@@ -101,7 +101,7 @@
         <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119277,42.438878,44.586548</coordinates>
+          <coordinates>-71.119277,42.438878,44.59</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -109,7 +109,7 @@
         <TimeStamp><when>2001-06-02T03:26:55Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119689,42.439227,57.607200</coordinates>
+          <coordinates>-71.119689,42.439227,57.61</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -117,7 +117,7 @@
         <TimeStamp><when>2001-11-16T23:03:38Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.116146,42.438917,44.826904</coordinates>
+          <coordinates>-71.116146,42.438917,44.83</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -125,7 +125,7 @@
         <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.122044,42.443904,50.594727</coordinates>
+          <coordinates>-71.122044,42.443904,50.59</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -133,7 +133,7 @@
         <TimeStamp><when>2001-06-02T03:26:58Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.121447,42.447298,127.711200</coordinates>
+          <coordinates>-71.121447,42.447298,127.71</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -141,7 +141,7 @@
         <TimeStamp><when>2001-06-02T03:26:59Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.125094,42.454873,96.926400</coordinates>
+          <coordinates>-71.125094,42.454873,96.93</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -149,7 +149,7 @@
         <TimeStamp><when>2001-06-02T03:26:59Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.124988,42.459079,82.600800</coordinates>
+          <coordinates>-71.124988,42.459079,82.60</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -157,7 +157,7 @@
         <TimeStamp><when>2001-06-02T03:26:59Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.124474,42.456979,82.905600</coordinates>
+          <coordinates>-71.124474,42.456979,82.91</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -165,7 +165,7 @@
         <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.120990,42.454401,66.696655</coordinates>
+          <coordinates>-71.120990,42.454401,66.70</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -173,7 +173,7 @@
         <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.121746,42.451442,74.627442</coordinates>
+          <coordinates>-71.121746,42.451442,74.63</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -181,7 +181,7 @@
         <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.120660,42.454404,65.254761</coordinates>
+          <coordinates>-71.120660,42.454404,65.25</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -189,7 +189,7 @@
         <TimeStamp><when>2001-06-02T03:27:00Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.121045,42.457761,77.419200</coordinates>
+          <coordinates>-71.121045,42.457761,77.42</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -197,7 +197,7 @@
         <TimeStamp><when>2001-06-02T03:27:00Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.120313,42.457089,74.676000</coordinates>
+          <coordinates>-71.120313,42.457089,74.68</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -205,7 +205,7 @@
         <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119676,42.456592,78.713135</coordinates>
+          <coordinates>-71.119676,42.456592,78.71</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -213,7 +213,7 @@
         <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119356,42.456252,78.713135</coordinates>
+          <coordinates>-71.119356,42.456252,78.71</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -221,7 +221,7 @@
         <TimeStamp><when>2001-06-02T03:27:00Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119135,42.458148,68.275200</coordinates>
+          <coordinates>-71.119135,42.458148,68.28</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -229,7 +229,7 @@
         <TimeStamp><when>2001-06-02T03:27:01Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.117693,42.459377,64.008000</coordinates>
+          <coordinates>-71.117693,42.459377,64.01</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -237,7 +237,7 @@
         <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119828,42.464183,52.997925</coordinates>
+          <coordinates>-71.119828,42.464183,53.00</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -245,7 +245,7 @@
         <TimeStamp><when>2001-06-02T03:27:02Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119399,42.465650,56.388000</coordinates>
+          <coordinates>-71.119399,42.465650,56.39</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -254,7 +254,7 @@
         <TimeStamp><when>2001-06-02T03:26:55Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.114456,42.439018,56.388000</coordinates>
+          <coordinates>-71.114456,42.439018,56.39</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -262,7 +262,7 @@
         <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.114803,42.438594,46.028564</coordinates>
+          <coordinates>-71.114803,42.438594,46.03</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -270,7 +270,7 @@
         <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.113223,42.436757,37.616943</coordinates>
+          <coordinates>-71.113223,42.436757,37.62</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -278,7 +278,7 @@
         <TimeStamp><when>2001-06-02T03:26:55Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.113220,42.441754,56.388000</coordinates>
+          <coordinates>-71.113220,42.441754,56.39</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -286,7 +286,7 @@
         <TimeStamp><when>2001-06-02T03:27:05Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.109075,42.436243,50.292000</coordinates>
+          <coordinates>-71.109075,42.436243,50.29</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -294,7 +294,7 @@
         <TimeStamp><when>2001-06-02T03:26:57Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.107500,42.439250,25.603200</coordinates>
+          <coordinates>-71.107500,42.439250,25.60</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -302,7 +302,7 @@
         <TimeStamp><when>2001-06-02T03:26:57Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.107582,42.439764,34.442400</coordinates>
+          <coordinates>-71.107582,42.439764,34.44</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -310,7 +310,7 @@
         <TimeStamp><when>2001-06-02T03:26:57Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.105874,42.434766,30.480000</coordinates>
+          <coordinates>-71.105874,42.434766,30.48</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -318,7 +318,7 @@
         <TimeStamp><when>2001-06-02T03:26:56Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.106599,42.433304,15.240000</coordinates>
+          <coordinates>-71.106599,42.433304,15.24</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -326,7 +326,7 @@
         <TimeStamp><when>2001-06-02T03:26:57Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.104772,42.437338,37.795200</coordinates>
+          <coordinates>-71.104772,42.437338,37.80</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -334,7 +334,7 @@
         <TimeStamp><when>2001-06-02T03:26:55Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.110975,42.442196,64.008000</coordinates>
+          <coordinates>-71.110975,42.442196,64.01</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -342,7 +342,7 @@
         <TimeStamp><when>2001-06-02T03:26:58Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.111441,42.442981,64.008000</coordinates>
+          <coordinates>-71.111441,42.442981,64.01</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -350,7 +350,7 @@
         <TimeStamp><when>2001-06-02T03:27:05Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.108882,42.444773,62.788800</coordinates>
+          <coordinates>-71.108882,42.444773,62.79</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -358,7 +358,7 @@
         <TimeStamp><when>2001-06-02T03:27:05Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.106301,42.443592,55.473600</coordinates>
+          <coordinates>-71.106301,42.443592,55.47</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -366,7 +366,7 @@
         <TimeStamp><when>2001-06-02T03:27:04Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.106624,42.447804,62.484000</coordinates>
+          <coordinates>-71.106624,42.447804,62.48</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -374,7 +374,7 @@
         <TimeStamp><when>2001-06-02T03:27:04Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.106158,42.448448,62.179200</coordinates>
+          <coordinates>-71.106158,42.448448,62.18</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -382,7 +382,7 @@
         <TimeStamp><when>2001-06-02T03:26:55Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.106783,42.453415,69.799200</coordinates>
+          <coordinates>-71.106783,42.453415,69.80</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -390,7 +390,7 @@
         <TimeStamp><when>2001-06-02T03:26:56Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.107253,42.453434,73.152000</coordinates>
+          <coordinates>-71.107253,42.453434,73.15</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -398,7 +398,7 @@
         <TimeStamp><when>2001-06-02T03:27:04Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.106771,42.458298,70.104000</coordinates>
+          <coordinates>-71.106771,42.458298,70.10</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -406,7 +406,7 @@
         <TimeStamp><when>2001-11-16T23:03:38Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.105413,42.451430,57.564209</coordinates>
+          <coordinates>-71.105413,42.451430,57.56</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -414,7 +414,7 @@
         <TimeStamp><when>2001-11-16T23:03:38Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.105206,42.453845,66.696655</coordinates>
+          <coordinates>-71.105206,42.453845,66.70</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -422,7 +422,7 @@
         <TimeStamp><when>2001-11-16T23:03:38Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.106170,42.459986,72.945191</coordinates>
+          <coordinates>-71.106170,42.459986,72.95</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -430,7 +430,7 @@
         <TimeStamp><when>2001-06-02T03:27:04Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.105116,42.457616,72.847200</coordinates>
+          <coordinates>-71.105116,42.457616,72.85</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -438,7 +438,7 @@
         <TimeStamp><when>2001-06-02T03:27:02Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.113574,42.467110,53.644800</coordinates>
+          <coordinates>-71.113574,42.467110,53.64</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -446,7 +446,7 @@
         <TimeStamp><when>2001-06-02T03:27:03Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.109863,42.464202,43.891200</coordinates>
+          <coordinates>-71.109863,42.464202,43.89</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -454,7 +454,7 @@
         <TimeStamp><when>2001-06-02T03:27:02Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.110067,42.466459,48.768000</coordinates>
+          <coordinates>-71.110067,42.466459,48.77</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -462,7 +462,7 @@
         <TimeStamp><when>2001-06-02T03:27:02Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.109410,42.466557,49.072800</coordinates>
+          <coordinates>-71.109410,42.466557,49.07</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -470,7 +470,7 @@
         <TimeStamp><when>2001-06-02T03:27:03Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.107117,42.463495,62.484000</coordinates>
+          <coordinates>-71.107117,42.463495,62.48</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -478,7 +478,7 @@
         <TimeStamp><when>2001-06-02T03:26:56Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.110241,42.401051,3.962400</coordinates>
+          <coordinates>-71.110241,42.401051,3.96</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -486,7 +486,7 @@
         <TimeStamp><when>2001-06-02T03:26:56Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.106532,42.432621,13.411200</coordinates>
+          <coordinates>-71.106532,42.432621,13.41</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -494,7 +494,7 @@
         <TimeStamp><when>2001-11-16T23:03:38Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.107883,42.431033,34.012085</coordinates>
+          <coordinates>-71.107883,42.431033,34.01</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -503,7 +503,7 @@
         <TimeStamp><when>2001-06-02T03:27:03Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.107360,42.465687,87.782400</coordinates>
+          <coordinates>-71.107360,42.465687,87.78</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -511,7 +511,7 @@
         <TimeStamp><when>2001-06-02T00:18:15Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.107628,42.430950,23.469600</coordinates>
+          <coordinates>-71.107628,42.430950,23.47</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -520,7 +520,7 @@
         <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.114079,42.438666,43.384766</coordinates>
+          <coordinates>-71.114079,42.438666,43.38</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -529,7 +529,7 @@
         <TimeStamp><when>2001-06-02T03:26:59Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.124651,42.456469,89.916000</coordinates>
+          <coordinates>-71.124651,42.456469,89.92</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -538,7 +538,7 @@
         <TimeStamp><when>2001-06-02T03:27:01Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119815,42.465759,55.473600</coordinates>
+          <coordinates>-71.119815,42.465759,55.47</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -547,7 +547,7 @@
         <TimeStamp><when>2001-06-02T03:27:05Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.105878,42.442993,52.730400</coordinates>
+          <coordinates>-71.105878,42.442993,52.73</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -556,7 +556,7 @@
         <TimeStamp><when>2001-06-02T03:27:05Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.109664,42.435472,45.110400</coordinates>
+          <coordinates>-71.109664,42.435472,45.11</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -564,7 +564,7 @@
         <description>Dark Hollow Pond</description>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.103646,42.458516,0.000000</coordinates>
+          <coordinates>-71.103646,42.458516</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -573,7 +573,7 @@
         <TimeStamp><when>2001-06-02T03:26:57Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.112675,42.443109,56.083200</coordinates>
+          <coordinates>-71.112675,42.443109,56.08</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -582,7 +582,7 @@
         <TimeStamp><when>2001-06-02T03:26:59Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119298,42.449866,117.043200</coordinates>
+          <coordinates>-71.119298,42.449866,117.04</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -591,7 +591,7 @@
         <TimeStamp><when>2001-06-02T03:27:01Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.116524,42.459629,69.494400</coordinates>
+          <coordinates>-71.116524,42.459629,69.49</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -600,7 +600,7 @@
         <TimeStamp><when>2001-06-02T03:27:02Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119148,42.465485,56.997600</coordinates>
+          <coordinates>-71.119148,42.465485,57.00</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -609,7 +609,7 @@
         <TimeStamp><when>2001-06-02T03:27:03Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.109986,42.462776,46.939200</coordinates>
+          <coordinates>-71.109986,42.462776,46.94</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -618,7 +618,7 @@
         <TimeStamp><when>2001-06-02T03:27:04Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.108784,42.446793,61.264800</coordinates>
+          <coordinates>-71.108784,42.446793,61.26</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -627,7 +627,7 @@
         <TimeStamp><when>2001-06-02T03:26:59Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.126602,42.451204,110.947200</coordinates>
+          <coordinates>-71.126602,42.451204,110.95</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -636,7 +636,7 @@
         <TimeStamp><when>2001-06-02T03:27:00Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.122078,42.458499,77.724000</coordinates>
+          <coordinates>-71.122078,42.458499,77.72</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -645,7 +645,7 @@
         <TimeStamp><when>2001-06-02T03:27:01Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119238,42.459376,65.836800</coordinates>
+          <coordinates>-71.119238,42.459376,65.84</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -654,7 +654,7 @@
         <TimeStamp><when>2001-06-02T03:27:02Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119240,42.466353,57.302400</coordinates>
+          <coordinates>-71.119240,42.466353,57.30</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -663,7 +663,7 @@
         <TimeStamp><when>2001-06-02T03:27:03Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.107697,42.468655,49.377600</coordinates>
+          <coordinates>-71.107697,42.468655,49.38</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -672,7 +672,7 @@
         <TimeStamp><when>2001-06-02T03:27:03Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.102973,42.456718,81.076800</coordinates>
+          <coordinates>-71.102973,42.456718,81.08</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -681,7 +681,7 @@
         <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.107690,42.430847,21.515015</coordinates>
+          <coordinates>-71.107690,42.430847,21.52</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -690,7 +690,7 @@
         <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.109236,42.431240,26.561890</coordinates>
+          <coordinates>-71.109236,42.431240,26.56</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -699,7 +699,7 @@
         <TimeStamp><when>2001-06-02T00:18:16Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.106556,42.439502,32.004000</coordinates>
+          <coordinates>-71.106556,42.439502,32.00</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -708,7 +708,7 @@
         <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.122320,42.449765,119.809082</coordinates>
+          <coordinates>-71.122320,42.449765,119.81</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -717,7 +717,7 @@
         <TimeStamp><when>2001-06-02T03:27:00Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119845,42.457388,73.761600</coordinates>
+          <coordinates>-71.119845,42.457388,73.76</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -726,7 +726,7 @@
         <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.109942,42.434980,45.307495</coordinates>
+          <coordinates>-71.109942,42.434980,45.31</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -735,7 +735,7 @@
         <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.121211,42.453256,77.992066</coordinates>
+          <coordinates>-71.121211,42.453256,77.99</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -744,7 +744,7 @@
         <TimeStamp><when>2001-06-02T03:27:01Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.117481,42.457734,67.970400</coordinates>
+          <coordinates>-71.117481,42.457734,67.97</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -753,7 +753,7 @@
         <TimeStamp><when>2001-06-02T03:27:00Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.124574,42.459278,81.076800</coordinates>
+          <coordinates>-71.124574,42.459278,81.08</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -762,7 +762,7 @@
         <TimeStamp><when>2001-06-02T03:27:01Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.118991,42.458782,67.360800</coordinates>
+          <coordinates>-71.118991,42.458782,67.36</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -771,7 +771,7 @@
         <TimeStamp><when>2001-06-02T00:18:14Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.120925,42.439993,53.949600</coordinates>
+          <coordinates>-71.120925,42.439993,53.95</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -780,7 +780,7 @@
         <TimeStamp><when>2001-06-02T00:18:13Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.106782,42.453415,69.799200</coordinates>
+          <coordinates>-71.106782,42.453415,69.80</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -789,7 +789,7 @@
         <TimeStamp><when>2001-06-02T03:27:04Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.107483,42.455956,64.008000</coordinates>
+          <coordinates>-71.107483,42.455956,64.01</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -798,7 +798,7 @@
         <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.119328,42.465913,64.533692</coordinates>
+          <coordinates>-71.119328,42.465913,64.53</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -807,7 +807,7 @@
         <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.122845,42.445359,61.649902</coordinates>
+          <coordinates>-71.122845,42.445359,61.65</coordinates>
         </Point>
       </Placemark>
       <Placemark>
@@ -816,7 +816,7 @@
         <TimeStamp><when>2001-06-02T00:18:16Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-71.121676,42.441727,67.360800</coordinates>
+          <coordinates>-71.121676,42.441727,67.36</coordinates>
         </Point>
       </Placemark>
     </Folder>
@@ -862,7 +862,7 @@
             <TimeStamp><when>2002-05-25T17:06:21Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.610350,30.062183,1.000000</coordinates>
+              <coordinates>-91.610350,30.062183,1.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -885,7 +885,7 @@
             <TimeStamp><when>2002-05-25T17:09:55Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.610567,30.062783,0.000000</coordinates>
+              <coordinates>-91.610567,30.062783</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -908,7 +908,7 @@
             <TimeStamp><when>2002-05-25T17:12:00Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.608267,30.062700,0.000000</coordinates>
+              <coordinates>-91.608267,30.062700</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -931,7 +931,7 @@
             <TimeStamp><when>2002-05-25T17:12:48Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.607383,30.062333,0.000000</coordinates>
+              <coordinates>-91.607383,30.062333</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -954,7 +954,7 @@
             <TimeStamp><when>2002-05-25T17:14:41Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.605283,30.061533,0.000000</coordinates>
+              <coordinates>-91.605283,30.061533</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -977,7 +977,7 @@
             <TimeStamp><when>2002-05-25T17:17:16Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.599400,30.059783,0.000000</coordinates>
+              <coordinates>-91.599400,30.059783</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1000,7 +1000,7 @@
             <TimeStamp><when>2002-05-25T17:17:46Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.596683,30.057800,0.000000</coordinates>
+              <coordinates>-91.596683,30.057800</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1023,7 +1023,7 @@
             <TimeStamp><when>2002-05-25T17:18:20Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594900,30.055383,0.000000</coordinates>
+              <coordinates>-91.594900,30.055383</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1046,7 +1046,7 @@
             <TimeStamp><when>2002-05-25T17:19:01Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.592617,30.053883,0.000000</coordinates>
+              <coordinates>-91.592617,30.053883</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1069,7 +1069,7 @@
             <TimeStamp><when>2002-05-25T17:20:46Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.589750,30.049733,0.000000</coordinates>
+              <coordinates>-91.589750,30.049733</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1092,7 +1092,7 @@
             <TimeStamp><when>2002-05-25T17:21:10Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.589883,30.049017,0.000000</coordinates>
+              <coordinates>-91.589883,30.049017</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1115,7 +1115,7 @@
             <TimeStamp><when>2002-05-25T17:21:51Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.592933,30.048800,0.000000</coordinates>
+              <coordinates>-91.592933,30.048800</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1138,7 +1138,7 @@
             <TimeStamp><when>2002-05-25T17:22:35Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.596450,30.046233,0.000000</coordinates>
+              <coordinates>-91.596450,30.046233</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1161,7 +1161,7 @@
             <TimeStamp><when>2002-05-25T17:23:08Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.598717,30.045517,0.000000</coordinates>
+              <coordinates>-91.598717,30.045517</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1184,7 +1184,7 @@
             <TimeStamp><when>2002-05-25T18:04:23Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.600267,30.047300,0.000000</coordinates>
+              <coordinates>-91.600267,30.047300</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1208,7 +1208,7 @@
             <TimeStamp><when>2002-05-25T18:06:04Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.599633,30.047000,2.000000</coordinates>
+              <coordinates>-91.599633,30.047000,2.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1231,7 +1231,7 @@
             <TimeStamp><when>2002-05-25T18:07:06Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.599467,30.046433,0.000000</coordinates>
+              <coordinates>-91.599467,30.046433</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1255,7 +1255,7 @@
             <TimeStamp><when>2002-05-25T18:08:18Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.598950,30.046200,1.000000</coordinates>
+              <coordinates>-91.598950,30.046200,1.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1278,7 +1278,7 @@
             <TimeStamp><when>2002-05-25T18:10:20Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.597733,30.046367,0.000000</coordinates>
+              <coordinates>-91.597733,30.046367</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1301,7 +1301,7 @@
             <TimeStamp><when>2002-05-25T18:11:09Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.597167,30.046350,0.000000</coordinates>
+              <coordinates>-91.597167,30.046350</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1324,7 +1324,7 @@
             <TimeStamp><when>2002-05-25T18:12:18Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.596333,30.046783,0.000000</coordinates>
+              <coordinates>-91.596333,30.046783</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1347,7 +1347,7 @@
             <TimeStamp><when>2002-05-25T18:14:22Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.595200,30.047450,0.000000</coordinates>
+              <coordinates>-91.595200,30.047450</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1371,7 +1371,7 @@
             <TimeStamp><when>2002-05-25T18:15:04Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594767,30.047800,2.000000</coordinates>
+              <coordinates>-91.594767,30.047800,2.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1395,7 +1395,7 @@
             <TimeStamp><when>2002-05-25T18:16:14Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594083,30.048250,1.000000</coordinates>
+              <coordinates>-91.594083,30.048250,1.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1419,7 +1419,7 @@
             <TimeStamp><when>2002-05-25T18:17:01Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.593800,30.048683,1.000000</coordinates>
+              <coordinates>-91.593800,30.048683,1.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1442,7 +1442,7 @@
             <TimeStamp><when>2002-05-25T18:18:07Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.593850,30.049350,0.000000</coordinates>
+              <coordinates>-91.593850,30.049350</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1466,7 +1466,7 @@
             <TimeStamp><when>2002-05-25T18:19:51Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.593983,30.050317,2.000000</coordinates>
+              <coordinates>-91.593983,30.050317,2.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1489,7 +1489,7 @@
             <TimeStamp><when>2002-05-25T18:20:39Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594117,30.050783,0.000000</coordinates>
+              <coordinates>-91.594117,30.050783</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1512,7 +1512,7 @@
             <TimeStamp><when>2002-05-25T18:21:24Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594367,30.051233,0.000000</coordinates>
+              <coordinates>-91.594367,30.051233</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1535,7 +1535,7 @@
             <TimeStamp><when>2002-05-25T18:22:17Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594367,30.051800,0.000000</coordinates>
+              <coordinates>-91.594367,30.051800</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1558,7 +1558,7 @@
             <TimeStamp><when>2002-05-25T18:23:18Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594667,30.052217,0.000000</coordinates>
+              <coordinates>-91.594667,30.052217</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1581,7 +1581,7 @@
             <TimeStamp><when>2002-05-25T18:24:37Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594683,30.053017,0.000000</coordinates>
+              <coordinates>-91.594683,30.053017</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1605,7 +1605,7 @@
             <TimeStamp><when>2002-05-25T18:28:13Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.595200,30.054867,6.000000</coordinates>
+              <coordinates>-91.595200,30.054867,6.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1629,7 +1629,7 @@
             <TimeStamp><when>2002-05-25T18:31:36Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594933,30.053733,2.000000</coordinates>
+              <coordinates>-91.594933,30.053733,2.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1652,7 +1652,7 @@
             <TimeStamp><when>2002-05-25T18:32:56Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594783,30.053183,0.000000</coordinates>
+              <coordinates>-91.594783,30.053183</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1675,7 +1675,7 @@
             <TimeStamp><when>2002-05-25T18:34:02Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594833,30.052633,0.000000</coordinates>
+              <coordinates>-91.594833,30.052633</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1698,7 +1698,7 @@
             <TimeStamp><when>2002-05-25T18:36:03Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.595433,30.052450,0.000000</coordinates>
+              <coordinates>-91.595433,30.052450</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1721,7 +1721,7 @@
             <TimeStamp><when>2002-05-25T18:36:48Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.595967,30.052483,0.000000</coordinates>
+              <coordinates>-91.595967,30.052483</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1745,7 +1745,7 @@
             <TimeStamp><when>2002-05-25T18:37:52Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.596783,30.052650,1.000000</coordinates>
+              <coordinates>-91.596783,30.052650,1.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1768,7 +1768,7 @@
             <TimeStamp><when>2002-05-25T18:39:18Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.597850,30.053133,0.000000</coordinates>
+              <coordinates>-91.597850,30.053133</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1791,7 +1791,7 @@
             <TimeStamp><when>2002-05-25T18:40:15Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.597967,30.053617,0.000000</coordinates>
+              <coordinates>-91.597967,30.053617</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1815,7 +1815,7 @@
             <TimeStamp><when>2002-05-25T18:41:25Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.597767,30.053967,6.000000</coordinates>
+              <coordinates>-91.597767,30.053967,6.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1838,7 +1838,7 @@
             <TimeStamp><when>2002-05-25T18:42:37Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.598083,30.053617,0.000000</coordinates>
+              <coordinates>-91.598083,30.053617</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1861,7 +1861,7 @@
             <TimeStamp><when>2002-05-25T18:44:01Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.597917,30.053200,0.000000</coordinates>
+              <coordinates>-91.597917,30.053200</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1884,7 +1884,7 @@
             <TimeStamp><when>2002-05-25T18:45:53Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.597517,30.052817,0.000000</coordinates>
+              <coordinates>-91.597517,30.052817</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1907,7 +1907,7 @@
             <TimeStamp><when>2002-05-25T18:46:54Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.596933,30.052567,0.000000</coordinates>
+              <coordinates>-91.596933,30.052567</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1930,7 +1930,7 @@
             <TimeStamp><when>2002-05-25T18:47:42Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.596433,30.052333,0.000000</coordinates>
+              <coordinates>-91.596433,30.052333</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1953,7 +1953,7 @@
             <TimeStamp><when>2002-05-25T18:48:41Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.595683,30.052250,0.000000</coordinates>
+              <coordinates>-91.595683,30.052250</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1976,7 +1976,7 @@
             <TimeStamp><when>2002-05-25T18:49:52Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.595017,30.052217,0.000000</coordinates>
+              <coordinates>-91.595017,30.052217</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1999,7 +1999,7 @@
             <TimeStamp><when>2002-05-25T18:50:49Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594700,30.051883,0.000000</coordinates>
+              <coordinates>-91.594700,30.051883</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2022,7 +2022,7 @@
             <TimeStamp><when>2002-05-25T18:52:14Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594400,30.051050,0.000000</coordinates>
+              <coordinates>-91.594400,30.051050</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2045,7 +2045,7 @@
             <TimeStamp><when>2002-05-25T18:52:56Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594233,30.050567,0.000000</coordinates>
+              <coordinates>-91.594233,30.050567</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2068,7 +2068,7 @@
             <TimeStamp><when>2002-05-25T18:53:38Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594100,30.050183,0.000000</coordinates>
+              <coordinates>-91.594100,30.050183</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2091,7 +2091,7 @@
             <TimeStamp><when>2002-05-25T18:55:11Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.593717,30.049100,0.000000</coordinates>
+              <coordinates>-91.593717,30.049100</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2114,7 +2114,7 @@
             <TimeStamp><when>2002-05-25T18:56:32Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594250,30.048450,0.000000</coordinates>
+              <coordinates>-91.594250,30.048450</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2137,7 +2137,7 @@
             <TimeStamp><when>2002-05-25T18:57:24Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.594750,30.048083,0.000000</coordinates>
+              <coordinates>-91.594750,30.048083</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2161,7 +2161,7 @@
             <TimeStamp><when>2002-05-25T18:58:40Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.595450,30.047500,7.000000</coordinates>
+              <coordinates>-91.595450,30.047500,7.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2184,7 +2184,7 @@
             <TimeStamp><when>2002-05-25T18:59:28Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.596000,30.047067,0.000000</coordinates>
+              <coordinates>-91.596000,30.047067</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2207,7 +2207,7 @@
             <TimeStamp><when>2002-05-25T19:00:22Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.596600,30.046633,0.000000</coordinates>
+              <coordinates>-91.596600,30.046633</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2230,7 +2230,7 @@
             <TimeStamp><when>2002-05-25T19:01:41Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.597650,30.046400,0.000000</coordinates>
+              <coordinates>-91.597650,30.046400</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2253,7 +2253,7 @@
             <TimeStamp><when>2002-05-25T19:02:48Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.598467,30.046233,0.000000</coordinates>
+              <coordinates>-91.598467,30.046233</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2276,7 +2276,7 @@
             <TimeStamp><when>2002-05-25T19:03:43Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.598967,30.046317,0.000000</coordinates>
+              <coordinates>-91.598967,30.046317</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2299,7 +2299,7 @@
             <TimeStamp><when>2002-05-25T19:04:49Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.599283,30.046783,0.000000</coordinates>
+              <coordinates>-91.599283,30.046783</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2322,7 +2322,7 @@
             <TimeStamp><when>2002-05-25T19:05:57Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-91.599667,30.047133,0.000000</coordinates>
+              <coordinates>-91.599667,30.047133</coordinates>
             </Point>
           </Placemark>
         </Folder>
@@ -2332,70 +2332,134 @@
           <LineString>
             <tessellate>1</tessellate>
             <coordinates>
+              -91.610350,30.062183,1.00
               -91.610350,30.062183,1.000000
-              -91.610567,30.062783,0.000000
-              -91.608267,30.062700,0.000000
-              -91.607383,30.062333,0.000000
-              -91.605283,30.061533,0.000000
-              -91.599400,30.059783,0.000000
-              -91.596683,30.057800,0.000000
-              -91.594900,30.055383,0.000000
-              -91.592617,30.053883,0.000000
-              -91.589750,30.049733,0.000000
-              -91.589883,30.049017,0.000000
-              -91.592933,30.048800,0.000000
-              -91.596450,30.046233,0.000000
-              -91.598717,30.045517,0.000000
-              -91.600267,30.047300,0.000000
+              -91.610567,30.062783
+              -91.610567,30.062783
+              -91.608267,30.062700
+              -91.608267,30.062700
+              -91.607383,30.062333
+              -91.607383,30.062333
+              -91.605283,30.061533
+              -91.605283,30.061533
+              -91.599400,30.059783
+              -91.599400,30.059783
+              -91.596683,30.057800
+              -91.596683,30.057800
+              -91.594900,30.055383
+              -91.594900,30.055383
+              -91.592617,30.053883
+              -91.592617,30.053883
+              -91.589750,30.049733
+              -91.589750,30.049733
+              -91.589883,30.049017
+              -91.589883,30.049017
+              -91.592933,30.048800
+              -91.592933,30.048800
+              -91.596450,30.046233
+              -91.596450,30.046233
+              -91.598717,30.045517
+              -91.598717,30.045517
+              -91.600267,30.047300
+              -91.600267,30.047300
+              -91.599633,30.047000,2.00
               -91.599633,30.047000,2.000000
-              -91.599467,30.046433,0.000000
+              -91.599467,30.046433
+              -91.599467,30.046433
+              -91.598950,30.046200,1.00
               -91.598950,30.046200,1.000000
-              -91.597733,30.046367,0.000000
-              -91.597167,30.046350,0.000000
-              -91.596333,30.046783,0.000000
-              -91.595200,30.047450,0.000000
+              -91.597733,30.046367
+              -91.597733,30.046367
+              -91.597167,30.046350
+              -91.597167,30.046350
+              -91.596333,30.046783
+              -91.596333,30.046783
+              -91.595200,30.047450
+              -91.595200,30.047450
+              -91.594767,30.047800,2.00
               -91.594767,30.047800,2.000000
+              -91.594083,30.048250,1.00
               -91.594083,30.048250,1.000000
+              -91.593800,30.048683,1.00
               -91.593800,30.048683,1.000000
-              -91.593850,30.049350,0.000000
+              -91.593850,30.049350
+              -91.593850,30.049350
+              -91.593983,30.050317,2.00
               -91.593983,30.050317,2.000000
-              -91.594117,30.050783,0.000000
-              -91.594367,30.051233,0.000000
-              -91.594367,30.051800,0.000000
-              -91.594667,30.052217,0.000000
-              -91.594683,30.053017,0.000000
+              -91.594117,30.050783
+              -91.594117,30.050783
+              -91.594367,30.051233
+              -91.594367,30.051233
+              -91.594367,30.051800
+              -91.594367,30.051800
+              -91.594667,30.052217
+              -91.594667,30.052217
+              -91.594683,30.053017
+              -91.594683,30.053017
+              -91.595200,30.054867,6.00
               -91.595200,30.054867,6.000000
+              -91.594933,30.053733,2.00
               -91.594933,30.053733,2.000000
-              -91.594783,30.053183,0.000000
-              -91.594833,30.052633,0.000000
-              -91.595433,30.052450,0.000000
-              -91.595967,30.052483,0.000000
+              -91.594783,30.053183
+              -91.594783,30.053183
+              -91.594833,30.052633
+              -91.594833,30.052633
+              -91.595433,30.052450
+              -91.595433,30.052450
+              -91.595967,30.052483
+              -91.595967,30.052483
+              -91.596783,30.052650,1.00
               -91.596783,30.052650,1.000000
-              -91.597850,30.053133,0.000000
-              -91.597967,30.053617,0.000000
+              -91.597850,30.053133
+              -91.597850,30.053133
+              -91.597967,30.053617
+              -91.597967,30.053617
+              -91.597767,30.053967,6.00
               -91.597767,30.053967,6.000000
-              -91.598083,30.053617,0.000000
-              -91.597917,30.053200,0.000000
-              -91.597517,30.052817,0.000000
-              -91.596933,30.052567,0.000000
-              -91.596433,30.052333,0.000000
-              -91.595683,30.052250,0.000000
-              -91.595017,30.052217,0.000000
-              -91.594700,30.051883,0.000000
-              -91.594400,30.051050,0.000000
-              -91.594233,30.050567,0.000000
-              -91.594100,30.050183,0.000000
-              -91.593717,30.049100,0.000000
-              -91.594250,30.048450,0.000000
-              -91.594750,30.048083,0.000000
+              -91.598083,30.053617
+              -91.598083,30.053617
+              -91.597917,30.053200
+              -91.597917,30.053200
+              -91.597517,30.052817
+              -91.597517,30.052817
+              -91.596933,30.052567
+              -91.596933,30.052567
+              -91.596433,30.052333
+              -91.596433,30.052333
+              -91.595683,30.052250
+              -91.595683,30.052250
+              -91.595017,30.052217
+              -91.595017,30.052217
+              -91.594700,30.051883
+              -91.594700,30.051883
+              -91.594400,30.051050
+              -91.594400,30.051050
+              -91.594233,30.050567
+              -91.594233,30.050567
+              -91.594100,30.050183
+              -91.594100,30.050183
+              -91.593717,30.049100
+              -91.593717,30.049100
+              -91.594250,30.048450
+              -91.594250,30.048450
+              -91.594750,30.048083
+              -91.594750,30.048083
+              -91.595450,30.047500,7.00
               -91.595450,30.047500,7.000000
-              -91.596000,30.047067,0.000000
-              -91.596600,30.046633,0.000000
-              -91.597650,30.046400,0.000000
-              -91.598467,30.046233,0.000000
-              -91.598967,30.046317,0.000000
-              -91.599283,30.046783,0.000000
-              -91.599667,30.047133,0.000000
+              -91.596000,30.047067
+              -91.596000,30.047067
+              -91.596600,30.046633
+              -91.596600,30.046633
+              -91.597650,30.046400
+              -91.597650,30.046400
+              -91.598467,30.046233
+              -91.598467,30.046233
+              -91.598967,30.046317
+              -91.598967,30.046317
+              -91.599283,30.046783
+              -91.599283,30.046783
+              -91.599667,30.047133
+              -91.599667,30.047133
             </coordinates>
           </LineString>
         </Placemark>
@@ -2426,7 +2490,7 @@
             <TimeStamp><when>2001-06-02T00:18:15Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.107628,42.430950,23.469600</coordinates>
+              <coordinates>-71.107628,42.430950,23.47</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2448,7 +2512,7 @@
             <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.109236,42.431240,26.561890</coordinates>
+              <coordinates>-71.109236,42.431240,26.56</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2470,7 +2534,7 @@
             <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.109942,42.434980,45.307495</coordinates>
+              <coordinates>-71.109942,42.434980,45.31</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2492,7 +2556,7 @@
             <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.113223,42.436757,37.616943</coordinates>
+              <coordinates>-71.113223,42.436757,37.62</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2514,7 +2578,7 @@
             <TimeStamp><when>2001-06-02T03:26:55Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.114456,42.439018,56.388000</coordinates>
+              <coordinates>-71.114456,42.439018,56.39</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2536,7 +2600,7 @@
             <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.114803,42.438594,46.028564</coordinates>
+              <coordinates>-71.114803,42.438594,46.03</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2558,7 +2622,7 @@
             <TimeStamp><when>2001-11-16T23:03:38Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.116146,42.438917,44.826904</coordinates>
+              <coordinates>-71.116146,42.438917,44.83</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2580,7 +2644,7 @@
             <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.119277,42.438878,44.586548</coordinates>
+              <coordinates>-71.119277,42.438878,44.59</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2602,7 +2666,7 @@
             <TimeStamp><when>2001-06-02T03:26:55Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.119689,42.439227,57.607200</coordinates>
+              <coordinates>-71.119689,42.439227,57.61</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2624,7 +2688,7 @@
             <TimeStamp><when>2001-06-02T00:18:14Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.120925,42.439993,53.949600</coordinates>
+              <coordinates>-71.120925,42.439993,53.95</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2646,7 +2710,7 @@
             <TimeStamp><when>2001-06-02T00:18:16Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.121676,42.441727,67.360800</coordinates>
+              <coordinates>-71.121676,42.441727,67.36</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2668,7 +2732,7 @@
             <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.122044,42.443904,50.594727</coordinates>
+              <coordinates>-71.122044,42.443904,50.59</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2690,7 +2754,7 @@
             <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.122845,42.445359,61.649902</coordinates>
+              <coordinates>-71.122845,42.445359,61.65</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2712,7 +2776,7 @@
             <TimeStamp><when>2001-06-02T03:26:58Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.121447,42.447298,127.711200</coordinates>
+              <coordinates>-71.121447,42.447298,127.71</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2734,7 +2798,7 @@
             <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.122320,42.449765,119.809082</coordinates>
+              <coordinates>-71.122320,42.449765,119.81</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2756,7 +2820,7 @@
             <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.121746,42.451442,74.627442</coordinates>
+              <coordinates>-71.121746,42.451442,74.63</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2778,7 +2842,7 @@
             <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.121211,42.453256,77.992066</coordinates>
+              <coordinates>-71.121211,42.453256,77.99</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2800,7 +2864,7 @@
             <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.119356,42.456252,78.713135</coordinates>
+              <coordinates>-71.119356,42.456252,78.71</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2822,7 +2886,7 @@
             <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.119676,42.456592,78.713135</coordinates>
+              <coordinates>-71.119676,42.456592,78.71</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2844,7 +2908,7 @@
             <TimeStamp><when>2001-06-02T03:27:00Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.119845,42.457388,73.761600</coordinates>
+              <coordinates>-71.119845,42.457388,73.76</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2866,7 +2930,7 @@
             <TimeStamp><when>2001-06-02T03:27:00Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.119135,42.458148,68.275200</coordinates>
+              <coordinates>-71.119135,42.458148,68.28</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2888,7 +2952,7 @@
             <TimeStamp><when>2001-06-02T03:27:01Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.117693,42.459377,64.008000</coordinates>
+              <coordinates>-71.117693,42.459377,64.01</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2910,7 +2974,7 @@
             <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.119828,42.464183,52.997925</coordinates>
+              <coordinates>-71.119828,42.464183,53.00</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2932,7 +2996,7 @@
             <TimeStamp><when>2001-06-02T03:27:02Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.119399,42.465650,56.388000</coordinates>
+              <coordinates>-71.119399,42.465650,56.39</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2954,7 +3018,7 @@
             <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.119328,42.465913,64.533692</coordinates>
+              <coordinates>-71.119328,42.465913,64.53</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2976,7 +3040,7 @@
             <TimeStamp><when>2001-06-02T03:27:02Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.113574,42.467110,53.644800</coordinates>
+              <coordinates>-71.113574,42.467110,53.64</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -2998,7 +3062,7 @@
             <TimeStamp><when>2001-06-02T03:27:02Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.110067,42.466459,48.768000</coordinates>
+              <coordinates>-71.110067,42.466459,48.77</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3020,7 +3084,7 @@
             <TimeStamp><when>2001-06-02T03:27:02Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.109410,42.466557,49.072800</coordinates>
+              <coordinates>-71.109410,42.466557,49.07</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3042,7 +3106,7 @@
             <TimeStamp><when>2001-06-02T03:27:03Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.107117,42.463495,62.484000</coordinates>
+              <coordinates>-71.107117,42.463495,62.48</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3064,7 +3128,7 @@
             <TimeStamp><when>2001-06-02T03:27:03Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.107360,42.465687,87.782400</coordinates>
+              <coordinates>-71.107360,42.465687,87.78</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3086,7 +3150,7 @@
             <TimeStamp><when>2001-11-16T23:03:38Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.106170,42.459986,72.945191</coordinates>
+              <coordinates>-71.106170,42.459986,72.95</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3108,7 +3172,7 @@
             <TimeStamp><when>2001-06-02T03:27:04Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.105116,42.457616,72.847200</coordinates>
+              <coordinates>-71.105116,42.457616,72.85</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3130,7 +3194,7 @@
             <TimeStamp><when>2001-11-16T23:03:38Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.105206,42.453845,66.696655</coordinates>
+              <coordinates>-71.105206,42.453845,66.70</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3152,7 +3216,7 @@
             <TimeStamp><when>2001-11-16T23:03:38Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.105413,42.451430,57.564209</coordinates>
+              <coordinates>-71.105413,42.451430,57.56</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3174,7 +3238,7 @@
             <TimeStamp><when>2001-06-02T03:27:04Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.106158,42.448448,62.179200</coordinates>
+              <coordinates>-71.106158,42.448448,62.18</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3196,7 +3260,7 @@
             <TimeStamp><when>2001-06-02T03:27:04Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.106624,42.447804,62.484000</coordinates>
+              <coordinates>-71.106624,42.447804,62.48</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3218,7 +3282,7 @@
             <TimeStamp><when>2001-06-02T03:27:05Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.108882,42.444773,62.788800</coordinates>
+              <coordinates>-71.108882,42.444773,62.79</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3240,7 +3304,7 @@
             <TimeStamp><when>2001-06-02T03:27:05Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.106301,42.443592,55.473600</coordinates>
+              <coordinates>-71.106301,42.443592,55.47</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3262,7 +3326,7 @@
             <TimeStamp><when>2001-06-02T03:26:58Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.111441,42.442981,64.008000</coordinates>
+              <coordinates>-71.111441,42.442981,64.01</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3284,7 +3348,7 @@
             <TimeStamp><when>2001-06-02T03:26:55Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.110975,42.442196,64.008000</coordinates>
+              <coordinates>-71.110975,42.442196,64.01</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3306,7 +3370,7 @@
             <TimeStamp><when>2001-06-02T03:26:55Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.113220,42.441754,56.388000</coordinates>
+              <coordinates>-71.113220,42.441754,56.39</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3328,7 +3392,7 @@
             <TimeStamp><when>2001-06-02T03:26:55Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.114456,42.439018,56.388000</coordinates>
+              <coordinates>-71.114456,42.439018,56.39</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3350,7 +3414,7 @@
             <TimeStamp><when>2001-11-28T21:05:28Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.113223,42.436757,37.616943</coordinates>
+              <coordinates>-71.113223,42.436757,37.62</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3372,7 +3436,7 @@
             <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.109942,42.434980,45.307495</coordinates>
+              <coordinates>-71.109942,42.434980,45.31</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3394,7 +3458,7 @@
             <TimeStamp><when>2001-11-07T23:53:41Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.109236,42.431240,26.561890</coordinates>
+              <coordinates>-71.109236,42.431240,26.56</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -3416,7 +3480,7 @@
             <TimeStamp><when>2001-06-02T00:18:15Z</when></TimeStamp>
             <styleUrl>#route</styleUrl>
             <Point>
-              <coordinates>-71.107628,42.430950,23.469600</coordinates>
+              <coordinates>-71.107628,42.430950,23.47</coordinates>
             </Point>
           </Placemark>
         </Folder>
@@ -3426,51 +3490,97 @@
           <LineString>
             <tessellate>1</tessellate>
             <coordinates>
+              -71.107628,42.430950,23.47
               -71.107628,42.430950,23.469600
+              -71.109236,42.431240,26.56
               -71.109236,42.431240,26.561890
+              -71.109942,42.434980,45.31
               -71.109942,42.434980,45.307495
+              -71.113223,42.436757,37.62
               -71.113223,42.436757,37.616943
+              -71.114456,42.439018,56.39
               -71.114456,42.439018,56.388000
+              -71.114803,42.438594,46.03
               -71.114803,42.438594,46.028564
+              -71.116146,42.438917,44.83
               -71.116146,42.438917,44.826904
+              -71.119277,42.438878,44.59
               -71.119277,42.438878,44.586548
+              -71.119689,42.439227,57.61
               -71.119689,42.439227,57.607200
+              -71.120925,42.439993,53.95
               -71.120925,42.439993,53.949600
+              -71.121676,42.441727,67.36
               -71.121676,42.441727,67.360800
+              -71.122044,42.443904,50.59
               -71.122044,42.443904,50.594727
+              -71.122845,42.445359,61.65
               -71.122845,42.445359,61.649902
+              -71.121447,42.447298,127.71
               -71.121447,42.447298,127.711200
+              -71.122320,42.449765,119.81
               -71.122320,42.449765,119.809082
+              -71.121746,42.451442,74.63
               -71.121746,42.451442,74.627442
+              -71.121211,42.453256,77.99
               -71.121211,42.453256,77.992066
+              -71.119356,42.456252,78.71
               -71.119356,42.456252,78.713135
+              -71.119676,42.456592,78.71
               -71.119676,42.456592,78.713135
+              -71.119845,42.457388,73.76
               -71.119845,42.457388,73.761600
+              -71.119135,42.458148,68.28
               -71.119135,42.458148,68.275200
+              -71.117693,42.459377,64.01
               -71.117693,42.459377,64.008000
+              -71.119828,42.464183,53.00
               -71.119828,42.464183,52.997925
+              -71.119399,42.465650,56.39
               -71.119399,42.465650,56.388000
+              -71.119328,42.465913,64.53
               -71.119328,42.465913,64.533692
+              -71.113574,42.467110,53.64
               -71.113574,42.467110,53.644800
+              -71.110067,42.466459,48.77
               -71.110067,42.466459,48.768000
+              -71.109410,42.466557,49.07
               -71.109410,42.466557,49.072800
+              -71.107117,42.463495,62.48
               -71.107117,42.463495,62.484000
+              -71.107360,42.465687,87.78
               -71.107360,42.465687,87.782400
+              -71.106170,42.459986,72.95
               -71.106170,42.459986,72.945191
+              -71.105116,42.457616,72.85
               -71.105116,42.457616,72.847200
+              -71.105206,42.453845,66.70
               -71.105206,42.453845,66.696655
+              -71.105413,42.451430,57.56
               -71.105413,42.451430,57.564209
+              -71.106158,42.448448,62.18
               -71.106158,42.448448,62.179200
+              -71.106624,42.447804,62.48
               -71.106624,42.447804,62.484000
+              -71.108882,42.444773,62.79
               -71.108882,42.444773,62.788800
+              -71.106301,42.443592,55.47
               -71.106301,42.443592,55.473600
+              -71.111441,42.442981,64.01
               -71.111441,42.442981,64.008000
+              -71.110975,42.442196,64.01
               -71.110975,42.442196,64.008000
+              -71.113220,42.441754,56.39
               -71.113220,42.441754,56.388000
+              -71.114456,42.439018,56.39
               -71.114456,42.439018,56.388000
+              -71.113223,42.436757,37.62
               -71.113223,42.436757,37.616943
+              -71.109942,42.434980,45.31
               -71.109942,42.434980,45.307495
+              -71.109236,42.431240,26.56
               -71.109236,42.431240,26.561890
+              -71.107628,42.430950,23.47
               -71.107628,42.430950,23.469600
             </coordinates>
           </LineString>

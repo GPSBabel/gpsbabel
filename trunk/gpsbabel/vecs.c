@@ -499,13 +499,13 @@ vecs_t vec_list[] = {
                 "Wintec WBT-100/200 GPS Download",
                 NULL
         },
-		{
-				&vpl_vecs,
-				"vpl",
-				"Honda/Acura Navigation System VP Log File Format",
-				NULL
-		},
 #if MAXIMAL_ENABLED
+	{
+		&vpl_vecs,
+		"vpl",
+		"Honda/Acura Navigation System VP Log File Format",
+		NULL
+	},
         {
                 &wbt_fvecs,
                 "wbt-bin",

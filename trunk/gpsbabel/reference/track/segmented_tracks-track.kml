@@ -123,7 +123,6 @@
               <table>
                 <tr><td>Longitude: -86.844140 </td></tr>
                 <tr><td>Latitude: 35.826146 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 305.9 </td></tr>
               </table>
             ]]></description>
@@ -134,7 +133,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.844140,35.826146,0.000000</coordinates>
+              <coordinates>-86.844140,35.826146</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -144,7 +143,6 @@
               <table>
                 <tr><td>Longitude: -86.843587 </td></tr>
                 <tr><td>Latitude: 35.824859 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 160.8 </td></tr>
               </table>
             ]]></description>
@@ -155,7 +153,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843587,35.824859,0.000000</coordinates>
+              <coordinates>-86.843587,35.824859</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -165,7 +163,6 @@
               <table>
                 <tr><td>Longitude: -86.843869 </td></tr>
                 <tr><td>Latitude: 35.825508 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 340.7 </td></tr>
               </table>
             ]]></description>
@@ -176,7 +173,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843869,35.825508,0.000000</coordinates>
+              <coordinates>-86.843869,35.825508</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -186,7 +183,6 @@
               <table>
                 <tr><td>Longitude: -86.843399 </td></tr>
                 <tr><td>Latitude: 35.825659 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 68.4 </td></tr>
               </table>
             ]]></description>
@@ -197,7 +193,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843399,35.825659,0.000000</coordinates>
+              <coordinates>-86.843399,35.825659</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -207,7 +203,6 @@
               <table>
                 <tr><td>Longitude: -86.843647 </td></tr>
                 <tr><td>Latitude: 35.826201 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 339.6 </td></tr>
               </table>
             ]]></description>
@@ -218,7 +213,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843647,35.826201,0.000000</coordinates>
+              <coordinates>-86.843647,35.826201</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -228,7 +223,6 @@
               <table>
                 <tr><td>Longitude: -86.843137 </td></tr>
                 <tr><td>Latitude: 35.825023 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 160.7 </td></tr>
               </table>
             ]]></description>
@@ -239,7 +233,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843137,35.825023,0.000000</coordinates>
+              <coordinates>-86.843137,35.825023</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -249,7 +243,6 @@
               <table>
                 <tr><td>Longitude: -86.842846 </td></tr>
                 <tr><td>Latitude: 35.825765 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 17.7 </td></tr>
               </table>
             ]]></description>
@@ -260,7 +253,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.842846,35.825765,0.000000</coordinates>
+              <coordinates>-86.842846,35.825765</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -270,7 +263,6 @@
               <table>
                 <tr><td>Longitude: -86.842592 </td></tr>
                 <tr><td>Latitude: 35.825213 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 159.5 </td></tr>
               </table>
             ]]></description>
@@ -281,7 +273,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.842592,35.825213,0.000000</coordinates>
+              <coordinates>-86.842592,35.825213</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -291,7 +283,6 @@
               <table>
                 <tr><td>Longitude: -86.842084 </td></tr>
                 <tr><td>Latitude: 35.825410 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 64.5 </td></tr>
               </table>
             ]]></description>
@@ -302,7 +293,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.842084,35.825410,0.000000</coordinates>
+              <coordinates>-86.842084,35.825410</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -312,7 +303,6 @@
               <table>
                 <tr><td>Longitude: -86.842528 </td></tr>
                 <tr><td>Latitude: 35.826530 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 342.2 </td></tr>
               </table>
             ]]></description>
@@ -323,7 +313,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.842528,35.826530,0.000000</coordinates>
+              <coordinates>-86.842528,35.826530</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -333,7 +323,6 @@
               <table>
                 <tr><td>Longitude: -86.841917 </td></tr>
                 <tr><td>Latitude: 35.826228 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 121.4 </td></tr>
               </table>
             ]]></description>
@@ -344,7 +333,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.841917,35.826228,0.000000</coordinates>
+              <coordinates>-86.841917,35.826228</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -354,7 +343,6 @@
               <table>
                 <tr><td>Longitude: -86.841882 </td></tr>
                 <tr><td>Latitude: 35.826753 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 3.0 </td></tr>
               </table>
             ]]></description>
@@ -365,7 +353,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.841882,35.826753,0.000000</coordinates>
+              <coordinates>-86.841882,35.826753</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -375,7 +363,6 @@
               <table>
                 <tr><td>Longitude: -86.841275 </td></tr>
                 <tr><td>Latitude: 35.825879 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 150.6 </td></tr>
               </table>
             ]]></description>
@@ -386,7 +373,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.841275,35.825879,0.000000</coordinates>
+              <coordinates>-86.841275,35.825879</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -396,7 +383,6 @@
               <table>
                 <tr><td>Longitude: -86.840954 </td></tr>
                 <tr><td>Latitude: 35.826506 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 22.5 </td></tr>
               </table>
             ]]></description>
@@ -407,7 +393,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840954,35.826506,0.000000</coordinates>
+              <coordinates>-86.840954,35.826506</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -417,7 +403,6 @@
               <table>
                 <tr><td>Longitude: -86.840765 </td></tr>
                 <tr><td>Latitude: 35.826053 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 161.3 </td></tr>
               </table>
             ]]></description>
@@ -428,7 +413,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840765,35.826053,0.000000</coordinates>
+              <coordinates>-86.840765,35.826053</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -438,7 +423,6 @@
               <table>
                 <tr><td>Longitude: -86.840254 </td></tr>
                 <tr><td>Latitude: 35.826187 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 72.1 </td></tr>
               </table>
             ]]></description>
@@ -449,7 +433,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840254,35.826187,0.000000</coordinates>
+              <coordinates>-86.840254,35.826187</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -459,7 +443,6 @@
               <table>
                 <tr><td>Longitude: -86.840499 </td></tr>
                 <tr><td>Latitude: 35.826665 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 337.4 </td></tr>
               </table>
             ]]></description>
@@ -470,7 +453,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840499,35.826665,0.000000</coordinates>
+              <coordinates>-86.840499,35.826665</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -480,7 +463,6 @@
               <table>
                 <tr><td>Longitude: -86.840954 </td></tr>
                 <tr><td>Latitude: 35.826506 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 246.7 </td></tr>
               </table>
             ]]></description>
@@ -491,7 +473,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840954,35.826506,0.000000</coordinates>
+              <coordinates>-86.840954,35.826506</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -501,7 +483,6 @@
               <table>
                 <tr><td>Longitude: -86.839683 </td></tr>
                 <tr><td>Latitude: 35.826441 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 93.6 </td></tr>
               </table>
             ]]></description>
@@ -512,7 +493,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.839683,35.826441,0.000000</coordinates>
+              <coordinates>-86.839683,35.826441</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -522,7 +503,6 @@
               <table>
                 <tr><td>Longitude: -86.840327 </td></tr>
                 <tr><td>Latitude: 35.827349 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 330.1 </td></tr>
               </table>
             ]]></description>
@@ -533,7 +513,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840327,35.827349,0.000000</coordinates>
+              <coordinates>-86.840327,35.827349</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -543,7 +523,6 @@
               <table>
                 <tr><td>Longitude: -86.839510 </td></tr>
                 <tr><td>Latitude: 35.827134 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 108.0 </td></tr>
               </table>
             ]]></description>
@@ -554,7 +533,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.839510,35.827134,0.000000</coordinates>
+              <coordinates>-86.839510,35.827134</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -564,7 +543,6 @@
               <table>
                 <tr><td>Longitude: -86.839451 </td></tr>
                 <tr><td>Latitude: 35.827576 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 6.2 </td></tr>
               </table>
             ]]></description>
@@ -575,7 +553,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.839451,35.827576,0.000000</coordinates>
+              <coordinates>-86.839451,35.827576</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -585,7 +563,6 @@
               <table>
                 <tr><td>Longitude: -86.838782 </td></tr>
                 <tr><td>Latitude: 35.826744 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 146.9 </td></tr>
               </table>
             ]]></description>
@@ -596,7 +573,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.838782,35.826744,0.000000</coordinates>
+              <coordinates>-86.838782,35.826744</coordinates>
             </Point>
           </Placemark>
         </Folder>
@@ -607,49 +584,72 @@
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.844140,35.826146,0.000000
-                -86.843587,35.824859,0.000000
-                -86.843869,35.825508,0.000000
-                -86.843399,35.825659,0.000000
-                -86.843647,35.826201,0.000000
-                -86.843137,35.825023,0.000000
+                -86.844140,35.826146
+                -86.844140,35.826146
+                -86.843587,35.824859
+                -86.843587,35.824859
+                -86.843869,35.825508
+                -86.843869,35.825508
+                -86.843399,35.825659
+                -86.843399,35.825659
+                -86.843647,35.826201
+                -86.843647,35.826201
+                -86.843137,35.825023
+                -86.843137,35.825023
               </coordinates>
             </LineString>
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.842846,35.825765,0.000000
-                -86.842592,35.825213,0.000000
+                -86.842846,35.825765
+                -86.842846,35.825765
+                -86.842592,35.825213
+                -86.842592,35.825213
               </coordinates>
             </LineString>
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.842084,35.825410,0.000000
-                -86.842528,35.826530,0.000000
-                -86.841917,35.826228,0.000000
-                -86.841882,35.826753,0.000000
-                -86.841275,35.825879,0.000000
+                -86.842084,35.825410
+                -86.842084,35.825410
+                -86.842528,35.826530
+                -86.842528,35.826530
+                -86.841917,35.826228
+                -86.841917,35.826228
+                -86.841882,35.826753
+                -86.841882,35.826753
+                -86.841275,35.825879
+                -86.841275,35.825879
               </coordinates>
             </LineString>
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.840954,35.826506,0.000000
-                -86.840765,35.826053,0.000000
-                -86.840254,35.826187,0.000000
-                -86.840499,35.826665,0.000000
-                -86.840954,35.826506,0.000000
+                -86.840954,35.826506
+                -86.840954,35.826506
+                -86.840765,35.826053
+                -86.840765,35.826053
+                -86.840254,35.826187
+                -86.840254,35.826187
+                -86.840499,35.826665
+                -86.840499,35.826665
+                -86.840954,35.826506
+                -86.840954,35.826506
               </coordinates>
             </LineString>
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.839683,35.826441,0.000000
-                -86.840327,35.827349,0.000000
-                -86.839510,35.827134,0.000000
-                -86.839451,35.827576,0.000000
-                -86.838782,35.826744,0.000000
+                -86.839683,35.826441
+                -86.839683,35.826441
+                -86.840327,35.827349
+                -86.840327,35.827349
+                -86.839510,35.827134
+                -86.839510,35.827134
+                -86.839451,35.827576
+                -86.839451,35.827576
+                -86.838782,35.826744
+                -86.838782,35.826744
               </coordinates>
             </LineString>
           </MultiGeometry>
@@ -682,29 +682,29 @@
           <when />
           <when />
           <when>2007-07-27T05:35:00Z</when>
-          <gx:coord>-86.844140 35.836146 0.000000</gx:coord>
-          <gx:coord>-86.843587 35.834859 0.000000</gx:coord>
-          <gx:coord>-86.843869 35.835508 0.000000</gx:coord>
-          <gx:coord>-86.843399 35.835659 0.000000</gx:coord>
-          <gx:coord>-86.843647 35.836201 0.000000</gx:coord>
-          <gx:coord>-86.843137 35.835023 0.000000</gx:coord>
-          <gx:coord>-86.842846 35.835765 0.000000</gx:coord>
-          <gx:coord>-86.842592 35.835213 0.000000</gx:coord>
-          <gx:coord>-86.842084 35.835410 0.000000</gx:coord>
-          <gx:coord>-86.842528 35.836530 0.000000</gx:coord>
-          <gx:coord>-86.841917 35.836228 0.000000</gx:coord>
-          <gx:coord>-86.841882 35.836753 0.000000</gx:coord>
-          <gx:coord>-86.841275 35.835879 0.000000</gx:coord>
-          <gx:coord>-86.840954 35.836506 0.000000</gx:coord>
-          <gx:coord>-86.840765 35.836053 0.000000</gx:coord>
-          <gx:coord>-86.840254 35.836187 0.000000</gx:coord>
-          <gx:coord>-86.840499 35.836665 0.000000</gx:coord>
-          <gx:coord>-86.840954 35.836506 0.000000</gx:coord>
-          <gx:coord>-86.839683 35.836441 0.000000</gx:coord>
-          <gx:coord>-86.840327 35.837349 0.000000</gx:coord>
-          <gx:coord>-86.839510 35.837134 0.000000</gx:coord>
-          <gx:coord>-86.839451 35.837576 0.000000</gx:coord>
-          <gx:coord>-86.838782 35.836744 0.000000</gx:coord>
+          <gx:coord>-86.844140 35.836146</gx:coord>
+          <gx:coord>-86.843587 35.834859</gx:coord>
+          <gx:coord>-86.843869 35.835508</gx:coord>
+          <gx:coord>-86.843399 35.835659</gx:coord>
+          <gx:coord>-86.843647 35.836201</gx:coord>
+          <gx:coord>-86.843137 35.835023</gx:coord>
+          <gx:coord>-86.842846 35.835765</gx:coord>
+          <gx:coord>-86.842592 35.835213</gx:coord>
+          <gx:coord>-86.842084 35.835410</gx:coord>
+          <gx:coord>-86.842528 35.836530</gx:coord>
+          <gx:coord>-86.841917 35.836228</gx:coord>
+          <gx:coord>-86.841882 35.836753</gx:coord>
+          <gx:coord>-86.841275 35.835879</gx:coord>
+          <gx:coord>-86.840954 35.836506</gx:coord>
+          <gx:coord>-86.840765 35.836053</gx:coord>
+          <gx:coord>-86.840254 35.836187</gx:coord>
+          <gx:coord>-86.840499 35.836665</gx:coord>
+          <gx:coord>-86.840954 35.836506</gx:coord>
+          <gx:coord>-86.839683 35.836441</gx:coord>
+          <gx:coord>-86.840327 35.837349</gx:coord>
+          <gx:coord>-86.839510 35.837134</gx:coord>
+          <gx:coord>-86.839451 35.837576</gx:coord>
+          <gx:coord>-86.838782 35.836744</gx:coord>
         </gx:Track>
       </Placemark>
       <Folder>
@@ -726,7 +726,6 @@
               <table>
                 <tr><td>Longitude: -86.844140 </td></tr>
                 <tr><td>Latitude: 35.826146 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 305.9 </td></tr>
               </table>
             ]]></description>
@@ -737,7 +736,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.844140,35.826146,0.000000</coordinates>
+              <coordinates>-86.844140,35.826146</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -747,7 +746,6 @@
               <table>
                 <tr><td>Longitude: -86.843587 </td></tr>
                 <tr><td>Latitude: 35.824859 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 160.8 </td></tr>
               </table>
             ]]></description>
@@ -758,7 +756,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843587,35.824859,0.000000</coordinates>
+              <coordinates>-86.843587,35.824859</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -768,7 +766,6 @@
               <table>
                 <tr><td>Longitude: -86.843869 </td></tr>
                 <tr><td>Latitude: 35.825508 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 340.7 </td></tr>
               </table>
             ]]></description>
@@ -779,7 +776,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843869,35.825508,0.000000</coordinates>
+              <coordinates>-86.843869,35.825508</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -789,7 +786,6 @@
               <table>
                 <tr><td>Longitude: -86.843399 </td></tr>
                 <tr><td>Latitude: 35.825659 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 68.4 </td></tr>
               </table>
             ]]></description>
@@ -800,7 +796,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843399,35.825659,0.000000</coordinates>
+              <coordinates>-86.843399,35.825659</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -810,7 +806,6 @@
               <table>
                 <tr><td>Longitude: -86.843647 </td></tr>
                 <tr><td>Latitude: 35.826201 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 339.6 </td></tr>
               </table>
             ]]></description>
@@ -821,7 +816,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843647,35.826201,0.000000</coordinates>
+              <coordinates>-86.843647,35.826201</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -831,7 +826,6 @@
               <table>
                 <tr><td>Longitude: -86.843137 </td></tr>
                 <tr><td>Latitude: 35.825023 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 160.7 </td></tr>
               </table>
             ]]></description>
@@ -842,7 +836,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843137,35.825023,0.000000</coordinates>
+              <coordinates>-86.843137,35.825023</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -852,7 +846,6 @@
               <table>
                 <tr><td>Longitude: -86.842846 </td></tr>
                 <tr><td>Latitude: 35.825765 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 17.7 </td></tr>
               </table>
             ]]></description>
@@ -863,7 +856,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.842846,35.825765,0.000000</coordinates>
+              <coordinates>-86.842846,35.825765</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -873,7 +866,6 @@
               <table>
                 <tr><td>Longitude: -86.842592 </td></tr>
                 <tr><td>Latitude: 35.825213 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 159.5 </td></tr>
               </table>
             ]]></description>
@@ -884,7 +876,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.842592,35.825213,0.000000</coordinates>
+              <coordinates>-86.842592,35.825213</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -894,7 +886,6 @@
               <table>
                 <tr><td>Longitude: -86.842084 </td></tr>
                 <tr><td>Latitude: 35.825410 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 64.5 </td></tr>
               </table>
             ]]></description>
@@ -905,7 +896,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.842084,35.825410,0.000000</coordinates>
+              <coordinates>-86.842084,35.825410</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -915,7 +906,6 @@
               <table>
                 <tr><td>Longitude: -86.842528 </td></tr>
                 <tr><td>Latitude: 35.826530 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 342.2 </td></tr>
               </table>
             ]]></description>
@@ -926,7 +916,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.842528,35.826530,0.000000</coordinates>
+              <coordinates>-86.842528,35.826530</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -936,7 +926,6 @@
               <table>
                 <tr><td>Longitude: -86.841917 </td></tr>
                 <tr><td>Latitude: 35.826228 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 121.4 </td></tr>
               </table>
             ]]></description>
@@ -947,7 +936,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.841917,35.826228,0.000000</coordinates>
+              <coordinates>-86.841917,35.826228</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -957,7 +946,6 @@
               <table>
                 <tr><td>Longitude: -86.841882 </td></tr>
                 <tr><td>Latitude: 35.826753 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 3.0 </td></tr>
               </table>
             ]]></description>
@@ -968,7 +956,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.841882,35.826753,0.000000</coordinates>
+              <coordinates>-86.841882,35.826753</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -978,7 +966,6 @@
               <table>
                 <tr><td>Longitude: -86.841275 </td></tr>
                 <tr><td>Latitude: 35.825879 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 150.6 </td></tr>
               </table>
             ]]></description>
@@ -989,7 +976,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.841275,35.825879,0.000000</coordinates>
+              <coordinates>-86.841275,35.825879</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -999,7 +986,6 @@
               <table>
                 <tr><td>Longitude: -86.840954 </td></tr>
                 <tr><td>Latitude: 35.826506 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 22.5 </td></tr>
               </table>
             ]]></description>
@@ -1010,7 +996,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840954,35.826506,0.000000</coordinates>
+              <coordinates>-86.840954,35.826506</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1020,7 +1006,6 @@
               <table>
                 <tr><td>Longitude: -86.840765 </td></tr>
                 <tr><td>Latitude: 35.826053 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 161.3 </td></tr>
               </table>
             ]]></description>
@@ -1031,7 +1016,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840765,35.826053,0.000000</coordinates>
+              <coordinates>-86.840765,35.826053</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1041,7 +1026,6 @@
               <table>
                 <tr><td>Longitude: -86.840254 </td></tr>
                 <tr><td>Latitude: 35.826187 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 72.1 </td></tr>
               </table>
             ]]></description>
@@ -1052,7 +1036,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840254,35.826187,0.000000</coordinates>
+              <coordinates>-86.840254,35.826187</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1062,7 +1046,6 @@
               <table>
                 <tr><td>Longitude: -86.840499 </td></tr>
                 <tr><td>Latitude: 35.826665 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 337.4 </td></tr>
               </table>
             ]]></description>
@@ -1073,7 +1056,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840499,35.826665,0.000000</coordinates>
+              <coordinates>-86.840499,35.826665</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1083,7 +1066,6 @@
               <table>
                 <tr><td>Longitude: -86.840954 </td></tr>
                 <tr><td>Latitude: 35.826506 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 246.7 </td></tr>
               </table>
             ]]></description>
@@ -1094,7 +1076,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840954,35.826506,0.000000</coordinates>
+              <coordinates>-86.840954,35.826506</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1104,7 +1086,6 @@
               <table>
                 <tr><td>Longitude: -86.839683 </td></tr>
                 <tr><td>Latitude: 35.826441 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 93.6 </td></tr>
               </table>
             ]]></description>
@@ -1115,7 +1096,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.839683,35.826441,0.000000</coordinates>
+              <coordinates>-86.839683,35.826441</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1125,7 +1106,6 @@
               <table>
                 <tr><td>Longitude: -86.840327 </td></tr>
                 <tr><td>Latitude: 35.827349 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 330.1 </td></tr>
               </table>
             ]]></description>
@@ -1136,7 +1116,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840327,35.827349,0.000000</coordinates>
+              <coordinates>-86.840327,35.827349</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1146,7 +1126,6 @@
               <table>
                 <tr><td>Longitude: -86.839510 </td></tr>
                 <tr><td>Latitude: 35.827134 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 108.0 </td></tr>
               </table>
             ]]></description>
@@ -1157,7 +1136,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.839510,35.827134,0.000000</coordinates>
+              <coordinates>-86.839510,35.827134</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1167,7 +1146,6 @@
               <table>
                 <tr><td>Longitude: -86.839451 </td></tr>
                 <tr><td>Latitude: 35.827576 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 6.2 </td></tr>
               </table>
             ]]></description>
@@ -1178,7 +1156,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.839451,35.827576,0.000000</coordinates>
+              <coordinates>-86.839451,35.827576</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1188,7 +1166,6 @@
               <table>
                 <tr><td>Longitude: -86.838782 </td></tr>
                 <tr><td>Latitude: 35.826744 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 146.9 </td></tr>
               </table>
             ]]></description>
@@ -1199,7 +1176,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.838782,35.826744,0.000000</coordinates>
+              <coordinates>-86.838782,35.826744</coordinates>
             </Point>
           </Placemark>
         </Folder>
@@ -1210,49 +1187,72 @@
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.844140,35.826146,0.000000
-                -86.843587,35.824859,0.000000
-                -86.843869,35.825508,0.000000
-                -86.843399,35.825659,0.000000
-                -86.843647,35.826201,0.000000
-                -86.843137,35.825023,0.000000
+                -86.844140,35.826146
+                -86.844140,35.826146
+                -86.843587,35.824859
+                -86.843587,35.824859
+                -86.843869,35.825508
+                -86.843869,35.825508
+                -86.843399,35.825659
+                -86.843399,35.825659
+                -86.843647,35.826201
+                -86.843647,35.826201
+                -86.843137,35.825023
+                -86.843137,35.825023
               </coordinates>
             </LineString>
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.842846,35.825765,0.000000
-                -86.842592,35.825213,0.000000
+                -86.842846,35.825765
+                -86.842846,35.825765
+                -86.842592,35.825213
+                -86.842592,35.825213
               </coordinates>
             </LineString>
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.842084,35.825410,0.000000
-                -86.842528,35.826530,0.000000
-                -86.841917,35.826228,0.000000
-                -86.841882,35.826753,0.000000
-                -86.841275,35.825879,0.000000
+                -86.842084,35.825410
+                -86.842084,35.825410
+                -86.842528,35.826530
+                -86.842528,35.826530
+                -86.841917,35.826228
+                -86.841917,35.826228
+                -86.841882,35.826753
+                -86.841882,35.826753
+                -86.841275,35.825879
+                -86.841275,35.825879
               </coordinates>
             </LineString>
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.840954,35.826506,0.000000
-                -86.840765,35.826053,0.000000
-                -86.840254,35.826187,0.000000
-                -86.840499,35.826665,0.000000
-                -86.840954,35.826506,0.000000
+                -86.840954,35.826506
+                -86.840954,35.826506
+                -86.840765,35.826053
+                -86.840765,35.826053
+                -86.840254,35.826187
+                -86.840254,35.826187
+                -86.840499,35.826665
+                -86.840499,35.826665
+                -86.840954,35.826506
+                -86.840954,35.826506
               </coordinates>
             </LineString>
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.839683,35.826441,0.000000
-                -86.840327,35.827349,0.000000
-                -86.839510,35.827134,0.000000
-                -86.839451,35.827576,0.000000
-                -86.838782,35.826744,0.000000
+                -86.839683,35.826441
+                -86.839683,35.826441
+                -86.840327,35.827349
+                -86.840327,35.827349
+                -86.839510,35.827134
+                -86.839510,35.827134
+                -86.839451,35.827576
+                -86.839451,35.827576
+                -86.838782,35.826744
+                -86.838782,35.826744
               </coordinates>
             </LineString>
           </MultiGeometry>
@@ -1285,7 +1285,6 @@
               <table>
                 <tr><td>Longitude: -86.844140 </td></tr>
                 <tr><td>Latitude: 35.836146 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Speed: 0.0 mph </td></tr>
                 <tr><td>Heading: 305.9 </td></tr>
                 <tr><td>Time: 2007-07-27T05:24:05Z </td></tr>
@@ -1299,7 +1298,7 @@
             <TimeStamp><when>2007-07-27T05:24:05Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.844140,35.836146,0.000000</coordinates>
+              <coordinates>-86.844140,35.836146</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1309,7 +1308,6 @@
               <table>
                 <tr><td>Longitude: -86.843587 </td></tr>
                 <tr><td>Latitude: 35.834859 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Speed: 0.0 mph </td></tr>
                 <tr><td>Heading: 160.8 </td></tr>
               </table>
@@ -1321,7 +1319,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843587,35.834859,0.000000</coordinates>
+              <coordinates>-86.843587,35.834859</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1331,7 +1329,6 @@
               <table>
                 <tr><td>Longitude: -86.843869 </td></tr>
                 <tr><td>Latitude: 35.835508 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 340.7 </td></tr>
               </table>
             ]]></description>
@@ -1342,7 +1339,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843869,35.835508,0.000000</coordinates>
+              <coordinates>-86.843869,35.835508</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1352,7 +1349,6 @@
               <table>
                 <tr><td>Longitude: -86.843399 </td></tr>
                 <tr><td>Latitude: 35.835659 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 68.4 </td></tr>
               </table>
             ]]></description>
@@ -1363,7 +1359,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843399,35.835659,0.000000</coordinates>
+              <coordinates>-86.843399,35.835659</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1373,7 +1369,6 @@
               <table>
                 <tr><td>Longitude: -86.843647 </td></tr>
                 <tr><td>Latitude: 35.836201 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 339.6 </td></tr>
               </table>
             ]]></description>
@@ -1384,7 +1379,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843647,35.836201,0.000000</coordinates>
+              <coordinates>-86.843647,35.836201</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1394,7 +1389,6 @@
               <table>
                 <tr><td>Longitude: -86.843137 </td></tr>
                 <tr><td>Latitude: 35.835023 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Speed: 0.0 mph </td></tr>
                 <tr><td>Heading: 160.7 </td></tr>
                 <tr><td>Time: 2007-07-27T05:30:00Z </td></tr>
@@ -1408,7 +1402,7 @@
             <TimeStamp><when>2007-07-27T05:30:00Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.843137,35.835023,0.000000</coordinates>
+              <coordinates>-86.843137,35.835023</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1418,7 +1412,6 @@
               <table>
                 <tr><td>Longitude: -86.842846 </td></tr>
                 <tr><td>Latitude: 35.835765 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Speed: 0.0 mph </td></tr>
                 <tr><td>Heading: 17.7 </td></tr>
               </table>
@@ -1430,7 +1423,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.842846,35.835765,0.000000</coordinates>
+              <coordinates>-86.842846,35.835765</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1440,7 +1433,6 @@
               <table>
                 <tr><td>Longitude: -86.842592 </td></tr>
                 <tr><td>Latitude: 35.835213 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 159.5 </td></tr>
               </table>
             ]]></description>
@@ -1451,7 +1443,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.842592,35.835213,0.000000</coordinates>
+              <coordinates>-86.842592,35.835213</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1461,7 +1453,6 @@
               <table>
                 <tr><td>Longitude: -86.842084 </td></tr>
                 <tr><td>Latitude: 35.835410 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Speed: 0.0 mph </td></tr>
                 <tr><td>Heading: 64.5 </td></tr>
                 <tr><td>Time: 2007-07-27T05:31:00Z </td></tr>
@@ -1475,7 +1466,7 @@
             <TimeStamp><when>2007-07-27T05:31:00Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.842084,35.835410,0.000000</coordinates>
+              <coordinates>-86.842084,35.835410</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1485,7 +1476,6 @@
               <table>
                 <tr><td>Longitude: -86.842528 </td></tr>
                 <tr><td>Latitude: 35.836530 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Speed: 0.0 mph </td></tr>
                 <tr><td>Heading: 342.2 </td></tr>
               </table>
@@ -1497,7 +1487,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.842528,35.836530,0.000000</coordinates>
+              <coordinates>-86.842528,35.836530</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1507,7 +1497,6 @@
               <table>
                 <tr><td>Longitude: -86.841917 </td></tr>
                 <tr><td>Latitude: 35.836228 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 121.4 </td></tr>
               </table>
             ]]></description>
@@ -1518,7 +1507,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.841917,35.836228,0.000000</coordinates>
+              <coordinates>-86.841917,35.836228</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1528,7 +1517,6 @@
               <table>
                 <tr><td>Longitude: -86.841882 </td></tr>
                 <tr><td>Latitude: 35.836753 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 3.0 </td></tr>
               </table>
             ]]></description>
@@ -1539,7 +1527,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.841882,35.836753,0.000000</coordinates>
+              <coordinates>-86.841882,35.836753</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1549,7 +1537,6 @@
               <table>
                 <tr><td>Longitude: -86.841275 </td></tr>
                 <tr><td>Latitude: 35.835879 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 150.6 </td></tr>
               </table>
             ]]></description>
@@ -1560,7 +1547,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.841275,35.835879,0.000000</coordinates>
+              <coordinates>-86.841275,35.835879</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1570,7 +1557,6 @@
               <table>
                 <tr><td>Longitude: -86.840954 </td></tr>
                 <tr><td>Latitude: 35.836506 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 22.5 </td></tr>
               </table>
             ]]></description>
@@ -1581,7 +1567,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840954,35.836506,0.000000</coordinates>
+              <coordinates>-86.840954,35.836506</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1591,7 +1577,6 @@
               <table>
                 <tr><td>Longitude: -86.840765 </td></tr>
                 <tr><td>Latitude: 35.836053 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 161.3 </td></tr>
               </table>
             ]]></description>
@@ -1602,7 +1587,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840765,35.836053,0.000000</coordinates>
+              <coordinates>-86.840765,35.836053</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1612,7 +1597,6 @@
               <table>
                 <tr><td>Longitude: -86.840254 </td></tr>
                 <tr><td>Latitude: 35.836187 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 72.1 </td></tr>
               </table>
             ]]></description>
@@ -1623,7 +1607,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840254,35.836187,0.000000</coordinates>
+              <coordinates>-86.840254,35.836187</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1633,7 +1617,6 @@
               <table>
                 <tr><td>Longitude: -86.840499 </td></tr>
                 <tr><td>Latitude: 35.836665 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 337.4 </td></tr>
               </table>
             ]]></description>
@@ -1644,7 +1627,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840499,35.836665,0.000000</coordinates>
+              <coordinates>-86.840499,35.836665</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1654,7 +1637,6 @@
               <table>
                 <tr><td>Longitude: -86.840954 </td></tr>
                 <tr><td>Latitude: 35.836506 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 246.7 </td></tr>
               </table>
             ]]></description>
@@ -1665,7 +1647,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840954,35.836506,0.000000</coordinates>
+              <coordinates>-86.840954,35.836506</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1675,7 +1657,6 @@
               <table>
                 <tr><td>Longitude: -86.839683 </td></tr>
                 <tr><td>Latitude: 35.836441 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 93.6 </td></tr>
               </table>
             ]]></description>
@@ -1686,7 +1667,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.839683,35.836441,0.000000</coordinates>
+              <coordinates>-86.839683,35.836441</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1696,7 +1677,6 @@
               <table>
                 <tr><td>Longitude: -86.840327 </td></tr>
                 <tr><td>Latitude: 35.837349 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 330.1 </td></tr>
               </table>
             ]]></description>
@@ -1707,7 +1687,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.840327,35.837349,0.000000</coordinates>
+              <coordinates>-86.840327,35.837349</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1717,7 +1697,6 @@
               <table>
                 <tr><td>Longitude: -86.839510 </td></tr>
                 <tr><td>Latitude: 35.837134 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 108.0 </td></tr>
               </table>
             ]]></description>
@@ -1728,7 +1707,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.839510,35.837134,0.000000</coordinates>
+              <coordinates>-86.839510,35.837134</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1738,7 +1717,6 @@
               <table>
                 <tr><td>Longitude: -86.839451 </td></tr>
                 <tr><td>Latitude: 35.837576 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Heading: 6.2 </td></tr>
               </table>
             ]]></description>
@@ -1749,7 +1727,7 @@
             </LookAt>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.839451,35.837576,0.000000</coordinates>
+              <coordinates>-86.839451,35.837576</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -1759,7 +1737,6 @@
               <table>
                 <tr><td>Longitude: -86.838782 </td></tr>
                 <tr><td>Latitude: 35.836744 </td></tr>
-                <tr><td>Altitude: 0.000 ft </td></tr>
                 <tr><td>Speed: 0.0 mph </td></tr>
                 <tr><td>Heading: 146.9 </td></tr>
                 <tr><td>Time: 2007-07-27T05:35:00Z </td></tr>
@@ -1773,7 +1750,7 @@
             <TimeStamp><when>2007-07-27T05:35:00Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-86.838782,35.836744,0.000000</coordinates>
+              <coordinates>-86.838782,35.836744</coordinates>
             </Point>
           </Placemark>
         </Folder>
@@ -1784,49 +1761,72 @@
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.844140,35.836146,0.000000
-                -86.843587,35.834859,0.000000
-                -86.843869,35.835508,0.000000
-                -86.843399,35.835659,0.000000
-                -86.843647,35.836201,0.000000
-                -86.843137,35.835023,0.000000
+                -86.844140,35.836146
+                -86.844140,35.836146
+                -86.843587,35.834859
+                -86.843587,35.834859
+                -86.843869,35.835508
+                -86.843869,35.835508
+                -86.843399,35.835659
+                -86.843399,35.835659
+                -86.843647,35.836201
+                -86.843647,35.836201
+                -86.843137,35.835023
+                -86.843137,35.835023
               </coordinates>
             </LineString>
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.842846,35.835765,0.000000
-                -86.842592,35.835213,0.000000
+                -86.842846,35.835765
+                -86.842846,35.835765
+                -86.842592,35.835213
+                -86.842592,35.835213
               </coordinates>
             </LineString>
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.842084,35.835410,0.000000
-                -86.842528,35.836530,0.000000
-                -86.841917,35.836228,0.000000
-                -86.841882,35.836753,0.000000
-                -86.841275,35.835879,0.000000
+                -86.842084,35.835410
+                -86.842084,35.835410
+                -86.842528,35.836530
+                -86.842528,35.836530
+                -86.841917,35.836228
+                -86.841917,35.836228
+                -86.841882,35.836753
+                -86.841882,35.836753
+                -86.841275,35.835879
+                -86.841275,35.835879
               </coordinates>
             </LineString>
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.840954,35.836506,0.000000
-                -86.840765,35.836053,0.000000
-                -86.840254,35.836187,0.000000
-                -86.840499,35.836665,0.000000
-                -86.840954,35.836506,0.000000
+                -86.840954,35.836506
+                -86.840954,35.836506
+                -86.840765,35.836053
+                -86.840765,35.836053
+                -86.840254,35.836187
+                -86.840254,35.836187
+                -86.840499,35.836665
+                -86.840499,35.836665
+                -86.840954,35.836506
+                -86.840954,35.836506
               </coordinates>
             </LineString>
             <LineString>
               <tessellate>1</tessellate>
               <coordinates>
-                -86.839683,35.836441,0.000000
-                -86.840327,35.837349,0.000000
-                -86.839510,35.837134,0.000000
-                -86.839451,35.837576,0.000000
-                -86.838782,35.836744,0.000000
+                -86.839683,35.836441
+                -86.839683,35.836441
+                -86.840327,35.837349
+                -86.840327,35.837349
+                -86.839510,35.837134
+                -86.839510,35.837134
+                -86.839451,35.837576
+                -86.839451,35.837576
+                -86.838782,35.836744
+                -86.838782,35.836744
               </coordinates>
             </LineString>
           </MultiGeometry>

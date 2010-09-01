@@ -117,7 +117,7 @@
         <TimeStamp><when>2008-08-20T07:04:48Z</when></TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-0.035187,51.506172,0.137000</coordinates>
+          <coordinates>-0.035187,51.506172,0.14</coordinates>
         </Point>
       </Placemark>
     </Folder>
@@ -135,14 +135,14 @@
           <when>2008-08-20T07:04:53Z</when>
           <when>2008-08-20T07:04:54Z</when>
           <when>2008-08-20T07:04:55Z</when>
-          <gx:coord>-0.035187 51.506172 0.137000</gx:coord>
-          <gx:coord>-0.035242 51.506196 -0.824000</gx:coord>
-          <gx:coord>-0.035303 51.506221 -15.724000</gx:coord>
-          <gx:coord>-0.035354 51.506246 -15.724000</gx:coord>
-          <gx:coord>-0.035400 51.506271 -15.244000</gx:coord>
-          <gx:coord>-0.035438 51.506297 -15.244000</gx:coord>
-          <gx:coord>-0.035462 51.506315 -15.244000</gx:coord>
-          <gx:coord>-0.035472 51.506324 -15.244000</gx:coord>
+          <gx:coord>-0.035187 51.506172 0.14</gx:coord>
+          <gx:coord>-0.035242 51.506196 -0.82</gx:coord>
+          <gx:coord>-0.035303 51.506221 -15.72</gx:coord>
+          <gx:coord>-0.035354 51.506246 -15.72</gx:coord>
+          <gx:coord>-0.035400 51.506271 -15.24</gx:coord>
+          <gx:coord>-0.035438 51.506297 -15.24</gx:coord>
+          <gx:coord>-0.035462 51.506315 -15.24</gx:coord>
+          <gx:coord>-0.035472 51.506324 -15.24</gx:coord>
           <ExtendedData>
             <SchemaData schemaUrl="#schema">
               <gx:SimpleArrayData name="cadence">
@@ -217,7 +217,7 @@
             <TimeStamp><when>2008-08-20T07:04:48Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-0.035187,51.506172,0.137000</coordinates>
+              <coordinates>-0.035187,51.506172,0.14</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -243,7 +243,7 @@
             <TimeStamp><when>2008-08-20T07:04:49Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-0.035242,51.506196,-0.824000</coordinates>
+              <coordinates>-0.035242,51.506196,-0.82</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -269,7 +269,7 @@
             <TimeStamp><when>2008-08-20T07:04:50Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-0.035303,51.506221,-15.724000</coordinates>
+              <coordinates>-0.035303,51.506221,-15.72</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -295,7 +295,7 @@
             <TimeStamp><when>2008-08-20T07:04:51Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-0.035354,51.506246,-15.724000</coordinates>
+              <coordinates>-0.035354,51.506246,-15.72</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -320,7 +320,7 @@
             <TimeStamp><when>2008-08-20T07:04:52Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-0.035400,51.506271,-15.244000</coordinates>
+              <coordinates>-0.035400,51.506271,-15.24</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -345,7 +345,7 @@
             <TimeStamp><when>2008-08-20T07:04:53Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-0.035438,51.506297,-15.244000</coordinates>
+              <coordinates>-0.035438,51.506297,-15.24</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -371,7 +371,7 @@
             <TimeStamp><when>2008-08-20T07:04:54Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-0.035462,51.506315,-15.244000</coordinates>
+              <coordinates>-0.035462,51.506315,-15.24</coordinates>
             </Point>
           </Placemark>
           <Placemark>
@@ -397,7 +397,7 @@
             <TimeStamp><when>2008-08-20T07:04:55Z</when></TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
-              <coordinates>-0.035472,51.506324,-15.244000</coordinates>
+              <coordinates>-0.035472,51.506324,-15.24</coordinates>
             </Point>
           </Placemark>
         </Folder>
@@ -407,13 +407,21 @@
           <LineString>
             <tessellate>1</tessellate>
             <coordinates>
+              -0.035187,51.506172,0.14
               -0.035187,51.506172,0.137000
+              -0.035242,51.506196,-0.82
               -0.035242,51.506196,-0.824000
+              -0.035303,51.506221,-15.72
               -0.035303,51.506221,-15.724000
+              -0.035354,51.506246,-15.72
               -0.035354,51.506246,-15.724000
+              -0.035400,51.506271,-15.24
               -0.035400,51.506271,-15.244000
+              -0.035438,51.506297,-15.24
               -0.035438,51.506297,-15.244000
+              -0.035462,51.506315,-15.24
               -0.035462,51.506315,-15.244000
+              -0.035472,51.506324,-15.24
               -0.035472,51.506324,-15.244000
             </coordinates>
           </LineString>
