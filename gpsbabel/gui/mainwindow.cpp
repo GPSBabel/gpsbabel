@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.24 2010-06-27 21:12:37 robertl Exp $
+// $Id: mainwindow.cpp,v 1.25 2010-09-02 03:10:46 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -975,10 +975,17 @@ void MainWindow::dropEvent(QDropEvent *event)
   foreach (QString format, event->mimeData()->formats()) {
     if (format == "text/uri-list") {
       QList<QUrl> urlList = event->mimeData()->urls();
+      bd.inputFileNames.clear();
       for (int i = 0; i < urlList.size(); ++i) {
-        QString url = urlList.at(i).path();
-        QString fmt = getFormatNameForExtension("gpx");
+        QFileInfo file_info(urlList.at(i).path());
+        QString name = file_info.filePath();
+        QString ext = file_info.suffix();
+
+        QString fmt = getFormatNameForExtension(ext);
         setComboToFormat(ui.inputFormatCombo, fmt, true);
+        ui.inputFileNameText->setText(name);
+        bd.inputFileNames << ui.inputFileNameText->text();
+        event->acceptProposedAction();
       }
     }
   }
