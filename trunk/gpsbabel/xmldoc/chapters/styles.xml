@@ -762,6 +762,69 @@ examples:
 </screen>
 </section>
 
+<section id="style_def_utm">
+<title>UTM</title>
+<para>A location in UTM has several components: a zone, a northing, and an easting.   The UTM format specifier is the most common representation of these.
+</para>
+<para>example: </para>
+<screen format="linespecific">
+IFIELD UTM, "%s" # writes 6S 519045 3984035  -the easting is first by convention.</screen>
+</section>
+
+<section id="style_def_utm_easting">
+<title>UTM_EASTING</title>
+<para>This is the decimal component representing the easting
+</para>
+<para>example: </para>
+<screen format="linespecific">
+IFIELD UTM_EASTING, "", "%d"  # outputs 519045
+</screen>
+</section>
+
+<section id="style_def_utm_northing">
+<title>UTM_NORTHING</title>
+<para>
+This is the decimal component representing the northing
+</para>
+<para>example: </para>
+<screen format="linespecific">
+IFIELD UTM_NORTHING "", "%d"  # outputs 3984035
+</screen>
+</section>
+
+<section id="style_def_utm_zone">
+<title>UTM_ZONE</title>
+<para>The UTM zone.
+</para>
+<para>example: </para>
+<screen format="linespecific">
+IFIELD UTM_ZONE "", "%d"  # outputs 6
+</screen>
+</section>
+
+<section id="style_def_utm_zonec">
+<title>UTM_ZONEC</title>
+<para>
+The UTM Zone character.
+</para>
+<para>example: </para>
+<screen format="linespecific">
+IFIELD UTM_ZONEC "", "%d"  # outputs S
+</screen>
+</section>
+
+<section id="style_def_utm_zonef">
+<title></title>
+<para>
+The full UTM zone and latitude band.
+</para>
+<para>example: </para>
+<screen format="linespecific">
+IFIELD UTM_ZONEF "", "%d%c"  # outputs 6S
+</screen>
+</section>
+
+
 <section id="style_def_altfeet">
 <title>ALT_FEET</title>
 <para>
