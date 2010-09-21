@@ -33,6 +33,8 @@
 		    * 0x12 - most files in my test pool :-)
 	2008/11/19: Fix routes with a loop but different start and end point
 	2008/12/12: Fix object release error
+	2010/09/10: Added read support for version 0x18
+		    (test file created by Memory-Map European Edition, Version 5.4.2, Build 1089).
 */
 
 #include <ctype.h>
@@ -132,6 +134,12 @@ static const mmo_icon_mapping_t mmo_icon_value_table[] = {
 
 	{ -1, NULL }
 };
+
+static const gbuint32 obj_type_ico = 0x00;
+static const gbuint32 obj_type_rte = 0x14;
+static const gbuint32 obj_type_trk = 0x1E;
+static const gbuint32 obj_type_txt = 0x32;
+static const gbuint32 obj_type_wpt = 0x3C;
 
 /* helpers */
 
@@ -250,8 +258,17 @@ mmo_get_object(const gbuint16 objid)
 	mmo_data_t *data;
 	
 	snprintf(key, sizeof(key), "%d", objid | 0x8000);
-	if (! avltree_find(objects, key, (void *)&data))
+	if (! avltree_find(objects, key, (void *)&data)) {
+#ifdef MMO_DBG
+		gbfseek(fin, -2, SEEK_CUR);
+		int ni, n;
+		for (ni = 0; (n = gbfgetc(fin)) != EOF; ni++) {
+			DBG(("mmo_get_object", "%04X %02X %c (%d)\n",
+				ni, n, n >= 32 && n <= 126 ? (char)n : '.', n));
+		}
+#endif
 		fatal(MYNAME ": Unregistered object id 0x%04X!\n", objid | 0x8000);
+	}
 	
 	return data;
 }
@@ -317,6 +334,7 @@ mmo_end_of_route(mmo_data_t *data)
 		rte->line_color.opacity = 255 - (buf[6] * 51);
 		DBG((sobj, "color = 0x%06X\n", rte->line_color.bbggrr));
 		DBG((sobj, "transparency = %d (-> %d)\n", buf[6], rte->line_color.opacity));
+		DBG((sobj, "for \"%s\" \n", data->name));
 	}
 
 	if (rte->rte_waypt_ct == 0) {	/* don't keep empty routes */
@@ -334,6 +352,7 @@ mmo_read_category(mmo_data_t *data)
 	if (marker & 0x8000) {
 		mmo_data_t *tmp;
 		
+		DBG(("mmo_read_category", "reading category object\n"));
 		gbfseek(fin, -2, SEEK_CUR);
 		tmp = mmo_read_object();
 		if (data) data->category = tmp->name;
@@ -347,22 +366,41 @@ mmo_read_CObjIcons(mmo_data_t *data)
 #ifdef MMO_DBG
 	const char *sobj = "CObjIcons";
 #endif
-	int i;
+	int icon_id;
 
 	DBG((sobj, ":-----------------------------------------------------\n"));
 	DBG((sobj, "name = \"%s\" [ visible=%s, id=0x%04X ]\n", 
 		data->name, data->visible ? "yes" : "NO", data->objid));
 
-	gbfseek(fin, 6, SEEK_CUR);	/* skip 6 unknown bytes */
+	if (mmo_version >= 0x18) {
+		gbuint16 u16;
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+	}
+	gbuint16 u16;
+	u16 = gbfgetuint16(fin);
+	DBG((sobj, "unknown value = 0x%04X\n", u16));
+	u16 = gbfgetuint16(fin);
+	DBG((sobj, "unknown value = 0x%04X\n", u16));
+	u16 = gbfgetuint16(fin);
+	DBG((sobj, "unknown value = 0x%04X\n", u16));
 
-	while ((i = gbfgetuint32(fin))) {
+	while ((icon_id = gbfgetuint32(fin))) {
 		char *name;
 		(void) gbfgetuint32(fin);
 		(void) gbfgetuint32(fin);
 		name = mmo_readstr();
-//		DBG((sobj, "bitmap(%d) = \"%s\"\n", i, name));
-		mmo_register_icon(i, name);
+		DBG((sobj, "bitmap(0x%08X) = \"%s\"\n", icon_id, name));
+		mmo_register_icon(icon_id, name);
 		xfree(name);
+		// The next four bytes hold the length of the image,
+		// read them and then skip the image data.
 		gbfseek(fin, gbfgetuint32(fin), SEEK_CUR);
 	}
 }
@@ -392,6 +430,18 @@ mmo_read_CObjWaypoint(mmo_data_t *data)
 	time = data->mtime;
 	if (! time) time = data->ctime;
 	if (time > 0) wpt->creation_time = time;
+
+	if (mmo_version >= 0x18) {
+		gbuint16 u16;
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+	}
 
 	wpt->latitude = gbfgetdbl(fin);
 	wpt->longitude = gbfgetdbl(fin);
@@ -447,6 +497,11 @@ mmo_read_CObjWaypoint(mmo_data_t *data)
 			wpt->wpt_flags.icon_descr_is_dynamic = 1;
 			DBG((sobj, "icon = \"%s\"\n", wpt->icon_descr));
 		}
+#ifdef MMO_DBG
+		else {
+			DBG((sobj, "icon not found for 0x%08X\n", i));
+		}
+#endif
 	}
 
 	wpt->proximity = le_read_float(&buf[4]);
@@ -492,6 +547,18 @@ mmo_read_CObjRoute(mmo_data_t *data)
 	rte->rte_name = xstrdup(data->name);
 	route_add_head(rte);
 
+	if (mmo_version >= 0x18) {
+		gbuint16 u16;
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+	}
+
 	ux = gbfgetc(fin);		/* line label */
 	DBG((sobj, "line label = %d\n", ux));
 
@@ -509,6 +576,7 @@ mmo_read_CObjRoute(mmo_data_t *data)
 	while (data->left > 0) {
 		mmo_data_t *tmp;
 		
+		DBG((sobj, "read next waypoint\n"));
 		tmp = mmo_read_object();
 		if (tmp && tmp->data && (tmp->type = wptdata)) {
 			waypoint *wpt;
@@ -549,6 +617,18 @@ mmo_read_CObjTrack(mmo_data_t *data)
 	trk->rte_name = xstrdup(data->name);
 	track_add_head(trk);
 
+	if (mmo_version >= 0x18) {
+		gbuint16 u16;
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+		u16 = gbfgetuint16(fin);
+		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+	}
+
 	tp = gbfgetint16(fin);
 	DBG((sobj, "track has %d point(s)\n", tp));
 
@@ -560,7 +640,9 @@ mmo_read_CObjTrack(mmo_data_t *data)
 		
 		wpt->latitude = gbfgetdbl(fin);
 		wpt->longitude = gbfgetdbl(fin);
+		DBG((sobj, "coordinates = %f / %f\n", wpt->latitude, wpt->longitude));
 		unk = gbfgetc(fin);
+		DBG((sobj, "Unknown = 0x%02X (%d)\n", unk, unk));
 		
 		wpt->creation_time = gbfgetint32(fin);
 		wpt->altitude = gbfgetflt(fin);
@@ -568,11 +650,11 @@ mmo_read_CObjTrack(mmo_data_t *data)
 		if (unk != 0) {
 			gbuint16 ux;
 			ux = gbfgetuint16(fin);
-			DBG((sobj, "u16 = %04X (%d)\n", ux, ux));
+			DBG((sobj, "unknown value = 0x%04X (%d)\n", ux, ux));
 			if (unk > 1) {
 				gbuint16 ux;
 				ux = gbfgetuint16(fin);
-				DBG((sobj, "u16 = %04X (%d)\n", ux, ux));
+				DBG((sobj, "unknown value = 0x%04X (%d)\n", ux, ux));
 			}
 		}
 		track_add_wpt(trk, wpt);
@@ -584,15 +666,15 @@ mmo_read_CObjTrack(mmo_data_t *data)
 		u32 = gbfgetuint32(fin); 	/* Min. update interval */
 		DBG((sobj, "min. update interval = %d\n", u32));
 		u32 = gbfgetuint32(fin); 	/* unknown */
-//		DBG((sobj, "unknown value = 0x%8X (%d)\n", u32, u32));
+		DBG((sobj, "unknown value = 0x%08X (%d)\n", u32, u32));
 		u32 = gbfgetuint32(fin); 	/* unknown */
-//		DBG((sobj, "unknown value = 0x%8X (%d)\n", u32, u32));
+		DBG((sobj, "unknown value = 0x%08X (%d)\n", u32, u32));
 		u32 = gbfgetuint32(fin); 	/* unknown */
 		DBG((sobj, "min. update distance = %d\n", u32));
 		u32 = gbfgetuint32(fin); 	/* unknown */
 		DBG((sobj, "track partition interval = %d\n", u32 / 60));
 		u32 = gbfgetuint32(fin); 	/* unknown */
-//		DBG((sobj, "unknown value = 0x%8X (%d)\n", u32, u32));
+		DBG((sobj, "unknown value = 0x%08X (%d)\n", u32, u32));
 		u32 = gbfgetuint32(fin); 	/* unknown */
 		DBG((sobj, "tick interval = %d\n", u32 / 60));
 		trk->line_color.bbggrr = gbfgetuint32(fin); 	/* rgb color */
@@ -616,11 +698,11 @@ mmo_read_CObjTrack(mmo_data_t *data)
 			gbuint16 u16;
 			
 			u8 = gbfgetc(fin);
-//			DBG((sobj, "u8 = 0x%X (since 0x16)\n", u8));
+			DBG((sobj, "unknown value = 0x%02X (since 0x16)\n", u8));
 			u16 = gbfgetuint16(fin);
-//			DBG((sobj, "u16 = 0x%X (since 0x16)\n", u16));
+			DBG((sobj, "unknown value = 0x%04X (since 0x16)\n", u16));
 			u16 = gbfgetuint16(fin);
-//			DBG((sobj, "u16 = 0x%X (since 0x16)\n", u16));
+			DBG((sobj, "unknown value = 0x%04X (since 0x16)\n", u16));
 		}
 	}
 	
@@ -699,9 +781,14 @@ mmo_read_object(void)
 	int objid;
 	mmo_data_t *data = NULL;
 
+	// There are three cases:
+	// a new object of a type that has not occurred previously in this file;
+	// a new object; or
+	// a back reference to an object that appears earlier in the file.
+
 	objid = gbfgetuint16(fin);
-	DBG(("mmo_read_object", "objid = 0x%04X\n", objid));
 	if (objid == 0xFFFF) {
+		DBG(("mmo_read_object", "Registering new object type\n"));
 		gbuint16 version;
 		char *sobj;
 		int len;
@@ -716,6 +803,7 @@ mmo_read_object(void)
 		sobj = xmalloc(len + 1);
 		sobj[len] = '\0';
 		gbfread(sobj, len, 1, fin);
+		DBG(("mmo_read_object", "%s\n", sobj));
 		
 		if (strcmp(sobj, "CObjIcons") == 0) ico_object_id = objid;
 		else if (strcmp(sobj, "CCategory") == 0) cat_object_id = objid;
@@ -729,8 +817,9 @@ mmo_read_object(void)
 		xfree(sobj);
 	}
 
-	if (objid & 0x8000) {
+	DBG(("mmo_read_object", "objid = 0x%04X\n", objid));
 
+	if (objid & 0x8000) {
 		data = mmo_register_object(mmo_object_id++, NULL, 0);
 		data->name = mmo_readstr();
 
@@ -739,10 +828,25 @@ mmo_read_object(void)
 			data->mtime = gbfgetuint32(fin);
 			data->locked = gbfgetc(fin);
 			data->visible = gbfgetc(fin);
-			(void) gbfgetuint16(fin);
-			(void) gbfgetuint16(fin);
-		
+
+			gbuint32 obj_type;
+			obj_type = gbfgetuint32(fin);
+#ifdef MMO_DBG
+			gbuint32 expected_type = 0xFFFFFFFF;
+			if      (objid == ico_object_id) expected_type = obj_type_ico;
+			else if (objid == trk_object_id) expected_type = obj_type_trk;
+			else if (objid == wpt_object_id) expected_type = obj_type_wpt;
+			else if (objid == rte_object_id) expected_type = obj_type_rte;
+			else if (objid == txt_object_id) expected_type = obj_type_txt;
+			if (mmo_version >= 0x18) expected_type <<= 24;
+			DBG(("mmo_read_object", "object type = 0x%08X\n", obj_type));
+			if (obj_type != expected_type)
+				DBG(("mmo_read_object", "   expected   0x%08X\n", expected_type));
+#endif
+
 			if (objid != ico_object_id) mmo_read_category(data);
+			DBG(("mmo_read_object", "Category : %s\n",
+				data->category ? data->category : "[No category]"));
 		}
 
 		if (objid == cat_object_id) ; 	/* do nothing */		
@@ -864,7 +968,7 @@ mmo_read(void)
 	DBG((sobj, "number of objects = %d\n", mmo_obj_ct));
 	
 	i = gbfgetuint16(fin);
-	if (i != 0xFFFF) fatal(MYNAME ": Marker not equel to 0xFFFF!\n");
+	if (i != 0xFFFF) fatal(MYNAME ": Marker not equal to 0xFFFF!\n");
 
 	mmo_version = gbfgetuint16(fin);
 	DBG((sobj, "version = 0x%02X\n", mmo_version));
@@ -944,7 +1048,8 @@ mmo_write_obj_mark(const char *sobj, const char *name)
 		mmo_object_id++;
 		snprintf(buf, sizeof(buf), "%u", mmo_object_id);
 
-		DBG(("write", "object \"%s\" registered (id = 0x%04X)\n", name, mmo_object_id));
+		DBG(("write", "object \"%s\", registered type \"%s\" (id = 0x%04X)\n",
+			name, sobj, mmo_object_id));
 
 		avltree_insert(mmobjects, sobj, xstrdup(buf));
 		
@@ -980,7 +1085,7 @@ mmo_write_category(const char *sobj, const char *name)
 
 static int
 mmo_write_obj_head(const char *sobj, const char *name, const time_t ctime, 
-	const gpsdata_type type)
+	const gbuint32 obj_type)
 {
 	int res;
 
@@ -992,13 +1097,7 @@ mmo_write_obj_head(const char *sobj, const char *name, const time_t ctime,
 	gbfputc(*opt_locked, fout);
 	gbfputc(*opt_visible, fout);
 
-	switch(type) {
-		case trkdata: gbfputuint16(0x1E, fout); break;
-		case wptdata: gbfputuint16(0x3C, fout); break;
-		case rtedata: gbfputuint16(0x14, fout); break;
-		default: gbfputuint16(type, fout); break;
-	}
-	gbfputuint16(0x00, fout);
+	gbfputuint32(obj_type, fout);
 	
 	return res;
 }
@@ -1032,7 +1131,7 @@ mmo_write_wpt_cb(const waypoint *wpt)
 	DBG(("write", "waypoint \"%s\"\n", wpt->shortname ? wpt->shortname : "Mark"));
 
 	objid = mmo_write_obj_head("CObjWaypoint",
-		(wpt->shortname && *wpt->shortname) ? wpt->shortname : "Mark", time, wptdata);
+		(wpt->shortname && *wpt->shortname) ? wpt->shortname : "Mark", time, obj_type_wpt);
 	data = mmo_register_object(objid, wpt, wptdata);
 	data->refct = 1;
 	mmo_write_category("CCategory", (mmo_datatype == rtedata) ? "Waypoints" : "Marks");
@@ -1115,7 +1214,7 @@ mmo_write_rte_head_cb(const route_head *rte)
 	if (time == 0x7FFFFFFF) time = gpsbabel_time;
 	
 	objid = mmo_write_obj_head("CObjRoute",
-		(rte->rte_name && *rte->rte_name) ? rte->rte_name : "Route", time, rtedata);
+		(rte->rte_name && *rte->rte_name) ? rte->rte_name : "Route", time, obj_type_rte);
 	mmo_register_object(objid, rte, rtedata);
 	mmo_write_category("CCategory", "Route");
 	gbfputc(0, fout); /* unknown */
@@ -1163,7 +1262,7 @@ mmo_write_trk_head_cb(const route_head *trk)
 	if (trk->rte_waypt_ct <= 0) return;
 	
 	objid = mmo_write_obj_head("CObjTrack",
-		(trk->rte_name && *trk->rte_name) ? trk->rte_name : "Track", gpsbabel_time, trkdata);
+		(trk->rte_name && *trk->rte_name) ? trk->rte_name : "Track", gpsbabel_time, obj_type_trk);
 	mmo_write_category("CCategory", "Track");
 	gbfputuint16(trk->rte_waypt_ct, fout);
 	
@@ -1252,7 +1351,7 @@ mmo_write(void)
 	
 	gbfputuint16(mmo_obj_ct, fout);
 	
-	mmo_write_obj_head("CObjIcons", "Unnamed object", gpsbabel_time, 0);
+	mmo_write_obj_head("CObjIcons", "Unnamed object", gpsbabel_time, obj_type_ico);
 	for (i = 0; i < 5; i++) gbfputuint16(0, fout);
 
 	mmo_datatype = wptdata;
