@@ -270,9 +270,12 @@ compare ${REFERENCE}/track/tcxtest~gpx-history.tcx ${TMPDIR}/tcxtest~gpx-history
 #
 # Memory-Map Navigator overlay files (.mmo)
 #
-# reading
+# reading version 22 (0x16)
 gpsbabel -i mmo -f ${REFERENCE}/memory-map.mmo -o gpx -F ${TMPDIR}/memory-map~mmo.gpx
 compare ${REFERENCE}/memory-map~mmo.gpx ${TMPDIR}/memory-map~mmo.gpx
+# reading version 24 (0x18)
+gpsbabel -i mmo -f ${REFERENCE}/memory-map_v24.mmo -o gpx -F ${TMPDIR}/memory-map_v24~mmo.gpx
+compare ${REFERENCE}/memory-map_v24~mmo.gpx ${TMPDIR}/memory-map_v24~mmo.gpx
 #writing (check only for memory leaks)
 gpsbabel -i gpx -f ${REFERENCE}/memory-map~mmo.gpx -o mmo -F ${TMPDIR}/memory-map~mmo.mmo
 gpsbabel -i mmo -f ${TMPDIR}/memory-map~mmo.mmo -o gpx -F ${TMPDIR}/memory-map~mmo~gpx.mmo
