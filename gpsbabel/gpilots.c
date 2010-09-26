@@ -388,6 +388,9 @@ my_write_wpt(const waypoint *wpt)
 	vdata = (char *)rec + sizeof (*rec);
 
 	rec->header.type = 4;
+	rec->header.size = 5;
+	rec->header.version = 6;
+
 	strncpy(rec->wpt.d103.ident, wpt->shortname, sizeof(rec->wpt.d103.ident));
 	strncpy(rec->wpt.d103.cmnt, wpt->description, sizeof(rec->wpt.d103.cmnt));
 	lat = wpt->latitude  / 180.0 * 2147483648.0;
@@ -395,7 +398,8 @@ my_write_wpt(const waypoint *wpt)
 	le_write32(&rec->wpt.d103.lat, lat);
 	le_write32(&rec->wpt.d103.lon, lon);
 
-	pdb_write_rec(file_out, 0, 0, ct++, rec, (char *)vdata - (char *)rec);
+	pdb_write_rec(file_out, 0, ct, ct+1, rec, (char *)vdata - (char *)rec);
+	ct++;
 	xfree(rec);
 }
 
@@ -425,7 +429,7 @@ data_write(void)
 
 ff_vecs_t gpilots_vecs = {
 	ff_type_file,
-	FF_CAP_RW_WPT,
+	{ ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write, ff_cap_none},
 	rd_init,
 	wr_init,
 	rd_deinit,
