@@ -1,0 +1,78 @@
+<para> 
+The polygon filter includes points if they are inside
+of a polygon.  A polygon file looks like an 
+<link linkend="filter_arc">arc</link> file, except
+that the arc it describes must be a closed cycle.  That is,
+for a simple polygon, the first and last points must be the
+same.  Here's a square:
+</para>
+<screen format="linespecific">
+# A square (not really) polygon
+41.0000       -85.0000
+41.0000       -86.0000
+42.0000       -86.0000
+42.0000       -85.0000
+41.0000       -85.0000
+</screen>
+<para> 
+Polygons may include islands and holes.  To include an
+island or a hole, just append it to the main polygon.
+</para>
+<screen format="linespecific">
+# A square polygon with a triangular hole
+41.0000       -85.0000
+41.0000       -86.0000
+42.0000       -86.0000
+42.0000       -85.0000
+41.0000       -85.0000
+# The hole begins here
+41.5000       -85.5000
+41.6000       -85.5000
+41.6000       -85.6000
+41.5000       -85.5000
+</screen>
+<para>
+As with the arc filter, you define a polygon by
+giving the name of the file that contains it, using
+the <option>file</option> option.  
+</para>
+<para> 
+Note that this filter currently will not work properly
+if your polygon contains one or both poles or if it spans the
+line of 180 degrees east or west longitude.
+</para>
+<example id="example_polygon_filter">
+<title>Using the polygon filter</title>
+<para> 
+Suppose you have a polygon file that defines the border of your county, 
+called mycounty.txt.  This command line will give you only the points 
+in your county:
+</para>
+<para><userinput>gpsbabel -i geo -f 1.loc -x polygon,file=mycounty.txt -o mapsend -F 2.wpt</userinput></para>
+</example>
+<example id="example_in_or_close_to">
+<title>Using the polygon and arc filters to find points in or nearly in a 
+polygon</title>
+<para>
+Because the polygon and <link linkend="filter_arc">arc</link> filters use
+the same file format, you can use them together to find all points that are
+"in or nearly in" a polygon.  This can be useful if your waypoints or the 
+boundaries of your polygon are not quite perfect, so you want to provide a 
+buffer zone around it in case there are points nearby that should be in the 
+polygon but aren't quite.
+</para>
+<para><userinput>
+gpsbabel -i gpx -f points.gpx -x stack,push -x polygon,file=mycounty.txt 
+-x stack,swap -x arc,file=mycounty.txt,distance=1k -x stack,pop,append 
+-x duplicate,shortname -o gpx -F nearmycounty.gpx
+</userinput></para>
+<para>
+This command makes a copy of the points, finds the ones that are in your
+your county, swaps that result with the copy of the original set of points,
+finds the ones from that set that are within 1 km of the border of the county, 
+puts the two lists together, and then filters out any points that appear twice
+(This step is necessary because points inside the county but near the county 
+line will be kept by both the polygon and the arc filter.)
+</para>
+</example>
+

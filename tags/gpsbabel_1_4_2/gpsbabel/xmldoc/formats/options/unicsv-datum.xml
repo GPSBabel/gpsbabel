@@ -1,0 +1,4 @@
+<para>
+   This option specifies the datum to be used on output. Valid values for this 
+   option are listed in <xref linkend="Datums" />.
+</para>

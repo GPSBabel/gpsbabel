@@ -1,0 +1,4 @@
+<para>
+This option instructs GPSBabel to simplify by removing points that cause the
+smallest change in the overall length of the route first.  
+</para>

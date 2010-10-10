@@ -1,0 +1,47 @@
+# gpsbabel XCSV style file
+#
+# Format: Tab delimited useful for OpenOffice, Ploticus etc.
+# Author: Tobias Minich
+#   Date: 07/18/2005
+#
+#
+
+DESCRIPTION		Tab delimited fields useful for OpenOffice, Ploticus etc.
+
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		TAB
+RECORD_DELIMITER	NEWLINE
+BADCHARS		TAB
+
+#
+# HEADER STUFF:
+#
+PROLOGUE	Index	Lat			Lon			Icon	Name	Description	Notes	URL	Link Text	Altitude (m)	Distance (km)	Speed (m/s)	Course (°)	Time	HDOP	VDOP	PDOP	Satellites	Fix
+
+#
+# INDIVIDUAL DATA FIELDS:
+#
+IFIELD	INDEX, "", "%d"
+IFIELD	LAT_DECIMAL, "", "%f"
+IFIELD	LAT_DIR, "", "%c"
+IFIELD	LAT_HUMAN_READABLE, "", "%d° %f' %c"
+IFIELD	LON_DECIMAL, "", "%f"
+IFIELD	LON_DIR, "", "%c"
+IFIELD	LON_HUMAN_READABLE, "", "%d° %f' %c"
+IFIELD	ICON_DESCR, "", "%s"
+IFIELD	SHORTNAME, "", "%s"
+IFIELD	DESCRIPTION, "", "%s"
+IFIELD	NOTES, "", "%s"
+IFIELD	URL, "", "%s" 		
+IFIELD	URL_LINK_TEXT, "", "%s"
+IFIELD	ALT_METERS, "", "%f"
+IFIELD	PATH_DISTANCE_KM, "", "%f"
+IFIELD	PATH_SPEED, "", "%f"
+IFIELD	PATH_COURSE, "", "%f"
+IFIELD	EXCEL_TIME, "", "%f"
+IFIELD	GPS_HDOP, "", "%f"
+IFIELD	GPS_VDOP, "", "%f"
+IFIELD	GPS_PDOP, "", "%f"
+IFIELD	GPS_SAT, "", "%d"
+IFIELD	GPS_FIX, "", "%s"

@@ -1,0 +1,41 @@
+# gpsbabel XCSV style file
+#
+# Format: MS S&T 2002/2003
+# Author: Alex Mottram
+#   Date: 12/09/2002
+#
+# 
+# As requested by Noel Shrum on the gpsbabel-code mailing list.
+# Name,Latitude,Longitude,Name 2,URL,Type
+# GCCBF,44.479133,-85.56515,High Rollaway by rjlint,http://www.geocaching.com/seek/cache_details.aspx?ID=3263,Traditional Cache
+# GC110D,44.6522,-85.492483,Brown Bridge Pond Peek-a-Boo Cache by Big Bird,http://www.geocaching.com/seek/cache_details.aspx?ID=4365,Traditional Cache
+# GC171C,44.70605,-85.62265,The Michigan Frog by RealDcoy & LRB,http://www.geocaching.com/seek/cache_details.aspx?ID=5916,Traditional Cache
+#
+
+DESCRIPTION 		Microsoft Streets and Trips 2002-2007
+EXTENSION               txt
+
+
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		TAB
+RECORD_DELIMITER	NEWLINE
+BADCHARS		,"
+
+PROLOGUE	Name	Latitude	Longitude	Description	URL	Type	Container	Diff	Terr
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+# NOTE: MS S&T ONLY IMPORTS DATA, IT DOESN'T EXPORT THIS ANYWHERE SO WE CAN
+#       HAVE OUR WAY WITH THE FORMATTING. 
+#
+IFIELD	SHORTNAME, "", "%s"		# Name
+IFIELD	LAT_DECIMAL, "", "%f"		# Latitude
+IFIELD	LON_DECIMAL, "", "%f"		# Longitude
+IFIELD	DESCRIPTION, "", "%s"		# Name 2 (Big Description)
+IFIELD	URL, "", "%s"			# URL
+IFIELD	GEOCACHE_TYPE, "", "%s"		# Geocache Type
+IFIELD	GEOCACHE_CONTAINER, "", "%s"	# Geocache Type
+IFIELD	GEOCACHE_DIFF, "", "%3.1f"	# Geocache Type
+IFIELD	GEOCACHE_TERR, "", "%3.1f"	# Geocache Type

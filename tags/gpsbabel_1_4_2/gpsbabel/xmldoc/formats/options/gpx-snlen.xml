@@ -1,0 +1,3 @@
+<para>
+  When used with the <option> -s </option> to control shortnames, the snlen suboption to GPX controls how long the generated smartname will be.  This can be useful for cases like writing GPX files to a GPS that has a fixed waypoint name length.
+</para>

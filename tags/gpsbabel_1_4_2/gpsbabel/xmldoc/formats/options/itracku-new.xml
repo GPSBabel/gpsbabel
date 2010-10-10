@@ -1,0 +1,12 @@
+<para>Will only pass waypoints along to filters and output formats that are not new, i.e. that are not already stored in the 
+backup file. This option can only be used with the backup option.</para>
+<para>Using this option allows you to output the waypoints of your latest trip with gpsbabel while keeping an endless log of all waypoints 
+in the backup file.</para>
+
+<example id="itracku-new">
+  <title>Download from the data logger and append the new logger data to a backup file. Output only the new 
+  waypoints.</title>
+  <para><userinput>gpsbabel -i itracku,auto,backup=itracku.bak,new -f dummy -o gpx -F out.gpx</userinput></para>
+</example>
+
+

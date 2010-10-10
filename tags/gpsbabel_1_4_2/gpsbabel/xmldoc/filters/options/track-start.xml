@@ -1,0 +1,24 @@
+<para>
+This option is used along with the <option>stop</option> to discard 
+trackpoints that were recorded outside of a specific period of time.  
+This option specifies the beginning of the time period.
+</para>
+<para>
+If this option is not specified, the time period is assumed to begin at the
+dawn of time or January 1, 1970, whichever was later.  The time for this 
+option is expressed in UTC. 
+</para>
+<para>
+The value of this option must be in the form of YYYYMMDDHHMMSS, but it is
+not necessary to specify the smaller time units if they are not needed.  
+That is, if you only care about points logged between 10 AM and 6 PM on a
+given date, you need not specify the minutes or seconds.
+</para>
+<example id="ex_track_startstop">
+<title>Extracting a period of time with the track filter</title>
+<para>
+To get only the parts of a track that were mapped on 20 July 2005
+between 10 AM and 6 PM, use this command line:
+</para> 
+<para><userinput>gpsbabel -t -i gpx -f in.gpx -x track,start=2005072010,stop=2005072018 -o gpx -F out.gpx </userinput></para>
+</example>

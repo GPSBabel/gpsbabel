@@ -1,0 +1,6 @@
+<para>
+This format supports IGN Rando track files. IGN Rando is a program mainly 
+used in France for Topo maps. The files are XML based and are "windows-1252" 
+encoded. Trackpoints do not have time stamps.
+</para>
+    
