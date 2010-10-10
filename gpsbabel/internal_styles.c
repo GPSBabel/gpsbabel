@@ -477,13 +477,13 @@ static char gpsman[] =
 "# gpsman.c likes mkshort len = 8, whitespace = 0.\n"
 ;
 static char iblue747[] = 
-"# GPSBabel XCSV Style File http://www.gpsbabel.org/htmldoc-1.3.2/Styles.html\n"
+"# GPSBabel XCSV Style File http://www.gpsbabel.org/htmldoc-development/Styles.html\n"
 "# Author: Christian Barmala http://www.barmala.de/\n"
 "# License GNU Public License http://opensource.org/licenses/gpl-license.php\n"
 
 "DESCRIPTION  Data Logger iBlue747 csv\n"
 "EXTENSION csv\n"
-
+"# full length csv with all options\n"
 
 "# FILE LAYOUT DEFINITIIONS:\n"
 
@@ -494,23 +494,31 @@ static char iblue747[] =
 "# SHORTWHITE 0\n"
 "# ENCODING UTF-8\n"
 "DATATYPE TRACK\n"
-"PROLOGUE INDEX,RCR,DATE,TIME,VALID,LATITUDE,N/S,LONGITUDE,E/W,HEIGHT,SPEED,DISTANCE,\n"
+"PROLOGUE INDEX,RCR,DATE,TIME,VALID,LATITUDE,N/S,LONGITUDE,E/W,HEIGHT,SPEED,PDOP,HDOP,VDOP,NSAT,DISTANCE,\n"
 
 
 "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
 
-"IFIELD INDEX,\"1\",\"%d\"			# INDEX\n"
-"IFIELD CONSTANT,\"T\",\"%s\"		# RCR\n"
-"IFIELD GMT_TIME,\"\",\"%Y/%m/%d\"		# DATE\n"
-"IFIELD HMSG_TIME,\"\",\"%02d:%02d:%02d\"	# TIME\n"
-"IFIELD GPS_FIX,\"SPS\",\"%s\"		# VALID #  No fix, SPS, DGPS, PPS\n"
-"IFIELD LAT_DECIMAL,\"\",\"%f\"		# LATITUDE\n"
-"IFIELD LAT_DIR,\"\",\"%c\"			# N/S\n"
-"IFIELD LON_DECIMAL,\"\",\"%f\"		# LONGITUDE\n"
-"IFIELD LON_DIR,\"\",\"%c\"			# E/W\n"
-"IFIELD ALT_METERS,\"\",\"%.0f\"		# HEIGHT\n"
-"IFIELD PATH_SPEED_KPH,\"\",\"%.1f\"		# SPEED\n"
-"IFIELD PATH_DISTANCE_KM,\"\",\"%f\"		# DISTANCE\n"
+"IFIELD INDEX,\"1\",\"%d\"            # INDEX\n"
+"IFIELD CONSTANT,\"T\",\"%s\"        # RCR\n"
+"IFIELD GMT_TIME,\"\",\"%Y/%m/%d\"        # DATE\n"
+"IFIELD HMSG_TIME,\"\",\"%02d:%02d:%02d\"    # TIME\n"
+"IFIELD GPS_FIX,\"\",\"%s\"        # VALID #  No fix, SPS, DGPS, PPS\n"
+"IFIELD LAT_DECIMAL,\"\",\"%f\"        # LATITUDE\n"
+"IFIELD LAT_DIR,\"\",\"%c\"            # N/S\n"
+"IFIELD LON_DECIMAL,\"\",\"%f\"        # LONGITUDE\n"
+"IFIELD LON_DIR,\"\",\"%c\"            # E/W\n"
+"IFIELD ALT_METERS,\"\",\"%.0f\"        # HEIGHT\n"
+"IFIELD PATH_SPEED_KPH,\"\",\"%.1f\"        # SPEED\n"
+"IFIELD IGNORE,\"\",\"%f\"        # HEADING\n"
+"IFIELD IGNORE,\"\",\"%d\"        # DSTA\n"
+"IFIELD IGNORE,\"\",\"%f\"        # DAGE\n"
+"IFIELD GPS_PDOP,\"\",\"%f\"            # PDOP\n"
+"IFIELD GPS_HDOP,\"\",\"%f\"            # HDOP\n"
+"IFIELD GPS_VDOP,\"\",\"%f\"            # VDOP\n"
+"IFIELD GPS_SAT,\"\",\"%d(\"            # NSAT USED/VIEW\n"
+"IFIELD IGNORE,\"\",\"%s\"        # SAT INFO\n"
+"IFIELD PATH_DISTANCE_KM,\"\",\"%f\"        # DISTANCE\n"
 ;
 static char igo2008_poi[] = 
 "# gpsbabel XCSV style file\n"
