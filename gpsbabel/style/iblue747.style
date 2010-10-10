@@ -1,10 +1,10 @@
-# GPSBabel XCSV Style File http://www.gpsbabel.org/htmldoc-1.3.2/Styles.html
+# GPSBabel XCSV Style File http://www.gpsbabel.org/htmldoc-development/Styles.html
 # Author: Christian Barmala http://www.barmala.de/
 # License GNU Public License http://opensource.org/licenses/gpl-license.php
 
 DESCRIPTION  Data Logger iBlue747 csv
 EXTENSION csv
-
+# full length csv with all options
 
 # FILE LAYOUT DEFINITIIONS:
 
@@ -15,20 +15,28 @@ RECORD_DELIMITER NEWLINE
 # SHORTWHITE 0
 # ENCODING UTF-8
 DATATYPE TRACK
-PROLOGUE INDEX,RCR,DATE,TIME,VALID,LATITUDE,N/S,LONGITUDE,E/W,HEIGHT,SPEED,DISTANCE,
+PROLOGUE INDEX,RCR,DATE,TIME,VALID,LATITUDE,N/S,LONGITUDE,E/W,HEIGHT,SPEED,PDOP,HDOP,VDOP,NSAT,DISTANCE,
 
 
 # INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
 
-IFIELD INDEX,"1","%d"			# INDEX
-IFIELD CONSTANT,"T","%s"		# RCR
-IFIELD GMT_TIME,"","%Y/%m/%d"		# DATE
-IFIELD HMSG_TIME,"","%02d:%02d:%02d"	# TIME
-IFIELD GPS_FIX,"SPS","%s"		# VALID #  No fix, SPS, DGPS, PPS
-IFIELD LAT_DECIMAL,"","%f"		# LATITUDE
-IFIELD LAT_DIR,"","%c"			# N/S
-IFIELD LON_DECIMAL,"","%f"		# LONGITUDE
-IFIELD LON_DIR,"","%c"			# E/W
-IFIELD ALT_METERS,"","%.0f"		# HEIGHT
-IFIELD PATH_SPEED_KPH,"","%.1f"		# SPEED
-IFIELD PATH_DISTANCE_KM,"","%f"		# DISTANCE
+IFIELD INDEX,"1","%d"            # INDEX
+IFIELD CONSTANT,"T","%s"        # RCR
+IFIELD GMT_TIME,"","%Y/%m/%d"        # DATE
+IFIELD HMSG_TIME,"","%02d:%02d:%02d"    # TIME
+IFIELD GPS_FIX,"","%s"        # VALID #  No fix, SPS, DGPS, PPS
+IFIELD LAT_DECIMAL,"","%f"        # LATITUDE
+IFIELD LAT_DIR,"","%c"            # N/S
+IFIELD LON_DECIMAL,"","%f"        # LONGITUDE
+IFIELD LON_DIR,"","%c"            # E/W
+IFIELD ALT_METERS,"","%.0f"        # HEIGHT
+IFIELD PATH_SPEED_KPH,"","%.1f"        # SPEED
+IFIELD IGNORE,"","%f"        # HEADING
+IFIELD IGNORE,"","%d"        # DSTA
+IFIELD IGNORE,"","%f"        # DAGE
+IFIELD GPS_PDOP,"","%f"            # PDOP
+IFIELD GPS_HDOP,"","%f"            # HDOP
+IFIELD GPS_VDOP,"","%f"            # VDOP
+IFIELD GPS_SAT,"","%d("            # NSAT USED/VIEW
+IFIELD IGNORE,"","%s"        # SAT INFO
+IFIELD PATH_DISTANCE_KM,"","%f"        # DISTANCE
