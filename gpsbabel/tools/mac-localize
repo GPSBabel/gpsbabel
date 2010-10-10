@@ -23,3 +23,5 @@ do
 done
 
 mkplist en
+
+exit 0
