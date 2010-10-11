@@ -32,15 +32,15 @@
     </StyleMap>
 <!-- Normal track style -->
     <Style id="track_n">
-      <LabelStyle>
-        <scale>0</scale>
-      </LabelStyle>
       <IconStyle>
         <scale>.5</scale>
         <Icon>
           <href>http://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
         </Icon>
       </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
     </Style>
 <!-- Highlighted track style -->
     <Style id="track_h">
