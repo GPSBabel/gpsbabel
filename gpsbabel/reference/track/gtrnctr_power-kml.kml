@@ -16,15 +16,15 @@
     </Schema>
 <!-- Normal track style -->
     <Style id="track_n">
-      <LabelStyle>
-        <scale>0</scale>
-      </LabelStyle>
       <IconStyle>
         <scale>.5</scale>
         <Icon>
           <href>http://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
         </Icon>
       </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
     </Style>
 <!-- Highlighted track style -->
     <Style id="track_h">
@@ -47,28 +47,28 @@
     </StyleMap>
 <!-- Normal multiTrack style -->
     <Style id="multiTrack_n">
-      <LineStyle>
-        <color>99ffac59</color>
-        <width>6</width>
-      </LineStyle>
       <IconStyle>
         <Icon>
           <href>http://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
         </Icon>
       </IconStyle>
+      <LineStyle>
+        <color>99ffac59</color>
+        <width>6</width>
+      </LineStyle>
     </Style>
 <!-- Highlighted multiTrack style -->
     <Style id="multiTrack_h">
-      <LineStyle>
-        <color>99ffac59</color>
-        <width>8</width>
-      </LineStyle>
       <IconStyle>
         <scale>1.2</scale>
         <Icon>
           <href>http://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
         </Icon>
       </IconStyle>
+      <LineStyle>
+        <color>99ffac59</color>
+        <width>8</width>
+      </LineStyle>
     </Style>
     <StyleMap id="multiTrack">
       <Pair>
