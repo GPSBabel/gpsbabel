@@ -565,8 +565,8 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 	first.longitude = 0;
 	first.creation_time = 0;
 	tdata->min_hrt =  9999;
-	tdata->min_alt =  999999999;
-	tdata->max_alt = -999999999;
+	tdata->min_alt = -unknown_alt;
+	tdata->max_alt =  unknown_alt;
 
 	QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
 		time_t timed;
@@ -611,11 +611,11 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
 			}
 		}
 
-		if ((thisw->altitude > 0) && (thisw->altitude < tdata->min_alt)) {
-			tdata->min_alt = thisw->altitude;
-		}
-		if (thisw->altitude > tdata->max_alt) {
-			tdata->max_alt = thisw->altitude;
+		if (thisw->altitude != unknown_alt) {
+			if (thisw->altitude < tdata->min_alt)
+				tdata->min_alt = thisw->altitude;
+			if (thisw->altitude > tdata->max_alt)
+				tdata->max_alt = thisw->altitude;
 		}
 
 		if (thisw->heartrate > 0) {

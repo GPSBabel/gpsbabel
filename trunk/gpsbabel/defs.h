@@ -498,8 +498,8 @@ typedef struct {
  */
 typedef struct {
 	double	distance_meters;
-	double	max_alt;
-	double	min_alt;
+	double	max_alt;	/*  unknown_alt => invalid */
+	double	min_alt;	/* -unknown_alt => invalid */
 	double	max_spd;	/* Meters/sec */
 	double	min_spd;	/* Meters/sec */
 	double	avg_hrt;	/* Avg Heartrate */
@@ -517,10 +517,10 @@ typedef struct {
 typedef struct {
 	double max_lat;
 	double max_lon;
-	double max_alt;
+	double max_alt;	/*  unknown_alt => invalid */
 	double min_lat;
 	double min_lon;
-	double min_alt;
+	double min_alt;	/* -unknown_alt => invalid */
 } bounds;
 
 typedef struct {

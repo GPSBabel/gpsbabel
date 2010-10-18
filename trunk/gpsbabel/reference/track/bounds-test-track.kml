@@ -1,0 +1,1509 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"
+	xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <name>GPS device</name>
+<!-- Normal track style -->
+    <Style id="track_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+<!-- Highlighted track style -->
+    <Style id="track_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track_h</styleUrl>
+      </Pair>
+    </StyleMap>
+<!-- Normal waypoint style -->
+    <Style id="waypoint_n">
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+<!-- Highlighted waypoint style -->
+    <Style id="waypoint_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="waypoint">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#waypoint_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#waypoint_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="lineStyle">
+      <LineStyle>
+        <color>99ffac59</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <Folder>
+      <name>Waypoints</name>
+      <Placemark>
+        <name>Head east on CA-190 E/Nadeau Trail Continue to follow CA-190 E</name>
+        <description>go 52.3&amp;#160;mi</description>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>-117.422570,36.339560,479.30</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Turn right at Airport Rd</name>
+        <description>go 0.8&amp;#160;mi</description>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>-116.865460,36.460850,-55.60</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Arrive at: Furnace Creek Airport-L06, Death Valley National Park, Death Valley, CA 92328</name>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>-116.879200,36.463640,-67.30</coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>Tracks</name>
+      <Folder>
+        <name>Route</name>
+        <Snippet/>
+        <description>
+<![CDATA[<table>
+            <tr><td><b>Description</b> Generated from route Route </td></tr>
+            <tr><td><b>Distance</b> 52.8 mi </td></tr>
+            <tr><td><b>Min Alt</b> -229.331 ft </td></tr>
+            <tr><td><b>Max Alt</b> 4901.247 ft </td></tr>
+          </table>]]>
+        </description>
+        <Folder>
+          <name>Points</name>
+          <Placemark>
+            <name>RPT001</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.422570 </td></tr>
+                <tr><td>Latitude: 36.339560 </td></tr>
+                <tr><td>Altitude: 1572.507 ft </td></tr>
+                <tr><td>Heading: 309.7 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.422570</longitude>
+              <latitude>36.339560</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.422570,36.339560,479.30</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT005</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.354270 </td></tr>
+                <tr><td>Latitude: 36.345010 </td></tr>
+                <tr><td>Altitude: 2048.228 ft </td></tr>
+                <tr><td>Heading: 84.3 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.354270</longitude>
+              <latitude>36.345010</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.354270,36.345010,624.30</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT011</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.349030 </td></tr>
+                <tr><td>Latitude: 36.344640 </td></tr>
+                <tr><td>Altitude: 2177.493 ft </td></tr>
+                <tr><td>Heading: 95.0 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.349030</longitude>
+              <latitude>36.344640</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.349030,36.344640,663.70</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT019</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.335270 </td></tr>
+                <tr><td>Latitude: 36.348710 </td></tr>
+                <tr><td>Altitude: 2500.328 ft </td></tr>
+                <tr><td>Heading: 69.8 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.335270</longitude>
+              <latitude>36.348710</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.335270,36.348710,762.10</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT027</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.316960 </td></tr>
+                <tr><td>Latitude: 36.346040 </td></tr>
+                <tr><td>Altitude: 3042.651 ft </td></tr>
+                <tr><td>Heading: 100.3 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.316960</longitude>
+              <latitude>36.346040</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.316960,36.346040,927.40</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT032</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.314020 </td></tr>
+                <tr><td>Latitude: 36.343080 </td></tr>
+                <tr><td>Altitude: 3085.302 ft </td></tr>
+                <tr><td>Heading: 141.3 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.314020</longitude>
+              <latitude>36.343080</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.314020,36.343080,940.40</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT038</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.311530 </td></tr>
+                <tr><td>Latitude: 36.342480 </td></tr>
+                <tr><td>Altitude: 3180.118 ft </td></tr>
+                <tr><td>Heading: 106.7 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.311530</longitude>
+              <latitude>36.342480</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.311530,36.342480,969.30</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT046</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.307620 </td></tr>
+                <tr><td>Latitude: 36.346880 </td></tr>
+                <tr><td>Altitude: 3373.360 ft </td></tr>
+                <tr><td>Heading: 35.6 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.307620</longitude>
+              <latitude>36.346880</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.307620,36.346880,1028.20</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT054</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.301180 </td></tr>
+                <tr><td>Latitude: 36.347060 </td></tr>
+                <tr><td>Altitude: 3590.879 ft </td></tr>
+                <tr><td>Heading: 88.0 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.301180</longitude>
+              <latitude>36.347060</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.301180,36.347060,1094.50</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT060</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.295650 </td></tr>
+                <tr><td>Latitude: 36.351920 </td></tr>
+                <tr><td>Altitude: 3716.207 ft </td></tr>
+                <tr><td>Heading: 42.5 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.295650</longitude>
+              <latitude>36.351920</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.295650,36.351920,1132.70</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT065</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.292270 </td></tr>
+                <tr><td>Latitude: 36.357050 </td></tr>
+                <tr><td>Altitude: 3887.467 ft </td></tr>
+                <tr><td>Heading: 28.0 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.292270</longitude>
+              <latitude>36.357050</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.292270,36.357050,1184.90</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT068</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.289430 </td></tr>
+                <tr><td>Latitude: 36.358440 </td></tr>
+                <tr><td>Altitude: 3942.913 ft </td></tr>
+                <tr><td>Heading: 58.7 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.289430</longitude>
+              <latitude>36.358440</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.289430,36.358440,1201.80</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT076</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.286380 </td></tr>
+                <tr><td>Latitude: 36.364320 </td></tr>
+                <tr><td>Altitude: 4205.052 ft </td></tr>
+                <tr><td>Heading: 22.7 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.286380</longitude>
+              <latitude>36.364320</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.286380,36.364320,1281.70</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT081</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.287070 </td></tr>
+                <tr><td>Latitude: 36.367970 </td></tr>
+                <tr><td>Altitude: 4302.165 ft </td></tr>
+                <tr><td>Heading: 351.3 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.287070</longitude>
+              <latitude>36.367970</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.287070,36.367970,1311.30</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT096</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.278460 </td></tr>
+                <tr><td>Latitude: 36.406150 </td></tr>
+                <tr><td>Altitude: 4901.247 ft </td></tr>
+                <tr><td>Heading: 10.3 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.278460</longitude>
+              <latitude>36.406150</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.278460,36.406150,1493.90</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT104</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.274150 </td></tr>
+                <tr><td>Latitude: 36.414650 </td></tr>
+                <tr><td>Altitude: 4722.769 ft </td></tr>
+                <tr><td>Heading: 22.2 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.274150</longitude>
+              <latitude>36.414650</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.274150,36.414650,1439.50</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT107</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.270260 </td></tr>
+                <tr><td>Latitude: 36.419620 </td></tr>
+                <tr><td>Altitude: 4578.412 ft </td></tr>
+                <tr><td>Heading: 32.2 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.270260</longitude>
+              <latitude>36.419620</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.270260,36.419620,1395.50</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT112</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.267430 </td></tr>
+                <tr><td>Latitude: 36.419700 </td></tr>
+                <tr><td>Altitude: 4520.013 ft </td></tr>
+                <tr><td>Heading: 88.0 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.267430</longitude>
+              <latitude>36.419700</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.267430,36.419700,1377.70</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT125</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.260620 </td></tr>
+                <tr><td>Latitude: 36.428730 </td></tr>
+                <tr><td>Altitude: 4237.205 ft </td></tr>
+                <tr><td>Heading: 31.2 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.260620</longitude>
+              <latitude>36.428730</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.260620,36.428730,1291.50</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT130</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.251140 </td></tr>
+                <tr><td>Latitude: 36.434140 </td></tr>
+                <tr><td>Altitude: 4022.310 ft </td></tr>
+                <tr><td>Heading: 54.6 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.251140</longitude>
+              <latitude>36.434140</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.251140,36.434140,1226.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT138</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.243900 </td></tr>
+                <tr><td>Latitude: 36.446250 </td></tr>
+                <tr><td>Altitude: 3572.835 ft </td></tr>
+                <tr><td>Heading: 25.7 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.243900</longitude>
+              <latitude>36.446250</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.243900,36.446250,1089.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT147</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.236110 </td></tr>
+                <tr><td>Latitude: 36.463810 </td></tr>
+                <tr><td>Altitude: 3038.058 ft </td></tr>
+                <tr><td>Heading: 19.6 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.236110</longitude>
+              <latitude>36.463810</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.236110,36.463810,926.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT152</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.226980 </td></tr>
+                <tr><td>Latitude: 36.494960 </td></tr>
+                <tr><td>Altitude: 2197.835 ft </td></tr>
+                <tr><td>Heading: 13.3 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.226980</longitude>
+              <latitude>36.494960</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.226980,36.494960,669.90</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT160</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.222650 </td></tr>
+                <tr><td>Latitude: 36.519980 </td></tr>
+                <tr><td>Altitude: 1687.664 ft </td></tr>
+                <tr><td>Heading: 7.9 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.222650</longitude>
+              <latitude>36.519980</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.222650,36.519980,514.40</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT163</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.218940 </td></tr>
+                <tr><td>Latitude: 36.529870 </td></tr>
+                <tr><td>Altitude: 1474.738 ft </td></tr>
+                <tr><td>Heading: 16.8 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.218940</longitude>
+              <latitude>36.529870</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.218940,36.529870,449.50</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT169</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.199580 </td></tr>
+                <tr><td>Latitude: 36.563200 </td></tr>
+                <tr><td>Altitude: 709.646 ft </td></tr>
+                <tr><td>Heading: 25.0 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.199580</longitude>
+              <latitude>36.563200</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.199580,36.563200,216.30</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT176</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.147410 </td></tr>
+                <tr><td>Latitude: 36.605940 </td></tr>
+                <tr><td>Altitude: 11.155 ft </td></tr>
+                <tr><td>Heading: 44.4 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.147410</longitude>
+              <latitude>36.605940</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.147410,36.605940,3.40</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT182</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.143600 </td></tr>
+                <tr><td>Latitude: 36.607880 </td></tr>
+                <tr><td>Altitude: -14.436 ft </td></tr>
+                <tr><td>Heading: 57.6 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.143600</longitude>
+              <latitude>36.607880</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.143600,36.607880,-4.40</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT185</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.137140 </td></tr>
+                <tr><td>Latitude: 36.607210 </td></tr>
+                <tr><td>Altitude: -17.717 ft </td></tr>
+                <tr><td>Heading: 97.4 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.137140</longitude>
+              <latitude>36.607210</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.137140,36.607210,-5.40</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT190</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.127830 </td></tr>
+                <tr><td>Latitude: 36.603590 </td></tr>
+                <tr><td>Altitude: -0.656 ft </td></tr>
+                <tr><td>Heading: 115.8 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.127830</longitude>
+              <latitude>36.603590</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.127830,36.603590,-0.20</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT194</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.117700 </td></tr>
+                <tr><td>Latitude: 36.605420 </td></tr>
+                <tr><td>Altitude: -8.530 ft </td></tr>
+                <tr><td>Heading: 77.3 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.117700</longitude>
+              <latitude>36.605420</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.117700,36.605420,-2.60</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT200</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.106740 </td></tr>
+                <tr><td>Latitude: 36.604640 </td></tr>
+                <tr><td>Altitude: -4.265 ft </td></tr>
+                <tr><td>Heading: 95.1 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.106740</longitude>
+              <latitude>36.604640</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.106740,36.604640,-1.30</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT205</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.097480 </td></tr>
+                <tr><td>Latitude: 36.601210 </td></tr>
+                <tr><td>Altitude: -16.076 ft </td></tr>
+                <tr><td>Heading: 114.8 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.097480</longitude>
+              <latitude>36.601210</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.097480,36.601210,-4.90</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT209</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.094200 </td></tr>
+                <tr><td>Latitude: 36.601720 </td></tr>
+                <tr><td>Altitude: -29.199 ft </td></tr>
+                <tr><td>Heading: 79.0 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.094200</longitude>
+              <latitude>36.601720</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.094200,36.601720,-8.90</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT212</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.082040 </td></tr>
+                <tr><td>Latitude: 36.611300 </td></tr>
+                <tr><td>Altitude: -42.651 ft </td></tr>
+                <tr><td>Heading: 45.5 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.082040</longitude>
+              <latitude>36.611300</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.082040,36.611300,-13.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT223</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.067710 </td></tr>
+                <tr><td>Latitude: 36.617900 </td></tr>
+                <tr><td>Altitude: -69.554 ft </td></tr>
+                <tr><td>Heading: 60.1 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.067710</longitude>
+              <latitude>36.617900</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.067710,36.617900,-21.20</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT224</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.035740 </td></tr>
+                <tr><td>Latitude: 36.639210 </td></tr>
+                <tr><td>Altitude: 120.735 ft </td></tr>
+                <tr><td>Heading: 50.3 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.035740</longitude>
+              <latitude>36.639210</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.035740,36.639210,36.80</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT229</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.031520 </td></tr>
+                <tr><td>Latitude: 36.639940 </td></tr>
+                <tr><td>Altitude: 130.906 ft </td></tr>
+                <tr><td>Heading: 77.8 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.031520</longitude>
+              <latitude>36.639940</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.031520,36.639940,39.90</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT232</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.029010 </td></tr>
+                <tr><td>Latitude: 36.638970 </td></tr>
+                <tr><td>Altitude: 147.638 ft </td></tr>
+                <tr><td>Heading: 115.7 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.029010</longitude>
+              <latitude>36.638970</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.029010,36.638970,45.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT236</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.024030 </td></tr>
+                <tr><td>Latitude: 36.633800 </td></tr>
+                <tr><td>Altitude: 150.591 ft </td></tr>
+                <tr><td>Heading: 142.3 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.024030</longitude>
+              <latitude>36.633800</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.024030,36.633800,45.90</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT241</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.016190 </td></tr>
+                <tr><td>Latitude: 36.628480 </td></tr>
+                <tr><td>Altitude: 148.294 ft </td></tr>
+                <tr><td>Heading: 130.2 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.016190</longitude>
+              <latitude>36.628480</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.016190,36.628480,45.20</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT246</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -117.006890 </td></tr>
+                <tr><td>Latitude: 36.625430 </td></tr>
+                <tr><td>Altitude: 139.436 ft </td></tr>
+                <tr><td>Heading: 112.2 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-117.006890</longitude>
+              <latitude>36.625430</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-117.006890,36.625430,42.50</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT259</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.969890 </td></tr>
+                <tr><td>Latitude: 36.596550 </td></tr>
+                <tr><td>Altitude: -161.089 ft </td></tr>
+                <tr><td>Heading: 134.2 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.969890</longitude>
+              <latitude>36.596550</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.969890,36.596550,-49.10</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT265</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.954760 </td></tr>
+                <tr><td>Latitude: 36.592470 </td></tr>
+                <tr><td>Altitude: -183.399 ft </td></tr>
+                <tr><td>Heading: 108.6 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.954760</longitude>
+              <latitude>36.592470</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.954760,36.592470,-55.90</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT279</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.936270 </td></tr>
+                <tr><td>Latitude: 36.584200 </td></tr>
+                <tr><td>Altitude: -198.163 ft </td></tr>
+                <tr><td>Heading: 119.1 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.936270</longitude>
+              <latitude>36.584200</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.936270,36.584200,-60.40</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT287</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.927060 </td></tr>
+                <tr><td>Latitude: 36.575990 </td></tr>
+                <tr><td>Altitude: -222.769 ft </td></tr>
+                <tr><td>Heading: 138.0 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.927060</longitude>
+              <latitude>36.575990</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.927060,36.575990,-67.90</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT298</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.909750 </td></tr>
+                <tr><td>Latitude: 36.568520 </td></tr>
+                <tr><td>Altitude: -229.003 ft </td></tr>
+                <tr><td>Heading: 118.2 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.909750</longitude>
+              <latitude>36.568520</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.909750,36.568520,-69.80</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT307</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.904380 </td></tr>
+                <tr><td>Latitude: 36.561450 </td></tr>
+                <tr><td>Altitude: -225.394 ft </td></tr>
+                <tr><td>Heading: 148.6 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.904380</longitude>
+              <latitude>36.561450</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.904380,36.561450,-68.70</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT312</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.894840 </td></tr>
+                <tr><td>Latitude: 36.557140 </td></tr>
+                <tr><td>Altitude: -226.706 ft </td></tr>
+                <tr><td>Heading: 119.4 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.894840</longitude>
+              <latitude>36.557140</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.894840,36.557140,-69.10</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT320</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.891610 </td></tr>
+                <tr><td>Latitude: 36.549690 </td></tr>
+                <tr><td>Altitude: -221.785 ft </td></tr>
+                <tr><td>Heading: 160.8 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.891610</longitude>
+              <latitude>36.549690</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.891610,36.549690,-67.60</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT326</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.886030 </td></tr>
+                <tr><td>Latitude: 36.543000 </td></tr>
+                <tr><td>Altitude: -227.362 ft </td></tr>
+                <tr><td>Heading: 146.2 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.886030</longitude>
+              <latitude>36.543000</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.886030,36.543000,-69.30</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT331</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.882770 </td></tr>
+                <tr><td>Latitude: 36.532760 </td></tr>
+                <tr><td>Altitude: -229.331 ft </td></tr>
+                <tr><td>Heading: 165.7 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.882770</longitude>
+              <latitude>36.532760</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.882770,36.532760,-69.90</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT344</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.881860 </td></tr>
+                <tr><td>Latitude: 36.513990 </td></tr>
+                <tr><td>Altitude: -208.661 ft </td></tr>
+                <tr><td>Heading: 177.8 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.881860</longitude>
+              <latitude>36.513990</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.881860,36.513990,-63.60</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT352</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.875450 </td></tr>
+                <tr><td>Latitude: 36.502030 </td></tr>
+                <tr><td>Altitude: -200.131 ft </td></tr>
+                <tr><td>Heading: 156.7 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.875450</longitude>
+              <latitude>36.502030</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.875450,36.502030,-61.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT356</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.875070 </td></tr>
+                <tr><td>Latitude: 36.498060 </td></tr>
+                <tr><td>Altitude: -189.961 ft </td></tr>
+                <tr><td>Heading: 175.6 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.875070</longitude>
+              <latitude>36.498060</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.875070,36.498060,-57.90</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT362</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.868420 </td></tr>
+                <tr><td>Latitude: 36.487220 </td></tr>
+                <tr><td>Altitude: -130.577 ft </td></tr>
+                <tr><td>Heading: 153.7 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.868420</longitude>
+              <latitude>36.487220</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.868420,36.487220,-39.80</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT371</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.871370 </td></tr>
+                <tr><td>Latitude: 36.482910 </td></tr>
+                <tr><td>Altitude: -189.304 ft </td></tr>
+                <tr><td>Heading: 208.8 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.871370</longitude>
+              <latitude>36.482910</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.871370,36.482910,-57.70</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT377</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.868950 </td></tr>
+                <tr><td>Latitude: 36.479500 </td></tr>
+                <tr><td>Altitude: -211.286 ft </td></tr>
+                <tr><td>Heading: 150.3 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.868950</longitude>
+              <latitude>36.479500</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.868950,36.479500,-64.40</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT386</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.865460 </td></tr>
+                <tr><td>Latitude: 36.460850 </td></tr>
+                <tr><td>Altitude: -182.415 ft </td></tr>
+                <tr><td>Heading: 171.4 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.865460</longitude>
+              <latitude>36.460850</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.865460,36.460850,-55.60</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>RPT399</name>
+            <Snippet/>
+            <description><![CDATA[
+              <table>
+                <tr><td>Longitude: -116.879200 </td></tr>
+                <tr><td>Latitude: 36.463640 </td></tr>
+                <tr><td>Altitude: -220.801 ft </td></tr>
+                <tr><td>Heading: 284.2 </td></tr>
+              </table>
+            ]]></description>
+            <LookAt>
+              <longitude>-116.879200</longitude>
+              <latitude>36.463640</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <styleUrl>#track</styleUrl>
+            <Point>
+              <coordinates>-116.879200,36.463640,-67.30</coordinates>
+            </Point>
+          </Placemark>
+        </Folder>
+        <Placemark>
+          <name>Path</name>
+          <styleUrl>#lineStyle</styleUrl>
+          <LineString>
+            <tessellate>1</tessellate>
+            <coordinates>
+              -117.422570,36.339560,479.30
+              -117.422570,36.339560,479.300000
+              -117.354270,36.345010,624.30
+              -117.354270,36.345010,624.300000
+              -117.349030,36.344640,663.70
+              -117.349030,36.344640,663.700000
+              -117.335270,36.348710,762.10
+              -117.335270,36.348710,762.100000
+              -117.316960,36.346040,927.40
+              -117.316960,36.346040,927.400000
+              -117.314020,36.343080,940.40
+              -117.314020,36.343080,940.400000
+              -117.311530,36.342480,969.30
+              -117.311530,36.342480,969.300000
+              -117.307620,36.346880,1028.20
+              -117.307620,36.346880,1028.200000
+              -117.301180,36.347060,1094.50
+              -117.301180,36.347060,1094.500000
+              -117.295650,36.351920,1132.70
+              -117.295650,36.351920,1132.700000
+              -117.292270,36.357050,1184.90
+              -117.292270,36.357050,1184.900000
+              -117.289430,36.358440,1201.80
+              -117.289430,36.358440,1201.800000
+              -117.286380,36.364320,1281.70
+              -117.286380,36.364320,1281.700000
+              -117.287070,36.367970,1311.30
+              -117.287070,36.367970,1311.300000
+              -117.278460,36.406150,1493.90
+              -117.278460,36.406150,1493.900000
+              -117.274150,36.414650,1439.50
+              -117.274150,36.414650,1439.500000
+              -117.270260,36.419620,1395.50
+              -117.270260,36.419620,1395.500000
+              -117.267430,36.419700,1377.70
+              -117.267430,36.419700,1377.700000
+              -117.260620,36.428730,1291.50
+              -117.260620,36.428730,1291.500000
+              -117.251140,36.434140,1226.00
+              -117.251140,36.434140,1226.000000
+              -117.243900,36.446250,1089.00
+              -117.243900,36.446250,1089.000000
+              -117.236110,36.463810,926.00
+              -117.236110,36.463810,926.000000
+              -117.226980,36.494960,669.90
+              -117.226980,36.494960,669.900000
+              -117.222650,36.519980,514.40
+              -117.222650,36.519980,514.400000
+              -117.218940,36.529870,449.50
+              -117.218940,36.529870,449.500000
+              -117.199580,36.563200,216.30
+              -117.199580,36.563200,216.300000
+              -117.147410,36.605940,3.40
+              -117.147410,36.605940,3.400000
+              -117.143600,36.607880,-4.40
+              -117.143600,36.607880,-4.400000
+              -117.137140,36.607210,-5.40
+              -117.137140,36.607210,-5.400000
+              -117.127830,36.603590,-0.20
+              -117.127830,36.603590,-0.200000
+              -117.117700,36.605420,-2.60
+              -117.117700,36.605420,-2.600000
+              -117.106740,36.604640,-1.30
+              -117.106740,36.604640,-1.300000
+              -117.097480,36.601210,-4.90
+              -117.097480,36.601210,-4.900000
+              -117.094200,36.601720,-8.90
+              -117.094200,36.601720,-8.900000
+              -117.082040,36.611300,-13.00
+              -117.082040,36.611300,-13.000000
+              -117.067710,36.617900,-21.20
+              -117.067710,36.617900,-21.200000
+              -117.035740,36.639210,36.80
+              -117.035740,36.639210,36.800000
+              -117.031520,36.639940,39.90
+              -117.031520,36.639940,39.900000
+              -117.029010,36.638970,45.00
+              -117.029010,36.638970,45.000000
+              -117.024030,36.633800,45.90
+              -117.024030,36.633800,45.900000
+              -117.016190,36.628480,45.20
+              -117.016190,36.628480,45.200000
+              -117.006890,36.625430,42.50
+              -117.006890,36.625430,42.500000
+              -116.969890,36.596550,-49.10
+              -116.969890,36.596550,-49.100000
+              -116.954760,36.592470,-55.90
+              -116.954760,36.592470,-55.900000
+              -116.936270,36.584200,-60.40
+              -116.936270,36.584200,-60.400000
+              -116.927060,36.575990,-67.90
+              -116.927060,36.575990,-67.900000
+              -116.909750,36.568520,-69.80
+              -116.909750,36.568520,-69.800000
+              -116.904380,36.561450,-68.70
+              -116.904380,36.561450,-68.700000
+              -116.894840,36.557140,-69.10
+              -116.894840,36.557140,-69.100000
+              -116.891610,36.549690,-67.60
+              -116.891610,36.549690,-67.600000
+              -116.886030,36.543000,-69.30
+              -116.886030,36.543000,-69.300000
+              -116.882770,36.532760,-69.90
+              -116.882770,36.532760,-69.900000
+              -116.881860,36.513990,-63.60
+              -116.881860,36.513990,-63.600000
+              -116.875450,36.502030,-61.00
+              -116.875450,36.502030,-61.000000
+              -116.875070,36.498060,-57.90
+              -116.875070,36.498060,-57.900000
+              -116.868420,36.487220,-39.80
+              -116.868420,36.487220,-39.800000
+              -116.871370,36.482910,-57.70
+              -116.871370,36.482910,-57.700000
+              -116.868950,36.479500,-64.40
+              -116.868950,36.479500,-64.400000
+              -116.865460,36.460850,-55.60
+              -116.865460,36.460850,-55.600000
+              -116.879200,36.463640,-67.30
+              -116.879200,36.463640,-67.300000
+            </coordinates>
+          </LineString>
+        </Placemark>
+      </Folder>
+    </Folder>
+    <LookAt>
+      <longitude>-117.144015</longitude>
+      <latitude>36.489750</latitude>
+      <range>78044.000069</range>
+    </LookAt>
+  </Document>
+</kml>
