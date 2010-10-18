@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.topografix.com/GPX/1/0" version="1.0" creator="http://tsteven4.qwestoffice.net/" xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+  <time>2010-10-16T14:42:34Z</time>
+  <wpt lat="36.339560000" lon="-117.422570000">
+    <ele>479.300000</ele>
+    <name>Head east on CA-190 E/Nadeau Trail Continue to follow CA-190 E</name>
+    <cmt>go 52.3&amp;#160;mi</cmt>
+    <desc>go 52.3&amp;#160;mi</desc>
+  </wpt>
+  <wpt lat="36.460850000" lon="-116.865460000">
+    <ele>-55.600000</ele>
+    <name>Turn right at Airport Rd</name>
+    <cmt>go 0.8&amp;#160;mi</cmt>
+    <desc>go 0.8&amp;#160;mi</desc>
+  </wpt>
+  <wpt lat="36.463640000" lon="-116.879200000">
+    <ele>-67.300000</ele>
+    <name>Arrive at: Furnace Creek Airport-L06, Death Valley National Park, Death Valley, CA 92328</name>
+    <cmt>Arrive at: Furnace Creek Airport-L06, Death Valley National Park, Death Valley, CA 92328</cmt>
+    <desc>Arrive at: Furnace Creek Airport-L06, Death Valley National Park, Death Valley, CA 92328</desc>
+  </wpt>
+  <trk>
+    <name>Route</name>
+    <desc>Generated from route Route</desc>
+    <trkseg>
+      <trkpt lat="36.339560000" lon="-117.422570000">
+        <ele>479.300000</ele>
+        <name>RPT001</name>
+      </trkpt>
+      <trkpt lat="36.345010000" lon="-117.354270000">
+        <ele>624.300000</ele>
+        <name>RPT005</name>
+      </trkpt>
+      <trkpt lat="36.344640000" lon="-117.349030000">
+        <ele>663.700000</ele>
+        <name>RPT011</name>
+      </trkpt>
+      <trkpt lat="36.348710000" lon="-117.335270000">
+        <ele>762.100000</ele>
+        <name>RPT019</name>
+      </trkpt>
+      <trkpt lat="36.346040000" lon="-117.316960000">
+        <ele>927.400000</ele>
+        <name>RPT027</name>
+      </trkpt>
+      <trkpt lat="36.343080000" lon="-117.314020000">
+        <ele>940.400000</ele>
+        <name>RPT032</name>
+      </trkpt>
+      <trkpt lat="36.342480000" lon="-117.311530000">
+        <ele>969.300000</ele>
+        <name>RPT038</name>
+      </trkpt>
+      <trkpt lat="36.346880000" lon="-117.307620000">
+        <ele>1028.200000</ele>
+        <name>RPT046</name>
+      </trkpt>
+      <trkpt lat="36.347060000" lon="-117.301180000">
+        <ele>1094.500000</ele>
+        <name>RPT054</name>
+      </trkpt>
+      <trkpt lat="36.351920000" lon="-117.295650000">
+        <ele>1132.700000</ele>
+        <name>RPT060</name>
+      </trkpt>
+      <trkpt lat="36.357050000" lon="-117.292270000">
+        <ele>1184.900000</ele>
+        <name>RPT065</name>
+      </trkpt>
+      <trkpt lat="36.358440000" lon="-117.289430000">
+        <ele>1201.800000</ele>
+        <name>RPT068</name>
+      </trkpt>
+      <trkpt lat="36.364320000" lon="-117.286380000">
+        <ele>1281.700000</ele>
+        <name>RPT076</name>
+      </trkpt>
+      <trkpt lat="36.367970000" lon="-117.287070000">
+        <ele>1311.300000</ele>
+        <name>RPT081</name>
+      </trkpt>
+      <trkpt lat="36.406150000" lon="-117.278460000">
+        <ele>1493.900000</ele>
+        <name>RPT096</name>
+      </trkpt>
+      <trkpt lat="36.414650000" lon="-117.274150000">
+        <ele>1439.500000</ele>
+        <name>RPT104</name>
+      </trkpt>
+      <trkpt lat="36.419620000" lon="-117.270260000">
+        <ele>1395.500000</ele>
+        <name>RPT107</name>
+      </trkpt>
+      <trkpt lat="36.419700000" lon="-117.267430000">
+        <ele>1377.700000</ele>
+        <name>RPT112</name>
+      </trkpt>
+      <trkpt lat="36.428730000" lon="-117.260620000">
+        <ele>1291.500000</ele>
+        <name>RPT125</name>
+      </trkpt>
+      <trkpt lat="36.434140000" lon="-117.251140000">
+        <ele>1226.000000</ele>
+        <name>RPT130</name>
+      </trkpt>
+      <trkpt lat="36.446250000" lon="-117.243900000">
+        <ele>1089.000000</ele>
+        <name>RPT138</name>
+      </trkpt>
+      <trkpt lat="36.463810000" lon="-117.236110000">
+        <ele>926.000000</ele>
+        <name>RPT147</name>
+      </trkpt>
+      <trkpt lat="36.494960000" lon="-117.226980000">
+        <ele>669.900000</ele>
+        <name>RPT152</name>
+      </trkpt>
+      <trkpt lat="36.519980000" lon="-117.222650000">
+        <ele>514.400000</ele>
+        <name>RPT160</name>
+      </trkpt>
+      <trkpt lat="36.529870000" lon="-117.218940000">
+        <ele>449.500000</ele>
+        <name>RPT163</name>
+      </trkpt>
+      <trkpt lat="36.563200000" lon="-117.199580000">
+        <ele>216.300000</ele>
+        <name>RPT169</name>
+      </trkpt>
+      <trkpt lat="36.605940000" lon="-117.147410000">
+        <ele>3.400000</ele>
+        <name>RPT176</name>
+      </trkpt>
+      <trkpt lat="36.607880000" lon="-117.143600000">
+        <ele>-4.400000</ele>
+        <name>RPT182</name>
+      </trkpt>
+      <trkpt lat="36.607210000" lon="-117.137140000">
+        <ele>-5.400000</ele>
+        <name>RPT185</name>
+      </trkpt>
+      <trkpt lat="36.603590000" lon="-117.127830000">
+        <ele>-0.200000</ele>
+        <name>RPT190</name>
+      </trkpt>
+      <trkpt lat="36.605420000" lon="-117.117700000">
+        <ele>-2.600000</ele>
+        <name>RPT194</name>
+      </trkpt>
+      <trkpt lat="36.604640000" lon="-117.106740000">
+        <ele>-1.300000</ele>
+        <name>RPT200</name>
+      </trkpt>
+      <trkpt lat="36.601210000" lon="-117.097480000">
+        <ele>-4.900000</ele>
+        <name>RPT205</name>
+      </trkpt>
+      <trkpt lat="36.601720000" lon="-117.094200000">
+        <ele>-8.900000</ele>
+        <name>RPT209</name>
+      </trkpt>
+      <trkpt lat="36.611300000" lon="-117.082040000">
+        <ele>-13.000000</ele>
+        <name>RPT212</name>
+      </trkpt>
+      <trkpt lat="36.617900000" lon="-117.067710000">
+        <ele>-21.200000</ele>
+        <name>RPT223</name>
+      </trkpt>
+      <trkpt lat="36.639210000" lon="-117.035740000">
+        <ele>36.800000</ele>
+        <name>RPT224</name>
+      </trkpt>
+      <trkpt lat="36.639940000" lon="-117.031520000">
+        <ele>39.900000</ele>
+        <name>RPT229</name>
+      </trkpt>
+      <trkpt lat="36.638970000" lon="-117.029010000">
+        <ele>45.000000</ele>
+        <name>RPT232</name>
+      </trkpt>
+      <trkpt lat="36.633800000" lon="-117.024030000">
+        <ele>45.900000</ele>
+        <name>RPT236</name>
+      </trkpt>
+      <trkpt lat="36.628480000" lon="-117.016190000">
+        <ele>45.200000</ele>
+        <name>RPT241</name>
+      </trkpt>
+      <trkpt lat="36.625430000" lon="-117.006890000">
+        <ele>42.500000</ele>
+        <name>RPT246</name>
+      </trkpt>
+      <trkpt lat="36.596550000" lon="-116.969890000">
+        <ele>-49.100000</ele>
+        <name>RPT259</name>
+      </trkpt>
+      <trkpt lat="36.592470000" lon="-116.954760000">
+        <ele>-55.900000</ele>
+        <name>RPT265</name>
+      </trkpt>
+      <trkpt lat="36.584200000" lon="-116.936270000">
+        <ele>-60.400000</ele>
+        <name>RPT279</name>
+      </trkpt>
+      <trkpt lat="36.575990000" lon="-116.927060000">
+        <ele>-67.900000</ele>
+        <name>RPT287</name>
+      </trkpt>
+      <trkpt lat="36.568520000" lon="-116.909750000">
+        <ele>-69.800000</ele>
+        <name>RPT298</name>
+      </trkpt>
+      <trkpt lat="36.561450000" lon="-116.904380000">
+        <ele>-68.700000</ele>
+        <name>RPT307</name>
+      </trkpt>
+      <trkpt lat="36.557140000" lon="-116.894840000">
+        <ele>-69.100000</ele>
+        <name>RPT312</name>
+      </trkpt>
+      <trkpt lat="36.549690000" lon="-116.891610000">
+        <ele>-67.600000</ele>
+        <name>RPT320</name>
+      </trkpt>
+      <trkpt lat="36.543000000" lon="-116.886030000">
+        <ele>-69.300000</ele>
+        <name>RPT326</name>
+      </trkpt>
+      <trkpt lat="36.532760000" lon="-116.882770000">
+        <ele>-69.900000</ele>
+        <name>RPT331</name>
+      </trkpt>
+      <trkpt lat="36.513990000" lon="-116.881860000">
+        <ele>-63.600000</ele>
+        <name>RPT344</name>
+      </trkpt>
+      <trkpt lat="36.502030000" lon="-116.875450000">
+        <ele>-61.000000</ele>
+        <name>RPT352</name>
+      </trkpt>
+      <trkpt lat="36.498060000" lon="-116.875070000">
+        <ele>-57.900000</ele>
+        <name>RPT356</name>
+      </trkpt>
+      <trkpt lat="36.487220000" lon="-116.868420000">
+        <ele>-39.800000</ele>
+        <name>RPT362</name>
+      </trkpt>
+      <trkpt lat="36.482910000" lon="-116.871370000">
+        <ele>-57.700000</ele>
+        <name>RPT371</name>
+      </trkpt>
+      <trkpt lat="36.479500000" lon="-116.868950000">
+        <ele>-64.400000</ele>
+        <name>RPT377</name>
+      </trkpt>
+      <trkpt lat="36.460850000" lon="-116.865460000">
+        <ele>-55.600000</ele>
+        <name>RPT386</name>
+      </trkpt>
+      <trkpt lat="36.463640000" lon="-116.879200000">
+        <ele>-67.300000</ele>
+        <name>RPT399</name>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>

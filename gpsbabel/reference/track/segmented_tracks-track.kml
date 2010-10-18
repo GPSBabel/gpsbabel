@@ -110,7 +110,7 @@
         <description>
 <![CDATA[<table>
             <tr><td><b>Distance</b> 1.1 mi </td></tr>
-            <tr><td><b>Min Alt</b> 621371.192 mi </td></tr>
+            <tr><td><b>Min Alt</b> 0.000 ft </td></tr>
             <tr><td><b>Max Alt</b> 0.000 ft </td></tr>
           </table>]]>
         </description>
@@ -713,7 +713,7 @@
         <description>
 <![CDATA[<table>
             <tr><td><b>Distance</b> 1.1 mi </td></tr>
-            <tr><td><b>Min Alt</b> 621371.192 mi </td></tr>
+            <tr><td><b>Min Alt</b> 0.000 ft </td></tr>
             <tr><td><b>Max Alt</b> 0.000 ft </td></tr>
           </table>]]>
         </description>
@@ -1264,7 +1264,7 @@
         <description>
 <![CDATA[<table>
             <tr><td><b>Distance</b> 1.1 mi </td></tr>
-            <tr><td><b>Min Alt</b> 621371.192 mi </td></tr>
+            <tr><td><b>Min Alt</b> 0.000 ft </td></tr>
             <tr><td><b>Max Alt</b> 0.000 ft </td></tr>
             <tr><td><b>Max Speed</b> 0.0 mph </td></tr>
             <tr><td><b>Avg Speed</b> 6.1 mph </td></tr>

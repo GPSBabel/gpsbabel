@@ -30,3 +30,10 @@ gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr_power.tcx \
   -o kml,track=1,points=0,lines=0 -F ${TMPDIR}/ge-power.kml
 compare ${REFERENCE}/track/gtrnctr_power-kml.kml ${TMPDIR}/ge-power.kml
 
+# test searches for route and waypoint min and max altitudes
+gpsbabel -i gpx -f ${REFERENCE}/bounds-test.gpx -o kml -F ${TMPDIR}/bnds.kml
+compare ${REFERENCE}/bounds-test.kml ${TMPDIR}/bnds.kml
+gpsbabel -i gpx -f ${REFERENCE}/track/bounds-test-track.gpx -o kml -F ${TMPDIR}/bnds-track.kml
+compare ${REFERENCE}/track/bounds-test-track.kml ${TMPDIR}/bnds-track.kml
+
+

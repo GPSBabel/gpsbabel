@@ -295,8 +295,8 @@ waypt_init_bounds(bounds *bounds)
 	bounds->max_lon = -9999;
 	bounds->min_lat = 9999;
 	bounds->min_lon = 9999;
-	bounds->max_alt = -unknown_alt;
-	bounds->min_alt = unknown_alt;
+	bounds->max_alt = unknown_alt;
+	bounds->min_alt = -unknown_alt;
 }
 
 int

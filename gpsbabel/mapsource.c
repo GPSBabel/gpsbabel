@@ -1087,7 +1087,7 @@ mps_routehdr_w(gbfile *mps_file, int mps_ver, const route_head *rte)
 	double		minlat=90.0;
 	double		minlon=180.0;
 	double		maxalt=unknown_alt;
-	double		minalt=unknown_alt;
+	double		minalt=-unknown_alt;
 
 	int lat;
 	int lon;
@@ -1116,7 +1116,7 @@ mps_routehdr_w(gbfile *mps_file, int mps_ver, const route_head *rte)
 				if ((testwpt->altitude > maxalt) || 
 					(maxalt == unknown_alt)) maxalt = testwpt->altitude;
 				if ((testwpt->altitude < minalt) ||
-					(minalt == unknown_alt)) minalt = testwpt->altitude;
+					(minalt == -unknown_alt)) minalt = testwpt->altitude;
 			}
 
 			if(testwpt->description) src = testwpt->description;
@@ -1196,7 +1196,7 @@ mps_routehdr_w(gbfile *mps_file, int mps_ver, const route_head *rte)
 		gbfputint32(lat, mps_file);
 		gbfputint32(lon, mps_file);
 
-		if (minalt == unknown_alt) {
+		if (minalt == -unknown_alt) {
 			gbfwrite(zbuf, 9, 1, mps_file);
 		}
 		else {
@@ -1235,7 +1235,7 @@ mps_routedatapoint_w(gbfile *mps_file, int mps_ver, const waypoint *rtewpt)
 	int			minlat;
 	int			minlon;
 	double		maxalt=unknown_alt;
-	double		minalt=unknown_alt;
+	double		minalt=-unknown_alt;
 
 	double		mps_altitude;
 	waypoint	*wptfound;
@@ -1304,7 +1304,7 @@ mps_routedatapoint_w(gbfile *mps_file, int mps_ver, const waypoint *rtewpt)
 			if ((prevRouteWpt->altitude > maxalt) || 
 				(maxalt == unknown_alt)) maxalt = prevRouteWpt->altitude;
 			if ((prevRouteWpt->altitude < minalt) ||
-				(minalt == unknown_alt)) minalt = prevRouteWpt->altitude;
+				(minalt == -unknown_alt)) minalt = prevRouteWpt->altitude;
 		}
 		
 		gbfwrite (zbuf, 1, 1, mps_file);
@@ -1325,7 +1325,7 @@ mps_routedatapoint_w(gbfile *mps_file, int mps_ver, const waypoint *rtewpt)
 		gbfputint32(minlat, mps_file);
 		gbfputint32(minlon, mps_file);
 
-		if (minalt == unknown_alt) {
+		if (minalt == -unknown_alt) {
 			gbfwrite(zbuf, 9, 1, mps_file);
 		}
 		else {
