@@ -3,9 +3,9 @@
 # Note: Reference files are from GPSBabel's own output.
 #
 gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o kml -F ${TMPDIR}/ge-gc.kml
-compare ${TMPDIR}/ge-gc.kml ${REFERENCE}/earth-gc.kml
+compare  ${REFERENCE}/earth-gc.kml ${REFERENCE}/earth-gc.kml
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml -F ${TMPDIR}/ge-eg.kml
-compare ${TMPDIR}/ge-eg.kml ${REFERENCE}/earth-expertgps.kml
+compare ${REFERENCE}/earth-expertgps.kml ${TMPDIR}/ge-eg.kml 
 
 # And again, but with tracks.
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml,track=1 \
