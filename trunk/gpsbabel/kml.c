@@ -892,12 +892,6 @@ static void kml_output_tailer(const route_head *header)
                           tpt->longitude,
                           tpt->latitude);
        }
-     if (kml_altitude_known(tpt))  {
-      kml_write_xml(0, "%f,%f,%f\n", tpt->longitude, tpt->latitude,
-                                     tpt->altitude);
-     } else {
-      kml_write_xml(0, "%f,%f\n", tpt->longitude, tpt->latitude);
-     }
     }
     kml_write_xml(-1, "</coordinates>\n");
     kml_write_xml(-1, "</LineString>\n");
