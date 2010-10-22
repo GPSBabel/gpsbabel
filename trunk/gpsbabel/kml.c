@@ -1487,31 +1487,6 @@ void kml_write(void)
 		kml_write_xml(0, "<Snippet>Created %s</Snippet>\n", import_time);
 	}
 
-	if(traits->trait_heartrate ||
-		traits->trait_cadence ||
-		traits->trait_power ||
-		traits->trait_temperature ||
-		traits->trait_depth) {
-		kml_write_xml(1, "<Schema id=\"schema\">\n");
-
-		if(traits->trait_heartrate) {
-			kml_mt_array_schema(kmt_heartrate, "Heart Rate", "int");
-		}
-		if(traits->trait_cadence) {
-			kml_mt_array_schema(kmt_cadence, "Cadence", "int");
-		}
-		if(traits->trait_power) {
-			kml_mt_array_schema(kmt_power, "Power", "float");
-		}
-		if(traits->trait_temperature) {
-			kml_mt_array_schema(kmt_temperature, "Temperature", "float");
-		}
-		if(traits->trait_depth) {
-			kml_mt_array_schema(kmt_depth, "Depth", "float");
-		}
-		kml_write_xml(-1, "</Schema>\n");
-	}
-
 	// Style settings for bitmaps
 	if (route_waypt_count()) {
 		kml_write_bitmap_style(kmlpt_route, ICON_RTE, NULL);
@@ -1548,6 +1523,32 @@ void kml_write(void)
 	if (traits->trait_geocaches) {
 		kml_gc_make_ballonstyle();
 	}
+
+	if(traits->trait_heartrate ||
+		traits->trait_cadence ||
+		traits->trait_power ||
+		traits->trait_temperature ||
+		traits->trait_depth) {
+		kml_write_xml(1, "<Schema id=\"schema\">\n");
+
+		if(traits->trait_heartrate) {
+			kml_mt_array_schema(kmt_heartrate, "Heart Rate", "int");
+		}
+		if(traits->trait_cadence) {
+			kml_mt_array_schema(kmt_cadence, "Cadence", "int");
+		}
+		if(traits->trait_power) {
+			kml_mt_array_schema(kmt_power, "Power", "float");
+		}
+		if(traits->trait_temperature) {
+			kml_mt_array_schema(kmt_temperature, "Temperature", "float");
+		}
+		if(traits->trait_depth) {
+			kml_mt_array_schema(kmt_depth, "Depth", "float");
+		}
+		kml_write_xml(-1, "</Schema>\n");
+	}
+
         if (waypt_count()) {
 		if (!realtime_positioning) {
 			kml_write_xml(1, "<Folder>\n");

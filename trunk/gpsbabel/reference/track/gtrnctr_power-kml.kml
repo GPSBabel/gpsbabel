@@ -3,17 +3,6 @@
 	xmlns:gx="http://www.google.com/kml/ext/2.2">
   <Document>
     <name>GPS device</name>
-    <Schema id="schema">
-      <gx:SimpleArrayField name="heartrate" type="int">
-          <displayName>Heart Rate</displayName>
-      </gx:SimpleArrayField>
-      <gx:SimpleArrayField name="cadence" type="int">
-          <displayName>Cadence</displayName>
-      </gx:SimpleArrayField>
-      <gx:SimpleArrayField name="power" type="float">
-          <displayName>Power</displayName>
-      </gx:SimpleArrayField>
-    </Schema>
 <!-- Normal track style -->
     <Style id="track_n">
       <IconStyle>
@@ -113,6 +102,17 @@
         <width>6</width>
       </LineStyle>
     </Style>
+    <Schema id="schema">
+      <gx:SimpleArrayField name="heartrate" type="int">
+          <displayName>Heart Rate</displayName>
+      </gx:SimpleArrayField>
+      <gx:SimpleArrayField name="cadence" type="int">
+          <displayName>Cadence</displayName>
+      </gx:SimpleArrayField>
+      <gx:SimpleArrayField name="power" type="float">
+          <displayName>Power</displayName>
+      </gx:SimpleArrayField>
+    </Schema>
     <Folder>
       <name>Waypoints</name>
       <Placemark>
