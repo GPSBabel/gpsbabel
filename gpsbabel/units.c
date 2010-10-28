@@ -75,6 +75,33 @@ fmt_distance(const double distance_meters, char **tag)
 }
 
 double
+fmt_altitude(const double distance_meters, char **tag)
+{
+	double d;
+
+	switch (units) {
+	case units_statute: 
+		d = METERS_TO_FEET(distance_meters);
+		*tag = "ft";
+		break;
+	case units_nautical: 
+		d = METERS_TO_NMILES(distance_meters);
+		*tag = "NM";
+		break;
+	case units_metric:
+		d = distance_meters;
+		*tag = "meters";
+		break;
+		
+	default: 
+		fatal("not done yet");
+		break;
+	}
+
+	return d;
+}
+
+double
 fmt_speed(const double distance_meters_sec, char **tag)
 {
 	double d;

@@ -1026,6 +1026,7 @@ typedef enum {
 
 int    fmt_setunits(fmt_units);
 double fmt_distance(const double, char **tag);
+double fmt_altitude(const double, char **tag);
 double fmt_speed(const double, char **tag);
 
 /*
