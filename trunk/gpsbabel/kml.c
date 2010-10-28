@@ -560,8 +560,8 @@ void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
 		return;
 	}
 
-	max_alt = fmt_distance(td->max_alt, &max_alt_units);
-	min_alt = fmt_distance(td->min_alt, &min_alt_units);
+	max_alt = fmt_altitude(td->max_alt, &max_alt_units);
+	min_alt = fmt_altitude(td->min_alt, &min_alt_units);
 	distance = fmt_distance(td->distance_meters, &distance_units);
 
 	kml_write_xml(0, "<Snippet/>\n");
@@ -719,7 +719,7 @@ static void kml_output_description(const waypoint *pt)
 		return;
 	}
 
-	alt = fmt_distance(pt->altitude, &alt_units);
+	alt = fmt_altitude(pt->altitude, &alt_units);
 
 	kml_write_xml(1, "<description><![CDATA[\n");
 	kml_write_xml(1, "<table>\n");
