@@ -30,6 +30,7 @@ fmt_setunits(fmt_units u)
 	case units_statute:
 	case units_metric:
 	case units_nautical:
+	case units_aviation:
 		units = u;
 		return 0;
 	default:
@@ -53,6 +54,7 @@ fmt_distance(const double distance_meters, char **tag)
 		}
 		break;
 	case units_nautical: 
+	case units_aviation: 
 		d = METERS_TO_NMILES(distance_meters);
 		*tag = "NM";
 		break;
@@ -81,6 +83,7 @@ fmt_altitude(const double distance_meters, char **tag)
 
 	switch (units) {
 	case units_statute: 
+	case units_aviation: 
 		d = METERS_TO_FEET(distance_meters);
 		*tag = "ft";
 		break;
@@ -112,6 +115,7 @@ fmt_speed(const double distance_meters_sec, char **tag)
 		*tag = "mph";
 		break;
 	case units_nautical:
+	case units_aviation:
 		d = METERS_TO_NMILES(distance_meters_sec) * SECONDS_PER_HOUR ;
 		*tag = "knts";
 		break;
