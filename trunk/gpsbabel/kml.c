@@ -130,7 +130,7 @@ arglist_t kml_args[] = {
 	 "Indicate direction of travel in track icons (default = 0)",
 	 "0", ARGTYPE_BOOL, ARG_NOMINMAX },
 	{"units", &opt_units,
-	 "Units used when writing comments ('s'tatute, 'm'etric,' 'n'autical)",
+	 "Units used when writing comments ('s'tatute, 'm'etric,' 'n'autical, 'a'viation)",
 	 "s", ARGTYPE_STRING, ARG_NOMINMAX },
 	{"labels", &opt_labels,
 	 "Display labels on track and routepoints  (default = 1)",
@@ -336,7 +336,8 @@ kml_wr_init(const char *fname)
 		case 's': fmt_setunits(units_statute); break;
 		case 'm': fmt_setunits(units_metric); break;
 		case 'n': fmt_setunits(units_nautical); break;
-		default: fatal("Units argument '%s' should be 's' for statute units or 'm' for metric.", opt_units); break;
+		case 'a': fmt_setunits(units_aviation); break;
+		default: fatal("Units argument '%s' should be 's' for statute units, 'm' for metric, 'n' for nautical or 'a' for aviation.\n", opt_units); break;
 	}
 	/*
 	 * Reduce race conditions with network read link.

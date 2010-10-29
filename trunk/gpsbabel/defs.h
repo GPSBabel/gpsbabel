@@ -1021,7 +1021,8 @@ typedef enum {
 	units_unknown = 0,
 	units_statute = 1,
 	units_metric = 2,
-	units_nautical =3
+	units_nautical =3,
+	units_aviation =4
 } fmt_units;
 
 int    fmt_setunits(fmt_units);
