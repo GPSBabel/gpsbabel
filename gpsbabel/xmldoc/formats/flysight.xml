@@ -1,0 +1,6 @@
+<para>
+This is the format used by the <ulink url="http://www.flysight.ca">FlySight GPS</ulink> for wingsuit pilots.
+</para>
+<para>
+Interfacing with the FlySight is pretty simple. FlySight acts like a USB disk when connected to a computer. Files are organized into folders by date, and individual files within the folder are named according to the time the log started (UTC). The files themselves are CSV text supported by this format.
+</para>
