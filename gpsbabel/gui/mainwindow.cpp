@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.25 2010-09-02 03:10:46 robertl Exp $
+// $Id: mainwindow.cpp,v 1.26 2010-10-31 19:31:26 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -111,8 +111,14 @@ static QString MakeOptions(const QList<FormatOption>& options)
     if (options[i].getSelected()) {
       str += ",";
       str += options[i].getName();
-      if (options[i].getType() != FormatOption::OPTbool) {
-	str += "=" + options[i].getValue().toString();
+      if (options[i].getType() == FormatOption::OPTbool) {
+        str += "=1";
+      } else {
+        str += "=" + options[i].getValue().toString();
+      }
+    } else {
+      if (options[i].getType() == FormatOption::OPTbool) {
+        str += "," + options[i].getName() + "=0";
       }
     }
   }
