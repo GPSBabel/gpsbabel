@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.cpp,v 1.26 2010-10-31 19:31:26 robertl Exp $
+// $Id: mainwindow.cpp,v 1.27 2010-11-01 03:30:42 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -176,6 +176,10 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   connect(ui.buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(applyActionX()));
   connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(closeActionX()));
   connect(ui.xlateFiltersBtn, SIGNAL(clicked()), this, SLOT(filtersClicked()));
+
+  connect(ui.inputFileNameText, SIGNAL(textEdited(QString)), this, SLOT(inputFileNameEdited()));
+  connect(ui.outputFileNameText, SIGNAL(textEdited(QString)), this, SLOT(outputFileNameEdited()));
+
 
   ui.buttonBox->button(QDialogButtonBox::Apply)->setIcon(QIcon(":images/runit.png"));
   ui.buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon(":images/exit.png"));
@@ -361,6 +365,17 @@ void MainWindow:: outputDeviceOptBtnClicked()
     ui.outputDevicePage->setEnabled(false);
   }
   fmtChgInterlock = false;
+}
+void MainWindow::inputFileNameEdited()
+{
+  bd.inputFileNames.clear();
+  bd.inputFileNames << ui.inputFileNameText->text();
+}
+
+void MainWindow::outputFileNameEdited()
+{
+  bd.outputFileName = ui.outputFileNameText->text();
+
 }
 
 //------------------------------------------------------------------------
