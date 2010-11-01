@@ -43,7 +43,7 @@ Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
   ui_.reportStatisticsCheck->setChecked(bd_.reportStatistics);
   ui_.ignoreVersionMismatchCheck->setChecked(bd_.ignoreVersionMismatch);
   // Because of an unfortunate bug in 1.4.0, we turn this off in 1.4.1.
-  if (VERSION == "1.4.1") 
+  if (VERSION == QString("1.4.1"))
     bd_.ignoreVersionMismatch = false;
 
   connect (ui_.buttonBox, SIGNAL(accepted()), this, SLOT(acceptClicked()));

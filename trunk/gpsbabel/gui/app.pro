@@ -1,10 +1,11 @@
-# $Id: app.pro,v 1.18 2010-06-19 23:59:06 robertl Exp $
+# $Id: app.pro,v 1.19 2010-11-01 03:30:42 robertl Exp $
 #
 
 CONFIG += qt release 
 #CONFIG += qt debug console
 
 # For Mac, build Universal binary.   Ignored on other OSes.
+# QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.4u.sdk
 CONFIG += x86 ppc
 
 ICON = images/appicon.icns

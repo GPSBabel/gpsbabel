@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id: mainwindow.h,v 1.12 2010-06-27 21:12:37 robertl Exp $
+// $Id: mainwindow.h,v 1.13 2010-11-01 03:30:42 robertl Exp $
 //------------------------------------------------------------------------
 //
 //  Copyright (C) 2009  S. Khai Mong <khai@mangrai.com>.
@@ -105,9 +105,11 @@ protected:
   void inputFileOptBtnClicked();
   void inputFormatChanged(int);
   void inputOptionButtonClicked();
+  void inputFileNameEdited();
   void moreOptionButtonClicked();
   void outputDeviceOptBtnClicked();
   void outputFileOptBtnClicked();
+  void outputFileNameEdited();
   void outputFormatChanged(int);
   void outputOptionButtonClicked();
   void preferencesActionX();
