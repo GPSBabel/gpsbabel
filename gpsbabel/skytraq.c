@@ -6,6 +6,7 @@
 
     2008         J.C Haessig, jean-christophe.haessig (at) dianosis.org
     2009-09-06 | Josef Reisinger | Added "set target location", i.e. -i skytrag,targetlocation=<lat>:<lng>
+    2010-10-23 | Josef Reisinger | Added read/write for miniHomer POI
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -387,6 +388,7 @@ skytraq_system_restart(void)
 	gbuint8 MSG_SYSTEM_RESTART[15] =
 		{ 0x01, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
+	db(2, "restart system\n");
 	return skytraq_wr_msg_verify(MSG_SYSTEM_RESTART, sizeof(MSG_SYSTEM_RESTART));
 }
 
@@ -904,6 +906,8 @@ skytraq_read_tracks(void)
 	}
 
 	db(1, MYNAME ": Reading log data from device...\n");
+	db(1, MYNAME ": start=%d used=%d\n", opt_first_sector_val, sectors_used);
+	db(1, MYNAME ": opt_last_sector_val=%d\n", opt_last_sector_val);
 	for (i = opt_first_sector_val; i < sectors_used; i += got_sectors) {
 		for (t = 0, got_sectors = 0; (t < SECTOR_RETRIES) && (got_sectors <= 0); t++) {
 			if (atoi(opt_read_at_once) == 0  ||  multi_read_supported == 0) {
@@ -1236,3 +1240,216 @@ ff_vecs_t skytraq_fvecs = {
 	CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
 };
 /**************************************************************************/
+/*
+ * support POI of skytraq based miniHomer device
+ * http://navin.com.tw/miniHomer.htm
+ * 2010-10-23	Josef Reisinger
+ */
+#ifdef MYNAME
+#undef MYNAME
+#endif
+#define MYNAME "miniHomer"
+static char *opt_set_poi_home = NULL;	/* set if a "poi" option was used */
+static char *opt_set_poi_car = NULL;	/* set if a "poi" option was used */
+static char *opt_set_poi_boat = NULL;	/* set if a "poi" option was used */
+static char *opt_set_poi_heart = NULL;	/* set if a "poi" option was used */
+static char *opt_set_poi_bar = NULL;	/* set if a "poi" option was used */
+arglist_t miniHomer_args[] = {
+	{ "baud",         &opt_dlbaud,        "Baud rate used for download", "115200", ARGTYPE_INT, "0", "115200" },
+	{ "dump-file",    &opt_dump_file,     "Dump raw data to this file", NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX },
+	{ "erase",        &opt_erase,         "Erase device data after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{ "first-sector", &opt_first_sector,  "First sector to be read from the device", "0", ARGTYPE_INT, "0", "65535" },
+	{ "initbaud",     &opt_initbaud,      "Baud rate used to init device (0=autodetect)", "38400", ARGTYPE_INT, "38400", "38400" },
+	{ "last-sector",  &opt_last_sector,   "Last sector to be read from the device (-1: smart read everything)", "-1", ARGTYPE_INT, "-1", "65535" },
+	{ "no-output",    &opt_no_output,     "Disable output (useful with erase)", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
+	{ "read-at-once", &opt_read_at_once,  "Number of sectors to read at once (0=use single sector mode)", "255", ARGTYPE_INT, "0", "255" },
+	{ "Home",         &opt_set_poi_home,  "POI for Home Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "" },
+	{ "Car",          &opt_set_poi_car,   "POI for Car Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "" },
+	{ "Boat",         &opt_set_poi_boat,  "POI for Boat Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "" },
+	{ "Heart",        &opt_set_poi_heart, "POI for Heart Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "" },
+	{ "Bar",          &opt_set_poi_bar,   "POI for Bar Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "" },
+	ARG_TERMINATOR
+};
+/*
+ * Names of the POIs on miniHomer
+ */
+static char *poinames[] = {
+	"Home", "Car", "Boat", "Heart", "Bar"
+};
+#define NUMPOI (sizeof poinames/sizeof poinames[0])
+int getPoiByName(char *name) {
+	int i;
+	for (i=0; i<NUMPOI; i++) {
+		if (strcmp(poinames[i], name) == 0) return i;
+	}
+	return -1;
+}
+// Convert lla (lat, lng, alt) to ECEF
+// Algorith taken from these sources:
+// http://www.mathworks.com/matlabcentral/fileexchange/7942-covert-lat-lon-alt-to-ecef-cartesian
+// http://en.wikipedia.org/wiki/Geodetic_system#From_ECEF_to_geodetic
+// http://earth-info.nga.mil/GandG/publications/tr8350.2/wgs84fin.pdf
+void lla2ecef(double lat, double lng, double alt, double *ecef_x, double *ecef_y, double *ecef_z) {
+	long double n;
+	long double a = 6378137.0;
+	long double esqr = 6.69437999014e-3;
+	long double s;
+	long double llat, llng, lalt;
+
+	llat=lat*M_PI/180;
+	llng=lng*M_PI/180;
+	lalt=alt;
+
+	s=sin(llat);
+	n = a / sqrt(1 - esqr * s*s);
+
+	*ecef_x = (double)((n+lalt) * cos(llat) * cos(llng));
+	*ecef_y = (double)((n+lalt) * cos(llat) * sin(llng));
+	*ecef_z = (double)((n*(1-esqr) + lalt)* sin(llat));
+}
+static void miniHomer_get_poi()
+{
+	gbuint8 MSG_GET_POI[3] = { 0x4D, 0, 0};
+	gbuint8 buf[32];
+	int poi;
+	double lat, lng, alt;
+	double ecef_x, ecef_y, ecef_z;
+	waypoint *wpt;
+
+	for (poi=0; poi<NUMPOI; poi++) {
+		MSG_GET_POI[1]=(poi>>8)&0xff;
+		MSG_GET_POI[2]=(poi)&0xff;
+		if (skytraq_wr_msg_verify((gbuint8*)&MSG_GET_POI, sizeof(MSG_GET_POI)) != res_OK) {
+			warning(MYNAME ": cannot read poi %d '%s'\n", poi, poinames[poi]);
+		}
+		skytraq_rd_msg(buf, 25);
+		ecef_x=be_read_double(buf+1);
+		ecef_y=be_read_double(buf+9);
+		ecef_z=be_read_double(buf+17);
+
+		// todo - how to determine not-set POIs ?
+		if (ecef_x < 100.0 && ecef_y < 100.0 && ecef_z < 100.0) {
+			db(2, MYNAME" : skipped poi %d for X=%f, y=%f, Z=%f\n", ecef_x, ecef_y, ecef_z);
+		} else {
+		    ECEF_to_LLA (ecef_x, ecef_y, ecef_z, &lat, &lng, &alt);
+
+		    wpt = waypt_new();
+		    xasprintf(&wpt->shortname, "POI_%s", poinames[poi]);
+		    xasprintf(&wpt->description, "miniHomer points to this coordinates if the %s symbol is on", poi, poinames[poi]);
+		    wpt->latitude       = lat;
+		    wpt->longitude      = lng;
+		    wpt->altitude       = alt;
+		    waypt_add(wpt);
+		    db(1, MYNAME ": got POI[%s]='%f %f %f/%f %f %f'\n", poinames[poi], lat, lng, alt, ecef_x, ecef_y, ecef_z);
+		}
+	}
+}
+/*
+ * set lla (lat/lng/alt) specified as <lat>:<lng>[:<alt] for a given poi [0..4] in miniHomer
+ * returns
+ * 1  if poi was set
+ * 0  if opt_poi was not set
+ * -1 in case of errors
+ *  the number of the POI will not be checked - if it is not correct, miniHome will send NACK
+ */
+static int miniHomer_set_poi(gbuint16 poinum, const char *opt_poi)
+{
+#define MSG_SET_POI_SIZE (sizeof(gbuint8)+sizeof(gbuint16)+3*sizeof(double)+sizeof(gbuint8))
+    gbuint8 MSG_SET_POI[MSG_SET_POI_SIZE] = { 
+	    0x4C, 0,  0, 		// cmd + poi (u16)
+	    0, 0, 0, 0, 0, 0, 0, 0,	//lat (double ecef)
+	    0, 0, 0, 0, 0, 0, 0, 0,	//lng (double ecef)
+	    0, 0, 0, 0, 0, 0, 0, 0,	//alt (double ecef)
+	    0 			// attr (u8, 1-> to flash, 0->ro sram)
+			    };
+    int n, result;
+    double lat, lng, alt;
+    double ecef_x, ecef_y, ecef_z;
+
+
+    result=0;		// result will be 0 if opt_poi isn't set
+    if (opt_poi) { 	// first check opt_poi 
+		if (*opt_poi) {
+			lat=lng=alt=0.0;
+			/*
+			 * parse format of <lat>:<lng>[:alt]
+			 * we assume at least two elements in the value string
+			 */
+			n = sscanf(opt_poi, "%lf:%lf:%lf", &lat, &lng, &alt);
+			if (n >= 2) {
+				db(3, "found %d elems '%s':poi=%s@%d, lat=%f, lng=%f, alt=%f over=%s\n", n, opt_poi, poinames[poinum], poinum, lat, lng, alt);
+				lla2ecef(lat, lng, alt, &ecef_x, &ecef_y, &ecef_z);
+				db(1, MYNAME ": set POI[%s]='%f %f %f/%f %f %f'\n", poinames[poinum], lat, lng, alt, ecef_x, ecef_y, ecef_z);
+				be_write16(MSG_SET_POI+1, poinum);
+				be_write_double(MSG_SET_POI+3, ecef_x);
+				be_write_double(MSG_SET_POI+11, ecef_y);
+				be_write_double(MSG_SET_POI+19, ecef_z);
+				MSG_SET_POI[27]=0;
+				if (skytraq_wr_msg_verify((gbuint8*)&MSG_SET_POI, sizeof(MSG_SET_POI)) == res_OK) {
+					result=1;
+				} else {
+					warning(MYNAME ": cannot set poi %d '%s'\n", poinum, poinames[poinum]);
+					result=-1;
+				}
+			} else {
+				warning(MYNAME ": argument to %s needs to be like <lat>:<lng>[:<alt>]\n", poinames[poinum]);
+				result=-1;
+			}
+		}
+    }
+    return result;
+}
+static const char *mhport;
+static void
+miniHomer_rd_init(const char *fname)
+{
+	opt_set_location="";	// otherwise it will lead to bus error
+	skytraq_rd_init(fname);	// sets global var serial_handle
+	mhport=fname;
+}
+static void 
+miniHomer_rd_deinit(void)
+{
+	skytraq_rd_deinit();
+}
+#define SETPOI(poinum, poiname) if (opt_set_poi_##poiname )  {miniHomer_set_poi(poinum, opt_set_poi_##poiname);}
+static void
+miniHomer_read(void)
+{
+	int npoi=0;
+	/*
+	 * read tracks and POI from miniHomer
+	 */
+	if (miniHomer_set_poi (0, opt_set_poi_home) > 0) npoi++;
+	if (miniHomer_set_poi (1, opt_set_poi_car) > 0) npoi++;
+	if (miniHomer_set_poi (2, opt_set_poi_boat) > 0) npoi++;
+	if (miniHomer_set_poi (3, opt_set_poi_heart) > 0) npoi++;
+	if (miniHomer_set_poi (4, opt_set_poi_bar) > 0) npoi++;
+	if (npoi == 0) {				// do not read if POIs are set (consider set & read distinct operations)
+	    skytraq_read();				// first read tracks (if not supressed by cmd line params)
+	    							// we need this call it initialized waypoint list etc...
+	    skytraq_rd_deinit(); 		// skytraq_read called system_reset, which changes the baud rate. 
+
+	    skytraq_rd_init(mhport);    // Lets start from scratch and re-init the port
+	    miniHomer_get_poi();		// add POI as waypoints to the waypoints of the track
+	} 
+}
+
+ff_vecs_t miniHomer_vecs = {
+	ff_type_serial,
+	{
+		ff_cap_read			/* waypoints */,
+	  	ff_cap_read 			/* tracks */,
+	  	ff_cap_none 			/* routes */
+	},
+	miniHomer_rd_init,
+	NULL,
+	miniHomer_rd_deinit,
+	NULL,
+	miniHomer_read,
+	NULL,
+	NULL,
+	miniHomer_args,
+	CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
+
+};

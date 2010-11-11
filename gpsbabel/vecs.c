@@ -101,6 +101,7 @@ extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t shape_vecs;
 extern ff_vecs_t skytraq_vecs;
 extern ff_vecs_t skytraq_fvecs;
+extern ff_vecs_t miniHomer_vecs;
 #if CSVFMTS_ENABLED
 extern ff_vecs_t stmsdf_vecs;
 #endif
@@ -1000,6 +1001,12 @@ vecs_t vec_list[] = {
                 "skytraq-bin",
                 "SkyTraq Venus based loggers Binary File Format",
                 "bin"
+        },
+        {
+                &miniHomer_vecs,
+                "miniHomer",
+                "MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)",
+                NULL
         },
         {
                 &jogmap_vecs,
