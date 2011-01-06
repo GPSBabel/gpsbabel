@@ -324,7 +324,7 @@ static int read_tag(const char *caller, const int tag, waypoint *wpt);
 
 /* read a single poi with all options */
 static void
-read_poi(const int sz)
+read_poi(const int sz, const int tag)
 {
 	int pos, len;
 	waypoint *wpt;
@@ -334,7 +334,10 @@ read_poi(const int sz)
 	dbginfo("> reading poi (size %d)\n", sz);
 #endif	
 	PP;
-	len = gbfgetint32(fin);	/* sub-header size */
+	len = 0;
+	if (tag == 0x80002) {
+		len = gbfgetint32(fin);	/* sub-header size */
+	} 
 #ifdef GPI_DBG
 	dbginfo("poi sublen = %1$d (0x%1$x)\n", len);
 #endif	
@@ -348,9 +351,8 @@ read_poi(const int sz)
 	
 	(void) gbfgetint16(fin);	/* ? always 1 ? */
 	(void) gbfgetc(fin);		/* seems to 1 when extra options present */
-	
 	wpt->shortname = gpi_read_string("Shortname");
-	
+
 	while (gbftell(fin) < (gbsize_t)(pos + sz - 4)) {
 		int tag = gbfgetint32(fin);
 		if (! read_tag("read_poi", tag, wpt)) break;
@@ -519,8 +521,9 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 			else wpt->description = str;
 			break;
 
+		case 0x2:
 		case 0x80002:
-			read_poi(sz);
+			read_poi(sz, tag);
 			break;
 
 		case 0x80008:
