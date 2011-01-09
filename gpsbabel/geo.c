@@ -52,6 +52,7 @@ geo_read(void)
 static xg_callback	wpt_s, wpt_e;
 static xg_callback	wpt_link_s, wpt_link;
 static xg_callback	wpt_name, wpt_name_s, wpt_type, wpt_coord;
+static xg_callback	wpt_diff, wpt_terr, wpt_container;
 
 static 
 xg_tag_mapping loc_map[] = {
@@ -63,6 +64,9 @@ xg_tag_mapping loc_map[] = {
 	{ wpt_link_s, 	cb_start, 	"/loc/waypoint/link" },
 	{ wpt_link, 	cb_cdata, 	"/loc/waypoint/link" },
 	{ wpt_coord, 	cb_start, 	"/loc/waypoint/coord" },
+	{ wpt_diff, 	cb_cdata, 	"/loc/waypoint/difficulty" },
+	{ wpt_terr, 	cb_cdata, 	"/loc/waypoint/terrain" },
+	{ wpt_container,cb_cdata, 	"/loc/waypoint/container" },
 	{ NULL, 	0, 		NULL }
 };
 
@@ -148,6 +152,37 @@ void wpt_coord(const char *args, const char **attrv)
         }
 }
 
+void wpt_container(const char *args, const char **unused)
+{
+	int v;
+
+	if (!args) return;
+	switch ( atoi(args) )
+	{
+	case 1: v = gc_unknown; break;
+	case 2: v = gc_micro; break;
+	case 3: v = gc_regular; break;
+	case 4: v = gc_large; break;
+	case 5: v = gc_virtual;; break;
+	case 6: v = gc_other; break;
+	case 8: v = gc_small; break;
+	default: v = gc_unknown; break;
+	}
+	waypt_alloc_gc_data(wpt_tmp)->container = v;
+}
+
+void wpt_diff(const char *args, const char **unused)
+{
+	if (!args) return;
+	waypt_alloc_gc_data(wpt_tmp)->diff = atof(args) * 10;
+}
+
+void wpt_terr(const char *args, const char **unused)
+{
+	if (!args) return;
+	waypt_alloc_gc_data(wpt_tmp)->terr = atof(args) * 10;
+}
+
 static void
 geo_rd_init(const char *fname)
 {
@@ -202,6 +237,27 @@ geo_waypt_pr(const waypoint *waypointp)
 		gbfprintf(ofd, "<link text =\"Cache Details\">%s</link>\n", 
 			tmp);
 		xfree(tmp);
+	}
+	if (waypointp->gc_data)
+	{
+		int v;
+
+		gbfprintf(ofd, "<difficulty>%.1lf</difficulty>\n",
+			waypointp->gc_data->diff / 10.0);
+		gbfprintf(ofd, "<terrain>%.1lf</terrain>\n",
+			waypointp->gc_data->terr / 10.0);
+		switch (waypointp->gc_data->container)
+		{
+		case gc_unknown: v = 1; break;
+		case gc_micro: v = 2; break;
+		case gc_regular: v = 3; break;
+		case gc_large: v = 4; break;
+		case gc_virtual: v = 5; break;
+		case gc_other: v = 6; break;
+		case gc_small: v = 8; break;
+		default: v = 1; break;
+		}
+		gbfprintf(ofd, "<container>%d</container>\n", v);
 	}
 	gbfprintf(ofd, "</waypoint>\n");
 }
