@@ -532,8 +532,12 @@ gprmc_parse(char *ibuf)
 	}
 
 	/* Skip past nine commas in ibuf to reach the dmy value */
-	for (dmybuf=ibuf,i=0; i<9 && dmybuf != NULL; i++) {
+	for (dmybuf=ibuf,i=0; i<9; i++) {
 		dmybuf= strchr(dmybuf, ',');
+		if(dmybuf==NULL) {
+			/* If we run out of commas, the sentence is invalid. */
+			return;
+		}
 		dmybuf++;
 	}
 
@@ -908,6 +912,12 @@ nmea_parse_one_line(char *ibuf)
 		/* we have had a checksum on all previous sentences, but not on this
 		one, which probably indicates this line is truncated */
 		had_checksum = 0;
+		return;
+	}
+	
+	if(strstr(tbuf+1,"$")!=NULL)
+	{
+		/* If line has more than one $, there is probably an error in it. */
 		return;
 	}
 
