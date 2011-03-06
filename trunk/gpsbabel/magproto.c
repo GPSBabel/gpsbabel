@@ -28,6 +28,10 @@
 #include "gbser.h"
 #include "explorist_ini.h"
 
+#if HAVE_GLOB
+#include <glob.h>
+#endif
+
 static int bitrate = 4800;
 static int wptcmtcnt;
 static int wptcmtcnt_max;
@@ -58,6 +62,7 @@ static int extension_hint;
 // (This has nothing to do with the Explorist 100...600 products.)
 static ff_vecs_t *gpx_vec;
 static mag_info *explorist_info;
+static char ** os_gpx_files(const char *dirname);
 
 /*
  * Magellan's firmware is *horribly* slow to send the next packet after
@@ -108,6 +113,7 @@ static int ignore_unable;
 static waypoint * mag_wptparse(char *);
 typedef char * (cleanse_fn) (char *);
 static cleanse_fn *mag_cleanse;
+static const char ** os_get_magellan_mountpoints();
 
 static icon_mapping_t gps315_icon_table[] = {
 	{ "a", "filled circle" },
@@ -751,9 +757,12 @@ mag_rd_init_common(const char *portname)
 	// We actually do the rd_init() inside read as we may have multiple
 	// files that we have to read.
 	if (0 == strcmp(portname, "usb:")) {
-		char *vec_opts = NULL;
-		explorist_info = explorist_ini_get();
-		gpx_vec = find_vec("gpx", &vec_opts);
+		const char **dlist = os_get_magellan_mountpoints();
+		explorist_info = explorist_ini_get(dlist);
+		if (explorist_info) {
+			char *vec_opts = NULL;
+			gpx_vec = find_vec("gpx", &vec_opts);
+		}
 		return;
 	}
 
@@ -1211,17 +1220,36 @@ static void
 mag_read(void)
 {
 	if (gpx_vec) {
-		gpx_vec->rd_init(explorist_info->track_path);
-		gpx_vec->read();
+		char **f = os_gpx_files(explorist_info->track_path);
+		while (f && *f) {
+			gpx_vec->rd_init(*f);
+			gpx_vec->read();
+			f++;
+                }
+
+		f = os_gpx_files(explorist_info->waypoint_path);
+		while (f && *f) {
+			gpx_vec->rd_init(*f);
+			gpx_vec->read();
+			f++;
+                }
+#if 0
+		f = os_gpx_files(explorist_info->geo_path);
+		while (f && *f) {
+			gpx_vec->rd_init(*f);
+			gpx_vec->read();
+			f++;
+                }
+#endif
 		return;
         }
 
 	found_done = 0;
         if (global_opts.masked_objective & TRKDATAMASK) {
 		  magrxstate = mrs_handoff;
-          if (!is_file) 
+          if (!is_file)
             mag_writemsg("PMGNCMD,TRACK,2");
-          
+
           while (!found_done) {
             mag_readmsg(trkdata);
           }
@@ -1528,6 +1556,35 @@ mag_write(void)
 		default:
 			fatal(MYNAME ": Unknown objective.\n");
 	}
+}
+
+const char ** os_get_magellan_mountpoints()
+{
+#if __APPLE__
+	const char **dlist = xcalloc(2, sizeof *dlist);
+	dlist[0] = xstrdup("/Volumes/Magellan");
+	dlist[1] = NULL;
+	return dlist;
+#else
+	fatal("Not implemented");
+#endif
+}
+
+// My kingdom for container classes and portable tree-walking...
+// Returns a pointer to a static vector that's valid until the next call.
+static char **
+os_gpx_files(const char *dirname)
+{
+#if HAVE_GLOB
+	static glob_t g;
+	char *path;
+	xasprintf(&path, "%s/*.gpx", dirname);
+	glob(path, 0, NULL, &g);
+	xfree(path);
+	return g.gl_pathv;
+#else
+	fatal("Not implemented");
+#endif
 }
 
 /*
