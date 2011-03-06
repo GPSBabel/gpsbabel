@@ -238,7 +238,7 @@ geo_waypt_pr(const waypoint *waypointp)
 			tmp);
 		xfree(tmp);
 	}
-	if (waypointp->gc_data)
+	if (waypointp->gc_data && waypointp->gc_data->diff)
 	{
 		int v;
 
