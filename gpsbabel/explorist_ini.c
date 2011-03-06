@@ -10,30 +10,53 @@ explorist_read_value(const char* section, const char *key) {
   return inifile_readstr(inifile, section, key);
 }
 
-mag_info *
-explorist_ini_get() {
-  mag_info *info = xmalloc(sizeof(mag_info));
+static mag_info *
+explorist_ini_try(const char *path) {
+  mag_info *info = NULL;
+  char *inipath;
   char *s;
 
-  inifile = inifile_init("Geocaches.ini", myname);
-  s = xstrdup(inifile_readstr(inifile, "Geocaches", "GeocachesPath"));
-  s = gstrsub(s, "\\", "/");
-  info->geo_path = s;
-  inifile_done(inifile);
+  xasprintf(&inipath, "%s/%s", path, "APP/Atlas.ini");
+  inifile = inifile_init(inipath, myname);
+  if (!inifile) {
+    xfree (inipath);
+    return NULL;
+  }
 
-  inifile = inifile_init("Tracks.ini", myname);
-  s = xstrdup(inifile_readstr(inifile, "Tracks", "TracksExportPath"));
-  s = gstrsub(s, "\\", "/");
-  info->track_path = xstrappend(s, "/tracks.gpx");;
-  inifile_done(inifile);
+  info = xmalloc(sizeof(mag_info));
+  info->geo_path = NULL;
+  info->track_path = NULL;
+  info->waypoint_path = NULL;
 
-  inifile = inifile_init("Waypoints.ini", myname);
-  s = xstrdup(inifile_readstr(inifile, "Waypoints", "WaypointsPath"));
-  s = gstrsub(s, "\\", "/");
-  info->waypoint_path = xstrappend(s, "/newwaypoints.gpx");
-  inifile_done(inifile);
+  s = xstrdup(inifile_readstr(inifile,  "UGDS", "WpFolder"));
+  if (s) {
+    s = gstrsub(s, "\\", "/");
+    xasprintf(&info->waypoint_path, "%s/%s", path, s);
+  }
+  s = xstrdup(inifile_readstr(inifile,  "UGDS", "GcFolder"));
+  if (s) {
+    s = gstrsub(s, "\\", "/");
+    xasprintf(&info->geo_path, "%s/%s", path, s);
+  }
+  s = xstrdup(inifile_readstr(inifile,  "UGDS", "TrkFolder"));
+  if (s) {
+    s = gstrsub(s, "\\", "/");
+    xasprintf(&info->track_path, "%s/%s", path, s);
+  }
 
+  inifile_done(inifile);
+  xfree (inipath);
   return info;
+}
+
+mag_info *
+explorist_ini_get(const char **dirlist) {
+  mag_info *r = NULL;
+  while (dirlist && *dirlist) {
+    r = explorist_ini_try(*dirlist);
+    if (r) return r;
+  }
+  return r;
 }
 
 void
