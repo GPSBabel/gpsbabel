@@ -1,7 +1,8 @@
 /*
     Communicate Thales/Magellan serial protocol.
 
-    Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007,
+      2008, 2010  Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,6 +26,7 @@
 #include "defs.h"
 #include "magellan.h"
 #include "gbser.h"
+#include "explorist_ini.h"
 
 static int bitrate = 4800;
 static int wptcmtcnt;
@@ -52,6 +54,10 @@ static int waypoint_read_count;
 static int wpt_len = 8;
 static const char *curfname;
 static int extension_hint;
+// For Explorist GC/510/610/710 familes, bludgeon in GPX support.
+// (This has nothing to do with the Explorist 100...600 products.)
+static ff_vecs_t *gpx_vec;
+static mag_info *explorist_info;
 
 /*
  * Magellan's firmware is *horribly* slow to send the next packet after
@@ -741,6 +747,15 @@ mag_rd_init_common(const char *portname)
 {
 	char *ext;
 	waypoint_read_count = 0;
+	// For Explorist GC, intercept the device access and redirect to GPX.
+	// We actually do the rd_init() inside read as we may have multiple
+	// files that we have to read.
+	if (0 == strcmp(portname, "usb:")) {
+		char *vec_opts = NULL;
+		explorist_info = explorist_ini_get();
+		gpx_vec = find_vec("gpx", &vec_opts);
+		return;
+	}
 
 	if (bs) {
 		bitrate=atoi(bs);
@@ -855,6 +870,10 @@ mag_wr_init(const char *portname)
 static void
 mag_deinit(void)
 {
+	if (explorist_info) {
+		explorist_ini_done(explorist_info);
+		return;
+	}
 	mag_handoff();
 	termdeinit();
 	if(mkshort_handle)
@@ -1191,6 +1210,12 @@ mag_wptparse(char *trkmsg)
 static void
 mag_read(void)
 {
+	if (gpx_vec) {
+		gpx_vec->rd_init(explorist_info->track_path);
+		gpx_vec->read();
+		return;
+        }
+
 	found_done = 0;
         if (global_opts.masked_objective & TRKDATAMASK) {
 		  magrxstate = mrs_handoff;
