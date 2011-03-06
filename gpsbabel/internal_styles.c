@@ -711,6 +711,32 @@ static char kwf2[] =
 "IFIELD	DESCRIPTION, \"\", \"%s\"\n"
 "IFIELD	CONSTANT, \"$\", \"%s\"\n"
 ;
+static char land_air_sea[] = 
+"# Format: GPS Tracking Key Pro text file\n"
+"# Author: Tyler Ritchie\n"
+"#   Date: 2011.02.04\n"
+
+"DESCRIPTION GPS Tracking Key Pro text\n"
+"EXTENSION txt\n"
+"ENCODING LATIN1\n"
+
+"DATUM WGS 84\n"
+"DATATYPE TRACK\n"
+"#File layout definitions\n"
+
+"FIELD_DELIMITER COMMA\n"
+"RECORD_DELIMITER NEWLINE\n"
+
+"# Individual data fields in order of appearance\n"
+
+"IFIELD LOCAL_TIME,\"\",\"%m-%d-%Y\"\n"
+"IFIELD HMSG_TIME,\"\",\"%d:%d:%d\"\n"
+"IFIELD LAT_HUMAN_READABLE,\"\",\"%c %d°%d'%f\\\"\"\n"
+"IFIELD LON_HUMAN_READABLE,\"\",\"%c %d°%d'%f\\\"\"\n"
+"IFIELD PATH_SPEED_MPH,\"\",\"%.1fmph\"\n"
+"IFIELD IGNORE,\"\",\"%s\" #This is the bearing data\n"
+"IFIELD ALT_FEET,\"\",\"%dft\"\n"
+;
 static char mapconverter[] = 
 "# Format: Mapopolis.com Mapconverter\n"
 "# Author: Gary Paulson\n"
@@ -1293,8 +1319,8 @@ static char xmapwpt[] =
 "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn_places", tomtom_itn_places } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "ricoh", ricoh } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "igo2008_poi", igo2008_poi } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "flysight", flysight } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 36;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn_places", tomtom_itn_places } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "ricoh", ricoh } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "land_air_sea", land_air_sea } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "igo2008_poi", igo2008_poi } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "flysight", flysight } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 37;
 #else /* CSVFMTS_ENABLED */
 style_vecs_t style_list[] = {{0,0}};
 size_t nstyles = 0;
