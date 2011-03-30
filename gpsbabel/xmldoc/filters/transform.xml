@@ -10,7 +10,7 @@
 <para>
   The following example show you how to create a route from a waypoint table.
 </para>
-  <para><userinput>gpsbabel -i csv waypts.txt -x transform,rte=wpt -o gpx -F route.gpx</userinput></para>
+  <para><userinput>gpsbabel -i csv -f waypts.txt -x transform,rte=wpt -o gpx -F route.gpx</userinput></para>
 <para>
   Only the first letter of option value decides which transformation will be done.
   Depending on the used option it can be only 'W' for waypoints, 'R' for routes or
