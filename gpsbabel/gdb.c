@@ -110,8 +110,8 @@
 
 /*******************************************************************************/
 
-/* static char gdb_release[] = "$Revision: 1.73 $"; */
-static char gdb_release_date[] = "$Date: 2010-10-18 13:29:25 $";
+/* static char gdb_release[] = "$Revision: 1.74 $"; */
+static char gdb_release_date[] = "$Date: 2011-04-14 01:30:01 $";
 
 static gbfile *fin, *fout, *ftmp;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
@@ -1327,7 +1327,7 @@ route_write_bounds(bounds *bounds)
 		FWRITE_DBL(bounds->max_alt, unknown_alt);
 		FWRITE_LATLON(bounds->min_lat);
 		FWRITE_LATLON(bounds->min_lon);
-		FWRITE_DBL(bounds->min_alt, -unknown_alt);
+		FWRITE_DBL(bounds->min_alt, -(unknown_alt));
 	}
 	else FWRITE_C(1);
 }
