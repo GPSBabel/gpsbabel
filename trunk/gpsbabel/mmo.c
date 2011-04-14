@@ -367,13 +367,13 @@ mmo_read_CObjIcons(mmo_data_t *data)
 	const char *sobj = "CObjIcons";
 #endif
 	int icon_id;
+	gbuint16 u16;
 
 	DBG((sobj, ":-----------------------------------------------------\n"));
 	DBG((sobj, "name = \"%s\" [ visible=%s, id=0x%04X ]\n", 
 		data->name, data->visible ? "yes" : "NO", data->objid));
 
 	if (mmo_version >= 0x18) {
-		gbuint16 u16;
 		u16 = gbfgetuint16(fin);
 		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
 		u16 = gbfgetuint16(fin);
@@ -383,7 +383,6 @@ mmo_read_CObjIcons(mmo_data_t *data)
 		u16 = gbfgetuint16(fin);
 		DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
 	}
-	gbuint16 u16;
 	u16 = gbfgetuint16(fin);
 	DBG((sobj, "unknown value = 0x%04X\n", u16));
 	u16 = gbfgetuint16(fin);
@@ -788,10 +787,10 @@ mmo_read_object(void)
 
 	objid = gbfgetuint16(fin);
 	if (objid == 0xFFFF) {
-		DBG(("mmo_read_object", "Registering new object type\n"));
 		gbuint16 version;
 		char *sobj;
 		int len;
+		DBG(("mmo_read_object", "Registering new object type\n"));
 		
 		objid = mmo_object_id++;
 
@@ -824,12 +823,12 @@ mmo_read_object(void)
 		data->name = mmo_readstr();
 
 		if (objid != cat_object_id) {
+			gbuint32 obj_type;
 			data->ctime = gbfgetuint32(fin);
 			data->mtime = gbfgetuint32(fin);
 			data->locked = gbfgetc(fin);
 			data->visible = gbfgetc(fin);
 
-			gbuint32 obj_type;
 			obj_type = gbfgetuint32(fin);
 #ifdef MMO_DBG
 			gbuint32 expected_type = 0xFFFFFFFF;
