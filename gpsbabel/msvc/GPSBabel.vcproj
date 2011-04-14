@@ -649,6 +649,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\explorist_ini"
+				>
+			</File>
+			<File
 				RelativePath="..\fatal.c"
 				>
 			</File>
@@ -750,6 +754,10 @@
 			</File>
 			<File
 				RelativePath="..\garmin_txt.c"
+				>
+			</File>
+			<File
+				RelativePath="..\garmin_xt.c"
 				>
 			</File>
 			<File
@@ -2285,6 +2293,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\subrip.c"
+				>
+			</File>
+			<File
 				RelativePath="..\swapdata.c"
 				>
 			</File>
@@ -3271,6 +3283,10 @@
 			</File>
 			<File
 				RelativePath="..\defs.h"
+				>
+			</File>
+			<File
+				RelativePath="..\explorist_ini.h"
 				>
 			</File>
 			<File
