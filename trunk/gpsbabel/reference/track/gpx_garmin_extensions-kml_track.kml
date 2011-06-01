@@ -3,6 +3,15 @@
 	xmlns:gx="http://www.google.com/kml/ext/2.2">
   <Document>
     <name>GPS device</name>
+    <LookAt>
+      <gx:TimeSpan>
+        <begin>2008-08-20T07:04:48Z</begin>
+        <end>2008-08-20T07:04:55Z</end>
+      </gx:TimeSpan>
+      <longitude>-0.035329</longitude>
+      <latitude>51.506248</latitude>
+      <range>1300.000000</range>
+    </LookAt>
 <!-- Normal track style -->
     <Style id="track_n">
       <IconStyle>
@@ -420,14 +429,5 @@
         </Placemark>
       </Folder>
     </Folder>
-    <LookAt>
-      <gx:TimeSpan>
-        <begin>2008-08-20T07:04:48Z</begin>
-        <end>2008-08-20T07:04:55Z</end>
-      </gx:TimeSpan>
-      <longitude>-0.035329</longitude>
-      <latitude>51.506248</latitude>
-      <range>1300.000000</range>
-    </LookAt>
   </Document>
 </kml>

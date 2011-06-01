@@ -3,6 +3,15 @@
 	xmlns:gx="http://www.google.com/kml/ext/2.2">
   <Document>
     <name>GPS device</name>
+    <LookAt>
+      <gx:TimeSpan>
+        <begin>2002-08-15T07:00:00Z</begin>
+        <end>2003-06-29T07:00:00Z</end>
+      </gx:TimeSpan>
+      <longitude>-79.930833</longitude>
+      <latitude>41.027500</latitude>
+      <range>2109328.437865</range>
+    </LookAt>
 <!-- Normal waypoint style -->
     <Style id="waypoint_n">
       <IconStyle>
@@ -155,14 +164,5 @@ Now that it's intuitively obvious to even the most casual observer where the cac
         </Point>
       </Placemark>
     </Folder>
-    <LookAt>
-      <gx:TimeSpan>
-        <begin>2002-08-15T07:00:00Z</begin>
-        <end>2003-06-29T07:00:00Z</end>
-      </gx:TimeSpan>
-      <longitude>-79.930833</longitude>
-      <latitude>41.027500</latitude>
-      <range>2109328.437865</range>
-    </LookAt>
   </Document>
 </kml>
