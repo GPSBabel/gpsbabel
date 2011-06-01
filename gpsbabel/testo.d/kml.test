@@ -37,8 +37,8 @@ gpsbabel -i gpx -f ${REFERENCE}/track/bounds-test-track.gpx -o kml -F ${TMPDIR}/
 compare ${REFERENCE}/track/bounds-test-track.kml ${TMPDIR}/bnds-track.kml
 
 
-
-if which xmllint;
+set -e
+if which xmllint > /dev/null;
 then
   KMLS=$(find ${REFERENCE} -name \*.kml)
   for f in $KMLS
