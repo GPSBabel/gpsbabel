@@ -3,7 +3,7 @@
 # Note: Reference files are from GPSBabel's own output.
 #
 gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o kml -F ${TMPDIR}/ge-gc.kml
-compare  ${REFERENCE}/earth-gc.kml ${REFERENCE}/earth-gc.kml
+compare  ${REFERENCE}/earth-gc.kml ${TMPDIR}/ge-gc.kml
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml -F ${TMPDIR}/ge-eg.kml
 compare ${REFERENCE}/earth-expertgps.kml ${TMPDIR}/ge-eg.kml 
 
@@ -37,3 +37,20 @@ gpsbabel -i gpx -f ${REFERENCE}/track/bounds-test-track.gpx -o kml -F ${TMPDIR}/
 compare ${REFERENCE}/track/bounds-test-track.kml ${TMPDIR}/bnds-track.kml
 
 
+
+if which xmllint;
+then
+  KMLS=$(find ${REFERENCE} -name \*.kml)
+  for f in $KMLS
+  do
+    case $f in 
+      # Argue with the KML wizards about this.  It was the intent for that
+      # to be legal in Earth GX 2.2.
+      ./reference/track/segmented_tracks-track.kml) continue;;
+    *)
+      xmllint --schema tools/kml22-schema/kml22gx.xsd --noout $f
+    esac;
+  done
+else
+  echo "SKipping KML validation phase."
+fi
