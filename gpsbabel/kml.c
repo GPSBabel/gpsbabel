@@ -772,11 +772,13 @@ static void kml_recompute_time_bounds(const waypoint *waypointp) {
   }
 }
 
-static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type) {
-  const char *style;
-
+static void kml_add_to_bounds(const waypoint *waypointp) {
   waypt_add_to_bounds(&kml_bounds, waypointp);
   kml_recompute_time_bounds(waypointp);
+}
+
+static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type) {
+  const char *style;
 
   switch (pt_type) {
     case kmlpt_track: style = "#track"; break;
@@ -1087,8 +1089,6 @@ static void kml_waypt_pr(const waypoint *waypointp)
 		kml_write_xml(-1, "</LookAt>\n");
 	}
 #endif
-	waypt_add_to_bounds(&kml_bounds, waypointp);
-	kml_recompute_time_bounds(waypointp);
 
 	if (waypointp->gc_data->diff && waypointp->gc_data->terr) {
 		kml_geocache_pr(waypointp);
@@ -1287,9 +1287,6 @@ static void kml_mt_hdr(const route_head *header)
     char time_string[64];
     waypoint *tpt = (waypoint *)elem;
 
-    // Add it to our bounding box so our default LookAt/flyto does a good
-    // thing.
-    waypt_add_to_bounds(&kml_bounds, tpt);
     if (tpt->creation_time) {
       xml_fill_in_time(time_string, tpt->creation_time, tpt->microseconds,
                        XML_LONG_TIME);
@@ -1390,6 +1387,17 @@ static void kml_route_tlr(const route_head *header)
 void kml_write_AbstractView(void) {
   double bb_size;
 
+  // Make a pass through all the points to find the bounds.
+  if (waypt_count()) {
+    waypt_disp_all(kml_add_to_bounds);
+  }
+  if (track_waypt_count())  {
+    track_disp_all(NULL, NULL, kml_add_to_bounds);
+  }
+  if (route_waypt_count()) {
+    route_disp_all(NULL, NULL, kml_add_to_bounds);
+  }
+
   kml_write_xml(1, "<LookAt>\n");
 
   if (kml_time_min || kml_time_max) {
@@ -1487,6 +1495,8 @@ void kml_write(void)
 	if (now) {
 		kml_write_xml(0, "<Snippet>Created %s</Snippet>\n", import_time);
 	}
+
+    kml_write_AbstractView();
 
 	// Style settings for bitmaps
 	if (route_waypt_count()) {
@@ -1593,7 +1603,6 @@ void kml_write(void)
 		}
         }
 
-        kml_write_AbstractView();
 	kml_write_xml(-1, "</Document>\n");
 	kml_write_xml(-1, "</kml>\n");
 }

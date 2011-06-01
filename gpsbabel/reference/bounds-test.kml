@@ -3,6 +3,11 @@
 	xmlns:gx="http://www.google.com/kml/ext/2.2">
   <Document>
     <name>GPS device</name>
+    <LookAt>
+      <longitude>-117.144015</longitude>
+      <latitude>36.438270</latitude>
+      <range>87257.203848</range>
+    </LookAt>
 <!-- Normal route style -->
     <Style id="route_n">
       <IconStyle>
@@ -2164,10 +2169,5 @@
         </Placemark>
       </Folder>
     </Folder>
-    <LookAt>
-      <longitude>-117.144015</longitude>
-      <latitude>36.438270</latitude>
-      <range>87257.203848</range>
-    </LookAt>
   </Document>
 </kml>
