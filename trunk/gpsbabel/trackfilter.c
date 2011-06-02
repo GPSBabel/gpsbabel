@@ -1087,9 +1087,16 @@ trackfilter_points_are_same(const waypoint *wpta, const waypoint *wptb)
 {
   // We use a simpler (non great circle) test for lat/lon here as this
   // is used for keeping the 'bookends' of non-moving points.
+  //
+  // Latitude spacing is about 27 feet per .00001 degree.
+  // Longitude spacing varies, but the reality is that anything closer
+  // than 27 feet does little but clutter the output.
+  // As this is about the limit of consumer grade GPS, it seems a
+  // reasonable tradeoff.
+
   return
-      abs(wpta->latitude - wptb->latitude) < .0000001 &&
-      abs(wpta->latitude - wptb->latitude) < .0000001 &&
+      fabs(wpta->latitude - wptb->latitude) < .00001 &&
+      fabs(wpta->longitude - wptb->longitude) < .00001 &&
       abs(wpta->altitude - wptb->altitude) < 20 &&
       (WAYPT_HAS(wpta,course) == WAYPT_HAS(wptb,course)) &&
       (wpta->course == wptb->course) &&
