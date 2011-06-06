@@ -127,6 +127,9 @@ nav_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 			if (0 == strcmp(ap[0], "name")) {
 				wpt_tmp->description = xstrdup(ap[1]);
 			} else
+			if (0 == strcmp(ap[0], "user_name")) {
+				gc_data->placer = xstrdup(ap[1]);
+			} else
 			if (0 == strcmp(ap[0], "latitude")) {
 				sscanf(ap[1], "%lf", 
 				&wpt_tmp->latitude);
