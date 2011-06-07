@@ -38,6 +38,7 @@ arglist_t nav_args[] = {
 
 #define MYNAME "navicache"
 #define MY_CBUF 4096
+#define NC_URL	"http://www.navicache.com/cgi-bin/db/displaycache2.pl?CacheID="
 
 #if ! HAVE_LIBEXPAT
 static void
@@ -122,7 +123,11 @@ nav_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 		
 		for (ap = attr; *ap; ap+=2) {
 			if (0 == strcmp(ap[0], "cache_id")) {
+				int id;
+
 				wpt_tmp->shortname = xstrdup(ap[1]);
+				id = atoi(ap[1]);
+				xasprintf(&wpt_tmp->url, "%s%d", NC_URL, id);
 			} else
 			if (0 == strcmp(ap[0], "name")) {
 				wpt_tmp->description = xstrdup(ap[1]);
@@ -153,8 +158,6 @@ nav_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 				gc_data->terr = x * 10;
 			} else
 			if (0 == strcmp(ap[0], "cache_type")) {
-				static char buf[512];
-
 	                        gc_data->type = nc_mktype(ap[1]);
 				if (!strcmp(ap[1], "normal"))
 				    wpt_tmp->icon_descr = "Geocache-regular";
@@ -163,8 +166,8 @@ nav_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 				else if (!strcmp(ap[1], "moving_travelling"))
 				    wpt_tmp->icon_descr = "Geocache-moving";
 				else {
-				    sprintf(buf, "Geocache-%-.20s", ap[1]);
-				    wpt_tmp->icon_descr = xstrdup(buf);
+				    xasprintf(&wpt_tmp->icon_descr,
+					    "Geocache-%-.20s", ap[1]);
 				}
 			} else
 			if (0 == strcmp(ap[0], "hidden_date")) {
