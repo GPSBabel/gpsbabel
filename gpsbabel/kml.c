@@ -574,10 +574,10 @@ void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
 		TD("<b>Description</b> %s", header->rte_desc);
 	}
 	TD2("<b>Distance</b> %.1f %s", distance, distance_units);
-	if (min_alt != -unknown_alt) {
+	if (td->min_alt != -unknown_alt) {
 		TD2("<b>Min Alt</b> %.3f %s", min_alt, min_alt_units);
 	}
-	if (max_alt != unknown_alt) {
+	if (td->max_alt != unknown_alt) {
 		TD2("<b>Max Alt</b> %.3f %s", max_alt, max_alt_units);
 	}
 	if (td->min_spd) {

@@ -55,6 +55,16 @@
     <cmt>Arrive at: Wildrose Rd</cmt>
     <desc>Arrive at: Wildrose Rd</desc>
   </wpt>
+  <wpt lat="36.463670000" lon="-116.879080000">
+    <name>Head east on Airport Rd</name>
+    <cmt>go 0.8&amp;#160;mi</cmt>
+    <desc>go 0.8&amp;#160;mi</desc>
+  </wpt>
+  <wpt lat="36.460860000" lon="-116.865720000">
+    <name>Arrive at: Airport Rd</name>
+    <cmt>Arrive at: Airport Rd</cmt>
+    <desc>Arrive at: Airport Rd</desc>
+  </wpt>
   <rte>
     <name>Low Road</name>
     <desc>Generated from track Route</desc>
@@ -441,6 +451,49 @@
     <rtept lat="36.494950000" lon="-117.226940000">
       <ele>669.800000</ele>
       <name>RPT430</name>
+    </rtept>
+  </rte>
+  <rte>
+    <name>No Elevation Route</name>
+    <desc>Generated from track No Elevation Route</desc>
+    <rtept lat="36.463670000" lon="-116.879080000">
+      <name>RPT001</name>
+    </rtept>
+    <rtept lat="36.463860000" lon="-116.878300000">
+      <name>RPT002</name>
+    </rtept>
+    <rtept lat="36.463880000" lon="-116.878140000">
+      <name>RPT003</name>
+    </rtept>
+    <rtept lat="36.463840000" lon="-116.877910000">
+      <name>RPT004</name>
+    </rtept>
+    <rtept lat="36.463450000" lon="-116.876800000">
+      <name>RPT005</name>
+    </rtept>
+    <rtept lat="36.462240000" lon="-116.872870000">
+      <name>RPT006</name>
+    </rtept>
+    <rtept lat="36.460990000" lon="-116.868650000">
+      <name>RPT007</name>
+    </rtept>
+    <rtept lat="36.461010000" lon="-116.868250000">
+      <name>RPT008</name>
+    </rtept>
+    <rtept lat="36.461210000" lon="-116.867660000">
+      <name>RPT009</name>
+    </rtept>
+    <rtept lat="36.460950000" lon="-116.867020000">
+      <name>RPT010</name>
+    </rtept>
+    <rtept lat="36.460910000" lon="-116.866830000">
+      <name>RPT011</name>
+    </rtept>
+    <rtept lat="36.460860000" lon="-116.866460000">
+      <name>RPT012</name>
+    </rtept>
+    <rtept lat="36.460860000" lon="-116.865720000">
+      <name>RPT013</name>
     </rtept>
   </rte>
 </gpx>
