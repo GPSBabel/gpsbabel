@@ -125,8 +125,8 @@ nav_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 			if (0 == strcmp(ap[0], "cache_id")) {
 				int id;
 
-				wpt_tmp->shortname = xstrdup(ap[1]);
 				id = atoi(ap[1]);
+				xasprintf(&wpt_tmp->shortname, "N%05X", id);
 				xasprintf(&wpt_tmp->url, "%s%d", NC_URL, id);
 			} else
 			if (0 == strcmp(ap[0], "name")) {
