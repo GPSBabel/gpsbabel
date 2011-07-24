@@ -1,0 +1,21 @@
+#
+# tracks filter tests
+#
+
+rm -f ${TMPDIR}/trackfilter*
+
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,title="LOG-%Y%m%d" -o gpx -F ${TMPDIR}/trackfilter.gpx
+compare ${TMPDIR}/trackfilter.gpx ${REFERENCE}/track/trackfilter.gpx
+
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,sdistance=0.1k  -o gpx -F ${TMPDIR}/trackfilter2.gpx
+compare ${TMPDIR}/trackfilter2.gpx ${REFERENCE}/track/trackfilter-sdistance.gpx
+
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,sdistance=0.1k,split=5m,title=%Y%m%d  -o gpx -F ${TMPDIR}/trackfilter-sdistance2.gpx
+compare ${TMPDIR}/trackfilter-sdistance2.gpx ${REFERENCE}/track/trackfilter-sdistance2.gpx
+
+# Exercise the 'faketime' filter.  The middle of the three points has
+# time so we can exercise the 'forced' option, too.
+gpsbabel -t -i unicsv -f ${REFERENCE}/track/trackfilter_faketime.txt -x track,faketime=20100506060000+5 -o gpx -F ${TMPDIR}/ft.gpx 
+compare ${REFERENCE}/track/trackfilter_faketime.gpx ${TMPDIR}/ft.gpx
+gpsbabel -t -i unicsv -f ${REFERENCE}/track/trackfilter_faketime.txt -x track,faketime=f20100506060000+5 -o gpx -F ${TMPDIR}/ftf.gpx
+compare ${REFERENCE}/track/trackfilter_faketime_forced.gpx ${TMPDIR}/ftf.gpx

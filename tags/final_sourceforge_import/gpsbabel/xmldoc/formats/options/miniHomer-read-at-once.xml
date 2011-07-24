@@ -1,0 +1,7 @@
+<para>If <userinput>read-at-once</userinput> >= 1, batch mode is enabled with that many sectors being read at a time.
+A value of zero disables batch mode and switches to single read mode. Not all devices support batch mode; in that case
+gpsbabel automatically switches to single read mode.</para>
+
+<para>Under normal circumstances, the larger this number the faster the transfer.
+Reducing <userinput>read-at-once</userinput> or even switching to single sector mode might help when you get
+transmission errors/aborts.</para>

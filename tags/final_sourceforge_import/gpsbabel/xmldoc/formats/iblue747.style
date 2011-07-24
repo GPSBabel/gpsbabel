@@ -1,0 +1,11 @@
+<para>
+  This is the format to interchange tracks with the software that comes
+  with the <ulink url="http://www.transystem.com.tw/p-gps-iblue747.htm">
+  Transystem i-Blue747 datalogger</ulink>.
+</para>
+<para>
+  It probably works with software provided for other MTK-based products
+  such as the Qstarz BT-1000, iTrek Z1, and Holux M-241, but they may 
+  bundle different software.   Please report success or failure on those
+  formats to the list.
+</para>

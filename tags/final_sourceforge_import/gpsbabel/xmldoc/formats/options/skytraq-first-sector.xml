@@ -1,0 +1,12 @@
+<para>The logger's memory is organized in sectors, serially numbered starting at 0. Each sector takes 4096 bytes of data.
+Typical devices hold about 250 sectors. The memory is always filled from sector 0 on, until it is full or the device being
+erased again by the user.</para>
+
+<para>Normally you can safely omit this option. However, it might be useful to read data from erased devices: we observed
+that on erase, only the first two sectors are actually cleared. The following example shows how to read the remaining data:
+</para>
+
+<example id="skytraq-restore-erased">
+  <title>Command showing how to read data from an erased device</title>
+  <para><userinput>gpsbabel -i skytraq,first-sector=2 -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput></para>
+</example>

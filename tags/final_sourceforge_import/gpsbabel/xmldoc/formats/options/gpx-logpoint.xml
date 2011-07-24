@@ -1,0 +1,6 @@
+<para>
+	When reading <ulink url="http://www.geocaching.com"> Groundspeak Pocket Queries </ulink>, the <option>logpoint</option> option creates additional waypoints from the log entries.
+</para>
+<para>
+ 	A typical use for this is to get coordinates read from "corrected coordinates" logs.
+</para>

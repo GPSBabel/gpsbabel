@@ -1,0 +1,11 @@
+<!ENTITY allchapters SYSTEM "allchapters.xml">
+<!ENTITY chap_preface SYSTEM "preface.xml">
+<!ENTITY chap_build SYSTEM "build.xml">
+<!ENTITY chap_use SYSTEM "use.xml">
+<!ENTITY chap_formats SYSTEM "formats.xml">
+<!ENTITY chap_filters SYSTEM "filters.xml">
+<!ENTITY app_datums  SYSTEM "datums.xml">
+<!ENTITY app_garmin_icons  SYSTEM "garmin_icons.xml">
+<!ENTITY app_styles  SYSTEM "styles.xml">
+<!ENTITY app_glossary  SYSTEM "glossary.xml">
+

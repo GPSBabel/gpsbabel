@@ -1,0 +1,16 @@
+<para>
+Sometimes there is a discrepancy between the internal clock in the barograph
+instrument and GPS time which can result in the altitude and ground positions
+not correlating correctly.  This can be corrected manually by passing the time
+difference in seconds between the two time domains through the "timeadj"
+parameter.  This can be any positive or negative integer:
+</para>
+<para><userinput>gpsbabel -i gpx -f baro.gpx -i igc -f my2D.igc -o igc,timeadj=27 -F my3D.igc</userinput></para>
+<para>
+GPSBabel can also attempt to deduce the time difference automatically.  This
+is done by comparing the time that it thinks that you landed on the GPS track
+and the barograph and adjusting accordingly:
+</para>
+<para><userinput>gpsbabel -i gpx -f baro.gpx -i igc -f my2D.igc -o igc,timeadj=auto -F my3D.igc</userinput></para>
+
+

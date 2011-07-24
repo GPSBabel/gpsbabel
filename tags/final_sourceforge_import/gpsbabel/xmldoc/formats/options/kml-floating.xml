@@ -1,0 +1,9 @@
+<para>
+When this option is nonzero, altitudes are allowed to float above or below
+the ground surface.  By default, this option is zero so that altitudes are
+clamped to the ground.  Specify <option>floating=1</option> to allow them to
+float.
+</para>
+<para>
+This option is more useful to pilots than to hikers.
+</para>

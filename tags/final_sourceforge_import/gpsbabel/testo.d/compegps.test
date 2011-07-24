@@ -1,0 +1,28 @@
+#
+# CompeGPS I/O tests
+#
+rm -f ${TMPDIR}/compegps*
+# read (CompeGPS)
+gpsbabel -i compegps -f ${REFERENCE}/compegps.wpt -o gpx -F ${TMPDIR}/compegps-wpt.gpx
+compare ${REFERENCE}/compegps-wpt.gpx ${TMPDIR}/compegps-wpt.gpx
+gpsbabel -i compegps -f ${REFERENCE}/route/compegps.rte -o gpx -F ${TMPDIR}/compegps-rte.gpx
+compare ${REFERENCE}/route/compegps-rte.gpx ${TMPDIR}/compegps-rte.gpx
+gpsbabel -i compegps -f ${REFERENCE}/track/compegps.trk -o gpx -F ${TMPDIR}/compegps-trk.gpx
+compare ${REFERENCE}/track/compegps-trk.gpx ${TMPDIR}/compegps-trk.gpx
+# write (CompeGPS)
+gpsbabel -i compegps -f ${REFERENCE}/compegps.wpt -o compegps -F ${TMPDIR}/compegps.wpt
+gpsbabel -i compegps -f ${TMPDIR}/compegps.wpt -o gpx -F ${TMPDIR}/compegps-wpt2.gpx
+compare ${REFERENCE}/compegps-wpt.gpx ${TMPDIR}/compegps-wpt2.gpx
+
+gpsbabel -i compegps -f ${REFERENCE}/compegps_time.wpt -o gpx -F ${TMPDIR}/compegps_time.gpx
+compare ${REFERENCE}/compegps_time_wpt.gpx ${TMPDIR}/compegps_time.gpx
+
+
+gpsbabel -t -i compegps -f ${REFERENCE}/track/compegps.trk -o compegps -F ${TMPDIR}/compegps.trk
+gpsbabel -i compegps -f ${TMPDIR}/compegps.trk -o gpx -F ${TMPDIR}/compegps-trk2.gpx
+compare ${REFERENCE}/track/compegps-trk.gpx ${TMPDIR}/compegps-trk2.gpx
+
+gpsbabel -r -i compegps -f ${REFERENCE}/route/compegps.rte -o compegps -F ${TMPDIR}/compegps.rte
+gpsbabel -i compegps -f ${TMPDIR}/compegps.rte -o gpx -F ${TMPDIR}/compegps-rte2.gpx
+compare ${REFERENCE}/route/compegps-rte.gpx ${TMPDIR}/compegps-rte2.gpx
+

@@ -1,0 +1,4 @@
+<para>
+This option specifies the length of generated short names on output.  The 
+default is 10 characters.
+</para>
