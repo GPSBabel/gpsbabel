@@ -67,7 +67,7 @@ extern cet_cs_vec_t cet_cs_vec_utf8;
 
 /* Taken from expat_external.h (Expat 1.95.7) */
 
-#ifndef XML_STATUS_OK			
+#ifndef XML_STATUS_OK
 # define XML_STATUS_OK 1
 #endif
 #ifndef XML_STATUS_ERROR

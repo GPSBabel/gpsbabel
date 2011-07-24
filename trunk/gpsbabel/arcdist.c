@@ -32,139 +32,146 @@ static char *exclopt = NULL;
 static char *ptsopt = NULL;
 
 typedef struct {
-	double distance;
+  double distance;
 } extra_data;
 
 static
 arglist_t arcdist_args[] = {
-	{"file", &arcfileopt,  "File containing vertices of arc", 
-		NULL, ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX},
-	{"distance", &distopt, "Maximum distance from arc", 
-		NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX},
-	{"exclude", &exclopt, "Exclude points close to the arc", NULL,
-		ARGTYPE_BOOL, ARG_NOMINMAX},
-	{"points", &ptsopt, "Use distance from vertices not lines", 
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
-	ARG_TERMINATOR
+  {
+    "file", &arcfileopt,  "File containing vertices of arc",
+    NULL, ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX
+  },
+  {
+    "distance", &distopt, "Maximum distance from arc",
+    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX
+  },
+  {
+    "exclude", &exclopt, "Exclude points close to the arc", NULL,
+    ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  {
+    "points", &ptsopt, "Use distance from vertices not lines",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  ARG_TERMINATOR
 };
 
 #define BADVAL 999999
 
-void 
+void
 arcdist_process(void)
 {
-	queue * elem, * tmp;
-	waypoint * waypointp;
-	double dist;
-	extra_data *ed;
-        double lat1, lon1, lat2, lon2;
-	int fileline = 0;
-	char *line;
-	gbfile *file_in;
+  queue * elem, * tmp;
+  waypoint * waypointp;
+  double dist;
+  extra_data *ed;
+  double lat1, lon1, lat2, lon2;
+  int fileline = 0;
+  char *line;
+  gbfile *file_in;
 
-	file_in = gbfopen(arcfileopt, "r", MYNAME);
-	
-        lat1 = lon1 = lat2 = lon2 = BADVAL;
-	while ((line = gbfgetstr(file_in))) {
-	    char *pound = NULL;
-	    int argsfound = 0;
-	    
-	    fileline++;
-	    
-	    pound = strchr( line, '#' );
-	    if ( pound ) {
-		if ( 0 == strncmp( pound, "#break", 6)) {
-		    lat1 = lon1 = BADVAL;
-		}
-		*pound = '\0';
-	    }
-	    
-	    lat2 = lon2 = BADVAL;
-	    argsfound = sscanf( line, "%lf %lf", &lat2, &lon2 );
-	   
-	    if ( argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
-                warning(MYNAME ": Warning: Arc file contains unusable vertex on line %d.\n", fileline );
-	    } 
-	    else if ( lat2 != BADVAL && lon2 != BADVAL &&
-	         (ptsopt || (lat1 != BADVAL && lon1 != BADVAL ))) {
-  	      QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+  file_in = gbfopen(arcfileopt, "r", MYNAME);
 
-		waypointp = (waypoint *)elem;
-		if ( waypointp->extra_data ) {
-			ed = (extra_data *) waypointp->extra_data;
-		}
-		else {
-			ed = (extra_data *) xcalloc(1, sizeof(*ed));
-			ed->distance = BADVAL;
-		}
-		if ( ed->distance == BADVAL || ed->distance >= pos_dist ) {
-		   if ( ptsopt ) {
-		      dist = gcdist( RAD(lat2), RAD(lon2), 
-				   RAD(waypointp->latitude), 
-				   RAD(waypointp->longitude) );
-		   }
-		   else {
-		      dist = linedist(lat1, lon1, lat2, lon2, 
-				waypointp->latitude,
-				waypointp->longitude );
-		   }
+  lat1 = lon1 = lat2 = lon2 = BADVAL;
+  while ((line = gbfgetstr(file_in))) {
+    char *pound = NULL;
+    int argsfound = 0;
 
-		   /* convert radians to float point statute miles */
-		   dist = radtomiles(dist);
+    fileline++;
 
-		   if ( ed->distance > dist ) {
-			ed->distance = dist;
-		   }
-		   waypointp->extra_data = ed;
-		}
-	      }
-	    }
-	    lat1 = lat2;
-	    lon1 = lon2;
-	}
-	    
-	gbfclose(file_in);
+    pound = strchr(line, '#');
+    if (pound) {
+      if (0 == strncmp(pound, "#break", 6)) {
+        lat1 = lon1 = BADVAL;
+      }
+      *pound = '\0';
+    }
 
-	QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-		waypoint *wp = (waypoint *) elem;
-		ed = (extra_data *) wp->extra_data;
-		wp->extra_data = NULL;
-	        if ( ed ) {
-		    if ((ed->distance >= pos_dist) == (exclopt == NULL)) {
-			waypt_del(wp);
-			waypt_free(wp);
-		    }
-		    xfree( ed );
-		}
-	}
+    lat2 = lon2 = BADVAL;
+    argsfound = sscanf(line, "%lf %lf", &lat2, &lon2);
+
+    if (argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
+      warning(MYNAME ": Warning: Arc file contains unusable vertex on line %d.\n", fileline);
+    } else if (lat2 != BADVAL && lon2 != BADVAL &&
+               (ptsopt || (lat1 != BADVAL && lon1 != BADVAL))) {
+      QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+
+        waypointp = (waypoint *)elem;
+        if (waypointp->extra_data) {
+          ed = (extra_data *) waypointp->extra_data;
+        } else {
+          ed = (extra_data *) xcalloc(1, sizeof(*ed));
+          ed->distance = BADVAL;
+        }
+        if (ed->distance == BADVAL || ed->distance >= pos_dist) {
+          if (ptsopt) {
+            dist = gcdist(RAD(lat2), RAD(lon2),
+                          RAD(waypointp->latitude),
+                          RAD(waypointp->longitude));
+          } else {
+            dist = linedist(lat1, lon1, lat2, lon2,
+                            waypointp->latitude,
+                            waypointp->longitude);
+          }
+
+          /* convert radians to float point statute miles */
+          dist = radtomiles(dist);
+
+          if (ed->distance > dist) {
+            ed->distance = dist;
+          }
+          waypointp->extra_data = ed;
+        }
+      }
+    }
+    lat1 = lat2;
+    lon1 = lon2;
+  }
+
+  gbfclose(file_in);
+
+  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+    waypoint *wp = (waypoint *) elem;
+    ed = (extra_data *) wp->extra_data;
+    wp->extra_data = NULL;
+    if (ed) {
+      if ((ed->distance >= pos_dist) == (exclopt == NULL)) {
+        waypt_del(wp);
+        waypt_free(wp);
+      }
+      xfree(ed);
+    }
+  }
 }
 
 void
-arcdist_init(const char *args) {
-	char *fm;
+arcdist_init(const char *args)
+{
+  char *fm;
 
-	pos_dist = 0;
+  pos_dist = 0;
 
-	if (distopt) {
-		pos_dist = strtod(distopt, &fm);
+  if (distopt) {
+    pos_dist = strtod(distopt, &fm);
 
-		if ((*fm == 'k') || (*fm == 'K')) {
-			 /* distance is kilometers, convert to feet */
-			pos_dist *= .6214;
-		}
-	}
+    if ((*fm == 'k') || (*fm == 'K')) {
+      /* distance is kilometers, convert to feet */
+      pos_dist *= .6214;
+    }
+  }
 }
 
 void
-arcdist_deinit(void) {
-	/* do nothing */
+arcdist_deinit(void)
+{
+  /* do nothing */
 }
 
 filter_vecs_t arcdist_vecs = {
-	arcdist_init,
-	arcdist_process,
-	arcdist_deinit,
-	NULL,
-	arcdist_args
+  arcdist_init,
+  arcdist_process,
+  arcdist_deinit,
+  NULL,
+  arcdist_args
 };
 #endif // FILTERS_ENABLED

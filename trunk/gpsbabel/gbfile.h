@@ -32,56 +32,56 @@
 struct gbfile_s;
 typedef struct gbfile_s gbfile;
 
-typedef void (*gbfclearerr_cb) (gbfile *self);
-typedef int (*gbfclose_cb) (gbfile *self);
-typedef int (*gbfeof_cb) (gbfile *self);
-typedef int (*gbferror_cb) (gbfile *self);
-typedef int (*gbfflush_cb) (gbfile *self);
-typedef gbfile* (*gbfopen_cb) (gbfile *self, const char *mode);
-typedef gbsize_t (*gbfread_cb) (void *buf, const gbsize_t size, const gbsize_t members, gbfile *self);
-typedef int (*gbfseek_cb) (gbfile *self, gbint32 offset, int whence);
-typedef gbsize_t (*gbftell_cb) (gbfile *self);
-typedef gbsize_t (*gbfwrite_cb) (const void *buf, const gbsize_t size, const gbsize_t members, gbfile *self);
-typedef int (*gbfungetc_cb) (const int c, gbfile *self);
+typedef void (*gbfclearerr_cb)(gbfile *self);
+typedef int (*gbfclose_cb)(gbfile *self);
+typedef int (*gbfeof_cb)(gbfile *self);
+typedef int (*gbferror_cb)(gbfile *self);
+typedef int (*gbfflush_cb)(gbfile *self);
+typedef gbfile* (*gbfopen_cb)(gbfile *self, const char *mode);
+typedef gbsize_t (*gbfread_cb)(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self);
+typedef int (*gbfseek_cb)(gbfile *self, gbint32 offset, int whence);
+typedef gbsize_t (*gbftell_cb)(gbfile *self);
+typedef gbsize_t (*gbfwrite_cb)(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *self);
+typedef int (*gbfungetc_cb)(const int c, gbfile *self);
 
 typedef struct gbfile_s {
 #ifdef DEBUG_MEM
-	void   *dummy;	/* ZERO pointer for stdio oop's */
+  void   *dummy;	/* ZERO pointer for stdio oop's */
 #endif
-	union {
-	  FILE *std;
-	  unsigned char *mem;
+  union {
+    FILE *std;
+    unsigned char *mem;
 #if !ZLIB_INHIBITED
-	  gzFile *gz;
+    gzFile *gz;
 #endif
-	} handle;
-	char   *name;
-	char   *module;
-	char   *buff;	/* static growing buffer, primary used by gbprintf */
-	int    buffsz;
-	char   mode;
-	int    back;
-	gbsize_t mempos;	/* curr. position in memory */
-	gbsize_t memlen;	/* max. number of written bytes to memory */
-	gbsize_t memsz;		/* curr. size of allocated memory */
-	unsigned char big_endian:1;
-	unsigned char binary:1;
-	unsigned char gzapi:1;
-	unsigned char memapi:1;
-	unsigned char unicode:1;
-	unsigned char unicode_checked:1;
-	unsigned char is_pipe:1;
-	gbfclearerr_cb fileclearerr;
-	gbfclose_cb fileclose;
-	gbfeof_cb fileeof;
-	gbferror_cb fileerror;
-	gbfflush_cb fileflush;
-	gbfopen_cb fileopen;
-	gbfread_cb fileread;
-	gbfseek_cb fileseek;
-	gbftell_cb filetell;
-	gbfungetc_cb fileungetc;
-	gbfwrite_cb filewrite;
+  } handle;
+  char   *name;
+  char   *module;
+  char   *buff;	/* static growing buffer, primary used by gbprintf */
+  int    buffsz;
+  char   mode;
+  int    back;
+  gbsize_t mempos;	/* curr. position in memory */
+  gbsize_t memlen;	/* max. number of written bytes to memory */
+  gbsize_t memsz;		/* curr. size of allocated memory */
+  unsigned char big_endian:1;
+  unsigned char binary:1;
+  unsigned char gzapi:1;
+  unsigned char memapi:1;
+  unsigned char unicode:1;
+  unsigned char unicode_checked:1;
+  unsigned char is_pipe:1;
+  gbfclearerr_cb fileclearerr;
+  gbfclose_cb fileclose;
+  gbfeof_cb fileeof;
+  gbferror_cb fileerror;
+  gbfflush_cb fileflush;
+  gbfopen_cb fileopen;
+  gbfread_cb fileread;
+  gbfseek_cb fileseek;
+  gbftell_cb filetell;
+  gbfungetc_cb fileungetc;
+  gbfwrite_cb filewrite;
 } gbfile_t;
 
 

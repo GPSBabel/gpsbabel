@@ -197,7 +197,8 @@ static arglist_t trl_args[] = {
 
 /**************************************************************************/
 
-static unsigned int byte_order(void) {
+static unsigned int byte_order(void)
+{
   unsigned long test = BYTEORDER_TEST;
   unsigned char *ptr;
   unsigned int order;
@@ -208,19 +209,22 @@ static unsigned int byte_order(void) {
   return order;
 }
 
-static void sw_bytes(void *word) {
+static void sw_bytes(void *word)
+{
   gbuint8 *p = word;
   gbuint16 *r = word;
 
   *r = (gbuint16)(p[1] << 8 | p[0]);
 }
-static void sw_words(void *dword) {
+static void sw_words(void *dword)
+{
   gbuint16 *p = dword;
   gbuint32 *r = dword;
 
   *r = (gbuint32)(p[0] << 16 | p[1]);
 }
-static void rev_bytes(void *dword) {
+static void rev_bytes(void *dword)
+{
   gbuint8 *p = dword;
   gbuint32 *r = dword;
 
@@ -228,71 +232,79 @@ static void rev_bytes(void *dword) {
 }
 
 static void swap_wpthdr(struct wpthdr *wpthdr,
-			void (*swap16_func)(void *), void (*swap32_func)(void *)) {
+                        void (*swap16_func)(void *), void (*swap32_func)(void *))
+{
   int i;
 
-  if ( swap32_func != NULL ) {
-    swap32_func( &wpthdr->id );
+  if (swap32_func != NULL) {
+    swap32_func(&wpthdr->id);
   }
-  if ( swap16_func != NULL ) {
-    swap16_func( &wpthdr->num );
-    swap16_func( &wpthdr->next );
-    for (i=0; i<MAXWPT; i++)
-      swap16_func( &wpthdr->idx[i] );
+  if (swap16_func != NULL) {
+    swap16_func(&wpthdr->num);
+    swap16_func(&wpthdr->next);
+    for (i=0; i<MAXWPT; i++) {
+      swap16_func(&wpthdr->idx[i]);
+    }
   }
 }
 
 static void swap_wpt(struct wpt *wpt,
-		     void (*swap16_func)(void *), void (*swap32_func)(void *)) {
-  if ( swap16_func != NULL ) {
-    swap16_func( &wpt->usecount );
+                     void (*swap16_func)(void *), void (*swap32_func)(void *))
+{
+  if (swap16_func != NULL) {
+    swap16_func(&wpt->usecount);
   }
-  if ( swap32_func != NULL ) {
-    swap32_func( &wpt->pt.x );
-    swap32_func( &wpt->pt.y );
-    swap32_func( &wpt->date );
-    swap32_func( &wpt->time );
+  if (swap32_func != NULL) {
+    swap32_func(&wpt->pt.x);
+    swap32_func(&wpt->pt.y);
+    swap32_func(&wpt->date);
+    swap32_func(&wpt->time);
   }
 }
 
 static void swap_rtehdr(struct rtehdr *rtehdr,
-			void (*swap16_func)(void *), void (*swap32_func)(void *)) {
+                        void (*swap16_func)(void *), void (*swap32_func)(void *))
+{
   int i;
 
-  if ( swap16_func != NULL) {
-    swap16_func( &rtehdr->num );
-    swap16_func( &rtehdr->next );
-    for (i=0; i<MAXRTE; i++)
-      swap16_func( &rtehdr->idx[i] );
-    swap16_func( &rtehdr->rteno );
+  if (swap16_func != NULL) {
+    swap16_func(&rtehdr->num);
+    swap16_func(&rtehdr->next);
+    for (i=0; i<MAXRTE; i++) {
+      swap16_func(&rtehdr->idx[i]);
+    }
+    swap16_func(&rtehdr->rteno);
   }
-  if ( swap32_func != NULL ) {
-    swap32_func( &rtehdr->id );
+  if (swap32_func != NULL) {
+    swap32_func(&rtehdr->id);
   }
 }
 
 static void swap_rte(struct rte *rte,
-		     void (*swap16_func)(void *), void (*swap32_func)(void *)) {
+                     void (*swap16_func)(void *), void (*swap32_func)(void *))
+{
   int i;
 
   if (swap16_func != NULL) {
-    swap16_func( &rte->wptnum );
-    for (i=0; i<MAXWPTINRTE; i++)
-      swap16_func( &rte->wptidx[i] );
-    swap16_func( &rte->reserved );
+    swap16_func(&rte->wptnum);
+    for (i=0; i<MAXWPTINRTE; i++) {
+      swap16_func(&rte->wptidx[i]);
+    }
+    swap16_func(&rte->reserved);
   }
-  if ( swap32_func != NULL ) {
-    swap32_func( &rte->date );
-    swap32_func( &rte->time );
+  if (swap32_func != NULL) {
+    swap32_func(&rte->date);
+    swap32_func(&rte->time);
   }
 }
 
-static void wpr_swap(struct wprdata *wprdata) {
+static void wpr_swap(struct wprdata *wprdata)
+{
   void (*swap16_func)(void *);
   void (*swap32_func)(void *);
   int i;
 
-  switch( byte_order() ) {
+  switch (byte_order()) {
   case SWAP_NONE:		   /* same byte oder, LITTLE_ENDIAN */
     return;
     break;
@@ -311,69 +323,76 @@ static void wpr_swap(struct wprdata *wprdata) {
   default:
     return;			   /* never reached */
   }
-  
-  swap_wpthdr( &(wprdata->wpthdr), swap16_func, swap32_func );
-  for (i=0; i< MAXWPT; i++)
-    swap_wpt( &(wprdata->wpt[i]), swap16_func, swap32_func );
-  swap_rtehdr( &(wprdata->rtehdr), swap16_func, swap32_func );
-  for (i=0; i<MAXRTE; i++)
-    swap_rte( &(wprdata->rte[i]), swap16_func, swap32_func );
+
+  swap_wpthdr(&(wprdata->wpthdr), swap16_func, swap32_func);
+  for (i=0; i< MAXWPT; i++) {
+    swap_wpt(&(wprdata->wpt[i]), swap16_func, swap32_func);
+  }
+  swap_rtehdr(&(wprdata->rtehdr), swap16_func, swap32_func);
+  for (i=0; i<MAXRTE; i++) {
+    swap_rte(&(wprdata->rte[i]), swap16_func, swap32_func);
+  }
 }
 
 static void swap_trkhdr(struct trkhdr *trkhdr,
-			void (*swap16_func)(void *), void (*swap32_func)(void *)) {
-  if ( swap16_func != NULL ) {
-    swap16_func( &(trkhdr->totalpt) );
-    swap16_func( &(trkhdr->next) );
+                        void (*swap16_func)(void *), void (*swap32_func)(void *))
+{
+  if (swap16_func != NULL) {
+    swap16_func(&(trkhdr->totalpt));
+    swap16_func(&(trkhdr->next));
   }
-  if ( swap32_func != NULL ) {
-    swap32_func( &(trkhdr->occupied) );
-    swap32_func( &(trkhdr->show) );
-    swap32_func( &(trkhdr->fill) );
+  if (swap32_func != NULL) {
+    swap32_func(&(trkhdr->occupied));
+    swap32_func(&(trkhdr->show));
+    swap32_func(&(trkhdr->fill));
   }
 }
 
 static void swap_loghdr(struct loghdr *loghdr,
-			void (*swap16_func)(void *), void (*swap32_func)(void *)) {
+                        void (*swap16_func)(void *), void (*swap32_func)(void *))
+{
   int i;
 
-  if ( swap16_func != NULL ) {
-    swap16_func( &(loghdr->num) );
-    swap16_func( &(loghdr->next) );
+  if (swap16_func != NULL) {
+    swap16_func(&(loghdr->num));
+    swap16_func(&(loghdr->next));
   }
-  if ( swap32_func != NULL ) {
-    swap32_func( &(loghdr->id) );
-    swap32_func( &(loghdr->date) );
-    swap32_func( &(loghdr->time) );
+  if (swap32_func != NULL) {
+    swap32_func(&(loghdr->id));
+    swap32_func(&(loghdr->date));
+    swap32_func(&(loghdr->time));
   }
-  for (i=0; i<MAXTRK; i++)
-    swap_trkhdr( &(loghdr->trkhdr[i]), swap16_func, swap32_func );
+  for (i=0; i<MAXTRK; i++) {
+    swap_trkhdr(&(loghdr->trkhdr[i]), swap16_func, swap32_func);
+  }
 }
 
 static void swap_trklog(struct trklog *trklog,
-			void (*swap16_func)(void *), void (*swap32_func)(void *)) {
+                        void (*swap16_func)(void *), void (*swap32_func)(void *))
+{
   int i;
 
-  if ( swap16_func != NULL ) {
+  if (swap16_func != NULL) {
     for (i=0; i<MAXPTINTRK; i++) {
-      swap16_func( &(trklog->sh[i].speed) );
-      swap16_func( &(trklog->sh[i].height) );
+      swap16_func(&(trklog->sh[i].speed));
+      swap16_func(&(trklog->sh[i].height));
     }
   }
-  if ( swap32_func != NULL ) {
+  if (swap32_func != NULL) {
     for (i=0; i<MAXPTINTRK; i++) {
-      swap32_func( &(trklog->pt[i].x) );
-      swap32_func( &(trklog->pt[i].y) );
+      swap32_func(&(trklog->pt[i].x));
+      swap32_func(&(trklog->pt[i].y));
     }
   }
 }
 
-static void trl_swap(struct trldata *trldata) {
+static void trl_swap(struct trldata *trldata)
+{
   void (*swap16_func)(void *);
   void (*swap32_func)(void *);
   int i;
 
-  switch( byte_order() ) {
+  switch (byte_order()) {
   case SWAP_NONE:		   /* same byte oder, LITTLE_ENDIAN */
     return;
     break;
@@ -393,33 +412,38 @@ static void trl_swap(struct trldata *trldata) {
     return;                        /* never reached */
   }
 
-  swap_loghdr( &(trldata->loghdr), swap16_func, swap32_func);
-  for (i=0; i<MAXTRK; i++)
-    swap_trklog( &(trldata->trklog[i]), swap16_func, swap32_func);
+  swap_loghdr(&(trldata->loghdr), swap16_func, swap32_func);
+  for (i=0; i<MAXTRK; i++) {
+    swap_trklog(&(trldata->trklog[i]), swap16_func, swap32_func);
+  }
 }
 
 
 /**************************************************************************/
 
-static void str2lab(char *dest, char *src, int len, char *fmt, int n) {
+static void str2lab(char *dest, char *src, int len, char *fmt, int n)
+{
   int i,j;
 
   j = 0;
   if (src != NULL) {
     for (i=0; i<len && src[i] != '\0'; i++) {
-      if (isprint(src[i]))
-	  dest[j++] = src[i];
+      if (isprint(src[i])) {
+        dest[j++] = src[i];
+      }
     }
   }
   if (j == 0 && fmt != NULL) {
     snprintf(dest, len, fmt, n);
     j = strlen(dest);
   }
-  if ( j < len )
+  if (j < len) {
     memset(dest+j, ' ', len-j);
+  }
 }
 
-static void pack_time(time_t t, gbint32 *date, gbint32 *time) {
+static void pack_time(time_t t, gbint32 *date, gbint32 *time)
+{
   struct tm *tm;
 
   tm = gmtime(&t);
@@ -427,11 +451,12 @@ static void pack_time(time_t t, gbint32 *date, gbint32 *time) {
   *time = t % 86400;
 }
 
-static time_t unpack_time(gbint32 date, gbint32 time) {
+static time_t unpack_time(gbint32 date, gbint32 time)
+{
   time_t result;
   short year, month, day;
   static int m_to_d[12] =
-    {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
+  {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 
   year  = (date >> 16) & 0xffff;
   month = (date >> 8) & 0xff;	/* 1-12 */
@@ -439,14 +464,15 @@ static time_t unpack_time(gbint32 date, gbint32 time) {
 
   month -= 1;			/* fit struct tm */
   year += month / 12;
-  
+
   if (month < 0) {
     year -= 1;
     month += 12;
   }
   result = (year - 1970) * 365 + m_to_d[month];
-  if (month <= 1)
+  if (month <= 1) {
     year -= 1;
+  }
   result += (year - 1968) / 4;
   result -= (year - 1900) / 100;
   result += (year - 1600) / 400;
@@ -454,13 +480,14 @@ static time_t unpack_time(gbint32 date, gbint32 time) {
   result -= 1;
   result *= 86400;
   result += time;	     /* map500 time is inseconds of the day */
-  
+
   return result;
 }
 
 /**************************************************************************/
 
-static waypoint * get_wpt(struct wprdata *wprdata, unsigned n) {
+static waypoint * get_wpt(struct wprdata *wprdata, unsigned n)
+{
   struct wpthdr *wpthdr;
   struct wpt *wpt;
   int j, idx;
@@ -469,27 +496,30 @@ static waypoint * get_wpt(struct wprdata *wprdata, unsigned n) {
   wpthdr = &(wprdata->wpthdr);
   idx = wpthdr->idx[n];
 
-  if (idx == WPT_IDX_NONE || wpthdr->used[idx] == WPT_UNUSED)
+  if (idx == WPT_IDX_NONE || wpthdr->used[idx] == WPT_UNUSED) {
     return NULL;
+  }
   wpt = &(wprdata->wpt[idx]);
-    
+
   WP = waypt_new();
   WP->latitude  = -pt2deg(wpt->pt.y);
   WP->longitude =  pt2deg(wpt->pt.x);
   WP->creation_time = unpack_time(wpt->date, wpt->time);
-  for(j=WPT_NAME_LEN-1; j >= 0 && wpt->name[j] == ' '; j--) {};
+  for (j=WPT_NAME_LEN-1; j >= 0 && wpt->name[j] == ' '; j--) {};
   WP->shortname = xstrndup(wpt->name,j+1);
-  for(j=WPT_COMMENT_LEN-1; j >= 0 && wpt->comment[j] == ' '; j--) {};
-  if (j >= 0)
+  for (j=WPT_COMMENT_LEN-1; j >= 0 && wpt->comment[j] == ' '; j--) {};
+  if (j >= 0) {
     WP->description = xstrndup(wpt->comment, j+1);
-  else
+  } else {
     WP->description = xstrdup("");
+  }
   WP->notes = xstrdup("");
 
   return WP;
 }
 
-static void wpr_read(void) {
+static void wpr_read(void)
+{
   struct wprdata wprdata;
   struct rtehdr *rtehdr;
   struct rte *rte;
@@ -497,50 +527,57 @@ static void wpr_read(void) {
   waypoint *WP;
   route_head *RT;
 
-  if ( gbfread(&wprdata, sizeof(struct wprdata), 1, fin) != 1 )
+  if (gbfread(&wprdata, sizeof(struct wprdata), 1, fin) != 1) {
     fatal(MYNAME ": Read error on %s\n", fin->name);
+  }
   wpr_swap(&wprdata);
-  if ( wprdata.wpthdr.id != WPT_HDR_ID ||
-       wprdata.rtehdr.id != RTE_HDR_ID )
+  if (wprdata.wpthdr.id != WPT_HDR_ID ||
+      wprdata.rtehdr.id != RTE_HDR_ID) {
     fatal(MYNAME ": %s is not in Alan .wpr format.\n", fin->name);
+  }
 
   /* waypoints */
   for (i=0; i<MAXWPT; i++) {
     WP = get_wpt(&wprdata, i);
-    if ( WP != NULL )
+    if (WP != NULL) {
       waypt_add(WP);
+    }
   }
 
   /* routes */
   rtehdr = &(wprdata.rtehdr);
   for (i=0; i<MAXRTE; i++) {
     idx = rtehdr->idx[i];
-    if (idx == RTE_IDX_NONE || rtehdr->used[idx] == RTE_UNUSED)
+    if (idx == RTE_IDX_NONE || rtehdr->used[idx] == RTE_UNUSED) {
       continue;
+    }
     rte = &(wprdata.rte[idx]);
-    
+
     RT = route_head_alloc();
     RT->rte_num = i;
-    for(j=RTE_NAME_LEN-1; j >= 0 && rte->name[j] == ' '; j--) {};
+    for (j=RTE_NAME_LEN-1; j >= 0 && rte->name[j] == ' '; j--) {};
     RT->rte_name = xstrndup(rte->name,j+1);
-    for(j=RTE_COMMENT_LEN-1; j >= 0 && rte->comment[j] == ' '; j--) {};
-    if (j >= 0)
+    for (j=RTE_COMMENT_LEN-1; j >= 0 && rte->comment[j] == ' '; j--) {};
+    if (j >= 0) {
       RT->rte_desc = xstrndup(rte->comment,j+1);
-    else
+    } else {
       RT->rte_desc = xstrdup("");
+    }
 
-    route_add_head(RT);          
+    route_add_head(RT);
 
     /* route points */
-    for(j=0; j<rte->wptnum; j++) {
+    for (j=0; j<rte->wptnum; j++) {
       WP = get_wpt(&wprdata, rte->wptidx[j]);
-      if ( WP != NULL )
-	route_add_wpt(RT, WP);
+      if (WP != NULL) {
+        route_add_wpt(RT, WP);
+      }
     }
   }
 }
 
-static void trl_read(void) {
+static void trl_read(void)
+{
   struct trldata trldata;
   struct trkhdr *trkhdr;
   struct trklog *trklog;
@@ -550,47 +587,52 @@ static void trl_read(void) {
 
   for (i=0; i<MAXTRK; i+=2) {
     gbfseek(fin, 0x10000 * (i/2), SEEK_SET);
-    if ( gbfread( &(trldata.trklog[i]), sizeof(struct trklog), 2, fin) != 2)
+    if (gbfread(&(trldata.trklog[i]), sizeof(struct trklog), 2, fin) != 2) {
       fatal(MYNAME ": Read error on %s\n", fin->name);
+    }
   }
   gbfseek(fin, 0x10000 * MAXTRK/2, SEEK_SET);
-  if ( gbfread( &(trldata.loghdr), sizeof(struct loghdr), 1, fin) != 1)
+  if (gbfread(&(trldata.loghdr), sizeof(struct loghdr), 1, fin) != 1) {
     fatal(MYNAME ": Read error on %s\n", fin->name);
+  }
   trl_swap(&trldata);
-  if ( trldata.loghdr.id != TRL_HDR_ID )
+  if (trldata.loghdr.id != TRL_HDR_ID) {
     fatal(MYNAME ": %s is not in Alan .trl format.\n", fin->name);
+  }
 
-  for(i=0; i<MAXTRK; i++) {
+  for (i=0; i<MAXTRK; i++) {
     /* track header */
     trkhdr = &(trldata.loghdr.trkhdr[i]);
-    if (trkhdr->occupied == TRK_UNUSED)
+    if (trkhdr->occupied == TRK_UNUSED) {
       continue;
+    }
     TL = route_head_alloc();
-    for(j=TRK_NAME_LEN-1;
-	j >= 0 && (trkhdr->name[j] == ' ' || trkhdr->name[j] == '\0');
-	j--) {};
+    for (j=TRK_NAME_LEN-1;
+         j >= 0 && (trkhdr->name[j] == ' ' || trkhdr->name[j] == '\0');
+         j--) {};
     TL->rte_name = xstrndup(trkhdr->name,j+1);
-/*  TL->rte_name[TRK_NAME_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
-    for(j=TRK_COMMENT_LEN-1;
-	j >= 0 && (trkhdr->comment[j] == ' ' || trkhdr->comment[j] == '\0');
-	j--) {};
+    /*  TL->rte_name[TRK_NAME_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
+    for (j=TRK_COMMENT_LEN-1;
+         j >= 0 && (trkhdr->comment[j] == ' ' || trkhdr->comment[j] == '\0');
+         j--) {};
     TL->rte_desc = xstrndup(trkhdr->comment,j+1);
-/*  TL->rte_desc[TRK_COMMENT_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
+    /*  TL->rte_desc[TRK_COMMENT_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
     TL->rte_num = i;
 
-    track_add_head(TL);          
+    track_add_head(TL);
 
     /* track points */
     trklog = &(trldata.trklog[i]);
-    for(j=0; j<trkhdr->totalpt; j++) {
+    for (j=0; j<trkhdr->totalpt; j++) {
       WP = waypt_new();
       WP->latitude  = -pt2deg(trklog->pt[j].y);
       WP->longitude =  pt2deg(trklog->pt[j].x);
       WP->altitude  =  hgt2m(trklog->sh[j].height);
-      if ( trklog->sh[j].speed >= 0 )
-	WAYPT_SET(WP, speed, sp2mps(trklog->sh[j].speed))
-      else				/* bad speed < 0 - set to 0.0 */
-	WAYPT_UNSET(WP, speed);
+      if (trklog->sh[j].speed >= 0)
+        WAYPT_SET(WP, speed, sp2mps(trklog->sh[j].speed))
+        else {			/* bad speed < 0 - set to 0.0 */
+          WAYPT_UNSET(WP, speed);
+        }
       track_add_wpt(TL, WP);
     }
   }
@@ -598,7 +640,8 @@ static void trl_read(void) {
 
 /**************************************************************************/
 
-static int find_wpt(struct wprdata *wprdata, const waypoint *WP) {
+static int find_wpt(struct wprdata *wprdata, const waypoint *WP)
+{
   struct wpt pattern, *wpt;
   int i, wpt_idx;
 
@@ -608,20 +651,23 @@ static int find_wpt(struct wprdata *wprdata, const waypoint *WP) {
 
   wpt = wprdata->wpt;
   for (i=0; i<MAXWPT; i++) {
-    wpt_idx = wprdata->wpthdr.idx[i]; 
-    if ( wpt_idx == WPT_IDX_NONE ||
-	 wprdata->wpthdr.used[wpt_idx] == WPT_UNUSED ) 
+    wpt_idx = wprdata->wpthdr.idx[i];
+    if (wpt_idx == WPT_IDX_NONE ||
+        wprdata->wpthdr.used[wpt_idx] == WPT_UNUSED) {
       continue;
-    if ( strncmp( wpt[wpt_idx].name, pattern.name, WPT_NAME_LEN) == 0 &&
-	 wpt[wpt_idx].pt.x == pattern.pt.x &&
-	 wpt[wpt_idx].pt.y == pattern.pt.y )
+    }
+    if (strncmp(wpt[wpt_idx].name, pattern.name, WPT_NAME_LEN) == 0 &&
+        wpt[wpt_idx].pt.x == pattern.pt.x &&
+        wpt[wpt_idx].pt.y == pattern.pt.y) {
       return i;
+    }
   }
 
   return -1;
 }
 
-static int add_wpt(struct wprdata *wprdata, const waypoint *WP,int isroute) {
+static int add_wpt(struct wprdata *wprdata, const waypoint *WP,int isroute)
+{
   struct wpthdr *wpthdr;
   int hdr_idx, wpt_idx;
   struct wpt *wpt;
@@ -630,7 +676,7 @@ static int add_wpt(struct wprdata *wprdata, const waypoint *WP,int isroute) {
   wpthdr = &(wprdata->wpthdr);
 
   hdr_idx = find_wpt(wprdata, WP);
-  if ( hdr_idx >= 0 ) {
+  if (hdr_idx >= 0) {
     /* duplicate waypoint */
     if (isroute) {
       wpt = &(wprdata->wpt[wpthdr->idx[hdr_idx]]);
@@ -638,7 +684,7 @@ static int add_wpt(struct wprdata *wprdata, const waypoint *WP,int isroute) {
     }
     /*
     warning(MYNAME ": using duplicate waypoint '%s' at (%f°, %f°)\n",
-	    WP->shortname, WP->latitude, WP->longitude);
+      WP->shortname, WP->latitude, WP->longitude);
     */
     return hdr_idx;
   }
@@ -647,8 +693,9 @@ static int add_wpt(struct wprdata *wprdata, const waypoint *WP,int isroute) {
   hdr_idx = i;
   for (i=0; i<MAXWPT && wpthdr->used[i] != WPT_UNUSED; i++) { }
   wpt_idx = i;
-  if (wpthdr->num >= MAXWPT || hdr_idx >= MAXWPT || wpt_idx >= MAXWPT )
+  if (wpthdr->num >= MAXWPT || hdr_idx >= MAXWPT || wpt_idx >= MAXWPT) {
     fatal(MYNAME ": Can't store more than %u waypoints\n", MAXWPT);
+  }
 
   wpt = &(wprdata->wpt[wpt_idx]);
   str2lab(wpt->name, WP->shortname, WPT_NAME_LEN, "W%05d", wpt_idx);
@@ -664,29 +711,33 @@ static int add_wpt(struct wprdata *wprdata, const waypoint *WP,int isroute) {
   wpthdr->used[wpt_idx] = WPT_USED;
   wpthdr->num++;
   wpthdr->next++;
-  if (wpthdr->next >= MAXWPT)		/* overrun */
+  if (wpthdr->next >= MAXWPT) {	/* overrun */
     wpthdr->next = 0;
+  }
 
   return hdr_idx;
 }
 
-static void wpr_waypoint(const waypoint *WP) {
+static void wpr_waypoint(const waypoint *WP)
+{
   add_wpt(&WPR, WP, 0);
 }
 
-static void wpr_route_hdr(const route_head *RT) {
+static void wpr_route_hdr(const route_head *RT)
+{
   struct rtehdr *rtehdr;
   int hdr_idx, rte_idx;
   struct rte *rte;
   int i;
-  
+
   rtehdr = &(WPR.rtehdr);
   for (i=0; i<MAXRTE && rtehdr->idx[i] != RTE_IDX_NONE; i++) { }
   hdr_idx = i;
   for (i=0; i<MAXRTE && rtehdr->used[i] != RTE_UNUSED; i++) { }
   rte_idx = i;
-  if (rtehdr->num >= MAXRTE || hdr_idx >= MAXRTE || rte_idx >= MAXRTE )
+  if (rtehdr->num >= MAXRTE || hdr_idx >= MAXRTE || rte_idx >= MAXRTE) {
     fatal(MYNAME ": Can't store more than %u routes", MAXRTE);
+  }
 
   rte = &(WPR.rte[rte_idx]);
   str2lab(rte->name, RT->rte_name, RTE_NAME_LEN, "R%03d", rte_idx);
@@ -697,20 +748,23 @@ static void wpr_route_hdr(const route_head *RT) {
   rtehdr->used[rte_idx] = RTE_USED;
   rtehdr->num++;
   rtehdr->next++;
-  if (rtehdr->next >= MAXRTE)		/* overrun */
+  if (rtehdr->next >= MAXRTE) {	/* overrun */
     rtehdr->next = 0;
+  }
 
   /* if you want the new route to be active, uncomment the next line */
   /* rtehdr->rteno = rte_idx; */
 }
 
-static void wpr_route_wpt(const waypoint *WP) {
+static void wpr_route_wpt(const waypoint *WP)
+{
   struct rte *rte;
   int wpt_idx;
 
   rte = &(WPR.rte[WPR.rtehdr.num -1]);
-  if ( rte->wptnum >= MAXWPTINRTE )
+  if (rte->wptnum >= MAXWPTINRTE) {
     fatal(MYNAME ": Can't store more than %u waypoints per route", MAXWPTINRTE);
+  }
 
   wpt_idx = add_wpt(&WPR, WP, 1);
 
@@ -718,11 +772,13 @@ static void wpr_route_wpt(const waypoint *WP) {
   rte->wptnum ++;
 }
 
-static void wpr_route_trl(const route_head *RT) {
+static void wpr_route_trl(const route_head *RT)
+{
   /* should we do some final sanity checks? */
 }
 
-static void wpr_write(void) {
+static void wpr_write(void)
+{
   int i;
 
   WPR.wpthdr.id = WPT_HDR_ID;
@@ -745,33 +801,39 @@ static void wpr_write(void) {
   route_disp_all(wpr_route_hdr, wpr_route_trl, wpr_route_wpt);
 
   wpr_swap(&WPR);
-  if ( gbfwrite(&WPR, sizeof(struct wprdata), 1, fout) != 1 )
+  if (gbfwrite(&WPR, sizeof(struct wprdata), 1, fout) != 1) {
     fatal(MYNAME ": Write error on %s\n", fout->name);
+  }
 }
 
 /**************************************************************************/
 
-static void trl_track_hdr(const route_head *TL) {
+static void trl_track_hdr(const route_head *TL)
+{
   struct trkhdr *trkhdr;
   int idx, l;
 
   trkhdr = TRL.loghdr.trkhdr;
-  
-  for (idx=0; idx< MAXTRK && trkhdr[idx].occupied != TRK_UNUSED; idx++) {};
-  if (idx >= MAXTRK)
-    fatal(MYNAME ": Can't store more than %u tracklogs", MAXTRK);
 
-  if ( TL->rte_name != NULL )
+  for (idx=0; idx< MAXTRK && trkhdr[idx].occupied != TRK_UNUSED; idx++) {};
+  if (idx >= MAXTRK) {
+    fatal(MYNAME ": Can't store more than %u tracklogs", MAXTRK);
+  }
+
+  if (TL->rte_name != NULL) {
     strncpy(trkhdr[idx].name, TL->rte_name, TRK_NAME_LEN);
-  if ( *(trkhdr[idx].name) == '\0' )
+  }
+  if (*(trkhdr[idx].name) == '\0') {
     sprintf(trkhdr[idx].name, "T%03d", idx);
+  }
   trkhdr[idx].name[TRK_NAME_LEN-1] = '\0';
 
-  if ( TL->rte_desc != NULL ) {
+  if (TL->rte_desc != NULL) {
     strncpy(trkhdr[idx].comment, TL->rte_desc, TRK_COMMENT_LEN);
     l = strlen(TL->rte_desc);
-    if ( l < TRK_COMMENT_LEN-1 )
+    if (l < TRK_COMMENT_LEN-1) {
       memset(trkhdr[idx].comment + l, ' ', TRK_COMMENT_LEN - l);
+    }
   }
   trkhdr[idx].comment[TRK_COMMENT_LEN-1] = '\0';
 
@@ -783,44 +845,51 @@ static void trl_track_hdr(const route_head *TL) {
   TRL.loghdr.num = idx;
 }
 
-static void trl_track_wpt(const waypoint *WP) {
+static void trl_track_wpt(const waypoint *WP)
+{
   struct trklog *trklog;
   struct trkhdr *trkhdr;
   int trk_idx, log_idx;
-  
+
   trk_idx = TRL.loghdr.num;
 
   trkhdr = &(TRL.loghdr.trkhdr[trk_idx]);
-  if ( trkhdr->totalpt >= MAXPTINTRK )
+  if (trkhdr->totalpt >= MAXPTINTRK) {
     fatal(MYNAME ": Can't store more than %u points per track", MAXPTINTRK);
+  }
   log_idx = trkhdr->next;
 
   trklog = &(TRL.trklog[trk_idx]);
-  trklog->pt[log_idx].x = deg2pt( WP->longitude);
+  trklog->pt[log_idx].x = deg2pt(WP->longitude);
   trklog->pt[log_idx].y = deg2pt(-WP->latitude);
-  if WAYPT_HAS(WP, speed)
+  if WAYPT_HAS(WP, speed) {
     trklog->sh[log_idx].speed =  mps2sp(WP->speed);
-  if ( WP->altitude != unknown_alt )
+  }
+  if (WP->altitude != unknown_alt) {
     trklog->sh[log_idx].height = m2hgt(WP->altitude);
+  }
 
   trkhdr->totalpt ++;
   trkhdr->next = trkhdr->totalpt;
 }
 
-static void trl_track_tlr(const route_head *TL) {
+static void trl_track_tlr(const route_head *TL)
+{
   struct trkhdr *trkhdr;
   int trk_idx;
 
   trk_idx = TRL.loghdr.num;
   trkhdr = &(TRL.loghdr.trkhdr[trk_idx]);
 
-  if ( trkhdr->totalpt == 0 )
+  if (trkhdr->totalpt == 0) {
     trkhdr->occupied = TRK_UNUSED;
+  }
 
   TRL.loghdr.num = -1;
 }
 
-static void trl_write(void) {
+static void trl_write(void)
+{
   struct trkhdr *trkhdr;
   void *buf;
   int i;
@@ -845,96 +914,105 @@ static void trl_write(void) {
   track_disp_all(trl_track_hdr, trl_track_tlr, trl_track_wpt);
 
   trl_swap(&TRL);
-  
+
   fill =  0x10000 - 2 * sizeof(struct trklog);
   buf = xmalloc(fill);
-  if (buf == NULL)
+  if (buf == NULL) {
     fatal(MYNAME ": Not enough memory\n");
+  }
   memset(buf, 0xff, fill);
 
   for (i=0; i<MAXTRK; i+=2) {
     if (gbfwrite(&(TRL.trklog[i]), sizeof(struct trklog), 2, fout) != 2 ||
-	gbfwrite(buf, fill, 1, fout) != 1 )
+        gbfwrite(buf, fill, 1, fout) != 1) {
       fatal(MYNAME ": Write error on %s\n", fout->name);
+    }
   }
   xfree(buf);
 
   fill = 0x1000 - sizeof(struct loghdr);
   buf = xmalloc(fill);
-  if (buf == NULL)
+  if (buf == NULL) {
     fatal(MYNAME ": Not enough memory\n");
+  }
   memset(buf, 0xff, fill);
 
-  if ( gbfwrite(&(TRL.loghdr), sizeof(struct loghdr), 1, fout) != 1 ||
-       gbfwrite(buf, fill, 1, fout) != 1 ) 
+  if (gbfwrite(&(TRL.loghdr), sizeof(struct loghdr), 1, fout) != 1 ||
+      gbfwrite(buf, fill, 1, fout) != 1) {
     fatal(MYNAME ": Write error on %s\n", fout->name);
+  }
   xfree(buf);
 }
 
 /**************************************************************************/
 
-static void alan_rd_init(const char *fname) {
+static void alan_rd_init(const char *fname)
+{
   fin = gbfopen(fname, "rb", MYNAME);
 }
 
-static void alan_rd_deinit(void) {
+static void alan_rd_deinit(void)
+{
   gbfclose(fin);
   fin = NULL;
 }
 
 
-static void alan_wr_init(const char *fname) {
+static void alan_wr_init(const char *fname)
+{
   fout = gbfopen(fname, "wb", MYNAME);
 }
 
-static void alan_wr_deinit(void) {
+static void alan_wr_deinit(void)
+{
   gbfclose(fout);
   fout = NULL;
 }
 
 
-static void alan_exit(void) {
+static void alan_exit(void)
+{
   return;
 }
 
 /**************************************************************************/
 
 ff_vecs_t alanwpr_vecs = {
-	ff_type_file,
-	{ 
-	  ff_cap_read | ff_cap_write 	/* waypoints */,
-	  ff_cap_none              	/* tracks */,
-	  ff_cap_read | ff_cap_write 	/* routes */
-	},
-	alan_rd_init,	
-	alan_wr_init,	
-	alan_rd_deinit,	
-	alan_wr_deinit,	
-	wpr_read,
-	wpr_write,
-	alan_exit,
-	wpr_args,
-	CET_CHARSET_ASCII, 0 /* ascii is the expected character set */
-                             /* not fixed, can be changed through command
-				line parameter */
+  ff_type_file,
+  {
+    ff_cap_read | ff_cap_write 	/* waypoints */,
+    ff_cap_none              	/* tracks */,
+    ff_cap_read | ff_cap_write 	/* routes */
+  },
+  alan_rd_init,
+  alan_wr_init,
+  alan_rd_deinit,
+  alan_wr_deinit,
+  wpr_read,
+  wpr_write,
+  alan_exit,
+  wpr_args,
+  CET_CHARSET_ASCII, 0 /* ascii is the expected character set */
+  /* not fixed, can be changed through command
+  line parameter */
 };
 
 ff_vecs_t alantrl_vecs = {
-	ff_type_file,
-	{ 
-	  ff_cap_none            	/* waypoints */,
-	  ff_cap_read | ff_cap_write 	/* tracks */,
-	  ff_cap_none           	/* routes */
-	},
-	alan_rd_init,	
-	alan_wr_init,	
-	alan_rd_deinit,	
-	alan_wr_deinit,	
-	trl_read,
-	trl_write,
-	alan_exit,
-	trl_args,
-	CET_CHARSET_ASCII, 0 /* ascii is the expected character set */
-                             /* not fixed, can be changed through command
-				line parameter */
+  ff_type_file,
+  {
+    ff_cap_none            	/* waypoints */,
+    ff_cap_read | ff_cap_write 	/* tracks */,
+    ff_cap_none           	/* routes */
+  },
+  alan_rd_init,
+  alan_wr_init,
+  alan_rd_deinit,
+  alan_wr_deinit,
+  trl_read,
+  trl_write,
+  alan_exit,
+  trl_args,
+  CET_CHARSET_ASCII, 0 /* ascii is the expected character set */
+  /* not fixed, can be changed through command
+  line parameter */
 };

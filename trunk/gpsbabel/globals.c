@@ -1,6 +1,6 @@
 /*
     Global data for GPSBabel.
-   
+
     Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify

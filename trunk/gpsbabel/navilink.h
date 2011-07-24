@@ -39,8 +39,7 @@ int locosys_decode_file_id(char *header, size_t len);
 #ifdef THIS_IS_ONLY_FOR_REFERENCE
 /* Locosys SBP and SBN structures */
 
-typedef __packed struct
-{
+typedef __packed struct {
   UINT8 HDOP;        /* HDOP [0..51] with resolution 0.2 */
   UINT8 SVIDCnt;        /* Number of SVs in solution [0 to 12] */
   UINT16 UtcSec;        /* UTC Second [0 to 59] in seconds with resolution 0.001 */
@@ -54,13 +53,12 @@ typedef __packed struct
   INT16 ClmbRte;        /* Climb rate in m/sec with resolution 0.01 */
   UINT8 bitFlags;     /* bitFlags, default 0x00,    bit 0=1 indicate the first point after power on */
   UINT8 reserved;
-} T_SBP;           
+} T_SBP;
 
-typedef struct __packed
-{
-   UINT8 Mid;
-   UINT16 Valid;
-   UINT16 Mode;            /* Nav Mode:  bit map as follows:
+typedef struct __packed {
+  UINT8 Mid;
+  UINT16 Valid;
+  UINT16 Mode;            /* Nav Mode:  bit map as follows:
                             *  Bits 2-0:  GPS Fix Type
                             *    000   =  No Nav
                             *    001   =  1 SV solution
@@ -93,45 +91,45 @@ typedef struct __packed
                             *    10    =  DR sensor error
                             *    11    =  DR Test mode
                             */
-   UINT16 Week;            /* Extended Week Number */
-   UINT32 TOW;             /* Time of Week [0 to 604800] in seconds with resolution 0.001 */
-   UINT16 UtcYr;           /* UTC Year   [1980 to 3000] */
-   UINT8  UtcMth;          /* UTC Month  [1 to 12] */
-   UINT8  UtcDay;          /* UTC Day    [1 to 31] */
-   UINT8  UtcHr;           /* UTC Hour   [0 to 23] */
-   UINT8  UtcMin;          /* UTC Minute [0 to 59] */
-   UINT16 UtcSec;          /* UTC Second [0 to 59] in seconds with resolution 0.001 */
-   UINT32 SVIDList;        /* SVs in solution:  Bit 0=1: SV1, Bit 1=1: SV2, ... , Bit 31=1: SV32 */
-  
-   INT32  Lat;             /* Latitude [-90 to 90] in degrees with resolution 0.0000001 */
-   INT32  Lon;             /* Longitude [-180 to 180] in degrees with resolution 0.0000001 */
-   INT32  AltE;            /* Altitude from Ellipsoid in meters with resolution 0.01 */
-   INT32  AltM;            /* Altitude from Mean Sea Level in meters with resolution 0.01 */
-   UINT8  Datum;           /* Map datum */
-   UINT16 Sog;             /* Speed Over Ground in m/sec with resolution 0.01 */
-   UINT16 Cog;             /* Course Over Ground [0 to 360] in degrees with resolution 0.01 */
-   INT16  MagVar;          /* Magnetic Variation - Reserved */
-   INT16  ClmbRte;         /* Climb rate in m/sec with resolution 0.01 */
-   INT16  HdRte;           /* Heading Rate in deg/sec with resolution 0.01 (SiRFDrive only) */
-   UINT32 Ehpe;            /* Expected Horizontal Position Error in meters with resolution 0.01 */
-   UINT32 Evpe;            /* Expected Horizontal Vertical Error in meters with resolution 0.01 */
-   UINT32 Ete;             /* Expected Time Error in meters with resolution 0.01 (SiRFDrive only) - Reserved */
-   UINT16 Ehve;            /* Expected Horizontal Velocity Error in m/sec with resolution 0.01 (SiRFDrive only) */
-   INT32  ClkBias;         /* Clock Bias in meters with resolution 0.01 */
-   UINT32 ClkBiasE;        /* Clock Bias Error in meters with resolution 0.01 (SiRFDrive only) */
-   INT32  ClkDrift;        /* Clock Drift in m/sec with resolution 0.01 */
-   UINT32 ClkDriftE;       /* Clock Drift in m/sec with resolution 0.01 (SiRFDrive only) */
-   UINT32 Trvled;          /* Distance Traveled since reset in meters (SiRFDrive only) */
-   UINT16 TrvledE;         /* Distance Traveled Error in meters (SiRFDrive only) */
-   UINT16 HdE;             /* Heading Error [0 to 180] in degrees with resolution 0.01 (SiRFDrive only) */
-   UINT8  SVIDCnt;         /* Number of SVs in solution [0 to 12] */
-   UINT8  HDOP;            /* HDOP [0..51] with resolution 0.2 */
-   UINT8  Reserved;        /* Reserved */
+  UINT16 Week;            /* Extended Week Number */
+  UINT32 TOW;             /* Time of Week [0 to 604800] in seconds with resolution 0.001 */
+  UINT16 UtcYr;           /* UTC Year   [1980 to 3000] */
+  UINT8  UtcMth;          /* UTC Month  [1 to 12] */
+  UINT8  UtcDay;          /* UTC Day    [1 to 31] */
+  UINT8  UtcHr;           /* UTC Hour   [0 to 23] */
+  UINT8  UtcMin;          /* UTC Minute [0 to 59] */
+  UINT16 UtcSec;          /* UTC Second [0 to 59] in seconds with resolution 0.001 */
+  UINT32 SVIDList;        /* SVs in solution:  Bit 0=1: SV1, Bit 1=1: SV2, ... , Bit 31=1: SV32 */
 
-   UINT16 ufSog;             /* Speed Over Ground in m/sec with resolution 0.01 ,unfiltered*/
-   UINT16 ufCog;             /* Course Over Ground [0 to 360] in degrees with resolution 0.01, unfiltered  */
+  INT32  Lat;             /* Latitude [-90 to 90] in degrees with resolution 0.0000001 */
+  INT32  Lon;             /* Longitude [-180 to 180] in degrees with resolution 0.0000001 */
+  INT32  AltE;            /* Altitude from Ellipsoid in meters with resolution 0.01 */
+  INT32  AltM;            /* Altitude from Mean Sea Level in meters with resolution 0.01 */
+  UINT8  Datum;           /* Map datum */
+  UINT16 Sog;             /* Speed Over Ground in m/sec with resolution 0.01 */
+  UINT16 Cog;             /* Course Over Ground [0 to 360] in degrees with resolution 0.01 */
+  INT16  MagVar;          /* Magnetic Variation - Reserved */
+  INT16  ClmbRte;         /* Climb rate in m/sec with resolution 0.01 */
+  INT16  HdRte;           /* Heading Rate in deg/sec with resolution 0.01 (SiRFDrive only) */
+  UINT32 Ehpe;            /* Expected Horizontal Position Error in meters with resolution 0.01 */
+  UINT32 Evpe;            /* Expected Horizontal Vertical Error in meters with resolution 0.01 */
+  UINT32 Ete;             /* Expected Time Error in meters with resolution 0.01 (SiRFDrive only) - Reserved */
+  UINT16 Ehve;            /* Expected Horizontal Velocity Error in m/sec with resolution 0.01 (SiRFDrive only) */
+  INT32  ClkBias;         /* Clock Bias in meters with resolution 0.01 */
+  UINT32 ClkBiasE;        /* Clock Bias Error in meters with resolution 0.01 (SiRFDrive only) */
+  INT32  ClkDrift;        /* Clock Drift in m/sec with resolution 0.01 */
+  UINT32 ClkDriftE;       /* Clock Drift in m/sec with resolution 0.01 (SiRFDrive only) */
+  UINT32 Trvled;          /* Distance Traveled since reset in meters (SiRFDrive only) */
+  UINT16 TrvledE;         /* Distance Traveled Error in meters (SiRFDrive only) */
+  UINT16 HdE;             /* Heading Error [0 to 180] in degrees with resolution 0.01 (SiRFDrive only) */
+  UINT8  SVIDCnt;         /* Number of SVs in solution [0 to 12] */
+  UINT8  HDOP;            /* HDOP [0..51] with resolution 0.2 */
+  UINT8  Reserved;        /* Reserved */
 
-}  T_SBN_REC; 
+  UINT16 ufSog;             /* Speed Over Ground in m/sec with resolution 0.01 ,unfiltered*/
+  UINT16 ufCog;             /* Course Over Ground [0 to 360] in degrees with resolution 0.01, unfiltered  */
+
+}  T_SBN_REC;
 
 #endif
 

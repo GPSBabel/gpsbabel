@@ -28,26 +28,24 @@
 #define CET_ERROR	1
 #define CET_SUCCESS	0
 
-typedef struct cet_ucs4_link_s
-{
-	int value;			/* UCS-4 value 			*/
-	short origin;			/* associeted character 	*/
+typedef struct cet_ucs4_link_s {
+  int value;			/* UCS-4 value 			*/
+  short origin;			/* associeted character 	*/
 } cet_ucs4_link_t;
 
-typedef struct cet_cs_vec_s
-{
-	const char *name;			/* name of character set 	*/
-	const char **alias;			/* alias table  		*/
-	struct cet_cs_vec_s *fallback;		/* fallback character set       */
-	void *unused;
-	const int *ucs4_map;			/* char to UCS-4 value table 	*/
-	const int ucs4_offset;			/* first non standard character */
-	const int ucs4_count;			/* values in table 		*/
-	const cet_ucs4_link_t *ucs4_link;	/* UCS-4 to char backward links */
-	const int ucs4_links;			/* number of links 		*/
-	const cet_ucs4_link_t *ucs4_extra;	/* Non standard UCS-4 to ...    */
-	const int ucs4_extras;			/* number of extra links 	*/
-	struct cet_cs_vec_s *next;
+typedef struct cet_cs_vec_s {
+  const char *name;			/* name of character set 	*/
+  const char **alias;			/* alias table  		*/
+  struct cet_cs_vec_s *fallback;		/* fallback character set       */
+  void *unused;
+  const int *ucs4_map;			/* char to UCS-4 value table 	*/
+  const int ucs4_offset;			/* first non standard character */
+  const int ucs4_count;			/* values in table 		*/
+  const cet_ucs4_link_t *ucs4_link;	/* UCS-4 to char backward links */
+  const int ucs4_links;			/* number of links 		*/
+  const cet_ucs4_link_t *ucs4_extra;	/* Non standard UCS-4 to ...    */
+  const int ucs4_extras;			/* number of extra links 	*/
+  struct cet_cs_vec_s *next;
 } cet_cs_vec_t;
 
 /* single char/value transmission */

@@ -23,15 +23,15 @@
 void
 gb_uuid_generate(uuid_t uu)
 {
-	unsigned char *cp;
-	int i;
-	for (cp = uu, i = 0; i < 16; i++) {
-		if (getenv("GPSBABEL_FREEZE_TIME")) {
-			static unsigned char blech = 0;
-			*cp++ = blech++;
-		} else {
-			*cp++ ^= (rand() >> 7) & 0xFF;
-		}
-	}
+  unsigned char *cp;
+  int i;
+  for (cp = uu, i = 0; i < 16; i++) {
+    if (getenv("GPSBABEL_FREEZE_TIME")) {
+      static unsigned char blech = 0;
+      *cp++ = blech++;
+    } else {
+      *cp++ ^= (rand() >> 7) & 0xFF;
+    }
+  }
 }
 

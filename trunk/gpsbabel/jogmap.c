@@ -1,4 +1,4 @@
-/* 
+/*
 
 	Support for XML files from jogmap.de
 
@@ -27,9 +27,8 @@
 
 static route_head *trk;
 
-static arglist_t jogmap_args[] = 
-{
-	ARG_TERMINATOR
+static arglist_t jogmap_args[] = {
+  ARG_TERMINATOR
 };
 
 #define MYNAME "xol"
@@ -38,7 +37,7 @@ static arglist_t jogmap_args[] =
 void
 jogmap_rd_init(const char *fname)
 {
-	fatal(MYNAME ": This build excluded \"" MYNAME "\" support because expat was not installed.\n");
+  fatal(MYNAME ": This build excluded \"" MYNAME "\" support because expat was not installed.\n");
 }
 
 void
@@ -58,72 +57,75 @@ jogmap_read(void)
 static void
 jogmap_markers(const char *args, const char **attrv)
 {
-	trk = route_head_alloc();
-	track_add_head(trk);
+  trk = route_head_alloc();
+  track_add_head(trk);
 }
 
 static void
 jogmap_marker(const char *args, const char **attrv)
 {
-	const char **avp = &attrv[0];
-	waypoint *wpt = waypt_new();
+  const char **avp = &attrv[0];
+  waypoint *wpt = waypt_new();
 
-        while (*avp) {
-		if (strcmp(avp[0], "lat") == 0) {
-			sscanf(avp[1], "%lf", 
-				&wpt->latitude);
-		} else
-		if (strcmp(avp[0], "lng") == 0) {
-			sscanf(avp[1], "%lf", 
-				&wpt->longitude);
-		}
+  while (*avp) {
+    if (strcmp(avp[0], "lat") == 0) {
+      sscanf(avp[1], "%lf",
+             &wpt->latitude);
+    } else if (strcmp(avp[0], "lng") == 0) {
+      sscanf(avp[1], "%lf",
+             &wpt->longitude);
+    }
 
-		avp+=2;
-	}
+    avp+=2;
+  }
 
-	if (trk) track_add_wpt(trk, wpt);
+  if (trk) {
+    track_add_wpt(trk, wpt);
+  }
 }
 
 static
 xg_tag_mapping jogmap_map[] = {
-	{ jogmap_markers,	cb_start,	"/markers" },
-	{ jogmap_marker,	cb_start,	"/markers/marker" },
-	{ NULL,			0,		NULL }
+  { jogmap_markers,	cb_start,	"/markers" },
+  { jogmap_marker,	cb_start,	"/markers/marker" },
+  { NULL,			0,		NULL }
 };
 
-static void 
+static void
 jogmap_rd_init(const char *fname)
 {
-	trk = NULL;
-	xml_init(fname, jogmap_map, NULL);
+  trk = NULL;
+  xml_init(fname, jogmap_map, NULL);
 }
 
-static void 
+static void
 jogmap_read(void)
 {
-	xml_read();
+  xml_read();
 }
 
 #endif
 
-static void 
+static void
 jogmap_rd_deinit(void)
 {
-	xml_deinit();
+  xml_deinit();
 }
 
 ff_vecs_t jogmap_vecs = {
-	ff_type_file,
-	{ ff_cap_none,		/* waypoints */
-	  ff_cap_read,		/* tracks */
-	  ff_cap_none },	/* routes */
-	jogmap_rd_init,	
-	NULL,	
-	jogmap_rd_deinit,
-	NULL,
-	jogmap_read,
-	NULL,
-	NULL, 
-	jogmap_args,
-	CET_CHARSET_UTF8, 0
+  ff_type_file,
+  {
+    ff_cap_none,		/* waypoints */
+    ff_cap_read,		/* tracks */
+    ff_cap_none
+  },	/* routes */
+  jogmap_rd_init,
+  NULL,
+  jogmap_rd_deinit,
+  NULL,
+  jogmap_read,
+  NULL,
+  NULL,
+  jogmap_args,
+  CET_CHARSET_UTF8, 0
 };

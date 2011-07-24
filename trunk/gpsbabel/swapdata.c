@@ -19,7 +19,7 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
- 
+
 #include "defs.h"
 #include "filterdefs.h"
 #include <ctype.h>
@@ -30,42 +30,42 @@
 
 static
 arglist_t swapdata_args[] = {
-	ARG_TERMINATOR
+  ARG_TERMINATOR
 };
 
 static void
 swapdata_cb(const waypoint *ref)
 {
-	waypoint *wpt = (waypoint *)ref;
-	double x;
+  waypoint *wpt = (waypoint *)ref;
+  double x;
 
-	x = wpt->latitude;
-	wpt->latitude = wpt->longitude;
-	wpt->longitude = x;
+  x = wpt->latitude;
+  wpt->latitude = wpt->longitude;
+  wpt->longitude = x;
 
-	return;
+  return;
 }
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static void 
+static void
 swapdata_process(void)	/* this procedure must be present in vecs */
 {
-	waypt_disp_all(swapdata_cb);
-	route_disp_all(NULL, NULL, swapdata_cb);
-	track_disp_all(NULL, NULL, swapdata_cb);
+  waypt_disp_all(swapdata_cb);
+  route_disp_all(NULL, NULL, swapdata_cb);
+  track_disp_all(NULL, NULL, swapdata_cb);
 }
 
 /*******************************************************************************/
 
 filter_vecs_t swapdata_vecs = {
-	NULL,
-	swapdata_process,
-	NULL,
-	NULL,
-	swapdata_args
+  NULL,
+  swapdata_process,
+  NULL,
+  NULL,
+  swapdata_args
 };
 
 /*******************************************************************************/

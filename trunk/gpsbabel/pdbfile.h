@@ -4,7 +4,7 @@
     Copyright (C) 2007 Olaf Klein, o.b.klein@gpsbabel.org
 
     Written after study the Coldsync project
-    
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -39,35 +39,35 @@
 #define EPOCH_1904		2082844800L
 
 typedef struct pdbrec_s {
-	gbuint32  offs;
-	gbuint32  size;
-	gbuint32 id;
-	gbuint8  category;
-	gbuint8  flags;
-	char    *data;
-	struct pdbrec_s *next;
+  gbuint32  offs;
+  gbuint32  size;
+  gbuint32 id;
+  gbuint8  category;
+  gbuint8  flags;
+  char    *data;
+  struct pdbrec_s *next;
 } pdbrec_t;
 
 typedef struct {
-	gbfile *file;
-	char mode;		/* file-mode: 1 = read / 2 = write */
-	char name[PDB_DBNAMELEN + 1];	/* database name */
-	gbuint16 attr;		/* attributes */
-	gbuint16 version;	/* version */
-	time_t ctime;		/* creation time */
-	time_t mtime;		/* modification time */
-	time_t btime;		/* backup time */
-	gbuint32 revision;
-	gbuint32 appinfo_offs;	/* offset to application info */
-	gbuint32 index_offs;	/* offset to sort-index info */
-	gbuint32 creator;
-	gbuint32 type;
-	gbuint32 uid;
-	gbuint16 rec_ct;
-	struct pdbrec_s *rec_list;
-	struct pdbrec_s *rec_curr;
-	void *appinfo;
-	int appinfo_len;
+  gbfile *file;
+  char mode;		/* file-mode: 1 = read / 2 = write */
+  char name[PDB_DBNAMELEN + 1];	/* database name */
+  gbuint16 attr;		/* attributes */
+  gbuint16 version;	/* version */
+  time_t ctime;		/* creation time */
+  time_t mtime;		/* modification time */
+  time_t btime;		/* backup time */
+  gbuint32 revision;
+  gbuint32 appinfo_offs;	/* offset to application info */
+  gbuint32 index_offs;	/* offset to sort-index info */
+  gbuint32 creator;
+  gbuint32 type;
+  gbuint32 uid;
+  gbuint16 rec_ct;
+  struct pdbrec_s *rec_list;
+  struct pdbrec_s *rec_curr;
+  void *appinfo;
+  int appinfo_len;
 } pdbfile;
 
 

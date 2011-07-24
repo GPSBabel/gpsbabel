@@ -49,10 +49,10 @@ void gbser_deinit(void *handle);
 int gbser_set_speed(void *handle, unsigned speed);
 
 /* Set the serial port speed, start, parity and stop bits */
-int gbser_set_port(void *handle, unsigned speed, 
-                                 unsigned bits, 
-                                 unsigned parity, 
-                                 unsigned stop);
+int gbser_set_port(void *handle, unsigned speed,
+                   unsigned bits,
+                   unsigned parity,
+                   unsigned stop);
 
 /* Set the serial port up by parsing the supplied parameter string.
  * Valid parameter strings look like '4800,8,N,1'. Parsing is case-
@@ -81,7 +81,7 @@ int gbser_read_wait(void *handle, void *buf, unsigned len, unsigned ms);
  * read lines terminated by 0x0A0x0D discarding linefeeds use
  * gbser_read_line(h, buf, len, 1000, 0x0D, 0x0A);
  */
-int gbser_read_line(void *handle, void *buf, 
+int gbser_read_line(void *handle, void *buf,
                     unsigned len, unsigned ms,
                     int eol, int discard);
 
@@ -96,7 +96,7 @@ int gbser_readc(void *handle);
 int gbser_readc_wait(void *handle, unsigned ms);
 
 /* Discard any pending input on the serial port.
- */                    
+ */
 int gbser_flush(void *handle);
 
 /* Write |len| bytes from |buf| to the serial port.
@@ -109,7 +109,7 @@ int gbser_write(void *handle, const void *buf, unsigned len);
 int gbser_print(void *handle, const char *str);
 
 /* Write a single character to the serial port.
- */ 
+ */
 int gbser_writec(void *handle, int c);
 
 /* Return true if a port name seems to refer to a serial port.
@@ -119,10 +119,10 @@ int gbser_writec(void *handle, int c);
  */
 int gbser_is_serial(const char *port_name);
 
-/* This isn't part of the above abstraction; it's just a helper for 
+/* This isn't part of the above abstraction; it's just a helper for
  * the other serial modules in the tree.
  *
- * Windows does a weird thing with serial ports.  
+ * Windows does a weird thing with serial ports.
  * COM ports 1 - 9 are "COM1:" through "COM9:"
  * The one after that is \\.\\com10 - this function tries to plaster over
  * that.

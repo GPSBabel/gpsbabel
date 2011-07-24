@@ -28,18 +28,18 @@
 int32
 GPS_Write_Packet_usb(gpsdevh *dh, GPS_PPacket packet)
 {
-	garmin_usb_packet gp;
-	memset(&gp, 0, sizeof(gp));
+  garmin_usb_packet gp;
+  memset(&gp, 0, sizeof(gp));
 
 
-	/*
-	 * Take the "portable" GPS_Packet data and put them into
-	 * the USB packet that we will put on the wire.
-	 */
-	gp.gusb_pkt.type = 0x14;
-    	le_write16(&gp.gusb_pkt.pkt_id, packet->type);
-	le_write32(&gp.gusb_pkt.datasz, packet->n );
-	memcpy(&gp.gusb_pkt.databuf, packet->data, packet->n);
+  /*
+   * Take the "portable" GPS_Packet data and put them into
+   * the USB packet that we will put on the wire.
+   */
+  gp.gusb_pkt.type = 0x14;
+  le_write16(&gp.gusb_pkt.pkt_id, packet->type);
+  le_write32(&gp.gusb_pkt.datasz, packet->n);
+  memcpy(&gp.gusb_pkt.databuf, packet->data, packet->n);
 
-	return  gusb_cmd_send(&gp, packet->n + 12);
+  return  gusb_cmd_send(&gp, packet->n + 12);
 }

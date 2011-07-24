@@ -18,8 +18,8 @@
 
  */
 
- /* header file for the holux gm-100 wpo format */
-   
+/* header file for the holux gm-100 wpo format */
+
 #ifndef BYTE
 #define BYTE unsigned char
 #endif
@@ -33,8 +33,8 @@
 #endif
 
 
-/* #define GM100_WPO_FILE_SIZE 25512 */      /* size of a holux gm-100 wpo file used by mapShow 1.4*/ 
-#define GM100_WPO_FILE_SIZE 25600       /* size of a holux gm-100 wpo file used by the GM-100*/ 
+/* #define GM100_WPO_FILE_SIZE 25512 */      /* size of a holux gm-100 wpo file used by mapShow 1.4*/
+#define GM100_WPO_FILE_SIZE 25600       /* size of a holux gm-100 wpo file used by the GM-100*/
 
 #define ROUTESTART	    23600           /* Offset for start of route */
 #define MAXWPT		    500             /* max number of waypoint */
@@ -45,73 +45,67 @@
 #define RTE_HDR_ID		0xD87F59F0      /* route header */
 
 
- /* Offsets */
-#define OFFS_WPT        0x05E4          /* offet for waypoint table */                
+/* Offsets */
+#define OFFS_WPT        0x05E4          /* offet for waypoint table */
 
 
-typedef  struct tagWPTHDR
-{
-	DWORD	    id;			            /* WPT_HDR_ID */
-	short		num;			        /* Current wpt number */
-	short		next;			        /* next wpt number */
-	short		idx[MAXWPT];	        /* saving wpt index here for each wpt, default was -1*/
-	BYTE		used[MAXWPT];	        /* Have the match wpt been used (0xFF), Default was 0 */
-}WPTHDR;
-
-
-
-
-typedef  struct tagPOINT
-{
-    signed int  iLongitude;
-    signed int  iLatitude;
-}POINT;
+typedef  struct tagWPTHDR {
+  DWORD	    id;			            /* WPT_HDR_ID */
+  short		num;			        /* Current wpt number */
+  short		next;			        /* next wpt number */
+  short		idx[MAXWPT];	        /* saving wpt index here for each wpt, default was -1*/
+  BYTE		used[MAXWPT];	        /* Have the match wpt been used (0xFF), Default was 0 */
+} WPTHDR;
 
 
 
 
-typedef  struct tagDATE
-{
-    BYTE    day;
-    BYTE    month;
-    short   year;
-}HX_DATE;
-
-
-typedef struct tagWPT
-{
-	char name[8];				        /* wpt name  */
-	char comment[12];			        /* comment string */	
-	POINT	 pt;				        /* waypoint location  */
-	short    vocidx;				    /* voice index, not used */
-	short    usecount;			        /* counter: times used by routes */
-	HX_DATE     date;			        /* date */
-	unsigned time;			            /* time	 */
-	char     checked;				    /* Active or not */
-    BYTE     dummy[3];                  /* fill bytes */
-}WPT;
+typedef  struct tagPOINT {
+  signed int  iLongitude;
+  signed int  iLatitude;
+} POINT;
 
 
 
-typedef  struct tagRTEHDR
-{
-	DWORD	        id;			             /* RTE_HDR_ID */
-	short		    num;			         /* Current route number */
-	short		    next;			         /* next route number */
-	signed short	idx[MAXRTE];	         /* saving route index here for each route, default was -1  */
-	BYTE		    used[MAXRTE];	         /* Have the wpt been used (0xFF), Default was 0 */
-	signed short    rteno;			         /* Saving navigationroute number here */
-}RTEHDR;
+
+typedef  struct tagDATE {
+  BYTE    day;
+  BYTE    month;
+  short   year;
+} HX_DATE;
 
 
-typedef  struct tagRTE
-{
-	char name[8];				         /* route name */
-	char comment[12];			         /* comment string */	
-	short wptnum;				         /* the total waypoint number */
-	short wptidx[MAXWPTINRTE];	         /* the waypoint index in this route */
-	short reserved;			
-	int date;				             /* date */
-	int time;				             /* time	 */
-}RTE;
+typedef struct tagWPT {
+  char name[8];				        /* wpt name  */
+  char comment[12];			        /* comment string */
+  POINT	 pt;				        /* waypoint location  */
+  short    vocidx;				    /* voice index, not used */
+  short    usecount;			        /* counter: times used by routes */
+  HX_DATE     date;			        /* date */
+  unsigned time;			            /* time	 */
+  char     checked;				    /* Active or not */
+  BYTE     dummy[3];                  /* fill bytes */
+} WPT;
+
+
+
+typedef  struct tagRTEHDR {
+  DWORD	        id;			             /* RTE_HDR_ID */
+  short		    num;			         /* Current route number */
+  short		    next;			         /* next route number */
+  signed short	idx[MAXRTE];	         /* saving route index here for each route, default was -1  */
+  BYTE		    used[MAXRTE];	         /* Have the wpt been used (0xFF), Default was 0 */
+  signed short    rteno;			         /* Saving navigationroute number here */
+} RTEHDR;
+
+
+typedef  struct tagRTE {
+  char name[8];				         /* route name */
+  char comment[12];			         /* comment string */
+  short wptnum;				         /* the total waypoint number */
+  short wptidx[MAXWPTINRTE];	         /* the waypoint index in this route */
+  short reserved;
+  int date;				             /* date */
+  int time;				             /* time	 */
+} RTE;
 

@@ -28,23 +28,21 @@ extern "C"
 #define ETX 0x03
 
 
-extern int32 gps_errno;
-extern int32 gps_warning;
-extern int32 gps_error;
-extern int32 gps_user;
-extern int32 gps_show_bytes;
-extern char gps_categories[16][17];
+  extern int32 gps_errno;
+  extern int32 gps_warning;
+  extern int32 gps_error;
+  extern int32 gps_user;
+  extern int32 gps_show_bytes;
+  extern char gps_categories[16][17];
 
 
-typedef struct GPS_SPacket
-{
+  typedef struct GPS_SPacket {
     US type;
     uint32 n;
     UC *data;
-} GPS_OPacket, *GPS_PPacket;
+  } GPS_OPacket, *GPS_PPacket;
 
-typedef struct GPS_Serial_SPacket
-{
+  typedef struct GPS_Serial_SPacket {
     UC dle;
     UC type;
     UC n;
@@ -52,20 +50,18 @@ typedef struct GPS_Serial_SPacket
     UC chk;
     UC edle;
     UC etx;
-} GPS_Serial_OPacket, *GPS_Serial_PPacket;
+  } GPS_Serial_OPacket, *GPS_Serial_PPacket;
 
-typedef struct GPS_SProduct_Data_Type
-{
+  typedef struct GPS_SProduct_Data_Type {
     int16 id;
     int16 version;
     char  desc[MAX_GPS_PACKET_SIZE];
-} GPS_OProduct_Data_Type, *GPS_PProduct_Data_Type;
+  } GPS_OProduct_Data_Type, *GPS_PProduct_Data_Type;
 
 
 
 
-typedef struct GPS_SPvt_Data_Type
-{
+  typedef struct GPS_SPvt_Data_Type {
     float alt;
     float epe;
     float eph;
@@ -80,12 +76,11 @@ typedef struct GPS_SPvt_Data_Type
     float msl_hght;
     int16 leap_scnds;
     int32 wn_days;
-} GPS_OPvt_Data, *GPS_PPvt_Data;
+  } GPS_OPvt_Data, *GPS_PPvt_Data;
 
 
 
-typedef struct GPS_STrack
-{
+  typedef struct GPS_STrack {
     double   lat;		/* Degrees */
     double   lon;		/* Degrees */
     time_t   Time;		/* Unix time */
@@ -104,13 +99,12 @@ typedef struct GPS_STrack
     float    distance; /* distance traveled in meters.*/
     int      distance_populated; /* True if above is valid. */
     char     trk_ident[256];	/* Track identifier */
-}
-GPS_OTrack, *GPS_PTrack;
+  }
+  GPS_OTrack, *GPS_PTrack;
 
 
 
-typedef struct GPS_SAlmanac
-{
+  typedef struct GPS_SAlmanac {
     UC    svid;
     int16 wn;
     float toa;
@@ -124,11 +118,10 @@ typedef struct GPS_SAlmanac
     float odot;
     float i;
     UC    hlth;
-} GPS_OAlmanac, *GPS_PAlmanac;
+  } GPS_OAlmanac, *GPS_PAlmanac;
 
 
-typedef struct GPS_SWay
-{
+  typedef struct GPS_SWay {
     char   ident[256];
     double lat;
     double lon;
@@ -169,48 +162,46 @@ typedef struct GPS_SWay
     char     temperature_populated;
     float    temperature;		/* Degrees celsius. */
     uint16   category;
-     
-} GPS_OWay, *GPS_PWay;
 
-/*
- * Forerunner/Edge Lap data.
- */
-typedef struct GPS_SLap {
-	uint32 index; /* unique index in device or -1 */
-	time_t	start_time;
-	uint32	total_time;	/* Hundredths of a second */
-	float	total_distance;	/* In meters */
-	double	begin_lat; 
-	double	begin_lon; 
-	double	end_lat;
-	double	end_lon;
-	int16	calories;
-	uint32 track_index; /* ref to track or -1 */
-	float max_speed; /* In meters per second */
-	unsigned char avg_heart_rate; /* In beats-per-minute, 0 if invalid */
-	unsigned char max_heart_rate; /* In beats-per-minute, 0 if invalid */
-	unsigned char intensity; /* Same as D1001 */
-	unsigned char avg_cadence; /* In revolutions-per-minute, 0xFF if invalid */
-	unsigned char trigger_method; 
-	/*Some D1015 unknown */
-	/*    unsigned char unk1015_1;
-	int16 unk1015_2;
-	int16 unk1015_3;
-	*/
-} GPS_OLap, *GPS_PLap;
+  } GPS_OWay, *GPS_PWay;
+
+  /*
+   * Forerunner/Edge Lap data.
+   */
+  typedef struct GPS_SLap {
+    uint32 index; /* unique index in device or -1 */
+    time_t	start_time;
+    uint32	total_time;	/* Hundredths of a second */
+    float	total_distance;	/* In meters */
+    double	begin_lat;
+    double	begin_lon;
+    double	end_lat;
+    double	end_lon;
+    int16	calories;
+    uint32 track_index; /* ref to track or -1 */
+    float max_speed; /* In meters per second */
+    unsigned char avg_heart_rate; /* In beats-per-minute, 0 if invalid */
+    unsigned char max_heart_rate; /* In beats-per-minute, 0 if invalid */
+    unsigned char intensity; /* Same as D1001 */
+    unsigned char avg_cadence; /* In revolutions-per-minute, 0xFF if invalid */
+    unsigned char trigger_method;
+    /*Some D1015 unknown */
+    /*    unsigned char unk1015_1;
+    int16 unk1015_2;
+    int16 unk1015_3;
+    */
+  } GPS_OLap, *GPS_PLap;
 
 
-typedef struct GPS_SCourse
-{
+  typedef struct GPS_SCourse {
     uint32    index;                    /* Unique among courses on device */
     char      course_name[16];          /* Null-terminated unique course name */
     uint32    track_index;              /* Index of the associated track
                                          * Must be 0xFFFFFFFF if there is none*/
-} GPS_OCourse, *GPS_PCourse;
+  } GPS_OCourse, *GPS_PCourse;
 
 
-typedef struct GPS_SCourse_Lap
-{
+  typedef struct GPS_SCourse_Lap {
     uint32        course_index;         /* Index of associated course */
     uint32        lap_index;            /* This lap's index in the course */
     uint32        total_time;           /* In hundredths of a second */
@@ -224,10 +215,9 @@ typedef struct GPS_SCourse_Lap
     UC            intensity;            /* 0=standard, active lap.
                                            1=rest lap in a workout */
     UC            avg_cadence;          /* In revolutions-per-minute */
-} GPS_OCourse_Lap, *GPS_PCourse_Lap;
+  } GPS_OCourse_Lap, *GPS_PCourse_Lap;
 
-typedef struct GPS_SCourse_Point
-{
+  typedef struct GPS_SCourse_Point {
     char        name[11];               /* Null-terminated name */
     uint32      course_index;           /* Index of associated course */
     time_t      track_point_time;       /* Time */
@@ -247,18 +237,17 @@ typedef struct GPS_SCourse_Point
                                          * first_category = 13,
                                          * hors_category = 14,
                                          * sprint = 15 */
-} GPS_OCourse_Point, *GPS_PCourse_Point;
+  } GPS_OCourse_Point, *GPS_PCourse_Point;
 
-typedef struct GPS_SCourse_Limits
-{
+  typedef struct GPS_SCourse_Limits {
     uint32 max_courses;
     uint32 max_course_laps;
     uint32 max_course_pnt;
     uint32 max_course_trk_pnt;
-} GPS_OCourse_Limits, *GPS_PCourse_Limits;
+  } GPS_OCourse_Limits, *GPS_PCourse_Limits;
 
 
-typedef int (*pcb_fn) (int, struct GPS_SWay **);
+  typedef int (*pcb_fn)(int, struct GPS_SWay **);
 
 #include "gpsdevice.h"
 #include "gpssend.h"
@@ -274,22 +263,22 @@ typedef int (*pcb_fn) (int, struct GPS_SWay **);
 #include "gpsinput.h"
 #include "gpsproj.h"
 
-time_t gps_save_time;
-double gps_save_lat;
-double gps_save_lon;
-extern int32  gps_save_id;
-extern double gps_save_version;
-extern char   gps_save_string[GPS_ARB_LEN];
-extern int gps_is_usb;
+  time_t gps_save_time;
+  double gps_save_lat;
+  double gps_save_lon;
+  extern int32  gps_save_id;
+  extern double gps_save_version;
+  extern char   gps_save_string[GPS_ARB_LEN];
+  extern int gps_is_usb;
 
-extern struct COMMANDDATA COMMAND_ID[2];
-extern struct LINKDATA LINK_ID[3];
-extern struct GPS_MODEL_PROTOCOL GPS_MP[];
+  extern struct COMMANDDATA COMMAND_ID[2];
+  extern struct LINKDATA LINK_ID[3];
+  extern struct GPS_MODEL_PROTOCOL GPS_MP[];
 
-extern char *gps_marine_sym[];
-extern char *gps_land_sym[];
-extern char *gps_aviation_sym[];
-extern char *gps_16_sym[];
+  extern char *gps_marine_sym[];
+  extern char *gps_land_sym[];
+  extern char *gps_aviation_sym[];
+  extern char *gps_16_sym[];
 
 
 #endif

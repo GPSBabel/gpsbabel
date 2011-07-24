@@ -4,16 +4,16 @@
 
     Steps to create a new format.
 
-    1) Copy this file to <your_format_name>.c 
-    2) Rename all format_skeleton tokens to <your_format_name>. 
+    1) Copy this file to <your_format_name>.c
+    2) Rename all format_skeleton tokens to <your_format_name>.
     3) Replace the fictional name and address in the Copyright section below.
        As your work is likely built on the work of others, please retain
        the original line.
     4) Create a new section in vecs.c.
     5) Add compilation instructions to Makefile.
-    6) Add sample files (it's better when they're created by the "real" 
-       application and not our own output) to reference/ along with 
-       files in a well supported (preferably non-binary) format and 
+    6) Add sample files (it's better when they're created by the "real"
+       application and not our own output) to reference/ along with
+       files in a well supported (preferably non-binary) format and
        entries in our 'testo' program.   This allows users of different
        OSes and hardware to exercise your module.
 
@@ -42,15 +42,15 @@
 #define MYNAME "format_skeleton"
 
 
-// Any arg in this list will appear in command line help and will be 
+// Any arg in this list will appear in command line help and will be
 // populated for you.
-// Values for ARGTYPE_xxx can be found in defs.h and are used to 
+// Values for ARGTYPE_xxx can be found in defs.h and are used to
 // select the type of option.
 static
 arglist_t format_skeleton_args[] = {
-// {"foo", &fooopt, "The text of the foo option in help", 
-//   "default", ARGYTPE_STRING, ARG_NOMINMAX} , 
-	ARG_TERMINATOR
+// {"foo", &fooopt, "The text of the foo option in help",
+//   "default", ARGYTPE_STRING, ARG_NOMINMAX} ,
+  ARG_TERMINATOR
 };
 
 /*******************************************************************************
@@ -63,7 +63,7 @@ format_skeleton_rd_init(const char *fname)
 //	fin = gbfopen(fname, "r", MYNAME);
 }
 
-static void 
+static void
 format_skeleton_rd_deinit(void)
 {
 //	gbfclose(fin);
@@ -88,18 +88,18 @@ format_skeleton_read(void)
 //                 populate waypoint
 //                 waypt_add(waypoint);
 //         }
-// 
+//
 // For routes:
-// 
+//
 //         route = route_head_alloc();
 //         populate struct route_hdr
-//	   route_add_head(route);      
+//	   route_add_head(route);
 //         while (have more routepoints) {
 //                 waypoint = waypt_new()
 //                 populate waypoint
 //                 route_add_wpt(route, waypoint)
 //         }
-// 
+//
 // Tracks are just like routes, except the word "track" replaces "routes".
 //
 }
@@ -133,24 +133,24 @@ format_skeleton_exit(void)		/* optional */
 /**************************************************************************/
 
 // capabilities below means: we can only read and write waypoints
-// please change this depending on your new module 
+// please change this depending on your new module
 
 ff_vecs_t format_skeleton_vecs = {
-	ff_type_file,
-	{ 
-		ff_cap_read | ff_cap_write 	/* waypoints */, 
-	  	ff_cap_none 			/* tracks */, 
-	  	ff_cap_none 			/* routes */
-	},
-	format_skeleton_rd_init,	
-	format_skeleton_wr_init,	
-	format_skeleton_rd_deinit,	
-	format_skeleton_wr_deinit,	
-	format_skeleton_read,
-	format_skeleton_write,
-	format_skeleton_exit,
-	format_skeleton_args,
-	CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-						/* not fixed, can be changed through command line parameter */
+  ff_type_file,
+  {
+    ff_cap_read | ff_cap_write 	/* waypoints */,
+    ff_cap_none 			/* tracks */,
+    ff_cap_none 			/* routes */
+  },
+  format_skeleton_rd_init,
+  format_skeleton_wr_init,
+  format_skeleton_rd_deinit,
+  format_skeleton_wr_deinit,
+  format_skeleton_read,
+  format_skeleton_write,
+  format_skeleton_exit,
+  format_skeleton_args,
+  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
+  /* not fixed, can be changed through command line parameter */
 };
 /**************************************************************************/

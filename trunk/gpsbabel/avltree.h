@@ -1,7 +1,7 @@
 /*
 
     AVL tree implementation.
-    
+
     Copyright (C) 2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
@@ -27,28 +27,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef int (*avltree_compare_cb) (const char *, const char *);
+typedef int (*avltree_compare_cb)(const char *, const char *);
 
-typedef struct avltree_s
-{
+typedef struct avltree_s {
 #ifdef MEM_DEBUG
-	const int magic;
+  const int magic;
 #endif
-	struct avlnode_s *root;
-	const char *module;
-	int count;		/* number of items in tree */
-	int options;
-	const char *key;
-	int key_sz;
-	avltree_compare_cb compare;
+  struct avlnode_s *root;
+  const char *module;
+  int count;		/* number of items in tree */
+  int options;
+  const char *key;
+  int key_sz;
+  avltree_compare_cb compare;
 } avltree_t;
 
 typedef struct avlnode_s {
-	int balance;
-	const char *key;
-	const void *data;
-	struct avlnode_s *left;
-	struct avlnode_s *right;
+  int balance;
+  const char *key;
+  const void *data;
+  struct avlnode_s *left;
+  struct avlnode_s *right;
 } avlnode_t;
 
 /* options for avltree_init */

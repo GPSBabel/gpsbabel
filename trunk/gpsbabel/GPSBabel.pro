@@ -6,7 +6,7 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-MINIMAL_FMTS = magproto.cc gpx.c geo.c mapsend.c mapsource.c garmin.c \
+MINIMAL_FMTS = magproto.c gpx.c geo.c mapsend.c mapsource.c garmin.c \
                garmin_device_xml.c garmin_tables.c internal_styles.c nmea.c \
                kml.c wbt-200.c
 
@@ -28,7 +28,7 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.c gpsutil.c pcx.c cetus.c copilot.c \
         jtr.c sbp.c sbn.c mmo.c skyforce.c itracku.c v900.c delbin.c \
         pocketfms_bc.c pocketfms_fp.c pocketfms_wp.c naviguide.c enigma.c \
         vpl.c teletype.c jogmap.c bushnell.c bushnell_trl.c wintec_tes.c \
-        subrip.c garmin_xt.c explorist_ini.cc \
+        subrip.c garmin_xt.c explorist_ini.c \
 
 FILTERS=position.c radius.c duplicate.c arcdist.c polygon.c smplrout.c \
         reverse_route.c sort.c stackfilter.c trackfilter.c discard.c \

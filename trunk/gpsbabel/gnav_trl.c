@@ -27,14 +27,14 @@
 
 static
 arglist_t gnav_trl_args[] = {
-	ARG_TERMINATOR
+  ARG_TERMINATOR
 };
 
 typedef struct gnav_trl_s {
-	gbuint32 time;
-	float lat;
-	float lon;
-	gbuint32 alt;
+  gbuint32 time;
+  float lat;
+  float lon;
+  gbuint32 alt;
 } gnav_trl_t;
 
 static gbfile *fin, *fout;
@@ -46,113 +46,115 @@ static gbfile *fin, *fout;
 static void
 gnav_trl_rd_init(const char *fname)
 {
-	fin = gbfopen_le(fname, "rb", MYNAME);
+  fin = gbfopen_le(fname, "rb", MYNAME);
 }
 
 static void
 gnav_trl_rw_init(const char *fname)
 {
-	fout = gbfopen_le(fname, "wb", MYNAME);
+  fout = gbfopen_le(fname, "wb", MYNAME);
 }
 
 static void
 gnav_trl_rd_deinit(void)
 {
-	gbfclose(fin);
+  gbfclose(fin);
 }
 
 static void
 gnav_trl_rw_deinit(void)
 {
-	gbfclose(fout);
+  gbfclose(fout);
 }
 
 static double
 read_altitude(void *ptr)
 {
-	unsigned char *i = (unsigned char *) ptr;
-	char buf[sizeof(float)];
-	le_write32(&buf, i[2] << 24 | i[1] << 16 | i[0] <<8 | i[3]);
-	return le_read_float(&buf);
+  unsigned char *i = (unsigned char *) ptr;
+  char buf[sizeof(float)];
+  le_write32(&buf, i[2] << 24 | i[1] << 16 | i[0] <<8 | i[3]);
+  return le_read_float(&buf);
 }
 
 static void
 write_altitude(void *ptr, const float alt)
 {
-	char buf[sizeof(float)];
-	unsigned char *i = (unsigned char *) &buf;
-	le_write_float(&buf, alt);
-	le_write32(ptr, i[0] << 24 | i[3] << 16 | i[2] << 8 | i[1]);
+  char buf[sizeof(float)];
+  unsigned char *i = (unsigned char *) &buf;
+  le_write_float(&buf, alt);
+  le_write32(ptr, i[0] << 24 | i[3] << 16 | i[2] << 8 | i[1]);
 }
 
 static void
 gnav_trl_read(void)
 {
-	route_head *trk = NULL;
+  route_head *trk = NULL;
 
-	while (! gbfeof(fin)) {
-		gnav_trl_t rec;
-		waypoint *wpt;
+  while (! gbfeof(fin)) {
+    gnav_trl_t rec;
+    waypoint *wpt;
 
-		if (gbfread(&rec, sizeof(rec), 1, fin) != 1)
-			fatal(MYNAME ": Unexpected EOF (end of file)!\n");
+    if (gbfread(&rec, sizeof(rec), 1, fin) != 1) {
+      fatal(MYNAME ": Unexpected EOF (end of file)!\n");
+    }
 
-		wpt = waypt_new();
+    wpt = waypt_new();
 
-		wpt->creation_time = le_read32(&rec.time);
-		wpt->latitude = le_read_float(&rec.lat);
-		wpt->longitude = le_read_float(&rec.lon);
-		wpt->altitude = read_altitude(&rec.alt);
+    wpt->creation_time = le_read32(&rec.time);
+    wpt->latitude = le_read_float(&rec.lat);
+    wpt->longitude = le_read_float(&rec.lon);
+    wpt->altitude = read_altitude(&rec.alt);
 
-		if (trk == NULL) {
-			trk = route_head_alloc();
-			track_add_head(trk);
-		}
-		track_add_wpt(trk, wpt);
-	}
+    if (trk == NULL) {
+      trk = route_head_alloc();
+      track_add_head(trk);
+    }
+    track_add_wpt(trk, wpt);
+  }
 }
 
 static void
 gnav_trl_write_trkpt(const waypoint *wpt)
 {
-	gnav_trl_t rec;
+  gnav_trl_t rec;
 
-	le_write32(&rec.time, wpt->creation_time);
-	le_write_float(&rec.lat, wpt->latitude);
-	le_write_float(&rec.lon, wpt->longitude);
-	if (wpt->altitude != unknown_alt)
-		write_altitude(&rec.alt, wpt->altitude);
-	else
-		write_altitude(&rec.alt, 0);
+  le_write32(&rec.time, wpt->creation_time);
+  le_write_float(&rec.lat, wpt->latitude);
+  le_write_float(&rec.lon, wpt->longitude);
+  if (wpt->altitude != unknown_alt) {
+    write_altitude(&rec.alt, wpt->altitude);
+  } else {
+    write_altitude(&rec.alt, 0);
+  }
 
-	gbfwrite(&rec, sizeof(rec), 1, fout);
+  gbfwrite(&rec, sizeof(rec), 1, fout);
 }
 
 static void
 gnav_trl_write(void)
 {
-	track_disp_all(NULL, NULL, gnav_trl_write_trkpt);
+  track_disp_all(NULL, NULL, gnav_trl_write_trkpt);
 }
 
 
 /**************************************************************************/
 
 ff_vecs_t gnav_trl_vecs = {
-	ff_type_file,
-	{
-		ff_cap_none			/* waypoints */,
-	  	ff_cap_read | ff_cap_write	/* tracks */,
-	  	ff_cap_none			/* routes */
-	},
-	gnav_trl_rd_init,
-	gnav_trl_rw_init,
-	gnav_trl_rd_deinit,
-	gnav_trl_rw_deinit,
-	gnav_trl_read,
-	gnav_trl_write,
-	NULL,
-	gnav_trl_args,
-	CET_CHARSET_UTF8, 1	/* CET - do nothing ! */
+  ff_type_file,
+  {
+    ff_cap_none			/* waypoints */,
+    ff_cap_read | ff_cap_write	/* tracks */,
+    ff_cap_none			/* routes */
+  },
+  gnav_trl_rd_init,
+  gnav_trl_rw_init,
+  gnav_trl_rd_deinit,
+  gnav_trl_rw_deinit,
+  gnav_trl_read,
+  gnav_trl_write,
+  NULL,
+  gnav_trl_args,
+  CET_CHARSET_UTF8, 1	/* CET - do nothing ! */
 
 };
 

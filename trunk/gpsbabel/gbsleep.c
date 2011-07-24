@@ -28,7 +28,7 @@
 void
 gb_sleep(unsigned long microseconds)
 {
-	Sleep(microseconds/1000 + 1);
+  Sleep(microseconds/1000 + 1);
 }
 
 #elif defined HAVE_NANOSLEEP
@@ -37,10 +37,10 @@ gb_sleep(unsigned long microseconds)
 void
 gb_sleep(unsigned long microseconds)
 {
-	struct timespec req;
-	req.tv_sec  = microseconds / 1000000;
-	req.tv_nsec = (microseconds * 1000) % 1000000000;
-	nanosleep(&req, NULL);
+  struct timespec req;
+  req.tv_sec  = microseconds / 1000000;
+  req.tv_nsec = (microseconds * 1000) % 1000000000;
+  nanosleep(&req, NULL);
 }
 #elif defined HAVE_SLEEP
 /* Amazingly underachieving, but probably "good enough" */
@@ -48,6 +48,6 @@ gb_sleep(unsigned long microseconds)
 void
 gb_sleep(unsigned long microseconds)
 {
-	sleep(microseconds / 1000000);
+  sleep(microseconds / 1000000);
 }
 #endif

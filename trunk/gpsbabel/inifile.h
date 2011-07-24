@@ -23,11 +23,10 @@
 
 #include "defs.h"
 
-typedef struct inifile_s
-{
-	int isecs;			/* number of sections */
-	queue secs;			/* sections */
-	gbuint8 unicode:1;
+typedef struct inifile_s {
+  int isecs;			/* number of sections */
+  queue secs;			/* sections */
+  gbuint8 unicode:1;
 } inifile_t;
 
 /*
@@ -40,14 +39,14 @@ void inifile_done(inifile_t *inifile);
 
 int inifile_has_section(const inifile_t *inifile, const char *section);
 
-/* 
+/*
      inifile_readstr:
        returns NULL if not found, otherwise a pointer to the value of key ...
-       all key values are valid entities until "inifile_done" 
+       all key values are valid entities until "inifile_done"
  */
 char *inifile_readstr(const inifile_t *inifile, const char *section, const char *key);
 
-/* 
+/*
      inifile_readint:
        on success the value is stored into "*value" and "inifile_readint" returns 1,
        otherwise inifile_readint returns 0

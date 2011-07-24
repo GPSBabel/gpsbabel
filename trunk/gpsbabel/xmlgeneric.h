@@ -22,37 +22,37 @@
 
 
 typedef enum {
-	cb_start = 1,
-	cb_cdata,
-	cb_end,
+  cb_start = 1,
+  cb_cdata,
+  cb_end,
 } xg_cb_type;
 
-typedef void (xg_callback) (const char *, const char **);
+typedef void (xg_callback)(const char *, const char **);
 
 typedef struct xg_tag_mapping {
-	xg_callback *tag_cb;
-	xg_cb_type cb_type;
-	const char *tag_name;
+  xg_callback *tag_cb;
+  xg_cb_type cb_type;
+  const char *tag_name;
 } xg_tag_mapping;
 
 extern char *xhtml_entities;
 
 void write_xml_entity(gbfile *ofd, const char *indent,
-		const char *tag, const char *value);
+                      const char *tag, const char *value);
 void write_xml_entity_begin0(gbfile *ofd, const char *indent,
-		const char *tag);
-void write_xml_entity_begin1(gbfile *ofd, const char *indent, const char *tag, 
-		const char *attr1, const char *attrval1);
-void write_xml_entity_begin2(gbfile *ofd, const char *indent, const char *tag, 
-		const char *attr1, const char *attrval1, 
-		const char *attr2, const char *attrval2);
+                             const char *tag);
+void write_xml_entity_begin1(gbfile *ofd, const char *indent, const char *tag,
+                             const char *attr1, const char *attrval1);
+void write_xml_entity_begin2(gbfile *ofd, const char *indent, const char *tag,
+                             const char *attr1, const char *attrval1,
+                             const char *attr2, const char *attrval2);
 void write_xml_entity_end(gbfile *ofd, const char *indent, const char *tag);
 
 void write_optional_xml_entity(gbfile *ofd, const char *indent,
-		const char *tag, const char *value);
+                               const char *tag, const char *value);
 void xml_write_time(gbfile *ofd, const time_t timep, int microseconds, const char *elname);
 void xml_fill_in_time(char *time_string, const time_t timep, int microseconds,
-		int long_or_short);
+                      int long_or_short);
 void write_xml_header(gbfile *ofd);
 void xml_ignore_tags(const char **taglist);
 
