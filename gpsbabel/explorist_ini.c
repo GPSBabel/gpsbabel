@@ -6,12 +6,14 @@ static inifile_t *inifile;
 static const char myname[] = "explorist";
 
 const char *
-explorist_read_value(const char* section, const char *key) {
+explorist_read_value(const char* section, const char *key)
+{
   return inifile_readstr(inifile, section, key);
 }
 
 static mag_info *
-explorist_ini_try(const char *path) {
+explorist_ini_try(const char *path)
+{
   mag_info *info = NULL;
   char *inipath;
   char *s;
@@ -19,7 +21,7 @@ explorist_ini_try(const char *path) {
   xasprintf(&inipath, "%s/%s", path, "APP/Atlas.ini");
   inifile = inifile_init(inipath, myname);
   if (!inifile) {
-    xfree (inipath);
+    xfree(inipath);
     return NULL;
   }
 
@@ -45,22 +47,26 @@ explorist_ini_try(const char *path) {
   }
 
   inifile_done(inifile);
-  xfree (inipath);
+  xfree(inipath);
   return info;
 }
 
 mag_info *
-explorist_ini_get(const char **dirlist) {
+explorist_ini_get(const char **dirlist)
+{
   mag_info *r = NULL;
   while (dirlist && *dirlist) {
     r = explorist_ini_try(*dirlist);
-    if (r) return r;
+    if (r) {
+      return r;
+    }
   }
   return r;
 }
 
 void
-explorist_ini_done(mag_info *info) {
+explorist_ini_done(mag_info *info)
+{
   xfree(info->geo_path);
   xfree(info->track_path);
   xfree(info->waypoint_path);

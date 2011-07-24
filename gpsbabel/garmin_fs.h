@@ -1,7 +1,7 @@
 /*
-  
+
     Implementation of special data used by Garmin products.
-    
+
     Copyright (C) 2006 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
@@ -59,59 +59,58 @@
 #define GMSD_GETNSTR(a,b,c) if (gmsd && gmsd->flags.a) strncpy((b),gmsd->a,(c))
 
 typedef struct garmin_ilink_s {
-	int ref_count;
-	double lat, lon, alt;
-	struct garmin_ilink_s *next;
+  int ref_count;
+  double lat, lon, alt;
+  struct garmin_ilink_s *next;
 } garmin_ilink_t;
 
 typedef struct {
-	unsigned int icon:1; 
-	unsigned int wpt_class:1;
-	unsigned int display:1; 
-	unsigned int category:1; 
-	unsigned int city:1;
-	unsigned int state:1;
-	unsigned int facility:1;
-	unsigned int cc:1;
-	unsigned int cross_road:1;
-	unsigned int addr:1;
-	unsigned int country:1;
-	unsigned int phone_nr:1;
-	unsigned int phone_nr2:1;
-	unsigned int fax_nr:1;
-	unsigned int postal_code:1;
-	unsigned int email:1;
+  unsigned int icon:1;
+  unsigned int wpt_class:1;
+  unsigned int display:1;
+  unsigned int category:1;
+  unsigned int city:1;
+  unsigned int state:1;
+  unsigned int facility:1;
+  unsigned int cc:1;
+  unsigned int cross_road:1;
+  unsigned int addr:1;
+  unsigned int country:1;
+  unsigned int phone_nr:1;
+  unsigned int phone_nr2:1;
+  unsigned int fax_nr:1;
+  unsigned int postal_code:1;
+  unsigned int email:1;
 #ifdef GMSD_EXPERIMENTAL
-	unsigned int subclass:1;
+  unsigned int subclass:1;
 #endif
 } garmin_fs_flags_t;
 
-typedef struct garmin_fs_s
-{
-	format_specific_data fs;
-	garmin_fs_flags_t flags;
+typedef struct garmin_fs_s {
+  format_specific_data fs;
+  garmin_fs_flags_t flags;
 
-	int protocol;		/* ... used by device (-1 is MapSource) */
-	
-	gbint32 icon;
-	int wpt_class;
-	gbint32 display;
-	gbint16 category;
-	char *city;			/* city name */
-	char *facility;			/* facility name */
-	char *state;			/* state */
-	char *cc;			/* country code */
-	char *cross_road;		/* Intersection road label */
-	char *addr;			/* address + number */
-	char *country;			/* country */
-	char *phone_nr;			/* phone number */
-	char *phone_nr2;		/* phone number (2) */
-	char *fax_nr;			/* fax number */
-	char *postal_code;		/* postal code */
-	char *email;			/* email address */
-	garmin_ilink_t *ilinks;
+  int protocol;		/* ... used by device (-1 is MapSource) */
+
+  gbint32 icon;
+  int wpt_class;
+  gbint32 display;
+  gbint16 category;
+  char *city;			/* city name */
+  char *facility;			/* facility name */
+  char *state;			/* state */
+  char *cc;			/* country code */
+  char *cross_road;		/* Intersection road label */
+  char *addr;			/* address + number */
+  char *country;			/* country */
+  char *phone_nr;			/* phone number */
+  char *phone_nr2;		/* phone number (2) */
+  char *fax_nr;			/* fax number */
+  char *postal_code;		/* postal code */
+  char *email;			/* email address */
+  garmin_ilink_t *ilinks;
 #ifdef GMSD_EXPERIMENTAL
-	char subclass[22];
+  char subclass[22];
 #endif
 } garmin_fs_t, *garmin_fs_p;
 

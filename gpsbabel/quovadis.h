@@ -31,22 +31,22 @@
 #define MAXCHUNKSIZE	0x10000	/* 64k Chunk max */
 
 struct record {
-    char		name[32];
-    pdb_32		longitude; /* Scaled. (degrees + 180.0) * 1e6 */
-    pdb_32		latitude; /* Scaled. (degrees + 90.0) * 1e6 */
-    pdb_16		icon_bitmap; /* Valid range: 0 - 47 */
-    pdb_32		note_id; /* Global ID of note in NotesDB. Not
+  char		name[32];
+  pdb_32		longitude; /* Scaled. (degrees + 180.0) * 1e6 */
+  pdb_32		latitude; /* Scaled. (degrees + 90.0) * 1e6 */
+  pdb_16		icon_bitmap; /* Valid range: 0 - 47 */
+  pdb_32		note_id; /* Global ID of note in NotesDB. Not
 				    supported yet */
-    char		name_scale; /* Map scale to display the
+  char		name_scale; /* Map scale to display the
 				       name. Valid range 15-26. 15 =>
 				       18.12 miles, 26 => 46 feet */
-    char		icon_scale; /* As above. */
-    unsigned char	reserved[8];
+  char		icon_scale; /* As above. */
+  unsigned char	reserved[8];
 };
 
 struct qv_icon_mapping {
-    const geocache_type		gc_type;
-    const int			bitmap_id;
+  const geocache_type		gc_type;
+  const int			bitmap_id;
 };
 
 /* Icon Types */

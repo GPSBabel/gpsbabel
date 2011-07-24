@@ -42,416 +42,430 @@ static int lon_col;
 
 static
 arglist_t pcx_args[] = {
-	{"deficon", &deficon, "Default icon name", "Waypoint", 
-		ARGTYPE_STRING, ARG_NOMINMAX },
-	{"cartoexploreur", &cartoexploreur,
-		"Write tracks compatible with Carto Exploreur", NULL,
-		ARGTYPE_BOOL, ARG_NOMINMAX },
-	ARG_TERMINATOR
+  {
+    "deficon", &deficon, "Default icon name", "Waypoint",
+    ARGTYPE_STRING, ARG_NOMINMAX
+  },
+  {
+    "cartoexploreur", &cartoexploreur,
+    "Write tracks compatible with Carto Exploreur", NULL,
+    ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  ARG_TERMINATOR
 };
 
 static void
 rd_init(const char *fname)
 {
-	file_in = gbfopen(fname, "rb", MYNAME);
+  file_in = gbfopen(fname, "rb", MYNAME);
 }
 
 static void
 rd_deinit(void)
 {
-	gbfclose(file_in);
+  gbfclose(file_in);
 }
 
 static void
 wr_init(const char *fname)
 {
-	file_out = gbfopen(fname, "w", MYNAME);
-	mkshort_handle = mkshort_new_handle();
-	mkshort_handle2 = mkshort_new_handle();
+  file_out = gbfopen(fname, "w", MYNAME);
+  mkshort_handle = mkshort_new_handle();
+  mkshort_handle2 = mkshort_new_handle();
 }
 
 static void
 wr_deinit(void)
 {
-	gbfclose(file_out);
-	mkshort_del_handle(&mkshort_handle);
-	mkshort_del_handle(&mkshort_handle2);
+  gbfclose(file_out);
+  mkshort_del_handle(&mkshort_handle);
+  mkshort_del_handle(&mkshort_handle2);
 }
 
 static void
 data_read(void)
 {
-	char name[7], desc[41];
-	double lat = 0, lon = 0;
-	long alt; 
-	int symnum;
-	char date[10];
-	char time[9];
-	char month[4];
-	waypoint *wpt_tmp;
-	char *buff;
-	struct tm tm;
-	route_head *track = NULL;
-	route_head *route = NULL;
-	int n; 
-	char lathemi, lonhemi;
-	char tbuf[20];
-	char nbuf[20];
-	int points;
-	int line = 0;
+  char name[7], desc[41];
+  double lat = 0, lon = 0;
+  long alt;
+  int symnum;
+  char date[10];
+  char time[9];
+  char month[4];
+  waypoint *wpt_tmp;
+  char *buff;
+  struct tm tm;
+  route_head *track = NULL;
+  route_head *route = NULL;
+  int n;
+  char lathemi, lonhemi;
+  char tbuf[20];
+  char nbuf[20];
+  int points;
+  int line = 0;
 
-	read_as_degrees  = 0;
-	points = 0;
+  read_as_degrees  = 0;
+  points = 0;
 
-	while ((buff = gbfgetstr(file_in)))
-	{
-		char *ibuf = lrtrim(buff);
-		char *cp;
-		
-		if ((line++ == 0) && file_in->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
+  while ((buff = gbfgetstr(file_in))) {
+    char *ibuf = lrtrim(buff);
+    char *cp;
 
-		switch (ibuf[0]) {
-		case 'W': 
-			time[0] = 0;
-			date[0] = 0;
-			desc[0] = 0;
-			alt = -9999;
-			sscanf(ibuf, "W  %6c %s %s %s %s %ld", 
-				name, tbuf, nbuf, date, time, &alt);
-			if (alt == -9999) {
-				alt = unknown_alt;
-			}
+    if ((line++ == 0) && file_in->unicode) {
+      cet_convert_init(CET_CHARSET_UTF8, 1);
+    }
 
-			if (comment_col) {
-				strncpy(desc, &ibuf[comment_col], sizeof(desc)-1);
-			} else {
-				desc[0] = 0;
-			}
+    switch (ibuf[0]) {
+    case 'W':
+      time[0] = 0;
+      date[0] = 0;
+      desc[0] = 0;
+      alt = -9999;
+      sscanf(ibuf, "W  %6c %s %s %s %s %ld",
+             name, tbuf, nbuf, date, time, &alt);
+      if (alt == -9999) {
+        alt = unknown_alt;
+      }
+
+      if (comment_col) {
+        strncpy(desc, &ibuf[comment_col], sizeof(desc)-1);
+      } else {
+        desc[0] = 0;
+      }
 
 
-			symnum = 18;
-			if (sym_col) {
-				symnum = atoi(&ibuf[sym_col]);
-			}
+      symnum = 18;
+      if (sym_col) {
+        symnum = atoi(&ibuf[sym_col]);
+      }
 
-			// If we have explicit columns for lat and lon,
-			// copy those entire words (warning: no spaces) 
-			// into the respective coord buffers.
-			if (lat_col) {
-				sscanf(tbuf, "%s", ibuf + lat_col);
-			}
-			if (lon_col) {
-				sscanf(nbuf, "%s", ibuf + lon_col);
-			}
+      // If we have explicit columns for lat and lon,
+      // copy those entire words (warning: no spaces)
+      // into the respective coord buffers.
+      if (lat_col) {
+        sscanf(tbuf, "%s", ibuf + lat_col);
+      }
+      if (lon_col) {
+        sscanf(nbuf, "%s", ibuf + lon_col);
+      }
 
-			name[sizeof(name)-1] = '\0';
-			desc[sizeof(desc)-1] = '\0';
-			
-			wpt_tmp = waypt_new();
-			wpt_tmp->altitude = alt;
-			cp = lrtrim(name);
-			if (*cp != '\0') {
-				wpt_tmp->shortname = xstrdup(cp);
-			}
-			cp = lrtrim(desc);
-			if (*cp != '\0') {
-				wpt_tmp->description = xstrdup(cp);
-			}
-			wpt_tmp->icon_descr = gt_find_desc_from_icon_number(symnum, PCX, NULL);
+      name[sizeof(name)-1] = '\0';
+      desc[sizeof(desc)-1] = '\0';
 
-			if (read_as_degrees || read_gpsu) {
-				human_to_dec(tbuf, &lat, &lon, 1);
-				human_to_dec(nbuf, &lat, &lon, 2);
-				
-				wpt_tmp->longitude = lon;
-				wpt_tmp->latitude = lat;
-			} else {
-				lat = atof(&tbuf[1]);
-				lon = atof(&nbuf[1]);
-				if (tbuf[0] == 'S') lat = -lat;
-				if (nbuf[0] == 'W') lon = -lon;
-				wpt_tmp->longitude = ddmm2degrees(lon);
-				wpt_tmp->latitude = ddmm2degrees(lat);
-			}
-			if (route != NULL)
-				route_add_wpt(route, waypt_dupe(wpt_tmp));
-			waypt_add(wpt_tmp);
-			points++;
-			break;
-		case 'H':
-			/* Garmap2 has headers 
-  "H(2 spaces)LATITUDE(some spaces)LONGTITUDE(etc... followed by);track
-  			everything else is 
-			  H(2 chars)TN(tracknane\0)
-  			*/
-			if (points > 0) {
-				track = NULL;
-				points = 0;
-			}
-			if (track == NULL) {
-				if (ibuf[3] == 'L' && ibuf[4] == 'A') {
-					track = route_head_alloc();
-					track->rte_name = xstrdup("track");
-					track_add_head(track);
-				} else if (ibuf[3] == 'T' && ibuf[4] == 'N') {
-					track = route_head_alloc();
-					track->rte_name = xstrdup(&ibuf[6]);
-					track_add_head(track);
-				}
-			}
-			break;
-		case 'R':
-			n = 1;
-			while (ibuf[n] == ' ') n++;
-			route = route_head_alloc();
-			route->rte_name = xstrdup(&ibuf[n]);
-			route_add_head(route);
-			break;
-		case 'T':
-			n = sscanf(ibuf, "T %lf %lf %s %s %ld", 
-				&lat, &lon, date, time, &alt);
+      wpt_tmp = waypt_new();
+      wpt_tmp->altitude = alt;
+      cp = lrtrim(name);
+      if (*cp != '\0') {
+        wpt_tmp->shortname = xstrdup(cp);
+      }
+      cp = lrtrim(desc);
+      if (*cp != '\0') {
+        wpt_tmp->description = xstrdup(cp);
+      }
+      wpt_tmp->icon_descr = gt_find_desc_from_icon_number(symnum, PCX, NULL);
 
-			if (n == 0) {
-				/* Attempt alternate PCX format used by 
-				 * www.radroutenplaner.nrw.de */
-				n = sscanf(ibuf, "T %c%lf %c%lf %s %s %ld", 
-				&lathemi, &lat, &lonhemi, &lon, date, 
-					time, &alt);
-				if (lathemi == 'S') lat = -lat;
-				if (lonhemi == 'W') lon = -lon;
-			} else if (n == 0) {
-				fatal(MYNAME ":Unrecognized track line '%s'\n", 
-						ibuf);
-			}
+      if (read_as_degrees || read_gpsu) {
+        human_to_dec(tbuf, &lat, &lon, 1);
+        human_to_dec(nbuf, &lat, &lon, 2);
 
-			memset(&tm, 0, sizeof(tm));
-			tm.tm_hour = atoi(time);
-			tm.tm_min = atoi(time+3);
-			tm.tm_sec = atoi(time+6);
-			tm.tm_mday = atoi(date);
-			strncpy(month, date+3, 3);
-			month[3] = 0;
-			tm.tm_mon = month_lookup(month);
-			tm.tm_year = atoi(date + 7);
-			if (tm.tm_year < 70) tm.tm_year += 100;
-			wpt_tmp = waypt_new();
-			wpt_tmp->creation_time = mkgmtime(&tm);
-			if (read_as_degrees) {
-				wpt_tmp->longitude = lon;
-				wpt_tmp->latitude = lat;
-			} else {
-				wpt_tmp->longitude = ddmm2degrees(lon);
-				wpt_tmp->latitude = ddmm2degrees(lat);
-			}
-			wpt_tmp->altitude = alt;
-			/* Did we get a track point before a track header? */
-			if (track == NULL) {
-				track = route_head_alloc();
-				track->rte_name = xstrdup("Default");
-				track_add_head(track);
-			}
-			track_add_wpt(track, wpt_tmp);
-			points++;
-			break;
-		case 'U': 
- 			read_as_degrees = ! strncmp("LAT LON DEG", ibuf + 3, 11);
-			if (strstr(ibuf, "UTM")) {
-				fatal (MYNAME ": UTM is not supported.\n");
-			}
-			break;
-		// GPSU is apparently PCX but with a different definition 
-		// of "LAT LON DM" - unlike the other, it actually IS decimal
-		// minutes.
-		case 'I':
-			read_gpsu = ! (strstr(ibuf, "GPSU") == NULL) ;
-			break;
-		// This is a format specifier.  Use this line to figure out
-		// where our other columns start.
-		case 'F': {
-			int col;
-			char *i = ibuf;
-			sym_col = 0;
+        wpt_tmp->longitude = lon;
+        wpt_tmp->latitude = lat;
+      } else {
+        lat = atof(&tbuf[1]);
+        lon = atof(&nbuf[1]);
+        if (tbuf[0] == 'S') {
+          lat = -lat;
+        }
+        if (nbuf[0] == 'W') {
+          lon = -lon;
+        }
+        wpt_tmp->longitude = ddmm2degrees(lon);
+        wpt_tmp->latitude = ddmm2degrees(lat);
+      }
+      if (route != NULL) {
+        route_add_wpt(route, waypt_dupe(wpt_tmp));
+      }
+      waypt_add(wpt_tmp);
+      points++;
+      break;
+    case 'H':
+      /* Garmap2 has headers
+      "H(2 spaces)LATITUDE(some spaces)LONGTITUDE(etc... followed by);track
+      	everything else is
+        H(2 chars)TN(tracknane\0)
+      	*/
+      if (points > 0) {
+        track = NULL;
+        points = 0;
+      }
+      if (track == NULL) {
+        if (ibuf[3] == 'L' && ibuf[4] == 'A') {
+          track = route_head_alloc();
+          track->rte_name = xstrdup("track");
+          track_add_head(track);
+        } else if (ibuf[3] == 'T' && ibuf[4] == 'N') {
+          track = route_head_alloc();
+          track->rte_name = xstrdup(&ibuf[6]);
+          track_add_head(track);
+        }
+      }
+      break;
+    case 'R':
+      n = 1;
+      while (ibuf[n] == ' ') {
+        n++;
+      }
+      route = route_head_alloc();
+      route->rte_name = xstrdup(&ibuf[n]);
+      route_add_head(route);
+      break;
+    case 'T':
+      n = sscanf(ibuf, "T %lf %lf %s %s %ld",
+                 &lat, &lon, date, time, &alt);
 
-			for (col = 0, i = ibuf; *i; col++, i++) {
-				if (0 == case_ignore_strncmp(i, "comment", 7)) {
-					comment_col = col;
-				}
-				if (0 == case_ignore_strncmp(i, "symbol", 6)) {
-					sym_col = col;
-				}
-				if (0 == case_ignore_strncmp(i, "latitude", 8)) {
-					lat_col = col;
-				}
-				if (0 == case_ignore_strncmp(i, "longitude", 9)) {
-					lon_col = col;
-				}
-			}
-		}
-		break;
-		default:
-			break;
-			;
-		
-		}
-	}
+      if (n == 0) {
+        /* Attempt alternate PCX format used by
+         * www.radroutenplaner.nrw.de */
+        n = sscanf(ibuf, "T %c%lf %c%lf %s %s %ld",
+                   &lathemi, &lat, &lonhemi, &lon, date,
+                   time, &alt);
+        if (lathemi == 'S') {
+          lat = -lat;
+        }
+        if (lonhemi == 'W') {
+          lon = -lon;
+        }
+      } else if (n == 0) {
+        fatal(MYNAME ":Unrecognized track line '%s'\n",
+              ibuf);
+      }
+
+      memset(&tm, 0, sizeof(tm));
+      tm.tm_hour = atoi(time);
+      tm.tm_min = atoi(time+3);
+      tm.tm_sec = atoi(time+6);
+      tm.tm_mday = atoi(date);
+      strncpy(month, date+3, 3);
+      month[3] = 0;
+      tm.tm_mon = month_lookup(month);
+      tm.tm_year = atoi(date + 7);
+      if (tm.tm_year < 70) {
+        tm.tm_year += 100;
+      }
+      wpt_tmp = waypt_new();
+      wpt_tmp->creation_time = mkgmtime(&tm);
+      if (read_as_degrees) {
+        wpt_tmp->longitude = lon;
+        wpt_tmp->latitude = lat;
+      } else {
+        wpt_tmp->longitude = ddmm2degrees(lon);
+        wpt_tmp->latitude = ddmm2degrees(lat);
+      }
+      wpt_tmp->altitude = alt;
+      /* Did we get a track point before a track header? */
+      if (track == NULL) {
+        track = route_head_alloc();
+        track->rte_name = xstrdup("Default");
+        track_add_head(track);
+      }
+      track_add_wpt(track, wpt_tmp);
+      points++;
+      break;
+    case 'U':
+      read_as_degrees = ! strncmp("LAT LON DEG", ibuf + 3, 11);
+      if (strstr(ibuf, "UTM")) {
+        fatal(MYNAME ": UTM is not supported.\n");
+      }
+      break;
+      // GPSU is apparently PCX but with a different definition
+      // of "LAT LON DM" - unlike the other, it actually IS decimal
+      // minutes.
+    case 'I':
+      read_gpsu = !(strstr(ibuf, "GPSU") == NULL) ;
+      break;
+      // This is a format specifier.  Use this line to figure out
+      // where our other columns start.
+    case 'F': {
+      int col;
+      char *i = ibuf;
+      sym_col = 0;
+
+      for (col = 0, i = ibuf; *i; col++, i++) {
+        if (0 == case_ignore_strncmp(i, "comment", 7)) {
+          comment_col = col;
+        }
+        if (0 == case_ignore_strncmp(i, "symbol", 6)) {
+          sym_col = col;
+        }
+        if (0 == case_ignore_strncmp(i, "latitude", 8)) {
+          lat_col = col;
+        }
+        if (0 == case_ignore_strncmp(i, "longitude", 9)) {
+          lon_col = col;
+        }
+      }
+    }
+    break;
+    default:
+      break;
+      ;
+
+    }
+  }
 }
 
 static void
 gpsutil_disp(const waypoint *wpt)
 {
-	double lon,lat;
-	int icon_token = 0;
-	char tbuf[1024];
-	time_t tm = wpt->creation_time;
+  double lon,lat;
+  int icon_token = 0;
+  char tbuf[1024];
+  time_t tm = wpt->creation_time;
 
-	lon = degrees2ddmm(wpt->longitude);
-	lat = degrees2ddmm(wpt->latitude);
+  lon = degrees2ddmm(wpt->longitude);
+  lat = degrees2ddmm(wpt->latitude);
 
-	if (tm == 0) 
-		tm = current_time();
-	strftime(tbuf, sizeof(tbuf), "%d-%b-%y %I:%M:%S", localtime(&tm));
-	strupper(tbuf);
+  if (tm == 0) {
+    tm = current_time();
+  }
+  strftime(tbuf, sizeof(tbuf), "%d-%b-%y %I:%M:%S", localtime(&tm));
+  strupper(tbuf);
 
-	if (deficon) {
-		icon_token = atoi(deficon);
-	} else {
-		icon_token = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
-		if (get_cache_icon(wpt)) {
-			icon_token = gt_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
-		}
-	}
+  if (deficon) {
+    icon_token = atoi(deficon);
+  } else {
+    icon_token = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
+    if (get_cache_icon(wpt)) {
+      icon_token = gt_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
+    }
+  }
 
 
-	gbfprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5.f %-40.40s %5e  %d\n",
-                global_opts.synthesize_shortnames ?
-                        mkshort_from_wpt(mkshort_handle, wpt) : 
-			wpt->shortname,
-		lat < 0.0 ? 'S' : 'N',
-		fabs(lat),
-		lon < 0.0 ? 'W' : 'E',
-		fabs(lon),
-		tbuf, 
-		(wpt->altitude == unknown_alt) ? -9999 : wpt->altitude,
-		(wpt->description != NULL) ? wpt->description : "",
-		0.0,
-		icon_token);
+  gbfprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5.f %-40.40s %5e  %d\n",
+            global_opts.synthesize_shortnames ?
+            mkshort_from_wpt(mkshort_handle, wpt) :
+            wpt->shortname,
+            lat < 0.0 ? 'S' : 'N',
+            fabs(lat),
+            lon < 0.0 ? 'W' : 'E',
+            fabs(lon),
+            tbuf,
+            (wpt->altitude == unknown_alt) ? -9999 : wpt->altitude,
+            (wpt->description != NULL) ? wpt->description : "",
+            0.0,
+            icon_token);
 }
 
 static void
 pcx_track_hdr(const route_head *trk)
 {
-	char *name;
-	char buff[20];
-	
-	route_ctr++;
-	snprintf(buff, sizeof(buff)-1, "Trk%03d", route_ctr);
-	
-	name = mkshort(mkshort_handle2, (trk->rte_name != NULL) ? trk->rte_name : buff);
-	/* Carto Exploreur (popular in France) chokes on trackname headers,
-	 * so provide option to supppress these.
-	 */
-	if (!cartoexploreur) {
-		gbfprintf(file_out, "\n\nH  TN %s\n", name);
-	}
-	xfree(name);
-	gbfprintf(file_out, "H  LATITUDE    LONGITUDE    DATE      TIME     ALT  ;track\n");
+  char *name;
+  char buff[20];
+
+  route_ctr++;
+  snprintf(buff, sizeof(buff)-1, "Trk%03d", route_ctr);
+
+  name = mkshort(mkshort_handle2, (trk->rte_name != NULL) ? trk->rte_name : buff);
+  /* Carto Exploreur (popular in France) chokes on trackname headers,
+   * so provide option to supppress these.
+   */
+  if (!cartoexploreur) {
+    gbfprintf(file_out, "\n\nH  TN %s\n", name);
+  }
+  xfree(name);
+  gbfprintf(file_out, "H  LATITUDE    LONGITUDE    DATE      TIME     ALT  ;track\n");
 }
 
 static void
 pcx_route_hdr(const route_head *rte)
 {
-	char *name;
-	char buff[20];
-	
-	route_ctr++;
-	snprintf(buff, sizeof(buff)-1, "Rte%03d", route_ctr);
-	
-	name = mkshort(mkshort_handle2, (rte->rte_name != NULL) ? rte->rte_name : buff);
-	
-	/* see pcx_track_hdr */
-	if (!cartoexploreur) {
-		gbfprintf(file_out, "\n\nR  %s\n", name);
-	}
-	gbfprintf(file_out, "\n"
-"H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
+  char *name;
+  char buff[20];
+
+  route_ctr++;
+  snprintf(buff, sizeof(buff)-1, "Rte%03d", route_ctr);
+
+  name = mkshort(mkshort_handle2, (rte->rte_name != NULL) ? rte->rte_name : buff);
+
+  /* see pcx_track_hdr */
+  if (!cartoexploreur) {
+    gbfprintf(file_out, "\n\nR  %s\n", name);
+  }
+  gbfprintf(file_out, "\n"
+            "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
 }
 
 void
 pcx_track_disp(const waypoint *wpt)
 {
-	double lon,lat;
-	char tbuf[100];
-	struct tm *tm;
-	char *tp;
+  double lon,lat;
+  char tbuf[100];
+  struct tm *tm;
+  char *tp;
 
-	lon = degrees2ddmm(wpt->longitude);
-	lat = degrees2ddmm(wpt->latitude);
+  lon = degrees2ddmm(wpt->longitude);
+  lat = degrees2ddmm(wpt->latitude);
 
-	tm = gmtime(&wpt->creation_time);
+  tm = gmtime(&wpt->creation_time);
 
-	strftime(tbuf, sizeof(tbuf), "%d-%b-%y %H:%M:%S", tm);	/* currently ...%T does nothing under Windows */
-	for (tp = tbuf; *tp; tp++) {
-		*tp = toupper(*tp);
-	}
-	gbfprintf(file_out, "T  %c%08.5f %c%011.5f %s %.f\n",
-			lat < 0.0 ? 'S' : 'N',
-			fabs(lat),
-			lon < 0.0 ? 'W' : 'E',
-			fabs(lon),
-			tbuf, wpt->altitude);
+  strftime(tbuf, sizeof(tbuf), "%d-%b-%y %H:%M:%S", tm);	/* currently ...%T does nothing under Windows */
+  for (tp = tbuf; *tp; tp++) {
+    *tp = toupper(*tp);
+  }
+  gbfprintf(file_out, "T  %c%08.5f %c%011.5f %s %.f\n",
+            lat < 0.0 ? 'S' : 'N',
+            fabs(lat),
+            lon < 0.0 ? 'W' : 'E',
+            fabs(lon),
+            tbuf, wpt->altitude);
 }
 
 
 static void
 data_write(void)
 {
-gbfprintf(file_out,
-"H  SOFTWARE NAME & VERSION\n"
-"I  PCX5 2.09\n"
-"\n"
-"H  R DATUM                IDX DA            DF            DX            DY            DZ\n"
-"M  G WGS 84               121 +0.000000e+00 +0.000000e+00 +0.000000e+00 +0.000000e+00 +0.000000e+00\n"
-"\n"
-"H  COORDINATE SYSTEM\n"
-"U  LAT LON DM\n");
+  gbfprintf(file_out,
+            "H  SOFTWARE NAME & VERSION\n"
+            "I  PCX5 2.09\n"
+            "\n"
+            "H  R DATUM                IDX DA            DF            DX            DY            DZ\n"
+            "M  G WGS 84               121 +0.000000e+00 +0.000000e+00 +0.000000e+00 +0.000000e+00 +0.000000e+00\n"
+            "\n"
+            "H  COORDINATE SYSTEM\n"
+            "U  LAT LON DM\n");
 
-	setshort_length(mkshort_handle, 6);
-	
-	setshort_length(mkshort_handle2, 20);	/* for track and route names */
-	setshort_whitespace_ok(mkshort_handle2, 0);
-	setshort_mustuniq(mkshort_handle2, 0);
+  setshort_length(mkshort_handle, 6);
 
-	if (global_opts.objective == wptdata)
-	{
-		gbfprintf(file_out,
-"\n"
-"H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
+  setshort_length(mkshort_handle2, 20);	/* for track and route names */
+  setshort_whitespace_ok(mkshort_handle2, 0);
+  setshort_mustuniq(mkshort_handle2, 0);
 
-		waypt_disp_all(gpsutil_disp);
-	}
-	else if (global_opts.objective == trkdata)
-	{
-		route_ctr = 0;
-		track_disp_all(pcx_track_hdr, NULL, pcx_track_disp);
-	}
-	else if (global_opts.objective == rtedata)
-	{
-		route_ctr = 0;
-		route_disp_all(pcx_route_hdr, NULL, gpsutil_disp);
-	}
+  if (global_opts.objective == wptdata) {
+    gbfprintf(file_out,
+              "\n"
+              "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
+
+    waypt_disp_all(gpsutil_disp);
+  } else if (global_opts.objective == trkdata) {
+    route_ctr = 0;
+    track_disp_all(pcx_track_hdr, NULL, pcx_track_disp);
+  } else if (global_opts.objective == rtedata) {
+    route_ctr = 0;
+    route_disp_all(pcx_route_hdr, NULL, gpsutil_disp);
+  }
 }
 
 
 ff_vecs_t pcx_vecs = {
-	ff_type_file,
-	FF_CAP_RW_ALL,
-	rd_init,
-	wr_init,
-	rd_deinit,
-	wr_deinit,
-	data_read,
-	data_write,
-	NULL,
-	pcx_args,
-	CET_CHARSET_ASCII, 1	/* CET-REVIEW */
+  ff_type_file,
+  FF_CAP_RW_ALL,
+  rd_init,
+  wr_init,
+  rd_deinit,
+  wr_deinit,
+  data_read,
+  data_write,
+  NULL,
+  pcx_args,
+  CET_CHARSET_ASCII, 1	/* CET-REVIEW */
 };

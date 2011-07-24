@@ -24,13 +24,13 @@
 #include "gpsread.h"
 
 gps_device_ops  gps_serial_ops = {
-	GPS_Serial_On,
-	GPS_Serial_Off,
-	GPS_Serial_Chars_Ready,
-	GPS_Serial_Wait,
-	GPS_Serial_Flush,
-	GPS_Serial_Send_Ack,
-	GPS_Serial_Get_Ack,
-	GPS_Serial_Packet_Read,
-	GPS_Serial_Write_Packet,
+  GPS_Serial_On,
+  GPS_Serial_Off,
+  GPS_Serial_Chars_Ready,
+  GPS_Serial_Wait,
+  GPS_Serial_Flush,
+  GPS_Serial_Send_Ack,
+  GPS_Serial_Get_Ack,
+  GPS_Serial_Packet_Read,
+  GPS_Serial_Write_Packet,
 };

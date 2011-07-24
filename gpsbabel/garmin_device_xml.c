@@ -1,5 +1,5 @@
 /*
-    Parse 'GarminDevice.xml' on a Garmin mass storage device (e.g. Zumo, 
+    Parse 'GarminDevice.xml' on a Garmin mass storage device (e.g. Zumo,
       Nuvi, Colorado, etc. and return key device info.
 
     Copyright (C) 2008 Robert Lipe, robertlipe@gpsbabel.org
@@ -20,7 +20,7 @@
 
  */
 
-// References: 
+// References:
 // http://developer.garmin.com/web-device/garmin-mass-storage-mode-devices/
 // http://developer.garmin.com/schemas/device/v2/
 
@@ -35,11 +35,13 @@ static int type;
 static char *mountpoint, *base, *path, *ext;
 static xg_callback device_s, id_s, path_s, ext_s, base_s, dir_s;
 
-void type_s(const char *args, const char **unused) {
+void type_s(const char *args, const char **unused)
+{
   type = strcmp(args, "GPSData");
 }
 
-void device_s(const char *args, const char **unused) {
+void device_s(const char *args, const char **unused)
+{
   if (my_gdx_info) {
     fatal(MYNAME ": More than one device type found in file.\n");
   }
@@ -47,50 +49,62 @@ void device_s(const char *args, const char **unused) {
   my_gdx_info->device_desc = xstrdup(args);
 }
 
-void id_s(const char *args, const char **unused) {
+void id_s(const char *args, const char **unused)
+{
   my_gdx_info->device_id = xstrdup(args);
 }
 
-void path_s(const char *args, const char **unused) {
+void path_s(const char *args, const char **unused)
+{
   path = xstrdup(args);
 }
 
-void ext_s(const char *args, const char **unused) {
+void ext_s(const char *args, const char **unused)
+{
   ext = xstrdup(args);
 }
 
-void base_s(const char *args, const char **unused) {
+void base_s(const char *args, const char **unused)
+{
   base = xstrdup(args);
 }
 
-void dir_s(const char *args, const char **unused) {
-  if (type)
+void dir_s(const char *args, const char **unused)
+{
+  if (type) {
     return;
+  }
   if (0 == strcmp(args, "OutputFromUnit")) {
     xasprintf(&my_gdx_info->from_device.path,  "%s%c%s",
-	mountpoint, GB_PATHSEP, path);
-   my_gdx_info->from_device.basename = xstrdup(base);
-   my_gdx_info->from_device.extension = xstrdup(ext);
-   xasprintf(&my_gdx_info->from_device.canon, "%s/%s.%s",
-     my_gdx_info->from_device.path, 
-     my_gdx_info->from_device.basename, 
-     my_gdx_info->from_device.extension);
-  } else
-  if (0 == strcmp(args, "InputToUnit")) {
-    xasprintf(&my_gdx_info->to_device.path,  "%s%c%s", 
-        mountpoint, GB_PATHSEP, path);
+              mountpoint, GB_PATHSEP, path);
+    my_gdx_info->from_device.basename = xstrdup(base);
+    my_gdx_info->from_device.extension = xstrdup(ext);
+    xasprintf(&my_gdx_info->from_device.canon, "%s/%s.%s",
+              my_gdx_info->from_device.path,
+              my_gdx_info->from_device.basename,
+              my_gdx_info->from_device.extension);
+  } else if (0 == strcmp(args, "InputToUnit")) {
+    xasprintf(&my_gdx_info->to_device.path,  "%s%c%s",
+              mountpoint, GB_PATHSEP, path);
     my_gdx_info->to_device.basename = xstrdup(base);
     my_gdx_info->to_device.extension = xstrdup(ext);
-  } else  
-  fatal(MYNAME ":Unknown direction '%s'\n", args);
+  } else {
+    fatal(MYNAME ":Unknown direction '%s'\n", args);
+  }
 
-  if (base) xfree(base) ; 
+  if (base) {
+    xfree(base) ;
+  }
   base = NULL;
 
-  if (ext) xfree(ext) ; 
+  if (ext) {
+    xfree(ext) ;
+  }
   ext = NULL;
 
-  if (path) xfree(path) ; 
+  if (path) {
+    xfree(path) ;
+  }
   path = NULL;
 }
 
@@ -106,7 +120,8 @@ static xg_tag_mapping gdx_map[] = {
 };
 
 const gdx_info *
-gdx_read(const char *fname) {
+gdx_read(const char *fname)
+{
   // Test file open-able before gb_open gets a chance to fatal().
   FILE *fin = fopen(fname, "r");
 
@@ -123,7 +138,8 @@ gdx_read(const char *fname) {
 
 // Look for the Device in the incoming NULL-terminated list of directories
 const gdx_info *
-gdx_find_file(char **dirlist) {
+gdx_find_file(char **dirlist)
+{
   const gdx_info *gdx;
   while (dirlist && *dirlist) {
     char *tbuf;
@@ -132,7 +148,7 @@ gdx_find_file(char **dirlist) {
     gdx = gdx_read(tbuf);
     xfree(tbuf);
     if (gdx) {
-	longjmp(gdx_jmp_buf, 1);
+      longjmp(gdx_jmp_buf, 1);
     }
     dirlist++;
   }
@@ -140,6 +156,7 @@ gdx_find_file(char **dirlist) {
 }
 
 const gdx_info *
-gdx_get_info() {
+gdx_get_info()
+{
   return my_gdx_info;
 }

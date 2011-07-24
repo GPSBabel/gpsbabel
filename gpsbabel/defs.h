@@ -96,8 +96,8 @@
 #define KNOTS_TO_MPS(a) (KPH_TO_MPS((a)*1.852))
 
 /*
- * Snprintf is in SUS (so it's in most UNIX-like substance) and it's in 
- * C99 (albeit with slightly different semantics) but it isn't in C89.   
+ * Snprintf is in SUS (so it's in most UNIX-like substance) and it's in
+ * C99 (albeit with slightly different semantics) but it isn't in C89.
  * This tweaks allows us to use snprintf on the holdout.
  */
 #if __WIN32__
@@ -126,10 +126,10 @@
 #  define GB_PATHSEP '/'
 #endif
 
-/* 
+/*
  *  Toss in some GNU C-specific voodoo for checking.
  */
-#if __GNUC__ 
+#if __GNUC__
 #  define PRINTFLIKE(x,y) __attribute__ ((__format__ (__printf__, (x), (y))))
 #  define NORETURN void __attribute__ ((__noreturn__))
 #else
@@ -157,30 +157,30 @@
    ((struct_type *)((char *)(memberp) - offsetof(struct_type, member_name)))
 
 typedef enum {
-	fix_unknown=-1,
-	fix_none=0,
-	fix_2d=1,	
-	fix_3d,
-	fix_dgps,
-	fix_pps
+  fix_unknown=-1,
+  fix_none=0,
+  fix_2d=1,
+  fix_3d,
+  fix_dgps,
+  fix_pps
 } fix_type;
 
 typedef enum {
-	status_unknown=0,
-	status_true,
-	status_false
+  status_unknown=0,
+  status_true,
+  status_false
 } status_type;
-        
+
 /*
  * Define globally on which kind of data gpsbabel is working.
  * Important for "file types" that are essentially a communication
  * protocol for a receiver, like the Magellan serial data.
  */
 typedef enum {
-	trkdata = 1 ,
-	wptdata,
-	rtedata,
-	posndata
+  trkdata = 1 ,
+  wptdata,
+  rtedata,
+  posndata
 } gpsdata_type;
 
 #define NOTHINGMASK		0
@@ -197,16 +197,16 @@ typedef enum {
 #define	doing_posn ((global_opts.masked_objective & POSNDATAMASK) == POSNDATAMASK)
 
 typedef struct {
-	int synthesize_shortnames;
-	int debug_level;
-	gpsdata_type objective;
-	unsigned int	masked_objective;
-	int verbose_status;	/* set by GUI wrappers for status */
-	int smart_icons;	
-	int smart_names;
-	cet_cs_vec_t *charset;
-	char *charset_name;
-	inifile_t *inifile;
+  int synthesize_shortnames;
+  int debug_level;
+  gpsdata_type objective;
+  unsigned int	masked_objective;
+  int verbose_status;	/* set by GUI wrappers for status */
+  int smart_icons;
+  int smart_names;
+  cet_cs_vec_t *charset;
+  char *charset_name;
+  inifile_t *inifile;
 } global_options;
 
 extern global_options global_opts;
@@ -225,70 +225,70 @@ extern int geocaches_present;
 #define XML_LONG_TIME 2
 
 /*
- * Extended data if waypoint happens to represent a geocache.  This is 
+ * Extended data if waypoint happens to represent a geocache.  This is
  * totally voluntary data...
  */
 
 typedef enum {
-	gt_unknown = 0 ,
-	gt_traditional,
-	gt_multi,
-	gt_virtual,
-	gt_letterbox,
-	gt_event,
-	gt_suprise,
-	gt_webcam,
-	gt_earth,
-	gt_locationless,
-	gt_benchmark, /* Extension to Groundspeak for GSAK */
-	gt_cito,
-	gt_ape,
-	gt_mega,
-	gt_wherigo
+  gt_unknown = 0 ,
+  gt_traditional,
+  gt_multi,
+  gt_virtual,
+  gt_letterbox,
+  gt_event,
+  gt_suprise,
+  gt_webcam,
+  gt_earth,
+  gt_locationless,
+  gt_benchmark, /* Extension to Groundspeak for GSAK */
+  gt_cito,
+  gt_ape,
+  gt_mega,
+  gt_wherigo
 } geocache_type;
 
 typedef enum {
-	gc_unknown = 0,
-	gc_micro,
-	gc_other,
-	gc_regular,
-	gc_large,
-	gc_virtual,
-	gc_small
+  gc_unknown = 0,
+  gc_micro,
+  gc_other,
+  gc_regular,
+  gc_large,
+  gc_virtual,
+  gc_small
 } geocache_container;
 
 typedef struct {
-	int is_html;
-	char *utfstring;
+  int is_html;
+  char *utfstring;
 } utf_string;
 
 typedef struct {
-	int id; /* The decimal cache number */
-	geocache_type type:5;
-	geocache_container container:4;
-	unsigned int diff:6; /* (multiplied by ten internally) */
-	unsigned int terr:6; /* (likewise) */
-	status_type is_archived:2;
-	status_type is_available:2;
-	time_t exported;
-	time_t last_found;
-	char *placer; /* Placer name */
-	int placer_id; /* Placer id */
-	char *hint; /* all these UTF8, XML entities removed, May be not HTML. */
-	utf_string desc_short;
-	utf_string desc_long;
+  int id; /* The decimal cache number */
+  geocache_type type:5;
+  geocache_container container:4;
+  unsigned int diff:6; /* (multiplied by ten internally) */
+  unsigned int terr:6; /* (likewise) */
+  status_type is_archived:2;
+  status_type is_available:2;
+  time_t exported;
+  time_t last_found;
+  char *placer; /* Placer name */
+  int placer_id; /* Placer id */
+  char *hint; /* all these UTF8, XML entities removed, May be not HTML. */
+  utf_string desc_short;
+  utf_string desc_long;
 } geocache_data ;
 
 typedef struct xml_tag {
-	char *tagname;
-	char *cdata;
-	int cdatalen;
-	char *parentcdata;
-	int parentcdatalen;
-	char **attributes;
-	struct xml_tag *parent;
-	struct xml_tag *sibling;
-	struct xml_tag *child;
+  char *tagname;
+  char *cdata;
+  int cdatalen;
+  char *parentcdata;
+  int parentcdatalen;
+  char **attributes;
+  struct xml_tag *parent;
+  struct xml_tag *sibling;
+  struct xml_tag *child;
 } xml_tag ;
 
 typedef void (*fs_destroy)(void *);
@@ -296,12 +296,12 @@ typedef void (*fs_copy)(void **, void *);
 typedef void (*fs_convert)(void *);
 
 typedef struct format_specific_data {
-	long type;
-	struct format_specific_data *next;
-	
-	fs_destroy destroy;
-	fs_copy copy;
-	fs_convert convert;
+  long type;
+  struct format_specific_data *next;
+
+  fs_destroy destroy;
+  fs_copy copy;
+  fs_convert convert;
 } format_specific_data;
 
 typedef struct {
@@ -310,17 +310,17 @@ typedef struct {
 } gb_color;
 
 
-format_specific_data *fs_chain_copy( format_specific_data *source );
-void fs_chain_destroy( format_specific_data *chain );
-format_specific_data *fs_chain_find( format_specific_data *chain, long type );
-void fs_chain_add( format_specific_data **chain, format_specific_data *data );
+format_specific_data *fs_chain_copy(format_specific_data *source);
+void fs_chain_destroy(format_specific_data *chain);
+format_specific_data *fs_chain_find(format_specific_data *chain, long type);
+void fs_chain_add(format_specific_data **chain, format_specific_data *data);
 
 typedef struct fs_xml {
-	format_specific_data fs;
-	xml_tag *tag;
+  format_specific_data fs;
+  xml_tag *tag;
 } fs_xml;
 
-fs_xml *fs_xml_alloc( long type );
+fs_xml *fs_xml_alloc(long type);
 
 #define FS_GPX 0x67707800L
 #define FS_AN1W 0x616e3177L
@@ -333,33 +333,33 @@ fs_xml *fs_xml_alloc( long type );
  * Structures and functions for multiple URLs per waypoint.
  */
 typedef struct url_link {
-	struct url_link *url_next;
-	char *url;
-	char *url_link_text;
+  struct url_link *url_next;
+  char *url;
+  char *url_link_text;
 } url_link;
 
 /*
  * Misc bitfields inside struct waypoint;
  */
 typedef struct {
-	unsigned int icon_descr_is_dynamic:1; 
-	unsigned int shortname_is_synthetic:1;
-	unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
-	unsigned int fmt_use:1;			/* lightweight "extra data" */
-	/* "flagged fields" */
-	unsigned int temperature:1;		/* temperature field is set */
-	unsigned int proximity:1;		/* proximity field is set */
-	unsigned int course:1;			/* course field is set */
-	unsigned int speed:1;			/* speed field is set */
-	unsigned int depth:1;			/* depth field is set */
-	/* !ToDo!
-	unsigned int altitude:1;		/+ altitude field is set +/
-	... and others
-	*/
-	unsigned int is_split:1;		/* the waypoint represents a split */
-	unsigned int new_trkseg:1;		/* True if first in new trkseg. */
+  unsigned int icon_descr_is_dynamic:1;
+  unsigned int shortname_is_synthetic:1;
+  unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
+  unsigned int fmt_use:1;			/* lightweight "extra data" */
+  /* "flagged fields" */
+  unsigned int temperature:1;		/* temperature field is set */
+  unsigned int proximity:1;		/* proximity field is set */
+  unsigned int course:1;			/* course field is set */
+  unsigned int speed:1;			/* speed field is set */
+  unsigned int depth:1;			/* depth field is set */
+  /* !ToDo!
+  unsigned int altitude:1;		/+ altitude field is set +/
+  ... and others
+  */
+  unsigned int is_split:1;		/* the waypoint represents a split */
+  unsigned int new_trkseg:1;		/* True if first in new trkseg. */
 
-	
+
 } wp_flags;
 
 // These are dicey as they're collected on read. Subsequent filters may change
@@ -380,162 +380,162 @@ const global_trait* get_traits();
 #define WAYPT_UNSET(wpt,member) wpt->wpt_flags.member = 0
 #define WAYPT_HAS(wpt,member) (wpt->wpt_flags.member)
 /*
- * This is a waypoint, as stored in the GPSR.   It tries to not 
+ * This is a waypoint, as stored in the GPSR.   It tries to not
  * cater to any specific model or protocol.  Anything that needs to
  * be truncated, edited, or otherwise trimmed should be done on the
  * way to the target.
  */
 
 typedef struct {
-	queue Q;			/* Master waypoint q.  Not for use
+  queue Q;			/* Master waypoint q.  Not for use
 					   by modules. */
 
-	double latitude;		/* Degrees */
-	double longitude; 		/* Degrees */
-	double altitude; 		/* Meters. */
+  double latitude;		/* Degrees */
+  double longitude; 		/* Degrees */
+  double altitude; 		/* Meters. */
 
-	/* 
-	 * The "thickness" of a waypoint; adds an element of 3D.  Can be
-	 * used to construct rudimentary polygons for, say, airspace 
-	 * definitions.   The units are meters.
-	 */
-	double depth;
+  /*
+   * The "thickness" of a waypoint; adds an element of 3D.  Can be
+   * used to construct rudimentary polygons for, say, airspace
+   * definitions.   The units are meters.
+   */
+  double depth;
 
-	/*
-	 * An alarm trigger value that can be considered to be a circle
-	 * surrounding a waypoint (or cylinder if depth is also defined).
-	 * The units are meters.
-	 */
-	double proximity;
+  /*
+   * An alarm trigger value that can be considered to be a circle
+   * surrounding a waypoint (or cylinder if depth is also defined).
+   * The units are meters.
+   */
+  double proximity;
 
-	/* shortname is a waypoint name as stored in receiver.  It should
-	 * strive to be, well, short, and unique.   Enforcing length and
-	 * character restrictions is the job of the output.   A typical
-	 * minimum length for shortname is 6 characters for NMEA units,
-	 * 8 for Magellan and 10 for Vista.   These are only guidelines.
-	 */
-	char *shortname;	 
-	/*
-	 * description is typically a human readable description of the 
-	 * waypoint.   It may be used as a comment field in some receivers.
-	 * These are probably under 40 bytes, but that's only a guideline.
-	 */
-	char *description;
-	/*
-	 * notes are relatively long - over 100 characters - prose associated
-	 * with the above.   Unlike shortname and description, these are never
-	 * used to compute anything else and are strictly "passed through".
-	 * Few formats support this.
-	 */
-	char *notes;
+  /* shortname is a waypoint name as stored in receiver.  It should
+   * strive to be, well, short, and unique.   Enforcing length and
+   * character restrictions is the job of the output.   A typical
+   * minimum length for shortname is 6 characters for NMEA units,
+   * 8 for Magellan and 10 for Vista.   These are only guidelines.
+   */
+  char *shortname;
+  /*
+   * description is typically a human readable description of the
+   * waypoint.   It may be used as a comment field in some receivers.
+   * These are probably under 40 bytes, but that's only a guideline.
+   */
+  char *description;
+  /*
+   * notes are relatively long - over 100 characters - prose associated
+   * with the above.   Unlike shortname and description, these are never
+   * used to compute anything else and are strictly "passed through".
+   * Few formats support this.
+   */
+  char *notes;
 
-	/* This is a bit icky.   Multiple waypoint support is an
-	 * afterthought and I don't want to change our data structures.
-	 * So we have the first in the waypoint itself and subsequent
-	 * ones in a linked list.
-	 * We also use an implicit anonymous union here, so these three
-	 * members must match struct url_link...
-	 */
-	struct url_link *url_next;
-	char *url;
-	char *url_link_text;
+  /* This is a bit icky.   Multiple waypoint support is an
+   * afterthought and I don't want to change our data structures.
+   * So we have the first in the waypoint itself and subsequent
+   * ones in a linked list.
+   * We also use an implicit anonymous union here, so these three
+   * members must match struct url_link...
+   */
+  struct url_link *url_next;
+  char *url;
+  char *url_link_text;
 
-	wp_flags wpt_flags;
-	const char *icon_descr;
-	time_t creation_time;	/* standardized in UTC/GMT */
-	int microseconds;	/* Optional millionths of a second. */
-	
-	/*
-	 * route priority is for use by the simplify filter.  If we have
-	 * some reason to believe that the route point is more important,
-	 * we can give it a higher (numerically; 0 is the lowest) priority.
-	 * This causes it to be removed last.
-	 * This is currently used by the saroute input filter to give named
-	 * waypoints (representing turns) a higher priority.
-	 * This is also used by the google input filter because they were
-	 * nice enough to use exactly the same priority scheme.
-	 */
-	int route_priority;
+  wp_flags wpt_flags;
+  const char *icon_descr;
+  time_t creation_time;	/* standardized in UTC/GMT */
+  int microseconds;	/* Optional millionths of a second. */
 
-	/* Optional dilution of precision:  positional, horizontal, veritcal.  
-	 * 1 <= dop <= 50 
-	 */ 
-	float hdop;		
-	float vdop;		
-	float pdop;		
-	float course;	/* Optional: degrees true */
-	float speed;   	/* Optional: meters per second. */
-	fix_type fix;	/* Optional: 3d, 2d, etc. */
-	int  sat;	/* Optional: number of sats used for fix */
+  /*
+   * route priority is for use by the simplify filter.  If we have
+   * some reason to believe that the route point is more important,
+   * we can give it a higher (numerically; 0 is the lowest) priority.
+   * This causes it to be removed last.
+   * This is currently used by the saroute input filter to give named
+   * waypoints (representing turns) a higher priority.
+   * This is also used by the google input filter because they were
+   * nice enough to use exactly the same priority scheme.
+   */
+  int route_priority;
 
-	unsigned char heartrate; /* Beats/min. likely to get moved to fs. */
-	unsigned char cadence;	 /* revolutions per minute */
-	float power; /* watts, as measured by cyclists */
-	float temperature; /* Degrees celsius */
-	const geocache_data *gc_data;
-	format_specific_data *fs;
-	session_t *session;	/* pointer to a session struct */
-	void *extra_data;	/* Extra data added by, say, a filter. */
+  /* Optional dilution of precision:  positional, horizontal, veritcal.
+   * 1 <= dop <= 50
+   */
+  float hdop;
+  float vdop;
+  float pdop;
+  float course;	/* Optional: degrees true */
+  float speed;   	/* Optional: meters per second. */
+  fix_type fix;	/* Optional: 3d, 2d, etc. */
+  int  sat;	/* Optional: number of sats used for fix */
+
+  unsigned char heartrate; /* Beats/min. likely to get moved to fs. */
+  unsigned char cadence;	 /* revolutions per minute */
+  float power; /* watts, as measured by cyclists */
+  float temperature; /* Degrees celsius */
+  const geocache_data *gc_data;
+  format_specific_data *fs;
+  session_t *session;	/* pointer to a session struct */
+  void *extra_data;	/* Extra data added by, say, a filter. */
 } waypoint;
 
 typedef struct {
-	queue Q;		/* Link onto parent list. */
-	queue waypoint_list;	/* List of child waypoints */
-	char *rte_name;
-	char *rte_desc;
-	char *rte_url;
-	int rte_num;
-	int rte_waypt_ct;		/* # waypoints in waypoint list */
-	format_specific_data *fs;
-	unsigned short cet_converted;	/* strings are converted to UTF8; interesting only for input */
-        gb_color line_color;         /* Optional line color for rendering */
-        int line_width;         /* in pixels (sigh).  < 0 is unknown. */
-	session_t *session;	/* pointer to a session struct */
+  queue Q;		/* Link onto parent list. */
+  queue waypoint_list;	/* List of child waypoints */
+  char *rte_name;
+  char *rte_desc;
+  char *rte_url;
+  int rte_num;
+  int rte_waypt_ct;		/* # waypoints in waypoint list */
+  format_specific_data *fs;
+  unsigned short cet_converted;	/* strings are converted to UTF8; interesting only for input */
+  gb_color line_color;         /* Optional line color for rendering */
+  int line_width;         /* in pixels (sigh).  < 0 is unknown. */
+  session_t *session;	/* pointer to a session struct */
 } route_head;
 
 /*
  *  Structure of recomputed track/roue data.
  */
 typedef struct {
-	double	distance_meters;
-	double	max_alt;	/*  unknown_alt => invalid */
-	double	min_alt;	/* -unknown_alt => invalid */
-	double	max_spd;	/* Meters/sec */
-	double	min_spd;	/* Meters/sec */
-	double	avg_hrt;	/* Avg Heartrate */
-	double	avg_cad;	/* Avg Cadence */
-	time_t	start;		/* Min time */
-	time_t	end;		/* Max time */
-	int	min_hrt;        /* Min Heartrate */
-	int	max_hrt;        /* Max Heartrate */
-	int	max_cad;        /* Max Cadence */
+  double	distance_meters;
+  double	max_alt;	/*  unknown_alt => invalid */
+  double	min_alt;	/* -unknown_alt => invalid */
+  double	max_spd;	/* Meters/sec */
+  double	min_spd;	/* Meters/sec */
+  double	avg_hrt;	/* Avg Heartrate */
+  double	avg_cad;	/* Avg Cadence */
+  time_t	start;		/* Min time */
+  time_t	end;		/* Max time */
+  int	min_hrt;        /* Min Heartrate */
+  int	max_hrt;        /* Max Heartrate */
+  int	max_cad;        /* Max Cadence */
 } computed_trkdata;
 
 /*
  *  Bounding box information.
  */
 typedef struct {
-	double max_lat;
-	double max_lon;
-	double max_alt;	/*  unknown_alt => invalid */
-	double min_lat;
-	double min_lon;
-	double min_alt;	/* -unknown_alt => invalid */
+  double max_lat;
+  double max_lon;
+  double max_alt;	/*  unknown_alt => invalid */
+  double min_lat;
+  double min_lon;
+  double min_alt;	/* -unknown_alt => invalid */
 } bounds;
 
 typedef struct {
-	volatile int request_terminate;
+  volatile int request_terminate;
 } posn_status;
 
 extern posn_status tracking_status;
 
-typedef void (*ff_init) (char const *);
-typedef void (*ff_deinit) (void);
-typedef void (*ff_read) (void);
-typedef void (*ff_write) (void);
-typedef void (*ff_exit) (void);
-typedef void (*ff_writeposn) (waypoint *);
-typedef waypoint * (*ff_readposn) (posn_status *);
+typedef void (*ff_init)(char const *);
+typedef void (*ff_deinit)(void);
+typedef void (*ff_read)(void);
+typedef void (*ff_write)(void);
+typedef void (*ff_exit)(void);
+typedef void (*ff_writeposn)(waypoint *);
+typedef waypoint * (*ff_readposn)(posn_status *);
 
 #ifndef DEBUG_MEM
 char * get_option(const char *iarglist, const char *argname);
@@ -545,19 +545,19 @@ char *GET_OPTION(const char *iarglist, const char *argname, DEBUG_PARAMS);
 #define get_option(iarglist, argname) GET_OPTION(iarglist, argname, __FILE__, __LINE__)
 #endif
 
-typedef void (*filter_init) (char const *);
-typedef void (*filter_process) (void);
-typedef void (*filter_deinit) (void);
-typedef void (*filter_exit) (void);
+typedef void (*filter_init)(char const *);
+typedef void (*filter_process)(void);
+typedef void (*filter_deinit)(void);
+typedef void (*filter_exit)(void);
 
-typedef void (*waypt_cb) (const waypoint *);
+typedef void (*waypt_cb)(const waypoint *);
 typedef void (*route_hdr)(const route_head *);
 typedef void (*route_trl)(const route_head *);
-void waypt_add (waypoint *);
-waypoint * waypt_dupe (const waypoint *);
+void waypt_add(waypoint *);
+waypoint * waypt_dupe(const waypoint *);
 waypoint * waypt_new(void);
-void waypt_del (waypoint *);
-void waypt_free (waypoint *);
+void waypt_del(waypoint *);
+void waypt_free(waypoint *);
 void waypt_disp_all(waypt_cb);
 void waypt_disp_session(const session_t *se, waypt_cb cb);
 void waypt_init_bounds(bounds *bounds);
@@ -571,7 +571,7 @@ void waypt_flush_all(void);
 unsigned int waypt_count(void);
 void set_waypt_count(unsigned int nc);
 void waypt_add_url(waypoint *wpt, char *link, char *url_link_text);
-void free_gpx_extras (xml_tag * tag);
+void free_gpx_extras(xml_tag * tag);
 void xcsv_setup_internal_style(const char *style_buf);
 void xcsv_read_internal_style(const char *style_buf);
 waypoint * find_waypt_by_name(const char *name);
@@ -584,7 +584,7 @@ geocache_type gs_mktype(const char *t);
 geocache_container gs_mkcont(const char *t);
 
 route_head *route_head_alloc(void);
-void route_add (waypoint *);
+void route_add(waypoint *);
 void route_add_wpt(route_head *rte, waypoint *wpt);
 void route_del_wpt(route_head *rte, waypoint *wpt);
 void track_add_wpt(route_head *rte, waypoint *wpt);
@@ -601,7 +601,7 @@ void route_disp_all(route_hdr, route_trl, waypt_cb);
 void track_disp_all(route_hdr, route_trl, waypt_cb);
 void route_disp_session(const session_t *se, route_hdr rh, route_trl rt, waypt_cb wc);
 void track_disp_session(const session_t *se, route_hdr rh, route_trl rt, waypt_cb wc);
-void route_flush( queue *);
+void route_flush(queue *);
 void route_flush_all(void);
 void route_flush_all_routes(void);
 void route_flush_all_tracks(void);
@@ -611,23 +611,23 @@ unsigned int route_waypt_count(void);
 unsigned int route_count(void);
 unsigned int track_waypt_count(void);
 unsigned int track_count(void);
-void route_copy( int *dst_count, int *dst_wpt_count, queue **dst, queue *src );
+void route_copy(int *dst_count, int *dst_wpt_count, queue **dst, queue *src);
 void route_backup(signed int *count, queue **head_bak);
-void route_restore( queue *head_bak);
-void route_append( queue *src );
+void route_restore(queue *head_bak);
+void route_append(queue *src);
 void track_backup(signed int *count, queue **head_bak);
-void track_restore( queue *head_bak);
-void track_append( queue *src );
-void route_flush( queue *head );
-void track_recompute( const route_head *trk, computed_trkdata **);
+void track_restore(queue *head_bak);
+void track_append(queue *src);
+void route_flush(queue *head);
+void track_recompute(const route_head *trk, computed_trkdata **);
 
 /*
  * All shortname functions take a shortname handle as the first arg.
  * This is an opaque pointer.  Callers must not fondle the contents of it.
  */
 typedef struct short_handle * short_handle;
-#ifndef DEBUG_MEM 
-char *mkshort (short_handle,  const char *);
+#ifndef DEBUG_MEM
+char *mkshort(short_handle,  const char *);
 void *mkshort_new_handle(void);
 #else
 char *MKSHORT(short_handle,  const char *, DEBUG_PARAMS);
@@ -652,8 +652,8 @@ void setshort_is_utf8(short_handle h, const int is_utf8);
  */
 #define VMFL_NOZERO (1 << 0)
 typedef struct vmem {
-	void *mem;		/* visible memory object */
-	size_t size; 		/* allocated size of object */
+  void *mem;		/* visible memory object */
+  size_t size; 		/* allocated size of object */
 } vmem_t;
 vmem_t 	vmem_alloc(size_t, int flags);
 void 	vmem_free(vmem_t*);
@@ -668,7 +668,7 @@ void 	vmem_realloc(vmem_t*, size_t);
 #define ARGTYPE_FILE       0x00000005
 #define ARGTYPE_OUTFILE    0x00000006
 
-/* REQUIRED means that the option is required to be set. 
+/* REQUIRED means that the option is required to be set.
  * See also BEGIN/END_REQ */
 #define ARGTYPE_REQUIRED   0x40000000
 
@@ -677,19 +677,19 @@ void 	vmem_realloc(vmem_t*, size_t);
 #define ARGTYPE_HIDDEN     0x20000000
 
 /* BEGIN/END_EXCL mark the beginning and end of an exclusive range of
- * options. No more than one of the options in the range may be selected 
+ * options. No more than one of the options in the range may be selected
  * or set. If exactly one must be set, use with BEGIN/END_REQ
  * Both of these flags set is just like neither set, so avoid doing that. */
 #define ARGTYPE_BEGIN_EXCL 0x10000000
 #define ARGTYPE_END_EXCL   0x08000000
 
-/* BEGIN/END_REQ mark the beginning and end of a required range of 
+/* BEGIN/END_REQ mark the beginning and end of a required range of
  * options.  One or more of the options in the range MUST be selected or set.
- * If exactly one must be set, use with BEGIN/END_EXCL 
+ * If exactly one must be set, use with BEGIN/END_EXCL
  * Both of these flags set is synonymous with REQUIRED, so use that instead
  * for "groups" of exactly one option. */
 #define ARGTYPE_BEGIN_REQ  0x04000000
-#define ARGTYPE_END_REQ    0x02000000 
+#define ARGTYPE_END_REQ    0x02000000
 
 #define ARGTYPE_TYPEMASK 0x00000fff
 #define ARGTYPE_FLAGMASK 0xfffff000
@@ -698,32 +698,32 @@ void 	vmem_realloc(vmem_t*, size_t);
 #define ARG_TERMINATOR {0, 0, 0, 0, 0, ARG_NOMINMAX}
 
 typedef struct arglist {
-	const char *argstring;
-	char **argval;
-	const char *helpstring;
-	const char *defaultvalue;
-	const gbuint32 argtype;
-	const char *minvalue;		/* minimum value for numeric options */
-	const char *maxvalue;		/* maximum value for numeric options */
-	char *argvalptr;	/* !!! internal helper. Not used in definitions !!! */
+  const char *argstring;
+  char **argval;
+  const char *helpstring;
+  const char *defaultvalue;
+  const gbuint32 argtype;
+  const char *minvalue;		/* minimum value for numeric options */
+  const char *maxvalue;		/* maximum value for numeric options */
+  char *argvalptr;	/* !!! internal helper. Not used in definitions !!! */
 } arglist_t;
 
 typedef enum {
-	ff_type_file = 1,	/* normal format: useful to a GUI. */
-	ff_type_internal,	/* fmt not useful with default options */
-	ff_type_serial		/* format describes a serial protocol (GUI can display port names) */
+  ff_type_file = 1,	/* normal format: useful to a GUI. */
+  ff_type_internal,	/* fmt not useful with default options */
+  ff_type_serial		/* format describes a serial protocol (GUI can display port names) */
 } ff_type;
 
 typedef enum {
-	ff_cap_rw_wpt,
-	ff_cap_rw_trk,
-	ff_cap_rw_rte
+  ff_cap_rw_wpt,
+  ff_cap_rw_trk,
+  ff_cap_rw_rte
 } ff_cap_array;
 
 typedef enum {
-	ff_cap_none,
-	ff_cap_read = 1,
-	ff_cap_write = 2
+  ff_cap_none,
+  ff_cap_read = 1,
+  ff_cap_write = 2
 } ff_cap;
 
 #define FF_CAP_RW_ALL \
@@ -736,38 +736,38 @@ typedef enum {
  * Format capabilities for realtime positioning.
  */
 typedef struct position_ops {
-	ff_init rd_init;
-	ff_readposn rd_position;
-	ff_deinit rd_deinit;
+  ff_init rd_init;
+  ff_readposn rd_position;
+  ff_deinit rd_deinit;
 
-	ff_init wr_init;
-	ff_writeposn wr_position;
-	ff_deinit wr_deinit;
+  ff_init wr_init;
+  ff_writeposn wr_position;
+  ff_deinit wr_deinit;
 } position_ops_t;
 
 /*
  *  Describe the file format to the caller.
  */
 typedef struct ff_vecs {
-	ff_type type;
-	ff_cap cap[3];
-	ff_init rd_init;
-	ff_init wr_init;
-	ff_deinit rd_deinit;
-	ff_deinit wr_deinit;
-	ff_read read;
-	ff_write write;
-	ff_exit exit;
-	arglist_t *args;
-	const char *encode;
-	int fixed_encode;
-	position_ops_t position_ops;
-	const char *name;		/* dyn. initialized by find_vec */
+  ff_type type;
+  ff_cap cap[3];
+  ff_init rd_init;
+  ff_init wr_init;
+  ff_deinit rd_deinit;
+  ff_deinit wr_deinit;
+  ff_read read;
+  ff_write write;
+  ff_exit exit;
+  arglist_t *args;
+  const char *encode;
+  int fixed_encode;
+  position_ops_t position_ops;
+  const char *name;		/* dyn. initialized by find_vec */
 } ff_vecs_t;
 
 typedef struct style_vecs {
-	const char *name;
-	const char *style_buf;
+  const char *name;
+  const char *style_buf;
 } style_vecs_t;
 extern style_vecs_t style_list[];
 
@@ -790,7 +790,7 @@ ff_vecs_t *find_vec(char * const, char **);
 void assign_option(const char *vecname, arglist_t *ap, const char *val);
 void disp_vec_options(const char *vecname, arglist_t *ap);
 void disp_vecs(void);
-void disp_vec( const char *vecname );
+void disp_vec(const char *vecname);
 void init_vecs(void);
 void exit_vecs(void);
 void disp_formats(int version);
@@ -813,16 +813,16 @@ char *xstrappend(char *src, const char *addon);
 #define xxstrdup(s, file, line) xstrdup(s)
 #define xxstrappend(src, addon, file, line) xstrappend(src, addon)
 #else /* DEBUG_MEM */
-void *XCALLOC(size_t nmemb, size_t size, DEBUG_PARAMS );
-void *XMALLOC(size_t size, DEBUG_PARAMS );
-void *XREALLOC(void *p, size_t s, DEBUG_PARAMS );
-void XFREE(void *mem, DEBUG_PARAMS );
-char *XSTRDUP(const char *s, DEBUG_PARAMS );
-char *XSTRNDUP(const char *src, size_t size, DEBUG_PARAMS );
-char *XSTRNDUPT(const char *src, size_t size, DEBUG_PARAMS );
-char *XSTRAPPEND(char *src, const char *addon, DEBUG_PARAMS );
+void *XCALLOC(size_t nmemb, size_t size, DEBUG_PARAMS);
+void *XMALLOC(size_t size, DEBUG_PARAMS);
+void *XREALLOC(void *p, size_t s, DEBUG_PARAMS);
+void XFREE(void *mem, DEBUG_PARAMS);
+char *XSTRDUP(const char *s, DEBUG_PARAMS);
+char *XSTRNDUP(const char *src, size_t size, DEBUG_PARAMS);
+char *XSTRNDUPT(const char *src, size_t size, DEBUG_PARAMS);
+char *XSTRAPPEND(char *src, const char *addon, DEBUG_PARAMS);
 void debug_mem_open();
-void debug_mem_output( char *format, ... );
+void debug_mem_output(char *format, ...);
 void debug_mem_close();
 #define xcalloc(nmemb, size) XCALLOC(nmemb, size, __FILE__, __LINE__)
 #define xmalloc(size) XMALLOC(size, __FILE__, __LINE__)
@@ -879,7 +879,7 @@ char * pretty_deg_format(double lat, double lon, char fmt, const char *sep, int 
 
 char * get_filename(const char *fname);				/* extract the filename portion */
 
-/* 
+/*
  * Character encoding transformations.
  */
 
@@ -890,45 +890,45 @@ char * get_filename(const char *fname);				/* extract the filename portion */
 #define CET_CHARSET_MS_ANSI	"MS-ANSI"
 #define CET_CHARSET_LATIN1	"ISO-8859-1"
 
-#define str_utf8_to_cp1252(str) cet_str_utf8_to_cp1252((str)) 
+#define str_utf8_to_cp1252(str) cet_str_utf8_to_cp1252((str))
 #define str_cp1252_to_utf8(str) cet_str_cp1252_to_utf8((str))
 
-#define str_utf8_to_iso8859_1(str) cet_str_utf8_to_iso8859_1((str)) 
+#define str_utf8_to_iso8859_1(str) cet_str_utf8_to_iso8859_1((str))
 #define str_iso8859_1_to_utf8(str) cet_str_iso8859_1_to_utf8((str))
 
 /* this lives in gpx.c */
-time_t xml_parse_time( const char *cdatastr, int * microsecs );
-	
-xml_tag *xml_findfirst( xml_tag *root, const char *tagname );
-xml_tag *xml_findnext( xml_tag *root, xml_tag *cur, const char *tagname );
-char *xml_attribute( xml_tag *tag, const char *attrname );
+time_t xml_parse_time(const char *cdatastr, int * microsecs);
 
-char * rot13( const char *str );
+xml_tag *xml_findfirst(xml_tag *root, const char *tagname);
+xml_tag *xml_findnext(xml_tag *root, xml_tag *cur, const char *tagname);
+char *xml_attribute(xml_tag *tag, const char *attrname);
+
+char * rot13(const char *str);
 
 /*
  * PalmOS records like fixed-point numbers, which should be rounded
  * to deal with possible floating-point representation errors.
  */
 
-signed int si_round( double d );
+signed int si_round(double d);
 
-/* 
+/*
  * Data types for Palm/OS files.
  */
 typedef struct {
-	unsigned char data[4];
+  unsigned char data[4];
 } pdb_32;
 
 typedef struct {
-	unsigned char data[2];
+  unsigned char data[2];
 } pdb_16;
 
 typedef struct {
-	unsigned char data[8];
+  unsigned char data[8];
 } pdb_double;
 
 typedef struct {
-	unsigned char data[4];
+  unsigned char data[4];
 } pdb_float;
 
 /*
@@ -976,13 +976,13 @@ double ddmm2degrees(double ddmm_val);
 double degrees2ddmm(double deg_val);
 
 typedef enum {
-	grid_unknown = -1,
-	grid_lat_lon_ddd = 0,
-	grid_lat_lon_dmm = 1,
-	grid_lat_lon_dms = 2,
-	grid_bng = 3,
-	grid_utm = 4,
-	grid_swiss = 5
+  grid_unknown = -1,
+  grid_lat_lon_ddd = 0,
+  grid_lat_lon_dmm = 1,
+  grid_lat_lon_dms = 2,
+  grid_bng = 3,
+  grid_utm = 4,
+  grid_swiss = 5
 } grid_type;
 
 #define GRID_INDEX_MIN	grid_lat_lon_ddd
@@ -1003,7 +1003,7 @@ int gb_ptr2int(const void *p);
  *  From parse.c
  */
 int parse_coordinates(const char *str, int datum, const grid_type grid,
-	double *latitude, double *longitude, const char *module);
+                      double *latitude, double *longitude, const char *module);
 int parse_distance(const char *str, double *val, double scale, const char *module);
 int parse_speed(const char *str, double *val, const double scale, const char *module);
 time_t parse_date(const char *str, const char *format, const char *module);
@@ -1018,11 +1018,11 @@ unsigned long get_crc32_s(const void * data);
  *  From units.c
  */
 typedef enum {
-	units_unknown = 0,
-	units_statute = 1,
-	units_metric = 2,
-	units_nautical =3,
-	units_aviation =4
+  units_unknown = 0,
+  units_statute = 1,
+  units_metric = 2,
+  units_nautical =3,
+  units_aviation =4
 } fmt_units;
 
 int    fmt_setunits(fmt_units);

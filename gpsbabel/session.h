@@ -23,19 +23,19 @@
 #define SESSION_H
 
 typedef struct {
-	queue Q;
-	int id;
-	char *name;
+  queue Q;
+  int id;
+  char *name;
 } category_t;
 
 typedef struct {
-	queue Q;
-	int nr;
-	const char *name;		/* in normal case the name of a format */
-	char *filename;			/* used file within format */
-	int category_ct;
-	int unknown_category_ct;	/* added without id */
-	queue category_list;
+  queue Q;
+  int nr;
+  const char *name;		/* in normal case the name of a format */
+  char *filename;			/* used file within format */
+  int category_ct;
+  int unknown_category_ct;	/* added without id */
+  queue category_list;
 } session_t;
 
 void session_init(void);

@@ -77,49 +77,69 @@ static char *govl_txttrans_s = NULL;
 static char *govl_file_s = NULL;
 
 static arglist_t ovl_args[] = {
-       { "col", &govl_col_s, "color index [1-9] for routes",
-        NULL, ARGTYPE_INT, "1", "9" },
-       { "size", &govl_size_s, "size index [101-] for routes",
-        NULL, ARGTYPE_INT, "101", NULL },
-       { "mapname", &govl_mapname, "name of map",
-        NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-       { "zoomfc", &govl_zoomfc_s, "zoom factor of map in %",
-        NULL, ARGTYPE_INT, ARG_NOMINMAX },
-       { "dimmfc", &govl_dimmfc_s, "dimmer factor of map in %",
-        NULL, ARGTYPE_INT, ARG_NOMINMAX },
-       { "txtcol", &govl_txtcol_s, "color index [1-9] for waypoint names",
-        NULL, ARGTYPE_INT, "1", "9" },
-       { "txtsize", &govl_txtsize_s, "text size [101-] for waypoint names",
-        NULL, ARGTYPE_INT, "101", NULL },
-       { "font", &govl_font_s, "font index [1-] for waypoint names",
-        NULL, ARGTYPE_INT, "1", NULL },
-       { "txttrans", &govl_txttrans_s, "set text background to transparent",
-        NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
-       { "file", &govl_file_s, "use file of parameters (parameters on command line overwrites file parameters)",
-        NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-       ARG_TERMINATOR
+  {
+    "col", &govl_col_s, "color index [1-9] for routes",
+    NULL, ARGTYPE_INT, "1", "9"
+  },
+  {
+    "size", &govl_size_s, "size index [101-] for routes",
+    NULL, ARGTYPE_INT, "101", NULL
+  },
+  {
+    "mapname", &govl_mapname, "name of map",
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+  },
+  {
+    "zoomfc", &govl_zoomfc_s, "zoom factor of map in %",
+    NULL, ARGTYPE_INT, ARG_NOMINMAX
+  },
+  {
+    "dimmfc", &govl_dimmfc_s, "dimmer factor of map in %",
+    NULL, ARGTYPE_INT, ARG_NOMINMAX
+  },
+  {
+    "txtcol", &govl_txtcol_s, "color index [1-9] for waypoint names",
+    NULL, ARGTYPE_INT, "1", "9"
+  },
+  {
+    "txtsize", &govl_txtsize_s, "text size [101-] for waypoint names",
+    NULL, ARGTYPE_INT, "101", NULL
+  },
+  {
+    "font", &govl_font_s, "font index [1-] for waypoint names",
+    NULL, ARGTYPE_INT, "1", NULL
+  },
+  {
+    "txttrans", &govl_txttrans_s, "set text background to transparent",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  {
+    "file", &govl_file_s, "use file of parameters (parameters on command line overwrites file parameters)",
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+  },
+  ARG_TERMINATOR
 };
 
 
-static char *Keywords[]={
-                "Typ",
-                "Group",
-                "Col",
-                "Zoom",
-                "Size",
-                "Art",
-                "Punkte",
-                "Path",
-                "Dir",
-                "Font",
-                "Area",
-                "Text",
-                "Width",
-                "Height",
-                "Trans",
-                "TransByte",
-        NULL
-             };
+static char *Keywords[]= {
+  "Typ",
+  "Group",
+  "Col",
+  "Zoom",
+  "Size",
+  "Art",
+  "Punkte",
+  "Path",
+  "Dir",
+  "Font",
+  "Area",
+  "Text",
+  "Width",
+  "Height",
+  "Trans",
+  "TransByte",
+  NULL
+};
 
 #define KEY_TYP        0
 #define KEY_GROUP      1
@@ -143,7 +163,9 @@ static int isKeyword(char *str,char **keys)
   int i;
 
   i = 0;
-  while(keys[i]!=NULL && strcmp(str,keys[i])) i++;
+  while (keys[i]!=NULL && strcmp(str,keys[i])) {
+    i++;
+  }
   return(keys[i]==NULL ? -1 : i);
 }
 
@@ -163,9 +185,9 @@ void ovl_rd_init(char const *fname)
 #define MAXLINE 512
 
 static  struct _group {
-                 int  group;
-                 char *name;
-                } *groups;
+  int  group;
+  char *name;
+} *groups;
 static  int    groups_cnt;
 
 static void ovl_add_group(int aktgrp,char *akttxt)
@@ -173,9 +195,10 @@ static void ovl_add_group(int aktgrp,char *akttxt)
   int i;
 
   i = 0;
-  while (i<groups_cnt && groups[i].group!=aktgrp) i++;
-  if (i==groups_cnt)
-  {
+  while (i<groups_cnt && groups[i].group!=aktgrp) {
+    i++;
+  }
+  if (i==groups_cnt) {
     groups = (struct _group *) xrealloc(groups,(groups_cnt+1)*sizeof(struct _group));
     groups[i].group = aktgrp;
     groups[i].name = NULL;
@@ -198,14 +221,13 @@ static void route_add_name(const route_head *hd)
   route = (route_head *) hd;
   grp = atoi(route->rte_name);
   i = 0;
-  while (i<groups_cnt && groups[i].group!=grp) i++;
-  if (i==groups_cnt) // not found
-  {
+  while (i<groups_cnt && groups[i].group!=grp) {
+    i++;
+  }
+  if (i==groups_cnt) { // not found
     sprintf(name,"undef(%d)",grp); /* pseudo name*/
     sprintf(name,"?%d",grp);
-  }
-  else
-  {
+  } else {
     strcpy(name,groups[i].name);
   }
   route->rte_name = (char *) xrealloc(route->rte_name,(strlen(name)+1)*sizeof(char));
@@ -238,160 +260,151 @@ static void ovl_read(void)
   aktPath = NULL;
   sym_cnt = 0;
   isSection = SECTION_NONE;
-  while ((line = gbfgetstr(fpin)))
-  {
-    if ((lineno == 0) && fpin->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
+  while ((line = gbfgetstr(fpin))) {
+    if ((lineno == 0) && fpin->unicode) {
+      cet_convert_init(CET_CHARSET_UTF8, 1);
+    }
     lineno++;
     line = lrtrim(line);
-    if( (pstr = strstr(line,"[Symbol "))!= NULL)
-    {
+    if ((pstr = strstr(line,"[Symbol "))!= NULL) {
       sym_cnt++;
       isSection = SECTION_SYMBOL;
-    }
-    else if( (pstr = strstr(line,"[Overlay]"))!= NULL)
-    {
+    } else if ((pstr = strstr(line,"[Overlay]"))!= NULL) {
       isSection = SECTION_OVERLAY;
-    }
-    else if (isSection==SECTION_SYMBOL)
-    {
+    } else if (isSection==SECTION_SYMBOL) {
       pstr = strtok(line,"=");
-      if (pstr!=NULL)
-      {
+      if (pstr!=NULL) {
         keyw = isKeyword(pstr,Keywords);
         pstr = strtok(NULL,"\n");
-        if (pstr!=NULL)
-        {
-          switch(keyw)
-          {
-            case KEY_TYP     :
-              aktTyp = atoi(pstr);
+        if (pstr!=NULL) {
+          switch (keyw) {
+          case KEY_TYP     :
+            aktTyp = atoi(pstr);
+            break;
+          case KEY_GROUP   :
+            aktGroup = atoi(pstr);
+            ovl_add_group(aktGroup,"?"); /* 'Group' without relation to 'Text'-Symbol */
+            switch (aktTyp) {
+            case 3: // Linie
+              route_head = route_head_alloc();
+              route_head->rte_num = sym_cnt;
+              route_head->rte_name = xstrdup(pstr); /* use group-number for the moment */
+              route_add_head(route_head);
               break;
-            case KEY_GROUP   :
-              aktGroup = atoi(pstr);
-              ovl_add_group(aktGroup,"?"); /* 'Group' without relation to 'Text'-Symbol */
-              switch(aktTyp)
-              {
-                case 3: // Linie
-                  route_head = route_head_alloc();
-                  route_head->rte_num = sym_cnt;
-                  route_head->rte_name = xstrdup(pstr); /* use group-number for the moment */
-                  route_add_head(route_head);
-                  break;
-              }
-              break;
-            case KEY_COL     :
-              aktCol = atoi(pstr);
-              break;
-            case KEY_ZOOM    :
-              break;
-            case KEY_SIZE    :
-              aktSize = atoi(pstr);
-              break;
-            case KEY_ART     :
-              aktArt = atoi(pstr);
-              break;
-            case KEY_AREA     :
-              aktArea = atoi(pstr);
-              if (aktTyp==5 || aktTyp==5 || aktTyp==7) isSection = SECTION_PUNKTE; // Rechteck, Kreis, Dreieck
-              break;
-            case KEY_PUNKTE  :
-              isSection = SECTION_PUNKTE; // Linie, Fläche
-              break;
+            }
+            break;
+          case KEY_COL     :
+            aktCol = atoi(pstr);
+            break;
+          case KEY_ZOOM    :
+            break;
+          case KEY_SIZE    :
+            aktSize = atoi(pstr);
+            break;
+          case KEY_ART     :
+            aktArt = atoi(pstr);
+            break;
+          case KEY_AREA     :
+            aktArea = atoi(pstr);
+            if (aktTyp==5 || aktTyp==5 || aktTyp==7) {
+              isSection = SECTION_PUNKTE;  // Rechteck, Kreis, Dreieck
+            }
+            break;
+          case KEY_PUNKTE  :
+            isSection = SECTION_PUNKTE; // Linie, Fläche
+            break;
 #ifdef WITH_BITMAP
-            case KEY_PATH     :
-              aktPath = xstrdup(pstr);
-              isSection = SECTION_PUNKTE; // Bitmap
-              break;
-            case KEY_TRANS     :
-              aktTrans = atoi(pstr);
-              break;
-            case KEY_TRANSBYTE     :
-              aktTransByte = atoi(pstr);
-              break;
+          case KEY_PATH     :
+            aktPath = xstrdup(pstr);
+            isSection = SECTION_PUNKTE; // Bitmap
+            break;
+          case KEY_TRANS     :
+            aktTrans = atoi(pstr);
+            break;
+          case KEY_TRANSBYTE     :
+            aktTransByte = atoi(pstr);
+            break;
 #endif
-            case KEY_TEXT     :
-              aktText = xstrdup(pstr);
-              /* The last 'Text'-symbol wins as a information block for
-                 waypoint/route description.
-                 Infos from previous symbols get overwrited.
-              */
-              ovl_add_group(aktGroup,aktText);
-              break;
-            case KEY_WIDTH     :
-              aktWidth = atoi(pstr);
-              break;
-            case KEY_HEIGHT     :
-              aktHeight = atoi(pstr);
-              break;
-            case KEY_DIR     :
-              aktDir = atoi(pstr);
-              if (aktTyp==2) isSection = SECTION_PUNKTE; // Text
-              break;
+          case KEY_TEXT     :
+            aktText = xstrdup(pstr);
+            /* The last 'Text'-symbol wins as a information block for
+               waypoint/route description.
+               Infos from previous symbols get overwrited.
+            */
+            ovl_add_group(aktGroup,aktText);
+            break;
+          case KEY_WIDTH     :
+            aktWidth = atoi(pstr);
+            break;
+          case KEY_HEIGHT     :
+            aktHeight = atoi(pstr);
+            break;
+          case KEY_DIR     :
+            aktDir = atoi(pstr);
+            if (aktTyp==2) {
+              isSection = SECTION_PUNKTE;  // Text
+            }
+            break;
           }
         }
       }
-    }
-    else if (isSection==SECTION_PUNKTE)
-    {
+    } else if (isSection==SECTION_PUNKTE) {
       pstr = strtok(line,"=");
-      if (strstr(pstr,"XKoord")!=NULL || strstr(pstr,"YKoord")!=NULL)
-      {
-        if ((pstr = strtok(NULL,"\n"))!=NULL)
-        {
+      if (strstr(pstr,"XKoord")!=NULL || strstr(pstr,"YKoord")!=NULL) {
+        if ((pstr = strtok(NULL,"\n"))!=NULL) {
           rwert = atof(pstr);
-          if (line[0]=='X')
-          {
+          if (line[0]=='X') {
             aktX = rwert;
-          }
-          else if (line[0]=='Y')
-          {
+          } else if (line[0]=='Y') {
             aktY = rwert;
-            switch(aktTyp)
-            {
+            switch (aktTyp) {
 #ifdef WITH_BITMAP
-              case 1: // Bitmap
-                wpt = waypt_new();
-                wpt->latitude = aktY;
-                wpt->longitude = aktX;
-                wpt->altitude = 0.0;
-                wpt->shortname = strdup(aktPath);
-                waypt_add(wpt);
-                break;
+            case 1: // Bitmap
+              wpt = waypt_new();
+              wpt->latitude = aktY;
+              wpt->longitude = aktX;
+              wpt->altitude = 0.0;
+              wpt->shortname = strdup(aktPath);
+              waypt_add(wpt);
+              break;
 #endif
-              case 2: // Text
-                isSection = SECTION_SYMBOL;
-                break;
-              case 3: // Linie
-                wpt = waypt_new();
-                wpt->latitude = aktY;
-                wpt->longitude = aktX;
-                wpt->altitude = 0.0;
-                route_add_wpt(route_head, wpt);
-                break;
-              case 4: // Fläche
-                break;
-              case 5: // Rechteck
-                break;
-              case 6: // Kreis
-                break;
-              case 7: // Dreieck
-                break;
+            case 2: // Text
+              isSection = SECTION_SYMBOL;
+              break;
+            case 3: // Linie
+              wpt = waypt_new();
+              wpt->latitude = aktY;
+              wpt->longitude = aktX;
+              wpt->altitude = 0.0;
+              route_add_wpt(route_head, wpt);
+              break;
+            case 4: // Fläche
+              break;
+            case 5: // Rechteck
+              break;
+            case 6: // Kreis
+              break;
+            case 7: // Dreieck
+              break;
             }
           }
         }
       }
-    }
-    else if (isSection==SECTION_OVERLAY)
-    {
+    } else if (isSection==SECTION_OVERLAY) {
       isSection = SECTION_NONE;
     }
   }
   route_disp_all(route_add_name,NULL,NULL);
-  if (aktText!=NULL) xfree(aktText);
-  if (aktPath!=NULL) xfree(aktPath);
-  for (i=0;i<groups_cnt;i++)
-  {
-    if (groups[i].name!=NULL) xfree(groups[i].name);
+  if (aktText!=NULL) {
+    xfree(aktText);
+  }
+  if (aktPath!=NULL) {
+    xfree(aktPath);
+  }
+  for (i=0; i<groups_cnt; i++) {
+    if (groups[i].name!=NULL) {
+      xfree(groups[i].name);
+    }
   }
   xfree(groups);
 }
@@ -410,28 +423,19 @@ void ovl_read_parameter(char *fname)
   char      *pstr;
 
   fpin = gbfopen(fname, "r", MYNAME);
-  if (fpin!=NULL)
-  {
-    while ((str = gbfgetstr(fpin)))
-    {
+  if (fpin!=NULL) {
+    while ((str = gbfgetstr(fpin))) {
       str = lrtrim(str); // trim
-      if (str[0]!=';')
-      {
+      if (str[0]!=';') {
         p = ovl_args;
         pstr = strtok(str,"=");
-        if (pstr!=NULL)
-        {
-          while(p->argstring!=NULL)
-          {
-            if (strcmp(pstr,p->argstring)==0)
-            {
+        if (pstr!=NULL) {
+          while (p->argstring!=NULL) {
+            if (strcmp(pstr,p->argstring)==0) {
               pstr = strtok(NULL,"\n");
-              if (p->argtype==ARGTYPE_BOOL)
-              {
+              if (p->argtype==ARGTYPE_BOOL) {
                 *(p->argval) = atoi(pstr) ? xstrdup(pstr) : NULL;
-              }
-              else
-              {
+              } else {
                 *(p->argval) = xstrdup(pstr);
               }
               break;
@@ -456,40 +460,31 @@ static void ovl_wr_init(const char *fname)
 
   ovl_read_parameter(govl_file_s!=NULL ? govl_file_s : PARAMETER_FILE);
 
-  if (govl_col_s!=NULL)
-  {
+  if (govl_col_s!=NULL) {
     govl_col = atoi(govl_col_s);
   }
-  if (govl_size_s!=NULL)
-  {
+  if (govl_size_s!=NULL) {
     govl_size = atoi(govl_size_s);
   }
-  if (govl_mapname==NULL)
-  {
+  if (govl_mapname==NULL) {
     govl_mapname = xstrdup(MAPNAME);
   }
-  if (govl_zoomfc_s!=NULL)
-  {
+  if (govl_zoomfc_s!=NULL) {
     govl_zoomfc = atoi(govl_zoomfc_s);
   }
-  if (govl_dimmfc_s!=NULL)
-  {
+  if (govl_dimmfc_s!=NULL) {
     govl_dimmfc = atoi(govl_dimmfc_s);
   }
-  if (govl_txtcol_s!=NULL)
-  {
+  if (govl_txtcol_s!=NULL) {
     govl_txtcol = atoi(govl_txtcol_s);
   }
-  if (govl_txtsize_s!=NULL)
-  {
+  if (govl_txtsize_s!=NULL) {
     govl_txtsize = atoi(govl_txtsize_s);
   }
-  if (govl_font_s!=NULL)
-  {
+  if (govl_font_s!=NULL) {
     govl_font = atoi(govl_font_s);
   }
-  if (govl_txttrans_s!=NULL)
-  {
+  if (govl_txttrans_s!=NULL) {
     govl_txttrans = 1;
   }
 }
@@ -502,13 +497,10 @@ static void ovl_wr_deinit(void)
   gbfprintf(fpout,"MapName=%s\n",govl_mapname);
   gbfprintf(fpout,"DimmFc=%d\n",govl_dimmfc);
   gbfprintf(fpout,"ZoomFc=%d\n",govl_zoomfc);
-  if (govl_symbol_cnt)
-  {
+  if (govl_symbol_cnt) {
     gbfprintf(fpout,"CenterLat=%.8lf\n",govl_sum_n/govl_sumcnt); // precision 8 = better than 1mm
     gbfprintf(fpout,"CenterLong=%.8lf\n",govl_sum_e/govl_sumcnt);
-  }
-  else
-  {
+  } else {
     gbfprintf(fpout,"CenterLong=10.52374295\n"); // Braunschweiger Löwe, Mittelpunkt der Welt :-)
     gbfprintf(fpout,"CenterLat=52.26474445\n");
   }
@@ -561,10 +553,10 @@ static void symbol_point(const waypoint *wpt)
   govl_sum_e += east;
   govl_sum_n += north;
   govl_sumcnt += 1.0;
-/*
-  govl_last_east  = east;
-  govl_last_north = north;
-*/
+  /*
+    govl_last_east  = east;
+    govl_last_north = north;
+  */
 }
 
 
@@ -581,18 +573,14 @@ static void symbol_deinit(const route_head *hd)
   lats = lons = late = lone = 0.0;
   dist = 0.0;
   i = 0;
-  QUEUE_FOR_EACH(&(hd->waypoint_list), elem, tmp)
-  {
+  QUEUE_FOR_EACH(&(hd->waypoint_list), elem, tmp) {
     waypointp = (waypoint *) elem;
     lat2 = RAD(waypointp->latitude);
     lon2 = RAD(waypointp->longitude);
-    if (i)
-    {
-      d   = gcdist(lat1, lon1, lat2, lon2 );
+    if (i) {
+      d   = gcdist(lat1, lon1, lat2, lon2);
       dist += d;
-    }
-    else
-    {
+    } else {
       lats = lat2; // start point
       lons = lon2;
     }
@@ -605,14 +593,12 @@ static void symbol_deinit(const route_head *hd)
   dd = 0;
   i = 0;
   elem = QUEUE_FIRST(&(hd->waypoint_list));
-  while (elem!=&(hd->waypoint_list) && dd<dist/2.0)
-  {
+  while (elem!=&(hd->waypoint_list) && dd<dist/2.0) {
     waypointp = (waypoint *) elem;
     lat2 = RAD(waypointp->latitude);
     lon2 = RAD(waypointp->longitude);
-    if (i)
-    {
-      d   = gcdist(lat1, lon1, lat2, lon2 );
+    if (i) {
+      d   = gcdist(lat1, lon1, lat2, lon2);
       dd += d;
     }
     lat1 = lat2;
@@ -623,8 +609,10 @@ static void symbol_deinit(const route_head *hd)
 
   d = gcdist(lats,lons,late,lone);
 //  d = acos( sin(lats)*sin(late)+cos(lats)*cos(late)*cos(lone-lons) );
-  dd = acos( (sin(late) - sin(lats)*cos(d))/(cos(lats)*sin(d)) );
-  if (lone<lons) dd = -dd;   // correction because the ambiguity of acos function
+  dd = acos((sin(late) - sin(lats)*cos(d))/(cos(lats)*sin(d)));
+  if (lone<lons) {
+    dd = -dd;  // correction because the ambiguity of acos function
+  }
   dd = DEG(dd);              // azimuth
   dd = 360.0 - (dd + 270.0); // make it anticlockwise and start counting on x-axis
   dd = dd <   0.0 ? dd + 360.0 : dd; // normalizing
@@ -653,8 +641,8 @@ static void overlay_waypt_pr(const waypoint *waypointp)
     odesc = waypointp->shortname;
   }
   oname = global_opts.synthesize_shortnames ?
-              mkshort(mkshort_handle, odesc) :
-              waypointp->shortname;
+          mkshort(mkshort_handle, odesc) :
+          waypointp->shortname;
 
   gbfprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
   gbfprintf(fpout,"Typ=1\n");
@@ -680,28 +668,28 @@ static void ovl_write(void)
   waypt_disp_all(overlay_waypt_pr);
   track_disp_all(symbol_init, symbol_deinit, symbol_point);
   route_disp_all(symbol_init, symbol_deinit, symbol_point);
-/*
-  switch(global_opts.objective)
-  {
-    case wptdata:
-      break;
-    case trkdata:
-      break;
-  }
-*/
+  /*
+    switch(global_opts.objective)
+    {
+      case wptdata:
+        break;
+      case trkdata:
+        break;
+    }
+  */
 }
 
 
 ff_vecs_t overlay_vecs = {
-       ff_type_internal,
-       FF_CAP_RW_ALL,
-       ovl_rd_init,
-       ovl_wr_init,
-       ovl_rd_deinit,
-       ovl_wr_deinit,
-       ovl_read,
-       ovl_write,
-        NULL,
-       ovl_args,
-	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  ff_type_internal,
+  FF_CAP_RW_ALL,
+  ovl_rd_init,
+  ovl_wr_init,
+  ovl_rd_deinit,
+  ovl_wr_deinit,
+  ovl_read,
+  ovl_write,
+  NULL,
+  ovl_args,
+  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

@@ -1,5 +1,5 @@
 /*
-    vmem utilities.  Manipulate allocated object optimized for 
+    vmem utilities.  Manipulate allocated object optimized for
     long-term persistence over raw speed.
 
     Copyright (C) 2003 Robert Lipe, robertlipe@usa.net
@@ -23,28 +23,31 @@
 #include "defs.h"
 #include <stdlib.h>
 
-vmem_t 
+vmem_t
 vmem_alloc(size_t size, int flags)
 {
-	vmem_t vm;
-	/*
-	 * By default, zero the allocated thingy.
-	 */
-	if (flags & VMFL_NOZERO)
-		vm.mem = xmalloc(size);
-	else
-		vm.mem = (char *) xcalloc(size, 1);
-	vm.size = size;
-	return vm;
+  vmem_t vm;
+  /*
+   * By default, zero the allocated thingy.
+   */
+  if (flags & VMFL_NOZERO) {
+    vm.mem = xmalloc(size);
+  } else {
+    vm.mem = (char *) xcalloc(size, 1);
+  }
+  vm.size = size;
+  return vm;
 }
 
 void
 vmem_free(vmem_t *vm)
 {
-	if (vm->mem) xfree(vm->mem);
-	vm->mem = NULL;
-	vm->size = 0;
-	return;
+  if (vm->mem) {
+    xfree(vm->mem);
+  }
+  vm->mem = NULL;
+  vm->size = 0;
+  return;
 }
 
 /*
@@ -54,12 +57,12 @@ vmem_free(vmem_t *vm)
 void
 vmem_realloc(vmem_t *vm, size_t size)
 {
-	/*
-	 * Reallocate only if we must.
-	 */
-	if (size > vm->size) {
-		vm->mem = xrealloc(vm->mem, size);
-		vm->size = size;
-	}
-	return;
+  /*
+   * Reallocate only if we must.
+   */
+  if (size > vm->size) {
+    vm->mem = xrealloc(vm->mem, size);
+    vm->size = size;
+  }
+  return;
 }

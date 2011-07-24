@@ -1,6 +1,6 @@
 /*
     Serial interface - private header for gbser*.c
-    
+
     Copyright (C) 2006  Robert Lipe, robertlipe@usa.net
 
     This program is free software; you can redistribute it and/or modify

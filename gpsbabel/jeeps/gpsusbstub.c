@@ -26,15 +26,15 @@
 
 #include "../defs.h"
 
-#if !HAVE_LIBUSB 
+#if !HAVE_LIBUSB
 
 const char no_usb[] = "USB support is not available in this build.\n";
 
 int
 gusb_init(const char *portname)
 {
-	fatal(no_usb);
-	return 0;
+  fatal(no_usb);
+  return 0;
 }
 
 #endif /* defined(HAVE_LIBUSB) */

@@ -1,7 +1,7 @@
-/* 
+/*
 
 	Support for IGN Rando track files.
-	
+
 	Copyright (C) 2005,2006 Olaf Klein, o.b.klein@gpsbabel.org
 
 	This program is free software; you can redistribute it and/or modify
@@ -45,10 +45,9 @@ static int xmlpoints;
 /* options */
 static char *index_opt = NULL;
 
-static arglist_t ignr_args[] = 
-{
-	{"index", &index_opt, "Index of track to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL },
-	ARG_TERMINATOR
+static arglist_t ignr_args[] = {
+  {"index", &index_opt, "Index of track to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL },
+  ARG_TERMINATOR
 };
 
 #if ! HAVE_LIBEXPAT
@@ -56,7 +55,7 @@ static arglist_t ignr_args[] =
 static void
 ignr_rd_init(const char *fname)
 {
-	fatal(MYNAME ": This build excluded \"" MYNAME "\" input support because expat was not installed.\n");
+  fatal(MYNAME ": This build excluded \"" MYNAME "\" input support because expat was not installed.\n");
 }
 
 static void
@@ -77,24 +76,24 @@ static xg_callback	ignr_nb_etapes, ignr_descr;
 static xg_callback	ignr_etape_begin, ignr_etape_end;
 static xg_callback	ignr_etape_pos, ignr_etape_alt;
 
-static 
-xg_tag_mapping ignr_xml_map[] = 
-{
-	{ ignr_start,		cb_start,	"/RANDONNEE" },
-	{ ignr_nb_etapes,   	cb_cdata,	"/RANDONNEE/INFORMATIONS/NB_ETAPES" },
-	{ ignr_descr,   	cb_cdata,	"/RANDONNEE/INFORMATIONS/DESCRIPTION" },
-	{ ignr_etape_begin, 	cb_start, 	"/RANDONNEE/ETAPE" },
-	{ ignr_etape_end, 	cb_end, 	"/RANDONNEE/ETAPE" },
-	{ ignr_etape_pos,	cb_cdata,	"/RANDONNEE/ETAPE/POSITION" },
-	{ ignr_etape_alt,	cb_cdata,	"/RANDONNEE/ETAPE/ALTITUDE" },
-	{ NULL, 		0, 		NULL }
+static
+xg_tag_mapping ignr_xml_map[] = {
+  { ignr_start,		cb_start,	"/RANDONNEE" },
+  { ignr_nb_etapes,   	cb_cdata,	"/RANDONNEE/INFORMATIONS/NB_ETAPES" },
+  { ignr_descr,   	cb_cdata,	"/RANDONNEE/INFORMATIONS/DESCRIPTION" },
+  { ignr_etape_begin, 	cb_start, 	"/RANDONNEE/ETAPE" },
+  { ignr_etape_end, 	cb_end, 	"/RANDONNEE/ETAPE" },
+  { ignr_etape_pos,	cb_cdata,	"/RANDONNEE/ETAPE/POSITION" },
+  { ignr_etape_alt,	cb_cdata,	"/RANDONNEE/ETAPE/ALTITUDE" },
+  { NULL, 		0, 		NULL }
 };
 
 static void
 ignr_xml_error(int condition)
 {
-	if (condition != 0)
-		fatal(MYNAME ": Error in XML structure!\n");
+  if (condition != 0) {
+    fatal(MYNAME ": Error in XML structure!\n");
+  }
 }
 
 /* xmlgeneric callbacks */
@@ -103,86 +102,91 @@ static xg_callback	ignr_start;
 static xg_callback	ignr_nb_etapes, ignr_descr;
 static xg_callback	ignr_etape_begin, ignr_etape_end;
 
-static void 
+static void
 ignr_start(const char *args, const char **attrv)
 {
-	ignr_xml_error((track != NULL));
-	
-	track = route_head_alloc();
-	track_add_head(track);
+  ignr_xml_error((track != NULL));
+
+  track = route_head_alloc();
+  track_add_head(track);
 }
 
-static void 
+static void
 ignr_nb_etapes(const char *args, const char **attrv)
 {
-	xmlpoints = atoi(args);
+  xmlpoints = atoi(args);
 }
 
-static void 
+static void
 ignr_descr(const char *args, const char **attrv)
 {
-	ignr_xml_error((track == NULL));
+  ignr_xml_error((track == NULL));
 
-	if ((args != NULL) && (strlen(args) > 0))
-		track->rte_desc = xstrdup(args);
+  if ((args != NULL) && (strlen(args) > 0)) {
+    track->rte_desc = xstrdup(args);
+  }
 }
 
-static void 
+static void
 ignr_etape_begin(const char *args, const char **attrv)
 {
-	ignr_xml_error((wpt != NULL));
-	
-	wpt = waypt_new();
+  ignr_xml_error((wpt != NULL));
+
+  wpt = waypt_new();
 }
 
-static void 
+static void
 ignr_etape_end(const char *args, const char **attrv)
 {
-	ignr_xml_error((track == NULL) || (wpt == NULL));
-	
-	track_add_wpt(track, wpt);
-	wpt = NULL;
+  ignr_xml_error((track == NULL) || (wpt == NULL));
+
+  track_add_wpt(track, wpt);
+  wpt = NULL;
 }
 
 static void
 ignr_etape_pos(const char *args, const char **attrv)
 {
-	ignr_xml_error((wpt == NULL) || (args == NULL));
+  ignr_xml_error((wpt == NULL) || (args == NULL));
 
-	if (2 != sscanf(args, "%lf,%lf", &wpt->latitude, &wpt->longitude))
-				fatal(MYNAME ": Invalid coordinates \"%s\"!\n", args);
+  if (2 != sscanf(args, "%lf,%lf", &wpt->latitude, &wpt->longitude)) {
+    fatal(MYNAME ": Invalid coordinates \"%s\"!\n", args);
+  }
 }
 
 static void
 ignr_etape_alt(const char *args, const char **attrv)
 {
-	ignr_xml_error((wpt == NULL));
-	if (args == NULL) return;
-	
-	if (1 != sscanf(args, "%lf", &wpt->altitude))
-		fatal(MYNAME ": Invalid altitude \"%s\"!\n", args);
+  ignr_xml_error((wpt == NULL));
+  if (args == NULL) {
+    return;
+  }
+
+  if (1 != sscanf(args, "%lf", &wpt->altitude)) {
+    fatal(MYNAME ": Invalid altitude \"%s\"!\n", args);
+  }
 }
 
 /* callbacks registered in ignr_vecs */
 
-static void 
+static void
 ignr_rd_init(const char *fname)
 {
-	xml_init(fname, ignr_xml_map, NULL);
-	wpt = NULL;
-	track = NULL;
+  xml_init(fname, ignr_xml_map, NULL);
+  wpt = NULL;
+  track = NULL;
 }
 
-static void 
+static void
 ignr_rd_deinit(void)
 {
-	xml_deinit();	
+  xml_deinit();
 }
 
-static void 
+static void
 ignr_read(void)
 {
-	xml_read();
+  xml_read();
 }
 
 #endif
@@ -191,30 +195,33 @@ ignr_read(void)
 
 /* callbacks registered in ignr_vecs */
 
-static void 
+static void
 ignr_rw_init(const char *fname)
 {
-	fout = gbfopen(fname, "w", MYNAME);
+  fout = gbfopen(fname, "w", MYNAME);
 }
 
-static void 
+static void
 ignr_rw_deinit(void)
 {
-	gbfclose(fout);
+  gbfclose(fout);
 }
 
 static void
 ignr_write_track_hdr(const route_head *track)
 {
-	track_num++;
+  track_num++;
 
-	if (track_num != track_index) return;
-	
-	gbfprintf(fout, "\t<INFORMATIONS>\n");
-	gbfprintf(fout, "\t\t<NB_ETAPES>%d</NB_ETAPES>\n", track->rte_waypt_ct);
-	if (track->rte_desc != NULL)
-		gbfprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", track->rte_desc);
-	gbfprintf(fout, "\t</INFORMATIONS>\n");
+  if (track_num != track_index) {
+    return;
+  }
+
+  gbfprintf(fout, "\t<INFORMATIONS>\n");
+  gbfprintf(fout, "\t\t<NB_ETAPES>%d</NB_ETAPES>\n", track->rte_waypt_ct);
+  if (track->rte_desc != NULL) {
+    gbfprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", track->rte_desc);
+  }
+  gbfprintf(fout, "\t</INFORMATIONS>\n");
 }
 
 static void
@@ -225,62 +232,64 @@ ignr_write_track_trl(const route_head *track)
 static void
 ignr_write_waypt(const waypoint *wpt)
 {
-	if (track_num != track_index) return;
+  if (track_num != track_index) {
+    return;
+  }
 
-	gbfprintf(fout, "\t<ETAPE>\n");
-	gbfprintf(fout, "\t\t<POSITION>%3.6f,%3.6f</POSITION>\n", wpt->latitude, wpt->longitude);
-	if (wpt->altitude != unknown_alt)
-		gbfprintf(fout, "\t\t<ALTITUDE>%3.6f</ALTITUDE>\n", wpt->altitude);
-	gbfprintf(fout, "\t</ETAPE>\n");
+  gbfprintf(fout, "\t<ETAPE>\n");
+  gbfprintf(fout, "\t\t<POSITION>%3.6f,%3.6f</POSITION>\n", wpt->latitude, wpt->longitude);
+  if (wpt->altitude != unknown_alt) {
+    gbfprintf(fout, "\t\t<ALTITUDE>%3.6f</ALTITUDE>\n", wpt->altitude);
+  }
+  gbfprintf(fout, "\t</ETAPE>\n");
 }
 
-static void 
+static void
 ignr_write(void)
 {
-	time_t now;
-	struct tm tm;
-	char buff[32];
-	
-	if (index_opt != NULL)
-	{
-		track_index = atoi(index_opt);
-		if ((track_index < 1) || (track_index > (int) track_count()))
-		    fatal(MYNAME ": Invalid track index %d (we have currently %d track(s))!\n", 
-			track_index, track_count());
-	}	    
-	else
-		track_index = 1;
-	track_num = 0;
+  time_t now;
+  struct tm tm;
+  char buff[32];
 
-        now = current_time();
-	tm = *localtime(&now);
-	
-	gbfprintf(fout, "<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n");
-	gbfprintf(fout, "<RANDONNEE>\n");
-	gbfprintf(fout, "\t<ENTETE>\n");
-	gbfprintf(fout, "\t\t<VERSION_XML>1.1</VERSION_XML>\n");
-	gbfprintf(fout, "\t\t<VERSION_BASE>IHA03AA</VERSION_BASE>\n");
-	
-	strftime(buff, sizeof(buff), "%d/%m/%Y", &tm);
-	gbfprintf(fout, "\t\t<DATE>%s</DATE>\n", buff);
-	strftime(buff, sizeof(buff), "%H:%M:%S", &tm);
-	gbfprintf(fout, "\t\t<HEURE>%s</HEURE>\n", buff);
-	
-	gbfprintf(fout, "\t</ENTETE>\n");
-	track_disp_all(ignr_write_track_hdr, ignr_write_track_trl, ignr_write_waypt);
-	gbfprintf(fout, "</RANDONNEE>\n");
+  if (index_opt != NULL) {
+    track_index = atoi(index_opt);
+    if ((track_index < 1) || (track_index > (int) track_count()))
+      fatal(MYNAME ": Invalid track index %d (we have currently %d track(s))!\n",
+            track_index, track_count());
+  } else {
+    track_index = 1;
+  }
+  track_num = 0;
+
+  now = current_time();
+  tm = *localtime(&now);
+
+  gbfprintf(fout, "<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n");
+  gbfprintf(fout, "<RANDONNEE>\n");
+  gbfprintf(fout, "\t<ENTETE>\n");
+  gbfprintf(fout, "\t\t<VERSION_XML>1.1</VERSION_XML>\n");
+  gbfprintf(fout, "\t\t<VERSION_BASE>IHA03AA</VERSION_BASE>\n");
+
+  strftime(buff, sizeof(buff), "%d/%m/%Y", &tm);
+  gbfprintf(fout, "\t\t<DATE>%s</DATE>\n", buff);
+  strftime(buff, sizeof(buff), "%H:%M:%S", &tm);
+  gbfprintf(fout, "\t\t<HEURE>%s</HEURE>\n", buff);
+
+  gbfprintf(fout, "\t</ENTETE>\n");
+  track_disp_all(ignr_write_track_hdr, ignr_write_track_trl, ignr_write_waypt);
+  gbfprintf(fout, "</RANDONNEE>\n");
 }
 
 ff_vecs_t ignr_vecs = {
-	ff_type_file,
-	{ ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none },
-	ignr_rd_init,	
-	ignr_rw_init,	
-	ignr_rd_deinit,
-	ignr_rw_deinit,
-	ignr_read,
-	ignr_write,
-	NULL, 
-	ignr_args,
-	CET_CHARSET_MS_ANSI, 1
+  ff_type_file,
+  { ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none },
+  ignr_rd_init,
+  ignr_rw_init,
+  ignr_rd_deinit,
+  ignr_rw_deinit,
+  ignr_read,
+  ignr_write,
+  NULL,
+  ignr_args,
+  CET_CHARSET_MS_ANSI, 1
 };

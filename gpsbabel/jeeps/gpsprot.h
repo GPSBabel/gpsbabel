@@ -8,12 +8,11 @@ extern "C"
 
 #include "gps.h"
 
-/* 
- *  Link protocols
- */
+  /*
+   *  Link protocols
+   */
 
-struct LINKDATA
-{
+  struct LINKDATA {
     US Pid_Protocol_Array;
     US Pid_Product_Rqst;
     US Pid_Product_Data;
@@ -35,7 +34,7 @@ struct LINKDATA
     US Pid_Pvt_Data;
     US Pid_Rte_Link_Data;
     US Pid_Trk_Hdr;
-	
+
     US Pid_FlightBook_Record;
     US Pid_Lap;
     US Pid_Wpt_Cat;
@@ -51,24 +50,23 @@ struct LINKDATA
     US Pid_Course_Trk_Data;
     US Pid_Course_Limits;
     US Pid_Trk2_Hdr; /*Undocumented*/
-};
+  };
 
 
 
 
 
-/*
- * Command types
- */
+  /*
+   * Command types
+   */
 
 #define pA010 10
 #define pA011 11
 
-int32 gps_device_command;
+  int32 gps_device_command;
 
 
-struct COMMANDDATA
-{
+  struct COMMANDDATA {
     US Cmnd_Abort_Transfer;
     US Cmnd_Transfer_Alm;
     US Cmnd_Transfer_Posn;
@@ -93,109 +91,109 @@ struct COMMANDDATA
     US Cmnd_Transfer_Course_Points;
     US Cmnd_Transfer_Course_Tracks;
     US Cmnd_Transfer_Course_Limits;
-}
-;
+  }
+  ;
 
 
 
 
-/*
- * Waypoint Transfer Protocol
- */
+  /*
+   * Waypoint Transfer Protocol
+   */
 #define pA100 100
-int32 gps_waypt_transfer;
+  int32 gps_waypt_transfer;
 
-/*
- * Waypoint category transfer protocol
- */
+  /*
+   * Waypoint category transfer protocol
+   */
 #define pA101 101
-int32 gps_category_transfer;
+  int32 gps_category_transfer;
 
-/*
- * Route Transfer Protocol
- */
+  /*
+   * Route Transfer Protocol
+   */
 #define pA200 200
 #define pA201 201
-int32 gps_route_transfer;
+  int32 gps_route_transfer;
 
-/*
- * Track Log Transfer Protocol
- */
+  /*
+   * Track Log Transfer Protocol
+   */
 #define pA300 300
 #define pA301 301
 #define pA302 302
 #define pA304 304
-int32 gps_trk_transfer;
+  int32 gps_trk_transfer;
 
-/*
- *  Proximity Waypoint Transfer Protocol
- */
+  /*
+   *  Proximity Waypoint Transfer Protocol
+   */
 #define pA400 400
-int32 gps_prx_waypt_transfer;
+  int32 gps_prx_waypt_transfer;
 
-/*
- *  Almanac Transfer Protocol
- */
+  /*
+   *  Almanac Transfer Protocol
+   */
 #define pA500 500
-int32 gps_almanac_transfer;
+  int32 gps_almanac_transfer;
 
 
-/*
- *  Date Time Transfer
- */
+  /*
+   *  Date Time Transfer
+   */
 #define pA600 600
-int32 gps_date_time_transfer;
+  int32 gps_date_time_transfer;
 
-/*
- *  FlightBook Transfer Protocol
- */
+  /*
+   *  FlightBook Transfer Protocol
+   */
 #define pA650 650
-/*Not implemented */
+  /*Not implemented */
 
-/*
- *  Position
- */
+  /*
+   *  Position
+   */
 #define pA700 700
-int32 gps_position_transfer;
+  int32 gps_position_transfer;
 
 
-/*
- *  Pvt
- */
+  /*
+   *  Pvt
+   */
 #define pA800 800
-int32 gps_pvt_transfer;
+  int32 gps_pvt_transfer;
 
-/*
- * Lap Data Transfer
- */
+  /*
+   * Lap Data Transfer
+   */
 #define pA906 906
-int32 gps_lap_transfer;
+  int32 gps_lap_transfer;
 
-/*
- * Various fitness related
- */
+  /*
+   * Various fitness related
+   */
 #define pA1000 1000
-int32 gps_run_transfer;
+  int32 gps_run_transfer;
 #define pA1002 1002
-int32 gps_workout_transfer;
+  int32 gps_workout_transfer;
 #define pA1004 1004
-int32 gps_user_profile_transfer;
+  int32 gps_user_profile_transfer;
 #define pA1005 1005
-int32 gps_workout_limits_transfer;
+  int32 gps_workout_limits_transfer;
 #define pA1006 1006
-int32 gps_course_transfer;
+  int32 gps_course_transfer;
 #define pA1007 1007
-int32 gps_course_lap_transfer;
+  int32 gps_course_lap_transfer;
 #define pA1008 1008
-int32 gps_course_point_transfer;
+  int32 gps_course_point_transfer;
 #define pA1009 1009
-int32 gps_course_limits_transfer;
+  int32 gps_course_limits_transfer;
 #define pA1012 1012
-int32 gps_course_trk_transfer;
+  int32 gps_course_trk_transfer;
 
-/*
- * Waypoint D Type
- */
+  /*
+   * Waypoint D Type
+   */
 #define pD100 100
 #define pD101 101
 #define pD102 102
@@ -213,148 +211,147 @@ int32 gps_course_trk_transfer;
 #define pD154 154
 #define pD155 155
 
-int32 gps_rte_type;
-int32 gps_waypt_type;
+  int32 gps_rte_type;
+  int32 gps_waypt_type;
 
-/*
- * Waypoint category types
- */
+  /*
+   * Waypoint category types
+   */
 #define pD120 120
-int32 gps_category_type;
+  int32 gps_category_type;
 
-/*
- * Rte Header Type
- */
+  /*
+   * Rte Header Type
+   */
 #define pD200 200
 #define pD201 201
 #define pD202 202
-int32 gps_rte_hdr_type;
+  int32 gps_rte_hdr_type;
 
 
-/*
- * Rte Link Type
- */
+  /*
+   * Rte Link Type
+   */
 #define pD210 210
-int32 gps_rte_link_type;
+  int32 gps_rte_link_type;
 
 
-/*
- *  Trk Point Type
- */
+  /*
+   *  Trk Point Type
+   */
 #define pD300 300
 #define pD301 301
 #define pD302 302
 #define pD303 303
 #define pD304 304
-int32 gps_trk_type;
-int32 gps_run_crs_trk_type;
+  int32 gps_trk_type;
+  int32 gps_run_crs_trk_type;
 
 
-/*
- *  Trk Header Type
- */
+  /*
+   *  Trk Header Type
+   */
 #define pD310 310
 #define pD311 311
 #define pD312 312
-int32 gps_trk_hdr_type;
-int32 gps_run_crs_trk_hdr_type;
+  int32 gps_trk_hdr_type;
+  int32 gps_run_crs_trk_hdr_type;
 
 
 
-/*
- * Prx Wpt Type
- */
+  /*
+   * Prx Wpt Type
+   */
 #define pD400 400
 #define pD403 403
 #define pD450 450
 
-int32 gps_prx_waypt_type;
+  int32 gps_prx_waypt_type;
 
 
-/*
- * Almanac Type
- */
+  /*
+   * Almanac Type
+   */
 #define pD500 500
 #define pD501 501
 #define pD550 550
 #define pD551 551
 
-int32 gps_almanac_type;
+  int32 gps_almanac_type;
 
 
-/*
- * Date Time Type
- */
+  /*
+   * Date Time Type
+   */
 #define pD600 600
 
-int32 gps_date_time_type;
+  int32 gps_date_time_type;
 
 
 
-/*
- * Position Type
- */
+  /*
+   * Position Type
+   */
 #define pD700 700
 
-int32 gps_position_type;
+  int32 gps_position_type;
 
 
 
-/*
- * Pvt Data Type
- */
+  /*
+   * Pvt Data Type
+   */
 #define pD800 800
 
-int32 gps_pvt_type;
+  int32 gps_pvt_type;
 
-/*
- * Lap Data Type
- */
+  /*
+   * Lap Data Type
+   */
 #define pD906 906
 #define pD1001 1001
 #define pD1011 1011
 #define pD1015 1015
 
-int32 gps_lap_type;
+  int32 gps_lap_type;
 
-/*
- * Various fitness related
- */
+  /*
+   * Various fitness related
+   */
 #define pD1000 1000
 #define pD1009 1009
 #define pD1010 1010
-int32 gps_run_type;
+  int32 gps_run_type;
 #define pD1002 1002
 #define pD1008 1008
-int32 gps_workout_type;
+  int32 gps_workout_type;
 #define pD1003 1003
-int32 gps_workout_occurrence_type;
+  int32 gps_workout_occurrence_type;
 #define pD1004 1004
-int32 gps_user_profile_type;
+  int32 gps_user_profile_type;
 #define pD1005 1005
-int32 gps_workout_limits_type;
+  int32 gps_workout_limits_type;
 #define pD1006 1006
-int32 gps_course_type;
+  int32 gps_course_type;
 #define pD1007 1007
-int32 gps_course_lap_type;
+  int32 gps_course_lap_type;
 #define pD1012 1012
-int32 gps_course_point_type;
+  int32 gps_course_point_type;
 #define pD1013 1013
-int32 gps_course_limits_type;
+  int32 gps_course_limits_type;
 
-/*
- * Link protocol type
- */
+  /*
+   * Link protocol type
+   */
 #define pL000 0
 #define pL001 1
 #define pL002 2
 
-int32 gps_link_type;
+  int32 gps_link_type;
 
 
 
-struct GPS_MODEL_PROTOCOL
-{
+  struct GPS_MODEL_PROTOCOL {
     US    id;
     int32 link;
     int32 command;
@@ -369,15 +366,15 @@ struct GPS_MODEL_PROTOCOL
     int32 prxd;
     int32 alma;
     int32 almd;
-}
-;
+  }
+  ;
 
-US     GPS_Protocol_Version_Change(US id, US version);
-int32  GPS_Protocol_Table_Set(US id);
-void   GPS_Protocol_Error(US tag, US data);
-void   GPS_Unknown_Protocol_Print(void);
+  US     GPS_Protocol_Version_Change(US id, US version);
+  int32  GPS_Protocol_Table_Set(US id);
+  void   GPS_Protocol_Error(US tag, US data);
+  void   GPS_Unknown_Protocol_Print(void);
 
-    
+
 #endif
 
 #ifdef __cplusplus

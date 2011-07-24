@@ -29,91 +29,93 @@ static char *as;
 
 static
 arglist_t yahoo_args[] = {
-	{"addrsep", &as, 
-	"String to separate concatenated address fields (default=\", \")", 
-	", ", ARGTYPE_STRING, ARG_NOMINMAX },
-	ARG_TERMINATOR
+  {
+    "addrsep", &as,
+    "String to separate concatenated address fields (default=\", \")",
+    ", ", ARGTYPE_STRING, ARG_NOMINMAX
+  },
+  ARG_TERMINATOR
 };
 
 static xg_callback	wpt_s, wpt_lat, wpt_lon, wpt_e;
 static xg_callback 	wpt_addr /*, wpt_city, wpt_state, wpt_zip, wpt_country*/;
 
 static xg_tag_mapping gl_map[] = {
- { wpt_s,	cb_start, "/ResultSet/Result" },
- { wpt_lat,	cb_cdata, "/ResultSet/Result/Latitude" },
- { wpt_lon,	cb_cdata, "/ResultSet/Result/Longitude" },
- { wpt_addr,	cb_cdata, "/ResultSet/Result/Address" },
- { wpt_addr,	cb_cdata, "/ResultSet/Result/City" },
- { wpt_addr,	cb_cdata, "/ResultSet/Result/State" },
- { wpt_addr,	cb_cdata, "/ResultSet/Result/Zip" },
- { wpt_addr,	cb_cdata, "/ResultSet/Result/Country" },
- { wpt_e,	cb_end,   "/ResultSet/Result" },
- { NULL, 	0,         NULL}
+  { wpt_s,	cb_start, "/ResultSet/Result" },
+  { wpt_lat,	cb_cdata, "/ResultSet/Result/Latitude" },
+  { wpt_lon,	cb_cdata, "/ResultSet/Result/Longitude" },
+  { wpt_addr,	cb_cdata, "/ResultSet/Result/Address" },
+  { wpt_addr,	cb_cdata, "/ResultSet/Result/City" },
+  { wpt_addr,	cb_cdata, "/ResultSet/Result/State" },
+  { wpt_addr,	cb_cdata, "/ResultSet/Result/Zip" },
+  { wpt_addr,	cb_cdata, "/ResultSet/Result/Country" },
+  { wpt_e,	cb_end,   "/ResultSet/Result" },
+  { NULL, 	0,         NULL}
 };
 
 static void
 yahoo_rd_init(const char *fname)
 {
-	xml_init(fname, gl_map, NULL);
+  xml_init(fname, gl_map, NULL);
 }
 
 static void
 yahoo_read(void)
 {
-	xml_read();
+  xml_read();
 }
 
 static void
 yahoo_rd_deinit(void)
 {
-	xml_deinit();
+  xml_deinit();
 }
 
 static void
 yahoo_wr_init(const char *fname)
 {
-	fatal("Writing file of type %s is not supported\n", MYNAME);
+  fatal("Writing file of type %s is not supported\n", MYNAME);
 }
 
 void	wpt_s(const char *args, const char **unused)
 {
-	wpt_tmp = waypt_new();
+  wpt_tmp = waypt_new();
 }
 
 void	wpt_e(const char *args, const char **unused)
 {
-	waypt_add(wpt_tmp);
-	wpt_tmp = NULL;
+  waypt_add(wpt_tmp);
+  wpt_tmp = NULL;
 }
 
 void	wpt_lat(const char *args, const char **unused)
 {
-	wpt_tmp->latitude = atof(args);
+  wpt_tmp->latitude = atof(args);
 }
 
 void	wpt_lon(const char *args, const char **unused)
 {
-	wpt_tmp->longitude = atof(args);
+  wpt_tmp->longitude = atof(args);
 }
 
 void	wpt_addr(const char *args, const char **unused)
 {
-	if (wpt_tmp->notes) {
-		wpt_tmp->notes = xstrappend(wpt_tmp->notes, as);
-	}
-	wpt_tmp->notes = xstrappend(wpt_tmp->notes, args);
+  if (wpt_tmp->notes) {
+    wpt_tmp->notes = xstrappend(wpt_tmp->notes, as);
+  }
+  wpt_tmp->notes = xstrappend(wpt_tmp->notes, args);
 }
 
 ff_vecs_t yahoo_vecs = {
-        ff_type_file,
-	{ ff_cap_read },
-        yahoo_rd_init,
-        yahoo_wr_init,
-        yahoo_rd_deinit,
-        NULL,
-        yahoo_read,
-        NULL,
-        NULL,
-        yahoo_args,
-	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  ff_type_file,
+  { ff_cap_read },
+  yahoo_rd_init,
+  yahoo_wr_init,
+  yahoo_rd_deinit,
+  NULL,
+  yahoo_read,
+  NULL,
+  NULL,
+  yahoo_args,
+  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

@@ -24,11 +24,11 @@
 #if FILTERS_ENABLED
 
 typedef enum {
-	sm_unknown = 0,
-	sm_gcid,
-	sm_shortname,
-	sm_description,
-	sm_time
+  sm_unknown = 0,
+  sm_gcid,
+  sm_shortname,
+  sm_description,
+  sm_time
 } sort_mode_;
 
 sort_mode_ sort_mode = sm_shortname;	/* How are we sorting these? */
@@ -37,56 +37,74 @@ static char *opt_sm_gcid, *opt_sm_shortname, *opt_sm_description, *opt_sm_time;
 
 static
 arglist_t sort_args[] = {
-	{"gcid", &opt_sm_gcid, "Sort by numeric geocache ID", 
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
-	{"shortname", &opt_sm_shortname, "Sort by waypoint short name", 
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
-	{"description", &opt_sm_description, "Sort by waypoint description", 
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
-	{"time", &opt_sm_time, "Sort by time", 
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
-	ARG_TERMINATOR
+  {
+    "gcid", &opt_sm_gcid, "Sort by numeric geocache ID",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  {
+    "shortname", &opt_sm_shortname, "Sort by waypoint short name",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  {
+    "description", &opt_sm_description, "Sort by waypoint description",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  {
+    "time", &opt_sm_time, "Sort by time",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  ARG_TERMINATOR
 };
 
 static int
 sort_comp(const queue * a, const queue * b)
 {
-	const waypoint *x1 = (waypoint *)a;
-	const waypoint *x2 = (waypoint *)b;
+  const waypoint *x1 = (waypoint *)a;
+  const waypoint *x2 = (waypoint *)b;
 
-	switch (sort_mode)  {
-	   case sm_gcid: return x1->gc_data->id - x2->gc_data->id;
-	   case sm_shortname: return strcmp (x1->shortname, x2->shortname);
-	   case sm_description: return strcmp (x1->description, x2->description);
-	   case sm_time: return x1->creation_time - x2->creation_time;
-	   default: abort(); return 0; /* Internal caller error. */
-	}
-}
-
-void 
-sort_process(void)
-{
-	sortqueue(&waypt_head, sort_comp);
+  switch (sort_mode)  {
+  case sm_gcid:
+    return x1->gc_data->id - x2->gc_data->id;
+  case sm_shortname:
+    return strcmp(x1->shortname, x2->shortname);
+  case sm_description:
+    return strcmp(x1->description, x2->description);
+  case sm_time:
+    return x1->creation_time - x2->creation_time;
+  default:
+    abort();
+    return 0; /* Internal caller error. */
+  }
 }
 
 void
-sort_init(const char *args) 
+sort_process(void)
 {
-	if (opt_sm_gcid)
-		sort_mode = sm_gcid;
-	if (opt_sm_shortname)
-		sort_mode = sm_shortname;
-	if (opt_sm_description)
-		sort_mode = sm_description;
-	if (opt_sm_time)
-		sort_mode = sm_time;
+  sortqueue(&waypt_head, sort_comp);
+}
+
+void
+sort_init(const char *args)
+{
+  if (opt_sm_gcid) {
+    sort_mode = sm_gcid;
+  }
+  if (opt_sm_shortname) {
+    sort_mode = sm_shortname;
+  }
+  if (opt_sm_description) {
+    sort_mode = sm_description;
+  }
+  if (opt_sm_time) {
+    sort_mode = sm_time;
+  }
 }
 
 filter_vecs_t sort_vecs = {
-	sort_init,
-	sort_process,
-	NULL,
-	NULL,
-	sort_args
+  sort_init,
+  sort_process,
+  NULL,
+  NULL,
+  sort_args
 };
 #endif // FILTERS_ENABLED

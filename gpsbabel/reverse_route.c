@@ -27,45 +27,47 @@
 
 static
 arglist_t reverse_route_args[] = {
-	ARG_TERMINATOR
+  ARG_TERMINATOR
 };
 
-void 
-reverse_route_head( const route_head *rte ) 
+void
+reverse_route_head(const route_head *rte)
 {
-	route_reverse(rte);
-}
-
-void 
-reverse_route_process( void ) 
-{
-	track_disp_all( reverse_route_head, NULL, NULL );
-	route_disp_all( reverse_route_head, NULL, NULL );
+  route_reverse(rte);
 }
 
 void
-reverse_route_init(const char *args) 
+reverse_route_process(void)
 {
-	switch (global_opts.objective) {
-		case rtedata: break;
-		case trkdata: break;
-		default:
-			fatal(MYNAME ": This filter only works in track "
-					"or route (-t or -r) mode.\n");
-	}
+  track_disp_all(reverse_route_head, NULL, NULL);
+  route_disp_all(reverse_route_head, NULL, NULL);
 }
 
 void
-reverse_route_deinit(void) 
+reverse_route_init(const char *args)
 {
-	/* do nothing */
+  switch (global_opts.objective) {
+  case rtedata:
+    break;
+  case trkdata:
+    break;
+  default:
+    fatal(MYNAME ": This filter only works in track "
+          "or route (-t or -r) mode.\n");
+  }
+}
+
+void
+reverse_route_deinit(void)
+{
+  /* do nothing */
 }
 
 filter_vecs_t reverse_route_vecs = {
-	reverse_route_init,
-	reverse_route_process,
-	reverse_route_deinit,
-	NULL,
-	reverse_route_args
+  reverse_route_init,
+  reverse_route_process,
+  reverse_route_deinit,
+  NULL,
+  reverse_route_args
 };
 #endif

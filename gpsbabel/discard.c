@@ -41,23 +41,39 @@ static route_head *head;
 
 static
 arglist_t fix_args[] = {
-	{"hdop", &hdopopt, "Suppress waypoints with higher hdop",
-		"-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX},
-	{"vdop", &vdopopt, "Suppress waypoints with higher vdop",
-		"-1.0", ARGTYPE_END_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX},
-	{"hdopandvdop", &andopt, "Link hdop and vdop supression with AND",
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
-	{"sat", &satopt, "Minimium sats to keep waypoints",
-		"-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX},
-	{"fixnone", &fixnoneopt, "Suppress waypoints without fix",
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
-	{"fixunknown", &fixunknownopt, "Suppress waypoints with unknown fix",
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
-        {"elemin", &eleminopt, "Suppress waypoints below given elevation in meters",
-                NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX},
-        {"elemax", &elemaxopt, "Suppress waypoints above given elevation in meters",
-                NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX},
-	ARG_TERMINATOR
+  {
+    "hdop", &hdopopt, "Suppress waypoints with higher hdop",
+    "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX
+  },
+  {
+    "vdop", &vdopopt, "Suppress waypoints with higher vdop",
+    "-1.0", ARGTYPE_END_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX
+  },
+  {
+    "hdopandvdop", &andopt, "Link hdop and vdop supression with AND",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  {
+    "sat", &satopt, "Minimium sats to keep waypoints",
+    "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX
+  },
+  {
+    "fixnone", &fixnoneopt, "Suppress waypoints without fix",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  {
+    "fixunknown", &fixunknownopt, "Suppress waypoints with unknown fix",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  {
+    "elemin", &eleminopt, "Suppress waypoints below given elevation in meters",
+    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX
+  },
+  {
+    "elemax", &elemaxopt, "Suppress waypoints above given elevation in meters",
+    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX
+  },
+  ARG_TERMINATOR
 };
 
 /*
@@ -66,108 +82,121 @@ arglist_t fix_args[] = {
 static void
 fix_process_wpt(const waypoint *wpt)
 {
-	int del = 0;
-	int delh = 0;
-	int delv = 0;
-	
-	waypoint *waypointp = (waypoint *) wpt;
+  int del = 0;
+  int delh = 0;
+  int delv = 0;
 
-	if ((hdopf >= 0.0) && (waypointp->hdop > hdopf))
-		delh = 1;
-	if ((vdopf >= 0.0) && (waypointp->vdop > vdopf))
-		delv = 1;
-	
-	if (andopt)
-		del = delh && delv;
-	else
-		del = delh || delv;
-		
-        if ((satpf >= 0) && (waypointp->sat < satpf))
-		del = 1;
+  waypoint *waypointp = (waypoint *) wpt;
 
-	if ((fixnoneopt) && (waypointp->fix == fix_none))
-		del = 1;
+  if ((hdopf >= 0.0) && (waypointp->hdop > hdopf)) {
+    delh = 1;
+  }
+  if ((vdopf >= 0.0) && (waypointp->vdop > vdopf)) {
+    delv = 1;
+  }
 
-	if ((fixunknownopt) && (waypointp->fix == fix_unknown))
-		del = 1;
+  if (andopt) {
+    del = delh && delv;
+  } else {
+    del = delh || delv;
+  }
 
-	if ((eleminopt) && (waypointp->altitude < eleminpf))
-		del = 1;
+  if ((satpf >= 0) && (waypointp->sat < satpf)) {
+    del = 1;
+  }
 
-	if ((elemaxopt) && (waypointp->altitude > elemaxpf))
-		del = 1;
+  if ((fixnoneopt) && (waypointp->fix == fix_none)) {
+    del = 1;
+  }
 
-	if (del) {
-		switch(what) {
-			case wptdata:
-				waypt_del(waypointp);
-				break;
-			case trkdata:
-				track_del_wpt(head, waypointp);
-				break;
-			case rtedata:
-				route_del_wpt(head, waypointp);
-				break;
-			default:
-				return;
-		}
-		waypt_free(waypointp);
-	}
+  if ((fixunknownopt) && (waypointp->fix == fix_unknown)) {
+    del = 1;
+  }
+
+  if ((eleminopt) && (waypointp->altitude < eleminpf)) {
+    del = 1;
+  }
+
+  if ((elemaxopt) && (waypointp->altitude > elemaxpf)) {
+    del = 1;
+  }
+
+  if (del) {
+    switch (what) {
+    case wptdata:
+      waypt_del(waypointp);
+      break;
+    case trkdata:
+      track_del_wpt(head, waypointp);
+      break;
+    case rtedata:
+      route_del_wpt(head, waypointp);
+      break;
+    default:
+      return;
+    }
+    waypt_free(waypointp);
+  }
 }
 
 static void
 fix_process_head(const route_head *trk)
 {
-	head = (route_head *)trk;
+  head = (route_head *)trk;
 }
 
 static void
 fix_process(void)
 {
-	// Filter waypoints.
-	what = wptdata;
-	waypt_disp_all(fix_process_wpt);
+  // Filter waypoints.
+  what = wptdata;
+  waypt_disp_all(fix_process_wpt);
 
-	// Filter tracks
-	what = trkdata;
-	track_disp_all(fix_process_head, NULL, fix_process_wpt);
-	
-	// And routes
-	what = rtedata;
-	route_disp_all(fix_process_head, NULL, fix_process_wpt);
-	
+  // Filter tracks
+  what = trkdata;
+  track_disp_all(fix_process_head, NULL, fix_process_wpt);
+
+  // And routes
+  what = rtedata;
+  route_disp_all(fix_process_head, NULL, fix_process_wpt);
+
 }
 
 static void
-fix_init(const char *args) 
+fix_init(const char *args)
 {
-	if (hdopopt)
-		hdopf = atof(hdopopt);
-	else
-		hdopf = -1.0;
+  if (hdopopt) {
+    hdopf = atof(hdopopt);
+  } else {
+    hdopf = -1.0;
+  }
 
-	if (vdopopt)
-		vdopf = atof(vdopopt);
-	else
-		vdopf = -1.0;
-	
-	if (satopt)
-		satpf = atoi(satopt);
-	else
-		satpf = -1;
-		
-        if (eleminopt)
-		eleminpf = atoi(eleminopt);
+  if (vdopopt) {
+    vdopf = atof(vdopopt);
+  } else {
+    vdopf = -1.0;
+  }
 
-        if (elemaxopt)
-		elemaxpf = atoi(elemaxopt);
+  if (satopt) {
+    satpf = atoi(satopt);
+  } else {
+    satpf = -1;
+  }
+
+  if (eleminopt) {
+    eleminpf = atoi(eleminopt);
+  }
+
+  if (elemaxopt) {
+    elemaxpf = atoi(elemaxopt);
+  }
 }
 
 filter_vecs_t discard_vecs = {
-	fix_init,
-	fix_process,
-	NULL,
-	NULL,
-	fix_args
+  fix_init,
+  fix_process,
+  NULL,
+  NULL,
+  fix_args
 };
 #endif

@@ -101,7 +101,7 @@ C - Checksum
 
 */
 
-/* 
+/*
 	TODO:
 		- Implement checksum verification
  */
@@ -116,7 +116,7 @@ void vpl_parse_75_sentence(const char*);
 
 static
 arglist_t vpl_args[] = {
-	ARG_TERMINATOR
+  ARG_TERMINATOR
 };
 
 static gbfile *vpl_file_in;
@@ -129,37 +129,37 @@ static route_head *track_head;
 static void
 vpl_rd_init(const char *fname)
 {
-	vpl_file_in = gbfopen(fname, "r", MYNAME);
+  vpl_file_in = gbfopen(fname, "r", MYNAME);
 }
 
-static void 
+static void
 vpl_rd_deinit(void)
 {
-	gbfclose(vpl_file_in);
+  gbfclose(vpl_file_in);
 }
 
 static void
 vpl_read(void)
 {
-	char *ibuf;
+  char *ibuf;
 
-	// Set up a track
-	if(track_head == NULL) {
-		track_head = route_head_alloc();
-		track_add_head(track_head);
-	}
+  // Set up a track
+  if (track_head == NULL) {
+    track_head = route_head_alloc();
+    track_add_head(track_head);
+  }
 
-	while((ibuf = gbfgetstr(vpl_file_in))) {
-		if(strncmp(ibuf, "75", 2) == 0) {
-			vpl_parse_75_sentence(ibuf);
-		} 
-	}
+  while ((ibuf = gbfgetstr(vpl_file_in))) {
+    if (strncmp(ibuf, "75", 2) == 0) {
+      vpl_parse_75_sentence(ibuf);
+    }
+  }
 }
 
 static void
 vpl_wr_init(const char *fname)
 {
-	fatal("Writing file of type %s is not support\n", MYNAME);
+  fatal("Writing file of type %s is not support\n", MYNAME);
 }
 
 /*******************************************************************************
@@ -169,69 +169,69 @@ vpl_wr_init(const char *fname)
 void
 vpl_parse_75_sentence(const char *ibuf)
 {
-	gbuint32 ymd, hms;
-	gbint32 lat_raw, lon_raw;
-	gbint16 alt, speed_raw;
-	gbuint16 hdg_raw;
-	gbuint8 sats, hdop_raw, vdop_raw;
-	waypoint *waypt;
-	struct tm tm;
+  gbuint32 ymd, hms;
+  gbint32 lat_raw, lon_raw;
+  gbint16 alt, speed_raw;
+  gbuint16 hdg_raw;
+  gbuint8 sats, hdop_raw, vdop_raw;
+  waypoint *waypt;
+  struct tm tm;
 
-	// The files have DOS line endings (CR/LF) but we don't care, because we
-	// don't read to the end.
-	sscanf(ibuf, "75%*2c%8X%8X%4hX%4hX%4hX%*2c%2hhX%2hhX%2hhX%6u%6u",
-		&lat_raw, &lon_raw, &alt, &speed_raw, &hdg_raw, &sats, &hdop_raw, &vdop_raw,
-		&ymd, &hms);
+  // The files have DOS line endings (CR/LF) but we don't care, because we
+  // don't read to the end.
+  sscanf(ibuf, "75%*2c%8X%8X%4hX%4hX%4hX%*2c%2hhX%2hhX%2hhX%6u%6u",
+         &lat_raw, &lon_raw, &alt, &speed_raw, &hdg_raw, &sats, &hdop_raw, &vdop_raw,
+         &ymd, &hms);
 
-	tm.tm_sec = hms % 100;
-	hms /= 100;
-	tm.tm_min = hms % 100;
-	hms /= 100;
-	tm.tm_hour = hms % 100;
+  tm.tm_sec = hms % 100;
+  hms /= 100;
+  tm.tm_min = hms % 100;
+  hms /= 100;
+  tm.tm_hour = hms % 100;
 
-	tm.tm_mday = ymd % 100;
-	ymd /= 100;
-	tm.tm_mon = ymd % 100;
-	ymd /= 100;
-	tm.tm_year = ymd % 100 + 100;
+  tm.tm_mday = ymd % 100;
+  ymd /= 100;
+  tm.tm_mon = ymd % 100;
+  ymd /= 100;
+  tm.tm_year = ymd % 100 + 100;
 
-	waypt = waypt_new();
+  waypt = waypt_new();
 
-	// Lat/Lon are both stored *0xE1000 which we have to divide out
-	// for decimal degrees
-	waypt->latitude  = lat_raw / (double) 0xE1000;
-	waypt->longitude = lon_raw / (double) 0xE1000;
-	waypt->altitude  = alt;
-	waypt->sat       = sats;
-	// Speed comes in (MPH x 0x10) which we have to convert to m/s
-	WAYPT_SET(waypt, speed, (speed_raw / (double) 0x10) * 0.44704);
-	waypt->course    = hdg_raw * (double) (360/65535);
-	waypt->hdop      = hdop_raw / (double) 8;
-	waypt->vdop      = vdop_raw / (double) 8;
+  // Lat/Lon are both stored *0xE1000 which we have to divide out
+  // for decimal degrees
+  waypt->latitude  = lat_raw / (double) 0xE1000;
+  waypt->longitude = lon_raw / (double) 0xE1000;
+  waypt->altitude  = alt;
+  waypt->sat       = sats;
+  // Speed comes in (MPH x 0x10) which we have to convert to m/s
+  WAYPT_SET(waypt, speed, (speed_raw / (double) 0x10) * 0.44704);
+  waypt->course    = hdg_raw * (double)(360/65535);
+  waypt->hdop      = hdop_raw / (double) 8;
+  waypt->vdop      = vdop_raw / (double) 8;
 
-	waypt->creation_time = mkgmtime(&tm);
+  waypt->creation_time = mkgmtime(&tm);
 
-	track_add_wpt(track_head, waypt);
+  track_add_wpt(track_head, waypt);
 }
 
 /**************************************************************************/
 
 ff_vecs_t vpl_vecs = {
-	ff_type_file,
-	{ 
-		ff_cap_none		/* waypoints */, 
-	  	ff_cap_read		/* tracks */, 
-	  	ff_cap_none		/* routes */
-	},
-	vpl_rd_init,	
-	vpl_wr_init,	
-	vpl_rd_deinit,	
-	NULL,	
-	vpl_read,
-	NULL,
-	NULL,
-	vpl_args,
-	CET_CHARSET_ASCII, /* ascii is the expected character set */
-	1	               /* fixed, can't be changed through command line parameter */
+  ff_type_file,
+  {
+    ff_cap_none		/* waypoints */,
+    ff_cap_read		/* tracks */,
+    ff_cap_none		/* routes */
+  },
+  vpl_rd_init,
+  vpl_wr_init,
+  vpl_rd_deinit,
+  NULL,
+  vpl_read,
+  NULL,
+  NULL,
+  vpl_args,
+  CET_CHARSET_ASCII, /* ascii is the expected character set */
+  1	               /* fixed, can't be changed through command line parameter */
 };
 /**************************************************************************/

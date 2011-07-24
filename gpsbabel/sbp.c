@@ -30,7 +30,7 @@ static gbfile *file_handle = NULL;
 
 static
 arglist_t sbp_args[] = {
-	ARG_TERMINATOR
+  ARG_TERMINATOR
 };
 
 /*******************************************************************************
@@ -40,76 +40,77 @@ arglist_t sbp_args[] = {
 static void
 sbp_rd_init(const char *fname)
 {
-	file_handle = gbfopen(fname, "r", MYNAME);
+  file_handle = gbfopen(fname, "r", MYNAME);
 }
 
-static void 
+static void
 sbp_rd_deinit(void)
 {
-	gbfclose(file_handle);
+  gbfclose(file_handle);
 }
 
 static void
 read_sbp_header(route_head *track)
 {
-	/*
-	 * A complete SBP file contains 64 bytes header,
-	 *
-	 * Here is the definition of the SBP header 
-	 * BYTE 0 ~1 : true SBP header length 
-	 * BYTE 2~63:  MID_FILE_ID(0xfd)
-	 *             will stuff 0xff for remaining bytes
-	 */
+  /*
+   * A complete SBP file contains 64 bytes header,
+   *
+   * Here is the definition of the SBP header
+   * BYTE 0 ~1 : true SBP header length
+   * BYTE 2~63:  MID_FILE_ID(0xfd)
+   *             will stuff 0xff for remaining bytes
+   */
 
 #define HEADER_SKIP 7
 
-	int success;
-	char header[64];
+  int success;
+  char header[64];
 
-	if (gbfread(header, sizeof(header), 1, file_handle) == 1) {
-		size_t len = le_read16(header) - HEADER_SKIP;
-		if (len > sizeof(header))
-			len = sizeof(header);
+  if (gbfread(header, sizeof(header), 1, file_handle) == 1) {
+    size_t len = le_read16(header) - HEADER_SKIP;
+    if (len > sizeof(header)) {
+      len = sizeof(header);
+    }
 
-		success = locosys_decode_file_id(header + HEADER_SKIP, len);
-	} else {
-		success = FALSE;
-	}
+    success = locosys_decode_file_id(header + HEADER_SKIP, len);
+  } else {
+    success = FALSE;
+  }
 
-	if (!success) {
-		fatal(MYNAME ": Format error: Couldn't read SBP header."
-		      "This probably isn't a SBP file.\n");
-	}
+  if (!success) {
+    fatal(MYNAME ": Format error: Couldn't read SBP header."
+          "This probably isn't a SBP file.\n");
+  }
 }
 
 static waypoint *
 read_logpoint(void)
 {
-	unsigned char buffer[SBP_RECORD_LEN];
+  unsigned char buffer[SBP_RECORD_LEN];
 
-	if (gbfread(buffer, sizeof(buffer), 1, file_handle) == 1) {
-		return navilink_decode_logpoint(buffer);
-	}
+  if (gbfread(buffer, sizeof(buffer), 1, file_handle) == 1) {
+    return navilink_decode_logpoint(buffer);
+  }
 
-	return NULL;
+  return NULL;
 }
 
 static void
 sbp_read(void)
 {
-	if (global_opts.masked_objective & TRKDATAMASK) {
-		waypoint *logpoint;
-		route_head     *track;
+  if (global_opts.masked_objective & TRKDATAMASK) {
+    waypoint *logpoint;
+    route_head     *track;
 
-		track = route_head_alloc();
-		track_add_head(track);
+    track = route_head_alloc();
+    track_add_head(track);
 
-		read_sbp_header(track);
-  
-		while ((logpoint = read_logpoint())) {
-			track_add_wpt(track, logpoint);
-		}
-	}
+    read_sbp_header(track);
+
+    while ((logpoint = read_logpoint())) {
+      track_add_wpt(track, logpoint);
+    }
+  }
 }
 
 static void
@@ -120,21 +121,21 @@ sbp_exit(void)
 /**************************************************************************/
 
 ff_vecs_t sbp_vecs = {
-	ff_type_file,
-	{ 
-		ff_cap_none         /* waypoints */, 
-		ff_cap_read					/* tracks */, 
-		ff_cap_none					/* routes */
-	},
-	sbp_rd_init,	
-	NULL,	
-	sbp_rd_deinit,	
-	NULL,	
-	sbp_read,
-	NULL,
-	sbp_exit,
-	sbp_args,
-	CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
-						/* not fixed, can be changed through command line parameter */
+  ff_type_file,
+  {
+    ff_cap_none         /* waypoints */,
+    ff_cap_read					/* tracks */,
+    ff_cap_none					/* routes */
+  },
+  sbp_rd_init,
+  NULL,
+  sbp_rd_deinit,
+  NULL,
+  sbp_read,
+  NULL,
+  sbp_exit,
+  sbp_args,
+  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
+  /* not fixed, can be changed through command line parameter */
 };
 /**************************************************************************/

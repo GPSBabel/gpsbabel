@@ -36,8 +36,8 @@ static char *suppresswhite = NULL;
 static char *iconismarker = NULL;
 static char *snlen = NULL;
 
-static char *margin  = NULL; 
-static char *xpixels = NULL; 
+static char *margin  = NULL;
+static char *xpixels = NULL;
 static char *ypixels = NULL;
 static char *oldthresh = NULL;
 static char *oldmarker  = NULL;
@@ -60,231 +60,270 @@ static char *clickmap = NULL;
 
 static
 arglist_t tiger_args[] = {
-	{"nolabels", &nolabels, "Suppress labels on generated pins",
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
-	{"genurl", &genurl, "Generate file with lat/lon for centering map",
-		NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX },
-	{"margin", &margin, "Margin for map.  Degrees or percentage",
-		"15%", ARGTYPE_FLOAT, ARG_NOMINMAX},
-	{"snlen", &snlen, "Max shortname length when used with -s",
-		"10", ARGTYPE_INT, "1", NULL},
-	{"oldthresh", &oldthresh, 
-		"Days after which points are considered old",
-		"14", ARGTYPE_INT, ARG_NOMINMAX},
-	{"oldmarker", &oldmarker, "Marker type for old points",
-		"redpin", ARGTYPE_STRING, ARG_NOMINMAX},
-	{"newmarker", &newmarker, "Marker type for new points",
-		"greenpin", ARGTYPE_STRING, ARG_NOMINMAX},
-	{"suppresswhite", &suppresswhite,
-		"Suppress whitespace in generated shortnames", 
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
-	{"unfoundmarker", &unfoundmarker, "Marker type for unfound points",
-		"bluepin", ARGTYPE_STRING, ARG_NOMINMAX},
-	{"xpixels", &xpixels, "Width in pixels of map",
-		"768", ARGTYPE_INT, ARG_NOMINMAX},
-	{"ypixels", &ypixels, "Height in pixels of map",
-		"768", ARGTYPE_INT, ARG_NOMINMAX},
-	{"iconismarker", &iconismarker,
-		"The icon description is already the marker", NULL,
-		ARGTYPE_BOOL, ARG_NOMINMAX },
+  {
+    "nolabels", &nolabels, "Suppress labels on generated pins",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  {
+    "genurl", &genurl, "Generate file with lat/lon for centering map",
+    NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX
+  },
+  {
+    "margin", &margin, "Margin for map.  Degrees or percentage",
+    "15%", ARGTYPE_FLOAT, ARG_NOMINMAX
+  },
+  {
+    "snlen", &snlen, "Max shortname length when used with -s",
+    "10", ARGTYPE_INT, "1", NULL
+  },
+  {
+    "oldthresh", &oldthresh,
+    "Days after which points are considered old",
+    "14", ARGTYPE_INT, ARG_NOMINMAX
+  },
+  {
+    "oldmarker", &oldmarker, "Marker type for old points",
+    "redpin", ARGTYPE_STRING, ARG_NOMINMAX
+  },
+  {
+    "newmarker", &newmarker, "Marker type for new points",
+    "greenpin", ARGTYPE_STRING, ARG_NOMINMAX
+  },
+  {
+    "suppresswhite", &suppresswhite,
+    "Suppress whitespace in generated shortnames",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
+  {
+    "unfoundmarker", &unfoundmarker, "Marker type for unfound points",
+    "bluepin", ARGTYPE_STRING, ARG_NOMINMAX
+  },
+  {
+    "xpixels", &xpixels, "Width in pixels of map",
+    "768", ARGTYPE_INT, ARG_NOMINMAX
+  },
+  {
+    "ypixels", &ypixels, "Height in pixels of map",
+    "768", ARGTYPE_INT, ARG_NOMINMAX
+  },
+  {
+    "iconismarker", &iconismarker,
+    "The icon description is already the marker", NULL,
+    ARGTYPE_BOOL, ARG_NOMINMAX
+  },
 #if CLICKMAP
-	{"clickmap", &clickmap, "Generate Clickable map web page",
-		NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+  {
+    "clickmap", &clickmap, "Generate Clickable map web page",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
 #endif
-	ARG_TERMINATOR
+  ARG_TERMINATOR
 };
 
 
 static void
 rd_init(const char *fname)
 {
-	file_in = gbfopen(fname, "rb", MYNAME);
-	mkshort_handle = mkshort_new_handle();
+  file_in = gbfopen(fname, "rb", MYNAME);
+  mkshort_handle = mkshort_new_handle();
 }
 
 static void
 rd_deinit(void)
 {
-	gbfclose(file_in);
-	mkshort_del_handle(&mkshort_handle);
+  gbfclose(file_in);
+  mkshort_del_handle(&mkshort_handle);
 }
 
 static void
 wr_init(const char *fname)
 {
-	file_out = gbfopen(fname, "w", MYNAME);
-	thresh_days = strtod(oldthresh, NULL);
+  file_out = gbfopen(fname, "w", MYNAME);
+  thresh_days = strtod(oldthresh, NULL);
 }
 
 static void
 wr_deinit(void)
 {
-	gbfclose(file_out);
+  gbfclose(file_out);
 }
 
 static void
 data_read(void)
 {
-	double lat,lon;
-	char desc[100];
-	char icon[100];
-	char *ibuf;
-	waypoint *wpt_tmp;
-	int line = 0;
-	
-	while ((ibuf = gbfgetstr(file_in))) {
-		if ((line++ == 0) && file_in->unicode) cet_convert_init(CET_CHARSET_UTF8, 1);
-		if( sscanf(ibuf, "%lf,%lf:%100[^:]:%100[^\n]", 
-				&lon, &lat, icon, desc)) {
-			wpt_tmp = waypt_new();
+  double lat,lon;
+  char desc[100];
+  char icon[100];
+  char *ibuf;
+  waypoint *wpt_tmp;
+  int line = 0;
 
-			wpt_tmp->longitude = lon;
-			wpt_tmp->latitude = lat;
-			wpt_tmp->description = xstrdup(desc);
-			wpt_tmp->shortname = mkshort(mkshort_handle, desc);
+  while ((ibuf = gbfgetstr(file_in))) {
+    if ((line++ == 0) && file_in->unicode) {
+      cet_convert_init(CET_CHARSET_UTF8, 1);
+    }
+    if (sscanf(ibuf, "%lf,%lf:%100[^:]:%100[^\n]",
+               &lon, &lat, icon, desc)) {
+      wpt_tmp = waypt_new();
 
-			waypt_add(wpt_tmp);
-		}
-	}
+      wpt_tmp->longitude = lon;
+      wpt_tmp->latitude = lat;
+      wpt_tmp->description = xstrdup(desc);
+      wpt_tmp->shortname = mkshort(mkshort_handle, desc);
+
+      waypt_add(wpt_tmp);
+    }
+  }
 }
 
 static void
 tiger_disp(const waypoint *wpt)
 {
-	const char *pin;
-	double lat = wpt->latitude;
-	double lon = wpt->longitude;
+  const char *pin;
+  double lat = wpt->latitude;
+  double lon = wpt->longitude;
 
-	if (iconismarker)
-		pin = wpt->icon_descr ? wpt->icon_descr : "";
-	else if (wpt->icon_descr && strstr(wpt->icon_descr, "-unfound"))
-		pin = unfoundmarker;
-	else if (wpt->creation_time > current_time() - 3600 * 24 * thresh_days)
-		pin = newmarker;
-	else
-		pin = oldmarker;
+  if (iconismarker) {
+    pin = wpt->icon_descr ? wpt->icon_descr : "";
+  } else if (wpt->icon_descr && strstr(wpt->icon_descr, "-unfound")) {
+    pin = unfoundmarker;
+  } else if (wpt->creation_time > current_time() - 3600 * 24 * thresh_days) {
+    pin = newmarker;
+  } else {
+    pin = oldmarker;
+  }
 
-	if (genurl) {
-		if (lat > maxlat) maxlat = lat;
-		if (lon > maxlon) maxlon = lon;
-		if (lat < minlat) minlat = lat;
-		if (lon < minlon) minlon = lon;
-	}
+  if (genurl) {
+    if (lat > maxlat) {
+      maxlat = lat;
+    }
+    if (lon > maxlon) {
+      maxlon = lon;
+    }
+    if (lat < minlat) {
+      minlat = lat;
+    }
+    if (lon < minlon) {
+      minlon = lon;
+    }
+  }
 
-	gbfprintf(file_out, "%f,%f:%s", lon, lat, pin);
-	if (!nolabels) {
-		char *temp = NULL;
-		char *desc = csv_stringclean(wpt->description, ":");
-		if (global_opts.synthesize_shortnames)
-		{
-			temp = desc;
-			desc = mkshort(mkshort_whandle, desc);
-		}
-		gbfprintf(file_out, ":%s", desc);
-		if (temp != NULL) desc = temp;
-		xfree(desc);
-	}
-	gbfprintf(file_out, "\n");
+  gbfprintf(file_out, "%f,%f:%s", lon, lat, pin);
+  if (!nolabels) {
+    char *temp = NULL;
+    char *desc = csv_stringclean(wpt->description, ":");
+    if (global_opts.synthesize_shortnames) {
+      temp = desc;
+      desc = mkshort(mkshort_whandle, desc);
+    }
+    gbfprintf(file_out, ":%s", desc);
+    if (temp != NULL) {
+      desc = temp;
+    }
+    xfree(desc);
+  }
+  gbfprintf(file_out, "\n");
 }
 
 #if CLICKMAP
 static void
 map_plot(const waypoint *wpt)
 {
-	static int x,y;
+  static int x,y;
 
-	/* Replace with real math. */
-	x+=10;
-	y+=10;
+  /* Replace with real math. */
+  x+=10;
+  y+=10;
 
-	gbfprintf(linkf, "<area shape=\"circle\" coords=\"%d,%d,7\" href=\"%s\" alt=\"%s\"\n", x, y, wpt->url, wpt->description);
+  gbfprintf(linkf, "<area shape=\"circle\" coords=\"%d,%d,7\" href=\"%s\" alt=\"%s\"\n", x, y, wpt->url, wpt->description);
 }
 #endif /* CLICKMAP */
 
 static double
 dscale(double distance)
 {
-	/*
-	 * If we have any specified margin options  factor those in now.  
-	 * A additional little boundary is helpful because Tiger always 
-	 * puts the pin above the actual coord and if we don't pad the 
-	 * top will be clipped.   It also makes the maps more useful to 
-	 * have a little bit of context around the pins on the border.
-	 */
+  /*
+   * If we have any specified margin options  factor those in now.
+   * A additional little boundary is helpful because Tiger always
+   * puts the pin above the actual coord and if we don't pad the
+   * top will be clipped.   It also makes the maps more useful to
+   * have a little bit of context around the pins on the border.
+   */
 
-	if (strchr(margin, '%'))
-		return distance + strtod(margin, NULL) / 100.0 * distance;
-	else
-		return strtod(margin, NULL) + distance;
+  if (strchr(margin, '%')) {
+    return distance + strtod(margin, NULL) / 100.0 * distance;
+  } else {
+    return strtod(margin, NULL) + distance;
+  }
 }
 
 static void
 data_write(void)
 {
-	double latsz,lonsz;
-	maxlat = -9999.0;
-	maxlon = -9999.0;
-	minlat = 9999.0;
-	minlon = 9999.0;
-	rec_cnt = 0;
+  double latsz,lonsz;
+  maxlat = -9999.0;
+  maxlon = -9999.0;
+  minlat = 9999.0;
+  minlon = 9999.0;
+  rec_cnt = 0;
 
-	short_length = atoi(snlen);
-	mkshort_whandle = mkshort_new_handle();
+  short_length = atoi(snlen);
+  mkshort_whandle = mkshort_new_handle();
 
-	if (suppresswhite) {
-		setshort_whitespace_ok(mkshort_whandle, 0);
-	}
+  if (suppresswhite) {
+    setshort_whitespace_ok(mkshort_whandle, 0);
+  }
 
-	setshort_length(mkshort_whandle, short_length);
+  setshort_length(mkshort_whandle, short_length);
 
-	gbfprintf(file_out, "#tms-marker\n");
-	waypt_disp_all(tiger_disp);
+  gbfprintf(file_out, "#tms-marker\n");
+  waypt_disp_all(tiger_disp);
 
-	if (genurl) {
-		gbfile *urlf;
+  if (genurl) {
+    gbfile *urlf;
 
-		urlf = gbfopen(genurl, "w", MYNAME);
-		latsz = fabs(maxlat - minlat); 
-		lonsz = fabs(maxlon - minlon); 
+    urlf = gbfopen(genurl, "w", MYNAME);
+    latsz = fabs(maxlat - minlat);
+    lonsz = fabs(maxlon - minlon);
 
-		/*
-		 * Center the map along X and Y axis the midpoint of
-		 * our min and max coords each way.   
-		 */
-		gbfprintf(urlf, "lat=%f&lon=%f&ht=%f&wid=%f",
-				minlat + (latsz/2.0),
-				minlon + (lonsz/2.0),
-				dscale(latsz),
-				dscale(lonsz));
+    /*
+     * Center the map along X and Y axis the midpoint of
+     * our min and max coords each way.
+     */
+    gbfprintf(urlf, "lat=%f&lon=%f&ht=%f&wid=%f",
+              minlat + (latsz/2.0),
+              minlon + (lonsz/2.0),
+              dscale(latsz),
+              dscale(lonsz));
 
-		gbfprintf(urlf, "&iwd=%s&iht=%s", xpixels, ypixels);
-		gbfclose(urlf);
+    gbfprintf(urlf, "&iwd=%s&iht=%s", xpixels, ypixels);
+    gbfclose(urlf);
 #if CLICKMAP
-		if (clickmap) {
-			linkf = gbfopen(clickmap, "w", MYNAME);
-			gbfprintf(linkf, "<map name=\"map\">\n");
-			waypt_disp_all(map_plot);
-			gbfprintf(linkf, "</map>\n");
-			gbfclose(linkf);
-			linkf = NULL;
-		}
+    if (clickmap) {
+      linkf = gbfopen(clickmap, "w", MYNAME);
+      gbfprintf(linkf, "<map name=\"map\">\n");
+      waypt_disp_all(map_plot);
+      gbfprintf(linkf, "</map>\n");
+      gbfclose(linkf);
+      linkf = NULL;
+    }
 #endif
-	}
+  }
 
-	mkshort_del_handle(&mkshort_whandle);
+  mkshort_del_handle(&mkshort_whandle);
 }
 
 
 ff_vecs_t tiger_vecs = {
-	ff_type_file, 
-	FF_CAP_RW_WPT,
-	rd_init,
-	wr_init,
-	rd_deinit,
-	wr_deinit,
-	data_read,
-	data_write,
-	NULL, 
-	tiger_args,
-	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  ff_type_file,
+  FF_CAP_RW_WPT,
+  rd_init,
+  wr_init,
+  rd_deinit,
+  wr_deinit,
+  data_read,
+  data_write,
+  NULL,
+  tiger_args,
+  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

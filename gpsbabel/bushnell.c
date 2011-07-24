@@ -25,14 +25,14 @@
 
 static gbfile *file_in;
 static char *ofname;
-static short_handle mkshort_handle = NULL; 
+static short_handle mkshort_handle = NULL;
 
 static
 arglist_t bushnell_args[] = {
   ARG_TERMINATOR
 };
 
-// Apparently, the icons are undocumented, so we made up names, 
+// Apparently, the icons are undocumented, so we made up names,
 // preferring them to be consistent with other brands where possiblde.
 
 typedef struct  {
@@ -73,10 +73,10 @@ icon_mapping_t bushnell_icons[] = {
   { 0x19, "Blue Diamond Checkmark" }, //  undocumented.
 
   { 0x1a, "Camera" },
-  { 0x1b, "Restaraunt" }, // "Fork/Knife (meal place?)" 
-  { 0x1c, "Restroom" }, // (man & Woman icon)" 
-  { 0x1d, "RV Park" }, // "Bus or RV (RV campground?)" 
-  { 0x1e, "Potable Water" }, // (faucet/glass or bucket)" 
+  { 0x1b, "Restaraunt" }, // "Fork/Knife (meal place?)"
+  { 0x1c, "Restroom" }, // (man & Woman icon)"
+  { 0x1d, "RV Park" }, // "Bus or RV (RV campground?)"
+  { 0x1e, "Potable Water" }, // (faucet/glass or bucket)"
   { 0x1f, "Fishing" },
   { 0x20, "Anchor in square" },
   { 0x21, "Boat ramp/launch" },
@@ -87,17 +87,17 @@ icon_mapping_t bushnell_icons[] = {
   { 0x26, "Mouantin/Mountain Peak" },
   { 0x27, "Turkey Tracks/animal tracks" },
 
-  { 0x28, "Bank" }, // "Cash (ATM MAybe)" 
-  { 0x29, "Bar" }, // "Martini undocumented" 
+  { 0x28, "Bank" }, // "Cash (ATM MAybe)"
+  { 0x29, "Bar" }, // "Martini undocumented"
   { 0x2a, "Lighthouse" },
 
   { 0x2b, "Tent" },
 
   { 0x2c, "Cresent Wrench or can opener" },
 
-  { 0x2d, "School" }, //? White Building with tunnel looking door and flag on top." 
-  { 0x2f, "Information" }, // "i  (info/internet maybe?)" 
-  { 0x30, "Picnic" }, //"Picnic table & Tree, maybe forest picnic or day use area?" 
+  { 0x2d, "School" }, //? White Building with tunnel looking door and flag on top."
+  { 0x2f, "Information" }, // "i  (info/internet maybe?)"
+  { 0x30, "Picnic" }, //"Picnic table & Tree, maybe forest picnic or day use area?"
   { 0x31, "Phone" },
   { 0x32, "Letter/Envelope" },
   { 0x33, "Forest/Park Ranger" },
@@ -113,61 +113,70 @@ icon_mapping_t bushnell_icons[] = {
 
   { 0x3a, "Swimmer/swimming" },
   { 0x3b, "Officer? Looks like man leaned over holding blue cube..." },
-  { 0x3c, "Parking" }, //"Car Parked" 
+  { 0x3c, "Parking" }, //"Car Parked"
   { 0x3d, "Airport" },
-  { 0x3e, "Bus Terminal" }, // (guess) Loks like Bus under canopy." 
+  { 0x3e, "Bus Terminal" }, // (guess) Loks like Bus under canopy."
   { 0x3f, "Red Cross" },
   { 0x40, "Red Buidling with flag, Fire Station maybe." },
   { 0x41, "Bus" },
-  { 0x42, "Officer" }, // "see 3b: duplicate" 
+  { 0x42, "Officer" }, // "see 3b: duplicate"
   { 0x43, "Railroad" },
   { 0x44, "Auto Ferry" },
   {-1, NULL}
 };
 
 static unsigned int
-bushnell_get_icon_from_name(const char *name) {
+bushnell_get_icon_from_name(const char *name)
+{
   icon_mapping_t *t;
   for (t = bushnell_icons; t->icon > 0; t++) {
-   if (0 == case_ignore_strcmp(name, t->icon))
-    return t->symbol;
+    if (0 == case_ignore_strcmp(name, t->icon)) {
+      return t->symbol;
+    }
   }
   return 0;
 }
 
 static const char *
-bushnell_get_name_from_symbol(signed int s) {
+bushnell_get_name_from_symbol(signed int s)
+{
   icon_mapping_t *t;
   for (t = bushnell_icons; t->icon > 0; t++) {
-   if (s == t->symbol)
-     return t->icon;
+    if (s == t->symbol) {
+      return t->icon;
+    }
   }
   return "Waypoint";
 }
 
 static void
-rd_init(const char *fname) {
+rd_init(const char *fname)
+{
   file_in = gbfopen_le(fname, "rb", MYNAME);
 }
 
 static void
-rd_deinit(void) {
+rd_deinit(void)
+{
   gbfclose(file_in);
 }
 
 static void
-wr_init(const char *fname) {
+wr_init(const char *fname)
+{
   char *dot, *slash;
   static char valid_chars [] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"
-		".-/\\~@#$%^&*()_+=<>"
-                "abcdefghijklmnopqrstuvwxyz";
+                               ".-/\\~@#$%^&*()_+=<>"
+                               "abcdefghijklmnopqrstuvwxyz";
 
   ofname = xstrdup(fname);
 
   // If user provided an extension in the pathname, whack it.
   dot = strrchr(ofname, '.');
   slash = strrchr(ofname, GB_PATHSEP);
-  if (dot > slash) *dot = 0;
+  if (dot > slash) {
+    *dot = 0;
+  }
 
   mkshort_handle = mkshort_new_handle();
   setshort_length(mkshort_handle, 19);
@@ -175,7 +184,8 @@ wr_init(const char *fname) {
 }
 
 static void
-wr_deinit(void) {
+wr_deinit(void)
+{
   mkshort_del_handle(&mkshort_handle);
   xfree(ofname);
 }
@@ -184,7 +194,8 @@ wr_deinit(void) {
  * Each file contains a single waypoint.
  */
 static void
-bushnell_read(void) {
+bushnell_read(void)
+{
   gbint32 lat_tmp,lon_tmp;
   unsigned int proximity;
   unsigned int icon;
@@ -208,7 +219,8 @@ bushnell_read(void) {
 }
 
 static void
-bushnell_write_one(const waypoint *wpt) {
+bushnell_write_one(const waypoint *wpt)
+{
   char tbuf[20]; // 19 text bytes + null terminator.
   char padding[2] = {0, 0};
   gbfile *file_out;
@@ -220,7 +232,7 @@ bushnell_write_one(const waypoint *wpt) {
   file_out = gbfopen_le(fname, "wb", MYNAME);
   gbfputint32(wpt->latitude  * 10000000, file_out);
   gbfputint32(wpt->longitude * 10000000, file_out);
-  gbfputc(bushnell_get_icon_from_name(wpt->icon_descr ? wpt->icon_descr : 
+  gbfputc(bushnell_get_icon_from_name(wpt->icon_descr ? wpt->icon_descr :
                                       "Waypoint"), file_out);
   gbfputc(0x01, file_out);  // Proximity alarm.  1 == "off", 3 == armed.
 
@@ -237,7 +249,8 @@ bushnell_write_one(const waypoint *wpt) {
 }
 
 static void
-bushnell_write(void) {
+bushnell_write(void)
+{
   waypt_disp_all(bushnell_write_one);
 }
 

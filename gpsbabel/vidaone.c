@@ -20,17 +20,17 @@
 
  */
 
- /*
-    Simple layout:
+/*
+   Simple layout:
 
-	struct
-	{
-		double dLatitude
-		double dLongitude
-		float fReserved
-	};
- */
- 
+struct
+{
+	double dLatitude
+	double dLongitude
+	float fReserved
+};
+*/
+
 #include "defs.h"
 #include <ctype.h>
 #include <math.h>
@@ -44,10 +44,12 @@ static int vidaone_ver;
 
 static
 arglist_t vidaone_args[] = {
-	{VIDAONE_VER, &vidaone_opt_ver, 
-		"Version of VidaOne file to read or write (1 or 2)",
-		"1", ARGTYPE_INT, "1", "2"},
-	ARG_TERMINATOR
+  {
+    VIDAONE_VER, &vidaone_opt_ver,
+    "Version of VidaOne file to read or write (1 or 2)",
+    "1", ARGTYPE_INT, "1", "2"
+  },
+  ARG_TERMINATOR
 };
 
 static gbfile *fin, *fout;
@@ -59,90 +61,93 @@ static gbfile *fin, *fout;
 static void
 vidaone_rd_init(const char *fname)
 {
-	vidaone_ver = atoi(vidaone_opt_ver);
-	fin = gbfopen(fname, "rb", MYNAME);
+  vidaone_ver = atoi(vidaone_opt_ver);
+  fin = gbfopen(fname, "rb", MYNAME);
 }
 
-static void 
+static void
 vidaone_rd_deinit(void)
 {
-	gbfclose(fin);
+  gbfclose(fin);
 }
 
 static void
 vidaone_read(void)
 {
-	route_head *trk = NULL;
-	
-	while (! gbfeof(fin)) {
-		waypoint *wpt = waypt_new();
+  route_head *trk = NULL;
 
-		wpt->latitude = gbfgetdbl(fin);
-		wpt->longitude = gbfgetdbl(fin);
-		if (vidaone_ver >= 2)
-			wpt->altitude = gbfgetflt(fin);
-		(void) gbfgetflt(fin);
-		
-		/* Only one basic check of data integrity */
-		if ((fabs(wpt->latitude) > 90) || (fabs(wpt->longitude) > 180))
-			fatal(MYNAME ": Latitude and/or longitude out of range.\n");
+  while (! gbfeof(fin)) {
+    waypoint *wpt = waypt_new();
 
-		if (!trk) {
-			trk = route_head_alloc();
-			track_add_head(trk);
-		}
+    wpt->latitude = gbfgetdbl(fin);
+    wpt->longitude = gbfgetdbl(fin);
+    if (vidaone_ver >= 2) {
+      wpt->altitude = gbfgetflt(fin);
+    }
+    (void) gbfgetflt(fin);
 
-		track_add_wpt(trk, wpt);
-	}
+    /* Only one basic check of data integrity */
+    if ((fabs(wpt->latitude) > 90) || (fabs(wpt->longitude) > 180)) {
+      fatal(MYNAME ": Latitude and/or longitude out of range.\n");
+    }
+
+    if (!trk) {
+      trk = route_head_alloc();
+      track_add_head(trk);
+    }
+
+    track_add_wpt(trk, wpt);
+  }
 }
 
 static void
 vidaone_wr_init(const char *fname)
 {
-	vidaone_ver = atoi(vidaone_opt_ver);
-	fout = gbfopen(fname, "wb", MYNAME);
+  vidaone_ver = atoi(vidaone_opt_ver);
+  fout = gbfopen(fname, "wb", MYNAME);
 }
 
 static void
 vidaone_wr_deinit(void)
 {
-	gbfclose(fout);
+  gbfclose(fout);
 }
 
 static void
 vidaone_trkpt(const waypoint *wpt)
 {
-	gbfputdbl(wpt->latitude, fout);
-	gbfputdbl(wpt->longitude, fout);
-	if (vidaone_ver >= 2)
-			gbfputflt(wpt->altitude, fout);
-	gbfputflt(0, fout);
+  gbfputdbl(wpt->latitude, fout);
+  gbfputdbl(wpt->longitude, fout);
+  if (vidaone_ver >= 2) {
+    gbfputflt(wpt->altitude, fout);
+  }
+  gbfputflt(0, fout);
 }
 
 static void
 vidaone_write(void)
 {
-	track_disp_all(NULL, NULL, vidaone_trkpt);
+  track_disp_all(NULL, NULL, vidaone_trkpt);
 }
 
 /**************************************************************************/
 
 ff_vecs_t vidaone_vecs = {
-	ff_type_file,
-	{ 
-		ff_cap_none 			/* waypoints */, 
-	  	ff_cap_read | ff_cap_write	/* tracks */, 
-	  	ff_cap_none 			/* routes */
-	},
-	vidaone_rd_init,	
-	vidaone_wr_init,	
-	vidaone_rd_deinit,	
-	vidaone_wr_deinit,	
-	vidaone_read,
-	vidaone_write,
-	NULL,
-	vidaone_args,
-	CET_CHARSET_UTF8, 1
+  ff_type_file,
+  {
+    ff_cap_none 			/* waypoints */,
+    ff_cap_read | ff_cap_write	/* tracks */,
+    ff_cap_none 			/* routes */
+  },
+  vidaone_rd_init,
+  vidaone_wr_init,
+  vidaone_rd_deinit,
+  vidaone_wr_deinit,
+  vidaone_read,
+  vidaone_write,
+  NULL,
+  vidaone_args,
+  CET_CHARSET_UTF8, 1
 };
 
 /**************************************************************************/

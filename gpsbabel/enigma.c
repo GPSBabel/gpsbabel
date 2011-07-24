@@ -54,21 +54,21 @@
 #define WTYPE_ALTITUDECHANGE  26 // Location at which altitude should be changed
 
 union wpt_data {
-    gbint32     wp_altitude;  // Waypoint type 0-6,8: waypoint altitude in feet
-    gbint32     tg_altitude;  // Waypoint type 26: target altitude in feet
-    gbuint32    frequency;    // Waypoint type 9-25: freq in steps of 1000Hz (118Mhz = 180000)
-    gbint32     dummy;        // waypoint type 7, unused
+  gbint32     wp_altitude;  // Waypoint type 0-6,8: waypoint altitude in feet
+  gbint32     tg_altitude;  // Waypoint type 26: target altitude in feet
+  gbuint32    frequency;    // Waypoint type 9-25: freq in steps of 1000Hz (118Mhz = 180000)
+  gbint32     dummy;        // waypoint type 7, unused
 };
 
 typedef struct enigma_wpt {
-	gbint32			latitude;
-	gbint32			longitude;
-    union wpt_data  data;
-    gbuint8         waypoint_type;
-    gbuint8         shortname_len;
-    char            shortname[6];
-    gbuint8         longname_len;
-    char            longname[27];
+  gbint32			latitude;
+  gbint32			longitude;
+  union wpt_data  data;
+  gbuint8         waypoint_type;
+  gbuint8         shortname_len;
+  char            shortname[6];
+  gbuint8         longname_len;
+  char            longname[27];
 } ENIGMA_WPT;
 
 static gbfile *file_in, *file_out;
@@ -76,80 +76,79 @@ static gbfile *file_in, *file_out;
 static void
 rd_init(const char *fname)
 {
-	file_in = gbfopen_le(fname, "rb", MYNAME);
+  file_in = gbfopen_le(fname, "rb", MYNAME);
 }
 
-gbint32 decToEnigmaPosition (double val)
+gbint32 decToEnigmaPosition(double val)
 {
-	int degrees = fabs(val);
-	double frac = fabs(val) - degrees;
-	int enigmadeg = degrees * 180000;
-	int enigmafrac = 180000 * frac;
-	int sign = (val < 0) ? -1 : +1;
-	return sign * (enigmadeg + enigmafrac);
+  int degrees = fabs(val);
+  double frac = fabs(val) - degrees;
+  int enigmadeg = degrees * 180000;
+  int enigmafrac = 180000 * frac;
+  int sign = (val < 0) ? -1 : +1;
+  return sign * (enigmadeg + enigmafrac);
 }
 
-float enigmaPositionToDec (gbint32 val)
+float enigmaPositionToDec(gbint32 val)
 {
-	int deg = abs(val) / 180000;
-	int enigmafrac = abs(val) % 180000;
-	double frac = (double)enigmafrac / 180000;
-	int sign = (val < 0) ? -1 : +1;
-	return sign * (deg + frac);
+  int deg = abs(val) / 180000;
+  int enigmafrac = abs(val) % 180000;
+  double frac = (double)enigmafrac / 180000;
+  int sign = (val < 0) ? -1 : +1;
+  return sign * (deg + frac);
 }
 
 static void
 data_read(void)
 {
-    struct enigma_wpt ewpt;
-    route_head *route = route_head_alloc();
-    route_add_head (route);
+  struct enigma_wpt ewpt;
+  route_head *route = route_head_alloc();
+  route_add_head(route);
 
-	while (1 == gbfread(&ewpt, sizeof (ewpt), 1, file_in)) {
-		waypoint *wpt = waypt_new();
-		wpt->latitude = enigmaPositionToDec(le_read32(&ewpt.latitude));
-		wpt->longitude = enigmaPositionToDec(le_read32(&ewpt.longitude));
-		wpt->shortname = xstrndup(ewpt.shortname, ewpt.shortname_len);
-		wpt->description = xstrndup(ewpt.longname, ewpt.longname_len);
-                switch (ewpt.waypoint_type)
-                {
-                    case WTYPE_WAYPOINT:        // 0
-                    case WTYPE_AIRPORT:         // 1
-                    case WTYPE_MAJORAIRPORT:    // 2
-                    case WTYPE_SEAPLANEBASE:    // 3
-                    case WTYPE_AIRFIELD:        // 4
-                    case WTYPE_PRIVATEAIRFIELD: // 5
-                    case WTYPE_ULTRALIGHTFIELD: // 6
-                    case WTYPE_HELIPORT:        // 8
-                        // waypoint altitude
-                        wpt->altitude = FEET_TO_METERS(le_read32(&ewpt.data.wp_altitude) - 1000);
-                        break;
-                    case WTYPE_ALTITUDECHANGE:  // 26
-                        // target altitude
-                        wpt->altitude = FEET_TO_METERS(le_read32(&ewpt.data.tg_altitude) - 1000);
-                        break;
-                    case WTYPE_INTERSECTION:    // 7
-                        // unused
-                        break;
-                    default:
-                        // frequency
-                        // wpt->frequency = wpt.le_readu32(ewpt.data.frequency);
-                        ;
-                }
-		route_add_wpt(route, wpt);
-	}
+  while (1 == gbfread(&ewpt, sizeof(ewpt), 1, file_in)) {
+    waypoint *wpt = waypt_new();
+    wpt->latitude = enigmaPositionToDec(le_read32(&ewpt.latitude));
+    wpt->longitude = enigmaPositionToDec(le_read32(&ewpt.longitude));
+    wpt->shortname = xstrndup(ewpt.shortname, ewpt.shortname_len);
+    wpt->description = xstrndup(ewpt.longname, ewpt.longname_len);
+    switch (ewpt.waypoint_type) {
+    case WTYPE_WAYPOINT:        // 0
+    case WTYPE_AIRPORT:         // 1
+    case WTYPE_MAJORAIRPORT:    // 2
+    case WTYPE_SEAPLANEBASE:    // 3
+    case WTYPE_AIRFIELD:        // 4
+    case WTYPE_PRIVATEAIRFIELD: // 5
+    case WTYPE_ULTRALIGHTFIELD: // 6
+    case WTYPE_HELIPORT:        // 8
+      // waypoint altitude
+      wpt->altitude = FEET_TO_METERS(le_read32(&ewpt.data.wp_altitude) - 1000);
+      break;
+    case WTYPE_ALTITUDECHANGE:  // 26
+      // target altitude
+      wpt->altitude = FEET_TO_METERS(le_read32(&ewpt.data.tg_altitude) - 1000);
+      break;
+    case WTYPE_INTERSECTION:    // 7
+      // unused
+      break;
+    default:
+      // frequency
+      // wpt->frequency = wpt.le_readu32(ewpt.data.frequency);
+      ;
+    }
+    route_add_wpt(route, wpt);
+  }
 }
 
 static void
 rd_deinit(void)
 {
-	gbfclose(file_in);
+  gbfclose(file_in);
 }
 
 static void
 wr_init(const char *fname)
 {
-	file_out = gbfopen_le(fname, "wb", MYNAME);
+  file_out = gbfopen_le(fname, "wb", MYNAME);
 }
 
 static void
@@ -167,54 +166,53 @@ route_head_noop(const route_head *wp)
 static void
 enigma_waypt_disp(const waypoint *wpt)
 {
-	struct enigma_wpt ewpt;
+  struct enigma_wpt ewpt;
 
-	memset (&ewpt, 0, sizeof (ewpt));
+  memset(&ewpt, 0, sizeof(ewpt));
 
-	le_write32(&ewpt.latitude, decToEnigmaPosition(wpt->latitude));
-	le_write32(&ewpt.longitude, decToEnigmaPosition(wpt->longitude));
-    ewpt.waypoint_type = WTYPE_WAYPOINT;
-	if (wpt->altitude != unknown_alt)
-		le_write32(&ewpt.data.wp_altitude, METERS_TO_FEET(wpt->altitude) + 1000);
-	if (wpt->shortname != NULL)
-	{
-        ewpt.shortname_len = min (6, strlen (wpt->shortname));
-        strncpy(ewpt.shortname, wpt->shortname, 6);
-	}
-	if (wpt->description != NULL)
-	{
-        ewpt.longname_len = min (27, strlen (wpt->description));
-        strncpy(ewpt.longname, wpt->description, 27);
-	}
-	gbfwrite(&ewpt, sizeof (ewpt), 1, file_out);
+  le_write32(&ewpt.latitude, decToEnigmaPosition(wpt->latitude));
+  le_write32(&ewpt.longitude, decToEnigmaPosition(wpt->longitude));
+  ewpt.waypoint_type = WTYPE_WAYPOINT;
+  if (wpt->altitude != unknown_alt) {
+    le_write32(&ewpt.data.wp_altitude, METERS_TO_FEET(wpt->altitude) + 1000);
+  }
+  if (wpt->shortname != NULL) {
+    ewpt.shortname_len = min(6, strlen(wpt->shortname));
+    strncpy(ewpt.shortname, wpt->shortname, 6);
+  }
+  if (wpt->description != NULL) {
+    ewpt.longname_len = min(27, strlen(wpt->description));
+    strncpy(ewpt.longname, wpt->description, 27);
+  }
+  gbfwrite(&ewpt, sizeof(ewpt), 1, file_out);
 }
 
 static void
 data_write(void)
 {
-	route_disp_all(route_head_noop, route_head_noop, enigma_waypt_disp);
+  route_disp_all(route_head_noop, route_head_noop, enigma_waypt_disp);
 }
 
 static void
 wr_deinit(void)
 {
-	gbfclose(file_in);
+  gbfclose(file_in);
 }
 
 ff_vecs_t enigma_vecs = {
-		ff_type_file,
-	{ 
-		ff_cap_read | ff_cap_write,  	/* waypoints */
-		ff_cap_none,                    /* tracks */
-		ff_cap_read | ff_cap_write  	/* routes */
-	},
-		rd_init,
-		wr_init,
-		rd_deinit,
-		wr_deinit,
-		data_read,
-		data_write,
-		NULL,
-		NULL,
-	CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  ff_type_file,
+  {
+    ff_cap_read | ff_cap_write,  	/* waypoints */
+    ff_cap_none,                    /* tracks */
+    ff_cap_read | ff_cap_write  	/* routes */
+  },
+  rd_init,
+  wr_init,
+  rd_deinit,
+  wr_deinit,
+  data_read,
+  data_write,
+  NULL,
+  NULL,
+  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

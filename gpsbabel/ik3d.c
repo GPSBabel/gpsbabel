@@ -1,4 +1,4 @@
-/* 
+/*
 
 	Support for "MagicMaps" project files (.ikt)
 
@@ -23,9 +23,8 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static arglist_t ikt_args[] = 
-{
-	ARG_TERMINATOR
+static arglist_t ikt_args[] = {
+  ARG_TERMINATOR
 };
 
 #define MYNAME "ikt"
@@ -36,7 +35,7 @@ static char *name, *text;
 void
 ikt_rd_init(const char *fname)
 {
-	fatal(MYNAME ": This build excluded \" MYNAME \" support because expat was not installed.\n");
+  fatal(MYNAME ": This build excluded \" MYNAME \" support because expat was not installed.\n");
 }
 
 void
@@ -61,142 +60,151 @@ static xg_callback	iktobj_waypt, iktobj_type, iktobj_name, iktobj_trkpt, iktobj_
 /* Here we are working with wildcards in the tag list.
    Please ensure that the longest entries comes first */
 
-static 
+static
 xg_tag_mapping ikt_map[] = {
-	{ iktobj_trkpt,	cb_start,	IKTOBJ "_*/PathPoints/Point_*/GeoPosition" },
-	{ iktobj_type,	cb_cdata,	IKTOBJ "_*/GeoObjectType" },
-	{ iktobj_waypt,	cb_start,	IKTOBJ "_*/GeoPosition" },
-	{ iktobj_name,	cb_cdata,	IKTOBJ "_*/Name" },
-	{ iktobj_text,	cb_cdata,	IKTOBJ "_*/POIDrawable2D/Text" },
-	{ NULL,		0,		NULL }
+  { iktobj_trkpt,	cb_start,	IKTOBJ "_*/PathPoints/Point_*/GeoPosition" },
+  { iktobj_type,	cb_cdata,	IKTOBJ "_*/GeoObjectType" },
+  { iktobj_waypt,	cb_start,	IKTOBJ "_*/GeoPosition" },
+  { iktobj_name,	cb_cdata,	IKTOBJ "_*/Name" },
+  { iktobj_text,	cb_cdata,	IKTOBJ "_*/POIDrawable2D/Text" },
+  { NULL,		0,		NULL }
 };
 
 static void
 ikt_object_end(void)
 {
-	if (track) {
-		track->rte_name = name;
-		track_add_head(track);
-		name = NULL;
-	}
-	else if (waypt) {
-		waypt->shortname = name;
-		waypt->description = text;
-		waypt_add(waypt);
-		name = NULL;
-		text = NULL;
-	}
-	if (name) {
-		xfree(name);
-		name = NULL;
-	}
-	if (text) {
-		xfree(text);
-		text = NULL;
-	}
-	track = NULL;
-	waypt = NULL; 
+  if (track) {
+    track->rte_name = name;
+    track_add_head(track);
+    name = NULL;
+  } else if (waypt) {
+    waypt->shortname = name;
+    waypt->description = text;
+    waypt_add(waypt);
+    name = NULL;
+    text = NULL;
+  }
+  if (name) {
+    xfree(name);
+    name = NULL;
+  }
+  if (text) {
+    xfree(text);
+    text = NULL;
+  }
+  track = NULL;
+  waypt = NULL;
 }
 
-static void 
+static void
 iktobj_waypt(const char *args, const char **attrv)
 {
-	const char **avp = &attrv[0];
+  const char **avp = &attrv[0];
 
-        while (*avp) {
-		if (strcmp(avp[0], "X") == 0) waypt->longitude = atof(avp[1]);
-		else if (strcmp(avp[0], "Y") == 0) waypt->latitude = atof(avp[1]);
-		avp+=2;
-	}
+  while (*avp) {
+    if (strcmp(avp[0], "X") == 0) {
+      waypt->longitude = atof(avp[1]);
+    } else if (strcmp(avp[0], "Y") == 0) {
+      waypt->latitude = atof(avp[1]);
+    }
+    avp+=2;
+  }
 }
 
 static void
 iktobj_trkpt(const char *args, const char **attrv)
 {
-	const char **avp = &attrv[0];
+  const char **avp = &attrv[0];
 
-	waypt = waypt_new();
-	while (*avp) {
-		if (strcmp(avp[0], "X") == 0) waypt->longitude = atof(avp[1]);
-		else if (strcmp(avp[0], "Y") == 0) waypt->latitude = atof(avp[1]);
-		avp+=2;
-	}
-	track_add_wpt(track, waypt);
-	waypt = NULL;
+  waypt = waypt_new();
+  while (*avp) {
+    if (strcmp(avp[0], "X") == 0) {
+      waypt->longitude = atof(avp[1]);
+    } else if (strcmp(avp[0], "Y") == 0) {
+      waypt->latitude = atof(avp[1]);
+    }
+    avp+=2;
+  }
+  track_add_wpt(track, waypt);
+  waypt = NULL;
 }
 
-static void 
+static void
 iktobj_name(const char *args, const char **unused)
 {
-	name = xstrdup(args);
+  name = xstrdup(args);
 }
 
-static void 
+static void
 iktobj_text(const char *args, const char **unused)
 {
-	text = xstrdup(args);
+  text = xstrdup(args);
 }
 
-static void 
+static void
 iktobj_type(const char *args, const char **unused)
 {
-	ikt_object_end();
+  ikt_object_end();
 
-	switch(atoi(args)) {
-		case 0: 
-			waypt = waypt_new();
-			break;
-		case 1: 
-			track = route_head_alloc(); 
-			break;
-		default: 
-			fatal(MYNAME ": Unknown object type %s!\n", args);
-	}
+  switch (atoi(args)) {
+  case 0:
+    waypt = waypt_new();
+    break;
+  case 1:
+    track = route_head_alloc();
+    break;
+  default:
+    fatal(MYNAME ": Unknown object type %s!\n", args);
+  }
 }
 
-static void 
+static void
 ikt_rd_init(const char *fname)
 {
-	xml_init(fname, ikt_map, NULL);
-	
-	track = NULL;
-	waypt = NULL;
-	name = NULL;
-	text = NULL;
+  xml_init(fname, ikt_map, NULL);
+
+  track = NULL;
+  waypt = NULL;
+  name = NULL;
+  text = NULL;
 }
 
-static void 
+static void
 ikt_read(void)
 {
-	xml_read();
+  xml_read();
 }
 
 #endif
 
-static void 
+static void
 ikt_rd_deinit(void)
 {
-	ikt_object_end();
-	if (name) xfree(name);
-	if (text) xfree(text);
+  ikt_object_end();
+  if (name) {
+    xfree(name);
+  }
+  if (text) {
+    xfree(text);
+  }
 
-	xml_deinit();
+  xml_deinit();
 }
 
 ff_vecs_t ik3d_vecs = {
-	ff_type_file,
-	{
-	  ff_cap_read,	/* waypoints */
-	  ff_cap_read, 	/* tracks */
-	  ff_cap_none	/* routes */
-	},
-	ikt_rd_init,	
-	NULL,	
-	ikt_rd_deinit,
-	NULL,
-	ikt_read,
-	NULL,
-	NULL, 
-	ikt_args,
-	CET_CHARSET_UTF8, 1
+  ff_type_file,
+  {
+    ff_cap_read,	/* waypoints */
+    ff_cap_read, 	/* tracks */
+    ff_cap_none	/* routes */
+  },
+  ikt_rd_init,
+  NULL,
+  ikt_rd_deinit,
+  NULL,
+  ikt_read,
+  NULL,
+  NULL,
+  ikt_args,
+  CET_CHARSET_UTF8, 1
 };
