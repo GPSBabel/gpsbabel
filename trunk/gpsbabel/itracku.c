@@ -788,8 +788,8 @@ ff_vecs_t itracku_vecs = {
 ff_vecs_t itracku_fvecs = {
   ff_type_file,
   {
-    (ff_cap) (ff_cap_read | ff_cap_write) /* waypoints */,
-    (ff_cap) (ff_cap_read | ff_cap_write) /* tracks */,
+    (ff_cap)(ff_cap_read | ff_cap_write) /* waypoints */,
+    (ff_cap)(ff_cap_read | ff_cap_write) /* tracks */,
     ff_cap_none /* routes */
   },
   itracku_rd_init,

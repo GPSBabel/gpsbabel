@@ -214,7 +214,7 @@ xg_tag_mapping kml_map[] = {
   { trk_coord, 	cb_cdata, 	"/Placemark/GeometryCollection/LineString/coordinates" },
   { trk_coord, 	cb_cdata,	"/Placemark/Polygon/outerBoundaryIs/LinearRing/coordinates" },
   { trk_coord, 	cb_cdata, 	"/Placemark/LineString/coordinates" },
-  { NULL, 	(xg_cb_type) 0, 		NULL }
+  { NULL,	(xg_cb_type) 0, 		NULL }
 };
 
 static
