@@ -443,7 +443,7 @@ const char *fix_win_serial_name(const char *comname)
  */
 int gbser_read_line(void *handle, void *buf, unsigned len, unsigned ms, int eol, int discard)
 {
-  char *bp = buf;
+  char *bp = (char *) buf;
   unsigned pos = 0;
   hp_time tv;
   get_time(&tv);

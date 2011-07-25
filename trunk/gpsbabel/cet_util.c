@@ -402,8 +402,8 @@ cet_check_cs(cet_cs_vec_t *vec)	/* test well sorted link & extra tables */
 static signed int
 cet_cs_alias_qsort_cb(const void *a, const void *b)
 {
-  const cet_cs_alias_t *va = a;
-  const cet_cs_alias_t *vb = b;
+  const cet_cs_alias_t *va = (const cet_cs_alias_t*) a;
+  const cet_cs_alias_t *vb = (const cet_cs_alias_t*) b;
   return case_ignore_strcmp(va->name, vb->name);
 }
 
@@ -444,6 +444,7 @@ cet_cs_vec_t cet_cs_vec_utf8 = {
   0,
   NULL,	/* extra */
   0,	/* extras */
+  NULL,
   NULL
 };
 
@@ -815,7 +816,7 @@ cet_register(void)
     }
     /* create name to vec table */
 
-    list = xcalloc(c, sizeof(*list));
+    list = (cet_cs_alias_t*) xcalloc(c, sizeof(*list));
     i = 0;
     for (p = cet_cs_vec_root; p != NULL; p = p->next) {
       if (p->alias != NULL) {

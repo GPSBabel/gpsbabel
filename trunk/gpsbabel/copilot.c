@@ -251,7 +251,7 @@ copilot_writewpt(const waypoint *wpt)
   struct record4 *rec;
   char *vdata;
 
-  rec = xcalloc(sizeof(*rec)+1141,1);
+  rec = (struct record4 *) xcalloc(sizeof(*rec)+1141,1);
 
   pdb_write_double(&rec->latitude, RAD(wpt->latitude));
   pdb_write_double(&rec->longitude, RAD(-wpt->longitude));

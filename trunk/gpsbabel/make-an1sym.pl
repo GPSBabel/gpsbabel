@@ -278,7 +278,7 @@ print <<'END';
 
 struct defguid {
 	GUID guid;
-	char *name;
+	const char *name;
 } default_guids[] = {
 END
 }

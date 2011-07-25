@@ -37,6 +37,10 @@
 #include "garminusb.h"
 #include "gpsusbint.h"
 
+time_t gps_save_time;
+double gps_save_lat;
+double gps_save_lon;
+
 #define XMIN(a,b) (a < b? a : b)
 
 static int32    GPS_A000(const char *port);
@@ -7855,7 +7859,7 @@ void GPS_Prepare_Track_For_Device(GPS_PTrack **trk, int32 *n)
             trkpt->distance_populated = 0;
             trkpt->heartrate = 0;
             trkpt->cadence = 0xff;
-            *trk = xrealloc(*trk, (*n+1) * sizeof(GPS_PTrack));
+            *trk = (struct GPS_STrack**) xrealloc(*trk, (*n+1) * sizeof(GPS_PTrack));
             memmove(&(*trk)[i+1], &(*trk)[i], (*n-i) * sizeof(GPS_PTrack));
             (*trk)[i] = trkpt;
             i++;

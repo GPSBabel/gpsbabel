@@ -163,7 +163,7 @@ gpspilot_writewpt(const waypoint *wpt)
   struct record *rec;
   char *vdata;
 
-  rec = xcalloc(sizeof(*rec)+206,1);
+  rec = (struct record*) xcalloc(sizeof(*rec)+206,1);
 
   be_write32(&rec->longitude, si_round(wpt->longitude * 3.6e6));
   be_write32(&rec->latitude, si_round(wpt->latitude * 3.6e6));

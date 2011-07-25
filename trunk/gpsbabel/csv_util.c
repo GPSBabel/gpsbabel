@@ -754,7 +754,7 @@ xcsv_file_init(void)
    */
   xcsv_file.type = ff_type_file;
 
-  xcsv_file.mkshort_handle = (struct short_handle *) mkshort_new_handle();
+  xcsv_file.mkshort_handle = mkshort_new_handle();
   xcsv_file.gps_datum = GPS_DATUM_WGS84;
 }
 

@@ -84,9 +84,9 @@ gzapi_open(gbfile *self, const char *mode)
       fd = stdout;
     }
     SET_BINARY_MODE(fd);
-    self->handle.gz = gzdopen(fileno(fd), openmode);
+    self->handle.gz = (void **)gzdopen(fileno(fd), openmode);
   } else {
-    self->handle.gz = gzopen(self->name, openmode);
+    self->handle.gz = (void **)gzopen(self->name, openmode);
   }
 
   if (self->handle.gz == NULL) {
@@ -131,7 +131,7 @@ static gbsize_t
 gzapi_read(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
 {
   int result = 0;
-  char *target = buf;
+  char *target = (char*) buf;
   int count = size * members;
 
   if (self->back != -1) {
@@ -430,7 +430,7 @@ memapi_write(const void *buf, const gbsize_t size, const gbsize_t members, gbfil
 
   if (self->mempos + count > self->memsz) {
     self->memsz = ((self->mempos + count + 4095) / 4096) * 4096;
-    self->handle.mem = xrealloc(self->handle.mem, self->memsz);
+    self->handle.mem = (unsigned char*) xrealloc(self->handle.mem, self->memsz);
   }
   memcpy(self->handle.mem + self->mempos, buf, count);
   self->mempos += count;
@@ -497,7 +497,7 @@ gbfopen(const char *filename, const char *mode, const char *module)
   const char *m;
   int len;
 
-  file = xcalloc(1, sizeof(*file));
+  file = (gbfile*) xcalloc(1, sizeof(*file));
 
   file->module = xstrdup(module);
   file->mode = 'r'; // default
@@ -589,7 +589,7 @@ gbfopen(const char *filename, const char *mode, const char *module)
 #else
   file->buffsz = 256;
 #endif
-  file->buff = xmalloc(file->buffsz);
+  file->buff = (char *) xmalloc(file->buffsz);
 
   return file;
 }
@@ -728,7 +728,7 @@ int gbvfprintf(gbfile *file, const char *format, va_list ap)
       file->buffsz *= 2;
     }
 
-    file->buff = xrealloc(file->buff, file->buffsz);
+    file->buff = (char*) xrealloc(file->buff, file->buffsz);
   }
   return gbfwrite(file->buff, 1, len, file);
 }
@@ -971,7 +971,7 @@ gbfgetcstr(gbfile *file)
 
     if (len == file->buffsz) {
       file->buffsz += 64;
-      str = file->buff = xrealloc(file->buff, file->buffsz + 1);
+      str = file->buff = (char*) xrealloc(file->buff, file->buffsz + 1);
     }
     str[len] = c;
     len++;
@@ -998,7 +998,7 @@ gbfgetpstr(gbfile *file)
   char *result;
 
   len = gbfgetc(file);
-  result = xmalloc(len + 1);
+  result = (char *) xmalloc(len + 1);
   if (len > 0) {
     gbfread(result, 1, len, file);
   }
@@ -1061,7 +1061,7 @@ gbfgetucs2str(gbfile *file)
 
     if (len+clen >= file->buffsz) {
       file->buffsz += 64;
-      result = file->buff = xrealloc(file->buff, file->buffsz + 1);
+      result = file->buff = (char*) xrealloc(file->buff, file->buffsz + 1);
     }
     memcpy(&result[len], buff, clen);
     len += clen;
@@ -1125,7 +1125,7 @@ gbfgetstr(gbfile *file)
 
     if ((len + 1) == file->buffsz) {
       file->buffsz += 64;
-      result = file->buff = xrealloc(file->buff, file->buffsz + 1);
+      result = file->buff = (char*) xrealloc(file->buff, file->buffsz + 1);
     }
     result[len] = (char)c;
     len++;

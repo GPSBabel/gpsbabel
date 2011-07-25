@@ -768,9 +768,9 @@ avltree_save_key(avltree_t *tree, const char *key)
 
       if (n8 > tree->key_sz) {
         if (tree->key_sz == 0) {
-          tree->key = xmalloc(n8);
+          tree->key = (char*) xmalloc(n8);
         } else {
-          tree->key = xrealloc((char *)tree->key, n8);
+          tree->key = (char *) xrealloc((char *)tree->key, n8);
         }
         tree->key_sz = n8;
       }

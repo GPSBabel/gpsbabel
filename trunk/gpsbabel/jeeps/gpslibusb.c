@@ -58,12 +58,23 @@ typedef struct {
 static int gusb_intr_in_ep;
 static int gusb_bulk_out_ep;
 static int gusb_bulk_in_ep;
-static gusb_llops_t libusb_llops;
 
 static usb_dev_handle *udev;
 static int garmin_usb_scan(libusb_unit_data *, int);
 static const gdx_info *gdx;
 
+static int gusb_libusb_get(garmin_usb_packet *ibuf, size_t sz);
+static int gusb_libusb_get_bulk(garmin_usb_packet *ibuf, size_t sz);
+static int gusb_teardown(gpsdevh *dh);
+static int gusb_libusb_send(const garmin_usb_packet *opkt, size_t sz);
+
+static gusb_llops_t libusb_llops = {
+  gusb_libusb_get,
+  gusb_libusb_get_bulk,
+  gusb_libusb_send,
+  gusb_teardown,
+  0
+};
 
 #if __linux__
 static
@@ -79,7 +90,7 @@ char ** os_get_garmin_mountpoints()
 // get mounted...
 char ** os_get_garmin_mountpoints()
 {
-  char **dlist = xcalloc(2, sizeof *dlist);
+  char **dlist = (char **) xcalloc(2, sizeof *dlist);
   dlist[0] = xstrdup("/Volumes/GARMIN");
   dlist[1] = NULL;
   return dlist;
@@ -443,18 +454,12 @@ int garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
   }
 }
 
-static gusb_llops_t libusb_llops = {
-  gusb_libusb_get,
-  gusb_libusb_get_bulk,
-  gusb_libusb_send,
-  gusb_teardown
-};
 
 int
 gusb_init(const char *portname, gpsdevh **dh)
 {
   int req_unit_number = 0;
-  libusb_unit_data *lud = xcalloc(sizeof(libusb_unit_data), 1);
+  libusb_unit_data *lud = (libusb_unit_data*) xcalloc(sizeof(libusb_unit_data), 1);
 
   *dh = (gpsdevh*) lud;
 

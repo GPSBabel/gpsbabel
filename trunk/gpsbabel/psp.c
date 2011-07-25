@@ -77,7 +77,7 @@ psp_read_str(gbfile *fin)
     return NULL;
   }
 
-  buff = xmalloc(len * sizeof(*buff));
+  buff = (gbint16*) xmalloc(len * sizeof(*buff));
   gbfread(buff, sizeof(*buff), len, fin);
   res = cet_str_uni_to_utf8(buff, len);
   xfree(buff);

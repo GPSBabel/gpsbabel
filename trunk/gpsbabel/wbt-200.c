@@ -92,9 +92,11 @@ static FILE *fl;
 static char *port;
 static char *erase;
 
-static enum {
+typedef enum {
   UNKNOWN, WBT200, WBT201, WSG1000
-} dev_type = UNKNOWN;
+} wintec_gps_types;
+
+static wintec_gps_types dev_type = UNKNOWN;
 
 struct buf_chunk {
   struct buf_chunk    *next;
@@ -173,7 +175,7 @@ static void buf_rewind(struct buf_head *h)
 
 static size_t buf_read(struct buf_head *h, void *data, size_t len)
 {
-  char    *bp = data;
+  char    *bp = (char *) data;
   size_t  got = 0;
 
   while (len != 0 && h->current != NULL) {
@@ -206,7 +208,7 @@ static void buf_extend(struct buf_head *h, size_t amt)
   struct buf_chunk *c;
   size_t sz = amt + sizeof(struct buf_chunk);
 
-  c = xmalloc(sz);
+  c = (struct buf_chunk*) xmalloc(sz);
   c->next = NULL;
   c->size = amt;
   c->used = 0;
@@ -236,7 +238,7 @@ static void buf_update_checksum(struct buf_head *h, const void *data, size_t len
 static void buf_write(struct buf_head *h, const void *data, size_t len)
 {
   size_t avail;
-  const char *bp = data;
+  const char *bp = (const char *) data;
 
   buf_update_checksum(h, data, len);
 
@@ -370,7 +372,7 @@ static int wsg1000_try()
   return expect("@AL,2,3,OK");
 }
 
-static int guess_device()
+static wintec_gps_types guess_device()
 {
   int i;
   db(1, "Guessing device...\n");

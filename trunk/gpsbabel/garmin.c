@@ -105,7 +105,7 @@ rw_init(const char *fname)
 {
   int receiver_short_length;
   int receiver_must_upper = 1;
-  char * receiver_charset = NULL;
+  const char * receiver_charset = NULL;
 
   if (!mkshort_handle) {
     mkshort_handle = mkshort_new_handle();
@@ -893,7 +893,7 @@ waypoint_prepare(void)
   extern queue waypt_head;
   int icon;
 
-  tx_waylist = xcalloc(n,sizeof(*tx_waylist));
+  tx_waylist = (struct GPS_SWay**) xcalloc(n,sizeof(*tx_waylist));
 
   for (i = 0; i < n; i++) {
     tx_waylist[i] = sane_GPS_Way_New();
@@ -1104,7 +1104,7 @@ route_write(void)
   int i;
   int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
 
-  tx_routelist = xcalloc(n,sizeof(GPS_PWay));
+  tx_routelist = (struct GPS_SWay**) xcalloc(n,sizeof(GPS_PWay));
   cur_tx_routelist_entry = tx_routelist;
 
   for (i = 0; i < n; i++) {
@@ -1150,7 +1150,7 @@ track_prepare(void)
   int i;
   int32 n = track_waypt_count() + track_count();
 
-  tx_tracklist = xcalloc(n, sizeof(GPS_PTrack));
+  tx_tracklist = (struct GPS_STrack**) xcalloc(n, sizeof(GPS_PTrack));
   cur_tx_tracklist_entry = tx_tracklist;
   for (i = 0; i < n; i++) {
     tx_tracklist[i] = GPS_Track_New();

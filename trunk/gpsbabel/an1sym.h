@@ -62,7 +62,7 @@
 
 struct defguid {
   GUID guid;
-  char *name;
+  const char *name;
 } default_guids[] = {
   { {0xb610bc70,{0x377e, 0x11d6, 0xaeb3}, {0x00, 0x01, 0x02, 0x31, 0x5f, 0xfd}},
     "Hiker"
