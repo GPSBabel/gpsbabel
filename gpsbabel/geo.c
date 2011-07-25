@@ -67,7 +67,7 @@ xg_tag_mapping loc_map[] = {
   { wpt_diff, 	cb_cdata, 	"/loc/waypoint/difficulty" },
   { wpt_terr, 	cb_cdata, 	"/loc/waypoint/terrain" },
   { wpt_container,cb_cdata, 	"/loc/waypoint/container" },
-  { NULL, 	(xg_cb_type)0, 		NULL }
+  { NULL,	(xg_cb_type)0, 		NULL }
 };
 
 void wpt_s(const char *args, const char **unused)
@@ -308,7 +308,7 @@ geo_write(void)
 
 ff_vecs_t geo_vecs = {
   ff_type_file,
-  { (ff_cap) (ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none },
+  { (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none },
   geo_rd_init,
   geo_wr_init,
   geo_rd_deinit,
