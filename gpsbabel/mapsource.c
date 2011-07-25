@@ -1847,7 +1847,7 @@ mps_write(void)
         fatal(MYNAME ": merge source version is %d, requested out version is %d\n", mps_ver_temp, atoi(mpsverout));
       }
     } else {
-      mpsverout = xmalloc(10);
+      mpsverout = (char *) xmalloc(10);
       sprintf(mpsverout,"%d", mps_ver_temp);
     }
   }

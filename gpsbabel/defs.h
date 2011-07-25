@@ -625,10 +625,27 @@ void track_recompute(const route_head *trk, computed_trkdata **);
  * All shortname functions take a shortname handle as the first arg.
  * This is an opaque pointer.  Callers must not fondle the contents of it.
  */
-typedef struct short_handle * short_handle;
+// This is a crutch until the new C++ shorthandle goes in.
+#define PRIME 37
+typedef struct {
+  unsigned int target_len;
+  char *badchars;
+  char *goodchars;
+  char *defname;
+  queue namelist[PRIME];
+
+  /* Various internal flags at end to allow alignment flexibility. */
+  unsigned int mustupper:1;
+  unsigned int whitespaceok:1;
+  unsigned int repeating_whitespaceok:1;
+  unsigned int must_uniq:1;
+  unsigned int is_utf8:1;
+} mkshort_handle_imp;
+typedef mkshort_handle_imp* short_handle;
+
 #ifndef DEBUG_MEM
 char *mkshort(short_handle,  const char *);
-void *mkshort_new_handle(void);
+short_handle mkshort_new_handle(void);
 #else
 char *MKSHORT(short_handle,  const char *, DEBUG_PARAMS);
 void *MKSHORT_NEW_HANDLE(DEBUG_PARAMS);
@@ -652,7 +669,7 @@ void setshort_is_utf8(short_handle h, const int is_utf8);
  */
 #define VMFL_NOZERO (1 << 0)
 typedef struct vmem {
-  void *mem;		/* visible memory object */
+  char *mem;		/* visible memory object */
   size_t size; 		/* allocated size of object */
 } vmem_t;
 vmem_t 	vmem_alloc(size_t, int flags);
@@ -727,10 +744,10 @@ typedef enum {
 } ff_cap;
 
 #define FF_CAP_RW_ALL \
-	{ ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write }
+	{ (ff_cap) (ff_cap_read | ff_cap_write), (ff_cap) (ff_cap_read | ff_cap_write), (ff_cap) (ff_cap_read | ff_cap_write) }
 
 #define FF_CAP_RW_WPT \
-	{ ff_cap_read | ff_cap_write, ff_cap_none, ff_cap_none}
+	{ (ff_cap) (ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none}
 
 /*
  * Format capabilities for realtime positioning.

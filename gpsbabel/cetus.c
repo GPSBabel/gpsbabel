@@ -624,7 +624,7 @@ data_write(void)
    * Turns out plain old strcmp will do the trick...
    */
 
-  htable = xmalloc(ct * sizeof(*htable));
+  htable = (struct hdr*) xmalloc(ct * sizeof(*htable));
   bh = htable;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
@@ -652,7 +652,7 @@ data_write(void)
 
 ff_vecs_t cetus_vecs = {
   ff_type_file,
-  { ff_cap_write | ff_cap_read, ff_cap_read, ff_cap_none },
+  { (ff_cap) (ff_cap_write | ff_cap_read), ff_cap_read, ff_cap_none },
   rd_init,
   wr_init,
   rd_deinit,

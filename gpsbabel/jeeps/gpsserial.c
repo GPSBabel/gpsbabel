@@ -488,7 +488,7 @@ int32 GPS_Serial_Wait(gpsdevh *dh)
 
 int32 GPS_Serial_On(const char *port, gpsdevh **dh)
 {
-  posix_serial_data *psd = xcalloc(sizeof(posix_serial_data), 1);
+  posix_serial_data *psd = (posix_serial_data*) xcalloc(sizeof(posix_serial_data), 1);
   *dh = (gpsdevh*) psd;
 
   if (!GPS_Serial_Open((gpsdevh *) psd,port)) {

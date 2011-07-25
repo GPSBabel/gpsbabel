@@ -45,7 +45,7 @@ void device_s(const char *args, const char **unused)
   if (my_gdx_info) {
     fatal(MYNAME ": More than one device type found in file.\n");
   }
-  my_gdx_info = xcalloc(sizeof *my_gdx_info, 1);
+  my_gdx_info = (gdx_info*) xcalloc(sizeof *my_gdx_info, 1);
   my_gdx_info->device_desc = xstrdup(args);
 }
 
@@ -116,7 +116,7 @@ static xg_tag_mapping gdx_map[] = {
   { ext_s, cb_cdata, "/Device/MassStorageMode/DataType/File/Location/FileExtension" },
   { base_s, cb_cdata, "/Device/MassStorageMode/DataType/File/Location/BaseName" },
   { dir_s, cb_cdata, "/Device/MassStorageMode/DataType/File/TransferDirection" },
-  { 0, 0, NULL }
+  { 0, (xg_cb_type) 0, NULL }
 };
 
 const gdx_info *

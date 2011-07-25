@@ -43,21 +43,6 @@ static const char *DEFAULT_BADCHARS = "\"$.,'!-";
 #define PRIME 37
 
 typedef struct {
-  unsigned int target_len;
-  char *badchars;
-  char *goodchars;
-  char *defname;
-  queue namelist[PRIME];
-
-  /* Various internal flags at end to allow alignment flexibility. */
-  unsigned int mustupper:1;
-  unsigned int whitespaceok:1;
-  unsigned int repeating_whitespaceok:1;
-  unsigned int must_uniq:1;
-  unsigned int is_utf8:1;
-} mkshort_handle;
-
-typedef struct {
   queue list;
   char *orig_shortname;
   int conflictctr;
@@ -93,7 +78,7 @@ unsigned int hash_string(const char *key)
   return hash;
 }
 
-void *
+short_handle
 #ifdef DEBUG_MEM
 MKSHORT_NEW_HANDLE(DEBUG_PARAMS)
 #else
@@ -101,7 +86,7 @@ mkshort_new_handle()
 #endif
 {
   int i;
-  mkshort_handle *h = (mkshort_handle *) xxcalloc(sizeof *h, 1, file, line);
+  mkshort_handle_imp *h = (mkshort_handle_imp *) xxcalloc(sizeof *h, 1, file, line);
 
   for (i = 0; i < PRIME; i++) {
     QUEUE_INIT(&h->namelist[i]);
@@ -119,7 +104,7 @@ mkshort_new_handle()
 
 static
 uniq_shortname *
-is_unique(mkshort_handle *h, char *name)
+is_unique(mkshort_handle_imp *h, char *name)
 {
   queue *e, *t;
   int hash;
@@ -136,7 +121,7 @@ is_unique(mkshort_handle *h, char *name)
 
 static
 void
-add_to_hashlist(mkshort_handle *h, char *name)
+add_to_hashlist(mkshort_handle_imp *h, char *name)
 {
   int hash = hash_string(name);
   uniq_shortname *s = (uniq_shortname*) xcalloc(1, sizeof(uniq_shortname));
@@ -146,7 +131,7 @@ add_to_hashlist(mkshort_handle *h, char *name)
 }
 
 char *
-mkshort_add_to_list(mkshort_handle *h, char *name)
+mkshort_add_to_list(mkshort_handle_imp *h, char *name)
 {
   uniq_shortname *s;
 
@@ -174,7 +159,7 @@ mkshort_add_to_list(mkshort_handle *h, char *name)
 void
 mkshort_del_handle(short_handle *h)
 {
-  mkshort_handle *hdr = (mkshort_handle*) *h;
+  mkshort_handle_imp *hdr = (mkshort_handle_imp*) *h;
   int i;
 
   if (!h || !hdr) {
@@ -275,7 +260,7 @@ replace_constants(char *s)
 void
 setshort_length(short_handle h, int l)
 {
-  mkshort_handle *hdl = (mkshort_handle *) h;
+  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
   if (l == 0) {
     hdl->target_len = DEFAULT_TARGET_LEN;
   } else {
@@ -290,7 +275,7 @@ setshort_length(short_handle h, int l)
 void
 setshort_whitespace_ok(short_handle h, int l)
 {
-  mkshort_handle *hdl = (mkshort_handle *) h;
+  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
   hdl->whitespaceok = l;
 }
 
@@ -302,7 +287,7 @@ setshort_whitespace_ok(short_handle h, int l)
 void
 setshort_repeating_whitespace_ok(short_handle h, int l)
 {
-  mkshort_handle *hdl = (mkshort_handle *) h;
+  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
   hdl->repeating_whitespaceok = l;
 }
 
@@ -313,7 +298,7 @@ setshort_repeating_whitespace_ok(short_handle h, int l)
 void
 setshort_defname(short_handle h, const char *s)
 {
-  mkshort_handle *hdl = (mkshort_handle *) h;
+  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
   if (s == NULL) {
     fatal("setshort_defname called without a valid name.");
   }
@@ -331,7 +316,7 @@ setshort_defname(short_handle h, const char *s)
 void
 setshort_badchars(short_handle h, const char *s)
 {
-  mkshort_handle *hdl = (mkshort_handle *) h;
+  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
 
   if ((hdl->badchars != NULL)) {
     xfree(hdl->badchars);
@@ -346,7 +331,7 @@ setshort_badchars(short_handle h, const char *s)
 void
 setshort_goodchars(short_handle h, const char *s)
 {
-  mkshort_handle *hdl = (mkshort_handle *) h;
+  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
 
   if (hdl->goodchars != NULL) {
     xfree(hdl->goodchars);
@@ -364,7 +349,7 @@ setshort_goodchars(short_handle h, const char *s)
 void
 setshort_mustupper(short_handle h, int i)
 {
-  mkshort_handle *hdl = (mkshort_handle *) h;
+  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
   hdl->mustupper = i;
 }
 
@@ -376,7 +361,7 @@ setshort_mustupper(short_handle h, int i)
 void
 setshort_mustuniq(short_handle h, int i)
 {
-  mkshort_handle *hdl = (mkshort_handle *) h;
+  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
   hdl->must_uniq = i;
 }
 
@@ -386,7 +371,7 @@ setshort_mustuniq(short_handle h, int i)
 void
 setshort_is_utf8(short_handle h, const int is_utf8)
 {
-  mkshort_handle *hdl = (mkshort_handle *) h;
+  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
   hdl->is_utf8 = is_utf8;
 }
 
@@ -403,7 +388,7 @@ mkshort(short_handle h, const char *istring)
   char *cp;
   char *np;
   int i, l, nlen, replaced;
-  mkshort_handle *hdl = (mkshort_handle *) h;
+  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
 
   if (hdl->is_utf8) {
     ostring = cet_utf8_strdup(istring);  /* clean UTF-8 string */

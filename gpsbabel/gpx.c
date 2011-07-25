@@ -190,7 +190,7 @@ typedef enum {
 } tag_type;
 
 typedef struct {
-  queue queue;
+  struct queue queue;
   char *tagdata;
 } gpx_global_entry;
 
@@ -222,7 +222,7 @@ gpx_add_to_global(gpx_global_entry *ge, char *cdata)
     }
   }
 
-  gep = xcalloc(sizeof(*gep), 1);
+  gep = (gpx_global_entry*) xcalloc(sizeof(*gep), 1);
   QUEUE_INIT(&gep->queue);
   gep->tagdata = xstrdup(cdata);
   ENQUEUE_TAIL(&ge->queue, &gep->queue);
@@ -266,7 +266,7 @@ gpx_write_gdata(gpx_global_entry *ge, const char *tag)
 
 
 typedef struct tag_mapping {
-  tag_type tag_type;		/* enum from above for this tag */
+  tag_type tag_type_;		/* enum from above for this tag */
   int tag_passthrough;		/* true if we don't generate this */
   const char *tag_name;		/* xpath-ish tag name */
   unsigned long crc;		/* Crc32 of tag_name */
@@ -404,7 +404,7 @@ tag_mapping tag_path_map[] = {
   { tt_vdop, 0, "/gpx/wpt/vdop", 0UL },
   { tt_vdop, 0, "/gpx/trk/trkseg/trkpt/vdop", 0UL },
   { tt_vdop, 0, "/gpx/rte/rtept/hdop", 0UL },
-  {0, 0, NULL, 0UL}
+  {(tag_type)0, 0, NULL, 0UL}
 };
 
 static tag_type
@@ -413,10 +413,10 @@ get_tag(const char *t, int *passthrough)
   tag_mapping *tm;
   unsigned long tcrc = get_crc32_s(t);
 
-  for (tm = tag_path_map; tm->tag_type != 0; tm++) {
+  for (tm = tag_path_map; tm->tag_type_ != 0; tm++) {
     if ((tcrc == tm->crc) && (0 == strcmp(tm->tag_name, t))) {
       *passthrough = tm->tag_passthrough;
-      return tm->tag_type;
+      return tm->tag_type_;
     }
   }
   *passthrough = 1;
@@ -427,7 +427,7 @@ static void
 prescan_tags(void)
 {
   tag_mapping *tm;
-  for (tm = tag_path_map; tm->tag_type != 0; tm++) {
+  for (tm = tag_path_map; tm->tag_type_ != 0; tm++) {
     tm->crc = get_crc32_s(tm->tag_name);
   }
 }
@@ -627,7 +627,7 @@ tag_log_wpt(const char **attrv)
 
   if ((wpt_tmp->shortname) && (strlen(wpt_tmp->shortname) > 2)) {
     /* copy of the shortname */
-    lwp_tmp->shortname = xcalloc(7, 1);
+    lwp_tmp->shortname = (char *) xcalloc(7, 1);
     sprintf(lwp_tmp->shortname, "%-4.4s%02d",
             &wpt_tmp->shortname[2], logpoint_ct++);
 
@@ -1129,7 +1129,7 @@ gpx_end(void *data, const XML_Char *xml_el)
     wpt_tmp->sat = atof(cdatastrp);
     break;
   case tt_fix:
-    wpt_tmp->fix = atoi(cdatastrp)-1;
+    wpt_tmp->fix = (fix_type)(atoi(cdatastrp)-1);
     if (wpt_tmp->fix < fix_2d) {
       if (!case_ignore_strcmp(cdatastrp, "none")) {
         wpt_tmp->fix = fix_none;
@@ -1226,7 +1226,7 @@ gpx_cdata(void *dta, const XML_Char *xml_el, int len)
     cdatalen = &(cur_tag->cdatalen);
   }
   estr = *cdata;
-  *cdata = xrealloc(*cdata, *cdatalen + len + 1);
+  *cdata = (char*) xrealloc(*cdata, *cdatalen + len + 1);
   estr = *cdata + *cdatalen;
   memcpy(estr, s, len);
   *(estr+len) = '\0';
@@ -1273,7 +1273,7 @@ gpx_rd_init(const char *fname)
   }
 
   if (NULL == gpx_global) {
-    gpx_global = xcalloc(sizeof(*gpx_global), 1);
+    gpx_global = (struct gpx_global*) xcalloc(sizeof(*gpx_global), 1);
     QUEUE_INIT(&gpx_global->name.queue);
     QUEUE_INIT(&gpx_global->desc.queue);
     QUEUE_INIT(&gpx_global->author.queue);
@@ -1347,7 +1347,7 @@ gpx_read(void)
 #if HAVE_LIBEXPAT
   int len;
   int done = 0;
-  char *buf = xmalloc(MY_CBUF_SZ);
+  char *buf = (char*) xmalloc(MY_CBUF_SZ);
   int result = 0;
   int extra;
 

@@ -117,7 +117,7 @@ static const char*
 itracku_device_read_string()
 {
   const int size = 1024;
-  char* s = xmalloc(size);
+  char* s = (char*) xmalloc(size);
   gbser_read_line(fd, s, size, 1000, 0, 0);
   dbg(1, "read from device: %s", s);
   return s;
@@ -788,8 +788,8 @@ ff_vecs_t itracku_vecs = {
 ff_vecs_t itracku_fvecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write /* waypoints */,
-    ff_cap_read | ff_cap_write /* tracks */,
+    (ff_cap) (ff_cap_read | ff_cap_write) /* waypoints */,
+    (ff_cap) (ff_cap_read | ff_cap_write) /* tracks */,
     ff_cap_none /* routes */
   },
   itracku_rd_init,

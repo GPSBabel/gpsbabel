@@ -78,7 +78,7 @@ fread_string(gbfile *fd)
     return NULL;
   }
 
-  val = xmalloc(len+1);
+  val = (char *) xmalloc(len+1);
   gbfread(val, 1, len, fd);
   while (len != 0 && val[len-1] == ' ') {
     len--;
@@ -100,7 +100,7 @@ fread_string_discard(gbfile *fd)
 static char *
 fread_fixedstring(gbfile *fd, int len)
 {
-  char *val = xmalloc(len+1);
+  char *val = (char *) xmalloc(len+1);
 
   gbfread(val, 1, len, fd);
   while (len != 0 && val[len-1] == ' ') {

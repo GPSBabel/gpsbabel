@@ -92,7 +92,7 @@ typedef struct mag_rte_elem {
 /*
  *  A header of a route.  Related elements of a route belong to this.
  */
-typedef struct mag_rte_head {
+typedef struct mag_rte_head_ {
   queue Q;			/* Queue head for child rte_elems */
   char *rte_name;
   int nelems;
@@ -225,7 +225,7 @@ static icon_mapping_t *icon_mapping = map330_icon_table;
 static char *
 m315_cleanse(char *istring)
 {
-  char *rstring = xmalloc(strlen(istring)+1);
+  char *rstring = (char*) xmalloc(strlen(istring)+1);
   char *i,*o;
   static char m315_valid_chars[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789";
@@ -247,7 +247,7 @@ m330_cleanse(char *istring)
   static char m330_valid_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
                                    "abcdefghijklmnopqrstuvwxyz"
                                    "0123456789+-.'/!@#<%^&>()=:\\";
-  char *rstring = xmalloc(strlen(istring)+1);
+  char *rstring = (char*) xmalloc(strlen(istring)+1);
   char *o, *i;
 
   for (o=rstring,i=istring; *i; i++) {
@@ -618,7 +618,7 @@ mag_dequote(char *ibuf)
   while ((esc = strchr(ibuf, 0x1b))) {
     int nremains = strlen(esc);
     if (nremains >= 3) {
-      static const char hex[16] = "0123456789ABCDEF";
+      static const char hex[17] = "0123456789ABCDEF";
       char *c1 = strchr(hex, esc[1]);
       char *c2 = strchr(hex, esc[2]);
       if (c1 && c2) {
@@ -1063,7 +1063,7 @@ mag_rteparse(char *rtemsg)
    * queue head.
    */
   if (frag == 1) {
-    mag_rte_head = xcalloc(sizeof(*mag_rte_head),1);
+    mag_rte_head = (struct mag_rte_head_*) xcalloc(sizeof(*mag_rte_head),1);
     QUEUE_INIT(&mag_rte_head->Q);
     mag_rte_head->nelems = frags;
   }
@@ -1084,7 +1084,7 @@ mag_rteparse(char *rtemsg)
       *p = '\0';
     }
 
-    rte_elem = xcalloc(sizeof(*rte_elem),1);
+    rte_elem = (mag_rte_elem*) xcalloc(sizeof(*rte_elem),1);
     QUEUE_INIT(&rte_elem->Q);
 
     rte_elem->wpt_name = xstrdup(next_stop);
@@ -1098,7 +1098,7 @@ mag_rteparse(char *rtemsg)
      * routepoint.
      */
     if (broken_sportrak && abuf[0]) {
-      rte_elem = xcalloc(sizeof(*rte_elem),1);
+      rte_elem = (mag_rte_elem*) xcalloc(sizeof(*rte_elem),1);
       QUEUE_INIT(&rte_elem->Q);
       rte_elem->wpt_name = xstrdup(abuf);
 
@@ -1379,7 +1379,7 @@ mag_waypt_pr(const waypoint *waypointp)
   isrc = waypointp->notes ? waypointp->notes : waypointp->description;
   owpt = global_opts.synthesize_shortnames ?
          mkshort_from_wpt(mkshort_handle, waypointp) : waypointp->shortname;
-  odesc = isrc ? isrc : "";
+  odesc = isrc ? isrc : (char *)"";
   owpt = mag_cleanse(owpt);
 
   if (global_opts.smart_icons &&
@@ -1602,7 +1602,7 @@ mag_write(void)
 const char ** os_get_magellan_mountpoints()
 {
 #if __APPLE__
-  const char **dlist = xcalloc(2, sizeof *dlist);
+  const char **dlist = (const char**) xcalloc(2, sizeof *dlist);
   dlist[0] = xstrdup("/Volumes/Magellan");
   dlist[1] = NULL;
   return dlist;

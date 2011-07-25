@@ -210,7 +210,7 @@ gusb_list_units()
 }
 
 void
-gusb_id_unit(struct garmin_unit_info *gu)
+gusb_id_unit(garmin_unit_info_t *gu)
 {
   static const char  oid[12] =
   {20, 0, 0, 0, 0xfe, 0, 0, 0, 0, 0, 0, 0};

@@ -82,7 +82,7 @@ waypt_dupe(const waypoint *wpt)
   }
 
   if (wpt->gc_data != &empty_gc_data) {
-    geocache_data *gc_data = xmalloc(sizeof(*gc_data));
+    geocache_data *gc_data = (geocache_data*) xmalloc(sizeof(*gc_data));
     tmp->gc_data = (const geocache_data *)gc_data;
 
     memcpy(gc_data, wpt->gc_data, sizeof(*gc_data));
@@ -522,7 +522,7 @@ waypt_add_url(waypoint *wpt, char *link, char *url_link_text)
     wpt->url_link_text = url_link_text;
   } else {
     url_link *tail;
-    url_link *new_link = xcalloc(sizeof(url_link), 1);
+    url_link *new_link = (url_link*) xcalloc(sizeof(url_link), 1);
     new_link->url = link;
     new_link->url_link_text = url_link_text;
 
@@ -676,7 +676,7 @@ waypt_alloc_gc_data(waypoint *wpt)
 {
   geocache_data *res = (geocache_data *)wpt->gc_data;
   if (res == &empty_gc_data) {
-    res = xcalloc(1, sizeof(*res));
+    res = (geocache_data*) xcalloc(1, sizeof(*res));
     wpt->gc_data = (const geocache_data *)res;
 
   }

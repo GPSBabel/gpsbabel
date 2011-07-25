@@ -63,7 +63,7 @@ find_gpsbabel_inifile(const char *path)		/* can be empty or NULL */
   }
 
   len = strlen(path);
-  buff = xmalloc(len + 1 + strlen(GPSBABEL_INIFILE) + 1);
+  buff = (char*) xmalloc(len + 1 + strlen(GPSBABEL_INIFILE) + 1);
   strcpy(buff, path);
   if (len > 0) {
     char test = buff[len - 1];
@@ -120,7 +120,7 @@ open_gpsbabel_inifile(void)
     if ((envstr = getenv("HOME")) != NULL) {
       char *path;
 
-      path = xmalloc(strlen(envstr) + 11);
+      path = (char*) xmalloc(strlen(envstr) + 11);
       strcpy(path, envstr);
       strcat(path, "/.gpsbabel");
       name = find_gpsbabel_inifile(path);

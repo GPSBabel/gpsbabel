@@ -31,7 +31,7 @@ vmem_alloc(size_t size, int flags)
    * By default, zero the allocated thingy.
    */
   if (flags & VMFL_NOZERO) {
-    vm.mem = xmalloc(size);
+    vm.mem = (char *) xmalloc(size);
   } else {
     vm.mem = (char *) xcalloc(size, 1);
   }
@@ -61,7 +61,7 @@ vmem_realloc(vmem_t *vm, size_t size)
    * Reallocate only if we must.
    */
   if (size > vm->size) {
-    vm->mem = xrealloc(vm->mem, size);
+    vm->mem = (char *) xrealloc(vm->mem, size);
     vm->size = size;
   }
   return;

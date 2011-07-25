@@ -400,7 +400,7 @@ static void Read_AN1_Waypoint(gbfile *f, an1_waypoint_record *wpt)
         *oldurlstr = 0;
       }
 
-      wpt->url = xcalloc(len+1, 1);
+      wpt->url = (char*) xcalloc(len+1, 1);
       memcpy(wpt->url, ofs, len);
       ofs += len;
     }
@@ -409,7 +409,7 @@ static void Read_AN1_Waypoint(gbfile *f, an1_waypoint_record *wpt)
     ofs += 2;
 
     if (len) {
-      wpt->comment = xcalloc(len+1, 1);
+      wpt->comment = (char*) xcalloc(len+1, 1);
       memcpy(wpt->comment, ofs, len);
       ofs += len;
     }
@@ -769,7 +769,7 @@ Write_One_AN1_Waypoint(const waypoint *wpt)
   rec->name = xstrdup(wpt->description);
 
   if (!nogc && wpt->gc_data->id) {
-    char *extra = xmalloc(25 + strlen(wpt->gc_data->placer) + strlen(wpt->shortname));
+    char *extra = (char *) xmalloc(25 + strlen(wpt->gc_data->placer) + strlen(wpt->shortname));
     sprintf(extra, "\r\nBy %s\r\n%s (%1.1f/%1.1f)",
             wpt->gc_data->placer,
             wpt->shortname, wpt->gc_data->diff/10.0,
@@ -1239,9 +1239,9 @@ my_write(void)
 ff_vecs_t an1_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write	/* waypoints */,
+    (ff_cap) (ff_cap_read | ff_cap_write)	/* waypoints */,
     ff_cap_write 			/* tracks */,
-    ff_cap_read | ff_cap_write 	/* routes */,
+    (ff_cap) (ff_cap_read | ff_cap_write) 	/* routes */,
   },
   rd_init,
   wr_init,

@@ -288,7 +288,7 @@ trackfilter_parse_fix(int *nsats)
     return fix_none;
   }
   fatal(MYNAME ": invalid fix type\n");
-  return 0;
+  return fix_unknown;
 }
 
 static void
@@ -932,7 +932,7 @@ trackfilter_seg2trk(void)
         dest->rte_num = src->rte_num;
         /* name in the form TRACKNAME #n */
         snprintf(trk_seg_num_buf, sizeof(trk_seg_num_buf), "%d", ++trk_seg_num);
-        dest->rte_name = xmalloc(strlen(src->rte_name)+strlen(trk_seg_num_buf)+3);
+        dest->rte_name = (char*) xmalloc(strlen(src->rte_name)+strlen(trk_seg_num_buf)+3);
         sprintf(dest->rte_name, "%s #%s", src->rte_name, trk_seg_num_buf);
 
         /* Insert after original track or after last newly
