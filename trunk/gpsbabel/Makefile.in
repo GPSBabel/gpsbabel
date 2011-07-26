@@ -65,7 +65,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
 	jtr.o sbp.o sbn.o mmo.o skyforce.o itracku.o v900.o delbin.o \
 	pocketfms_bc.o pocketfms_fp.o pocketfms_wp.o naviguide.o enigma.o \
 	vpl.o teletype.o jogmap.o bushnell.o bushnell_trl.o wintec_tes.o \
-	subrip.o garmin_xt.o explorist_ini.o \
+	subrip.o garmin_xt.o explorist_ini.o garmin_fit.o \
 
 FMTS=@FMTS@
 

@@ -174,6 +174,7 @@ extern ff_vecs_t jogmap_vecs;
 extern ff_vecs_t wintec_tes_vecs;
 extern ff_vecs_t subrip_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
+extern ff_vecs_t format_fit_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -1031,6 +1032,12 @@ vecs_t vec_list[] = {
     "garmin_xt",
     "Mobile Garmin XT Track files",
     NULL
+  },
+  {
+    &format_fit_vecs,
+    "garmin_fit",
+    "Flexible and Interoperable Data Transfer (FIT) Activity file"
+    "fit"
   },
 #endif // MAXIMAL_ENABLED
   {
