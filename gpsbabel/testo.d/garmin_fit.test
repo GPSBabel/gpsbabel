@@ -1,0 +1,7 @@
+#
+# Basic FIT tests (readonly)
+#
+rm -f ${TMPDIR}/fit-*
+echo Skipping garmin_fit until Paul Brook submits test file.
+# gpsbabel -i garmin_fit -f ${REFERENCE}/track/fit-sample.fit -o gpx -F ${TMPDIR}/fit-sameple.gpx
+#compare ${TMPDIR}/fit-sameple.gpx ${REFERENCE}/track/fit-sample.gpx
