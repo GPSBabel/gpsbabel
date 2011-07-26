@@ -25,13 +25,13 @@
 
 #include "defs.h"
 
-format_specific_data *fs_chain_copy(format_specific_data *source)
+format_specific_data* fs_chain_copy(format_specific_data* source)
 {
-  format_specific_data *result = NULL;
+  format_specific_data* result = NULL;
 
-  format_specific_data **copy = &result;
+  format_specific_data** copy = &result;
   while (source) {
-    source->copy((void **)copy, (void *)source);
+    source->copy((void**)copy, (void*)source);
     /* prevent segfaults from badly-behaved copy functions */
     (*copy)->next = NULL;
     copy = &((*copy)->next);
@@ -40,10 +40,10 @@ format_specific_data *fs_chain_copy(format_specific_data *source)
   return result;
 }
 
-void fs_chain_destroy(format_specific_data *chain)
+void fs_chain_destroy(format_specific_data* chain)
 {
-  format_specific_data *cur = chain;
-  format_specific_data *next = NULL;
+  format_specific_data* cur = chain;
+  format_specific_data* next = NULL;
   while (cur) {
     next = cur->next;
     cur->destroy(cur);
@@ -51,9 +51,9 @@ void fs_chain_destroy(format_specific_data *chain)
   }
 }
 
-format_specific_data *fs_chain_find(format_specific_data *chain, long type)
+format_specific_data* fs_chain_find(format_specific_data* chain, long type)
 {
-  format_specific_data *cur = chain;
+  format_specific_data* cur = chain;
   while (cur) {
     if (cur->type == type) {
       return cur;
@@ -63,7 +63,7 @@ format_specific_data *fs_chain_find(format_specific_data *chain, long type)
   return NULL;
 }
 
-void fs_chain_add(format_specific_data **chain, format_specific_data *data)
+void fs_chain_add(format_specific_data** chain, format_specific_data* data)
 {
   data->next = *chain;
   *chain = data;

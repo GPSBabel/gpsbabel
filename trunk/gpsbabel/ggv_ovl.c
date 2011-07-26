@@ -65,8 +65,8 @@ typedef enum {
 		# "zoom":
 		# "art":   line-style
  */
-static inifile_t *inifile;
-static gbfile *fout;
+static inifile_t* inifile;
+static gbfile* fout;
 
 static int symbol_ct;	/* Number of symbols written */
 static int group_ct;	/* Group number during write */
@@ -79,7 +79,7 @@ static OVL_COLOR_TYP color;
 *******************************************************************************/
 
 static void
-ggv_ovl_rd_init(const char *fname)
+ggv_ovl_rd_init(const char* fname)
 {
   inifile = inifile_init(fname, MYNAME);
   if (inifile->unicode) {
@@ -117,8 +117,8 @@ ggv_ovl_read(void)
     switch (type) {
 
       char coord[32];
-      waypoint *wpt;
-      char *cx;
+      waypoint* wpt;
+      char* cx;
       int group;
 
     case OVL_SYMBOL_LINE:
@@ -130,7 +130,7 @@ ggv_ovl_read(void)
 
       if (points > 0) {
         int j;
-        route_head *rte, *trk;
+        route_head* rte, *trk;
 
         rte = trk = route_head_alloc();
         if (group > 1) {
@@ -202,18 +202,18 @@ ggv_ovl_read(void)
 
 /* prototypes used in main functions */
 
-static void waypt_disp_cb(const waypoint *wpt);
-static void track_disp_cb(const route_head *trk);
-static void route_disp_cb(const route_head *rte);
+static void waypt_disp_cb(const waypoint* wpt);
+static void track_disp_cb(const route_head* trk);
+static void route_disp_cb(const route_head* rte);
 static void write_bounds(void);
-static void draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP color, const waypoint *wpt);
-static int get_direction(const waypoint *A, const waypoint *B);
+static void draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP color, const waypoint* wpt);
+static int get_direction(const waypoint* A, const waypoint* B);
 // static void draw_symbol_text(const char *text, const waypoint *reference);
 
 /* -----------------------------------------------------------------------*/
 
 static void
-ggv_ovl_wr_init(const char *fname)
+ggv_ovl_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 
@@ -254,7 +254,7 @@ ggv_ovl_write(void)
 /**************************************************************************/
 
 static void
-waypt_disp_cb(const waypoint *wpt)
+waypt_disp_cb(const waypoint* wpt)
 {
   draw_symbol_basics(OVL_SYMBOL_CIRCLE, 1, color, wpt);
   gbfprintf(fout, "Width=20\n");
@@ -269,10 +269,10 @@ waypt_disp_cb(const waypoint *wpt)
 /* -----------------------------------------------------------------------*/
 
 static void
-track_disp_cb(const route_head *trk)
+track_disp_cb(const route_head* trk)
 {
   int i;
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   int waypt_ct = trk->rte_waypt_ct;
 
   if (waypt_ct <= 0) {
@@ -289,7 +289,7 @@ track_disp_cb(const route_head *trk)
 
   QUEUE_FOR_EACH(&(trk->waypoint_list), elem, tmp) {
 
-    waypoint *wpt = (waypoint *) elem;
+    waypoint* wpt = (waypoint*) elem;
 
     gbfprintf(fout, "XKoord%d=%0.8f\n", i, wpt->longitude);
     gbfprintf(fout, "YKoord%d=%0.8f\n", i, wpt->latitude);
@@ -301,11 +301,11 @@ track_disp_cb(const route_head *trk)
 /* -----------------------------------------------------------------------*/
 
 static void
-route_disp_cb(const route_head *rte)
+route_disp_cb(const route_head* rte)
 {
   int i;
-  queue *elem, *tmp;
-  waypoint *prev;
+  queue* elem, *tmp;
+  waypoint* prev;
   int waypt_ct = rte->rte_waypt_ct;
 
   if (waypt_ct <= 0) {
@@ -321,7 +321,7 @@ route_disp_cb(const route_head *rte)
 
   QUEUE_FOR_EACH(&(rte->waypoint_list), elem, tmp) {
 
-    waypoint *wpt = (waypoint *) elem;
+    waypoint* wpt = (waypoint*) elem;
 
     if (prev != NULL) {
       draw_symbol_basics(OVL_SYMBOL_TRIANGLE, 1, 9 /* color */, prev);
@@ -342,7 +342,7 @@ route_disp_cb(const route_head *rte)
 /* -----------------------------------------------------------------------*/
 
 static void
-waypt_bound_calc(const waypoint *waypointp)
+waypt_bound_calc(const waypoint* waypointp)
 {
   waypt_add_to_bounds(&all_bounds, waypointp);
 }
@@ -370,7 +370,7 @@ write_bounds(void)
 }
 
 static void
-draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP color, const waypoint *wpt)
+draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP color, const waypoint* wpt)
 {
   symbol_ct++;
 
@@ -390,7 +390,7 @@ draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP 
 /* the following code comes from first overlay module */
 
 static int
-get_direction(const waypoint *A, const waypoint *B)
+get_direction(const waypoint* A, const waypoint* B)
 {
   double lata, lona, latb, lonb;
   double dist, dir;
@@ -419,7 +419,7 @@ get_direction(const waypoint *A, const waypoint *B)
 
 #if 0
 static void
-draw_symbol_text(const char *text, const waypoint *reference)
+draw_symbol_text(const char* text, const waypoint* reference)
 {
   waypoint wpt;
 

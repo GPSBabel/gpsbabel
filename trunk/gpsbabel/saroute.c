@@ -226,9 +226,9 @@ my_read(void)
         addrlen = le_read16(&record[obase]);
         cmtlen = le_read16(&record[obase+2+addrlen]);
 
-        wpt_tmp->shortname = xmalloc(addrlen+1);
+        wpt_tmp->shortname = (char*) xmalloc(addrlen+1);
         wpt_tmp->shortname[addrlen]='\0';
-        wpt_tmp->notes = xmalloc(cmtlen+1);
+        wpt_tmp->notes = (char *) xmalloc(cmtlen+1);
         wpt_tmp->notes[cmtlen] = '\0';
         memcpy(wpt_tmp->notes,
                record+obase+4+addrlen,
@@ -237,7 +237,7 @@ my_read(void)
                record+obase+2,
                addrlen);
       } else {
-        wpt_tmp->shortname = xmalloc(7);
+        wpt_tmp->shortname = (char*) xmalloc(7);
         sprintf(wpt_tmp->shortname, "\\%5.5x", serial++);
       }
       if (control == 2) {
@@ -361,7 +361,7 @@ my_read(void)
         wpt_tmp->latitude = lat;
         wpt_tmp->longitude = -lon;
         if (stringlen && ((coordcount>1) || count)) {
-          wpt_tmp->shortname = xmalloc(stringlen+1);
+          wpt_tmp->shortname = (char *) xmalloc(stringlen+1);
           wpt_tmp->shortname[stringlen] = '\0';
           memcpy(wpt_tmp->shortname,
                  ((char *)record)+2,

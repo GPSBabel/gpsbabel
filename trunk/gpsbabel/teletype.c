@@ -73,7 +73,7 @@ teletype_read(void)
     if (1) {  // need bit value of NEWFORMAT
       int len = gbfgetuint16(fin);
       // probably could treat as a pascal string
-      char *junk = xmalloc(len);
+      char *junk = (char*) xmalloc(len);
       gbfread(junk, len, 1, fin);
       xfree(junk);
     }
@@ -124,7 +124,7 @@ teletype_exit(void)		/* optional */
 ff_vecs_t teletype_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write 	/* waypoints */,
+    (ff_cap)(ff_cap_read | ff_cap_write) 	/* waypoints */,
     ff_cap_none 			/* tracks */,
     ff_cap_none 			/* routes */
   },

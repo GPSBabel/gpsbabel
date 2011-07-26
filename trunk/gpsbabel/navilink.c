@@ -29,22 +29,22 @@
 
 #define MYNAME "NAVILINK"
 
-static char *nuketrk = NULL;
-static char *nukerte = NULL;
-static char *nukewpt = NULL;
-static char *nukedlg = NULL;
-static char *poweroff = NULL;
-static char *datalog = NULL;
+static char* nuketrk = NULL;
+static char* nukerte = NULL;
+static char* nukewpt = NULL;
+static char* nukedlg = NULL;
+static char* poweroff = NULL;
+static char* datalog = NULL;
 
-static void *serial_handle = NULL;
-static gbfile *file_handle = NULL;
+static void* serial_handle = NULL;
+static gbfile* file_handle = NULL;
 
-static unsigned char *track_data;
-static unsigned char *track_data_ptr;
-static unsigned char *track_data_end;
+static unsigned char* track_data;
+static unsigned char* track_data_ptr;
+static unsigned char* track_data_end;
 static unsigned track_serial;
-static waypoint **route_waypts;
-static unsigned *route_ids;
+static waypoint** route_waypts;
+static unsigned* route_ids;
 static unsigned route_id_ptr;
 
 static enum {
@@ -88,7 +88,7 @@ static enum {
 #define PID_CLEAR_DATALOG     0x1b
 
 static
-const char *const icon_table[] = {
+const char* const icon_table[] = {
   "Star",
   "Flag",
   "House",
@@ -165,20 +165,20 @@ arglist_t navilink_args[] = {
   ARG_TERMINATOR
 };
 
-static void (*write_waypoint)(const waypoint *) = NULL;
-static void (*write_track_start)(const route_head *track) = NULL;
-static void (*write_track_point)(const waypoint *waypt) = NULL;
-static void (*write_track_end)(const route_head *track) = NULL;
-static void (*write_route_start)(const route_head *track) = NULL;
-static void (*write_route_point)(const waypoint *waypt) = NULL;
-static void (*write_route_end)(const route_head *track) = NULL;
+static void (*write_waypoint)(const waypoint*) = NULL;
+static void (*write_track_start)(const route_head* track) = NULL;
+static void (*write_track_point)(const waypoint* waypt) = NULL;
+static void (*write_track_end)(const route_head* track) = NULL;
+static void (*write_route_start)(const route_head* track) = NULL;
+static void (*write_route_point)(const waypoint* waypt) = NULL;
+static void (*write_route_end)(const route_head* track) = NULL;
 
 static int
-find_icon_from_descr(const char *descr)
+find_icon_from_descr(const char* descr)
 {
   int i;
 
-  for (i = 0; descr && i < sizeof(icon_table) / sizeof(const char *); i++) {
+  for (i = 0; descr && i < sizeof(icon_table) / sizeof(const char*); i++) {
     if (strcmp(descr, icon_table[i]) == 0) {
       return i;
     }
@@ -188,9 +188,9 @@ find_icon_from_descr(const char *descr)
 }
 
 static void
-free_waypoints(waypoint **waypts)
+free_waypoints(waypoint** waypts)
 {
-  waypoint **wayptp;
+  waypoint** wayptp;
 
   for (wayptp = waypts; wayptp < waypts + MAX_WAYPOINTS; wayptp++) {
     if (*wayptp) {
@@ -202,7 +202,7 @@ free_waypoints(waypoint **waypts)
 }
 
 static unsigned
-compare_waypoints(const waypoint *waypt1, const waypoint *waypt2)
+compare_waypoints(const waypoint* waypt1, const waypoint* waypt2)
 {
   return waypt1->latitude == waypt2->latitude &&
          waypt1->longitude == waypt2->longitude &&
@@ -211,7 +211,7 @@ compare_waypoints(const waypoint *waypt1, const waypoint *waypt2)
 }
 
 unsigned
-navilink_checksum_packet(const unsigned char *packet, unsigned length)
+navilink_checksum_packet(const unsigned char* packet, unsigned length)
 {
   unsigned checksum = 0;
 
@@ -225,7 +225,7 @@ navilink_checksum_packet(const unsigned char *packet, unsigned length)
 #ifdef NAVILINK_DEBUG
 
 static void
-dump_packet(char *prefix, unsigned char *packet, unsigned length)
+dump_packet(char* prefix, unsigned char* packet, unsigned length)
 {
   unsigned i;
 
@@ -245,9 +245,9 @@ dump_packet(char *prefix, unsigned char *packet, unsigned length)
 #endif
 
 static void
-write_packet(unsigned type, const void *payload, unsigned length)
+write_packet(unsigned type, const void* payload, unsigned length)
 {
-  unsigned char *packet = xmalloc(length + 9);
+  unsigned char* packet = (unsigned char*) xmalloc(length + 9);
 
   packet[0] = 0xa0;
   packet[1] = 0xa2;
@@ -292,12 +292,12 @@ read_word(void)
  * Returns TRUE if the packet was successfully read into payload.
  */
 static int
-read_packet(unsigned type, void *payload,
+read_packet(unsigned type, void* payload,
             unsigned minlength, unsigned maxlength,
             int handle_nak)
 {
   unsigned      size;
-  unsigned char *data;
+  unsigned char* data;
   unsigned      checksum;
 
   if (read_word() != 0xa2a0) {
@@ -309,7 +309,7 @@ read_packet(unsigned type, void *payload,
     fatal(MYNAME ": Protocol error: Packet too short\n");
   }
 
-  data = xmalloc(size);
+  data = (unsigned char*) xmalloc(size);
 
   if (gbser_read_wait(serial_handle, data, size, SERIAL_TIMEOUT) != size) {
     fatal(MYNAME ": Read error reading %d byte payload\n", size);
@@ -348,7 +348,7 @@ read_packet(unsigned type, void *payload,
 }
 
 static time_t
-decode_datetime(const unsigned char *buffer)
+decode_datetime(const unsigned char* buffer)
 {
   struct tm tm;
 
@@ -363,9 +363,9 @@ decode_datetime(const unsigned char *buffer)
 }
 
 static void
-encode_datetime(time_t datetime, unsigned char *buffer)
+encode_datetime(time_t datetime, unsigned char* buffer)
 {
-  struct tm *tm;
+  struct tm* tm;
 
   if ((tm = gmtime(&datetime)) != NULL) {
     buffer[0] = tm->tm_year - 100;
@@ -380,7 +380,7 @@ encode_datetime(time_t datetime, unsigned char *buffer)
 }
 
 static void
-decode_position(const unsigned char *buffer, waypoint *waypt)
+decode_position(const unsigned char* buffer, waypoint* waypt)
 {
   waypt->latitude = le_read32(buffer + 0) / 10000000.0;
   waypt->longitude = le_read32(buffer + 4) / 10000000.0;
@@ -388,7 +388,7 @@ decode_position(const unsigned char *buffer, waypoint *waypt)
 }
 
 static void
-encode_position(const waypoint *waypt, unsigned char *buffer)
+encode_position(const waypoint* waypt, unsigned char* buffer)
 {
   le_write32(buffer + 0, (int)(waypt->latitude * 10000000));
   le_write32(buffer + 4, (int)(waypt->longitude * 10000000));
@@ -396,7 +396,7 @@ encode_position(const waypoint *waypt, unsigned char *buffer)
 }
 
 static unsigned
-decode_waypoint_id(const unsigned char *buffer)
+decode_waypoint_id(const unsigned char* buffer)
 {
   unsigned id = le_read16(buffer + 2);
 
@@ -407,13 +407,13 @@ decode_waypoint_id(const unsigned char *buffer)
   return id;
 }
 
-static waypoint *
-decode_waypoint(const unsigned char *buffer)
+static waypoint*
+decode_waypoint(const unsigned char* buffer)
 {
-  waypoint *waypt = waypt_new();
+  waypoint* waypt = waypt_new();
 
   decode_position(buffer + 12, waypt);
-  waypt->shortname = xstrdup((char *)buffer + 4);
+  waypt->shortname = xstrdup((char*)buffer + 4);
   waypt->icon_descr = icon_table[buffer[28]];
   waypt->creation_time = decode_datetime(buffer + 22);
 
@@ -421,12 +421,12 @@ decode_waypoint(const unsigned char *buffer)
 }
 
 static void
-encode_waypoint(const waypoint *waypt, unsigned char *buffer)
+encode_waypoint(const waypoint* waypt, unsigned char* buffer)
 {
   buffer[0] = 0x00;
   buffer[1] = 0x40;
   le_write16(buffer + 2, 0);
-  strncpy((char *)buffer + 4, waypt->shortname, 6);
+  strncpy((char*)buffer + 4, waypt->shortname, 6);
   buffer[10] = 0;
   buffer[11] = 0;
   encode_position(waypt, buffer + 12);
@@ -437,10 +437,10 @@ encode_waypoint(const waypoint *waypt, unsigned char *buffer)
   buffer[31] = 0x7e;
 }
 
-static waypoint *
-decode_trackpoint(const unsigned char *buffer)
+static waypoint*
+decode_trackpoint(const unsigned char* buffer)
 {
-  waypoint *waypt = waypt_new();
+  waypoint* waypt = waypt_new();
 
   decode_position(buffer + 12, waypt);
   waypt->creation_time = decode_datetime(buffer + 22);
@@ -451,7 +451,7 @@ decode_trackpoint(const unsigned char *buffer)
 }
 
 static void
-encode_trackpoint(const waypoint *waypt, unsigned serial, unsigned char *buffer)
+encode_trackpoint(const waypoint* waypt, unsigned serial, unsigned char* buffer)
 {
   double x;
   double y;
@@ -472,16 +472,16 @@ encode_trackpoint(const waypoint *waypt, unsigned serial, unsigned char *buffer)
   buffer[31] = 0x7e;
 }
 
-static waypoint **
+static waypoint**
 serial_read_waypoints(void)
 {
-  waypoint       **waypts = NULL;
+  waypoint**       waypts = NULL;
   unsigned char  information[32];
   unsigned short total;
   unsigned short start;
 
   if (global_opts.masked_objective & RTEDATAMASK) {
-    waypts = xcalloc(MAX_WAYPOINTS, sizeof(waypoint *));
+    waypts = (waypoint**) xcalloc(MAX_WAYPOINTS, sizeof(waypoint*));
   }
 
   write_packet(PID_QRY_INFORMATION, NULL, 0);
@@ -494,8 +494,8 @@ serial_read_waypoints(void)
   for (start = 0; start < total; start += 32) {
     unsigned short count = total - start;
     unsigned char  payload[7];
-    unsigned char  *waypoints;
-    unsigned char  *w;
+    unsigned char*  waypoints;
+    unsigned char*  w;
 
     if (count > 32) {
       count = 32;
@@ -507,7 +507,7 @@ serial_read_waypoints(void)
 
     write_packet(PID_QRY_WAYPOINTS, payload, sizeof(payload));
 
-    waypoints = xmalloc(count * 32);
+    waypoints = (unsigned char*) xmalloc(count * 32);
 
     read_packet(PID_DATA, waypoints, count * 32, count * 32, FALSE);
 
@@ -531,7 +531,7 @@ serial_read_waypoints(void)
 }
 
 static unsigned int
-serial_write_waypoint_packet(const waypoint *waypt)
+serial_write_waypoint_packet(const waypoint* waypt)
 {
   unsigned char data[32];
   unsigned char id[2];
@@ -546,7 +546,7 @@ serial_write_waypoint_packet(const waypoint *waypt)
 }
 
 static void
-serial_write_waypoint(const waypoint *waypt)
+serial_write_waypoint(const waypoint* waypt)
 {
   serial_write_waypoint_packet(waypt);
 }
@@ -557,7 +557,7 @@ serial_read_track(void)
   unsigned char  information[32];
   unsigned int   address;
   unsigned short total;
-  route_head     *track;
+  route_head*     track;
 
   write_packet(PID_QRY_INFORMATION, NULL, 0);
   read_packet(PID_DATA, information,
@@ -573,8 +573,8 @@ serial_read_track(void)
   while (total > 0) {
     unsigned short count = total < MAX_READ_TRACKPOINTS ? total : MAX_READ_TRACKPOINTS;
     unsigned char  payload[7];
-    unsigned char  *trackpoints;
-    unsigned char  *t;
+    unsigned char*  trackpoints;
+    unsigned char*  t;
 
     le_write32(payload + 0, address);
     le_write16(payload + 4, count * 32);
@@ -582,7 +582,7 @@ serial_read_track(void)
 
     write_packet(PID_READ_TRACKPOINTS, payload, sizeof(payload));
 
-    trackpoints = xmalloc(count * 32);
+    trackpoints = (unsigned char*) xmalloc(count * 32);
 
     read_packet(PID_DATA, trackpoints, count * 32, count * 32, FALSE);
     write_packet(PID_ACK, NULL, 0);
@@ -627,15 +627,15 @@ serial_write_track(void)
 }
 
 static void
-serial_write_track_start(const route_head *track)
+serial_write_track_start(const route_head* track)
 {
-  track_data = xmalloc(MAX_WRITE_TRACKPOINTS * 32);
+  track_data = (unsigned char*) xmalloc(MAX_WRITE_TRACKPOINTS * 32);
   track_data_ptr = track_data;
   track_data_end = track_data + MAX_WRITE_TRACKPOINTS * 32;
 }
 
 static void
-serial_write_track_point(const waypoint *waypt)
+serial_write_track_point(const waypoint* waypt)
 {
   if (track_data_ptr >= track_data_end) {
     serial_write_track();
@@ -647,7 +647,7 @@ serial_write_track_point(const waypoint *waypt)
 }
 
 static void
-serial_write_track_end(const route_head *track)
+serial_write_track_end(const route_head* track)
 {
   if (track_data_ptr > track_data) {
     serial_write_track();
@@ -657,7 +657,7 @@ serial_write_track_end(const route_head *track)
 }
 
 static void
-serial_read_routes(waypoint **waypts)
+serial_read_routes(waypoint** waypts)
 {
   unsigned char information[32];
   unsigned char routec;
@@ -673,7 +673,7 @@ serial_read_routes(waypoint **waypts)
   for (r = 0; r < routec; r++) {
     unsigned char payload[7];
     unsigned char routedata[320];
-    route_head    *route;
+    route_head*    route;
     int           sr;
 
     le_write32(payload + 0, r);
@@ -685,7 +685,7 @@ serial_read_routes(waypoint **waypts)
 
     route = route_head_alloc();
     route->rte_num = routedata[2];
-    route->rte_name = xstrdup((char *)routedata + 4);
+    route->rte_name = xstrdup((char*)routedata + 4);
     route_add_head(route);
 
     for (sr = 0; sr < MAX_SUBROUTES; sr++) {
@@ -710,14 +710,14 @@ serial_read_routes(waypoint **waypts)
 }
 
 static void
-serial_write_route_start(const route_head *route)
+serial_write_route_start(const route_head* route)
 {
-  route_ids = xmalloc(route->rte_waypt_ct * sizeof(unsigned));
+  route_ids = (unsigned int*) xmalloc(route->rte_waypt_ct * sizeof(unsigned));
   route_id_ptr = 0;
 }
 
 static void
-serial_write_route_point(const waypoint *waypt)
+serial_write_route_point(const waypoint* waypt)
 {
   unsigned w;
 
@@ -736,9 +736,9 @@ serial_write_route_point(const waypoint *waypt)
 }
 
 static void
-serial_write_route_end(const route_head *route)
+serial_write_route_end(const route_head* route)
 {
-  unsigned char *data;
+  unsigned char* data;
   unsigned      src;
   unsigned      sr;
   unsigned char id[1];
@@ -748,12 +748,12 @@ serial_write_route_end(const route_head *route)
   }
 
   src = (route_id_ptr + MAX_SUBROUTE_LENGTH) / MAX_SUBROUTE_LENGTH;
-  data = xmalloc(32 + src * 32);
+  data = (unsigned char*) xmalloc(32 + src * 32);
 
   le_write16(data + 0, 0x2000);
   data[2] = 0;
   data[3] = 0x20;
-  strncpy((char *)data + 4, route->rte_name, 6);
+  strncpy((char*)data + 4, route->rte_name, 6);
   data[18] = 0;
   data[19] = 0;
   le_write32(data + 20, 0);
@@ -763,7 +763,7 @@ serial_write_route_end(const route_head *route)
   data[31] = 0x77;
 
   for (sr = 0; sr < src; sr++) {
-    unsigned char *srdata = data + 32 + 32 * sr;
+    unsigned char* srdata = data + 32 + 32 * sr;
     unsigned      pt_offset = MAX_SUBROUTE_LENGTH * sr;
     unsigned      pt;
 
@@ -791,14 +791,14 @@ serial_write_route_end(const route_head *route)
 }
 
 static int
-decode_sbp_usec(const unsigned char *buffer)
+decode_sbp_usec(const unsigned char* buffer)
 {
   int msec = le_read16(buffer);
   return (msec % 1000) * 1000;
 }
 
 static time_t
-decode_sbp_datetime_packed(const unsigned char *buffer)
+decode_sbp_datetime_packed(const unsigned char* buffer)
 {
   /*
    * Packed_Date_Time_UTC:
@@ -831,17 +831,17 @@ decode_sbp_datetime_packed(const unsigned char *buffer)
 }
 
 static void
-decode_sbp_position(const unsigned char *buffer, waypoint *waypt)
+decode_sbp_position(const unsigned char* buffer, waypoint* waypt)
 {
   waypt->latitude = le_read32(buffer + 0) / 10000000.0;
   waypt->longitude = le_read32(buffer + 4) / 10000000.0;
   waypt->altitude = le_read32(buffer + 8) / 100.0;
 }
 
-waypoint *
-navilink_decode_logpoint(const unsigned char *buffer)
+waypoint*
+navilink_decode_logpoint(const unsigned char* buffer)
 {
-  waypoint *waypt = NULL;
+  waypoint* waypt = NULL;
   waypt = waypt_new();
 
   waypt->hdop = ((unsigned char)buffer[0]) * 0.2f;
@@ -863,8 +863,8 @@ navilink_decode_logpoint(const unsigned char *buffer)
  * around), then seg2_addr and seg2_len will be zero.
  */
 static void
-read_datalog_info(unsigned int *seg1_addr, unsigned int *seg1_len,
-                  unsigned int *seg2_addr, unsigned int *seg2_len)
+read_datalog_info(unsigned int* seg1_addr, unsigned int* seg1_len,
+                  unsigned int* seg2_addr, unsigned int* seg2_len)
 {
   unsigned char  info[16];
   unsigned int   flash_start_addr;
@@ -901,13 +901,13 @@ read_datalog_info(unsigned int *seg1_addr, unsigned int *seg1_len,
 }
 
 static void
-read_datalog_records(route_head *track,
+read_datalog_records(route_head* track,
                      unsigned int start_addr, unsigned int len)
 {
   unsigned char  logpoints[MAX_READ_LOGPOINTS * SBP_RECORD_LEN];
   unsigned int   logpoints_len;
   unsigned char  payload[7];
-  unsigned char *p;
+  unsigned char* p;
 
   /* The protocol only supports reading 256 logpoints at once, so
    * read small chunks until none left. */
@@ -934,7 +934,7 @@ read_datalog_records(route_head *track,
 static void
 serial_read_datalog(void)
 {
-  route_head *track;
+  route_head* track;
   unsigned int seg1_addr;
   unsigned int seg1_len;
   unsigned int seg2_addr;
@@ -958,7 +958,7 @@ static void
 file_read(void)
 {
   unsigned char data[32];
-  route_head    *track = NULL;
+  route_head*    track = NULL;
 
   while (gbfread(data, sizeof(data), 1, file_handle) == 1) {
     switch (le_read16(data)) {
@@ -988,7 +988,7 @@ file_read(void)
 }
 
 static void
-file_write_waypoint(const waypoint *waypt)
+file_write_waypoint(const waypoint* waypt)
 {
   unsigned char data[32];
 
@@ -997,13 +997,13 @@ file_write_waypoint(const waypoint *waypt)
 }
 
 static void
-file_write_track_start(const route_head *track)
+file_write_track_start(const route_head* track)
 {
   track_serial = 1;
 }
 
 static void
-file_write_track_point(const waypoint *waypt)
+file_write_track_point(const waypoint* waypt)
 {
   unsigned char data[32];
 
@@ -1012,23 +1012,23 @@ file_write_track_point(const waypoint *waypt)
 }
 
 static void
-file_write_track_end(const route_head *track)
+file_write_track_end(const route_head* track)
 {
 }
 
 static void
-file_write_route_start(const route_head *track)
+file_write_route_start(const route_head* track)
 {
   fatal(MYNAME ": Can't write routes to a file\n");
 }
 
 static void
-file_write_route_point(const waypoint *waypt)
+file_write_route_point(const waypoint* waypt)
 {
 }
 
 static void
-file_write_route_end(const route_head *track)
+file_write_route_end(const route_head* track)
 {
 }
 
@@ -1086,7 +1086,7 @@ nuke(void)
 }
 
 static void
-navilink_common_init(const char *name)
+navilink_common_init(const char* name)
 {
   if (gbser_is_serial(name)) {
     if ((serial_handle = gbser_init(name)) == NULL) {
@@ -1113,7 +1113,7 @@ navilink_common_init(const char *name)
     write_route_point = serial_write_route_point;
     write_route_end = serial_write_route_end;
   } else {
-    char *mode = operation == READING ? "r" : "w+";
+    const char* mode = operation == READING ? "r" : "w+";
     file_handle = gbfopen(name, mode, MYNAME);
 
     write_waypoint = file_write_waypoint;
@@ -1129,14 +1129,14 @@ navilink_common_init(const char *name)
 }
 
 static void
-navilink_rd_init(const char *name)
+navilink_rd_init(const char* name)
 {
   operation = READING;
   navilink_common_init(name);
 }
 
 static void
-navilink_wr_init(const char *name)
+navilink_wr_init(const char* name)
 {
   operation = WRITING;
   navilink_common_init(name);
@@ -1178,7 +1178,7 @@ navilink_read(void)
     }
   } else {
     if (serial_handle) {
-      waypoint **waypts = NULL;
+      waypoint** waypts = NULL;
 
       if (global_opts.masked_objective & (WPTDATAMASK|RTEDATAMASK)) {
         waypts = serial_read_waypoints();

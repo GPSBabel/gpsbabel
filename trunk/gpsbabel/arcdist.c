@@ -26,10 +26,10 @@
 #define MYNAME "Arc filter"
 
 static double pos_dist;
-static char *distopt = NULL;
-static char *arcfileopt = NULL;
-static char *exclopt = NULL;
-static char *ptsopt = NULL;
+static char* distopt = NULL;
+static char* arcfileopt = NULL;
+static char* exclopt = NULL;
+static char* ptsopt = NULL;
 
 typedef struct {
   double distance;
@@ -61,20 +61,20 @@ arglist_t arcdist_args[] = {
 void
 arcdist_process(void)
 {
-  queue * elem, * tmp;
-  waypoint * waypointp;
+  queue* elem, * tmp;
+  waypoint* waypointp;
   double dist;
-  extra_data *ed;
+  extra_data* ed;
   double lat1, lon1, lat2, lon2;
   int fileline = 0;
-  char *line;
-  gbfile *file_in;
+  char* line;
+  gbfile* file_in;
 
   file_in = gbfopen(arcfileopt, "r", MYNAME);
 
   lat1 = lon1 = lat2 = lon2 = BADVAL;
   while ((line = gbfgetstr(file_in))) {
-    char *pound = NULL;
+    char* pound = NULL;
     int argsfound = 0;
 
     fileline++;
@@ -96,11 +96,11 @@ arcdist_process(void)
                (ptsopt || (lat1 != BADVAL && lon1 != BADVAL))) {
       QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
 
-        waypointp = (waypoint *)elem;
+        waypointp = (waypoint*)elem;
         if (waypointp->extra_data) {
-          ed = (extra_data *) waypointp->extra_data;
+          ed = (extra_data*) waypointp->extra_data;
         } else {
-          ed = (extra_data *) xcalloc(1, sizeof(*ed));
+          ed = (extra_data*) xcalloc(1, sizeof(*ed));
           ed->distance = BADVAL;
         }
         if (ed->distance == BADVAL || ed->distance >= pos_dist) {
@@ -131,8 +131,8 @@ arcdist_process(void)
   gbfclose(file_in);
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypoint *wp = (waypoint *) elem;
-    ed = (extra_data *) wp->extra_data;
+    waypoint* wp = (waypoint*) elem;
+    ed = (extra_data*) wp->extra_data;
     wp->extra_data = NULL;
     if (ed) {
       if ((ed->distance >= pos_dist) == (exclopt == NULL)) {
@@ -145,9 +145,9 @@ arcdist_process(void)
 }
 
 void
-arcdist_init(const char *args)
+arcdist_init(const char* args)
 {
-  char *fm;
+  char* fm;
 
   pos_dist = 0;
 

@@ -25,9 +25,9 @@
 
 extern gps_device_ops gps_serial_ops;
 extern gps_device_ops gps_usb_ops;
-gps_device_ops *ops = NULL;
+gps_device_ops* ops = NULL;
 
-int32  GPS_Device_On(const char *port, gpsdevh **fd)
+int32  GPS_Device_On(const char* port, gpsdevh** fd)
 {
   gps_is_usb = (0 == case_ignore_strncmp(port, "usb:", 4));
 
@@ -40,47 +40,47 @@ int32  GPS_Device_On(const char *port, gpsdevh **fd)
   return (ops->Device_On)(port, fd);
 }
 
-int32  GPS_Device_Off(gpsdevh * fd)
+int32  GPS_Device_Off(gpsdevh* fd)
 {
   return (ops->Device_Off)(fd);
 }
 
-int32  GPS_Device_Wait(gpsdevh * fd)
+int32  GPS_Device_Wait(gpsdevh* fd)
 {
   return (ops->Device_Wait)(fd);
 }
 
-int32  GPS_Device_Chars_Ready(gpsdevh * fd)
+int32  GPS_Device_Chars_Ready(gpsdevh* fd)
 {
   return (ops->Device_Chars_Ready)(fd);
 }
 
-int32  GPS_Device_Flush(gpsdevh * fd)
+int32  GPS_Device_Flush(gpsdevh* fd)
 {
   return (ops->Device_Flush)(fd);
 }
 
-int32  GPS_Write_Packet(gpsdevh * fd, GPS_PPacket packet)
+int32  GPS_Write_Packet(gpsdevh* fd, GPS_PPacket packet)
 {
   return (ops->Write_Packet)(fd, packet);
 }
 
-int32 GPS_Packet_Read(gpsdevh * fd, GPS_PPacket *packet)
+int32 GPS_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
 {
   return (ops->Read_Packet)(fd, packet);
 }
 
-int32 GPS_Send_Ack(gpsdevh * fd, GPS_PPacket *tra, GPS_PPacket *rec)
+int32 GPS_Send_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
 {
   return (ops->Send_Ack)(fd, tra, rec);
 }
 
-int32 GPS_Get_Ack(gpsdevh * fd, GPS_PPacket *tra, GPS_PPacket *rec)
+int32 GPS_Get_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
 {
   return (ops->Get_Ack)(fd, tra, rec);
 }
 
-void GPS_Make_Packet(GPS_PPacket *packet, US type, UC *data, uint32 n)
+void GPS_Make_Packet(GPS_PPacket* packet, US type, UC* data, uint32 n)
 {
   (*packet)->type = type;
   memcpy((*packet)->data, data, n);

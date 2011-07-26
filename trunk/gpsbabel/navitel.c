@@ -26,7 +26,7 @@
 
 #define MYNAME "navitel"
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 static char new_track;
 static int trkpts;
 
@@ -35,7 +35,7 @@ static int trkpts;
 *******************************************************************************/
 
 static void
-navitel_rd_init(const char *fname)
+navitel_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 }
@@ -50,14 +50,14 @@ static void
 navitel_read_track(void)
 {
   int points, i;
-  route_head *trk = NULL;
+  route_head* trk = NULL;
 
   points = gbfgetint32(fin);
   (void) gbfgetint32(fin); /* unknown */
 
   for (i = 0; i < points; i++) {
     int lat, lon;
-    waypoint *wpt;
+    waypoint* wpt;
 
     lon = gbfgetint32(fin);
     lat = gbfgetint32(fin);
@@ -75,7 +75,7 @@ navitel_read_track(void)
 }
 
 static void
-navitel_wr_init(const char *fname)
+navitel_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
 }
@@ -87,19 +87,19 @@ navitel_wr_deinit(void)
 }
 
 static void
-navitel_enum_trkpts(const waypoint *wpt)
+navitel_enum_trkpts(const waypoint* wpt)
 {
   trkpts++;
 }
 
 static void
-navitel_disp_trk_head(const route_head *trk)
+navitel_disp_trk_head(const route_head* trk)
 {
   new_track = 1;
 }
 
 static void
-navitel_disp_trkpts(const waypoint *wpt)
+navitel_disp_trkpts(const waypoint* wpt)
 {
   int lat, lon;
 
@@ -136,7 +136,7 @@ ff_vecs_t navitel_trk_vecs = {
   ff_type_file,
   {
     ff_cap_none			/* waypoints */,
-    ff_cap_read | ff_cap_write	/* tracks */,
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* tracks */,
     ff_cap_none			/* routes */
   },
   navitel_rd_init,

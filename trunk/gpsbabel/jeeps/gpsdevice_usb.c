@@ -31,17 +31,17 @@ static int32 success_stub(void)
   return 1;
 }
 
-static int32 gdu_on(const char *port, gpsdevh **fd)
+static int32 gdu_on(const char* port, gpsdevh** fd)
 {
   return gusb_init(port, fd);
 }
 
-static int32 gdu_off(gpsdevh *dh)
+static int32 gdu_off(gpsdevh* dh)
 {
   return gusb_close(dh);
 }
 
-static int32  gdu_read(gpsdevh *fd, GPS_PPacket *packet)
+static int32  gdu_read(gpsdevh* fd, GPS_PPacket* packet)
 {
   /* Default is to eat bulk request packets. */
   return GPS_Packet_Read_usb(fd, packet, 1);

@@ -33,17 +33,17 @@
 
 #define MYNAME "IGNRando"
 
-static gbfile *fout;
+static gbfile* fout;
 
-static route_head *track;
-static waypoint *wpt;
+static route_head* track;
+static waypoint* wpt;
 static int track_index;		/* index of track we'll write */
 static int track_num;		/* current index of track within track_disp_all */
 
 static int xmlpoints;
 
 /* options */
-static char *index_opt = NULL;
+static char* index_opt = NULL;
 
 static arglist_t ignr_args[] = {
   {"index", &index_opt, "Index of track to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL },
@@ -53,7 +53,7 @@ static arglist_t ignr_args[] = {
 #if ! HAVE_LIBEXPAT
 
 static void
-ignr_rd_init(const char *fname)
+ignr_rd_init(const char* fname)
 {
   fatal(MYNAME ": This build excluded \"" MYNAME "\" input support because expat was not installed.\n");
 }
@@ -85,7 +85,7 @@ xg_tag_mapping ignr_xml_map[] = {
   { ignr_etape_end, 	cb_end, 	"/RANDONNEE/ETAPE" },
   { ignr_etape_pos,	cb_cdata,	"/RANDONNEE/ETAPE/POSITION" },
   { ignr_etape_alt,	cb_cdata,	"/RANDONNEE/ETAPE/ALTITUDE" },
-  { NULL, 		0, 		NULL }
+  { NULL,	(xg_cb_type)0, 		NULL }
 };
 
 static void
@@ -103,7 +103,7 @@ static xg_callback	ignr_nb_etapes, ignr_descr;
 static xg_callback	ignr_etape_begin, ignr_etape_end;
 
 static void
-ignr_start(const char *args, const char **attrv)
+ignr_start(const char* args, const char** attrv)
 {
   ignr_xml_error((track != NULL));
 
@@ -112,13 +112,13 @@ ignr_start(const char *args, const char **attrv)
 }
 
 static void
-ignr_nb_etapes(const char *args, const char **attrv)
+ignr_nb_etapes(const char* args, const char** attrv)
 {
   xmlpoints = atoi(args);
 }
 
 static void
-ignr_descr(const char *args, const char **attrv)
+ignr_descr(const char* args, const char** attrv)
 {
   ignr_xml_error((track == NULL));
 
@@ -128,7 +128,7 @@ ignr_descr(const char *args, const char **attrv)
 }
 
 static void
-ignr_etape_begin(const char *args, const char **attrv)
+ignr_etape_begin(const char* args, const char** attrv)
 {
   ignr_xml_error((wpt != NULL));
 
@@ -136,7 +136,7 @@ ignr_etape_begin(const char *args, const char **attrv)
 }
 
 static void
-ignr_etape_end(const char *args, const char **attrv)
+ignr_etape_end(const char* args, const char** attrv)
 {
   ignr_xml_error((track == NULL) || (wpt == NULL));
 
@@ -145,7 +145,7 @@ ignr_etape_end(const char *args, const char **attrv)
 }
 
 static void
-ignr_etape_pos(const char *args, const char **attrv)
+ignr_etape_pos(const char* args, const char** attrv)
 {
   ignr_xml_error((wpt == NULL) || (args == NULL));
 
@@ -155,7 +155,7 @@ ignr_etape_pos(const char *args, const char **attrv)
 }
 
 static void
-ignr_etape_alt(const char *args, const char **attrv)
+ignr_etape_alt(const char* args, const char** attrv)
 {
   ignr_xml_error((wpt == NULL));
   if (args == NULL) {
@@ -170,7 +170,7 @@ ignr_etape_alt(const char *args, const char **attrv)
 /* callbacks registered in ignr_vecs */
 
 static void
-ignr_rd_init(const char *fname)
+ignr_rd_init(const char* fname)
 {
   xml_init(fname, ignr_xml_map, NULL);
   wpt = NULL;
@@ -196,7 +196,7 @@ ignr_read(void)
 /* callbacks registered in ignr_vecs */
 
 static void
-ignr_rw_init(const char *fname)
+ignr_rw_init(const char* fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 }
@@ -208,7 +208,7 @@ ignr_rw_deinit(void)
 }
 
 static void
-ignr_write_track_hdr(const route_head *track)
+ignr_write_track_hdr(const route_head* track)
 {
   track_num++;
 
@@ -225,12 +225,12 @@ ignr_write_track_hdr(const route_head *track)
 }
 
 static void
-ignr_write_track_trl(const route_head *track)
+ignr_write_track_trl(const route_head* track)
 {
 }
 
 static void
-ignr_write_waypt(const waypoint *wpt)
+ignr_write_waypt(const waypoint* wpt)
 {
   if (track_num != track_index) {
     return;
@@ -282,7 +282,7 @@ ignr_write(void)
 
 ff_vecs_t ignr_vecs = {
   ff_type_file,
-  { ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none },
+  { ff_cap_none, (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none },
   ignr_rd_init,
   ignr_rw_init,
   ignr_rd_deinit,

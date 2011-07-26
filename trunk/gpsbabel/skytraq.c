@@ -929,7 +929,7 @@ skytraq_read_tracks(void)
     }
   }
 
-  buffer = xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6);
+  buffer = (gbuint8*) xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6);
   // m.ad/090930: removed code that tried reducing read_at_once if necessary since doesn't work with xmalloc
 
   if (opt_dump_file) {
@@ -1207,7 +1207,7 @@ file_read(void)
   gbuint8 *buffer;
 
   state_init(&st);
-  buffer = xmalloc(SECTOR_SIZE);
+  buffer = (gbuint8*) xmalloc(SECTOR_SIZE);
 
   if (opt_first_sector_val > 0) {
     db(4, MYNAME ": Seeking to first-sector index %i\n", opt_first_sector_val*SECTOR_SIZE);

@@ -40,10 +40,10 @@
  */
 
 int
-cet_char_to_ucs4(const char src, const cet_cs_vec_t *vec, int *value)
+cet_char_to_ucs4(const char src, const cet_cs_vec_t* vec, int* value)
 {
   int trash, c;
-  int *dest;
+  int* dest;
 
   c = ((unsigned char)src & 0xFF);
   dest = (value != NULL) ? value : &trash;
@@ -70,13 +70,13 @@ cet_char_to_ucs4(const char src, const cet_cs_vec_t *vec, int *value)
  */
 
 int
-cet_ucs4_to_utf8(char *dest, size_t dest_size, int value)
+cet_ucs4_to_utf8(char* dest, size_t dest_size, int value)
 {
   int result;
   unsigned char trash[16];
-  unsigned char *c;
+  unsigned char* c;
 
-  c = (dest != NULL) ? (unsigned char *) dest : trash;
+  c = (dest != NULL) ? (unsigned char*) dest : trash;
 
   if ((value & 0xffffff80) == 0) {		/* <= 7 bits */
     if (dest_size < 1) {
@@ -143,9 +143,9 @@ cet_ucs4_to_utf8(char *dest, size_t dest_size, int value)
  * return values: 0 if success, otherwise 1
  */
 int
-cet_utf8_to_ucs4(const char *str, int *bytes, int *value)
+cet_utf8_to_ucs4(const char* str, int* bytes, int* value)
 {
-  unsigned char *cp = (unsigned char *)str;
+  unsigned char* cp = (unsigned char*)str;
 
   if (*cp < 0x80) {
     if (bytes != NULL) {
@@ -168,7 +168,7 @@ cet_utf8_to_ucs4(const char *str, int *bytes, int *value)
           if ((*cp & 0xc0) != 0x80) {
             break;  /* invalid 	*/
           } else if (i == 0) {		/* all valid 	*/
-            char *c = (char *)str;		/* found valid sequence, now storing value */
+            char* c = (char*)str;		/* found valid sequence, now storing value */
             int res = *c++ & (mask ^ 0xFF);
             i = len;
             while (i-- > 0) {
@@ -206,11 +206,11 @@ cet_utf8_to_ucs4(const char *str, int *bytes, int *value)
  *                if not possible
  */
 short
-cet_ucs4_to_char(const int value, const cet_cs_vec_t *vec)
+cet_ucs4_to_char(const int value, const cet_cs_vec_t* vec)
 {
-  cet_ucs4_link_t *link;
+  cet_ucs4_link_t* link;
 
-  if ((link = (cet_ucs4_link_t *)vec->ucs4_link)) {
+  if ((link = (cet_ucs4_link_t*)vec->ucs4_link)) {
     int i = 0;
     int j = vec->ucs4_links - 1;			/* validate ucs value against vec */
     while (i <= j) {
@@ -227,7 +227,7 @@ cet_ucs4_to_char(const int value, const cet_cs_vec_t *vec)
     }
   }
 
-  if ((link = (cet_ucs4_link_t *)vec->ucs4_extra)) {	/* can be NULL */
+  if ((link = (cet_ucs4_link_t*)vec->ucs4_extra)) {	/* can be NULL */
     int i = 0;
     int j = vec->ucs4_extras - 1;
     while (i <= j) {
@@ -262,7 +262,7 @@ cet_ucs4_to_char(const int value, const cet_cs_vec_t *vec)
  */
 
 short
-cet_utf8_to_char(const char *str, const cet_cs_vec_t *vec, /* out */ int *bytes, int *value)
+cet_utf8_to_char(const char* str, const cet_cs_vec_t* vec, /* out */ int* bytes, int* value)
 {
   int b, v;
 
@@ -287,10 +287,10 @@ cet_utf8_to_char(const char *str, const cet_cs_vec_t *vec, /* out */ int *bytes,
  * Returns the number of valid (visible) characters.
  */
 unsigned int
-cet_utf8_strlen(const char *str)
+cet_utf8_strlen(const char* str)
 {
   if (str) {
-    const char *cin = str;
+    const char* cin = str;
     int len = 0;
 
     while (*cin) {
@@ -310,8 +310,8 @@ cet_utf8_strlen(const char *str)
  *
  * Checks and duplicates an UTF-8 string
  */
-char *
-cet_utf8_strdup(const char *str)
+char*
+cet_utf8_strdup(const char* str)
 {
   if (str) {
     return cet_utf8_strndup(str, strlen(str));
@@ -324,12 +324,12 @@ cet_utf8_strdup(const char *str)
  *
  * Checks and duplicates an UTF-8 string
  */
-char *
-cet_utf8_strndup(const char *str, const int maxlen)
+char*
+cet_utf8_strndup(const char* str, const int maxlen)
 {
   if (str) {
-    const char *cin = str;
-    char *res, *cout;
+    const char* cin = str;
+    char* res, *cout;
     int len = 0;
 
     res = cout = xstrdup(cin);
@@ -364,12 +364,12 @@ cet_utf8_strndup(const char *str, const int maxlen)
  *
  * Converts a UTF-8 string to given character set
  */
-char *
-cet_str_utf8_to_any(const char *src, const cet_cs_vec_t *vec)
+char*
+cet_str_utf8_to_any(const char* src, const cet_cs_vec_t* vec)
 {
-  char *c = (char *)src;
+  char* c = (char*)src;
   int len;
-  char *res, *dest, *cend;
+  char* res, *dest, *cend;
 
   if (c == NULL) {
     return NULL;
@@ -379,7 +379,7 @@ cet_str_utf8_to_any(const char *src, const cet_cs_vec_t *vec)
   }
 
   len = strlen(c);
-  res = dest = (char *) xmalloc(len + 1);	/* target will become smaller or equal length */
+  res = dest = (char*) xmalloc(len + 1);	/* target will become smaller or equal length */
 
   cend = c + len;
 
@@ -398,14 +398,14 @@ cet_str_utf8_to_any(const char *src, const cet_cs_vec_t *vec)
  *
  * Converts a string from given character set to UTF-8
  */
-char *
-cet_str_any_to_utf8(const char *src, const cet_cs_vec_t *vec)
+char*
+cet_str_any_to_utf8(const char* src, const cet_cs_vec_t* vec)
 {
   int len, value;
-  char *result, *cin, *cout;
+  char* result, *cin, *cout;
   char temp = CET_NOT_CONVERTABLE_DEFAULT;
 
-  cin = (char *)src;
+  cin = (char*)src;
   if (cin == NULL) {
     return NULL;
   }
@@ -421,8 +421,8 @@ cet_str_any_to_utf8(const char *src, const cet_cs_vec_t *vec)
     len += cet_ucs4_to_utf8(NULL, 6, value);
   }
 
-  result = cout = (char *) xmalloc(len + 1);
-  cin = (char *)src;
+  result = cout = (char*) xmalloc(len + 1);
+  cin = (char*)src;
 
   while (*cin != '\0') {
     if (CET_ERROR == cet_char_to_ucs4(*cin++, vec, &value)) {
@@ -438,12 +438,12 @@ cet_str_any_to_utf8(const char *src, const cet_cs_vec_t *vec)
  *
  * Converts an unicode string to UTF-8
  */
-char *
-cet_str_uni_to_utf8(const short *src, const int length)
+char*
+cet_str_uni_to_utf8(const short* src, const int length)
 {
   int i, len;
-  unsigned short *cin;
-  char *res, *cout;
+  unsigned short* cin;
+  char* res, *cout;
 
   if (src == NULL) {
     return NULL;
@@ -451,14 +451,14 @@ cet_str_uni_to_utf8(const short *src, const int length)
 
   len = 0;
   i = length;
-  cin = (unsigned short *)src;
+  cin = (unsigned short*)src;
 
   while (i-- > 0) {
     len += cet_ucs4_to_utf8(NULL, 6, le_read16(cin++));
   }
 
-  res = cout = (char *) xmalloc(len + 1);
-  cin = (unsigned short *)src;
+  res = cout = (char*) xmalloc(len + 1);
+  cin = (unsigned short*)src;
   i = length;
 
   while (i-- > 0) {
@@ -474,12 +474,12 @@ cet_str_uni_to_utf8(const short *src, const int length)
  *
  * Converts a string in given character set to a 'wide string' (unicode)
  */
-short *
-cet_str_any_to_uni(const char *src, const cet_cs_vec_t *vec, int *length)
+short*
+cet_str_any_to_uni(const char* src, const cet_cs_vec_t* vec, int* length)
 {
-  char *utf8;
+  char* utf8;
   int len;
-  short *res, *sout;
+  short* res, *sout;
 
   if (! src) {
     utf8 = xstrdup("");
@@ -490,10 +490,10 @@ cet_str_any_to_uni(const char *src, const cet_cs_vec_t *vec, int *length)
   }
 
   len = cet_utf8_strlen(utf8);
-  res = sout = (short int *) xcalloc(2, len + 1);
+  res = sout = (short int*) xcalloc(2, len + 1);
 
   if (len) {
-    char *cin = utf8;
+    char* cin = utf8;
 
     while (*cin) {
       int bytes, value;

@@ -91,7 +91,7 @@ read_packet(int *type, void *payload, size_t max_len)
   data_size = size + 4;
 
   /* data_size can be up to about 64k */
-  data = xmalloc(data_size);
+  data = (unsigned char *) xmalloc(data_size);
 
   if (gbfread(data, data_size, 1, file_handle) != 1) {
     fatal(MYNAME ": Format error: could not read %d bytes.\n",

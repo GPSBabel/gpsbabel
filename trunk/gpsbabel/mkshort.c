@@ -32,7 +32,7 @@
 static const char vowels[] = "aeiouAEIOU";
 
 #define DEFAULT_TARGET_LEN 8
-static const char *DEFAULT_BADCHARS = "\"$.,'!-";
+static const char* DEFAULT_BADCHARS = "\"$.,'!-";
 
 /*
  * Hash table tunings.   The reality is that our hash doesn't have to be
@@ -44,13 +44,13 @@ static const char *DEFAULT_BADCHARS = "\"$.,'!-";
 
 typedef struct {
   queue list;
-  char *orig_shortname;
+  char* orig_shortname;
   int conflictctr;
 } uniq_shortname;
 
 static struct replacements {
-  const char *orig;
-  const char *replacement;
+  const char* orig;
+  const char* replacement;
 } replacements[] = {
   {"zero", 	"0"},
   {"one", 	"1"},
@@ -68,7 +68,7 @@ static struct replacements {
 /*
  * We hash all strings as upper case.
  */
-unsigned int hash_string(const char *key)
+unsigned int hash_string(const char* key)
 {
   unsigned int hash = 0;
   while (*key) {
@@ -86,7 +86,7 @@ mkshort_new_handle()
 #endif
 {
   int i;
-  mkshort_handle_imp *h = (mkshort_handle_imp *) xxcalloc(sizeof *h, 1, file, line);
+  mkshort_handle_imp* h = (mkshort_handle_imp*) xxcalloc(sizeof *h, 1, file, line);
 
   for (i = 0; i < PRIME; i++) {
     QUEUE_INIT(&h->namelist[i]);
@@ -103,37 +103,37 @@ mkshort_new_handle()
 }
 
 static
-uniq_shortname *
-is_unique(mkshort_handle_imp *h, char *name)
+uniq_shortname*
+is_unique(mkshort_handle_imp* h, char* name)
 {
-  queue *e, *t;
+  queue* e, *t;
   int hash;
 
   hash = hash_string(name);
   QUEUE_FOR_EACH(&h->namelist[hash], e, t) {
-    uniq_shortname *z = (uniq_shortname *) e;
+    uniq_shortname* z = (uniq_shortname*) e;
     if (0 == case_ignore_strcmp(z->orig_shortname, name)) {
       return z;
     }
   }
-  return (uniq_shortname *) NULL;
+  return (uniq_shortname*) NULL;
 }
 
 static
 void
-add_to_hashlist(mkshort_handle_imp *h, char *name)
+add_to_hashlist(mkshort_handle_imp* h, char* name)
 {
   int hash = hash_string(name);
-  uniq_shortname *s = (uniq_shortname*) xcalloc(1, sizeof(uniq_shortname));
+  uniq_shortname* s = (uniq_shortname*) xcalloc(1, sizeof(uniq_shortname));
 
   s->orig_shortname = xstrdup(name);
   ENQUEUE_TAIL(&h->namelist[hash], &s->list);
 }
 
-char *
-mkshort_add_to_list(mkshort_handle_imp *h, char *name)
+char*
+mkshort_add_to_list(mkshort_handle_imp* h, char* name)
 {
-  uniq_shortname *s;
+  uniq_shortname* s;
 
   while ((s = is_unique(h, name))) {
     int dl;
@@ -145,7 +145,7 @@ mkshort_add_to_list(mkshort_handle_imp *h, char *name)
     dl = sprintf(tbuf, ".%d", s->conflictctr);
 
     if (l + dl < h->target_len) {
-      name = (char *) xrealloc(name, l + dl + 1);
+      name = (char*) xrealloc(name, l + dl + 1);
       strcat(name, tbuf);
     } else {
       strcpy(&name[l-dl], tbuf);
@@ -157,9 +157,9 @@ mkshort_add_to_list(mkshort_handle_imp *h, char *name)
 }
 
 void
-mkshort_del_handle(short_handle *h)
+mkshort_del_handle(short_handle* h)
 {
-  mkshort_handle_imp *hdr = (mkshort_handle_imp*) *h;
+  mkshort_handle_imp* hdr = (mkshort_handle_imp*) *h;
   int i;
 
   if (!h || !hdr) {
@@ -167,9 +167,9 @@ mkshort_del_handle(short_handle *h)
   }
 
   for (i = 0; i < PRIME; i++) {
-    queue *e, *t;
+    queue* e, *t;
     QUEUE_FOR_EACH(&hdr->namelist[i], e, t) {
-      uniq_shortname *s = (uniq_shortname *) e;
+      uniq_shortname* s = (uniq_shortname*) e;
 #if 0
       if (global_opts.verbose_status >= 2 && s->conflictctr) {
         fprintf(stderr, "%d Output name conflicts: '%s'\n",
@@ -199,8 +199,8 @@ mkshort_del_handle(short_handle *h)
  */
 
 static
-char *
-delete_last_vowel(int start, char *istring, int *replaced)
+char*
+delete_last_vowel(int start, char* istring, int* replaced)
 {
   int l;
 
@@ -210,7 +210,7 @@ delete_last_vowel(int start, char *istring, int *replaced)
   *replaced = 0;
   for (l = strlen(istring); l > start; l--) {
     if (strchr(vowels, istring[l-1])) {
-      char *ostring;
+      char* ostring;
       /* If vowel is the first letter of a word, keep it.*/
       if (istring[l-2] == ' ') {
         continue;
@@ -232,9 +232,9 @@ delete_last_vowel(int start, char *istring, int *replaced)
  * are made only at the end of the string.
  */
 void
-replace_constants(char *s)
+replace_constants(char* s)
 {
-  struct replacements *r;
+  struct replacements* r;
   int origslen = strlen(s);
 
   for (r = replacements; r->orig; r++) {
@@ -260,7 +260,7 @@ replace_constants(char *s)
 void
 setshort_length(short_handle h, int l)
 {
-  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
+  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
   if (l == 0) {
     hdl->target_len = DEFAULT_TARGET_LEN;
   } else {
@@ -275,7 +275,7 @@ setshort_length(short_handle h, int l)
 void
 setshort_whitespace_ok(short_handle h, int l)
 {
-  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
+  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
   hdl->whitespaceok = l;
 }
 
@@ -287,7 +287,7 @@ setshort_whitespace_ok(short_handle h, int l)
 void
 setshort_repeating_whitespace_ok(short_handle h, int l)
 {
-  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
+  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
   hdl->repeating_whitespaceok = l;
 }
 
@@ -296,9 +296,9 @@ setshort_repeating_whitespace_ok(short_handle h, int l)
  * becuase it was filtered by charsets or null or whatever.
  */
 void
-setshort_defname(short_handle h, const char *s)
+setshort_defname(short_handle h, const char* s)
 {
-  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
+  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
   if (s == NULL) {
     fatal("setshort_defname called without a valid name.");
   }
@@ -314,9 +314,9 @@ setshort_defname(short_handle h, const char *s)
  * resets to default.
  */
 void
-setshort_badchars(short_handle h, const char *s)
+setshort_badchars(short_handle h, const char* s)
 {
-  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
+  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
 
   if ((hdl->badchars != NULL)) {
     xfree(hdl->badchars);
@@ -329,9 +329,9 @@ setshort_badchars(short_handle h, const char *s)
  * in generated names.
  */
 void
-setshort_goodchars(short_handle h, const char *s)
+setshort_goodchars(short_handle h, const char* s)
 {
-  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
+  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
 
   if (hdl->goodchars != NULL) {
     xfree(hdl->goodchars);
@@ -349,7 +349,7 @@ setshort_goodchars(short_handle h, const char *s)
 void
 setshort_mustupper(short_handle h, int i)
 {
-  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
+  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
   hdl->mustupper = i;
 }
 
@@ -361,7 +361,7 @@ setshort_mustupper(short_handle h, int i)
 void
 setshort_mustuniq(short_handle h, int i)
 {
-  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
+  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
   hdl->must_uniq = i;
 }
 
@@ -371,24 +371,24 @@ setshort_mustuniq(short_handle h, int i)
 void
 setshort_is_utf8(short_handle h, const int is_utf8)
 {
-  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
+  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
   hdl->is_utf8 = is_utf8;
 }
 
-char *
+char*
 #ifdef DEBUG_MEM
-MKSHORT(short_handle h, const char *istring, DEBUG_PARAMS)
+MKSHORT(short_handle h, const char* istring, DEBUG_PARAMS)
 #else
-mkshort(short_handle h, const char *istring)
+mkshort(short_handle h, const char* istring)
 #endif
 {
-  char *ostring;
-  char *nstring;
-  char *tstring;
-  char *cp;
-  char *np;
+  char* ostring;
+  char* nstring;
+  char* tstring;
+  char* cp;
+  char* np;
   int i, l, nlen, replaced;
-  mkshort_handle_imp *hdl = (mkshort_handle_imp *) h;
+  mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
 
   if (hdl->is_utf8) {
     ostring = cet_utf8_strdup(istring);  /* clean UTF-8 string */
@@ -544,12 +544,12 @@ mkshort(short_handle h, const char *istring)
   if (hdl->is_utf8) {
     /* ToDo: Keep trailing numeric data as described above! */
     if (cet_utf8_strlen(ostring) > hdl->target_len) {
-      char *tmp = cet_utf8_strndup(ostring, hdl->target_len);
+      char* tmp = cet_utf8_strndup(ostring, hdl->target_len);
       xfree(ostring);
       ostring = tmp;
     }
   } else if ((/*i = */strlen(ostring)) > hdl->target_len) {
-    char *dp = &ostring[hdl->target_len] - strlen(np);
+    char* dp = &ostring[hdl->target_len] - strlen(np);
     if (dp < ostring) {
       dp = ostring;
     }
@@ -577,8 +577,8 @@ mkshort(short_handle h, const char *istring)
  * As above, but arg list is a waypoint so we can centralize
  * the code that considers the alternate sources.
  */
-char *
-mkshort_from_wpt(short_handle h, const waypoint *wpt)
+char*
+mkshort_from_wpt(short_handle h, const waypoint* wpt)
 {
   /* This probably came from a Groundspeak Pocket Query
    * so use the 'cache name' instead of the description field
@@ -607,7 +607,7 @@ mkshort_from_wpt(short_handle h, const waypoint *wpt)
 
 
 #if 0
-char *foo[] =  {
+char* foo[] =  {
   "VwthPst# 3700.706N 08627.588W 0000000m View the Past #2              ",
   "PilotRoc 3655.270N 08717.173W 0000000m Pilot Rock by CacheAdvance    ",
   "MrCycsNg 3652.407N 08728.890W 0000000m Mr. Cayces Neighborhood by Ca",
@@ -755,7 +755,7 @@ char *foo[] =  {
 
 main()
 {
-  char **foop = foo;
+  char** foop = foo;
   int r;
 
   printf("%s\n", mkshort("The Troll"));

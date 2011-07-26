@@ -88,8 +88,8 @@ static unsigned delbin_os_packet_size;
 #define DELBIN_MAX_UNITS 32
 static struct {
   unsigned int unit_number;
-  const char *unit_serial_number;
-  const char *unit_name;
+  const char* unit_serial_number;
+  const char* unit_name;
 } delbin_unit_info[DELBIN_MAX_UNITS];
 static int n_delbin_units;
 
@@ -97,15 +97,15 @@ static int n_delbin_units;
 
 #define sizeofarray(x) (sizeof(x) / sizeof(x[0]))
 
-static char *opt_getposn = NULL;
-static char *opt_logs = NULL;
-static char *opt_long_notes = NULL;
-static char *opt_nuke_wpt = NULL;
-static char *opt_nuke_trk = NULL;
-static char *opt_nuke_rte = NULL;
+static char* opt_getposn = NULL;
+static char* opt_logs = NULL;
+static char* opt_long_notes = NULL;
+static char* opt_nuke_wpt = NULL;
+static char* opt_nuke_trk = NULL;
+static char* opt_nuke_rte = NULL;
 /* If true, Order hint to match Cache Register and Topo 7 */
-static char *opt_hint_at_end = NULL;
-static char *opt_gcsym = NULL;
+static char* opt_hint_at_end = NULL;
+static char* opt_gcsym = NULL;
 
 
 static arglist_t delbin_args[] = {
@@ -511,7 +511,7 @@ packet_read(void* buf)
   }
   if (global_opts.debug_level >= DBGLVL_H) {
     unsigned j;
-    const gbuint8* p = buf;
+    const gbuint8* p = (const gbuint8*) buf;
 
     debug_out_time("pcktrd");
     for (j = 0; j < n; j++) {
@@ -535,7 +535,7 @@ packet_write(const void* buf, unsigned size)
   unsigned n;
   if (global_opts.debug_level >= DBGLVL_H) {
     unsigned j;
-    const gbuint8* p = buf;
+    const gbuint8* p = (const gbuint8*) buf;
 
     debug_out_time("pcktwr");
     for (j = 0; j < size; j++) {
@@ -573,7 +573,7 @@ static void
 message_init(message_t* m)
 {
   m->capacity = 100;
-  m->buf = xmalloc(m->capacity);
+  m->buf = (gbuint8*)xmalloc(m->capacity);
   m->data = m->buf + 2 + 8;
 }
 
@@ -582,7 +582,7 @@ message_init_size(message_t* m, unsigned size)
 {
   m->size = size;
   m->capacity = 2 + 8 + size + 4;
-  m->buf = xmalloc(m->capacity);
+  m->buf = (gbuint8*)xmalloc(m->capacity);
   m->data = m->buf + 2 + 8;
 }
 
@@ -601,7 +601,7 @@ message_ensure_size(message_t* m, unsigned size)
   if (m->capacity < 2 + 8 + size + 4) {
     m->capacity = 2 + 8 + size + 4;
     xfree(m->buf);
-    m->buf = xmalloc(m->capacity);
+    m->buf = (gbuint8*)xmalloc(m->capacity);
     m->data = m->buf + 2 + 8;
   }
 }
@@ -753,7 +753,7 @@ message_ack(unsigned id, const message_t* m)
 {
   message_t ack;
   char* p1;
-  const char* p2 = m->data;
+  const char* p2 = (const char*) m->data;
   switch (id) {
   case MSG_ACK:
   case MSG_NACK:
@@ -763,7 +763,7 @@ message_ack(unsigned id, const message_t* m)
     return;
   }
   message_init_size(&ack, 4);
-  p1 = ack.data;
+  p1 = (char*) ack.data;
   // ack payload is id and body checksum of acked message
   le_write16(p1, id);
   p1[2] = p2[m->size];
@@ -789,7 +789,7 @@ message_read(unsigned msg_id, message_t* m)
       break;
     }
     if (id == MSG_ERROR) {
-      const gbuint8* p = m->data;
+      const gbuint8* p = (const gbuint8*) m->data;
       fatal(MYNAME ": device error %u: \"%s\"\n", *p, p + 1);
     }
     message_ack(id, m);
@@ -806,7 +806,7 @@ get_batch(message_t** array, unsigned* n)
 {
   int success = 1;
   unsigned array_max = 100;
-  message_t* a = xmalloc(array_max * sizeof(message_t));
+  message_t* a = (message_t*) xmalloc(array_max * sizeof(message_t));
   unsigned i = 0;
   unsigned id;
   if (global_opts.debug_level >= DBGLVL_M) {
@@ -817,7 +817,7 @@ get_batch(message_t** array, unsigned* n)
     if (i == array_max) {
       message_t* old_a = a;
       array_max += array_max;
-      a = xmalloc(array_max * sizeof(message_t));
+      a = (message_t*) xmalloc(array_max * sizeof(message_t));
       memcpy(a, old_a, i * sizeof(message_t));
       xfree(old_a);
     }
@@ -865,7 +865,7 @@ get_batch(message_t** array, unsigned* n)
 static struct {
   unsigned msg_id;
   message_t msg;
-} *batch_array;
+}* batch_array;
 static unsigned batch_array_max;
 static unsigned batch_array_i;
 
@@ -991,7 +991,7 @@ static waypoint*
 decode_waypoint(const void* data)
 {
   waypoint* wp = waypt_new();
-  const msg_waypoint_t* p = data;
+  const msg_waypoint_t* p = (const msg_waypoint_t*)data;
   const char* s;
   float f;
 
@@ -1085,7 +1085,7 @@ read_waypoints(void)
         warning(MYNAME ": read waypoint '%s'\n", wp->description);
       }
     } else if (wp && id == MSG_WAYPOINT_NOTE_OUT) {
-      const msg_waypoint_note_t* p = msg_array[i].data;
+      const msg_waypoint_note_t* p = (const msg_waypoint_note_t*) msg_array[i].data;
       const char* s = p->name + p->name_size;
       unsigned nn = le_readu16(s);
       if (notes_max < notes_i + nn) {
@@ -1096,7 +1096,7 @@ read_waypoints(void)
         do {
           notes_max += notes_max;
         } while (notes_max < notes_i + nn);
-        wp->notes = xmalloc(notes_max);
+        wp->notes = (char*) xmalloc(notes_max);
         if (old) {
           memcpy(wp->notes, old, notes_i);
           xfree(old);
@@ -1300,7 +1300,7 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
   }
   gbfputc(0, fd);
   *notes_size = fd->memlen;
-  *notes = xmalloc(*notes_size);
+  *notes = (char*) xmalloc(*notes_size);
   memcpy(*notes, fd->handle.mem, *notes_size);
   gbfclose(fd);
 }
@@ -1319,7 +1319,7 @@ write_waypoint_notes(const char* notes, unsigned size, const char* name)
     unsigned n = bytes_per_msg;
     msg_waypoint_note_t* p;
     message_init_size(&m, 2 + 2 + 1 + name_size + 2 + bytes_per_msg);
-    p = m.data;
+    p = (msg_waypoint_note_t*) m.data;
     le_write16(p->index, i++);
     le_write16(p->total, msg_count);
     p->name_size = name_size;
@@ -1349,7 +1349,7 @@ add_nuke(nuke_type type)
   msg_delete_t* p;
 
   message_init_size(&m, MSG_DELETE_SIZE);
-  p = m.data;
+  p = (msg_delete_t*) m.data;
   p->type = type;
   p->mode = nuke_mode_all;
   p->location = nuke_dest_internal;
@@ -1406,7 +1406,7 @@ write_waypoint(const waypoint* wp)
     name_size = 255;
   }
   message_init_size(&m, 31 + name_size + notes_size);
-  p = m.data;
+  p = (msg_waypoint_t*) m.data;
 
   waypoint_i++;
   le_write32(p->total, waypoint_n);
@@ -1514,7 +1514,7 @@ decode_sat_fix(waypoint* wp, const gbuint8 status)
 static void
 decode_track_point(const void* data, unsigned* wp_array_i, unsigned max_point)
 {
-  const msg_track_point_t* p = data;
+  const msg_track_point_t* p = (const msg_track_point_t*) data;
   const unsigned n = p->number;
   unsigned i;
   unsigned j = *wp_array_i;
@@ -1579,13 +1579,13 @@ read_track(route_head* track)
     fatal(MYNAME ": reading track '%s' failed (missing track header)\n", track->rte_name);
   }
   // process track messages
-  p = msg_array[0].data;
+  p = (const msg_track_header_t*) msg_array[0].data;
   if (le_readu16(p->comment_size)) {
     track->rte_desc = xstrdup(p->comment);
   }
   track->line_color.bbggrr = track_color(p->color[0]);
   n_point = le_readu32(p->total_points);
-  wp_array = xcalloc(n_point, sizeof(*wp_array));
+  wp_array = (waypoint**) xcalloc(n_point, sizeof(*wp_array));
   message_free(&msg_array[0]);
   for (i = 1; i < msg_array_n; i++) {
     unsigned id = message_get_id(&msg_array[i]);
@@ -1663,11 +1663,11 @@ read_tracks(void)
     message_write(MSG_BREAK, &m);
   }
   message_free(&m);
-  track_array = xcalloc(total, sizeof(*track_array));
+  track_array = (route_head**) xcalloc(total, sizeof(*track_array));
   for (i = 0; i < msg_array_n; i++) {
     unsigned id = message_get_id(&msg_array[i]);
     if (id == MSG_TRACK_HEADER_OUT) {
-      const msg_track_header_t* p = msg_array[i].data;
+      const msg_track_header_t* p = (msg_track_header_t*) msg_array[i].data;
       if (le_readu32(p->total_points)) {
         track_array[i] = route_head_alloc();
         track_array[i]->rte_name = xstrdup(p->name);
@@ -1705,7 +1705,7 @@ write_track_points(void)
 
     if (j == 0) {
       message_init_size(&m, 9 + 23 * pt_per_msg);
-      p = m.data;
+      p =(msg_track_point_t*) m.data;
       le_write32(p->total, waypoint_n);
       le_write32(p->index, i + 1);
     }
@@ -1761,7 +1761,7 @@ write_track_begin(const route_head* track)
   waypoint_i = 0;
   waypoint_n = track->rte_waypt_ct;
   if (waypoint_n) {
-    wp_array = xmalloc(waypoint_n * sizeof(*wp_array));
+    wp_array = (waypoint**) xmalloc(waypoint_n * sizeof(*wp_array));
   }
 }
 
@@ -1785,7 +1785,7 @@ write_track_end(const route_head* track)
     comment_size = strlen(track->rte_desc) + 1;
   }
   message_init_size(&m, sizeof(msg_track_header_in_t) - 1 + comment_size);
-  p = m.data;
+  p = (msg_track_header_in_t*) m.data;
   memset(p->name, 0, sizeof(p->name));
   if (track->rte_name) {
     strncpy(p->name, track->rte_name, sizeof(p->name) - 1);
@@ -1817,7 +1817,7 @@ write_tracks(void)
 static void
 decode_route_shape(const void* data, unsigned* wp_array_i)
 {
-  const msg_route_shape_t* p = data;
+  const msg_route_shape_t* p = (msg_route_shape_t*) data;
   const unsigned n = p->number;
   unsigned i;
   unsigned j = *wp_array_i;
@@ -1837,7 +1837,7 @@ decode_route_shape(const void* data, unsigned* wp_array_i)
 static waypoint*
 decode_route_point(const void* data)
 {
-  const msg_route_point_t* p = data;
+  const msg_route_point_t* p = (const msg_route_point_t*) data;
   const char* s = NULL;
   gbfile* fd = gbfopen(NULL, "w", MYNAME);
   waypoint* wp = waypt_new();
@@ -1908,7 +1908,7 @@ decode_route_point(const void* data)
   }
   if (fd->memlen) {
     gbfputc(0, fd);
-    wp->notes = xmalloc(fd->memlen);
+    wp->notes = (char*) xmalloc(fd->memlen);
     memcpy(wp->notes, fd->handle.mem, fd->memlen);
   }
   gbfclose(fd);
@@ -1951,11 +1951,11 @@ read_route(route_head* route)
   if (msg_array_n == 0 || message_get_id(&msg_array[0]) != MSG_ROUTE_HEADER_OUT) {
     fatal(MYNAME ": missing route header\n");
   }
-  p = msg_array[0].data;
+  p = (const msg_route_header_t*) msg_array[0].data;
   route_total = le_readu32(p->total_route_point);
   shape_total = le_readu32(p->total_shape_point);
   total = route_total + shape_total;
-  wp_array = xcalloc(total, sizeof(*wp_array));
+  wp_array = (waypoint**) xcalloc(total, sizeof(*wp_array));
   if (global_opts.debug_level >= DBGLVL_L) {
     warning(MYNAME ": route '%s' %u points, %u shape points\n",
             route->rte_name, route_total, shape_total);
@@ -2040,7 +2040,7 @@ read_routes(void)
     message_write(MSG_BREAK, &m);
   }
   message_free(&m);
-  route_array = xcalloc(total, sizeof(*route_array));
+  route_array = (route_head**) xcalloc(total, sizeof(*route_array));
   for (i = 0; i < msg_array_n; i++) {
     unsigned id = message_get_id(&msg_array[i]);
     if (id == MSG_ROUTE_HEADER_OUT) {
@@ -2078,7 +2078,7 @@ write_route_shape_points(waypoint** array, unsigned n)
   do {
     if (j == 0) {
       message_init_size(&m, 10 + 8 * pt_per_msg);
-      p = m.data;
+      p = (msg_route_shape_t*) m.data;
       le_write32(p->total, n);
       le_write32(p->index, i + 1);
       p->reserved = 0;
@@ -2111,7 +2111,7 @@ write_route_points(void)
     char* s;
 
     message_init_size(&m, sizeof(msg_route_point_t) + 1 + 1 + 4);
-    p = m.data;
+    p = (msg_route_point_t*) m.data;
     memset(m.data, 0, m.size);
     route_point_i++;
     shape_n = shape_point_counts[route_point_i];
@@ -2150,8 +2150,8 @@ write_route_begin(const route_head* track)
   shape_point_n = 0;
   waypoint_n = track->rte_waypt_ct;
   if (waypoint_n) {
-    wp_array = xmalloc(waypoint_n * sizeof(*wp_array));
-    shape_point_counts = xcalloc(waypoint_n, sizeof(*shape_point_counts));
+    wp_array = (waypoint**) xmalloc(waypoint_n * sizeof(*wp_array));
+    shape_point_counts = (unsigned int*) xcalloc(waypoint_n, sizeof(*shape_point_counts));
   }
 }
 
@@ -2178,7 +2178,7 @@ write_route_end(const route_head* route)
     return;
   }
   message_init_size(&m, sizeof(msg_route_header_in_t));
-  p = m.data;
+  p = (msg_route_header_in_t*) m.data;
   memset(p->name, 0, sizeof(p->name));
   if (route->rte_name) {
     strncpy(p->name, route->rte_name, sizeof(p->name) - 1);
@@ -2210,7 +2210,7 @@ static waypoint*
 decode_navmsg(const void* data)
 {
   waypoint* wp = waypt_new();
-  const msg_navigation_t* p = data;
+  const msg_navigation_t* p = (const msg_navigation_t*) data;
   struct tm t;
 
   t.tm_year = le_readu16(p->year) - 1900;
@@ -2246,7 +2246,7 @@ read_position(void)
   wp = decode_navmsg(m.data);
   if (wp->fix > fix_none &&
       message_read_1(MSG_SATELLITE_INFO, &m) == MSG_SATELLITE_INFO) {
-    const msg_satellite_t* p = m.data;
+    const msg_satellite_t* p = (const msg_satellite_t*) m.data;
     wp->hdop = le_readu16(p->hdop);
     wp->hdop /= 100;
     wp->vdop = le_readu16(p->vdop);
@@ -2273,7 +2273,7 @@ delbin_list_units()
 }
 
 static void
-delbin_rw_init(const char *fname)
+delbin_rw_init(const char* fname)
 {
   message_t m;
   char buf[256];
@@ -2302,7 +2302,7 @@ delbin_rw_init(const char *fname)
   m.size = 0;
   message_write(MSG_VERSION, &m);
   if (message_read(MSG_VERSION, &m)) {
-    const msg_version_t* p = m.data;
+    const msg_version_t* p = (const msg_version_t*) m.data;
     if (global_opts.debug_level >= DBGLVL_L) {
       warning(MYNAME ": device %s %s\n", p->product, p->firmware);
     }
@@ -2369,7 +2369,7 @@ delbin_write(void)
     message_init_size(&m, 0);
     message_write(MSG_CAPABILITIES, &m);
     if (message_read(MSG_CAPABILITIES, &m)) {
-      const msg_capabilities_t* p = m.data;
+      const msg_capabilities_t* p = (const msg_capabilities_t*) m.data;
       device_max_waypoint = le_readu32(p->max_waypoints);
     }
     message_free(&m);
@@ -2646,9 +2646,9 @@ mac_os_init(const char* fname)
     fatal(MYNAME ": createAsyncEventSource failed 0x%x\n", (int)ir);
   }
   delbin_os_packet_size = 64;
-  report_buf = xmalloc(delbin_os_packet_size);
+  report_buf = (char*)xmalloc(delbin_os_packet_size);
   for (i = sizeofarray(packet_array); i--;) {
-    packet_array[i] = xmalloc(delbin_os_packet_size);
+    packet_array[i] = (char*)xmalloc(delbin_os_packet_size);
   }
   ir = (*device)->setInterruptReportHandlerCallback(
          device, report_buf, delbin_os_packet_size, interrupt_report_cb, NULL, NULL);

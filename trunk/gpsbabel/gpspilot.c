@@ -45,9 +45,9 @@ struct runways {
   pdb_32 en_latitude; 	/* similarly */
 };
 
-static pdbfile *file_in, *file_out;
-static const char *out_fname;
-static char *dbname = NULL;
+static pdbfile* file_in, *file_out;
+static const char* out_fname;
+static char* dbname = NULL;
 static int ct;
 
 static
@@ -57,7 +57,7 @@ arglist_t gpspilot_args[] = {
 };
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = pdb_open(fname, MYNAME);
 }
@@ -73,7 +73,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = pdb_create(fname, MYNAME);
   out_fname = fname;
@@ -93,8 +93,8 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-  struct record *rec;
-  pdbrec_t *pdb_rec;
+  struct record* rec;
+  pdbrec_t* pdb_rec;
 
   if ((file_in->creator != MYCREATOR)) {
     fatal(MYNAME ": Not a gpspilot file.\n");
@@ -112,18 +112,18 @@ data_read(void)
   }
 
   for (pdb_rec = file_in->rec_list; pdb_rec; pdb_rec = pdb_rec->next) {
-    waypoint *wpt_tmp;
-    char *vdata;
+    waypoint* wpt_tmp;
+    char* vdata;
 
     wpt_tmp = waypt_new();
 
-    rec = (struct record *) pdb_rec->data;
+    rec = (struct record*) pdb_rec->data;
     wpt_tmp->longitude = be_read32(&rec->longitude) / 3.6e6;
     wpt_tmp->latitude = be_read32(&rec->latitude) / 3.6e6;
     wpt_tmp->altitude =
       be_read16(&rec->elevation);
 
-    vdata = (char *) pdb_rec->data + sizeof(*rec);
+    vdata = (char*) pdb_rec->data + sizeof(*rec);
 
     /*
     * skip runway records if an airport.
@@ -158,10 +158,10 @@ data_read(void)
 
 
 static void
-gpspilot_writewpt(const waypoint *wpt)
+gpspilot_writewpt(const waypoint* wpt)
 {
-  struct record *rec;
-  char *vdata;
+  struct record* rec;
+  char* vdata;
 
   rec = (struct record*) xcalloc(sizeof(*rec)+206,1);
 
@@ -170,7 +170,7 @@ gpspilot_writewpt(const waypoint *wpt)
   be_write16(&rec->elevation, si_round(wpt->altitude));
   be_write16(&rec->magvar, 0);
 
-  vdata = (char *)rec + sizeof(*rec);
+  vdata = (char*)rec + sizeof(*rec);
   if (wpt->description) {
     strncpy(vdata, wpt->description, 36);
     vdata[35] = '\0';
@@ -194,7 +194,7 @@ gpspilot_writewpt(const waypoint *wpt)
   }
   vdata += strlen(vdata) + 1;
 
-  pdb_write_rec(file_out, 0, 2, ct++, (void *)rec, (char *)vdata - (char *)rec);
+  pdb_write_rec(file_out, 0, 2, ct++, (void*)rec, (char*)vdata - (char*)rec);
 
   xfree(rec);
 }

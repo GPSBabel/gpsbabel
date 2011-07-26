@@ -31,7 +31,7 @@
 const char no_usb[] = "USB support is not available in this build.\n";
 
 int
-gusb_init(const char *portname)
+gusb_init(const char* portname)
 {
   fatal(no_usb);
   return 0;

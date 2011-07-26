@@ -113,17 +113,17 @@
 /* static char gdb_release[] = "$Revision: 1.74 $"; */
 static char gdb_release_date[] = "$Date: 2011-04-14 01:30:01 $";
 
-static gbfile *fin, *fout, *ftmp;
+static gbfile* fin, *fout, *ftmp;
 static int gdb_ver, gdb_category, gdb_via, gdb_roadbook;
 
 static queue wayptq_in, wayptq_out, wayptq_in_hidden;
 static short_handle short_h;
 
-static char *gdb_opt_category;
-static char *gdb_opt_ver;
-static char *gdb_opt_via;
-static char *gdb_opt_roadbook;
-static char *gdb_opt_bitcategory;
+static char* gdb_opt_category;
+static char* gdb_opt_ver;
+static char* gdb_opt_via;
+static char* gdb_opt_roadbook;
+static char* gdb_opt_bitcategory;
 
 static int waypt_flag;
 static int route_flag;
@@ -141,12 +141,12 @@ static int trk_ct;	/* informational: total number of tracks in/out */
 #define NOT_EMPTY(a) (a && *a)
 
 static void
-gdb_flush_waypt_queue(queue *Q)
+gdb_flush_waypt_queue(queue* Q)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   QUEUE_FOR_EACH(Q, elem, tmp) {
-    waypoint *wpt = (waypoint *)elem;
+    waypoint* wpt = (waypoint*)elem;
     dequeue(elem);
     if (wpt->extra_data) {
       xfree(wpt->extra_data);
@@ -158,7 +158,7 @@ gdb_flush_waypt_queue(queue *Q)
 
 #if GDB_DEBUG
 static void
-disp_summary(const gbfile *f)
+disp_summary(const gbfile* f)
 {
   int i, len;
 
@@ -205,11 +205,11 @@ disp_summary(const gbfile *f)
 #define FREAD_LATLON GPS_Math_Semi_To_Deg(gbfgetint32(fin))
 
 #if GDB_DEBUG
-static char *
-nice(const char *str)
+static char*
+nice(const char* str)
 {
-  char *res, *env;
-  cet_cs_vec_t *vec;
+  char* res, *env;
+  cet_cs_vec_t* vec;
 
   if (!(str && *str)) {
     return "";
@@ -217,7 +217,7 @@ nice(const char *str)
 
   env = getenv("LANG");
   if (env == NULL) {
-    return (char *)str;
+    return (char*)str;
   }
 
   if ((res = strchr(env, '.'))) {
@@ -232,15 +232,15 @@ nice(const char *str)
     xfree(res);
     return buf;
   } else {
-    return (char *)str;
+    return (char*)str;
   }
 }
 #endif
 
-static char *
-gdb_fread_cstr(gbfile *fin)
+static char*
+gdb_fread_cstr(gbfile* fin)
 {
-  char *result = gbfgetcstr(fin);
+  char* result = gbfgetcstr(fin);
 
   if (result && (*result == '\0')) {
     xfree(result);
@@ -250,7 +250,7 @@ gdb_fread_cstr(gbfile *fin)
 }
 
 static int
-gdb_fread_str(char *buf, int size, gbfile *fin)
+gdb_fread_str(char* buf, int size, gbfile* fin)
 {
   char c;
   int res = 0;
@@ -267,16 +267,16 @@ gdb_fread_str(char *buf, int size, gbfile *fin)
   return res;
 }
 
-static char *
+static char*
 gdb_fread_strlist(void)
 {
-  char *res = NULL;
+  char* res = NULL;
   int count;
 
   count = FREAD_i32;
 
   while (count > 0) {
-    char *str = FREAD_CSTR;
+    char* str = FREAD_CSTR;
     if (str != NULL) {
       if (*str && (res == NULL)) {
         res = str;
@@ -290,14 +290,14 @@ gdb_fread_strlist(void)
   return res;
 }
 
-static waypoint *
-gdb_find_wayptq(const queue *Q, const waypoint *wpt, const char exact)
+static waypoint*
+gdb_find_wayptq(const queue* Q, const waypoint* wpt, const char exact)
 {
-  queue *elem, *tmp;
-  const char *name = wpt->shortname;
+  queue* elem, *tmp;
+  const char* name = wpt->shortname;
 
   QUEUE_FOR_EACH(Q, elem, tmp) {
-    waypoint *tmp = (waypoint *)elem;
+    waypoint* tmp = (waypoint*)elem;
     if (case_ignore_strcmp(name, tmp->shortname) == 0) {
 
       if (! exact) {
@@ -313,10 +313,10 @@ gdb_find_wayptq(const queue *Q, const waypoint *wpt, const char exact)
   return NULL;
 }
 
-static waypoint *
-gdb_reader_find_waypt(const waypoint *wpt, const char exact)
+static waypoint*
+gdb_reader_find_waypt(const waypoint* wpt, const char exact)
 {
-  waypoint *res;
+  waypoint* res;
   res = gdb_find_wayptq(&wayptq_in, wpt, exact);
   if (res == NULL) {
     res = gdb_find_wayptq(&wayptq_in_hidden, wpt, exact);
@@ -324,10 +324,10 @@ gdb_reader_find_waypt(const waypoint *wpt, const char exact)
   return res;
 }
 
-static waypoint *
-gdb_add_route_waypt(route_head *rte, waypoint *ref, const int wpt_class)
+static waypoint*
+gdb_add_route_waypt(route_head* rte, waypoint* ref, const int wpt_class)
 {
-  waypoint *tmp, *res;
+  waypoint* tmp, *res;
   int turn_point;
 
   tmp = gdb_reader_find_waypt(ref, 1);
@@ -381,7 +381,7 @@ gdb_add_route_waypt(route_head *rte, waypoint *ref, const int wpt_class)
 #define FWRITE_LATLON(a) gbfputint32(GPS_Math_Deg_To_Semi((a)),fout)
 
 static void
-gdb_write_cstr_list(const char *str)
+gdb_write_cstr_list(const char* str)
 {
   if NOT_EMPTY(str) {
     gbfputint32(1, fout);
@@ -451,7 +451,7 @@ read_file_header(void)
   reclen = FREAD_i32;
   i = FREAD(buf, reclen + 1);
   if (global_opts.verbose_status > 0) {
-    char *name = buf+2;
+    char* name = buf+2;
     if (strstr(name, "SQA") == 0) {
       name = "MapSource";
     } else if (strstr(name, "neaderhi") == 0) {
@@ -466,28 +466,28 @@ read_file_header(void)
 
 /*-----------------------------------------------------------------------------*/
 
-static waypoint *
-read_waypoint(gt_waypt_classes_e *waypt_class_out)
+static waypoint*
+read_waypoint(gt_waypt_classes_e* waypt_class_out)
 {
   char buf[128];		/* used for temporary stuff */
   int display, icon, dynamic;
   gt_waypt_classes_e wpt_class;
   int i;
-  waypoint *res;
-  garmin_fs_t *gmsd;
-  char *str;
-  char *bufp = buf;
+  waypoint* res;
+  garmin_fs_t* gmsd;
+  char* str;
+  char* bufp = buf;
 #ifdef GMSD_EXPERIMENTAL
   char subclass[22];
 #endif
 #if GDB_DEBUG
-  char *sn;
+  char* sn;
 #endif
   waypt_ct++;
   res = waypt_new();
 
   gmsd = garmin_fs_alloc(-1);
-  fs_chain_add(&res->fs, (format_specific_data *) gmsd);
+  fs_chain_add(&res->fs, (format_specific_data*) gmsd);
 
   res->shortname = FREAD_CSTR;
 #if GDB_DEBUG
@@ -535,7 +535,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
   res->notes = FREAD_CSTR;
 #if GDB_DEBUG
   DBG(GDB_DBG_WPTe, res->notes) {
-    char *str = gstrsub(res->notes, "\r\n", ", ");
+    char* str = gstrsub(res->notes, "\r\n", ", ");
     printf(MYNAME "-wpt \"%s\" (%d): notes = %s\n",
            sn, wpt_class, nice(str));
     xfree(str);
@@ -592,7 +592,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
   /* VERSION DEPENDENT CODE */
 
   if (gdb_ver <= GDB_VER_2) {
-    char *temp;
+    char* temp;
 
     FREAD(buf, 2);				/* ?????????????????????????????????? */
     waypt_flag = FREAD_C;
@@ -630,7 +630,7 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 
     url_ct = FREAD_i32;
     for (i = url_ct; (i); i--) {
-      char *str = FREAD_CSTR;
+      char* str = FREAD_CSTR;
       if (str && *str) {
         waypt_add_url(res, str, NULL);
 #if GDB_DEBUG
@@ -722,10 +722,10 @@ read_waypoint(gt_waypt_classes_e *waypt_class_out)
 
 /*-----------------------------------------------------------------------------*/
 
-static route_head *
+static route_head*
 read_route(void)
 {
-  route_head *rte;
+  route_head* rte;
   int points, warnings, links, i;
   char buf[128];
   bounds bounds;
@@ -765,9 +765,9 @@ read_route(void)
   for (i = 0; i < points; i++) {
     int wpt_class, j;
     char buf[128];
-    garmin_ilink_t *il_root, *il_anchor;
+    garmin_ilink_t* il_root, *il_anchor;
 
-    waypoint *wpt;
+    waypoint* wpt;
 
     wpt = waypt_new();
     rtept_ct++;
@@ -811,7 +811,7 @@ read_route(void)
            nice(wpt->shortname), wpt_class, links);
 #endif
     for (j = 0; j < links; j++) {
-      garmin_ilink_t *il_step = xmalloc(sizeof(*il_step));
+      garmin_ilink_t* il_step = (garmin_ilink_t*) xmalloc(sizeof(*il_step));
 
       il_step->ref_count = 1;
 
@@ -864,7 +864,7 @@ read_route(void)
 
     if (links == 0) {
       /* Without links we need all informations from wpt */
-      waypoint *tmp = gdb_reader_find_waypt(wpt, 0);
+      waypoint* tmp = gdb_reader_find_waypt(wpt, 0);
       if (tmp != NULL) {
         waypt_free(wpt);
         wpt = waypt_dupe(tmp);
@@ -894,10 +894,10 @@ read_route(void)
 #endif
     wpt = gdb_add_route_waypt(rte, wpt, wpt_class);
     if (wpt != NULL) {
-      garmin_fs_t *gmsd = GMSD_FIND(wpt);
+      garmin_fs_t* gmsd = GMSD_FIND(wpt);
       if (gmsd == NULL) {
         gmsd = garmin_fs_alloc(-1);
-        fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
+        fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
       }
       GMSD_SET(wpt_class, wpt_class);
       gmsd->ilinks = il_root;
@@ -905,7 +905,7 @@ read_route(void)
     }
 
     while (il_root) {
-      garmin_ilink_t *il = il_root;
+      garmin_ilink_t* il = il_root;
       il_root = il_root->next;
       xfree(il);
     }
@@ -925,7 +925,7 @@ read_route(void)
 #if 0
     /* replace CRLF's with ", " */
     if (rte->rte_desc) {
-      char *c = rte->rte_desc;
+      char* c = rte->rte_desc;
       while ((c = strstr(c, "\r\n"))) {
         *c++ = ',';
         *c++ = ' ';
@@ -938,10 +938,10 @@ read_route(void)
 
 /*-----------------------------------------------------------------------------*/
 
-static route_head *
+static route_head*
 read_track(void)
 {
-  route_head *res;
+  route_head* res;
   int points, index;
   char dummy;
   int color_idx;
@@ -959,7 +959,7 @@ read_track(void)
   points = FREAD_i32;
 
   for (index = 0; index < points; index++) {
-    waypoint *wpt = waypt_new();
+    waypoint* wpt = waypt_new();
 
     trkpt_ct++;
 
@@ -1001,7 +1001,7 @@ read_track(void)
 /*******************************************************************************/
 
 static void
-gdb_rd_init(const char *fname)
+gdb_rd_init(const char* fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
   ftmp = gbfopen_le(NULL, "wb", MYNAME);
@@ -1041,15 +1041,15 @@ gdb_rd_deinit(void)
 static void
 read_data(void)
 {
-  gbfile *fsave;
+  gbfile* fsave;
   int incomplete = 0;	/* number of incomplete reads */
 
   for (;;) {
     int len, delta;
     char typ, dump;
     gt_waypt_classes_e wpt_class;
-    waypoint *wpt;
-    route_head *trk, *rte;
+    waypoint* wpt;
+    route_head* trk, *rte;
 
     len = FREAD_i32;
     if (FREAD(&typ, 1) < 1) {
@@ -1074,7 +1074,7 @@ read_data(void)
     case 'W':
       wpt = read_waypoint(&wpt_class);
       if ((gdb_via == 0) || (wpt_class == 0)) {
-        waypoint *dupe;
+        waypoint* dupe;
         waypt_add(wpt);
         dupe = waypt_dupe(wpt);
         ENQUEUE_TAIL(&wayptq_in, &dupe->Q);
@@ -1120,7 +1120,7 @@ read_data(void)
       }
       if (delta > 0) {
         int i;
-        char *buf = xmalloc(delta);
+        char* buf = (char*) xmalloc(delta);
         if (FREAD(buf, delta) < 1) {
           fatal(MYNAME ": Attempt to read past EOF.\n");
         }
@@ -1151,7 +1151,7 @@ read_data(void)
  * reset_short_handle: used for waypoint, route and track names
  */
 static void
-reset_short_handle(const char *defname)
+reset_short_handle(const char* defname)
 {
   if (short_h != NULL) {
     mkshort_del_handle(&short_h);
@@ -1174,7 +1174,7 @@ static void
 write_header(void)
 {
   char buff[128], tbuff[32];
-  char *c;
+  char* c;
   int len;
   struct tm tm;
 
@@ -1239,7 +1239,7 @@ write_header(void)
  */
 
 static void
-gdb_check_waypt(waypoint *wpt)
+gdb_check_waypt(waypoint* wpt)
 {
   double lat_orig = wpt->latitude;
   double lon_orig = wpt->longitude;
@@ -1267,7 +1267,7 @@ gdb_check_waypt(waypoint *wpt)
 
 static void
 write_waypoint(
-  const waypoint *wpt, const char *shortname, garmin_fs_t *gmsd,
+  const waypoint* wpt, const char* shortname, garmin_fs_t* gmsd,
   const int icon, const int display)
 {
   char zbuf[32], ffbuf[32];
@@ -1320,7 +1320,7 @@ write_waypoint(
 
   /* VERSION DEPENDENT CODE */
   if (gdb_ver <= GDB_VER_2) {
-    char *descr;
+    char* descr;
 
     FWRITE(zbuf, 3);
     FWRITE(zbuf, 4);
@@ -1333,8 +1333,8 @@ write_waypoint(
     FWRITE_CSTR(descr);
   } else { /* if (gdb_ver > GDB_VER_3) */
     int cnt;
-    url_link *url_next;
-    const char *str;
+    url_link* url_next;
+    const char* str;
 
     if (wpt_class < gt_waypt_class_map_point) {	/* street address */
       str  = GMSD_GET(addr, "");
@@ -1380,7 +1380,7 @@ write_waypoint(
 
   /* VERSION DEPENDENT CODE */
   if (gdb_ver >= GDB_VER_3) {
-    const char *str = GMSD_GET(phone_nr, "");
+    const char* str = GMSD_GET(phone_nr, "");
     if (*str) {
       FWRITE_i32(1);
       FWRITE_CSTR(str);
@@ -1394,19 +1394,19 @@ write_waypoint(
 }
 
 static void
-route_compute_bounds(const route_head *rte, bounds *bounds)
+route_compute_bounds(const route_head* rte, bounds* bounds)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   waypt_init_bounds(bounds);
-  QUEUE_FOR_EACH((queue *)&rte->waypoint_list, elem, tmp) {
-    waypoint *wpt = (waypoint *)elem;
+  QUEUE_FOR_EACH((queue*)&rte->waypoint_list, elem, tmp) {
+    waypoint* wpt = (waypoint*)elem;
     gdb_check_waypt(wpt);
     waypt_add_to_bounds(bounds, wpt);
   }
 }
 
 static void
-route_write_bounds(bounds *bounds)
+route_write_bounds(bounds* bounds)
 {
   if (waypt_bounds_valid(bounds)) {
     FWRITE_C(0);
@@ -1422,11 +1422,11 @@ route_write_bounds(bounds *bounds)
 }
 
 static void
-write_route(const route_head *rte, const char *rte_name)
+write_route(const route_head* rte, const char* rte_name)
 {
   bounds bounds;
   int points, index;
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   char zbuf[32], ffbuf[32];
 
   memset(zbuf, 0, sizeof(zbuf));
@@ -1443,12 +1443,12 @@ write_route(const route_head *rte, const char *rte_name)
 
   index = 0;
 
-  QUEUE_FOR_EACH((queue *)&rte->waypoint_list, elem, tmp) {
+  QUEUE_FOR_EACH((queue*)&rte->waypoint_list, elem, tmp) {
 
-    waypoint *wpt = (waypoint *)elem;
-    waypoint *next = (waypoint *)tmp;
-    waypoint *test;
-    garmin_fs_t *gmsd = NULL;
+    waypoint* wpt = (waypoint*)elem;
+    waypoint* next = (waypoint*)tmp;
+    waypoint* test;
+    garmin_fs_t* gmsd = NULL;
     int wpt_class;
 
     index++;
@@ -1471,7 +1471,7 @@ write_route(const route_head *rte, const char *rte_name)
     gmsd = GMSD_FIND(wpt);
 
     /* extra_data may contain a modified shortname */
-    FWRITE_CSTR((wpt->extra_data) ? (char *)wpt->extra_data : wpt->shortname);
+    FWRITE_CSTR((wpt->extra_data) ? (char*)wpt->extra_data : wpt->shortname);
 
     wpt_class = wpt->microseconds;			/* trick */
 
@@ -1537,9 +1537,9 @@ write_route(const route_head *rte, const char *rte_name)
 }
 
 static void
-write_track(const route_head *trk, const char *trk_name)
+write_track(const route_head* trk, const char* trk_name)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   int points = ELEMENTS(trk);
 
   FWRITE_CSTR(trk_name);
@@ -1549,9 +1549,9 @@ write_track(const route_head *trk, const char *trk_name)
 
   FWRITE_i32(points);	/* total number of waypoints in waypoint list */
 
-  QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
+  QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
     double d;
-    waypoint *wpt = (waypoint *)elem;
+    waypoint* wpt = (waypoint*)elem;
 
     trkpt_ct++;	/* increase informational number of written route points */
 
@@ -1578,7 +1578,7 @@ write_track(const route_head *trk, const char *trk_name)
 /*-----------------------------------------------------------------------------*/
 
 static void
-finalize_item(gbfile *origin, const char identifier)
+finalize_item(gbfile* origin, const char identifier)
 {
   int len = gbftell(fout);
 
@@ -1596,7 +1596,7 @@ finalize_item(gbfile *origin, const char identifier)
 /*-----------------------------------------------------------------------------*/
 
 static char
-str_not_equal(const char *s1, const char *s2)
+str_not_equal(const char* s1, const char* s2)
 {
   if (s1) {
     if (!s2) {
@@ -1615,15 +1615,15 @@ str_not_equal(const char *s1, const char *s2)
 }
 
 static void
-write_waypoint_cb(const waypoint *refpt)
+write_waypoint_cb(const waypoint* refpt)
 {
-  garmin_fs_t *gmsd;
-  waypoint *test;
-  gbfile *fsave;
+  garmin_fs_t* gmsd;
+  waypoint* test;
+  gbfile* fsave;
 
   /* do this when backup always happens in main */
 
-  rtrim(((waypoint *)refpt)->shortname);
+  rtrim(((waypoint*)refpt)->shortname);
   test = gdb_find_wayptq(&wayptq_out, refpt, 1);
 
   if ((test != NULL) && (route_flag == 0)) {
@@ -1635,8 +1635,8 @@ write_waypoint_cb(const waypoint *refpt)
 
   if (test == NULL) {
     int icon, display, wpt_class;
-    char *name;
-    waypoint *wpt = waypt_dupe(refpt);
+    char* name;
+    waypoint* wpt = waypt_dupe(refpt);
 
     gdb_check_waypt(wpt);
     ENQUEUE_TAIL(&wayptq_out, &wpt->Q);
@@ -1694,7 +1694,7 @@ write_waypoint_cb(const waypoint *refpt)
     }
 
     name = mkshort(short_h, name);
-    wpt->extra_data = (void *)name;
+    wpt->extra_data = (void*)name;
     write_waypoint(wpt, name, gmsd, icon, display);
 
     finalize_item(fsave, 'W');
@@ -1702,10 +1702,10 @@ write_waypoint_cb(const waypoint *refpt)
 }
 
 static void
-write_route_cb(const route_head *rte)
+write_route_cb(const route_head* rte)
 {
-  gbfile *fsave;
-  char *name;
+  gbfile* fsave;
+  char* name;
   char buf[32];
 
   if (ELEMENTS(rte) <= 0) {
@@ -1730,10 +1730,10 @@ write_route_cb(const route_head *rte)
 }
 
 static void
-write_track_cb(const route_head *trk)
+write_track_cb(const route_head* trk)
 {
-  gbfile *fsave;
-  char *name;
+  gbfile* fsave;
+  char* name;
   char buf[32];
 
   if (ELEMENTS(trk) <= 0) {
@@ -1760,7 +1760,7 @@ write_track_cb(const route_head *trk)
 /*-----------------------------------------------------------------------------*/
 
 static void
-gdb_wr_init(const char *fname)
+gdb_wr_init(const char* fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
   ftmp = gbfopen_le(NULL, "wb", MYNAME);

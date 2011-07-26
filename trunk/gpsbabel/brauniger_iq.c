@@ -22,7 +22,7 @@
 #include "gbser.h"
 #include <errno.h>
 
-static void *serial_handle;
+static void* serial_handle;
 
 #define MYNAME "BRAUNIGER-IQ"
 #define PRESTRKNAME "PRESALTTRK"
@@ -49,7 +49,7 @@ static enum {
 
 static const int reqd_bytes[num_states] = { 6, 1, 2, 2, 25, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1 };
 
-static void rd_init(const char *fname)
+static void rd_init(const char* fname)
 {
   if (serial_handle = gbser_init(fname), NULL == serial_handle) {
     fatal(MYNAME ": Can't open port '%s'\n", fname);
@@ -69,15 +69,15 @@ static void rd_deinit(void)
  * Process a data record.
  * @return zero when all expected data has been received
  */
-static int process_data(const unsigned char *data)
+static int process_data(const unsigned char* data)
 {
   static int remaining = 100;
   static struct tm tm;
   static time_t start, creation;
-  static route_head *track;
+  static route_head* track;
   static unsigned char interval;
   time_t finish;
-  waypoint *wpt = NULL;
+  waypoint* wpt = NULL;
   int i;
 
   if (global_opts.debug_level >= 3) {

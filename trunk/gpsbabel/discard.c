@@ -23,21 +23,21 @@
 #include "filterdefs.h"
 
 #if FILTERS_ENABLED
-static char *hdopopt = NULL;
-static char *vdopopt = NULL;
-static char *andopt = NULL;
-static char *satopt = NULL;
-static char *fixnoneopt = NULL;
-static char *fixunknownopt = NULL;
-static char *eleminopt = NULL;
-static char *elemaxopt = NULL;
+static char* hdopopt = NULL;
+static char* vdopopt = NULL;
+static char* andopt = NULL;
+static char* satopt = NULL;
+static char* fixnoneopt = NULL;
+static char* fixunknownopt = NULL;
+static char* eleminopt = NULL;
+static char* elemaxopt = NULL;
 static double hdopf;
 static double vdopf;
 static int satpf;
 static int eleminpf;
 static int elemaxpf;
 static gpsdata_type what;
-static route_head *head;
+static route_head* head;
 
 static
 arglist_t fix_args[] = {
@@ -80,13 +80,13 @@ arglist_t fix_args[] = {
  * Decide whether to keep or toss this point.
  */
 static void
-fix_process_wpt(const waypoint *wpt)
+fix_process_wpt(const waypoint* wpt)
 {
   int del = 0;
   int delh = 0;
   int delv = 0;
 
-  waypoint *waypointp = (waypoint *) wpt;
+  waypoint* waypointp = (waypoint*) wpt;
 
   if ((hdopf >= 0.0) && (waypointp->hdop > hdopf)) {
     delh = 1;
@@ -140,9 +140,9 @@ fix_process_wpt(const waypoint *wpt)
 }
 
 static void
-fix_process_head(const route_head *trk)
+fix_process_head(const route_head* trk)
 {
-  head = (route_head *)trk;
+  head = (route_head*)trk;
 }
 
 static void
@@ -163,7 +163,7 @@ fix_process(void)
 }
 
 static void
-fix_init(const char *args)
+fix_init(const char* args)
 {
   if (hdopopt) {
     hdopf = atof(hdopopt);

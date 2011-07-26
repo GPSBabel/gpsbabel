@@ -35,7 +35,7 @@
 
 #define MYNAME "DG-100"
 
-static void *serial_handle;
+static void* serial_handle;
 
 /* maximum frame size observed so far: 1817 bytes
  *   (dg100cmd_getfileheader returning 150 entries)
@@ -59,7 +59,7 @@ struct dg100_command {
   int  sendsize;
   int  recvsize;
   int  trailing_bytes;
-  const char *text;	/* Textual description for debugging */
+  const char* text;	/* Textual description for debugging */
 };
 
 struct dg100_command dg100_commands[] = {
@@ -78,11 +78,11 @@ const unsigned dg100_numcommands = sizeof(dg100_commands) / sizeof(dg100_command
 struct dynarray16 {
   unsigned count; /* number of elements used */
   unsigned limit; /* number of elements allocated */
-  gbint16 *data;
+  gbint16* data;
 };
 
 /* helper functions */
-static struct dg100_command *
+static struct dg100_command*
 dg100_findcmd(int id) {
   unsigned int i;
 
@@ -97,15 +97,15 @@ dg100_findcmd(int id) {
 }
 
 static void
-dynarray16_init(struct dynarray16 *a, unsigned limit)
+dynarray16_init(struct dynarray16* a, unsigned limit)
 {
   a->count = 0;
   a->limit = limit;
-  a->data = xmalloc(sizeof(a->data[0]) * a->limit);
+  a->data = (gbint16*) xmalloc(sizeof(a->data[0]) * a->limit);
 }
 
-static gbint16 *
-dynarray16_alloc(struct dynarray16 *a, unsigned n)
+static gbint16*
+dynarray16_alloc(struct dynarray16* a, unsigned n)
 {
   unsigned oldcount, need;
   const unsigned elements_per_chunk = 4096 / sizeof(a->data[0]);
@@ -117,7 +117,7 @@ dynarray16_alloc(struct dynarray16 *a, unsigned n)
     need = a->count - a->limit;
     need = (need > elements_per_chunk) ? need : elements_per_chunk;
     a->limit += need;
-    a->data = xrealloc(a->data, sizeof(a->data[0]) * a->limit);
+    a->data = (gbint16*) xrealloc(a->data, sizeof(a->data[0]) * a->limit);
   }
   return(a->data + oldcount);
 }
@@ -147,7 +147,7 @@ bintime2utc(int date, int time)
 }
 
 static void
-dg100_debug(const char *hdr, int include_nl, size_t sz, unsigned char *buf)
+dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf)
 {
   unsigned int i;
 
@@ -168,7 +168,7 @@ dg100_debug(const char *hdr, int include_nl, size_t sz, unsigned char *buf)
 }
 
 static void
-dg100_log(const char *fmt, ...)
+dg100_log(const char* fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);
@@ -210,12 +210,12 @@ bin2deg(int val)
 }
 
 static void
-process_gpsfile(gbuint8 data[], route_head *track)
+process_gpsfile(gbuint8 data[], route_head* track)
 {
   const int recordsizes[3] = {8, 20, 32};
   int i, style, recsize;
   int lat, lon, bintime, bindate;
-  waypoint *wpt;
+  waypoint* wpt;
 
   /* the first record of each file is always full-sized; its style field
    * determines the format of all subsequent records in the file */
@@ -276,7 +276,7 @@ dg100_checksum(gbuint8 buf[], int count)
 
 /* communication functions */
 static size_t
-dg100_send(gbuint8 cmd, const void *payload, size_t count)
+dg100_send(gbuint8 cmd, const void* payload, size_t count)
 {
   gbuint8 frame[FRAME_MAXLEN];
   gbuint16 checksum, payload_len;
@@ -308,7 +308,7 @@ dg100_send(gbuint8 cmd, const void *payload, size_t count)
   n = gbser_write(serial_handle, frame, framelen);
 
   if (global_opts.debug_level) {
-    struct dg100_command *cmdp = dg100_findcmd(cmd);
+    struct dg100_command* cmdp = dg100_findcmd(cmd);
 
     dg100_debug(n == 0 ? "Sent: " : "Error Sending:",
                 1, framelen, frame);
@@ -343,7 +343,7 @@ dg100_recv_byte()
  * framing around the data), so the caller must copy the data before calling
  * this function again */
 static int
-dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
+dg100_recv_frame(struct dg100_command** cmdinfo_result, gbuint8** payload)
 {
   static gbuint8 buf[FRAME_MAXLEN];
   gbuint16 frame_start_seq, payload_len_field;
@@ -351,7 +351,7 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
   gbuint16 frame_head, numheaders, sum;
   gbuint8 c, cmd;
   int i, param_len, frame_len;
-  struct dg100_command *cmdinfo;
+  struct dg100_command* cmdinfo;
 
   /* consume input until frame head sequence 0xA0A2 was received */
   frame_head = 0;
@@ -469,11 +469,11 @@ dg100_recv_frame(struct dg100_command **cmdinfo_result, gbuint8 **payload)
 
 /* return value: number of bytes copied into buf, -1 on error */
 static int
-dg100_recv(gbuint8 expected_id, void *buf, unsigned int len)
+dg100_recv(gbuint8 expected_id, void* buf, unsigned int len)
 {
   int n;
-  struct dg100_command *cmdinfo;
-  gbuint8 *data;
+  struct dg100_command* cmdinfo;
+  gbuint8* data;
   unsigned int copysize, trailing_bytes;
 
   n = dg100_recv_frame(&cmdinfo, &data);
@@ -500,11 +500,11 @@ dg100_recv(gbuint8 expected_id, void *buf, unsigned int len)
 /* the number of bytes to be sent is determined by cmd,
  * count is the size of recvbuf */
 static int
-dg100_request(gbuint8 cmd, const void *sendbuf, void *recvbuf, size_t count)
+dg100_request(gbuint8 cmd, const void* sendbuf, void* recvbuf, size_t count)
 {
-  struct dg100_command *cmdinfo;
+  struct dg100_command* cmdinfo;
   int n, i, frames, fill;
-  gbuint8 *buf;
+  gbuint8* buf;
 
   cmdinfo = dg100_findcmd(cmd);
   assert(cmdinfo != NULL);
@@ -513,7 +513,7 @@ dg100_request(gbuint8 cmd, const void *sendbuf, void *recvbuf, size_t count)
   /* the number of frames the answer will comprise */
   frames = (cmd == dg100cmd_getfile) ? 2 : 1;
   /* alias pointer for easy typecasting */
-  buf = recvbuf;
+  buf = (gbuint8*) recvbuf;
   fill = 0;
   for (i = 0; i < frames; i++) {
     n = dg100_recv(cmd, buf + fill, count - fill);
@@ -527,7 +527,7 @@ dg100_request(gbuint8 cmd, const void *sendbuf, void *recvbuf, size_t count)
 
 /* higher level communication functions */
 static void
-dg100_getfileheaders(struct dynarray16 *headers)
+dg100_getfileheaders(struct dynarray16* headers)
 {
   gbuint8 request[2];
   gbuint8 answer[FRAME_MAXLEN];
@@ -568,7 +568,7 @@ dg100_getfileheaders(struct dynarray16 *headers)
 }
 
 static void
-dg100_getfile(gbint16 num, route_head *track)
+dg100_getfile(gbint16 num, route_head* track)
 {
   gbuint8 request[2];
   gbuint8 answer[2048];
@@ -584,7 +584,7 @@ dg100_getfiles()
   unsigned int i;
   int filenum;
   struct dynarray16 headers;
-  route_head *track;
+  route_head* track;
 
   track = route_head_alloc();
   track->rte_name = xstrdup("DG-100 tracklog");
@@ -619,8 +619,8 @@ dg100_erase()
 
 /* GPSBabel integration */
 
-static char *erase;
-static char *erase_only;
+static char* erase;
+static char* erase_only;
 
 static
 arglist_t dg100_args[] = {
@@ -640,7 +640,7 @@ arglist_t dg100_args[] = {
 *******************************************************************************/
 
 static void
-dg100_rd_init(const char *fname)
+dg100_rd_init(const char* fname)
 {
   if (serial_handle = gbser_init(fname), NULL == serial_handle) {
     fatal(MYNAME ": Can't open port '%s'\n", fname);

@@ -42,27 +42,27 @@ static int broken_sportrak;
 
 #define debug_serial  (global_opts.debug_level > 1)
 
-static char *termread(char *ibuf, int size);
-static void termwrite(char *obuf, int size);
+static char* termread(char* ibuf, int size);
+static void termwrite(char* obuf, int size);
 static void mag_readmsg(gpsdata_type objective);
 static void mag_handon(void);
 static void mag_handoff(void);
 static short_handle mkshort_handle = NULL;
-static char *deficon = NULL;
-static char *bs = NULL;
-static char *cmts = NULL;
-static char *noack = NULL;
-static char *nukewpt = NULL;
+static char* deficon = NULL;
+static char* bs = NULL;
+static char* cmts = NULL;
+static char* noack = NULL;
+static char* nukewpt = NULL;
 static int route_out_count;
 static int waypoint_read_count;
 static int wpt_len = 8;
-static const char *curfname;
+static const char* curfname;
 static int extension_hint;
 // For Explorist GC/510/610/710 familes, bludgeon in GPX support.
 // (This has nothing to do with the Explorist 100...600 products.)
-static ff_vecs_t *gpx_vec;
-static mag_info *explorist_info;
-static char ** os_gpx_files(const char *dirname);
+static ff_vecs_t* gpx_vec;
+static mag_info* explorist_info;
+static char** os_gpx_files(const char* dirname);
 
 /*
  * Magellan's firmware is *horribly* slow to send the next packet after
@@ -85,8 +85,8 @@ typedef enum {
  */
 typedef struct mag_rte_elem {
   queue Q;	 		/* My link pointers */
-  char *wpt_name;
-  char *wpt_icon;
+  char* wpt_name;
+  char* wpt_icon;
 } mag_rte_elem;
 
 /*
@@ -94,26 +94,26 @@ typedef struct mag_rte_elem {
  */
 typedef struct mag_rte_head_ {
   queue Q;			/* Queue head for child rte_elems */
-  char *rte_name;
+  char* rte_name;
   int nelems;
 } mag_rte_head;
 
 static queue rte_wpt_tmp; /* temporary PGMNWPL msgs for routes */
 
-static gbfile *magfile_h;
+static gbfile* magfile_h;
 static mag_rxstate magrxstate;
 static int mag_error;
 static unsigned int last_rx_csum;
 static int found_done;
 static int got_version;
 static int is_file = 0;
-static route_head *trk_head;
+static route_head* trk_head;
 static int ignore_unable;
 
-static waypoint * mag_wptparse(char *);
-typedef char * (cleanse_fn)(char *);
-static cleanse_fn *mag_cleanse;
-static const char ** os_get_magellan_mountpoints();
+static waypoint* mag_wptparse(char*);
+typedef char* (cleanse_fn)(char*);
+static cleanse_fn* mag_cleanse;
+static const char** os_get_magellan_mountpoints();
 
 static icon_mapping_t gps315_icon_table[] = {
   { "a", "filled circle" },
@@ -215,18 +215,18 @@ pid_to_model_t pid_to_model[] = {
   { mm_unknown, 0, NULL }
 };
 
-static icon_mapping_t *icon_mapping = map330_icon_table;
+static icon_mapping_t* icon_mapping = map330_icon_table;
 
 /*
  *   For each receiver type, return a "cleansed" version of the string
  *   that's valid for a waypoint name or comment.   The string should be
  *   freed when you're done with it.
  */
-static char *
-m315_cleanse(char *istring)
+static char*
+m315_cleanse(char* istring)
 {
-  char *rstring = (char*) xmalloc(strlen(istring)+1);
-  char *i,*o;
+  char* rstring = (char*) xmalloc(strlen(istring)+1);
+  char* i,*o;
   static char m315_valid_chars[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789";
   for (o=rstring,i=istring; *i; i++) {
@@ -241,14 +241,14 @@ m315_cleanse(char *istring)
 /*
  * Do same for 330, Meridian, and SportTrak.
  */
-char *
-m330_cleanse(char *istring)
+char*
+m330_cleanse(char* istring)
 {
   static char m330_valid_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
                                    "abcdefghijklmnopqrstuvwxyz"
                                    "0123456789+-.'/!@#<%^&>()=:\\";
-  char *rstring = (char*) xmalloc(strlen(istring)+1);
-  char *o, *i;
+  char* rstring = (char*) xmalloc(strlen(istring)+1);
+  char* o, *i;
 
   for (o=rstring,i=istring; *i; i++) {
     if (strchr(m330_valid_chars, *i)) {
@@ -264,10 +264,10 @@ m330_cleanse(char *istring)
  * the Magellan protocol.
  */
 unsigned int
-mag_checksum(const char * const buf)
+mag_checksum(const char* const buf)
 {
   int csum = 0;
-  const char *p;
+  const char* p;
 
   for (p = buf; *p; p++) {
     csum  ^= *p;
@@ -276,10 +276,10 @@ mag_checksum(const char * const buf)
   return csum;
 }
 static unsigned int
-mag_pchecksum(const char * const buf, int len)
+mag_pchecksum(const char* const buf, int len)
 {
   int csum = 0;
-  const char *p = buf;
+  const char* p = buf;
   for (; len ; len--) {
     csum ^= *p++;
   }
@@ -287,7 +287,7 @@ mag_pchecksum(const char * const buf, int len)
 }
 
 static void
-mag_writemsg(const char * const buf)
+mag_writemsg(const char* const buf)
 {
   unsigned int osum = mag_checksum(buf);
   int retry_cnt = 5;
@@ -367,11 +367,11 @@ mag_handoff(void)
 }
 
 void
-mag_verparse(char *ibuf)
+mag_verparse(char* ibuf)
 {
   int prodid = mm_unknown;
   char version[1024];
-  pid_to_model_t *pp = pid_to_model;
+  pid_to_model_t* pp = pid_to_model;
 
   got_version = 1;
   sscanf(ibuf,"$PMGNVER,%d,%[^,]", &prodid, version);
@@ -416,8 +416,8 @@ mag_readmsg(gpsdata_type objective)
 				     of escaped FFFFFFFF) may need more size  */
   int isz;
   unsigned int isum;
-  char *isump;
-  char *gr;
+  char* isump;
+  char* gr;
   int retrycnt = 20;
 
 retry:
@@ -481,7 +481,7 @@ retry:
     return;
   }
   if (strncmp(ibuf, "$PMGNWPL,", 7) == 0) {
-    waypoint *wpt = mag_wptparse(ibuf);
+    waypoint* wpt = mag_wptparse(ibuf);
     waypoint_read_count++;
     if (global_opts.verbose_status) {
       waypt_status_disp(waypoint_read_count,
@@ -508,7 +508,7 @@ retry:
     }
   }
   if (strncmp(ibuf, "$PMGNTRK,", 7) == 0) {
-    waypoint *wpt = mag_trkparse(ibuf);
+    waypoint* wpt = mag_trkparse(ibuf);
     /*
      * Allow lazy allocation of track head.
      */
@@ -516,8 +516,8 @@ retry:
       /* These tracks don't have names, so derive one
        * from input filename.
        */
-      char *e;
-      const char *s = get_filename(curfname);
+      char* e;
+      const char* s = get_filename(curfname);
 
       trk_head = route_head_alloc();
 
@@ -557,10 +557,10 @@ retry:
   }
 }
 
-static void *serial_handle = NULL;
+static void* serial_handle = NULL;
 
 static int
-terminit(const char *portname, int create_ok)
+terminit(const char* portname, int create_ok)
 {
   if (gbser_is_serial(portname)) {
     if (serial_handle = gbser_init(portname), NULL != serial_handle) {
@@ -585,7 +585,7 @@ terminit(const char *portname, int create_ok)
   }
 }
 
-static char *termread(char *ibuf, int size)
+static char* termread(char* ibuf, int size)
 {
   if (is_file) {
     return gbfgets(ibuf, size, magfile_h);
@@ -611,20 +611,20 @@ static char *termread(char *ibuf, int size)
  */
 static
 void
-mag_dequote(char *ibuf)
+mag_dequote(char* ibuf)
 {
-  char *esc = NULL;
+  char* esc = NULL;
 
   while ((esc = strchr(ibuf, 0x1b))) {
     int nremains = strlen(esc);
     if (nremains >= 3) {
       static const char hex[17] = "0123456789ABCDEF";
-      char *c1 = strchr(hex, esc[1]);
-      char *c2 = strchr(hex, esc[2]);
+      char* c1 = strchr(hex, esc[1]);
+      char* c2 = strchr(hex, esc[2]);
       if (c1 && c2) {
         int escv = (c1 - hex) * 16 + (c2 - hex);
         if (escv == 255) {	/* corrupted data */
-          char *tmp = esc + 1;
+          char* tmp = esc + 1;
           while (*tmp == 'F') {
             tmp++;
           }
@@ -643,7 +643,7 @@ mag_dequote(char *ibuf)
 }
 
 static void
-termwrite(char *obuf, int size)
+termwrite(char* obuf, int size)
 {
   if (is_file) {
     size_t nw;
@@ -714,7 +714,7 @@ arglist_t mag_fargs[] = {
  * The part of the serial init that's common to read and write.
  */
 static void
-mag_serial_init_common(const char *portname)
+mag_serial_init_common(const char* portname)
 {
   time_t now, later;
 
@@ -766,18 +766,18 @@ mag_serial_init_common(const char *portname)
 
 }
 static void
-mag_rd_init_common(const char *portname)
+mag_rd_init_common(const char* portname)
 {
-  char *ext;
+  char* ext;
   waypoint_read_count = 0;
   // For Explorist GC, intercept the device access and redirect to GPX.
   // We actually do the rd_init() inside read as we may have multiple
   // files that we have to read.
   if (0 == strcmp(portname, "usb:")) {
-    const char **dlist = os_get_magellan_mountpoints();
+    const char** dlist = os_get_magellan_mountpoints();
     explorist_info = explorist_ini_get(dlist);
     if (explorist_info) {
-      char *vec_opts = NULL;
+      char* vec_opts = NULL;
       gpx_vec = find_vec("gpx", &vec_opts);
     }
     return;
@@ -824,7 +824,7 @@ mag_rd_init_common(const char *portname)
 }
 
 static void
-mag_rd_init(const char *portname)
+mag_rd_init(const char* portname)
 {
   explorist = 0;
   suppress_ack = 1;
@@ -832,14 +832,14 @@ mag_rd_init(const char *portname)
 }
 
 static void
-magX_rd_init(const char *portname)
+magX_rd_init(const char* portname)
 {
   explorist = 1;
   mag_rd_init_common(portname);
 }
 
 static void
-mag_wr_init_common(const char *portname)
+mag_wr_init_common(const char* portname)
 {
   suppress_ack = 0;
   if (bs) {
@@ -870,7 +870,7 @@ mag_wr_init_common(const char *portname)
  * Entry point for extended (explorist) points.
  */
 static void
-magX_wr_init(const char *portname)
+magX_wr_init(const char* portname)
 {
   wpt_len = 20;
   explorist = 1;
@@ -880,7 +880,7 @@ magX_wr_init(const char *portname)
 }
 
 static void
-mag_wr_init(const char *portname)
+mag_wr_init(const char* portname)
 {
   explorist = 0;
   wpt_len = 8;
@@ -922,12 +922,12 @@ mag_deinit(void)
 
 static char ifield[20][100];
 static
-void parse_istring(char *istring)
+void parse_istring(char* istring)
 {
   int f = 0;
   int n,x;
   while (istring[0]) {
-    char *fp = ifield[f];
+    char* fp = ifield[f];
     x = sscanf(istring, "%[^,]%n", fp, &n);
     f++;
     if (x) {
@@ -947,8 +947,8 @@ void parse_istring(char *istring)
  * $PMGNTRK,3605.259,N,08644.389,W,00151,M,201444.61,A,,020302*66
  * create and return a populated waypoint.
  */
-waypoint *
-mag_trkparse(char *trkmsg)
+waypoint*
+mag_trkparse(char* trkmsg)
 {
   double latdeg, lngdeg;
   int alt;
@@ -958,7 +958,7 @@ mag_trkparse(char *trkmsg)
   int hms;
   int fracsecs;
   struct tm tm;
-  waypoint *waypt;
+  waypoint* waypt;
 
   waypt  = waypt_new();
 
@@ -1017,17 +1017,17 @@ mag_trkparse(char *trkmsg)
  * generate a route.
  */
 void
-mag_rteparse(char *rtemsg)
+mag_rteparse(char* rtemsg)
 {
   char descr[100];
   int n;
   int frags,frag,rtenum;
   char xbuf[100],next_stop[100],abuf[100];
-  char *currtemsg;
-  static mag_rte_head *mag_rte_head;
-  mag_rte_elem *rte_elem;
-  char *p;
-  char *rte_name = NULL;
+  char* currtemsg;
+  static mag_rte_head* mag_rte_head;
+  mag_rte_elem* rte_elem;
+  char* p;
+  char* rte_name = NULL;
 
   descr[0] = 0;
 #if 0
@@ -1039,7 +1039,7 @@ mag_rteparse(char *rtemsg)
 
   /* Explorist has a route name here */
   if (explorist) {
-    char *ca, *ce;
+    char* ca, *ce;
 
     ca = rtemsg + n;
     is_fatal(*ca++ != ',', MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
@@ -1114,8 +1114,8 @@ mag_rteparse(char *rtemsg)
    * gpsbabel internal structs now.
    */
   if (frag == mag_rte_head->nelems) {
-    queue *elem, *tmp;
-    route_head *rte_head;
+    queue* elem, *tmp;
+    route_head* rte_head;
 
     rte_head = route_head_alloc();
     route_add_head(rte_head);
@@ -1129,17 +1129,17 @@ mag_rteparse(char *rtemsg)
      */
 
     QUEUE_FOR_EACH(&mag_rte_head->Q, elem, tmp) {
-      mag_rte_elem *re = (mag_rte_elem *) elem;
-      waypoint *waypt;
-      queue *welem, *wtmp;
+      mag_rte_elem* re = (mag_rte_elem*) elem;
+      waypoint* waypt;
+      queue* welem, *wtmp;
 
       /*
        * Copy route points from temp wpt queue.
        */
       QUEUE_FOR_EACH(&rte_wpt_tmp, welem, wtmp) {
-        waypt = (waypoint *)welem;
+        waypt = (waypoint*)welem;
         if (strcmp(waypt->shortname, re->wpt_name) == 0) {
-          waypoint * wpt = waypt_dupe(waypt);
+          waypoint* wpt = waypt_dupe(waypt);
           route_add_wpt(rte_head, wpt);
           break;
         }
@@ -1157,10 +1157,10 @@ mag_rteparse(char *rtemsg)
   }
 }
 
-const char *
-mag_find_descr_from_token(const char *token)
+const char*
+mag_find_descr_from_token(const char* token)
 {
-  icon_mapping_t *i = icon_mapping;
+  icon_mapping_t* i = icon_mapping;
 
   if (icon_mapping == NULL) {
     return "unknown";
@@ -1177,10 +1177,10 @@ mag_find_descr_from_token(const char *token)
   return icon_mapping[0].icon;
 }
 
-const char *
-mag_find_token_from_descr(const char *icon)
+const char*
+mag_find_token_from_descr(const char* icon)
 {
-  icon_mapping_t *i = icon_mapping;
+  icon_mapping_t* i = icon_mapping;
 
   if (i == NULL || icon == NULL) {
     return "a";
@@ -1199,8 +1199,8 @@ mag_find_token_from_descr(const char *icon)
  * $PMGNWPL,3549.499,N,08650.827,W,0000257,M,HOME,HOME,c*4D
  * create and return a populated waypoint.
  */
-static waypoint *
-mag_wptparse(char *trkmsg)
+static waypoint*
+mag_wptparse(char* trkmsg)
 {
   double latdeg, lngdeg;
   char latdir;
@@ -1210,10 +1210,10 @@ mag_wptparse(char *trkmsg)
   char shortname[100];
   char descr[256];
   char icon_token[100];
-  waypoint *waypt;
-  char *icons;
-  char *icone;
-  char *blah;
+  waypoint* waypt;
+  char* icons;
+  char* icone;
+  char* blah;
   int i = 0;
 
   descr[0] = 0;
@@ -1257,7 +1257,7 @@ static void
 mag_read(void)
 {
   if (gpx_vec) {
-    char **f = os_gpx_files(explorist_info->track_path);
+    char** f = os_gpx_files(explorist_info->track_path);
     while (f && *f) {
       gpx_vec->rd_init(*f);
       gpx_vec->read();
@@ -1339,17 +1339,17 @@ mag_read(void)
 
 static
 void
-mag_waypt_pr(const waypoint *waypointp)
+mag_waypt_pr(const waypoint* waypointp)
 {
   double lon, lat;
   double ilon, ilat;
   int lon_deg, lat_deg;
   char obuf[200];
   char ofmtdesc[200];
-  const char *icon_token=NULL;
-  char *owpt;
-  char *odesc;
-  char *isrc = NULL;
+  const char* icon_token=NULL;
+  char* owpt;
+  char* odesc;
+  char* isrc = NULL;
 
   ilat = waypointp->latitude;
   ilon = waypointp->longitude;
@@ -1379,7 +1379,7 @@ mag_waypt_pr(const waypoint *waypointp)
   isrc = waypointp->notes ? waypointp->notes : waypointp->description;
   owpt = global_opts.synthesize_shortnames ?
          mkshort_from_wpt(mkshort_handle, waypointp) : waypointp->shortname;
-  odesc = isrc ? isrc : (char *)"";
+  odesc = isrc ? isrc : (char*)"";
   owpt = mag_cleanse(owpt);
 
   if (global_opts.smart_icons &&
@@ -1421,13 +1421,13 @@ mag_waypt_pr(const waypoint *waypointp)
 }
 
 static
-void mag_track_nop(const route_head *rte)
+void mag_track_nop(const route_head* rte)
 {
   return;
 }
 
 static
-void mag_track_disp(const waypoint *waypointp)
+void mag_track_disp(const waypoint* waypointp)
 {
   double ilon, ilat;
   double lon, lat;
@@ -1436,7 +1436,7 @@ void mag_track_disp(const waypoint *waypointp)
   int hms=0;
   int fracsec=0;
   int date=0;
-  struct tm *tm = NULL;
+  struct tm* tm = NULL;
 
   ilat = waypointp->latitude;
   ilon = waypointp->longitude;
@@ -1497,14 +1497,14 @@ and to replace the 2nd name with "<<>>", but I haven't seen one of those.
 */
 
 static void
-mag_route_trl(const route_head * rte)
+mag_route_trl(const route_head* rte)
 {
-  queue *elem, *tmp;
-  waypoint *waypointp;
+  queue* elem, *tmp;
+  waypoint* waypointp;
   char obuff[256];
   char buff1[64], buff2[64];
-  char *pbuff, *owpt;
-  const char * icon_token;
+  char* pbuff, *owpt;
+  const char* icon_token;
   int i, numlines, thisline;
 
   /* count waypoints for this route */
@@ -1518,7 +1518,7 @@ mag_route_trl(const route_head * rte)
 
   thisline = i = 0;
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    waypointp = (waypoint *) elem;
+    waypointp = (waypoint*) elem;
     i++;
 
     if (deficon) {
@@ -1566,7 +1566,7 @@ mag_route_trl(const route_head * rte)
 }
 
 static void
-mag_route_hdr(const route_head *rh)
+mag_route_hdr(const route_head* rh)
 {
 }
 
@@ -1599,10 +1599,10 @@ mag_write(void)
   }
 }
 
-const char ** os_get_magellan_mountpoints()
+const char** os_get_magellan_mountpoints()
 {
 #if __APPLE__
-  const char **dlist = (const char**) xcalloc(2, sizeof *dlist);
+  const char** dlist = (const char**) xcalloc(2, sizeof *dlist);
   dlist[0] = xstrdup("/Volumes/Magellan");
   dlist[1] = NULL;
   return dlist;
@@ -1613,12 +1613,12 @@ const char ** os_get_magellan_mountpoints()
 
 // My kingdom for container classes and portable tree-walking...
 // Returns a pointer to a static vector that's valid until the next call.
-static char **
-os_gpx_files(const char *dirname)
+static char**
+os_gpx_files(const char* dirname)
 {
 #if HAVE_GLOB
   static glob_t g;
-  char *path;
+  char* path;
   xasprintf(&path, "%s/*.gpx", dirname);
   glob(path, 0, NULL, &g);
   xfree(path);

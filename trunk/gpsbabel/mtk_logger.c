@@ -105,7 +105,7 @@ static const unsigned char LOG_RST[16] = {
   0xbb, 0xbb, 0xbb, 0xbb
 };          /* end marker */
 
-static const char *MTK_ACK[] = { /* Flags returned from PMTK001 ack packet */
+static const char* MTK_ACK[] = { /* Flags returned from PMTK001 ack packet */
   "Invalid packet", "Unsupported packet type",
   "Valid packet but action failed", "Valid packet, action success"
 };
@@ -146,7 +146,7 @@ enum {
 struct log_type {
   int id;
   int size;
-  const char *name;
+  const char* name;
 } log_type[32] =  {
   { 0, 4, "UTC" },
   { 1, 2, "VALID" },
@@ -216,13 +216,13 @@ enum MTK_DEVICE_TYPE {
 
 #define HOLUX245_MASK (1 << 27)
 
-static void *fd;  /* serial fd */
-static FILE *fl;  /* bin.file fd */
-static char *port; /* serial port name */
-static char *OPT_erase;  /* erase ? command option */
-static char *OPT_erase_only;  /* erase_only ? command option */
-static char *OPT_log_enable;  /* enable ? command option */
-static char *csv_file; /* csv ? command option */
+static void* fd;  /* serial fd */
+static FILE* fl;  /* bin.file fd */
+static char* port; /* serial port name */
+static char* OPT_erase;  /* erase ? command option */
+static char* OPT_erase_only;  /* erase_only ? command option */
+static char* OPT_log_enable;  /* enable ? command option */
+static char* csv_file; /* csv ? command option */
 static enum MTK_DEVICE_TYPE mtk_device = MTK_LOGGER;
 
 struct mtk_loginfo mtk_info;
@@ -239,12 +239,12 @@ const char CMD_LOG_ERASE[]  = "$PMTK182,6,1*3E\r\n";
 const char CMD_LOG_STATUS[] = "$PMTK182,2,7*3C\r\n";
 
 static int  mtk_log_len(unsigned int bitmask);
-static void mtk_rd_init(const char *fname);
-static void file_init(const char *fname);
+static void mtk_rd_init(const char* fname);
+static void file_init(const char* fname);
 static void file_deinit(void) ;
 static void holux245_init(void);
 static void file_read(void);
-static int mtk_parse_info(const unsigned char *data, int dataLen);
+static int mtk_parse_info(const unsigned char* data, int dataLen);
 
 
 // Arguments for log fetch 'mtk' command..
@@ -269,7 +269,7 @@ static arglist_t mtk_sargs[] = {
   ARG_TERMINATOR
 };
 
-static void dbg(int l, const char *msg, ...)
+static void dbg(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);
@@ -279,7 +279,7 @@ static void dbg(int l, const char *msg, ...)
   }
   va_end(ap);
 }
-static int do_send_cmd(const char *cmd, int cmdLen)
+static int do_send_cmd(const char* cmd, int cmdLen)
 {
   int rc;
 
@@ -293,7 +293,7 @@ static int do_send_cmd(const char *cmd, int cmdLen)
 }
 
 
-static int do_cmd(const char *cmd, const char *expect, char **rslt, time_t timeout_sec)
+static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeout_sec)
 {
   char line[256];
   int len, done, loops, cmd_erase;
@@ -359,7 +359,7 @@ static int do_cmd(const char *cmd, const char *expect, char **rslt, time_t timeo
           }
           // printf("Data segment: #%s#\n", &line[expect_len+1]);
           if (rslt) {
-            *rslt = xmalloc(len-3-expect_len+1);
+            *rslt = (char*) xmalloc(len-3-expect_len+1);
             strcpy(*rslt, &line[expect_len+1]);
           }
         }
@@ -367,7 +367,7 @@ static int do_cmd(const char *cmd, const char *expect, char **rslt, time_t timeo
       } else if (strncmp(line, "$PMTK", 5) == 0) {
         /* A quick parser for ACK packets */
         if (!cmd_erase && strncmp(line, "$PMTK001,", 9) == 0 && line[9] != '\0') {
-          char *pType, *pRslt;
+          char* pType, *pRslt;
           int pAck;
           pType = &line[9];
           pRslt = strchr(&line[9], ',') + 1;
@@ -395,16 +395,16 @@ static int do_cmd(const char *cmd, const char *expect, char **rslt, time_t timeo
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
-static void mtk_rd_init_m241(const char *fname)
+static void mtk_rd_init_m241(const char* fname)
 {
   mtk_device = HOLUX_M241;
   mtk_rd_init(fname);
 }
 
-static void mtk_rd_init(const char *fname)
+static void mtk_rd_init(const char* fname)
 {
   int rc;
-  char *model;
+  char* model;
 
   port = xstrdup(fname);
 
@@ -469,7 +469,7 @@ static void mtk_rd_deinit(void)
 static int mtk_erase(void)
 {
   int log_status, log_mask, err;
-  char *lstatus = NULL;
+  char* lstatus = NULL;
 
   log_status = 0;
   // check log status - is logging disabled ?
@@ -507,13 +507,13 @@ static int mtk_erase(void)
 static void mtk_read(void)
 {
   char cmd[256];
-  char *line = NULL;
+  char* line = NULL;
   unsigned char crc, *data = NULL;
   int cmdLen, j, bsize, i, len, ff_len, null_len, rc, init_scan, retry_cnt, log_enabled;
   unsigned int line_size, data_size, data_addr, addr, addr_max;
   unsigned long dsize, dpos = 0;
-  FILE *dout;
-  char *fusage = NULL;
+  FILE* dout;
+  char* fusage = NULL;
 
 
   if (*OPT_erase_only != '0') {
@@ -591,10 +591,10 @@ static void mtk_read(void)
 
   line_size = 2*bsize + 32; // logdata as nmea/hex.
   data_size = bsize + 32;
-  if ((line = xmalloc(line_size)) == NULL) {
+  if ((line = (char*) xmalloc(line_size)) == NULL) {
     fatal(MYNAME ": Can't allocate %u bytes for NMEA buffer\n",  line_size);
   }
-  if ((data = xmalloc(data_size)) ==  NULL) {
+  if ((data = (unsigned char*) xmalloc(data_size)) ==  NULL) {
     fatal(MYNAME ": Can't allocate %u bytes for data buffer\n",  data_size);
   }
   memset(line, '\0', line_size);
@@ -742,13 +742,13 @@ mtk_retry:
 }
 
 
-static route_head  *trk_head = NULL;
-static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm)
+static route_head*  trk_head = NULL;
+static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
 {
   char     wp_name[20];
-  waypoint *trk = waypt_new();
+  waypoint* trk = waypt_new();
 
-  if (global_opts.masked_objective & TRKDATAMASK && (trk_head == NULL || (mtk_info.track_event & MTK_EVT_START))) {
+  if (global_opts.masked_objective& TRKDATAMASK && (trk_head == NULL || (mtk_info.track_event & MTK_EVT_START))) {
     char spds[50];
     trk_head = route_head_alloc();
     xasprintf(&trk_head->rte_name, "track-%d", 1+track_count());
@@ -841,7 +841,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm)
          )
      ) {
     /* Button press -- create waypoint, start count at 1 */
-    waypoint *w = waypt_dupe(trk);
+    waypoint* w = waypt_dupe(trk);
 
     sprintf(wp_name, "WP%06d", waypt_count()+1);
     w->shortname      = xstrdup(wp_name);
@@ -863,11 +863,11 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item *itm)
 
 
 /********************** MTK Logger -- CSV output *************************/
-static gbfile *cd;
-static void mtk_csv_init(char *csv_fname, unsigned long bitmask)
+static gbfile* cd;
+static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
 {
   int i;
-  FILE *cf;
+  FILE* cf;
 
   dbg(1, "Opening csv output file %s...\n", csv_fname);
 
@@ -925,11 +925,11 @@ static void mtk_csv_deinit(void)
 }
 
 /* Output a single data line in MTK application compatible format - i.e ignore any locale settings... */
-static int csv_line(gbfile *csvFile, int idx, unsigned long bmask, struct data_item *itm)
+static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_item* itm)
 {
-  struct tm *ts_tm;
+  struct tm* ts_tm;
   char ts_str[30];
-  const char *fix_str = "";
+  const char* fix_str = "";
 
   ts_tm = gmtime(&(itm->timestamp));
   strftime(ts_str, sizeof(ts_str)-1, "%Y/%m/%d,%H:%M:%S", ts_tm);
@@ -1054,7 +1054,7 @@ static int csv_line(gbfile *csvFile, int idx, unsigned long bmask, struct data_i
 
 
 /********************* MTK Logger -- Parse functions *********************/
-int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask)
+int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
 {
   static int count = 0;
   int i, k, sat_id, hspd;
@@ -1269,7 +1269,7 @@ int mtk_parse(unsigned char *data, int dataLen, unsigned int bmask)
   Description: Parse an info block
   Globals: mtk_info - bitmask/period/speed/... may be affected if updated.
  */
-static int mtk_parse_info(const unsigned char *data, int dataLen)
+static int mtk_parse_info(const unsigned char* data, int dataLen)
 {
   unsigned short cmd;
   unsigned int bm;
@@ -1379,13 +1379,13 @@ static int mtk_log_len(unsigned int bitmask)
 
 /********************** File-in interface ********************************/
 
-static void file_init_m241(const char *fname)
+static void file_init_m241(const char* fname)
 {
   mtk_device = HOLUX_M241;
   file_init(fname);
 }
 
-static void file_init(const char *fname)
+static void file_init(const char* fname)
 {
   dbg(4, "Opening file %s...\n", fname);
   if (fl = fopen(fname, "rb"), NULL == fl) {
@@ -1420,7 +1420,7 @@ static void holux245_init(void)
   log_type[SPEED].size  = 3; // height size..
 }
 
-static int is_holux_string(const unsigned char *data, int dataLen)
+static int is_holux_string(const unsigned char* data, int dataLen)
 {
   if (mtk_device != MTK_LOGGER &&
       dataLen >= 5 &&

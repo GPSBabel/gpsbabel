@@ -11,12 +11,12 @@
 tbl_ent(int n, ...)
 {
   int i;
-  char *t;
+  char* t;
   va_list args;
   va_start(args, n);
 #if 0
   for (i = 0; i < n; i++) {
-    t = va_arg(args, char *);
+    t = va_arg(args, char*);
     printf("%s%s", i > 0 ? "," : "", t);
 
   }
@@ -31,16 +31,16 @@ tbl_ent(int n, ...)
 }
 
 #include "garmin_tables.c"
-sort_garmin(const void *a, const void *b)
+sort_garmin(const void* a, const void* b)
 {
-  const icon_mapping_t *ap = a;
-  const icon_mapping_t *bp = b;
+  const icon_mapping_t* ap = a;
+  const icon_mapping_t* bp = b;
   return (case_ignore_strcmp((ap)->icon, (bp)->icon));
 }
 
 garmin()
 {
-  icon_mapping_t *i;
+  icon_mapping_t* i;
   int n = 0;
   char pbuf[100];
   char mbuf[100];

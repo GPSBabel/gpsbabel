@@ -35,28 +35,28 @@ void signal_handler(int sig);
 typedef struct arg_stack_s {
   int argn;
   int argc;
-  char **argv;
-  struct arg_stack_s *prev;
+  char** argv;
+  struct arg_stack_s* prev;
 } arg_stack_t;
 
 static arg_stack_t
-*push_args(arg_stack_t *stack, const int argn, const int argc, char *argv[])
+*push_args(arg_stack_t* stack, const int argn, const int argc, char* argv[])
 {
-  arg_stack_t *res = (arg_stack_t *) xmalloc(sizeof(*res));
+  arg_stack_t* res = (arg_stack_t*) xmalloc(sizeof(*res));
 
   res->prev = stack;
   res->argn = argn;
   res->argc = argc;
-  res->argv = (char **)argv;
+  res->argv = (char**)argv;
 
   return res;
 }
 
 static arg_stack_t
-*pop_args(arg_stack_t *stack, int *argn, int *argc, char **argv[])
+*pop_args(arg_stack_t* stack, int* argn, int* argc, char** argv[])
 {
-  arg_stack_t *res;
-  char **argv2 = *argv;
+  arg_stack_t* res;
+  char** argv2 = *argv;
   int i;
 
   if (stack == NULL) {
@@ -79,12 +79,12 @@ static arg_stack_t
 }
 
 static void
-load_args(const char *filename, int *argc, char **argv[])
+load_args(const char* filename, int* argc, char** argv[])
 {
-  gbfile *fin;
-  char *str, *line = NULL;
+  gbfile* fin;
+  char* str, *line = NULL;
   int argc2;
-  char **argv2;
+  char** argv2;
 
   fin = gbfopen(filename, "r", "main");
   while ((str = gbfgetstr(fin))) {
@@ -96,7 +96,7 @@ load_args(const char *filename, int *argc, char **argv[])
     if (line == NULL) {
       line = xstrdup(str);
     } else {
-      char *tmp;
+      char* tmp;
       xasprintf(&tmp, "%s %s", line, str);
       xfree(line);
       line = tmp;
@@ -104,13 +104,13 @@ load_args(const char *filename, int *argc, char **argv[])
   }
   gbfclose(fin);
 
-  argv2 = (char **) xmalloc(2 * sizeof(*argv2));
+  argv2 = (char**) xmalloc(2 * sizeof(*argv2));
   argv2[0] = xstrdup(*argv[0]);
   argc2 = 1;
 
   str = csv_lineparse(line, " ", "\"", 0);
   while (str != NULL) {
-    argv2 = (char **) xrealloc(argv2, (argc2 + 2) * sizeof(*argv2));
+    argv2 = (char**) xrealloc(argv2, (argc2 + 2) * sizeof(*argv2));
     argv2[argc2] = xstrdup(str);
     argc2++;
     str = csv_lineparse(NULL, " ", "\"", 0);
@@ -124,7 +124,7 @@ load_args(const char *filename, int *argc, char **argv[])
 }
 
 static void
-usage(const char *pname, int shorter)
+usage(const char* pname, int shorter)
 {
   printf("GPSBabel Version %s.  http://www.gpsbabel.org\n\n",
          gpsbabel_version);
@@ -179,7 +179,7 @@ usage(const char *pname, int shorter)
 }
 
 static void
-spec_usage(const char *vec)
+spec_usage(const char* vec)
 {
   printf("\n");
   disp_vec(vec);
@@ -225,24 +225,24 @@ print_extended_info(void)
 }
 
 int
-main(int argc, char *argv[])
+main(int argc, char* argv[])
 {
   int c;
   int argn;
-  ff_vecs_t *ivecs = NULL;
-  ff_vecs_t *ovecs = NULL;
-  filter_vecs_t *fvecs = NULL;
-  char *fname = NULL;
-  char *ofname = NULL;
-  char *ivec_opts = NULL;
-  char *ovec_opts = NULL;
-  char *fvec_opts = NULL;
+  ff_vecs_t* ivecs = NULL;
+  ff_vecs_t* ovecs = NULL;
+  filter_vecs_t* fvecs = NULL;
+  char* fname = NULL;
+  char* ofname = NULL;
+  char* ivec_opts = NULL;
+  char* ovec_opts = NULL;
+  char* fvec_opts = NULL;
   int opt_version = 0;
   int did_something = 0;
-  const char *prog_name = argv[0]; /* argv is modified during processing */
-  queue *wpt_head_bak, *rte_head_bak, *trk_head_bak;	/* #ifdef UTF8_SUPPORT */
+  const char* prog_name = argv[0]; /* argv is modified during processing */
+  queue* wpt_head_bak, *rte_head_bak, *trk_head_bak;	/* #ifdef UTF8_SUPPORT */
   signed int wpt_ct_bak, rte_ct_bak, trk_ct_bak;	/* #ifdef UTF8_SUPPORT */
-  arg_stack_t *arg_stack = NULL;
+  arg_stack_t* arg_stack = NULL;
 
   global_opts.objective = wptdata;
   global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
@@ -283,7 +283,7 @@ main(int argc, char *argv[])
    */
   argn = 1;
   while (argn < argc) {
-    char *optarg;
+    char* optarg;
 
     if (argv[argn][0] != '-') {
       break;
@@ -685,7 +685,7 @@ main(int argc, char *argv[])
 
     tracking_status.request_terminate = 0;
     while (!tracking_status.request_terminate) {
-      waypoint *wpt;
+      waypoint* wpt;
 
       wpt = ivecs->position_ops.rd_position(&tracking_status);
 

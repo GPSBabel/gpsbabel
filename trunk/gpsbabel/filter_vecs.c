@@ -25,9 +25,9 @@
 #include "gbversion.h"
 
 typedef struct {
-  filter_vecs_t *vec;
-  const char *name;
-  const char *desc;
+  filter_vecs_t* vec;
+  const char* name;
+  const char* desc;
 } fl_vecs_t;
 
 extern filter_vecs_t position_vecs;
@@ -145,17 +145,17 @@ fl_vecs_t filter_vec_list[] = {
   }
 };
 
-filter_vecs_t *
-find_filter_vec(char *const vecname, char **opts)
+filter_vecs_t*
+find_filter_vec(char* const vecname, char** opts)
 {
-  fl_vecs_t *vec = filter_vec_list;
-  char *v = xstrdup(vecname);
-  char *svecname = strtok(v, ",");
+  fl_vecs_t* vec = filter_vec_list;
+  char* v = xstrdup(vecname);
+  char* svecname = strtok(v, ",");
   int found = 0;
 
   while (vec->vec) {
-    arglist_t *ap;
-    char *res;
+    arglist_t* ap;
+    char* res;
 
     if (case_ignore_strcmp(svecname, vec->name)) {
       vec++;
@@ -165,7 +165,7 @@ find_filter_vec(char *const vecname, char **opts)
     /* step 1: initialize by inifile or default values */
     if (vec->vec->args) {
       for (ap = vec->vec->args; ap->argstring; ap++) {
-        const char *temp;
+        const char* temp;
 
         temp = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
         if (temp == NULL) {
@@ -185,7 +185,7 @@ find_filter_vec(char *const vecname, char **opts)
 
       if (vec->vec->args) {
         for (ap = vec->vec->args; ap->argstring; ap++) {
-          char *opt;
+          char* opt;
 
           opt = get_option(*opts, ap->argstring);
           if (opt) {
@@ -213,9 +213,9 @@ find_filter_vec(char *const vecname, char **opts)
 }
 
 void
-free_filter_vec(filter_vecs_t *fvec)
+free_filter_vec(filter_vecs_t* fvec)
 {
-  arglist_t *ap;
+  arglist_t* ap;
 
   if (fvec->args) {
     for (ap = fvec->args; ap->argstring; ap++) {
@@ -230,9 +230,9 @@ free_filter_vec(filter_vecs_t *fvec)
 void
 init_filter_vecs(void)
 {
-  fl_vecs_t *vec = filter_vec_list;
+  fl_vecs_t* vec = filter_vec_list;
   while (vec->vec) {
-    arglist_t *ap;
+    arglist_t* ap;
     if (vec->vec->args) {
       for (ap = vec->vec->args; ap->argstring; ap++) {
         ap->argvalptr = NULL;
@@ -245,7 +245,7 @@ init_filter_vecs(void)
 void
 exit_filter_vecs(void)
 {
-  fl_vecs_t *vec = filter_vec_list;
+  fl_vecs_t* vec = filter_vec_list;
   while (vec->vec) {
     if (vec->vec->f_exit) {
       (vec->vec->f_exit)();
@@ -261,8 +261,8 @@ exit_filter_vecs(void)
 void
 disp_filter_vecs(void)
 {
-  fl_vecs_t *vec;
-  arglist_t *ap;
+  fl_vecs_t* vec;
+  arglist_t* ap;
 
   for (vec = filter_vec_list; vec->vec; vec++) {
     printf("	%-20.20s  %-50.50s\n",
@@ -277,10 +277,10 @@ disp_filter_vecs(void)
 }
 
 void
-disp_filter_vec(const char *vecname)
+disp_filter_vec(const char* vecname)
 {
-  fl_vecs_t *vec;
-  arglist_t *ap;
+  fl_vecs_t* vec;
+  arglist_t* ap;
 
   for (vec = filter_vec_list; vec->vec; vec++) {
     if (case_ignore_strcmp(vec->name, vecname)) {
@@ -298,16 +298,16 @@ disp_filter_vec(const char *vecname)
 }
 
 static signed int
-alpha(const void *a, const void *b)
+alpha(const void* a, const void* b)
 {
-  const fl_vecs_t *const ap = (const fl_vecs_t*) a;
-  const fl_vecs_t *const bp = (const fl_vecs_t*) b;
+  const fl_vecs_t* const ap = (const fl_vecs_t*) a;
+  const fl_vecs_t* const bp = (const fl_vecs_t*) b;
 
   return case_ignore_strcmp(ap->desc , bp->desc);
 }
 
 static
-void disp_help_url(const fl_vecs_t *vec, arglist_t *arg)
+void disp_help_url(const fl_vecs_t* vec, arglist_t* arg)
 {
   printf("\t" WEB_DOC_DIR "/fmt_%s.html", vec->name);
   if (arg) {
@@ -316,9 +316,9 @@ void disp_help_url(const fl_vecs_t *vec, arglist_t *arg)
 }
 
 static void
-disp_v1(const fl_vecs_t *vec)
+disp_v1(const fl_vecs_t* vec)
 {
-  arglist_t *ap;
+  arglist_t* ap;
 
   disp_help_url(vec, NULL);
   printf("\n");
@@ -346,7 +346,7 @@ disp_v1(const fl_vecs_t *vec)
 void
 disp_filters(int version)
 {
-  fl_vecs_t *vec;
+  fl_vecs_t* vec;
 
   qsort(filter_vec_list,
         sizeof(filter_vec_list) / sizeof(filter_vec_list[0]) - 1,

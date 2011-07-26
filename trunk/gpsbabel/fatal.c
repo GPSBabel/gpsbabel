@@ -21,7 +21,7 @@
 
 #include "defs.h"
 void
-fatal(const char *fmt, ...)
+fatal(const char* fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);
@@ -31,7 +31,7 @@ fatal(const char *fmt, ...)
 }
 
 void
-warning(const char *fmt, ...)
+warning(const char* fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);

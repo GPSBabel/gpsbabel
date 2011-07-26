@@ -26,30 +26,30 @@
 #include <time.h>
 
 
-static void GPS_Fmt_Print_Way100(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way101(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way102(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way103(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way104(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way105(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way106(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way107(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way108(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way109(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way150(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way151(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way152(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way154(GPS_PWay way, FILE *outf);
-static void GPS_Fmt_Print_Way155(GPS_PWay way, FILE *outf);
+static void GPS_Fmt_Print_Way100(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way101(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way102(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way103(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way104(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way105(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way106(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way107(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way108(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way109(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way150(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way151(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way152(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way154(GPS_PWay way, FILE* outf);
+static void GPS_Fmt_Print_Way155(GPS_PWay way, FILE* outf);
 
-static void GPS_Fmt_Print_Track301(GPS_PTrack *trk, int32 n, FILE *outf);
-static void GPS_Fmt_Print_D300(GPS_PTrack trk, FILE *outf);
-static void GPS_Fmt_Print_D301(GPS_PTrack trk, FILE *outf);
+static void GPS_Fmt_Print_Track301(GPS_PTrack* trk, int32 n, FILE* outf);
+static void GPS_Fmt_Print_D300(GPS_PTrack trk, FILE* outf);
+static void GPS_Fmt_Print_D301(GPS_PTrack trk, FILE* outf);
 
-static int32 GPS_Fmt_Print_Route201(GPS_PWay *way, int32 n, FILE *outf);
+static int32 GPS_Fmt_Print_Route201(GPS_PWay* way, int32 n, FILE* outf);
 
 
-char *gps_marine_sym[]= {
+char* gps_marine_sym[]= {
   "Anchor","Bell","Diamond-grn","Diamond_red","Dive1","Dive2","Dollar",
   "Fish","Fuel","Horn","House","Knife","Light","Mug","Skull",
   "Square_grn","Square_red","Wbuoy","Wpt_dot","Wreck","Null","Mob",
@@ -80,7 +80,7 @@ char *gps_marine_sym[]= {
 
 
 
-char *gps_land_sym[]= {
+char* gps_land_sym[]= {
   "Is_hwy","Us_hwy","St_hwy","Mi_mrkr","Trcbck","Golf","Sml_cty",
   "Med_cty","Lrg_cty","Freeway","Ntl_hwy","Cap_cty","Amuse_pk",
   "Bowling","Car_rental","Car_repair","Fastfood","Fitness","Film",
@@ -95,14 +95,14 @@ char *gps_land_sym[]= {
 };
 
 
-char *gps_aviation_sym[]= {
+char* gps_aviation_sym[]= {
   "Airport","Int","Ndb","Vor","Heliport","Private","Soft_fld",
   "Tall_tower","Short_tower","Glider","Ultralight","Parachute",
   "Vortac","Vordme","Faf","Lom","Map","Tacan","Seaplane"
 };
 
 
-char *gps_16_sym[]= {
+char* gps_16_sym[]= {
   "Dot","House","Fuel","Car","Fish","Boat","Anchor","Wreck",
   "Exit","Skull","Flag","Camp","Circle-x","Deer","1st_aid","Back_track"
 };
@@ -121,7 +121,7 @@ char *gps_16_sym[]= {
 ** @return [void]
 ************************************************************************/
 
-void GPS_Fmt_Print_Time(time_t Time, FILE *outf)
+void GPS_Fmt_Print_Time(time_t Time, FILE* outf)
 {
   (void) fprintf(outf,"%s",ctime(&Time));
   fflush(outf);
@@ -142,7 +142,7 @@ void GPS_Fmt_Print_Time(time_t Time, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Fmt_Print_Position(double lat, double lon, FILE *outf)
+void GPS_Fmt_Print_Position(double lat, double lon, FILE* outf)
 {
   (void) fprintf(outf,"Latitude: %f   Longitude %f\n",lat,lon);
   fflush(outf);
@@ -162,7 +162,7 @@ void GPS_Fmt_Print_Position(double lat, double lon, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Fmt_Print_Pvt(GPS_PPvt_Data pvt, FILE *outf)
+void GPS_Fmt_Print_Pvt(GPS_PPvt_Data pvt, FILE* outf)
 {
 
   (void) fprintf(outf,"Fix: ");
@@ -222,7 +222,7 @@ void GPS_Fmt_Print_Pvt(GPS_PPvt_Data pvt, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Fmt_Print_Almanac(GPS_PAlmanac *alm, int32 n, FILE *outf)
+void GPS_Fmt_Print_Almanac(GPS_PAlmanac* alm, int32 n, FILE* outf)
 {
   int32 i;
   int32 t;
@@ -294,7 +294,7 @@ void GPS_Fmt_Print_Almanac(GPS_PAlmanac *alm, int32 n, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Fmt_Print_Track(GPS_PTrack *trk, int32 n, FILE *outf)
+void GPS_Fmt_Print_Track(GPS_PTrack* trk, int32 n, FILE* outf)
 {
   int32 i;
 
@@ -350,7 +350,7 @@ void GPS_Fmt_Print_Track(GPS_PTrack *trk, int32 n, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Track301(GPS_PTrack *trk, int32 n, FILE *outf)
+static void GPS_Fmt_Print_Track301(GPS_PTrack* trk, int32 n, FILE* outf)
 {
   int32 i;
 
@@ -404,7 +404,7 @@ static void GPS_Fmt_Print_Track301(GPS_PTrack *trk, int32 n, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_D300(GPS_PTrack trk, FILE *outf)
+static void GPS_Fmt_Print_D300(GPS_PTrack trk, FILE* outf)
 {
   (void) fprintf(outf,"\tLatitude:    %f\n",trk->lat);
   (void) fprintf(outf,"\tLongitude:   %f\n",trk->lon);
@@ -429,7 +429,7 @@ static void GPS_Fmt_Print_D300(GPS_PTrack trk, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_D301(GPS_PTrack trk, FILE *outf)
+static void GPS_Fmt_Print_D301(GPS_PTrack trk, FILE* outf)
 {
   (void) fprintf(outf,"\tLatitude:    %f\n",trk->lat);
   (void) fprintf(outf,"\tLongitude:   %f\n",trk->lon);
@@ -458,7 +458,7 @@ static void GPS_Fmt_Print_D301(GPS_PTrack trk, FILE *outf)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Fmt_Print_Waypoint(GPS_PWay *way, int32 n, FILE *outf)
+int32 GPS_Fmt_Print_Waypoint(GPS_PWay* way, int32 n, FILE* outf)
 {
   int32 i;
 
@@ -542,7 +542,7 @@ int32 GPS_Fmt_Print_Waypoint(GPS_PWay *way, int32 n, FILE *outf)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Fmt_Print_Proximity(GPS_PWay *way, int32 n, FILE *outf)
+int32 GPS_Fmt_Print_Proximity(GPS_PWay* way, int32 n, FILE* outf)
 {
   int32 i;
 
@@ -628,7 +628,7 @@ int32 GPS_Fmt_Print_Proximity(GPS_PWay *way, int32 n, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way100(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way100(GPS_PWay way, FILE* outf)
 {
 
   (void) fprintf(outf,"\tIdent:            %-6.6s\n",way->ident);
@@ -650,7 +650,7 @@ static void GPS_Fmt_Print_Way100(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way101(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way101(GPS_PWay way, FILE* outf)
 {
 
   if (way->smbl > 176) {
@@ -678,9 +678,9 @@ static void GPS_Fmt_Print_Way101(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way102(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way102(GPS_PWay way, FILE* outf)
 {
-  char **p;
+  char** p;
   int32  x;
 
   if (way->smbl < 8192) {
@@ -716,9 +716,9 @@ static void GPS_Fmt_Print_Way102(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way103(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way103(GPS_PWay way, FILE* outf)
 {
-  static char *dspl[]= {
+  static char* dspl[]= {
     "SW","S","SC"
   };
 
@@ -745,12 +745,12 @@ static void GPS_Fmt_Print_Way103(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way104(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way104(GPS_PWay way, FILE* outf)
 {
-  static char *dspl[]= {
+  static char* dspl[]= {
     "S","S","","SW","","SC"
   };
-  char **p;
+  char** p;
   int32  x;
 
   if (way->smbl < 8192) {
@@ -787,9 +787,9 @@ static void GPS_Fmt_Print_Way104(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way105(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way105(GPS_PWay way, FILE* outf)
 {
-  char **p;
+  char** p;
   int32  x;
 
   if (way->smbl < 8192) {
@@ -823,9 +823,9 @@ static void GPS_Fmt_Print_Way105(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way106(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way106(GPS_PWay way, FILE* outf)
 {
-  char **p;
+  char** p;
   int32  x;
 
   if (way->smbl < 8192) {
@@ -872,12 +872,12 @@ static void GPS_Fmt_Print_Way106(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way107(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way107(GPS_PWay way, FILE* outf)
 {
-  static char *dspl[]= {
+  static char* dspl[]= {
     "SW","S","SC"
   };
-  static char *col[]= {
+  static char* col[]= {
     "Default","Red","Green","Blue"
   };
 
@@ -908,16 +908,16 @@ static void GPS_Fmt_Print_Way107(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way108(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way108(GPS_PWay way, FILE* outf)
 {
-  char **p;
+  char** p;
   int32  x;
 
-  static char *dspl[]= {
+  static char* dspl[]= {
     "SW","S","SC"
   };
 
-  static char *col[]= {
+  static char* col[]= {
     "Black","Dark_Red","Dark_Green","Dark_Yellow","Dark_Blue",
     "Dark_Magenta","Dark_Cyan","Light_Grey","Dark_Grey","Red","Green",
     "Yellow","Blue","Magenta","Cyan","White"
@@ -983,16 +983,16 @@ static void GPS_Fmt_Print_Way108(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way109(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way109(GPS_PWay way, FILE* outf)
 {
-  char **p;
+  char** p;
   int32  x;
 
-  static char *dspl[]= {
+  static char* dspl[]= {
     "SW","S","SC"
   };
 
-  static char *col[]= {
+  static char* col[]= {
     "Black","Dark_Red","Dark_Green","Dark_Yellow","Dark_Blue",
     "Dark_Magenta","Dark_Cyan","Light_Grey","Dark_Grey","Red","Green",
     "Yellow","Blue","Magenta","Cyan","White"
@@ -1061,7 +1061,7 @@ static void GPS_Fmt_Print_Way109(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way150(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way150(GPS_PWay way, FILE* outf)
 {
 
   (void) fprintf(outf,"\tIdent:            %-6.6s\n",way->ident);
@@ -1093,7 +1093,7 @@ static void GPS_Fmt_Print_Way150(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way151(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way151(GPS_PWay way, FILE* outf)
 {
 
   (void) fprintf(outf,"\tIdent:            %-6.6s\n",way->ident);
@@ -1126,7 +1126,7 @@ static void GPS_Fmt_Print_Way151(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way152(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way152(GPS_PWay way, FILE* outf)
 {
 
   (void) fprintf(outf,"\tIdent:            %-6.6s\n",way->ident);
@@ -1158,9 +1158,9 @@ static void GPS_Fmt_Print_Way152(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way154(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way154(GPS_PWay way, FILE* outf)
 {
-  char **p;
+  char** p;
   int32  x;
 
   if (way->smbl < 8192) {
@@ -1206,13 +1206,13 @@ static void GPS_Fmt_Print_Way154(GPS_PWay way, FILE *outf)
 ** @return [void]
 ************************************************************************/
 
-static void GPS_Fmt_Print_Way155(GPS_PWay way, FILE *outf)
+static void GPS_Fmt_Print_Way155(GPS_PWay way, FILE* outf)
 {
-  static char *dspl[]= {
+  static char* dspl[]= {
     "","S","","SW","","SC"
   };
 
-  char **p;
+  char** p;
   int32  x;
 
   if (way->smbl < 8192) {
@@ -1262,7 +1262,7 @@ static void GPS_Fmt_Print_Way155(GPS_PWay way, FILE *outf)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Fmt_Print_Route(GPS_PWay *way, int32 n, FILE *outf)
+int32 GPS_Fmt_Print_Route(GPS_PWay* way, int32 n, FILE* outf)
 {
   int32 i;
   int32 first;
@@ -1389,7 +1389,7 @@ int32 GPS_Fmt_Print_Route(GPS_PWay *way, int32 n, FILE *outf)
 ** @return [int32] success
 ************************************************************************/
 
-static int32 GPS_Fmt_Print_Route201(GPS_PWay *way, int32 n, FILE *outf)
+static int32 GPS_Fmt_Print_Route201(GPS_PWay* way, int32 n, FILE* outf)
 {
   int32 i;
   int32 first;

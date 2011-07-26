@@ -35,14 +35,14 @@ arglist_t jtr_args[] = {
   ARG_TERMINATOR
 };
 
-static gbfile *fin, *fout;
-static avltree_t *trkpts;
+static gbfile* fin, *fout;
+static avltree_t* trkpts;
 
 static time_t
-jtr_parse_time(const char *str, struct tm *tm, int *micro)
+jtr_parse_time(const char* str, struct tm* tm, int* micro)
 {
   long int hms;
-  char *dot;
+  char* dot;
 
   hms = strtol(str, &dot, 10);
   if (hms > 0) {
@@ -63,7 +63,7 @@ jtr_parse_time(const char *str, struct tm *tm, int *micro)
 }
 
 static time_t
-jtr_parse_date(const char *str, struct tm *tm)
+jtr_parse_date(const char* str, struct tm* tm)
 {
   int dmy = atoi(str);
 
@@ -84,7 +84,7 @@ jtr_parse_date(const char *str, struct tm *tm)
 *******************************************************************************/
 
 static void
-jtr_rd_init(const char *fname)
+jtr_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
   trkpts = avltree_init(0, MYNAME);
@@ -100,14 +100,14 @@ jtr_rd_deinit(void)
 static void
 jtr_read(void)
 {
-  char *str;
+  char* str;
   int line = 0;
-  route_head *trk = NULL;
+  route_head* trk = NULL;
 
   while ((str = gbfgetstr(fin))) {
-    waypoint *wpt;
+    waypoint* wpt;
     struct tm tm;
-    char *tmp;
+    char* tmp;
     int column = -1;
     char valid = 'V';
     double lat, lon;
@@ -254,7 +254,7 @@ jtr_read(void)
 }
 
 static void
-jtr_wr_init(const char *fname)
+jtr_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
 }
@@ -266,9 +266,9 @@ jtr_wr_deinit(void)
 }
 
 static void
-jtr_trkpt_disp_cb(const waypoint *wpt)
+jtr_trkpt_disp_cb(const waypoint* wpt)
 {
-  char *str, *tmp;
+  char* str, *tmp;
   char stime[10], sdate[7], scourse[6], sspeed[8];
   struct tm tm;
 
@@ -331,7 +331,7 @@ ff_vecs_t jtr_vecs = {
   ff_type_file,
   {
     ff_cap_none, 			/* waypoints */
-    ff_cap_read | ff_cap_write, 	/* tracks */
+    (ff_cap)(ff_cap_read | ff_cap_write), 	/* tracks */
     ff_cap_none 			/* routes */
   },
   jtr_rd_init,

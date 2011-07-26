@@ -27,18 +27,18 @@
 #define MYNAME "an1"
 #include "defs.h"
 
-static gbfile *infile;
-static gbfile *outfile;
+static gbfile* infile;
+static gbfile* outfile;
 
-static char *output_type = NULL;
-static char *road_changes = NULL;
-static char *nogc = NULL;
-static char *nourl = NULL;
-static char *opt_symbol = NULL;
-static char *opt_color = NULL;
-static char *opt_zoom  = NULL;
-static char *opt_wpt_type = NULL;
-static char *opt_radius = NULL;
+static char* output_type = NULL;
+static char* road_changes = NULL;
+static char* nogc = NULL;
+static char* nourl = NULL;
+static char* opt_symbol = NULL;
+static char* opt_color = NULL;
+static char* opt_zoom  = NULL;
+static char* opt_wpt_type = NULL;
+static char* opt_radius = NULL;
 
 static short output_type_num = 0;
 static short opt_zoom_num = 0;
@@ -52,10 +52,10 @@ static long rtserial=1;
 
 typedef struct roadchange {
   long type;
-  char *name;
+  char* name;
 } roadchange;
 
-roadchange *roadchanges = NULL;
+roadchange* roadchanges = NULL;
 
 static
 arglist_t an1_args[] = {
@@ -114,11 +114,11 @@ typedef struct guid {
 #define ReadDouble(f) gbfgetdbl(f)
 #define WriteDouble(f,d) gbfputdbl((d),f)
 
-static char *
-ReadString(gbfile * f, short len)
+static char*
+ReadString(gbfile* f, short len)
 {
-  char *result = NULL;
-  result = (char *)xcalloc(1, len + 1);
+  char* result = NULL;
+  result = (char*)xcalloc(1, len + 1);
   if (len) {
     gbfread(result, 1, len, f);
   }
@@ -130,7 +130,7 @@ ReadString(gbfile * f, short len)
 #define WriteString(f,s) gbfputs((s),f)
 
 static void
-ReadGuid(gbfile *f, GUID *guid)
+ReadGuid(gbfile* f, GUID* guid)
 {
   int i = 0;
   guid->l = ReadLong(f);
@@ -143,7 +143,7 @@ ReadGuid(gbfile *f, GUID *guid)
 }
 
 static void
-WriteGuid(gbfile *f, GUID *guid)
+WriteGuid(gbfile* f, GUID* guid)
 {
   int i = 0;
   WriteLong(f, guid->l);
@@ -156,7 +156,7 @@ WriteGuid(gbfile *f, GUID *guid)
 }
 
 static void
-Skip(gbfile * f,
+Skip(gbfile* f,
      unsigned long distance)
 {
   gbfseek(f, distance, SEEK_CUR);
@@ -179,7 +179,7 @@ typedef struct {
   long hotspoty;
   long unk1;
   GUID guid;
-  char *name;
+  char* name;
 } an1_symbol_record;
 
 typedef struct {
@@ -199,8 +199,8 @@ typedef struct {
   unsigned char visible_zoom;
   short unk5;
   double radius; /* in km */
-  char *name;
-  char *fontname;
+  char* name;
+  char* fontname;
   GUID guid;
   long fontcolor;
   long fontstyle;
@@ -214,11 +214,11 @@ typedef struct {
 
   /* Added in SA2006/Topo 6.0 */
   short unk6_1;
-  char *url;
-  char *comment;
+  char* url;
+  char* comment;
   long creation_time;
   long modification_time;
-  char *image_name;
+  char* image_name;
 } an1_waypoint_record;
 
 typedef struct {
@@ -238,7 +238,7 @@ typedef struct {
   short unk3;
   short type;
   long unk4;
-  char *name;
+  char* name;
   long lineweight;
   long linestyle;
   long linecolor;
@@ -250,12 +250,12 @@ typedef struct {
   long pointcount;
 } an1_line_record;
 
-static an1_waypoint_record *Alloc_AN1_Waypoint();
+static an1_waypoint_record* Alloc_AN1_Waypoint();
 
-void Destroy_AN1_Waypoint(void *vwpt)
+void Destroy_AN1_Waypoint(void* vwpt)
 {
 
-  an1_waypoint_record *wpt = (an1_waypoint_record *)vwpt;
+  an1_waypoint_record* wpt = (an1_waypoint_record*)vwpt;
   xfree(wpt->name);
   xfree(wpt->fontname);
   if (wpt->url) {
@@ -270,23 +270,23 @@ void Destroy_AN1_Waypoint(void *vwpt)
   xfree(vwpt);
 }
 
-void Copy_AN1_Waypoint(void **vdwpt, void *vwpt)
+void Copy_AN1_Waypoint(void** vdwpt, void* vwpt)
 {
-  an1_waypoint_record *wpt = (an1_waypoint_record *)vwpt;
-  an1_waypoint_record *dwpt = Alloc_AN1_Waypoint();
+  an1_waypoint_record* wpt = (an1_waypoint_record*)vwpt;
+  an1_waypoint_record* dwpt = Alloc_AN1_Waypoint();
   memcpy(dwpt, wpt, sizeof(an1_waypoint_record));
   dwpt->name = xstrdup(wpt->name);
   dwpt->fontname = xstrdup(wpt->fontname);
   dwpt->url = xstrdup(wpt->url);
   dwpt->comment = xstrdup(wpt->comment);
   dwpt->image_name = xstrdup(wpt->image_name);
-  *vdwpt = (void *)dwpt;
+  *vdwpt = (void*)dwpt;
 }
 
-static an1_waypoint_record *Alloc_AN1_Waypoint()
+static an1_waypoint_record* Alloc_AN1_Waypoint()
 {
-  an1_waypoint_record *result = NULL;
-  result = (an1_waypoint_record *)xcalloc(sizeof(*result), 1);
+  an1_waypoint_record* result = NULL;
+  result = (an1_waypoint_record*)xcalloc(sizeof(*result), 1);
   result->fs.type = FS_AN1W;
   result->fs.copy = Copy_AN1_Waypoint;
   result->fs.destroy = Destroy_AN1_Waypoint;
@@ -294,25 +294,25 @@ static an1_waypoint_record *Alloc_AN1_Waypoint()
   return result;
 }
 
-static an1_vertex_record *Alloc_AN1_Vertex();
+static an1_vertex_record* Alloc_AN1_Vertex();
 
-void Destroy_AN1_Vertex(void *vvertex)
+void Destroy_AN1_Vertex(void* vvertex)
 {
   xfree(vvertex);
 }
 
-void Copy_AN1_Vertex(void **vdvert, void *vvert)
+void Copy_AN1_Vertex(void** vdvert, void* vvert)
 {
-  an1_vertex_record *vert = (an1_vertex_record *)vvert;
-  an1_vertex_record *dvert = Alloc_AN1_Vertex();
+  an1_vertex_record* vert = (an1_vertex_record*)vvert;
+  an1_vertex_record* dvert = Alloc_AN1_Vertex();
   memcpy(dvert, vert, sizeof(an1_vertex_record));
-  *vdvert = (void *)dvert;
+  *vdvert = (void*)dvert;
 }
 
-static an1_vertex_record *Alloc_AN1_Vertex()
+static an1_vertex_record* Alloc_AN1_Vertex()
 {
-  an1_vertex_record *result = NULL;
-  result = (an1_vertex_record *)xcalloc(sizeof(*result), 1);
+  an1_vertex_record* result = NULL;
+  result = (an1_vertex_record*)xcalloc(sizeof(*result), 1);
   result->fs.type = FS_AN1V;
   result->fs.copy = Copy_AN1_Vertex;
   result->fs.destroy = Destroy_AN1_Vertex;
@@ -321,28 +321,28 @@ static an1_vertex_record *Alloc_AN1_Vertex()
 }
 
 
-static an1_line_record *Alloc_AN1_Line();
+static an1_line_record* Alloc_AN1_Line();
 
-void Destroy_AN1_Line(void *vline)
+void Destroy_AN1_Line(void* vline)
 {
-  an1_line_record *line = (an1_line_record *)vline;
+  an1_line_record* line = (an1_line_record*)vline;
   xfree(line->name);
   xfree(vline);
 }
 
-void Copy_AN1_Line(void **vdline, void *vline)
+void Copy_AN1_Line(void** vdline, void* vline)
 {
-  an1_line_record *line = (an1_line_record *)vline;
-  an1_line_record *dline = Alloc_AN1_Line();
+  an1_line_record* line = (an1_line_record*)vline;
+  an1_line_record* dline = Alloc_AN1_Line();
   memcpy(dline, line, sizeof(an1_line_record));
   dline->name = xstrdup(line->name);
-  *vdline = (void *)dline;
+  *vdline = (void*)dline;
 }
 
-static an1_line_record *Alloc_AN1_Line()
+static an1_line_record* Alloc_AN1_Line()
 {
-  an1_line_record *result = NULL;
-  result = (an1_line_record *)xcalloc(sizeof(*result), 1);
+  an1_line_record* result = NULL;
+  result = (an1_line_record*)xcalloc(sizeof(*result), 1);
   result->fs.type = FS_AN1L;
   result->fs.copy = Copy_AN1_Line;
   result->fs.destroy = Destroy_AN1_Line;
@@ -351,12 +351,12 @@ static an1_line_record *Alloc_AN1_Line()
 }
 
 
-static void Destroy_AN1_Symbol(an1_symbol_record *symbol)
+static void Destroy_AN1_Symbol(an1_symbol_record* symbol)
 {
   xfree(symbol->name);
 }
 
-static void Read_AN1_Waypoint(gbfile *f, an1_waypoint_record *wpt)
+static void Read_AN1_Waypoint(gbfile* f, an1_waypoint_record* wpt)
 {
   short len;
 
@@ -381,7 +381,7 @@ static void Read_AN1_Waypoint(gbfile *f, an1_waypoint_record *wpt)
   if (len != strlen(wpt->name)) {
     /* This happens in 06/6.0 files that put extra data in the
      * name record for backward compatibility's sake */
-    char *ofs = wpt->name + strlen(wpt->name) + 1;
+    char* ofs = wpt->name + strlen(wpt->name) + 1;
     wpt->unk6_1 = le_read16(ofs);
     ofs += 2;
 
@@ -389,7 +389,7 @@ static void Read_AN1_Waypoint(gbfile *f, an1_waypoint_record *wpt)
     ofs += 2;
 
     if (len) {
-      char *oldurlstr;
+      char* oldurlstr;
       /*
        * Trust URL encoded in new format over one in
        * old format if both are present.  Whack the
@@ -446,7 +446,7 @@ static void Read_AN1_Waypoint(gbfile *f, an1_waypoint_record *wpt)
   wpt->fillflags = ReadLong(f);
 }
 
-static void Write_AN1_Waypoint(gbfile *f, an1_waypoint_record *wpt)
+static void Write_AN1_Waypoint(gbfile* f, an1_waypoint_record* wpt)
 {
   short len;
 
@@ -530,7 +530,7 @@ static void Write_AN1_Waypoint(gbfile *f, an1_waypoint_record *wpt)
   WriteLong(f, wpt->fillflags);
 }
 
-static void Read_AN1_Vertex(gbfile *f, an1_vertex_record *vertex)
+static void Read_AN1_Vertex(gbfile* f, an1_vertex_record* vertex)
 {
 
   vertex->magic = ReadShort(f);
@@ -540,7 +540,7 @@ static void Read_AN1_Vertex(gbfile *f, an1_vertex_record *vertex)
   vertex->unk1 = ReadShort(f);
 }
 
-static void Write_AN1_Vertex(gbfile *f, an1_vertex_record *vertex)
+static void Write_AN1_Vertex(gbfile* f, an1_vertex_record* vertex)
 {
   WriteShort(f, vertex->magic);
   WriteLong(f, vertex->unk0);
@@ -549,7 +549,7 @@ static void Write_AN1_Vertex(gbfile *f, an1_vertex_record *vertex)
   WriteShort(f, vertex->unk1);
 }
 
-static void Read_AN1_Line(gbfile *f, an1_line_record *line)
+static void Read_AN1_Line(gbfile* f, an1_line_record* line)
 {
 
   short len;
@@ -573,7 +573,7 @@ static void Read_AN1_Line(gbfile *f, an1_line_record *line)
   line->pointcount = ReadLong(f);
 }
 
-static void Write_AN1_Line(gbfile *f, an1_line_record *line)
+static void Write_AN1_Line(gbfile* f, an1_line_record* line)
 {
   short len;
 
@@ -597,12 +597,12 @@ static void Write_AN1_Line(gbfile *f, an1_line_record *line)
   WriteLong(f, line->pointcount);
 }
 
-static void Skip_AN1_IL(gbfile *f)
+static void Skip_AN1_IL(gbfile* f)
 {
   Skip(f, 26);
 }
 
-static void Skip_AN1_BM(gbfile *f)
+static void Skip_AN1_BM(gbfile* f)
 {
   unsigned long bmsize;
   unsigned long palettesize;
@@ -621,7 +621,7 @@ static void Skip_AN1_BM(gbfile *f)
   Skip(f, bmsize + palettesize);
 }
 
-static void Read_AN1_Symbol(gbfile *f, an1_symbol_record *symbol)
+static void Read_AN1_Symbol(gbfile* f, an1_symbol_record* symbol)
 {
   short len;
 
@@ -635,7 +635,7 @@ static void Read_AN1_Symbol(gbfile *f, an1_symbol_record *symbol)
   symbol->name = ReadString(f, len);
 }
 
-static void Read_AN1_Header(gbfile *f)
+static void Read_AN1_Header(gbfile* f)
 {
   unsigned short magic;
   unsigned short type;
@@ -646,13 +646,13 @@ static void Read_AN1_Header(gbfile *f)
   last_read_type = type;
 }
 
-static void Write_AN1_Header(gbfile *f)
+static void Write_AN1_Header(gbfile* f)
 {
   WriteShort(f, 11557);
   WriteShort(f, output_type_num);
 }
 
-static void Read_AN1_Bitmaps(gbfile *f)
+static void Read_AN1_Bitmaps(gbfile* f)
 {
   long count;
   unsigned short magic;
@@ -680,21 +680,21 @@ static void Read_AN1_Bitmaps(gbfile *f)
   /* Read the symbol table */
 }
 
-static void Write_AN1_Bitmaps(gbfile *f)
+static void Write_AN1_Bitmaps(gbfile* f)
 {
   /* On write, we don't output any bitmaps, so writing them
    * is just a matter of writing a count of zero */
   WriteLong(f, 0);
 }
 
-static void Read_AN1_Waypoints(gbfile *f)
+static void Read_AN1_Waypoints(gbfile* f)
 {
   unsigned long count = 0;
   unsigned long i = 0;
-  an1_waypoint_record *rec = NULL;
-  waypoint *wpt_tmp;
-  char *icon = NULL;
-  char *url = NULL;
+  an1_waypoint_record* rec = NULL;
+  waypoint* wpt_tmp;
+  char* icon = NULL;
+  char* url = NULL;
   ReadShort(f);
   count = ReadLong(f);
   for (i = 0; i < count; i++) {
@@ -724,22 +724,22 @@ static void Read_AN1_Waypoints(gbfile *f)
       wpt_tmp->icon_descr = icon;
     }
 
-    fs_chain_add(&(wpt_tmp->fs), (format_specific_data *)rec);
+    fs_chain_add(&(wpt_tmp->fs), (format_specific_data*)rec);
     rec = NULL;
     waypt_add(wpt_tmp);
   }
 }
 
 static void
-Write_One_AN1_Waypoint(const waypoint *wpt)
+Write_One_AN1_Waypoint(const waypoint* wpt)
 {
-  an1_waypoint_record *rec;
+  an1_waypoint_record* rec;
   int local;
-  format_specific_data *fs = NULL;
+  format_specific_data* fs = NULL;
 
   fs = fs_chain_find(wpt->fs, FS_AN1W);
   if (fs) {
-    rec = (an1_waypoint_record *)fs;
+    rec = (an1_waypoint_record*)fs;
     xfree(rec->name);
     local = 0;
     if (opt_zoom) {
@@ -769,7 +769,7 @@ Write_One_AN1_Waypoint(const waypoint *wpt)
   rec->name = xstrdup(wpt->description);
 
   if (!nogc && wpt->gc_data->id) {
-    char *extra = (char *) xmalloc(25 + strlen(wpt->gc_data->placer) + strlen(wpt->shortname));
+    char* extra = (char*) xmalloc(25 + strlen(wpt->gc_data->placer) + strlen(wpt->shortname));
     sprintf(extra, "\r\nBy %s\r\n%s (%1.1f/%1.1f)",
             wpt->gc_data->placer,
             wpt->shortname, wpt->gc_data->diff/10.0,
@@ -780,7 +780,7 @@ Write_One_AN1_Waypoint(const waypoint *wpt)
 
   if (!nourl && wpt->url) {
     int len = 7+strlen(wpt->url);
-    char *extra = (char *)xmalloc(len);
+    char* extra = (char*)xmalloc(len);
     sprintf(extra, "{URL=%s}", wpt->url);
     rec->name = xstrappend(rec->name, extra);
     xfree(extra);
@@ -808,7 +808,7 @@ Write_One_AN1_Waypoint(const waypoint *wpt)
     }
   }
   if (!rec->image_name && wpt->icon_descr) {
-    FindIconByName((char *)(void *)wpt->icon_descr, &rec->guid);
+    FindIconByName((char*)(void*)wpt->icon_descr, &rec->guid);
   }
 
   Write_AN1_Waypoint(outfile, rec);
@@ -817,22 +817,22 @@ Write_One_AN1_Waypoint(const waypoint *wpt)
   }
 }
 
-static void Write_AN1_Waypoints(gbfile *f)
+static void Write_AN1_Waypoints(gbfile* f)
 {
   WriteShort(f, 2);
   WriteLong(f, waypt_count());
   waypt_disp_all(Write_One_AN1_Waypoint);
 }
 
-static void Read_AN1_Lines(gbfile *f)
+static void Read_AN1_Lines(gbfile* f)
 {
   unsigned long count = 0;
   unsigned long i = 0;
   unsigned long j = 0;
-  an1_line_record *rec = NULL;
-  an1_vertex_record *vert = NULL;
-  route_head *rte_head;
-  waypoint *wpt_tmp;
+  an1_line_record* rec = NULL;
+  an1_vertex_record* vert = NULL;
+  route_head* rte_head;
+  waypoint* wpt_tmp;
 
   ReadShort(f);
   count = ReadLong(f);
@@ -852,7 +852,7 @@ static void Read_AN1_Lines(gbfile *f)
       rte_head->line_width = rec->lineweight;
     }
     rte_head->rte_name = xstrdup(rec->name);
-    fs_chain_add(&rte_head->fs, (format_specific_data *)rec);
+    fs_chain_add(&rte_head->fs, (format_specific_data*)rec);
     route_add_head(rte_head);
     for (j = 0; j < (unsigned) rec->pointcount; j++) {
       vert = Alloc_AN1_Vertex();
@@ -862,17 +862,17 @@ static void Read_AN1_Lines(gbfile *f)
       wpt_tmp = waypt_new();
       wpt_tmp->latitude = DecodeOrd(vert->lat);
       wpt_tmp->longitude = -DecodeOrd(vert->lon);
-      wpt_tmp->shortname = (char *) xmalloc(7);
+      wpt_tmp->shortname = (char*) xmalloc(7);
       sprintf(wpt_tmp->shortname, "\\%5.5lx", rtserial++);
       fs_chain_add(&wpt_tmp->fs,
-                   (format_specific_data *)vert);
+                   (format_specific_data*)vert);
       route_add_wpt(rte_head, wpt_tmp);
     }
   }
 }
 
 static void
-Make_Road_Changes(an1_line_record *rec)
+Make_Road_Changes(an1_line_record* rec)
 {
   int i = 0;
 
@@ -894,16 +894,16 @@ Make_Road_Changes(an1_line_record *rec)
 }
 
 static void
-Write_One_AN1_Line(const route_head *rte)
+Write_One_AN1_Line(const route_head* rte)
 {
-  an1_line_record *rec;
+  an1_line_record* rec;
   int local;
-  format_specific_data *fs = NULL;
+  format_specific_data* fs = NULL;
 
   fs = fs_chain_find(rte->fs, FS_AN1L);
 
   if (fs) {
-    rec = (an1_line_record *)(void *)fs;
+    rec = (an1_line_record*)(void*)fs;
     local = 0;
     switch (output_type_num) {
     case 1:
@@ -991,16 +991,16 @@ Write_One_AN1_Line(const route_head *rte)
 }
 
 static void
-Write_One_AN1_Vertex(const waypoint *wpt)
+Write_One_AN1_Vertex(const waypoint* wpt)
 {
-  an1_vertex_record *rec;
+  an1_vertex_record* rec;
   int local;
-  format_specific_data *fs = NULL;
+  format_specific_data* fs = NULL;
 
   fs = fs_chain_find(wpt->fs, FS_AN1V);
 
   if (fs) {
-    rec = (an1_vertex_record *)(void *)fs;
+    rec = (an1_vertex_record*)(void*)fs;
     local = 0;
   } else {
     rec = Alloc_AN1_Vertex();
@@ -1016,7 +1016,7 @@ Write_One_AN1_Vertex(const waypoint *wpt)
   }
 }
 
-static void Write_AN1_Lines(gbfile *f)
+static void Write_AN1_Lines(gbfile* f)
 {
   WriteShort(f, 2);
   WriteLong(f, route_count()+track_count());
@@ -1085,7 +1085,7 @@ Init_Output_Type(void)
 }
 
 static long
-Parse_Change_Type(char *type)
+Parse_Change_Type(char* type)
 {
   long retval = 0x11100541;
 
@@ -1134,10 +1134,10 @@ static void
 Init_Road_Changes(void)
 {
   int count = 0;
-  char *strType = NULL;
-  char *name = NULL;
-  char *bar = NULL;
-  char *copy = NULL;
+  char* strType = NULL;
+  char* name = NULL;
+  char* bar = NULL;
+  char* copy = NULL;
   Free_Road_Changes();
 
   if (!road_changes || !road_changes[0]) {
@@ -1152,7 +1152,7 @@ Init_Road_Changes(void)
     fatal(MYNAME ": invalid format for road changes\n");
   }
   count = 1 + count / 2;
-  roadchanges = (roadchange *)xmalloc((count+1) * sizeof(roadchange));
+  roadchanges = (roadchange*)xmalloc((count+1) * sizeof(roadchange));
 
   roadchanges[count].type = 0;
   roadchanges[count].name = NULL;
@@ -1180,7 +1180,7 @@ Init_Road_Changes(void)
 }
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   infile = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -1201,7 +1201,7 @@ my_read(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   outfile = gbfopen_le(fname, "wb", MYNAME);
   Init_Output_Type();

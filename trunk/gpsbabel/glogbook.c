@@ -22,9 +22,9 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static gbfile *ofd;
-static waypoint *wpt_tmp;
-static route_head *trk_head;
+static gbfile* ofd;
+static waypoint* wpt_tmp;
+static route_head* trk_head;
 
 
 #define MYNAME "glogbook"
@@ -51,11 +51,11 @@ static xg_tag_mapping gl_map[] = {
   { gl_trk_long, cb_cdata, "/History/Run/Track/Trackpoint/Position/Longitude" },
   { gl_trk_alt,  cb_cdata, "/History/Run/Track/Trackpoint/Position/Altitude" },
   { gl_trk_utc,  cb_cdata, "/History/Run/Track/Trackpoint/Time" },
-  { NULL, 	0,         NULL}
+  { NULL,	(xg_cb_type)0,         NULL}
 };
 
 static void
-glogbook_rd_init(const char *fname)
+glogbook_rd_init(const char* fname)
 {
   xml_init(fname, gl_map, NULL);
 }
@@ -73,7 +73,7 @@ glogbook_rd_deinit(void)
 }
 
 static void
-glogbook_wr_init(const char *fname)
+glogbook_wr_init(const char* fname)
 {
   ofd = gbfopen(fname, "w", MYNAME);
 }
@@ -85,7 +85,7 @@ glogbook_wr_deinit(void)
 }
 
 static void
-glogbook_waypt_pr(const waypoint *wpt)
+glogbook_waypt_pr(const waypoint* wpt)
 {
   gbfprintf(ofd, "            <Trackpoint>\n");
   gbfprintf(ofd, "                <Position>\n");
@@ -101,13 +101,13 @@ glogbook_waypt_pr(const waypoint *wpt)
 }
 
 static void
-glogbook_hdr(const route_head *rte)
+glogbook_hdr(const route_head* rte)
 {
   gbfprintf(ofd, "        <Track>\n");
 }
 
 static void
-glogbook_ftr(const route_head *rte)
+glogbook_ftr(const route_head* rte)
 {
   gbfprintf(ofd, "        </Track>\n");
 }
@@ -123,44 +123,44 @@ glogbook_write(void)
   gbfprintf(ofd, "</History>\n");
 }
 
-void	gl_trk_s(const char *args, const char **unused)
+void	gl_trk_s(const char* args, const char** unused)
 {
   trk_head = route_head_alloc();
   track_add_head(trk_head);
 }
 #if 0
-void	gl_trk_ident(const char *args, const char **unused)
+void	gl_trk_ident(const char* args, const char** unused)
 {
   trk_head->rte_name = xstrdup(args);
 }
 #endif
 
-void	gl_trk_pnt_s(const char *args, const char **unused)
+void	gl_trk_pnt_s(const char* args, const char** unused)
 {
   wpt_tmp = waypt_new();
 }
 
-void	gl_trk_pnt_e(const char *args, const char **unused)
+void	gl_trk_pnt_e(const char* args, const char** unused)
 {
   track_add_wpt(trk_head, wpt_tmp);
 }
 
-void	gl_trk_utc(const char *args, const char **unused)
+void	gl_trk_utc(const char* args, const char** unused)
 {
   wpt_tmp->creation_time = xml_parse_time(args, &wpt_tmp->microseconds);
 }
 
-void	gl_trk_lat(const char *args, const char **unused)
+void	gl_trk_lat(const char* args, const char** unused)
 {
   wpt_tmp->latitude = atof(args);
 }
 
-void	gl_trk_long(const char *args, const char **unused)
+void	gl_trk_long(const char* args, const char** unused)
 {
   wpt_tmp->longitude = atof(args);
 }
 
-void	gl_trk_alt(const char *args, const char **unused)
+void	gl_trk_alt(const char* args, const char** unused)
 {
   wpt_tmp->altitude = atof(args);
 }
@@ -169,7 +169,7 @@ void	gl_trk_alt(const char *args, const char **unused)
 
 ff_vecs_t glogbook_vecs = {
   ff_type_file,
-  { ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none},
+  { ff_cap_none, (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none},
   glogbook_rd_init,
   glogbook_wr_init,
   glogbook_rd_deinit,

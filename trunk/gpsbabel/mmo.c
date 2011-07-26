@@ -52,7 +52,7 @@
 
 // #define MMO_DBG
 
-static char *opt_locked, *opt_visible, *opt_version;
+static char* opt_locked, *opt_visible, *opt_version;
 
 static
 arglist_t mmo_args[] = {
@@ -73,21 +73,21 @@ arglist_t mmo_args[] = {
 
 typedef struct mmo_data_s {
   int objid;		/* internal object id */
-  char *name;
-  const char *category;	/* currently not handled */
+  char* name;
+  const char* category;	/* currently not handled */
   gpsdata_type type;	/* type of "data" */
   time_t ctime;
   time_t mtime;
   int left;		/* number of un-readed route points */
-  void *data;		/* can be a waypoint, a route or a track */
+  void* data;		/* can be a waypoint, a route or a track */
   int refct;
-  struct mmo_data_s **members;
+  struct mmo_data_s** members;
   unsigned char visible:1;
   unsigned char locked:1;
   unsigned char loaded:1;
 } mmo_data_t;
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 static int mmo_version;
 static int mmo_obj_ct;
 static int mmo_object_id;
@@ -100,14 +100,14 @@ static gbuint16 ico_object_id;
 static gbuint16 pos_object_id;
 static gbuint16 txt_object_id;
 static gpsdata_type mmo_datatype;
-static route_head *mmo_rte;
+static route_head* mmo_rte;
 
-static avltree_t *category_names, *objects, *mmobjects, *category_ids;
-static avltree_t *icons;
+static avltree_t* category_names, *objects, *mmobjects, *category_ids;
+static avltree_t* icons;
 
 typedef struct mmo_icon_mapping_s {
   const int	value;
-  const char	*icon;
+  const char*	icon;
 } mmo_icon_mapping_t;
 
 /* standard icons; no bitmaps in file */
@@ -151,7 +151,7 @@ static const gbuint32 obj_type_wpt = 0x3C;
 
 #ifdef MMO_DBG
 static void
-dbgprintf(const char *sobj, const char *fmt, ...)
+dbgprintf(const char* sobj, const char* fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
@@ -166,10 +166,10 @@ dbgprintf(const char *sobj, const char *fmt, ...)
 # define DBG(args) do {} while (0) ;
 #endif
 
-static char *
+static char*
 mmo_readstr(void)
 {
-  char *res;
+  char* res;
   int len;
 
   len = (unsigned)gbfgetc(fin);
@@ -179,7 +179,7 @@ mmo_readstr(void)
       fatal(MYNAME ": Invalid string length (%d)!\n", len);
     }
   }
-  res = xmalloc(len + 1);
+  res = (char*) xmalloc(len + 1);
   res[len] = '\0';
   if (len) {
     gbfread(res, len, 1, fin);
@@ -193,7 +193,7 @@ mmo_readstr(void)
 
 
 static int
-mmo_fillbuf2(void *buf, const gbsize_t bufsz, const gbsize_t count, const int need_all)
+mmo_fillbuf2(void* buf, const gbsize_t bufsz, const gbsize_t count, const int need_all)
 {
   gbsize_t res;
 
@@ -212,7 +212,7 @@ mmo_fillbuf2(void *buf, const gbsize_t bufsz, const gbsize_t count, const int ne
 #define mmo_fillbuf(a,b,c) mmo_fillbuf2((a),sizeof((a)),(b),(c))
 
 static void
-mmo_printbuf(const char *buf, int count, const char *comment)
+mmo_printbuf(const char* buf, int count, const char* comment)
 {
 #ifdef MMO_DBG
   int i;
@@ -234,14 +234,14 @@ mmo_printbuf(const char *buf, int count, const char *comment)
 
 /******************************************************************************/
 
-static mmo_data_t *
-mmo_register_object(const int objid, const void *ptr, const gpsdata_type type)
+static mmo_data_t*
+mmo_register_object(const int objid, const void* ptr, const gpsdata_type type)
 {
   char key[16];
-  mmo_data_t *data;
+  mmo_data_t* data;
 
-  data = xcalloc(1, sizeof(*data));
-  data->data = (void *)ptr;
+  data = (mmo_data_t*) xcalloc(1, sizeof(*data));
+  data->data = (void*)ptr;
   data->visible = 1;
   data->locked = 0;
   data->type = type;
@@ -255,29 +255,29 @@ mmo_register_object(const int objid, const void *ptr, const gpsdata_type type)
 
 
 static int
-mmo_get_objid(const void *ptr)
+mmo_get_objid(const void* ptr)
 {
-  const char *key;
-  mmo_data_t *data;
+  const char* key;
+  mmo_data_t* data;
 
-  if ((key = avltree_first(objects, (void *)&data))) do {
+  if ((key = avltree_first(objects, (const void**)&data))) do {
       if (data->data == ptr) {
         return atoi(key);
       }
-    } while ((key = avltree_next(objects, key, (void *)&data)));
+    } while ((key = avltree_next(objects, key, (const void**)&data)));
 
   return 0;
 }
 
 
-static mmo_data_t *
+static mmo_data_t*
 mmo_get_object(const gbuint16 objid)
 {
   char key[16];
-  mmo_data_t *data;
+  mmo_data_t* data;
 
   snprintf(key, sizeof(key), "%d", objid | 0x8000);
-  if (! avltree_find(objects, key, (void *)&data)) {
+  if (! avltree_find(objects, key, (const void**)&data)) {
 #ifdef MMO_DBG
     gbfseek(fin, -2, SEEK_CUR);
     int ni, n;
@@ -292,46 +292,46 @@ mmo_get_object(const gbuint16 objid)
   return data;
 }
 
-static waypoint *
-mmo_get_waypt(mmo_data_t *data)
+static waypoint*
+mmo_get_waypt(mmo_data_t* data)
 {
   data->refct++;
   if (data->refct == 1) {
-    return (waypoint *)data->data;
+    return (waypoint*)data->data;
   } else {
-    return waypt_dupe((waypoint *)data->data);
+    return waypt_dupe((waypoint*)data->data);
   }
 }
 
 static void
-mmo_release_avltree(avltree_t *tree, const int is_object)
+mmo_release_avltree(avltree_t* tree, const int is_object)
 {
-  const char *key;
-  char *name;
+  const char* key;
+  char* name;
 
-  if ((key = avltree_first(tree, (void *)&name))) {
+  if ((key = avltree_first(tree, (const void**)&name))) {
     do {
       if (name == NULL) {
         continue;
       }
       if (is_object) {
-        mmo_data_t *data = (mmo_data_t *)name;
+        mmo_data_t* data = (mmo_data_t*)name;
         if (data->name) {
           xfree(data->name);
         }
         if ((data->type == wptdata) && (data->refct == 0)) {
-          waypt_free((waypoint *)data->data);
+          waypt_free((waypoint*)data->data);
         }
       }
       xfree(name);
-    } while ((key = avltree_next(tree, key, (void *)&name)));
+    } while ((key = avltree_next(tree, key, (const void**)&name)));
   }
   avltree_done(tree);
 }
 
 
 static void
-mmo_register_icon(const int id, const char *name)
+mmo_register_icon(const int id, const char* name)
 {
   char key[16];
 
@@ -340,16 +340,16 @@ mmo_register_icon(const int id, const char *name)
 }
 
 
-static mmo_data_t *mmo_read_object(void);
+static mmo_data_t* mmo_read_object(void);
 
 
 static void
-mmo_end_of_route(mmo_data_t *data)
+mmo_end_of_route(mmo_data_t* data)
 {
 #ifdef MMO_DBG
-  const char *sobj = "CObjRoute";
+  const char* sobj = "CObjRoute";
 #endif
-  route_head *rte = data->data;
+  route_head* rte = (route_head*) data->data;
   char buf[7];
 
   if (mmo_version >= 0x12) {
@@ -372,12 +372,12 @@ mmo_end_of_route(mmo_data_t *data)
 
 
 static void
-mmo_read_category(mmo_data_t *data)
+mmo_read_category(mmo_data_t* data)
 {
   int marker = gbfgetuint16(fin);
 
   if (marker & 0x8000) {
-    mmo_data_t *tmp;
+    mmo_data_t* tmp;
 
     DBG(("mmo_read_category", "reading category object\n"));
     gbfseek(fin, -2, SEEK_CUR);
@@ -390,10 +390,10 @@ mmo_read_category(mmo_data_t *data)
 
 
 static void
-mmo_read_CObjIcons(mmo_data_t *data)
+mmo_read_CObjIcons(mmo_data_t* data)
 {
 #ifdef MMO_DBG
-  const char *sobj = "CObjIcons";
+  const char* sobj = "CObjIcons";
 #endif
   int icon_id;
   gbuint16 u16;
@@ -420,7 +420,7 @@ mmo_read_CObjIcons(mmo_data_t *data)
   DBG((sobj, "unknown value = 0x%04X\n", u16));
 
   while ((icon_id = gbfgetuint32(fin))) {
-    char *name;
+    char* name;
     (void) gbfgetuint32(fin);
     (void) gbfgetuint32(fin);
     name = mmo_readstr();
@@ -435,16 +435,16 @@ mmo_read_CObjIcons(mmo_data_t *data)
 
 
 static void
-mmo_read_CObjWaypoint(mmo_data_t *data)
+mmo_read_CObjWaypoint(mmo_data_t* data)
 {
 #ifdef MMO_DBG
-  const char *sobj = "CObjWaypoint";
+  const char* sobj = "CObjWaypoint";
 #endif
-  waypoint *wpt;
+  waypoint* wpt;
   time_t time;
   int rtelinks;
-  mmo_data_t **rtelink = NULL;
-  char *str;
+  mmo_data_t** rtelink = NULL;
+  char* str;
   char buf[16];
   int i, ux;
 
@@ -483,11 +483,11 @@ mmo_read_CObjWaypoint(mmo_data_t *data)
   rtelinks = gbfgetuint16(fin);
   if (rtelinks > 0) {
 
-    rtelink = xcalloc(sizeof(*rtelink), rtelinks);
+    rtelink = (mmo_data_t**) xcalloc(sizeof(*rtelink), rtelinks);
     DBG((sobj, "rtelinks = %d\n", rtelinks));
 
     for (i = 0; i < rtelinks; i++) {
-      mmo_data_t *tmp;
+      mmo_data_t* tmp;
 
       DBG((sobj, "read rtelink number %d\n", i + 1));
       rtelink[i] = tmp = mmo_read_object();
@@ -497,7 +497,7 @@ mmo_read_CObjWaypoint(mmo_data_t *data)
 
   str = mmo_readstr();	/* descr + url */
   if (strncmp(str, "_FILE_ ", 7) == 0) {
-    char *cx, *cend;
+    char* cx, *cend;
 
     cx = lrtrim(str + 7);
     cend = strchr(cx, '\n');
@@ -532,10 +532,10 @@ mmo_read_CObjWaypoint(mmo_data_t *data)
   i = le_read32(&buf[8]);		/* icon */
   if (i != -1) {
     char key[16];
-    char *name;
+    char* name;
 
     snprintf(key, sizeof(key), "%d", i);
-    if (avltree_find(icons, key, (void *)&name)) {
+    if (avltree_find(icons, key, (const void**)&name)) {
       wpt->icon_descr = xstrdup(name);
       wpt->wpt_flags.icon_descr_is_dynamic = 1;
       DBG((sobj, "icon = \"%s\"\n", wpt->icon_descr));
@@ -576,13 +576,13 @@ mmo_read_CObjWaypoint(mmo_data_t *data)
 
 
 static void
-mmo_read_CObjRoute(mmo_data_t *data)
+mmo_read_CObjRoute(mmo_data_t* data)
 {
 #ifdef MMO_DBG
-  const char *sobj = "CObjRoute";
+  const char* sobj = "CObjRoute";
 #endif
   int rtept;
-  route_head *rte;
+  route_head* rte;
   char buf[16];
   int ux;
 
@@ -623,12 +623,12 @@ mmo_read_CObjRoute(mmo_data_t *data)
   }
 
   while (data->left > 0) {
-    mmo_data_t *tmp;
+    mmo_data_t* tmp;
 
     DBG((sobj, "read next waypoint\n"));
     tmp = mmo_read_object();
     if (tmp && tmp->data && (tmp->type = wptdata)) {
-      waypoint *wpt;
+      waypoint* wpt;
 
       /* FIXME: At this point this waypoint maybe not fully loaded (initialized) !!!
       	  We need a final procedure to handle this !!! */
@@ -653,13 +653,13 @@ mmo_read_CObjRoute(mmo_data_t *data)
 
 
 static void
-mmo_read_CObjTrack(mmo_data_t *data)
+mmo_read_CObjTrack(mmo_data_t* data)
 {
 #ifdef MMO_DBG
-  const char *sobj = "CObjTrack";
+  const char* sobj = "CObjTrack";
 #endif
   int tp, ctp;
-  route_head *trk;
+  route_head* trk;
 
   DBG((sobj, ":-----------------------------------------------------\n"));
   DBG((sobj, "name = \"%s\" [ visible=%s, id=0x%04X ]\n",
@@ -685,7 +685,7 @@ mmo_read_CObjTrack(mmo_data_t *data)
   DBG((sobj, "track has %d point(s)\n", tp));
 
   for (ctp = 0; ctp < tp; ctp++) {
-    waypoint *wpt;
+    waypoint* wpt;
     char unk;
 
     wpt = waypt_new();
@@ -766,14 +766,14 @@ mmo_read_CObjTrack(mmo_data_t *data)
 
 
 static void
-mmo_read_CObjText(mmo_data_t *data)
+mmo_read_CObjText(mmo_data_t* data)
 {
 #ifdef MMO_DBG
-  const char *sobj = "CObjText";
+  const char* sobj = "CObjText";
 #endif
   char buf[28];
   double lat, lon;
-  char *text, *font;
+  char* text, *font;
 
   DBG((sobj, ":-----------------------------------------------------\n"));
   DBG((sobj, "name = \"%s\" [ visible=%s, id=0x%04X ]\n",
@@ -798,10 +798,10 @@ mmo_read_CObjText(mmo_data_t *data)
 
 
 static void
-mmo_read_CObjCurrentPosition(mmo_data_t *data)
+mmo_read_CObjCurrentPosition(mmo_data_t* data)
 {
 #ifdef MMO_DBG
-  const char *sobj = "CObjCurrentPosition";
+  const char* sobj = "CObjCurrentPosition";
 #endif
   char buf[24];
   double lat, lon;
@@ -817,7 +817,7 @@ mmo_read_CObjCurrentPosition(mmo_data_t *data)
   mmo_fillbuf(buf, 24, 1);
 
   if (mmo_version >= 0x14) {
-    char *name;
+    char* name;
 
     name = mmo_readstr();
     DBG((sobj, "name = \"%s\"\n", name));
@@ -827,11 +827,11 @@ mmo_read_CObjCurrentPosition(mmo_data_t *data)
 }
 
 
-static mmo_data_t *
+static mmo_data_t*
 mmo_read_object(void)
 {
   int objid;
-  mmo_data_t *data = NULL;
+  mmo_data_t* data = NULL;
 
   // There are three cases:
   // a new object of a type that has not occurred previously in this file;
@@ -841,7 +841,7 @@ mmo_read_object(void)
   objid = gbfgetuint16(fin);
   if (objid == 0xFFFF) {
     gbuint16 version;
-    char *sobj;
+    char* sobj;
     int len;
     DBG(("mmo_read_object", "Registering new object type\n"));
 
@@ -852,7 +852,7 @@ mmo_read_object(void)
 
     len = gbfgetint16(fin);
 
-    sobj = xmalloc(len + 1);
+    sobj = (char*) xmalloc(len + 1);
     sobj[len] = '\0';
     gbfread(sobj, len, 1, fin);
     DBG(("mmo_read_object", "%s\n", sobj));
@@ -880,7 +880,7 @@ mmo_read_object(void)
   DBG(("mmo_read_object", "objid = 0x%04X\n", objid));
 
   if (objid & 0x8000) {
-    data = mmo_register_object(mmo_object_id++, NULL, 0);
+    data = mmo_register_object(mmo_object_id++, NULL, (gpsdata_type)0);
     data->name = mmo_readstr();
 
     if (objid != cat_object_id) {
@@ -947,16 +947,16 @@ mmo_read_object(void)
 }
 
 static void
-mmo_finalize_rtept_cb(const waypoint *wptref)
+mmo_finalize_rtept_cb(const waypoint* wptref)
 {
-  waypoint *wpt = (waypoint *)wptref;
+  waypoint* wpt = (waypoint*)wptref;
 
   if ((wpt->shortname[0] == 1) && (wpt->latitude == 0) && (wpt->longitude == 0)) {
-    mmo_data_t *data;
-    waypoint *wpt2;
+    mmo_data_t* data;
+    waypoint* wpt2;
 
     sscanf(wpt->shortname + 1, "%p", &data);
-    wpt2 = (waypoint *)data->data;
+    wpt2 = (waypoint*)data->data;
 
     wpt->latitude = wpt2->latitude;
     wpt->longitude = wpt2->longitude;
@@ -989,7 +989,7 @@ mmo_finalize_rtept_cb(const waypoint *wptref)
 *******************************************************************************/
 
 static void
-mmo_rd_init(const char *fname)
+mmo_rd_init(const char* fname)
 {
   int i;
 
@@ -1028,9 +1028,9 @@ static void
 mmo_read(void)
 {
 #ifdef MMO_DBG
-  const char *sobj = "main";
+  const char* sobj = "main";
 #endif
-  gbfile *fx;
+  gbfile* fx;
   int i;
 
   /* copy file to memory stream (needed for seek-ops and piped commands) */
@@ -1075,7 +1075,7 @@ mmo_read(void)
 /**************************************************************************/
 
 static void
-mmo_register_category_names(const char *name)
+mmo_register_category_names(const char* name)
 {
   char key[16];
 
@@ -1085,7 +1085,7 @@ mmo_register_category_names(const char *name)
 
 
 static void
-mmo_writestr(const char *str)
+mmo_writestr(const char* str)
 {
   int len = strlen(str);
 
@@ -1103,14 +1103,14 @@ mmo_writestr(const char *str)
 
 
 static void
-mmo_enum_waypt_cb(const waypoint *wpt)
+mmo_enum_waypt_cb(const waypoint* wpt)
 {
   mmo_obj_ct++;
 }
 
 
 static void
-mmo_enum_route_cb(const route_head *rte)
+mmo_enum_route_cb(const route_head* rte)
 {
   if (rte->rte_waypt_ct > 0) {
     mmo_obj_ct++;
@@ -1119,14 +1119,14 @@ mmo_enum_route_cb(const route_head *rte)
 
 
 static int
-mmo_write_obj_mark(const char *sobj, const char *name)
+mmo_write_obj_mark(const char* sobj, const char* name)
 {
-  char *key;
+  char* key;
   gbuint16 nr;
   char buf[16];
   int res;
 
-  if (avltree_find(mmobjects, sobj, (void *)&key)) {
+  if (avltree_find(mmobjects, sobj, (const void**)&key)) {
     nr = (unsigned)atoi(key);
     gbfputuint16(nr, fout);
   } else {
@@ -1152,12 +1152,12 @@ mmo_write_obj_mark(const char *sobj, const char *name)
 
 
 static void
-mmo_write_category(const char *sobj, const char *name)
+mmo_write_category(const char* sobj, const char* name)
 {
-  char *key;
+  char* key;
   gbuint16 nr;
 
-  if (avltree_find(category_names, name, (void *)&key)) {
+  if (avltree_find(category_names, name, (const void**)&key)) {
     nr = (unsigned)atoi(key);
     gbfputuint16(nr & 0x7FFF, fout);
   } else {
@@ -1168,7 +1168,7 @@ mmo_write_category(const char *sobj, const char *name)
 
 
 static int
-mmo_write_obj_head(const char *sobj, const char *name, const time_t ctime,
+mmo_write_obj_head(const char* sobj, const char* name, const time_t ctime,
                    const gbuint32 obj_type)
 {
   int res;
@@ -1188,13 +1188,13 @@ mmo_write_obj_head(const char *sobj, const char *name, const time_t ctime,
 
 
 static void
-mmo_write_wpt_cb(const waypoint *wpt)
+mmo_write_wpt_cb(const waypoint* wpt)
 {
-  char *str, *cx;
+  char* str, *cx;
   int objid;
   time_t time;
   int icon = 0;
-  mmo_data_t *data;
+  mmo_data_t* data;
 
   time = wpt->creation_time;
   if (time < 0) {
@@ -1247,7 +1247,7 @@ mmo_write_wpt_cb(const waypoint *wpt)
     cx = wpt->description;
   }
   if (cx != NULL) {
-    char *kml = NULL;
+    char* kml = NULL;
 
     if (strcmp(wpt->session->name, "kml") == 0) {
       utf_string tmp;
@@ -1290,20 +1290,20 @@ mmo_write_wpt_cb(const waypoint *wpt)
 
 
 static void
-mmo_write_rte_head_cb(const route_head *rte)
+mmo_write_rte_head_cb(const route_head* rte)
 {
   int objid;
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   time_t time = 0x7FFFFFFF;
 
   if (rte->rte_waypt_ct <= 0) {
     return;
   }
 
-  mmo_rte = (route_head *)rte;
+  mmo_rte = (route_head*)rte;
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    waypoint *wpt = (waypoint *)elem;
+    waypoint* wpt = (waypoint*)elem;
 
     if ((wpt->creation_time > 0) && (wpt->creation_time < time)) {
       time = wpt->creation_time;
@@ -1323,9 +1323,9 @@ mmo_write_rte_head_cb(const route_head *rte)
 
 
 static void
-mmo_write_rte_tail_cb(const route_head *rte)
+mmo_write_rte_tail_cb(const route_head* rte)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   if (rte->rte_waypt_ct <= 0) {
     return;
@@ -1348,7 +1348,7 @@ mmo_write_rte_tail_cb(const route_head *rte)
   }
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    waypoint *wpt = (waypoint *)elem;
+    waypoint* wpt = (waypoint*)elem;
     int objid = mmo_get_objid(wpt);
     gbfputuint16(objid & 0x7FFF, fout);
   }
@@ -1356,7 +1356,7 @@ mmo_write_rte_tail_cb(const route_head *rte)
 
 
 static void
-mmo_write_trk_head_cb(const route_head *trk)
+mmo_write_trk_head_cb(const route_head* trk)
 {
   int objid;
 
@@ -1374,7 +1374,7 @@ mmo_write_trk_head_cb(const route_head *trk)
 
 
 static void
-mmo_write_trk_tail_cb(const route_head *trk)
+mmo_write_trk_tail_cb(const route_head* trk)
 {
   if (trk->rte_waypt_ct <= 0) {
     return;
@@ -1408,7 +1408,7 @@ mmo_write_trk_tail_cb(const route_head *trk)
 /**************************************************************************/
 
 static void
-mmo_wr_init(const char *fname)
+mmo_wr_init(const char* fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
 

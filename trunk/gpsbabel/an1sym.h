@@ -62,7 +62,7 @@
 
 struct defguid {
   GUID guid;
-  const char *name;
+  const char* name;
 } default_guids[] = {
   { {0xb610bc70,{0x377e, 0x11d6, 0xaeb3}, {0x00, 0x01, 0x02, 0x31, 0x5f, 0xfd}},
     "Hiker"
@@ -708,7 +708,7 @@ struct defguid {
   },
 };
 
-int FindIconByName(const char *name, GUID *guid)
+int FindIconByName(const char* name, GUID* guid)
 {
   int i = 0;
   for (i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++) {
@@ -720,7 +720,7 @@ int FindIconByName(const char *name, GUID *guid)
   return 0;
 }
 
-int FindIconByGuid(GUID *guid, char **name)
+int FindIconByGuid(GUID* guid, char** name)
 {
   int i = 0;
   for (i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++) {

@@ -53,8 +53,8 @@ static waypoint* to_waypoint(itracku_data_record* d);
 /* itracku file access */
 static void itracku_file_read_data_record(gbfile* fin, itracku_data_record* d);
 static gbuint32 itracku_file_read_last_time(gbfile* fin);
-static void itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(waypoint *wpt));
-static void itracku_file_write_waypt(gbfile* fout, const waypoint *wpt);
+static void itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(waypoint* wpt));
+static void itracku_file_write_waypt(gbfile* fout, const waypoint* wpt);
 
 /* itracku device access */
 static const char read_update_data_command[] = { 0x60, 0xb5, 0, 0, 0, 0, 0 }; /* command string to start memory dump */
@@ -74,25 +74,25 @@ static char* update_data_buffer_read;
 static char* update_data_buffer_write;
 static char* update_data_buffer_end;
 
-static void itracku_device_dump_waypts(void* fd, void (*waypt_add)(waypoint *wpt));
+static void itracku_device_dump_waypts(void* fd, void (*waypt_add)(waypoint* wpt));
 static int itracku_device_update_data_init();
 static int itracku_device_update_data_read(void* buf, int len);
 static void itracku_device_write_string(const char* s);
 static const char* itracku_device_read_string();
 
 /* global variables */
-static void *fd;  /* serial fd */
+static void* fd;  /* serial fd */
 static gbfile* fin; /* input file handle */
 static gbfile* fout; /* output file handle */
 static gbfile* fbackup; /* backup file handle */
 static gbuint32 backup_last_creation_time; /* time of last data record in backup file */
 static gbuint32 new_waypoint_count; /* count of new waypoints */
-static char *port; /* serial port name */
-static char *backup_file_name; /* "backup" command option */
-static char *only_new; /* "new" command option */
+static char* port; /* serial port name */
+static char* backup_file_name; /* "backup" command option */
+static char* only_new; /* "new" command option */
 
 static void
-dbg(int l, const char *msg, ...)
+dbg(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);
@@ -361,7 +361,7 @@ arglist_t itracku_args[] = {
 *******************************************************************************/
 
 static void
-itracku_rd_init_common(const char *fname)
+itracku_rd_init_common(const char* fname)
 {
   new_waypoint_count = 0;
 
@@ -376,7 +376,7 @@ itracku_rd_init_common(const char *fname)
 }
 
 static void
-itracku_rd_ser_init(const char *fname)
+itracku_rd_ser_init(const char* fname)
 {
 #if LATER
   int i;
@@ -447,7 +447,7 @@ itracku_rd_ser_init(const char *fname)
 }
 
 static void
-itracku_rd_init(const char *fname)
+itracku_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
   itracku_rd_init_common(fname);
@@ -509,7 +509,7 @@ itracku_is_valid_data_record(itracku_data_record* d)
 }
 
 static void
-itracku_device_dump_waypts(void* fd, void (*waypt_add)(waypoint *wpt))
+itracku_device_dump_waypts(void* fd, void (*waypt_add)(waypoint* wpt))
 {
   itracku_data_record d;
 
@@ -549,7 +549,7 @@ itracku_file_read_last_time(gbfile* fin)
 }
 
 static void
-itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(waypoint *wpt))
+itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(waypoint* wpt))
 {
   itracku_data_record d;
 
@@ -564,7 +564,7 @@ itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(waypoint *wpt))
 }
 
 static void
-itracku_file_write_waypt(gbfile* fout, const waypoint *wpt)
+itracku_file_write_waypt(gbfile* fout, const waypoint* wpt)
 {
   itracku_data_record d;
   to_itracku_data_record(wpt, &d);
@@ -572,7 +572,7 @@ itracku_file_write_waypt(gbfile* fout, const waypoint *wpt)
 }
 
 static void
-itracku_waypt_input(void (*waypt_add)(waypoint *wpt))
+itracku_waypt_input(void (*waypt_add)(waypoint* wpt))
 {
   if (fd) {
     itracku_device_dump_waypts(fd, waypt_add);
@@ -590,7 +590,7 @@ itracku_read_waypt(void)
 static route_head* itracku_read_trk_track;
 
 static void
-itracku_read_trk_waypt_add(waypoint *wpt)
+itracku_read_trk_waypt_add(waypoint* wpt)
 {
   track_add_wpt(itracku_read_trk_track, wpt);
 }
@@ -622,7 +622,7 @@ itracku_read(void)
 }
 
 static void
-itracku_wr_init(const char *fname)
+itracku_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 }
@@ -634,7 +634,7 @@ itracku_wr_deinit(void)
 }
 
 static void
-itracku_output_waypoint(const waypoint * wp)
+itracku_output_waypoint(const waypoint* wp)
 {
   itracku_file_write_waypt(fout, wp);
 }
@@ -651,14 +651,14 @@ itracku_exit(void)		/* optional */
 }
 
 static void
-itracku_rt_init(const char *fname)
+itracku_rt_init(const char* fname)
 {
   itracku_rd_ser_init(fname);
   itracku_device_write_string("WP AP-Exit");
 }
 
 static void
-nmea_set_waypoint_time(waypoint *wpt, struct tm *time, int microseconds)
+nmea_set_waypoint_time(waypoint* wpt, struct tm* time, int microseconds)
 {
   if (time->tm_year == 0) {
     wpt->creation_time = ((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec;
@@ -675,8 +675,8 @@ nmea_set_waypoint_time(waypoint *wpt, struct tm *time, int microseconds)
   }
 }
 
-static waypoint *
-gprmc_parse(char *ibuf)
+static waypoint*
+gprmc_parse(char* ibuf)
 {
   double latdeg, lngdeg;
   char lngdir, latdir;
@@ -684,7 +684,7 @@ gprmc_parse(char *ibuf)
   char fix;
   unsigned int dmy;
   double speed,course;
-  waypoint *waypt;
+  waypoint* waypt;
   double microseconds;
   struct tm tm;
 
@@ -739,8 +739,8 @@ gprmc_parse(char *ibuf)
 
 	andreas.grimme@gmx.net
 */
-static waypoint *
-itracku_rt_position(posn_status *posn_status)
+static waypoint*
+itracku_rt_position(posn_status* posn_status)
 {
   char line[1024];
   waypoint* wpt;

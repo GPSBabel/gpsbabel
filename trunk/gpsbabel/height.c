@@ -27,8 +27,8 @@
 #define MYNAME "height"
 
 #if FILTERS_ENABLED
-static char *addopt        = NULL;
-static char *wgs84tomslopt = NULL;
+static char* addopt        = NULL;
+static char* wgs84tomslopt = NULL;
 static double addf;
 
 
@@ -124,9 +124,9 @@ static double wgs84_separation(double lat, double lon)
 
 
 static void
-correct_height(const waypoint *wpt)
+correct_height(const waypoint* wpt)
 {
-  waypoint *waypointp = (waypoint *) wpt;
+  waypoint* waypointp = (waypoint*) wpt;
 
   if (addopt) {
     waypointp->altitude += addf;
@@ -139,9 +139,9 @@ correct_height(const waypoint *wpt)
 
 
 static void
-height_init(const char *args)
+height_init(const char* args)
 {
-  char *unit;
+  char* unit;
 
   if (addopt) {
     addf = strtod(addopt, &unit);

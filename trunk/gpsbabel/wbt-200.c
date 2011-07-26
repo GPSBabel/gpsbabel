@@ -124,7 +124,7 @@ struct buf_head {
 };
 
 struct read_state {
-  route_head          *route_head;
+  route_head          *route_head_;
   unsigned            wpn, tpn;
 
   struct buf_head     data;
@@ -453,7 +453,7 @@ static int starts_with(const char *buf, const char *pat)
  */
 static int do_cmd(const char *cmd, const char *expect, char *buf, int len)
 {
-  int try;
+  int trycount;
 
   rd_drain();
   wr_cmdl(cmd);
@@ -464,15 +464,15 @@ static int do_cmd(const char *cmd, const char *expect, char *buf, int len)
    * NMEA data all the time so it's highly likely that it'll be in the
    * middle of an NMEA sentence when we start listening.
    */
-  for (try = 0; try < RETRIES; try++) {
-          rd_line(buf, len);
-          db(3, "Got: %s\n", buf);
-          if (starts_with(buf, expect)) {
-            db(2, "Matched: %s\n", buf);
-            return strlen(expect);
-          }
-          db(2, "Skip %d: %s\n", try, buf);
-        }
+  for (trycount = 0; trycount < RETRIES; trycount++) {
+    rd_line(buf, len);
+    db(3, "Got: %s\n", buf);
+    if (starts_with(buf, expect)) {
+      db(2, "Matched: %s\n", buf);
+      return strlen(expect);
+    }
+    db(2, "Skip %d: %s\n", trycount, buf);
+  }
 
   fatal(MYNAME ": Bad response from unit\n");
   return 0;   /* keep compiler quiet */
@@ -572,7 +572,7 @@ static int wbt200_data_chunk(struct read_state *st, const void *buf, int fmt)
   double     lat, lon, alt;
   time_t     rtim;
   waypoint   *tpt     = NULL;
-  const char *bp      = buf;
+  const char *bp      = (const char*) buf;
   size_t     buf_used = fmt_version[fmt].reclen;
 
   tim = le_read32(bp + 0);
@@ -592,23 +592,23 @@ static int wbt200_data_chunk(struct read_state *st, const void *buf, int fmt)
   if (lat >= 100) {
     /* Start new track in the northern hemisphere */
     lat -= 100;
-    st->route_head = NULL;
+    st->route_head_ = NULL;
   } else if (lat <= -100) {
     /* Start new track in the southern hemisphere */
     /* This fix courtesy of Anton Frolich */
     lat += 100;
-    st->route_head = NULL;
+    st->route_head_ = NULL;
   }
 
   tpt = make_trackpoint(st, lat, lon, alt, rtim);
 
-  if (NULL == st->route_head) {
+  if (NULL == st->route_head_) {
     db(1, "New Track\n");
-    st->route_head = route_head_alloc();
-    track_add_head(st->route_head);
+    st->route_head_ = route_head_alloc();
+    track_add_head(st->route_head_);
   }
 
-  track_add_wpt(st->route_head, tpt);
+  track_add_wpt(st->route_head_, tpt);
 
   return 1;
 }
@@ -671,7 +671,7 @@ static void wbt200_process_data(struct read_state *pst, int fmt)
 
 static void state_init(struct read_state *pst)
 {
-  pst->route_head = NULL;
+  pst->route_head_ = NULL;
   pst->wpn        = 0;
   pst->tpn        = 0;
 
@@ -790,7 +790,7 @@ static void wbt200_data_read(void)
 
 static int all_null(const void *buf, const int len)
 {
-  const char *bp = buf;
+  const char *bp = (const char *) buf;
   int i;
 
   for (i = 0; i < len; i++) {
@@ -809,7 +809,7 @@ static int wbt201_data_chunk(struct read_state *st, const void *buf)
   double      lat, lon, alt;
   time_t      rtim;
   waypoint    *tpt     = NULL;
-  const char  *bp      = buf;
+  const char  *bp      = (const char *) buf;
 
   /* Zero records are skipped */
   if (all_null(buf, RECLEN_WBT201)) {
@@ -837,18 +837,18 @@ static int wbt201_data_chunk(struct read_state *st, const void *buf)
 
   if (global_opts.masked_objective & TRKDATAMASK) {
     if (flags & WBT201_TRACK_START) {
-      st->route_head = NULL;
+      st->route_head_ = NULL;
     }
 
     tpt = make_trackpoint(st, lat, lon, alt, rtim);
 
-    if (NULL == st->route_head) {
+    if (NULL == st->route_head_) {
       db(1, "New Track\n");
-      st->route_head = route_head_alloc();
-      track_add_head(st->route_head);
+      st->route_head_ = route_head_alloc();
+      track_add_head(st->route_head_);
     }
 
-    track_add_wpt(st->route_head, tpt);
+    track_add_wpt(st->route_head_, tpt);
   }
 
   return 1;

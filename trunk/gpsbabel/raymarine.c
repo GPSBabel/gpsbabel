@@ -301,9 +301,9 @@ register_waypt(const waypoint *ref, const char is_rtept)
   if (waypt_table_ct >= waypt_table_sz) {
     waypt_table_sz += 32;
     if (waypt_table) {
-      waypt_table = (void *) xrealloc(waypt_table, waypt_table_sz * sizeof(wpt));
+      waypt_table = (waypoint**) xrealloc(waypt_table, waypt_table_sz * sizeof(wpt));
     } else {
-      waypt_table = (void *) xmalloc(waypt_table_sz * sizeof(wpt));
+      waypt_table = (waypoint**) xmalloc(waypt_table_sz * sizeof(wpt));
     }
   }
 
@@ -521,9 +521,9 @@ raymarine_write(void)
 ff_vecs_t raymarine_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write	/* waypoints */,
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* waypoints */,
     ff_cap_none 			/* tracks */,
-    ff_cap_read | ff_cap_write 	/* routes */,
+    (ff_cap)(ff_cap_read | ff_cap_write) 	/* routes */,
   },
   raymarine_rd_init,
   raymarine_wr_init,

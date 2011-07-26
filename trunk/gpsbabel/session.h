@@ -25,14 +25,14 @@
 typedef struct {
   queue Q;
   int id;
-  char *name;
+  char* name;
 } category_t;
 
 typedef struct {
   queue Q;
   int nr;
-  const char *name;		/* in normal case the name of a format */
-  char *filename;			/* used file within format */
+  const char* name;		/* in normal case the name of a format */
+  char* filename;			/* used file within format */
   int category_ct;
   int unknown_category_ct;	/* added without id */
   queue category_list;
@@ -41,8 +41,8 @@ typedef struct {
 void session_init(void);
 void session_exit(void);
 
-void start_session(const char *name, const char *filename);
-session_t *curr_session(void);
+void start_session(const char* name, const char* filename);
+session_t* curr_session(void);
 
 /* in work
 int session_add_category(const char *name, const int id);

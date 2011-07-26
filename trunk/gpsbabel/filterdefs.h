@@ -33,14 +33,14 @@ typedef struct filter_vecs {
   filter_process f_process;
   filter_deinit f_deinit;
   filter_exit f_exit;
-  arglist_t *args;
+  arglist_t* args;
 } filter_vecs_t;
 
-filter_vecs_t * find_filter_vec(char * const, char **);
-void free_filter_vec(filter_vecs_t *);
+filter_vecs_t* find_filter_vec(char* const, char**);
+void free_filter_vec(filter_vecs_t*);
 void disp_filters(int version);
-void disp_filter(const char *vecname);
-void disp_filter_vec(const char *vecname);
+void disp_filter(const char* vecname);
+void disp_filter_vec(const char* vecname);
 void disp_filter_vecs(void);
 void init_filter_vecs(void);
 void exit_filter_vecs(void);

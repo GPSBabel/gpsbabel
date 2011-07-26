@@ -29,19 +29,19 @@
 #endif
 
 // options
-static char *opt_deficon = NULL;
-static char *opt_export_lines = NULL;
-static char *opt_export_points = NULL;
-static char *opt_export_track = NULL;
-static char *opt_line_width = NULL;
-static char *opt_line_color = NULL;
-static char *opt_floating = NULL;
-static char *opt_extrude = NULL;
-static char *opt_trackdata = NULL;
-static char *opt_trackdirection = NULL;
-static char *opt_units = NULL;
-static char *opt_labels = NULL;
-static char *opt_max_position_points = NULL;
+static char* opt_deficon = NULL;
+static char* opt_export_lines = NULL;
+static char* opt_export_points = NULL;
+static char* opt_export_track = NULL;
+static char* opt_line_width = NULL;
+static char* opt_line_color = NULL;
+static char* opt_floating = NULL;
+static char* opt_extrude = NULL;
+static char* opt_trackdata = NULL;
+static char* opt_trackdirection = NULL;
+static char* opt_units = NULL;
+static char* opt_labels = NULL;
+static char* opt_max_position_points = NULL;
 
 static int export_lines;
 static int export_points;
@@ -55,12 +55,12 @@ static int line_width;
 
 static int indent_level;
 
-static waypoint *wpt_tmp;
+static waypoint* wpt_tmp;
 static int wpt_tmp_queued;
-static const char *posnfilename;
-static char *posnfilenametmp;
+static const char* posnfilename;
+static char* posnfilenametmp;
 
-static gbfile *ofd;
+static gbfile* ofd;
 
 #define COORD_FORMAT "%.6f"
 #define ALT_FORMAT   "%.2f"  // Beyond a centimeter is fantasy.
@@ -167,7 +167,7 @@ arglist_t kml_args[] = {
 static
 struct {
   int freshness;
-  const char *icon;
+  const char* icon;
 } kml_tracking_icons[] = {
   { 60, ICON_BASE "youarehere-60.png" }, // Red
   { 30, ICON_BASE "youarehere-30.png" }, // Yellow
@@ -185,7 +185,7 @@ struct {
 
 #if ! HAVE_LIBEXPAT
 static void
-kml_rd_init(const char *fname)
+kml_rd_init(const char* fname)
 {
   fatal(MYNAME ": This build excluded KML support because expat was not installed.\n");
 }
@@ -218,20 +218,20 @@ xg_tag_mapping kml_map[] = {
 };
 
 static
-const char * kml_tags_to_ignore[] = {
+const char* kml_tags_to_ignore[] = {
   "kml",
   "Document",
   "Folder",
   NULL,
 };
 
-void wpt_s(const char *args, const char **unused)
+void wpt_s(const char* args, const char** unused)
 {
   wpt_tmp = waypt_new();
   wpt_tmp_queued = 0;
 }
 
-void wpt_e(const char *args, const char **unused)
+void wpt_e(const char* args, const char** unused)
 {
   if (wpt_tmp_queued) {
     waypt_add(wpt_tmp);
@@ -239,19 +239,19 @@ void wpt_e(const char *args, const char **unused)
   wpt_tmp_queued = 0;
 }
 
-void wpt_name(const char *args, const char **unused)
+void wpt_name(const char* args, const char** unused)
 {
   if (args) {
     wpt_tmp->shortname = xstrdup(args);
   }
 }
 
-void wpt_desc(const char *args, const char **unused)
+void wpt_desc(const char* args, const char** unused)
 {
   if (args) {
-    char *tmp, *c;
+    char* tmp, *c;
 
-    tmp = xstrdup((char *)args);
+    tmp = xstrdup((char*)args);
     c = lrtrim(tmp);
     if (*c) {
       wpt_tmp->description = xstrappend(wpt_tmp->description, c);
@@ -260,12 +260,12 @@ void wpt_desc(const char *args, const char **unused)
   }
 }
 
-void wpt_time(const char *args, const char **unused)
+void wpt_time(const char* args, const char** unused)
 {
   wpt_tmp->creation_time = xml_parse_time(args, &wpt_tmp->microseconds);
 }
 
-void wpt_coord(const char *args, const char **attrv)
+void wpt_coord(const char* args, const char** attrv)
 {
   int n = 0;
   double lat, lon, alt;
@@ -281,7 +281,7 @@ void wpt_coord(const char *args, const char **attrv)
   wpt_tmp_queued = 1;
 }
 
-void wpt_icon(const char *args, const char **unused)
+void wpt_icon(const char* args, const char** unused)
 {
   if (wpt_tmp)  {
     wpt_tmp->icon_descr = xstrdup(args);
@@ -289,14 +289,14 @@ void wpt_icon(const char *args, const char **unused)
   }
 }
 
-void trk_coord(const char *args, const char **attrv)
+void trk_coord(const char* args, const char** attrv)
 {
   int consumed = 0;
   double lat, lon, alt;
-  waypoint *trkpt;
+  waypoint* trkpt;
   int n = 0;
 
-  route_head *trk_head = route_head_alloc();
+  route_head* trk_head = route_head_alloc();
   if (wpt_tmp->shortname) {
     trk_head->rte_name  = xstrdup(wpt_tmp->shortname);
   }
@@ -325,7 +325,7 @@ void trk_coord(const char *args, const char **attrv)
 
 static
 void
-kml_rd_init(const char *fname)
+kml_rd_init(const char* fname)
 {
   xml_init(fname, kml_map, NULL);
   xml_ignore_tags(kml_tags_to_ignore);
@@ -346,7 +346,7 @@ kml_rd_deinit(void)
 }
 
 static void
-kml_wr_init(const char *fname)
+kml_wr_init(const char* fname)
 {
   char u = 's';
   waypt_init_bounds(&kml_bounds);
@@ -385,7 +385,7 @@ kml_wr_init(const char *fname)
  * updated.
  */
 static void
-kml_wr_position_init(const char *fname)
+kml_wr_position_init(const char* fname)
 {
   posnfilename = fname;
   posnfilenametmp = xstrappend(xstrdup(fname), "-");
@@ -432,7 +432,7 @@ kml_wr_position_deinit(void)
  * If negative, descrease the indent level.
  */
 static void
-kml_write_xml(int indent, const char *fmt, ...)
+kml_write_xml(int indent, const char* fmt, ...)
 {
   va_list args;
   int i;
@@ -462,14 +462,14 @@ kml_write_xml(int indent, const char *fmt, ...)
  * Never changes indention leve, but does honour it.
  */
 static void
-kml_write_xmle(const char *tag, const char *fmt, ...)
+kml_write_xmle(const char* tag, const char* fmt, ...)
 {
   va_list args;
   int i;
   va_start(args, fmt);
 
   if (fmt && *fmt) {
-    char *tmp_ent = xml_entitize(fmt);
+    char* tmp_ent = xml_entitize(fmt);
     int needs_escaping = 0;
     for (i = 0; i < indent_level; i++) {
       gbfputs("  ", ofd);
@@ -491,7 +491,7 @@ kml_write_xmle(const char *tag, const char *fmt, ...)
 }
 
 void
-kml_output_linestyle(char *color, int width)
+kml_output_linestyle(char* color, int width)
 {
   // Style settings for line strings
   kml_write_xml(1, "<LineStyle>\n");
@@ -502,7 +502,7 @@ kml_output_linestyle(char *color, int width)
 
 
 #define hovertag(h) h ? 'h' : 'n'
-static void kml_write_bitmap_style_(const char *style, const char * bitmap,
+static void kml_write_bitmap_style_(const char* style, const char* bitmap,
                                     int highlighted, int force_heading)
 {
   int is_track = !strncmp(style, "track", 5);
@@ -548,11 +548,11 @@ static void kml_write_bitmap_style_(const char *style, const char * bitmap,
  * and non-highlighted version of the style to allow the icons
  * to magnify slightly on a rollover.
  */
-static void kml_write_bitmap_style(kml_point_type pt_type, const char *bitmap,
-                                   const char *customstyle)
+static void kml_write_bitmap_style(kml_point_type pt_type, const char* bitmap,
+                                   const char* customstyle)
 {
   int force_heading = 0;
-  const char *style;
+  const char* style;
   switch (pt_type) {
   case kmlpt_track:
     style = "track";
@@ -590,7 +590,7 @@ static void kml_write_bitmap_style(kml_point_type pt_type, const char *bitmap,
   kml_write_xml(-1, "</StyleMap>\n");
 }
 
-static void kml_output_timestamp(const waypoint *waypointp)
+static void kml_output_timestamp(const waypoint* waypointp)
 {
   char time_string[64];
   if (waypointp->creation_time) {
@@ -606,13 +606,13 @@ static void kml_output_timestamp(const waypoint *waypointp)
  * Output the track summary.
  */
 static
-void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
+void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
 {
-  char *max_alt_units;
+  char* max_alt_units;
   double max_alt;
-  char *min_alt_units;
+  char* min_alt_units;
   double min_alt;
-  char *distance_units;
+  char* distance_units;
   double distance;
 
   if (!td || !trackdata) {
@@ -639,17 +639,17 @@ void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
     TD2("<b>Max Alt</b> %.3f %s", max_alt, max_alt_units);
   }
   if (td->min_spd) {
-    char *spd_units;
+    char* spd_units;
     double spd = fmt_speed(td->min_spd, &spd_units);
     TD2("<b>Min Speed</b> %.1f %s", spd, spd_units);
   }
   if (td->max_spd) {
-    char *spd_units;
+    char* spd_units;
     double spd = fmt_speed(td->max_spd, &spd_units);
     TD2("<b>Max Speed</b> %.1f %s", spd, spd_units);
   }
   if (td->max_spd && td->start && td->end) {
-    char *spd_units;
+    char* spd_units;
     time_t elapsed = td->end - td->start;
     double spd = fmt_speed(td->distance_meters / elapsed, &spd_units);
     if (spd > 1.0)  {
@@ -697,7 +697,7 @@ void kml_output_trkdescription(const route_head *header, computed_trkdata *td)
 
 
 static
-void kml_output_header(const route_head *header, computed_trkdata*td)
+void kml_output_header(const route_head* header, computed_trkdata* td)
 {
   if (!realtime_positioning)  {
     kml_write_xml(1,  "<Folder>\n");
@@ -713,7 +713,7 @@ void kml_output_header(const route_head *header, computed_trkdata*td)
 }
 
 static
-int kml_altitude_known(const waypoint *waypoint)
+int kml_altitude_known(const waypoint* waypoint)
 {
   if (waypoint->altitude == unknown_alt) {
     return 0;
@@ -727,7 +727,7 @@ int kml_altitude_known(const waypoint *waypoint)
 }
 
 static
-void kml_write_coordinates(const waypoint *waypointp)
+void kml_write_coordinates(const waypoint* waypointp)
 {
   if (kml_altitude_known(waypointp)) {
     kml_write_xml(0, "<coordinates>"
@@ -748,7 +748,7 @@ void kml_write_coordinates(const waypoint *waypointp)
 /* Rather than a default "top down" view, view from the side to highlight
  * topo features.
  */
-static void kml_output_lookat(const waypoint *waypointp)
+static void kml_output_lookat(const waypoint* waypointp)
 {
   kml_write_xml(1, "<LookAt>\n");
   kml_write_xml(0, "<longitude>%f</longitude>\n", waypointp->longitude);
@@ -769,9 +769,9 @@ static void kml_output_positioning(void)
 }
 
 /* Output something interesing when we can for route and trackpoints */
-static void kml_output_description(const waypoint *pt)
+static void kml_output_description(const waypoint* pt)
 {
-  char *alt_units;
+  char* alt_units;
   double alt;
 
   if (!trackdata) {
@@ -799,12 +799,12 @@ static void kml_output_description(const waypoint *pt)
     TD("Temperature: %.1f", pt->temperature);
   }
   if WAYPT_HAS(pt, depth) {
-    char *depth_units;
+    char* depth_units;
     double depth = fmt_distance(pt->depth, &depth_units);
     TD2("Depth: %.1f %s", depth, depth_units);
   }
   if WAYPT_HAS(pt, speed) {
-    char *spd_units;
+    char* spd_units;
     double spd = fmt_speed(pt->speed, &spd_units);
     TD2("Speed: %.1f %s", spd, spd_units);
   }
@@ -828,7 +828,7 @@ static void kml_output_description(const waypoint *pt)
   kml_write_xml(-1, "]]></description>\n");
 }
 
-static void kml_recompute_time_bounds(const waypoint *waypointp)
+static void kml_recompute_time_bounds(const waypoint* waypointp)
 {
   if (waypointp->creation_time && (waypointp->creation_time < kml_time_min)) {
     kml_time_min = waypointp->creation_time;
@@ -841,15 +841,15 @@ static void kml_recompute_time_bounds(const waypoint *waypointp)
   }
 }
 
-static void kml_add_to_bounds(const waypoint *waypointp)
+static void kml_add_to_bounds(const waypoint* waypointp)
 {
   waypt_add_to_bounds(&kml_bounds, waypointp);
   kml_recompute_time_bounds(waypointp);
 }
 
-static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type)
+static void kml_output_point(const waypoint* waypointp, kml_point_type pt_type)
 {
-  const char *style;
+  const char* style;
 
   switch (pt_type) {
   case kmlpt_track:
@@ -921,9 +921,9 @@ static void kml_output_point(const waypoint *waypointp, kml_point_type pt_type)
   }
 }
 
-static void kml_output_tailer(const route_head *header)
+static void kml_output_tailer(const route_head* header)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   if (export_points && header->rte_waypt_ct > 0) {
     kml_write_xml(-1, "</Folder>\n");
@@ -933,7 +933,7 @@ static void kml_output_tailer(const route_head *header)
   if (export_lines && header->rte_waypt_ct > 0) {
     int needs_multigeometry = 0;
     QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-      waypoint *tpt = (waypoint *) elem;
+      waypoint* tpt = (waypoint*) elem;
       int first_in_trk = tpt->Q.prev == &header->waypoint_list;
       if (!first_in_trk && tpt->wpt_flags.new_trkseg) {
         needs_multigeometry = 1;
@@ -960,7 +960,7 @@ static void kml_output_tailer(const route_head *header)
     }
 
     QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-      waypoint *tpt = (waypoint *) elem;
+      waypoint* tpt = (waypoint*) elem;
       int first_in_trk = tpt->Q.prev == &header->waypoint_list;
       if (tpt->wpt_flags.new_trkseg) {
         if (!first_in_trk) {
@@ -1018,11 +1018,11 @@ void kml_gc_make_ballonstyle(void)
 }
 
 static
-char *
-kml_lookup_gc_icon(const waypoint *waypointp)
+char*
+kml_lookup_gc_icon(const waypoint* waypointp)
 {
-  const char *icon;
-  char *rb;
+  const char* icon;
+  char* rb;
 
   /* This could be done so much better in C99 with designated
    * initializers...
@@ -1077,10 +1077,10 @@ kml_lookup_gc_icon(const waypoint *waypointp)
 }
 
 static const
-char *
-kml_lookup_gc_container(const waypoint *waypointp)
+char*
+kml_lookup_gc_container(const waypoint* waypointp)
 {
-  const char *cont;
+  const char* cont;
 
   switch (waypointp->gc_data->container) {
   case gc_micro:
@@ -1112,7 +1112,7 @@ kml_lookup_gc_container(const waypoint *waypointp)
 // Not thread safe.  Return strings are small and it's silly to xasprintf/free
 // them so we use a static buffer.
 
-char * kml_gc_mkstar(int rating)
+char* kml_gc_mkstar(int rating)
 {
   static char tmp[40];
   if (0 == rating % 10) {
@@ -1124,9 +1124,9 @@ char * kml_gc_mkstar(int rating)
   return tmp;
 }
 
-static void kml_geocache_pr(const waypoint *waypointp)
+static void kml_geocache_pr(const waypoint* waypointp)
 {
-  char *p, *is;
+  char* p, *is;
 
   kml_write_xml(1, "<Placemark>\n");
 
@@ -1204,9 +1204,9 @@ static void kml_geocache_pr(const waypoint *waypointp)
  * WAYPOINTS
  */
 
-static void kml_waypt_pr(const waypoint *waypointp)
+static void kml_waypt_pr(const waypoint* waypointp)
 {
-  const char *icon;
+  const char* icon;
 
 #if 0 // Experimental
   if (realtime_positioning) {
@@ -1229,11 +1229,11 @@ static void kml_waypt_pr(const waypoint *waypointp)
 
   // Description
   if (waypointp->url && waypointp->url[0]) {
-    char * odesc = xml_entitize(waypointp->url);
+    char* odesc = xml_entitize(waypointp->url);
     kml_write_xml(0, "<Snippet/>\n");
     kml_write_xml(0, "<description>\n");
     if (waypointp->url_link_text && waypointp->url_link_text[0])  {
-      char *olink = xml_entitize(waypointp->url_link_text);
+      char* olink = xml_entitize(waypointp->url_link_text);
       kml_write_xml(0, "<![CDATA[<a href=\"%s\">%s</a>]]>", odesc, olink);
       xfree(olink);
     } else {
@@ -1278,9 +1278,9 @@ static void kml_waypt_pr(const waypoint *waypointp)
  * TRACKPOINTS
  */
 
-static void kml_track_hdr(const route_head *header)
+static void kml_track_hdr(const route_head* header)
 {
-  computed_trkdata *td;
+  computed_trkdata* td;
   track_recompute(header, &td);
   if (header->rte_waypt_ct > 0 && (export_lines || export_points)) {
     kml_output_header(header, td);
@@ -1288,12 +1288,12 @@ static void kml_track_hdr(const route_head *header)
   xfree(td);
 }
 
-static void kml_track_disp(const waypoint *waypointp)
+static void kml_track_disp(const waypoint* waypointp)
 {
   kml_output_point(waypointp, kmlpt_track);
 }
 
-static void kml_track_tlr(const route_head *header)
+static void kml_track_tlr(const route_head* header)
 {
   if (header->rte_waypt_ct > 0 && (export_lines || export_points)) {
     kml_output_tailer(header);
@@ -1316,40 +1316,40 @@ typedef enum {
   sl_float,
   sl_double,
 } sl_element;
-static void kml_mt_simple_array(const route_head *header,
-                                const char *name, const char *fmt_string,
+static void kml_mt_simple_array(const route_head* header,
+                                const char* name, const char* fmt_string,
                                 int offset, sl_element type)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   kml_write_xml(1, "<gx:SimpleArrayData name=\"%s\">\n", name);
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
 
-    char *datap = (char*) elem + offset;
+    char* datap = (char*) elem + offset;
 
     switch (type) {
     case sl_char: {
-      char data = *(char *) datap;
+      char data = *(char*) datap;
       kml_write_xmle("gx:value", fmt_string, data);
     }
     break;
     case sl_uchar: {
-      unsigned char data = *(unsigned char *) datap;
+      unsigned char data = *(unsigned char*) datap;
       kml_write_xmle("gx:value", fmt_string, data);
     }
     break;
     case sl_int: {
-      int data = *(int *) datap;
+      int data = *(int*) datap;
       kml_write_xmle("gx:value", fmt_string, data);
     }
     break;
     case sl_float: {
-      float data = *(float *) datap;
+      float data = *(float*) datap;
       kml_write_xmle("gx:value", fmt_string, data);
     }
     break;
     case sl_double: {
-      double data = *(double *) datap;
+      double data = *(double*) datap;
       kml_write_xmle("gx:value", fmt_string, data);
     }
     break;
@@ -1361,12 +1361,12 @@ static void kml_mt_simple_array(const route_head *header,
 }
 
 // True if at least two points in the track have timestamps.
-static int track_has_time(const route_head *header)
+static int track_has_time(const route_head* header)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   int points_with_time = 0;
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    waypoint *tpt = (waypoint *)elem;
+    waypoint* tpt = (waypoint*)elem;
 
     if (tpt->creation_time) {
       points_with_time++;
@@ -1379,21 +1379,21 @@ static int track_has_time(const route_head *header)
 }
 
 // Simulate a track_disp_all callback sequence for a single track.
-static void write_as_linestring(const route_head *header)
+static void write_as_linestring(const route_head* header)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   kml_track_hdr(header);
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    waypoint *tpt = (waypoint *)elem;
+    waypoint* tpt = (waypoint*)elem;
     kml_track_disp(tpt);
   }
   kml_track_tlr(header);
 
 }
 
-static void kml_mt_hdr(const route_head *header)
+static void kml_mt_hdr(const route_head* header)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   int has_cadence = 0;
   int has_depth = 0;
   int has_heartrate = 0;
@@ -1415,7 +1415,7 @@ static void kml_mt_hdr(const route_head *header)
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
     char time_string[64];
-    waypoint *tpt = (waypoint *)elem;
+    waypoint* tpt = (waypoint*)elem;
 
     if (tpt->creation_time) {
       xml_fill_in_time(time_string, tpt->creation_time, tpt->microseconds,
@@ -1430,7 +1430,7 @@ static void kml_mt_hdr(const route_head *header)
 
   // TODO: How to handle clamped, floating, extruded, etc.?
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    waypoint *tpt = (waypoint *)elem;
+    waypoint* tpt = (waypoint*)elem;
 
     if (kml_altitude_known(tpt)) {
       kml_write_xmle("gx:coord", COORD_FORMAT " " COORD_FORMAT " " ALT_FORMAT,
@@ -1489,7 +1489,7 @@ static void kml_mt_hdr(const route_head *header)
   }
 }
 
-static void kml_mt_tlr(const route_head *header)
+static void kml_mt_tlr(const route_head* header)
 {
   if (track_has_time(header)) {
     kml_write_xml(-1, "</gx:Track>\n");
@@ -1501,17 +1501,17 @@ static void kml_mt_tlr(const route_head *header)
  * ROUTES
  */
 
-static void kml_route_hdr(const route_head *header)
+static void kml_route_hdr(const route_head* header)
 {
   kml_output_header(header, NULL);
 }
 
-static void kml_route_disp(const waypoint *waypointp)
+static void kml_route_disp(const waypoint* waypointp)
 {
   kml_output_point(waypointp, kmlpt_route);
 }
 
-static void kml_route_tlr(const route_head *header)
+static void kml_route_tlr(const route_head* header)
 {
   kml_output_tailer(header);
 }
@@ -1590,8 +1590,8 @@ void kml_write_AbstractView(void)
 }
 
 static
-void kml_mt_array_schema(const char *field_name, const char *display_name,
-                         const char *type)
+void kml_mt_array_schema(const char* field_name, const char* display_name,
+                         const char* type)
 {
   kml_write_xml(1, "<gx:SimpleArrayField name=\"%s\" type=\"%s\">\n",
                 field_name, type);
@@ -1749,7 +1749,7 @@ void kml_write(void)
  * This depends on the table being sorted correctly.
  */
 static const
-char *
+char*
 kml_get_posn_icon(int freshness)
 {
   int i;
@@ -1764,10 +1764,10 @@ kml_get_posn_icon(int freshness)
 }
 
 
-static route_head *posn_trk_head = NULL;
+static route_head* posn_trk_head = NULL;
 
 static void
-kml_wr_position(waypoint *wpt)
+kml_wr_position(waypoint* wpt)
 {
   static time_t last_valid_fix;
 
@@ -1811,7 +1811,7 @@ kml_wr_position(waypoint *wpt)
      track points if we've not moved a minimum distance from the
      beginnning of our accumulated track. */
   {
-    waypoint *newest_posn= (waypoint *) QUEUE_LAST(&posn_trk_head->waypoint_list);
+    waypoint* newest_posn= (waypoint*) QUEUE_LAST(&posn_trk_head->waypoint_list);
 
     if (radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
                            RAD(newest_posn->latitude), RAD(newest_posn->longitude))) > 50) {
@@ -1836,7 +1836,7 @@ kml_wr_position(waypoint *wpt)
    */
   while (max_position_points &&
          (posn_trk_head->rte_waypt_ct >= max_position_points)) {
-    waypoint *tonuke = (waypoint *) QUEUE_FIRST(&posn_trk_head->waypoint_list);
+    waypoint* tonuke = (waypoint*) QUEUE_FIRST(&posn_trk_head->waypoint_list);
     track_del_wpt(posn_trk_head, tonuke);
   }
 

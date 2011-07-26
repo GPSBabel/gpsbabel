@@ -62,8 +62,8 @@
 /* %%%                            Zlib file api                            %%% */
 /*******************************************************************************/
 
-static gbfile *
-gzapi_open(gbfile *self, const char *mode)
+static gbfile*
+gzapi_open(gbfile* self, const char* mode)
 {
   char openmode[32];
 
@@ -77,16 +77,16 @@ gzapi_open(gbfile *self, const char *mode)
   }
 
   if (self->is_pipe) {
-    FILE *fd;
+    FILE* fd;
     if (self->mode == 'r') {
       fd = stdin;
     } else {
       fd = stdout;
     }
     SET_BINARY_MODE(fd);
-    self->handle.gz = (void **)gzdopen(fileno(fd), openmode);
+    self->handle.gz = (void**)gzdopen(fileno(fd), openmode);
   } else {
-    self->handle.gz = (void **)gzopen(self->name, openmode);
+    self->handle.gz = (void**)gzopen(self->name, openmode);
   }
 
   if (self->handle.gz == NULL) {
@@ -100,13 +100,13 @@ gzapi_open(gbfile *self, const char *mode)
 }
 
 static int
-gzapi_close(gbfile *self)
+gzapi_close(gbfile* self)
 {
   return gzclose(self->handle.gz);
 }
 
 static int
-gzapi_seek(gbfile *self, gbint32 offset, int whence)
+gzapi_seek(gbfile* self, gbint32 offset, int whence)
 {
   int result;
 
@@ -128,10 +128,10 @@ gzapi_seek(gbfile *self, gbint32 offset, int whence)
 }
 
 static gbsize_t
-gzapi_read(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
+gzapi_read(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self)
 {
   int result = 0;
-  char *target = (char*) buf;
+  char* target = (char*) buf;
   int count = size * members;
 
   if (self->back != -1) {
@@ -151,7 +151,7 @@ gzapi_read(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
 
   if ((result < 0) || ((gbsize_t)result < members)) {
     int errnum;
-    const char *errtxt;
+    const char* errtxt;
 
     errtxt = gzerror(self->handle.gz, &errnum);
 
@@ -167,19 +167,19 @@ gzapi_read(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
 }
 
 static gbsize_t
-gzapi_write(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
+gzapi_write(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* self)
 {
   return gzwrite(self->handle.gz, buf, size * members) / size;
 }
 
 static int
-gzapi_flush(gbfile *self)
+gzapi_flush(gbfile* self)
 {
   return gzflush(self->handle.gz, Z_SYNC_FLUSH);
 }
 
 static gbsize_t
-gzapi_tell(gbfile *self)
+gzapi_tell(gbfile* self)
 {
   gbsize_t result;
 
@@ -192,7 +192,7 @@ gzapi_tell(gbfile *self)
 }
 
 static int
-gzapi_eof(gbfile *self)
+gzapi_eof(gbfile* self)
 {
   int res = 0;
 
@@ -220,7 +220,7 @@ gzapi_eof(gbfile *self)
 }
 
 static int
-gzapi_ungetc(const int c, gbfile *self)
+gzapi_ungetc(const int c, gbfile* self)
 {
   if (self->back == -1) {
     self->back = c;
@@ -231,13 +231,13 @@ gzapi_ungetc(const int c, gbfile *self)
 }
 
 static void
-gzapi_clearerr(gbfile *self)
+gzapi_clearerr(gbfile* self)
 {
   gzclearerr(self->handle.gz);
 }
 
 static int
-gzapi_error(gbfile *self)
+gzapi_error(gbfile* self)
 {
   int errnum;
 
@@ -252,21 +252,21 @@ gzapi_error(gbfile *self)
 /* %%%                         Standard C file api                         %%% */
 /*******************************************************************************/
 
-static gbfile *
-stdapi_open(gbfile *self, const char *mode)
+static gbfile*
+stdapi_open(gbfile* self, const char* mode)
 {
   self->handle.std = xfopen(self->name, mode, self->module);
   return self;
 }
 
 static int
-stdapi_close(gbfile *self)
+stdapi_close(gbfile* self)
 {
   return fclose(self->handle.std);
 }
 
 static int
-stdapi_seek(gbfile *self, gbint32 offset, int whence)
+stdapi_seek(gbfile* self, gbint32 offset, int whence)
 {
   int result;
   gbsize_t pos = 0;
@@ -296,7 +296,7 @@ stdapi_seek(gbfile *self, gbint32 offset, int whence)
 }
 
 static gbsize_t
-stdapi_read(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
+stdapi_read(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self)
 {
   int errno;
   gbsize_t result = fread(buf, size, members, self->handle.std);
@@ -309,43 +309,43 @@ stdapi_read(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self
 }
 
 static gbsize_t
-stdapi_write(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
+stdapi_write(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* self)
 {
   return fwrite(buf, size, members, self->handle.std);
 }
 
 static int
-stdapi_flush(gbfile *self)
+stdapi_flush(gbfile* self)
 {
   return fflush(self->handle.std);
 }
 
 static gbsize_t
-stdapi_tell(gbfile *self)
+stdapi_tell(gbfile* self)
 {
   return ftell(self->handle.std);
 }
 
 static int
-stdapi_eof(gbfile *self)
+stdapi_eof(gbfile* self)
 {
   return feof(self->handle.std);
 }
 
 static int
-stdapi_ungetc(const int c, gbfile *self)
+stdapi_ungetc(const int c, gbfile* self)
 {
   return ungetc(c, self->handle.std);
 }
 
 static void
-stdapi_clearerr(gbfile *self)
+stdapi_clearerr(gbfile* self)
 {
   clearerr(self->handle.std);
 }
 
 static int
-stdapi_error(gbfile *self)
+stdapi_error(gbfile* self)
 {
   return ferror(self->handle.std);
 }
@@ -355,8 +355,8 @@ stdapi_error(gbfile *self)
 /* %%%                     Memory stream (memapi)                          %%% */
 /*******************************************************************************/
 
-static gbfile *
-memapi_open(gbfile *self, const char *mode)
+static gbfile*
+memapi_open(gbfile* self, const char* mode)
 {
   self->mempos = 0;
   self->memsz = 0;
@@ -366,7 +366,7 @@ memapi_open(gbfile *self, const char *mode)
 }
 
 static int
-memapi_close(gbfile *self)
+memapi_close(gbfile* self)
 {
   if (self->handle.mem) {
     xfree(self->handle.mem);
@@ -376,7 +376,7 @@ memapi_close(gbfile *self)
 }
 
 static int
-memapi_seek(gbfile *self, gbint32 offset, int whence)
+memapi_seek(gbfile* self, gbint32 offset, int whence)
 {
   long long pos = (int)self->mempos;
 
@@ -399,7 +399,7 @@ memapi_seek(gbfile *self, gbint32 offset, int whence)
 }
 
 static gbsize_t
-memapi_read(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
+memapi_read(void* buf, const gbsize_t size, const gbsize_t members, gbfile* self)
 {
   gbsize_t count;
   gbsize_t result = (self->memlen - self->mempos) / size;
@@ -417,7 +417,7 @@ memapi_read(void *buf, const gbsize_t size, const gbsize_t members, gbfile *self
 }
 
 static gbsize_t
-memapi_write(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *self)
+memapi_write(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* self)
 {
   gbsize_t count;
 
@@ -442,25 +442,25 @@ memapi_write(const void *buf, const gbsize_t size, const gbsize_t members, gbfil
 }
 
 static int
-memapi_flush(gbfile *self)
+memapi_flush(gbfile* self)
 {
   return 0;
 }
 
 static gbsize_t
-memapi_tell(gbfile *self)
+memapi_tell(gbfile* self)
 {
   return self->mempos;
 }
 
 static int
-memapi_eof(gbfile *self)
+memapi_eof(gbfile* self)
 {
   return (self->mempos == self->memlen);
 }
 
 static int
-memapi_ungetc(const int c, gbfile *self)
+memapi_ungetc(const int c, gbfile* self)
 {
   if (self->mempos == 0) {
     return EOF;
@@ -472,13 +472,13 @@ memapi_ungetc(const int c, gbfile *self)
 }
 
 static void
-memapi_clearerr(gbfile *self)
+memapi_clearerr(gbfile* self)
 {
   return;
 }
 
 static int
-memapi_error(gbfile *self)
+memapi_error(gbfile* self)
 {
   return 0;
 }
@@ -490,11 +490,11 @@ memapi_error(gbfile *self)
  * gbfopen: (as xfopen) plus the name of the calling GPSBabel module (MYNAME)
  */
 
-gbfile *
-gbfopen(const char *filename, const char *mode, const char *module)
+gbfile*
+gbfopen(const char* filename, const char* mode, const char* module)
 {
-  gbfile *file;
-  const char *m;
+  gbfile* file;
+  const char* m;
   int len;
 
   file = (gbfile*) xcalloc(1, sizeof(*file));
@@ -589,7 +589,7 @@ gbfopen(const char *filename, const char *mode, const char *module)
 #else
   file->buffsz = 256;
 #endif
-  file->buff = (char *) xmalloc(file->buffsz);
+  file->buff = (char*) xmalloc(file->buffsz);
 
   return file;
 }
@@ -598,10 +598,10 @@ gbfopen(const char *filename, const char *mode, const char *module)
  * gbfopen_be: as gbfopen, but set the BIG-ENDIAN flag
  */
 
-gbfile *
-gbfopen_be(const char *filename, const char *mode, const char *module)
+gbfile*
+gbfopen_be(const char* filename, const char* mode, const char* module)
 {
-  gbfile *result;
+  gbfile* result;
 
   result = gbfopen(filename, mode, module);
   result->big_endian = 1;
@@ -614,7 +614,7 @@ gbfopen_be(const char *filename, const char *mode, const char *module)
  */
 
 void
-gbfclose(gbfile *file)
+gbfclose(gbfile* file)
 {
   if (!file) {
     return;
@@ -633,7 +633,7 @@ gbfclose(gbfile *file)
  */
 
 int
-gbfgetc(gbfile *file)
+gbfgetc(gbfile* file)
 {
   unsigned char c;
 
@@ -649,10 +649,10 @@ gbfgetc(gbfile *file)
  * gbfgets: (as fgets)
  */
 
-char *
-gbfgets(char *buf, int len, gbfile *file)
+char*
+gbfgets(char* buf, int len, gbfile* file)
 {
-  char *result = buf;
+  char* result = buf;
 
   while (--len > 0) {
     int c = gbfgetc(file);
@@ -661,7 +661,7 @@ gbfgets(char *buf, int len, gbfile *file)
       break;
     }
 
-    *(unsigned char *)buf = (unsigned char)c;
+    *(unsigned char*)buf = (unsigned char)c;
     buf++;
 
     if (c == '\r') {
@@ -683,7 +683,7 @@ gbfgets(char *buf, int len, gbfile *file)
  */
 
 gbsize_t
-gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
+gbfread(void* buf, const gbsize_t size, const gbsize_t members, gbfile* file)
 {
   if ((size == 0) || (members == 0)) {
     return 0;
@@ -695,7 +695,7 @@ gbfread(void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
  * gbvfprintf: (as vfprintf)
  */
 
-int gbvfprintf(gbfile *file, const char *format, va_list ap)
+int gbvfprintf(gbfile* file, const char* format, va_list ap)
 {
   int len;
 
@@ -738,7 +738,7 @@ int gbvfprintf(gbfile *file, const char *format, va_list ap)
  */
 
 int
-gbfprintf(gbfile *file, const char *format, ...)
+gbfprintf(gbfile* file, const char* format, ...)
 {
   va_list args;
   int result;
@@ -755,7 +755,7 @@ gbfprintf(gbfile *file, const char *format, ...)
  */
 
 int
-gbfputc(int c, gbfile *file)
+gbfputc(int c, gbfile* file)
 {
   unsigned char temp = (unsigned int) c;
 
@@ -769,7 +769,7 @@ gbfputc(int c, gbfile *file)
  */
 
 int
-gbfputs(const char *s, gbfile *file)
+gbfputs(const char* s, gbfile* file)
 {
   return gbfwrite(s, 1, strlen(s), file);
 }
@@ -779,7 +779,7 @@ gbfputs(const char *s, gbfile *file)
  */
 
 int
-gbfwrite(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *file)
+gbfwrite(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* file)
 {
   int result;
 
@@ -800,7 +800,7 @@ gbfwrite(const void *buf, const gbsize_t size, const gbsize_t members, gbfile *f
  */
 
 int
-gbfflush(gbfile *file)
+gbfflush(gbfile* file)
 {
   return file->fileflush(file);
 }
@@ -810,7 +810,7 @@ gbfflush(gbfile *file)
  */
 
 void
-gbfclearerr(gbfile *file)
+gbfclearerr(gbfile* file)
 {
   file->fileclearerr(file);
 }
@@ -820,7 +820,7 @@ gbfclearerr(gbfile *file)
  */
 
 int
-gbferror(gbfile *file)
+gbferror(gbfile* file)
 {
   return file->fileerror(file);
 }
@@ -830,7 +830,7 @@ gbferror(gbfile *file)
  */
 
 void
-gbfrewind(gbfile *file)
+gbfrewind(gbfile* file)
 {
   (void) gbfseek(file, 0, SEEK_SET);
   gbfclearerr(file);
@@ -841,7 +841,7 @@ gbfrewind(gbfile *file)
  */
 
 int
-gbfseek(gbfile *file, gbint32 offset, int whence)
+gbfseek(gbfile* file, gbint32 offset, int whence)
 {
   return file->fileseek(file, offset, whence);
 }
@@ -851,7 +851,7 @@ gbfseek(gbfile *file, gbint32 offset, int whence)
  */
 
 gbsize_t
-gbftell(gbfile *file)
+gbftell(gbfile* file)
 {
   gbsize_t result = file->filetell(file);
   if ((signed) result == -1)
@@ -865,7 +865,7 @@ gbftell(gbfile *file)
  */
 
 int
-gbfeof(gbfile *file)
+gbfeof(gbfile* file)
 {
   return file->fileeof(file);
 }
@@ -875,7 +875,7 @@ gbfeof(gbfile *file)
  */
 
 int
-gbfungetc(const int c, gbfile *file)
+gbfungetc(const int c, gbfile* file)
 {
   return file->fileungetc(c, file);
 }
@@ -887,7 +887,7 @@ gbfungetc(const int c, gbfile *file)
  */
 
 gbint32
-gbfgetint32(gbfile *file)
+gbfgetint32(gbfile* file)
 {
   char buf[4];
 
@@ -906,7 +906,7 @@ gbfgetint32(gbfile *file)
  */
 
 gbint16
-gbfgetint16(gbfile *file)
+gbfgetint16(gbfile* file)
 {
   char buf[2];
 
@@ -925,7 +925,7 @@ gbfgetint16(gbfile *file)
  */
 
 double
-gbfgetdbl(gbfile *file)
+gbfgetdbl(gbfile* file)
 {
   char buf[8];
 
@@ -940,7 +940,7 @@ gbfgetdbl(gbfile *file)
  */
 
 float
-gbfgetflt(gbfile *file)
+gbfgetflt(gbfile* file)
 {
   char buf[4];
 
@@ -955,12 +955,12 @@ gbfgetflt(gbfile *file)
  *             The result is a temporary allocated entity: use it or free it!
  */
 
-char *
-gbfgetcstr(gbfile *file)
+char*
+gbfgetcstr(gbfile* file)
 {
-  char *result;
+  char* result;
   int len = 0;
-  char *str = file->buff;
+  char* str = file->buff;
 
   for (;;) {
     int c = gbfgetc(file);
@@ -977,7 +977,7 @@ gbfgetcstr(gbfile *file)
     len++;
   }
 
-  result = (char *) xmalloc(len + 1);
+  result = (char*) xmalloc(len + 1);
   if (len > 0) {
     memcpy(result, str, len);
   }
@@ -991,14 +991,14 @@ gbfgetcstr(gbfile *file)
  *             The result is a temporary allocated entity: use it or free it!
  */
 
-char *
-gbfgetpstr(gbfile *file)
+char*
+gbfgetpstr(gbfile* file)
 {
   int len;
-  char *result;
+  char* result;
 
   len = gbfgetc(file);
-  result = (char *) xmalloc(len + 1);
+  result = (char*) xmalloc(len + 1);
   if (len > 0) {
     gbfread(result, 1, len, file);
   }
@@ -1007,11 +1007,11 @@ gbfgetpstr(gbfile *file)
   return result;
 }
 
-static char *
-gbfgetucs2str(gbfile *file)
+static char*
+gbfgetucs2str(gbfile* file)
 {
   int len = 0;
-  char *result = file->buff;
+  char* result = file->buff;
 
   for (;;) {
     char buff[8];
@@ -1076,11 +1076,11 @@ gbfgetucs2str(gbfile *file)
  *            except xfree and free you can do all possible things with the result
  */
 
-char *
-gbfgetstr(gbfile *file)
+char*
+gbfgetstr(gbfile* file)
 {
   int len = 0;
-  char *result = file->buff;
+  char* result = file->buff;
 
   if (file->unicode) {
     return gbfgetucs2str(file);
@@ -1140,7 +1140,7 @@ gbfgetstr(gbfile *file)
  */
 
 int
-gbfputint16(const gbint16 i, gbfile *file)
+gbfputint16(const gbint16 i, gbfile* file)
 {
   char buf[2];
 
@@ -1157,7 +1157,7 @@ gbfputint16(const gbint16 i, gbfile *file)
  */
 
 int
-gbfputint32(const gbint32 i, gbfile *file)
+gbfputint32(const gbint32 i, gbfile* file)
 {
   char buf[4];
 
@@ -1174,7 +1174,7 @@ gbfputint32(const gbint32 i, gbfile *file)
  */
 
 int
-gbfputdbl(const double d, gbfile *file)
+gbfputdbl(const double d, gbfile* file)
 {
   char buf[8];
 
@@ -1187,7 +1187,7 @@ gbfputdbl(const double d, gbfile *file)
  */
 
 int
-gbfputflt(const float f, gbfile *file)
+gbfputflt(const float f, gbfile* file)
 {
   char buf[4];
 
@@ -1201,7 +1201,7 @@ gbfputflt(const float f, gbfile *file)
  */
 
 int
-gbfputcstr(const char *s, gbfile *file)
+gbfputcstr(const char* s, gbfile* file)
 {
   int len;
 
@@ -1220,7 +1220,7 @@ gbfputcstr(const char *s, gbfile *file)
  */
 
 int
-gbfputpstr(const char *s, gbfile *file)
+gbfputpstr(const char* s, gbfile* file)
 {
   int len;
 
@@ -1238,7 +1238,7 @@ gbfputpstr(const char *s, gbfile *file)
 /* Much more higher level functions */
 
 gbsize_t
-gbfcopyfrom(gbfile *file, gbfile *src, gbsize_t count)
+gbfcopyfrom(gbfile* file, gbfile* src, gbsize_t count)
 {
   char buf[1024];
   gbsize_t copied = 0;

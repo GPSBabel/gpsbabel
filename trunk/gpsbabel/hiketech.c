@@ -22,9 +22,9 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static gbfile *ofd;
-static waypoint *wpt_tmp;
-static route_head *trk_head;
+static gbfile* ofd;
+static waypoint* wpt_tmp;
+static route_head* trk_head;
 
 
 #define MYNAME "hiketech"
@@ -70,11 +70,11 @@ static xg_tag_mapping ht_map[] = {
   { ht_trk_lat, 	cb_cdata, "/hiketech/gpsdata/trk/pnt/lat" },
   { ht_trk_long, 	cb_cdata, "/hiketech/gpsdata/trk/pnt/long" },
   { ht_trk_alt, 	cb_cdata, "/hiketech/gpsdata/trk/pnt/alt" },
-  { NULL, 	0,         NULL}
+  { NULL,	(xg_cb_type)0,         NULL}
 };
 
 static void
-hiketech_rd_init(const char *fname)
+hiketech_rd_init(const char* fname)
 {
   xml_init(fname, ht_map, NULL);
 }
@@ -92,7 +92,7 @@ hiketech_rd_deinit(void)
 }
 
 static void
-hiketech_wr_init(const char *fname)
+hiketech_wr_init(const char* fname)
 {
   ofd = gbfopen(fname, "w", MYNAME);
 }
@@ -104,20 +104,20 @@ hiketech_wr_deinit(void)
 }
 
 static void
-hiketech_trk_hdr(const route_head *rte)
+hiketech_trk_hdr(const route_head* rte)
 {
   gbfprintf(ofd, "<trk>\n");
   write_optional_xml_entity(ofd, " ", "ident", rte->rte_name);
 }
 
 static void
-hiketech_trk_tlr(const route_head *rte)
+hiketech_trk_tlr(const route_head* rte)
 {
   gbfprintf(ofd, "</trk>\n");
 }
 
 static void
-hiketech_print_utc(time_t tm, const char *indent, const char *tag)
+hiketech_print_utc(time_t tm, const char* indent, const char* tag)
 {
   char tbuf[80];
   strftime(tbuf, sizeof(tbuf), "%Y-%m-%d %I:%M:%S", gmtime(&tm));
@@ -125,7 +125,7 @@ hiketech_print_utc(time_t tm, const char *indent, const char *tag)
 }
 
 static void
-hiketech_trkpt_pr(const waypoint *waypointp)
+hiketech_trkpt_pr(const waypoint* waypointp)
 {
   gbfprintf(ofd, " <pnt>\n");
   if (waypointp->creation_time) {
@@ -141,7 +141,7 @@ hiketech_trkpt_pr(const waypoint *waypointp)
 }
 
 static void
-hiketech_waypt_pr(const waypoint *wpt)
+hiketech_waypt_pr(const waypoint* wpt)
 {
   gbfprintf(ofd, "<wpt>\n");
   write_xml_entity(ofd, "\t", "ident", wpt->shortname);
@@ -170,82 +170,82 @@ hiketech_write(void)
 }
 
 static
-void	 ht_wpt_s(const char *args, const char **unused)
+void	 ht_wpt_s(const char* args, const char** unused)
 {
   wpt_tmp = waypt_new();
 }
 
 static
-void  	ht_ident(const char *args, const char **unused)
+void  	ht_ident(const char* args, const char** unused)
 {
   wpt_tmp->shortname = xstrdup(args);
 }
 
 static
-void 	ht_sym(const char *args, const char **unused)
+void 	ht_sym(const char* args, const char** unused)
 {
   wpt_tmp->icon_descr = xstrdup(args);
   wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
 }
 
 static
-void  	ht_lat(const char *args, const char **unused)
+void  	ht_lat(const char* args, const char** unused)
 {
   wpt_tmp->latitude = atof(args);
 }
 
 static
-void  	ht_long(const char *args, const char **unused)
+void  	ht_long(const char* args, const char** unused)
 {
   wpt_tmp->longitude = atof(args);
 }
 
 static
-void  	ht_alt(const char *args, const char **unused)
+void  	ht_alt(const char* args, const char** unused)
 {
   wpt_tmp->altitude = atof(args);
 }
 
 static
-void  	ht_wpt_e(const char *args, const char **unused)
+void  	ht_wpt_e(const char* args, const char** unused)
 {
   waypt_add(wpt_tmp);
   wpt_tmp = NULL;
 }
 
 static
-void	ht_trk_s(const char *args, const char **unused)
+void	ht_trk_s(const char* args, const char** unused)
 {
   trk_head = route_head_alloc();
   track_add_head(trk_head);
 }
 
 static
-void	ht_trk_e(const char *args, const char **unused)
+void	ht_trk_e(const char* args, const char** unused)
 {
 
 }
 
 static
-void	ht_trk_ident(const char *args, const char **unused)
+void	ht_trk_ident(const char* args, const char** unused)
 {
   trk_head->rte_name = xstrdup(args);
 }
 
 static
-void	ht_trk_pnt_s(const char *args, const char **unused)
+void	ht_trk_pnt_s(const char* args, const char** unused)
 {
   wpt_tmp = waypt_new();
 }
 
 static
-void	ht_trk_pnt_e(const char *args, const char **unused)
+void	ht_trk_pnt_e(const char* args, const char** unused)
 {
   track_add_wpt(trk_head, wpt_tmp);
 }
 
 static
-void	ht_trk_utc(const char *args, const char **unused)
+void	ht_trk_utc(const char* args, const char** unused)
 {
   struct tm tm;
   time_t utc;
@@ -264,19 +264,19 @@ void	ht_trk_utc(const char *args, const char **unused)
 }
 
 static
-void	ht_trk_lat(const char *args, const char **unused)
+void	ht_trk_lat(const char* args, const char** unused)
 {
   wpt_tmp->latitude = atof(args);
 }
 
 static
-void	ht_trk_long(const char *args, const char **unused)
+void	ht_trk_long(const char* args, const char** unused)
 {
   wpt_tmp->longitude = atof(args);
 }
 
 static
-void	ht_trk_alt(const char *args, const char **unused)
+void	ht_trk_alt(const char* args, const char** unused)
 {
   wpt_tmp->altitude = atof(args);
 }
@@ -285,7 +285,7 @@ void	ht_trk_alt(const char *args, const char **unused)
 
 ff_vecs_t hiketech_vecs = {
   ff_type_file,
-  { ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write },
+  { (ff_cap)(ff_cap_read | ff_cap_write), (ff_cap)(ff_cap_read | ff_cap_write) },
   hiketech_rd_init,
   hiketech_wr_init,
   hiketech_rd_deinit,

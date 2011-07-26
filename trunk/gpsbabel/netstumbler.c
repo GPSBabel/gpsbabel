@@ -24,12 +24,12 @@
 #include "csv_util.h"
 #include <ctype.h>
 
-static gbfile *file_in;
-static char *nseicon = NULL;
-static char *nsneicon = NULL;
-static char *seicon = NULL;
-static char *sneicon = NULL;
-static char *snmac = NULL;
+static gbfile* file_in;
+static char* nseicon = NULL;
+static char* nsneicon = NULL;
+static char* seicon = NULL;
+static char* sneicon = NULL;
+static char* snmac = NULL;
 static int macstumbler;
 
 static void	fix_netstumbler_dupes(void);
@@ -62,7 +62,7 @@ arglist_t netstumbler_args[] = {
 };
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen(fname, "rb", MYNAME);
   macstumbler = 0;
@@ -77,12 +77,12 @@ rd_deinit(void)
 static void
 data_read(void)
 {
-  char *ibuf;
+  char* ibuf;
   char ssid[2 + 32 + 2 + 1];			/* "( " + SSID + " )" + null */
   char mac[2 + 17 + 2 + 1];			/* "( " + MAC + " )" + null */
   char desc[sizeof ssid - 1 + 15 + 1];	/* room for channel/speed */
   double lat = 0, lon = 0;
-  waypoint *wpt_tmp;
+  waypoint* wpt_tmp;
   int line_no = 0;
   int stealth_num = 0, whitespace_num = 0;
   long flags = 0;
@@ -93,7 +93,7 @@ data_read(void)
   memset(&tm, 0, sizeof(tm));
 
   while ((ibuf = gbfgetstr(file_in))) {
-    char *field;
+    char* field;
     int field_num, len, i, stealth = 0;
 
     if ((line++ == 0) && file_in->unicode) {
@@ -249,15 +249,15 @@ data_read(void)
 
 typedef struct {
   unsigned long crc;
-  waypoint *wpt;
+  waypoint* wpt;
 } htable_t;
 
 static
 int
-compare(const void *a, const void *b)
+compare(const void* a, const void* b)
 {
-  unsigned long crc_a = ((const htable_t *)a)->crc;
-  unsigned long crc_b = ((const htable_t *)b)->crc;
+  unsigned long crc_a = ((const htable_t*)a)->crc;
+  unsigned long crc_b = ((const htable_t*)b)->crc;
 
   /* we can't just return crc_a - crc_b because the return type is
    * signed.
@@ -274,8 +274,8 @@ compare(const void *a, const void *b)
      * to make the testo script happy.
      * */
 
-    waypoint *wpt_a = ((const htable_t *)a)->wpt;
-    waypoint *wpt_b = ((const htable_t *)b)->wpt;
+    waypoint* wpt_a = ((const htable_t*)a)->wpt;
+    waypoint* wpt_b = ((const htable_t*)b)->wpt;
 
     return strcmp(wpt_a->description, wpt_b->description);
   }
@@ -291,20 +291,20 @@ void
 fix_netstumbler_dupes(void)
 {
   int i, ct = waypt_count(), serial = 0;
-  htable_t *htable, *bh;
-  queue *elem, *tmp;
+  htable_t* htable, *bh;
+  queue* elem, *tmp;
   extern queue waypt_head;
-  const char *snptr;
-  char *tmp_sn;
+  const char* snptr;
+  char* tmp_sn;
   unsigned long last_crc;
   char ssid[32 + 5 + 1];
 
-  htable = (htable_t *) xmalloc(ct * sizeof *htable);
+  htable = (htable_t*) xmalloc(ct * sizeof *htable);
   bh = htable;
 
   i = 0;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    bh->wpt = (waypoint *) elem;
+    bh->wpt = (waypoint*) elem;
     snptr = bh->wpt->shortname;
     tmp_sn = strlower(xstrdup(snptr));
     bh->crc = get_crc32(tmp_sn, strlen(snptr));

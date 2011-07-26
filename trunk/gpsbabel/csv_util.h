@@ -19,25 +19,25 @@
 
 /* function prototypes */
 
-char *
+char*
 #ifndef DEBUG_MEM
-csv_stringtrim(const char *string, const char *enclosure, int strip_max);
+csv_stringtrim(const char* string, const char* enclosure, int strip_max);
 #else
-CSV_STRINGTRIM(const char *string, const char *enclosure, int strip_max, DEBUG_PARAMS);
+CSV_STRINGTRIM(const char* string, const char* enclosure, int strip_max, DEBUG_PARAMS);
 #define csv_stringtrim( s, e,m ) CSV_STRINGTRIM( s, e, m, __FILE__, __LINE__)
 #endif
 
-char *
-csv_lineparse(const char *stringstart, const char *delimited_by, const char *enclosed_in, const int line_no);
+char*
+csv_lineparse(const char* stringstart, const char* delimited_by, const char* enclosed_in, const int line_no);
 
 void
-human_to_dec(const char *instr, double *outlat, double *outlon, int which);
+human_to_dec(const char* instr, double* outlat, double* outlon, int which);
 
-char *
+char*
 #ifndef DEBUG_MEM
-csv_stringclean(const char *string, const char *chararray);
+csv_stringclean(const char* string, const char* chararray);
 #else
-CSV_STRINGCLEAN(const char *string, const char *chararray,DEBUG_PARAMS);
+CSV_STRINGCLEAN(const char* string, const char* chararray,DEBUG_PARAMS);
 #define csv_stringclean(s,c) CSV_STRINGCLEAN(s,c,__FILE__,__LINE__)
 #endif
 
@@ -51,22 +51,22 @@ void
 xcsv_file_init(void);
 
 void
-xcsv_prologue_add(char *);
+xcsv_prologue_add(char*);
 
 void
-xcsv_epilogue_add(char *);
+xcsv_epilogue_add(char*);
 
 void
-xcsv_ifield_add(char *, char *, char *);
+xcsv_ifield_add(char*, char*, char*);
 
 void
-xcsv_ofield_add(char *, char *, char *, int options);
+xcsv_ofield_add(char*, char*, char*, int options);
 
 void
 xcsv_destroy_style(void);
 
-const char *
-xcsv_get_char_from_constant_table(char *key);
+const char*
+xcsv_get_char_from_constant_table(char* key);
 
 /****************************************************************************/
 /* types required for various xcsv functions                                */
@@ -78,9 +78,9 @@ xcsv_get_char_from_constant_table(char *key);
 #define OPTIONS_OPTIONAL 3
 typedef struct field_map {
   queue Q;
-  char * key;
-  char * val;
-  char * printfc;
+  char* key;
+  char* val;
+  char* printfc;
   int hashed_key;
   int options;
 } field_map_t;
@@ -88,13 +88,13 @@ typedef struct field_map {
 /* a queuing struct for prologues / epilogues */
 typedef struct ogue {
   queue Q;
-  char * val;
+  char* val;
 } ogue_t;
 
 /* something to map config file constants to chars */
 typedef struct char_map {
-  const char * key;
-  const char * chars;
+  const char* key;
+  const char* chars;
 } char_map_t;
 
 /*
@@ -113,22 +113,22 @@ typedef struct {
   /* footer lines for writing at the bottom of the file. */
   queue epilogue;
 
-  char * field_delimiter; 	/* comma, quote, etc... */
-  char * record_delimiter;	/* newline, c/r, etc... */
+  char* field_delimiter; 	/* comma, quote, etc... */
+  char* record_delimiter;	/* newline, c/r, etc... */
 
-  char * badchars;		/* characters we never write to output */
+  char* badchars;		/* characters we never write to output */
 
   queue ifield;		/* input field mapping */
-  queue * ofield;    		/* output field mapping */
+  queue* ofield;    		/* output field mapping */
 
   int ifield_ct;		/* actual # of ifields */
   int ofield_ct;		/* actual # of ofields */
 
-  gbfile * xcsvfp;		/* ptr to current *open* data file */
-  char * fname;                /* ptr to filename of above. */
+  gbfile* xcsvfp;		/* ptr to current *open* data file */
+  char* fname;                 /* ptr to filename of above. */
 
-  char * description;		/* Description for help text */
-  char * extension;		/* preferred filename extension (for wrappers)*/
+  char* description;		/* Description for help text */
+  char* extension;		/* preferred filename extension (for wrappers)*/
 
   short_handle mkshort_handle;/* handle for mkshort() */
   ff_type type;		/* format type for GUI wrappers. */

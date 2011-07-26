@@ -34,12 +34,12 @@
 	"xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3 " \
 	"http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd"
 
-garmin_fs_t *
+garmin_fs_t*
 garmin_fs_alloc(const int protocol)
 {
-  garmin_fs_t *result = NULL;
+  garmin_fs_t* result = NULL;
 
-  result = (garmin_fs_t *)xcalloc(1, sizeof(*result));
+  result = (garmin_fs_t*)xcalloc(1, sizeof(*result));
   result->fs.type = FS_GMSD;
   result->fs.copy = (fs_copy) garmin_fs_copy;
   result->fs.destroy = garmin_fs_destroy;
@@ -52,11 +52,11 @@ garmin_fs_alloc(const int protocol)
 }
 
 void
-garmin_fs_destroy(void *fs)
+garmin_fs_destroy(void* fs)
 {
-  garmin_fs_t *data = (garmin_fs_t *) fs;
+  garmin_fs_t* data = (garmin_fs_t*) fs;
   if (data != NULL) {
-    garmin_ilink_t *ilinks;
+    garmin_ilink_t* ilinks;
 
     if (data->addr != NULL) {
       xfree(data->addr);
@@ -99,7 +99,7 @@ garmin_fs_destroy(void *fs)
       ilinks->ref_count--;
       if (ilinks->ref_count <= 0) {
         while (ilinks != NULL) {
-          garmin_ilink_t *tmp = ilinks;
+          garmin_ilink_t* tmp = ilinks;
           ilinks = ilinks->next;
           xfree(tmp);
         }
@@ -109,13 +109,13 @@ garmin_fs_destroy(void *fs)
   }
 }
 
-void garmin_fs_copy(garmin_fs_t **dest, garmin_fs_t *src)
+void garmin_fs_copy(garmin_fs_t** dest, garmin_fs_t* src)
 {
   if (src == NULL) {
     *dest = NULL;
     return;
   }
-  *dest = (garmin_fs_t *) xmalloc(sizeof(*src));
+  *dest = (garmin_fs_t*) xmalloc(sizeof(*src));
 
   /* do not copy interlinks, only increment the refrence counter */
   if (src->ilinks != NULL) {
@@ -138,9 +138,9 @@ void garmin_fs_copy(garmin_fs_t **dest, garmin_fs_t *src)
   (*dest)->state = (src->state != NULL) ? xstrdup(src->state) : NULL;
 }
 
-void garmin_fs_convert(void *fs)
+void garmin_fs_convert(void* fs)
 {
-  garmin_fs_t *gmsd = (garmin_fs_t *) fs;
+  garmin_fs_t* gmsd = (garmin_fs_t*) fs;
 
   if (gmsd->addr) {
     gmsd->addr = cet_convert_string(gmsd->addr);
@@ -183,10 +183,10 @@ void garmin_fs_convert(void *fs)
 /* GPX - out */
 
 void
-garmin_fs_xml_fprint(gbfile *ofd, const waypoint *waypt)
+garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt)
 {
-  const char *phone, *addr;
-  garmin_fs_t *gmsd = GMSD_FIND(waypt);
+  const char* phone, *addr;
+  garmin_fs_t* gmsd = GMSD_FIND(waypt);
 
   if (gmsd == NULL) {
     return;
@@ -229,7 +229,7 @@ garmin_fs_xml_fprint(gbfile *ofd, const waypoint *waypt)
       gbfprintf(ofd, "%*s<gpxx:Depth>%.6f</gpxx:Depth>\n", space * 2, "", waypt->depth);
     }
     if (gmsd->flags.display) {
-      char *cx;
+      char* cx;
       switch (gmsd->display) {
       case gt_display_mode_symbol:
         cx = "SymbolOnly";
@@ -256,7 +256,7 @@ garmin_fs_xml_fprint(gbfile *ofd, const waypoint *waypt)
       gbfprintf(ofd, "%*s</gpxx:Categories>\n", --space * 2, "");
     }
     if (*addr) {
-      char *str, *tmp;
+      char* str, *tmp;
       gbfprintf(ofd, "%*s<gpxx:Address>\n", space++ * 2, "");
 
       if ((str = GMSD_GET(addr, NULL))) {
@@ -289,7 +289,7 @@ garmin_fs_xml_fprint(gbfile *ofd, const waypoint *waypt)
     }
 
     if (*phone) {
-      char *tmp = xml_entitize(phone);
+      char* tmp = xml_entitize(phone);
       gbfprintf(ofd, "%*s<gpxx:PhoneNumber>%s</gpxx:PhoneNumber>\n", space * 2, "", tmp);
       xfree(tmp);
     }
@@ -301,14 +301,14 @@ garmin_fs_xml_fprint(gbfile *ofd, const waypoint *waypt)
 }
 
 void
-garmin_fs_xml_convert(const int base_tag, int tag, const char *cdatastr, waypoint *waypt)
+garmin_fs_xml_convert(const int base_tag, int tag, const char* cdatastr, waypoint* waypt)
 {
-  garmin_fs_t *gmsd;
+  garmin_fs_t* gmsd;
 
   gmsd = GMSD_FIND(waypt);
   if (gmsd == NULL) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&waypt->fs, (format_specific_data *) gmsd);
+    fs_chain_add(&waypt->fs, (format_specific_data*) gmsd);
   }
 
   tag -= base_tag;
@@ -379,7 +379,7 @@ garmin_fs_xml_convert(const int base_tag, int tag, const char *cdatastr, waypoin
 }
 
 unsigned char
-garmin_fs_convert_category(const char *category_name, gbuint16 *category)
+garmin_fs_convert_category(const char* category_name, gbuint16* category)
 {
   int i;
   int cat = 0;
@@ -390,7 +390,7 @@ garmin_fs_convert_category(const char *category_name, gbuint16 *category)
     cat = (1 << --i);
   } else if (global_opts.inifile != NULL) {
     for (i = 0; i < 16; i++) {
-      char *c;
+      char* c;
       char key[3];
 
       snprintf(key, sizeof(key), "%d", i + 1);
@@ -410,10 +410,10 @@ garmin_fs_convert_category(const char *category_name, gbuint16 *category)
 }
 
 unsigned char
-garmin_fs_merge_category(const char *category_name, waypoint *waypt)
+garmin_fs_merge_category(const char* category_name, waypoint* waypt)
 {
   gbuint16 cat;
-  garmin_fs_t *gmsd;
+  garmin_fs_t* gmsd;
 
   if (!garmin_fs_convert_category(category_name, &cat)) {
     return 0;
@@ -424,19 +424,19 @@ garmin_fs_merge_category(const char *category_name, waypoint *waypt)
 
   if (gmsd == NULL) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&waypt->fs, (format_specific_data *) gmsd);
+    fs_chain_add(&waypt->fs, (format_specific_data*) gmsd);
   }
   GMSD_SET(category, cat);
   return 1;
 }
 
 void
-garmin_fs_garmin_after_read(const GPS_PWay way, waypoint *wpt, const int protoid)
+garmin_fs_garmin_after_read(const GPS_PWay way, waypoint* wpt, const int protoid)
 {
-  garmin_fs_t *gmsd = NULL;
+  garmin_fs_t* gmsd = NULL;
 
   gmsd = garmin_fs_alloc(protoid);
-  fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
+  fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
   /* nothing happens until gmsd is allocated some lines above */
 
@@ -466,9 +466,9 @@ garmin_fs_garmin_after_read(const GPS_PWay way, waypoint *wpt, const int protoid
 }
 
 void
-garmin_fs_garmin_before_write(const waypoint *wpt, GPS_PWay way, const int protoid)
+garmin_fs_garmin_before_write(const waypoint* wpt, GPS_PWay way, const int protoid)
 {
-  garmin_fs_t *gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = GMSD_FIND(wpt);
 
   if (gmsd == NULL) {
     return;

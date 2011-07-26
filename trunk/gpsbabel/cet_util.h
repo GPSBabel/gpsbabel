@@ -36,29 +36,29 @@ typedef char XML_Char;
 
 #include "cet.h"
 
-cet_cs_vec_t *cet_find_cs_by_name(const char *name);
+cet_cs_vec_t* cet_find_cs_by_name(const char* name);
 void cet_register(void);
 void cet_deregister(void);
 
 /* short hand transmissions */
 
-char *cet_str_utf8_to_cp1252(const char *src);
-char *cet_str_cp1252_to_utf8(const char *src);
+char* cet_str_utf8_to_cp1252(const char* src);
+char* cet_str_cp1252_to_utf8(const char* src);
 extern cet_cs_vec_t cet_cs_vec_cp1252;
 
-char *cet_str_iso8859_1_to_utf8(const char *src);
-char *cet_str_utf8_to_iso8859_1(const char *src);
+char* cet_str_iso8859_1_to_utf8(const char* src);
+char* cet_str_utf8_to_iso8859_1(const char* src);
 extern cet_cs_vec_t cet_cs_vec_iso8859_1;
 
-char *cet_str_iso8859_15_to_utf8(const char *src);
-char *cet_str_utf8_to_iso8859_15(const char *src);
+char* cet_str_iso8859_15_to_utf8(const char* src);
+char* cet_str_utf8_to_iso8859_15(const char* src);
 extern const cet_cs_vec_t cet_cs_vec_iso8859_15;
 
-char *cet_str_utf8_to_us_ascii(const char *src);
-char *cet_str_us_ascii_to_utf8(const char *src);
+char* cet_str_utf8_to_us_ascii(const char* src);
+char* cet_str_us_ascii_to_utf8(const char* src);
 extern cet_cs_vec_t cet_cs_vec_ansi_x3_4_1968;
 
-short *cet_str_utf8_to_uni(const char *src, int *length);
+short* cet_str_utf8_to_uni(const char* src, int* length);
 
 extern cet_cs_vec_t cet_cs_vec_utf8;
 
@@ -96,27 +96,27 @@ extern cet_cs_vec_t cet_cs_vec_utf8;
 #endif  /* not defined XMLCALL */
 
 #if HAVE_LIBEXPAT
-int XMLCALL cet_lib_expat_UnknownEncodingHandler(void *data, const XML_Char *encoding, XML_Encoding *info);
+int XMLCALL cet_lib_expat_UnknownEncodingHandler(void* data, const XML_Char* encoding, XML_Encoding* info);
 #endif
 
 /* helpers */
 
-char *cet_str_uni_to_any(const short *src, int length, const cet_cs_vec_t *dest_vec);
-char *cet_str_any_to_any(const char *src, const cet_cs_vec_t *src_vec, const cet_cs_vec_t *dest_vec);
-int cet_valid_char(const char *src, const cet_cs_vec_t *vec);
+char* cet_str_uni_to_any(const short* src, int length, const cet_cs_vec_t* dest_vec);
+char* cet_str_any_to_any(const char* src, const cet_cs_vec_t* src_vec, const cet_cs_vec_t* dest_vec);
+int cet_valid_char(const char* src, const cet_cs_vec_t* vec);
 
-int cet_gbfprintf(gbfile *stream, const cet_cs_vec_t *src_vec, const char *fmt, ...);
+int cet_gbfprintf(gbfile* stream, const cet_cs_vec_t* src_vec, const char* fmt, ...);
 
 /* cet_convert_string: !!! ONLY VALID WITHIN 'cet_convert_strings' process !!! */
-char *cet_convert_string(char *str);
+char* cet_convert_string(char* str);
 
 /* gpsbabel extensions */
 
-void cet_convert_init(const char *cs_name, const int force);
-void cet_convert_strings(const cet_cs_vec_t *source, const cet_cs_vec_t *target, const char *format);
+void cet_convert_init(const char* cs_name, const int force);
+void cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, const char* format);
 void cet_convert_deinit(void);
 
-void cet_disp_character_set_names(FILE *fout);
+void cet_disp_character_set_names(FILE* fout);
 
 /*
  * Conversion from XML_Char string to char string.  If XML_Char is the
@@ -126,11 +126,11 @@ void cet_disp_character_set_names(FILE *fout);
  * it.
  */
 
-const char *xml_convert_to_char_string_n(const XML_Char *str, int *nbytes);
-const char *xml_convert_to_char_string(const XML_Char *str);
-void xml_free_converted_string(const char *str);
+const char* xml_convert_to_char_string_n(const XML_Char* str, int* nbytes);
+const char* xml_convert_to_char_string(const XML_Char* str);
+void xml_free_converted_string(const char* str);
 
-const char **xml_convert_attrs_to_char_string(const XML_Char **xml_attr);
-void xml_free_converted_attrs(const char **attr);
+const char** xml_convert_attrs_to_char_string(const XML_Char** xml_attr);
+void xml_free_converted_attrs(const char** attr);
 
 #endif

@@ -23,8 +23,8 @@
 #include "defs.h"
 #define MYNAME "Bushnell"
 
-static gbfile *file_in;
-static char *ofname;
+static gbfile* file_in;
+static char* ofname;
 static short_handle mkshort_handle = NULL;
 
 static
@@ -37,7 +37,7 @@ arglist_t bushnell_args[] = {
 
 typedef struct  {
   const signed int symbol;
-  const char *icon;
+  const char* icon;
 } icon_mapping_t;
 
 icon_mapping_t bushnell_icons[] = {
@@ -126,9 +126,9 @@ icon_mapping_t bushnell_icons[] = {
 };
 
 static unsigned int
-bushnell_get_icon_from_name(const char *name)
+bushnell_get_icon_from_name(const char* name)
 {
-  icon_mapping_t *t;
+  icon_mapping_t* t;
   for (t = bushnell_icons; t->icon > 0; t++) {
     if (0 == case_ignore_strcmp(name, t->icon)) {
       return t->symbol;
@@ -137,10 +137,10 @@ bushnell_get_icon_from_name(const char *name)
   return 0;
 }
 
-static const char *
+static const char*
 bushnell_get_name_from_symbol(signed int s)
 {
-  icon_mapping_t *t;
+  icon_mapping_t* t;
   for (t = bushnell_icons; t->icon > 0; t++) {
     if (s == t->symbol) {
       return t->icon;
@@ -150,7 +150,7 @@ bushnell_get_name_from_symbol(signed int s)
 }
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -162,9 +162,9 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
-  char *dot, *slash;
+  char* dot, *slash;
   static char valid_chars [] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"
                                ".-/\\~@#$%^&*()_+=<>"
                                "abcdefghijklmnopqrstuvwxyz";
@@ -199,7 +199,7 @@ bushnell_read(void)
   gbint32 lat_tmp,lon_tmp;
   unsigned int proximity;
   unsigned int icon;
-  waypoint *wpt_tmp = waypt_new();
+  waypoint* wpt_tmp = waypt_new();
 
   lat_tmp = gbfgetint32(file_in);
   lon_tmp = gbfgetint32(file_in);
@@ -219,14 +219,14 @@ bushnell_read(void)
 }
 
 static void
-bushnell_write_one(const waypoint *wpt)
+bushnell_write_one(const waypoint* wpt)
 {
   char tbuf[20]; // 19 text bytes + null terminator.
   char padding[2] = {0, 0};
-  gbfile *file_out;
+  gbfile* file_out;
   static int wpt_count;
-  char *fname;
-  char *ident;
+  char* fname;
+  char* ident;
   xasprintf(&fname, "%s-%d.wpt", ofname, wpt_count++);
 
   file_out = gbfopen_le(fname, "wb", MYNAME);

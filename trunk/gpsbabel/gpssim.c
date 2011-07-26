@@ -23,11 +23,11 @@
 
 #define MYNAME "gpssim"
 
-static gbfile *fout;
-static char *wayptspd;
-static char *splitfiles_opt;
+static gbfile* fout;
+static char* wayptspd;
+static char* splitfiles_opt;
 static int splitfiles;
-static char *fnamestr;
+static char* fnamestr;
 static int trk_count;
 static int doing_tracks;
 
@@ -52,7 +52,7 @@ arglist_t gpssim_args[] = {
  */
 
 static void
-gpssim_wr_init(const char *fname)
+gpssim_wr_init(const char* fname)
 {
   fnamestr =  xstrdup(fname);
   trk_count = 0;
@@ -86,7 +86,7 @@ gpssim_wr_deinit(void)
  */
 
 static void
-gpssim_write_sentence(const char *const s)
+gpssim_write_sentence(const char* const s)
 {
   gbfprintf(fout, "$%s*%02X\r\n", s, nmea_cksum(s));
 }
@@ -101,7 +101,7 @@ gpssim_write_spd(double knotsperhour)
 }
 
 static void
-gpssim_write_pt(const waypoint *wpt)
+gpssim_write_pt(const waypoint* wpt)
 {
   char obuf[1024];
   double lat, lon;
@@ -122,7 +122,7 @@ gpssim_write_pt(const waypoint *wpt)
   if (wpt->creation_time) {
     char tbuf[20];
     int hms, ymd;
-    struct tm *tm;
+    struct tm* tm;
 
     tm = gmtime(&wpt->creation_time);
     hms = tm->tm_hour * 10000 + tm->tm_min * 100 + tm->tm_sec;
@@ -135,11 +135,11 @@ gpssim_write_pt(const waypoint *wpt)
 }
 
 static void
-gpssim_trk_hdr(const route_head *rh)
+gpssim_trk_hdr(const route_head* rh)
 {
   if (splitfiles) {
     char c[1024];
-    char *ofname = xstrdup(fnamestr);
+    char* ofname = xstrdup(fnamestr);
 
     if (fout) {
       fatal(MYNAME ": output file already open.\n");
@@ -156,7 +156,7 @@ gpssim_trk_hdr(const route_head *rh)
 }
 
 static void
-gpssim_trk_ftr(const route_head *rh)
+gpssim_trk_ftr(const route_head* rh)
 {
   if (splitfiles) {
     gbfclose(fout);
@@ -169,7 +169,7 @@ gpssim_write(void)
 {
   if (waypt_count()) {
     if (splitfiles) {
-      char *ofname = xstrdup(fnamestr);
+      char* ofname = xstrdup(fnamestr);
       ofname = xstrappend(ofname, "-waypoints.gpssim");
       fout = gbfopen(ofname, "wb", MYNAME);
       xfree(ofname);

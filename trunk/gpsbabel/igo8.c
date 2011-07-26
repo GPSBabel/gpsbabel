@@ -92,8 +92,8 @@ typedef struct _igo8_point {
 } igo8_point, *p_igo8_point;
 
 // Files
-static gbfile *igo8_file_in;
-static gbfile *igo8_file_out;
+static gbfile* igo8_file_in;
+static gbfile* igo8_file_out;
 
 // Options
 static char* igo8_option_tracknum = NULL;
@@ -133,7 +133,7 @@ static void igo8_check_type_sizes()
 }
 
 // Reader initialization callback
-static void igo8_read_init(const char *fname)
+static void igo8_read_init(const char* fname)
 {
   igo8_file_in = gbfopen_le(fname, "rb", MYNAME);
 
@@ -151,8 +151,8 @@ static void igo8_read_init(const char *fname)
 // Reader callback
 static void igo8_read(void)
 {
-  waypoint *wpt_tmp;
-  route_head *track_head;
+  waypoint* wpt_tmp;
+  route_head* track_head;
   igo8_point point;
 
   track_head = route_head_alloc();
@@ -178,7 +178,7 @@ static void igo8_read_deinit(void)
 }
 
 // Writer initialize callback
-static void igo8_write_init(const char *fname)
+static void igo8_write_init(const char* fname)
 {
   igo8_file_out = gbfopen_le(fname, "wb", MYNAME);
 
@@ -207,7 +207,7 @@ static void igo8_write_deinit(void)
 }
 
 // Write point callback
-static void write_igo8_track_point(const waypoint *wpt)
+static void write_igo8_track_point(const waypoint* wpt)
 {
   igo8_point point;
 
@@ -239,7 +239,7 @@ static void write_igo8_track_point(const waypoint *wpt)
 
 // Write src unicode str to the dst cstring using unicode characters
 // All lengths are in bytes
-unsigned int print_unicode(char *dst, const unsigned int dst_max_length, short *src, unsigned int src_len)
+unsigned int print_unicode(char* dst, const unsigned int dst_max_length, short* src, unsigned int src_len)
 {
   // Check to see what length we were passed, if the length doesn't include the null
   // then we make it include the null
@@ -278,9 +278,9 @@ unsigned int print_unicode(char *dst, const unsigned int dst_max_length, short *
 //                     string, validate that the use of the CET library provides
 //                     conmforming output, remove my old junk converter code.
 
-unsigned int ascii_to_unicode_2(char *dst, const unsigned int dst_max_length, const char *src)
+unsigned int ascii_to_unicode_2(char* dst, const unsigned int dst_max_length, const char* src)
 {
-  short *unicode;
+  short* unicode;
   int len;
 
   unicode = cet_str_any_to_uni(src, &cet_cs_vec_ansi_x3_4_1968, &len);
@@ -357,7 +357,7 @@ static void igo8_write(void)
 // Callback definitions
 ff_vecs_t igo8_vecs = {
   ff_type_file,
-  { ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none },
+  { ff_cap_none, (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none },
   igo8_read_init,
   igo8_write_init,
   igo8_read_deinit,

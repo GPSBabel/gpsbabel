@@ -19,11 +19,11 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static char *encoded_points = NULL;
-static char *encoded_levels = NULL;
-static char *script = NULL;
-static route_head **routehead;
-static int *routecount;
+static char* encoded_points = NULL;
+static char* encoded_levels = NULL;
+static char* script = NULL;
+static route_head** routehead;
+static int* routecount;
 static short_handle desc_handle;
 
 static int serial = 0;
@@ -33,7 +33,7 @@ static int serial = 0;
 
 #if ! HAVE_LIBEXPAT
 static void
-google_rd_init(const char *fname)
+google_rd_init(const char* fname)
 {
   fatal(MYNAME ": This build excluded Google Maps support because expat was not installed.\n");
 }
@@ -62,10 +62,10 @@ xg_tag_mapping google_map[] = {
   { goog_td_b,      cb_cdata,      "/div/div/table/tr/td/b" },
   { goog_td_e,    cb_end,        "/div/table/tr/td" },
   { goog_td_e,    cb_end,        "/div/div/table/tr/td" },
-  { NULL,         0,              NULL }
+  { NULL, (xg_cb_type)0,              NULL }
 };
 
-void goog_script(const char *args, const char **unused)
+void goog_script(const char* args, const char** unused)
 {
   if (args) {
     if (script) {
@@ -76,7 +76,7 @@ void goog_script(const char *args, const char **unused)
   }
 }
 
-void goog_points(const char *args, const char **unused)
+void goog_points(const char* args, const char** unused)
 {
   if (args) {
     if (encoded_points) {
@@ -87,7 +87,7 @@ void goog_points(const char *args, const char **unused)
   }
 }
 
-void goog_levels(const char *args, const char **unused)
+void goog_levels(const char* args, const char** unused)
 {
   if (args) {
     if (encoded_levels) {
@@ -99,16 +99,16 @@ void goog_levels(const char *args, const char **unused)
 }
 
 static char goog_segname[7];
-static char *goog_realname = NULL;
+static char* goog_realname = NULL;
 static int goog_segroute = 0;
 
 /*
  * The segments contain an index into the points array.  We use that
  * index to find the waypoint and insert a better name for it.
  */
-void goog_segment_s(const char *args, const char **attrv)
+void goog_segment_s(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
+  const char** avp = &attrv[0];
   while (*avp) {
     if (0 == strcmp(avp[0], "pointIndex")) {
       snprintf(goog_segname, sizeof(goog_segname), "\\%5.5x", atoi(avp[1]));
@@ -118,9 +118,9 @@ void goog_segment_s(const char *args, const char **attrv)
 
 }
 
-void goog_segment(const char *args, const char **unused)
+void goog_segment(const char* args, const char** unused)
 {
-  waypoint *wpt_tmp;
+  waypoint* wpt_tmp;
 
   wpt_tmp = route_find_waypt_by_name(routehead[goog_segroute], goog_segname);
   if (wpt_tmp) {
@@ -130,9 +130,9 @@ void goog_segment(const char *args, const char **unused)
   }
 }
 
-void goog_td_s(const char *args, const char **attrv)
+void goog_td_s(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
+  const char** avp = &attrv[0];
   int isdesc = 0;
   int isseg = 0;
   while (*avp) {
@@ -158,18 +158,18 @@ void goog_td_s(const char *args, const char **attrv)
   }
 }
 
-void goog_td_b(const char *args, const char **attrv)
+void goog_td_b(const char* args, const char** attrv)
 {
   if (goog_segname[0] == '\\' && !strchr(args, '\xa0')) {
     if (goog_realname) {
       xfree(goog_realname);
       goog_realname = NULL;
     }
-    goog_realname = xmalloc(strlen(args)+1);
+    goog_realname = (char*) xmalloc(strlen(args)+1);
     strcpy(goog_realname, args);
   }
 }
-void goog_td_e(const char *args, const char **attrv)
+void goog_td_e(const char* args, const char** attrv)
 {
   if (goog_segname[0] == '\\' && goog_realname) {
     goog_segment(goog_realname, attrv);
@@ -181,7 +181,7 @@ void goog_td_e(const char *args, const char **attrv)
   }
 }
 
-static long decode_goog64(char **str)
+static long decode_goog64(char** str)
 {
   long result = 0;
   unsigned char c = 0;
@@ -203,15 +203,15 @@ static long decode_goog64(char **str)
   return result/2;
 }
 
-void goog_poly_e(const char *args, const char **unused)
+void goog_poly_e(const char* args, const char** unused)
 {
   long lat = 0;
   long lon = 0;
   long level = 0;
   long level1 = -9999;
   long level2 = -9999;
-  char *str = encoded_points;
-  char *lstr = encoded_levels;
+  char* str = encoded_points;
+  char* lstr = encoded_levels;
 
   routehead[goog_segroute] = route_head_alloc();
   route_add_head(routehead[goog_segroute]);
@@ -236,11 +236,11 @@ void goog_poly_e(const char *args, const char **unused)
     }
 
     {
-      waypoint *wpt_tmp = waypt_new();
+      waypoint* wpt_tmp = waypt_new();
       wpt_tmp->latitude = lat / 100000.0;
       wpt_tmp->longitude = lon / 100000.0;
       wpt_tmp->route_priority=level;
-      wpt_tmp->shortname = (char *) xmalloc(7);
+      wpt_tmp->shortname = (char*) xmalloc(7);
       sprintf(wpt_tmp->shortname, "\\%5.5x", serial++);
       route_add_wpt(routehead[goog_segroute], wpt_tmp);
     }
@@ -249,7 +249,7 @@ void goog_poly_e(const char *args, const char **unused)
 }
 
 static void
-google_rd_init(const char *fname)
+google_rd_init(const char* fname)
 {
   desc_handle = mkshort_new_handle();
   setshort_length(desc_handle, 12);
@@ -260,8 +260,8 @@ google_rd_init(const char *fname)
 static void
 google_read(void)
 {
-  routehead = (route_head **)xmalloc(sizeof(route_head *));
-  routecount = (int *)xmalloc(sizeof(int));
+  routehead = (route_head**)xmalloc(sizeof(route_head*));
+  routecount = (int*)xmalloc(sizeof(int));
   goog_segroute = 0;
   xml_read();
   xfree(routehead);
@@ -276,14 +276,14 @@ google_read(void)
     encoded_levels = NULL;
   }
   if (script) {
-    char *xml = strchr(script, '\'');
-    char *dict = strstr(script, "({");
+    char* xml = strchr(script, '\'');
+    char* dict = strstr(script, "({");
 
-    char *end = NULL;
+    char* end = NULL;
 
     if (xml && (!dict || (xml < dict))) {
-      routehead = (route_head **)xmalloc(sizeof(route_head *));
-      routecount = (int *)xmalloc(sizeof(int));
+      routehead = (route_head**)xmalloc(sizeof(route_head*));
+      routecount = (int*)xmalloc(sizeof(int));
       goog_segroute = 0;
       xml++;
       end = strchr(xml+1, '\'');
@@ -306,10 +306,10 @@ google_read(void)
       int ofs = 9;
       int panelofs = 8;
       int count = 0;
-      char *tmp = NULL;
-      char *start = NULL;
+      char* tmp = NULL;
+      char* start = NULL;
 
-      char *panel = strstr(dict, "panel: '");
+      char* panel = strstr(dict, "panel: '");
       encoded_points = strstr(dict, "points: '");
       encoded_levels = strstr(dict, "levels: '");
       if (!encoded_points) {
@@ -331,7 +331,7 @@ google_read(void)
       tmp = panel;
       while (tmp) {
         if (qc == '"') {
-          char *tmp1 = strstr(tmp, "\"points\":\"");
+          char* tmp1 = strstr(tmp, "\"points\":\"");
           if (!tmp1) {
             tmp1 = strstr(tmp, "points:\"");
           }
@@ -344,8 +344,8 @@ google_read(void)
           tmp++;
         }
       }
-      routehead = (route_head **)xmalloc(sizeof(route_head *)*count);
-      routecount = (int *)xmalloc(sizeof(int)*count);
+      routehead = (route_head**)xmalloc(sizeof(route_head*)*count);
+      routecount = (int*)xmalloc(sizeof(int)*count);
       goog_segroute = 0;
 
       do {
@@ -412,8 +412,8 @@ google_read(void)
           }
         }
         if (end) {
-          char *to = panel;
-          char *from = panel;
+          char* to = panel;
+          char* from = panel;
           while (*from) {
             if (!strncmp(from, "\\\"", 2)) {
               *to++ = '"';
@@ -467,7 +467,7 @@ google_read(void)
 
 #if 0
           {
-            FILE *foo = fopen("foo.xml", "w");
+            FILE* foo = fopen("foo.xml", "w");
             fprintf(foo, "<!DOCTYPE foo [%s]>\n", xhtml_entities);
             fwrite(panel, sizeof(char), strlen(panel), foo);
             fclose(foo);

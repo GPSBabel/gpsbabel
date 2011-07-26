@@ -47,15 +47,15 @@ pdb_16  nflds;
 struct dbfld dbfld[1];
 };
 
-static pdbfile *file_in, *file_out;
-static const char *out_fname;
+static pdbfile* file_in, *file_out;
+static const char* out_fname;
 static int ct;
 
-static char *tbuf = NULL;
-static char *tbufp = NULL;
+static char* tbuf = NULL;
+static char* tbufp = NULL;
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
 file_in = pdb_open(fname, MYNAME);
 }
@@ -67,7 +67,7 @@ pdb_close(file_in);
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
 file_out = pdb_create(fname, MYNAME);
 out_fname = fname;
@@ -86,20 +86,20 @@ xfree(tbuf);
 static void
 data_read(void)
 {
-pdbrec_t *pdb_rec;
+pdbrec_t* pdb_rec;
 
 if ((file_in->creator != MYCREATOR) || (file_in->type != MYTYPE)) {
 fatal(MYNAME ": Not a GeocachingDB file.\n");
 }
 
 for (pdb_rec = file_in->rec_list; pdb_rec; pdb_rec=pdb_rec->next) {
-waypoint *wpt = waypt_new();
-struct dbrec *rec = (struct dbrec *) pdb_rec->data;
+waypoint* wpt = waypt_new();
+struct dbrec* rec = (struct dbrec*) pdb_rec->data;
 int nflds;
 int length;
 int type;
 int i;
-char *recdata;
+char* recdata;
 int lat_dir = 0;
 int lat_deg = 0;
 float lat_min = 0.0;
@@ -108,7 +108,7 @@ int lon_deg = 0;
 float lon_min = 0.0;
 
 nflds = be_read16(&rec->nflds);
-recdata = (char *) &rec->dbfld[nflds];
+recdata = (char*) &rec->dbfld[nflds];
 
 for (i = 0; i < nflds; i++) {
 length = (unsigned short) be_read16(&rec->dbfld[i].fldlen);
@@ -170,7 +170,7 @@ waypt_add(wpt);
 
 
 static int
-gcdb_add_to_rec(struct dbrec *rec, const char *fldname, gcdb_rectype rectype, void *data)
+gcdb_add_to_rec(struct dbrec* rec, const char* fldname, gcdb_rectype rectype, void* data)
 {
 int length;
 static int rec_cnt;
@@ -215,9 +215,9 @@ return length;
 }
 
 static void
-gcdb_write_wpt(const waypoint *wpt)
+gcdb_write_wpt(const waypoint* wpt)
 {
-struct dbrec *rec;
+struct dbrec* rec;
 int reclen;
 char tbuf[100];
 
@@ -266,7 +266,7 @@ gcdb_add_to_rec(rec, "terr", RECTYPE_TEXT, tbuf);
 * not the cache creation date.
 */
 if (wpt->creation_time) {
-gcdb_add_to_rec(rec, "date", RECTYPE_DATE, (void *) wpt->creation_time);
+gcdb_add_to_rec(rec, "date", RECTYPE_DATE, (void*) wpt->creation_time);
 }
 #endif
 

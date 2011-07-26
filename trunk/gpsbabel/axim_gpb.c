@@ -29,7 +29,7 @@
 
 #define RECORD_LEN	344
 
-static gbfile *fin;
+static gbfile* fin;
 
 static
 arglist_t axim_gpb_args[] = {
@@ -37,7 +37,7 @@ arglist_t axim_gpb_args[] = {
 };
 
 static float
-le_read32_float(const void *src)
+le_read32_float(const void* src)
 {
   float f;
   gbint32 i;
@@ -49,36 +49,36 @@ le_read32_float(const void *src)
 }
 
 static void
-decode_buff(const char *buff, route_head *track)
+decode_buff(const char* buff, route_head* track)
 {
   struct tm tm;
   double lat, lon, alt, dir;
   float vdop, hdop, pdop, spd, Uf1;
   int sats;
-  waypoint *wpt;
+  waypoint* wpt;
 
   wpt = waypt_new();
 
   memset(&tm, '\0', sizeof(tm));
 
-  tm.tm_year = le_read16((void *)(buff + 16));
-  tm.tm_mon = le_read16((void *)(buff + 18));
-  tm.tm_mday = le_read16((void *)(buff + 22));
-  tm.tm_hour = le_read16((void *)(buff + 24));
-  tm.tm_min = le_read16((void *)(buff + 26));
-  tm.tm_sec = le_read16((void *)(buff + 28));
-  lat = le_read_double((void *)(buff + 32));
-  lon = le_read_double((void *)(buff + 40));
-  spd = le_read32_float((void *)(buff + 48));
-  dir = le_read32_float((void *)(buff + 52));
+  tm.tm_year = le_read16((void*)(buff + 16));
+  tm.tm_mon = le_read16((void*)(buff + 18));
+  tm.tm_mday = le_read16((void*)(buff + 22));
+  tm.tm_hour = le_read16((void*)(buff + 24));
+  tm.tm_min = le_read16((void*)(buff + 26));
+  tm.tm_sec = le_read16((void*)(buff + 28));
+  lat = le_read_double((void*)(buff + 32));
+  lon = le_read_double((void*)(buff + 40));
+  spd = le_read32_float((void*)(buff + 48));
+  dir = le_read32_float((void*)(buff + 52));
 
-  alt = le_read32_float((void *)(buff + 64));
-  Uf1 = le_read32_float((void *)(buff + 68));
+  alt = le_read32_float((void*)(buff + 64));
+  Uf1 = le_read32_float((void*)(buff + 68));
 
-  hdop = le_read32_float((void *)(buff + 84));
-  vdop = le_read32_float((void *)(buff + 88));
-  pdop = le_read32_float((void *)(buff + 92));
-  sats = le_read16((void *)(buff + 96));
+  hdop = le_read32_float((void*)(buff + 84));
+  vdop = le_read32_float((void*)(buff + 88));
+  pdop = le_read32_float((void*)(buff + 92));
+  sats = le_read16((void*)(buff + 96));
 
   wpt->latitude = lat;
   wpt->longitude = lon;
@@ -122,7 +122,7 @@ decode_buff(const char *buff, route_head *track)
 *******************************************************************************/
 
 static void
-axim_gpb_rd_init(const char *fname)
+axim_gpb_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 }
@@ -137,7 +137,7 @@ static void
 axim_gpb_read(void)
 {
   char buff[RECORD_LEN];
-  route_head *track = NULL;
+  route_head* track = NULL;
   size_t bytes;
 
   while ((bytes = gbfread(buff, 1, RECORD_LEN, fin))) {

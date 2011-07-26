@@ -28,7 +28,7 @@
  * Negative on error.
  * 1 if read success - even if empty packet.
  */
-int32 GPS_Packet_Read_usb(gpsdevh *dh, GPS_PPacket *packet, int eat_bulk)
+int32 GPS_Packet_Read_usb(gpsdevh* dh, GPS_PPacket* packet, int eat_bulk)
 {
   int32  n;
   int32 payload_size;

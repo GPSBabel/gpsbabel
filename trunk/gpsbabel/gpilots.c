@@ -142,10 +142,10 @@ struct record {
 };
 
 
-static pdbfile *file_in, *file_out;
-static const char *out_fname;
+static pdbfile* file_in, *file_out;
+static const char* out_fname;
 static int ct = 0;
-static char *dbname = NULL;
+static char* dbname = NULL;
 
 static
 arglist_t my_args[] = {
@@ -154,7 +154,7 @@ arglist_t my_args[] = {
 };
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = pdb_open(fname, MYNAME);
 }
@@ -170,7 +170,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = pdb_create(fname, MYNAME);
   out_fname = fname;
@@ -189,9 +189,9 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-  struct record *rec;
-  pdbrec_t *pdb_rec;
-  route_head *track_head = NULL;
+  struct record* rec;
+  pdbrec_t* pdb_rec;
+  route_head* track_head = NULL;
 
   if (file_in->creator != MYCREATOR) {
     fatal(MYNAME ": Not a %s file.\n", MYNAME);
@@ -209,9 +209,9 @@ data_read(void)
   }
 
   for (pdb_rec = file_in->rec_list; pdb_rec; pdb_rec=pdb_rec->next) {
-    waypoint *wpt_tmp;
-    Custom_Trk_Point_Type *tp_cust;
-    Compact_Trk_Point_Type *tp_comp;
+    waypoint* wpt_tmp;
+    Custom_Trk_Point_Type* tp_cust;
+    Compact_Trk_Point_Type* tp_comp;
     int lat;
     int lon;
     int sz;
@@ -219,11 +219,11 @@ data_read(void)
     int trk_num = 0;
     int trk_seg_num = 1;
     char trk_seg_num_buf[10];
-    char *trk_name = "";
+    char* trk_name = "";
 
     wpt_tmp = waypt_new();
 
-    rec = (struct record *) pdb_rec->data;
+    rec = (struct record*) pdb_rec->data;
     switch (rec->header.type) {
       /*
        * G103Type
@@ -278,7 +278,7 @@ data_read(void)
        */
       switch (rec->wpt.CustTrkHdr.type) {
       case 102:
-        tp_cust = (Custom_Trk_Point_Type *)((char *) pdb_rec->data + sizeof(rec->header) + sizeof(rec->wpt.CustTrkHdr));
+        tp_cust = (Custom_Trk_Point_Type*)((char*) pdb_rec->data + sizeof(rec->header) + sizeof(rec->wpt.CustTrkHdr));
         while (sz--) {
           if ((int)(tp_cust->new_trk) == 1 || trk_seg_num == 1) {
             /*
@@ -322,7 +322,7 @@ data_read(void)
         }
         break;
       case 104:
-        tp_comp = (Compact_Trk_Point_Type *)((char *) pdb_rec->data + sizeof(rec->header) + sizeof(rec->wpt.CustTrkHdr));
+        tp_comp = (Compact_Trk_Point_Type*)((char*) pdb_rec->data + sizeof(rec->header) + sizeof(rec->wpt.CustTrkHdr));
         while (sz--) {
           if ((int)(tp_comp->new_trk) == 1 || trk_seg_num == 1) {
             /*
@@ -365,19 +365,19 @@ data_read(void)
 
 
 struct hdr {
-  char *wpt_name;
-  waypoint *wpt;
+  char* wpt_name;
+  waypoint* wpt;
 };
 
 static void
-my_write_wpt(const waypoint *wpt)
+my_write_wpt(const waypoint* wpt)
 {
-  struct record *rec;
-  char *vdata;
+  struct record* rec;
+  char* vdata;
   int lat, lon;
 
   rec = xcalloc(sizeof *rec, 1);
-  vdata = (char *)rec + sizeof(*rec);
+  vdata = (char*)rec + sizeof(*rec);
 
   rec->header.type = 4;
   rec->header.size = 5;
@@ -390,7 +390,7 @@ my_write_wpt(const waypoint *wpt)
   le_write32(&rec->wpt.d103.lat, lat);
   le_write32(&rec->wpt.d103.lon, lon);
 
-  pdb_write_rec(file_out, 0, ct, ct+1, rec, (char *)vdata - (char *)rec);
+  pdb_write_rec(file_out, 0, ct, ct+1, rec, (char*)vdata - (char*)rec);
   ct++;
   xfree(rec);
 }

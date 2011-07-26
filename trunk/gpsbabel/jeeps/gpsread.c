@@ -67,18 +67,18 @@ time_t GPS_Time_Now(void)
 ** @return [int32] number of bytes read
 **********************************************************************/
 
-int32 GPS_Serial_Packet_Read(gpsdevh *fd, GPS_PPacket *packet)
+int32 GPS_Serial_Packet_Read(gpsdevh* fd, GPS_PPacket* packet)
 {
   time_t start;
   int32  n;
   int32  len;
   UC     u;
   int32  isDLE;
-  UC     *p;
+  UC*     p;
   int32  i;
   UC     chk=0, chk_read;
-  const char *m1;
-  const char *m2;
+  const char* m1;
+  const char* m2;
 
   len = 0;
   isDLE = gpsFalse;
@@ -189,7 +189,7 @@ int32 GPS_Serial_Packet_Read(gpsdevh *fd, GPS_PPacket *packet)
 ** @return [int32] true if ACK
 **********************************************************************/
 
-int32 GPS_Serial_Get_Ack(gpsdevh *fd, GPS_PPacket *tra, GPS_PPacket *rec)
+int32 GPS_Serial_Get_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
 {
   if (!GPS_Serial_Packet_Read(fd, rec)) {
     return 0;

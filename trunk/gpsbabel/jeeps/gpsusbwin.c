@@ -53,12 +53,12 @@ typedef struct {
   int booger;
 } winusb_unit_data;
 
-static HANDLE *usb_handle = INVALID_HANDLE_VALUE;
+static HANDLE* usb_handle = INVALID_HANDLE_VALUE;
 static int usb_tx_packet_size ;
-static const gdx_info *gdx;
+static const gdx_info* gdx;
 
 static int
-gusb_win_close(gpsdevh *handle)
+gusb_win_close(gpsdevh* handle)
 {
   if (usb_handle != INVALID_HANDLE_VALUE) {
     CloseHandle(usb_handle);
@@ -69,10 +69,10 @@ gusb_win_close(gpsdevh *handle)
 }
 
 static int
-gusb_win_get(garmin_usb_packet *ibuf, size_t sz)
+gusb_win_get(garmin_usb_packet* ibuf, size_t sz)
 {
   DWORD rxed = GARMIN_USB_INTERRUPT_DATA_SIZE;
-  unsigned char *buf = (unsigned char *) &ibuf->dbuf;
+  unsigned char* buf = (unsigned char*) &ibuf->dbuf;
   int tsz=0;
 
   while (sz) {
@@ -95,11 +95,11 @@ gusb_win_get(garmin_usb_packet *ibuf, size_t sz)
 }
 
 static int
-gusb_win_get_bulk(garmin_usb_packet *ibuf, size_t sz)
+gusb_win_get_bulk(garmin_usb_packet* ibuf, size_t sz)
 {
   int n;
   DWORD rsz;
-  unsigned char *buf = (unsigned char *) &ibuf->dbuf;
+  unsigned char* buf = (unsigned char*) &ibuf->dbuf;
 
   n = ReadFile(usb_handle, buf, sz, &rsz, NULL);
 
@@ -107,10 +107,10 @@ gusb_win_get_bulk(garmin_usb_packet *ibuf, size_t sz)
 }
 
 static int
-gusb_win_send(const garmin_usb_packet *opkt, size_t sz)
+gusb_win_send(const garmin_usb_packet* opkt, size_t sz)
 {
   DWORD rsz;
-  unsigned char *obuf = (unsigned char *) &opkt->dbuf;
+  unsigned char* obuf = (unsigned char*) &opkt->dbuf;
 
   /* The spec warns us about making writes an exact multiple
    * of the packet size, but isn't clear whether we can issue
@@ -133,7 +133,7 @@ static gusb_llops_t win_llops = {
 };
 
 static
-HANDLE * garmin_usb_start(HDEVINFO* hdevinfo, SP_DEVICE_INTERFACE_DATA *infodata)
+HANDLE* garmin_usb_start(HDEVINFO* hdevinfo, SP_DEVICE_INTERFACE_DATA* infodata)
 {
   DWORD size;
   PSP_INTERFACE_DEVICE_DETAIL_DATA pdd = NULL;
@@ -185,12 +185,12 @@ HANDLE * garmin_usb_start(HDEVINFO* hdevinfo, SP_DEVICE_INTERFACE_DATA *infodata
 }
 
 
-static char ** get_garmin_mountpoints(void)
+static char** get_garmin_mountpoints(void)
 {
 #define BUFSIZE 512
   TCHAR szTemp[MAX_PATH];
-  char *p = szTemp;
-  char **dlist = xmalloc(sizeof(*dlist));
+  char* p = szTemp;
+  char** dlist = xmalloc(sizeof(*dlist));
 
   int i = 0;
   dlist[0] = NULL;
@@ -213,7 +213,7 @@ static char ** get_garmin_mountpoints(void)
  * device, and light it up.
  */
 int
-gusb_init(const char *pname, gpsdevh **dh)
+gusb_init(const char* pname, gpsdevh** dh)
 {
   int req_unit_number = 0;
   int un = 0;
@@ -222,7 +222,7 @@ gusb_init(const char *pname, gpsdevh **dh)
   HDEVINFO hdevinfo;
   SP_DEVICE_INTERFACE_DATA devinterface;
 
-  winusb_unit_data *wud = xcalloc(sizeof(winusb_unit_data), 1);
+  winusb_unit_data* wud = xcalloc(sizeof(winusb_unit_data), 1);
   *dh = (gpsdevh*) wud;
 
   gusb_register_ll(&win_llops);
@@ -235,7 +235,7 @@ gusb_init(const char *pname, gpsdevh **dh)
     }
   }
 
-  hdevinfo = SetupDiGetClassDevs((GUID *) &GARMIN_GUID, NULL, NULL,
+  hdevinfo = SetupDiGetClassDevs((GUID*) &GARMIN_GUID, NULL, NULL,
                                  DIGCF_PRESENT | DIGCF_INTERFACEDEVICE);
 
   if (hdevinfo == INVALID_HANDLE_VALUE) {
@@ -248,12 +248,12 @@ gusb_init(const char *pname, gpsdevh **dh)
 
   if (req_unit_number >= 0) {
     if (!SetupDiEnumDeviceInterfaces(hdevinfo, NULL,
-                                     (GUID *) &GARMIN_GUID,
+                                     (GUID*) &GARMIN_GUID,
                                      req_unit_number, &devinterface)) {
       // If there were zero matches, we may be trying to talk to a "GPX Mode" device.
 
 
-      char **dlist = get_garmin_mountpoints();
+      char** dlist = get_garmin_mountpoints();
       gdx = gdx_find_file(dlist);
       if (gdx) {
         return 1;
@@ -276,7 +276,7 @@ gusb_init(const char *pname, gpsdevh **dh)
    */
   for (match = 0;; match++) {
     if (!SetupDiEnumDeviceInterfaces(hdevinfo, NULL,
-                                     (GUID *) &GARMIN_GUID, match, &devinterface)) {
+                                     (GUID*) &GARMIN_GUID, match, &devinterface)) {
       if (GetLastError() == ERROR_NO_MORE_ITEMS) {
 
         break;

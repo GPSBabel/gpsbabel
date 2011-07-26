@@ -38,7 +38,7 @@
 
 typedef struct lowranceusr_icon_mapping {
   const int	value;
-  const char	*icon;
+  const char*	icon;
 } lowranceusr_icon_mapping_t;
 
 #define DEF_ICON 10001
@@ -192,8 +192,8 @@ const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
   {	 -1, NULL }
 };
 
-static gbfile *file_in;
-static gbfile *file_out;
+static gbfile* file_in;
+static gbfile* file_out;
 static short_handle mkshort_handle;
 
 static unsigned short waypt_out_count;
@@ -201,13 +201,13 @@ static unsigned int trail_count, lowrance_route_count;
 static int trail_point_count;
 static char continuous = 1;
 static short num_section_points;
-static route_head *trk_head;
-static route_head *rte_head;
-static char *ignoreicons;
-static char *writeasicons;
-static char *merge;
-static char *seg_break;
-static char *wversion_arg;
+static route_head* trk_head;
+static route_head* rte_head;
+static char* ignoreicons;
+static char* writeasicons;
+static char* merge;
+static char* seg_break;
+static char* wversion_arg;
 static int reading_version;
 static int writing_version;
 
@@ -224,7 +224,7 @@ static int writing_version;
 const time_t base_time_secs = 946706400;
 
 static int
-lowranceusr_readstr(char *buf, const int maxlen, gbfile *file)
+lowranceusr_readstr(char* buf, const int maxlen, gbfile* file)
 {
   int org, len;
 
@@ -253,10 +253,10 @@ lowranceusr_readstr(char *buf, const int maxlen, gbfile *file)
   return len;
 }
 
-const char *
+const char*
 lowranceusr_find_desc_from_icon_number(const int icon)
 {
-  const lowranceusr_icon_mapping_t *i;
+  const lowranceusr_icon_mapping_t* i;
 
   for (i = lowranceusr_icon_value_table; i->icon; i++) {
     if (icon == i->value) {
@@ -268,9 +268,9 @@ lowranceusr_find_desc_from_icon_number(const int icon)
 }
 
 int
-lowranceusr_find_icon_number_from_desc(const char *desc)
+lowranceusr_find_icon_number_from_desc(const char* desc)
 {
-  const lowranceusr_icon_mapping_t *i;
+  const lowranceusr_icon_mapping_t* i;
   int n;
 
   if (!desc) {
@@ -322,7 +322,7 @@ arglist_t lowranceusr_args[] = {
 };
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -334,7 +334,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen_le(fname, "wb", MYNAME);
   mkshort_handle = mkshort_new_handle();
@@ -378,7 +378,7 @@ lat_deg_to_mm(double x)
 }
 
 static void
-lowranceusr_parse_waypt(waypoint *wpt_tmp)
+lowranceusr_parse_waypt(waypoint* wpt_tmp)
 {
   char buff[MAXUSRSTRINGSIZE + 1];
   int text_len;
@@ -454,7 +454,7 @@ lowranceusr_parse_routes(void)
   short int num_routes, num_legs;
   int i,j;
   int text_len;
-  waypoint *wpt_tmp;
+  waypoint* wpt_tmp;
 
   num_routes = gbfgetint16(file_in);
 
@@ -514,7 +514,7 @@ lowranceusr_parse_icons(void)
       /* symbol */
       (void) gbfread(&buff[0], 4, 1, file_in);
     } else {
-      waypoint *wpt_tmp;
+      waypoint* wpt_tmp;
       wpt_tmp = waypt_new();
 
       /* position coord lat & long */
@@ -538,8 +538,8 @@ lowranceusr_parse_trails(void)
   short int num_trails, num_trail_points, num_section_points;
   int i,j, trk_num, itmp;
   int text_len;
-  waypoint *wpt_tmp;
-  route_head *trk_tmp;
+  waypoint* wpt_tmp;
+  route_head* trk_tmp;
 
   /* num trails */
   num_trails = gbfgetint16(file_in);
@@ -654,7 +654,7 @@ data_read(void)
   }
 
   for (i = 0; i < NumWaypoints; i++) {
-    waypoint *wpt_tmp;
+    waypoint* wpt_tmp;
 
     wpt_tmp = waypt_new();
 
@@ -676,12 +676,12 @@ data_read(void)
 }
 
 static void
-lowranceusr_waypt_disp(const waypoint *wpt)
+lowranceusr_waypt_disp(const waypoint* wpt)
 {
   int text_len, Lat, Lon, Time, SymbolId;
   short int WayptType;
-  char *name;
-  char *comment;
+  char* name;
+  char* comment;
   int alt = METERS_TO_FEET(wpt->altitude);
 
   if (wpt->altitude == unknown_alt) {
@@ -784,7 +784,7 @@ lowranceusr_waypt_disp(const waypoint *wpt)
 }
 
 static void
-lowranceusr_waypt_pr(const waypoint *wpt)
+lowranceusr_waypt_pr(const waypoint* wpt)
 {
 
   /* our personal waypoint counter */
@@ -808,7 +808,7 @@ lowranceusr_waypt_pr(const waypoint *wpt)
  * 4 bytes symbol
  */
 static void
-lowranceusr_write_icon(const waypoint *wpt)
+lowranceusr_write_icon(const waypoint* wpt)
 {
   int latmm = lat_deg_to_mm(wpt->latitude);
   int lonmm = lon_deg_to_mm(wpt->longitude);
@@ -837,10 +837,10 @@ lowranceusr_write_icon(const waypoint *wpt)
  */
 
 static void
-lowranceusr_track_hdr(const route_head *trk)
+lowranceusr_track_hdr(const route_head* trk)
 {
   int text_len;
-  char *name, tmp_name[20];
+  char* name, tmp_name[20];
   short num_trail_points, max_trail_size;
   char visible=1;
 
@@ -890,10 +890,10 @@ lowranceusr_track_hdr(const route_head *trk)
 }
 
 static void
-lowranceusr_route_hdr(const route_head *rte)
+lowranceusr_route_hdr(const route_head* rte)
 {
   int text_len;
-  char *name, tmp_name[20];
+  char* name, tmp_name[20];
   short num_legs;
   char route_reversed=0;
 
@@ -927,7 +927,7 @@ lowranceusr_route_hdr(const route_head *rte)
 }
 
 static void
-lowranceusr_track_disp(const waypoint *wpt)
+lowranceusr_track_disp(const waypoint* wpt)
 {
   int lat, lon;
 
@@ -949,10 +949,10 @@ lowranceusr_track_disp(const waypoint *wpt)
 }
 
 static void
-lowranceusr_merge_track_hdr(const route_head *trk)
+lowranceusr_merge_track_hdr(const route_head* trk)
 {
   int text_len;
-  char *name, tmp_name[20];
+  char* name, tmp_name[20];
 
   if (++trail_count == 1) {
     if (trk->rte_name) {
@@ -981,7 +981,7 @@ lowranceusr_merge_track_hdr(const route_head *trk)
 }
 
 static void
-lowranceusr_merge_track_tlr(const route_head *trk)
+lowranceusr_merge_track_tlr(const route_head* trk)
 {
   short num_trail_points, max_trail_size;
   char visible=1;
@@ -1006,7 +1006,7 @@ lowranceusr_merge_track_tlr(const route_head *trk)
 }
 static void
 
-lowranceusr_merge_track_hdr_2(const route_head *trk)
+lowranceusr_merge_track_hdr_2(const route_head* trk)
 {
   continuous = 0;
 }

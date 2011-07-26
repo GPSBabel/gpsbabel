@@ -33,12 +33,12 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 static int curr_rte_num, target_rte_num;
 
 #define MYNAME "navigon"
 
-static char *index_opt;
+static char* index_opt;
 
 static
 arglist_t nmn4_args[] = {
@@ -49,18 +49,18 @@ arglist_t nmn4_args[] = {
 
 /* helpers */
 
-static char *
-nmn4_concat(char *arg0, ...)
+static char*
+nmn4_concat(char* arg0, ...)
 {
   va_list args;
-  char *src, *res;
+  char* src, *res;
 
   res = NULL;
   va_start(args, arg0);
-  src = (char *)arg0;
+  src = (char*)arg0;
 
   while (src != NULL) {
-    char *c = lrtrim(src);
+    char* c = lrtrim(src);
 
     if (*c != '\0') {
       if (res == NULL) {
@@ -71,7 +71,7 @@ nmn4_concat(char *arg0, ...)
       }
     }
     xfree(src);
-    src = va_arg(args, char *);
+    src = va_arg(args, char*);
   }
   va_end(args);
 
@@ -79,9 +79,9 @@ nmn4_concat(char *arg0, ...)
 }
 
 static void
-nmn4_check_line(char *line)
+nmn4_check_line(char* line)
 {
-  char *c = line;
+  char* c = line;
   int i = 0;
   while ((c = strchr(c, '|'))) {
     c++;
@@ -94,14 +94,14 @@ nmn4_check_line(char *line)
 static void
 nmn4_read_data(void)
 {
-  char *buff;
-  char *str, *c;
+  char* buff;
+  char* str, *c;
   int column;
   int line = 0;
 
-  char *zip1, *zip2, *city, *street, *number;
-  route_head *route;
-  waypoint *wpt;
+  char* zip1, *zip2, *city, *street, *number;
+  route_head* route;
+  waypoint* wpt;
 
   route = route_head_alloc();
   route_add_head(route);
@@ -217,18 +217,18 @@ nmn4_read_data(void)
 }
 
 static void
-nmn4_route_hdr(const route_head *route)
+nmn4_route_hdr(const route_head* route)
 {
   curr_rte_num++;
 }
 
 static void
-nmn4_route_tlr(const route_head *rte)
+nmn4_route_tlr(const route_head* rte)
 {
 }
 
 static void
-nmn4_write_waypt(const waypoint *wpt)
+nmn4_write_waypt(const waypoint* wpt)
 {
   char city[128], street[128], zipc[32], number[32];
 
@@ -277,7 +277,7 @@ nmn4_write_data(void)
 /* %%% global callbacks %%% */
 
 static void
-nmn4_rd_init(const char *fname)
+nmn4_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 }
@@ -295,7 +295,7 @@ nmn4_read(void)
 }
 
 static void
-nmn4_wr_init(const char *fname)
+nmn4_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
 }
@@ -316,7 +316,7 @@ nmn4_write(void)
 
 ff_vecs_t nmn4_vecs = {
   ff_type_file,
-  { ff_cap_none, ff_cap_none, ff_cap_read | ff_cap_write},
+  { ff_cap_none, ff_cap_none, (ff_cap)(ff_cap_read | ff_cap_write)},
   nmn4_rd_init,
   nmn4_wr_init,
   nmn4_rd_deinit,

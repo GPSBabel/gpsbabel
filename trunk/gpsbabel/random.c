@@ -62,7 +62,7 @@ rand_str(const int maxlen, const char *fmt)
 
   len = rand_int(maxlen) + 1;
 
-  res = xmalloc(len + 1);
+  res = (char*) xmalloc(len + 1);
   res[len] = '\0';
 
   for (i = 0; i < len; i++) {
@@ -176,7 +176,7 @@ random_read(void)
       wpt->hdop = (rand_int(500)) / 10.0;
       wpt->vdop = (rand_int(500)) / 10.0;
       wpt->pdop = (rand_int(500)) / 10.0;
-      wpt->fix = rand_int(6) - 1;
+      wpt->fix = (fix_type)(rand_int(6) - 1);
       if RND(3) {
         wpt->cadence = rand_int(255);
       }

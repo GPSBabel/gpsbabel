@@ -50,10 +50,10 @@ static int colors[] = {
   0xffffff // White
 };
 
-static	gbfile *fin;
-static	route_head *track;
-static char	*opt_xt_ftype = NULL;
-static char	*opt_trk_header = NULL;
+static	gbfile* fin;
+static	route_head* track;
+static char*	opt_xt_ftype = NULL;
+static char*	opt_trk_header = NULL;
 
 static
 arglist_t format_garmin_xt_args[] = {
@@ -72,7 +72,7 @@ arglist_t format_garmin_xt_args[] = {
  * %%%        Reader callbacks                                              %%% *
  *******************************************************************************/
 static void
-format_garmin_xt_rd_init(const char *fname)
+format_garmin_xt_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 }
@@ -84,7 +84,7 @@ format_garmin_xt_rd_deinit(void)
 }
 
 static gbuint16
-format_garmin_xt_rd_st_attrs(char *p_trk_name, gbuint8 *p_track_color)
+format_garmin_xt_rd_st_attrs(char* p_trk_name, gbuint8* p_track_color)
 {
   int		method = 0;
   gbuint16	trackbytes = 0, TrackPoints = 0;
@@ -168,7 +168,7 @@ format_garmin_xt_decrypt_trk_blk(int Count, gbuint8 TrackBlock[])
  * Function to Decompose track block of STRK_BLOCK_SIZE bytes
  */
 static void
-format_garmin_xt_decomp_trk_blk(gbuint8 ii, gbuint8 TrackBlock[], double *Ele, double *Lat, double *Lon, gbuint32 *Time)
+format_garmin_xt_decomp_trk_blk(gbuint8 ii, gbuint8 TrackBlock[], double* Ele, double* Lat, double* Lon, gbuint32* Time)
 {
   gbuint32	LatLW = 0, LonLW = 0, TimeLW = 0;
   double		LatF = 0, LonF = 0;
@@ -216,7 +216,7 @@ format_garmin_xt_decomp_trk_blk(gbuint8 ii, gbuint8 TrackBlock[], double *Ele, d
  * Decompose Last Waypoint Eleveation
  */
 static void
-format_garmin_xt_decomp_last_ele(gbuint8 ii, double *PrevEle, gbuint8 TrackBlock[])
+format_garmin_xt_decomp_last_ele(gbuint8 ii, double* PrevEle, gbuint8 TrackBlock[])
 {
   gbuint16	PrevEleW;
 
@@ -254,10 +254,10 @@ format_garmin_xt_proc_strk(void)
 
   // Process all tracks one by one
   while ((TracksCompleted < NumberOfTracks) && (!gbfeof(fin))) {
-    route_head *tmp_track;
-    waypoint	*wpt;
-    char	*trk_name;
-    trk_name = xmalloc(30);
+    route_head* tmp_track;
+    waypoint*	wpt;
+    char*	trk_name;
+    trk_name = (char*) xmalloc(30);
 
     // Generate Track Header
     trackbytes = format_garmin_xt_rd_st_attrs(trk_name, &trk_color) - 50;
@@ -341,7 +341,7 @@ format_garmin_xt_proc_atrk(void)
   gbuint32	Lat=0, Lon=0;
   gbuint32	Tim=0;
   double		LatF = 0, LonF = 0, AltF = 0;
-  waypoint	*wpt;
+  waypoint*	wpt;
   int		method = 0;
   unsigned char 	buf[3];
   gbint32 	num_trackpoints;

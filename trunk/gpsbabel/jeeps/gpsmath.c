@@ -28,11 +28,11 @@
 #include "gpsdatum.h"
 
 
-static int32 GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32 *zone,
-    char *zc, double *Mc, double *E0,
-    double *N0, double *F0);
-static int32 GPS_Math_UTM_Param_To_Mc(int32 zone, char zc, double *Mc,
-                                      double *E0, double *N0, double *F0);
+static int32 GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32* zone,
+    char* zc, double* Mc, double* E0,
+    double* N0, double* F0);
+static int32 GPS_Math_UTM_Param_To_Mc(int32 zone, char zc, double* Mc,
+                                      double* E0, double* N0, double* F0);
 
 
 
@@ -79,7 +79,7 @@ double GPS_Math_Rad_To_Deg(double v)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Math_Deg_To_DegMin(double v, int32 *d, double *m)
+void GPS_Math_Deg_To_DegMin(double v, int32* d, double* m)
 {
   int32 sign;
 
@@ -117,7 +117,7 @@ void GPS_Math_Deg_To_DegMin(double v, int32 *d, double *m)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Math_DegMin_To_Deg(int32 d, double m, double *deg)
+void GPS_Math_DegMin_To_Deg(int32 d, double m, double* deg)
 {
 
   *deg = ((double)abs(d)) + m / (double)60.0;
@@ -142,7 +142,7 @@ void GPS_Math_DegMin_To_Deg(int32 d, double m, double *deg)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Math_Deg_To_DegMinSec(double v, int32 *d, int32 *m, double *s)
+void GPS_Math_Deg_To_DegMinSec(double v, int32* d, int32* m, double* s)
 {
   int32 sign;
   double t;
@@ -193,7 +193,7 @@ void GPS_Math_Deg_To_DegMinSec(double v, int32 *d, int32 *m, double *s)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Math_DegMinSec_To_Deg(int32 d, int32 m, double s, double *deg)
+void GPS_Math_DegMinSec_To_Deg(int32 d, int32 m, double s, double* deg)
 {
 
   *deg = ((double)abs(d)) + ((double)m + s / (double)60.0) / (double)60.0;
@@ -320,7 +320,7 @@ time_t GPS_Math_Gtime_To_Utime(time_t v)
 ** @return [void]
 ************************************************************************/
 void GPS_Math_LatLonH_To_XYZ(double phi, double lambda, double H,
-                             double *x, double *y, double *z,
+                             double* x, double* y, double* z,
                              double a, double b)
 {
   double esq;
@@ -358,7 +358,7 @@ void GPS_Math_LatLonH_To_XYZ(double phi, double lambda, double H,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_XYZ_To_LatLonH(double *phi, double *lambda, double *H,
+void GPS_Math_XYZ_To_LatLonH(double* phi, double* lambda, double* H,
                              double x, double y, double z,
                              double a, double b)
 {
@@ -419,7 +419,7 @@ void GPS_Math_XYZ_To_LatLonH(double *phi, double *lambda, double *H,
 ** @return [void]
 ************************************************************************/
 void GPS_Math_Airy1830LatLonH_To_XYZ(double phi, double lambda, double H,
-                                     double *x, double *y, double *z)
+                                     double* x, double* y, double* z)
 {
   double a = 6377563.396;
   double b = 6356256.910;
@@ -446,7 +446,7 @@ void GPS_Math_Airy1830LatLonH_To_XYZ(double phi, double lambda, double H,
 ** @return [void]
 ************************************************************************/
 void GPS_Math_WGS84LatLonH_To_XYZ(double phi, double lambda, double H,
-                                  double *x, double *y, double *z)
+                                  double* x, double* y, double* z)
 {
   double a = 6378137.000;
   double b = 6356752.3141;
@@ -472,7 +472,7 @@ void GPS_Math_WGS84LatLonH_To_XYZ(double phi, double lambda, double H,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_XYZ_To_Airy1830LatLonH(double *phi, double *lambda, double *H,
+void GPS_Math_XYZ_To_Airy1830LatLonH(double* phi, double* lambda, double* H,
                                      double x, double y, double z)
 {
   double a = 6377563.396;
@@ -498,7 +498,7 @@ void GPS_Math_XYZ_To_Airy1830LatLonH(double *phi, double *lambda, double *H,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_XYZ_To_WGS84LatLonH(double *phi, double *lambda, double *H,
+void GPS_Math_XYZ_To_WGS84LatLonH(double* phi, double* lambda, double* H,
                                   double x, double y, double z)
 {
   double a = 6378137.000;
@@ -529,7 +529,7 @@ void GPS_Math_XYZ_To_WGS84LatLonH(double *phi, double *lambda, double *H,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_LatLon_To_EN(double *E, double *N, double phi,
+void GPS_Math_LatLon_To_EN(double* E, double* N, double phi,
                            double lambda, double N0, double E0,
                            double phi0, double lambda0,
                            double F0, double a, double b)
@@ -627,8 +627,8 @@ void GPS_Math_LatLon_To_EN(double *E, double *N, double phi,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_Airy1830M_LatLonToINGEN(double phi, double lambda, double *E,
-                                      double *N)
+void GPS_Math_Airy1830M_LatLonToINGEN(double phi, double lambda, double* E,
+                                      double* N)
 {
   double N0      =  250000;
   double E0      =  200000;
@@ -658,8 +658,8 @@ void GPS_Math_Airy1830M_LatLonToINGEN(double phi, double lambda, double *E,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_Airy1830LatLonToNGEN(double phi, double lambda, double *E,
-                                   double *N)
+void GPS_Math_Airy1830LatLonToNGEN(double phi, double lambda, double* E,
+                                   double* N)
 {
   double N0      = -100000;
   double E0      =  400000;
@@ -689,8 +689,8 @@ void GPS_Math_Airy1830LatLonToNGEN(double phi, double lambda, double *E,
 ** @return [void]
 ************************************************************************/
 
-int32 GPS_Math_WGS84_To_Swiss_EN(double lat, double lon, double *E,
-                                 double *N)
+int32 GPS_Math_WGS84_To_Swiss_EN(double lat, double lon, double* E,
+                                 double* N)
 {
   const double phi0 = 46.95240556;
   const double lambda0 = 7.43958333;
@@ -727,7 +727,7 @@ int32 GPS_Math_WGS84_To_Swiss_EN(double lat, double lon, double *E,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_Swiss_EN_To_WGS84(double E, double N, double *lat, double *lon)
+void GPS_Math_Swiss_EN_To_WGS84(double E, double N, double* lat, double* lon)
 {
   const double phi0 = 46.95240556;
   const double lambda0 = 7.43958333;
@@ -761,8 +761,8 @@ void GPS_Math_Swiss_EN_To_WGS84(double E, double N, double *lat, double *lon)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_Cassini_LatLon_To_EN(double phi, double lambda, double *E,
-                                   double *N, double phi0, double M0,
+void GPS_Math_Cassini_LatLon_To_EN(double phi, double lambda, double* E,
+                                   double* N, double phi0, double M0,
                                    double E0, double N0, double a, double b)
 {
   double p2;
@@ -907,8 +907,8 @@ void GPS_Math_Cassini_LatLon_To_EN(double phi, double lambda, double *E,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_Cassini_EN_To_LatLon(double E, double N, double *phi,
-                                   double *lambda, double phi0, double M0,
+void GPS_Math_Cassini_EN_To_LatLon(double E, double N, double* phi,
+                                   double* lambda, double phi0, double M0,
                                    double E0, double N0, double a, double b)
 
 {
@@ -1081,8 +1081,8 @@ void GPS_Math_Cassini_EN_To_LatLon(double E, double N, double *phi,
 ** @return [void]
 ************************************************************************/
 
-int32 GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double *E,
-                               double *N)
+int32 GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
+                               double* N)
 {
   double const phi0    = 31.73409694444; // 31 44 2.749
   double const lambda0 = 35.21208055556; // 35 12 43.49
@@ -1116,7 +1116,7 @@ int32 GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double *E,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_ICS_EN_To_WGS84(double E, double N, double *lat, double *lon)
+void GPS_Math_ICS_EN_To_WGS84(double E, double N, double* lat, double* lon)
 {
   double const phi0    = 31.73409694444; // 31 44 2.749
   double const lambda0 = 35.21208055556; // 35 12 43.49
@@ -1154,8 +1154,8 @@ void GPS_Math_ICS_EN_To_WGS84(double E, double N, double *lat, double *lon)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_EN_To_LatLon(double E, double N, double *phi,
-                           double *lambda, double N0, double E0,
+void GPS_Math_EN_To_LatLon(double E, double N, double* phi,
+                           double* lambda, double N0, double E0,
                            double phi0, double lambda0,
                            double F0, double a, double b)
 {
@@ -1280,8 +1280,8 @@ void GPS_Math_EN_To_LatLon(double E, double N, double *phi,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_NGENToAiry1830LatLon(double E, double N, double *phi,
-                                   double *lambda)
+void GPS_Math_NGENToAiry1830LatLon(double E, double N, double* phi,
+                                   double* lambda)
 {
   double N0      = -100000;
   double E0      =  400000;
@@ -1310,8 +1310,8 @@ void GPS_Math_NGENToAiry1830LatLon(double E, double N, double *phi,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_Math_INGENToAiry1830MLatLon(double E, double N, double *phi,
-                                     double *lambda)
+void GPS_Math_INGENToAiry1830MLatLon(double E, double N, double* phi,
+                                     double* lambda)
 {
   double N0      =  250000;
   double E0      =  200000;
@@ -1341,8 +1341,8 @@ void GPS_Math_INGENToAiry1830MLatLon(double E, double N, double *phi,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_EN_To_UKOSNG_Map(double E, double N, double *mE,
-                                double *mN, char *map)
+int32 GPS_Math_EN_To_UKOSNG_Map(double E, double N, double* mE,
+                                double* mN, char* map)
 {
   int32  t;
   int32  idx;
@@ -1380,8 +1380,8 @@ int32 GPS_Math_EN_To_UKOSNG_Map(double E, double N, double *mE,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_UKOSNG_Map_To_EN(char *map, double mapE, double mapN, double *E,
-                                double *N)
+int32 GPS_Math_UKOSNG_Map_To_EN(char* map, double mapE, double mapN, double* E,
+                                double* N)
 {
   int32  t;
   int32  idx;
@@ -1435,8 +1435,8 @@ int32 GPS_Math_UKOSNG_Map_To_EN(char *map, double mapE, double mapN, double *E,
 ** @return [void]
 ************************************************************************/
 void GPS_Math_Molodensky(double Sphi, double Slam, double SH, double Sa,
-                         double Sif, double *Dphi, double *Dlam,
-                         double *DH, double Da, double Dif, double dx,
+                         double Sif, double* Dphi, double* Dlam,
+                         double* DH, double Da, double Dif, double dx,
                          double dy, double dz)
 {
   double Sf;
@@ -1515,7 +1515,7 @@ void GPS_Math_Molodensky(double Sphi, double Slam, double SH, double Sa,
 ** @return [void]
 ************************************************************************/
 void GPS_Math_Known_Datum_To_WGS84_M(double Sphi, double Slam, double SH,
-                                     double *Dphi, double *Dlam, double *DH,
+                                     double* Dphi, double* Dlam, double* DH,
                                      int32 n)
 {
   double Sa;
@@ -1559,7 +1559,7 @@ void GPS_Math_Known_Datum_To_WGS84_M(double Sphi, double Slam, double SH,
 ** @return [void]
 ************************************************************************/
 void GPS_Math_WGS84_To_Known_Datum_M(double Sphi, double Slam, double SH,
-                                     double *Dphi, double *Dlam, double *DH,
+                                     double* Dphi, double* Dlam, double* DH,
                                      int32 n)
 {
   double Sa;
@@ -1603,7 +1603,7 @@ void GPS_Math_WGS84_To_Known_Datum_M(double Sphi, double Slam, double SH,
 ** @return [void]
 ************************************************************************/
 void GPS_Math_Known_Datum_To_WGS84_C(double Sphi, double Slam, double SH,
-                                     double *Dphi, double *Dlam, double *DH,
+                                     double* Dphi, double* Dlam, double* DH,
                                      int32 n)
 {
   double Sa;
@@ -1660,7 +1660,7 @@ void GPS_Math_Known_Datum_To_WGS84_C(double Sphi, double Slam, double SH,
 ** @return [void]
 ************************************************************************/
 void GPS_Math_WGS84_To_Known_Datum_C(double Sphi, double Slam, double SH,
-                                     double *Dphi, double *Dlam, double *DH,
+                                     double* Dphi, double* Dlam, double* DH,
                                      int32 n)
 {
   double Sa;
@@ -1718,8 +1718,8 @@ void GPS_Math_WGS84_To_Known_Datum_C(double Sphi, double Slam, double SH,
 ** @return [void]
 ************************************************************************/
 void GPS_Math_Known_Datum_To_Known_Datum_M(double Sphi, double Slam, double SH,
-    double *Dphi, double *Dlam,
-    double *DH, int32 n1, int32 n2)
+    double* Dphi, double* Dlam,
+    double* DH, int32 n1, int32 n2)
 {
   double Sa;
   double Sif;
@@ -1780,8 +1780,8 @@ void GPS_Math_Known_Datum_To_Known_Datum_M(double Sphi, double Slam, double SH,
 ** @return [void]
 ************************************************************************/
 void GPS_Math_Known_Datum_To_Known_Datum_C(double Sphi, double Slam, double SH,
-    double *Dphi, double *Dlam,
-    double *DH, int32 n1, int32 n2)
+    double* Dphi, double* Dlam,
+    double* DH, int32 n1, int32 n2)
 {
   double Sa;
   double Sif;
@@ -1846,8 +1846,8 @@ void GPS_Math_Known_Datum_To_Known_Datum_C(double Sphi, double Slam, double SH,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_WGS84_To_UKOSMap_M(double lat, double lon, double *mE,
-                                  double *mN, char *map)
+int32 GPS_Math_WGS84_To_UKOSMap_M(double lat, double lon, double* mE,
+                                  double* mN, char* map)
 {
   double alat;
   double alon;
@@ -1882,8 +1882,8 @@ int32 GPS_Math_WGS84_To_UKOSMap_M(double lat, double lon, double *mE,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_UKOSMap_To_WGS84_M(char *map, double mE, double mN,
-                                  double *lat, double *lon)
+int32 GPS_Math_UKOSMap_To_WGS84_M(char* map, double mE, double mN,
+                                  double* lat, double* lon)
 {
   double E;
   double N;
@@ -1917,8 +1917,8 @@ int32 GPS_Math_UKOSMap_To_WGS84_M(char *map, double mE, double mN,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_WGS84_To_UKOSMap_C(double lat, double lon, double *mE,
-                                  double *mN, char *map)
+int32 GPS_Math_WGS84_To_UKOSMap_C(double lat, double lon, double* mE,
+                                  double* mN, char* map)
 {
   double alat;
   double alon;
@@ -1953,8 +1953,8 @@ int32 GPS_Math_WGS84_To_UKOSMap_C(double lat, double lon, double *mE,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_UKOSMap_To_WGS84_C(char *map, double mE, double mN,
-                                  double *lat, double *lon)
+int32 GPS_Math_UKOSMap_To_WGS84_C(char* map, double mE, double mN,
+                                  double* lat, double* lon)
 {
   double E;
   double N;
@@ -1989,9 +1989,9 @@ int32 GPS_Math_UKOSMap_To_WGS84_C(char *map, double mE, double mN,
 **
 ** @return [int32] success
 ************************************************************************/
-static int32 GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32 *zone,
-    char *zc, double *Mc, double *E0,
-    double *N0, double *F0)
+static int32 GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32* zone,
+    char* zc, double* Mc, double* E0,
+    double* N0, double* F0)
 {
   int32 ilon;
   int32 ilat;
@@ -2084,8 +2084,8 @@ static int32 GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32 *zone,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_NAD83_To_UTM_EN(double lat, double lon, double *E,
-                               double *N, int32 *zone, char *zc)
+int32 GPS_Math_NAD83_To_UTM_EN(double lat, double lon, double* E,
+                               double* N, int32* zone, char* zc)
 {
   double phi0;
   double lambda0;
@@ -2125,8 +2125,8 @@ int32 GPS_Math_NAD83_To_UTM_EN(double lat, double lon, double *E,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_WGS84_To_UTM_EN(double lat, double lon, double *E,
-                               double *N, int32 *zone, char *zc)
+int32 GPS_Math_WGS84_To_UTM_EN(double lat, double lon, double* E,
+                               double* N, int32* zone, char* zc)
 {
   double phi;
   double lambda;
@@ -2156,8 +2156,8 @@ int32 GPS_Math_WGS84_To_UTM_EN(double lat, double lon, double *E,
 **
 ** @return [int32] success
 ************************************************************************/
-static int32 GPS_Math_UTM_Param_To_Mc(int32 zone, char zc, double *Mc,
-                                      double *E0, double *N0, double *F0)
+static int32 GPS_Math_UTM_Param_To_Mc(int32 zone, char zc, double* Mc,
+                                      double* E0, double* N0, double* F0)
 {
 
   if (zone>60 || zone<0 || zc<'C' || zc>'X') {
@@ -2214,7 +2214,7 @@ static int32 GPS_Math_UTM_Param_To_Mc(int32 zone, char zc, double *Mc,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_UTM_EN_To_NAD83(double *lat, double *lon, double E,
+int32 GPS_Math_UTM_EN_To_NAD83(double* lat, double* lon, double E,
                                double N, int32 zone, char zc)
 {
   return GPS_Math_UTM_EN_To_Known_Datum(lat, lon, E, N, zone, zc, 77);
@@ -2235,7 +2235,7 @@ int32 GPS_Math_UTM_EN_To_NAD83(double *lat, double *lon, double E,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_UTM_EN_To_WGS84(double *lat, double *lon, double E,
+int32 GPS_Math_UTM_EN_To_WGS84(double* lat, double* lon, double E,
                                double N, int32 zone, char zc)
 {
   double lambda0;
@@ -2266,8 +2266,8 @@ int32 GPS_Math_UTM_EN_To_WGS84(double *lat, double *lon, double E,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_Known_Datum_To_UTM_EN(double lat, double lon, double *E,
-                                     double *N, int32 *zone, char *zc, const int n)
+int32 GPS_Math_Known_Datum_To_UTM_EN(double lat, double lon, double* E,
+                                     double* N, int32* zone, char* zc, const int n)
 {
   double phi0;
   double lambda0;
@@ -2308,7 +2308,7 @@ int32 GPS_Math_Known_Datum_To_UTM_EN(double lat, double lon, double *E,
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_Math_UTM_EN_To_Known_Datum(double *lat, double *lon, double E,
+int32 GPS_Math_UTM_EN_To_Known_Datum(double* lat, double* lon, double E,
                                      double N, int32 zone, char zc, const int n)
 {
   double lambda0;
@@ -2343,8 +2343,8 @@ int32 GPS_Math_UTM_EN_To_Known_Datum(double *lat, double *lon, double E,
 **
 ** @return [void]
 ***************************************************************************/
-void GPS_Math_Swiss_LatLon_To_EN(double phi, double lambda, double *E,
-                                 double *N,double phi0,double lambda0,
+void GPS_Math_Swiss_LatLon_To_EN(double phi, double lambda, double* E,
+                                 double* N,double phi0,double lambda0,
                                  double E0, double N0, double a, double b)
 
 {
@@ -2424,8 +2424,8 @@ void GPS_Math_Swiss_LatLon_To_EN(double phi, double lambda, double *E,
 ** @return [void]
 *************************************************************************/
 
-void GPS_Math_Swiss_EN_To_LatLon(double E, double N, double *phi,
-                                 double *lambda, double phi0, double lambda0,
+void GPS_Math_Swiss_EN_To_LatLon(double E, double N, double* phi,
+                                 double* lambda, double phi0, double lambda0,
                                  double E0, double N0, double a, double b)
 {
   double a2;
@@ -2497,7 +2497,7 @@ void GPS_Math_Swiss_EN_To_LatLon(double E, double N, double *phi,
 
 void GPS_Math_UTM_EN_to_LatLon(int ReferenceEllipsoid,
                                const double UTMNorthing, const double UTMEasting,
-                               double *Lat, double *Lon,
+                               double* Lat, double* Lon,
                                const double lambda0,
                                const double E0,
                                const double N0)
@@ -2552,7 +2552,7 @@ void GPS_Math_UTM_EN_to_LatLon(int ReferenceEllipsoid,
 
 /********************************************************************/
 
-int32 GPS_Lookup_Datum_Index(const char *n)
+int32 GPS_Lookup_Datum_Index(const char* n)
 {
   GPS_PDatum dp;
   GPS_PDatum_Alias al;
@@ -2572,7 +2572,7 @@ int32 GPS_Lookup_Datum_Index(const char *n)
   return -1;
 }
 
-char *
+char*
 GPS_Math_Get_Datum_Name(const int datum_index)
 {
   return GPS_Datum[datum_index].name;

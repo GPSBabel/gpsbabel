@@ -27,27 +27,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef int (*avltree_compare_cb)(const char *, const char *);
+typedef int (*avltree_compare_cb)(const char*, const char*);
 
 typedef struct avltree_s {
 #ifdef MEM_DEBUG
   const int magic;
 #endif
-  struct avlnode_s *root;
-  const char *module;
+  struct avlnode_s* root;
+  const char* module;
   int count;		/* number of items in tree */
   int options;
-  const char *key;
+  const char* key;
   int key_sz;
   avltree_compare_cb compare;
 } avltree_t;
 
 typedef struct avlnode_s {
   int balance;
-  const char *key;
-  const void *data;
-  struct avlnode_s *left;
-  struct avlnode_s *right;
+  const char* key;
+  const void* data;
+  struct avlnode_s* left;
+  struct avlnode_s* right;
 } avlnode_t;
 
 /* options for avltree_init */
@@ -60,37 +60,37 @@ typedef struct avlnode_s {
 #define AVLTREE_PARANOIAC		256	/* STOP on "duplicate key" (insert) or on "not found" (delete) */
 
 /* Allocate and initialize an AVL Tree */
-avltree_t *avltree_init(const int options, const char *module);
+avltree_t* avltree_init(const int options, const char* module);
 
 /* Destroy an AVL Tree */
-void avltree_done(avltree_t *tree);
+void avltree_done(avltree_t* tree);
 
 /* Delete all items of tree [tree]; returns number of deleted items */
-int avltree_clear(avltree_t *tree);
+int avltree_clear(avltree_t* tree);
 
 /* Get number of items in tree */
-int avltree_count(const avltree_t *tree);
+int avltree_count(const avltree_t* tree);
 
 /* Delete item with key [key] */
-int avltree_delete(avltree_t *tree, const char *key);
+int avltree_delete(avltree_t* tree, const char* key);
 
 /* Duplicate an existing tree */
-avltree_t *avltree_dupe(const avltree_t *tree, const char *module);
+avltree_t* avltree_dupe(const avltree_t* tree, const char* module);
 
 /* Find key [key] in tree */
-int avltree_find(const avltree_t *tree, const char *key, const void **data);
+int avltree_find(const avltree_t* tree, const char* key, const void** data);
 
 /* Get the first (the MIN-) entry of the tree */
-const char *avltree_first(const avltree_t *tree, const void **data);
+const char* avltree_first(const avltree_t* tree, const void** data);
 
 /* Get the current height of the tree */
-int avltree_height(const avltree_t *tree);
+int avltree_height(const avltree_t* tree);
 
 /* Insert key [key] and [data] into tree */
-int avltree_insert(avltree_t *tree, const char *key, const void *data);
+int avltree_insert(avltree_t* tree, const char* key, const void* data);
 
 /* Get the next (the entry above [key]) */
-const char *avltree_next(const avltree_t *tree, const char *key, const void **data);
+const char* avltree_next(const avltree_t* tree, const char* key, const void** data);
 
 
 #endif /* AVLTREE_H_INCLUDED */

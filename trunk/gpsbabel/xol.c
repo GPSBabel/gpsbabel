@@ -63,7 +63,7 @@ xg_tag_mapping xol_map[] = {
   { xol_shape,		cb_start,	XOL "/shapes/*shape" },
   { xol_shape_end,	cb_end,		XOL "/shapes/*shape" },
   { xol_waypt,		cb_start,	XOL "/shapes/shape/*points/point" },
-  { NULL,			0,		NULL }
+  { NULL,	(xg_cb_type)0,		NULL }
 };
 
 
@@ -360,8 +360,8 @@ xol_write(void)
 ff_vecs_t xol_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write,	/* waypoints */
-    ff_cap_read | ff_cap_write,	/* tracks */
+    (ff_cap)(ff_cap_read | ff_cap_write),	/* waypoints */
+    (ff_cap)(ff_cap_read | ff_cap_write),	/* tracks */
     ff_cap_none
   },		/* routes */
   xol_rd_init,

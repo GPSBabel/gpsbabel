@@ -30,21 +30,21 @@
 #endif
 
 #ifdef MEM_DEBUG
-void avltree_check_handle(const void *tree);
+void avltree_check_handle(const void* tree);
 #endif
-static void avltree_node_free(const avltree_t *tree, avlnode_t *node);
-static int avltree_node_height(avlnode_t *node);
-static int avltree_insert_node(avltree_t *tree, avlnode_t **root, const char *key, const void *data);
-static int avltree_delete_node(avltree_t *tree, const char *key, avlnode_t **root, int *changed);
-static avlnode_t *avltree_right_rotation(avlnode_t *A);
-static avlnode_t *avltree_left_rotation(avlnode_t *A);
-static avlnode_t *avltree_left_right_rotation(avlnode_t *A);
-static avlnode_t *avltree_right_left_rotation(avlnode_t *A);
-static avlnode_t *avltree_dupe_node(const avltree_t *tree, const avlnode_t *node);
-static int avltree_strcmpr(const char *s1, const char *s2);
-static int avltree_case_ignore_strcmpr(const char *s1, const char *s2);
-static avlnode_t *avltree_find_next(const avltree_t *tree, avlnode_t *node, const char *key);
-static void avltree_save_key(avltree_t *tree, const char *key);
+static void avltree_node_free(const avltree_t* tree, avlnode_t* node);
+static int avltree_node_height(avlnode_t* node);
+static int avltree_insert_node(avltree_t* tree, avlnode_t** root, const char* key, const void* data);
+static int avltree_delete_node(avltree_t* tree, const char* key, avlnode_t** root, int* changed);
+static avlnode_t* avltree_right_rotation(avlnode_t* A);
+static avlnode_t* avltree_left_rotation(avlnode_t* A);
+static avlnode_t* avltree_left_right_rotation(avlnode_t* A);
+static avlnode_t* avltree_right_left_rotation(avlnode_t* A);
+static avlnode_t* avltree_dupe_node(const avltree_t* tree, const avlnode_t* node);
+static int avltree_strcmpr(const char* s1, const char* s2);
+static int avltree_case_ignore_strcmpr(const char* s1, const char* s2);
+static avlnode_t* avltree_find_next(const avltree_t* tree, avlnode_t* node, const char* key);
+static void avltree_save_key(avltree_t* tree, const char* key);
 
 
 #ifdef MEM_DEBUG
@@ -59,10 +59,10 @@ static void avltree_save_key(avltree_t *tree, const char *key);
 
 /* Allocate and initialize an AVL Tree */
 
-avltree_t *
-avltree_init(const int options, const char *module)
+avltree_t*
+avltree_init(const int options, const char* module)
 {
-  avltree_t *tree;
+  avltree_t* tree;
 
   if ((module == NULL) || (*module == '\0')) {
     fatal(MYNAME ": 'avltree_init' should be called with a valid module name!\n");
@@ -92,7 +92,7 @@ avltree_init(const int options, const char *module)
 /* Delete all items of tree [tree] */
 
 int
-avltree_clear(avltree_t *tree)
+avltree_clear(avltree_t* tree)
 {
   int res;
 
@@ -112,7 +112,7 @@ avltree_clear(avltree_t *tree)
 /* Destroy an AVL Tree */
 
 void
-avltree_done(avltree_t *tree)
+avltree_done(avltree_t* tree)
 {
   avltree_clear(tree);
   xfree(tree);
@@ -122,7 +122,7 @@ avltree_done(avltree_t *tree)
 /* Get number of items in tree */
 
 int
-avltree_count(const avltree_t *tree)
+avltree_count(const avltree_t* tree)
 {
   AVLTREE_CHECK_HANDLE(tree);
 
@@ -133,7 +133,7 @@ avltree_count(const avltree_t *tree)
 /* Delete item with key [key] */
 
 int
-avltree_delete(avltree_t *tree, const char *key)
+avltree_delete(avltree_t* tree, const char* key)
 {
   int changed = 0;
 
@@ -149,10 +149,10 @@ avltree_delete(avltree_t *tree, const char *key)
 
 /* Duplicate an existing tree */
 
-avltree_t *
-avltree_dupe(const avltree_t *tree, const char *module)
+avltree_t*
+avltree_dupe(const avltree_t* tree, const char* module)
 {
-  avltree_t *dupe;
+  avltree_t* dupe;
 
   AVLTREE_CHECK_HANDLE(tree);
 
@@ -168,9 +168,9 @@ avltree_dupe(const avltree_t *tree, const char *module)
 /* Find key [key] in tree */
 
 int
-avltree_find(const avltree_t *tree, const char *key, const void **data)
+avltree_find(const avltree_t* tree, const char* key, const void** data)
 {
-  avlnode_t *node;
+  avlnode_t* node;
 
   AVLTREE_CHECK_HANDLE(tree);
 
@@ -196,10 +196,10 @@ avltree_find(const avltree_t *tree, const char *key, const void **data)
 
 /* Get the first (the MIN-) entry of the tree */
 
-const char *
-avltree_first(const avltree_t *tree, const void **data)
+const char*
+avltree_first(const avltree_t* tree, const void** data)
 {
-  avlnode_t *node;
+  avlnode_t* node;
 
   AVLTREE_CHECK_HANDLE(tree);
 
@@ -211,7 +211,7 @@ avltree_first(const avltree_t *tree, const void **data)
   while (node->left) {
     node = node->left;
   }
-  avltree_save_key((avltree_t *)tree, node->key);
+  avltree_save_key((avltree_t*)tree, node->key);
   if (data) {
     (*data) = node->data;
   }
@@ -223,7 +223,7 @@ avltree_first(const avltree_t *tree, const void **data)
 /* Get the current height of the tree */
 
 int
-avltree_height(const avltree_t *tree)
+avltree_height(const avltree_t* tree)
 {
   AVLTREE_CHECK_HANDLE(tree);
 
@@ -238,7 +238,7 @@ avltree_height(const avltree_t *tree)
 /* Insert key [key] and [data] into tree */
 
 int
-avltree_insert(avltree_t *tree, const char *key, const void *data)
+avltree_insert(avltree_t* tree, const char* key, const void* data)
 {
   int count;
 
@@ -256,10 +256,10 @@ avltree_insert(avltree_t *tree, const char *key, const void *data)
 
 /* Get the next (the entry above [key]) */
 
-const char *
-avltree_next(const avltree_t *tree, const char *key, const void **data)
+const char*
+avltree_next(const avltree_t* tree, const char* key, const void** data)
 {
-  avlnode_t *node;
+  avlnode_t* node;
 
   AVLTREE_CHECK_HANDLE(tree);
 
@@ -273,12 +273,12 @@ avltree_next(const avltree_t *tree, const char *key, const void **data)
   }
 
   if ((node = avltree_find_next(tree, node, key))) {
-    avltree_save_key((avltree_t *)tree, node->key);
+    avltree_save_key((avltree_t*)tree, node->key);
     if (data) {
       (*data) = node->data;
     }
   } else {
-    avltree_save_key((avltree_t *)tree, NULL);
+    avltree_save_key((avltree_t*)tree, NULL);
   }
 
   return tree->key;
@@ -291,7 +291,7 @@ avltree_next(const avltree_t *tree, const char *key, const void **data)
 #ifdef MEM_DEBUG
 
 void
-avltree_check_handle(const avltree_t *tree)
+avltree_check_handle(const avltree_t* tree)
 {
   if (! tree) {
     fatal(MYNAME ": Invalid (NULL-) pointer!\n");
@@ -305,10 +305,10 @@ avltree_check_handle(const avltree_t *tree)
 
 
 static void
-avltree_node_free(const avltree_t *tree, avlnode_t *node)
+avltree_node_free(const avltree_t* tree, avlnode_t* node)
 {
   if ((!(tree->options & AVLTREE_STATIC_KEYS)) && node->key) {
-    xfree((char *)node->key);
+    xfree((char*)node->key);
   }
   if (node->left) {
     avltree_node_free(tree, node->left);
@@ -321,7 +321,7 @@ avltree_node_free(const avltree_t *tree, avlnode_t *node)
 
 
 static int
-avltree_node_height(avlnode_t *node)
+avltree_node_height(avlnode_t* node)
 {
   int height = 1;
 
@@ -335,8 +335,8 @@ avltree_node_height(avlnode_t *node)
 }
 
 
-static avlnode_t *
-avltree_right_rotation(avlnode_t *A)
+static avlnode_t*
+avltree_right_rotation(avlnode_t* A)
 {
   /*
   >          A                         B
@@ -348,7 +348,7 @@ avltree_right_rotation(avlnode_t *A)
   >                .
   >               / \
   */
-  avlnode_t *B;
+  avlnode_t* B;
 
   B = A->right;
   A->right = B->left;
@@ -364,8 +364,8 @@ avltree_right_rotation(avlnode_t *A)
 }
 
 
-static avlnode_t *
-avltree_left_rotation(avlnode_t *A)
+static avlnode_t*
+avltree_left_rotation(avlnode_t* A)
 {
   /*
   >              A                     B
@@ -377,7 +377,7 @@ avltree_left_rotation(avlnode_t *A)
   >        .
   >       / \
   */
-  avlnode_t *B;
+  avlnode_t* B;
 
   B = A->left;
   A->left = B->right;
@@ -393,8 +393,8 @@ avltree_left_rotation(avlnode_t *A)
 }
 
 
-static avlnode_t *
-avltree_left_right_rotation(avlnode_t *A)
+static avlnode_t*
+avltree_left_right_rotation(avlnode_t* A)
 {
   /*
   >          A                       C
@@ -405,7 +405,7 @@ avltree_left_right_rotation(avlnode_t *A)
   >         \
   >          C
   */
-  avlnode_t *B, *C;
+  avlnode_t* B, *C;
 
   B = A->left;
   C = B->right;
@@ -425,8 +425,8 @@ avltree_left_right_rotation(avlnode_t *A)
 }
 
 
-static avlnode_t *
-avltree_right_left_rotation(avlnode_t *A)
+static avlnode_t*
+avltree_right_left_rotation(avlnode_t* A)
 {
   /*
   >          A                       C
@@ -437,7 +437,7 @@ avltree_right_left_rotation(avlnode_t *A)
   >           /
   >          C
   */
-  avlnode_t *B, *C;
+  avlnode_t* B, *C;
 
   B = A->right;
   C = B->left;
@@ -458,11 +458,11 @@ avltree_right_left_rotation(avlnode_t *A)
 
 
 static int
-avltree_insert_node(avltree_t *tree, avlnode_t **root, const char *key, const void *data)
+avltree_insert_node(avltree_t* tree, avlnode_t** root, const char* key, const void* data)
 {
   int changed = 0;
   int compare;
-  avlnode_t *node = (*root);
+  avlnode_t* node = (*root);
 
   if (node == NULL) {
     (*root) = node = (avlnode_t*) xcalloc(1, sizeof(*node));
@@ -535,9 +535,9 @@ avltree_insert_node(avltree_t *tree, avlnode_t **root, const char *key, const vo
 
 
 static int
-avltree_delete_node(avltree_t *tree, const char *key, avlnode_t **root, int *changed)
+avltree_delete_node(avltree_t* tree, const char* key, avlnode_t** root, int* changed)
 {
-  avlnode_t *node = (*root);
+  avlnode_t* node = (*root);
   int deleted = 0;
   int compare;
 
@@ -603,9 +603,9 @@ avltree_delete_node(avltree_t *tree, const char *key, avlnode_t **root, int *cha
   } else {
     if (node->left) {
       if (node->right) {
-        const char *temp_key;
-        const void *temp_data;
-        avlnode_t *succ = node->right;
+        const char* temp_key;
+        const void* temp_data;
+        avlnode_t* succ = node->right;
 
         while (succ->left) {
           succ = succ->left;  /* find successor */
@@ -665,10 +665,10 @@ avltree_delete_node(avltree_t *tree, const char *key, avlnode_t **root, int *cha
 }
 
 
-static avlnode_t *
-avltree_dupe_node(const avltree_t *tree, const avlnode_t *node)
+static avlnode_t*
+avltree_dupe_node(const avltree_t* tree, const avlnode_t* node)
 {
-  avlnode_t *res = (avlnode_t*) xcalloc(1, sizeof(*res));
+  avlnode_t* res = (avlnode_t*) xcalloc(1, sizeof(*res));
 
   if (tree->options & AVLTREE_STATIC_KEYS) {
     res->key = node->key;
@@ -689,23 +689,23 @@ avltree_dupe_node(const avltree_t *tree, const avlnode_t *node)
 
 
 static int
-avltree_strcmpr(const char *s1, const char *s2)
+avltree_strcmpr(const char* s1, const char* s2)
 {
   return -(strcmp(s1, s2));
 }
 
 
 static int
-avltree_case_ignore_strcmpr(const char *s1, const char *s2)
+avltree_case_ignore_strcmpr(const char* s1, const char* s2)
 {
   return -(case_ignore_strcmp(s1, s2));
 }
 
 
-static avlnode_t *
-avltree_find_next(const avltree_t *tree, avlnode_t *node, const char *key)
+static avlnode_t*
+avltree_find_next(const avltree_t* tree, avlnode_t* node, const char* key)
 {
-  avlnode_t *prev = NULL;
+  avlnode_t* prev = NULL;
 
   if (key == NULL) {
     if ((node = tree->root)) {
@@ -749,14 +749,14 @@ avltree_find_next(const avltree_t *tree, avlnode_t *node, const char *key)
 	}
  */
 static void
-avltree_save_key(avltree_t *tree, const char *key)
+avltree_save_key(avltree_t* tree, const char* key)
 {
   if (tree->options & AVLTREE_STATIC_KEYS) {
     tree->key = key;
   } else {
     if (key == NULL) {
       if (tree->key_sz) {
-        xfree((char *)tree->key);
+        xfree((char*)tree->key);
         tree->key_sz = 0;
       }
       tree->key = NULL;
@@ -770,11 +770,11 @@ avltree_save_key(avltree_t *tree, const char *key)
         if (tree->key_sz == 0) {
           tree->key = (char*) xmalloc(n8);
         } else {
-          tree->key = (char *) xrealloc((char *)tree->key, n8);
+          tree->key = (char*) xrealloc((char*)tree->key, n8);
         }
         tree->key_sz = n8;
       }
-      strncpy((char *)tree->key, key, n);
+      strncpy((char*)tree->key, key, n);
     }
   }
 }

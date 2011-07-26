@@ -36,14 +36,14 @@
 
 #define MYNAME "cet_util"
 
-static cet_cs_vec_t *cet_cs_vec_root = NULL;
+static cet_cs_vec_t* cet_cs_vec_root = NULL;
 
 typedef struct cet_cs_alias_s {
-  char *name;
-  cet_cs_vec_t *vec;
+  char* name;
+  cet_cs_vec_t* vec;
 } cet_cs_alias_t;
 
-static cet_cs_alias_t *cet_cs_alias;
+static cet_cs_alias_t* cet_cs_alias;
 static int cet_cs_alias_ct = 0;
 static int cet_cs_vec_ct = 0;
 static int cet_output = 0;
@@ -59,79 +59,79 @@ static int cet_output = 0;
 
 /* %%% short hand strings transmission for main character sets %%% */
 
-char *
-cet_str_utf8_to_iso8859_1(const char *src)
+char*
+cet_str_utf8_to_iso8859_1(const char* src)
 {
   return cet_str_utf8_to_any(src, &cet_cs_vec_iso_8859_1);
 }
 
-char *
-cet_str_iso8859_1_to_utf8(const char *src)
+char*
+cet_str_iso8859_1_to_utf8(const char* src)
 {
   return cet_str_any_to_utf8(src, &cet_cs_vec_iso_8859_1);
 }
 
-char *
-cet_str_utf8_to_iso8859_8(const char *src)
+char*
+cet_str_utf8_to_iso8859_8(const char* src)
 {
   return cet_str_utf8_to_any(src, &cet_cs_vec_iso_8859_8);
 }
 
-char *
-cet_str_iso8859_8_to_utf8(const char *src)
+char*
+cet_str_iso8859_8_to_utf8(const char* src)
 {
   return cet_str_any_to_utf8(src, &cet_cs_vec_iso_8859_8);
 }
 
-char *
-cet_str_utf8_to_iso8859_15(const char *src)
+char*
+cet_str_utf8_to_iso8859_15(const char* src)
 {
   return cet_str_utf8_to_any(src, &cet_cs_vec_iso_8859_15);
 }
 
-char *
-cet_str_iso8859_15_to_utf8(const char *src)
+char*
+cet_str_iso8859_15_to_utf8(const char* src)
 {
   return cet_str_any_to_utf8(src, &cet_cs_vec_iso_8859_15);
 }
 
-char *
-cet_str_utf8_to_us_ascii(const char *src)
+char*
+cet_str_utf8_to_us_ascii(const char* src)
 {
   return cet_str_utf8_to_any(src, &cet_cs_vec_ansi_x3_4_1968);
 }
 
-char *
-cet_str_us_ascii_to_utf8(const char *src)
+char*
+cet_str_us_ascii_to_utf8(const char* src)
 {
   return cet_str_any_to_utf8(src, &cet_cs_vec_ansi_x3_4_1968);
 }
 
-char *
-cet_str_utf8_to_cp1252(const char *src)
+char*
+cet_str_utf8_to_cp1252(const char* src)
 {
   return cet_str_utf8_to_any(src, &cet_cs_vec_cp1252);
 }
 
-char *
-cet_str_cp1252_to_utf8(const char *src)
+char*
+cet_str_cp1252_to_utf8(const char* src)
 {
   return cet_str_any_to_utf8(src, &cet_cs_vec_cp1252);
 }
 
-char *
-cet_str_utf8_to_cp1255(const char *src)
+char*
+cet_str_utf8_to_cp1255(const char* src)
 {
   return cet_str_utf8_to_any(src, &cet_cs_vec_cp1255);
 }
 
-char *
-cet_str_cp1255_to_utf8(const char *src)
+char*
+cet_str_cp1255_to_utf8(const char* src)
 {
   return cet_str_any_to_utf8(src, &cet_cs_vec_cp1255);
 }
-short *
-cet_str_utf8_to_uni(const char *src, int *length)
+short*
+cet_str_utf8_to_uni(const char* src, int* length)
 {
   return cet_str_any_to_uni(src, &cet_cs_vec_utf8, length);
 }
@@ -145,11 +145,11 @@ cet_str_utf8_to_uni(const char *src, int *length)
  *
  */
 #if HAVE_LIBEXPAT
-int XMLCALL cet_lib_expat_UnknownEncodingHandler(void *data, const XML_Char *xml_encoding, XML_Encoding *info)
+int XMLCALL cet_lib_expat_UnknownEncodingHandler(void* data, const XML_Char* xml_encoding, XML_Encoding* info)
 {
-  cet_cs_vec_t *cs;
+  cet_cs_vec_t* cs;
   int i, c, ucs4_def;
-  const char *encoding;
+  const char* encoding;
 
   encoding = xml_convert_to_char_string(xml_encoding);
   cs = cet_find_cs_by_name(encoding);
@@ -189,11 +189,11 @@ int XMLCALL cet_lib_expat_UnknownEncodingHandler(void *data, const XML_Char *xml
 #endif
 
 
-char *
-cet_str_uni_to_any(const short *src, int length, const cet_cs_vec_t *dest_vec)
+char*
+cet_str_uni_to_any(const short* src, int length, const cet_cs_vec_t* dest_vec)
 {
-  char *res, *c;
-  const cet_cs_vec_t *cs = (dest_vec != NULL) ? dest_vec : &cet_cs_vec_ansi_x3_4_1968;
+  char* res, *c;
+  const cet_cs_vec_t* cs = (dest_vec != NULL) ? dest_vec : &cet_cs_vec_ansi_x3_4_1968;
 
   res = cet_str_uni_to_utf8(src, length);
   if (cs != &cet_cs_vec_utf8) {
@@ -208,12 +208,12 @@ cet_str_uni_to_any(const short *src, int length, const cet_cs_vec_t *dest_vec)
  *
  * -->> for use in mkshort */
 
-char *
-cet_str_any_to_any(const char *src, const cet_cs_vec_t *src_vec, const cet_cs_vec_t *dest_vec)
+char*
+cet_str_any_to_any(const char* src, const cet_cs_vec_t* src_vec, const cet_cs_vec_t* dest_vec)
 {
-  char *c0, *c1;
-  const cet_cs_vec_t *v_in = (src_vec != NULL)  ? src_vec :  &cet_cs_vec_ansi_x3_4_1968;
-  const cet_cs_vec_t *v_out = (dest_vec != NULL) ? dest_vec : &cet_cs_vec_ansi_x3_4_1968;
+  char* c0, *c1;
+  const cet_cs_vec_t* v_in = (src_vec != NULL)  ? src_vec :  &cet_cs_vec_ansi_x3_4_1968;
+  const cet_cs_vec_t* v_out = (dest_vec != NULL) ? dest_vec : &cet_cs_vec_ansi_x3_4_1968;
 
   if (src == NULL) {
     return NULL;
@@ -235,11 +235,11 @@ cet_str_any_to_any(const char *src, const cet_cs_vec_t *src_vec, const cet_cs_ve
  */
 
 int
-cet_valid_char(const char *src, const cet_cs_vec_t *vec)
+cet_valid_char(const char* src, const cet_cs_vec_t* vec)
 {
   int value;
 
-  const cet_cs_vec_t *v = (vec != NULL) ? vec : &cet_cs_vec_ansi_x3_4_1968;
+  const cet_cs_vec_t* v = (vec != NULL) ? vec : &cet_cs_vec_ansi_x3_4_1968;
   return cet_char_to_ucs4(*src, v, &value);
 }
 
@@ -369,11 +369,11 @@ cet_valid_char(const char *src, const cet_cs_vec_t *vec)
 #ifdef DEBUG_MEM
 
 void
-cet_check_cs(cet_cs_vec_t *vec)	/* test well sorted link & extra tables */
+cet_check_cs(cet_cs_vec_t* vec)	/* test well sorted link & extra tables */
 {
-  cet_ucs4_link_t *link;
+  cet_ucs4_link_t* link;
 
-  if ((link = (cet_ucs4_link_t *)vec->ucs4_link)) {
+  if ((link = (cet_ucs4_link_t*)vec->ucs4_link)) {
     int i, j;
 
     for (i = 0, j = 1; j < vec->ucs4_links; i++, j++) {
@@ -384,7 +384,7 @@ cet_check_cs(cet_cs_vec_t *vec)	/* test well sorted link & extra tables */
 
     }
   }
-  if ((link = (cet_ucs4_link_t *)vec->ucs4_extra)) {
+  if ((link = (cet_ucs4_link_t*)vec->ucs4_extra)) {
     int i, j;
 
     for (i = 0, j = 1; j < vec->ucs4_extras; i++, j++) {
@@ -400,23 +400,23 @@ cet_check_cs(cet_cs_vec_t *vec)	/* test well sorted link & extra tables */
 #endif
 
 static signed int
-cet_cs_alias_qsort_cb(const void *a, const void *b)
+cet_cs_alias_qsort_cb(const void* a, const void* b)
 {
-  const cet_cs_alias_t *va = (const cet_cs_alias_t*) a;
-  const cet_cs_alias_t *vb = (const cet_cs_alias_t*) b;
+  const cet_cs_alias_t* va = (const cet_cs_alias_t*) a;
+  const cet_cs_alias_t* vb = (const cet_cs_alias_t*) b;
   return case_ignore_strcmp(va->name, vb->name);
 }
 
 static signed int
-cet_cs_vec_qsort_cb(const void *a, const void *b)
+cet_cs_vec_qsort_cb(const void* a, const void* b)
 {
-  const cet_cs_vec_t *va = *(cet_cs_vec_t **)a;
-  const cet_cs_vec_t *vb = *(cet_cs_vec_t **)b;
+  const cet_cs_vec_t* va = *(cet_cs_vec_t**)a;
+  const cet_cs_vec_t* vb = *(cet_cs_vec_t**)b;
   return case_ignore_strcmp(va->name, vb->name);
 }
 
 void
-cet_register_cs(cet_cs_vec_t *vec)
+cet_register_cs(cet_cs_vec_t* vec)
 {
   if (vec->next == NULL) {
     vec->next = cet_cs_vec_root;
@@ -430,7 +430,7 @@ cet_register_cs(cet_cs_vec_t *vec)
 
 /* Dummy vector for our native character set */
 
-const char *cet_cs_utf8_alias[] = {
+const char* cet_cs_utf8_alias[] = {
   "utf8", NULL
 };
 
@@ -798,8 +798,8 @@ cet_register(void)
 #endif
 
   if (cet_cs_vec_ct > 0) {
-    cet_cs_vec_t *p;
-    cet_cs_alias_t *list;
+    cet_cs_vec_t* p;
+    cet_cs_alias_t* list;
     c = 0;
 
     /* enumerate count of all names and aliases */
@@ -807,7 +807,7 @@ cet_register(void)
     for (p = cet_cs_vec_root; p != NULL; p = p->next) {
       c++;
       if (p->alias != NULL) {
-        char **a = (char **)p->alias;
+        char** a = (char**)p->alias;
         while ((*a) != NULL) {
           a++;
           c++;
@@ -820,7 +820,7 @@ cet_register(void)
     i = 0;
     for (p = cet_cs_vec_root; p != NULL; p = p->next) {
       if (p->alias != NULL) {
-        char **a = (char **)p->alias;
+        char** a = (char**)p->alias;
 
         list[i].name = xstrdup(p->name);
         list[i].vec = p;
@@ -840,7 +840,7 @@ cet_register(void)
     /* install fallback for ascii-like (first 128 ch.) character sets */
     for (i = 1250; i <= 1258; i++) {
       char name[16];
-      cet_cs_vec_t *vec;
+      cet_cs_vec_t* vec;
 
       snprintf(name, sizeof(name), "WIN-CP%d", i);
       if ((vec = cet_find_cs_by_name(name))) {
@@ -849,7 +849,7 @@ cet_register(void)
     }
     for (i = 1; i <= 15; i++) {
       char name[16];
-      cet_cs_vec_t *vec;
+      cet_cs_vec_t* vec;
 
       snprintf(name, sizeof(name), "ISO-8859-%d", i);
       if ((vec = cet_find_cs_by_name(name))) {
@@ -862,8 +862,8 @@ cet_register(void)
 #endif
 }
 
-cet_cs_vec_t *
-cet_find_cs_by_name(const char *name)
+cet_cs_vec_t*
+cet_find_cs_by_name(const char* name)
 {
   int i, j;
 
@@ -878,7 +878,7 @@ cet_find_cs_by_name(const char *name)
 
   while (i <= j) {
     int a, x;
-    cet_cs_alias_t *n;
+    cet_cs_alias_t* n;
 
     a = (i + j) >> 1;
     n = &cet_cs_alias[a];
@@ -899,7 +899,7 @@ cet_deregister(void)
 {
   int i;
   int j = cet_cs_alias_ct;
-  cet_cs_alias_t *p = cet_cs_alias;
+  cet_cs_alias_t* p = cet_cs_alias;
 
   if (p == NULL) {
     return;
@@ -917,9 +917,9 @@ cet_deregister(void)
 /* gpsbabel additions */
 
 int
-cet_validate_cs(const char *cs, cet_cs_vec_t **vec, char **cs_name)
+cet_validate_cs(const char* cs, cet_cs_vec_t** vec, char** cs_name)
 {
-  cet_cs_vec_t *v;
+  cet_cs_vec_t* v;
 
   if ((cs == NULL) || (strlen(cs) == 0)) {	/* set default us-ascii */
     *vec = &cet_cs_vec_ansi_x3_4_1968;
@@ -950,7 +950,7 @@ cet_convert_deinit(void)
 }
 
 void
-cet_convert_init(const char *cs_name, const int force)
+cet_convert_init(const char* cs_name, const int force)
 {
   if ((force != 0) || (global_opts.charset == NULL)) {
     cet_convert_deinit();
@@ -963,15 +963,15 @@ cet_convert_init(const char *cs_name, const int force)
 /* -------------------------------------------------------------------- */
 
 static void
-cet_flag_waypt(const waypoint *wpt)
+cet_flag_waypt(const waypoint* wpt)
 {
-  ((waypoint *)(wpt))->wpt_flags.cet_converted = 1;
+  ((waypoint*)(wpt))->wpt_flags.cet_converted = 1;
 }
 
 static void
-cet_flag_route(const route_head *rte)
+cet_flag_route(const route_head* rte)
 {
-  ((route_head *)(rte))->cet_converted = 1;
+  ((route_head*)(rte))->cet_converted = 1;
 }
 
 static void
@@ -986,28 +986,28 @@ cet_flag_all(void)
 /* %%%         complete data strings transformation                 %%% */
 /* -------------------------------------------------------------------- */
 
-static char * (*converter)(const char *) = NULL;
+static char* (*converter)(const char*) = NULL;
 
 /* two converters */
 
-static char *
-cet_convert_to_utf8(const char *str)
+static char*
+cet_convert_to_utf8(const char* str)
 {
   return cet_str_any_to_utf8(str, global_opts.charset);
 }
 
-static char *
-cet_convert_from_utf8(const char *str)
+static char*
+cet_convert_from_utf8(const char* str)
 {
   return cet_str_utf8_to_any(str, global_opts.charset);
 }
 
 /* cet_convert_string: internal used within cet_convert_strings process */
 
-char *
-cet_convert_string(char *str)
+char*
+cet_convert_string(char* str)
 {
-  char *res;
+  char* res;
 
   if (str == NULL) {
     return NULL;  /* return origin if empty or NULL */
@@ -1023,12 +1023,12 @@ cet_convert_string(char *str)
 /* cet_convert_waypt: internal used within cet_convert_strings process */
 
 static void
-cet_convert_waypt(const waypoint *wpt)
+cet_convert_waypt(const waypoint* wpt)
 {
-  waypoint *w = (waypoint *)wpt;
-  format_specific_data *fs;
-  url_link *url_next;
-  geocache_data *gc_data = (geocache_data *)wpt->gc_data;
+  waypoint* w = (waypoint*)wpt;
+  format_specific_data* fs;
+  url_link* url_next;
+  geocache_data* gc_data = (geocache_data*)wpt->gc_data;
 
   if ((cet_output == 0) && (w->wpt_flags.cet_converted != 0)) {
     return;
@@ -1060,9 +1060,9 @@ cet_convert_waypt(const waypoint *wpt)
 /* cet_convert_route_hdr: internal used within cet_convert_strings process */
 
 static void
-cet_convert_route_hdr(const route_head *route)
+cet_convert_route_hdr(const route_head* route)
 {
-  route_head *rte = (route_head *)route;
+  route_head* rte = (route_head*)route;
 
   if ((cet_output == 0) && (rte->cet_converted != 0)) {
     return;
@@ -1078,7 +1078,7 @@ cet_convert_route_hdr(const route_head *route)
 /* cet_convert_route_tlr: internal used within cet_convert_strings process */
 
 static void
-cet_convert_route_tlr(const route_head *route)
+cet_convert_route_tlr(const route_head* route)
 {
 }
 
@@ -1089,9 +1089,9 @@ cet_convert_route_tlr(const route_head *route)
  * !!! One of "source" or "target" must be internal cet_cs_vec_utf8 or NULL !!! */
 
 void
-cet_convert_strings(const cet_cs_vec_t *source, const cet_cs_vec_t *target, const char *format)
+cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, const char* format)
 {
-  char *cs_name_from, *cs_name_to;
+  char* cs_name_from, *cs_name_to;
 
   converter = NULL;
 
@@ -1104,8 +1104,8 @@ cet_convert_strings(const cet_cs_vec_t *source, const cet_cs_vec_t *target, cons
     cet_output = 1;
 
     converter = cet_convert_from_utf8;
-    cs_name_from = (char *)cet_cs_vec_utf8.name;
-    cs_name_to = (char *)target->name;
+    cs_name_from = (char*)cet_cs_vec_utf8.name;
+    cs_name_to = (char*)target->name;
   } else {
     if ((target != NULL) && (target != &cet_cs_vec_utf8)) {
       fatal(MYNAME ": Internal error!\n");
@@ -1114,8 +1114,8 @@ cet_convert_strings(const cet_cs_vec_t *source, const cet_cs_vec_t *target, cons
     cet_output = 0;
 
     converter = cet_convert_to_utf8;
-    cs_name_to = (char *)cet_cs_vec_utf8.name;
-    cs_name_from = (char *)source->name;
+    cs_name_to = (char*)cet_cs_vec_utf8.name;
+    cs_name_from = (char*)source->name;
   }
 
   if (global_opts.debug_level > 0) {
@@ -1138,11 +1138,11 @@ cet_convert_strings(const cet_cs_vec_t *source, const cet_cs_vec_t *target, cons
  * - Put all character set names and aliases to "FILE" - */
 
 void
-cet_disp_character_set_names(FILE *fout)
+cet_disp_character_set_names(FILE* fout)
 {
   int i, c, ac;
-  cet_cs_vec_t *vec;
-  cet_cs_vec_t **list;
+  cet_cs_vec_t* vec;
+  cet_cs_vec_t** list;
 
   if (cet_cs_alias_ct == 0) {
     return;
@@ -1157,7 +1157,7 @@ cet_disp_character_set_names(FILE *fout)
     fatal(MYNAME ": internal error \"%s\"!\n", "cet_disp_character_set_names");
   }
 
-  list = (cet_cs_vec_t **)xcalloc(c, sizeof(*list));
+  list = (cet_cs_vec_t**)xcalloc(c, sizeof(*list));
 
   i = 0;								/* fill the list */
   for (vec = cet_cs_vec_root; vec != NULL; vec = vec->next) {
@@ -1169,12 +1169,12 @@ cet_disp_character_set_names(FILE *fout)
 
   fprintf(fout, "GPSBabel builtin character sets: (-c option)\n");
   for (i = 0; i < c; i++) {
-    char **a;
+    char** a;
 
     vec = list[i];
     fprintf(fout, "\n* %s", vec->name);
 
-    a = (char **)vec->alias;
+    a = (char**)vec->alias;
     if (a != NULL) {
       int column = 0;
       int alias = 0;
@@ -1200,10 +1200,10 @@ cet_disp_character_set_names(FILE *fout)
  *
  * - print any special hard-coded characters from inside a module - */
 
-int cet_gbfprintf(gbfile *stream, const cet_cs_vec_t *src_vec, const char *fmt, ...)
+int cet_gbfprintf(gbfile* stream, const cet_cs_vec_t* src_vec, const char* fmt, ...)
 {
   int res;
-  char *cout;
+  char* cout;
   va_list args;
 
   va_start(args, fmt);
@@ -1212,12 +1212,12 @@ int cet_gbfprintf(gbfile *stream, const cet_cs_vec_t *src_vec, const char *fmt, 
 
   if (global_opts.charset != src_vec) {
     if (src_vec != &cet_cs_vec_utf8) {
-      char *ctemp = cet_str_any_to_utf8(cout, src_vec);
+      char* ctemp = cet_str_any_to_utf8(cout, src_vec);
       xfree(cout);
       cout = ctemp;
     }
     if (global_opts.charset != &cet_cs_vec_utf8) {
-      char *ctemp = cet_str_utf8_to_any(cout, global_opts.charset);
+      char* ctemp = cet_str_utf8_to_any(cout, global_opts.charset);
       xfree(cout);
       cout = ctemp;
     }
@@ -1234,11 +1234,11 @@ int cet_gbfprintf(gbfile *stream, const cet_cs_vec_t *src_vec, const char *fmt, 
  * words in native endianness.
  */
 
-const char *xml_convert_to_char_string_n(const XML_Char *src, int *n)
+const char* xml_convert_to_char_string_n(const XML_Char* src, int* n)
 {
 #ifdef XML_UNICODE
-  char *utf8;
-  char *utf8b;
+  char* utf8;
+  char* utf8b;
   int i, j;
 
   /*
@@ -1273,13 +1273,13 @@ const char *xml_convert_to_char_string_n(const XML_Char *src, int *n)
  * may be UNICODE16 words in native endianness.
  */
 
-const char *xml_convert_to_char_string(const XML_Char *src)
+const char* xml_convert_to_char_string(const XML_Char* src)
 {
 #ifdef XML_UNICODE
-  char *utf8;
-  char *utf8b;
+  char* utf8;
+  char* utf8b;
   int i, j;
-  const XML_Char *in = src;
+  const XML_Char* in = src;
 
   /* Walk source array until we find source terminator */
   i = 0;
@@ -1304,21 +1304,21 @@ const char *xml_convert_to_char_string(const XML_Char *src)
 }
 
 
-void xml_free_converted_string(const char *str)
+void xml_free_converted_string(const char* str)
 {
 #ifdef XML_UNICODE
-  xfree((void *) str);
+  xfree((void*) str);
 #endif
 }
 
-const char **xml_convert_attrs_to_char_string(const XML_Char **xml_attr)
+const char** xml_convert_attrs_to_char_string(const XML_Char** xml_attr)
 {
 #ifdef XML_UNICODE
   // First count size of array
   int size = 0;
   int i;
-  const XML_Char **ptr;
-  const char **char_attrs;
+  const XML_Char** ptr;
+  const char** char_attrs;
 
   if (xml_attr == NULL) {
     return NULL;
@@ -1329,7 +1329,7 @@ const char **xml_convert_attrs_to_char_string(const XML_Char **xml_attr)
   }
 
   // Allocate space
-  char_attrs = xmalloc((size + 1) * sizeof(char *));
+  char_attrs = xmalloc((size + 1) * sizeof(char*));
 
   // Duplicate strings
   for (i = 0; i < size; ++i) {
@@ -1343,11 +1343,11 @@ const char **xml_convert_attrs_to_char_string(const XML_Char **xml_attr)
 #endif
 }
 
-void xml_free_converted_attrs(const char **attr)
+void xml_free_converted_attrs(const char** attr)
 {
 #ifdef XML_UNICODE
   while (attr != NULL && *attr != NULL) {
-    xfree((void *)*attr);
+    xfree((void*)*attr);
     ++attr;
   }
 #endif

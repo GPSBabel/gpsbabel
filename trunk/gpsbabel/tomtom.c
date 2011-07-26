@@ -83,11 +83,11 @@ wr_deinit(void)
 char *
 decode_8(int sz, const unsigned char *inbuf)
 {
-  static const char encoding_8[32] = "X. SaerionstldchumgpbkfzvACBMPG-";
+  static const char encoding_8[] = "X. SaerionstldchumgpbkfzvACBMPG-";
   static const int encoding_8_high[8] = {0x2,0x3,0x4,0x5,0x6,0x7,0xe,0xf};
 
   // Maximally sized for laziness.
-  char *rval = xmalloc(sz * 3 + 1);
+  char *rval = (char *) xmalloc(sz * 3 + 1);
   char *out = rval;
 
   int i;
@@ -248,8 +248,8 @@ static
 int
 compare_lat(const void *a, const void *b)
 {
-  const struct hdr *wa = a;
-  const struct hdr *wb = b;
+  const struct hdr *wa = (const struct hdr*) a;
+  const struct hdr *wb = (const struct hdr*) b;
 
   double difference = wa->wpt->latitude - wb->wpt->latitude;
   if (difference < 0) {
@@ -268,8 +268,8 @@ static
 int
 compare_lon(const void *a, const void *b)
 {
-  const struct hdr *wa = a;
-  const struct hdr *wb = b;
+  const struct hdr *wa = (const struct hdr*)a;
+  const struct hdr *wb = (const struct hdr*)b;
 
   double difference = wa->wpt->longitude - wb->wpt->longitude;
   if (difference < 0) {
@@ -429,7 +429,7 @@ data_write(void)
   double maxlat = -200;
   struct blockheader *blocks = NULL;
 
-  htable = xmalloc(ct * sizeof(*htable));
+  htable = (struct hdr*) xmalloc(ct * sizeof(*htable));
   bh = htable;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {

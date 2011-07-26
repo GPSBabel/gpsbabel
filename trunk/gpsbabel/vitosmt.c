@@ -49,7 +49,7 @@ ReadRecord(gbfile *f, gbsize_t size)
 static void
 WriteDouble(void* ptr, double d)
 {
-  unsigned char result[8]="\0\0\0\0\0\0\0\0";
+  unsigned char result[9]="\0\0\0\0\0\0\0\0";
   le_write_double(result,d);
   memcpy(ptr, result, 8);
 }
@@ -169,7 +169,7 @@ vitosmt_read(void)
 
     wpt_tmp->creation_time = mkgmtime(&tmStruct);
     wpt_tmp->microseconds = fmod(1000000*seconds+0.5,1000000);
-    wpt_tmp->shortname	=xcalloc(16,1);
+    wpt_tmp->shortname	= (char*) xcalloc(16,1);
     snprintf(wpt_tmp->shortname, 15 , "WP%04d", ++serial);
 
     WAYPT_SET(wpt_tmp, speed, KNOTS_TO_MPS(speed)); /* meters per second */
@@ -244,7 +244,7 @@ vitosmt_waypt_pr(const waypoint *waypointp)
   double			seconds			=0;
 
   ++count;
-  workbuffer = xcalloc(vitosmt_datasize,1);
+  workbuffer = (unsigned char *) xcalloc(vitosmt_datasize,1);
 
   WriteDouble(&workbuffer[position], RAD(waypointp->latitude));
   position += sizeof(double);
@@ -324,7 +324,7 @@ vitosmt_write(void)
   unsigned char *	workbuffer					=0;
   size_t			position					=0;
 
-  workbuffer = xcalloc(vitosmt_headersize,1);
+  workbuffer = (unsigned char*) xcalloc(vitosmt_headersize,1);
 
   now = current_time();
   count = 0;

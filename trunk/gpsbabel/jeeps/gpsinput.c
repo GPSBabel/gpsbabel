@@ -28,32 +28,32 @@
 #include <stdlib.h>
 
 
-static int32 GPS_Input_Load_String(char *t, int32 n, char *s);
-static int32 GPS_Input_Load_Strnull(char *t, char *s);
-static int32 GPS_Input_Read_Line(char *s, FILE *inf);
+static int32 GPS_Input_Load_String(char* t, int32 n, char* s);
+static int32 GPS_Input_Load_Strnull(char* t, char* s);
+static int32 GPS_Input_Read_Line(char* s, FILE* inf);
 
-static int32 GPS_Input_Get_D100(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D101(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D102(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D103(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D104(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D105(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D106(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D107(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf, int protonum);
-static int32 GPS_Input_Get_D150(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D151(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D152(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D154(GPS_PWay *way, FILE *inf);
-static int32 GPS_Input_Get_D155(GPS_PWay *way, FILE *inf);
+static int32 GPS_Input_Get_D100(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D101(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D102(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D103(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D104(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D105(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D106(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D107(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D108(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D109(GPS_PWay* way, FILE* inf, int protonum);
+static int32 GPS_Input_Get_D150(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D151(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D152(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D154(GPS_PWay* way, FILE* inf);
+static int32 GPS_Input_Get_D155(GPS_PWay* way, FILE* inf);
 
-static int32 GPS_Input_Get_Track301(GPS_PTrack **trk, FILE *inf, int32 type,
+static int32 GPS_Input_Get_Track301(GPS_PTrack** trk, FILE* inf, int32 type,
                                     int32 n);
-static int32 GPS_Input_Get_D300(GPS_PTrack *trk, FILE *inf, char *s);
-static int32 GPS_Input_Get_D301(GPS_PTrack *trk, FILE *inf, char *s);
+static int32 GPS_Input_Get_D300(GPS_PTrack* trk, FILE* inf, char* s);
+static int32 GPS_Input_Get_D301(GPS_PTrack* trk, FILE* inf, char* s);
 
-static int32 GPS_Input_Get_Route201(GPS_PWay **way, FILE *inf);
+static int32 GPS_Input_Get_Route201(GPS_PWay** way, FILE* inf);
 
 
 /* @funcstatic GPS_Input_Load_String ***********************************
@@ -67,10 +67,10 @@ static int32 GPS_Input_Get_Route201(GPS_PWay **way, FILE *inf);
 **
 ** @return [int32] success
 ************************************************************************/
-static int32 GPS_Input_Load_String(char *t, int32 n, char *s)
+static int32 GPS_Input_Load_String(char* t, int32 n, char* s)
 {
-  char *p;
-  char *q;
+  char* p;
+  char* q;
 
   int32 len;
   int32 i;
@@ -119,10 +119,10 @@ static int32 GPS_Input_Load_String(char *t, int32 n, char *s)
 **
 ** @return [int32] success
 ************************************************************************/
-static int32 GPS_Input_Load_Strnull(char *t, char *s)
+static int32 GPS_Input_Load_Strnull(char* t, char* s)
 {
-  char *p;
-  char *q;
+  char* p;
+  char* q;
 
   gps_errno = INPUT_ERROR;
 
@@ -154,7 +154,7 @@ static int32 GPS_Input_Load_Strnull(char *t, char *s)
 ** @return [int32] success
 ************************************************************************/
 
-static int32 GPS_Input_Read_Line(char *s, FILE *inf)
+static int32 GPS_Input_Read_Line(char* s, FILE* inf)
 {
   int32 len;
 
@@ -185,7 +185,7 @@ static int32 GPS_Input_Read_Line(char *s, FILE *inf)
 ** @return [int32] number of entries
 ************************************************************************/
 
-int32 GPS_Input_Get_Almanac(GPS_PAlmanac **alm, FILE *inf)
+int32 GPS_Input_Get_Almanac(GPS_PAlmanac** alm, FILE* inf)
 {
   char s[GPS_ARB_LEN];
   int32 n;
@@ -193,7 +193,7 @@ int32 GPS_Input_Get_Almanac(GPS_PAlmanac **alm, FILE *inf)
   int32 i;
   int32   d;
   float f;
-  char *p;
+  char* p;
 
   gps_errno = INPUT_ERROR;
 
@@ -202,12 +202,12 @@ int32 GPS_Input_Get_Almanac(GPS_PAlmanac **alm, FILE *inf)
     return gps_errno;
   }
 
-  if (sscanf(s,"Almanac %d%d",(int *)&n,(int *)&type)!=2) {
+  if (sscanf(s,"Almanac %d%d",(int*)&n,(int*)&type)!=2) {
     return gps_errno;
   }
 
   if (!type) {
-    if (!(*alm = (GPS_PAlmanac *) malloc(32*sizeof(GPS_PAlmanac *)))) {
+    if (!(*alm = (GPS_PAlmanac*) malloc(32*sizeof(GPS_PAlmanac*)))) {
       return MEMORY_ERROR;
     }
     for (i=0; i<32; ++i) {
@@ -219,7 +219,7 @@ int32 GPS_Input_Get_Almanac(GPS_PAlmanac **alm, FILE *inf)
       (*alm)[i]->wn = -1;
     }
   } else {
-    if (!(*alm = (GPS_PAlmanac *) malloc(n*sizeof(GPS_PAlmanac *)))) {
+    if (!(*alm = (GPS_PAlmanac*) malloc(n*sizeof(GPS_PAlmanac*)))) {
       return MEMORY_ERROR;
     }
     for (i=0; i<32; ++i)
@@ -238,7 +238,7 @@ int32 GPS_Input_Get_Almanac(GPS_PAlmanac **alm, FILE *inf)
     }
 
     p=strchr(s,':');
-    if (sscanf(p+1,"%d",(int *)&d)!=1) {
+    if (sscanf(p+1,"%d",(int*)&d)!=1) {
       return gps_errno;
     }
     --d;
@@ -253,7 +253,7 @@ int32 GPS_Input_Get_Almanac(GPS_PAlmanac **alm, FILE *inf)
       return gps_errno;
     }
     p=strchr(s,':');
-    if (sscanf(p+1,"%d",(int *)&d)!=1) {
+    if (sscanf(p+1,"%d",(int*)&d)!=1) {
       return gps_errno;
     }
     (*alm)[i]->wn = d;
@@ -352,7 +352,7 @@ int32 GPS_Input_Get_Almanac(GPS_PAlmanac **alm, FILE *inf)
       return gps_errno;
     }
     p=strchr(s,':');
-    if (sscanf(p+1,"%d",(int *)&d)!=1) {
+    if (sscanf(p+1,"%d",(int*)&d)!=1) {
       return gps_errno;
     }
     (*alm)[i]->hlth=d;
@@ -377,7 +377,7 @@ int32 GPS_Input_Get_Almanac(GPS_PAlmanac **alm, FILE *inf)
 ** @return [int32] number of entries
 ************************************************************************/
 
-int32 GPS_Input_Get_Waypoint(GPS_PWay **way, FILE *inf)
+int32 GPS_Input_Get_Waypoint(GPS_PWay** way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
   int32 n;
@@ -391,7 +391,7 @@ int32 GPS_Input_Get_Waypoint(GPS_PWay **way, FILE *inf)
   if (!GPS_Input_Read_Line(s,inf)) {
     return gps_errno;
   }
-  if (sscanf(s,"Waypoints Type: %d",(int *)&type)!=1) {
+  if (sscanf(s,"Waypoints Type: %d",(int*)&type)!=1) {
     return gps_errno;
   }
 
@@ -414,7 +414,7 @@ int32 GPS_Input_Get_Waypoint(GPS_PWay **way, FILE *inf)
   }
   fseek(inf,pos,0);
 
-  if (!(*way=(GPS_PWay *)malloc(n*sizeof(GPS_PWay *)))) {
+  if (!(*way=(GPS_PWay*)malloc(n*sizeof(GPS_PWay*)))) {
     return MEMORY_ERROR;
   }
   for (i=0; i<n; ++i) {
@@ -544,7 +544,7 @@ int32 GPS_Input_Get_Waypoint(GPS_PWay **way, FILE *inf)
 ** @return [int32] number of entries
 ************************************************************************/
 
-int32 GPS_Input_Get_Proximity(GPS_PWay **way, FILE *inf)
+int32 GPS_Input_Get_Proximity(GPS_PWay** way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
   int32 n;
@@ -553,14 +553,14 @@ int32 GPS_Input_Get_Proximity(GPS_PWay **way, FILE *inf)
   long pos;
   int32 ret;
   double f;
-  char *p;
+  char* p;
 
   gps_errno = INPUT_ERROR;
 
   if (!GPS_Input_Read_Line(s,inf)) {
     return gps_errno;
   }
-  if (sscanf(s,"Waypoints Type: %d",(int *)&type)!=1) {
+  if (sscanf(s,"Waypoints Type: %d",(int*)&type)!=1) {
     return gps_errno;
   }
 
@@ -583,7 +583,7 @@ int32 GPS_Input_Get_Proximity(GPS_PWay **way, FILE *inf)
   }
   fseek(inf,pos,0);
 
-  if (!(*way=(GPS_PWay *)malloc(n*sizeof(GPS_PWay *)))) {
+  if (!(*way=(GPS_PWay*)malloc(n*sizeof(GPS_PWay*)))) {
     return MEMORY_ERROR;
   }
   for (i=0; i<n; ++i) {
@@ -720,10 +720,10 @@ int32 GPS_Input_Get_Proximity(GPS_PWay **way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D100(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D100(GPS_PWay* way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
-  char *p;
+  char* p;
 
   double f;
 
@@ -769,10 +769,10 @@ static int32 GPS_Input_Get_D100(GPS_PWay *way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D101(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D101(GPS_PWay* way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
-  char *p;
+  char* p;
 
   double f;
   int32 d;
@@ -810,7 +810,7 @@ static int32 GPS_Input_Get_D101(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->smbl = d;
@@ -829,7 +829,7 @@ static int32 GPS_Input_Get_D101(GPS_PWay *way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D102(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D102(GPS_PWay* way, FILE* inf)
 {
   return GPS_Input_Get_D101(way,inf);
 }
@@ -845,10 +845,10 @@ static int32 GPS_Input_Get_D102(GPS_PWay *way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D103(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D103(GPS_PWay* way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
-  char *p;
+  char* p;
 
   double f;
   int32 d;
@@ -886,7 +886,7 @@ static int32 GPS_Input_Get_D103(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->smbl = d;
@@ -895,7 +895,7 @@ static int32 GPS_Input_Get_D103(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->dspl = d;
@@ -914,7 +914,7 @@ static int32 GPS_Input_Get_D103(GPS_PWay *way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D104(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D104(GPS_PWay* way, FILE* inf)
 {
   return GPS_Input_Get_D103(way,inf);
 }
@@ -930,10 +930,10 @@ static int32 GPS_Input_Get_D104(GPS_PWay *way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D105(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D105(GPS_PWay* way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
-  char *p;
+  char* p;
 
   double f;
   int32 d;
@@ -961,7 +961,7 @@ static int32 GPS_Input_Get_D105(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->smbl = d;
@@ -985,10 +985,10 @@ static int32 GPS_Input_Get_D105(GPS_PWay *way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D106(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D106(GPS_PWay* way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
-  char *p;
+  char* p;
 
   double f;
   int32 d;
@@ -997,7 +997,7 @@ static int32 GPS_Input_Get_D106(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->wpt_class = d;
@@ -1005,7 +1005,7 @@ static int32 GPS_Input_Get_D106(GPS_PWay *way, FILE *inf)
   if (!GPS_Input_Read_Line(s,inf)) {
     return gps_errno;
   }
-  GPS_Input_Load_String((char *)(*way)->subclass,13,s);
+  GPS_Input_Load_String((char*)(*way)->subclass,13,s);
 
 
   if (!GPS_Input_Read_Line(s,inf)) {
@@ -1035,7 +1035,7 @@ static int32 GPS_Input_Get_D106(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->smbl = d;
@@ -1064,10 +1064,10 @@ static int32 GPS_Input_Get_D106(GPS_PWay *way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D107(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D107(GPS_PWay* way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
-  char *p;
+  char* p;
 
   int32 d;
   int32 ret;
@@ -1080,7 +1080,7 @@ static int32 GPS_Input_Get_D107(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->colour = d;
@@ -1099,10 +1099,10 @@ static int32 GPS_Input_Get_D107(GPS_PWay *way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D108(GPS_PWay* way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
-  char *p;
+  char* p;
   double f;
   int32 d;
   int32 xc;
@@ -1135,7 +1135,7 @@ static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->colour = d;
@@ -1144,7 +1144,7 @@ static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->dspl = d;
@@ -1153,7 +1153,7 @@ static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->smbl = d;
@@ -1162,7 +1162,7 @@ static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->alt = d;
@@ -1190,7 +1190,7 @@ static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->wpt_class = d;
@@ -1200,7 +1200,7 @@ static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf)
     if (!GPS_Input_Read_Line(s,inf)) {
       return gps_errno;
     }
-    GPS_Input_Load_String((char *)(*way)->subclass,18,s);
+    GPS_Input_Load_String((char*)(*way)->subclass,18,s);
   } else {
     GPS_Util_Put_Short((*way)->subclass,0);
     GPS_Util_Put_Int((*way)->subclass+2,0);
@@ -1256,10 +1256,10 @@ static int32 GPS_Input_Get_D108(GPS_PWay *way, FILE *inf)
 ** @return [int32] number of entries
 ** D109's and D110's are so similar, we handle both with the same function.
 ************************************************************************/
-static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf, int protonum)
+static int32 GPS_Input_Get_D109(GPS_PWay* way, FILE* inf, int protonum)
 {
   char s[GPS_ARB_LEN];
-  char *p;
+  char* p;
   double f;
   int32 d;
   int32 xc;
@@ -1292,7 +1292,7 @@ static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf, int protonum)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->colour = d;
@@ -1301,7 +1301,7 @@ static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf, int protonum)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->dspl = d;
@@ -1310,7 +1310,7 @@ static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf, int protonum)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->smbl = d;
@@ -1319,7 +1319,7 @@ static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf, int protonum)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->alt = d;
@@ -1347,7 +1347,7 @@ static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf, int protonum)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->wpt_class = d;
@@ -1357,7 +1357,7 @@ static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf, int protonum)
     if (!GPS_Input_Read_Line(s,inf)) {
       return gps_errno;
     }
-    GPS_Input_Load_String((char *)(*way)->subclass,18,s);
+    GPS_Input_Load_String((char*)(*way)->subclass,18,s);
   } else {
     GPS_Util_Put_Short((*way)->subclass,0);
     GPS_Util_Put_Int((*way)->subclass+2,0);
@@ -1411,10 +1411,10 @@ static int32 GPS_Input_Get_D109(GPS_PWay *way, FILE *inf, int protonum)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D150(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D150(GPS_PWay* way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
-  char *p;
+  char* p;
 
   double f;
   int32 d;
@@ -1453,7 +1453,7 @@ static int32 GPS_Input_Get_D150(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->wpt_class = cl = d;
@@ -1485,7 +1485,7 @@ static int32 GPS_Input_Get_D150(GPS_PWay *way, FILE *inf)
       return gps_errno;
     }
     p=strchr(s,':');
-    if (sscanf(p+1,"%d",(int *)&d)!=1) {
+    if (sscanf(p+1,"%d",(int*)&d)!=1) {
       return gps_errno;
     }
     (*way)->alt = d;
@@ -1505,10 +1505,10 @@ static int32 GPS_Input_Get_D150(GPS_PWay *way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D151(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D151(GPS_PWay* way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
-  char *p;
+  char* p;
 
   double f;
   int32 d;
@@ -1547,7 +1547,7 @@ static int32 GPS_Input_Get_D151(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->wpt_class = cl = d;
@@ -1579,7 +1579,7 @@ static int32 GPS_Input_Get_D151(GPS_PWay *way, FILE *inf)
       return gps_errno;
     }
     p=strchr(s,':');
-    if (sscanf(p+1,"%d",(int *)&d)!=1) {
+    if (sscanf(p+1,"%d",(int*)&d)!=1) {
       return gps_errno;
     }
     (*way)->alt = d;
@@ -1598,7 +1598,7 @@ static int32 GPS_Input_Get_D151(GPS_PWay *way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D152(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D152(GPS_PWay* way, FILE* inf)
 {
   return GPS_Input_Get_D150(way,inf);
 }
@@ -1614,10 +1614,10 @@ static int32 GPS_Input_Get_D152(GPS_PWay *way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D154(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D154(GPS_PWay* way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
-  char *p;
+  char* p;
 
   double f;
   int32 d;
@@ -1656,7 +1656,7 @@ static int32 GPS_Input_Get_D154(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->smbl = d;
@@ -1665,7 +1665,7 @@ static int32 GPS_Input_Get_D154(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->wpt_class = cl = d;
@@ -1697,7 +1697,7 @@ static int32 GPS_Input_Get_D154(GPS_PWay *way, FILE *inf)
       return gps_errno;
     }
     p=strchr(s,':');
-    if (sscanf(p+1,"%d",(int *)&d)!=1) {
+    if (sscanf(p+1,"%d",(int*)&d)!=1) {
       return gps_errno;
     }
     (*way)->alt = d;
@@ -1717,10 +1717,10 @@ static int32 GPS_Input_Get_D154(GPS_PWay *way, FILE *inf)
 **
 ** @return [int32] number of entries
 ************************************************************************/
-static int32 GPS_Input_Get_D155(GPS_PWay *way, FILE *inf)
+static int32 GPS_Input_Get_D155(GPS_PWay* way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
-  char *p;
+  char* p;
 
   double f;
   int32 d;
@@ -1759,7 +1759,7 @@ static int32 GPS_Input_Get_D155(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->smbl = d;
@@ -1768,7 +1768,7 @@ static int32 GPS_Input_Get_D155(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->dspl = d;
@@ -1777,7 +1777,7 @@ static int32 GPS_Input_Get_D155(GPS_PWay *way, FILE *inf)
     return gps_errno;
   }
   p=strchr(s,':');
-  if (sscanf(p+1,"%d",(int *)&d)!=1) {
+  if (sscanf(p+1,"%d",(int*)&d)!=1) {
     return gps_errno;
   }
   (*way)->wpt_class = cl = d;
@@ -1809,7 +1809,7 @@ static int32 GPS_Input_Get_D155(GPS_PWay *way, FILE *inf)
       return gps_errno;
     }
     p=strchr(s,':');
-    if (sscanf(p+1,"%d",(int *)&d)!=1) {
+    if (sscanf(p+1,"%d",(int*)&d)!=1) {
       return gps_errno;
     }
     (*way)->alt = d;
@@ -1830,7 +1830,7 @@ static int32 GPS_Input_Get_D155(GPS_PWay *way, FILE *inf)
 ** @return [int32] number of entries
 ************************************************************************/
 
-int32 GPS_Input_Get_Track(GPS_PTrack **trk, FILE *inf)
+int32 GPS_Input_Get_Track(GPS_PTrack** trk, FILE* inf)
 {
   char s[GPS_ARB_LEN];
   int32 n;
@@ -1848,7 +1848,7 @@ int32 GPS_Input_Get_Track(GPS_PTrack **trk, FILE *inf)
     return gps_errno;
   }
 
-  if (sscanf(s,"Track log %d%d",(int *)&a,(int *)&d)!=2) {
+  if (sscanf(s,"Track log %d%d",(int*)&a,(int*)&d)!=2) {
     return INPUT_ERROR;
   }
 
@@ -1876,7 +1876,7 @@ int32 GPS_Input_Get_Track(GPS_PTrack **trk, FILE *inf)
   fseek(inf,pos,0);
 
 
-  if (!(*trk=(GPS_PTrack *)malloc(n*sizeof(GPS_PTrack *)))) {
+  if (!(*trk=(GPS_PTrack*)malloc(n*sizeof(GPS_PTrack*)))) {
     return MEMORY_ERROR;
   }
   for (i=0; i<n; ++i)
@@ -1939,12 +1939,12 @@ int32 GPS_Input_Get_Track(GPS_PTrack **trk, FILE *inf)
 ** @return [int32] number of entries
 ************************************************************************/
 
-static int32 GPS_Input_Get_Track301(GPS_PTrack **trk, FILE *inf, int32 type,
+static int32 GPS_Input_Get_Track301(GPS_PTrack** trk, FILE* inf, int32 type,
                                     int32 n)
 {
   char s[GPS_ARB_LEN];
   int32 i;
-  char *p;
+  char* p;
   int32 x;
 
   for (i=0; i<n; ++i) {
@@ -1963,7 +1963,7 @@ static int32 GPS_Input_Get_Track301(GPS_PTrack **trk, FILE *inf, int32 type,
         return gps_errno;
       }
       p=strchr(s,':');
-      if (sscanf(p+1,"%d",(int *)&x)!=1) {
+      if (sscanf(p+1,"%d",(int*)&x)!=1) {
         return INPUT_ERROR;
       }
       (*trk)[i]->dspl = x;
@@ -1972,7 +1972,7 @@ static int32 GPS_Input_Get_Track301(GPS_PTrack **trk, FILE *inf, int32 type,
         return gps_errno;
       }
       p=strchr(s,':');
-      if (sscanf(p+1,"%d",(int *)&x)!=1) {
+      if (sscanf(p+1,"%d",(int*)&x)!=1) {
         return INPUT_ERROR;
       }
       (*trk)[i]->colour = x;
@@ -2019,9 +2019,9 @@ static int32 GPS_Input_Get_Track301(GPS_PTrack **trk, FILE *inf, int32 type,
 ** @return [int32] number of entries
 ************************************************************************/
 
-static int32 GPS_Input_Get_D300(GPS_PTrack *trk, FILE *inf, char *s)
+static int32 GPS_Input_Get_D300(GPS_PTrack* trk, FILE* inf, char* s)
 {
-  char *p;
+  char* p;
   double f;
 
   p=strchr(s,':');
@@ -2060,9 +2060,9 @@ static int32 GPS_Input_Get_D300(GPS_PTrack *trk, FILE *inf, char *s)
 ** @return [int32] number of entries
 ************************************************************************/
 
-static int32 GPS_Input_Get_D301(GPS_PTrack *trk, FILE *inf, char *s)
+static int32 GPS_Input_Get_D301(GPS_PTrack* trk, FILE* inf, char* s)
 {
-  char *p;
+  char* p;
   double f;
 
   p=strchr(s,':');
@@ -2118,7 +2118,7 @@ static int32 GPS_Input_Get_D301(GPS_PTrack *trk, FILE *inf, char *s)
 ** @return [int32] number of entries
 ************************************************************************/
 
-int32 GPS_Input_Get_Route(GPS_PWay **way, FILE *inf)
+int32 GPS_Input_Get_Route(GPS_PWay** way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
   int32 n;
@@ -2128,7 +2128,7 @@ int32 GPS_Input_Get_Route(GPS_PWay **way, FILE *inf)
   int32 i;
   long pos;
   int32 ret;
-  char *p;
+  char* p;
   int32 d;
 
   gps_errno = INPUT_ERROR;
@@ -2137,7 +2137,7 @@ int32 GPS_Input_Get_Route(GPS_PWay **way, FILE *inf)
   if (!GPS_Input_Read_Line(s,inf)) {
     return gps_errno;
   }
-  if (sscanf(s,"Route log %d",(int *)&atype)!=1) {
+  if (sscanf(s,"Route log %d",(int*)&atype)!=1) {
     return gps_errno;
   }
   if (!GPS_Input_Read_Line(s,inf)) {
@@ -2158,14 +2158,14 @@ int32 GPS_Input_Get_Route(GPS_PWay **way, FILE *inf)
   if (!GPS_Input_Read_Line(s,inf)) {
     return gps_errno;
   }
-  if (sscanf(s,"Route Type: %d",(int *)&rtype)!=1) {
+  if (sscanf(s,"Route Type: %d",(int*)&rtype)!=1) {
     return gps_errno;
   }
 
   if (!GPS_Input_Read_Line(s,inf)) {
     return gps_errno;
   }
-  if (sscanf(s,"Waypoints Type: %d",(int *)&type)!=1) {
+  if (sscanf(s,"Waypoints Type: %d",(int*)&type)!=1) {
     return gps_errno;
   }
 
@@ -2189,7 +2189,7 @@ int32 GPS_Input_Get_Route(GPS_PWay **way, FILE *inf)
   fseek(inf,0L,0);
 
 
-  if (!(*way=(GPS_PWay *)malloc(n*sizeof(GPS_PWay *)))) {
+  if (!(*way=(GPS_PWay*)malloc(n*sizeof(GPS_PWay*)))) {
     return MEMORY_ERROR;
   }
   for (i=0; i<n; ++i) {
@@ -2218,7 +2218,7 @@ int32 GPS_Input_Get_Route(GPS_PWay **way, FILE *inf)
       case 200:
         p = strchr(s,':');
         p = strchr(p+1,':');
-        if (sscanf(p+1,"%d",(int *)&d)!=1) {
+        if (sscanf(p+1,"%d",(int*)&d)!=1) {
           return gps_error;
         }
         (*way)[i]->rte_num=d;
@@ -2226,7 +2226,7 @@ int32 GPS_Input_Get_Route(GPS_PWay **way, FILE *inf)
       case 201:
         p = strchr(s,':');
         p = strchr(p+1,':');
-        if (sscanf(p+1,"%d",(int *)&d)!=1) {
+        if (sscanf(p+1,"%d",(int*)&d)!=1) {
           return gps_error;
         }
         (*way)[i]->rte_num=d;
@@ -2366,7 +2366,7 @@ int32 GPS_Input_Get_Route(GPS_PWay **way, FILE *inf)
 ** @return [int32] number of entries
 ************************************************************************/
 
-static int32 GPS_Input_Get_Route201(GPS_PWay **way, FILE *inf)
+static int32 GPS_Input_Get_Route201(GPS_PWay** way, FILE* inf)
 {
   char s[GPS_ARB_LEN];
   int32 n;
@@ -2375,7 +2375,7 @@ static int32 GPS_Input_Get_Route201(GPS_PWay **way, FILE *inf)
   int32 i;
   long pos;
   int32 ret;
-  char *p;
+  char* p;
   int32 d;
 
   gps_errno = INPUT_ERROR;
@@ -2383,14 +2383,14 @@ static int32 GPS_Input_Get_Route201(GPS_PWay **way, FILE *inf)
   if (!GPS_Input_Read_Line(s,inf)) {
     return gps_errno;
   }
-  if (sscanf(s,"Route Type: %d",(int *)&rtype)!=1) {
+  if (sscanf(s,"Route Type: %d",(int*)&rtype)!=1) {
     return gps_errno;
   }
 
   if (!GPS_Input_Read_Line(s,inf)) {
     return gps_errno;
   }
-  if (sscanf(s,"Waypoints Type: %d",(int *)&type)!=1) {
+  if (sscanf(s,"Waypoints Type: %d",(int*)&type)!=1) {
     return gps_errno;
   }
 
@@ -2407,7 +2407,7 @@ static int32 GPS_Input_Get_Route201(GPS_PWay **way, FILE *inf)
   }
   fseek(inf,0L,0);
 
-  if (!(*way=(GPS_PWay *)malloc(n*sizeof(GPS_PWay *)))) {
+  if (!(*way=(GPS_PWay*)malloc(n*sizeof(GPS_PWay*)))) {
     return MEMORY_ERROR;
   }
   for (i=0; i<n; ++i) {
@@ -2436,7 +2436,7 @@ static int32 GPS_Input_Get_Route201(GPS_PWay **way, FILE *inf)
       case 200:
         p = strchr(s,':');
         p = strchr(p+1,':');
-        if (sscanf(p+1,"%d",(int *)&d)!=1) {
+        if (sscanf(p+1,"%d",(int*)&d)!=1) {
           return gps_error;
         }
         (*way)[i]->rte_num=d;
@@ -2444,7 +2444,7 @@ static int32 GPS_Input_Get_Route201(GPS_PWay **way, FILE *inf)
       case 201:
         p = strchr(s,':');
         p = strchr(p+1,':');
-        if (sscanf(p+1,"%d",(int *)&d)!=1) {
+        if (sscanf(p+1,"%d",(int*)&d)!=1) {
           return gps_error;
         }
         (*way)[i]->rte_num=d;
@@ -2471,7 +2471,7 @@ static int32 GPS_Input_Get_Route201(GPS_PWay **way, FILE *inf)
       (*way)[i]->islink = 1;
 
       p = strchr(s,':');
-      if (sscanf(p+1,"%d",(int *)&d)!=1) {
+      if (sscanf(p+1,"%d",(int*)&d)!=1) {
         return gps_error;
       }
       (*way)[i]->rte_link_class=d;
@@ -2483,13 +2483,13 @@ static int32 GPS_Input_Get_Route201(GPS_PWay **way, FILE *inf)
         }
         GPS_Input_Load_String((*way)[i]->rte_link_subclass,18,s);
       } else {
-        GPS_Util_Put_Short((UC *)(*way)[i]->rte_link_subclass,0);
-        GPS_Util_Put_Int((UC *)(*way)[i]->rte_link_subclass+2,0);
-        GPS_Util_Put_Uint((UC *)(*way)[i]->rte_link_subclass+6,
+        GPS_Util_Put_Short((UC*)(*way)[i]->rte_link_subclass,0);
+        GPS_Util_Put_Int((UC*)(*way)[i]->rte_link_subclass+2,0);
+        GPS_Util_Put_Uint((UC*)(*way)[i]->rte_link_subclass+6,
                           0xffffffff);
-        GPS_Util_Put_Uint((UC *)(*way)[i]->rte_link_subclass+10,
+        GPS_Util_Put_Uint((UC*)(*way)[i]->rte_link_subclass+10,
                           0xffffffff);
-        GPS_Util_Put_Uint((UC *)(*way)[i]->rte_link_subclass+14,
+        GPS_Util_Put_Uint((UC*)(*way)[i]->rte_link_subclass+14,
                           0xffffffff);
       }
 
