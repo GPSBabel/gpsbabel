@@ -114,7 +114,7 @@ read_tracks(void)
     wpt->pdop = le_read_float(&bc.espe);
     wpt->course = le_read_float(&bc.course);
     wpt->speed = le_read_float(&bc.speed);
-    wpt->fix = (fix_type) le_readu16(&bc.fix) - 1;
+    wpt->fix = (fix_type) (le_readu16(&bc.fix) - 1);
 
     track_add_wpt(trk_head, wpt);
   }

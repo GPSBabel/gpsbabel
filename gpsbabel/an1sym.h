@@ -725,7 +725,7 @@ int FindIconByGuid(GUID* guid, char** name)
   int i = 0;
   for (i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++) {
     if (!memcmp(guid, &default_guids[i].guid, sizeof(GUID))) {
-      *name = default_guids[i].name;
+      *name = (char*) default_guids[i].name;
       return 1;
     }
   }

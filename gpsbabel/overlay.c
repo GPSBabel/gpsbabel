@@ -415,7 +415,7 @@ static void ovl_rd_deinit(void)
 }
 
 /*------------------------------------------*/
-void ovl_read_parameter(char* fname)
+void ovl_read_parameter(const char* fname)
 {
   gbfile*    fpin;
   arglist_t* p;

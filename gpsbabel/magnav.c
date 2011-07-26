@@ -139,7 +139,7 @@ my_writewpt(const waypoint* wpt)
                    mkshort_from_wpt(mkshort_handle, wpt) :
                    wpt->shortname;
 
-  rec = xcalloc(sizeof(*rec)+56,1);
+  rec = (struct record*) xcalloc(sizeof(*rec)+56,1);
 
   tm = NULL;
   if (wpt->creation_time) {

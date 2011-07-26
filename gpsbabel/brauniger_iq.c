@@ -27,7 +27,7 @@ static void* serial_handle;
 #define MYNAME "BRAUNIGER-IQ"
 #define PRESTRKNAME "PRESALTTRK"
 
-static enum {
+typedef enum {
   st_sync,
   st_fl_num,
   st_data_len,
@@ -45,7 +45,14 @@ static enum {
   st_sample_alt,
   st_sample_spd,
   num_states
-} state;
+} state_t;
+state_t state;
+#if __cplusplus
+inline state_t operator++(state_t& rs, int)
+{
+  return rs = (state_t)((int)rs + 1);
+}
+#endif
 
 static const int reqd_bytes[num_states] = { 6, 1, 2, 2, 25, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1 };
 

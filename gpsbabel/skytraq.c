@@ -244,7 +244,7 @@ wr_buf(const unsigned char *str, int len)
 
 gbuint8 NL[2] = { 0x0D, 0x0A };
 gbuint8 MSG_START[2] = { 0xA0, 0xA1 };
-gbuint8 SECTOR_READ_END[13] = "END\0CHECKSUM=";
+gbuint8 SECTOR_READ_END[] = "END\0CHECKSUM=";
 
 static int
 skytraq_calc_checksum(const unsigned char *buf, int len)
@@ -288,9 +288,9 @@ skytraq_rd_msg(const void *payload, int len)
   }
 
   db(2, "Receiving message with %i bytes of payload (expected >=%i)\n", rcv_len, len);
-  rd_buf(payload, MIN(rcv_len, len));
+  rd_buf((const unsigned char*) payload, MIN(rcv_len, len));
 
-  calc_cs = skytraq_calc_checksum(payload, MIN(rcv_len, len));
+  calc_cs = skytraq_calc_checksum((const unsigned char*) payload, MIN(rcv_len, len));
   for (i = 0; i < rcv_len-len; i++) {
     c = rd_char(&errors);
     calc_cs ^= c;
@@ -507,7 +507,7 @@ static unsigned int me_read32(const unsigned char *p)
 }
 
 struct read_state {
-  route_head          *route_head;
+  route_head          *route_head_;
   unsigned            wpn, tpn;
 
   time_t ts;
@@ -524,7 +524,7 @@ state_init(struct read_state *pst)
   track->rte_desc = xstrdup("SkyTraq GPS tracklog data");
   track_add_head(track);
 
-  pst->route_head = track;
+  pst->route_head_ = track;
   pst->wpn        = 0;
   pst->tpn        = 0;
 
@@ -709,13 +709,13 @@ process_data_item(struct read_state *pst, const item_frame *pitem, int len)
       waypt_add(waypt_dupe(tpt));
     }
 
-    if (0 == pst->route_head) {
+    if (0 == pst->route_head_) {
       db(1, MYNAME ": New Track\n");
-      pst->route_head = route_head_alloc();
-      track_add_head(pst->route_head);
+      pst->route_head_ = route_head_alloc();
+      track_add_head(pst->route_head_);
     }
 
-    track_add_wpt(pst->route_head, tpt);
+    track_add_wpt(pst->route_head_, tpt);
   }
 
   return res;

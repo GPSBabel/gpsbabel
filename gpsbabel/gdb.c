@@ -493,7 +493,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 #if GDB_DEBUG
   sn = xstrdup(nice(res->shortname));
 #endif
-  wpt_class = FREAD_i32;
+  wpt_class = (gt_waypt_classes_e) FREAD_i32;
   GMSD_SET(wpt_class, wpt_class);
   if (wpt_class != 0) {
     waypth_ct++;

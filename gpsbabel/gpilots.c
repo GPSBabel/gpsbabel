@@ -290,7 +290,7 @@ data_read(void)
             } else {
               /* name in the form TRACKNAME #n */
               snprintf(trk_seg_num_buf, sizeof(trk_seg_num_buf), "%d", trk_seg_num);
-              track_head->rte_name = xmalloc(strlen(trk_name)+strlen(trk_seg_num_buf)+3);
+              track_head->rte_name = (char*) xmalloc(strlen(trk_name)+strlen(trk_seg_num_buf)+3);
               sprintf(track_head->rte_name, "%s #%s", trk_name, trk_seg_num_buf);
             }
             trk_seg_num++;
@@ -334,7 +334,7 @@ data_read(void)
             } else {
               /* name in the form TRACKNAME #n */
               snprintf(trk_seg_num_buf, sizeof(trk_seg_num_buf), "%d", trk_seg_num);
-              track_head->rte_name = xmalloc(strlen(trk_name)+strlen(trk_seg_num_buf)+3);
+              track_head->rte_name = (char*) xmalloc(strlen(trk_name)+strlen(trk_seg_num_buf)+3);
               sprintf(track_head->rte_name, "%s #%s", trk_name, trk_seg_num_buf);
             }
             trk_seg_num++;
@@ -376,7 +376,7 @@ my_write_wpt(const waypoint* wpt)
   char* vdata;
   int lat, lon;
 
-  rec = xcalloc(sizeof *rec, 1);
+  rec = (struct record*) xcalloc(sizeof *rec, 1);
   vdata = (char*)rec + sizeof(*rec);
 
   rec->header.type = 4;
@@ -421,7 +421,7 @@ data_write(void)
 
 ff_vecs_t gpilots_vecs = {
   ff_type_file,
-  { ff_cap_read | ff_cap_write, ff_cap_read | ff_cap_write, ff_cap_none},
+  { (ff_cap)(ff_cap_read | ff_cap_write), (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none},
   rd_init,
   wr_init,
   rd_deinit,

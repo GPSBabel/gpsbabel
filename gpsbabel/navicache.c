@@ -160,7 +160,8 @@ nav_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
         } else if (!strcmp(ap[1], "moving_travelling")) {
           wpt_tmp->icon_descr = "Geocache-moving";
         } else {
-          xasprintf(&wpt_tmp->icon_descr,
+          // WARNING: casting away const-ness.
+          xasprintf((char**)&wpt_tmp->icon_descr,
                     "Geocache-%-.20s", ap[1]);
         }
       } else if (0 == strcmp(ap[0], "hidden_date")) {

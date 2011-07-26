@@ -358,7 +358,7 @@ coto_wpt_write(const waypoint* wpt)
 
   if ((wpt->description) && ((strlen(wpt->description) > MAX_MARKER_NAME_LENGTH) || (strcmp(wpt->description, wpt->shortname)))) {
     if ((wpt->notes) && (strcmp(wpt->description, wpt->notes) != 0)) {
-      notes = xcalloc(strlen(wpt->description) + strlen(wpt->notes) + 9, 1);
+      notes = (char*) xcalloc(strlen(wpt->description) + strlen(wpt->notes) + 9, 1);
       sprintf(notes, "%s\nNotes:\n%s", wpt->description, wpt->notes);
     } else {
       notes = xstrdup(wpt->description);
@@ -371,7 +371,7 @@ coto_wpt_write(const waypoint* wpt)
   if (notes != NULL) {
     size += strlen(notes);
   }
-  rec = xcalloc(size, 1);
+  rec = (struct record_wpt*) xcalloc(size, 1);
 
   pdb_write_double(&rec->lon, RAD(-wpt->longitude));
   pdb_write_double(&rec->lat, RAD(wpt->latitude));
@@ -419,7 +419,7 @@ data_write(void)
 
 ff_vecs_t coto_vecs = {
   ff_type_file,
-  {ff_cap_read|ff_cap_write, ff_cap_read, ff_cap_none},
+  {(ff_cap)(ff_cap_read|ff_cap_write), ff_cap_read, ff_cap_none},
   rd_init,
   wr_init,
   rd_deinit,

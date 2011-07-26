@@ -278,9 +278,9 @@ void
 poly_init(const route_head *h)
 {
   int ct = track_waypt_count();
-  polybufx = xcalloc(ct, sizeof(double));
-  polybufy = xcalloc(ct, sizeof(double));
-  polybufz = xcalloc(ct, sizeof(double));
+  polybufx = (double*) xcalloc(ct, sizeof(double));
+  polybufy = (double*) xcalloc(ct, sizeof(double));
+  polybufz = (double*) xcalloc(ct, sizeof(double));
 }
 
 

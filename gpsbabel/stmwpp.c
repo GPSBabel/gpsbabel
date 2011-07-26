@@ -81,7 +81,7 @@ stmwpp_data_read(void)
 
   what = STM_NOTHING;
   buff = gbfgetstr(fin);
-  buff = (buff == NULL) ? "" : buff;
+  buff = (buff == NULL) ? (char *) "" : buff;
 
   if (case_ignore_strncmp(buff, "Datum,WGS 84,WGS 84,", 20) != 0) {
     fatal(MYNAME ": Invalid GPS datum or not \"WaypointPlus\"\" file!\n");

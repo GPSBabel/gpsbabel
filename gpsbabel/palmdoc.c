@@ -253,7 +253,7 @@ static void write_header(void)
   struct doc_record0 *rec0;
   --ct;
 
-  rec0 = xcalloc(1, sizeof(struct doc_record0)+(ct-1)*sizeof(short));
+  rec0 = (struct doc_record0*) xcalloc(1, sizeof(struct doc_record0)+(ct-1)*sizeof(short));
   be_write16(&rec0->version, COMPRESSED);
   be_write16(&rec0->reserved1, 0);
   be_write32(&rec0->doc_size, offset);
@@ -307,7 +307,7 @@ static void write_bookmarks(void)
 static void commit_buffer(void)
 {
 
-  struct recordsize *newrec = xcalloc(1, sizeof(struct recordsize));
+  struct recordsize *newrec = (struct recordsize*) xcalloc(1, sizeof(struct recordsize));
   newrec->next = recordsize_tail;
   newrec->size = buf.len;
   recordsize_tail = newrec;

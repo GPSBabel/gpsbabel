@@ -190,7 +190,7 @@ finalize_tracks(void)
     return;
   }
 
-  list = (void *)xmalloc(count * sizeof(*list));
+  list = (waypoint**)xmalloc(count * sizeof(*list));
 
   index = 0;
   QUEUE_FOR_EACH(&trackpts, elem, tmp) {
@@ -795,8 +795,8 @@ ff_vecs_t stmsdf_vecs = {
   ff_type_file,
   {
     ff_cap_none,
-    ff_cap_read | ff_cap_write,
-    ff_cap_read | ff_cap_write
+    (ff_cap)(ff_cap_read | ff_cap_write),
+    (ff_cap)(ff_cap_read | ff_cap_write)
   },
   rd_init,
   wr_init,

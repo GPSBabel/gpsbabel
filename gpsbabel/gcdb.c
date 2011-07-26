@@ -170,13 +170,13 @@ waypt_add(wpt);
 
 
 static int
-gcdb_add_to_rec(struct dbrec* rec, const char* fldname, gcdb_rectype rectype, void* data)
+gcdb_add_to_rec(struct dbrec* rec, const char* fldname, gcdb_rectype rectype, const void* data)
 {
 int length;
 static int rec_cnt;
 
 if (!tbuf) {
-tbuf = xcalloc(MAXRECSZ, 1);
+tbuf = (char*) xcalloc(MAXRECSZ, 1);
 tbufp = tbuf;
 }
 
@@ -195,9 +195,9 @@ strncpy(rec->dbfld[rec_cnt].fldname, fldname, 4);
 
 switch (rectype) {
 case RECTYPE_TEXT:
-length = 1 + strlen(data);
+length = 1 + strlen((const char*)data);
 be_write16(&rec->dbfld[rec_cnt].fldlen, length);
-strcpy(tbufp, data);
+strcpy(tbufp, (const char*)data);
 tbufp += (length + 1) & (~1);
 break;
 case RECTYPE_DATE:
@@ -225,7 +225,7 @@ char tbuf[100];
 * We don't really know how many fields we'll have or how long
 * they'll be so we'll just lazily create a huge place to hold them.
 */
-rec = xcalloc(sizeof(*rec) + 500, 1);
+rec = (struct dbrec*) xcalloc(sizeof(*rec) + 500, 1);
 
 gcdb_add_to_rec(rec, "gcna", RECTYPE_TEXT, wpt->description);
 gcdb_add_to_rec(rec, "gcid", RECTYPE_TEXT, wpt->shortname);
@@ -273,7 +273,7 @@ gcdb_add_to_rec(rec, "date", RECTYPE_DATE, (void*) wpt->creation_time);
 /*
 * We're done.  Build the record.
 */
-reclen = gcdb_add_to_rec(rec, NULL, 0, NULL);
+reclen = gcdb_add_to_rec(rec, NULL, (gcdb_rectype)0, NULL);
 
 pdb_write_rec(file_out, 0, 2, ct++, rec, reclen);
 xfree(rec);
