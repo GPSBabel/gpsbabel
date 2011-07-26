@@ -71,7 +71,7 @@
 
 #define SHORT_NAME_LENGTH 16
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 static int target_index, curr_index;
 static int track_info_flag;
 static short_handle sh;
@@ -79,15 +79,15 @@ static int snlen;
 static int radius;
 static int input_datum;
 
-static route_head *curr_track;
-static route_head *curr_route;
+static route_head* curr_track;
+static route_head* curr_route;
 
 /* placeholders for options */
 
-static char *option_icon;
-static char *option_index;
-static char *option_radius;
-static char *option_snlen;
+static char* option_icon;
+static char* option_index;
+static char* option_radius;
+static char* option_snlen;
 
 static
 arglist_t compegps_args[] = {
@@ -111,7 +111,7 @@ arglist_t compegps_args[] = {
 };
 
 static
-void fix_datum(double *lat, double *lon)
+void fix_datum(double* lat, double* lon)
 {
   double amt;
 
@@ -125,7 +125,7 @@ void fix_datum(double *lat, double *lon)
 }
 
 static void
-compegps_parse_date(const char *c, struct tm* tm)
+compegps_parse_date(const char* c, struct tm* tm)
 {
   char month[4];
   int year;
@@ -145,7 +145,7 @@ compegps_parse_date(const char *c, struct tm* tm)
 }
 
 static void
-compegps_parse_time(const char *c, struct tm* tm)
+compegps_parse_time(const char* c, struct tm* tm)
 {
   tm->tm_hour = atoi(c);
   tm->tm_min = atoi(c+3);
@@ -155,11 +155,11 @@ compegps_parse_time(const char *c, struct tm* tm)
 /* specialized readers */
 
 static waypoint*
-parse_wpt(char *buff)
+parse_wpt(char* buff)
 {
   int col = -1;
-  char *c, *cx;
-  waypoint *wpt = waypt_new();
+  char* c, *cx;
+  waypoint* wpt = waypt_new();
   struct tm tm;
   int has_time = 0;
   memset(&tm, 0, sizeof(tm));
@@ -228,9 +228,9 @@ parse_wpt(char *buff)
 }
 
 static void
-parse_wpt_info(const char *buff, waypoint *wpt)		/* "w" */
+parse_wpt_info(const char* buff, waypoint* wpt)		/* "w" */
 {
-  char *c;
+  char* c;
   int col = -1;
   double fx;
 
@@ -272,13 +272,13 @@ parse_wpt_info(const char *buff, waypoint *wpt)		/* "w" */
   }
 }
 
-static waypoint *
-parse_trkpt(char *buff)
+static waypoint*
+parse_trkpt(char* buff)
 {
   int col = -1;
-  char *c;
+  char* c;
   struct tm tm;
-  waypoint *wpt = waypt_new();
+  waypoint* wpt = waypt_new();
 
   c = strstr(buff, "A ");
   if (c == buff) {
@@ -319,9 +319,9 @@ parse_trkpt(char *buff)
 }
 
 static void
-parse_track_info(const char *buff, route_head *track)	/* "t" */
+parse_track_info(const char* buff, route_head* track)	/* "t" */
 {
-  char *c;
+  char* c;
   int col = -1;
 
   c = csv_lineparse(buff, "|", "", col++);
@@ -348,9 +348,9 @@ parse_track_info(const char *buff, route_head *track)	/* "t" */
 }
 
 static void
-parse_rte_info(const char *buff, route_head *route)	/* "R" */
+parse_rte_info(const char* buff, route_head* route)	/* "R" */
 {
-  char *c;
+  char* c;
   int col = -1;
 
   c = csv_lineparse(buff, ",", "", col++);
@@ -378,7 +378,7 @@ parse_rte_info(const char *buff, route_head *route)	/* "R" */
 /* main functions */
 
 static void
-compegps_rd_init(const char *fname)
+compegps_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
   input_datum = DATUM_WGS84;
@@ -393,16 +393,16 @@ compegps_rd_deinit(void)
 static void
 compegps_data_read(void)
 {
-  char *buff;
+  char* buff;
   int line = 0;
   int input_datum;
-  waypoint *wpt = NULL;
-  route_head *route = NULL;
-  route_head *track = NULL;
+  waypoint* wpt = NULL;
+  route_head* route = NULL;
+  route_head* track = NULL;
 
   while ((buff = gbfgetstr(fin))) {
-    char *cin = buff;
-    char *ctail;
+    char* cin = buff;
+    char* ctail;
 
     if ((line++ == 0) && fin->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
@@ -478,9 +478,9 @@ compegps_data_read(void)
 /* ----------------------------------------------------------- */
 
 static void
-write_waypt_cb(const waypoint *wpt)
+write_waypt_cb(const waypoint* wpt)
 {
-  char *name;
+  char* name;
 
   if (curr_index != target_index) {
     return;
@@ -502,10 +502,10 @@ write_waypt_cb(const waypoint *wpt)
 
   if ((wpt->icon_descr != NULL) || (wpt->wpt_flags.proximity) || \
       (option_icon != NULL)) {
-    char *icon = option_icon;
+    char* icon = option_icon;
 
     if (wpt->icon_descr != NULL) {
-      icon = (char *) wpt->icon_descr;
+      icon = (char*) wpt->icon_descr;
     }
 
     gbfprintf(fout, "w  %s,0,0.0,16777215,255,1,7,,%.1f\n",
@@ -516,10 +516,10 @@ write_waypt_cb(const waypoint *wpt)
 }
 
 static void
-write_route_hdr_cb(const route_head *rte)
+write_route_hdr_cb(const route_head* rte)
 {
-  char *name;
-  curr_route = (route_head *) rte;
+  char* name;
+  curr_route = (route_head*) rte;
   curr_index++;
   if (curr_index != target_index) {
     return;
@@ -543,10 +543,10 @@ write_route(void)
 }
 
 static void
-write_track_hdr_cb(const route_head *trk)
+write_track_hdr_cb(const route_head* trk)
 {
   track_info_flag = 0;
-  curr_track = (route_head *) trk;
+  curr_track = (route_head*) trk;
 
   curr_index++;
   if (curr_index != target_index) {
@@ -557,7 +557,7 @@ write_track_hdr_cb(const route_head *trk)
 }
 
 static void
-write_trkpt_cb(const waypoint *wpt)
+write_trkpt_cb(const waypoint* wpt)
 {
   char buff[128];
   struct tm tm;
@@ -595,7 +595,7 @@ write_trkpt_cb(const waypoint *wpt)
   if (track_info_flag != 0) {
     track_info_flag = 0;
     if (curr_track->rte_name != NULL) {
-      char *name;
+      char* name;
 
       name = csv_stringclean(curr_track->rte_name, "|");
       gbfprintf(fout, "t 4294967295|%s|-1|-1\n", name);
@@ -623,7 +623,7 @@ write_waypoints(void)
 /* --------------------------------------------------------------------------- */
 
 static void
-compegps_wr_init(const char *fname)
+compegps_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
   sh = mkshort_new_handle();

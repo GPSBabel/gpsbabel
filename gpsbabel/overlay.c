@@ -38,8 +38,8 @@ static short_handle mkshort_handle;
 #undef  MAPNAME
 #define MAPNAME "Top. Karte 1:50.000 Nieders."
 
-static gbfile *fpout;
-static gbfile *fpin;
+static gbfile* fpout;
+static gbfile* fpin;
 static int govl_cnt;
 static double govl_sum_e=0.0;
 static double govl_sum_n=0.0;
@@ -52,16 +52,16 @@ static double govl_last_north=0.0;
 */
 
 static int     govl_col=1;
-static char   *govl_col_s = NULL;
+static char*   govl_col_s = NULL;
 static int     govl_size=101;
-static char   *govl_size_s = NULL;
+static char*   govl_size_s = NULL;
 static double  govl_dir=0.0;
 
-static char *govl_mapname = NULL;
+static char* govl_mapname = NULL;
 static int   govl_zoomfc = 100;
-static char *govl_zoomfc_s = NULL;
+static char* govl_zoomfc_s = NULL;
 static int   govl_dimmfc = 100;
-static char *govl_dimmfc_s = NULL;
+static char* govl_dimmfc_s = NULL;
 
 
 static int     govl_txtcol=1;
@@ -69,12 +69,12 @@ static int     govl_txtsize=120;
 static int     govl_font=1;
 static int     govl_txttrans=0;
 
-static char *govl_txtcol_s = NULL;
-static char *govl_txtsize_s = NULL;
-static char *govl_font_s = NULL;
-static char *govl_txttrans_s = NULL;
+static char* govl_txtcol_s = NULL;
+static char* govl_txtsize_s = NULL;
+static char* govl_font_s = NULL;
+static char* govl_txttrans_s = NULL;
 
-static char *govl_file_s = NULL;
+static char* govl_file_s = NULL;
 
 static arglist_t ovl_args[] = {
   {
@@ -121,7 +121,7 @@ static arglist_t ovl_args[] = {
 };
 
 
-static char *Keywords[]= {
+static char* Keywords[]= {
   "Typ",
   "Group",
   "Col",
@@ -158,7 +158,7 @@ static char *Keywords[]= {
 #define KEY_TRANS     14
 #define KEY_TRANSBYTE 15
 
-static int isKeyword(char *str,char **keys)
+static int isKeyword(char* str,char** keys)
 {
   int i;
 
@@ -172,7 +172,7 @@ static int isKeyword(char *str,char **keys)
 /*----------------------------------------------*/
 
 static
-void ovl_rd_init(char const *fname)
+void ovl_rd_init(char const* fname)
 {
   fpin = gbfopen(fname, "r", MYNAME);
 }
@@ -186,11 +186,11 @@ void ovl_rd_init(char const *fname)
 
 static  struct _group {
   int  group;
-  char *name;
-} *groups;
+  char* name;
+}* groups;
 static  int    groups_cnt;
 
-static void ovl_add_group(int aktgrp,char *akttxt)
+static void ovl_add_group(int aktgrp,char* akttxt)
 {
   int i;
 
@@ -199,26 +199,26 @@ static void ovl_add_group(int aktgrp,char *akttxt)
     i++;
   }
   if (i==groups_cnt) {
-    groups = (struct _group *) xrealloc(groups,(groups_cnt+1)*sizeof(struct _group));
+    groups = (struct _group*) xrealloc(groups,(groups_cnt+1)*sizeof(struct _group));
     groups[i].group = aktgrp;
     groups[i].name = NULL;
     groups_cnt++;
   }
-  groups[i].name = (char *) xrealloc(groups[i].name,(strlen(akttxt)+1)*sizeof(char));
+  groups[i].name = (char*) xrealloc(groups[i].name,(strlen(akttxt)+1)*sizeof(char));
   strcpy(groups[i].name,akttxt);
 }
 
 /*
   The name of route is stored in a 'Text'-symbol with identical 'Group'-number.
 */
-static void route_add_name(const route_head *hd)
+static void route_add_name(const route_head* hd)
 {
   int grp;
   int i;
   char name[MAXLINE];
-  route_head *route;
+  route_head* route;
 
-  route = (route_head *) hd;
+  route = (route_head*) hd;
   grp = atoi(route->rte_name);
   i = 0;
   while (i<groups_cnt && groups[i].group!=grp) {
@@ -230,24 +230,24 @@ static void route_add_name(const route_head *hd)
   } else {
     strcpy(name,groups[i].name);
   }
-  route->rte_name = (char *) xrealloc(route->rte_name,(strlen(name)+1)*sizeof(char));
+  route->rte_name = (char*) xrealloc(route->rte_name,(strlen(name)+1)*sizeof(char));
   strcpy(route->rte_name,name);
 }
 
 static void ovl_read(void)
 {
-  char    *line;
+  char*    line;
   int     isSection;
   int     aktTyp,aktCol,aktSize,aktArt,aktGroup;
   int     aktArea,aktWidth,aktHeight,aktTrans,aktTransByte,aktDir;
   double  aktX,aktY;
-  char   *aktPath;
-  char   *aktText;
-  char   *pstr;
+  char*   aktPath;
+  char*   aktText;
+  char*   pstr;
   int     keyw,i;
   double  rwert;
-  route_head *route_head = NULL;
-  waypoint   *wpt;
+  route_head* route_head = NULL;
+  waypoint*   wpt;
   int      sym_cnt;
   int lineno = 0;
 
@@ -415,12 +415,12 @@ static void ovl_rd_deinit(void)
 }
 
 /*------------------------------------------*/
-void ovl_read_parameter(char *fname)
+void ovl_read_parameter(char* fname)
 {
-  gbfile    *fpin;
-  arglist_t *p;
-  char      *str;
-  char      *pstr;
+  gbfile*    fpin;
+  arglist_t* p;
+  char*      str;
+  char*      pstr;
 
   fpin = gbfopen(fname, "r", MYNAME);
   if (fpin!=NULL) {
@@ -449,7 +449,7 @@ void ovl_read_parameter(char *fname)
   }
 }
 
-static void ovl_wr_init(const char *fname)
+static void ovl_wr_init(const char* fname)
 {
   fpout = gbfopen(fname, "w", MYNAME);
   govl_sum_n = 0.0;
@@ -509,7 +509,7 @@ static void ovl_wr_deinit(void)
   gbfclose(fpout);
 }
 
-static void symbol_init(const route_head *hd)
+static void symbol_init(const route_head* hd)
 {
   gbfprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
   gbfprintf(fpout,"Typ=3\n");                            // Linie
@@ -524,7 +524,7 @@ static void symbol_init(const route_head *hd)
   govl_group_cnt++;
 }
 
-static void symbol_text(double east,double north,char *text,int group)
+static void symbol_text(double east,double north,char* text,int group)
 {
   gbfprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
   gbfprintf(fpout,"Typ=2\n");                           // Text
@@ -541,7 +541,7 @@ static void symbol_text(double east,double north,char *text,int group)
   govl_symbol_cnt++;
 }
 
-static void symbol_point(const waypoint *wpt)
+static void symbol_point(const waypoint* wpt)
 {
   double east,north;
 
@@ -560,10 +560,10 @@ static void symbol_point(const waypoint *wpt)
 }
 
 
-static void symbol_deinit(const route_head *hd)
+static void symbol_deinit(const route_head* hd)
 {
-  queue *elem, *tmp;
-  waypoint *waypointp;
+  queue* elem, *tmp;
+  waypoint* waypointp;
   int i;
   double lat1,lon1,lat2,lon2;
   double lats,lons,late,lone;
@@ -574,7 +574,7 @@ static void symbol_deinit(const route_head *hd)
   dist = 0.0;
   i = 0;
   QUEUE_FOR_EACH(&(hd->waypoint_list), elem, tmp) {
-    waypointp = (waypoint *) elem;
+    waypointp = (waypoint*) elem;
     lat2 = RAD(waypointp->latitude);
     lon2 = RAD(waypointp->longitude);
     if (i) {
@@ -594,7 +594,7 @@ static void symbol_deinit(const route_head *hd)
   i = 0;
   elem = QUEUE_FIRST(&(hd->waypoint_list));
   while (elem!=&(hd->waypoint_list) && dd<dist/2.0) {
-    waypointp = (waypoint *) elem;
+    waypointp = (waypoint*) elem;
     lat2 = RAD(waypointp->latitude);
     lon2 = RAD(waypointp->longitude);
     if (i) {
@@ -625,10 +625,10 @@ static void symbol_deinit(const route_head *hd)
   govl_dir = 0.0; // restore
 }
 
-static void overlay_waypt_pr(const waypoint *waypointp)
+static void overlay_waypt_pr(const waypoint* waypointp)
 {
-  const char *oname;
-  char *odesc;
+  const char* oname;
+  char* odesc;
 
   /*
    * Desparation time, try very hard to get a good shortname

@@ -21,13 +21,13 @@
 #include "defs.h"
 #include "magellan.h"
 
-static gbfile *file_in, *file_out;
+static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;
 
 #define MYNAME "GPSUTIL"
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen(fname, "rb", MYNAME);
 }
@@ -39,7 +39,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen(fname, "w", MYNAME);
   mkshort_handle = mkshort_new_handle();
@@ -55,7 +55,7 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-  char *ibuf;
+  char* ibuf;
   char desc[31];
   double lat,lon;
   char latdir, londir;
@@ -63,7 +63,7 @@ data_read(void)
   long alt;
   char alttype;
   char icon[3];
-  waypoint *wpt_tmp;
+  waypoint* wpt_tmp;
   int line = 0;
   /*
    * Make sure that all waypoints in single read have same
@@ -74,7 +74,7 @@ data_read(void)
 
   while ((ibuf = gbfgetstr(file_in))) {
     int n, len;
-    char *sn;
+    char* sn;
 
     if ((line++ == 0) && file_in->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
@@ -132,11 +132,11 @@ data_read(void)
 }
 
 static void
-gpsutil_disp(const waypoint *wpt)
+gpsutil_disp(const waypoint* wpt)
 {
   double lon,lat;
-  const char *icon_token;
-  char *tdesc = xstrdup(wpt->description);
+  const char* icon_token;
+  char* tdesc = xstrdup(wpt->description);
 
   icon_token = mag_find_token_from_descr(wpt->icon_descr);
 

@@ -23,10 +23,10 @@
 #include "filterdefs.h"
 
 #if FILTERS_ENABLED
-static char *snopt = NULL;
-static char *lcopt = NULL;
-static char *purge_duplicates = NULL;
-static char *correct_coords = NULL;
+static char* snopt = NULL;
+static char* lcopt = NULL;
+static char* purge_duplicates = NULL;
+static char* correct_coords = NULL;
 
 static
 arglist_t dup_args[] = {
@@ -51,15 +51,15 @@ arglist_t dup_args[] = {
 
 
 typedef struct btree_node {
-  struct btree_node *left, *right;
+  struct btree_node* left, *right;
   unsigned long data;
-  waypoint *wpt;
+  waypoint* wpt;
 } btree_node;
 
-static btree_node *
-addnode(btree_node * tree, btree_node * newnode, btree_node **oldnode)
+static btree_node*
+addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode)
 {
-  btree_node * tmp, * last = NULL;
+  btree_node* tmp, * last = NULL;
 
   if (*oldnode) {
     *oldnode = NULL;
@@ -95,7 +95,7 @@ addnode(btree_node * tree, btree_node * newnode, btree_node **oldnode)
 }
 
 void
-free_tree(btree_node *tree)
+free_tree(btree_node* tree)
 {
   if (tree->left) {
     free_tree(tree->left);
@@ -107,7 +107,7 @@ free_tree(btree_node *tree)
 }
 
 typedef struct {
-  waypoint *wpt;
+  waypoint* wpt;
   int index;
 } wpt_ptr;
 
@@ -147,10 +147,10 @@ because, sadly, quicksort can be O(n^2) on presorted elements.)
 
 static
 int
-compare(const void *a, const void *b)
+compare(const void* a, const void* b)
 {
-  const wpt_ptr *wa = (wpt_ptr *)a;
-  const wpt_ptr *wb = (wpt_ptr *)b;
+  const wpt_ptr* wa = (wpt_ptr*)a;
+  const wpt_ptr* wb = (wpt_ptr*)b;
 
   if (wa->wpt->gc_data->exported < wb->wpt->gc_data->exported) {
     return 1;
@@ -174,27 +174,27 @@ compare(const void *a, const void *b)
 static void
 duplicate_process(void)
 {
-  waypoint * waypointp;
-  btree_node * newnode, * btmp, * sup_tree = NULL;
-  btree_node * oldnode = NULL;
+  waypoint* waypointp;
+  btree_node* newnode, * btmp, * sup_tree = NULL;
+  btree_node* oldnode = NULL;
   unsigned long crc = 0;
   struct {
     char shortname[32];
     char lat[13];
     char lon[13];
   } dupe;
-  waypoint * delwpt = NULL;
+  waypoint* delwpt = NULL;
 
   int i, ct = waypt_count();
-  wpt_ptr *htable, *bh;
-  queue *elem, *tmp;
+  wpt_ptr* htable, *bh;
+  queue* elem, *tmp;
 
-  htable = (wpt_ptr *) xmalloc(ct * sizeof(*htable));
+  htable = (wpt_ptr*) xmalloc(ct * sizeof(*htable));
   bh = htable;
 
   i = 0;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    bh->wpt = (waypoint *) elem;
+    bh->wpt = (waypoint*) elem;
     bh->index = i;
     i ++;
     bh ++;
@@ -225,7 +225,7 @@ duplicate_process(void)
 
     crc = get_crc32(&dupe, sizeof(dupe));
 
-    newnode = (btree_node *)xcalloc(sizeof(btree_node), 1);
+    newnode = (btree_node*)xcalloc(sizeof(btree_node), 1);
     newnode->data = crc;
     newnode->wpt = waypointp;
 

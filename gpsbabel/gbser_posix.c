@@ -44,9 +44,9 @@ typedef struct {
 } gbser_handle;
 
 /* Wrapper to safely cast a void * into a gbser_handle */
-static gbser_handle *gbser__get_handle(void *p)
+static gbser_handle* gbser__get_handle(void* p)
 {
-  gbser_handle *h = (gbser_handle *) p;
+  gbser_handle* h = (gbser_handle*) p;
   assert(h->magic == MYMAGIC);
   return h;
 }
@@ -86,12 +86,12 @@ static speed_t mkspeed(unsigned br)
 
 typedef struct timeval hp_time;
 
-static void get_time(hp_time *tv)
+static void get_time(hp_time* tv)
 {
   gettimeofday(tv, NULL);
 }
 
-static double elapsed(hp_time *tv)
+static double elapsed(hp_time* tv)
 {
   hp_time now;
   double ot = (double) tv->tv_sec  * 1000 +
@@ -104,7 +104,7 @@ static double elapsed(hp_time *tv)
   return nt - ot;
 }
 
-static int set_rx_timeout(gbser_handle *h, unsigned vmin, unsigned vtime)
+static int set_rx_timeout(gbser_handle* h, unsigned vmin, unsigned vtime)
 {
   if (vmin  > 255) {
     vmin  = 255;
@@ -129,9 +129,9 @@ static int set_rx_timeout(gbser_handle *h, unsigned vmin, unsigned vtime)
  * ('com1:') are translated into the equivalent name required by
  * WIN32
  */
-void *gbser_init(const char *port_name)
+void* gbser_init(const char* port_name)
 {
-  gbser_handle *h;
+  gbser_handle* h;
 
   gbser__db(4, "gbser_init(\"%s\")\n", port_name);
 
@@ -171,9 +171,9 @@ failed:
 
 /* Close a serial port
  */
-void gbser_deinit(void *handle)
+void gbser_deinit(void* handle)
 {
-  gbser_handle *h = gbser__get_handle(handle);
+  gbser_handle* h = gbser__get_handle(handle);
 
   tcsetattr(h->fd, TCSAFLUSH, &h->old_tio);
   close(h->fd);
@@ -181,9 +181,9 @@ void gbser_deinit(void *handle)
   xfree(h);
 }
 
-int gbser_set_port(void *handle, unsigned speed, unsigned bits, unsigned parity, unsigned stop)
+int gbser_set_port(void* handle, unsigned speed, unsigned bits, unsigned parity, unsigned stop)
 {
-  gbser_handle *h = gbser__get_handle(handle);
+  gbser_handle* h = gbser__get_handle(handle);
   speed_t s;
 
   static unsigned bit_flags[] = {
@@ -251,11 +251,11 @@ int gbser_set_port(void *handle, unsigned speed, unsigned bits, unsigned parity,
   return tcsetattr(h->fd, TCSADRAIN, &h->new_tio) ? gbser_ERROR : gbser_OK;
 }
 
-unsigned gbser__read_buffer(void *handle, void **buf, unsigned *len)
+unsigned gbser__read_buffer(void* handle, void** buf, unsigned* len)
 {
-  gbser_handle *h = gbser__get_handle(handle);
+  gbser_handle* h = gbser__get_handle(handle);
   unsigned count = *len;
-  unsigned char *cp = (unsigned char *) *buf;
+  unsigned char* cp = (unsigned char*) *buf;
   if (count > h->inbuf_used) {
     count = h->inbuf_used;
   }
@@ -266,7 +266,7 @@ unsigned gbser__read_buffer(void *handle, void **buf, unsigned *len)
   h->inbuf_used -= count;
   *len -= count;
   cp   += count;
-  *buf = (void *) cp;
+  *buf = (void*) cp;
   return count;
 }
 
@@ -276,10 +276,10 @@ unsigned gbser__read_buffer(void *handle, void **buf, unsigned *len)
  * be updated to indicate the remaining time on exit.
  * Returns the number of bytes available (>=0) or an error code (<0).
  */
-int gbser__fill_buffer(void *handle, unsigned want, unsigned *ms)
+int gbser__fill_buffer(void* handle, unsigned want, unsigned* ms)
 {
   int rc;
-  gbser_handle *h = gbser__get_handle(handle);
+  gbser_handle* h = gbser__get_handle(handle);
 
   if (want > BUFSIZE) {
     want = BUFSIZE;
@@ -356,9 +356,9 @@ int gbser__fill_buffer(void *handle, unsigned want, unsigned *ms)
 
 /* Discard any pending input on the serial port.
  */
-int gbser_flush(void *handle)
+int gbser_flush(void* handle)
 {
-  gbser_handle *h = gbser__get_handle(handle);
+  gbser_handle* h = gbser__get_handle(handle);
   h->inbuf_used = 0;
   if (tcflush(h->fd, TCIFLUSH)) {
     return gbser_ERROR;
@@ -369,10 +369,10 @@ int gbser_flush(void *handle)
 
 /* Write |len| bytes from |buf| to the serial port.
  */
-int gbser_write(void *handle, const void *buf, unsigned len)
+int gbser_write(void* handle, const void* buf, unsigned len)
 {
-  gbser_handle *h = gbser__get_handle(handle);
-  const char *bp = (const char *) buf;
+  gbser_handle* h = gbser__get_handle(handle);
+  const char* bp = (const char*) buf;
   int rc;
   while (len > 0) {
     /*printf("write(%d, %p, %d)\n", h->fd, bp, len);*/
@@ -392,7 +392,7 @@ int gbser_write(void *handle, const void *buf, unsigned len)
  * isatty()
  */
 
-int gbser_is_serial(const char *port_name)
+int gbser_is_serial(const char* port_name)
 {
   int fd;
   int is_port = 0;
@@ -421,7 +421,7 @@ int gbser_is_serial(const char *port_name)
  * call to this function.
  */
 
-const char *fix_win_serial_name_r(const char *comname, char *obuf, size_t len)
+const char* fix_win_serial_name_r(const char* comname, char* obuf, size_t len)
 {
   strncpy(obuf, comname, len);
   return obuf;
@@ -429,7 +429,7 @@ const char *fix_win_serial_name_r(const char *comname, char *obuf, size_t len)
 
 static char gb_com_buffer[100];
 
-const char *fix_win_serial_name(const char *comname)
+const char* fix_win_serial_name(const char* comname)
 {
   return fix_win_serial_name_r(comname, gb_com_buffer, sizeof(gb_com_buffer));
 }
@@ -441,9 +441,9 @@ const char *fix_win_serial_name(const char *comname)
  * The terminating character and any discarded characters are not
  * stored in the buffer.
  */
-int gbser_read_line(void *handle, void *buf, unsigned len, unsigned ms, int eol, int discard)
+int gbser_read_line(void* handle, void* buf, unsigned len, unsigned ms, int eol, int discard)
 {
-  char *bp = (char *) buf;
+  char* bp = (char*) buf;
   unsigned pos = 0;
   hp_time tv;
   get_time(&tv);

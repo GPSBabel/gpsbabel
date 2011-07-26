@@ -147,15 +147,15 @@ enum {
   rm_file
 } read_mode;
 
-static gbfile *file_in, *file_out;
-static route_head *trk_head;
+static gbfile* file_in, *file_out;
+static route_head* trk_head;
 static short_handle mkshort_handle;
 static preferred_posn_type posn_type;
 static struct tm tm;
-static waypoint *curr_waypt;
-static waypoint *last_waypt;
-static void * gbser_handle;
-static const char *posn_fname;
+static waypoint* curr_waypt;
+static waypoint* last_waypt;
+static void* gbser_handle;
+static const char* posn_fname;
 static queue pcmpt_head;
 
 static int without_date;	/* number of created trackpoints without a valid date */
@@ -163,17 +163,17 @@ static struct tm opt_tm;	/* converted "date" parameter */
 
 #define MYNAME "nmea"
 
-static char *opt_gprmc;
-static char *opt_gpgga;
-static char *opt_gpvtg;
-static char *opt_gpgsa;
-static char *snlenopt;
-static char *optdate;
-static char *getposnarg;
-static char *opt_sleep;
-static char *opt_baud;
-static char *opt_append;
-static char *opt_gisteq;
+static char* opt_gprmc;
+static char* opt_gpgga;
+static char* opt_gpvtg;
+static char* opt_gpgsa;
+static char* snlenopt;
+static char* optdate;
+static char* getposnarg;
+static char* opt_sleep;
+static char* opt_baud;
+static char* opt_append;
+static char* opt_gisteq;
 
 static long sleepus;
 static int getposn;
@@ -185,8 +185,8 @@ static double last_read_time;   /* Last timestamp of GGA or PRMC */
 static int datum;
 static int had_checksum;
 
-static waypoint * nmea_rd_posn(posn_status *);
-static void nmea_rd_posn_init(const char *fname);
+static waypoint* nmea_rd_posn(posn_status*);
+static void nmea_rd_posn_init(const char* fname);
 
 arglist_t nmea_args[] = {
   {"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64" },
@@ -212,10 +212,10 @@ arglist_t nmea_args[] = {
  * Slightly different than the Magellan checksum fn.
  */
 int
-nmea_cksum(const char *const buf)
+nmea_cksum(const char* const buf)
 {
   int x = 0 ;
-  const char *p;
+  const char* p;
 
   for (p = buf; *p; p++) {
     x ^= *p;
@@ -224,7 +224,7 @@ nmea_cksum(const char *const buf)
 }
 
 static void
-nmea_add_wpt(waypoint *wpt, route_head *trk)
+nmea_add_wpt(waypoint* wpt, route_head* trk)
 {
   if (datum != DATUM_WGS84) {
     double lat, lon, alt;
@@ -242,7 +242,7 @@ nmea_add_wpt(waypoint *wpt, route_head *trk)
 }
 
 static void
-nmea_release_wpt(waypoint *wpt)
+nmea_release_wpt(waypoint* wpt)
 {
   if (wpt && ((wpt->Q.next == NULL) || (wpt->Q.next == &wpt->Q))) {
     /* This waypoint isn't queued.
@@ -253,7 +253,7 @@ nmea_release_wpt(waypoint *wpt)
 }
 
 static void
-nmea_rd_init(const char *fname)
+nmea_rd_init(const char* fname)
 {
   curr_waypt = NULL;
   last_waypt = NULL;
@@ -277,7 +277,7 @@ nmea_rd_init(const char *fname)
    * it as one waypoint.
    */
   if (getposn) {
-    waypoint *wpt;
+    waypoint* wpt;
     posn_status st;
     nmea_rd_posn_init(fname);
     wpt = nmea_rd_posn(&st);
@@ -314,7 +314,7 @@ nmea_rd_deinit(void)
 }
 
 static void
-nmea_wr_init(const char *portname)
+nmea_wr_init(const char* portname)
 {
   CHECK_BOOL(opt_gprmc);
   CHECK_BOOL(opt_gpgga);
@@ -353,7 +353,7 @@ nmea_wr_deinit(void)
 }
 
 static void
-nmea_set_waypoint_time(waypoint *wpt, struct tm *time, int microseconds)
+nmea_set_waypoint_time(waypoint* wpt, struct tm* time, int microseconds)
 {
   if (time->tm_year == 0) {
     wpt->creation_time = ((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec;
@@ -373,14 +373,14 @@ nmea_set_waypoint_time(waypoint *wpt, struct tm *time, int microseconds)
 }
 
 static void
-gpgll_parse(char *ibuf)
+gpgll_parse(char* ibuf)
 {
   double latdeg, lngdeg, microseconds;
   char lngdir, latdir;
   double hmsd;
   int hms;
   char valid = 0;
-  waypoint *waypt;
+  waypoint* waypt;
 
   if (trk_head == NULL) {
     trk_head = route_head_alloc();
@@ -426,7 +426,7 @@ gpgll_parse(char *ibuf)
 }
 
 static void
-gpgga_parse(char *ibuf)
+gpgga_parse(char* ibuf)
 {
   double latdeg, lngdeg;
   char lngdir, latdir;
@@ -436,7 +436,7 @@ gpgga_parse(char *ibuf)
   int nsats = 0;
   double hdop;
   char altunits;
-  waypoint *waypt;
+  waypoint* waypt;
   double microseconds;
 
   if (trk_head == NULL) {
@@ -507,7 +507,7 @@ gpgga_parse(char *ibuf)
 }
 
 static void
-gprmc_parse(char *ibuf)
+gprmc_parse(char* ibuf)
 {
   double latdeg, lngdeg;
   char lngdir, latdir;
@@ -515,9 +515,9 @@ gprmc_parse(char *ibuf)
   char fix;
   unsigned int dmy;
   double speed,course;
-  waypoint *waypt;
+  waypoint* waypt;
   double microseconds;
-  char *dmybuf;
+  char* dmybuf;
   int i;
 
   if (trk_head == NULL) {
@@ -617,9 +617,9 @@ gprmc_parse(char *ibuf)
 }
 
 static void
-gpwpl_parse(char *ibuf)
+gpwpl_parse(char* ibuf)
 {
-  waypoint *waypt;
+  waypoint* waypt;
   double latdeg, lngdeg;
   char latdir, lngdir;
   char sname[99];
@@ -647,7 +647,7 @@ gpwpl_parse(char *ibuf)
 }
 
 static void
-gpzda_parse(char *ibuf)
+gpzda_parse(char* ibuf)
 {
   double hms;
   int dd, mm, yy, lclhrs, lclmins;
@@ -663,7 +663,7 @@ gpzda_parse(char *ibuf)
 }
 
 static void
-gpgsa_parse(char *ibuf)
+gpgsa_parse(char* ibuf)
 {
   char fixauto;
   char fix;
@@ -720,7 +720,7 @@ gpgsa_parse(char *ibuf)
 }
 
 static void
-gpvtg_parse(char *ibuf)
+gpvtg_parse(char* ibuf)
 {
   float 	course;
   char	ct;
@@ -763,7 +763,7 @@ double pcmpt_deg(int d)
 }
 
 void
-pcmpt_parse(char *ibuf)
+pcmpt_parse(char* ibuf)
 {
   int i, j1, j2, j3, j4, j5, j6;
   int lat, lon;
@@ -775,7 +775,7 @@ pcmpt_parse(char *ibuf)
   dmy = hms = 0;
 
   sscanf(ibuf,"$PCMPT,%d,%d,%d,%c,%f,%d,%[^,],%d,%f,%d,%f,%c,%d,%c,%d",
-         &j1, &j2, &j3, &altflag, &alt, &j4, (char *) &coords,
+         &j1, &j2, &j3, &altflag, &alt, &j4, (char*) &coords,
          &j5, &f1, &j6, &f2, &u1, &dmy, &u2, &hms);
 
   if (altflag == 'D' && curr_waypt && alt > 0) {
@@ -819,8 +819,8 @@ pcmpt_parse(char *ibuf)
     nmea_set_waypoint_time(curr_waypt, &tm, 0);
     ENQUEUE_HEAD(&pcmpt_head, &curr_waypt->Q);
   } else {
-    queue *elem, *tmp;
-    route_head *trk_head;
+    queue* elem, *tmp;
+    route_head* trk_head;
 
     if (QUEUE_EMPTY(&pcmpt_head)) {
       return;
@@ -834,22 +834,22 @@ pcmpt_parse(char *ibuf)
     trk_head = route_head_alloc();
     track_add_head(trk_head);
     QUEUE_FOR_EACH(&pcmpt_head, elem, tmp) {
-      waypoint *wpt = (waypoint *) dequeue(elem);
+      waypoint* wpt = (waypoint*) dequeue(elem);
       nmea_add_wpt(wpt, trk_head);
     }
   }
 }
 
 static void
-nmea_fix_timestamps(route_head *track)
+nmea_fix_timestamps(route_head* track)
 {
   if ((trk_head == NULL) || (without_date == 0)) {
     return;
   }
 
   if (tm.tm_year == 0) {
-    queue *elem, *temp;
-    waypoint *prev = NULL;
+    queue* elem, *temp;
+    waypoint* prev = NULL;
     time_t delta_tm;
 
     if (optdate == NULL) {
@@ -861,7 +861,7 @@ nmea_fix_timestamps(route_head *track)
     delta_tm = mkgmtime(&opt_tm);
 
     QUEUE_FOR_EACH(&track->waypoint_list, elem, temp) {
-      waypoint *wpt = (waypoint *)elem;
+      waypoint* wpt = (waypoint*)elem;
 
       wpt->creation_time += delta_tm;
       if ((prev != NULL) && (prev->creation_time > wpt->creation_time)) {	/* go over midnight ? */
@@ -872,7 +872,7 @@ nmea_fix_timestamps(route_head *track)
     }
   } else {
     time_t prev;
-    queue *elem;
+    queue* elem;
 
     tm.tm_hour = 23;	/* last date found */
     tm.tm_min = 59;
@@ -883,7 +883,7 @@ nmea_fix_timestamps(route_head *track)
     /* go backward through the track and complete timestamps */
 
     for (elem = QUEUE_LAST(&track->waypoint_list); elem != &track->waypoint_list; elem=elem->prev) {
-      waypoint *wpt = (waypoint *)elem;
+      waypoint* wpt = (waypoint*)elem;
 
       if (wpt->wpt_flags.fmt_use != 0) {
         time_t dt;
@@ -902,11 +902,11 @@ nmea_fix_timestamps(route_head *track)
 }
 
 void
-nmea_parse_one_line(char *ibuf)
+nmea_parse_one_line(char* ibuf)
 {
-  char *ck;
+  char* ck;
   int ckval, ckcmp;
-  char *tbuf = lrtrim(ibuf);
+  char* tbuf = lrtrim(ibuf);
 
   /*
    * GISTEQ PhotoTracker (stupidly) puts a bogus field in front
@@ -996,8 +996,8 @@ nmea_parse_one_line(char *ibuf)
 static void
 nmea_read(void)
 {
-  char *ibuf;
-  char *ck;
+  char* ibuf;
+  char* ck;
   double lt = -1;
   int line = -1;
 
@@ -1015,7 +1015,7 @@ nmea_read(void)
   if (optdate) {
     memset(&opt_tm, 0, sizeof(opt_tm));
 
-    ck = (char *)strptime(optdate, "%Y%m%d", &opt_tm);
+    ck = (char*)strptime(optdate, "%Y%m%d", &opt_tm);
     if ((ck == NULL) || (*ck != '\0') || (strlen(optdate) != 8)) {
       fatal(MYNAME ": Invalid date \"%s\"!\n", optdate);
     } else if (opt_tm.tm_year < 70) {
@@ -1026,7 +1026,7 @@ nmea_read(void)
   curr_waypt = NULL;
 
   while ((ibuf = gbfgetstr(file_in))) {
-    char *sdatum, *cx;
+    char* sdatum, *cx;
 
     line++;
 
@@ -1047,7 +1047,7 @@ nmea_read(void)
       /* Check the GPS datum */
       cx = strchr(&ibuf[12], '/');
       if (cx != NULL) {
-        char *edatum;
+        char* edatum;
         sdatum = cx + 1;
         edatum = strchr(sdatum, '/');
         if (edatum) {
@@ -1076,7 +1076,7 @@ nmea_read(void)
 }
 
 void
-nmea_rd_posn_init(const char *fname)
+nmea_rd_posn_init(const char* fname)
 {
   if ((gbser_handle = gbser_init(fname)) != NULL) {
     read_mode = rm_serial;
@@ -1096,7 +1096,7 @@ nmea_rd_posn_init(const char *fname)
 }
 
 static void
-safe_print(int cnt, const char *b)
+safe_print(int cnt, const char* b)
 {
   int i;
   for (i = 0; i < cnt; i++) {
@@ -1112,7 +1112,7 @@ int hunt_sirf(void)
 {
   /* Try to place the common BR's first to speed searching */
   static int br[] = {38400, 9600, 57600, 115200, 19200, 4800, -1};
-  static int *brp = &br[0];
+  static int* brp = &br[0];
   char ibuf[1024];
 
   for (brp = br; *brp > 0; brp++) {
@@ -1149,8 +1149,8 @@ int hunt_sirf(void)
   return 0;
 }
 
-static waypoint *
-nmea_rd_posn(posn_status *posn_status)
+static waypoint*
+nmea_rd_posn(posn_status* posn_status)
 {
   char ibuf[1024];
   static double lt = -1;
@@ -1191,7 +1191,7 @@ nmea_rd_posn(posn_status *posn_status)
     nmea_parse_one_line(ibuf);
     if (lt != last_read_time) {
       if (last_read_time) {
-        waypoint *w = curr_waypt;
+        waypoint* w = curr_waypt;
 
         lt = last_read_time;
         curr_waypt = NULL;
@@ -1204,11 +1204,11 @@ nmea_rd_posn(posn_status *posn_status)
 }
 
 static void
-nmea_wayptpr(const waypoint *wpt)
+nmea_wayptpr(const waypoint* wpt)
 {
   char obuf[200];
   double lat,lon;
-  char *s;
+  char* s;
   int cksum;
 
   lat = degrees2ddmm(wpt->latitude);
@@ -1236,19 +1236,19 @@ nmea_wayptpr(const waypoint *wpt)
 }
 
 void
-nmea_track_init(const route_head *rte)
+nmea_track_init(const route_head* rte)
 {
   last_time = -1;
 }
 
 void
-nmea_trackpt_pr(const waypoint *wpt)
+nmea_trackpt_pr(const waypoint* wpt)
 {
   char obuf[200];
   char fix='0';
   double lat,lon;
   int cksum;
-  struct tm *tm;
+  struct tm* tm;
   time_t hms;
   time_t ymd;
 
@@ -1368,13 +1368,13 @@ nmea_write(void)
 }
 
 static void
-nmea_wr_posn_init(const char *fname)
+nmea_wr_posn_init(const char* fname)
 {
   nmea_wr_init(fname);
 }
 
 static void
-nmea_wr_posn(waypoint *wpt)
+nmea_wr_posn(waypoint* wpt)
 {
   nmea_trackpt_pr(wpt);
 }
@@ -1416,7 +1416,7 @@ ff_vecs_t nmea_vecs = {
  */
 
 static void
-sirf_write(unsigned char *buf)
+sirf_write(unsigned char* buf)
 {
   int i, chksum = 0;
   int len = buf[2] << 8 | buf[3];

@@ -38,11 +38,11 @@ typedef struct gpl_point {
   unsigned int dummy3;
 } gpl_point_t;
 
-static gbfile *gplfile_in;
-static gbfile *gplfile_out;
+static gbfile* gplfile_in;
+static gbfile* gplfile_out;
 
 static void
-gpl_rd_init(const char *fname)
+gpl_rd_init(const char* fname)
 {
   gplfile_in = gbfopen_le(fname, "rb", MYNAME);
   if (sizeof(struct gpl_point) != 56) {
@@ -54,8 +54,8 @@ gpl_rd_init(const char *fname)
 static void
 gpl_read(void)
 {
-  waypoint *wpt_tmp;
-  route_head *track_head;
+  waypoint* wpt_tmp;
+  route_head* track_head;
   gpl_point_t gp;
   double alt_feet;
 
@@ -109,7 +109,7 @@ gpl_rd_deinit(void)
 }
 
 static void
-gpl_wr_init(const char *fname)
+gpl_wr_init(const char* fname)
 {
   gplfile_out = gbfopen_le(fname, "wb", MYNAME);
 }
@@ -121,7 +121,7 @@ gpl_wr_deinit(void)
 }
 
 static void
-gpl_trackpt(const waypoint *wpt)
+gpl_trackpt(const waypoint* wpt)
 {
   double alt_feet = METERS_TO_FEET(wpt->altitude);
   int status = 3;
@@ -166,7 +166,7 @@ gpl_write(void)
 
 ff_vecs_t gpl_vecs = {
   ff_type_file,
-  { ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none },
+  { ff_cap_none, (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none },
   gpl_rd_init,
   gpl_wr_init,
   gpl_rd_deinit,

@@ -25,7 +25,7 @@
 #include "jeeps/gpsmath.h"
 #include "garmin_tables.h"
 
-static route_head *trk;
+static route_head* trk;
 
 static arglist_t jogmap_args[] = {
   ARG_TERMINATOR
@@ -35,7 +35,7 @@ static arglist_t jogmap_args[] = {
 
 #if ! HAVE_LIBEXPAT
 void
-jogmap_rd_init(const char *fname)
+jogmap_rd_init(const char* fname)
 {
   fatal(MYNAME ": This build excluded \"" MYNAME "\" support because expat was not installed.\n");
 }
@@ -55,17 +55,17 @@ jogmap_read(void)
 
 
 static void
-jogmap_markers(const char *args, const char **attrv)
+jogmap_markers(const char* args, const char** attrv)
 {
   trk = route_head_alloc();
   track_add_head(trk);
 }
 
 static void
-jogmap_marker(const char *args, const char **attrv)
+jogmap_marker(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
-  waypoint *wpt = waypt_new();
+  const char** avp = &attrv[0];
+  waypoint* wpt = waypt_new();
 
   while (*avp) {
     if (strcmp(avp[0], "lat") == 0) {
@@ -88,11 +88,11 @@ static
 xg_tag_mapping jogmap_map[] = {
   { jogmap_markers,	cb_start,	"/markers" },
   { jogmap_marker,	cb_start,	"/markers/marker" },
-  { NULL,			0,		NULL }
+  { NULL,	(xg_cb_type)0,		NULL }
 };
 
 static void
-jogmap_rd_init(const char *fname)
+jogmap_rd_init(const char* fname)
 {
   trk = NULL;
   xml_init(fname, jogmap_map, NULL);

@@ -25,8 +25,8 @@
 #include "mapsend.h"
 #include "magellan.h"
 
-static gbfile *mapsend_file_in;
-static gbfile *mapsend_file_out;
+static gbfile* mapsend_file_in;
+static gbfile* mapsend_file_out;
 static short_handle mkshort_handle;
 static short_handle wpt_handle;
 
@@ -36,7 +36,7 @@ static int trk_version = 30;
 
 #define MYNAME "mapsend"
 
-static char *mapsend_opt_trkver = NULL;
+static char* mapsend_opt_trkver = NULL;
 #define MAPSEND_TRKVER_MIN 3
 #define MAPSEND_TRKVER_MAX 4
 
@@ -72,7 +72,7 @@ mapsend_init_opts(const char isReading)  	/* 1=read, 2=write */
 }
 
 static void
-mapsend_rd_init(const char *fname)
+mapsend_rd_init(const char* fname)
 {
   mapsend_init_opts(1);
   mapsend_file_in = gbfopen_le(fname, "rb", MYNAME);
@@ -85,7 +85,7 @@ mapsend_rd_deinit(void)
 }
 
 static void
-mapsend_wr_init(const char *fname)
+mapsend_wr_init(const char* fname)
 {
   mapsend_init_opts(0);
   mapsend_file_out = gbfopen(fname, "wb", MYNAME);
@@ -114,8 +114,8 @@ mapsend_wpt_read(void)
   int wpt_number;
   char wpt_icon;
   char wpt_status;
-  waypoint *wpt_tmp;
-  route_head *rte_head;
+  waypoint* wpt_tmp;
+  route_head* rte_head;
 
   wpt_count = gbfgetint32(mapsend_file_in);
 
@@ -191,8 +191,8 @@ mapsend_track_read(void)
   unsigned int trk_count;
   int valid;
   unsigned char centisecs;
-  route_head *track_head;
-  waypoint *wpt_tmp;
+  route_head* track_head;
+  waypoint* wpt_tmp;
 
   track_head = route_head_alloc();
   track_head->rte_name = gbfgetpstr(mapsend_file_in);
@@ -268,16 +268,16 @@ mapsend_read(void)
 
 
 static void
-mapsend_waypt_pr(const waypoint *waypointp)
+mapsend_waypt_pr(const waypoint* waypointp)
 {
   unsigned char c;
   double falt;
   static int cnt = 0;
-  const char *iconp = NULL;
-  const char *sn = global_opts.synthesize_shortnames ?
+  const char* iconp = NULL;
+  const char* sn = global_opts.synthesize_shortnames ?
                    mkshort_from_wpt(mkshort_handle, waypointp) :
                    waypointp->shortname;
-  char *tmp;
+  char* tmp;
 
   /*
    * The format spec doesn't call out the character set of waypoint
@@ -350,9 +350,9 @@ mapsend_waypt_pr(const waypoint *waypointp)
 }
 
 static void
-mapsend_route_hdr(const route_head *rte)
+mapsend_route_hdr(const route_head* rte)
 {
-  char * rname;
+  char* rname;
 
   /* route name -- mapsend really seems to want something here.. */
   if (!rte->rte_name) {
@@ -372,16 +372,16 @@ mapsend_route_hdr(const route_head *rte)
 }
 
 static void
-mapsend_noop(const route_head *wp)
+mapsend_noop(const route_head* wp)
 {
   /* no-op */
 }
 
 static void
-mapsend_route_disp(const waypoint *waypointp)
+mapsend_route_disp(const waypoint* waypointp)
 {
   unsigned char c;
-  const char *iconp;
+  const char* iconp;
 
   route_wp_count++;
 
@@ -409,15 +409,15 @@ mapsend_route_disp(const waypoint *waypointp)
   gbfwrite(&c, 1, 1, mapsend_file_out);
 }
 
-void mapsend_track_hdr(const route_head * trk)
+void mapsend_track_hdr(const route_head* trk)
 {
   /*
    * we write mapsend v3.0 tracks as mapsend v2.0 tracks get
    * tremendously out of whack time/date wise.
    */
-  char *verstring = "30";
-  queue *elem, *tmp;
-  char *tname;
+  char* verstring = "30";
+  queue* elem, *tmp;
+  char* tname;
   int i;
   mapsend_hdr hdr = {13, "4D533334 MS", "30", ms_type_track, {0, 0, 0}};
 
@@ -466,7 +466,7 @@ void mapsend_track_hdr(const route_head * trk)
 
 }
 
-void mapsend_track_disp(const waypoint * wpt)
+void mapsend_track_disp(const waypoint* wpt)
 {
   unsigned char c;
   int t;

@@ -47,7 +47,7 @@
 #define TMOUT_B 5000 /*  Milliseconds to timeout bulk pipe access. */
 
 typedef struct {
-  struct usb_bus *busses;
+  struct usb_bus* busses;
   unsigned product_id;
 } libusb_unit_data;
 
@@ -59,14 +59,14 @@ static int gusb_intr_in_ep;
 static int gusb_bulk_out_ep;
 static int gusb_bulk_in_ep;
 
-static usb_dev_handle *udev;
-static int garmin_usb_scan(libusb_unit_data *, int);
-static const gdx_info *gdx;
+static usb_dev_handle* udev;
+static int garmin_usb_scan(libusb_unit_data*, int);
+static const gdx_info* gdx;
 
-static int gusb_libusb_get(garmin_usb_packet *ibuf, size_t sz);
-static int gusb_libusb_get_bulk(garmin_usb_packet *ibuf, size_t sz);
-static int gusb_teardown(gpsdevh *dh);
-static int gusb_libusb_send(const garmin_usb_packet *opkt, size_t sz);
+static int gusb_libusb_get(garmin_usb_packet* ibuf, size_t sz);
+static int gusb_libusb_get_bulk(garmin_usb_packet* ibuf, size_t sz);
+static int gusb_teardown(gpsdevh* dh);
+static int gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz);
 
 static gusb_llops_t libusb_llops = {
   gusb_libusb_get,
@@ -78,7 +78,7 @@ static gusb_llops_t libusb_llops = {
 
 #if __linux__
 static
-char ** os_get_garmin_mountpoints()
+char** os_get_garmin_mountpoints()
 {
   // Hacked for testing.
   return NULL;
@@ -88,15 +88,15 @@ char ** os_get_garmin_mountpoints()
 // vendor ID and match that against the mounted device table.  In practical
 // matters, that's crazy complex and this is where the devices seems to always
 // get mounted...
-char ** os_get_garmin_mountpoints()
+char** os_get_garmin_mountpoints()
 {
-  char **dlist = (char **) xcalloc(2, sizeof *dlist);
+  char** dlist = (char**) xcalloc(2, sizeof *dlist);
   dlist[0] = xstrdup("/Volumes/GARMIN");
   dlist[1] = NULL;
   return dlist;
 }
 #else
-char ** os_get_garmin_mountpoints()
+char** os_get_garmin_mountpoints()
 {
   return NULL;
 }
@@ -104,10 +104,10 @@ char ** os_get_garmin_mountpoints()
 
 
 static int
-gusb_libusb_send(const garmin_usb_packet *opkt, size_t sz)
+gusb_libusb_send(const garmin_usb_packet* opkt, size_t sz)
 {
   int r;
-  r = usb_bulk_write(udev, gusb_bulk_out_ep, (char *)(void *)opkt->dbuf, sz, TMOUT_B);
+  r = usb_bulk_write(udev, gusb_bulk_out_ep, (char*)(void*)opkt->dbuf, sz, TMOUT_B);
 
   if (r != (int) sz) {
     fprintf(stderr, "Bad cmdsend r %d sz %ld\n", r, (unsigned long) sz);
@@ -121,29 +121,29 @@ gusb_libusb_send(const garmin_usb_packet *opkt, size_t sz)
 }
 
 static int
-gusb_libusb_get(garmin_usb_packet *ibuf, size_t sz)
+gusb_libusb_get(garmin_usb_packet* ibuf, size_t sz)
 {
-  unsigned char *buf = &ibuf->dbuf[0];
+  unsigned char* buf = &ibuf->dbuf[0];
   int r = -1;
 
-  r = usb_interrupt_read(udev, gusb_intr_in_ep, (char *) buf, sz, TMOUT_I);
+  r = usb_interrupt_read(udev, gusb_intr_in_ep, (char*) buf, sz, TMOUT_I);
   return r;
 }
 
 static int
-gusb_libusb_get_bulk(garmin_usb_packet *ibuf, size_t sz)
+gusb_libusb_get_bulk(garmin_usb_packet* ibuf, size_t sz)
 {
   int r;
-  unsigned char *buf = &ibuf->dbuf[0];
+  unsigned char* buf = &ibuf->dbuf[0];
 
-  r = usb_bulk_read(udev, gusb_bulk_in_ep, (char *) buf, sz, TMOUT_B);
+  r = usb_bulk_read(udev, gusb_bulk_in_ep, (char*) buf, sz, TMOUT_B);
 
   return r;
 }
 
 
 static int
-gusb_teardown(gpsdevh *dh)
+gusb_teardown(gpsdevh* dh)
 {
   if (udev) {
     usb_release_interface(udev, 0);
@@ -220,9 +220,9 @@ gusb_reset_toggles(void)
    * #3 actually starts the session now that the above are both clear.
    */
 
-  gusb_cmd_send((const garmin_usb_packet *) oinit, sizeof(oinit));
-  gusb_cmd_send((const garmin_usb_packet *) oinit, sizeof(oinit));
-  gusb_cmd_send((const garmin_usb_packet *) oinit, sizeof(oinit));
+  gusb_cmd_send((const garmin_usb_packet*) oinit, sizeof(oinit));
+  gusb_cmd_send((const garmin_usb_packet*) oinit, sizeof(oinit));
+  gusb_cmd_send((const garmin_usb_packet*) oinit, sizeof(oinit));
 
   t = 10;
   while (1) {
@@ -249,7 +249,7 @@ gusb_reset_toggles(void)
    */
 
   t = 10;
-  gusb_cmd_send((const garmin_usb_packet *) oid, sizeof(oid));
+  gusb_cmd_send((const garmin_usb_packet*) oid, sizeof(oid));
   while (1) {
     le_write16(&iresp.gusb_pkt.pkt_id, 0);
     le_write32(&iresp.gusb_pkt.datasz, 0);
@@ -272,7 +272,7 @@ gusb_reset_toggles(void)
 }
 
 void
-garmin_usb_start(struct usb_device *dev, libusb_unit_data *lud)
+garmin_usb_start(struct usb_device* dev, libusb_unit_data* lud)
 {
   int i;
 
@@ -338,7 +338,7 @@ garmin_usb_start(struct usb_device *dev, libusb_unit_data *lud)
   }
 
   for (i = 0; i < dev->config->interface->altsetting->bNumEndpoints; i++) {
-    struct usb_endpoint_descriptor * ep;
+    struct usb_endpoint_descriptor* ep;
     ep = &dev->config->interface->altsetting->endpoint[i];
 
     switch (ep->bmAttributes & USB_ENDPOINT_TYPE_MASK) {
@@ -393,13 +393,13 @@ garmin_usb_start(struct usb_device *dev, libusb_unit_data *lud)
 }
 
 static
-int garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
+int garmin_usb_scan(libusb_unit_data* lud, int req_unit_number)
 {
   int found_devices = 0;
-  struct usb_bus *bus;
+  struct usb_bus* bus;
 
   for (bus = lud->busses; bus; bus = bus->next) {
-    struct usb_device *dev;
+    struct usb_device* dev;
 
     for (dev = bus->devices; dev; dev = dev->next) {
       /*
@@ -442,7 +442,7 @@ int garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
      * that is wants to read and write GPX files on a
      * mounted drive.  Try that now.
      */
-    char **dlist = os_get_garmin_mountpoints();
+    char** dlist = os_get_garmin_mountpoints();
     gdx = gdx_find_file(dlist);
     if (gdx) {
       return 1;
@@ -456,10 +456,10 @@ int garmin_usb_scan(libusb_unit_data *lud, int req_unit_number)
 
 
 int
-gusb_init(const char *portname, gpsdevh **dh)
+gusb_init(const char* portname, gpsdevh** dh)
 {
   int req_unit_number = 0;
-  libusb_unit_data *lud = (libusb_unit_data*) xcalloc(sizeof(libusb_unit_data), 1);
+  libusb_unit_data* lud = (libusb_unit_data*) xcalloc(sizeof(libusb_unit_data), 1);
 
   *dh = (gpsdevh*) lud;
 

@@ -68,8 +68,8 @@
 #define GPI_ADDR_POSTAL_CODE	8
 #define GPI_ADDR_ADDR		16
 
-static char *opt_cat, *opt_pos, *opt_notes, *opt_hide_bitmap, *opt_descr, *opt_bitmap;
-static char *opt_unique, *opt_alerts, *opt_units, *opt_speed, *opt_proximity, *opt_sleep;
+static char* opt_cat, *opt_pos, *opt_notes, *opt_hide_bitmap, *opt_descr, *opt_bitmap;
+static char* opt_unique, *opt_alerts, *opt_units, *opt_speed, *opt_proximity, *opt_sleep;
 static double defspeed, defproximity;
 static int alerts;
 
@@ -131,8 +131,8 @@ typedef struct {
   time_t crdate;		/* creation date and time */
   char POI[4];		/* "POI" */
   char S8[3];
-  char *group;
-  char *category;
+  char* group;
+  char* category;
 } reader_data_t;
 
 typedef struct writer_data_s {
@@ -141,16 +141,16 @@ typedef struct writer_data_s {
   int sz;
   int alert;
   bounds bds;
-  struct writer_data_s *top_left;
-  struct writer_data_s *top_right;
-  struct writer_data_s *buttom_left;
-  struct writer_data_s *buttom_right;
+  struct writer_data_s* top_left;
+  struct writer_data_s* top_right;
+  struct writer_data_s* buttom_left;
+  struct writer_data_s* buttom_right;
 } writer_data_t;
 
 typedef struct gpi_waypt_data_s {
   int sz;
-  char *addr;
-  char *postal_code;
+  char* addr;
+  char* postal_code;
 } gpi_waypt_data_t;
 
 typedef struct {
@@ -191,18 +191,18 @@ typedef struct {
   int alerts;
   short mask;
   char addr_is_dynamic;
-  char *addr;
-  char *city;
-  char *country;
-  char *phone_nr;
-  char *postal_code;
-  char *state;
+  char* addr;
+  char* city;
+  char* country;
+  char* phone_nr;
+  char* postal_code;
+  char* state;
 } gpi_waypt_t;
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 static gbint16 codepage;	/* code-page, i.e. 1252 */
-static reader_data_t *rdata;
-static writer_data_t *wdata;
+static reader_data_t* rdata;
+static writer_data_t* wdata;
 static short_handle short_h;
 static char units;
 static time_t gpi_timestamp = 0;
@@ -219,26 +219,26 @@ static time_t gpi_timestamp = 0;
 *******************************************************************************/
 
 /* look for or initialize GMSD */
-static garmin_fs_t *
-gpi_gmsd_init(waypoint *wpt)
+static garmin_fs_t*
+gpi_gmsd_init(waypoint* wpt)
 {
-  garmin_fs_t *gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = GMSD_FIND(wpt);
   if (wpt == NULL) {
     fatal(MYNAME ": Error in file structure.\n");
   }
   if (gmsd == NULL) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
+    fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
   }
   return gmsd;
 }
 
 /* read a standard string with or without 'EN' (or whatever) header */
-static char *
-gpi_read_string(const char *field)
+static char*
+gpi_read_string(const char* field)
 {
   int l1;
-  char *res = NULL;
+  char* res = NULL;
 
   l1 = gbfgetint16(fin);
   if (l1 > 0) {
@@ -260,14 +260,14 @@ gpi_read_string(const char *field)
       if ((en[0] < 'A') || (en[0] > 'Z') || (en[1] < 'A') || (en[1] > 'Z')) {
         fatal(MYNAME ": Invalid country code!\n");
       }
-      res = xmalloc(l2 + 1);
+      res = (char*) xmalloc(l2 + 1);
       res[l2] = '\0';
       PP;
       if (l2 > 0) {
         gbfread(res, 1, l2, fin);
       }
     } else {
-      res = xmalloc(l1 + 1);
+      res = (char*) xmalloc(l1 + 1);
       *res = first;
       *(res + l1) = '\0';
       PP;
@@ -351,7 +351,7 @@ read_header(void)
 }
 
 /* gpi tag handler */
-static int read_tag(const char *caller, const int tag, waypoint *wpt);
+static int read_tag(const char* caller, const int tag, waypoint* wpt);
 
 
 /* read a single poi with all options */
@@ -359,7 +359,7 @@ static void
 read_poi(const int sz, const int tag)
 {
   int pos, len;
-  waypoint *wpt;
+  waypoint* wpt;
 
 #ifdef GPI_DBG
   PP;
@@ -492,13 +492,13 @@ read_poi_group(const int sz, const int tag)
 // length field)
 /* gpi tag handler */
 static int
-read_tag(const char *caller, const int tag, waypoint *wpt)
+read_tag(const char* caller, const int tag, waypoint* wpt)
 {
   int pos, sz, dist;
   double speed;
   short mask;
-  char *str;
-  garmin_fs_t *gmsd;
+  char* str;
+  garmin_fs_t* gmsd;
 
   sz = gbfgetint32(fin);
   pos = gbftell(fin);
@@ -673,7 +673,7 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 #ifdef GPI_DBG
   {
     int x;
-    unsigned char *b = xmalloc(sz);
+    unsigned char* b = xmalloc(sz);
     fprintf(stderr, "Tag: %x\n", tag);
     gbfread(b, 1, sz, fin);
     fprintf(stderr, "\n");
@@ -701,7 +701,7 @@ read_tag(const char *caller, const int tag, waypoint *wpt)
 *******************************************************************************/
 
 static void
-write_string(const char *str, const char long_format)
+write_string(const char* str, const char long_format)
 {
   int len;
 
@@ -716,17 +716,17 @@ write_string(const char *str, const char long_format)
 
 
 static int
-compare_wpt_cb(const queue *a, const queue *b)
+compare_wpt_cb(const queue* a, const queue* b)
 {
-  const waypoint *wa = (waypoint *) a;
-  const waypoint *wb = (waypoint *) b;
+  const waypoint* wa = (waypoint*) a;
+  const waypoint* wb = (waypoint*) b;
 
   return strcmp(wa->shortname, wb->shortname);
 }
 
 
 static char
-compare_strings(const char *s1, const char *s2)
+compare_strings(const char* s1, const char* s2)
 {
   if (s1 == s2) {
     return 0;
@@ -742,12 +742,12 @@ compare_strings(const char *s1, const char *s2)
 }
 
 
-static writer_data_t *
+static writer_data_t*
 wdata_alloc()
 {
-  writer_data_t *res;
+  writer_data_t* res;
 
-  res = xcalloc(1, sizeof(*res));
+  res = (writer_data_t*) xcalloc(1, sizeof(*res));
   QUEUE_INIT(&res->Q);
   waypt_init_bounds(&res->bds);
 
@@ -756,15 +756,15 @@ wdata_alloc()
 
 
 static void
-wdata_free(writer_data_t *data)
+wdata_free(writer_data_t* data)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    waypoint *wpt = (waypoint *)elem;
+    waypoint* wpt = (waypoint*)elem;
 
     if (wpt->extra_data) {
-      gpi_waypt_t *dt = (gpi_waypt_t *) wpt->extra_data;
+      gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
       if (dt->addr_is_dynamic) {
         xfree(dt->addr);
       }
@@ -791,7 +791,7 @@ wdata_free(writer_data_t *data)
 
 
 static void
-wdata_add_wpt(writer_data_t *data, waypoint *wpt)
+wdata_add_wpt(writer_data_t* data, waypoint* wpt)
 {
   data->ct++;
   ENQUEUE_TAIL(&data->Q, &wpt->Q);
@@ -800,9 +800,9 @@ wdata_add_wpt(writer_data_t *data, waypoint *wpt)
 
 
 static void
-wdata_check(writer_data_t *data)
+wdata_check(writer_data_t* data)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   double center_lat, center_lon;
 
   if ((data->ct <= WAYPOINTS_PER_BLOCK) ||
@@ -819,7 +819,7 @@ wdata_check(writer_data_t *data)
 
   center_lat = center_lon = 0;
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    waypoint *wpt = (waypoint *) elem;
+    waypoint* wpt = (waypoint*) elem;
     center_lat += wpt->latitude;
     center_lon += wpt->longitude;
   }
@@ -827,8 +827,8 @@ wdata_check(writer_data_t *data)
   center_lon /= data->ct;
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    waypoint *wpt = (waypoint *) elem;
-    writer_data_t **ref;
+    waypoint* wpt = (waypoint*) elem;
+    writer_data_t** ref;
 
     if (wpt->latitude < center_lat) {
       if (wpt->longitude < center_lon) {
@@ -870,18 +870,18 @@ wdata_check(writer_data_t *data)
 
 
 static int
-wdata_compute_size(writer_data_t *data)
+wdata_compute_size(writer_data_t* data)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   int res;
 
   res = 23;	/* bounds, ... of tag 0x80008 */
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    waypoint *wpt = (waypoint *) elem;
-    gpi_waypt_t *dt;
-    garmin_fs_t *gmsd;
-    char *str;
+    waypoint* wpt = (waypoint*) elem;
+    gpi_waypt_t* dt;
+    garmin_fs_t* gmsd;
+    char* str;
 
     res += 12;		/* tag/sz/sub-sz */
     res += 19;		/* poi fixed size */
@@ -890,11 +890,11 @@ wdata_compute_size(writer_data_t *data)
       res += 10;  /* tag(4) */
     }
 
-    dt = xcalloc(1, sizeof(*dt));
+    dt = (gpi_waypt_t*) xcalloc(1, sizeof(*dt));
     wpt->extra_data = dt;
 
     if (alerts) {
-      char *pos;
+      char* pos;
 
       if ((pos = strchr(wpt->shortname, '@'))) {
         double speed, scale;
@@ -1012,9 +1012,9 @@ wdata_compute_size(writer_data_t *data)
 
 
 static void
-wdata_write(const writer_data_t *data)
+wdata_write(const writer_data_t* data)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   gbfputint32(0x80008, fout);
   gbfputint32(data->sz, fout);
@@ -1030,10 +1030,10 @@ wdata_write(const writer_data_t *data)
   gbfputc(data->alert, fout);
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    char *str;
+    char* str;
     int s0, s1;
-    waypoint *wpt = (waypoint *)elem;
-    gpi_waypt_t *dt = wpt->extra_data;
+    waypoint* wpt = (waypoint*)elem;
+    gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
 
     str = wpt->description;
     if (! str) {
@@ -1156,7 +1156,7 @@ wdata_write(const writer_data_t *data)
 
 
 static void
-write_category(const char *category, const char *image, const int image_sz)
+write_category(const char* category, const char* image, const int image_sz)
 {
   int sz;
 
@@ -1216,14 +1216,14 @@ write_header(void)
 
 
 static void
-enum_waypt_cb(const waypoint *ref)
+enum_waypt_cb(const waypoint* ref)
 {
-  waypoint *wpt;
-  char *str;
-  queue *elem, *tmp;
+  waypoint* wpt;
+  char* str;
+  queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&wdata->Q, elem, tmp) {
-    waypoint *cmp = (waypoint *) elem;
+    waypoint* cmp = (waypoint*) elem;
 
     /* sort out nearly equal waypoints */
     if ((compare_strings(cmp->shortname, ref->shortname) == 0) &&
@@ -1248,16 +1248,16 @@ enum_waypt_cb(const waypoint *ref)
 
 
 static void
-load_bitmap_from_file(const char *fname, char **data, int *data_sz)
+load_bitmap_from_file(const char* fname, char** data, int* data_sz)
 {
-  gbfile *f;
+  gbfile* f;
   int i, sz;
   int dest_bpp;
   int src_line_sz, dest_line_sz;
   bmp_header_t src_h;
-  int *color_table = NULL;
-  gpi_bitmap_header_t *dest_h;
-  char *ptr;
+  int* color_table = NULL;
+  gpi_bitmap_header_t* dest_h;
+  char* ptr;
 
   f = gbfopen_le(fname, "rb", MYNAME);
   is_fatal(gbfgetint16(f) != 0x4d42, MYNAME ": No BMP image.");
@@ -1313,7 +1313,7 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
   }
 
   if (src_h.used_colors > 0) {
-    color_table = xmalloc(4 * src_h.used_colors);
+    color_table = (int*) xmalloc(4 * src_h.used_colors);
     gbfread(color_table, 1, 4 * src_h.used_colors, f);
     for (i = 0; i < src_h.used_colors; i++) {
       int color = color_table[i];
@@ -1341,8 +1341,8 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
     sz += (src_h.used_colors * 4);
   }
 
-  ptr = xmalloc(sz);
-  dest_h = (void *)ptr;
+  ptr = (char*) xmalloc(sz);
+  dest_h = (gpi_bitmap_header_t*)ptr;
   *data = ptr;
   *data_sz = sz;
 
@@ -1360,14 +1360,14 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
   le_write32(&dest_h->size_2c, (dest_line_sz * src_h.height) + 0x2c);
 
   /* copy and revert order of BMP lines */
-  ptr = (void *)dest_h;
+  ptr = (char*)dest_h;
   ptr += (sizeof(*dest_h) + (dest_line_sz * (src_h.height - 1)));
 
   if (src_h.bpp == 24) {
     /* 24 bpp seems to be not supported, convert to 32 bpp */
     for (i = 0; i < src_h.height; i++) {
       int j;
-      char *p = ptr;
+      char* p = ptr;
 
       for (j = 0; j < src_h.width; j++) {
         int color;
@@ -1386,7 +1386,7 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
     }
 
   if (src_h.used_colors > 0) {
-    ptr = (void *)dest_h;
+    ptr = (char*)dest_h;
     ptr += (sizeof(*dest_h) + (src_h.height * src_line_sz));
 
     for (i = 0; i < src_h.used_colors; i++) {
@@ -1406,12 +1406,12 @@ load_bitmap_from_file(const char *fname, char **data, int *data_sz)
 *******************************************************************************/
 
 static void
-garmin_gpi_rd_init(const char *fname)
+garmin_gpi_rd_init(const char* fname)
 {
   char cp[8];
 
   fin = gbfopen_le(fname, "rb", MYNAME);
-  rdata = xcalloc(1, sizeof(*rdata));
+  rdata = (reader_data_t*) xcalloc(1, sizeof(*rdata));
 
   read_header();
 
@@ -1430,10 +1430,10 @@ garmin_gpi_rd_init(const char *fname)
 
 
 static void
-garmin_gpi_wr_init(const char *fname)
+garmin_gpi_wr_init(const char* fname)
 {
   char cp[8];
-  cet_cs_vec_t *vec;
+  cet_cs_vec_t* vec;
   int i;
 
   if (gpi_timestamp != 0) {			/* not the first gpi output session */
@@ -1559,7 +1559,7 @@ garmin_gpi_read(void)
 static void
 garmin_gpi_write(void)
 {
-  char *image;
+  char* image;
   int image_sz;
 
   if (strlen(opt_cat) == 0) {
@@ -1594,7 +1594,7 @@ garmin_gpi_write(void)
 ff_vecs_t garmin_gpi_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write 	/* waypoints */,
+    (ff_cap)(ff_cap_read | ff_cap_write) 	/* waypoints */,
     ff_cap_none 			/* tracks */,
     ff_cap_none 			/* routes */
   },

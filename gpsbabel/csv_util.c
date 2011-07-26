@@ -137,8 +137,8 @@ typedef enum {
 } xcsv_token;
 
 // Static definition of in_word_set to meet C99 rules as used by Clang.
-static struct xt_mapping *
-in_word_set(register const char *str, register unsigned int len);
+static struct xt_mapping*
+in_word_set(register const char* str, register unsigned int len);
 
 #include "xcsv_tokens.gperf"
 
@@ -147,8 +147,8 @@ in_word_set(register const char *str, register unsigned int len);
 /****************************************************************************/
 xcsv_file_t xcsv_file;
 
-extern char *xcsv_urlbase;
-extern char *prefer_shortnames;
+extern char* xcsv_urlbase;
+extern char* prefer_shortnames;
 
 #if CSVFMTS_ENABLED
 static double pathdist = 0;
@@ -156,7 +156,7 @@ static double oldlon = 999;
 static double oldlat = 999;
 
 static int waypt_out_count;
-static route_head *csv_track, *csv_route;
+static route_head* csv_track, *csv_route;
 static double utm_northing, utm_easting, utm_zone = 0;
 static char utm_zonec;
 #endif // CSVFMTS_ENABLED
@@ -168,17 +168,17 @@ static char utm_zonec;
 /*     usage: p = csv_stringclean(stringtoclean, "&,\"")             */
 /*            (strip out ampersands, commas, and quotes.             */
 /*********************************************************************/
-char *
+char*
 #ifdef DEBUG_MEM
-CSV_STRINGCLEAN(const char *string, const char *chararray, DEBUG_PARAMS)
+CSV_STRINGCLEAN(const char* string, const char* chararray, DEBUG_PARAMS)
 #else
-csv_stringclean(const char *string, const char *chararray)
+csv_stringclean(const char* string, const char* chararray)
 #endif
 {
-  char * p1;
-  char * p2;
-  const char * cp;
-  char * tmp = xxstrdup(string,file,line);
+  char* p1;
+  char* p2;
+  const char* cp;
+  char* tmp = xxstrdup(string,file,line);
 
   if ((! string) || (! chararray)) {
     return (tmp);
@@ -211,16 +211,16 @@ csv_stringclean(const char *string, const char *chararray)
 /*                    returns a copy of the modified string                        */
 /*    usage: p = csv_stringtrim(string, "\"", 0)                                   */
 /***********************************************************************************/
-char *
+char*
 #ifdef DEBUG_MEM
-CSV_STRINGTRIM(const char *string, const char *enclosure, int strip_max, DEBUG_PARAMS)
+CSV_STRINGTRIM(const char* string, const char* enclosure, int strip_max, DEBUG_PARAMS)
 #else
-csv_stringtrim(const char *string, const char *enclosure, int strip_max)
+csv_stringtrim(const char* string, const char* enclosure, int strip_max)
 #endif
 {
-  static const char *p1 = NULL;
-  char *p2 = NULL;
-  char * tmp = xxstrdup(string,file,line);
+  static const char* p1 = NULL;
+  char* p2 = NULL;
+  char* tmp = xxstrdup(string,file,line);
   size_t elen;
   int stripped = 0;
 
@@ -279,13 +279,13 @@ csv_stringtrim(const char *string, const char *enclosure, int strip_max)
 /*    usage: p = csv_lineparse(string, ",", "\"", line)  [initial call]      */
 /*           p = csv_lineparse(NULL, ",", "\"", line)    [subsequent calls]  */
 /*****************************************************************************/
-char *
-csv_lineparse(const char *stringstart, const char *delimited_by,
-              const char *enclosed_in, const int line_no)
+char*
+csv_lineparse(const char* stringstart, const char* delimited_by,
+              const char* enclosed_in, const int line_no)
 {
-  const char *sp;
-  static const char *p = NULL;
-  static char *tmp = NULL;
+  const char* sp;
+  static const char* p = NULL;
+  static char* tmp = NULL;
   size_t dlen = 0, elen = 0, efound = 0;
   int enclosedepth = 0;
   short int dfound;
@@ -362,13 +362,13 @@ csv_lineparse(const char *stringstart, const char *delimited_by,
   }
 
   /* allocate enough space for this data field */
-  tmp = (char *) xcalloc((p - sp) + 1, sizeof(char));
+  tmp = (char*) xcalloc((p - sp) + 1, sizeof(char));
 
   strncpy(tmp, sp, (p - sp));
   tmp[p - sp] = '\0';
 
   if (elen && efound) {
-    char *c = csv_stringtrim(tmp, enclosed_in, 0);
+    char* c = csv_stringtrim(tmp, enclosed_in, 0);
     xfree(tmp);
     tmp = c;
   }
@@ -432,10 +432,10 @@ intdeg_to_dec(const int ideg)
 /*        lat = decdir_to_dec("30.1234N");                                  */
 /*****************************************************************************/
 static double
-decdir_to_dec(const char * decdir)
+decdir_to_dec(const char* decdir)
 {
-  char *p;
-  const char *cp;
+  char* p;
+  const char* cp;
   double rval;
   int sign = 0;
 
@@ -466,7 +466,7 @@ decdir_to_dec(const char * decdir)
 /*        lat = ddmmdir_to_degrees("30.1234N");                              */
 /*****************************************************************************/
 static double
-ddmmdir_to_degrees(const char * ddmmdir)
+ddmmdir_to_degrees(const char* ddmmdir)
 {
   // if not N or E, prepend a '-' to ddmm2degrees input
   // see XT_LAT_NMEA which handles ddmm directly
@@ -487,7 +487,7 @@ ddmmdir_to_degrees(const char * ddmmdir)
  *****************************************************************************/
 
 void
-human_to_dec(const char *instr, double *outlat, double *outlon, int which)
+human_to_dec(const char* instr, double* outlat, double* outlon, int which)
 {
   double unk[3] = {999,999,999};
   double lat[3] = {999,999,999};
@@ -496,19 +496,19 @@ human_to_dec(const char *instr, double *outlat, double *outlon, int which)
   int    lonsign = 0;
   int    unksign = 1;
 
-  const char *cur;
-  double *numres = unk;
+  const char* cur;
+  double* numres = unk;
   int numind = 0;
-  char *buff;
+  char* buff;
 
   if (strchr(instr, ',') != NULL) {
-    char *c;
+    char* c;
     buff = xstrdup(instr);
     while ((c = strchr(buff, ','))) {
       *c = '.';
     }
   } else {
-    buff = (char *)instr;
+    buff = (char*)instr;
   }
 
   cur = buff;
@@ -656,12 +656,12 @@ human_to_dec(const char *instr, double *outlat, double *outlon, int which)
  */
 
 void
-dec_to_human(char *buff, const char *format, const char *dirs, double val)
+dec_to_human(char* buff, const char* format, const char* dirs, double val)
 {
-  char *subformat = NULL;
-  const char *formatptr = NULL;
-  char *percent = NULL;
-  char *type = NULL;
+  char* subformat = NULL;
+  const char* formatptr = NULL;
+  char* percent = NULL;
+  char* type = NULL;
 
   int  index = 0;
   int  intvals[3] = {0,0,0};
@@ -763,10 +763,10 @@ xcsv_file_init(void)
 /* usage: xcsv_ifield_add("DESCRIPTION", "", "%s")                           */
 /*****************************************************************************/
 void
-xcsv_ifield_add(char *key, char *val, char *pfc)
+xcsv_ifield_add(char* key, char* val, char* pfc)
 {
-  field_map_t *fmp = (field_map_t *) xcalloc(sizeof(*fmp), 1);
-  struct xt_mapping *xm = in_word_set(key, strlen(key));
+  field_map_t* fmp = (field_map_t*) xcalloc(sizeof(*fmp), 1);
+  struct xt_mapping* xm = in_word_set(key, strlen(key));
 
   fmp->key = key;
   fmp->hashed_key = xm ? xm->xt_token : -1;
@@ -782,10 +782,10 @@ xcsv_ifield_add(char *key, char *val, char *pfc)
 /* usage: xcsv_ofield_add("LAT_DECIMAL", "", "%08.5lf")                      */
 /*****************************************************************************/
 void
-xcsv_ofield_add(char *key, char *val, char *pfc, int options)
+xcsv_ofield_add(char* key, char* val, char* pfc, int options)
 {
-  field_map_t *fmp = (field_map_t *) xcalloc(sizeof(*fmp), 1);
-  struct xt_mapping *xm = in_word_set(key, strlen(key));
+  field_map_t* fmp = (field_map_t*) xcalloc(sizeof(*fmp), 1);
+  struct xt_mapping* xm = in_word_set(key, strlen(key));
 
   fmp->key = key;
   fmp->hashed_key = xm ? xm->xt_token : -1;
@@ -802,7 +802,7 @@ xcsv_ofield_add(char *key, char *val, char *pfc, int options)
 /* usage: xcsv_prologue_add("Four score and seven years ago today,")         */
 /*****************************************************************************/
 void
-xcsv_prologue_add(char *prologue)
+xcsv_prologue_add(char* prologue)
 {
   ogue_t* ogp = (ogue_t*) xcalloc(sizeof(*ogp), 1);
 
@@ -816,9 +816,9 @@ xcsv_prologue_add(char *prologue)
 /* usage: xcsv_epilogue_add("shall not perish from the earth.")              */
 /*****************************************************************************/
 void
-xcsv_epilogue_add(char *epilogue)
+xcsv_epilogue_add(char* epilogue)
 {
-  ogue_t * ogp = (ogue_t*) xcalloc(sizeof(*ogp), 1);
+  ogue_t* ogp = (ogue_t*) xcalloc(sizeof(*ogp), 1);
 
   ogp->val = epilogue;
   ENQUEUE_TAIL(&xcsv_file.epilogue, &ogp->Q);
@@ -827,7 +827,7 @@ xcsv_epilogue_add(char *epilogue)
 
 static
 time_t
-yyyymmdd_to_time(const char *s)
+yyyymmdd_to_time(const char* s)
 {
   int t = atol(s);
   struct tm tm;
@@ -854,7 +854,7 @@ yyyymmdd_to_time(const char *s)
  */
 static
 time_t
-sscanftime(const char *s, const char *format, const int gmt)
+sscanftime(const char* s, const char* format, const int gmt)
 {
   struct tm stm;
   memset(&stm, 0, sizeof(stm));
@@ -882,13 +882,13 @@ sscanftime(const char *s, const char *format, const int gmt)
 
 static
 time_t
-addhms(const char *s, const char *format)
+addhms(const char* s, const char* format)
 {
   time_t tt =0;
   int  hour =0;
   int  min  =0;
   int  sec  =0;
-  char * ampm = NULL;
+  char* ampm = NULL;
   int ac;
 
   ampm = (char*) xmalloc(strlen(s));
@@ -907,9 +907,9 @@ addhms(const char *s, const char *format)
 
 static
 int
-writetime(char * buff, size_t bufsize, const char * format, time_t t, int gmt)
+writetime(char* buff, size_t bufsize, const char* format, time_t t, int gmt)
 {
-  static struct tm * stmp;
+  static struct tm* stmp;
 
   if (gmt) {
     stmp = gmtime(&t);
@@ -924,10 +924,10 @@ writetime(char * buff, size_t bufsize, const char * format, time_t t, int gmt)
 /* not used */
 static
 int
-writeisotime(char * buff, size_t bufsize, const char * format, time_t t)
+writeisotime(char* buff, size_t bufsize, const char* format, time_t t)
 {
-  static struct tm * stmp;
-  char * ibuff = NULL;
+  static struct tm* stmp;
+  char* ibuff = NULL;
   int i;
 
   ibuff = xmalloc(bufsize);
@@ -942,10 +942,10 @@ writeisotime(char * buff, size_t bufsize, const char * format, time_t t)
 
 static
 int
-writehms(char * buff, size_t bufsize, const char * format, time_t t, int gmt)
+writehms(char* buff, size_t bufsize, const char* format, time_t t, int gmt)
 {
   static struct tm no_time = {0};
-  static struct tm * stmp = &no_time;
+  static struct tm* stmp = &no_time;
 
   if (gmt) {
     stmp = gmtime(&t);
@@ -967,7 +967,7 @@ long
 time_to_yyyymmdd(time_t t)
 {
   long b;
-  struct tm *tm = gmtime(&t);
+  struct tm* tm = gmtime(&t);
 
   b = (1900 + tm->tm_year) * 10000 +
       (1 + tm->tm_mon) * 100 +
@@ -976,13 +976,13 @@ time_to_yyyymmdd(time_t t)
   return b;
 }
 
-static garmin_fs_t *
-gmsd_init(waypoint *wpt)
+static garmin_fs_t*
+gmsd_init(waypoint* wpt)
 {
-  garmin_fs_t *gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = GMSD_FIND(wpt);
   if (gmsd == NULL) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
+    fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
   }
   return gmsd;
 }
@@ -992,11 +992,11 @@ gmsd_init(waypoint *wpt)
 /* usage: xcsv_parse_val("-123.34", *waypt, *field_map)                      */
 /*****************************************************************************/
 static void
-xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp,
-               route_head **trk)
+xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
+               route_head** trk)
 {
-  char *enclosure = "";
-  geocache_data *gc_data = NULL;
+  char* enclosure = "";
+  geocache_data* gc_data = NULL;
 
   if (!fmp->printfc) {
     fatal(MYNAME ": xcsv style '%s' is missing format specifier", fmp->key);
@@ -1119,7 +1119,7 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp,
     utm_northing = atof(s);
     break;
   case XT_UTM: {
-    char *ss;
+    char* ss;
     int i = 0;;
 
     utm_zone = strtod(s, &ss);
@@ -1306,37 +1306,37 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp,
     break;
     /* GMSD ****************************************************************/
   case XT_COUNTRY: {
-    garmin_fs_t *gmsd = gmsd_init(wpt);
+    garmin_fs_t* gmsd = gmsd_init(wpt);
     GMSD_SET(country, csv_stringtrim(s, enclosure, 0));
   }
   break;
   case XT_STATE: {
-    garmin_fs_t *gmsd = gmsd_init(wpt);
+    garmin_fs_t* gmsd = gmsd_init(wpt);
     GMSD_SET(state, csv_stringtrim(s, enclosure, 0));
   }
   break;
   case XT_CITY: {
-    garmin_fs_t *gmsd = gmsd_init(wpt);
+    garmin_fs_t* gmsd = gmsd_init(wpt);
     GMSD_SET(city, csv_stringtrim(s, enclosure, 0));
   }
   break;
   case XT_STREET_ADDR: {
-    garmin_fs_t *gmsd = gmsd_init(wpt);
+    garmin_fs_t* gmsd = gmsd_init(wpt);
     GMSD_SET(addr, csv_stringtrim(s, enclosure, 0));
   }
   break;
   case XT_POSTAL_CODE: {
-    garmin_fs_t *gmsd = gmsd_init(wpt);
+    garmin_fs_t* gmsd = gmsd_init(wpt);
     GMSD_SET(postal_code, csv_stringtrim(s, enclosure, 0));
   }
   break;
   case XT_PHONE_NR: {
-    garmin_fs_t *gmsd = gmsd_init(wpt);
+    garmin_fs_t* gmsd = gmsd_init(wpt);
     GMSD_SET(phone_nr, csv_stringtrim(s, enclosure, 0));
   }
   break;
   case XT_FACILITY: {
-    garmin_fs_t *gmsd = gmsd_init(wpt);
+    garmin_fs_t* gmsd = gmsd_init(wpt);
     GMSD_SET(facility, csv_stringtrim(s, enclosure, 0));
   }
   break;
@@ -1363,15 +1363,15 @@ xcsv_parse_val(const char *s, waypoint *wpt, const field_map_t *fmp,
 void
 xcsv_data_read(void)
 {
-  char *buff;
-  char *s;
-  waypoint *wpt_tmp;
+  char* buff;
+  char* s;
+  waypoint* wpt_tmp;
   int linecount = 0;
-  queue *elem, *tmp;
-  field_map_t *fmp;
-  ogue_t *ogp;
-  route_head *rte = NULL;
-  route_head *trk = NULL;
+  queue* elem, *tmp;
+  field_map_t* fmp;
+  ogue_t* ogp;
+  route_head* rte = NULL;
+  route_head* trk = NULL;
   utm_northing = 0;
   utm_easting = 0;
   utm_zone = 0;
@@ -1407,7 +1407,7 @@ xcsv_data_read(void)
      */
 
     QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {
-      ogp = (ogue_t *) elem;
+      ogp = (ogue_t*) elem;
       if (strncmp(buff, ogp->val, strlen(ogp->val)) == 0) {
         buff[0] = '\0';
         break;
@@ -1431,7 +1431,7 @@ xcsv_data_read(void)
        * off the beginning of buff since there's no index into queue.
        */
       while (s) {
-        fmp = (field_map_t *) elem;
+        fmp = (field_map_t*) elem;
         xcsv_parse_val(s, wpt_tmp, fmp, &trk);
 
         elem = QUEUE_NEXT(elem);
@@ -1492,7 +1492,7 @@ xcsv_data_read(void)
 }
 
 static void
-xcsv_resetpathlen(const route_head *head)
+xcsv_resetpathlen(const route_head* head)
 {
   pathdist = 0;
   oldlat = 999;
@@ -1500,10 +1500,10 @@ xcsv_resetpathlen(const route_head *head)
   csv_route = csv_track = NULL;
   switch (xcsv_file.datatype) {
   case trkdata:
-    csv_track = (route_head *) head;
+    csv_track = (route_head*) head;
     break;
   case rtedata:
-    csv_route = (route_head *) head;
+    csv_route = (route_head*) head;
     break;
   default:
     break;
@@ -1515,16 +1515,16 @@ xcsv_resetpathlen(const route_head *head)
 /*                  (the output meat)                                        */
 /*****************************************************************************/
 static void
-xcsv_waypt_pr(const waypoint *wpt)
+xcsv_waypt_pr(const waypoint* wpt)
 {
   char buff[1024];
-  char *shortname = NULL;
-  char *description = NULL;
-  char * anyname = NULL;
-  char * write_delimiter;
+  char* shortname = NULL;
+  char* description = NULL;
+  char* anyname = NULL;
+  char* write_delimiter;
   int i;
-  field_map_t *fmp;
-  queue *elem, *tmp;
+  field_map_t* fmp;
+  queue* elem, *tmp;
   double latitude, longitude;
   int32 utmz;
   double utme, utmn;
@@ -1575,7 +1575,7 @@ xcsv_waypt_pr(const waypoint *wpt)
     }
     description = shortname;
   } else if (description) {
-    char *odesc = description;
+    char* odesc = description;
     description = xstrdup(odesc);
     xfree(odesc);
   }
@@ -1587,7 +1587,7 @@ xcsv_waypt_pr(const waypoint *wpt)
 
   i = 0;
   QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
-    char *obuff;
+    char* obuff;
     double lat = latitude;
     double lon = longitude;
     /*
@@ -1598,7 +1598,7 @@ xcsv_waypt_pr(const waypoint *wpt)
      */
     int field_is_unknown = 0;
 
-    fmp = (field_map_t *) elem;
+    fmp = (field_map_t*) elem;
 
     if ((i != 0) && !(fmp->options & OPTIONS_NODELIM)) {
       gbfprintf(xcsv_file.xcsvfp, write_delimiter);
@@ -1620,7 +1620,7 @@ xcsv_waypt_pr(const waypoint *wpt)
       writebuff(buff, fmp->printfc, waypt_out_count + atoi(fmp->val));
       break;
     case XT_CONSTANT: {
-      const char *cp = xcsv_get_char_from_constant_table(fmp->val);
+      const char* cp = xcsv_get_char_from_constant_table(fmp->val);
       if (cp) {
         writebuff(buff, fmp->printfc, cp);
       } else {
@@ -1973,7 +1973,7 @@ xcsv_waypt_pr(const waypoint *wpt)
       field_is_unknown = !wpt->sat;
       break;
     case XT_GPS_FIX: {
-      char *fix = NULL;
+      char* fix = NULL;
       switch (wpt->fix) {
       case fix_unknown:
         field_is_unknown = 1;
@@ -2000,37 +2000,37 @@ xcsv_waypt_pr(const waypoint *wpt)
     break;
     /* GMSD ************************************************************/
     case XT_COUNTRY: {
-      garmin_fs_t *gmsd = GMSD_FIND(wpt);
+      garmin_fs_t* gmsd = GMSD_FIND(wpt);
       writebuff(buff, fmp->printfc, GMSD_GET(country, ""));
     }
     break;
     case XT_STATE: {
-      garmin_fs_t *gmsd = GMSD_FIND(wpt);
+      garmin_fs_t* gmsd = GMSD_FIND(wpt);
       writebuff(buff, fmp->printfc, GMSD_GET(state, ""));
     }
     break;
     case XT_CITY: {
-      garmin_fs_t *gmsd = GMSD_FIND(wpt);
+      garmin_fs_t* gmsd = GMSD_FIND(wpt);
       writebuff(buff, fmp->printfc, GMSD_GET(city, ""));
     }
     break;
     case XT_POSTAL_CODE: {
-      garmin_fs_t *gmsd = GMSD_FIND(wpt);
+      garmin_fs_t* gmsd = GMSD_FIND(wpt);
       writebuff(buff, fmp->printfc, GMSD_GET(postal_code, ""));
     }
     break;
     case XT_STREET_ADDR: {
-      garmin_fs_t *gmsd = GMSD_FIND(wpt);
+      garmin_fs_t* gmsd = GMSD_FIND(wpt);
       writebuff(buff, fmp->printfc, GMSD_GET(addr, ""));
     }
     break;
     case XT_PHONE_NR: {
-      garmin_fs_t *gmsd = GMSD_FIND(wpt);
+      garmin_fs_t* gmsd = GMSD_FIND(wpt);
       writebuff(buff, fmp->printfc, GMSD_GET(phone_nr, ""));
     }
     break;
     case XT_FACILITY: {
-      garmin_fs_t *gmsd = GMSD_FIND(wpt);
+      garmin_fs_t* gmsd = GMSD_FIND(wpt);
       writebuff(buff, fmp->printfc, GMSD_GET(facility, ""));
     }
     break;
@@ -2087,7 +2087,7 @@ next:
 }
 
 static void
-xcsv_noop(const route_head *wp)
+xcsv_noop(const route_head* wp)
 {
   /* no-op */
 }
@@ -2099,8 +2099,8 @@ xcsv_noop(const route_head *wp)
 void
 xcsv_data_write(void)
 {
-  queue *elem, *tmp;
-  ogue_t *ogp;
+  queue* elem, *tmp;
+  ogue_t* ogp;
   time_t time;
   struct tm tm;
   char tbuf[32];
@@ -2117,8 +2117,8 @@ xcsv_data_write(void)
 
   /* output prologue lines, if any. */
   QUEUE_FOR_EACH(&xcsv_file.prologue, elem, tmp) {
-    char *cout, *ctmp;
-    ogp = (ogue_t *) elem;
+    char* cout, *ctmp;
+    ogp = (ogue_t*) elem;
 
     cout = xstrdup((ogp->val) ? ogp->val : "");
 
@@ -2170,7 +2170,7 @@ xcsv_data_write(void)
 
   /* output epilogue lines, if any. */
   QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {
-    ogp = (ogue_t *) elem;
+    ogp = (ogue_t*) elem;
     gbfprintf(xcsv_file.xcsvfp, "%s%s", ogp->val, xcsv_file.record_delimiter);
   }
 }

@@ -31,32 +31,32 @@
 #define SOON 1
 
 #define MYNAME "GARMIN"
-static const char *portname;
+static const char* portname;
 static short_handle mkshort_handle;
-static GPS_PWay *tx_waylist;
-static GPS_PWay *tx_routelist;
-static GPS_PWay *cur_tx_routelist_entry;
-static GPS_PTrack *tx_tracklist;
-static GPS_PTrack *cur_tx_tracklist_entry;
+static GPS_PWay* tx_waylist;
+static GPS_PWay* tx_routelist;
+static GPS_PWay* cur_tx_routelist_entry;
+static GPS_PTrack* tx_tracklist;
+static GPS_PTrack* cur_tx_tracklist_entry;
 static int my_track_count = 0;
-static char *getposn = NULL;
-static char *poweroff = NULL;
-static char *eraset = NULL;
-static char *resettime = NULL;
-static char *snlen = NULL;
-static char *snwhiteopt = NULL;
-static char *deficon = NULL;
-static char *category = NULL;
-static char *categorybitsopt = NULL;
+static char* getposn = NULL;
+static char* poweroff = NULL;
+static char* eraset = NULL;
+static char* resettime = NULL;
+static char* snlen = NULL;
+static char* snwhiteopt = NULL;
+static char* deficon = NULL;
+static char* category = NULL;
+static char* categorybitsopt = NULL;
 static int categorybits;
 static int receiver_must_upper = 1;
 
-static ff_vecs_t *gpx_vec;
+static ff_vecs_t* gpx_vec;
 
 #define MILITANT_VALID_WAYPT_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
 /* Technically, even this is a little loose as spaces arent allowed */
-static const char *valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " ";
+static const char* valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " ";
 
 static
 arglist_t garmin_args[] = {
@@ -96,16 +96,16 @@ arglist_t garmin_args[] = {
   ARG_TERMINATOR
 };
 
-static const char * d103_symbol_from_icon_number(unsigned int n);
-static int d103_icon_number_from_symbol(const char *s);
+static const char* d103_symbol_from_icon_number(unsigned int n);
+static int d103_icon_number_from_symbol(const char* s);
 
 
 static void
-rw_init(const char *fname)
+rw_init(const char* fname)
 {
   int receiver_short_length;
   int receiver_must_upper = 1;
-  const char * receiver_charset = NULL;
+  const char* receiver_charset = NULL;
 
   if (!mkshort_handle) {
     mkshort_handle = mkshort_new_handle();
@@ -298,11 +298,11 @@ rw_init(const char *fname)
 }
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   if (setjmp(gdx_jmp_buf)) {
-    char *vec_opts = NULL;
-    const gdx_info *gi = gdx_get_info();
+    char* vec_opts = NULL;
+    const gdx_info* gi = gdx_get_info();
     gpx_vec = find_vec("gpx", &vec_opts);
     gpx_vec->rd_init(gi->from_device.canon);
   } else {
@@ -320,7 +320,7 @@ rw_deinit(void)
 }
 
 static int
-waypt_read_cb(int total_ct, GPS_PWay *way)
+waypt_read_cb(int total_ct, GPS_PWay* way)
 {
   static int i;
 
@@ -335,10 +335,10 @@ static void
 waypt_read(void)
 {
   int i,n;
-  GPS_PWay *way = NULL;
+  GPS_PWay* way = NULL;
 
   if (getposn) {
-    waypoint *wpt = waypt_new();
+    waypoint* wpt = waypt_new();
     wpt->latitude = gps_save_lat;
     wpt->longitude = gps_save_lon;
     wpt->shortname = xstrdup("Position");
@@ -354,7 +354,7 @@ waypt_read(void)
   }
 
   for (i = 0; i < n; i++) {
-    waypoint *wpt_tmp = waypt_new();
+    waypoint* wpt_tmp = waypt_new();
 
     wpt_tmp->shortname = xstrdup(way[i]->ident);
     wpt_tmp->description = xstrdup(way[i]->cmnt);
@@ -409,7 +409,7 @@ static int lap_read_nop_cb(int n, struct GPS_SWay** dp)
 
 // returns 1 if the waypoint's start_time can be found
 // in the laps array, 0 otherwise
-unsigned int checkWayPointIsAtSplit(waypoint *wpt, GPS_PLap *laps, int nlaps)
+unsigned int checkWayPointIsAtSplit(waypoint* wpt, GPS_PLap* laps, int nlaps)
 {
   int result = 0;
 
@@ -441,11 +441,11 @@ void
 track_read(void)
 {
   int32 ntracks;
-  GPS_PTrack *array;
-  route_head *trk_head = NULL;
+  GPS_PTrack* array;
+  route_head* trk_head = NULL;
   int trk_num = 0;
   int i;
-  char *trk_name = "";
+  char* trk_name = "";
   GPS_PLap* laps = NULL;
   int nlaps = 0;
   int next_is_new_trkseg = 0;
@@ -462,7 +462,7 @@ track_read(void)
   }
 
   for (i = 0; i < ntracks; i++) {
-    waypoint *wpt;
+    waypoint* wpt;
 
     /*
      * This is probably always in slot zero, but the Garmin
@@ -530,12 +530,12 @@ route_read(void)
 {
   int32 nroutepts;
   int i;
-  GPS_PWay *array;
+  GPS_PWay* array;
   /* TODO: Fixes warning but is it right?
    * RJL:  No, the warning isn't right; GCC's flow analysis is broken.
    * still, it's good taste...
    */
-  route_head *rte_head = NULL;
+  route_head* rte_head = NULL;
 
   nroutepts = GPS_Command_Get_Route(portname, &array);
 
@@ -543,7 +543,7 @@ route_read(void)
 #if 1
   for (i = 0; i < nroutepts; i++) {
     if (array[i]->isrte) {
-      char *csrc = NULL;
+      char* csrc = NULL;
       /* What a horrible API has libjeeps for making this
        * my problem.
        */
@@ -566,7 +566,7 @@ route_read(void)
       if (array[i]->islink)  {
         continue;
       } else {
-        waypoint *wpt_tmp = waypt_new();
+        waypoint* wpt_tmp = waypt_new();
         wpt_tmp->latitude = array[i]->lat;
         wpt_tmp->longitude = array[i]->lon;
         wpt_tmp->shortname = array[i]->ident;
@@ -586,8 +586,8 @@ void
 lap_read_as_track(void)
 {
   int32 ntracks;
-  GPS_PLap *array;
-  route_head *trk_head = NULL;
+  GPS_PLap* array;
+  route_head* trk_head = NULL;
   int trk_num = 0;
   int index;
   int i;
@@ -597,7 +597,7 @@ lap_read_as_track(void)
     return;
   }
   for (i = 0; i < ntracks; i++) {
-    waypoint *wpt;
+    waypoint* wpt;
     if (array[i]->index == -1) {
       index=i;
     } else {
@@ -611,7 +611,7 @@ lap_read_as_track(void)
         /* D10xx - no real separator, use begin/end time to guess */
         (abs(array[i-1]->start_time + array[i]->total_time/100-array[i]->start_time) > 2)
        ) {
-      static struct tm * stmp;
+      static struct tm* stmp;
       stmp = gmtime(&array[i]->start_time);
       trk_head = route_head_alloc();
       /*For D906, we would like to use the track_index in the last packet instead...*/
@@ -677,7 +677,7 @@ lap_read_as_track(void)
  * to the data type we use throughout.   Yes, we do lose some data that way.
  */
 static void
-pvt2wpt(GPS_PPvt_Data pvt, waypoint *wpt)
+pvt2wpt(GPS_PPvt_Data pvt, waypoint* wpt)
 {
   double wptime, wptimes;
 
@@ -741,19 +741,19 @@ pvt2wpt(GPS_PPvt_Data pvt, waypoint *wpt)
   }
 }
 
-static gpsdevh *pvt_fd;
+static gpsdevh* pvt_fd;
 
 static void
-pvt_init(const char *fname)
+pvt_init(const char* fname)
 {
   rw_init(fname);
   GPS_Command_Pvt_On(fname, &pvt_fd);
 }
 
-static waypoint *
-pvt_read(posn_status *posn_status)
+static waypoint*
+pvt_read(posn_status* posn_status)
 {
-  waypoint *wpt = waypt_new();
+  waypoint* wpt = waypt_new();
   GPS_PPvt_Data pvt = GPS_Pvt_New();
 
   if (GPS_Command_Pvt_Get(&pvt_fd, &pvt)) {
@@ -839,7 +839,7 @@ sane_GPS_Way_New(void)
 }
 
 static int
-waypt_write_cb(GPS_PWay *way)
+waypt_write_cb(GPS_PWay* way)
 {
   static int i;
   int n = waypt_count();
@@ -855,8 +855,8 @@ waypt_write_cb(GPS_PWay *way)
  * If we're using smart names, try to put the cache info in the
  * description.
  */
-const char *
-get_gc_info(waypoint *wpt)
+const char*
+get_gc_info(waypoint* wpt)
 {
   if (global_opts.smart_names) {
     if (wpt->gc_data->type == gt_virtual) {
@@ -889,7 +889,7 @@ waypoint_prepare(void)
 {
   int i;
   int n = waypt_count();
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   extern queue waypt_head;
   int icon;
 
@@ -902,12 +902,12 @@ waypoint_prepare(void)
   i = 0;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypoint *wpt;
-    char *ident;
-    char *src = NULL;
+    waypoint* wpt;
+    char* ident;
+    char* src = NULL;
     char obuf[256];
 
-    wpt = (waypoint *) elem;
+    wpt = (waypoint*) elem;
 
     if (wpt->description) {
       src = wpt->description;
@@ -1025,7 +1025,7 @@ waypoint_write(void)
 }
 
 static void
-route_hdr_pr(const route_head *rte)
+route_hdr_pr(const route_head* rte)
 {
   (*cur_tx_routelist_entry)->rte_num = rte->rte_num;
   (*cur_tx_routelist_entry)->isrte = 1;
@@ -1036,10 +1036,10 @@ route_hdr_pr(const route_head *rte)
 }
 
 static void
-route_waypt_pr(const waypoint *wpt)
+route_waypt_pr(const waypoint* wpt)
 {
   GPS_PWay rte = *cur_tx_routelist_entry;
-  char *s, *d;
+  char* s, *d;
 
   /*
    * As stupid as this is, libjeeps seems to want an empty
@@ -1094,7 +1094,7 @@ route_waypt_pr(const waypoint *wpt)
 }
 
 static void
-route_noop(const route_head *wp)
+route_noop(const route_head* wp)
 {
 }
 
@@ -1116,7 +1116,7 @@ route_write(void)
 }
 
 static void
-track_hdr_pr(const route_head *trk_head)
+track_hdr_pr(const route_head* trk_head)
 {
   (*cur_tx_tracklist_entry)->ishdr = gpsTrue;
   if (trk_head->rte_name) {
@@ -1130,7 +1130,7 @@ track_hdr_pr(const route_head *trk_head)
 }
 
 static void
-track_waypt_pr(const waypoint *wpt)
+track_waypt_pr(const waypoint* wpt)
 {
   (*cur_tx_tracklist_entry)->lat = wpt->latitude;
   (*cur_tx_tracklist_entry)->lon = wpt->longitude;
@@ -1243,7 +1243,7 @@ ff_vecs_t garmin_vecs = {
   { pvt_init, pvt_read, rw_deinit, NULL, NULL, NULL }
 };
 
-static const char *d103_icons[16] = {
+static const char* d103_icons[16] = {
   "dot",
   "house",
   "gas",
@@ -1262,7 +1262,7 @@ static const char *d103_icons[16] = {
   "back-track"
 };
 
-static const char *
+static const char*
 d103_symbol_from_icon_number(unsigned int n)
 {
   if (n  <= 15) {
@@ -1273,7 +1273,7 @@ d103_symbol_from_icon_number(unsigned int n)
 }
 
 static int
-d103_icon_number_from_symbol(const char *s)
+d103_icon_number_from_symbol(const char* s)
 {
   unsigned int i;
 

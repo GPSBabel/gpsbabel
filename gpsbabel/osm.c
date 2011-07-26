@@ -24,7 +24,7 @@
 #include "avltree.h"
 #include "xmlgeneric.h"
 
-static char *opt_tag, *opt_tagnd, *created_by;
+static char* opt_tag, *opt_tagnd, *created_by;
 
 static arglist_t osm_args[] = {
   { "tag", &opt_tag, 	"Write additional way tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
@@ -35,19 +35,19 @@ static arglist_t osm_args[] = {
 
 #define MYNAME "osm"
 
-static avltree_t *waypoints;	/* AVL tree */
+static avltree_t* waypoints;	/* AVL tree */
 
-static avltree_t *keys = NULL;
-static avltree_t *values = NULL;
-static avltree_t *icons = NULL;
+static avltree_t* keys = NULL;
+static avltree_t* values = NULL;
+static avltree_t* icons = NULL;
 
-static gbfile *fout;
+static gbfile* fout;
 static int node_id;
 static int skip_rte;
 
 #if HAVE_LIBEXPAT
-static route_head *rte;
-static waypoint *wpt;
+static route_head* rte;
+static waypoint* wpt;
 static int wpt_loaded, rte_loaded;
 
 static xg_callback	osm_node, osm_node_tag, osm_node_end;
@@ -62,11 +62,11 @@ xg_tag_mapping osm_map[] = {
   { osm_way_nd,	cb_start,	"/osm/way/nd" },
   { osm_way_tag,	cb_start,	"/osm/way/tag" },
   { osm_way_end,	cb_end,		"/osm/way" },
-  { NULL,		0,		NULL }
+  { NULL,	(xg_cb_type)0,		NULL }
 };
 #endif // HAVE_LIBEXPAT
 
-static const char *osm_features[] = {
+static const char* osm_features[] = {
   "- dummy -",	/*  0 */
   "aeroway",	/*  1 */
   "amenity",	/*  2 */
@@ -92,8 +92,8 @@ static const char *osm_features[] = {
 
 typedef struct osm_icon_mapping_s {
   const int key;
-  const char *value;
-  const char *icon;
+  const char* value;
+  const char* icon;
 } osm_icon_mapping_t;
 
 
@@ -405,7 +405,7 @@ static osm_icon_mapping_t osm_icon_mappings[] = {
 #if ! HAVE_LIBEXPAT
 
 void
-osm_rd_init(const char *fname)
+osm_rd_init(const char* fname)
 {
   fatal(MYNAME ": This build excluded \" MYNAME \" support because expat was not installed.\n");
 }
@@ -440,16 +440,16 @@ osm_features_init(void)
 
     buff[0] = osm_icon_mappings[i].key;
     strncpy(&buff[1], osm_icon_mappings[i].value, sizeof(buff) - 1);
-    avltree_insert(values, buff, (const void *)&osm_icon_mappings[i]);
+    avltree_insert(values, buff, (const void*)&osm_icon_mappings[i]);
   }
 }
 
 
 static char
-osm_feature_ikey(const char *key)
+osm_feature_ikey(const char* key)
 {
   int result;
-  const void *p;
+  const void* p;
 
   if (avltree_find(keys, key, &p)) {
     result = gb_ptr2int(p);
@@ -461,17 +461,17 @@ osm_feature_ikey(const char *key)
 }
 
 
-static char *
-osm_feature_symbol(const int ikey, const char *value)
+static char*
+osm_feature_symbol(const int ikey, const char* value)
 {
-  char *result;
+  char* result;
   char buff[128];
-  osm_icon_mapping_t *data;
+  osm_icon_mapping_t* data;
 
   buff[0] = ikey;
   strncpy(&buff[1], value, sizeof(buff) - 1);
 
-  if (avltree_find(values, buff, (void *)&data)) {
+  if (avltree_find(values, buff, (const void**)&data)) {
     result = xstrdup(data->icon);
   } else {
     xasprintf(&result, "%s:%s", osm_features[ikey], value);
@@ -481,19 +481,19 @@ osm_feature_symbol(const int ikey, const char *value)
 }
 
 
-static char *
-osm_strip_html(const char *str)
+static char*
+osm_strip_html(const char* str)
 {
   utf_string utf;
   utf.is_html = 1;
-  utf.utfstring = (char *)str;
+  utf.utfstring = (char*)str;
 
   return strip_html(&utf);	// util.c
 }
 
 
 static void
-osm_node_end(const char *args, const char **unused)
+osm_node_end(const char* args, const char** unused)
 {
   if (wpt) {
     if (wpt->wpt_flags.fmt_use) {
@@ -507,16 +507,16 @@ osm_node_end(const char *args, const char **unused)
 
 
 static void
-osm_node(const char *args, const char **attrv)
+osm_node(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
+  const char** avp = &attrv[0];
 
   wpt = waypt_new();
 
   while (*avp) {
     if (strcmp(avp[0], "id") == 0) {
       xasprintf(&wpt->description, "osm-id %s", avp[1]);
-      if (! avltree_insert(waypoints, avp[1], (void *)wpt)) {
+      if (! avltree_insert(waypoints, avp[1], (void*)wpt)) {
         warning(MYNAME ": Duplicate osm-id %s!\n", avp[1]);
       } else {
         wpt->wpt_flags.fmt_use = 1;
@@ -536,11 +536,11 @@ osm_node(const char *args, const char **attrv)
 
 
 static void
-osm_node_tag(const char *args, const char **attrv)
+osm_node_tag(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
-  const char *key = "", *value = "";
-  char *str;
+  const char** avp = &attrv[0];
+  const char* key = "", *value = "";
+  char* str;
   signed char ikey;
 
   while (*avp) {
@@ -568,7 +568,7 @@ osm_node_tag(const char *args, const char **attrv)
     wpt->wpt_flags.icon_descr_is_dynamic = 1;
   } else if (strcmp(key, "note") == 0) {
     if (wpt->notes) {
-      char *tmp;
+      char* tmp;
       xasprintf(&tmp, "%s; %s", wpt->notes, str);
       xfree(wpt->notes);
       wpt->notes = tmp;
@@ -602,9 +602,9 @@ osm_node_tag(const char *args, const char **attrv)
 
 
 static void
-osm_way(const char *args, const char **attrv)
+osm_way(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
+  const char** avp = &attrv[0];
 
   rte = route_head_alloc();
 
@@ -617,14 +617,14 @@ osm_way(const char *args, const char **attrv)
 }
 
 static void
-osm_way_nd(const char *args, const char **attrv)
+osm_way_nd(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
+  const char** avp = &attrv[0];
 
   while (*avp) {
     if (strcmp(avp[0], "ref") == 0) {
-      waypoint *tmp;
-      if (avltree_find(waypoints, avp[1], (void *)&tmp)) {
+      waypoint* tmp;
+      if (avltree_find(waypoints, avp[1], (const void**)&tmp)) {
         tmp = waypt_dupe(tmp);
         route_add_wpt(rte, tmp);
       } else {
@@ -636,11 +636,11 @@ osm_way_nd(const char *args, const char **attrv)
 }
 
 static void
-osm_way_tag(const char *args, const char **attrv)
+osm_way_tag(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
-  const char *key = "", *value = "";
-  char *str;
+  const char** avp = &attrv[0];
+  const char* key = "", *value = "";
+  char* str;
 
   while (*avp) {
     if (strcmp(avp[0], "k") == 0) {
@@ -668,7 +668,7 @@ osm_way_tag(const char *args, const char **attrv)
 }
 
 static void
-osm_way_end(const char *args, const char **unused)
+osm_way_end(const char* args, const char** unused)
 {
   if (rte) {
     route_add_head(rte);
@@ -677,7 +677,7 @@ osm_way_end(const char *args, const char **unused)
 }
 
 static void
-osm_rd_init(const char *fname)
+osm_rd_init(const char* fname)
 {
   wpt = NULL;
   rte = NULL;
@@ -723,34 +723,34 @@ osm_init_icons(void)
   icons = avltree_init(AVLTREE_STATIC_KEYS, MYNAME);
 
   for (i = 0; osm_icon_mappings[i].value; i++) {
-    avltree_insert(icons, osm_icon_mappings[i].icon, (const void *)&osm_icon_mappings[i]);
+    avltree_insert(icons, osm_icon_mappings[i].icon, (const void*)&osm_icon_mappings[i]);
   }
 }
 
 static void
-osm_write_tag(const char *key, const char *value)
+osm_write_tag(const char* key, const char* value)
 {
   if (value && *value) {
-    char *str = xml_entitize(value);
+    char* str = xml_entitize(value);
     gbfprintf(fout, "    <tag k='%s' v='%s'/>\n", key, str);
     xfree(str);
   }
 }
 
 static void
-osm_disp_feature(const waypoint *wpt)
+osm_disp_feature(const waypoint* wpt)
 {
-  osm_icon_mapping_t *map;
+  osm_icon_mapping_t* map;
 
-  if (avltree_find(icons, wpt->icon_descr, (void *) &map)) {
+  if (avltree_find(icons, wpt->icon_descr, (const void**) &map)) {
     osm_write_tag(osm_features[map->key], map->value);
   }
 }
 
 static void
-osm_write_opt_tag(const char *atag)
+osm_write_opt_tag(const char* atag)
 {
-  char *tag, *cin, *ce;
+  char* tag, *cin, *ce;
 
   if (!atag) {
     return;
@@ -760,7 +760,7 @@ osm_write_opt_tag(const char *atag)
   ce = cin + strlen(cin);
 
   while (cin < ce) {
-    char *sc, *dp;
+    char* sc, *dp;
 
     if ((sc = strchr(cin, ';'))) {
       *sc = '\0';
@@ -777,29 +777,29 @@ osm_write_opt_tag(const char *atag)
 }
 
 static void
-osm_release_ids(const waypoint *wpt)
+osm_release_ids(const waypoint* wpt)
 {
   if (wpt && wpt->extra_data) {
-    waypoint *tmp = (waypoint *)wpt;
+    waypoint* tmp = (waypoint*)wpt;
     xfree(tmp->extra_data);
     tmp->extra_data = NULL;
   }
 }
 
 static void
-osm_waypt_disp(const waypoint *wpt)
+osm_waypt_disp(const waypoint* wpt)
 {
-  char *buff;
+  char* buff;
 
   xasprintf(&buff, "%s\01%f\01%f", (wpt->shortname) ? wpt->shortname : "",
             wpt->latitude, wpt->longitude);
 
-  if (avltree_insert(waypoints, buff, (const void *) wpt)) {
-    int *id;
+  if (avltree_insert(waypoints, buff, (const void*) wpt)) {
+    int* id;
 
-    id = xmalloc(sizeof(*id));
+    id = (int*) xmalloc(sizeof(*id));
     *id = --node_id;
-    ((waypoint *)(wpt))->extra_data = id;
+    ((waypoint*)(wpt))->extra_data = id;
 
     gbfprintf(fout, "  <node id='%d' visible='true' lat='%0.7f' lon='%0.7f'", *id, wpt->latitude, wpt->longitude);
     if (wpt->creation_time) {
@@ -867,7 +867,7 @@ osm_waypt_disp(const waypoint *wpt)
 }
 
 static void
-osm_rte_disp_head(const route_head *rte)
+osm_rte_disp_head(const route_head* rte)
 {
   skip_rte = (rte->rte_waypt_ct <= 0);
 
@@ -879,10 +879,10 @@ osm_rte_disp_head(const route_head *rte)
 }
 
 static void
-osm_rtept_disp(const waypoint *wpt_ref)
+osm_rtept_disp(const waypoint* wpt_ref)
 {
-  char *buff;
-  waypoint *wpt;
+  char* buff;
+  waypoint* wpt;
 
   if (skip_rte) {
     return;
@@ -891,8 +891,8 @@ osm_rtept_disp(const waypoint *wpt_ref)
   xasprintf(&buff, "%s\01%f\01%f", (wpt_ref->shortname) ? wpt_ref->shortname : "",
             wpt_ref->latitude, wpt_ref->longitude);
 
-  if (avltree_find(waypoints, buff, (void *) &wpt)) {
-    int *id = wpt->extra_data;
+  if (avltree_find(waypoints, buff, (const void**) &wpt)) {
+    int* id = (int*) wpt->extra_data;
     gbfprintf(fout, "    <nd ref='%d'/>\n", *id);
   }
 
@@ -900,7 +900,7 @@ osm_rtept_disp(const waypoint *wpt_ref)
 }
 
 static void
-osm_rte_disp_trail(const route_head *rte)
+osm_rte_disp_trail(const route_head* rte)
 {
   if (skip_rte) {
     return;
@@ -928,7 +928,7 @@ osm_rte_disp_trail(const route_head *rte)
 /*-----------------------------------------------------------------------------*/
 
 static void
-osm_wr_init(const char *fname)
+osm_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 
@@ -988,9 +988,9 @@ osm_exit(void)
 ff_vecs_t osm_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write	/* waypoints */,
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* waypoints */,
     ff_cap_write 			/* tracks */,
-    ff_cap_read | ff_cap_write 	/* routes */,
+    (ff_cap)(ff_cap_read | ff_cap_write) 	/* routes */,
   },
   osm_rd_init,
   osm_wr_init,

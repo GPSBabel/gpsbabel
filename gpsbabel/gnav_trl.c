@@ -37,20 +37,20 @@ typedef struct gnav_trl_s {
   gbuint32 alt;
 } gnav_trl_t;
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
 static void
-gnav_trl_rd_init(const char *fname)
+gnav_trl_rd_init(const char* fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
 }
 
 static void
-gnav_trl_rw_init(const char *fname)
+gnav_trl_rw_init(const char* fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
 }
@@ -68,19 +68,19 @@ gnav_trl_rw_deinit(void)
 }
 
 static double
-read_altitude(void *ptr)
+read_altitude(void* ptr)
 {
-  unsigned char *i = (unsigned char *) ptr;
+  unsigned char* i = (unsigned char*) ptr;
   char buf[sizeof(float)];
   le_write32(&buf, i[2] << 24 | i[1] << 16 | i[0] <<8 | i[3]);
   return le_read_float(&buf);
 }
 
 static void
-write_altitude(void *ptr, const float alt)
+write_altitude(void* ptr, const float alt)
 {
   char buf[sizeof(float)];
-  unsigned char *i = (unsigned char *) &buf;
+  unsigned char* i = (unsigned char*) &buf;
   le_write_float(&buf, alt);
   le_write32(ptr, i[0] << 24 | i[3] << 16 | i[2] << 8 | i[1]);
 }
@@ -88,11 +88,11 @@ write_altitude(void *ptr, const float alt)
 static void
 gnav_trl_read(void)
 {
-  route_head *trk = NULL;
+  route_head* trk = NULL;
 
   while (! gbfeof(fin)) {
     gnav_trl_t rec;
-    waypoint *wpt;
+    waypoint* wpt;
 
     if (gbfread(&rec, sizeof(rec), 1, fin) != 1) {
       fatal(MYNAME ": Unexpected EOF (end of file)!\n");
@@ -114,7 +114,7 @@ gnav_trl_read(void)
 }
 
 static void
-gnav_trl_write_trkpt(const waypoint *wpt)
+gnav_trl_write_trkpt(const waypoint* wpt)
 {
   gnav_trl_t rec;
 
@@ -143,7 +143,7 @@ ff_vecs_t gnav_trl_vecs = {
   ff_type_file,
   {
     ff_cap_none			/* waypoints */,
-    ff_cap_read | ff_cap_write	/* tracks */,
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* tracks */,
     ff_cap_none			/* routes */
   },
   gnav_trl_rd_init,

@@ -36,10 +36,10 @@
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Off(const char *port)
+int32 GPS_Command_Off(const char* port)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
 
@@ -90,7 +90,7 @@ int32 GPS_Command_Off(const char *port)
 ** @return [int32] number of waypoint entries
 ************************************************************************/
 
-int32 GPS_Command_Get_Waypoint(const char *port, GPS_PWay **way, pcb_fn cb)
+int32 GPS_Command_Get_Waypoint(const char* port, GPS_PWay** way, pcb_fn cb)
 {
   int32 ret=0;
 
@@ -132,7 +132,7 @@ int32 GPS_Command_Get_Waypoint(const char *port, GPS_PWay **way, pcb_fn cb)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Send_Waypoint(const char *port, GPS_PWay *way, int32 n, int (*cb)(struct GPS_SWay **))
+int32 GPS_Command_Send_Waypoint(const char* port, GPS_PWay* way, int32 n, int (*cb)(struct GPS_SWay**))
 {
   int32 ret=0;
 
@@ -159,7 +159,7 @@ int32 GPS_Command_Send_Waypoint(const char *port, GPS_PWay *way, int32 n, int (*
 ** @return [int32] number of waypoint entries
 ************************************************************************/
 
-int32 GPS_Command_Get_Route(const char *port, GPS_PWay **way)
+int32 GPS_Command_Get_Route(const char* port, GPS_PWay** way)
 {
   int32 ret=0;
 
@@ -191,7 +191,7 @@ int32 GPS_Command_Get_Route(const char *port, GPS_PWay **way)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Send_Route(const char *port, GPS_PWay *way, int32 n)
+int32 GPS_Command_Send_Route(const char* port, GPS_PWay* way, int32 n)
 {
   int32 ret=0;
 
@@ -222,7 +222,7 @@ int32 GPS_Command_Send_Route(const char *port, GPS_PWay *way, int32 n)
 ** @return [int32] number of track entries
 ************************************************************************/
 
-int32 GPS_Command_Get_Track(const char *port, GPS_PTrack **trk, pcb_fn cb)
+int32 GPS_Command_Get_Track(const char* port, GPS_PTrack** trk, pcb_fn cb)
 {
   int32 ret=0;
 
@@ -259,7 +259,7 @@ int32 GPS_Command_Get_Track(const char *port, GPS_PTrack **trk, pcb_fn cb)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Send_Track(const char *port, GPS_PTrack *trk, int32 n, int eraset)
+int32 GPS_Command_Send_Track(const char* port, GPS_PTrack* trk, int32 n, int eraset)
 {
   int32 ret=0;
 
@@ -299,7 +299,7 @@ int32 GPS_Command_Send_Track(const char *port, GPS_PTrack *trk, int32 n, int era
 ** @return [int32] number of waypoint entries
 ************************************************************************/
 
-int32 GPS_Command_Get_Proximity(const char *port, GPS_PWay **way)
+int32 GPS_Command_Get_Proximity(const char* port, GPS_PWay** way)
 {
   int32 ret=0;
 
@@ -332,7 +332,7 @@ int32 GPS_Command_Get_Proximity(const char *port, GPS_PWay **way)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Send_Proximity(const char *port, GPS_PWay *way, int32 n)
+int32 GPS_Command_Send_Proximity(const char* port, GPS_PWay* way, int32 n)
 {
   int32 ret=0;
 
@@ -366,7 +366,7 @@ int32 GPS_Command_Send_Proximity(const char *port, GPS_PWay *way, int32 n)
 ** @return [int32] number of almanac entries
 ************************************************************************/
 
-int32 GPS_Command_Get_Almanac(const char *port, GPS_PAlmanac **alm)
+int32 GPS_Command_Get_Almanac(const char* port, GPS_PAlmanac** alm)
 {
   int32 ret=0;
 
@@ -399,7 +399,7 @@ int32 GPS_Command_Get_Almanac(const char *port, GPS_PAlmanac **alm)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Send_Almanac(const char *port, GPS_PAlmanac *alm, int32 n)
+int32 GPS_Command_Send_Almanac(const char* port, GPS_PAlmanac* alm, int32 n)
 {
   int32 ret=0;
 
@@ -430,7 +430,7 @@ int32 GPS_Command_Send_Almanac(const char *port, GPS_PAlmanac *alm, int32 n)
 ** @return [time_t] unix-style time
 ************************************************************************/
 
-time_t GPS_Command_Get_Time(const char *port)
+time_t GPS_Command_Get_Time(const char* port)
 {
   time_t ret=0;
 
@@ -464,7 +464,7 @@ time_t GPS_Command_Get_Time(const char *port)
 ** @return [int32] true if OK
 ************************************************************************/
 
-int32 GPS_Command_Send_Time(const char *port, time_t Time)
+int32 GPS_Command_Send_Time(const char* port, time_t Time)
 {
   time_t ret=0;
 
@@ -494,7 +494,7 @@ int32 GPS_Command_Send_Time(const char *port, time_t Time)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Get_Position(const char *port, double *lat, double *lon)
+int32 GPS_Command_Get_Position(const char* port, double* lat, double* lon)
 {
   int32 ret=0;
 
@@ -530,7 +530,7 @@ int32 GPS_Command_Get_Position(const char *port, double *lat, double *lon)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Send_Position(const char *port, double lat, double lon)
+int32 GPS_Command_Send_Position(const char* port, double lat, double lon)
 {
   int32 ret=0;
 
@@ -557,7 +557,7 @@ int32 GPS_Command_Send_Position(const char *port, double lat, double lon)
 ** @return [int32] success if supported and GPS starts sending
 ************************************************************************/
 
-int32 GPS_Command_Pvt_On(const char *port, gpsdevh **fd)
+int32 GPS_Command_Pvt_On(const char* port, gpsdevh** fd)
 {
   int32 ret=0;
 
@@ -592,7 +592,7 @@ int32 GPS_Command_Pvt_On(const char *port, gpsdevh **fd)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Pvt_Off(const char *port, gpsdevh **fd)
+int32 GPS_Command_Pvt_Off(const char* port, gpsdevh** fd)
 {
   int32 ret=0;
 
@@ -625,7 +625,7 @@ int32 GPS_Command_Pvt_Off(const char *port, gpsdevh **fd)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Pvt_Get(gpsdevh **fd, GPS_PPvt_Data *pvt)
+int32 GPS_Command_Pvt_Get(gpsdevh** fd, GPS_PPvt_Data* pvt)
 {
   int32 ret=0;
 
@@ -657,7 +657,7 @@ int32 GPS_Command_Pvt_Get(gpsdevh **fd, GPS_PPvt_Data *pvt)
 ** @return [int32] number of lap entries
 ************************************************************************/
 
-int32 GPS_Command_Get_Lap(const char *port, GPS_PLap **lap, pcb_fn cb)
+int32 GPS_Command_Get_Lap(const char* port, GPS_PLap** lap, pcb_fn cb)
 {
   int32 ret=0;
 
@@ -695,14 +695,14 @@ int32 GPS_Command_Get_Lap(const char *port, GPS_PLap **lap, pcb_fn cb)
 ** @return [int32] number of course entries
 ************************************************************************/
 int32  GPS_Command_Get_Course
-(const char *port,
- GPS_PCourse **crs,
- GPS_PCourse_Lap **clp,
- GPS_PTrack **trk,
- GPS_PCourse_Point **cpt,
- int32 *n_clp,
- int32 *n_trk,
- int32 *n_cpt,
+(const char* port,
+ GPS_PCourse** crs,
+ GPS_PCourse_Lap** clp,
+ GPS_PTrack** trk,
+ GPS_PCourse_Point** cpt,
+ int32* n_clp,
+ int32* n_trk,
+ int32* n_cpt,
  pcb_fn cb)
 {
   int32 ret=0;
@@ -775,17 +775,17 @@ int32  GPS_Command_Get_Course
 ** @return [int32] Success
 ************************************************************************/
 int32  GPS_Command_Send_Course
-(const char *port,
- GPS_PCourse *crs,
- GPS_PCourse_Lap *clp,
- GPS_PTrack *trk,
- GPS_PCourse_Point *cpt,
+(const char* port,
+ GPS_PCourse* crs,
+ GPS_PCourse_Lap* clp,
+ GPS_PTrack* trk,
+ GPS_PCourse_Point* cpt,
  int32 n_crs,
  int32 n_clp,
  int32 n_trk,
  int32 n_cpt)
 {
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_OCourse_Limits limits;
   int32 ret;
   int32 ret_crs=0;
@@ -891,7 +891,7 @@ int32  GPS_Command_Send_Course
 **
 ** @return [uint32] course index
 ************************************************************************/
-static uint32 Unique_Course_Index(GPS_PCourse *crs, int n_crs)
+static uint32 Unique_Course_Index(GPS_PCourse* crs, int n_crs)
 {
   uint32 idx;
   int i;
@@ -918,7 +918,7 @@ static uint32 Unique_Course_Index(GPS_PCourse *crs, int n_crs)
 **
 ** @return [uint32] track index
 ************************************************************************/
-static uint32 Unique_Track_Index(GPS_PCourse *crs, int n_crs)
+static uint32 Unique_Track_Index(GPS_PCourse* crs, int n_crs)
 {
   uint32 idx;
   int i;
@@ -951,7 +951,7 @@ static uint32 Unique_Track_Index(GPS_PCourse *crs, int n_crs)
 ** @return [void]
 ************************************************************************/
 static void
-Calculate_Course_Lap_Data(GPS_PCourse_Lap clp, GPS_PTrack *ctk,
+Calculate_Course_Lap_Data(GPS_PCourse_Lap clp, GPS_PTrack* ctk,
                           int ctk_start, int ctk_end)
 {
   int i;
@@ -1040,10 +1040,10 @@ Calculate_Course_Lap_Data(GPS_PCourse_Lap clp, GPS_PTrack *ctk,
 ** @return [void]
 ************************************************************************/
 static void
-Course_Garbage_Collect(GPS_PCourse *crs, int *n_crs,
-                       GPS_PCourse_Lap *clp, int *n_clp,
-                       GPS_PTrack *ctk, int *n_ctk,
-                       GPS_PCourse_Point *cpt, int *n_cpt)
+Course_Garbage_Collect(GPS_PCourse* crs, int* n_crs,
+                       GPS_PCourse_Lap* clp, int* n_clp,
+                       GPS_PTrack* ctk, int* n_ctk,
+                       GPS_PCourse_Point* cpt, int* n_cpt)
 {
   int i, j;
 
@@ -1155,13 +1155,13 @@ restart_course_points:
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_Command_Send_Track_As_Course(const char *port, GPS_PTrack *trk, int32 n_trk,
-                                       GPS_PWay *wpt, int32 n_wpt, int eraset)
+int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 n_trk,
+                                       GPS_PWay* wpt, int32 n_wpt, int eraset)
 {
-  GPS_PCourse *crs = NULL;
-  GPS_PCourse_Lap *clp = NULL;
-  GPS_PTrack *ctk = NULL;
-  GPS_PCourse_Point *cpt = NULL;
+  GPS_PCourse* crs = NULL;
+  GPS_PCourse_Lap* clp = NULL;
+  GPS_PTrack* ctk = NULL;
+  GPS_PCourse_Point* cpt = NULL;
   int n_crs, n_clp=0, n_ctk=0, n_cpt=0;
   int i, j, trk_end, new_crs, first_new_ctk;
   int32 ret;
@@ -1310,22 +1310,22 @@ int32 GPS_Command_Send_Track_As_Course(const char *port, GPS_PTrack *trk, int32 
 }
 
 /*Stubs for unimplemented stuff*/
-int32  GPS_Command_Get_Workout(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **))
+int32  GPS_Command_Get_Workout(const char* port, void** lap, int (*cb)(int, struct GPS_SWay**))
 {
   return 0;
 }
 
-int32  GPS_Command_Get_Fitness_User_Profile(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **))
+int32  GPS_Command_Get_Fitness_User_Profile(const char* port, void** lap, int (*cb)(int, struct GPS_SWay**))
 {
   return 0;
 }
 
-int32  GPS_Command_Get_Workout_Limits(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **))
+int32  GPS_Command_Get_Workout_Limits(const char* port, void** lap, int (*cb)(int, struct GPS_SWay**))
 {
   return 0;
 }
 
-int32  GPS_Command_Get_Course_Limits(const char *port, void **lap, int (*cb)(int, struct GPS_SWay **))
+int32  GPS_Command_Get_Course_Limits(const char* port, void** lap, int (*cb)(int, struct GPS_SWay**))
 {
   return 0;
 }

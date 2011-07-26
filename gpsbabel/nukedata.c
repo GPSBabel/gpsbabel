@@ -26,7 +26,7 @@
 #if FILTERS_ENABLED
 #define MYNAME "nukedata"
 
-static char *nukewpts, *nuketrks, *nukertes;
+static char* nukewpts, *nuketrks, *nukertes;
 
 static
 arglist_t nuke_args[] = {

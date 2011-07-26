@@ -30,17 +30,18 @@
 
 #define MYNAME "whatever"
 
-static gdx_info *my_gdx_info;
+static gdx_info* my_gdx_info;
 static int type;
-static char *mountpoint, *base, *path, *ext;
+static char* mountpoint, *base, *path, *ext;
 static xg_callback device_s, id_s, path_s, ext_s, base_s, dir_s;
+jmp_buf gdx_jmp_buf;
 
-void type_s(const char *args, const char **unused)
+void type_s(const char* args, const char** unused)
 {
   type = strcmp(args, "GPSData");
 }
 
-void device_s(const char *args, const char **unused)
+void device_s(const char* args, const char** unused)
 {
   if (my_gdx_info) {
     fatal(MYNAME ": More than one device type found in file.\n");
@@ -49,27 +50,27 @@ void device_s(const char *args, const char **unused)
   my_gdx_info->device_desc = xstrdup(args);
 }
 
-void id_s(const char *args, const char **unused)
+void id_s(const char* args, const char** unused)
 {
   my_gdx_info->device_id = xstrdup(args);
 }
 
-void path_s(const char *args, const char **unused)
+void path_s(const char* args, const char** unused)
 {
   path = xstrdup(args);
 }
 
-void ext_s(const char *args, const char **unused)
+void ext_s(const char* args, const char** unused)
 {
   ext = xstrdup(args);
 }
 
-void base_s(const char *args, const char **unused)
+void base_s(const char* args, const char** unused)
 {
   base = xstrdup(args);
 }
 
-void dir_s(const char *args, const char **unused)
+void dir_s(const char* args, const char** unused)
 {
   if (type) {
     return;
@@ -119,11 +120,11 @@ static xg_tag_mapping gdx_map[] = {
   { 0, (xg_cb_type) 0, NULL }
 };
 
-const gdx_info *
-gdx_read(const char *fname)
+const gdx_info*
+gdx_read(const char* fname)
 {
   // Test file open-able before gb_open gets a chance to fatal().
-  FILE *fin = fopen(fname, "r");
+  FILE* fin = fopen(fname, "r");
 
   if (fin) {
     fclose(fin);
@@ -137,12 +138,12 @@ gdx_read(const char *fname)
 
 
 // Look for the Device in the incoming NULL-terminated list of directories
-const gdx_info *
-gdx_find_file(char **dirlist)
+const gdx_info*
+gdx_find_file(char** dirlist)
 {
-  const gdx_info *gdx;
+  const gdx_info* gdx;
   while (dirlist && *dirlist) {
-    char *tbuf;
+    char* tbuf;
     xasprintf(&tbuf, "%s/%s", *dirlist, "/Garmin/GarminDevice.xml");
     mountpoint = *dirlist;
     gdx = gdx_read(tbuf);
@@ -155,7 +156,7 @@ gdx_find_file(char **dirlist)
   return NULL;
 }
 
-const gdx_info *
+const gdx_info*
 gdx_get_info()
 {
   return my_gdx_info;

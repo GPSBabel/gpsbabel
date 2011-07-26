@@ -104,7 +104,7 @@ typedef struct exif_tag_s {
   gbuint32 offs;
 #endif
   unsigned char data_is_dynamic:1;
-  void *data;
+  void* data;
 } exif_tag_t;
 
 typedef struct exif_ifd_s {
@@ -119,20 +119,20 @@ typedef struct exif_app_s {
   queue Q;
   gbuint16 marker;
   gbsize_t len;
-  gbfile *fcache;
-  gbfile *fexif;
+  gbfile* fcache;
+  gbfile* fexif;
   queue ifds;
 } exif_app_t;
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 static queue exif_apps;
-static exif_app_t *exif_app;
-const waypoint *exif_wpt_ref;
+static exif_app_t* exif_app;
+const waypoint* exif_wpt_ref;
 time_t exif_time_ref;
 static char exif_success;
-static char *exif_fout_name;
+static char* exif_fout_name;
 
-static char *opt_filename, *opt_overwrite, *opt_frame, *opt_name;
+static char* opt_filename, *opt_overwrite, *opt_frame, *opt_name;
 
 arglist_t exif_args[] = {
   { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX },
@@ -144,7 +144,7 @@ arglist_t exif_args[] = {
 
 #ifdef EXIF_DBG
 static void
-print_buff(const char *buf, int sz, const char *cmt)
+print_buff(const char* buf, int sz, const char* cmt)
 {
   int i;
 
@@ -203,11 +203,11 @@ exif_type_size(const gbuint16 type)
   return size;
 }
 
-static char *
+static char*
 exif_time_str(const time_t time)
 {
   struct tm tm;
-  char *res;
+  char* res;
 
   tm = *localtime(&time);
   tm.tm_year += 1900;
@@ -218,20 +218,20 @@ exif_time_str(const time_t time)
   return res;
 }
 
-static char *
-exif_read_str(exif_tag_t *tag)
+static char*
+exif_read_str(exif_tag_t* tag)
 {
   // Panasonic DMC-TZ10 stores datum with trailing spaces.
-  char *buf = xstrndup((char *)tag->data, tag->size);
+  char* buf = xstrndup((char*)tag->data, tag->size);
   rtrim(buf);
   return buf;
 }
 
 static double
-exif_read_double(const exif_tag_t *tag, const int index)
+exif_read_double(const exif_tag_t* tag, const int index)
 {
   unsigned int num, den;
-  gbint32 *data = (void *)tag->data;
+  gbint32* data = (gbint32*)tag->data;
 
   num = data[index * 2];
   den = data[(index * 2) + 1];
@@ -243,7 +243,7 @@ exif_read_double(const exif_tag_t *tag, const int index)
 }
 
 static double
-exif_read_coord(const exif_tag_t *tag)
+exif_read_coord(const exif_tag_t* tag)
 {
   double res, min, sec;
 
@@ -265,7 +265,7 @@ exif_read_coord(const exif_tag_t *tag)
 }
 
 static time_t
-exif_read_timestamp(const exif_tag_t *tag)
+exif_read_timestamp(const exif_tag_t* tag)
 {
   double hour, min, sec;
 
@@ -277,13 +277,13 @@ exif_read_timestamp(const exif_tag_t *tag)
 }
 
 static time_t
-exif_read_datestamp(const exif_tag_t *tag)
+exif_read_datestamp(const exif_tag_t* tag)
 {
   struct tm tm;
-  char *str;
+  char* str;
 
   memset(&tm, 0, sizeof(tm));
-  str = xstrndup((char *)tag->data, tag->size);
+  str = xstrndup((char*)tag->data, tag->size);
   sscanf(str, "%d:%d:%d", &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
   xfree(str);
 
@@ -294,7 +294,7 @@ exif_read_datestamp(const exif_tag_t *tag)
 }
 
 static void
-exif_release_tag(exif_tag_t *tag)
+exif_release_tag(exif_tag_t* tag)
 {
   dequeue(&tag->Q);
   if (tag->data_is_dynamic) {
@@ -304,13 +304,13 @@ exif_release_tag(exif_tag_t *tag)
 }
 
 static void
-exif_release_ifd(exif_ifd_t *ifd)
+exif_release_ifd(exif_ifd_t* ifd)
 {
   if (ifd != NULL) {
-    queue *elem, *tmp;
+    queue* elem, *tmp;
 
     QUEUE_FOR_EACH(&ifd->tags, elem, tmp) {
-      exif_release_tag((exif_tag_t *)elem);
+      exif_release_tag((exif_tag_t*)elem);
     }
     xfree(ifd);
   }
@@ -319,11 +319,11 @@ exif_release_ifd(exif_ifd_t *ifd)
 static void
 exif_release_apps(void)
 {
-  queue *e0, *t0;
+  queue* e0, *t0;
 
   QUEUE_FOR_EACH(&exif_apps, e0, t0) {
-    queue *e1, *t1;
-    exif_app_t *app = (exif_app_t *)dequeue(e0);
+    queue* e1, *t1;
+    exif_app_t* app = (exif_app_t*)dequeue(e0);
 
     if (app->fcache) {
       gbfclose(app->fcache);
@@ -332,7 +332,7 @@ exif_release_apps(void)
       gbfclose(app->fexif);
     }
     QUEUE_FOR_EACH(&app->ifds, e1, t1) {
-      exif_ifd_t *ifd = (exif_ifd_t *)dequeue(e1);
+      exif_ifd_t* ifd = (exif_ifd_t*)dequeue(e1);
       exif_release_ifd(ifd);
     }
     xfree(app);
@@ -340,14 +340,14 @@ exif_release_apps(void)
 }
 
 static gbuint32
-exif_ifd_size(exif_ifd_t *ifd)
+exif_ifd_size(exif_ifd_t* ifd)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   gbuint32 res = 6; 	/* nr of tags + next_ifd */
 
   res += (ifd->count * 12);
   QUEUE_FOR_EACH(&ifd->tags, elem, tmp) {
-    exif_tag_t *tag = (exif_tag_t *)elem;
+    exif_tag_t* tag = (exif_tag_t*)elem;
     if (tag->size > 4) {
       gbuint32 size = tag->size;
       if (size & 1) {
@@ -360,13 +360,13 @@ exif_ifd_size(exif_ifd_t *ifd)
   return res;
 }
 
-static exif_app_t *
+static exif_app_t*
 exif_load_apps(void)
 {
-  exif_app_t *exif_app = NULL;
+  exif_app_t* exif_app = NULL;
 
   while (! gbfeof(fin)) {
-    exif_app_t *app = xcalloc(sizeof(*app), 1);
+    exif_app_t* app = (exif_app_t*) xcalloc(sizeof(*app), 1);
 
     ENQUEUE_TAIL(&exif_apps, &app->Q);
     QUEUE_INIT(&app->ifds);
@@ -393,16 +393,16 @@ exif_load_apps(void)
   return exif_app;
 }
 
-static exif_ifd_t *
-exif_read_ifd(exif_app_t *app, const gbuint16 ifd_nr, gbsize_t offs,
-              gbuint32 *exif_ifd_ofs, gbuint32 *gps_ifd_ofs, gbuint32 *inter_ifd_ofs)
+static exif_ifd_t*
+exif_read_ifd(exif_app_t* app, const gbuint16 ifd_nr, gbsize_t offs,
+              gbuint32* exif_ifd_ofs, gbuint32* gps_ifd_ofs, gbuint32* inter_ifd_ofs)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   gbuint16 i;
-  exif_ifd_t *ifd;
-  gbfile *fin = app->fexif;
+  exif_ifd_t* ifd;
+  gbfile* fin = app->fexif;
 
-  ifd = xcalloc(sizeof(*ifd), 1);
+  ifd = (exif_ifd_t*) xcalloc(sizeof(*ifd), 1);
   QUEUE_INIT(&ifd->tags);
   ENQUEUE_TAIL(&app->ifds, &ifd->Q);
   ifd->nr = ifd_nr;
@@ -412,7 +412,7 @@ exif_read_ifd(exif_app_t *app, const gbuint16 ifd_nr, gbsize_t offs,
 
 #ifdef EXIF_DBG
   {
-    char *name;
+    char* name;
     switch (ifd_nr) {
     case IFD0:
       name = "IFD0";
@@ -442,10 +442,10 @@ exif_read_ifd(exif_app_t *app, const gbuint16 ifd_nr, gbsize_t offs,
   }
 
   for (i = 0; i < ifd->count; i++) {
-    exif_tag_t *tag;
+    exif_tag_t* tag;
     offs = gbftell(fin);
 
-    tag = xcalloc(sizeof(*tag), 1);
+    tag = (exif_tag_t*) xcalloc(sizeof(*tag), 1);
 
     ENQUEUE_TAIL(&ifd->tags, &tag->Q);
 
@@ -481,15 +481,15 @@ exif_read_ifd(exif_app_t *app, const gbuint16 ifd_nr, gbsize_t offs,
   ifd->next_ifd = gbfgetuint16(fin);
 
   QUEUE_FOR_EACH(&ifd->tags, elem, tmp) {
-    exif_tag_t *tag = (exif_tag_t *)elem;
+    exif_tag_t* tag = (exif_tag_t*)elem;
     if ((tag->size > 4) && (tag->value)) {
       gbuint16 i;
-      char *ptr;
+      char* ptr;
 
       tag->data = xmalloc(tag->size);
       tag->data_is_dynamic = 1;
 
-      ptr = tag->data;
+      ptr = (char*) tag->data;
       gbfseek(fin, tag->value, SEEK_SET);
 
       if (BYTE_TYPE(tag->type)) {
@@ -498,23 +498,23 @@ exif_read_ifd(exif_app_t *app, const gbuint16 ifd_nr, gbsize_t offs,
           switch (tag->type) {
           case EXIF_TYPE_SHORT:
           case EXIF_TYPE_SSHORT:
-            *(gbint16 *)ptr = gbfgetuint16(fin);
+            *(gbint16*)ptr = gbfgetuint16(fin);
             break;
           case EXIF_TYPE_IFD:
           case EXIF_TYPE_LONG:
           case EXIF_TYPE_SLONG:
-            *(gbint32 *)ptr = gbfgetuint32(fin);
+            *(gbint32*)ptr = gbfgetuint32(fin);
             break;
           case EXIF_TYPE_RAT:
           case EXIF_TYPE_SRAT:
-            *(gbint32 *)ptr = gbfgetuint32(fin);
-            *(gbint32 *)(ptr+4) = gbfgetuint32(fin);
+            *(gbint32*)ptr = gbfgetuint32(fin);
+            *(gbint32*)(ptr+4) = gbfgetuint32(fin);
             break;
           case EXIF_TYPE_FLOAT:
-            *(float *)ptr = gbfgetflt(fin);
+            *(float*)ptr = gbfgetflt(fin);
             break;
           case EXIF_TYPE_DOUBLE:
-            *(double *)ptr = gbfgetdbl(fin);
+            *(double*)ptr = gbfgetdbl(fin);
             break;
           default:
             gbfread(ptr, 1, 1, fin);
@@ -537,16 +537,16 @@ exif_read_ifd(exif_app_t *app, const gbuint16 ifd_nr, gbsize_t offs,
 }
 
 static void
-exif_read_app(exif_app_t *app)
+exif_read_app(exif_app_t* app)
 {
   gbsize_t offs;
   gbuint32 exif_ifd_ofs, gps_ifd_ofs, inter_ifd_ofs;
-  exif_ifd_t *ifd;
-  gbfile *fin = app->fexif;
+  exif_ifd_t* ifd;
+  gbfile* fin = app->fexif;
 
 #ifdef EXIF_DBG
   printf(MYNAME ": read_app...\n");
-  print_buff((const char *)fin->handle.mem, 16, MYNAME);
+  print_buff((const char*)fin->handle.mem, 16, MYNAME);
   printf("\n");
 #endif
   exif_ifd_ofs = gps_ifd_ofs = inter_ifd_ofs = 0;
@@ -574,11 +574,11 @@ exif_read_app(exif_app_t *app)
 }
 
 static void
-exif_examine_app(exif_app_t *app)
+exif_examine_app(exif_app_t* app)
 {
   gbuint16 endianess;
   gbuint32 ident;
-  gbfile *ftmp = exif_app->fcache;
+  gbfile* ftmp = exif_app->fcache;
   int i;
 
   gbfrewind(ftmp);
@@ -606,13 +606,13 @@ exif_examine_app(exif_app_t *app)
   exif_read_app(exif_app);
 }
 
-static exif_ifd_t *
-exif_find_ifd(exif_app_t *app, const gbuint16 ifd_nr)
+static exif_ifd_t*
+exif_find_ifd(exif_app_t* app, const gbuint16 ifd_nr)
 {
-  queue *e0, *t0;
+  queue* e0, *t0;
 
   QUEUE_FOR_EACH(&app->ifds, e0, t0) {
-    exif_ifd_t *ifd = (exif_ifd_t *)e0;
+    exif_ifd_t* ifd = (exif_ifd_t*)e0;
 
     if (ifd->nr == ifd_nr) {
       return ifd;
@@ -621,14 +621,14 @@ exif_find_ifd(exif_app_t *app, const gbuint16 ifd_nr)
   return NULL;
 }
 
-static exif_tag_t *
-exif_find_tag(exif_app_t *app, const gbuint16 ifd_nr, const gbuint16 tag_id)
+static exif_tag_t*
+exif_find_tag(exif_app_t* app, const gbuint16 ifd_nr, const gbuint16 tag_id)
 {
-  exif_ifd_t *ifd = exif_find_ifd(app, ifd_nr);
+  exif_ifd_t* ifd = exif_find_ifd(app, ifd_nr);
   if (ifd != NULL) {
-    queue *elem, *tmp;
+    queue* elem, *tmp;
     QUEUE_FOR_EACH(&ifd->tags, elem, tmp) {
-      exif_tag_t *tag = (exif_tag_t *)elem;
+      exif_tag_t* tag = (exif_tag_t*)elem;
       if (tag->id == tag_id) {
         return tag;
       }
@@ -638,9 +638,9 @@ exif_find_tag(exif_app_t *app, const gbuint16 ifd_nr, const gbuint16 tag_id)
 }
 
 static time_t
-exif_get_exif_time(exif_app_t *app)
+exif_get_exif_time(exif_app_t* app)
 {
-  exif_tag_t *tag;
+  exif_tag_t* tag;
   time_t res = 0;
 
   tag = exif_find_tag(app, EXIF_IFD, 0x9003);			/* DateTimeOriginal from EXIF */
@@ -652,7 +652,7 @@ exif_get_exif_time(exif_app_t *app)
   }
   if (tag) {
     struct tm tm;
-    char *c, *str;
+    char* c, *str;
 
     memset(&tm, 0, sizeof(tm));
     str = exif_read_str(tag);
@@ -666,18 +666,18 @@ exif_get_exif_time(exif_app_t *app)
   return res;
 }
 
-static waypoint *
-exif_waypt_from_exif_app(exif_app_t *app)
+static waypoint*
+exif_waypt_from_exif_app(exif_app_t* app)
 {
-  waypoint *wpt;
-  queue *elem, *tmp;
-  exif_ifd_t *ifd;
-  exif_tag_t *tag;
+  waypoint* wpt;
+  queue* elem, *tmp;
+  exif_ifd_t* ifd;
+  exif_tag_t* tag;
   char lat_ref = '\0';
   char lon_ref = '\0';
   char alt_ref = 0;
   char speed_ref = '\0';
-  char *datum = NULL;
+  char* datum = NULL;
   char mode = '\0';
   double gpsdop = unknown_alt;
   double alt = unknown_alt;
@@ -695,25 +695,25 @@ exif_waypt_from_exif_app(exif_app_t *app)
   wpt->longitude = unknown_alt;
 
   QUEUE_FOR_EACH(&ifd->tags, elem, tmp) {
-    tag = (exif_tag_t *)elem;
+    tag = (exif_tag_t*)elem;
 
     switch (tag->id) {
     case GPS_IFD_TAG_VERSION:
       break;
     case GPS_IFD_TAG_LATREF:
-      lat_ref = *(char *)tag->data;
+      lat_ref = *(char*)tag->data;
       break;
     case GPS_IFD_TAG_LAT:
       wpt->latitude = exif_read_coord(tag);
       break;
     case GPS_IFD_TAG_LONREF:
-      lon_ref = *(char *)tag->data;
+      lon_ref = *(char*)tag->data;
       break;
     case GPS_IFD_TAG_LON:
       wpt->longitude = exif_read_coord(tag);
       break;
     case GPS_IFD_TAG_ALTREF:
-      alt_ref = *(char *)tag->data;
+      alt_ref = *(char*)tag->data;
       break;
     case GPS_IFD_TAG_ALT:
       alt = exif_read_double(tag, 0);
@@ -722,16 +722,16 @@ exif_waypt_from_exif_app(exif_app_t *app)
       timestamp = exif_read_timestamp(tag);
       break;
     case GPS_IFD_TAG_SAT:
-      wpt->sat = atoi((char *)tag->data);
+      wpt->sat = atoi((char*)tag->data);
       break;
     case GPS_IFD_TAG_MODE:
-      mode = *(char *)tag->data;
+      mode = *(char*)tag->data;
       break;
     case GPS_IFD_TAG_DOP:
       gpsdop = exif_read_double(tag, 0);
       break;
     case GPS_IFD_TAG_SPEEDREF:
-      speed_ref = *(char *)tag->data;
+      speed_ref = *(char*)tag->data;
       break;
     case GPS_IFD_TAG_SPEED:
       WAYPT_SET(wpt, speed, exif_read_double(tag, 0));
@@ -832,7 +832,7 @@ exif_waypt_from_exif_app(exif_app_t *app)
   }
   if (timestamp != UNKNOWN_TIMESTAMP) {
 #ifdef EXIF_DBG
-    char *str = exif_time_str(timestamp);
+    char* str = exif_time_str(timestamp);
     printf(MYNAME "-GPSTimeStamp =   %s\n", str);
     xfree(str);
 #endif
@@ -843,12 +843,12 @@ exif_waypt_from_exif_app(exif_app_t *app)
 
   tag = exif_find_tag(app, EXIF_IFD, EXIF_IFD_TAG_USER_CMT); /* UserComment */
   if (tag && (tag->size > 8)) {
-    char *str = NULL;
+    char* str = NULL;
     if (memcmp(tag->data, "ASCII\0\0\0", 8) == 0) {
-      str = xstrndup((char *)tag->data + 8, tag->size - 8);
+      str = xstrndup((char*)tag->data + 8, tag->size - 8);
     } else if (memcmp(tag->data, "UNICODE\0", 8) == 0) {
       int i, len = (tag->size - 8) / 2;
-      gbint16 *s = (void *)((char *)tag->data + 8);
+      gbint16* s = (gbint16*)((char*)tag->data + 8);
       for (i = 0; i < len; i++) {
         s[i] = be_read16(&s[i]);  /* always BE ? */
       }
@@ -860,8 +860,8 @@ exif_waypt_from_exif_app(exif_app_t *app)
   }
 
   if (opt_filename) {
-    char *c, *cx;
-    char *str = xstrdup(fin->name);
+    char* c, *cx;
+    char* str = xstrdup(fin->name);
 
     cx = str;
     if ((c = strrchr(cx, ':'))) {
@@ -888,13 +888,13 @@ exif_waypt_from_exif_app(exif_app_t *app)
 }
 
 static void
-exif_dec2frac(double val, gbint32 *num, gbint32 *den)
+exif_dec2frac(double val, gbint32* num, gbint32* den)
 {
   char sval[16], snum[16];
   char dot = 0;
   int den1 = 1;
   int num1, num2, den2, rem;
-  char *cx;
+  char* cx;
   double vx;
 
   if (val < 0.000000001) {
@@ -950,16 +950,16 @@ exif_dec2frac(double val, gbint32 *num, gbint32 *den)
   *den = den1 / rem;
 }
 
-static exif_tag_t *
-exif_put_value(const int ifd_nr, const gbuint16 tag_id, const gbuint16 type, const gbuint32 count, const int index, const void *data)
+static exif_tag_t*
+exif_put_value(const int ifd_nr, const gbuint16 tag_id, const gbuint16 type, const gbuint32 count, const int index, const void* data)
 {
-  exif_tag_t *tag = NULL;
-  exif_ifd_t *ifd;
+  exif_tag_t* tag = NULL;
+  exif_ifd_t* ifd;
   gbuint16 item_size, size;
 
   ifd = exif_find_ifd(exif_app, ifd_nr);
   if (ifd == NULL) {
-    ifd = xcalloc(sizeof(*ifd), 1);
+    ifd = (exif_ifd_t*) xcalloc(sizeof(*ifd), 1);
     ifd->nr = ifd_nr;
     QUEUE_INIT(&ifd->tags);
     ENQUEUE_TAIL(&exif_app->ifds, &ifd->Q);
@@ -980,7 +980,7 @@ exif_put_value(const int ifd_nr, const gbuint16 tag_id, const gbuint16 type, con
       return NULL;
     }
 
-    tag = xcalloc(sizeof(*tag), 1);
+    tag = (exif_tag_t*) xcalloc(sizeof(*tag), 1);
 
     tag->id = tag_id;
     tag->type = type;
@@ -999,7 +999,7 @@ exif_put_value(const int ifd_nr, const gbuint16 tag_id, const gbuint16 type, con
     }
     if (tag->count < (index + count)) {
       if (! tag->data_is_dynamic) {
-        void *tmp = xmalloc(tag->size < 4 ? 4 : tag->size);
+        void* tmp = xmalloc(tag->size < 4 ? 4 : tag->size);
         memcpy(tmp, tag->data, tag->size);
         tag->data = tmp;
         tag->data_is_dynamic = 1;
@@ -1013,8 +1013,8 @@ exif_put_value(const int ifd_nr, const gbuint16 tag_id, const gbuint16 type, con
   switch (type) {
   case EXIF_TYPE_RAT:
   case EXIF_TYPE_SRAT: {
-    double val = *(double *)data;
-    gbuint32 *dest = tag->data;
+    double val = *(double*)data;
+    gbuint32* dest = (gbuint32*) tag->data;
 
     if ((int)val == val) {
       dest[index * 2] = (int)val;
@@ -1031,7 +1031,7 @@ exif_put_value(const int ifd_nr, const gbuint16 tag_id, const gbuint16 type, con
   }
   break;
   default: {
-    char *dest = tag->data;
+    char* dest = (char*) tag->data;
     memcpy(&dest[index * item_size], data, count * item_size);
   }
   }
@@ -1048,7 +1048,7 @@ exif_put_double(const int ifd_nr, const int tag_id, const int index, const doubl
 
 
 static void
-exif_put_str(const int ifd_nr, const int tag_id, const char *val)
+exif_put_str(const int ifd_nr, const int tag_id, const char* val)
 {
   int len = (val) ? strlen(val) + 1 : 0;
   exif_put_value(ifd_nr, tag_id, EXIF_TYPE_ASCII, len, 0, val);
@@ -1083,7 +1083,7 @@ exif_remove_tag(const int ifd_nr, const int tag_id)
 }
 
 static void
-exif_find_wpt_by_time(const waypoint *wpt)
+exif_find_wpt_by_time(const waypoint* wpt)
 {
   if (wpt->creation_time <= 0) {
     return;
@@ -1097,7 +1097,7 @@ exif_find_wpt_by_time(const waypoint *wpt)
 }
 
 static void
-exif_find_wpt_by_name(const waypoint *wpt)
+exif_find_wpt_by_name(const waypoint* wpt)
 {
   if (exif_wpt_ref != NULL) {
     return;
@@ -1108,40 +1108,40 @@ exif_find_wpt_by_name(const waypoint *wpt)
 
 
 static int
-exif_sort_tags_cb(const queue *A, const queue *B)
+exif_sort_tags_cb(const queue* A, const queue* B)
 {
-  exif_tag_t *ta = (exif_tag_t *)A;
-  exif_tag_t *tb = (exif_tag_t *)B;
+  exif_tag_t* ta = (exif_tag_t*)A;
+  exif_tag_t* tb = (exif_tag_t*)B;
 
   return ta->id - tb->id;
 }
 
 static int
-exif_sort_ifds_cb(const queue *A, const queue *B)
+exif_sort_ifds_cb(const queue* A, const queue* B)
 {
-  exif_ifd_t *ia = (exif_ifd_t *)A;
-  exif_ifd_t *ib = (exif_ifd_t *)B;
+  exif_ifd_t* ia = (exif_ifd_t*)A;
+  exif_ifd_t* ib = (exif_ifd_t*)B;
 
   return ia->nr - ib->nr;
 }
 
 static void
-exif_write_value(exif_tag_t *tag, gbfile *fout)
+exif_write_value(exif_tag_t* tag, gbfile* fout)
 {
   if (tag->size > 4) {
     gbfputuint32(tag->value, fout);  /* offset to data */
   } else {
-    char *data = tag->data;
+    char* data = (char*) tag->data;
 
     if BYTE_TYPE(tag->type) {
       gbfwrite(data, 4, 1, fout);
     } else if WORD_TYPE(tag->type) {
-      gbfputuint16(*(gbuint16 *)data, fout);
-      gbfputuint16(*(gbuint16 *)(data+2), fout);
+      gbfputuint16(*(gbuint16*)data, fout);
+      gbfputuint16(*(gbuint16*)(data+2), fout);
     } else if LONG_TYPE(tag->type) {
-      gbfputuint32(*(gbuint32 *)data, fout);
+      gbfputuint32(*(gbuint32*)data, fout);
     } else if (tag->type == EXIF_TYPE_FLOAT) {
-      gbfputflt(*(float *)data, fout);
+      gbfputflt(*(float*)data, fout);
     } else {
       fatal(MYNAME ": Unknown data type %d!\n", tag->type);
     }
@@ -1149,16 +1149,16 @@ exif_write_value(exif_tag_t *tag, gbfile *fout)
 }
 
 static void
-exif_write_ifd(const exif_ifd_t *ifd, const char next, gbfile *fout)
+exif_write_ifd(const exif_ifd_t* ifd, const char next, gbfile* fout)
 {
   gbsize_t offs;
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   gbfputuint16(ifd->count, fout);
   offs = gbftell(fout) + (ifd->count * 12) + 4;
 
   QUEUE_FOR_EACH(&ifd->tags, elem, tmp) {
-    exif_tag_t *tag = (exif_tag_t *)elem;
+    exif_tag_t* tag = (exif_tag_t*)elem;
 
     gbfputuint16(tag->id, fout);
     gbfputuint16(tag->type, fout);
@@ -1182,11 +1182,11 @@ exif_write_ifd(const exif_ifd_t *ifd, const char next, gbfile *fout)
   }
 
   QUEUE_FOR_EACH(&ifd->tags, elem, tmp) {
-    exif_tag_t *tag = (exif_tag_t *)elem;
+    exif_tag_t* tag = (exif_tag_t*)elem;
 
     if (tag->size > 4) {
       gbuint16 i;
-      char *ptr = tag->data;
+      char* ptr = (char*) tag->data;
 
       if BYTE_TYPE(tag->type) {
         gbfwrite(tag->data, tag->size, 1, fout);
@@ -1194,23 +1194,23 @@ exif_write_ifd(const exif_ifd_t *ifd, const char next, gbfile *fout)
           switch (tag->type) {
           case EXIF_TYPE_SHORT:
           case EXIF_TYPE_SSHORT:
-            gbfputuint16(*(gbint16 *)ptr, fout);
+            gbfputuint16(*(gbint16*)ptr, fout);
             break;
           case EXIF_TYPE_LONG:
           case EXIF_TYPE_SLONG:
           case EXIF_TYPE_IFD:
-            gbfputuint32(*(gbint32 *)ptr, fout);
+            gbfputuint32(*(gbint32*)ptr, fout);
             break;
           case EXIF_TYPE_RAT:
           case EXIF_TYPE_SRAT:
-            gbfputuint32(*(gbint32 *)ptr, fout);
-            gbfputuint32(*(gbint32 *)(ptr+4), fout);
+            gbfputuint32(*(gbint32*)ptr, fout);
+            gbfputuint32(*(gbint32*)(ptr+4), fout);
             break;
           case EXIF_TYPE_FLOAT:
-            gbfputflt(*(float *)ptr, fout);
+            gbfputflt(*(float*)ptr, fout);
             break;
           case EXIF_TYPE_DOUBLE:
-            gbfputdbl(*(double *)ptr, fout);
+            gbfputdbl(*(double*)ptr, fout);
             break;
           default:
             gbfwrite(ptr, exif_type_size(tag->type), 1, fin);
@@ -1228,20 +1228,20 @@ exif_write_ifd(const exif_ifd_t *ifd, const char next, gbfile *fout)
 static void
 exif_write_apps(void)
 {
-  queue *e0, *t0;
+  queue* e0, *t0;
 
   gbfputuint16(0xFFD8, fout);
 
   QUEUE_FOR_EACH(&exif_apps, e0, t0) {
-    exif_app_t *app = (exif_app_t *)e0;
+    exif_app_t* app = (exif_app_t*)e0;
 
     gbfputuint16(app->marker, fout);
 
     if (app == exif_app) {
-      queue *e1, *t1;
+      queue* e1, *t1;
       gbuint16 len = 8;
-      gbfile *ftmp;
-      exif_tag_t *tag;
+      gbfile* ftmp;
+      exif_tag_t* tag;
 
       exif_put_long(IFD0, IFD0_TAG_GPS_IFD_OFFS, 0, 0);
       exif_put_long(GPS_IFD, GPS_IFD_TAG_VERSION, 0, 2);
@@ -1249,7 +1249,7 @@ exif_write_apps(void)
       sortqueue(&exif_app->ifds, exif_sort_ifds_cb);
 
       QUEUE_FOR_EACH(&app->ifds, e1, t1) {
-        exif_ifd_t *ifd = (exif_ifd_t *)e1;
+        exif_ifd_t* ifd = (exif_ifd_t*)e1;
 
         if (ifd->nr == GPS_IFD) {
           exif_put_long(IFD0, IFD0_TAG_GPS_IFD_OFFS, 0, len);
@@ -1269,7 +1269,7 @@ exif_write_apps(void)
       }
 
       QUEUE_FOR_EACH(&app->ifds, e1, t1) {
-        exif_ifd_t *ifd = (exif_ifd_t *)e1;
+        exif_ifd_t* ifd = (exif_ifd_t*)e1;
         sortqueue(&ifd->tags, exif_sort_tags_cb);
       }
 
@@ -1281,8 +1281,8 @@ exif_write_apps(void)
       gbfputuint32(0x08, ftmp);	/* offset to first IFD */
 
       QUEUE_FOR_EACH(&app->ifds, e1, t1) {
-        exif_ifd_t *ifd = (exif_ifd_t *)e1;
-        exif_ifd_t *ifd_next = (exif_ifd_t *)t1;
+        exif_ifd_t* ifd = (exif_ifd_t*)e1;
+        exif_ifd_t* ifd_next = (exif_ifd_t*)t1;
         char next;
 
         if ((ifd->nr == IFD0) && (ifd_next->nr == IFD1)) {
@@ -1325,7 +1325,7 @@ exif_write_apps(void)
 *******************************************************************************/
 
 static void
-exif_rd_init(const char *fname)
+exif_rd_init(const char* fname)
 {
   fin = gbfopen_be(fname, "rb", MYNAME);
   QUEUE_INIT(&exif_apps);
@@ -1342,7 +1342,7 @@ static void
 exif_read(void)
 {
   gbuint16 soi;
-  waypoint *wpt;
+  waypoint* wpt;
 
   soi = gbfgetuint16(fin);
   is_fatal(soi != 0xFFD8, MYNAME ": Unknown image file.");	/* only jpeg for now */
@@ -1358,10 +1358,10 @@ exif_read(void)
 }
 
 static void
-exif_wr_init(const char *fname)
+exif_wr_init(const char* fname)
 {
   gbuint16 soi;
-  char *tmpname;
+  char* tmpname;
 
   exif_success = 0;
   exif_fout_name = xstrdup(fname);
@@ -1391,7 +1391,7 @@ exif_wr_init(const char *fname)
 static void
 exif_wr_deinit(void)
 {
-  char *tmpname;
+  char* tmpname;
 
   exif_release_apps();
   tmpname = xstrdup(fout->name);
@@ -1430,7 +1430,7 @@ exif_write(void)
       warning(MYNAME ": No matching point with name \"%s\" found.\n", opt_name);
     }
   } else {
-    char *str = exif_time_str(exif_time_ref);
+    char* str = exif_time_str(exif_time_ref);
 
     track_disp_all(NULL, NULL, exif_find_wpt_by_time);
     route_disp_all(NULL, NULL, exif_find_wpt_by_time);
@@ -1443,7 +1443,7 @@ exif_write(void)
     } else if (abs(exif_time_ref - exif_wpt_ref->creation_time) > frame) {
       warning(MYNAME ": No matching point found for image date %s!\n", str);
       if (exif_wpt_ref != NULL) {
-        char *str = exif_time_str(exif_wpt_ref->creation_time);
+        char* str = exif_time_str(exif_wpt_ref->creation_time);
         warning(MYNAME ": Best is from %s, %d second(s) away.\n",
                 str, abs(exif_time_ref - exif_wpt_ref->creation_time));
         xfree(str);
@@ -1454,7 +1454,7 @@ exif_write(void)
   }
 
   if (exif_wpt_ref != NULL) {
-    const waypoint *wpt = exif_wpt_ref;
+    const waypoint* wpt = exif_wpt_ref;
 
     exif_put_long(IFD0, IFD0_TAG_GPS_IFD_OFFS, 0, 0);
     exif_put_long(GPS_IFD, GPS_IFD_TAG_VERSION, 0, 2);
@@ -1534,7 +1534,7 @@ exif_write(void)
 ff_vecs_t exif_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write	/* waypoints */,
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* waypoints */,
     ff_cap_none 			/* tracks */,
     ff_cap_none 			/* routes */
   },

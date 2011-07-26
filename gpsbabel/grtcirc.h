@@ -36,7 +36,7 @@ double radtomiles(double rads);
 void linepart(double lat1, double lon1,
               double lat2, double lon2,
               double frac,
-              double *reslat, double *reslon);
+              double* reslat, double* reslon);
 
 /* Degrees to radians */
 #define DEG(x) ((x)*180.0/M_PI)

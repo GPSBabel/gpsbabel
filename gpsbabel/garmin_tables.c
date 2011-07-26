@@ -577,7 +577,7 @@ gt_country_code_t gt_country_codes[] = {
 };
 
 /* gt_waypt_classes: gdb internal order */
-char *gt_waypt_class_names[] = {
+char* gt_waypt_class_names[] = {
   "User Waypoint",
   "Airport",
   "Intersection",
@@ -595,15 +595,15 @@ char *gt_waypt_class_names[] = {
 };
 
 /* gt_display_mode_names: this order is used by most devices */
-char *gt_display_mode_names[] = {
+char* gt_display_mode_names[] = {
   "Symbol & Name",
   "Symbol",
   "Symbol & Description"
 };
 
 typedef struct {
-  const char *shortname;
-  const char *longname;
+  const char* shortname;
+  const char* longname;
   grid_type grid;
 } grid_mapping_t;
 
@@ -622,8 +622,8 @@ grid_mapping_t gt_mps_grid_names[] = {
 /* gt_mps_datum_names: */
 
 typedef struct {
-  const char *jeeps_name;
-  const char *mps_name;
+  const char* jeeps_name;
+  const char* mps_name;
 } datum_mapping_t;
 
 /* will be continued (when requested) */
@@ -644,7 +644,7 @@ static datum_mapping_t gt_mps_datum_names[] = {
 };
 
 typedef struct garmin_color_s {
-  const char *name;
+  const char* name;
   gbint32 rgb;
 } garmin_color_t;
 
@@ -729,10 +729,10 @@ gt_switch_display_mode_value(const unsigned char display_mode, const int protoid
   }
 }
 
-char *
-gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, int *dynamic)
+char*
+gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, int* dynamic)
 {
-  icon_mapping_t *i;
+  icon_mapping_t* i;
   char custom[] = "Custom 63 ";
 
   if ((garmin_format == GDB) && (icon >= 500) && (icon <= 563)) {
@@ -756,13 +756,13 @@ gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, in
     case MAPSOURCE:
     case GDB:
       if (icon == i->mpssymnum) {
-        return (char *)i->icon;
+        return (char*)i->icon;
       }
       break;
     case PCX:
     case GARMIN_SERIAL:
       if (icon == i->pcxsymnum) {
-        return (char *)i->icon;
+        return (char*)i->icon;
       }
       break;
     default:
@@ -772,10 +772,10 @@ gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, in
   return DEFAULT_ICON_DESCR;
 }
 
-int gt_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_format)
+int gt_find_icon_number_from_desc(const char* desc, garmin_formats_e garmin_format)
 {
   static int find_flag = 0;
-  icon_mapping_t *i;
+  icon_mapping_t* i;
   int def_icon = DEFAULT_ICON_VALUE;
   int n;
 
@@ -841,8 +841,8 @@ int gt_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_form
    */
 
   if (find_flag == 0) {
-    char **prefix;
-    char *prefixes[] = {"White ", "Red ", "Green ", "Blue ", "Black ", NULL};
+    char** prefix;
+    char* prefixes[] = {"White ", "Red ", "Green ", "Blue ", "Black ", NULL};
 
     for (prefix = prefixes; *prefix != NULL; prefix++) {
       int len = strlen(*prefix);
@@ -865,17 +865,17 @@ int gt_find_icon_number_from_desc(const char *desc, garmin_formats_e garmin_form
   return def_icon;
 }
 
-const char *
-gt_get_icao_country(const char *cc)
+const char*
+gt_get_icao_country(const char* cc)
 {
-  gt_country_code_t *x = &gt_country_codes[0];
+  gt_country_code_t* x = &gt_country_codes[0];
 
   if ((cc == NULL) || (*cc == '\0')) {
     return NULL;
   }
 
   do {
-    const char *ccx = x->cc;
+    const char* ccx = x->cc;
     while (ccx != NULL) {
       if (strncmp(ccx, cc, 2) == 0) {
         return x->country;
@@ -894,14 +894,14 @@ gt_get_icao_country(const char *cc)
   return NULL;
 }
 
-const char *
-gt_get_icao_cc(const char *country, const char *shortname)
+const char*
+gt_get_icao_cc(const char* country, const char* shortname)
 {
   static char res[3];
-  gt_country_code_t *x = &gt_country_codes[0];
+  gt_country_code_t* x = &gt_country_codes[0];
 
   if ((country == NULL) || (*country == '\0')) {
-    const char *test;
+    const char* test;
     if (shortname == NULL) {
       return NULL;
     }
@@ -939,7 +939,7 @@ gt_get_icao_cc(const char *country, const char *shortname)
       return res;
     }
     if (shortname && (strlen(shortname) == 4)) {
-      const char *ccx = x->cc;
+      const char* ccx = x->cc;
 
       strncpy(res, shortname, 2);
       res[2] = '\0';
@@ -963,9 +963,9 @@ gt_get_icao_cc(const char *country, const char *shortname)
 }
 
 grid_type
-gt_lookup_grid_type(const char *grid_name, const char *module)
+gt_lookup_grid_type(const char* grid_name, const char* module)
 {
-  grid_mapping_t *g;
+  grid_mapping_t* g;
 
   for (g = gt_mps_grid_names; (g->shortname); g++) {
     if ((case_ignore_strcmp(grid_name, g->shortname) == 0) ||
@@ -980,8 +980,8 @@ gt_lookup_grid_type(const char *grid_name, const char *module)
   return grid_unknown;	/* (warnings) */
 }
 
-const char *
-gt_get_mps_grid_longname(const grid_type grid, const char *module)
+const char*
+gt_get_mps_grid_longname(const grid_type grid, const char* module)
 {
   if ((grid < GRID_INDEX_MIN) || (grid > GRID_INDEX_MAX))
     fatal("%s: Grid index out of range %d (%d..%d)!",
@@ -990,11 +990,11 @@ gt_get_mps_grid_longname(const grid_type grid, const char *module)
   return gt_mps_grid_names[grid].longname;
 }
 
-const char *
+const char*
 gt_get_mps_datum_name(const int datum_index)
 {
-  char *result;
-  datum_mapping_t *d;
+  char* result;
+  datum_mapping_t* d;
 
   result = GPS_Math_Get_Datum_Name(datum_index);
 
@@ -1007,11 +1007,11 @@ gt_get_mps_datum_name(const int datum_index)
 }
 
 int
-gt_lookup_datum_index(const char *datum_str, const char *module)
+gt_lookup_datum_index(const char* datum_str, const char* module)
 {
-  datum_mapping_t *d;
+  datum_mapping_t* d;
   int result;
-  const char *name = datum_str;
+  const char* name = datum_str;
 
   for (d = gt_mps_datum_names; (d->jeeps_name); d++) {
     if (case_ignore_strcmp(name, d->mps_name) == 0) {
@@ -1023,7 +1023,7 @@ gt_lookup_datum_index(const char *datum_str, const char *module)
   result = GPS_Lookup_Datum_Index(name);
 
   if (result < 0) {
-    char *tmp;
+    char* tmp;
     xasprintf(&tmp, "%s mean", datum_str);
     result = GPS_Lookup_Datum_Index(tmp);
     xfree(tmp);
@@ -1047,7 +1047,7 @@ gt_color_value(const int garmin_index)
 }
 
 gbuint32
-gt_color_value_by_name(const char *name)
+gt_color_value_by_name(const char* name)
 {
   int i;
 
@@ -1060,7 +1060,7 @@ gt_color_value_by_name(const char *name)
 }
 
 int
-gt_color_index_by_name(const char *name)
+gt_color_index_by_name(const char* name)
 {
   int i;
 
@@ -1085,7 +1085,7 @@ gt_color_index_by_rgb(const int rgb)
   return 0; /* unknown */
 }
 
-const char *
+const char*
 gt_color_name(const int garmin_index)
 {
   if ((garmin_index >= 0) && (garmin_index < GT_COLORS_CT)) {
@@ -1102,17 +1102,17 @@ gt_color_name(const int garmin_index)
  * cc -DMAKE_TABLE garmin_tables.c fatal.o util.o globals.o  -lm
  */
 
-int cet_utf8_to_ucs4(const char *str, int *bytes, int *value)
+int cet_utf8_to_ucs4(const char* str, int* bytes, int* value)
 {
   fatal("Should not be here.");
 }
 
 
 int
-sortem(const void *a, const void *b)
+sortem(const void* a, const void* b)
 {
-  const icon_mapping_t *aa = a;
-  const icon_mapping_t *bb = b;
+  const icon_mapping_t* aa = a;
+  const icon_mapping_t* bb = b;
 
 //	return aa->mpssymnum - bb->mpssymnum;
   return strcmp(aa->icon, bb->icon);
@@ -1121,7 +1121,7 @@ sortem(const void *a, const void *b)
 
 main()
 {
-  icon_mapping_t *i;
+  icon_mapping_t* i;
   qsort(garmin_icon_table, sizeof(garmin_icon_table) / sizeof(garmin_icon_table[0]) - 1,  sizeof(garmin_icon_table[0]), sortem);
   for (i = garmin_icon_table; i->icon; i++) {
 //		printf("%03d\t%s\n", i->mpssymnum, i->icon);

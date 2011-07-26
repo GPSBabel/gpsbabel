@@ -176,7 +176,7 @@ enum {
 
 /**************************************************************************/
 
-static gbfile *fin = NULL, *fout = NULL;
+static gbfile* fin = NULL, *fout = NULL;
 struct wprdata WPR;
 struct trldata TRL;
 
@@ -196,43 +196,43 @@ static arglist_t trl_args[] = {
 };
 
 /**************************************************************************/
-
+// FIXME: Why is this code doing its own byte order conversion?
 static unsigned int byte_order(void)
 {
   unsigned long test = BYTEORDER_TEST;
-  unsigned char *ptr;
+  unsigned char* ptr;
   unsigned int order;
 
-  ptr = (unsigned char *)(&test);
+  ptr = (unsigned char*)(&test);
   order = (ptr[0] << 12) | (ptr[1] << 8) | (ptr[2] << 4) | ptr[3];
 
   return order;
 }
 
-static void sw_bytes(void *word)
+static void sw_bytes(void* word)
 {
-  gbuint8 *p = word;
-  gbuint16 *r = word;
+  gbuint8* p = (gbuint8*) word;
+  gbuint16* r = (gbuint16*) word;
 
   *r = (gbuint16)(p[1] << 8 | p[0]);
 }
-static void sw_words(void *dword)
+static void sw_words(void* dword)
 {
-  gbuint16 *p = dword;
-  gbuint32 *r = dword;
+  gbuint16* p = (gbuint16*) dword;
+  gbuint32* r = (gbuint32*) dword;
 
   *r = (gbuint32)(p[0] << 16 | p[1]);
 }
-static void rev_bytes(void *dword)
+static void rev_bytes(void* dword)
 {
-  gbuint8 *p = dword;
-  gbuint32 *r = dword;
+  gbuint8* p = (gbuint8*) dword;
+  gbuint32* r = (gbuint32*) dword;
 
   *r = (gbuint32)(p[3] << 24 | p[2] << 16 | p[1] << 8 | p[0]);
 }
 
-static void swap_wpthdr(struct wpthdr *wpthdr,
-                        void (*swap16_func)(void *), void (*swap32_func)(void *))
+static void swap_wpthdr(struct wpthdr* wpthdr,
+                        void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
   int i;
 
@@ -248,8 +248,8 @@ static void swap_wpthdr(struct wpthdr *wpthdr,
   }
 }
 
-static void swap_wpt(struct wpt *wpt,
-                     void (*swap16_func)(void *), void (*swap32_func)(void *))
+static void swap_wpt(struct wpt* wpt,
+                     void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
   if (swap16_func != NULL) {
     swap16_func(&wpt->usecount);
@@ -262,8 +262,8 @@ static void swap_wpt(struct wpt *wpt,
   }
 }
 
-static void swap_rtehdr(struct rtehdr *rtehdr,
-                        void (*swap16_func)(void *), void (*swap32_func)(void *))
+static void swap_rtehdr(struct rtehdr* rtehdr,
+                        void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
   int i;
 
@@ -280,8 +280,8 @@ static void swap_rtehdr(struct rtehdr *rtehdr,
   }
 }
 
-static void swap_rte(struct rte *rte,
-                     void (*swap16_func)(void *), void (*swap32_func)(void *))
+static void swap_rte(struct rte* rte,
+                     void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
   int i;
 
@@ -298,10 +298,10 @@ static void swap_rte(struct rte *rte,
   }
 }
 
-static void wpr_swap(struct wprdata *wprdata)
+static void wpr_swap(struct wprdata* wprdata)
 {
-  void (*swap16_func)(void *);
-  void (*swap32_func)(void *);
+  void (*swap16_func)(void*);
+  void (*swap32_func)(void*);
   int i;
 
   switch (byte_order()) {
@@ -334,8 +334,8 @@ static void wpr_swap(struct wprdata *wprdata)
   }
 }
 
-static void swap_trkhdr(struct trkhdr *trkhdr,
-                        void (*swap16_func)(void *), void (*swap32_func)(void *))
+static void swap_trkhdr(struct trkhdr* trkhdr,
+                        void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
   if (swap16_func != NULL) {
     swap16_func(&(trkhdr->totalpt));
@@ -348,8 +348,8 @@ static void swap_trkhdr(struct trkhdr *trkhdr,
   }
 }
 
-static void swap_loghdr(struct loghdr *loghdr,
-                        void (*swap16_func)(void *), void (*swap32_func)(void *))
+static void swap_loghdr(struct loghdr* loghdr,
+                        void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
   int i;
 
@@ -367,8 +367,8 @@ static void swap_loghdr(struct loghdr *loghdr,
   }
 }
 
-static void swap_trklog(struct trklog *trklog,
-                        void (*swap16_func)(void *), void (*swap32_func)(void *))
+static void swap_trklog(struct trklog* trklog,
+                        void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
   int i;
 
@@ -386,10 +386,10 @@ static void swap_trklog(struct trklog *trklog,
   }
 }
 
-static void trl_swap(struct trldata *trldata)
+static void trl_swap(struct trldata* trldata)
 {
-  void (*swap16_func)(void *);
-  void (*swap32_func)(void *);
+  void (*swap16_func)(void*);
+  void (*swap32_func)(void*);
   int i;
 
   switch (byte_order()) {
@@ -421,7 +421,7 @@ static void trl_swap(struct trldata *trldata)
 
 /**************************************************************************/
 
-static void str2lab(char *dest, char *src, int len, char *fmt, int n)
+static void str2lab(char* dest, char* src, int len, char* fmt, int n)
 {
   int i,j;
 
@@ -442,9 +442,9 @@ static void str2lab(char *dest, char *src, int len, char *fmt, int n)
   }
 }
 
-static void pack_time(time_t t, gbint32 *date, gbint32 *time)
+static void pack_time(time_t t, gbint32* date, gbint32* time)
 {
-  struct tm *tm;
+  struct tm* tm;
 
   tm = gmtime(&t);
   *date = tm->tm_mday | ((tm->tm_mon+1)<<8) | ((tm->tm_year+1900)<<16);
@@ -486,12 +486,12 @@ static time_t unpack_time(gbint32 date, gbint32 time)
 
 /**************************************************************************/
 
-static waypoint * get_wpt(struct wprdata *wprdata, unsigned n)
+static waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
 {
-  struct wpthdr *wpthdr;
-  struct wpt *wpt;
+  struct wpthdr* wpthdr;
+  struct wpt* wpt;
   int j, idx;
-  waypoint *WP;
+  waypoint* WP;
 
   wpthdr = &(wprdata->wpthdr);
   idx = wpthdr->idx[n];
@@ -521,11 +521,11 @@ static waypoint * get_wpt(struct wprdata *wprdata, unsigned n)
 static void wpr_read(void)
 {
   struct wprdata wprdata;
-  struct rtehdr *rtehdr;
-  struct rte *rte;
+  struct rtehdr* rtehdr;
+  struct rte* rte;
   int i, j, idx;
-  waypoint *WP;
-  route_head *RT;
+  waypoint* WP;
+  route_head* RT;
 
   if (gbfread(&wprdata, sizeof(struct wprdata), 1, fin) != 1) {
     fatal(MYNAME ": Read error on %s\n", fin->name);
@@ -579,10 +579,10 @@ static void wpr_read(void)
 static void trl_read(void)
 {
   struct trldata trldata;
-  struct trkhdr *trkhdr;
-  struct trklog *trklog;
-  waypoint *WP;
-  route_head *TL;
+  struct trkhdr* trkhdr;
+  struct trklog* trklog;
+  waypoint* WP;
+  route_head* TL;
   int i, j;
 
   for (i=0; i<MAXTRK; i+=2) {
@@ -640,7 +640,7 @@ static void trl_read(void)
 
 /**************************************************************************/
 
-static int find_wpt(struct wprdata *wprdata, const waypoint *WP)
+static int find_wpt(struct wprdata* wprdata, const waypoint* WP)
 {
   struct wpt pattern, *wpt;
   int i, wpt_idx;
@@ -666,11 +666,11 @@ static int find_wpt(struct wprdata *wprdata, const waypoint *WP)
   return -1;
 }
 
-static int add_wpt(struct wprdata *wprdata, const waypoint *WP,int isroute)
+static int add_wpt(struct wprdata* wprdata, const waypoint* WP,int isroute)
 {
-  struct wpthdr *wpthdr;
+  struct wpthdr* wpthdr;
   int hdr_idx, wpt_idx;
-  struct wpt *wpt;
+  struct wpt* wpt;
   int i;
 
   wpthdr = &(wprdata->wpthdr);
@@ -718,16 +718,16 @@ static int add_wpt(struct wprdata *wprdata, const waypoint *WP,int isroute)
   return hdr_idx;
 }
 
-static void wpr_waypoint(const waypoint *WP)
+static void wpr_waypoint(const waypoint* WP)
 {
   add_wpt(&WPR, WP, 0);
 }
 
-static void wpr_route_hdr(const route_head *RT)
+static void wpr_route_hdr(const route_head* RT)
 {
-  struct rtehdr *rtehdr;
+  struct rtehdr* rtehdr;
   int hdr_idx, rte_idx;
-  struct rte *rte;
+  struct rte* rte;
   int i;
 
   rtehdr = &(WPR.rtehdr);
@@ -756,9 +756,9 @@ static void wpr_route_hdr(const route_head *RT)
   /* rtehdr->rteno = rte_idx; */
 }
 
-static void wpr_route_wpt(const waypoint *WP)
+static void wpr_route_wpt(const waypoint* WP)
 {
-  struct rte *rte;
+  struct rte* rte;
   int wpt_idx;
 
   rte = &(WPR.rte[WPR.rtehdr.num -1]);
@@ -772,7 +772,7 @@ static void wpr_route_wpt(const waypoint *WP)
   rte->wptnum ++;
 }
 
-static void wpr_route_trl(const route_head *RT)
+static void wpr_route_trl(const route_head* RT)
 {
   /* should we do some final sanity checks? */
 }
@@ -808,9 +808,9 @@ static void wpr_write(void)
 
 /**************************************************************************/
 
-static void trl_track_hdr(const route_head *TL)
+static void trl_track_hdr(const route_head* TL)
 {
-  struct trkhdr *trkhdr;
+  struct trkhdr* trkhdr;
   int idx, l;
 
   trkhdr = TRL.loghdr.trkhdr;
@@ -845,10 +845,10 @@ static void trl_track_hdr(const route_head *TL)
   TRL.loghdr.num = idx;
 }
 
-static void trl_track_wpt(const waypoint *WP)
+static void trl_track_wpt(const waypoint* WP)
 {
-  struct trklog *trklog;
-  struct trkhdr *trkhdr;
+  struct trklog* trklog;
+  struct trkhdr* trkhdr;
   int trk_idx, log_idx;
 
   trk_idx = TRL.loghdr.num;
@@ -873,9 +873,9 @@ static void trl_track_wpt(const waypoint *WP)
   trkhdr->next = trkhdr->totalpt;
 }
 
-static void trl_track_tlr(const route_head *TL)
+static void trl_track_tlr(const route_head* TL)
 {
-  struct trkhdr *trkhdr;
+  struct trkhdr* trkhdr;
   int trk_idx;
 
   trk_idx = TRL.loghdr.num;
@@ -890,8 +890,8 @@ static void trl_track_tlr(const route_head *TL)
 
 static void trl_write(void)
 {
-  struct trkhdr *trkhdr;
-  void *buf;
+  struct trkhdr* trkhdr;
+  void* buf;
   int i;
   size_t fill;
 
@@ -946,7 +946,7 @@ static void trl_write(void)
 
 /**************************************************************************/
 
-static void alan_rd_init(const char *fname)
+static void alan_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 }
@@ -958,7 +958,7 @@ static void alan_rd_deinit(void)
 }
 
 
-static void alan_wr_init(const char *fname)
+static void alan_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
 }
@@ -980,9 +980,9 @@ static void alan_exit(void)
 ff_vecs_t alanwpr_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write 	/* waypoints */,
+    (ff_cap)(ff_cap_read | ff_cap_write) 	/* waypoints */,
     ff_cap_none              	/* tracks */,
-    ff_cap_read | ff_cap_write 	/* routes */
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* routes */
   },
   alan_rd_init,
   alan_wr_init,
@@ -1001,7 +1001,7 @@ ff_vecs_t alantrl_vecs = {
   ff_type_file,
   {
     ff_cap_none            	/* waypoints */,
-    ff_cap_read | ff_cap_write 	/* tracks */,
+    (ff_cap)(ff_cap_read | ff_cap_write) 	/* tracks */,
     ff_cap_none           	/* routes */
   },
   alan_rd_init,

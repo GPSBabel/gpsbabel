@@ -49,7 +49,7 @@ GPS_PPacket GPS_Packet_New(void)
     fflush(stderr);
     return NULL;
   }
-  if (!(ret->data = (UC *)calloc(1, MAX_GPS_PACKET_SIZE*sizeof(UC)))) {
+  if (!(ret->data = (UC*)calloc(1, MAX_GPS_PACKET_SIZE*sizeof(UC)))) {
     perror("malloc");
     fprintf(stderr,"GPS_Packet_New: Insufficient data memory");
     fflush(stderr);
@@ -69,10 +69,10 @@ GPS_PPacket GPS_Packet_New(void)
 ** @return [void]
 **********************************************************************/
 
-void GPS_Packet_Del(GPS_PPacket *thys)
+void GPS_Packet_Del(GPS_PPacket* thys)
 {
-  free((void *)(*thys)->data);
-  free((void *)*thys);
+  free((void*)(*thys)->data);
+  free((void*)*thys);
 
   return;
 }
@@ -111,9 +111,9 @@ GPS_PPvt_Data GPS_Pvt_New(void)
 ** @return [void]
 **********************************************************************/
 
-void GPS_Pvt_Del(GPS_PPvt_Data *thys)
+void GPS_Pvt_Del(GPS_PPvt_Data* thys)
 {
-  free((void *)*thys);
+  free((void*)*thys);
 
   return;
 }
@@ -156,9 +156,9 @@ GPS_PAlmanac GPS_Almanac_New(void)
 ** @return [void]
 **********************************************************************/
 
-void GPS_Almanac_Del(GPS_PAlmanac *thys)
+void GPS_Almanac_Del(GPS_PAlmanac* thys)
 {
-  free((void *)*thys);
+  free((void*)*thys);
 
   return;
 }
@@ -197,9 +197,9 @@ GPS_PTrack GPS_Track_New(void)
 ** @return [void]
 **********************************************************************/
 
-void GPS_Track_Del(GPS_PTrack *thys)
+void GPS_Track_Del(GPS_PTrack* thys)
 {
-  free((void *)*thys);
+  free((void*)*thys);
 
   return;
 }
@@ -287,9 +287,9 @@ GPS_PWay GPS_Way_New(void)
 ** @return [void]
 **********************************************************************/
 
-void GPS_Way_Del(GPS_PWay *thys)
+void GPS_Way_Del(GPS_PWay* thys)
 {
-  xfree((void *)*thys);
+  xfree((void*)*thys);
 
   return;
 }
@@ -326,9 +326,9 @@ GPS_PLap GPS_Lap_New(void)
 ** @return [void]
 **********************************************************************/
 
-void GPS_Lap_Del(GPS_PLap *thys)
+void GPS_Lap_Del(GPS_PLap* thys)
 {
-  free((void *)*thys);
+  free((void*)*thys);
 
   return;
 }
@@ -364,9 +364,9 @@ GPS_PCourse GPS_Course_New(void)
 **
 ** @return [void]
 **********************************************************************/
-void GPS_Course_Del(GPS_PCourse *thys)
+void GPS_Course_Del(GPS_PCourse* thys)
 {
-  free((void *)*thys);
+  free((void*)*thys);
 
   return;
 }
@@ -403,9 +403,9 @@ GPS_PCourse_Lap GPS_Course_Lap_New(void)
 ** @return [void]
 **********************************************************************/
 
-void GPS_Course_Lap_Del(GPS_PCourse_Lap *thys)
+void GPS_Course_Lap_Del(GPS_PCourse_Lap* thys)
 {
-  free((void *)*thys);
+  free((void*)*thys);
 
   return;
 }
@@ -442,9 +442,9 @@ GPS_PCourse_Point GPS_Course_Point_New(void)
 ** @return [void]
 **********************************************************************/
 
-void GPS_Course_Point_Del(GPS_PCourse_Point *thys)
+void GPS_Course_Point_Del(GPS_PCourse_Point* thys)
 {
-  free((void *)*thys);
+  free((void*)*thys);
 
   return;
 }

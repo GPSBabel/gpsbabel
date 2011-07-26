@@ -19,12 +19,12 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static char *deficon = NULL;
-static char *nuke_placer;
+static char* deficon = NULL;
+static char* nuke_placer;
 
-static waypoint *wpt_tmp;
+static waypoint* wpt_tmp;
 
-static gbfile *ofd;
+static gbfile* ofd;
 
 static
 arglist_t geo_args[] = {
@@ -38,7 +38,7 @@ arglist_t geo_args[] = {
 
 #if ! HAVE_LIBEXPAT
 static void
-geo_rd_init(const char *fname)
+geo_rd_init(const char* fname)
 {
   fatal(MYNAME ": This build excluded GEO support because expat was not installed.\n");
 }
@@ -70,7 +70,7 @@ xg_tag_mapping loc_map[] = {
   { NULL,	(xg_cb_type)0, 		NULL }
 };
 
-void wpt_s(const char *args, const char **unused)
+void wpt_s(const char* args, const char** unused)
 {
   wpt_tmp = waypt_new();
   /*
@@ -82,14 +82,14 @@ void wpt_s(const char *args, const char **unused)
   wpt_tmp->altitude = 0;
 }
 
-void wpt_e(const char *args, const char **unused)
+void wpt_e(const char* args, const char** unused)
 {
   waypt_add(wpt_tmp);
 }
 
-void wpt_name_s(const char *args, const char **attrv)
+void wpt_name_s(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
+  const char** avp = &attrv[0];
   while (*avp) {
     if (0 == strcmp(avp[0], "id")) {
       wpt_tmp->shortname = xstrdup(avp[1]);
@@ -98,9 +98,9 @@ void wpt_name_s(const char *args, const char **attrv)
   }
 }
 
-void wpt_name(const char *args, const char **unused)
+void wpt_name(const char* args, const char** unused)
 {
-  char *s;
+  char* s;
   if (!args) {
     return;
   }
@@ -116,9 +116,9 @@ void wpt_name(const char *args, const char **unused)
   }
 }
 
-void wpt_link_s(const char *args, const char **attrv)
+void wpt_link_s(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
+  const char** avp = &attrv[0];
   while (*avp) {
     if (0 == strcmp(avp[0], "text")) {
       wpt_tmp->url_link_text = xstrdup(avp[1]);
@@ -126,20 +126,20 @@ void wpt_link_s(const char *args, const char **attrv)
     avp+=2;
   }
 }
-void wpt_link(const char *args, const char **attrv)
+void wpt_link(const char* args, const char** attrv)
 {
   wpt_tmp->url = xstrdup(args);
 }
 
-void wpt_type(const char *args, const char **unused)
+void wpt_type(const char* args, const char** unused)
 {
   wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
   wpt_tmp->icon_descr = xstrdup(args);
 }
 
-void wpt_coord(const char *args, const char **attrv)
+void wpt_coord(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
+  const char** avp = &attrv[0];
 
   while (*avp) {
     if (strcmp(avp[0], "lat") == 0) {
@@ -153,7 +153,7 @@ void wpt_coord(const char *args, const char **attrv)
   }
 }
 
-void wpt_container(const char *args, const char **unused)
+void wpt_container(const char* args, const char** unused)
 {
   int v;
 
@@ -189,7 +189,7 @@ void wpt_container(const char *args, const char **unused)
   waypt_alloc_gc_data(wpt_tmp)->container = v;
 }
 
-void wpt_diff(const char *args, const char **unused)
+void wpt_diff(const char* args, const char** unused)
 {
   if (!args) {
     return;
@@ -197,7 +197,7 @@ void wpt_diff(const char *args, const char **unused)
   waypt_alloc_gc_data(wpt_tmp)->diff = atof(args) * 10;
 }
 
-void wpt_terr(const char *args, const char **unused)
+void wpt_terr(const char* args, const char** unused)
 {
   if (!args) {
     return;
@@ -206,7 +206,7 @@ void wpt_terr(const char *args, const char **unused)
 }
 
 static void
-geo_rd_init(const char *fname)
+geo_rd_init(const char* fname)
 {
   xml_init(fname, loc_map, NULL);
 }
@@ -225,7 +225,7 @@ geo_rd_deinit(void)
 }
 
 static void
-geo_wr_init(const char *fname)
+geo_wr_init(const char* fname)
 {
   ofd = gbfopen(fname, "w", MYNAME);
 }
@@ -237,9 +237,9 @@ geo_wr_deinit(void)
 }
 
 static void
-geo_waypt_pr(const waypoint *waypointp)
+geo_waypt_pr(const waypoint* waypointp)
 {
-  char *tmp;
+  char* tmp;
 
   gbfprintf(ofd, "<waypoint>\n");
   gbfprintf(ofd, "<name id=\"%s\">", waypointp->shortname);

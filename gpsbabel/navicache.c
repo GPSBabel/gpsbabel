@@ -23,11 +23,11 @@
 static XML_Parser psr;
 #endif
 
-static waypoint *wpt_tmp;
+static waypoint* wpt_tmp;
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 
-static char *noretired = NULL;
+static char* noretired = NULL;
 
 static
 arglist_t nav_args[] = {
@@ -44,7 +44,7 @@ arglist_t nav_args[] = {
 
 #if ! HAVE_LIBEXPAT
 static void
-nav_rd_init(const char *fname)
+nav_rd_init(const char* fname)
 {
   fatal(MYNAME ": This build excluded GPX support because expat was not installed.\n");
 }
@@ -58,7 +58,7 @@ nav_read(void)
 static struct
     nc_type_mapping {
   geocache_type type;
-  const char *name;
+  const char* name;
 } nc_type_map[] = {
   { gt_unknown, "unknown" },
   { gt_traditional, "normal" },
@@ -70,7 +70,7 @@ static struct
 static struct
     nc_container_mapping {
   geocache_container type;
-  const char *name;
+  const char* name;
 } nc_container_map[] = {
   { gc_other, "Unknown" },
   { gc_micro, "Micro" },
@@ -81,7 +81,7 @@ static struct
 
 static
 geocache_type
-nc_mktype(const char *t)
+nc_mktype(const char* t)
 {
   int i;
   int sz = sizeof(nc_type_map) / sizeof(nc_type_map[0]);
@@ -96,7 +96,7 @@ nc_mktype(const char *t)
 
 static
 geocache_container
-nc_mkcont(const char *t)
+nc_mkcont(const char* t)
 {
   int i;
   int sz = sizeof(nc_container_map) / sizeof(nc_container_map[0]);
@@ -110,16 +110,16 @@ nc_mkcont(const char *t)
 }
 
 static void
-nav_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
+nav_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
 {
-  const char *el;
-  const char **attr;
+  const char* el;
+  const char** attr;
 
   el = xml_convert_to_char_string(xml_el);
   attr = xml_convert_attrs_to_char_string(xml_attr);
   if (0 == strcmp(el, "CacheDetails")) {
-    const char **ap;
-    geocache_data *gc_data;
+    const char** ap;
+    geocache_data* gc_data;
     wpt_tmp = waypt_new();
     gc_data = waypt_alloc_gc_data(wpt_tmp);
 
@@ -200,12 +200,12 @@ nav_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 }
 
 static void
-nav_end(void *data, const XML_Char *el)
+nav_end(void* data, const XML_Char* el)
 {
 }
 
 static void
-nav_rd_init(const char *fname)
+nav_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
 
@@ -244,7 +244,7 @@ nav_rd_deinit(void)
 }
 
 static void
-nav_wr_init(const char *fname)
+nav_wr_init(const char* fname)
 {
   fatal(MYNAME ": Does not support writing Navicache files.\n");
   fout = gbfopen(fname, "w", MYNAME);

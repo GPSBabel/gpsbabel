@@ -48,7 +48,7 @@ arglist_t filter_skeleton_args[] = {
 *******************************************************************************/
 
 static void
-filter_skeleton_init(const char *args)
+filter_skeleton_init(const char* args)
 {
   /* Called before filter processing */
 

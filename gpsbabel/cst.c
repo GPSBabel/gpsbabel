@@ -38,9 +38,9 @@
 #define CST_REFERENCE	4
 #define CST_VERSION	5
 
-static gbfile *fin;
+static gbfile* fin;
 
-static route_head *temp_route;
+static route_head* temp_route;
 
 /* placeholders for options */
 
@@ -52,7 +52,7 @@ arglist_t cst_args[] = {
 /* helpers */
 
 static void
-cst_add_wpt(const route_head *track, waypoint *wpt)
+cst_add_wpt(const route_head* track, waypoint* wpt)
 {
   if ((wpt == NULL) || (track == NULL)) {
     return;
@@ -71,14 +71,14 @@ cst_add_wpt(const route_head *track, waypoint *wpt)
     }
     route_add_wpt(temp_route, waypt_dupe(wpt));
   }
-  track_add_wpt((route_head *)track, (waypoint *)wpt);
+  track_add_wpt((route_head*)track, (waypoint*)wpt);
 }
 
-static char *
-cst_make_url(char *str)
+static char*
+cst_make_url(char* str)
 {
   int len = strlen(str);
-  char *res;
+  char* res;
 
   if (len < 3) {
     return NULL;
@@ -92,7 +92,7 @@ cst_make_url(char *str)
     res[8] = *str++;
     res = xstrappend(res, str);
     {
-      char *c;
+      char* c;
       int i;
 
       c = res;			/* replace all backslashes with a slash */
@@ -108,10 +108,10 @@ cst_make_url(char *str)
       }
 
       if (i > 0) {		/* .. and replace them with "%20" */
-        char *src, *dest, *last;
+        char* src, *dest, *last;
 
         last = src = res;
-        res = dest = xcalloc(strlen(src) + (2*i) + 1, 1);
+        res = dest = (char*) xcalloc(strlen(src) + (2*i) + 1, 1);
         while ((c = strchr(src, ' '))) {
           if (c != src) {
             strncpy(dest, src, c - src);
@@ -138,7 +138,7 @@ cst_make_url(char *str)
 /* --------------------------------------------------------------------------- */
 
 static void
-cst_rd_init(const char *fname)
+cst_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
   temp_route = NULL;
@@ -155,7 +155,7 @@ cst_rd_deinit(void)
 static void
 cst_data_read(void)
 {
-  char *buff;
+  char* buff;
   int line = 0;
   int data_lines = -1;
   int line_of_count = -1;
@@ -163,11 +163,11 @@ cst_data_read(void)
   int section = CST_UNKNOWN;
   int cst_version;
   int cst_points = -1;
-  route_head *track = NULL;
-  waypoint *wpt = NULL;
+  route_head* track = NULL;
+  waypoint* wpt = NULL;
 
   while ((buff = gbfgetstr(fin))) {
-    char *cin = buff;
+    char* cin = buff;
 
     if ((line++ == 0) && fin->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
@@ -245,7 +245,7 @@ cst_data_read(void)
       } else {
         int interp, i;
         char name[256];
-        char *pow;
+        char* pow;
 
         if (data_lines < 0) {
           if ((2 != sscanf(cin, "%d %128s", &i, name)) ||
@@ -278,7 +278,7 @@ cst_data_read(void)
           track = route_head_alloc();
           track_add_head(track);
         } else if (strncmp(name, "NAME:", 5) == 0) {
-          wpt->shortname = xstrdup(((char *)&name) + 5);
+          wpt->shortname = xstrdup(((char*)&name) + 5);
         }
 
         pow = strrchr(cin, '^');
@@ -324,7 +324,7 @@ cst_data_read(void)
 
 #if 0
 static void
-cst_wr_init(const char *fname)
+cst_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 }
@@ -336,17 +336,17 @@ cst_wr_deinit(void)
 }
 
 static void
-cst_route_hdr(const route_head *rte)
+cst_route_hdr(const route_head* rte)
 {
 }
 
 static void
-cst_route_tlr(const route_head *rte)
+cst_route_tlr(const route_head* rte)
 {
 }
 
 static void
-cst_write_wpt(const waypoint *wpt)
+cst_write_wpt(const waypoint* wpt)
 {
 }
 

@@ -46,9 +46,9 @@
 #define TR7_S_VALID	28
 #define TR7_S_FIX	29
 
-static gbfile *fin, *fout;
-static const waypoint *wpt_tmp;
-static const route_head *trk_tmp;
+static gbfile* fin, *fout;
+static const waypoint* wpt_tmp;
+static const route_head* trk_tmp;
 static int course_tmp, speed_tmp;
 struct tm tmref;
 
@@ -62,7 +62,7 @@ arglist_t tr7_args[] = {
 *******************************************************************************/
 
 static void
-tr7_rd_init(const char *fname)
+tr7_rd_init(const char* fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
   tmref = *gmtime(&gpsbabel_now);
@@ -73,9 +73,9 @@ tr7_rd_init(const char *fname)
 static void
 tr7_read(void)
 {
-  route_head *trk = NULL;
+  route_head* trk = NULL;
   unsigned int magic;
-  waypoint *prev = NULL;
+  waypoint* prev = NULL;
 
   magic = gbfgetint32(fin);
   if (magic != TR7_TRACK_MAGIC) {
@@ -86,7 +86,7 @@ tr7_read(void)
     unsigned char buff[TR7_S_SIZE];
     double lat, lon;
     struct tm tm;
-    waypoint *wpt;
+    waypoint* wpt;
     float speed, course;
 
     gbfread(buff, 1, sizeof(buff), fin);
@@ -163,7 +163,7 @@ tr7_read(void)
 }
 
 static void
-tr7_check_after_read_head_cb(const route_head *trk)
+tr7_check_after_read_head_cb(const route_head* trk)
 {
   trk_tmp = trk;
   course_tmp = 0;
@@ -171,7 +171,7 @@ tr7_check_after_read_head_cb(const route_head *trk)
 }
 
 static void
-tr7_check_after_read_wpt_cb(const waypoint *wpt)
+tr7_check_after_read_wpt_cb(const waypoint* wpt)
 {
   if (wpt->speed != 0) {
     speed_tmp = 1;
@@ -182,11 +182,11 @@ tr7_check_after_read_wpt_cb(const waypoint *wpt)
 }
 
 static void
-tr7_check_after_read_trailer_cb(const route_head *trk)
+tr7_check_after_read_trailer_cb(const route_head* trk)
 {
-  queue *elem, *tmp;
-  QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
-    waypoint *wpt = (waypoint *)elem;
+  queue* elem, *tmp;
+  QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
+    waypoint* wpt = (waypoint*)elem;
     if (speed_tmp == 0) {
       WAYPT_UNSET(wpt, speed);
     }
@@ -212,13 +212,13 @@ tr7_rd_deinit(void)
 *******************************************************************************/
 
 static void
-tr7_disp_track_head_cb(const route_head *trk)
+tr7_disp_track_head_cb(const route_head* trk)
 {
   wpt_tmp = NULL;
 }
 
 static void
-tr7_disp_waypt_cb(const waypoint *wpt)
+tr7_disp_waypt_cb(const waypoint* wpt)
 {
   unsigned char buff[TR7_S_SIZE];
   struct tm tm;
@@ -274,7 +274,7 @@ tr7_disp_waypt_cb(const waypoint *wpt)
 }
 
 static void
-tr7_wr_init(const char *fname)
+tr7_wr_init(const char* fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
   gbfputint32(TR7_TRACK_MAGIC, fout);
@@ -298,7 +298,7 @@ ff_vecs_t mapasia_tr7_vecs = {		/* we can read and write tracks */
   ff_type_file,
   {
     ff_cap_none 			/* waypoints */,
-    ff_cap_read | ff_cap_write	/* tracks */,
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* tracks */,
     ff_cap_none			/* routes */
   },
   tr7_rd_init,

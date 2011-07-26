@@ -58,7 +58,7 @@ arglist_t format_skeleton_args[] = {
 *******************************************************************************/
 
 static void
-format_skeleton_rd_init(const char *fname)
+format_skeleton_rd_init(const char* fname)
 {
 //	fin = gbfopen(fname, "r", MYNAME);
 }
@@ -105,7 +105,7 @@ format_skeleton_read(void)
 }
 
 static void
-format_skeleton_wr_init(const char *fname)
+format_skeleton_wr_init(const char* fname)
 {
 //	fout = gbfopen(fname, "w", MYNAME);
 }

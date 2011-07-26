@@ -29,11 +29,11 @@ static arglist_t ikt_args[] = {
 
 #define MYNAME "ikt"
 
-static char *name, *text;
+static char* name, *text;
 
 #if ! HAVE_LIBEXPAT
 void
-ikt_rd_init(const char *fname)
+ikt_rd_init(const char* fname)
 {
   fatal(MYNAME ": This build excluded \" MYNAME \" support because expat was not installed.\n");
 }
@@ -50,8 +50,8 @@ ikt_object_end(void)
 
 #else
 
-static route_head *track;
-static waypoint *waypt;
+static route_head* track;
+static waypoint* waypt;
 
 static xg_callback	iktobj_waypt, iktobj_type, iktobj_name, iktobj_trkpt, iktobj_text;
 
@@ -67,7 +67,7 @@ xg_tag_mapping ikt_map[] = {
   { iktobj_waypt,	cb_start,	IKTOBJ "_*/GeoPosition" },
   { iktobj_name,	cb_cdata,	IKTOBJ "_*/Name" },
   { iktobj_text,	cb_cdata,	IKTOBJ "_*/POIDrawable2D/Text" },
-  { NULL,		0,		NULL }
+  { NULL,	(xg_cb_type)0,		NULL }
 };
 
 static void
@@ -97,9 +97,9 @@ ikt_object_end(void)
 }
 
 static void
-iktobj_waypt(const char *args, const char **attrv)
+iktobj_waypt(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
+  const char** avp = &attrv[0];
 
   while (*avp) {
     if (strcmp(avp[0], "X") == 0) {
@@ -112,9 +112,9 @@ iktobj_waypt(const char *args, const char **attrv)
 }
 
 static void
-iktobj_trkpt(const char *args, const char **attrv)
+iktobj_trkpt(const char* args, const char** attrv)
 {
-  const char **avp = &attrv[0];
+  const char** avp = &attrv[0];
 
   waypt = waypt_new();
   while (*avp) {
@@ -130,19 +130,19 @@ iktobj_trkpt(const char *args, const char **attrv)
 }
 
 static void
-iktobj_name(const char *args, const char **unused)
+iktobj_name(const char* args, const char** unused)
 {
   name = xstrdup(args);
 }
 
 static void
-iktobj_text(const char *args, const char **unused)
+iktobj_text(const char* args, const char** unused)
 {
   text = xstrdup(args);
 }
 
 static void
-iktobj_type(const char *args, const char **unused)
+iktobj_type(const char* args, const char** unused)
 {
   ikt_object_end();
 
@@ -159,7 +159,7 @@ iktobj_type(const char *args, const char **unused)
 }
 
 static void
-ikt_rd_init(const char *fname)
+ikt_rd_init(const char* fname)
 {
   xml_init(fname, ikt_map, NULL);
 

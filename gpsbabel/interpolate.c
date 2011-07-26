@@ -26,11 +26,11 @@
 #if FILTERS_ENABLED
 #define MYNAME "Interpolate filter"
 
-static char *opt_interval = NULL;
+static char* opt_interval = NULL;
 int interval = 0;
-static char *opt_dist = NULL;
+static char* opt_dist = NULL;
 double dist = 0;
-static char *opt_route = NULL;
+static char* opt_route = NULL;
 
 static
 arglist_t interpfilt_args[] = {
@@ -54,9 +54,9 @@ arglist_t interpfilt_args[] = {
 void
 interpfilt_process(void)
 {
-  queue *backuproute = NULL;
-  queue *elem, *tmp, *elem2, *tmp2;
-  route_head *rte_new;
+  queue* backuproute = NULL;
+  queue* elem, *tmp, *elem2, *tmp2;
+  route_head* rte_new;
   int count = 0;
   int first = 0;
   double lat1 = 0, lon1 = 0;
@@ -74,7 +74,7 @@ interpfilt_process(void)
     route_flush_all_tracks();
   }
   QUEUE_FOR_EACH(backuproute, elem, tmp) {
-    route_head *rte_old = (route_head *)elem;
+    route_head* rte_old = (route_head*)elem;
 
     rte_new = route_head_alloc();
     rte_new->rte_name = xstrdup(rte_old->rte_name);
@@ -88,7 +88,7 @@ interpfilt_process(void)
     }
     first = 1;
     QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2) {
-      waypoint *wpt = (waypoint *)elem2;
+      waypoint* wpt = (waypoint*)elem2;
       if (first) {
         first = 0;
       } else {
@@ -97,7 +97,7 @@ interpfilt_process(void)
           for (timen = time1+interval;
                timen < wpt->creation_time;
                timen += interval) {
-            waypoint *wpt_new = waypt_dupe(wpt);
+            waypoint* wpt_new = waypt_dupe(wpt);
             wpt_new->creation_time = timen;
             if (wpt_new->shortname) {
               xfree(wpt_new->shortname);
@@ -129,7 +129,7 @@ interpfilt_process(void)
             for (distn = dist;
                  distn < curdist;
                  distn += dist) {
-              waypoint *wpt_new = waypt_dupe(wpt);
+              waypoint* wpt_new = waypt_dupe(wpt);
               wpt_new->creation_time = distn/curdist*
                                        (wpt->creation_time - time1) + time1;
               if (wpt_new->shortname) {
@@ -169,10 +169,10 @@ interpfilt_process(void)
 }
 
 void
-interpfilt_init(const char *args)
+interpfilt_init(const char* args)
 {
 
-  char *fm;
+  char* fm;
   if (opt_interval && opt_dist) {
     fatal(MYNAME ": Can't interpolate on both time and distance.\n");
   } else if (opt_interval && opt_route) {

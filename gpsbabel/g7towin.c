@@ -39,7 +39,7 @@
 
 #define G7T_HEADER	"Version 2:G7T"
 
-static gbfile *fin;
+static gbfile* fin;
 static grid_type grid;
 static int datum;
 static gpsdata_type mode;
@@ -70,9 +70,9 @@ arglist_t g7towin_args[] = {
 #define WPT_cD_OFS	0x0cD00
 
 static void
-parse_line(char *buff, int index, const char *delimiter, waypoint *wpt)
+parse_line(char* buff, int index, const char* delimiter, waypoint* wpt)
 {
-  char *cin;
+  char* cin;
   garmin_fs_p gmsd = GMSD_FIND(wpt);
 
   while ((cin = csv_lineparse(buff, delimiter, "", index++))) {
@@ -91,7 +91,7 @@ parse_line(char *buff, int index, const char *delimiter, waypoint *wpt)
 
       int categories, dyn;
       struct tm tm;
-      char *cerr;
+      char* cerr;
 
     case TRKPT__OFS + 1:
       cin += parse_coordinates(cin, datum, grid,
@@ -268,18 +268,18 @@ parse_line(char *buff, int index, const char *delimiter, waypoint *wpt)
   }
 }
 
-static waypoint *
-parse_waypt(char *buff)
+static waypoint*
+parse_waypt(char* buff)
 {
-  char *cin, *cerr;
+  char* cin, *cerr;
   int i;
   struct tm tm;
-  waypoint *wpt;
+  waypoint* wpt;
   garmin_fs_p gmsd;
 
   wpt = waypt_new();
   gmsd = garmin_fs_alloc(-1);
-  fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
+  fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
   if (gardown) {
     cin = buff + 6;
@@ -343,15 +343,15 @@ parse_waypt(char *buff)
   return wpt;
 }
 
-static waypoint *
-parse_trkpt(char *buff)
+static waypoint*
+parse_trkpt(char* buff)
 {
   garmin_fs_p gmsd;
-  waypoint *wpt;
+  waypoint* wpt;
 
   wpt = waypt_new();
   gmsd = garmin_fs_alloc(-1);
-  fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
+  fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
   parse_line(buff, TRKPT__OFS, ";", wpt);
 
@@ -365,9 +365,9 @@ parse_trkpt(char *buff)
  */
 
 static void
-parse_categories(char *buff)
+parse_categories(char* buff)
 {
-  char *cin;
+  char* cin;
   int cat = 0;
 
   while ((cin = csv_lineparse(buff, ",", "", cat++))) {
@@ -388,7 +388,7 @@ parse_categories(char *buff)
 /* main functions */
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 
@@ -409,15 +409,15 @@ rd_deinit(void)
 static void
 data_read(void)
 {
-  char *buff;
+  char* buff;
   int line = 0;
-  waypoint *wpt = NULL;
-  waypoint *prev = NULL;
-  route_head *head = NULL;
+  waypoint* wpt = NULL;
+  waypoint* prev = NULL;
+  route_head* head = NULL;
 
   while ((buff = gbfgetstr(fin))) {
-    char *cin = buff;
-    char *cdata;
+    char* cin = buff;
+    char* cdata;
 
     if ((line++ == 0) && fin->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
@@ -540,7 +540,7 @@ data_read(void)
           cdata++;
         }
         if (*cdata) {
-          char *s;
+          char* s;
           s = strrchr(cdata, ',');
           if (s) {
             *s = '\0';

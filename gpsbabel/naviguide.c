@@ -69,9 +69,9 @@ typedef struct {
 
 /* Global variables */
 
-static gbfile *file_in, *file_out;
+static gbfile* file_in, *file_out;
 static gbuint16 nof_wp;
-static route_head *rte_head;
+static route_head* rte_head;
 static ng_file_header_t ng_file_header;
 static ng_wp_no_comment_t WPNC;
 static ng_next_wp_t ng_next_wp;
@@ -81,8 +81,8 @@ static char strComment[101];
 /* wp - process only waypoints */
 /* rte - process as route */
 /* wprte - Process waypoints and route */
-static char *process = NULL;
-static char *reorder = NULL;
+static char* process = NULL;
+static char* reorder = NULL;
 static int process_rte = 1;
 static int reorder_wp = 0;
 
@@ -111,7 +111,7 @@ arglist_t ng_args[] = {
 /*===================Utilities ==========================================*/
 
 static void
-ng_convert_datum(waypoint *wpt)
+ng_convert_datum(waypoint* wpt)
 {
   double lat, lon, east, north, alt;
 
@@ -130,7 +130,7 @@ ng_convert_datum(waypoint *wpt)
 /*=================== File read/write utilities ==========================================*/
 
 static void
-ng_fwrite_wp_data(char *s, char *d, ng_wp_data_t *wp_data, gbfile *f)
+ng_fwrite_wp_data(char* s, char* d, ng_wp_data_t* wp_data, gbfile* f)
 {
   int i;
   char z[50];
@@ -154,7 +154,7 @@ ng_fwrite_wp_data(char *s, char *d, ng_wp_data_t *wp_data, gbfile *f)
 }
 
 static void
-ng_fwrite_next_wp(ng_next_wp_t *nwp, gbfile *f)
+ng_fwrite_next_wp(ng_next_wp_t* nwp, gbfile* f)
 {
   gbfwrite(nwp->pad1, 2, 1, f);
   gbfputint16(nwp->next_wp, f);
@@ -162,7 +162,7 @@ ng_fwrite_next_wp(ng_next_wp_t *nwp, gbfile *f)
 }
 
 static void
-ng_fread_wp_data(char *d, ng_wp_no_comment_t *wpnc, gbfile *f)
+ng_fread_wp_data(char* d, ng_wp_no_comment_t* wpnc, gbfile* f)
 {
 
   int i;
@@ -187,7 +187,7 @@ ng_fread_wp_data(char *d, ng_wp_no_comment_t *wpnc, gbfile *f)
 }
 
 static void
-ng_fread_next_wp(ng_next_wp_t *nwp, gbfile *f)
+ng_fread_next_wp(ng_next_wp_t* nwp, gbfile* f)
 {
   gbfread(&nwp->pad1, 2, 1, f);
   nwp->next_wp = gbfgetint16(f);
@@ -236,9 +236,9 @@ ng_fill_waypoint_default(void)
 
 
 static void
-ng_waypt_rd(const waypoint * wpt)
+ng_waypt_rd(const waypoint* wpt)
 {
-  char * s = NULL;
+  char* s = NULL;
 
   char z[50];
   double lat, lon;
@@ -305,7 +305,7 @@ data_write(void)
 
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen_le(fname, "wb", MYNAME);
   ng_fill_header_default();
@@ -325,7 +325,7 @@ wr_deinit(void)
 /*=========================== Read data functions ==================================*/
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen_le(fname, "rb", MYNAME);
 
@@ -373,7 +373,7 @@ data_read(void)
 {
   int n;
   unsigned i;
-  waypoint *wpt_tmp;
+  waypoint* wpt_tmp;
 
   if (process_rte) {
     rte_head = route_head_alloc();

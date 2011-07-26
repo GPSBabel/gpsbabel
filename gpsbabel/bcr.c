@@ -50,18 +50,18 @@
     but this seems to be used by Map&Guide when exporting to XML.
 */
 
-static gbfile *fout;
-static char *filename;
+static gbfile* fout;
+static char* filename;
 static int curr_rte_num, target_rte_num;
 static double radius;
-static inifile_t *ini;
+static inifile_t* ini;
 
 /* placeholders for options */
 
-static char *rtenum_opt;
-static char *rtename_opt;
-static char *radius_opt;
-static char *prefer_shortnames_opt;
+static char* rtenum_opt;
+static char* rtename_opt;
+static char* radius_opt;
+static char* prefer_shortnames_opt;
 
 static
 arglist_t bcr_args[] = {
@@ -85,9 +85,9 @@ arglist_t bcr_args[] = {
 };
 
 typedef struct {
-  const char *bcr_name;
-  const char *mps_name;
-  const char *symbol_DE;
+  const char* bcr_name;
+  const char* mps_name;
+  const char* symbol_DE;
   int  warned;
 } bcr_icon_mapping_t;
 
@@ -126,9 +126,9 @@ bcr_icon_mapping_t bcr_icon_mapping[] = {
 };
 
 static void
-bcr_handle_icon_str(const char *str, waypoint *wpt)
+bcr_handle_icon_str(const char* str, waypoint* wpt)
 {
-  bcr_icon_mapping_t *m;
+  bcr_icon_mapping_t* m;
 
   wpt->icon_descr = BCR_DEF_MPS_ICON;
 
@@ -153,13 +153,13 @@ bcr_handle_icon_str(const char *str, waypoint *wpt)
   }
 }
 
-static const char *
-get_bcr_icon_from_icon_descr(const char *icon_descr)
+static const char*
+get_bcr_icon_from_icon_descr(const char* icon_descr)
 {
-  const char *result = BCR_DEF_ICON;
+  const char* result = BCR_DEF_ICON;
 
   if (icon_descr) {
-    bcr_icon_mapping_t *m;
+    bcr_icon_mapping_t* m;
 
     for (m = bcr_icon_mapping; (m->bcr_name); m++) {
       if (! m->mps_name) {
@@ -192,7 +192,7 @@ bcr_init_radius(void)
 }
 
 static void
-bcr_rd_init(const char *fname)
+bcr_rd_init(const char* fname)
 {
   filename = xstrdup(fname);
   ini = inifile_init(fname, MYNAME);
@@ -212,19 +212,19 @@ bcr_rd_deinit(void)
 /* ------------------------------------------------------------*/
 
 static void
-bcr_create_waypts_from_route(route_head *route)
+bcr_create_waypts_from_route(route_head* route)
 {
-  waypoint *wpt;
-  queue *elem, *tmp;
+  waypoint* wpt;
+  queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    wpt = waypt_dupe((waypoint *) elem);
+    wpt = waypt_dupe((waypoint*) elem);
     waypt_add(wpt);
   }
 }
 
 static void
-bcr_wgs84_to_mercator(const double lat, const double lon, int *north, int *east)
+bcr_wgs84_to_mercator(const double lat, const double lon, int* north, int* east)
 {
   double N, E;
 
@@ -247,7 +247,7 @@ bcr_wgs84_to_mercator(const double lat, const double lon, int *north, int *east)
 }
 
 void
-bcr_mercator_to_wgs84(const int north, const int east, double *lat, double *lon)
+bcr_mercator_to_wgs84(const int north, const int east, double* lat, double* lon)
 {
   *lat = 2 * (atan(exp(north / radius)) - M_PI / 4) / M_PI * (double)180;
   *lon = (double)east * (double)180 / (radius * M_PI);
@@ -259,8 +259,8 @@ static void
 bcr_data_read(void)
 {
   int index;
-  char *str;
-  route_head *route;
+  char* str;
+  route_head* route;
 
   route = route_head_alloc();
 
@@ -273,9 +273,9 @@ bcr_data_read(void)
   for (index = 1; index > 0; index ++) {
 
     char station[32];
-    char *str;
+    char* str;
     int mlat, mlon;		/* mercator data */
-    waypoint *wpt;
+    waypoint* wpt;
 
     snprintf(station, sizeof(station), "STATION%d", index);
     if (NULL == (str = inifile_readstr(ini, "coordinates", station))) {
@@ -292,7 +292,7 @@ bcr_data_read(void)
     bcr_mercator_to_wgs84(mlat, mlon, &wpt->latitude, &wpt->longitude);
 
     if (NULL != (str = inifile_readstr(ini, "client", station))) {
-      char *cx;
+      char* cx;
 
       cx = strchr(str, ',');
       if (cx == NULL) {
@@ -303,7 +303,7 @@ bcr_data_read(void)
     }
 
     if (NULL != (str = inifile_readstr(ini, "description", station))) {
-      char *c;
+      char* c;
 
       c = strchr(str, ',');
       if (c != NULL) {
@@ -339,7 +339,7 @@ bcr_data_read(void)
 /* %%% bcr write support %%% ----------------------------------- */
 
 static void
-bcr_wr_init(const char *fname)
+bcr_wr_init(const char* fname)
 {
   filename = xstrdup(fname);
   fout = gbfopen(fname, "wb", MYNAME);
@@ -354,22 +354,22 @@ bcr_wr_deinit(void)
 }
 
 static void
-bcr_route_trailer(const route_head *rte)
+bcr_route_trailer(const route_head* rte)
 {
 }
 
 static void
-bcr_write_wpt(const waypoint *wpt)
+bcr_write_wpt(const waypoint* wpt)
 {
 }
 
-void bcr_write_line(gbfile *fout, const char *key, int *index, const char *value)
+void bcr_write_line(gbfile* fout, const char* key, int* index, const char* value)
 {
   if (value == NULL) {			/* this is mostly used in the world of windows */
     /* so we respectfully add a CR/LF on each line */
     gbfprintf(fout, "%s\r\n", key);
   } else {
-    char *tmp;
+    char* tmp;
 
     tmp = (value != NULL) ? xstrdup(value) : xstrdup("");
     if (index != NULL) {
@@ -382,11 +382,11 @@ void bcr_write_line(gbfile *fout, const char *key, int *index, const char *value
 }
 
 static void
-bcr_route_header(const route_head *route)
+bcr_route_header(const route_head* route)
 {
-  queue *elem, *tmp;
-  waypoint *wpt;
-  char *sout;
+  queue* elem, *tmp;
+  waypoint* wpt;
+  char* sout;
   int i, north, east, nmin, nmax, emin, emax;
 
   curr_rte_num++;
@@ -411,8 +411,8 @@ bcr_route_header(const route_head *route)
 
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    const char *icon;
-    waypoint *wpt = (waypoint *) elem;
+    const char* icon;
+    waypoint* wpt = (waypoint*) elem;
 
     i++;
 
@@ -431,7 +431,7 @@ bcr_route_header(const route_head *route)
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
     i++;
-    wpt = (waypoint *) elem;
+    wpt = (waypoint*) elem;
 
     bcr_wgs84_to_mercator(wpt->latitude, wpt->longitude, &north, &east);
 
@@ -457,10 +457,10 @@ bcr_route_header(const route_head *route)
 
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    char *s1, *s2, *sout;
+    char* s1, *s2, *sout;
 
     i++;
-    wpt = (waypoint *) elem;
+    wpt = (waypoint*) elem;
     s1 = wpt->notes;
     if (s1 == NULL) {
       s1 = wpt->description;
@@ -521,7 +521,7 @@ bcr_data_write(void)
 
 ff_vecs_t bcr_vecs = {
   ff_type_file,
-  { ff_cap_none, ff_cap_none, ff_cap_read | ff_cap_write},
+  { ff_cap_none, ff_cap_none, (ff_cap)(ff_cap_read | ff_cap_write)},
   bcr_rd_init,
   bcr_wr_init,
   bcr_rd_deinit,

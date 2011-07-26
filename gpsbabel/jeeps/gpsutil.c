@@ -72,12 +72,12 @@ int32 GPS_Util_Little(void)
 ** @return [US] value
 ************************************************************************/
 
-US GPS_Util_Get_Short(const UC *s)
+US GPS_Util_Get_Short(const UC* s)
 {
   static US ret;
-  UC *p;
+  UC* p;
 
-  p = (UC *)&ret;
+  p = (UC*)&ret;
 
   if (!GPS_Little) {
     *p++ = *(s+1);
@@ -102,11 +102,11 @@ US GPS_Util_Get_Short(const UC *s)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Util_Put_Short(UC *s, const US v)
+void GPS_Util_Put_Short(UC* s, const US v)
 {
-  UC *p;
+  UC* p;
 
-  p = (UC *)&v;
+  p = (UC*)&v;
 
   if (!GPS_Little) {
     *s++ = *(p+1);
@@ -128,13 +128,13 @@ void GPS_Util_Put_Short(UC *s, const US v)
 ** @return [double] value
 ************************************************************************/
 
-double GPS_Util_Get_Double(const UC *s)
+double GPS_Util_Get_Double(const UC* s)
 {
   double ret;
-  UC *p;
+  UC* p;
   int32 i;
 
-  p = (UC *)&ret;
+  p = (UC*)&ret;
 
 
   if (!GPS_Little)
@@ -161,12 +161,12 @@ double GPS_Util_Get_Double(const UC *s)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Util_Put_Double(UC *s, const double v)
+void GPS_Util_Put_Double(UC* s, const double v)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
-  p = (UC *)&v;
+  p = (UC*)&v;
 
   if (!GPS_Little)
     for (i=sizeof(double)-1; i>-1; --i) {
@@ -190,13 +190,13 @@ void GPS_Util_Put_Double(UC *s, const double v)
 ** @return [int32] value
 ************************************************************************/
 
-int32 GPS_Util_Get_Int(const UC *s)
+int32 GPS_Util_Get_Int(const UC* s)
 {
   int32 ret;
-  UC *p;
+  UC* p;
   int32 i;
 
-  p = (UC *)&ret;
+  p = (UC*)&ret;
 
 
   if (!GPS_Little)
@@ -223,12 +223,12 @@ int32 GPS_Util_Get_Int(const UC *s)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Util_Put_Int(UC *s, const int32 v)
+void GPS_Util_Put_Int(UC* s, const int32 v)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
-  p = (UC *)&v;
+  p = (UC*)&v;
 
   if (!GPS_Little)
     for (i=sizeof(int32)-1; i>-1; --i) {
@@ -251,13 +251,13 @@ void GPS_Util_Put_Int(UC *s, const int32 v)
 ** @return [uint32] value
 ************************************************************************/
 
-uint32 GPS_Util_Get_Uint(const UC *s)
+uint32 GPS_Util_Get_Uint(const UC* s)
 {
   uint32 ret;
-  UC     *p;
+  UC*     p;
   int32  i;
 
-  p = (UC *)&ret;
+  p = (UC*)&ret;
 
 
   if (!GPS_Little)
@@ -284,12 +284,12 @@ uint32 GPS_Util_Get_Uint(const UC *s)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Util_Put_Uint(UC *s, const uint32 v)
+void GPS_Util_Put_Uint(UC* s, const uint32 v)
 {
-  UC    *p;
+  UC*    p;
   int32 i;
 
-  p = (UC *)&v;
+  p = (UC*)&v;
 
   if (!GPS_Little)
     for (i=sizeof(uint32)-1; i>-1; --i) {
@@ -312,13 +312,13 @@ void GPS_Util_Put_Uint(UC *s, const uint32 v)
 ** @return [float] value
 ************************************************************************/
 
-float GPS_Util_Get_Float(const UC *s)
+float GPS_Util_Get_Float(const UC* s)
 {
   float ret;
-  UC *p;
+  UC* p;
   int32 i;
 
-  p = (UC *)&ret;
+  p = (UC*)&ret;
 
 
   if (!GPS_Little)
@@ -345,12 +345,12 @@ float GPS_Util_Get_Float(const UC *s)
 ** @return [void]
 ************************************************************************/
 
-void GPS_Util_Put_Float(UC *s, const float v)
+void GPS_Util_Put_Float(UC* s, const float v)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
-  p = (UC *)&v;
+  p = (UC*)&v;
 
   if (!GPS_Little)
     for (i=sizeof(float)-1; i>-1; --i) {
@@ -457,7 +457,7 @@ int32 GPS_Util_Block(int32 fd, int32 state)
 ** @@
 ****************************************************************************/
 
-void GPS_Warning(char *s)
+void GPS_Warning(char* s)
 {
   if (!gps_warning) {
     return;
@@ -481,7 +481,7 @@ void GPS_Warning(char *s)
 ** @@
 ****************************************************************************/
 
-void GPS_Fatal(char *s)
+void GPS_Fatal(char* s)
 {
 
   fprintf(stderr,"[FATAL] %s\n",s);
@@ -501,7 +501,7 @@ void GPS_Fatal(char *s)
 ** @@
 ****************************************************************************/
 
-void GPS_Error(char *fmt, ...)
+void GPS_Error(char* fmt, ...)
 {
   va_list argp;
   va_start(argp, fmt);
@@ -594,7 +594,7 @@ void GPS_Disable_Warning(void)
 ** @@
 ****************************************************************************/
 
-void GPS_User(const char *fmt, ...)
+void GPS_User(const char* fmt, ...)
 {
   va_list  argp;
   va_start(argp, fmt);
@@ -659,7 +659,7 @@ void GPS_Diagnose(int32 c)
   return;
 }
 
-void GPS_Diag(const char *fmt, ...)
+void GPS_Diag(const char* fmt, ...)
 {
   va_list argp;
   va_start(argp, fmt);

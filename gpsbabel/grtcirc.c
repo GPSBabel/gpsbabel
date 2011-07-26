@@ -27,7 +27,7 @@ static const double EARTH_RAD = 6378137.0;
 
 static void crossproduct(double x1, double y1, double z1,
                          double x2, double y2, double z2,
-                         double *xa, double *ya, double *za)
+                         double* xa, double* ya, double* za)
 {
   *xa = y1*z2-y2*z1;
   *ya = z1*x2-z2*x1;
@@ -290,7 +290,7 @@ double linedist(double lat1, double lon1,
 void linepart(double lat1, double lon1,
               double lat2, double lon2,
               double frac,
-              double *reslat, double *reslon)
+              double* reslat, double* reslon)
 {
 
   double x1,y1,z1;

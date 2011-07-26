@@ -50,16 +50,16 @@ typedef struct {
   unsigned long serial_number;
   unsigned long unit_id;
   unsigned long unit_version;
-  char *os_identifier; /* In case the OS has another name for it. */
-  char *product_identifier; /* From the hardware itself. */
+  char* os_identifier; /* In case the OS has another name for it. */
+  char* product_identifier; /* From the hardware itself. */
 } garmin_unit_info_t;
 
 extern garmin_unit_info_t garmin_unit_info[GUSB_MAX_UNITS];
 
-int gusb_cmd_send(const garmin_usb_packet *obuf, size_t sz);
-int gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz);
-int gusb_init(const char *portname, gpsdevh **dh);
-int gusb_close(gpsdevh *);
+int gusb_cmd_send(const garmin_usb_packet* obuf, size_t sz);
+int gusb_cmd_get(garmin_usb_packet* ibuf, size_t sz);
+int gusb_init(const char* portname, gpsdevh** dh);
+int gusb_close(gpsdevh*);
 
 /*
  * New packet types in USB.

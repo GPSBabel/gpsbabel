@@ -50,7 +50,7 @@ static xg_tag_mapping gl_map[] = {
   { wpt_addr,	cb_cdata, "/ResultSet/Result/Zip" },
   { wpt_addr,	cb_cdata, "/ResultSet/Result/Country" },
   { wpt_e,	cb_end,   "/ResultSet/Result" },
-  { NULL, 	0,         NULL}
+  { NULL,	(xg_cb_type)0,         NULL}
 };
 
 static void

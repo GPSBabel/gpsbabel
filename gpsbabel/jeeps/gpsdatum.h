@@ -9,7 +9,7 @@ extern "C"
 
 
   typedef struct GPS_SEllipse {
-    char   *name;
+    char*   name;
     double a;
     double invf;
   } GPS_OEllipse, *GPS_PEllipse;
@@ -48,7 +48,7 @@ extern "C"
 
 
   typedef struct GPS_SDatum {
-    char   *name;
+    char*   name;
     int    ellipse;
     double dx;
     double dy;
@@ -187,7 +187,7 @@ extern "C"
 
 
   typedef struct GPS_SDatum_Alias {
-    char *alias;
+    char* alias;
     const int datum;
   } GPS_ODatum_Alias, *GPS_PDatum_Alias;
 
@@ -227,7 +227,7 @@ extern "C"
 
 
   /* UK Ordnance Survey Nation Grid Map Codes */
-  static char *UKNG[]= {
+  static char* UKNG[]= {
     "SV","SW","SX","SY","SZ","TV","TW","SQ","SR","SS","ST","SU","TQ","TR",
     "SL","SM","SN","SO","SP","TL","TM","SF","SG","SH","SJ","SK","TF","TG",
     "SA","SB","SC","SD","SE","TA","TB","NV","NW","NX","NY","NZ","OV","OW",

@@ -29,7 +29,7 @@
 
 #define MYNAME "ggv_log"
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 static int ggv_log_ver;
 
 static
@@ -42,7 +42,7 @@ arglist_t ggv_log_args[] = {
 *******************************************************************************/
 
 static void
-ggv_log_rd_init(const char *fname)
+ggv_log_rd_init(const char* fname)
 {
   static char magic[32];
   int len = 0;
@@ -61,7 +61,7 @@ ggv_log_rd_init(const char *fname)
 
     if (cin == '\0') {
       double ver = 0;
-      char *sver;
+      char* sver;
       if (strncmp(magic, "DOMGVGPS Logfile V", 18) != 0) {
         break;
       }
@@ -90,9 +90,9 @@ ggv_log_rd_deinit(void)
 static void
 ggv_log_read(void)
 {
-  signed char *buf;
+  signed char* buf;
   int bufsz = 0, len;
-  route_head *trk = NULL;
+  route_head* trk = NULL;
 
   switch (ggv_log_ver) {
   case 10:
@@ -110,7 +110,7 @@ ggv_log_read(void)
     double xlat, xlon;
     float sec;
     struct tm tm;
-    waypoint *wpt;
+    waypoint* wpt;
 
     if (len != bufsz) {
       break;
@@ -188,7 +188,7 @@ ggv_log_read(void)
 }
 
 static void
-ggv_log_wr_init(const char *fname)
+ggv_log_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
 
@@ -202,17 +202,17 @@ ggv_log_wr_deinit(void)
 }
 
 static void
-ggv_log_track_head_cb(const route_head *trk)
+ggv_log_track_head_cb(const route_head* trk)
 {
-  queue *elem, *tmp;
-  waypoint *prev = NULL;
+  queue* elem, *tmp;
+  waypoint* prev = NULL;
 
-  QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
+  QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
     double  latmin, lonmin, latsec, lonsec;
     int     latint, lonint;
     double  course = 0, speed = 0;
     struct tm tm;
-    waypoint *wpt = (waypoint *)elem;
+    waypoint* wpt = (waypoint*)elem;
     double secs = 0;
 
     latint = wpt->latitude;
@@ -273,7 +273,7 @@ ff_vecs_t ggv_log_vecs = {
   ff_type_file,
   {
     ff_cap_none, 			/* waypoints */
-    ff_cap_read | ff_cap_write,	/* tracks */
+    (ff_cap)(ff_cap_read | ff_cap_write),	/* tracks */
     ff_cap_none			/* routes */
   },
   ggv_log_rd_init,

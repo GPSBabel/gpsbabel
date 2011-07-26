@@ -119,7 +119,7 @@ static void
 ozi_copy_fsdata(ozi_fsdata **dest, ozi_fsdata *src)
 {
   /* No strings to mess with.  Straight forward copy. */
-  *dest = (void *)xmalloc(sizeof(*src));
+  *dest = (ozi_fsdata *)xmalloc(sizeof(*src));
   **dest = *src;
   (*dest)->fs.next = NULL;
 }
@@ -134,7 +134,7 @@ static
 ozi_fsdata *
 ozi_alloc_fsdata(void)
 {
-  ozi_fsdata *fsdata = xcalloc(sizeof(*fsdata), 1);
+  ozi_fsdata *fsdata = (ozi_fsdata*) xcalloc(sizeof(*fsdata), 1);
   fsdata->fs.type = FS_OZI;
   fsdata->fs.copy = (fs_copy) ozi_copy_fsdata;
   fsdata->fs.destroy = ozi_free_fsdata;

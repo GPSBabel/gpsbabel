@@ -28,7 +28,7 @@
 
 #undef OLE_DEBUG
 
-static gbfile *fin;
+static gbfile* fin;
 
 static arglist_t msroute_args[] = {
   ARG_TERMINATOR
@@ -137,23 +137,23 @@ static int sector_sz = 512;
 #define max(a,b) ((a) > (b)) ? (a) : (b)
 #endif
 
-static gbint32 *ole_fat1 = NULL;
-static gbint32 *ole_fat2 = NULL;
+static gbint32* ole_fat1 = NULL;
+static gbint32* ole_fat2 = NULL;
 static int ole_fat1_ct;
 static int ole_fat2_ct;
 static int ole_size1;
 static int ole_size2;
 static int ole_size1_min = 4096;
-static ole_prop_t *ole_dir = NULL;
+static ole_prop_t* ole_dir = NULL;
 static int ole_dir_ct;
-static ole_prop_t *ole_root = NULL;
-static char **ole_root_sec = NULL;
+static ole_prop_t* ole_root = NULL;
+static char** ole_root_sec = NULL;
 static int ole_root_sec_ct;
 
 /* local helpers */
 
 static void
-le_read32_buff(int *buff, const int count)
+le_read32_buff(int* buff, const int count)
 {
   int i;
   for (i = 0; i < count; i++) {
@@ -164,7 +164,7 @@ le_read32_buff(int *buff, const int count)
 /* simple OLE file reader */
 
 static void
-ole_read_sector(const int sector, void *target, const char full)
+ole_read_sector(const int sector, void* target, const char full)
 {
   int res;
 
@@ -176,15 +176,15 @@ ole_read_sector(const int sector, void *target, const char full)
     MYNAME ": Read error (%d, sector %d) on file \"%s\"!", res, sector, fin->name);
 }
 
-static ole_prop_t *
-ole_find_property(const char *property)
+static ole_prop_t*
+ole_find_property(const char* property)
 {
   int i;
 
   for (i = 0; i < ole_dir_ct; i++) {
     int len, test;
-    char *str;
-    ole_prop_t *item;
+    char* str;
+    ole_prop_t* item;
 
     item = &ole_dir[i];
     if ((item->ole_typ != 1) && (item->ole_typ != 2) && (item->ole_typ != 5)) {
@@ -195,7 +195,7 @@ ole_find_property(const char *property)
     }
 
     len = min(OLE_MAX_NAME_LENGTH, item->name_sz / 2);
-    str = cet_str_uni_to_utf8((short *)&item->name, len);
+    str = cet_str_uni_to_utf8((short*)&item->name, len);
     test = case_ignore_strcmp(str, property);
     xfree(str);
 
@@ -207,14 +207,14 @@ ole_find_property(const char *property)
   return 0;
 }
 
-static char *
-ole_read_stream(const ole_prop_t *property)
+static char*
+ole_read_stream(const ole_prop_t* property)
 {
-  const char *action = "ole_read_stream";
+  const char* action = "ole_read_stream";
   int len, sector, big, blocksize, offs, left;
   int i;
-  int *fat;
-  char *buff;
+  int* fat;
+  char* buff;
 
   len = property->data_sz;
 
@@ -233,7 +233,7 @@ ole_read_stream(const ole_prop_t *property)
   sector = property->first_sector;
 
   i = ((len + blocksize - 1) / blocksize) * blocksize;
-  buff = xmalloc(i);	/* blocksize aligned */
+  buff = (char*) xmalloc(i);	/* blocksize aligned */
 
   if (big != 0) {
     while (left > 0) {
@@ -254,7 +254,7 @@ ole_read_stream(const ole_prop_t *property)
     offs = 0;
 
     while (blocks-- > 0) {
-      char *temp;
+      char* temp;
       int block_offs;
 
       is_fatal((chain < 0), MYNAME ": Broken stream (%s)!", action);
@@ -277,11 +277,11 @@ ole_read_stream(const ole_prop_t *property)
 }
 
 
-static char *
-ole_read_property_stream(const char *property_name, int *data_sz)
+static char*
+ole_read_property_stream(const char* property_name, int* data_sz)
 {
-  ole_prop_t *property;
-  char *result;
+  ole_prop_t* property;
+  char* result;
 
   if ((property = ole_find_property(property_name)) == NULL) {
     return NULL;
@@ -303,9 +303,9 @@ ole_test_properties()
   int i;
 
   for (i = 0; i < ole_dir_ct; i++) {
-    char *temp;
+    char* temp;
     char name[OLE_MAX_NAME_LENGTH + 1];
-    ole_prop_t *p = &ole_dir[i];
+    ole_prop_t* p = &ole_dir[i];
 
     if ((p->ole_typ != 1) && (p->ole_typ != 2) && (p->ole_typ != 5)) {
       continue;
@@ -371,7 +371,7 @@ ole_init(void)
   memset(&head, 0, sizeof(head));
   gbfread(&head, sizeof(head), 1, fin);
 
-  is_fatal((strncmp(head.magic, (char *) ole_magic, sizeof(ole_magic)) != 0), MYNAME ": No MS document.");
+  is_fatal((strncmp(head.magic, (char*) ole_magic, sizeof(ole_magic)) != 0), MYNAME ": No MS document.");
 
   head.rev = le_read16(&head.rev);
   head.ver = le_read16(&head.ver);
@@ -413,7 +413,7 @@ ole_init(void)
 #else
   is_fatal((ole_size1 != 512), MYNAME ": Unsupported sector size %d", ole_size1);
 #endif
-  ole_fat1 = xmalloc(head.fat1_blocks * sector_sz);
+  ole_fat1 = (gbint32*) xmalloc(head.fat1_blocks * sector_sz);
   ole_fat1_ct = (head.fat1_blocks * sector_sz) / sizeof(gbint32);
 
 #ifdef OLE_DEBUG
@@ -464,12 +464,12 @@ ole_init(void)
     count = 0;
     do {
       if (ole_fat2 == NULL) {
-        ole_fat2 = (int *)xmalloc((count + 1) * sector_sz);
+        ole_fat2 = (int*)xmalloc((count + 1) * sector_sz);
       } else {
-        ole_fat2 = (int *)xrealloc(ole_fat2, (count + 1) * sector_sz);
+        ole_fat2 = (int*)xrealloc(ole_fat2, (count + 1) * sector_sz);
       }
 
-      ole_read_sector(sector, (char *)ole_fat2 + (count * sector_sz), 1);
+      ole_read_sector(sector, (char*)ole_fat2 + (count * sector_sz), 1);
       sector = ole_fat1[sector];
 
       count++;
@@ -489,12 +489,12 @@ ole_init(void)
   count = 0;
   while (sector >= 0) {
     if (ole_dir == NULL) {
-      ole_dir = (void *)xmalloc((count + 1) * sector_sz);
+      ole_dir = (ole_prop_t*)xmalloc((count + 1) * sector_sz);
     } else {
-      ole_dir = (void *)xrealloc(ole_dir, (count + 1) * sector_sz);
+      ole_dir = (ole_prop_t*)xrealloc(ole_dir, (count + 1) * sector_sz);
     }
 
-    ole_read_sector(sector, (char *)ole_dir + (count * sector_sz), 1);
+    ole_read_sector(sector, (char*)ole_dir + (count * sector_sz), 1);
     sector = ole_fat1[sector];
 
     count++;
@@ -504,7 +504,7 @@ ole_init(void)
   /* fix endianess of property catalog */
 
   for (i = 0; i < ole_dir_ct; i++) {
-    ole_prop_t *item = &ole_dir[i];
+    ole_prop_t* item = &ole_dir[i];
 
     item->first_sector = le_read32(&item->first_sector);
     item->data_sz = le_read32(&item->data_sz);
@@ -515,14 +515,14 @@ ole_init(void)
   /* read fat2 data sectors given by "Root Entry" */
 
   ole_root_sec_ct = (ole_root->data_sz + (sector_sz - 1)) / sector_sz;
-  ole_root_sec = xcalloc(ole_root_sec_ct + 1, sizeof(char *));
+  ole_root_sec = (char**) xcalloc(ole_root_sec_ct + 1, sizeof(char*));
 
   i = 0;
   sector = ole_root->first_sector;
   while (sector >= 0) {
-    char *temp;
+    char* temp;
 
-    temp = ole_root_sec[i++] = xmalloc(sector_sz);
+    temp = ole_root_sec[i++] = (char*) xmalloc(sector_sz);
 
     ole_read_sector(sector, temp, 1);
     sector = ole_fat1[sector];
@@ -538,7 +538,7 @@ ole_deinit(void)
   if (ole_root_sec != NULL) {
     int i;
     for (i = 0; i < ole_root_sec_ct; i++) {
-      char *c;
+      char* c;
       if ((c = ole_root_sec[i])) {
         xfree(c);
       }
@@ -562,16 +562,16 @@ static void
 msroute_read_journey(void)
 {
   int bufsz = 0;
-  char *buff;
+  char* buff;
 
   buff = ole_read_property_stream(MSROUTE_OBJ_NAME, &bufsz);
 
   if ((buff != NULL) && (bufsz > 0)) {
-    msroute_head_t *head = (msroute_head_t *)buff;
-    unsigned char *cin, *cend;
+    msroute_head_t* head = (msroute_head_t*)buff;
+    unsigned char* cin, *cend;
     int count = 0;
-    route_head *route;
-    waypoint *wpt;
+    route_head* route;
+    waypoint* wpt;
     char version;
 
     is_fatal((strncmp(head->masm, "MASM", 4) != 0), MYNAME ": Invalid or unknown data!");
@@ -579,8 +579,8 @@ msroute_read_journey(void)
     version = buff[0x14];
     is_fatal((version < 1) || (version > 7), MYNAME ": Unsupported version %d!", version);
 
-    cin = (unsigned char *)buff + 71; // (at least?) sizeof(msroute_head_t);
-    cend = (unsigned char *)buff + bufsz;
+    cin = (unsigned char*)buff + 71;  // (at least?) sizeof(msroute_head_t);
+    cend = (unsigned char*)buff + bufsz;
 
     route = route_head_alloc();
     route_add_head(route);
@@ -618,7 +618,7 @@ msroute_read_journey(void)
       cin += 3;			/* 0xfffeff */
 
       len = *cin++;
-      wpt->shortname = cet_str_uni_to_utf8((const short *)cin, len);
+      wpt->shortname = cet_str_uni_to_utf8((const short*)cin, len);
       cin += (len * 2);		/* seek over wide string */
       cin += (5 * sizeof(gbint32));	/* five unknown DWORDs */
 
@@ -645,7 +645,7 @@ msroute_read_journey(void)
 
 /* registered callbacks */
 
-static void msroute_rd_init(const char *fname)
+static void msroute_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 

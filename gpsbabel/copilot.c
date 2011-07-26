@@ -61,12 +61,12 @@ struct record4 {
   pdb_float	elevation; 	/* feet */
 };
 
-static pdbfile *file_in, *file_out;
-static const char *out_fname;
+static pdbfile* file_in, *file_out;
+static const char* out_fname;
 static int ct;
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = pdb_open(fname, MYNAME);
 }
@@ -78,7 +78,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = pdb_create(fname, MYNAME);
   out_fname = fname;
@@ -92,10 +92,10 @@ wr_deinit(void)
 }
 
 static waypoint*
-read_version0(void *data)
+read_version0(void* data)
 {
-  char *vdata;
-  waypoint *wpt_tmp;
+  char* vdata;
+  waypoint* wpt_tmp;
   struct record0* rec = (struct record0*)data;
 
   wpt_tmp = waypt_new();
@@ -106,7 +106,7 @@ read_version0(void *data)
     DEG(pdb_read_double(&rec->latitude));
   wpt_tmp->altitude = FEET_TO_METERS(be_read32(&rec->elevation));
 
-  vdata = (char *) data + sizeof(*rec);
+  vdata = (char*) data + sizeof(*rec);
 
   wpt_tmp->shortname = xstrdup(vdata);
   vdata = vdata + strlen(vdata) + 1;
@@ -120,10 +120,10 @@ read_version0(void *data)
 }
 
 static waypoint*
-read_version1(void *data)
+read_version1(void* data)
 {
-  char *vdata;
-  waypoint *wpt_tmp;
+  char* vdata;
+  waypoint* wpt_tmp;
   struct record1* rec = (struct record1*)data;
 
   wpt_tmp = waypt_new();
@@ -135,7 +135,7 @@ read_version1(void *data)
   wpt_tmp->altitude =
     FEET_TO_METERS(pdb_read_double(&rec->elevation));
 
-  vdata = (char *) data + sizeof(*rec);
+  vdata = (char*) data + sizeof(*rec);
 
   wpt_tmp->shortname = xstrdup(vdata);
   vdata = vdata + strlen(vdata) + 1;
@@ -149,10 +149,10 @@ read_version1(void *data)
 }
 
 static waypoint*
-read_version3(void *data)
+read_version3(void* data)
 {
-  char *vdata;
-  waypoint *wpt_tmp;
+  char* vdata;
+  waypoint* wpt_tmp;
   struct record3* rec = (struct record3*)data;
 
   wpt_tmp = waypt_new();
@@ -164,7 +164,7 @@ read_version3(void *data)
   wpt_tmp->altitude =
     FEET_TO_METERS(pdb_read_double(&rec->elevation));
 
-  vdata = (char *) data + sizeof(*rec);
+  vdata = (char*) data + sizeof(*rec);
 
   wpt_tmp->shortname = xstrdup(vdata);
   vdata = vdata + strlen(vdata) + 1;
@@ -178,10 +178,10 @@ read_version3(void *data)
 }
 
 static waypoint*
-read_version4(void *data)
+read_version4(void* data)
 {
-  char *vdata;
-  waypoint *wpt_tmp;
+  char* vdata;
+  waypoint* wpt_tmp;
   struct record4* rec = (struct record4*)data;
 
   wpt_tmp = waypt_new();
@@ -193,7 +193,7 @@ read_version4(void *data)
   wpt_tmp->altitude =
     FEET_TO_METERS(pdb_read_float(&rec->elevation));
 
-  vdata = (char *) data + sizeof(*rec);
+  vdata = (char*) data + sizeof(*rec);
 
   wpt_tmp->shortname = xstrdup(vdata);
   vdata = vdata + strlen(vdata) + 1;
@@ -209,7 +209,7 @@ read_version4(void *data)
 static void
 data_read(void)
 {
-  pdbrec_t *pdb_rec;
+  pdbrec_t* pdb_rec;
 
   if ((file_in->creator != GXPU_CREATOR && file_in->creator != AP_P_CREATOR) ||
       (file_in->type != wayp_TYPE && file_in->type != swpu_TYPE &&
@@ -222,7 +222,7 @@ data_read(void)
 
 
   for (pdb_rec = file_in->rec_list; pdb_rec; pdb_rec = pdb_rec->next) {
-    waypoint *wpt_tmp;
+    waypoint* wpt_tmp;
 
     switch (file_in->version) {
     case 0:
@@ -246,12 +246,12 @@ data_read(void)
 }
 
 static void
-copilot_writewpt(const waypoint *wpt)
+copilot_writewpt(const waypoint* wpt)
 {
-  struct record4 *rec;
-  char *vdata;
+  struct record4* rec;
+  char* vdata;
 
-  rec = (struct record4 *) xcalloc(sizeof(*rec)+1141,1);
+  rec = (struct record4*) xcalloc(sizeof(*rec)+1141,1);
 
   pdb_write_double(&rec->latitude, RAD(wpt->latitude));
   pdb_write_double(&rec->longitude, RAD(-wpt->longitude));
@@ -259,7 +259,7 @@ copilot_writewpt(const waypoint *wpt)
   pdb_write_float(&rec->elevation,
                   METERS_TO_FEET(wpt->altitude));
 
-  vdata = (char *)rec + sizeof(*rec);
+  vdata = (char*)rec + sizeof(*rec);
   if (wpt->shortname) {
     strncpy(vdata, wpt->shortname, 10);
     vdata[9] = '\0';
@@ -283,7 +283,7 @@ copilot_writewpt(const waypoint *wpt)
   }
   vdata += strlen(vdata) + 1;
 
-  pdb_write_rec(file_out, 0, 2, ct++, rec, (char *)vdata - (char *)rec);
+  pdb_write_rec(file_out, 0, 2, ct++, rec, (char*)vdata - (char*)rec);
 
   xfree(rec);
 }

@@ -134,13 +134,13 @@ typedef struct cetus_track_point_s {
 
 #define TRACK_POINT_SIZE sizeof(struct cetus_track_point_s)
 
-static pdbfile *file_in, *file_out;
-static const char *out_fname;
+static pdbfile* file_in, *file_out;
+static const char* out_fname;
 static short_handle mkshort_wr_handle;
 static int ct;
 
-static char *dbname = NULL;
-static char *appendicon = NULL;
+static char* dbname = NULL;
+static char* appendicon = NULL;
 
 static
 arglist_t cetus_args[] = {
@@ -155,11 +155,11 @@ arglist_t cetus_args[] = {
   ARG_TERMINATOR
 };
 
-static waypoint *
-read_track_point(cetus_track_point_t *data, const time_t basetime)
+static waypoint*
+read_track_point(cetus_track_point_t* data, const time_t basetime)
 {
   int i, ilat, ilon;
-  waypoint *wpt;
+  waypoint* wpt;
 
   ilat = be_read32(&data->latitude);
   ilon = be_read32(&data->longitude);
@@ -221,15 +221,15 @@ read_track_point(cetus_track_point_t *data, const time_t basetime)
 
 
 static void
-read_tracks(const pdbfile *pdb)
+read_tracks(const pdbfile* pdb)
 {
-  pdbrec_t *pdb_rec;
+  pdbrec_t* pdb_rec;
   int reclen, records, total, points, dropped;
   char descr[(2 * TRACK_POINT_SIZE) + 1];
   char temp_descr[TRACK_POINT_SIZE + 1];
-  cetus_track_head_t *head;
-  waypoint *wpt;
-  route_head *track;
+  cetus_track_head_t* head;
+  waypoint* wpt;
+  route_head* track;
   time_t basetime;
 
   track = route_head_alloc();
@@ -242,7 +242,7 @@ read_tracks(const pdbfile *pdb)
 
   for (pdb_rec = pdb->rec_list; pdb_rec; pdb_rec = pdb_rec->next) {
     int i, magic;
-    char *c = (char *)pdb_rec->data;
+    char* c = (char*)pdb_rec->data;
 
     magic = be_read32(c);
     if (magic != MYTRACK) {
@@ -259,7 +259,7 @@ read_tracks(const pdbfile *pdb)
         struct tm tm;
 
       case 0: 	/* track header */
-        head = (cetus_track_head_t *)c;
+        head = (cetus_track_head_t*)c;
         if (head->id[0] != 'C' || head->id[1] != 'G') {
           fatal(MYNAME ": Invalid track header!\n");
         }
@@ -284,7 +284,7 @@ read_tracks(const pdbfile *pdb)
         break;
 
       default:
-        wpt = read_track_point((cetus_track_point_t *)c, basetime);
+        wpt = read_track_point((cetus_track_point_t*)c, basetime);
         if (wpt != NULL) {
           track_add_wpt(track, wpt);
           points++;
@@ -305,19 +305,19 @@ read_tracks(const pdbfile *pdb)
 }
 
 static void
-read_waypts(const pdbfile *pdb)
+read_waypts(const pdbfile* pdb)
 {
-  struct cetus_wpt_s *rec;
-  pdbrec_t *pdb_rec;
-  char *vdata;
+  struct cetus_wpt_s* rec;
+  pdbrec_t* pdb_rec;
+  char* vdata;
 
   for (pdb_rec = pdb->rec_list; pdb_rec; pdb_rec = pdb_rec->next) {
-    waypoint *wpt_tmp;
+    waypoint* wpt_tmp;
     int i;
 
     wpt_tmp = waypt_new();
 
-    rec = (struct cetus_wpt_s *) pdb_rec->data;
+    rec = (struct cetus_wpt_s*) pdb_rec->data;
     if (be_read32(&rec->elevation) == -100000000) {
       wpt_tmp->altitude = unknown_alt;
     } else {
@@ -373,7 +373,7 @@ read_waypts(const pdbfile *pdb)
 
     }
 
-    vdata = (char *) pdb_rec->data + sizeof(*rec);
+    vdata = (char*) pdb_rec->data + sizeof(*rec);
 
     wpt_tmp->shortname = xstrdup(vdata);
     vdata = vdata + strlen(vdata) + 1;
@@ -391,7 +391,7 @@ read_waypts(const pdbfile *pdb)
 /* --------------------------------------------------------------------------- */
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = pdb_open(fname, MYNAME);
 }
@@ -407,7 +407,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = pdb_create(fname, MYNAME);
   out_fname = fname;
@@ -444,15 +444,15 @@ data_read(void)
 
 
 static void
-cetus_writewpt(const waypoint *wpt)
+cetus_writewpt(const waypoint* wpt)
 {
-  struct cetus_wpt_s *rec;
-  struct tm *tm;
-  char *vdata;
-  char *desc_long;
-  char *desc_short;
-  char *desc_geo;
-  char *desc;
+  struct cetus_wpt_s* rec;
+  struct tm* tm;
+  char* vdata;
+  char* desc_long;
+  char* desc_short;
+  char* desc_geo;
+  char* desc;
 
   rec = (struct cetus_wpt_s*) xcalloc(sizeof(*rec)+18 + NOTESZ + DESCSZ,1);
 
@@ -494,9 +494,9 @@ cetus_writewpt(const waypoint *wpt)
 
   rec->sat = wpt->sat ? wpt->sat : 0xff;
 
-  vdata = (char *)rec + sizeof(*rec);
+  vdata = (char*)rec + sizeof(*rec);
   if (wpt->shortname) {
-    char *sn = xstrdup(wpt->shortname);
+    char* sn = xstrdup(wpt->shortname);
     strncpy(vdata, sn, 16);
     vdata[15] = '\0';
     xfree(sn);
@@ -521,7 +521,7 @@ cetus_writewpt(const waypoint *wpt)
   }
 
   if (wpt->gc_data->desc_short.utfstring) {
-    char *stripped_html = strip_html(&wpt->gc_data->desc_short);
+    char* stripped_html = strip_html(&wpt->gc_data->desc_short);
     desc_short = xstrdup(wpt->gc_data->diff == 0 ? "\n\n" : "");
     desc_short = xstrappend(desc_short, xstrdup(stripped_html));
     xfree(stripped_html);
@@ -530,7 +530,7 @@ cetus_writewpt(const waypoint *wpt)
   }
 
   if (wpt->gc_data->desc_long.utfstring) {
-    char *stripped_html = strip_html(&wpt->gc_data->desc_long);
+    char* stripped_html = strip_html(&wpt->gc_data->desc_long);
     desc_long = xstrdup("\n\n");
     desc_long = xstrappend(desc_long, xstrdup(stripped_html));
     xfree(stripped_html);
@@ -564,7 +564,7 @@ cetus_writewpt(const waypoint *wpt)
   vdata += strlen(vdata) + 1;
 
   if (wpt->gc_data->hint) {
-    char *hint = xstrdup(wpt->gc_data->hint);
+    char* hint = xstrdup(wpt->gc_data->hint);
     rec->type = WptCache;
     strncpy(vdata, hint, NOTESZ + 1) ;
     xfree(hint);
@@ -575,22 +575,22 @@ cetus_writewpt(const waypoint *wpt)
   }
   vdata += strlen(vdata) + 1;
 
-  pdb_write_rec(file_out, 0, 2, ct++, rec, (char *)vdata - (char *)rec);
+  pdb_write_rec(file_out, 0, 2, ct++, rec, (char*)vdata - (char*)rec);
 
   xfree(rec);
 }
 
 struct hdr {
-  char *wpt_name;
-  waypoint *wpt;
+  char* wpt_name;
+  waypoint* wpt;
 };
 
 static
 int
-compare(const void *a, const void *b)
+compare(const void* a, const void* b)
 {
-  const struct hdr *wa = (const struct hdr*) a;
-  const struct hdr *wb = (const struct hdr*) b;
+  const struct hdr* wa = (const struct hdr*) a;
+  const struct hdr* wb = (const struct hdr*) b;
 
   return strcmp(wa->wpt->shortname, wb->wpt->shortname);
 }
@@ -599,10 +599,10 @@ static void
 data_write(void)
 {
   int i, ct = waypt_count();
-  struct hdr *htable, *bh;
-  queue *elem, *tmp;
+  struct hdr* htable, *bh;
+  queue* elem, *tmp;
   extern queue waypt_head;
-  waypoint *waypointp;
+  waypoint* waypointp;
   mkshort_wr_handle = mkshort_new_handle();
   setshort_length(mkshort_wr_handle, 15);
   setshort_whitespace_ok(mkshort_wr_handle, 0);
@@ -628,7 +628,7 @@ data_write(void)
   bh = htable;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (waypoint *) elem;
+    waypointp = (waypoint*) elem;
     bh->wpt = waypointp;
     if (global_opts.synthesize_shortnames && waypointp->description) {
       if (waypointp->shortname) {

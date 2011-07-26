@@ -24,14 +24,14 @@
 #include "jeeps/gpsmath.h"
 #include <ctype.h>
 
-static gbfile *file_out;
+static gbfile* file_out;
 static short_handle mkshort_handle;
 
-static char *stylesheet = NULL;
-static char *html_encrypt = NULL;
-static char *includelogs = NULL;
-static char *degformat = NULL;
-static char *altunits = NULL;
+static char* stylesheet = NULL;
+static char* html_encrypt = NULL;
+static char* includelogs = NULL;
+static char* degformat = NULL;
+static char* altunits = NULL;
 
 #define MYNAME "HTML"
 
@@ -63,7 +63,7 @@ arglist_t html_args[] = {
 
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen(fname, "w", MYNAME);
   mkshort_handle = mkshort_new_handle();
@@ -77,15 +77,15 @@ wr_deinit(void)
 }
 
 static void
-html_disp(const waypoint *wpt)
+html_disp(const waypoint* wpt)
 {
   char tbuf[1024];
-  char *cout;
+  char* cout;
   time_t tm = wpt->creation_time;
   gbint32 utmz;
   double utme, utmn;
   char utmzc;
-  fs_xml *fs_gpx = NULL;
+  fs_xml* fs_gpx = NULL;
 
 
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
@@ -109,7 +109,7 @@ html_disp(const waypoint *wpt)
   gbfprintf(file_out, "<br>\n");
   if (strcmp(wpt->description, wpt->shortname)) {
     if (wpt->url) {
-      char *d = html_entitize(wpt->description);
+      char* d = html_entitize(wpt->description);
       gbfprintf(file_out, "<a href=\"%s\">%s</a>", wpt->url, d);
       xfree(d);
     } else {
@@ -135,17 +135,17 @@ html_disp(const waypoint *wpt)
 
   gbfprintf(file_out, "<tr><td colspan=\"2\">");
   if (wpt->gc_data->desc_short.utfstring) {
-    char *tmpstr = strip_nastyhtml(wpt->gc_data->desc_short.utfstring);
+    char* tmpstr = strip_nastyhtml(wpt->gc_data->desc_short.utfstring);
     gbfprintf(file_out, "<p class=\"gpsbabeldescshort\">%s</p>\n", tmpstr);
     xfree(tmpstr);
   }
   if (wpt->gc_data->desc_long.utfstring) {
-    char *tmpstr = strip_nastyhtml(wpt->gc_data->desc_long.utfstring);
+    char* tmpstr = strip_nastyhtml(wpt->gc_data->desc_long.utfstring);
     gbfprintf(file_out, "<p class=\"gpsbabeldesclong\">%s</p>\n", tmpstr);
     xfree(tmpstr);
   }
   if (wpt->gc_data->hint) {
-    char *hint = NULL;
+    char* hint = NULL;
     if (html_encrypt) {
       hint = rot13(wpt->gc_data->hint);
     } else {
@@ -159,17 +159,17 @@ html_disp(const waypoint *wpt)
 
   fs_gpx = NULL;
   if (includelogs) {
-    fs_gpx = (fs_xml *)fs_chain_find(wpt->fs, FS_GPX);
+    fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
   }
 
   if (fs_gpx && fs_gpx->tag) {
-    xml_tag *root = fs_gpx->tag;
-    xml_tag *curlog = NULL;
-    xml_tag *logpart = NULL;
+    xml_tag* root = fs_gpx->tag;
+    xml_tag* curlog = NULL;
+    xml_tag* logpart = NULL;
     curlog = xml_findfirst(root, "groundspeak:log");
     while (curlog) {
       time_t logtime = 0;
-      struct tm *logtm = NULL;
+      struct tm* logtm = NULL;
       gbfprintf(file_out, "<p class=\"gpsbabellog\">\n");
 
       logpart = xml_findfirst(curlog, "groundspeak:type");
@@ -179,7 +179,7 @@ html_disp(const waypoint *wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:finder");
       if (logpart) {
-        char *f = html_entitize(logpart->cdata);
+        char* f = html_entitize(logpart->cdata);
         gbfprintf(file_out, "<span class=\"gpsbabellogfinder\">%s</span> on ", f);
         xfree(f);
       }
@@ -199,7 +199,7 @@ html_disp(const waypoint *wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
       if (logpart) {
-        char *coordstr = NULL;
+        char* coordstr = NULL;
         float lat = 0;
         float lon = 0;
         coordstr = xml_attribute(logpart, "lat");
@@ -219,9 +219,9 @@ html_disp(const waypoint *wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:text");
       if (logpart) {
-        char *encstr = NULL;
-        char *s = NULL;
-        char *t = NULL;
+        char* encstr = NULL;
+        char* s = NULL;
+        char* t = NULL;
         int encoded = 0;
         encstr = xml_attribute(logpart, "encoded");
         encoded = (encstr[0] != 'F');
@@ -246,10 +246,10 @@ html_disp(const waypoint *wpt)
 }
 
 static void
-html_index(const waypoint *wpt)
+html_index(const waypoint* wpt)
 {
-  char *sn = html_entitize(wpt->shortname);
-  char *d = html_entitize(wpt->description);
+  char* sn = html_entitize(wpt->shortname);
+  char* d = html_entitize(wpt->description);
 
   gbfprintf(file_out, "<a href=\"#%s\">%s - %s</a><br>\n", sn, sn, d);
 

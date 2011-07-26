@@ -71,10 +71,10 @@ typedef struct enigma_wpt {
   char            longname[27];
 } ENIGMA_WPT;
 
-static gbfile *file_in, *file_out;
+static gbfile* file_in, *file_out;
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -102,11 +102,11 @@ static void
 data_read(void)
 {
   struct enigma_wpt ewpt;
-  route_head *route = route_head_alloc();
+  route_head* route = route_head_alloc();
   route_add_head(route);
 
   while (1 == gbfread(&ewpt, sizeof(ewpt), 1, file_in)) {
-    waypoint *wpt = waypt_new();
+    waypoint* wpt = waypt_new();
     wpt->latitude = enigmaPositionToDec(le_read32(&ewpt.latitude));
     wpt->longitude = enigmaPositionToDec(le_read32(&ewpt.longitude));
     wpt->shortname = xstrndup(ewpt.shortname, ewpt.shortname_len);
@@ -146,13 +146,13 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen_le(fname, "wb", MYNAME);
 }
 
 static void
-route_head_noop(const route_head *wp)
+route_head_noop(const route_head* wp)
 {
 }
 
@@ -164,7 +164,7 @@ route_head_noop(const route_head *wp)
 #endif
 
 static void
-enigma_waypt_disp(const waypoint *wpt)
+enigma_waypt_disp(const waypoint* wpt)
 {
   struct enigma_wpt ewpt;
 
@@ -202,9 +202,9 @@ wr_deinit(void)
 ff_vecs_t enigma_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write,  	/* waypoints */
+    (ff_cap)(ff_cap_read | ff_cap_write),  	/* waypoints */
     ff_cap_none,                    /* tracks */
-    ff_cap_read | ff_cap_write  	/* routes */
+    (ff_cap)(ff_cap_read | ff_cap_write) 	/* routes */
   },
   rd_init,
   wr_init,

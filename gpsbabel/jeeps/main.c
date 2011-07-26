@@ -4,8 +4,8 @@
 main()
 {
   int n;
-  GPS_PWay *way;
-  GPS_PWay *array;
+  GPS_PWay* way;
+  GPS_PWay* array;
 
   if (GPS_Init("/dev/ttyS0") < 0) {
     fprintf(stderr, "Can't init\n");
@@ -19,7 +19,7 @@ main()
 
   GPS_Fmt_Print_Waypoint(way, n, stdout);
 
-  array = (GPS_PWay *) calloc(1, sizeof(GPS_PWay));
+  array = (GPS_PWay*) calloc(1, sizeof(GPS_PWay));
   array[0] = GPS_Way_New();
   strcpy(array[0]->ident,"lower @#$%^&* rocks");
   strcpy(array[0]->cmnt,"COMMENTCOMMENTCOMMENTCOMMENTCOMMENT");

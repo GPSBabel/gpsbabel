@@ -34,46 +34,46 @@ typedef struct cet_ucs4_link_s {
 } cet_ucs4_link_t;
 
 typedef struct cet_cs_vec_s {
-  const char *name;			/* name of character set 	*/
-  const char **alias;			/* alias table  		*/
-  struct cet_cs_vec_s *fallback;		/* fallback character set       */
-  void *unused;
-  const int *ucs4_map;			/* char to UCS-4 value table 	*/
+  const char* name;			/* name of character set 	*/
+  const char** alias;			/* alias table  		*/
+  struct cet_cs_vec_s* fallback;		/* fallback character set       */
+  void* unused;
+  const int* ucs4_map;			/* char to UCS-4 value table 	*/
   const int ucs4_offset;			/* first non standard character */
   const int ucs4_count;			/* values in table 		*/
-  const cet_ucs4_link_t *ucs4_link;	/* UCS-4 to char backward links */
+  const cet_ucs4_link_t* ucs4_link;	/* UCS-4 to char backward links */
   const int ucs4_links;			/* number of links 		*/
-  const cet_ucs4_link_t *ucs4_extra;	/* Non standard UCS-4 to ...    */
+  const cet_ucs4_link_t* ucs4_extra;	/* Non standard UCS-4 to ...    */
   const int ucs4_extras;			/* number of extra links 	*/
-  struct cet_cs_vec_s *next;
+  struct cet_cs_vec_s* next;
 } cet_cs_vec_t;
 
 /* single char/value transmission */
 
-int cet_utf8_to_ucs4(const char *str, int *bytes, int *value);
-int cet_ucs4_to_utf8(char *dest, size_t dest_size, int value);
+int cet_utf8_to_ucs4(const char* str, int* bytes, int* value);
+int cet_ucs4_to_utf8(char* dest, size_t dest_size, int value);
 
 /* single char/value transmission - vec based */
 
-int cet_char_to_ucs4(const char src, const cet_cs_vec_t *vec, int *value);
-short cet_utf8_to_char(const char *str, const cet_cs_vec_t *vecint, int *bytes, int *value);
-short cet_ucs4_to_char(const int value, const cet_cs_vec_t *vec);
+int cet_char_to_ucs4(const char src, const cet_cs_vec_t* vec, int* value);
+short cet_utf8_to_char(const char* str, const cet_cs_vec_t* vecint, int* bytes, int* value);
+short cet_ucs4_to_char(const int value, const cet_cs_vec_t* vec);
 
 /* string to string - vector based */
 
-char *cet_str_utf8_to_any(const char *src, const cet_cs_vec_t *vec);
-char *cet_str_any_to_utf8(const char *src, const cet_cs_vec_t *vec);
+char* cet_str_utf8_to_any(const char* src, const cet_cs_vec_t* vec);
+char* cet_str_any_to_utf8(const char* src, const cet_cs_vec_t* vec);
 
-char *cet_str_uni_to_utf8(const short *src, const int length);
+char* cet_str_uni_to_utf8(const short* src, const int length);
 
 /* UTF-8 string manipulation functions */
 
-unsigned int cet_utf8_strlen(const char *str);
-char *cet_utf8_strdup(const char *str);
-char *cet_utf8_strndup(const char *str, const int maxlen);
+unsigned int cet_utf8_strlen(const char* str);
+char* cet_utf8_strdup(const char* str);
+char* cet_utf8_strndup(const char* str, const int maxlen);
 
 /* unicode functions */
 
-short *cet_str_any_to_uni(const char *src, const cet_cs_vec_t *vec, int *length);
+short* cet_str_any_to_uni(const char* src, const cet_cs_vec_t* vec, int* length);
 
 #endif

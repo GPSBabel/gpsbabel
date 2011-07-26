@@ -39,7 +39,7 @@ arglist_t destinator_args[] = {
   ARG_TERMINATOR
 };
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 static gpsdata_type data_type;
 
 
@@ -47,37 +47,37 @@ static gpsdata_type data_type;
 /*                                   READER                                    */
 /*-----------------------------------------------------------------------------*/
 
-static garmin_fs_t *
-gmsd_init(waypoint *wpt)
+static garmin_fs_t*
+gmsd_init(waypoint* wpt)
 {
-  garmin_fs_t *gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = GMSD_FIND(wpt);
   if (gmsd == NULL) {
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
+    fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
   }
   return gmsd;
 }
 
-static char *
+static char*
 read_wcstr(const int discard)
 {
-  gbint16 *buff = NULL, c;
+  gbint16* buff = NULL, c;
   int size = 0, pos = 0;
 
   while (gbfread(&c, sizeof(c), 1, fin) && (c != 0)) {
     if (size == 0) {
       size = 16;
-      buff = xmalloc(size * sizeof(*buff));
+      buff = (gbint16*) xmalloc(size * sizeof(*buff));
     } else if (pos == size) {
       size += 16;
-      buff = xrealloc(buff, size * sizeof(*buff));
+      buff = (gbint16*) xrealloc(buff, size * sizeof(*buff));
     }
     buff[pos] = c;
     pos += 1;
   }
 
   if (pos != 0) {
-    char *res;
+    char* res;
     if (discard) {
       res = NULL;
     } else {
@@ -96,26 +96,26 @@ read_wcstr(const int discard)
 }
 
 static void
-write_wcstr(const char *str)
+write_wcstr(const char* str)
 {
   int len;
-  short *unicode;
+  short* unicode;
 
   unicode = cet_str_utf8_to_uni(str, &len);
-  gbfwrite((void *)unicode, 2, len + 1, fout);
+  gbfwrite((void*)unicode, 2, len + 1, fout);
   xfree(unicode);
 }
 
 static int
-read_until_wcstr(const char *str)
+read_until_wcstr(const char* str)
 {
-  char *buff;
+  char* buff;
   int len, sz;
   int eos = 0, res = 0;
 
   len = strlen(str);
   sz = (len + 1) * 2;
-  buff = xcalloc(sz, 1);
+  buff = (char*) xcalloc(sz, 1);
 
   while (! gbfeof(fin)) {
 
@@ -126,7 +126,7 @@ read_until_wcstr(const char *str)
     if (c == 0) {
       eos++;
       if (eos >= 2) {	/* two or more zero bytes => end of string */
-        char *test = cet_str_uni_to_utf8((short *)buff, len);
+        char* test = cet_str_uni_to_utf8((short*)buff, len);
         if (test) {
           res = (strcmp(str, test) == 0);
           xfree(test);
@@ -146,15 +146,15 @@ read_until_wcstr(const char *str)
 static void
 destinator_read_poi(void)
 {
-  waypoint *wpt;
+  waypoint* wpt;
   int count = 0;
 
   gbfrewind(fin);
 
   while (!(gbfeof(fin))) {
-    char *str, *hnum;
+    char* str, *hnum;
     double ll;
-    garmin_fs_t *gmsd;
+    garmin_fs_t* gmsd;
 
     if (count == 0) {
       str = read_wcstr(0);
@@ -228,13 +228,13 @@ static void
 destinator_read_rte(void)
 {
   int count = 0;
-  route_head *rte = NULL;
+  route_head* rte = NULL;
 
   gbfrewind(fin);
 
   while (!(gbfeof(fin))) {
-    char *str;
-    waypoint *wpt;
+    char* str;
+    waypoint* wpt;
 
     if (count == 0) {
       str = read_wcstr(0);
@@ -282,12 +282,12 @@ destinator_read_trk(void)
 {
   char TXT[4] = "TXT";
   int recno = -1;
-  route_head *trk = NULL;
+  route_head* trk = NULL;
 
   gbfrewind(fin);
 
   while (!(gbfeof(fin))) {
-    waypoint *wpt;
+    waypoint* wpt;
     struct tm tm;
     char buff[20];
     int date;
@@ -309,7 +309,7 @@ destinator_read_trk(void)
     (void) gbfgetdbl(fin);				/* unknown */
     (void) gbfgetdbl(fin);				/* unknown */
 
-    wpt->fix = gbfgetint32(fin);
+    wpt->fix = (fix_type) gbfgetint32(fin);
     wpt->sat = gbfgetint32(fin);
 
     gbfseek(fin, 12 * sizeof(gbint32), SEEK_CUR);	/* SAT info */
@@ -388,9 +388,9 @@ destinator_read(void)
 /*-----------------------------------------------------------------------------*/
 
 static void
-destinator_wpt_disp(const waypoint *wpt)
+destinator_wpt_disp(const waypoint* wpt)
 {
-  garmin_fs_t *gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = GMSD_FIND(wpt);
 
   write_wcstr(DST_DYN_POI);
   write_wcstr((wpt->shortname) ? wpt->shortname : "WPT");
@@ -416,7 +416,7 @@ destinator_wpt_disp(const waypoint *wpt)
 }
 
 static void
-destinator_trkpt_disp(const waypoint *wpt)
+destinator_trkpt_disp(const waypoint* wpt)
 {
   int i;
 
@@ -461,7 +461,7 @@ destinator_trkpt_disp(const waypoint *wpt)
 }
 
 static void
-destinator_rtept_disp(const waypoint *wpt)
+destinator_rtept_disp(const waypoint* wpt)
 {
   write_wcstr(DST_ITINERARY);
   write_wcstr((wpt->shortname) ? wpt->shortname : "RTEPT");
@@ -485,7 +485,7 @@ destinator_rtept_disp(const waypoint *wpt)
 *******************************************************************************/
 
 static void
-destinator_rd_init(const char *fname)
+destinator_rd_init(const char* fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -518,7 +518,7 @@ destinator_read_trk_wrapper(void)
 }
 
 static void
-destinator_wr_init(const char *fname)
+destinator_wr_init(const char* fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
 }
@@ -552,7 +552,7 @@ destinator_write_trk(void)
 ff_vecs_t destinator_poi_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write	/* waypoints */,
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* waypoints */,
     ff_cap_none		 	/* tracks */,
     ff_cap_none 			/* routes */
   },
@@ -572,7 +572,7 @@ ff_vecs_t destinator_itn_vecs = {
   {
     ff_cap_none 			/* waypoints */,
     ff_cap_none		 	/* tracks */,
-    ff_cap_read | ff_cap_write	/* routes */
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* routes */
   },
   destinator_rd_init,
   destinator_wr_init,
@@ -589,7 +589,7 @@ ff_vecs_t destinator_trl_vecs = {
   ff_type_file,
   {
     ff_cap_none 			/* waypoints */,
-    ff_cap_read | ff_cap_write 	/* tracks */,
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* tracks */,
     ff_cap_none 			/* routes */
   },
   destinator_rd_init,

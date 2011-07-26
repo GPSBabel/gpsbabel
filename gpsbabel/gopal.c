@@ -57,16 +57,16 @@
 #include "grtcirc.h"
 #define MYNAME "gopal"
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 
 static struct tm tm,filenamedate, trackdate;
 time_t		tx;
 char tmp[64];
 char routename[64];
-static char *optdate=NULL;
-static char *optmaxspeed=NULL;
-static char *optminspeed=NULL;
-static char *optclean= NULL;
+static char* optdate=NULL;
+static char* optmaxspeed=NULL;
+static char* optminspeed=NULL;
+static char* optclean= NULL;
 static double minspeed,maxspeed;
 static struct tm opt_tm;	/* converted "date" parameter */
 static
@@ -80,9 +80,9 @@ arglist_t gopal_args[] = {
 
 #define CHECK_BOOL(a) if (a && (*a == '0')) a = NULL
 
-int gopal_check_line(char *line)
+int gopal_check_line(char* line)
 {
-  char *c = line;
+  char* c = line;
   int i = 0;
   while ((c = strchr(c, ','))) {
     c++;
@@ -98,11 +98,11 @@ int gopal_check_line(char *line)
 *******************************************************************************/
 
 static void
-gopal_rd_init(const char *fname)
+gopal_rd_init(const char* fname)
 {
   char buff[32];
-  char *ck;
-  char *filename;
+  char* ck;
+  char* filename;
   CHECK_BOOL(optclean);
   if (optminspeed) {
     minspeed=atof(optminspeed);
@@ -130,7 +130,7 @@ gopal_rd_init(const char *fname)
   if (optdate) {
     memset(&opt_tm, 0, sizeof(opt_tm));
 
-    ck = (char *)strptime(optdate, "%Y%m%d", &opt_tm);
+    ck = (char*)strptime(optdate, "%Y%m%d", &opt_tm);
     if ((ck == NULL) || (*ck != '\0') || (strlen(optdate) != 8)) {
       fatal(MYNAME ": Invalid date \"%s\"!\n", optdate);
     } else if (opt_tm.tm_year < 70) {
@@ -148,7 +148,7 @@ gopal_rd_init(const char *fname)
       strncpy(&buff[0],&filename[2],8);
     }
     // in buff we should now have something wich looks like a valid date starting with YYYYMMDD
-    ck = (char *)strptime(buff, "%Y%m%d", &filenamedate);
+    ck = (char*)strptime(buff, "%Y%m%d", &filenamedate);
     // if (((ck == NULL) || (*ck != '\0') )&&!(optdate))
     // fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"date\" switch!\n", buff);
     // /* else */ if (filenamedate.tm_year < 70)
@@ -167,14 +167,14 @@ static void
 gopal_read(void)
 {
 
-  char *buff;
-  char *str, *c;
+  char* buff;
+  char* str, *c;
   int column;
   long line;
   double hmsd,speed;
   int fix, hms;
-  route_head *route;
-  waypoint *wpt, *lastwpt=NULL;
+  route_head* route;
+  waypoint* wpt, *lastwpt=NULL;
   double long_old,lat_old;
   char tbuffer[64];
   struct tm tm2;
@@ -333,18 +333,18 @@ gopal_read(void)
 }
 
 static void
-gopal_route_hdr(const route_head *route)
+gopal_route_hdr(const route_head* route)
 {
 
 }
 
 static void
-gopal_route_tlr(const route_head *rte)
+gopal_route_tlr(const route_head* rte)
 {
 }
 
 static void
-gopal_write_waypt(const waypoint *wpt)
+gopal_write_waypt(const waypoint* wpt)
 {
   char tbuffer[64];
   unsigned long timestamp;
@@ -373,7 +373,7 @@ gopal_write_waypt(const waypoint *wpt)
 
 
 static void
-gopal_wr_init(const char *fname)
+gopal_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 }
@@ -404,7 +404,7 @@ ff_vecs_t gopal_vecs = {
   ff_type_file,
   {
     ff_cap_none 	 	/* waypoints */,
-    ff_cap_read | ff_cap_write	/* tracks */,
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* tracks */,
     ff_cap_none  	/* routes */
   },
   gopal_rd_init,

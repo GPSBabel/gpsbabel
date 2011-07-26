@@ -49,13 +49,13 @@ struct record {
   char unknown3; /* always 'a' */
 };
 
-static pdbfile *file_in;
-static pdbfile *file_out;
+static pdbfile* file_in;
+static pdbfile* file_out;
 static short_handle mkshort_handle;
 static int ct;
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = pdb_open(fname, MYNAME);
 }
@@ -67,7 +67,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = pdb_create(fname, MYNAME);
   mkshort_handle = mkshort_new_handle();
@@ -85,27 +85,27 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-  struct record *rec;
-  pdbrec_t *pdb_rec;
+  struct record* rec;
+  pdbrec_t* pdb_rec;
 
   if ((file_in->creator != MYCREATOR) || (file_in->type != MYTYPE)) {
     fatal(MYNAME ": Not a Magellan Navigator file.\n");
   }
 
   for (pdb_rec = file_in->rec_list; pdb_rec; pdb_rec = pdb_rec->next) {
-    waypoint *wpt_tmp;
-    char *vdata;
+    waypoint* wpt_tmp;
+    char* vdata;
     struct tm tm;
 
     memset(&tm, 0, sizeof(tm));
     wpt_tmp = waypt_new();
-    rec = (struct record *) pdb_rec->data;
+    rec = (struct record*) pdb_rec->data;
     wpt_tmp->altitude = be_read32(&rec->elevation);
 
     wpt_tmp->longitude = be_read32(&rec->longitude) / 1e5;
     wpt_tmp->latitude = be_read32(&rec->latitude) / 1e5;
 
-    vdata = (char *) pdb_rec->data + sizeof(*rec);
+    vdata = (char*) pdb_rec->data + sizeof(*rec);
 
     wpt_tmp->shortname = xstrdup(vdata);
     vdata += strlen(vdata) + 1;
@@ -129,13 +129,13 @@ data_read(void)
 
 
 static void
-my_writewpt(const waypoint *wpt)
+my_writewpt(const waypoint* wpt)
 {
-  struct record *rec;
-  struct tm *tm;
-  char *vdata;
+  struct record* rec;
+  struct tm* tm;
+  char* vdata;
   time_t tm_t;
-  const char *sn = global_opts.synthesize_shortnames ?
+  const char* sn = global_opts.synthesize_shortnames ?
                    mkshort_from_wpt(mkshort_handle, wpt) :
                    wpt->shortname;
 
@@ -175,7 +175,7 @@ my_writewpt(const waypoint *wpt)
   rec->plot = 0;
   rec->unknown3 = 'a';
 
-  vdata = (char *)rec + sizeof(*rec);
+  vdata = (char*)rec + sizeof(*rec);
   if (sn) {
     strncpy(vdata, sn, 21);
     vdata[20] = '\0';
@@ -194,7 +194,7 @@ my_writewpt(const waypoint *wpt)
   vdata[1] = '\0';
   vdata += 2;
 
-  pdb_write_rec(file_out, 0, 0, ct++, rec, (char *)vdata - (char *)rec);
+  pdb_write_rec(file_out, 0, 0, ct++, rec, (char*)vdata - (char*)rec);
 
   xfree(rec);
 }
@@ -202,7 +202,7 @@ my_writewpt(const waypoint *wpt)
 static void
 data_write(void)
 {
-  static char *appinfo =
+  static char* appinfo =
     "\0\x01"
     "User\0\0\0\0\0\0\0\0\0\0\0\0"
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
@@ -229,7 +229,7 @@ data_write(void)
   file_out->type = MYTYPE;  /* CWpt */
   file_out->creator = MYCREATOR; /* cGPS */
   file_out->version = 1;
-  file_out->appinfo = (void *)appinfo;
+  file_out->appinfo = (void*)appinfo;
   file_out->appinfo_len = 276;
 
   waypt_disp_all(my_writewpt);

@@ -29,10 +29,10 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static gbfile *ofd;
-static waypoint *wpt_tmp;
-char *urllink, *urllinkt;
-static char *binary = NULL;
+static gbfile* ofd;
+static waypoint* wpt_tmp;
+char* urllink, *urllinkt;
+static char* binary = NULL;
 
 #define MYNAME "lmx"
 
@@ -52,7 +52,7 @@ arglist_t lmx_args[] = {
 
 
 static void
-lmx_wr_init(const char *fname)
+lmx_wr_init(const char* fname)
 {
   ofd = gbfopen(fname, "w", MYNAME);
 }
@@ -63,7 +63,7 @@ lmx_wr_deinit(void)
   gbfclose(ofd);
 }
 
-static char *
+static char*
 lmx_stag(int tag)
 {
   switch (tag) {
@@ -174,7 +174,7 @@ lmx_end_tag(int tag, int indent)
 }
 
 static void
-lmx_write_xml(int tag, const char *data, int indent)
+lmx_write_xml(int tag, const char* data, int indent)
 {
   lmx_start_tag(tag, indent);
 
@@ -182,7 +182,7 @@ lmx_write_xml(int tag, const char *data, int indent)
     gbfputc(0x03, ofd); // inline string follows
     gbfputcstr(data, ofd);
   } else {
-    char *tmp_ent = xml_entitize(data);
+    char* tmp_ent = xml_entitize(data);
     gbfputs(tmp_ent, ofd);
     xfree(tmp_ent);
   }
@@ -191,10 +191,10 @@ lmx_write_xml(int tag, const char *data, int indent)
 }
 
 static void
-lmx_print(const waypoint *wpt)
+lmx_print(const waypoint* wpt)
 {
-  const char *oname;
-  char *odesc;
+  const char* oname;
+  char* odesc;
   char tbuf[100];
 
   /*
@@ -308,11 +308,11 @@ static xg_tag_mapping gl_map[] = {
   { lmx_lm_link,  	cb_cdata, 	LM "/lm:mediaLink/lm:url" },
   { lmx_lm_linkt, 	cb_cdata, 	LM "/lm:mediaLink/lm:name" },
   { lmx_lm_mlink_e,	cb_end, 	LM "/lm:mediaLink" },
-  { NULL, 	0,         NULL}
+  { NULL,	(xg_cb_type)0,         NULL}
 };
 
 static void
-lmx_rd_init(const char *fname)
+lmx_rd_init(const char* fname)
 {
   xml_init(fname, gl_map, NULL);
 }
@@ -332,67 +332,67 @@ lmx_rd_deinit(void)
 
 
 static void
-lmx_lm_start(const char *args, const char **unused)
+lmx_lm_start(const char* args, const char** unused)
 {
   wpt_tmp = waypt_new();
 }
 
 static void
-lmx_lm_end(const char *args, const char **unused)
+lmx_lm_end(const char* args, const char** unused)
 {
   waypt_add(wpt_tmp);
 }
 
 static void
-lmx_lm_lat(const char *args, const char **unused)
+lmx_lm_lat(const char* args, const char** unused)
 {
   wpt_tmp->latitude = atof(args);
 }
 
 static void
-lmx_lm_lon(const char *args, const char **unused)
+lmx_lm_lon(const char* args, const char** unused)
 {
   wpt_tmp->longitude = atof(args);
 }
 
 static void
-lmx_lm_alt(const char *args, const char **unused)
+lmx_lm_alt(const char* args, const char** unused)
 {
   wpt_tmp->altitude = atof(args);
 }
 
 static void
-lmx_lm_name(const char *args, const char **unused)
+lmx_lm_name(const char* args, const char** unused)
 {
   wpt_tmp->shortname = xstrdup(args);
 }
 
 static void
-lmx_lm_desc(const char *args, const char **unused)
+lmx_lm_desc(const char* args, const char** unused)
 {
   wpt_tmp->description = xstrdup(args);
 }
 
 static void
-lmx_lm_mlink_s(const char *args, const char **unused)
+lmx_lm_mlink_s(const char* args, const char** unused)
 {
   urllink = urllinkt = NULL;
 }
 
 static void
-lmx_lm_link(const char *args, const char **unused)
+lmx_lm_link(const char* args, const char** unused)
 {
   urllink = xstrdup(args);
 }
 
 static void
-lmx_lm_linkt(const char *args, const char **unused)
+lmx_lm_linkt(const char* args, const char** unused)
 {
   urllinkt = xstrdup(args);
 }
 
 static void
-lmx_lm_mlink_e(const char *args, const char **unused)
+lmx_lm_mlink_e(const char* args, const char** unused)
 {
   waypt_add_url(wpt_tmp, urllink, urllinkt);
 }
@@ -401,7 +401,7 @@ lmx_lm_mlink_e(const char *args, const char **unused)
 ff_vecs_t lmx_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write,	/* waypoints */
+    (ff_cap)(ff_cap_read | ff_cap_write),	/* waypoints */
     ff_cap_none,			/* tracks */
     ff_cap_none			/* routes */
   },

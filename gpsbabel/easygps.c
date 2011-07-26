@@ -22,8 +22,8 @@
 #include "defs.h"
 #include <ctype.h>
 
-static gbfile *file_in;
-static gbfile *file_out;
+static gbfile* file_in;
+static gbfile* file_out;
 static short_handle mkshort_handle;
 /* static char *deficon = NULL; */
 
@@ -37,11 +37,11 @@ arglist_t easygps_args[] = {
 };
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   int sz;
   char ibuf[100] = {'0'} ;
-  const char *ezsig = "TerraByte Location File";
+  const char* ezsig = "TerraByte Location File";
 
   file_in = gbfopen_le(fname, "rb", MYNAME);
 
@@ -61,7 +61,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen_le(fname, "wb", MYNAME);
   mkshort_handle = mkshort_new_handle();
@@ -81,7 +81,7 @@ data_read(void)
   char ibuf[10];
   do {
     unsigned char tag;
-    waypoint *wpt_tmp;
+    waypoint* wpt_tmp;
 
     wpt_tmp = waypt_new();
 
@@ -142,7 +142,7 @@ data_read(void)
 
 
 static void
-ez_disp(const waypoint *wpt)
+ez_disp(const waypoint* wpt)
 {
   gbfputc('W', file_out);
 

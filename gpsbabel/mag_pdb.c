@@ -34,7 +34,7 @@
 #define PROUTE_MAGIC	0x766d6170 		/* vmap */
 #define PROUTE_ROUTE	0x49444154		/* IDAT */
 
-static pdbfile *file_in;
+static pdbfile* file_in;
 
 static arglist_t magpdb_args[] = {
   ARG_TERMINATOR
@@ -58,17 +58,17 @@ magpdb_to_degree(const int degx)
 }
 
 static void
-magpdb_read_data(const char *data, const size_t data_len)
+magpdb_read_data(const char* data, const size_t data_len)
 {
-  route_head *route;
-  char *cin = (char *)data;
-  char *cend = cin + data_len;
+  route_head* route;
+  char* cin = (char*)data;
+  char* cend = cin + data_len;
 
   route = route_head_alloc();
   route_add_head(route);
 
   while (cin < cend) {
-    char *lend;
+    char* lend;
     int len;
 
     lend = strchr(cin, '\x0A');
@@ -94,7 +94,7 @@ magpdb_read_data(const char *data, const size_t data_len)
       }
       /* check, if line starts with time and distance */
       else if (3 == sscanf(cin, "%d:%d %lf", &hour, &min, &distance)) {
-        char *buff, *comma;
+        char* buff, *comma;
 
         /* detect time-format settings, 12,0 or 12.0 */
 
@@ -115,8 +115,8 @@ magpdb_read_data(const char *data, const size_t data_len)
           comma = cin;
           while ((comma = strchr(comma, separator))) {
             int i, xlat, xlon;
-            waypoint *wpt;
-            char *cx;
+            waypoint* wpt;
+            char* cx;
 
             comma++;
 
@@ -153,7 +153,7 @@ magpdb_read_data(const char *data, const size_t data_len)
 
             cx = strchr(comma, ')');		/* find tailing notes after the coordinates */
             if (cx != NULL) {
-              char *tail = lrtrim(++cx);
+              char* tail = lrtrim(++cx);
               if (*tail != '\0') {
                 wpt->notes = xstrdup(tail);
               }
@@ -179,7 +179,7 @@ magpdb_read_data(const char *data, const size_t data_len)
  * &&& gobal callbacks &&&
  * ----------------------------------------------------------------------------------------- */
 
-static void magpdb_rd_init(const char *fname)
+static void magpdb_rd_init(const char* fname)
 {
   file_in = pdb_open(fname, MYNAME);
 }
@@ -191,7 +191,7 @@ static void magpdb_rd_deinit(void)
 
 static void magpdb_read(void)
 {
-  pdbrec_t *pdb_rec;
+  pdbrec_t* pdb_rec;
 
   is_fatal((file_in->creator != PROUTE_MAGIC),	/* identify the database */
            MYNAME ": Not a Map&Guide pdb file (0x%08x).", file_in->creator);
@@ -203,7 +203,7 @@ static void magpdb_read(void)
            MYNAME ": Unknown pdb data type (0x%08x).", file_in->type);
 
   for (pdb_rec = file_in->rec_list; pdb_rec; pdb_rec = pdb_rec->next) {
-    char *data = (char *)pdb_rec->data;
+    char* data = (char*)pdb_rec->data;
 
     if (be_read16(data) == 0) {
       int len = be_read16(data + 2);

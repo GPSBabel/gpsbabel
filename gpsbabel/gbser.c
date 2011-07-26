@@ -26,7 +26,7 @@
 #include <assert.h>
 #include <stdarg.h>
 
-void gbser__db(int l, const char *msg, ...)
+void gbser__db(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);
@@ -38,7 +38,7 @@ void gbser__db(int l, const char *msg, ...)
 
 /* Set the serial port speed.
  */
-int gbser_set_speed(void *handle, unsigned speed)
+int gbser_set_speed(void* handle, unsigned speed)
 {
   return gbser_set_port(handle, speed, 8, 0, 1);
 }
@@ -65,7 +65,7 @@ static int parity_letter(char c)
  * insensitive, spaces are allowed around the commas and omitted
  * trailing fields will default to '8', 'N' and '1'
  */
-int gbser_setup(void *handle, const char *spec)
+int gbser_setup(void* handle, const char* spec)
 {
   unsigned arg[] = { 4800, 8, 0, 1 };
   int ap;
@@ -107,7 +107,7 @@ int gbser_setup(void *handle, const char *spec)
 
 /* Return true if there are characters available on the serial port
  */
-int gbser_avail(void *handle)
+int gbser_avail(void* handle)
 {
   return gbser__fill_buffer(handle, 1, NULL);
 }
@@ -116,7 +116,7 @@ int gbser_avail(void *handle)
  * bytes will be read. Returns the number of bytes read or gbser_ERROR if an
  * error occurs.
  */
-int gbser_read(void *handle, void *buf, unsigned len)
+int gbser_read(void* handle, void* buf, unsigned len)
 {
   int got = 0;
 
@@ -138,7 +138,7 @@ int gbser_read(void *handle, void *buf, unsigned len)
 /* Read the specified number of bytes. Block until the requested number
  * of bytes have been read or the timeout (in ms) is exceeded.
  */
-int gbser_read_wait(void *handle, void *buf, unsigned len, unsigned ms)
+int gbser_read_wait(void* handle, void* buf, unsigned len, unsigned ms)
 {
   int got = 0;
 
@@ -156,7 +156,7 @@ int gbser_read_wait(void *handle, void *buf, unsigned len, unsigned ms)
 /* Read a single character from the port, returning immediately if
  * none are available.
  */
-int gbser_readc(void *handle)
+int gbser_readc(void* handle)
 {
   unsigned char buf;
   int rc;
@@ -174,7 +174,7 @@ int gbser_readc(void *handle)
 /* Read a single character from the port, waiting up to |ms|
  * milliseconds for a character to be available.
  */
-int gbser_readc_wait(void *handle, unsigned ms)
+int gbser_readc_wait(void* handle, unsigned ms)
 {
   unsigned char buf;
   int rc;
@@ -192,14 +192,14 @@ int gbser_readc_wait(void *handle, unsigned ms)
 /* Write a null terminated string in |str| to the serial
  * port.
  */
-int gbser_print(void *handle, const char *str)
+int gbser_print(void* handle, const char* str)
 {
   return gbser_write(handle, str, (unsigned) strlen(str));
 }
 
 /* Write a single character to the serial port.
  */
-int gbser_writec(void *handle, int c)
+int gbser_writec(void* handle, int c)
 {
   return gbser_write(handle, &c, 1);
 }

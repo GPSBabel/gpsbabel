@@ -43,70 +43,70 @@ double gps_save_lon;
 
 #define XMIN(a,b) (a < b? a : b)
 
-static int32    GPS_A000(const char *port);
+static int32    GPS_A000(const char* port);
 static void   GPS_A001(GPS_PPacket packet);
 
 
-static void   GPS_A500_Translate(UC *s, GPS_PAlmanac *alm);
-static void   GPS_A500_Encode(UC *s, GPS_PAlmanac alm);
-static void   GPS_A300_Translate(UC *s, GPS_PTrack *trk);
-static void   GPS_A300_Encode(UC *s, GPS_PTrack trk);
+static void   GPS_A500_Translate(UC* s, GPS_PAlmanac* alm);
+static void   GPS_A500_Encode(UC* s, GPS_PAlmanac alm);
+static void   GPS_A300_Translate(UC* s, GPS_PTrack* trk);
+static void   GPS_A300_Encode(UC* s, GPS_PTrack trk);
 
 
-static void   GPS_D100_Get(GPS_PWay *way, UC *s);
-static void   GPS_D101_Get(GPS_PWay *way, UC *s);
-static void   GPS_D102_Get(GPS_PWay *way, UC *s);
-static void   GPS_D103_Get(GPS_PWay *way, UC *s);
-static void   GPS_D104_Get(GPS_PWay *way, UC *s);
-static void   GPS_D105_Get(GPS_PWay *way, UC *s);
-static void   GPS_D106_Get(GPS_PWay *way, UC *s);
-static void   GPS_D107_Get(GPS_PWay *way, UC *s);
-static void   GPS_D108_Get(GPS_PWay *way, UC *s);
-static void   GPS_D109_Get(GPS_PWay *way, UC *s, int proto);
-static void   GPS_D150_Get(GPS_PWay *way, UC *s);
-static void   GPS_D151_Get(GPS_PWay *way, UC *s);
-static void   GPS_D152_Get(GPS_PWay *way, UC *s);
-static void   GPS_D154_Get(GPS_PWay *way, UC *s);
-static void   GPS_D155_Get(GPS_PWay *way, UC *s);
+static void   GPS_D100_Get(GPS_PWay* way, UC* s);
+static void   GPS_D101_Get(GPS_PWay* way, UC* s);
+static void   GPS_D102_Get(GPS_PWay* way, UC* s);
+static void   GPS_D103_Get(GPS_PWay* way, UC* s);
+static void   GPS_D104_Get(GPS_PWay* way, UC* s);
+static void   GPS_D105_Get(GPS_PWay* way, UC* s);
+static void   GPS_D106_Get(GPS_PWay* way, UC* s);
+static void   GPS_D107_Get(GPS_PWay* way, UC* s);
+static void   GPS_D108_Get(GPS_PWay* way, UC* s);
+static void   GPS_D109_Get(GPS_PWay* way, UC* s, int proto);
+static void   GPS_D150_Get(GPS_PWay* way, UC* s);
+static void   GPS_D151_Get(GPS_PWay* way, UC* s);
+static void   GPS_D152_Get(GPS_PWay* way, UC* s);
+static void   GPS_D154_Get(GPS_PWay* way, UC* s);
+static void   GPS_D155_Get(GPS_PWay* way, UC* s);
 
-static void   GPS_D100_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D101_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D102_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D103_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D104_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D105_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D106_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D107_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D108_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D109_Send(UC *data, GPS_PWay way, int32 *len, int proto);
-static void   GPS_D150_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D151_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D152_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D154_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D155_Send(UC *data, GPS_PWay way, int32 *len);
+static void   GPS_D100_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D101_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D102_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D103_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D104_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D105_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D106_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D107_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D108_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D109_Send(UC* data, GPS_PWay way, int32* len, int proto);
+static void   GPS_D150_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D151_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D152_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D154_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D155_Send(UC* data, GPS_PWay way, int32* len);
 
-static void   GPS_D120_Get(int n, char *data);
+static void   GPS_D120_Get(int n, char* data);
 
-static void   GPS_D200_Get(GPS_PWay *way, UC *s);
-static void   GPS_D201_Get(GPS_PWay *way, UC *s);
-static void   GPS_D202_Get(GPS_PWay *way, UC *s);
-static void   GPS_D210_Get(GPS_PWay *way, UC *s);
-static void   GPS_D200_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D201_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D202_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D210_Send(UC *data, GPS_PWay way, int32 *len);
+static void   GPS_D200_Get(GPS_PWay* way, UC* s);
+static void   GPS_D201_Get(GPS_PWay* way, UC* s);
+static void   GPS_D202_Get(GPS_PWay* way, UC* s);
+static void   GPS_D210_Get(GPS_PWay* way, UC* s);
+static void   GPS_D200_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D201_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D202_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D210_Send(UC* data, GPS_PWay way, int32* len);
 
-static void   GPS_D400_Get(GPS_PWay *way, UC *s);
-static void   GPS_D403_Get(GPS_PWay *way, UC *s);
-static void   GPS_D450_Get(GPS_PWay *way, UC *s);
-static void   GPS_D400_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D403_Send(UC *data, GPS_PWay way, int32 *len);
-static void   GPS_D450_Send(UC *data, GPS_PWay way, int32 *len);
+static void   GPS_D400_Get(GPS_PWay* way, UC* s);
+static void   GPS_D403_Get(GPS_PWay* way, UC* s);
+static void   GPS_D450_Get(GPS_PWay* way, UC* s);
+static void   GPS_D400_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D403_Send(UC* data, GPS_PWay way, int32* len);
+static void   GPS_D450_Send(UC* data, GPS_PWay way, int32* len);
 
-static void   GPS_D500_Send(UC *data, GPS_PAlmanac alm);
-static void   GPS_D501_Send(UC *data, GPS_PAlmanac alm);
-static void   GPS_D550_Send(UC *data, GPS_PAlmanac alm);
-static void   GPS_D551_Send(UC *data, GPS_PAlmanac alm);
+static void   GPS_D500_Send(UC* data, GPS_PAlmanac alm);
+static void   GPS_D501_Send(UC* data, GPS_PAlmanac alm);
+static void   GPS_D550_Send(UC* data, GPS_PAlmanac alm);
+static void   GPS_D551_Send(UC* data, GPS_PAlmanac alm);
 
 static UC Is_Trackpoint_Invalid(GPS_PTrack trk);
 
@@ -125,9 +125,9 @@ char	gps_save_string[GPS_ARB_LEN];
 typedef enum { UpperNo = 0, UpperYes = 1 } copycase;
 
 static
-void copy_char_array(UC **dst, char* src, int count, copycase mustupper)
+void copy_char_array(UC** dst, char* src, int count, copycase mustupper)
 {
-  UC *d = *dst;
+  UC* d = *dst;
   int ocount =  count;
   do {
     UC sc = *src++;
@@ -158,7 +158,7 @@ void copy_char_array(UC **dst, char* src, int count, copycase mustupper)
 **
 ** @return [int32] 1 if success -ve if error
 ************************************************************************/
-int32 GPS_Init(const char *port)
+int32 GPS_Init(const char* port)
 {
   int32 ret;
 
@@ -195,9 +195,9 @@ int32 GPS_Init(const char *port)
 **
 ** @return [int32] 1 if success -ve if error
 ************************************************************************/
-static int32 GPS_A000(const char *port)
+static int32 GPS_A000(const char* port)
 {
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int16 version;
@@ -230,7 +230,7 @@ static int32 GPS_A000(const char *port)
   id = GPS_Util_Get_Short(rec->data);
   version = GPS_Util_Get_Short((rec->data)+2);
 
-  (void) strcpy(gps_save_string,(char *)rec->data+4);
+  (void) strcpy(gps_save_string,(char*)rec->data+4);
   gps_save_id = id;
   gps_save_version = (double)((double)version/(double)100.);
 
@@ -386,7 +386,7 @@ static void GPS_A001(GPS_PPacket packet)
 {
   int32 entries;
   int32 i;
-  UC *p;
+  UC* p;
   US tag;
   US data;
   US lasta=0;
@@ -859,10 +859,10 @@ static void GPS_A001(GPS_PPacket packet)
 **
 ** @return [int32] number of waypoint entries
 ************************************************************************/
-int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int, GPS_PWay *))
+int32 GPS_A100_Get(const char* port, GPS_PWay** way, int (*cb)(int, GPS_PWay*))
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 n;
@@ -898,7 +898,7 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int, GPS_PWay *))
   n = GPS_Util_Get_Short(rec->data);
 
   if (n)
-    if (!((*way)=(GPS_PWay *)malloc(n*sizeof(GPS_PWay)))) {
+    if (!((*way)=(GPS_PWay*)malloc(n*sizeof(GPS_PWay)))) {
       GPS_Error("A100_Get: Insufficient memory");
       return MEMORY_ERROR;
     }
@@ -1016,10 +1016,10 @@ int32 GPS_A100_Get(const char *port, GPS_PWay **way, int (*cb)(int, GPS_PWay *))
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A100_Send(const char *port, GPS_PWay *way, int32 n, int (*cb)(GPS_PWay *))
+int32 GPS_A100_Send(const char* port, GPS_PWay* way, int32 n, int (*cb)(GPS_PWay*))
 {
   UC data[GPS_ARB_LEN];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 i;
@@ -1047,7 +1047,7 @@ int32 GPS_A100_Send(const char *port, GPS_PWay *way, int32 n, int (*cb)(GPS_PWay
 
   for (i=0; i<n; ++i) {
     if (cb) {
-      if (cb((GPS_PWay *) way[i])) { /* BUGBUG Wrong level of indirection */
+      if (cb((GPS_PWay*) way[i])) {  /* BUGBUG Wrong level of indirection */
         break;
       }
     }
@@ -1144,10 +1144,10 @@ int32 GPS_A100_Send(const char *port, GPS_PWay *way, int32 n, int (*cb)(GPS_PWay
 /*
  * Get the list of waypoint categories from the receiver.
  */
-int32 GPS_A101_Get(const char *port)
+int32 GPS_A101_Get(const char* port)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 n;
@@ -1190,7 +1190,7 @@ int32 GPS_A101_Get(const char *port)
     }
     switch (gps_category_type) {
     case pD120:
-      GPS_D120_Get(i,(char *) rec->data);
+      GPS_D120_Get(i,(char*) rec->data);
       break;
     }
   }
@@ -1224,9 +1224,9 @@ int32 GPS_A101_Get(const char *port)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D100_Get(GPS_PWay *way, UC *s)
+static void GPS_D100_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -1262,9 +1262,9 @@ static void GPS_D100_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D101_Get(GPS_PWay *way, UC *s)
+static void GPS_D101_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -1305,9 +1305,9 @@ static void GPS_D101_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D102_Get(GPS_PWay *way, UC *s)
+static void GPS_D102_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -1349,9 +1349,9 @@ static void GPS_D102_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D103_Get(GPS_PWay *way, UC *s)
+static void GPS_D103_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -1391,9 +1391,9 @@ static void GPS_D103_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D104_Get(GPS_PWay *way, UC *s)
+static void GPS_D104_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -1437,10 +1437,10 @@ static void GPS_D104_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D105_Get(GPS_PWay *way, UC *s)
+static void GPS_D105_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
 
   p=s;
 
@@ -1455,7 +1455,7 @@ static void GPS_D105_Get(GPS_PWay *way, UC *s)
   (*way)->smbl = GPS_Util_Get_Short(p);
   p+=sizeof(int16);
 
-  q = (UC *)(*way)->wpt_ident;
+  q = (UC*)(*way)->wpt_ident;
   while ((*q++ = *p++));
 
   return;
@@ -1472,10 +1472,10 @@ static void GPS_D105_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D106_Get(GPS_PWay *way, UC *s)
+void GPS_D106_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
   int32 i;
 
   p=s;
@@ -1497,9 +1497,9 @@ void GPS_D106_Get(GPS_PWay *way, UC *s)
   (*way)->smbl = GPS_Util_Get_Short(p);
   p+=sizeof(int16);
 
-  q = (UC *)(*way)->wpt_ident;
+  q = (UC*)(*way)->wpt_ident;
   while ((*q++ = *p++));
-  q = (UC *)(*way)->lnk_ident;
+  q = (UC*)(*way)->lnk_ident;
   while ((*q++ = *p++));
 
   return;
@@ -1516,9 +1516,9 @@ void GPS_D106_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D107_Get(GPS_PWay *way, UC *s)
+static void GPS_D107_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -1562,10 +1562,10 @@ static void GPS_D107_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D108_Get(GPS_PWay *way, UC *s)
+static void GPS_D108_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
 
   int32 i;
 
@@ -1603,22 +1603,22 @@ static void GPS_D108_Get(GPS_PWay *way, UC *s)
     (*way)->cc[i] = *p++;
   }
 
-  q = (UC *)(*way)->ident;
+  q = (UC*)(*way)->ident;
   while ((*q++ = *p++));
 
-  q = (UC *)(*way)->cmnt;
+  q = (UC*)(*way)->cmnt;
   while ((*q++ = *p++));
 
-  q = (UC *)(*way)->facility;
+  q = (UC*)(*way)->facility;
   while ((*q++ = *p++));
 
-  q = (UC *)(*way)->city;
+  q = (UC*)(*way)->city;
   while ((*q++ = *p++));
 
-  q = (UC *)(*way)->addr;
+  q = (UC*)(*way)->addr;
   while ((*q++ = *p++));
 
-  q = (UC *)(*way)->cross_road;
+  q = (UC*)(*way)->cross_road;
   while ((*q++ = *p++));
 
   return;
@@ -1636,10 +1636,10 @@ static void GPS_D108_Get(GPS_PWay *way, UC *s)
 ** of temp, time, and wpt_cat stuck between ete and ident.   Rather than
 ** duplicating the function, we just handle this at runtime.
 ************************************************************************/
-static void GPS_D109_Get(GPS_PWay *way, UC *s, int protoid)
+static void GPS_D109_Get(GPS_PWay* way, UC* s, int protoid)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
 
   int32 i;
 
@@ -1702,22 +1702,22 @@ static void GPS_D109_Get(GPS_PWay *way, UC *s, int protoid)
     p += 2;
   }
 
-  q = (UC *)(*way)->ident;
+  q = (UC*)(*way)->ident;
   while ((*q++ = *p++));
 
-  q = (UC *)(*way)->cmnt;
+  q = (UC*)(*way)->cmnt;
   while ((*q++ = *p++));
 
-  q = (UC *)(*way)->facility;
+  q = (UC*)(*way)->facility;
   while ((*q++ = *p++));
 
-  q = (UC *)(*way)->city;
+  q = (UC*)(*way)->city;
   while ((*q++ = *p++));
 
-  q = (UC *)(*way)->addr;
+  q = (UC*)(*way)->addr;
   while ((*q++ = *p++));
 
-  q = (UC *)(*way)->cross_road;
+  q = (UC*)(*way)->cross_road;
   while ((*q++ = *p++));
 
   return;
@@ -1733,9 +1733,9 @@ static void GPS_D109_Get(GPS_PWay *way, UC *s, int protoid)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D150_Get(GPS_PWay *way, UC *s)
+static void GPS_D150_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -1785,9 +1785,9 @@ static void GPS_D150_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D151_Get(GPS_PWay *way, UC *s)
+static void GPS_D151_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -1847,9 +1847,9 @@ static void GPS_D151_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D152_Get(GPS_PWay *way, UC *s)
+static void GPS_D152_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -1908,9 +1908,9 @@ static void GPS_D152_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D154_Get(GPS_PWay *way, UC *s)
+static void GPS_D154_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -1971,9 +1971,9 @@ static void GPS_D154_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D155_Get(GPS_PWay *way, UC *s)
+static void GPS_D155_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -2037,7 +2037,7 @@ char gps_categories[16][17];
  * Read descriptor s into category number N;
  */
 static
-void GPS_D120_Get(int cat_num, char *s)
+void GPS_D120_Get(int cat_num, char* s)
 {
   /* we're guaranteed to have no more than 16 chars plus a
    * null terminator.
@@ -2065,9 +2065,9 @@ void GPS_D120_Get(int cat_num, char *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D100_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D100_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
 
   p = data;
 
@@ -2096,9 +2096,9 @@ static void GPS_D100_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D101_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D101_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
 
   p = data;
 
@@ -2133,9 +2133,9 @@ static void GPS_D101_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D102_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D102_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
 
   p = data;
 
@@ -2169,9 +2169,9 @@ static void GPS_D102_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D103_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D103_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
 
   p = data;
 
@@ -2204,9 +2204,9 @@ static void GPS_D103_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D104_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D104_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
 
   p = data;
 
@@ -2247,10 +2247,10 @@ static void GPS_D104_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D105_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D105_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
 
   p = data;
 
@@ -2262,7 +2262,7 @@ static void GPS_D105_Send(UC *data, GPS_PWay way, int32 *len)
   GPS_Util_Put_Short(p, (int16) way->smbl);
   p+=sizeof(int16);
 
-  q = (UC *) way->wpt_ident;
+  q = (UC*) way->wpt_ident;
   while ((*p++ = *q++));
 
 
@@ -2282,10 +2282,10 @@ static void GPS_D105_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D106_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D106_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
   int32 i;
 
   p = data;
@@ -2302,9 +2302,9 @@ static void GPS_D106_Send(UC *data, GPS_PWay way, int32 *len)
   GPS_Util_Put_Short(p, (int16) way->smbl);
   p+=sizeof(int16);
 
-  q = (UC *) way->wpt_ident;
+  q = (UC*) way->wpt_ident;
   while ((*p++ = *q++));
-  q = (UC *) way->lnk_ident;
+  q = (UC*) way->lnk_ident;
   while ((*p++ = *q++));
 
   *len = p-data;
@@ -2323,9 +2323,9 @@ static void GPS_D106_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D107_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D107_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
 
   p = data;
 
@@ -2363,10 +2363,10 @@ static void GPS_D107_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D108_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D108_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
 
   int32 i;
 
@@ -2405,22 +2405,22 @@ static void GPS_D108_Send(UC *data, GPS_PWay way, int32 *len)
   }
 
 
-  q = (UC *) way->ident;
+  q = (UC*) way->ident;
   i = XMIN(51, sizeof(way->ident));
   while ((*p++ = *q++) && i--);
-  q = (UC *) way->cmnt;
+  q = (UC*) way->cmnt;
   i = XMIN(51, sizeof(way->cmnt));
   while ((*p++ = *q++) && i--);
-  q = (UC *) way->facility;
+  q = (UC*) way->facility;
   i = XMIN(31, sizeof(way->facility));
   while ((*p++ = *q++) && i--);
-  q = (UC *) way->city;
+  q = (UC*) way->city;
   i = XMIN(25, sizeof(way->city));
   while ((*p++ = *q++) && i--);
-  q = (UC *) way->addr;
+  q = (UC*) way->addr;
   i = XMIN(51, sizeof(way->addr));
   while ((*p++ = *q++) && i--);
-  q = (UC *) way->cross_road;
+  q = (UC*) way->cross_road;
   i = XMIN(51, sizeof(way->cross_road));
   while ((*p++ = *q++) && i--);
 
@@ -2441,10 +2441,10 @@ static void GPS_D108_Send(UC *data, GPS_PWay way, int32 *len)
 ** @return [void]
 ** D109's and D110's are so simlar, we handle themw with the same code.
 ************************************************************************/
-static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len, int protoid)
+static void GPS_D109_Send(UC* data, GPS_PWay way, int32* len, int protoid)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
 
   int32 i;
 
@@ -2510,22 +2510,22 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len, int protoid)
     p += 2;
   }
 
-  q = (UC *) way->ident;
+  q = (UC*) way->ident;
   i = XMIN(51, sizeof(way->ident));
   while ((*p++ = *q++) && i--);
-  q = (UC *) way->cmnt;
+  q = (UC*) way->cmnt;
   i = XMIN(51, sizeof(way->cmnt));
   while ((*p++ = *q++) && i--);
-  q = (UC *) way->facility;
+  q = (UC*) way->facility;
   i = XMIN(31, sizeof(way->facility));
   while ((*p++ = *q++) && i--);
-  q = (UC *) way->city;
+  q = (UC*) way->city;
   i = XMIN(25, sizeof(way->city));
   while ((*p++ = *q++) && i--);
-  q = (UC *) way->addr;
+  q = (UC*) way->addr;
   i = XMIN(51, sizeof(way->addr));
   while ((*p++ = *q++) && i--);
-  q = (UC *) way->cross_road;
+  q = (UC*) way->cross_road;
   i = XMIN(51, sizeof(way->cross_road));
   while ((*p++ = *q++) && i--);
   *len = p-data;
@@ -2543,9 +2543,9 @@ static void GPS_D109_Send(UC *data, GPS_PWay way, int32 *len, int protoid)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D150_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D150_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p = data;
@@ -2589,9 +2589,9 @@ static void GPS_D150_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D151_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D151_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p = data;
@@ -2642,9 +2642,9 @@ static void GPS_D151_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D152_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D152_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p = data;
@@ -2694,9 +2694,9 @@ static void GPS_D152_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D154_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D154_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p = data;
@@ -2750,9 +2750,9 @@ static void GPS_D154_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D155_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D155_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
 
   p = data;
 
@@ -2802,10 +2802,10 @@ static void GPS_D155_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [int32] number of waypoint entries
 ************************************************************************/
-int32 GPS_A200_Get(const char *port, GPS_PWay **way)
+int32 GPS_A200_Get(const char* port, GPS_PWay** way)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 n;
@@ -2841,7 +2841,7 @@ int32 GPS_A200_Get(const char *port, GPS_PWay **way)
   n = GPS_Util_Get_Short(rec->data);
 
   if (n)
-    if (!((*way)=(GPS_PWay *)malloc(n*sizeof(GPS_PWay)))) {
+    if (!((*way)=(GPS_PWay*)malloc(n*sizeof(GPS_PWay)))) {
       GPS_Error("A200_Get: Insufficient memory");
       return MEMORY_ERROR;
     }
@@ -2981,10 +2981,10 @@ int32 GPS_A200_Get(const char *port, GPS_PWay **way)
 **
 ** @return [int32] number of waypoint entries
 ************************************************************************/
-int32 GPS_A201_Get(const char *port, GPS_PWay **way)
+int32 GPS_A201_Get(const char* port, GPS_PWay** way)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 n;
@@ -3020,7 +3020,7 @@ int32 GPS_A201_Get(const char *port, GPS_PWay **way)
   n = GPS_Util_Get_Short(rec->data);
 
   if (n)
-    if (!((*way)=(GPS_PWay *)malloc(n*sizeof(GPS_PWay)))) {
+    if (!((*way)=(GPS_PWay*)malloc(n*sizeof(GPS_PWay)))) {
       GPS_Error("A201_Get: Insufficient memory");
       return MEMORY_ERROR;
     }
@@ -3177,10 +3177,10 @@ int32 GPS_A201_Get(const char *port, GPS_PWay **way)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A200_Send(const char *port, GPS_PWay *way, int32 n)
+int32 GPS_A200_Send(const char* port, GPS_PWay* way, int32 n)
 {
   UC data[GPS_ARB_LEN];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 i;
@@ -3323,10 +3323,10 @@ int32 GPS_A200_Send(const char *port, GPS_PWay *way, int32 n)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A201_Send(const char *port, GPS_PWay *way, int32 n)
+int32 GPS_A201_Send(const char* port, GPS_PWay* way, int32 n)
 {
   UC data[GPS_ARB_LEN];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 i;
@@ -3487,7 +3487,7 @@ int32 GPS_A201_Send(const char *port, GPS_PWay *way, int32 n)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D200_Get(GPS_PWay *way, UC *s)
+static void GPS_D200_Get(GPS_PWay* way, UC* s)
 {
   (*way)->rte_prot = 200;
   (*way)->rte_num  = *s;
@@ -3507,9 +3507,9 @@ static void GPS_D200_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D201_Get(GPS_PWay *way, UC *s)
+static void GPS_D201_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -3535,10 +3535,10 @@ static void GPS_D201_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D202_Get(GPS_PWay *way, UC *s)
+static void GPS_D202_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
 
   p=s;
 
@@ -3548,7 +3548,7 @@ static void GPS_D202_Get(GPS_PWay *way, UC *s)
   (*way)->rte_num  = *p++;
 #endif
   (*way)->isrte    = 1;
-  q = (UC *)(*way)->rte_ident;
+  q = (UC*)(*way)->rte_ident;
   while ((*q++=*p++));
 
   return;
@@ -3565,10 +3565,10 @@ static void GPS_D202_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D210_Get(GPS_PWay *way, UC *s)
+static void GPS_D210_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
   int32 i;
 
   p=s;
@@ -3578,7 +3578,7 @@ static void GPS_D210_Get(GPS_PWay *way, UC *s)
   for (i=0; i<18; ++i) {
     (*way)->rte_link_subclass[i] = *p++;
   }
-  q = (UC *)(*way)->rte_link_ident;
+  q = (UC*)(*way)->rte_link_ident;
   while ((*q++=*p++));
 
   return;
@@ -3596,7 +3596,7 @@ static void GPS_D210_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D200_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D200_Send(UC* data, GPS_PWay way, int32* len)
 {
 
   *data = way->rte_num;
@@ -3617,9 +3617,9 @@ static void GPS_D200_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D201_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D201_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
 
   p = data;
 
@@ -3642,13 +3642,13 @@ static void GPS_D201_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D202_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D202_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
 
   p = data;
-  q = (UC *) way->rte_ident;
+  q = (UC*) way->rte_ident;
 
   while ((*p++ = *q++));
 
@@ -3669,10 +3669,10 @@ static void GPS_D202_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D210_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D210_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
   int32 i;
 
   p = data;
@@ -3683,7 +3683,7 @@ static void GPS_D210_Send(UC *data, GPS_PWay way, int32 *len)
     *p++ = way->rte_link_subclass[i];
   }
 
-  q = (UC *) way->rte_link_ident;
+  q = (UC*) way->rte_link_ident;
   while ((*p++ = *q++));
 
   *len = p-data;
@@ -3702,10 +3702,10 @@ static void GPS_D210_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [int32] number of track entries
 ************************************************************************/
-int32 GPS_A300_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
+int32 GPS_A300_Get(const char* port, GPS_PTrack** trk, pcb_fn cb)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 n;
@@ -3752,7 +3752,7 @@ int32 GPS_A300_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
   n = GPS_Util_Get_Short(rec->data);
 
   if (n)
-    if (!((*trk)=(GPS_PTrack *)malloc(n*sizeof(GPS_PTrack)))) {
+    if (!((*trk)=(GPS_PTrack*)malloc(n*sizeof(GPS_PTrack)))) {
       GPS_Error("A300_Get: Insufficient memory");
       return MEMORY_ERROR;
     }
@@ -3800,7 +3800,7 @@ int32 GPS_A300_Get(const char *port, GPS_PTrack **trk, pcb_fn cb)
  * Hopefully, this won't be needed forever.
  */
 int
-drain_run_cmd(gpsdevh *fd)
+drain_run_cmd(gpsdevh* fd)
 {
   GPS_PPacket tra;
   GPS_PPacket rec;
@@ -3849,10 +3849,10 @@ drain_run_cmd(gpsdevh *fd)
 **
 ** @return [int32] number of track entries
 ************************************************************************/
-int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb, int protoid)
+int32 GPS_A301_Get(const char* port, GPS_PTrack** trk, pcb_fn cb, int protoid)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 n;
@@ -3923,7 +3923,7 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb, int protoid)
   n = GPS_Util_Get_Short(rec->data);
 
   if (n)
-    if (!((*trk)=(GPS_PTrack *)malloc(n*sizeof(GPS_PTrack)))) {
+    if (!((*trk)=(GPS_PTrack*)malloc(n*sizeof(GPS_PTrack)))) {
       GPS_Error("A301_Get: Insufficient memory");
       return MEMORY_ERROR;
     }
@@ -4036,10 +4036,10 @@ int32 GPS_A301_Get(const char *port, GPS_PTrack **trk, pcb_fn cb, int protoid)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A300_Send(const char *port, GPS_PTrack *trk, int32 n)
+int32 GPS_A300_Send(const char* port, GPS_PTrack* trk, int32 n)
 {
   UC data[GPS_ARB_LEN];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 i;
@@ -4135,8 +4135,8 @@ int32 GPS_A300_Send(const char *port, GPS_PTrack *trk, int32 n)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n, int protoid,
-                    gpsdevh *fd)
+int32 GPS_A301_Send(const char* port, GPS_PTrack* trk, int32 n, int protoid,
+                    gpsdevh* fd)
 {
   UC data[GPS_ARB_LEN];
   GPS_PPacket tra;
@@ -4281,7 +4281,7 @@ int32 GPS_A301_Send(const char *port, GPS_PTrack *trk, int32 n, int protoid,
 **
 ** @return [int32] number of entries read
 ************************************************************************/
-int32 GPS_D300_Get(GPS_PTrack *trk, int32 entries, gpsdevh *fd)
+int32 GPS_D300_Get(GPS_PTrack* trk, int32 entries, gpsdevh* fd)
 {
   GPS_PPacket tra;
   GPS_PPacket rec;
@@ -4334,7 +4334,7 @@ int32 GPS_D300_Get(GPS_PTrack *trk, int32 entries, gpsdevh *fd)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D300b_Get(GPS_PTrack *trk, UC *data)
+void GPS_D300b_Get(GPS_PTrack* trk, UC* data)
 {
 
   GPS_A300_Translate(data, trk);
@@ -4352,9 +4352,9 @@ void GPS_D300b_Get(GPS_PTrack *trk, UC *data)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D301b_Get(GPS_PTrack *trk, UC *data)
+void GPS_D301b_Get(GPS_PTrack* trk, UC* data)
 {
-  UC *p;
+  UC* p;
   uint32 t;
 
   p=data;
@@ -4393,9 +4393,9 @@ void GPS_D301b_Get(GPS_PTrack *trk, UC *data)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D302b_Get(GPS_PTrack *trk, UC *data)
+void GPS_D302b_Get(GPS_PTrack* trk, UC* data)
 {
-  UC *p;
+  UC* p;
   uint32 t;
   double gps_temp;
 
@@ -4447,9 +4447,9 @@ void GPS_D302b_Get(GPS_PTrack *trk, UC *data)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D303b_Get(GPS_PTrack *trk, UC *data)
+void GPS_D303b_Get(GPS_PTrack* trk, UC* data)
 {
-  UC *p;
+  UC* p;
   uint32 t;
   uint32 raw_lat, raw_lon;
   int lat_undefined, lon_undefined;
@@ -4540,17 +4540,17 @@ void GPS_D303b_Get(GPS_PTrack *trk, UC *data)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D310_Get(GPS_PTrack *trk, UC *s)
+void GPS_D310_Get(GPS_PTrack* trk, UC* s)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
 
   p=s;
 
   (*trk)->dspl = *p++;
   (*trk)->colour = *p++;
 
-  q = (UC *)(*trk)->trk_ident;
+  q = (UC*)(*trk)->trk_ident;
 
   while ((*q++ = *p++));
 
@@ -4566,9 +4566,9 @@ void GPS_D310_Get(GPS_PTrack *trk, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D311_Get(GPS_PTrack *trk, UC *s)
+void GPS_D311_Get(GPS_PTrack* trk, UC* s)
 {
-  UC *p;
+  UC* p;
   short identifier;
 
   p=s;
@@ -4591,9 +4591,9 @@ void GPS_D311_Get(GPS_PTrack *trk, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D300_Send(UC *data, GPS_PTrack trk, int32 *len)
+void GPS_D300_Send(UC* data, GPS_PTrack trk, int32* len)
 {
-  UC *p;
+  UC* p;
 
   p = data;
   GPS_A300_Encode(p,trk);
@@ -4616,9 +4616,9 @@ void GPS_D300_Send(UC *data, GPS_PTrack trk, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D301_Send(UC *data, GPS_PTrack trk, int32 *len, int type)
+void GPS_D301_Send(UC* data, GPS_PTrack trk, int32* len, int type)
 {
-  UC *p;
+  UC* p;
 
   p = data;
   GPS_A300_Encode(p,trk);
@@ -4655,9 +4655,9 @@ void GPS_D301_Send(UC *data, GPS_PTrack trk, int32 *len, int type)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D303_Send(UC *data, GPS_PTrack trk, int32 *len, int protoid)
+void GPS_D303_Send(UC* data, GPS_PTrack trk, int32* len, int protoid)
 {
-  UC *p;
+  UC* p;
 
   p = data;
   GPS_A300_Encode(p,trk);
@@ -4697,9 +4697,9 @@ void GPS_D303_Send(UC *data, GPS_PTrack trk, int32 *len, int protoid)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D311_Send(UC *data, GPS_PTrack trk, int32 *len)
+void GPS_D311_Send(UC* data, GPS_PTrack trk, int32* len)
 {
-  UC *p;
+  UC* p;
 
   p = data;
   GPS_Util_Put_Short(p,strtoul(trk->trk_ident, NULL, 0));
@@ -4719,17 +4719,17 @@ void GPS_D311_Send(UC *data, GPS_PTrack trk, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D310_Send(UC *data, GPS_PTrack trk, int32 *len)
+void GPS_D310_Send(UC* data, GPS_PTrack trk, int32* len)
 {
-  UC *p;
-  UC *q;
+  UC* p;
+  UC* q;
 
   p = data;
 
   *p++ = trk->dspl;
   *p++ = trk->colour;
 
-  q = (UC *) trk->trk_ident;
+  q = (UC*) trk->trk_ident;
   while ((*p++ = *q++));
 
   *len = p-data;
@@ -4747,9 +4747,9 @@ void GPS_D310_Send(UC *data, GPS_PTrack trk, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_A300_Translate(UC *s, GPS_PTrack *trk)
+static void GPS_A300_Translate(UC* s, GPS_PTrack* trk)
 {
-  UC *p;
+  UC* p;
   uint32 t;
 
   p=s;
@@ -4784,9 +4784,9 @@ static void GPS_A300_Translate(UC *s, GPS_PTrack *trk)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_A300_Encode(UC *s, GPS_PTrack trk)
+static void GPS_A300_Encode(UC* s, GPS_PTrack trk)
 {
-  UC *p;
+  UC* p;
 
   p=s;
 
@@ -4818,10 +4818,10 @@ static void GPS_A300_Encode(UC *s, GPS_PTrack trk)
 **
 ** @return [int32] number of waypoint entries
 ************************************************************************/
-int32 GPS_A400_Get(const char *port, GPS_PWay **way)
+int32 GPS_A400_Get(const char* port, GPS_PWay** way)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 n;
@@ -4875,7 +4875,7 @@ int32 GPS_A400_Get(const char *port, GPS_PWay **way)
   n = GPS_Util_Get_Short(rec->data);
 
   if (n)
-    if (!((*way)=(GPS_PWay *)malloc(n*sizeof(GPS_PWay)))) {
+    if (!((*way)=(GPS_PWay*)malloc(n*sizeof(GPS_PWay)))) {
       GPS_Error("A400_Get: Insufficient memory");
       return MEMORY_ERROR;
     }
@@ -4989,10 +4989,10 @@ int32 GPS_A400_Get(const char *port, GPS_PWay **way)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A400_Send(const char *port, GPS_PWay *way, int32 n)
+int32 GPS_A400_Send(const char* port, GPS_PWay* way, int32 n)
 {
   UC data[GPS_ARB_LEN];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 i;
@@ -5117,9 +5117,9 @@ int32 GPS_A400_Send(const char *port, GPS_PWay *way, int32 n)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D400_Get(GPS_PWay *way, UC *s)
+static void GPS_D400_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -5157,9 +5157,9 @@ static void GPS_D400_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D403_Get(GPS_PWay *way, UC *s)
+static void GPS_D403_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -5199,9 +5199,9 @@ static void GPS_D403_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D450_Get(GPS_PWay *way, UC *s)
+static void GPS_D450_Get(GPS_PWay* way, UC* s)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p=s;
@@ -5257,9 +5257,9 @@ static void GPS_D450_Get(GPS_PWay *way, UC *s)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D400_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D400_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p = data;
@@ -5295,9 +5295,9 @@ static void GPS_D400_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D403_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D403_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p = data;
@@ -5336,9 +5336,9 @@ static void GPS_D403_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D450_Send(UC *data, GPS_PWay way, int32 *len)
+static void GPS_D450_Send(UC* data, GPS_PWay way, int32* len)
 {
-  UC *p;
+  UC* p;
   int32 i;
 
   p = data;
@@ -5394,10 +5394,10 @@ static void GPS_D450_Send(UC *data, GPS_PWay way, int32 *len)
 **
 ** @return [int32] number of almanac entries
 ************************************************************************/
-int32 GPS_A500_Get(const char *port, GPS_PAlmanac **alm)
+int32 GPS_A500_Get(const char* port, GPS_PAlmanac** alm)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket trapkt;
   GPS_PPacket recpkt;
   int32 i, n;
@@ -5434,7 +5434,7 @@ int32 GPS_A500_Get(const char *port, GPS_PAlmanac **alm)
   n = GPS_Util_Get_Short(recpkt->data);
 
   if (n)
-    if (!((*alm)=(GPS_PAlmanac *)malloc(n*sizeof(GPS_PAlmanac)))) {
+    if (!((*alm)=(GPS_PAlmanac*)malloc(n*sizeof(GPS_PAlmanac)))) {
       GPS_Error("A500_Get: Insufficient memory");
       return MEMORY_ERROR;
     }
@@ -5513,10 +5513,10 @@ int32 GPS_A500_Get(const char *port, GPS_PAlmanac **alm)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A500_Send(const char *port, GPS_PAlmanac *alm, int32 n)
+int32 GPS_A500_Send(const char* port, GPS_PAlmanac* alm, int32 n)
 {
   UC data[GPS_ARB_LEN];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 i;
@@ -5696,9 +5696,9 @@ int32 GPS_A500_Send(const char *port, GPS_PAlmanac *alm, int32 n)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_A500_Translate(UC *s, GPS_PAlmanac *alm)
+static void GPS_A500_Translate(UC* s, GPS_PAlmanac* alm)
 {
-  UC *p;
+  UC* p;
 
   p=s;
 
@@ -5748,9 +5748,9 @@ static void GPS_A500_Translate(UC *s, GPS_PAlmanac *alm)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D500_Send(UC *data, GPS_PAlmanac alm)
+static void GPS_D500_Send(UC* data, GPS_PAlmanac alm)
 {
-  UC *p;
+  UC* p;
 
   p = data;
   GPS_A500_Encode(p,alm);
@@ -5769,9 +5769,9 @@ static void GPS_D500_Send(UC *data, GPS_PAlmanac alm)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D501_Send(UC *data, GPS_PAlmanac alm)
+static void GPS_D501_Send(UC* data, GPS_PAlmanac alm)
 {
-  UC *p;
+  UC* p;
 
   p=data;
   p[42] = alm->hlth;
@@ -5791,9 +5791,9 @@ static void GPS_D501_Send(UC *data, GPS_PAlmanac alm)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D550_Send(UC *data, GPS_PAlmanac alm)
+static void GPS_D550_Send(UC* data, GPS_PAlmanac alm)
 {
-  UC *p;
+  UC* p;
 
   p = data;
   *p = alm->svid;
@@ -5813,9 +5813,9 @@ static void GPS_D550_Send(UC *data, GPS_PAlmanac alm)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_D551_Send(UC *data, GPS_PAlmanac alm)
+static void GPS_D551_Send(UC* data, GPS_PAlmanac alm)
 {
-  UC *p;
+  UC* p;
 
   p = data;
   *p = alm->svid;
@@ -5836,9 +5836,9 @@ static void GPS_D551_Send(UC *data, GPS_PAlmanac alm)
 **
 ** @return [void]
 ************************************************************************/
-static void GPS_A500_Encode(UC *s, GPS_PAlmanac alm)
+static void GPS_A500_Encode(UC* s, GPS_PAlmanac alm)
 {
-  UC *p;
+  UC* p;
 
   p=s;
 
@@ -5886,10 +5886,10 @@ static void GPS_A500_Encode(UC *s, GPS_PAlmanac alm)
 **
 ** @return [time_t] GPS time as unix system time, -ve if error
 ************************************************************************/
-time_t GPS_A600_Get(const char *port)
+time_t GPS_A600_Get(const char* port)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   time_t ret;
@@ -5952,9 +5952,9 @@ time_t GPS_A600_Get(const char *port)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A600_Send(const char *port, time_t Time)
+int32 GPS_A600_Send(const char* port, time_t Time)
 {
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
   int32 posnsent=0;
@@ -6044,7 +6044,7 @@ int32 GPS_A600_Send(const char *port, time_t Time)
 ************************************************************************/
 time_t GPS_D600_Get(GPS_PPacket packet)
 {
-  UC *p;
+  UC* p;
   static struct tm ts;
 
   p = packet->data;
@@ -6071,11 +6071,11 @@ time_t GPS_D600_Get(GPS_PPacket packet)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D600_Send(GPS_PPacket *packet, time_t Time)
+void GPS_D600_Send(GPS_PPacket* packet, time_t Time)
 {
   UC data[10];
-  UC *p;
-  struct tm *ts;
+  UC* p;
+  struct tm* ts;
 
   p = data;
 
@@ -6110,10 +6110,10 @@ void GPS_D600_Send(GPS_PPacket *packet, time_t Time)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A700_Get(const char *port, double *lat, double *lon)
+int32 GPS_A700_Get(const char* port, double* lat, double* lon)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
 
@@ -6175,9 +6175,9 @@ int32 GPS_A700_Get(const char *port, double *lat, double *lon)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A700_Send(const char *port, double lat, double lon)
+int32 GPS_A700_Send(const char* port, double lat, double lon)
 {
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket tra;
   GPS_PPacket rec;
 
@@ -6229,9 +6229,9 @@ int32 GPS_A700_Send(const char *port, double lat, double lon)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D700_Get(GPS_PPacket packet, double *lat, double *lon)
+void GPS_D700_Get(GPS_PPacket packet, double* lat, double* lon)
 {
-  UC *p;
+  UC* p;
   double t;
 
   p = packet->data;
@@ -6259,10 +6259,10 @@ void GPS_D700_Get(GPS_PPacket packet, double *lat, double *lon)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D700_Send(GPS_PPacket *packet, double lat, double lon)
+void GPS_D700_Send(GPS_PPacket* packet, double lat, double lon)
 {
   UC data[16];
-  UC *p;
+  UC* p;
 
   lat = GPS_Math_Deg_To_Rad(lat);
   lon = GPS_Math_Deg_To_Rad(lon);
@@ -6290,7 +6290,7 @@ void GPS_D700_Send(GPS_PPacket *packet, double lat, double lon)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A800_On(const char *port, gpsdevh **fd)
+int32 GPS_A800_On(const char* port, gpsdevh** fd)
 {
   static UC data[2];
   GPS_PPacket tra;
@@ -6334,7 +6334,7 @@ int32 GPS_A800_On(const char *port, gpsdevh **fd)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A800_Off(const char *port, gpsdevh **fd)
+int32 GPS_A800_Off(const char* port, gpsdevh** fd)
 {
   static UC data[2];
   GPS_PPacket tra;
@@ -6377,7 +6377,7 @@ int32 GPS_A800_Off(const char *port, gpsdevh **fd)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A800_Get(gpsdevh **fd, GPS_PPvt_Data *packet)
+int32 GPS_A800_Get(gpsdevh** fd, GPS_PPvt_Data* packet)
 {
   GPS_PPacket tra;
   GPS_PPacket rec;
@@ -6433,9 +6433,9 @@ int32 GPS_A800_Get(gpsdevh **fd, GPS_PPvt_Data *packet)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data *pvt)
+void GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data* pvt)
 {
-  UC *p;
+  UC* p;
 
   p = packet->data;
 
@@ -6493,10 +6493,10 @@ void GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data *pvt)
 ** @return [int32] number of lap entries
 ************************************************************************/
 
-int32 GPS_A906_Get(const char *port, GPS_PLap **lap, pcb_fn cb)
+int32 GPS_A906_Get(const char* port, GPS_PLap** lap, pcb_fn cb)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket trapkt;
   GPS_PPacket recpkt;
   int32 i, n;
@@ -6533,7 +6533,7 @@ int32 GPS_A906_Get(const char *port, GPS_PLap **lap, pcb_fn cb)
   n = GPS_Util_Get_Short(recpkt->data);
 
   if (n)
-    if (!((*lap)=(GPS_PLap *)malloc(n*sizeof(GPS_PLap)))) {
+    if (!((*lap)=(GPS_PLap*)malloc(n*sizeof(GPS_PLap)))) {
       GPS_Error("A906_Get: Insufficient memory");
       return MEMORY_ERROR;
     }
@@ -6600,7 +6600,7 @@ int32 GPS_A906_Get(const char *port, GPS_PLap **lap, pcb_fn cb)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D1011b_Get(GPS_PLap *Lap, UC *p)
+void GPS_D1011b_Get(GPS_PLap* Lap, UC* p)
 {
   uint32 t;
 
@@ -6711,13 +6711,13 @@ void GPS_D1011b_Get(GPS_PLap *Lap, UC *p)
 ************************************************************************/
 
 int32  GPS_A1006_Get
-(const char *port,
- GPS_PCourse **crs,
+(const char* port,
+ GPS_PCourse** crs,
  pcb_fn cb)
 
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket trapkt;
   GPS_PPacket recpkt;
   int32 i, n;
@@ -6755,7 +6755,7 @@ int32  GPS_A1006_Get
 
 
   if (n)
-    if (!((*crs)=(GPS_PCourse *)malloc(n*sizeof(GPS_PCourse)))) {
+    if (!((*crs)=(GPS_PCourse*)malloc(n*sizeof(GPS_PCourse)))) {
       GPS_Error("A1006_Get: Insufficient memory");
       return MEMORY_ERROR;
     }
@@ -6829,10 +6829,10 @@ int32  GPS_A1006_Get
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A1006_Send(const char *port,
-                     GPS_PCourse *crs,
+int32 GPS_A1006_Send(const char* port,
+                     GPS_PCourse* crs,
                      int32 n_crs,
-                     gpsdevh *fd)
+                     gpsdevh* fd)
 {
   UC data[GPS_ARB_LEN];
   GPS_PPacket tra;
@@ -6906,7 +6906,7 @@ int32 GPS_A1006_Send(const char *port,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D1006_Get(GPS_PCourse *crs, UC *p)
+void GPS_D1006_Get(GPS_PCourse* crs, UC* p)
 {
   int i;
   (*crs)->index = GPS_Util_Get_Short(p);
@@ -6930,9 +6930,9 @@ void GPS_D1006_Get(GPS_PCourse *crs, UC *p)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D1006_Send(UC *data, GPS_PCourse crs, int32 *len)
+void GPS_D1006_Send(UC* data, GPS_PCourse crs, int32* len)
 {
-  UC *p;
+  UC* p;
   int j;
   p = data;
 
@@ -6965,10 +6965,10 @@ void GPS_D1006_Send(UC *data, GPS_PCourse crs, int32 *len)
 ** @return [int32] number of lap entries
 ************************************************************************/
 
-int32 GPS_A1007_Get(const char *port, GPS_PCourse_Lap **clp, pcb_fn cb)
+int32 GPS_A1007_Get(const char* port, GPS_PCourse_Lap** clp, pcb_fn cb)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket trapkt;
   GPS_PPacket recpkt;
   int32 i, n;
@@ -7006,7 +7006,7 @@ int32 GPS_A1007_Get(const char *port, GPS_PCourse_Lap **clp, pcb_fn cb)
 
 
   if (n)
-    if (!((*clp)=(GPS_PCourse_Lap *)malloc(n*sizeof(GPS_PCourse_Lap)))) {
+    if (!((*clp)=(GPS_PCourse_Lap*)malloc(n*sizeof(GPS_PCourse_Lap)))) {
       GPS_Error("A1007_Get: Insufficient memory");
       return MEMORY_ERROR;
     }
@@ -7080,10 +7080,10 @@ int32 GPS_A1007_Get(const char *port, GPS_PCourse_Lap **clp, pcb_fn cb)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A1007_Send(const char *port,
-                     GPS_PCourse_Lap *clp,
+int32 GPS_A1007_Send(const char* port,
+                     GPS_PCourse_Lap* clp,
                      int32 n_clp,
-                     gpsdevh *fd)
+                     gpsdevh* fd)
 {
   UC data[GPS_ARB_LEN];
   GPS_PPacket tra;
@@ -7157,7 +7157,7 @@ int32 GPS_A1007_Send(const char *port,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D1007_Get(GPS_PCourse_Lap *clp, UC *p)
+void GPS_D1007_Get(GPS_PCourse_Lap* clp, UC* p)
 {
   (*clp)->course_index = GPS_Util_Get_Short(p);
   p+=sizeof(uint16);
@@ -7199,9 +7199,9 @@ void GPS_D1007_Get(GPS_PCourse_Lap *clp, UC *p)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D1007_Send(UC *data, GPS_PCourse_Lap clp, int32 *len)
+void GPS_D1007_Send(UC* data, GPS_PCourse_Lap clp, int32* len)
 {
-  UC *p;
+  UC* p;
   p = data;
 
   GPS_Util_Put_Short(p, (US) clp->course_index);
@@ -7250,10 +7250,10 @@ void GPS_D1007_Send(UC *data, GPS_PCourse_Lap clp, int32 *len)
 ** @return [int32] number of course point entries
 ************************************************************************/
 
-int32 GPS_A1008_Get(const char *port, GPS_PCourse_Point **cpt, pcb_fn cb)
+int32 GPS_A1008_Get(const char* port, GPS_PCourse_Point** cpt, pcb_fn cb)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket trapkt;
   GPS_PPacket recpkt;
   int32 i, n;
@@ -7291,7 +7291,7 @@ int32 GPS_A1008_Get(const char *port, GPS_PCourse_Point **cpt, pcb_fn cb)
 
 
   if (n)
-    if (!((*cpt)=(GPS_PCourse_Point *)malloc(n*sizeof(GPS_PCourse_Point)))) {
+    if (!((*cpt)=(GPS_PCourse_Point*)malloc(n*sizeof(GPS_PCourse_Point)))) {
       GPS_Error("A1008_Get: Insufficient memory");
       return MEMORY_ERROR;
     }
@@ -7366,10 +7366,10 @@ int32 GPS_A1008_Get(const char *port, GPS_PCourse_Point **cpt, pcb_fn cb)
 **
 ** @return [int32] success
 ************************************************************************/
-int32 GPS_A1008_Send(const char *port,
-                     GPS_PCourse_Point *cpt,
+int32 GPS_A1008_Send(const char* port,
+                     GPS_PCourse_Point* cpt,
                      int32 n_cpt,
-                     gpsdevh *fd)
+                     gpsdevh* fd)
 {
   UC data[GPS_ARB_LEN];
   GPS_PPacket tra;
@@ -7443,7 +7443,7 @@ int32 GPS_A1008_Send(const char *port,
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D1012_Get(GPS_PCourse_Point *cpt, UC *p)
+void GPS_D1012_Get(GPS_PCourse_Point* cpt, UC* p)
 {
   int i;
   uint32 t;
@@ -7475,9 +7475,9 @@ void GPS_D1012_Get(GPS_PCourse_Point *cpt, UC *p)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D1012_Send(UC *data, GPS_PCourse_Point cpt, int32 *len)
+void GPS_D1012_Send(UC* data, GPS_PCourse_Point cpt, int32* len)
 {
-  UC *p;
+  UC* p;
   int j;
   p = data;
 
@@ -7515,10 +7515,10 @@ void GPS_D1012_Send(UC *data, GPS_PCourse_Point cpt, int32 *len)
 ** @return [int32] success
 ************************************************************************/
 
-int32 GPS_A1009_Get(const char *port, GPS_PCourse_Limits limits)
+int32 GPS_A1009_Get(const char* port, GPS_PCourse_Limits limits)
 {
   static UC data[2];
-  gpsdevh *fd;
+  gpsdevh* fd;
   GPS_PPacket trapkt;
   GPS_PPacket recpkt;
 
@@ -7580,7 +7580,7 @@ int32 GPS_A1009_Get(const char *port, GPS_PCourse_Limits limits)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D1013_Get(GPS_PCourse_Limits limits, UC *p)
+void GPS_D1013_Get(GPS_PCourse_Limits limits, UC* p)
 {
   limits->max_courses = GPS_Util_Get_Uint(p);
   p+=sizeof(uint32);
@@ -7600,8 +7600,8 @@ void GPS_D1013_Get(GPS_PCourse_Limits limits, UC *p)
  *  It's unfortunate that these aren't constant and therefore switchable,
  *  but they really are runtime variable.  Sigh.
  */
-const char *
-Get_Pkt_Type(US p, US d0, const char **xinfo)
+const char*
+Get_Pkt_Type(US p, US d0, const char** xinfo)
 {
   *xinfo = NULL;
 #define LT LINK_ID[gps_link_type]
@@ -7834,7 +7834,7 @@ static UC Is_Trackpoint_Invalid(GPS_PTrack trk)
 ** @param [r] trk [GPS_PTrack **] track
 ** @param [r] n [int32 *] Number of trackpoints
 ************************************************************************/
-void GPS_Prepare_Track_For_Device(GPS_PTrack **trk, int32 *n)
+void GPS_Prepare_Track_For_Device(GPS_PTrack** trk, int32* n)
 {
   int32 i, j;
 

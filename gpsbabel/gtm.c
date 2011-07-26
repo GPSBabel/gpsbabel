@@ -21,7 +21,7 @@
 #include "defs.h"
 #include "jeeps/gpsmath.h"
 
-static gbfile *file_in, *file_out;
+static gbfile* file_in, *file_out;
 static int indatum;
 static int wp_count;
 static int ws_count;
@@ -29,7 +29,7 @@ static int tr_count;
 static int ts_count;
 static int rt_count;
 static int im_count;
-static const route_head *rte_active;
+static const route_head* rte_active;
 static int start_new;
 
 #define MYNAME "GTM"
@@ -55,7 +55,7 @@ static int start_new;
 #if 0
 /* not used */
 static short int
-fread_bool(gbfile *fd)
+fread_bool(gbfile* fd)
 {
   char buf[2];
   gbfread(buf, 2, 1, fd);
@@ -68,17 +68,17 @@ fread_bool(gbfile *fd)
 #define fread_single(a) gbfgetflt(a)
 #define fread_double(a) gbfgetdbl(a)
 
-static char *
-fread_string(gbfile *fd)
+static char*
+fread_string(gbfile* fd)
 {
-  char *val;
+  char* val;
   int len = fread_integer(fd);
 
   if (len == 0) {
     return NULL;
   }
 
-  val = (char *) xmalloc(len+1);
+  val = (char*) xmalloc(len+1);
   gbfread(val, 1, len, fd);
   while (len != 0 && val[len-1] == ' ') {
     len--;
@@ -88,19 +88,19 @@ fread_string(gbfile *fd)
 }
 
 static void
-fread_string_discard(gbfile *fd)
+fread_string_discard(gbfile* fd)
 {
-  char *temp = fread_string(fd);
+  char* temp = fread_string(fd);
 
   if (temp != NULL) {
     xfree(temp);
   }
 }
 
-static char *
-fread_fixedstring(gbfile *fd, int len)
+static char*
+fread_fixedstring(gbfile* fd, int len)
 {
-  char *val = (char *) xmalloc(len+1);
+  char* val = (char*) xmalloc(len+1);
 
   gbfread(val, 1, len, fd);
   while (len != 0 && val[len-1] == ' ') {
@@ -113,7 +113,7 @@ fread_fixedstring(gbfile *fd, int len)
 /* Write functions, according to specification. */
 
 static void
-fwrite_null(gbfile *fd, int len)
+fwrite_null(gbfile* fd, int len)
 {
   char buf[1024];
 
@@ -129,7 +129,7 @@ fwrite_null(gbfile *fd, int len)
 #define fwrite_double(a,b) gbfputdbl((b), a)
 
 static void
-fwrite_string(gbfile *fd, const char *str)
+fwrite_string(gbfile* fd, const char* str)
 {
   if (str && str[0]) {
     int len = strlen(str);
@@ -141,7 +141,7 @@ fwrite_string(gbfile *fd, const char *str)
 }
 
 void
-fwrite_fixedstring(gbfile *fd, const char *str, int fieldlen)
+fwrite_fixedstring(gbfile* fd, const char* str, int fieldlen)
 {
   int len = str ? strlen(str) : 0;
 
@@ -415,7 +415,7 @@ set_datum(int n)
   }
 }
 
-static const char *icon_descr[] = {
+static const char* icon_descr[] = {
   "", "Airport", "Ball Park", "Bank", "Bar", "Boat Ramp", "Campground", "Car",
   "City (Large)", "City (Medium)", "City (Small)", "Dam", "Danger Area",
   "Drinking Water", "Fishing Area", "Gas Station", "Glider Area", "Golf Course",
@@ -460,7 +460,7 @@ static const char *icon_descr[] = {
 };
 
 
-void convert_datum(double *lat, double *lon)
+void convert_datum(double* lat, double* lon)
 {
   double amt;
   if (indatum != -1 && indatum != 118) {
@@ -472,10 +472,10 @@ void convert_datum(double *lat, double *lon)
 /* Callbacks */
 
 static void
-gtm_rd_init(const char *fname)
+gtm_rd_init(const char* fname)
 {
   int version;
-  char *name;
+  char* name;
   file_in = gbfopen_le(fname, "rb", MYNAME);
   version = fread_integer(file_in);
   name = fread_fixedstring(file_in, 10);
@@ -518,17 +518,17 @@ gtm_rd_deinit(void)
   gbfclose(file_in);
 }
 
-static void count_route_waypts(const waypoint *wpt)
+static void count_route_waypts(const waypoint* wpt)
 {
   rt_count++;
 }
-static void count_track_waypts(const waypoint *wpt)
+static void count_track_waypts(const waypoint* wpt)
 {
   tr_count++;
 }
 
 static void
-gtm_wr_init(const char *fname)
+gtm_wr_init(const char* fname)
 {
   rt_count = tr_count = 0;
   track_disp_all(NULL, NULL, count_track_waypts);
@@ -591,12 +591,12 @@ gtm_wr_deinit(void)
 static void
 gtm_read(void)
 {
-  route_head *first_trk_head = NULL;
-  route_head *trk_head = NULL;
-  route_head *rte_head = NULL;
-  waypoint *wpt;
+  route_head* first_trk_head = NULL;
+  route_head* trk_head = NULL;
+  route_head* rte_head = NULL;
+  waypoint* wpt;
   int real_tr_count = 0;
-  char *route_name;
+  char* route_name;
   unsigned int icon;
   int i;
 
@@ -673,7 +673,7 @@ gtm_read(void)
   for (i = 0; i != ts_count && i != real_tr_count; i++) {
     trk_head->rte_name = fread_string(file_in);
     fread_discard(file_in, 12);
-    trk_head = (route_head *)QUEUE_NEXT(&trk_head->Q);
+    trk_head = (route_head*)QUEUE_NEXT(&trk_head->Q);
   }
 
   /* Routes */
@@ -709,7 +709,7 @@ gtm_read(void)
   }
 }
 
-int icon_from_descr(const char *descr)
+int icon_from_descr(const char* descr)
 {
   if (descr) {
     int i;
@@ -721,7 +721,7 @@ int icon_from_descr(const char *descr)
   return 48;
 }
 
-static void write_waypt(const waypoint *wpt)
+static void write_waypt(const waypoint* wpt)
 {
   fwrite_double(file_out, wpt->latitude);
   fwrite_double(file_out, wpt->longitude);
@@ -743,13 +743,13 @@ static void write_waypt(const waypoint *wpt)
   fwrite_integer(file_out, 0);
 }
 
-static void start_rte(const route_head *rte)
+static void start_rte(const route_head* rte)
 {
   rte_active = rte;
   start_new = 1;
 }
 
-static void write_trk_waypt(const waypoint *wpt)
+static void write_trk_waypt(const waypoint* wpt)
 {
   fwrite_double(file_out, wpt->latitude);
   fwrite_double(file_out, wpt->longitude);
@@ -763,7 +763,7 @@ static void write_trk_waypt(const waypoint *wpt)
   start_new = 0;
 }
 
-static void write_trk_style(const route_head *trk)
+static void write_trk_style(const route_head* trk)
 {
   fwrite_string(file_out, trk->rte_name);
   fwrite_byte(file_out, 1);
@@ -773,7 +773,7 @@ static void write_trk_style(const route_head *trk)
   fwrite_integer(file_out, 0);
 }
 
-static void write_rte_waypt(const waypoint *wpt)
+static void write_rte_waypt(const waypoint* wpt)
 {
   fwrite_double(file_out, wpt->latitude);
   fwrite_double(file_out, wpt->longitude);

@@ -34,20 +34,20 @@ enum {
   rs_frombulk
 } receive_state;
 
-static gusb_llops_t *gusb_llops;
+static gusb_llops_t* gusb_llops;
 
 /* Decide when to truncate packets for debug output */
 #define DEBUG_THRESH  ((global_opts.debug_level < 5) && (i > 10))
 
 /* Called from OS layer to register its low-level entry points. */
 void
-gusb_register_ll(gusb_llops_t *p)
+gusb_register_ll(gusb_llops_t* p)
 {
   gusb_llops = p;
 }
 
 int
-gusb_close(gpsdevh *dh)
+gusb_close(gpsdevh* dh)
 {
   garmin_usb_packet scratch;
 
@@ -79,10 +79,10 @@ gusb_close(gpsdevh *dh)
 
 
 int
-gusb_cmd_get(garmin_usb_packet *ibuf, size_t sz)
+gusb_cmd_get(garmin_usb_packet* ibuf, size_t sz)
 {
   int rv;
-  unsigned char *buf = (unsigned char *) &ibuf->dbuf;
+  unsigned char* buf = (unsigned char*) &ibuf->dbuf;
   int orig_receive_state;
   unsigned short pkt_id;
 top:
@@ -101,7 +101,7 @@ top:
   pkt_id = le_read16(&ibuf->gusb_pkt.pkt_id);
   if (gps_show_bytes) {
     int i;
-    const char *m1, *m2;
+    const char* m1, *m2;
     unsigned short pkttype = le_read16(&ibuf->gusb_pkt.databuf[0]);
 
     GPS_Diag("RX (%s) [%d]:",
@@ -152,12 +152,12 @@ top:
 }
 
 int
-gusb_cmd_send(const garmin_usb_packet *opkt, size_t sz)
+gusb_cmd_send(const garmin_usb_packet* opkt, size_t sz)
 {
   unsigned int rv, i;
 
-  unsigned char *obuf = (unsigned char *) &opkt->dbuf;
-  const char *m1, *m2;
+  unsigned char* obuf = (unsigned char*) &opkt->dbuf;
+  const char* m1, *m2;
 
   rv = gusb_llops->llop_send(opkt, sz);
 
@@ -210,14 +210,14 @@ gusb_list_units()
 }
 
 void
-gusb_id_unit(garmin_unit_info_t *gu)
+gusb_id_unit(garmin_unit_info_t* gu)
 {
   static const char  oid[12] =
   {20, 0, 0, 0, 0xfe, 0, 0, 0, 0, 0, 0, 0};
   garmin_usb_packet iresp;
   int i;
 
-  gusb_cmd_send((garmin_usb_packet *)oid, sizeof(oid));
+  gusb_cmd_send((garmin_usb_packet*)oid, sizeof(oid));
 
   for (i = 0; i < 25; i++) {
     iresp.gusb_pkt.type = 0;
@@ -225,7 +225,7 @@ gusb_id_unit(garmin_unit_info_t *gu)
       return;
     }
     if (le_read16(iresp.gusb_pkt.pkt_id) == 0xff) {
-      gu->product_identifier = xstrdup((char *) iresp.gusb_pkt.databuf+4);
+      gu->product_identifier = xstrdup((char*) iresp.gusb_pkt.databuf+4);
       gu->unit_id = le_read16(iresp.gusb_pkt.databuf+0);
       gu->unit_version = le_read16(iresp.gusb_pkt.databuf+2);
     }
@@ -260,7 +260,7 @@ gusb_syncup(void)
     le_write32(&iresp.gusb_pkt.datasz, 0);
     le_write32(&iresp.gusb_pkt.databuf, 0);
 
-    gusb_cmd_send((const garmin_usb_packet *) oinit, sizeof(oinit));
+    gusb_cmd_send((const garmin_usb_packet*) oinit, sizeof(oinit));
     gusb_cmd_get(&iresp, sizeof(iresp));
 
     if ((le_read16(iresp.gusb_pkt.pkt_id) == GUSB_SESSION_ACK) &&

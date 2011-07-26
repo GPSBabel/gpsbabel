@@ -22,12 +22,12 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static gbfile *ofd;
+static gbfile* ofd;
 static int lap_ct = 0;
 static int lap_s = 0;
-static waypoint *wpt_tmp;
-static route_head *trk_head;
-static computed_trkdata *tdata;
+static waypoint* wpt_tmp;
+static route_head* trk_head;
+static computed_trkdata* tdata;
 
 #define MYNAME "gtc"
 
@@ -45,7 +45,7 @@ static double gtc_start_long;
 static double gtc_end_lat;
 static double gtc_end_long;
 
-static char *opt_sport, *opt_course;
+static char* opt_sport, *opt_course;
 
 static
 arglist_t gtc_args[] = {
@@ -62,7 +62,7 @@ arglist_t gtc_args[] = {
 
 #if ! HAVE_LIBEXPAT
 static void
-gtc_rd_init(const char *fname)
+gtc_rd_init(const char* fname)
 {
   fatal(MYNAME ": this format does not support reading.\n");
 }
@@ -143,10 +143,10 @@ static xg_tag_mapping gtc_map[] = {
   { gtc_wpt_lat,  cb_cdata, "/Courses/Course/Lap/BeginPosition/LatitudeDegrees" },
   { gtc_wpt_long, cb_cdata, "/Courses/Course/Lap/BeginPosition/LongitudeDegrees" },
 
-  { NULL, 	0,         NULL}
+  { NULL,	(xg_cb_type)0,         NULL}
 };
 
-static const char *
+static const char*
 gtc_tags_to_ignore[] = {
   "TrainingCenterDatabase",
   "CourseFolder",
@@ -158,7 +158,7 @@ gtc_tags_to_ignore[] = {
 };
 
 static void
-gtc_rd_init(const char *fname)
+gtc_rd_init(const char* fname)
 {
   xml_init(fname, gtc_map, NULL);
   xml_ignore_tags(gtc_tags_to_ignore);
@@ -178,7 +178,7 @@ gtc_rd_deinit(void)
 #endif
 
 static void
-gtc_wr_init(const char *fname)
+gtc_wr_init(const char* fname)
 {
   int i;
 
@@ -205,7 +205,7 @@ gtc_wr_deinit(void)
 static int gtc_indent_level;
 
 static void
-gtc_write_xml(int indent, const char *fmt, ...)
+gtc_write_xml(int indent, const char* fmt, ...)
 {
   va_list args;
 
@@ -226,7 +226,7 @@ gtc_write_xml(int indent, const char *fmt, ...)
 }
 
 static void
-gtc_waypt_pr(const waypoint *wpt)
+gtc_waypt_pr(const waypoint* wpt)
 {
   if (wpt->wpt_flags.is_split != 0) {
     gtc_write_xml(1, "<Trackpoint split=\"yes\">\n");
@@ -314,7 +314,7 @@ gtc_fake_hdr(void)
 }
 
 static void
-gtc_act_hdr(const route_head *rte)
+gtc_act_hdr(const route_head* rte)
 {
   gtc_write_xml(1, "<Activity Sport=\"%s\">\n", gtc_sportlist[gtc_sport]);
   if (gtc_least_time) {
@@ -330,7 +330,7 @@ gtc_act_hdr(const route_head *rte)
 }
 
 static void
-gtc_act_ftr(const route_head *rte)
+gtc_act_ftr(const route_head* rte)
 {
   gtc_write_xml(-1, "</Track>\n");
   gtc_write_xml(-1, "</Lap>\n");
@@ -338,12 +338,12 @@ gtc_act_ftr(const route_head *rte)
 }
 
 static void
-gtc_crs_hdr(const route_head *rte)
+gtc_crs_hdr(const route_head* rte)
 {
 
   gtc_write_xml(1, "<Course>\n");
   if (rte->rte_name) {
-    char *name = xstrndup(rte->rte_name, GTC_MAX_NAME_LEN);
+    char* name = xstrndup(rte->rte_name, GTC_MAX_NAME_LEN);
     gtc_write_xml(0, "<Name>%s</Name>\n", name);
     xfree(name);
   } else {
@@ -357,7 +357,7 @@ gtc_crs_hdr(const route_head *rte)
 }
 
 static void
-gtc_crs_ftr(const route_head *rte)
+gtc_crs_ftr(const route_head* rte)
 {
   gtc_write_xml(-1,"</Track>\n");
   gtc_write_xml(-1, "</Course>\n");
@@ -365,20 +365,20 @@ gtc_crs_ftr(const route_head *rte)
 }
 
 static void
-gtc_lap_start(const route_head *rte)
+gtc_lap_start(const route_head* rte)
 {
   gtc_least_time = 0;
   gtc_most_time = 0;
 }
 
 static void
-gtc_new_study_lap(const route_head *rte)
+gtc_new_study_lap(const route_head* rte)
 {
   track_recompute(rte, &tdata);  /* called routine allocates space for tdata */
 }
 
 static void
-gtc_study_lap(const waypoint *wpt)
+gtc_study_lap(const waypoint* wpt)
 {
   if (wpt->creation_time && (gtc_least_time == 0)) {
     gtc_least_time = wpt->creation_time;
@@ -422,39 +422,39 @@ gtc_write(void)
 }
 
 void
-gtc_trk_s(const char *unused, const char **attrv)
+gtc_trk_s(const char* unused, const char** attrv)
 {
   trk_head = route_head_alloc();
   track_add_head(trk_head);
 }
 
 void
-gtc_trk_ident(const char *args, const char **unused)
+gtc_trk_ident(const char* args, const char** unused)
 {
   trk_head->rte_name = xstrdup(args);
 }
 
 void
-gtc_trk_lap_s(const char *unused, const char **attrv)
+gtc_trk_lap_s(const char* unused, const char** attrv)
 {
   lap_ct++;
   lap_s = 1;
 }
 
 void
-gtc_trk_lap_e(const char *unused, const char **attrv)
+gtc_trk_lap_e(const char* unused, const char** attrv)
 {
   lap_s = 0;
 }
 
 void
-gtc_trk_pnt_s(const char *unused, const char **attrv)
+gtc_trk_pnt_s(const char* unused, const char** attrv)
 {
   wpt_tmp = waypt_new();
 }
 
 void
-gtc_trk_pnt_e(const char *args, const char **unused)
+gtc_trk_pnt_e(const char* args, const char** unused)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     if (lap_s) {
@@ -477,55 +477,55 @@ gtc_trk_pnt_e(const char *args, const char **unused)
 }
 
 void
-gtc_trk_utc(const char *args, const char **unused)
+gtc_trk_utc(const char* args, const char** unused)
 {
   wpt_tmp->creation_time = xml_parse_time(args, NULL);
 }
 
 void
-gtc_trk_lat(const char *args, const char **unused)
+gtc_trk_lat(const char* args, const char** unused)
 {
   wpt_tmp->latitude = atof(args);
 }
 
 void
-gtc_trk_long(const char *args, const char **unused)
+gtc_trk_long(const char* args, const char** unused)
 {
   wpt_tmp->longitude = atof(args);
 }
 
 void
-gtc_trk_alt(const char *args, const char **unused)
+gtc_trk_alt(const char* args, const char** unused)
 {
   wpt_tmp->altitude = atof(args);
 }
 
 void
-gtc_trk_hr(const char *args, const char **unused)
+gtc_trk_hr(const char* args, const char** unused)
 {
   wpt_tmp->heartrate = atoi(args);
 }
 
 void
-gtc_trk_cad(const char *args, const char **unused)
+gtc_trk_cad(const char* args, const char** unused)
 {
   wpt_tmp->cadence = atoi(args);
 }
 
 void
-gtc_trk_pwr(const char *args, const char **unused)
+gtc_trk_pwr(const char* args, const char** unused)
 {
   wpt_tmp->power = atof(args);
 }
 
 void
-gtc_wpt_pnt_s(const char *unused, const char **attrv)
+gtc_wpt_pnt_s(const char* unused, const char** attrv)
 {
   wpt_tmp = waypt_new();
 }
 
 void
-gtc_wpt_pnt_e(const char *args, const char **unused)
+gtc_wpt_pnt_e(const char* args, const char** unused)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     waypt_add(wpt_tmp);
@@ -537,13 +537,13 @@ gtc_wpt_pnt_e(const char *args, const char **unused)
 }
 
 void
-gtc_wpt_lat(const char *args, const char **unused)
+gtc_wpt_lat(const char* args, const char** unused)
 {
   wpt_tmp->latitude = atof(args);
 }
 
 void
-gtc_wpt_long(const char *args, const char **unused)
+gtc_wpt_long(const char* args, const char** unused)
 {
   wpt_tmp->longitude = atof(args);
 }
@@ -552,7 +552,7 @@ ff_vecs_t gtc_vecs = {
   ff_type_file,
   {
     ff_cap_read 			/* waypoints */,
-    ff_cap_read | ff_cap_write 	/* tracks */,
+    (ff_cap)(ff_cap_read | ff_cap_write) 	/* tracks */,
     ff_cap_none 			/* routes */
   },
   gtc_rd_init,

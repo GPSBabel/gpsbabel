@@ -30,21 +30,21 @@
 /* Turn this on (remove) after 5.2 becomes widespread. */
 #define FIRMWARE_DOES_88591 0
 
-static gbfile *maggeofile_in;
-static gbfile *maggeofile_out;
+static gbfile* maggeofile_in;
+static gbfile* maggeofile_out;
 static short_handle desc_handle = NULL;
 
-static time_t maggeo_parsedate(char *dmy);
+static time_t maggeo_parsedate(char* dmy);
 
 static void
-maggeo_writemsg(const char * const buf)
+maggeo_writemsg(const char* const buf)
 {
   unsigned int osum = mag_checksum(buf);
   gbfprintf(maggeofile_out, "$%s*%02X\r\n",buf, osum);
 }
 
 static void
-maggeo_rd_init(const char *fname)
+maggeo_rd_init(const char* fname)
 {
   maggeofile_in = gbfopen(fname, "rb", MYNAME);
 }
@@ -56,7 +56,7 @@ maggeo_rd_deinit(void)
 }
 
 static void
-maggeo_wr_init(const char *fname)
+maggeo_wr_init(const char* fname)
 {
   if (waypt_count() > 200) {
     fatal(MYNAME ": eXplorist does not support more than 200 waypoints in one .gs file.\nDecrease the number of waypoints sent.\n");
@@ -78,12 +78,12 @@ maggeo_wr_deinit(void)
 static void
 maggeo_read(void)
 {
-  char *buff;
+  char* buff;
 
   while ((buff = gbfgetstr(maggeofile_in))) {
-    waypoint *wpt_tmp;
-    geocache_data *gcdata;
-    char *s = NULL;
+    waypoint* wpt_tmp;
+    geocache_data* gcdata;
+    char* s = NULL;
     int fld;
 
     buff = lrtrim(buff);
@@ -170,14 +170,14 @@ maggeo_read(void)
  * Note: returns allocated buffer that must be freed by caller.
  */
 static
-char *
+char*
 maggeo_fmtdate(time_t t)
 {
 #define SZ 16
 
-  struct tm *tm = NULL;
+  struct tm* tm = NULL;
   int date;
-  char *cbuf = xmalloc(SZ);
+  char* cbuf = xmalloc(SZ);
 
   cbuf[0] = '\0';
   if (t > 0) {
@@ -197,7 +197,7 @@ maggeo_fmtdate(time_t t)
  * century is three digits but anything from before 2000, we'd have
  * two digit years.  This makes this easier to parse as strings.
  */
-static time_t maggeo_parsedate(char *dmy)
+static time_t maggeo_parsedate(char* dmy)
 {
   struct tm tm;
   char dd[3];
@@ -230,9 +230,9 @@ static time_t maggeo_parsedate(char *dmy)
  */
 static
 void
-append(char *buf, const char *str)
+append(char* buf, const char* str)
 {
-  char *cleansed1, *cleansed2;
+  char* cleansed1, *cleansed2;
 
   strcat(buf, ",");
 
@@ -256,18 +256,18 @@ append(char *buf, const char *str)
 }
 
 static void
-maggeo_waypt_pr(const waypoint *waypointp)
+maggeo_waypt_pr(const waypoint* waypointp)
 {
   char obuf[4096];
   double ilon, ilat;
   double lon, lat;
   int lon_deg, lat_deg;
-  char *shortname;
-  char *cname = NULL;
-  const char *ctype = NULL;
-  char *placer = NULL;
-  char *lfounddate = NULL;
-  char *placeddate = NULL;
+  char* shortname;
+  char* cname = NULL;
+  const char* ctype = NULL;
+  char* placer = NULL;
+  char* lfounddate = NULL;
+  char* placeddate = NULL;
 
   ilat = waypointp->latitude;
   ilon = waypointp->longitude;
@@ -360,7 +360,7 @@ maggeo_write(void)
 
 ff_vecs_t maggeo_vecs = {
   ff_type_file,
-  { ff_cap_read | ff_cap_write, ff_cap_none, ff_cap_none },
+  { (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none, ff_cap_none },
   maggeo_rd_init,
   maggeo_wr_init,
   maggeo_rd_deinit,

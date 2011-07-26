@@ -36,14 +36,14 @@
 
 #undef GEONICHE_DBG
 
-static pdbfile	*file_in, *file_out;
-static const char	*FilenameOut;
+static pdbfile*	file_in, *file_out;
+static const char*	FilenameOut;
 static int		rec_ct;
 static int		ct;
 static char		Rec0Magic[] = "68000NV4Q2";
 
-static char *Arg_dbname = NULL;
-static char *Arg_category = NULL;
+static char* Arg_dbname = NULL;
+static char* Arg_category = NULL;
 
 static
 arglist_t Args[] = {
@@ -67,9 +67,9 @@ static char	GcSet[] = "0123456789ABCDEFGHJKMNPQRTVWXYZ";
 static int	GcOffset = 16 * 31 * 31 * 31 - 65536;
 
 static int
-gid2id(char *gid)
+gid2id(char* gid)
 {
-  char	*p;
+  char*	p;
   int		i, val;
 
   if (strncmp(gid, "GC", 2) != 0) {
@@ -122,7 +122,7 @@ id2gid(char gid[6+1], int id)
 }
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = pdb_open(fname, MYNAME);
 }
@@ -136,7 +136,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = pdb_create(fname, MYNAME);
   FilenameOut = fname;
@@ -150,12 +150,12 @@ wr_deinit(void)
   ARG_FREE(Arg_category);
 }
 
-static char *
-field(char **pp, int *lenp)
+static char*
+field(char** pp, int* lenp)
 {
   int		len = *lenp;
-  char	*p = *pp;
-  char	*dp, *dbuf;
+  char*	p = *pp;
+  char*	dp, *dbuf;
   int		state = 0;
 
   if (len == 0 || *p == 0) {
@@ -199,30 +199,30 @@ eof:
 static void
 geoniche_read_asc(void)
 {
-  pdbrec_t *pdb_rec;
+  pdbrec_t* pdb_rec;
 
   /* Process record 0 */
   pdb_rec = file_in->rec_list;
-  if (strcmp((char *) pdb_rec->data, Rec0Magic)) {
+  if (strcmp((char*) pdb_rec->data, Rec0Magic)) {
     fatal(MYNAME ": Bad record 0, not a GeoNiche file.\n");
   }
   pdb_rec = pdb_rec->next;
 
   /* Process the rest of the records */
   for (; pdb_rec; pdb_rec = pdb_rec->next) {
-    waypoint	*wpt;
-    char		*vdata;
+    waypoint*	wpt;
+    char*		vdata;
     int		vlen;
-    char		*p;
+    char*		p;
 
     int		id;
     int		route_id;
-    char		*title;
-    char		*category;
+    char*		title;
+    char*		category;
     double		lat, lon, alt;
-    char		*datestr, *timestr;
+    char*		datestr, *timestr;
     int		icon;
-    char		*notes;
+    char*		notes;
     char		gid[6+1];
     struct tm	tm;
 
@@ -232,7 +232,7 @@ geoniche_read_asc(void)
     if (!wpt) {
       fatal(MYNAME ": Couldn't allocate waypoint.\n");
     }
-    vdata = (char *) pdb_rec->data;
+    vdata = (char*) pdb_rec->data;
     vlen = pdb_rec->size;
 
     /* Field 1: Target */
@@ -404,7 +404,7 @@ geoniche_read_asc(void)
   }
 }
 
-static const char *geoniche_icon_map[] = 			/* MPS */
+static const char* geoniche_icon_map[] = 			/* MPS */
 {
   /* 21 */ "Cross",
   /* 22 */ "Cross (light)",
@@ -458,10 +458,10 @@ static const char *geoniche_icon_map[] = 			/* MPS */
   /* 52 */ "Mystery or puzzle Cache",
 };
 
-static const char *
+static const char*
 geoniche_icon_to_descr(const int no)
 {
-  const char *result = NULL;
+  const char* result = NULL;
 
   if (no >= 0x21) {
     int i = no - 0x21;
@@ -478,17 +478,17 @@ geoniche_icon_to_descr(const int no)
 static void
 geoniche_read_bin(void)
 {
-  pdbrec_t *pdb_rec;
+  pdbrec_t* pdb_rec;
 
   /* Process records */
 
   for (pdb_rec = file_in->rec_list; pdb_rec != NULL; pdb_rec = pdb_rec->next) {
-    char *vdata = (char *) pdb_rec->data;
+    char* vdata = (char*) pdb_rec->data;
     struct tm created, visited;
     int icon_nr, selected;
     int latdeg, londeg;
     double lat, lon, altitude;
-    waypoint *waypt;
+    waypoint* waypt;
 
     memset(&visited, 0, sizeof(visited));
     memset(&created, 0, sizeof(created));
@@ -574,10 +574,10 @@ data_read(void)
   }
 }
 
-static char *
-enscape(char *s)
+static char*
+enscape(char* s)
 {
-  char	*buf, *d;
+  char*	buf, *d;
 
   if (!s) {
     d =  xmalloc(1);
@@ -614,9 +614,9 @@ enscape(char *s)
  * Attempt to map an icon description into a GeoNiche icon number
  */
 static int
-wpt2icon(const waypoint *wpt)
+wpt2icon(const waypoint* wpt)
 {
-  const char	*desc = wpt->icon_descr;
+  const char*	desc = wpt->icon_descr;
 
   if (!desc) {
     return 0;
@@ -680,10 +680,10 @@ wpt2icon(const waypoint *wpt)
   return 0;
 }
 
-static char *
-geoniche_geostuff(const waypoint *wpt)
+static char*
+geoniche_geostuff(const waypoint* wpt)
 {
-  char *gs = NULL, *tmp1, *tmp2, *tmp3;
+  char* gs = NULL, *tmp1, *tmp2, *tmp3;
   char tbuf[10240];
 
   if (!wpt->gc_data->terr) {
@@ -726,18 +726,18 @@ geoniche_geostuff(const waypoint *wpt)
 }
 
 static void
-geoniche_writewpt(const waypoint *wpt)
+geoniche_writewpt(const waypoint* wpt)
 {
   int			vlen;
-  char		*vdata;
-  char		*title;
+  char*		vdata;
+  char*		title;
   struct tm		tm;
   char		datestr[10+1];
   char		timestr[8+1];
-  char		*notes;
+  char*		notes;
   int			id;
   time_t		tx;
-  char 		*gs;
+  char*		 gs;
 
   if (rec_ct == 0) {
     pdb_write_rec(file_out, 0, 0, ct++, Rec0Magic, sizeof(Rec0Magic));

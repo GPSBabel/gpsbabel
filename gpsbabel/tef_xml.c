@@ -86,7 +86,7 @@ xg_tag_mapping tef_xml_map[] = {
   { tef_point,		cb_start,	"/TEF/WaypointList/Item/Point" },
   { tef_item_end,		cb_end,		"/TEF/WaypointList/Item" },
   { tef_list_end,		cb_end,		"/TEF/WaypointList" },
-  { NULL,			0,		NULL }
+  { NULL,	(xg_cb_type)0,		NULL }
 };
 
 

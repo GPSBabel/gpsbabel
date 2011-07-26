@@ -34,29 +34,29 @@ typedef struct inifile_s {
 	  reads inifile filename into memory
 	  myname represents the calling module
  */
-inifile_t * inifile_init(const char *filename, const char *myname);
-void inifile_done(inifile_t *inifile);
+inifile_t* inifile_init(const char* filename, const char* myname);
+void inifile_done(inifile_t* inifile);
 
-int inifile_has_section(const inifile_t *inifile, const char *section);
+int inifile_has_section(const inifile_t* inifile, const char* section);
 
 /*
      inifile_readstr:
        returns NULL if not found, otherwise a pointer to the value of key ...
        all key values are valid entities until "inifile_done"
  */
-char *inifile_readstr(const inifile_t *inifile, const char *section, const char *key);
+char* inifile_readstr(const inifile_t* inifile, const char* section, const char* key);
 
 /*
      inifile_readint:
        on success the value is stored into "*value" and "inifile_readint" returns 1,
        otherwise inifile_readint returns 0
  */
-int inifile_readint(const inifile_t *inifile, const char *section, const char *key, int *value);
+int inifile_readint(const inifile_t* inifile, const char* section, const char* key, int* value);
 
 /*
      inifile_readint_def:
        if found inifile_readint_def returns value of key, otherwise a default value "def"
  */
-int inifile_readint_def(const inifile_t *inifile, const char *section, const char *key, const int def);
+int inifile_readint_def(const inifile_t* inifile, const char* section, const char* key, const int def);
 
 #endif

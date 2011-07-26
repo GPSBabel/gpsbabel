@@ -6,11 +6,11 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-XMINIMAL_FMTS = magproto.cc gpx.cc geo.cc mapsend.cc mapsource.cc garmin.cc \
+MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc mapsource.cc garmin.cc \
                garmin_device_xml.cc garmin_tables.cc internal_styles.cc nmea.cc \
                kml.cc wbt-200.cc
 
-XALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc cetus.cc copilot.cc \
+ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc cetus.cc copilot.cc \
         gpspilot.cc magnav.cc skytraq.cc \
         psp.cc holux.cc tmpro.cc tpg.cc tpo.cc \
         xcsv.cc gcdb.cc tiger.cc easygps.cc quovadis.cc \
@@ -29,6 +29,7 @@ XALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc cetus.cc copilot.cc \
         pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc \
         vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc \
         subrip.cc garmin_xt.cc explorist_ini.cc \
+
 ALL_FMTS=$$MINIMAL_FMTS
 FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc \
@@ -64,6 +65,7 @@ macx|linux {
   INCLUDEPATH += jeeps
   LIBS += -lexpat
 }
+
 win32 {
   SOURCES += gbser_win32.cc jeeps/gpsusbwin.c
 }
@@ -79,7 +81,6 @@ macx {
              mac/libusb/descriptors.c \
              mac/libusb/error.c \
              mac/libusb/usb.c
-
 }
 
 SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$SHAPE $$ZLIB $$JEEPS

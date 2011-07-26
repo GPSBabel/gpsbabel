@@ -32,12 +32,12 @@
 
 #define DEFLATE_BUFF_SIZE 16384
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 
-static char *xmlbin;
-static waypoint *xmlwpt;
-static route_head *xmltrk;
-static char *xmlgrid;
+static char* xmlbin;
+static waypoint* xmlwpt;
+static route_head* xmltrk;
+static char* xmlgrid;
 static int xmldatum;
 static double xmlEasting, xmlNorthing;
 static double xmlLatitude, xmlLongitude;
@@ -48,7 +48,7 @@ static int xmlbinsize;
 #endif
 
 static char header_written;
-static char *opt_index;
+static char* opt_index;
 static int track_index, this_index;
 
 static
@@ -68,7 +68,7 @@ static xg_tag_mapping tlog3a_xgcb_map[] = {
   { tlog3a_xgcb_version, 	cb_cdata, "/CXMLSafe/Version" },
   { tlog3a_xgcb_length, 	cb_cdata, "/CXMLSafe/Length" },
   { tlog3a_xgcb_data, 	cb_cdata, "/CXMLSafe/Data" },
-  { NULL, 	0,         NULL}
+  { NULL,	(xg_cb_type)0,         NULL}
 };
 #endif
 
@@ -99,13 +99,13 @@ static xg_tag_mapping tlog3b_xgcb_map[] = {
   { tlog3b_xgcb_wptno,	cb_cdata, "/CTrackFile/CTrackPoint/Northing" },
   { tlog3b_xgcb_wptal,	cb_cdata, "/CTrackFile/CTrackPoint/Altitude" },
   { tlog3b_xgcb_tpten,	cb_end,   "/CTrackFile/CTrackPoint" },
-  { NULL, 	0,         NULL}
+  { NULL,	(xg_cb_type)0,         NULL}
 };
 
 /* helpers */
 
 static void
-convert_datum(waypoint *wpt, int datum)
+convert_datum(waypoint* wpt, int datum)
 {
   if (datum != DATUM_WGS84) {
     double lat = wpt->latitude;
@@ -119,7 +119,7 @@ convert_datum(waypoint *wpt, int datum)
 
 
 static void
-finalize_pt(waypoint *wpt)
+finalize_pt(waypoint* wpt)
 {
   if (strcmp(xmlgrid, "BNG") == 0) {
     GPS_Math_NGENToAiry1830LatLon(xmlEasting, xmlNorthing,
@@ -146,7 +146,7 @@ finalize_pt(waypoint *wpt)
 
 #if !ZLIB_INHIBITED
 static void
-tlog3a_xgcb_version(const char *args, const char **unused)
+tlog3a_xgcb_version(const char* args, const char** unused)
 {
   if (strcmp(args, "1") != 0) {
     fatal(MYNAME ": Unsupported file version '%s'!\n", args);
@@ -154,22 +154,22 @@ tlog3a_xgcb_version(const char *args, const char **unused)
 }
 
 static void
-tlog3a_xgcb_length(const char *args, const char **unused)
+tlog3a_xgcb_length(const char* args, const char** unused)
 {
 }
 
 static void
-tlog3a_xgcb_data(const char *args, const char **unused)
+tlog3a_xgcb_data(const char* args, const char** unused)
 {
   int len;
-  char *bin;
-  char *cin, *cout;
+  char* bin;
+  char* cin, *cout;
   char cl, ch;
 
   len = strlen(args);
-  bin = xmalloc((len >> 1) + 1);
+  bin = (char*) xmalloc((len >> 1) + 1);
 
-  cin = (char *)args;
+  cin = (char*)args;
   cout = bin;
 
   cl = 0x10;
@@ -203,7 +203,7 @@ tlog3a_xgcb_data(const char *args, const char **unused)
 
 
 static void
-tlog3b_xgcb_tfna(const char *args, const char **unused)
+tlog3b_xgcb_tfna(const char* args, const char** unused)
 {
   if (xmltrk == NULL) {
     xmltrk = route_head_alloc();
@@ -214,7 +214,7 @@ tlog3b_xgcb_tfna(const char *args, const char **unused)
 
 
 static void
-tlog3b_xgcb_tfdes(const char *args, const char **unused)
+tlog3b_xgcb_tfdes(const char* args, const char** unused)
 {
   if (xmltrk == NULL) {
     xmltrk = route_head_alloc();
@@ -225,7 +225,7 @@ tlog3b_xgcb_tfdes(const char *args, const char **unused)
 
 
 static void
-tlog3b_xgcb_wptst(const char *args, const char **unused)
+tlog3b_xgcb_wptst(const char* args, const char** unused)
 {
   xmlwpt = waypt_new();
   xmldatum = DATUM_WGS84;
@@ -233,7 +233,7 @@ tlog3b_xgcb_wptst(const char *args, const char **unused)
 
 
 static void
-tlog3b_xgcb_tptst(const char *args, const char **unused)
+tlog3b_xgcb_tptst(const char* args, const char** unused)
 {
   xmlwpt = waypt_new();
   xmldatum = DATUM_WGS84;
@@ -241,7 +241,7 @@ tlog3b_xgcb_tptst(const char *args, const char **unused)
 
 
 static void
-tlog3b_xgcb_tpten(const char *args, const char **unused)
+tlog3b_xgcb_tpten(const char* args, const char** unused)
 {
   finalize_pt(xmlwpt);
 
@@ -255,7 +255,7 @@ tlog3b_xgcb_tpten(const char *args, const char **unused)
 
 
 static void
-tlog3b_xgcb_wptid(const char *args, const char **unused)
+tlog3b_xgcb_wptid(const char* args, const char** unused)
 {
   if (*args) {
     xmlwpt->shortname = xstrdup(args);
@@ -264,14 +264,14 @@ tlog3b_xgcb_wptid(const char *args, const char **unused)
 
 
 static void
-tlog3b_xgcb_wptdt(const char *args, const char **unused)
+tlog3b_xgcb_wptdt(const char* args, const char** unused)
 {
   xmldatum = GPS_Lookup_Datum_Index(args);
 }
 
 
 static void
-tlog3b_xgcb_wptgr(const char *args, const char **unused)
+tlog3b_xgcb_wptgr(const char* args, const char** unused)
 {
   if (xmlgrid != NULL) {
     if (strcmp(xmlgrid, args) == 0) {
@@ -284,35 +284,35 @@ tlog3b_xgcb_wptgr(const char *args, const char **unused)
 
 
 static void
-tlog3b_xgcb_wptno(const char *args, const char **unused)
+tlog3b_xgcb_wptno(const char* args, const char** unused)
 {
   xmlNorthing = atof(args);
 }
 
 
 static void
-tlog3b_xgcb_wptea(const char *args, const char **unused)
+tlog3b_xgcb_wptea(const char* args, const char** unused)
 {
   xmlEasting = atof(args);
 }
 
 
 static void
-tlog3b_xgcb_wptal(const char *args, const char **unused)
+tlog3b_xgcb_wptal(const char* args, const char** unused)
 {
   xmlAltitude = atof(args);
 }
 
 
 static void
-tlog3b_xgcb_tptdt(const char *args, const char **unused)
+tlog3b_xgcb_tptdt(const char* args, const char** unused)
 {
   xmldatum = GPS_Lookup_Datum_Index(args);
 }
 
 
 static void
-tlog3b_xgcb_wpten(const char *args, const char **unused)
+tlog3b_xgcb_wpten(const char* args, const char** unused)
 {
   finalize_pt(xmlwpt);
   waypt_add(xmlwpt);
@@ -320,18 +320,18 @@ tlog3b_xgcb_wpten(const char *args, const char **unused)
 }
 
 
-static char *
-read_str(gbfile *f)
+static char*
+read_str(gbfile* f)
 {
   int i;
-  char *res;
+  char* res;
 
   i = gbfgetc(f);
   if (i == 0xff) {
     i = gbfgetint16(f);
   }
 
-  res = xmalloc(i + 1);
+  res = (char*) xmalloc(i + 1);
   res[i] = '\0';
   if (i) {
     gbfread(res, 1, i, f);
@@ -341,7 +341,7 @@ read_str(gbfile *f)
 }
 
 static void
-write_str(const char *str, gbfile *f)
+write_str(const char* str, gbfile* f)
 {
   if (str && *str) {
     int len = strlen(str);
@@ -366,10 +366,10 @@ write_str(const char *str, gbfile *f)
 }
 
 static int
-read_datum(gbfile *f)
+read_datum(gbfile* f)
 {
   int res;
-  char *d, *g;
+  char* d, *g;
 
   d = read_str(f);
   g = read_str(f);
@@ -395,7 +395,7 @@ read_CTrackFile(const int version)
   gbint32 tcount, wcount;
   gbint16 u1;
   gbint32 ux;
-  route_head *track;
+  route_head* track;
   int i;
   int datum;
 
@@ -424,7 +424,7 @@ read_CTrackFile(const int version)
 
   /* S1 .. S9: comments, hints, jokes, aso */
   for (i = 0; i < 9; i++) {
-    char *s = read_str(fin);
+    char* s = read_str(fin);
     xfree(s);
   }
 
@@ -441,7 +441,7 @@ read_CTrackFile(const int version)
   }
 
   while (tcount > 0) {
-    waypoint *wpt;
+    waypoint* wpt;
 
     tcount--;
 
@@ -485,7 +485,7 @@ read_CTrackFile(const int version)
     }
 
     while (! gbfeof(fin)) {
-      waypoint *wpt;
+      waypoint* wpt;
 
       i = gbfgetc(fin);
       if (i == 0) {
@@ -520,7 +520,7 @@ read_CTrackFile(const int version)
   datum = read_datum(fin);
 
   while (wcount > 0) {
-    waypoint *wpt;
+    waypoint* wpt;
     gbint32 namect, i;
 
     wcount--;
@@ -538,7 +538,7 @@ read_CTrackFile(const int version)
     // variants of shortname
 
     for (i = 0; i < namect; i++) {
-      char *name;
+      char* name;
 
       name = read_str(fin);
       if (name && *name) {
@@ -562,12 +562,12 @@ read_CTrackFile(const int version)
 #if !ZLIB_INHIBITED
 
 static int
-inflate_buff(const char *buff, const size_t size, char **out_buff)
+inflate_buff(const char* buff, const size_t size, char** out_buff)
 {
   int res = Z_OK;
   z_stream strm;
   char out[DEFLATE_BUFF_SIZE];
-  char *cout = NULL;
+  char* cout = NULL;
   gbuint32 bytes = 0;
   gbuint32 have;
 
@@ -583,11 +583,11 @@ inflate_buff(const char *buff, const size_t size, char **out_buff)
   }
 
   strm.avail_in = size;
-  strm.next_in = (void *)buff;
+  strm.next_in = (Bytef*)buff;
 
   do {
     strm.avail_out = DEFLATE_BUFF_SIZE;
-    strm.next_out = (void *)out;
+    strm.next_out = (Bytef*)out;
     res = inflate(&strm, Z_NO_FLUSH);
 
     switch (res) {
@@ -600,7 +600,7 @@ inflate_buff(const char *buff, const size_t size, char **out_buff)
     }
     have = DEFLATE_BUFF_SIZE - strm.avail_out;
     if (have > 0) {
-      cout = xrealloc(cout, bytes + have);
+      cout = (char*) xrealloc(cout, bytes + have);
       memcpy(cout+bytes, out, have);
       bytes+=have;
     }
@@ -614,7 +614,7 @@ inflate_buff(const char *buff, const size_t size, char **out_buff)
 static void
 read_CXMLSafe(void)
 {
-  char *xmlstr = NULL;
+  char* xmlstr = NULL;
 
   xmlbin = NULL;
   xmlbinsize = 0;
@@ -652,7 +652,7 @@ read_XML(void)
 *******************************************************************************/
 
 static void
-dmtlog_rd_init(const char *fname)
+dmtlog_rd_init(const char* fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
 
@@ -701,7 +701,7 @@ dmtlog_read(void)
 }
 
 static void
-dmtlog_wr_init(const char *fname)
+dmtlog_wr_init(const char* fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
 }
@@ -713,17 +713,17 @@ dmtlog_wr_deinit(void)
 }
 
 static void
-write_header(const route_head *trk)
+write_header(const route_head* trk)
 {
   int count, i;
-  char *cout;
+  char* cout;
   const char ZERO = '\0';
 
   header_written = 1;
 
   count = 0;
   if (trk != NULL) {
-    queue *curr, *prev;
+    queue* curr, *prev;
     QUEUE_FOR_EACH(&trk->waypoint_list, curr, prev) count++;
   }
   write_str(trk && trk->rte_name && *trk->rte_name ? trk->rte_name : "Name", fout);
@@ -744,7 +744,7 @@ write_header(const route_head *trk)
 }
 
 static void
-track_hdr_cb(const route_head *trk)
+track_hdr_cb(const route_head* trk)
 {
 
   this_index++;
@@ -755,12 +755,12 @@ track_hdr_cb(const route_head *trk)
 }
 
 static void
-track_tlr_cb(const route_head *trk)
+track_tlr_cb(const route_head* trk)
 {
 }
 
 static void
-track_wpt_cb(const waypoint *wpt)
+track_wpt_cb(const waypoint* wpt)
 {
   if (this_index != track_index) {
     return;
@@ -772,7 +772,7 @@ track_wpt_cb(const waypoint *wpt)
 }
 
 static void
-wpt_cb(const waypoint *wpt)
+wpt_cb(const waypoint* wpt)
 {
   int names;
 
@@ -824,8 +824,8 @@ dmtlog_write(void)
 ff_vecs_t dmtlog_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write	/* waypoints */,
-    ff_cap_read | ff_cap_write	/* tracks */,
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* waypoints */,
+    (ff_cap)(ff_cap_read | ff_cap_write)	/* tracks */,
     ff_cap_none			/* routes */
   },
   dmtlog_rd_init,

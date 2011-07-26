@@ -30,13 +30,13 @@
 
 typedef struct inifile_entry_s {
   queue Q;
-  char *key;
-  char *val;
+  char* key;
+  char* val;
 } inifile_entry_t;
 
 typedef struct inifile_section_s {
   queue Q;
-  char *name;
+  char* name;
   int ientries;
   queue entries;
 } inifile_section_t;
@@ -49,13 +49,13 @@ typedef struct inifile_section_s {
 #define GPSBABEL_INIFILE "gpsbabel.ini"
 
 /* Remember the filename we used so we can include it in errors. */
-char *gbinipathname;
+char* gbinipathname;
 
-static char *
-find_gpsbabel_inifile(const char *path)		/* can be empty or NULL */
+static char*
+find_gpsbabel_inifile(const char* path)		/* can be empty or NULL */
 {
-  FILE *test;
-  char *buff;
+  FILE* test;
+  char* buff;
   int len;
 
   if (path == NULL) {
@@ -87,16 +87,16 @@ find_gpsbabel_inifile(const char *path)		/* can be empty or NULL */
   return NULL;
 }
 
-static gbfile *
+static gbfile*
 open_gpsbabel_inifile(void)
 {
-  char *name;
-  char *envstr;
-  gbfile *res = NULL;
+  char* name;
+  char* envstr;
+  gbfile* res = NULL;
 
   envstr = getenv("GPSBABELINI");
   if (envstr != NULL) {
-    FILE *test;
+    FILE* test;
 
     test = fopen(envstr, "r");
     if (test != NULL) {
@@ -118,7 +118,7 @@ open_gpsbabel_inifile(void)
     }
 #else
     if ((envstr = getenv("HOME")) != NULL) {
-      char *path;
+      char* path;
 
       path = (char*) xmalloc(strlen(envstr) + 11);
       strcpy(path, envstr);
@@ -145,14 +145,14 @@ open_gpsbabel_inifile(void)
 }
 
 static void
-inifile_load_file(gbfile *fin, inifile_t *inifile, const char *myname)
+inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
 {
-  char *buf;
-  inifile_section_t *sec = NULL;
+  char* buf;
+  inifile_section_t* sec = NULL;
   int line = 0;
 
   while ((buf = gbfgetstr(fin))) {
-    char *cin = lrtrim(buf);
+    char* cin = lrtrim(buf);
 
     if ((line++ == 0) && fin->unicode) {
       inifile->unicode = 1;
@@ -167,7 +167,7 @@ inifile_load_file(gbfile *fin, inifile_t *inifile, const char *myname)
 
     if (*cin == '[') {
 
-      char *cend = strchr(++cin, ']');
+      char* cend = strchr(++cin, ']');
 
       if (cend != NULL) {
         *cend = '\0';
@@ -177,21 +177,21 @@ inifile_load_file(gbfile *fin, inifile_t *inifile, const char *myname)
         fatal("%s: invalid section header '%s' in '%s'.\n", myname, cin, gbinipathname);
       }
 
-      sec = (inifile_section_t *) xcalloc(1, sizeof(*sec));
+      sec = (inifile_section_t*) xcalloc(1, sizeof(*sec));
 
       sec->name = xstrdup(cin);
       QUEUE_INIT(&sec->entries);
       ENQUEUE_TAIL(&inifile->secs, &sec->Q);
       inifile->isecs++;
     } else {
-      char *cx;
-      inifile_entry_t *entry;
+      char* cx;
+      inifile_entry_t* entry;
 
       if (sec == NULL) {
         fatal("%s: missing section header in '%s'.\n", myname,gbinipathname);
       }
 
-      entry = (inifile_entry_t *) xcalloc(1, sizeof(*entry));
+      entry = (inifile_entry_t*) xcalloc(1, sizeof(*entry));
       ENQUEUE_TAIL(&sec->entries, &entry->Q);
       sec->ientries++;
 
@@ -213,23 +213,23 @@ inifile_load_file(gbfile *fin, inifile_t *inifile, const char *myname)
   }
 }
 
-static char *
-inifile_find_value(const inifile_t *inifile, const char *sec_name, const char *key)
+static char*
+inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* key)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   if (inifile == NULL) {
     return NULL;
   }
 
   QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-    inifile_section_t *sec = (inifile_section_t *) elem;
+    inifile_section_t* sec = (inifile_section_t*) elem;
 
     if (case_ignore_strcmp(sec->name, sec_name) == 0) {
-      queue *elem, *tmp;
+      queue* elem, *tmp;
 
       QUEUE_FOR_EACH(&sec->entries, elem, tmp) {
-        inifile_entry_t *entry = (inifile_entry_t *) elem;
+        inifile_entry_t* entry = (inifile_entry_t*) elem;
 
         if (case_ignore_strcmp(entry->key, key) == 0) {
           return entry->val;
@@ -249,11 +249,11 @@ inifile_find_value(const inifile_t *inifile, const char *sec_name, const char *k
 
 	  filename == NULL: try to open global gpsbabel.ini
  */
-inifile_t *
-inifile_init(const char *filename, const char *myname)
+inifile_t*
+inifile_init(const char* filename, const char* myname)
 {
-  inifile_t *result;
-  gbfile *fin = NULL;
+  inifile_t* result;
+  gbfile* fin = NULL;
 
   if (filename == NULL) {
     fin = open_gpsbabel_inifile();
@@ -264,7 +264,7 @@ inifile_init(const char *filename, const char *myname)
     fin = gbfopen(filename, "rb", myname);
   }
 
-  result = (inifile_t *) xcalloc(1, sizeof(*result));
+  result = (inifile_t*) xcalloc(1, sizeof(*result));
   QUEUE_INIT(&result->secs);
   inifile_load_file(fin, result, myname);
 
@@ -273,23 +273,23 @@ inifile_init(const char *filename, const char *myname)
 }
 
 void
-inifile_done(inifile_t *inifile)
+inifile_done(inifile_t* inifile)
 {
   if (inifile == NULL) {
     return;
   }
 
   if (inifile->isecs > 0) {
-    queue *elem, *tmp;
+    queue* elem, *tmp;
 
     QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-      inifile_section_t *sec = (inifile_section_t *) elem;
+      inifile_section_t* sec = (inifile_section_t*) elem;
 
       if (sec->ientries > 0) {
-        queue *elem, *tmp;
+        queue* elem, *tmp;
 
         QUEUE_FOR_EACH(&sec->entries, elem, tmp) {
-          inifile_entry_t *entry = (inifile_entry_t *) elem;
+          inifile_entry_t* entry = (inifile_entry_t*) elem;
 
           if (entry->key) {
             xfree(entry->key);
@@ -316,12 +316,12 @@ inifile_done(inifile_t *inifile)
 }
 
 int
-inifile_has_section(const inifile_t *inifile, const char *section)
+inifile_has_section(const inifile_t* inifile, const char* section)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-    inifile_section_t *sec = (inifile_section_t *) elem;
+    inifile_section_t* sec = (inifile_section_t*) elem;
     if (case_ignore_strcmp(sec->name, section) == 0) {
       return 1;
     }
@@ -335,8 +335,8 @@ inifile_has_section(const inifile_t *inifile, const char *section)
        all key values are valid entities until "inifile_done"
  */
 
-char *
-inifile_readstr(const inifile_t *inifile, const char *section, const char *key)
+char*
+inifile_readstr(const inifile_t* inifile, const char* section, const char* key)
 {
   return inifile_find_value(inifile, section, key);
 }
@@ -348,9 +348,9 @@ inifile_readstr(const inifile_t *inifile, const char *section, const char *key)
  */
 
 int
-inifile_readint(const inifile_t *inifile, const char *section, const char *key, int *value)
+inifile_readint(const inifile_t* inifile, const char* section, const char* key, int* value)
 {
-  char *str;
+  char* str;
 
   str = inifile_find_value(inifile, section, key);
 
@@ -370,7 +370,7 @@ inifile_readint(const inifile_t *inifile, const char *section, const char *key, 
  */
 
 int
-inifile_readint_def(const inifile_t *inifile, const char *section, const char *key, const int def)
+inifile_readint_def(const inifile_t* inifile, const char* section, const char* key, const int def)
 {
   int result;
 

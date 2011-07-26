@@ -23,8 +23,8 @@
 #include "defs.h"
 #define MYNAME "Bushnell Trail"
 
-static gbfile *file_in;
-static gbfile *file_out;
+static gbfile* file_in;
+static gbfile* file_out;
 static int trkpt_count;
 static route_head* trk_head;
 
@@ -34,7 +34,7 @@ arglist_t bushnell_args[] = {
 };
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   char h[0x14]; // Believed to be zero terminated.
   file_in = gbfopen_le(fname, "rb", MYNAME);
@@ -53,11 +53,11 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   int i,l = strlen(fname);
   char obuf[20] = { 0 } ;
-  char *p = obuf;
+  char* p = obuf;
   file_out = gbfopen_le(fname, "w", MYNAME);
   trkpt_count = 0;
   for (i = 0; (i < l) && (i < 20); i++) {
@@ -97,7 +97,7 @@ bushnell_read(void)
   int lat_tmp,lon_tmp;
 
   while (1) {
-    waypoint *wpt_tmp;
+    waypoint* wpt_tmp;
 
     lat_tmp = gbfgetint32(file_in);
     lon_tmp = gbfgetint32(file_in);
@@ -115,7 +115,7 @@ bushnell_read(void)
 }
 
 static void
-bushnell_write_one(const waypoint *wpt)
+bushnell_write_one(const waypoint* wpt)
 {
   gbint32 lat = wpt->latitude  * 10000000.0;
   gbint32 lon = wpt->longitude * 10000000.0;
@@ -136,7 +136,7 @@ bushnell_write(void)
 
 ff_vecs_t bushnell_trl_vecs = {
   ff_type_file,
-  { ff_cap_none, ff_cap_read | ff_cap_write, ff_cap_none },
+  { ff_cap_none, (ff_cap)(ff_cap_read | ff_cap_write), ff_cap_none },
   rd_init,
   wr_init,
   rd_deinit,

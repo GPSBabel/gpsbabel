@@ -92,14 +92,14 @@ typedef struct appinfo {
 
 #define APPINFO_SIZE sizeof(appinfo_t)
 
-static pdbfile *file_in, *file_out;
-static const char *out_fname;
-static const char *in_fname; /* We might need that for naming tracks */
+static pdbfile* file_in, *file_out;
+static const char* out_fname;
+static const char* in_fname; /* We might need that for naming tracks */
 static short_handle  mkshort_wr_handle;
 static int ct;
 
-static char *zerocat = NULL;
-static char *internals = NULL;
+static char* zerocat = NULL;
+static char* internals = NULL;
 
 static
 arglist_t coto_args[] = {
@@ -115,7 +115,7 @@ arglist_t coto_args[] = {
 };
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = pdb_open(fname, MYNAME);
   in_fname = fname;
@@ -128,7 +128,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = pdb_create(fname, MYNAME);
   out_fname = fname;
@@ -143,8 +143,8 @@ wr_deinit(void)
 
 /* helpers */
 
-static char *
-coto_get_icon_descr(int category, const appinfo_t *app)
+static char*
+coto_get_icon_descr(int category, const appinfo_t* app)
 {
   char buff[CATEGORY_NAME_LENGTH + 1] = "Not Assigned";
   if ((category >= 0) && (category < 16)) {
@@ -163,10 +163,10 @@ coto_get_icon_descr(int category, const appinfo_t *app)
 static void
 coto_track_read(void)
 {
-  struct record_track *rec;
-  pdbrec_t *pdb_rec;
-  route_head *trk_head;
-  char *track_name;
+  struct record_track* rec;
+  pdbrec_t* pdb_rec;
+  route_head* trk_head;
+  char* track_name;
 
   if (strncmp(file_in->name, "cotoGPS TrackDB", PDB_DBNAMELEN) != 0)
     // Use database name if not default
@@ -174,7 +174,7 @@ coto_track_read(void)
     track_name = xstrndup(file_in->name, PDB_DBNAMELEN);
   } else {
     // Use filename for new track title
-    const char *fnametmp = strrchr(in_fname, '/');
+    const char* fnametmp = strrchr(in_fname, '/');
     if (fnametmp == NULL) {
       fnametmp = strrchr(in_fname, '\\');
     }
@@ -196,11 +196,11 @@ coto_track_read(void)
   trk_head->rte_name = track_name;
 
   for (pdb_rec = file_in->rec_list; pdb_rec; pdb_rec = pdb_rec->next) {
-    waypoint *wpt_tmp;
+    waypoint* wpt_tmp;
 
     wpt_tmp = waypt_new();
 
-    rec = (struct record_track *) pdb_rec->data;
+    rec = (struct record_track*) pdb_rec->data;
 
     wpt_tmp->longitude = DEG(-pdb_read_double(&rec->longitude));
     wpt_tmp->latitude = DEG(pdb_read_double(&rec->latitude));
@@ -211,7 +211,7 @@ coto_track_read(void)
 
     if (internals) {
       // Parse the option as xcsv delimiter
-      const char *inter = xcsv_get_char_from_constant_table(internals);
+      const char* inter = xcsv_get_char_from_constant_table(internals);
       char temp[256];
       snprintf(temp, sizeof(temp), "%.20f%s%.20f%s%.20f%s%.20f", pdb_read_double(&rec->distance), inter,
                pdb_read_double(&rec->arc), inter, pdb_read_double(&rec->x), inter, pdb_read_double(&rec->y));
@@ -252,18 +252,18 @@ coto_track_read(void)
 static void
 coto_wpt_read(void)
 {
-  struct record_wpt *rec;
-  pdbrec_t *pdb_rec;
-  appinfo_t *app;
-  app = (struct appinfo *) file_in->appinfo;
+  struct record_wpt* rec;
+  pdbrec_t* pdb_rec;
+  appinfo_t* app;
+  app = (struct appinfo*) file_in->appinfo;
 
   for (pdb_rec = file_in->rec_list; pdb_rec; pdb_rec = pdb_rec->next) {
-    waypoint *wpt_tmp;
-    char *c;
+    waypoint* wpt_tmp;
+    char* c;
 
     wpt_tmp = waypt_new();
 
-    rec = (struct record_wpt *) pdb_rec->data;
+    rec = (struct record_wpt*) pdb_rec->data;
 
     wpt_tmp->longitude = DEG(-pdb_read_double(&rec->lon));
     wpt_tmp->latitude = DEG(pdb_read_double(&rec->lat));
@@ -312,7 +312,7 @@ data_read(void)
 static void
 coto_prepare_wpt_write(void)
 {
-  struct appinfo *ai;
+  struct appinfo* ai;
 
   file_out->name[PDB_DBNAMELEN-1] = 0;
   file_out->attr = PDB_FLAG_BACKUP;
@@ -325,7 +325,7 @@ coto_prepare_wpt_write(void)
   file_out->appinfo_len = APPINFO_SIZE;
   file_out->appinfo = calloc(APPINFO_SIZE,1);
 
-  ai = (struct appinfo *) file_out->appinfo;
+  ai = (struct appinfo*) file_out->appinfo;
   be_write16(&ai->renamedCategories, 31); // Don't ask me why...
   if (zerocat) {
     strncpy(ai->categories[0], zerocat, 16);
@@ -336,12 +336,12 @@ coto_prepare_wpt_write(void)
 }
 
 static void
-coto_wpt_write(const waypoint *wpt)
+coto_wpt_write(const waypoint* wpt)
 {
-  struct record_wpt *rec;
-  struct appinfo *ai = (struct appinfo *) file_out->appinfo;
-  char *notes = NULL;
-  char *shortname = NULL;
+  struct record_wpt* rec;
+  struct appinfo* ai = (struct appinfo*) file_out->appinfo;
+  char* notes = NULL;
+  char* shortname = NULL;
   int size;
   gbuint8 cat = 0;
   int i;
@@ -401,7 +401,7 @@ coto_wpt_write(const waypoint *wpt)
     }
   }
 
-  pdb_write_rec(file_out, 0, cat, ct++, (const gbuint8 *)rec, size);
+  pdb_write_rec(file_out, 0, cat, ct++, (const gbuint8*)rec, size);
 
   xfree(shortname);
   xfree(rec);
