@@ -63,15 +63,15 @@ pdb_read_tail(gbfile *fin, gbuint32 *size)
       res = (char *) xmalloc(count);
       memcpy(res, buff, count);
     } else {
-      res = xrealloc(res, bytes + count);
+      res = (char*) xrealloc(res, bytes + count);
       memcpy(&res[bytes], buff, count);
     }
     bytes += count;
   }
   if (res) {
-    res = xrealloc(res, bytes + 1);
+    res = (char*) xrealloc(res, bytes + 1);
   } else {
-    res = xmalloc(1);
+    res = (char*) xmalloc(1);
   }
   res[bytes] = '\0';
 
@@ -133,7 +133,7 @@ pdb_load_data(pdbfile *fin)
   for (i = 0; i < ct; i++) {
     pdbrec_t *rec;
 
-    rec = xcalloc(1, sizeof(*rec));
+    rec = (pdbrec_t*) xcalloc(1, sizeof(*rec));
     if (fin->attr & PDB_FLAG_RESOURCE) {
       (void) gbfgetuint32(fin->file);	/* type */
       rec->id = gbfgetint16(fin->file);
@@ -205,14 +205,14 @@ pdb_load_data(pdbfile *fin)
     if (rec->next) {
       rec->size = (gbint32)rec->next->offs - (gbint32)offs;
       if (rec->size > 0) {
-        rec->data = xmalloc(rec->size);
+        rec->data = (char*) xmalloc(rec->size);
         rec->size = gbfread(rec->data, 1, rec->size, fin->file);
         offs += rec->size;
       } else if (rec->size < 0) {
         pdb_invalid_file(fin, "Wrong data size in record with id %d.\n", rec->id);
       }
     } else {
-      rec->data = pdb_read_tail(fin->file, &rec->size);
+      rec->data = (char*) pdb_read_tail(fin->file, &rec->size);
       offs += rec->size;
     }
   }
@@ -223,7 +223,7 @@ pdb_open(const char *filename, const char *module)
 {
   pdbfile *res;
 
-  res = xcalloc(1, sizeof(*res));
+  res = (pdbfile*) xcalloc(1, sizeof(*res));
   res->file = gbfopen_be(filename, "rb", module);
   res->mode = 1;
 
@@ -260,7 +260,7 @@ pdb_create(const char *filename, const char *module)
 {
   pdbfile *res;
 
-  res = xcalloc(1, sizeof(*res));
+  res = (pdbfile*) xcalloc(1, sizeof(*res));
   strncpy(res->name, "Palm/OS Database", PDB_DBNAMELEN);
   res->file = gbfopen_be(filename, "wb", module);;
   res->mode = 2;
@@ -273,13 +273,13 @@ pdb_write_rec(pdbfile *fout, const gbuint8 flags, const gbuint8 category, const 
 {
   pdbrec_t *rec, *cur;
 
-  rec = xcalloc(1, sizeof(*rec));
+  rec = (pdbrec_t*) xcalloc(1, sizeof(*rec));
   rec->category = category;
   rec->flags = category;
   rec->id = rec_id;
   rec->size = size;
   if (size > 0) {
-    rec->data = xmalloc(size);
+    rec->data = (char*) xmalloc(size);
     memcpy(rec->data, data, size);
   }
 

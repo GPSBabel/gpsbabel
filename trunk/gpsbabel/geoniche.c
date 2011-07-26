@@ -162,7 +162,7 @@ field(char** pp, int* lenp)
     return NULL;
   }
 
-  dbuf = dp = xmalloc(len);
+  dbuf = dp = (char*) xmalloc(len);
   while (len) {
     char	ch;
 
@@ -189,7 +189,7 @@ field(char** pp, int* lenp)
   }
 eof:
   *dp++ = 0;
-  dbuf = xrealloc(dbuf, dp - dbuf);
+  dbuf = (char*) xrealloc(dbuf, dp - dbuf);
   /* fprintf(stderr, "<%.8s> dbuf=%x, len=%d\n", *pp, dbuf, len); */
   *pp = p;
   *lenp = len;
@@ -580,11 +580,11 @@ enscape(char* s)
   char*	buf, *d;
 
   if (!s) {
-    d =  xmalloc(1);
+    d = (char*) xmalloc(1);
     *d = 0;
     return d;
   }
-  buf = d = xmalloc(strlen(s) * 2 + 1);
+  buf = d = (char*) xmalloc(strlen(s) * 2 + 1);
   for (; *s; ++s) {
 
     /*

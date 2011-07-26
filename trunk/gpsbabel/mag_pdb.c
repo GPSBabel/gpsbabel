@@ -110,7 +110,7 @@ magpdb_read_data(const char* data, const size_t data_len)
 
           /* now we are looking for a sequence like 0,1 NE (123456,654321) */
 
-          buff = xmalloc(strlen(cin) + 1);		/* safe target space for sscanf( ... */
+          buff = (char*) xmalloc(strlen(cin) + 1);		/* safe target space for sscanf( ... */
 
           comma = cin;
           while ((comma = strchr(comma, separator))) {

@@ -103,7 +103,7 @@ ggv_log_read(void)
     break;
   }
 
-  buf = xmalloc(bufsz);
+  buf = (signed char*) xmalloc(bufsz);
 
   while ((len = gbfread(buf, 1, bufsz, fin))) {
     int deg, min;

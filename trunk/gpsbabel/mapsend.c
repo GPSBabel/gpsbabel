@@ -419,7 +419,9 @@ void mapsend_track_hdr(const route_head* trk)
   queue* elem, *tmp;
   char* tname;
   int i;
-  mapsend_hdr hdr = {13, "4D533334 MS", "30", ms_type_track, {0, 0, 0}};
+  mapsend_hdr hdr = {13, {'4','D','5','3','3','3','3','4',' ','M','S'},
+    {'3','0'}, ms_type_track, {0, 0, 0}
+  };
 
   switch (trk_version) {
   case 20:
@@ -525,7 +527,9 @@ mapsend_track_write(void)
 static void
 mapsend_wpt_write(void)
 {
-  mapsend_hdr hdr = {13, {"4D533330 MS"}, {"30"}, ms_type_wpt, {0, 0, 0}};
+  mapsend_hdr hdr = {13, {'4','D','5','3','3','3','3','0',' ','M','S'},
+    {'3', '0'}, ms_type_wpt, {0, 0, 0}
+  };
   int n = 0;
   int wpt_count = waypt_count();
 

@@ -73,6 +73,18 @@ typedef enum {
   unknown_header
 } header_type;
 
+#if __cplusplus
+inline header_type operator++(header_type& rs, int)
+{
+  return rs = (header_type)((int)rs + 1);
+}
+
+inline gt_display_modes_e  operator++(gt_display_modes_e& rs, int)
+{
+  return rs = (gt_display_modes_e)((int)rs + 1);
+}
+#endif
+
 #define MAX_HEADER_FIELDS 36
 
 static char* header_lines[unknown_header + 1][MAX_HEADER_FIELDS];
@@ -836,7 +848,7 @@ garmin_txt_write(void)
     xfree(wpt_a);
 
     route_idx = 0;
-    route_info = xcalloc(route_count(), sizeof(struct info_s));
+    route_info = (info_t*) xcalloc(route_count(), sizeof(struct info_s));
     routepoints = 0;
     route_disp_all(prework_hdr_cb, prework_tlr_cb, prework_wpt_cb);
     if (routepoints > 0) {
@@ -847,7 +859,7 @@ garmin_txt_write(void)
   }
 
   route_idx = 0;
-  route_info = xcalloc(track_count(), sizeof(struct info_s));
+  route_info = (info_t*) xcalloc(track_count(), sizeof(struct info_s));
   routepoints = 0;
   track_disp_all(prework_hdr_cb, prework_tlr_cb, prework_wpt_cb);
 
@@ -1021,7 +1033,7 @@ bind_fields(const header_type ht)
   /* make a copy of headers[ht], uppercase, replace "\t" with "\0" */
 
   i = strlen(headers[ht]);
-  fields = xmalloc(i + 2);
+  fields = (char*) xmalloc(i + 2);
   strcpy(fields, headers[ht]);
   strcat(fields, "\t");
   c = strupper(fields);
@@ -1325,7 +1337,7 @@ garmin_txt_rd_init(const char* fname)
   memset(&header_ct, 0, sizeof(header_ct));
 
   datum_index = -1;
-  grid_index = -1;
+  grid_index = (grid_type) -1;
 
   init_date_and_time_format();
 }

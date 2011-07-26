@@ -177,7 +177,7 @@ maggeo_fmtdate(time_t t)
 
   struct tm* tm = NULL;
   int date;
-  char* cbuf = xmalloc(SZ);
+  char* cbuf = (char*) xmalloc(SZ);
 
   cbuf[0] = '\0';
   if (t > 0) {

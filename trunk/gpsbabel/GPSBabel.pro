@@ -28,9 +28,9 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc cetus.cc copilot.cc \
         jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc delbin.cc \
         pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc \
         vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc \
-        subrip.cc garmin_xt.cc explorist_ini.cc \
+        subrip.cc garmin_xt.cc \
 
-ALL_FMTS=$$MINIMAL_FMTS
+# ALL_FMTS=$$MINIMAL_FMTS
 FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc \
         nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc
@@ -86,9 +86,9 @@ macx {
 SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$SHAPE $$ZLIB $$JEEPS
 
 # We don't care about stripping things out of the build.  Full monty, baby.
-#DEFINES += MAXIMAL_ENABLED
+DEFINES += MAXIMAL_ENABLED
 DEFINES += FILTERS_ENABLED
-#DEFINES += PDBFMTS_ENABLED
-#DEFINES += SHAPELIB_ENABLED
-#DEFINES += CSVFMTS_ENABLED
-#DEFINES += CET_WANTED
+DEFINES += PDBFMTS_ENABLED
+DEFINES += SHAPELIB_ENABLED
+DEFINES += CSVFMTS_ENABLED
+DEFINES += CET_WANTED

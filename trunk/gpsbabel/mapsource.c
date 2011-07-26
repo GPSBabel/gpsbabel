@@ -67,13 +67,13 @@ static short_handle read_route_wpt_mkshort_handle;
 #define MPSDESCBUFFERLEN	4096
 
 
-char* snlen = NULL;
-char* snwhiteopt = NULL;
-char* mpsverout = NULL;
-char* mpsmergeouts = NULL;
-int   mpsmergeout;
-char* mpsusedepth = NULL;
-char* mpsuseprox = NULL;
+static char* snlen = NULL;
+static char* snwhiteopt = NULL;
+static char* mpsverout = NULL;
+static char* mpsmergeouts = NULL;
+static int   mpsmergeout;
+static char* mpsusedepth = NULL;
+static char* mpsuseprox = NULL;
 
 static
 arglist_t mps_args[] = {

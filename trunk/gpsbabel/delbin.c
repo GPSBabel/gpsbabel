@@ -631,7 +631,7 @@ message_write(unsigned msg_id, message_t* m)
   chksum = checksum(p + 2, 6);
   le_write16(p + 8, chksum);
   // message data (filled in by caller)
-  chksum = checksum(m->data, m->size);
+  chksum = checksum((gbuint8*) m->data, m->size);
   n = 2 + 8 + m->size;
   // trailer (checksum and marker bytes)
   le_write16(p + n, chksum);
@@ -727,9 +727,9 @@ message_read_1(unsigned msg_id, message_t* m)
     m->buf[0] = m->buf[1] = 0;
     memcpy(m->buf + 2, buf, 8);
     // read message body and trailer
-    read_depacketize(m->data, total);
+    read_depacketize((gbuint8*) m->data, total);
     p = (gbuint8*)m->data + m->size;
-    if (checksum(m->data, m->size) == le_readu16(p) &&
+    if (checksum((gbuint8*) m->data, m->size) == le_readu16(p) &&
         p[2] == 0xad && p[3] == 0xbc) {
       if (global_opts.debug_level >= DBGLVL_M) {
         warning(MYNAME ": received %x\n", id);
@@ -862,10 +862,13 @@ get_batch(message_t** array, unsigned* n)
   return success;
 }
 
-static struct {
+typedef struct {
   unsigned msg_id;
   message_t msg;
-}* batch_array;
+} batch_array_t;
+
+static batch_array_t* batch_array;
+
 static unsigned batch_array_max;
 static unsigned batch_array_i;
 
@@ -874,12 +877,12 @@ static void
 add_to_batch(unsigned id, message_t* m)
 {
   if (batch_array_i == batch_array_max) {
-    void* old = batch_array;
+    char* old = (char*) batch_array;
     if (batch_array_max == 0) {
       batch_array_max = 50;
     }
     batch_array_max += batch_array_max;
-    batch_array = xmalloc(batch_array_max * sizeof(*batch_array));
+    batch_array = (batch_array_t*) xmalloc(batch_array_max * sizeof(*batch_array));
     if (batch_array_i) {
       memcpy(batch_array, old, batch_array_i * sizeof(*batch_array));
       xfree(old);
@@ -2579,7 +2582,11 @@ static void*
 thread_func(void* run_loop_source)
 {
   run_loop = CFRunLoopGetCurrent();
+#if __cplusplus
+  CFRunLoopAddSource(run_loop, (__CFRunLoopSource*) run_loop_source, kCFRunLoopDefaultMode);
+#else
   CFRunLoopAddSource(run_loop, run_loop_source, kCFRunLoopDefaultMode);
+#endif
   CFRunLoopRun();
   return NULL;
 }
@@ -2632,7 +2639,7 @@ mac_os_init(const char* fname)
     fatal(MYNAME ": IOCreatePlugInInterfaceForService failed 0x%x\n", (int)kr);
   }
   IOObjectRelease(service);
-  hr = (*plugin)->QueryInterface(plugin, CFUUIDGetUUIDBytes(kIOHIDDeviceInterfaceID122), (void*)&device);
+  hr = (*plugin)->QueryInterface(plugin, CFUUIDGetUUIDBytes(kIOHIDDeviceInterfaceID122), (void**)&device);
   if (hr) {
     fatal(MYNAME ": QueryInterface failed 0x%x\n", (int)hr);
   }

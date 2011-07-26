@@ -151,7 +151,7 @@ char *ppdb_strcat(char *dest, char *src, char *def, int *size)
   len = strlen(dest) + strlen(tmp) + 1;
   if (len > *size) {
     *size = len;
-    res = xrealloc(dest, *size);
+    res = (char*) xrealloc(dest, *size);
   } else {
     res = dest;
   }
@@ -197,9 +197,9 @@ char *str_pool_get(size_t size)
   tmp = str_pool[str_poolp];
 
   if (str_pool_s[str_poolp] == 0) {
-    tmp = xmalloc(size);
+    tmp = (char*) xmalloc(size);
   } else if (str_pool_s[str_poolp] < size) {
-    tmp = xrealloc(tmp, size);
+    tmp = (char*) xrealloc(tmp, size);
   } else {
     return tmp;
   }
@@ -426,7 +426,7 @@ int ppdb_read_wpt(route_head *head, int isRoute)
   double altfeet;
   struct tm tm;
 
-  while (pdb_read_rec(file_in, NULL, NULL, NULL, (void *)&data) >= 0) {
+  while (pdb_read_rec(file_in, NULL, NULL, NULL, (void **)&data) >= 0) {
     waypoint *wpt_tmp = waypt_new();
     int line = 0;
     char *tmp = data;
@@ -654,7 +654,7 @@ static void ppdb_write_wpt(const waypoint *wpt)
   int len;
   struct tm tm;
 
-  buff = xcalloc(REC_SIZE, 1);
+  buff = (char *) xcalloc(REC_SIZE, 1);
 
   if (wpt->latitude < 0) {
     latdir = 'S';
@@ -752,7 +752,7 @@ static void ppdb_write(void)
    *	if (global_opts.objective != wptdata)	/ * Waypoint target do not need appinfo block * /
    *	{
    */
-  appinfo = xcalloc(1, sizeof(*appinfo));
+  appinfo = (ppdb_appdata_t *) xcalloc(1, sizeof(*appinfo));
   file_out->appinfo = (void *)appinfo;
   file_out->appinfo_len = PPDB_APPINFO_SIZE;
   /*	}

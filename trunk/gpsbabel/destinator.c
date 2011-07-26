@@ -334,7 +334,7 @@ destinator_read_trk(void)
     wpt->microseconds = ((int)time % 1000) * 1000;
 
     if (wpt->fix > 0) {
-      wpt->fix++;
+      wpt->fix = (fix_type)(wpt->fix + 1);
     }
 
     if (! trk) {

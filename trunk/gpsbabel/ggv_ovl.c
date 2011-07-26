@@ -324,7 +324,7 @@ route_disp_cb(const route_head* rte)
     waypoint* wpt = (waypoint*) elem;
 
     if (prev != NULL) {
-      draw_symbol_basics(OVL_SYMBOL_TRIANGLE, 1, 9 /* color */, prev);
+      draw_symbol_basics(OVL_SYMBOL_TRIANGLE, 1, (OVL_COLOR_TYP)9 /* color */, prev);
 
       gbfprintf(fout, "Width=12\n");
       gbfprintf(fout, "Height=8\n");

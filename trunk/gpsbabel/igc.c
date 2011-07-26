@@ -132,6 +132,14 @@ static void rd_deinit(void)
   gbfclose(file_in);
 }
 
+typedef enum { id, takeoff, start, turnpoint, finish, landing } state_t;
+#if __cplusplus
+inline state_t operator++(state_t& rs, int)
+{
+  return rs = (state_t)((int)rs + 1);
+}
+#endif
+
 /**
  * Handle pre- or post-flight task declarations.
  * A route is created for each set of waypoints in a task declaration.
@@ -153,8 +161,7 @@ static void igc_task_rec(const char* rec)
   char short_name[8];
   char tmp_str[MAXRECLEN];
   struct tm tm;
-
-  static enum { id, takeoff, start, turnpoint, finish, landing } state = id;
+  static state_t state = id;
 
   // First task record identifies the task to follow
   if (id == state) {
