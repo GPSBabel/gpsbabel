@@ -666,7 +666,7 @@ gpx_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
     tag_wpt(attr);
     break;
   case tt_wpt_link:
-    if (0 == strcmp(attr[0], "href")) {
+    if (attr[0] && attr[1] && 0 == strcmp(attr[0], "href")) {
       link_url = attr[1];
     }
     break;
