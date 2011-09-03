@@ -445,7 +445,7 @@ cet_cs_vec_t cet_cs_vec_utf8 = {
   NULL,	/* extra */
   0,	/* extras */
   NULL,
-  NULL
+  0
 };
 
 void
