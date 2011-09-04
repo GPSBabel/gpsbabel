@@ -23,8 +23,10 @@
 #include "babeldata.h"
 #include "format.h"
 #include "upgrade.h"
-#include "../config.h"
 #include "../gbversion.h"
+#if HAVE_CONFIG_H
+#include "../config.h"
+#endif
 
 #if HAVE_UNAME
 #include <sys/utsname.h>
