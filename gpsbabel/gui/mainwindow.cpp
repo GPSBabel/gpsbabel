@@ -250,7 +250,7 @@ void MainWindow::createLanguageMenu(void)
     langPath.append("/translations");
 //fprintf(stderr, "Looking in %s\n", qPrintable(langPath));
     QDir dir(langPath);
-    QStringList fileNames = dir.entryList(QStringList("*.qm"));
+    QStringList fileNames = dir.entryList(QStringList("GPSBabelFE*.qm"));
 
     for (int i = 0; i < fileNames.size(); ++i) {
         // get locale extracted by filename
