@@ -28,6 +28,8 @@
 #include "babeldata.h"
 #include "upgrade.h"
 
+#include <QTranslator>
+
 class MainWindow: public QMainWindow {
   Q_OBJECT
 
@@ -35,6 +37,7 @@ class MainWindow: public QMainWindow {
   public:
   MainWindow(QWidget* parent);
   ~MainWindow();
+
 
 private:
   Ui_MainWindow     ui;
@@ -46,9 +49,16 @@ private:
   AllFiltersData filterData;
   BabelData      bd;
   bool           fmtChgInterlock;
+  QTranslator     translator;     // translation for the GUI.
+  QTranslator     translatorCore; // translation for the core application.
+  QTranslator     translatorQt;   // translations for Qt.
+  QString         currLang;       // currently loaded language.
+  QString         langPath;       // Path of language files. This is always fixed to /languages. 
 
 private:
   void loadFormats();
+  void loadLanguage(const QString& rLanguage);
+  void createLanguageMenu();
   QString filterForFormat(int idx);
   QString ensureExtensionPresent(const QString &nanme, int idx);
   QString findBabelVersion();
@@ -89,6 +99,7 @@ private:
 
 protected:
   void closeEvent(QCloseEvent*);
+  void changeEvent(QEvent*);
 
  private slots:
   void aboutActionX();
@@ -116,6 +127,8 @@ protected:
   void visitWebsiteActionX();
   void resetFormatDefaults();
   void upgradeCheckActionX();
+  void slotLanguageChanged(QAction* action);
+
 
 };
 

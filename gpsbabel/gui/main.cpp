@@ -25,7 +25,6 @@
 #include <QFile>
 #include <QCoreApplication>
 #include <QLibraryInfo>
-#include <QTranslator>
 #include <QIcon>
 
 #include "mainwindow.h"
@@ -42,33 +41,6 @@ const char *pathSeparator = ":";
 #endif
 
 //------------------------------------------------------------------------
-static void installTranslation(QApplication *app, const QString &nm)
-{
-  QTranslator *xlator = new QTranslator();
-
-  xlator->load(QLibraryInfo::location(QLibraryInfo::TranslationsPath) + "/" + nm + QLocale::system().name());
-
-  xlator->load(nm + QLocale::system().name());
-
-#if defined (Q_OS_MAC)
-  CFURLRef pluginRef = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-  CFStringRef macPath = CFURLCopyFileSystemPath(pluginRef,
-                                           kCFURLPOSIXPathStyle);
-  QString pathPtr(CFStringGetCStringPtr(macPath, CFStringGetSystemEncoding()));
-  pathPtr += "/Contents/MacOS/lang/" + nm;
-  // pathPtr +=  QLocale::system().name().left(2);
-  pathPtr +=  QLocale::system().name();
-
-  xlator->load(pathPtr);
-
-#endif
-
-  app->installTranslator(xlator);
-}
-
-//------------------------------------------------------------------------
-
-//------------------------------------------------------------------------
 int main(int argc, char**argv)
 {
   QApplication *app;
@@ -81,10 +53,6 @@ int main(int argc, char**argv)
   strcpy(newPathEnv, newPath.toStdString().c_str());
   putenv(newPathEnv);
 
-  installTranslation(app, "qt_");
-  installTranslation(app, "gpsbabelfe_");
-  installTranslation(app, "gpsbabel_");
-
   QCoreApplication::setOrganizationName("GPSBabel");
   QCoreApplication::setOrganizationDomain("gpsbabel.org");
   QCoreApplication::setApplicationName("GPSBabel");
@@ -92,5 +60,6 @@ int main(int argc, char**argv)
   MainWindow mainWindow(0);
   mainWindow.show();
   app->exec();
+
   return 0;
 }

@@ -204,6 +204,9 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   ui.outputWindow->setReadOnly(true);
 
+  // Start up in the current system language.
+  loadLanguage(QLocale::system().name());
+  createLanguageMenu();
 
   //--- Restore from registry
   restoreSettings();
@@ -227,6 +230,106 @@ MainWindow::~MainWindow()
 {
   if (upgrade)
     delete upgrade;
+}
+//------------------------------------------------------------------------
+// Dynamic language switching courtesy of 
+// http://developer.qt.nokia.com/wiki/How_to_create_a_multi_language_application
+// We create the menu entries dynamically, dependant on the existing 
+// translations.
+void MainWindow::createLanguageMenu(void)
+{
+    QActionGroup* langGroup = new QActionGroup(ui.menuHelp);
+    langGroup->setExclusive(true);
+    connect(langGroup, SIGNAL(triggered(QAction *)), this, SLOT(slotLanguageChanged(QAction *)));
+
+    // format systems language
+    QString defaultLocale = QLocale::system().name();       // e.g. "de_DE"
+    defaultLocale.truncate(defaultLocale.lastIndexOf('_')); // e.g. "de"
+
+    langPath = QApplication::applicationDirPath();
+    langPath.append("/translations");
+//fprintf(stderr, "Looking in %s\n", qPrintable(langPath));
+    QDir dir(langPath);
+    QStringList fileNames = dir.entryList(QStringList("*.qm"));
+
+    for (int i = 0; i < fileNames.size(); ++i) {
+        // get locale extracted by filename
+        QString locale;
+        locale = fileNames[i];                  // "TranslationExample_de.qm"
+        locale.truncate(locale.lastIndexOf('.'));   // "TranslationExample_de"
+        locale.remove(0, locale.indexOf('_') + 1);   // "de"
+
+        QString lang = QLocale::languageToString(QLocale(locale).language());
+
+        QAction *action = new QAction(lang, this);
+        action->setCheckable(true);
+        action->setData(locale);
+
+        ui.menuHelp->addAction(action);
+        langGroup->addAction(action);
+
+        // set default translators and language checked
+        if (defaultLocale == locale) {
+            action->setChecked(true);
+        }
+    }
+}
+
+//------------------------------------------------------------------------
+// Called every time, when a menu entry of the language menu is called
+void MainWindow::slotLanguageChanged(QAction* action)
+{
+  if (0 != action) {
+    // load the language dependant on the action content.
+    loadLanguage(action->data().toString());
+  }
+}
+
+void switchTranslator(QTranslator& translator, const QString& filename)
+{
+  // remove the old translator
+  qApp->removeTranslator(&translator);
+
+  // load the new translator
+  if (translator.load(filename))
+    qApp->installTranslator(&translator);
+}
+
+void MainWindow::loadLanguage(const QString& rLanguage)
+{
+  if (currLang != rLanguage) {
+    currLang = rLanguage;
+    QLocale locale = QLocale(currLang);
+    QLocale::setDefault(locale);
+    QString languageName = QLocale::languageToString(locale.language());
+    switchTranslator(translator, QString("gpsbabelfe_%1.qm").arg(rLanguage));
+    switchTranslator(translatorCore, QString("gpsbabel__%1.qm").arg(rLanguage));
+    switchTranslator(translatorQt, QString("qt_%1.qm").arg(rLanguage));
+  }
+}
+
+void MainWindow::changeEvent(QEvent* event)
+{
+    if (0 != event) {
+        switch(event->type()) {
+        // This event is sent if a translator is loaded.
+        case QEvent::LanguageChange:
+            ui.retranslateUi(this);
+            break;
+        // This event is sent if the system language changes.
+        case QEvent::LocaleChange:
+            {
+                QString locale = QLocale::system().name();
+                locale.truncate(locale.lastIndexOf('_'));
+                loadLanguage(locale);
+            }
+           break;
+        default:
+           break;
+        }
+    }
+ 
+    QMainWindow::changeEvent(event);
 }
 
 //------------------------------------------------------------------------
@@ -535,7 +638,7 @@ void MainWindow::loadFormats()
 				"Check that the backend program \"gpsbabel\" is properly installed "
 				"and is in the current PATH\n\n"
 				"This program cannot continue."));
-    exit(1);
+   exit(1);
   }
   if (inputFileFormatIndices().size() == 0 ||
       inputDeviceFormatIndices().size() == 0 ||
@@ -954,7 +1057,7 @@ void MainWindow::closeActionX()
   bd.runCount++;
 
   QDateTime now = QDateTime::currentDateTime();
-  if((bd.runCount > 5) && (bd.donateSplashed.daysTo(now) > 30)) {
+  if ((bd.runCount > 5) && (bd.donateSplashed.daysTo(now) > 30)) {
     Donate donate(0);
     if (bd.donateSplashed.date() == QDate(2010,1,1))
       donate.showNever(false);
