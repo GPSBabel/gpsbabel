@@ -26,7 +26,10 @@ UI_DIR = tmp
 RESOURCES = app.qrc 
 RC_FILE = app.rc
 
-win32:TARGET=GPSBabelFE
+win32 { 
+  TARGET=GPSBabelFE
+  QMAKE_LFLAGS_RELEASE += -static-libgcc
+}
 unix:TARGET=gpsbabelfe-bin
 mac:TARGET=GPSBabelFE
 
