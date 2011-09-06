@@ -247,8 +247,7 @@ void MainWindow::createLanguageMenu(void)
     defaultLocale.truncate(defaultLocale.lastIndexOf('_')); // e.g. "de"
 
     langPath = QApplication::applicationDirPath();
-    langPath.append("/translations");
-//fprintf(stderr, "Looking in %s\n", qPrintable(langPath));
+    langPath.append("/translations/");
     QDir dir(langPath);
     QStringList fileNames = dir.entryList(QStringList("GPSBabelFE*.qm"));
 
@@ -302,9 +301,15 @@ void MainWindow::loadLanguage(const QString& rLanguage)
     QLocale locale = QLocale(currLang);
     QLocale::setDefault(locale);
     QString languageName = QLocale::languageToString(locale.language());
-    switchTranslator(translator, QString("gpsbabelfe_%1.qm").arg(rLanguage));
-    switchTranslator(translatorCore, QString("gpsbabel__%1.qm").arg(rLanguage));
-    switchTranslator(translatorQt, QString("qt_%1.qm").arg(rLanguage));
+    // It's baffling to me that this is required.  On Mac, we absolutely do not have to do this.
+#if defined (Q_OS_WIN)
+#define LANGUAGE_DIR "translations/"
+#else
+#define LANGUAGE_DIR ""
+#endif
+    switchTranslator(translator, QString(LANGUAGE_DIR "gpsbabelfe_%1.qm").arg(rLanguage));
+    switchTranslator(translatorCore, QString(LANGUAGE_DIR "gpsbabel__%1.qm").arg(rLanguage));
+    switchTranslator(translatorQt, QString(LANGUAGE_DIR " qt_%1.qm").arg(rLanguage));
   }
 }
 

@@ -13,11 +13,15 @@ mkdir qtdir\plugins\imageformats
 mkdir qtdir\mingw
 
 rem Basic Qt runtime DLLs
+if "%QTDIR%"=="" call \QtSDK\Desktop\Qt\4.7.4\mingw\bin\qtenv2.bat
 copy %QTDIR%\bin\QtCore4.dll qtdir\bin
 copy %QTDIR%\bin\QtGui4.dll qtdir\bin
 copy %QTDIR%\bin\QtWebkit4.dll qtdir\bin
 copy %QTDIR%\bin\QtXml4.dll qtdir\bin
 copy %QTDIR%\bin\QtNetwork4.dll qtdir\bin
+copy %QTDIR%\bin\mingwm10.dll qtdir\bin
+copy %QTDIR%\bin\libgcc_s_dw2-1.dll qtdir\bin
+copy %QTDIR%\bin\phonon4.dll qtdir\bin
 
 rem Image format plugins needed at runtime, but not debug verions
 xcopy %QTDIR%\plugins\imageformats qtdir\plugins\imageformats
@@ -33,22 +37,24 @@ copy %QTDIR%\translations\qt_*.qm qtdir\translations
 del qtdir\translations\qt_help*
 
 rem Generate the compiled translations
-lrelease gpsbabel_de.ts
-lrelease gpsbabel_es.ts
-lrelease gpsbabel_fr.ts
-lrelease gpsbabel_hu.ts
-lrelease gpsbabel_it.ts
-lrelease gpsbabelfe_de.ts
-lrelease gpsbabelfe_es.ts
-lrelease gpsbabelfe_fr.ts
-lrelease gpsbabelfe_hu.ts
-lrelease gpsbabelfe_it.ts
-lrelease gpsbabelfe_ru.ts
+rem lrelease gpsbabel_de.ts
+rem lrelease gpsbabel_es.ts
+rem lrelease gpsbabel_fr.ts
+rem lrelease gpsbabel_hu.ts
+rem lrelease gpsbabel_it.ts
+rem lrelease gpsbabelfe_de.ts
+rem lrelease gpsbabelfe_es.ts
+rem lrelease gpsbabelfe_fr.ts
+rem lrelease gpsbabelfe_hu.ts
+rem lrelease gpsbabelfe_it.ts
+rem lrelease gpsbabelfe_ru.ts
+rem for /f %%a in (dir /b *.ts) do lrelease %%a
 
+copy ..\msvc\Expat\libexpat.dll release
 
 "c:\Program Files\Inno Setup 5\ISCC.exe" setup.iss
 
 rem cleanup
 rd /q /s qtdir
-del gpsbabel_*.qm
-del gpsbabelfe_*.qm
+rem del gpsbabel_*.qm
+rem del gpsbabelfe_*.qm
