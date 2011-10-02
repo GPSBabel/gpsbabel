@@ -205,9 +205,8 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   ui.outputWindow->setReadOnly(true);
 
   langPath = QApplication::applicationDirPath();
-#if defined (Q_OS_WIN)
   langPath.append("/translations/");
-#endif
+
   // Start up in the current system language.
   loadLanguage(QLocale::system().name());
   createLanguageMenu();
