@@ -53,11 +53,12 @@ private:
   QTranslator     translatorCore; // translation for the core application.
   QTranslator     translatorQt;   // translations for Qt.
   QString         currLang;       // currently loaded language.
-  QString         langPath;       // Path of language files. This is always fixed to /languages. 
+  QString         langPath;       // Absolute path of language files. 
 
 private:
   void loadFormats();
   void loadLanguage(const QString& rLanguage);
+  void switchTranslator(QTranslator&, const QString&);
   void createLanguageMenu();
   QString filterForFormat(int idx);
   QString ensureExtensionPresent(const QString &nanme, int idx);
