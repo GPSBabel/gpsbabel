@@ -204,6 +204,10 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   ui.outputWindow->setReadOnly(true);
 
+  langPath = QApplication::applicationDirPath();
+#if defined (Q_OS_WIN)
+  langPath.append("/translations/");
+#endif
   // Start up in the current system language.
   loadLanguage(QLocale::system().name());
   createLanguageMenu();
@@ -246,8 +250,6 @@ void MainWindow::createLanguageMenu(void)
     QString defaultLocale = QLocale::system().name();       // e.g. "de_DE"
     defaultLocale.truncate(defaultLocale.lastIndexOf('_')); // e.g. "de"
 
-    langPath = QApplication::applicationDirPath();
-    langPath.append("/translations/");
     QDir dir(langPath);
     QStringList fileNames = dir.entryList(QStringList("GPSBabelFE*.qm"));
 
@@ -284,13 +286,15 @@ void MainWindow::slotLanguageChanged(QAction* action)
   }
 }
 
-void switchTranslator(QTranslator& translator, const QString& filename)
+void MainWindow::switchTranslator(QTranslator& translator, const QString& filename)
 {
   // remove the old translator
   qApp->removeTranslator(&translator);
 
+  QString full_filename(langPath + "/" + filename);
+
   // load the new translator
-  if (translator.load(filename))
+  if (translator.load(full_filename))
     qApp->installTranslator(&translator);
 }
 
@@ -301,15 +305,10 @@ void MainWindow::loadLanguage(const QString& rLanguage)
     QLocale locale = QLocale(currLang);
     QLocale::setDefault(locale);
     QString languageName = QLocale::languageToString(locale.language());
-    // It's baffling to me that this is required.  On Mac, we absolutely do not have to do this.
-#if defined (Q_OS_WIN)
-#define LANGUAGE_DIR "translations/"
-#else
-#define LANGUAGE_DIR ""
-#endif
-    switchTranslator(translator, QString(LANGUAGE_DIR "gpsbabelfe_%1.qm").arg(rLanguage));
-    switchTranslator(translatorCore, QString(LANGUAGE_DIR "gpsbabel__%1.qm").arg(rLanguage));
-    switchTranslator(translatorQt, QString(LANGUAGE_DIR " qt_%1.qm").arg(rLanguage));
+
+    switchTranslator(translator, QString("gpsbabelfe_%1.qm").arg(rLanguage));
+    switchTranslator(translatorCore, QString("gpsbabel__%1.qm").arg(rLanguage));
+    switchTranslator(translatorQt, QString(" qt_%1.qm").arg(rLanguage));
   }
 }
 
