@@ -987,10 +987,6 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindow</name>
     <message>
-        <source>MainWindow</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Input </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1277,6 +1273,10 @@ This program cannot continue.</source>
     </message>
     <message>
         <source>Make a Donation...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GPSBabel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
