@@ -37,12 +37,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: qtdir\bin\QtCore4.dll;		DestDir: "{app}"; Flags: ignoreversion
-Source: qtdir\bin\QtGui4.dll; 		DestDir: "{app}"; Flags: ignoreversion
-Source: qtdir\bin\QtWebkit4.dll; 	DestDir: "{app}"; Flags: ignoreversion
-Source: qtdir\bin\QtXml4.dll; 		DestDir: "{app}"; Flags: ignoreversion
-Source: qtdir\bin\QtNetwork4.dll; 	DestDir: "{app}"; Flags: ignoreversion
-Source: qtdir\mingw\mingwm10.dll;	DestDir: "{app}"; Flags: ignoreversion 
+; This isn't as wreckless as it seems; these directories are populated on a
+; controlled way by the batch file.
+Source: qtdir\bin\*.dll;		DestDir: "{app}"; Flags: ignoreversion
 Source: qtdir\plugins\*; 		DestDir: "{app}\plugins"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 Source: gmapbase.html; 			DestDir: "{app}"; Flags: ignoreversion
@@ -51,36 +48,22 @@ Source: qt.conf;       			DestDir: "{app}"; Flags: ignoreversion
 Source: release\gpsbabelfe.exe; 	DestDir: "{app}"; Flags: ignoreversion
 Source: release\libexpat.dll;   	DestDir: "{app}"; Flags: ignoreversion
 Source: release\gpsbabel.exe;   	DestDir: "{app}"; Flags: ignoreversion
-Source: release\help\*;           	DestDir: "{app}\help"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Source: release\help\*;           	DestDir: "{app}\help"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; Translation strings extracted from source code.  Include it in the dist
 ; so that users can translate if they want to. 
-Source: gpsbabel_de.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabel_es.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabel_fr.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabel_hu.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabel_it.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabelfe_de.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabelfe_es.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabelfe_fr.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabelfe_hu.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabelfe_it.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabelfe_ru.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
+; Source: gpsbabel_*.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
+; Source: gpsbabelfe_*.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
 
 ; Compiled translation strings that are used at runtime.
-; Only Spanish is adequately translated for now.
-Source: gpsbabel_es.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabelfe_es.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-
-; German is usable
-Source: gpsbabel_de.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabelfe_de.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion 
+; Source: gpsbabel_*.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion 
+Source: gpsbabelfe*.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion 
 
 ; Now translations from Qt's own UI stuff.
 Source: qtdir\translations\*;  		DestDir: "{app}\translations"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; Miscellaneous
-Source: COPYING;			DestDir: {app}; Flags: ignoreversion
+Source: COPYING.txt;			DestDir: {app}; Flags: ignoreversion
 ; Source: AUTHORS;			DestDir: {app}; Flags: ignoreversion
 ; Source: README.contrib;			DestDir: {app}; Flags: ignoreversion
 ; Source: README.gui;			DestDir: {app}; Flags: ignoreversion

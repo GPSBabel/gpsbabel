@@ -1745,13 +1745,13 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 DOCVERSION=`echo $PACKAGE_VERSION`
 
 # 1.4.1 is a tiny tweak to 1.4.0.  Use that doc.
-DOCVERSION=1.4.2
+DOCVERSION=1.4.3
 
 
 # Increase GBBUILD for a new release
-GBBUILD=22
+GBBUILD=23
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
-# PACKAGE_RELEASE="-beta20100518"
+PACKAGE_RELEASE="-beta20111002"
 # DOCVERSION=development
 
 cat >>confdefs.h <<_ACEOF

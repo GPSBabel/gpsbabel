@@ -5,8 +5,8 @@ case `uname -r` in
   *)   XFLAGS="-mmacosx-version-min=10.4" ;; # 10.5/Leopard
 esac 
 SRC=.
-CFLAGS="$XFLAGS  -O  -arch i386 -arch ppc" \
-  LDFLAGS="$XFLAGS -arch i386 -arch ppc"   ${SRC}/configure \
+CFLAGS="$XFLAGS  -O  -arch i386 " \
+  LDFLAGS="$XFLAGS -arch i386 "   ${SRC}/configure \
  --with-libexpat=${SRC}/mac/lib/libexpat.a \
  --with-expathdr=${SRC}/mac/include
 
