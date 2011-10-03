@@ -16,7 +16,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{1B8FE958-A304-4902-BF7A-4E2F0F5B7017}
 AppName=GPSBabel
-AppVerName=GPSBabel 1.4.3-beta20110903
+AppVerName=GPSBabel 1.4.2-beta20111002
 AppPublisher=GPSBabel
 AppPublisherURL=http://www.gpsbabel.org
 AppSupportURL=http://www.gpsbabel.org
@@ -24,7 +24,7 @@ AppUpdatesURL=http://www.gpsbabel.org
 DefaultDirName={pf}\GPSBabel
 DefaultGroupName=GPSBabel
 OutputDir=release
-OutputBaseFilename=GPSBabel-1.4.3-beta20110903-Setup
+OutputBaseFilename=GPSBabel-1.4.2-beta20111002-Setup
 SetupIconFile=images\babel2.ico
 Compression=lzma
 SolidCompression=yes
@@ -39,7 +39,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 ; This isn't as wreckless as it seems; these directories are populated on a
 ; controlled way by the batch file.
-Source: qtdir\bin\*.dll;	DestDir: "{app}"; Flags: ignoreversion 
+Source: qtdir\bin\*.dll;		DestDir: "{app}"; Flags: ignoreversion
 Source: qtdir\plugins\*; 		DestDir: "{app}\plugins"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 Source: gmapbase.html; 			DestDir: "{app}"; Flags: ignoreversion

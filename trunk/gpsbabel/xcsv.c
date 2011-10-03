@@ -602,8 +602,10 @@ xcsv_wr_init(const char *fname)
 {
   /* if we don't have an internal style defined, we need to
    * read it from a user-supplied style file, or die trying.
+   * 8/19 - add test for styleopt to ensure that a write of a style
+   * after a read of a style works.
    */
-  if (xcsv_file.is_internal) {
+  if (xcsv_file.is_internal && !styleopt) {
     xcsv_read_internal_style(intstylebuf);
   } else {
 

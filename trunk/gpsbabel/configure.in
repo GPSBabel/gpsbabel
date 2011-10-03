@@ -7,13 +7,13 @@ AC_INIT(GPSBabel, 1.4.2, BUG-REPORT-ADDRESS)
 DOCVERSION=`echo $PACKAGE_VERSION`
 
 # 1.4.1 is a tiny tweak to 1.4.0.  Use that doc.
-DOCVERSION=1.4.2
+DOCVERSION=1.4.3
 
 
 # Increase GBBUILD for a new release
-GBBUILD=22
+GBBUILD=23
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
-# PACKAGE_RELEASE="-beta20100518"
+PACKAGE_RELEASE="-beta20111002"
 # DOCVERSION=development
 AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, "$PACKAGE_RELEASE", [Define to the release name of this package.])
 AC_SUBST(PACKAGE_RELEASE)

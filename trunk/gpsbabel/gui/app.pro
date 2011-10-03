@@ -6,7 +6,7 @@ CONFIG += qt release
 
 # For Mac, build Universal binary.   Ignored on other OSes.
 # QMAKE_MAC_SDK=/Developer/SDKs/MacOSX10.4u.sdk
-CONFIG += x86 ppc
+CONFIG -= x86 _64
 
 ICON = images/appicon.icns
 

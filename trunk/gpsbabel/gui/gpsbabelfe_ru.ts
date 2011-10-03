@@ -658,23 +658,23 @@ p, li { white-space: pre-wrap; }
         <translation>Сделать пожертвование...</translation>
     </message>
     <message>
+        <location filename="mainwindow.cpp" line="379"/>
         <location filename="mainwindow.cpp" line="380"/>
-        <location filename="mainwindow.cpp" line="381"/>
         <source>default</source>
         <translation>по умолчанию</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="554"/>
+        <location filename="mainwindow.cpp" line="553"/>
         <source>Select one or more input files</source>
         <translation>Выберите один или несколько файлов</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="581"/>
+        <location filename="mainwindow.cpp" line="580"/>
         <source>Output File Name</source>
         <translation>Имя выходного файла</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="641"/>
+        <location filename="mainwindow.cpp" line="640"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -683,7 +683,7 @@ This program cannot continue.</source>
 Выполнение программы не может быть продолжено.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="652"/>
+        <location filename="mainwindow.cpp" line="651"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -692,114 +692,114 @@ This program cannot continue.</source>
 Выполнение программы не может быть продолжено.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="674"/>
+        <location filename="mainwindow.cpp" line="673"/>
         <source>Input and output formats do not support %1</source>
         <translation>Входной и выходной форматы не поддерживают %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="677"/>
+        <location filename="mainwindow.cpp" line="676"/>
         <source>Input does not support %1; output format supports %2</source>
         <translation>Входной формат не поддерживает %1; выходной формат поддерживает %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="680"/>
+        <location filename="mainwindow.cpp" line="679"/>
         <source>Input format supports %1; output format does not support %2</source>
         <translation>Входной формат поддерживает %1; выходной формат не поддерживаетt %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="683"/>
+        <location filename="mainwindow.cpp" line="682"/>
         <source>Both input and output formats support %1</source>
         <translation>Входной и выходной формат поддерживают %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="704"/>
+        <location filename="mainwindow.cpp" line="703"/>
         <source>waypoints</source>
         <translation>маршрутные точки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="705"/>
+        <location filename="mainwindow.cpp" line="704"/>
         <source>tracks</source>
         <translation>треки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="706"/>
+        <location filename="mainwindow.cpp" line="705"/>
         <source>routes</source>
         <translation>маршруты</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="796"/>
+        <location filename="mainwindow.cpp" line="795"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>Нет входных параметров для формата &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="803"/>
-        <location filename="mainwindow.cpp" line="823"/>
+        <location filename="mainwindow.cpp" line="802"/>
+        <location filename="mainwindow.cpp" line="822"/>
         <source>Options for %1</source>
         <translation>Параметры %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="816"/>
+        <location filename="mainwindow.cpp" line="815"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>Нет выходных параметров для формата &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="837"/>
+        <location filename="mainwindow.cpp" line="836"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Не выбрано преобразование маршрутных точек/маршрутов/треков</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="856"/>
+        <location filename="mainwindow.cpp" line="855"/>
         <source>No input file specified</source>
         <translation>Не выбран входной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="863"/>
+        <location filename="mainwindow.cpp" line="862"/>
         <source>No valid output specified</source>
         <translation>Не выбран выходной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="868"/>
+        <location filename="mainwindow.cpp" line="867"/>
         <source>No output file specified</source>
         <translation>Не выбран выходной файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="884"/>
+        <location filename="mainwindow.cpp" line="883"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation>Процесс &quot;%1&quot; не запустился</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="898"/>
+        <location filename="mainwindow.cpp" line="897"/>
         <source>Process exited unsucessfully with code %1</source>
         <translation>Процесс завершился неудачей с кодом %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1041"/>
+        <location filename="mainwindow.cpp" line="1040"/>
         <source>Translation successful</source>
         <translation>Конвертация выполнена</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1051"/>
+        <location filename="mainwindow.cpp" line="1050"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Ошибка запуска gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1164"/>
+        <location filename="mainwindow.cpp" line="1163"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>Вы действительно желаете сбросить все параметры формата в значения по умолчанию?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1188"/>
+        <location filename="mainwindow.cpp" line="1187"/>
         <source>About %1</source>
         <translation>О %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1231"/>
+        <location filename="mainwindow.cpp" line="1230"/>
         <source>One or more data filters are active</source>
         <translation>Один или более фильтров данных активны</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1233"/>
+        <location filename="mainwindow.cpp" line="1232"/>
         <source>No data filters are active</source>
         <translation>Фильтры данных не активны</translation>
     </message>
