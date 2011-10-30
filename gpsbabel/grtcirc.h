@@ -26,6 +26,12 @@ double gcdist(double lat1, double lon1, double lat2, double lon2);
 double heading(double lat1, double lon1, double lat2, double lon2);
 double heading_true_degrees(double lat1, double lon1, double lat2, double lon2);
 
+double linedistprj(double lat1, double lon1,
+                   double lat2, double lon2,
+                   double lat3, double lon3,
+                   double* prjlat, double* prjlon,
+                   double* frac );
+
 double linedist(double lat1, double lon1,
                 double lat2, double lon2,
                 double lat3, double lon3);

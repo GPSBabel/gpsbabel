@@ -1,0 +1,5 @@
+<para>
+When this option is specified the routes contains the vertices of the arc.
+If there are several routes then it is assumed that there is a gap between
+each of them.
+</para>

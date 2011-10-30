@@ -1,7 +1,4 @@
 <para>
-This option is required.
-</para>
-<para>
 This option specifies the name of the file containing the arc to use for
 filtering.  The format of the file is as described above.
 </para>

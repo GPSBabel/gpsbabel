@@ -1,0 +1,17 @@
+#
+# arc-project filter tests
+#
+
+rm -f ${TMPDIR}/arc-project*
+
+# Test 1: rte & trk options
+gpsbabel -i gpx -f ${REFERENCE}/arc-project.gpx -x arc,rte,exclude,distance=0.1K -x arc,trk,exclude,distance=0.1K -o gpx -F ${TMPDIR}/arc-project1.gpx
+compare ${TMPDIR}/arc-project1.gpx ${REFERENCE}/arc-project1.gpx
+
+# Test 2: rte, project & points options
+gpsbabel -i gpx -f ${REFERENCE}/arc-project.gpx -x arc,rte,project,points,distance=0.1K -o gpx -F ${TMPDIR}/arc-project2.gpx
+compare ${TMPDIR}/arc-project2.gpx ${REFERENCE}/arc-project2.gpx
+
+# Test 3: trk & project options
+gpsbabel -i gpx -f ${REFERENCE}/arc-project.gpx -x arc,trk,project,distance=0.1K -o gpx -F ${TMPDIR}/arc-project3.gpx
+compare ${TMPDIR}/arc-project3.gpx ${REFERENCE}/arc-project3.gpx
