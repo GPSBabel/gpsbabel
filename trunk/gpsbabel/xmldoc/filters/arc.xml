@@ -1,12 +1,13 @@
 <para> 
 This filter keeps or removes waypoints based on their proximity to an arc, 
 which is a series of connected line segments similar to a route or a track 
-but without any associated data other than the coordinates.
+but without any associated data other than the coordinates.  Optionally, it
+can move each non-deleted waypoint over the closest segment of the arc.
 </para>
 
 <para> 
-The arc is defined in a file whose name must be provided with the 
-<option>file</option>.  That file contains pairs of coordinates for the 
+The arc may defined in a file whose name must be provided with the 
+<option>file</option>, or the tracks or routes that have already been read.  That file contains pairs of coordinates for the 
 vertices of the arc, one coordinate pair per line.  Comments may be
 included by preceding them with a '#' character.  An arc file looks 
 something like this sample:

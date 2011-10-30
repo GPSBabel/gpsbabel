@@ -48,6 +48,9 @@
 const int BabelData::noType = -1;
 const int BabelData::fileType = 0;
 const int BabelData::deviceType = 1;
+
+#define FAKE_LANGUAGE_MENU 0
+
 //------------------------------------------------------------------------
 QString MainWindow::findBabelVersion()
 {
@@ -209,7 +212,9 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 
   // Start up in the current system language.
   loadLanguage(QLocale::system().name());
+#if FAKE_LANGUAGE_MENU
   createLanguageMenu();
+#endif
 
   //--- Restore from registry
   restoreSettings();
@@ -239,6 +244,7 @@ MainWindow::~MainWindow()
 // http://developer.qt.nokia.com/wiki/How_to_create_a_multi_language_application
 // We create the menu entries dynamically, dependant on the existing 
 // translations.
+#if FAKE_LANGUAGE_MENU
 void MainWindow::createLanguageMenu(void)
 {
     QActionGroup* langGroup = new QActionGroup(ui.menuHelp);
@@ -274,6 +280,7 @@ void MainWindow::createLanguageMenu(void)
         }
     }
 }
+#endif //  FAKE_LANGUAGE_MENU
 
 //------------------------------------------------------------------------
 // Called every time, when a menu entry of the language menu is called

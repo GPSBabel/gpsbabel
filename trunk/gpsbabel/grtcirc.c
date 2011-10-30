@@ -125,10 +125,11 @@ double heading_true_degrees(double lat1, double lon1, double lat2, double lon2)
   return h;
 }
 
-
-double linedist(double lat1, double lon1,
-                double lat2, double lon2,
-                double lat3, double lon3)
+double linedistprj(double lat1, double lon1,
+                   double lat2, double lon2,
+                   double lat3, double lon3,
+                   double* prjlat, double* prjlon,
+                   double* frac)
 {
 
   static double _lat1 = -9999;
@@ -152,6 +153,10 @@ double linedist(double lat1, double lon1,
   double dot;
 
   int newpoints;
+
+  *prjlat = lat1;
+  *prjlon = lon1;
+  *frac = 0;
 
   /* degrees to radians */
   lat1 = RAD(lat1);
@@ -234,6 +239,15 @@ double linedist(double lat1, double lon1,
          * atan2 would be overkill because lp and fabs(dot) are both
          * known to be positive. */
 
+        *prjlat = DEG(asin(yp));
+        if(xp == 0 && zp == 0) {
+          *prjlon = 0;
+        }
+        else {
+          *prjlon = DEG(atan2(zp, xp));
+        }
+        *frac = d1/(d1 + d2);
+
         return atan(fabs(dot)/lp);
       }
 
@@ -262,6 +276,9 @@ double linedist(double lat1, double lon1,
       if (fabs(d1) < fabs(d2)) {
         return gcdist(lat1,lon1,lat3,lon3);
       } else {
+        *prjlat = DEG(lat2);
+        *prjlon = DEG(lon2);
+        *frac = 1.0;
         return gcdist(lat2,lon2,lat3,lon3);
       }
     } else {
@@ -278,6 +295,15 @@ double linedist(double lat1, double lon1,
     }
   }
   return 0;
+}
+
+
+double linedist(double lat1, double lon1,
+                double lat2, double lon2,
+                double lat3, double lon3)
+{
+  double dummy;
+  return linedistprj(lat1, lon1, lat2, lon2, lat3, lon3, &dummy, &dummy, &dummy);
 }
 
 /*

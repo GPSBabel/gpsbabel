@@ -1,0 +1,5 @@
+<para>
+When this option is specified the tracks contains the vertices of the arc.
+If there are several tracks then it is assumed that there is a gap between
+each of them.
+</para>
