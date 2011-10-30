@@ -1454,7 +1454,6 @@ fprint_tag_and_attrs(const char* prefix, const char* suffix, xml_tag* tag)
 static void
 fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
 {
-  char* tmp_ent;
   while (tag) {
     if (!tag->cdata && !tag->child) {
       fprint_tag_and_attrs("<", " />", tag);
@@ -1462,6 +1461,7 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
       fprint_tag_and_attrs("<", ">", tag);
 
       if (tag->cdata) {
+        char* tmp_ent;
         tmp_ent = xml_entitize(tag->cdata);
         gbfprintf(ofd, "%s", tmp_ent);
         xfree(tmp_ent);
@@ -1477,9 +1477,16 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
       gbfprintf(ofd, "</%s>\n", tag->tagname);
     }
     if (tag->parentcdata) {
-      tmp_ent = xml_entitize(tag->parentcdata);
+      // retain whitespacing, but nuke leading NL as the above will add a trailing.
+
+      char* otmp_ent, *tmp_ent = NULL;
+      otmp_ent = xml_entitize(tag->parentcdata);
+      if (otmp_ent[0] == '\n')
+        tmp_ent = otmp_ent+1;
+      else
+        tmp_ent = otmp_ent;
       gbfprintf(ofd, "%s", tmp_ent);
-      xfree(tmp_ent);
+      xfree(otmp_ent);
     }
     tag = tag->sibling;
   }
