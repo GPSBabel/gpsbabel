@@ -16,3 +16,11 @@
 <para>
 	Use the m241 format to connect with the unit serially and m241-bin to read files saved by the device.
 </para>
+<para>
+  This module is also reported to handle the Holux M1000c.
+</para>
+<para>
+  Most of the loggers cannot receive bluetooth commands, they can only send
+  data. Since GPSBabel needs to send commands to the GPS device it won't
+  work. Download the data using the USB cable instead.
+</para>

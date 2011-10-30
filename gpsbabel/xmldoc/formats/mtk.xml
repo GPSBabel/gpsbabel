@@ -88,4 +88,8 @@ If you can confirm success with others, please share with us.
  For info about the used log format, see
   <ulink url="http://spreadsheets.google.com/pub?key=pyCLH-0TdNe-5N-5tBokuOA&amp;gid=5">MTK binary format</ulink>
 </para>
-
+<para>
+Most of the loggers cannot receive bluetooth commands; they can only send 
+  data. Since GPSBabel needs to send commands to the GPS device it won't
+  work. Download the data using the USB cable instead.
+</para>
