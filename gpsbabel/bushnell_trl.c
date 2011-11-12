@@ -49,7 +49,7 @@ rd_init(const char* fname)
 static void
 rd_deinit(void)
 {
-  gbfclose(file_out);
+  gbfclose(file_in);
 }
 
 static void
