@@ -95,6 +95,7 @@ gpl_read(void)
     // in time.  The only thing I see "special" about those
     // trackpoints is that these fields are zeroed.  Toss them.
     if ((wpt_tmp->speed == 0.0) && (wpt_tmp->course == 0.0)) {
+      waypt_free(wpt_tmp);
       continue;
     }
     track_add_wpt(track_head, wpt_tmp);

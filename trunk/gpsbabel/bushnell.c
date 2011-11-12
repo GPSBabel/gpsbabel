@@ -245,6 +245,7 @@ bushnell_write_one(const waypoint* wpt)
   gbfwrite(padding, sizeof(padding), 1, file_out);
 
   xfree(fname);
+  xfree(ident);
   gbfclose(file_out);
 }
 
