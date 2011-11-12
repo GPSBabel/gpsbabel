@@ -270,6 +270,8 @@ typedef struct {
   unsigned int terr:6; /* (likewise) */
   status_type is_archived:2;
   status_type is_available:2;
+  status_type is_memberonly:2;
+  status_type has_customcoords:2;
   time_t exported;
   time_t last_found;
   char* placer; /* Placer name */
