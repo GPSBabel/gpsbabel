@@ -52,6 +52,7 @@ static int trackdata;
 static int trackdirection;
 static int max_position_points;
 static int line_width;
+static int html_encrypt;
 
 static int indent_level;
 
@@ -440,6 +441,10 @@ kml_write_xml(int indent, const char* fmt, ...)
 
   if (indent < 0) {
     indent_level--;
+  }
+
+  if (indent_level < 0) {
+    fatal("Indention nesting problem in KML writer.");
   }
 
   if (fmt[1] != '!' && do_indentation) {
@@ -997,24 +1002,147 @@ static void kml_output_tailer(const route_head* header)
 /*
  * Completely different writer for geocaches.
  */
+
+// Text that's common to all tabs.
 static
-void kml_gc_make_ballonstyle(void)
+void kml_gc_all_tabs_text(void)
 {
-  // BalloonStyle for Geocaches.
-  kml_write_xml(1, "<Style id=\"geocache\"><BalloonStyle><text><![CDATA[\n");
-  kml_write_xml(0, "<a href=\"http://www.geocaching.com\"><img src=\"http://www.geocaching.com/images/nav/logo_sub.gif\"> </a>\n");
+  // kml_write_xml(0, "<a href=\"http://www.geocaching.com\"><img style=\"float: left; padding: 10px\" src=\"http://www.geocaching.com/images/nav/logo_sub.gif\" /> </a>\n");
+  kml_write_xml(0, "<img align=\"right\" src=\"$[gc_icon]\" />\n");
+  kml_write_xml(0, "<a href=\"http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]\"><b>$[gc_num]</b></a> <b>$[gc_name]</b> \n");
+  kml_write_xml(0, "a $[gc_type],<br />on $[gc_placed] by <a href=\"http://www.geocaching.com/profile?id=$[gc_placer_id\">$[gc_placer]</a><br/>\n");
+  kml_write_xml(0, "Difficulty: <img src=\"http://www.geocaching.com/images/stars/$[gc_diff_stars].gif\" alt=\"$[gc_diff]\" width=\"61\" height=\"13\" />\n");
+  kml_write_xml(0, "&nbsp;Terrain: <img src=\"http://www.geocaching.com/images/stars/$[gc_terr_stars].gif\" alt=\"$[gc_terr]\" width=\"61\" height=\"13\" /><br />\n");
+  kml_write_xml(0, "Size: <img src=\"http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif\" width=\"45\" height=\"12\" alt=\"$[gc_cont_icon]\"/>&nbsp;($[gc_cont_icon])<br />\n");
 
-  kml_write_xml(0, "<p><a href=\"http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]\"><b>$[gc_num]</b></a> <b>$[gc_name]</b> \n");
-  kml_write_xml(0, "a $[gc_type], by <b>$[gc_placer]</b> [<a href=\"http://www.geocaching.com/profile?id=$[gc_placer_id]\">profile</a>]<br/>\n");
-  kml_write_xml(0, "(ratings out of 5 stars. 1 is easiest, 5 is hardest)<br/>\n");
-  kml_write_xml(0, "Difficulty: <img src=\"http://www.geocaching.com/images/stars/$[gc_diff_stars].gif\" alt=\"$[gc_diff]\" width=\"61\" height=\"13\">\n");
-  kml_write_xml(0, "&nbsp;Terrain: <img src=\"http://www.geocaching.com/images/stars/$[gc_terr_stars].gif\" alt=\"$[gc_terr]\" width=\"61\" height=\"13\"><br />\n");
-  kml_write_xml(0, "Size: <img src=\"http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif\" width=\"45\" height=\"12\">&nbsp;($[gc_cont_icon])<br />\n");
+}
 
-  kml_write_xml(0, "$[gc_issues]\n");
+const char* map_templates[] = {
+  "<a href=\"http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]\" target=\"_blank\">Google Maps</a>",
+  "<a href=\"http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]\" target=\"_blank\">Google Street View</a>",
+  "<a href=\"http://www.geocaching.com/map/default.aspx?lat=$[gc_lat]&lng=$[gc_lon]\" target=\"_blank\">Geocaching.com Google Map</a>",
+  "<a href=\"http://www.mytopo.com/maps.cfm?lat=$[gc_lat]&lon=$[gc_lon]&pid=groundspeak\" target=\"_blank\">MyTopo Maps</a>",
+  "<a href=\"http://www.mapquest.com/maps/map.adp?searchtype=address&formtype=latlong&latlongtype=decimal&latitude=$[gc_lat]&longitude=$[gc_lon]&zoom=10\" target=\"_blank\">MapQuest</a>",
+  "<a href=\"http://www.bing.com/maps/default.aspx?v=2&sp=point.$[gc_lat]$[gc_lon]\" target=\"_blank\">Bing Maps</a>",
+  "<a href=\"http://maps.yahoo.com/maps_result?lat=$[gc_lat]&lon=$[gc_lon]\" target=\"_blank\">Yahoo Maps</a>",
+  "<a href=\"http://maps.randmcnally.com/#s=screen&lat=$[gc_lat]&lon=$[gc_lon]&zoom=13&loc1=$[gc_lat],$[gc_lon]\" target=\"_blank\">Rand McNally</a>",
+  "<a href=\"http://msrmaps.com/image.aspx?Lon=$[gc_lon]&Lat=$[gc_lat]&w=1&ref=G|$[gc_lon],$[gc_lat]\" target=\"_blank\">MSR Maps (Formerly Terraserver)</a>",
+  "<a href=\"http://www.opencyclemap.org/?zoom=12&lat=$[gc_lat]&lon=$[gc_lon]\" target=\"_blank\">Open Cycle Maps</a>",
+  "<a href=\"http://www.openstreetmap.org/?mlat=$[gc_lat]&mlon=$[gc_lon]&zoom=12\" target=\"_blank\">Open Street Maps</a>",
+  NULL
+};
+
+
+static
+void kml_gc_make_balloonstyletext(void)
+{
+
+  kml_write_xml(1, "<BalloonStyle><text><![CDATA[\n");
+
+  kml_write_xml(0, "<!DOCTYPE html>\n");
+  kml_write_xml(0, "<html>\n");
+  kml_write_xml(0, "<head>\n");
+  kml_write_xml(0, "<link href=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css\" rel=\"stylesheet\" type=\"text/css\"/>\n");
+  kml_write_xml(0, "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js\"></script>\n");
+  kml_write_xml(0, "<script src=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js\"></script>\n");
+  kml_write_xml(0, "<script>\n");
+  kml_write_xml(1, "$(document).ready(function() {\n");
+  kml_write_xml(0, "$(\"#tabs\").tabs();\n");
+  kml_write_xml(-1, "});\n");
+  kml_write_xml(0, "</script>\n");
+  kml_write_xml(0, "</head>\n");
+
+  kml_write_xml(0, "<body>\n");
+  kml_write_xml(0, "<div id=\"tabs\">\n");
+
+  // The tabbed menu bar.  Oddly, it has to be on top.
+  kml_write_xml(1, "<ul>\n");
+  kml_write_xml(0, "<li><a href=\"#fragment-1\"><span>Description</span></a></li>\n");
+  kml_write_xml(0, "<li><a href=\"#fragment-2\"><span>Logs</span></a></li>\n");
+  kml_write_xml(0, "<li><a href=\"#fragment-3\"><span>Extras</span></a></li>\n");
+  kml_write_xml(-1, "</ul>\n");
+  kml_write_xml(0, "\n");
+
+  kml_write_xml(1, "<div id=\"fragment-1\">\n");
+  kml_gc_all_tabs_text();
+  kml_write_xml(0, "<p />$[gc_issues]\n");
   kml_write_xml(0, "$[gc_short_desc]\n");
   kml_write_xml(0, "$[gc_long_desc]\n");
-  kml_write_xml(-1, "]]></text></BalloonStyle></Style>\n");
+  kml_write_xml(-1, "</div>\n");
+
+  kml_write_xml(1, "<div id=\"fragment-2\">\n");
+  kml_gc_all_tabs_text();
+  kml_write_xml(0, "$[gc_logs]\n");
+  kml_write_xml(-1, "</div>\n");
+
+  // "Extra" stuff tab.
+  kml_write_xml(1, "<div id=\"fragment-3\">\n");
+  kml_gc_all_tabs_text();
+  kml_write_xml(0, "<h1>Extra Maps</h1>\n");
+
+  const char** tp;
+  kml_write_xml(1, "<ul>\n");
+  // Fortunately, all the mappy map URLs take lat/longs in the URLs, so
+  // the substition is easy.
+  for (tp = map_templates; *tp; tp++) {
+    kml_write_xml(0, "<li>\n");
+    kml_write_xml(0, *tp);
+    kml_write_xml(0, "</li>\n");
+  }
+  kml_write_xml(-1, "<ul>\n");
+
+  kml_write_xml(-1, "</div>\n"); //  fragment-3.
+
+  kml_write_xml(0, "</div>\n"); // tabs.
+  kml_write_xml(0, "</body>\n");
+  kml_write_xml(0, "</html>\n");
+
+  kml_write_xml(-1, "]]></text></BalloonStyle>\n");
+}
+
+static
+void kml_gc_make_balloonstyle(void)
+{
+  // For Normal style of gecoaches, scale of label is set to zero
+  // to make the label invisible.  On hover (highlight?) enlarge
+  // the icon sightly and set the scale of the label to 1 so the
+  // label pops.
+  // It's unfortunate that we have to repeat so much of the template
+  // but KML doesn't have a cascading style-like substance.
+  //
+  kml_write_xml(1, "<Style id=\"geocache_n\">\n");
+  kml_write_xml(1, "<IconStyle>\n");
+  kml_write_xml(0, "<scale>.6</scale>\n");
+  kml_write_xml(-1, "</IconStyle>\n");
+  kml_write_xml(1, "<LabelStyle>\n");
+  kml_write_xml(0, "<scale>0</scale>\n");
+  kml_write_xml(-1, "</LabelStyle>\n");
+  kml_gc_make_balloonstyletext();
+  kml_write_xml(-1, "</Style>\n");
+
+  kml_write_xml(1, "<Style id=\"geocache_h\">\n");
+  kml_write_xml(1, "<IconStyle>\n");
+  kml_write_xml(0, "<scale>.8</scale>\n");
+  kml_write_xml(-1, "</IconStyle>\n");
+  kml_write_xml(1, "<LabelStyle>\n");
+  kml_write_xml(0, "<scale>1</scale>\n");
+  kml_write_xml(-1, "</LabelStyle>\n");
+  kml_gc_make_balloonstyletext();
+  kml_write_xml(-1, "</Style>\n");
+
+  kml_write_xml(1, "<StyleMap id=\"geocache\">\n");
+
+  kml_write_xml(1, "<Pair>\n");
+  kml_write_xml(0, "<key>normal</key>\n");
+  kml_write_xml(0, "<styleUrl>#geocache_n</styleUrl>\n");
+  kml_write_xml(-1, "</Pair>\n");
+
+  kml_write_xml(1, "<Pair>\n");
+  kml_write_xml(0, "<key>highlight</key>\n");
+  kml_write_xml(0, "<styleUrl>#geocache_h</styleUrl>\n");
+  kml_write_xml(-1, "</Pair>\n");
+
+  kml_write_xml(-1, "</StyleMap>\n");
 }
 
 static
@@ -1115,6 +1243,11 @@ kml_lookup_gc_container(const waypoint* waypointp)
 char* kml_gc_mkstar(int rating)
 {
   static char tmp[40];
+
+  if (rating < 0 || rating > 50 || rating % 5 != 0) {
+    fatal("Bogus difficulty or terrain rating.");
+  }
+
   if (0 == rating % 10) {
     snprintf(tmp, sizeof(tmp), "stars%d", rating / 10);
   } else {
@@ -1124,9 +1257,88 @@ char* kml_gc_mkstar(int rating)
   return tmp;
 }
 
+// Returns an allocated buffer that must be freed.
+char* kml_geocache_get_logs(const waypoint* wpt)
+{
+  char* r = xstrdup("");
+
+  fs_xml* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
+  if (!fs_gpx) {
+    return r;
+  }
+
+  xml_tag* root = fs_gpx->tag;
+  xml_tag* curlog = NULL;
+  xml_tag* logpart = NULL;
+  curlog = xml_findfirst(root, "groundspeak:log");
+  while (curlog) {
+    time_t logtime = 0;
+    struct tm* logtm = NULL;
+
+    // Unless we have a broken GPX input, these logparts
+    // branches will always be taken.
+    logpart = xml_findfirst(curlog, "groundspeak:type");
+    if (logpart) {
+      r = xstrappend(r, "<p><b>");
+      r = xstrappend(r, logpart->cdata);
+      r = xstrappend(r, "</b>");
+    }
+
+    logpart = xml_findfirst(curlog, "groundspeak:finder");
+    if (logpart) {
+      r = xstrappend(r, " by ");
+      r = xstrappend(r, logpart->cdata);
+      // xfree( f );
+    }
+
+    logpart = xml_findfirst(curlog, "groundspeak:date");
+    if (logpart) {
+      logtime = xml_parse_time(logpart->cdata, NULL);
+      logtm = localtime(&logtime);
+      if (logtm) {
+        char* temp;
+        xasprintf(&temp,
+                  " %04d-%02d-%02d",
+                  logtm->tm_year+1900,
+                  logtm->tm_mon+1,
+                  logtm->tm_mday);
+        r = xstrappend(r, temp);
+        xfree(temp);
+      }
+    }
+
+    logpart = xml_findfirst(curlog, "groundspeak:text");
+    if (logpart) {
+      char* encstr = NULL;
+      char* s = NULL;
+      char* t = NULL;
+      int encoded = 0;
+      encstr = xml_attribute(logpart, "encoded");
+      encoded = (encstr[0] != 'F');
+
+      if (html_encrypt && encoded) {
+        s = rot13(logpart->cdata);
+      } else {
+        s = xstrdup(logpart->cdata);
+      }
+
+      r = xstrappend(r, "<br />");
+      t = html_entitize(s);
+      r = xstrappend(r, t);
+      xfree(t);
+      xfree(s);
+    }
+
+    r = xstrappend(r, "</p>");
+    curlog = xml_findnext(root, curlog, "groundspeak:log");
+  }
+  return r;
+}
+
 static void kml_geocache_pr(const waypoint* waypointp)
 {
   char* p, *is;
+  char date_placed[100];  // Always long engough for a date.
 
   kml_write_xml(1, "<Placemark>\n");
 
@@ -1136,6 +1348,12 @@ static void kml_geocache_pr(const waypoint* waypointp)
 
   // Timestamp
   kml_output_timestamp(waypointp);
+  if (waypointp->creation_time) {
+    strftime(date_placed, sizeof(date_placed),
+             "%d-%b-%Y", localtime(&waypointp->creation_time));
+  } else {
+    date_placed[0] = '\0';
+  }
 
   kml_write_xml(0, "<styleUrl>#geocache</styleUrl>\n");
   is = kml_lookup_gc_icon(waypointp);
@@ -1168,6 +1386,7 @@ static void kml_geocache_pr(const waypoint* waypointp)
   }
 
   kml_write_xml(0, "<Data name=\"gc_placer_id\"><value>%d</value></Data>\n", waypointp->gc_data->placer_id);
+  kml_write_xml(0, "<Data name=\"gc_placed\"><value>%s</value></Data>\n", date_placed);
 
   kml_write_xml(0, "<Data name=\"gc_diff_stars\"><value>%s</value></Data>\n", kml_gc_mkstar(waypointp->gc_data->diff));
   kml_write_xml(0, "<Data name=\"gc_terr_stars\"><value>%s</value></Data>\n", kml_gc_mkstar(waypointp->gc_data->terr));
@@ -1176,17 +1395,24 @@ static void kml_geocache_pr(const waypoint* waypointp)
 
   // Highlight any issues with the cache, such as temp unavail
   // or archived.
-  kml_write_xml(0, "<Data name=\"gc_issues\"><value>");
+  const char* issues = "";
   if (waypointp->gc_data->is_archived == status_true) {
-    kml_write_xml(0, "&lt;font color=\"red\"&gt;This cache has been archived.&lt;/font&gt;&lt;br/&gt;\n");
+    issues = "&lt;font color=\"red\"&gt;This cache has been archived.&lt;/font&gt;&lt;br/&gt;\n";
   } else if (waypointp->gc_data->is_available == status_false) {
-    kml_write_xml(0, "&lt;font color=\"red\"&gt;This cache is temporarily unavailable.&lt;/font&gt;&lt;br/&gt;\n");
+    issues = "&lt;font color=\"red\"&gt;This cache is temporarily unavailable.&lt;/font&gt;&lt;br/&gt;\n";
   }
-  kml_write_xml(0, "</value></Data>\n");
+  kml_write_xml(0, "<Data name=\"gc_issues\"><value>%s</value></Data>\n", issues);
+
+  kml_write_xml(0, "<Data name=\"gc_lat\"><value>%f</value></Data>\n", waypointp->latitude);
+  kml_write_xml(0, "<Data name=\"gc_lon\"><value>%f</value></Data>\n", waypointp->longitude);
 
   kml_write_xml(0, "<Data name=\"gc_type\"><value>%s</value></Data>\n", gs_get_cachetype(waypointp->gc_data->type));
+  kml_write_xml(0, "<Data name=\"gc_icon\"><value>%s</value></Data>\n", is);
   kml_write_xml(0, "<Data name=\"gc_short_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data->desc_short.utfstring ? waypointp->gc_data->desc_short.utfstring : "");
   kml_write_xml(0, "<Data name=\"gc_long_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data->desc_long.utfstring ? waypointp->gc_data->desc_long.utfstring : "");
+  char* logs = kml_geocache_get_logs(waypointp);
+  kml_write_xml(0, "<Data name=\"gc_logs\"><value><![CDATA[%s]]></value></Data>\n", logs);
+  xfree(logs);
 
   kml_write_xml(-1, "</ExtendedData>\n");
 
@@ -1516,7 +1742,7 @@ static void kml_route_tlr(const route_head* header)
   kml_output_tailer(header);
 }
 
-// For Earth 5.0, we write a LookAt that encompasses
+// For Earth 5.0 and later, we write a LookAt that encompasses
 // the bounding box of our entire data set and set the event times
 // to include all our data.
 void kml_write_AbstractView(void)
@@ -1669,7 +1895,7 @@ void kml_write(void)
   }
 
   if (traits->trait_geocaches) {
-    kml_gc_make_ballonstyle();
+    kml_gc_make_balloonstyle();
   }
 
   if (traits->trait_heartrate ||
