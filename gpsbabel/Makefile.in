@@ -141,8 +141,8 @@ configure: configure.in
 	autoconf
 
 tag:
-	cvs commit
-	cvs tag gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@
+	svn commit
+	svn copy https://gpsbabel.googlecode.com/svn/trunk/ https://gpsbabel.googlecode.com/svn/tags/gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@
 
 more-clean: clean
 	tools/mkmoreclean
@@ -259,13 +259,13 @@ WINFILES = gpsbabel.exe mingw/libexpat.dll win32/GPSBabelGUI.exe win32/gui-2/REA
 # in and tagged.
 #
 release-sourcecheck: changes.html
-	cvs commit
+	svn commit
 	./chkdoc
 	# make clean
 	rm -fr gpsbabel-$(VERSIOND)
 	# make gpsbabel doc gpsbabel.html
-	@(. tools/functions && ask "Enter 'y' to tag the tree as gpsbabel_$(VERSIONU)." "y") && cvs tag -F gpsbabel_$(VERSIONU) ; exit 0
-	cvs export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
+	@(. tools/functions && ask "Enter 'y' to tag the tree as gpsbabel_$(VERSIONU)." "y") && svn copy https://gpsbabel.googlecode.com/svn/trunk/ https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU) ; exit 0
+	svn export -r gpsbabel_$(VERSIONU) -d gpsbabel-$(VERSIOND) gpsbabel
 	touch gpsbabel-$(VERSIOND)/internal_styles.c
 
 #
