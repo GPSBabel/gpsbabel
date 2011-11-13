@@ -260,7 +260,7 @@ WINFILES = gpsbabel.exe mingw/libexpat.dll win32/GPSBabelGUI.exe win32/gui-2/REA
 #
 release-sourcecheck: changes.html
 	svn commit
-	./chkdoc
+	# ./chkdoc
 	# make clean
 	rm -fr gpsbabel-$(VERSIOND)
 	# make gpsbabel doc gpsbabel.html
@@ -276,6 +276,7 @@ release-tarball: release-sourcecheck
 #	rm -fr gpsbabel-$(VERSIOND)
 	cp -ap internal_styles.c gpsbabel-$(VERSIOND)/
 	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
+	gb_upload /tmp/gpsbabel-$(VERSIOND).tar.gz
 #	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
 
 release-rpm:
