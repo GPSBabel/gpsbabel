@@ -660,23 +660,23 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="379"/>
-        <location filename="mainwindow.cpp" line="380"/>
+        <location filename="mainwindow.cpp" line="386"/>
+        <location filename="mainwindow.cpp" line="387"/>
         <source>default</source>
         <translation>predefinite</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="553"/>
+        <location filename="mainwindow.cpp" line="560"/>
         <source>Select one or more input files</source>
         <translation>Selezionare uno o più file in ingresso</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="580"/>
+        <location filename="mainwindow.cpp" line="587"/>
         <source>Output File Name</source>
         <translation>Nome del file in uscita</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="640"/>
+        <location filename="mainwindow.cpp" line="647"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -685,7 +685,7 @@ This program cannot continue.</source>
 Questo programma non può proseguire.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="651"/>
+        <location filename="mainwindow.cpp" line="658"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
@@ -694,115 +694,115 @@ This program cannot continue.</source>
 Questo programma non può proseguire.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="673"/>
+        <location filename="mainwindow.cpp" line="680"/>
         <source>Input and output formats do not support %1</source>
         <translation>I formati di ingresso e di uscita non supportano %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="676"/>
+        <location filename="mainwindow.cpp" line="683"/>
         <source>Input does not support %1; output format supports %2</source>
         <translation>L&apos;ingresso non supporta %1, il formato di destinazione supporta %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="679"/>
+        <location filename="mainwindow.cpp" line="686"/>
         <source>Input format supports %1; output format does not support %2</source>
         <translation>Il formato in ingresso supporta %1, il formato di destinazione non supporta %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="682"/>
+        <location filename="mainwindow.cpp" line="689"/>
         <source>Both input and output formats support %1</source>
         <translation>I formati di origine e di destinazione supportano %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="703"/>
+        <location filename="mainwindow.cpp" line="710"/>
         <source>waypoints</source>
         <translation>punti di interesse</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="704"/>
+        <location filename="mainwindow.cpp" line="711"/>
         <source>tracks</source>
         <translation>tracce</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="705"/>
+        <location filename="mainwindow.cpp" line="712"/>
         <source>routes</source>
         <translation>rotte</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="795"/>
+        <location filename="mainwindow.cpp" line="802"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>Non ci sono opzioni in ingresso per il formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="802"/>
-        <location filename="mainwindow.cpp" line="822"/>
+        <location filename="mainwindow.cpp" line="809"/>
+        <location filename="mainwindow.cpp" line="829"/>
         <source>Options for %1</source>
         <translation>Opzioni per %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="815"/>
+        <location filename="mainwindow.cpp" line="822"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>Non ci sono opzioni in uscita per il formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="836"/>
+        <location filename="mainwindow.cpp" line="843"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Non è stato specificato alcun punto di interesse/rotta/traccia</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="855"/>
+        <location filename="mainwindow.cpp" line="862"/>
         <source>No input file specified</source>
         <translation>Il file di origine non è stato specificato</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="862"/>
+        <location filename="mainwindow.cpp" line="869"/>
         <source>No valid output specified</source>
         <translation>Non è stata specificata una destinazione valida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="867"/>
+        <location filename="mainwindow.cpp" line="874"/>
         <source>No output file specified</source>
         <translation>Il file di destinazione non è stato specificato</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="883"/>
+        <location filename="mainwindow.cpp" line="890"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation>Il processo &quot;%1&quot; non è stato avviato</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="897"/>
+        <location filename="mainwindow.cpp" line="904"/>
         <source>Process exited unsucessfully with code %1</source>
         <translation>Il processo è terminato con il codice di errorre %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1040"/>
+        <location filename="mainwindow.cpp" line="1047"/>
         <source>Translation successful</source>
         <translation>Traduzione terminata con successo</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1050"/>
+        <location filename="mainwindow.cpp" line="1057"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Errore durante l&apos;esecuzione di gpsbabel: %1
 </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1163"/>
+        <location filename="mainwindow.cpp" line="1170"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>Si è certi di voler reimpostare tutte le opzioni dei formati ai valori predefiniti?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1187"/>
+        <location filename="mainwindow.cpp" line="1194"/>
         <source>About %1</source>
         <translation>Informazioni su %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1230"/>
+        <location filename="mainwindow.cpp" line="1237"/>
         <source>One or more data filters are active</source>
         <translation>È attivo uno o più filtri di dati</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1232"/>
+        <location filename="mainwindow.cpp" line="1239"/>
         <source>No data filters are active</source>
         <translation>Nessun filtro di dati è attivo</translation>
     </message>
