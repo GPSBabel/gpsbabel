@@ -1,0 +1,4 @@
+<para>
+  By default the proximity values are handled in meters. With this option you can now specify (m)iles,
+  (k)ilometers or (n)autical miles as the units for proximity when reading or writing ozi files.
+</para>

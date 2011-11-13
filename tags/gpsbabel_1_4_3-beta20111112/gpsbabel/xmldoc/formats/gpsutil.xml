@@ -1,0 +1,12 @@
+
+      
+      
+      <para>The format we call <ulink url="http://www.cs.uakron.edu/~hennings/gpsutil">gpsutil</ulink> is a simple file format used by a program that runs
+on POSIX- compliant OSes like UNIX and Linux.  Reads and writes of
+this format are very reliable.  (<ulink url="/people/robertlipe.html">The lead
+developer of GPSBabel</ulink> also contributed to this that 'gpsutil' 
+the early days.)</para>
+<para>
+	Note that 'gpsutil' is a different format - and program - than the one called <ulink url="http://www.gpsu.co.uk/index.html">GPS Utility</ulink>; for that one, you should probably use our  <link linkend="fmt_pcx">PCX module</link>.
+</para>
+    

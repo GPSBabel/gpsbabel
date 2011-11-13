@@ -1,0 +1,5 @@
+<para>Reads the binary format of the <productname><ulink url="http://www.xaiox.com/itracku_sirf3.htm">XAiOX iTrackU BLUETOOTH GPS-RECEIVER SiRF III</ulink></productname> data logger.</para>
+<example id="itracku-bin">
+  <title>Command showing reading an itracku data file.</title>
+  <para><userinput>gpsbabel -i itracku-bin -f itracku.bin -o gpx -F out.gpx</userinput></para>
+</example>

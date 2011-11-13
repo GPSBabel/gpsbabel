@@ -1,0 +1,25 @@
+	<para>
+		This is a write-only format for geotagging videos. It is used for
+		videomapping, i.e. filming a trip while creating a GPS trace.
+		It will produce a subtitle file in SubRip (.srt) format.
+	</para>
+	<para>
+		Unless the video and the GPS trace start at exactly the same time, you
+		will need to synchronize both. For this purpose, film the display of
+		your GPS receiver (or any other device) showing GPS time. (Important:
+		you need precise GPS time for this; local time, especially from an
+		inaccurate clock, will not do for this.) 
+	</para>
+	<para>
+		Determine the position in the video at which the GPS time is visible
+		(in hours, minutes and seconds from the beginning of the video) and
+		the GPS date and time shown. Specify these as command line options; you
+		will need to do this once for each video file.
+	</para>
+	<para>
+		To use these files, choose the same name as for the associated video,
+		changing just the extension to .srt, and place the srt file in the same
+		directory as the video. Open the video in a media player and the GPS
+		coordinates will be shown as subtitles (tested on VLC, your mileage may
+		vary).
+	</para>

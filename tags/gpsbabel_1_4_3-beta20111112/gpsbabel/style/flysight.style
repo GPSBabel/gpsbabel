@@ -1,0 +1,28 @@
+# Format:	FlySight
+# Author:	LukeH
+# Date:		10/10/10
+
+DESCRIPTION		FlySight GPS File
+EXTENSION		csv
+
+# FILE LAYOUT DEFINITIIONS:
+FIELD_DELIMITER COMMA
+RECORD_DELIMITER NEWLINE
+BADCHARS ,"
+
+PROLOGUE time lat lon hMSL velN velE velD hAcc vAcc sAcc gpsFix numSV
+PROLOGUE
+
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+IFIELD ISO_TIME,	"",	"%s"	# Date & time
+IFIELD LAT_DECIMAL,	"",	"%f"	# Latitude
+IFIELD LON_DECIMAL,	"",	"%f"	# Longitude
+IFIELD ALT_METERS,	"",	"%.0f"	# Altitude above MSL (m)
+IFIELD IGNORE,		"",	"%s"	# Velocity north (m/s)
+IFIELD IGNORE,		"",	"%s"	# Velocity east (m/s)
+IFIELD IGNORE,		"",	"%s"	# Velocity down (m/s)
+IFIELD IGNORE,		"",	"%s"	# Horizontal accuracy (m)
+IFIELD IGNORE,		"",	"%s"	# Vertical accuracy (m)
+IFIELD IGNORE,		"",	"%s"	# Speed accuracy (m/s)
+IFIELD GPS_FIX,		"",	"%s"	# GPS fix type
+IFIELD GPS_SAT,		"",	"%d"	# Number of satellites used in fix

@@ -1,0 +1,11 @@
+<para>
+	Video position (relative to beginning of video) for which the corresponding
+	GPS timestamp is known.
+</para>
+<para>
+	Format is hhmmss. If omitted, 0:00:00 (beginning of video) is assumed.
+</para>
+<para>
+	The GPS timestamp can be set with the <option>gps_time</option> and 
+	<option>gps_date</option> options.
+</para>

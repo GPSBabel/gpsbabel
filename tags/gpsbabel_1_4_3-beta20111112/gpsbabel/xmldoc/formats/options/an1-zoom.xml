@@ -1,0 +1,7 @@
+<para>
+This option specifies at what zoom level Street Atlas will begin showing 
+reduced versions of your symbols. The default is 10.  Setting zoom to 0 will 
+disable this feature.  Setting it to anything but the default will override 
+the zoom level specified on any waypoints that were read from an existing 
+an1 file; this is by design.
+</para>

@@ -1,0 +1,5 @@
+<para>
+   With this format you can read and write <ulink url="http://www.tomtom.com">TomTom</ulink>
+   Points of Interest - POI (ascii) files.
+   It is a simple text (csv) format with only latitude, longitude and a short name.
+</para>

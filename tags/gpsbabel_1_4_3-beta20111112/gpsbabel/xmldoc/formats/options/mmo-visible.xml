@@ -1,0 +1,13 @@
+<para>
+   This option can be useful, if you want to convert a big file with a lot of entries.
+   By default GPSBabel creates only 'visible' items.
+</para>
+<para>
+   Sample command to write an mmo file with 'in-vsisible' items:
+</para>
+<para>
+   <userinput>
+      gpsbabel -i gpx -f in.gpx -o mmo,visible=n -F out.mmo
+   </userinput>
+</para>
+

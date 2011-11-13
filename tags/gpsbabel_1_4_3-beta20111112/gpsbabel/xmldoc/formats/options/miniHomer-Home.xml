@@ -1,0 +1,20 @@
+<para>
+  The device provides a location finder display supporting five locations "Home", "Car", "Boat", "Heart", "Bar". 
+  You can program the location of each either by a keypress on the device (which uses the actual position) 
+  or with GPSBabel (which lets you use any position)
+  You can set the location of "Home" with the 'Home' option.  Use ':' as the delimiter between latitude, longitude and altitude. 
+  You can leave altitude out, in which case it is assumed to be zero.
+  Note that GPSBabel terminates after writing the location info to the device, i.e. no logging data will be read from it.
+</para>
+<example id="miniHomer-Home">
+  <title>Set the target location of the miniHomer Home POI</title>
+  <para>
+       <userinput>gpsbabel -i miniHomer,Home=-3.066667:37.359167:5895 -f /dev/ttyUSB0 -o unicsv -F -</userinput>
+  </para>
+  <para>
+       Sets the Home symbols' latitude to 3.066667S longitude to 37.359167E and altitude to 5895m.
+       If you select the Home symbol on miniHomer, the display will show the direction and distance to 
+       this location as soon as it has a satellite fix.
+ </para>
+</example>
+

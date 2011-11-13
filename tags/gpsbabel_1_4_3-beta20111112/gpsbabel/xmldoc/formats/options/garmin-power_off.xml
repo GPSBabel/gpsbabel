@@ -1,0 +1,8 @@
+<para>This command forces an immediate powerdown of the addressed Garmin
+receiver.  It is ignored on hardware that does not support this command.
+Obviously, further processing once you have sent a "power off" command to
+a unit that supports it is rather futile, so place this option carefully
+in your command.
+
+</para>
+<para><userinput>gpsbabel -o garmin,power_off -F /dev/ttyS0</userinput></para>

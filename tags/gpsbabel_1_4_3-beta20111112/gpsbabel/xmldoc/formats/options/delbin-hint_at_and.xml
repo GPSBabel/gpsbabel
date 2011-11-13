@@ -1,0 +1,5 @@
+<para>
+  When set to true, this places the "HINT:" entry from a geocacching.com 
+   pocket query at the end of the screen (scroll up for quick access) like
+   Cache Register and Topo7 do instead of at the top as Topo8 does.
+</para>

@@ -1,0 +1,4 @@
+<para>
+This option causes GPSBabel to use the MAC address as the short name for the
+waypoint.  The unmodified SSID is included in the waypoint description.
+</para>
