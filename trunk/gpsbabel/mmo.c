@@ -35,6 +35,9 @@
 	2008/12/12: Fix object release error
 	2010/09/10: Added read support for version 0x18
 		    (test file created by Memory-Map European Edition, Version 5.4.2, Build 1089).
+	2011/10/05: Fixed read support: Track, CurrentPosition, UTF-16 strings
+		    (test file is version 0x18 as written by GPS units running 5.4.4 build 1114).
+		    Strings now written in UTF-16 if necessary.
 */
 
 #include <ctype.h>
@@ -169,21 +172,54 @@ dbgprintf(const char* sobj, const char* fmt, ...)
 static char*
 mmo_readstr(void)
 {
-  char* res;
+  char *res;
   int len;
 
   len = (unsigned)gbfgetc(fin);
   if (len == 0xFF) {
+    // Next two bytes are either the length (strings longer than 254 chars)
+    // or FE then FF (which is -2) meaning a UTF-16 string
     len = gbfgetint16(fin);
-    if (len < 0) {
-      fatal(MYNAME ": Invalid string length (%d)!\n", len);
-    }
-  }
-  res = (char*) xmalloc(len + 1);
-  res[len] = '\0';
+    if (len == -2)
+    {
+      // read the new length (single byte)
+      // length is number of "characters" not number of bytes
+      len = (unsigned)gbfgetc(fin);
+      if (len > 0)
+			{
+				int ii, jj, ch, resbytes=0;
+				res = xmalloc(len*2 + 1); // bigger to allow for utf-8 expansion
+				for (ii=0; ii<len; ii++)
+				{
+					ch = gbfgetint16(fin);
+					char utf8buf[8];
+					int utf8len;
+					// convert to utf-8, possibly multiple bytes
+					utf8len = cet_ucs4_to_utf8(utf8buf, sizeof(utf8buf), ch);
+					for (jj=0; jj < utf8len; jj++)
+					{
+						res[resbytes++] = utf8buf[jj];
+					}
+				}
+				res[resbytes] = '\0';
+				return res;
+			}
+			// length zero is handled below: returns an empty string
+		}
+		else if (len < 0)
+		{
+			fatal(MYNAME ": Invalid string length (%d)!\n", len);
+		}
+		// positive values of len are for strings longer than 254, handled below:
+	}
+	// length zero returns an empty string
+	res = xmalloc(len + 1);
+	res[len] = '\0';
   if (len) {
     gbfread(res, len, 1, fin);
-    if (len != strlen(res)) {
+    if (len != strlen(res))
+    {
+      fprintf(stdout, "got len %d but str is '%s' (strlen %d)\n", len, res, strlen(res));
       fatal(MYNAME ": Error in file structure!\n");
     }
   }
@@ -478,7 +514,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
   wpt->latitude = gbfgetdbl(fin);
   wpt->longitude = gbfgetdbl(fin);
 
-  DBG((sobj, "coordinates = %f / %f\n", wpt->latitude, wpt->longitude));
+  DBG((sobj, "trackpoint %d/%d coordinates = %f / %f\n", ctp+1,tp, wpt->latitude, wpt->longitude));
 
   rtelinks = gbfgetuint16(fin);
   if (rtelinks > 0) {
@@ -746,11 +782,13 @@ mmo_read_CObjTrack(mmo_data_t* data)
     trk->line_color.opacity = 255 - (u8 * 51);
 
     if (mmo_version >= 0x16) {
-      char u8;
       gbuint16 u16;
+      char *text;
 
-      u8 = gbfgetc(fin);
-      DBG((sobj, "unknown value = 0x%02X (since 0x16)\n", u8));
+      // XXX ARB was u8 = gbfgetc(fin); but actually a string
+      text = mmo_readstr();
+      DBG((sobj, "text = \"%s\"\n", text));
+      xfree(text);
       u16 = gbfgetuint16(fin);
       DBG((sobj, "unknown value = 0x%04X (since 0x16)\n", u16));
       u16 = gbfgetuint16(fin);
@@ -815,6 +853,9 @@ mmo_read_CObjCurrentPosition(mmo_data_t* data)
   DBG((sobj, "coordinates = %f / %f\n", lat, lon));
 
   mmo_fillbuf(buf, 24, 1);
+  if (mmo_version >= 0x18) {
+    mmo_fillbuf(buf, 8, 1); // XXX ARB read an extra 8
+  }
 
   if (mmo_version >= 0x14) {
     char* name;
@@ -822,7 +863,14 @@ mmo_read_CObjCurrentPosition(mmo_data_t* data)
     name = mmo_readstr();
     DBG((sobj, "name = \"%s\"\n", name));
     xfree(name);
-    mmo_fillbuf(buf, 13, 1);
+    // XXX ARB was just: mmo_fillbuf(buf, 13, 1);
+    // but actually it's string/long/string/long/long
+    gbfgetuint32(fin);
+    name = mmo_readstr();
+    DBG((sobj, "name = \"%s\"\n", name));
+    xfree(name);
+    gbfgetuint32(fin);
+    gbfgetuint32(fin);
   }
 }
 
@@ -1087,17 +1135,50 @@ mmo_register_category_names(const char* name)
 static void
 mmo_writestr(const char* str)
 {
+  int ii, topbitset = 0;
   int len = strlen(str);
 
-  if (len > 254) {
+  // see if there's any utf-8 multi-byte chars
+  for (ii = 0; ii < len; ii++) {
+    if (str[ii] & 0x80) {
+      topbitset = 1;
+      break;
+    }
+  }
+  // Old version can't handle utf-16
+  // XXX ARB check which version number can, just guessed at 0x12
+  if (mmo_version < 0x12) {
+    topbitset = 0;
+  }
+
+  // XXX ARB need to convert UTF-8 into UTF-16
+  if (topbitset) {
+    gbfputc(0xFF, fout); // means two-byte length follows
+    gbfputc(0xFE, fout); // means utf-16 little-endian string follows
+    gbfputc(0xFF, fout); // ditto
+    gbfputc(len, fout);
+  } else if (len > 254) {
     len = len & 0x7FFF;
-    gbfputc(0xFF, fout);
+    gbfputc(0xFF, fout); // means two-byte length follows
     gbfputint16(len, fout);
   } else {
     gbfputc(len, fout);
   }
   if (len) {
-    gbfwrite(str, len, 1, fout);
+    if (topbitset) {
+      int utf16val;
+      int utf16len;
+      for (ii=0; ii<len; ii++) {
+        cet_utf8_to_ucs4(str+ii, &utf16len, &utf16val);
+        // this format only handles two-byte encoding
+        // so only write the lower two bytes
+        gbfputint16(utf16val & 0xffff, fout);
+        // if utf8 char was multi-byte then skip them
+        ii += (utf16len - 1);
+      }
+    } else {
+      gbfwrite(str, len, 1, fout);
+    }
   }
 }
 
