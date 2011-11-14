@@ -95,6 +95,7 @@ QString UpgradeCheck::getOsVersion()
   case QSysInfo::MV_10_4: return "10.4"; break;
   case QSysInfo::MV_10_5: return "10.5"; break;
   case QSysInfo::MV_10_6: return "10.6"; break;
+  case QSysInfo::MV_10_7: return "10.7"; break;
   default: return QString("Unknown Mac %1").arg(QSysInfo::MacintoshVersion);
   };
 #elif defined (Q_OS_WIN)
