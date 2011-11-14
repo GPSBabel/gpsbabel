@@ -9,6 +9,7 @@
     filter_vecs and finally add complying statements to Makefile.
 
     Copyright (C) YYYY John Doe, anybody@wherever.com
+    Copyright (C) 2001-YYYY Robert Lipe, robertlipe@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
