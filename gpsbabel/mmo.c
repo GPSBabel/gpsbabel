@@ -172,7 +172,7 @@ dbgprintf(const char* sobj, const char* fmt, ...)
 static char*
 mmo_readstr(void)
 {
-  char *res;
+  char* res;
   int len;
 
   len = (unsigned)gbfgetc(fin);
@@ -180,45 +180,38 @@ mmo_readstr(void)
     // Next two bytes are either the length (strings longer than 254 chars)
     // or FE then FF (which is -2) meaning a UTF-16 string
     len = gbfgetint16(fin);
-    if (len == -2)
-    {
+    if (len == -2) {
       // read the new length (single byte)
       // length is number of "characters" not number of bytes
       len = (unsigned)gbfgetc(fin);
-      if (len > 0)
-			{
-				int ii, jj, ch, resbytes=0;
-				res = xmalloc(len*2 + 1); // bigger to allow for utf-8 expansion
-				for (ii=0; ii<len; ii++)
-				{
-					ch = gbfgetint16(fin);
-					char utf8buf[8];
-					int utf8len;
-					// convert to utf-8, possibly multiple bytes
-					utf8len = cet_ucs4_to_utf8(utf8buf, sizeof(utf8buf), ch);
-					for (jj=0; jj < utf8len; jj++)
-					{
-						res[resbytes++] = utf8buf[jj];
-					}
-				}
-				res[resbytes] = '\0';
-				return res;
-			}
-			// length zero is handled below: returns an empty string
-		}
-		else if (len < 0)
-		{
-			fatal(MYNAME ": Invalid string length (%d)!\n", len);
-		}
-		// positive values of len are for strings longer than 254, handled below:
-	}
-	// length zero returns an empty string
-	res = xmalloc(len + 1);
-	res[len] = '\0';
+      if (len > 0) {
+        int ii, jj, ch, resbytes=0;
+        res = xmalloc(len*2 + 1); // bigger to allow for utf-8 expansion
+        for (ii=0; ii<len; ii++) {
+          ch = gbfgetint16(fin);
+          char utf8buf[8];
+          int utf8len;
+          // convert to utf-8, possibly multiple bytes
+          utf8len = cet_ucs4_to_utf8(utf8buf, sizeof(utf8buf), ch);
+          for (jj=0; jj < utf8len; jj++) {
+            res[resbytes++] = utf8buf[jj];
+          }
+        }
+        res[resbytes] = '\0';
+        return res;
+      }
+      // length zero is handled below: returns an empty string
+    } else if (len < 0) {
+      fatal(MYNAME ": Invalid string length (%d)!\n", len);
+    }
+    // positive values of len are for strings longer than 254, handled below:
+  }
+  // length zero returns an empty string
+  res = xmalloc(len + 1);
+  res[len] = '\0';
   if (len) {
     gbfread(res, len, 1, fin);
-    if (len != strlen(res))
-    {
+    if (len != strlen(res)) {
       fprintf(stdout, "got len %d but str is '%s' (strlen %d)\n", len, res, strlen(res));
       fatal(MYNAME ": Error in file structure!\n");
     }
@@ -783,7 +776,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
 
     if (mmo_version >= 0x16) {
       gbuint16 u16;
-      char *text;
+      char* text;
 
       // XXX ARB was u8 = gbfgetc(fin); but actually a string
       text = mmo_readstr();
