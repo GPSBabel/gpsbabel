@@ -119,15 +119,27 @@ support Garmin communication protocol and don't work with the
 <option>garmin</option> option.  To use these receivers, read or write
 GPX files from the mass storage device as mounted on your computer.
 <simplelist columns="4">
+<member>eTrex 10<footnoteref linkend="gpx"/></member>
+<member>eTrex 20<footnoteref linkend="gpx"/></member>
+<member>eTrex 30<footnoteref linkend="gpx"/></member>
 <member>Colorado 300<footnoteref linkend="gpx"/></member>
 <member>Colorado 400c<footnoteref linkend="gpx"/></member>
 <member>Colorado 400i<footnoteref linkend="gpx"/></member>
 <member>Colorado 400t<footnoteref linkend="gpx"/></member>
 <member>Dakota 10<footnoteref linkend="gpx"/></member>
 <member>Dakota 20<footnoteref linkend="gpx"/></member>
+<member>GPSMap 62<footnoteref linkend="gpx"/></member>
+<member>GPSMap 62sc<footnoteref linkend="gpx"/></member>
+<member>GPSMap 62stc<footnoteref linkend="gpx"/></member>
 <member>GPSMap 78<footnoteref linkend="gpx"/></member>
 <member>GPSMap 78s<footnoteref linkend="gpx"/></member>
 <member>GPSMap 78sc<footnoteref linkend="gpx"/></member>
+<member>Montana 600<footnoteref linkend="gpx"/></member>
+<member>Montana 650<footnoteref linkend="gpx"/></member>
+<member>Montana 650t<footnoteref linkend="gpx"/></member>
+<member>Nuvi 30<footnoteref linkend="gpx"/></member>
+<member>Nuvi 40<footnoteref linkend="gpx"/></member>
+<member>Nuvi 50<footnoteref linkend="gpx"/></member>
 <member>Nuvi 200<footnoteref linkend="gpx"/></member>
 <member>Nuvi 205<footnoteref linkend="gpx"/></member>
 <member>Nuvi 200W<footnoteref linkend="gpx"/></member>
@@ -174,6 +186,17 @@ GPX files from the mass storage device as mounted on your computer.
 <member>Nuvi 1390T<footnoteref linkend="gpx"/></member>
 <member>Nuvi 1350<footnoteref linkend="gpx"/></member>
 <member>Nuvi 1490T<footnoteref linkend="gpx"/></member>
+<member>Nuvi 2250<footnoteref linkend="gpx"/></member>
+<member>Nuvi 2250LT<footnoteref linkend="gpx"/></member>
+<member>Nuvi 2350<footnoteref linkend="gpx"/></member>
+<member>Nuvi 2350LT<footnoteref linkend="gpx"/></member>
+<member>Nuvi 2360LT<footnoteref linkend="gpx"/></member>
+<member>Nuvi 2405<footnoteref linkend="gpx"/></member>
+<member>Nuvi 2450<footnoteref linkend="gpx"/></member>
+<member>Nuvi 2450LM<footnoteref linkend="gpx"/></member>
+<member>Nuvi 2450LT<footnoteref linkend="gpx"/></member>
+<member>Nuvi 2450LMT<footnoteref linkend="gpx"/></member>
+<member>Nuvi 2505<footnoteref linkend="gpx"/></member>
 <member>Nuvi 1690T<footnoteref linkend="gpx"/></member>
 <member>Nuvi 3750<footnoteref linkend="gpx"/></member>
 <member>Nuvi 3760T<footnoteref linkend="gpx"/></member>
@@ -198,6 +221,7 @@ GPX files from the mass storage device as mounted on your computer.
 <member>Zumo 550<footnoteref linkend="gpx"/></member>
 <member>Zumo 660<footnoteref linkend="gpx"/></member>
 <member>Zumo 665<footnoteref linkend="gpx"/></member>
+<member>Surely any Garmin product that Garmin actually sensibly designed after 2006 or so.<footnoteref linkend="gpx"/></member>
 </simplelist>
 </para>
 
