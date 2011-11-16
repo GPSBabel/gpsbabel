@@ -36,7 +36,7 @@ static char* opt_humminbirdext = NULL;
 static char* opt_garminext = NULL;
 static int logpoint_ct = 0;
 
-static const char* gpx_version;
+static char* gpx_version = NULL;
 static char* gpx_wversion;
 static int gpx_wversion_num;
 static const char* gpx_creator;
@@ -438,7 +438,15 @@ tag_gpx(const char** attrv)
   const char** avp;
   for (avp = &attrv[0]; *avp; avp += 2) {
     if (strcmp(avp[0], "version") == 0) {
-      gpx_version = avp[1];
+      /* Set the default output version to the highest input
+       * version.
+       */
+      if (! gpx_version) {
+        gpx_version = xstrdup(avp[1]);
+      } else if ((strtod(gpx_version, NULL) * 10) < (strtod(avp[1], NULL) * 10)) {
+        xfree(gpx_version);
+        gpx_version = xstrdup(avp[1]);
+      }
     } else if (strcmp(avp[0], "src") == 0) {
       gpx_creator = avp[1];
     }
@@ -1889,6 +1897,17 @@ gpx_write(void)
   time_t now = 0;
   int short_length;
 
+  /* if an output version is not specified and an input version is
+   * available use it, otherwise use the default.
+   */
+  if (! gpx_wversion) {
+    if (! gpx_version) {
+      gpx_wversion = (char *)"1.0";
+    } else {
+      gpx_wversion = (char *)gpx_version;
+    }
+  }
+
   if (opt_humminbirdext || opt_garminext) {
     gpx_wversion = (char*)"1.1";
   }
@@ -1942,9 +1961,12 @@ gpx_write(void)
   if (gpx_wversion_num < 11) {
     gpx_write_gdata(&gpx_global->author, "author");
   }
-  gpx_write_gdata(&gpx_global->email, "email");
-  gpx_write_gdata(&gpx_global->url, "url");
-  gpx_write_gdata(&gpx_global->urlname, "urlname");
+  /* In GPX 1.1 email, url, urlname aren't allowed. */
+  if (gpx_wversion_num < 11) {
+    gpx_write_gdata(&gpx_global->email, "email");
+    gpx_write_gdata(&gpx_global->url, "url");
+    gpx_write_gdata(&gpx_global->urlname, "urlname");
+  }
   xml_write_time(ofd, now, 0, "time");
   gpx_write_gdata(&gpx_global->keywords, "keywords");
 
@@ -1978,6 +2000,11 @@ gpx_free_gpx_global(void)
 static void
 gpx_exit(void)
 {
+  if (gpx_version) {
+    xfree(gpx_version);
+    gpx_version = NULL;
+  }
+
   if (xsi_schema_loc) {
     xfree(xsi_schema_loc);
     xsi_schema_loc = NULL;
@@ -2011,7 +2038,7 @@ arglist_t gpx_args[] = {
   },
   {
     "gpxver", &gpx_wversion, "Target GPX version for output",
-    "1.0", ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX
   },
   {
     "humminbirdextensions", &opt_humminbirdext,

@@ -219,6 +219,12 @@ gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,tracks -x t
 compare ${TMPDIR}/transform-wpt.gpx ${REFERENCE}/transform-wpt.gpx
 
 #
+# GPX version detection
+#
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,routes,tracks -x transform,rte=wpt,del=y -o gpx -F ${TMPDIR}/transform-ver.gpx
+compare ${TMPDIR}/transform-ver.gpx ${REFERENCE}/transform-rte.gpx
+
+#
 # "Raymarine Waypoint File" tests
 #
 gpsbabel -i raymarine -f ${REFERENCE}/raymarine-sample.rwf -o gpx -F ${TMPDIR}/raymarine-sample.gpx
