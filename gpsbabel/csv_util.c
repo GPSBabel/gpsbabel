@@ -1463,7 +1463,7 @@ xcsv_data_read(void)
       }
 
       switch (xcsv_file.datatype) {
-      case 0:
+      case unknown_gpsdata:
       case wptdata:
         waypt_add(wpt_tmp);
         break;
