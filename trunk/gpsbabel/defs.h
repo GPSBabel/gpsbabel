@@ -177,6 +177,7 @@ typedef enum {
  * protocol for a receiver, like the Magellan serial data.
  */
 typedef enum {
+  unknown_gpsdata = 0,
   trkdata = 1 ,
   wptdata,
   rtedata,
