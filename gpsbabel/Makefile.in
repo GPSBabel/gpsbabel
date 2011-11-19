@@ -267,6 +267,7 @@ release-sourcecheck: changes.html
 	@(. tools/functions && ask "Enter 'y' to tag the tree as gpsbabel_$(VERSIONU)." "y") && svn copy https://gpsbabel.googlecode.com/svn/trunk/ https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU) ; exit 0
 	svn export https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU)/gpsbabel gpsbabel-$(VERSIOND) 
 	touch gpsbabel-$(VERSIOND)/internal_styles.c
+	touch gpsbabel-$(VERSIOND)/configure
 
 #
 # Build the release tarball from the exported CVS tree, tweaking 
