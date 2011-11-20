@@ -162,7 +162,21 @@ case "$target" in
 		OSJEEPS=jeeps/gpsusbstub.o
 	else
 		OSJEEPS=jeeps/gpsusbwin.o
-		USB_LIBS="-lsetupapi -lhid"
+		USB_LIBS="-lsetupapi"
+		AC_MSG_CHECKING(for Windows DDK)
+		old_LIBS="$LIBS"
+		LIBS="$LIBS -lhid"
+		AC_TRY_LINK([#include <windows.h>]
+			[#include <hidsdi.h>],
+			[HANDLE              HidDeviceObject;
+			HIDD_ATTRIBUTES    Attributes;
+			HidD_GetAttributes(HidDeviceObject, &Attributes);],
+			[AC_MSG_RESULT(yes)]
+			[AC_DEFINE(HAVE_WDK, 1, [Defined if you have Windows DDK])]
+			[USB_LIBS=${USB_LIBS}" -lhid"],
+			[AC_MSG_RESULT(no)]
+                ) 
+                LIBS="$old_LIBS"
 	fi
 	;;
     *-*-darwin*)
@@ -232,7 +246,7 @@ case "$target" in
 			ioctl(0, HIDIOCSREPORT, &rinfo);
 		}],
 		AC_MSG_RESULT(yes)
-		AC_DEFINE(HAVE_LINUX_HID, 1),
+		AC_DEFINE(HAVE_LINUX_HID, 1, [Defined if you have Linux HID]),
 		AC_MSG_RESULT(no))
 	;;
 esac
@@ -290,21 +304,18 @@ AC_ARG_WITH(libexpat,
 			EXPAT_LIB=/sw/lib/libexpat.a
 			LIBS="$LIBS -L/sw/lib"
 			  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
-			  AC_SUBST(EXPAT_LIB)
 		fi
 		if test -f /opt/local/lib/libexpat.a ; then
 			# libexpat installed via macports
 			EXPAT_LIB=/opt/local/lib/libexpat.a
 			LIBS="$LIBS -L/opt/local/lib"
 			  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
-			  AC_SUBST(EXPAT_LIB)
 		fi
 		if test -f /usr/local/lib/libexpat.a ; then
 			# libexpat installed from source
 			EXPAT_LIB=/usr/local/lib/libexpat.a
 			LIBS="$LIBS -L/usr/local/lib"
 			  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
-			  AC_SUBST(EXPAT_LIB)
 		fi				
 		;;
 	*-gentoo-freebsd*)
@@ -314,21 +325,22 @@ AC_ARG_WITH(libexpat,
 		if test -f /usr/local/lib/libexpat.a ; then
 			EXPAT_LIB=/usr/local/lib/libexpat.a
 			  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
-			  AC_SUBST(EXPAT_LIB)
 		fi
-		;;
-	*)
-			EXPAT_LIB=-lexpat
 		;;
 	esac
   ]
 )
-AC_MSG_RESULT($EXPAT_LIB)
 
-AC_CHECK_LIB([expat], [XML_ParserCreate], 
-  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
-  AC_SUBST(EXPAT_LIB)
-)
+if test "x${EXPAT_LIB}" = x; then
+  AC_MSG_RESULT(try to autodetect)
+  AC_CHECK_LIB([expat], [XML_ParserCreate], 
+    AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
+    EXPAT_LIB=-lexpat
+  )
+else
+  AC_MSG_RESULT($EXPAT_LIB)
+fi
+AC_SUBST(EXPAT_LIB)
 
 AC_MSG_CHECKING(for efence)
 AC_ARG_ENABLE(efence,
