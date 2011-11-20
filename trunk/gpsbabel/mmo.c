@@ -212,7 +212,9 @@ mmo_readstr(void)
   if (len) {
     gbfread(res, len, 1, fin);
     if (len != strlen(res)) {
-      fprintf(stdout, "got len %d but str is '%s' (strlen %d)\n", len, res, strlen(res));
+      // strlen requires a size_t, but Microsoft's stupid compiler doesn't
+      // do C99 %zd.  Thanx, Microsoft.
+      fprintf(stdout, "got len %d but str is '%s' (strlen %d)\n", len, res, (int) strlen(res));
       fatal(MYNAME ": Error in file structure!\n");
     }
   }
@@ -858,12 +860,12 @@ mmo_read_CObjCurrentPosition(mmo_data_t* data)
     xfree(name);
     // XXX ARB was just: mmo_fillbuf(buf, 13, 1);
     // but actually it's string/long/string/long/long
-    gbfgetuint32(fin);
+    (void) gbfgetuint32(fin);
     name = mmo_readstr();
     DBG((sobj, "name = \"%s\"\n", name));
     xfree(name);
-    gbfgetuint32(fin);
-    gbfgetuint32(fin);
+    (void) gbfgetuint32(fin);
+    (void) gbfgetuint32(fin);
   }
 }
 

@@ -719,6 +719,7 @@ data_write(void)
 
   switch (global_opts.objective) {
   case wptdata:
+  case unknown_gpsdata:
     break;
 
   case rtedata:

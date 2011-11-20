@@ -300,6 +300,7 @@ stmwpp_data_write(void)
 
   switch (global_opts.objective) {
   case wptdata:
+  case unknown_gpsdata:
     what = STM_WAYPT;
     track_index = track_num;	/* disable filter */
     setshort_defname(short_h, "WPT");
