@@ -2425,7 +2425,7 @@ ff_vecs_t delbin_vecs = {
 
 //-----------------------------------------------------------------------------
 // Windows
-#if _WIN32
+#ifdef HAVE_WDK
 
 #undef HAVE_LIBUSB
 
@@ -2550,7 +2550,7 @@ delbin_os_ops_t delbin_os_ops = {
   win_os_packet_write
 };
 
-#endif // _WIN32
+#endif // HAVE_WDK
 
 //-----------------------------------------------------------------------------
 // MacOS X
@@ -3006,7 +3006,7 @@ delbin_os_ops_t delbin_os_ops = {
 
 //-----------------------------------------------------------------------------
 // stubs
-#if !(_WIN32 || __APPLE__ || HAVE_LIBUSB || HAVE_LINUX_HID)
+#if !(HAVE_WDK || __APPLE__ || HAVE_LIBUSB || HAVE_LINUX_HID)
 static void
 stub_os_init(const char* fname)
 {

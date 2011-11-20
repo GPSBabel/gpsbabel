@@ -4179,7 +4179,67 @@ echo "${ECHO_T}USB skipped" >&6; }
 		OSJEEPS=jeeps/gpsusbstub.o
 	else
 		OSJEEPS=jeeps/gpsusbwin.o
-		USB_LIBS="-lsetupapi -lhid"
+		USB_LIBS="-lsetupapi"
+		{ echo "$as_me:$LINENO: checking for Windows DDK" >&5
+echo $ECHO_N "checking for Windows DDK... $ECHO_C" >&6; }
+		old_LIBS="$LIBS"
+		LIBS="$LIBS -lhid"
+		cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <windows.h>
+			#include <hidsdi.h>
+int
+main ()
+{
+HANDLE              HidDeviceObject;
+			HIDD_ATTRIBUTES    Attributes;
+			HidD_GetAttributes(HidDeviceObject, &Attributes);
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_WDK 1
+_ACEOF
+
+			USB_LIBS=${USB_LIBS}" -lhid"
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	{ echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+                LIBS="$old_LIBS"
 	fi
 	;;
     *-*-darwin*)
@@ -4378,7 +4438,8 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
        } && test -s conftest.$ac_objext; then
   { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
-		cat >>confdefs.h <<\_ACEOF
+
+cat >>confdefs.h <<\_ACEOF
 #define HAVE_LINUX_HID 1
 _ACEOF
 
@@ -4462,7 +4523,6 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBEXPAT 1
 _ACEOF
 
-
 		fi
 		if test -f /opt/local/lib/libexpat.a ; then
 			# libexpat installed via macports
@@ -4473,7 +4533,6 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBEXPAT 1
 _ACEOF
 
-
 		fi
 		if test -f /usr/local/lib/libexpat.a ; then
 			# libexpat installed from source
@@ -4483,7 +4542,6 @@ _ACEOF
 cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBEXPAT 1
 _ACEOF
-
 
 		fi
 		;;
@@ -4498,21 +4556,18 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBEXPAT 1
 _ACEOF
 
-
 		fi
-		;;
-	*)
-			EXPAT_LIB=-lexpat
 		;;
 	esac
 
 
 fi
 
-{ echo "$as_me:$LINENO: result: $EXPAT_LIB" >&5
-echo "${ECHO_T}$EXPAT_LIB" >&6; }
 
-{ echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
+if test "x${EXPAT_LIB}" = x; then
+  { echo "$as_me:$LINENO: result: try to autodetect" >&5
+echo "${ECHO_T}try to autodetect" >&6; }
+  { echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
 echo $ECHO_N "checking for XML_ParserCreate in -lexpat... $ECHO_C" >&6; }
 if test "${ac_cv_lib_expat_XML_ParserCreate+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -4579,8 +4634,13 @@ cat >>confdefs.h <<\_ACEOF
 #define HAVE_LIBEXPAT 1
 _ACEOF
 
+    EXPAT_LIB=-lexpat
 
+fi
 
+else
+  { echo "$as_me:$LINENO: result: $EXPAT_LIB" >&5
+echo "${ECHO_T}$EXPAT_LIB" >&6; }
 fi
 
 
