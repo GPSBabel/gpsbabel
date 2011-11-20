@@ -180,7 +180,7 @@
       </Placemark>
       <Folder>
         <name>2008-08-20T07:04:47Z</name>
-        <Snippet/>
+        <snippet/>
         <description>
 <![CDATA[<table>
             <tr><td><b>Distance</b> 85.9 ft </td></tr>
@@ -205,7 +205,7 @@
           <name>Points</name>
           <Placemark>
             <name>2008-08-20T07:04:47Z-0</name>
-            <Snippet/>
+            <snippet/>
             <description><![CDATA[
               <table>
                 <tr><td>Longitude: -0.035187 </td></tr>
@@ -231,7 +231,7 @@
           </Placemark>
           <Placemark>
             <name>2008-08-20T07:04:47Z-1</name>
-            <Snippet/>
+            <snippet/>
             <description><![CDATA[
               <table>
                 <tr><td>Longitude: -0.035242 </td></tr>
@@ -257,7 +257,7 @@
           </Placemark>
           <Placemark>
             <name>2008-08-20T07:04:47Z-2</name>
-            <Snippet/>
+            <snippet/>
             <description><![CDATA[
               <table>
                 <tr><td>Longitude: -0.035303 </td></tr>
@@ -283,7 +283,7 @@
           </Placemark>
           <Placemark>
             <name>2008-08-20T07:04:47Z-3</name>
-            <Snippet/>
+            <snippet/>
             <description><![CDATA[
               <table>
                 <tr><td>Longitude: -0.035354 </td></tr>
@@ -309,7 +309,7 @@
           </Placemark>
           <Placemark>
             <name>2008-08-20T07:04:47Z-4</name>
-            <Snippet/>
+            <snippet/>
             <description><![CDATA[
               <table>
                 <tr><td>Longitude: -0.035400 </td></tr>
@@ -334,7 +334,7 @@
           </Placemark>
           <Placemark>
             <name>2008-08-20T07:04:47Z-5</name>
-            <Snippet/>
+            <snippet/>
             <description><![CDATA[
               <table>
                 <tr><td>Longitude: -0.035438 </td></tr>
@@ -359,7 +359,7 @@
           </Placemark>
           <Placemark>
             <name>2008-08-20T07:04:47Z-6</name>
-            <Snippet/>
+            <snippet/>
             <description><![CDATA[
               <table>
                 <tr><td>Longitude: -0.035462 </td></tr>
@@ -385,7 +385,7 @@
           </Placemark>
           <Placemark>
             <name>2008-08-20T07:04:47Z-7</name>
-            <Snippet/>
+            <snippet/>
             <description><![CDATA[
               <table>
                 <tr><td>Longitude: -0.035472 </td></tr>
