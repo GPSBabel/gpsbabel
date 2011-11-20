@@ -681,6 +681,7 @@ compegps_data_write(void)
 
   switch (global_opts.objective) {
   case wptdata:
+  case unknown_gpsdata:
     curr_index = target_index = 0;
     write_waypoints();
     break;

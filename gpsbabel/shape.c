@@ -314,6 +314,7 @@ my_write(void)
 {
   switch (global_opts.objective) {
   case wptdata:
+  case unknown_gpsdata:
     ohandle = SHPCreate(ofname, SHPT_POINT);
 
     if (ohandle == NULL) {

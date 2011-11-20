@@ -816,6 +816,7 @@ data_read(void)
 
           break;
         case wptdata:
+        case unknown_gpsdata:
           ozi_parse_waypt(i, s, wpt_tmp, fsdata);
           break;
         case posndata:
@@ -844,6 +845,7 @@ data_read(void)
         }
         break;
       case wptdata:
+      case unknown_gpsdata:
         if (linecount > 4) {  /* skipping over file header */
           fs_chain_add(&(wpt_tmp->fs),
                        (format_specific_data *) fsdata);

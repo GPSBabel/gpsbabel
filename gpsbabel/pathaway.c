@@ -588,6 +588,7 @@ static void ppdb_read(void)
     ppdb_read_wpt(route_head, 1);
     break;
   case wptdata:
+  case unknown_gpsdata:
     ppdb_read_wpt(NULL, 0);
     break;
   case posndata:
@@ -763,6 +764,7 @@ static void ppdb_write(void)
 
   switch (global_opts.objective) {	/* Only one target is possible */
   case wptdata:
+  case unknown_gpsdata:
     if (opt_dbname == NULL) {
       strncpy(file_out->name, "PathAway Waypoints", PDB_DBNAMELEN);
     }

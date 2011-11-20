@@ -1934,6 +1934,7 @@ unicsv_wr(void)
 {
   switch (global_opts.objective) {
   case wptdata:
+  case unknown_gpsdata:
     waypt_disp_all(unicsv_waypt_enum_cb);
     break;
   case trkdata:

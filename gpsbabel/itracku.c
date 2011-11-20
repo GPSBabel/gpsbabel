@@ -608,6 +608,7 @@ itracku_read(void)
 {
   switch (global_opts.objective) {
   case wptdata:
+  case unknown_gpsdata:
     itracku_read_waypt();
     break;
   case trkdata:

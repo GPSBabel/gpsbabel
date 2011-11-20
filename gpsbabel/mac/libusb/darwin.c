@@ -1115,7 +1115,7 @@ int usb_os_find_devices(struct usb_bus *bus, struct usb_device **devices)
     result = (*(device))->GetDeviceAddress(device, (USBDeviceAddress *)&address);
 
     if (usb_debug >= 2)
-      fprintf(stderr, "usb_os_find_devices: Found USB device at location 0x%08lx\n", location);
+      fprintf(stderr, "usb_os_find_devices: Found USB device at location 0x%08lx\n", (long) location);
 
     /* first byte of location appears to be associated with the device's bus */
     if (location >> 24 == bus_loc >> 24) {
@@ -1143,7 +1143,7 @@ int usb_os_find_devices(struct usb_bus *bus, struct usb_device **devices)
 
       if (usb_debug >= 2)
 	fprintf(stderr, "usb_os_find_devices: Found %s on %s at location 0x%08lx\n",
-		dev->filename, bus->dirname, location);
+		dev->filename, bus->dirname, (long) location);
     }
 
     /* release the device now */
