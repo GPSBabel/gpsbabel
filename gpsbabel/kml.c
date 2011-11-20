@@ -628,7 +628,7 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   min_alt = fmt_altitude(td->min_alt, &min_alt_units);
   distance = fmt_distance(td->distance_meters, &distance_units);
 
-  kml_write_xml(0, "<Snippet/>\n");
+  kml_write_xml(0, "<snippet/>\n");
 
   kml_write_xml(1, "<description>\n");
   kml_write_xml(1, "<![CDATA[<table>\n");
@@ -885,7 +885,7 @@ static void kml_output_point(const waypoint* waypointp, kml_point_type pt_type)
     if (atoi(opt_labels)) {
       kml_write_xmle("name", waypointp->shortname);
     }
-    kml_write_xml(0, "<Snippet/>\n");
+    kml_write_xml(0, "<snippet/>\n");
     kml_output_description(waypointp);
     kml_output_lookat(waypointp);
     kml_output_timestamp(waypointp);
@@ -1456,7 +1456,7 @@ static void kml_waypt_pr(const waypoint* waypointp)
   // Description
   if (waypointp->url && waypointp->url[0]) {
     char* odesc = xml_entitize(waypointp->url);
-    kml_write_xml(0, "<Snippet/>\n");
+    kml_write_xml(0, "<snippet/>\n");
     kml_write_xml(0, "<description>\n");
     if (waypointp->url_link_text && waypointp->url_link_text[0])  {
       char* olink = xml_entitize(waypointp->url_link_text);
@@ -1856,7 +1856,7 @@ void kml_write(void)
   }
 
   if (now) {
-    kml_write_xml(0, "<Snippet>Created %s</Snippet>\n", import_time);
+    kml_write_xml(0, "<snippet>Created %s</snippet>\n", import_time);
   }
 
   kml_write_AbstractView();
