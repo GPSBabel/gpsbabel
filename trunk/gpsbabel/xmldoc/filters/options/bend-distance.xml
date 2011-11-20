@@ -1,0 +1,7 @@
+<para>Distance in meters to the original point where the new points will be added.</para>
+
+<para>The new points will be created at this distance. The first one in the
+direction of the previous point, ant the second one in the direction
+of the next point in the route.</para>
+
+

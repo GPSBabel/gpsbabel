@@ -69,7 +69,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
 
 FMTS=@FMTS@
 
-FILTERS=position.o radius.o duplicate.o arcdist.o polygon.o smplrout.o \
+FILTERS=bend.o position.o radius.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
 	nukedata.o interpolate.o transform.o height.o swapdata.o
 
@@ -392,6 +392,9 @@ avltree.o: avltree.c avltree.h defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h
 axim_gpb.o: axim_gpb.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h
+bend.o: bend.c defs.h config.h queue.h gbtypes.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h filterdefs.h \
+  grtcirc.h
 bcr.o: bcr.c defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h csv_util.h \
   garmin_tables.h

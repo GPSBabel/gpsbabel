@@ -1,0 +1,32 @@
+<para>The bend filter modifies each route replacing each point inside a
+curve with two points: one at a given distance in the direction of the
+previous point, and another at the same distance in the direction of
+the next point in the route. It only replaces points where there is a
+change in heading big enough.</para>
+
+<para>When creating a route, points are usually created inside curves or
+intersections. That means that, while navigating that route using a
+GPS unit, the course pointer would aim to the inside of that curve or
+intersection, and only when you have passed that point will the GPS 
+aim to the next waypoint in the route. This behaviour is useful in
+marine navigation but when biking, for instance, it may be a bit late
+to decide where to turn to in an intersection.</para>
+
+<para>This filter tries to solve that creating a waypoint before and after
+where there is a change in direction.That way, the course pointer will
+point to the direction you should turn to ahead in time.</para>
+
+<para>For this filter to work correctly, the route should be simple enough
+that there is only one waypoint inside each curve or intersection.
+Because of that, it is usually a good idea to use the simplify filter
+before this one.</para>
+
+<para>This command line reads route.gpx and replaces each point with other two
+points: one 25 metres before and another 25 metres after the original
+point. It replaces a point only if there is a change of direction
+larger than 5 degrees.</para>
+
+<para><userinput>gpsbabel -i gpx -f route.gpx -x
+bend,distance=25,interpolate,minangle=5 -o gpx -F newroute.gpx
+</userinput></para>
+

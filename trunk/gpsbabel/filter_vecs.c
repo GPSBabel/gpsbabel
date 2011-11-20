@@ -30,6 +30,7 @@ typedef struct {
   const char* desc;
 } fl_vecs_t;
 
+extern filter_vecs_t bend_vecs;
 extern filter_vecs_t position_vecs;
 extern filter_vecs_t radius_vecs;
 extern filter_vecs_t duplicate_vecs;
@@ -54,6 +55,11 @@ fl_vecs_t filter_vec_list[] = {
     &arcdist_vecs,
     "arc",
     "Include Only Points Within Distance of Arc",
+  },
+  {
+    &bend_vecs,
+    "bend",
+    "Add points before and after bends in routes"
   },
   {
     &discard_vecs,
