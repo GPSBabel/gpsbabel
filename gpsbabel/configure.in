@@ -303,19 +303,16 @@ AC_ARG_WITH(libexpat,
 			# libexpat installed via fink
 			EXPAT_LIB=/sw/lib/libexpat.a
 			LIBS="$LIBS -L/sw/lib"
-			  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
 		fi
 		if test -f /opt/local/lib/libexpat.a ; then
 			# libexpat installed via macports
 			EXPAT_LIB=/opt/local/lib/libexpat.a
 			LIBS="$LIBS -L/opt/local/lib"
-			  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
 		fi
 		if test -f /usr/local/lib/libexpat.a ; then
 			# libexpat installed from source
 			EXPAT_LIB=/usr/local/lib/libexpat.a
 			LIBS="$LIBS -L/usr/local/lib"
-			  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
 		fi				
 		;;
 	*-gentoo-freebsd*)
@@ -324,21 +321,21 @@ AC_ARG_WITH(libexpat,
 	*-*-freebsd*)
 		if test -f /usr/local/lib/libexpat.a ; then
 			EXPAT_LIB=/usr/local/lib/libexpat.a
-			  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
 		fi
 		;;
 	esac
   ]
 )
 
-if test "x${EXPAT_LIB}" = x; then
+if ! test "x${EXPAT_LIB}" = x; then
+  AC_MSG_RESULT($EXPAT_LIB)
+  AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
+else
   AC_MSG_RESULT(try to autodetect)
   AC_CHECK_LIB([expat], [XML_ParserCreate], 
     AC_DEFINE(HAVE_LIBEXPAT, 1, [Defined if you have libexpat])
     EXPAT_LIB=-lexpat
   )
-else
-  AC_MSG_RESULT($EXPAT_LIB)
 fi
 AC_SUBST(EXPAT_LIB)
 
