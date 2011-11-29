@@ -303,7 +303,7 @@ void trk_coord(const char* args, const char** attrv)
   }
   track_add_head(trk_head);
 
-  while ((n = sscanf(args, "%lf,%lf,%lf %n", &lon, &lat, &alt, &consumed)) > 0) {
+  while ((n = sscanf(args, "%lf,%lf,%lf%n", &lon, &lat, &alt, &consumed)) > 0) {
 
     trkpt = waypt_new();
     trkpt->latitude = lat;
@@ -311,7 +311,7 @@ void trk_coord(const char* args, const char** attrv)
 
     // Line malformed or two-arg format without alt .  Rescan.
     if (2 == n) {
-      sscanf(args, "%lf,%lf %n", &lon, &lat, &consumed);
+      sscanf(args, "%lf,%lf%n", &lon, &lat, &consumed);
     }
 
     if (3 == n) {
