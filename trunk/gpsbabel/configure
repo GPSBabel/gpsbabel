@@ -4518,31 +4518,16 @@ else
 			# libexpat installed via fink
 			EXPAT_LIB=/sw/lib/libexpat.a
 			LIBS="$LIBS -L/sw/lib"
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_LIBEXPAT 1
-_ACEOF
-
 		fi
 		if test -f /opt/local/lib/libexpat.a ; then
 			# libexpat installed via macports
 			EXPAT_LIB=/opt/local/lib/libexpat.a
 			LIBS="$LIBS -L/opt/local/lib"
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_LIBEXPAT 1
-_ACEOF
-
 		fi
 		if test -f /usr/local/lib/libexpat.a ; then
 			# libexpat installed from source
 			EXPAT_LIB=/usr/local/lib/libexpat.a
 			LIBS="$LIBS -L/usr/local/lib"
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_LIBEXPAT 1
-_ACEOF
-
 		fi
 		;;
 	*-gentoo-freebsd*)
@@ -4551,11 +4536,6 @@ _ACEOF
 	*-*-freebsd*)
 		if test -f /usr/local/lib/libexpat.a ; then
 			EXPAT_LIB=/usr/local/lib/libexpat.a
-
-cat >>confdefs.h <<\_ACEOF
-#define HAVE_LIBEXPAT 1
-_ACEOF
-
 		fi
 		;;
 	esac
@@ -4564,7 +4544,15 @@ _ACEOF
 fi
 
 
-if test "x${EXPAT_LIB}" = x; then
+if ! test "x${EXPAT_LIB}" = x; then
+  { echo "$as_me:$LINENO: result: $EXPAT_LIB" >&5
+echo "${ECHO_T}$EXPAT_LIB" >&6; }
+
+cat >>confdefs.h <<\_ACEOF
+#define HAVE_LIBEXPAT 1
+_ACEOF
+
+else
   { echo "$as_me:$LINENO: result: try to autodetect" >&5
 echo "${ECHO_T}try to autodetect" >&6; }
   { echo "$as_me:$LINENO: checking for XML_ParserCreate in -lexpat" >&5
@@ -4638,9 +4626,6 @@ _ACEOF
 
 fi
 
-else
-  { echo "$as_me:$LINENO: result: $EXPAT_LIB" >&5
-echo "${ECHO_T}$EXPAT_LIB" >&6; }
 fi
 
 
