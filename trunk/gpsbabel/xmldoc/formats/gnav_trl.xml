@@ -8,7 +8,7 @@
 </para>
 
 <para>
-  <table>
+  <table id="structure">
     <title>Track point structure (16 bytes)</title>
     <tgroup cols="3">
     <thead>

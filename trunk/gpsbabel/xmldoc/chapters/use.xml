@@ -68,12 +68,12 @@ name of a file to be read or written.
          <para> This command will read from a Magellan unit attached
          to the first serial port on a Linux system (device names will
          vary on other OSes; typically COMx: on WIndows) and write them as a geocaching loc file.</para>
-<example>
+<example id="linux_download_from_magellan">
   <title>Command showing Linux download from Magellan serial and writing to .loc file</title>
          <para><userinput>gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</userinput></para>
 </example>
          <para>This second command does the same on Microsoft Windows.</para>
-<example>
+<example id="windows_download_from_magellan">
   <title>Command showing Windows download from Magellan serial and writing to .loc file</title>
          <para><userinput>gpsbabel -i magellan -f com1 -o geo -F mag.loc</userinput></para>
 </example>
@@ -141,16 +141,16 @@ merged data to multiple destinations.
          <parameter moreinfo="none">-i</parameter> argument is seen.
          Files are read in the order they appear. So you could merge
          three input files into one output file with: </para>
-	<example>
+	<example id="merging_files">
 	<title>Merging multiple files into one</title>
            <para><userinput>gpsbabel -i geo -f 1.loc -f 2.loc -f 3.loc -o geo -F big.loc</userinput></para>
 	</example>
          <para>You can merge files of different types:</para>
-	<example>
+	<example id="merging_different_types_of_files">
 	<title>Merging multiple files of differing types.</title>
          <para><userinput>gpsbabel  -i geo -f 1.loc -i gpx -f 2.gpx -i pcx 3.pcx  -o gpsutil -F big.gps</userinput></para>
 	</example>
-	<example>
+	<example id="multiple_writes">
 	 <title>Writing the same data in multiple output formats.</title>
          <para> You can write the same data in different output formats:</para>
 
@@ -294,7 +294,7 @@ merged data to multiple destinations.
 	  output.   Additional formats may be added by interested parties 
 	  later.
     </para>
-<example>
+<example id="realtime_reading">
   <title>Read realtime positioning from Garmin USB, write to Keyhole Markup</title>
   <para><userinput>gpsbabel -T -i garmin -f usb: -o kml -F xxx.kml</userinput></para>
   <para>
@@ -303,7 +303,7 @@ merged data to multiple destinations.
         </para>
       </example>
 
-<example>
+<example id="realtime_reading_wintec">
   <title>Read realtime positioning from Wintec WBT-201 via Bluetooth on Mac, write to Keyhole Markup</title>
   <para><userinput>gpsbabel -T -i nmea -f /dev/cu.G-Rays2-SPPslave-1 -o kml -F xxx.kml</userinput></para>
   <para>
