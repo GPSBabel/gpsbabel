@@ -1394,7 +1394,7 @@ that are suitable for Garmin's POI loader.
 <para>
 For additional examples, please see the 
 <filename>*.style</filename> files in the 
-<filename>style/</filename> subdirectory of the GPSBabel source tree or at the <ulink url="http://gpsbabel.cvs.sourceforge.net/gpsbabel/gpsbabel/style/">online source.</ulink>.
+<filename>style/</filename> subdirectory of the GPSBabel source tree or at the <ulink url="http://code.google.com/p/gpsbabel/source/browse/#svn%2Ftrunk%2Fgpsbabel%2Fstyle">online source.</ulink>.
 </para>
 </section> <!-- examples -->
 
