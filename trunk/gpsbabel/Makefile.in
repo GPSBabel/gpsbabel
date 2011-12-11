@@ -268,6 +268,7 @@ release-sourcecheck: changes.html
 	svn export https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU)/gpsbabel gpsbabel-$(VERSIOND) 
 	touch gpsbabel-$(VERSIOND)/internal_styles.c
 	touch gpsbabel-$(VERSIOND)/configure
+	touch gpsbabel-$(VERSIOND)/xcsv_tokens.gperf
 
 #
 # Build the release tarball from the exported CVS tree, tweaking 
