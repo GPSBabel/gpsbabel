@@ -441,6 +441,9 @@ waypt_free(waypoint *wpt)
     if (gc_data->hint) {
       xfree(gc_data->hint);
     }
+    if (gc_data->personal_note) {
+      xfree(gc_data->personal_note);
+    }
     xfree(gc_data);
   }
   fs_chain_destroy(wpt->fs);

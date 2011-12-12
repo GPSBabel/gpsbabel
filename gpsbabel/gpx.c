@@ -134,6 +134,8 @@ typedef enum {
   tt_cache_log_type,
   tt_cache_log_date,
   tt_cache_placer,
+  tt_cache_favorite_points,
+  tt_cache_personal_note,
 
   tt_wpt_extensions,
 
@@ -324,6 +326,8 @@ tag_mapping tag_path_map[] = {
   GEOTAG(tt_cache_desc_short, 	"short_description"),
   GEOTAG(tt_cache_desc_long, 	"long_description"),
   GEOTAG(tt_cache_placer, 	"owner"),
+  GEOTAG(tt_cache_favorite_points, 	"favorite_points"),
+  GEOTAG(tt_cache_personal_note, 	"personal_note"),
   { tt_cache_log_wpt, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:log_wpt"},
   { tt_cache_log_wpt, 1, "/gpx/wpt/extensions/cache/logs/log/log_wpt"},
   { tt_cache_log_type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:type"},
@@ -1009,6 +1013,12 @@ gpx_end(void* data, const XML_Char* xml_el)
       waypt_alloc_gc_data(wpt_tmp)->last_found  = gc_log_date;
     }
     gc_log_date = 0;
+    break;
+  case tt_cache_favorite_points:
+    waypt_alloc_gc_data(wpt_tmp)->favorite_points  = atoi(cdatastrp);
+    break;
+  case tt_cache_personal_note:
+    waypt_alloc_gc_data(wpt_tmp)->personal_note  = xstrdup(cdatastrp);
     break;
 
     /*

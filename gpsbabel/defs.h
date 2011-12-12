@@ -280,6 +280,8 @@ typedef struct {
   char* hint; /* all these UTF8, XML entities removed, May be not HTML. */
   utf_string desc_short;
   utf_string desc_long;
+  int favorite_points;
+  char* personal_note;
 } geocache_data ;
 
 typedef struct xml_tag {
