@@ -261,7 +261,7 @@ compare ${REFERENCE}/track/vitovtt-sample.gpx ${TMPDIR}/vitovtt-sample.gpx
 #
 rm -f ${TMPDIR}/mlink*
 gpsbabel -i gpx -f ${REFERENCE}/multiple-links.gpx -o gpx,gpxver=1.1 -F ${TMPDIR}/mlink-1.gpx
-compare ${TMPDIR}/mlink-1.gpx ${REFERENCE}/multiple-links.gpx
+compare ${REFERENCE}/multiple-links.gpx ${TMPDIR}/mlink-1.gpx 
 
 #
 # Geogrid Viewer tracklogs

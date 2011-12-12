@@ -244,7 +244,7 @@ wr_buf(const unsigned char *str, int len)
 
 gbuint8 NL[2] = { 0x0D, 0x0A };
 gbuint8 MSG_START[2] = { 0xA0, 0xA1 };
-gbuint8 SECTOR_READ_END[] = "END\0CHECKSUM=";
+gbuint8 SECTOR_READ_END[13] = "END\0CHECKSUM=";
 
 static int
 skytraq_calc_checksum(const unsigned char *buf, int len)
@@ -643,7 +643,7 @@ process_data_item(struct read_state *pst, const item_frame *pitem, int len)
       return res_ERROR;
     }
     ts = me_read32(pitem->full.ts);
-    f.gps_week = ts & 0x00000FFF;
+    f.gps_week = ts & 0x000003FF;
     f.gps_sec = ts >> 12;
     f.x = me_read32(pitem->full.x);
     f.y = me_read32(pitem->full.y);
