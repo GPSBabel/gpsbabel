@@ -224,7 +224,7 @@ html_disp(const waypoint* wpt)
         char* t = NULL;
         int encoded = 0;
         encstr = xml_attribute(logpart, "encoded");
-        encoded = (encstr[0] != 'F');
+        encoded = (toupper(encstr[0]) != 'F');
 
         if (html_encrypt && encoded) {
           s = rot13(logpart->cdata);
