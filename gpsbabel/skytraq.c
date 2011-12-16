@@ -244,7 +244,7 @@ wr_buf(const unsigned char *str, int len)
 
 gbuint8 NL[2] = { 0x0D, 0x0A };
 gbuint8 MSG_START[2] = { 0xA0, 0xA1 };
-gbuint8 SECTOR_READ_END[13] = "END\0CHECKSUM=";
+gbuint8 SECTOR_READ_END[13] = { 'E','N','D', 0, 'C','H','E','C','K','S','U','M','=' };
 
 static int
 skytraq_calc_checksum(const unsigned char *buf, int len)
@@ -1306,7 +1306,7 @@ arglist_t miniHomer_args[] = {
 /*
  * Names of the POIs on miniHomer
  */
-static char *poinames[] = {
+static const char *poinames[] = {
   "Home", "Car", "Boat", "Heart", "Bar"
 };
 #define NUMPOI (sizeof poinames/sizeof poinames[0])
