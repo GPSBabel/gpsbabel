@@ -34,15 +34,15 @@ const char *cet_cs_alias_ibm891[] =
 #define cet_ucs4_ofs_ibm891 128
 #define cet_ucs4_cnt_ibm891 1
 
-const int cet_ucs4_map_ibm891[cet_ucs4_cnt_ibm891] = {};
+const int cet_ucs4_map_ibm891[cet_ucs4_cnt_ibm891] = {0};
 
 #define cet_ucs4_to_ibm891_ct 1
 
-const cet_ucs4_link_t cet_ucs4_to_ibm891_links[cet_ucs4_to_ibm891_ct] = {};
+const cet_ucs4_link_t cet_ucs4_to_ibm891_links[cet_ucs4_to_ibm891_ct] = {0};
 
 /*
 #define cet_ucs4_to_ibm891_extra_ct 0
-const cet_ucs4_link_t cet_ucs4_to_ibm891_extra[cet_ucs4_to_ibm891_extra_ct] = {};
+const cet_ucs4_link_t cet_ucs4_to_ibm891_extra[cet_ucs4_to_ibm891_extra_ct] = {0};
 */
 
 cet_cs_vec_t cet_cs_vec_ibm891 =	/* defined in cet.h */
