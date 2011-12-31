@@ -188,9 +188,9 @@ mmo_readstr(void)
         int ii, jj, ch, resbytes=0;
         res = xmalloc(len*2 + 1); // bigger to allow for utf-8 expansion
         for (ii=0; ii<len; ii++) {
-          ch = gbfgetint16(fin);
           char utf8buf[8];
           int utf8len;
+          ch = gbfgetint16(fin);
           // convert to utf-8, possibly multiple bytes
           utf8len = cet_ucs4_to_utf8(utf8buf, sizeof(utf8buf), ch);
           for (jj=0; jj < utf8len; jj++) {

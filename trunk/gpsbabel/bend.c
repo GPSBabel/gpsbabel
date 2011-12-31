@@ -76,19 +76,21 @@ create_wpt_dest(const waypoint* wpt_orig, double lat_orig,
 {
   double distance = gcdist(lat_orig, long_orig,
                            lat_orig_adj, long_orig_adj);
+  double frac;
+  double lat_dest;
+  double long_dest;
+  waypoint* wpt_dest = NULL;
   distance = radtometers(distance);
   if (distance <= maxDist) {
     return NULL;
   }
 
-  double frac = maxDist / distance;
-  double lat_dest;
-  double long_dest;
+  frac = maxDist / distance;
 
   linepart(lat_orig, long_orig, lat_orig_adj, long_orig_adj, frac,
            &lat_dest, &long_dest);
 
-  waypoint* wpt_dest = waypt_dupe(wpt_orig);
+  wpt_dest = waypt_dupe(wpt_orig);
   wpt_dest->latitude = DEG(lat_dest);
   wpt_dest->longitude = DEG(long_dest);
 
@@ -136,6 +138,7 @@ process_route(const route_head* route_orig, route_head* route_dest)
 
       double lat_orig_next = RAD(wpt_orig_next->latitude);
       double long_orig_next = RAD(wpt_orig_next->longitude);
+	  waypoint* wpt_dest_next = NULL;
 
       if (is_small_angle(lat_orig, long_orig, lat_orig_prev,
                          long_orig_prev, lat_orig_next, long_orig_next)) {
@@ -148,7 +151,7 @@ process_route(const route_head* route_orig, route_head* route_dest)
           route_add_wpt(route_dest, wpt_dest_prev);
         }
 
-        waypoint* wpt_dest_next = create_wpt_dest(wpt_orig,
+        wpt_dest_next = create_wpt_dest(wpt_orig,
                                   lat_orig, long_orig, lat_orig_next, long_orig_next);
         if (wpt_dest_next != NULL) {
           route_add_wpt(route_dest, wpt_dest_next);

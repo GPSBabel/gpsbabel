@@ -1036,7 +1036,7 @@ const char* map_templates[] = {
 static
 void kml_gc_make_balloonstyletext(void)
 {
-
+  const char** tp;
   kml_write_xml(1, "<BalloonStyle><text><![CDATA[\n");
 
   kml_write_xml(0, "<!DOCTYPE html>\n");
@@ -1080,7 +1080,6 @@ void kml_gc_make_balloonstyletext(void)
   kml_gc_all_tabs_text();
   kml_write_xml(0, "<h1>Extra Maps</h1>\n");
 
-  const char** tp;
   kml_write_xml(1, "<ul>\n");
   // Fortunately, all the mappy map URLs take lat/longs in the URLs, so
   // the substition is easy.
@@ -1263,13 +1262,15 @@ char* kml_geocache_get_logs(const waypoint* wpt)
   char* r = xstrdup("");
 
   fs_xml* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
+  xml_tag* root = NULL;
+  xml_tag* curlog = NULL;
+  xml_tag* logpart = NULL;
+
   if (!fs_gpx) {
     return r;
   }
 
-  xml_tag* root = fs_gpx->tag;
-  xml_tag* curlog = NULL;
-  xml_tag* logpart = NULL;
+  root = fs_gpx->tag;
   curlog = xml_findfirst(root, "groundspeak:log");
   while (curlog) {
     time_t logtime = 0;
@@ -1340,6 +1341,9 @@ static void kml_geocache_pr(const waypoint* waypointp)
   char* p, *is;
   char date_placed[100];  // Always long engough for a date.
 
+  const char* issues = "";
+  char* logs;
+
   kml_write_xml(1, "<Placemark>\n");
 
   kml_write_xml(1, "<name>\n");
@@ -1395,7 +1399,6 @@ static void kml_geocache_pr(const waypoint* waypointp)
 
   // Highlight any issues with the cache, such as temp unavail
   // or archived.
-  const char* issues = "";
   if (waypointp->gc_data->is_archived == status_true) {
     issues = "&lt;font color=\"red\"&gt;This cache has been archived.&lt;/font&gt;&lt;br/&gt;\n";
   } else if (waypointp->gc_data->is_available == status_false) {
@@ -1410,7 +1413,7 @@ static void kml_geocache_pr(const waypoint* waypointp)
   kml_write_xml(0, "<Data name=\"gc_icon\"><value>%s</value></Data>\n", is);
   kml_write_xml(0, "<Data name=\"gc_short_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data->desc_short.utfstring ? waypointp->gc_data->desc_short.utfstring : "");
   kml_write_xml(0, "<Data name=\"gc_long_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data->desc_long.utfstring ? waypointp->gc_data->desc_long.utfstring : "");
-  char* logs = kml_geocache_get_logs(waypointp);
+  logs = kml_geocache_get_logs(waypointp);
   kml_write_xml(0, "<Data name=\"gc_logs\"><value><![CDATA[%s]]></value></Data>\n", logs);
   xfree(logs);
 
