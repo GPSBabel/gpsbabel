@@ -41,7 +41,7 @@ const int cet_ucs4_map_iso_8859_1[cet_ucs4_cnt_iso_8859_1] = {0};
 
 #define cet_ucs4_to_iso_8859_1_ct 1
 
-const cet_ucs4_link_t cet_ucs4_to_iso_8859_1_links[cet_ucs4_to_iso_8859_1_ct] = {0};
+const cet_ucs4_link_t cet_ucs4_to_iso_8859_1_links[cet_ucs4_to_iso_8859_1_ct] = {{0}};
 
 /*
 #define cet_ucs4_to_iso_8859_1_extra_ct 0
