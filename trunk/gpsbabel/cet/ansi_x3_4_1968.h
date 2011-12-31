@@ -41,7 +41,7 @@ const int cet_ucs4_map_ansi_x3_4_1968[cet_ucs4_cnt_ansi_x3_4_1968] = {0};
 
 #define cet_ucs4_to_ansi_x3_4_1968_ct 1
 
-const cet_ucs4_link_t cet_ucs4_to_ansi_x3_4_1968_links[cet_ucs4_to_ansi_x3_4_1968_ct] = {0};
+const cet_ucs4_link_t cet_ucs4_to_ansi_x3_4_1968_links[cet_ucs4_to_ansi_x3_4_1968_ct] = {{0}};
 
 // #define cet_ucs4_to_ansi_x3_4_1968_extra_ct 200
 
