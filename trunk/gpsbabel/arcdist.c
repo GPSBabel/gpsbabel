@@ -184,8 +184,9 @@ arcdist_process(void)
         warning(MYNAME ": Warning: Arc file contains unusable vertex on line %d.\n", fileline);
       }
       else {
-        waypoint* arcpttmp = waypt_dupe(arcpt1);
+        waypoint* arcpttmp = arcpt1;
         arcdist_arc_disp_wpt_cb(arcpt2);
+        arcpt1 = arcpt2;
         arcpt2 = arcpttmp;
       }
     }
