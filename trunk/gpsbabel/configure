@@ -1749,9 +1749,9 @@ DOCVERSION=1.4.3
 
 
 # Increase GBBUILD for a new release
-GBBUILD=23
+GBBUILD=24
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
-PACKAGE_RELEASE="-beta20111112"
+PACKAGE_RELEASE="-beta20120114"
 # DOCVERSION=development
 
 cat >>confdefs.h <<_ACEOF
