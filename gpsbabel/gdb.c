@@ -1175,7 +1175,7 @@ write_header(void)
 {
   char buff[128], tbuff[32];
   char* c;
-  int len;
+  int len, n = 0;
   struct tm tm;
 
   FWRITE_CSTR("MsRcf");
@@ -1211,10 +1211,22 @@ write_header(void)
   */
 
   memset(&tm, 0, sizeof(tm));
-  sscanf(gdb_release_date+7, "%d/%d/%d %d:%d:%d", &tm.tm_year, &tm.tm_mon, &tm.tm_mday, &tm.tm_hour, &tm.tm_min, &tm.tm_sec);
+
+  n = sscanf(gdb_release_date+7, "%d/%d/%d %d:%d:%d", &tm.tm_year, &tm.tm_mon, &tm.tm_mday, &tm.tm_hour, &tm.tm_min, &tm.tm_sec);
+  if (n != 6) { 
+    // The $Date string in gdb_release_date[] above is bad.
+    fatal(MYNAME ": internal date format error on %s\n", gdb_release_date + 7);
+  }
+
   tm.tm_year -= 1900;
   tm.tm_mon -= 1;
-  strftime(tbuff, sizeof(tbuff), "%b %d %Y*%H:%M:%S", &tm);
+
+  n = strftime(tbuff, sizeof(tbuff), "%b %d %Y*%H:%M:%S", &tm);
+  if (n == 0) {
+    // The build of the struct tm was bad.
+    fatal(MYNAME ": internal date generation error for %s\n", gdb_release_date + 7);
+  }
+
   snprintf(buff, sizeof(buff), "A].GPSBabel-%s*%s", gpsbabel_version, tbuff);
 #endif
   len = strlen(buff);
