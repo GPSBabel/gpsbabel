@@ -16,7 +16,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{1B8FE958-A304-4902-BF7A-4E2F0F5B7017}
 AppName=GPSBabel
-AppVerName=GPSBabel 1.4.3-beta20111112
+AppVerName=GPSBabel 1.4.3-beta20120114
 AppPublisher=GPSBabel
 AppPublisherURL=http://www.gpsbabel.org
 AppSupportURL=http://www.gpsbabel.org
@@ -24,7 +24,7 @@ AppUpdatesURL=http://www.gpsbabel.org
 DefaultDirName={pf}\GPSBabel
 DefaultGroupName=GPSBabel
 OutputDir=release
-OutputBaseFilename=GPSBabel-1.4.3-beta20111112-Setup
+OutputBaseFilename=GPSBabel-1.4.3-beta20120114-Setup
 SetupIconFile=images\babel2.ico
 Compression=lzma
 SolidCompression=yes
