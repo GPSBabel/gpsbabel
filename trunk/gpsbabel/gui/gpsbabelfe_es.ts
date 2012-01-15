@@ -1540,32 +1540,32 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
 <context>
     <name>UpgradeCheck</name>
     <message>
-        <location filename="upgrade.cpp" line="209"/>
+        <location filename="upgrade.cpp" line="211"/>
         <source>HTTP</source>
         <translation>HTTP</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="210"/>
+        <location filename="upgrade.cpp" line="212"/>
         <source>Download failed: %1.</source>
         <translation>La descarga falló: %1.</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="239"/>
+        <location filename="upgrade.cpp" line="241"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="240"/>
+        <location filename="upgrade.cpp" line="242"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation>Ha devuelto datos no válidos en la línea %1: %2.</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="279"/>
+        <location filename="upgrade.cpp" line="281"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation>Una nueva versióon de GPSBabel ha salido ya. &lt;br /&gt;Tu versión es la %1 &lt;br /&gt;La última versióon sería %2</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="296"/>
+        <location filename="upgrade.cpp" line="298"/>
         <source>Do you wish to download an upgrade?</source>
         <translation>¿Quieres bajarte una actualización?</translation>
     </message>
@@ -1574,7 +1574,7 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
         <translation type="obsolete">&lt;center&gt;&lt;b&gt;Una nueva versión de GPSBabel está disponible &lt;/b&gt;&lt;br&gt;La versión actual es %1 &lt;br&gt; La versión más reciente es %2&lt;/center&gt;</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="290"/>
+        <location filename="upgrade.cpp" line="292"/>
         <source>Upgrade</source>
         <translation>Actualizar</translation>
     </message>

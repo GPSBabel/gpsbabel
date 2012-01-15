@@ -1427,37 +1427,37 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
 <context>
     <name>UpgradeCheck</name>
     <message>
-        <location filename="upgrade.cpp" line="209"/>
+        <location filename="upgrade.cpp" line="211"/>
         <source>HTTP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="210"/>
+        <location filename="upgrade.cpp" line="212"/>
         <source>Download failed: %1.</source>
         <translation>Загрузка завершилась неудачей: %1.</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="239"/>
+        <location filename="upgrade.cpp" line="241"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="240"/>
+        <location filename="upgrade.cpp" line="242"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation>Некорректные данные возвращены в строке %1: %2.</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="279"/>
+        <location filename="upgrade.cpp" line="281"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation>Доступна новая версия GPSBabel.&lt;br /&gt;Используемая версия %1 &lt;br /&gt;Последняя доступная версия %2</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="290"/>
+        <location filename="upgrade.cpp" line="292"/>
         <source>Upgrade</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="296"/>
+        <location filename="upgrade.cpp" line="298"/>
         <source>Do you wish to download an upgrade?</source>
         <translation>Загрузить обновление?</translation>
     </message>
