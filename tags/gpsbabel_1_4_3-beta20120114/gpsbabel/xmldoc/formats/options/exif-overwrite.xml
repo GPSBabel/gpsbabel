@@ -1,0 +1,6 @@
+<para>
+   In the default case GPSBabel reads the output file (the file that should be
+   tagged with GPS information) and then creates a new file with an additional
+   .JPG extension. With this option in a final step the original file will be
+   deleted and the new file renamed as the original filename.
+</para>

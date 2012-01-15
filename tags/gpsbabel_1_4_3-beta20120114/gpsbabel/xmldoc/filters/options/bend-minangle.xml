@@ -1,0 +1,7 @@
+<para>Minimum curve angle in degrees.</para>
+
+<para>The substitution will only be made if the change in the heading is
+greater than this value. This avoids replacing a point if the GPS unit
+is already pointing in the correct direction, or if the route reaches
+a certain point and goes back the same road.</para>
+

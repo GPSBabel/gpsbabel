@@ -1,0 +1,9 @@
+<para>
+   Don't create unique names sample:
+</para>
+<para>
+  <userinput>
+    gpsbabel -i gpx -f "My Points.gpx" -o garmin_gpi,unique=0 -F "My Points.gpi"
+  </userinput>
+</para>
+

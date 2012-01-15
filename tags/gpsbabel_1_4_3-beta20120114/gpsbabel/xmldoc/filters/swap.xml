@@ -1,0 +1,5 @@
+<para>
+   Simple filter to swap the coordinate values (latitude and longitude) of all
+   points. This can be helpful for wrong defined/coded data. Or if you think, you can use
+   one of our xcsv formats, but latitude and longitude are in opposite order.
+</para>

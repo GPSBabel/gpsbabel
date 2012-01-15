@@ -1,0 +1,6 @@
+<para>
+   <ulink url="http://www.mapking.com/en/">Mapking</ulink> provides a set of tools for GPS 
+   navigation.  The location of distributed maps is mainly in Asia, so the software seems 
+   not (yet) well known in Europe or US.  Some of the GPS tools (e.g. Mapking 2007 for Windows Mobile) 
+   can also be used to write waypoints and save them under the .tr7 format which can be translated by GPSBabel.
+</para>

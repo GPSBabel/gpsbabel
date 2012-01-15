@@ -1,0 +1,9 @@
+#
+# Mobile Garmin XT Track files () (read-only)
+#
+
+gpsbabel -i garmin_xt,ftype=ATRK -f ${REFERENCE}/track/GARMIN_ATRK.NVM -o gpx -F ${TMPDIR}/garmin_xt_atrk.gpx
+compare ${TMPDIR}/garmin_xt_atrk.gpx ${REFERENCE}/track/garmin_xt_atrk.gpx
+gpsbabel -i garmin_xt,ftype=STRK -f ${REFERENCE}/track/GARMIN_STRK.NVM -o gpx -F ${TMPDIR}/garmin_xt_strk.gpx
+compare ${TMPDIR}/garmin_xt_strk.gpx ${REFERENCE}/track/garmin_xt_strk.gpx
+

@@ -1,0 +1,62 @@
+<para>
+Serial download protocol for GPS data loggers called "miniHomer". 
+These loggers are based on Skytraq Venus 5 and Venus 6 chipsets, but with modified firmware.
+The miniHomer logger has five POI (or better: Point-to-Return, PTR?), which can be set programatically. The miniHomer module in gpsbabel is an extension of the skytraq module. 
+</para>
+
+<para>
+Following a list of devices which should be supported by this module
+(Note that not all of them have actually been tested, so if you can confirm that additional models work, please mail the gpsbabel-misc group with your success, tips, and any pertinent links for your model.)
+</para>
+
+<table id="miniHomer_devices">
+<title>Devices supported by miniHomer module</title>
+<tgroup cols="4">
+<thead>
+<row>
+ <entry>Manufacturer</entry> 
+ <entry>Model</entry> 
+ <entry>USB (baud)</entry> 
+ <entry>Bluetooth (baud)</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>
+  	<ulink url="http://navin.com.tw/miniHomer.htm"> Navin </ulink>
+  	<ulink url="http://www.znex.de/minihomer-details.html">Z:NEX</ulink>
+  </entry>
+  <entry>miniHomer</entry>
+  <entry>up to 230400</entry>
+  <entry>this device does not have bluetooth</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<example id="miniHomer-on-linux">
+  <title>Command showing miniHomer download of tracks and erasing the logger on Linux</title>
+  <para><userinput>gpsbabel -i miniHomer,erase -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput></para>
+</example>
+
+<example id="miniHomer-erase">
+  <title>Command showing miniHomer erasing the logger without download on Linux</title>
+  <para><userinput>gpsbabel -i miniHomer,erase,no-output -f /dev/ttyUSB0</userinput></para>
+</example>
+
+<para>miniHomer has five POI called Home, <emphasis>Car</emphasis>, <emphasis>Boat</emphasis>, <emphasis>Heart</emphasis>, <emphasis>Bar</emphasis>. You can set the lla 
+(Lattitude, Longitude, Altitude) for each of the POI. The format is 
+<emphasis>&lt;name&gt;=&lt;lat&gt;:&lt;lng&gt;[:&lt;alt&gt;]</emphasis>
+Once the according POI symbol is selected on miniHomer, the display shows you the direction and distance to the POI.
+</para>
+<example id="miniHomer-on-linux-poi">
+  <title>Command showing miniHomer setting Car and Home POI</title>
+  <para>
+  	<userinput>
+  	   gpsbabel -i miniHomer,Car=36.790145:-6.352898,Home=-3.066667:37.359167:5895 -f /dev/ttyUSB0 -o gpx -F out.gpx
+  	</userinput>
+       Sets the Car/Home symbols' latitude longitude and altitude.
+       If you select the Car/Home symbol on miniHomer, the display will show the direction and distance to 
+       this location as soon as it has a satellite fix.
+	</para>
+</example>

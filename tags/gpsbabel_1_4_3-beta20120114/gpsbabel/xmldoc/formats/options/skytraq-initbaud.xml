@@ -1,0 +1,4 @@
+<para>The "initbaud" option might be helpful if autodetection fails or takes too long. With this option you
+can tell GPSBabel the baud rate the device is currently set to. In contrast, the option "baud" specifies
+the rate at which the actual download should take place. If it is different than "initbaud" (or the autodetected
+rate, if initbaud wasn't given), the initial setting will be restored after finishing the download.</para>

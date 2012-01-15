@@ -1,0 +1,26 @@
+<para>This format supports Wintec .tec files, such as appear on the 
+<productname>Wintec WBT-202</productname> data logger.
+</para>
+<para>
+The WinTec WBT-202 stores tracks and waypoints on an internal
+MICRO-SD Memory card. The log files can be accessed by connecting to an USB
+host and setting the device into a mass storage device (MSD) mode. To enter
+this mode, attach it to the computer, then hold the power button until the 
+GPS and Bluetooth LEDs go out.  It will then behave like an USB Memory stick.
+and individual files containing your tracks will show up on the "disk" with
+names ending in .tes.   You can use GPSBabel to read these files directly
+or copy them to your host computer.
+</para>
+<para>
+Note that this format is for the TES files on the GPS, it has no relationship
+to the .TK2 files created by Wintec's Time Machine software for Windows.
+</para>
+<para>
+Despite the physical similarity to the 
+<productname>Wintec WBT-201</productname>, this is believed to be a rather
+different product.  While this GPS probably works fine for 
+<link linkend="tracking">realtime tracking</link> over the bluetooth or 
+serial lines (once you have appropriate serial drivers), it's expected
+to not work with GPSBabel's <link linkend="fmt_wbt">GPSBabel WBT 
+Protocol</link> module.
+</para>

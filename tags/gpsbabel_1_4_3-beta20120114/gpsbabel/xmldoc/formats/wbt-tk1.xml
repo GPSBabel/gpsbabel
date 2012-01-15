@@ -1,0 +1,11 @@
+<para>File protocol for the <productname>Wintec WBT-201 / G-Rays 2</productname>
+GPS data logger. This format reads the binary file format created
+by Wintec's Time Machine X application.</para>
+<para>
+<ulink url="http://www.semsons.com/wiwbmu3gpsre2.html">Wintec WBT-201</ulink>
+</para>
+<example id="wbt-tk1">
+  <title>Command showing conversion of a Wintec binary file to GPX</title>
+  <para><userinput>gpsbabel -w -t -i wbt-tk1 -f tracks.tk1 -o gpx -F out.gpx</userinput></para>
+</example>
+

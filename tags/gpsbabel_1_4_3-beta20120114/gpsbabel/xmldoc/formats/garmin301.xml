@@ -1,0 +1,13 @@
+
+      
+       <para>This is a very simple format that
+is most useful for exporting data from units that support heart rate
+data such as
+<productname>Garmin Forerunner 301</productname>,
+<productname>Garmin Forerunner 305</productname>, and
+<productname>Garmin Edge 305</productname>, and
+to other programs
+for analysis.   It's a simple comma delimited format that includes the
+timestamp, 3D position information and heart rate so you can pull it
+into a spreadsheet or graphing program. </para>
+    

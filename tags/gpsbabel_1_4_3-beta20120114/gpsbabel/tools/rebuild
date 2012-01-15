@@ -1,0 +1,47 @@
+:
+
+# Simple script to regenerate GPSBabel test files.
+# This is most useful when you make a change to an output module that
+# changes the output format trivially.
+#
+# Usage:   tools/rebuild [format name]
+#
+# Copyright 2010 Robert Lipe
+
+fatal() {
+  echo $*
+  exit 1
+}
+
+kml() {
+  ./gpsbabel \
+    -i gpx -f reference/expertgps.gpx \
+    -o kml,track=1 -F reference/earth-expertgps-track.kml \
+    -o kml,track=0 -F reference/earth-expertgps.kml
+
+  ./gpsbabel \
+    -i gpx -f reference/track/segmented_tracks.gpx \
+    -o kml,track=0 -F reference/track/segmented_tracks.kml \
+    -o kml,track=1 -F reference/track/segmented_tracks-track.kml
+
+
+  ./gpsbabel \
+    -i gtrnctr -f reference/track/gtrnctr_power.tcx \
+    -o kml,track=0 -F reference/track/gtrnctr_power-kml.kml \
+    -o kml,track=1,points=0,lines=0 -F reference/track/gtrnctr_power-kml.kml
+
+  ./gpsbabel \
+    -i gpx -f reference/track/gpx_garmin_extensions.gpx \
+    -o kml,track=1 -F reference/track/gpx_garmin_extensions-kml_track.kml
+
+  ./gpsbabel \
+    -i gpx -f reference/gc/GC7FA4.gpx -f reference/gc/GCGCA8.gpx \
+    -o kml -F reference/earth-gc.kml
+
+  # Validate all our KML
+  find reference -name \*.kml | xargs -n 1 SAX2Count || fatal "Validation error"
+  }
+
+# Inhibit timestamps in generated files.
+export GPSBABEL_FREEZE_TIME=1
+$1

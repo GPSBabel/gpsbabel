@@ -1,0 +1,9 @@
+#
+# SBN tracks (Locosys NaviGPS)
+#
+gpsbabel -t -i sbn -f ${REFERENCE}/track/sbn.SBN -o gpx -F ${TMPDIR}/sbn.gpx
+compare ${TMPDIR}/sbn.gpx ${REFERENCE}/track/sbn.gpx
+
+# V1.3 of the firmware added two bytes in the packet
+gpsbabel -t -i sbn -f ${REFERENCE}/track/sbn-v13.sbn -o gpx -F ${TMPDIR}/sbn-v13.gpx
+compare ${TMPDIR}/sbn-v13.gpx ${REFERENCE}/track/sbn-v13.gpx

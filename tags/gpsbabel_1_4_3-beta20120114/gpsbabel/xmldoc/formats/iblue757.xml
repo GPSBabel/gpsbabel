@@ -1,0 +1,90 @@
+<para>
+  This is the format used by the software that comes with the 
+   <ulink url="http://www.gpspassion.com/forumsen/topic.asp?TOPIC_ID=81290">
+     Transystem i-Blue757 Pro GPS
+   </ulink>.
+   It is very similar to the <link linkend="fmt_iblue747">iBlue747</link> 
+   format, apart from the date format being reversed.
+</para>
+
+<para>
+  The csv log file can be extracted from the GPS receiver using 
+  the BT747 software available from <ulink url="http://www.bt747.org"></ulink>
+</para>
+
+<para>
+Field definitions:
+</para>
+
+<section id="ib_index"> <title>INDEX</title> <para>
+A sequential integer which corresponds for each logged point in the file.
+</para><para>example 3308
+</para></section>
+
+<section id="ib_rcr"><title>RCR</title><para>
+?
+</para><para>example 1: T
+</para><para>example 2: TD
+</para></section>
+
+<section id="ib_title"><title>DATE</title><para>
+Date that the point was recorded, in the format YYYY/MM/DD
+</para><para>example: 2011/05/14
+</para></section>
+
+<section id="ib_time"><title>TIME</title><para>
+Time that the point was recorded, 24-hr format H:MM:SS. Unsure how fractions of a second are handled.
+</para><para>example: 4:15:11
+</para></section>
+
+<section id="ib_valid"><title>VALID</title><para>
+?
+</para><para>example 1: DGPS
+</para><para>example 2: SPS
+</para></section>
+
+<section id="ib_lat"><title>LATITUDE</title><para>
+Degrees above the equator (use negative for south of the equator)
+</para><para>example: -33.803645
+</para></section>
+
+<section id="ib_hemi"><title>N/S</title><para>
+North (N)or South (S) of the equator
+</para><para>example: S
+</para></section>
+
+<section id="ib_lon"><title>LONGITUDE</title><para>
+Degrees east of the Prime Meridian (use negative for east of the Prime Meridian/Greenwich)
+</para><para>example: 150.880499
+</para></section>
+
+<section id="ib_ewhemi"><title>E/W</title><para>
+East (E) or West (W) of Greenwich
+</para><para>example: E
+</para></section>
+<section id="ib_height"><title>HEIGHT</title><para>
+Height above sea level in metres
+</para><para>example: 99.859 m
+</para></section>
+
+<section id="ib_speed"><title>SPEED</title><para>
+Speed in km/h
+</para><para>example: 0.302 km/h
+</para></section>
+
+<section id="ib_dist"><title>DISTANCE</title><para>
+Distance covered since last point in metres
+</para><para>example: 0.30 m
+</para></section>
+
+<section id="ib_example"><title>Example File</title>
+<para>
+Example 3.X. Example 'iBlue 757' file
+<literallayout>
+INDEX,RCR,DATE,TIME,VALID,LATITUDE,N/S,LONGITUDE,E/W,HEIGHT,SPEED,DISTANCE
+3308,T,2011/05/14,4:15:11,DGPS,-33.803645,S,150.880499,E,99.859 m,0.207 km/h, 0.28 m
+3309,T,2011/05/14,4:15:12,DGPS,-33.803645,S,150.880499,E,100.137 m,0.362 km/h, 0.28 m
+3310,T,2011/05/14,4:15:13,DGPS,-33.803644,S,150.8805,E,100.416 m,0.302 km/h, 0.30 m
+</literallayout>
+</para>
+</section>

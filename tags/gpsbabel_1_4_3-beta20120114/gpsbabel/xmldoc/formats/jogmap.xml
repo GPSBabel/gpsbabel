@@ -1,0 +1,3 @@
+<para>
+ This read-only format reads the XML marker files from <ulink url="http://jogmap.de"> Jogmap</ulink> as tracks.  Each "markers" entry is a new track with each "marker" entry being a trackpoint.
+</para>

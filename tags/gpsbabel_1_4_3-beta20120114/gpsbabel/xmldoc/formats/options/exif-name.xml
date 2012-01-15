@@ -1,0 +1,9 @@
+<para>
+   When you specify a name with this option we're looking for a waypoint
+   with this name. And, if found, the GPS information of this point is used
+   for tagging the image file.
+</para>
+<para>
+  <userinput>gpsbabel -i gpx -f holiday.gpx -o exif,name="On the beach" -F IMG0786.JPG</userinput>
+</para>
+

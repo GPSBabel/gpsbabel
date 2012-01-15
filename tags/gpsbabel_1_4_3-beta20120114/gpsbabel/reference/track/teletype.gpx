@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="-84.592135000" minlon="40.492200000" maxlat="-73.845933000" maxlon="42.374635000"/>
+<wpt lat="-73.993588000" lon="40.702659000">
+  <name>19 Cadman Plz</name>
+  <cmt>19 Cadman Plz\Old Fulton St, brooklyn, NY 11201, United States</cmt>
+  <desc>19 Cadman Plz\Old Fulton St, brooklyn, NY 11201, United States</desc>
+</wpt>
+<wpt lat="-73.984723000" lon="40.730556000">
+  <name>349 E 12th St, new york, NY 10003, United States</name>
+  <cmt>349 E 12th St, new york, NY 10003, United States</cmt>
+  <desc>349 E 12th St, new york, NY 10003, United States</desc>
+</wpt>
+<wpt lat="-73.845933000" lon="40.782934000">
+  <name>Pizza Town</name>
+  <cmt>NE[10.20 mi] - Pizza Town, 1827 College Point Blvd, Flushing, NY 11356 (718-9392187)</cmt>
+  <desc>NE[10.20 mi] - Pizza Town, 1827 College Point Blvd, Flushing, NY 11356 (718-9392187)</desc>
+</wpt>
+<wpt lat="-73.992537000" lon="40.748444000">
+  <name>New Pizza Town Ii</name>
+  <cmt>NE[9.34 mi] - New Pizza Town Ii, 360 7th Ave, New York, NY 10001 (212-6959229)</cmt>
+  <desc>NE[9.34 mi] - New Pizza Town Ii, 360 7th Ave, New York, NY 10001 (212-6959229)</desc>
+</wpt>
+<wpt lat="-73.992167000" lon="40.748804000">
+  <name>371 7th Ave</name>
+  <cmt>371 7th Ave\Penn Plz\Fashion Ave, new york, NY 10001, United States</cmt>
+  <desc>371 7th Ave\Penn Plz\Fashion Ave, new york, NY 10001, United States</desc>
+</wpt>
+<wpt lat="-73.994120000" lon="40.750054000">
+  <name>WP #1</name>
+  <cmt>WP #1</cmt>
+  <desc>WP #1</desc>
+</wpt>
+<wpt lat="-73.992167000" lon="40.748804000">
+  <name>371 7th Ave</name>
+  <cmt>371 7th Ave\Penn Plz\Fashion Ave, new york, NY 10001, United States</cmt>
+  <desc>371 7th Ave\Penn Plz\Fashion Ave, new york, NY 10001, United States</desc>
+</wpt>
+<wpt lat="-73.975375000" lon="40.758271000">
+  <name>St Patrick&apos;s Cathedral</name>
+  <cmt>NE[1.30 mi] - St Patrick&apos;s Cathedral, 460 Madison Ave, New York, NY 10022 (212-7532261)</cmt>
+  <desc>NE[1.30 mi] - St Patrick&apos;s Cathedral, 460 Madison Ave, New York, NY 10022 (212-7532261)</desc>
+</wpt>
+<wpt lat="-73.975375000" lon="40.758271000">
+  <name>St Patrick&apos;s Cathedral</name>
+  <cmt>460 Madison Ave, New York, NY 10022, 212-7532261</cmt>
+  <desc>460 Madison Ave, New York, NY 10022, 212-7532261</desc>
+</wpt>
+<wpt lat="-84.592135000" lon="42.374635000">
+  <name>WP #1</name>
+  <cmt>ALT=1627 ft
+UTC=22:27:46
+Speed:584 mph</cmt>
+  <desc>ALT=1627 ft
+UTC=22:27:46
+Speed:584 mph</desc>
+</wpt>
+<wpt lat="-84.431658000" lon="42.330371000">
+  <name>WP #2</name>
+  <cmt>ALT=29993 ft
+UTC=22:28:47
+Speed:580 mph</cmt>
+  <desc>ALT=29993 ft
+UTC=22:28:47
+Speed:580 mph</desc>
+</wpt>
+<wpt lat="-84.244883000" lon="42.293100000">
+  <name>WP #3</name>
+  <cmt>ALT=30003 ft
+UTC=22:29:48
+Speed:609 mph</cmt>
+  <desc>ALT=30003 ft
+UTC=22:29:48
+Speed:609 mph</desc>
+</wpt>
+<wpt lat="-84.046695000" lon="42.300286000">
+  <name>WP #4</name>
+  <cmt>ALT=30009 ft
+UTC=22:30:48
+Speed:611 mph</cmt>
+  <desc>ALT=30009 ft
+UTC=22:30:48
+Speed:611 mph</desc>
+</wpt>
+<wpt lat="-83.851696000" lon="42.305040000">
+  <name>WP #5</name>
+  <cmt>ALT=30016 ft
+UTC=22:31:47
+Speed:605 mph</cmt>
+  <desc>ALT=30016 ft
+UTC=22:31:47
+Speed:605 mph</desc>
+</wpt>
+<wpt lat="-83.666818000" lon="42.266526000">
+  <name>WP #6</name>
+  <cmt>ALT=30039 ft
+UTC=22:32:47
+Speed:586 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:32:47
+Speed:586 mph</desc>
+</wpt>
+<wpt lat="-83.306781000" lon="42.164826000">
+  <name>WP #7</name>
+  <cmt>ALT=30039 ft
+UTC=22:34:47
+Speed:600 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:34:47
+Speed:600 mph</desc>
+</wpt>
+<wpt lat="-82.860941000" lon="42.034118000">
+  <name>WP #8</name>
+  <cmt>ALT=30039 ft
+UTC=22:37:13
+Speed:610 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:37:13
+Speed:610 mph</desc>
+</wpt>
+<wpt lat="-82.848706000" lon="42.030461000">
+  <name>WP #9</name>
+  <cmt>ALT=30039 ft
+UTC=22:37:17
+Speed:611 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:37:17
+Speed:611 mph</desc>
+</wpt>
+<wpt lat="-82.839515000" lon="42.027721000">
+  <name>WP #10</name>
+  <cmt>ALT=30039 ft
+UTC=22:37:20
+Speed:611 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:37:20
+Speed:611 mph</desc>
+</wpt>
+<wpt lat="-82.836448000" lon="42.026808000">
+  <name>WP #11</name>
+  <cmt>ALT=30039 ft
+UTC=22:37:21
+Speed:611 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:37:21
+Speed:611 mph</desc>
+</wpt>
+<wpt lat="-82.827248000" lon="42.024078000">
+  <name>WP #12</name>
+  <cmt>ALT=30039 ft
+UTC=22:37:24
+Speed:612 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:37:24
+Speed:612 mph</desc>
+</wpt>
+<wpt lat="-82.824180000" lon="42.023170000">
+  <name>WP #13</name>
+  <cmt>ALT=30039 ft
+UTC=22:37:25
+Speed:612 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:37:25
+Speed:612 mph</desc>
+</wpt>
+<wpt lat="-82.814968000" lon="42.020450000">
+  <name>WP #14</name>
+  <cmt>ALT=30039 ft
+UTC=22:37:28
+Speed:612 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:37:28
+Speed:612 mph</desc>
+</wpt>
+<wpt lat="-82.811895000" lon="42.019543000">
+  <name>WP #15</name>
+  <cmt>ALT=30039 ft
+UTC=22:37:29
+Speed:612 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:37:29
+Speed:612 mph</desc>
+</wpt>
+<wpt lat="-82.802676000" lon="42.016841000">
+  <name>WP #16</name>
+  <cmt>ALT=30039 ft
+UTC=22:37:32
+Speed:612 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:37:32
+Speed:612 mph</desc>
+</wpt>
+<wpt lat="-82.793453000" lon="42.014148000">
+  <name>WP #17</name>
+  <cmt>ALT=30039 ft
+UTC=22:37:35
+Speed:612 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:37:35
+Speed:612 mph</desc>
+</wpt>
+<wpt lat="-82.603376000" lon="41.957968000">
+  <name>WP #18</name>
+  <cmt>ALT=30039 ft
+UTC=22:38:37
+Speed:611 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:38:37
+Speed:611 mph</desc>
+</wpt>
+<wpt lat="-82.572846000" lon="41.948756000">
+  <name>WP #19</name>
+  <cmt>ALT=30039 ft
+UTC=22:38:47
+Speed:611 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:38:47
+Speed:611 mph</desc>
+</wpt>
+<wpt lat="-82.382761000" lon="41.892201000">
+  <name>WP #20</name>
+  <cmt>ALT=30039 ft
+UTC=22:39:49
+Speed:613 mph</cmt>
+  <desc>ALT=30039 ft
+UTC=22:39:49
+Speed:613 mph</desc>
+</wpt>
+<wpt lat="-82.199101000" lon="41.836443000">
+  <name>WP #21</name>
+  <cmt>ALT=30111 ft
+UTC=22:40:49
+Speed:615 mph</cmt>
+  <desc>ALT=30111 ft
+UTC=22:40:49
+Speed:615 mph</desc>
+</wpt>
+<wpt lat="-82.018255000" lon="41.781675000">
+  <name>WP #22</name>
+  <cmt>ALT=30131 ft
+UTC=22:41:48
+Speed:613 mph</cmt>
+  <desc>ALT=30131 ft
+UTC=22:41:48
+Speed:613 mph</desc>
+</wpt>
+<wpt lat="-81.832216000" lon="41.724685000">
+  <name>WP #23</name>
+  <cmt>ALT=30147 ft
+UTC=22:42:49
+Speed:612 mph</cmt>
+  <desc>ALT=30147 ft
+UTC=22:42:49
+Speed:612 mph</desc>
+</wpt>
+<wpt lat="-81.099601000" lon="41.511813000">
+  <name>WP #24</name>
+  <cmt>ALT=30124 ft
+UTC=22:46:48
+Speed:630 mph</cmt>
+  <desc>ALT=30124 ft
+UTC=22:46:48
+Speed:630 mph</desc>
+</wpt>
+<wpt lat="-80.985145000" lon="41.501845000">
+  <name>WP #25</name>
+  <cmt>ALT=30141 ft
+UTC=22:47:22
+Speed:638 mph</cmt>
+  <desc>ALT=30141 ft
+UTC=22:47:22
+Speed:638 mph</desc>
+</wpt>
+<wpt lat="-80.771986000" lon="41.481780000">
+  <name>WP #26</name>
+  <cmt>ALT=30150 ft
+UTC=22:48:23
+Speed:676 mph</cmt>
+  <desc>ALT=30150 ft
+UTC=22:48:23
+Speed:676 mph</desc>
+</wpt>
+<wpt lat="-80.552196000" lon="41.462241000">
+  <name>WP #27</name>
+  <cmt>ALT=30121 ft
+UTC=22:49:23
+Speed:695 mph</cmt>
+  <desc>ALT=30121 ft
+UTC=22:49:23
+Speed:695 mph</desc>
+</wpt>
+<wpt lat="-80.330783000" lon="41.441575000">
+  <name>WP #28</name>
+  <cmt>ALT=30144 ft
+UTC=22:50:23
+Speed:696 mph</cmt>
+  <desc>ALT=30144 ft
+UTC=22:50:23
+Speed:696 mph</desc>
+</wpt>
+<wpt lat="-80.109170000" lon="41.420628000">
+  <name>WP #29</name>
+  <cmt>ALT=30134 ft
+UTC=22:51:23
+Speed:697 mph</cmt>
+  <desc>ALT=30134 ft
+UTC=22:51:23
+Speed:697 mph</desc>
+</wpt>
+<wpt lat="-79.887161000" lon="41.399240000">
+  <name>WP #30</name>
+  <cmt>ALT=30144 ft
+UTC=22:52:23
+Speed:698 mph</cmt>
+  <desc>ALT=30144 ft
+UTC=22:52:23
+Speed:698 mph</desc>
+</wpt>
+<wpt lat="-79.661675000" lon="41.376945000">
+  <name>WP #31</name>
+  <cmt>ALT=30150 ft
+UTC=22:53:24
+Speed:696 mph</cmt>
+  <desc>ALT=30150 ft
+UTC=22:53:24
+Speed:696 mph</desc>
+</wpt>
+<wpt lat="-79.443991000" lon="41.355043000">
+  <name>WP #32</name>
+  <cmt>ALT=30154 ft
+UTC=22:54:23
+Speed:696 mph</cmt>
+  <desc>ALT=30154 ft
+UTC=22:54:23
+Speed:696 mph</desc>
+</wpt>
+<wpt lat="-79.219106000" lon="41.331933000">
+  <name>WP #33</name>
+  <cmt>ALT=30157 ft
+UTC=22:55:24
+Speed:695 mph</cmt>
+  <desc>ALT=30157 ft
+UTC=22:55:24
+Speed:695 mph</desc>
+</wpt>
+<wpt lat="-79.117075000" lon="41.321250000">
+  <name>WP #34</name>
+  <cmt>ALT=30157 ft
+UTC=22:55:52
+Speed:685 mph</cmt>
+  <desc>ALT=30157 ft
+UTC=22:55:52
+Speed:685 mph</desc>
+</wpt>
+<wpt lat="-78.878546000" lon="41.296073000">
+  <name>WP #35</name>
+  <cmt>ALT=30170 ft
+UTC=22:56:58
+Speed:685 mph</cmt>
+  <desc>ALT=30170 ft
+UTC=22:56:58
+Speed:685 mph</desc>
+</wpt>
+<wpt lat="-78.672531000" lon="41.273845000">
+  <name>WP #36</name>
+  <cmt>ALT=30164 ft
+UTC=22:57:55
+Speed:684 mph</cmt>
+  <desc>ALT=30164 ft
+UTC=22:57:55
+Speed:684 mph</desc>
+</wpt>
+<wpt lat="-78.455975000" lon="41.249930000">
+  <name>WP #37</name>
+  <cmt>ALT=30180 ft
+UTC=22:58:55
+Speed:683 mph</cmt>
+  <desc>ALT=30180 ft
+UTC=22:58:55
+Speed:683 mph</desc>
+</wpt>
+<wpt lat="-78.236220000" lon="41.225575000">
+  <name>WP #38</name>
+  <cmt>ALT=30167 ft
+UTC=22:59:56
+Speed:683 mph</cmt>
+  <desc>ALT=30167 ft
+UTC=22:59:56
+Speed:683 mph</desc>
+</wpt>
+<wpt lat="-78.016906000" lon="41.199615000">
+  <name>WP #39</name>
+  <cmt>ALT=30164 ft
+UTC=23:00:57
+Speed:682 mph</cmt>
+  <desc>ALT=30164 ft
+UTC=23:00:57
+Speed:682 mph</desc>
+</wpt>
+<wpt lat="-77.801761000" lon="41.172248000">
+  <name>WP #40</name>
+  <cmt>ALT=30167 ft
+UTC=23:01:57
+Speed:683 mph</cmt>
+  <desc>ALT=30167 ft
+UTC=23:01:57
+Speed:683 mph</desc>
+</wpt>
+<wpt lat="-77.586235000" lon="41.145086000">
+  <name>WP #41</name>
+  <cmt>ALT=30167 ft
+UTC=23:02:57
+Speed:683 mph</cmt>
+  <desc>ALT=30167 ft
+UTC=23:02:57
+Speed:683 mph</desc>
+</wpt>
+<wpt lat="-77.371440000" lon="41.117298000">
+  <name>WP #42</name>
+  <cmt>ALT=30157 ft
+UTC=23:03:57
+Speed:673 mph</cmt>
+  <desc>ALT=30157 ft
+UTC=23:03:57
+Speed:673 mph</desc>
+</wpt>
+<wpt lat="-77.164418000" lon="41.090243000">
+  <name>WP #43</name>
+  <cmt>ALT=29983 ft
+UTC=23:04:55
+Speed:685 mph</cmt>
+  <desc>ALT=29983 ft
+UTC=23:04:55
+Speed:685 mph</desc>
+</wpt>
+<wpt lat="-76.939018000" lon="41.059721000">
+  <name>WP #44</name>
+  <cmt>ALT=29169 ft
+UTC=23:05:58
+Speed:682 mph</cmt>
+  <desc>ALT=29169 ft
+UTC=23:05:58
+Speed:682 mph</desc>
+</wpt>
+<wpt lat="-76.723800000" lon="41.047781000">
+  <name>WP #45</name>
+  <cmt>ALT=28448 ft
+UTC=23:06:58
+Speed:670 mph</cmt>
+  <desc>ALT=28448 ft
+UTC=23:06:58
+Speed:670 mph</desc>
+</wpt>
+<wpt lat="-76.510536000" lon="41.045838000">
+  <name>WP #46</name>
+  <cmt>ALT=25875 ft
+UTC=23:07:57
+Speed:676 mph</cmt>
+  <desc>ALT=25875 ft
+UTC=23:07:57
+Speed:676 mph</desc>
+</wpt>
+<wpt lat="-76.183290000" lon="40.919911000">
+  <name>WP #47</name>
+  <cmt>ALT=18838 ft
+UTC=23:09:48
+Speed:577 mph</cmt>
+  <desc>ALT=18838 ft
+UTC=23:09:48
+Speed:577 mph</desc>
+</wpt>
+<wpt lat="-75.851451000" lon="40.825691000">
+  <name>WP #48</name>
+  <cmt>ALT=15324 ft
+UTC=23:11:52
+Speed:498 mph</cmt>
+  <desc>ALT=15324 ft
+UTC=23:11:52
+Speed:498 mph</desc>
+</wpt>
+<wpt lat="-75.699578000" lon="40.787526000">
+  <name>WP #49</name>
+  <cmt>ALT=13845 ft
+UTC=23:12:53
+Speed:490 mph</cmt>
+  <desc>ALT=13845 ft
+UTC=23:12:53
+Speed:490 mph</desc>
+</wpt>
+<wpt lat="-75.559176000" lon="40.752528000">
+  <name>WP #50</name>
+  <cmt>ALT=12483 ft
+UTC=23:13:52
+Speed:449 mph</cmt>
+  <desc>ALT=12483 ft
+UTC=23:13:52
+Speed:449 mph</desc>
+</wpt>
+<wpt lat="-75.423086000" lon="40.720228000">
+  <name>WP #51</name>
+  <cmt>ALT=12460 ft
+UTC=23:14:52
+Speed:451 mph</cmt>
+  <desc>ALT=12460 ft
+UTC=23:14:52
+Speed:451 mph</desc>
+</wpt>
+<wpt lat="-74.960256000" lon="40.554363000">
+  <name>WP #52</name>
+  <cmt>ALT=9553 ft
+UTC=23:18:52
+Speed:361 mph</cmt>
+  <desc>ALT=9553 ft
+UTC=23:18:52
+Speed:361 mph</desc>
+</wpt>
+<wpt lat="-74.851031000" lon="40.521065000">
+  <name>WP #53</name>
+  <cmt>ALT=9527 ft
+UTC=23:19:54
+Speed:357 mph</cmt>
+  <desc>ALT=9527 ft
+UTC=23:19:54
+Speed:357 mph</desc>
+</wpt>
+<wpt lat="-74.753721000" lon="40.492200000">
+  <name>WP #54</name>
+  <cmt>ALT=9540 ft
+UTC=23:20:52
+Speed:307 mph</cmt>
+  <desc>ALT=9540 ft
+UTC=23:20:52
+Speed:307 mph</desc>
+</wpt>
+<wpt lat="-73.974537000" lon="40.760732000">
+  <name>15 E 54th St, New york, NY, United States</name>
+  <cmt>15 E 54th St, New york, NY, United States</cmt>
+  <desc>15 E 54th St, New york, NY, United States</desc>
+</wpt>
+<wpt lat="-73.975119000" lon="40.758428000">
+  <name>14 E 51st St, new york, NY, United States</name>
+  <cmt>14 E 51st St, new york, NY, United States</cmt>
+  <desc>14 E 51st St, new york, NY, United States</desc>
+</wpt>
+<wpt lat="-73.975119000" lon="40.758428000">
+  <name>14 E 51st St, new york, NY, United States</name>
+  <cmt>14 E 51st St, new york, NY, United States</cmt>
+  <desc>14 E 51st St, new york, NY, United States</desc>
+</wpt>
+</gpx>

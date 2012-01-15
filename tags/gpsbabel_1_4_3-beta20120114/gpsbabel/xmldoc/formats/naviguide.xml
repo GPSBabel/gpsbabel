@@ -1,0 +1,7 @@
+<para>Naviguide 3.02 is off-road navigation software. Naviguide covers the area of Israel and uses the Israeli old grid as a reference; Naviguide uses Hebrew as its default language.</para>
+
+<para>Naviguide uses unique map file format and binary file format (.twl) as route file.
+The *.twl file contains a route that is comprised of a list of waypoints. Naviguide does not support a file that contains only waypoints.</para>
+
+<para>GPSBabel supports reading and creating Naviguide route files. Plot files are not supported.</para>
+
