@@ -78,3 +78,5 @@
 
 /* 1 to inhibit our use of zlib. */
 #undef ZLIB_INHIBITED
+
+#undef HAVE_WDK
