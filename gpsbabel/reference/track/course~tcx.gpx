@@ -8,9 +8,9 @@
 <time>1970-01-01T00:00:00Z</time>
 <bounds minlat="34.139802000" minlon="-118.957485700" maxlat="34.199616700" maxlon="-118.756231700"/>
 <wpt lat="34.173919900" lon="-118.758800100">
-  <name>WPT001</name>
-  <cmt>WPT001</cmt>
-  <desc>WPT001</desc>
+  <name>LAP001</name>
+  <cmt>LAP001</cmt>
+  <desc>LAP001</desc>
 </wpt>
 <trk>
   <name>ThursRide</name>

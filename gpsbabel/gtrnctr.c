@@ -91,9 +91,13 @@ static xg_callback	gtc_trk_alt;
 static xg_callback	gtc_trk_hr;
 static xg_callback	gtc_trk_cad;
 static xg_callback	gtc_trk_pwr;
+static xg_callback	gtc_wpt_crs_s, gtc_wpt_crs_e;
 static xg_callback	gtc_wpt_pnt_s, gtc_wpt_pnt_e;
+static xg_callback	gtc_wpt_ident;
 static xg_callback	gtc_wpt_lat;
 static xg_callback	gtc_wpt_long;
+static xg_callback	gtc_wpt_icon;
+static xg_callback	gtc_wpt_notes;
 
 static xg_tag_mapping gtc_map[] = {
   /* courses tcx v1 & v2 */
@@ -105,9 +109,17 @@ static xg_tag_mapping gtc_map[] = {
   { gtc_trk_lat,  cb_cdata, "/Courses/Course/Track/Trackpoint/Position/LatitudeDegrees" },
   { gtc_trk_long, cb_cdata, "/Courses/Course/Track/Trackpoint/Position/LongitudeDegrees" },
   { gtc_trk_alt,  cb_cdata, "/Courses/Course/Track/Trackpoint/AltitudeMeters" },
-  { gtc_trk_alt,  cb_cdata, "/Courses/Course/Track/Trackpoint/AltitudeMeters" },
   { gtc_trk_hr,   cb_cdata, "/Courses/Course/Track/Trackpoint/HeartRateBpm" },
   { gtc_trk_cad,  cb_cdata, "/Courses/Course/Track/Trackpoint/Cadence" },
+  { gtc_wpt_crs_s,cb_start, "/Courses/Course/CoursePoint" },
+  { gtc_wpt_crs_e,cb_end,   "/Courses/Course/CoursePoint" },
+  { gtc_wpt_ident,cb_cdata, "/Courses/Course/CoursePoint/Name"},
+  { gtc_trk_utc,  cb_cdata, "/Courses/Course/CoursePoint/Time"},
+  { gtc_wpt_lat,  cb_cdata, "/Courses/Course/CoursePoint/Position/LatitudeDegrees"},
+  { gtc_wpt_long, cb_cdata, "/Courses/Course/CoursePoint/Position/LongitudeDegrees"},
+  { gtc_trk_alt,  cb_cdata, "/Courses/Course/CoursePoint/AltitudeMeters" },
+  { gtc_wpt_icon, cb_cdata, "/Courses/Course/CoursePoint/PointType" },
+  { gtc_wpt_notes,cb_cdata, "/Courses/Course/CoursePoint/Notes" },
 
   /* history tcx v2 (activities) */
   { gtc_trk_s,    cb_start, "/Activities/Activity" },
@@ -142,6 +154,7 @@ static xg_tag_mapping gtc_map[] = {
   { gtc_wpt_pnt_e,cb_end, "/Courses/Course/Lap/BeginPosition" },
   { gtc_wpt_lat,  cb_cdata, "/Courses/Course/Lap/BeginPosition/LatitudeDegrees" },
   { gtc_wpt_long, cb_cdata, "/Courses/Course/Lap/BeginPosition/LongitudeDegrees" },
+  { gtc_trk_alt,  cb_cdata, "/Courses/Course/Lap/BeginAltitudeMeters" },
 
   { NULL,	(xg_cb_type)0,         NULL}
 };
@@ -519,13 +532,13 @@ gtc_trk_pwr(const char* args, const char** unused)
 }
 
 void
-gtc_wpt_pnt_s(const char* unused, const char** attrv)
+gtc_wpt_crs_s(const char* unused, const char** attrv)
 {
   wpt_tmp = waypt_new();
 }
 
 void
-gtc_wpt_pnt_e(const char* args, const char** unused)
+gtc_wpt_crs_e(const char* args, const char** unused)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     waypt_add(wpt_tmp);
@@ -534,6 +547,38 @@ gtc_wpt_pnt_e(const char* args, const char** unused)
   }
 
   wpt_tmp = NULL;
+}
+
+void
+gtc_wpt_pnt_s(const char* unused, const char** attrv)
+{
+  wpt_tmp = waypt_new();
+  lap_ct++;
+}
+
+void
+gtc_wpt_pnt_e(const char* args, const char** unused)
+{
+  if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
+    /* Add the begin position of a CourseLap as
+    a waypoint. */
+    char *cbuf;
+    xasprintf(&cbuf, "LAP%03d", lap_ct);
+    wpt_tmp->shortname = cbuf;
+    waypt_add(wpt_tmp);
+  } else {
+    waypt_free(wpt_tmp);
+  }
+
+  wpt_tmp = NULL;
+}
+
+void
+gtc_wpt_ident(const char* args, const char** unused)
+{
+  wpt_tmp->shortname = xstrdup(args);
+  /* Set also as notes for compatibility with garmin usb format */
+  wpt_tmp->notes = xstrdup(args);
 }
 
 void
@@ -546,6 +591,19 @@ void
 gtc_wpt_long(const char* args, const char** unused)
 {
   wpt_tmp->longitude = atof(args);
+}
+
+void
+gtc_wpt_icon(const char* args, const char** unused)
+{
+  wpt_tmp->icon_descr = xstrdup(args);
+  wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
+}
+
+void
+gtc_wpt_notes(const char* args, const char** unused)
+{
+  wpt_tmp->description = xstrdup(args);
 }
 
 ff_vecs_t gtc_vecs = {
