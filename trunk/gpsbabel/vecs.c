@@ -47,6 +47,7 @@ extern ff_vecs_t coto_vecs;
 extern ff_vecs_t cst_vecs;
 extern ff_vecs_t delbin_vecs;
 extern ff_vecs_t dg100_vecs;
+extern ff_vecs_t dg200_vecs;
 extern ff_vecs_t easygps_vecs;
 extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t garmin_txt_vecs;
@@ -788,6 +789,12 @@ vecs_t vec_list[] = {
     &dg100_vecs,
     "dg-100",
     "GlobalSat DG-100/BT-335 Download",
+    NULL
+  },
+  {
+    &dg200_vecs,
+    "dg-200",
+    "GlobalSat DG-200 Download",
     NULL
   },
   {
