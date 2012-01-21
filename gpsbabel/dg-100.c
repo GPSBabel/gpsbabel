@@ -4,6 +4,7 @@
 
     Copyright (C) 2007  Mirko Parthey, mirko.parthey@informatik.tu-chemnitz.de
     Copyright (C) 2005-2008  Robert Lipe, robertlipe@gpsbabel.org
+    Copyright (C) 2012  Nicolas Boullis, nboullis@debian.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -35,6 +36,14 @@
 
 #define MYNAME "DG-100"
 
+typedef struct {
+  unsigned speed;
+  int has_trailing_bytes;
+  int has_payload_end_seq;
+} model_t;
+
+static const model_t* model;
+
 static void* serial_handle;
 
 /* maximum frame size observed so far: 1817 bytes
@@ -63,15 +72,15 @@ struct dg100_command {
 };
 
 struct dg100_command dg100_commands[] = {
-  { dg100cmd_getconfig,      0,   44+2,    2, "getconfig" },
-  { dg100cmd_setconfig,     41,    4+2,    2, "setconfig"  },
+  { dg100cmd_getconfig,      0,   44,    2, "getconfig" },
+  { dg100cmd_setconfig,     41,    4,    2, "setconfig"  },
   /* the getfileheader answer has variable length, -1 is a dummy value */
-  { dg100cmd_getfileheader,  2,   -1  ,    2, "getfileheader"  },
-  { dg100cmd_getfile,        2, 1024+2,    2, "getfile" },
-  { dg100cmd_erase,          2,    4+2,    2, "erase" },
-  { dg100cmd_getid,          0,    8+2,    2, "getid" },
-  { dg100cmd_setid,          8,    4+2,    2, "setid" },
-  { dg100cmd_gpsmouse,       1,    0  ,    0, "gpsmouse" }
+  { dg100cmd_getfileheader,  2,   -1,    2, "getfileheader"  },
+  { dg100cmd_getfile,        2, 1024,    2, "getfile" },
+  { dg100cmd_erase,          2,    4,    2, "erase" },
+  { dg100cmd_getid,          0,    8,    2, "getid" },
+  { dg100cmd_setid,          8,    4,    2, "setid" },
+  { dg100cmd_gpsmouse,       1,    0,    0, "gpsmouse" }
 };
 const unsigned dg100_numcommands = sizeof(dg100_commands) / sizeof(dg100_commands[0]);
 
@@ -210,7 +219,7 @@ bin2deg(int val)
 }
 
 static void
-process_gpsfile(gbuint8 data[], route_head* track)
+process_gpsfile(gbuint8 data[], route_head** track)
 {
   const int recordsizes[3] = {8, 20, 32};
   int i, style, recsize;
@@ -227,6 +236,8 @@ process_gpsfile(gbuint8 data[], route_head* track)
   recsize = recordsizes[style];
 
   for (i = 0; i <= 2048 - recsize; i += (i == 0) ? 32 : recsize) {
+    float latitude;
+    int manual_point = 0;
 
     lat = be_read32(data + i + 0);
     lon = be_read32(data + i + 4);
@@ -236,12 +247,40 @@ process_gpsfile(gbuint8 data[], route_head* track)
       continue;
     }
 
+    if ((i == 0) && (be_read32(data + i + 8) & 0x80000000)) {
+      /* This is the first point recorded after power-on; start a new track */
+      *track = NULL;
+    }
+
+    if (*track == NULL) {
+      time_t creation_time;
+      char buf[1024];
+      bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
+      bindate = be_read32(data + i + 12);
+      creation_time = bintime2utc(bindate, bintime);
+      strftime(buf, 4096, "DG-100 tracklog (%Y/%m/%d %H:%M:%S)",
+               gmtime(&creation_time));
+      *track = route_head_alloc();
+      (*track)->rte_name = xstrdup(buf);
+      (*track)->rte_desc = xstrdup("DG-100 GPS tracklog data");
+      track_add_head(*track);
+    }
+
     wpt = waypt_new();
-    wpt->latitude = bin2deg(lat);
+    latitude = bin2deg(lat);
+    if (latitude >= 100) {
+      manual_point = 1;
+      latitude -= 100;
+    }
+    else if (latitude <= -100) {
+      manual_point = 1;
+      latitude += 100;
+    }
+    wpt->latitude = latitude;
     wpt->longitude = bin2deg(lon);
 
     if (style >= 1) {
-      bintime = be_read32(data + i +  8);
+      bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
       bindate = be_read32(data + i + 12);
       wpt->creation_time = bintime2utc(bindate, bintime);
       /* The device presents the speed as a fixed-point number
@@ -256,7 +295,12 @@ process_gpsfile(gbuint8 data[], route_head* track)
       wpt->altitude = be_read32(data + i + 20) / 10000.0;
     }
 
-    track_add_wpt(track, wpt);
+    if (manual_point) {
+      waypt_add(wpt);
+    }
+    else {
+      track_add_wpt(*track, wpt);
+    }
   }
 }
 
@@ -419,14 +463,18 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, gbuint8** payload)
    */
   if (cmd == dg100cmd_getfileheader) {
     numheaders = be_read16(buf + 5);
-    param_len = 2 + 2 + 12 * numheaders + 2;
+    param_len = 2 + 2 + 12 * numheaders;
+  }
+
+  if (model->has_trailing_bytes) {
+    param_len += cmdinfo->trailing_bytes;
   }
 
   /* Frame length calculation:
    * frame start sequence(2), payload length field(2), command id(1),
    * param(variable length),
-   * payload end seqence(2), checksum(2), frame end sequence(2) */
-  frame_len = 2 + 2 + 1 + param_len + 2 + 2 + 2;
+   * payload end seqence(2 or 0), checksum(2), frame end sequence(2) */
+  frame_len = 2 + 2 + 1 + param_len + ((model->has_payload_end_seq) ? 2 : 0) + 2 + 2;
 
   if (frame_len > FRAME_MAXLEN) {
     fatal("frame too large (frame_len=%d, FRAME_MAXLEN=%d)\n",
@@ -442,7 +490,9 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, gbuint8** payload)
 
   frame_start_seq   = be_read16(buf + 0);
   payload_len_field = be_read16(buf + 2);
-  payload_end_seq   = be_read16(buf + frame_len - 6);
+  if (model->has_payload_end_seq) {
+    payload_end_seq   = be_read16(buf + frame_len - 6);
+  }
   payload_checksum  = be_read16(buf + frame_len - 4);
   frame_end_seq     = be_read16(buf + frame_len - 2);
 
@@ -484,7 +534,7 @@ dg100_recv(gbuint8 expected_id, void* buf, unsigned int len)
     return -1;
   }
 
-  trailing_bytes = cmdinfo->trailing_bytes;
+  trailing_bytes = (model->has_trailing_bytes) ? (cmdinfo->trailing_bytes) : 0;
   copysize = n - trailing_bytes;
 
   /* check for buffer overflow */
@@ -557,7 +607,7 @@ dg100_getfileheaders(struct dynarray16* headers)
       seqnum = be_read32(answer + offset + 8);
       h[i] = seqnum;
       if (global_opts.debug_level) {
-        int time   = be_read32(answer + offset);
+        int time   = be_read32(answer + offset) & 0x7FFFFFFF;
         int date   = be_read32(answer + offset + 4);
         time_t ti = bintime2utc(date, time);
         dg100_log("Header #%d: Seq: %d Time: %s",
@@ -568,7 +618,7 @@ dg100_getfileheaders(struct dynarray16* headers)
 }
 
 static void
-dg100_getfile(gbint16 num, route_head* track)
+dg100_getfile(gbint16 num, route_head** track)
 {
   gbuint8 request[2];
   gbuint8 answer[2048];
@@ -584,12 +634,7 @@ dg100_getfiles()
   unsigned int i;
   int filenum;
   struct dynarray16 headers;
-  route_head* track;
-
-  track = route_head_alloc();
-  track->rte_name = xstrdup("DG-100 tracklog");
-  track->rte_desc = xstrdup("DG-100 GPS tracklog data");
-  track_add_head(track);
+  route_head* track = NULL;
 
   /* maximum number of headers observed so far: 672
    * if necessary, the dynarray will grow even further */
@@ -599,7 +644,7 @@ dg100_getfiles()
 
   for (i = 0; i < headers.count; i++) {
     filenum = headers.data[i];
-    dg100_getfile(filenum, track);
+    dg100_getfile(filenum, &track);
   }
 }
 
@@ -640,17 +685,33 @@ arglist_t dg100_args[] = {
 *******************************************************************************/
 
 static void
-dg100_rd_init(const char* fname)
+common_rd_init(const char* fname)
 {
   if (serial_handle = gbser_init(fname), NULL == serial_handle) {
     fatal(MYNAME ": Can't open port '%s'\n", fname);
   }
-  if (gbser_set_speed(serial_handle, 115200) != gbser_OK) {
+  if (gbser_set_speed(serial_handle, model->speed) != gbser_OK) {
     fatal(MYNAME ": Can't configure port '%s'\n", fname);
   }
   // Toss anything that came in before our speed was set, particularly
   // for the bluetooth BT-335 product.
   gbser_flush(serial_handle);
+}
+
+static void
+dg100_rd_init(const char* fname)
+{
+  static const model_t dg100_model = { 115200, 1, 1 };
+  model = &dg100_model;
+  common_rd_init(fname);
+}
+
+static void
+dg200_rd_init(const char* fname)
+{
+  static const model_t dg200_model = { 230400, 0, 0 };
+  model = &dg200_model;
+  common_rd_init(fname);
 }
 
 static void
@@ -685,6 +746,25 @@ ff_vecs_t dg100_vecs = {
     ff_cap_none 			/* routes */
   },
   dg100_rd_init,
+  NULL,
+  dg100_rd_deinit,
+  NULL,
+  dg100_read,
+  NULL,
+  NULL,
+  dg100_args,
+  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
+  /* not fixed, can be changed through command line parameter */
+};
+
+ff_vecs_t dg200_vecs = {
+  ff_type_serial,
+  {
+    ff_cap_none			/* waypoints */,
+    ff_cap_read 			/* tracks */,
+    ff_cap_none 			/* routes */
+  },
+  dg200_rd_init,
   NULL,
   dg100_rd_deinit,
   NULL,
