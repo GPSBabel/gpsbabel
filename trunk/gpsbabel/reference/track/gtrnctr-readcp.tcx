@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<TrainingCenterDatabase xmlns="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd">
+  <Folders>
+    <Courses>
+      <CourseFolder Name="Courses">
+        <CourseNameRef>
+          <Id>Test CP Reading</Id>
+        </CourseNameRef>
+      </CourseFolder>
+    </Courses>
+  </Folders>
+  <Courses>
+    <Course>
+      <Name>Test CP Reading</Name>
+      <Lap>
+        <TotalTimeSeconds>309.9</TotalTimeSeconds>
+        <DistanceMeters>207.872342345229</DistanceMeters>
+        <BeginPosition>
+          <LatitudeDegrees>28.3899562951997</LatitudeDegrees>
+          <LongitudeDegrees>-16.5815234184265</LongitudeDegrees>
+        </BeginPosition>
+        <EndPosition>
+          <LatitudeDegrees>28.3897769635538</LatitudeDegrees>
+          <LongitudeDegrees>-16.5820491313934</LongitudeDegrees>
+        </EndPosition>
+        <Intensity>Active</Intensity>
+      </Lap>
+      <Track>
+        <Trackpoint>
+          <Time>2012-01-04T00:00:00Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389956</LatitudeDegrees>
+            <LongitudeDegrees>-16.581523</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>231</AltitudeMeters>
+          <DistanceMeters>0</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:00:04Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389950</LatitudeDegrees>
+            <LongitudeDegrees>-16.581551</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>231</AltitudeMeters>
+          <DistanceMeters>2.78552429082476</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:00:14Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389900</LatitudeDegrees>
+            <LongitudeDegrees>-16.581539</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>231</AltitudeMeters>
+          <DistanceMeters>8.46401259709588</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:00:42Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389919</LatitudeDegrees>
+            <LongitudeDegrees>-16.581369</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>232</AltitudeMeters>
+          <DistanceMeters>25.2160839556801</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:00:57Z</Time>
+          <Position>
+            <LatitudeDegrees>28.390003</LatitudeDegrees>
+            <LongitudeDegrees>-16.581287</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>232</AltitudeMeters>
+          <DistanceMeters>37.536598150474</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:01:07Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389985</LatitudeDegrees>
+            <LongitudeDegrees>-16.581202</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>232</AltitudeMeters>
+          <DistanceMeters>46.1852716217043</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:01:19Z</Time>
+          <Position>
+            <LatitudeDegrees>28.390003</LatitudeDegrees>
+            <LongitudeDegrees>-16.581105</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>232</AltitudeMeters>
+          <DistanceMeters>55.8547825200545</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:01:29Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389994</LatitudeDegrees>
+            <LongitudeDegrees>-16.581019</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>232</AltitudeMeters>
+          <DistanceMeters>64.3105241299902</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:02:06Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389900</LatitudeDegrees>
+            <LongitudeDegrees>-16.581051</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>234</AltitudeMeters>
+          <DistanceMeters>75.26038211514</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:02:22Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389909</LatitudeDegrees>
+            <LongitudeDegrees>-16.581191</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>233</AltitudeMeters>
+          <DistanceMeters>88.9351471352528</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:02:37Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389890</LatitudeDegrees>
+            <LongitudeDegrees>-16.581309</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>233</AltitudeMeters>
+          <DistanceMeters>100.661161922849</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:02:52Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389871</LatitudeDegrees>
+            <LongitudeDegrees>-16.581438</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>233</AltitudeMeters>
+          <DistanceMeters>113.420447740461</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:03:18Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389881</LatitudeDegrees>
+            <LongitudeDegrees>-16.581663</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>230</AltitudeMeters>
+          <DistanceMeters>135.470349678032</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:03:36Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389852</LatitudeDegrees>
+            <LongitudeDegrees>-16.581813</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>228</AltitudeMeters>
+          <DistanceMeters>150.486980256282</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:03:57Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389815</LatitudeDegrees>
+            <LongitudeDegrees>-16.581985</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>224</AltitudeMeters>
+          <DistanceMeters>167.78435337889</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:04:18Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389834</LatitudeDegrees>
+            <LongitudeDegrees>-16.582156</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>224</AltitudeMeters>
+          <DistanceMeters>184.695864453439</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:04:52Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389768</LatitudeDegrees>
+            <LongitudeDegrees>-16.582199</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>226</AltitudeMeters>
+          <DistanceMeters>193.151621872271</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+        <Trackpoint>
+          <Time>2012-01-04T00:05:09Z</Time>
+          <Position>
+            <LatitudeDegrees>28.389777</LatitudeDegrees>
+            <LongitudeDegrees>-16.582049</LongitudeDegrees>
+          </Position>
+          <AltitudeMeters>225</AltitudeMeters>
+          <DistanceMeters>207.872342345229</DistanceMeters>
+          <SensorState>Absent</SensorState>
+        </Trackpoint>
+      </Track>
+      <CoursePoint>
+        <Name>Tp Gen</Name>
+        <Time>2012-01-04T00:00:00Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389956</LatitudeDegrees>
+          <LongitudeDegrees>-16.581523</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>231</AltitudeMeters>
+        <PointType>Generic</PointType>
+        <Notes>Not Gen</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp Sum</Name>
+        <Time>2012-01-04T00:00:42Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389919</LatitudeDegrees>
+          <LongitudeDegrees>-16.581369</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>232</AltitudeMeters>
+        <PointType>Summit</PointType>
+        <Notes>Not Sum</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp Val</Name>
+        <Time>2012-01-04T00:00:57Z</Time>
+        <Position>
+          <LatitudeDegrees>28.390003</LatitudeDegrees>
+          <LongitudeDegrees>-16.581287</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>232</AltitudeMeters>
+        <PointType>Valley</PointType>
+        <Notes>Not Val</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp Wat</Name>
+        <Time>2012-01-04T00:01:07Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389985</LatitudeDegrees>
+          <LongitudeDegrees>-16.581202</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>232</AltitudeMeters>
+        <PointType>Water</PointType>
+        <Notes>Not Wat</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp Foo</Name>
+        <Time>2012-01-04T00:01:19Z</Time>
+        <Position>
+          <LatitudeDegrees>28.390003</LatitudeDegrees>
+          <LongitudeDegrees>-16.581105</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>232</AltitudeMeters>
+        <PointType>Food</PointType>
+        <Notes>Not Foo</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp Dan</Name>
+        <Time>2012-01-04T00:01:29Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389994</LatitudeDegrees>
+          <LongitudeDegrees>-16.581019</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>232</AltitudeMeters>
+        <PointType>Danger</PointType>
+        <Notes>Not Dan</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp Lef</Name>
+        <Time>2012-01-04T00:02:06Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389900</LatitudeDegrees>
+          <LongitudeDegrees>-16.581051</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>234</AltitudeMeters>
+        <PointType>Left</PointType>
+        <Notes>Not Lef</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp Rig</Name>
+        <Time>2012-01-04T00:02:22Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389909</LatitudeDegrees>
+          <LongitudeDegrees>-16.581191</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>233</AltitudeMeters>
+        <PointType>Right</PointType>
+        <Notes>Not Rig</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp Str</Name>
+        <Time>2012-01-04T00:02:37Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389890</LatitudeDegrees>
+          <LongitudeDegrees>-16.581309</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>233</AltitudeMeters>
+        <PointType>Straight</PointType>
+        <Notes>Not Str</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp Fir</Name>
+        <Time>2012-01-04T00:02:52Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389871</LatitudeDegrees>
+          <LongitudeDegrees>-16.581438</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>233</AltitudeMeters>
+        <PointType>First Aid</PointType>
+        <Notes>Not Fir</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp 4th</Name>
+        <Time>2012-01-04T00:03:18Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389881</LatitudeDegrees>
+          <LongitudeDegrees>-16.581663</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>230</AltitudeMeters>
+        <PointType>4th Category</PointType>
+        <Notes>Not 4th</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp 3th</Name>
+        <Time>2012-01-04T00:03:36Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389852</LatitudeDegrees>
+          <LongitudeDegrees>-16.581813</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>228</AltitudeMeters>
+        <PointType>3rd Category</PointType>
+        <Notes>Not 3rd</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp 2nd</Name>
+        <Time>2012-01-04T00:03:57Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389815</LatitudeDegrees>
+          <LongitudeDegrees>-16.581985</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>224</AltitudeMeters>
+        <PointType>2nd Category</PointType>
+        <Notes>Not 2nd</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp 1st</Name>
+        <Time>2012-01-04T00:04:18Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389834</LatitudeDegrees>
+          <LongitudeDegrees>-16.582156</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>224</AltitudeMeters>
+        <PointType>1st Category</PointType>
+        <Notes>Not 1st</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp Hor</Name>
+        <Time>2012-01-04T00:04:52Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389768</LatitudeDegrees>
+          <LongitudeDegrees>-16.582199</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>226</AltitudeMeters>
+        <PointType>Hors Category</PointType>
+        <Notes>Not Hor</Notes>
+      </CoursePoint>
+      <CoursePoint>
+        <Name>Tp Spr</Name>
+        <Time>2012-01-04T00:05:09Z</Time>
+        <Position>
+          <LatitudeDegrees>28.389777</LatitudeDegrees>
+          <LongitudeDegrees>-16.582049</LongitudeDegrees>
+        </Position>
+        <AltitudeMeters>225</AltitudeMeters>
+        <PointType>Sprint</PointType>
+        <Notes>Not Spr</Notes>
+      </CoursePoint>
+    </Course>
+  </Courses>
+</TrainingCenterDatabase>
