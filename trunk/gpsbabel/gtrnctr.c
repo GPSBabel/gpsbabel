@@ -212,7 +212,6 @@ static void
 gtc_wr_deinit(void)
 {
   gbfclose(ofd);
-  xfree(tdata);
 }
 
 static int gtc_indent_level;
@@ -236,6 +235,40 @@ gtc_write_xml(int indent, const char* fmt, ...)
   }
 
   va_end(args);
+}
+
+static void
+gtc_lap_start(const route_head* rte)
+{
+  gtc_least_time = 0;
+  gtc_most_time = 0;
+}
+
+static void
+gtc_new_study_lap(const route_head* rte)
+{
+  track_recompute(rte, &tdata);  /* called routine allocates space for tdata */
+}
+
+static void
+gtc_study_lap(const waypoint* wpt)
+{
+  if (wpt->creation_time && (gtc_least_time == 0)) {
+    gtc_least_time = wpt->creation_time;
+    gtc_start_lat = wpt->latitude;
+    gtc_start_long = wpt->longitude;
+  }
+
+  if (wpt->creation_time && (gtc_least_time > wpt->creation_time)) {
+    gtc_least_time =  wpt->creation_time;
+    gtc_start_lat = wpt->latitude;
+    gtc_start_long = wpt->longitude;
+  }
+  if (wpt->creation_time > gtc_most_time)  {
+    gtc_most_time = wpt->creation_time;
+    gtc_end_lat = wpt->latitude;
+    gtc_end_long = wpt->longitude;
+  }
 }
 
 static void
@@ -330,6 +363,9 @@ static void
 gtc_act_hdr(const route_head* rte)
 {
   gtc_write_xml(1, "<Activity Sport=\"%s\">\n", gtc_sportlist[gtc_sport]);
+  gtc_lap_start(NULL);
+  gtc_new_study_lap(rte);
+  route_disp(rte, gtc_study_lap);
   if (gtc_least_time) {
     char time_string[100];
     xml_fill_in_time(time_string, gtc_least_time, 0, XML_LONG_TIME);
@@ -339,6 +375,7 @@ gtc_act_hdr(const route_head* rte)
     gtc_write_xml(1, "<Lap>\n");
   }
   gtc_fake_hdr();
+  xfree(tdata);
   gtc_write_xml(1,"<Track>\n");
 }
 
@@ -355,6 +392,9 @@ gtc_crs_hdr(const route_head* rte)
 {
 
   gtc_write_xml(1, "<Course>\n");
+  gtc_lap_start(NULL);
+  gtc_new_study_lap(rte);
+  route_disp(rte, gtc_study_lap);
   if (rte->rte_name) {
     char* name = xstrndup(rte->rte_name, GTC_MAX_NAME_LEN);
     gtc_write_xml(0, "<Name>%s</Name>\n", name);
@@ -366,6 +406,7 @@ gtc_crs_hdr(const route_head* rte)
   gtc_write_xml(1, "<Lap>\n");
   gtc_fake_hdr();
   gtc_write_xml(-1, "</Lap>\n");
+  xfree(tdata);
   gtc_write_xml(1,"<Track>\n");
 }
 
@@ -377,49 +418,11 @@ gtc_crs_ftr(const route_head* rte)
 
 }
 
-static void
-gtc_lap_start(const route_head* rte)
-{
-  gtc_least_time = 0;
-  gtc_most_time = 0;
-}
-
-static void
-gtc_new_study_lap(const route_head* rte)
-{
-  track_recompute(rte, &tdata);  /* called routine allocates space for tdata */
-}
-
-static void
-gtc_study_lap(const waypoint* wpt)
-{
-  if (wpt->creation_time && (gtc_least_time == 0)) {
-    gtc_least_time = wpt->creation_time;
-    gtc_start_lat = wpt->latitude;
-    gtc_start_long = wpt->longitude;
-  }
-
-  if (wpt->creation_time && (gtc_least_time > wpt->creation_time)) {
-    gtc_least_time =  wpt->creation_time;
-    gtc_start_lat = wpt->latitude;
-    gtc_start_long = wpt->longitude;
-  }
-  if (wpt->creation_time > gtc_most_time)  {
-    gtc_most_time = wpt->creation_time;
-    gtc_end_lat = wpt->latitude;
-    gtc_end_long = wpt->longitude;
-  }
-}
-
 void
 gtc_write(void)
 {
   gtc_write_xml(0, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n");
   gtc_write_xml(1, "<TrainingCenterDatabase xmlns=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd\">\n");
-
-  gtc_lap_start(NULL);
-  track_disp_all(NULL, NULL, gtc_study_lap);
-  track_disp_all(gtc_new_study_lap, NULL, NULL);
 
   if (gtc_course_flag) {
     gtc_write_xml(1, "<Courses>\n");
