@@ -1,5 +1,5 @@
 <para> 
-KML, the Keyhole Markup Language, is used by Keyhole and
+KML, the Keyhole Markup Language format, was used by Keyhole and is used by 
 <ulink url="http://earth.google.com">Google Earth</ulink>.  
 </para>
 <para>There are concepts in KML that GPSBabel can't support very well on 
@@ -7,7 +7,7 @@ read becuase they don't map well into other programs.  For example, KML has
 ideas of camera views and names and descriptions can have arbitrarily 
 complicated HTML in them.   KML files may have tiered "Styles" which
 can identify sizing info and URLs of associated icons.   Reading such
-files with GPSBabel - even if your goal it to out to KML - can often
+files with GPSBabel - even if your goal it to write it back out as KML - can often
 have suprising results.  Simple files with waypoints and paths (which
 GPSBabel represents internally as tracks) work fine.
 </para>

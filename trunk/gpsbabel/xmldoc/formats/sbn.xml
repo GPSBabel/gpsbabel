@@ -1,6 +1,6 @@
 <para>
 	This format is for SBN datalog files saved to the SD card by
-	the Locosys GT-11/BGT-11/GT-31/BGT-31.
+	the Locosys GT-11/BGT-11/GT-31/BGT-31 GPS receivers.
 </para>
 <para>
 	On the device, logging in this format is enabled by choosing

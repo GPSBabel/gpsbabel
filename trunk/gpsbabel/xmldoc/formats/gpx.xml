@@ -1,8 +1,5 @@
-
-      
-      
-<para>This is the most capable and expressive of all the file
-formats supplied.  It is described at <ulink url="http://www.topografix.com/gpx.asp">topografix.com</ulink> and is
+<para>This is one of the most capable and expressive formats of all the file
+formats supported by GPSBabel.  It is described at <ulink url="http://www.topografix.com/gpx.asp">topografix.com</ulink> and is
 supported by EasyGPS, ExpertGPS, and many other programs described at
 <ulink url="http://www.topografix.com/gpx_resources.asp">topografix.com</ulink>
 </para>
@@ -10,8 +7,8 @@ supported by EasyGPS, ExpertGPS, and many other programs described at
 GPSBabel's reader of this module attempts to preserve tags it doesn't
 really understand.   It also tries to glean interesting data from
 <simplelist>
-  <member><ulink url="http://www.geocaching.com">pocket queries from Geocaching.com</ulink></member>
-  <member>Garmin's "gpxx" GPX extensions.</member>
+  <member><ulink url="http://www.geocaching.com">pocket queries from Geocaching.com,</ulink></member>
+  <member>Garmin's "gpxx" GPX extensions,</member>
   <member>Humminbird's "h" GPX extensions.</member>
 </simplelist>
 </para>

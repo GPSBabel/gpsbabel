@@ -1,5 +1,10 @@
 <para>
-  The 'delbin' module supports DeLorme PN-20, PN-30, PN-40, and PN-40 SE receivers.
+  The 'delbin' module supports 
+<productname>DeLorme PN-20</productname>, 
+<productname>DeLorme PN-30</productname>, 
+<productname>DeLorme PN-40</productname>, 
+<productname>DeLorme PN-40 SE</productname>, and 
+<productname>DeLorme PN 60 </productname>receivers.
   <important>
     <para>
       Not all strains of Linux are supported.   Fedora 7 is known not to work, for example.

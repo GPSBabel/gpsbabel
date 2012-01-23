@@ -1,7 +1,7 @@
 <para>
 GPSBabel supports reading and writing of tracks in the .tcx 
-format used by Garmin Training Center (GTC). GTC is the successor 
-to Garmin's Logbook program for their workout units.  It is a 
+format used by <productname>Garmin Training Center</productname> (GTC). GTC is the successor 
+to Garmin's <productname>Logbook</productname> program for their workout units.  It is a 
 free upgrade.
 </para>
 <para>

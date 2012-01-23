@@ -1,5 +1,5 @@
 <para> 
-This format supports the <ulink url="http://www.delorme.com">DeLorme</ulink> ".an1" drawing file format.  It can 
+This format supports the <ulink url="http://www.delorme.com">DeLorme</ulink> ".an1" drawing file format used by their desktop software like Topo USA.  It can 
 currently be used to either read or write drawing files.  If you use 
 this format to create drawing files with routes or waypoints from another 
 source, by default it will create "Red Flag" symbols for waypoints, and 
