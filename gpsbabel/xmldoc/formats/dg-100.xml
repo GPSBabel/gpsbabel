@@ -1,7 +1,15 @@
-<para>Serial download protocol for the <productname>GlobalSat DG-100</productname>, <productname> GlobalSat BT-335</productname>, and <productname>GlboalSat BT-338X</productname>GPS data loggers.</para>
-<para>While the DG-100 has a button to record waypoints, they seem to be indistinguishable from trackpoints. Therefore, all points will be presented as trackpoints, disregarding whether they were recorded automatically or manually.</para>
 <para>
-<ulink url="http://www.globalsat.com.tw/eng/product_detail_00000090.htm">GlobalSat DG-100</ulink>
+  Serial download protocol for the <productname>GlobalSat DG-100</productname>, 
+  <productname> GlobalSat BT-335</productname>, 
+  and <productname>GlboalSat BT-338X</productname>GPS data loggers.
+</para>
+<para>
+  While the DG-100 has a button to record waypoints, they seem to be indistinguishable 
+  from trackpoints. Therefore, all points will be presented as trackpoints, 
+  regardless of whether they were recorded automatically or manually.
+</para>
+<para>
+  <ulink url="http://www.globalsat.com.tw/eng/product_detail_00000090.htm">GlobalSat DG-100</ulink>
 </para>
 <example id="dg-100-on-linux">
   <title>Command showing DG-100 download and erase on Linux</title>
@@ -13,11 +21,11 @@
 </example>
 
 <para>
-The DG-100 provides a physical USB interface to the host computer, but
-internally it uses a Prolific PL-2303 chip to do this.  So you must have
-drivers installed on your computer to recognize the PL-2303 and provide
-that data as a serial port to software like GPSBabel.   Such software
-comes with the unit for Windows.  Prolific provides software for Mac OS/X,
-but unfortunately their driver has a defect which makes it unusable with
-GPSBabel.
+  The DG-100 provides a physical USB interface to the host computer, but
+  internally it uses a Prolific PL-2303 chip to do this.  So you must have
+  drivers installed on your computer to recognize the PL-2303 and provide
+  that data as a serial port to software like GPSBabel.   Such software
+  comes with the unit for Windows.  Prolific provides software for Mac OS/X,
+  but unfortunately their driver has a defect which makes it unstable with
+  GPSBabel.
 </para>

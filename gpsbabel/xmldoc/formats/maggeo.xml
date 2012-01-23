@@ -1,17 +1,19 @@
-
-      
-      
-      <para> This format supports the on-card format used by the <ulink url="http://www.magellangps.com">Magellan</ulink> Explorist 400,
-Explorist 500, Explorist 600, Explorist 210, and Explorist XL 
-to describe geocaches.  Notice what while the format can
-hold an infinite number of geocaches, the unit will read and silently
-discard all but 200 geocache POIs at a time.</para>
-      <para> You should name any file created with this format with a
-".gs" extension so the firmware can read it.
+<para> 
+  This format supports the on-card format used by the 
+  <ulink url="http://www.magellangps.com">Magellan</ulink> Explorist 400,
+  Explorist 500, Explorist 600, Explorist 210, and Explorist XL 
+  to describe geocaches.  Notice what while the format can
+  hold an infinite number of geocaches, the unit will read and silently
+  discard all but 200 geocache POIs at a time.</para>
+<para>
+  You should name any file created with this format with a ".gs" extension 
+  so the firmware can read it.
 </para>
-<para>This format does support reading .gs files, but it's kind of a 
-pointless operation as the units can't create or edit these files.  
-Round-tripped data is lossy for all but the most trivial cases as
-many fields are shortened or discarded on write.  "Date last found" is
-discarded on read as there are no logs stored on the device in which to
-store the date last found.</para>
+<para>
+  This format does support reading .gs files, but it's kind of a 
+  pointless operation as the units can't create or edit these files.  
+  Round-tripped data is lossy for all but the most trivial cases as
+  many fields are shortened or discarded on write.  "Date last found" is
+  discarded on read as there are no logs stored on the device in which to
+  store the date last found.
+</para>

@@ -1,11 +1,9 @@
+<para>
+  This is the XML format used by the Garmin Logbook product
+  that ships with Forerunner and Foretrex.  
+  As of early 2006, this program is apparently  been discontinued in favor of
+  <link  linkend="fmt_gtrnctr">Garmin Training Center</link>.
 
-      
-      
-      <para>This is the XML format used by the Garmin Logbook product
-that ships with Forerunner and Foretrex.  
-As of early 2006, this program is apparently  been discontinued in favor of
-<link  linkend="fmt_gtrnctr">Garmin Training Center</link>.
-
-See: <ulink url="http://www.garmin.com">http://www.garmin.com</ulink>  
-         </para>
+  See: <ulink url="http://www.garmin.com">http://www.garmin.com</ulink>  
+</para>
     

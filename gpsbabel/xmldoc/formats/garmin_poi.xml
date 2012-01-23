@@ -1,14 +1,13 @@
-
-      
-      
-      <para>The <ulink url="http://www.garmin.com/support/agree.jsp?id=927">Garmin POI loader</ulink> 
-loads custom points of interest into certain models of
-Garmin GPS receivers.  (As of this writing, only the models introduced
-in 2005 and later are supported.  See Garmin's site for more info.)
-The garmin_poi format produces csv files that can be
- converted into POI files by Garmin's POI loader.</para>
 <para>
-This format was mostly useful when POI Loader couldn't read GPX and we
-couldn't write GPI.  See <link linkend="fmt_garmin_gpi">GPSBabel's GPI doc</link>.
+  The <ulink url="http://www.garmin.com/support/agree.jsp?id=927">Garmin POI loader</ulink> 
+  loads custom points of interest into certain models of
+  Garmin GPS receivers.  (As of this writing, only the models introduced
+  in 2005 and later are supported.  See Garmin's site for more info.)
+  The garmin_poi format produces csv files that can be
+  converted into POI files by Garmin's POI loader.
+</para>
+<para>
+  This format was mostly useful when POI Loader couldn't read GPX and we
+  couldn't write GPI.  See <link linkend="fmt_garmin_gpi">GPSBabel's GPI doc</link>.
 </para>
     

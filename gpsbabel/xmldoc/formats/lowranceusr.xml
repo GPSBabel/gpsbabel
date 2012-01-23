@@ -1,5 +1,5 @@
 <para> 
-The <ulink url="http://www.lowrance.com">Lowrance iFinder GPS</ulink> series has the unique capability
+The <ulink url="http://www.lowrance.com">Lowrance iFinder GPS</ulink> series has the unique capability within the Lowrance models
 to output its data to an MMC card.  The data is saved to the card as a
 .USR file and can be read by your computer using a card reader.
 Waypoints, icons, routes, tracks are supported.   Event marker icons contain a symbol, name, latitude and longitude

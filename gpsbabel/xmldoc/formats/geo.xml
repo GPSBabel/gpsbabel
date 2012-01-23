@@ -7,7 +7,7 @@ or <link linkend="fmt_gpx">GPX</link> formats for more general EasyGPS support.
 <para>
 This is a simple XML-based format containing only very basic information 
 about geocaches.  If you can use the <link linkend="fmt_gpx">GPX</link> 
-format instead, you should consider doing so as it is a much richer format.
+format from Pocket Queries instead, you should consider doing so as it is a much richer format.
 </para>
 <para>
 We have a separate page describing how to <ulink url="/tips/browser.html">send from Geocaching.com pages to GPS</ulink> 
