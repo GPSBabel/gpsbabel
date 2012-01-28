@@ -1372,7 +1372,7 @@ static void miniHomer_get_poi()
 
       wpt = waypt_new();
       xasprintf(&wpt->shortname, "POI_%s", poinames[poi]);
-      xasprintf(&wpt->description, "miniHomer points to this coordinates if the %s symbol is on", poi, poinames[poi]);
+      xasprintf(&wpt->description, "miniHomer points to this coordinates if the %s symbol is on", poinames[poi]);
       wpt->latitude       = lat;
       wpt->longitude      = lng;
       wpt->altitude       = alt;

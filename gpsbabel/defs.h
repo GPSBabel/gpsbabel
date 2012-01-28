@@ -878,7 +878,7 @@ char* gstrsub(const char* s, const char* search, const char* replace);
 char* xstrrstr(const char* s1, const char* s2);
 void rtrim(char* s);
 char* lrtrim(char* s);
-int xasprintf(char** strp, const char* fmt, ...);
+int xasprintf(char** strp, const char* fmt, ...) PRINTFLIKE(2, 3);
 int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);
