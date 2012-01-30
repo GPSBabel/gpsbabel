@@ -1,0 +1,33 @@
+# gpsbabel XCSV style file
+#
+# Format: iGO2008 points of interest
+# Author: Olaf Klein
+#   Date: 09/05/2008
+#
+DESCRIPTION		iGO2008 points of interest (.upoi)
+EXTENSION		upoi
+DATATYPE		WAYPOINT
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		PIPE
+RECORD_DELIMITER	CRNEWLINE
+BADCHARS		"|
+ENCODING		MS-ANSI
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	INDEX,"1","%d"
+IFIELD	DESCRIPTION, "", "%s"
+IFIELD	SHORTNAME, "", "%s"
+IFIELD	IGNORE, "", "%s"		# nothing
+IFIELD	LAT_DECIMAL, "", "%.6f"
+IFIELD	LON_DECIMAL, "", "%.6f"
+IFIELD	IGNORE, "", "%s"		# Name of map
+IFIELD	IGNORE, "", "%s"		# nothing
+IFIELD	POSTAL_CODE, "", "%s"
+IFIELD	CITY, "", "%s"
+IFIELD	STREET_ADDR, "", "%s"		# Street without number
+IFIELD	IGNORE, "", "%s"		# Street number
+IFIELD	NOTES, "", "%s"
+IFIELD	PHONE_NR, "", "%s"

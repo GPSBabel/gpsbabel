@@ -1,0 +1,13 @@
+<para>
+This function is identical to the init-baud file function of skytraq module. 
+</para>
+<para>The "initbaud" option might be helpful if autodetection fails or takes too long. With this option you
+can tell GPSBabel the baud rate the device is currently set to. In contrast, the option "baud" specifies
+the rate at which the actual download should take place. If it is different than "initbaud" (or the autodetected
+rate, if initbaud wasn't given), the initial setting will be restored after finishing the download.
+</para>
+<para>
+Please note that miniHomer by default uses 38400bps and does not autodetect the port speed. If you need autodetect, start as
+<userinput>gpsbabel -i miniHomer,initibaud=0 -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput>
+</para>
+

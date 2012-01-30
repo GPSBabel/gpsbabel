@@ -1,0 +1,6 @@
+<para>
+This option merges multiple tracks, inserting segment separators at
+track boundaries. It expects the tracks to already be in the right order for
+merging, i.e. it does not check timestamps and reorder track points so that
+their timestamps are monotonically increasing.
+</para>

@@ -1,0 +1,5 @@
+rm -f ${TMPDIR}/bend.*
+
+
+gpsbabel -i gpx -f ${REFERENCE}/route/bend-input.gpx -x bend,distance=25,interpolate,minangle=5 -o gpx -F ${TMPDIR}/bend.gpx
+compare ${REFERENCE}/route/bend-expected.gpx ${TMPDIR}/bend.gpx

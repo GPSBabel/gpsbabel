@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="50.827089869" minlon="6.222871869" maxlat="50.865717758" maxlon="6.245795987"/>
+<trk>
+  <desc>Log every 10 sec, 0 m, 0 km/h</desc>
+<trkseg>
+<trkpt lat="50.865717758" lon="6.222871869">
+  <ele>195.780899</ele>
+  <time>2008-07-29T06:53:26Z</time>
+  <course>161.293961</course>
+  <speed>0.023978</speed>
+  <name>TP0110</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.020000</hdop>
+  <vdop>0.880000</vdop>
+  <pdop>1.350000</pdop>
+</trkpt>
+<trkpt lat="50.865667798" lon="6.222886101">
+  <ele>195.678741</ele>
+  <time>2008-07-29T06:53:36Z</time>
+  <course>164.263916</course>
+  <speed>5.327742</speed>
+  <name>TP0111</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.930000</hdop>
+  <vdop>1.480000</vdop>
+  <pdop>1.740000</pdop>
+</trkpt>
+<trkpt lat="50.864863215" lon="6.223279763">
+  <ele>196.897476</ele>
+  <time>2008-07-29T06:53:46Z</time>
+  <course>162.088165</course>
+  <speed>11.843518</speed>
+  <name>TP0112</name>
+  <fix>3d</fix>
+  <sat>11</sat>
+  <hdop>0.900000</hdop>
+  <vdop>1.380000</vdop>
+  <pdop>1.650000</pdop>
+</trkpt>
+<trkpt lat="50.863556656" lon="6.224139074">
+  <ele>195.390579</ele>
+  <time>2008-07-29T06:53:56Z</time>
+  <course>153.299805</course>
+  <speed>18.403793</speed>
+  <name>TP0113</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.260000</hdop>
+  <vdop>2.090000</vdop>
+  <pdop>2.440000</pdop>
+</trkpt>
+<trkpt lat="50.862044835" lon="6.225447079">
+  <ele>196.039886</ele>
+  <time>2008-07-29T06:54:06Z</time>
+  <course>151.212051</course>
+  <speed>19.475996</speed>
+  <name>TP0114</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.930000</hdop>
+  <vdop>1.480000</vdop>
+  <pdop>1.750000</pdop>
+</trkpt>
+<trkpt lat="50.860492114" lon="6.226932932">
+  <ele>195.953262</ele>
+  <time>2008-07-29T06:54:16Z</time>
+  <course>146.928894</course>
+  <speed>19.539358</speed>
+  <name>TP0115</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.060000</hdop>
+  <vdop>1.880000</vdop>
+  <pdop>2.160000</pdop>
+</trkpt>
+<trkpt lat="50.859037371" lon="6.228467480">
+  <ele>196.389969</ele>
+  <time>2008-07-29T06:54:26Z</time>
+  <course>146.199387</course>
+  <speed>19.320868</speed>
+  <name>TP0116</name>
+  <fix>3d</fix>
+  <sat>8</sat>
+  <hdop>1.390000</hdop>
+  <vdop>2.240000</vdop>
+  <pdop>2.640000</pdop>
+</trkpt>
+<trkpt lat="50.857541310" lon="6.230045411">
+  <ele>196.359695</ele>
+  <time>2008-07-29T06:54:36Z</time>
+  <course>146.045898</course>
+  <speed>19.448168</speed>
+  <name>TP0117</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.300000</hdop>
+  <vdop>2.030000</vdop>
+  <pdop>2.410000</pdop>
+</trkpt>
+<trkpt lat="50.856043127" lon="6.231628001">
+  <ele>196.074524</ele>
+  <time>2008-07-29T06:54:46Z</time>
+  <course>146.341537</course>
+  <speed>19.894892</speed>
+  <name>TP0118</name>
+  <fix>3d</fix>
+  <sat>8</sat>
+  <hdop>1.390000</hdop>
+  <vdop>2.240000</vdop>
+  <pdop>2.640000</pdop>
+</trkpt>
+<trkpt lat="50.854634087" lon="6.233121896">
+  <ele>197.843628</ele>
+  <time>2008-07-29T06:54:56Z</time>
+  <course>145.704956</course>
+  <speed>16.669222</speed>
+  <name>TP0119</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.060000</hdop>
+  <vdop>1.550000</vdop>
+  <pdop>1.880000</pdop>
+</trkpt>
+<trkpt lat="50.853565422" lon="6.234249097">
+  <ele>202.286789</ele>
+  <time>2008-07-29T06:55:06Z</time>
+  <course>146.005951</course>
+  <speed>13.027266</speed>
+  <name>TP0120</name>
+  <fix>3d</fix>
+  <sat>11</sat>
+  <hdop>0.900000</hdop>
+  <vdop>1.400000</vdop>
+  <pdop>1.670000</pdop>
+</trkpt>
+<trkpt lat="50.853023686" lon="6.234809142">
+  <ele>202.414261</ele>
+  <time>2008-07-29T06:55:16Z</time>
+  <course>146.901215</course>
+  <speed>1.206095</speed>
+  <name>TP0121</name>
+  <fix>3d</fix>
+  <sat>11</sat>
+  <hdop>0.840000</hdop>
+  <vdop>0.810000</vdop>
+  <pdop>1.170000</pdop>
+</trkpt>
+<trkpt lat="50.853011126" lon="6.234822841">
+  <ele>203.334824</ele>
+  <time>2008-07-29T06:55:26Z</time>
+  <course>138.959549</course>
+  <speed>0.011050</speed>
+  <name>TP0122</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.930000</hdop>
+  <vdop>0.820000</vdop>
+  <pdop>1.240000</pdop>
+</trkpt>
+<trkpt lat="50.852688877" lon="6.235152203">
+  <ele>206.549713</ele>
+  <time>2008-07-29T06:55:36Z</time>
+  <course>146.013168</course>
+  <speed>9.511775</speed>
+  <name>TP0123</name>
+  <fix>3d</fix>
+  <sat>11</sat>
+  <hdop>0.900000</hdop>
+  <vdop>1.410000</vdop>
+  <pdop>1.670000</pdop>
+</trkpt>
+<trkpt lat="50.851764779" lon="6.236133821">
+  <ele>208.111160</ele>
+  <time>2008-07-29T06:55:46Z</time>
+  <course>145.465225</course>
+  <speed>15.709099</speed>
+  <name>TP0124</name>
+  <fix>3d</fix>
+  <sat>11</sat>
+  <hdop>0.900000</hdop>
+  <vdop>1.410000</vdop>
+  <pdop>1.670000</pdop>
+</trkpt>
+<trkpt lat="50.850516850" lon="6.237476287">
+  <ele>208.874451</ele>
+  <time>2008-07-29T06:55:56Z</time>
+  <course>146.075500</course>
+  <speed>18.512190</speed>
+  <name>TP0125</name>
+  <fix>3d</fix>
+  <sat>11</sat>
+  <hdop>0.900000</hdop>
+  <vdop>1.410000</vdop>
+  <pdop>1.680000</pdop>
+</trkpt>
+<trkpt lat="50.849101390" lon="6.238963837">
+  <ele>210.970779</ele>
+  <time>2008-07-29T06:56:06Z</time>
+  <course>146.079727</course>
+  <speed>18.825529</speed>
+  <name>TP0126</name>
+  <fix>3d</fix>
+  <sat>11</sat>
+  <hdop>0.910000</hdop>
+  <vdop>1.410000</vdop>
+  <pdop>1.680000</pdop>
+</trkpt>
+<trkpt lat="50.847635472" lon="6.240531138">
+  <ele>215.003540</ele>
+  <time>2008-07-29T06:56:16Z</time>
+  <course>146.143692</course>
+  <speed>20.144392</speed>
+  <name>TP0127</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.990000</hdop>
+  <vdop>1.420000</vdop>
+  <pdop>1.730000</pdop>
+</trkpt>
+<trkpt lat="50.846080463" lon="6.242129629">
+  <ele>217.159836</ele>
+  <time>2008-07-29T06:56:26Z</time>
+  <course>147.831940</course>
+  <speed>20.504822</speed>
+  <name>TP0128</name>
+  <fix>3d</fix>
+  <sat>11</sat>
+  <hdop>0.910000</hdop>
+  <vdop>1.420000</vdop>
+  <pdop>1.680000</pdop>
+</trkpt>
+<trkpt lat="50.844480339" lon="6.243585047">
+  <ele>214.226456</ele>
+  <time>2008-07-29T06:56:36Z</time>
+  <course>153.660782</course>
+  <speed>20.871927</speed>
+  <name>TP0129</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.940000</hdop>
+  <vdop>1.520000</vdop>
+  <pdop>1.790000</pdop>
+</trkpt>
+<trkpt lat="50.842739349" lon="6.244716892">
+  <ele>212.094818</ele>
+  <time>2008-07-29T06:56:46Z</time>
+  <course>162.121063</course>
+  <speed>20.861839</speed>
+  <name>TP0130</name>
+  <fix>3d</fix>
+  <sat>11</sat>
+  <hdop>0.910000</hdop>
+  <vdop>1.420000</vdop>
+  <pdop>1.690000</pdop>
+</trkpt>
+<trkpt lat="50.840971871" lon="6.245452870">
+  <ele>211.116760</ele>
+  <time>2008-07-29T06:56:56Z</time>
+  <course>169.502975</course>
+  <speed>19.669909</speed>
+  <name>TP0131</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.150000</hdop>
+  <vdop>1.600000</vdop>
+  <pdop>1.960000</pdop>
+</trkpt>
+<trkpt lat="50.839297511" lon="6.245762047">
+  <ele>209.528275</ele>
+  <time>2008-07-29T06:57:06Z</time>
+  <course>176.329559</course>
+  <speed>17.733749</speed>
+  <name>TP0132</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.950000</hdop>
+  <vdop>1.520000</vdop>
+  <pdop>1.790000</pdop>
+</trkpt>
+<trkpt lat="50.837920715" lon="6.245795987">
+  <ele>209.119659</ele>
+  <time>2008-07-29T06:57:16Z</time>
+  <course>180.751617</course>
+  <speed>12.216647</speed>
+  <name>TP0133</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.950000</hdop>
+  <vdop>1.520000</vdop>
+  <pdop>1.790000</pdop>
+</trkpt>
+<trkpt lat="50.837218585" lon="6.245763805">
+  <ele>209.183655</ele>
+  <time>2008-07-29T06:57:26Z</time>
+  <course>180.543655</course>
+  <speed>3.888501</speed>
+  <name>TP0134</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.950000</hdop>
+  <vdop>1.530000</vdop>
+  <pdop>1.800000</pdop>
+</trkpt>
+<trkpt lat="50.836823991" lon="6.245769759">
+  <ele>209.345215</ele>
+  <time>2008-07-29T06:57:36Z</time>
+  <course>181.453415</course>
+  <speed>7.413952</speed>
+  <name>TP0135</name>
+  <fix>3d</fix>
+  <sat>11</sat>
+  <hdop>0.910000</hdop>
+  <vdop>1.430000</vdop>
+  <pdop>1.700000</pdop>
+</trkpt>
+<trkpt lat="50.835798748" lon="6.245745388">
+  <ele>209.575470</ele>
+  <time>2008-07-29T06:57:46Z</time>
+  <course>180.527542</course>
+  <speed>14.646052</speed>
+  <name>TP0136</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.950000</hdop>
+  <vdop>1.530000</vdop>
+  <pdop>1.800000</pdop>
+</trkpt>
+<trkpt lat="50.834379309" lon="6.245734786">
+  <ele>209.706360</ele>
+  <time>2008-07-29T06:57:56Z</time>
+  <course>180.994965</course>
+  <speed>17.144146</speed>
+  <name>TP0137</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.950000</hdop>
+  <vdop>1.530000</vdop>
+  <pdop>1.800000</pdop>
+</trkpt>
+<trkpt lat="50.832781065" lon="6.245684290">
+  <ele>210.981903</ele>
+  <time>2008-07-29T06:58:06Z</time>
+  <course>180.547180</course>
+  <speed>17.879311</speed>
+  <name>TP0138</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.950000</hdop>
+  <vdop>1.540000</vdop>
+  <pdop>1.810000</pdop>
+</trkpt>
+<trkpt lat="50.831213506" lon="6.245643131">
+  <ele>213.639923</ele>
+  <time>2008-07-29T06:58:16Z</time>
+  <course>181.557831</course>
+  <speed>17.341228</speed>
+  <name>TP0139</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.950000</hdop>
+  <vdop>1.540000</vdop>
+  <pdop>1.810000</pdop>
+</trkpt>
+<trkpt lat="50.829728949" lon="6.245609101">
+  <ele>214.042358</ele>
+  <time>2008-07-29T06:58:26Z</time>
+  <course>181.223846</course>
+  <speed>15.520967</speed>
+  <name>TP0140</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.060000</hdop>
+  <vdop>1.940000</vdop>
+  <pdop>2.210000</pdop>
+</trkpt>
+<trkpt lat="50.828598302" lon="6.245579941">
+  <ele>206.812027</ele>
+  <time>2008-07-29T06:58:36Z</time>
+  <course>181.608673</course>
+  <speed>8.122931</speed>
+  <name>TP0141</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.060000</hdop>
+  <vdop>1.950000</vdop>
+  <pdop>2.210000</pdop>
+</trkpt>
+<trkpt lat="50.828335995" lon="6.245583984">
+  <ele>203.424423</ele>
+  <time>2008-07-29T06:58:46Z</time>
+  <course>173.229111</course>
+  <speed>0.455293</speed>
+  <name>TP0142</name>
+  <fix>3d</fix>
+  <sat>10</sat>
+  <hdop>0.910000</hdop>
+  <vdop>0.840000</vdop>
+  <pdop>1.240000</pdop>
+</trkpt>
+<trkpt lat="50.828315071" lon="6.245585815">
+  <ele>202.360809</ele>
+  <time>2008-07-29T06:58:56Z</time>
+  <course>181.487564</course>
+  <speed>0.070300</speed>
+  <name>TP0143</name>
+  <fix>3d</fix>
+  <sat>8</sat>
+  <hdop>1.260000</hdop>
+  <vdop>0.920000</vdop>
+  <pdop>1.560000</pdop>
+</trkpt>
+<trkpt lat="50.828313011" lon="6.245585648">
+  <ele>202.515137</ele>
+  <time>2008-07-29T06:59:06Z</time>
+  <course>268.758911</course>
+  <speed>0.038898</speed>
+  <name>TP0144</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.020000</hdop>
+  <vdop>0.890000</vdop>
+  <pdop>1.350000</pdop>
+</trkpt>
+<trkpt lat="50.828084072" lon="6.245542982">
+  <ele>203.537628</ele>
+  <time>2008-07-29T06:59:16Z</time>
+  <course>185.460052</course>
+  <speed>7.315135</speed>
+  <name>TP0145</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.060000</hdop>
+  <vdop>1.960000</vdop>
+  <pdop>2.220000</pdop>
+</trkpt>
+<trkpt lat="50.827525636" lon="6.245578224">
+  <ele>201.630936</ele>
+  <time>2008-07-29T06:59:26Z</time>
+  <course>174.653168</course>
+  <speed>0.382723</speed>
+  <name>TP0146</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.150000</hdop>
+  <vdop>0.850000</vdop>
+  <pdop>1.430000</pdop>
+</trkpt>
+<trkpt lat="50.827517528" lon="6.245592697">
+  <ele>202.598358</ele>
+  <time>2008-07-29T06:59:36Z</time>
+  <course>174.010529</course>
+  <speed>0.048324</speed>
+  <name>TP0147</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.160000</hdop>
+  <vdop>1.610000</vdop>
+  <pdop>1.990000</pdop>
+</trkpt>
+<trkpt lat="50.827518490" lon="6.245591882">
+  <ele>202.834427</ele>
+  <time>2008-07-29T06:59:46Z</time>
+  <course>330.416962</course>
+  <speed>0.042397</speed>
+  <name>TP0148</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.160000</hdop>
+  <vdop>1.620000</vdop>
+  <pdop>1.990000</pdop>
+</trkpt>
+<trkpt lat="50.827517619" lon="6.245591501">
+  <ele>203.029007</ele>
+  <time>2008-07-29T06:59:56Z</time>
+  <course>330.416962</course>
+  <speed>0.003231</speed>
+  <name>TP0149</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.160000</hdop>
+  <vdop>1.620000</vdop>
+  <pdop>1.990000</pdop>
+</trkpt>
+<trkpt lat="50.827517312" lon="6.245590729">
+  <ele>203.197311</ele>
+  <time>2008-07-29T07:00:06Z</time>
+  <course>330.416962</course>
+  <speed>0.000434</speed>
+  <name>TP0150</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.170000</hdop>
+  <vdop>1.620000</vdop>
+  <pdop>1.990000</pdop>
+</trkpt>
+<trkpt lat="50.827516711" lon="6.245589700">
+  <ele>203.374374</ele>
+  <time>2008-07-29T07:00:16Z</time>
+  <course>200.356400</course>
+  <speed>0.169673</speed>
+  <name>TP0151</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.170000</hdop>
+  <vdop>1.620000</vdop>
+  <pdop>1.990000</pdop>
+</trkpt>
+<trkpt lat="50.827117198" lon="6.245624383">
+  <ele>203.469315</ele>
+  <time>2008-07-29T07:00:26Z</time>
+  <course>173.281235</course>
+  <speed>2.458185</speed>
+  <name>TP0152</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.170000</hdop>
+  <vdop>1.620000</vdop>
+  <pdop>2.000000</pdop>
+</trkpt>
+<trkpt lat="50.827089869" lon="6.245617902">
+  <ele>205.763046</ele>
+  <time>2008-07-29T07:00:36Z</time>
+  <course>172.024109</course>
+  <speed>0.011256</speed>
+  <name>TP0153</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.150000</hdop>
+  <vdop>0.850000</vdop>
+  <pdop>1.430000</pdop>
+</trkpt>
+<trkpt lat="50.827090094" lon="6.245617582">
+  <ele>205.838577</ele>
+  <time>2008-07-29T07:00:46Z</time>
+  <course>172.024109</course>
+  <speed>0.001248</speed>
+  <name>TP0154</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.170000</hdop>
+  <vdop>1.620000</vdop>
+  <pdop>2.000000</pdop>
+</trkpt>
+<trkpt lat="50.827090427" lon="6.245617316">
+  <ele>205.928421</ele>
+  <time>2008-07-29T07:00:56Z</time>
+  <course>172.024109</course>
+  <speed>0.002104</speed>
+  <name>TP0155</name>
+  <fix>3d</fix>
+  <sat>9</sat>
+  <hdop>1.170000</hdop>
+  <vdop>1.620000</vdop>
+  <pdop>2.000000</pdop>
+</trkpt>
+</trkseg>
+</trk>
+</gpx>

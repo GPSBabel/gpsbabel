@@ -1,0 +1,41 @@
+<para>
+This option assigns a time value to each trackpoint.
+</para>
+<para>
+The value of this option must be in the form of fYYYYMMDDHHMMSS+SS.
+</para>
+<para>
+The parameter f (force) is optional and means that the time value of each trackpoint is replaced.
+If f is not specified, the time value of each trackpoint is only replaced when the trackpoint contains no time value.
+</para>
+<para>
+YYYYMMDDHHMMSS is the pattern for the timestamp and is required.
+</para>
+<para>
+The plus sign is the delimiter between the timestamp and the step time in seconds.
+The first trackpoint receives the time value of the timestamp and
+each following trackpoint receives the timestamp incremented by the step time.
+The specification of the steptime is optional.
+</para>
+<para>
+The parameter was added because some software products (e.g. garmin training center)
+require a time value for each trackpoint.
+</para>
+<example id="ex_track_faketime1">
+<title>Replace time values of a track</title>
+<para>
+Replace all time values with new time values.
+Start at the 5 th of July, 2010 at 8 PM and
+increment 2 seconds between each trackpoint:
+</para>
+<para><userinput>gpsbabel -i kml -f in.kml -x track,faketime=f20100705200000+2 -o gtrnctr -F out.tcx</userinput></para>
+</example>
+<example id="ex_track_faketime2">
+<title>Add time values to a track</title>
+<para>
+Add a time value to a trackpoint, if the trackpoint contains no time value.
+Start at the 6 th of May, 2010 at 6 AM and
+increment 5 seconds between each trackpoint:
+</para>
+<para><userinput>gpsbabel -i kml -f in.kml -x track,faketime=20100506060000+5 -o gtrnctr -F out.tcx</userinput></para>
+</example>

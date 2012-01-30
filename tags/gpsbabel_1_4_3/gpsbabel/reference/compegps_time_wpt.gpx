@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="41.806956560" minlon="2.344091590" maxlat="41.807118160" maxlon="2.344168870"/>
+<wpt lat="41.807118160" lon="2.344168870">
+  <ele>0.000000</ele>
+  <time>2010-05-16T09:30:03Z</time>
+  <name>wpt001</name>
+  <cmt>wpt001</cmt>
+  <desc>wpt001</desc>
+  <sym>Waypoint</sym>
+</wpt>
+<wpt lat="41.806956560" lon="2.344091590">
+  <ele>1099.570068</ele>
+  <time>2010-05-16T09:35:49Z</time>
+  <name>wpt002</name>
+  <cmt>wpt002</cmt>
+  <desc>wpt002</desc>
+  <sym>Waypoint</sym>
+</wpt>
+</gpx>

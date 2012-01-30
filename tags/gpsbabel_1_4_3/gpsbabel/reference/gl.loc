@@ -1,0 +1,56 @@
+<?xml version="1.0"?><loc version="1.0" src="EasyGPS">
+<waypoint>
+<name id="GCEBB"><![CDATA[Mountain Bike Heaven by susy1313]]></name>
+<coord lat="35.972033" lon="-87.134700"/>
+<type>geocache</type>
+<link text ="Cache Details">http://www.geocaching.com/seek/cache_details.asp?ID=3771</link>
+</waypoint>
+<waypoint>
+<name id="GC1A37"><![CDATA[The Troll by a182pilot & Family]]></name>
+<coord lat="36.090683" lon="-86.679550"/>
+<type>geocache</type>
+<link text ="Cache Details">http://www.geocaching.com/seek/cache_details.asp?ID=6711</link>
+</waypoint>
+<waypoint>
+<name id="GC1C2B"><![CDATA[Dive Bomber by JoGPS & family]]></name>
+<coord lat="35.996267" lon="-86.620117"/>
+<type>geocache</type>
+<link text ="Cache Details">http://www.geocaching.com/seek/cache_details.asp?ID=7211</link>
+</waypoint>
+<waypoint>
+<name id="GC25A9"><![CDATA[FOSTER by JoGPS & Family]]></name>
+<coord lat="36.038483" lon="-86.648617"/>
+<type>geocache</type>
+<link text ="Cache Details">http://www.geocaching.com/seek/cache_details.asp?ID=9641</link>
+</waypoint>
+<waypoint>
+<name id="GC2723"><![CDATA[Logan Lighthouse by JoGps & Family]]></name>
+<coord lat="36.112183" lon="-86.741767"/>
+<type>geocache</type>
+<link text ="Cache Details">http://www.geocaching.com/seek/cache_details.asp?ID=10019</link>
+</waypoint>
+<waypoint>
+<name id="GC2B71"><![CDATA[Ganier Cache by Susy1313]]></name>
+<coord lat="36.064083" lon="-86.790517"/>
+<type>geocache</type>
+<link text ="Cache Details">http://www.geocaching.com/seek/cache_details.asp?ID=11121</link>
+</waypoint>
+<waypoint>
+<name id="GC309F"><![CDATA[Shy's Hill by FireFighterEng33]]></name>
+<coord lat="36.087767" lon="-86.809733"/>
+<type>geocache</type>
+<link text ="Cache Details">http://www.geocaching.com/seek/cache_details.asp?ID=12447</link>
+</waypoint>
+<waypoint>
+<name id="GC317A"><![CDATA[GittyUp by JoGPS / Warner Parks]]></name>
+<coord lat="36.057500" lon="-86.892000"/>
+<type>geocache</type>
+<link text ="Cache Details">http://www.geocaching.com/seek/cache_details.asp?ID=12666</link>
+</waypoint>
+<waypoint>
+<name id="GC317D"><![CDATA[Inlighting by JoGPS / Warner Parks]]></name>
+<coord lat="36.082800" lon="-86.867283"/>
+<type>geocache</type>
+<link text ="Cache Details">http://www.geocaching.com/seek/cache_details.asp?ID=12669</link>
+</waypoint>
+</loc>

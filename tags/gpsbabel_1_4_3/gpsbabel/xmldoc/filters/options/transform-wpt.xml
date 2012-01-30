@@ -1,0 +1,11 @@
+<para>
+This option selects the destination type of this filter to be waypoints.  
+Choose this when you want to convert tracks or routes into waypoints.
+</para>
+<example id="transform_to_wpt">
+<title>Converting a track to a sequence of waypoints</title>
+<para>
+Say you you have a KML file that contains a track but you want to convert it to a CSV file that can contain only waypoints, perhaps to import into a spreadsheet.  Use the following command:
+</para>
+<para><userinput>gpsbabel -i kml -f blah.kml -x transform,wpt=trk -o csv -F blah.txt</userinput></para>
+</example>
