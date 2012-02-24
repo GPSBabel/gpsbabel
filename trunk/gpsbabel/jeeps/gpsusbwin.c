@@ -166,7 +166,8 @@ HANDLE* garmin_usb_start(HDEVINFO* hdevinfo, SP_DEVICE_INTERFACE_DATA* infodata)
     if (GetLastError() == ERROR_ACCESS_DENIED) {
       warning(
         "Exclusive access is denied.  It's likely that something else such as\n"
-        "Nroute, Spanner, Google Earth, or GPSGate already has control of the device\n");
+        "Garmin Lifetime Updater, Communicator, Basecamp, Nroute, Spanner,\n"
+        "Google Earth, or GPSGate already has control of the device\n");
     }
     GPS_Serial_Error("(usb) CreateFile on '%s' failed", pdd->DevicePath);
     return NULL;
