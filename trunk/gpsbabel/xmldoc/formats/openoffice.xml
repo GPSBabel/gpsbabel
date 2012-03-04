@@ -1,5 +1,5 @@
 <para> 
-	Tab seperated export-all (except geocaching data) file
+	Tab separated export-all (except geocaching data) file
 	format.  Intended to serve as source for number-processing
 	applications like OpenOffice, Ploticus and others. Tab was chosen as
 	delimiter because it is a) supported by both OpenOffice and Ploticus

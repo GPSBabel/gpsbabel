@@ -1,6 +1,6 @@
 <para>Read-only support for the csv file format used by <productname>Visiontac VGPS-900</productname> and <productname>Columbus V-900</productname> GPS data loggers. These seem to be two brand names for the exact same product.</para>
 
-<para>The the V-900 stores logs on a microSD card in a custom csv format. This format contains NULL chracters and fixed length fields, and therefore can not  be handled by the normal csv module in GPSBabel.</para>
+<para>The the V-900 stores logs on a microSD card in a custom csv format. This format contains NULL characters and fixed length fields, and therefore can not  be handled by the normal csv module in GPSBabel.</para>
 
 <para>
 <ulink url="http://www.visiontac.com/v900_specs.htm">Visiontac VGPS-900</ulink>

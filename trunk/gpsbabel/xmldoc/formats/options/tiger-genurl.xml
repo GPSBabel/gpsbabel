@@ -1,5 +1,5 @@
 <para>
-genurl is a convenience option for generating the scaling paramaters
+genurl is a convenience option for generating the scaling parameters
 when accessing the Tiger servers.  It will output the latitude, longitude,
 height, and width parameters in a form suitable for use in the URL to generate
 a map that will hold all the points to be displayed  and is suitably scaled

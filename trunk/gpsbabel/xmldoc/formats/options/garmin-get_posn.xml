@@ -1,4 +1,4 @@
-<para>This options gets the current longtitude and latitude from the attached GPS device
+<para>This options gets the current longitude and latitude from the attached GPS device
 and returns it as a single waypoint for further processing.  For example,
 to return the current position from a USB Garmin to a KML file:
 </para>

@@ -119,7 +119,7 @@ representing the flight:
 </para>
 <para><userinput>gpsbabel -i gpx -f baro.gpx -i igc -f my2D.igc -o igc -F my3D.igc</userinput></para>
 <para>
-The same can be acheived by downloading directly from a barograph instrument
+The same can be achieved by downloading directly from a barograph instrument
 supported by GPSBabel.  For example with a Brauniger IQ Comp GPS variometer:
 </para>
 <para><userinput>gpsbabel -i baroiq -f /dev/ttyS0 -i igc -f my2D.igc -o igc,timeadj=auto -F my3D.igc</userinput></para>

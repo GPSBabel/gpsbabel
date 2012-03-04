@@ -266,7 +266,7 @@ GPX files from the mass storage device as mounted on your computer.
 	a unit number, with zero being the implied default.  So if you 
 	have three USB models on your system, they can be addressed as 
 	<filename>usb:0</filename>, <filename>usb:1</filename>, and <filename>usb:2</filename>.  To get a list of recognized devices,
-	specifiy a negative number such as:
+	specify a negative number such as:
 </para>
 	<para><userinput>gpsbabel -i garmin -f usb:-1</userinput></para>
  

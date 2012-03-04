@@ -1,6 +1,6 @@
 <para>
 If this option is specified, GPSBabel will not read geocache placer information
-from a .loc file on input.  That is, it will ignore any placeer names in the
+from a .loc file on input.  That is, it will ignore any placer names in the
 input file.
 </para>
 <para>

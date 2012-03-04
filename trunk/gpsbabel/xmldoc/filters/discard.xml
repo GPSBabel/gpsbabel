@@ -1,7 +1,7 @@
 <para>
 This filter is used to "fix" unreliable GPS data by discarding points
 that are believed to be unreliable.  You may specify an 
-HDOP and/or VDOP above a specified limit, a minimum number of satellits
+HDOP and/or VDOP above a specified limit, a minimum number of satellites
 that must have been in view for a fix to be considered, or both.
 </para>
 <para>
@@ -14,7 +14,7 @@ HDOP and VDOP are measures of the best possible horizontal or vertical precision
 </example>
 </para>
 <para>
-You may specify a minimmum number of  satellites.  
+You may specify a minimum number of  satellites.  
 </para>
 <para>
 <example id="example_discard_filter_sats">

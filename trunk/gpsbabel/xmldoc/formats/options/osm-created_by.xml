@@ -1,7 +1,7 @@
 <para> Use this value as custom created_by value in an OSM file.</para>
 
 <para>
-With this pption, the given string is added as the 'created_by' field in 
+With this option, the given string is added as the 'created_by' field in 
 all the created nodes and ways.
 </para>
 

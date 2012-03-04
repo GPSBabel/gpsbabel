@@ -244,7 +244,7 @@ merged data to multiple destinations.
 	<listitem>
 	<para>Common format settings.</para>
 	<para>  Any option from any of the formats listed here will be used by
-		GPSBabel unless explictly provided on the command line.
+		GPSBabel unless explicitly provided on the command line.
 	</para>
 	</listitem>
 	<listitem>
@@ -290,7 +290,7 @@ merged data to multiple destinations.
       As of this writing, <link linkend="fmt_garmin">Garmin's PVT
         protocol</link>  and 
       <link linkend="fmt_nmea">NMEA</link>  are supported 
-	  inputs. KML, NMEA, and the variou XCSV formats are supported on 
+	  inputs. KML, NMEA, and the various XCSV formats are supported on 
 	  output.   Additional formats may be added by interested parties 
 	  later.
     </para>
@@ -360,7 +360,7 @@ merged data to multiple destinations.
   <para>
    The complete list of available options to GPSBabel can be obtained by
    running <command>gpsbabel -h</command>.  While there are a number of
-   options, most people will not use most of them, so don't be intimiated.
+   options, most people will not use most of them, so don't be intimidated.
   </para>
 <para><option>-p</option> Read preferences file.   On startup, GPSBabel will look for a file named <filename>gpsbabel.ini</filename> containing preferences you have provided.  This option lets you pick a different files.  See <xref linkend="inifile"/> for more info.</para>
 <para><option>-s</option> Write "smart" names.  This option influences some - but not all - of our writers to try to build "smart" waypoint names.   For example, in modules that know about geocaching, it may replace "GC1234" with the actual name of the geocache.</para>
