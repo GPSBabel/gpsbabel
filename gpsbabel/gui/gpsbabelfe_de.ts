@@ -155,7 +155,7 @@ grössere Zahl bedeutet detailliertere Diagnosebeschreibungen.</translation>
     <message>
         <location filename="donate.ui" line="32"/>
         <source>Support GPSBabel</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSBabel unterstützen</translation>
     </message>
     <message>
         <location filename="donate.ui" line="47"/>
@@ -164,27 +164,31 @@ grössere Zahl bedeutet detailliertere Diagnosebeschreibungen.</translation>
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;http://www.gpsbabel.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed) or Google Checkout.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GPSBabel ist freie Software, programmiert und supportet von Freiwilligen. Jede Menge Zeit sind nötig um die Software herzustellen und zu warten, und spezielle Programme, GPS Receiver etc. kosten auch Geld. Bitte &lt;a href=&quot;http://www.gpsbabel.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;tragen Sie zu dem Projekt bei: Ihre Zeit oder eine Spende über PayPal (Kein Account benötigt) oder Google Checkout.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="donate.ui" line="61"/>
         <source>&lt;p&gt;Of course, if you&apos;ve already contributed  to the project or you just can&apos;t help the project, please check the box below to never see this message again.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Wenn Sie schon zu dem Projekt beigetragen haben oder Sie nicht helfen können, markieren Sie bitte die Checkbox unten um diese Meldung nicht wieder zu sehen.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="donate.ui" line="71"/>
         <source>Never show this message again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Diese Meldung nicht mehr anzeigen</translation>
     </message>
     <message>
         <location filename="donate.ui" line="93"/>
         <source>No, Thanks</source>
-        <translation type="unfinished"></translation>
+        <translation>Nein, danke</translation>
     </message>
     <message>
         <location filename="donate.ui" line="100"/>
         <source>Contribute</source>
-        <translation type="unfinished"></translation>
+        <translation>Beitragen</translation>
     </message>
 </context>
 <context>
@@ -226,8 +230,8 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="filterdlg.cpp" line="104"/>
         <source>Are you sure you want to reset all filter options to default values?</source>
-        <translatorcomment>alt: dass = daß   - at least swiss german differs</translatorcomment>
-        <translation>Sind Sie sicher, dass Sie alle Filteroptionen auf die Vorgaben setzen wollen?</translation>
+        <translatorcomment>reset: zurücksetzen, set: setzen</translatorcomment>
+        <translation>Sind Sie sicher, dass Sie alle Filteroptionen auf die Vorgaben zurücksetzen wollen?</translation>
     </message>
 </context>
 <context>
@@ -404,12 +408,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="gmapui.ui" line="47"/>
         <source>Copy to Clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>In die Zwischenablage kopieren</translation>
     </message>
     <message>
         <location filename="gmapui.ui" line="50"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieren</translation>
     </message>
 </context>
 <context>
@@ -783,6 +787,7 @@ Das Prgramm muss abgebrochen werden.</translation>
     <message>
         <location filename="mainwinui.ui" line="508"/>
         <source>Browse for an output file name. </source>
+        <translatorcomment>no sentence</translatorcomment>
         <translation>Suchen nach Zieldatei-Namen</translation>
     </message>
     <message>
@@ -798,6 +803,7 @@ Das Prgramm muss abgebrochen werden.</translation>
     <message>
         <location filename="mainwinui.ui" line="581"/>
         <source>Options for the selected output format. </source>
+        <translatorcomment>no sentence</translatorcomment>
         <translation>Optionen für das gewählte Ausgabeformat</translation>
     </message>
     <message>
@@ -835,8 +841,7 @@ Das Prgramm muss abgebrochen werden.</translation>
     <message>
         <location filename="mainwinui.ui" line="675"/>
         <source>Check for Upgrade</source>
-        <translatorcomment>via Google Translate</translatorcomment>
-        <translation>Prüfen Sie für ein Upgrade</translation>
+        <translation>Nach Upgrade suchen</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="680"/>
@@ -846,7 +851,7 @@ Das Prgramm muss abgebrochen werden.</translation>
     <message>
         <location filename="mainwinui.ui" line="685"/>
         <source>Make a Donation...</source>
-        <translation>Machen Sie eine Spende...</translation>
+        <translation>Spenden Sie...</translation>
     </message>
 </context>
 <context>
@@ -905,7 +910,7 @@ Das Prgramm muss abgebrochen werden.</translation>
     <message>
         <location filename="miscfltui.ui" line="34"/>
         <source>Nuke (Remove) Data Types</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestimmte Datentypen löschen</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="72"/>
@@ -974,43 +979,42 @@ Manche Dateiformate unterstuetzen nur eine Teilmenge, entweder Wegpunkte oder Tr
     <message>
         <location filename="preferences.ui" line="20"/>
         <source>GPSBabel Preferences</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSBabel Einstellungen</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="30"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="45"/>
         <source>Check for newer version on start.</source>
-        <translatorcomment>Via GT</translatorcomment>
-        <translation type="unfinished">Check für neuere Version auf Start.</translation>
+        <translation>Beim Start auf neue Version überprüfen.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="52"/>
         <source>Anonymously report usage data.</source>
-        <translation type="unfinished"></translation>
+        <translation>Daten über die Benutzung anonym übertragen.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="59"/>
         <source>Ignore mismatch between command line and GUI version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Konflikt zwischen Kommandozeilen- und GUI-Verson ignorieren.</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="68"/>
         <source>Formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Formate</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="76"/>
         <source>Enabled Formats</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktivierte Formate</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="100"/>
         <source>Enable All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle aktivieren</translation>
     </message>
     <message>
         <location filename="preferences.ui" line="107"/>
@@ -1318,7 +1322,7 @@ Diese Option wird zusammen mit ihrem Gegenstück verwendet, um alle Trackpunkte 
         <location filename="trackui.ui" line="203"/>
         <source>Pack all tracks into one. </source>
         <translatorcomment>no sentence</translatorcomment>
-        <translation>Alle Tracks in einem zusammenfassen.</translation>
+        <translation>Tracks zu einem Track verketten</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="206"/>
@@ -1327,9 +1331,9 @@ Diese Option wird zusammen mit ihrem Gegenstück verwendet, um alle Trackpunkte 
 This option causes all tracks to be appended to one another to form a single track. This option does not work if any two tracks overlap in time; in that case, consider using the merge option.
 
 This option is most useful for rejoining tracks that might have been interrupted by an equipment malfunction or an overnight stop. </source>
-        <translation>Alle Tracks in einem zusammenfassen.
+        <translation>Alle Tracks zu einem verketten.
 
-Diese Option sorgt dafür, daβ alle Tracks hintereinander zu einen gemeinsamen Track werden. Das funktioniert nicht, wenn die Zeitpunkte von Tracks überlappen. Falls das der Fall ist, kommt eher die &apos;Migrieren&apos;-Funktion in Frage.
+Diese Option sorgt dafür, daβ alle Tracks hintereinander zu einen gemeinsamen Track werden. Das funktioniert nicht, wenn die Zeitpunkte von Tracks überlappen. Falls das der Fall ist, kommt eher die &apos;Mischen&apos;-Funktion in Frage.
 
 Diese Option eignet sich am besten dafuer, Tracks zu verbinden, die durch eine Fehlfunktion oder eine automatische &apos;über-Nacht-Auftrennung&apos; aufgeteilt wurden.</translation>
     </message>
@@ -1342,27 +1346,27 @@ Diese Option eignet sich am besten dafuer, Tracks zu verbinden, die durch eine F
     <message>
         <location filename="trackui.ui" line="220"/>
         <source>Merge multiple tracks for the same way.</source>
-        <translation>Mehrere Tracks auf einem Weg zusammenfassen.</translation>
+        <translation>Tracks auf einem Weg mischen.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="223"/>
         <source> Merge multiple tracks for the same way.
 
 This option puts all track points from all tracks into a single track and sorts them by time stamp. Points with identical time stamps will be dropped. </source>
-        <translation>Mehrere Tracks auf einem Weg zusammenfassen.
+        <translation>Tracks auf einem Weg mischen.
 
 Diese Option übernimmt alle Punkte aus allen Tracks in einen einzigen Track und sortiert sie nach der Zeit. Punkte mit den gleichen Zeitdaten werden entfernt.</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="228"/>
         <source>Merge</source>
-        <translation>Migrieren</translation>
+        <translation>Mischen</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="235"/>
         <source>Split by Date</source>
         <oldsource>Split tracks. </oldsource>
-        <translation type="unfinished">Tracks aufspalten</translation>
+        <translation>nach Datum teilen</translation>
     </message>
     <message>
         <source>Split by date or time interval 
@@ -1396,7 +1400,7 @@ Mehrere Tracks, die sich ueber Tagesgrenzen verteilen, können so ebenfalls an D
     <message>
         <location filename="trackui.ui" line="285"/>
         <source>Split by Dist.</source>
-        <translation type="unfinished"></translation>
+        <translation>nach Entf. teilen</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="297"/>
@@ -1499,7 +1503,7 @@ Diese Option erzeugt oder errechnet einen Wert für den GPS-Kurs an jeden Trackp
     <message>
         <location filename="trackui.ui" line="242"/>
         <source>Split by Time</source>
-        <translation type="unfinished"></translation>
+        <translation>nach Zeit teilen</translation>
     </message>
     <message>
         <location filename="trackui.ui" line="395"/>
@@ -1572,27 +1576,27 @@ Diese Option generiert für jeden Trackpunkt einen Geschwindigkeitswert. Sie wir
     <message>
         <location filename="version_mismatch.ui" line="32"/>
         <source>GPSBabel Version Mismatch</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSBabel Versionskonflikt</translation>
     </message>
     <message>
         <location filename="version_mismatch.ui" line="38"/>
         <source>&lt;b&gt;A version mismatch has been detected.&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Ein Versionskonflikt wurde gefunden.&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="version_mismatch.ui" line="47"/>
         <source>GPSBabel command line version:</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSBabel Kommandozeilenversion:</translation>
     </message>
     <message>
         <location filename="version_mismatch.ui" line="81"/>
         <source>GPSBabel GUI version:</source>
-        <translation type="unfinished"></translation>
+        <translation>GPSBabel GUI Version:</translation>
     </message>
     <message>
         <location filename="version_mismatch.ui" line="115"/>
         <source>Never show this message again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Diese Meldung nicht mehr anzeigen</translation>
     </message>
 </context>
 <context>
@@ -1626,7 +1630,7 @@ Diese Option generiert für jeden Trackpunkt einen Geschwindigkeitswert. Sie wir
         <location filename="wayptsui.ui" line="55"/>
         <source>Suppress duplicate waypoints based on name.</source>
         <translatorcomment>no sentence</translatorcomment>
-        <translation type="unfinished">Unterdrücken gleichnamiger Wegpunkte</translation>
+        <translation>Unterdrücken gleichnamiger Wegpunkte</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="58"/>
@@ -1768,7 +1772,7 @@ Voreinstellung ist, dass die übrig gebliebenen Punkte nach ihrer Entfernung vom
         <location filename="wayptsui.ui" line="215"/>
         <location filename="wayptsui.ui" line="218"/>
         <source>This filter sorts waypoints into alphabetical order</source>
-        <translation>Dieser Filter sortiert Wegpunkte nach Alphabet</translation>
+        <translation>Dieser Filter sortiert Wegpunkte alphabetisch</translation>
     </message>
     <message>
         <location filename="wayptsui.ui" line="221"/>
