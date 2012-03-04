@@ -397,6 +397,7 @@ gpgll_parse(char* ibuf)
   }
 
   hms = (int) hmsd;
+  last_read_time = hms;
   microseconds = MILLI_TO_MICRO(1000 * (hmsd - hms));
 
   tm.tm_sec = hms % 100;
@@ -404,8 +405,6 @@ gpgll_parse(char* ibuf)
   tm.tm_min = hms % 100;
   hms = hms / 100;
   tm.tm_hour = hms % 100;
-
-  last_read_time = hms;
 
   waypt = waypt_new();
 
