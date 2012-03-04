@@ -355,8 +355,7 @@ mac-gui: gpsbabel
 	cd gui ; qmake && make
 	cd gui ; lupdate  app.pro
 	cd gui ; lrelease  app.pro
-	@ [ ! -d gui/objects/GPSBabelFE.app/Contents/MacOS/translations ] && \
-	  mkdir -p gui/objects/GPSBabelFE.app/Contents/MacOS/translations
+	mkdir -p gui/objects/GPSBabelFE.app/Contents/MacOS/translations
 	cp gui/*.qm  gui/objects/gpsbabelFE.app/Contents/MacOS/translations
 	cp gpsbabel gui/objects/GPSBabelFE.app/Contents/MacOS
 	cp -r gui/help/*.html  gui/objects/GPSBabelFE.app/Contents/MacOS
