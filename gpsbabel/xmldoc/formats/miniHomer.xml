@@ -45,7 +45,7 @@ Following a list of devices which should be supported by this module
 </example>
 
 <para>miniHomer has five POI called Home, <emphasis>Car</emphasis>, <emphasis>Boat</emphasis>, <emphasis>Heart</emphasis>, <emphasis>Bar</emphasis>. You can set the lla 
-(Lattitude, Longitude, Altitude) for each of the POI. The format is 
+(Latitude, Longitude, Altitude) for each of the POI. The format is 
 <emphasis>&lt;name&gt;=&lt;lat&gt;:&lt;lng&gt;[:&lt;alt&gt;]</emphasis>
 Once the according POI symbol is selected on miniHomer, the display shows you the direction and distance to the POI.
 </para>

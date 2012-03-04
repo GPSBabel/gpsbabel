@@ -1,6 +1,6 @@
 <para>
   When this option is enabled, we write an additional column called 'Filename'.
-  The values of this column are filled with filenames of previos input formats.
+  The values of this column are filled with filenames of previous input formats.
 </para>
 <para>
   This can be very helpful for locating specific waypoints (i.e. using the position filter)

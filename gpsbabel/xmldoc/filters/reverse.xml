@@ -8,7 +8,7 @@
         Timestamps are kept with the original waypoints so the
         resulting track or route will have the interesting
         characteristic that time runs backwards.  This tends to make
-        Magellan Mapsend, in particular, do a wierd thing and place
+        Magellan Mapsend, in particular, do a weird thing and place
         each waypoint on a separate day.
 </para>
          <para> Additionally, if you're using this to reverse a route

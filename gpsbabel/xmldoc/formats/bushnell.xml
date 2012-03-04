@@ -20,7 +20,7 @@ Consider the case where 'whatever.gpx' holds three waypoints.
   gpsbabel -i gpx -f whatever.gpx -o bushnell -F /Volumes/Bushnell/WAYPOINT/whatever
 </userinput>
 will result in "whatever-0.wpt", "whatever-1.wpt", and "whatever-2.wpt" being
-credated in that directory.
+created in that directory.
 Windows users may prefer the spelling:
 <userinput>
   gpsbabel -i gpx -f whatever.gpx -o bushnell -F e:/WAYPOINT/whatever

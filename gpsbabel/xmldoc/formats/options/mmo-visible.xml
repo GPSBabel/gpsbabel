@@ -3,7 +3,7 @@
    By default GPSBabel creates only 'visible' items.
 </para>
 <para>
-   Sample command to write an mmo file with 'in-vsisible' items:
+   Sample command to write an mmo file with 'invisible' items:
 </para>
 <para>
    <userinput>

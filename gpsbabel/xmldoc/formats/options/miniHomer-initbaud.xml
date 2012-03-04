@@ -8,6 +8,6 @@ rate, if initbaud wasn't given), the initial setting will be restored after fini
 </para>
 <para>
 Please note that miniHomer by default uses 38400bps and does not autodetect the port speed. If you need autodetect, start as
-<userinput>gpsbabel -i miniHomer,initibaud=0 -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput>
+<userinput>gpsbabel -i miniHomer,initbaud=0 -f /dev/ttyUSB0 -o gpx -F out.gpx</userinput>
 </para>
 

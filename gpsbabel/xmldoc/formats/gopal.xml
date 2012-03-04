@@ -31,7 +31,7 @@ Conversions from gopal into any other format are a bit lossy concerning the firs
 and is simply discarded while reading. If written, there will be a time_t value from the current (computed) timestamp.
 </para>
 <para>
-Somehwere around Gopal 4.8 or 5.0, Electrobit added three more fields to the end of this format.  They are, in order, date (which eliminates most of the silliness above), an unknonw field, and a bearing.   GPSBabel now reads the date and ignores the other two.  We don't yet write these three fields for compatibility with earlier versions.
+Somewhere around Gopal 4.8 or 5.0, Electrobit added three more fields to the end of this format.  They are, in order, date (which eliminates most of the silliness above), an unknown field, and a bearing.   GPSBabel now reads the date and ignores the other two.  We don't yet write these three fields for compatibility with earlier versions.
 </para>
 <para>
 

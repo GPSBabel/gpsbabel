@@ -4,7 +4,7 @@
       <para>This is a text format created by KuDaTa's PsiTrex program
 for the Psion PDAs. The format can't be readily handled by XCSV, so
 this format is handled explicitly. Waypoints, routes and tracks are
-all handled, with icon names used corresponding to verison 1.13 of
+all handled, with icon names used corresponding to version 1.13 of
 PsiTrex. This module was contributed to GPSBabel by Mark
 Bradley.</para>
     

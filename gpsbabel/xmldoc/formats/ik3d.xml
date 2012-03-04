@@ -3,7 +3,7 @@
 </para>
 <para>
   <ulink url="http://www.magicmaps.de">MagicMaps</ulink> <productname>"Das interaktive Kartenwerk"</productname> is a Software from Germany. It's a
-  route-planning software with a 3-dimensional envirounment.
+  route-planning software with a 3-dimensional environment.
 </para>
 <para>
   The project files are XML based and we can read the main GPS items (names and coordinates). 

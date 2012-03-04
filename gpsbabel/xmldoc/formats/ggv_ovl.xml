@@ -8,14 +8,14 @@
 </para>
 <para>
    During the creation of an overlay file, a circle will be added to each 
-   postion of a waypoint or a route.
+   position of a waypoint or a route.
 </para>
 
 <para>
   Sample layout of the ASCII overlay file
   <programlisting format="linespecific">
     [Symbol &lt;number # &gt;]
-    Typ=&lt;1=picture,2=Text, 3=line, 4=area, 5=retangle, 6=circle, 7=triangle&gt;
+    Typ=&lt;1=picture,2=Text, 3=line, 4=area, 5=rectangle, 6=circle, 7=triangle&gt;
     Group=&lt;1=no group, number &gt; 1=group number&gt;
     Col=&lt;number of the line color&gt;
     Zoom=&lt;1=no zoom, 2=zoom&gt;
