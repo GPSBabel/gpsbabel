@@ -314,7 +314,7 @@ void MainWindow::loadLanguage(const QString& rLanguage)
 
     switchTranslator(translator, QString("gpsbabelfe_%1.qm").arg(rLanguage));
     switchTranslator(translatorCore, QString("gpsbabel__%1.qm").arg(rLanguage));
-    switchTranslator(translatorQt, QString(" qt_%1.qm").arg(rLanguage));
+    switchTranslator(translatorQt, QString("qt_%1.qm").arg(rLanguage));
   }
 }
 
