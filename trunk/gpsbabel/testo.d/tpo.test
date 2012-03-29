@@ -1,0 +1,25 @@
+# TPO (NG Topo!) file format
+# This is hard to test as the datum conversions create minute
+# inconsistencies in the coordinates. We have four reference files:
+# tpo-sample1.tpo, tpo-sample1.gpx, tpo-sample2.gpx, and
+# tpo-sample2.tpo.  These are used to check the conversion to/from
+# TPO format.
+#
+# Version 2.x tests
+rm -f ${TMPDIR}/tpo-sample1.gpx ${TMPDIR}/tpo-sample2.tpo
+gpsbabel -t -i tpo2 -f ${REFERENCE}/track/tpo-sample1.tpo -o gpx -F ${TMPDIR}/tpo-sample1.gpx
+compare ${TMPDIR}/tpo-sample1.gpx ${REFERENCE}/track/tpo-sample1.gpx
+#gpsbabel -t -i gpx -f reference/track/tpo-sample2.gpx -o tpo2 -F ${TMPDIR}/tpo-sample2.tpo
+#bincompare ${TMPDIR}/tpo-sample2.tpo reference/track/tpo-sample2.tpo
+#
+# Version 3.x tests.  Remove the timestamp from the generated file
+# so that the compare will succeed.
+rm -f ${TMPDIR}/tpo-sample3.gpx ${TMPDIR}/tpo-sample3.gpx2
+gpsbabel -t -r -w -i tpo3 -f ${REFERENCE}/tpo-sample3.tpo -o gpx -F ${TMPDIR}/tpo-sample3.gpx
+# Remove the timestamp
+grep -v time <${TMPDIR}/tpo-sample3.gpx >${TMPDIR}/tpo-sample3.gpx2
+compare ${TMPDIR}/tpo-sample3.gpx2 ${REFERENCE}/tpo-sample3.gpx
+# Verify that tpo3 line styles convert sensibly.
+gpsbabel -i tpo3 -f ${REFERENCE}/LineStyles.tpo -o gpx -F ${TMPDIR}/LineStyles.gpx -o kml -F ${TMPDIR}/LineStyles.kml
+compare ${TMPDIR}/LineStyles.gpx ${REFERENCE}/LineStyles.gpx
+compare ${TMPDIR}/LineStyles.kml ${REFERENCE}/LineStyles.kml

@@ -463,7 +463,7 @@ int tpo_find_block(unsigned int block_desired)
 
     // Read record type
     block_type = gbfgetint32(tpo_file_in);
-//printf("Block: %08x\tat offset: %08x\n", block_type, block_offset);
+// printf("Block: %08x\tat offset: %08x\n", block_type, block_offset);
 
     // Read offset to next record
     block_offset = gbfgetint32(tpo_file_in);
@@ -532,13 +532,90 @@ waypoint* tpo_convert_ll(int lat, int lon)
 //
 void tpo_process_tracks(void)
 {
-  unsigned int track_count;
-  unsigned int ii;
+  unsigned int track_count, track_style_count;
+  unsigned int xx,ii,tmp;
 
+  int DEBUG=0;
 
-//printf("Processing Tracks...\n");
+  if (DEBUG) {
+    printf("Processing Track Styles... (added in 2012 by SRE)\n");
+  }
+  // Find block 0x050000 (definitions of styles for free-hand routes)
+  if (tpo_find_block(0x050000)) {
+    // printf("Found no track styles, skipping tracks\n");
+    return;
+  }
+  // Read the number of track styles.
+  track_style_count = tpo_read_int(); // 8 bit value
 
-  // Find block 0x060000 (free-hand routes)
+  if (DEBUG) {
+    printf("Unpacking %d track styles...\n",track_style_count);
+  }
+  char style_name[track_style_count][256]; // some huge value
+  char style_color[track_style_count][7];  // web color is 6 chars
+  int style_wide[track_style_count],style_dash[track_style_count];
+  for (ii = 0; ii < track_style_count; ii++) {
+    style_color[ii][0] = '\0';
+
+    // clumsy way to skip two undefined bytes
+    for (xx = 0; xx < 2; xx++) {
+      tmp = (unsigned char) gbfgetc(tpo_file_in);
+      // printf("Skipping (visibility?) byte 0x%x\n",tmp);
+    }
+
+    // next three bytes are RGB color, fourth is unknown
+    for (xx = 0; xx < 3; xx++) {
+      tmp = (unsigned char) gbfgetc(tpo_file_in);
+      sprintf(style_color[ii], "%s%02x",style_color[ii],tmp);
+    }
+
+    tmp = (unsigned char) gbfgetc(tpo_file_in);
+    // printf("Skipping unknown byte 0x%x after color=%s\n",tmp,style_color);
+
+    // byte for name length, then name
+    tmp = (unsigned char) gbfgetc(tpo_file_in);
+    // wrong byte order?? tmp = tpo_read_int(); // 16 bit value
+    // printf("Track %d has %d-byte (0x%x) name\n",ii,tmp,tmp);
+    if (tmp >= 256) {
+      printf("ERROR! Found track style over 128 chars, skipping tracks\n");
+      return;
+    }
+    if (tmp) {
+      style_name[ii][0] = '\0';
+      gbfread(style_name[ii], 1, tmp, tpo_file_in);
+      style_name[ii][tmp] = '\0';  // Terminator
+    } else { // Assign a generic style name
+      sprintf(style_name[ii], "STYLE %d", ii);
+    }
+    for (xx = 0; xx < 3; xx++) {
+      if (style_name[ii][xx] == (char) ',') {
+        style_name[ii][xx] = (char) '_';
+      }
+      if (style_name[ii][xx] == (char) '=') {
+        style_name[ii][xx] = (char) '_';
+      }
+    }
+
+    // one byte for line width (value 1-4), one byte for 'dashed' boolean
+    style_wide[ii] = (unsigned int) gbfgetc(tpo_file_in);
+    style_dash[ii] = (unsigned int) gbfgetc(tpo_file_in);
+
+    // clumsy way to skip two undefined bytes
+    for (xx = 0; xx < 2; xx++) {
+      tmp = (unsigned char) gbfgetc(tpo_file_in);
+      // printf("Skipping final byte 0x%x\n",tmp);
+    }
+
+    if (DEBUG) {
+      printf("Track style %d: color=#%s, width=%d, dashed=%d, name=%s\n",ii,style_color[ii],style_wide[ii],style_dash[ii],style_name[ii]);
+    }
+  }
+
+  if (DEBUG) {
+    printf("Processing Tracks... found %d track styles\n",track_style_count);
+  }
+
+  // Find block 0x060000 (free-hand routes) (original track code, pre-2012, without styles)
   if (tpo_find_block(0x060000)) {
     return;
   }
@@ -546,7 +623,9 @@ void tpo_process_tracks(void)
   // Read the number of tracks.  Can be 8/16/32-bit value.
   track_count = tpo_read_int();
 
-//printf("Total Tracks: %d\n", track_count);
+  if (DEBUG) {
+    printf("Total Tracks: %d\n", track_count);
+  }
 
   if (track_count == 0) {
     return;
@@ -556,7 +635,7 @@ void tpo_process_tracks(void)
   //
   for (ii = 0; ii < track_count; ii++) {
     unsigned int line_type;
-    unsigned int track_number;
+    unsigned int track_style;
     unsigned int track_length;
     unsigned int name_length;
     char* track_name = NULL;
@@ -577,10 +656,11 @@ void tpo_process_tracks(void)
     track_add_head(track_temp);
 
 //UNKNOWN DATA LENGTH
-    line_type = tpo_read_int();
+    line_type = tpo_read_int(); // always zero??
 
-    // Can be 8/16/32-bit value
-    track_number = tpo_read_int();
+    // Can be 8/16/32-bit value (defined in 2012, ignored before then)
+    track_style = tpo_read_int(); // index into freehand route styles defined in this .tpo file
+    track_style -= 1;  // STARTS AT 1, whereas style arrays start at 0
 
     // Can be 8/16/32-bit value
     track_length = tpo_read_int();
@@ -597,10 +677,13 @@ void tpo_process_tracks(void)
       xasprintf(&track_name, "TRK %d", ii+1);
     }
     track_temp->rte_name = track_name;
-//printf("\nTrack Name: %s  ", track_name);
+    if (DEBUG) printf("Track Name: %s, ?Type?: %d, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
+                        track_name, line_type, style_name[track_style], style_wide[track_style], style_dash[track_style], style_color[track_style]);
 
-    // Route description
-//        track_temp->rte_desc = NULL;
+    // Track description
+    // track_temp->rte_desc = NULL; // pre-2012 default, next line from SRE saves track style as track description
+    xasprintf(&track_temp->rte_desc, "Style=%s, Width=%d, Dashed=%d, Color=#%s",
+            style_name[track_style], style_wide[track_style], style_dash[track_style], style_color[track_style]);
 
     // Route number
     track_temp->rte_num = ii+1;
@@ -756,7 +839,7 @@ void tpo_process_waypoints(void)
 
   // Fetch storage for the waypoint index (needed later for
   // routes)
-  tpo_wp_index = (waypoint**)(char*) xmalloc(sizeof(waypoint*) * waypoint_count);
+  tpo_wp_index = (waypoint**) xmalloc(sizeof(waypoint*) * waypoint_count);
 
   if (waypoint_count == 0) {
     return;
