@@ -333,6 +333,7 @@ fs_xml* fs_xml_alloc(long type);
 #define FS_AN1V 0x616e3176L
 #define FS_OZI 0x6f7a6900L
 #define FS_GMSD 0x474d5344L	/* GMSD = Garmin specific data */
+#define FS_LOWRANCEUSR4 0x615f234cL
 
 /*
  * Structures and functions for multiple URLs per waypoint.
