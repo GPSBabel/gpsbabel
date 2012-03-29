@@ -20,6 +20,6 @@ gpsbabel -t -r -w -i tpo3 -f ${REFERENCE}/tpo-sample3.tpo -o gpx -F ${TMPDIR}/tp
 grep -v time <${TMPDIR}/tpo-sample3.gpx >${TMPDIR}/tpo-sample3.gpx2
 compare ${TMPDIR}/tpo-sample3.gpx2 ${REFERENCE}/tpo-sample3.gpx
 # Verify that tpo3 line styles convert sensibly.
-gpsbabel -i tpo3 -f ${REFERENCE}/LineStyles.tpo -o gpx -F ${TMPDIR}/LineStyles.gpx -o kml -F ${TMPDIR}/LineStyles.kml
+gpsbabel -t -w -r -i tpo3 -f ${REFERENCE}/LineStyles.tpo -o gpx -F ${TMPDIR}/LineStyles.gpx -o kml -F ${TMPDIR}/LineStyles.kml
 compare ${TMPDIR}/LineStyles.gpx ${REFERENCE}/LineStyles.gpx
 compare ${TMPDIR}/LineStyles.kml ${REFERENCE}/LineStyles.kml

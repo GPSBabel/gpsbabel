@@ -183,6 +183,7 @@
 </rte>
 <trk>
   <name>crazy route 4.49 miles long</name>
+  <desc>Style=GrnMedium, Width=3, Dashed=0, Color=#008000</desc>
 <number>1</number>
 <trkseg>
 <trkpt lat="39.068095684" lon="-119.894665003">
@@ -315,6 +316,7 @@
 </trk>
 <trk>
   <name>TRK 2</name>
+  <desc>Style=GrnMedium, Width=3, Dashed=0, Color=#008000</desc>
 <number>2</number>
 <trkseg>
 <trkpt lat="39.068340063" lon="-119.875101328">
@@ -405,6 +407,7 @@
 </trk>
 <trk>
   <name>TRK 3</name>
+  <desc>Style=GrnMedium, Width=3, Dashed=0, Color=#008000</desc>
 <number>3</number>
 <trkseg>
 <trkpt lat="39.048154354" lon="-119.897549391">
