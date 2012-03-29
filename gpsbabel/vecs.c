@@ -73,6 +73,7 @@ extern ff_vecs_t ignr_vecs;
 extern ff_vecs_t igo8_vecs;
 extern ff_vecs_t kml_vecs;
 extern ff_vecs_t lowranceusr_vecs;
+extern ff_vecs_t lowranceusr4_vecs;
 extern ff_vecs_t mag_fvecs;
 extern ff_vecs_t maggeo_vecs;
 extern ff_vecs_t magnav_vec;
@@ -289,6 +290,12 @@ vecs_t vec_list[] = {
     &lowranceusr_vecs,
     "lowranceusr",
     "Lowrance USR",
+    "usr"
+  },
+  {
+    &lowranceusr4_vecs,
+    "lowranceusr4",
+    "Lowrance USR version 4",
     "usr"
   },
 #if PDBFMTS_ENABLED

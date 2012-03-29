@@ -642,7 +642,10 @@ data_read(void)
   if (MajorVersion < 2) {
     fatal(MYNAME ": input file is from an old version of the USR file and is not supported\n");
   }
-  if (MajorVersion > 3) {
+  if (MajorVersion == 4) {
+    fatal(MYNAME ": this appears to be a USR v4 file: use the lowranceusr4 format\n");
+  }
+  if (MajorVersion > 4) {
     fatal(MYNAME ": input file version %d is not supported\n",
           MajorVersion);
   }
