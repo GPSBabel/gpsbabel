@@ -534,6 +534,7 @@ void tpo_process_tracks(void)
 {
   unsigned int track_count, track_style_count;
   unsigned int xx,ii,tmp;
+#define TRACKNAMELENGTH 256
 
   int DEBUG=0;
 
@@ -551,11 +552,10 @@ void tpo_process_tracks(void)
   if (DEBUG) {
     printf("Unpacking %d track styles...\n",track_style_count);
   }
-  char style_name[track_style_count][256]; // some huge value
-  char style_color[track_style_count][7];  // web color is 6 chars
+  char style_name[track_style_count][TRACKNAMELENGTH]; // some huge value
+  int style_color[track_style_count][3];  // keep R/G/B values separate because line_color needs BGR
   int style_wide[track_style_count],style_dash[track_style_count];
   for (ii = 0; ii < track_style_count; ii++) {
-    style_color[ii][0] = '\0';
 
     // clumsy way to skip two undefined bytes
     for (xx = 0; xx < 2; xx++) {
@@ -564,20 +564,24 @@ void tpo_process_tracks(void)
     }
 
     // next three bytes are RGB color, fourth is unknown
+    // Topo and web uses rrggbb, also need line_color.bbggrr for KML
     for (xx = 0; xx < 3; xx++) {
-      tmp = (unsigned char) gbfgetc(tpo_file_in);
-      sprintf(style_color[ii], "%s%02x",style_color[ii],tmp);
+      style_color[ii][xx] = (int) gbfgetc(tpo_file_in);
+      if((style_color[ii][xx] < 0) || (style_color[ii][xx] >255)) {
+        style_color[ii][xx] = 0; // assign black if out of range 0x00 to 0xff
+        // used to store strings: sprintf(style_color[ii], "%s%02x",style_color[ii],tmp);
+      }
     }
 
     tmp = (unsigned char) gbfgetc(tpo_file_in);
-    // printf("Skipping unknown byte 0x%x after color=%s\n",tmp,style_color);
+    // printf("Skipping unknown byte 0x%x after color\n",tmp);
 
     // byte for name length, then name
     tmp = (unsigned char) gbfgetc(tpo_file_in);
     // wrong byte order?? tmp = tpo_read_int(); // 16 bit value
     // printf("Track %d has %d-byte (0x%x) name\n",ii,tmp,tmp);
-    if (tmp >= 256) {
-      printf("ERROR! Found track style over 128 chars, skipping tracks\n");
+    if (tmp >= TRACKNAMELENGTH) {
+      printf("ERROR! Found track style over TRACKNAMELENGTH chars, skipping all tracks!\n");
       return;
     }
     if (tmp) {
@@ -607,7 +611,7 @@ void tpo_process_tracks(void)
     }
 
     if (DEBUG) {
-      printf("Track style %d: color=#%s, width=%d, dashed=%d, name=%s\n",ii,style_color[ii],style_wide[ii],style_dash[ii],style_name[ii]);
+      printf("Track style %d: color=#%02x%02x%02x, width=%d, dashed=%d, name=%s\n",ii,style_color[ii][0],style_color[ii][1],style_color[ii][2],style_wide[ii],style_dash[ii],style_name[ii]);
     }
   }
 
@@ -649,7 +653,8 @@ void tpo_process_tracks(void)
     int lon = 0;
     unsigned int jj;
     route_head* track_temp;
-
+    char rgb[7],bgr[7];
+    int bbggrr = 0;
 
     // Allocate the track struct
     track_temp = route_head_alloc();
@@ -662,7 +667,7 @@ void tpo_process_tracks(void)
     track_style = tpo_read_int(); // index into freehand route styles defined in this .tpo file
     track_style -= 1;  // STARTS AT 1, whereas style arrays start at 0
 
-    // Can be 8/16/32-bit value
+    // Can be 8/16/32-bit value - never used?
     track_length = tpo_read_int();
 
 //UNKNOWN DATA LENGTH
@@ -677,13 +682,30 @@ void tpo_process_tracks(void)
       xasprintf(&track_name, "TRK %d", ii+1);
     }
     track_temp->rte_name = track_name;
+
+    // RGB line_color expressed for html=rrggbb and kml=bbggrr - not assigned before 2012
+    sprintf(rgb,"%02x%02x%02x",style_color[track_style][0],style_color[track_style][1],style_color[track_style][2]);
+    sprintf(bgr,"%02x%02x%02x",style_color[track_style][2],style_color[track_style][1],style_color[track_style][0]);
+    sscanf(bgr,"%06x",&bbggrr); // hex string to integer - probably not the best way to do style_color to bbggrr
+    track_temp->line_color.bbggrr = bbggrr;
+
+    // track texture (dashed=1, solid=0) mapped into opacity - not assigned before 2012
+    track_temp->line_color.opacity = 0xff;   // 255
+    if(style_dash[track_style]) {
+      track_temp->line_color.opacity = 0x50;
+    }
+
+    // track width, from 1=hairline to 4=thick in Topo - not assigned before 2012
+    //  (what are correct values for KML or other outputs??)
+    track_temp->line_width = style_wide[track_style];
+
     if (DEBUG) printf("Track Name: %s, ?Type?: %d, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
-                        track_name, line_type, style_name[track_style], style_wide[track_style], style_dash[track_style], style_color[track_style]);
+                        track_name, line_type, style_name[track_style], style_wide[track_style], style_dash[track_style],rgb);
 
     // Track description
     // track_temp->rte_desc = NULL; // pre-2012 default, next line from SRE saves track style as track description
     xasprintf(&track_temp->rte_desc, "Style=%s, Width=%d, Dashed=%d, Color=#%s",
-            style_name[track_style], style_wide[track_style], style_dash[track_style], style_color[track_style]);
+            style_name[track_style], style_wide[track_style], style_dash[track_style], rgb);
 
     // Route number
     track_temp->rte_num = ii+1;
