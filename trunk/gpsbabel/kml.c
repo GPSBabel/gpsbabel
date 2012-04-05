@@ -1473,7 +1473,18 @@ static void kml_waypt_pr(const waypoint* waypointp)
     xfree(odesc);
   } else {
     if (strcmp(waypointp->shortname, waypointp->description)) {
-      kml_write_xmle("description", waypointp->description);
+      // This is a hack.  The entitizer code really should catch this,
+      // but this is the low risk fix for now - just toss bad chars.
+      int j;
+      char* t = xstrdup(waypointp->description);
+      for (j = 0; t[j] != 0; j++) {
+        if (t[j] < ' ') {
+          t[j] = ' ';
+        }
+      }
+
+      kml_write_xmle("description", t);
+      xfree(t);
     }
   }
 
