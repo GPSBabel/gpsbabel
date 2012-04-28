@@ -14,40 +14,40 @@
   <time>2011-07-02T17:47:25Z</time>
   <speed>13.818100</speed>
   <name>trkpt-2011-07-02T17:47:25.000Z</name>
+  <type>T</type>
   <fix>3d</fix>
-<type>T</type>
 </trkpt>
 <trkpt lat="49.794710000" lon="9.833996000">
   <ele>289.300000</ele>
   <time>2011-07-02T17:47:25Z</time>
   <speed>14.049800</speed>
   <name>trkpt-2011-07-02T17:47:25.000Z</name>
+  <type>T</type>
   <fix>3d</fix>
-<type>T</type>
 </trkpt>
 <trkpt lat="49.794734000" lon="9.833976000">
   <ele>289.300000</ele>
   <time>2011-07-02T17:47:25Z</time>
   <speed>14.161100</speed>
   <name>trkpt-2011-07-02T17:47:25.000Z</name>
+  <type>T</type>
   <fix>3d</fix>
-<type>T</type>
 </trkpt>
 <trkpt lat="49.794758000" lon="9.833955000">
   <ele>289.400000</ele>
   <time>2011-07-02T17:47:25Z</time>
   <speed>14.090400</speed>
   <name>trkpt-2011-07-02T17:47:25.000Z</name>
+  <type>T</type>
   <fix>3d</fix>
-<type>T</type>
 </trkpt>
 <trkpt lat="49.794782000" lon="9.833934000">
   <ele>289.500000</ele>
   <time>2011-07-02T17:47:25Z</time>
   <speed>14.183800</speed>
   <name>trkpt-2011-07-02T17:47:25.000Z</name>
+  <type>T</type>
   <fix>3d</fix>
-<type>T</type>
 </trkpt>
 <!--
 <trkpt lat="49.794807000" lon="9.833916000">
@@ -55,40 +55,40 @@
   <time>2011-07-02T17:47:26Z</time>
   <speed>14.208100</speed>
   <name>trkpt-2011-07-02T17:47:26.000Z</name>
+  <type>T</type>
   <fix>3d</fix>
-<type>T</type>
 </trkpt>
 <trkpt lat="49.794831000" lon="9.833898000">
   <ele>289.800000</ele>
   <time>2011-07-02T17:47:26Z</time>
   <speed>14.272600</speed>
   <name>trkpt-2011-07-02T17:47:26.000Z</name>
+  <type>T</type>
   <fix>3d</fix>
-<type>T</type>
 </trkpt>
 <trkpt lat="49.794856000" lon="9.833881000">
   <ele>289.800000</ele>
   <time>2011-07-02T17:47:26Z</time>
   <speed>14.279100</speed>
   <name>trkpt-2011-07-02T17:47:26.000Z</name>
+  <type>T</type>
   <fix>3d</fix>
-<type>T</type>
 </trkpt>
 <trkpt lat="49.794880000" lon="9.833863000">
   <ele>289.800000</ele>
   <time>2011-07-02T17:47:26Z</time>
   <speed>14.085500</speed>
   <name>trkpt-2011-07-02T17:47:26.000Z</name>
+  <type>T</type>
   <fix>3d</fix>
-<type>T</type>
 </trkpt>
 <trkpt lat="49.794904000" lon="9.833847000">
   <ele>289.800000</ele>
   <time>2011-07-02T17:47:26Z</time>
   <speed>12.700900</speed>
   <name>trkpt-2011-07-02T17:47:26.000Z</name>
+  <type>T</type>
   <fix>3d</fix>
-<type>T</type>
 </trkpt>
 -->
 </trkseg>
