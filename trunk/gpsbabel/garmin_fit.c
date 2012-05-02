@@ -96,6 +96,12 @@ fit_parse_header(void)
   if (sig[0] != '.' || sig[1] != 'F' || sig[2] != 'I' || sig[3] != 'T') {
     fatal(MYNAME ": .FIT signature missing\n");
   }
+
+  // Read in rest of header (if any)
+  len -= 12;
+  while( len-- ) {
+    gbfgetc(fin); // throw away unknown header data
+  }
 }
 
 static gbuint8
