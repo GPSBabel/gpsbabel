@@ -4,3 +4,6 @@
 rm -f ${TMPDIR}/fit-*
 gpsbabel -i garmin_fit -f ${REFERENCE}/track/fit-sample.fit -o gpx -F ${TMPDIR}/fit-sameple.gpx
 compare ${TMPDIR}/fit-sameple.gpx ${REFERENCE}/track/fit-sample.gpx
+
+gpsbabel -i garmin_fit -f ${REFERENCE}/track/garmin-edge-200-output.fit -o gpx -F ${TMPDIR}/fit-sample.gpx
+compare ${TMPDIR}/fit-sample.gpx ${REFERENCE}/track/garmin-edge-200-output.gpx
