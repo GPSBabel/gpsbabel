@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<time>2012-04-17T08:26:58Z</time>
+<bounds minlat="-36.722941300" minlon="142.175800700" maxlat="-36.716685300" maxlon="142.198467900"/>
+<trk>
+  <name>Track 937</name>
+  <desc>14/04/2012  3:54 pm</desc>
+<trkseg>
+<trkpt lat="-36.720798700" lon="142.177066800">
+  <ele>145.411000</ele>
+  <time>2012-04-14T07:08:11.906Z</time>
+</trkpt>
+<trkpt lat="-36.720713300" lon="142.176767600">
+  <ele>145.683000</ele>
+  <time>2012-04-14T07:08:11.906Z</time>
+</trkpt>
+<trkpt lat="-36.720713300" lon="142.176767600">
+  <ele>145.808000</ele>
+</trkpt>
+<trkpt lat="-36.720796000" lon="142.176806200">
+  <ele>145.736000</ele>
+  <time>2012-04-14T07:09:35.906Z</time>
+</trkpt>
+</trkseg>
+</trk>
+</gpx>
