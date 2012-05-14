@@ -585,18 +585,18 @@ ECEF_to_LLA(double x, double y, long z, double *lat, double *lon, double *alt)
 }
 
 typedef struct {
-  short gps_week;
-  long gps_sec;
-  unsigned long x;
-  unsigned long y;
-  unsigned long z;
+  gbuint32 gps_week;
+  gbuint32 gps_sec;
+  gbint32  x;
+  gbint32  y;
+  gbint32  z;
 } full_item;
 
 typedef struct {
-  short dt;
-  short dx;
-  short dy;
-  short dz;
+  gbint16 dt;
+  gbint16 dx;
+  gbint16 dy;
+  gbint16 dz;
 } compact_item;
 
 struct full_item_frame {
@@ -626,7 +626,7 @@ process_data_item(struct read_state *pst, const item_frame *pitem, int len)
 {
   int res = 0;
   double lat, lon, alt;
-  unsigned int ts;
+  gbint32 ts;
   int poi = 0;
   full_item f;
   compact_item c;

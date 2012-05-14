@@ -1,0 +1,13 @@
+#
+# Skytraq logger tests
+#
+rm -f ${TMPDIR}/skytraq.*
+gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq.bin -o gpx -F ${TMPDIR}/skytraq.gpx
+compare ${TMPDIR}/skytraq.gpx ${REFERENCE}/skytraq.gpx
+
+#
+# The original was recorded in Germany, thus all coordinates are positive.
+# This one is in North America and triggered a sign extension bug on 64-bit
+# systems prior to revision 4176.
+gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq-2.bin -o gpx -F ${TMPDIR}/skytraq-2.gpx
+compare ${TMPDIR}/skytraq-2.gpx ${REFERENCE}/skytraq-2.gpx
