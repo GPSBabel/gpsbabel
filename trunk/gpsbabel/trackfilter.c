@@ -34,6 +34,7 @@
 	(based on patch from Vladimir Kondratiev)
    2007-07-26: Allow 'range' together with trackpoints without timestamp
    2010-06-02: Add specified timestamp to each trackpoint (added by sven_luzar)
+   2012-05-04: Added 'discard' option to 'merge' to throw out track points without timestamp
 */
 
 #include <ctype.h>
@@ -62,6 +63,7 @@
 #define TRACKFILTER_TRK2SEG_OPTION      "trk2seg"
 #define TRACKFILTER_SEGMENT_OPTION      "segment"
 #define TRACKFILTER_FAKETIME_OPTION     "faketime"
+#define TRACKFILTER_DISCARD_OPTION      "discard"
 
 #undef TRACKF_DBG
 
@@ -81,6 +83,7 @@ static char *opt_seg2trk = NULL;
 static char *opt_trk2seg = NULL;
 static char *opt_segment = NULL;
 static char *opt_faketime = NULL;
+static char *opt_discard = NULL;
 
 static
 arglist_t trackfilter_args[] = {
@@ -160,6 +163,11 @@ arglist_t trackfilter_args[] = {
     "Add specified timestamp to each trackpoint",
     NULL, ARGTYPE_STRING, ARG_NOMINMAX
   },
+  {
+    TRACKFILTER_DISCARD_OPTION,  &opt_discard,  
+    "Discard track points without timestamps during merge",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+  },
   ARG_TERMINATOR
 };
 
@@ -173,6 +181,7 @@ typedef struct trkflt_s {
 static trkflt_t *track_list = NULL;
 static int track_ct = 0;
 static int track_pts = 0;
+static int timeless_pts = 0;
 static int opt_interval = 0;
 static int opt_distance = 0;
 static char need_time;		/* initialized within trackfilter_init */
@@ -325,7 +334,8 @@ trackfilter_fill_track_list_cb(const route_head *track) 	/* callback for track_d
     track_pts++;
 
     wpt = (waypoint *)elem;
-    if ((need_time != 0) && (wpt->creation_time == 0)) {
+    if(wpt->creation_time == 0) timeless_pts++;
+    if (!(opt_merge && opt_discard) && (need_time != 0) && (wpt->creation_time == 0)) {
       fatal(MYNAME "-init: Found track point at %f,%f without time!\n",
             wpt->latitude, wpt->longitude);
     }
@@ -483,18 +493,20 @@ trackfilter_merge(void)
   waypoint *prev, *wpt;
   route_head *master = track_list[0].track;
 
-  if (track_pts < 1) {
+  if (track_pts-timeless_pts < 1) {
     return;
   }
 
-  buff = (waypoint **)xcalloc(track_pts, sizeof(*buff));
+  buff = (waypoint **)xcalloc(track_pts-timeless_pts, sizeof(*buff));
 
   j = 0;
   for (i = 0; i < track_ct; i++) {	/* put all points into temp buffer */
     route_head *track = track_list[i].track;
     QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp) {
       wpt = (waypoint *)elem;
-      buff[j++] = waypt_dupe(wpt);
+      if(wpt->creation_time != 0) {
+        buff[j++] = waypt_dupe(wpt);
+      }
       track_del_wpt(track, wpt);
       waypt_free(wpt);
     }
@@ -504,12 +516,12 @@ trackfilter_merge(void)
   }
   track_ct = 1;
 
-  qsort(buff, track_pts, sizeof(*buff), trackfilter_merge_qsort_cb);
+  qsort(buff, track_pts-timeless_pts, sizeof(*buff), trackfilter_merge_qsort_cb);
 
-  dropped = 0;
+  dropped = timeless_pts;
   prev = NULL;
 
-  for (i = 0; i < track_pts; i++) {
+  for (i = 0; i < track_pts-timeless_pts; i++) {
     wpt = buff[i];
     if ((prev == NULL) || (prev->creation_time != wpt->creation_time)) {
       route_add_wpt(master, wpt);
