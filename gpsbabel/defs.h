@@ -808,6 +808,7 @@ double waypt_distance_ex(const waypoint* A, const waypoint* B);
 NORETURN fatal(const char*, ...) PRINTFLIKE(1, 2);
 void is_fatal(const int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
+void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
 ff_vecs_t* find_vec(char* const, char**);
 void assign_option(const char* vecname, arglist_t* ap, const char* val);

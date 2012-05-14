@@ -71,6 +71,10 @@ fit_rd_deinit(void)
   gbfclose(fin);
 }
 
+
+/*******************************************************************************
+* fit_parse_header- parse the global FIT header
+*******************************************************************************/
 static void
 fit_parse_header(void)
 {
@@ -82,10 +86,18 @@ fit_parse_header(void)
   if (len == EOF || len < 12) {
     fatal(MYNAME ": Bad header\n");
   }
+  if (global_opts.debug_level >= 1) {
+    debug_print(1,"%s: header len=%d\n", MYNAME, len);
+  }
+
   ver = gbfgetc(fin);
   if (ver == EOF || (ver >> 4) > 1)
     fatal(MYNAME ": Unsupported protocol version %d.%d\n",
           ver >> 4, ver & 0xf);
+  if (global_opts.debug_level >= 1) {
+    debug_print(1,"%s: protocol version=%d\n", MYNAME, ver);
+  }
+
   // profile version
   ver = gbfgetuint16(fin);
   // data length
@@ -97,10 +109,9 @@ fit_parse_header(void)
     fatal(MYNAME ": .FIT signature missing\n");
   }
 
-  // Read in rest of header (if any)
-  len -= 12;
-  while( len-- ) {
-    gbfgetc(fin); // throw away unknown header data
+  if (global_opts.debug_level >= 1) {
+    debug_print(1,"%s: profile version=%d\n", MYNAME, ver);
+    debug_print(1,"%s: fit_data.len=%d\n", MYNAME, fit_data.len);
   }
 }
 
@@ -110,11 +121,17 @@ fit_getuint8(void)
   int val;
 
   if (fit_data.len == 0) {
-    fatal(MYNAME ": record truncated\n");
+    // fail gracefully for GARMIN Edge 800 with newest firmware, seems to write a wrong record length
+    // for the last record.
+    //fatal(MYNAME ": record truncated: fit_data.len=0\n");
+    if (global_opts.debug_level >= 1) {
+      warning("%s: record truncated: fit_data.len=0\n", MYNAME);
+    }
+    return 0;
   }
   val = gbfgetc(fin);
   if (val == EOF) {
-    fatal(MYNAME ": unexpected end of file\n");
+    fatal(MYNAME ": unexpected end of file with fit_data.len=%d\n",fit_data.len);
   }
   fit_data.len--;
   return (gbuint8)val;
@@ -127,10 +144,10 @@ fit_getuint16(void)
   char buf[2];
 
   if (fit_data.len < 2) {
-    fatal(MYNAME ": record truncated\n");
+    fatal(MYNAME ": record truncated: expecting char[2], but only got %d\n",fit_data.len);
   }
   is_fatal(gbfread(buf, 2, 1, fin) != 1,
-           MYNAME ": unexpected end of file\n");
+           MYNAME ": unexpected end of file with fit_data.len=%d\n",fit_data.len);
   fit_data.len -= 2;
   if (fit_data.endian) {
     return be_read16(buf);
@@ -146,10 +163,10 @@ fit_getuint32(void)
   char buf[4];
 
   if (fit_data.len < 4) {
-    fatal(MYNAME ": record truncated\n");
+    fatal(MYNAME ": record truncated: expecting char[4], but only got %d\n",fit_data.len);
   }
   is_fatal(gbfread(buf, 4, 1, fin) != 1,
-           MYNAME ": unexpected end of file\n");
+           MYNAME ": unexpected end of file with fit_data.len=%d\n",fit_data.len);
   fit_data.len -= 4;
   if (fit_data.endian) {
     return be_read32(buf);
@@ -170,24 +187,40 @@ fit_parse_definition_message(gbuint8 header)
     free(def->fields);
   }
 
+  // first byte is reserved
   is_fatal(fit_getuint8() != 0,
            MYNAME ": Definition message reserved bits not zero\n");
+
+  // second byte is endianness
   def->endian = fit_getuint8();
   if (def->endian > 1) {
     fatal(MYNAME ": Bad endian field\n");
   }
   fit_data.endian = def->endian;
+
+  // next two bytes are the global message number
   def->global_id = fit_getuint16();
+
+  // byte 5 has the number of records in the remainder of the definition message
   def->num_fields = fit_getuint8();
+  if (global_opts.debug_level >= 8) {
+    debug_print(8,"%s: definition message contains %d records\n",MYNAME, def->num_fields);
+  }
   if (def->num_fields == 0) {
     def->fields = (fit_field_t*) xmalloc(sizeof(fit_field_t));
     return;
   }
+
+  // remainder of the definition message is data at one byte per field * 3 fields
   def->fields = (fit_field_t*) xmalloc(def->num_fields * sizeof(fit_field_t));
   for (i = 0; i < def->num_fields; i++) {
     def->fields[i].id = fit_getuint8();
     def->fields[i].size = fit_getuint8();
     def->fields[i].type = fit_getuint8();
+    if (global_opts.debug_level >= 8) {
+      debug_print(8,"%s: record %d  ID: %d  SIZE: %d  TYPE: %d  fit_data.len=%d\n",
+                  MYNAME, i, def->fields[i].id, def->fields[i].size, def->fields[i].type,fit_data.len);
+    }
   }
 }
 
@@ -196,6 +229,10 @@ fit_read_field(fit_field_t* f)
 {
   int i;
 
+  if (global_opts.debug_level >= 8) {
+    debug_print(8,"%s: fit_read_field: read data field with f->type=0x%X and f->size=%d fit_data.len=%d\n",
+                MYNAME, f->type, f->size, fit_data.len);
+  }
   switch (f->type) {
   case 1: // sint8
   case 2: // uint8
@@ -237,45 +274,93 @@ fit_parse_data(fit_message_def* def, int time_offset)
   int i;
   waypoint* waypt;
 
+  if (global_opts.debug_level >= 7) {
+    debug_print(7,"%s: parsing fit data ID %d with num_fields=%d\n", MYNAME, def->global_id, def->num_fields);
+  }
   for (i = 0; i < def->num_fields; i++) {
+    if (global_opts.debug_level >= 7) {
+      debug_print(7,"%s: parsing field %d\n", MYNAME, i);
+    }
     f = &def->fields[i];
     val = fit_read_field(f);
     if (f->id == 253) {
+      if (global_opts.debug_level >= 7) {
+        debug_print(7,"%s: parsing fit data: timestamp=%d\n", MYNAME, val);
+      }
       fit_data.last_timestamp = timestamp = val;
     } else {
       switch (def->global_id) {
-      case 20: // record mesage
+      case 20: // record message
         switch (f->id) {
         case 0:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: lat=%d\n", MYNAME, val);
+          }
           lat = val;
           break;
         case 1:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: lon=%d\n", MYNAME, val);
+          }
           lon = val;
           break;
         case 2:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: alt=%d\n", MYNAME, val);
+          }
           alt = val;
           break;
         case 3:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: heartrate=%d\n", MYNAME, val);
+          }
           heartrate = val;
           break;
         case 4:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: cadence=%d\n", MYNAME, val);
+          }
           cadence = val;
           break;
+        case 5:
+          // NOTE: 5 is DISTANCE in cm ... unused.
+          if (global_opts.debug_level >= 7) {
+            debug_print(7, "%s: unrecognized data type in GARMIN FIT record: f->id=%d\n", MYNAME, f->id);
+          }
+          break;
         case 6:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: speed=%d\n", MYNAME, val);
+          }
           speed = val;
           break;
         case 7:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: power=%d\n", MYNAME, val);
+          }
           power = val;
           break;
         case 13:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: temperature=%d\n", MYNAME, val);
+          }
           temperature = val;
+          break;
+        default:
+          if (global_opts.debug_level >= 1) {
+            debug_print(1, "%s: unrecognized data type in GARMIN FIT record: f->id=%d\n", MYNAME, f->id);
+          }
           break;
         }
       }
     }
   }
+
+  if (global_opts.debug_level >= 7) {
+    debug_print(7,"%s: storing fit data with num_fields=%d\n", MYNAME, def->num_fields);
+  }
   switch (def->global_id) {
-  case 20: // record mesage
+  case 20: // record message
     if (lat == 0x7fffffff || lon == 0x7fffffff) {
       break;
     }
@@ -323,21 +408,45 @@ fit_parse_compressed_message(gbuint8 header)
   fit_parse_data(def, header & 0x1f);
 }
 
+/*******************************************************************************
+* fit_parse_record- parse each record in the file
+*******************************************************************************/
 static void
 fit_parse_record(void)
 {
   gbuint8 header;
 
   header = fit_getuint8();
+  // high bit 7 set -> compressed message (0 for normal)
+  // second bit 6 set -> 0 for data message, 1 for definition message
+  // bits 5, 4 -> reserved
+  // bits 3..0 -> local message type
   if (header & 0x80) {
+    if (global_opts.debug_level >= 6) {
+      debug_print(6,"%s: got compressed message at fit_data.len=%d", MYNAME, fit_data.len);
+      debug_print(0," ...local message type 0x%X\n", header&0x0f);
+    }
     fit_parse_compressed_message(header);
   } else if (header & 0x40) {
+    if (global_opts.debug_level >= 6) {
+      debug_print(6,"%s: got definition message at fit_data.len=%d", MYNAME, fit_data.len);
+      debug_print(0," ...local message type 0x%X\n", header&0x0f);
+    }
     fit_parse_definition_message(header);
   } else {
+    if (global_opts.debug_level >= 6) {
+      debug_print(6,"%s: got data message at fit_data.len=%d", MYNAME, fit_data.len);
+      debug_print(0," ...local message type 0x%X\n", header&0x0f);
+    }
     fit_parse_data_message(header);
   }
 }
 
+/*******************************************************************************
+* fit_read- global entry point
+* - parse the header
+* - parse all the records in the file
+*******************************************************************************/
 static void
 fit_read(void)
 {
@@ -345,6 +454,9 @@ fit_read(void)
 
   fit_data.track = route_head_alloc();
   track_add_head(fit_data.track);
+  if (global_opts.debug_level >= 1) {
+    debug_print(1,"%s: starting to read data with fit_data.len=%d\n", MYNAME, fit_data.len);
+  }
   while (fit_data.len) {
     fit_parse_record();
   }
