@@ -626,7 +626,7 @@ process_data_item(struct read_state *pst, const item_frame *pitem, int len)
 {
   int res = 0;
   double lat, lon, alt;
-  gbint32 ts;
+  unsigned int ts;
   int poi = 0;
   full_item f;
   compact_item c;
