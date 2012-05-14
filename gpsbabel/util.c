@@ -1699,6 +1699,37 @@ entity_types stdentities[] =  {
   { "<",	"&lt;", 0 },
   { ">",	"&gt;", 0 },
   { "\"",	"&quot;", 0 },
+  { "\x01",	" ", 1 }, // illegal xml 1.0 character
+  { "\x02",	" ", 1 }, // illegal xml 1.0 character
+  { "\x03",	" ", 1 }, // illegal xml 1.0 character
+  { "\x04",	" ", 1 }, // illegal xml 1.0 character
+  { "\x05",	" ", 1 }, // illegal xml 1.0 character
+  { "\x06",	" ", 1 }, // illegal xml 1.0 character
+  { "\x07",	" ", 1 }, // illegal xml 1.0 character
+  { "\x08",	" ", 1 }, // illegal xml 1.0 character
+  // { "\x09",	" ", 1 },  legal xml 1.0 character
+  // { "\x0a",	" ", 1 },  legal xml 1.0 character
+  { "\x0b",	" ", 1 }, // illegal xml 1.0 character
+  { "\x0c",	" ", 1 }, // illegal xml 1.0 character
+  // { "\x0d",	" ", 1 },  legal xml 1.0 character
+  { "\x0e",	" ", 1 }, // illegal xml 1.0 character
+  { "\x0f",	" ", 1 }, // illegal xml 1.0 character
+  { "\x10",	" ", 1 }, // illegal xml 1.0 character
+  { "\x11",	" ", 1 }, // illegal xml 1.0 character
+  { "\x12",	" ", 1 }, // illegal xml 1.0 character
+  { "\x13",	" ", 1 }, // illegal xml 1.0 character
+  { "\x14",	" ", 1 }, // illegal xml 1.0 character
+  { "\x15",	" ", 1 }, // illegal xml 1.0 character
+  { "\x16",	" ", 1 }, // illegal xml 1.0 character
+  { "\x17",	" ", 1 }, // illegal xml 1.0 character
+  { "\x18",	" ", 1 }, // illegal xml 1.0 character
+  { "\x19",	" ", 1 }, // illegal xml 1.0 character
+  { "\x1a",	" ", 1 }, // illegal xml 1.0 character
+  { "\x1b",	" ", 1 }, // illegal xml 1.0 character
+  { "\x1c",	" ", 1 }, // illegal xml 1.0 character
+  { "\x1d",	" ", 1 }, //illegal xml 1.0 character
+  { "\x1e",	" ", 1 }, //illegal xml 1.0 character
+  { "\x1f",	" ", 1 }, //illegal xml 1.0 character
   { NULL,	NULL, 0 }
 };
 
