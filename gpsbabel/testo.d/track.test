@@ -19,3 +19,7 @@ gpsbabel -t -i unicsv -f ${REFERENCE}/track/trackfilter_faketime.txt -x track,fa
 compare ${REFERENCE}/track/trackfilter_faketime.gpx ${TMPDIR}/ft.gpx
 gpsbabel -t -i unicsv -f ${REFERENCE}/track/trackfilter_faketime.txt -x track,faketime=f20100506060000+5 -o gpx -F ${TMPDIR}/ftf.gpx
 compare ${REFERENCE}/track/trackfilter_faketime_forced.gpx ${TMPDIR}/ftf.gpx
+
+# reverse the track
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trk_reverse_test-fwd.gpx -x reverse -o gpx -F ${TMPDIR}/trk_reverse_test-rev.gpx
+compare ${REFERENCE}/track/trk_reverse_test-rev.gpx ${TMPDIR}/trk_reverse_test-rev.gpx
