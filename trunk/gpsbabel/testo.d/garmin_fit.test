@@ -7,3 +7,6 @@ compare ${TMPDIR}/fit-sameple.gpx ${REFERENCE}/track/fit-sample.gpx
 
 gpsbabel -i garmin_fit -f ${REFERENCE}/track/garmin-edge-200-output.fit -o gpx -F ${TMPDIR}/fit-sample.gpx
 compare ${TMPDIR}/fit-sample.gpx ${REFERENCE}/track/garmin-edge-200-output.gpx
+
+gpsbabel -i garmin_fit -f ${REFERENCE}/track/garmin-edge-800.fit -o gpx -F ${TMPDIR}/fit-sample-800.gpx
+compare ${TMPDIR}/fit-sample-800.gpx ${REFERENCE}/track/garmin-edge-800-output.gpx
