@@ -11,3 +11,9 @@ compare ${TMPDIR}/skytraq.gpx ${REFERENCE}/skytraq.gpx
 # systems prior to revision 4176.
 gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq-2.bin -o gpx -F ${TMPDIR}/skytraq-2.gpx
 compare ${TMPDIR}/skytraq-2.gpx ${REFERENCE}/skytraq-2.gpx
+
+gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq-realdata.bin -o gpx -F ${TMPDIR}/skytraq-realdata.gpx
+compare ${TMPDIR}/skytraq-realdata.gpx ${REFERENCE}/skytraq-realdata.gpx
+
+gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq-artificial.bin -o gpx -F ${TMPDIR}/skytraq-artificial.gpx
+compare ${TMPDIR}/skytraq-artificial.gpx ${REFERENCE}/skytraq-artificial.gpx
