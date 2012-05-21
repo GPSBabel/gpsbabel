@@ -39,6 +39,9 @@ that work with NMEA-0183 formatted data include:
 <member>
   Wintec WPL-1000 GPS
 </member>
+<member>
+  Sony GPS_CS1
+</member>
 </simplelist>  
 <para>
 This module also supports <link linkend="tracking">realtime tracking</link> 
