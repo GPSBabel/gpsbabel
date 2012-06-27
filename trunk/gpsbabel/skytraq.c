@@ -553,9 +553,9 @@ static time_t
 gpstime_to_timet(int week, int sec)
 {
   /* TODO: make leap second compensation more general
-   * (the windows software seems to correct by 13).
+   * (the windows software seems to correct by a magic amount).
    */
-  return (315964800 + (week+1024)*7*SECONDS_PER_DAY + sec - 13);
+  return (315964800 + (week+1024)*7*SECONDS_PER_DAY + sec - 16);
 }
 
 static void
