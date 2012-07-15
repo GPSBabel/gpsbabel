@@ -174,6 +174,7 @@ static char* opt_sleep;
 static char* opt_baud;
 static char* opt_append;
 static char* opt_gisteq;
+static char* opt_ignorefix;
 
 static long sleepus;
 static int getposn;
@@ -203,6 +204,7 @@ arglist_t nmea_args[] = {
   {"append_positioning", &opt_append, "Append realtime positioning data to the output file instead of truncating", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
   {"baud", &opt_baud, "Speed in bits per second of serial port (baud=4800)", NULL, ARGTYPE_INT, ARG_NOMINMAX },
   {"gisteq", &opt_gisteq, "Write tracks for Gisteq Phototracker", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
+  {"ignore_fix", &opt_ignorefix, "Accept position fixes in gpgga marked invalid", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
   ARG_TERMINATOR
 };
 
@@ -453,7 +455,8 @@ gpgga_parse(char* ibuf)
    * as serial units will often spit a remembered position up and
    * that is more comfortable than nothing at all...
    */
-  if ((fix <= 0) && (read_mode != rm_serial)) {
+  CHECK_BOOL(opt_ignorefix);
+  if ((fix <= 0) && (read_mode != rm_serial) && (!opt_ignorefix)) {
     return;
   }
 
