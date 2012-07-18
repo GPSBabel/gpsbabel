@@ -42,9 +42,11 @@ warning(const char* fmt, ...)
 void
 debug_print(int level, const char* fmt, ...)
 {
-int i;
-for(i=1;i<level;i++) { fprintf(stderr, "."); }
   va_list ap;
+  int i;
+  for (i=1; i<level; i++) {
+    fprintf(stderr, ".");
+  }
   va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);
   va_end(ap);

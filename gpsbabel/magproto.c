@@ -1608,6 +1608,7 @@ const char** os_get_magellan_mountpoints()
   return dlist;
 #else
   fatal("Not implemented");
+  return NULL;
 #endif
 }
 
@@ -1625,6 +1626,7 @@ os_gpx_files(const char* dirname)
   return g.gl_pathv;
 #else
   fatal("Not implemented");
+  return NULL;
 #endif
 }
 
