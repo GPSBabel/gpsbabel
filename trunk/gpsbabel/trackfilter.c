@@ -1046,7 +1046,7 @@ trackfilter_faketime_check(const char *timestr)
     }
 
     if (timeparse) {
-      if ((c == '+')) {
+      if (c == '+') {
         fmtstart[i++] = '\0';
         timeparse = 0;
       } else {
