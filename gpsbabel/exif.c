@@ -779,10 +779,21 @@ exif_waypt_from_exif_app(exif_app_t* app)
   }
 
   if (alt != unknown_alt) {
-    if (alt_ref != 0) {
+    double sign;
+    switch (alt_ref != 0) {
+    case 0:
+      sign = 1.0;
+      break;
+
+    case 1:
+      sign = -1.0;
+      break;
+
+    default:
       warning(MYNAME ": Invalid GPSAltitudeRef (%d)! Using 0 (= Sea level).\n", alt_ref);
+      sign = 1.0;
     }
-    wpt->altitude = alt;
+    wpt->altitude = sign * alt;
 #ifdef EXIF_DBG
     printf(MYNAME "-GPSAltitude =  %12.7f m\n", wpt->altitude);
 #endif
