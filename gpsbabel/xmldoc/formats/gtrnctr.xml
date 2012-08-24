@@ -18,7 +18,8 @@ it, the fundamentals of Training Center are different.  It deals in
 concepts like laps and calories, which are rather alien to GPSBabel 
 and most of the formats we support.  As such, while we can describe
 the tracks pretty accurately, things like calories and heart zone
-tracking are not supported.
+tracking are not supported. Some of the auxiliary data, such as
+heart rate (not zone), cadence, and bicycling power are supported.
 </para>
 <para>
 One of the most useful things you can do with this format is to send 
@@ -34,6 +35,3 @@ gpsbabel -i gtrnctr -f somefile.tcx -x simplify,count=50
 where you select the count not to exceed the number of available
 waypoints for routing on your device.
 </para>
-
-
-
