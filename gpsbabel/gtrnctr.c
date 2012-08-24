@@ -289,13 +289,17 @@ gtc_waypt_pr(const waypoint* wpt)
                     time_string);
     }
   }
-  gtc_write_xml(1, "<Position>\n");
-  gtc_write_xml(0, "<LatitudeDegrees>%f</LatitudeDegrees>\n", wpt->latitude);
-  gtc_write_xml(0, "<LongitudeDegrees>%f</LongitudeDegrees>\n", wpt->longitude);
-  gtc_write_xml(-1, "</Position>\n");
-  if (wpt->altitude != unknown_alt) {
-    gtc_write_xml(0, "<AltitudeMeters>%f</AltitudeMeters>\n", wpt->altitude);
+  if (wpt->latitude && wpt->longitude) {
+    gtc_write_xml(1, "<Position>\n");
+    gtc_write_xml(0, "<LatitudeDegrees>%f</LatitudeDegrees>\n", wpt->latitude);
+    gtc_write_xml(0, "<LongitudeDegrees>%f</LongitudeDegrees>\n", wpt->longitude);
+    gtc_write_xml(-1, "</Position>\n");
   }
+  if (wpt->altitude != unknown_alt) {
+    gtc_write_xml(0, "<AltitudeMeters>%.1f</AltitudeMeters>\n", wpt->altitude);
+  }
+  // TODO: find a schema extension to include wpt->course and wpt->temperature
+  // TODO: find a way to include DistanceMeters from odometer information
   if (wpt->heartrate) {
     //gtc_write_xml(0, "<HeartRateBpm>%d</HeartRateBpm>\n", wpt->heartrate);
     gtc_write_xml(1, "<HeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
@@ -304,6 +308,19 @@ gtc_waypt_pr(const waypoint* wpt)
   }
   if (wpt->cadence) {
     gtc_write_xml(0, "<Cadence>%d</Cadence>\n", wpt->cadence);
+  }
+  if (wpt->speed || wpt->power) {
+    gtc_write_xml(1, "<Extensions>\n");
+    gtc_write_xml(1, "<TPX xmlns=\"http://www.garmin.com/xmlschemas/ActivityExtension/v2\">\n");
+    /* see http://www8.garmin.com/xmlschemas/ActivityExtensionv2.xsd */
+    if (wpt->speed) {
+      gtc_write_xml(0, "<Speed>%.3f</Speed>\n", wpt->speed);
+    }
+    if (wpt->power) {
+      gtc_write_xml(0, "<Watts>%.0f</Watts>\n", wpt->power);
+    }
+    gtc_write_xml(-1, "</TPX>\n", wpt->cadence);
+    gtc_write_xml(-1, "</Extensions>\n");
   }
 
   gtc_write_xml(-1, "</Trackpoint>\n");
@@ -316,47 +333,46 @@ gtc_fake_hdr(void)
   if (gtc_least_time && gtc_most_time) {
     secs = gtc_most_time - gtc_least_time;
   }
-  if (gtc_course_flag) { /* course format */
 
-    gtc_write_xml(0, "<TotalTimeSeconds>%d</TotalTimeSeconds>\n", secs);
-    gtc_write_xml(0, "<DistanceMeters>%lf</DistanceMeters>\n",
-                  tdata->distance_meters ? tdata->distance_meters : 0);
+  /* write these in either case, course or activity format */
+  gtc_write_xml(0, "<TotalTimeSeconds>%d</TotalTimeSeconds>\n", secs);
+  if (tdata->distance_meters) {
+    gtc_write_xml(0, "<DistanceMeters>%.2f</DistanceMeters>\n",
+                  tdata->distance_meters);
+  }
+  if (tdata->avg_hrt) {
+    gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
+    gtc_write_xml(0, "<Value>%d</Value>\n", (int) (tdata->avg_hrt + 0.5));
+    gtc_write_xml(-1,"</AverageHeartRateBpm>\n");
+  }
+  if (tdata->max_hrt) {
+    gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
+    gtc_write_xml(0, "<Value>%d</Value>\n", (int) (tdata->max_hrt + 0.5));
+    gtc_write_xml(-1,"</MaximumHeartRateBpm>\n");
+  }
+  if (tdata->avg_cad) {
+    gtc_write_xml(0, "<Cadence>%.1f</Cadence>\n", tdata->avg_cad);
+  }
+  gtc_write_xml(0, "<Intensity>Active</Intensity>\n");
+
+  if (gtc_course_flag) { /* course format */
     gtc_write_xml(1, "<BeginPosition>\n");
     gtc_write_xml(0, "<LatitudeDegrees>%lf</LatitudeDegrees>\n", gtc_start_lat);
     gtc_write_xml(0, "<LongitudeDegrees>%lf</LongitudeDegrees>\n", gtc_start_long);
-    gtc_write_xml(-1, "</BeginPosition>\n");
+    gtc_write_xml(-1,"</BeginPosition>\n");
     gtc_write_xml(1, "<EndPosition>\n");
     gtc_write_xml(0, "<LatitudeDegrees>%lf</LatitudeDegrees>\n", gtc_end_lat);
     gtc_write_xml(0, "<LongitudeDegrees>%lf</LongitudeDegrees>\n", gtc_end_long);
-    gtc_write_xml(-1, "</EndPosition>\n");
-    gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0,"<Value>%d</Value>\n",
-                  tdata->avg_hrt ? (int)(tdata->avg_hrt + .5): 100);
-    gtc_write_xml(-1, "</AverageHeartRateBpm>\n");
-    gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0,"<Value>%d</Value>\n",
-                  tdata->max_hrt ? tdata->max_hrt : 200);
-    gtc_write_xml(-1,"</MaximumHeartRateBpm>\n");
-    gtc_write_xml(0, "<Intensity>Active</Intensity>\n");
+    gtc_write_xml(-1,"</EndPosition>\n");
 
   } else {  /* activity (history) format */
-
-    gtc_write_xml(0, "<TotalTimeSeconds>%d</TotalTimeSeconds>\n", secs);
-    gtc_write_xml(0, "<DistanceMeters>%lf</DistanceMeters>\n",
-                  tdata->distance_meters ? tdata->distance_meters : 1000);
-    gtc_write_xml(0, "<MaximumSpeed>0</MaximumSpeed>\n");
-    gtc_write_xml(0, "<Calories>0</Calories>\n");
-    gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0,"<Value>%g</Value>\n",
-                  tdata->avg_hrt ? tdata->avg_hrt : 100);
-    gtc_write_xml(-1, "</AverageHeartRateBpm>\n");
-    gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0,"<Value>%d</Value>\n",
-                  tdata->max_hrt ? (int) tdata->max_hrt : 200);
-    gtc_write_xml(-1,"</MaximumHeartRateBpm>\n");
-    gtc_write_xml(0, "<Intensity>Active</Intensity>\n");
+    if (tdata->max_spd) {
+      gtc_write_xml(0, "<MaximumSpeed>%.3f</MaximumSpeed>\n", tdata->max_spd);
+    }
+    //gtc_write_xml(0, "<Calories>0</Calories>\n");
     gtc_write_xml(0, "<TriggerMethod>Manual</TriggerMethod>\n");
   }
+
 }
 
 static void

@@ -111,6 +111,7 @@ typedef enum {
   XT_NET_TIME,
   XT_PATH_COURSE,
   XT_PATH_DISTANCE_KM,
+  XT_PATH_DISTANCE_METERS,
   XT_PATH_DISTANCE_MILES,
   XT_PATH_SPEED,
   XT_PATH_SPEED_KNOTS,
@@ -118,11 +119,15 @@ typedef enum {
   XT_PATH_SPEED_MPH,
   XT_PHONE_NR,
   XT_POSTAL_CODE,
+  XT_POWER,
   XT_ROUTE_NAME,
   XT_SHORTNAME,
   XT_STATE,
   XT_STREET_ADDR,
+  XT_TEMPERATURE,
+  XT_TEMPERATURE_F,
   XT_TIMET_TIME,
+  XT_TIMET_TIME_MS,
   XT_TRACK_NAME,
   XT_TRACK_NEW,
   XT_URL,
@@ -1172,8 +1177,28 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     break;
   case XT_TIMET_TIME:
     /* Time as time_t */
-    wpt->creation_time = atol(s);
+    wpt->creation_time = (time_t) atol(s);
     break;
+  case XT_TIMET_TIME_MS: {
+    /* Time as time_t in milliseconds */
+    int s_len = strlen(s);
+    if (s_len < 4) {
+      /* less than 1 epochsecond, an unusual case */
+      wpt->creation_time = (time_t) 0;
+      wpt->microseconds = (int) atoi(s) * 1000;
+    } else {
+      char buff[32];
+      int off = s_len - 3;
+      strncpy(buff, s, off);
+      buff[off] = '\0';
+      wpt->creation_time = (time_t) atol(buff);
+      s += off;
+      strncpy(buff, s, 3);
+      buff[3] = '\0';
+      wpt->microseconds = (int) atoi(buff) * 1000;
+    }
+  }
+  break;
   case XT_YYYYMMDD_TIME:
     wpt->creation_time = yyyymmdd_to_time(s);
     break;
@@ -1292,8 +1317,14 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     break;
 
     /* OTHER STUFF ***************************************************/
+  case XT_PATH_DISTANCE_METERS:
+    wpt->odometer_distance = atof(s);
+    break;
+  case XT_PATH_DISTANCE_KM:
+    wpt->odometer_distance = atof(s) * 1000.0;
+    break;
   case XT_PATH_DISTANCE_MILES:
-    /* Ignored on input */
+    wpt->odometer_distance = MILES_TO_METERS(atof(s));
     break;
   case XT_HEART_RATE:
     wpt->heartrate = atoi(s);
@@ -1301,8 +1332,14 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
   case XT_CADENCE:
     wpt->cadence = atoi(s);
     break;
-  case XT_PATH_DISTANCE_KM:
-    /* Ignored on input */
+  case XT_POWER:
+    wpt->power = atof(s);
+    break;
+  case XT_TEMPERATURE:
+    wpt->temperature = atof(s);
+    break;
+  case XT_TEMPERATURE_F:
+    wpt->temperature = (FAHRENHEIT_TO_CELSIUS( atof(s) ));
     break;
     /* GMSD ****************************************************************/
   case XT_COUNTRY: {
@@ -1418,7 +1455,8 @@ xcsv_data_read(void)
       wpt_tmp = waypt_new();
 
       s = buff;
-      s = csv_lineparse(s, xcsv_file.field_delimiter, "", linecount);
+      s = csv_lineparse(s, xcsv_file.field_delimiter,
+                        xcsv_file.field_encloser, linecount);
 
       if (QUEUE_EMPTY(&xcsv_file.ifield)) {
         fatal(MYNAME ": attempt to read, but style '%s' has no IFIELDs in it.\n", xcsv_file.description? xcsv_file.description : "unknown");
@@ -1444,8 +1482,8 @@ xcsv_data_read(void)
           break;
         }
 
-        s = csv_lineparse(NULL, xcsv_file.field_delimiter, "",
-                          linecount);
+        s = csv_lineparse(NULL, xcsv_file.field_delimiter,
+                          xcsv_file.field_encloser, linecount);
       }
 
       if ((xcsv_file.gps_datum > -1) && (xcsv_file.gps_datum != GPS_DATUM_WGS84)) {
@@ -1829,13 +1867,31 @@ xcsv_waypt_pr(const waypoint* wpt)
       break;
 
       /* DISTANCE CONVERSIONS**********************************************/
+      /* prefer odometer distance. */
+      /* if not available, use calculated distance from positions */
     case XT_PATH_DISTANCE_MILES:
       /* path (route/track) distance in miles */
-      writebuff(buff, fmp->printfc, pathdist);
+      if (wpt->odometer_distance) {
+        writebuff(buff, fmp->printfc, METERS_TO_MILES(wpt->odometer_distance));
+      } else {
+        writebuff(buff, fmp->printfc, pathdist);
+      }
+      break;
+    case XT_PATH_DISTANCE_METERS:
+      /* path (route/track) distance in meters */
+      if (wpt->odometer_distance) {
+        writebuff(buff, fmp->printfc, wpt->odometer_distance);
+      } else {
+        writebuff(buff, fmp->printfc, MILES_TO_METERS(pathdist));
+      }
       break;
     case XT_PATH_DISTANCE_KM:
-      /* path (route/track) distance in  */
-      writebuff(buff, fmp->printfc, pathdist * 5280*12*2.54/100/1000);
+      /* path (route/track) distance in kilometers */
+      if (wpt->odometer_distance) {
+        writebuff(buff, fmp->printfc, wpt->odometer_distance / 1000.0);
+      } else {
+        writebuff(buff, fmp->printfc, MILES_TO_METERS(pathdist) / 1000.0);
+      }
       break;
     case XT_PATH_SPEED:
       writebuff(buff, fmp->printfc, wpt->speed);
@@ -1861,6 +1917,16 @@ xcsv_waypt_pr(const waypoint* wpt)
     case XT_CADENCE:
       writebuff(buff, fmp->printfc, wpt->cadence);
       break;
+      /* POWER CONVERSION***********************************************/
+    case XT_POWER:
+      writebuff(buff, fmp->printfc, wpt->power);
+      break;
+    case XT_TEMPERATURE:
+      writebuff(buff, fmp->printfc, wpt->temperature);
+      break;
+    case XT_TEMPERATURE_F:
+      writebuff(buff, fmp->printfc, CELSIUS_TO_FAHRENHEIT(wpt->temperature));
+      break;
       /* TIME CONVERSIONS**************************************************/
     case XT_EXCEL_TIME:
       /* creation time as an excel (double) time */
@@ -1870,6 +1936,15 @@ xcsv_waypt_pr(const waypoint* wpt)
       /* time as a time_t variable */
       writebuff(buff, fmp->printfc, wpt->creation_time);
       break;
+    case XT_TIMET_TIME_MS: {
+      /* time as a time_t variable in milliseconds */
+      char tbuf[24];
+      writetime(tbuf, sizeof(tbuf), "%s", wpt->creation_time, 0);
+      char mbuf[32];
+      snprintf(mbuf, sizeof(mbuf), "%s%03d", tbuf, wpt->microseconds / 1000);
+      writebuff(buff, "%s", mbuf);
+    }
+    break;
     case XT_YYYYMMDD_TIME:
       writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->creation_time));
       break;
@@ -2058,6 +2133,10 @@ xcsv_waypt_pr(const waypoint* wpt)
       goto next;
     }
 
+    if (xcsv_file.field_encloser) {
+      /* print the enclosing character(s) */
+      gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.field_encloser);
+    }
 
     /* As a special case (pronounced "horrible hack") we allow
      * ""%s"" to smuggle bad characters through.
@@ -2066,6 +2145,11 @@ xcsv_waypt_pr(const waypoint* wpt)
       gbfprintf(xcsv_file.xcsvfp, "\"%s\"", obuff);
     } else {
       gbfprintf(xcsv_file.xcsvfp, "%s", obuff);
+    }
+
+    if (xcsv_file.field_encloser) {
+      /* print the enclosing character(s) */
+      gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.field_encloser);
     }
 
 next:

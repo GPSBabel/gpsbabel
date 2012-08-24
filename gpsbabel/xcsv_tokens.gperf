@@ -1,4 +1,4 @@
-/* ANSI-C code produced by gperf version 3.0.3 */
+/* ANSI-C code produced by gperf version 3.0.4 */
 /* Command-line: gperf -L ANSI-C -D -t xcsv_tokens.in  */
 /* Computed positions: -k'2,4-5,12,$' */
 
@@ -32,12 +32,12 @@
 #line 1 "xcsv_tokens.in"
 struct xt_mapping {char *name; int xt_token; };
 
-#define TOTAL_KEYWORDS 81
+#define TOTAL_KEYWORDS 86
 #define MIN_WORD_LENGTH 3
 #define MAX_WORD_LENGTH 21
-#define MIN_HASH_VALUE 5
-#define MAX_HASH_VALUE 185
-/* maximum key range = 181, duplicates = 0 */
+#define MIN_HASH_VALUE 7
+#define MAX_HASH_VALUE 248
+/* maximum key range = 242, duplicates = 0 */
 
 #ifdef __GNUC__
 __inline
@@ -51,32 +51,32 @@ hash (register const char *str, register unsigned int len)
 {
   static unsigned char asso_values[] =
     {
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186,   0, 186,   0,   0,   0,
-       50,  20,  30,  60, 186,  30,  50,  35,   5,  15,
-       45, 186,   0,  70,   0, 186,  15,   5,  35,  20,
-       80, 186, 186, 186, 186,  20, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186, 186, 186, 186, 186,
-      186, 186, 186, 186, 186, 186
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249,   0, 249,  25,   0,   0,
+       10,  90,  60,  25, 249,  30,  65,  25,  20,   5,
+       80, 249,   0,  70,  15, 249,   0,   0,  40,  30,
+       85, 249, 249, 249, 249,   0, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
+      249, 249, 249, 249, 249, 249
     };
   register int hval = len;
 
@@ -107,7 +107,7 @@ hash (register const char *str, register unsigned int len)
 
 #ifdef __GNUC__
 __inline
-#ifdef __GNUC_STDC_INLINE__
+#if defined __GNUC_STDC_INLINE__ || defined __GNUC_GNU_INLINE__
 __attribute__ ((__gnu_inline__))
 #endif
 #endif
@@ -116,186 +116,200 @@ in_word_set (register const char *str, register unsigned int len)
 {
   static struct xt_mapping wordlist[] =
     {
-#line 70 "xcsv_tokens.in"
-      {"STATE", XT_STATE},
+#line 41 "xcsv_tokens.in"
+      {"LAT_DIR", XT_LAT_DIR},
+#line 69 "xcsv_tokens.in"
+      {"POWER", XT_POWER},
+#line 45 "xcsv_tokens.in"
+      {"LAT_DDMMDIR", XT_LAT_DDMMDIR},
+#line 51 "xcsv_tokens.in"
+      {"LON_DIR", XT_LON_DIR},
+#line 38 "xcsv_tokens.in"
+      {"LAT_DECIMALDIR", XT_LAT_DECIMALDIR},
+#line 54 "xcsv_tokens.in"
+      {"LON_DDMMDIR", XT_LON_DDMMDIR},
+#line 48 "xcsv_tokens.in"
+      {"LON_DECIMALDIR", XT_LON_DECIMALDIR},
+#line 58 "xcsv_tokens.in"
+      {"NET_TIME", XT_NET_TIME},
 #line 30 "xcsv_tokens.in"
       {"HEART_RATE", XT_HEART_RATE},
-#line 71 "xcsv_tokens.in"
+#line 73 "xcsv_tokens.in"
       {"STREET_ADDR", XT_STREET_ADDR},
 #line 6 "xcsv_tokens.in"
       {"CADENCE", XT_CADENCE},
+#line 46 "xcsv_tokens.in"
+      {"LAT_NMEA", XT_LAT_NMEA},
+#line 70 "xcsv_tokens.in"
+      {"ROUTE_NAME", XT_ROUTE_NAME},
+#line 68 "xcsv_tokens.in"
+      {"POSTAL_CODE", XT_POSTAL_CODE},
+#line 55 "xcsv_tokens.in"
+      {"LON_NMEA", XT_LON_NMEA},
+#line 72 "xcsv_tokens.in"
+      {"STATE", XT_STATE},
 #line 22 "xcsv_tokens.in"
       {"GEOCACHE_TERR", XT_GEOCACHE_TERR},
 #line 21 "xcsv_tokens.in"
       {"GEOCACHE_PLACER", XT_GEOCACHE_PLACER},
-#line 10 "xcsv_tokens.in"
-      {"DESCRIPTION", XT_DESCRIPTION},
-#line 5 "xcsv_tokens.in"
-      {"ANYNAME", XT_ANYNAME},
-#line 17 "xcsv_tokens.in"
-      {"GEOCACHE_HINT", XT_GEOCACHE_HINT},
+#line 82 "xcsv_tokens.in"
+      {"UTM", XT_UTM},
 #line 18 "xcsv_tokens.in"
       {"GEOCACHE_ISARCHIVED", XT_GEOCACHE_ISARCHIVED},
 #line 19 "xcsv_tokens.in"
       {"GEOCACHE_ISAVAILABLE", XT_GEOCACHE_ISAVAILABLE},
-#line 15 "xcsv_tokens.in"
-      {"GEOCACHE_CONTAINER", XT_GEOCACHE_CONTAINER},
-#line 68 "xcsv_tokens.in"
-      {"ROUTE_NAME", XT_ROUTE_NAME},
-#line 67 "xcsv_tokens.in"
-      {"POSTAL_CODE", XT_POSTAL_CODE},
-#line 41 "xcsv_tokens.in"
-      {"LAT_DIR", XT_LAT_DIR},
-#line 58 "xcsv_tokens.in"
-      {"NET_TIME", XT_NET_TIME},
-#line 45 "xcsv_tokens.in"
-      {"LAT_DDMMDIR", XT_LAT_DDMMDIR},
-#line 46 "xcsv_tokens.in"
-      {"LAT_NMEA", XT_LAT_NMEA},
-#line 38 "xcsv_tokens.in"
-      {"LAT_DECIMALDIR", XT_LAT_DECIMALDIR},
-#line 33 "xcsv_tokens.in"
-      {"ICON_DESCR", XT_ICON_DESCR},
-#line 77 "xcsv_tokens.in"
-      {"UTM", XT_UTM},
-#line 69 "xcsv_tokens.in"
-      {"SHORTNAME", XT_SHORTNAME},
-#line 73 "xcsv_tokens.in"
-      {"TRACK_NAME", XT_TRACK_NAME},
-#line 34 "xcsv_tokens.in"
-      {"IGNORE", XT_IGNORE},
-#line 51 "xcsv_tokens.in"
-      {"LON_DIR", XT_LON_DIR},
-#line 66 "xcsv_tokens.in"
-      {"PHONE_NR", XT_PHONE_NR},
-#line 74 "xcsv_tokens.in"
-      {"TRACK_NEW", XT_TRACK_NEW},
-#line 54 "xcsv_tokens.in"
-      {"LON_DDMMDIR", XT_LON_DDMMDIR},
-#line 9 "xcsv_tokens.in"
-      {"COUNTRY", XT_COUNTRY},
-#line 55 "xcsv_tokens.in"
-      {"LON_NMEA", XT_LON_NMEA},
-#line 48 "xcsv_tokens.in"
-      {"LON_DECIMALDIR", XT_LON_DECIMALDIR},
-#line 56 "xcsv_tokens.in"
-      {"MAP_EN_BNG", XT_MAP_EN_BNG},
-#line 81 "xcsv_tokens.in"
-      {"UTM_EASTING", XT_UTM_EASTING},
+#line 5 "xcsv_tokens.in"
+      {"ANYNAME", XT_ANYNAME},
+#line 24 "xcsv_tokens.in"
+      {"GMT_TIME", XT_GMT_TIME},
 #line 76 "xcsv_tokens.in"
-      {"URL", XT_URL},
+      {"TIMET_TIME", XT_TIMET_TIME},
 #line 14 "xcsv_tokens.in"
       {"FORMAT", XT_FORMAT},
-#line 23 "xcsv_tokens.in"
-      {"GEOCACHE_TYPE", XT_GEOCACHE_TYPE},
-#line 65 "xcsv_tokens.in"
+#line 13 "xcsv_tokens.in"
+      {"FILENAME", XT_FILENAME},
+#line 33 "xcsv_tokens.in"
+      {"ICON_DESCR", XT_ICON_DESCR},
+#line 10 "xcsv_tokens.in"
+      {"DESCRIPTION", XT_DESCRIPTION},
+#line 16 "xcsv_tokens.in"
+      {"GEOCACHE_DIFF", XT_GEOCACHE_DIFF},
+#line 15 "xcsv_tokens.in"
+      {"GEOCACHE_CONTAINER", XT_GEOCACHE_CONTAINER},
+#line 79 "xcsv_tokens.in"
+      {"TRACK_NEW", XT_TRACK_NEW},
+#line 78 "xcsv_tokens.in"
+      {"TRACK_NAME", XT_TRACK_NAME},
+#line 81 "xcsv_tokens.in"
+      {"URL", XT_URL},
+#line 66 "xcsv_tokens.in"
       {"PATH_SPEED", XT_PATH_SPEED},
 #line 59 "xcsv_tokens.in"
       {"PATH_COURSE", XT_PATH_COURSE},
-#line 24 "xcsv_tokens.in"
-      {"GMT_TIME", XT_GMT_TIME},
-#line 42 "xcsv_tokens.in"
-      {"LAT_HUMAN_READABLE", XT_LAT_HUMAN_READABLE},
-#line 72 "xcsv_tokens.in"
-      {"TIMET_TIME", XT_TIMET_TIME},
-#line 13 "xcsv_tokens.in"
-      {"FILENAME", XT_FILENAME},
-#line 47 "xcsv_tokens.in"
-      {"LOCAL_TIME", XT_LOCAL_TIME},
-#line 82 "xcsv_tokens.in"
-      {"UTM_NORTHING", XT_UTM_NORTHING},
-#line 35 "xcsv_tokens.in"
-      {"INDEX", XT_INDEX},
+#line 17 "xcsv_tokens.in"
+      {"GEOCACHE_HINT", XT_GEOCACHE_HINT},
 #line 39 "xcsv_tokens.in"
       {"LAT_DECIMAL", XT_LAT_DECIMAL},
+#line 9 "xcsv_tokens.in"
+      {"COUNTRY", XT_COUNTRY},
+#line 42 "xcsv_tokens.in"
+      {"LAT_HUMAN_READABLE", XT_LAT_HUMAN_READABLE},
+#line 47 "xcsv_tokens.in"
+      {"LOCAL_TIME", XT_LOCAL_TIME},
+#line 49 "xcsv_tokens.in"
+      {"LON_DECIMAL", XT_LON_DECIMAL},
 #line 52 "xcsv_tokens.in"
       {"LON_HUMAN_READABLE", XT_LON_HUMAN_READABLE},
-#line 31 "xcsv_tokens.in"
-      {"HMSG_TIME", XT_HMSG_TIME},
-#line 20 "xcsv_tokens.in"
-      {"GEOCACHE_LAST_FOUND", XT_GEOCACHE_LAST_FOUND},
+#line 71 "xcsv_tokens.in"
+      {"SHORTNAME", XT_SHORTNAME},
+#line 67 "xcsv_tokens.in"
+      {"PHONE_NR", XT_PHONE_NR},
+#line 7 "xcsv_tokens.in"
+      {"CITY", XT_CITY},
+#line 74 "xcsv_tokens.in"
+      {"TEMPERATURE", XT_TEMPERATURE},
+#line 37 "xcsv_tokens.in"
+      {"ISO_TIME", XT_ISO_TIME},
+#line 3 "xcsv_tokens.in"
+      {"ALT_FEET", XT_ALT_FEET},
+#line 32 "xcsv_tokens.in"
+      {"HMSL_TIME", XT_HMSL_TIME},
+#line 56 "xcsv_tokens.in"
+      {"MAP_EN_BNG", XT_MAP_EN_BNG},
+#line 34 "xcsv_tokens.in"
+      {"IGNORE", XT_IGNORE},
+#line 75 "xcsv_tokens.in"
+      {"TEMPERATURE_F", XT_TEMPERATURE_F},
+#line 40 "xcsv_tokens.in"
+      {"LAT_DIRDECIMAL", XT_LAT_DIRDECIMAL},
+#line 35 "xcsv_tokens.in"
+      {"INDEX", XT_INDEX},
+#line 83 "xcsv_tokens.in"
+      {"UTM_ZONE", XT_UTM_ZONE},
+#line 50 "xcsv_tokens.in"
+      {"LON_DIRDECIMAL", XT_LON_DIRDECIMAL},
 #line 44 "xcsv_tokens.in"
       {"LATLON_HUMAN_READABLE", XT_LATLON_HUMAN_READABLE},
 #line 8 "xcsv_tokens.in"
       {"CONSTANT", XT_CONSTANT},
+#line 20 "xcsv_tokens.in"
+      {"GEOCACHE_LAST_FOUND", XT_GEOCACHE_LAST_FOUND},
 #line 11 "xcsv_tokens.in"
       {"EXCEL_TIME", XT_EXCEL_TIME},
-#line 49 "xcsv_tokens.in"
-      {"LON_DECIMAL", XT_LON_DECIMAL},
-#line 37 "xcsv_tokens.in"
-      {"ISO_TIME", XT_ISO_TIME},
+#line 86 "xcsv_tokens.in"
+      {"UTM_EASTING", XT_UTM_EASTING},
+#line 23 "xcsv_tokens.in"
+      {"GEOCACHE_TYPE", XT_GEOCACHE_TYPE},
+#line 85 "xcsv_tokens.in"
+      {"UTM_ZONEF", XT_UTM_ZONEF},
+#line 88 "xcsv_tokens.in"
+      {"YYYYMMDD_TIME", XT_YYYYMMDD_TIME},
+#line 31 "xcsv_tokens.in"
+      {"HMSG_TIME", XT_HMSG_TIME},
 #line 60 "xcsv_tokens.in"
       {"PATH_DISTANCE_KM", XT_PATH_DISTANCE_KM},
-#line 7 "xcsv_tokens.in"
-      {"CITY", XT_CITY},
-#line 78 "xcsv_tokens.in"
-      {"UTM_ZONE", XT_UTM_ZONE},
-#line 79 "xcsv_tokens.in"
-      {"UTM_ZONEC", XT_UTM_ZONEC},
-#line 16 "xcsv_tokens.in"
-      {"GEOCACHE_DIFF", XT_GEOCACHE_DIFF},
-#line 32 "xcsv_tokens.in"
-      {"HMSL_TIME", XT_HMSL_TIME},
-#line 75 "xcsv_tokens.in"
-      {"URL_LINK_TEXT", XT_URL_LINK_TEXT},
-#line 40 "xcsv_tokens.in"
-      {"LAT_DIRDECIMAL", XT_LAT_DIRDECIMAL},
-#line 83 "xcsv_tokens.in"
-      {"YYYYMMDD_TIME", XT_YYYYMMDD_TIME},
-#line 63 "xcsv_tokens.in"
-      {"PATH_SPEED_KPH", XT_PATH_SPEED_KPH},
-#line 3 "xcsv_tokens.in"
-      {"ALT_FEET", XT_ALT_FEET},
-#line 64 "xcsv_tokens.in"
-      {"PATH_SPEED_MPH", XT_PATH_SPEED_MPH},
-#line 43 "xcsv_tokens.in"
-      {"LAT_INT32DEG", XT_LAT_INT32DEG},
-#line 29 "xcsv_tokens.in"
-      {"GPS_VDOP", XT_GPS_VDOP},
-#line 50 "xcsv_tokens.in"
-      {"LON_DIRDECIMAL", XT_LON_DIRDECIMAL},
 #line 12 "xcsv_tokens.in"
       {"FACILITY", XT_FACILITY},
-#line 61 "xcsv_tokens.in"
-      {"PATH_DISTANCE_MILES", XT_PATH_DISTANCE_MILES},
-#line 28 "xcsv_tokens.in"
-      {"GPS_SAT", XT_GPS_SAT},
-#line 53 "xcsv_tokens.in"
-      {"LON_INT32DEG", XT_LON_INT32DEG},
-#line 26 "xcsv_tokens.in"
-      {"GPS_HDOP", XT_GPS_HDOP},
+#line 80 "xcsv_tokens.in"
+      {"URL_LINK_TEXT", XT_URL_LINK_TEXT},
+#line 84 "xcsv_tokens.in"
+      {"UTM_ZONEC", XT_UTM_ZONEC},
 #line 25 "xcsv_tokens.in"
       {"GPS_FIX", XT_GPS_FIX},
-#line 80 "xcsv_tokens.in"
-      {"UTM_ZONEF", XT_UTM_ZONEF},
+#line 77 "xcsv_tokens.in"
+      {"TIMET_TIME_MS", XT_TIMET_TIME_MS},
 #line 57 "xcsv_tokens.in"
       {"NOTES", XT_NOTES},
-#line 27 "xcsv_tokens.in"
-      {"GPS_PDOP", XT_GPS_PDOP},
-#line 62 "xcsv_tokens.in"
-      {"PATH_SPEED_KNOTS", XT_PATH_SPEED_KNOTS},
+#line 65 "xcsv_tokens.in"
+      {"PATH_SPEED_MPH", XT_PATH_SPEED_MPH},
+#line 64 "xcsv_tokens.in"
+      {"PATH_SPEED_KPH", XT_PATH_SPEED_KPH},
 #line 36 "xcsv_tokens.in"
       {"ISO_TIME_MS", XT_ISO_TIME_MS},
+#line 29 "xcsv_tokens.in"
+      {"GPS_VDOP", XT_GPS_VDOP},
 #line 4 "xcsv_tokens.in"
-      {"ALT_METERS", XT_ALT_METERS}
+      {"ALT_METERS", XT_ALT_METERS},
+#line 28 "xcsv_tokens.in"
+      {"GPS_SAT", XT_GPS_SAT},
+#line 62 "xcsv_tokens.in"
+      {"PATH_DISTANCE_MILES", XT_PATH_DISTANCE_MILES},
+#line 61 "xcsv_tokens.in"
+      {"PATH_DISTANCE_METERS", XT_PATH_DISTANCE_METERS},
+#line 63 "xcsv_tokens.in"
+      {"PATH_SPEED_KNOTS", XT_PATH_SPEED_KNOTS},
+#line 43 "xcsv_tokens.in"
+      {"LAT_INT32DEG", XT_LAT_INT32DEG},
+#line 53 "xcsv_tokens.in"
+      {"LON_INT32DEG", XT_LON_INT32DEG},
+#line 87 "xcsv_tokens.in"
+      {"UTM_NORTHING", XT_UTM_NORTHING},
+#line 26 "xcsv_tokens.in"
+      {"GPS_HDOP", XT_GPS_HDOP},
+#line 27 "xcsv_tokens.in"
+      {"GPS_PDOP", XT_GPS_PDOP}
     };
 
   static signed char lookup[] =
     {
-      -1, -1, -1, -1, -1,  0, -1, -1, -1, -1,  1,  2,  3,  4,
-      -1,  5,  6,  7,  8,  9, 10, -1, -1, 11, -1, 12, 13, 14,
-      15, -1, -1, 16, -1, 17, 18, 19, -1, -1, 20, 21, 22, 23,
-      24, 25, 26, -1, 27, 28, 29, 30, 31, 32, -1, 33, -1, -1,
-      34, -1, 35, -1, 36, 37, -1, 38, -1, -1, -1, -1, 39, -1,
-      40, -1, -1, 41, -1, 42, -1, 43, -1, -1, 44, 45, -1, 46,
-      47, -1, -1, -1, -1, 48, -1, 49, -1, 50, -1, 51, 52, -1,
-      53, -1, -1, 54, -1, -1, 55, -1, -1, -1, 56, 57, -1, -1,
-      -1, 58, 59, -1, -1, -1, 60, 61, -1, -1, -1, 62, 63, -1,
-      -1, -1, 64, 65, -1, -1, 66, 67, 68, -1, -1, -1, 69, 70,
-      -1, -1, 71, -1, -1, -1, -1, 72, 73, -1, -1, -1, -1, -1,
-      -1, -1, -1, 74, -1, 75, 76, -1, -1, 77, -1, -1, 78, -1,
-      -1, -1, -1, 79, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-      -1, -1, -1, 80
+      -1, -1, -1, -1, -1, -1, -1,  0, -1, -1,  1,  2,  3, -1,
+       4, -1,  5, -1, -1,  6, -1, -1, -1,  7, -1,  8,  9, 10,
+      11, -1, 12, 13, -1, 14, -1, 15, -1, -1, 16, -1, 17, -1,
+      -1, 18, 19, 20, -1, 21, 22, -1, 23, 24, -1, 25, -1, 26,
+      27, -1, 28, -1, -1, -1, -1, 29, 30, 31, -1, -1, 32, -1,
+      33, 34, -1, 35, -1, -1, 36, 37, 38, -1, 39, 40, -1, 41,
+      42, -1, -1, -1, 43, 44, -1, 45, -1, 46, -1, -1, -1, -1,
+      47, 48, 49, 50, -1, 51, 52, 53, -1, -1, 54, 55, -1, 56,
+      -1, 57, 58, 59, 60, -1, 61, 62, -1, -1, -1, 63, 64, -1,
+      65, -1, 66, -1, -1, -1, -1, 67, 68, -1, -1, 69, -1, -1,
+      -1, -1, -1, -1, -1, -1, -1, -1, 70, -1, 71, -1, -1, -1,
+      -1, -1, -1, -1, -1, 72, -1, -1, -1, -1, 73, -1, 74, -1,
+      75, -1, 76, -1, 77, -1, 78, 79, 80, -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1, -1, -1, 81, -1, -1, -1, -1, 82, -1,
+      -1, -1, -1, 83, 84, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+      -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 85
     };
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)

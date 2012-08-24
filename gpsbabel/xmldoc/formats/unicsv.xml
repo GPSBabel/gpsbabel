@@ -48,6 +48,7 @@
       pdop =     Position dilution of precision
       placer =   <link linkend="style_def_geoplacer">Geocache placer</link>
       placer_id =Geocache placer id
+      power =    Cycling power (in Watts)
       prox =     Proximity (in meters).  Add "ft" or "feet" for feet.
       sat =      Number of sats used for fix
       speed =    Speed

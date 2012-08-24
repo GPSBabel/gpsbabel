@@ -214,7 +214,7 @@ waypt_new(void)
 
   wpt = (waypoint *) xcalloc(sizeof(*wpt), 1);
 #ifdef DEBUG_MEM
-  wpt->altitude = unknown_alt;
+  wpt->altitude = unknown_alt; // should this be "latitude" instead of "altitude"?
   wpt->longitude = unknown_alt;
 #endif
   wpt->altitude = unknown_alt;

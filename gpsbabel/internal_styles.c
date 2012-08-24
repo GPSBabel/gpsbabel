@@ -709,12 +709,6 @@ static char ktf2[] =
 "#\n"
 "IFIELD	CONSTANT, %, \"%s\"\n"
 "IFIELD	INDEX, \"\", \"%d\"\n"
-"IFIELD	LATLON_HUMAN_READABLE, \"\", \"%c%f°\"\n"
-"IFIELD	ALT_METERS, \"\", \"%.2f\"\n"
-"IFIELD	GMT_TIME, \"\", \"%Y-%m-%d %H:%M:%S\"\n"
-"IFIELD	IGNORE, \"\", \"%s\" #Empty field\n"
-"IFIELD	IGNORE, \"\", \"%s\" #Empty field\n"
-"IFIELD	CONSTANT, \"$\", \"%s\"\n"
 ;
 static char kwf2[] = 
 "# gpsbabel XCSV style file\n"
@@ -748,13 +742,6 @@ static char kwf2[] =
 "IFIELD	CONSTANT, \\#, \"%s\"\n"
 "IFIELD	INDEX,\"\",\"%d\"\n"
 "IFIELD	SHORTNAME,\"\",\"%s\"\n"
-"IFIELD	LATLON_HUMAN_READABLE,\"\",\"%c%f°\"\n"
-"IFIELD	ALT_METERS,\"\",\"%.2f\"\n"
-"IFIELD	IGNORE, \"\",\"%s\" #Empty field\n"
-"IFIELD	IGNORE, \"\",\"%s\" #Empty field\n"
-"IFIELD	CONSTANT, \"0\",\"%s\" #Waypoint symbol code\n"
-"IFIELD	DESCRIPTION, \"\", \"%s\"\n"
-"IFIELD	CONSTANT, \"$\", \"%s\"\n"
 ;
 static char land_air_sea[] = 
 "# Format: GPS Tracking Key Pro text file\n"
@@ -818,6 +805,48 @@ static char mapconverter[] =
 "IFIELD  CONSTANT, \"1\", \"%s\"		# View at Zoom Level 1 (1-4)\n"
 "IFIELD  LON_DECIMAL, \"\", \"%08.5f\"       # Longitude\n"
 "IFIELD  LAT_DECIMAL, \"\", \"%08.5f\"       # Latitude\n"
+;
+static char motoactv[] = 
+"# gpsbabel XCSV style file\n"
+"#\n"
+"# Format: MOTOACTV CSV\n"
+"# Author: Dan Brown\n"
+"# Date: 07/21/2012\n"
+"#\n"
+"# example usage:\n"
+"# gpsbabel -i xcsv,style=motoactv.style -f infile.csv -x transform,trk=wpt -o gtrnctr,course=0 -F outfile.tcx\n"
+"# gpsbabel -i xcsv,style=motoactv.style -f infile.csv -x transform,trk=wpt -o gpx,garminextensions -F outfile.gpx\n"
+
+"DESCRIPTION Motoactiv CSV\n"
+"EXTENSION csv\n"
+
+"ENCODING US-ASCII\n"
+"FIELD_DELIMITER COMMA\n"
+"RECORD_DELIMITER NEWLINE\n"
+"FIELD_ENCLOSER DOUBLEQUOTE\n"
+
+"PROLOGUE \"DISTANCE\",\"activity_id\",\"HEARTRATE\",\"SPEED\",\"STEPS_PER_MINUTE\",\"LATITUDE\",\"repetitions\",\"temperature\",\"INSTANT_TORQUE_CRANK\",\"timestamp_epoch\",\"ELEVATION\",\"POWER\",\"STRIDES\",\"wheel_torque\",\"CALORIEBURN\",\"LONGITUDE\",\"CADENCE\",\"heading\",\"STEP_RATE\"\n"
+
+"# Data fields, in order of appearance\n"
+"IFIELD PATH_DISTANCE_METERS,\"\",\"%.1f\" # used for writing files (not for reading)\n"
+"IFIELD IGNORE,\"\",\"%s\" # activity id\n"
+"IFIELD HEART_RATE,\"\",\"%d\"\n"
+"IFIELD PATH_SPEED,\"\",\"%.1f\"\n"
+"IFIELD IGNORE,\"\",\"%s\" # steps per minute\n"
+"IFIELD LAT_DECIMAL,\"\",\"%.6f\"\n"
+"IFIELD IGNORE,\"\",\"%s\" # repetitions\n"
+"IFIELD TEMPERATURE,\"\",\"%.1f\"\n"
+"IFIELD IGNORE,\"\",\"%s\" # instant torque crank\n"
+"IFIELD TIMET_TIME_MS,\"\",\"%ld\"\n"
+"IFIELD ALT_METERS,\"\",\"%.1f\"\n"
+"IFIELD POWER,\"\",\"%.0f\"\n"
+"IFIELD IGNORE,\"\",\"%s\" # strides\n"
+"IFIELD IGNORE,\"\",\"%s\" # wheel_torque\n"
+"IFIELD IGNORE,\"\",\"%s\" # calories\n"
+"IFIELD LON_DECIMAL,\"\",\"%.6f\"\n"
+"IFIELD CADENCE,\"\",\"%d\"\n"
+"IFIELD PATH_COURSE,\"\",\"%.1f\"\n"
+"IFIELD IGNORE,\"\",\"%s\" # step rate\n"
 ;
 static char mxf[] = 
 "# gpsbabel XCSV style file\n"
@@ -969,34 +998,6 @@ static char openoffice[] =
 "#\n"
 "# HEADER STUFF:\n"
 "#\n"
-"PROLOGUE	Index	Lat			Lon			Icon	Name	Description	Notes	URL	Link Text	Altitude (m)	Distance (km)	Speed (m/s)	Course (°)	Time	HDOP	VDOP	PDOP	Satellites	Fix\n"
-
-"#\n"
-"# INDIVIDUAL DATA FIELDS:\n"
-"#\n"
-"IFIELD	INDEX, \"\", \"%d\"\n"
-"IFIELD	LAT_DECIMAL, \"\", \"%f\"\n"
-"IFIELD	LAT_DIR, \"\", \"%c\"\n"
-"IFIELD	LAT_HUMAN_READABLE, \"\", \"%d° %f' %c\"\n"
-"IFIELD	LON_DECIMAL, \"\", \"%f\"\n"
-"IFIELD	LON_DIR, \"\", \"%c\"\n"
-"IFIELD	LON_HUMAN_READABLE, \"\", \"%d° %f' %c\"\n"
-"IFIELD	ICON_DESCR, \"\", \"%s\"\n"
-"IFIELD	SHORTNAME, \"\", \"%s\"\n"
-"IFIELD	DESCRIPTION, \"\", \"%s\"\n"
-"IFIELD	NOTES, \"\", \"%s\"\n"
-"IFIELD	URL, \"\", \"%s\" 		\n"
-"IFIELD	URL_LINK_TEXT, \"\", \"%s\"\n"
-"IFIELD	ALT_METERS, \"\", \"%f\"\n"
-"IFIELD	PATH_DISTANCE_KM, \"\", \"%f\"\n"
-"IFIELD	PATH_SPEED, \"\", \"%f\"\n"
-"IFIELD	PATH_COURSE, \"\", \"%f\"\n"
-"IFIELD	EXCEL_TIME, \"\", \"%f\"\n"
-"IFIELD	GPS_HDOP, \"\", \"%f\"\n"
-"IFIELD	GPS_VDOP, \"\", \"%f\"\n"
-"IFIELD	GPS_PDOP, \"\", \"%f\"\n"
-"IFIELD	GPS_SAT, \"\", \"%d\"\n"
-"IFIELD	GPS_FIX, \"\", \"%s\"\n"
 ;
 static char ricoh[] = 
 "DESCRIPTION Ricoh GPS Log File\n"
@@ -1364,8 +1365,8 @@ static char xmapwpt[] =
 "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn_places", tomtom_itn_places } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "ricoh", ricoh } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "mapconverter", mapconverter } , { "land_air_sea", land_air_sea } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "igo2008_poi", igo2008_poi } , { "iblue757", iblue757 } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "flysight", flysight } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 38;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn_places", tomtom_itn_places } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "ricoh", ricoh } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "motoactv", motoactv } , { "mapconverter", mapconverter } , { "land_air_sea", land_air_sea } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "igo2008_poi", igo2008_poi } , { "iblue757", iblue757 } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "flysight", flysight } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 39;
 #else /* CSVFMTS_ENABLED */
 style_vecs_t style_list[] = {{0,0}};
 size_t nstyles = 0;

@@ -181,6 +181,10 @@ xcsv_destroy_style(void)
     xfree(xcsv_file.field_delimiter);
   }
 
+  if (xcsv_file.field_encloser) {
+    xfree(xcsv_file.field_encloser);
+  }
+
   if (xcsv_file.record_delimiter) {
     xfree(xcsv_file.record_delimiter);
   }
@@ -268,6 +272,33 @@ xcsv_parse_style_line(const char *sbuff)
       }
 
       xfree(p);
+
+    } else
+
+      if (ISSTOKEN(sbuff, "FIELD_ENCLOSER")) {
+        sp = csv_stringtrim(&sbuff[15], "\"", 1);
+        cp = xcsv_get_char_from_constant_table(sp);
+        if (cp) {
+          xcsv_file.field_encloser = xstrdup(cp);
+          xfree(sp);
+        } else {
+          xcsv_file.field_encloser = sp;
+        }
+
+        p = csv_stringtrim(xcsv_file.field_encloser, " ", 0);
+
+        /* field_enclosers are always bad characters */
+        if (xcsv_file.badchars) {
+          xcsv_file.badchars = (char *) xrealloc(xcsv_file.badchars,
+                                                 strlen(xcsv_file.badchars) +
+                                                 strlen(p) + 1);
+        } else {
+          xcsv_file.badchars = (char *) xcalloc(strlen(p) + 1, 1);
+        }
+
+        strcat(xcsv_file.badchars, p);
+
+        xfree(p);
 
     } else
 
