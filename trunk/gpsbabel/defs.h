@@ -478,6 +478,7 @@ typedef struct {
   unsigned char cadence;	 /* revolutions per minute */
   float power; /* watts, as measured by cyclists */
   float temperature; /* Degrees celsius */
+  float odometer_distance; /* Meters? */
   const geocache_data* gc_data;
   format_specific_data* fs;
   session_t* session;	/* pointer to a session struct */
@@ -654,7 +655,7 @@ char* mkshort(short_handle,  const char*);
 short_handle mkshort_new_handle(void);
 #else
 char* MKSHORT(short_handle,  const char*, DEBUG_PARAMS);
-void* MKSHORT_NEW_HANDLE(DEBUG_PARAMS);
+short_handle MKSHORT_NEW_HANDLE(DEBUG_PARAMS);
 #define mkshort( a, b) MKSHORT(a,b,__FILE__, __LINE__)
 #define mkshort_new_handle() MKSHORT_NEW_HANDLE(__FILE__,__LINE__)
 #endif

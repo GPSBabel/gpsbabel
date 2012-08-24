@@ -114,6 +114,7 @@ typedef struct {
   queue epilogue;
 
   char* field_delimiter; 	/* comma, quote, etc... */
+  char* field_encloser; 	/* doublequote, etc... */
   char* record_delimiter;	/* newline, c/r, etc... */
 
   char* badchars;		/* characters we never write to output */

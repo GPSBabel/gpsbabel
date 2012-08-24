@@ -74,6 +74,7 @@ typedef enum {
   fld_temperature_f,
   fld_heartrate,
   fld_cadence,
+  fld_power,
   fld_proximity,
   fld_depth,
   fld_symbol,
@@ -197,6 +198,7 @@ static field_t fields_def[] = {
   { "temp",	fld_temperature, STR_ANY },	/* degrees celsius by default */
   { "heart",	fld_heartrate, STR_ANY },
   { "caden",	fld_cadence, STR_ANY },
+  { "power",	fld_power, STR_ANY },
   { "prox",	fld_proximity, STR_ANY },
   { "depth",	fld_depth, STR_ANY },
   { "date",	fld_date, STR_ANY },
@@ -918,6 +920,13 @@ unicsv_parse_one_line(char *ibuf)
       }
       break;
 
+    case fld_power:
+      wpt->power = atof(s);
+      if (unicsv_detect) {
+        unicsv_data_type = trkdata;
+      }
+      break;
+
     case fld_proximity:
       if (parse_distance(s, &d, unicsv_proximityscale, MYNAME)) {
         WAYPT_SET(wpt, proximity, d);
@@ -1378,6 +1387,9 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
   if (wpt->cadence != 0) {
     gb_setbit(&unicsv_outp_flags, fld_cadence);
   }
+  if (wpt->power > 0) {
+    gb_setbit(&unicsv_outp_flags, fld_power);
+  }
 
   /* "flagged" waypoint members */
   if WAYPT_HAS(wpt, course) {
@@ -1693,6 +1705,13 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
   if FIELD_USED(fld_cadence) {
     if (wpt->cadence != 0) {
       gbfprintf(fout, "%s%u", unicsv_fieldsep, wpt->cadence);
+    } else {
+      gbfputs(unicsv_fieldsep, fout);
+    }
+  }
+  if FIELD_USED(fld_power) {
+    if (wpt->power > 0) {
+      gbfprintf(fout, "%s%.1f", unicsv_fieldsep, wpt->power);
     } else {
       gbfputs(unicsv_fieldsep, fout);
     }
@@ -2022,6 +2041,9 @@ unicsv_wr(void)
   }
   if FIELD_USED(fld_cadence) {
     gbfprintf(fout, "%sCadence", unicsv_fieldsep);
+  }
+  if FIELD_USED(fld_power) {
+    gbfprintf(fout, "%sPower", unicsv_fieldsep);
   }
   if FIELD_USED(fld_date) {
     gbfprintf(fout, "%sDate", unicsv_fieldsep);

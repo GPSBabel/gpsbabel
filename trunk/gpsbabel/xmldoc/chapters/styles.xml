@@ -18,7 +18,7 @@ are not good fits for this scheme.  It should have:
 <member>A fixed header at the beginning, if it has any at all. This is called a 'prologue'.</member>
 <member>Waypoints that are grouped by fixed separators, often a newline.  In style file parlance, this is called a 'record'.</member>
 <member>Traits of that waypoint described in that record.  In the style files, these are called 'fields' and examples may include longitude or a name.</member>
-<member>Fields that are grouped by fixed separators, often a comma or a tab.  In the style files, this is called the field separator.</member>
+<member>Fields that are grouped by fixed separators, often a comma or a tab.  In the style files, this is called the field separator. Fields may be enclosed by characters, such as a double quote.</member>
 <member>A fixed footer at the end, if it has any at all.  This is called the 'epilogue'.</member>
 </simplelist>
 </para>
@@ -293,6 +293,25 @@ The first few directives define the layout the physical file itself:
 </para>
 </section>
 
+<section id="style_layout_field_enclose">
+<title>FIELD_ENCLOSER</title>
+<para>
+   The field encloser defines the character(s) that surround the field values.
+   Common field enclosers are single and double quote marks. Many styles will
+   leave this directive unset. If set, it will be applied to all fields.
+</para>
+<para>
+   examples: 
+</para>
+<screen format="linespecific">   FIELD_ENCLOSER    DOUBLEQUOTE
+   FIELD_ENCLOSER    SINGLEQUOTE
+</screen>
+<para>
+   The directive FIELD_ENCLOSER is parsed for STYLE CONSTANTS as defined in 
+   the table above.
+</para>
+</section>
+
 <section id="style_layout_rec">
 <title>RECORD_DELIMITER</title>
 <para>
@@ -317,7 +336,8 @@ The first few directives define the layout the physical file itself:
 <para>   
    Bad characters are things that should *never* be written into the XCSV
    file as data on output.  GPSBabel automatically includes any non-blank
-   FIELD_DELIMITER and RECORD_DELIMITER characters as BADCHARS by default.
+   FIELD_DELIMITER and FIELD_ENCLOSER and RECORD_DELIMITER characters as
+   BADCHARS by default.
 </para>
 <para>
    examples: 
@@ -873,6 +893,43 @@ example:
 </screen>
 </section>
 
+<section id="style_def_power">
+<title>POWER</title>
+<para>
+   Cycling power in Watts.  Only valid for units with power meter
+   features (i.e. Garmin Edge 305).
+</para>
+<para>
+example:
+</para>
+<screen format="linespecific">   IFIELD POWER,"","%.1f"
+</screen>
+</section>
+
+<section id="style_def_temperature">
+<title>TEMPERATURE</title>
+<para>
+   Temperature in degrees Celsius.
+</para>
+<para>
+example:
+</para>
+<screen format="linespecific">   IFIELD TEMPERATURE,"","%.1f"
+</screen>
+</section>
+
+<section id="style_def_temperaturef">
+<title>TEMPERATURE_F</title>
+<para>
+   Temperature in degrees Fahrenheit.
+</para>
+<para>
+example:
+</para>
+<screen format="linespecific">   IFIELD TEMPERATURE_F,"","%.1f"
+</screen>
+</section>
+
 <section id="style_def_exceltime">
 <title>EXCEL_TIME</title>
 <para>
@@ -899,6 +956,20 @@ example:
 example:
 </para>
 <screen format="linespecific">   IFIELD TIMET_TIME,"","%ld"
+</screen>
+</section>
+
+<section id="style_def_timettimems">
+<title>TIMET_TIME_MS</title>
+<para>
+   TIMET_TIME_MS is the same as TIMET_TIME, but expressed in milliseconds.
+   It too is handled internally as a LONG INTEGER and requires a LONG INTEGER
+   printf conversion.
+</para>
+<para>
+example:
+</para>
+<screen format="linespecific">   IFIELD TIMET_TIME_MS,"","%ld"
 </screen>
 </section>
 
@@ -1173,6 +1244,14 @@ example:
 <para>
    PATH_DISTANCE_KM is like PATH_DISTANCE_MILES except it outputs the 
    length in kilometers. 
+</para>
+</section> 
+
+<section id="style_def_pathdistm">
+<title>PATH_DISTANCE_METERS</title>
+<para>
+   PATH_DISTANCE_METERS is like PATH_DISTANCE_MILES except it outputs the 
+   length in meters. 
 </para>
 </section> 
 
