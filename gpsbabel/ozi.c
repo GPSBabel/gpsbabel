@@ -231,7 +231,7 @@ ozi_openfile(char *fname)
   if (c == NULL) {
     c = fname + strlen(fname);
   }
-  xasprintf(&tmpname, "%*.*s%s.%s", c - fname, c - fname, fname, buff, ozi_extensions[ozi_objective]);
+  xasprintf(&tmpname, "%*.*s%s.%s", (int)(c - fname),(int)(c - fname), fname, buff, ozi_extensions[ozi_objective]);
 
   /* re-open file_out with the new filename */
   if (file_out) {

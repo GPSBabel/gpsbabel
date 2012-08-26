@@ -2,11 +2,14 @@
 case `uname -r` in
   9.0) ;; # 10.3/
   9.1) ;; # 10.4/Tiger
-  *)   XFLAGS="-mmacosx-version-min=10.4" ;; # 10.5/Leopard
+  *)   XFLAGS="-mmacosx-version-min=10.6" ;; # 10.5/Leopard
 esac 
 SRC=.
-CFLAGS="$XFLAGS  -O  -arch i386 " \
-  LDFLAGS="$XFLAGS -arch i386 "   ${SRC}/configure \
- --with-libexpat=${SRC}/mac/lib/libexpat.a \
- --with-expathdr=${SRC}/mac/include
+CFLAGS="$XFLAGS  -O " \
+  LDFLAGS="$XFLAGS "   ${SRC}/configure 
+
+# CFLAGS="$XFLAGS  -O  -arch i386 " \
+#   LDFLAGS="$XFLAGS -arch i386 "   ${SRC}/configure \
+#  --with-libexpat=${SRC}/mac/lib/libexpat.a \
+#  --with-expathdr=${SRC}/mac/include
 

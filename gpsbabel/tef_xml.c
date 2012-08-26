@@ -185,7 +185,7 @@ fix_notes(const char *name, char *notes)
   /* now contruct the new name */
   ctmp = lrtrim(xstrndup(notes, cleft - notes));
   xfree(notes);
-  xasprintf(&notes, "%s (%*.*s)", ctmp, cback - name, cback - name, name);
+  xasprintf(&notes, "%s (%*.*s)", ctmp, (int)(cback - name), (int)(cback - name), name);
   xfree(ctmp);
 
   return notes;
