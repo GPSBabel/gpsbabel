@@ -95,9 +95,14 @@ QString UpgradeCheck::getOsVersion()
   case QSysInfo::MV_10_4: return "10.4"; break;
   case QSysInfo::MV_10_5: return "10.5"; break;
   case QSysInfo::MV_10_6: return "10.6"; break;
-  // Disabled while we roll back to 4.7.4 :-(
-  // case QSysInfo::MV_10_7: return "10.7"; break;
-  default: return QString("Unknown Mac %1").arg(QSysInfo::MacintoshVersion);
+  case QSysInfo::MV_10_7: return "10.7"; break;
+  //case QSysInfo::MV_10_8: return "10.8"; break;
+  default: 
+    if (QSysInfo::MacintoshVersion == 10) {
+      return "10.8";
+      break;
+    }
+    return QString("Unknown Mac %1").arg(QSysInfo::MacintoshVersion);
   };
 #elif defined (Q_OS_WIN)
 
