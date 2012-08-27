@@ -236,8 +236,7 @@ static char flysight[] =
 "IFIELD IGNORE,		\"\",	\"%s\"	# Vertical accuracy (m)\n"
 "IFIELD IGNORE,		\"\",	\"%s\"	# Speed accuracy (m/s)\n"
 "IFIELD GPS_FIX,		\"\",	\"%s\"	# GPS fix type\n"
-"IFIELD GPS_SAT,		\"\",	\"%d\"	# Number of satellites used in fix\n"
-;
+"IFIELD GPS_SAT,		\"\",	\"%d\"	# Number of satellites used in fix\n";
 static char fugawi[] = 
 "# fugawi XCSV style file\n"
 "#\n"
@@ -709,6 +708,12 @@ static char ktf2[] =
 "#\n"
 "IFIELD	CONSTANT, %, \"%s\"\n"
 "IFIELD	INDEX, \"\", \"%d\"\n"
+"IFIELD	LATLON_HUMAN_READABLE, \"\", \"%c%f°\"\n"
+"IFIELD	ALT_METERS, \"\", \"%.2f\"\n"
+"IFIELD	GMT_TIME, \"\", \"%Y-%m-%d %H:%M:%S\"\n"
+"IFIELD	IGNORE, \"\", \"%s\" #Empty field\n"
+"IFIELD	IGNORE, \"\", \"%s\" #Empty field\n"
+"IFIELD	CONSTANT, \"$\", \"%s\"\n"
 ;
 static char kwf2[] = 
 "# gpsbabel XCSV style file\n"
@@ -742,6 +747,13 @@ static char kwf2[] =
 "IFIELD	CONSTANT, \\#, \"%s\"\n"
 "IFIELD	INDEX,\"\",\"%d\"\n"
 "IFIELD	SHORTNAME,\"\",\"%s\"\n"
+"IFIELD	LATLON_HUMAN_READABLE,\"\",\"%c%f°\"\n"
+"IFIELD	ALT_METERS,\"\",\"%.2f\"\n"
+"IFIELD	IGNORE, \"\",\"%s\" #Empty field\n"
+"IFIELD	IGNORE, \"\",\"%s\" #Empty field\n"
+"IFIELD	CONSTANT, \"0\",\"%s\" #Waypoint symbol code\n"
+"IFIELD	DESCRIPTION, \"\", \"%s\"\n"
+"IFIELD	CONSTANT, \"$\", \"%s\"\n"
 ;
 static char land_air_sea[] = 
 "# Format: GPS Tracking Key Pro text file\n"
@@ -998,6 +1010,34 @@ static char openoffice[] =
 "#\n"
 "# HEADER STUFF:\n"
 "#\n"
+"PROLOGUE	Index	Lat			Lon			Icon	Name	Description	Notes	URL	Link Text	Altitude (m)	Distance (km)	Speed (m/s)	Course (°)	Time	HDOP	VDOP	PDOP	Satellites	Fix\n"
+
+"#\n"
+"# INDIVIDUAL DATA FIELDS:\n"
+"#\n"
+"IFIELD	INDEX, \"\", \"%d\"\n"
+"IFIELD	LAT_DECIMAL, \"\", \"%f\"\n"
+"IFIELD	LAT_DIR, \"\", \"%c\"\n"
+"IFIELD	LAT_HUMAN_READABLE, \"\", \"%d° %f' %c\"\n"
+"IFIELD	LON_DECIMAL, \"\", \"%f\"\n"
+"IFIELD	LON_DIR, \"\", \"%c\"\n"
+"IFIELD	LON_HUMAN_READABLE, \"\", \"%d° %f' %c\"\n"
+"IFIELD	ICON_DESCR, \"\", \"%s\"\n"
+"IFIELD	SHORTNAME, \"\", \"%s\"\n"
+"IFIELD	DESCRIPTION, \"\", \"%s\"\n"
+"IFIELD	NOTES, \"\", \"%s\"\n"
+"IFIELD	URL, \"\", \"%s\" 		\n"
+"IFIELD	URL_LINK_TEXT, \"\", \"%s\"\n"
+"IFIELD	ALT_METERS, \"\", \"%f\"\n"
+"IFIELD	PATH_DISTANCE_KM, \"\", \"%f\"\n"
+"IFIELD	PATH_SPEED, \"\", \"%f\"\n"
+"IFIELD	PATH_COURSE, \"\", \"%f\"\n"
+"IFIELD	EXCEL_TIME, \"\", \"%f\"\n"
+"IFIELD	GPS_HDOP, \"\", \"%f\"\n"
+"IFIELD	GPS_VDOP, \"\", \"%f\"\n"
+"IFIELD	GPS_PDOP, \"\", \"%f\"\n"
+"IFIELD	GPS_SAT, \"\", \"%d\"\n"
+"IFIELD	GPS_FIX, \"\", \"%s\"\n"
 ;
 static char ricoh[] = 
 "DESCRIPTION Ricoh GPS Log File\n"
