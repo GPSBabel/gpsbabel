@@ -23,11 +23,11 @@
   xmlns:xal="urn:oasis:names:tc:ciq:xsdschema:xAL:2.0"
   targetNamespace="http://www.google.com/kml/ext/2.2"
   elementFormDefault="qualified"
-  version="112910BETA">
+  version="21092011BETA">
 
   <!-- Import the language we are extending: OGC KML 2.2 -->
   <import namespace="http://www.opengis.net/kml/2.2"
-    schemaLocation="http://schemas.opengis.net/kml/2.2.0/ogckml22.xsd"/>
+    schemaLocation="ogckml22.xsd"/>
 
    <!-- Simple types -->
   <simpleType name="altitudeModeEnumType">
@@ -81,7 +81,15 @@
     substitutionGroup="kml:AbstractGeometrySimpleExtensionGroup"/>
   <element name="duration" type="double" default="0.0"/>
   <element name="flyToMode" type="gx:flyToModeEnumType" default="bounce"/>
+  <!--horizFov in Google Earth only works in a range of 10-170 degress
+    in Google Earth 6.1-->
+  <element name="horizFov" type="kml:anglepos180Type"
+    substitutionGroup="kml:AbstractViewSimpleExtensionGroup" />
   <element name="interpolate" type="boolean" default="false"/>
+  <!--Currently only works on LineStyle as applied to a LineString.
+    Does not work on LineStyle as applied to Polygons or extruded Points.-->
+  <element name="labelVisibility" type="boolean" default="0"
+    substitutionGroup="kml:AbstractColorStyleSimpleExtensionGroup" />
   <element name="outerColor" type="kml:colorType" default="ffffffff"
     substitutionGroup="kml:LineStyleSimpleExtensionGroup"/>
   <element name="outerWidth" type="gx:outerWidthType" default="0.0"
