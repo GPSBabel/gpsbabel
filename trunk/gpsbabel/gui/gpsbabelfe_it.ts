@@ -1430,37 +1430,37 @@ Questa opzione calcola (o ricalcola) un valore per la direzione del GPS in ogni 
 <context>
     <name>UpgradeCheck</name>
     <message>
-        <location filename="upgrade.cpp" line="211"/>
+        <location filename="upgrade.cpp" line="216"/>
         <source>HTTP</source>
         <translation>HTTP</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="212"/>
+        <location filename="upgrade.cpp" line="217"/>
         <source>Download failed: %1.</source>
         <translation>Scaricamento non riuscito: %1.</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="241"/>
+        <location filename="upgrade.cpp" line="246"/>
         <source>Error</source>
         <translation>Errore</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="242"/>
+        <location filename="upgrade.cpp" line="247"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation>Dati ricevuti non validi alla linea %1: %2.</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="281"/>
+        <location filename="upgrade.cpp" line="286"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation>È disponibile una nuova versione di GPSBabel.&lt;br /&gt;Versione corrente: %1 &lt;br /&gt;Nuova versione: %2</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="292"/>
+        <location filename="upgrade.cpp" line="297"/>
         <source>Upgrade</source>
         <translation>Aggiorna</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="298"/>
+        <location filename="upgrade.cpp" line="303"/>
         <source>Do you wish to download an upgrade?</source>
         <translation>Si desidera scaricare un aggiornamento?</translation>
     </message>
