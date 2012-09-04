@@ -1,0 +1,17 @@
+
+      
+      
+      <para> This format is for Delorme Street Atlas USA 2004 Plus and later.
+</para>
+      <para> For geocachers importing data from a tool like GSAK or
+Spinner, import the file twice in XData.  One will create a file with
+the Cache description as a hyperlink on the flag. This can clutter up
+the screen and when you try to zoom in, it causes problems.  So the
+second one will only have a flag. Thus you can turn off and on which
+one you want to view.  The first time you import the file, in the
+assign field types, check the circle above Full Name and then next.
+The second time you import the file do not check any circle and in the
+second to last column, change URL to none and then click next. Use the
+same name you used the first time but add -Flag to it.
+</para>
+    

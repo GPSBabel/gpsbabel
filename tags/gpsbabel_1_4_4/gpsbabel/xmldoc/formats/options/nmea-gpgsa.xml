@@ -1,0 +1,12 @@
+<para>
+This option tells GPSBabel whether to read (on input) or write (on output) 
+GPGSA sentences.  The default is to read or write GPGSA sentences.  To 
+disable GPGSA sentences, specify <option>gpgsa=0</option>.
+</para>
+<para>
+GPGSA sentences contain information on the quality of the positional fix
+and the individual satellites from which it was derived.  However, GPSBabel
+neither reads nor writes the individual satellite data.  On input, the 
+satellite fields are ignored and on output they are left blank.
+</para>
+

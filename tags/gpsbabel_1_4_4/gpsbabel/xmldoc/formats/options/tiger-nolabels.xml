@@ -1,0 +1,3 @@
+<para>This option tells GPSBabel to not generate labels on the pins.   If
+this is true, the description of the incoming waypoints are ignored and not
+placed on the pins.</para>

@@ -1,0 +1,14 @@
+<para>
+	This is the SD card format used by the <ulink url="http://www.magellangps.com">Magellan</ulink> Explorist 400,
+	Explorist 500, Explorist 600, and Explorist XL and internally on those devices plus the 
+	Explorist 210.  Stored waypoints are identical to the <link linkend="fmt_magellan">Magellan SD format</link>
+	used by Meridian, but the newer models allow longer waypoint names.  Routes are 
+	subtly different.
+</para>
+<para> 	
+	You should name any file containing waypoints created with 
+	this format with a ".upt" extension so the firmware can read it.
+	Similarly, routes should be named ".rte" and tracks should be
+	named ".log".
+</para>
+    

@@ -1,0 +1,6 @@
+<para>
+  Subtracts the WGS84 geoid height from every altitude.
+</para>
+<para>
+  For GPS receivers like the iBlue747, this corrects the logged altitudes to height above mean sea level.
+</para>

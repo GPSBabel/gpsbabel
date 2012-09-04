@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="50.492619000" minlon="12.105449000" maxlat="51.314521000" maxlon="12.435919000"/>
+<wpt lat="50.877341000" lon="12.433889000">
+  <name>3</name>
+  <cmt>! constructed waypoint !</cmt>
+  <desc>! constructed waypoint !</desc>
+</wpt>
+<wpt lat="50.964955000" lon="12.435919000">
+  <name>Altenburg-Umgehung</name>
+  <cmt>! constructed waypoint !</cmt>
+  <desc>! constructed waypoint !</desc>
+</wpt>
+<wpt lat="50.610795000" lon="12.173802000">
+  <name>Elsterberg</name>
+  <cmt>! constructed waypoint !</cmt>
+  <desc>! constructed waypoint !</desc>
+</wpt>
+<wpt lat="50.844126000" lon="12.408757000">
+  <name>Gosel</name>
+  <cmt>! constructed waypoint !</cmt>
+  <desc>! constructed waypoint !</desc>
+</wpt>
+<wpt lat="50.654763000" lon="12.204957000">
+  <name>Greiz</name>
+  <cmt>! constructed waypoint !</cmt>
+  <desc>! constructed waypoint !</desc>
+</wpt>
+<wpt lat="51.314521000" lon="12.409143000">
+  <name>HMMMM</name>
+  <cmt>No comment</cmt>
+  <desc>No comment</desc>
+</wpt>
+<wpt lat="50.493663000" lon="12.107153000">
+  <name>Jahnstrasse</name>
+  <cmt>! constructed waypoint !</cmt>
+  <desc>! constructed waypoint !</desc>
+</wpt>
+<wpt lat="50.493837000" lon="12.106101000">
+  <name>Liebknechtstrasse</name>
+  <cmt>! constructed waypoint !</cmt>
+  <desc>! constructed waypoint !</desc>
+</wpt>
+<wpt lat="50.492619000" lon="12.105449000">
+  <name>NARVA</name>
+  <cmt>Start</cmt>
+  <desc>Start</desc>
+</wpt>
+</gpx>

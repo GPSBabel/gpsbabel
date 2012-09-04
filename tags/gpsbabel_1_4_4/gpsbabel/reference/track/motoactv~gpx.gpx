@@ -1,0 +1,1942 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="37.781487000" minlon="-122.406334000" maxlat="37.787605000" maxlon="-122.400700000"/>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:08.091Z</time>
+  <name>WPT001</name>
+  <cmt>WPT001</cmt>
+  <desc>WPT001</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:09.076Z</time>
+  <name>WPT002</name>
+  <cmt>WPT002</cmt>
+  <desc>WPT002</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:10.060Z</time>
+  <name>WPT003</name>
+  <cmt>WPT003</cmt>
+  <desc>WPT003</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:11.046Z</time>
+  <name>WPT004</name>
+  <cmt>WPT004</cmt>
+  <desc>WPT004</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:12.032Z</time>
+  <name>WPT005</name>
+  <cmt>WPT005</cmt>
+  <desc>WPT005</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:13.016Z</time>
+  <name>WPT006</name>
+  <cmt>WPT006</cmt>
+  <desc>WPT006</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:14.003Z</time>
+  <name>WPT007</name>
+  <cmt>WPT007</cmt>
+  <desc>WPT007</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:14.982Z</time>
+  <name>WPT008</name>
+  <cmt>WPT008</cmt>
+  <desc>WPT008</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:15.972Z</time>
+  <name>WPT009</name>
+  <cmt>WPT009</cmt>
+  <desc>WPT009</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:16.953Z</time>
+  <name>WPT010</name>
+  <cmt>WPT010</cmt>
+  <desc>WPT010</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:17.942Z</time>
+  <name>WPT011</name>
+  <cmt>WPT011</cmt>
+  <desc>WPT011</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:18.927Z</time>
+  <name>WPT012</name>
+  <cmt>WPT012</cmt>
+  <desc>WPT012</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:19.912Z</time>
+  <name>WPT013</name>
+  <cmt>WPT013</cmt>
+  <desc>WPT013</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:20.897Z</time>
+  <name>WPT014</name>
+  <cmt>WPT014</cmt>
+  <desc>WPT014</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:21.882Z</time>
+  <name>WPT015</name>
+  <cmt>WPT015</cmt>
+  <desc>WPT015</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:22.867Z</time>
+  <name>WPT016</name>
+  <cmt>WPT016</cmt>
+  <desc>WPT016</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:23.852Z</time>
+  <name>WPT017</name>
+  <cmt>WPT017</cmt>
+  <desc>WPT017</desc>
+</wpt>
+<wpt lat="37.781487000" lon="-122.405230000">
+  <ele>151.000000</ele>
+  <time>2012-06-29T01:03:24.838Z</time>
+  <name>WPT018</name>
+  <cmt>WPT018</cmt>
+  <desc>WPT018</desc>
+</wpt>
+<wpt lat="37.781693000" lon="-122.405860000">
+  <ele>4.000000</ele>
+  <time>2012-06-29T01:03:25.822Z</time>
+  <name>WPT019</name>
+  <cmt>WPT019</cmt>
+  <desc>WPT019</desc>
+</wpt>
+<wpt lat="37.781710000" lon="-122.405840000">
+  <ele>4.000000</ele>
+  <time>2012-06-29T01:03:26.807Z</time>
+  <name>WPT020</name>
+  <cmt>WPT020</cmt>
+  <desc>WPT020</desc>
+</wpt>
+<wpt lat="37.781742000" lon="-122.405820000">
+  <ele>4.000000</ele>
+  <time>2012-06-29T01:03:27.816Z</time>
+  <name>WPT021</name>
+  <cmt>WPT021</cmt>
+  <desc>WPT021</desc>
+</wpt>
+<wpt lat="37.781765000" lon="-122.405810000">
+  <ele>4.000000</ele>
+  <time>2012-06-29T01:03:28.766Z</time>
+  <name>WPT022</name>
+  <cmt>WPT022</cmt>
+  <desc>WPT022</desc>
+</wpt>
+<wpt lat="37.781788000" lon="-122.405785000">
+  <ele>4.000000</ele>
+  <time>2012-06-29T01:03:29.752Z</time>
+  <name>WPT023</name>
+  <cmt>WPT023</cmt>
+  <desc>WPT023</desc>
+</wpt>
+<wpt lat="37.781815000" lon="-122.405770000">
+  <ele>4.000000</ele>
+  <time>2012-06-29T01:03:30.739Z</time>
+  <name>WPT024</name>
+  <cmt>WPT024</cmt>
+  <desc>WPT024</desc>
+</wpt>
+<wpt lat="37.781837000" lon="-122.405754000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:31.727Z</time>
+  <name>WPT025</name>
+  <cmt>WPT025</cmt>
+  <desc>WPT025</desc>
+</wpt>
+<wpt lat="37.781864000" lon="-122.405730000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:32.713Z</time>
+  <name>WPT026</name>
+  <cmt>WPT026</cmt>
+  <desc>WPT026</desc>
+</wpt>
+<wpt lat="37.781887000" lon="-122.405710000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:33.700Z</time>
+  <name>WPT027</name>
+  <cmt>WPT027</cmt>
+  <desc>WPT027</desc>
+</wpt>
+<wpt lat="37.781910000" lon="-122.405700000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:34.691Z</time>
+  <name>WPT028</name>
+  <cmt>WPT028</cmt>
+  <desc>WPT028</desc>
+</wpt>
+<wpt lat="37.781937000" lon="-122.405690000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:35.672Z</time>
+  <name>WPT029</name>
+  <cmt>WPT029</cmt>
+  <desc>WPT029</desc>
+</wpt>
+<wpt lat="37.781963000" lon="-122.405690000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:36.657Z</time>
+  <name>WPT030</name>
+  <cmt>WPT030</cmt>
+  <desc>WPT030</desc>
+</wpt>
+<wpt lat="37.781982000" lon="-122.405685000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:37.644Z</time>
+  <name>WPT031</name>
+  <cmt>WPT031</cmt>
+  <desc>WPT031</desc>
+</wpt>
+<wpt lat="37.781998000" lon="-122.405690000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:38.629Z</time>
+  <name>WPT032</name>
+  <cmt>WPT032</cmt>
+  <desc>WPT032</desc>
+</wpt>
+<wpt lat="37.782010000" lon="-122.405690000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:39.614Z</time>
+  <name>WPT033</name>
+  <cmt>WPT033</cmt>
+  <desc>WPT033</desc>
+</wpt>
+<wpt lat="37.782020000" lon="-122.405690000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:40.599Z</time>
+  <name>WPT034</name>
+  <cmt>WPT034</cmt>
+  <desc>WPT034</desc>
+</wpt>
+<wpt lat="37.782036000" lon="-122.405690000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:41.585Z</time>
+  <name>WPT035</name>
+  <cmt>WPT035</cmt>
+  <desc>WPT035</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405700000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:42.564Z</time>
+  <name>WPT036</name>
+  <cmt>WPT036</cmt>
+  <desc>WPT036</desc>
+</wpt>
+<wpt lat="37.782050000" lon="-122.405700000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:43.554Z</time>
+  <name>WPT037</name>
+  <cmt>WPT037</cmt>
+  <desc>WPT037</desc>
+</wpt>
+<wpt lat="37.782066000" lon="-122.405700000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:44.534Z</time>
+  <name>WPT038</name>
+  <cmt>WPT038</cmt>
+  <desc>WPT038</desc>
+</wpt>
+<wpt lat="37.782066000" lon="-122.405685000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:45.519Z</time>
+  <name>WPT039</name>
+  <cmt>WPT039</cmt>
+  <desc>WPT039</desc>
+</wpt>
+<wpt lat="37.782060000" lon="-122.405670000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:03:46.509Z</time>
+  <name>WPT040</name>
+  <cmt>WPT040</cmt>
+  <desc>WPT040</desc>
+</wpt>
+<wpt lat="37.782050000" lon="-122.405660000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:03:47.495Z</time>
+  <name>WPT041</name>
+  <cmt>WPT041</cmt>
+  <desc>WPT041</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:03:48.480Z</time>
+  <name>WPT042</name>
+  <cmt>WPT042</cmt>
+  <desc>WPT042</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:03:49.464Z</time>
+  <name>WPT043</name>
+  <cmt>WPT043</cmt>
+  <desc>WPT043</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:03:50.449Z</time>
+  <name>WPT044</name>
+  <cmt>WPT044</cmt>
+  <desc>WPT044</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:03:51.435Z</time>
+  <name>WPT045</name>
+  <cmt>WPT045</cmt>
+  <desc>WPT045</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:03:52.419Z</time>
+  <name>WPT046</name>
+  <cmt>WPT046</cmt>
+  <desc>WPT046</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:03:53.403Z</time>
+  <name>WPT047</name>
+  <cmt>WPT047</cmt>
+  <desc>WPT047</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:03:54.388Z</time>
+  <name>WPT048</name>
+  <cmt>WPT048</cmt>
+  <desc>WPT048</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:03:55.373Z</time>
+  <name>WPT049</name>
+  <cmt>WPT049</cmt>
+  <desc>WPT049</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:03:56.359Z</time>
+  <name>WPT050</name>
+  <cmt>WPT050</cmt>
+  <desc>WPT050</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:03:57.343Z</time>
+  <name>WPT051</name>
+  <cmt>WPT051</cmt>
+  <desc>WPT051</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:03:58.328Z</time>
+  <name>WPT052</name>
+  <cmt>WPT052</cmt>
+  <desc>WPT052</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:03:59.312Z</time>
+  <name>WPT053</name>
+  <cmt>WPT053</cmt>
+  <desc>WPT053</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:04:00.294Z</time>
+  <name>WPT054</name>
+  <cmt>WPT054</cmt>
+  <desc>WPT054</desc>
+</wpt>
+<wpt lat="37.782043000" lon="-122.405660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:04:01.211Z</time>
+  <name>WPT055</name>
+  <cmt>WPT055</cmt>
+  <desc>WPT055</desc>
+</wpt>
+<wpt lat="37.782032000" lon="-122.405630000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:02.212Z</time>
+  <name>WPT056</name>
+  <cmt>WPT056</cmt>
+  <desc>WPT056</desc>
+</wpt>
+<wpt lat="37.782036000" lon="-122.405630000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:03.208Z</time>
+  <name>WPT057</name>
+  <cmt>WPT057</cmt>
+  <desc>WPT057</desc>
+</wpt>
+<wpt lat="37.782040000" lon="-122.405630000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:04:04.210Z</time>
+  <name>WPT058</name>
+  <cmt>WPT058</cmt>
+  <desc>WPT058</desc>
+</wpt>
+<wpt lat="37.782040000" lon="-122.405630000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:04:05.212Z</time>
+  <name>WPT059</name>
+  <cmt>WPT059</cmt>
+  <desc>WPT059</desc>
+</wpt>
+<wpt lat="37.782040000" lon="-122.405630000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:04:06.210Z</time>
+  <name>WPT060</name>
+  <cmt>WPT060</cmt>
+  <desc>WPT060</desc>
+</wpt>
+<wpt lat="37.782040000" lon="-122.405630000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:04:07.189Z</time>
+  <name>WPT061</name>
+  <cmt>WPT061</cmt>
+  <desc>WPT061</desc>
+</wpt>
+<wpt lat="37.782110000" lon="-122.405655000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:08.176Z</time>
+  <name>WPT062</name>
+  <cmt>WPT062</cmt>
+  <desc>WPT062</desc>
+</wpt>
+<wpt lat="37.782140000" lon="-122.405670000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:09.164Z</time>
+  <name>WPT063</name>
+  <cmt>WPT063</cmt>
+  <desc>WPT063</desc>
+</wpt>
+<wpt lat="37.782180000" lon="-122.405690000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:10.148Z</time>
+  <name>WPT064</name>
+  <cmt>WPT064</cmt>
+  <desc>WPT064</desc>
+</wpt>
+<wpt lat="37.782220000" lon="-122.405710000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:11.128Z</time>
+  <name>WPT065</name>
+  <cmt>WPT065</cmt>
+  <desc>WPT065</desc>
+</wpt>
+<wpt lat="37.782260000" lon="-122.405730000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:12.120Z</time>
+  <name>WPT066</name>
+  <cmt>WPT066</cmt>
+  <desc>WPT066</desc>
+</wpt>
+<wpt lat="37.782270000" lon="-122.405800000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:13.104Z</time>
+  <name>WPT067</name>
+  <cmt>WPT067</cmt>
+  <desc>WPT067</desc>
+</wpt>
+<wpt lat="37.782288000" lon="-122.405870000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:14.089Z</time>
+  <name>WPT068</name>
+  <cmt>WPT068</cmt>
+  <desc>WPT068</desc>
+</wpt>
+<wpt lat="37.782322000" lon="-122.405920000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:15.074Z</time>
+  <name>WPT069</name>
+  <cmt>WPT069</cmt>
+  <desc>WPT069</desc>
+</wpt>
+<wpt lat="37.782364000" lon="-122.405970000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:16.059Z</time>
+  <name>WPT070</name>
+  <cmt>WPT070</cmt>
+  <desc>WPT070</desc>
+</wpt>
+<wpt lat="37.782400000" lon="-122.406020000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:17.044Z</time>
+  <name>WPT071</name>
+  <cmt>WPT071</cmt>
+  <desc>WPT071</desc>
+</wpt>
+<wpt lat="37.782433000" lon="-122.406070000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:18.029Z</time>
+  <name>WPT072</name>
+  <cmt>WPT072</cmt>
+  <desc>WPT072</desc>
+</wpt>
+<wpt lat="37.782463000" lon="-122.406110000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:19.010Z</time>
+  <name>WPT073</name>
+  <cmt>WPT073</cmt>
+  <desc>WPT073</desc>
+</wpt>
+<wpt lat="37.782494000" lon="-122.406160000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:19.999Z</time>
+  <name>WPT074</name>
+  <cmt>WPT074</cmt>
+  <desc>WPT074</desc>
+</wpt>
+<wpt lat="37.782520000" lon="-122.406200000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:20.984Z</time>
+  <name>WPT075</name>
+  <cmt>WPT075</cmt>
+  <desc>WPT075</desc>
+</wpt>
+<wpt lat="37.782550000" lon="-122.406230000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:21.969Z</time>
+  <name>WPT076</name>
+  <cmt>WPT076</cmt>
+  <desc>WPT076</desc>
+</wpt>
+<wpt lat="37.782574000" lon="-122.406260000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:22.955Z</time>
+  <name>WPT077</name>
+  <cmt>WPT077</cmt>
+  <desc>WPT077</desc>
+</wpt>
+<wpt lat="37.782597000" lon="-122.406280000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:23.940Z</time>
+  <name>WPT078</name>
+  <cmt>WPT078</cmt>
+  <desc>WPT078</desc>
+</wpt>
+<wpt lat="37.782610000" lon="-122.406320000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:24.925Z</time>
+  <name>WPT079</name>
+  <cmt>WPT079</cmt>
+  <desc>WPT079</desc>
+</wpt>
+<wpt lat="37.782640000" lon="-122.406330000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:25.910Z</time>
+  <name>WPT080</name>
+  <cmt>WPT080</cmt>
+  <desc>WPT080</desc>
+</wpt>
+<wpt lat="37.782660000" lon="-122.406334000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:26.896Z</time>
+  <name>WPT081</name>
+  <cmt>WPT081</cmt>
+  <desc>WPT081</desc>
+</wpt>
+<wpt lat="37.782690000" lon="-122.406334000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:27.875Z</time>
+  <name>WPT082</name>
+  <cmt>WPT082</cmt>
+  <desc>WPT082</desc>
+</wpt>
+<wpt lat="37.782722000" lon="-122.406300000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:28.865Z</time>
+  <name>WPT083</name>
+  <cmt>WPT083</cmt>
+  <desc>WPT083</desc>
+</wpt>
+<wpt lat="37.782760000" lon="-122.406270000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:29.850Z</time>
+  <name>WPT084</name>
+  <cmt>WPT084</cmt>
+  <desc>WPT084</desc>
+</wpt>
+<wpt lat="37.782803000" lon="-122.406250000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:30.835Z</time>
+  <name>WPT085</name>
+  <cmt>WPT085</cmt>
+  <desc>WPT085</desc>
+</wpt>
+<wpt lat="37.782803000" lon="-122.406250000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:31.820Z</time>
+  <name>WPT086</name>
+  <cmt>WPT086</cmt>
+  <desc>WPT086</desc>
+</wpt>
+<wpt lat="37.782890000" lon="-122.406200000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:32.806Z</time>
+  <name>WPT087</name>
+  <cmt>WPT087</cmt>
+  <desc>WPT087</desc>
+</wpt>
+<wpt lat="37.782932000" lon="-122.406166000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:33.791Z</time>
+  <name>WPT088</name>
+  <cmt>WPT088</cmt>
+  <desc>WPT088</desc>
+</wpt>
+<wpt lat="37.782990000" lon="-122.406140000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:34.776Z</time>
+  <name>WPT089</name>
+  <cmt>WPT089</cmt>
+  <desc>WPT089</desc>
+</wpt>
+<wpt lat="37.783035000" lon="-122.406110000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:35.756Z</time>
+  <name>WPT090</name>
+  <cmt>WPT090</cmt>
+  <desc>WPT090</desc>
+</wpt>
+<wpt lat="37.783085000" lon="-122.406075000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:36.747Z</time>
+  <name>WPT091</name>
+  <cmt>WPT091</cmt>
+  <desc>WPT091</desc>
+</wpt>
+<wpt lat="37.783142000" lon="-122.406040000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:37.731Z</time>
+  <name>WPT092</name>
+  <cmt>WPT092</cmt>
+  <desc>WPT092</desc>
+</wpt>
+<wpt lat="37.783190000" lon="-122.406000000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:38.716Z</time>
+  <name>WPT093</name>
+  <cmt>WPT093</cmt>
+  <desc>WPT093</desc>
+</wpt>
+<wpt lat="37.783240000" lon="-122.405950000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:39.701Z</time>
+  <name>WPT094</name>
+  <cmt>WPT094</cmt>
+  <desc>WPT094</desc>
+</wpt>
+<wpt lat="37.783295000" lon="-122.405910000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:40.686Z</time>
+  <name>WPT095</name>
+  <cmt>WPT095</cmt>
+  <desc>WPT095</desc>
+</wpt>
+<wpt lat="37.783348000" lon="-122.405860000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:41.672Z</time>
+  <name>WPT096</name>
+  <cmt>WPT096</cmt>
+  <desc>WPT096</desc>
+</wpt>
+<wpt lat="37.783394000" lon="-122.405820000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:42.656Z</time>
+  <name>WPT097</name>
+  <cmt>WPT097</cmt>
+  <desc>WPT097</desc>
+</wpt>
+<wpt lat="37.783440000" lon="-122.405785000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:43.643Z</time>
+  <name>WPT098</name>
+  <cmt>WPT098</cmt>
+  <desc>WPT098</desc>
+</wpt>
+<wpt lat="37.783493000" lon="-122.405740000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:44.627Z</time>
+  <name>WPT099</name>
+  <cmt>WPT099</cmt>
+  <desc>WPT099</desc>
+</wpt>
+<wpt lat="37.783550000" lon="-122.405690000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:45.612Z</time>
+  <name>WPT100</name>
+  <cmt>WPT100</cmt>
+  <desc>WPT100</desc>
+</wpt>
+<wpt lat="37.783607000" lon="-122.405655000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:46.593Z</time>
+  <name>WPT101</name>
+  <cmt>WPT101</cmt>
+  <desc>WPT101</desc>
+</wpt>
+<wpt lat="37.783672000" lon="-122.405624000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:47.582Z</time>
+  <name>WPT102</name>
+  <cmt>WPT102</cmt>
+  <desc>WPT102</desc>
+</wpt>
+<wpt lat="37.783737000" lon="-122.405594000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:48.567Z</time>
+  <name>WPT103</name>
+  <cmt>WPT103</cmt>
+  <desc>WPT103</desc>
+</wpt>
+<wpt lat="37.783806000" lon="-122.405560000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:49.552Z</time>
+  <name>WPT104</name>
+  <cmt>WPT104</cmt>
+  <desc>WPT104</desc>
+</wpt>
+<wpt lat="37.783848000" lon="-122.405540000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:50.537Z</time>
+  <name>WPT105</name>
+  <cmt>WPT105</cmt>
+  <desc>WPT105</desc>
+</wpt>
+<wpt lat="37.783894000" lon="-122.405520000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:51.523Z</time>
+  <name>WPT106</name>
+  <cmt>WPT106</cmt>
+  <desc>WPT106</desc>
+</wpt>
+<wpt lat="37.783930000" lon="-122.405490000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:52.508Z</time>
+  <name>WPT107</name>
+  <cmt>WPT107</cmt>
+  <desc>WPT107</desc>
+</wpt>
+<wpt lat="37.783974000" lon="-122.405450000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:53.493Z</time>
+  <name>WPT108</name>
+  <cmt>WPT108</cmt>
+  <desc>WPT108</desc>
+</wpt>
+<wpt lat="37.784023000" lon="-122.405410000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:54.480Z</time>
+  <name>WPT109</name>
+  <cmt>WPT109</cmt>
+  <desc>WPT109</desc>
+</wpt>
+<wpt lat="37.784060000" lon="-122.405370000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:55.383Z</time>
+  <name>WPT110</name>
+  <cmt>WPT110</cmt>
+  <desc>WPT110</desc>
+</wpt>
+<wpt lat="37.784096000" lon="-122.405334000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:04:56.364Z</time>
+  <name>WPT111</name>
+  <cmt>WPT111</cmt>
+  <desc>WPT111</desc>
+</wpt>
+<wpt lat="37.784138000" lon="-122.405300000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:04:57.352Z</time>
+  <name>WPT112</name>
+  <cmt>WPT112</cmt>
+  <desc>WPT112</desc>
+</wpt>
+<wpt lat="37.784176000" lon="-122.405266000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:04:58.338Z</time>
+  <name>WPT113</name>
+  <cmt>WPT113</cmt>
+  <desc>WPT113</desc>
+</wpt>
+<wpt lat="37.784220000" lon="-122.405240000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:04:59.326Z</time>
+  <name>WPT114</name>
+  <cmt>WPT114</cmt>
+  <desc>WPT114</desc>
+</wpt>
+<wpt lat="37.784264000" lon="-122.405210000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:00.250Z</time>
+  <name>WPT115</name>
+  <cmt>WPT115</cmt>
+  <desc>WPT115</desc>
+</wpt>
+<wpt lat="37.784306000" lon="-122.405180000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:01.212Z</time>
+  <name>WPT116</name>
+  <cmt>WPT116</cmt>
+  <desc>WPT116</desc>
+</wpt>
+<wpt lat="37.784344000" lon="-122.405160000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:02.210Z</time>
+  <name>WPT117</name>
+  <cmt>WPT117</cmt>
+  <desc>WPT117</desc>
+</wpt>
+<wpt lat="37.784380000" lon="-122.405136000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:03.211Z</time>
+  <name>WPT118</name>
+  <cmt>WPT118</cmt>
+  <desc>WPT118</desc>
+</wpt>
+<wpt lat="37.784416000" lon="-122.405110000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:04.209Z</time>
+  <name>WPT119</name>
+  <cmt>WPT119</cmt>
+  <desc>WPT119</desc>
+</wpt>
+<wpt lat="37.784447000" lon="-122.405080000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:05.220Z</time>
+  <name>WPT120</name>
+  <cmt>WPT120</cmt>
+  <desc>WPT120</desc>
+</wpt>
+<wpt lat="37.784477000" lon="-122.405060000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:06.215Z</time>
+  <name>WPT121</name>
+  <cmt>WPT121</cmt>
+  <desc>WPT121</desc>
+</wpt>
+<wpt lat="37.784515000" lon="-122.405040000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:07.210Z</time>
+  <name>WPT122</name>
+  <cmt>WPT122</cmt>
+  <desc>WPT122</desc>
+</wpt>
+<wpt lat="37.784515000" lon="-122.405040000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:08.210Z</time>
+  <name>WPT123</name>
+  <cmt>WPT123</cmt>
+  <desc>WPT123</desc>
+</wpt>
+<wpt lat="37.784540000" lon="-122.405010000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:09.192Z</time>
+  <name>WPT124</name>
+  <cmt>WPT124</cmt>
+  <desc>WPT124</desc>
+</wpt>
+<wpt lat="37.784570000" lon="-122.404980000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:10.178Z</time>
+  <name>WPT125</name>
+  <cmt>WPT125</cmt>
+  <desc>WPT125</desc>
+</wpt>
+<wpt lat="37.784603000" lon="-122.404950000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:11.166Z</time>
+  <name>WPT126</name>
+  <cmt>WPT126</cmt>
+  <desc>WPT126</desc>
+</wpt>
+<wpt lat="37.784626000" lon="-122.404900000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:12.152Z</time>
+  <name>WPT127</name>
+  <cmt>WPT127</cmt>
+  <desc>WPT127</desc>
+</wpt>
+<wpt lat="37.784653000" lon="-122.404860000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:13.140Z</time>
+  <name>WPT128</name>
+  <cmt>WPT128</cmt>
+  <desc>WPT128</desc>
+</wpt>
+<wpt lat="37.784668000" lon="-122.404816000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:14.127Z</time>
+  <name>WPT129</name>
+  <cmt>WPT129</cmt>
+  <desc>WPT129</desc>
+</wpt>
+<wpt lat="37.784683000" lon="-122.404780000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:15.113Z</time>
+  <name>WPT130</name>
+  <cmt>WPT130</cmt>
+  <desc>WPT130</desc>
+</wpt>
+<wpt lat="37.784710000" lon="-122.404750000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:16.101Z</time>
+  <name>WPT131</name>
+  <cmt>WPT131</cmt>
+  <desc>WPT131</desc>
+</wpt>
+<wpt lat="37.784730000" lon="-122.404710000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:17.088Z</time>
+  <name>WPT132</name>
+  <cmt>WPT132</cmt>
+  <desc>WPT132</desc>
+</wpt>
+<wpt lat="37.784730000" lon="-122.404680000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:18.074Z</time>
+  <name>WPT133</name>
+  <cmt>WPT133</cmt>
+  <desc>WPT133</desc>
+</wpt>
+<wpt lat="37.784718000" lon="-122.404660000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:19.062Z</time>
+  <name>WPT134</name>
+  <cmt>WPT134</cmt>
+  <desc>WPT134</desc>
+</wpt>
+<wpt lat="37.784714000" lon="-122.404630000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:20.049Z</time>
+  <name>WPT135</name>
+  <cmt>WPT135</cmt>
+  <desc>WPT135</desc>
+</wpt>
+<wpt lat="37.784710000" lon="-122.404610000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:21.035Z</time>
+  <name>WPT136</name>
+  <cmt>WPT136</cmt>
+  <desc>WPT136</desc>
+</wpt>
+<wpt lat="37.784700000" lon="-122.404590000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:22.027Z</time>
+  <name>WPT137</name>
+  <cmt>WPT137</cmt>
+  <desc>WPT137</desc>
+</wpt>
+<wpt lat="37.784690000" lon="-122.404560000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:23.010Z</time>
+  <name>WPT138</name>
+  <cmt>WPT138</cmt>
+  <desc>WPT138</desc>
+</wpt>
+<wpt lat="37.784683000" lon="-122.404530000">
+  <ele>9.000000</ele>
+  <time>2012-06-29T01:05:24.002Z</time>
+  <name>WPT139</name>
+  <cmt>WPT139</cmt>
+  <desc>WPT139</desc>
+</wpt>
+<wpt lat="37.784683000" lon="-122.404530000">
+  <ele>9.000000</ele>
+  <time>2012-06-29T01:05:24.988Z</time>
+  <name>WPT140</name>
+  <cmt>WPT140</cmt>
+  <desc>WPT140</desc>
+</wpt>
+<wpt lat="37.784683000" lon="-122.404530000">
+  <ele>9.000000</ele>
+  <time>2012-06-29T01:05:25.971Z</time>
+  <name>WPT141</name>
+  <cmt>WPT141</cmt>
+  <desc>WPT141</desc>
+</wpt>
+<wpt lat="37.784645000" lon="-122.404460000">
+  <ele>8.000000</ele>
+  <time>2012-06-29T01:05:26.958Z</time>
+  <name>WPT142</name>
+  <cmt>WPT142</cmt>
+  <desc>WPT142</desc>
+</wpt>
+<wpt lat="37.784645000" lon="-122.404440000">
+  <ele>9.000000</ele>
+  <time>2012-06-29T01:05:27.945Z</time>
+  <name>WPT143</name>
+  <cmt>WPT143</cmt>
+  <desc>WPT143</desc>
+</wpt>
+<wpt lat="37.784650000" lon="-122.404410000">
+  <ele>9.000000</ele>
+  <time>2012-06-29T01:05:28.938Z</time>
+  <name>WPT144</name>
+  <cmt>WPT144</cmt>
+  <desc>WPT144</desc>
+</wpt>
+<wpt lat="37.784650000" lon="-122.404410000">
+  <ele>9.000000</ele>
+  <time>2012-06-29T01:05:29.924Z</time>
+  <name>WPT145</name>
+  <cmt>WPT145</cmt>
+  <desc>WPT145</desc>
+</wpt>
+<wpt lat="37.784650000" lon="-122.404410000">
+  <ele>9.000000</ele>
+  <time>2012-06-29T01:05:30.911Z</time>
+  <name>WPT146</name>
+  <cmt>WPT146</cmt>
+  <desc>WPT146</desc>
+</wpt>
+<wpt lat="37.784683000" lon="-122.404320000">
+  <ele>8.000000</ele>
+  <time>2012-06-29T01:05:31.898Z</time>
+  <name>WPT147</name>
+  <cmt>WPT147</cmt>
+  <desc>WPT147</desc>
+</wpt>
+<wpt lat="37.784700000" lon="-122.404300000">
+  <ele>8.000000</ele>
+  <time>2012-06-29T01:05:32.885Z</time>
+  <name>WPT148</name>
+  <cmt>WPT148</cmt>
+  <desc>WPT148</desc>
+</wpt>
+<wpt lat="37.784720000" lon="-122.404260000">
+  <ele>8.000000</ele>
+  <time>2012-06-29T01:05:33.872Z</time>
+  <name>WPT149</name>
+  <cmt>WPT149</cmt>
+  <desc>WPT149</desc>
+</wpt>
+<wpt lat="37.784744000" lon="-122.404220000">
+  <ele>8.000000</ele>
+  <time>2012-06-29T01:05:34.859Z</time>
+  <name>WPT150</name>
+  <cmt>WPT150</cmt>
+  <desc>WPT150</desc>
+</wpt>
+<wpt lat="37.784786000" lon="-122.404180000">
+  <ele>8.000000</ele>
+  <time>2012-06-29T01:05:35.846Z</time>
+  <name>WPT151</name>
+  <cmt>WPT151</cmt>
+  <desc>WPT151</desc>
+</wpt>
+<wpt lat="37.784820000" lon="-122.404144000">
+  <ele>8.000000</ele>
+  <time>2012-06-29T01:05:36.833Z</time>
+  <name>WPT152</name>
+  <cmt>WPT152</cmt>
+  <desc>WPT152</desc>
+</wpt>
+<wpt lat="37.784870000" lon="-122.404100000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:37.820Z</time>
+  <name>WPT153</name>
+  <cmt>WPT153</cmt>
+  <desc>WPT153</desc>
+</wpt>
+<wpt lat="37.784916000" lon="-122.404050000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:38.807Z</time>
+  <name>WPT154</name>
+  <cmt>WPT154</cmt>
+  <desc>WPT154</desc>
+</wpt>
+<wpt lat="37.784966000" lon="-122.404010000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:39.792Z</time>
+  <name>WPT155</name>
+  <cmt>WPT155</cmt>
+  <desc>WPT155</desc>
+</wpt>
+<wpt lat="37.785010000" lon="-122.403960000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:40.777Z</time>
+  <name>WPT156</name>
+  <cmt>WPT156</cmt>
+  <desc>WPT156</desc>
+</wpt>
+<wpt lat="37.785065000" lon="-122.403920000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:41.762Z</time>
+  <name>WPT157</name>
+  <cmt>WPT157</cmt>
+  <desc>WPT157</desc>
+</wpt>
+<wpt lat="37.785114000" lon="-122.403870000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:42.747Z</time>
+  <name>WPT158</name>
+  <cmt>WPT158</cmt>
+  <desc>WPT158</desc>
+</wpt>
+<wpt lat="37.785160000" lon="-122.403830000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:43.736Z</time>
+  <name>WPT159</name>
+  <cmt>WPT159</cmt>
+  <desc>WPT159</desc>
+</wpt>
+<wpt lat="37.785206000" lon="-122.403780000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:44.717Z</time>
+  <name>WPT160</name>
+  <cmt>WPT160</cmt>
+  <desc>WPT160</desc>
+</wpt>
+<wpt lat="37.785255000" lon="-122.403725000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:45.702Z</time>
+  <name>WPT161</name>
+  <cmt>WPT161</cmt>
+  <desc>WPT161</desc>
+</wpt>
+<wpt lat="37.785290000" lon="-122.403660000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:46.687Z</time>
+  <name>WPT162</name>
+  <cmt>WPT162</cmt>
+  <desc>WPT162</desc>
+</wpt>
+<wpt lat="37.785330000" lon="-122.403600000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:47.667Z</time>
+  <name>WPT163</name>
+  <cmt>WPT163</cmt>
+  <desc>WPT163</desc>
+</wpt>
+<wpt lat="37.785370000" lon="-122.403540000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:48.657Z</time>
+  <name>WPT164</name>
+  <cmt>WPT164</cmt>
+  <desc>WPT164</desc>
+</wpt>
+<wpt lat="37.785410000" lon="-122.403490000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:49.642Z</time>
+  <name>WPT165</name>
+  <cmt>WPT165</cmt>
+  <desc>WPT165</desc>
+</wpt>
+<wpt lat="37.785454000" lon="-122.403430000">
+  <ele>7.000000</ele>
+  <time>2012-06-29T01:05:50.627Z</time>
+  <name>WPT166</name>
+  <cmt>WPT166</cmt>
+  <desc>WPT166</desc>
+</wpt>
+<wpt lat="37.785496000" lon="-122.403366000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:51.612Z</time>
+  <name>WPT167</name>
+  <cmt>WPT167</cmt>
+  <desc>WPT167</desc>
+</wpt>
+<wpt lat="37.785540000" lon="-122.403305000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:52.597Z</time>
+  <name>WPT168</name>
+  <cmt>WPT168</cmt>
+  <desc>WPT168</desc>
+</wpt>
+<wpt lat="37.785587000" lon="-122.403250000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:53.581Z</time>
+  <name>WPT169</name>
+  <cmt>WPT169</cmt>
+  <desc>WPT169</desc>
+</wpt>
+<wpt lat="37.785630000" lon="-122.403200000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:54.566Z</time>
+  <name>WPT170</name>
+  <cmt>WPT170</cmt>
+  <desc>WPT170</desc>
+</wpt>
+<wpt lat="37.785675000" lon="-122.403145000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:55.551Z</time>
+  <name>WPT171</name>
+  <cmt>WPT171</cmt>
+  <desc>WPT171</desc>
+</wpt>
+<wpt lat="37.785713000" lon="-122.403090000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:05:56.536Z</time>
+  <name>WPT172</name>
+  <cmt>WPT172</cmt>
+  <desc>WPT172</desc>
+</wpt>
+<wpt lat="37.785755000" lon="-122.403046000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:57.521Z</time>
+  <name>WPT173</name>
+  <cmt>WPT173</cmt>
+  <desc>WPT173</desc>
+</wpt>
+<wpt lat="37.785793000" lon="-122.402990000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:58.502Z</time>
+  <name>WPT174</name>
+  <cmt>WPT174</cmt>
+  <desc>WPT174</desc>
+</wpt>
+<wpt lat="37.785824000" lon="-122.402920000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:05:59.492Z</time>
+  <name>WPT175</name>
+  <cmt>WPT175</cmt>
+  <desc>WPT175</desc>
+</wpt>
+<wpt lat="37.785847000" lon="-122.402870000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:00.477Z</time>
+  <name>WPT176</name>
+  <cmt>WPT176</cmt>
+  <desc>WPT176</desc>
+</wpt>
+<wpt lat="37.785862000" lon="-122.402824000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:01.459Z</time>
+  <name>WPT177</name>
+  <cmt>WPT177</cmt>
+  <desc>WPT177</desc>
+</wpt>
+<wpt lat="37.785896000" lon="-122.402780000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:02.446Z</time>
+  <name>WPT178</name>
+  <cmt>WPT178</cmt>
+  <desc>WPT178</desc>
+</wpt>
+<wpt lat="37.785934000" lon="-122.402730000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:03.431Z</time>
+  <name>WPT179</name>
+  <cmt>WPT179</cmt>
+  <desc>WPT179</desc>
+</wpt>
+<wpt lat="37.785965000" lon="-122.402680000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:04.416Z</time>
+  <name>WPT180</name>
+  <cmt>WPT180</cmt>
+  <desc>WPT180</desc>
+</wpt>
+<wpt lat="37.785990000" lon="-122.402626000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:05.401Z</time>
+  <name>WPT181</name>
+  <cmt>WPT181</cmt>
+  <desc>WPT181</desc>
+</wpt>
+<wpt lat="37.786015000" lon="-122.402570000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:06.382Z</time>
+  <name>WPT182</name>
+  <cmt>WPT182</cmt>
+  <desc>WPT182</desc>
+</wpt>
+<wpt lat="37.786034000" lon="-122.402534000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:07.366Z</time>
+  <name>WPT183</name>
+  <cmt>WPT183</cmt>
+  <desc>WPT183</desc>
+</wpt>
+<wpt lat="37.786050000" lon="-122.402534000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:08.356Z</time>
+  <name>WPT184</name>
+  <cmt>WPT184</cmt>
+  <desc>WPT184</desc>
+</wpt>
+<wpt lat="37.786090000" lon="-122.402510000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:09.341Z</time>
+  <name>WPT185</name>
+  <cmt>WPT185</cmt>
+  <desc>WPT185</desc>
+</wpt>
+<wpt lat="37.786120000" lon="-122.402480000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:10.276Z</time>
+  <name>WPT186</name>
+  <cmt>WPT186</cmt>
+  <desc>WPT186</desc>
+</wpt>
+<wpt lat="37.786160000" lon="-122.402435000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:11.204Z</time>
+  <name>WPT187</name>
+  <cmt>WPT187</cmt>
+  <desc>WPT187</desc>
+</wpt>
+<wpt lat="37.786236000" lon="-122.402380000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:12.214Z</time>
+  <name>WPT188</name>
+  <cmt>WPT188</cmt>
+  <desc>WPT188</desc>
+</wpt>
+<wpt lat="37.786300000" lon="-122.402336000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:13.208Z</time>
+  <name>WPT189</name>
+  <cmt>WPT189</cmt>
+  <desc>WPT189</desc>
+</wpt>
+<wpt lat="37.786392000" lon="-122.402270000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:14.221Z</time>
+  <name>WPT190</name>
+  <cmt>WPT190</cmt>
+  <desc>WPT190</desc>
+</wpt>
+<wpt lat="37.786434000" lon="-122.402214000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:15.213Z</time>
+  <name>WPT191</name>
+  <cmt>WPT191</cmt>
+  <desc>WPT191</desc>
+</wpt>
+<wpt lat="37.786465000" lon="-122.402160000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:16.215Z</time>
+  <name>WPT192</name>
+  <cmt>WPT192</cmt>
+  <desc>WPT192</desc>
+</wpt>
+<wpt lat="37.786490000" lon="-122.402110000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:17.210Z</time>
+  <name>WPT193</name>
+  <cmt>WPT193</cmt>
+  <desc>WPT193</desc>
+</wpt>
+<wpt lat="37.786490000" lon="-122.402110000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:18.204Z</time>
+  <name>WPT194</name>
+  <cmt>WPT194</cmt>
+  <desc>WPT194</desc>
+</wpt>
+<wpt lat="37.786514000" lon="-122.402084000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:19.188Z</time>
+  <name>WPT195</name>
+  <cmt>WPT195</cmt>
+  <desc>WPT195</desc>
+</wpt>
+<wpt lat="37.786537000" lon="-122.402054000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:20.172Z</time>
+  <name>WPT196</name>
+  <cmt>WPT196</cmt>
+  <desc>WPT196</desc>
+</wpt>
+<wpt lat="37.786560000" lon="-122.402030000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:21.162Z</time>
+  <name>WPT197</name>
+  <cmt>WPT197</cmt>
+  <desc>WPT197</desc>
+</wpt>
+<wpt lat="37.786583000" lon="-122.402010000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:22.150Z</time>
+  <name>WPT198</name>
+  <cmt>WPT198</cmt>
+  <desc>WPT198</desc>
+</wpt>
+<wpt lat="37.786613000" lon="-122.401970000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:23.132Z</time>
+  <name>WPT199</name>
+  <cmt>WPT199</cmt>
+  <desc>WPT199</desc>
+</wpt>
+<wpt lat="37.786644000" lon="-122.401940000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:24.119Z</time>
+  <name>WPT200</name>
+  <cmt>WPT200</cmt>
+  <desc>WPT200</desc>
+</wpt>
+<wpt lat="37.786694000" lon="-122.401900000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:25.098Z</time>
+  <name>WPT201</name>
+  <cmt>WPT201</cmt>
+  <desc>WPT201</desc>
+</wpt>
+<wpt lat="37.786743000" lon="-122.401870000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:26.088Z</time>
+  <name>WPT202</name>
+  <cmt>WPT202</cmt>
+  <desc>WPT202</desc>
+</wpt>
+<wpt lat="37.786797000" lon="-122.401840000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:27.073Z</time>
+  <name>WPT203</name>
+  <cmt>WPT203</cmt>
+  <desc>WPT203</desc>
+</wpt>
+<wpt lat="37.786830000" lon="-122.401820000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:28.058Z</time>
+  <name>WPT204</name>
+  <cmt>WPT204</cmt>
+  <desc>WPT204</desc>
+</wpt>
+<wpt lat="37.786858000" lon="-122.401800000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:29.043Z</time>
+  <name>WPT205</name>
+  <cmt>WPT205</cmt>
+  <desc>WPT205</desc>
+</wpt>
+<wpt lat="37.786873000" lon="-122.401790000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:30.028Z</time>
+  <name>WPT206</name>
+  <cmt>WPT206</cmt>
+  <desc>WPT206</desc>
+</wpt>
+<wpt lat="37.786884000" lon="-122.401770000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:31.013Z</time>
+  <name>WPT207</name>
+  <cmt>WPT207</cmt>
+  <desc>WPT207</desc>
+</wpt>
+<wpt lat="37.786892000" lon="-122.401760000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:31.998Z</time>
+  <name>WPT208</name>
+  <cmt>WPT208</cmt>
+  <desc>WPT208</desc>
+</wpt>
+<wpt lat="37.786903000" lon="-122.401740000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:32.984Z</time>
+  <name>WPT209</name>
+  <cmt>WPT209</cmt>
+  <desc>WPT209</desc>
+</wpt>
+<wpt lat="37.786920000" lon="-122.401730000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:33.968Z</time>
+  <name>WPT210</name>
+  <cmt>WPT210</cmt>
+  <desc>WPT210</desc>
+</wpt>
+<wpt lat="37.786934000" lon="-122.401726000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:34.954Z</time>
+  <name>WPT211</name>
+  <cmt>WPT211</cmt>
+  <desc>WPT211</desc>
+</wpt>
+<wpt lat="37.786950000" lon="-122.401720000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:35.933Z</time>
+  <name>WPT212</name>
+  <cmt>WPT212</cmt>
+  <desc>WPT212</desc>
+</wpt>
+<wpt lat="37.786960000" lon="-122.401700000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:36.924Z</time>
+  <name>WPT213</name>
+  <cmt>WPT213</cmt>
+  <desc>WPT213</desc>
+</wpt>
+<wpt lat="37.786976000" lon="-122.401700000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:37.909Z</time>
+  <name>WPT214</name>
+  <cmt>WPT214</cmt>
+  <desc>WPT214</desc>
+</wpt>
+<wpt lat="37.786983000" lon="-122.401695000">
+  <ele>6.000000</ele>
+  <time>2012-06-29T01:06:38.889Z</time>
+  <name>WPT215</name>
+  <cmt>WPT215</cmt>
+  <desc>WPT215</desc>
+</wpt>
+<wpt lat="37.786980000" lon="-122.401690000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:39.879Z</time>
+  <name>WPT216</name>
+  <cmt>WPT216</cmt>
+  <desc>WPT216</desc>
+</wpt>
+<wpt lat="37.786980000" lon="-122.401670000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:40.864Z</time>
+  <name>WPT217</name>
+  <cmt>WPT217</cmt>
+  <desc>WPT217</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401665000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:41.844Z</time>
+  <name>WPT218</name>
+  <cmt>WPT218</cmt>
+  <desc>WPT218</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:42.834Z</time>
+  <name>WPT219</name>
+  <cmt>WPT219</cmt>
+  <desc>WPT219</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:43.819Z</time>
+  <name>WPT220</name>
+  <cmt>WPT220</cmt>
+  <desc>WPT220</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:44.805Z</time>
+  <name>WPT221</name>
+  <cmt>WPT221</cmt>
+  <desc>WPT221</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:45.790Z</time>
+  <name>WPT222</name>
+  <cmt>WPT222</cmt>
+  <desc>WPT222</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:46.775Z</time>
+  <name>WPT223</name>
+  <cmt>WPT223</cmt>
+  <desc>WPT223</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:47.761Z</time>
+  <name>WPT224</name>
+  <cmt>WPT224</cmt>
+  <desc>WPT224</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:48.744Z</time>
+  <name>WPT225</name>
+  <cmt>WPT225</cmt>
+  <desc>WPT225</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:49.730Z</time>
+  <name>WPT226</name>
+  <cmt>WPT226</cmt>
+  <desc>WPT226</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:50.715Z</time>
+  <name>WPT227</name>
+  <cmt>WPT227</cmt>
+  <desc>WPT227</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:51.700Z</time>
+  <name>WPT228</name>
+  <cmt>WPT228</cmt>
+  <desc>WPT228</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:52.685Z</time>
+  <name>WPT229</name>
+  <cmt>WPT229</cmt>
+  <desc>WPT229</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:53.689Z</time>
+  <name>WPT230</name>
+  <cmt>WPT230</cmt>
+  <desc>WPT230</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:54.656Z</time>
+  <name>WPT231</name>
+  <cmt>WPT231</cmt>
+  <desc>WPT231</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401660000">
+  <ele>5.000000</ele>
+  <time>2012-06-29T01:06:55.640Z</time>
+  <name>WPT232</name>
+  <cmt>WPT232</cmt>
+  <desc>WPT232</desc>
+</wpt>
+<wpt lat="37.786950000" lon="-122.401590000">
+  <ele>1.000000</ele>
+  <time>2012-06-29T01:06:56.625Z</time>
+  <name>WPT233</name>
+  <cmt>WPT233</cmt>
+  <desc>WPT233</desc>
+</wpt>
+<wpt lat="37.786957000" lon="-122.401580000">
+  <ele>1.000000</ele>
+  <time>2012-06-29T01:06:57.611Z</time>
+  <name>WPT234</name>
+  <cmt>WPT234</cmt>
+  <desc>WPT234</desc>
+</wpt>
+<wpt lat="37.786972000" lon="-122.401566000">
+  <ele>1.000000</ele>
+  <time>2012-06-29T01:06:58.591Z</time>
+  <name>WPT235</name>
+  <cmt>WPT235</cmt>
+  <desc>WPT235</desc>
+</wpt>
+<wpt lat="37.786987000" lon="-122.401550000">
+  <ele>1.000000</ele>
+  <time>2012-06-29T01:06:59.497Z</time>
+  <name>WPT236</name>
+  <cmt>WPT236</cmt>
+  <desc>WPT236</desc>
+</wpt>
+<wpt lat="37.787003000" lon="-122.401540000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:00.479Z</time>
+  <name>WPT237</name>
+  <cmt>WPT237</cmt>
+  <desc>WPT237</desc>
+</wpt>
+<wpt lat="37.787018000" lon="-122.401520000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:01.466Z</time>
+  <name>WPT238</name>
+  <cmt>WPT238</cmt>
+  <desc>WPT238</desc>
+</wpt>
+<wpt lat="37.787037000" lon="-122.401490000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:02.458Z</time>
+  <name>WPT239</name>
+  <cmt>WPT239</cmt>
+  <desc>WPT239</desc>
+</wpt>
+<wpt lat="37.787060000" lon="-122.401450000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:03.445Z</time>
+  <name>WPT240</name>
+  <cmt>WPT240</cmt>
+  <desc>WPT240</desc>
+</wpt>
+<wpt lat="37.787083000" lon="-122.401410000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:04.432Z</time>
+  <name>WPT241</name>
+  <cmt>WPT241</cmt>
+  <desc>WPT241</desc>
+</wpt>
+<wpt lat="37.787110000" lon="-122.401370000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:05.415Z</time>
+  <name>WPT242</name>
+  <cmt>WPT242</cmt>
+  <desc>WPT242</desc>
+</wpt>
+<wpt lat="37.787140000" lon="-122.401330000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:06.406Z</time>
+  <name>WPT243</name>
+  <cmt>WPT243</cmt>
+  <desc>WPT243</desc>
+</wpt>
+<wpt lat="37.787167000" lon="-122.401280000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:07.393Z</time>
+  <name>WPT244</name>
+  <cmt>WPT244</cmt>
+  <desc>WPT244</desc>
+</wpt>
+<wpt lat="37.787193000" lon="-122.401230000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:08.380Z</time>
+  <name>WPT245</name>
+  <cmt>WPT245</cmt>
+  <desc>WPT245</desc>
+</wpt>
+<wpt lat="37.787220000" lon="-122.401184000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:09.367Z</time>
+  <name>WPT246</name>
+  <cmt>WPT246</cmt>
+  <desc>WPT246</desc>
+</wpt>
+<wpt lat="37.787240000" lon="-122.401146000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:10.354Z</time>
+  <name>WPT247</name>
+  <cmt>WPT247</cmt>
+  <desc>WPT247</desc>
+</wpt>
+<wpt lat="37.787270000" lon="-122.401110000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:11.346Z</time>
+  <name>WPT248</name>
+  <cmt>WPT248</cmt>
+  <desc>WPT248</desc>
+</wpt>
+<wpt lat="37.787290000" lon="-122.401070000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:12.329Z</time>
+  <name>WPT249</name>
+  <cmt>WPT249</cmt>
+  <desc>WPT249</desc>
+</wpt>
+<wpt lat="37.787320000" lon="-122.401030000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:13.315Z</time>
+  <name>WPT250</name>
+  <cmt>WPT250</cmt>
+  <desc>WPT250</desc>
+</wpt>
+<wpt lat="37.787354000" lon="-122.400990000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:14.302Z</time>
+  <name>WPT251</name>
+  <cmt>WPT251</cmt>
+  <desc>WPT251</desc>
+</wpt>
+<wpt lat="37.787376000" lon="-122.400970000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:15.212Z</time>
+  <name>WPT252</name>
+  <cmt>WPT252</cmt>
+  <desc>WPT252</desc>
+</wpt>
+<wpt lat="37.787395000" lon="-122.400950000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:16.211Z</time>
+  <name>WPT253</name>
+  <cmt>WPT253</cmt>
+  <desc>WPT253</desc>
+</wpt>
+<wpt lat="37.787422000" lon="-122.400930000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:17.212Z</time>
+  <name>WPT254</name>
+  <cmt>WPT254</cmt>
+  <desc>WPT254</desc>
+</wpt>
+<wpt lat="37.787440000" lon="-122.400920000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:18.213Z</time>
+  <name>WPT255</name>
+  <cmt>WPT255</cmt>
+  <desc>WPT255</desc>
+</wpt>
+<wpt lat="37.787457000" lon="-122.400920000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:19.210Z</time>
+  <name>WPT256</name>
+  <cmt>WPT256</cmt>
+  <desc>WPT256</desc>
+</wpt>
+<wpt lat="37.787460000" lon="-122.400910000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:20.211Z</time>
+  <name>WPT257</name>
+  <cmt>WPT257</cmt>
+  <desc>WPT257</desc>
+</wpt>
+<wpt lat="37.787460000" lon="-122.400910000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:21.216Z</time>
+  <name>WPT258</name>
+  <cmt>WPT258</cmt>
+  <desc>WPT258</desc>
+</wpt>
+<wpt lat="37.787464000" lon="-122.400900000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:22.194Z</time>
+  <name>WPT259</name>
+  <cmt>WPT259</cmt>
+  <desc>WPT259</desc>
+</wpt>
+<wpt lat="37.787480000" lon="-122.400890000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:23.182Z</time>
+  <name>WPT260</name>
+  <cmt>WPT260</cmt>
+  <desc>WPT260</desc>
+</wpt>
+<wpt lat="37.787495000" lon="-122.400870000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:24.175Z</time>
+  <name>WPT261</name>
+  <cmt>WPT261</cmt>
+  <desc>WPT261</desc>
+</wpt>
+<wpt lat="37.787506000" lon="-122.400856000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:25.160Z</time>
+  <name>WPT262</name>
+  <cmt>WPT262</cmt>
+  <desc>WPT262</desc>
+</wpt>
+<wpt lat="37.787520000" lon="-122.400840000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:26.147Z</time>
+  <name>WPT263</name>
+  <cmt>WPT263</cmt>
+  <desc>WPT263</desc>
+</wpt>
+<wpt lat="37.787533000" lon="-122.400826000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:27.134Z</time>
+  <name>WPT264</name>
+  <cmt>WPT264</cmt>
+  <desc>WPT264</desc>
+</wpt>
+<wpt lat="37.787544000" lon="-122.400820000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:28.121Z</time>
+  <name>WPT265</name>
+  <cmt>WPT265</cmt>
+  <desc>WPT265</desc>
+</wpt>
+<wpt lat="37.787556000" lon="-122.400820000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:29.108Z</time>
+  <name>WPT266</name>
+  <cmt>WPT266</cmt>
+  <desc>WPT266</desc>
+</wpt>
+<wpt lat="37.787567000" lon="-122.400800000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:30.095Z</time>
+  <name>WPT267</name>
+  <cmt>WPT267</cmt>
+  <desc>WPT267</desc>
+</wpt>
+<wpt lat="37.787582000" lon="-122.400795000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:31.082Z</time>
+  <name>WPT268</name>
+  <cmt>WPT268</cmt>
+  <desc>WPT268</desc>
+</wpt>
+<wpt lat="37.787590000" lon="-122.400780000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:32.070Z</time>
+  <name>WPT269</name>
+  <cmt>WPT269</cmt>
+  <desc>WPT269</desc>
+</wpt>
+<wpt lat="37.787594000" lon="-122.400764000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:33.057Z</time>
+  <name>WPT270</name>
+  <cmt>WPT270</cmt>
+  <desc>WPT270</desc>
+</wpt>
+<wpt lat="37.787594000" lon="-122.400760000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:34.043Z</time>
+  <name>WPT271</name>
+  <cmt>WPT271</cmt>
+  <desc>WPT271</desc>
+</wpt>
+<wpt lat="37.787590000" lon="-122.400740000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:35.026Z</time>
+  <name>WPT272</name>
+  <cmt>WPT272</cmt>
+  <desc>WPT272</desc>
+</wpt>
+<wpt lat="37.787590000" lon="-122.400734000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:36.012Z</time>
+  <name>WPT273</name>
+  <cmt>WPT273</cmt>
+  <desc>WPT273</desc>
+</wpt>
+<wpt lat="37.787590000" lon="-122.400730000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:37Z</time>
+  <name>WPT274</name>
+  <cmt>WPT274</cmt>
+  <desc>WPT274</desc>
+</wpt>
+<wpt lat="37.787598000" lon="-122.400720000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:37.986Z</time>
+  <name>WPT275</name>
+  <cmt>WPT275</cmt>
+  <desc>WPT275</desc>
+</wpt>
+<wpt lat="37.787605000" lon="-122.400700000">
+  <ele>2.000000</ele>
+  <time>2012-06-29T01:07:38.973Z</time>
+  <name>WPT276</name>
+  <cmt>WPT276</cmt>
+  <desc>WPT276</desc>
+</wpt>
+</gpx>

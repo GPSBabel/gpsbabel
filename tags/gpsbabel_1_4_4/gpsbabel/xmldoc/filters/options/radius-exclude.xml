@@ -1,0 +1,5 @@
+<para>
+If this option is included, the action of the radius filter will be reversed:
+points within the given distance will be removed, and points further away
+will be kept.
+</para>

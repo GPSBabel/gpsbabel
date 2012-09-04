@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="35.824985000" minlon="-86.847065000" maxlat="35.824985000" maxlon="-86.847065000"/>
+<trk>
+<trkseg>
+<trkpt lat="35.824985000" lon="-86.847065000">
+  <time>2008-06-05T20:06:41Z</time>
+  <course>224.449997</course>
+  <speed>0.000000</speed>
+</trkpt>
+<trkpt lat="35.824985000" lon="-86.847065000">
+  <ele>269.900000</ele>
+  <time>2008-06-05T20:06:42Z</time>
+  <course>224.449997</course>
+  <speed>0.000000</speed>
+  <fix>3d</fix>
+  <sat>7</sat>
+  <hdop>1.100000</hdop>
+  <vdop>1.800000</vdop>
+  <pdop>2.100000</pdop>
+</trkpt>
+<trkpt lat="35.824985000" lon="-86.847065000">
+  <ele>269.900000</ele>
+  <time>2008-06-05T20:06:43Z</time>
+  <course>224.449997</course>
+  <speed>0.000000</speed>
+  <fix>3d</fix>
+  <sat>7</sat>
+  <hdop>1.100000</hdop>
+  <vdop>1.800000</vdop>
+  <pdop>2.100000</pdop>
+</trkpt>
+<trkpt lat="35.824985000" lon="-86.847065000">
+  <ele>269.900000</ele>
+  <time>2008-06-05T20:06:44Z</time>
+  <course>224.449997</course>
+  <speed>0.000000</speed>
+  <fix>3d</fix>
+  <sat>6</sat>
+  <hdop>1.300000</hdop>
+  <vdop>1.800000</vdop>
+  <pdop>2.200000</pdop>
+</trkpt>
+</trkseg>
+</trk>
+</gpx>
