@@ -57,7 +57,7 @@ typedef enum {
   gt_waypt_class_map_line
 } gt_waypt_classes_e;
 
-extern char* gt_waypt_class_names[];
+extern const char* gt_waypt_class_names[];
 
 typedef struct gt_country_code_s {
   const char* cc;
@@ -76,7 +76,7 @@ typedef enum {
   gt_display_mode_symbol_and_comment
 } gt_display_modes_e;
 
-extern char* gt_display_mode_names[];
+extern const char* gt_display_mode_names[];
 
 #define GT_DISPLAY_MODE_MIN gt_display_mode_symbol_and_name
 #define GT_DISPLAY_MODE_MAX gt_display_mode_symbol_and_comment
