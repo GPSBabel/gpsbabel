@@ -93,7 +93,7 @@ wr_deinit(void)
   mkshort_del_handle(&mkshort_handle);
 }
 
-convert_rec0(struct record0* rec0)
+void convert_rec0(struct record0* rec0)
 {
   Lon1 = be_read32(&rec0->lon1) / LONDIV;
   Lat1 = be_read32(&rec0->lat1) / LATDIV;

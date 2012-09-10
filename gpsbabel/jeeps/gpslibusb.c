@@ -26,7 +26,7 @@
 #include "config.h"
 #endif
 #if HAVE_LIBUSB
-#include <usb.h>
+#include "usb.h"
 #include "gps.h"
 #include "garminusb.h"
 #include "gpsusbcommon.h"
@@ -204,9 +204,9 @@ gusb_atexit_teardown(void)
 unsigned
 gusb_reset_toggles(void)
 {
-  static const char  oinit[12] =
+  static const unsigned char  oinit[12] =
   {0, 0, 0, 0, GUSB_SESSION_START, 0, 0, 0, 0, 0, 0, 0};
-  static const char  oid[12] =
+  static const unsigned char  oid[12] =
   {20, 0, 0, 0, 0xfe, 0, 0, 0, 0, 0, 0, 0};
   garmin_usb_packet iresp;
   int t;

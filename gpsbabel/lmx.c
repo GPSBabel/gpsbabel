@@ -63,7 +63,7 @@ lmx_wr_deinit(void)
   gbfclose(ofd);
 }
 
-static char*
+static const char*
 lmx_stag(int tag)
 {
   switch (tag) {

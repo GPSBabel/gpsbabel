@@ -421,7 +421,8 @@ static void trl_swap(struct trldata* trldata)
 
 /**************************************************************************/
 
-static void str2lab(char* dest, char* src, int len, char* fmt, int n)
+static void str2lab(char* dest, const char* src, int len, const char* fmt,
+                   int n)
 {
   int i,j;
 

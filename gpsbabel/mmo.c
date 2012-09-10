@@ -186,7 +186,7 @@ mmo_readstr(void)
       len = (unsigned)gbfgetc(fin);
       if (len > 0) {
         int ii, jj, ch, resbytes=0;
-        res = xmalloc(len*2 + 1); // bigger to allow for utf-8 expansion
+        res = (char *) xmalloc(len*2 + 1); // bigger to allow for utf-8 expansion
         for (ii=0; ii<len; ii++) {
           char utf8buf[8];
           int utf8len;
@@ -207,7 +207,7 @@ mmo_readstr(void)
     // positive values of len are for strings longer than 254, handled below:
   }
   // length zero returns an empty string
-  res = xmalloc(len + 1);
+  res = (char *) xmalloc(len + 1);
   res[len] = '\0';
   if (len) {
     gbfread(res, len, 1, fin);

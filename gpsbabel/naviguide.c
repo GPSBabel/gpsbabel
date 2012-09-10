@@ -38,26 +38,26 @@
 /* Naviguide file header */
 typedef struct {
   gbuint16 nof_wp;    /* Little endean format */
-  char pad1[6];      /* 0xff, 0xff, 0x01, 0x00, 0x06, 0x00 */
+  unsigned char pad1[6];      /* 0xff, 0xff, 0x01, 0x00, 0x06, 0x00 */
   char signature[9]; /* cWaypoint */
-  char pad2[4];      /* 0x01, 0x00, 0x00, 0x00 */
+  unsigned char pad2[4];      /* 0x01, 0x00, 0x00, 0x00 */
 } ng_file_header_t;
 
 /* Naviguide waypoint/rout data  */
 typedef struct {
-  char pad1[8];   /*  0xfe, 0xff, 0xff, 0xff, 0x01, 0x00, 0x00, 0x00 */
+  unsigned char pad1[8];   /*  0xfe, 0xff, 0xff, 0xff, 0x01, 0x00, 0x00, 0x00 */
   /* coordination are in old israeli grid */
   gbuint32 East;
   gbuint32 North;
-  char pad2[2];  /* 0x01, 0x01 */
+  unsigned char pad2[2];  /* 0x01, 0x01 */
   gbuint32 Alt;
   char CommentLength;
 } ng_wp_data_t;
 
 typedef struct {
-  char pad1[2]; /* 0x01, 0x80 */
+  unsigned char pad1[2]; /* 0x01, 0x80 */
   gbuint16 next_wp;
-  char pad2[2]; /* 0x00, 0x00 */
+  unsigned char pad2[2]; /* 0x00, 0x00 */
 } ng_next_wp_t;
 
 typedef struct {
