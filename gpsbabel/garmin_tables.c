@@ -577,7 +577,7 @@ gt_country_code_t gt_country_codes[] = {
 };
 
 /* gt_waypt_classes: gdb internal order */
-char* gt_waypt_class_names[] = {
+const char* gt_waypt_class_names[] = {
   "User Waypoint",
   "Airport",
   "Intersection",
@@ -595,7 +595,7 @@ char* gt_waypt_class_names[] = {
 };
 
 /* gt_display_mode_names: this order is used by most devices */
-char* gt_display_mode_names[] = {
+const char* gt_display_mode_names[] = {
   "Symbol & Name",
   "Symbol",
   "Symbol & Description"
@@ -841,8 +841,10 @@ int gt_find_icon_number_from_desc(const char* desc, garmin_formats_e garmin_form
    */
 
   if (find_flag == 0) {
-    char** prefix;
-    char* prefixes[] = {"White ", "Red ", "Green ", "Blue ", "Black ", NULL};
+    const char** prefix;
+    const char* prefixes[] = {
+      "White ", "Red ", "Green ", "Blue ", "Black ", NULL
+    };
 
     for (prefix = prefixes; *prefix != NULL; prefix++) {
       int len = strlen(*prefix);

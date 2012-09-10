@@ -530,7 +530,7 @@ write_waypt(const waypoint* wpt)
 {
   unsigned char wpt_class;
   garmin_fs_p gmsd;
-  char* wpt_type;
+  const char* wpt_type;
   const char* dspl_mode;
   const char* country;
   double x;
