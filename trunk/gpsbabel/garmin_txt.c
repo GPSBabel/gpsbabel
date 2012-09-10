@@ -139,7 +139,7 @@ static info_t* route_info;
 static int route_idx;
 static info_t* cur_info;
 
-static char* headers[] = {
+static const char* headers[] = {
   "Name\tDescription\tType\tPosition\tAltitude\tDepth\tProximity\tTemperature\t"
   "Display Mode\tColor\tSymbol\tFacility\tCity\tState\tCountry\t"
   "Date Modified\tLink\tCategories",
@@ -531,11 +531,11 @@ write_waypt(const waypoint* wpt)
   unsigned char wpt_class;
   garmin_fs_p gmsd;
   char* wpt_type;
-  char* dspl_mode;
+  const char* dspl_mode;
   const char* country;
   double x;
   int i, icon, dynamic;
-  char* icon_descr;
+  const char* icon_descr;
 
   gmsd = GMSD_FIND(wpt);
 
@@ -602,7 +602,8 @@ write_waypt(const waypoint* wpt)
   icon_descr = gt_find_desc_from_icon_number(icon, GDB, &dynamic);
   print_string("%s\t", icon_descr);
   if (dynamic) {
-    xfree(icon_descr);
+    // sleaze alert: cast away constness.
+    xfree((char *) icon_descr);
   }
 
   print_string("%s\t", GMSD_GET(facility, ""));

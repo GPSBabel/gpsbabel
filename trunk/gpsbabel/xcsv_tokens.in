@@ -1,4 +1,4 @@
-struct xt_mapping {char *name; int xt_token; };
+struct xt_mapping {const char *name; int xt_token; };
 %%
 ALT_FEET, XT_ALT_FEET
 ALT_METERS, XT_ALT_METERS

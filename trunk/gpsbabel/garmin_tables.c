@@ -729,7 +729,7 @@ gt_switch_display_mode_value(const unsigned char display_mode, const int protoid
   }
 }
 
-char*
+const char*
 gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, int* dynamic)
 {
   icon_mapping_t* i;
@@ -993,7 +993,7 @@ gt_get_mps_grid_longname(const grid_type grid, const char* module)
 const char*
 gt_get_mps_datum_name(const int datum_index)
 {
-  char* result;
+  const char* result;
   datum_mapping_t* d;
 
   result = GPS_Math_Get_Datum_Name(datum_index);

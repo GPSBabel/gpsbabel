@@ -212,7 +212,7 @@ gusb_list_units()
 void
 gusb_id_unit(garmin_unit_info_t* gu)
 {
-  static const char  oid[12] =
+  static const unsigned char  oid[12] =
   {20, 0, 0, 0, 0xfe, 0, 0, 0, 0, 0, 0, 0};
   garmin_usb_packet iresp;
   int i;

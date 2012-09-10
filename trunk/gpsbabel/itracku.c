@@ -57,7 +57,7 @@ static void itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(waypoint* wp
 static void itracku_file_write_waypt(gbfile* fout, const waypoint* wpt);
 
 /* itracku device access */
-static const char read_update_data_command[] = { 0x60, 0xb5, 0, 0, 0, 0, 0 }; /* command string to start memory dump */
+static const unsigned char read_update_data_command[] = { 0x60, 0xb5, 0, 0, 0, 0, 0 }; /* command string to start memory dump */
 static const int timeout = 1000; /* timeout for all read operations */
 static const char update_end_marker[] = "WP Update Over"; /* end marker for the memory dump */
 static const int update_end_marker_size = sizeof(update_end_marker);

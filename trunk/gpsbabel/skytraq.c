@@ -740,9 +740,9 @@ process_data_sector(struct read_state *pst, const gbuint8 *buf, int len)
 
 /* Note: the buffer is being padded with 0xFFs if necessary so there are always SECTOR_SIZE valid bytes */
 static int
-skytraq_read_single_sector(int sector, gbuint8 *buf)
+skytraq_read_single_sector(unsigned int sector, gbuint8 *buf)
 {
-  gbuint8 MSG_LOG_SECTOR_READ_CONTROL[2] = { 0x1B, sector };
+  gbuint8 MSG_LOG_SECTOR_READ_CONTROL[2] = { 0x1B, (gbuint8)(sector) };
   int errors = 5;		/* allow this many errors */
   int c, i, j, cs;
   gbuint8 buffer[16];
