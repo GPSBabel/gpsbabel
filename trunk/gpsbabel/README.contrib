@@ -52,10 +52,10 @@ If you are creating a new target you should submit patches (use
   conversions and any support files that your code requires.
 * vecs.c - an updated vecs.c file implementing your conversion code into
   GPSBabel.
-* Makefile - an updated Makefile telling the compiler how to build and link
+* Makefile.in - an updated Makefile telling the compiler how to build and link
   your conversion into GPSBabel
-* testo - an updated script that tests your conversion (this should produce
-  no output if all is good, see the current testo script for examples)
+* testo.d/$TARGET - an updated script that tests your conversion (this should 
+  produce no output if all is good, see the current testo script for examples)
 * YourOutput - a sample file of code produced by your function (used in testo
   and lives in a directory called "reference").
 * Documentation - see below.

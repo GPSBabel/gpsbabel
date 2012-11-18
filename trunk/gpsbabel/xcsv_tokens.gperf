@@ -1,5 +1,5 @@
 /* ANSI-C code produced by gperf version 3.0.4 */
-/* Command-line: gperf -L ANSI-C -D -t xcsv_tokens.in  */
+/* Command-line: gperf --output-file=xcsv_tokens.gperf -L ANSI-C -D -t xcsv_tokens.in  */
 /* Computed positions: -k'2,4-5,12,$' */
 
 #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
