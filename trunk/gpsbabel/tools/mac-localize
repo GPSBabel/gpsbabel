@@ -2,7 +2,8 @@
 # the application menu and system buttons.  See description at
 # http://doc.qt.nokia.com/4.6/mac-differences.html#translating-the-application-menu-and-native-dialogs
 
-QTDIR="/Developer/Applications/Qt/Qt Creator.app/Contents/Resources/translations"
+QTDIR=`qmake -query QT_INSTALL_TRANSLATIONS`
+
 LANGDIR=objects/GPSBabelFE.app/Contents/MacOS/translations
 
 

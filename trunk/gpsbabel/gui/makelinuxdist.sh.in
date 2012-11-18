@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e -v
-QTLIBDIR=/usr/lib
-QTSHDIR=/usr/share/qt4
+QT_INSTALL_PLUGINS=`qmake -query QT_INSTALL_PLUGINS`
+QT_INSTALL_TRANSLATIONS=`qmake -query QT_INSTALL_TRANSLATIONS`
 
 DISTNAME=GPSBabel@PACKAGE_VERSION@@PACKAGE_RELEASE@
 DISTDIR=$DISTNAME
@@ -11,37 +11,20 @@ mkdir $DISTDIR/plugins
 mkdir $DISTDIR/translations
 mkdir $DISTDIR/help
 
-cp `ldd objects/gpsbabelfe-bin  | grep libQtCore |awk '{print $3}'` $DISTDIR
-cp `ldd objects/gpsbabelfe-bin  | grep libQtGui |awk '{print $3}'` $DISTDIR
-cp `ldd objects/gpsbabelfe-bin  | grep libQtWebKit |awk '{print $3}'` $DISTDIR
-cp `ldd objects/gpsbabelfe-bin  | grep libQtXml |awk '{print $3}'` $DISTDIR
-cp `ldd objects/gpsbabelfe-bin  | grep libQtNetwork |awk '{print $3}'` $DISTDIR
-cp `ldd objects/gpsbabelfe-bin  | grep libQtDBus |awk '{print $3}'` $DISTDIR
-cp `ldd objects/gpsbabelfe-bin  | grep libphonon |awk '{print $3}'` $DISTDIR
-cp `ldd objects/gpsbabelfe-bin  | grep libaudio   |awk '{print $3}'` $DISTDIR
+QT_LIBS=`ldd objects/gpsbabelfe-bin | grep libQt | awk '{print $3}'`
+for lib in $QT_LIBS
+do
+	cp $lib $DISTDIR
+done
+#cp `ldd objects/gpsbabelfe-bin  | grep libphonon |awk '{print $3}'` $DISTDIR
+#cp `ldd objects/gpsbabelfe-bin  | grep libaudio   |awk '{print $3}'` $DISTDIR
 
-cp -r $QTSHDIR/plugins/imageformats $DISTDIR/plugins
-cp $QTSHDIR/translations/qt_*.qm $DISTDIR/translations/
+cp -r $QT_INSTALL_PLUGINS/imageformats $DISTDIR/plugins
+cp -r $QT_INSTALL_PLUGINS/codecs $DISTDIR/plugins
+cp $QT_INSTALL_TRANSLATIONS/qt_*.qm $DISTDIR/translations/
 
-# Generate the compiled translations
-TSFILES="gpsbabel_de.ts 
-gpsbabel_es.ts 
-gpsbabel_fr.ts 
-gpsbabel_hu.ts 
-gpsbabel_it.ts 
-gpsbabelfe_de.ts 
-gpsbabelfe_es.ts 
-gpsbabelfe_fr.ts 
-gpsbabelfe_hu.ts 
-gpsbabelfe_it.ts"
-
-#
-lrelease $TSFILES
-QMFILES=`echo $TSFILES | sed -e 's/\.ts/.qm/g'`
-cp $TSFILES $DISTDIR/translations
-#
-# Only Spanish and German are moderately OK.
-cp gpsbabel_es.ts gpsbabelfe_es.ts gpsbabel_de.ts gpsbabelfe_de.ts $DISTDIR/translations
+# copy the compiled translations
+cp *.qm $DISTDIR/translations
 
 # Now our gui
 cp gmapbase.html $DISTDIR/
@@ -51,19 +34,14 @@ cp objects/gpsbabelfe-bin $DISTDIR
 cp qt.conf $DISTDIR/
 cp ../gpsbabel $DISTDIR/
 #
-# Help needs to be donea
-cp ../../babelweb/htmldoc-development/* $DISTDIR/help/
+cp -r help/*.html $DISTDIR/help
 
-cp COPYING $DISTDIR/
+cp ../COPYING $DISTDIR/
 #cp AUTHORS $DISTDIR/
-#cp README.contrib $DISTDIR/
-#cp README.gui $DISTDIR/
+cp ../README* $DISTDIR/
 
 
 rm -f $DISTDIR.tar $DISTDIR.tar.bz2
 tar cvf $DISTDIR.tar $DISTDIR
 bzip2 $DISTDIR.tar
 
-# cleanup needed
-echo $QMFILES
-rm -f $QMFILES
