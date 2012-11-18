@@ -3,6 +3,7 @@
     Support for Garmin Points of Interest (.gpi files)
 
     Copyright (C) 2007 Olaf Klein, o.b.klein@gpsbabel.org
+    Copyright (C) 2007-2012 Robert Lipe, robertlipe@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -564,11 +565,15 @@ read_tag(const char* caller, const int tag, waypoint* wpt)
 
   case 0xe:	/* ? notes or description / or both ? */
     mask = gbfgetc(fin);
-    if (mask == 0x01) {
+    // Olaf's code called this a mask, but the bits below have nothing
+    // in common.  I'm wondering if that first byte is something else and
+    // a type e is always a note.
+    switch (mask) {
+    case 0x01:
+    case 0x05:
+    case 0x32:
       str = gpi_read_string("Notes");
-    } else if (mask == 0x32) {
-      str = gpi_read_string("Notes");
-    } else {
+    default:
       break;
     }
 
@@ -1156,7 +1161,7 @@ wdata_write(const writer_data_t* data)
 
 
 static void
-write_category(const char* category, const char* image, const int image_sz)
+write_category(const char* category, const unsigned char* image, const int image_sz)
 {
   int sz;
 
@@ -1248,7 +1253,7 @@ enum_waypt_cb(const waypoint* ref)
 
 
 static void
-load_bitmap_from_file(const char* fname, char** data, int* data_sz)
+load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
 {
   gbfile* f;
   int i, sz;
@@ -1257,7 +1262,7 @@ load_bitmap_from_file(const char* fname, char** data, int* data_sz)
   bmp_header_t src_h;
   int* color_table = NULL;
   gpi_bitmap_header_t* dest_h;
-  char* ptr;
+  unsigned char* ptr;
 
   f = gbfopen_le(fname, "rb", MYNAME);
   is_fatal(gbfgetint16(f) != 0x4d42, MYNAME ": No BMP image.");
@@ -1341,7 +1346,7 @@ load_bitmap_from_file(const char* fname, char** data, int* data_sz)
     sz += (src_h.used_colors * 4);
   }
 
-  ptr = (char*) xmalloc(sz);
+  ptr = (unsigned char*) xmalloc(sz);
   dest_h = (gpi_bitmap_header_t*)ptr;
   *data = ptr;
   *data_sz = sz;
@@ -1360,14 +1365,14 @@ load_bitmap_from_file(const char* fname, char** data, int* data_sz)
   le_write32(&dest_h->size_2c, (dest_line_sz * src_h.height) + 0x2c);
 
   /* copy and revert order of BMP lines */
-  ptr = (char*)dest_h;
+  ptr = (unsigned char*)dest_h;
   ptr += (sizeof(*dest_h) + (dest_line_sz * (src_h.height - 1)));
 
   if (src_h.bpp == 24) {
     /* 24 bpp seems to be not supported, convert to 32 bpp */
     for (i = 0; i < src_h.height; i++) {
       int j;
-      char* p = ptr;
+      unsigned char* p = ptr;
 
       for (j = 0; j < src_h.width; j++) {
         int color;
@@ -1386,7 +1391,7 @@ load_bitmap_from_file(const char* fname, char** data, int* data_sz)
     }
 
   if (src_h.used_colors > 0) {
-    ptr = (char*)dest_h;
+    ptr = (unsigned char*)dest_h;
     ptr += (sizeof(*dest_h) + (src_h.height * src_line_sz));
 
     for (i = 0; i < src_h.used_colors; i++) {
@@ -1559,7 +1564,7 @@ garmin_gpi_read(void)
 static void
 garmin_gpi_write(void)
 {
-  char* image;
+  unsigned char* image;
   int image_sz;
 
   if (strlen(opt_cat) == 0) {
