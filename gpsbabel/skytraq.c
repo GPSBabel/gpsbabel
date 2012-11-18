@@ -2,7 +2,7 @@
 
     Serial download of track data from GPS loggers with Skytraq chipset.
 
-    Copyright (C) 2008-2009  Mathias Adam, m.adam (at) adamis.de
+    Copyright (C) 2008-2012  Mathias Adam, m.adam (at) adamis.de
 
     2008         J.C Haessig, jean-christophe.haessig (at) dianosis.org
     2009-09-06 | Josef Reisinger | Added "set target location", i.e. -i skytrag,targetlocation=<lat>:<lng>
@@ -57,7 +57,6 @@ static char *port;			/* port name */
 static void *serial_handle = 0;		/* IO file descriptor */
 static int skytraq_baud = 0;		/* detected baud rate */
 static gbfile *file_handle = 0;		/* file descriptor (used by skytraq-bin format) */
-static int utc_offset = 16;
 
 static char *opt_erase = 0;		/* erase after read? (0/1) */
 static char *opt_initbaud = 0;		/* baud rate used to init device */
@@ -507,11 +506,70 @@ static unsigned int me_read32(const unsigned char *p)
   return ((unsigned)be_read16(p+2) << 16) | ((unsigned)be_read16(p));
 }
 
+static time_t
+gpstime_to_timet(int week, int sec)
+{
+  /* Notes:
+   *   * assumes we're between the 1st and 2nd week rollover
+   *     (i.e. between 22 Aug 1999 and 7 April 2019), so this
+   *     should be taken care of before the next rollover...
+   *   * list of leap seconds taken from
+   *     <http://maia.usno.navy.mil/ser7/tai-utc.dat>
+   *     as of 2012-10-12. Please update when necessary.
+   *     Announcement of leap seconds:
+   *     <http://hpiers.obspm.fr/iers/bul/bulc/bulletinc.dat>
+   *   * leap seconds of 1999 JAN  1 and before are not reflected
+   *     here, beware when using this for really old data
+   *   * overflow of sec into next week is allowed
+   *     (i.e. sec >= 7*24*3600 = 604800 is allowed)
+   */
+  time_t gps_timet = 315964800;     /* Jan 06 1980 0:00 UTC */
+  gps_timet += (week+1024)*7*SECONDS_PER_DAY + sec;
+
+  /* leap second compensation: */
+  gps_timet -= 13;  /* diff GPS-UTC=13s (valid from Jan 01 1999 on) */
+  if (gps_timet >= 1136073600)      /* Jan 01 2006 0:00 UTC */
+    gps_timet--;                    /*   GPS-UTC = 14s      */
+  if (gps_timet >= 1230768000)      /* Jan 01 2009 0:00 UTC */
+    gps_timet--;                    /*   GPS-UTC = 15s      */
+  if (gps_timet >= 1341100800)      /* Jul 01 2012 0:00 UTC */
+    gps_timet--;                    /*   GPS-UTC = 16s      */
+
+  return gps_timet;     /* returns UTC time */
+}
+
+static void
+ECEF_to_LLA(double x, double y, long z, double *lat, double *lon, double *alt)
+{
+  /* constants: */
+  const double CA   = 6378137.0;
+  const double CB   = 6356752.31424518;
+  const double CE2  = (CA*CA - CB*CB) / (CA*CA);    /* =e^2 */
+  const double CE_2 = (CA*CA - CB*CB) / (CB*CB);    /* =e'^2 */
+
+  /* auxiliary values: */
+  double AP = sqrt(x*x + y*y);
+  double ATHETA = atan2(z*CA, AP*CB);
+
+  /* latitude (in radians): */
+  *lat = atan2(z + CE_2 * CB * pow(sin(ATHETA), 3), AP - CE2 * CA * pow(cos(ATHETA), 3));
+
+  /* longitude (in radians): */
+  *lon = atan2(y, x);
+
+  /* height above ellipsoid (in meters): */
+  *alt = AP/cos(*lat) - CA/sqrt(1 - CE2 * pow(sin(*lat), 2));
+
+  *lat = *lat /M_PI*180;
+  *lon = *lon /M_PI*180;
+}
+
 struct read_state {
   route_head          *route_head_;
   unsigned            wpn, tpn;
 
-  time_t ts;
+  unsigned gps_week;
+  unsigned gps_sec;
   long x, y, z;
 };
 
@@ -529,7 +587,8 @@ state_init(struct read_state *pst)
   pst->wpn        = 0;
   pst->tpn        = 0;
 
-  pst->ts         = 0;
+  pst->gps_week   = 0;
+  pst->gps_sec    = 0;
   pst->x          = 0;
   pst->y          = 0;
   pst->z          = 0;
@@ -542,47 +601,12 @@ make_trackpoint(struct read_state *st, double lat, double lon, double alt)
 
   xasprintf(&wpt->shortname, "TP%04d", ++st->tpn);
 
-  wpt->latitude       = lat;;
+  wpt->latitude       = lat;
   wpt->longitude      = lon;
   wpt->altitude       = alt;
-  wpt->creation_time  = st->ts;
+  wpt->creation_time  = gpstime_to_timet(st->gps_week, st->gps_sec);
 
   return wpt;
-}
-
-static time_t
-gpstime_to_timet(int week, int sec)
-{
-  /* TODO: make leap second compensation more general
-   * (the windows software seems to correct by a magic amount).
-   */
-  return (315964800 + (week+1024)*7*SECONDS_PER_DAY + sec - utc_offset);
-}
-
-static void
-ECEF_to_LLA(double x, double y, long z, double *lat, double *lon, double *alt)
-{
-  /* constants: */
-#define CA     6378137.0
-#define CB     6356752.31424518
-#define CE2    (CA*CA - CB*CB) / (CA*CA)    /* =e^2 */
-#define CE_2   (CA*CA - CB*CB) / (CB*CB)    /* =e'^2 */
-  /* auxiliary values: */
-#define AP     sqrt(x*x + y*y)
-#define ATHETA atan2(z*CA, AP*CB)
-#define AN     CA / sqrt(1 - CE2 * pow(sin(*lat), 2))       /* must calc *lat before using AN! */
-
-  // latitude (in radians):
-  *lat = atan2(z + CE_2 * CB * pow(sin(ATHETA), 3), AP - CE2 * CA * pow(cos(ATHETA), 3));
-
-  // longitude (in radians):
-  *lon = atan2(y, x);
-
-  // height above ellipsoid (in meters):
-  *alt = AP/cos(*lat) - AN;
-
-  *lat = *lat /M_PI*180;
-  *lon = *lon /M_PI*180;
 }
 
 typedef struct {
@@ -594,7 +618,7 @@ typedef struct {
 } full_item;
 
 typedef struct {
-  gbuint16 dt;  // Is it right that time is unsigned and everything else is signed?  Not sure, but without this being unsigned, we get odd failures on 64-bit systems.
+  gbuint16 dt;
   gbint16 dx;
   gbint16 dy;
   gbint16 dz;
@@ -650,14 +674,15 @@ process_data_item(struct read_state *pst, const item_frame *pitem, int len)
     f.y = me_read32(pitem->full.y);
     f.z = me_read32(pitem->full.z);
 
-    pst->ts = gpstime_to_timet(f.gps_week, f.gps_sec);
+    pst->gps_week = f.gps_week;
+    pst->gps_sec = f.gps_sec;
     pst->x = f.x;
     pst->y = f.y;
     pst->z = f.z;
 
-    db(4, "Got %s item: week=%i sec=%i (time_t=%i)  x=%i  y=%i  z=%i  speed=%i\n",
+    db(4, "Got %s item: week=%i  sec=%i  x=%i  y=%i  z=%i  speed=%i\n",
        poi ? "POI" : "full",
-       f.gps_week, f.gps_sec, pst->ts,
+       f.gps_week, f.gps_sec,
        f.x, f.y, f.z,
        ITEM_SPEED(pitem));
 
@@ -687,7 +712,7 @@ process_data_item(struct read_state *pst, const item_frame *pitem, int len)
        c.dt, c.dx, c.dy, c.dz,
        ITEM_SPEED(pitem), (pitem->comp.dpos[2] & 0x0F)>>2);
 
-    pst->ts += c.dt;
+    pst->gps_sec += c.dt;
     pst->x += c.dx;
     pst->y += c.dy;
     pst->z += c.dz;
@@ -1183,10 +1208,6 @@ skytraq_read(void)
 static void
 file_init(const char *fname)
 {
-  if (1 || getenv("GPSBABEL_FREEZE_TIME")) {
-    // Offset when our reference files were made.  Yes, this sucks.
-    utc_offset = 13;
-  }
   db(1, "Opening file...\n");
   if ((file_handle = gbfopen(fname, "rb", MYNAME)) == NULL) {
     fatal(MYNAME ": Can't open file '%s'\n", fname);
