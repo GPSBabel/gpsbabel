@@ -4985,7 +4985,9 @@ else
        { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
 fi
-ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss gui/makelinuxdist.sh xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc jeeps/Makefile shapelib/Makefile zlib/empty"
+ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc jeeps/Makefile shapelib/Makefile zlib/empty"
+
+ac_config_files="$ac_config_files gui/makelinuxdist.sh"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5544,13 +5546,13 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "gbversion.h") CONFIG_FILES="$CONFIG_FILES gbversion.h" ;;
     "gui/setup.iss") CONFIG_FILES="$CONFIG_FILES gui/setup.iss" ;;
-    "gui/makelinuxdist.sh") CONFIG_FILES="$CONFIG_FILES gui/makelinuxdist.sh" ;;
     "xmldoc/makedoc") CONFIG_FILES="$CONFIG_FILES xmldoc/makedoc" ;;
     "tools/mkcapabilities") CONFIG_FILES="$CONFIG_FILES tools/mkcapabilities" ;;
     "win32/gpsbabel.rc") CONFIG_FILES="$CONFIG_FILES win32/gpsbabel.rc" ;;
     "jeeps/Makefile") CONFIG_FILES="$CONFIG_FILES jeeps/Makefile" ;;
     "shapelib/Makefile") CONFIG_FILES="$CONFIG_FILES shapelib/Makefile" ;;
     "zlib/empty") CONFIG_FILES="$CONFIG_FILES zlib/empty" ;;
+    "gui/makelinuxdist.sh") CONFIG_FILES="$CONFIG_FILES gui/makelinuxdist.sh" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -6099,6 +6101,11 @@ echo "$as_me: $ac_file is unchanged" >&6;}
 
   esac
 
+
+  case $ac_file$ac_mode in
+    "gui/makelinuxdist.sh":F) chmod +x gui/makelinuxdist.sh ;;
+
+  esac
 done # for ac_tag
 
 

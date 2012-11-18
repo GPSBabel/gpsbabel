@@ -429,6 +429,7 @@ if test "$ac_cv_valistisarray" = true ; then
 else
        AC_MSG_RESULT(no)
 fi
-AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss gui/makelinuxdist.sh xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc jeeps/Makefile shapelib/Makefile zlib/empty])
+AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc jeeps/Makefile shapelib/Makefile zlib/empty])
+AC_CONFIG_FILES([gui/makelinuxdist.sh], [chmod +x gui/makelinuxdist.sh])
 AC_OUTPUT
 

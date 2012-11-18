@@ -136,6 +136,7 @@ fileinfo.o: win32/gpsbabel.rc
 
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
+	[ -f gui/Makefile ] && $(MAKE) -C gui clean
 
 configure: configure.in
 	autoconf
@@ -348,13 +349,17 @@ mac-release:
 	tar cvzf gpsbabel-osx.tgz usr/bin/gpsbabel
 	curl -u anonymous:anonymous --upload-file gpsbabel-osx.tgz ftp://upload.sf.net/incoming/
 
-
-mac-gui: gpsbabel
-	# file gpsbabel | grep '2 architectures' || exit 1
-	# file gui/objects/GPSBabelFE.app/Contents/MacOS/GPSBabelFE | grep '2 architectures' || exit 1
+gui: gpsbabel
 	cd gui ; qmake && make
 	cd gui ; lupdate  app.pro
 	cd gui ; lrelease  app.pro
+
+linux-gui: gui
+	cd gui; ./makelinuxdist.sh
+
+mac-gui: gui
+	# file gpsbabel | grep '2 architectures' || exit 1
+	# file gui/objects/GPSBabelFE.app/Contents/MacOS/GPSBabelFE | grep '2 architectures' || exit 1
 	mkdir -p gui/objects/GPSBabelFE.app/Contents/MacOS/translations
 	cp gui/*.qm  gui/objects/gpsbabelFE.app/Contents/MacOS/translations
 	cp gpsbabel gui/objects/GPSBabelFE.app/Contents/MacOS
