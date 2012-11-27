@@ -1,0 +1,5 @@
+<para>This option processes a set of Locus fixes, by downloading it from an 
+attached USB device or by reading records stored in a normal file.</para>
+<para>You might want to disable this option if all you want to do is erase the memory 
+or display the device status.  Downloading a large dataset can take several minutes
+and while that is happening no other device commands can be executed.</para>

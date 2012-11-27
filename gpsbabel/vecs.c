@@ -87,6 +87,7 @@ extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
 extern ff_vecs_t mtk_m241_vecs;
 extern ff_vecs_t mtk_m241_fvecs;
+extern ff_vecs_t mtk_locus_vecs;
 extern ff_vecs_t navicache_vecs;
 extern ff_vecs_t netstumbler_vecs;
 extern ff_vecs_t nmea_vecs;
@@ -501,6 +502,12 @@ vecs_t vec_list[] = {
     "m241-bin",
     "Holux M-241 (MTK based) Binary File Format",
     "bin"
+  },
+  {
+    &mtk_locus_vecs,
+    "mtk_locus",
+    "MediaTek Locus",
+    NULL
   },
 #endif // MAXIMAL_ENABLED
   {
