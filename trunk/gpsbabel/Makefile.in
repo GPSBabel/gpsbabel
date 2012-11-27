@@ -137,7 +137,7 @@ fileinfo.o: win32/gpsbabel.rc
 
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
-	[ -f gui/Makefile ] && $(MAKE) -C gui clean
+	if [ -f gui/Makefile ]; then $(MAKE) -C gui clean; fi
 
 configure: configure.in
 	autoconf
