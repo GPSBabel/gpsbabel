@@ -25,12 +25,13 @@ trap "rm -fr $TMPDIR" 0 1 2 3 15
 bincompare()
 {
 	rm -f ${TMPDIR}/bc1
-        rm -f ${TMPDIR}/bc2
-        ${OD} $1 >${TMPDIR}/bc1 
-        ${OD} $2 >${TMPDIR}/bc2
-        ${DIFF} ${TMPDIR}/bc1 ${TMPDIR}/bc2 || {
+		rm -f ${TMPDIR}/bc2
+		${OD} $1 >${TMPDIR}/bc1 
+		${OD} $2 >${TMPDIR}/bc2
+		${DIFF} ${TMPDIR}/bc1 ${TMPDIR}/bc2 || {
 		echo ERROR binary comparing $*
-                #exit 1
+		let errorcount=errorcout+1
+		#exit 1
 	}
 }
 
@@ -38,6 +39,7 @@ compare()
 {
 	${DIFF} -u -b $* ||  {
 		echo ERROR comparing $*
+		let errorcount=errorcout+1
 		#exit 1
 	} 
 }
@@ -54,6 +56,7 @@ gpsbabel()
 	${PNAME} $* || {
 		echo "$PNAME returned error $?"
 		echo "($PNAME $*)"
+		let errorcount=errorcout+1
 		#exit 1
 	}
 }
@@ -72,6 +75,8 @@ gpsbabel()
 # cambridge
 # cup
 
+let errorcount=0;
+
 if [ $# -ge 1 ];
 then
   while [ $# -ge 1 ];
@@ -81,7 +86,7 @@ then
     . $t
     shift;
   done
-  exit 0
+  exit $errorcount
 fi
 
 for i in testo.d/*.test
@@ -90,4 +95,4 @@ do
   . $i
 done
 
-exit 0
+exit $errorcount
