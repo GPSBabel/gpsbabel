@@ -42,6 +42,7 @@ static char* opt_trackdirection = NULL;
 static char* opt_units = NULL;
 static char* opt_labels = NULL;
 static char* opt_max_position_points = NULL;
+static char *opt_rotate_colors = NULL;
 
 static int export_lines;
 static int export_points;
@@ -51,6 +52,7 @@ static int extrude;
 static int trackdata;
 static int trackdirection;
 static int max_position_points;
+static int rotate_colors;
 static int line_width;
 static int html_encrypt;
 
@@ -162,6 +164,11 @@ arglist_t kml_args[] = {
     "Retain at most this number of position points  (0 = unlimited)",
     "0", ARGTYPE_INT, ARG_NOMINMAX
   },
+  {
+    "rotate_colors", &opt_rotate_colors, 
+    "Rotate colors for tracks and routes (default automatic)",
+    NULL, ARGTYPE_FLOAT, "0", "360"
+  },
   ARG_TERMINATOR
 };
 
@@ -182,7 +189,60 @@ struct {
 #define ICON_MULTI_TRK ICON_BASE "track-directional/track-0.png"
 #define ICON_DIR ICON_BASE "track-directional/track-%d.png" // format string where next arg is rotational degrees.
 
+static struct {
+  float seq;
+  float step;
+  gb_color color;
+} kml_color_sequencer;
+#define KML_COLOR_LIMIT 204	/* allowed range [0,255] */
+
 #define MYNAME "kml"
+
+static void kml_init_color_sequencer(unsigned int steps_per_rev)
+{
+  float color_step;
+  if (rotate_colors) {
+    color_step = atof(opt_rotate_colors);
+    if (color_step > 0.0f) {
+      // step around circle by given number of degrees for each track(route)
+      kml_color_sequencer.step = ((float)KML_COLOR_LIMIT) * 6.0f * color_step / 360.0f;
+    } else {
+      // one cycle around circle for all the tracks(routes)
+      kml_color_sequencer.step = ((float)KML_COLOR_LIMIT) * 6.0f / ((float)steps_per_rev);
+    }
+    kml_color_sequencer.color.opacity=255;
+    kml_color_sequencer.seq = 0.0f;
+  }
+}
+
+static void kml_step_color(void)
+{
+  int color_seq;
+  // Map kml_color_sequencer.seq to an integer in the range [0, KML_COLOR_LIMIT*6).
+  // Note that color_seq may be outside this range if the cast from float to int fails.
+  color_seq = ((int) kml_color_sequencer.seq) % (KML_COLOR_LIMIT * 6);
+#ifdef KML_COLOR_DEBUG
+  printf("kml_color_sequencer seq %f %d, step %f\n",kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
+#endif
+  if ((color_seq >= (0*KML_COLOR_LIMIT)) && (color_seq < (1*KML_COLOR_LIMIT))) {
+    kml_color_sequencer.color.bbggrr = (0)<<16 | (color_seq)<<8 | (KML_COLOR_LIMIT);
+  } else if ((color_seq >= (1*KML_COLOR_LIMIT)) && (color_seq < (2*KML_COLOR_LIMIT))) {
+    kml_color_sequencer.color.bbggrr = (0)<<16 | (KML_COLOR_LIMIT)<<8 | (2*KML_COLOR_LIMIT-color_seq);
+  } else if ((color_seq >= (2*KML_COLOR_LIMIT)) && (color_seq < (3*KML_COLOR_LIMIT))) {
+    kml_color_sequencer.color.bbggrr = (color_seq-2*KML_COLOR_LIMIT)<<16 | (KML_COLOR_LIMIT)<<8 | (0);
+  } else if ((color_seq >= (3*KML_COLOR_LIMIT)) && (color_seq < (4*KML_COLOR_LIMIT))) {
+    kml_color_sequencer.color.bbggrr = (KML_COLOR_LIMIT)<<16 | (4*KML_COLOR_LIMIT-color_seq)<<8 | (0);
+  } else if ((color_seq >= (4*KML_COLOR_LIMIT)) && (color_seq < (5*KML_COLOR_LIMIT))) {
+    kml_color_sequencer.color.bbggrr = (KML_COLOR_LIMIT)<<16 | (0)<<8 | (color_seq-4*KML_COLOR_LIMIT);
+  } else if ((color_seq >= (5*KML_COLOR_LIMIT)) && (color_seq < (6*KML_COLOR_LIMIT))) {
+    kml_color_sequencer.color.bbggrr = (6*KML_COLOR_LIMIT-color_seq)<<16 | (0)<<8 | (KML_COLOR_LIMIT);
+  } else { // should not occur, but to be safe generate a legal color.
+    fprintf(stderr, "Error in color conversion - using default color.\n");
+    kml_color_sequencer.color.bbggrr = (102)<<16 | (102)<<8 | (102);
+  }
+  // compute next color.
+  kml_color_sequencer.seq = kml_color_sequencer.seq + kml_color_sequencer.step;
+}
 
 #if ! HAVE_LIBEXPAT
 static void
@@ -947,15 +1007,24 @@ static void kml_output_tailer(const route_head* header)
     }
     kml_write_xml(1, "<Placemark>\n");
     kml_write_xml(0, "<name>Path</name>\n");
-    kml_write_xml(0, "<styleUrl>#lineStyle</styleUrl>\n");
-    if (header->line_color.bbggrr >= 0 || header->line_width >= 0) {
+    if (!rotate_colors)
+      kml_write_xml(0, "<styleUrl>#lineStyle</styleUrl>\n");
+    if (header->line_color.bbggrr >= 0 || header->line_width >= 0 || rotate_colors) {
       kml_write_xml(1, "<Style>\n");
       kml_write_xml(1, "<LineStyle>\n");
-      if (header->line_color.bbggrr >= 0)
+      if (rotate_colors) {
+        kml_step_color();
         kml_write_xml(0, "<color>%02x%06x</color>\n",
-                      header->line_color.opacity, header->line_color.bbggrr);
-      if (header->line_width >= 0) {
-        kml_write_xml(0, "<width>%d</width>\n",header->line_width);
+                      kml_color_sequencer.color.opacity, kml_color_sequencer.color.bbggrr);
+        kml_write_xml(0, "<width>%s</width>\n", opt_line_width);
+      } else {
+        if (header->line_color.bbggrr >= 0) {
+          kml_write_xml(0, "<color>%02x%06x</color>\n",
+                        header->line_color.opacity, header->line_color.bbggrr);
+        }
+        if (header->line_width >= 0) {
+            kml_write_xml(0, "<width>%d</width>\n",header->line_width);
+        }
       }
       kml_write_xml(-1, "</LineStyle>\n");
       kml_write_xml(-1, "</Style>\n");
@@ -1840,6 +1909,7 @@ void kml_write(void)
   export_track = (0 ==  strcmp("1", opt_export_track));
   floating = (!! strcmp("0", opt_floating));
   extrude = (!! strcmp("0", opt_extrude));
+  rotate_colors = (!! opt_rotate_colors);
   trackdata = (!! strcmp("0", opt_trackdata));
   trackdirection = (!! strcmp("0", opt_trackdirection));
   line_width = atol(opt_line_width);
@@ -1946,6 +2016,7 @@ void kml_write(void)
       kml_write_xml(0,  "<name>Tracks</name>\n");
     }
 
+    kml_init_color_sequencer(track_count());
     if (export_track) {
       track_disp_all(kml_mt_hdr, kml_mt_tlr, NULL);
     }
@@ -1964,6 +2035,7 @@ void kml_write(void)
       kml_write_xml(1,  "<Folder>\n");
       kml_write_xml(0,  "<name>Routes</name>\n");
 
+      kml_init_color_sequencer(route_count());
       route_disp_all(kml_route_hdr,
                      kml_route_tlr, kml_route_disp);
       kml_write_xml(-1,  "</Folder>\n");
