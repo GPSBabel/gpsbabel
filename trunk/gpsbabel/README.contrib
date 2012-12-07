@@ -21,27 +21,41 @@ The entire world doesn't run <your OS here>.  I've tested this code on
 at least five different OSes.  If you find yourself wanting to insert
 compiler or OS specific magic, please resist.
 
-Coding consistency is encouraged. The reality is we have a lot of code
-that was written by different authors. Some code from other projects is
-included. We don't have immutable rules about code style (indention,
-curly location, whitespace rules, etc.) but we do ask that you try to
-match what is around any code you modify.  "When in Rome..."  
-
-If writing new code, we'd prefer a style like:
+We try to keep a consistent convention in code that's "ours".  We aren't
+interested in trying to convert zlib or jeeps to it, but in general we
+prefer:
 
 	int
 	mumble(int whatever)
 	{
-	<tab>if (whatevever) {
-	<tab><tab>return blah;
-	<tab>}
+	<2spaces>if (whatevever) {
+	<4spaces>return blah;
+	<2spaces>}
 	}
 
-...but if you're submitting a new source file that you intend to
-maintain and are convinced that two space indents will make the world a
-better place, knock yourself out.  But if you need to add a line of code
-to the above before "return blah" and do it with spaces instead of hard
-tabs, that would be bad.
+The corresponding astyle settings for this are:
+
+	# One True Brace Style - function curlies are in column zero for easy
+	# selection in vi.
+	--style=1tbs 
+
+	# Two column indents.
+	-s2 
+
+	# Even single line ifs and elses get braces.
+	--add-brackets  
+
+	# Insert space after 'if', 'for', 'while'.
+	--pad-header 
+
+	# Remove extraneous spaces in parens.
+	--unpad-paren
+
+	# Prefer char* foo to char *foo.
+	--align-pointer=type
+	--align-reference=type
+
+
 
 Submitting Patches
 ------------------
@@ -111,4 +125,4 @@ no need to repeat that information in your documentation.
 Enjoy!
 
 Robert Lipe,
-robertlipe@usa.net
+robertlipe@gpsbabel.org
