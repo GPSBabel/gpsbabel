@@ -33,35 +33,19 @@ prefer:
 	<2spaces>}
 	}
 
-The corresponding astyle settings for this are:
+Formatting can be done with astyle using the included style file
+astylerc with the command "astyle --options=astylerc {source files}".
+astyle is available at http://astyle.sourceforge.net/
 
-	# One True Brace Style - function curlies are in column zero for easy
-	# selection in vi.
-	--style=1tbs 
-
-	# Two column indents.
-	-s2 
-
-	# Even single line ifs and elses get braces.
-	--add-brackets  
-
-	# Insert space after 'if', 'for', 'while'.
-	--pad-header 
-
-	# Remove extraneous spaces in parens.
-	--unpad-paren
-
-	# Prefer char* foo to char *foo.
-	--align-pointer=type
-	--align-reference=type
-
+The corresponding astyle settings for this are provided in our source
+tree in the file named 'astylerc'
 
 
 Submitting Patches
 ------------------
 
 If you are creating a new target you should submit patches (use 
-"cvs diff -uN" to create patches) to the following files:
+"svn diff" to create patches) to the following files:
 * Yourcode.c and/or Yourcode.h - this is the code required to do your
   conversions and any support files that your code requires.
 * vecs.c - an updated vecs.c file implementing your conversion code into
