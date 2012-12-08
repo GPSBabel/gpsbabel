@@ -106,7 +106,7 @@ enigma_waypt_disp(const waypoint *wpt)
   if (wpt->shortname) {
     // The output might have a space or control character.
     int i, l = strlen(wpt->shortname);
-    t = xmalloc(l);
+    t = xmalloc(l + 1);
     char *d = t;
     for (i = 0; i < l; i++) {
       char s = wpt->shortname[i];
