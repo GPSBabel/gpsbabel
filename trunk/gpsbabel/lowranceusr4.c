@@ -437,7 +437,14 @@ lowranceusr4_parse_waypoints(void)
        time is a unix timestamp. */
     create_date = gbfgetint32(file_in);
     create_time = gbfgetint32(file_in);
-    wpt_tmp->creation_time = lowranceusr4_get_timestamp(create_date, create_time);
+
+    // Julian date 2440487 is 1/1/1970.  If that's the date we're working
+    // with, as a practical matter, we have no date, so don't even compute
+    // or set it.
+    if (create_date > 2440587) {
+      wpt_tmp->creation_time = lowranceusr4_get_timestamp(create_date,
+                                                          create_time);
+    }
 
     /* Unused byte */
     gbfgetc(file_in);
