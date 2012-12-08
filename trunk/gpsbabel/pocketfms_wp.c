@@ -68,10 +68,20 @@ data_read(void)
     wpt = waypt_new();
     s = buff;
     s = csv_lineparse(s, "\\w", "", linecount);
+    if (!s) {
+      fatal(MYNAME "Invalid name");
+    }
     wpt->shortname = xstrdup(s);
     s = csv_lineparse(NULL, "\\w", "", linecount);
+    if (!s) {
+      fatal(MYNAME "Invalid latitude %s", wpt->shortname);
+    }
     wpt->latitude = wppos_to_dec(s);
+
     s = csv_lineparse(NULL, "\\w", "", linecount);
+    if (!s) {
+      fatal(MYNAME "Invalid longitude %s", wpt->shortname);
+    }
     wpt->longitude = wppos_to_dec(s);
     waypt_add(wpt);
   }
@@ -92,7 +102,24 @@ wr_init(const char *fname)
 static void
 enigma_waypt_disp(const waypoint *wpt)
 {
-  gbfprintf(file_out, "%s %f %f\n", wpt->shortname, wpt->latitude, wpt->longitude);
+  char *t;
+  if (wpt->shortname) {
+    // The output might have a space or control character.
+    int i, l = strlen(wpt->shortname);
+    t = xmalloc(l);
+    char *d = t;
+    for (i = 0; i < l; i++) {
+      char s = wpt->shortname[i];
+      if(isgraph(s)) {
+        *d++ = s;
+      }
+    }
+    *d = 0;
+  } else {
+    t = xstrdup("NONAME");
+  }
+  gbfprintf(file_out, "%s %f %f\n", t, wpt->latitude, wpt->longitude);
+  xfree(t);
 }
 
 static void
