@@ -943,9 +943,9 @@ trackfilter_seg2trk(void)
         dest = route_head_alloc();
         dest->rte_num = src->rte_num;
         /* name in the form TRACKNAME #n */
-        snprintf(trk_seg_num_buf, sizeof(trk_seg_num_buf), "%d", ++trk_seg_num);
-        dest->rte_name = (char*) xmalloc(strlen(src->rte_name)+strlen(trk_seg_num_buf)+3);
-        sprintf(dest->rte_name, "%s #%s", src->rte_name, trk_seg_num_buf);
+        if (src->rte_name) {
+          xasprintf(&dest->rte_name, "%s #%s", src->rte_name, ++trk_seg_num);
+        }
 
         /* Insert after original track or after last newly
          * created track */
