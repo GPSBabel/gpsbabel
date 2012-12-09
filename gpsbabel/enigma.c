@@ -196,7 +196,7 @@ data_write(void)
 static void
 wr_deinit(void)
 {
-  gbfclose(file_in);
+  gbfclose(file_out);
 }
 
 ff_vecs_t enigma_vecs = {
