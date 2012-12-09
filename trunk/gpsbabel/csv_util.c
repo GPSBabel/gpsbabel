@@ -2019,6 +2019,15 @@ xcsv_waypt_pr(const waypoint* wpt)
       }
       break;
       /* Tracks and Routes ***********************************************/
+    case XT_TRACK_NEW:
+      if (csv_track) {
+        if (WAYPT_HAS(wpt,new_trkseg)) {
+          writebuff(buff, fmp->printfc, 1);
+        } else {
+          writebuff(buff, fmp->printfc, 0);
+        }
+      }
+      break;
     case XT_TRACK_NAME:
       if (csv_track) {
         writebuff(buff, fmp->printfc, NONULL(csv_track->rte_name));
