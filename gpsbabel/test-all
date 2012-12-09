@@ -152,77 +152,97 @@ function STAGE_0 ()
     echo "$CAPS" |
     
     while read type caps format comment; do
- if [ "$format" -ne "pocketfms_wpt" ]; then
-   continue;
- fi   
-	for i in $EXCL; do
-		if [ "$format" == "$i" ]; then
-			caps="------"
-		fi
-	done
-	
-	case ${caps:0:2} in
-	    rw)
-		CMD="${PNAME} -i gpx -f $REFGPX -x nuketypes,routes,tracks -o $format -F $TEMPDIR/w-$format"
-		try_run "${CMD}" || continue
-		STAGE_1 "w" $format || exit 1
-		;;
-	    -w)
-		CMD="${PNAME} -i gpx -f $REFGPX -x nuketypes,routes,tracks -o $format -F $TEMPDIR/w-$format"
-		try_run "${CMD}" || continue
-		;;
-	esac
-	case ${caps:2:2} in
-	    rw)
-		CMD="${PNAME} -t -i gpx -f $REFGPX -x nuketypes,waypoints,routes -x track,fix=2D -o $format -F $TEMPDIR/t-$format"
-		try_run "${CMD}" || continue
-		STAGE_1 "t" $format || exit 1
-		;;
-	    -w)
-		CMD="${PNAME} -t -i gpx -f $REFGPX -x nuketypes,waypoints,routes -x track,fix=2D -o $format -F $TEMPDIR/t-$format"
-		try_run "${CMD}" || continue
-		;;
-	esac
-	case ${caps:4:2} in
-	    rw)
-		CMD="${PNAME} -r -i gpx -f $REFGPX -x nuketypes,waypoints,tracks -o $format -F $TEMPDIR/r-$format"
-		try_run "${CMD}" || continue
-		STAGE_1 "r" $format || exit 1
-		;;
-	    -w)
-		CMD="${PNAME} -r -i gpx -f $REFGPX -x nuketypes,waypoints,tracks -o $format -F $TEMPDIR/r-$format"
-		try_run "${CMD}" || continue
-		;;
-	esac
+    
+    for i in $EXCL; do
+        if [ "$format" == "$i" ]; then
+            caps="------"
+        fi
+    done
+    
+    case ${caps:0:2} in
+        rw)
+        CMD="${PNAME} -i gpx -f $REFGPX -x nuketypes,routes,tracks -o $format -F $TEMPDIR/w-$format"
+        try_run "${CMD}" || continue
+        STAGE_1 "w" $format || exit 1
+        ;;
+        -w)
+        CMD="${PNAME} -i gpx -f $REFGPX -x nuketypes,routes,tracks -o $format -F $TEMPDIR/w-$format"
+        try_run "${CMD}" || continue
+        ;;
+    esac
+    case ${caps:2:2} in
+        rw)
+        CMD="${PNAME} -t -i gpx -f $REFGPX -x nuketypes,waypoints,routes -x track,fix=2D -o $format -F $TEMPDIR/t-$format"
+        try_run "${CMD}" || continue
+        STAGE_1 "t" $format || exit 1
+        ;;
+        -w)
+        CMD="${PNAME} -t -i gpx -f $REFGPX -x nuketypes,waypoints,routes -x track,fix=2D -o $format -F $TEMPDIR/t-$format"
+        try_run "${CMD}" || continue
+        ;;
+    esac
+    case ${caps:4:2} in
+        rw)
+        CMD="${PNAME} -r -i gpx -f $REFGPX -x nuketypes,waypoints,tracks -o $format -F $TEMPDIR/r-$format"
+        try_run "${CMD}" || continue
+        STAGE_1 "r" $format || exit 1
+        ;;
+        -w)
+        CMD="${PNAME} -r -i gpx -f $REFGPX -x nuketypes,waypoints,tracks -o $format -F $TEMPDIR/r-$format"
+        try_run "${CMD}" || continue
+        ;;
+    esac
     done
     rm -f $TEMPDIR/.result
 }
 
-rm -rf $TEMPDIR > /dev/null
-mkdir -p $TEMPDIR > /dev/null
-
 while [ $# -gt 0 ]; do
     case $1 in
-	-s|--start)	# remove catalog. run the full test.
-	    rm -f $CATALOG
-	    ;;
-	-v|--valgrind)
-	    vg=1
-	    ;;
-	-p|--prepare)	# prepare for valgrind check.
-	    prep=1
-	    ;;
-	-c|--clean)
-	    trap "rm -fr $TEMPDIR; exit 1" 0 1 2 3 15
-	    ;;
-	-n|--random)
-	    ${PNAME} -i random -w -f - -i random,points=48 -r -f - -i random,points=120 -t -f - -o gpx,gpxver=1.1 -F $RNDFILE
-	    REFGPX=/tmp/gb-random.gpx
-	    ;;
-	-r|--reference)
-	    shift
-	    REFGPX=$1
-	    ;;
+    -s|--start)	# remove catalog. run the full test.
+        rm -f $CATALOG
+        ;;
+    -v|--valgrind)
+        vg=1
+        ;;
+    -p|--prepare)	# prepare for valgrind check.
+        prep=1
+        ;;
+    -c|--clean)
+        trap "rm -fr $TEMPDIR; exit 1" 0 1 2 3 15
+        ;;
+    -n|--random)
+        ${PNAME} -i random -w -f - -i random,points=48 -r -f - -i random,points=120 -t -f - -o gpx,gpxver=1.1 -F $RNDFILE
+        REFGPX=$RNDFILE
+        ;;
+    -r|--reference)
+        shift
+        REFGPX=$1
+        ;;
+    -j|--judge)	# implies tallying so we have something to judge.
+        tally=1
+        judge=1
+        ;;
+    -J|--rejudge)	# re-judge a previous run and exit without running more tests.
+        tally=1
+        judge=1
+        tally_log
+        exit $?
+        ;;
+    -t|--tally)
+        tally=1
+        ;;
+    -T|--retally)	# re-tally a previous run and exit without running more tests.
+        tally=1
+        tally_log
+        exit 0
+        ;;
+    -W|--wipe)	# clean up files and exit
+        rm -rf $TEMPDIR > /dev/null
+        rm -f $CATALOG
+        rm -f $LOGFILE
+        rm -f $RNDFILE
+        exit 0
+        ;;
     esac
     shift
 done
