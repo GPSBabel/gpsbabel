@@ -390,9 +390,11 @@ ce_check_route_names(void)
     ce_route* route = (ce_route*) elem;
     if (route->r->rte_name == NULL)	{
       *cdatastr = '\0';
-      strcat(cdatastr, ((ce_mark*) QUEUE_FIRST(&route->ce_mark_head))->wp->shortname);
-      strcat(cdatastr, "->");
-      strcat(cdatastr, ((ce_mark*) QUEUE_LAST(&route->ce_mark_head))->wp->shortname);
+      if (!QUEUE_EMPTY(&route->ce_mark_head)) {
+        strcat(cdatastr, ((ce_mark*) QUEUE_FIRST(&route->ce_mark_head))->wp->shortname);
+        strcat(cdatastr, "->");
+        strcat(cdatastr, ((ce_mark*) QUEUE_LAST(&route->ce_mark_head))->wp->shortname);
+      }
       route->r->rte_name = xstrdup(cdatastr);
     }
   }

@@ -1,8 +1,9 @@
+#!/bin/sh
 
 PNAME=${PNAME:-./gpsbabel}
 DIFF=${DIFF:-diff}
 
-TMPDIR=/tmp/gpsbabel.$$
+TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
 mkdir -p $TMPDIR
 trap "rm -fr $TMPDIR" 0 1 2 3 15
 

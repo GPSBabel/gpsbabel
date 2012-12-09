@@ -7,13 +7,38 @@ REFGPX="reference/expertgps.gpx"	# reference file for all tests
 EXCL="exif ozi vitosmt xol navigonwpt gopal"	# exclude formats from test
 CAPS=""
 TEMPDIR=${GBTEMP:-/tmp}/gb-test-all
-CATALOG=/tmp/gb-test-all.done
-LOGFILE=/tmp/gb-test-all.log
-RNDFILE=/tmp/gb-random.gpx
+CATALOG=${GBTEMP:-/tmp}/gb-test-all.done
+LOGFILE=${GBTEMP:-/tmp}/gb-test-all.log
+RNDFILE=${GBTEMP:-/tmp}/gb-random.gpx
 
 # options
 vg=0
 prep=0
+tally=0
+judge=0
+
+function tally_log()
+{
+    local exceptions=`grep '^cmd([0-9]*)\*[*]*:' $LOGFILE | wc -l`
+    local onlyunexpected=`grep '^cmd([0-9]*)\*:' $LOGFILE | wc -l`
+    local nonfatals=`grep '^cmd([0-9]*)\*\*:' $LOGFILE | wc -l`
+    local fatals=`grep '^cmd([0-9]*)\*\*\*:' $LOGFILE | wc -l`
+    local totals=`grep '^cmd([0-9]*)[*]*:' $LOGFILE | wc -l`
+    echo "Fatal Error Cases:"
+    grep '^cmd([0-9]*)\*\*\*:' $LOGFILE
+    echo ""
+    echo Error Summary:
+    echo "tests with errors and/or unexpected output: $exceptions"
+    echo "  tests without error but with unexpected output: $onlyunexpected"
+    echo "  tests with non-fatal errors: $nonfatals"
+    echo "  tests with fatal errors: $fatals"
+    echo "total tests: $totals"
+    if [ $fatals -gt 0 ]; then
+        return 1
+    else
+        return 0
+    fi
+}
 
 function log_entry()
 {
@@ -27,25 +52,36 @@ function try_run() # command line
 {
     local CMD="$*"
     local RES=0
+    local SEVERITY=""
     
     [ $vg -ne 0 ] && CMD="valgrind -q $CMD"
 
     ${CMD} > $TEMPDIR/.result 2>&1
     RES=$?
     if [ $RES -ne 0 -o -s $TEMPDIR/.result ]; then
-	if [ $RES -ne 0 ]; then
-	    echo " -- Uhps --"
-	    echo "-----------------------------------------------------------------------"
-	    test -s $TEMPDIR/.result && cat $TEMPDIR/.result
-	    echo "-----------------------------------------------------------------------"
-	else
-	    echo ""
-	fi
-	log_entry "cmd($RES): $CMD"
-	test -s $TEMPDIR/.result && cat $TEMPDIR/.result >> ${LOGFILE}
-	return 1
+        if [ $RES -ne 0 ]; then
+            echo " -- Signal $RES --"
+            if [ -s $TEMPDIR/.result ]; then
+                echo "---------------------------output-follows------------------------------"
+                cat $TEMPDIR/.result
+                echo "-----------------------------------------------------------------------"
+            fi
+        else
+            echo " -- unexpected output exists, see $LOGFILE --"
+        fi
+        if [ $RES -gt 128 ]; then
+            SEVERITY="***"
+        elif [ $RES -gt 0 ]; then
+            SEVERITY="**"
+        else
+            SEVERITY="*"
+        fi
+        log_entry "cmd($RES)$SEVERITY: $CMD"
+        test -s $TEMPDIR/.result && cat $TEMPDIR/.result >> ${LOGFILE}
+        return 1
     else
-	return 0
+        log_entry "cmd($RES): $CMD"
+        return 0
     fi
 }
 
@@ -59,54 +95,54 @@ function STAGE_1 () # type format
     
     while read type caps format comment; do
     
-	for i in $EXCL; do
-	    if [ "$format" == "$i" ]; then
-		caps="------"
-	    fi
-	done
-	
-	grep "$TYP: $FMT & $format" ${CATALOG} > /dev/null && continue
-	
-	echo -n "testing "
-	case $TYP in
-	    w)
-		echo -n "waypoints"
-		caps=${caps:0:2}
-		;;
-	    t)
-		echo -n "tracks"
-		caps=${caps:2:2}
-		;;
-	    r)
-		echo -n "routes"
-		caps=${caps:4:2}
-		;;
-	esac
+        for i in $EXCL; do
+            if [ "$format" == "$i" ]; then
+            caps="------"
+            fi
+        done
+        
+        grep "$TYP: $FMT & $format" ${CATALOG} > /dev/null && continue
+        
+        echo -n "testing "
+        case $TYP in
+            w)
+            echo -n "waypoints"
+            caps=${caps:0:2}
+            ;;
+            t)
+            echo -n "tracks"
+            caps=${caps:2:2}
+            ;;
+            r)
+            echo -n "routes"
+            caps=${caps:4:2}
+            ;;
+        esac
 
-	echo -n ": \"$FMT\" with \"$format\" "
-	
-	IFILE=$TEMPDIR/$TYP-$FMT
-	OFILE=$TEMPDIR/$TYP-$FMT.$format
-	
-	case $caps in
-	    -w)
-		echo -n "*"
-		CMD1="${PNAME} -$TYP -i $FMT -f $IFILE -o $format -F $OFILE"
-		try_run "${CMD1}" || continue
-		;;
-		
-	    rw)
-		echo -n "*"
-		CMD1="${PNAME} -$TYP -i $FMT -f $IFILE -o $format -F $OFILE"
-		try_run "${CMD1}" || continue
-		echo -n "*"
-		CMD2="${PNAME} -$TYP -i $format -f $OFILE -o $FMT -F $OFILE.$FMT"
-		try_run "${CMD2}" || continue
-		;;
-	esac
-	
-	echo "*"
-	echo "$TYP: $FMT & $format" >> $CATALOG
+        echo -n ": \"$FMT\" with \"$format\" "
+        
+        IFILE=$TEMPDIR/$TYP-$FMT
+        OFILE=$TEMPDIR/$TYP-$FMT.$format
+        
+        case $caps in
+            -w)
+            echo -n "*"
+            CMD1="${PNAME} -$TYP -i $FMT -f $IFILE -o $format -F $OFILE"
+            try_run "${CMD1}" || continue
+            ;;
+            
+            rw)
+            echo -n "*"
+            CMD1="${PNAME} -$TYP -i $FMT -f $IFILE -o $format -F $OFILE"
+            try_run "${CMD1}" || continue
+            echo -n "*"
+            CMD2="${PNAME} -$TYP -i $format -f $OFILE -o $FMT -F $OFILE.$FMT"
+            try_run "${CMD2}" || continue
+            ;;
+        esac
+        
+        echo "*"
+        echo "$TYP: $FMT & $format" >> $CATALOG
     done
     return 0
 }
@@ -116,7 +152,9 @@ function STAGE_0 ()
     echo "$CAPS" |
     
     while read type caps format comment; do
-    
+ if [ "$format" -ne "pocketfms_wpt" ]; then
+   continue;
+ fi   
 	for i in $EXCL; do
 		if [ "$format" == "$i" ]; then
 			caps="------"
@@ -202,7 +240,9 @@ if test ! -s $REFGPX; then
     exit 1
 fi
 
-test -s $LOGFILE && rm -f $LOGFILE.bak > /dev/null
+rm -rf $TEMPDIR > /dev/null
+mkdir -p $TEMPDIR > /dev/null
+rm -f $LOGFILE
 touch $LOGFILE
 touch $CATALOG
 
@@ -211,3 +251,11 @@ echo "Catalog: $CATALOG" >> $LOGFILE
 
 CAPS=`${PNAME} -^2 | grep "^file"`
 STAGE_0
+if [ $tally -ne 0 ]; then
+    tally_log
+    judgement=$?
+    if [ $judge -ne 0 ]; then
+        exit $judgement
+    fi
+fi
+exit 0

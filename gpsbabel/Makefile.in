@@ -138,6 +138,7 @@ fileinfo.o: win32/gpsbabel.rc
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
 	if [ -f gui/Makefile ]; then $(MAKE) -C gui clean; fi
+	./test-all -W
 
 configure: configure.in
 	autoconf
@@ -166,7 +167,7 @@ torture:
 # 	faults, math overflows and other hard errors
 #
 	@echo "test-all in progress... (read/write test between all possible formats)"
-	@./test-all -s -r reference/expertgps.gpx
+	@./test-all -s -r reference/expertgps.gpx -t
 
 #
 # This will only work on UNIX-like substances.
