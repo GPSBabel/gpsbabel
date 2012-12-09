@@ -938,13 +938,12 @@ trackfilter_seg2trk(void)
     QUEUE_FOR_EACH((queue *)&src->waypoint_list, elem, tmp) {
       waypoint *wpt = (waypoint *)elem;
       if (wpt->wpt_flags.new_trkseg && !first) {
-        char trk_seg_num_buf[10];
 
         dest = route_head_alloc();
         dest->rte_num = src->rte_num;
         /* name in the form TRACKNAME #n */
         if (src->rte_name) {
-          xasprintf(&dest->rte_name, "%s #%s", src->rte_name, ++trk_seg_num);
+          xasprintf(&dest->rte_name, "%s #%d", src->rte_name, ++trk_seg_num);
         }
 
         /* Insert after original track or after last newly
