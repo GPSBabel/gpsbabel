@@ -23,3 +23,7 @@ compare ${REFERENCE}/track/trackfilter_faketime_forced.gpx ${TMPDIR}/ftf.gpx
 # reverse the track
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trk_reverse_test-fwd.gpx -x reverse -o gpx -F ${TMPDIR}/trk_reverse_test-rev.gpx
 compare ${REFERENCE}/track/trk_reverse_test-rev.gpx ${TMPDIR}/trk_reverse_test-rev.gpx
+
+# seg2trk filter test
+gpsbabel -i gpx -f ${REFERENCE}/track/seg2trk_test.gpx -x track,seg2trk -o gpx -F ${TMPDIR}/seg2trk_test-seg.gpx
+compare ${REFERENCE}/track/seg2trk_test-seg.gpx ${TMPDIR}/seg2trk_test-seg.gpx
