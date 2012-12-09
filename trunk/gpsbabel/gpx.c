@@ -242,6 +242,26 @@ gpx_rm_from_global(gpx_global_entry* ge)
   }
 }
 
+/*
+ * gpx_reset_short_handle: used for waypoint, route and track names
+ * this allows gpx:wpt names to overlap gpx:rtept names, etc.
+ */
+static void
+gpx_reset_short_handle(void)
+{
+  if (mkshort_handle != NULL) {
+    mkshort_del_handle(&mkshort_handle);
+  }
+
+  mkshort_handle = mkshort_new_handle();
+
+  if (suppresswhite) {
+    setshort_whitespace_ok(mkshort_handle, 0);
+  }
+
+  setshort_length(mkshort_handle, atoi(snlen));
+}
+
 static void
 gpx_write_gdata(gpx_global_entry* ge, const char* tag)
 {
@@ -1347,7 +1367,7 @@ gpx_rd_deinit(void)
 static void
 gpx_wr_init(const char* fname)
 {
-  mkshort_handle = mkshort_new_handle();
+  mkshort_handle = NULL;
 
   ofd = gbfopen(fname, "w", MYNAME);
 }
@@ -1694,29 +1714,16 @@ static void
 gpx_waypt_pr(const waypoint* waypointp)
 {
   const char* oname;
-  char* odesc;
   fs_xml* fs_gpx;
   garmin_fs_t* gmsd;	/* gARmIN sPECIAL dATA */
-
-  /*
-   * Desparation time, try very hard to get a good shortname
-   */
-  odesc = waypointp->notes;
-  if (!odesc) {
-    odesc = waypointp->description;
-  }
-  if (!odesc) {
-    odesc = waypointp->shortname;
-  }
-
-  oname = global_opts.synthesize_shortnames ?
-          mkshort(mkshort_handle, odesc) :
-          waypointp->shortname;
 
   gbfprintf(ofd, "<wpt lat=\"" FLT_FMT "\" lon=\"" FLT_FMT "\">\n",
             waypointp->latitude,
             waypointp->longitude);
 
+  oname = global_opts.synthesize_shortnames ?
+          mkshort_from_wpt(mkshort_handle, waypointp) :
+          waypointp->shortname;
   gpx_write_common_position(waypointp, "  ");
   gpx_write_common_description(waypointp, "  ", oname);
   gpx_write_common_acc(waypointp, "  ");
@@ -1761,6 +1768,7 @@ gpx_track_hdr(const route_head* rte)
 static void
 gpx_track_disp(const waypoint* waypointp)
 {
+  const char* oname;
   fs_xml* fs_gpx;
   int first_in_trk;
   first_in_trk = waypointp->Q.prev == &current_trk_head->waypoint_list;
@@ -1793,9 +1801,12 @@ gpx_track_disp(const waypoint* waypointp)
   /* GPX doesn't require a name on output, so if we made one up
    * on input, we might as well say nothing.
    */
+  oname = global_opts.synthesize_shortnames ?
+          mkshort_from_wpt(mkshort_handle, waypointp) :
+          waypointp->shortname;
   gpx_write_common_description(waypointp, "  ",
                                waypointp->wpt_flags.shortname_is_synthetic ?
-                               NULL : waypointp->shortname);
+                               NULL : oname);
   gpx_write_common_acc(waypointp, "  ");
 
   fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
@@ -1846,14 +1857,18 @@ gpx_route_hdr(const route_head* rte)
 static void
 gpx_route_disp(const waypoint* waypointp)
 {
+  const char* oname;
   fs_xml* fs_gpx;
 
   gbfprintf(ofd, "  <rtept lat=\"" FLT_FMT_R "\" lon=\"" FLT_FMT_R "\">\n",
             waypointp->latitude,
             waypointp->longitude);
 
+  oname = global_opts.synthesize_shortnames ?
+          mkshort_from_wpt(mkshort_handle, waypointp) :
+          waypointp->shortname;
   gpx_write_common_position(waypointp, "    ");
-  gpx_write_common_description(waypointp, "    ", waypointp->shortname);
+  gpx_write_common_description(waypointp, "    ", oname);
   gpx_write_common_acc(waypointp, "    ");
 
   fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
@@ -1905,7 +1920,6 @@ static void
 gpx_write(void)
 {
   time_t now = 0;
-  int short_length;
 
   /* if an output version is not specified and an input version is
    * available use it, otherwise use the default.
@@ -1929,14 +1943,6 @@ gpx_write(void)
   }
 
   now = current_time();
-
-  short_length = atoi(snlen);
-
-  if (suppresswhite) {
-    setshort_whitespace_ok(mkshort_handle, 0);
-  }
-
-  setshort_length(mkshort_handle, short_length);
 
   gbfprintf(ofd, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", global_opts.charset_name);
   gbfprintf(ofd, "<gpx\n  version=\"%s\"\n", gpx_wversion);
@@ -1986,8 +1992,11 @@ gpx_write(void)
     gbfprintf(ofd, "</metadata>\n");
   }
 
+  gpx_reset_short_handle();
   waypt_disp_all(gpx_waypt_pr);
+  gpx_reset_short_handle();
   gpx_route_pr();
+  gpx_reset_short_handle();
   gpx_track_pr();
 
   gbfprintf(ofd, "</gpx>\n");
