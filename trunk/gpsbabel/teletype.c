@@ -35,10 +35,10 @@ arglist_t teletype_args[] = {
 *******************************************************************************/
 
 static gbuint32 tty_wpt_count;
-static gbfile *fin;
+static gbfile* fin;
 
 static void
-teletype_rd_init(const char *fname)
+teletype_rd_init(const char* fname)
 {
   char header[64];
 
@@ -59,7 +59,7 @@ teletype_read(void)
 {
   int i;
   for (i = 0; i < tty_wpt_count; i++) {
-    waypoint *wpt = waypt_new();
+    waypoint* wpt = waypt_new();
     wpt->shortname = (gbfgetcstr(fin));
     wpt->description = (gbfgetcstr(fin));
 
@@ -73,7 +73,7 @@ teletype_read(void)
     if (1) {  // need bit value of NEWFORMAT
       int len = gbfgetuint16(fin);
       // probably could treat as a pascal string
-      char *junk = (char*) xmalloc(len);
+      char* junk = (char*) xmalloc(len);
       gbfread(junk, len, 1, fin);
       xfree(junk);
     }
@@ -91,27 +91,6 @@ teletype_read(void)
 }
 
 static void
-teletype_wr_init(const char *fname)
-{
-//	fout = gbfopen(fname, "w", MYNAME);
-}
-
-static void
-teletype_wr_deinit(void)
-{
-//	gbfclose(fout);
-}
-
-static void
-teletype_write(void)
-{
-// Here is how you register callbacks for all waypoints, routes, tracks.
-// waypt_disp_all(waypt)
-// route_disp_all(head, tail, rtept);
-// track_disp_all(head, tail, trkpt);
-}
-
-static void
 teletype_exit(void)		/* optional */
 {
 }
@@ -124,16 +103,16 @@ teletype_exit(void)		/* optional */
 ff_vecs_t teletype_vecs = {
   ff_type_file,
   {
-    (ff_cap)(ff_cap_read | ff_cap_write) 	/* waypoints */,
+    (ff_cap)(ff_cap_read) 	/* waypoints */,
     ff_cap_none 			/* tracks */,
     ff_cap_none 			/* routes */
   },
   teletype_rd_init,
-  teletype_wr_init,
+  NULL,
   teletype_rd_deinit,
-  teletype_wr_deinit,
+  NULL,
   teletype_read,
-  teletype_write,
+  NULL,
   teletype_exit,
   teletype_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
