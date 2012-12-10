@@ -203,7 +203,7 @@ geoniche_read_asc(void)
 
   /* Process record 0 */
   pdb_rec = file_in->rec_list;
-  if (strcmp((char*) pdb_rec->data, Rec0Magic)) {
+  if (!pdb_rec || strcmp((char*) pdb_rec->data, Rec0Magic)) {
     fatal(MYNAME ": Bad record 0, not a GeoNiche file.\n");
   }
   pdb_rec = pdb_rec->next;
