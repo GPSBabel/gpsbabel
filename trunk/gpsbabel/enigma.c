@@ -151,11 +151,6 @@ wr_init(const char* fname)
   file_out = gbfopen_le(fname, "wb", MYNAME);
 }
 
-static void
-route_head_noop(const route_head* wp)
-{
-}
-
 #ifndef min
 #define min(a,b) ((a) < (b)) ? (a) : (b)
 #endif
@@ -190,7 +185,7 @@ enigma_waypt_disp(const waypoint* wpt)
 static void
 data_write(void)
 {
-  route_disp_all(route_head_noop, route_head_noop, enigma_waypt_disp);
+  route_disp_all(NULL, NULL, enigma_waypt_disp);
 }
 
 static void
@@ -202,7 +197,7 @@ wr_deinit(void)
 ff_vecs_t enigma_vecs = {
   ff_type_file,
   {
-    (ff_cap)(ff_cap_read | ff_cap_write),  	/* waypoints */
+    ff_cap_none,                    /* waypoints */
     ff_cap_none,                    /* tracks */
     (ff_cap)(ff_cap_read | ff_cap_write) 	/* routes */
   },
