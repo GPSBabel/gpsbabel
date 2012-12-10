@@ -112,7 +112,7 @@ data_read(void)
   pdbrec_t *pdb_rec;
   int	i;
 
-  if ((file_in->creator != MYCREATOR) || (file_in->type != MYTYPE)) {
+  if (!file_in->rec_list || (file_in->creator != MYCREATOR) || (file_in->type != MYTYPE)) {
     fatal(MYNAME ": Not a QuoVadis file.\n");
   }
 
