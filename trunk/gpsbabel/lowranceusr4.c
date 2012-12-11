@@ -656,7 +656,7 @@ lowranceusr4_parse_trails(void)
     text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
     if (text_len) {
       buff[text_len] = '\0';
-      trk_head->rte_desc = buff;
+      trk_head->rte_desc = xstrdup(buff);
     }
 
     /* Creation date/time, discard for now */
