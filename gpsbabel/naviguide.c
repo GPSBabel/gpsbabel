@@ -47,8 +47,8 @@ typedef struct {
 typedef struct {
   unsigned char pad1[8];   /*  0xfe, 0xff, 0xff, 0xff, 0x01, 0x00, 0x00, 0x00 */
   /* coordination are in old israeli grid */
-  gbuint32 East;
-  gbuint32 North;
+  gbint32 East;
+  gbint32 North;
   unsigned char pad2[2];  /* 0x01, 0x01 */
   gbuint32 Alt;
   char CommentLength;
@@ -252,8 +252,8 @@ ng_waypt_rd(const waypoint* wpt)
     fatal(MYNAME ": Waypoint %d is out of the israeli grid area", current_wp_ix);
   }
 
-  WPNC.wp_data.North = (gbuint32)lat;
-  WPNC.wp_data.East = (gbuint32)lon;
+  WPNC.wp_data.North = (gbint32)lat;
+  WPNC.wp_data.East = (gbint32)lon;
 
   if (reorder_wp) {
     sprintf(temp_short_name, "A%03d", current_wp_ix);
