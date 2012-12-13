@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>1970-01-01T00:00:00Z</time>
+<bounds minlat="20.556257939" minlon="32.568395522" maxlat="22.556254099" maxlon="34.568387647"/>
+<rte>
+  <rtept lat="22.556250760" lon="32.568395669">
+    <ele>0.000000</ele>
+    <name>1</name>
+    <cmt>1</cmt>
+    <desc>1</desc>
+  </rtept>
+  <rtept lat="22.556254099" lon="34.568387354">
+    <ele>0.000000</ele>
+    <name>2</name>
+    <cmt>2</cmt>
+    <desc>2</desc>
+  </rtept>
+  <rtept lat="20.556260799" lon="34.568387647">
+    <ele>0.000000</ele>
+    <name>3</name>
+    <cmt>3</cmt>
+    <desc>3</desc>
+  </rtept>
+  <rtept lat="20.556257939" lon="32.568395522">
+    <ele>0.000000</ele>
+    <name>4</name>
+    <cmt>4</cmt>
+    <desc>4</desc>
+  </rtept>
+</rte>
+</gpx>

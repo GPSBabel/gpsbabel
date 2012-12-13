@@ -302,6 +302,10 @@ compare ${REFERENCE}/v900_advanced_mode.gpx ${TMPDIR}/v900_advanced_mode.gpx
 #
 gpsbabel -i naviguide -f ${REFERENCE}/route/naviguide-route.twl -o gpx -F ${TMPDIR}/naviguide.gpx
 compare ${REFERENCE}/route/naviguide.gpx ${TMPDIR}/naviguide.gpx
+# Make sure ICS negative eastings and northings work.
+gpsbabel -i gpx -f ${REFERENCE}/ics.gpx -o naviguide -F ${TMPDIR}/ics.gpx.naviguide
+gpsbabel -i naviguide -f ${TMPDIR}/ics.gpx.naviguide -o gpx -F ${TMPDIR}/ics.gpx.naviguide.gpx
+compare ${REFERENCE}/ics.gpx.naviguide.gpx ${TMPDIR}/ics.gpx.naviguide.gpx
 
 #
 # Basic VPL test
