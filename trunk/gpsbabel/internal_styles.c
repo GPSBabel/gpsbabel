@@ -236,7 +236,8 @@ static char flysight[] =
 "IFIELD IGNORE,		\"\",	\"%s\"	# Vertical accuracy (m)\n"
 "IFIELD IGNORE,		\"\",	\"%s\"	# Speed accuracy (m/s)\n"
 "IFIELD GPS_FIX,		\"\",	\"%s\"	# GPS fix type\n"
-"IFIELD GPS_SAT,		\"\",	\"%d\"	# Number of satellites used in fix\n";
+"IFIELD GPS_SAT,		\"\",	\"%d\"	# Number of satellites used in fix\n"
+;
 static char fugawi[] = 
 "# fugawi XCSV style file\n"
 "#\n"
@@ -780,6 +781,59 @@ static char land_air_sea[] =
 "IFIELD PATH_SPEED_MPH,\"\",\"%.1fmph\"\n"
 "IFIELD IGNORE,\"\",\"%s\" #This is the bearing data\n"
 "IFIELD ALT_FEET,\"\",\"%dft\"\n"
+;
+static char mainnav[] = 
+"#\n"
+"#   Support for MainNav CSV format\n"
+"#\n"
+"#   Copyright (C) 2012 Robert Lipe, gpsbabel.org\n"
+"#\n"
+"#   This program is free software; you can redistribute it and/or modify\n"
+"#   it under the terms of the GNU General Public License as published by\n"
+"#   the Free Software Foundation; either version 2 of the License, or\n"
+"#   (at your option) any later version.\n"
+"#\n"
+"#   This program is distributed in the hope that it will be useful,\n"
+"#   but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"#   GNU General Public License for more details.\n"
+"#\n"
+"#   You should have received a copy of the GNU General Public License\n"
+"#   along with this program; if not, write to the Free Software\n"
+"#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA\n"
+"#\n"
+"# gpsbabel XCSV style file\n"
+"# Format: Mainnav MG-950d data logger and possibly others\n"
+"# Author: tsteven4\n"
+"# Date: December 13, 2012\n"
+"#\n"
+"# \n"
+"DESCRIPTION	Mainnav\n"
+"EXTENSION	nav\n"
+"DATATYPE	TRACK\n"
+"#\n"
+"#\n"
+"# FILE LAYOUT DEFINITIIONS:\n"
+"#\n"
+"FIELD_DELIMITER		COMMA\n"
+"RECORD_DELIMITER	NEWLINE\n"
+"BADCHARS	COMMA\n"
+
+"#\n"
+"# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+"#\n"
+"IFIELD	LOCAL_TIME, \"\", \"%Y/%m/%d %H:%M:%S\"\n"
+"IFIELD	LON_DECIMAL,\"\",\"%.9f\"\n"
+"IFIELD	LON_DIR,\"\",\"%c\"\n"
+"IFIELD	LAT_DECIMAL,\"\",\"%.9f\"\n"
+"IFIELD	LAT_DIR,\"\",\"%c\"\n"
+"IFIELD	IGNORE, \"\", \"%s\"	# ALT?\n"
+"IFIELD	IGNORE, \"\", \"%s\"	# SPD?\n"
+"IFIELD	IGNORE, \"\", \"%s\"	# PATH?\n"
+"IFIELD	IGNORE, \"\", \"%s\"	# FILENAME?\n"
+"IFIELD	IGNORE, \"\", \"%s\"	# MODE?\n"
+"IFIELD	IGNORE, \"\", \"%s\"	# JOURNEY_INDEX?\n"
+"IFIELD	IGNORE, \"\", \"%s\"	# ?\n"
 ;
 static char mapconverter[] = 
 "# Format: Mapopolis.com Mapconverter\n"
@@ -1405,8 +1459,8 @@ static char xmapwpt[] =
 "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
 "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
 ;
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn_places", tomtom_itn_places } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "ricoh", ricoh } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "motoactv", motoactv } , { "mapconverter", mapconverter } , { "land_air_sea", land_air_sea } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "igo2008_poi", igo2008_poi } , { "iblue757", iblue757 } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "flysight", flysight } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 39;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn_places", tomtom_itn_places } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "sportsim", sportsim } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "ricoh", ricoh } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "motoactv", motoactv } , { "mapconverter", mapconverter } , { "mainnav", mainnav } , { "land_air_sea", land_air_sea } , { "kwf2", kwf2 } , { "ktf2", ktf2 } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "igo2008_poi", igo2008_poi } , { "iblue757", iblue757 } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "flysight", flysight } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 40;
 #else /* CSVFMTS_ENABLED */
 style_vecs_t style_list[] = {{0,0}};
 size_t nstyles = 0;

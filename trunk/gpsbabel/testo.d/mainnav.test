@@ -1,0 +1,8 @@
+#!/bin/sh
+
+#
+# Mainnav tests
+#
+gpsbabel -i mainnav -f ${REFERENCE}/track/mainnav_mg-950d.nav -o gpx -F ${TMPDIR}/mainnav_mg-950d.gpx
+compare ${TMPDIR}/mainnav_mg-950d.gpx ${REFERENCE}/track/mainnav_mg-950d.gpx
+
