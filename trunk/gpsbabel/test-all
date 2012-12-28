@@ -3,7 +3,8 @@
 ### cross format read/(write) test ###
 
 PNAME=${PNAME:-./gpsbabel}
-REFGPX="reference/expertgps.gpx"	# reference file for all tests
+BASEPATH=`dirname $0`
+REFGPX="${BASEPATH}/reference/expertgps.gpx"	# reference file for all tests
 EXCL="exif ozi vitosmt xol navigonwpt gopal"	# exclude formats from test
 CAPS=""
 TEMPDIR=${GBTEMP:-/tmp}/gb-test-all

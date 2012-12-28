@@ -6,4 +6,5 @@
 # from time to time.
 #
 
-PNAME="valgrind -q ./gpsbabel" ./testo
+BASEPATH=`dirname $0`
+PNAME="valgrind -q ./gpsbabel" ${BASEPATH}/testo

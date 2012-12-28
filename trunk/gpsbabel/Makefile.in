@@ -140,7 +140,7 @@ fileinfo.o: win32/gpsbabel.rc
 clean:
 	rm -f $(OBJS) gpsbabel gpsbabel.exe
 	if [ -f gui/Makefile ]; then $(MAKE) -C gui clean; fi
-	./test-all -W
+	$(srcdir)/test-all -W
 
 configure: configure.in
 	autoconf
@@ -150,18 +150,18 @@ tag:
 	svn copy https://gpsbabel.googlecode.com/svn/trunk/ https://gpsbabel.googlecode.com/svn/tags/gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@
 
 more-clean: clean
-	tools/mkmoreclean
+	$(srcdir)/tools/mkmoreclean
 
 check:
-	./testo
+	$(srcdir)/testo
 
 torture:
 	@echo "testo in progress... (basic data integrity test)"
-	@./testo
+	@$(srcdir)/testo
 	@echo "vtesto in progress... (valgrind is watching testo)"
-	@./vtesto
+	@$(srcdir)/vtesto
 	@echo "torture_test in progress... (shortname reduction)"
-	@./torture_test
+	@$(srcdir)/torture_test
 #
 # 	Because there are some "non-real" errors like "IGC: bad date" 
 # 	test-all does not stop on errors.
@@ -169,7 +169,7 @@ torture:
 # 	faults, math overflows and other hard errors
 #
 	@echo "test-all in progress... (read/write test between all possible formats)"
-	@./test-all -s -r reference/expertgps.gpx -t
+	@$(srcdir)/test-all -s -r $(srcdir)/reference/expertgps.gpx -t
 
 #
 # This will only work on UNIX-like substances.
@@ -192,8 +192,8 @@ leaktest:
 
 dep:
 	make clean && make EXTRA_CFLAGS="-isystem /sw/include -MMD"  && cat $(sort $(DEPFILES)) > /tmp/dep && rm $(DEPFILES)
-	echo "internal_styles.c: mkstyle.sh style/*.style" >> /tmp/dep
-	echo "	@srcdir@/mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)"  >> /tmp/dep
+	echo 'internal_styles.c: mkstyle.sh $$(srcdir)/style/*.style' >> /tmp/dep
+	echo '	$$(srcdir)/mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)'  >> /tmp/dep
 	echo Edit Makefile.in and bring in /tmp/dep
 
 $(WEB)/htmldoc-$(DOCVERSION)/index.html: FORCE
@@ -1148,5 +1148,5 @@ zlib/trees.o: zlib/trees.c zlib/deflate.h zlib/zutil.h zlib/zlib.h \
   zlib/zconf.h zlib/trees.h
 zlib/uncompr.o: zlib/uncompr.c zlib/zlib.h zlib/zconf.h
 zlib/zutil.o: zlib/zutil.c zlib/zutil.h zlib/zlib.h zlib/zconf.h
-internal_styles.c: mkstyle.sh style/*.style
-	./mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)
+internal_styles.c: mkstyle.sh $(srcdir)/style/*.style
+	$(srcdir)/mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)
