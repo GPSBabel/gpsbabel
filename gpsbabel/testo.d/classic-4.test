@@ -115,8 +115,8 @@ gpsbabel -i gpx -f ${TMPDIR}/${GoPalName}.im2  -o gopal -F ${TMPDIR}/${GoPalName
 compare ${TMPDIR}/${GoPalName}.tst2 ${TMPDIR}/${GoPalName}.tst3
 
 # Gopal with 11 fields is slightly more sane.
-gpsbabel -i gopal -f reference/gopal-11.trk -o gpx -F ${TMPDIR}/gopal-11-gpx.gpx
-compare ${TMPDIR}/gopal-11-gpx.gpx reference/gopal-11-gpx.gpx
+gpsbabel -i gopal -f ${REFERENCE}/gopal-11.trk -o gpx -F ${TMPDIR}/gopal-11-gpx.gpx
+compare ${TMPDIR}/gopal-11-gpx.gpx ${REFERENCE}/gopal-11-gpx.gpx
 
 #
 # Height filter

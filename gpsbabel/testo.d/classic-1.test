@@ -100,12 +100,12 @@ compare ${REFERENCE}/lowrance-v3-unicsv.txt ${TMPDIR}/lowrance-v3-unicsv.txt
 #
 # CSV (Comma separated value) data.
 
-gpsbabel  -i geo -f ${REFERENCE}/../geocaching.loc -o csv -F ${TMPDIR}/csv.csv
-gpsbabel  -i csv -f ${TMPDIR}/csv.csv -o csv -F ${TMPDIR}/csv2.csv
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o csv -F ${TMPDIR}/csv.csv
+gpsbabel -i csv -f ${TMPDIR}/csv.csv -o csv -F ${TMPDIR}/csv2.csv
 compare ${TMPDIR}/csv2.csv ${TMPDIR}/csv.csv 
 # And the alternate command line version.
-gpsbabel  -i csv -o gpx ${TMPDIR}/csv.csv ${TMPDIR}/csv3.gpx
-gpsbabel  -i gpx -o csv ${TMPDIR}/csv3.gpx ${TMPDIR}/csv4.csv
+gpsbabel -i csv -o gpx ${TMPDIR}/csv.csv ${TMPDIR}/csv3.gpx
+gpsbabel -i gpx -o csv ${TMPDIR}/csv3.gpx ${TMPDIR}/csv4.csv
 compare ${TMPDIR}/csv.csv ${TMPDIR}/csv4.csv 
 
 #

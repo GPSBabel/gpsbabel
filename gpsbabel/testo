@@ -81,7 +81,7 @@ if [ $# -ge 1 ];
 then
   while [ $# -ge 1 ];
   do
-    t=testo.d/$1.test
+    t=${BASEPATH}/testo.d/$1.test
     echo Running $t
     . $t
     shift;
@@ -89,7 +89,7 @@ then
   exit $errorcount
 fi
 
-for i in testo.d/*.test
+for i in ${BASEPATH}/testo.d/*.test
 do
   echo Running $i
   . $i

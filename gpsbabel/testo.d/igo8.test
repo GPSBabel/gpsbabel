@@ -12,4 +12,4 @@ compare ${TMPDIR}/igo.gpx ${TMPDIR}/new-igo2.gpx
 # verify that one such files converts sensibly to GPX.
 
 gpsbabel -i igo8 -f ${REFERENCE}/track/igo8_padded.trk -o gpx -F ${TMPDIR}/igo8_padded.gpx
-compare reference/track/igo8_padded~gpx.gpx ${TMPDIR}/igo8_padded.gpx
+compare ${REFERENCE}/track/igo8_padded~gpx.gpx ${TMPDIR}/igo8_padded.gpx
