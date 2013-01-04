@@ -193,6 +193,10 @@ rm -f ${TMPDIR}/google.out
 gpsbabel -i google -f ${REFERENCE}/google_jan_06.html -o csv -F ${TMPDIR}/google.out
 compare ${TMPDIR}/google.out ${REFERENCE}/google_jan_06.csv
 
+rm -f ${TMPDIR}/google.out
+gpsbabel -i google -f ${REFERENCE}/google_multisegment.js -o gpx -F ${TMPDIR}/google.out
+compare ${TMPDIR}/google.out ${REFERENCE}/google_multisegment.gpx
+
 #
 # DeLorme .an1 tests
 #

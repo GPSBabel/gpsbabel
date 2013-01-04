@@ -328,7 +328,7 @@ google_read(void)
         panel = strstr(dict, "panel:\"");
         panelofs = 7;
       }
-      tmp = panel;
+      tmp=encoded_points;
       while (tmp) {
         if (qc == '"') {
           char* tmp1 = strstr(tmp, "\"points\":\"");
@@ -339,8 +339,8 @@ google_read(void)
         } else {
           tmp = strstr(tmp, "points: '");
         }
-        count++;
         if (tmp) {
+          count++;
           tmp++;
         }
       }
