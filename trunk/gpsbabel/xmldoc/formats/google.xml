@@ -2,7 +2,7 @@
       
       
       <para> This format is designed to read the XML emitted when you
-tack "&amp;output=js" onto the end of a <ulink url="http://maps.google.com">Google Maps">Google Maps</ulink> route URL (use
+tack "&amp;output=js" onto the end of a <ulink url="http://maps.google.com">Google Maps</ulink> route URL (use
 the "link to this page" option to get a usable URL.)  This allows you
 to plan a route using Google Maps, then download it and use it in your
 own mapping program or GPS receiver.   To get a file suitable for use
