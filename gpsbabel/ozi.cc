@@ -200,7 +200,7 @@ static void
 ozi_openfile(char *fname)
 {
   char *c, *cx, *tmpname;
-  char *ozi_extensions[] = {0, "plt", "wpt", "rte"};
+  const char *ozi_extensions[] = {0, "plt", "wpt", "rte"};
   char buff[32];
 
   /* if we're doing multi-track output, sequence the filenames like:
@@ -249,7 +249,7 @@ ozi_openfile(char *fname)
 static void
 ozi_track_hdr(const route_head * rte)
 {
-  static char *ozi_trk_header =
+  static const char *ozi_trk_header =
     "OziExplorer Track Point File Version 2.1\r\n"
     "WGS 84\r\n"
     "Altitude is in %s\r\n"
@@ -303,7 +303,7 @@ ozi_track_pr()
 static void
 ozi_route_hdr(const route_head * rte)
 {
-  static char *ozi_route_header =
+  static const char *ozi_route_header =
     "OziExplorer Route File Version 1.0\r\n"
     "WGS 84\r\n"
     "Reserved 1\r\n"
@@ -949,7 +949,7 @@ ozi_waypt_pr(const waypoint * wpt)
 static void
 data_write(void)
 {
-  static char *ozi_wpt_header =
+  static const char *ozi_wpt_header =
     "OziExplorer Waypoint File Version 1.1\r\n"
     "WGS 84\r\n"
     "Reserved 2\r\n"

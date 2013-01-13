@@ -1000,7 +1000,7 @@ static void
 xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
                route_head** trk)
 {
-  char* enclosure = "";
+  const char* enclosure = "";
   geocache_data* gc_data = NULL;
 
   if (!fmp->printfc) {
@@ -1559,7 +1559,7 @@ xcsv_waypt_pr(const waypoint* wpt)
   char* shortname = NULL;
   char* description = NULL;
   char* anyname = NULL;
-  char* write_delimiter;
+  const char* write_delimiter;
   int i;
   field_map_t* fmp;
   queue* elem, *tmp;
@@ -2057,7 +2057,7 @@ xcsv_waypt_pr(const waypoint* wpt)
       field_is_unknown = !wpt->sat;
       break;
     case XT_GPS_FIX: {
-      char* fix = NULL;
+      const char* fix = NULL;
       switch (wpt->fix) {
       case fix_unknown:
         field_is_unknown = 1;

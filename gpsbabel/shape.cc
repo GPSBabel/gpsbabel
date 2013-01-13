@@ -112,7 +112,7 @@ void
 my_read(void)
 {
   int npts;
-  char *etype = "unknown";
+  const char *etype = "unknown";
 
   SHPGetInfo(ihandle, &npts, NULL, NULL, NULL);
 

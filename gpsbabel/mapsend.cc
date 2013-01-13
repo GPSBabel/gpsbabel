@@ -415,7 +415,7 @@ void mapsend_track_hdr(const route_head* trk)
    * we write mapsend v3.0 tracks as mapsend v2.0 tracks get
    * tremendously out of whack time/date wise.
    */
-  char* verstring = "30";
+  const char* verstring = "30";
   queue* elem, *tmp;
   char* tname;
   int i;

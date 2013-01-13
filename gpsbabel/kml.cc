@@ -673,11 +673,11 @@ static void kml_output_timestamp(const waypoint* waypointp)
 static
 void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
 {
-  char* max_alt_units;
+  const char* max_alt_units;
   double max_alt;
-  char* min_alt_units;
+  const char* min_alt_units;
   double min_alt;
-  char* distance_units;
+  const char* distance_units;
   double distance;
 
   if (!td || !trackdata) {
@@ -704,17 +704,17 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
     TD2("<b>Max Alt</b> %.3f %s", max_alt, max_alt_units);
   }
   if (td->min_spd) {
-    char* spd_units;
+    const char* spd_units;
     double spd = fmt_speed(td->min_spd, &spd_units);
     TD2("<b>Min Speed</b> %.1f %s", spd, spd_units);
   }
   if (td->max_spd) {
-    char* spd_units;
+    const char* spd_units;
     double spd = fmt_speed(td->max_spd, &spd_units);
     TD2("<b>Max Speed</b> %.1f %s", spd, spd_units);
   }
   if (td->max_spd && td->start && td->end) {
-    char* spd_units;
+    const char* spd_units;
     time_t elapsed = td->end - td->start;
     double spd = fmt_speed(td->distance_meters / elapsed, &spd_units);
     if (spd > 1.0)  {
@@ -836,7 +836,7 @@ static void kml_output_positioning(void)
 /* Output something interesing when we can for route and trackpoints */
 static void kml_output_description(const waypoint* pt)
 {
-  char* alt_units;
+  const char* alt_units;
   double alt;
 
   if (!trackdata) {
@@ -864,12 +864,12 @@ static void kml_output_description(const waypoint* pt)
     TD("Temperature: %.1f", pt->temperature);
   }
   if WAYPT_HAS(pt, depth) {
-    char* depth_units;
+    const char* depth_units;
     double depth = fmt_distance(pt->depth, &depth_units);
     TD2("Depth: %.1f %s", depth, depth_units);
   }
   if WAYPT_HAS(pt, speed) {
-    char* spd_units;
+    const char* spd_units;
     double spd = fmt_speed(pt->speed, &spd_units);
     TD2("Speed: %.1f %s", spd, spd_units);
   }

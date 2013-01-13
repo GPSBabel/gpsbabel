@@ -39,7 +39,7 @@ fmt_setunits(fmt_units u)
 }
 
 double
-fmt_distance(const double distance_meters, char **tag)
+fmt_distance(const double distance_meters, const char **tag)
 {
   double d;
 
@@ -77,7 +77,7 @@ fmt_distance(const double distance_meters, char **tag)
 }
 
 double
-fmt_altitude(const double distance_meters, char **tag)
+fmt_altitude(const double distance_meters, const char **tag)
 {
   double d;
 
@@ -105,7 +105,7 @@ fmt_altitude(const double distance_meters, char **tag)
 }
 
 double
-fmt_speed(const double distance_meters_sec, char **tag)
+fmt_speed(const double distance_meters_sec, const char **tag)
 {
   double d;
 

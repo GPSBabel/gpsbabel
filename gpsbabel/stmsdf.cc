@@ -111,7 +111,7 @@ parse_header(char *line)
 {
   char *str;
   char *key = NULL;
-  char *prod = NULL;
+  const char *prod = NULL;
   int column = -1;
 
   while ((str = csv_lineparse(line, "=", "", lineno))) {
@@ -602,13 +602,13 @@ track_disp_wpt_cb(const waypoint *wpt)
   }
 
   if (flag == 1) {
-    char *name = wpt->shortname;
+    const char *name = wpt->shortname;
     if (name == NULL) {
       name = "Log paused";
     }
     gbfprintf(fout, "\"MP\",\"%s\"", name);
   } else if (flag == 2) {
-    char *name = wpt->shortname;
+    const char *name = wpt->shortname;
     if (name == NULL) {
       name = "Log continued";
     }

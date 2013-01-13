@@ -121,7 +121,7 @@ static arglist_t ovl_args[] = {
 };
 
 
-static char* Keywords[]= {
+static const char* Keywords[]= {
   "Typ",
   "Group",
   "Col",
@@ -158,7 +158,7 @@ static char* Keywords[]= {
 #define KEY_TRANS     14
 #define KEY_TRANSBYTE 15
 
-static int isKeyword(char* str,char** keys)
+static int isKeyword(const char* str,const char** keys)
 {
   int i;
 
@@ -190,7 +190,7 @@ static  struct _group {
 }* groups;
 static  int    groups_cnt;
 
-static void ovl_add_group(int aktgrp,char* akttxt)
+static void ovl_add_group(int aktgrp,const char* akttxt)
 {
   int i;
 

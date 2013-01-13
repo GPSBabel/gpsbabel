@@ -1569,7 +1569,7 @@ disp_vec(const char *vecname)
 static void
 disp_v1(ff_type t)
 {
-  char *tstring;
+  const char *tstring;
 
   switch (t) {
   case ff_type_file:
