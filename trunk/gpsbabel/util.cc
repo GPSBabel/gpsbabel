@@ -1176,7 +1176,7 @@ double degrees2ddmm(double deg_val)
 char *
 strsub(const char *s, const char *search, const char *replace)
 {
-  char *p;
+  const char *p;
   int len = strlen(s);
   int slen = strlen(search);
   int rlen = strlen(replace);
@@ -1239,10 +1239,10 @@ gstrsub(const char *s, const char *search, const char *replace)
 /*
  * Like strstr, but starts from back of string.
  */
-char *
+const char *
 xstrrstr(const char *s1, const char *s2)
 {
-  char *r = NULL, *next = NULL;
+  const char *r = NULL, *next = NULL;
 
   while (next = strstr(s1, s2), NULL != next) {
     r = next;
@@ -1892,9 +1892,11 @@ char *xml_attribute(xml_tag *tag, const char *attrname)
   return result;
 }
 
-char *get_filename(const char *fname)
+const char *get_filename(const char *fname)
 {
-  char *res, *cb, *cs;
+  const char *res;
+  const char *cb;
+  const char *cs;
 
   cb = strrchr(fname, '\\');
   cs = strrchr(fname, '/');
