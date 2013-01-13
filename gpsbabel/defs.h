@@ -878,7 +878,7 @@ char* strenquote(const char* str, const char quot_char);
 
 char* strsub(const char* s, const char* search, const char* replace);
 char* gstrsub(const char* s, const char* search, const char* replace);
-char* xstrrstr(const char* s1, const char* s2);
+const char* xstrrstr(const char* s1, const char* s2);
 void rtrim(char* s);
 char* lrtrim(char* s);
 int xasprintf(char** strp, const char* fmt, ...) PRINTFLIKE(2, 3);
@@ -902,7 +902,7 @@ char* convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m
 char* convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
 char* pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
-char* get_filename(const char* fname);				/* extract the filename portion */
+const char* get_filename(const char* fname);			/* extract the filename portion */
 
 /*
  * Character encoding transformations.
