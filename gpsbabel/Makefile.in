@@ -666,7 +666,7 @@ ik3d.o: ik3d.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h xmlgeneric.h
 inifile.o: inifile.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h
-internal_styles.o: internal_styles.cc defs.h config.h queue.h gbtypes.h \
+internal_styles.o: internal_styles.c defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h
 interpolate.o: interpolate.cc defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h \
@@ -1030,7 +1030,7 @@ stmsdf.o: stmsdf.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   jeeps/gpsproj.h grtcirc.h
 stmwpp.o: stmwpp.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h csv_util.h
-strptime.o: strptime.cc config.h strptime.h
+strptime.o: strptime.c config.h strptime.h
 subrip.o: subrip.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h
 swapdata.o: swapdata.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h \
