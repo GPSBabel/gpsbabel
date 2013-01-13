@@ -619,8 +619,8 @@ mag_dequote(char* ibuf)
     int nremains = strlen(esc);
     if (nremains >= 3) {
       static const char hex[17] = "0123456789ABCDEF";
-      char* c1 = strchr(hex, esc[1]);
-      char* c2 = strchr(hex, esc[2]);
+      const char* c1 = strchr(hex, esc[1]);
+      const char* c2 = strchr(hex, esc[2]);
       if (c1 && c2) {
         int escv = (c1 - hex) * 16 + (c2 - hex);
         if (escv == 255) {	/* corrupted data */
@@ -768,7 +768,7 @@ mag_serial_init_common(const char* portname)
 static void
 mag_rd_init_common(const char* portname)
 {
-  char* ext;
+  const char* ext;
   waypoint_read_count = 0;
   // For Explorist GC, intercept the device access and redirect to GPX.
   // We actually do the rd_init() inside read as we may have multiple

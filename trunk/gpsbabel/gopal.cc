@@ -102,7 +102,7 @@ gopal_rd_init(const char* fname)
 {
   char buff[32];
   char* ck;
-  char* filename;
+  const char* filename;
   CHECK_BOOL(optclean);
   if (optminspeed) {
     minspeed=atof(optminspeed);

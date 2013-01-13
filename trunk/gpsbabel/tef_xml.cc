@@ -161,7 +161,8 @@ tef_list_start(const char *args, const char **attrv)
 static char *
 fix_notes(const char *name, char *notes)
 {
-  char *cleft, *cright, *cback, *ctmp;
+  const char *cleft, *cright, *cback;
+  char *ctmp;
 
   if ((! name) || (! notes)) {
     return notes;
@@ -287,19 +288,24 @@ tef_point(const char *args, const char **attrv)
     return;
   }
 
+  // FIXME: this code should really not be writing into the arg list.
   while (*avp) {
     if (strcmp(avp[0], "y") == 0) {
-      comma = strstr(avp[1], ",");
+      char *tbuf = xstrdup(avp[0]);
+      comma = strstr(tbuf, ",");
       if (comma) {
         *comma='.';
       }
-      sscanf(avp[1], "%lf", &wpt_tmp->latitude);
+      sscanf(tbuf, "%lf", &wpt_tmp->latitude);
+      xfree(tbuf);
     } else if (strcmp(avp[0], "x") == 0) {
-      comma = strstr(avp[1], ",");
+      char *tbuf = xstrdup(avp[1]);
+      comma = strstr(tbuf, ",");
       if (comma) {
         *comma='.';
       }
-      sscanf(avp[1], "%lf", &wpt_tmp->longitude);
+      sscanf(tbuf, "%lf", &wpt_tmp->longitude);
+      xfree(tbuf);
     }
     avp+=2;
   }

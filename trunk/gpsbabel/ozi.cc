@@ -162,7 +162,7 @@ void
 ozi_set_time_str(const char *str, waypoint *waypointp)
 {
   double ozi_time;
-  char *dot;
+  const char *dot;
   int len;
 
   ozi_time = atof(str);
