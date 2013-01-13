@@ -1,3 +1,11 @@
+#
+# Build file  for GPSBabel.
+# Makefile is generated from Makefile.in by autoconf which does several
+# text substitutions such version numbers and object paths for us.
+#
+# We rely on very few fancy features of make so the exact version probably
+# doesn't much matter.  GNU Make 3.81 seems a reasonable target.
+
 srcdir = @srcdir@
 VPATH = @srcdir@
 
