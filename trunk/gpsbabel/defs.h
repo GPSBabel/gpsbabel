@@ -1051,9 +1051,9 @@ typedef enum {
 } fmt_units;
 
 int    fmt_setunits(fmt_units);
-double fmt_distance(const double, char** tag);
-double fmt_altitude(const double, char** tag);
-double fmt_speed(const double, char** tag);
+double fmt_distance(const double, const char** tag);
+double fmt_altitude(const double, const char** tag);
+double fmt_speed(const double, const char** tag);
 
 /*
  * From gbsleep.c

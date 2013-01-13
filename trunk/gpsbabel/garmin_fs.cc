@@ -229,7 +229,7 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt)
       gbfprintf(ofd, "%*s<gpxx:Depth>%.6f</gpxx:Depth>\n", space * 2, "", waypt->depth);
     }
     if (gmsd->flags.display) {
-      char* cx;
+      const char* cx;
       switch (gmsd->display) {
       case gt_display_mode_symbol:
         cx = "SymbolOnly";

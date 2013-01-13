@@ -93,7 +93,8 @@ ff_vecs_t mtk_locus_vecs = {
 #define PMTK_Q_RELEASE          "$PMTK605"
 #define PMTK_DT_RELEASE         "$PMTK705"
 
-static void* fd;
+static gbfile* ffd; // File access.
+static void* sfd;
 static enum {rm_serial, rm_file} read_mode;
 static int packetnum;
 static char line[1000];
@@ -112,8 +113,8 @@ static void process_pmtklox(void);
 static void process_pmtklog(void);
 static void process_pmtk001(void);
 static void process_pmtk705(void);
-static void send_command(char* s, char* waitfor);
-static int calculate_checksum(char* s, int length);
+static void send_command(const char* s, const char* waitfor);
+static int calculate_checksum(const char* s, int length);
 static void dbg(int l, const char* msg, ...);
 
 static void
@@ -125,17 +126,17 @@ mtk_locus_rd_init(const char* fname)
 
     dbg(1, "Input is a serial port\n");
     read_mode = rm_serial;
-    if ((fd = gbser_init(fname)) == NULL) {
+    if ((sfd = gbser_init(fname)) == NULL) {
       fatal(MYNAME ": Can't initialise port \"%s\" (%s)\n", fname, strerror(errno));
     }
     set_baudrate();
-    gbser_flush(fd);
+    gbser_flush(sfd);
 
   } else {
 
     dbg(1, "Input is a normal file\n");
     read_mode = rm_file;
-    if ((fd = gbfopen(fname, "rb", MYNAME)) == NULL) {
+    if ((ffd = gbfopen(fname, "rb", MYNAME)) == NULL) {
       fatal(MYNAME ": Can't initialise port \"%s\" (%s)\n", fname, strerror(errno));
     }
   }
@@ -147,9 +148,9 @@ static void
 mtk_locus_rd_deinit(void)
 {
   if (read_mode == rm_serial) {
-    gbser_deinit(fd);
+    gbser_deinit(sfd);
   } else {
-    gbfclose(fd);
+    gbfclose(ffd);
   }
 }
 
@@ -225,7 +226,7 @@ set_baudrate()
   if (strcmp(opt_baudrate, "0") != 0) {
 
     baudrate = atoi(opt_baudrate);
-    rc = gbser_set_speed(fd, baudrate);
+    rc = gbser_set_speed(sfd, baudrate);
     if (rc != gbser_OK) {
       fatal(MYNAME ": Set baud rate to %i failed (%i)\n", baudrate, rc);
     }
@@ -239,14 +240,14 @@ set_baudrate()
         fatal(MYNAME ": Autobaud connection failed\n");
       }
       dbg(1, MYNAME ": Probing at %i baud...\n", baudrate);
-      rc = gbser_set_speed(fd, baudrate);
+      rc = gbser_set_speed(sfd, baudrate);
 
       if (rc != gbser_OK) {
         dbg(1, "Set speed failed\n");
         continue;
       }
 
-      rc = gbser_read_line(fd, line, sizeof(line)-1, TIMEOUT, 0x0A, 0x0D);
+      rc = gbser_read_line(sfd, line, sizeof(line)-1, TIMEOUT, 0x0A, 0x0D);
       if (rc != gbser_OK) {
         dbg(1, "Read test failed\n");
         continue;
@@ -267,7 +268,7 @@ read_line(void)
   line[0] = '\0';
 
   if (read_mode == rm_file) {
-    s = gbfgetstr(fd);
+    s = gbfgetstr(ffd);
     if (s == NULL) {
       dbg(1, "EOF reached\n");
       download_complete = 1;
@@ -275,7 +276,7 @@ read_line(void)
     }
     strncat(line, s, sizeof(line)-1);
   } else {
-    rc = gbser_read_line(fd, line, sizeof(line)-1, TIMEOUT, 0x0A, 0x0D);
+    rc = gbser_read_line(sfd, line, sizeof(line)-1, TIMEOUT, 0x0A, 0x0D);
     if (rc != gbser_OK) {
       fatal(MYNAME "Serial read failed: %i\n", rc);
     }
@@ -541,7 +542,7 @@ process_pmtk705()
 }
 
 void
-send_command(char* s, char* wait_for)
+send_command(const char* s, const char* wait_for)
 {
   int rc;
   time_t starttime;
@@ -557,7 +558,7 @@ send_command(char* s, char* wait_for)
   checksum = calculate_checksum(&s[1], strlen(s)-1);
   snprintf(cmd, sizeof(cmd)-1, "%s*%02X\r\n", s, checksum);
 
-  rc = gbser_print(fd, cmd);
+  rc = gbser_print(sfd, cmd);
   if (rc != gbser_OK) {
     fatal(MYNAME ": Write error (%d)\n", rc);
   }
@@ -588,7 +589,7 @@ send_command(char* s, char* wait_for)
 }
 
 int
-calculate_checksum(char* s, int length)
+calculate_checksum(const char* s, int length)
 {
   int i;
   int sum;

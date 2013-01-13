@@ -1051,7 +1051,7 @@ gt_color_value(const int garmin_index)
 gbuint32
 gt_color_value_by_name(const char* name)
 {
-  int i;
+  unsigned int i;
 
   for (i = 0; i < GT_COLORS_CT; i++)
     if (case_ignore_strcmp(gt_colors[i].name, name) == 0) {
@@ -1064,7 +1064,7 @@ gt_color_value_by_name(const char* name)
 int
 gt_color_index_by_name(const char* name)
 {
-  int i;
+  unsigned int i;
 
   for (i = 0; i < GT_COLORS_CT; i++)
     if (case_ignore_strcmp(name, gt_colors[i].name) == 0) {
@@ -1077,7 +1077,7 @@ gt_color_index_by_name(const char* name)
 int
 gt_color_index_by_rgb(const int rgb)
 {
-  int i;
+  unsigned int i;
 
   for (i = 0; i < GT_COLORS_CT; i++)
     if (rgb == gt_colors[i].rgb) {

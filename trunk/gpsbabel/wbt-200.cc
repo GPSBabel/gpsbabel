@@ -872,7 +872,7 @@ static int wbt201_read_chunk(struct read_state *st, unsigned pos, unsigned limit
   char line_buf[100];
   unsigned long cs;
   char *lp, *op;
-  static char *cs_prefix = "@AL,CS,";
+  static const char *cs_prefix = "@AL,CS,";
 
   unsigned want = limit - pos;
   if (want > WBT201CHUNK) {
