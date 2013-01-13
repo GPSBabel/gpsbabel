@@ -357,7 +357,11 @@ v900_read(void)
     track_add_wpt(track, wpt);
     if (line.bas.common.tag != 'T') {
       waypoint *wpt2;
-      assert(line.bas.common.tag == 'C' || line.bas.common.tag == 'V');
+      // A 'G' tag appears to be a 'T' tag, but generated on the trailing
+      // edge of a DGPS fix as it decays to an SPS fix.  See 1/13/13 email
+      // thread on gpsbabel-misc with Jamie Robertson.
+      assert(line.bas.common.tag == 'C' || line.bas.common.tag == 'G' ||
+             line.bas.common.tag == 'V');
       wpt2 = waypt_dupe(wpt);
       if (line.bas.common.tag == 'V') {	// waypoint with voice recording?
         char vox_file_name[sizeof(line.adv.vox)+5];
