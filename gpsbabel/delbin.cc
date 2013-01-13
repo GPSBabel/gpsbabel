@@ -2787,7 +2787,7 @@ libusb_os_deinit(void)
 static unsigned
 libusb_os_packet_read(void* buf)
 {
-  int n = usb_interrupt_read(usb_handle, endpoint_in, buf, delbin_os_packet_size, 2000);
+  int n = usb_interrupt_read(usb_handle, endpoint_in, (char *) buf, delbin_os_packet_size, 2000);
   if (n < 0) {
     fatal(MYNAME ": %s\n", usb_strerror());
   }
