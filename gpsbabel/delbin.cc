@@ -2947,7 +2947,7 @@ linuxhid_os_packet_write(const void* buf, unsigned size)
 {
   struct hiddev_usage_ref_multi urefm;
   struct hiddev_report_info rinfo;
-  const gbuint8* p = buf;
+  const gbuint8* p = (const gbuint8*) buf;
   unsigned i;
 
   for (i = 0; i < size; i++) {

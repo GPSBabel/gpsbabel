@@ -191,7 +191,7 @@ static int HexDigit(char hex)
 {
   const char *Digits = "0123456789ABCDEF";
   const char *digits = "0123456789abcdef";
-  char * ofs = strchr(digits, hex);
+  const char *ofs = strchr(digits, hex);
   if (ofs) {
     return ofs-digits;
   }

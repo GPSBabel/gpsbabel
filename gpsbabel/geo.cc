@@ -100,7 +100,7 @@ void wpt_name_s(const char* args, const char** attrv)
 
 void wpt_name(const char* args, const char** unused)
 {
-  char* s;
+  const char* s;
   if (!args) {
     return;
   }
@@ -111,7 +111,9 @@ void wpt_name(const char* args, const char** unused)
     waypt_alloc_gc_data(wpt_tmp)->placer = xstrdup(s + 4);
 
     if (nuke_placer) {
-      *s = '\0';
+      // Sleaze alert.  We're casting away constness and writing into a string
+      // that should probably be read-only...
+      *(char *)s = '\0';
     }
   }
 }
@@ -155,7 +157,7 @@ void wpt_coord(const char* args, const char** attrv)
 
 void wpt_container(const char* args, const char** unused)
 {
-  int v;
+  geocache_container v;
 
   if (!args) {
     return;

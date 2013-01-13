@@ -224,10 +224,11 @@ xcsv_get_char_from_constant_table(char *key)
 }
 
 static void
-xcsv_parse_style_line(const char *sbuff)
+xcsv_parse_style_line(char *sbuff)
 {
   int i, linecount = 0;
-  char *s, *p, *sp;
+  char *s, *sp;
+  char *p;
   const char *cp;
   char *key, *val, *pfc;
 

@@ -132,10 +132,11 @@ internal_debug2(const char *format, ...)
  */
 
 static
-char *ppdb_strcat(char *dest, char *src, char *def, int *size)
+char *ppdb_strcat(char *dest, const char *src, char *def, int *size)
 {
   int len;
-  char *res, *tmp;
+  char *res;
+  const char *tmp;
 
   tmp = src;
   if (tmp == NULL) {
@@ -284,7 +285,7 @@ double ppdb_decode_coord(const char *str)
     CHECK_INP(1, sscanf(str,"%lf", &val), "decode_coord(1) DD.dddd", str);
     return val;
   } else {
-    char *tmp;
+    const char *tmp;
 
     if (*str == 'O') {
       german_release = 1;

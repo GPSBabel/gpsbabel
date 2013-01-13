@@ -211,9 +211,9 @@ hsa_ndv_read(void)
 
 static void getAttr(const char* data, const char* attr, char** val, char seperator)
 {
-  char* start;
+  const char* start;
   if ((start = strstr(data, attr)) != NULL) {
-    char* end;
+    const char* end;
     int len;
 
     end = strchr(start, seperator);
