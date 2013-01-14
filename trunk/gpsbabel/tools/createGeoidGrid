@@ -1,0 +1,91 @@
+#!/bin/bash
+#
+# this is used to generate height.h
+# which is used by height.c to compute the EMG96 geoid height
+# relative to the WGS84 ellipsoid.
+# It requires the GeographicLib utility GeoidEval.
+#
+if [ $# != 2 ]; then
+	echo "Usage: $0 grid_spacing_degrees gbint8|gbint16" >&2
+	exit 1
+fi
+geoidgrid=$1 # grid spacing in degrees
+geoidtype=$2
+case $geoidtype in
+gbint8)
+	geoidscale=1.0
+	geoidformat1="%4.0f"
+	geoidformat2="%4.0f"
+	;;
+gbint16)
+	geoidscale=100.0
+	geoidformat1="%6.1f"
+	geoidformat2="%6.0f"
+	;;
+*)
+	echo "invalid type" >&2
+	exit 1
+	;;
+esac
+geoidmodel="egm96-5"
+lats=$(seq -s' ' -90 $geoidgrid 90)
+lons=$(seq -s' ' -180 $geoidgrid 180)
+latarray=($lats)
+lonarray=($lons)
+echo "/*"
+echo "    Copyright (C) 2013  Robert Lipe, robertlipe@usa.net"
+echo ""
+echo "    This program is free software; you can redistribute it and/or modify"
+echo "    it under the terms of the GNU General Public License as published by"
+echo "    the Free Software Foundation; either version 2 of the License, or"
+echo "    (at your option) any later version."
+echo ""
+echo "    This program is distributed in the hope that it will be useful,"
+echo "    but WITHOUT ANY WARRANTY; without even the implied warranty of"
+echo "    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the"
+echo "    GNU General Public License for more details."
+echo ""
+echo "    You should have received a copy of the GNU General Public License"
+echo "    along with this program; if not, write to the Free Software"
+echo "    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA"
+echo ""
+echo " */"
+echo "/* Created by \"$0 $1 $2\" using GeographicLib utility GeoidEval with $geoidmodel. */"
+echo "#define GEOID_GRID_DEG $geoidgrid"
+echo "#define GEOID_SCALE $geoidscale"
+echo "#define GEOID_ROW ${#latarray[@]}"
+echo "#define GEOID_COL ${#lonarray[@]}"
+echo "static const $geoidtype geoid_delta[GEOID_COL*GEOID_ROW]= {"
+idx=1
+echo -n "  /*         "
+for lon in $lons
+do
+	echo -n $geoidformat1 $lon | awk '{printf $1,$2}'
+	if [ $idx -lt ${#lonarray[@]} ]; then
+		echo -n ","
+	fi
+	let idx++
+done
+echo " */"
+
+latidx=1
+for lat in $lats
+do
+	echo -n "  /* "
+	echo -n $lat | awk '{printf "%5.1f",$1}'
+	echo -n " */"
+	lonidx=1
+	for lon in $lons
+	do
+		fullheight=$(echo "$lat $lon" | GeoidEval -n $geoidmodel -l)
+		echo -n $geoidformat2 $fullheight $geoidscale | awk '{printf $1,$2*$3}'
+		if [ $lonidx -lt ${#lonarray[@]} -o $latidx -lt ${#latarray[@]} ]; then
+			echo -n ","
+		fi
+		let lonidx++
+	done
+	echo ""
+	let latidx++
+done
+echo "};"
+
