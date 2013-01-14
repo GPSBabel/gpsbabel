@@ -291,7 +291,7 @@ tef_point(const char *args, const char **attrv)
   // FIXME: this code should really not be writing into the arg list.
   while (*avp) {
     if (strcmp(avp[0], "y") == 0) {
-      char *tbuf = xstrdup(avp[0]);
+      char *tbuf = xstrdup(avp[1]);
       comma = strstr(tbuf, ",");
       if (comma) {
         *comma='.';
