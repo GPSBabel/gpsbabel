@@ -641,7 +641,8 @@ gtm.o: gtm.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
 gtrnctr.o: gtrnctr.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h xmlgeneric.h
 height.o: height.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h \
-  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h filterdefs.h
+  zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h filterdefs.h \
+  height.h
 hiketech.o: hiketech.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h xmlgeneric.h
 holux.o: holux.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h \

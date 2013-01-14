@@ -126,6 +126,11 @@ gpsbabel -i gpx -f ${REFERENCE}/track/height.gpx \
 		-x height,wgs84tomsl,add=100m  \
 		-o gpx -F ${TMPDIR}/height_out.gpx
 compare ${TMPDIR}/height_out.gpx ${REFERENCE}/track/height_out.gpx
+rm -f ${TMPDIR}/height_out.csv
+gpsbabel -i unicsv -f ${REFERENCE}/heightcheck.csv \
+		-x height,wgs84tomsl  \
+		-o xcsv,style=${REFERENCE}/heightcheck.style -F ${TMPDIR}/height_out.csv
+compare ${TMPDIR}/height_out.csv ${REFERENCE}/heightcheck_out.csv
 
 #
 # iBlue747 (style) track files
