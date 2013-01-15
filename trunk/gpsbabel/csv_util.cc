@@ -22,6 +22,7 @@
 
 #include <ctype.h>
 #include <math.h>
+#include <stdlib.h>
 #include "defs.h"
 #include "csv_util.h"
 #include "grtcirc.h"
@@ -1206,7 +1207,12 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     wpt->creation_time += sscanftime(s, fmp->printfc, 1);
     break;
   case XT_LOCAL_TIME:
-    wpt->creation_time += sscanftime(s, fmp->printfc, 0);
+    if (getenv("GPSBABEL_FREEZE_TIME")) {
+      /* Force constant time zone for test */
+      wpt->creation_time += sscanftime(s, fmp->printfc, 1);
+    } else {
+      wpt->creation_time += sscanftime(s, fmp->printfc, 0);
+    }
     break;
     /* Useful when time and date are in separate fields
     	GMT / Local offset is handled by the two cases above */
@@ -1339,7 +1345,7 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     wpt->temperature = atof(s);
     break;
   case XT_TEMPERATURE_F:
-    wpt->temperature = (FAHRENHEIT_TO_CELSIUS( atof(s) ));
+    wpt->temperature = (FAHRENHEIT_TO_CELSIUS(atof(s)));
     break;
     /* GMSD ****************************************************************/
   case XT_COUNTRY: {
