@@ -3,8 +3,10 @@
 # Makefile is generated from Makefile.in by autoconf which does several
 # text substitutions such version numbers and object paths for us.
 #
-# We rely on very few fancy features of make so the exact version probably
-# doesn't much matter.  GNU Make 3.81 seems a reasonable target.
+# GPSBabel requires a reasonably recent version of GNU Make.
+# We rely on very few fancy features of make so the exact version
+# probably doesn't much matter.  GNU Make 3.81 seems a reasonable target.
+#
 
 srcdir = @srcdir@
 VPATH = @srcdir@
@@ -203,8 +205,8 @@ leaktest:
 
 dep:
 	make clean && make EXTRA_CFLAGS="-isystem /sw/include -MMD"  && cat $(sort $(DEPFILES)) > /tmp/dep && rm $(DEPFILES)
-	echo 'internal_styles.c: mkstyle.sh $$(srcdir)/style/*.style' >> /tmp/dep
-	echo '	$$(srcdir)/mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)'  >> /tmp/dep
+	echo 'internal_styles.cc: mkstyle.sh $$(srcdir)/style/*.style' >> /tmp/dep
+	echo '	$$(srcdir)/mkstyle.sh > internal_styles.cc || (rm -f internal_styles.cc ; exit 1)'  >> /tmp/dep
 	echo Edit Makefile.in and bring in /tmp/dep
 
 $(WEB)/htmldoc-$(DOCVERSION)/index.html: FORCE
@@ -283,7 +285,7 @@ release-sourcecheck: changes.html
 	# make gpsbabel doc gpsbabel.html
 	@(. tools/functions && ask "Enter 'y' to tag the tree as gpsbabel_$(VERSIONU)." "y") && svn copy https://gpsbabel.googlecode.com/svn/trunk/ https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU) ; exit 0
 	svn export https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU)/gpsbabel gpsbabel-$(VERSIOND) 
-	touch gpsbabel-$(VERSIOND)/internal_styles.c
+	touch gpsbabel-$(VERSIOND)/internal_styles.cc
 	touch gpsbabel-$(VERSIOND)/configure
 	touch gpsbabel-$(VERSIOND)/xcsv_tokens.gperf
 
@@ -293,7 +295,7 @@ release-sourcecheck: changes.html
 #
 release-tarball: release-sourcecheck
 #	rm -fr gpsbabel-$(VERSIOND)
-	cp -ap internal_styles.c gpsbabel-$(VERSIOND)/
+	cp -ap internal_styles.cc gpsbabel-$(VERSIOND)/
 	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
 	gb_upload /tmp/gpsbabel-$(VERSIOND).tar.gz
 #	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
@@ -398,7 +400,7 @@ msvc-build:
 # release check using CVS tree
 test-release: doc gpsbabel.html changes.html
 	cvs export -r HEAD -d gpsbabel-$(VERSIOND) gpsbabel
-	rm -f gpsbabel-$(VERSIOND)/internal_styles.c
+	rm -f gpsbabel-$(VERSIOND)/internal_styles.cc
 	make release-tarball release-winbuild release-rpm
 
 # Machine generated from here down. 
@@ -667,7 +669,7 @@ ik3d.o: ik3d.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h xmlgeneric.h
 inifile.o: inifile.cc defs.h config.h queue.h gbtypes.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h
-internal_styles.o: internal_styles.c defs.h config.h queue.h gbtypes.h \
+internal_styles.o: internal_styles.cc defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h
 interpolate.o: interpolate.cc defs.h config.h queue.h gbtypes.h \
   zlib/zlib.h zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h \
@@ -1160,5 +1162,5 @@ zlib/trees.o: zlib/trees.c zlib/deflate.h zlib/zutil.h zlib/zlib.h \
   zlib/zconf.h zlib/trees.h
 zlib/uncompr.o: zlib/uncompr.c zlib/zlib.h zlib/zconf.h
 zlib/zutil.o: zlib/zutil.c zlib/zutil.h zlib/zlib.h zlib/zconf.h
-internal_styles.c: mkstyle.sh $(srcdir)/style/*.style
-	$(srcdir)/mkstyle.sh > internal_styles.c || (rm -f internal_styles.c ; exit 1)
+internal_styles.cc: mkstyle.sh $(srcdir)/style/*.style
+	$(srcdir)/mkstyle.sh > internal_styles.cc || (rm -f internal_styles.cc ; exit 1)
