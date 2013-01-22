@@ -1,7 +1,7 @@
 /*
     Perform various operations on waypoints.
 
-    Copyright (C) 2002-2007 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2013 Robert Lipe, robertlipe@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -174,9 +174,7 @@ waypt_add(waypoint *wpt)
       wpt->shortname = xstrdup(wpt->notes);
     } else {
       /* Last ditch:  make up a name */
-      char cbuf[10];
-      snprintf(cbuf, sizeof(cbuf), "WPT%03d", waypt_ct);
-      wpt->shortname = xstrdup(cbuf);
+      xasprintf(&wpt->shortname, "WPT%03d", waypt_ct);
     }
   }
 
@@ -210,9 +208,7 @@ waypt_del(waypoint *wpt)
 waypoint *
 waypt_new(void)
 {
-  waypoint *wpt;
-
-  wpt = (waypoint *) xcalloc(sizeof(*wpt), 1);
+  waypoint *wpt = new waypoint;
 #ifdef DEBUG_MEM
   wpt->altitude = unknown_alt; // should this be "latitude" instead of "altitude"?
   wpt->longitude = unknown_alt;
@@ -447,7 +443,7 @@ waypt_free(waypoint *wpt)
     xfree(gc_data);
   }
   fs_chain_destroy(wpt->fs);
-  xfree(wpt);
+  delete wpt;
 }
 
 void
