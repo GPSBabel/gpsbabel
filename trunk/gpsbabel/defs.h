@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007  Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2013 Robert Lipe, robertlipe@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,6 +41,10 @@
 #include "inifile.h"
 #include "session.h"
 
+#if NEWTIME
+# include "src/core/datetime.h"
+#endif
+
 // Turn on Unicode in expat?
 #ifdef _UNICODE
 #  define XML_UNICODE
@@ -54,11 +58,11 @@
 #endif
 
 #ifndef FALSE
-#  define FALSE 0
+#  define FALSE false
 #endif
 
 #ifndef TRUE
-#  define TRUE !FALSE
+#  define TRUE true
 #endif
 
 #define FEET_TO_METERS(feetsies) ((feetsies) * 0.3048)
@@ -309,10 +313,14 @@ typedef struct format_specific_data {
   fs_convert convert;
 } format_specific_data;
 
-typedef struct {
+class gb_color {
+ public:
+  gb_color() :
+    bbggrr(-1),
+    opacity(255) {}
   int bbggrr;   // 32 bit color: Blue/Green/Red.  < 0 == unknown.
   unsigned char opacity;  // 0 == transparent.  255 == opaque.
-} gb_color;
+};
 
 
 format_specific_data* fs_chain_copy(format_specific_data* source);
@@ -347,7 +355,20 @@ typedef struct url_link {
 /*
  * Misc bitfields inside struct waypoint;
  */
-typedef struct {
+class wp_flags {
+ public:
+   wp_flags() :
+    icon_descr_is_dynamic(0),
+    shortname_is_synthetic(0),
+    cet_converted(0),
+    fmt_use(0),
+    temperature(0),
+    proximity(0),
+    course(0),
+    speed(0),
+    depth(0),
+    is_split(0),
+    new_trkseg(0) {} 
   unsigned int icon_descr_is_dynamic:1;
   unsigned int shortname_is_synthetic:1;
   unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
@@ -366,19 +387,29 @@ typedef struct {
   unsigned int new_trkseg:1;		/* True if first in new trkseg. */
 
 
-} wp_flags;
+};
 
 // These are dicey as they're collected on read. Subsequent filters may change
 // things, though it's u nlikely to matter in practical terms.  Don't use these
 // if a false positive would be deleterious.
-typedef struct {
+#
+class global_trait {
+ public:
+  global_trait() :
+    trait_geocaches(0),
+    trait_heartrate(0),
+    trait_cadence(0),
+    trait_power(0),
+    trait_depth(0),
+    trait_temperature(0) {}
   unsigned int trait_geocaches:1;
   unsigned int trait_heartrate:1;
   unsigned int trait_cadence:1;
   unsigned int trait_power:1;
   unsigned int trait_depth:1;
   unsigned int trait_temperature:1;
-} global_trait;
+};
+
 const global_trait* get_traits();
 
 #define WAYPT_SET(wpt,member,val) { wpt->member = (val); wpt->wpt_flags.member = 1; }
@@ -392,7 +423,41 @@ const global_trait* get_traits();
  * way to the target.
  */
 
-typedef struct {
+class waypoint {
+public:
+ waypoint() :
+  latitude(0),  // These should probably use some invalid data, but
+  longitude(0), // it looks like we have code that relies on them being zero.
+  altitude(-99999999.0),
+  depth(0),
+  proximity(0),
+  shortname(NULL),
+  description(NULL), 
+  notes(NULL), 
+  url_next(NULL), 
+  url(NULL), 
+  url_link_text(NULL), 
+  icon_descr(NULL), 
+  creation_time(0), 
+  microseconds(0), 
+  route_priority(0), 
+  hdop(0), 
+  vdop(0), 
+  pdop(0), 
+  course(0), 
+  speed(0), 
+  fix(fix_unknown), 
+  sat(-1), 
+  heartrate(0), 
+  cadence(0), 
+  power(0), 
+  temperature(0), 
+  odometer_distance(0), 
+  gc_data(NULL), 
+  fs(NULL), 
+  session(NULL), 
+  extra_data(NULL) { }
+ public:
   queue Q;			/* Master waypoint q.  Not for use
 					   by modules. */
 
@@ -448,7 +513,11 @@ typedef struct {
 
   wp_flags wpt_flags;
   const char* icon_descr;
+#if NEWTIME
+  gbDateTime creation_time;
+#else
   time_t creation_time;	/* standardized in UTC/GMT */
+#endif
   int microseconds;	/* Optional millionths of a second. */
 
   /*
@@ -483,9 +552,20 @@ typedef struct {
   format_specific_data* fs;
   session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
-} waypoint;
+};
 
-typedef struct {
+class route_head {
+ public:
+  route_head() :
+    rte_name(NULL),
+    rte_desc(NULL),
+    rte_url(NULL),
+    rte_num(NULL),
+    rte_waypt_ct(NULL),
+    fs(NULL),
+    cet_converted(0),
+    line_width(-1),
+    session(NULL) {}
   queue Q;		/* Link onto parent list. */
   queue waypoint_list;	/* List of child waypoints */
   char* rte_name;
@@ -498,7 +578,7 @@ typedef struct {
   gb_color line_color;         /* Optional line color for rendering */
   int line_width;         /* in pixels (sigh).  < 0 is unknown. */
   session_t* session;	/* pointer to a session struct */
-} route_head;
+};
 
 /*
  *  Structure of recomputed track/roue data.
