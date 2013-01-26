@@ -102,21 +102,6 @@ compare ${TMPDIR}/amod-pure ${REFERENCE}/track/amod-cleansed
 gpsbabel -i wfff -f ${REFERENCE}/wfff.xml -o gpsutil -F ${TMPDIR}/wfff.gpu
 compare ${TMPDIR}/wfff.gpu ${REFERENCE}/wfff.gpu
 
-#
-# Garmin MapSource tab delimited text files - garmin_txt
-#
-rm -f ${TMPDIR}/garmin_txt*
-#
-# !!! garmin_txt timestamps are stored in localtime !!!
-#
-gpsbabel -i gdb -f ${REFERENCE}/gdb-sample2.gdb -o garmin_txt,utc,prec=9 -F ${TMPDIR}/garmin_txt.txt
-compare ${REFERENCE}/garmin_txt.txt ${TMPDIR}/garmin_txt.txt 
-gpsbabel -i garmin_txt -f ${REFERENCE}/garmin_txt.txt -o garmin_txt,prec=9 -F ${TMPDIR}/garmin_txt-2.txt
-gpsbabel -i garmin_txt -f ${TMPDIR}/garmin_txt-2.txt -o garmin_txt,prec=9 -F ${TMPDIR}/garmin_txt-3.txt
-#
-# test can fail because of localtime/gmtime differences
-# 
-## compare ${TMPDIR}/garmin_txt-2.txt ${TMPDIR}/garmin_txt-3.txt
 
 #
 # hiketech tests
@@ -149,14 +134,6 @@ compare ${TMPDIR}/kartex-2a.ktf ${TMPDIR}/kartex-2b.ktf
 rm -f ${TMPDIR}/axim-*
 gpsbabel -i axim_gpb -f ${REFERENCE}/track/axim-sample.gpb -o gpx -F ${TMPDIR}/axim-sample.gpx
 compare ${REFERENCE}/track/axim-sample.gpx ${TMPDIR}/axim-sample.gpx
-
-#
-# Franson GPSGate simulation
-#
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpssim -F ${TMPDIR}/waypoints.gpssim
-compare ${TMPDIR}/waypoints.gpssim ${REFERENCE}
-gpsbabel -i gpx -f ${REFERENCE}/track/tracks.gpx -o gpssim -F ${TMPDIR}/tracks.gpssim
-compare ${TMPDIR}/tracks.gpssim ${REFERENCE}/track
 
 #
 # WBT-200 tests
