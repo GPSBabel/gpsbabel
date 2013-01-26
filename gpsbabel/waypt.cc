@@ -44,18 +44,16 @@ waypt_init(void)
   QUEUE_INIT(&waypt_head);
 }
 
+// This whole thing is a poor-man's copy constructor. It exists mostly
+// as a bridge from our non-reference counted C types to classes now.
 waypoint *
 waypt_dupe(const waypoint *wpt)
 {
   /*
    * This and waypt_free should be closely synced.
    */
-  waypoint * tmp;
-  url_link *url_next;
-
-  tmp = waypt_new();
-  memcpy(tmp, wpt, sizeof(waypoint));
-  tmp->url_next = NULL;
+  waypoint* tmp = new waypoint;
+  *tmp = *wpt;
 
   if (wpt->shortname) {
     tmp->shortname = xstrdup(wpt->shortname);
@@ -72,7 +70,8 @@ waypt_dupe(const waypoint *wpt)
   if (wpt->url_link_text) {
     tmp->url_link_text = xstrdup(wpt->url_link_text);
   }
-  for (url_next = wpt->url_next; url_next; url_next = url_next->url_next) {
+
+  for (url_link* url_next = wpt->url_next; url_next; url_next = url_next->url_next) {
     waypt_add_url(tmp,
                   (url_next->url) ? xstrdup(url_next->url) : NULL,
                   (url_next->url_link_text) ? xstrdup(url_next->url_link_text) : NULL);
@@ -239,9 +238,15 @@ void
 waypt_disp(const waypoint *wpt)
 {
   char *tmpdesc = NULL;
+#if NEWTIME
+  if (wpt->creation_time.isValid()) {
+  printf("%s", qPrintable(wpt->creation_time.toString()));
+  }
+#else
   if (wpt->creation_time) {
     printf("%s ", ctime(&wpt->creation_time));
   }
+#endif
   printposn(wpt->latitude,1);
   printposn(wpt->longitude,0);
 
