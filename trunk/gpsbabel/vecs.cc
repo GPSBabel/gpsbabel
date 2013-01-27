@@ -1122,7 +1122,7 @@ exit_vecs(void)
 void
 assign_option(const char *module, arglist_t *ap, const char *val)
 {
-  char *c;
+  const char *c;
 
   if (ap->argval == NULL) {
     fatal("%s: No local variable defined for option \"%s\"!", module, ap->argstring);
@@ -1220,7 +1220,7 @@ disp_vec_options(const char *vecname, arglist_t *ap)
 }
 
 ff_vecs_t *
-find_vec(char *const vecname, char **opts)
+find_vec(const char *const vecname, char **opts)
 {
   vecs_t *vec = vec_list;
   style_vecs_t *svec = style_list;
