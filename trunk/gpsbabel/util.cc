@@ -829,24 +829,6 @@ si_round(double d)
 }
 
 /*
- *  Return a time_t suitable for adding to a time_t that is in GMT to
- *  make it a local time.
- *  Obsolete: to use mkgmtime instead.
- */
-signed int
-get_tz_offset(void)
-{
-  time_t now = current_time();
-  time_t later = mktime(gmtime(&now));
-
-  if (later == -1) {
-    return 0;
-  } else {
-    return (signed int) difftime(now, later);
-  }
-}
-
-/*
 	mkgmtime -- convert tm struct in UTC to time_t
 
 	works just like mktime but without all the mucking
