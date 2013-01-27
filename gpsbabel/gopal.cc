@@ -351,7 +351,11 @@ gopal_write_waypt(const waypoint* wpt)
   int fix=fix_unknown;
   //TICK;    TIME;   LONG;     LAT;       HEIGHT; SPEED;  UN; HDOP;     SAT
   //3801444, 080558, 2.944362, 43.262117, 295.28, 0.12964, 2, 2.900000, 3
+#if NEWTIME
+  snprintf(tbuffer, sizeof(tbuffer), "%06d", wpt->creation_time.hms());
+#else
   strftime(tbuffer, sizeof(tbuffer), "%H%M%S", gmtime(&wpt->creation_time));
+#endif
   if (wpt->fix!=fix_unknown) {
     switch (wpt->fix) {
     case fix_none:

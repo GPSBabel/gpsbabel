@@ -240,7 +240,6 @@ vitosmt_waypt_pr(const waypoint *waypointp)
 {
   unsigned char *	workbuffer		=0;
   size_t			position		=0;
-  struct tm*		tmstructp		=0;
   double			seconds			=0;
 
   ++count;
@@ -254,7 +253,16 @@ vitosmt_waypt_pr(const waypoint *waypointp)
     WriteDouble(&workbuffer[position], waypointp->altitude);
   }
   position += sizeof(double);
-
+#if NEWTIME
+  QDate date(waypointp->creation_time.date());
+  QTime time(waypointp->creation_time.time());
+  workbuffer[position++]	= date.year()-100;
+  workbuffer[position++]	= date.month();
+  workbuffer[position++]	= date.day();
+  workbuffer[position++]	= time.hour();
+  workbuffer[position++]	= time.minute();
+#else
+  struct tm*		tmstructp		=0;
   tmstructp =  gmtime(&waypointp->creation_time);
   seconds = (double) tmstructp->tm_sec + 0.0000001*waypointp->microseconds;
 
@@ -263,6 +271,7 @@ vitosmt_waypt_pr(const waypoint *waypointp)
   workbuffer[position++]	=tmstructp->tm_mday;
   workbuffer[position++]	=tmstructp->tm_hour;
   workbuffer[position++]	=tmstructp->tm_min;
+#endif
 
   WriteDouble(&workbuffer[position], seconds);
   position += sizeof(double);

@@ -447,7 +447,6 @@ static void
 cetus_writewpt(const waypoint* wpt)
 {
   struct cetus_wpt_s* rec;
-  struct tm* tm;
   char* vdata;
   char* desc_long;
   char* desc_short;
@@ -456,6 +455,19 @@ cetus_writewpt(const waypoint* wpt)
 
   rec = (struct cetus_wpt_s*) xcalloc(sizeof(*rec)+18 + NOTESZ + DESCSZ,1);
 
+#if NEWTIME
+  QDate date(wpt->creation_time.date());
+  rec->day = date.day();
+  rec->mon = date.month();
+  be_write16(&rec->year, date.year());
+
+  QTime time(wpt->creation_time.time());
+  rec->min = time.minute();
+  rec->hour = time.hour();
+  rec->sec = time.second();
+
+#else
+  struct tm* tm;
   if (wpt->creation_time && (NULL != (tm = gmtime(&wpt->creation_time)))) {
     rec->min = tm->tm_min;
     rec->hour = tm->tm_hour;
@@ -471,6 +483,7 @@ cetus_writewpt(const waypoint* wpt)
     rec->mon = 0xff;
     be_write16(&rec->year, 0xff);
   }
+#endif
   be_write32(&rec->longitude, (unsigned int)(int)(wpt->longitude * 10000000.0));
   be_write32(&rec->latitude, (unsigned int)(wpt->latitude * 10000000.0));
   if (wpt->altitude == unknown_alt) {

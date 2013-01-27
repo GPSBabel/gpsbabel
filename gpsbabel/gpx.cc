@@ -855,6 +855,27 @@ gs_get_container(geocache_container t)
 time_t
 xml_parse_time(const char* cdatastr, int* microsecs)
 {
+#if NEWTIME
+  time_t rv = 0;
+  QString string_date(cdatastr);
+
+  // Lovely.  It looks like the OSM format triggers Qt Bug 18290. by
+  // leaving it ambiguous whether DST is in effect, which triggers local 
+  // time. Allegedly fixed in Qt 5.0, but trivial to work around.
+  // https://bugreports.qt-project.org/browse/QTBUG-18290
+  if (string_date.endsWith("+00:00")) {
+    string_date.replace("+00:00", "Z");
+  }
+  QDateTime dt(QDateTime::fromString(string_date, Qt::ISODate));
+
+  if (dt.isValid()) {
+    rv =  dt.toTime_t();
+    if (microsecs) {
+      *microsecs = dt.time().msec() * 1000;
+    }
+  }
+  return rv;
+#else
   int off_hr = 0;
   int off_min = 0;
   int off_sign = 1;
@@ -918,6 +939,7 @@ xml_parse_time(const char* cdatastr, int* microsecs)
   xfree(timestr);
 
   return rv;
+#endif
 }
 
 static void
