@@ -1272,7 +1272,8 @@ nmea_trackpt_pr(const waypoint* wpt)
   lat = degrees2ddmm(wpt->latitude);
   lon = degrees2ddmm(wpt->longitude);
 
-  tm = gmtime(&wpt->creation_time);
+  time_t ct = wpt->creation_time;
+  tm = gmtime(&ct);
   if (tm) {
     hms = tm->tm_hour * 10000 + tm->tm_min * 100 + tm->tm_sec;
     ymd = tm->tm_mday * 10000 + tm->tm_mon * 100 + tm->tm_year;

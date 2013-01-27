@@ -1641,7 +1641,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
     }
   }
   if FIELD_USED(fld_fix) {
-    char *fix;
+    const char *fix;
     switch (wpt->fix) {
     case fix_none:
       fix = "none";
@@ -1726,7 +1726,8 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
         time += atoi(opt_utc) * SECONDS_PER_HOUR;
         tm = *gmtime(&time);
       } else {
-        tm = *localtime(&wpt->creation_time);
+        const time_t tt = wpt->creation_time;
+        tm = *localtime(&tt);
       }
       tm.tm_year += 1900;
       tm.tm_mon += 1;
@@ -1746,7 +1747,8 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
         time += atoi(opt_utc) * SECONDS_PER_HOUR;
         tm = *gmtime(&time);
       } else {
-        tm = *localtime(&wpt->creation_time);
+        const time_t tt = wpt->creation_time;
+        tm = *localtime(&tt);
       }
       snprintf(buf, sizeof(buf), "%02d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
 

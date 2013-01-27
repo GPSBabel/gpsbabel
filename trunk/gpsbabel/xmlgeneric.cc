@@ -105,7 +105,7 @@ void
 xml_fill_in_time(char *time_string, const time_t timep, int microseconds, int long_or_short)
 {
   struct tm *tm = gmtime(&timep);
-  char *format;
+  const char *format;
   int n;
 
   if (!tm) {
@@ -145,7 +145,6 @@ xml_write_time(gbfile *ofd, const time_t timep, int microseconds, const char *el
               elname
              );
   }
-
 }
 
 /***********************************************************************
@@ -301,7 +300,7 @@ void xml_readstring(char *str)
   XML_ParserFree(psr);
 }
 
-void xml_readprefixstring(char *str)
+void xml_readprefixstring(const char *str)
 {
   int len = strlen(str);
   if (!XML_Parse(psr, str, len, 0)) {

@@ -1224,8 +1224,10 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
   case XT_ISO_TIME_MS:
     wpt->creation_time = xml_parse_time(s, &wpt->microseconds);
     break;
-  case XT_NET_TIME:
-    dotnet_time_to_time_t(atof(s), &wpt->creation_time, &wpt->microseconds);
+  case XT_NET_TIME: {
+    time_t tt = wpt->creation_time;
+    dotnet_time_to_time_t(atof(s), &tt, &wpt->microseconds);
+    }
     break;
   case XT_GEOCACHE_LAST_FOUND:
     waypt_alloc_gc_data(wpt)->last_found = yyyymmdd_to_time(s);
@@ -1939,8 +1941,9 @@ xcsv_waypt_pr(const waypoint* wpt)
       writebuff(buff, fmp->printfc, TIMET_TO_EXCEL(wpt->creation_time));
       break;
     case XT_TIMET_TIME:
-      /* time as a time_t variable */
-      writebuff(buff, fmp->printfc, wpt->creation_time);
+      /* time as a time_t variable */ {
+      time_t tt = wpt->creation_time;
+      writebuff(buff, fmp->printfc, tt); }
       break;
     case XT_TIMET_TIME_MS: {
       /* time as a time_t variable in milliseconds */

@@ -132,9 +132,11 @@ pocketfms_waypt_disp(const waypoint *wpt)
   struct tm *tm;
 
   memset(&bc, 0, sizeof(bc));
-  tm = localtime(&wpt->creation_time);
+  const time_t tt = wpt->creation_time;
+  tm = localtime(&tt);
   if (wpt->creation_time) {
-    tm = gmtime(&wpt->creation_time);
+    const time_t tt = wpt->creation_time;
+    tm = gmtime(&tt);
   }
 
   strcpy(bc.id, header_id);
