@@ -560,7 +560,6 @@ static void
 write_trkpt_cb(const waypoint* wpt)
 {
   char buff[128];
-  struct tm tm;
 
   if ((curr_index != target_index) || (wpt == NULL)) {
     return;
@@ -569,7 +568,9 @@ write_trkpt_cb(const waypoint* wpt)
   buff[0] = '\0';
 
   if (wpt->creation_time != 0) {
-    tm = *gmtime(&wpt->creation_time);
+    const time_t tt = wpt->creation_time;
+    struct tm tm = *gmtime(&tt);
+
     strftime(buff, sizeof(buff), "%d-%b-%y %H:%M:%S", &tm);
     strupper(buff);
   } else {

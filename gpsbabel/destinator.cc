@@ -436,8 +436,8 @@ destinator_trkpt_disp(const waypoint* wpt)
     struct tm tm;
     double time;
     int date;
-
-    tm = *gmtime(&wpt->creation_time);
+    const time_t ct = wpt->creation_time;
+    tm = *gmtime(&ct);
     tm.tm_mon += 1;
     tm.tm_year -= 100;
     date = ((int)tm.tm_mday * 10000) + ((int)tm.tm_mon * 100) + tm.tm_year;

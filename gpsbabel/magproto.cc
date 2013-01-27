@@ -1442,7 +1442,8 @@ void mag_track_disp(const waypoint* waypointp)
   ilon = waypointp->longitude;
   tm = NULL;
   if (waypointp->creation_time) {
-    tm = gmtime(&waypointp->creation_time);
+    const time_t ct = waypointp->creation_time;
+    tm = gmtime(&ct);
     if (tm) {
       hms = tm->tm_hour * 10000 + tm->tm_min  * 100 +
             tm->tm_sec;

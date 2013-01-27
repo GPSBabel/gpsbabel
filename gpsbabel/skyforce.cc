@@ -176,7 +176,8 @@ skyforce_waypt_disp_cb(const waypoint *wpt)
   if (global_opts.objective == trkdata) {
     struct tm tm;
 
-    tm = *gmtime(&wpt->creation_time);
+    const time_t tt = wpt->creation_time;
+    tm = *gmtime(&tt);
     strftime(buf + 2, sizeof(buf) - 2, "%d%m%y  %H%M%S    ", &tm);
   } else {
     char *name;

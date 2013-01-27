@@ -1182,8 +1182,11 @@ parse_waypoint(void)
       GMSD_SETSTR(country, str);
       GMSD_SETSTR(cc, gt_get_icao_cc(str, wpt->shortname));
       break;
-    case 16:
-      parse_date_and_time(str, &wpt->creation_time);
+    case 16: {
+      time_t ct;
+      parse_date_and_time(str, &ct);
+      wpt->creation_time = ct;
+      }
       break;
     case 17:
       wpt->url = DUPSTR(str);
@@ -1296,8 +1299,11 @@ parse_track_waypoint(void)
       parse_coordinates(str, datum_index, grid_index,
                         &wpt->latitude, &wpt->longitude, MYNAME);
       break;
-    case 2:
-      parse_date_and_time(str, &wpt->creation_time);
+    case 2: {
+      time_t ct;
+      parse_date_and_time(str, &ct); 
+      wpt->creation_time = ct;
+      }
       break;
     case 3:
       if (parse_distance(str, &x, 1, MYNAME)) {
