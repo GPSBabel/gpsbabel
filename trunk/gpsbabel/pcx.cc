@@ -406,7 +406,8 @@ pcx_track_disp(const waypoint *wpt)
   lon = degrees2ddmm(wpt->longitude);
   lat = degrees2ddmm(wpt->latitude);
 
-  tm = gmtime(&wpt->creation_time);
+  const time_t ct = wpt->creation_time;
+  tm = gmtime(&ct);
 
   strftime(tbuf, sizeof(tbuf), "%d-%b-%y %H:%M:%S", tm);	/* currently ...%T does nothing under Windows */
   for (tp = tbuf; *tp; tp++) {

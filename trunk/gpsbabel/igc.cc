@@ -690,7 +690,10 @@ static void wr_fix_record(const waypoint* wpt, int pres_alt, int gnss_alt)
 {
   struct tm* tm;
 
-  if (NULL == (tm = gmtime(&wpt->creation_time))) {
+  const time_t tt = wpt->creation_time;
+  tm = gmtime(&tt);
+
+  if (NULL == tm) {
     fatal(MYNAME ": bad track timestamp\n");
   }
 

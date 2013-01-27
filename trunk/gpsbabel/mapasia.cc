@@ -241,7 +241,8 @@ tr7_disp_waypt_cb(const waypoint* wpt)
   }
 
   if (wpt->creation_time) {
-    tm = *gmtime(&wpt->creation_time);
+    const time_t tt = wpt->creation_time;
+    tm = *gmtime(&tt);
 
     le_write16(&buff[TR7_S_YEAR], tm.tm_year + 1900);
     buff[TR7_S_MONTH] = tm.tm_mon + 1;

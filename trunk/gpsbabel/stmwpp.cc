@@ -239,7 +239,8 @@ stmwpp_waypt_cb(const waypoint *wpt)
     return;
   }
 
-  tm = *gmtime(&wpt->creation_time);
+  const time_t tt = wpt->creation_time;
+  tm = *gmtime(&tt);
   tm.tm_year += 1900;
   tm.tm_mon++;
 

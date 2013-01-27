@@ -273,7 +273,9 @@ jtr_trkpt_disp_cb(const waypoint* wpt)
   struct tm tm;
 
   if (wpt->creation_time > 0) {
-    tm = *gmtime(&wpt->creation_time);
+    const time_t tt = wpt->creation_time;
+    tm = *gmtime(&tt);
+
     tm.tm_year += 1900;
     tm.tm_mon += 1;
     snprintf(sdate, sizeof(sdate), "%02d%02d%02d", tm.tm_mday, tm.tm_mon, tm.tm_year % 100);
