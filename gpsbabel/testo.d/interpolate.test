@@ -1,0 +1,10 @@
+
+#
+# Interpolate filter
+# 
+
+gpsbabel -i gpx -f ${REFERENCE}/track/simpletrack.gpx -x interpolate,distance=50m -o gpx -F ${TMPDIR}/interp.gpx
+compare ${REFERENCE}/track/interptrack.gpx ${TMPDIR}/interp.gpx 
+
+gpsbabel -i gpx -f ${REFERENCE}/track/simpletrack.gpx -x interpolate,time=1 -o gpx -F ${TMPDIR}/tinterp.gpx
+compare ${REFERENCE}/track/tinterptrack.gpx ${TMPDIR}/tinterp.gpx 

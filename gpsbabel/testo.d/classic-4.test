@@ -74,21 +74,6 @@ rm -f ${TMPDIR}/osm-*
 gpsbabel -i osm -f ${REFERENCE}/osm-data.xml -o gpx -F ${TMPDIR}/osm-data.gpx
 compare ${TMPDIR}/osm-data.gpx ${REFERENCE}/osm-data.gpx
 
-# Destinator POI
-gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o destinator_poi -F ${TMPDIR}/destinator_poi.dat
-gpsbabel -i destinator_poi -f ${TMPDIR}/destinator_poi.dat -w -o unicsv,utc=0 -F ${TMPDIR}/destinator_poi.txt
-compare ${TMPDIR}/destinator_poi.txt ${REFERENCE}/destinator_poi.txt
-
-# Destinator Itinerary
-gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o destinator_itn -F ${TMPDIR}/destinator_itn.dat
-gpsbabel -i destinator_itn -f ${TMPDIR}/destinator_itn.dat -r -o unicsv,utc=0 -F ${TMPDIR}/destinator_itn.txt
-compare ${TMPDIR}/destinator_itn.txt ${REFERENCE}/route/destinator_itn.txt
-
-# Destinator TrackLog
-gpsbabel -i nmea -f ${REFERENCE}/track/nmea+ms.txt -o destinator_trl -F ${TMPDIR}/destinator_trl.dat
-gpsbabel -i destinator_trl -f ${TMPDIR}/destinator_trl.dat -t -o unicsv,utc=0 -F ${TMPDIR}/destinator_trl.txt
-compare ${TMPDIR}/destinator_trl.txt ${REFERENCE}/track/destinator_trl.txt
-
 # Exif format test (read only)
 gpsbabel -i exif -f ${REFERENCE}/IMG_2065.JPG -o unicsv,utc=0 -F ${TMPDIR}/exif-dat.csv
 compare ${TMPDIR}/exif-dat.csv ${REFERENCE}/exif-dat.csv
