@@ -438,7 +438,11 @@ public:
   url(NULL), 
   url_link_text(NULL), 
   icon_descr(NULL), 
+#if NEWTIME
+//  creation_time(QDateTime::fromTime_t(0)),
+#else
   creation_time(0), 
+#endif
   microseconds(0), 
   route_priority(0), 
   hdop(0), 
@@ -891,7 +895,7 @@ void is_fatal(const int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
-ff_vecs_t* find_vec(char* const, char**);
+ff_vecs_t* find_vec(const char*, char**);
 void assign_option(const char* vecname, arglist_t* ap, const char* val);
 void disp_vec_options(const char* vecname, arglist_t* ap);
 void disp_vecs(void);
