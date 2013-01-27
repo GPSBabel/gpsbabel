@@ -189,9 +189,11 @@ case "$target" in
       USB_LIBS="-framework  IOKit -framework CoreFoundation"
       AC_DEFINE(HAVE_LIBUSB, 1)
       CFLAGS="$CFLAGS -Imac/libusb/"
+      QT_LIBS="-F$(qmake -query QT_INSTALL_LIBS) -framework QtCore"
       ;;
     *)
 	GBSER=gbser_posix.o
+        QT_LIBS="-L$(qmake -query QT_INSTALL_LIBS) -l QtCore"
 	AC_MSG_CHECKING(for libusb)
 	if test "$with_libusb" = no ; then
 		AC_MSG_RESULT(check not done)
@@ -430,6 +432,14 @@ if test "$ac_cv_valistisarray" = true ; then
 else
        AC_MSG_RESULT(no)
 fi
+
+#
+# There's probably some more "autoconfish" way to do this.
+#
+QT_INC=$(qmake -query QT_INSTALL_HEADERS)
+AC_SUBST(QT_INC)
+AC_SUBST(QT_LIBS)
+
 AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc jeeps/Makefile shapelib/Makefile zlib/empty])
 AC_CONFIG_FILES([gui/makelinuxdist.sh], [chmod +x gui/makelinuxdist.sh])
 AC_OUTPUT

@@ -39,14 +39,16 @@ RC=@RC@
 #   or     -Fomain.o (cl.exe)
 OUTPUT_SWITCH=-o #
 
+QT_INC=@QT_INC@
+
 #
 # Enable either or both of these as you wish.
 #
 #OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
 #DEBUGGING=-g $(EXTRA_DEBUGGING)
 # add -DDEBUG_MEM to turn on memory allocation logging
-GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I. -I$(srcdir) \
-	$(OPTIMIZATION) -DHAVE_CONFIG_H @CFLAGS@
+GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I. -I$(srcdir) -I$(QT_INC) \
+	$(OPTIMIZATION) -DHAVE_CONFIG_H @CFLAGS@ -DNEWTIME
 LDFLAGS=$(EXTRA_LDFLAGS) @LDFLAGS@
 PREFIX=@prefix@
 INSTALL_DIR=$(DESTDIR)/$(PREFIX)
@@ -56,27 +58,27 @@ INSTALL_DIR=$(DESTDIR)/$(PREFIX)
 
 MINIMAL_FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin.o \
 	garmin_device_xml.o garmin_tables.o internal_styles.o nmea.o kml.o \
-	wbt-200.o
+	wbt-200.o ozi.o pcx.o gdb.o gtrnctr.o xcsv.o explorist_ini.o
 
-ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o pcx.o cetus.o copilot.o \
+ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o cetus.o copilot.o \
 	gpspilot.o magnav.o skytraq.o \
 	psp.o holux.o tmpro.o tpg.o tpo.o \
-	xcsv.o gcdb.o tiger.o easygps.o quovadis.o \
+	gcdb.o tiger.o easygps.o quovadis.o \
 	gpilots.o saroute.o navicache.o psitrex.o geoniche.o delgpl.o \
-	ozi.o text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
+	text.o html.o palmdoc.o netstumbler.o hsa_ndv.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o coastexp.o \
 	vcf.o overlay.o google.o xhtmlent.o lowranceusr.o an1.o tomtom.o \
-	tef_xml.o maggeo.o pathaway.o vitosmt.o gdb.o bcr.o coto.o \
+	tef_xml.o maggeo.o pathaway.o vitosmt.o bcr.o coto.o \
 	ignrando.o stmwpp.o msroute.o cst.o nmn4.o mag_pdb.o compegps.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
-	stmsdf.o gtrnctr.o dmtlog.o raymarine.o alan.o vitovtt.o \
+	stmsdf.o dmtlog.o raymarine.o alan.o vitovtt.o \
 	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
 	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o vidaone.o \
 	igo8.o gopal.o humminbird.o mapasia.o gnav_trl.o navitel.o ggv_ovl.o \
 	jtr.o sbp.o sbn.o mmo.o skyforce.o itracku.o v900.o delbin.o \
 	pocketfms_bc.o pocketfms_fp.o pocketfms_wp.o naviguide.o enigma.o \
 	vpl.o teletype.o jogmap.o bushnell.o bushnell_trl.o wintec_tes.o \
-	subrip.o garmin_xt.o explorist_ini.o garmin_fit.o lowranceusr4.o \
+	subrip.o garmin_xt.o garmin_fit.o lowranceusr4.o \
         mtk_locus.o 
 
 FMTS=@FMTS@
@@ -129,7 +131,7 @@ WEB=@DOCDIR@
 all: gpsbabel$(EXEEXT)
 
 gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@ 
-	$(CXX)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EXPAT_LIB@ @USB_LIBS@ $(OUTPUT_SWITCH)$@
+	$(CXX)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EXPAT_LIB@ @USB_LIBS@ @QT_LIBS@ $(OUTPUT_SWITCH)$@
 
 gpsbabel-debug: $(OBJS)
 	$(CXX)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ @EXPAT_LIB@ @USB_LIBS@ $(OUTPUT_SWITCH)$@
@@ -387,6 +389,7 @@ mac-gui: gui
 
 # Build the Qt front end, place GPSBabel in the right place, deploy all 
 # the libs.
+
 mac-gui-dmg: mac-gui
 	rm -f gui/objects/GPSBabelFE.dmg
 	cd gui/objects ; macdeployqt GPSBabelFE.app -dmg
