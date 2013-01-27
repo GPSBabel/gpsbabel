@@ -61,42 +61,6 @@ gpsbabel -i gpx -f ${TMPDIR}/wpts.gpx -f ${TMPDIR}/trks.gpx -f ${TMPDIR}/rtes.gp
 compare ${TMPDIR}/alltypes.gpx ${TMPDIR}/merged.gpx
 
 #
-# Interpolate filter
-# 
-
-gpsbabel -i gpx -f ${REFERENCE}/track/simpletrack.gpx -x interpolate,distance=50m -o gpx -F ${TMPDIR}/interp.gpx
-compare ${REFERENCE}/track/interptrack.gpx ${TMPDIR}/interp.gpx 
-gpsbabel -i gpx -f ${REFERENCE}/track/simpletrack.gpx -x interpolate,time=1 -o gpx -F ${TMPDIR}/tinterp.gpx
-compare ${REFERENCE}/track/tinterptrack.gpx ${TMPDIR}/tinterp.gpx 
-
-#
-# Universal CSV - unicsv
-#
-echo "lat,lon,descr,name,notes,unk,unk" > ${TMPDIR}/unicsv.txt
-cat ${REFERENCE}/mxf.mxf >> ${TMPDIR}/unicsv.txt
-gpsbabel -i unicsv -f ${TMPDIR}/unicsv.txt -o gpx -F ${TMPDIR}/unicsv.gpx
-compare ${TMPDIR}/unicsv.gpx ${REFERENCE}/unicsv.gpx
-gpsbabel -i garmin_txt -f ${REFERENCE}/garmin_txt.txt -x nuketypes,routes,tracks -o unicsv -F ${TMPDIR}/garmin_txt-uni.csv
-compare ${TMPDIR}/garmin_txt-uni.csv ${REFERENCE}/garmin_txt-uni.csv
-
-#
-# Basic NMEA tests
-#
-gpsbabel -i nmea -f ${REFERENCE}/track/nmea -o gpx -F ${TMPDIR}/nmea.gpx
-compare ${TMPDIR}/nmea.gpx ${REFERENCE}/track/nmea.gpx
-gpsbabel -i nmea -f ${REFERENCE}/track/nmea+ms.txt -o gpx -F ${TMPDIR}/nmea+ms.gpx
-compare ${TMPDIR}/nmea+ms.gpx ${REFERENCE}/track/nmea+ms.gpx
-
-#
-# Read an NMEA file  with AMOD 3808 waypoints.  Be sure we read the points.
-# Also write as a "normal" NMEA to be sure AMOD extensions don't leak.
-#
-gpsbabel -i nmea -f ${REFERENCE}/track/amod-nmea -o gpx -F ${TMPDIR}/amod-out.gpx -o nmea -F ${TMPDIR}/amod-pure
-compare ${TMPDIR}/amod-out.gpx ${REFERENCE}/track/amod.gpx
-compare ${TMPDIR}/amod-pure ${REFERENCE}/track/amod-cleansed
-
-
-#
 # Wfff.
 #
 gpsbabel -i wfff -f ${REFERENCE}/wfff.xml -o gpsutil -F ${TMPDIR}/wfff.gpu
