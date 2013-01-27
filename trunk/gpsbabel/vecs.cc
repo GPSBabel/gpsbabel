@@ -57,6 +57,7 @@ extern ff_vecs_t geoniche_vecs;
 extern ff_vecs_t geo_vecs;
 extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t google_vecs;
+extern ff_vecs_t google_dir_vecs;
 extern ff_vecs_t gpilots_vecs;
 extern ff_vecs_t gpl_vecs;
 extern ff_vecs_t gpssim_vecs;
@@ -565,6 +566,12 @@ vecs_t vec_list[] = {
     &google_vecs,
     "google",
     "Google Maps XML",
+    "xml"
+  },
+  {
+    &google_dir_vecs,
+    "googledir",
+    "Google Directions XML",
     "xml"
   },
   {
