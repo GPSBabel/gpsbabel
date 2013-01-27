@@ -19,6 +19,7 @@
 
  */
 
+#include "gps.h"
 #include "gpsdevice.h"
 #include "garminusb.h"
 #include "gpsusbint.h"
