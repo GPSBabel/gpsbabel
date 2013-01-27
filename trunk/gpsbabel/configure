@@ -701,6 +701,8 @@ EFENCE_LIB
 GPSBABEL_DEBUG
 INSTALL_DEBUG
 DOCDIR
+QT_INC
+QT_LIBS
 LIBOBJS
 LTLIBOBJS'
 ac_subst_files=''
@@ -4626,9 +4628,11 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
 _ACEOF
 
       CFLAGS="$CFLAGS -Imac/libusb/"
+      QT_LIBS="-F$(qmake -query QT_INSTALL_LIBS) -framework QtCore"
       ;;
     *)
 	GBSER=gbser_posix.o
+        QT_LIBS="-L$(qmake -query QT_INSTALL_LIBS) -l QtCore"
 	{ echo "$as_me:$LINENO: checking for libusb" >&5
 echo $ECHO_N "checking for libusb... $ECHO_C" >&6; }
 	if test "$with_libusb" = no ; then
@@ -5357,6 +5361,14 @@ else
        { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
 fi
+
+#
+# There's probably some more "autoconfish" way to do this.
+#
+QT_INC=$(qmake -query QT_INSTALL_HEADERS)
+
+
+
 ac_config_files="$ac_config_files Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc jeeps/Makefile shapelib/Makefile zlib/empty"
 
 ac_config_files="$ac_config_files gui/makelinuxdist.sh"
@@ -6073,11 +6085,13 @@ EFENCE_LIB!$EFENCE_LIB$ac_delim
 GPSBABEL_DEBUG!$GPSBABEL_DEBUG$ac_delim
 INSTALL_DEBUG!$INSTALL_DEBUG$ac_delim
 DOCDIR!$DOCDIR$ac_delim
+QT_INC!$QT_INC$ac_delim
+QT_LIBS!$QT_LIBS$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 89; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 91; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

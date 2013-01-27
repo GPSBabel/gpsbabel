@@ -61,5 +61,5 @@ void xml_init_offset(const char* fname, xg_tag_mapping* tbl,
                      const char* encoding, gbsize_t offset);
 void xml_read(void);
 void xml_readstring(char* str);
-void xml_readprefixstring(char* str);
+void xml_readprefixstring(const char* str);
 void xml_deinit(void);

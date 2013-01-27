@@ -518,7 +518,7 @@ public:
   wp_flags wpt_flags;
   const char* icon_descr;
 #if NEWTIME
-  gbDateTime creation_time;
+  gpsbabel::DateTime creation_time;
 #else
   time_t creation_time;	/* standardized in UTC/GMT */
 #endif
