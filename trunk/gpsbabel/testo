@@ -30,7 +30,7 @@ bincompare()
 		${OD} $2 >${TMPDIR}/bc2
 		${DIFF} ${TMPDIR}/bc1 ${TMPDIR}/bc2 || {
 		echo ERROR binary comparing $*
-		let errorcount=errorcout+1
+		let errorcount=errorcount+1
 		#exit 1
 	}
 }
@@ -39,7 +39,7 @@ compare()
 {
 	${DIFF} -u -b $* ||  {
 		echo ERROR comparing $*
-		let errorcount=errorcout+1
+		let errorcount=errorcount+1
 		#exit 1
 	} 
 }
@@ -56,7 +56,7 @@ gpsbabel()
 	${PNAME} $* || {
 		echo "$PNAME returned error $?"
 		echo "($PNAME $*)"
-		let errorcount=errorcout+1
+		let errorcount=errorcount+1
 		#exit 1
 	}
 }
