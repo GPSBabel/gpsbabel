@@ -585,7 +585,8 @@ track_disp_wpt_cb(const waypoint *wpt)
   track_points++;
   all_track_points++;
 
-  tm = *localtime(&wpt->creation_time);
+  time_t ct = wpt->creation_time;
+  tm = *localtime(&ct);
   strftime(tbuf, sizeof(tbuf), "%d.%m.%Y,%H:%M.%S", &tm);
 
   calculate(wpt, &dist, &speed, &course, NULL, NULL);

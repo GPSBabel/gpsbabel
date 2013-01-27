@@ -124,9 +124,11 @@ gpssim_write_pt(const waypoint* wpt)
     int hms, ymd;
     struct tm* tm;
 
-    tm = gmtime(&wpt->creation_time);
+    const time_t tt = wpt->creation_time;
+    tm = gmtime(&tt);
     hms = tm->tm_hour * 10000 + tm->tm_min * 100 + tm->tm_sec;
     ymd = tm->tm_mday * 10000 + tm->tm_mon * 100 + tm->tm_year;
+
     snprintf(tbuf, sizeof(tbuf), ",%d,%d",ymd, hms);
     strcat(obuf, tbuf);
   }

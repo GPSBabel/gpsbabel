@@ -1045,8 +1045,10 @@ cet_convert_waypt(const waypoint* wpt)
     url_next->url = cet_convert_string(url_next->url);
     url_next->url_link_text = cet_convert_string(url_next->url_link_text);
   }
-  gc_data->placer = cet_convert_string(gc_data->placer);
-  gc_data->hint = cet_convert_string(gc_data->hint);
+  if (gc_data) {
+    gc_data->placer = cet_convert_string(gc_data->placer);
+    gc_data->hint = cet_convert_string(gc_data->hint);
+  }
 
   fs = wpt->fs;
   while (fs != NULL) {

@@ -132,18 +132,19 @@ static void
 my_writewpt(const waypoint* wpt)
 {
   struct record* rec;
-  struct tm* tm;
   char* vdata;
-  time_t tm_t;
   const char* sn = global_opts.synthesize_shortnames ?
                    mkshort_from_wpt(mkshort_handle, wpt) :
                    wpt->shortname;
 
   rec = (struct record*) xcalloc(sizeof(*rec)+56,1);
 
+  time_t tm_t;
+  struct tm* tm;
   tm = NULL;
   if (wpt->creation_time) {
-    tm = gmtime(&wpt->creation_time);
+    const time_t tt = wpt->creation_time;
+    tm = gmtime(&tt);
   }
   if (!tm) {
     tm_t = current_time();
@@ -202,7 +203,7 @@ my_writewpt(const waypoint* wpt)
 static void
 data_write(void)
 {
-  static char* appinfo =
+  static const char* appinfo =
     "\0\x01"
     "User\0\0\0\0\0\0\0\0\0\0\0\0"
     "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
