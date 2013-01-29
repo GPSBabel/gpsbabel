@@ -348,13 +348,16 @@ compare ${TMPDIR}/glog1.gpx ${TMPDIR}/glog2.gpx
 #
 # Dop filter test
 #
+OLD_LANG=$LANG
+LANG=C
 rm -f ${TMPDIR}/dop*
-sed '/<hdop>50/d' ${REFERENCE}/dop-test.gpx | gpsbabel -i gpx -f - -o openoffice -F - | sed 's/RPT...//g' > ${TMPDIR}/dop-hdop.ref
+sed '/<hdop>50/d' ${REFERENCE}/dop-test.gpx | gpsbabel -i gpx -f - -o openoffice -F - | sed  's/RPT...//g' > ${TMPDIR}/dop-hdop.ref
 gpsbabel -i gpx -f ${REFERENCE}/dop-test.gpx -x discard,hdop=50 -o openoffice -F - | sed 's/RPT...//g' > ${TMPDIR}/dop-hdop.fil
 compare ${TMPDIR}/dop-hdop.ref ${TMPDIR}/dop-hdop.fil
 sed '/<vdop>50/d' ${REFERENCE}/dop-test.gpx | gpsbabel -i gpx -f - -o openoffice -F - | sed 's/RPT...//g' > ${TMPDIR}/dop-vdop.ref
 gpsbabel -i gpx -f ${REFERENCE}/dop-test.gpx -x discard,vdop=50 -o openoffice -F - | sed 's/RPT...//g' > ${TMPDIR}/dop-vdop.fil
 compare ${TMPDIR}/dop-vdop.ref ${TMPDIR}/dop-vdop.fil
+LANG=$OLD_LANG
 
 #
 # cotoGPS tests
