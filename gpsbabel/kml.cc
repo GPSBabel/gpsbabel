@@ -200,9 +200,8 @@ static struct {
 
 static void kml_init_color_sequencer(unsigned int steps_per_rev)
 {
-  float color_step;
   if (rotate_colors) {
-    color_step = atof(opt_rotate_colors);
+    float color_step = atof(opt_rotate_colors);
     if (color_step > 0.0f) {
       // step around circle by given number of degrees for each track(route)
       kml_color_sequencer.step = ((float)KML_COLOR_LIMIT) * 6.0f * color_step / 360.0f;
@@ -496,7 +495,6 @@ static void
 kml_write_xml(int indent, const char* fmt, ...)
 {
   va_list args;
-  int i;
   va_start(args, fmt);
 
   if (indent < 0) {
@@ -508,7 +506,7 @@ kml_write_xml(int indent, const char* fmt, ...)
   }
 
   if (fmt[1] != '!' && do_indentation) {
-    for (i = 0; i < indent_level; i++) {
+    for (int i = 0; i < indent_level; i++) {
       gbfputs("  ", ofd);
     }
   }
@@ -530,13 +528,12 @@ static void
 kml_write_xmle(const char* tag, const char* fmt, ...)
 {
   va_list args;
-  int i;
   va_start(args, fmt);
 
   if (fmt && *fmt) {
     char* tmp_ent = xml_entitize(fmt);
     int needs_escaping = 0;
-    for (i = 0; i < indent_level; i++) {
+    for (int i = 0; i < indent_level; i++) {
       gbfputs("  ", ofd);
     }
     if (strspn(tmp_ent, "&'<>\"")) {
@@ -657,8 +654,8 @@ static void kml_write_bitmap_style(kml_point_type pt_type, const char* bitmap,
 
 static void kml_output_timestamp(const waypoint* waypointp)
 {
-  char time_string[64];
   if (waypointp->creation_time) {
+    char time_string[64];
     xml_fill_in_time(time_string, waypointp->creation_time, waypointp->microseconds, XML_LONG_TIME);
     if (time_string[0]) {
       kml_write_xml(0, "<TimeStamp><when>%s</when></TimeStamp>\n",
@@ -988,7 +985,6 @@ static void kml_output_point(const waypoint* waypointp, kml_point_type pt_type)
 
 static void kml_output_tailer(const route_head* header)
 {
-  queue* elem, *tmp;
 
   if (export_points && header->rte_waypt_ct > 0) {
     kml_write_xml(-1, "</Folder>\n");
@@ -997,6 +993,8 @@ static void kml_output_tailer(const route_head* header)
   // Add a linestring for this track?
   if (export_lines && header->rte_waypt_ct > 0) {
     int needs_multigeometry = 0;
+    queue* elem, *tmp;
+
     QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
       waypoint* tpt = (waypoint*) elem;
       int first_in_trk = tpt->Q.prev == &header->waypoint_list;
@@ -1343,7 +1341,6 @@ char* kml_geocache_get_logs(const waypoint* wpt)
   curlog = xml_findfirst(root, "groundspeak:log");
   while (curlog) {
     time_t logtime = 0;
-    struct tm* logtm = NULL;
 
     // Unless we have a broken GPX input, these logparts
     // branches will always be taken.
@@ -1364,7 +1361,7 @@ char* kml_geocache_get_logs(const waypoint* wpt)
     logpart = xml_findfirst(curlog, "groundspeak:date");
     if (logpart) {
       logtime = xml_parse_time(logpart->cdata, NULL);
-      logtm = localtime(&logtime);
+      struct tm* logtm = localtime(&logtime);
       if (logtm) {
         char* temp;
         xasprintf(&temp,
@@ -1717,10 +1714,10 @@ static void kml_mt_hdr(const route_head* header)
   kml_output_positioning();
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    char time_string[64];
     waypoint* tpt = (waypoint*)elem;
 
     if (tpt->creation_time) {
+      char time_string[64];
       xml_fill_in_time(time_string, tpt->creation_time, tpt->microseconds,
                        XML_LONG_TIME);
       if (time_string[0]) {

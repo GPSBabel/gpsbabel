@@ -237,7 +237,6 @@ set_waypt_count(unsigned int nc)
 void
 waypt_disp(const waypoint *wpt)
 {
-  char *tmpdesc = NULL;
 #if NEWTIME
   if (wpt->creation_time.isValid()) {
   printf("%s", qPrintable(wpt->creation_time.toString()));
@@ -251,7 +250,7 @@ waypt_disp(const waypoint *wpt)
   printposn(wpt->longitude,0);
 
   if (wpt->description) {
-    tmpdesc = xstrdup(wpt->description);
+    char *tmpdesc = xstrdup(wpt->description);
     printf("%s/%s",
            global_opts.synthesize_shortnames ?
            mkshort(mkshort_handle, tmpdesc) :
