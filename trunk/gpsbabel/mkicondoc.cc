@@ -1,14 +1,19 @@
+// Display all the Garmin icons that we know about so we can copy/paste
+// into our doc, http://www.gpsbabel.org/htmldoc-development/GarminIcons.html
+
+
 #include <stdarg.h>
 #include <stdio.h>
-#include "fatal.c"
-#include "util.c"
-#include "cet.c"
-#define VERSION "1"
-#include "globals.c"
+#include "fatal.cc"
+#include "util.cc"
+#include "cet.cc"
+// #define VERSION "1"
+#include "globals.cc"
+#include "jeeps/gpsmath.cc"
 
 
 
-tbl_ent(int n, ...)
+void tbl_ent(int n, ...)
 {
   int i;
   char* t;
@@ -30,15 +35,15 @@ tbl_ent(int n, ...)
 
 }
 
-#include "garmin_tables.c"
-sort_garmin(const void* a, const void* b)
+#include "garmin_tables.cc"
+int sort_garmin(const void* a, const void* b)
 {
-  const icon_mapping_t* ap = a;
-  const icon_mapping_t* bp = b;
+  const icon_mapping_t* ap = (const icon_mapping_t*) a;
+  const icon_mapping_t* bp = (const icon_mapping_t*) b;
   return (case_ignore_strcmp((ap)->icon, (bp)->icon));
 }
 
-garmin()
+void garmin()
 {
   icon_mapping_t* i;
   int n = 0;
@@ -61,7 +66,8 @@ garmin()
   }
 }
 
-main()
+int main()
 {
   garmin();
+  return 0;
 }
