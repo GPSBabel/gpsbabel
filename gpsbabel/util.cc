@@ -407,22 +407,6 @@ xvasprintf(char **strp, const char *fmt, va_list ap)
   return outsize;
 }
 
-
-/*
- * Duplicate a pascal string into a normal C string.
- */
-char *
-pstrdup(char *src)
-{
-  int len = src[0];
-  char *obuf = (char *) xmalloc(len + 1);
-
-  memcpy(obuf, src + 1, len);
-  obuf[len] = 0;
-
-  return obuf;
-}
-
 void
 rtrim(char *s)
 {
