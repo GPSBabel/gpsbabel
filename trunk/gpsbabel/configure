@@ -3801,7 +3801,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   ac_cv_header_stdc=no
 fi
-rm -f -r conftest*
+rm -f conftest*
 
 fi
 
@@ -3822,7 +3822,7 @@ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
 else
   ac_cv_header_stdc=no
 fi
-rm -f -r conftest*
+rm -f conftest*
 
 fi
 
@@ -4628,7 +4628,16 @@ rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
 _ACEOF
 
       CFLAGS="$CFLAGS -Imac/libusb/"
-      QT_LIBS="-F$(qmake -query QT_INSTALL_LIBS) -framework QtCore"
+
+      # Macports uses a non-standard build of Qt with an added
+      # QT_INSTALL_FRAMEWORKS flag, so look for thier custom
+      # version first.  That will fail on 'normal' Qt so fall
+      # back to QT_INSTALL_LIBS.
+      QT_LIBS=$(qmake -query QT_INSTALL_FRAMEWORKS)
+      if test $QT_LIBS = "**Unknown**" ; then
+         QT_LIBS=$(qmake -query QT_INSTALL_LIBS)
+      fi
+      QT_LIBS="-F$QT_LIBS -framework QtCore"
       ;;
     *)
 	GBSER=gbser_posix.o
