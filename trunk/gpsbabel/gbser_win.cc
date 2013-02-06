@@ -168,7 +168,7 @@ const char* fix_win_serial_name(const char* comname)
 void* gbser_init(const char* port_name)
 {
   HANDLE comport;
-  gbser_handle* h = xcalloc(1, sizeof(*h));
+  gbser_handle* h = (gbser_handle*) xcalloc(1, sizeof(*h));
   const char* xname = fix_win_serial_name(port_name);
 
   gbser__db(2, "Translated port name: \"%s\"\n", xname);
@@ -259,7 +259,7 @@ unsigned gbser__read_buffer(void* handle, void** buf, unsigned* len)
 {
   gbser_handle* h = gbser__get_handle(handle);
   unsigned count = *len;
-  unsigned char* cp = *buf;
+  unsigned char* cp = (unsigned char *) *buf;
   if (count > h->inbuf_used) {
     count = h->inbuf_used;
   }
@@ -357,7 +357,7 @@ int gbser_write(void* handle, const void* buf, unsigned len)
 {
   gbser_handle* h = gbser__get_handle(handle);
   DWORD nwritten;
-  const char* bp = buf;
+  const char* bp = (const char *) buf;
   /* Not sure we need to spin here - but this'll work even if we don't */
   while (len > 0) {
     if (!WriteFile(h->comport, bp, len, &nwritten, NULL)) {
@@ -426,7 +426,7 @@ int gbser_read_line(void* handle, void* buf,
                     unsigned len, unsigned ms,
                     int eol, int discard)
 {
-  char* bp = buf;
+  char* bp = (char *) buf;
   unsigned pos = 0;
   hp_time tv;
   get_time(&tv);
