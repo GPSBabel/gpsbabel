@@ -262,10 +262,15 @@ typedef enum {
   gc_small
 } geocache_container;
 
-typedef struct {
-  int is_html;
+class utf_string{
+ public:
+  utf_string() :
+    is_html(false),
+    utfstring(NULL)
+  {};
+  bool is_html;
   char* utfstring;
-} utf_string;
+};
 
 typedef struct {
   int id; /* The decimal cache number */
@@ -346,11 +351,17 @@ fs_xml* fs_xml_alloc(long type);
 /*
  * Structures and functions for multiple URLs per waypoint.
  */
-typedef struct url_link {
+class url_link {
+ public: 
+    url_link() :
+    url_next(NULL),
+    url(NULL),
+    url_link_text(NULL)
+     {} ;
   struct url_link* url_next;
   char* url;
   char* url_link_text;
-} url_link;
+};
 
 /*
  * Misc bitfields inside struct waypoint;
