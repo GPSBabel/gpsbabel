@@ -90,7 +90,7 @@ int32 GPS_Serial_On(const char* port, gpsdevh** dh)
   COMMTIMEOUTS timeout;
   HANDLE comport;
   const char* xname = fix_win_serial_name(port);
-  win_serial_data* wsd = xcalloc(sizeof(win_serial_data), 1);
+  win_serial_data* wsd = (win_serial_data*) xcalloc(sizeof(win_serial_data), 1);
   *dh = (gpsdevh*) wsd;
   GPS_Diag("Opening %s\n", xname);
   comport = CreateFileA(xname, GENERIC_READ|GENERIC_WRITE, 0, NULL,
