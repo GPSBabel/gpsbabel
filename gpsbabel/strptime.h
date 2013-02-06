@@ -27,7 +27,12 @@
 /*
  * Version of "strptime()", for the benefit of OSes that don't have it.
  */
+#ifdef __cplusplus
+extern "C" {
+#endif
 extern char* strptime(const char*, const char*, struct tm*);
-
+#ifdef __cplusplus
+}
+#endif
 #endif
 
