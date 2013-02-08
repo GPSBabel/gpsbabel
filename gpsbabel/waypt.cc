@@ -29,7 +29,7 @@
 queue waypt_head;
 static unsigned int waypt_ct;
 static short_handle mkshort_handle;
-static geocache_data empty_gc_data = { 0 };
+static geocache_data empty_gc_data;
 static global_trait traits;
 
 const global_trait* get_traits(void)
@@ -82,7 +82,7 @@ waypt_dupe(const waypoint *wpt)
 
   if (wpt->gc_data != &empty_gc_data) {
     geocache_data *gc_data = (geocache_data*) xmalloc(sizeof(*gc_data));
-    tmp->gc_data = (const geocache_data *)gc_data;
+    tmp->gc_data = (geocache_data *)gc_data;
 
     memcpy(gc_data, wpt->gc_data, sizeof(*gc_data));
     if (wpt->gc_data->desc_short.utfstring) {
@@ -680,7 +680,7 @@ waypt_alloc_gc_data(waypoint *wpt)
   geocache_data *res = (geocache_data *)wpt->gc_data;
   if (res == &empty_gc_data) {
     res = (geocache_data*) xcalloc(1, sizeof(*res));
-    wpt->gc_data = (const geocache_data *)res;
+    wpt->gc_data = (geocache_data *)res;
 
   }
   return res;
