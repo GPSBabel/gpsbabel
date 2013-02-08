@@ -272,7 +272,24 @@ class utf_string{
   char* utfstring;
 };
 
-typedef struct {
+class geocache_data {
+ public:
+  geocache_data() :
+    id(0),
+    type(gt_unknown),
+    container(gc_unknown),
+    diff(0),
+    terr(0),
+    is_archived(status_unknown),
+    is_available(status_unknown),
+    is_memberonly(status_unknown),
+    has_customcoords(status_unknown),
+    placer(NULL),
+    placer_id(0),
+    hint(NULL),
+    favorite_points(0),
+    personal_note(NULL)
+  {}
   int id; /* The decimal cache number */
   geocache_type type:5;
   geocache_container container:4;
@@ -291,7 +308,7 @@ typedef struct {
   utf_string desc_long;
   int favorite_points;
   char* personal_note;
-} geocache_data ;
+};
 
 typedef struct xml_tag {
   char* tagname;
@@ -563,7 +580,7 @@ public:
   float power; /* watts, as measured by cyclists */
   float temperature; /* Degrees celsius */
   float odometer_distance; /* Meters? */
-  const geocache_data* gc_data;
+  geocache_data* gc_data;
   format_specific_data* fs;
   session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
