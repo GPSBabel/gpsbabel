@@ -144,12 +144,11 @@ find_symbol_num(const char *descr)
 {
   if ((descr != NULL) && (*descr)) {
 
-    int i;
     raymarine_symbol_mapping_t *a;
 
     a = &raymarine_symbols[0];
 
-    for (i = 0; i < RAYMARINE_SYMBOL_CT; i++, a++) {
+    for (unsigned int i = 0; i < RAYMARINE_SYMBOL_CT; i++, a++) {
       if (case_ignore_strcmp(descr, a->name) == 0) {
         return i;
       }
@@ -185,7 +184,8 @@ static void
 raymarine_read(void)
 {
   waypoint *wpt;
-  int ix, rx;
+  unsigned int ix;
+  unsigned int rx;
 
   /* Read all waypoints */
 
@@ -221,7 +221,7 @@ raymarine_read(void)
       wpt->creation_time = EXCEL_TO_TIMET(atof(str));
     }
     if (((str = inifile_readstr(fin, sect, "Bmp"))) && *str) {
-      int symbol = atoi(str);
+      unsigned int symbol = atoi(str);
 
       if ((symbol < 3) && (symbol >= RAYMARINE_SYMBOL_CT)) {
         symbol = RAYMARINE_STD_SYMBOL;
@@ -337,7 +337,7 @@ qsort_cb(const void *a, const void *b)
 static void
 write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char *location)
 {
-  char *notes;
+  const char *notes;
   char *name;
   double time;
 
@@ -410,7 +410,6 @@ write_route_head_cb(const route_head *rte)
 static void
 write_route_wpt_cb(const waypoint *wpt)
 {
-  int i;
   static const char *items[] = {
     "Cog",
     "Eta",
@@ -425,7 +424,7 @@ write_route_wpt_cb(const waypoint *wpt)
   };
 
   gbfprintf(fout, "Mk%d=%s" LINE_FEED, rte_wpt_index, (char *)wpt->extra_data);
-  for (i = 0; i < sizeof(items) / sizeof(char *); i++) {
+  for (unsigned i = 0; i < sizeof(items) / sizeof(char *); i++) {
     gbfprintf(fout, "%s%d=%.15f" LINE_FEED, items[i], rte_wpt_index, 0.0);
   }
 

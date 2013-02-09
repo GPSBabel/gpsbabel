@@ -108,9 +108,9 @@ lowranceusr4_readstr(char* buf, const int maxlen, gbfile* file, int bytes_per_ch
 }
 
 static void
-lowranceusr4_writestr(char *buf, gbfile *file, int bytes_per_char)
+lowranceusr4_writestr(char *buf, gbfile *file, unsigned int bytes_per_char)
 {
-  int len = 0;
+  unsigned int len = 0;
 
   if (buf) {
     len = strlen(buf);
@@ -127,10 +127,9 @@ lowranceusr4_writestr(char *buf, gbfile *file, int bytes_per_char)
   if (bytes_per_char == 1) {
     (void) gbfwrite(buf, 1, len, file);
   } else {
-    int i, j;
-    for (i = 0; i < len; ++i) {
+    for (unsigned int i = 0; i < len; ++i) {
       gbfputc(buf[i], file_out);
-      for (j = 1; j < bytes_per_char; ++j) {
+      for (unsigned int j = 1; j < bytes_per_char; ++j) {
         gbfputc('\0', file_out);
       }
     }
@@ -498,11 +497,11 @@ lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
 static void
 lowranceusr4_parse_routes(void)
 {
-  int num_routes, i, j, text_len;
+  unsigned int num_routes, i, j, text_len;
   unsigned int num_legs;
   char buff[MAXUSRSTRINGSIZE + 1];
   waypoint* wpt_tmp;
-  int uid_unit, uid_seq_low, uid_seq_high;
+  unsigned int uid_unit, uid_seq_low, uid_seq_high;
 
   num_routes = gbfgetint32(file_in);
 
