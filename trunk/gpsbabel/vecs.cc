@@ -1240,15 +1240,12 @@ find_vec(const char *vecname, char **opts)
   }
 
   while (vec->vec) {
-    arglist_t *ap;
-    char *res;
-
     if (case_ignore_strcmp(svecname, vec->name)) {
       vec++;
       continue;
     }
 
-    res = strchr(vecname, ',');
+    const char* res = strchr(vecname, ',');
     if (res) {
       *opts = strchr(vecname, ',')+1;
     } else {
@@ -1256,7 +1253,7 @@ find_vec(const char *vecname, char **opts)
     }
 
     if (vec->vec->args) {
-      for (ap = vec->vec->args; ap->argstring; ap++) {
+      for (arglist_t* ap = vec->vec->args; ap->argstring; ap++) {
         const char *opt;
 
         if (res) {
@@ -1300,15 +1297,12 @@ find_vec(const char *vecname, char **opts)
    * is to search the list of xcsv styles.
    */
   while (svec->name) {
-    arglist_t *ap;
-    char *res;
-
     if (case_ignore_strcmp(svecname, svec->name)) {
       svec++;
       continue;
     }
 
-    res = strchr(vecname, ',');
+    const char* res = strchr(vecname, ',');
     if (res) {
       *opts = strchr(vecname, ',') + 1;
     } else {
@@ -1316,7 +1310,7 @@ find_vec(const char *vecname, char **opts)
     }
 
     if (vec_list[0].vec->args) {
-      for (ap = vec_list[0].vec->args; ap->argstring; ap++) {
+      for (arglist_t* ap = vec_list[0].vec->args; ap->argstring; ap++) {
         const char *opt;
 
         if (res) {
