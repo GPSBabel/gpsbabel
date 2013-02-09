@@ -1227,7 +1227,7 @@ disp_vec_options(const char *vecname, arglist_t *ap)
 }
 
 ff_vecs_t *
-find_vec(const char *vecname, char **opts)
+find_vec(const char *vecname, const char **opts)
 {
   vecs_t *vec = vec_list;
   style_vecs_t *svec = style_list;
