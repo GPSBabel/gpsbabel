@@ -234,8 +234,8 @@ main(int argc, char* argv[])
   filter_vecs_t* fvecs = NULL;
   char* fname = NULL;
   char* ofname = NULL;
-  char* ivec_opts = NULL;
-  char* ovec_opts = NULL;
+  const char* ivec_opts = NULL;
+  const char* ovec_opts = NULL;
   char* fvec_opts = NULL;
   int opt_version = 0;
   int did_something = 0;

@@ -923,7 +923,7 @@ void is_fatal(const int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
-ff_vecs_t* find_vec(const char *, char**);
+ff_vecs_t* find_vec(const char *, const char**);
 void assign_option(const char* vecname, arglist_t* ap, const char* val);
 void disp_vec_options(const char* vecname, arglist_t* ap);
 void disp_vecs(void);
