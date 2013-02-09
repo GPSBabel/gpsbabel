@@ -923,7 +923,7 @@ void is_fatal(const int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
-ff_vecs_t* find_vec(char *, char**);
+ff_vecs_t* find_vec(const char *, char**);
 void assign_option(const char* vecname, arglist_t* ap, const char* val);
 void disp_vec_options(const char* vecname, arglist_t* ap);
 void disp_vecs(void);
@@ -938,7 +938,7 @@ void printposn(const double c, int is_lat);
 void* xcalloc(size_t nmemb, size_t size);
 void* xmalloc(size_t size);
 void* xrealloc(void* p, size_t s);
-void xfree(void* mem);
+void xfree(const void* mem);
 char* xstrdup(const char* s);
 char* xstrndup(const char* s, size_t n);
 char* xstrndupt(const char* s, size_t n);

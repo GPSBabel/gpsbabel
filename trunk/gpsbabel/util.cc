@@ -115,12 +115,12 @@ xcalloc(size_t nmemb, size_t size)
 
 void
 #ifdef DEBUG_MEM
-XFREE(void *mem, DEBUG_PARAMS)
+XFREE(const void *mem, DEBUG_PARAMS)
 #else
-xfree(void *mem)
+xfree(const void *mem)
 #endif
 {
-  free(mem);
+  free((void *) mem);
 #ifdef DEBUG_MEM
   debug_mem_output("free, %x, %s, %d\n",
                    mem, file, line);
