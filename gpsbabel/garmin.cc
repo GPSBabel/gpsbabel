@@ -301,7 +301,7 @@ static void
 rd_init(const char* fname)
 {
   if (setjmp(gdx_jmp_buf)) {
-    char* vec_opts = NULL;
+    const char* vec_opts = NULL;
     const gdx_info* gi = gdx_get_info();
     gpx_vec = find_vec("gpx", &vec_opts);
     gpx_vec->rd_init(gi->from_device.canon);
@@ -445,7 +445,7 @@ track_read(void)
   route_head* trk_head = NULL;
   int trk_num = 0;
   int i;
-  char* trk_name = "";
+  const char* trk_name = "";
   GPS_PLap* laps = NULL;
   int nlaps = 0;
   int next_is_new_trkseg = 0;
