@@ -56,7 +56,7 @@ static waypoint** wpt_a;
 static int wpt_a_ct;
 static grid_type grid_index;
 static int datum_index;
-static char* datum_str;
+static const char* datum_str;
 static int current_line;
 static char* date_time_format = NULL;
 static int precision = 3;
@@ -152,17 +152,18 @@ static const char* headers[] = {
 
 /* helpers */
 
-static char*
-get_option_val(char* option, char* def)
+static const char*
+get_option_val(const char* option, const char* def)
 {
-  char* c = (option != NULL) ? option : def;
+  const char* c = (option != NULL) ? option : def;
   return c;
 }
 
 static void
 init_date_and_time_format(void)
 {
-  char* f, *c;
+  const char* f;
+  const char* c;
 
   f = get_option_val(opt_date_format, DEFAULT_DATE_FORMAT);
   date_time_format = convert_human_date_format(f);
@@ -172,7 +173,7 @@ init_date_and_time_format(void)
   f = get_option_val(opt_time_format, DEFAULT_TIME_FORMAT);
   c = convert_human_time_format(f);
   date_time_format = xstrappend(date_time_format, c);
-  xfree(c);
+  xfree((void*) c);
 }
 
 static void
@@ -468,7 +469,7 @@ print_speed(double* distance, time_t* time)
 {
   int idist;
   double dist = *distance;
-  char* unit;
+  const char* unit;
 
   if (!gtxt_flags.metric) {
     dist = METERS_TO_MILES(dist) * 1000.0;
@@ -554,7 +555,7 @@ write_waypt(const waypoint* wpt)
 
   gbfprintf(fout, "Waypoint\t%s\t", (wpt->shortname) ? wpt->shortname : "");
   if (wpt_class <= gt_waypt_class_airport_ndb) {
-    char* temp = wpt->notes;
+    const char* temp = wpt->notes;
     if (temp == NULL) {
       if (wpt->description && (strcmp(wpt->description, wpt->shortname) != 0)) {
         temp = wpt->description;
@@ -750,7 +751,7 @@ track_disp_wpt_cb(const waypoint* wpt)
 static void
 garmin_txt_wr_init(const char* fname)
 {
-  char* grid_str;
+  const char* grid_str;
 
   memset(&gtxt_flags, 0, sizeof(gtxt_flags));
 

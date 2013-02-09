@@ -246,7 +246,7 @@ static void
 geo_wr_deinit(void)
 {
   writer.writeEndDocument();
-  gbfputs(ostring.toUtf8().data(),ofd);
+  gbfputs(ostring,ofd);
   gbfclose(ofd);
   ofd = NULL;
 }
