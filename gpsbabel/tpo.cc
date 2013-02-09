@@ -138,7 +138,7 @@ tpo_check_version_string()
 
   unsigned char string_size;
   char* string_buffer;
-  char* v3_id_string = "TOPO! Ver";
+  const char* v3_id_string = "TOPO! Ver";
 
   /* read the id string */
   gbfread(&string_size, 1, 1, tpo_file_in);
@@ -449,8 +449,8 @@ int tpo_read_int()
 //
 int tpo_find_block(unsigned int block_desired)
 {
-  int block_type;
-  int block_offset;
+  unsigned int block_type;
+  unsigned int block_offset;
 
 
   // Skip 512 byte fixed-length header
@@ -875,7 +875,7 @@ void tpo_process_waypoints(void)
     char* waypoint_name;
     int lat;
     int lon;
-    int altitude;
+    unsigned int altitude;
 
 
 //UNKNOWN DATA LENGTH
@@ -1908,7 +1908,7 @@ tpo_write(void)
 {
   unsigned char unknown1[] = { 0xFF, 0xFF, 0x01, 0x00 };
 
-  char* chunk_name = "CTopoRoute";
+  const  char* chunk_name = "CTopoRoute";
   int chunk_name_length = strlen(chunk_name);
 
   /* write the total number of tracks */
