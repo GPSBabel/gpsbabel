@@ -26,6 +26,11 @@ static waypoint* wpt_tmp;
 
 static gbfile* ofd;
 
+#include <QtCore/QXmlStreamWriter>
+#include <QtCore/QDebug>
+QString ostring;
+QXmlStreamWriter writer(&ostring);
+
 static
 arglist_t geo_args[] = {
   {"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
@@ -230,45 +235,55 @@ static void
 geo_wr_init(const char* fname)
 {
   ofd = gbfopen(fname, "w", MYNAME);
+
+  //writer.setAutoFormatting(true);
+  writer.setAutoFormattingIndent(0);
+  writer.writeStartDocument();
+
 }
 
 static void
 geo_wr_deinit(void)
 {
+  writer.writeEndDocument();
+  gbfputs(ostring.toUtf8().data(),ofd);
   gbfclose(ofd);
+  ofd = NULL;
 }
 
 static void
 geo_waypt_pr(const waypoint* waypointp)
 {
-  char* tmp;
+  writer.writeStartElement("waypoint");
 
-  gbfprintf(ofd, "<waypoint>\n");
-  gbfprintf(ofd, "<name id=\"%s\">", waypointp->shortname);
-  gbfprintf(ofd, "<![CDATA[%s]]>", waypointp->description);
-  gbfprintf(ofd, "</name>\n");
+  writer.writeStartElement("name");
+  writer.writeAttribute("id", waypointp->shortname);
+  // TODO: this could be writeCharacters, but it's here for compat with pre
+  // Qt writer.
+  writer.writeCDATA(waypointp->description);
+  writer.writeEndElement();
 
-  gbfprintf(ofd, "<coord lat=\"%lf\" lon=\"%lf\"/>",
-            waypointp->latitude,
-            waypointp->longitude);
-  gbfprintf(ofd, "\n");
+  writer.writeStartElement("coord");
+  writer.writeAttribute("lat", QString::number(waypointp->latitude, 'f'));
+  writer.writeAttribute("lon", QString::number(waypointp->longitude, 'f'));
+  writer.writeEndElement();
 
-  if (waypointp->icon_descr) {
-    gbfprintf(ofd, "<type>%s</type>\n", deficon ? deficon : waypointp->icon_descr);
-  }
+  writer.writeTextElement("type", deficon ? deficon : waypointp->icon_descr);
+
   if (waypointp->url) {
-    tmp = xml_entitize(waypointp->url);
-    gbfprintf(ofd, "<link text =\"Cache Details\">%s</link>\n",
-              tmp);
-    xfree(tmp);
+    writer.writeStartElement("link");
+    writer.writeAttribute("text ", "Cache Details");
+    writer.writeCharacters(waypointp->url);
+    writer.writeEndElement();
   }
-  if (waypointp->gc_data && waypointp->gc_data->diff) {
-    int v;
 
-    gbfprintf(ofd, "<difficulty>%.1lf</difficulty>\n",
-              waypointp->gc_data->diff / 10.0);
-    gbfprintf(ofd, "<terrain>%.1lf</terrain>\n",
-              waypointp->gc_data->terr / 10.0);
+  if (waypointp->gc_data && waypointp->gc_data->diff) {
+    writer.writeTextElement("difficulty", 
+                            QString::number(waypointp->gc_data->diff/10));
+    writer.writeTextElement("terrain", 
+                            QString::number(waypointp->gc_data->terr/10));
+
+    int v = 1;
     switch (waypointp->gc_data->container) {
     case gc_unknown:
       v = 1;
@@ -295,17 +310,24 @@ geo_waypt_pr(const waypoint* waypointp)
       v = 1;
       break;
     }
-    gbfprintf(ofd, "<container>%d</container>\n", v);
+    writer.writeTextElement("container", 
+                            QString::number(v));
   }
-  gbfprintf(ofd, "</waypoint>\n");
+
+  writer.writeEndElement();
 }
 
 static void
 geo_write(void)
 {
-  gbfprintf(ofd, "<?xml version=\"1.0\"?><loc version=\"1.0\" src=\"EasyGPS\">\n");
+  writer.writeStartElement("loc");
+  writer.writeAttribute("version", "1.0");
+  // TODO: This could be moved to wr_init, but the pre GPX version put the two
+  // lines above this, so mimic that behaviour exactly.
+  writer.setAutoFormatting(true);
+  writer.writeAttribute("src", "EasyGPS");
   waypt_disp_all(geo_waypt_pr);
-  gbfprintf(ofd, "</loc>\n");
+  writer.writeEndElement();
 }
 
 ff_vecs_t geo_vecs = {
