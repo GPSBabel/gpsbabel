@@ -774,6 +774,16 @@ gbfputs(const char* s, gbfile* file)
   return gbfwrite(s, 1, strlen(s), file);
 }
 
+// This is a depressing hack, meant to ease the pain from C strings
+// to QStrings, which are consitently encoded.
+int
+gbfputs(const QString& s, gbfile* file)
+{
+  const char* qs = s.toUtf8().data();
+  unsigned int l = strlen(qs);
+  return gbfwrite(qs, 1, l, file);
+}
+
 /*
  * gbfwrite: (as fwrite)
  */

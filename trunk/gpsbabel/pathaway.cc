@@ -132,7 +132,7 @@ internal_debug2(const char *format, ...)
  */
 
 static
-char *ppdb_strcat(char *dest, const char *src, char *def, int *size)
+char *ppdb_strcat(char *dest, const char *src, const char *def, int *size)
 {
   int len;
   char *res;
@@ -212,7 +212,7 @@ char *str_pool_get(size_t size)
 }
 
 static
-char *str_pool_getcpy(const char *src, char *def)
+char *str_pool_getcpy(const char *src, const char *def)
 {
   char *res;
 

@@ -26,6 +26,8 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <string.h>
+#include <QtCore/QString.h>
+
 #include "defs.h"
 #include "cet.h"
 
@@ -98,6 +100,7 @@ int gbvfprintf(gbfile* file, const char* format, va_list ap);
 int gbfprintf(gbfile* file, const char* format, ...);
 int gbfputc(int c, gbfile* file);
 int gbfputs(const char* s, gbfile* file);
+int gbfputs(const QString& s, gbfile* file);
 int gbfwrite(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* file);
 int gbfflush(gbfile* file);
 
