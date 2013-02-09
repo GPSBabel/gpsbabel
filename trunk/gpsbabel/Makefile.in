@@ -131,7 +131,7 @@ WEB=@DOCDIR@
 # particularly important, e.g. gui.
 .PHONY: all clean tag more-clean check torture
 	install install-debug leaktest
-	dep doc FORCE
+	dep doc
 	release-sourcecheck release-tarball release-rpm
 	cross-configure
 	release-winbuild release-upload mac-upload release rpm mac-release
