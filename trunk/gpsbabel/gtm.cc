@@ -18,6 +18,10 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 */
 
+/*
+ * Documentation can be found at http://www.trackmaker.com/download/ref_guide_eng.pdf
+ */
+
 #include "defs.h"
 #include "jeeps/gpsmath.h"
 
@@ -276,8 +280,7 @@ set_datum(int n)
     indatum = 75;  /* Nahrwan */
   } else if (n < 116) {
     indatum = 76;  /* Naparima BWI  */
-  } else if (n < 116) {}
-  else if (n < 119) {
+  } else if (n < 119) {
     indatum = 3;   /* Alaska NAD27 */
   } else if (n < 121) {
     indatum = 14;  /* Bahamas NAD27 */
