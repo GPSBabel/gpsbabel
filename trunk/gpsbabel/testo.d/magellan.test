@@ -1,0 +1,20 @@
+
+
+#
+# Magellan file format
+#
+gpsbabel -i magellan -f ${REFERENCE}/magfile -o magellan -F ${TMPDIR}/magfile
+compare ${TMPDIR}/magfile ${REFERENCE}/magfile
+
+#
+# Magellanx is just like, but with longer names. (which this admittedly
+# doesn't actually exercise...)
+#
+gpsbabel -i magellan -f ${REFERENCE}/magfile -o magellanx -F ${TMPDIR}/magfile2
+compare ${TMPDIR}/magfile2 ${REFERENCE}/magfile
+
+# Magellanx routes, however, have an extra 'name' field in them.
+gpsbabel -r -i magellanx -f ${REFERENCE}/route/magexplorist.rte -o magellanx -F ${TMPDIR}/magxfile.rte
+gpsbabel -r -i magellanx -f ${TMPDIR}/magxfile.rte -o magellanx -F ${TMPDIR}/magxfile2.rte
+compare ${TMPDIR}/magxfile2.rte ${REFERENCE}/route/magexplorist.rte
+

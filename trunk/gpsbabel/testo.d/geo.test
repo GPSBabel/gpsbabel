@@ -1,0 +1,5 @@
+
+# Geocaching .loc
+rm -f ${TMPDIR}/gl.loc
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o geo -F ${TMPDIR}/gl.loc
+compare ${TMPDIR}/gl.loc ${REFERENCE}

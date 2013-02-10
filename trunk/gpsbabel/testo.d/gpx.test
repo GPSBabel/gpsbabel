@@ -1,0 +1,6 @@
+
+# GPX
+rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpx -F ${TMPDIR}/gl.gpx
+gpsbabel -i gpx -f ${TMPDIR}/gl.gpx -o gpsutil -F ${TMPDIR}/gpx.gpx
+compare ${TMPDIR}/gpx.gpx ${TMPDIR}/gu.wpt
