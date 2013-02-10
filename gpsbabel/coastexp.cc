@@ -19,8 +19,8 @@
  */
 
 #include "defs.h"
+#include "xmlgeneric.h"
 #if HAVE_LIBEXPAT
-#  include "xmlgeneric.h"
 #  include <expat.h>
 static XML_Parser psr;
 #endif
