@@ -28,6 +28,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <QtCore/QDebug>
 
 
 #if __WIN32__
@@ -779,9 +780,11 @@ gbfputs(const char* s, gbfile* file)
 int
 gbfputs(const QString& s, gbfile* file)
 {
-  const char* qs = s.toUtf8().data();
+  const char* qs = xstrdup(s.toUtf8().data());
   unsigned int l = strlen(qs);
-  return gbfwrite(qs, 1, l, file);
+  int rv =  gbfwrite(qs, 1, l, file);
+  xfree(qs);
+  return rv;
 }
 
 /*
