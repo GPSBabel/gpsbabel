@@ -1354,12 +1354,6 @@ void tpo_process_routes(void)
 
   // Free the waypoint index, we don't need it anymore.
   for (ii = 0; ii < tpo_index_ptr; ii++) {
-    if (tpo_wp_index[ii]->shortname) {
-      xfree(tpo_wp_index[ii]->shortname);
-    }
-    if (tpo_wp_index[ii]->description) {
-      xfree(tpo_wp_index[ii]->description);
-    }
     waypt_free(tpo_wp_index[ii]);
   }
 
