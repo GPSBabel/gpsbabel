@@ -1,68 +1,9 @@
 #!/bin/sh
 
-# Geocaching .loc
-rm -f ${TMPDIR}/gl.loc
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o geo -F ${TMPDIR}/gl.loc
-compare ${TMPDIR}/gl.loc ${REFERENCE}
-
-# GPSUtil
-rm -f ${TMPDIR}/gu.wpt ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpsutil -F ${TMPDIR}/gu.wpt
-compare ${TMPDIR}/gu.wpt ${REFERENCE}
-gpsbabel -i gpsutil -f ${TMPDIR}/gu.wpt -o gpx -F ${TMPDIR}/1.gpx
-gpsbabel -i gpsutil -f ${REFERENCE}/gu.wpt -o gpx -F ${TMPDIR}/2.gpx
-compare ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
-
-# GPSman 
-rm -f ${TMPDIR}/gm.gm ${TMPDIR}/gm.gm+
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpsman -F ${TMPDIR}/gm.gm
-gpsbabel -i gpsman -f ${TMPDIR}/gm.gm -o gpsutil -F ${TMPDIR}/gm.gm+
-compare ${TMPDIR}/gm.gm+ ${TMPDIR}/gu.wpt
-
-# GPX
-rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpx -F ${TMPDIR}/gl.gpx
-gpsbabel -i gpx -f ${TMPDIR}/gl.gpx -o gpsutil -F ${TMPDIR}/gpx.gpx
-compare ${TMPDIR}/gpx.gpx ${TMPDIR}/gu.wpt
-
-# GTM
-rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
-gpsbabel -i gtm -f ${REFERENCE}/sample.gtm -o gpx -F ${TMPDIR}/gtm1.gpx
-gpsbabel -i gpx -f ${TMPDIR}/gtm1.gpx -o gtm -F ${TMPDIR}/gtm.gtm
-gpsbabel -i gtm -f ${TMPDIR}/gtm.gtm -o gpx -F ${TMPDIR}/gtm2.gpx
-compare ${TMPDIR}/gtm1.gpx ${TMPDIR}/gtm2.gpx
-bincompare ${TMPDIR}/gtm.gtm ${REFERENCE}/sample.gtm
-#
-# GTM compressed files
-# ... do the same as above but with gzipped gtm files
-#
-rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
-gpsbabel -i gtm -f ${REFERENCE}/sample.gtm.gz -o gpx -F ${TMPDIR}/gtm1.gpx
-gpsbabel -i gpx -f ${TMPDIR}/gtm1.gpx -o gtm -F ${TMPDIR}/gtm.gtm.gz
-gpsbabel -i gtm -f ${TMPDIR}/gtm.gtm.gz -o gpx -F ${TMPDIR}/gtm2.gpx
-compare ${TMPDIR}/gtm1.gpx ${TMPDIR}/gtm2.gpx
-bincompare ${TMPDIR}/gtm.gtm.gz ${REFERENCE}/sample.gtm.gz
-gunzip -c ${TMPDIR}/gtm.gtm.gz > ${TMPDIR}/gtm.gtm
-gunzip -c ${REFERENCE}/sample.gtm.gz > ${TMPDIR}/sample.gtm
-bincompare ${TMPDIR}/gtm.gtm ${REFERENCE}/sample.gtm
-
-# Magellan Mapsend
-rm -f ${TMPDIR}/mm.mapsend ${TMPDIR}/mm.gps
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o mapsend -F ${TMPDIR}/mm.mapsend
-gpsbabel -i mapsend -f ${TMPDIR}/mm.mapsend -o gpsutil -F ${TMPDIR}/mm.gps
-compare ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
 
 # Magellan serial
 # TODO
 
-# Tiger
-# This one is a little tacky, becuase it's a very lossy format.
-# so we simply test we can write it, and then read it and write it and
-# get an identical file back.
-rm -f ${TMPDIR}/tiger
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o tiger -F ${TMPDIR}/tiger
-gpsbabel -i tiger -f ${TMPDIR}/tiger -o tiger -F ${TMPDIR}/tiger2
-compare ${TMPDIR}/tiger ${TMPDIR}/tiger2
 
 #
 # Lowrance USR.  Binary, and also slightly lossy because of the math to
@@ -118,37 +59,6 @@ gpsbabel -i xmap -f ${TMPDIR}/xmap -o gpx -F ${TMPDIR}/xmap-2.gpx
 compare ${TMPDIR}/xmap-1.gpx ${TMPDIR}/xmap-2.gpx
 compare ${REFERENCE}/xmap ${TMPDIR}/xmap
 
-# PCX (Garmin mapsource import) file format
-rm -f ${TMPDIR}/mm.pcx ${TMPDIR}/pcx.gps
-gpsbabel -i gpx -f ${REFERENCE}/geocaching.gpx -o pcx -F ${TMPDIR}/mm.pcx
-gpsbabel -i pcx -f ${TMPDIR}/mm.pcx -o gpsutil -F ${TMPDIR}/pcx.gps
-compare ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
-gpsbabel -t -i gpx -f ${REFERENCE}/track/tracks.gpx -o pcx -F ${TMPDIR}/pcx.trk
-gpsbabel -t -i pcx -f ${REFERENCE}/track/pcx.trk -o pcx -F ${TMPDIR}/pcx2.trk
-compare ${TMPDIR}/pcx.trk ${TMPDIR}/pcx2.trk 
-# GPSUtil strain - hand crafted, but based on problem report.
-gpsbabel -i pcx -f ${REFERENCE}/gpsutil-1.pcx -o pcx -F ${TMPDIR}/mm-2.pcx
-compare ${TMPDIR}/mm-2.pcx ${TMPDIR}/mm.pcx
-
-#
-# Magellan file format
-#
-gpsbabel -i magellan -f ${REFERENCE}/magfile -o magellan -F ${TMPDIR}/magfile
-compare ${TMPDIR}/magfile ${REFERENCE}/magfile
-
-#
-# Magellanx is just like, but with longer names. (which this admittedly
-# doesn't actually exercise...)
-#
-gpsbabel -i magellan -f ${REFERENCE}/magfile -o magellanx -F ${TMPDIR}/magfile2
-compare ${TMPDIR}/magfile2 ${REFERENCE}/magfile
-
-# Magellanx routes, however, have an extra 'name' field in them.
-gpsbabel -r -i magellanx -f ${REFERENCE}/route/magexplorist.rte -o magellanx -F ${TMPDIR}/magxfile.rte
-gpsbabel -r -i magellanx -f ${TMPDIR}/magxfile.rte -o magellanx -F ${TMPDIR}/magxfile2.rte
-compare ${TMPDIR}/magxfile2.rte ${REFERENCE}/route/magexplorist.rte
-
-
 # Navitrak DNA marker format
 gpsbabel -i dna -f ${REFERENCE}/dnatest.txt -o dna -F ${TMPDIR}/dnatest.txt
 compare ${TMPDIR}/dnatest.txt ${REFERENCE}/dnatest.txt
@@ -201,27 +111,6 @@ compare ${TMPDIR}/ozi.wpt ${REFERENCE}
 # identical reference.
 gpsbabel -i holux -f ${REFERENCE}/paris.wpo -o holux -F ${TMPDIR}/paris.wpo
 # compare ${REFERENCE}/paris.wpo ${TMPDIR}/paris.wpo
-
-# Magellan NAV Companion for PalmOS
-# This format is hard to test, because each record and the database itself
-# contains the time of creation, so two otherwise identical files won't
-# compare accurately.  In any case, the files are binary so compare wouldn't
-# like them.  So, we convert the reference file to gpsutil and the converted
-# file to gpsutil and make sure they're the same, and that they're the same
-# as one converted on a known-working installation.  Unfortunately, this does
-# not verify that the appinfo block was written correctly.  However, it does
-# successfully test for some endianness errors that might otherwise go 
-# unnoticed.
-rm -f ${TMPDIR}/magnav.pdb ${TMPDIR}/magnav.gpu ${TMPDIR}/magnavt.gpu
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o magnav -F ${TMPDIR}/magnav.pdb
-gpsbabel -i magnav -f ${TMPDIR}/magnav.pdb -o gpsutil -F ${TMPDIR}/magnav.gpu
-gpsbabel -i magnav -f ${REFERENCE}/magnav.pdb -o gpsutil -F ${TMPDIR}/magnavt.gpu
-compare ${TMPDIR}/magnavt.gpu ${TMPDIR}/magnav.gpu
-compare ${REFERENCE}/gu.wpt ${TMPDIR}/magnav.gpu
-
-rm -f ${TMPDIR}/magnav.pdb
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o magnav -F ${TMPDIR}/magnav.pdb
-bincompare ${TMPDIR}/magnav.pdb ${REFERENCE}/magnav.pdb
 
 
 
