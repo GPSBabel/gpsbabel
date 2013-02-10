@@ -29,7 +29,7 @@ static int in_ChartWork = 0;
 static int in_Object = 0;
 
 static waypoint* wpt_tmp;
-static char* routeName = "ROUTENAME";
+static const char* routeName = "ROUTENAME";
 
 #define REPLACEMENT_SIRIUS_ATTR_SEPARATOR	';'
 #define ATTR_USRMRK							"usrmrk"
@@ -339,8 +339,7 @@ static void readVersion4(gbfile* pFile)
 
     // set the pointer to the time stamp depending
     // on whether we have a sounding array or not
-    long ts1, ts2;
-    long* pts1 = 0;
+    long ts2;
     long* pts2 = 0;
 
     int soundArray = FALSE;
@@ -369,7 +368,6 @@ static void readVersion4(gbfile* pFile)
     }
 
     if (soundArray) {
-      pts1 = &ts1;
       pts2 = &ts2;
     }
 
@@ -377,7 +375,7 @@ static void readVersion4(gbfile* pFile)
     for (Vertex = 0; Vertex < numberOfVerticies; Vertex++) {
       // read vertex position
       if (!readPositionRecord(pFile, &lat2, &lng2, pts2)) {
-        xfree(wpt_tmp);
+        waypt_free(wpt_tmp);
         return;
       }
 
@@ -389,13 +387,13 @@ static void readVersion4(gbfile* pFile)
 
     // read the class name
     if (!readRecord(pFile, EF_CLNM_REC, className)) {
-      xfree(wpt_tmp);
+      waypt_free(wpt_tmp);
       return;
     }
 
     // read the attributes name
     if (!readRecord(pFile, EF_ATTR_REC, attr)) {
-      xfree(wpt_tmp);
+      waypt_free(wpt_tmp);
       return;
     }
     getAttr(attr, ATTR_OBJECTNAME, &wpt_tmp->shortname, '\x1f');
