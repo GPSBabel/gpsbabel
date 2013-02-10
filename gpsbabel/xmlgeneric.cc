@@ -53,52 +53,52 @@ write_xml_header(gbfile *ofd)
 }
 
 void
-write_xml_entity(gbfile *ofd, const char *indent,
-                 const char *tag, const char *value)
+write_xml_entity(gbfile *ofd, QString indent,
+                 QString tag, QString value)
 {
-  char *tmp_ent = xml_entitize(value);
-  gbfprintf(ofd, "%s<%s>%s</%s>\n", indent, tag, tmp_ent, tag);
+  char *tmp_ent = xml_entitize(value.toAscii().data());
+  gbfprintf(ofd, "%s<%s>%s</%s>\n", qPrintable(indent), qPrintable(tag), tmp_ent, qPrintable(tag));
   xfree(tmp_ent);
 }
 
 void
-write_optional_xml_entity(gbfile *ofd, const char *indent,
-                          const char *tag, const char *value)
+write_optional_xml_entity(gbfile *ofd, const QString indent,
+                          const QString tag, const QString value)
 {
-  if (value && *value) {
+  if (!value.isEmpty()) {
     write_xml_entity(ofd, indent, tag, value);
   }
 }
 
 void
-write_xml_entity_begin0(gbfile *ofd, const char *indent,
-                        const char *tag)
+write_xml_entity_begin0(gbfile *ofd, const QString indent,
+                        const QString tag)
 {
-  gbfprintf(ofd, "%s<%s>\n", indent, tag);
+  gbfprintf(ofd, "%s<%s>\n", indent.toAscii().data(), tag.toAscii().data());
 }
 
 void
-write_xml_entity_begin1(gbfile *ofd, const char *indent,
-                        const char *tag, const char *attr,
-                        const char *attrval)
+write_xml_entity_begin1(gbfile *ofd, const QString indent,
+                        const QString tag, const QString attr,
+                        const QString attrval)
 {
-  gbfprintf(ofd, "%s<%s %s=\"%s\">\n", indent, tag, attr, attrval);
+  gbfprintf(ofd, "%s<%s %s=\"%s\">\n", indent.toAscii().data(), tag.toAscii().data(), attr.toAscii().data(), attrval.toAscii().data());
 }
 
 void
-write_xml_entity_begin2(gbfile *ofd, const char *indent,
-                        const char *tag, const char *attr1,
-                        const char *attrval1, const char *attr2,
-                        const char *attrval2)
+write_xml_entity_begin2(gbfile *ofd, const QString indent,
+                        const QString tag, const QString attr1,
+                        const QString attrval1, const QString attr2,
+                        const QString attrval2)
 {
-  gbfprintf(ofd, "%s<%s %s=\"%s\" %s=\"%s\">\n", indent, tag, attr1, attrval1, attr2, attrval2);
+  gbfprintf(ofd, "%s<%s %s=\"%s\" %s=\"%s\">\n", indent.toAscii().data(), tag.toAscii().data(), attr1.toAscii().data(), attrval1.toAscii().data(), attr2.toAscii().data(), attrval2.toAscii().data());
 }
 
 void
-write_xml_entity_end(gbfile *ofd, const char *indent,
-                     const char *tag)
+write_xml_entity_end(gbfile *ofd, const QString indent,
+                     const QString tag)
 {
-  gbfprintf(ofd, "%s</%s>\n", indent, tag);
+  gbfprintf(ofd, "%s</%s>\n", indent.toAscii().data(), tag.toAscii().data());
 }
 
 void

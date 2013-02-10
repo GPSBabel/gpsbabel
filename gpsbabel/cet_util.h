@@ -109,6 +109,7 @@ int cet_gbfprintf(gbfile* stream, const cet_cs_vec_t* src_vec, const char* fmt, 
 
 /* cet_convert_string: !!! ONLY VALID WITHIN 'cet_convert_strings' process !!! */
 char* cet_convert_string(char* str);
+const char* cet_convert_string(QString str);
 
 /* gpsbabel extensions */
 

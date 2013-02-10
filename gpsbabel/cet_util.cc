@@ -1020,6 +1020,11 @@ cet_convert_string(char* str)
   return res;
 }
 
+const char *
+cet_convert_string(QString str) {
+  return cet_convert_string(str.toUtf8().data());
+}
+
 /* cet_convert_waypt: internal used within cet_convert_strings process */
 
 static void

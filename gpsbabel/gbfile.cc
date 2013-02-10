@@ -1226,6 +1226,11 @@ gbfputcstr(const char* s, gbfile* file)
     return 1;
   }
 }
+int
+gbfputcstr(const QString s, gbfile* file)
+{
+  return gbfputcstr(qPrintable(s), file);
+}
 
 /*
  * gbfputcstr: write a pascal string into a stream
