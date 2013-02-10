@@ -523,6 +523,12 @@ print_string(const char* fmt, const char* string)
   xfree(buff);
 }
 
+static void
+print_string(const char* fmt, const QString string)
+{
+  print_string(fmt, string.toUtf8().data());
+}
+
 
 /* main cb's */
 

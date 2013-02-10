@@ -37,19 +37,20 @@ typedef struct xg_tag_mapping {
 
 extern char* xhtml_entities;
 
-void write_xml_entity(gbfile* ofd, const char* indent,
-                      const char* tag, const char* value);
-void write_xml_entity_begin0(gbfile* ofd, const char* indent,
-                             const char* tag);
-void write_xml_entity_begin1(gbfile* ofd, const char* indent, const char* tag,
-                             const char* attr1, const char* attrval1);
-void write_xml_entity_begin2(gbfile* ofd, const char* indent, const char* tag,
-                             const char* attr1, const char* attrval1,
-                             const char* attr2, const char* attrval2);
-void write_xml_entity_end(gbfile* ofd, const char* indent, const char* tag);
+void write_xml_entity(gbfile* ofd, const QString indent,
+                      const QString tag, const QString value);
+void write_xml_entity_begin0(gbfile* ofd, const QString indent,
+                             const QString tag);
+void write_xml_entity_begin1(gbfile* ofd, const QString indent, 
+                             const QString tag, const QString attr1, 
+                             const QString attrval1);
+void write_xml_entity_begin2(gbfile* ofd, const QString indent, const QString tag,
+                             const QString attr1, const QString attrval1,
+                             const QString attr2, const QString attrval2);
+void write_xml_entity_end(gbfile* ofd, const QString indent, const QString tag);
 
-void write_optional_xml_entity(gbfile* ofd, const char* indent,
-                               const char* tag, const char* value);
+void write_optional_xml_entity(gbfile* ofd, const QString ndent,
+                               const QString tag, const QString value);
 void xml_write_time(gbfile* ofd, const time_t timep, int microseconds, const char* elname);
 void xml_fill_in_time(char* time_string, const time_t timep, int microseconds,
                       int long_or_short);

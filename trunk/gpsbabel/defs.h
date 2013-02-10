@@ -375,7 +375,7 @@ class url_link {
     url(NULL),
     url_link_text(NULL)
      {} ;
-  struct url_link* url_next;
+  url_link* url_next;
   char* url;
   char* url_link_text;
 };
@@ -539,7 +539,7 @@ public:
    * We also use an implicit anonymous union here, so these three
    * members must match struct url_link...
    */
-  struct url_link* url_next;
+  url_link* url_next;
   char* url;
   char* url_link_text;
 
