@@ -640,7 +640,6 @@ void tpo_process_tracks(void)
   for (ii = 0; ii < track_count; ii++) {
     unsigned int line_type;
     unsigned int track_style;
-    unsigned int track_length;
     unsigned int name_length;
     char* track_name = NULL;
     unsigned int track_byte_count;
@@ -1361,7 +1360,7 @@ void tpo_process_routes(void)
     if (tpo_wp_index[ii]->description) {
       xfree(tpo_wp_index[ii]->description);
     }
-    xfree(tpo_wp_index[ii]);
+    waypt_free(tpo_wp_index[ii]);
   }
 
   // Free the index array itself
