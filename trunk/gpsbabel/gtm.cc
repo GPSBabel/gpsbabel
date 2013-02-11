@@ -712,14 +712,12 @@ gtm_read(void)
   }
 }
 
-int icon_from_descr(const char* descr)
+int icon_from_descr(QString descr)
 {
-  if (descr) {
-    int i;
-    for (i = 0; icon_descr[i]; i++)
-      if (strcmp(icon_descr[i], descr) == 0) {
-        return i;
-      }
+  for (int i = 0; icon_descr[i]; i++) {
+    if (descr.compare(icon_descr[i]) == 0) {
+      return i;
+    }
   }
   return 48;
 }

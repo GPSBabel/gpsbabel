@@ -44,8 +44,8 @@ typedef struct icon_mapping {
   const char* icon;
 } icon_mapping_t;
 
-const char* mag_find_descr_from_token(const char* token);
-const char* mag_find_token_from_descr(const char* icon);
+QString mag_find_descr_from_token(const char* token);
+QString mag_find_token_from_descr(QString icon);
 
 unsigned int mag_checksum(const char* const buf);
 char* m330_cleanse(char* istring);

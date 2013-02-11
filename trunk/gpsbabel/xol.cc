@@ -116,8 +116,7 @@ xol_shape(const char *args, const char **attrv)
       }
     } else if (strcmp(avp[0], "icon") == 0) {
       if (wpt) {
-        wpt->icon_descr = xstrdup(avp[1]);
-        wpt->wpt_flags.icon_descr_is_dynamic = 1;
+        wpt->icon_descr = avp[1];
       }
     }
 
@@ -269,7 +268,7 @@ xol_waypt_disp_cb(const waypoint *wpt)
   gbfprintf(fout, "%*s<shape type=\"waypoint\"", space++*2, "");
   xol_write_string("name", name);
   xol_write_string("comment", wpt->notes);
-  xol_write_string("icon", wpt->icon_descr);
+  xol_write_string("icon", wpt->icon_descr.toUtf8().data());
   if (wpt->creation_time) {
     xol_write_time(wpt);
   }

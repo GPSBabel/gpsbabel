@@ -270,10 +270,9 @@ mapsend_read(void)
 static void
 mapsend_waypt_pr(const waypoint* waypointp)
 {
-  unsigned char c;
+  unsigned int c = 0;
   double falt;
   static int cnt = 0;
-  const char* iconp = NULL;
   const char* sn = global_opts.synthesize_shortnames ?
                    mkshort_from_wpt(mkshort_handle, waypointp) :
                    waypointp->shortname;
@@ -316,23 +315,25 @@ mapsend_waypt_pr(const waypoint* waypointp)
 
   /* #, icon, status */
   gbfputint32(++cnt, mapsend_file_out);
+ 
 
-  if (waypointp->icon_descr) {
+  QString iconp;
+  if (!waypointp->icon_descr.isNull()) {
     iconp = mag_find_token_from_descr(waypointp->icon_descr);
-    if (1 == strlen(iconp)) {
-      c = iconp[0] - 'a';
+    if (1 == iconp.size()) {
+      c = iconp[0].toAscii() - 'a';
     } else {
-      c = iconp[1] - 'a' + 26;
+      c = iconp[1].toAscii() - 'a' + 26;
     }
   } else  {
     c = 0;
   }
   if (get_cache_icon(waypointp)) {
     iconp = mag_find_token_from_descr(get_cache_icon(waypointp));
-    if (1 == strlen(iconp)) {
-      c = iconp[0] - 'a';
+    if (1 == iconp.size()) {
+      c = iconp[0].toAscii() - 'a';
     } else {
-      c = iconp[1] - 'a' + 26;
+      c = iconp[1].toAscii() - 'a' + 26;
     }
   }
 
@@ -381,7 +382,7 @@ static void
 mapsend_route_disp(const waypoint* waypointp)
 {
   unsigned char c;
-  const char* iconp;
+  QString iconp;
 
   route_wp_count++;
 
@@ -396,12 +397,12 @@ mapsend_route_disp(const waypoint* waypointp)
   gbfputdbl(waypointp->longitude, mapsend_file_out);
   gbfputdbl(-waypointp->latitude, mapsend_file_out);
 
-  if (waypointp->icon_descr) {
+  if (!waypointp->icon_descr.isNull()) {
     iconp = mag_find_token_from_descr(waypointp->icon_descr);
-    if (1 == strlen(iconp)) {
-      c = iconp[0] - 'a';
+    if (1 == iconp.size()) {
+      c = iconp[0].toAscii() - 'a';
     } else {
-      c = iconp[1] - 'a' + 26;
+      c = iconp[1].toAscii() - 'a' + 26;
     }
   } else  {
     c = 0;

@@ -135,7 +135,7 @@ static void
 gpsutil_disp(const waypoint* wpt)
 {
   double lon,lat;
-  const char* icon_token;
+  QString icon_token;
   char* tdesc = xstrdup(wpt->description);
 
   icon_token = mag_find_token_from_descr(wpt->icon_descr);
@@ -155,7 +155,7 @@ gpsutil_disp(const waypoint* wpt)
              (wpt->altitude < 0.0)) ? 0 : wpt->altitude,
             'm',
             wpt->description ? tdesc : "",
-            icon_token);
+            icon_token.toUtf8().data());
 
   xfree(tdesc);
 }

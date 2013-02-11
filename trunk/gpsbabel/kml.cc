@@ -344,8 +344,7 @@ void wpt_coord(const char* args, const char** attrv)
 void wpt_icon(const char* args, const char** unused)
 {
   if (wpt_tmp)  {
-    wpt_tmp->icon_descr = xstrdup(args);
-    wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
+    wpt_tmp->icon_descr = args;
   }
 }
 
@@ -1506,7 +1505,7 @@ static void kml_geocache_pr(const waypoint* waypointp)
 
 static void kml_waypt_pr(const waypoint* waypointp)
 {
-  const char* icon;
+  QString icon;
 
 #if 0 // Experimental
   if (realtime_positioning) {
@@ -1553,11 +1552,11 @@ static void kml_waypt_pr(const waypoint* waypointp)
 
   // Icon - but only if it looks like a URL.
   icon = opt_deficon ? opt_deficon : waypointp->icon_descr;
-  if (icon && strstr(icon, "://")) {
+  if (icon.contains("://")) {
     kml_write_xml(1, "<Style>\n");
     kml_write_xml(1, "<IconStyle>\n");
     kml_write_xml(1, "<Icon>\n");
-    kml_write_xml(0, "<href>%s</href>\n", icon);
+    kml_write_xml(0, "<href>%s</href>\n", icon.toUtf8().data());
     kml_write_xml(-1, "</Icon>\n");
     kml_write_xml(-1, "</IconStyle>\n");
     kml_write_xml(-1, "</Style>\n");

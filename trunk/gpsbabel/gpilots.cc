@@ -261,7 +261,6 @@ data_read(void)
       WAYPT_SET(wpt_tmp, depth, fi.f);
       fi.i = le_read32(&rec->wpt.d108.dist);
       WAYPT_SET(wpt_tmp, proximity, fi.f);
-      wpt_tmp->wpt_flags.icon_descr_is_dynamic = 0;
       wpt_tmp->icon_descr = gt_find_desc_from_icon_number((rec->wpt.d108.smbl[1] << 8) + rec->wpt.d108.smbl[0], PCX, NULL);
       waypt_add(wpt_tmp);
       break;

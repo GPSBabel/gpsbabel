@@ -386,7 +386,6 @@ class url_link {
 class wp_flags {
  public:
    wp_flags() :
-    icon_descr_is_dynamic(0),
     shortname_is_synthetic(0),
     cet_converted(0),
     fmt_use(0),
@@ -397,7 +396,6 @@ class wp_flags {
     depth(0),
     is_split(0),
     new_trkseg(0) {} 
-  unsigned int icon_descr_is_dynamic:1;
   unsigned int shortname_is_synthetic:1;
   unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
   unsigned int fmt_use:1;			/* lightweight "extra data" */
@@ -465,7 +463,6 @@ public:
   url_next(NULL), 
   url(NULL), 
   url_link_text(NULL), 
-  icon_descr(NULL), 
 #if NEWTIME
 //  creation_time(QDateTime::fromTime_t(0)),
 #else
@@ -546,7 +543,7 @@ public:
   char* url_link_text;
 
   wp_flags wpt_flags;
-  const char* icon_descr;
+  QString icon_descr;
 #if NEWTIME
   gpsbabel::DateTime creation_time;
 #else

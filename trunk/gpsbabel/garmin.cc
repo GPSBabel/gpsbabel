@@ -97,7 +97,7 @@ arglist_t garmin_args[] = {
 };
 
 static const char* d103_symbol_from_icon_number(unsigned int n);
-static int d103_icon_number_from_symbol(const char* s);
+static int d103_icon_number_from_symbol(QString s);
 
 
 static void
@@ -369,7 +369,6 @@ waypt_read(void)
       int dyn = 0;
       wpt_tmp->icon_descr = gt_find_desc_from_icon_number(
                               way[i]->smbl, PCX, &dyn);
-      wpt_tmp->wpt_flags.icon_descr_is_dynamic = dyn;
     }
     /*
      * If a unit doesn't store altitude info (i.e. a D103)
@@ -1273,16 +1272,16 @@ d103_symbol_from_icon_number(unsigned int n)
 }
 
 static int
-d103_icon_number_from_symbol(const char* s)
+d103_icon_number_from_symbol(QString s)
 {
   unsigned int i;
 
-  if (NULL == s) {
+  if (s.isNull()) {
     return 0;
   }
 
   for (i = 0; i < sizeof(d103_icons) / sizeof(d103_icons[0]); i++) {
-    if (0 == case_ignore_strcmp(s, d103_icons[i])) {
+    if (0 == (s.compare(d103_icons[i]), Qt::CaseInsensitive)) {
       return i;
     }
   }

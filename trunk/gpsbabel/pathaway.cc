@@ -472,9 +472,8 @@ int ppdb_read_wpt(route_head *head, int isRoute)
         break;
       case 6:		/* icon */
         if (*str != '\0') {
-          wpt_tmp->icon_descr = xstrdup(str);
+          wpt_tmp->icon_descr = str;
         }
-        wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
         break;
       case 7:		/* notes */
         if (*str != '\0') {
@@ -711,7 +710,7 @@ static void ppdb_write_wpt(const waypoint *wpt)
   buff = ppdb_strcat(buff, ",", NULL, &len);
   /* 6 icon */
 
-  tmp = str_pool_getcpy(wpt->icon_descr, opt_deficon);	/* point icon or deficon from options */
+  tmp = str_pool_getcpy(wpt->icon_descr.toUtf8().data(), opt_deficon);	/* point icon or deficon from options */
   buff = ppdb_strcat(buff, tmp, NULL, &len);
   buff = ppdb_strcat(buff, ",", NULL, &len);
   /* 7 description */

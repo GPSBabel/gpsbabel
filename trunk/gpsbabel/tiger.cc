@@ -179,13 +179,13 @@ data_read(void)
 static void
 tiger_disp(const waypoint *wpt)
 {
-  const char *pin;
+  QString pin;
   double lat = wpt->latitude;
   double lon = wpt->longitude;
 
   if (iconismarker) {
-    pin = wpt->icon_descr ? wpt->icon_descr : "";
-  } else if (wpt->icon_descr && strstr(wpt->icon_descr, "-unfound")) {
+    pin = wpt->icon_descr;
+  } else if (wpt->icon_descr.contains("-unfound")) {
     pin = unfoundmarker;
   } else if (wpt->creation_time > current_time() - 3600 * 24 * thresh_days) {
     pin = newmarker;
@@ -208,7 +208,7 @@ tiger_disp(const waypoint *wpt)
     }
   }
 
-  gbfprintf(file_out, "%f,%f:%s", lon, lat, pin);
+  gbfprintf(file_out, "%f,%f:%s", lon, lat, pin.toUtf8().data());
   if (!nolabels) {
     char *temp = NULL;
     char *desc = csv_stringclean(wpt->description, ":");

@@ -115,7 +115,6 @@ parse_line(char* buff, int index, const char* delimiter, waypoint* wpt)
     case WAYPT__OFS + 2:
       wpt->icon_descr = gt_find_desc_from_icon_number(
                           atoi(cin), PCX, &dyn);
-      wpt->wpt_flags.icon_descr_is_dynamic = dyn;
       break;
 
     case WAYPT__OFS + 4:
@@ -474,7 +473,6 @@ data_read(void)
         cdata++;
         wpt->icon_descr = gt_find_desc_from_icon_number(
                             atoi(cdata), PCX, &dyn);
-        wpt->wpt_flags.icon_descr_is_dynamic = dyn;
       }
       waypt_add(wpt);
       break;

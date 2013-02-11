@@ -140,19 +140,19 @@ static raymarine_symbol_mapping_t raymarine_symbols[] = {
 #define RAYMARINE_STD_SYMBOL 3
 
 static int
-find_symbol_num(const char *descr)
+find_symbol_num(const QString descr)
 {
-  if ((descr != NULL) && (*descr)) {
+  if (!descr.isNull()) {
 
     raymarine_symbol_mapping_t *a;
 
     a = &raymarine_symbols[0];
 
     for (unsigned int i = 0; i < RAYMARINE_SYMBOL_CT; i++, a++) {
-      if (case_ignore_strcmp(descr, a->name) == 0) {
+      if (descr.compare(a->name, Qt::CaseInsensitive) == 0) {
         return i;
       }
-      if (a->mps_name && (case_ignore_strcmp(descr, a->mps_name) == 0)) {
+      if (a->mps_name && (descr.compare(a->mps_name, Qt::CaseInsensitive) == 0)) {
         return i;
       }
     }

@@ -940,8 +940,7 @@ unicsv_parse_one_line(char *ibuf)
       break;
 
     case fld_symbol:
-      wpt->icon_descr = xstrdup(s);
-      wpt->wpt_flags.icon_descr_is_dynamic = 1;
+      wpt->icon_descr = s;
       break;
 
     case fld_iso_time:
@@ -1305,6 +1304,14 @@ unicsv_print_str(const char *str)
   }
 }
 
+static void
+unicsv_print_str(const QString s)
+{
+  char *t = xstrdup(s.toUtf8().data());
+  unicsv_print_str(t);
+  xfree(t);
+}
+
 #ifdef UNICSV_GC_READY
 static void
 unicsv_print_data_time(const time_t atime)
@@ -1345,7 +1352,7 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
   if (wpt->altitude != unknown_alt) {
     gb_setbit(&unicsv_outp_flags, fld_altitude);
   }
-  if (wpt->icon_descr && *wpt->icon_descr) {
+  if (!wpt->icon_descr.isNull()) {
     gb_setbit(&unicsv_outp_flags, fld_symbol);
   }
   if (wpt->description && *wpt->description && (strcmp(shortname, wpt->description) != 0)) {
@@ -1603,7 +1610,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
     unicsv_print_str(wpt->notes);
   }
   if FIELD_USED(fld_symbol) {
-    unicsv_print_str((wpt->icon_descr != NULL) ? wpt->icon_descr : "Waypoint");
+    unicsv_print_str(wpt->icon_descr.isNull() ? "Waypoint" : wpt->icon_descr);
   }
   if FIELD_USED(fld_depth) {
     if WAYPT_HAS(wpt, depth) {

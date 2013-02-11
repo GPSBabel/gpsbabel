@@ -37,7 +37,7 @@ typedef struct icon_mapping {
 typedef enum {MAPSOURCE, PCX, GARMIN_SERIAL, GDB} garmin_formats_e;
 
 const char* gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, int* dynamic);
-int gt_find_icon_number_from_desc(const char* desc, garmin_formats_e garmin_format);
+int gt_find_icon_number_from_desc(const QString desc, garmin_formats_e garmin_format);
 
 extern icon_mapping_t garmin_icon_table[];
 
@@ -95,10 +95,10 @@ grid_type gt_lookup_grid_type(const char* grid_name, const char* module);
 const char* gt_get_mps_grid_longname(const grid_type grid, const char* module);
 int gt_lookup_datum_index(const char* datum_str, const char* module);
 const char* gt_get_mps_datum_name(const int datum_index);
-gbuint32 gt_color_value(const int garmin_index);
+gbuint32 gt_color_value(const unsigned int garmin_index);
 gbuint32 gt_color_value_by_name(const char* name);
 int gt_color_index_by_name(const char* name);
 int gt_color_index_by_rgb(const int rgb);
-const char* gt_color_name(const int garmin_index);
+const char* gt_color_name(const unsigned int garmin_index);
 
 #endif

@@ -801,14 +801,17 @@ Write_One_AN1_Waypoint(const waypoint* wpt)
   rec->serial = serial++;
 
   if (rec->type == 0x12) {    /* image */
-    if (strstr(wpt->icon_descr, ":\\")) {
-      rec->image_name = xstrdup(wpt->icon_descr);
+    if (wpt->icon_descr.contains(":\\")) {
+      rec->image_name = xstrdup(wpt->icon_descr.toUtf8().data());
       rec->height = -244;
       rec->width = -1;
     }
   }
-  if (!rec->image_name && wpt->icon_descr) {
-    FindIconByName((char*)(void*)wpt->icon_descr, &rec->guid);
+  if (!rec->image_name && !wpt->icon_descr.isNull()) {
+// FIXME: WTH?
+char* t = xstrdup(wpt->icon_descr.toUtf8().data());
+    FindIconByName(t, &rec->guid);
+xfree(t);
   }
 
   Write_AN1_Waypoint(outfile, rec);

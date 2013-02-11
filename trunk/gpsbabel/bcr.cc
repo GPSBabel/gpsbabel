@@ -154,18 +154,18 @@ bcr_handle_icon_str(const char* str, waypoint* wpt)
 }
 
 static const char*
-get_bcr_icon_from_icon_descr(const char* icon_descr)
+get_bcr_icon_from_icon_descr(QString icon_descr)
 {
   const char* result = BCR_DEF_ICON;
 
-  if (icon_descr) {
+  if (!icon_descr.isNull()) {
     bcr_icon_mapping_t* m;
 
     for (m = bcr_icon_mapping; (m->bcr_name); m++) {
       if (! m->mps_name) {
         continue;
       }
-      if (case_ignore_strcmp(icon_descr, m->mps_name) == 0) {
+      if (icon_descr.compare(m->mps_name, Qt::CaseInsensitive) == 0) {
         result = m->bcr_name;
         break;
       }

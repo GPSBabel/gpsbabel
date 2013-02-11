@@ -567,9 +567,8 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
 
     snprintf(key, sizeof(key), "%d", i);
     if (avltree_find(icons, key, (const void**)&name)) {
-      wpt->icon_descr = xstrdup(name);
-      wpt->wpt_flags.icon_descr_is_dynamic = 1;
-      DBG((sobj, "icon = \"%s\"\n", wpt->icon_descr));
+      wpt->icon_descr = name;
+      DBG((sobj, "icon = \"%s\"\n", wpt->icon_descr.toUtf8().data()));
     }
 #ifdef MMO_DBG
     else {
@@ -1020,9 +1019,8 @@ mmo_finalize_rtept_cb(const waypoint* wptref)
     wpt->proximity = wpt2->proximity;
     wpt->wpt_flags.proximity = wpt2->wpt_flags.proximity;
 
-    if (wpt2->icon_descr) {
-      wpt->icon_descr = xstrdup(wpt2->icon_descr);
-      wpt->wpt_flags.icon_descr_is_dynamic = 1;
+    if (!wpt2->icon_descr.isNull()) {
+      wpt->icon_descr = wpt2->icon_descr;
     }
   }
 }
@@ -1347,11 +1345,11 @@ mmo_write_wpt_cb(const waypoint* wpt)
     gbfputflt(0, fout);
   }
 
-  if (wpt->icon_descr) {
+  if (!wpt->icon_descr.isNull()) {
     int i = 0;
 
     while (mmo_icon_value_table[i].icon) {
-      if (case_ignore_strcmp(wpt->icon_descr, mmo_icon_value_table[i].icon) == 0) {
+      if (wpt->icon_descr.compare(mmo_icon_value_table[i].icon, Qt::CaseInsensitive) == 0) {
         icon = mmo_icon_value_table[i].value;
         break;
       }

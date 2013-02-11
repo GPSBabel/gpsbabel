@@ -524,7 +524,7 @@ print_string(const char* fmt, const char* string)
 }
 
 static void
-print_string(const char* fmt, const QString string)
+print_string(const char* fmt, QString string)
 {
   print_string(fmt, string.toUtf8().data());
 }
@@ -1174,7 +1174,6 @@ parse_waypoint(void)
       i = gt_find_icon_number_from_desc(str, GDB);
       GMSD_SET(icon, i);
       wpt->icon_descr = gt_find_desc_from_icon_number(i, GDB, &dynamic);
-      wpt->wpt_flags.icon_descr_is_dynamic = dynamic;
       break;
     case 12:
       GMSD_SETSTR(facility, str);

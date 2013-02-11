@@ -362,7 +362,7 @@ psit_waypoint_w(gbfile *psit_file, const waypoint *wpt)
   gbfprintf(psit_file, " %-6s, ", ident);
   icon = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
 
-  if (get_cache_icon(wpt) && wpt->icon_descr && (strcmp(wpt->icon_descr, "Geocache Found") != 0)) {
+  if (get_cache_icon(wpt) && wpt->icon_descr.compare("Geocache Found") != 0) {
     icon = gt_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
   }
 

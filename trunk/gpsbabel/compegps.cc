@@ -243,8 +243,7 @@ parse_wpt_info(const char* buff, waypoint* wpt)		/* "w" */
 #endif
       switch (col) {
       case 0:
-        wpt->icon_descr = xstrdup(c);
-        wpt->wpt_flags.icon_descr_is_dynamic = 1;
+        wpt->icon_descr = c;
         break;
       case 1:
         break;			/* Text postion */
@@ -502,14 +501,8 @@ write_waypt_cb(const waypoint* wpt)
 
   if ((wpt->icon_descr != NULL) || (wpt->wpt_flags.proximity) || \
       (option_icon != NULL)) {
-    char* icon = option_icon;
-
-    if (wpt->icon_descr != NULL) {
-      icon = (char*) wpt->icon_descr;
-    }
-
     gbfprintf(fout, "w  %s,0,0.0,16777215,255,1,7,,%.1f\n",
-              (icon != NULL) ? icon : "Waypoint",
+              wpt->icon_descr.isNull() ? "Waypoint" : wpt->icon_descr.toUtf8().data(),
               WAYPT_GET(wpt, proximity, 0));
   }
   xfree(name);

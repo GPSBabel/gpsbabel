@@ -461,7 +461,7 @@ osm_feature_ikey(const char* key)
 }
 
 
-static char*
+static QString
 osm_feature_symbol(const int ikey, const char* value)
 {
   char* result;
@@ -565,7 +565,6 @@ osm_node_tag(const char* args, const char** attrv)
     wpt->shortname = xstrdup(str);
   } else if ((ikey = osm_feature_ikey(key)) >= 0) {
     wpt->icon_descr = osm_feature_symbol(ikey, value);
-    wpt->wpt_flags.icon_descr_is_dynamic = 1;
   } else if (strcmp(key, "note") == 0) {
     if (wpt->notes) {
       char* tmp;
@@ -854,7 +853,7 @@ osm_waypt_disp(const waypoint* wpt)
 
     osm_write_tag("name", wpt->shortname);
     osm_write_tag("note", (wpt->notes) ? wpt->notes : wpt->description);
-    if (wpt->icon_descr) {
+    if (!wpt->icon_descr.isNull()) {
       osm_disp_feature(wpt);
     }
 

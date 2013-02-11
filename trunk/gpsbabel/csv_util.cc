@@ -1041,7 +1041,6 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     break;
   case XT_ICON_DESCR:
     wpt->icon_descr = csv_stringtrim(s, "", 0);
-    wpt->wpt_flags.icon_descr_is_dynamic = 1;
     break;
 
     /* LATITUDE CONVERSIONS**************************************************/
@@ -1724,8 +1723,8 @@ xcsv_waypt_pr(const waypoint* wpt)
       break;
     case XT_ICON_DESCR:
       writebuff(buff, fmp->printfc,
-                (wpt->icon_descr && *wpt->icon_descr) ?
-                wpt->icon_descr : fmp->val);
+                (!wpt->icon_descr.isNull()) ?
+                wpt->icon_descr.toUtf8().data() : fmp->val);
       break;
 
       /* LATITUDE CONVERSION***********************************************/

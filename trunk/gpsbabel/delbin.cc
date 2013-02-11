@@ -1006,9 +1006,9 @@ decode_waypoint(const void* data)
     wp->altitude = f;
   }
   wp->icon_descr = waypoint_symbol(p->symbol);
-  if (wp->icon_descr) {
-    wp->icon_descr = xstrdup(wp->icon_descr);
-  }
+//  if (!wp->icon_descr.isNull()) {
+//    wp->icon_descr = wp->icon_descr;
+//  }
   if (p->name_size && p->name[0]) {
     wp->description = xstrdup(p->name);
   }
@@ -1186,7 +1186,7 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
   case gt_ape:
     break;
   }
-  if (0 == strcmp(wp->icon_descr, "Geocache Found")) {
+  if (0 == (wp->icon_descr.compare("Geocache Found"))) {
     gc_sym = 124;
   }
   if (wp->description) {
@@ -1201,8 +1201,8 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
   if (gc_sym && opt_gcsym && atoi(opt_gcsym)) {
     gbfprintf(fd, "%s\n", waypoint_symbol(gc_sym));
     *symbol = gc_sym;
-  } else if (wp->icon_descr) {
-    gbfprintf(fd, "%s\n", wp->icon_descr);
+  } else if (!wp->icon_descr.isNull()) {
+    gbfprintf(fd, "%s\n", wp->icon_descr.toUtf8().data());
   }
   switch (wp->gc_data->container) {
   case gc_micro:
@@ -1423,8 +1423,8 @@ write_waypoint(const waypoint* wp)
   le_write_float(p->elevation, elev);
   if (symbol < 0) {
     symbol = 0;
-    if (wp->icon_descr) {
-      symbol = waypoint_symbol_index(wp->icon_descr);
+    if (!wp->icon_descr.isNull()) {
+      symbol = waypoint_symbol_index(wp->icon_descr.toUtf8().data());
     }
   }
   p->symbol = symbol;
