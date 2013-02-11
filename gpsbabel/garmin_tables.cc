@@ -756,13 +756,13 @@ gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, in
     case MAPSOURCE:
     case GDB:
       if (icon == i->mpssymnum) {
-        return (char*)i->icon;
+        return i->icon;
       }
       break;
     case PCX:
     case GARMIN_SERIAL:
       if (icon == i->pcxsymnum) {
-        return (char*)i->icon;
+        return i->icon;
       }
       break;
     default:
@@ -772,14 +772,14 @@ gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, in
   return DEFAULT_ICON_DESCR;
 }
 
-int gt_find_icon_number_from_desc(const char* desc, garmin_formats_e garmin_format)
+int gt_find_icon_number_from_desc(const QString desc, garmin_formats_e garmin_format)
 {
   static int find_flag = 0;
   icon_mapping_t* i;
   int def_icon = DEFAULT_ICON_VALUE;
   int n;
 
-  if (!desc) {
+  if (desc.isNull()) {
     return def_icon;
   }
 
@@ -787,12 +787,12 @@ int gt_find_icon_number_from_desc(const char* desc, garmin_formats_e garmin_form
    * If we were given a numeric icon number as a description
    * (i.e. 8255), just return that.
    */
-  n = atoi(desc);
+  n = desc.toInt();
   if (n)  {
     return n;
   }
 
-  if (0 == case_ignore_strncmp(desc, "Custom ", 7)) {
+  if (desc.startsWith("Custom ", Qt::CaseInsensitive)) {
     int base = 0;
     if (garmin_format == GDB) {
       base = 500;
@@ -801,13 +801,13 @@ int gt_find_icon_number_from_desc(const char* desc, garmin_formats_e garmin_form
       base = 7680;
     }
     if (base) {
-      n = atoi(&desc[7]);
+      n = desc.mid(7).toInt();
       return n + base;
     }
   }
 
   for (i = garmin_smart_icon_table; global_opts.smart_icons && i->icon; i++) {
-    if (case_ignore_strcmp(desc,i->icon) == 0) {
+    if (desc.compare(i->icon, Qt::CaseInsensitive) == 0) {
       switch (garmin_format) {
       case MAPSOURCE:
       case GDB:
@@ -821,7 +821,7 @@ int gt_find_icon_number_from_desc(const char* desc, garmin_formats_e garmin_form
     }
   }
   for (i = garmin_icon_table; i->icon; i++) {
-    if (case_ignore_strcmp(desc,i->icon) == 0) {
+    if (desc.compare(i->icon, Qt::CaseInsensitive) == 0) {
       switch (garmin_format) {
       case MAPSOURCE:
       case GDB:
@@ -845,19 +845,17 @@ int gt_find_icon_number_from_desc(const char* desc, garmin_formats_e garmin_form
     const char* prefixes[] = {
       "White ", "Red ", "Green ", "Blue ", "Black ", NULL
     };
-
+    // Rewrite "Green Square" to "Square, Green".
     for (prefix = prefixes; *prefix != NULL; prefix++) {
-      int len = strlen(*prefix);
-
-      if (case_ignore_strncmp(desc, *prefix, len) == 0) {
-        char buff[64];
-        int result;
-
-        snprintf(buff, sizeof(buff), "%s, %s", &desc[len], *prefix);
-        rtrim(buff);
+      if (desc.startsWith(*prefix, Qt::CaseInsensitive)) {
+        QString buff = desc;
+        buff.replace(*prefix, "");
+        buff.append(", ");
+        buff.append(*prefix);
+        buff = buff.trimmed();
 
         find_flag = 1;
-        result = gt_find_icon_number_from_desc(buff, garmin_format);
+        int result = gt_find_icon_number_from_desc(buff, garmin_format);
         find_flag = 0;
 
         return result;
@@ -1039,7 +1037,7 @@ gt_lookup_datum_index(const char* datum_str, const char* module)
 }
 
 gbuint32
-gt_color_value(const int garmin_index)
+gt_color_value(const unsigned int garmin_index)
 {
   if ((garmin_index >= 0) && (garmin_index < GT_COLORS_CT)) {
     return gt_colors[garmin_index].rgb;
@@ -1088,7 +1086,7 @@ gt_color_index_by_rgb(const int rgb)
 }
 
 const char*
-gt_color_name(const int garmin_index)
+gt_color_name(const unsigned int garmin_index)
 {
   if ((garmin_index >= 0) && (garmin_index < GT_COLORS_CT)) {
     return gt_colors[garmin_index].name;

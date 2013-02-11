@@ -184,8 +184,7 @@ void  	ht_ident(const char* args, const char** unused)
 static
 void 	ht_sym(const char* args, const char** unused)
 {
-  wpt_tmp->icon_descr = xstrdup(args);
-  wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
+  wpt_tmp->icon_descr = args;
 }
 
 static

@@ -655,9 +655,9 @@ humminbird_write_waypoint(const waypoint* wpt)
   hum.icon   = 255;
 
   // Icon....
-  if (wpt->icon_descr) {
+  if (!wpt->icon_descr.isNull()) {
     for (i = 0; i < num_icons; i++) {
-      if (!case_ignore_strcmp(wpt->icon_descr, humminbird_icons[i])) {
+      if (!wpt->icon_descr.compare(humminbird_icons[i], Qt::CaseInsensitive)) {
         hum.icon = i;
         break;
       }
@@ -668,7 +668,7 @@ humminbird_write_waypoint(const waypoint* wpt)
         char* match;
         int j;
         xasprintf(&match, "*%s*", humminbird_icons[i]);
-        j = case_ignore_str_match(wpt->icon_descr, match);
+        j = wpt->icon_descr.compare(match, Qt::CaseInsensitive);
         xfree(match);
         if (j != 0) {
           hum.icon = i;

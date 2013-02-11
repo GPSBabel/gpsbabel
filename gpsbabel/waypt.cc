@@ -76,9 +76,8 @@ waypt_dupe(const waypoint *wpt)
                   (url_next->url) ? xstrdup(url_next->url) : NULL,
                   (url_next->url_link_text) ? xstrdup(url_next->url_link_text) : NULL);
   }
-  if (wpt->icon_descr && wpt->wpt_flags.icon_descr_is_dynamic) {
-    tmp->icon_descr = xstrdup(wpt->icon_descr);
-  }
+
+  tmp->icon_descr = wpt->icon_descr;
 
   if (wpt->gc_data != &empty_gc_data) {
     geocache_data *gc_data = (geocache_data*) xmalloc(sizeof(*gc_data));
@@ -421,9 +420,6 @@ waypt_free(waypoint *wpt)
       url_next = tonuke->url_next;
       xfree(tonuke);
     }
-  }
-  if (wpt->icon_descr && wpt->wpt_flags.icon_descr_is_dynamic) {
-    xfree((char *)(void *)wpt->icon_descr);
   }
 
   if (wpt->gc_data != &empty_gc_data) {

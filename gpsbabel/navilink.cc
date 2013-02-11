@@ -174,12 +174,12 @@ static void (*write_route_point)(const waypoint* waypt) = NULL;
 static void (*write_route_end)(const route_head* track) = NULL;
 
 static int
-find_icon_from_descr(const char* descr)
+find_icon_from_descr(QString descr)
 {
   unsigned int i;
 
-  for (i = 0; descr && i < sizeof(icon_table) / sizeof(const char*); i++) {
-    if (strcmp(descr, icon_table[i]) == 0) {
+  for (i = 0; i < sizeof(icon_table) / sizeof(const char*); i++) {
+    if (0 == descr.compare(icon_table[i])) {
       return i;
     }
   }

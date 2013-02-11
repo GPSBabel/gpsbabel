@@ -271,9 +271,6 @@ coto_wpt_read(void)
     wpt_tmp->shortname = xstrndup(rec->name, sizeof(rec->name));
 
     wpt_tmp->icon_descr = coto_get_icon_descr(pdb_rec->category, app);
-    if (wpt_tmp->icon_descr) {
-      wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
-    }
 
     if ((c = strstr(rec->notes, "\nNotes:\n"))) {	/* remove our contruct */
       wpt_tmp->notes = xstrdup(c + 8);
@@ -382,9 +379,9 @@ coto_wpt_write(const waypoint* wpt)
     xfree(notes);
   }
 
-  if (wpt->icon_descr) {
+  if (!wpt->icon_descr.isNull()) {
     for (i = 1; i < 16; i++)
-      if (!strncmp(wpt->icon_descr, ai->categories[i], 16)) {
+      if (!strncmp(wpt->icon_descr.toUtf8().data(), ai->categories[i], 16)) {
         cat=i;
         break;
       }
@@ -392,11 +389,11 @@ coto_wpt_write(const waypoint* wpt)
       // We have a new one
       if (ai->maxid<15) {
         i = ++ai->maxid;
-        snprintf(ai->categories[i], 16, "%s", wpt->icon_descr);
+        snprintf(ai->categories[i], 16, "%s", wpt->icon_descr.toUtf8().data());
         cat = ai->ids[i] = i;
       } else {
         // We're full!
-        warning(MYNAME ": Categories full. Category '%s' written as %s.\n", wpt->icon_descr, zerocat?zerocat:"Not Assigned");
+        warning(MYNAME ": Categories full. Category '%s' written as %s.\n", wpt->icon_descr.toUtf8().data(), zerocat?zerocat:"Not Assigned");
       }
     }
   }

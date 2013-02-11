@@ -126,11 +126,16 @@ icon_mapping_t bushnell_icons[] = {
 };
 
 static unsigned int
-bushnell_get_icon_from_name(const char* name)
+bushnell_get_icon_from_name(QString name)
 {
   icon_mapping_t* t;
+
+  if (name.isNull()) {
+    name = "Waypoint";
+  }
+
   for (t = bushnell_icons; t->icon > 0; t++) {
-    if (0 == case_ignore_strcmp(name, t->icon)) {
+    if (0 == name.compare(t->icon, Qt::CaseInsensitive)) {
       return t->symbol;
     }
   }
@@ -232,8 +237,7 @@ bushnell_write_one(const waypoint* wpt)
   file_out = gbfopen_le(fname, "wb", MYNAME);
   gbfputint32(wpt->latitude  * 10000000, file_out);
   gbfputint32(wpt->longitude * 10000000, file_out);
-  gbfputc(bushnell_get_icon_from_name(wpt->icon_descr ? wpt->icon_descr :
-                                      "Waypoint"), file_out);
+  gbfputc(bushnell_get_icon_from_name(wpt->icon_descr), file_out);
   gbfputc(0x01, file_out);  // Proximity alarm.  1 == "off", 3 == armed.
 
   ident = mkshort(mkshort_handle, wpt->shortname);

@@ -102,7 +102,6 @@ data_read(void)
         break;
       case 7:
         wpt_tmp->icon_descr = gbfgetpstr(file_in);;
-        wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
         break;
       case 8:  /* NULL Terminated (vs. pascal) descr */
         wpt_tmp->notes = gbfgetcstr(file_in);
@@ -154,7 +153,7 @@ ez_disp(const waypoint* wpt)
     gbfputc(3, file_out);
     gbfputpstr(wpt->description, file_out);
   }
-  if (wpt->icon_descr) {
+  if (!wpt->icon_descr.isNull()) {
     gbfputc(7, file_out);
     gbfputpstr(wpt->icon_descr, file_out);
   }

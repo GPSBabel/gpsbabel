@@ -1157,7 +1157,7 @@ mag_rteparse(char* rtemsg)
   }
 }
 
-const char*
+QString
 mag_find_descr_from_token(const char* token)
 {
   icon_mapping_t* i = icon_mapping;
@@ -1177,8 +1177,8 @@ mag_find_descr_from_token(const char* token)
   return icon_mapping[0].icon;
 }
 
-const char*
-mag_find_token_from_descr(const char* icon)
+QString
+mag_find_token_from_descr(QString icon)
 {
   icon_mapping_t* i = icon_mapping;
 
@@ -1187,7 +1187,7 @@ mag_find_token_from_descr(const char* icon)
   }
 
   for (i = icon_mapping; i->token; i++) {
-    if (case_ignore_strcmp(icon, i->icon) == 0) {
+     if (icon.compare(i->icon, Qt::CaseInsensitive) == 0) {
       return i->token;
     }
   }
@@ -1346,7 +1346,7 @@ mag_waypt_pr(const waypoint* waypointp)
   int lon_deg, lat_deg;
   char obuf[200];
   char ofmtdesc[200];
-  const char* icon_token=NULL;
+  QString icon_token;
   char* owpt;
   char* odesc;
   char* isrc = NULL;
@@ -1408,7 +1408,7 @@ mag_waypt_pr(const waypoint* waypointp)
           wpt_len,
           owpt,
           odesc,
-          icon_token);
+          icon_token.toUtf8().data());
   mag_writemsg(obuf);
   xfree(owpt);
   xfree(odesc);
@@ -1505,7 +1505,7 @@ mag_route_trl(const route_head* rte)
   char obuff[256];
   char buff1[64], buff2[64];
   char* pbuff, *owpt;
-  const char* icon_token;
+  QString icon_token;
   int i, numlines, thisline;
 
   /* count waypoints for this route */
@@ -1540,7 +1540,7 @@ mag_route_trl(const route_head* rte)
     }
     owpt = mag_cleanse(owpt);
 
-    sprintf(pbuff, "%s,%s", owpt, icon_token);
+    sprintf(pbuff, "%s,%s", owpt, icon_token.toUtf8().data());
 
     xfree(owpt);
 

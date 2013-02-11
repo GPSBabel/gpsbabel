@@ -592,7 +592,6 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, waypoint** wpt, unsigned int* mpsc
 
   /* might need to change this to handle version dependent icon handling */
   thisWaypoint->icon_descr = gt_find_desc_from_icon_number(icon, MAPSOURCE, &dynamic);
-  thisWaypoint->wpt_flags.icon_descr_is_dynamic = dynamic;
 
   /* The following Now done elsewhere since it can be useful to read in and
     perhaps not add to the list */
@@ -611,7 +610,7 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isR
   int reclen;
   int lat, lon;
   int icon;
-  char* src = "";         /* default to empty string */
+  const char* src = "";         /* default to empty string */
   char* ident;
   char* ascii_description;
   char zbuf[25];
@@ -644,8 +643,7 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isR
 
   /* might need to change this to handle version dependent icon handling */
   icon = gt_find_icon_number_from_desc(wpt->icon_descr, MAPSOURCE);
-
-  if (get_cache_icon(wpt) /* && wpt->icon_descr && (strcmp(wpt->icon_descr, "Geocache Found") != 0)*/) {
+  if (get_cache_icon(wpt)) {
     icon = gt_find_icon_number_from_desc(get_cache_icon(wpt), MAPSOURCE);
   }
 
@@ -1119,7 +1117,7 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
   char*		rname;
   char		hdr[20];
   char		zbuf[20];
-  char*		src = "";
+  const char*		src = "";
   char*		ident;
 
   waypoint*	testwpt;
@@ -1283,7 +1281,7 @@ mps_routedatapoint_w(gbfile* mps_file, int mps_ver, const waypoint* rtewpt)
   int			lon;
   char		zbuf[20];
   char		ffbuf[20];
-  char*		src = "";
+  const char*		src = "";
   char*		ident;
   int			reclen;
 

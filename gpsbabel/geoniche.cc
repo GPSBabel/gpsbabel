@@ -388,7 +388,6 @@ geoniche_read_asc(void)
     wpt->longitude = lon;
     wpt->altitude = alt;
     wpt->icon_descr = category;
-    wpt->wpt_flags.icon_descr_is_dynamic = 1;
 
     if (gid[0]) {
       wpt->shortname = xstrdup(gid);
@@ -458,7 +457,7 @@ static const char* geoniche_icon_map[] = 			/* MPS */
   /* 52 */ "Mystery or puzzle Cache",
 };
 
-static const char*
+static const QString
 geoniche_icon_to_descr(const int no)
 {
   const char* result = NULL;
@@ -547,10 +546,6 @@ geoniche_read_bin(void)
     GPS_Math_DegMin_To_Deg(londeg, lon, &waypt->longitude);
 
     waypt->icon_descr = geoniche_icon_to_descr(icon_nr);
-    if (waypt->icon_descr != NULL) {
-      waypt->wpt_flags.icon_descr_is_dynamic = 1;
-    }
-
     waypt_add(waypt);
   }
 }
@@ -616,31 +611,31 @@ enscape(char* s)
 static int
 wpt2icon(const waypoint* wpt)
 {
-  const char*	desc = wpt->icon_descr;
+  QString desc = wpt->icon_descr;
 
-  if (!desc) {
+  if (desc.isNull()) {
     return 0;
-  } else if (strstr(desc, "reg")) {
+  } else if (desc.contains("reg")) {
     return 43;
-  } else if (strstr(desc, "trad")) {
+  } else if (desc.contains("trad")) {
     return 43;
-  } else if (strstr(desc, "multi")) {
+  } else if (desc.contains("multi")) {
     return 44;
-  } else if (strstr(desc, "offset")) {
+  } else if (desc.contains("offset")) {
     return 44;
-  } else if (strstr(desc, "virt")) {
+  } else if (desc.contains("virt")) {
     return 45;
-  } else if (strstr(desc, "loca")) {
+  } else if (desc.contains("loca")) {
     return 45;
-  } else if (strstr(desc, "event")) {
+  } else if (desc.contains("event")) {
     return 46;
-  } else if (strstr(desc, "lett")) {
+  } else if (desc.contains("lett")) {
     return 47;
-  } else if (strstr(desc, "hyb")) {
+  } else if (desc.contains("hyb")) {
     return 47;
-  } else if (strstr(desc, "unk")) {
+  } else if (desc.contains("unk")) {
     return 48;
-  } else if (strstr(desc, "cam")) {
+  } else if (desc.contains("cam")) {
     return 49;
   }
 

@@ -565,12 +565,12 @@ cetus_writewpt(const waypoint* wpt)
   xfree(desc_short);
   xfree(desc_long);
 
-  if (appendicon && wpt->icon_descr) {
+  if (appendicon && !wpt->icon_descr.isNull()) {
     int left = DESCSZ - strlen(vdata);
-    int ilen = strlen(wpt->icon_descr);
+    int ilen = strlen(wpt->icon_descr.toUtf8().data());
     if (ilen && left > (ilen+3)) {
       strcat(vdata, " (");
-      strcat(vdata, wpt->icon_descr);
+      strcat(vdata, wpt->icon_descr.toUtf8().data());
       strcat(vdata, ")");
     }
   }

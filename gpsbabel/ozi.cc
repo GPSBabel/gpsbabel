@@ -537,8 +537,7 @@ ozi_parse_waypt(int field, char *str, waypoint * wpt_tmp, ozi_fsdata *fsdata)
        other types, but it at least maintains fidelity for an ozi->ozi
        operation. */
     if (str && isdigit(str[0])) {
-      wpt_tmp->icon_descr = xstrdup(str);
-      wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
+      wpt_tmp->icon_descr = str;
     }
     break;
   case 6:
@@ -921,8 +920,8 @@ ozi_waypt_pr(const waypoint * wpt)
 
   index++;
 
-  if (wpt->icon_descr && isdigit(wpt->icon_descr[0])) {
-    icon = atoi(wpt->icon_descr);
+  if (wpt->icon_descr.toInt()) {
+    icon = wpt->icon_descr.toInt();
   }
 
   gbfprintf(file_out,

@@ -1133,8 +1133,7 @@ gpx_end(void* data, const XML_Char* xml_el)
   case tt_wpt_sym:
   case tt_rte_rtept_sym:
   case tt_trk_trkseg_trkpt_sym:
-    wpt_tmp->icon_descr = xstrdup(cdatastrp);
-    wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
+    wpt_tmp->icon_descr = cdatastrp;
     break;
   case tt_wpt_time:
   case tt_trk_trkseg_trkpt_time:

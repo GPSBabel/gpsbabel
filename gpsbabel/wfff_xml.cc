@@ -241,18 +241,17 @@ void wfff_e(const char *args, const char **unused)
     wpt_tmp->altitude = unknown_alt;
     wpt_tmp->fix = fix_unknown;
 
-    wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
     if (case_ignore_strncmp(ap_wep,"On",2)==0) {
       if (case_ignore_strncmp(ap_type,"AP",2)==0) {
-        wpt_tmp->icon_descr = xstrdup(aicicon); /* Infra Closed */
+        wpt_tmp->icon_descr = aicicon; /* Infra Closed */
       } else {
-        wpt_tmp->icon_descr = xstrdup(ahcicon); /* AdHoc Closed */
+        wpt_tmp->icon_descr = ahcicon; /* AdHoc Closed */
       }
     } else {
       if (case_ignore_strncmp(ap_type,"AP",2)==0) {
-        wpt_tmp->icon_descr = xstrdup(aioicon); /* Infra Open */
+        wpt_tmp->icon_descr = aioicon; /* Infra Open */
       } else {
-        wpt_tmp->icon_descr = xstrdup(ahoicon);	/* AdHoc Open */
+        wpt_tmp->icon_descr = ahoicon;	/* AdHoc Open */
       }
     }
 

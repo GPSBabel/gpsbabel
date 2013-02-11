@@ -268,12 +268,12 @@ lowranceusr_find_desc_from_icon_number(const int icon)
 }
 
 int
-lowranceusr_find_icon_number_from_desc(const char* desc)
+lowranceusr_find_icon_number_from_desc(QString desc)
 {
   const lowranceusr_icon_mapping_t* i;
   int n;
 
-  if (!desc) {
+  if (desc.isNull()) {
     return DEF_ICON;
   }
 
@@ -281,14 +281,14 @@ lowranceusr_find_icon_number_from_desc(const char* desc)
    * If we were given a numeric icon number as a description
    * (i.e. 8255), just return that.
    */
-  n = atoi(desc);
+  n = desc.toInt();
   if (n)  {
     return n;
   }
 
 
   for (i = lowranceusr_icon_value_table; i->icon; i++) {
-    if (case_ignore_strcmp(desc,i->icon) == 0) {
+    if (desc.compare(i->icon,Qt::CaseInsensitive) == 0) {
       return i->value;
     }
   }
@@ -422,11 +422,10 @@ lowranceusr_parse_waypt(waypoint* wpt_tmp)
 
   /* Symbol ID */
   wpt_tmp->icon_descr = lowranceusr_find_desc_from_icon_number(gbfgetint32(file_in));
-  if (!wpt_tmp->icon_descr[0]) {
+  if (wpt_tmp->icon_descr.isNull()) {
     char nbuf[10];
     snprintf(nbuf, sizeof(nbuf), "%d", le_read32(buff));
-    wpt_tmp->wpt_flags.icon_descr_is_dynamic = 1;
-    wpt_tmp->icon_descr = xstrdup(nbuf);
+    wpt_tmp->icon_descr = nbuf;
   }
 
   /* Waypoint Type (USER, TEMPORARY, POINT_OF_INTEREST) */
@@ -769,7 +768,7 @@ lowranceusr_waypt_disp(const waypoint* wpt)
 
   gbfputint32(Time, file_out);
 
-  if (get_cache_icon(wpt) && wpt->icon_descr && (strcmp(wpt->icon_descr, "Geocache Found") != 0)) {
+  if (get_cache_icon(wpt) && wpt->icon_descr.compare("Geocache Found") == 0) {
     SymbolId = lowranceusr_find_icon_number_from_desc(get_cache_icon(wpt));
   } else {
     SymbolId = lowranceusr_find_icon_number_from_desc(wpt->icon_descr);
@@ -815,7 +814,7 @@ lowranceusr_write_icon(const waypoint* wpt)
 {
   int latmm = lat_deg_to_mm(wpt->latitude);
   int lonmm = lon_deg_to_mm(wpt->longitude);
-  int icon = wpt->icon_descr ?
+  int icon = !wpt->icon_descr.isNull() ?
              lowranceusr_find_icon_number_from_desc(wpt->icon_descr) :
              10003;
 

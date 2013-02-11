@@ -699,7 +699,6 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   }
 
   res->icon_descr = gt_find_desc_from_icon_number(icon, GDB, &dynamic);
-  res->wpt_flags.icon_descr_is_dynamic = dynamic;
 
 #if GDB_DEBUG
   DBG(GDB_DBG_WPTe, icon != GDB_DEF_ICON)
@@ -1673,10 +1672,10 @@ write_waypoint_cb(const waypoint* refpt)
 
     icon = GMSD_GET(icon, -1);
     if (icon < 0) {
-      if (wpt->icon_descr) {
-        icon = gt_find_icon_number_from_desc(wpt->icon_descr, GDB);
-      } else {
+      if (wpt->icon_descr.isNull()) {
         icon = GDB_DEF_ICON;
+      } else {
+        icon = gt_find_icon_number_from_desc(wpt->icon_descr, GDB);
       }
     }
 
