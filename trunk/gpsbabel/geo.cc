@@ -270,7 +270,7 @@ geo_waypt_pr(const waypoint* waypointp)
 
   writer.writeTextElement("type", deficon ? deficon : waypointp->icon_descr);
 
-  if (waypointp->url) {
+  if (waypointp->hasLink()) {
     writer.writeStartElement("link");
     writer.writeAttribute("text ", "Cache Details");
     writer.writeCharacters(waypointp->url);

@@ -619,7 +619,7 @@ write_waypt(const waypoint* wpt)
   country = gt_get_icao_country(GMSD_GET(cc, ""));
   print_string("%s\t", (country != NULL) ? country : "");
   print_date_and_time(wpt->creation_time, 0);
-  print_string("%s\t", wpt->url ? wpt->url : "");
+  print_string("%s\t", wpt->hasLink() ? wpt->url : "");
   print_categories(GMSD_GET(category, 0));
 
   gbfprintf(fout, "\r\n");

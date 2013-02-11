@@ -547,7 +547,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
       wpt->notes = xstrdup(cend);
     }
 
-    if (wpt->url) {
+    if (wpt->hasLink()) {
       DBG((sobj, "url = \"%s\"\n", wpt->url));
     }
   } else if (*str) {
@@ -1013,7 +1013,7 @@ mmo_finalize_rtept_cb(const waypoint* wptref)
     if (wpt2->notes) {
       wpt->notes = xstrdup(wpt2->notes);
     }
-    if (wpt2->url) {
+    if (wpt2->hasLink()) {
       wpt->notes = xstrdup(wpt2->url);
     }
 
@@ -1310,7 +1310,7 @@ mmo_write_wpt_cb(const waypoint* wpt)
     gbfputuint16(0, fout);  /* extra bytes */
   }
 
-  if (wpt->url && *wpt->url) {
+  if (wpt->hasLink()) {
     str = xstrdup("_FILE_ ");
     str = xstrappend(str, wpt->url);
     str = xstrappend(str, "\n");

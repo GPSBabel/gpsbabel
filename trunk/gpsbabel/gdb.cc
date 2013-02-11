@@ -457,7 +457,7 @@ read_file_header(void)
   reclen = FREAD_i32;
   i = FREAD(buf, reclen + 1);
   if (global_opts.verbose_status > 0) {
-    char* name = buf+2;
+    const char* name = buf+2;
     if (strstr(name, "SQA") == 0) {
       name = "MapSource";
     } else if (strstr(name, "neaderhi") == 0) {
@@ -1375,7 +1375,7 @@ write_waypoint(
     FWRITE_CSTR(str);				/* instruction */
 
     cnt = 0;
-    if (wpt->url) {
+    if (wpt->hasLink()) {
       cnt++;
     }
     for (url_next = wpt->url_next; (url_next); url_next = url_next->url_next)
@@ -1383,7 +1383,7 @@ write_waypoint(
         cnt++;
       }
     FWRITE_i32(cnt);
-    if (wpt->url) {
+    if (wpt->hasLink()) {
       FWRITE_CSTR(wpt->url);
     }
     for (url_next = wpt->url_next; (url_next); url_next = url_next->url_next)

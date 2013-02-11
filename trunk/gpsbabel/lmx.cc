@@ -237,12 +237,12 @@ lmx_print(const waypoint* wpt)
   }
   lmx_end_tag(0x4A, 3); // coordinates
 
-  if (wpt->url && wpt->url[0]) {
+  if (wpt->hasLink()) {
     lmx_start_tag(0x65, 3); // mediaLink
     if (!binary) {
       gbfputc('\n', ofd);
     }
-    if (wpt->url_link_text) {
+    if (wpt->hasLinkText()) {
       lmx_write_xml(0x48, wpt->url_link_text, 4);  // name
     }
     lmx_write_xml(0x67, wpt->url, 4); // url

@@ -104,7 +104,7 @@ vcf_disp(const waypoint *wpt)
   gbfprintf(file_out, "N:%s;%s;;;\n", wpt->description,wpt->shortname);
   gbfprintf(file_out, "ADR:%c%d %06.3f %c%d %06.3f\n", wpt->latitude < 0 ? 'S' : 'N',  abs(latint), 60.0 * (fabs(wpt->latitude) - latint), wpt->longitude < 0 ? 'W' : 'E', abs(lonint), 60.0 * (fabs(wpt->longitude) - lonint));
 
-  if (wpt->url) {
+  if (wpt->hasLink()) {
     gbfprintf(file_out, "URL:%s\n", wpt->url);
   }
 

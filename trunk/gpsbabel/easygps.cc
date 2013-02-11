@@ -168,11 +168,11 @@ ez_disp(const waypoint* wpt)
     gbfputc(5, file_out);
     gbfputpstr(wpt->notes, file_out);
   }
-  if (wpt->url_link_text) {
+  if (wpt->hasLinkText()) {
     gbfputc(6, file_out);
     gbfputpstr(wpt->url_link_text, file_out);
   }
-  if (1 && wpt->url) {
+  if (wpt->hasLink()) {
     gbfputc(9, file_out);
     gbfputcstr(wpt->url, file_out);
   }
