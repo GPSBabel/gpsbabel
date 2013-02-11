@@ -636,6 +636,9 @@ OSJEEPS
 USB_CFLAGS
 USB_LIBS
 LIBUSBCONFIG
+LRELEASE
+LUPDATE
+ac_ct_QMAKE
 QMAKE
 RC
 FILEINFO
@@ -4341,9 +4344,14 @@ case "$target" in
 esac
 
 
+# On RHEL/OEL/SL/CENTOS/FEDORA qmake is from Qt3, and qmake-qt4 is from Qt4.
+# If qmake-qt4 isn't found look for the standard name qmake and assume it is
+# from a useful version Qt.
 if test -n "$ac_tool_prefix"; then
-  # Extract the first word of "${ac_tool_prefix}qmake", so it can be a program name with args.
-set dummy ${ac_tool_prefix}qmake; ac_word=$2
+  for ac_prog in qmake-qt4 qmake
+  do
+    # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
+set dummy $ac_tool_prefix$ac_prog; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
 if ${ac_cv_prog_QMAKE+:} false; then :
@@ -4359,7 +4367,7 @@ do
   test -z "$as_dir" && as_dir=.
     for ac_exec_ext in '' $ac_executable_extensions; do
   if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_QMAKE="${ac_tool_prefix}qmake"
+    ac_cv_prog_QMAKE="$ac_tool_prefix$ac_prog"
     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -4379,11 +4387,15 @@ $as_echo "no" >&6; }
 fi
 
 
+    test -n "$QMAKE" && break
+  done
 fi
-if test -z "$ac_cv_prog_QMAKE"; then
+if test -z "$QMAKE"; then
   ac_ct_QMAKE=$QMAKE
-  # Extract the first word of "qmake", so it can be a program name with args.
-set dummy qmake; ac_word=$2
+  for ac_prog in qmake-qt4 qmake
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
 if ${ac_cv_prog_ac_ct_QMAKE+:} false; then :
@@ -4399,7 +4411,7 @@ do
   test -z "$as_dir" && as_dir=.
     for ac_exec_ext in '' $ac_executable_extensions; do
   if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_ac_ct_QMAKE="qmake"
+    ac_cv_prog_ac_ct_QMAKE="$ac_prog"
     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -4418,6 +4430,10 @@ else
 $as_echo "no" >&6; }
 fi
 
+
+  test -n "$ac_ct_QMAKE" && break
+done
+
   if test "x$ac_ct_QMAKE" = x; then
     QMAKE=""
   else
@@ -4429,9 +4445,92 @@ ac_tool_warned=yes ;;
 esac
     QMAKE=$ac_ct_QMAKE
   fi
-else
-  QMAKE="$ac_cv_prog_QMAKE"
 fi
+
+for ac_prog in lupdate-qt4 lupdate
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_LUPDATE+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$LUPDATE"; then
+  ac_cv_prog_LUPDATE="$LUPDATE" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_LUPDATE="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+LUPDATE=$ac_cv_prog_LUPDATE
+if test -n "$LUPDATE"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LUPDATE" >&5
+$as_echo "$LUPDATE" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$LUPDATE" && break
+done
+
+for ac_prog in lrelease-qt4 lrelease
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_LRELEASE+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$LRELEASE"; then
+  ac_cv_prog_LRELEASE="$LRELEASE" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_LRELEASE="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+LRELEASE=$ac_cv_prog_LRELEASE
+if test -n "$LRELEASE"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $LRELEASE" >&5
+$as_echo "$LRELEASE" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$LRELEASE" && break
+done
+
 
 
 QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -l QtCore"
