@@ -778,7 +778,7 @@ Write_One_AN1_Waypoint(const waypoint* wpt)
     xfree(extra);
   }
 
-  if (!nourl && wpt->url) {
+  if (!nourl && wpt->hasLink()) {
     int len = 7+strlen(wpt->url);
     char* extra = (char*)xmalloc(len);
     sprintf(extra, "{URL=%s}", wpt->url);

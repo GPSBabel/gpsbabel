@@ -1448,7 +1448,7 @@ static void kml_geocache_pr(const waypoint* waypointp)
     xfree(p);
   }
 
-  if (waypointp->url_link_text) {
+  if (waypointp->hasLinkText()) {
     p = xml_entitize(waypointp->url_link_text);
     kml_write_xml(0, "<Data name=\"gc_name\"><value>%s</value></Data>\n", p);
     xfree(p);
@@ -1528,11 +1528,11 @@ static void kml_waypt_pr(const waypoint* waypointp)
   kml_write_xmle("name", waypointp->shortname);
 
   // Description
-  if (waypointp->url && waypointp->url[0]) {
+  if (waypointp->hasLink()) {
     char* odesc = xml_entitize(waypointp->url);
     kml_write_xml(0, "<snippet/>\n");
     kml_write_xml(0, "<description>\n");
-    if (waypointp->url_link_text && waypointp->url_link_text[0])  {
+    if (waypointp->hasLinkText()) {
       char* olink = xml_entitize(waypointp->url_link_text);
       kml_write_xml(0, "<![CDATA[<a href=\"%s\">%s</a>]]>", odesc, olink);
       xfree(olink);

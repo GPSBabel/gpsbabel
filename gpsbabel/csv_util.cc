@@ -1711,7 +1711,7 @@ xcsv_waypt_pr(const waypoint* wpt)
         strcpy(buff, xcsv_urlbase);
         off = strlen(xcsv_urlbase);
       }
-      if (wpt->url) {
+      if (wpt->hasLink()) {
         snprintf(buff + off, sizeof(buff) - off, fmp->printfc, wpt->url);
       } else {
         strcpy(buff, (fmp->val && *fmp->val) ? fmp->val : "\"\"");
@@ -1720,7 +1720,7 @@ xcsv_waypt_pr(const waypoint* wpt)
     break;
     case XT_URL_LINK_TEXT:
       snprintf(buff, sizeof(buff), fmp->printfc,
-               (wpt->url_link_text && *wpt->url_link_text) ? wpt->url_link_text : fmp->val);
+               (wpt->hasLinkText()) ? wpt->url_link_text : fmp->val);
       break;
     case XT_ICON_DESCR:
       writebuff(buff, fmp->printfc,

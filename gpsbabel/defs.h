@@ -540,6 +540,8 @@ public:
    * members must match struct url_link...
    */
   url_link* url_next;
+  bool hasLink() const {return url && *url; }
+  bool hasLinkText() const {return url && *url; }
   char* url;
   char* url_link_text;
 
