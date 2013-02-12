@@ -1256,7 +1256,7 @@ gbfputpstr(const char* s, gbfile* file)
 int
 gbfputpstr(const QString s, gbfile* file)
 {
-  const char *t = s.toUtf8().data();
+  const char *t = xstrdup(s.toUtf8().data());
   int r = gbfputpstr(t, file);
   xfree(t);
   return r;
