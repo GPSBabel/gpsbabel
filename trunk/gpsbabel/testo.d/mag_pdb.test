@@ -1,0 +1,7 @@
+#
+# Map&Guide Palm/OS .pdb files (read-only)
+#
+rm -f ${TMPDIR}/mag_pdb-*
+gpsbabel -i mag_pdb -f ${REFERENCE}/route/mag_pdb-sample.pdb -o gpx -F ${TMPDIR}/mag_pdb-sample.gpx
+compare ${REFERENCE}/route/mag_pdb-sample.gpx ${TMPDIR}/mag_pdb-sample.gpx 
+

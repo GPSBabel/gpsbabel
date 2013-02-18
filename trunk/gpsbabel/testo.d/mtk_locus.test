@@ -6,4 +6,4 @@ FORMAT=mtk_locus
 rm -f ${TMPDIR}/$FORMAT.*
 
 gpsbabel -i $FORMAT -f ${REFERENCE}/$FORMAT.nmea -o gpx -F ${TMPDIR}/$FORMAT.gpx >/dev/null
-compare ${TMPDIR}/$FORMAT.gpx ${REFERENCE}/$FORMAT.gpx
+compare ${REFERENCE}/$FORMAT.gpx ${TMPDIR}/$FORMAT.gpx 
