@@ -41,13 +41,6 @@ gpsbabel -i gpx -f ${REFERENCE}/route/nmn4-sample.gpx -o nmn4 -F ${TMPDIR}/nmn4-
 compare ${REFERENCE}/route/nmn4-sample-out.rte ${TMPDIR}/nmn4-sample-out.rte
 
 #
-# Map&Guide Palm/OS .pdb files (read-only)
-#
-rm -f ${TMPDIR}/mag_pdb-*
-gpsbabel -i mag_pdb -f ${REFERENCE}/route/mag_pdb-sample.pdb -o gpx -F ${TMPDIR}/mag_pdb-sample.gpx
-compare ${TMPDIR}/mag_pdb-sample.gpx ${REFERENCE}/route/mag_pdb-sample.gpx
-
-#
 # Testing the 'nuketypes' filter is funky.
 # Convert a GPX file to GPX to eliminate jitter.
 # Then nuke the all but the three individual types, merge the result together
@@ -149,15 +142,6 @@ gpsbabel -i compegps -f ${REFERENCE}/compegps.wpt.gz -o gpx -F ${TMPDIR}/compegp
 compare ${REFERENCE}/compegps-wpt.gpx ${TMPDIR}/compegps-wpt.gpx
 gpsbabel -i cst -f ${REFERENCE}/route/cst-sample.cst.gz -o gpx -F ${TMPDIR}/cst-sample.gpx
 compare ${TMPDIR}/cst-sample.gpx ${REFERENCE}/route/cst-sample.gpx
-
-#
-# Transformation filter (transform) tests
-#
-rm -f ${TMPDIR}/transform*
-gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,routes,tracks -x transform,rte=wpt,del=y -o gpx,gpxver=1.1 -F ${TMPDIR}/transform-rte.gpx
-compare ${TMPDIR}/transform-rte.gpx ${REFERENCE}/transform-rte.gpx
-gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,tracks -x transform,wpt=rte,del=y -o gpx,gpxver=1.1 -F ${TMPDIR}/transform-wpt.gpx
-compare ${TMPDIR}/transform-wpt.gpx ${REFERENCE}/transform-wpt.gpx
 
 #
 # GPX version detection
