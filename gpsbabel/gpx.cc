@@ -55,7 +55,7 @@ static waypoint* wpt_tmp;
 static int cache_descr_is_html;
 static gbfile* fd;
 static const char* input_fname;
-static gbfile* ofd;
+static gbfile* ofd = NULL;
 static QString ostring;
 static QXmlStreamWriter writer(&ostring);
 static short_handle mkshort_handle;
@@ -279,11 +279,18 @@ gpx_write_gdata(gpx_global_entry* ge, const char* tag)
   if (!gpx_global || QUEUE_EMPTY(&ge->queue)) {
     return;
   }
-
+#if OLD
   gbfprintf(ofd, "<%s>", tag);
+#else
+  writer.writeStartElement(tag);
+#endif
   QUEUE_FOR_EACH(&ge->queue, elem, tmp) {
     gep = BASE_STRUCT(elem, gpx_global_entry, queue);
+#if OLD
     gbfprintf(ofd, "%s", gep->tagdata);
+#else
+    writer.writeCharacters(gep->tagdata);
+#endif
     /* Some tags we just output once. */
     if ((0 == strcmp(tag, "url")) ||
         (0 == strcmp(tag, "email"))) {
@@ -291,7 +298,11 @@ gpx_write_gdata(gpx_global_entry* ge, const char* tag)
     }
     gbfprintf(ofd, " ");
   }
+#if OLD
   gbfprintf(ofd, "</%s>\n", tag);
+#else
+  writer.writeEndElement();
+#endif
 }
 
 
@@ -1375,12 +1386,13 @@ static void
 gpx_wr_init(const char* fname)
 {
   mkshort_handle = NULL;
-
   ofd = gbfopen(fname, "w", MYNAME);
 
   writer.setAutoFormattingIndent(2);
-  writer.setCodec("UTF-8");
-  writer.writeStartDocument();
+//  writer.setCodec("UTF-8");
+//  writer.writeStartDocument();
+  writer.writeProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\"");
+
 }
 
 static void
@@ -1394,6 +1406,11 @@ gpx_wr_deinit(void)
 #if XDEBUG
   qDebug() << ostring;
 #else
+  // TODO: technically, &apos is almost never required to be encoded, but 
+  // the pre-Qt version of our serializer did, so we'll manually do it here
+  // for now, in the early days, just to keep things as we've always done it.
+  ostring.replace("'", "&apos;");  
+
   gbfputs(ostring, ofd);
   gbfclose(ofd);
   ofd = NULL;
@@ -1502,31 +1519,46 @@ static void
 fprint_tag_and_attrs(const char* prefix, const char* suffix, xml_tag* tag)
 {
   char** pa;
+#if OLD
   gbfprintf(ofd, "%s%s", prefix, tag->tagname);
+#endif
   pa = tag->attributes;
   if (pa) {
     while (*pa) {
+#if OLD
       gbfprintf(ofd, " %s=\"%s\"", pa[0], pa[1]);
       pa += 2;
+#else
+     writer.writeAttribute(pa[0], pa[1]);
+#endif
     }
   }
+#if OLD
   gbfprintf(ofd, "%s", suffix);
+#else
+//  writer.writeEndElement();
+#endif
 }
 
 static void
 fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
 {
   while (tag) {
+    writer.writeStartElement(tag->tagname);
     if (!tag->cdata && !tag->child) {
       fprint_tag_and_attrs("<", " />", tag);
     } else {
       fprint_tag_and_attrs("<", ">", tag);
 
       if (tag->cdata) {
+#if OLD
         char* tmp_ent;
         tmp_ent = xml_entitize(tag->cdata);
         gbfprintf(ofd, "%s", tmp_ent);
         xfree(tmp_ent);
+#else
+      writer.writeCharacters(tag->cdata);
+#endif
       }
       if (tag->child) {
         fprint_xml_chain(tag->child, wpt);
@@ -1536,7 +1568,11 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
         xml_write_time(ofd, wpt->gc_data->exported, 0,
                        "groundspeak:exported");
       }
+#if OLD
       gbfprintf(ofd, "</%s>\n", tag->tagname);
+#else
+  writer.writeEndElement();
+#endif
     }
     if (tag->parentcdata) {
       // retain whitespacing, but nuke leading NL as the above will add a trailing.
@@ -1624,14 +1660,18 @@ write_gpx_url(const waypoint* waypointp)
     url_link* tail;
     for (tail = (url_link*)&waypointp->url_next; tail; tail = tail->url_next) {
       writer.writeStartElement("link");
-      writer.writeAttribute("href", tail->url);
-      writer.writeAttribute("text", tail->url_link_text);
+      if(tail->url && tail->url[0]) {
+        writer.writeAttribute("href", tail->url);
+      }
+      if(tail->url_link_text && tail->url_link_text[0]) {
+        writer.writeAttribute("text", tail->url_link_text);
+      }
       writer.writeEndElement();
     }
     return;
   }
   writer.writeTextElement("url", QString(urlbase) + QString(waypointp->url));
-  if (waypointp->url_link_text) {
+  if (waypointp->url_link_text && waypointp->url_link_text[0]) {
     writer.writeTextElement("urlname", QString(waypointp->url_link_text));
   }
 #endif
@@ -1860,10 +1900,10 @@ gpx_track_hdr(const route_head* rte)
   }
 #else
   writer.writeStartElement("trk");
-  if (rte->rte_name) {
+  if (rte->rte_name && rte->rte_name[0]) {
     writer.writeTextElement("name", rte->rte_name);
   }
-  if (rte->rte_desc) {
+  if (rte->rte_desc && rte->rte_desc[0]) {
     writer.writeTextElement("desc", rte->rte_desc);
   }
   if (rte->rte_num) {
@@ -1903,6 +1943,14 @@ gpx_track_disp(const waypoint* waypointp)
   writer.writeStartElement("trkpt");
   writer.writeAttribute("lat", QString::number(waypointp->latitude, 'f', 9));
   writer.writeAttribute("lon", QString::number(waypointp->longitude, 'f', 9));
+  // FIXME: this is technically not needed.  
+  // Our Pre-Qt XML writer would write
+  // <trkpt lat=X lon=Y>
+  // </trkpt>
+  // even thogh <trkpt lat=X lon=Y /> is more compact and legal (assuming there
+  // are no child tags, of course.  This is to bridge our exsiting test suite
+  // during the transition to QXmlStreamWriter to force an explict closing tag.
+  writer.writeCharacters("\n");
 #endif
 
   gpx_write_common_position(waypointp, "  ");
@@ -1964,6 +2012,10 @@ gpx_track_tlr(const route_head* rte)
 #if OLD
   gbfprintf(ofd, "</trk>\n");
 #else
+    // FIXME This is to force empty tracks to not be self-closing.  This is
+    // lame, but it's for compatibilty with our old writer to minimize thrash
+    // on the Qt transition.
+    writer.writeCharacters("\n");
     writer.writeEndElement();
 #endif
   current_trk_head = NULL;
@@ -2042,6 +2094,10 @@ gpx_route_disp(const waypoint* waypointp)
 #if OLD
   gbfprintf(ofd, "  </rtept>\n");
 #else
+  // FIXME This is to force empty tracks to not be self-closing.  This is
+  // lame, but it's for compatibilty with our old writer to minimize thrash
+  // on the Qt transition.
+  writer.writeCharacters("\n");
   writer.writeEndElement();
 #endif
 }
@@ -2129,8 +2185,8 @@ gpx_write(void)
   gbfprintf(ofd, "  creator=\"" CREATOR_NAME_URL "\"\n");
   gbfprintf(ofd, "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 #else
-  writer.writeStartElement("gpx");
   writer.setAutoFormatting(true);
+  writer.writeStartElement("gpx");
   writer.writeAttribute("\n  version", gpx_wversion);
   writer.writeAttribute("\n  creator", CREATOR_NAME_URL);
   writer.writeAttribute("\n  xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
@@ -2166,7 +2222,11 @@ gpx_write(void)
   }
 
   if (gpx_wversion_num > 10) {
+#if OLD
     gbfprintf(ofd, "<metadata>\n");
+#else
+    writer.writeStartElement("metadata");
+#endif
   }
   gpx_write_gdata(&gpx_global->name, "name");
   gpx_write_gdata(&gpx_global->desc, "desc");
@@ -2196,7 +2256,11 @@ gpx_write(void)
   gpx_write_bounds();
 
   if (gpx_wversion_num > 10) {
+#if OLD
     gbfprintf(ofd, "</metadata>\n");
+#else
+    writer.writeEndElement();
+#endif
   }
 
   gpx_reset_short_handle();
