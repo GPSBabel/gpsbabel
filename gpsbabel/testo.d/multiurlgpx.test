@@ -1,0 +1,7 @@
+#
+# Test > 1 URL in selected files.
+#
+rm -f ${TMPDIR}/mlink*
+gpsbabel -i gpx -f ${REFERENCE}/multiple-links.gpx -o gpx,gpxver=1.1 -F ${TMPDIR}/mlink-1.gpx
+compare ${REFERENCE}/multiple-links.gpx ${TMPDIR}/mlink-1.gpx 
+

@@ -157,36 +157,12 @@ compare ${TMPDIR}/raymarine-sample.gpx ${REFERENCE}/raymarine-sample.gpx
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o raymarine -F ${TMPDIR}/expertgps.rwf
 compare ${TMPDIR}/expertgps.rwf ${REFERENCE}/expertgps.rwf
 
-
-#
-# Alan MAp500 waypoint & route test
-#
-rm -f ${TMPDIR}/alanwpr*
-gpsbabel -i alanwpr -f ${REFERENCE}/alanwpr.wpr -o alanwpr -F ${TMPDIR}/alanwpr-new.wpr
-gpsbabel -i alanwpr -f ${TMPDIR}/alanwpr-new.wpr -o gpx -F ${TMPDIR}/alanwpr-new.gpx
-compare ${TMPDIR}/alanwpr-new.gpx ${REFERENCE}/alanwpr.gpx
-
-#
-# Alan Map500 tracklogs< test
-#
-rm -f ${TMPDIR}/alantrl*
-gpsbabel -i alantrl -f ${REFERENCE}/alantrl.trl -o alantrl -F ${TMPDIR}/alantrl-new.trl
-gpsbabel -i alantrl -f ${TMPDIR}/alantrl-new.trl -o gpx -F ${TMPDIR}/alantrl-new.gpx
-compare ${TMPDIR}/alantrl-new.gpx ${REFERENCE}/alantrl.gpx
-
 #
 # VITO SmartMap .vtt track file 'vitovtt' test
 #
 rm -f ${TMPDIR}/vitovtt-*
 gpsbabel -i vitovtt -f ${REFERENCE}/track/vitovtt-sample.vtt -o gpx -F ${TMPDIR}/vitovtt-sample.gpx
 compare ${REFERENCE}/track/vitovtt-sample.gpx ${TMPDIR}/vitovtt-sample.gpx
-
-#
-# Test > 1 URL in selected files.
-#
-rm -f ${TMPDIR}/mlink*
-gpsbabel -i gpx -f ${REFERENCE}/multiple-links.gpx -o gpx,gpxver=1.1 -F ${TMPDIR}/mlink-1.gpx
-compare ${REFERENCE}/multiple-links.gpx ${TMPDIR}/mlink-1.gpx 
 
 #
 # Geogrid Viewer tracklogs

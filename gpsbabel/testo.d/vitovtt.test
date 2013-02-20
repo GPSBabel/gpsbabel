@@ -1,0 +1,6 @@
+#
+# VITO SmartMap .vtt track file 'vitovtt' test
+#
+rm -f ${TMPDIR}/vitovtt-*
+gpsbabel -i vitovtt -f ${REFERENCE}/track/vitovtt-sample.vtt -o gpx -F ${TMPDIR}/vitovtt-sample.gpx
+compare ${REFERENCE}/track/vitovtt-sample.gpx ${TMPDIR}/vitovtt-sample.gpx

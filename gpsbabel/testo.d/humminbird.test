@@ -1,0 +1,19 @@
+#
+# Humminbird waypoints/routes
+#
+gpsbabel -i humminbird -f ${REFERENCE}/humminbird.hwr -o unicsv,utc=0 -F ${TMPDIR}/humminbird~hwr.csv
+compare ${REFERENCE}/humminbird~hwr.csv ${TMPDIR}/humminbird~hwr.csv
+gpsbabel -i humminbird -f ${REFERENCE}/humminbird.hwr -o humminbird -F ${TMPDIR}/humminbird.hwr
+bincompare ${REFERENCE}/humminbird.hwr ${TMPDIR}/humminbird.hwr
+gpsbabel -i humminbird -f ${REFERENCE}/route/humminbird.hwr -o gpx -F ${TMPDIR}/humminbird~hwr.gpx
+compare ${REFERENCE}/route/humminbird~hwr.gpx ${TMPDIR}/humminbird~hwr.gpx
+#
+# Humminbird tracks
+#
+gpsbabel -i humminbird -f ${REFERENCE}/track/humminbird.ht -o humminbird_ht -F ${TMPDIR}/humminbird.ht
+bincompare ${REFERENCE}/track/humminbird.ht ${TMPDIR}/humminbird.ht
+
+gpsbabel -i humminbird -f ${REFERENCE}/humminbird.hwr -f ${REFERENCE}/track/humminbird.ht -o gpx,humminbirdextensions=1 -F ${TMPDIR}/combo.gpx
+gpsbabel -i gpx -f ${TMPDIR}/combo.gpx -o humminbird -F ${TMPDIR}/funky.hwr -o humminbird_ht -F ${TMPDIR}/funky.ht
+bincompare ${REFERENCE}/humminbird.hwr ${TMPDIR}/funky.hwr
+bincompare ${REFERENCE}/track/humminbird.ht ${TMPDIR}/funky.ht 

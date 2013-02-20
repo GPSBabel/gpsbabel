@@ -1,0 +1,9 @@
+#
+# Swiss Map (.xol) tests
+#
+gpsbabel -i xol -f ${REFERENCE}/xol-sample.xol -o gpx -F ${TMPDIR}/xol-sample.gpx
+compare ${REFERENCE}/xol-sample.gpx ${TMPDIR}/xol-sample.gpx 
+
+gpsbabel -i gpx -f ${REFERENCE}/xol-sample.gpx -o xol -F ${TMPDIR}/xol-sample-gpx.xol
+compare ${REFERENCE}/xol-sample-gpx.xol ${TMPDIR}/xol-sample-gpx.xol 
+
