@@ -1,21 +1,4 @@
 #!/bin/sh
-
-#
-# Nokia  LMX
-#
-gpsbabel -i lmx -f ${REFERENCE}/nokia.lmx -o lmx -F ${TMPDIR}/nokia.lmx
-compare ${REFERENCE}/nokia.lmx ${TMPDIR}/nokia.lmx
-gpsbabel -i lmx -f ${REFERENCE}/nokia.lmx -o lmx,binary -F ${TMPDIR}/binary.lmx
-bincompare ${REFERENCE}/binary.lmx ${TMPDIR}/binary.lmx
-
-#
-# Swiss Map (.xol) tests
-#
-gpsbabel -i xol -f ${REFERENCE}/xol-sample.xol -o gpx -F ${TMPDIR}/xol-sample.gpx
-compare ${TMPDIR}/xol-sample.gpx ${REFERENCE}/xol-sample.gpx
-gpsbabel -i gpx -f ${REFERENCE}/xol-sample.gpx -o xol -F ${TMPDIR}/xol-sample-gpx.xol
-compare ${TMPDIR}/xol-sample-gpx.xol ${REFERENCE}/xol-sample-gpx.xol
-
 #
 # NaviLink waypoints
 #
@@ -104,44 +87,11 @@ gpsbabel -i gopal -f ${REFERENCE}/gopal-11.trk -o gpx -F ${TMPDIR}/gopal-11-gpx.
 compare ${TMPDIR}/gopal-11-gpx.gpx ${REFERENCE}/gopal-11-gpx.gpx
 
 #
-# Height filter
-#
-rm -f ${TMPDIR}/height_out.gpx
-gpsbabel -i gpx -f ${REFERENCE}/track/height.gpx \
-		-x height,wgs84tomsl,add=100m  \
-		-o gpx -F ${TMPDIR}/height_out.gpx
-compare ${TMPDIR}/height_out.gpx ${REFERENCE}/track/height_out.gpx
-rm -f ${TMPDIR}/height_out.csv
-gpsbabel -i unicsv -f ${REFERENCE}/heightcheck.csv \
-		-x height,wgs84tomsl  \
-		-o xcsv,style=${REFERENCE}/heightcheck.style -F ${TMPDIR}/height_out.csv
-compare ${TMPDIR}/height_out.csv ${REFERENCE}/heightcheck_out.csv
-
-#
 # iBlue747 (style) track files
 #
 gpsbabel -i iblue747 -f ${REFERENCE}/track/iblue747.csv -o gpx -F ${TMPDIR}/iblue747~csv.gpx
 compare ${REFERENCE}/track/iblue747~csv.gpx ${TMPDIR}/iblue747~csv.gpx
 
-#
-# Humminbird waypoints/routes
-#
-gpsbabel -i humminbird -f ${REFERENCE}/humminbird.hwr -o unicsv,utc=0 -F ${TMPDIR}/humminbird~hwr.csv
-compare ${REFERENCE}/humminbird~hwr.csv ${TMPDIR}/humminbird~hwr.csv
-gpsbabel -i humminbird -f ${REFERENCE}/humminbird.hwr -o humminbird -F ${TMPDIR}/humminbird.hwr
-bincompare ${REFERENCE}/humminbird.hwr ${TMPDIR}/humminbird.hwr
-gpsbabel -i humminbird -f ${REFERENCE}/route/humminbird.hwr -o gpx -F ${TMPDIR}/humminbird~hwr.gpx
-compare ${REFERENCE}/route/humminbird~hwr.gpx ${TMPDIR}/humminbird~hwr.gpx
-#
-# Humminbird tracks
-#
-gpsbabel -i humminbird -f ${REFERENCE}/track/humminbird.ht -o humminbird_ht -F ${TMPDIR}/humminbird.ht
-bincompare ${REFERENCE}/track/humminbird.ht ${TMPDIR}/humminbird.ht
-
-gpsbabel -i humminbird -f ${REFERENCE}/humminbird.hwr -f ${REFERENCE}/track/humminbird.ht -o gpx,humminbirdextensions=1 -F ${TMPDIR}/combo.gpx
-gpsbabel -i gpx -f ${TMPDIR}/combo.gpx -o humminbird -F ${TMPDIR}/funky.hwr -o humminbird_ht -F ${TMPDIR}/funky.ht
-bincompare ${REFERENCE}/humminbird.hwr ${TMPDIR}/funky.hwr
-bincompare ${REFERENCE}/track/humminbird.ht ${TMPDIR}/funky.ht 
 
 #
 # Google Navigator tracklines
@@ -296,24 +246,3 @@ compare ${REFERENCE}/route/naviguide.gpx ${TMPDIR}/naviguide.gpx
 gpsbabel -i gpx -f ${REFERENCE}/ics.gpx -o naviguide -F ${TMPDIR}/ics.gpx.naviguide
 gpsbabel -i naviguide -f ${TMPDIR}/ics.gpx.naviguide -o gpx -F ${TMPDIR}/ics.gpx.naviguide.gpx
 compare ${REFERENCE}/ics.gpx.naviguide.gpx ${TMPDIR}/ics.gpx.naviguide.gpx
-
-#
-# Basic VPL test
-#
-gpsbabel -i vpl -f ${REFERENCE}/track/vpl_reference.vpl -o gpx -F ${TMPDIR}/vpl_reference.gpx
-compare ${TMPDIR}/vpl_reference.gpx ${REFERENCE}/track/vpl_reference.gpx
-
-#
-# Teletype tests
-#
-rm -f ${TMPDIR}/teletype.*
-gpsbabel -i teletype -f ${REFERENCE}/track/teletype.way -o gpx -F ${TMPDIR}/teletype.gpx
-compare ${TMPDIR}/teletype.gpx ${REFERENCE}/track/teletype.gpx
-
-#
-# Jogmap XML tests
-#
-rm -f ${TMPDIR}/jogmap.*
-gpsbabel -i jogmap -f ${REFERENCE}/track/jogmap.xml -o gpx -F ${TMPDIR}/jogmap.gpx
-compare ${TMPDIR}/jogmap.gpx ${REFERENCE}/track/jogmap-gpx.gpx
-

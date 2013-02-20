@@ -1,0 +1,6 @@
+
+#
+# Basic VPL test
+#
+gpsbabel -i vpl -f ${REFERENCE}/track/vpl_reference.vpl -o gpx -F ${TMPDIR}/vpl_reference.gpx
+compare ${REFERENCE}/track/vpl_reference.gpx ${TMPDIR}/vpl_reference.gpx 
