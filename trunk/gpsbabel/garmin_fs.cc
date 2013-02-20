@@ -25,6 +25,8 @@
 #include "garmin_tables.h"
 #include "inifile.h"
 
+#include <QtCore/QXmlStreamWriter>
+
 #define MYNAME "garmin_fs"
 
 #define GARMIN_GPX_EXT_REFERENCE \
@@ -183,7 +185,8 @@ void garmin_fs_convert(void* fs)
 /* GPX - out */
 
 void
-garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt)
+garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt, 
+                     QXmlStreamWriter& writer)
 {
   const char* phone, *addr;
   garmin_fs_t* gmsd = GMSD_FIND(waypt);
@@ -216,9 +219,26 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt)
       WAYPT_HAS(waypt, temperature) ||
       gmsd->flags.display) {
     int space = 1;
-
+#if OLDGPX
     gbfprintf(ofd, "%*s<extensions>\n", space++ * 2, "");
     gbfprintf(ofd, "%*s<gpxx:WaypointExtension %s\">\n", space++ * 2, "", GARMIN_GPX_EXT_REFERENCE);
+#else
+    writer.writeStartElement("extensions");
+    writer.writeStartElement("gpxx:WaypointExtension");
+    writer.writeNamespace("http://www.garmin.com/xmlschemas/GpxExtensions/v3",
+                          "gpxx");
+    writer.writeNamespace("http://www.w3.org/2001/XMLSchema-instance",
+                          "xsi");
+    writer.writeAttribute("xsi:schemaLocation", 
+      "http://www.garmin.com/xmlschemas/GpxExtensions/v3 "
+      "http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd");
+//	"http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd"
+//	"xmlns:gpxx=\"" \
+//	"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " \
+//	"xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3 " \
+//	"http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd"
+//     writer.writeEndElement();
+#endif
     if WAYPT_HAS(waypt, proximity) {
       gbfprintf(ofd, "%*s<gpxx:Proximity>%.6f</gpxx:Proximity>\n", space * 2, "", waypt->proximity);
     }
@@ -241,7 +261,11 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt)
         cx = "SymbolAndName";
         break;
       }
+#if OLDGPX
       gbfprintf(ofd, "%*s<gpxx:DisplayMode>%s</gpxx:DisplayMode>\n", space * 2, "", cx);
+#else
+      writer.writeTextElement("gpxx:DisplayMode", cx);
+#endif
     }
     if (gmsd->flags.category && gmsd->category) {
       int i;
@@ -257,45 +281,81 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt)
     }
     if (*addr) {
       char* str, *tmp;
+#if OLDGPX
       gbfprintf(ofd, "%*s<gpxx:Address>\n", space++ * 2, "");
+#else
+      writer.writeStartElement("gpxx:Address");
+#endif
 
       if ((str = GMSD_GET(addr, NULL))) {
+#if OLDGPX
         tmp = xml_entitize(str);
         gbfprintf(ofd, "%*s<gpxx:StreetAddress>%s</gpxx:StreetAddress>\n", space * 2, "", tmp);
         xfree(tmp);
+#else
+      writer.writeTextElement("gpxx:StreetAddress", str);
+#endif
       }
       if ((str = GMSD_GET(city, NULL))) {
+#if OLDGPX
         tmp = xml_entitize(str);
         gbfprintf(ofd, "%*s<gpxx:City>%s</gpxx:City>\n", space * 2, "", tmp);
         xfree(tmp);
+#else
+      writer.writeTextElement("gpxx:City", str);
+#endif
       }
       if ((str = GMSD_GET(state, NULL))) {
+#if OLDGPX
         tmp = xml_entitize(str);
         gbfprintf(ofd, "%*s<gpxx:State>%s</gpxx:State>\n", space * 2, "", tmp);
         xfree(tmp);
+#else
+      writer.writeTextElement("gpxx:State", str);
+#endif
       }
       if ((str = GMSD_GET(country, NULL))) {
+#if OLDGPX
         tmp = xml_entitize(str);
         gbfprintf(ofd, "%*s<gpxx:Country>%s</gpxx:Country>\n", space * 2, "", tmp);
+#else
+      writer.writeTextElement("gpxx:Country", str);
+#endif
         xfree(tmp);
       }
       if ((str = GMSD_GET(postal_code, NULL))) {
+#if OLDGPX
         tmp = xml_entitize(str);
         gbfprintf(ofd, "%*s<gpxx:PostalCode>%s</gpxx:PostalCode>\n", space * 2, "", tmp);
         xfree(tmp);
+#else
+      writer.writeTextElement("gpxx:PostalCode", str);
+#endif
       }
-
+#if OLDGPX
       gbfprintf(ofd, "%*s</gpxx:Address>\n", --space * 2, "");
+#else
+      writer.writeEndElement(); // /gpxx::Address
+#endif
     }
 
     if (*phone) {
+#if OLDGPX
       char* tmp = xml_entitize(phone);
       gbfprintf(ofd, "%*s<gpxx:PhoneNumber>%s</gpxx:PhoneNumber>\n", space * 2, "", tmp);
       xfree(tmp);
+#else
+      writer.writeTextElement("gpxx:PhoneNumber", phone);
+#endif
     }
 
+#if OLDGPX
     gbfprintf(ofd, "%*s</gpxx:WaypointExtension>\n", --space * 2, "");
     gbfprintf(ofd, "%*s</extensions>\n", --space * 2, "");
+#else
+    writer.writeEndElement(); // /gpxx::WaypointExtension
+    writer.writeEndElement(); // /extensions.
+#endif
   }
 
 }
