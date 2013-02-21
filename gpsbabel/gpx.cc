@@ -2235,6 +2235,12 @@ gpx_write(void)
   gbfprintf(ofd, "  creator=\"" CREATOR_NAME_URL "\"\n");
   gbfprintf(ofd, "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 #else
+  // FIXME: This write of a blank line is needed for Qt 4.6 (as on Centos 6.3)
+  // to include just enough whitespace between <xml/> and <gpx...> to pass
+  // diff -w.  It's here for now to shim compatibility with our zillion 
+  // reference files, but this blank link can go away some day.
+  writer.writeCharacters("\n");
+
   writer.setAutoFormatting(true);
   writer.writeStartElement("gpx");
   writer.writeAttribute("\n  version", gpx_wversion);
