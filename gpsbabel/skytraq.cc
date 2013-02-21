@@ -203,7 +203,7 @@ rd_buf(const gbuint8 *buf, int len)
   return res_OK;
 }
 
-static int
+static unsigned int
 rd_word(void)
 {
   int errors = 5;		/* allow this many errors */
@@ -257,11 +257,11 @@ skytraq_calc_checksum(const unsigned char *buf, int len)
 }
 
 static int
-skytraq_rd_msg(const void *payload, int len)
+skytraq_rd_msg(const void *payload, unsigned int len)
 {
   int errors = 5;		/* allow this many errors */
-  int c, i, state;
-  int rcv_len, calc_cs, rcv_cs;
+  unsigned int c, i, state;
+  unsigned int rcv_len, calc_cs, rcv_cs;
 
   for (i = 0, state = 0; i < RETRIES && state < sizeof(MSG_START); i++) {
     c = rd_char(&errors);
@@ -480,7 +480,7 @@ skytraq_get_log_buffer_status(gbuint32 *log_wr_ptr, gbuint16 *sectors_free, gbui
     gbuint8 sectors_free[2];
     gbuint8 sectors_total[2];
   } MSG_LOG_STATUS_OUTPUT;
-  int rc;
+  unsigned int rc;
 
   if ((rc = skytraq_wr_msg_verify(&MSG_LOG_STATUS_CONTROL, 1)) != res_OK) {	/* get memory status */
     db(1, MYNAME ": Error sending LOG STATUS CONTROL message (%d)\n", rc);
@@ -769,7 +769,7 @@ skytraq_read_single_sector(unsigned int sector, gbuint8 *buf)
 {
   gbuint8 MSG_LOG_SECTOR_READ_CONTROL[2] = { 0x1B, (gbuint8)(sector) };
   int errors = 5;		/* allow this many errors */
-  int c, i, j, cs;
+  unsigned int c, i, j, cs;
   gbuint8 buffer[16];
 
   if (sector < 0  ||  sector > 0xFF) {
@@ -856,11 +856,11 @@ skytraq_read_single_sector(unsigned int sector, gbuint8 *buf)
 }
 
 static int
-skytraq_read_multiple_sectors(int first_sector, int sector_count, gbuint8 *buf)
+skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, gbuint8 *buf)
 {
   gbuint8 MSG_LOG_READ_MULTI_SECTORS[5] = { 0x1D };
   gbuint8 *buf_end_tag;
-  int cs, i, read_result;
+  unsigned int cs, i, read_result;
 
   if (first_sector < 0  ||  first_sector > 0xFFFF) {
     fatal(MYNAME ": Invalid sector number (%i)\n", first_sector);
@@ -1128,7 +1128,7 @@ static void
 skytraq_set_location(void)
 {
   double lat, lng;
-  int i;
+  unsigned int i;
   gbuint8 MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
   gbuint8 MSG_GET_LOCATION = 0x35;
 
@@ -1338,7 +1338,7 @@ static const char *poinames[] = {
 #define NUMPOI (sizeof poinames/sizeof poinames[0])
 int getPoiByName(char *name)
 {
-  int i;
+  unsigned int i;
   for (i=0; i<NUMPOI; i++) {
     if (strcmp(poinames[i], name) == 0) {
       return i;
@@ -1374,7 +1374,7 @@ static void miniHomer_get_poi()
 {
   gbuint8 MSG_GET_POI[3] = { 0x4D, 0, 0};
   gbuint8 buf[32];
-  int poi;
+  unsigned int poi;
   double lat, lng, alt;
   double ecef_x, ecef_y, ecef_z;
   waypoint *wpt;
