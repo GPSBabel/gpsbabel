@@ -68,7 +68,7 @@ static int parity_letter(char c)
 int gbser_setup(void* handle, const char* spec)
 {
   unsigned arg[] = { 4800, 8, 0, 1 };
-  int ap;
+  unsigned int ap;
 
   for (ap = 0; ap < sizeof(arg) / sizeof(arg[0]); ap++) {
     unsigned t = 0;

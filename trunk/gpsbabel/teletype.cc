@@ -57,7 +57,7 @@ teletype_rd_deinit(void)
 static void
 teletype_read(void)
 {
-  int i;
+  gbuint32 i;
   for (i = 0; i < tty_wpt_count; i++) {
     waypoint* wpt = waypt_new();
     wpt->shortname = (gbfgetcstr(fin));

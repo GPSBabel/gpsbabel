@@ -219,7 +219,7 @@ data_read(void)
     int trk_num = 0;
     int trk_seg_num = 1;
     char trk_seg_num_buf[10];
-    char* trk_name = "";
+    const char* trk_name = "";
 
     wpt_tmp = waypt_new();
 

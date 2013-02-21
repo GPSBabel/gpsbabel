@@ -232,12 +232,6 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
     writer.writeAttribute("xsi:schemaLocation", 
       "http://www.garmin.com/xmlschemas/GpxExtensions/v3 "
       "http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd");
-//	"http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd"
-//	"xmlns:gpxx=\"" \
-//	"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " \
-//	"xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3 " \
-//	"http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd"
-//     writer.writeEndElement();
 #endif
     if WAYPT_HAS(waypt, proximity) {
       gbfprintf(ofd, "%*s<gpxx:Proximity>%.6f</gpxx:Proximity>\n", space * 2, "", waypt->proximity);
@@ -280,8 +274,9 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
       gbfprintf(ofd, "%*s</gpxx:Categories>\n", --space * 2, "");
     }
     if (*addr) {
-      char* str, *tmp;
+      char* str;
 #if OLDGPX
+      char* tmp;
       gbfprintf(ofd, "%*s<gpxx:Address>\n", space++ * 2, "");
 #else
       writer.writeStartElement("gpxx:Address");
@@ -318,10 +313,10 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
 #if OLDGPX
         tmp = xml_entitize(str);
         gbfprintf(ofd, "%*s<gpxx:Country>%s</gpxx:Country>\n", space * 2, "", tmp);
+        xfree(tmp);
 #else
       writer.writeTextElement("gpxx:Country", str);
 #endif
-        xfree(tmp);
       }
       if ((str = GMSD_GET(postal_code, NULL))) {
 #if OLDGPX

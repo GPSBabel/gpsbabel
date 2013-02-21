@@ -173,7 +173,7 @@ static char*
 mmo_readstr(void)
 {
   char* res;
-  int len;
+  unsigned int len;
 
   len = (unsigned)gbfgetc(fin);
   if (len == 0xFF) {
@@ -185,7 +185,7 @@ mmo_readstr(void)
       // length is number of "characters" not number of bytes
       len = (unsigned)gbfgetc(fin);
       if (len > 0) {
-        int ii, jj, ch, resbytes=0;
+        unsigned int ii, jj, ch, resbytes=0;
         res = (char *) xmalloc(len*2 + 1); // bigger to allow for utf-8 expansion
         for (ii=0; ii<len; ii++) {
           char utf8buf[8];
@@ -228,7 +228,7 @@ mmo_fillbuf2(void* buf, const gbsize_t bufsz, const gbsize_t count, const int ne
 {
   gbsize_t res;
 
-  if (count > (int)bufsz) {
+  if (count > (unsigned int)bufsz) {
     fatal(MYNAME ": Internal error (bufsz too small)!\n");
   }
 
