@@ -1,8 +1,7 @@
 /*
     Access GPX data files.
 
-    Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008,
-      2009, 2010 Robert Lipe, gpsbabel.org
+    Copyright (C) 2002-2013 Robert Lipe, gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -28,7 +27,7 @@
 #include <expat.h>
 static XML_Parser psr;
 #endif
-#include <QtCore/QXmlStreamWriter>
+#include "src/core/xmlstreamwriter.h"
 #include <QtCore/QRegExp>
 #include <QtCore/QDebug>
 //#include <QtCore/QTextCodec>
@@ -57,7 +56,7 @@ static gbfile* fd;
 static const char* input_fname;
 static gbfile* ofd = NULL;
 static QString ostring;
-static QXmlStreamWriter writer(&ostring);
+static gpsbabel::XmlStreamWriter writer(ostring);
 static short_handle mkshort_handle;
 static const char* link_url;
 static char* link_text;
@@ -1667,12 +1666,8 @@ write_gpx_url(const waypoint* waypointp)
     url_link* tail;
     for (tail = (url_link*)&waypointp->url_next; tail; tail = tail->url_next) {
       writer.writeStartElement("link");
-      if(tail->url && tail->url[0]) {
         writer.writeAttribute("href", tail->url);
-      }
-      if(tail->url_link_text && tail->url_link_text[0]) {
-        writer.writeTextElement("text", tail->url_link_text);
-      }
+        writer.writeOptionalTextElement("text", tail->url_link_text);
       // FIXME This is to force empty links to not be self-closing.  This is
       // lame, but it's for compatibilty with our old writer to minimize thrash
       // on the Qt transition.
@@ -1682,9 +1677,7 @@ write_gpx_url(const waypoint* waypointp)
     return;
   }
   writer.writeTextElement("url", QString(urlbase) + QString(waypointp->url));
-  if (waypointp->url_link_text && waypointp->url_link_text[0]) {
-    writer.writeTextElement("urlname", QString(waypointp->url_link_text));
-  }
+  writer.writeOptionalTextElement("urlname", QString(waypointp->url_link_text));
 #endif
 }
 
@@ -1871,15 +1864,11 @@ gpx_write_common_description(const waypoint* waypointp, const char* indent,
   if (oname) {
     writer.writeTextElement("name", oname);
   }
-  if (waypointp->description && waypointp->description[0]) {
-    writer.writeTextElement("cmt", waypointp->description);
-  }
+  writer.writeOptionalTextElement("cmt", waypointp->description);
   if (waypointp->notes && waypointp->notes[0]) {
     writer.writeTextElement("desc", waypointp->notes);
   } else {
-    if (waypointp->description && waypointp->description[0]) {
-      writer.writeTextElement("desc", waypointp->description);
-    }
+    writer.writeOptionalTextElement("desc", waypointp->description);
   }
   write_gpx_url(waypointp);
   if (!waypointp->icon_descr.isNull()) {
@@ -1950,12 +1939,8 @@ gpx_track_hdr(const route_head* rte)
   }
 #else
   writer.writeStartElement("trk");
-  if (rte->rte_name && rte->rte_name[0]) {
-    writer.writeTextElement("name", rte->rte_name);
-  }
-  if (rte->rte_desc && rte->rte_desc[0]) {
-    writer.writeTextElement("desc", rte->rte_desc);
-  }
+  writer.writeOptionalTextElement("name", rte->rte_name);
+  writer.writeOptionalTextElement("desc", rte->rte_desc);
   if (rte->rte_num) {
     writer.writeTextElement("number", QString::number(rte->rte_num));
   }
@@ -2090,12 +2075,8 @@ gpx_route_hdr(const route_head* rte)
   write_optional_xml_entity(ofd, "  ", "name", rte->rte_name);
   write_optional_xml_entity(ofd, "  ", "desc", rte->rte_desc);
 #else
-  if (rte->rte_name && rte->rte_name[0]) {
-    writer.writeTextElement("name", rte->rte_name);
-  }
-  if (rte->rte_desc && rte->rte_desc[0]) {
-    writer.writeTextElement("desc", rte->rte_desc);
-  }
+  writer.writeOptionalTextElement("name", rte->rte_name);
+  writer.writeOptionalTextElement("desc", rte->rte_desc);
 #endif
   if (rte->rte_num) {
 #if OLDGPX
