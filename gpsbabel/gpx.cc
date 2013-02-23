@@ -2233,12 +2233,18 @@ gpx_write(void)
 #if OLDGPX
     gbfprintf(ofd, "  xmlns:h=\"http://humminbird.com\"\n");
 #else
-  writer.writeAttribute("\n  xmlns:h","http://humminbird.com");
+    writer.writeAttribute("\n  xmlns:h","http://humminbird.com");
 #endif
   }
-  if (opt_garminext)
+  if (opt_garminext) {
+#if OLDGPX
     gbfprintf(ofd, "  xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\"\n"
               "  xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v1\"\n");
+#else
+    writer.writeAttribute("\n  xmlns:gpxx", "http://www.garmin.com/xmlschemas/GpxExtensions/v3");
+    writer.writeAttribute("\n  xmlns:gpxtpx", "http://www.garmin.com/xmlschemas/TrackPointExtension/v1");
+#endif
+  }
 #if OLDGPX
   gbfprintf(ofd, "  xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
 #else
@@ -2248,7 +2254,7 @@ gpx_write(void)
 #if OLDGPX
     gbfprintf(ofd, "  xsi:schemaLocation=\"%s\">\n", xsi_schema_loc);
 #else
-  writer.writeAttribute("\n  xsi:schemaLocation", xsi_schema_loc);
+    writer.writeAttribute("\n  xsi:schemaLocation", xsi_schema_loc);
 #endif
   } else {
 #if OLDGPX
