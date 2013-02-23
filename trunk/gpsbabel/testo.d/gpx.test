@@ -4,3 +4,7 @@ rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpx -F ${TMPDIR}/gl.gpx
 gpsbabel -i gpx -f ${TMPDIR}/gl.gpx -o gpsutil -F ${TMPDIR}/gpx.gpx
 compare ${TMPDIR}/gpx.gpx ${TMPDIR}/gu.wpt
+
+rm -f ${TMPDIR}/gtrnctr_power.gpx
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr_power.tcx -o gpx,garminextensions=1 -F ${TMPDIR}/gtrnctr_power.gpx
+compare  ${REFERENCE}/track/gtrnctr_power.gpx ${TMPDIR}/gtrnctr_power.gpx 

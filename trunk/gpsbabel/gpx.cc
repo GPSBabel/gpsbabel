@@ -1807,41 +1807,34 @@ gpx_write_common_extensions(const waypoint* waypointp, const char* indent)
     }
     gbfprintf(ofd, "%s</extensions>\n", indent);
 #else
-  writer.writeStartElement("extensions");
+    writer.writeStartElement("extensions");
     if (waypointp->depth != 0) {
       if (opt_humminbirdext) {
-//        gbfprintf(ofd, "%s  <h:depth>%f</h:depth>\n",
-//                  indent, waypointp->depth*100.0);
-writer.writeTextElement("h:depth", QString::number(waypointp->depth * 100.0));
+        writer.writeTextElement("h:depth", QString::number(waypointp->depth * 100.0));
       }
       if (opt_garminext) {
-#if OLDGPX
-        gbfprintf(ofd, "%s  <gpxx:Depth>%f</gpxx:Depth>\n",
-                  indent, waypointp->depth);
-#else
-writer.writeTextElement("gpxx", "Depth", QString::number(waypointp->depth));
-#endif
+        writer.writeTextElement("gpxx:Depth", QString::number(waypointp->depth));
       }
     }
     if (waypointp->temperature != 0) {
-      if (opt_humminbirdext)
-        gbfprintf(ofd, "%s  <h:temperature>%f</h:temperature>\n",
-                  indent, waypointp->temperature);
-      if (opt_garminext)
-        gbfprintf(ofd, "%s  <gpxx:Temperature>%f</gpxx:Temperature>\n",
-                  indent, waypointp->temperature);
+      if (opt_humminbirdext) {
+        writer.writeTextElement("h:temperature", QString::number(waypointp->temperature));
+      }
+      if (opt_garminext) {
+        writer.writeTextElement("gpxx:Temperature", QString::number(waypointp->temperature));
+      }
     }
     if (opt_garminext && (waypointp->heartrate != 0 || waypointp->cadence != 0)) {
-      gbfprintf(ofd, "%s  <gpxtpx:TrackPointExtension>\n", indent);
-      if (waypointp->heartrate != 0)
-        gbfprintf(ofd, "%s    <gpxtpx:hr>%u</gpxtpx:hr>\n",
-                  indent, waypointp->heartrate);
-      if (waypointp->cadence != 0)
-        gbfprintf(ofd, "%s    <gpxtpx:cad>%u</gpxtpx:cad>\n",
-                  indent, waypointp->cadence);
-      gbfprintf(ofd, "%s  </gpxtpx:TrackPointExtension>\n", indent);
+      writer.writeStartElement("gpxtpx:TrackPointExtension");
+      if (waypointp->heartrate != 0) {
+        writer.writeTextElement("gpxtpx:hr", QString::number(waypointp->heartrate));
+      }
+      if (waypointp->cadence != 0) {
+        writer.writeTextElement("gpxtpx:cad", QString::number(waypointp->cadence));
+      }
+      writer.writeEndElement(); // "gpxtpx:TrackPointExtension"
     }
-  writer.writeEndElement(); // "extensions"
+    writer.writeEndElement(); // "extensions"
 #endif
   }
 }
