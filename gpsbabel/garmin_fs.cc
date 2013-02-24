@@ -234,13 +234,25 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
       "http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd");
 #endif
     if WAYPT_HAS(waypt, proximity) {
+#if OLDGPX
       gbfprintf(ofd, "%*s<gpxx:Proximity>%.6f</gpxx:Proximity>\n", space * 2, "", waypt->proximity);
+#else
+      writer.writeTextElement("gpxx:Proximity", QString::number(waypt->proximity, 'f', 6));
+#endif
     }
     if WAYPT_HAS(waypt, temperature) {
+#if OLDGPX
       gbfprintf(ofd, "%*s<gpxx:Temperature>%.6f</gpxx:Temperature>\n", space * 2, "", waypt->temperature);
+#else
+      writer.writeTextElement("gpxx:Temperature",  QString::number(waypt->temperature, 'f', 6));
+#endif
     }
     if WAYPT_HAS(waypt, depth) {
+#if OLDGPX
       gbfprintf(ofd, "%*s<gpxx:Depth>%.6f</gpxx:Depth>\n", space * 2, "", waypt->depth);
+#else
+      writer.writeTextElement("gpxx:Depth", QString::number(waypt->depth, 'f', 6));
+#endif
     }
     if (gmsd->flags.display) {
       const char* cx;
