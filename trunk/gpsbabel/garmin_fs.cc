@@ -185,7 +185,7 @@ void garmin_fs_convert(void* fs)
 /* GPX - out */
 
 void
-garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt, 
+garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
                      QXmlStreamWriter& writer)
 {
   const char* phone, *addr;
@@ -229,7 +229,7 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
                           "gpxx");
     writer.writeNamespace("http://www.w3.org/2001/XMLSchema-instance",
                           "xsi");
-    writer.writeAttribute("xsi:schemaLocation", 
+    writer.writeAttribute("xsi:schemaLocation",
       "http://www.garmin.com/xmlschemas/GpxExtensions/v3 "
       "http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd");
 #endif
@@ -276,14 +276,26 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
     if (gmsd->flags.category && gmsd->category) {
       int i;
       gbuint16 cx = gmsd->category;
+#if OLDGPX
       gbfprintf(ofd, "%*s<gpxx:Categories>\n", space++ * 2, "");
+#else
+      writer.writeStartElement("gpxx:Categories");
+#endif
       for (i = 0; i < 16; i++) {
         if (cx & 1) {
+#if OLDGPX
           gbfprintf(ofd, "%*s<gpxx:Category>Category %d</gpxx:Category>\n", space*2, "", i+1);
+#else
+          writer.writeTextElement("gpxx:Category", QString("Category %1").arg(i+1));
+#endif
         }
         cx = cx >> 1;
       }
+#if OLDGPX
       gbfprintf(ofd, "%*s</gpxx:Categories>\n", --space * 2, "");
+#else
+      writer.writeEndElement(); // gpxx:Categories
+#endif
     }
     if (*addr) {
       char* str;
@@ -300,7 +312,7 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
         gbfprintf(ofd, "%*s<gpxx:StreetAddress>%s</gpxx:StreetAddress>\n", space * 2, "", tmp);
         xfree(tmp);
 #else
-      writer.writeTextElement("gpxx:StreetAddress", str);
+        writer.writeTextElement("gpxx:StreetAddress", str);
 #endif
       }
       if ((str = GMSD_GET(city, NULL))) {
@@ -309,7 +321,7 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
         gbfprintf(ofd, "%*s<gpxx:City>%s</gpxx:City>\n", space * 2, "", tmp);
         xfree(tmp);
 #else
-      writer.writeTextElement("gpxx:City", str);
+        writer.writeTextElement("gpxx:City", str);
 #endif
       }
       if ((str = GMSD_GET(state, NULL))) {
@@ -318,7 +330,7 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
         gbfprintf(ofd, "%*s<gpxx:State>%s</gpxx:State>\n", space * 2, "", tmp);
         xfree(tmp);
 #else
-      writer.writeTextElement("gpxx:State", str);
+        writer.writeTextElement("gpxx:State", str);
 #endif
       }
       if ((str = GMSD_GET(country, NULL))) {
@@ -327,7 +339,7 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
         gbfprintf(ofd, "%*s<gpxx:Country>%s</gpxx:Country>\n", space * 2, "", tmp);
         xfree(tmp);
 #else
-      writer.writeTextElement("gpxx:Country", str);
+        writer.writeTextElement("gpxx:Country", str);
 #endif
       }
       if ((str = GMSD_GET(postal_code, NULL))) {
@@ -336,7 +348,7 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
         gbfprintf(ofd, "%*s<gpxx:PostalCode>%s</gpxx:PostalCode>\n", space * 2, "", tmp);
         xfree(tmp);
 #else
-      writer.writeTextElement("gpxx:PostalCode", str);
+        writer.writeTextElement("gpxx:PostalCode", str);
 #endif
       }
 #if OLDGPX
