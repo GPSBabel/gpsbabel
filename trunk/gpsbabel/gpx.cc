@@ -1582,6 +1582,7 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
 #endif
     }
     if (tag->parentcdata) {
+#if OLDGPX
       // retain whitespacing, but nuke leading NL as the above will add a trailing.
 
       char* otmp_ent, *tmp_ent = NULL;
@@ -1592,6 +1593,13 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
         tmp_ent = otmp_ent;
       gbfprintf(ofd, "%s", tmp_ent);
       xfree(otmp_ent);
+#else
+      // FIXME: The length check is necessary to get line endings correct in our test suite.
+      // Writing the zero length string eats a newline, at least with Qt 4.6.2.
+      if (tag->parentcdatalen > 0) {
+        writer.writeCharacters(tag->parentcdata);
+      }
+#endif
     }
     tag = tag->sibling;
   }
@@ -1811,18 +1819,18 @@ gpx_write_common_extensions(const waypoint* waypointp, const char* indent)
     writer.writeStartElement("extensions");
     if (waypointp->depth != 0) {
       if (opt_humminbirdext) {
-        writer.writeTextElement("h:depth", QString::number(waypointp->depth * 100.0));
+        writer.writeTextElement("h:depth", QString::number(waypointp->depth * 100.0, 'f', 6));
       }
       if (opt_garminext) {
-        writer.writeTextElement("gpxx:Depth", QString::number(waypointp->depth));
+        writer.writeTextElement("gpxx:Depth", QString::number(waypointp->depth, 'f', 6));
       }
     }
     if (waypointp->temperature != 0) {
       if (opt_humminbirdext) {
-        writer.writeTextElement("h:temperature", QString::number(waypointp->temperature));
+        writer.writeTextElement("h:temperature", QString::number(waypointp->temperature, 'f', 6));
       }
       if (opt_garminext) {
-        writer.writeTextElement("gpxx:Temperature", QString::number(waypointp->temperature));
+        writer.writeTextElement("gpxx:Temperature", QString::number(waypointp->temperature, 'f', 6));
       }
     }
     if (opt_garminext && (waypointp->heartrate != 0 || waypointp->cadence != 0)) {
