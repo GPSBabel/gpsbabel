@@ -179,6 +179,7 @@ extern ff_vecs_t wintec_tes_vecs;
 extern ff_vecs_t subrip_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 extern ff_vecs_t format_fit_vecs;
+extern ff_vecs_t mapbar_track_vecs;
 
 static
 vecs_t vec_list[] = {
@@ -1066,6 +1067,12 @@ vecs_t vec_list[] = {
     "garmin_fit",
     "Flexible and Interoperable Data Transfer (FIT) Activity file"
     "fit"
+  },
+  {
+    &mapbar_track_vecs,
+    "mapbar",
+    "Mapbar (China) navigation track for Sonim Xp3300",
+    "trk"
   },
 #endif // MAXIMAL_ENABLED
   {

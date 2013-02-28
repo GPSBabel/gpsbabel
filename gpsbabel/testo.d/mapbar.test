@@ -1,0 +1,4 @@
+# Mapbar/Sonim XP330
+rm -f ${TMPDIR}/mapbar.gpx
+gpsbabel -i mapbar -f ${REFERENCE}/track/mapbar.trk -o gpx -F ${TMPDIR}/mapbar.gpx
+compare ${REFERENCE}/track/mapbar~gpx.gpx ${TMPDIR}/mapbar.gpx 
