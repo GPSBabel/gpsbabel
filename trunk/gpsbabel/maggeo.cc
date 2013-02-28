@@ -146,12 +146,17 @@ maggeo_read(void)
         gcdata->hint = xstrdup(s);
         break;
       case 12: // cache type
-        gcdata->type = gs_mktype(s);
+        if (strcmp(s, "Mystery Cache") == 0) {
+          gcdata->type = gt_suprise;
+        } else {
+          gcdata->type = gs_mktype(s);
+        }
         break;
       case 13:
         wpt_tmp->creation_time = maggeo_parsedate(s);
         break;
-      case 14: // last found date is ignored.
+      case 14: // last found date was ignored.  Implemented 2013-02-27.
+        gcdata->last_found = maggeo_parsedate(s);
         break;
       case 15:
         gcdata->diff = 10 * atof(s);
