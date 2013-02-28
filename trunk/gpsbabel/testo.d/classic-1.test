@@ -124,17 +124,8 @@ gpsbabel -i gpspilot -f ${REFERENCE}/gpspilot.pdb -o gpsutil -F ${TMPDIR}/gpspil
 compare ${TMPDIR}/gpspil_t.gpu ${TMPDIR}/gpspilot.gpu
 compare ${REFERENCE}/gu.wpt ${TMPDIR}/gpspilot.gpu
 
-# Cetus GPS for PalmOS
-# This test is also similar to the NAV Companion test.
-rm -f ${TMPDIR}/cetus.pdb ${TMPDIR}/cetus.gpu ${TMPDIR}/cetust.gpu
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o cetus -F ${TMPDIR}/cetus.pdb
-gpsbabel -i cetus -f ${TMPDIR}/cetus.pdb -o gpsutil -F ${TMPDIR}/cetus.gpu
-gpsbabel -i cetus -f ${REFERENCE}/cetus.pdb -o gpsutil -F ${TMPDIR}/cetust.gpu
-compare ${TMPDIR}/cetust.gpu ${TMPDIR}/cetus.gpu
-compare ${REFERENCE}/cetus.gpu ${TMPDIR}/cetus.gpu
-
 # QuoVadis GPS for PalmOS
-# This test is derived from the Cetus test above.
+# This test is derived from the Cetus test.
 rm -f ${TMPDIR}/quovadis.pdb ${TMPDIR}/quovadis.gpu ${TMPDIR}/quovadist.gpu
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o quovadis -F ${TMPDIR}/quovadis.pdb
 gpsbabel -i quovadis -f ${TMPDIR}/quovadis.pdb -o gpsutil -F ${TMPDIR}/quovadis.gpu
