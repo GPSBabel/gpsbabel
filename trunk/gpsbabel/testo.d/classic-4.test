@@ -52,11 +52,6 @@ compare ${TMPDIR}/mtk_logger_gp245.gpx ${REFERENCE}/track/mtk_logger_gp245.gpx
 gpsbabel -i ik3d -f ${REFERENCE}/ik3d-sample.ikt -o gpx -F ${TMPDIR}/ik3d-sample.gpx
 compare ${TMPDIR}/ik3d-sample.gpx ${REFERENCE}/ik3d-sample.gpx
 
-# osm data files
-rm -f ${TMPDIR}/osm-*
-gpsbabel -i osm -f ${REFERENCE}/osm-data.xml -o gpx -F ${TMPDIR}/osm-data.gpx
-compare ${TMPDIR}/osm-data.gpx ${REFERENCE}/osm-data.gpx
-
 # Exif format test (read only)
 gpsbabel -i exif -f ${REFERENCE}/IMG_2065.JPG -o unicsv,utc=0 -F ${TMPDIR}/exif-dat.csv
 compare ${TMPDIR}/exif-dat.csv ${REFERENCE}/exif-dat.csv
