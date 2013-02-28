@@ -391,12 +391,6 @@ gpsbabel -i gpx -f ${REFERENCE}/track/tracks.gpx  -o fugawi -F ${TMPDIR}/fugawi5
 compare ${REFERENCE}/track/fugawi.txt ${TMPDIR}/fugawi5.txt
 
 #
-# Magellan Explorist geocaching format (write-only).
-#
-gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o maggeo -F ${TMPDIR}/maggeo.gs
-compare ${REFERENCE}/gc/maggeo.gs ${TMPDIR}/maggeo.gs
-
-#
 # IGN Rando tests
 #
 gpsbabel -i ignrando -f ${REFERENCE}/track/ignrando-sample.rdn -o ignrando -F ${TMPDIR}/ignrando-sample.rdn

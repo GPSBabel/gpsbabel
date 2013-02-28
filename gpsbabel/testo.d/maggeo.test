@@ -1,0 +1,9 @@
+
+#
+# Magellan Explorist geocaching format (write-only).
+#
+gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o maggeo -F ${TMPDIR}/maggeo.gs 
+compare ${REFERENCE}/gc/maggeo.gs ${TMPDIR}/maggeo.gs
+
+gpsbabel -i maggeo -f ${REFERENCE}/gc/maggeo.gs -o maggeo -F ${TMPDIR}/maggeo2.gs
+compare ${REFERENCE}/gc/maggeo.gs ${TMPDIR}/maggeo2.gs
