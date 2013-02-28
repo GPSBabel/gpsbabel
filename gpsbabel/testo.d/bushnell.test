@@ -7,5 +7,10 @@ compare ${REFERENCE}/bushnell.gpx ${TMPDIR}/bushnell.gpx
 gpsbabel -i bushnell -f ${REFERENCE}/bushnell.wpt -o bushnell -F ${TMPDIR}/bushnell
 bincompare ${REFERENCE}/bushnell.wpt ${TMPDIR}/bushnell-0.wpt
 
-gpsbabel -i bushnell_trl -f ${REFERENCE}/bushnell_trl.trl -o gpx -F ${TMPDIR}/bushnell_trl.gpx
+gpsbabel -i bushnell_trl -f ${REFERENCE}/bushnell_trl.trl -o gpx -F ${TMPDIR}/bushnell_trl.gpx -o bushnell_trl -F ${TMPDIR}/bush_trl.trl
 compare ${REFERENCE}/bushnell_trl.gpx ${TMPDIR}/bushnell_trl.gpx
+
+# Because of numeric instability, we don't actually do the compare, but there's
+# value just in spinning through the writer.
+gpsbabel -i bushnell_trl -f ${TMPDIR}/bush_trl.trl -o gpx -F ${TMPDIR}/bush~gpx.gpx
+# compare ${REFERENCE}/bushnell_trl.gpx ${TMPDIR}/bush~gpx.gpx
