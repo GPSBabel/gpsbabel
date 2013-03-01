@@ -263,7 +263,6 @@ gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc  -o geo -F ${TMPDIR}/geocustom
 # Write something to the various output-only formats
 #
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o text -F ${TMPDIR}/text.out -o html -F ${TMPDIR}/html.out -o vcard -F ${TMPDIR}/vcard.out #-o palmdoc -F ${TMPDIR}/pd.out
-gpsbabel -i 
 
 #
 # tef "TourExchangeFormat" read test
