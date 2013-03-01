@@ -97,13 +97,8 @@ mapbar_track_read(void)
   int olen = strlen(name);
   track->rte_name = cet_str_uni_to_utf8((const short int*) name, olen);
 
-  waypoint* start = read_waypoint();
-  track_add_wpt(track, start);
-
-  waypoint* end = read_waypoint();
-
-  // skip one pair waypoint
-  gbfseek(fin, 4*4, SEEK_CUR);
+  // skip two pair waypoint
+  gbfseek(fin, 8*4, SEEK_CUR);
   // skip way length
   gbfseek(fin, 8, SEEK_CUR);
   // skip fixed value
@@ -111,11 +106,15 @@ mapbar_track_read(void)
 
   int end_flag = gbfgetint32(fin);
   for (;;) {
+    if (end_flag) {
+      break;
+    }
+
     int length = gbfgetint32(fin);
     is_fatal((length < 1) || (length > 1600), MYNAME ": get bad buffer length");
 
-    length += 16; // the real length
     is_fatal((length % 8 != 0), MYNAME ": bad buffer size");
+    gbfseek(fin, 16, SEEK_CUR);
 
     const int amount = length/8;
     for (int i = 0; i < amount; ++i) {
@@ -123,13 +122,8 @@ mapbar_track_read(void)
       track_add_wpt(track, tmp);
     }
 
-    if (end_flag) {
-      break;
-    }
     end_flag = gbfgetint32(fin);
   }
-
-  track_add_wpt(track, end);
 }
 
 // capabilities below means: we can only read trackpoints.
