@@ -8,3 +8,8 @@ compare ${TMPDIR}/gpx.gpx ${TMPDIR}/gu.wpt
 rm -f ${TMPDIR}/gtrnctr_power.gpx
 gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr_power.tcx -o gpx,garminextensions=1 -F ${TMPDIR}/gtrnctr_power.gpx
 compare  ${REFERENCE}/track/gtrnctr_power.gpx ${TMPDIR}/gtrnctr_power.gpx 
+
+rm -f ${TMPDIR}/tpx-sample.gpx
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_garmin_extensions.gpx -o gpx,garminextensions -F ${TMPDIR}/tpx-sample.gpx
+compare ${REFERENCE}/track/gpx_garmin_extensions.gpx ${TMPDIR}/tpx-sample.gpx 
+

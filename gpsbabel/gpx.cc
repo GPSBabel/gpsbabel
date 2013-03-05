@@ -87,7 +87,7 @@ static format_specific_data** fs_ptr;
 #  define CREATOR_NAME_URL "GPSBabel - http://www.gpsbabel.org"
 #endif
 
-typedef enum {
+typedef enum  {
   tt_unknown = 0,
   tt_gpx,
 
@@ -240,12 +240,14 @@ gpx_rm_from_global(gpx_global_entry* ge)
 // Temporarily mock the old GPX writer's hardcoded fixed length for float/double
 // types.  This can be removed once we have time/interest in regenerating all our
 // zillion reference files.
-static inline QString toString(double d) {
- return QString::number(d, 'f', 9);
+static inline QString toString(double d)
+{
+  return QString::number(d, 'f', 9);
 };
 
-static inline QString toString(float f) {
- return QString::number(f, 'f', 6);
+static inline QString toString(float f)
+{
+  return QString::number(f, 'f', 6);
 };
 
 
@@ -336,8 +338,8 @@ tag_mapping tag_path_map[] = {
   {type, 1, "/gpx/wpt/geocache/" name, 0UL }  /* opencaching.de */
 
 #define GARMIN_WPT_EXT "/gpx/wpt/extensions/gpxx:WaypointExtension"
-#define GARMIN_TRK_EXT "/gpx/trk/trkseg/trkpt/extensions/gpxtpx:TrackPointExtension"
-#define GARMIN_RTE_EXT "/gpx/rte/rtept/extensions/gpxxx:RoutePointExtension"
+#define GARMIN_TRKPT_EXT "/gpx/trk/trkseg/trkpt/extensions/gpxtpx:TrackPointExtension"
+#define GARMIN_RTEPT_EXT "/gpx/rte/rtept/extensions/gpxxx:RoutePointExtension"
 
 //	GEOTAG( tt_cache, 		"cache"),
   { tt_cache, 1, "/gpx/wpt/groundspeak:cache" },
@@ -366,7 +368,7 @@ tag_mapping tag_path_map[] = {
   { tt_garmin_wpt_extensions, 0, GARMIN_WPT_EXT, 0UL },
   { tt_garmin_wpt_proximity, 0, GARMIN_WPT_EXT "/gpxx:Proximity", 0UL },
   { tt_garmin_wpt_temperature, 0, GARMIN_WPT_EXT "/gpxx:Temperature", 0UL },
-  { tt_garmin_wpt_temperature, 0, GARMIN_TRK_EXT "/gpxtpx:atemp", 0UL },
+  { tt_garmin_wpt_temperature, 1, GARMIN_TRKPT_EXT "/gpxtpx:atemp", 0UL },
   { tt_garmin_wpt_depth, 0, GARMIN_WPT_EXT "/gpxx:Depth", 0UL },
   { tt_garmin_wpt_display_mode, 0, GARMIN_WPT_EXT "/gpxx:DisplayMode", 0UL },
   { tt_garmin_wpt_categories, 0, GARMIN_WPT_EXT "/gpxx:Categories", 0UL },
@@ -379,8 +381,8 @@ tag_mapping tag_path_map[] = {
   { tt_garmin_wpt_phone_nr, 0, GARMIN_WPT_EXT "/gpxx:PhoneNumber", 0UL },
 
   // In Garmin space, but in core of waypoint.
-  { tt_trk_trkseg_trkpt_heartrate, 0, GARMIN_TRK_EXT "/gpxtpx:hr", 0UL },
-  { tt_trk_trkseg_trkpt_cadence, 0, GARMIN_TRK_EXT "/gpxtpx:cad", 0UL },
+  { tt_trk_trkseg_trkpt_heartrate, 1, GARMIN_TRKPT_EXT "/gpxtpx:hr", 0UL },
+  { tt_trk_trkseg_trkpt_cadence, 1, GARMIN_TRKPT_EXT "/gpxtpx:cad", 0UL },
 
   { tt_humminbird_wpt_depth, 0, "/gpx/wpt/extensions/h:depth", 0UL },  // in centimeters.
   { tt_humminbird_wpt_status, 0, "/gpx/wpt/extensions/h:status", 0UL },
@@ -1387,22 +1389,22 @@ gpx_wr_deinit(void)
 {
   writer.writeEndDocument();
 
-  // TODO: technically, &apos is almost never required to be encoded, but 
+  // TODO: technically, &apos is almost never required to be encoded, but
   // the pre-Qt version of our serializer did, so we'll manually do it here
   // for now, in the early days, just to keep things as we've always done it.
-  ostring.replace("'", "&apos;");  
+  ostring.replace("'", "&apos;");
 
   // TODO: The old writer would more aggressively protect you from control
-  // character nonsense.  The control-Z (032)is the only thing that appears in 
+  // character nonsense.  The control-Z (032)is the only thing that appears in
   // our test suite, but let's toss things we know aren't allowed in GPX.
   // Let's just carpet-bomb the whole range for now.  I have a feeling we'll
   // revisit this in time...
-  ostring.replace(QRegExp("[\014-\032]"), " ");  
+  ostring.replace(QRegExp("[\014-\032]"), " ");
 
   gbfputs(ostring, ofd);
   gbfclose(ofd);
   ofd = NULL;
-  
+
   mkshort_del_handle(&mkshort_handle);
 }
 
@@ -1544,10 +1546,11 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
 
       char* otmp_ent, *tmp_ent = NULL;
       otmp_ent = xml_entitize(tag->parentcdata);
-      if (otmp_ent[0] == '\n')
+      if (otmp_ent[0] == '\n') {
         tmp_ent = otmp_ent+1;
-      else
+      } else {
         tmp_ent = otmp_ent;
+      }
       gbfprintf(ofd, "%s", tmp_ent);
       xfree(otmp_ent);
 #else
@@ -1706,7 +1709,7 @@ gpx_write_common_position(const waypoint* waypointp, const char* indent)
   if (waypointp->creation_time) {
     char time_string[64];
     // FIXME: Eventually use creation_time.toString()
-    xml_fill_in_time(time_string, waypointp->creation_time, 
+    xml_fill_in_time(time_string, waypointp->creation_time,
                      waypointp->microseconds, XML_LONG_TIME);
     if (time_string[0]) {
       writer.writeTextElement("time", time_string);
@@ -1717,6 +1720,12 @@ gpx_write_common_position(const waypoint* waypointp, const char* indent)
 static void
 gpx_write_common_extensions(const waypoint* waypointp, const char* indent)
 {
+  // FIXME: gpxx:Temperature must be a child of gpxx:WaypointExtension or gpxx:TrackPointExtension.
+  // FIXME: gpxx:Depth must be a child of gpxx:WaypointExtension or gpxx:TrackPointExtension.
+  // FIXME: Although not required by the schema it seems gpxx:WaypointExtension should only be used as a child of gpx:wpt
+  // FIXME: Although not required by the schema it seems gpxx:RoutePointExtension should only be used as a child of gpx:rtept
+  // FIXME: Although not required by the schema it seems gpxx:TrackPointExtension should only be used as a child of gpx:trkpt
+  // FIXME: Although not required by the schema it seems gpxtpx:TrackPointExtension should only be used as a child of gpx:trkpt
   if (((opt_humminbirdext || opt_garminext) && (waypointp->depth != 0 || waypointp->temperature != 0))
       || (opt_garminext && (waypointp->heartrate != 0 || waypointp->cadence != 0))) {
 #if OLDGPX
@@ -1814,18 +1823,21 @@ gpx_waypt_pr(const waypoint* waypointp)
   gpx_write_common_description(waypointp, "  ", oname);
   gpx_write_common_acc(waypointp, "  ");
 
-  fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
-  gmsd = GMSD_FIND(waypointp);
-  if (fs_gpx) {
-    if (! gmsd) {
-      fprint_xml_chain(fs_gpx->tag, waypointp);
+  if (!(opt_humminbirdext || opt_garminext)) {
+    fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
+    gmsd = GMSD_FIND(waypointp);
+    if (fs_gpx) {
+      if (! gmsd) {
+        fprint_xml_chain(fs_gpx->tag, waypointp);
+      }
     }
+    if (gmsd && (gpx_wversion_num > 10)) {
+      /* MapSource doesn't accepts extensions from 1.0 */
+      garmin_fs_xml_fprint(ofd, waypointp, writer);
+    }
+  } else {
+    gpx_write_common_extensions(waypointp, "  ");
   }
-  if (gmsd && (gpx_wversion_num > 10)) {
-    /* MapSource doesn't accepts extensions from 1.0 */
-    garmin_fs_xml_fprint(ofd, waypointp, writer);
-  }
-  gpx_write_common_extensions(waypointp, "  ");
   writer.writeEndElement();
 }
 
@@ -1878,7 +1890,7 @@ gpx_track_disp(const waypoint* waypointp)
   writer.writeAttribute("lat", toString(waypointp->latitude));
   writer.writeAttribute("lon", toString(waypointp->longitude));
 
-  // FIXME: this is technically not needed.  
+  // FIXME: this is technically not needed.
   // Our Pre-Qt XML writer would write
   // <trkpt lat=X lon=Y>
   // </trkpt>
@@ -1910,12 +1922,14 @@ gpx_track_disp(const waypoint* waypointp)
                                NULL : oname);
   gpx_write_common_acc(waypointp, "  ");
 
-  fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
-  if (fs_gpx) {
-    fprint_xml_chain(fs_gpx->tag, waypointp);
+  if (!(opt_humminbirdext || opt_garminext)) {
+    fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
+    if (fs_gpx) {
+      fprint_xml_chain(fs_gpx->tag, waypointp);
+    }
+  } else {
+    gpx_write_common_extensions(waypointp, "  ");
   }
-
-  gpx_write_common_extensions(waypointp, "  ");
   writer.writeEndElement();
 }
 
@@ -1977,12 +1991,14 @@ gpx_route_disp(const waypoint* waypointp)
   gpx_write_common_description(waypointp, "    ", oname);
   gpx_write_common_acc(waypointp, "    ");
 
-  fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
-  if (fs_gpx) {
-    fprint_xml_chain(fs_gpx->tag, waypointp);
+  if (!(opt_humminbirdext || opt_garminext)) {
+    fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
+    if (fs_gpx) {
+      fprint_xml_chain(fs_gpx->tag, waypointp);
+    }
+  } else {
+    gpx_write_common_extensions(waypointp, "    ");
   }
-
-  gpx_write_common_extensions(waypointp, "    ");
   writer.writeEndElement();
 }
 
@@ -1990,7 +2006,7 @@ static void
 gpx_route_tlr(const route_head* rte)
 {
   // FIXME This is to force empty tracks to not be self-closing.  This is
-  // lame, but it's for compatibilty with our old writer to minimize thrash
+  // lame, but it's for compatibility with our old writer to minimize thrash
   // on the Qt transition.
   writer.writeCharacters("\n");
   writer.writeEndElement(); // Close rte tag.
@@ -2039,9 +2055,9 @@ gpx_write(void)
 
   if (! gpx_wversion) {
     if (! gpx_version) {
-      gpx_wversion = (char *)"1.0";
+      gpx_wversion = (char*)"1.0";
     } else {
-      gpx_wversion = (char *)gpx_version;
+      gpx_wversion = (char*)gpx_version;
     }
   }
 
@@ -2063,7 +2079,7 @@ gpx_write(void)
 #else
   // FIXME: This write of a blank line is needed for Qt 4.6 (as on Centos 6.3)
   // to include just enough whitespace between <xml/> and <gpx...> to pass
-  // diff -w.  It's here for now to shim compatibility with our zillion 
+  // diff -w.  It's here for now to shim compatibility with our zillion
   // reference files, but this blank link can go away some day.
   writer.writeCharacters("\n");
 
@@ -2074,6 +2090,8 @@ gpx_write(void)
   writer.writeAttribute("\n  xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 #endif
 
+  // FIXME: If we pass elements from an optional declared namespace, e.g. gpxx, gpxtpx, or h through with fprint_xml_chain, we won't have declared the namespace.
+  //        This is a schema violation.
   if (opt_humminbirdext) {
 #if OLDGPX
     gbfprintf(ofd, "  xmlns:h=\"http://humminbird.com\"\n");
@@ -2108,8 +2126,8 @@ gpx_write(void)
               gpx_wversion[0], gpx_wversion[2],
               gpx_wversion[0], gpx_wversion[2]);
 #else
-    writer.writeAttribute("\n  xsi:schemaLocation", 
-       QString("http://www.topografix.com/GPX/%1/%2 http://www.topografix.com/GPX/%1/%2/gpx.xsd").arg(gpx_wversion[0]).arg(gpx_wversion[2]));
+    writer.writeAttribute("\n  xsi:schemaLocation",
+                          QString("http://www.topografix.com/GPX/%1/%2 http://www.topografix.com/GPX/%1/%2/gpx.xsd").arg(gpx_wversion[0]).arg(gpx_wversion[2]));
 #endif
   }
 
