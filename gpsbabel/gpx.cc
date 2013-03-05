@@ -29,7 +29,6 @@ static XML_Parser psr;
 #endif
 #include "src/core/xmlstreamwriter.h"
 #include <QtCore/QRegExp>
-#include <QtCore/QDebug>
 //#include <QtCore/QTextCodec>
 
 
@@ -87,17 +86,6 @@ static format_specific_data** fs_ptr;
 #ifndef CREATOR_NAME_URL
 #  define CREATOR_NAME_URL "GPSBabel - http://www.gpsbabel.org"
 #endif
-
-
-/*
- * Format used for floating point formats.  Put in one place to make it
- * easier to tweak when comparing output with other GPX programs that
- * have more or less digits of output...
- */
-/* #define FLT_FMT "%.9lf" */  /* ExpertGPS */
-#define FLT_FMT "%0.9lf"
-#define FLT_FMT_T "%0.9lf"
-#define FLT_FMT_R "%0.9lf"
 
 typedef enum {
   tt_unknown = 0,
@@ -249,6 +237,18 @@ gpx_rm_from_global(gpx_global_entry* ge)
   }
 }
 
+// Temporarily mock the old GPX writer's hardcoded fixed length for float/double
+// types.  This can be removed once we have time/interest in regenerating all our
+// zillion reference files.
+static inline QString toString(double d) {
+ return QString::number(d, 'f', 9);
+};
+
+static inline QString toString(float f) {
+ return QString::number(f, 'f', 6);
+};
+
+
 /*
  * gpx_reset_short_handle: used for waypoint, route and track names
  * this allows gpx:wpt names to overlap gpx:rtept names, etc.
@@ -278,18 +278,10 @@ gpx_write_gdata(gpx_global_entry* ge, const char* tag)
   if (!gpx_global || QUEUE_EMPTY(&ge->queue)) {
     return;
   }
-#if OLDGPX
-  gbfprintf(ofd, "<%s>", tag);
-#else
   writer.writeStartElement(tag);
-#endif
   QUEUE_FOR_EACH(&ge->queue, elem, tmp) {
     gep = BASE_STRUCT(elem, gpx_global_entry, queue);
-#if OLDGPX
-    gbfprintf(ofd, "%s", gep->tagdata);
-#else
     writer.writeCharacters(gep->tagdata);
-#endif
     /* Some tags we just output once. */
     if ((0 == strcmp(tag, "url")) ||
         (0 == strcmp(tag, "email"))) {
@@ -297,11 +289,7 @@ gpx_write_gdata(gpx_global_entry* ge, const char* tag)
     }
     gbfprintf(ofd, " ");
   }
-#if OLDGPX
-  gbfprintf(ofd, "</%s>\n", tag);
-#else
   writer.writeEndElement();
-#endif
 }
 
 
@@ -1397,14 +1385,8 @@ gpx_wr_init(const char* fname)
 static void
 gpx_wr_deinit(void)
 {
-#if OLDGPX
-  gbfclose(ofd);
-#else
   writer.writeEndDocument();
-#define XDEBUG 0
-#if XDEBUG
-  qDebug() << ostring;
-#else
+
   // TODO: technically, &apos is almost never required to be encoded, but 
   // the pre-Qt version of our serializer did, so we'll manually do it here
   // for now, in the early days, just to keep things as we've always done it.
@@ -1420,8 +1402,6 @@ gpx_wr_deinit(void)
   gbfputs(ostring, ofd);
   gbfclose(ofd);
   ofd = NULL;
-#endif
-#endif
   
   mkshort_del_handle(&mkshort_handle);
 }
@@ -1522,50 +1502,31 @@ gpx_read(void)
 }
 
 static void
-fprint_tag_and_attrs(const char* prefix, const char* suffix, xml_tag* tag)
+write_tag_attributes(xml_tag* tag)
 {
   char** pa;
-#if OLDGPX
-  gbfprintf(ofd, "%s%s", prefix, tag->tagname);
-#else
-  writer.writeStartElement(tag->tagname);
-#endif
   pa = tag->attributes;
   if (pa) {
     while (*pa) {
-#if OLDGPX
-      gbfprintf(ofd, " %s=\"%s\"", pa[0], pa[1]);
-#else
       writer.writeAttribute(pa[0], pa[1]);
-#endif
       pa += 2;
     }
   }
-#if OLDGPX
-  gbfprintf(ofd, "%s", suffix);
-#else
-//  writer.writeEndElement();
-#endif
 }
 
 static void
 fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
 {
   while (tag) {
+    writer.writeStartElement(tag->tagname);
+
     if (!tag->cdata && !tag->child) {
-      fprint_tag_and_attrs("<", " />", tag);
+      write_tag_attributes(tag);
     } else {
-      fprint_tag_and_attrs("<", ">", tag);
+      write_tag_attributes(tag);
 
       if (tag->cdata) {
-#if OLDGPX
-        char* tmp_ent;
-        tmp_ent = xml_entitize(tag->cdata);
-        gbfprintf(ofd, "%s", tmp_ent);
-        xfree(tmp_ent);
-#else
         writer.writeCharacters(tag->cdata);
-#endif
       }
       if (tag->child) {
         fprint_xml_chain(tag->child, wpt);
@@ -1575,11 +1536,7 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
         xml_write_time(ofd, wpt->gc_data->exported, 0,
                        "groundspeak:exported");
       }
-#if OLDGPX
-      gbfprintf(ofd, "</%s>\n", tag->tagname);
-#else
       writer.writeEndElement();
-#endif
     }
     if (tag->parentcdata) {
 #if OLDGPX
@@ -1721,37 +1678,22 @@ gpx_write_common_acc(const waypoint* waypointp, const char* indent)
   default:
     break;
   }
-#if OLDGPX
+
   if (fix) {
-    gbfprintf(ofd, "%s<fix>%s</fix>\n", indent, fix);
+    writer.writeTextElement("fix", fix);
   }
-  if (waypointp->sat > 0) {
-    gbfprintf(ofd, "%s<sat>%d</sat>\n", indent, waypointp->sat);
-  }
-  if (waypointp->hdop) {
-    gbfprintf(ofd, "%s<hdop>%f</hdop>\n", indent, waypointp->hdop);
-  }
-  if (waypointp->vdop) {
-    gbfprintf(ofd, "%s<vdop>%f</vdop>\n", indent, waypointp->vdop);
-  }
-  if (waypointp->pdop) {
-    gbfprintf(ofd, "%s<pdop>%f</pdop>\n", indent, waypointp->pdop);
-  }
-#else
-  if (fix) writer.writeTextElement("fix", fix);
   if (waypointp->sat > 0) {
     writer.writeTextElement("sat", QString::number(waypointp->sat));
   }
   if (waypointp->hdop) {
-    writer.writeTextElement("hdop", QString::number(waypointp->hdop, 'f', 6));
+    writer.writeTextElement("hdop", toString(waypointp->hdop));
   }
   if (waypointp->vdop) {
-    writer.writeTextElement("vdop", QString::number(waypointp->vdop, 'f', 6));
+    writer.writeTextElement("vdop", toString(waypointp->vdop));
   }
   if (waypointp->pdop) {
-    writer.writeTextElement("pdop", QString::number(waypointp->pdop, 'f', 6));
+    writer.writeTextElement("pdop", toString(waypointp->pdop));
   }
-#endif
 }
 
 
@@ -1759,25 +1701,16 @@ static void
 gpx_write_common_position(const waypoint* waypointp, const char* indent)
 {
   if (waypointp->altitude != unknown_alt) {
-#if OLDGPX
-    gbfprintf(ofd, "%s<ele>%f</ele>\n",
-              indent, waypointp->altitude);
-#else
     writer.writeTextElement("ele", QString::number(waypointp->altitude, 'f', 6));
-#endif
   }
   if (waypointp->creation_time) {
-#if OLDGPX
-    gbfprintf(ofd, indent);
-    xml_write_time(ofd, waypointp->creation_time, waypointp->microseconds, "time");
-#else
     char time_string[64];
     // FIXME: Eventually use creation_time.toString()
-    xml_fill_in_time(time_string, waypointp->creation_time, waypointp->microseconds, XML_LONG_TIME);
+    xml_fill_in_time(time_string, waypointp->creation_time, 
+                     waypointp->microseconds, XML_LONG_TIME);
     if (time_string[0]) {
       writer.writeTextElement("time", time_string);
     }
-#endif
   }
 }
 
@@ -1819,18 +1752,18 @@ gpx_write_common_extensions(const waypoint* waypointp, const char* indent)
     writer.writeStartElement("extensions");
     if (waypointp->depth != 0) {
       if (opt_humminbirdext) {
-        writer.writeTextElement("h:depth", QString::number(waypointp->depth * 100.0, 'f', 6));
+        writer.writeTextElement("h:depth", toString(waypointp->depth * 100.0));
       }
       if (opt_garminext) {
-        writer.writeTextElement("gpxx:Depth", QString::number(waypointp->depth, 'f', 6));
+        writer.writeTextElement("gpxx:Depth", toString(waypointp->depth));
       }
     }
     if (waypointp->temperature != 0) {
       if (opt_humminbirdext) {
-        writer.writeTextElement("h:temperature", QString::number(waypointp->temperature, 'f', 6));
+        writer.writeTextElement("h:temperature", toString(waypointp->temperature));
       }
       if (opt_garminext) {
-        writer.writeTextElement("gpxx:Temperature", QString::number(waypointp->temperature, 'f', 6));
+        writer.writeTextElement("gpxx:Temperature", toString(waypointp->temperature));
       }
     }
     if (opt_garminext && (waypointp->heartrate != 0 || waypointp->cadence != 0)) {
@@ -1852,20 +1785,7 @@ static void
 gpx_write_common_description(const waypoint* waypointp, const char* indent,
                              const char* oname)
 {
-#if OLDGPX
-  write_optional_xml_entity(ofd, indent, "name", oname);
-  write_optional_xml_entity(ofd, indent, "cmt", waypointp->description);
-  if (waypointp->notes && waypointp->notes[0]) {
-    write_xml_entity(ofd, indent, "desc", waypointp->notes);
-  } else {
-    write_optional_xml_entity(ofd, indent, "desc", waypointp->description);
-  }
-  write_gpx_url(waypointp);
-  write_optional_xml_entity(ofd, indent , "sym", waypointp->icon_descr);
-#else
-  if (oname) {
-    writer.writeTextElement("name", oname);
-  }
+  writer.writeOptionalTextElement("name", oname);
   writer.writeOptionalTextElement("cmt", waypointp->description);
   if (waypointp->notes && waypointp->notes[0]) {
     writer.writeTextElement("desc", waypointp->notes);
@@ -1873,10 +1793,7 @@ gpx_write_common_description(const waypoint* waypointp, const char* indent,
     writer.writeOptionalTextElement("desc", waypointp->description);
   }
   write_gpx_url(waypointp);
-  if (!waypointp->icon_descr.isNull()) {
-    writer.writeTextElement("sym", waypointp->icon_descr);
-  }
-#endif
+  writer.writeOptionalTextElement("sym", waypointp->icon_descr);
 }
 
 static void
@@ -1885,15 +1802,11 @@ gpx_waypt_pr(const waypoint* waypointp)
   const char* oname;
   fs_xml* fs_gpx;
   garmin_fs_t* gmsd;	/* gARmIN sPECIAL dATA */
-#if OLDGPX
-  gbfprintf(ofd, "<wpt lat=\"" FLT_FMT "\" lon=\"" FLT_FMT "\">\n",
-            waypointp->latitude,
-            waypointp->longitude);
-#else
+
   writer.writeStartElement("wpt");
-  writer.writeAttribute("lat", QString::number(waypointp->latitude, 'f', 9));
-  writer.writeAttribute("lon", QString::number(waypointp->longitude, 'f', 9));
-#endif
+  writer.writeAttribute("lat", toString(waypointp->latitude));
+  writer.writeAttribute("lon", toString(waypointp->longitude));
+
   oname = global_opts.synthesize_shortnames ?
           mkshort_from_wpt(mkshort_handle, waypointp) :
           waypointp->shortname;
@@ -1913,11 +1826,7 @@ gpx_waypt_pr(const waypoint* waypointp)
     garmin_fs_xml_fprint(ofd, waypointp, writer);
   }
   gpx_write_common_extensions(waypointp, "  ");
-#if OLDGPX
-  gbfprintf(ofd, "</wpt>\n");
-#else
   writer.writeEndElement();
-#endif
 }
 
 static void
@@ -1960,26 +1869,15 @@ gpx_track_disp(const waypoint* waypointp)
 
   if (waypointp->wpt_flags.new_trkseg) {
     if (!first_in_trk) {
-#if OLDGPX
-      gbfprintf(ofd, "</trkseg>\n");
-#else
       writer.writeEndElement();
-#endif
     }
-#if OLDGPX
-    gbfprintf(ofd, "<trkseg>\n");
-#else
     writer.writeStartElement("trkseg");
-#endif
   }
-#if OLDGPX
-  gbfprintf(ofd, "<trkpt lat=\"" FLT_FMT_T "\" lon=\"" FLT_FMT_T "\">\n",
-            waypointp->latitude,
-            waypointp->longitude);
-#else
+
   writer.writeStartElement("trkpt");
-  writer.writeAttribute("lat", QString::number(waypointp->latitude, 'f', 9));
-  writer.writeAttribute("lon", QString::number(waypointp->longitude, 'f', 9));
+  writer.writeAttribute("lat", toString(waypointp->latitude));
+  writer.writeAttribute("lon", toString(waypointp->longitude));
+
   // FIXME: this is technically not needed.  
   // Our Pre-Qt XML writer would write
   // <trkpt lat=X lon=Y>
@@ -1988,27 +1886,16 @@ gpx_track_disp(const waypoint* waypointp)
   // are no child tags, of course.  This is to bridge our exsiting test suite
   // during the transition to QXmlStreamWriter to force an explict closing tag.
   writer.writeCharacters("\n");
-#endif
 
   gpx_write_common_position(waypointp, "  ");
 
   /* These were accidentally removed from 1.1 */
   if (gpx_wversion_num == 10) {
     if WAYPT_HAS(waypointp, course) {
-#if OLDGPX
-      gbfprintf(ofd, "  <course>%f</course>\n",
-                waypointp->course);
-#else
-      writer.writeTextElement("course", QString::number(waypointp->course, 'f', 6));
-#endif
+      writer.writeTextElement("course", toString(waypointp->course));
     }
     if WAYPT_HAS(waypointp, speed) {
-#if OLDGPX
-      gbfprintf(ofd, "  <speed>%f</speed>\n",
-                waypointp->speed);
-#else
-      writer.writeTextElement("speed", QString::number(waypointp->speed, 'f', 6));
-#endif
+      writer.writeTextElement("speed", toString(waypointp->speed));
     }
   }
 
@@ -2029,32 +1916,22 @@ gpx_track_disp(const waypoint* waypointp)
   }
 
   gpx_write_common_extensions(waypointp, "  ");
-#if OLDGPX
-  gbfprintf(ofd, "</trkpt>\n");
-#else
   writer.writeEndElement();
-#endif
 }
 
 static void
 gpx_track_tlr(const route_head* rte)
 {
   if (!QUEUE_EMPTY(&current_trk_head->waypoint_list)) {
-#if OLDGPX
-    gbfprintf(ofd, "</trkseg>\n");
-#else
     writer.writeEndElement();
-#endif
   }
-#if OLDGPX
-  gbfprintf(ofd, "</trk>\n");
-#else
+
   // FIXME This is to force empty tracks to not be self-closing.  This is
   // lame, but it's for compatibilty with our old writer to minimize thrash
   // on the Qt transition.
   writer.writeCharacters("\n");
   writer.writeEndElement();
-#endif
+
   current_trk_head = NULL;
 }
 
@@ -2068,24 +1945,12 @@ static void
 gpx_route_hdr(const route_head* rte)
 {
   fs_xml* fs_gpx;
-#if OLDGPX
-  gbfprintf(ofd, "<rte>\n");
-#else
   writer.writeStartElement("rte");
-#endif
-#if OLDGPX
-  write_optional_xml_entity(ofd, "  ", "name", rte->rte_name);
-  write_optional_xml_entity(ofd, "  ", "desc", rte->rte_desc);
-#else
   writer.writeOptionalTextElement("name", rte->rte_name);
   writer.writeOptionalTextElement("desc", rte->rte_desc);
-#endif
+
   if (rte->rte_num) {
-#if OLDGPX
-    gbfprintf(ofd, "  <number>%d</number>\n", rte->rte_num);
-#else
     writer.writeTextElement("number", QString::number(rte->rte_num));
-#endif
   }
 
   if (gpx_wversion_num > 10) {
@@ -2101,15 +1966,9 @@ gpx_route_disp(const waypoint* waypointp)
 {
   const char* oname;
   fs_xml* fs_gpx;
-#if OLDGPX
-  gbfprintf(ofd, "  <rtept lat=\"" FLT_FMT_R "\" lon=\"" FLT_FMT_R "\">\n",
-            waypointp->latitude,
-            waypointp->longitude);
-#else
   writer.writeStartElement("rtept");
-  writer.writeAttribute("lat", QString::number(waypointp->latitude, 'f', 9));
-  writer.writeAttribute("lon", QString::number(waypointp->longitude, 'f', 9));
-#endif
+  writer.writeAttribute("lat", toString(waypointp->latitude));
+  writer.writeAttribute("lon", toString(waypointp->longitude));
 
   oname = global_opts.synthesize_shortnames ?
           mkshort_from_wpt(mkshort_handle, waypointp) :
@@ -2124,25 +1983,17 @@ gpx_route_disp(const waypoint* waypointp)
   }
 
   gpx_write_common_extensions(waypointp, "    ");
-#if OLDGPX
-  gbfprintf(ofd, "  </rtept>\n");
-#else
   writer.writeEndElement();
-#endif
 }
 
 static void
 gpx_route_tlr(const route_head* rte)
 {
-#if OLDGPX
-  gbfprintf(ofd, "</rte>\n");
-#else
   // FIXME This is to force empty tracks to not be self-closing.  This is
   // lame, but it's for compatibilty with our old writer to minimize thrash
   // on the Qt transition.
   writer.writeCharacters("\n");
   writer.writeEndElement(); // Close rte tag.
-#endif
 }
 
 static
@@ -2168,19 +2019,12 @@ gpx_write_bounds(void)
   track_disp_all(NULL, NULL, gpx_waypt_bound_calc);
 
   if (waypt_bounds_valid(&all_bounds)) {
-#if OLDGPX
-    gbfprintf(ofd, "<bounds minlat=\"%0.9f\" minlon=\"%0.9f\" "
-              "maxlat=\"%0.9f\" maxlon=\"%0.9f\"/>\n",
-              all_bounds.min_lat, all_bounds.min_lon,
-              all_bounds.max_lat, all_bounds.max_lon);
-#else
     writer.writeStartElement("bounds");
-    writer.writeAttribute("minlat", QString::number(all_bounds.min_lat, 'f', 9));
-    writer.writeAttribute("minlon", QString::number(all_bounds.min_lon, 'f', 9));
-    writer.writeAttribute("maxlat", QString::number(all_bounds.max_lat, 'f', 9));
-    writer.writeAttribute("maxlon", QString::number(all_bounds.max_lon, 'f', 9));
+    writer.writeAttribute("minlat", toString(all_bounds.min_lat));
+    writer.writeAttribute("minlon", toString(all_bounds.min_lon));
+    writer.writeAttribute("maxlat", toString(all_bounds.max_lat));
+    writer.writeAttribute("maxlon", toString(all_bounds.max_lon));
     writer.writeEndElement();
-#endif
   }
 }
 
@@ -2211,7 +2055,6 @@ gpx_write(void)
     fatal(MYNAME ": gpx version number of '%s' not valid.\n", gpx_wversion);
   }
 
-  now = current_time();
 #if OLDGPX
   gbfprintf(ofd, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", global_opts.charset_name);
   gbfprintf(ofd, "<gpx\n  version=\"%s\"\n", gpx_wversion);
@@ -2271,11 +2114,7 @@ gpx_write(void)
   }
 
   if (gpx_wversion_num > 10) {
-#if OLDGPX
-    gbfprintf(ofd, "<metadata>\n");
-#else
     writer.writeStartElement("metadata");
-#endif
   }
   gpx_write_gdata(&gpx_global->name, "name");
   gpx_write_gdata(&gpx_global->desc, "desc");
@@ -2291,6 +2130,8 @@ gpx_write(void)
     gpx_write_gdata(&gpx_global->url, "url");
     gpx_write_gdata(&gpx_global->urlname, "urlname");
   }
+
+  now = current_time();
 #if OLDGPX
   xml_write_time(ofd, now, 0, "time");
 #else
@@ -2305,11 +2146,7 @@ gpx_write(void)
   gpx_write_bounds();
 
   if (gpx_wversion_num > 10) {
-#if OLDGPX
-    gbfprintf(ofd, "</metadata>\n");
-#else
     writer.writeEndElement();
-#endif
   }
 
   gpx_reset_short_handle();
@@ -2318,11 +2155,7 @@ gpx_write(void)
   gpx_route_pr();
   gpx_reset_short_handle();
   gpx_track_pr();
-#if OLDGPX
-  gbfprintf(ofd, "</gpx>\n");
-#else
   writer.writeEndElement(); // Close gpx tag.
-#endif
 }
 
 
