@@ -289,7 +289,6 @@ gpx_write_gdata(gpx_global_entry* ge, const char* tag)
         (0 == strcmp(tag, "email"))) {
       break;
     }
-    gbfprintf(ofd, " ");
   }
   writer.writeEndElement();
 }
@@ -1378,8 +1377,11 @@ gpx_wr_init(const char* fname)
   ofd = gbfopen(fname, "w", MYNAME);
 
   writer.setAutoFormattingIndent(2);
-//  writer.setCodec("UTF-8");
-//  writer.writeStartDocument();
+  // Technically, XML (and therefore GPX) defaults ot UTF-8, so we should not
+  // have to declare this.  For compatibility with the existing Qt writer,
+  // we do...
+  //  writer.setCodec("UTF-8");
+  //  writer.writeStartDocument();
   writer.writeProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\"");
 
 }
@@ -1535,31 +1537,21 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
       }
       if (wpt && wpt->gc_data->exported &&
           strcmp(tag->tagname, "groundspeak:cache") == 0) {
-        xml_write_time(ofd, wpt->gc_data->exported, 0,
-                       "groundspeak:exported");
+        char time_string[64];
+        xml_fill_in_time(time_string, wpt->gc_data->exported, 
+                         0, XML_LONG_TIME);
+        if (time_string[0]) {
+          writer.writeTextElement("time", time_string);
+        }
       }
       writer.writeEndElement();
     }
     if (tag->parentcdata) {
-#if OLDGPX
-      // retain whitespacing, but nuke leading NL as the above will add a trailing.
-
-      char* otmp_ent, *tmp_ent = NULL;
-      otmp_ent = xml_entitize(tag->parentcdata);
-      if (otmp_ent[0] == '\n') {
-        tmp_ent = otmp_ent+1;
-      } else {
-        tmp_ent = otmp_ent;
-      }
-      gbfprintf(ofd, "%s", tmp_ent);
-      xfree(otmp_ent);
-#else
       // FIXME: The length check is necessary to get line endings correct in our test suite.
       // Writing the zero length string eats a newline, at least with Qt 4.6.2.
       if (tag->parentcdatalen > 0) {
         writer.writeCharacters(tag->parentcdata);
       }
-#endif
     }
     tag = tag->sibling;
   }
@@ -1609,28 +1601,6 @@ write_gpx_url(const waypoint* waypointp)
     return;
   }
 
-#if OLDGPX
-  char* tmp_ent;
-  if (gpx_wversion_num > 10) {
-    url_link* tail;
-    for (tail = (url_link*)&waypointp->url_next; tail; tail = tail->url_next) {
-      tmp_ent = xml_entitize(tail->url);
-      gbfprintf(ofd, "  <link href=\"%s%s\">\n",
-                urlbase ? urlbase : "", tmp_ent);
-      write_optional_xml_entity(ofd, "  ", "text",
-                                tail->url_link_text);
-      gbfprintf(ofd, "  </link>\n");
-      xfree(tmp_ent);
-    }
-  } else {
-    tmp_ent = xml_entitize(waypointp->url);
-    gbfprintf(ofd, "  <url>%s%s</url>\n",
-              urlbase ? urlbase : "", tmp_ent);
-    write_optional_xml_entity(ofd, "  ", "urlname",
-                              waypointp->url_link_text);
-    xfree(tmp_ent);
-  }
-#else
   if (gpx_wversion_num > 10) {
     url_link* tail;
     for (tail = (url_link*)&waypointp->url_next; tail; tail = tail->url_next) {
@@ -1647,7 +1617,6 @@ write_gpx_url(const waypoint* waypointp)
   }
   writer.writeTextElement("url", QString(urlbase) + QString(waypointp->url));
   writer.writeOptionalTextElement("urlname", QString(waypointp->url_link_text));
-#endif
 }
 
 /*
@@ -1728,36 +1697,6 @@ gpx_write_common_extensions(const waypoint* waypointp, const char* indent)
   // FIXME: Although not required by the schema it seems gpxtpx:TrackPointExtension should only be used as a child of gpx:trkpt
   if (((opt_humminbirdext || opt_garminext) && (waypointp->depth != 0 || waypointp->temperature != 0))
       || (opt_garminext && (waypointp->heartrate != 0 || waypointp->cadence != 0))) {
-#if OLDGPX
-    gbfprintf(ofd, "%s<extensions>\n", indent);
-    if (waypointp->depth != 0) {
-      if (opt_humminbirdext)
-        gbfprintf(ofd, "%s  <h:depth>%f</h:depth>\n",
-                  indent, waypointp->depth*100.0);
-      if (opt_garminext)
-        gbfprintf(ofd, "%s  <gpxx:Depth>%f</gpxx:Depth>\n",
-                  indent, waypointp->depth);
-    }
-    if (waypointp->temperature != 0) {
-      if (opt_humminbirdext)
-        gbfprintf(ofd, "%s  <h:temperature>%f</h:temperature>\n",
-                  indent, waypointp->temperature);
-      if (opt_garminext)
-        gbfprintf(ofd, "%s  <gpxx:Temperature>%f</gpxx:Temperature>\n",
-                  indent, waypointp->temperature);
-    }
-    if (opt_garminext && (waypointp->heartrate != 0 || waypointp->cadence != 0)) {
-      gbfprintf(ofd, "%s  <gpxtpx:TrackPointExtension>\n", indent);
-      if (waypointp->heartrate != 0)
-        gbfprintf(ofd, "%s    <gpxtpx:hr>%u</gpxtpx:hr>\n",
-                  indent, waypointp->heartrate);
-      if (waypointp->cadence != 0)
-        gbfprintf(ofd, "%s    <gpxtpx:cad>%u</gpxtpx:cad>\n",
-                  indent, waypointp->cadence);
-      gbfprintf(ofd, "%s  </gpxtpx:TrackPointExtension>\n", indent);
-    }
-    gbfprintf(ofd, "%s</extensions>\n", indent);
-#else
     writer.writeStartElement("extensions");
     if (waypointp->depth != 0) {
       if (opt_humminbirdext) {
@@ -1786,7 +1725,6 @@ gpx_write_common_extensions(const waypoint* waypointp, const char* indent)
       writer.writeEndElement(); // "gpxtpx:TrackPointExtension"
     }
     writer.writeEndElement(); // "extensions"
-#endif
   }
 }
 
@@ -1833,7 +1771,7 @@ gpx_waypt_pr(const waypoint* waypointp)
     }
     if (gmsd && (gpx_wversion_num > 10)) {
       /* MapSource doesn't accepts extensions from 1.0 */
-      garmin_fs_xml_fprint(ofd, waypointp, writer);
+      garmin_fs_xml_fprint(waypointp, writer);
     }
   } else {
     gpx_write_common_extensions(waypointp, "  ");
@@ -1846,29 +1784,22 @@ gpx_track_hdr(const route_head* rte)
 {
   fs_xml* fs_gpx;
   current_trk_head = rte;
-#if OLDGPX
-  gbfprintf(ofd, "<trk>\n");
-  write_optional_xml_entity(ofd, "  ", "name", rte->rte_name);
-  write_optional_xml_entity(ofd, "  ", "desc", rte->rte_desc);
-  if (rte->rte_num) {
-    gbfprintf(ofd, "<number>%d</number>\n", rte->rte_num);
-  }
 
-  if (gpx_wversion_num > 10) {
-    fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
-    if (fs_gpx) {
-      fprint_xml_chain(fs_gpx->tag, NULL);
-    }
-  }
-#else
   writer.writeStartElement("trk");
   writer.writeOptionalTextElement("name", rte->rte_name);
   writer.writeOptionalTextElement("desc", rte->rte_desc);
   if (rte->rte_num) {
     writer.writeTextElement("number", QString::number(rte->rte_num));
   }
-  // TODO the chain nonsense.
-#endif
+
+  // FIXME: Note that this chain nonsense is not executed in our
+  // test suite as of 2013-03-09.
+  if (gpx_wversion_num > 10) {
+    fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
+    if (fs_gpx) {
+      fprint_xml_chain(fs_gpx->tag, NULL);
+    }
+  }
 }
 
 static void
@@ -2071,12 +2002,6 @@ gpx_write(void)
     fatal(MYNAME ": gpx version number of '%s' not valid.\n", gpx_wversion);
   }
 
-#if OLDGPX
-  gbfprintf(ofd, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", global_opts.charset_name);
-  gbfprintf(ofd, "<gpx\n  version=\"%s\"\n", gpx_wversion);
-  gbfprintf(ofd, "  creator=\"" CREATOR_NAME_URL "\"\n");
-  gbfprintf(ofd, "  xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
-#else
   // FIXME: This write of a blank line is needed for Qt 4.6 (as on Centos 6.3)
   // to include just enough whitespace between <xml/> and <gpx...> to pass
   // diff -w.  It's here for now to shim compatibility with our zillion
@@ -2088,47 +2013,26 @@ gpx_write(void)
   writer.writeAttribute("\n  version", gpx_wversion);
   writer.writeAttribute("\n  creator", CREATOR_NAME_URL);
   writer.writeAttribute("\n  xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-#endif
 
-  // FIXME: If we pass elements from an optional declared namespace, e.g. gpxx, gpxtpx, or h through with fprint_xml_chain, we won't have declared the namespace.
+  // FIXME: If we pass elements from an optional declared namespace, 
+  // e.g. gpxx, gpxtpx, or h through with fprint_xml_chain, we won't 
+  // have declared the namespace.
   //        This is a schema violation.
   if (opt_humminbirdext) {
-#if OLDGPX
-    gbfprintf(ofd, "  xmlns:h=\"http://humminbird.com\"\n");
-#else
     writer.writeAttribute("\n  xmlns:h","http://humminbird.com");
-#endif
   }
   if (opt_garminext) {
-#if OLDGPX
-    gbfprintf(ofd, "  xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\"\n"
-              "  xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v1\"\n");
-#else
+    // TODO: it's kind of wrong to force formatting in here...
     writer.writeAttribute("\n  xmlns:gpxx", "http://www.garmin.com/xmlschemas/GpxExtensions/v3");
     writer.writeAttribute("\n  xmlns:gpxtpx", "http://www.garmin.com/xmlschemas/TrackPointExtension/v1");
-#endif
   }
-#if OLDGPX
-  gbfprintf(ofd, "  xmlns=\"http://www.topografix.com/GPX/%c/%c\"\n", gpx_wversion[0], gpx_wversion[2]);
-#else
   writer.writeAttribute("\n  xmlns", QString("http://www.topografix.com/GPX/%1/%2").arg(gpx_wversion[0]).arg(gpx_wversion[2]));
-#endif
   if (xsi_schema_loc) {
-#if OLDGPX
-    gbfprintf(ofd, "  xsi:schemaLocation=\"%s\">\n", xsi_schema_loc);
-#else
+    // FIXME: it's tacky to have formatting in here...
     writer.writeAttribute("\n  xsi:schemaLocation", xsi_schema_loc);
-#endif
   } else {
-#if OLDGPX
-    gbfprintf(ofd,
-              "  xsi:schemaLocation=" DEFAULT_XSI_SCHEMA_LOC_FMT">\n",
-              gpx_wversion[0], gpx_wversion[2],
-              gpx_wversion[0], gpx_wversion[2]);
-#else
     writer.writeAttribute("\n  xsi:schemaLocation",
                           QString("http://www.topografix.com/GPX/%1/%2 http://www.topografix.com/GPX/%1/%2/gpx.xsd").arg(gpx_wversion[0]).arg(gpx_wversion[2]));
-#endif
   }
 
   if (gpx_wversion_num > 10) {
@@ -2150,15 +2054,11 @@ gpx_write(void)
   }
 
   now = current_time();
-#if OLDGPX
-  xml_write_time(ofd, now, 0, "time");
-#else
   char time_string[64];
   xml_fill_in_time(time_string, now, 0, XML_LONG_TIME);
   if (time_string[0]) {
     writer.writeTextElement("time", time_string);
   }
-#endif
   gpx_write_gdata(&gpx_global->keywords, "keywords");
 
   gpx_write_bounds();

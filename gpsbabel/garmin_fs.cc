@@ -185,7 +185,7 @@ void garmin_fs_convert(void* fs)
 /* GPX - out */
 
 void
-garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
+garmin_fs_xml_fprint(const waypoint* waypt,
                      QXmlStreamWriter& writer)
 {
   const char* phone, *addr;
@@ -218,11 +218,6 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
       WAYPT_HAS(waypt, proximity) ||
       WAYPT_HAS(waypt, temperature) ||
       gmsd->flags.display) {
-    int space = 1;
-#if OLDGPX
-    gbfprintf(ofd, "%*s<extensions>\n", space++ * 2, "");
-    gbfprintf(ofd, "%*s<gpxx:WaypointExtension %s\">\n", space++ * 2, "", GARMIN_GPX_EXT_REFERENCE);
-#else
     writer.writeStartElement("extensions");
     writer.writeStartElement("gpxx:WaypointExtension");
     writer.writeNamespace("http://www.garmin.com/xmlschemas/GpxExtensions/v3",
@@ -232,27 +227,14 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
     writer.writeAttribute("xsi:schemaLocation",
       "http://www.garmin.com/xmlschemas/GpxExtensions/v3 "
       "http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd");
-#endif
     if WAYPT_HAS(waypt, proximity) {
-#if OLDGPX
-      gbfprintf(ofd, "%*s<gpxx:Proximity>%.6f</gpxx:Proximity>\n", space * 2, "", waypt->proximity);
-#else
       writer.writeTextElement("gpxx:Proximity", QString::number(waypt->proximity, 'f', 6));
-#endif
     }
     if WAYPT_HAS(waypt, temperature) {
-#if OLDGPX
-      gbfprintf(ofd, "%*s<gpxx:Temperature>%.6f</gpxx:Temperature>\n", space * 2, "", waypt->temperature);
-#else
       writer.writeTextElement("gpxx:Temperature",  QString::number(waypt->temperature, 'f', 6));
-#endif
     }
     if WAYPT_HAS(waypt, depth) {
-#if OLDGPX
-      gbfprintf(ofd, "%*s<gpxx:Depth>%.6f</gpxx:Depth>\n", space * 2, "", waypt->depth);
-#else
       writer.writeTextElement("gpxx:Depth", QString::number(waypt->depth, 'f', 6));
-#endif
     }
     if (gmsd->flags.display) {
       const char* cx;
@@ -267,114 +249,48 @@ garmin_fs_xml_fprint(gbfile* ofd, const waypoint* waypt,
         cx = "SymbolAndName";
         break;
       }
-#if OLDGPX
-      gbfprintf(ofd, "%*s<gpxx:DisplayMode>%s</gpxx:DisplayMode>\n", space * 2, "", cx);
-#else
       writer.writeTextElement("gpxx:DisplayMode", cx);
-#endif
     }
     if (gmsd->flags.category && gmsd->category) {
       int i;
       gbuint16 cx = gmsd->category;
-#if OLDGPX
-      gbfprintf(ofd, "%*s<gpxx:Categories>\n", space++ * 2, "");
-#else
       writer.writeStartElement("gpxx:Categories");
-#endif
       for (i = 0; i < 16; i++) {
         if (cx & 1) {
-#if OLDGPX
-          gbfprintf(ofd, "%*s<gpxx:Category>Category %d</gpxx:Category>\n", space*2, "", i+1);
-#else
           writer.writeTextElement("gpxx:Category", QString("Category %1").arg(i+1));
-#endif
         }
         cx = cx >> 1;
       }
-#if OLDGPX
-      gbfprintf(ofd, "%*s</gpxx:Categories>\n", --space * 2, "");
-#else
       writer.writeEndElement(); // gpxx:Categories
-#endif
     }
     if (*addr) {
       char* str;
-#if OLDGPX
-      char* tmp;
-      gbfprintf(ofd, "%*s<gpxx:Address>\n", space++ * 2, "");
-#else
       writer.writeStartElement("gpxx:Address");
-#endif
 
       if ((str = GMSD_GET(addr, NULL))) {
-#if OLDGPX
-        tmp = xml_entitize(str);
-        gbfprintf(ofd, "%*s<gpxx:StreetAddress>%s</gpxx:StreetAddress>\n", space * 2, "", tmp);
-        xfree(tmp);
-#else
         writer.writeTextElement("gpxx:StreetAddress", str);
-#endif
       }
       if ((str = GMSD_GET(city, NULL))) {
-#if OLDGPX
-        tmp = xml_entitize(str);
-        gbfprintf(ofd, "%*s<gpxx:City>%s</gpxx:City>\n", space * 2, "", tmp);
-        xfree(tmp);
-#else
         writer.writeTextElement("gpxx:City", str);
-#endif
       }
       if ((str = GMSD_GET(state, NULL))) {
-#if OLDGPX
-        tmp = xml_entitize(str);
-        gbfprintf(ofd, "%*s<gpxx:State>%s</gpxx:State>\n", space * 2, "", tmp);
-        xfree(tmp);
-#else
         writer.writeTextElement("gpxx:State", str);
-#endif
       }
       if ((str = GMSD_GET(country, NULL))) {
-#if OLDGPX
-        tmp = xml_entitize(str);
-        gbfprintf(ofd, "%*s<gpxx:Country>%s</gpxx:Country>\n", space * 2, "", tmp);
-        xfree(tmp);
-#else
         writer.writeTextElement("gpxx:Country", str);
-#endif
       }
       if ((str = GMSD_GET(postal_code, NULL))) {
-#if OLDGPX
-        tmp = xml_entitize(str);
-        gbfprintf(ofd, "%*s<gpxx:PostalCode>%s</gpxx:PostalCode>\n", space * 2, "", tmp);
-        xfree(tmp);
-#else
         writer.writeTextElement("gpxx:PostalCode", str);
-#endif
       }
-#if OLDGPX
-      gbfprintf(ofd, "%*s</gpxx:Address>\n", --space * 2, "");
-#else
       writer.writeEndElement(); // /gpxx::Address
-#endif
     }
 
     if (*phone) {
-#if OLDGPX
-      char* tmp = xml_entitize(phone);
-      gbfprintf(ofd, "%*s<gpxx:PhoneNumber>%s</gpxx:PhoneNumber>\n", space * 2, "", tmp);
-      xfree(tmp);
-#else
       writer.writeTextElement("gpxx:PhoneNumber", phone);
-#endif
     }
 
-#if OLDGPX
-    gbfprintf(ofd, "%*s</gpxx:WaypointExtension>\n", --space * 2, "");
-    gbfprintf(ofd, "%*s</extensions>\n", --space * 2, "");
-#else
     writer.writeEndElement(); // /gpxx::WaypointExtension
     writer.writeEndElement(); // /extensions.
-#endif
   }
 
 }
