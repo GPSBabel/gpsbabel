@@ -1792,8 +1792,6 @@ gpx_track_hdr(const route_head* rte)
     writer.writeTextElement("number", QString::number(rte->rte_num));
   }
 
-  // FIXME: Note that this chain nonsense is not executed in our
-  // test suite as of 2013-03-09.
   if (gpx_wversion_num > 10) {
     fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
     if (fs_gpx) {

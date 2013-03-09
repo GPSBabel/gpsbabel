@@ -13,3 +13,7 @@ rm -f ${TMPDIR}/tpx-sample.gpx
 gpsbabel -i gpx -f ${REFERENCE}/track/gpx_garmin_extensions.gpx -o gpx,garminextensions -F ${TMPDIR}/tpx-sample.gpx
 compare ${REFERENCE}/track/gpx_garmin_extensions.gpx ${TMPDIR}/tpx-sample.gpx 
 
+rm -f ${TMPDIR}/basecampe~gpx.gpx
+gpsbabel -i gpx -f ${REFERENCE}/basecamp.gpx -o gpx -F ${TMPDIR}/basecamp~gpx.gpx
+compare ${REFERENCE}/basecamp~gpx.gpx ${TMPDIR}/basecamp~gpx.gpx 
+
