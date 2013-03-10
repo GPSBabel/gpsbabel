@@ -1,67 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
+<gpx 
+  version="1.0" 
+  creator="GPSBabel - http://www.gpsbabel.org" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns="http://www.topografix.com/GPX/1/0" 
   xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="40.000000000" minlon="-106.300000000" maxlat="50.200000000" maxlon="-105.100000000"/>
-<trk>
-  <name>track one</name>
-<trkseg>
-<trkpt lat="50.200000000" lon="-106.300000000">
-</trkpt>
-<trkpt lat="50.100000000" lon="-106.200000000">
-</trkpt>
-<trkpt lat="50.000000000" lon="-106.100000000">
-</trkpt>
-</trkseg>
-<trkseg>
-<trkpt lat="40.200000000" lon="-105.300000000">
-</trkpt>
-<trkpt lat="40.100000000" lon="-105.200000000">
-</trkpt>
-<trkpt lat="40.000000000" lon="-105.100000000">
-</trkpt>
-</trkseg>
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="40.000000000" minlon="-106.300000000" maxlat="50.200000000" maxlon="-105.100000000"/>
+  <trk>
+    <name>track one</name>
+    <trkseg>
+      <trkpt lat="50.200000000" lon="-106.300000000"/>
+      <trkpt lat="50.100000000" lon="-106.200000000"/>
+      <trkpt lat="50.000000000" lon="-106.100000000"/>
+    </trkseg>
+    <trkseg>
+      <trkpt lat="40.200000000" lon="-105.300000000"/>
+      <trkpt lat="40.100000000" lon="-105.200000000"/>
+      <trkpt lat="40.000000000" lon="-105.100000000"/>
+    </trkseg>
 </trk>
-<trk>
-  <name>track two</name>
-<trkseg>
-<trkpt lat="50.200000000" lon="-106.300000000">
-</trkpt>
-<trkpt lat="50.100000000" lon="-106.200000000">
-</trkpt>
-<trkpt lat="50.000000000" lon="-106.100000000">
-</trkpt>
-<trkpt lat="40.200000000" lon="-105.300000000">
-</trkpt>
-<trkpt lat="40.100000000" lon="-105.200000000">
-</trkpt>
-</trkseg>
-<trkseg>
-<trkpt lat="40.000000000" lon="-105.100000000">
-</trkpt>
-</trkseg>
+  <trk>
+    <name>track two</name>
+    <trkseg>
+      <trkpt lat="50.200000000" lon="-106.300000000"/>
+      <trkpt lat="50.100000000" lon="-106.200000000"/>
+      <trkpt lat="50.000000000" lon="-106.100000000"/>
+      <trkpt lat="40.200000000" lon="-105.300000000"/>
+      <trkpt lat="40.100000000" lon="-105.200000000"/>
+    </trkseg>
+    <trkseg>
+      <trkpt lat="40.000000000" lon="-105.100000000"/>
+    </trkseg>
 </trk>
-<trk>
-  <name>track three</name>
-<trkseg>
-<trkpt lat="50.200000000" lon="-106.300000000">
-</trkpt>
-</trkseg>
-<trkseg>
-<trkpt lat="50.100000000" lon="-106.200000000">
-</trkpt>
-<trkpt lat="50.000000000" lon="-106.100000000">
-</trkpt>
-<trkpt lat="40.200000000" lon="-105.300000000">
-</trkpt>
-<trkpt lat="40.100000000" lon="-105.200000000">
-</trkpt>
-<trkpt lat="40.000000000" lon="-105.100000000">
-</trkpt>
-</trkseg>
+  <trk>
+    <name>track three</name>
+    <trkseg>
+      <trkpt lat="50.200000000" lon="-106.300000000"/>
+    </trkseg>
+    <trkseg>
+      <trkpt lat="50.100000000" lon="-106.200000000"/>
+      <trkpt lat="50.000000000" lon="-106.100000000"/>
+      <trkpt lat="40.200000000" lon="-105.300000000"/>
+      <trkpt lat="40.100000000" lon="-105.200000000"/>
+      <trkpt lat="40.000000000" lon="-105.100000000"/>
+    </trkseg>
 </trk>
 </gpx>

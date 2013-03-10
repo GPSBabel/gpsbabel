@@ -1819,15 +1819,6 @@ gpx_track_disp(const waypoint* waypointp)
   writer.writeAttribute("lat", toString(waypointp->latitude));
   writer.writeAttribute("lon", toString(waypointp->longitude));
 
-  // FIXME: this is technically not needed.
-  // Our Pre-Qt XML writer would write
-  // <trkpt lat=X lon=Y>
-  // </trkpt>
-  // even thogh <trkpt lat=X lon=Y /> is more compact and legal (assuming there
-  // are no child tags, of course.  This is to bridge our exsiting test suite
-  // during the transition to QXmlStreamWriter to force an explict closing tag.
-  writer.writeCharacters("\n");
-
   gpx_write_common_position(waypointp, "  ");
 
   /* These were accidentally removed from 1.1 */
