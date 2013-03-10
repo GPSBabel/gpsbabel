@@ -50,7 +50,7 @@ compare ${TMPDIR}/mtk_logger_gp245.gpx ${REFERENCE}/track/mtk_logger_gp245.gpx
 # MagicMaps IK3D Project File .ikt test
 #
 gpsbabel -i ik3d -f ${REFERENCE}/ik3d-sample.ikt -o gpx -F ${TMPDIR}/ik3d-sample.gpx
-compare ${TMPDIR}/ik3d-sample.gpx ${REFERENCE}/ik3d-sample.gpx
+compare ${REFERENCE}/ik3d-sample.gpx ${TMPDIR}/ik3d-sample.gpx
 
 # Exif format test (read only)
 gpsbabel -i exif -f ${REFERENCE}/IMG_2065.JPG -o unicsv,utc=0 -F ${TMPDIR}/exif-dat.csv

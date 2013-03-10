@@ -78,10 +78,8 @@
       </gpxx:TrackExtension>
     </extensions>
     <trkseg>
-      <trkpt lat="39.973869715" lon="-105.465850364">
-</trkpt>
-      <trkpt lat="40.003967285" lon="-105.498962402">
-</trkpt>
+      <trkpt lat="39.973869715" lon="-105.465850364"/>
+      <trkpt lat="40.003967285" lon="-105.498962402"/>
     </trkseg>
 </trk>
 </gpx>
