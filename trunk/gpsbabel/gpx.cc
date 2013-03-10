@@ -82,7 +82,6 @@ static format_specific_data** fs_ptr;
 #define MY_CBUF_SZ 4096
 #define DEFAULT_XSI_SCHEMA_LOC "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"
 #define DEFAULT_XSI_SCHEMA_LOC_11 "http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
-#define DEFAULT_XSI_SCHEMA_LOC_FMT "\"http://www.topografix.com/GPX/%c/%c http://www.topografix.com/GPX/%c/%c/gpx.xsd\""
 #ifndef CREATOR_NAME_URL
 #  define CREATOR_NAME_URL "GPSBabel - http://www.gpsbabel.org"
 #endif
@@ -1607,10 +1606,6 @@ write_gpx_url(const waypoint* waypointp)
       writer.writeStartElement("link");
       writer.writeAttribute("href", tail->url);
       writer.writeOptionalTextElement("text", tail->url_link_text);
-      // FIXME This is to force empty links to not be self-closing.  This is
-      // lame, but it's for compatibilty with our old writer to minimize thrash
-      // on the Qt transition.
-      writer.writeCharacters("\n");
       writer.writeEndElement();
     }
     return;
@@ -1860,10 +1855,6 @@ gpx_track_tlr(const route_head* rte)
     writer.writeEndElement();
   }
 
-  // FIXME This is to force empty tracks to not be self-closing.  This is
-  // lame, but it's for compatibilty with our old writer to minimize thrash
-  // on the Qt transition.
-  writer.writeCharacters("\n");
   writer.writeEndElement();
 
   current_trk_head = NULL;
@@ -1925,10 +1916,6 @@ gpx_route_disp(const waypoint* waypointp)
 static void
 gpx_route_tlr(const route_head* rte)
 {
-  // FIXME This is to force empty tracks to not be self-closing.  This is
-  // lame, but it's for compatibility with our old writer to minimize thrash
-  // on the Qt transition.
-  writer.writeCharacters("\n");
   writer.writeEndElement(); // Close rte tag.
 }
 

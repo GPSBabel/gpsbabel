@@ -1,124 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
+<gpx 
+  version="1.0" 
+  creator="GPSBabel - http://www.gpsbabel.org" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xmlns="http://www.topografix.com/GPX/1/0" 
   xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="51.061111450" minlon="-114.124198914" maxlat="51.061264038" maxlon="-114.123962402"/>
-<wpt lat="51.061149597" lon="-114.124061584">
-  <ele>1117.000000</ele>
-  <time>2012-10-26T18:02:55Z</time>
-  <name>WPT001</name>
-  <cmt>WPT001</cmt>
-  <desc>WPT001</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061218262" lon="-114.124145508">
-  <ele>1116.000000</ele>
-  <time>2012-10-26T18:03:10Z</time>
-  <name>WPT002</name>
-  <cmt>WPT002</cmt>
-  <desc>WPT002</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061264038" lon="-114.124198914">
-  <ele>1115.000000</ele>
-  <time>2012-10-26T18:03:25Z</time>
-  <name>WPT003</name>
-  <cmt>WPT003</cmt>
-  <desc>WPT003</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061252594" lon="-114.124168396">
-  <ele>1115.000000</ele>
-  <time>2012-10-26T18:03:40Z</time>
-  <name>WPT004</name>
-  <cmt>WPT004</cmt>
-  <desc>WPT004</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061264038" lon="-114.124176025">
-  <ele>1114.000000</ele>
-  <time>2012-10-26T18:03:55Z</time>
-  <name>WPT005</name>
-  <cmt>WPT005</cmt>
-  <desc>WPT005</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061244965" lon="-114.124145508">
-  <ele>1112.000000</ele>
-  <time>2012-10-26T18:04:10Z</time>
-  <name>WPT006</name>
-  <cmt>WPT006</cmt>
-  <desc>WPT006</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061195374" lon="-114.124084473">
-  <ele>1111.000000</ele>
-  <time>2012-10-26T18:04:25Z</time>
-  <name>WPT007</name>
-  <cmt>WPT007</cmt>
-  <desc>WPT007</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061149597" lon="-114.124053955">
-  <ele>1108.000000</ele>
-  <time>2012-10-26T18:04:40Z</time>
-  <name>WPT008</name>
-  <cmt>WPT008</cmt>
-  <desc>WPT008</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061126709" lon="-114.124053955">
-  <ele>1106.000000</ele>
-  <time>2012-10-26T18:04:55Z</time>
-  <name>WPT009</name>
-  <cmt>WPT009</cmt>
-  <desc>WPT009</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061122894" lon="-114.124061584">
-  <ele>1106.000000</ele>
-  <time>2012-10-26T18:05:10Z</time>
-  <name>WPT010</name>
-  <cmt>WPT010</cmt>
-  <desc>WPT010</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061126709" lon="-114.124122620">
-  <ele>1104.000000</ele>
-  <time>2012-10-26T18:05:25Z</time>
-  <name>WPT011</name>
-  <cmt>WPT011</cmt>
-  <desc>WPT011</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061111450" lon="-114.124114990">
-  <ele>1103.000000</ele>
-  <time>2012-10-26T18:05:40Z</time>
-  <name>WPT012</name>
-  <cmt>WPT012</cmt>
-  <desc>WPT012</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061126709" lon="-114.124069214">
-  <ele>1101.000000</ele>
-  <time>2012-10-26T18:05:55Z</time>
-  <name>WPT013</name>
-  <cmt>WPT013</cmt>
-  <desc>WPT013</desc>
-  <fix>3d</fix>
-</wpt>
-<wpt lat="51.061199188" lon="-114.123962402">
-  <ele>1097.000000</ele>
-  <time>2012-10-26T18:06:10Z</time>
-  <name>WPT014</name>
-  <cmt>WPT014</cmt>
-  <desc>WPT014</desc>
-  <fix>3d</fix>
-</wpt>
-<trk>
-</trk>
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="51.061111450" minlon="-114.124198914" maxlat="51.061264038" maxlon="-114.123962402"/>
+  <wpt lat="51.061149597" lon="-114.124061584">
+    <ele>1117.000000</ele>
+    <time>2012-10-26T18:02:55Z</time>
+    <name>WPT001</name>
+    <cmt>WPT001</cmt>
+    <desc>WPT001</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061218262" lon="-114.124145508">
+    <ele>1116.000000</ele>
+    <time>2012-10-26T18:03:10Z</time>
+    <name>WPT002</name>
+    <cmt>WPT002</cmt>
+    <desc>WPT002</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061264038" lon="-114.124198914">
+    <ele>1115.000000</ele>
+    <time>2012-10-26T18:03:25Z</time>
+    <name>WPT003</name>
+    <cmt>WPT003</cmt>
+    <desc>WPT003</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061252594" lon="-114.124168396">
+    <ele>1115.000000</ele>
+    <time>2012-10-26T18:03:40Z</time>
+    <name>WPT004</name>
+    <cmt>WPT004</cmt>
+    <desc>WPT004</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061264038" lon="-114.124176025">
+    <ele>1114.000000</ele>
+    <time>2012-10-26T18:03:55Z</time>
+    <name>WPT005</name>
+    <cmt>WPT005</cmt>
+    <desc>WPT005</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061244965" lon="-114.124145508">
+    <ele>1112.000000</ele>
+    <time>2012-10-26T18:04:10Z</time>
+    <name>WPT006</name>
+    <cmt>WPT006</cmt>
+    <desc>WPT006</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061195374" lon="-114.124084473">
+    <ele>1111.000000</ele>
+    <time>2012-10-26T18:04:25Z</time>
+    <name>WPT007</name>
+    <cmt>WPT007</cmt>
+    <desc>WPT007</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061149597" lon="-114.124053955">
+    <ele>1108.000000</ele>
+    <time>2012-10-26T18:04:40Z</time>
+    <name>WPT008</name>
+    <cmt>WPT008</cmt>
+    <desc>WPT008</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061126709" lon="-114.124053955">
+    <ele>1106.000000</ele>
+    <time>2012-10-26T18:04:55Z</time>
+    <name>WPT009</name>
+    <cmt>WPT009</cmt>
+    <desc>WPT009</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061122894" lon="-114.124061584">
+    <ele>1106.000000</ele>
+    <time>2012-10-26T18:05:10Z</time>
+    <name>WPT010</name>
+    <cmt>WPT010</cmt>
+    <desc>WPT010</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061126709" lon="-114.124122620">
+    <ele>1104.000000</ele>
+    <time>2012-10-26T18:05:25Z</time>
+    <name>WPT011</name>
+    <cmt>WPT011</cmt>
+    <desc>WPT011</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061111450" lon="-114.124114990">
+    <ele>1103.000000</ele>
+    <time>2012-10-26T18:05:40Z</time>
+    <name>WPT012</name>
+    <cmt>WPT012</cmt>
+    <desc>WPT012</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061126709" lon="-114.124069214">
+    <ele>1101.000000</ele>
+    <time>2012-10-26T18:05:55Z</time>
+    <name>WPT013</name>
+    <cmt>WPT013</cmt>
+    <desc>WPT013</desc>
+    <fix>3d</fix>
+  </wpt>
+  <wpt lat="51.061199188" lon="-114.123962402">
+    <ele>1097.000000</ele>
+    <time>2012-10-26T18:06:10Z</time>
+    <name>WPT014</name>
+    <cmt>WPT014</cmt>
+    <desc>WPT014</desc>
+    <fix>3d</fix>
+  </wpt>
+  <trk/>
 </gpx>
