@@ -104,7 +104,7 @@ compare ${REFERENCE}/wbt-200.gpx ${TMPDIR}/wbt-200.gpx2
 #
 # WBT-201 tests
 #
-rm -f ${TMPDIR}/wbt-200.*
+rm -f ${TMPDIR}/wbt-201.*
 gpsbabel -t -w -i wbt-bin -f ${REFERENCE}/wbt-201.tk1 -o gpx -F ${TMPDIR}/wbt-201.gpx
 # Remove the timestamp
 grep -v time <${TMPDIR}/wbt-201.gpx >${TMPDIR}/wbt-201.gpx2
