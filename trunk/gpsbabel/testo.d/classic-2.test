@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #
-# GPilotS.   A Palm format.  Another binary format that 
+# GPilotS.   A Palm format.  Another binary format that
 #
 # rm -f ${TMPDIR/gpilots.l
 #gpsbabel -i easygps -f ${REFERENCE}/gpilots.pdb -o gpx -F ${TMPDIR}/gp.gpx
@@ -179,7 +179,7 @@ gpsbabel -i an1 -f ${REFERENCE}/foo.an1 -o an1 -F ${TMPDIR}/an1.out
 bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-an1.ref
 
 rm -f ${TMPDIR}/an1.out
-gpsbabel -i xmap -f ${REFERENCE}/xmap -o an1 -F ${TMPDIR}/an1.out 
+gpsbabel -i xmap -f ${REFERENCE}/xmap -o an1 -F ${TMPDIR}/an1.out
 bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-out.ref
 
 rm -f ${TMPDIR}/an1.out
@@ -235,7 +235,7 @@ gpsbabel -i hsandv -f ${REFERENCE}/Glad_4.exp -o hsandv -F ${TMPDIR}/Glad_5.exp
 
 #
 # stack filter tests
-# These don't actually test for proper behavior, for now, but they do 
+# These don't actually test for proper behavior, for now, but they do
 # exercise all of the currently-extant filter code.
 #
 
@@ -251,7 +251,7 @@ gpsbabel -i tabsep -f ${TMPDIR}/tabsep.in -o geo -F ${TMPDIR}/tabsep.out
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc  -o geo -F ${TMPDIR}/geotabsep.out
 compare ${TMPDIR}/tabsep.out ${TMPDIR}/geotabsep.out
 
-# 
+#
 # Now do the same for custom - it has the same issues.
 #
 
@@ -269,7 +269,7 @@ gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o text -F ${TMPDIR}/text.out 
 #
 rm -f ${TMPDIR}/tef_xml*
 gpsbabel -i tef -f ${REFERENCE}/route/tef_xml.sample.xml -o gpx -F ${TMPDIR}/tef_xml.sample.gpx
-compare ${TMPDIR}/tef_xml.sample.gpx ${REFERENCE}/route/tef_xml.sample.gpx 
+compare ${REFERENCE}/route/tef_xml.sample.gpx ${TMPDIR}/tef_xml.sample.gpx
 
 #
 # PathAway Palm Database .pdb tests
@@ -296,7 +296,7 @@ compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample_v3.gpx
 # Because of Garmin coordinates storage gpx is not good for this test
 # compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
 #
-# compare ${TMPDIR}/gdb-sample.gpx ${REFERENCE}/gdb-sample.gpx 
+# compare ${TMPDIR}/gdb-sample.gpx ${REFERENCE}/gdb-sample.gpx
 
 #
 # Vito Navigator II .smt tests
@@ -312,7 +312,7 @@ compare ${REFERENCE}/track/vitosmt_t.gpx ${TMPDIR}/vitosmt_t.gpx
 #
 rm -f ${TMPDIR}/bcr*
 gpsbabel -r -i bcr -f ${REFERENCE}/route/bcr-sample.bcr -o gpx -F ${TMPDIR}/bcr-sample.gpx
-compare ${TMPDIR}/bcr-sample.gpx ${REFERENCE}/route/bcr-sample.gpx 
+compare ${REFERENCE}/route/bcr-sample.gpx ${TMPDIR}/bcr-sample.gpx
 gpsbabel -r -i gpx -f ${REFERENCE}/route/bcr-sample.gpx -o bcr -F ${TMPDIR}/bcr-sample2.bcr
 compare ${REFERENCE}/route/bcr-sample2.bcr ${TMPDIR}/bcr-sample2.bcr
 gpsbabel -r -i bcr -f ${TMPDIR}/bcr-sample2.bcr -o gpx -F ${TMPDIR}/bcr-sample2.gpx
