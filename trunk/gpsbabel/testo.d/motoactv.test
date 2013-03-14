@@ -1,6 +1,6 @@
 
 rm -f ${TMPDIR}/motoactv.*
-gpsbabel -i motoactv -f ${REFERENCE}/track/motoactv.csv -o gpx -F ${TMPDIR}/lowranceusr4.gpx
-compare ${REFERENCE}/track/motoactv~gpx.gpx ${TMPDIR}/lowranceusr4.gpx
+gpsbabel -i motoactv -f ${REFERENCE}/track/motoactv.csv -o gpx -F ${TMPDIR}/motoactv~csv.gpx
+compare ${REFERENCE}/track/motoactv~gpx.gpx ${TMPDIR}/motoactv~csv.gpx
 
 

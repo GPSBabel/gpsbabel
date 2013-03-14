@@ -289,14 +289,12 @@ rm -f ${TMPDIR}/gdb-*
 gpsbabel -i gdb,via -f ${REFERENCE}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample.gpx
 compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
 gpsbabel -i gpx -f ${REFERENCE}/gdb-sample.gpx -o gdb,ver=1 -F ${TMPDIR}/gdb-sample.gdb
-gpsbabel -i gdb -f ${TMPDIR}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample.gpx
+gpsbabel -i gdb -f ${TMPDIR}/gdb-sample.gdb -o gpx -F ${TMPDIR}/gdb-sample_v2.gpx
 gpsbabel -i gdb,via -f ${REFERENCE}/gdb-sample-v3.gdb -o gpx -F ${TMPDIR}/gdb-sample_v3.gpx
 compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample_v3.gpx
 #
 # Because of Garmin coordinates storage gpx is not good for this test
-# compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample.gpx
-#
-# compare ${TMPDIR}/gdb-sample.gpx ${REFERENCE}/gdb-sample.gpx
+# compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample_v2.gpx
 
 #
 # Vito Navigator II .smt tests

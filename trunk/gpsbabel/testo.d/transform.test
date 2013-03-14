@@ -1,9 +1,11 @@
 #
 # Transformation filter (transform) tests
 #
-rm -f ${TMPDIR}/transform*
+rm -f ${TMPDIR}/transform-rte.gpx
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,routes,tracks -x transform,rte=wpt,del=y -o gpx,gpxver=1.1 -F ${TMPDIR}/transform-rte.gpx
 compare ${REFERENCE}/transform-rte.gpx ${TMPDIR}/transform-rte.gpx 
+
+rm -f ${TMPDIR}/transform-wpt.gpx
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,tracks -x transform,wpt=rte,del=y -o gpx,gpxver=1.1 -F ${TMPDIR}/transform-wpt.gpx
 compare ${REFERENCE}/transform-wpt.gpx ${TMPDIR}/transform-wpt.gpx 
 
