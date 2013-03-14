@@ -16,5 +16,5 @@ compare ${TMPDIR}/magfile2 ${REFERENCE}/magfile
 # Magellanx routes, however, have an extra 'name' field in them.
 gpsbabel -r -i magellanx -f ${REFERENCE}/route/magexplorist.rte -o magellanx -F ${TMPDIR}/magxfile.rte
 gpsbabel -r -i magellanx -f ${TMPDIR}/magxfile.rte -o magellanx -F ${TMPDIR}/magxfile2.rte
-compare ${TMPDIR}/magxfile2.rte ${REFERENCE}/route/magexplorist.rte
+compare ${REFERENCE}/route/magexplorist.rte ${TMPDIR}/magxfile2.rte
 

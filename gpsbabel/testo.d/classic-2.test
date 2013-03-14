@@ -14,19 +14,19 @@ compare ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
 #
 # Navicache.
 gpsbabel -i navicache -f ${REFERENCE}/navicache.xml -o gpsutil -F ${TMPDIR}/navi.wpt
-compare ${TMPDIR}/navi.wpt ${REFERENCE}/navicache.ref
+compare ${REFERENCE}/navicache.ref ${TMPDIR}/navi.wpt
 #
 
 #
 # CoastalExplorer..
 gpsbabel -r -i coastexp -f ${REFERENCE}/coastexp.nob -o gpx -F ${TMPDIR}/coastexp.gpx
-compare ${TMPDIR}/coastexp.gpx ${REFERENCE}/coastexp.ref
+compare ${REFERENCE}/coastexp.ref ${TMPDIR}/coastexp.gpx
 gpsbabel -r -i gpx -f ${TMPDIR}/coastexp.gpx -o coastexp -F ${TMPDIR}/coastexp.nob
-compare ${TMPDIR}/coastexp.nob ${REFERENCE}/coastexp.ref2
+compare ${REFERENCE}/coastexp.ref2 ${TMPDIR}/coastexp.nob
 gpsbabel -w -i coastexp -f ${REFERENCE}/coastexp.nob -o gpx -F ${TMPDIR}/coastexp.gpx
-compare ${TMPDIR}/coastexp.gpx ${REFERENCE}/coastexp.ref3
+compare ${REFERENCE}/coastexp.ref3 ${TMPDIR}/coastexp.gpx
 gpsbabel -w -i gpx -f ${TMPDIR}/coastexp.gpx -o coastexp -F ${TMPDIR}/coastexp.nob
-compare ${TMPDIR}/coastexp.nob ${REFERENCE}/coastexp.ref4
+compare ${REFERENCE}/coastexp.ref4 ${TMPDIR}/coastexp.nob
 #
 
 # PsiTrex.  A text format that can't be handled by XCSV due to context of
@@ -74,7 +74,7 @@ rm -f ${TMPDIR}/arcdist.txt
 gpsbabel -i xmap -f ${REFERENCE}/arcdist_input.txt \
          -x arc,file=${REFERENCE}/arcdist_arc.txt,distance=1 \
          -o xmap -F ${TMPDIR}/arcdist.txt
-compare ${TMPDIR}/arcdist.txt ${REFERENCE}/arcdist_output.txt
+compare ${REFERENCE}/arcdist_output.txt ${TMPDIR}/arcdist.txt
 
 #
 # Polygon filter
@@ -83,7 +83,7 @@ rm -f ${TMPDIR}/polygon.txt
 gpsbabel -i xmap -f ${REFERENCE}/arcdist_input.txt \
          -x polygon,file=${REFERENCE}/polygon_allencty.txt \
          -o xmap -F ${TMPDIR}/polygon.txt
-compare ${TMPDIR}/polygon.txt ${REFERENCE}/polygon_output.txt
+compare ${REFERENCE}/polygon_output.txt ${TMPDIR}/polygon.txt
 
 #
 # Simplify filter
@@ -92,7 +92,7 @@ rm -f ${TMPDIR}/simplify.txt
 gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
          -x simplify,count=10 \
          -o arc -F ${TMPDIR}/simplify.txt
-compare ${TMPDIR}/simplify.txt ${REFERENCE}/simplify_output.txt
+compare ${REFERENCE}/simplify_output.txt ${TMPDIR}/simplify.txt
 
 #
 # Route reversal filter.   Do it twice and be sure we get what we
@@ -131,7 +131,7 @@ gpsbabel -i geoniche -f ${TMPDIR}/gn.pdb -o gpx -F ${TMPDIR}/2.gpx
 compare ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
 #
 gpsbabel -i geoniche -f ${REFERENCE}/gn-targets.pdb -o gpx -F ${TMPDIR}/gn-targets.gpx
-compare ${TMPDIR}/gn-targets.gpx ${REFERENCE}/gn-targets.gpx
+compare ${REFERENCE}/gn-targets.gpx ${TMPDIR}/gn-targets.gpx
 
 #
 # saroute covers *.anr, *.rte, and *.rtd, but I only have an .anr for testing.
@@ -153,26 +153,26 @@ bincompare ${TMPDIR}/netstumbler.mps ${REFERENCE}/netstumbler.mps
 #
 rm -f ${TMPDIR}/google.out
 gpsbabel -i google -f ${REFERENCE}/google.xml -o csv -F ${TMPDIR}/google.out
-compare ${TMPDIR}/google.out ${REFERENCE}/google.csv
+compare ${REFERENCE}/google.csv ${TMPDIR}/google.out
 
 rm -f ${TMPDIR}/google.out
 gpsbabel -i google -f ${REFERENCE}/google.js -o csv -F ${TMPDIR}/google.out
-compare ${TMPDIR}/google.out ${REFERENCE}/google.csv
+compare ${REFERENCE}/google.csv ${TMPDIR}/google.out
 
 rm -f ${TMPDIR}/google.out
 gpsbabel -i google -f ${REFERENCE}/google_jan_06.html -o csv -F ${TMPDIR}/google.out
-compare ${TMPDIR}/google.out ${REFERENCE}/google_jan_06.csv
+compare ${REFERENCE}/google_jan_06.csv ${TMPDIR}/google.out
 
 rm -f ${TMPDIR}/google.out
 gpsbabel -i google -f ${REFERENCE}/google_multisegment.js -o gpx -F ${TMPDIR}/google.out
-compare ${TMPDIR}/google.out ${REFERENCE}/google_multisegment.gpx
+compare ${REFERENCE}/google_multisegment.gpx ${TMPDIR}/google.out
 
 #
 # DeLorme .an1 tests
 #
 rm -f ${TMPDIR}/an1.out
 gpsbabel -i an1 -f ${REFERENCE}/foo.an1 -o csv -F ${TMPDIR}/an1.out
-compare ${TMPDIR}/an1.out ${REFERENCE}/an1-in.ref
+compare ${REFERENCE}/an1-in.ref ${TMPDIR}/an1.out
 
 rm -f ${TMPDIR}/an1.out
 gpsbabel -i an1 -f ${REFERENCE}/foo.an1 -o an1 -F ${TMPDIR}/an1.out
@@ -192,33 +192,33 @@ bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-line-out.ref
 
 rm -f ${TMPDIR}/ov2.out
 gpsbabel -i arc -f ${REFERENCE}/google.arc -o tomtom -F ${TMPDIR}/ov2.out
-compare ${TMPDIR}/ov2.out ${REFERENCE}/ov2-arc-out.ref
+compare ${REFERENCE}/ov2-arc-out.ref ${TMPDIR}/ov2.out
 
 rm -f ${TMPDIR}/ov2.out
 gpsbabel -i geo -f ${REFERENCE}/gl.loc -o tomtom -F ${TMPDIR}/ov2.out
-compare ${TMPDIR}/ov2.out ${REFERENCE}/ov2-geo-out.ref
+compare ${REFERENCE}/ov2-geo-out.ref ${TMPDIR}/ov2.out
 
 rm -f ${TMPDIR}/ov2.out
 gpsbabel -i tomtom -f ${REFERENCE}/ov2-geo-out.ref -o gpsutil -F ${TMPDIR}/ov2.out
-compare ${TMPDIR}/ov2.out ${REFERENCE}/ov2-in.ref
+compare ${REFERENCE}/ov2-in.ref ${TMPDIR}/ov2.out
 
 #
 # XCSV "human readable" tests
 #
 rm -f ${TMPDIR}/humanread.out
 gpsbabel -i xcsv,style=${REFERENCE}/humanread.style -f ${REFERENCE}/human.in -o arc -F ${TMPDIR}/humanread.out
-compare ${TMPDIR}/humanread.out ${REFERENCE}/humanread.out
+compare ${REFERENCE}/humanread.out ${TMPDIR}/humanread.out
 
 rm -f ${TMPDIR}/humanwrite.out
 gpsbabel -i xcsv,style=${REFERENCE}/humanread.style -f ${REFERENCE}/human.in -o xcsv,style=${REFERENCE}/humanwrite.style -F ${TMPDIR}/humanwrite.out
-compare ${TMPDIR}/humanwrite.out ${REFERENCE}/humanwrite.out
+compare ${REFERENCE}/humanwrite.out ${TMPDIR}/humanwrite.out
 
 #
 # XCSV "path distance" test
 #
 rm -f ${TMPDIR}/pathdist.out
 gpsbabel -i magellan -f ${REFERENCE}/dusky.trk -o xcsv,style=${REFERENCE}/gnuplot.style -F ${TMPDIR}/pathdist.out
-compare ${TMPDIR}/pathdist.out ${REFERENCE}/dusky.gnuplot
+compare ${REFERENCE}/dusky.gnuplot ${TMPDIR}/pathdist.out
 
 # hsandv
 rm -f ${TMPDIR}/hsandv.exp ${TMPDIR}/1.exp ${TMPDIR}/1.exp ${TMPDIR}/Glad_5.exp
@@ -277,10 +277,10 @@ compare ${TMPDIR}/tef_xml.sample.gpx ${REFERENCE}/route/tef_xml.sample.gpx
 rm -f ${TMPDIR}/pathaway*
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o pathaway,dbname="pathaway-geo" -F ${TMPDIR}/pathaway-geo.pdb
 gpsbabel -i pathaway -f ${TMPDIR}/pathaway-geo.pdb -o geo -F ${TMPDIR}/pathaway-geo.loc
-compare ${TMPDIR}/pathaway-geo.loc ${REFERENCE}/pathaway-geo.loc
+compare ${REFERENCE}/pathaway-geo.loc ${TMPDIR}/pathaway-geo.loc
 rm -f ${TMPDIR}/pathaway*
 gpsbabel -t -i pathaway -f ${REFERENCE}/track/pathaway.pdb -o gpx -F ${TMPDIR}/pathaway.gpx
-compare ${TMPDIR}/pathaway.gpx ${REFERENCE}/track/pathaway.gpx
+compare ${REFERENCE}/track/pathaway.gpx ${TMPDIR}/pathaway.gpx
 
 #
 # Garmin GPS Database .gdb tests
@@ -303,9 +303,9 @@ compare ${REFERENCE}/gdb-sample.gpx ${TMPDIR}/gdb-sample_v3.gpx
 #
 rm -f ${TMPDIR}/vitosmt*
 gpsbabel    -i vitosmt -f ${REFERENCE}/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt.gpx
-compare ${TMPDIR}/vitosmt.gpx ${REFERENCE}/vitosmt.gpx
+compare ${REFERENCE}/vitosmt.gpx ${TMPDIR}/vitosmt.gpx
 gpsbabel -t -i vitosmt -f ${REFERENCE}/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt_t.gpx
-compare ${TMPDIR}/vitosmt_t.gpx ${REFERENCE}/track/vitosmt_t.gpx
+compare ${REFERENCE}/track/vitosmt_t.gpx ${TMPDIR}/vitosmt_t.gpx
 
 #
 # Map&Guide Motorrad Routenplaner .bcr files test
@@ -323,15 +323,15 @@ compare	${REFERENCE}/route/bcr-sample.gpx ${TMPDIR}/bcr-sample2.gpx
 #
 rm -f ${TMPDIR}/cet-sample*
 gpsbabel -w -i gdb -f ${REFERENCE}/cet/cet-sample.gdb -o gpx -F ${TMPDIR}/cet-sample.gpx
-compare ${TMPDIR}/cet-sample.gpx ${REFERENCE}/cet/cet-sample.gpx
+compare ${REFERENCE}/cet/cet-sample.gpx ${TMPDIR}/cet-sample.gpx
 gpsbabel -w -i gpx -f ${TMPDIR}/cet-sample.gpx -o tmpro -c Latin1 -F ${TMPDIR}/cet-sample.latin1.txt
-compare ${TMPDIR}/cet-sample.latin1.txt ${REFERENCE}/cet/cet-sample.latin1.txt
+compare ${REFERENCE}/cet/cet-sample.latin1.txt ${TMPDIR}/cet-sample.latin1.txt
 gpsbabel -w -i gdb -f ${REFERENCE}/cet/cet-sample.gdb -o tmpro -c Latin2 -F ${TMPDIR}/cet-sample.latin2.txt
-compare ${TMPDIR}/cet-sample.latin2.txt ${REFERENCE}/cet/cet-sample.latin2.txt
+compare ${REFERENCE}/cet/cet-sample.latin2.txt ${TMPDIR}/cet-sample.latin2.txt
 gpsbabel -w -i gdb -f ${REFERENCE}/cet/cet-sample.gdb -o tmpro -c cp1250 -F ${TMPDIR}/cet-sample.cp1250.txt
-compare ${TMPDIR}/cet-sample.cp1250.txt ${REFERENCE}/cet/cet-sample.cp1250.txt
+compare ${REFERENCE}/cet/cet-sample.cp1250.txt ${TMPDIR}/cet-sample.cp1250.txt
 gpsbabel -w -i gdb -f ${REFERENCE}/cet/cet-sample.gdb -o tmpro -c macroman -F ${TMPDIR}/cet-sample.macroman.txt
-compare ${TMPDIR}/cet-sample.macroman.txt ${REFERENCE}/cet/cet-sample.macroman.txt
+compare ${REFERENCE}/cet/cet-sample.macroman.txt ${TMPDIR}/cet-sample.macroman.txt
 
 #
 # Garmin logbook.   This format has an extra section (lap data with things
@@ -394,5 +394,5 @@ compare ${REFERENCE}/track/fugawi.txt ${TMPDIR}/fugawi5.txt
 #
 gpsbabel -i ignrando -f ${REFERENCE}/track/ignrando-sample.rdn -o ignrando -F ${TMPDIR}/ignrando-sample.rdn
 gpsbabel -i ignrando -f ${TMPDIR}/ignrando-sample.rdn -o gpx -F ${TMPDIR}/ignrando-sample.gpx
-compare ${TMPDIR}/ignrando-sample.gpx ${REFERENCE}/track/ignrando-sample.gpx
+compare ${REFERENCE}/track/ignrando-sample.gpx ${TMPDIR}/ignrando-sample.gpx
 
