@@ -61,7 +61,7 @@ compare ${REFERENCE}/xmap ${TMPDIR}/xmap
 
 # Navitrak DNA marker format
 gpsbabel -i dna -f ${REFERENCE}/dnatest.txt -o dna -F ${TMPDIR}/dnatest.txt
-compare ${TMPDIR}/dnatest.txt ${REFERENCE}/dnatest.txt
+compare ${REFERENCE}/dnatest.txt ${TMPDIR}/dnatest.txt
 
 # PSP (PocketStreets 2002 Pushpin (.PSP)) file format. Use mxf as an 
 # intermediate format to avoid binary FP anomalies on compareerent platforms.
@@ -138,7 +138,7 @@ rm -f ${TMPDIR}/gpsdrive.txt
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpsdrive -F ${TMPDIR}/gpsdrive.txt
 compare ${TMPDIR}/gpsdrive.txt ${REFERENCE}
 gpsbabel -i gpsdrive -f ${REFERENCE}/gpsdrive.txt -o gpsdrive -F ${TMPDIR}/gpsdrive2.txt
-compare ${TMPDIR}/gpsdrive2.txt ${REFERENCE}/gpsdrive.txt
+compare ${REFERENCE}/gpsdrive.txt ${TMPDIR}/gpsdrive2.txt
 
 # XMapHH Street Atlas USA file format
 rm -f ${TMPDIR}/xmapwpt.wpt ${TMPDIR}/xmapwpt.xmapwpt
@@ -187,7 +187,7 @@ compare ${TMPDIR}/mps-track.mps ${REFERENCE}/track
 rm -f ${TMPDIR}/mps-track.mps
 gpsbabel -i mapsource -f ${REFERENCE}/track/mps-track.mps -o mapsource,mpsverout=3 \
          -F ${TMPDIR}/mps-track.mps
-compare ${TMPDIR}/mps-track.mps ${REFERENCE}/mps-empty.mps
+compare ${REFERENCE}/mps-empty.mps ${TMPDIR}/mps-track.mps
 
 #
 # MRCB mapsource route test
@@ -195,13 +195,13 @@ compare ${TMPDIR}/mps-track.mps ${REFERENCE}/mps-empty.mps
 rm -f ${TMPDIR}/mps-route.mps
 gpsbabel -r -i mapsource -f ${REFERENCE}/route/route.mps -o mapsource,mpsverout=4 \
          -F ${TMPDIR}/mps-route.mps
-compare ${TMPDIR}/mps-route.mps ${REFERENCE}/route/route.mps
+compare ${REFERENCE}/route/route.mps ${TMPDIR}/mps-route.mps
 
 # Now do a test of reading tracks from a route-only file - should have an empty result
 rm -f ${TMPDIR}/mps-route.mps
 gpsbabel -t -i mapsource -f ${REFERENCE}/route/route.mps -o mapsource,mpsverout=3 \
          -F ${TMPDIR}/mps-route.mps
-compare ${TMPDIR}/mps-route.mps ${REFERENCE}/mps-empty.mps
+compare ${REFERENCE}/mps-empty.mps ${TMPDIR}/mps-route.mps
 
 #
 # Geocaching Database is a binary Palm format that, like the GPX variants
@@ -250,7 +250,7 @@ compare ${TMPDIR}/radius.csv ${REFERENCE}
 rm -f ${TMPDIR}/magellan.rte
 gpsbabel -r -i magellan -f ${REFERENCE}/route/magellan.rte -o magellan \
          -F ${TMPDIR}/magellan.rte
-compare ${TMPDIR}/magellan.rte ${REFERENCE}/route/magellan.rte
+compare ${REFERENCE}/route/magellan.rte ${TMPDIR}/magellan.rte
 
 
 #
@@ -262,7 +262,7 @@ gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx -o gpx \
          -F ${TMPDIR}/gpxroute.gpx
 gpsbabel -r -i gpx -f ${TMPDIR}/gpxroute.gpx -o magellan \
          -F ${TMPDIR}/maggpx.rte
-compare ${TMPDIR}/maggpx.rte ${REFERENCE}/route/magellan.rte
+compare ${REFERENCE}/route/magellan.rte ${TMPDIR}/maggpx.rte
 
 #
 # GPX tracks -- since GPX contains a date stamp, tests will always

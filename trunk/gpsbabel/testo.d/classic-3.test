@@ -5,31 +5,31 @@
 #
 gpsbabel -i ignrando -f ${REFERENCE}/track/ignrando-sample.rdn -o ignrando -F ${TMPDIR}/ignrando-sample.rdn
 gpsbabel -i ignrando -f ${TMPDIR}/ignrando-sample.rdn -o gpx -F ${TMPDIR}/ignrando-sample.gpx
-compare ${TMPDIR}/ignrando-sample.gpx ${REFERENCE}/track/ignrando-sample.gpx
+compare ${REFERENCE}/track/ignrando-sample.gpx ${TMPDIR}/ignrando-sample.gpx
 
 #
 # STMwpp "Suunto Trek Manager" WaypointPlus format tests
 #
 rm -f ${TMPDIR}/stmwpp-*
 gpsbabel -i stmwpp -f ${REFERENCE}/track/stmwpp-track.txt -o gpx -F ${TMPDIR}/stmwpp-track.gpx
-compare ${TMPDIR}/stmwpp-track.gpx ${REFERENCE}/track/stmwpp-track.gpx
+compare ${REFERENCE}/track/stmwpp-track.gpx ${TMPDIR}/stmwpp-track.gpx
 gpsbabel -i stmwpp -f ${REFERENCE}/route/stmwpp-route.txt -o gpx -F ${TMPDIR}/stmwpp-route.gpx
-compare ${TMPDIR}/stmwpp-route.gpx ${REFERENCE}/route/stmwpp-route.gpx
+compare ${REFERENCE}/route/stmwpp-route.gpx ${TMPDIR}/stmwpp-route.gpx
 gpsbabel -i stmwpp -f ${REFERENCE}/route/stmwpp-route.txt -o stmwpp -F ${TMPDIR}/stmwpp-route.txt
-compare ${TMPDIR}/stmwpp-route.txt ${REFERENCE}/route/stmwpp-route.txt
+compare ${REFERENCE}/route/stmwpp-route.txt ${TMPDIR}/stmwpp-route.txt
 
 #
 # Microsoft AutoRoute 2002 test (read-only)
 #
 gpsbabel -i msroute -f ${REFERENCE}/route/msroute-sample.axe -o gpx -F ${TMPDIR}/msroute-sample.gpx
-compare ${TMPDIR}/msroute-sample.gpx ${REFERENCE}/route/msroute-sample.gpx
+compare ${REFERENCE}/route/msroute-sample.gpx ${TMPDIR}/msroute-sample.gpx
 
 #
 # CarteSurTable read test
 #
 rm -f ${TMPDIR}/cst-*
 gpsbabel -i cst -f ${REFERENCE}/route/cst-sample.cst -o gpx -F ${TMPDIR}/cst-sample.gpx
-compare ${TMPDIR}/cst-sample.gpx ${REFERENCE}/route/cst-sample.gpx
+compare ${REFERENCE}/route/cst-sample.gpx ${TMPDIR}/cst-sample.gpx
 
 #
 # Navigon Mobile Navigator .rte tests
@@ -57,7 +57,7 @@ compare ${TMPDIR}/alltypes.gpx ${TMPDIR}/merged.gpx
 # Wfff.
 #
 gpsbabel -i wfff -f ${REFERENCE}/wfff.xml -o gpsutil -F ${TMPDIR}/wfff.gpu
-compare ${TMPDIR}/wfff.gpu ${REFERENCE}/wfff.gpu
+compare ${REFERENCE}/wfff.gpu ${TMPDIR}/wfff.gpu
 
 
 #
@@ -65,9 +65,9 @@ compare ${TMPDIR}/wfff.gpu ${REFERENCE}/wfff.gpu
 #
 rm -f ${TMPDIR}/hiketech*
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o hiketech -F ${TMPDIR}/hiketech.out
-compare ${TMPDIR}/hiketech.out ${REFERENCE}/hiketech.ref
+compare ${REFERENCE}/hiketech.ref ${TMPDIR}/hiketech.out
 gpsbabel -i hiketech -f ${REFERENCE}/hiketech.ref -o gpx -F ${TMPDIR}/hiketech.gpx
-compare ${TMPDIR}/hiketech.gpx ${REFERENCE}/hiketech.gpx
+compare ${REFERENCE}/hiketech.gpx ${TMPDIR}/hiketech.gpx
 
 #
 # Kartex waypoints and tracks
@@ -99,7 +99,7 @@ rm -f ${TMPDIR}/wbt-200.*
 gpsbabel -i wbt-bin -f ${REFERENCE}/wbt-200.bin -o gpx -F ${TMPDIR}/wbt-200.gpx
 # Remove the timestamp
 grep -v time <${TMPDIR}/wbt-200.gpx >${TMPDIR}/wbt-200.gpx2
-compare ${TMPDIR}/wbt-200.gpx2 ${REFERENCE}/wbt-200.gpx
+compare ${REFERENCE}/wbt-200.gpx ${TMPDIR}/wbt-200.gpx2
 
 #
 # WBT-201 tests
@@ -108,24 +108,24 @@ rm -f ${TMPDIR}/wbt-200.*
 gpsbabel -t -w -i wbt-bin -f ${REFERENCE}/wbt-201.tk1 -o gpx -F ${TMPDIR}/wbt-201.gpx
 # Remove the timestamp
 grep -v time <${TMPDIR}/wbt-201.gpx >${TMPDIR}/wbt-201.gpx2
-compare ${TMPDIR}/wbt-201.gpx2 ${REFERENCE}/wbt-201.gpx
+compare ${REFERENCE}/wbt-201.gpx ${TMPDIR}/wbt-201.gpx2
 
 #
 # Sportsim style-sheet
 #
 rm -f ${TMPDIR}/sportsim*
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,routes -o sportsim -F ${TMPDIR}/sportsim.txt
-compare ${TMPDIR}/sportsim.txt ${REFERENCE}/track/sportsim-sample.txt
+compare ${REFERENCE}/track/sportsim-sample.txt ${TMPDIR}/sportsim.txt
 
 #
 # Suunto SDF
 #
 rm -f ${TMPDIR}/stmsdf*
 gpsbabel -i garmin_txt -f ${REFERENCE}/garmin_txt.txt -t -o stmsdf -F ${TMPDIR}/stmsdf-track.sdf -r -o stmsdf,index=2 -F ${TMPDIR}/stmsdf-route.sdf
-compare ${TMPDIR}/stmsdf-track.sdf ${REFERENCE}/track/stmsdf-track.sdf
-compare ${TMPDIR}/stmsdf-route.sdf ${REFERENCE}/route/stmsdf-route.sdf
+compare ${REFERENCE}/track/stmsdf-track.sdf ${TMPDIR}/stmsdf-track.sdf
+compare ${REFERENCE}/route/stmsdf-route.sdf ${TMPDIR}/stmsdf-route.sdf
 gpsbabel -i stmsdf -f ${TMPDIR}/stmsdf-track.sdf -f ${TMPDIR}/stmsdf-route.sdf -o garmin_txt,prec=2 -F ${TMPDIR}/stmsdf.txt
-compare ${TMPDIR}/stmsdf.txt ${REFERENCE}/stmsdf.txt
+compare ${REFERENCE}/stmsdf.txt ${TMPDIR}/stmsdf.txt
 
 #
 # Digital Mapping Tracklogs
@@ -133,7 +133,7 @@ compare ${TMPDIR}/stmsdf.txt ${REFERENCE}/stmsdf.txt
 rm -f ${TMPDIR}/dmtlog*
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o dmtlog -F ${TMPDIR}/dmtlog-sample.trl
 gpsbabel -i dmtlog -f ${TMPDIR}/dmtlog-sample.trl -o gpx -F ${TMPDIR}/dmtlog-sample.gpx
-compare ${TMPDIR}/dmtlog-sample.gpx ${REFERENCE}/track/dmtlog-sample.gpx
+compare ${REFERENCE}/track/dmtlog-sample.gpx ${TMPDIR}/dmtlog-sample.gpx
 
 #
 # gzipped file i/o
@@ -141,21 +141,21 @@ compare ${TMPDIR}/dmtlog-sample.gpx ${REFERENCE}/track/dmtlog-sample.gpx
 gpsbabel -i compegps -f ${REFERENCE}/compegps.wpt.gz -o gpx -F ${TMPDIR}/compegps-wpt.gpx
 compare ${REFERENCE}/compegps-wpt.gpx ${TMPDIR}/compegps-wpt.gpx
 gpsbabel -i cst -f ${REFERENCE}/route/cst-sample.cst.gz -o gpx -F ${TMPDIR}/cst-sample.gpx
-compare ${TMPDIR}/cst-sample.gpx ${REFERENCE}/route/cst-sample.gpx
+compare ${REFERENCE}/route/cst-sample.gpx ${TMPDIR}/cst-sample.gpx
 
 #
 # GPX version detection
 #
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,routes,tracks -x transform,rte=wpt,del=y -o gpx -F ${TMPDIR}/transform-ver.gpx
-compare ${TMPDIR}/transform-ver.gpx ${REFERENCE}/transform-rte.gpx
+compare ${REFERENCE}/transform-rte.gpx ${TMPDIR}/transform-ver.gpx
 
 #
 # "Raymarine Waypoint File" tests
 #
 gpsbabel -i raymarine -f ${REFERENCE}/raymarine-sample.rwf -o gpx -F ${TMPDIR}/raymarine-sample.gpx
-compare ${TMPDIR}/raymarine-sample.gpx ${REFERENCE}/raymarine-sample.gpx
+compare ${REFERENCE}/raymarine-sample.gpx ${TMPDIR}/raymarine-sample.gpx
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o raymarine -F ${TMPDIR}/expertgps.rwf
-compare ${TMPDIR}/expertgps.rwf ${REFERENCE}/expertgps.rwf
+compare ${REFERENCE}/expertgps.rwf ${TMPDIR}/expertgps.rwf
 
 #
 # VITO SmartMap .vtt track file 'vitovtt' test

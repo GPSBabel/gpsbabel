@@ -5,13 +5,13 @@
 rm -f ${TMPDIR}/trackfilter*
 
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,title="LOG-%Y%m%d" -o gpx -F ${TMPDIR}/trackfilter.gpx
-compare ${TMPDIR}/trackfilter.gpx ${REFERENCE}/track/trackfilter.gpx
+compare ${REFERENCE}/track/trackfilter.gpx ${TMPDIR}/trackfilter.gpx
 
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,sdistance=0.1k  -o gpx -F ${TMPDIR}/trackfilter2.gpx
-compare ${TMPDIR}/trackfilter2.gpx ${REFERENCE}/track/trackfilter-sdistance.gpx
+compare ${REFERENCE}/track/trackfilter-sdistance.gpx ${TMPDIR}/trackfilter2.gpx
 
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,sdistance=0.1k,split=5m,title=%Y%m%d  -o gpx -F ${TMPDIR}/trackfilter-sdistance2.gpx
-compare ${TMPDIR}/trackfilter-sdistance2.gpx ${REFERENCE}/track/trackfilter-sdistance2.gpx
+compare ${REFERENCE}/track/trackfilter-sdistance2.gpx ${TMPDIR}/trackfilter-sdistance2.gpx
 
 # Exercise the 'faketime' filter.  The middle of the three points has
 # time so we can exercise the 'forced' option, too.
