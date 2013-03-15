@@ -30,6 +30,7 @@ static XML_Parser psr;
 #include "src/core/xmlstreamwriter.h"
 #include <QtCore/QRegExp>
 //#include <QtCore/QTextCodec>
+#include <QtXml/QXmlStreamAttributes>
 
 
 static xml_tag* cur_tag;
@@ -43,7 +44,7 @@ static char* gpx_version = NULL;
 static char* gpx_wversion;
 static int gpx_wversion_num;
 static const char* gpx_creator;
-static char* xsi_schema_loc = NULL;
+static QXmlStreamAttributes gpx_namespace_attribute;
 
 static char* gpx_email = NULL;
 static char* gpx_author = NULL;
@@ -80,8 +81,6 @@ static format_specific_data** fs_ptr;
 
 #define MYNAME "GPX"
 #define MY_CBUF_SZ 4096
-#define DEFAULT_XSI_SCHEMA_LOC "http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd"
-#define DEFAULT_XSI_SCHEMA_LOC_11 "http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
 #ifndef CREATOR_NAME_URL
 #  define CREATOR_NAME_URL "GPSBabel - http://www.gpsbabel.org"
 #endif
@@ -479,24 +478,11 @@ tag_gpx(const char** attrv)
       }
     } else if (strcmp(avp[0], "src") == 0) {
       gpx_creator = avp[1];
-    }
-    /*
-     * Our handling of schemaLocation really is weird.
-     * If we see we have a "normal" GPX 1.1 header, on read,
-     * flip our default on write to use that and don't append
-     * it to the rest...
-     */
-    else if (strcmp(avp[0], "xsi:schemaLocation") == 0) {
-      if (0 == strcmp(avp[1], DEFAULT_XSI_SCHEMA_LOC_11)) {
-        if (0 == strcmp(xsi_schema_loc, DEFAULT_XSI_SCHEMA_LOC)) {
-          xfree(xsi_schema_loc);
-          xsi_schema_loc = xstrdup(DEFAULT_XSI_SCHEMA_LOC_11);
+    } else if (0 == strncmp(avp[0], "xmlns:", 6)) {
+      if (0 != strcmp(avp[0], "xmlns:xsi")) {
+        if (! gpx_namespace_attribute.hasAttribute(avp[0])) {
+          gpx_namespace_attribute.append(avp[0], avp[1]);
         }
-        continue;
-      }
-      if (0 == strstr(xsi_schema_loc, avp[1])) {
-        xsi_schema_loc = xstrappend(xsi_schema_loc, " ");
-        xsi_schema_loc = xstrappend(xsi_schema_loc, avp[1]);
       }
     }
   }
@@ -1307,14 +1293,6 @@ gpx_rd_init(const char* fname)
   cdatastr = vmem_alloc(1, 0);
   *((char*)cdatastr.mem) = '\0';
 
-  if (!xsi_schema_loc) {
-    xsi_schema_loc = xstrdup(DEFAULT_XSI_SCHEMA_LOC);
-  }
-  if (!xsi_schema_loc) {
-    fatal("gpx: Unable to allocate %ld bytes of memory.\n",
-          (unsigned long) strlen(DEFAULT_XSI_SCHEMA_LOC) + 1);
-  }
-
   if (NULL == gpx_global) {
     gpx_global = (struct gpx_global*) xcalloc(sizeof(*gpx_global), 1);
     QUEUE_INIT(&gpx_global->name.queue);
@@ -1337,18 +1315,6 @@ gpx_rd_deinit(void)
 {
   vmem_free(&current_tag);
   vmem_free(&cdatastr);
-  /*
-   * Don't free schema_loc.  It really is important that we preserve
-   * this across reads or else merges/copies of files with different
-   * schemas won't retain the headers.
-   *
-   *  moved to gpx_exit
-
-  if ( xsi_schema_loc ) {
-  	xfree(xsi_schema_loc);
-  	xsi_schema_loc = NULL;
-  }
-  */
 
   if (gpx_email) {
     xfree(gpx_email);
@@ -1537,7 +1503,7 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
       if (wpt && wpt->gc_data->exported &&
           strcmp(tag->tagname, "groundspeak:cache") == 0) {
         char time_string[64];
-        xml_fill_in_time(time_string, wpt->gc_data->exported, 
+        xml_fill_in_time(time_string, wpt->gc_data->exported,
                          0, XML_LONG_TIME);
         if (time_string[0]) {
           writer.writeTextElement("time", time_string);
@@ -1788,9 +1754,11 @@ gpx_track_hdr(const route_head* rte)
   }
 
   if (gpx_wversion_num > 10) {
-    fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
-    if (fs_gpx) {
-      fprint_xml_chain(fs_gpx->tag, NULL);
+    if (!(opt_humminbirdext || opt_garminext)) {
+      fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
+      if (fs_gpx) {
+        fprint_xml_chain(fs_gpx->tag, NULL);
+      }
     }
   }
 }
@@ -1879,9 +1847,11 @@ gpx_route_hdr(const route_head* rte)
   }
 
   if (gpx_wversion_num > 10) {
-    fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
-    if (fs_gpx) {
-      fprint_xml_chain(fs_gpx->tag, NULL);
+    if (!(opt_humminbirdext || opt_garminext)) {
+      fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
+      if (fs_gpx) {
+        fprint_xml_chain(fs_gpx->tag, NULL);
+      }
     }
   }
 }
@@ -1986,29 +1956,19 @@ gpx_write(void)
 
   writer.setAutoFormatting(true);
   writer.writeStartElement("gpx");
-  writer.writeAttribute("\n  version", gpx_wversion);
-  writer.writeAttribute("\n  creator", CREATOR_NAME_URL);
-  writer.writeAttribute("\n  xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
-
-  // FIXME: If we pass elements from an optional declared namespace, 
-  // e.g. gpxx, gpxtpx, or h through with fprint_xml_chain, we won't 
-  // have declared the namespace.
-  //        This is a schema violation.
-  if (opt_humminbirdext) {
-    writer.writeAttribute("\n  xmlns:h","http://humminbird.com");
-  }
-  if (opt_garminext) {
-    // TODO: it's kind of wrong to force formatting in here...
-    writer.writeAttribute("\n  xmlns:gpxx", "http://www.garmin.com/xmlschemas/GpxExtensions/v3");
-    writer.writeAttribute("\n  xmlns:gpxtpx", "http://www.garmin.com/xmlschemas/TrackPointExtension/v1");
-  }
-  writer.writeAttribute("\n  xmlns", QString("http://www.topografix.com/GPX/%1/%2").arg(gpx_wversion[0]).arg(gpx_wversion[2]));
-  if (xsi_schema_loc) {
-    // FIXME: it's tacky to have formatting in here...
-    writer.writeAttribute("\n  xsi:schemaLocation", xsi_schema_loc);
+  writer.writeAttribute("version", gpx_wversion);
+  writer.writeAttribute("creator", CREATOR_NAME_URL);
+  writer.writeAttribute("xmlns", QString("http://www.topografix.com/GPX/%1/%2").arg(gpx_wversion[0]).arg(gpx_wversion[2]));
+  if (opt_humminbirdext || opt_garminext) {
+    if (opt_humminbirdext) {
+      writer.writeAttribute("xmlns:h","http://humminbird.com");
+    }
+    if (opt_garminext) {
+      writer.writeAttribute("xmlns:gpxx", "http://www.garmin.com/xmlschemas/GpxExtensions/v3");
+      writer.writeAttribute("xmlns:gpxtpx", "http://www.garmin.com/xmlschemas/TrackPointExtension/v1");
+    }
   } else {
-    writer.writeAttribute("\n  xsi:schemaLocation",
-                          QString("http://www.topografix.com/GPX/%1/%2 http://www.topografix.com/GPX/%1/%2/gpx.xsd").arg(gpx_wversion[0]).arg(gpx_wversion[2]));
+    writer.writeAttributes(gpx_namespace_attribute);
   }
 
   if (gpx_wversion_num > 10) {
@@ -2074,10 +2034,8 @@ gpx_exit(void)
     gpx_version = NULL;
   }
 
-  if (xsi_schema_loc) {
-    xfree(xsi_schema_loc);
-    xsi_schema_loc = NULL;
-  }
+  /* FIXME: is clear necessary or desirable? */
+  gpx_namespace_attribute.clear();
 
   if (gpx_global) {
     gpx_free_gpx_global();

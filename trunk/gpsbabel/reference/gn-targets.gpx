@@ -1,34 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="42.438878000" minlon="-71.119689000" maxlat="42.439227000" maxlon="-71.116146000"/>
-<wpt lat="42.438878000" lon="-71.119277000">
-  <ele>44.000000</ele>
-  <time>2001-11-28T22:05:00Z</time>
-  <name>5066</name>
-  <cmt>5066</cmt>
-  <desc>5066</desc>
-  <sym>Scenic Area</sym>
-</wpt>
-<wpt lat="42.439227000" lon="-71.119689000">
-  <ele>57.000000</ele>
-  <time>2001-06-02T05:26:00Z</time>
-  <name>5067</name>
-  <cmt>5067</cmt>
-  <desc>5067</desc>
-  <sym>Traditional Cache</sym>
-</wpt>
-<wpt lat="42.438917000" lon="-71.116146000">
-  <ele>44.000000</ele>
-  <time>2001-11-17T00:03:00Z</time>
-  <name>5096</name>
-  <cmt>5096</cmt>
-  <desc>5096</desc>
-  <sym>Residence</sym>
-</wpt>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="42.438878000" minlon="-71.119689000" maxlat="42.439227000" maxlon="-71.116146000"/>
+  <wpt lat="42.438878000" lon="-71.119277000">
+    <ele>44.000000</ele>
+    <time>2001-11-28T22:05:00Z</time>
+    <name>5066</name>
+    <cmt>5066</cmt>
+    <desc>5066</desc>
+    <sym>Scenic Area</sym>
+  </wpt>
+  <wpt lat="42.439227000" lon="-71.119689000">
+    <ele>57.000000</ele>
+    <time>2001-06-02T05:26:00Z</time>
+    <name>5067</name>
+    <cmt>5067</cmt>
+    <desc>5067</desc>
+    <sym>Traditional Cache</sym>
+  </wpt>
+  <wpt lat="42.438917000" lon="-71.116146000">
+    <ele>44.000000</ele>
+    <time>2001-11-17T00:03:00Z</time>
+    <name>5096</name>
+    <cmt>5096</cmt>
+    <desc>5096</desc>
+    <sym>Residence</sym>
+  </wpt>
 </gpx>

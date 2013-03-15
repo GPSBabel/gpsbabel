@@ -1,334 +1,329 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="30.045516667" minlon="-91.610566667" maxlat="30.062783333" maxlon="-91.589750000"/>
-<trk>
-<trkseg>
-<trkpt lat="30.062183333" lon="-91.610350000">
-  <time>2002-05-25T17:06:21Z</time>
-  <course>0.000000</course>
-  <speed>0.000000</speed>
-</trkpt>
-<trkpt lat="30.062783333" lon="-91.610566667">
-  <time>2002-05-25T17:09:55Z</time>
-  <course>342.600006</course>
-  <speed>0.308667</speed>
-</trkpt>
-<trkpt lat="30.062700000" lon="-91.608266667">
-  <time>2002-05-25T17:12:00Z</time>
-  <course>92.400002</course>
-  <speed>1.749111</speed>
-</trkpt>
-<trkpt lat="30.062333333" lon="-91.607383333">
-  <time>2002-05-25T17:12:48Z</time>
-  <course>115.599998</course>
-  <speed>1.954889</speed>
-</trkpt>
-<trkpt lat="30.061533333" lon="-91.605283333">
-  <time>2002-05-25T17:14:41Z</time>
-  <course>113.800003</course>
-  <speed>1.954889</speed>
-</trkpt>
-<trkpt lat="30.059783333" lon="-91.599400000">
-  <time>2002-05-25T17:17:16Z</time>
-  <course>109.000000</course>
-  <speed>3.858333</speed>
-</trkpt>
-<trkpt lat="30.057800000" lon="-91.596683333">
-  <time>2002-05-25T17:17:46Z</time>
-  <course>130.100006</course>
-  <speed>11.420667</speed>
-</trkpt>
-<trkpt lat="30.055383333" lon="-91.594900000">
-  <time>2002-05-25T17:18:20Z</time>
-  <course>147.399994</course>
-  <speed>9.414333</speed>
-</trkpt>
-<trkpt lat="30.053883333" lon="-91.592616667">
-  <time>2002-05-25T17:19:01Z</time>
-  <course>127.199997</course>
-  <speed>6.739222</speed>
-</trkpt>
-<trkpt lat="30.049733333" lon="-91.589750000">
-  <time>2002-05-25T17:20:46Z</time>
-  <course>149.100006</course>
-  <speed>5.144444</speed>
-</trkpt>
-<trkpt lat="30.049016667" lon="-91.589883333">
-  <time>2002-05-25T17:21:10Z</time>
-  <course>189.100006</course>
-  <speed>3.343889</speed>
-</trkpt>
-<trkpt lat="30.048800000" lon="-91.592933333">
-  <time>2002-05-25T17:21:51Z</time>
-  <course>265.299988</course>
-  <speed>7.202222</speed>
-</trkpt>
-<trkpt lat="30.046233333" lon="-91.596450000">
-  <time>2002-05-25T17:22:35Z</time>
-  <course>229.899994</course>
-  <speed>10.083111</speed>
-</trkpt>
-<trkpt lat="30.045516667" lon="-91.598716667">
-  <time>2002-05-25T17:23:08Z</time>
-  <course>250.000000</course>
-  <speed>7.047889</speed>
-</trkpt>
-<trkpt lat="30.047300000" lon="-91.600266667">
-  <time>2002-05-25T18:04:23Z</time>
-  <course>323.000000</course>
-  <speed>0.102889</speed>
-</trkpt>
-<trkpt lat="30.047000000" lon="-91.599633333">
-  <time>2002-05-25T18:06:04Z</time>
-  <course>118.699997</course>
-  <speed>0.668778</speed>
-</trkpt>
-<trkpt lat="30.046433333" lon="-91.599466667">
-  <time>2002-05-25T18:07:06Z</time>
-  <course>165.800003</course>
-  <speed>1.028889</speed>
-</trkpt>
-<trkpt lat="30.046200000" lon="-91.598950000">
-  <time>2002-05-25T18:08:18Z</time>
-  <course>117.500000</course>
-  <speed>0.771667</speed>
-</trkpt>
-<trkpt lat="30.046366667" lon="-91.597733333">
-  <time>2002-05-25T18:10:20Z</time>
-  <course>81.000000</course>
-  <speed>0.977444</speed>
-</trkpt>
-<trkpt lat="30.046350000" lon="-91.597166667">
-  <time>2002-05-25T18:11:09Z</time>
-  <course>92.000000</course>
-  <speed>1.131778</speed>
-</trkpt>
-<trkpt lat="30.046783333" lon="-91.596333333">
-  <time>2002-05-25T18:12:18Z</time>
-  <course>59.000000</course>
-  <speed>1.337556</speed>
-</trkpt>
-<trkpt lat="30.047450000" lon="-91.595200000">
-  <time>2002-05-25T18:14:22Z</time>
-  <course>55.799999</course>
-  <speed>1.080333</speed>
-</trkpt>
-<trkpt lat="30.047800000" lon="-91.594766667">
-  <time>2002-05-25T18:15:04Z</time>
-  <course>47.000000</course>
-  <speed>1.337556</speed>
-</trkpt>
-<trkpt lat="30.048250000" lon="-91.594083333">
-  <time>2002-05-25T18:16:14Z</time>
-  <course>52.799999</course>
-  <speed>1.183222</speed>
-</trkpt>
-<trkpt lat="30.048683333" lon="-91.593800000">
-  <time>2002-05-25T18:17:01Z</time>
-  <course>29.500000</course>
-  <speed>1.183222</speed>
-</trkpt>
-<trkpt lat="30.049350000" lon="-91.593850000">
-  <time>2002-05-25T18:18:07Z</time>
-  <course>356.299988</course>
-  <speed>1.131778</speed>
-</trkpt>
-<trkpt lat="30.050316667" lon="-91.593983333">
-  <time>2002-05-25T18:19:51Z</time>
-  <course>353.200012</course>
-  <speed>1.028889</speed>
-</trkpt>
-<trkpt lat="30.050783333" lon="-91.594116667">
-  <time>2002-05-25T18:20:39Z</time>
-  <course>346.000000</course>
-  <speed>1.131778</speed>
-</trkpt>
-<trkpt lat="30.051233333" lon="-91.594366667">
-  <time>2002-05-25T18:21:24Z</time>
-  <course>334.299988</course>
-  <speed>1.234667</speed>
-</trkpt>
-<trkpt lat="30.051800000" lon="-91.594366667">
-  <time>2002-05-25T18:22:17Z</time>
-  <course>0.000000</course>
-  <speed>1.183222</speed>
-</trkpt>
-<trkpt lat="30.052216667" lon="-91.594666667">
-  <time>2002-05-25T18:23:18Z</time>
-  <course>328.100006</course>
-  <speed>0.874556</speed>
-</trkpt>
-<trkpt lat="30.053016667" lon="-91.594683333">
-  <time>2002-05-25T18:24:37Z</time>
-  <course>359.000000</course>
-  <speed>1.131778</speed>
-</trkpt>
-<trkpt lat="30.054866667" lon="-91.595200000">
-  <time>2002-05-25T18:28:13Z</time>
-  <course>346.399994</course>
-  <speed>0.977444</speed>
-</trkpt>
-<trkpt lat="30.053733333" lon="-91.594933333">
-  <time>2002-05-25T18:31:36Z</time>
-  <course>168.500000</course>
-  <speed>0.617333</speed>
-</trkpt>
-<trkpt lat="30.053183333" lon="-91.594783333">
-  <time>2002-05-25T18:32:56Z</time>
-  <course>166.699997</course>
-  <speed>0.771667</speed>
-</trkpt>
-<trkpt lat="30.052633333" lon="-91.594833333">
-  <time>2002-05-25T18:34:02Z</time>
-  <course>184.500000</course>
-  <speed>0.926000</speed>
-</trkpt>
-<trkpt lat="30.052450000" lon="-91.595433333">
-  <time>2002-05-25T18:36:03Z</time>
-  <course>250.600006</course>
-  <speed>0.514444</speed>
-</trkpt>
-<trkpt lat="30.052483333" lon="-91.595966667">
-  <time>2002-05-25T18:36:48Z</time>
-  <course>274.100006</course>
-  <speed>1.131778</speed>
-</trkpt>
-<trkpt lat="30.052650000" lon="-91.596783333">
-  <time>2002-05-25T18:37:52Z</time>
-  <course>283.299988</course>
-  <speed>1.286111</speed>
-</trkpt>
-<trkpt lat="30.053133333" lon="-91.597850000">
-  <time>2002-05-25T18:39:18Z</time>
-  <course>297.600006</course>
-  <speed>1.337556</speed>
-</trkpt>
-<trkpt lat="30.053616667" lon="-91.597966667">
-  <time>2002-05-25T18:40:15Z</time>
-  <course>348.200012</course>
-  <speed>0.977444</speed>
-</trkpt>
-<trkpt lat="30.053966667" lon="-91.597766667">
-  <time>2002-05-25T18:41:25Z</time>
-  <course>26.299999</course>
-  <speed>0.617333</speed>
-</trkpt>
-<trkpt lat="30.053616667" lon="-91.598083333">
-  <time>2002-05-25T18:42:37Z</time>
-  <course>218.000000</course>
-  <speed>0.668778</speed>
-</trkpt>
-<trkpt lat="30.053200000" lon="-91.597916667">
-  <time>2002-05-25T18:44:01Z</time>
-  <course>161.000000</course>
-  <speed>0.565889</speed>
-</trkpt>
-<trkpt lat="30.052816667" lon="-91.597516667">
-  <time>2002-05-25T18:45:53Z</time>
-  <course>137.899994</course>
-  <speed>0.514444</speed>
-</trkpt>
-<trkpt lat="30.052566667" lon="-91.596933333">
-  <time>2002-05-25T18:46:54Z</time>
-  <course>116.300003</course>
-  <speed>1.028889</speed>
-</trkpt>
-<trkpt lat="30.052333333" lon="-91.596433333">
-  <time>2002-05-25T18:47:42Z</time>
-  <course>118.400002</course>
-  <speed>1.131778</speed>
-</trkpt>
-<trkpt lat="30.052250000" lon="-91.595683333">
-  <time>2002-05-25T18:48:41Z</time>
-  <course>97.300003</course>
-  <speed>1.234667</speed>
-</trkpt>
-<trkpt lat="30.052216667" lon="-91.595016667">
-  <time>2002-05-25T18:49:52Z</time>
-  <course>93.300003</course>
-  <speed>0.926000</speed>
-</trkpt>
-<trkpt lat="30.051883333" lon="-91.594700000">
-  <time>2002-05-25T18:50:49Z</time>
-  <course>140.600006</course>
-  <speed>0.823111</speed>
-</trkpt>
-<trkpt lat="30.051050000" lon="-91.594400000">
-  <time>2002-05-25T18:52:14Z</time>
-  <course>162.699997</course>
-  <speed>1.131778</speed>
-</trkpt>
-<trkpt lat="30.050566667" lon="-91.594233333">
-  <time>2002-05-25T18:52:56Z</time>
-  <course>163.300003</course>
-  <speed>1.337556</speed>
-</trkpt>
-<trkpt lat="30.050183333" lon="-91.594100000">
-  <time>2002-05-25T18:53:38Z</time>
-  <course>163.300003</course>
-  <speed>1.080333</speed>
-</trkpt>
-<trkpt lat="30.049100000" lon="-91.593716667">
-  <time>2002-05-25T18:55:11Z</time>
-  <course>163.000000</course>
-  <speed>1.337556</speed>
-</trkpt>
-<trkpt lat="30.048450000" lon="-91.594250000">
-  <time>2002-05-25T18:56:32Z</time>
-  <course>215.399994</course>
-  <speed>1.080333</speed>
-</trkpt>
-<trkpt lat="30.048083333" lon="-91.594750000">
-  <time>2002-05-25T18:57:24Z</time>
-  <course>229.699997</course>
-  <speed>1.234667</speed>
-</trkpt>
-<trkpt lat="30.047500000" lon="-91.595450000">
-  <time>2002-05-25T18:58:40Z</time>
-  <course>226.100006</course>
-  <speed>1.234667</speed>
-</trkpt>
-<trkpt lat="30.047066667" lon="-91.596000000">
-  <time>2002-05-25T18:59:28Z</time>
-  <course>227.699997</course>
-  <speed>1.491889</speed>
-</trkpt>
-<trkpt lat="30.046633333" lon="-91.596600000">
-  <time>2002-05-25T19:00:22Z</time>
-  <course>230.100006</course>
-  <speed>1.389000</speed>
-</trkpt>
-<trkpt lat="30.046400000" lon="-91.597650000">
-  <time>2002-05-25T19:01:41Z</time>
-  <course>255.600006</course>
-  <speed>1.337556</speed>
-</trkpt>
-<trkpt lat="30.046233333" lon="-91.598466667">
-  <time>2002-05-25T19:02:48Z</time>
-  <course>256.700012</course>
-  <speed>1.183222</speed>
-</trkpt>
-<trkpt lat="30.046316667" lon="-91.598966667">
-  <time>2002-05-25T19:03:43Z</time>
-  <course>281.000000</course>
-  <speed>0.874556</speed>
-</trkpt>
-<trkpt lat="30.046783333" lon="-91.599283333">
-  <time>2002-05-25T19:04:49Z</time>
-  <course>329.600006</course>
-  <speed>0.926000</speed>
-</trkpt>
-<trkpt lat="30.047133333" lon="-91.599666667">
-  <time>2002-05-25T19:05:57Z</time>
-  <course>316.500000</course>
-  <speed>0.771667</speed>
-</trkpt>
-</trkseg>
-</trk>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="30.045516667" minlon="-91.610566667" maxlat="30.062783333" maxlon="-91.589750000"/>
+  <trk>
+    <trkseg>
+      <trkpt lat="30.062183333" lon="-91.610350000">
+        <time>2002-05-25T17:06:21Z</time>
+        <course>0.000000</course>
+        <speed>0.000000</speed>
+      </trkpt>
+      <trkpt lat="30.062783333" lon="-91.610566667">
+        <time>2002-05-25T17:09:55Z</time>
+        <course>342.600006</course>
+        <speed>0.308667</speed>
+      </trkpt>
+      <trkpt lat="30.062700000" lon="-91.608266667">
+        <time>2002-05-25T17:12:00Z</time>
+        <course>92.400002</course>
+        <speed>1.749111</speed>
+      </trkpt>
+      <trkpt lat="30.062333333" lon="-91.607383333">
+        <time>2002-05-25T17:12:48Z</time>
+        <course>115.599998</course>
+        <speed>1.954889</speed>
+      </trkpt>
+      <trkpt lat="30.061533333" lon="-91.605283333">
+        <time>2002-05-25T17:14:41Z</time>
+        <course>113.800003</course>
+        <speed>1.954889</speed>
+      </trkpt>
+      <trkpt lat="30.059783333" lon="-91.599400000">
+        <time>2002-05-25T17:17:16Z</time>
+        <course>109.000000</course>
+        <speed>3.858333</speed>
+      </trkpt>
+      <trkpt lat="30.057800000" lon="-91.596683333">
+        <time>2002-05-25T17:17:46Z</time>
+        <course>130.100006</course>
+        <speed>11.420667</speed>
+      </trkpt>
+      <trkpt lat="30.055383333" lon="-91.594900000">
+        <time>2002-05-25T17:18:20Z</time>
+        <course>147.399994</course>
+        <speed>9.414333</speed>
+      </trkpt>
+      <trkpt lat="30.053883333" lon="-91.592616667">
+        <time>2002-05-25T17:19:01Z</time>
+        <course>127.199997</course>
+        <speed>6.739222</speed>
+      </trkpt>
+      <trkpt lat="30.049733333" lon="-91.589750000">
+        <time>2002-05-25T17:20:46Z</time>
+        <course>149.100006</course>
+        <speed>5.144444</speed>
+      </trkpt>
+      <trkpt lat="30.049016667" lon="-91.589883333">
+        <time>2002-05-25T17:21:10Z</time>
+        <course>189.100006</course>
+        <speed>3.343889</speed>
+      </trkpt>
+      <trkpt lat="30.048800000" lon="-91.592933333">
+        <time>2002-05-25T17:21:51Z</time>
+        <course>265.299988</course>
+        <speed>7.202222</speed>
+      </trkpt>
+      <trkpt lat="30.046233333" lon="-91.596450000">
+        <time>2002-05-25T17:22:35Z</time>
+        <course>229.899994</course>
+        <speed>10.083111</speed>
+      </trkpt>
+      <trkpt lat="30.045516667" lon="-91.598716667">
+        <time>2002-05-25T17:23:08Z</time>
+        <course>250.000000</course>
+        <speed>7.047889</speed>
+      </trkpt>
+      <trkpt lat="30.047300000" lon="-91.600266667">
+        <time>2002-05-25T18:04:23Z</time>
+        <course>323.000000</course>
+        <speed>0.102889</speed>
+      </trkpt>
+      <trkpt lat="30.047000000" lon="-91.599633333">
+        <time>2002-05-25T18:06:04Z</time>
+        <course>118.699997</course>
+        <speed>0.668778</speed>
+      </trkpt>
+      <trkpt lat="30.046433333" lon="-91.599466667">
+        <time>2002-05-25T18:07:06Z</time>
+        <course>165.800003</course>
+        <speed>1.028889</speed>
+      </trkpt>
+      <trkpt lat="30.046200000" lon="-91.598950000">
+        <time>2002-05-25T18:08:18Z</time>
+        <course>117.500000</course>
+        <speed>0.771667</speed>
+      </trkpt>
+      <trkpt lat="30.046366667" lon="-91.597733333">
+        <time>2002-05-25T18:10:20Z</time>
+        <course>81.000000</course>
+        <speed>0.977444</speed>
+      </trkpt>
+      <trkpt lat="30.046350000" lon="-91.597166667">
+        <time>2002-05-25T18:11:09Z</time>
+        <course>92.000000</course>
+        <speed>1.131778</speed>
+      </trkpt>
+      <trkpt lat="30.046783333" lon="-91.596333333">
+        <time>2002-05-25T18:12:18Z</time>
+        <course>59.000000</course>
+        <speed>1.337556</speed>
+      </trkpt>
+      <trkpt lat="30.047450000" lon="-91.595200000">
+        <time>2002-05-25T18:14:22Z</time>
+        <course>55.799999</course>
+        <speed>1.080333</speed>
+      </trkpt>
+      <trkpt lat="30.047800000" lon="-91.594766667">
+        <time>2002-05-25T18:15:04Z</time>
+        <course>47.000000</course>
+        <speed>1.337556</speed>
+      </trkpt>
+      <trkpt lat="30.048250000" lon="-91.594083333">
+        <time>2002-05-25T18:16:14Z</time>
+        <course>52.799999</course>
+        <speed>1.183222</speed>
+      </trkpt>
+      <trkpt lat="30.048683333" lon="-91.593800000">
+        <time>2002-05-25T18:17:01Z</time>
+        <course>29.500000</course>
+        <speed>1.183222</speed>
+      </trkpt>
+      <trkpt lat="30.049350000" lon="-91.593850000">
+        <time>2002-05-25T18:18:07Z</time>
+        <course>356.299988</course>
+        <speed>1.131778</speed>
+      </trkpt>
+      <trkpt lat="30.050316667" lon="-91.593983333">
+        <time>2002-05-25T18:19:51Z</time>
+        <course>353.200012</course>
+        <speed>1.028889</speed>
+      </trkpt>
+      <trkpt lat="30.050783333" lon="-91.594116667">
+        <time>2002-05-25T18:20:39Z</time>
+        <course>346.000000</course>
+        <speed>1.131778</speed>
+      </trkpt>
+      <trkpt lat="30.051233333" lon="-91.594366667">
+        <time>2002-05-25T18:21:24Z</time>
+        <course>334.299988</course>
+        <speed>1.234667</speed>
+      </trkpt>
+      <trkpt lat="30.051800000" lon="-91.594366667">
+        <time>2002-05-25T18:22:17Z</time>
+        <course>0.000000</course>
+        <speed>1.183222</speed>
+      </trkpt>
+      <trkpt lat="30.052216667" lon="-91.594666667">
+        <time>2002-05-25T18:23:18Z</time>
+        <course>328.100006</course>
+        <speed>0.874556</speed>
+      </trkpt>
+      <trkpt lat="30.053016667" lon="-91.594683333">
+        <time>2002-05-25T18:24:37Z</time>
+        <course>359.000000</course>
+        <speed>1.131778</speed>
+      </trkpt>
+      <trkpt lat="30.054866667" lon="-91.595200000">
+        <time>2002-05-25T18:28:13Z</time>
+        <course>346.399994</course>
+        <speed>0.977444</speed>
+      </trkpt>
+      <trkpt lat="30.053733333" lon="-91.594933333">
+        <time>2002-05-25T18:31:36Z</time>
+        <course>168.500000</course>
+        <speed>0.617333</speed>
+      </trkpt>
+      <trkpt lat="30.053183333" lon="-91.594783333">
+        <time>2002-05-25T18:32:56Z</time>
+        <course>166.699997</course>
+        <speed>0.771667</speed>
+      </trkpt>
+      <trkpt lat="30.052633333" lon="-91.594833333">
+        <time>2002-05-25T18:34:02Z</time>
+        <course>184.500000</course>
+        <speed>0.926000</speed>
+      </trkpt>
+      <trkpt lat="30.052450000" lon="-91.595433333">
+        <time>2002-05-25T18:36:03Z</time>
+        <course>250.600006</course>
+        <speed>0.514444</speed>
+      </trkpt>
+      <trkpt lat="30.052483333" lon="-91.595966667">
+        <time>2002-05-25T18:36:48Z</time>
+        <course>274.100006</course>
+        <speed>1.131778</speed>
+      </trkpt>
+      <trkpt lat="30.052650000" lon="-91.596783333">
+        <time>2002-05-25T18:37:52Z</time>
+        <course>283.299988</course>
+        <speed>1.286111</speed>
+      </trkpt>
+      <trkpt lat="30.053133333" lon="-91.597850000">
+        <time>2002-05-25T18:39:18Z</time>
+        <course>297.600006</course>
+        <speed>1.337556</speed>
+      </trkpt>
+      <trkpt lat="30.053616667" lon="-91.597966667">
+        <time>2002-05-25T18:40:15Z</time>
+        <course>348.200012</course>
+        <speed>0.977444</speed>
+      </trkpt>
+      <trkpt lat="30.053966667" lon="-91.597766667">
+        <time>2002-05-25T18:41:25Z</time>
+        <course>26.299999</course>
+        <speed>0.617333</speed>
+      </trkpt>
+      <trkpt lat="30.053616667" lon="-91.598083333">
+        <time>2002-05-25T18:42:37Z</time>
+        <course>218.000000</course>
+        <speed>0.668778</speed>
+      </trkpt>
+      <trkpt lat="30.053200000" lon="-91.597916667">
+        <time>2002-05-25T18:44:01Z</time>
+        <course>161.000000</course>
+        <speed>0.565889</speed>
+      </trkpt>
+      <trkpt lat="30.052816667" lon="-91.597516667">
+        <time>2002-05-25T18:45:53Z</time>
+        <course>137.899994</course>
+        <speed>0.514444</speed>
+      </trkpt>
+      <trkpt lat="30.052566667" lon="-91.596933333">
+        <time>2002-05-25T18:46:54Z</time>
+        <course>116.300003</course>
+        <speed>1.028889</speed>
+      </trkpt>
+      <trkpt lat="30.052333333" lon="-91.596433333">
+        <time>2002-05-25T18:47:42Z</time>
+        <course>118.400002</course>
+        <speed>1.131778</speed>
+      </trkpt>
+      <trkpt lat="30.052250000" lon="-91.595683333">
+        <time>2002-05-25T18:48:41Z</time>
+        <course>97.300003</course>
+        <speed>1.234667</speed>
+      </trkpt>
+      <trkpt lat="30.052216667" lon="-91.595016667">
+        <time>2002-05-25T18:49:52Z</time>
+        <course>93.300003</course>
+        <speed>0.926000</speed>
+      </trkpt>
+      <trkpt lat="30.051883333" lon="-91.594700000">
+        <time>2002-05-25T18:50:49Z</time>
+        <course>140.600006</course>
+        <speed>0.823111</speed>
+      </trkpt>
+      <trkpt lat="30.051050000" lon="-91.594400000">
+        <time>2002-05-25T18:52:14Z</time>
+        <course>162.699997</course>
+        <speed>1.131778</speed>
+      </trkpt>
+      <trkpt lat="30.050566667" lon="-91.594233333">
+        <time>2002-05-25T18:52:56Z</time>
+        <course>163.300003</course>
+        <speed>1.337556</speed>
+      </trkpt>
+      <trkpt lat="30.050183333" lon="-91.594100000">
+        <time>2002-05-25T18:53:38Z</time>
+        <course>163.300003</course>
+        <speed>1.080333</speed>
+      </trkpt>
+      <trkpt lat="30.049100000" lon="-91.593716667">
+        <time>2002-05-25T18:55:11Z</time>
+        <course>163.000000</course>
+        <speed>1.337556</speed>
+      </trkpt>
+      <trkpt lat="30.048450000" lon="-91.594250000">
+        <time>2002-05-25T18:56:32Z</time>
+        <course>215.399994</course>
+        <speed>1.080333</speed>
+      </trkpt>
+      <trkpt lat="30.048083333" lon="-91.594750000">
+        <time>2002-05-25T18:57:24Z</time>
+        <course>229.699997</course>
+        <speed>1.234667</speed>
+      </trkpt>
+      <trkpt lat="30.047500000" lon="-91.595450000">
+        <time>2002-05-25T18:58:40Z</time>
+        <course>226.100006</course>
+        <speed>1.234667</speed>
+      </trkpt>
+      <trkpt lat="30.047066667" lon="-91.596000000">
+        <time>2002-05-25T18:59:28Z</time>
+        <course>227.699997</course>
+        <speed>1.491889</speed>
+      </trkpt>
+      <trkpt lat="30.046633333" lon="-91.596600000">
+        <time>2002-05-25T19:00:22Z</time>
+        <course>230.100006</course>
+        <speed>1.389000</speed>
+      </trkpt>
+      <trkpt lat="30.046400000" lon="-91.597650000">
+        <time>2002-05-25T19:01:41Z</time>
+        <course>255.600006</course>
+        <speed>1.337556</speed>
+      </trkpt>
+      <trkpt lat="30.046233333" lon="-91.598466667">
+        <time>2002-05-25T19:02:48Z</time>
+        <course>256.700012</course>
+        <speed>1.183222</speed>
+      </trkpt>
+      <trkpt lat="30.046316667" lon="-91.598966667">
+        <time>2002-05-25T19:03:43Z</time>
+        <course>281.000000</course>
+        <speed>0.874556</speed>
+      </trkpt>
+      <trkpt lat="30.046783333" lon="-91.599283333">
+        <time>2002-05-25T19:04:49Z</time>
+        <course>329.600006</course>
+        <speed>0.926000</speed>
+      </trkpt>
+      <trkpt lat="30.047133333" lon="-91.599666667">
+        <time>2002-05-25T19:05:57Z</time>
+        <course>316.500000</course>
+        <speed>0.771667</speed>
+      </trkpt>
+    </trkseg>
+  </trk>
 </gpx>

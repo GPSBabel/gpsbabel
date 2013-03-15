@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx 
-  version="1.0" 
-  creator="GPSBabel - http://www.gpsbabel.org" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns="http://www.topografix.com/GPX/1/0" 
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="51.744667000" minlon="10.552068390" maxlat="51.816378030" maxlon="10.690602210"/>
   <rte>
@@ -54,7 +49,7 @@
     <rtept lat="51.775214760" lon="10.577687550">
       <name>RPT015</name>
     </rtept>
-</rte>
+  </rte>
   <rte>
     <name>Route 2</name>
     <rtept lat="51.801880930" lon="10.596525070">
@@ -72,7 +67,7 @@
     <rtept lat="51.802690830" lon="10.593145420">
       <name>RPT020</name>
     </rtept>
-</rte>
+  </rte>
   <rte>
     <name>Route 3</name>
     <rtept lat="51.762554050" lon="10.606579240">
@@ -87,7 +82,7 @@
     <rtept lat="51.775274560" lon="10.586600710">
       <name>RPT024</name>
     </rtept>
-</rte>
+  </rte>
   <rte>
     <name>Route 4</name>
     <rtept lat="51.764389200" lon="10.610410780">
@@ -105,7 +100,7 @@
     <rtept lat="51.766185410" lon="10.617066160">
       <name>RPT029</name>
     </rtept>
-</rte>
+  </rte>
   <trk>
     <name>Track 1</name>
     <trkseg>
@@ -147,7 +142,7 @@
       <trkpt lat="51.798403450" lon="10.620755680"/>
       <trkpt lat="51.800206230" lon="10.617123440"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>Track 2</name>
     <trkseg>
@@ -164,7 +159,7 @@
       <trkpt lat="51.763965550" lon="10.663414560"/>
       <trkpt lat="51.764932500" lon="10.658597170"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>Track 3</name>
     <trkseg>
@@ -175,5 +170,5 @@
       <trkpt lat="51.812379720" lon="10.649897680"/>
       <trkpt lat="51.816378030" lon="10.630682440"/>
     </trkseg>
-</trk>
+  </trk>
 </gpx>

@@ -29,13 +29,6 @@
 
 #define MYNAME "garmin_fs"
 
-#define GARMIN_GPX_EXT_REFERENCE \
-	"xmlns:gpxx=\"" \
-	"http://www.garmin.com/xmlschemas/GpxExtensions/v3\" " \
-	"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" " \
-	"xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3 " \
-	"http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd"
-
 garmin_fs_t*
 garmin_fs_alloc(const int protocol)
 {
@@ -222,11 +215,6 @@ garmin_fs_xml_fprint(const waypoint* waypt,
     writer.writeStartElement("gpxx:WaypointExtension");
     writer.writeNamespace("http://www.garmin.com/xmlschemas/GpxExtensions/v3",
                           "gpxx");
-    writer.writeNamespace("http://www.w3.org/2001/XMLSchema-instance",
-                          "xsi");
-    writer.writeAttribute("xsi:schemaLocation",
-      "http://www.garmin.com/xmlschemas/GpxExtensions/v3 "
-      "http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd");
     if WAYPT_HAS(waypt, proximity) {
       writer.writeTextElement("gpxx:Proximity", QString::number(waypt->proximity, 'f', 6));
     }

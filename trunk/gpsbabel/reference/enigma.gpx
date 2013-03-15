@@ -1,35 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="51.305278778" minlon="-9.523783684" maxlat="53.423606873" maxlon="4.390666485"/>
-<rte>
-  <rtept lat="52.180873871" lon="-9.523783684">
-    <ele>34.137600</ele>
-    <name>EIKY</name>
-    <cmt>KERRY</cmt>
-    <desc>KERRY</desc>
-  </rtept>
-  <rtept lat="52.701972961" lon="-8.924821854">
-    <ele>14.020800</ele>
-    <name>EINN</name>
-    <cmt>SHANNON</cmt>
-    <desc>SHANNON</desc>
-  </rtept>
-  <rtept lat="53.423606873" lon="-6.302777767">
-    <name>DAP(EI</name>
-    <cmt>DUBLIN</cmt>
-    <desc>DUBLIN</desc>
-  </rtept>
-  <rtept lat="51.305278778" lon="4.390666485">
-    <ele>3.048000</ele>
-    <name>EBHN</name>
-    <cmt>Hoevenen</cmt>
-    <desc>Hoevenen</desc>
-  </rtept>
-</rte>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="51.305278778" minlon="-9.523783684" maxlat="53.423606873" maxlon="4.390666485"/>
+  <rte>
+    <rtept lat="52.180873871" lon="-9.523783684">
+      <ele>34.137600</ele>
+      <name>EIKY</name>
+      <cmt>KERRY</cmt>
+      <desc>KERRY</desc>
+    </rtept>
+    <rtept lat="52.701972961" lon="-8.924821854">
+      <ele>14.020800</ele>
+      <name>EINN</name>
+      <cmt>SHANNON</cmt>
+      <desc>SHANNON</desc>
+    </rtept>
+    <rtept lat="53.423606873" lon="-6.302777767">
+      <name>DAP(EI</name>
+      <cmt>DUBLIN</cmt>
+      <desc>DUBLIN</desc>
+    </rtept>
+    <rtept lat="51.305278778" lon="4.390666485">
+      <ele>3.048000</ele>
+      <name>EBHN</name>
+      <cmt>Hoevenen</cmt>
+      <desc>Hoevenen</desc>
+    </rtept>
+  </rte>
 </gpx>

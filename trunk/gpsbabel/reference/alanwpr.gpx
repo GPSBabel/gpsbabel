@@ -1,381 +1,376 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="28.455250000" minlon="-17.980111111" maxlat="47.650694444" maxlon="9.483111111"/>
-<wpt lat="47.650694444" lon="9.483111111">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>Home</name>
-  <cmt>Sweet_Home</cmt>
-  <desc>Sweet_Home</desc>
-</wpt>
-<wpt lat="28.620472222" lon="-17.752805556">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>Airport</name>
-  <cmt>Santa_Cruz</cmt>
-  <desc>Santa_Cruz</desc>
-</wpt>
-<wpt lat="28.830361111" lon="-17.803222222">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GAS001</name>
-  <cmt>Barlovento</cmt>
-  <desc>Barlovento</desc>
-</wpt>
-<wpt lat="28.763444444" lon="-17.977722222">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GAS002</name>
-  <cmt>Puntagorda</cmt>
-  <desc>Puntagorda</desc>
-</wpt>
-<wpt lat="28.766000000" lon="-17.980111111">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>Police</name>
-  <cmt>Puntagorda</cmt>
-  <desc>Puntagorda</desc>
-</wpt>
-<wpt lat="28.689583333" lon="-17.767472222">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>SMrkt01</name>
-  <cmt>Santa_Cruz</cmt>
-  <desc>Santa_Cruz</desc>
-</wpt>
-<wpt lat="28.651083333" lon="-17.881027778">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>SMrkt02</name>
-  <cmt>El_Paso</cmt>
-  <desc>El_Paso</desc>
-</wpt>
-<wpt lat="28.778305556" lon="-17.906250000">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>PARK01</name>
-  <cmt>SmallParking</cmt>
-  <desc>SmallParking</desc>
-</wpt>
-<wpt lat="28.791527778" lon="-17.799361111">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>PARK02</name>
-  <cmt>Tilos_Trail</cmt>
-  <desc>Tilos_Trail</desc>
-</wpt>
-<wpt lat="28.780388889" lon="-17.962944444">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>PARK03</name>
-  <cmt>Las_Tricia</cmt>
-  <desc>Las_Tricia</desc>
-</wpt>
-<wpt lat="28.811111111" lon="-17.805222222">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>Barloven</name>
-  <cmt>Barlovento</cmt>
-  <desc>Barlovento</desc>
-</wpt>
-<wpt lat="28.692500000" lon="-17.876888889">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>Bejenado</name>
-  <cmt>Bejenado</cmt>
-  <desc>Bejenado</desc>
-</wpt>
-<wpt lat="28.697916667" lon="-17.856750000">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>Cumbreci</name>
-  <cmt>Cumbrecita</cmt>
-  <desc>Cumbrecita</desc>
-</wpt>
-<wpt lat="28.578805556" lon="-17.838083333">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>Durazner</name>
-  <cmt>Duraznero</cmt>
-  <desc>Duraznero</desc>
-</wpt>
-<wpt lat="28.614916667" lon="-17.836777778">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>El_Pilar</name>
-  <cmt>El_Pilar</cmt>
-  <desc>El_Pilar</desc>
-</wpt>
-<wpt lat="28.689138889" lon="-17.870083333">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>El_Rodeo</name>
-  <cmt>El_Rodeo</cmt>
-  <desc>El_Rodeo</desc>
-</wpt>
-<wpt lat="28.455361111" lon="-17.843166667">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>FaroFuen</name>
-  <cmt>Fuencaliente</cmt>
-  <desc>Fuencaliente</desc>
-</wpt>
-<wpt lat="28.730166667" lon="-17.813666667">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>F.Olen</name>
-  <cmt>Fuente_Olen</cmt>
-  <desc>Fuente_Olen</desc>
-</wpt>
-<wpt lat="28.583250000" lon="-17.837527778">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>HoyoNegr</name>
-  <cmt>Hoyo_Negro</cmt>
-  <desc>Hoyo_Negro</desc>
-</wpt>
-<wpt lat="28.754305556" lon="-17.884805556">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>Muchacho</name>
-  <cmt>Rq.Muchachos</cmt>
-  <desc>Rq.Muchachos</desc>
-</wpt>
-<wpt lat="28.609750000" lon="-17.839944444">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>M.Birigo</name>
-  <cmt>M_Birigoyo</cmt>
-  <desc>M_Birigoyo</desc>
-</wpt>
-<wpt lat="28.629027778" lon="-17.802027778">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>S.Isidro</name>
-  <cmt>San_Isidro</cmt>
-  <desc>San_Isidro</desc>
-</wpt>
-<wpt lat="28.688250000" lon="-17.761611111">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>S.Maria</name>
-  <cmt>Santa_Maria</cmt>
-  <desc>Santa_Maria</desc>
-</wpt>
-<wpt lat="28.647277778" lon="-17.944055556">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>Tazacort</name>
-  <cmt>Tazacorte</cmt>
-  <desc>Tazacorte</desc>
-</wpt>
-<wpt lat="28.692805556" lon="-17.924444444">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>T.d.Time</name>
-  <cmt>Tor_del_Time</cmt>
-  <desc>Tor_del_Time</desc>
-</wpt>
-<wpt lat="28.802388889" lon="-17.906944444">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>Zarza</name>
-  <cmt>La_Zarza</cmt>
-  <desc>La_Zarza</desc>
-</wpt>
-<wpt lat="28.801638889" lon="-17.908722222">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>Zarzita</name>
-  <cmt>La_Zarzita</cmt>
-  <desc>La_Zarzita</desc>
-</wpt>
-<wpt lat="28.723027778" lon="-17.875583333">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>SRVCENTR</name>
-  <cmt>Servicecentr</cmt>
-  <desc>Servicecentr</desc>
-</wpt>
-<wpt lat="28.501916667" lon="-17.843888889">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TGR130</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.688777778" lon="-17.927250000">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TGR131</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.622972222" lon="-17.844805556">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TPRLP14</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.562611111" lon="-17.836833333">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TPRLP15</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.587416667" lon="-17.837694444">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TPRLP16</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.619361111" lon="-17.858638889">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TSLEP103</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.603194444" lon="-17.846388889">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TSLEP107</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.601944444" lon="-17.880944444">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TSLEP107</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.525138889" lon="-17.837555556">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TSLFU110</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.536055556" lon="-17.842666667">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TSLFU111</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.767166667" lon="-17.832916667">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TSLSAS30</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.703972222" lon="-17.925750000">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TSLTJ71</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.702138889" lon="-17.951472222">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>TSLTJ71a</name>
-  <cmt>Trailhead</cmt>
-  <desc>Trailhead</desc>
-</wpt>
-<wpt lat="28.561555556" lon="-17.836500000">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GC7CF</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.518166667" lon="-17.834250000">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GCN1TQ</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.603000000" lon="-17.877250000">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GCNXY8</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.622666667" lon="-17.848777778">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GCHT8C</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.480750000" lon="-17.856500000">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GCNQXK</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.653916667" lon="-17.852722222">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GCD098</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.455250000" lon="-17.843555556">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GCM6N0</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.668027778" lon="-17.831361111">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GC405B</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.651138889" lon="-17.946194444">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GCD096</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.692055556" lon="-17.875194444">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GCNXKV</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.703805556" lon="-17.845555556">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GCNXMD</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.710027778" lon="-17.954611111">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GCHND9</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.766861111" lon="-17.833194444">
-  <time>2005-12-27T16:09:39Z</time>
-  <name>GC405C</name>
-  <cmt>Geocache</cmt>
-  <desc>Geocache</desc>
-</wpt>
-<wpt lat="28.698000000" lon="-17.949055556">
-  <time>2005-12-29T10:41:43Z</time>
-  <name>FH-HAUS</name>
-</wpt>
-<wpt lat="28.696750000" lon="-17.950194444">
-  <time>2005-12-29T11:01:17Z</time>
-  <name>FH-DRIVE</name>
-</wpt>
-<wpt lat="28.710055556" lon="-17.954638889">
-  <time>2005-12-31T10:31:52Z</time>
-  <name>GCHND9-1</name>
-</wpt>
-<wpt lat="28.710944444" lon="-17.955277778">
-  <time>2005-12-31T10:31:52Z</time>
-  <name>GCHND9-2</name>
-</wpt>
-<wpt lat="28.707222222" lon="-17.950888889">
-  <time>2005-12-31T10:31:52Z</time>
-  <name>GCHND9-3</name>
-</wpt>
-<wpt lat="28.722111111" lon="-17.979694444">
-  <time>2006-01-03T13:46:38Z</time>
-  <name>PL VETA</name>
-  <cmt>PLAYA VETA</cmt>
-  <desc>PLAYA VETA</desc>
-</wpt>
-<rte>
-  <name>GCHND9</name>
-  <rtept lat="28.710027778" lon="-17.954611111">
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="28.455250000" minlon="-17.980111111" maxlat="47.650694444" maxlon="9.483111111"/>
+  <wpt lat="47.650694444" lon="9.483111111">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>Home</name>
+    <cmt>Sweet_Home</cmt>
+    <desc>Sweet_Home</desc>
+  </wpt>
+  <wpt lat="28.620472222" lon="-17.752805556">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>Airport</name>
+    <cmt>Santa_Cruz</cmt>
+    <desc>Santa_Cruz</desc>
+  </wpt>
+  <wpt lat="28.830361111" lon="-17.803222222">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GAS001</name>
+    <cmt>Barlovento</cmt>
+    <desc>Barlovento</desc>
+  </wpt>
+  <wpt lat="28.763444444" lon="-17.977722222">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GAS002</name>
+    <cmt>Puntagorda</cmt>
+    <desc>Puntagorda</desc>
+  </wpt>
+  <wpt lat="28.766000000" lon="-17.980111111">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>Police</name>
+    <cmt>Puntagorda</cmt>
+    <desc>Puntagorda</desc>
+  </wpt>
+  <wpt lat="28.689583333" lon="-17.767472222">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>SMrkt01</name>
+    <cmt>Santa_Cruz</cmt>
+    <desc>Santa_Cruz</desc>
+  </wpt>
+  <wpt lat="28.651083333" lon="-17.881027778">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>SMrkt02</name>
+    <cmt>El_Paso</cmt>
+    <desc>El_Paso</desc>
+  </wpt>
+  <wpt lat="28.778305556" lon="-17.906250000">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>PARK01</name>
+    <cmt>SmallParking</cmt>
+    <desc>SmallParking</desc>
+  </wpt>
+  <wpt lat="28.791527778" lon="-17.799361111">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>PARK02</name>
+    <cmt>Tilos_Trail</cmt>
+    <desc>Tilos_Trail</desc>
+  </wpt>
+  <wpt lat="28.780388889" lon="-17.962944444">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>PARK03</name>
+    <cmt>Las_Tricia</cmt>
+    <desc>Las_Tricia</desc>
+  </wpt>
+  <wpt lat="28.811111111" lon="-17.805222222">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>Barloven</name>
+    <cmt>Barlovento</cmt>
+    <desc>Barlovento</desc>
+  </wpt>
+  <wpt lat="28.692500000" lon="-17.876888889">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>Bejenado</name>
+    <cmt>Bejenado</cmt>
+    <desc>Bejenado</desc>
+  </wpt>
+  <wpt lat="28.697916667" lon="-17.856750000">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>Cumbreci</name>
+    <cmt>Cumbrecita</cmt>
+    <desc>Cumbrecita</desc>
+  </wpt>
+  <wpt lat="28.578805556" lon="-17.838083333">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>Durazner</name>
+    <cmt>Duraznero</cmt>
+    <desc>Duraznero</desc>
+  </wpt>
+  <wpt lat="28.614916667" lon="-17.836777778">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>El_Pilar</name>
+    <cmt>El_Pilar</cmt>
+    <desc>El_Pilar</desc>
+  </wpt>
+  <wpt lat="28.689138889" lon="-17.870083333">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>El_Rodeo</name>
+    <cmt>El_Rodeo</cmt>
+    <desc>El_Rodeo</desc>
+  </wpt>
+  <wpt lat="28.455361111" lon="-17.843166667">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>FaroFuen</name>
+    <cmt>Fuencaliente</cmt>
+    <desc>Fuencaliente</desc>
+  </wpt>
+  <wpt lat="28.730166667" lon="-17.813666667">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>F.Olen</name>
+    <cmt>Fuente_Olen</cmt>
+    <desc>Fuente_Olen</desc>
+  </wpt>
+  <wpt lat="28.583250000" lon="-17.837527778">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>HoyoNegr</name>
+    <cmt>Hoyo_Negro</cmt>
+    <desc>Hoyo_Negro</desc>
+  </wpt>
+  <wpt lat="28.754305556" lon="-17.884805556">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>Muchacho</name>
+    <cmt>Rq.Muchachos</cmt>
+    <desc>Rq.Muchachos</desc>
+  </wpt>
+  <wpt lat="28.609750000" lon="-17.839944444">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>M.Birigo</name>
+    <cmt>M_Birigoyo</cmt>
+    <desc>M_Birigoyo</desc>
+  </wpt>
+  <wpt lat="28.629027778" lon="-17.802027778">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>S.Isidro</name>
+    <cmt>San_Isidro</cmt>
+    <desc>San_Isidro</desc>
+  </wpt>
+  <wpt lat="28.688250000" lon="-17.761611111">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>S.Maria</name>
+    <cmt>Santa_Maria</cmt>
+    <desc>Santa_Maria</desc>
+  </wpt>
+  <wpt lat="28.647277778" lon="-17.944055556">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>Tazacort</name>
+    <cmt>Tazacorte</cmt>
+    <desc>Tazacorte</desc>
+  </wpt>
+  <wpt lat="28.692805556" lon="-17.924444444">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>T.d.Time</name>
+    <cmt>Tor_del_Time</cmt>
+    <desc>Tor_del_Time</desc>
+  </wpt>
+  <wpt lat="28.802388889" lon="-17.906944444">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>Zarza</name>
+    <cmt>La_Zarza</cmt>
+    <desc>La_Zarza</desc>
+  </wpt>
+  <wpt lat="28.801638889" lon="-17.908722222">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>Zarzita</name>
+    <cmt>La_Zarzita</cmt>
+    <desc>La_Zarzita</desc>
+  </wpt>
+  <wpt lat="28.723027778" lon="-17.875583333">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>SRVCENTR</name>
+    <cmt>Servicecentr</cmt>
+    <desc>Servicecentr</desc>
+  </wpt>
+  <wpt lat="28.501916667" lon="-17.843888889">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TGR130</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.688777778" lon="-17.927250000">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TGR131</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.622972222" lon="-17.844805556">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TPRLP14</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.562611111" lon="-17.836833333">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TPRLP15</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.587416667" lon="-17.837694444">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TPRLP16</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.619361111" lon="-17.858638889">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TSLEP103</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.603194444" lon="-17.846388889">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TSLEP107</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.601944444" lon="-17.880944444">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TSLEP107</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.525138889" lon="-17.837555556">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TSLFU110</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.536055556" lon="-17.842666667">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TSLFU111</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.767166667" lon="-17.832916667">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TSLSAS30</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.703972222" lon="-17.925750000">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TSLTJ71</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.702138889" lon="-17.951472222">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>TSLTJ71a</name>
+    <cmt>Trailhead</cmt>
+    <desc>Trailhead</desc>
+  </wpt>
+  <wpt lat="28.561555556" lon="-17.836500000">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GC7CF</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </wpt>
+  <wpt lat="28.518166667" lon="-17.834250000">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GCN1TQ</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </wpt>
+  <wpt lat="28.603000000" lon="-17.877250000">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GCNXY8</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </wpt>
+  <wpt lat="28.622666667" lon="-17.848777778">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GCHT8C</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </wpt>
+  <wpt lat="28.480750000" lon="-17.856500000">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GCNQXK</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </wpt>
+  <wpt lat="28.653916667" lon="-17.852722222">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GCD098</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </wpt>
+  <wpt lat="28.455250000" lon="-17.843555556">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GCM6N0</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </wpt>
+  <wpt lat="28.668027778" lon="-17.831361111">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GC405B</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </wpt>
+  <wpt lat="28.651138889" lon="-17.946194444">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GCD096</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </wpt>
+  <wpt lat="28.692055556" lon="-17.875194444">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GCNXKV</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </wpt>
+  <wpt lat="28.703805556" lon="-17.845555556">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GCNXMD</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </wpt>
+  <wpt lat="28.710027778" lon="-17.954611111">
     <time>2005-12-27T16:09:39Z</time>
     <name>GCHND9</name>
     <cmt>Geocache</cmt>
     <desc>Geocache</desc>
-  </rtept>
-  <rtept lat="28.710055556" lon="-17.954638889">
+  </wpt>
+  <wpt lat="28.766861111" lon="-17.833194444">
+    <time>2005-12-27T16:09:39Z</time>
+    <name>GC405C</name>
+    <cmt>Geocache</cmt>
+    <desc>Geocache</desc>
+  </wpt>
+  <wpt lat="28.698000000" lon="-17.949055556">
+    <time>2005-12-29T10:41:43Z</time>
+    <name>FH-HAUS</name>
+  </wpt>
+  <wpt lat="28.696750000" lon="-17.950194444">
+    <time>2005-12-29T11:01:17Z</time>
+    <name>FH-DRIVE</name>
+  </wpt>
+  <wpt lat="28.710055556" lon="-17.954638889">
     <time>2005-12-31T10:31:52Z</time>
     <name>GCHND9-1</name>
-  </rtept>
-  <rtept lat="28.710944444" lon="-17.955277778">
+  </wpt>
+  <wpt lat="28.710944444" lon="-17.955277778">
     <time>2005-12-31T10:31:52Z</time>
     <name>GCHND9-2</name>
-  </rtept>
-  <rtept lat="28.707222222" lon="-17.950888889">
+  </wpt>
+  <wpt lat="28.707222222" lon="-17.950888889">
     <time>2005-12-31T10:31:52Z</time>
     <name>GCHND9-3</name>
-  </rtept>
-</rte>
+  </wpt>
+  <wpt lat="28.722111111" lon="-17.979694444">
+    <time>2006-01-03T13:46:38Z</time>
+    <name>PL VETA</name>
+    <cmt>PLAYA VETA</cmt>
+    <desc>PLAYA VETA</desc>
+  </wpt>
+  <rte>
+    <name>GCHND9</name>
+    <rtept lat="28.710027778" lon="-17.954611111">
+      <time>2005-12-27T16:09:39Z</time>
+      <name>GCHND9</name>
+      <cmt>Geocache</cmt>
+      <desc>Geocache</desc>
+    </rtept>
+    <rtept lat="28.710055556" lon="-17.954638889">
+      <time>2005-12-31T10:31:52Z</time>
+      <name>GCHND9-1</name>
+    </rtept>
+    <rtept lat="28.710944444" lon="-17.955277778">
+      <time>2005-12-31T10:31:52Z</time>
+      <name>GCHND9-2</name>
+    </rtept>
+    <rtept lat="28.707222222" lon="-17.950888889">
+      <time>2005-12-31T10:31:52Z</time>
+      <name>GCHND9-3</name>
+    </rtept>
+  </rte>
 </gpx>

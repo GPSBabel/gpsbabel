@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx 
-  version="1.0" 
-  creator="GPSBabel - http://www.gpsbabel.org" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns="http://www.topografix.com/GPX/1/0" 
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="35.260533000" minlon="-92.445088000" maxlat="35.262290000" maxlon="-92.441453000"/>
   <trk>
@@ -130,5 +125,5 @@
       <trkpt lat="35.261114000" lon="-92.444015000"/>
       <trkpt lat="35.261188000" lon="-92.444011000"/>
     </trkseg>
-</trk>
+  </trk>
 </gpx>

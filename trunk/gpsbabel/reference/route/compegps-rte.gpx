@@ -1,48 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="45.754467000" minlon="11.449617000" maxlat="45.789383000" maxlon="11.553583000"/>
-<rte>
-  <name>test</name>
-  <rtept lat="45.789383000" lon="11.553583000">
-    <ele>0.000000</ele>
-    <name>V03087</name>
-    <sym>Waypoint</sym>
-  </rtept>
-  <rtept lat="45.775800000" lon="11.449967000">
-    <ele>0.000000</ele>
-    <name>V05027</name>
-    <sym>Waypoint</sym>
-  </rtept>
-  <rtept lat="45.784883000" lon="11.544417000">
-    <ele>0.000000</ele>
-    <name>V06080</name>
-    <sym>Waypoint</sym>
-  </rtept>
-  <rtept lat="45.754467000" lon="11.493950000">
-    <ele>0.000000</ele>
-    <name>V04041</name>
-    <sym>Waypoint</sym>
-  </rtept>
-  <rtept lat="45.783083000" lon="11.459083000">
-    <ele>0.000000</ele>
-    <name>V09058</name>
-    <sym>Waypoint</sym>
-  </rtept>
-  <rtept lat="45.760583000" lon="11.449617000">
-    <ele>0.000000</ele>
-    <name>V10025</name>
-    <sym>Waypoint</sym>
-  </rtept>
-  <rtept lat="45.765950000" lon="11.480617000">
-    <ele>0.000000</ele>
-    <name>V02023</name>
-    <sym>Waypoint</sym>
-  </rtept>
-</rte>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="45.754467000" minlon="11.449617000" maxlat="45.789383000" maxlon="11.553583000"/>
+  <rte>
+    <name>test</name>
+    <rtept lat="45.789383000" lon="11.553583000">
+      <ele>0.000000</ele>
+      <name>V03087</name>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="45.775800000" lon="11.449967000">
+      <ele>0.000000</ele>
+      <name>V05027</name>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="45.784883000" lon="11.544417000">
+      <ele>0.000000</ele>
+      <name>V06080</name>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="45.754467000" lon="11.493950000">
+      <ele>0.000000</ele>
+      <name>V04041</name>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="45.783083000" lon="11.459083000">
+      <ele>0.000000</ele>
+      <name>V09058</name>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="45.760583000" lon="11.449617000">
+      <ele>0.000000</ele>
+      <name>V10025</name>
+      <sym>Waypoint</sym>
+    </rtept>
+    <rtept lat="45.765950000" lon="11.480617000">
+      <ele>0.000000</ele>
+      <name>V02023</name>
+      <sym>Waypoint</sym>
+    </rtept>
+  </rte>
 </gpx>

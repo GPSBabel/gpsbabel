@@ -1,1443 +1,1438 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.1"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/1"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
-<metadata>
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="47.545639984" minlon="4.290249981" maxlat="54.402619991" maxlon="16.385979988"/>
-</metadata>
-<wpt lat="48.399400022" lon="11.753660012">
-  <name>Uferlos Festival</name>
-  <cmt>Herzstück des Uferlos wird der Markt der Möglichkeiten mit einer bunten Auswahl an Kunst und Handwerk sein. Dort kann man gemütlich bummeln und jeden Tag eine neue kulinarische Spezialität aus der ganzen Welt entdecken. Darum herum wird auf fünf Bühnen ein wahres Feuerwerk mit Musik, Musical, Kabarett und vielem mehr abgebrannt. In vier Zirkuszelten, die den Markt umgeben, können die Besucher kostenlos alle Veranstaltungen genießen. Ausschließlich besondere Events in der Luitpoldhalle werden mit Ticketverkauf stattfinden. Datum: 15.05. - 24.05.2009, Beginn: 12:00 Uhr.</cmt>
-  <desc>Herzstück des Uferlos wird der Markt der Möglichkeiten mit einer bunten Auswahl an Kunst und Handwerk sein. Dort kann man gemütlich bummeln und jeden Tag eine neue kulinarische Spezialität aus der ganzen Welt entdecken. Darum herum wird auf fünf Bühnen ein wahres Feuerwerk mit Musik, Musical, Kabarett und vielem mehr abgebrannt. In vier Zirkuszelten, die den Markt umgeben, können die Besucher kostenlos alle Veranstaltungen genießen. Ausschließlich besondere Events in der Luitpoldhalle werden mit Ticketverkauf stattfinden. Datum: 15.05. - 24.05.2009, Beginn: 12:00 Uhr.</desc>
-  <link href="www.uferlos-festival.de">
-  <text>www.uferlos-festival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Luitpoldstrasse</gpxx:StreetAddress>
-        <gpxx:City>Freising</gpxx:City>
-        <gpxx:PostalCode>85356</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+49 8161 88 49 305</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="49.874490006" lon="8.653959967">
-  <name>Schlossgrabenfest</name>
-  <cmt>Line Up: Bakkushan, Boom Gang, Boppin B, Clickclickdecker, Extrabreit, Großstadtgeflüster, Luxuslärm, Mofa, Radiopilot, Rockformation Diskokugel, Sondaschule, The Fountains. Datum: 28.05. - 31.05.2009, Beginn: 12:00 Uhr.</cmt>
-  <desc>Line Up: Bakkushan, Boom Gang, Boppin B, Clickclickdecker, Extrabreit, Großstadtgeflüster, Luxuslärm, Mofa, Radiopilot, Rockformation Diskokugel, Sondaschule, The Fountains. Datum: 28.05. - 31.05.2009, Beginn: 12:00 Uhr.</desc>
-  <link href="www.schlossgrabenfest.de">
-  <text>www.schlossgrabenfest.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Zeughausstrasse</gpxx:StreetAddress>
-        <gpxx:City>Darmstadt</gpxx:City>
-        <gpxx:PostalCode>64283</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+49  61 51 9 71 12 27</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="49.039299991" lon="8.716329960">
-  <name>Kultival</name>
-  <cmt>Programm: Al Cajon, Blue Tattoo, White-Riddim, Zap-Gang, Fat Fuck, Saidian. Datum: 29.05. - 31.05.2009, Beginn: 19:00 Uhr.</cmt>
-  <desc>Programm: Al Cajon, Blue Tattoo, White-Riddim, Zap-Gang, Fat Fuck, Saidian. Datum: 29.05. - 31.05.2009, Beginn: 19:00 Uhr.</desc>
-  <link href="www.Kult-Verein.de">
-  <text>www.Kult-Verein.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Bretten / Grillplatz / B 35</gpxx:StreetAddress>
-        <gpxx:City>Bretten</gpxx:City>
-        <gpxx:PostalCode>75015</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="53.546119994" lon="9.966749987">
-  <name>Hafengeburtstag Hamburg</name>
-  <cmt>Mit dem größten Hafenfest der Welt feiert Hamburg vom 08.05. - 10.05.2009 seinen Hafen.</cmt>
-  <desc>Mit dem größten Hafenfest der Welt feiert Hamburg vom 08.05. - 10.05.2009 seinen Hafen.</desc>
-  <link href="www.hafengeburtstag.de">
-  <text>www.hafengeburtstag.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Alter Elbtunnel / St. Pauli Landungsbrücken</gpxx:StreetAddress>
-        <gpxx:City>Hamburg</gpxx:City>
-        <gpxx:PostalCode>20359</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 040 428412893</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.660460001" lon="6.622350002">
-  <name>EselRock</name>
-  <cmt>An einem Tag werden auf zwei Bühnen 15 Bands die Luft anheizen. Eine Mischung aus renommierten Acts und bundesweit bekannten Newcomern rocken auf zwei Bühnen, Main- und Secondstage. Programm: Blind, Bosse, Hazels, Innocent Exile, Juke Box Pussys, Kaiserkind, Naked End, Parklane7, Peilomat, Play The Gallery, Scarlet, We Set The Sun, Without Wax, Wretched. Eintritt frei. Datum: 23.05.2009.</cmt>
-  <desc>An einem Tag werden auf zwei Bühnen 15 Bands die Luft anheizen. Eine Mischung aus renommierten Acts und bundesweit bekannten Newcomern rocken auf zwei Bühnen, Main- und Secondstage. Programm: Blind, Bosse, Hazels, Innocent Exile, Juke Box Pussys, Kaiserkind, Naked End, Parklane7, Peilomat, Play The Gallery, Scarlet, We Set The Sun, Without Wax, Wretched. Eintritt frei. Datum: 23.05.2009.</desc>
-  <link href="www.eselrock.de">
-  <text>www.eselrock.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Heubergpark / Alte Roßmühlstraße</gpxx:StreetAddress>
-        <gpxx:City>Wesel</gpxx:City>
-        <gpxx:PostalCode>46483</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.962610008" lon="7.628400000">
-  <name>EuroCityFest Münster</name>
-  <cmt>Jeder Nation wird hier die Möglichkeit gegeben sich zu präsentieren und seine Individualiltät und kulturelle Einigkeiten zu unterstreichen. Vielseitiges Programm wird geboten, ob Musik, Tanz, Theater, Kunst oder kulinarische Genüsse. Eintriff frei. Datum: 22.05. - 24.05.2009, Beginn: 16:00.</cmt>
-  <desc>Jeder Nation wird hier die Möglichkeit gegeben sich zu präsentieren und seine Individualiltät und kulturelle Einigkeiten zu unterstreichen. Vielseitiges Programm wird geboten, ob Musik, Tanz, Theater, Kunst oder kulinarische Genüsse. Eintriff frei. Datum: 22.05. - 24.05.2009, Beginn: 16:00.</desc>
-  <link href="www.eurocityfest.de">
-  <text>www.eurocityfest.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Prinzipalmarkt</gpxx:StreetAddress>
-        <gpxx:City>Münster</gpxx:City>
-        <gpxx:PostalCode>48159</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 251 9226665</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.349280002" lon="7.761930004">
-  <name>Wispa Festival</name>
-  <cmt>Line Up: Animals Crossing, Babylon Riot, Back to Back, Buena Wispa Social Club, Bukkl, Cavidan, D-Zug, Die Konsorten, Die Lebenden Legenden, Flabba, Fueltones, Hux Flux, Ivan Ivanovich + The Kreml Krauts, Müller Tourgau, Mumpitz, Neo, Newphoria, Niteprowler, Soul Invaders, St. Range, Warg Sang. Datum: 11.06. - 13.06.2009, Beginn: 15:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</cmt>
-  <desc>Line Up: Animals Crossing, Babylon Riot, Back to Back, Buena Wispa Social Club, Bukkl, Cavidan, D-Zug, Die Konsorten, Die Lebenden Legenden, Flabba, Fueltones, Hux Flux, Ivan Ivanovich + The Kreml Krauts, Müller Tourgau, Mumpitz, Neo, Newphoria, Niteprowler, Soul Invaders, St. Range, Warg Sang. Datum: 11.06. - 13.06.2009, Beginn: 15:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</desc>
-  <link href="www.wispafestival.de">
-  <text>www.wispafestival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Frönsberg</gpxx:StreetAddress>
-        <gpxx:City>Hemer</gpxx:City>
-        <gpxx:PostalCode>58675</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="49.799310034" lon="9.919969998">
-  <name>Umsonst + Draußen Würzburg</name>
-  <cmt>Line Up: Aeon of Decay, Aloha From Hell, Benni Hemm Hemm, Better Ones, Blocking Element, Bons Balls, Boppin B, Breakfast Killers, Brut Boogaloo, Diego, Enuff, Faint, Falling to Dust, Fiatonic, Frittenbude, Fuck your Shadow from behind, Fuenf, Ghost Rockets, Gold Minor, Guitar Challenge Spectacle, Hank Cash, Jamaze, Jane Doe, Jerry Lain, JZ James Trio, Karlsson, Kashiwa Daisuke, Mama Boom, Mama s Gun, Markus Rill, Melomania, Other Generations Anthem, Palpitation, Sam Isaac Acoustic Trio, Schöne Schaisse, Senore Matze Rossi, Signals to Airkraft, Sorrow Remains, Spaceship Bismark, Steffi-Mira-Band, Superpunk, Surfing Hundekuchen, Tequila Terminators, The Robocop Kraus, Unter Tagen, Vladiwoodstok, Worst Thoughts. Datum: 19.06. - 21.06.2009, Beginn: 17:00 Uhr.</cmt>
-  <desc>Line Up: Aeon of Decay, Aloha From Hell, Benni Hemm Hemm, Better Ones, Blocking Element, Bons Balls, Boppin B, Breakfast Killers, Brut Boogaloo, Diego, Enuff, Faint, Falling to Dust, Fiatonic, Frittenbude, Fuck your Shadow from behind, Fuenf, Ghost Rockets, Gold Minor, Guitar Challenge Spectacle, Hank Cash, Jamaze, Jane Doe, Jerry Lain, JZ James Trio, Karlsson, Kashiwa Daisuke, Mama Boom, Mama s Gun, Markus Rill, Melomania, Other Generations Anthem, Palpitation, Sam Isaac Acoustic Trio, Schöne Schaisse, Senore Matze Rossi, Signals to Airkraft, Sorrow Remains, Spaceship Bismark, Steffi-Mira-Band, Superpunk, Surfing Hundekuchen, Tequila Terminators, The Robocop Kraus, Unter Tagen, Vladiwoodstok, Worst Thoughts. Datum: 19.06. - 21.06.2009, Beginn: 17:00 Uhr.</desc>
-  <link href="www.umsonst-und-draussen.de">
-  <text>www.umsonst-und-draussen.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Talavera</gpxx:StreetAddress>
-        <gpxx:City>Würzburg</gpxx:City>
-        <gpxx:PostalCode>97082</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+49 9306 9855748</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="50.208350010" lon="10.083699999">
-  <name>Umsonst + Draußen Bad Kissingen</name>
-  <cmt>Line Up: Black Petty, Dave + Hal, Die Schröders, Hamada, Hesslers, Kings are Better Queens, Knifflers Mom, Kojak, Luis + Laserpower, Mustache Madness, Saitensprung, Scallwags, Sebastian 23, Senore Matze Rossi, Spaceman Spiff, Taschenrocker, The Ghost Rockets, The Rising Rocket. Datum: 26.06. - 27.06.2009.</cmt>
-  <desc>Line Up: Black Petty, Dave + Hal, Die Schröders, Hamada, Hesslers, Kings are Better Queens, Knifflers Mom, Kojak, Luis + Laserpower, Mustache Madness, Saitensprung, Scallwags, Sebastian 23, Senore Matze Rossi, Spaceman Spiff, Taschenrocker, The Ghost Rockets, The Rising Rocket. Datum: 26.06. - 27.06.2009.</desc>
-  <link href="www.umsonst-und-draussen-kg.de">
-  <text>www.umsonst-und-draussen-kg.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Kasernenstrasse</gpxx:StreetAddress>
-        <gpxx:City>Bad Kissingen</gpxx:City>
-        <gpxx:PostalCode>97688</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="52.071980014" lon="10.018159971">
-  <name>Teichrock</name>
-  <cmt>Line Up: Blakvise, Dollsface, Trashmonkeys, Your Hero. Datum: 27.06.2009, Beginn: 13:00 Uhr.</cmt>
-  <desc>Line Up: Blakvise, Dollsface, Trashmonkeys, Your Hero. Datum: 27.06.2009, Beginn: 13:00 Uhr.</desc>
-  <link href="www.teichrock.de">
-  <text>www.teichrock.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Solebadstrasse</gpxx:StreetAddress>
-        <gpxx:City>Bad Salzdetfurth</gpxx:City>
-        <gpxx:PostalCode>31162</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="53.310100017" lon="9.598830035">
-  <name>Spreehafenfestival</name>
-  <cmt>&quot;Am 23. Juni 2007 wird es im Rahmen des Spreehafenfestes das 2. Spreehafen OPEN AIR FESTIVAL geben. - Mucke vom &quot;&quot;Feinsten&quot;&quot; + Hafenatmosphäre pur mit einmaligem Blick auf die Hamburger Skyline. Fünf Spitzenbands aus dem Raum Hamburg werden euch auch dies mal mit Reggae, Ska und Rocksteady verwöhnen. Anschließend geht es mir der Mittsommernachtsparty bis in den frühen Morgen weiter. Datum: 20.06.2009, Beginn: 16:00 Uhr&quot;</cmt>
-  <desc>&quot;Am 23. Juni 2007 wird es im Rahmen des Spreehafenfestes das 2. Spreehafen OPEN AIR FESTIVAL geben. - Mucke vom &quot;&quot;Feinsten&quot;&quot; + Hafenatmosphäre pur mit einmaligem Blick auf die Hamburger Skyline. Fünf Spitzenbands aus dem Raum Hamburg werden euch auch dies mal mit Reggae, Ska und Rocksteady verwöhnen. Anschließend geht es mir der Mittsommernachtsparty bis in den frühen Morgen weiter. Datum: 20.06.2009, Beginn: 16:00 Uhr&quot;</desc>
-  <link href="www.spreehafenfestival.de">
-  <text>www.spreehafenfestival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Zwischen Potsdamer und Berliner Ufer</gpxx:StreetAddress>
-        <gpxx:City>Hamburg</gpxx:City>
-        <gpxx:PostalCode>20457</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.713909984" lon="9.106200021">
-  <name>Rohrer Seefest</name>
-  <cmt>Line Up: Charmin Carmen, Desert Storm, Elektroboys, Neuland, Pure Sickness, Revealing Dawn, The Prosecution, [æm-x]. Datum: 13.06. - 14.06.2009, Beginn: 11:00 Uhr.</cmt>
-  <desc>Line Up: Charmin Carmen, Desert Storm, Elektroboys, Neuland, Pure Sickness, Revealing Dawn, The Prosecution, [æm-x]. Datum: 13.06. - 14.06.2009, Beginn: 11:00 Uhr.</desc>
-  <link href="www.rohrer-seefest.de">
-  <text>www.rohrer-seefest.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Parkanlage Stuttgart-Rohr</gpxx:StreetAddress>
-        <gpxx:City>Stuttgart</gpxx:City>
-        <gpxx:PostalCode>70565</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+49162  90 90 857</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.427960016" lon="9.768199967">
-  <name>Rock die Heide</name>
-  <cmt>Open Air- Festival mit Bands aus der Region, aber auch hier kann ich wieder auf die Homepage verweisen, denn da ist alles genau zu erfahren. Datum: 05.06. - 06.06.2009, Beginn: 15:00 Uhr.</cmt>
-  <desc>Open Air- Festival mit Bands aus der Region, aber auch hier kann ich wieder auf die Homepage verweisen, denn da ist alles genau zu erfahren. Datum: 05.06. - 06.06.2009, Beginn: 15:00 Uhr.</desc>
-  <link href="www.rockdieheide.de">
-  <text>www.rockdieheide.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Himmelreichgelände bei den Hessenhöfen</gpxx:StreetAddress>
-        <gpxx:City>Blaubeuren</gpxx:City>
-        <gpxx:PostalCode>89143</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.646140022" lon="6.798919989">
-  <name>Rock and Bike</name>
-  <cmt>Ein Festival für Biker und Festival - Freaks. Neben 10 Live-Bands gibt es eine ganze Reihe von Wettbewerben und Shows. Band-, Bike- u. Tattoo-Contest, Tauziehen, Strongest-Man Wettbewerb (Hantel stemmen), Wahl zur Miss R+B 2006. Line Up: Iljas Richter, Imagine. Datum: 12.06. - 14.06.2009, Beginn: Fr. 14:00 Uhr.</cmt>
-  <desc>Ein Festival für Biker und Festival - Freaks. Neben 10 Live-Bands gibt es eine ganze Reihe von Wettbewerben und Shows. Band-, Bike- u. Tattoo-Contest, Tauziehen, Strongest-Man Wettbewerb (Hantel stemmen), Wahl zur Miss R+B 2006. Line Up: Iljas Richter, Imagine. Datum: 12.06. - 14.06.2009, Beginn: Fr. 14:00 Uhr.</desc>
-  <link href="www.rockandbike.de">
-  <text>www.rockandbike.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Ossenbergweg</gpxx:StreetAddress>
-        <gpxx:City>Hünxe</gpxx:City>
-        <gpxx:PostalCode>46569</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.510489995" lon="9.035319965">
-  <name>RACT Festival</name>
-  <cmt>Mischung aus Musik und Politik. Viele Workshops (Graffiti, Rapschmiede, Capoeira, Politik-Manufaktur uvm). und Contests (SlamBabylon, Poetry Slam uvm.). Datum: 12.06. - 13.06.2009, Beginn: Fr. 15:00 Uhr Sa. 10:00 Uhr</cmt>
-  <desc>Mischung aus Musik und Politik. Viele Workshops (Graffiti, Rapschmiede, Capoeira, Politik-Manufaktur uvm). und Contests (SlamBabylon, Poetry Slam uvm.). Datum: 12.06. - 13.06.2009, Beginn: Fr. 15:00 Uhr Sa. 10:00 Uhr</desc>
-  <link href="www.ract-festival.de">
-  <text>www.ract-festival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Rappenberghalde</gpxx:StreetAddress>
-        <gpxx:City>Tübingen</gpxx:City>
-        <gpxx:PostalCode>72074</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+49 7071 26969</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.702990040" lon="8.530369978">
-  <name>Polterplatz Open Air</name>
-  <cmt>Gemütliches Open Air mitten im Schwarzwald, mit stationären sanitären Anlagen. Theke hat rund um die Uhr offen. Grosse Zeltwiese vorhanden. Nach den Bands Rockdisco in der 2. Hütte von 1 Uhr bis Open End. Line Up: Ashes Of Pompeii, Different, Forrest Green, Green Frog Feet, Insanity, Kung Fu Schmitt, The Pheromoans, The Vin Lights, Twice Aday, Wildbad Bahnhof, Willo the Wisp. Datum: 26.06. - 27.06.2009, Beginn: 18:00 Uhr.</cmt>
-  <desc>Gemütliches Open Air mitten im Schwarzwald, mit stationären sanitären Anlagen. Theke hat rund um die Uhr offen. Grosse Zeltwiese vorhanden. Nach den Bands Rockdisco in der 2. Hütte von 1 Uhr bis Open End. Line Up: Ashes Of Pompeii, Different, Forrest Green, Green Frog Feet, Insanity, Kung Fu Schmitt, The Pheromoans, The Vin Lights, Twice Aday, Wildbad Bahnhof, Willo the Wisp. Datum: 26.06. - 27.06.2009, Beginn: 18:00 Uhr.</desc>
-  <link href="www.polterplatz.de">
-  <text>www.polterplatz.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Ginsterweg</gpxx:StreetAddress>
-        <gpxx:City>Bad Wildbad</gpxx:City>
-        <gpxx:PostalCode>75323</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="52.052970026" lon="4.290249981">
-  <name>Parkpop</name>
-  <cmt>Line Up: M.O. + Brakko, Milow, Pretenders, Sabrina Starke, Shantel + Bucovina Club Orkestar. Datum: 28.06.2009, Beginn: 13:00 Uhr.</cmt>
-  <desc>Line Up: M.O. + Brakko, Milow, Pretenders, Sabrina Starke, Shantel + Bucovina Club Orkestar. Datum: 28.06.2009, Beginn: 13:00 Uhr.</desc>
-  <link href="www.parkpop.nl">
-  <text>www.parkpop.nl</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Zuiderpark</gpxx:StreetAddress>
-        <gpxx:City>Den Haag</gpxx:City>
-        <gpxx:PostalCode>02533</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.383819981" lon="6.996099986">
-  <name>Open Air Werden</name>
-  <cmt>Line Up: Boris Hotton, Crash Casino, Dinner Ratz, Freakatronic, Ja, Panik, Jennifer Rostock, Kreator, Modern Walker, Schallschleuser, The Autumns Regret, The Black Lips, The Whitest Boy Alive, Urban Absolutes, Vincenzo. Datum: 01.06.2009, Beginn: ab 14:00 Uhr.</cmt>
-  <desc>Line Up: Boris Hotton, Crash Casino, Dinner Ratz, Freakatronic, Ja, Panik, Jennifer Rostock, Kreator, Modern Walker, Schallschleuser, The Autumns Regret, The Black Lips, The Whitest Boy Alive, Urban Absolutes, Vincenzo. Datum: 01.06.2009, Beginn: ab 14:00 Uhr.</desc>
-  <link href="www.openair-werden.de">
-  <text>www.openair-werden.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Im Löwental</gpxx:StreetAddress>
-        <gpxx:City>Essen</gpxx:City>
-        <gpxx:PostalCode>45239</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+49 201  88 511 86</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="50.049679996" lon="8.700139979">
-  <name>Open Doors Festivals</name>
-  <cmt>Line Up: Cashma Hoody, Hole Full Of Love, Hot Stuff, Madhouse Flowers, Paddy goes to Holyhead, Skafield, The Mazers, The Queen Kings. Datum: 05.06. - 07.06.2009.</cmt>
-  <desc>Line Up: Cashma Hoody, Hole Full Of Love, Hot Stuff, Madhouse Flowers, Paddy goes to Holyhead, Skafield, The Mazers, The Queen Kings. Datum: 05.06. - 07.06.2009.</desc>
-  <link href="www.open-doors-festival.de">
-  <text>www.open-doors-festival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Neu-Isenburg</gpxx:StreetAddress>
-        <gpxx:City>Neu-Isenburg</gpxx:City>
-        <gpxx:PostalCode>63263</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.506919974" lon="8.323650034">
-  <name>Happiness</name>
-  <cmt>Datum: 18.07.2009, Beginn: 19:00.</cmt>
-  <desc>Datum: 18.07.2009, Beginn: 19:00.</desc>
-  <link href="www.regioactive.de">
-  <text>www.regioactive.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:City>Straubenhardt</gpxx:City>
-        <gpxx:PostalCode>75334</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.683030035" lon="7.813850027">
-  <name>Hafenfest Hamm</name>
-  <cmt>Anlässlich des 95-jährigen Jubiläums des Hafen Hamm gibt es ein großes Hafenfest. Datum: 06.06.2009, Beginn: 11:00 Uhr.</cmt>
-  <desc>Anlässlich des 95-jährigen Jubiläums des Hafen Hamm gibt es ein großes Hafenfest. Datum: 06.06.2009, Beginn: 11:00 Uhr.</desc>
-  <link href="www.stadtwerke-hamm.de">
-  <text>www.stadtwerke-hamm.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Hafenstraße</gpxx:StreetAddress>
-        <gpxx:City>Hamm</gpxx:City>
-        <gpxx:PostalCode>59065</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 2381 2741234</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="53.133990029" lon="7.319710013">
-  <name>Free for All</name>
-  <cmt>Das Festival beginnt um 15:00 Uhr und endet um 01:00 Uhr. In Ostfriesland könnt ihr ein schönes Festival erleben, wo das Preisleistungsverhältnis noch stimmt! Programm: Barroom Heroes, Cataract, Circus Ivory, Forever It Shall Be, Claus Grabke, Hate Embraced, Laut, Sore Emetic, Sturch, Testsieger, The Bottrops, We Butter The Bread With Butter. Datum: 27.06.2009, Beginn: 15:00 Uhr.</cmt>
-  <desc>Das Festival beginnt um 15:00 Uhr und endet um 01:00 Uhr. In Ostfriesland könnt ihr ein schönes Festival erleben, wo das Preisleistungsverhältnis noch stimmt! Programm: Barroom Heroes, Cataract, Circus Ivory, Forever It Shall Be, Claus Grabke, Hate Embraced, Laut, Sore Emetic, Sturch, Testsieger, The Bottrops, We Butter The Bread With Butter. Datum: 27.06.2009, Beginn: 15:00 Uhr.</desc>
-  <link href="www.ffa-stapelmoor.de">
-  <text>www.ffa-stapelmoor.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Heidjerstraße</gpxx:StreetAddress>
-        <gpxx:City>Weener</gpxx:City>
-        <gpxx:PostalCode>26826</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 4962 996835</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.372929960" lon="7.696949970">
-  <name>Friedensfestival</name>
-  <cmt>Benefizfestival zugunsten der Flüchtlingsarbeit sowie sozialen und politischen Projekten. Datum: 26.06. - 28.06.2009.</cmt>
-  <desc>Benefizfestival zugunsten der Flüchtlingsarbeit sowie sozialen und politischen Projekten. Datum: 26.06. - 28.06.2009.</desc>
-  <link href="www.friedensfestival.de">
-  <text>www.friedensfestival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Altstadt</gpxx:StreetAddress>
-        <gpxx:City>Iserlohn</gpxx:City>
-        <gpxx:PostalCode>58636</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="49.002669984" lon="8.371280031">
-  <name>Das Fest Karlsruhe</name>
-  <cmt>Festival mit internationalen Stars wie Nenesh Cherry, Maria Glen, Chaka Khan, Suzanne Vega, Willy de Ville, die Simple Minds oder Faithless kostenlos zu sehen. Ein großes Rahmenprogramm mit Theater, Kleinkunst und Comedy machen das Festival perfekt. Erwartete Bucher: 200.000. Datum: 24.07. - 26.07.2009.</cmt>
-  <desc>Festival mit internationalen Stars wie Nenesh Cherry, Maria Glen, Chaka Khan, Suzanne Vega, Willy de Ville, die Simple Minds oder Faithless kostenlos zu sehen. Ein großes Rahmenprogramm mit Theater, Kleinkunst und Comedy machen das Festival perfekt. Erwartete Bucher: 200.000. Datum: 24.07. - 26.07.2009.</desc>
-  <link href="www.dasfest-karlsruhe.de">
-  <text>www.dasfest-karlsruhe.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Günther-Klutz-Anlage</gpxx:StreetAddress>
-        <gpxx:City>Karlsruhe</gpxx:City>
-        <gpxx:PostalCode>76135</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 721 7817213</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.249339983" lon="16.385979988">
-  <name>Donauinselfest</name>
-  <cmt>Größtes Musikfestival Europas mitten in Wien mit über drei Millionen Besuchern lädt auch dieses Jahr zum feiern ein. Info und Programm: 19 Iseln, 16 Bühnen, 2000 KünstlerInnen, über 200 Musik-, Theater- und Kabarettgruppen, Über 6000 Stunden Programm an vier Tagen. Eintritt frei. Datum: 26.06. - 28.06.2009</cmt>
-  <desc>Größtes Musikfestival Europas mitten in Wien mit über drei Millionen Besuchern lädt auch dieses Jahr zum feiern ein. Info und Programm: 19 Iseln, 16 Bühnen, 2000 KünstlerInnen, über 200 Musik-, Theater- und Kabarettgruppen, Über 6000 Stunden Programm an vier Tagen. Eintritt frei. Datum: 26.06. - 28.06.2009</desc>
-  <link href="www.donauinselfest.at">
-  <text>www.donauinselfest.at</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Donauinsel</gpxx:StreetAddress>
-        <gpxx:City>Wien</gpxx:City>
-        <gpxx:PostalCode>01220</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 43 1 2020202</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.946109992" lon="9.430129984">
-  <name>Backnanger Nachwuchsfestival</name>
-  <cmt>Schon seit 1971 zeigen die Backnanger am letzten Juni-Wochenende wie sie feiern können. Und weit über 100.000 Besucher zeigen, dass die ganze Region mitfeiert. Damit ist es die größte und älteste Veranstaltung dieser Art im deutschen Südwesten eröffnet.Backnanger Nachwuchsfestival (am 28.06.2009, Beginn 16:00 Uhr) im Rahmen des Backnanger Strassenfestes vom 26.06. - 28.06.2009</cmt>
-  <desc>Schon seit 1971 zeigen die Backnanger am letzten Juni-Wochenende wie sie feiern können. Und weit über 100.000 Besucher zeigen, dass die ganze Region mitfeiert. Damit ist es die größte und älteste Veranstaltung dieser Art im deutschen Südwesten eröffnet.Backnanger Nachwuchsfestival (am 28.06.2009, Beginn 16:00 Uhr) im Rahmen des Backnanger Strassenfestes vom 26.06. - 28.06.2009</desc>
-  <link href="www.backnanger-strassenfest.de">
-  <text>www.backnanger-strassenfest.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Obstmarkt</gpxx:StreetAddress>
-        <gpxx:City>Backnang</gpxx:City>
-        <gpxx:PostalCode>71522</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 7191 35210</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="52.491740026" lon="7.296230039">
-  <name>Abifestival</name>
-  <cmt>Das alljährige Abifestival präsentiert sich in diesem Jahr unter dem Motto: Energie. Den nicht nur der Atommeiler neben an als auch das Abifestival produzieren pure Energie und Power! (Radio-) Aktivität und Kraft verkörpern diese beiden Größen. Jahr für Jahr setzt auch das Abifestival seine Besucher und Gäste unter Strom. Es elektrisiert die Massen und begeistert Musikliebhaber mit seinem vielfältigen Programm, mit herausragenden Künstlern und überwältigenden Bands. Programm: Adolar, The Bandgeek Mafia, Blumentopf, Bodhi Trees, Damion Davis, Dúné, Don and the Knocknerus, Fatso and the Rightmakers, Frittenbude, Götz Widmann, Herrenmagazin, Juri Gagarin, Kalypso, Klez.e, Mikrokosmos23, Ohrbooten, Play and Rewind, RapPourTua, Revolving Door, Talk Radio Talk, The Piglets, The Pollywogs, Turbostaat, Umse. Datum:  05.06. - 06.06.2009, Beginn Fr. 12:00 Uhr</cmt>
-  <desc>Das alljährige Abifestival präsentiert sich in diesem Jahr unter dem Motto: Energie. Den nicht nur der Atommeiler neben an als auch das Abifestival produzieren pure Energie und Power! (Radio-) Aktivität und Kraft verkörpern diese beiden Größen. Jahr für Jahr setzt auch das Abifestival seine Besucher und Gäste unter Strom. Es elektrisiert die Massen und begeistert Musikliebhaber mit seinem vielfältigen Programm, mit herausragenden Künstlern und überwältigenden Bands. Programm: Adolar, The Bandgeek Mafia, Blumentopf, Bodhi Trees, Damion Davis, Dúné, Don and the Knocknerus, Fatso and the Rightmakers, Frittenbude, Götz Widmann, Herrenmagazin, Juri Gagarin, Kalypso, Klez.e, Mikrokosmos23, Ohrbooten, Play and Rewind, RapPourTua, Revolving Door, Talk Radio Talk, The Piglets, The Pollywogs, Turbostaat, Umse. Datum:  05.06. - 06.06.2009, Beginn Fr. 12:00 Uhr</desc>
-  <link href="www.abifestival.de">
-  <text>www.abifestival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Am Kohschultenhof</gpxx:StreetAddress>
-        <gpxx:City>Lingen</gpxx:City>
-        <gpxx:PostalCode>49808</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="49.969729967" lon="10.417360011">
-  <name>Weinlabyrinth</name>
-  <cmt>Bands: Mister Music, MacD, The Shades, Ritmo Candela, Gipsy for Life, Fiesta Andaluza, Baila me. Datum: 10.07. - 12.07.2009, Beginn: 18:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</cmt>
-  <desc>Bands: Mister Music, MacD, The Shades, Ritmo Candela, Gipsy for Life, Fiesta Andaluza, Baila me. Datum: 10.07. - 12.07.2009, Beginn: 18:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</desc>
-  <link href="www.weinlabyrinth.de">
-  <text>www.weinlabyrinth.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Falkenstein</gpxx:StreetAddress>
-        <gpxx:City>Donnersdorf-Falkenstein</gpxx:City>
-        <gpxx:PostalCode>97499</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+491 70 / 4 60 05 38</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="49.760510037" lon="11.537659960">
-  <name>Waldstock</name>
-  <cmt>Waldstock Umsonst Und Draussen Festival idyllisch inmitten einer Waldlichtung in der fränkischen Schweiz. Alles mit viel Liebe, viel Ehrenamt, viel Herzblut und viel Leidenschaft! Datum: 11.07.2009. Der exakte Standort der Location ist vor Ort ausgeschildert.</cmt>
-  <desc>Waldstock Umsonst Und Draussen Festival idyllisch inmitten einer Waldlichtung in der fränkischen Schweiz. Alles mit viel Liebe, viel Ehrenamt, viel Herzblut und viel Leidenschaft! Datum: 11.07.2009. Der exakte Standort der Location ist vor Ort ausgeschildert.</desc>
-  <link href="www.waldstock.de">
-  <text>www.waldstock.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Schloßberg</gpxx:StreetAddress>
-        <gpxx:City>Pegnitz</gpxx:City>
-        <gpxx:PostalCode>91257</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.413060009" lon="9.068780020">
-  <name>Umsonst + Draußen Mössingen</name>
-  <cmt>Line Up: Derby Dolls, InPlugged, Melanus Kwest, Reefer Madness, Scratched Surface, Spätzlesdreck, The Johnny Trouble Trio, The Real Mc Kenzies, The Seducers. Datum: 31.07. - 01.08.2009, Beginn: ca. 15:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</cmt>
-  <desc>Line Up: Derby Dolls, InPlugged, Melanus Kwest, Reefer Madness, Scratched Surface, Spätzlesdreck, The Johnny Trouble Trio, The Real Mc Kenzies, The Seducers. Datum: 31.07. - 01.08.2009, Beginn: ca. 15:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</desc>
-  <link href="www.umsonstunddraussen.com">
-  <text>www.umsonstunddraussen.com</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Firstwaldstrasse</gpxx:StreetAddress>
-        <gpxx:City>Mössingen</gpxx:City>
-        <gpxx:PostalCode>72116</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="52.187669976" lon="8.938270016">
-  <name>Umsonst + Draußen Vlotho</name>
-  <cmt>Datum: 31.07. - 02.08.2009.</cmt>
-  <desc>Datum: 31.07. - 02.08.2009.</desc>
-  <link href="www.festivalkult.de">
-  <text>www.festivalkult.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Weserwiese Veltheim</gpxx:StreetAddress>
-        <gpxx:City>Vlotho</gpxx:City>
-        <gpxx:PostalCode>32602</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="47.545639984" lon="9.679759992">
-  <name>Umsonst + Draußen Lindau</name>
-  <cmt>Line Up: Broilers, Far From Finished, It-Ate, Jancee Pornick Casino, Nosliw + Feueralarm, Talco. Datum: 25.07.2009, Beginn: 13:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</cmt>
-  <desc>Line Up: Broilers, Far From Finished, It-Ate, Jancee Pornick Casino, Nosliw + Feueralarm, Talco. Datum: 25.07.2009, Beginn: 13:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</desc>
-  <link href="www.vaudeville.de">
-  <text>www.vaudeville.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Hintere Insel</gpxx:StreetAddress>
-        <gpxx:City>Lindau</gpxx:City>
-        <gpxx:PostalCode>88131</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="49.966509975" lon="9.784779958">
-  <name>Umsonst + Draußen Karlstadt</name>
-  <cmt>Als Besonderheit wartet das karlstadter u+d mit einer Garagenbühne auf, auf der nachwuchs-künstler die Möglichkeit bekommen, ihr Können unter Beweis zu stellen. Datum: 25.07. - 26.07.2009, Beginn: Fr. 19:30 Uhr, Sa. 18:00 Uhr, So. 11:00 Uhr.</cmt>
-  <desc>Als Besonderheit wartet das karlstadter u+d mit einer Garagenbühne auf, auf der nachwuchs-künstler die Möglichkeit bekommen, ihr Können unter Beweis zu stellen. Datum: 25.07. - 26.07.2009, Beginn: Fr. 19:30 Uhr, Sa. 18:00 Uhr, So. 11:00 Uhr.</desc>
-  <link href="www.umsonstunddraussen.de">
-  <text>www.umsonstunddraussen.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Am Saupurzl</gpxx:StreetAddress>
-        <gpxx:City>Karlstadt</gpxx:City>
-        <gpxx:PostalCode>97753</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.786249999" lon="9.945200030">
-  <name>Umsonst + Draußen Heubach</name>
-  <cmt>Dieses Jahr zum 25. Mal, wieder mit dabei sind hochkarätige Acts aus vielen Bereichen der Musik. 2 Tage voller Spaß, guter Musik und netten Menschen. Datum ist noch nicht bekannt. Datum: 10. + 11.07.2009.</cmt>
-  <desc>Dieses Jahr zum 25. Mal, wieder mit dabei sind hochkarätige Acts aus vielen Bereichen der Musik. 2 Tage voller Spaß, guter Musik und netten Menschen. Datum ist noch nicht bekannt. Datum: 10. + 11.07.2009.</desc>
-  <link href="www.ud-heubach.de">
-  <text>www.ud-heubach.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:City>Heubach</gpxx:City>
-        <gpxx:PostalCode>73540</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.314740034" lon="11.913810018">
-  <name>Sinnflutfestival</name>
-  <cmt>10 Tage Festival, kostenlose Musik, Circuszelt mit Veranstaltungen, Gastrostände, Kunsthandwerk, Kinderprogramm. 24. Juli bis 2. August 2009.</cmt>
-  <desc>10 Tage Festival, kostenlose Musik, Circuszelt mit Veranstaltungen, Gastrostände, Kunsthandwerk, Kinderprogramm. 24. Juli bis 2. August 2009.</desc>
-  <link href="www.sinnflut.biz">
-  <text>www.sinnflut.biz</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Volksfestplatz am Stadion</gpxx:StreetAddress>
-        <gpxx:City>Erding</gpxx:City>
-        <gpxx:PostalCode>85435</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+49 8122  880 989 0</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="52.672489984" lon="9.902839987">
-  <name>Südwinsen Festival</name>
-  <cmt>Auf der Südwinser Festivalkuhwiese idylisch gelegen, mitten im Wald und direkt an der Aller, wird auch in diesem Jahr ein sehr abwechslungsreiches Programm geboten. Line Up: Demian Band, Kid Decker, Rockout, Stars and Bars, The Pokes, WhatEver. Datum: 24.07. - 25.07.2009, Beginn: Fr. 15:00 Uhr, Sa. 11:00 Uhr.</cmt>
-  <desc>Auf der Südwinser Festivalkuhwiese idylisch gelegen, mitten im Wald und direkt an der Aller, wird auch in diesem Jahr ein sehr abwechslungsreiches Programm geboten. Line Up: Demian Band, Kid Decker, Rockout, Stars and Bars, The Pokes, WhatEver. Datum: 24.07. - 25.07.2009, Beginn: Fr. 15:00 Uhr, Sa. 11:00 Uhr.</desc>
-  <link href="www.suedwinsen-festival.de">
-  <text>www.suedwinsen-festival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:City>Südwinsen</gpxx:City>
-        <gpxx:PostalCode>29308</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="52.444449998" lon="13.393969964">
-  <name>Rocktreff</name>
-  <cmt>Festival für alle von bis usw. check out! Datum: 10.07. - 12.07.2009, Beginn: 11:00 Uhr.</cmt>
-  <desc>Festival für alle von bis usw. check out! Datum: 10.07. - 12.07.2009, Beginn: 11:00 Uhr.</desc>
-  <link href="www.rocktreff.de">
-  <text>www.rocktreff.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Andlauer Weg</gpxx:StreetAddress>
-        <gpxx:City>Berlin</gpxx:City>
-        <gpxx:PostalCode>12105</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="50.706969984" lon="7.145749982">
-  <name>Rheinkultur</name>
-  <cmt>Line Up: A + E aka Masta Ace + Edo G, Baddies, Black President, Black Stone Cherry, Boppin B, Bubonix, Culcha Candela, Get Well Soon, In December, Montreal, No Use For A Name, Olli Schulz, Paramount Styles, Pete Philly + Perquisite, She&apos;s All That, Talion aka Snaga + Fard, The Casting Out, Tone, Virginia Jetzt! Datum: 04.07.2009.</cmt>
-  <desc>Line Up: A + E aka Masta Ace + Edo G, Baddies, Black President, Black Stone Cherry, Boppin B, Bubonix, Culcha Candela, Get Well Soon, In December, Montreal, No Use For A Name, Olli Schulz, Paramount Styles, Pete Philly + Perquisite, She&apos;s All That, Talion aka Snaga + Fard, The Casting Out, Tone, Virginia Jetzt! Datum: 04.07.2009.</desc>
-  <link href="www.rheinkultur.com">
-  <text>www.rheinkultur.com</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Freizeitpark Rheinaue</gpxx:StreetAddress>
-        <gpxx:City>Bonn</gpxx:City>
-        <gpxx:PostalCode>53111</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+49 228  20 70 80 6</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.261089986" lon="11.642399970">
-  <name>Open Air am Garchinger See</name>
-  <cmt>Das OpenAir ist eine Veranstaltung von Jugendlichen für Jugendliche. Das heißt jede/r der/die Interesse hat sich an der Planung dieser Veranstaltung zu beteiligen kann das tun. Datum: 04.07.2009, Beginn: 15.30.</cmt>
-  <desc>Das OpenAir ist eine Veranstaltung von Jugendlichen für Jugendliche. Das heißt jede/r der/die Interesse hat sich an der Planung dieser Veranstaltung zu beteiligen kann das tun. Datum: 04.07.2009, Beginn: 15.30.</desc>
-  <link href="www.openairamsee.de">
-  <text>www.openairamsee.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Stadionweg</gpxx:StreetAddress>
-        <gpxx:City>Garching</gpxx:City>
-        <gpxx:PostalCode>85748</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.459379999" lon="9.942190005">
-  <name>Obstwiesenfestival</name>
-  <cmt>Line Up: Bishop Allen, Mintzkov, PlusMinus, Super700, We Have Band, Wrongkong. Datum: 16.07. - 18.07.2009, Beginn: Donnerstag ab 19:00 Uhr, Freitag ab 16:30 Uhr Samstag ab 13:00 Uhr.</cmt>
-  <desc>Line Up: Bishop Allen, Mintzkov, PlusMinus, Super700, We Have Band, Wrongkong. Datum: 16.07. - 18.07.2009, Beginn: Donnerstag ab 19:00 Uhr, Freitag ab 16:30 Uhr Samstag ab 13:00 Uhr.</desc>
-  <link href="www.obstwiesenfestival.de">
-  <text>www.obstwiesenfestival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>im Lerchenfeld</gpxx:StreetAddress>
-        <gpxx:City>Dornstadt bei Ulm</gpxx:City>
-        <gpxx:PostalCode>89160</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="47.991100000" lon="9.252010016">
-  <name>Live at Plaza</name>
-  <cmt>Line Up: The Mellers. Datum: 24.07. - 25.07.2009 , Beginn: 20:00 Uhr.</cmt>
-  <desc>Line Up: The Mellers. Datum: 24.07. - 25.07.2009 , Beginn: 20:00 Uhr.</desc>
-  <link href="www.live-at-plaza.de">
-  <text>www.live-at-plaza.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Riedweg</gpxx:StreetAddress>
-        <gpxx:City>Hausen am Andelsbach</gpxx:City>
-        <gpxx:PostalCode>72505</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 7576 962 478</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.491600035" lon="9.207370011">
-  <name>KuRt Festival</name>
-  <cmt>Line Up: Accused Drug, Karpatenhund, Kilians, Mini Moustache, The Mad Trist, Trashmonkeys. Datum: 17.07. - 18.07.2009, Beginn: 17:00 Uhr.</cmt>
-  <desc>Line Up: Accused Drug, Karpatenhund, Kilians, Mini Moustache, The Mad Trist, Trashmonkeys. Datum: 17.07. - 18.07.2009, Beginn: 17:00 Uhr.</desc>
-  <link href="www.ku-rt.de">
-  <text>www.ku-rt.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Karlsstraße</gpxx:StreetAddress>
-        <gpxx:City>Reutlingen</gpxx:City>
-        <gpxx:PostalCode>72764</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.194310011" lon="6.431639995">
-  <name>HORST Festival</name>
-  <cmt>Für Münchengladbach von Studierenden. 2 Bühnen, 32 Bands und 2 Tage lang. Datum: 18.07. - 19.07.2009, Beginn: 10 Uhr. Achtung: Die genaue Location erfahrt ihr auf der Homepage des Festivals.</cmt>
-  <desc>Für Münchengladbach von Studierenden. 2 Bühnen, 32 Bands und 2 Tage lang. Datum: 18.07. - 19.07.2009, Beginn: 10 Uhr. Achtung: Die genaue Location erfahrt ihr auf der Homepage des Festivals.</desc>
-  <link href="www.horstfestival.de">
-  <text>www.horstfestival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Noch nicht bekannt</gpxx:StreetAddress>
-        <gpxx:City>Mönchengladbach</gpxx:City>
-        <gpxx:PostalCode>41065</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.191120027" lon="10.094509972">
-  <name>Go Ahead Weekend</name>
-  <cmt>3 Tage open-air Jugendkulturfestival mit 18 Bands und 10 Vereinen. Datum: 17.07. - 19.07.2009, Beginn: 16:00 Uhr.</cmt>
-  <desc>3 Tage open-air Jugendkulturfestival mit 18 Bands und 10 Vereinen. Datum: 17.07. - 19.07.2009, Beginn: 16:00 Uhr.</desc>
-  <link href="www.kjr-eschwege.de">
-  <text>www.kjr-eschwege.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Am Werratalsee</gpxx:StreetAddress>
-        <gpxx:City>Schwebda</gpxx:City>
-        <gpxx:PostalCode>37276</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49  5651 96154</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="50.006319992" lon="8.419119995">
-  <name>Flörsheimer Open Air</name>
-  <cmt>Programm: The Shanes und mehr. Datum: 17.07. - 19.07.2009, Beginn: 17:00 Uhr.</cmt>
-  <desc>Programm: The Shanes und mehr. Datum: 17.07. - 19.07.2009, Beginn: 17:00 Uhr.</desc>
-  <link href="www.floersheimer-openair.de">
-  <text>www.floersheimer-openair.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Liebigstraße</gpxx:StreetAddress>
-        <gpxx:City>Flörsheim</gpxx:City>
-        <gpxx:PostalCode>65439</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 179 2056219</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="54.088740014" lon="9.073549993">
-  <name>Frequenzen Festival</name>
-  <cmt>Zum vierten Mal findes Das Open Air Musik-Fest FREQUENZEN 09 Meldorf/Dithmarschen an der Nordsee statt. Auf dem Rathausplatz werden drei Bands mit ihrem Mix aus Latin, Funk + Jazz, Balkan, Samba, Klezmer, Reggae und Dancefloor die Besucher des Festivals zum Tanzen bringen. Programm: Analogik, King Kora, Radio Zastava. Datum: 04.07.2009, Beginn: 17:00.</cmt>
-  <desc>Zum vierten Mal findes Das Open Air Musik-Fest FREQUENZEN 09 Meldorf/Dithmarschen an der Nordsee statt. Auf dem Rathausplatz werden drei Bands mit ihrem Mix aus Latin, Funk + Jazz, Balkan, Samba, Klezmer, Reggae und Dancefloor die Besucher des Festivals zum Tanzen bringen. Programm: Analogik, King Kora, Radio Zastava. Datum: 04.07.2009, Beginn: 17:00.</desc>
-  <link href="www.frequenzen-festival.de">
-  <text>www.frequenzen-festival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Rathausplatz</gpxx:StreetAddress>
-        <gpxx:City>Meldorf</gpxx:City>
-        <gpxx:PostalCode>25704</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="49.270319995" lon="11.048290003">
-  <name>Bardentreffen</name>
-  <cmt>Nürnbergs größtes Open Air Festival lädt ein um Weltmusik zu erleben. Die Altstadt tönt vom 30.07. - 01.08.2009 an allen Ecken und Enden.</cmt>
-  <desc>Nürnbergs größtes Open Air Festival lädt ein um Weltmusik zu erleben. Die Altstadt tönt vom 30.07. - 01.08.2009 an allen Ecken und Enden.</desc>
-  <link href="www.bardentreffen.de">
-  <text>www.bardentreffen.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Innenstadt Nürnberg</gpxx:StreetAddress>
-        <gpxx:City>Nürnberg</gpxx:City>
-        <gpxx:PostalCode>90402</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 911 2313325</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="49.009889988" lon="12.060559960">
-  <name>Bayerisches Jazzweekend</name>
-  <cmt>Freuen Sie sich auf das 28. Bayerische Jazzweekend unter freiem Himmel in Regensburg. Es werden 30.000 Besucher erwartet. Regensburg steht auch 2009 ganz im Zeichen des Jazz. Damit lädt die Stadt erneut zum feiern mit knapp 100 Bands ein und  zum genießen der wunderschönen Altstadt. Das ganze komplett umsonst. Datum: 09.07. - 12.07.2009</cmt>
-  <desc>Freuen Sie sich auf das 28. Bayerische Jazzweekend unter freiem Himmel in Regensburg. Es werden 30.000 Besucher erwartet. Regensburg steht auch 2009 ganz im Zeichen des Jazz. Damit lädt die Stadt erneut zum feiern mit knapp 100 Bands ein und  zum genießen der wunderschönen Altstadt. Das ganze komplett umsonst. Datum: 09.07. - 12.07.2009</desc>
-  <link href="www.bayerisches-jazzweekend.de">
-  <text>www.bayerisches-jazzweekend.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Innenstadt Regensburg</gpxx:StreetAddress>
-        <gpxx:City>Regensburg</gpxx:City>
-        <gpxx:PostalCode>93047</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.289210003" lon="7.129469980">
-  <name>Bochum Total</name>
-  <cmt>Eines der größten Musikfestivals lädt vom 3.07. - 6.07.2009 zur großen Sause in der Bochumer Innenstadt ein. Auch in diesem Jahr werden bis zu einer Million Besucher erwartet. Und wieder heißt es: vier Tage volles Programm, 66 nationale und internationale Bands vom Newcomer bis zum Top-Act auf vier Bühnen, und dies alles bei freiem Eintritt. Nach dem offiziellen Bühnenschluss am 22 Uhr wird das Programm mit über 100 Einzelterminen im legendären Kneipenviertel Bermudadreieck bis in die Morgenstunden fortgesetzt. Beginn: Do - So 16:00 Uhr</cmt>
-  <desc>Eines der größten Musikfestivals lädt vom 3.07. - 6.07.2009 zur großen Sause in der Bochumer Innenstadt ein. Auch in diesem Jahr werden bis zu einer Million Besucher erwartet. Und wieder heißt es: vier Tage volles Programm, 66 nationale und internationale Bands vom Newcomer bis zum Top-Act auf vier Bühnen, und dies alles bei freiem Eintritt. Nach dem offiziellen Bühnenschluss am 22 Uhr wird das Programm mit über 100 Einzelterminen im legendären Kneipenviertel Bermudadreieck bis in die Morgenstunden fortgesetzt. Beginn: Do - So 16:00 Uhr</desc>
-  <link href="www.bochumtotal.de">
-  <text>www.bochumtotal.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Innenstadt Bochum</gpxx:StreetAddress>
-        <gpxx:City>Bochum</gpxx:City>
-        <gpxx:PostalCode>44787</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 234 65067</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.597130040" lon="8.862640020">
-  <name>48er Festival</name>
-  <cmt>15. 48er Festival in Herrenberg. Programm: Buccaneer Soundsystem, Die Rakede, Emily Still Reminds, Helldorados, Itchy Poopzkid, Luis + Laserpower, Ohrbooten, Pilot, Right Before Summer, Skulls and Bones, Soultecniques, The Bottrops, The Rising Rocket, The Savants. Datum: 24.07. - 26.07.2009.</cmt>
-  <desc>15. 48er Festival in Herrenberg. Programm: Buccaneer Soundsystem, Die Rakede, Emily Still Reminds, Helldorados, Itchy Poopzkid, Luis + Laserpower, Ohrbooten, Pilot, Right Before Summer, Skulls and Bones, Soultecniques, The Bottrops, The Rising Rocket, The Savants. Datum: 24.07. - 26.07.2009.</desc>
-  <link href="www.48er.com">
-  <text>www.48er.com</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Schießmauer</gpxx:StreetAddress>
-        <gpxx:City>Herrenberg</gpxx:City>
-        <gpxx:PostalCode>71083</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.413060009" lon="9.068780020">
-  <name>Umsonst + Draußen Mössingen</name>
-  <cmt>Line Up: Derby Dolls, InPlugged, Melanus Kwest, Reefer Madness, Scratched Surface, Spätzlesdreck, The Johnny Trouble Trio, The Real Mc Kenzies, The Seducers. Datum: 31.07. - 01.08.2009, Beginn: ca. 15:00 Uhr.</cmt>
-  <desc>Line Up: Derby Dolls, InPlugged, Melanus Kwest, Reefer Madness, Scratched Surface, Spätzlesdreck, The Johnny Trouble Trio, The Real Mc Kenzies, The Seducers. Datum: 31.07. - 01.08.2009, Beginn: ca. 15:00 Uhr.</desc>
-  <link href="www.umsonstunddraussen.com">
-  <text>www.umsonstunddraussen.com</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Firstwaldstrasse</gpxx:StreetAddress>
-        <gpxx:City>Mössingen</gpxx:City>
-        <gpxx:PostalCode>72116</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="52.187669976" lon="8.938270016">
-  <name>Umsonst + Draußen Vlotho</name>
-  <cmt>Datum: 31.07. - 02.08.2009.</cmt>
-  <desc>Datum: 31.07. - 02.08.2009.</desc>
-  <link href="www.festivalkult.de">
-  <text>www.festivalkult.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Weserwiese Veltheim</gpxx:StreetAddress>
-        <gpxx:City>Vlotho</gpxx:City>
-        <gpxx:PostalCode>32602</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.314740034" lon="11.913810018">
-  <name>Sinnflutfestival</name>
-  <cmt>10 Tage Festival, kostenlose Musik, Circuszelt mit Veranstaltungen, Gastrostände, Kunsthandwerk, Kinderprogramm. 24. Juli bis 2. August 2009.</cmt>
-  <desc>10 Tage Festival, kostenlose Musik, Circuszelt mit Veranstaltungen, Gastrostände, Kunsthandwerk, Kinderprogramm. 24. Juli bis 2. August 2009.</desc>
-  <link href="www.sinnflut.biz">
-  <text>www.sinnflut.biz</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Volksfestplatz am Stadion</gpxx:StreetAddress>
-        <gpxx:City>Erding</gpxx:City>
-        <gpxx:PostalCode>85435</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+49 8122  880 989 0</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="53.486279994" lon="10.112810014">
-  <name>Wutzrock Festival</name>
-  <cmt>Vielfältiges Programm mit viel Musik von Ska bis Rock, Kleinkunstbühne, Kinderprogramm, Baden, Schlafsackwetthüpfen. Line Up: Coppelius, Dritte Wahl, Wohnraumhelden. Datum: 28.08. - 30.08.2009, Beginn: 18:00 Uhr.</cmt>
-  <desc>Vielfältiges Programm mit viel Musik von Ska bis Rock, Kleinkunstbühne, Kinderprogramm, Baden, Schlafsackwetthüpfen. Line Up: Coppelius, Dritte Wahl, Wohnraumhelden. Datum: 28.08. - 30.08.2009, Beginn: 18:00 Uhr.</desc>
-  <link href="www.wutzrock.de">
-  <text>www.wutzrock.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Moorfleeter Deich</gpxx:StreetAddress>
-        <gpxx:City>Hamburg</gpxx:City>
-        <gpxx:PostalCode>21037</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="49.861859987" lon="8.423670027">
-  <name>Wutzdog Festival</name>
-  <cmt>Line Up: Aunt of Agony, Beatshots, Contraption, Dive into Infinity, Drowning Fate, Entweder-Oder, John Boy, MilchmÃ¤dchen, Picknick at the Warfield. Datum: 29.08.2009, Beginn: 17:00 Uhr.</cmt>
-  <desc>Line Up: Aunt of Agony, Beatshots, Contraption, Dive into Infinity, Drowning Fate, Entweder-Oder, John Boy, MilchmÃ¤dchen, Picknick at the Warfield. Datum: 29.08.2009, Beginn: 17:00 Uhr.</desc>
-  <link href="www.wutzdog-festival.de">
-  <text>www.wutzdog-festival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Geinsheimer Straße</gpxx:StreetAddress>
-        <gpxx:City>Riedstadt-Leeheim</gpxx:City>
-        <gpxx:PostalCode>64560</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+49 6158 985025</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="53.546119994" lon="9.966749987">
-  <name>Welt Astra Tag</name>
-  <cmt>Line Up: 5 Bugs, Luxuslärm, Mama Boom. Datum: 08.08.2009, Beginn: 14:00 Uhr.</cmt>
-  <desc>Line Up: 5 Bugs, Luxuslärm, Mama Boom. Datum: 08.08.2009, Beginn: 14:00 Uhr.</desc>
-  <link href="www.weltastratag.de">
-  <text>www.weltastratag.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>An den St Pauli Landungsbrücken</gpxx:StreetAddress>
-        <gpxx:City>Hamburg</gpxx:City>
-        <gpxx:PostalCode>20359</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.748850031" lon="9.110089978">
-  <name>Umsonst + Draußen Stuttgart</name>
-  <cmt>Größtes alternatives nichtkommerzielles Festival in der Region. Datum: 14.08. - 16.08.2009, Beginn: 11 Uhr.</cmt>
-  <desc>Größtes alternatives nichtkommerzielles Festival in der Region. Datum: 14.08. - 16.08.2009, Beginn: 11 Uhr.</desc>
-  <link href="www.ud-stuttgart.de">
-  <text>www.ud-stuttgart.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Pfaffenwaldring</gpxx:StreetAddress>
-        <gpxx:City>Stuttgart</gpxx:City>
-        <gpxx:PostalCode>70569</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="53.757100040" lon="12.608659985">
-  <name>TeteRock Festival</name>
-  <cmt>Neben der Musik gibt es noch Spiel-,Sport- und Spaßangebote, wie zB eine Wasserrutsche. Organisiert wird es von der katholischen Jugend Mecklenburg und dem Bischof-Theissing-Haus.</cmt>
-  <desc>Neben der Musik gibt es noch Spiel-,Sport- und Spaßangebote, wie zB eine Wasserrutsche. Organisiert wird es von der katholischen Jugend Mecklenburg und dem Bischof-Theissing-Haus.</desc>
-  <link href="www.bth-kjm.de">
-  <text>www.bth-kjm.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Koppelbergstrasse</gpxx:StreetAddress>
-        <gpxx:City>Teterow</gpxx:City>
-        <gpxx:PostalCode>17166</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="52.408349980" lon="8.386299983">
-  <name>Stemweder Openair Festival</name>
-  <cmt>Line Up: Anorak, Bad Luck Charms, Banana Butts, Big John Bates + The Voodoodollz, Dúné, Earthbend, Far From Finished, Jennifer Rostock, Les Caméléons, Mama Boom, Mighty Vibez, Randale, Talco, The Inspector Cluzo. Datum: 14.08. - 15.08.2009, Beginn: Freitag 17:00 Uhr</cmt>
-  <desc>Line Up: Anorak, Bad Luck Charms, Banana Butts, Big John Bates + The Voodoodollz, Dúné, Earthbend, Far From Finished, Jennifer Rostock, Les Caméléons, Mama Boom, Mighty Vibez, Randale, Talco, The Inspector Cluzo. Datum: 14.08. - 15.08.2009, Beginn: Freitag 17:00 Uhr</desc>
-  <link href="www.jfk-stemwede.de/festival">
-  <text>www.jfk-stemwede.de/festival</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Ilweder Strasse</gpxx:StreetAddress>
-        <gpxx:City>Stemwede-Haldem</gpxx:City>
-        <gpxx:PostalCode>32351</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="52.743069967" lon="8.167319996">
-  <name>Staatsforsten Open Air</name>
-  <cmt>Line Up: Dritte Wahl. Datum: 07.08. - 08.08.2009, Beginn: 15:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</cmt>
-  <desc>Line Up: Dritte Wahl. Datum: 07.08. - 08.08.2009, Beginn: 15:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</desc>
-  <link href="www.staatsforsten-openair.de">
-  <text>www.staatsforsten-openair.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Festivalgelände</gpxx:StreetAddress>
-        <gpxx:City>Bakum (Büschel)</gpxx:City>
-        <gpxx:PostalCode>49456</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="50.077860039" lon="8.420490017">
-  <name>Sommerschein Festival</name>
-  <cmt>Spielmobil für Kinder, Kultur, Kulinarisches, Kleinkunst, Kreatives, Lagerfeuer, uvm., Datum: 21.08. - 23.08.2009, Beginn: 18:00 Uhr (Freitag).</cmt>
-  <desc>Spielmobil für Kinder, Kultur, Kulinarisches, Kleinkunst, Kreatives, Lagerfeuer, uvm., Datum: 21.08. - 23.08.2009, Beginn: 18:00 Uhr (Freitag).</desc>
-  <link href="www.sommerschein.de">
-  <text>www.sommerschein.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Schlossstraße</gpxx:StreetAddress>
-        <gpxx:City>Hofheim</gpxx:City>
-        <gpxx:PostalCode>65719</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="49.188649999" lon="10.285149990">
-  <name>Sommerfühl</name>
-  <cmt>Line Up: Ape Project, Dukla Vozovna, Supershirt, Wrongkong. Datum: 14.08. - 15.08.2009, Beginn: Freitag 18:00 Uhr, Samstag 14:00 Uhr.</cmt>
-  <desc>Line Up: Ape Project, Dukla Vozovna, Supershirt, Wrongkong. Datum: 14.08. - 15.08.2009, Beginn: Freitag 18:00 Uhr, Samstag 14:00 Uhr.</desc>
-  <link href="www.sommerfuehl.de">
-  <text>www.sommerfuehl.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Oberransbach</gpxx:StreetAddress>
-        <gpxx:City>Feuchtwangen</gpxx:City>
-        <gpxx:PostalCode>91555</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="50.006099967" lon="8.282699995">
-  <name>Rockfield Open Air</name>
-  <cmt>Line Up: Anchony, Ashes Of Decay, Battle Against The Empire, BRT, Bugs of God, Club of Chrome, Creme Frech, Creme Frech, Cycocircus, Dick N Ali Blow The House, Hauptsache Es Knallt, In Aiwins, Lenard, Linus Q, Lustkind, Mindspoken, r.u.s.t., Sabbathorium, Scarecrows Field, Semuc, Sever, The Bazement Pilots, The Hairy Balls, Tinfoil Hat, Twenty Eyes, Wayke, Wilde Zeiten. Datum: 07.08. - 09.08.2009, Beginn: 18:00 Uhr.</cmt>
-  <desc>Line Up: Anchony, Ashes Of Decay, Battle Against The Empire, BRT, Bugs of God, Club of Chrome, Creme Frech, Creme Frech, Cycocircus, Dick N Ali Blow The House, Hauptsache Es Knallt, In Aiwins, Lenard, Linus Q, Lustkind, Mindspoken, r.u.s.t., Sabbathorium, Scarecrows Field, Semuc, Sever, The Bazement Pilots, The Hairy Balls, Tinfoil Hat, Twenty Eyes, Wayke, Wilde Zeiten. Datum: 07.08. - 09.08.2009, Beginn: 18:00 Uhr.</desc>
-  <link href="www.kulturfabrik-airfield.de">
-  <text>www.kulturfabrik-airfield.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Am Rheinufer/In der Reduit</gpxx:StreetAddress>
-        <gpxx:City>Mainz-Kastel</gpxx:City>
-        <gpxx:PostalCode>55252</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="49.255299959" lon="9.111690000">
-  <name>Römersee Open Air</name>
-  <cmt>Line Up: Bass Busters, Catching Of Larks, Dubwars, One Inch Man, Oozing Goo, Robert Rausch + Seine Zustände, The Shanes. Datum: 21.08. - 22.08.2009, Beginn: Fr. 17:00 Uhr / Sa. 12:00 Uhr.</cmt>
-  <desc>Line Up: Bass Busters, Catching Of Larks, Dubwars, One Inch Man, Oozing Goo, Robert Rausch + Seine Zustände, The Shanes. Datum: 21.08. - 22.08.2009, Beginn: Fr. 17:00 Uhr / Sa. 12:00 Uhr.</desc>
-  <link href="www.roemersee.de">
-  <text>www.roemersee.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Römersee</gpxx:StreetAddress>
-        <gpxx:City>Bad Rappenau-Zimmerhof</gpxx:City>
-        <gpxx:PostalCode>74906</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.503850007" lon="6.877499996">
-  <name>Olgas Rock Festival</name>
-  <cmt>Das Olgas-Rock Festival hat sich mittlerweile zu einem der beliebtesten umsonst + draußen Festivals des Ruhrgebiets gemausert. Die Atmosphäre ist trotz der mehreren Tausend Besucher sehr entspannt, ja schon fast familiär. Datum: 07.08. - 08.08.2009, Beginn: 12:00 Uhr.</cmt>
-  <desc>Das Olgas-Rock Festival hat sich mittlerweile zu einem der beliebtesten umsonst + draußen Festivals des Ruhrgebiets gemausert. Die Atmosphäre ist trotz der mehreren Tausend Besucher sehr entspannt, ja schon fast familiär. Datum: 07.08. - 08.08.2009, Beginn: 12:00 Uhr.</desc>
-  <link href="www.olgas-rock.de">
-  <text>www.olgas-rock.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Vestische Straße</gpxx:StreetAddress>
-        <gpxx:City>Oberhausen</gpxx:City>
-        <gpxx:PostalCode>46047</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.188539993" lon="7.504489990">
-  <name>Midsummer Open Air</name>
-  <cmt>Line Up: An Early Cascade, Blonk, Grac Will Fall, Loush, Tenement Kids, The Black Atlantic, The Satellite Year, Your Hero. Datum: 15.08.2009, Beginn: 13:30 Uhr.</cmt>
-  <desc>Line Up: An Early Cascade, Blonk, Grac Will Fall, Loush, Tenement Kids, The Black Atlantic, The Satellite Year, Your Hero. Datum: 15.08.2009, Beginn: 13:30 Uhr.</desc>
-  <link href="www.midsummer-records.de">
-  <text>www.midsummer-records.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Thomasstrasse</gpxx:StreetAddress>
-        <gpxx:City>Halver</gpxx:City>
-        <gpxx:PostalCode>58553</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.300879970" lon="9.897989966">
-  <name>Live im Schlossgarten</name>
-  <cmt>Superkultiges und relaxtes Festival einem wunderschön gelegenen Schlossgarten. Am Freitag gibts Kino auf Großleinwand und am Samstag 3 Bands unterschiedlicher Musikrichtungen. Line Up: Volxtanz, Datum: 07.08. - 09.08.2009, Beginn: 19:00 Uhr.</cmt>
-  <desc>Superkultiges und relaxtes Festival einem wunderschön gelegenen Schlossgarten. Am Freitag gibts Kino auf Großleinwand und am Samstag 3 Bands unterschiedlicher Musikrichtungen. Line Up: Volxtanz, Datum: 07.08. - 09.08.2009, Beginn: 19:00 Uhr.</desc>
-  <link href="www.live-im-schlossgarten.de">
-  <text>www.live-im-schlossgarten.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Werdensteinstrasse</gpxx:StreetAddress>
-        <gpxx:City>Dellmensingen bei Ulm</gpxx:City>
-        <gpxx:PostalCode>89155</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.903490014" lon="8.633109983">
-  <name>Holter Meeting</name>
-  <cmt>Programm: Dreamothergirl, Eddies Revenge, Fat Belly, Gammalux, More Than Crossed, Off Limits, Prinzessin Plastik, Transmitter. Datum: 21.08. - 22.08.2009, Beginn: 17:00 Uhr.</cmt>
-  <desc>Programm: Dreamothergirl, Eddies Revenge, Fat Belly, Gammalux, More Than Crossed, Off Limits, Prinzessin Plastik, Transmitter. Datum: 21.08. - 22.08.2009, Beginn: 17:00 Uhr.</desc>
-  <link href="www.holtermeeting.de">
-  <text>www.holtermeeting.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Holter Straße</gpxx:StreetAddress>
-        <gpxx:City>Schloß Holte-Stukenbrock</gpxx:City>
-        <gpxx:PostalCode>33758</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="54.107789984" lon="10.803940007">
-  <name>Gogenkrog Open-Air</name>
-  <cmt>Rahmenprogramm für Jung und Alt. Auftritt von vier regionlaen Bands. Zudem Kinderprogramm und Großflächenflohmarkt. Datum: 28.08. - 30.08.2009, Beginn: 14:00 Uhr.</cmt>
-  <desc>Rahmenprogramm für Jung und Alt. Auftritt von vier regionlaen Bands. Zudem Kinderprogramm und Großflächenflohmarkt. Datum: 28.08. - 30.08.2009, Beginn: 14:00 Uhr.</desc>
-  <link href="www.gogenkrog-openair.de">
-  <text>www.gogenkrog-openair.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Am Gogenkrog</gpxx:StreetAddress>
-        <gpxx:City>Neustadt in Holstein</gpxx:City>
-        <gpxx:PostalCode>23730</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 4561 1073</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.335239979" lon="9.336189972">
-  <name>Fest der leisen Tönen</name>
-  <cmt>Datum: 21.08.2009 - 23.08.2009, Beginn 10:00 - 24:00.</cmt>
-  <desc>Datum: 21.08.2009 - 23.08.2009, Beginn 10:00 - 24:00.</desc>
-  <link href="www.festderleisentoene.de">
-  <text>www.festderleisentoene.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Höllchenstrasse</gpxx:StreetAddress>
-        <gpxx:City>Dörnberg</gpxx:City>
-        <gpxx:PostalCode>34317</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 5606 599615</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.331050033" lon="6.562150000">
-  <name>Folklorefest Krefeld</name>
-  <cmt>Ein von den Krefelder beliebtes Sommerfestival mitten in der Innenstadt. Datum: 14.08. - 15.08.2009, Beginn 19:00 Uhr.</cmt>
-  <desc>Ein von den Krefelder beliebtes Sommerfestival mitten in der Innenstadt. Datum: 14.08. - 15.08.2009, Beginn 19:00 Uhr.</desc>
-  <link href="www.folklorefest.de">
-  <text>www.folklorefest.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>An der alten Kirche</gpxx:StreetAddress>
-        <gpxx:City>Krefeld</gpxx:City>
-        <gpxx:PostalCode>47798</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 2151 501729</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.456610020" lon="7.011569962">
-  <name>Essen Original</name>
-  <cmt>Essen Original präsentiert sich auch dieses Jahr mit rund 750 Künstlern auf acht Bühnen in der gesamten Essener Innenstadt. Für jeden ist etwas dabei. Ob Rock-, Pop- oder Hip-Hop-Begeisterte, jeder kommt auf seine Kosten. Eintritt frei. Tolles Programm erwartet euch vom 28.08. - 30.08.2009.</cmt>
-  <desc>Essen Original präsentiert sich auch dieses Jahr mit rund 750 Künstlern auf acht Bühnen in der gesamten Essener Innenstadt. Für jeden ist etwas dabei. Ob Rock-, Pop- oder Hip-Hop-Begeisterte, jeder kommt auf seine Kosten. Eintritt frei. Tolles Programm erwartet euch vom 28.08. - 30.08.2009.</desc>
-  <link href="www.essen-original.de">
-  <text>www.essen-original.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Kennedyplatz</gpxx:StreetAddress>
-        <gpxx:City>Essen</gpxx:City>
-        <gpxx:PostalCode>45127</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 201 887200</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="51.407510005" lon="6.689430038">
-  <name>Open Air Folksfest</name>
-  <cmt>Sieben Bands auf zwei Bühnen, Kinderspaß und Ständemarkt an der Bergheimer Mühle. Line Up: Ezio, Ma Valise. Datum: 06.06.2009, Beginn: 15:00 Uhr</cmt>
-  <desc>Sieben Bands auf zwei Bühnen, Kinderspaß und Ständemarkt an der Bergheimer Mühle. Line Up: Ezio, Ma Valise. Datum: 06.06.2009, Beginn: 15:00 Uhr</desc>
-  <link href="www.folkfest.de">
-  <text>www.folkfest.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Peschmannstrasse</gpxx:StreetAddress>
-        <gpxx:City>Duisburg</gpxx:City>
-        <gpxx:PostalCode>47228</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="50.286050001" lon="8.504360011">
-  <name>Open Ernstival</name>
-  <cmt>Ein nichtkommerzielles Open Air-Festival für Bands aus der Region, ein Live-Spektakel inmitten von Wiesen und Feldern, ein Happening nicht nur für Jugendliche. Datum: 05.09.2009, Beginn: 15:00 Uhr.</cmt>
-  <desc>Ein nichtkommerzielles Open Air-Festival für Bands aus der Region, ein Live-Spektakel inmitten von Wiesen und Feldern, ein Happening nicht nur für Jugendliche. Datum: 05.09.2009, Beginn: 15:00 Uhr.</desc>
-  <link href="www.open-ernstival.de">
-  <text>www.open-ernstival.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Am Steinchen</gpxx:StreetAddress>
-        <gpxx:City>Neu-Anspach</gpxx:City>
-        <gpxx:PostalCode>61267</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="53.568390040" lon="9.982860005">
-  <name>Karneval der Kulturen Hamburg</name>
-  <cmt>Der farbenprächtige Umzug zeigt das internationale Gesicht Hamburgs, und trägt gleichzeitig zur Integration der ausländischen Mitbürger und Mitbürgerinnen in Hamburg und Umgebung bei. Datum: 11.09. - 13.09.2009, Beginn: 16:00 Uhr.</cmt>
-  <desc>Der farbenprächtige Umzug zeigt das internationale Gesicht Hamburgs, und trägt gleichzeitig zur Integration der ausländischen Mitbürger und Mitbürgerinnen in Hamburg und Umgebung bei. Datum: 11.09. - 13.09.2009, Beginn: 16:00 Uhr.</desc>
-  <link href="www.karneval-kulturen-hamburg.de">
-  <text>www.karneval-kulturen-hamburg.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Grindelhof/Siemersallee/Allendeplatz</gpxx:StreetAddress>
-        <gpxx:City>Hamburg</gpxx:City>
-        <gpxx:PostalCode>20149</gpxx:PostalCode>
-      </gpxx:Address>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="54.402619991" lon="11.161179990">
-  <name>Fehmarn Open Air</name>
-  <cmt>Das Fehrman Open Air Festival ist für seine friedliche und familiäre Atmosphäre weit über die Grenzen Deutschlands hinaus bekannt. Programm: Bradley&apos;s Circus, Chris Farlowe, Cosmic Finger, Errorhead, Großenbroder Shanty Chor, Hamburg Blues Band, Jimmy Cornett, Joanne Shaw Taylor, Peer Knacke, Purple, Rohstoff, Ten Years After. Datum: 05.09.2009, Beginn: 11:00 Uhr.</cmt>
-  <desc>Das Fehrman Open Air Festival ist für seine friedliche und familiäre Atmosphäre weit über die Grenzen Deutschlands hinaus bekannt. Programm: Bradley&apos;s Circus, Chris Farlowe, Cosmic Finger, Errorhead, Großenbroder Shanty Chor, Hamburg Blues Band, Jimmy Cornett, Joanne Shaw Taylor, Peer Knacke, Purple, Rohstoff, Ten Years After. Datum: 05.09.2009, Beginn: 11:00 Uhr.</desc>
-  <link href="www.fehmarnfestivalgroup.com">
-  <text>www.fehmarnfestivalgroup.com</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Flögger Strand</gpxx:StreetAddress>
-        <gpxx:City>Fehmarn</gpxx:City>
-        <gpxx:PostalCode>23769</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 4372 1890</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="48.934029993" lon="10.896470016">
-  <name>Eber-Hart Open Air</name>
-  <cmt>Datum: 04.09. - 05.09.2009.</cmt>
-  <desc>Datum: 04.09. - 05.09.2009.</desc>
-  <link href="www.eber-hart.de">
-  <text>www.eber-hart.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>Treuchtlingen Ri. Möhren, links Ri. Haag</gpxx:StreetAddress>
-        <gpxx:City>Treuchtlingen</gpxx:City>
-        <gpxx:PostalCode>91757</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 91421221</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
-<wpt lat="52.180170016" lon="7.538499981">
-  <name>Detten Rockt</name>
-  <cmt>&quot;Zum fünften mal findet das DettenRockt Festival unter dem Motto &quot;&quot;gegen Rassismus und Diskriminierung&quot;&quot; statt. Internationale und nationalen Musikgrößen wie The Bones (swe), Siena Root (swe), Peter Pan Speedrock (nl), Jeneson, Planlos und viel mehr konnten in den letzten Jahren für das Festival gewonnen werden.Auch dieses Jahr erwartet euch an tolles Aufgebot an grandiösen KünstlernInnen und Musikern. Eintritt frei. Erwartete Besucher: 4000. Datum: 12.09.2009. &quot;</cmt>
-  <desc>&quot;Zum fünften mal findet das DettenRockt Festival unter dem Motto &quot;&quot;gegen Rassismus und Diskriminierung&quot;&quot; statt. Internationale und nationalen Musikgrößen wie The Bones (swe), Siena Root (swe), Peter Pan Speedrock (nl), Jeneson, Planlos und viel mehr konnten in den letzten Jahren für das Festival gewonnen werden.Auch dieses Jahr erwartet euch an tolles Aufgebot an grandiösen KünstlernInnen und Musikern. Eintritt frei. Erwartete Besucher: 4000. Datum: 12.09.2009. &quot;</desc>
-  <link href="www.dettenrockt.de">
-  <text>www.dettenrockt.de</text>
-  </link>
-  <sym>Waypoint</sym>
-  <extensions>
-    <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
-      <gpxx:Address>
-        <gpxx:StreetAddress>An den Klärteichen</gpxx:StreetAddress>
-        <gpxx:City>Emsdetten</gpxx:City>
-        <gpxx:PostalCode>48282</gpxx:PostalCode>
-      </gpxx:Address>
-      <gpxx:PhoneNumber>+ 49 151 10302099</gpxx:PhoneNumber>
-    </gpxx:WaypointExtension>
-  </extensions>
-</wpt>
+<gpx version="1.1" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="47.545639984" minlon="4.290249981" maxlat="54.402619991" maxlon="16.385979988"/>
+  </metadata>
+  <wpt lat="48.399400022" lon="11.753660012">
+    <name>Uferlos Festival</name>
+    <cmt>Herzstück des Uferlos wird der Markt der Möglichkeiten mit einer bunten Auswahl an Kunst und Handwerk sein. Dort kann man gemütlich bummeln und jeden Tag eine neue kulinarische Spezialität aus der ganzen Welt entdecken. Darum herum wird auf fünf Bühnen ein wahres Feuerwerk mit Musik, Musical, Kabarett und vielem mehr abgebrannt. In vier Zirkuszelten, die den Markt umgeben, können die Besucher kostenlos alle Veranstaltungen genießen. Ausschließlich besondere Events in der Luitpoldhalle werden mit Ticketverkauf stattfinden. Datum: 15.05. - 24.05.2009, Beginn: 12:00 Uhr.</cmt>
+    <desc>Herzstück des Uferlos wird der Markt der Möglichkeiten mit einer bunten Auswahl an Kunst und Handwerk sein. Dort kann man gemütlich bummeln und jeden Tag eine neue kulinarische Spezialität aus der ganzen Welt entdecken. Darum herum wird auf fünf Bühnen ein wahres Feuerwerk mit Musik, Musical, Kabarett und vielem mehr abgebrannt. In vier Zirkuszelten, die den Markt umgeben, können die Besucher kostenlos alle Veranstaltungen genießen. Ausschließlich besondere Events in der Luitpoldhalle werden mit Ticketverkauf stattfinden. Datum: 15.05. - 24.05.2009, Beginn: 12:00 Uhr.</desc>
+    <link href="www.uferlos-festival.de">
+      <text>www.uferlos-festival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Luitpoldstrasse</gpxx:StreetAddress>
+          <gpxx:City>Freising</gpxx:City>
+          <gpxx:PostalCode>85356</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+49 8161 88 49 305</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="49.874490006" lon="8.653959967">
+    <name>Schlossgrabenfest</name>
+    <cmt>Line Up: Bakkushan, Boom Gang, Boppin B, Clickclickdecker, Extrabreit, Großstadtgeflüster, Luxuslärm, Mofa, Radiopilot, Rockformation Diskokugel, Sondaschule, The Fountains. Datum: 28.05. - 31.05.2009, Beginn: 12:00 Uhr.</cmt>
+    <desc>Line Up: Bakkushan, Boom Gang, Boppin B, Clickclickdecker, Extrabreit, Großstadtgeflüster, Luxuslärm, Mofa, Radiopilot, Rockformation Diskokugel, Sondaschule, The Fountains. Datum: 28.05. - 31.05.2009, Beginn: 12:00 Uhr.</desc>
+    <link href="www.schlossgrabenfest.de">
+      <text>www.schlossgrabenfest.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Zeughausstrasse</gpxx:StreetAddress>
+          <gpxx:City>Darmstadt</gpxx:City>
+          <gpxx:PostalCode>64283</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+49  61 51 9 71 12 27</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="49.039299991" lon="8.716329960">
+    <name>Kultival</name>
+    <cmt>Programm: Al Cajon, Blue Tattoo, White-Riddim, Zap-Gang, Fat Fuck, Saidian. Datum: 29.05. - 31.05.2009, Beginn: 19:00 Uhr.</cmt>
+    <desc>Programm: Al Cajon, Blue Tattoo, White-Riddim, Zap-Gang, Fat Fuck, Saidian. Datum: 29.05. - 31.05.2009, Beginn: 19:00 Uhr.</desc>
+    <link href="www.Kult-Verein.de">
+      <text>www.Kult-Verein.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Bretten / Grillplatz / B 35</gpxx:StreetAddress>
+          <gpxx:City>Bretten</gpxx:City>
+          <gpxx:PostalCode>75015</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="53.546119994" lon="9.966749987">
+    <name>Hafengeburtstag Hamburg</name>
+    <cmt>Mit dem größten Hafenfest der Welt feiert Hamburg vom 08.05. - 10.05.2009 seinen Hafen.</cmt>
+    <desc>Mit dem größten Hafenfest der Welt feiert Hamburg vom 08.05. - 10.05.2009 seinen Hafen.</desc>
+    <link href="www.hafengeburtstag.de">
+      <text>www.hafengeburtstag.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Alter Elbtunnel / St. Pauli Landungsbrücken</gpxx:StreetAddress>
+          <gpxx:City>Hamburg</gpxx:City>
+          <gpxx:PostalCode>20359</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 040 428412893</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.660460001" lon="6.622350002">
+    <name>EselRock</name>
+    <cmt>An einem Tag werden auf zwei Bühnen 15 Bands die Luft anheizen. Eine Mischung aus renommierten Acts und bundesweit bekannten Newcomern rocken auf zwei Bühnen, Main- und Secondstage. Programm: Blind, Bosse, Hazels, Innocent Exile, Juke Box Pussys, Kaiserkind, Naked End, Parklane7, Peilomat, Play The Gallery, Scarlet, We Set The Sun, Without Wax, Wretched. Eintritt frei. Datum: 23.05.2009.</cmt>
+    <desc>An einem Tag werden auf zwei Bühnen 15 Bands die Luft anheizen. Eine Mischung aus renommierten Acts und bundesweit bekannten Newcomern rocken auf zwei Bühnen, Main- und Secondstage. Programm: Blind, Bosse, Hazels, Innocent Exile, Juke Box Pussys, Kaiserkind, Naked End, Parklane7, Peilomat, Play The Gallery, Scarlet, We Set The Sun, Without Wax, Wretched. Eintritt frei. Datum: 23.05.2009.</desc>
+    <link href="www.eselrock.de">
+      <text>www.eselrock.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Heubergpark / Alte Roßmühlstraße</gpxx:StreetAddress>
+          <gpxx:City>Wesel</gpxx:City>
+          <gpxx:PostalCode>46483</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.962610008" lon="7.628400000">
+    <name>EuroCityFest Münster</name>
+    <cmt>Jeder Nation wird hier die Möglichkeit gegeben sich zu präsentieren und seine Individualiltät und kulturelle Einigkeiten zu unterstreichen. Vielseitiges Programm wird geboten, ob Musik, Tanz, Theater, Kunst oder kulinarische Genüsse. Eintriff frei. Datum: 22.05. - 24.05.2009, Beginn: 16:00.</cmt>
+    <desc>Jeder Nation wird hier die Möglichkeit gegeben sich zu präsentieren und seine Individualiltät und kulturelle Einigkeiten zu unterstreichen. Vielseitiges Programm wird geboten, ob Musik, Tanz, Theater, Kunst oder kulinarische Genüsse. Eintriff frei. Datum: 22.05. - 24.05.2009, Beginn: 16:00.</desc>
+    <link href="www.eurocityfest.de">
+      <text>www.eurocityfest.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Prinzipalmarkt</gpxx:StreetAddress>
+          <gpxx:City>Münster</gpxx:City>
+          <gpxx:PostalCode>48159</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 251 9226665</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.349280002" lon="7.761930004">
+    <name>Wispa Festival</name>
+    <cmt>Line Up: Animals Crossing, Babylon Riot, Back to Back, Buena Wispa Social Club, Bukkl, Cavidan, D-Zug, Die Konsorten, Die Lebenden Legenden, Flabba, Fueltones, Hux Flux, Ivan Ivanovich + The Kreml Krauts, Müller Tourgau, Mumpitz, Neo, Newphoria, Niteprowler, Soul Invaders, St. Range, Warg Sang. Datum: 11.06. - 13.06.2009, Beginn: 15:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</cmt>
+    <desc>Line Up: Animals Crossing, Babylon Riot, Back to Back, Buena Wispa Social Club, Bukkl, Cavidan, D-Zug, Die Konsorten, Die Lebenden Legenden, Flabba, Fueltones, Hux Flux, Ivan Ivanovich + The Kreml Krauts, Müller Tourgau, Mumpitz, Neo, Newphoria, Niteprowler, Soul Invaders, St. Range, Warg Sang. Datum: 11.06. - 13.06.2009, Beginn: 15:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</desc>
+    <link href="www.wispafestival.de">
+      <text>www.wispafestival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Frönsberg</gpxx:StreetAddress>
+          <gpxx:City>Hemer</gpxx:City>
+          <gpxx:PostalCode>58675</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="49.799310034" lon="9.919969998">
+    <name>Umsonst + Draußen Würzburg</name>
+    <cmt>Line Up: Aeon of Decay, Aloha From Hell, Benni Hemm Hemm, Better Ones, Blocking Element, Bons Balls, Boppin B, Breakfast Killers, Brut Boogaloo, Diego, Enuff, Faint, Falling to Dust, Fiatonic, Frittenbude, Fuck your Shadow from behind, Fuenf, Ghost Rockets, Gold Minor, Guitar Challenge Spectacle, Hank Cash, Jamaze, Jane Doe, Jerry Lain, JZ James Trio, Karlsson, Kashiwa Daisuke, Mama Boom, Mama s Gun, Markus Rill, Melomania, Other Generations Anthem, Palpitation, Sam Isaac Acoustic Trio, Schöne Schaisse, Senore Matze Rossi, Signals to Airkraft, Sorrow Remains, Spaceship Bismark, Steffi-Mira-Band, Superpunk, Surfing Hundekuchen, Tequila Terminators, The Robocop Kraus, Unter Tagen, Vladiwoodstok, Worst Thoughts. Datum: 19.06. - 21.06.2009, Beginn: 17:00 Uhr.</cmt>
+    <desc>Line Up: Aeon of Decay, Aloha From Hell, Benni Hemm Hemm, Better Ones, Blocking Element, Bons Balls, Boppin B, Breakfast Killers, Brut Boogaloo, Diego, Enuff, Faint, Falling to Dust, Fiatonic, Frittenbude, Fuck your Shadow from behind, Fuenf, Ghost Rockets, Gold Minor, Guitar Challenge Spectacle, Hank Cash, Jamaze, Jane Doe, Jerry Lain, JZ James Trio, Karlsson, Kashiwa Daisuke, Mama Boom, Mama s Gun, Markus Rill, Melomania, Other Generations Anthem, Palpitation, Sam Isaac Acoustic Trio, Schöne Schaisse, Senore Matze Rossi, Signals to Airkraft, Sorrow Remains, Spaceship Bismark, Steffi-Mira-Band, Superpunk, Surfing Hundekuchen, Tequila Terminators, The Robocop Kraus, Unter Tagen, Vladiwoodstok, Worst Thoughts. Datum: 19.06. - 21.06.2009, Beginn: 17:00 Uhr.</desc>
+    <link href="www.umsonst-und-draussen.de">
+      <text>www.umsonst-und-draussen.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Talavera</gpxx:StreetAddress>
+          <gpxx:City>Würzburg</gpxx:City>
+          <gpxx:PostalCode>97082</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+49 9306 9855748</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="50.208350010" lon="10.083699999">
+    <name>Umsonst + Draußen Bad Kissingen</name>
+    <cmt>Line Up: Black Petty, Dave + Hal, Die Schröders, Hamada, Hesslers, Kings are Better Queens, Knifflers Mom, Kojak, Luis + Laserpower, Mustache Madness, Saitensprung, Scallwags, Sebastian 23, Senore Matze Rossi, Spaceman Spiff, Taschenrocker, The Ghost Rockets, The Rising Rocket. Datum: 26.06. - 27.06.2009.</cmt>
+    <desc>Line Up: Black Petty, Dave + Hal, Die Schröders, Hamada, Hesslers, Kings are Better Queens, Knifflers Mom, Kojak, Luis + Laserpower, Mustache Madness, Saitensprung, Scallwags, Sebastian 23, Senore Matze Rossi, Spaceman Spiff, Taschenrocker, The Ghost Rockets, The Rising Rocket. Datum: 26.06. - 27.06.2009.</desc>
+    <link href="www.umsonst-und-draussen-kg.de">
+      <text>www.umsonst-und-draussen-kg.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Kasernenstrasse</gpxx:StreetAddress>
+          <gpxx:City>Bad Kissingen</gpxx:City>
+          <gpxx:PostalCode>97688</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="52.071980014" lon="10.018159971">
+    <name>Teichrock</name>
+    <cmt>Line Up: Blakvise, Dollsface, Trashmonkeys, Your Hero. Datum: 27.06.2009, Beginn: 13:00 Uhr.</cmt>
+    <desc>Line Up: Blakvise, Dollsface, Trashmonkeys, Your Hero. Datum: 27.06.2009, Beginn: 13:00 Uhr.</desc>
+    <link href="www.teichrock.de">
+      <text>www.teichrock.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Solebadstrasse</gpxx:StreetAddress>
+          <gpxx:City>Bad Salzdetfurth</gpxx:City>
+          <gpxx:PostalCode>31162</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="53.310100017" lon="9.598830035">
+    <name>Spreehafenfestival</name>
+    <cmt>&quot;Am 23. Juni 2007 wird es im Rahmen des Spreehafenfestes das 2. Spreehafen OPEN AIR FESTIVAL geben. - Mucke vom &quot;&quot;Feinsten&quot;&quot; + Hafenatmosphäre pur mit einmaligem Blick auf die Hamburger Skyline. Fünf Spitzenbands aus dem Raum Hamburg werden euch auch dies mal mit Reggae, Ska und Rocksteady verwöhnen. Anschließend geht es mir der Mittsommernachtsparty bis in den frühen Morgen weiter. Datum: 20.06.2009, Beginn: 16:00 Uhr&quot;</cmt>
+    <desc>&quot;Am 23. Juni 2007 wird es im Rahmen des Spreehafenfestes das 2. Spreehafen OPEN AIR FESTIVAL geben. - Mucke vom &quot;&quot;Feinsten&quot;&quot; + Hafenatmosphäre pur mit einmaligem Blick auf die Hamburger Skyline. Fünf Spitzenbands aus dem Raum Hamburg werden euch auch dies mal mit Reggae, Ska und Rocksteady verwöhnen. Anschließend geht es mir der Mittsommernachtsparty bis in den frühen Morgen weiter. Datum: 20.06.2009, Beginn: 16:00 Uhr&quot;</desc>
+    <link href="www.spreehafenfestival.de">
+      <text>www.spreehafenfestival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Zwischen Potsdamer und Berliner Ufer</gpxx:StreetAddress>
+          <gpxx:City>Hamburg</gpxx:City>
+          <gpxx:PostalCode>20457</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.713909984" lon="9.106200021">
+    <name>Rohrer Seefest</name>
+    <cmt>Line Up: Charmin Carmen, Desert Storm, Elektroboys, Neuland, Pure Sickness, Revealing Dawn, The Prosecution, [æm-x]. Datum: 13.06. - 14.06.2009, Beginn: 11:00 Uhr.</cmt>
+    <desc>Line Up: Charmin Carmen, Desert Storm, Elektroboys, Neuland, Pure Sickness, Revealing Dawn, The Prosecution, [æm-x]. Datum: 13.06. - 14.06.2009, Beginn: 11:00 Uhr.</desc>
+    <link href="www.rohrer-seefest.de">
+      <text>www.rohrer-seefest.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Parkanlage Stuttgart-Rohr</gpxx:StreetAddress>
+          <gpxx:City>Stuttgart</gpxx:City>
+          <gpxx:PostalCode>70565</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+49162  90 90 857</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.427960016" lon="9.768199967">
+    <name>Rock die Heide</name>
+    <cmt>Open Air- Festival mit Bands aus der Region, aber auch hier kann ich wieder auf die Homepage verweisen, denn da ist alles genau zu erfahren. Datum: 05.06. - 06.06.2009, Beginn: 15:00 Uhr.</cmt>
+    <desc>Open Air- Festival mit Bands aus der Region, aber auch hier kann ich wieder auf die Homepage verweisen, denn da ist alles genau zu erfahren. Datum: 05.06. - 06.06.2009, Beginn: 15:00 Uhr.</desc>
+    <link href="www.rockdieheide.de">
+      <text>www.rockdieheide.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Himmelreichgelände bei den Hessenhöfen</gpxx:StreetAddress>
+          <gpxx:City>Blaubeuren</gpxx:City>
+          <gpxx:PostalCode>89143</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.646140022" lon="6.798919989">
+    <name>Rock and Bike</name>
+    <cmt>Ein Festival für Biker und Festival - Freaks. Neben 10 Live-Bands gibt es eine ganze Reihe von Wettbewerben und Shows. Band-, Bike- u. Tattoo-Contest, Tauziehen, Strongest-Man Wettbewerb (Hantel stemmen), Wahl zur Miss R+B 2006. Line Up: Iljas Richter, Imagine. Datum: 12.06. - 14.06.2009, Beginn: Fr. 14:00 Uhr.</cmt>
+    <desc>Ein Festival für Biker und Festival - Freaks. Neben 10 Live-Bands gibt es eine ganze Reihe von Wettbewerben und Shows. Band-, Bike- u. Tattoo-Contest, Tauziehen, Strongest-Man Wettbewerb (Hantel stemmen), Wahl zur Miss R+B 2006. Line Up: Iljas Richter, Imagine. Datum: 12.06. - 14.06.2009, Beginn: Fr. 14:00 Uhr.</desc>
+    <link href="www.rockandbike.de">
+      <text>www.rockandbike.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Ossenbergweg</gpxx:StreetAddress>
+          <gpxx:City>Hünxe</gpxx:City>
+          <gpxx:PostalCode>46569</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.510489995" lon="9.035319965">
+    <name>RACT Festival</name>
+    <cmt>Mischung aus Musik und Politik. Viele Workshops (Graffiti, Rapschmiede, Capoeira, Politik-Manufaktur uvm). und Contests (SlamBabylon, Poetry Slam uvm.). Datum: 12.06. - 13.06.2009, Beginn: Fr. 15:00 Uhr Sa. 10:00 Uhr</cmt>
+    <desc>Mischung aus Musik und Politik. Viele Workshops (Graffiti, Rapschmiede, Capoeira, Politik-Manufaktur uvm). und Contests (SlamBabylon, Poetry Slam uvm.). Datum: 12.06. - 13.06.2009, Beginn: Fr. 15:00 Uhr Sa. 10:00 Uhr</desc>
+    <link href="www.ract-festival.de">
+      <text>www.ract-festival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Rappenberghalde</gpxx:StreetAddress>
+          <gpxx:City>Tübingen</gpxx:City>
+          <gpxx:PostalCode>72074</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+49 7071 26969</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.702990040" lon="8.530369978">
+    <name>Polterplatz Open Air</name>
+    <cmt>Gemütliches Open Air mitten im Schwarzwald, mit stationären sanitären Anlagen. Theke hat rund um die Uhr offen. Grosse Zeltwiese vorhanden. Nach den Bands Rockdisco in der 2. Hütte von 1 Uhr bis Open End. Line Up: Ashes Of Pompeii, Different, Forrest Green, Green Frog Feet, Insanity, Kung Fu Schmitt, The Pheromoans, The Vin Lights, Twice Aday, Wildbad Bahnhof, Willo the Wisp. Datum: 26.06. - 27.06.2009, Beginn: 18:00 Uhr.</cmt>
+    <desc>Gemütliches Open Air mitten im Schwarzwald, mit stationären sanitären Anlagen. Theke hat rund um die Uhr offen. Grosse Zeltwiese vorhanden. Nach den Bands Rockdisco in der 2. Hütte von 1 Uhr bis Open End. Line Up: Ashes Of Pompeii, Different, Forrest Green, Green Frog Feet, Insanity, Kung Fu Schmitt, The Pheromoans, The Vin Lights, Twice Aday, Wildbad Bahnhof, Willo the Wisp. Datum: 26.06. - 27.06.2009, Beginn: 18:00 Uhr.</desc>
+    <link href="www.polterplatz.de">
+      <text>www.polterplatz.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Ginsterweg</gpxx:StreetAddress>
+          <gpxx:City>Bad Wildbad</gpxx:City>
+          <gpxx:PostalCode>75323</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="52.052970026" lon="4.290249981">
+    <name>Parkpop</name>
+    <cmt>Line Up: M.O. + Brakko, Milow, Pretenders, Sabrina Starke, Shantel + Bucovina Club Orkestar. Datum: 28.06.2009, Beginn: 13:00 Uhr.</cmt>
+    <desc>Line Up: M.O. + Brakko, Milow, Pretenders, Sabrina Starke, Shantel + Bucovina Club Orkestar. Datum: 28.06.2009, Beginn: 13:00 Uhr.</desc>
+    <link href="www.parkpop.nl">
+      <text>www.parkpop.nl</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Zuiderpark</gpxx:StreetAddress>
+          <gpxx:City>Den Haag</gpxx:City>
+          <gpxx:PostalCode>02533</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.383819981" lon="6.996099986">
+    <name>Open Air Werden</name>
+    <cmt>Line Up: Boris Hotton, Crash Casino, Dinner Ratz, Freakatronic, Ja, Panik, Jennifer Rostock, Kreator, Modern Walker, Schallschleuser, The Autumns Regret, The Black Lips, The Whitest Boy Alive, Urban Absolutes, Vincenzo. Datum: 01.06.2009, Beginn: ab 14:00 Uhr.</cmt>
+    <desc>Line Up: Boris Hotton, Crash Casino, Dinner Ratz, Freakatronic, Ja, Panik, Jennifer Rostock, Kreator, Modern Walker, Schallschleuser, The Autumns Regret, The Black Lips, The Whitest Boy Alive, Urban Absolutes, Vincenzo. Datum: 01.06.2009, Beginn: ab 14:00 Uhr.</desc>
+    <link href="www.openair-werden.de">
+      <text>www.openair-werden.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Im Löwental</gpxx:StreetAddress>
+          <gpxx:City>Essen</gpxx:City>
+          <gpxx:PostalCode>45239</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+49 201  88 511 86</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="50.049679996" lon="8.700139979">
+    <name>Open Doors Festivals</name>
+    <cmt>Line Up: Cashma Hoody, Hole Full Of Love, Hot Stuff, Madhouse Flowers, Paddy goes to Holyhead, Skafield, The Mazers, The Queen Kings. Datum: 05.06. - 07.06.2009.</cmt>
+    <desc>Line Up: Cashma Hoody, Hole Full Of Love, Hot Stuff, Madhouse Flowers, Paddy goes to Holyhead, Skafield, The Mazers, The Queen Kings. Datum: 05.06. - 07.06.2009.</desc>
+    <link href="www.open-doors-festival.de">
+      <text>www.open-doors-festival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Neu-Isenburg</gpxx:StreetAddress>
+          <gpxx:City>Neu-Isenburg</gpxx:City>
+          <gpxx:PostalCode>63263</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.506919974" lon="8.323650034">
+    <name>Happiness</name>
+    <cmt>Datum: 18.07.2009, Beginn: 19:00.</cmt>
+    <desc>Datum: 18.07.2009, Beginn: 19:00.</desc>
+    <link href="www.regioactive.de">
+      <text>www.regioactive.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:City>Straubenhardt</gpxx:City>
+          <gpxx:PostalCode>75334</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.683030035" lon="7.813850027">
+    <name>Hafenfest Hamm</name>
+    <cmt>Anlässlich des 95-jährigen Jubiläums des Hafen Hamm gibt es ein großes Hafenfest. Datum: 06.06.2009, Beginn: 11:00 Uhr.</cmt>
+    <desc>Anlässlich des 95-jährigen Jubiläums des Hafen Hamm gibt es ein großes Hafenfest. Datum: 06.06.2009, Beginn: 11:00 Uhr.</desc>
+    <link href="www.stadtwerke-hamm.de">
+      <text>www.stadtwerke-hamm.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Hafenstraße</gpxx:StreetAddress>
+          <gpxx:City>Hamm</gpxx:City>
+          <gpxx:PostalCode>59065</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 2381 2741234</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="53.133990029" lon="7.319710013">
+    <name>Free for All</name>
+    <cmt>Das Festival beginnt um 15:00 Uhr und endet um 01:00 Uhr. In Ostfriesland könnt ihr ein schönes Festival erleben, wo das Preisleistungsverhältnis noch stimmt! Programm: Barroom Heroes, Cataract, Circus Ivory, Forever It Shall Be, Claus Grabke, Hate Embraced, Laut, Sore Emetic, Sturch, Testsieger, The Bottrops, We Butter The Bread With Butter. Datum: 27.06.2009, Beginn: 15:00 Uhr.</cmt>
+    <desc>Das Festival beginnt um 15:00 Uhr und endet um 01:00 Uhr. In Ostfriesland könnt ihr ein schönes Festival erleben, wo das Preisleistungsverhältnis noch stimmt! Programm: Barroom Heroes, Cataract, Circus Ivory, Forever It Shall Be, Claus Grabke, Hate Embraced, Laut, Sore Emetic, Sturch, Testsieger, The Bottrops, We Butter The Bread With Butter. Datum: 27.06.2009, Beginn: 15:00 Uhr.</desc>
+    <link href="www.ffa-stapelmoor.de">
+      <text>www.ffa-stapelmoor.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Heidjerstraße</gpxx:StreetAddress>
+          <gpxx:City>Weener</gpxx:City>
+          <gpxx:PostalCode>26826</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 4962 996835</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.372929960" lon="7.696949970">
+    <name>Friedensfestival</name>
+    <cmt>Benefizfestival zugunsten der Flüchtlingsarbeit sowie sozialen und politischen Projekten. Datum: 26.06. - 28.06.2009.</cmt>
+    <desc>Benefizfestival zugunsten der Flüchtlingsarbeit sowie sozialen und politischen Projekten. Datum: 26.06. - 28.06.2009.</desc>
+    <link href="www.friedensfestival.de">
+      <text>www.friedensfestival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Altstadt</gpxx:StreetAddress>
+          <gpxx:City>Iserlohn</gpxx:City>
+          <gpxx:PostalCode>58636</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="49.002669984" lon="8.371280031">
+    <name>Das Fest Karlsruhe</name>
+    <cmt>Festival mit internationalen Stars wie Nenesh Cherry, Maria Glen, Chaka Khan, Suzanne Vega, Willy de Ville, die Simple Minds oder Faithless kostenlos zu sehen. Ein großes Rahmenprogramm mit Theater, Kleinkunst und Comedy machen das Festival perfekt. Erwartete Bucher: 200.000. Datum: 24.07. - 26.07.2009.</cmt>
+    <desc>Festival mit internationalen Stars wie Nenesh Cherry, Maria Glen, Chaka Khan, Suzanne Vega, Willy de Ville, die Simple Minds oder Faithless kostenlos zu sehen. Ein großes Rahmenprogramm mit Theater, Kleinkunst und Comedy machen das Festival perfekt. Erwartete Bucher: 200.000. Datum: 24.07. - 26.07.2009.</desc>
+    <link href="www.dasfest-karlsruhe.de">
+      <text>www.dasfest-karlsruhe.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Günther-Klutz-Anlage</gpxx:StreetAddress>
+          <gpxx:City>Karlsruhe</gpxx:City>
+          <gpxx:PostalCode>76135</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 721 7817213</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.249339983" lon="16.385979988">
+    <name>Donauinselfest</name>
+    <cmt>Größtes Musikfestival Europas mitten in Wien mit über drei Millionen Besuchern lädt auch dieses Jahr zum feiern ein. Info und Programm: 19 Iseln, 16 Bühnen, 2000 KünstlerInnen, über 200 Musik-, Theater- und Kabarettgruppen, Über 6000 Stunden Programm an vier Tagen. Eintritt frei. Datum: 26.06. - 28.06.2009</cmt>
+    <desc>Größtes Musikfestival Europas mitten in Wien mit über drei Millionen Besuchern lädt auch dieses Jahr zum feiern ein. Info und Programm: 19 Iseln, 16 Bühnen, 2000 KünstlerInnen, über 200 Musik-, Theater- und Kabarettgruppen, Über 6000 Stunden Programm an vier Tagen. Eintritt frei. Datum: 26.06. - 28.06.2009</desc>
+    <link href="www.donauinselfest.at">
+      <text>www.donauinselfest.at</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Donauinsel</gpxx:StreetAddress>
+          <gpxx:City>Wien</gpxx:City>
+          <gpxx:PostalCode>01220</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 43 1 2020202</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.946109992" lon="9.430129984">
+    <name>Backnanger Nachwuchsfestival</name>
+    <cmt>Schon seit 1971 zeigen die Backnanger am letzten Juni-Wochenende wie sie feiern können. Und weit über 100.000 Besucher zeigen, dass die ganze Region mitfeiert. Damit ist es die größte und älteste Veranstaltung dieser Art im deutschen Südwesten eröffnet.Backnanger Nachwuchsfestival (am 28.06.2009, Beginn 16:00 Uhr) im Rahmen des Backnanger Strassenfestes vom 26.06. - 28.06.2009</cmt>
+    <desc>Schon seit 1971 zeigen die Backnanger am letzten Juni-Wochenende wie sie feiern können. Und weit über 100.000 Besucher zeigen, dass die ganze Region mitfeiert. Damit ist es die größte und älteste Veranstaltung dieser Art im deutschen Südwesten eröffnet.Backnanger Nachwuchsfestival (am 28.06.2009, Beginn 16:00 Uhr) im Rahmen des Backnanger Strassenfestes vom 26.06. - 28.06.2009</desc>
+    <link href="www.backnanger-strassenfest.de">
+      <text>www.backnanger-strassenfest.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Obstmarkt</gpxx:StreetAddress>
+          <gpxx:City>Backnang</gpxx:City>
+          <gpxx:PostalCode>71522</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 7191 35210</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="52.491740026" lon="7.296230039">
+    <name>Abifestival</name>
+    <cmt>Das alljährige Abifestival präsentiert sich in diesem Jahr unter dem Motto: Energie. Den nicht nur der Atommeiler neben an als auch das Abifestival produzieren pure Energie und Power! (Radio-) Aktivität und Kraft verkörpern diese beiden Größen. Jahr für Jahr setzt auch das Abifestival seine Besucher und Gäste unter Strom. Es elektrisiert die Massen und begeistert Musikliebhaber mit seinem vielfältigen Programm, mit herausragenden Künstlern und überwältigenden Bands. Programm: Adolar, The Bandgeek Mafia, Blumentopf, Bodhi Trees, Damion Davis, Dúné, Don and the Knocknerus, Fatso and the Rightmakers, Frittenbude, Götz Widmann, Herrenmagazin, Juri Gagarin, Kalypso, Klez.e, Mikrokosmos23, Ohrbooten, Play and Rewind, RapPourTua, Revolving Door, Talk Radio Talk, The Piglets, The Pollywogs, Turbostaat, Umse. Datum:  05.06. - 06.06.2009, Beginn Fr. 12:00 Uhr</cmt>
+    <desc>Das alljährige Abifestival präsentiert sich in diesem Jahr unter dem Motto: Energie. Den nicht nur der Atommeiler neben an als auch das Abifestival produzieren pure Energie und Power! (Radio-) Aktivität und Kraft verkörpern diese beiden Größen. Jahr für Jahr setzt auch das Abifestival seine Besucher und Gäste unter Strom. Es elektrisiert die Massen und begeistert Musikliebhaber mit seinem vielfältigen Programm, mit herausragenden Künstlern und überwältigenden Bands. Programm: Adolar, The Bandgeek Mafia, Blumentopf, Bodhi Trees, Damion Davis, Dúné, Don and the Knocknerus, Fatso and the Rightmakers, Frittenbude, Götz Widmann, Herrenmagazin, Juri Gagarin, Kalypso, Klez.e, Mikrokosmos23, Ohrbooten, Play and Rewind, RapPourTua, Revolving Door, Talk Radio Talk, The Piglets, The Pollywogs, Turbostaat, Umse. Datum:  05.06. - 06.06.2009, Beginn Fr. 12:00 Uhr</desc>
+    <link href="www.abifestival.de">
+      <text>www.abifestival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Am Kohschultenhof</gpxx:StreetAddress>
+          <gpxx:City>Lingen</gpxx:City>
+          <gpxx:PostalCode>49808</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="49.969729967" lon="10.417360011">
+    <name>Weinlabyrinth</name>
+    <cmt>Bands: Mister Music, MacD, The Shades, Ritmo Candela, Gipsy for Life, Fiesta Andaluza, Baila me. Datum: 10.07. - 12.07.2009, Beginn: 18:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</cmt>
+    <desc>Bands: Mister Music, MacD, The Shades, Ritmo Candela, Gipsy for Life, Fiesta Andaluza, Baila me. Datum: 10.07. - 12.07.2009, Beginn: 18:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</desc>
+    <link href="www.weinlabyrinth.de">
+      <text>www.weinlabyrinth.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Falkenstein</gpxx:StreetAddress>
+          <gpxx:City>Donnersdorf-Falkenstein</gpxx:City>
+          <gpxx:PostalCode>97499</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+491 70 / 4 60 05 38</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="49.760510037" lon="11.537659960">
+    <name>Waldstock</name>
+    <cmt>Waldstock Umsonst Und Draussen Festival idyllisch inmitten einer Waldlichtung in der fränkischen Schweiz. Alles mit viel Liebe, viel Ehrenamt, viel Herzblut und viel Leidenschaft! Datum: 11.07.2009. Der exakte Standort der Location ist vor Ort ausgeschildert.</cmt>
+    <desc>Waldstock Umsonst Und Draussen Festival idyllisch inmitten einer Waldlichtung in der fränkischen Schweiz. Alles mit viel Liebe, viel Ehrenamt, viel Herzblut und viel Leidenschaft! Datum: 11.07.2009. Der exakte Standort der Location ist vor Ort ausgeschildert.</desc>
+    <link href="www.waldstock.de">
+      <text>www.waldstock.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Schloßberg</gpxx:StreetAddress>
+          <gpxx:City>Pegnitz</gpxx:City>
+          <gpxx:PostalCode>91257</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.413060009" lon="9.068780020">
+    <name>Umsonst + Draußen Mössingen</name>
+    <cmt>Line Up: Derby Dolls, InPlugged, Melanus Kwest, Reefer Madness, Scratched Surface, Spätzlesdreck, The Johnny Trouble Trio, The Real Mc Kenzies, The Seducers. Datum: 31.07. - 01.08.2009, Beginn: ca. 15:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</cmt>
+    <desc>Line Up: Derby Dolls, InPlugged, Melanus Kwest, Reefer Madness, Scratched Surface, Spätzlesdreck, The Johnny Trouble Trio, The Real Mc Kenzies, The Seducers. Datum: 31.07. - 01.08.2009, Beginn: ca. 15:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</desc>
+    <link href="www.umsonstunddraussen.com">
+      <text>www.umsonstunddraussen.com</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Firstwaldstrasse</gpxx:StreetAddress>
+          <gpxx:City>Mössingen</gpxx:City>
+          <gpxx:PostalCode>72116</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="52.187669976" lon="8.938270016">
+    <name>Umsonst + Draußen Vlotho</name>
+    <cmt>Datum: 31.07. - 02.08.2009.</cmt>
+    <desc>Datum: 31.07. - 02.08.2009.</desc>
+    <link href="www.festivalkult.de">
+      <text>www.festivalkult.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Weserwiese Veltheim</gpxx:StreetAddress>
+          <gpxx:City>Vlotho</gpxx:City>
+          <gpxx:PostalCode>32602</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="47.545639984" lon="9.679759992">
+    <name>Umsonst + Draußen Lindau</name>
+    <cmt>Line Up: Broilers, Far From Finished, It-Ate, Jancee Pornick Casino, Nosliw + Feueralarm, Talco. Datum: 25.07.2009, Beginn: 13:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</cmt>
+    <desc>Line Up: Broilers, Far From Finished, It-Ate, Jancee Pornick Casino, Nosliw + Feueralarm, Talco. Datum: 25.07.2009, Beginn: 13:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</desc>
+    <link href="www.vaudeville.de">
+      <text>www.vaudeville.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Hintere Insel</gpxx:StreetAddress>
+          <gpxx:City>Lindau</gpxx:City>
+          <gpxx:PostalCode>88131</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="49.966509975" lon="9.784779958">
+    <name>Umsonst + Draußen Karlstadt</name>
+    <cmt>Als Besonderheit wartet das karlstadter u+d mit einer Garagenbühne auf, auf der nachwuchs-künstler die Möglichkeit bekommen, ihr Können unter Beweis zu stellen. Datum: 25.07. - 26.07.2009, Beginn: Fr. 19:30 Uhr, Sa. 18:00 Uhr, So. 11:00 Uhr.</cmt>
+    <desc>Als Besonderheit wartet das karlstadter u+d mit einer Garagenbühne auf, auf der nachwuchs-künstler die Möglichkeit bekommen, ihr Können unter Beweis zu stellen. Datum: 25.07. - 26.07.2009, Beginn: Fr. 19:30 Uhr, Sa. 18:00 Uhr, So. 11:00 Uhr.</desc>
+    <link href="www.umsonstunddraussen.de">
+      <text>www.umsonstunddraussen.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Am Saupurzl</gpxx:StreetAddress>
+          <gpxx:City>Karlstadt</gpxx:City>
+          <gpxx:PostalCode>97753</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.786249999" lon="9.945200030">
+    <name>Umsonst + Draußen Heubach</name>
+    <cmt>Dieses Jahr zum 25. Mal, wieder mit dabei sind hochkarätige Acts aus vielen Bereichen der Musik. 2 Tage voller Spaß, guter Musik und netten Menschen. Datum ist noch nicht bekannt. Datum: 10. + 11.07.2009.</cmt>
+    <desc>Dieses Jahr zum 25. Mal, wieder mit dabei sind hochkarätige Acts aus vielen Bereichen der Musik. 2 Tage voller Spaß, guter Musik und netten Menschen. Datum ist noch nicht bekannt. Datum: 10. + 11.07.2009.</desc>
+    <link href="www.ud-heubach.de">
+      <text>www.ud-heubach.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:City>Heubach</gpxx:City>
+          <gpxx:PostalCode>73540</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.314740034" lon="11.913810018">
+    <name>Sinnflutfestival</name>
+    <cmt>10 Tage Festival, kostenlose Musik, Circuszelt mit Veranstaltungen, Gastrostände, Kunsthandwerk, Kinderprogramm. 24. Juli bis 2. August 2009.</cmt>
+    <desc>10 Tage Festival, kostenlose Musik, Circuszelt mit Veranstaltungen, Gastrostände, Kunsthandwerk, Kinderprogramm. 24. Juli bis 2. August 2009.</desc>
+    <link href="www.sinnflut.biz">
+      <text>www.sinnflut.biz</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Volksfestplatz am Stadion</gpxx:StreetAddress>
+          <gpxx:City>Erding</gpxx:City>
+          <gpxx:PostalCode>85435</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+49 8122  880 989 0</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="52.672489984" lon="9.902839987">
+    <name>Südwinsen Festival</name>
+    <cmt>Auf der Südwinser Festivalkuhwiese idylisch gelegen, mitten im Wald und direkt an der Aller, wird auch in diesem Jahr ein sehr abwechslungsreiches Programm geboten. Line Up: Demian Band, Kid Decker, Rockout, Stars and Bars, The Pokes, WhatEver. Datum: 24.07. - 25.07.2009, Beginn: Fr. 15:00 Uhr, Sa. 11:00 Uhr.</cmt>
+    <desc>Auf der Südwinser Festivalkuhwiese idylisch gelegen, mitten im Wald und direkt an der Aller, wird auch in diesem Jahr ein sehr abwechslungsreiches Programm geboten. Line Up: Demian Band, Kid Decker, Rockout, Stars and Bars, The Pokes, WhatEver. Datum: 24.07. - 25.07.2009, Beginn: Fr. 15:00 Uhr, Sa. 11:00 Uhr.</desc>
+    <link href="www.suedwinsen-festival.de">
+      <text>www.suedwinsen-festival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:City>Südwinsen</gpxx:City>
+          <gpxx:PostalCode>29308</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="52.444449998" lon="13.393969964">
+    <name>Rocktreff</name>
+    <cmt>Festival für alle von bis usw. check out! Datum: 10.07. - 12.07.2009, Beginn: 11:00 Uhr.</cmt>
+    <desc>Festival für alle von bis usw. check out! Datum: 10.07. - 12.07.2009, Beginn: 11:00 Uhr.</desc>
+    <link href="www.rocktreff.de">
+      <text>www.rocktreff.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Andlauer Weg</gpxx:StreetAddress>
+          <gpxx:City>Berlin</gpxx:City>
+          <gpxx:PostalCode>12105</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="50.706969984" lon="7.145749982">
+    <name>Rheinkultur</name>
+    <cmt>Line Up: A + E aka Masta Ace + Edo G, Baddies, Black President, Black Stone Cherry, Boppin B, Bubonix, Culcha Candela, Get Well Soon, In December, Montreal, No Use For A Name, Olli Schulz, Paramount Styles, Pete Philly + Perquisite, She&apos;s All That, Talion aka Snaga + Fard, The Casting Out, Tone, Virginia Jetzt! Datum: 04.07.2009.</cmt>
+    <desc>Line Up: A + E aka Masta Ace + Edo G, Baddies, Black President, Black Stone Cherry, Boppin B, Bubonix, Culcha Candela, Get Well Soon, In December, Montreal, No Use For A Name, Olli Schulz, Paramount Styles, Pete Philly + Perquisite, She&apos;s All That, Talion aka Snaga + Fard, The Casting Out, Tone, Virginia Jetzt! Datum: 04.07.2009.</desc>
+    <link href="www.rheinkultur.com">
+      <text>www.rheinkultur.com</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Freizeitpark Rheinaue</gpxx:StreetAddress>
+          <gpxx:City>Bonn</gpxx:City>
+          <gpxx:PostalCode>53111</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+49 228  20 70 80 6</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.261089986" lon="11.642399970">
+    <name>Open Air am Garchinger See</name>
+    <cmt>Das OpenAir ist eine Veranstaltung von Jugendlichen für Jugendliche. Das heißt jede/r der/die Interesse hat sich an der Planung dieser Veranstaltung zu beteiligen kann das tun. Datum: 04.07.2009, Beginn: 15.30.</cmt>
+    <desc>Das OpenAir ist eine Veranstaltung von Jugendlichen für Jugendliche. Das heißt jede/r der/die Interesse hat sich an der Planung dieser Veranstaltung zu beteiligen kann das tun. Datum: 04.07.2009, Beginn: 15.30.</desc>
+    <link href="www.openairamsee.de">
+      <text>www.openairamsee.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Stadionweg</gpxx:StreetAddress>
+          <gpxx:City>Garching</gpxx:City>
+          <gpxx:PostalCode>85748</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.459379999" lon="9.942190005">
+    <name>Obstwiesenfestival</name>
+    <cmt>Line Up: Bishop Allen, Mintzkov, PlusMinus, Super700, We Have Band, Wrongkong. Datum: 16.07. - 18.07.2009, Beginn: Donnerstag ab 19:00 Uhr, Freitag ab 16:30 Uhr Samstag ab 13:00 Uhr.</cmt>
+    <desc>Line Up: Bishop Allen, Mintzkov, PlusMinus, Super700, We Have Band, Wrongkong. Datum: 16.07. - 18.07.2009, Beginn: Donnerstag ab 19:00 Uhr, Freitag ab 16:30 Uhr Samstag ab 13:00 Uhr.</desc>
+    <link href="www.obstwiesenfestival.de">
+      <text>www.obstwiesenfestival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>im Lerchenfeld</gpxx:StreetAddress>
+          <gpxx:City>Dornstadt bei Ulm</gpxx:City>
+          <gpxx:PostalCode>89160</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="47.991100000" lon="9.252010016">
+    <name>Live at Plaza</name>
+    <cmt>Line Up: The Mellers. Datum: 24.07. - 25.07.2009 , Beginn: 20:00 Uhr.</cmt>
+    <desc>Line Up: The Mellers. Datum: 24.07. - 25.07.2009 , Beginn: 20:00 Uhr.</desc>
+    <link href="www.live-at-plaza.de">
+      <text>www.live-at-plaza.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Riedweg</gpxx:StreetAddress>
+          <gpxx:City>Hausen am Andelsbach</gpxx:City>
+          <gpxx:PostalCode>72505</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 7576 962 478</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.491600035" lon="9.207370011">
+    <name>KuRt Festival</name>
+    <cmt>Line Up: Accused Drug, Karpatenhund, Kilians, Mini Moustache, The Mad Trist, Trashmonkeys. Datum: 17.07. - 18.07.2009, Beginn: 17:00 Uhr.</cmt>
+    <desc>Line Up: Accused Drug, Karpatenhund, Kilians, Mini Moustache, The Mad Trist, Trashmonkeys. Datum: 17.07. - 18.07.2009, Beginn: 17:00 Uhr.</desc>
+    <link href="www.ku-rt.de">
+      <text>www.ku-rt.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Karlsstraße</gpxx:StreetAddress>
+          <gpxx:City>Reutlingen</gpxx:City>
+          <gpxx:PostalCode>72764</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.194310011" lon="6.431639995">
+    <name>HORST Festival</name>
+    <cmt>Für Münchengladbach von Studierenden. 2 Bühnen, 32 Bands und 2 Tage lang. Datum: 18.07. - 19.07.2009, Beginn: 10 Uhr. Achtung: Die genaue Location erfahrt ihr auf der Homepage des Festivals.</cmt>
+    <desc>Für Münchengladbach von Studierenden. 2 Bühnen, 32 Bands und 2 Tage lang. Datum: 18.07. - 19.07.2009, Beginn: 10 Uhr. Achtung: Die genaue Location erfahrt ihr auf der Homepage des Festivals.</desc>
+    <link href="www.horstfestival.de">
+      <text>www.horstfestival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Noch nicht bekannt</gpxx:StreetAddress>
+          <gpxx:City>Mönchengladbach</gpxx:City>
+          <gpxx:PostalCode>41065</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.191120027" lon="10.094509972">
+    <name>Go Ahead Weekend</name>
+    <cmt>3 Tage open-air Jugendkulturfestival mit 18 Bands und 10 Vereinen. Datum: 17.07. - 19.07.2009, Beginn: 16:00 Uhr.</cmt>
+    <desc>3 Tage open-air Jugendkulturfestival mit 18 Bands und 10 Vereinen. Datum: 17.07. - 19.07.2009, Beginn: 16:00 Uhr.</desc>
+    <link href="www.kjr-eschwege.de">
+      <text>www.kjr-eschwege.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Am Werratalsee</gpxx:StreetAddress>
+          <gpxx:City>Schwebda</gpxx:City>
+          <gpxx:PostalCode>37276</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49  5651 96154</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="50.006319992" lon="8.419119995">
+    <name>Flörsheimer Open Air</name>
+    <cmt>Programm: The Shanes und mehr. Datum: 17.07. - 19.07.2009, Beginn: 17:00 Uhr.</cmt>
+    <desc>Programm: The Shanes und mehr. Datum: 17.07. - 19.07.2009, Beginn: 17:00 Uhr.</desc>
+    <link href="www.floersheimer-openair.de">
+      <text>www.floersheimer-openair.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Liebigstraße</gpxx:StreetAddress>
+          <gpxx:City>Flörsheim</gpxx:City>
+          <gpxx:PostalCode>65439</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 179 2056219</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="54.088740014" lon="9.073549993">
+    <name>Frequenzen Festival</name>
+    <cmt>Zum vierten Mal findes Das Open Air Musik-Fest FREQUENZEN 09 Meldorf/Dithmarschen an der Nordsee statt. Auf dem Rathausplatz werden drei Bands mit ihrem Mix aus Latin, Funk + Jazz, Balkan, Samba, Klezmer, Reggae und Dancefloor die Besucher des Festivals zum Tanzen bringen. Programm: Analogik, King Kora, Radio Zastava. Datum: 04.07.2009, Beginn: 17:00.</cmt>
+    <desc>Zum vierten Mal findes Das Open Air Musik-Fest FREQUENZEN 09 Meldorf/Dithmarschen an der Nordsee statt. Auf dem Rathausplatz werden drei Bands mit ihrem Mix aus Latin, Funk + Jazz, Balkan, Samba, Klezmer, Reggae und Dancefloor die Besucher des Festivals zum Tanzen bringen. Programm: Analogik, King Kora, Radio Zastava. Datum: 04.07.2009, Beginn: 17:00.</desc>
+    <link href="www.frequenzen-festival.de">
+      <text>www.frequenzen-festival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Rathausplatz</gpxx:StreetAddress>
+          <gpxx:City>Meldorf</gpxx:City>
+          <gpxx:PostalCode>25704</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="49.270319995" lon="11.048290003">
+    <name>Bardentreffen</name>
+    <cmt>Nürnbergs größtes Open Air Festival lädt ein um Weltmusik zu erleben. Die Altstadt tönt vom 30.07. - 01.08.2009 an allen Ecken und Enden.</cmt>
+    <desc>Nürnbergs größtes Open Air Festival lädt ein um Weltmusik zu erleben. Die Altstadt tönt vom 30.07. - 01.08.2009 an allen Ecken und Enden.</desc>
+    <link href="www.bardentreffen.de">
+      <text>www.bardentreffen.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Innenstadt Nürnberg</gpxx:StreetAddress>
+          <gpxx:City>Nürnberg</gpxx:City>
+          <gpxx:PostalCode>90402</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 911 2313325</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="49.009889988" lon="12.060559960">
+    <name>Bayerisches Jazzweekend</name>
+    <cmt>Freuen Sie sich auf das 28. Bayerische Jazzweekend unter freiem Himmel in Regensburg. Es werden 30.000 Besucher erwartet. Regensburg steht auch 2009 ganz im Zeichen des Jazz. Damit lädt die Stadt erneut zum feiern mit knapp 100 Bands ein und  zum genießen der wunderschönen Altstadt. Das ganze komplett umsonst. Datum: 09.07. - 12.07.2009</cmt>
+    <desc>Freuen Sie sich auf das 28. Bayerische Jazzweekend unter freiem Himmel in Regensburg. Es werden 30.000 Besucher erwartet. Regensburg steht auch 2009 ganz im Zeichen des Jazz. Damit lädt die Stadt erneut zum feiern mit knapp 100 Bands ein und  zum genießen der wunderschönen Altstadt. Das ganze komplett umsonst. Datum: 09.07. - 12.07.2009</desc>
+    <link href="www.bayerisches-jazzweekend.de">
+      <text>www.bayerisches-jazzweekend.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Innenstadt Regensburg</gpxx:StreetAddress>
+          <gpxx:City>Regensburg</gpxx:City>
+          <gpxx:PostalCode>93047</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.289210003" lon="7.129469980">
+    <name>Bochum Total</name>
+    <cmt>Eines der größten Musikfestivals lädt vom 3.07. - 6.07.2009 zur großen Sause in der Bochumer Innenstadt ein. Auch in diesem Jahr werden bis zu einer Million Besucher erwartet. Und wieder heißt es: vier Tage volles Programm, 66 nationale und internationale Bands vom Newcomer bis zum Top-Act auf vier Bühnen, und dies alles bei freiem Eintritt. Nach dem offiziellen Bühnenschluss am 22 Uhr wird das Programm mit über 100 Einzelterminen im legendären Kneipenviertel Bermudadreieck bis in die Morgenstunden fortgesetzt. Beginn: Do - So 16:00 Uhr</cmt>
+    <desc>Eines der größten Musikfestivals lädt vom 3.07. - 6.07.2009 zur großen Sause in der Bochumer Innenstadt ein. Auch in diesem Jahr werden bis zu einer Million Besucher erwartet. Und wieder heißt es: vier Tage volles Programm, 66 nationale und internationale Bands vom Newcomer bis zum Top-Act auf vier Bühnen, und dies alles bei freiem Eintritt. Nach dem offiziellen Bühnenschluss am 22 Uhr wird das Programm mit über 100 Einzelterminen im legendären Kneipenviertel Bermudadreieck bis in die Morgenstunden fortgesetzt. Beginn: Do - So 16:00 Uhr</desc>
+    <link href="www.bochumtotal.de">
+      <text>www.bochumtotal.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Innenstadt Bochum</gpxx:StreetAddress>
+          <gpxx:City>Bochum</gpxx:City>
+          <gpxx:PostalCode>44787</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 234 65067</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.597130040" lon="8.862640020">
+    <name>48er Festival</name>
+    <cmt>15. 48er Festival in Herrenberg. Programm: Buccaneer Soundsystem, Die Rakede, Emily Still Reminds, Helldorados, Itchy Poopzkid, Luis + Laserpower, Ohrbooten, Pilot, Right Before Summer, Skulls and Bones, Soultecniques, The Bottrops, The Rising Rocket, The Savants. Datum: 24.07. - 26.07.2009.</cmt>
+    <desc>15. 48er Festival in Herrenberg. Programm: Buccaneer Soundsystem, Die Rakede, Emily Still Reminds, Helldorados, Itchy Poopzkid, Luis + Laserpower, Ohrbooten, Pilot, Right Before Summer, Skulls and Bones, Soultecniques, The Bottrops, The Rising Rocket, The Savants. Datum: 24.07. - 26.07.2009.</desc>
+    <link href="www.48er.com">
+      <text>www.48er.com</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Schießmauer</gpxx:StreetAddress>
+          <gpxx:City>Herrenberg</gpxx:City>
+          <gpxx:PostalCode>71083</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.413060009" lon="9.068780020">
+    <name>Umsonst + Draußen Mössingen</name>
+    <cmt>Line Up: Derby Dolls, InPlugged, Melanus Kwest, Reefer Madness, Scratched Surface, Spätzlesdreck, The Johnny Trouble Trio, The Real Mc Kenzies, The Seducers. Datum: 31.07. - 01.08.2009, Beginn: ca. 15:00 Uhr.</cmt>
+    <desc>Line Up: Derby Dolls, InPlugged, Melanus Kwest, Reefer Madness, Scratched Surface, Spätzlesdreck, The Johnny Trouble Trio, The Real Mc Kenzies, The Seducers. Datum: 31.07. - 01.08.2009, Beginn: ca. 15:00 Uhr.</desc>
+    <link href="www.umsonstunddraussen.com">
+      <text>www.umsonstunddraussen.com</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Firstwaldstrasse</gpxx:StreetAddress>
+          <gpxx:City>Mössingen</gpxx:City>
+          <gpxx:PostalCode>72116</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="52.187669976" lon="8.938270016">
+    <name>Umsonst + Draußen Vlotho</name>
+    <cmt>Datum: 31.07. - 02.08.2009.</cmt>
+    <desc>Datum: 31.07. - 02.08.2009.</desc>
+    <link href="www.festivalkult.de">
+      <text>www.festivalkult.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Weserwiese Veltheim</gpxx:StreetAddress>
+          <gpxx:City>Vlotho</gpxx:City>
+          <gpxx:PostalCode>32602</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.314740034" lon="11.913810018">
+    <name>Sinnflutfestival</name>
+    <cmt>10 Tage Festival, kostenlose Musik, Circuszelt mit Veranstaltungen, Gastrostände, Kunsthandwerk, Kinderprogramm. 24. Juli bis 2. August 2009.</cmt>
+    <desc>10 Tage Festival, kostenlose Musik, Circuszelt mit Veranstaltungen, Gastrostände, Kunsthandwerk, Kinderprogramm. 24. Juli bis 2. August 2009.</desc>
+    <link href="www.sinnflut.biz">
+      <text>www.sinnflut.biz</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Volksfestplatz am Stadion</gpxx:StreetAddress>
+          <gpxx:City>Erding</gpxx:City>
+          <gpxx:PostalCode>85435</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+49 8122  880 989 0</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="53.486279994" lon="10.112810014">
+    <name>Wutzrock Festival</name>
+    <cmt>Vielfältiges Programm mit viel Musik von Ska bis Rock, Kleinkunstbühne, Kinderprogramm, Baden, Schlafsackwetthüpfen. Line Up: Coppelius, Dritte Wahl, Wohnraumhelden. Datum: 28.08. - 30.08.2009, Beginn: 18:00 Uhr.</cmt>
+    <desc>Vielfältiges Programm mit viel Musik von Ska bis Rock, Kleinkunstbühne, Kinderprogramm, Baden, Schlafsackwetthüpfen. Line Up: Coppelius, Dritte Wahl, Wohnraumhelden. Datum: 28.08. - 30.08.2009, Beginn: 18:00 Uhr.</desc>
+    <link href="www.wutzrock.de">
+      <text>www.wutzrock.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Moorfleeter Deich</gpxx:StreetAddress>
+          <gpxx:City>Hamburg</gpxx:City>
+          <gpxx:PostalCode>21037</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="49.861859987" lon="8.423670027">
+    <name>Wutzdog Festival</name>
+    <cmt>Line Up: Aunt of Agony, Beatshots, Contraption, Dive into Infinity, Drowning Fate, Entweder-Oder, John Boy, MilchmÃ¤dchen, Picknick at the Warfield. Datum: 29.08.2009, Beginn: 17:00 Uhr.</cmt>
+    <desc>Line Up: Aunt of Agony, Beatshots, Contraption, Dive into Infinity, Drowning Fate, Entweder-Oder, John Boy, MilchmÃ¤dchen, Picknick at the Warfield. Datum: 29.08.2009, Beginn: 17:00 Uhr.</desc>
+    <link href="www.wutzdog-festival.de">
+      <text>www.wutzdog-festival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Geinsheimer Straße</gpxx:StreetAddress>
+          <gpxx:City>Riedstadt-Leeheim</gpxx:City>
+          <gpxx:PostalCode>64560</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+49 6158 985025</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="53.546119994" lon="9.966749987">
+    <name>Welt Astra Tag</name>
+    <cmt>Line Up: 5 Bugs, Luxuslärm, Mama Boom. Datum: 08.08.2009, Beginn: 14:00 Uhr.</cmt>
+    <desc>Line Up: 5 Bugs, Luxuslärm, Mama Boom. Datum: 08.08.2009, Beginn: 14:00 Uhr.</desc>
+    <link href="www.weltastratag.de">
+      <text>www.weltastratag.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>An den St Pauli Landungsbrücken</gpxx:StreetAddress>
+          <gpxx:City>Hamburg</gpxx:City>
+          <gpxx:PostalCode>20359</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.748850031" lon="9.110089978">
+    <name>Umsonst + Draußen Stuttgart</name>
+    <cmt>Größtes alternatives nichtkommerzielles Festival in der Region. Datum: 14.08. - 16.08.2009, Beginn: 11 Uhr.</cmt>
+    <desc>Größtes alternatives nichtkommerzielles Festival in der Region. Datum: 14.08. - 16.08.2009, Beginn: 11 Uhr.</desc>
+    <link href="www.ud-stuttgart.de">
+      <text>www.ud-stuttgart.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Pfaffenwaldring</gpxx:StreetAddress>
+          <gpxx:City>Stuttgart</gpxx:City>
+          <gpxx:PostalCode>70569</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="53.757100040" lon="12.608659985">
+    <name>TeteRock Festival</name>
+    <cmt>Neben der Musik gibt es noch Spiel-,Sport- und Spaßangebote, wie zB eine Wasserrutsche. Organisiert wird es von der katholischen Jugend Mecklenburg und dem Bischof-Theissing-Haus.</cmt>
+    <desc>Neben der Musik gibt es noch Spiel-,Sport- und Spaßangebote, wie zB eine Wasserrutsche. Organisiert wird es von der katholischen Jugend Mecklenburg und dem Bischof-Theissing-Haus.</desc>
+    <link href="www.bth-kjm.de">
+      <text>www.bth-kjm.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Koppelbergstrasse</gpxx:StreetAddress>
+          <gpxx:City>Teterow</gpxx:City>
+          <gpxx:PostalCode>17166</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="52.408349980" lon="8.386299983">
+    <name>Stemweder Openair Festival</name>
+    <cmt>Line Up: Anorak, Bad Luck Charms, Banana Butts, Big John Bates + The Voodoodollz, Dúné, Earthbend, Far From Finished, Jennifer Rostock, Les Caméléons, Mama Boom, Mighty Vibez, Randale, Talco, The Inspector Cluzo. Datum: 14.08. - 15.08.2009, Beginn: Freitag 17:00 Uhr</cmt>
+    <desc>Line Up: Anorak, Bad Luck Charms, Banana Butts, Big John Bates + The Voodoodollz, Dúné, Earthbend, Far From Finished, Jennifer Rostock, Les Caméléons, Mama Boom, Mighty Vibez, Randale, Talco, The Inspector Cluzo. Datum: 14.08. - 15.08.2009, Beginn: Freitag 17:00 Uhr</desc>
+    <link href="www.jfk-stemwede.de/festival">
+      <text>www.jfk-stemwede.de/festival</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Ilweder Strasse</gpxx:StreetAddress>
+          <gpxx:City>Stemwede-Haldem</gpxx:City>
+          <gpxx:PostalCode>32351</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="52.743069967" lon="8.167319996">
+    <name>Staatsforsten Open Air</name>
+    <cmt>Line Up: Dritte Wahl. Datum: 07.08. - 08.08.2009, Beginn: 15:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</cmt>
+    <desc>Line Up: Dritte Wahl. Datum: 07.08. - 08.08.2009, Beginn: 15:00 Uhr. Der exakte Standort der Location ist vor Ort ausgeschildert.</desc>
+    <link href="www.staatsforsten-openair.de">
+      <text>www.staatsforsten-openair.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Festivalgelände</gpxx:StreetAddress>
+          <gpxx:City>Bakum (Büschel)</gpxx:City>
+          <gpxx:PostalCode>49456</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="50.077860039" lon="8.420490017">
+    <name>Sommerschein Festival</name>
+    <cmt>Spielmobil für Kinder, Kultur, Kulinarisches, Kleinkunst, Kreatives, Lagerfeuer, uvm., Datum: 21.08. - 23.08.2009, Beginn: 18:00 Uhr (Freitag).</cmt>
+    <desc>Spielmobil für Kinder, Kultur, Kulinarisches, Kleinkunst, Kreatives, Lagerfeuer, uvm., Datum: 21.08. - 23.08.2009, Beginn: 18:00 Uhr (Freitag).</desc>
+    <link href="www.sommerschein.de">
+      <text>www.sommerschein.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Schlossstraße</gpxx:StreetAddress>
+          <gpxx:City>Hofheim</gpxx:City>
+          <gpxx:PostalCode>65719</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="49.188649999" lon="10.285149990">
+    <name>Sommerfühl</name>
+    <cmt>Line Up: Ape Project, Dukla Vozovna, Supershirt, Wrongkong. Datum: 14.08. - 15.08.2009, Beginn: Freitag 18:00 Uhr, Samstag 14:00 Uhr.</cmt>
+    <desc>Line Up: Ape Project, Dukla Vozovna, Supershirt, Wrongkong. Datum: 14.08. - 15.08.2009, Beginn: Freitag 18:00 Uhr, Samstag 14:00 Uhr.</desc>
+    <link href="www.sommerfuehl.de">
+      <text>www.sommerfuehl.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Oberransbach</gpxx:StreetAddress>
+          <gpxx:City>Feuchtwangen</gpxx:City>
+          <gpxx:PostalCode>91555</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="50.006099967" lon="8.282699995">
+    <name>Rockfield Open Air</name>
+    <cmt>Line Up: Anchony, Ashes Of Decay, Battle Against The Empire, BRT, Bugs of God, Club of Chrome, Creme Frech, Creme Frech, Cycocircus, Dick N Ali Blow The House, Hauptsache Es Knallt, In Aiwins, Lenard, Linus Q, Lustkind, Mindspoken, r.u.s.t., Sabbathorium, Scarecrows Field, Semuc, Sever, The Bazement Pilots, The Hairy Balls, Tinfoil Hat, Twenty Eyes, Wayke, Wilde Zeiten. Datum: 07.08. - 09.08.2009, Beginn: 18:00 Uhr.</cmt>
+    <desc>Line Up: Anchony, Ashes Of Decay, Battle Against The Empire, BRT, Bugs of God, Club of Chrome, Creme Frech, Creme Frech, Cycocircus, Dick N Ali Blow The House, Hauptsache Es Knallt, In Aiwins, Lenard, Linus Q, Lustkind, Mindspoken, r.u.s.t., Sabbathorium, Scarecrows Field, Semuc, Sever, The Bazement Pilots, The Hairy Balls, Tinfoil Hat, Twenty Eyes, Wayke, Wilde Zeiten. Datum: 07.08. - 09.08.2009, Beginn: 18:00 Uhr.</desc>
+    <link href="www.kulturfabrik-airfield.de">
+      <text>www.kulturfabrik-airfield.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Am Rheinufer/In der Reduit</gpxx:StreetAddress>
+          <gpxx:City>Mainz-Kastel</gpxx:City>
+          <gpxx:PostalCode>55252</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="49.255299959" lon="9.111690000">
+    <name>Römersee Open Air</name>
+    <cmt>Line Up: Bass Busters, Catching Of Larks, Dubwars, One Inch Man, Oozing Goo, Robert Rausch + Seine Zustände, The Shanes. Datum: 21.08. - 22.08.2009, Beginn: Fr. 17:00 Uhr / Sa. 12:00 Uhr.</cmt>
+    <desc>Line Up: Bass Busters, Catching Of Larks, Dubwars, One Inch Man, Oozing Goo, Robert Rausch + Seine Zustände, The Shanes. Datum: 21.08. - 22.08.2009, Beginn: Fr. 17:00 Uhr / Sa. 12:00 Uhr.</desc>
+    <link href="www.roemersee.de">
+      <text>www.roemersee.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Römersee</gpxx:StreetAddress>
+          <gpxx:City>Bad Rappenau-Zimmerhof</gpxx:City>
+          <gpxx:PostalCode>74906</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.503850007" lon="6.877499996">
+    <name>Olgas Rock Festival</name>
+    <cmt>Das Olgas-Rock Festival hat sich mittlerweile zu einem der beliebtesten umsonst + draußen Festivals des Ruhrgebiets gemausert. Die Atmosphäre ist trotz der mehreren Tausend Besucher sehr entspannt, ja schon fast familiär. Datum: 07.08. - 08.08.2009, Beginn: 12:00 Uhr.</cmt>
+    <desc>Das Olgas-Rock Festival hat sich mittlerweile zu einem der beliebtesten umsonst + draußen Festivals des Ruhrgebiets gemausert. Die Atmosphäre ist trotz der mehreren Tausend Besucher sehr entspannt, ja schon fast familiär. Datum: 07.08. - 08.08.2009, Beginn: 12:00 Uhr.</desc>
+    <link href="www.olgas-rock.de">
+      <text>www.olgas-rock.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Vestische Straße</gpxx:StreetAddress>
+          <gpxx:City>Oberhausen</gpxx:City>
+          <gpxx:PostalCode>46047</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.188539993" lon="7.504489990">
+    <name>Midsummer Open Air</name>
+    <cmt>Line Up: An Early Cascade, Blonk, Grac Will Fall, Loush, Tenement Kids, The Black Atlantic, The Satellite Year, Your Hero. Datum: 15.08.2009, Beginn: 13:30 Uhr.</cmt>
+    <desc>Line Up: An Early Cascade, Blonk, Grac Will Fall, Loush, Tenement Kids, The Black Atlantic, The Satellite Year, Your Hero. Datum: 15.08.2009, Beginn: 13:30 Uhr.</desc>
+    <link href="www.midsummer-records.de">
+      <text>www.midsummer-records.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Thomasstrasse</gpxx:StreetAddress>
+          <gpxx:City>Halver</gpxx:City>
+          <gpxx:PostalCode>58553</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.300879970" lon="9.897989966">
+    <name>Live im Schlossgarten</name>
+    <cmt>Superkultiges und relaxtes Festival einem wunderschön gelegenen Schlossgarten. Am Freitag gibts Kino auf Großleinwand und am Samstag 3 Bands unterschiedlicher Musikrichtungen. Line Up: Volxtanz, Datum: 07.08. - 09.08.2009, Beginn: 19:00 Uhr.</cmt>
+    <desc>Superkultiges und relaxtes Festival einem wunderschön gelegenen Schlossgarten. Am Freitag gibts Kino auf Großleinwand und am Samstag 3 Bands unterschiedlicher Musikrichtungen. Line Up: Volxtanz, Datum: 07.08. - 09.08.2009, Beginn: 19:00 Uhr.</desc>
+    <link href="www.live-im-schlossgarten.de">
+      <text>www.live-im-schlossgarten.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Werdensteinstrasse</gpxx:StreetAddress>
+          <gpxx:City>Dellmensingen bei Ulm</gpxx:City>
+          <gpxx:PostalCode>89155</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.903490014" lon="8.633109983">
+    <name>Holter Meeting</name>
+    <cmt>Programm: Dreamothergirl, Eddies Revenge, Fat Belly, Gammalux, More Than Crossed, Off Limits, Prinzessin Plastik, Transmitter. Datum: 21.08. - 22.08.2009, Beginn: 17:00 Uhr.</cmt>
+    <desc>Programm: Dreamothergirl, Eddies Revenge, Fat Belly, Gammalux, More Than Crossed, Off Limits, Prinzessin Plastik, Transmitter. Datum: 21.08. - 22.08.2009, Beginn: 17:00 Uhr.</desc>
+    <link href="www.holtermeeting.de">
+      <text>www.holtermeeting.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Holter Straße</gpxx:StreetAddress>
+          <gpxx:City>Schloß Holte-Stukenbrock</gpxx:City>
+          <gpxx:PostalCode>33758</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="54.107789984" lon="10.803940007">
+    <name>Gogenkrog Open-Air</name>
+    <cmt>Rahmenprogramm für Jung und Alt. Auftritt von vier regionlaen Bands. Zudem Kinderprogramm und Großflächenflohmarkt. Datum: 28.08. - 30.08.2009, Beginn: 14:00 Uhr.</cmt>
+    <desc>Rahmenprogramm für Jung und Alt. Auftritt von vier regionlaen Bands. Zudem Kinderprogramm und Großflächenflohmarkt. Datum: 28.08. - 30.08.2009, Beginn: 14:00 Uhr.</desc>
+    <link href="www.gogenkrog-openair.de">
+      <text>www.gogenkrog-openair.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Am Gogenkrog</gpxx:StreetAddress>
+          <gpxx:City>Neustadt in Holstein</gpxx:City>
+          <gpxx:PostalCode>23730</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 4561 1073</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.335239979" lon="9.336189972">
+    <name>Fest der leisen Tönen</name>
+    <cmt>Datum: 21.08.2009 - 23.08.2009, Beginn 10:00 - 24:00.</cmt>
+    <desc>Datum: 21.08.2009 - 23.08.2009, Beginn 10:00 - 24:00.</desc>
+    <link href="www.festderleisentoene.de">
+      <text>www.festderleisentoene.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Höllchenstrasse</gpxx:StreetAddress>
+          <gpxx:City>Dörnberg</gpxx:City>
+          <gpxx:PostalCode>34317</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 5606 599615</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.331050033" lon="6.562150000">
+    <name>Folklorefest Krefeld</name>
+    <cmt>Ein von den Krefelder beliebtes Sommerfestival mitten in der Innenstadt. Datum: 14.08. - 15.08.2009, Beginn 19:00 Uhr.</cmt>
+    <desc>Ein von den Krefelder beliebtes Sommerfestival mitten in der Innenstadt. Datum: 14.08. - 15.08.2009, Beginn 19:00 Uhr.</desc>
+    <link href="www.folklorefest.de">
+      <text>www.folklorefest.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>An der alten Kirche</gpxx:StreetAddress>
+          <gpxx:City>Krefeld</gpxx:City>
+          <gpxx:PostalCode>47798</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 2151 501729</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.456610020" lon="7.011569962">
+    <name>Essen Original</name>
+    <cmt>Essen Original präsentiert sich auch dieses Jahr mit rund 750 Künstlern auf acht Bühnen in der gesamten Essener Innenstadt. Für jeden ist etwas dabei. Ob Rock-, Pop- oder Hip-Hop-Begeisterte, jeder kommt auf seine Kosten. Eintritt frei. Tolles Programm erwartet euch vom 28.08. - 30.08.2009.</cmt>
+    <desc>Essen Original präsentiert sich auch dieses Jahr mit rund 750 Künstlern auf acht Bühnen in der gesamten Essener Innenstadt. Für jeden ist etwas dabei. Ob Rock-, Pop- oder Hip-Hop-Begeisterte, jeder kommt auf seine Kosten. Eintritt frei. Tolles Programm erwartet euch vom 28.08. - 30.08.2009.</desc>
+    <link href="www.essen-original.de">
+      <text>www.essen-original.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Kennedyplatz</gpxx:StreetAddress>
+          <gpxx:City>Essen</gpxx:City>
+          <gpxx:PostalCode>45127</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 201 887200</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="51.407510005" lon="6.689430038">
+    <name>Open Air Folksfest</name>
+    <cmt>Sieben Bands auf zwei Bühnen, Kinderspaß und Ständemarkt an der Bergheimer Mühle. Line Up: Ezio, Ma Valise. Datum: 06.06.2009, Beginn: 15:00 Uhr</cmt>
+    <desc>Sieben Bands auf zwei Bühnen, Kinderspaß und Ständemarkt an der Bergheimer Mühle. Line Up: Ezio, Ma Valise. Datum: 06.06.2009, Beginn: 15:00 Uhr</desc>
+    <link href="www.folkfest.de">
+      <text>www.folkfest.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Peschmannstrasse</gpxx:StreetAddress>
+          <gpxx:City>Duisburg</gpxx:City>
+          <gpxx:PostalCode>47228</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="50.286050001" lon="8.504360011">
+    <name>Open Ernstival</name>
+    <cmt>Ein nichtkommerzielles Open Air-Festival für Bands aus der Region, ein Live-Spektakel inmitten von Wiesen und Feldern, ein Happening nicht nur für Jugendliche. Datum: 05.09.2009, Beginn: 15:00 Uhr.</cmt>
+    <desc>Ein nichtkommerzielles Open Air-Festival für Bands aus der Region, ein Live-Spektakel inmitten von Wiesen und Feldern, ein Happening nicht nur für Jugendliche. Datum: 05.09.2009, Beginn: 15:00 Uhr.</desc>
+    <link href="www.open-ernstival.de">
+      <text>www.open-ernstival.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Am Steinchen</gpxx:StreetAddress>
+          <gpxx:City>Neu-Anspach</gpxx:City>
+          <gpxx:PostalCode>61267</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="53.568390040" lon="9.982860005">
+    <name>Karneval der Kulturen Hamburg</name>
+    <cmt>Der farbenprächtige Umzug zeigt das internationale Gesicht Hamburgs, und trägt gleichzeitig zur Integration der ausländischen Mitbürger und Mitbürgerinnen in Hamburg und Umgebung bei. Datum: 11.09. - 13.09.2009, Beginn: 16:00 Uhr.</cmt>
+    <desc>Der farbenprächtige Umzug zeigt das internationale Gesicht Hamburgs, und trägt gleichzeitig zur Integration der ausländischen Mitbürger und Mitbürgerinnen in Hamburg und Umgebung bei. Datum: 11.09. - 13.09.2009, Beginn: 16:00 Uhr.</desc>
+    <link href="www.karneval-kulturen-hamburg.de">
+      <text>www.karneval-kulturen-hamburg.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Grindelhof/Siemersallee/Allendeplatz</gpxx:StreetAddress>
+          <gpxx:City>Hamburg</gpxx:City>
+          <gpxx:PostalCode>20149</gpxx:PostalCode>
+        </gpxx:Address>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="54.402619991" lon="11.161179990">
+    <name>Fehmarn Open Air</name>
+    <cmt>Das Fehrman Open Air Festival ist für seine friedliche und familiäre Atmosphäre weit über die Grenzen Deutschlands hinaus bekannt. Programm: Bradley&apos;s Circus, Chris Farlowe, Cosmic Finger, Errorhead, Großenbroder Shanty Chor, Hamburg Blues Band, Jimmy Cornett, Joanne Shaw Taylor, Peer Knacke, Purple, Rohstoff, Ten Years After. Datum: 05.09.2009, Beginn: 11:00 Uhr.</cmt>
+    <desc>Das Fehrman Open Air Festival ist für seine friedliche und familiäre Atmosphäre weit über die Grenzen Deutschlands hinaus bekannt. Programm: Bradley&apos;s Circus, Chris Farlowe, Cosmic Finger, Errorhead, Großenbroder Shanty Chor, Hamburg Blues Band, Jimmy Cornett, Joanne Shaw Taylor, Peer Knacke, Purple, Rohstoff, Ten Years After. Datum: 05.09.2009, Beginn: 11:00 Uhr.</desc>
+    <link href="www.fehmarnfestivalgroup.com">
+      <text>www.fehmarnfestivalgroup.com</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Flögger Strand</gpxx:StreetAddress>
+          <gpxx:City>Fehmarn</gpxx:City>
+          <gpxx:PostalCode>23769</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 4372 1890</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="48.934029993" lon="10.896470016">
+    <name>Eber-Hart Open Air</name>
+    <cmt>Datum: 04.09. - 05.09.2009.</cmt>
+    <desc>Datum: 04.09. - 05.09.2009.</desc>
+    <link href="www.eber-hart.de">
+      <text>www.eber-hart.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>Treuchtlingen Ri. Möhren, links Ri. Haag</gpxx:StreetAddress>
+          <gpxx:City>Treuchtlingen</gpxx:City>
+          <gpxx:PostalCode>91757</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 91421221</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="52.180170016" lon="7.538499981">
+    <name>Detten Rockt</name>
+    <cmt>&quot;Zum fünften mal findet das DettenRockt Festival unter dem Motto &quot;&quot;gegen Rassismus und Diskriminierung&quot;&quot; statt. Internationale und nationalen Musikgrößen wie The Bones (swe), Siena Root (swe), Peter Pan Speedrock (nl), Jeneson, Planlos und viel mehr konnten in den letzten Jahren für das Festival gewonnen werden.Auch dieses Jahr erwartet euch an tolles Aufgebot an grandiösen KünstlernInnen und Musikern. Eintritt frei. Erwartete Besucher: 4000. Datum: 12.09.2009. &quot;</cmt>
+    <desc>&quot;Zum fünften mal findet das DettenRockt Festival unter dem Motto &quot;&quot;gegen Rassismus und Diskriminierung&quot;&quot; statt. Internationale und nationalen Musikgrößen wie The Bones (swe), Siena Root (swe), Peter Pan Speedrock (nl), Jeneson, Planlos und viel mehr konnten in den letzten Jahren für das Festival gewonnen werden.Auch dieses Jahr erwartet euch an tolles Aufgebot an grandiösen KünstlernInnen und Musikern. Eintritt frei. Erwartete Besucher: 4000. Datum: 12.09.2009. &quot;</desc>
+    <link href="www.dettenrockt.de">
+      <text>www.dettenrockt.de</text>
+    </link>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:Address>
+          <gpxx:StreetAddress>An den Klärteichen</gpxx:StreetAddress>
+          <gpxx:City>Emsdetten</gpxx:City>
+          <gpxx:PostalCode>48282</gpxx:PostalCode>
+        </gpxx:Address>
+        <gpxx:PhoneNumber>+ 49 151 10302099</gpxx:PhoneNumber>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
 </gpx>

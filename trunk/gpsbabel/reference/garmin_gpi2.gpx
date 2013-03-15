@@ -1,526 +1,521 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="42.401050944" minlon="-71.126601985" maxlat="42.468654849" maxlon="-71.102972981"/>
-<wpt lat="42.439992931" lon="-71.120924922">
-  <name>5058ROAD</name>
-  <cmt>ROAD CROSSING</cmt>
-  <desc>ROAD CROSSING</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.438877970" lon="-71.119276956">
-  <name>5066</name>
-  <cmt>5066</cmt>
-  <desc>5066</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.439226909" lon="-71.119688759">
-  <name>5067</name>
-  <cmt>5067</cmt>
-  <desc>5067</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.438916946" lon="-71.116145980">
-  <name>5096</name>
-  <cmt>5096</cmt>
-  <desc>5096</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.443903927" lon="-71.122043990">
-  <name>5142</name>
-  <cmt>5142</cmt>
-  <desc>5142</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.445358858" lon="-71.122844797">
-  <name>5144SUMMIT</name>
-  <cmt>Summit</cmt>
-  <desc>Summit</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.449764973" lon="-71.122319922">
-  <name>5148NANEPA</name>
-  <cmt>Nanepashemet Road Crossing</cmt>
-  <desc>Nanepashemet Road Crossing</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.441726979" lon="-71.121675773">
-  <name>5150TANK</name>
-  <cmt>WATER TANK</cmt>
-  <desc>WATER TANK</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.447297927" lon="-71.121446947">
-  <name>5156</name>
-  <cmt>5156</cmt>
-  <desc>5156</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.449865891" lon="-71.119297827">
-  <name>5179DEAD</name>
-  <cmt>Dead End</cmt>
-  <desc>Dead End</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.454872821" lon="-71.125093997">
-  <name>5224</name>
-  <cmt>5224</cmt>
-  <desc>5224</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.459078860" lon="-71.124987882">
-  <name>5229</name>
-  <cmt>5229</cmt>
-  <desc>5229</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.456468903" lon="-71.124650678">
-  <name>5236BRIDGE</name>
-  <cmt>Bridge</cmt>
-  <desc>Bridge</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.456978858" lon="-71.124473820">
-  <name>5237</name>
-  <cmt>5237</cmt>
-  <desc>5237</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.459277930" lon="-71.124573816">
-  <name>5239ROAD</name>
-  <cmt>Road</cmt>
-  <desc>Road</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.453255868" lon="-71.121210745">
-  <name>5252PURPLE</name>
-  <cmt>Purple Rock Hill</cmt>
-  <desc>Purple Rock Hill</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.454400836" lon="-71.120989798">
-  <name>5254</name>
-  <cmt>5254</cmt>
-  <desc>5254</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.451441940" lon="-71.121745678">
-  <name>5258</name>
-  <cmt>5258</cmt>
-  <desc>5258</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.454403937" lon="-71.120659970">
-  <name>5264</name>
-  <cmt>5264</cmt>
-  <desc>5264</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.457760973" lon="-71.121044951">
-  <name>526708</name>
-  <cmt>526708</cmt>
-  <desc>526708</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.457088996" lon="-71.120312959">
-  <name>526750</name>
-  <cmt>526750</cmt>
-  <desc>526750</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.457387811" lon="-71.119844830">
-  <name>5267OBSTAC</name>
-  <cmt>Obstacle</cmt>
-  <desc>Obstacle</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.456591949" lon="-71.119675767">
-  <name>527614</name>
-  <cmt>527614</cmt>
-  <desc>527614</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.456251979" lon="-71.119355746">
-  <name>527631</name>
-  <cmt>527631</cmt>
-  <desc>527631</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.458147882" lon="-71.119134799">
-  <name>5278</name>
-  <cmt>5278</cmt>
-  <desc>5278</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.458781973" lon="-71.118990798">
-  <name>5278ROAD</name>
-  <cmt>Road</cmt>
-  <desc>Road</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.457733816" lon="-71.117480882">
-  <name>5287WATER</name>
-  <cmt>Reservoir</cmt>
-  <desc>Reservoir</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.459376669" lon="-71.117692944">
-  <name>5289</name>
-  <cmt>5289</cmt>
-  <desc>5289</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.459628964" lon="-71.116523920">
-  <name>5299DEAD</name>
-  <cmt>Dead End</cmt>
-  <desc>Dead End</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.464182936" lon="-71.119827731">
-  <name>5374FIRE</name>
-  <cmt>5374FIRE</cmt>
-  <desc>5374FIRE</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.465649853" lon="-71.119398829">
-  <name>5376</name>
-  <cmt>5376</cmt>
-  <desc>5376</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.465758985" lon="-71.119814739">
-  <name>5376BRIDGE</name>
-  <cmt>Bridge</cmt>
-  <desc>Bridge</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.465484897" lon="-71.119147791">
-  <name>5376DEAD</name>
-  <cmt>Dead End</cmt>
-  <desc>Dead End</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.465912877" lon="-71.119327918">
-  <name>5376STREAM</name>
-  <cmt>Stream Crossing</cmt>
-  <desc>Stream Crossing</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.439017948" lon="-71.114455853">
-  <name>6006</name>
-  <cmt>600698</cmt>
-  <desc>600698</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.438593740" lon="-71.114802780">
-  <name>6006BLUE</name>
-  <cmt>6006BLUE</cmt>
-  <desc>6006BLUE</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.436756846" lon="-71.113222959">
-  <name>6014MEADOW</name>
-  <cmt>6014MEADOW</cmt>
-  <desc>6014MEADOW</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.438665992" lon="-71.114078835">
-  <name>6016</name>
-  <cmt>Bike Loop Connector</cmt>
-  <desc>Bike Loop Connector</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.441753969" lon="-71.113219690">
-  <name>6029</name>
-  <cmt>6029</cmt>
-  <desc>6029</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.435471984" lon="-71.109663919">
-  <name>6042CROSS</name>
-  <cmt>Crossing</cmt>
-  <desc>Crossing</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.436242700" lon="-71.109074755">
-  <name>6053</name>
-  <cmt>6053</cmt>
-  <desc>6053</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.439249959" lon="-71.107499963">
-  <name>6066</name>
-  <cmt>6066</cmt>
-  <desc>6066</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.439763770" lon="-71.107581938">
-  <name>6067</name>
-  <cmt>6067</cmt>
-  <desc>6067</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.434765976" lon="-71.105873790">
-  <name>6071</name>
-  <cmt>6071</cmt>
-  <desc>6071</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.433303921" lon="-71.106598992">
-  <name>6073</name>
-  <cmt>6073</cmt>
-  <desc>6073</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.439501919" lon="-71.106555993">
-  <name>6077LOGS</name>
-  <cmt>Log Crossing</cmt>
-  <desc>Log Crossing</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.437337963" lon="-71.104771905">
-  <name>6084</name>
-  <cmt>6084</cmt>
-  <desc>6084</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.443108736" lon="-71.112674950">
-  <name>6121DEAD</name>
-  <cmt>Dead End</cmt>
-  <desc>Dead End</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.442195863" lon="-71.110974681">
-  <name>6130</name>
-  <cmt>6130</cmt>
-  <desc>6130</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.442980912" lon="-71.111440966">
-  <name>6131</name>
-  <cmt>6131</cmt>
-  <desc>6131</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.444772879" lon="-71.108881971">
-  <name>6153</name>
-  <cmt>6153</cmt>
-  <desc>6153</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.446792834" lon="-71.108783903">
-  <name>6155DEAD</name>
-  <cmt>Dead End</cmt>
-  <desc>Dead End</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.443591869" lon="-71.106300848">
-  <name>6171</name>
-  <cmt>6171</cmt>
-  <desc>6171</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.447803859" lon="-71.106623970">
-  <name>6176</name>
-  <cmt>6176</cmt>
-  <desc>6176</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.448447673" lon="-71.106157769">
-  <name>6177</name>
-  <cmt>6177</cmt>
-  <desc>6177</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.442992982" lon="-71.105877981">
-  <name>6181CROSS</name>
-  <cmt>Crossing</cmt>
-  <desc>Crossing</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.453414705" lon="-71.106782975">
-  <name>6272</name>
-  <cmt>6272</cmt>
-  <desc>6272</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.453433732" lon="-71.107252948">
-  <name>6272.1</name>
-  <cmt>6272</cmt>
-  <desc>6272</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.458297918" lon="-71.106770989">
-  <name>6278</name>
-  <cmt>6278</cmt>
-  <desc>6278</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.451429954" lon="-71.105412953">
-  <name>6280</name>
-  <cmt>6280</cmt>
-  <desc>6280</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.453844948" lon="-71.105205920">
-  <name>6283</name>
-  <cmt>6283</cmt>
-  <desc>6283</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.459985698" lon="-71.106169755">
-  <name>6289</name>
-  <cmt>6289</cmt>
-  <desc>6289</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.457615966" lon="-71.105115982">
-  <name>6297</name>
-  <cmt>6297</cmt>
-  <desc>6297</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.467109729" lon="-71.113573993">
-  <name>6328</name>
-  <cmt>6328</cmt>
-  <desc>6328</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.462775866" lon="-71.109985868">
-  <name>6353DEAD</name>
-  <cmt>Dead End</cmt>
-  <desc>Dead End</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.464201963" lon="-71.109862989">
-  <name>6354</name>
-  <cmt>6354</cmt>
-  <desc>6354</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.466458958" lon="-71.110066921">
-  <name>635722</name>
-  <cmt>635722</cmt>
-  <desc>635722</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.466556691" lon="-71.109409947">
-  <name>635783</name>
-  <cmt>635783</cmt>
-  <desc>635783</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.463494698" lon="-71.107116994">
-  <name>6373</name>
-  <cmt>6373</cmt>
-  <desc>6373</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.401050944" lon="-71.110240929">
-  <name>6634</name>
-  <cmt>6634</cmt>
-  <desc>6634</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.432620712" lon="-71.106531937">
-  <name>6979</name>
-  <cmt>6979</cmt>
-  <desc>6979</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.431032928" lon="-71.107882932">
-  <name>6997</name>
-  <cmt>6997</cmt>
-  <desc>6997</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.465686901" lon="-71.107359985">
-  <name>BEAR HILL</name>
-  <cmt>BEAR HILL TOWER</cmt>
-  <desc>BEAR HILL TOWER</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.430949947" lon="-71.107627871">
-  <name>BELLEVUE</name>
-  <cmt>BELLEVUE</cmt>
-  <desc>BELLEVUE</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.458515931" lon="-71.103645964">
-  <name>DARKHOLLPO</name>
-  <cmt>Dark Hollow Pond</cmt>
-  <desc>Dark Hollow Pond</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.451203978" lon="-71.126601985">
-  <name>GATE14</name>
-  <cmt>Gate 14</cmt>
-  <desc>Gate 14</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.458498916" lon="-71.122077769">
-  <name>GATE16</name>
-  <cmt>Gate 16</cmt>
-  <desc>Gate 16</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.459375747" lon="-71.119237980">
-  <name>GATE17</name>
-  <cmt>Gate 17</cmt>
-  <desc>Gate 17</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.466352927" lon="-71.119239992">
-  <name>GATE19</name>
-  <cmt>Gate 19</cmt>
-  <desc>Gate 19</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.468654849" lon="-71.107696854">
-  <name>GATE21</name>
-  <cmt>Gate 21</cmt>
-  <desc>Gate 21</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.456717929" lon="-71.102972981">
-  <name>GATE24</name>
-  <cmt>Gate 24</cmt>
-  <desc>Gate 24</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.430846766" lon="-71.107689897">
-  <name>GATE5</name>
-  <cmt>Gate 5</cmt>
-  <desc>Gate 5</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.431239961" lon="-71.109235939">
-  <name>GATE6</name>
-  <cmt>Gate 6</cmt>
-  <desc>Gate 6</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.434979966" lon="-71.109941863">
-  <name>PANTHRCAVE</name>
-  <cmt>Panther Cave</cmt>
-  <desc>Panther Cave</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.453414705" lon="-71.106781969">
-  <name>SHEEPFOLD</name>
-  <cmt>Sheepfold Parking Lot</cmt>
-  <desc>Sheepfold Parking Lot</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="42.455955679" lon="-71.107482864">
-  <name>SOAPBOX</name>
-  <cmt>Soap Box Derby Track</cmt>
-  <desc>Soap Box Derby Track</desc>
-  <sym>Waypoint</sym>
-</wpt>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="42.401050944" minlon="-71.126601985" maxlat="42.468654849" maxlon="-71.102972981"/>
+  <wpt lat="42.439992931" lon="-71.120924922">
+    <name>5058ROAD</name>
+    <cmt>ROAD CROSSING</cmt>
+    <desc>ROAD CROSSING</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.438877970" lon="-71.119276956">
+    <name>5066</name>
+    <cmt>5066</cmt>
+    <desc>5066</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.439226909" lon="-71.119688759">
+    <name>5067</name>
+    <cmt>5067</cmt>
+    <desc>5067</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.438916946" lon="-71.116145980">
+    <name>5096</name>
+    <cmt>5096</cmt>
+    <desc>5096</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.443903927" lon="-71.122043990">
+    <name>5142</name>
+    <cmt>5142</cmt>
+    <desc>5142</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.445358858" lon="-71.122844797">
+    <name>5144SUMMIT</name>
+    <cmt>Summit</cmt>
+    <desc>Summit</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.449764973" lon="-71.122319922">
+    <name>5148NANEPA</name>
+    <cmt>Nanepashemet Road Crossing</cmt>
+    <desc>Nanepashemet Road Crossing</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.441726979" lon="-71.121675773">
+    <name>5150TANK</name>
+    <cmt>WATER TANK</cmt>
+    <desc>WATER TANK</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.447297927" lon="-71.121446947">
+    <name>5156</name>
+    <cmt>5156</cmt>
+    <desc>5156</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.449865891" lon="-71.119297827">
+    <name>5179DEAD</name>
+    <cmt>Dead End</cmt>
+    <desc>Dead End</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.454872821" lon="-71.125093997">
+    <name>5224</name>
+    <cmt>5224</cmt>
+    <desc>5224</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.459078860" lon="-71.124987882">
+    <name>5229</name>
+    <cmt>5229</cmt>
+    <desc>5229</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.456468903" lon="-71.124650678">
+    <name>5236BRIDGE</name>
+    <cmt>Bridge</cmt>
+    <desc>Bridge</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.456978858" lon="-71.124473820">
+    <name>5237</name>
+    <cmt>5237</cmt>
+    <desc>5237</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.459277930" lon="-71.124573816">
+    <name>5239ROAD</name>
+    <cmt>Road</cmt>
+    <desc>Road</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.453255868" lon="-71.121210745">
+    <name>5252PURPLE</name>
+    <cmt>Purple Rock Hill</cmt>
+    <desc>Purple Rock Hill</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.454400836" lon="-71.120989798">
+    <name>5254</name>
+    <cmt>5254</cmt>
+    <desc>5254</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.451441940" lon="-71.121745678">
+    <name>5258</name>
+    <cmt>5258</cmt>
+    <desc>5258</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.454403937" lon="-71.120659970">
+    <name>5264</name>
+    <cmt>5264</cmt>
+    <desc>5264</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.457760973" lon="-71.121044951">
+    <name>526708</name>
+    <cmt>526708</cmt>
+    <desc>526708</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.457088996" lon="-71.120312959">
+    <name>526750</name>
+    <cmt>526750</cmt>
+    <desc>526750</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.457387811" lon="-71.119844830">
+    <name>5267OBSTAC</name>
+    <cmt>Obstacle</cmt>
+    <desc>Obstacle</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.456591949" lon="-71.119675767">
+    <name>527614</name>
+    <cmt>527614</cmt>
+    <desc>527614</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.456251979" lon="-71.119355746">
+    <name>527631</name>
+    <cmt>527631</cmt>
+    <desc>527631</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.458147882" lon="-71.119134799">
+    <name>5278</name>
+    <cmt>5278</cmt>
+    <desc>5278</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.458781973" lon="-71.118990798">
+    <name>5278ROAD</name>
+    <cmt>Road</cmt>
+    <desc>Road</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.457733816" lon="-71.117480882">
+    <name>5287WATER</name>
+    <cmt>Reservoir</cmt>
+    <desc>Reservoir</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.459376669" lon="-71.117692944">
+    <name>5289</name>
+    <cmt>5289</cmt>
+    <desc>5289</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.459628964" lon="-71.116523920">
+    <name>5299DEAD</name>
+    <cmt>Dead End</cmt>
+    <desc>Dead End</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.464182936" lon="-71.119827731">
+    <name>5374FIRE</name>
+    <cmt>5374FIRE</cmt>
+    <desc>5374FIRE</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.465649853" lon="-71.119398829">
+    <name>5376</name>
+    <cmt>5376</cmt>
+    <desc>5376</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.465758985" lon="-71.119814739">
+    <name>5376BRIDGE</name>
+    <cmt>Bridge</cmt>
+    <desc>Bridge</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.465484897" lon="-71.119147791">
+    <name>5376DEAD</name>
+    <cmt>Dead End</cmt>
+    <desc>Dead End</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.465912877" lon="-71.119327918">
+    <name>5376STREAM</name>
+    <cmt>Stream Crossing</cmt>
+    <desc>Stream Crossing</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.439017948" lon="-71.114455853">
+    <name>6006</name>
+    <cmt>600698</cmt>
+    <desc>600698</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.438593740" lon="-71.114802780">
+    <name>6006BLUE</name>
+    <cmt>6006BLUE</cmt>
+    <desc>6006BLUE</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.436756846" lon="-71.113222959">
+    <name>6014MEADOW</name>
+    <cmt>6014MEADOW</cmt>
+    <desc>6014MEADOW</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.438665992" lon="-71.114078835">
+    <name>6016</name>
+    <cmt>Bike Loop Connector</cmt>
+    <desc>Bike Loop Connector</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.441753969" lon="-71.113219690">
+    <name>6029</name>
+    <cmt>6029</cmt>
+    <desc>6029</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.435471984" lon="-71.109663919">
+    <name>6042CROSS</name>
+    <cmt>Crossing</cmt>
+    <desc>Crossing</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.436242700" lon="-71.109074755">
+    <name>6053</name>
+    <cmt>6053</cmt>
+    <desc>6053</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.439249959" lon="-71.107499963">
+    <name>6066</name>
+    <cmt>6066</cmt>
+    <desc>6066</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.439763770" lon="-71.107581938">
+    <name>6067</name>
+    <cmt>6067</cmt>
+    <desc>6067</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.434765976" lon="-71.105873790">
+    <name>6071</name>
+    <cmt>6071</cmt>
+    <desc>6071</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.433303921" lon="-71.106598992">
+    <name>6073</name>
+    <cmt>6073</cmt>
+    <desc>6073</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.439501919" lon="-71.106555993">
+    <name>6077LOGS</name>
+    <cmt>Log Crossing</cmt>
+    <desc>Log Crossing</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.437337963" lon="-71.104771905">
+    <name>6084</name>
+    <cmt>6084</cmt>
+    <desc>6084</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.443108736" lon="-71.112674950">
+    <name>6121DEAD</name>
+    <cmt>Dead End</cmt>
+    <desc>Dead End</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.442195863" lon="-71.110974681">
+    <name>6130</name>
+    <cmt>6130</cmt>
+    <desc>6130</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.442980912" lon="-71.111440966">
+    <name>6131</name>
+    <cmt>6131</cmt>
+    <desc>6131</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.444772879" lon="-71.108881971">
+    <name>6153</name>
+    <cmt>6153</cmt>
+    <desc>6153</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.446792834" lon="-71.108783903">
+    <name>6155DEAD</name>
+    <cmt>Dead End</cmt>
+    <desc>Dead End</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.443591869" lon="-71.106300848">
+    <name>6171</name>
+    <cmt>6171</cmt>
+    <desc>6171</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.447803859" lon="-71.106623970">
+    <name>6176</name>
+    <cmt>6176</cmt>
+    <desc>6176</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.448447673" lon="-71.106157769">
+    <name>6177</name>
+    <cmt>6177</cmt>
+    <desc>6177</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.442992982" lon="-71.105877981">
+    <name>6181CROSS</name>
+    <cmt>Crossing</cmt>
+    <desc>Crossing</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.453414705" lon="-71.106782975">
+    <name>6272</name>
+    <cmt>6272</cmt>
+    <desc>6272</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.453433732" lon="-71.107252948">
+    <name>6272.1</name>
+    <cmt>6272</cmt>
+    <desc>6272</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.458297918" lon="-71.106770989">
+    <name>6278</name>
+    <cmt>6278</cmt>
+    <desc>6278</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.451429954" lon="-71.105412953">
+    <name>6280</name>
+    <cmt>6280</cmt>
+    <desc>6280</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.453844948" lon="-71.105205920">
+    <name>6283</name>
+    <cmt>6283</cmt>
+    <desc>6283</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.459985698" lon="-71.106169755">
+    <name>6289</name>
+    <cmt>6289</cmt>
+    <desc>6289</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.457615966" lon="-71.105115982">
+    <name>6297</name>
+    <cmt>6297</cmt>
+    <desc>6297</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.467109729" lon="-71.113573993">
+    <name>6328</name>
+    <cmt>6328</cmt>
+    <desc>6328</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.462775866" lon="-71.109985868">
+    <name>6353DEAD</name>
+    <cmt>Dead End</cmt>
+    <desc>Dead End</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.464201963" lon="-71.109862989">
+    <name>6354</name>
+    <cmt>6354</cmt>
+    <desc>6354</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.466458958" lon="-71.110066921">
+    <name>635722</name>
+    <cmt>635722</cmt>
+    <desc>635722</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.466556691" lon="-71.109409947">
+    <name>635783</name>
+    <cmt>635783</cmt>
+    <desc>635783</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.463494698" lon="-71.107116994">
+    <name>6373</name>
+    <cmt>6373</cmt>
+    <desc>6373</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.401050944" lon="-71.110240929">
+    <name>6634</name>
+    <cmt>6634</cmt>
+    <desc>6634</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.432620712" lon="-71.106531937">
+    <name>6979</name>
+    <cmt>6979</cmt>
+    <desc>6979</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.431032928" lon="-71.107882932">
+    <name>6997</name>
+    <cmt>6997</cmt>
+    <desc>6997</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.465686901" lon="-71.107359985">
+    <name>BEAR HILL</name>
+    <cmt>BEAR HILL TOWER</cmt>
+    <desc>BEAR HILL TOWER</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.430949947" lon="-71.107627871">
+    <name>BELLEVUE</name>
+    <cmt>BELLEVUE</cmt>
+    <desc>BELLEVUE</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.458515931" lon="-71.103645964">
+    <name>DARKHOLLPO</name>
+    <cmt>Dark Hollow Pond</cmt>
+    <desc>Dark Hollow Pond</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.451203978" lon="-71.126601985">
+    <name>GATE14</name>
+    <cmt>Gate 14</cmt>
+    <desc>Gate 14</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.458498916" lon="-71.122077769">
+    <name>GATE16</name>
+    <cmt>Gate 16</cmt>
+    <desc>Gate 16</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.459375747" lon="-71.119237980">
+    <name>GATE17</name>
+    <cmt>Gate 17</cmt>
+    <desc>Gate 17</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.466352927" lon="-71.119239992">
+    <name>GATE19</name>
+    <cmt>Gate 19</cmt>
+    <desc>Gate 19</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.468654849" lon="-71.107696854">
+    <name>GATE21</name>
+    <cmt>Gate 21</cmt>
+    <desc>Gate 21</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.456717929" lon="-71.102972981">
+    <name>GATE24</name>
+    <cmt>Gate 24</cmt>
+    <desc>Gate 24</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.430846766" lon="-71.107689897">
+    <name>GATE5</name>
+    <cmt>Gate 5</cmt>
+    <desc>Gate 5</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.431239961" lon="-71.109235939">
+    <name>GATE6</name>
+    <cmt>Gate 6</cmt>
+    <desc>Gate 6</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.434979966" lon="-71.109941863">
+    <name>PANTHRCAVE</name>
+    <cmt>Panther Cave</cmt>
+    <desc>Panther Cave</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.453414705" lon="-71.106781969">
+    <name>SHEEPFOLD</name>
+    <cmt>Sheepfold Parking Lot</cmt>
+    <desc>Sheepfold Parking Lot</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="42.455955679" lon="-71.107482864">
+    <name>SOAPBOX</name>
+    <cmt>Soap Box Derby Track</cmt>
+    <desc>Soap Box Derby Track</desc>
+    <sym>Waypoint</sym>
+  </wpt>
 </gpx>

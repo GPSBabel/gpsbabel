@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx 
-  version="1.0" 
-  creator="GPSBabel - http://www.gpsbabel.org" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns="http://www.topografix.com/GPX/1/0" 
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="37.507930994" minlon="-122.292645574" maxlat="37.538625002" maxlon="-122.258695364"/>
   <wpt lat="37.538136244" lon="-122.291540504">
@@ -177,7 +172,7 @@
       <trkpt lat="37.524402142" lon="-122.262685895"/>
       <trkpt lat="37.524451017" lon="-122.262317538"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>yellow med</name>
     <desc>Style=Yellow Medium, Width=3, Dashed=0, Color=#ffff00</desc>
@@ -253,7 +248,7 @@
       <trkpt lat="37.520198822" lon="-122.263115644"/>
       <trkpt lat="37.520198822" lon="-122.262747288"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>blue med</name>
     <desc>Style=Blue Medium, Width=3, Dashed=0, Color=#000080</desc>
@@ -333,7 +328,7 @@
       <trkpt lat="37.515702248" lon="-122.263975143"/>
       <trkpt lat="37.515751123" lon="-122.263606787"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>black med</name>
     <desc>Style=Black Medium, Width=3, Dashed=0, Color=#000000</desc>
@@ -409,7 +404,7 @@
       <trkpt lat="37.510032654" lon="-122.260721326"/>
       <trkpt lat="37.510032654" lon="-122.260352969"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>red med</name>
     <desc>Style=Red Medium, Width=3, Dashed=0, Color=#ff0000</desc>
@@ -484,7 +479,7 @@
       <trkpt lat="37.528898716" lon="-122.263668180"/>
       <trkpt lat="37.528849840" lon="-122.263299823"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>red thin</name>
     <desc>Style=Red Thin, Width=2, Dashed=0, Color=#ff0000</desc>
@@ -569,7 +564,7 @@
       <trkpt lat="37.530951500" lon="-122.261826396"/>
       <trkpt lat="37.530951500" lon="-122.261458039"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>red hair</name>
     <desc>Style=Red Hairline, Width=1, Dashed=0, Color=#ff0000</desc>
@@ -659,7 +654,7 @@
       <trkpt lat="37.534226179" lon="-122.259063721"/>
       <trkpt lat="37.534226179" lon="-122.258695364"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>thin dash</name>
     <desc>Style=Red Thin Dashed, Width=2, Dashed=1, Color=#ff0000</desc>
@@ -749,7 +744,7 @@
       <trkpt lat="37.536132336" lon="-122.259554863"/>
       <trkpt lat="37.536132336" lon="-122.259186506"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>hair dash</name>
     <desc>Style=Red Hairline Dashed, Width=1, Dashed=1, Color=#ff0000</desc>
@@ -833,7 +828,7 @@
       <trkpt lat="37.538625002" lon="-122.261028290"/>
       <trkpt lat="37.538625002" lon="-122.260659933"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>green med</name>
     <desc>Style=Green Medium, Width=3, Dashed=0, Color=#008000</desc>
@@ -915,7 +910,7 @@
       <trkpt lat="37.517168522" lon="-122.262317538"/>
       <trkpt lat="37.517315149" lon="-122.261949182"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>purple med</name>
     <desc>Style=Purple Medium, Width=3, Dashed=0, Color=#800080</desc>
@@ -997,7 +992,7 @@
       <trkpt lat="37.513307333" lon="-122.262747288"/>
       <trkpt lat="37.513258457" lon="-122.262378931"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>white med</name>
     <desc>Style=White Medium, Width=3, Dashed=0, Color=#ffffff</desc>
@@ -1083,5 +1078,5 @@
       <trkpt lat="37.508028746" lon="-122.288900614"/>
       <trkpt lat="37.508028746" lon="-122.289268970"/>
     </trkseg>
-</trk>
+  </trk>
 </gpx>

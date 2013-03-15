@@ -1,62 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="49.021900000" minlon="11.587670000" maxlat="50.494250000" maxlon="12.675630000"/>
-<rte>
-  <rtept lat="50.494250000" lon="12.107270000">
-    <name>RPT001</name>
-    <cmt>08523 Plauen, Jahnstrasse 28</cmt>
-    <desc>08523 Plauen, Jahnstrasse 28</desc>
-  </rtept>
-  <rtept lat="50.375750000" lon="12.012100000">
-    <name>RPT002</name>
-    <cmt>08538 Burgstein, K7855</cmt>
-    <desc>08538 Burgstein, K7855</desc>
-  </rtept>
-  <rtept lat="50.224670000" lon="12.071990000">
-    <name>RPT003</name>
-    <cmt>95111 Rehau</cmt>
-    <desc>95111 Rehau</desc>
-  </rtept>
-  <rtept lat="49.225280000" lon="12.675630000">
-    <name>RPT004</name>
-    <cmt>93413 Cham, Further Strasse</cmt>
-    <desc>93413 Cham, Further Strasse</desc>
-  </rtept>
-  <rtept lat="49.124090000" lon="12.551650000">
-    <name>RPT005</name>
-    <cmt>93185 Michelsneukirchen, Hauptstrasse</cmt>
-    <desc>93185 Michelsneukirchen, Hauptstrasse</desc>
-  </rtept>
-  <rtept lat="49.055460000" lon="12.262440000">
-    <name>RPT006</name>
-    <cmt>93177 Altenthann</cmt>
-    <desc>93177 Altenthann</desc>
-  </rtept>
-  <rtept lat="49.033020000" lon="12.226590000">
-    <name>RPT007</name>
-    <cmt>93093 Donaustauf</cmt>
-    <desc>93093 Donaustauf</desc>
-  </rtept>
-  <rtept lat="49.048410000" lon="11.765920000">
-    <name>RPT008</name>
-    <cmt>93155 Hemau, Dietfurter Strasse</cmt>
-    <desc>93155 Hemau, Dietfurter Strasse</desc>
-  </rtept>
-  <rtept lat="49.021900000" lon="11.616100000">
-    <name>RPT009</name>
-    <cmt>92345 Mühlbach, Riedenburger Strasse</cmt>
-    <desc>92345 Mühlbach, Riedenburger Strasse</desc>
-  </rtept>
-  <rtept lat="49.034850000" lon="11.587670000">
-    <name>RPT010</name>
-    <cmt>92345 Dietfurt An Der Altmühl</cmt>
-    <desc>92345 Dietfurt An Der Altmühl</desc>
-  </rtept>
-</rte>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="49.021900000" minlon="11.587670000" maxlat="50.494250000" maxlon="12.675630000"/>
+  <rte>
+    <rtept lat="50.494250000" lon="12.107270000">
+      <name>RPT001</name>
+      <cmt>08523 Plauen, Jahnstrasse 28</cmt>
+      <desc>08523 Plauen, Jahnstrasse 28</desc>
+    </rtept>
+    <rtept lat="50.375750000" lon="12.012100000">
+      <name>RPT002</name>
+      <cmt>08538 Burgstein, K7855</cmt>
+      <desc>08538 Burgstein, K7855</desc>
+    </rtept>
+    <rtept lat="50.224670000" lon="12.071990000">
+      <name>RPT003</name>
+      <cmt>95111 Rehau</cmt>
+      <desc>95111 Rehau</desc>
+    </rtept>
+    <rtept lat="49.225280000" lon="12.675630000">
+      <name>RPT004</name>
+      <cmt>93413 Cham, Further Strasse</cmt>
+      <desc>93413 Cham, Further Strasse</desc>
+    </rtept>
+    <rtept lat="49.124090000" lon="12.551650000">
+      <name>RPT005</name>
+      <cmt>93185 Michelsneukirchen, Hauptstrasse</cmt>
+      <desc>93185 Michelsneukirchen, Hauptstrasse</desc>
+    </rtept>
+    <rtept lat="49.055460000" lon="12.262440000">
+      <name>RPT006</name>
+      <cmt>93177 Altenthann</cmt>
+      <desc>93177 Altenthann</desc>
+    </rtept>
+    <rtept lat="49.033020000" lon="12.226590000">
+      <name>RPT007</name>
+      <cmt>93093 Donaustauf</cmt>
+      <desc>93093 Donaustauf</desc>
+    </rtept>
+    <rtept lat="49.048410000" lon="11.765920000">
+      <name>RPT008</name>
+      <cmt>93155 Hemau, Dietfurter Strasse</cmt>
+      <desc>93155 Hemau, Dietfurter Strasse</desc>
+    </rtept>
+    <rtept lat="49.021900000" lon="11.616100000">
+      <name>RPT009</name>
+      <cmt>92345 Mühlbach, Riedenburger Strasse</cmt>
+      <desc>92345 Mühlbach, Riedenburger Strasse</desc>
+    </rtept>
+    <rtept lat="49.034850000" lon="11.587670000">
+      <name>RPT010</name>
+      <cmt>92345 Dietfurt An Der Altmühl</cmt>
+      <desc>92345 Dietfurt An Der Altmühl</desc>
+    </rtept>
+  </rte>
 </gpx>
