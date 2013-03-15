@@ -1,151 +1,146 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="42.431000000" minlon="-71.122833333" maxlat="42.467166667" maxlon="-71.105166667"/>
-<rte>
-  <number>1</number>
-  <rtept lat="42.431000000" lon="-71.107666667">
-    <name>BELLEVUE</name>
-  </rtept>
-  <rtept lat="42.431166667" lon="-71.109166667">
-    <name>GATE6</name>
-  </rtept>
-  <rtept lat="42.435000000" lon="-71.110000000">
-    <name>PANTHRCAV</name>
-  </rtept>
-  <rtept lat="42.436833333" lon="-71.113166667">
-    <name>6014MEADW</name>
-  </rtept>
-  <rtept lat="42.439000000" lon="-71.114500000">
-    <name>6006</name>
-  </rtept>
-  <rtept lat="42.438666667" lon="-71.114833333">
-    <name>6006BLUE</name>
-  </rtept>
-  <rtept lat="42.439000000" lon="-71.116166667">
-    <name>5096</name>
-  </rtept>
-  <rtept lat="42.438833333" lon="-71.119333333">
-    <name>5066</name>
-  </rtept>
-  <rtept lat="42.439166667" lon="-71.119666667">
-    <name>5067</name>
-  </rtept>
-  <rtept lat="42.440000000" lon="-71.121000000">
-    <name>5058ROAD</name>
-  </rtept>
-  <rtept lat="42.441666667" lon="-71.121666667">
-    <name>5150TANK</name>
-  </rtept>
-  <rtept lat="42.443833333" lon="-71.122000000">
-    <name>5142</name>
-  </rtept>
-  <rtept lat="42.445333333" lon="-71.122833333">
-    <name>5144SUMMT</name>
-  </rtept>
-  <rtept lat="42.447333333" lon="-71.121500000">
-    <name>5156</name>
-  </rtept>
-  <rtept lat="42.449833333" lon="-71.122333333">
-    <name>5148NANEP</name>
-  </rtept>
-  <rtept lat="42.451500000" lon="-71.121666667">
-    <name>5258</name>
-  </rtept>
-  <rtept lat="42.453333333" lon="-71.121166667">
-    <name>5252PURPL</name>
-  </rtept>
-  <rtept lat="42.456333333" lon="-71.119333333">
-    <name>527631</name>
-  </rtept>
-  <rtept lat="42.456666667" lon="-71.119666667">
-    <name>527614</name>
-  </rtept>
-  <rtept lat="42.457333333" lon="-71.119833333">
-    <name>5267OBSTC</name>
-  </rtept>
-  <rtept lat="42.458166667" lon="-71.119166667">
-    <name>5278</name>
-  </rtept>
-  <rtept lat="42.459333333" lon="-71.117666667">
-    <name>5289</name>
-  </rtept>
-  <rtept lat="42.464166667" lon="-71.119833333">
-    <name>5374FIRE</name>
-  </rtept>
-  <rtept lat="42.465666667" lon="-71.119333333">
-    <name>5376</name>
-  </rtept>
-  <rtept lat="42.465833333" lon="-71.119333333">
-    <name>5376STREM</name>
-  </rtept>
-  <rtept lat="42.467166667" lon="-71.113500000">
-    <name>6328</name>
-  </rtept>
-  <rtept lat="42.466500000" lon="-71.110000000">
-    <name>635722</name>
-  </rtept>
-  <rtept lat="42.466500000" lon="-71.109333333">
-    <name>635783</name>
-  </rtept>
-  <rtept lat="42.463500000" lon="-71.107166667">
-    <name>6373</name>
-  </rtept>
-  <rtept lat="42.465666667" lon="-71.107333333">
-    <name>BEARHILL</name>
-  </rtept>
-  <rtept lat="42.460000000" lon="-71.106166667">
-    <name>6289</name>
-  </rtept>
-  <rtept lat="42.457666667" lon="-71.105166667">
-    <name>6297</name>
-  </rtept>
-  <rtept lat="42.453833333" lon="-71.105166667">
-    <name>6283</name>
-  </rtept>
-  <rtept lat="42.451500000" lon="-71.105333333">
-    <name>6280</name>
-  </rtept>
-  <rtept lat="42.448500000" lon="-71.106166667">
-    <name>6177</name>
-  </rtept>
-  <rtept lat="42.447833333" lon="-71.106666667">
-    <name>6176</name>
-  </rtept>
-  <rtept lat="42.444833333" lon="-71.108833333">
-    <name>6153</name>
-  </rtept>
-  <rtept lat="42.443666667" lon="-71.106333333">
-    <name>6171</name>
-  </rtept>
-  <rtept lat="42.443000000" lon="-71.111500000">
-    <name>6131</name>
-  </rtept>
-  <rtept lat="42.442166667" lon="-71.111000000">
-    <name>6130</name>
-  </rtept>
-  <rtept lat="42.441833333" lon="-71.113166667">
-    <name>6029</name>
-  </rtept>
-  <rtept lat="42.439000000" lon="-71.114500000">
-    <name>6006</name>
-  </rtept>
-  <rtept lat="42.436833333" lon="-71.113166667">
-    <name>6014MEADW</name>
-  </rtept>
-  <rtept lat="42.435000000" lon="-71.110000000">
-    <name>PANTHRCAV</name>
-  </rtept>
-  <rtept lat="42.431166667" lon="-71.109166667">
-    <name>GATE6</name>
-  </rtept>
-  <rtept lat="42.431000000" lon="-71.107666667">
-    <name>BELLEVUE</name>
-  </rtept>
-</rte>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="42.431000000" minlon="-71.122833333" maxlat="42.467166667" maxlon="-71.105166667"/>
+  <rte>
+    <number>1</number>
+    <rtept lat="42.431000000" lon="-71.107666667">
+      <name>BELLEVUE</name>
+    </rtept>
+    <rtept lat="42.431166667" lon="-71.109166667">
+      <name>GATE6</name>
+    </rtept>
+    <rtept lat="42.435000000" lon="-71.110000000">
+      <name>PANTHRCAV</name>
+    </rtept>
+    <rtept lat="42.436833333" lon="-71.113166667">
+      <name>6014MEADW</name>
+    </rtept>
+    <rtept lat="42.439000000" lon="-71.114500000">
+      <name>6006</name>
+    </rtept>
+    <rtept lat="42.438666667" lon="-71.114833333">
+      <name>6006BLUE</name>
+    </rtept>
+    <rtept lat="42.439000000" lon="-71.116166667">
+      <name>5096</name>
+    </rtept>
+    <rtept lat="42.438833333" lon="-71.119333333">
+      <name>5066</name>
+    </rtept>
+    <rtept lat="42.439166667" lon="-71.119666667">
+      <name>5067</name>
+    </rtept>
+    <rtept lat="42.440000000" lon="-71.121000000">
+      <name>5058ROAD</name>
+    </rtept>
+    <rtept lat="42.441666667" lon="-71.121666667">
+      <name>5150TANK</name>
+    </rtept>
+    <rtept lat="42.443833333" lon="-71.122000000">
+      <name>5142</name>
+    </rtept>
+    <rtept lat="42.445333333" lon="-71.122833333">
+      <name>5144SUMMT</name>
+    </rtept>
+    <rtept lat="42.447333333" lon="-71.121500000">
+      <name>5156</name>
+    </rtept>
+    <rtept lat="42.449833333" lon="-71.122333333">
+      <name>5148NANEP</name>
+    </rtept>
+    <rtept lat="42.451500000" lon="-71.121666667">
+      <name>5258</name>
+    </rtept>
+    <rtept lat="42.453333333" lon="-71.121166667">
+      <name>5252PURPL</name>
+    </rtept>
+    <rtept lat="42.456333333" lon="-71.119333333">
+      <name>527631</name>
+    </rtept>
+    <rtept lat="42.456666667" lon="-71.119666667">
+      <name>527614</name>
+    </rtept>
+    <rtept lat="42.457333333" lon="-71.119833333">
+      <name>5267OBSTC</name>
+    </rtept>
+    <rtept lat="42.458166667" lon="-71.119166667">
+      <name>5278</name>
+    </rtept>
+    <rtept lat="42.459333333" lon="-71.117666667">
+      <name>5289</name>
+    </rtept>
+    <rtept lat="42.464166667" lon="-71.119833333">
+      <name>5374FIRE</name>
+    </rtept>
+    <rtept lat="42.465666667" lon="-71.119333333">
+      <name>5376</name>
+    </rtept>
+    <rtept lat="42.465833333" lon="-71.119333333">
+      <name>5376STREM</name>
+    </rtept>
+    <rtept lat="42.467166667" lon="-71.113500000">
+      <name>6328</name>
+    </rtept>
+    <rtept lat="42.466500000" lon="-71.110000000">
+      <name>635722</name>
+    </rtept>
+    <rtept lat="42.466500000" lon="-71.109333333">
+      <name>635783</name>
+    </rtept>
+    <rtept lat="42.463500000" lon="-71.107166667">
+      <name>6373</name>
+    </rtept>
+    <rtept lat="42.465666667" lon="-71.107333333">
+      <name>BEARHILL</name>
+    </rtept>
+    <rtept lat="42.460000000" lon="-71.106166667">
+      <name>6289</name>
+    </rtept>
+    <rtept lat="42.457666667" lon="-71.105166667">
+      <name>6297</name>
+    </rtept>
+    <rtept lat="42.453833333" lon="-71.105166667">
+      <name>6283</name>
+    </rtept>
+    <rtept lat="42.451500000" lon="-71.105333333">
+      <name>6280</name>
+    </rtept>
+    <rtept lat="42.448500000" lon="-71.106166667">
+      <name>6177</name>
+    </rtept>
+    <rtept lat="42.447833333" lon="-71.106666667">
+      <name>6176</name>
+    </rtept>
+    <rtept lat="42.444833333" lon="-71.108833333">
+      <name>6153</name>
+    </rtept>
+    <rtept lat="42.443666667" lon="-71.106333333">
+      <name>6171</name>
+    </rtept>
+    <rtept lat="42.443000000" lon="-71.111500000">
+      <name>6131</name>
+    </rtept>
+    <rtept lat="42.442166667" lon="-71.111000000">
+      <name>6130</name>
+    </rtept>
+    <rtept lat="42.441833333" lon="-71.113166667">
+      <name>6029</name>
+    </rtept>
+    <rtept lat="42.439000000" lon="-71.114500000">
+      <name>6006</name>
+    </rtept>
+    <rtept lat="42.436833333" lon="-71.113166667">
+      <name>6014MEADW</name>
+    </rtept>
+    <rtept lat="42.435000000" lon="-71.110000000">
+      <name>PANTHRCAV</name>
+    </rtept>
+    <rtept lat="42.431166667" lon="-71.109166667">
+      <name>GATE6</name>
+    </rtept>
+    <rtept lat="42.431000000" lon="-71.107666667">
+      <name>BELLEVUE</name>
+    </rtept>
+  </rte>
 </gpx>

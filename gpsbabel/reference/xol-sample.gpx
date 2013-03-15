@@ -1,167 +1,162 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="47.040493413" minlon="8.301538728" maxlat="47.084053769" maxlon="8.441445336"/>
-<wpt lat="47.047048679" lon="8.425787728">
-  <name>002</name>
-  <cmt>002</cmt>
-  <desc>002</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.075851301" lon="8.439485848">
-  <name>012</name>
-  <cmt>012</cmt>
-  <desc>012</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.081348565" lon="8.441445336">
-  <name>015</name>
-  <cmt>015</cmt>
-  <desc>015</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.081441150" lon="8.441144177">
-  <name>017</name>
-  <cmt>017</cmt>
-  <desc>017</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.084053769" lon="8.435530024">
-  <name>019</name>
-  <cmt>019</cmt>
-  <desc>019</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.083543270" lon="8.435270306">
-  <name>020</name>
-  <cmt>020</cmt>
-  <desc>020</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.083710418" lon="8.434667607">
-  <name>021</name>
-  <cmt>021</cmt>
-  <desc>021</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.043911888" lon="8.349271355">
-  <name>041</name>
-  <cmt>041</cmt>
-  <desc>041</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.053241978" lon="8.338794823">
-  <name>044</name>
-  <cmt>044</cmt>
-  <desc>044</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.053414625" lon="8.338573965">
-  <name>047</name>
-  <cmt>047</cmt>
-  <desc>047</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.050276242" lon="8.309263802">
-  <name>056</name>
-  <cmt>056</cmt>
-  <desc>056</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.045862359" lon="8.308876328">
-  <name>060</name>
-  <cmt>060</cmt>
-  <desc>060</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.045734441" lon="8.309137456">
-  <name>062</name>
-  <cmt>062</cmt>
-  <desc>062</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.045734441" lon="8.309137456">
-  <name>065</name>
-  <cmt>065</cmt>
-  <desc>065</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.045818284" lon="8.308757172">
-  <name>068</name>
-  <cmt>068</cmt>
-  <desc>068</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.043159808" lon="8.303437100">
-  <name>073</name>
-  <cmt>073</cmt>
-  <desc>073</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<wpt lat="47.040493413" lon="8.301538728">
-  <name>074</name>
-  <cmt>074</cmt>
-  <desc>074</desc>
-  <sym>Waypoint</sym>
-</wpt>
-<trk>
-<trkseg>
-<trkpt lat="47.047048679" lon="8.425787728">
-  <time>2007-08-21T18:37:58Z</time>
-</trkpt>
-<trkpt lat="47.075851301" lon="8.439485848">
-  <time>2007-08-21T18:37:59Z</time>
-</trkpt>
-<trkpt lat="47.081348565" lon="8.441445336">
-  <time>2007-08-21T18:38:00Z</time>
-</trkpt>
-<trkpt lat="47.081441150" lon="8.441144177">
-  <time>2007-08-21T18:38:01Z</time>
-</trkpt>
-<trkpt lat="47.084053769" lon="8.435530024">
-  <time>2007-08-21T18:38:02Z</time>
-</trkpt>
-<trkpt lat="47.083543270" lon="8.435270306">
-  <time>2007-08-21T18:38:03Z</time>
-</trkpt>
-<trkpt lat="47.083710418" lon="8.434667607">
-  <time>2007-08-21T18:38:04Z</time>
-</trkpt>
-<trkpt lat="47.043911888" lon="8.349271355">
-  <time>2007-08-21T18:38:05Z</time>
-</trkpt>
-<trkpt lat="47.053241978" lon="8.338794823">
-  <time>2007-08-21T18:38:06Z</time>
-</trkpt>
-<trkpt lat="47.053414625" lon="8.338573965">
-  <time>2007-08-21T18:38:07Z</time>
-</trkpt>
-<trkpt lat="47.050276242" lon="8.309263802">
-  <time>2007-08-21T18:38:08Z</time>
-</trkpt>
-<trkpt lat="47.045862359" lon="8.308876328">
-  <time>2007-08-21T18:38:09Z</time>
-</trkpt>
-<trkpt lat="47.045734441" lon="8.309137456">
-  <time>2007-08-21T18:38:10Z</time>
-</trkpt>
-<trkpt lat="47.045734441" lon="8.309137456">
-  <time>2007-08-21T18:38:11Z</time>
-</trkpt>
-<trkpt lat="47.045818284" lon="8.308757172">
-  <time>2007-08-21T18:38:12Z</time>
-</trkpt>
-<trkpt lat="47.043159808" lon="8.303437100">
-  <time>2007-08-21T18:38:13Z</time>
-</trkpt>
-<trkpt lat="47.040493413" lon="8.301538728">
-  <time>2007-08-21T18:38:14Z</time>
-</trkpt>
-</trkseg>
-</trk>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="47.040493413" minlon="8.301538728" maxlat="47.084053769" maxlon="8.441445336"/>
+  <wpt lat="47.047048679" lon="8.425787728">
+    <name>002</name>
+    <cmt>002</cmt>
+    <desc>002</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.075851301" lon="8.439485848">
+    <name>012</name>
+    <cmt>012</cmt>
+    <desc>012</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.081348565" lon="8.441445336">
+    <name>015</name>
+    <cmt>015</cmt>
+    <desc>015</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.081441150" lon="8.441144177">
+    <name>017</name>
+    <cmt>017</cmt>
+    <desc>017</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.084053769" lon="8.435530024">
+    <name>019</name>
+    <cmt>019</cmt>
+    <desc>019</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.083543270" lon="8.435270306">
+    <name>020</name>
+    <cmt>020</cmt>
+    <desc>020</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.083710418" lon="8.434667607">
+    <name>021</name>
+    <cmt>021</cmt>
+    <desc>021</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.043911888" lon="8.349271355">
+    <name>041</name>
+    <cmt>041</cmt>
+    <desc>041</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.053241978" lon="8.338794823">
+    <name>044</name>
+    <cmt>044</cmt>
+    <desc>044</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.053414625" lon="8.338573965">
+    <name>047</name>
+    <cmt>047</cmt>
+    <desc>047</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.050276242" lon="8.309263802">
+    <name>056</name>
+    <cmt>056</cmt>
+    <desc>056</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.045862359" lon="8.308876328">
+    <name>060</name>
+    <cmt>060</cmt>
+    <desc>060</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.045734441" lon="8.309137456">
+    <name>062</name>
+    <cmt>062</cmt>
+    <desc>062</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.045734441" lon="8.309137456">
+    <name>065</name>
+    <cmt>065</cmt>
+    <desc>065</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.045818284" lon="8.308757172">
+    <name>068</name>
+    <cmt>068</cmt>
+    <desc>068</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.043159808" lon="8.303437100">
+    <name>073</name>
+    <cmt>073</cmt>
+    <desc>073</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="47.040493413" lon="8.301538728">
+    <name>074</name>
+    <cmt>074</cmt>
+    <desc>074</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <trk>
+    <trkseg>
+      <trkpt lat="47.047048679" lon="8.425787728">
+        <time>2007-08-21T18:37:58Z</time>
+      </trkpt>
+      <trkpt lat="47.075851301" lon="8.439485848">
+        <time>2007-08-21T18:37:59Z</time>
+      </trkpt>
+      <trkpt lat="47.081348565" lon="8.441445336">
+        <time>2007-08-21T18:38:00Z</time>
+      </trkpt>
+      <trkpt lat="47.081441150" lon="8.441144177">
+        <time>2007-08-21T18:38:01Z</time>
+      </trkpt>
+      <trkpt lat="47.084053769" lon="8.435530024">
+        <time>2007-08-21T18:38:02Z</time>
+      </trkpt>
+      <trkpt lat="47.083543270" lon="8.435270306">
+        <time>2007-08-21T18:38:03Z</time>
+      </trkpt>
+      <trkpt lat="47.083710418" lon="8.434667607">
+        <time>2007-08-21T18:38:04Z</time>
+      </trkpt>
+      <trkpt lat="47.043911888" lon="8.349271355">
+        <time>2007-08-21T18:38:05Z</time>
+      </trkpt>
+      <trkpt lat="47.053241978" lon="8.338794823">
+        <time>2007-08-21T18:38:06Z</time>
+      </trkpt>
+      <trkpt lat="47.053414625" lon="8.338573965">
+        <time>2007-08-21T18:38:07Z</time>
+      </trkpt>
+      <trkpt lat="47.050276242" lon="8.309263802">
+        <time>2007-08-21T18:38:08Z</time>
+      </trkpt>
+      <trkpt lat="47.045862359" lon="8.308876328">
+        <time>2007-08-21T18:38:09Z</time>
+      </trkpt>
+      <trkpt lat="47.045734441" lon="8.309137456">
+        <time>2007-08-21T18:38:10Z</time>
+      </trkpt>
+      <trkpt lat="47.045734441" lon="8.309137456">
+        <time>2007-08-21T18:38:11Z</time>
+      </trkpt>
+      <trkpt lat="47.045818284" lon="8.308757172">
+        <time>2007-08-21T18:38:12Z</time>
+      </trkpt>
+      <trkpt lat="47.043159808" lon="8.303437100">
+        <time>2007-08-21T18:38:13Z</time>
+      </trkpt>
+      <trkpt lat="47.040493413" lon="8.301538728">
+        <time>2007-08-21T18:38:14Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
 </gpx>

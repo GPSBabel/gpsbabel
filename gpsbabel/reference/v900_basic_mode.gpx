@@ -1,100 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="31.765973000" minlon="35.206728000" maxlat="31.766553000" maxlon="35.206901000"/>
-<trk>
-  <name>V900 tracklog</name>
-  <desc>V900 GPS tracklog data</desc>
-<trkseg>
-<trkpt lat="31.765973000" lon="35.206901000">
-  <ele>827.000000</ele>
-  <time>2009-04-04T06:35:10Z</time>
-  <course>357.000000</course>
-  <speed>3.333333</speed>
-</trkpt>
-<trkpt lat="31.766016000" lon="35.206889000">
-  <ele>827.000000</ele>
-  <time>2009-04-04T06:35:11Z</time>
-  <course>354.000000</course>
-  <speed>3.888889</speed>
-</trkpt>
-<trkpt lat="31.766056000" lon="35.206885000">
-  <ele>827.000000</ele>
-  <time>2009-04-04T06:35:12Z</time>
-  <course>353.000000</course>
-  <speed>4.444445</speed>
-</trkpt>
-<trkpt lat="31.766106000" lon="35.206883000">
-  <ele>827.000000</ele>
-  <time>2009-04-04T06:35:13Z</time>
-  <course>355.000000</course>
-  <speed>5.000000</speed>
-</trkpt>
-<trkpt lat="31.766163000" lon="35.206873000">
-  <ele>827.000000</ele>
-  <time>2009-04-04T06:35:14Z</time>
-  <course>353.000000</course>
-  <speed>5.555555</speed>
-</trkpt>
-<trkpt lat="31.766216000" lon="35.206864000">
-  <ele>828.000000</ele>
-  <time>2009-04-04T06:35:15Z</time>
-  <course>352.000000</course>
-  <speed>5.555555</speed>
-</trkpt>
-<trkpt lat="31.766271000" lon="35.206851000">
-  <ele>828.000000</ele>
-  <time>2009-04-04T06:35:16Z</time>
-  <course>350.000000</course>
-  <speed>5.555555</speed>
-</trkpt>
-<trkpt lat="31.766326000" lon="35.206833000">
-  <ele>828.000000</ele>
-  <time>2009-04-04T06:35:17Z</time>
-  <course>347.000000</course>
-  <speed>5.555555</speed>
-</trkpt>
-<trkpt lat="31.766376000" lon="35.206816000">
-  <ele>828.000000</ele>
-  <time>2009-04-04T06:35:18Z</time>
-  <course>344.000000</course>
-  <speed>5.555555</speed>
-</trkpt>
-<trkpt lat="31.766421000" lon="35.206798000">
-  <ele>828.000000</ele>
-  <time>2009-04-04T06:35:19Z</time>
-  <course>342.000000</course>
-  <speed>4.444445</speed>
-</trkpt>
-<trkpt lat="31.766458000" lon="35.206778000">
-  <ele>828.000000</ele>
-  <time>2009-04-04T06:35:20Z</time>
-  <course>336.000000</course>
-  <speed>3.888889</speed>
-</trkpt>
-<trkpt lat="31.766504000" lon="35.206761000">
-  <ele>827.000000</ele>
-  <time>2009-04-04T06:35:21Z</time>
-  <course>312.000000</course>
-  <speed>3.888889</speed>
-</trkpt>
-<trkpt lat="31.766535000" lon="35.206743000">
-  <ele>827.000000</ele>
-  <time>2009-04-04T06:35:22Z</time>
-  <course>313.000000</course>
-  <speed>3.333333</speed>
-</trkpt>
-<trkpt lat="31.766553000" lon="35.206728000">
-  <ele>827.000000</ele>
-  <time>2009-04-04T06:35:23Z</time>
-  <course>306.000000</course>
-  <speed>3.055556</speed>
-</trkpt>
-</trkseg>
-</trk>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="31.765973000" minlon="35.206728000" maxlat="31.766553000" maxlon="35.206901000"/>
+  <trk>
+    <name>V900 tracklog</name>
+    <desc>V900 GPS tracklog data</desc>
+    <trkseg>
+      <trkpt lat="31.765973000" lon="35.206901000">
+        <ele>827.000000</ele>
+        <time>2009-04-04T06:35:10Z</time>
+        <course>357.000000</course>
+        <speed>3.333333</speed>
+      </trkpt>
+      <trkpt lat="31.766016000" lon="35.206889000">
+        <ele>827.000000</ele>
+        <time>2009-04-04T06:35:11Z</time>
+        <course>354.000000</course>
+        <speed>3.888889</speed>
+      </trkpt>
+      <trkpt lat="31.766056000" lon="35.206885000">
+        <ele>827.000000</ele>
+        <time>2009-04-04T06:35:12Z</time>
+        <course>353.000000</course>
+        <speed>4.444445</speed>
+      </trkpt>
+      <trkpt lat="31.766106000" lon="35.206883000">
+        <ele>827.000000</ele>
+        <time>2009-04-04T06:35:13Z</time>
+        <course>355.000000</course>
+        <speed>5.000000</speed>
+      </trkpt>
+      <trkpt lat="31.766163000" lon="35.206873000">
+        <ele>827.000000</ele>
+        <time>2009-04-04T06:35:14Z</time>
+        <course>353.000000</course>
+        <speed>5.555555</speed>
+      </trkpt>
+      <trkpt lat="31.766216000" lon="35.206864000">
+        <ele>828.000000</ele>
+        <time>2009-04-04T06:35:15Z</time>
+        <course>352.000000</course>
+        <speed>5.555555</speed>
+      </trkpt>
+      <trkpt lat="31.766271000" lon="35.206851000">
+        <ele>828.000000</ele>
+        <time>2009-04-04T06:35:16Z</time>
+        <course>350.000000</course>
+        <speed>5.555555</speed>
+      </trkpt>
+      <trkpt lat="31.766326000" lon="35.206833000">
+        <ele>828.000000</ele>
+        <time>2009-04-04T06:35:17Z</time>
+        <course>347.000000</course>
+        <speed>5.555555</speed>
+      </trkpt>
+      <trkpt lat="31.766376000" lon="35.206816000">
+        <ele>828.000000</ele>
+        <time>2009-04-04T06:35:18Z</time>
+        <course>344.000000</course>
+        <speed>5.555555</speed>
+      </trkpt>
+      <trkpt lat="31.766421000" lon="35.206798000">
+        <ele>828.000000</ele>
+        <time>2009-04-04T06:35:19Z</time>
+        <course>342.000000</course>
+        <speed>4.444445</speed>
+      </trkpt>
+      <trkpt lat="31.766458000" lon="35.206778000">
+        <ele>828.000000</ele>
+        <time>2009-04-04T06:35:20Z</time>
+        <course>336.000000</course>
+        <speed>3.888889</speed>
+      </trkpt>
+      <trkpt lat="31.766504000" lon="35.206761000">
+        <ele>827.000000</ele>
+        <time>2009-04-04T06:35:21Z</time>
+        <course>312.000000</course>
+        <speed>3.888889</speed>
+      </trkpt>
+      <trkpt lat="31.766535000" lon="35.206743000">
+        <ele>827.000000</ele>
+        <time>2009-04-04T06:35:22Z</time>
+        <course>313.000000</course>
+        <speed>3.333333</speed>
+      </trkpt>
+      <trkpt lat="31.766553000" lon="35.206728000">
+        <ele>827.000000</ele>
+        <time>2009-04-04T06:35:23Z</time>
+        <course>306.000000</course>
+        <speed>3.055556</speed>
+      </trkpt>
+    </trkseg>
+  </trk>
 </gpx>

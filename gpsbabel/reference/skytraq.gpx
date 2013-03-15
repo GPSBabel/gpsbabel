@@ -1,1318 +1,1313 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="47.542427570" minlon="9.675760308" maxlat="47.547924899" maxlon="9.681796358"/>
-<trk>
-  <name>SkyTraq tracklog</name>
-  <desc>SkyTraq GPS tracklog data</desc>
-<trkseg>
-<trkpt lat="47.547749767" lon="9.679499575">
-  <ele>435.413042</ele>
-  <time>2009-09-10T05:19:37Z</time>
-  <speed>0.000000</speed>
-  <name>TP0001</name>
-</trkpt>
-<trkpt lat="47.547754722" lon="9.679512670">
-  <ele>436.264370</ele>
-  <time>2009-09-10T05:19:42Z</time>
-  <speed>0.000000</speed>
-  <name>TP0002</name>
-</trkpt>
-<trkpt lat="47.547754722" lon="9.679512670">
-  <ele>436.264370</ele>
-  <time>2009-09-10T05:19:47Z</time>
-  <speed>0.000000</speed>
-  <name>TP0003</name>
-</trkpt>
-<trkpt lat="47.547768450" lon="9.679501809">
-  <ele>436.223356</ele>
-  <time>2009-09-10T05:19:52Z</time>
-  <speed>0.555556</speed>
-  <name>TP0004</name>
-</trkpt>
-<trkpt lat="47.547754875" lon="9.679431869">
-  <ele>436.248809</ele>
-  <time>2009-09-10T05:19:57Z</time>
-  <speed>1.944444</speed>
-  <name>TP0005</name>
-</trkpt>
-<trkpt lat="47.547765243" lon="9.679215655">
-  <ele>437.904812</ele>
-  <time>2009-09-10T05:20:02Z</time>
-  <speed>2.500000</speed>
-  <name>TP0006</name>
-</trkpt>
-<trkpt lat="47.547719564" lon="9.678992742">
-  <ele>437.129918</ele>
-  <time>2009-09-10T05:20:07Z</time>
-  <speed>2.500000</speed>
-  <name>TP0007</name>
-</trkpt>
-<trkpt lat="47.547753568" lon="9.678791857">
-  <ele>440.447637</ele>
-  <time>2009-09-10T05:20:12Z</time>
-  <speed>2.500000</speed>
-  <name>TP0008</name>
-</trkpt>
-<trkpt lat="47.547750679" lon="9.678588738">
-  <ele>440.741560</ele>
-  <time>2009-09-10T05:20:17Z</time>
-  <speed>0.000000</speed>
-  <name>TP0009</name>
-</trkpt>
-<trkpt lat="47.547740298" lon="9.678560315">
-  <ele>440.442133</ele>
-  <time>2009-09-10T05:20:22Z</time>
-  <speed>1.944444</speed>
-  <name>TP0010</name>
-</trkpt>
-<trkpt lat="47.547685845" lon="9.678361359">
-  <ele>440.559690</ele>
-  <time>2009-09-10T05:20:27Z</time>
-  <speed>0.000000</speed>
-  <name>TP0011</name>
-</trkpt>
-<trkpt lat="47.547694146" lon="9.678335169">
-  <ele>441.070580</ele>
-  <time>2009-09-10T05:20:32Z</time>
-  <speed>0.555556</speed>
-  <name>TP0012</name>
-</trkpt>
-<trkpt lat="47.547526829" lon="9.678100787">
-  <ele>441.825716</ele>
-  <time>2009-09-10T05:20:37Z</time>
-  <speed>1.666667</speed>
-  <name>TP0013</name>
-</trkpt>
-<trkpt lat="47.547412510" lon="9.677932183">
-  <ele>441.256100</ele>
-  <time>2009-09-10T05:20:42Z</time>
-  <speed>2.500000</speed>
-  <name>TP0014</name>
-</trkpt>
-<trkpt lat="47.547379781" lon="9.677857778">
-  <ele>441.874572</ele>
-  <time>2009-09-10T05:20:47Z</time>
-  <speed>0.000000</speed>
-  <name>TP0015</name>
-</trkpt>
-<trkpt lat="47.547304906" lon="9.677748251">
-  <ele>442.714110</ele>
-  <time>2009-09-10T05:20:52Z</time>
-  <speed>0.000000</speed>
-  <name>TP0016</name>
-</trkpt>
-<trkpt lat="47.547289099" lon="9.677704502">
-  <ele>442.966621</ele>
-  <time>2009-09-10T05:20:57Z</time>
-  <speed>0.000000</speed>
-  <name>TP0017</name>
-</trkpt>
-<trkpt lat="47.547209913" lon="9.677566554">
-  <ele>444.244629</ele>
-  <time>2009-09-10T05:21:02Z</time>
-  <speed>1.388889</speed>
-  <name>TP0018</name>
-</trkpt>
-<trkpt lat="47.547169504" lon="9.677439772">
-  <ele>442.933609</ele>
-  <time>2009-09-10T05:21:07Z</time>
-  <speed>1.388889</speed>
-  <name>TP0019</name>
-</trkpt>
-<trkpt lat="47.547195306" lon="9.677239192">
-  <ele>436.243169</ele>
-  <time>2009-09-10T05:21:12Z</time>
-  <speed>1.666667</speed>
-  <name>TP0020</name>
-</trkpt>
-<trkpt lat="47.547102370" lon="9.677048867">
-  <ele>434.853905</ele>
-  <time>2009-09-10T05:21:17Z</time>
-  <speed>1.388889</speed>
-  <name>TP0021</name>
-</trkpt>
-<trkpt lat="47.547008985" lon="9.676919549">
-  <ele>437.576244</ele>
-  <time>2009-09-10T05:21:22Z</time>
-  <speed>2.222222</speed>
-  <name>TP0022</name>
-</trkpt>
-<trkpt lat="47.546908414" lon="9.676803327">
-  <ele>439.674243</ele>
-  <time>2009-09-10T05:21:27Z</time>
-  <speed>2.222222</speed>
-  <name>TP0023</name>
-</trkpt>
-<trkpt lat="47.546788044" lon="9.676697967">
-  <ele>441.075457</ele>
-  <time>2009-09-10T05:21:32Z</time>
-  <speed>0.000000</speed>
-  <name>TP0024</name>
-</trkpt>
-<trkpt lat="47.546733757" lon="9.676662847">
-  <ele>439.820937</ele>
-  <time>2009-09-10T05:21:37Z</time>
-  <speed>1.944444</speed>
-  <name>TP0025</name>
-</trkpt>
-<trkpt lat="47.546631425" lon="9.676575047">
-  <ele>440.742716</ele>
-  <time>2009-09-10T05:21:42Z</time>
-  <speed>2.222222</speed>
-  <name>TP0026</name>
-</trkpt>
-<trkpt lat="47.546465714" lon="9.676393052">
-  <ele>442.690206</ele>
-  <time>2009-09-10T05:21:47Z</time>
-  <speed>1.666667</speed>
-  <name>TP0027</name>
-</trkpt>
-<trkpt lat="47.546332262" lon="9.676283229">
-  <ele>445.422344</ele>
-  <time>2009-09-10T05:21:52Z</time>
-  <speed>2.222222</speed>
-  <name>TP0028</name>
-</trkpt>
-<trkpt lat="47.546279437" lon="9.676199896">
-  <ele>449.440383</ele>
-  <time>2009-09-10T05:21:57Z</time>
-  <speed>1.666667</speed>
-  <name>TP0029</name>
-</trkpt>
-<trkpt lat="47.546219427" lon="9.676129657">
-  <ele>452.834063</ele>
-  <time>2009-09-10T05:22:02Z</time>
-  <speed>0.000000</speed>
-  <name>TP0030</name>
-</trkpt>
-<trkpt lat="47.546187515" lon="9.676022369">
-  <ele>457.435472</ele>
-  <time>2009-09-10T05:22:07Z</time>
-  <speed>0.000000</speed>
-  <name>TP0031</name>
-</trkpt>
-<trkpt lat="47.546197403" lon="9.675985319">
-  <ele>456.429727</ele>
-  <time>2009-09-10T05:22:12Z</time>
-  <speed>0.833333</speed>
-  <name>TP0032</name>
-</trkpt>
-<trkpt lat="47.546130973" lon="9.675950200">
-  <ele>453.699649</ele>
-  <time>2009-09-10T05:22:17Z</time>
-  <speed>0.000000</speed>
-  <name>TP0033</name>
-</trkpt>
-<trkpt lat="47.546058967" lon="9.675980552">
-  <ele>451.536835</ele>
-  <time>2009-09-10T05:22:22Z</time>
-  <speed>0.000000</speed>
-  <name>TP0034</name>
-</trkpt>
-<trkpt lat="47.546028788" lon="9.675962993">
-  <ele>450.540714</ele>
-  <time>2009-09-10T05:22:27Z</time>
-  <speed>0.000000</speed>
-  <name>TP0035</name>
-</trkpt>
-<trkpt lat="47.545743643" lon="9.675861500">
-  <ele>447.018013</ele>
-  <time>2009-09-10T05:22:32Z</time>
-  <speed>0.000000</speed>
-  <name>TP0036</name>
-</trkpt>
-<trkpt lat="47.545731676" lon="9.675843940">
-  <ele>448.235361</ele>
-  <time>2009-09-10T05:22:37Z</time>
-  <speed>0.555556</speed>
-  <name>TP0037</name>
-</trkpt>
-<trkpt lat="47.545727365" lon="9.675815519">
-  <ele>448.673860</ele>
-  <time>2009-09-10T05:22:42Z</time>
-  <speed>0.555556</speed>
-  <name>TP0038</name>
-</trkpt>
-<trkpt lat="47.545692254" lon="9.675848104">
-  <ele>449.534777</ele>
-  <time>2009-09-10T05:22:47Z</time>
-  <speed>0.555556</speed>
-  <name>TP0039</name>
-</trkpt>
-<trkpt lat="47.545598393" lon="9.675897947">
-  <ele>449.595124</ele>
-  <time>2009-09-10T05:22:52Z</time>
-  <speed>1.944444</speed>
-  <name>TP0040</name>
-</trkpt>
-<trkpt lat="47.545479779" lon="9.675945557">
-  <ele>448.107453</ele>
-  <time>2009-09-10T05:22:57Z</time>
-  <speed>1.666667</speed>
-  <name>TP0041</name>
-</trkpt>
-<trkpt lat="47.545317602" lon="9.676132737">
-  <ele>446.985171</ele>
-  <time>2009-09-10T05:23:02Z</time>
-  <speed>1.111111</speed>
-  <name>TP0042</name>
-</trkpt>
-<trkpt lat="47.545231271" lon="9.676315752">
-  <ele>448.990374</ele>
-  <time>2009-09-10T05:23:07Z</time>
-  <speed>2.222222</speed>
-  <name>TP0043</name>
-</trkpt>
-<trkpt lat="47.545170163" lon="9.676503232">
-  <ele>451.140430</ele>
-  <time>2009-09-10T05:23:12Z</time>
-  <speed>2.222222</speed>
-  <name>TP0044</name>
-</trkpt>
-<trkpt lat="47.545041511" lon="9.676668686">
-  <ele>450.674026</ele>
-  <time>2009-09-10T05:23:17Z</time>
-  <speed>2.500000</speed>
-  <name>TP0045</name>
-</trkpt>
-<trkpt lat="47.545013730" lon="9.676788765">
-  <ele>448.078545</ele>
-  <time>2009-09-10T05:23:22Z</time>
-  <speed>1.666667</speed>
-  <name>TP0046</name>
-</trkpt>
-<trkpt lat="47.544967442" lon="9.676889051">
-  <ele>447.365833</ele>
-  <time>2009-09-10T05:23:27Z</time>
-  <speed>0.000000</speed>
-  <name>TP0047</name>
-</trkpt>
-<trkpt lat="47.544983249" lon="9.676932798">
-  <ele>447.113220</ele>
-  <time>2009-09-10T05:23:32Z</time>
-  <speed>0.555556</speed>
-  <name>TP0048</name>
-</trkpt>
-<trkpt lat="47.544920508" lon="9.677004664">
-  <ele>445.363386</ele>
-  <time>2009-09-10T05:23:37Z</time>
-  <speed>1.944444</speed>
-  <name>TP0049</name>
-</trkpt>
-<trkpt lat="47.544843888" lon="9.677168186">
-  <ele>443.670027</ele>
-  <time>2009-09-10T05:23:42Z</time>
-  <speed>0.000000</speed>
-  <name>TP0050</name>
-</trkpt>
-<trkpt lat="47.544701355" lon="9.677425295">
-  <ele>443.260289</ele>
-  <time>2009-09-10T05:23:47Z</time>
-  <speed>2.500000</speed>
-  <name>TP0051</name>
-</trkpt>
-<trkpt lat="47.544608329" lon="9.677686869">
-  <ele>445.946646</ele>
-  <time>2009-09-10T05:23:52Z</time>
-  <speed>1.388889</speed>
-  <name>TP0052</name>
-</trkpt>
-<trkpt lat="47.544592864" lon="9.677789387">
-  <ele>447.519851</ele>
-  <time>2009-09-10T05:23:57Z</time>
-  <speed>0.000000</speed>
-  <name>TP0053</name>
-</trkpt>
-<trkpt lat="47.544568627" lon="9.677915859">
-  <ele>449.985430</ele>
-  <time>2009-09-10T05:24:02Z</time>
-  <speed>1.944444</speed>
-  <name>TP0054</name>
-</trkpt>
-<trkpt lat="47.544488364" lon="9.678098868">
-  <ele>452.728850</ele>
-  <time>2009-09-10T05:24:07Z</time>
-  <speed>2.222222</speed>
-  <name>TP0055</name>
-</trkpt>
-<trkpt lat="47.544368011" lon="9.678238129">
-  <ele>452.773689</ele>
-  <time>2009-09-10T05:24:12Z</time>
-  <speed>1.944444</speed>
-  <name>TP0056</name>
-</trkpt>
-<trkpt lat="47.544224762" lon="9.678320853">
-  <ele>442.949320</ele>
-  <time>2009-09-10T05:24:17Z</time>
-  <speed>2.222222</speed>
-  <name>TP0057</name>
-</trkpt>
-<trkpt lat="47.544211680" lon="9.678316387">
-  <ele>444.280147</ele>
-  <time>2009-09-10T05:24:22Z</time>
-  <speed>0.555556</speed>
-  <name>TP0058</name>
-</trkpt>
-<trkpt lat="47.544199091" lon="9.678377389">
-  <ele>446.916185</ele>
-  <time>2009-09-10T05:24:27Z</time>
-  <speed>1.388889</speed>
-  <name>TP0059</name>
-</trkpt>
-<trkpt lat="47.544172774" lon="9.678449252">
-  <ele>449.593325</ele>
-  <time>2009-09-10T05:24:32Z</time>
-  <speed>0.000000</speed>
-  <name>TP0060</name>
-</trkpt>
-<trkpt lat="47.544133670" lon="9.678536442">
-  <ele>449.505150</ele>
-  <time>2009-09-10T05:24:37Z</time>
-  <speed>1.388889</speed>
-  <name>TP0061</name>
-</trkpt>
-<trkpt lat="47.544090750" lon="9.678660679">
-  <ele>451.160654</ele>
-  <time>2009-09-10T05:24:42Z</time>
-  <speed>1.388889</speed>
-  <name>TP0062</name>
-</trkpt>
-<trkpt lat="47.544036332" lon="9.678769589">
-  <ele>452.630306</ele>
-  <time>2009-09-10T05:24:47Z</time>
-  <speed>1.388889</speed>
-  <name>TP0063</name>
-</trkpt>
-<trkpt lat="47.543996956" lon="9.678900220">
-  <ele>459.346762</ele>
-  <time>2009-09-10T05:24:52Z</time>
-  <speed>0.000000</speed>
-  <name>TP0064</name>
-</trkpt>
-<trkpt lat="47.543976982" lon="9.678928640">
-  <ele>455.957143</ele>
-  <time>2009-09-10T05:24:57Z</time>
-  <speed>0.000000</speed>
-  <name>TP0065</name>
-</trkpt>
-<trkpt lat="47.543933098" lon="9.678985176">
-  <ele>457.710665</ele>
-  <time>2009-09-10T05:25:02Z</time>
-  <speed>1.111111</speed>
-  <name>TP0066</name>
-</trkpt>
-<trkpt lat="47.543867972" lon="9.679164019">
-  <ele>456.203610</ele>
-  <time>2009-09-10T05:25:07Z</time>
-  <speed>0.277778</speed>
-  <name>TP0067</name>
-</trkpt>
-<trkpt lat="47.543855360" lon="9.679161786">
-  <ele>456.131232</ele>
-  <time>2009-09-10T05:25:12Z</time>
-  <speed>0.000000</speed>
-  <name>TP0068</name>
-</trkpt>
-<trkpt lat="47.543848174" lon="9.679174880">
-  <ele>455.506931</ele>
-  <time>2009-09-10T05:25:17Z</time>
-  <speed>0.000000</speed>
-  <name>TP0069</name>
-</trkpt>
-<trkpt lat="47.543559457" lon="9.679708562">
-  <ele>459.125648</ele>
-  <time>2009-09-10T05:25:22Z</time>
-  <speed>0.277778</speed>
-  <name>TP0070</name>
-</trkpt>
-<trkpt lat="47.543492405" lon="9.679752003">
-  <ele>457.814584</ele>
-  <time>2009-09-10T05:25:27Z</time>
-  <speed>0.000000</speed>
-  <name>TP0071</name>
-</trkpt>
-<trkpt lat="47.543492405" lon="9.679752003">
-  <ele>457.814584</ele>
-  <time>2009-09-10T05:25:32Z</time>
-  <speed>0.555556</speed>
-  <name>TP0072</name>
-</trkpt>
-<trkpt lat="47.543484748" lon="9.679762863">
-  <ele>458.593504</ele>
-  <time>2009-09-10T05:25:37Z</time>
-  <speed>0.555556</speed>
-  <name>TP0073</name>
-</trkpt>
-<trkpt lat="47.543425375" lon="9.679858677">
-  <ele>459.212036</ele>
-  <time>2009-09-10T05:25:42Z</time>
-  <speed>1.666667</speed>
-  <name>TP0074</name>
-</trkpt>
-<trkpt lat="47.543344617" lon="9.679976211">
-  <ele>460.650642</ele>
-  <time>2009-09-10T05:25:47Z</time>
-  <speed>1.944444</speed>
-  <name>TP0075</name>
-</trkpt>
-<trkpt lat="47.543292606" lon="9.680041371">
-  <ele>464.586406</ele>
-  <time>2009-09-10T05:25:52Z</time>
-  <speed>1.111111</speed>
-  <name>TP0076</name>
-</trkpt>
-<trkpt lat="47.543252539" lon="9.680060857">
-  <ele>464.596319</ele>
-  <time>2009-09-10T05:25:57Z</time>
-  <speed>0.000000</speed>
-  <name>TP0077</name>
-</trkpt>
-<trkpt lat="47.543180083" lon="9.680152204">
-  <ele>466.545748</ele>
-  <time>2009-09-10T05:26:02Z</time>
-  <speed>1.388889</speed>
-  <name>TP0078</name>
-</trkpt>
-<trkpt lat="47.543115931" lon="9.680217363">
-  <ele>469.005968</ele>
-  <time>2009-09-10T05:26:07Z</time>
-  <speed>1.388889</speed>
-  <name>TP0079</name>
-</trkpt>
-<trkpt lat="47.543016042" lon="9.680393662">
-  <ele>473.746261</ele>
-  <time>2009-09-10T05:26:12Z</time>
-  <speed>0.555556</speed>
-  <name>TP0080</name>
-</trkpt>
-<trkpt lat="47.542786981" lon="9.680606697">
-  <ele>474.007460</ele>
-  <time>2009-09-10T05:26:17Z</time>
-  <speed>1.944444</speed>
-  <name>TP0081</name>
-</trkpt>
-<trkpt lat="47.542706223" lon="9.680724228">
-  <ele>475.446245</ele>
-  <time>2009-09-10T05:26:22Z</time>
-  <speed>1.388889</speed>
-  <name>TP0082</name>
-</trkpt>
-<trkpt lat="47.542692364" lon="9.680879113">
-  <ele>478.211624</ele>
-  <time>2009-09-10T05:26:27Z</time>
-  <speed>1.944444</speed>
-  <name>TP0083</name>
-</trkpt>
-<trkpt lat="47.542694933" lon="9.680999185">
-  <ele>479.305619</ele>
-  <time>2009-09-10T05:26:32Z</time>
-  <speed>0.000000</speed>
-  <name>TP0084</name>
-</trkpt>
-<trkpt lat="47.542710115" lon="9.681121490">
-  <ele>480.471980</ele>
-  <time>2009-09-10T05:26:37Z</time>
-  <speed>0.000000</speed>
-  <name>TP0085</name>
-</trkpt>
-<trkpt lat="47.542680428" lon="9.681169396">
-  <ele>480.781347</ele>
-  <time>2009-09-10T05:26:42Z</time>
-  <speed>0.833333</speed>
-  <name>TP0086</name>
-</trkpt>
-<trkpt lat="47.542669423" lon="9.681219535">
-  <ele>481.900849</ele>
-  <time>2009-09-10T05:26:47Z</time>
-  <speed>0.833333</speed>
-  <name>TP0087</name>
-</trkpt>
-<trkpt lat="47.542699448" lon="9.681317888">
-  <ele>482.912547</ele>
-  <time>2009-09-10T05:26:52Z</time>
-  <speed>1.111111</speed>
-  <name>TP0088</name>
-</trkpt>
-<trkpt lat="47.542741123" lon="9.681350775">
-  <ele>484.094431</ele>
-  <time>2009-09-10T05:26:57Z</time>
-  <speed>0.000000</speed>
-  <name>TP0089</name>
-</trkpt>
-<trkpt lat="47.542763469" lon="9.681396755">
-  <ele>483.176496</ele>
-  <time>2009-09-10T05:27:02Z</time>
-  <speed>0.000000</speed>
-  <name>TP0090</name>
-</trkpt>
-<trkpt lat="47.542787577" lon="9.681414316">
-  <ele>483.434729</ele>
-  <time>2009-09-10T05:27:07Z</time>
-  <speed>0.833333</speed>
-  <name>TP0091</name>
-</trkpt>
-<trkpt lat="47.542829252" lon="9.681447203">
-  <ele>484.616623</ele>
-  <time>2009-09-10T05:27:12Z</time>
-  <speed>0.555556</speed>
-  <name>TP0092</name>
-</trkpt>
-<trkpt lat="47.542901730" lon="9.681419092">
-  <ele>485.375632</ele>
-  <time>2009-09-10T05:27:17Z</time>
-  <speed>2.222222</speed>
-  <name>TP0093</name>
-</trkpt>
-<trkpt lat="47.543007287" lon="9.681430261">
-  <ele>490.901919</ele>
-  <time>2009-09-10T05:27:22Z</time>
-  <speed>0.000000</speed>
-  <name>TP0094</name>
-</trkpt>
-<trkpt lat="47.543105488" lon="9.681193275">
-  <ele>472.779123</ele>
-  <time>2009-09-10T05:27:27Z</time>
-  <speed>1.666667</speed>
-  <name>TP0095</name>
-</trkpt>
-<trkpt lat="47.543217836" lon="9.681100006">
-  <ele>468.126764</ele>
-  <time>2009-09-10T05:27:32Z</time>
-  <speed>1.388889</speed>
-  <name>TP0096</name>
-</trkpt>
-<trkpt lat="47.543287040" lon="9.681022063">
-  <ele>457.020230</ele>
-  <time>2009-09-10T05:27:37Z</time>
-  <speed>1.944444</speed>
-  <name>TP0097</name>
-</trkpt>
-<trkpt lat="47.543315729" lon="9.681024605">
-  <ele>450.035412</ele>
-  <time>2009-09-10T05:27:42Z</time>
-  <speed>0.555556</speed>
-  <name>TP0098</name>
-</trkpt>
-<trkpt lat="47.543357228" lon="9.681075053">
-  <ele>448.524439</ele>
-  <time>2009-09-10T05:27:47Z</time>
-  <speed>0.000000</speed>
-  <name>TP0099</name>
-</trkpt>
-<trkpt lat="47.543472189" lon="9.681228324">
-  <ele>450.383315</ele>
-  <time>2009-09-10T05:27:52Z</time>
-  <speed>1.666667</speed>
-  <name>TP0100</name>
-</trkpt>
-<trkpt lat="47.543529516" lon="9.681385753">
-  <ele>451.328467</ele>
-  <time>2009-09-10T05:27:57Z</time>
-  <speed>1.388889</speed>
-  <name>TP0101</name>
-</trkpt>
-<trkpt lat="47.543624501" lon="9.681567445">
-  <ele>449.797885</ele>
-  <time>2009-09-10T05:28:02Z</time>
-  <speed>2.222222</speed>
-  <name>TP0102</name>
-</trkpt>
-<trkpt lat="47.543734779" lon="9.681664186">
-  <ele>444.000867</ele>
-  <time>2009-09-10T05:28:07Z</time>
-  <speed>1.666667</speed>
-  <name>TP0103</name>
-</trkpt>
-<trkpt lat="47.543815854" lon="9.681629682">
-  <ele>441.174653</ele>
-  <time>2009-09-10T05:28:12Z</time>
-  <speed>1.666667</speed>
-  <name>TP0104</name>
-</trkpt>
-<trkpt lat="47.543916377" lon="9.681619441">
-  <ele>433.659329</ele>
-  <time>2009-09-10T05:28:17Z</time>
-  <speed>1.111111</speed>
-  <name>TP0105</name>
-</trkpt>
-<trkpt lat="47.543916201" lon="9.681637002">
-  <ele>430.966439</ele>
-  <time>2009-09-10T05:28:22Z</time>
-  <speed>0.277778</speed>
-  <name>TP0106</name>
-</trkpt>
-<trkpt lat="47.543947833" lon="9.681787732">
-  <ele>433.170131</ele>
-  <time>2009-09-10T05:28:27Z</time>
-  <speed>0.000000</speed>
-  <name>TP0107</name>
-</trkpt>
-<trkpt lat="47.543909351" lon="9.681796358">
-  <ele>431.663294</ele>
-  <time>2009-09-10T05:28:32Z</time>
-  <speed>1.666667</speed>
-  <name>TP0108</name>
-</trkpt>
-<trkpt lat="47.543852517" lon="9.681704394">
-  <ele>432.023446</ele>
-  <time>2009-09-10T05:28:37Z</time>
-  <speed>2.222222</speed>
-  <name>TP0109</name>
-</trkpt>
-<trkpt lat="47.543790727" lon="9.681599337">
-  <ele>431.532298</ele>
-  <time>2009-09-10T05:28:42Z</time>
-  <speed>1.111111</speed>
-  <name>TP0110</name>
-</trkpt>
-<trkpt lat="47.543768851" lon="9.681555589">
-  <ele>431.046974</ele>
-  <time>2009-09-10T05:28:47Z</time>
-  <speed>1.388889</speed>
-  <name>TP0111</name>
-</trkpt>
-<trkpt lat="47.543691256" lon="9.681406784">
-  <ele>430.808326</ele>
-  <time>2009-09-10T05:28:52Z</time>
-  <speed>2.500000</speed>
-  <name>TP0112</name>
-</trkpt>
-<trkpt lat="47.543606202" lon="9.681314512">
-  <ele>436.750126</ele>
-  <time>2009-09-10T05:28:57Z</time>
-  <speed>2.222222</speed>
-  <name>TP0113</name>
-</trkpt>
-<trkpt lat="47.543531330" lon="9.681204988">
-  <ele>437.589876</ele>
-  <time>2009-09-10T05:29:02Z</time>
-  <speed>1.944444</speed>
-  <name>TP0114</name>
-</trkpt>
-<trkpt lat="47.543438737" lon="9.681160931">
-  <ele>437.521651</ele>
-  <time>2009-09-10T05:29:07Z</time>
-  <speed>1.944444</speed>
-  <name>TP0115</name>
-</trkpt>
-<trkpt lat="47.543375523" lon="9.681230557">
-  <ele>437.175482</ele>
-  <time>2009-09-10T05:29:12Z</time>
-  <speed>1.666667</speed>
-  <name>TP0116</name>
-</trkpt>
-<trkpt lat="47.543309607" lon="9.681324136">
-  <ele>438.459570</ele>
-  <time>2009-09-10T05:29:17Z</time>
-  <speed>0.000000</speed>
-  <name>TP0117</name>
-</trkpt>
-<trkpt lat="47.543296349" lon="9.681337229">
-  <ele>437.097514</ele>
-  <time>2009-09-10T05:29:22Z</time>
-  <speed>0.833333</speed>
-  <name>TP0118</name>
-</trkpt>
-<trkpt lat="47.543191578" lon="9.681411322">
-  <ele>428.780453</ele>
-  <time>2009-09-10T05:29:27Z</time>
-  <speed>2.222222</speed>
-  <name>TP0119</name>
-</trkpt>
-<trkpt lat="47.543060018" lon="9.681555040">
-  <ele>424.544021</ele>
-  <time>2009-09-10T05:29:32Z</time>
-  <speed>0.000000</speed>
-  <name>TP0120</name>
-</trkpt>
-<trkpt lat="47.543025375" lon="9.681589853">
-  <ele>424.002078</ele>
-  <time>2009-09-10T05:29:37Z</time>
-  <speed>1.388889</speed>
-  <name>TP0121</name>
-</trkpt>
-<trkpt lat="47.542917901" lon="9.681687898">
-  <ele>417.315344</ele>
-  <time>2009-09-10T05:29:42Z</time>
-  <speed>1.666667</speed>
-  <name>TP0122</name>
-</trkpt>
-<trkpt lat="47.542884374" lon="9.681709617">
-  <ele>416.659890</ele>
-  <time>2009-09-10T05:29:47Z</time>
-  <speed>0.277778</speed>
-  <name>TP0123</name>
-</trkpt>
-<trkpt lat="47.542861873" lon="9.681744429">
-  <ele>417.593529</ele>
-  <time>2009-09-10T05:29:52Z</time>
-  <speed>0.555556</speed>
-  <name>TP0124</name>
-</trkpt>
-<trkpt lat="47.542492846" lon="9.681761439">
-  <ele>449.714402</ele>
-  <time>2009-09-10T05:29:57Z</time>
-  <speed>0.000000</speed>
-  <name>TP0125</name>
-</trkpt>
-<trkpt lat="47.542487421" lon="9.681746112">
-  <ele>450.266305</ele>
-  <time>2009-09-10T05:30:02Z</time>
-  <speed>0.000000</speed>
-  <name>TP0126</name>
-</trkpt>
-<trkpt lat="47.542483112" lon="9.681717692">
-  <ele>450.704682</ele>
-  <time>2009-09-10T05:30:07Z</time>
-  <speed>0.833333</speed>
-  <name>TP0127</name>
-</trkpt>
-<trkpt lat="47.542484228" lon="9.681704599">
-  <ele>450.591157</ele>
-  <time>2009-09-10T05:30:12Z</time>
-  <speed>0.000000</speed>
-  <name>TP0128</name>
-</trkpt>
-<trkpt lat="47.542484228" lon="9.681704599">
-  <ele>450.591157</ele>
-  <time>2009-09-10T05:30:17Z</time>
-  <speed>0.000000</speed>
-  <name>TP0129</name>
-</trkpt>
-<trkpt lat="47.542427570" lon="9.681595077">
-  <ele>453.644364</ele>
-  <time>2009-09-10T05:30:22Z</time>
-  <speed>1.944444</speed>
-  <name>TP0130</name>
-</trkpt>
-<trkpt lat="47.542448617" lon="9.681427100">
-  <ele>451.503135</ele>
-  <time>2009-09-10T05:30:27Z</time>
-  <speed>2.222222</speed>
-  <name>TP0131</name>
-</trkpt>
-<trkpt lat="47.542516941" lon="9.681289777">
-  <ele>452.684782</ele>
-  <time>2009-09-10T05:30:32Z</time>
-  <speed>2.222222</speed>
-  <name>TP0132</name>
-</trkpt>
-<trkpt lat="47.542498544" lon="9.681062725">
-  <ele>449.134706</ele>
-  <time>2009-09-10T05:30:37Z</time>
-  <speed>0.833333</speed>
-  <name>TP0133</name>
-</trkpt>
-<trkpt lat="47.542570684" lon="9.680888355">
-  <ele>448.572648</ele>
-  <time>2009-09-10T05:30:42Z</time>
-  <speed>1.666667</speed>
-  <name>TP0134</name>
-</trkpt>
-<trkpt lat="47.542631644" lon="9.680781684">
-  <ele>446.437208</ele>
-  <time>2009-09-10T05:30:47Z</time>
-  <speed>1.944444</speed>
-  <name>TP0135</name>
-</trkpt>
-<trkpt lat="47.542717805" lon="9.680616247">
-  <ele>441.737939</ele>
-  <time>2009-09-10T05:30:52Z</time>
-  <speed>2.222222</speed>
-  <name>TP0136</name>
-</trkpt>
-<trkpt lat="47.542857960" lon="9.680466136">
-  <ele>442.389048</ele>
-  <time>2009-09-10T05:30:57Z</time>
-  <speed>2.500000</speed>
-  <name>TP0137</name>
-</trkpt>
-<trkpt lat="47.542890349" lon="9.680394277">
-  <ele>440.449495</ele>
-  <time>2009-09-10T05:31:02Z</time>
-  <speed>0.000000</speed>
-  <name>TP0138</name>
-</trkpt>
-<trkpt lat="47.542997916" lon="9.680270351">
-  <ele>437.638774</ele>
-  <time>2009-09-10T05:31:07Z</time>
-  <speed>1.944444</speed>
-  <name>TP0139</name>
-</trkpt>
-<trkpt lat="47.543083901" lon="9.680122472">
-  <ele>430.246727</ele>
-  <time>2009-09-10T05:31:12Z</time>
-  <speed>1.944444</speed>
-  <name>TP0140</name>
-</trkpt>
-<trkpt lat="47.543114058" lon="9.680076798">
-  <ele>428.534219</ele>
-  <time>2009-09-10T05:31:17Z</time>
-  <speed>0.277778</speed>
-  <name>TP0141</name>
-</trkpt>
-<trkpt lat="47.543114704" lon="9.680061471">
-  <ele>429.823924</ele>
-  <time>2009-09-10T05:31:22Z</time>
-  <speed>0.000000</speed>
-  <name>TP0142</name>
-</trkpt>
-<trkpt lat="47.543144391" lon="9.680013565">
-  <ele>429.514629</ele>
-  <time>2009-09-10T05:31:27Z</time>
-  <speed>1.666667</speed>
-  <name>TP0143</name>
-</trkpt>
-<trkpt lat="47.543157626" lon="9.679937237">
-  <ele>428.168184</ele>
-  <time>2009-09-10T05:31:32Z</time>
-  <speed>1.388889</speed>
-  <name>TP0144</name>
-</trkpt>
-<trkpt lat="47.543333046" lon="9.679673748">
-  <ele>427.942731</ele>
-  <time>2009-09-10T05:31:37Z</time>
-  <speed>2.777778</speed>
-  <name>TP0145</name>
-</trkpt>
-<trkpt lat="47.543465895" lon="9.679499373">
-  <ele>434.758898</ele>
-  <time>2009-09-10T05:31:42Z</time>
-  <speed>2.222222</speed>
-  <name>TP0146</name>
-</trkpt>
-<trkpt lat="47.543590514" lon="9.679262068">
-  <ele>428.858310</ele>
-  <time>2009-09-10T05:31:47Z</time>
-  <speed>2.222222</speed>
-  <name>TP0147</name>
-</trkpt>
-<trkpt lat="47.543616066" lon="9.679168180">
-  <ele>431.680438</ele>
-  <time>2009-09-10T05:31:52Z</time>
-  <speed>1.111111</speed>
-  <name>TP0148</name>
-</trkpt>
-<trkpt lat="47.543771884" lon="9.678961222">
-  <ele>436.160030</ele>
-  <time>2009-09-10T05:31:57Z</time>
-  <speed>2.222222</speed>
-  <name>TP0149</name>
-</trkpt>
-<trkpt lat="47.543834309" lon="9.678806332">
-  <ele>439.297293</ele>
-  <time>2009-09-10T05:32:02Z</time>
-  <speed>1.944444</speed>
-  <name>TP0150</name>
-</trkpt>
-<trkpt lat="47.543899554" lon="9.678664840">
-  <ele>434.015315</ele>
-  <time>2009-09-10T05:32:07Z</time>
-  <speed>1.666667</speed>
-  <name>TP0151</name>
-</trkpt>
-<trkpt lat="47.543947430" lon="9.678553697">
-  <ele>433.211075</ele>
-  <time>2009-09-10T05:32:12Z</time>
-  <speed>1.388889</speed>
-  <name>TP0152</name>
-</trkpt>
-<trkpt lat="47.543988318" lon="9.678501322">
-  <ele>437.183908</ele>
-  <time>2009-09-10T05:32:17Z</time>
-  <speed>0.833333</speed>
-  <name>TP0153</name>
-</trkpt>
-<trkpt lat="47.544068158" lon="9.678442553">
-  <ele>441.260406</ele>
-  <time>2009-09-10T05:32:22Z</time>
-  <speed>1.388889</speed>
-  <name>TP0154</name>
-</trkpt>
-<trkpt lat="47.544151169" lon="9.678362062">
-  <ele>442.303530</ele>
-  <time>2009-09-10T05:32:27Z</time>
-  <speed>0.000000</speed>
-  <name>TP0155</name>
-</trkpt>
-<trkpt lat="47.544300420" lon="9.678089632">
-  <ele>444.740435</ele>
-  <time>2009-09-10T05:32:32Z</time>
-  <speed>0.000000</speed>
-  <name>TP0156</name>
-</trkpt>
-<trkpt lat="47.544308076" lon="9.678078771">
-  <ele>443.961542</ele>
-  <time>2009-09-10T05:32:37Z</time>
-  <speed>0.000000</speed>
-  <name>TP0157</name>
-</trkpt>
-<trkpt lat="47.544309192" lon="9.678065677">
-  <ele>443.848063</ele>
-  <time>2009-09-10T05:32:42Z</time>
-  <speed>1.666667</speed>
-  <name>TP0158</name>
-</trkpt>
-<trkpt lat="47.544383089" lon="9.677862876">
-  <ele>444.462983</ele>
-  <time>2009-09-10T05:32:47Z</time>
-  <speed>2.500000</speed>
-  <name>TP0159</name>
-</trkpt>
-<trkpt lat="47.544414065" lon="9.677784313">
-  <ele>446.733330</ele>
-  <time>2009-09-10T05:32:52Z</time>
-  <speed>1.944444</speed>
-  <name>TP0160</name>
-</trkpt>
-<trkpt lat="47.544540489" lon="9.677645051">
-  <ele>447.426359</ele>
-  <time>2009-09-10T05:32:57Z</time>
-  <speed>2.222222</speed>
-  <name>TP0161</name>
-</trkpt>
-<trkpt lat="47.544568566" lon="9.677544766">
-  <ele>445.925557</ele>
-  <time>2009-09-10T05:33:02Z</time>
-  <speed>1.388889</speed>
-  <name>TP0162</name>
-</trkpt>
-<trkpt lat="47.544669278" lon="9.677154184">
-  <ele>449.234080</ele>
-  <time>2009-09-10T05:33:07Z</time>
-  <speed>2.500000</speed>
-  <name>TP0163</name>
-</trkpt>
-<trkpt lat="47.544695769" lon="9.677064759">
-  <ele>449.250009</ele>
-  <time>2009-09-10T05:33:12Z</time>
-  <speed>0.000000</speed>
-  <name>TP0164</name>
-</trkpt>
-<trkpt lat="47.544699115" lon="9.677025478">
-  <ele>448.909610</ele>
-  <time>2009-09-10T05:33:17Z</time>
-  <speed>0.277778</speed>
-  <name>TP0165</name>
-</trkpt>
-<trkpt lat="47.544694160" lon="9.677012384">
-  <ele>448.058340</ele>
-  <time>2009-09-10T05:33:22Z</time>
-  <speed>1.388889</speed>
-  <name>TP0166</name>
-</trkpt>
-<trkpt lat="47.544744440" lon="9.676857490">
-  <ele>449.720373</ele>
-  <time>2009-09-10T05:33:27Z</time>
-  <speed>1.944444</speed>
-  <name>TP0167</name>
-</trkpt>
-<trkpt lat="47.544827601" lon="9.676696200">
-  <ele>450.748354</ele>
-  <time>2009-09-10T05:33:32Z</time>
-  <speed>0.000000</speed>
-  <name>TP0168</name>
-</trkpt>
-<trkpt lat="47.544850745" lon="9.676646057">
-  <ele>451.104710</ele>
-  <time>2009-09-10T05:33:37Z</time>
-  <speed>1.944444</speed>
-  <name>TP0169</name>
-</trkpt>
-<trkpt lat="47.544993450" lon="9.676371386">
-  <ele>454.207639</ele>
-  <time>2009-09-10T05:33:42Z</time>
-  <speed>1.944444</speed>
-  <name>TP0170</name>
-</trkpt>
-<trkpt lat="47.545082681" lon="9.676210095">
-  <ele>455.973538</ele>
-  <time>2009-09-10T05:33:47Z</time>
-  <speed>1.666667</speed>
-  <name>TP0171</name>
-</trkpt>
-<trkpt lat="47.545163139" lon="9.676072759">
-  <ele>458.631789</ele>
-  <time>2009-09-10T05:33:52Z</time>
-  <speed>0.000000</speed>
-  <name>TP0172</name>
-</trkpt>
-<trkpt lat="47.545208113" lon="9.675939887">
-  <ele>454.056776</ele>
-  <time>2009-09-10T05:33:57Z</time>
-  <speed>0.555556</speed>
-  <name>TP0173</name>
-</trkpt>
-<trkpt lat="47.545264138" lon="9.675883347">
-  <ele>453.779136</ele>
-  <time>2009-09-10T05:34:02Z</time>
-  <speed>0.000000</speed>
-  <name>TP0174</name>
-</trkpt>
-<trkpt lat="47.545420884" lon="9.675862227">
-  <ele>451.387791</ele>
-  <time>2009-09-10T05:34:07Z</time>
-  <speed>0.000000</speed>
-  <name>TP0175</name>
-</trkpt>
-<trkpt lat="47.545495417" lon="9.675825478">
-  <ele>449.227422</ele>
-  <time>2009-09-10T05:34:12Z</time>
-  <speed>1.111111</speed>
-  <name>TP0176</name>
-</trkpt>
-<trkpt lat="47.545541356" lon="9.675760308">
-  <ele>444.554311</ele>
-  <time>2009-09-10T05:34:17Z</time>
-  <speed>0.000000</speed>
-  <name>TP0177</name>
-</trkpt>
-<trkpt lat="47.545727638" lon="9.675772073">
-  <ele>441.869384</ele>
-  <time>2009-09-10T05:34:22Z</time>
-  <speed>1.944444</speed>
-  <name>TP0178</name>
-</trkpt>
-<trkpt lat="47.545825164" lon="9.675765977">
-  <ele>440.080797</ele>
-  <time>2009-09-10T05:34:27Z</time>
-  <speed>1.666667</speed>
-  <name>TP0179</name>
-</trkpt>
-<trkpt lat="47.545886465" lon="9.675805561">
-  <ele>439.266580</ele>
-  <time>2009-09-10T05:34:32Z</time>
-  <speed>1.388889</speed>
-  <name>TP0180</name>
-</trkpt>
-<trkpt lat="47.545966942" lon="9.675912849">
-  <ele>440.567682</ele>
-  <time>2009-09-10T05:34:37Z</time>
-  <speed>0.277778</speed>
-  <name>TP0181</name>
-</trkpt>
-<trkpt lat="47.546038774" lon="9.675900056">
-  <ele>440.037505</ele>
-  <time>2009-09-10T05:34:42Z</time>
-  <speed>0.833333</speed>
-  <name>TP0182</name>
-</trkpt>
-<trkpt lat="47.546198095" lon="9.675999016">
-  <ele>438.739876</ele>
-  <time>2009-09-10T05:34:47Z</time>
-  <speed>1.666667</speed>
-  <name>TP0183</name>
-</trkpt>
-<trkpt lat="47.546358852" lon="9.676167914">
-  <ele>435.940959</ele>
-  <time>2009-09-10T05:34:52Z</time>
-  <speed>1.388889</speed>
-  <name>TP0184</name>
-</trkpt>
-<trkpt lat="47.546365864" lon="9.676172379">
-  <ele>433.872354</ele>
-  <time>2009-09-10T05:34:57Z</time>
-  <speed>0.000000</speed>
-  <name>TP0185</name>
-</trkpt>
-<trkpt lat="47.546560813" lon="9.676367467">
-  <ele>435.727380</ele>
-  <time>2009-09-10T05:35:02Z</time>
-  <speed>0.000000</speed>
-  <name>TP0186</name>
-</trkpt>
-<trkpt lat="47.546643991" lon="9.676450801">
-  <ele>435.398517</ele>
-  <time>2009-09-10T05:35:07Z</time>
-  <speed>0.000000</speed>
-  <name>TP0187</name>
-</trkpt>
-<trkpt lat="47.546650533" lon="9.676453034">
-  <ele>434.733131</ele>
-  <time>2009-09-10T05:35:12Z</time>
-  <speed>0.555556</speed>
-  <name>TP0188</name>
-</trkpt>
-<trkpt lat="47.546788666" lon="9.676619400">
-  <ele>439.656885</ele>
-  <time>2009-09-10T05:35:17Z</time>
-  <speed>1.944444</speed>
-  <name>TP0189</name>
-</trkpt>
-<trkpt lat="47.546873476" lon="9.676818352">
-  <ele>443.228073</ele>
-  <time>2009-09-10T05:35:22Z</time>
-  <speed>0.000000</speed>
-  <name>TP0190</name>
-</trkpt>
-<trkpt lat="47.546931749" lon="9.676980253">
-  <ele>441.366563</ele>
-  <time>2009-09-10T05:35:27Z</time>
-  <speed>0.000000</speed>
-  <name>TP0191</name>
-</trkpt>
-<trkpt lat="47.546994187" lon="9.677069984">
-  <ele>443.147409</ele>
-  <time>2009-09-10T05:35:32Z</time>
-  <speed>1.944444</speed>
-  <name>TP0192</name>
-</trkpt>
-<trkpt lat="47.547040173" lon="9.677131294">
-  <ele>443.891060</ele>
-  <time>2009-09-10T05:35:37Z</time>
-  <speed>1.666667</speed>
-  <name>TP0193</name>
-</trkpt>
-<trkpt lat="47.547162795" lon="9.677273706">
-  <ele>444.971380</ele>
-  <time>2009-09-10T05:35:42Z</time>
-  <speed>0.555556</speed>
-  <name>TP0194</name>
-</trkpt>
-<trkpt lat="47.547226175" lon="9.677367904">
-  <ele>443.945855</ele>
-  <time>2009-09-10T05:35:47Z</time>
-  <speed>1.111111</speed>
-  <name>TP0195</name>
-</trkpt>
-<trkpt lat="47.547289728" lon="9.677444541">
-  <ele>445.613301</ele>
-  <time>2009-09-10T05:35:52Z</time>
-  <speed>1.944444</speed>
-  <name>TP0196</name>
-</trkpt>
-<trkpt lat="47.547352636" lon="9.677536506">
-  <ele>445.991016</ele>
-  <time>2009-09-10T05:35:57Z</time>
-  <speed>1.666667</speed>
-  <name>TP0197</name>
-</trkpt>
-<trkpt lat="47.547396391" lon="9.677624005">
-  <ele>446.961659</ele>
-  <time>2009-09-10T05:36:02Z</time>
-  <speed>1.666667</speed>
-  <name>TP0198</name>
-</trkpt>
-<trkpt lat="47.547580507" lon="9.677851686">
-  <ele>452.629525</ele>
-  <time>2009-09-10T05:36:07Z</time>
-  <speed>2.222222</speed>
-  <name>TP0199</name>
-</trkpt>
-<trkpt lat="47.547782871" lon="9.678387243">
-  <ele>461.862647</ele>
-  <time>2009-09-10T05:36:12Z</time>
-  <speed>2.500000</speed>
-  <name>TP0200</name>
-</trkpt>
-<trkpt lat="47.547810985" lon="9.678594828">
-  <ele>461.713634</ele>
-  <time>2009-09-10T05:36:17Z</time>
-  <speed>0.000000</speed>
-  <name>TP0201</name>
-</trkpt>
-<trkpt lat="47.547824089" lon="9.678662534">
-  <ele>463.091338</ele>
-  <time>2009-09-10T05:36:22Z</time>
-  <speed>1.666667</speed>
-  <name>TP0202</name>
-</trkpt>
-<trkpt lat="47.547864988" lon="9.678854791">
-  <ele>465.707789</ele>
-  <time>2009-09-10T05:36:27Z</time>
-  <speed>2.222222</speed>
-  <name>TP0203</name>
-</trkpt>
-<trkpt lat="47.547886088" lon="9.679057909">
-  <ele>467.627439</ele>
-  <time>2009-09-10T05:36:32Z</time>
-  <speed>2.500000</speed>
-  <name>TP0204</name>
-</trkpt>
-<trkpt lat="47.547909891" lon="9.679237072">
-  <ele>467.916951</ele>
-  <time>2009-09-10T05:36:37Z</time>
-  <speed>2.222222</speed>
-  <name>TP0205</name>
-</trkpt>
-<trkpt lat="47.547924899" lon="9.679376951">
-  <ele>466.390348</ele>
-  <time>2009-09-10T05:36:42Z</time>
-  <speed>1.388889</speed>
-  <name>TP0206</name>
-</trkpt>
-<trkpt lat="47.547874698" lon="9.679442730">
-  <ele>452.522321</ele>
-  <time>2009-09-10T05:36:47Z</time>
-  <speed>0.000000</speed>
-  <name>TP0207</name>
-</trkpt>
-<trkpt lat="47.547847243" lon="9.679464452">
-  <ele>452.604343</ele>
-  <time>2009-09-10T05:36:52Z</time>
-  <speed>0.000000</speed>
-  <name>TP0208</name>
-</trkpt>
-<trkpt lat="47.547827445" lon="9.679475313">
-  <ele>451.907513</ele>
-  <time>2009-09-10T05:36:57Z</time>
-  <speed>0.000000</speed>
-  <name>TP0209</name>
-</trkpt>
-<trkpt lat="47.547820259" lon="9.679488408">
-  <ele>451.283160</ele>
-  <time>2009-09-10T05:37:02Z</time>
-  <speed>0.000000</speed>
-  <name>TP0210</name>
-</trkpt>
-<trkpt lat="47.547820730" lon="9.679490641">
-  <ele>449.879954</ele>
-  <time>2009-09-10T05:37:07Z</time>
-  <speed>0.000000</speed>
-  <name>TP0211</name>
-</trkpt>
-<trkpt lat="47.547814659" lon="9.679490641">
-  <ele>449.142113</ele>
-  <time>2009-09-10T05:37:12Z</time>
-  <speed>0.000000</speed>
-  <name>TP0212</name>
-</trkpt>
-<trkpt lat="47.547815130" lon="9.679492875">
-  <ele>447.738906</ele>
-  <time>2009-09-10T05:37:17Z</time>
-  <speed>0.000000</speed>
-  <name>TP0213</name>
-</trkpt>
-<trkpt lat="47.547809060" lon="9.679492875">
-  <ele>447.001066</ele>
-  <time>2009-09-10T05:37:22Z</time>
-  <speed>0.000000</speed>
-  <name>TP0214</name>
-</trkpt>
-<trkpt lat="47.547809060" lon="9.679492875">
-  <ele>447.001066</ele>
-  <time>2009-09-10T05:37:27Z</time>
-  <speed>0.000000</speed>
-  <name>TP0215</name>
-</trkpt>
-<trkpt lat="47.547809060" lon="9.679492875">
-  <ele>447.001066</ele>
-  <time>2009-09-10T05:37:32Z</time>
-  <speed>0.000000</speed>
-  <name>TP0216</name>
-</trkpt>
-<trkpt lat="47.547809060" lon="9.679492875">
-  <ele>447.001066</ele>
-  <time>2009-09-10T05:37:37Z</time>
-  <speed>0.000000</speed>
-  <name>TP0217</name>
-</trkpt>
-</trkseg>
-</trk>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="47.542427570" minlon="9.675760308" maxlat="47.547924899" maxlon="9.681796358"/>
+  <trk>
+    <name>SkyTraq tracklog</name>
+    <desc>SkyTraq GPS tracklog data</desc>
+    <trkseg>
+      <trkpt lat="47.547749767" lon="9.679499575">
+        <ele>435.413042</ele>
+        <time>2009-09-10T05:19:37Z</time>
+        <speed>0.000000</speed>
+        <name>TP0001</name>
+      </trkpt>
+      <trkpt lat="47.547754722" lon="9.679512670">
+        <ele>436.264370</ele>
+        <time>2009-09-10T05:19:42Z</time>
+        <speed>0.000000</speed>
+        <name>TP0002</name>
+      </trkpt>
+      <trkpt lat="47.547754722" lon="9.679512670">
+        <ele>436.264370</ele>
+        <time>2009-09-10T05:19:47Z</time>
+        <speed>0.000000</speed>
+        <name>TP0003</name>
+      </trkpt>
+      <trkpt lat="47.547768450" lon="9.679501809">
+        <ele>436.223356</ele>
+        <time>2009-09-10T05:19:52Z</time>
+        <speed>0.555556</speed>
+        <name>TP0004</name>
+      </trkpt>
+      <trkpt lat="47.547754875" lon="9.679431869">
+        <ele>436.248809</ele>
+        <time>2009-09-10T05:19:57Z</time>
+        <speed>1.944444</speed>
+        <name>TP0005</name>
+      </trkpt>
+      <trkpt lat="47.547765243" lon="9.679215655">
+        <ele>437.904812</ele>
+        <time>2009-09-10T05:20:02Z</time>
+        <speed>2.500000</speed>
+        <name>TP0006</name>
+      </trkpt>
+      <trkpt lat="47.547719564" lon="9.678992742">
+        <ele>437.129918</ele>
+        <time>2009-09-10T05:20:07Z</time>
+        <speed>2.500000</speed>
+        <name>TP0007</name>
+      </trkpt>
+      <trkpt lat="47.547753568" lon="9.678791857">
+        <ele>440.447637</ele>
+        <time>2009-09-10T05:20:12Z</time>
+        <speed>2.500000</speed>
+        <name>TP0008</name>
+      </trkpt>
+      <trkpt lat="47.547750679" lon="9.678588738">
+        <ele>440.741560</ele>
+        <time>2009-09-10T05:20:17Z</time>
+        <speed>0.000000</speed>
+        <name>TP0009</name>
+      </trkpt>
+      <trkpt lat="47.547740298" lon="9.678560315">
+        <ele>440.442133</ele>
+        <time>2009-09-10T05:20:22Z</time>
+        <speed>1.944444</speed>
+        <name>TP0010</name>
+      </trkpt>
+      <trkpt lat="47.547685845" lon="9.678361359">
+        <ele>440.559690</ele>
+        <time>2009-09-10T05:20:27Z</time>
+        <speed>0.000000</speed>
+        <name>TP0011</name>
+      </trkpt>
+      <trkpt lat="47.547694146" lon="9.678335169">
+        <ele>441.070580</ele>
+        <time>2009-09-10T05:20:32Z</time>
+        <speed>0.555556</speed>
+        <name>TP0012</name>
+      </trkpt>
+      <trkpt lat="47.547526829" lon="9.678100787">
+        <ele>441.825716</ele>
+        <time>2009-09-10T05:20:37Z</time>
+        <speed>1.666667</speed>
+        <name>TP0013</name>
+      </trkpt>
+      <trkpt lat="47.547412510" lon="9.677932183">
+        <ele>441.256100</ele>
+        <time>2009-09-10T05:20:42Z</time>
+        <speed>2.500000</speed>
+        <name>TP0014</name>
+      </trkpt>
+      <trkpt lat="47.547379781" lon="9.677857778">
+        <ele>441.874572</ele>
+        <time>2009-09-10T05:20:47Z</time>
+        <speed>0.000000</speed>
+        <name>TP0015</name>
+      </trkpt>
+      <trkpt lat="47.547304906" lon="9.677748251">
+        <ele>442.714110</ele>
+        <time>2009-09-10T05:20:52Z</time>
+        <speed>0.000000</speed>
+        <name>TP0016</name>
+      </trkpt>
+      <trkpt lat="47.547289099" lon="9.677704502">
+        <ele>442.966621</ele>
+        <time>2009-09-10T05:20:57Z</time>
+        <speed>0.000000</speed>
+        <name>TP0017</name>
+      </trkpt>
+      <trkpt lat="47.547209913" lon="9.677566554">
+        <ele>444.244629</ele>
+        <time>2009-09-10T05:21:02Z</time>
+        <speed>1.388889</speed>
+        <name>TP0018</name>
+      </trkpt>
+      <trkpt lat="47.547169504" lon="9.677439772">
+        <ele>442.933609</ele>
+        <time>2009-09-10T05:21:07Z</time>
+        <speed>1.388889</speed>
+        <name>TP0019</name>
+      </trkpt>
+      <trkpt lat="47.547195306" lon="9.677239192">
+        <ele>436.243169</ele>
+        <time>2009-09-10T05:21:12Z</time>
+        <speed>1.666667</speed>
+        <name>TP0020</name>
+      </trkpt>
+      <trkpt lat="47.547102370" lon="9.677048867">
+        <ele>434.853905</ele>
+        <time>2009-09-10T05:21:17Z</time>
+        <speed>1.388889</speed>
+        <name>TP0021</name>
+      </trkpt>
+      <trkpt lat="47.547008985" lon="9.676919549">
+        <ele>437.576244</ele>
+        <time>2009-09-10T05:21:22Z</time>
+        <speed>2.222222</speed>
+        <name>TP0022</name>
+      </trkpt>
+      <trkpt lat="47.546908414" lon="9.676803327">
+        <ele>439.674243</ele>
+        <time>2009-09-10T05:21:27Z</time>
+        <speed>2.222222</speed>
+        <name>TP0023</name>
+      </trkpt>
+      <trkpt lat="47.546788044" lon="9.676697967">
+        <ele>441.075457</ele>
+        <time>2009-09-10T05:21:32Z</time>
+        <speed>0.000000</speed>
+        <name>TP0024</name>
+      </trkpt>
+      <trkpt lat="47.546733757" lon="9.676662847">
+        <ele>439.820937</ele>
+        <time>2009-09-10T05:21:37Z</time>
+        <speed>1.944444</speed>
+        <name>TP0025</name>
+      </trkpt>
+      <trkpt lat="47.546631425" lon="9.676575047">
+        <ele>440.742716</ele>
+        <time>2009-09-10T05:21:42Z</time>
+        <speed>2.222222</speed>
+        <name>TP0026</name>
+      </trkpt>
+      <trkpt lat="47.546465714" lon="9.676393052">
+        <ele>442.690206</ele>
+        <time>2009-09-10T05:21:47Z</time>
+        <speed>1.666667</speed>
+        <name>TP0027</name>
+      </trkpt>
+      <trkpt lat="47.546332262" lon="9.676283229">
+        <ele>445.422344</ele>
+        <time>2009-09-10T05:21:52Z</time>
+        <speed>2.222222</speed>
+        <name>TP0028</name>
+      </trkpt>
+      <trkpt lat="47.546279437" lon="9.676199896">
+        <ele>449.440383</ele>
+        <time>2009-09-10T05:21:57Z</time>
+        <speed>1.666667</speed>
+        <name>TP0029</name>
+      </trkpt>
+      <trkpt lat="47.546219427" lon="9.676129657">
+        <ele>452.834063</ele>
+        <time>2009-09-10T05:22:02Z</time>
+        <speed>0.000000</speed>
+        <name>TP0030</name>
+      </trkpt>
+      <trkpt lat="47.546187515" lon="9.676022369">
+        <ele>457.435472</ele>
+        <time>2009-09-10T05:22:07Z</time>
+        <speed>0.000000</speed>
+        <name>TP0031</name>
+      </trkpt>
+      <trkpt lat="47.546197403" lon="9.675985319">
+        <ele>456.429727</ele>
+        <time>2009-09-10T05:22:12Z</time>
+        <speed>0.833333</speed>
+        <name>TP0032</name>
+      </trkpt>
+      <trkpt lat="47.546130973" lon="9.675950200">
+        <ele>453.699649</ele>
+        <time>2009-09-10T05:22:17Z</time>
+        <speed>0.000000</speed>
+        <name>TP0033</name>
+      </trkpt>
+      <trkpt lat="47.546058967" lon="9.675980552">
+        <ele>451.536835</ele>
+        <time>2009-09-10T05:22:22Z</time>
+        <speed>0.000000</speed>
+        <name>TP0034</name>
+      </trkpt>
+      <trkpt lat="47.546028788" lon="9.675962993">
+        <ele>450.540714</ele>
+        <time>2009-09-10T05:22:27Z</time>
+        <speed>0.000000</speed>
+        <name>TP0035</name>
+      </trkpt>
+      <trkpt lat="47.545743643" lon="9.675861500">
+        <ele>447.018013</ele>
+        <time>2009-09-10T05:22:32Z</time>
+        <speed>0.000000</speed>
+        <name>TP0036</name>
+      </trkpt>
+      <trkpt lat="47.545731676" lon="9.675843940">
+        <ele>448.235361</ele>
+        <time>2009-09-10T05:22:37Z</time>
+        <speed>0.555556</speed>
+        <name>TP0037</name>
+      </trkpt>
+      <trkpt lat="47.545727365" lon="9.675815519">
+        <ele>448.673860</ele>
+        <time>2009-09-10T05:22:42Z</time>
+        <speed>0.555556</speed>
+        <name>TP0038</name>
+      </trkpt>
+      <trkpt lat="47.545692254" lon="9.675848104">
+        <ele>449.534777</ele>
+        <time>2009-09-10T05:22:47Z</time>
+        <speed>0.555556</speed>
+        <name>TP0039</name>
+      </trkpt>
+      <trkpt lat="47.545598393" lon="9.675897947">
+        <ele>449.595124</ele>
+        <time>2009-09-10T05:22:52Z</time>
+        <speed>1.944444</speed>
+        <name>TP0040</name>
+      </trkpt>
+      <trkpt lat="47.545479779" lon="9.675945557">
+        <ele>448.107453</ele>
+        <time>2009-09-10T05:22:57Z</time>
+        <speed>1.666667</speed>
+        <name>TP0041</name>
+      </trkpt>
+      <trkpt lat="47.545317602" lon="9.676132737">
+        <ele>446.985171</ele>
+        <time>2009-09-10T05:23:02Z</time>
+        <speed>1.111111</speed>
+        <name>TP0042</name>
+      </trkpt>
+      <trkpt lat="47.545231271" lon="9.676315752">
+        <ele>448.990374</ele>
+        <time>2009-09-10T05:23:07Z</time>
+        <speed>2.222222</speed>
+        <name>TP0043</name>
+      </trkpt>
+      <trkpt lat="47.545170163" lon="9.676503232">
+        <ele>451.140430</ele>
+        <time>2009-09-10T05:23:12Z</time>
+        <speed>2.222222</speed>
+        <name>TP0044</name>
+      </trkpt>
+      <trkpt lat="47.545041511" lon="9.676668686">
+        <ele>450.674026</ele>
+        <time>2009-09-10T05:23:17Z</time>
+        <speed>2.500000</speed>
+        <name>TP0045</name>
+      </trkpt>
+      <trkpt lat="47.545013730" lon="9.676788765">
+        <ele>448.078545</ele>
+        <time>2009-09-10T05:23:22Z</time>
+        <speed>1.666667</speed>
+        <name>TP0046</name>
+      </trkpt>
+      <trkpt lat="47.544967442" lon="9.676889051">
+        <ele>447.365833</ele>
+        <time>2009-09-10T05:23:27Z</time>
+        <speed>0.000000</speed>
+        <name>TP0047</name>
+      </trkpt>
+      <trkpt lat="47.544983249" lon="9.676932798">
+        <ele>447.113220</ele>
+        <time>2009-09-10T05:23:32Z</time>
+        <speed>0.555556</speed>
+        <name>TP0048</name>
+      </trkpt>
+      <trkpt lat="47.544920508" lon="9.677004664">
+        <ele>445.363386</ele>
+        <time>2009-09-10T05:23:37Z</time>
+        <speed>1.944444</speed>
+        <name>TP0049</name>
+      </trkpt>
+      <trkpt lat="47.544843888" lon="9.677168186">
+        <ele>443.670027</ele>
+        <time>2009-09-10T05:23:42Z</time>
+        <speed>0.000000</speed>
+        <name>TP0050</name>
+      </trkpt>
+      <trkpt lat="47.544701355" lon="9.677425295">
+        <ele>443.260289</ele>
+        <time>2009-09-10T05:23:47Z</time>
+        <speed>2.500000</speed>
+        <name>TP0051</name>
+      </trkpt>
+      <trkpt lat="47.544608329" lon="9.677686869">
+        <ele>445.946646</ele>
+        <time>2009-09-10T05:23:52Z</time>
+        <speed>1.388889</speed>
+        <name>TP0052</name>
+      </trkpt>
+      <trkpt lat="47.544592864" lon="9.677789387">
+        <ele>447.519851</ele>
+        <time>2009-09-10T05:23:57Z</time>
+        <speed>0.000000</speed>
+        <name>TP0053</name>
+      </trkpt>
+      <trkpt lat="47.544568627" lon="9.677915859">
+        <ele>449.985430</ele>
+        <time>2009-09-10T05:24:02Z</time>
+        <speed>1.944444</speed>
+        <name>TP0054</name>
+      </trkpt>
+      <trkpt lat="47.544488364" lon="9.678098868">
+        <ele>452.728850</ele>
+        <time>2009-09-10T05:24:07Z</time>
+        <speed>2.222222</speed>
+        <name>TP0055</name>
+      </trkpt>
+      <trkpt lat="47.544368011" lon="9.678238129">
+        <ele>452.773689</ele>
+        <time>2009-09-10T05:24:12Z</time>
+        <speed>1.944444</speed>
+        <name>TP0056</name>
+      </trkpt>
+      <trkpt lat="47.544224762" lon="9.678320853">
+        <ele>442.949320</ele>
+        <time>2009-09-10T05:24:17Z</time>
+        <speed>2.222222</speed>
+        <name>TP0057</name>
+      </trkpt>
+      <trkpt lat="47.544211680" lon="9.678316387">
+        <ele>444.280147</ele>
+        <time>2009-09-10T05:24:22Z</time>
+        <speed>0.555556</speed>
+        <name>TP0058</name>
+      </trkpt>
+      <trkpt lat="47.544199091" lon="9.678377389">
+        <ele>446.916185</ele>
+        <time>2009-09-10T05:24:27Z</time>
+        <speed>1.388889</speed>
+        <name>TP0059</name>
+      </trkpt>
+      <trkpt lat="47.544172774" lon="9.678449252">
+        <ele>449.593325</ele>
+        <time>2009-09-10T05:24:32Z</time>
+        <speed>0.000000</speed>
+        <name>TP0060</name>
+      </trkpt>
+      <trkpt lat="47.544133670" lon="9.678536442">
+        <ele>449.505150</ele>
+        <time>2009-09-10T05:24:37Z</time>
+        <speed>1.388889</speed>
+        <name>TP0061</name>
+      </trkpt>
+      <trkpt lat="47.544090750" lon="9.678660679">
+        <ele>451.160654</ele>
+        <time>2009-09-10T05:24:42Z</time>
+        <speed>1.388889</speed>
+        <name>TP0062</name>
+      </trkpt>
+      <trkpt lat="47.544036332" lon="9.678769589">
+        <ele>452.630306</ele>
+        <time>2009-09-10T05:24:47Z</time>
+        <speed>1.388889</speed>
+        <name>TP0063</name>
+      </trkpt>
+      <trkpt lat="47.543996956" lon="9.678900220">
+        <ele>459.346762</ele>
+        <time>2009-09-10T05:24:52Z</time>
+        <speed>0.000000</speed>
+        <name>TP0064</name>
+      </trkpt>
+      <trkpt lat="47.543976982" lon="9.678928640">
+        <ele>455.957143</ele>
+        <time>2009-09-10T05:24:57Z</time>
+        <speed>0.000000</speed>
+        <name>TP0065</name>
+      </trkpt>
+      <trkpt lat="47.543933098" lon="9.678985176">
+        <ele>457.710665</ele>
+        <time>2009-09-10T05:25:02Z</time>
+        <speed>1.111111</speed>
+        <name>TP0066</name>
+      </trkpt>
+      <trkpt lat="47.543867972" lon="9.679164019">
+        <ele>456.203610</ele>
+        <time>2009-09-10T05:25:07Z</time>
+        <speed>0.277778</speed>
+        <name>TP0067</name>
+      </trkpt>
+      <trkpt lat="47.543855360" lon="9.679161786">
+        <ele>456.131232</ele>
+        <time>2009-09-10T05:25:12Z</time>
+        <speed>0.000000</speed>
+        <name>TP0068</name>
+      </trkpt>
+      <trkpt lat="47.543848174" lon="9.679174880">
+        <ele>455.506931</ele>
+        <time>2009-09-10T05:25:17Z</time>
+        <speed>0.000000</speed>
+        <name>TP0069</name>
+      </trkpt>
+      <trkpt lat="47.543559457" lon="9.679708562">
+        <ele>459.125648</ele>
+        <time>2009-09-10T05:25:22Z</time>
+        <speed>0.277778</speed>
+        <name>TP0070</name>
+      </trkpt>
+      <trkpt lat="47.543492405" lon="9.679752003">
+        <ele>457.814584</ele>
+        <time>2009-09-10T05:25:27Z</time>
+        <speed>0.000000</speed>
+        <name>TP0071</name>
+      </trkpt>
+      <trkpt lat="47.543492405" lon="9.679752003">
+        <ele>457.814584</ele>
+        <time>2009-09-10T05:25:32Z</time>
+        <speed>0.555556</speed>
+        <name>TP0072</name>
+      </trkpt>
+      <trkpt lat="47.543484748" lon="9.679762863">
+        <ele>458.593504</ele>
+        <time>2009-09-10T05:25:37Z</time>
+        <speed>0.555556</speed>
+        <name>TP0073</name>
+      </trkpt>
+      <trkpt lat="47.543425375" lon="9.679858677">
+        <ele>459.212036</ele>
+        <time>2009-09-10T05:25:42Z</time>
+        <speed>1.666667</speed>
+        <name>TP0074</name>
+      </trkpt>
+      <trkpt lat="47.543344617" lon="9.679976211">
+        <ele>460.650642</ele>
+        <time>2009-09-10T05:25:47Z</time>
+        <speed>1.944444</speed>
+        <name>TP0075</name>
+      </trkpt>
+      <trkpt lat="47.543292606" lon="9.680041371">
+        <ele>464.586406</ele>
+        <time>2009-09-10T05:25:52Z</time>
+        <speed>1.111111</speed>
+        <name>TP0076</name>
+      </trkpt>
+      <trkpt lat="47.543252539" lon="9.680060857">
+        <ele>464.596319</ele>
+        <time>2009-09-10T05:25:57Z</time>
+        <speed>0.000000</speed>
+        <name>TP0077</name>
+      </trkpt>
+      <trkpt lat="47.543180083" lon="9.680152204">
+        <ele>466.545748</ele>
+        <time>2009-09-10T05:26:02Z</time>
+        <speed>1.388889</speed>
+        <name>TP0078</name>
+      </trkpt>
+      <trkpt lat="47.543115931" lon="9.680217363">
+        <ele>469.005968</ele>
+        <time>2009-09-10T05:26:07Z</time>
+        <speed>1.388889</speed>
+        <name>TP0079</name>
+      </trkpt>
+      <trkpt lat="47.543016042" lon="9.680393662">
+        <ele>473.746261</ele>
+        <time>2009-09-10T05:26:12Z</time>
+        <speed>0.555556</speed>
+        <name>TP0080</name>
+      </trkpt>
+      <trkpt lat="47.542786981" lon="9.680606697">
+        <ele>474.007460</ele>
+        <time>2009-09-10T05:26:17Z</time>
+        <speed>1.944444</speed>
+        <name>TP0081</name>
+      </trkpt>
+      <trkpt lat="47.542706223" lon="9.680724228">
+        <ele>475.446245</ele>
+        <time>2009-09-10T05:26:22Z</time>
+        <speed>1.388889</speed>
+        <name>TP0082</name>
+      </trkpt>
+      <trkpt lat="47.542692364" lon="9.680879113">
+        <ele>478.211624</ele>
+        <time>2009-09-10T05:26:27Z</time>
+        <speed>1.944444</speed>
+        <name>TP0083</name>
+      </trkpt>
+      <trkpt lat="47.542694933" lon="9.680999185">
+        <ele>479.305619</ele>
+        <time>2009-09-10T05:26:32Z</time>
+        <speed>0.000000</speed>
+        <name>TP0084</name>
+      </trkpt>
+      <trkpt lat="47.542710115" lon="9.681121490">
+        <ele>480.471980</ele>
+        <time>2009-09-10T05:26:37Z</time>
+        <speed>0.000000</speed>
+        <name>TP0085</name>
+      </trkpt>
+      <trkpt lat="47.542680428" lon="9.681169396">
+        <ele>480.781347</ele>
+        <time>2009-09-10T05:26:42Z</time>
+        <speed>0.833333</speed>
+        <name>TP0086</name>
+      </trkpt>
+      <trkpt lat="47.542669423" lon="9.681219535">
+        <ele>481.900849</ele>
+        <time>2009-09-10T05:26:47Z</time>
+        <speed>0.833333</speed>
+        <name>TP0087</name>
+      </trkpt>
+      <trkpt lat="47.542699448" lon="9.681317888">
+        <ele>482.912547</ele>
+        <time>2009-09-10T05:26:52Z</time>
+        <speed>1.111111</speed>
+        <name>TP0088</name>
+      </trkpt>
+      <trkpt lat="47.542741123" lon="9.681350775">
+        <ele>484.094431</ele>
+        <time>2009-09-10T05:26:57Z</time>
+        <speed>0.000000</speed>
+        <name>TP0089</name>
+      </trkpt>
+      <trkpt lat="47.542763469" lon="9.681396755">
+        <ele>483.176496</ele>
+        <time>2009-09-10T05:27:02Z</time>
+        <speed>0.000000</speed>
+        <name>TP0090</name>
+      </trkpt>
+      <trkpt lat="47.542787577" lon="9.681414316">
+        <ele>483.434729</ele>
+        <time>2009-09-10T05:27:07Z</time>
+        <speed>0.833333</speed>
+        <name>TP0091</name>
+      </trkpt>
+      <trkpt lat="47.542829252" lon="9.681447203">
+        <ele>484.616623</ele>
+        <time>2009-09-10T05:27:12Z</time>
+        <speed>0.555556</speed>
+        <name>TP0092</name>
+      </trkpt>
+      <trkpt lat="47.542901730" lon="9.681419092">
+        <ele>485.375632</ele>
+        <time>2009-09-10T05:27:17Z</time>
+        <speed>2.222222</speed>
+        <name>TP0093</name>
+      </trkpt>
+      <trkpt lat="47.543007287" lon="9.681430261">
+        <ele>490.901919</ele>
+        <time>2009-09-10T05:27:22Z</time>
+        <speed>0.000000</speed>
+        <name>TP0094</name>
+      </trkpt>
+      <trkpt lat="47.543105488" lon="9.681193275">
+        <ele>472.779123</ele>
+        <time>2009-09-10T05:27:27Z</time>
+        <speed>1.666667</speed>
+        <name>TP0095</name>
+      </trkpt>
+      <trkpt lat="47.543217836" lon="9.681100006">
+        <ele>468.126764</ele>
+        <time>2009-09-10T05:27:32Z</time>
+        <speed>1.388889</speed>
+        <name>TP0096</name>
+      </trkpt>
+      <trkpt lat="47.543287040" lon="9.681022063">
+        <ele>457.020230</ele>
+        <time>2009-09-10T05:27:37Z</time>
+        <speed>1.944444</speed>
+        <name>TP0097</name>
+      </trkpt>
+      <trkpt lat="47.543315729" lon="9.681024605">
+        <ele>450.035412</ele>
+        <time>2009-09-10T05:27:42Z</time>
+        <speed>0.555556</speed>
+        <name>TP0098</name>
+      </trkpt>
+      <trkpt lat="47.543357228" lon="9.681075053">
+        <ele>448.524439</ele>
+        <time>2009-09-10T05:27:47Z</time>
+        <speed>0.000000</speed>
+        <name>TP0099</name>
+      </trkpt>
+      <trkpt lat="47.543472189" lon="9.681228324">
+        <ele>450.383315</ele>
+        <time>2009-09-10T05:27:52Z</time>
+        <speed>1.666667</speed>
+        <name>TP0100</name>
+      </trkpt>
+      <trkpt lat="47.543529516" lon="9.681385753">
+        <ele>451.328467</ele>
+        <time>2009-09-10T05:27:57Z</time>
+        <speed>1.388889</speed>
+        <name>TP0101</name>
+      </trkpt>
+      <trkpt lat="47.543624501" lon="9.681567445">
+        <ele>449.797885</ele>
+        <time>2009-09-10T05:28:02Z</time>
+        <speed>2.222222</speed>
+        <name>TP0102</name>
+      </trkpt>
+      <trkpt lat="47.543734779" lon="9.681664186">
+        <ele>444.000867</ele>
+        <time>2009-09-10T05:28:07Z</time>
+        <speed>1.666667</speed>
+        <name>TP0103</name>
+      </trkpt>
+      <trkpt lat="47.543815854" lon="9.681629682">
+        <ele>441.174653</ele>
+        <time>2009-09-10T05:28:12Z</time>
+        <speed>1.666667</speed>
+        <name>TP0104</name>
+      </trkpt>
+      <trkpt lat="47.543916377" lon="9.681619441">
+        <ele>433.659329</ele>
+        <time>2009-09-10T05:28:17Z</time>
+        <speed>1.111111</speed>
+        <name>TP0105</name>
+      </trkpt>
+      <trkpt lat="47.543916201" lon="9.681637002">
+        <ele>430.966439</ele>
+        <time>2009-09-10T05:28:22Z</time>
+        <speed>0.277778</speed>
+        <name>TP0106</name>
+      </trkpt>
+      <trkpt lat="47.543947833" lon="9.681787732">
+        <ele>433.170131</ele>
+        <time>2009-09-10T05:28:27Z</time>
+        <speed>0.000000</speed>
+        <name>TP0107</name>
+      </trkpt>
+      <trkpt lat="47.543909351" lon="9.681796358">
+        <ele>431.663294</ele>
+        <time>2009-09-10T05:28:32Z</time>
+        <speed>1.666667</speed>
+        <name>TP0108</name>
+      </trkpt>
+      <trkpt lat="47.543852517" lon="9.681704394">
+        <ele>432.023446</ele>
+        <time>2009-09-10T05:28:37Z</time>
+        <speed>2.222222</speed>
+        <name>TP0109</name>
+      </trkpt>
+      <trkpt lat="47.543790727" lon="9.681599337">
+        <ele>431.532298</ele>
+        <time>2009-09-10T05:28:42Z</time>
+        <speed>1.111111</speed>
+        <name>TP0110</name>
+      </trkpt>
+      <trkpt lat="47.543768851" lon="9.681555589">
+        <ele>431.046974</ele>
+        <time>2009-09-10T05:28:47Z</time>
+        <speed>1.388889</speed>
+        <name>TP0111</name>
+      </trkpt>
+      <trkpt lat="47.543691256" lon="9.681406784">
+        <ele>430.808326</ele>
+        <time>2009-09-10T05:28:52Z</time>
+        <speed>2.500000</speed>
+        <name>TP0112</name>
+      </trkpt>
+      <trkpt lat="47.543606202" lon="9.681314512">
+        <ele>436.750126</ele>
+        <time>2009-09-10T05:28:57Z</time>
+        <speed>2.222222</speed>
+        <name>TP0113</name>
+      </trkpt>
+      <trkpt lat="47.543531330" lon="9.681204988">
+        <ele>437.589876</ele>
+        <time>2009-09-10T05:29:02Z</time>
+        <speed>1.944444</speed>
+        <name>TP0114</name>
+      </trkpt>
+      <trkpt lat="47.543438737" lon="9.681160931">
+        <ele>437.521651</ele>
+        <time>2009-09-10T05:29:07Z</time>
+        <speed>1.944444</speed>
+        <name>TP0115</name>
+      </trkpt>
+      <trkpt lat="47.543375523" lon="9.681230557">
+        <ele>437.175482</ele>
+        <time>2009-09-10T05:29:12Z</time>
+        <speed>1.666667</speed>
+        <name>TP0116</name>
+      </trkpt>
+      <trkpt lat="47.543309607" lon="9.681324136">
+        <ele>438.459570</ele>
+        <time>2009-09-10T05:29:17Z</time>
+        <speed>0.000000</speed>
+        <name>TP0117</name>
+      </trkpt>
+      <trkpt lat="47.543296349" lon="9.681337229">
+        <ele>437.097514</ele>
+        <time>2009-09-10T05:29:22Z</time>
+        <speed>0.833333</speed>
+        <name>TP0118</name>
+      </trkpt>
+      <trkpt lat="47.543191578" lon="9.681411322">
+        <ele>428.780453</ele>
+        <time>2009-09-10T05:29:27Z</time>
+        <speed>2.222222</speed>
+        <name>TP0119</name>
+      </trkpt>
+      <trkpt lat="47.543060018" lon="9.681555040">
+        <ele>424.544021</ele>
+        <time>2009-09-10T05:29:32Z</time>
+        <speed>0.000000</speed>
+        <name>TP0120</name>
+      </trkpt>
+      <trkpt lat="47.543025375" lon="9.681589853">
+        <ele>424.002078</ele>
+        <time>2009-09-10T05:29:37Z</time>
+        <speed>1.388889</speed>
+        <name>TP0121</name>
+      </trkpt>
+      <trkpt lat="47.542917901" lon="9.681687898">
+        <ele>417.315344</ele>
+        <time>2009-09-10T05:29:42Z</time>
+        <speed>1.666667</speed>
+        <name>TP0122</name>
+      </trkpt>
+      <trkpt lat="47.542884374" lon="9.681709617">
+        <ele>416.659890</ele>
+        <time>2009-09-10T05:29:47Z</time>
+        <speed>0.277778</speed>
+        <name>TP0123</name>
+      </trkpt>
+      <trkpt lat="47.542861873" lon="9.681744429">
+        <ele>417.593529</ele>
+        <time>2009-09-10T05:29:52Z</time>
+        <speed>0.555556</speed>
+        <name>TP0124</name>
+      </trkpt>
+      <trkpt lat="47.542492846" lon="9.681761439">
+        <ele>449.714402</ele>
+        <time>2009-09-10T05:29:57Z</time>
+        <speed>0.000000</speed>
+        <name>TP0125</name>
+      </trkpt>
+      <trkpt lat="47.542487421" lon="9.681746112">
+        <ele>450.266305</ele>
+        <time>2009-09-10T05:30:02Z</time>
+        <speed>0.000000</speed>
+        <name>TP0126</name>
+      </trkpt>
+      <trkpt lat="47.542483112" lon="9.681717692">
+        <ele>450.704682</ele>
+        <time>2009-09-10T05:30:07Z</time>
+        <speed>0.833333</speed>
+        <name>TP0127</name>
+      </trkpt>
+      <trkpt lat="47.542484228" lon="9.681704599">
+        <ele>450.591157</ele>
+        <time>2009-09-10T05:30:12Z</time>
+        <speed>0.000000</speed>
+        <name>TP0128</name>
+      </trkpt>
+      <trkpt lat="47.542484228" lon="9.681704599">
+        <ele>450.591157</ele>
+        <time>2009-09-10T05:30:17Z</time>
+        <speed>0.000000</speed>
+        <name>TP0129</name>
+      </trkpt>
+      <trkpt lat="47.542427570" lon="9.681595077">
+        <ele>453.644364</ele>
+        <time>2009-09-10T05:30:22Z</time>
+        <speed>1.944444</speed>
+        <name>TP0130</name>
+      </trkpt>
+      <trkpt lat="47.542448617" lon="9.681427100">
+        <ele>451.503135</ele>
+        <time>2009-09-10T05:30:27Z</time>
+        <speed>2.222222</speed>
+        <name>TP0131</name>
+      </trkpt>
+      <trkpt lat="47.542516941" lon="9.681289777">
+        <ele>452.684782</ele>
+        <time>2009-09-10T05:30:32Z</time>
+        <speed>2.222222</speed>
+        <name>TP0132</name>
+      </trkpt>
+      <trkpt lat="47.542498544" lon="9.681062725">
+        <ele>449.134706</ele>
+        <time>2009-09-10T05:30:37Z</time>
+        <speed>0.833333</speed>
+        <name>TP0133</name>
+      </trkpt>
+      <trkpt lat="47.542570684" lon="9.680888355">
+        <ele>448.572648</ele>
+        <time>2009-09-10T05:30:42Z</time>
+        <speed>1.666667</speed>
+        <name>TP0134</name>
+      </trkpt>
+      <trkpt lat="47.542631644" lon="9.680781684">
+        <ele>446.437208</ele>
+        <time>2009-09-10T05:30:47Z</time>
+        <speed>1.944444</speed>
+        <name>TP0135</name>
+      </trkpt>
+      <trkpt lat="47.542717805" lon="9.680616247">
+        <ele>441.737939</ele>
+        <time>2009-09-10T05:30:52Z</time>
+        <speed>2.222222</speed>
+        <name>TP0136</name>
+      </trkpt>
+      <trkpt lat="47.542857960" lon="9.680466136">
+        <ele>442.389048</ele>
+        <time>2009-09-10T05:30:57Z</time>
+        <speed>2.500000</speed>
+        <name>TP0137</name>
+      </trkpt>
+      <trkpt lat="47.542890349" lon="9.680394277">
+        <ele>440.449495</ele>
+        <time>2009-09-10T05:31:02Z</time>
+        <speed>0.000000</speed>
+        <name>TP0138</name>
+      </trkpt>
+      <trkpt lat="47.542997916" lon="9.680270351">
+        <ele>437.638774</ele>
+        <time>2009-09-10T05:31:07Z</time>
+        <speed>1.944444</speed>
+        <name>TP0139</name>
+      </trkpt>
+      <trkpt lat="47.543083901" lon="9.680122472">
+        <ele>430.246727</ele>
+        <time>2009-09-10T05:31:12Z</time>
+        <speed>1.944444</speed>
+        <name>TP0140</name>
+      </trkpt>
+      <trkpt lat="47.543114058" lon="9.680076798">
+        <ele>428.534219</ele>
+        <time>2009-09-10T05:31:17Z</time>
+        <speed>0.277778</speed>
+        <name>TP0141</name>
+      </trkpt>
+      <trkpt lat="47.543114704" lon="9.680061471">
+        <ele>429.823924</ele>
+        <time>2009-09-10T05:31:22Z</time>
+        <speed>0.000000</speed>
+        <name>TP0142</name>
+      </trkpt>
+      <trkpt lat="47.543144391" lon="9.680013565">
+        <ele>429.514629</ele>
+        <time>2009-09-10T05:31:27Z</time>
+        <speed>1.666667</speed>
+        <name>TP0143</name>
+      </trkpt>
+      <trkpt lat="47.543157626" lon="9.679937237">
+        <ele>428.168184</ele>
+        <time>2009-09-10T05:31:32Z</time>
+        <speed>1.388889</speed>
+        <name>TP0144</name>
+      </trkpt>
+      <trkpt lat="47.543333046" lon="9.679673748">
+        <ele>427.942731</ele>
+        <time>2009-09-10T05:31:37Z</time>
+        <speed>2.777778</speed>
+        <name>TP0145</name>
+      </trkpt>
+      <trkpt lat="47.543465895" lon="9.679499373">
+        <ele>434.758898</ele>
+        <time>2009-09-10T05:31:42Z</time>
+        <speed>2.222222</speed>
+        <name>TP0146</name>
+      </trkpt>
+      <trkpt lat="47.543590514" lon="9.679262068">
+        <ele>428.858310</ele>
+        <time>2009-09-10T05:31:47Z</time>
+        <speed>2.222222</speed>
+        <name>TP0147</name>
+      </trkpt>
+      <trkpt lat="47.543616066" lon="9.679168180">
+        <ele>431.680438</ele>
+        <time>2009-09-10T05:31:52Z</time>
+        <speed>1.111111</speed>
+        <name>TP0148</name>
+      </trkpt>
+      <trkpt lat="47.543771884" lon="9.678961222">
+        <ele>436.160030</ele>
+        <time>2009-09-10T05:31:57Z</time>
+        <speed>2.222222</speed>
+        <name>TP0149</name>
+      </trkpt>
+      <trkpt lat="47.543834309" lon="9.678806332">
+        <ele>439.297293</ele>
+        <time>2009-09-10T05:32:02Z</time>
+        <speed>1.944444</speed>
+        <name>TP0150</name>
+      </trkpt>
+      <trkpt lat="47.543899554" lon="9.678664840">
+        <ele>434.015315</ele>
+        <time>2009-09-10T05:32:07Z</time>
+        <speed>1.666667</speed>
+        <name>TP0151</name>
+      </trkpt>
+      <trkpt lat="47.543947430" lon="9.678553697">
+        <ele>433.211075</ele>
+        <time>2009-09-10T05:32:12Z</time>
+        <speed>1.388889</speed>
+        <name>TP0152</name>
+      </trkpt>
+      <trkpt lat="47.543988318" lon="9.678501322">
+        <ele>437.183908</ele>
+        <time>2009-09-10T05:32:17Z</time>
+        <speed>0.833333</speed>
+        <name>TP0153</name>
+      </trkpt>
+      <trkpt lat="47.544068158" lon="9.678442553">
+        <ele>441.260406</ele>
+        <time>2009-09-10T05:32:22Z</time>
+        <speed>1.388889</speed>
+        <name>TP0154</name>
+      </trkpt>
+      <trkpt lat="47.544151169" lon="9.678362062">
+        <ele>442.303530</ele>
+        <time>2009-09-10T05:32:27Z</time>
+        <speed>0.000000</speed>
+        <name>TP0155</name>
+      </trkpt>
+      <trkpt lat="47.544300420" lon="9.678089632">
+        <ele>444.740435</ele>
+        <time>2009-09-10T05:32:32Z</time>
+        <speed>0.000000</speed>
+        <name>TP0156</name>
+      </trkpt>
+      <trkpt lat="47.544308076" lon="9.678078771">
+        <ele>443.961542</ele>
+        <time>2009-09-10T05:32:37Z</time>
+        <speed>0.000000</speed>
+        <name>TP0157</name>
+      </trkpt>
+      <trkpt lat="47.544309192" lon="9.678065677">
+        <ele>443.848063</ele>
+        <time>2009-09-10T05:32:42Z</time>
+        <speed>1.666667</speed>
+        <name>TP0158</name>
+      </trkpt>
+      <trkpt lat="47.544383089" lon="9.677862876">
+        <ele>444.462983</ele>
+        <time>2009-09-10T05:32:47Z</time>
+        <speed>2.500000</speed>
+        <name>TP0159</name>
+      </trkpt>
+      <trkpt lat="47.544414065" lon="9.677784313">
+        <ele>446.733330</ele>
+        <time>2009-09-10T05:32:52Z</time>
+        <speed>1.944444</speed>
+        <name>TP0160</name>
+      </trkpt>
+      <trkpt lat="47.544540489" lon="9.677645051">
+        <ele>447.426359</ele>
+        <time>2009-09-10T05:32:57Z</time>
+        <speed>2.222222</speed>
+        <name>TP0161</name>
+      </trkpt>
+      <trkpt lat="47.544568566" lon="9.677544766">
+        <ele>445.925557</ele>
+        <time>2009-09-10T05:33:02Z</time>
+        <speed>1.388889</speed>
+        <name>TP0162</name>
+      </trkpt>
+      <trkpt lat="47.544669278" lon="9.677154184">
+        <ele>449.234080</ele>
+        <time>2009-09-10T05:33:07Z</time>
+        <speed>2.500000</speed>
+        <name>TP0163</name>
+      </trkpt>
+      <trkpt lat="47.544695769" lon="9.677064759">
+        <ele>449.250009</ele>
+        <time>2009-09-10T05:33:12Z</time>
+        <speed>0.000000</speed>
+        <name>TP0164</name>
+      </trkpt>
+      <trkpt lat="47.544699115" lon="9.677025478">
+        <ele>448.909610</ele>
+        <time>2009-09-10T05:33:17Z</time>
+        <speed>0.277778</speed>
+        <name>TP0165</name>
+      </trkpt>
+      <trkpt lat="47.544694160" lon="9.677012384">
+        <ele>448.058340</ele>
+        <time>2009-09-10T05:33:22Z</time>
+        <speed>1.388889</speed>
+        <name>TP0166</name>
+      </trkpt>
+      <trkpt lat="47.544744440" lon="9.676857490">
+        <ele>449.720373</ele>
+        <time>2009-09-10T05:33:27Z</time>
+        <speed>1.944444</speed>
+        <name>TP0167</name>
+      </trkpt>
+      <trkpt lat="47.544827601" lon="9.676696200">
+        <ele>450.748354</ele>
+        <time>2009-09-10T05:33:32Z</time>
+        <speed>0.000000</speed>
+        <name>TP0168</name>
+      </trkpt>
+      <trkpt lat="47.544850745" lon="9.676646057">
+        <ele>451.104710</ele>
+        <time>2009-09-10T05:33:37Z</time>
+        <speed>1.944444</speed>
+        <name>TP0169</name>
+      </trkpt>
+      <trkpt lat="47.544993450" lon="9.676371386">
+        <ele>454.207639</ele>
+        <time>2009-09-10T05:33:42Z</time>
+        <speed>1.944444</speed>
+        <name>TP0170</name>
+      </trkpt>
+      <trkpt lat="47.545082681" lon="9.676210095">
+        <ele>455.973538</ele>
+        <time>2009-09-10T05:33:47Z</time>
+        <speed>1.666667</speed>
+        <name>TP0171</name>
+      </trkpt>
+      <trkpt lat="47.545163139" lon="9.676072759">
+        <ele>458.631789</ele>
+        <time>2009-09-10T05:33:52Z</time>
+        <speed>0.000000</speed>
+        <name>TP0172</name>
+      </trkpt>
+      <trkpt lat="47.545208113" lon="9.675939887">
+        <ele>454.056776</ele>
+        <time>2009-09-10T05:33:57Z</time>
+        <speed>0.555556</speed>
+        <name>TP0173</name>
+      </trkpt>
+      <trkpt lat="47.545264138" lon="9.675883347">
+        <ele>453.779136</ele>
+        <time>2009-09-10T05:34:02Z</time>
+        <speed>0.000000</speed>
+        <name>TP0174</name>
+      </trkpt>
+      <trkpt lat="47.545420884" lon="9.675862227">
+        <ele>451.387791</ele>
+        <time>2009-09-10T05:34:07Z</time>
+        <speed>0.000000</speed>
+        <name>TP0175</name>
+      </trkpt>
+      <trkpt lat="47.545495417" lon="9.675825478">
+        <ele>449.227422</ele>
+        <time>2009-09-10T05:34:12Z</time>
+        <speed>1.111111</speed>
+        <name>TP0176</name>
+      </trkpt>
+      <trkpt lat="47.545541356" lon="9.675760308">
+        <ele>444.554311</ele>
+        <time>2009-09-10T05:34:17Z</time>
+        <speed>0.000000</speed>
+        <name>TP0177</name>
+      </trkpt>
+      <trkpt lat="47.545727638" lon="9.675772073">
+        <ele>441.869384</ele>
+        <time>2009-09-10T05:34:22Z</time>
+        <speed>1.944444</speed>
+        <name>TP0178</name>
+      </trkpt>
+      <trkpt lat="47.545825164" lon="9.675765977">
+        <ele>440.080797</ele>
+        <time>2009-09-10T05:34:27Z</time>
+        <speed>1.666667</speed>
+        <name>TP0179</name>
+      </trkpt>
+      <trkpt lat="47.545886465" lon="9.675805561">
+        <ele>439.266580</ele>
+        <time>2009-09-10T05:34:32Z</time>
+        <speed>1.388889</speed>
+        <name>TP0180</name>
+      </trkpt>
+      <trkpt lat="47.545966942" lon="9.675912849">
+        <ele>440.567682</ele>
+        <time>2009-09-10T05:34:37Z</time>
+        <speed>0.277778</speed>
+        <name>TP0181</name>
+      </trkpt>
+      <trkpt lat="47.546038774" lon="9.675900056">
+        <ele>440.037505</ele>
+        <time>2009-09-10T05:34:42Z</time>
+        <speed>0.833333</speed>
+        <name>TP0182</name>
+      </trkpt>
+      <trkpt lat="47.546198095" lon="9.675999016">
+        <ele>438.739876</ele>
+        <time>2009-09-10T05:34:47Z</time>
+        <speed>1.666667</speed>
+        <name>TP0183</name>
+      </trkpt>
+      <trkpt lat="47.546358852" lon="9.676167914">
+        <ele>435.940959</ele>
+        <time>2009-09-10T05:34:52Z</time>
+        <speed>1.388889</speed>
+        <name>TP0184</name>
+      </trkpt>
+      <trkpt lat="47.546365864" lon="9.676172379">
+        <ele>433.872354</ele>
+        <time>2009-09-10T05:34:57Z</time>
+        <speed>0.000000</speed>
+        <name>TP0185</name>
+      </trkpt>
+      <trkpt lat="47.546560813" lon="9.676367467">
+        <ele>435.727380</ele>
+        <time>2009-09-10T05:35:02Z</time>
+        <speed>0.000000</speed>
+        <name>TP0186</name>
+      </trkpt>
+      <trkpt lat="47.546643991" lon="9.676450801">
+        <ele>435.398517</ele>
+        <time>2009-09-10T05:35:07Z</time>
+        <speed>0.000000</speed>
+        <name>TP0187</name>
+      </trkpt>
+      <trkpt lat="47.546650533" lon="9.676453034">
+        <ele>434.733131</ele>
+        <time>2009-09-10T05:35:12Z</time>
+        <speed>0.555556</speed>
+        <name>TP0188</name>
+      </trkpt>
+      <trkpt lat="47.546788666" lon="9.676619400">
+        <ele>439.656885</ele>
+        <time>2009-09-10T05:35:17Z</time>
+        <speed>1.944444</speed>
+        <name>TP0189</name>
+      </trkpt>
+      <trkpt lat="47.546873476" lon="9.676818352">
+        <ele>443.228073</ele>
+        <time>2009-09-10T05:35:22Z</time>
+        <speed>0.000000</speed>
+        <name>TP0190</name>
+      </trkpt>
+      <trkpt lat="47.546931749" lon="9.676980253">
+        <ele>441.366563</ele>
+        <time>2009-09-10T05:35:27Z</time>
+        <speed>0.000000</speed>
+        <name>TP0191</name>
+      </trkpt>
+      <trkpt lat="47.546994187" lon="9.677069984">
+        <ele>443.147409</ele>
+        <time>2009-09-10T05:35:32Z</time>
+        <speed>1.944444</speed>
+        <name>TP0192</name>
+      </trkpt>
+      <trkpt lat="47.547040173" lon="9.677131294">
+        <ele>443.891060</ele>
+        <time>2009-09-10T05:35:37Z</time>
+        <speed>1.666667</speed>
+        <name>TP0193</name>
+      </trkpt>
+      <trkpt lat="47.547162795" lon="9.677273706">
+        <ele>444.971380</ele>
+        <time>2009-09-10T05:35:42Z</time>
+        <speed>0.555556</speed>
+        <name>TP0194</name>
+      </trkpt>
+      <trkpt lat="47.547226175" lon="9.677367904">
+        <ele>443.945855</ele>
+        <time>2009-09-10T05:35:47Z</time>
+        <speed>1.111111</speed>
+        <name>TP0195</name>
+      </trkpt>
+      <trkpt lat="47.547289728" lon="9.677444541">
+        <ele>445.613301</ele>
+        <time>2009-09-10T05:35:52Z</time>
+        <speed>1.944444</speed>
+        <name>TP0196</name>
+      </trkpt>
+      <trkpt lat="47.547352636" lon="9.677536506">
+        <ele>445.991016</ele>
+        <time>2009-09-10T05:35:57Z</time>
+        <speed>1.666667</speed>
+        <name>TP0197</name>
+      </trkpt>
+      <trkpt lat="47.547396391" lon="9.677624005">
+        <ele>446.961659</ele>
+        <time>2009-09-10T05:36:02Z</time>
+        <speed>1.666667</speed>
+        <name>TP0198</name>
+      </trkpt>
+      <trkpt lat="47.547580507" lon="9.677851686">
+        <ele>452.629525</ele>
+        <time>2009-09-10T05:36:07Z</time>
+        <speed>2.222222</speed>
+        <name>TP0199</name>
+      </trkpt>
+      <trkpt lat="47.547782871" lon="9.678387243">
+        <ele>461.862647</ele>
+        <time>2009-09-10T05:36:12Z</time>
+        <speed>2.500000</speed>
+        <name>TP0200</name>
+      </trkpt>
+      <trkpt lat="47.547810985" lon="9.678594828">
+        <ele>461.713634</ele>
+        <time>2009-09-10T05:36:17Z</time>
+        <speed>0.000000</speed>
+        <name>TP0201</name>
+      </trkpt>
+      <trkpt lat="47.547824089" lon="9.678662534">
+        <ele>463.091338</ele>
+        <time>2009-09-10T05:36:22Z</time>
+        <speed>1.666667</speed>
+        <name>TP0202</name>
+      </trkpt>
+      <trkpt lat="47.547864988" lon="9.678854791">
+        <ele>465.707789</ele>
+        <time>2009-09-10T05:36:27Z</time>
+        <speed>2.222222</speed>
+        <name>TP0203</name>
+      </trkpt>
+      <trkpt lat="47.547886088" lon="9.679057909">
+        <ele>467.627439</ele>
+        <time>2009-09-10T05:36:32Z</time>
+        <speed>2.500000</speed>
+        <name>TP0204</name>
+      </trkpt>
+      <trkpt lat="47.547909891" lon="9.679237072">
+        <ele>467.916951</ele>
+        <time>2009-09-10T05:36:37Z</time>
+        <speed>2.222222</speed>
+        <name>TP0205</name>
+      </trkpt>
+      <trkpt lat="47.547924899" lon="9.679376951">
+        <ele>466.390348</ele>
+        <time>2009-09-10T05:36:42Z</time>
+        <speed>1.388889</speed>
+        <name>TP0206</name>
+      </trkpt>
+      <trkpt lat="47.547874698" lon="9.679442730">
+        <ele>452.522321</ele>
+        <time>2009-09-10T05:36:47Z</time>
+        <speed>0.000000</speed>
+        <name>TP0207</name>
+      </trkpt>
+      <trkpt lat="47.547847243" lon="9.679464452">
+        <ele>452.604343</ele>
+        <time>2009-09-10T05:36:52Z</time>
+        <speed>0.000000</speed>
+        <name>TP0208</name>
+      </trkpt>
+      <trkpt lat="47.547827445" lon="9.679475313">
+        <ele>451.907513</ele>
+        <time>2009-09-10T05:36:57Z</time>
+        <speed>0.000000</speed>
+        <name>TP0209</name>
+      </trkpt>
+      <trkpt lat="47.547820259" lon="9.679488408">
+        <ele>451.283160</ele>
+        <time>2009-09-10T05:37:02Z</time>
+        <speed>0.000000</speed>
+        <name>TP0210</name>
+      </trkpt>
+      <trkpt lat="47.547820730" lon="9.679490641">
+        <ele>449.879954</ele>
+        <time>2009-09-10T05:37:07Z</time>
+        <speed>0.000000</speed>
+        <name>TP0211</name>
+      </trkpt>
+      <trkpt lat="47.547814659" lon="9.679490641">
+        <ele>449.142113</ele>
+        <time>2009-09-10T05:37:12Z</time>
+        <speed>0.000000</speed>
+        <name>TP0212</name>
+      </trkpt>
+      <trkpt lat="47.547815130" lon="9.679492875">
+        <ele>447.738906</ele>
+        <time>2009-09-10T05:37:17Z</time>
+        <speed>0.000000</speed>
+        <name>TP0213</name>
+      </trkpt>
+      <trkpt lat="47.547809060" lon="9.679492875">
+        <ele>447.001066</ele>
+        <time>2009-09-10T05:37:22Z</time>
+        <speed>0.000000</speed>
+        <name>TP0214</name>
+      </trkpt>
+      <trkpt lat="47.547809060" lon="9.679492875">
+        <ele>447.001066</ele>
+        <time>2009-09-10T05:37:27Z</time>
+        <speed>0.000000</speed>
+        <name>TP0215</name>
+      </trkpt>
+      <trkpt lat="47.547809060" lon="9.679492875">
+        <ele>447.001066</ele>
+        <time>2009-09-10T05:37:32Z</time>
+        <speed>0.000000</speed>
+        <name>TP0216</name>
+      </trkpt>
+      <trkpt lat="47.547809060" lon="9.679492875">
+        <ele>447.001066</ele>
+        <time>2009-09-10T05:37:37Z</time>
+        <speed>0.000000</speed>
+        <name>TP0217</name>
+      </trkpt>
+    </trkseg>
+  </trk>
 </gpx>

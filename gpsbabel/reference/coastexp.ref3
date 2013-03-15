@@ -1,221 +1,216 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="34.019184000" minlon="-122.605838000" maxlat="37.819339000" maxlon="-120.438209000"/>
-<wpt lat="37.229349000" lon="-122.441589000">
-  <time>2004-11-05T21:13:00Z</time>
-  <name>PESCDR01</name>
-  <cmt>PESCDR01</cmt>
-  <desc>PESCDR01</desc>
-</wpt>
-<wpt lat="37.183397000" lon="-122.411904000">
-  <time>2004-11-05T21:13:24Z</time>
-  <name>PIGEON01</name>
-  <cmt>PIGEON01</cmt>
-  <desc>PIGEON01</desc>
-</wpt>
-<wpt lat="37.090736000" lon="-122.348775000">
-  <time>2004-11-05T21:13:41Z</time>
-  <name>ANONUV01</name>
-  <cmt>ANONUV01</cmt>
-  <desc>ANONUV01</desc>
-</wpt>
-<wpt lat="36.929502000" lon="-122.113725000">
-  <time>2004-11-05T21:14:09Z</time>
-  <name>SCRUZ01</name>
-  <cmt>SCRUZ01</cmt>
-  <desc>SCRUZ01</desc>
-</wpt>
-<wpt lat="36.934235000" lon="-122.022130000">
-  <time>2004-11-05T21:14:16Z</time>
-  <name>SCRUZ02</name>
-  <cmt>SCRUZ02</cmt>
-  <desc>SCRUZ02</desc>
-</wpt>
-<wpt lat="36.960666000" lon="-122.024734000">
-  <time>2004-11-05T21:14:20Z</time>
-  <name>SCRUZENT</name>
-  <cmt>SCRUZENT</cmt>
-  <desc>SCRUZENT</desc>
-</wpt>
-<wpt lat="36.581344000" lon="-121.995411000">
-  <time>2004-11-05T21:24:22Z</time>
-  <name>CYPRSSPT</name>
-  <cmt>CYPRSSPT</cmt>
-  <desc>CYPRSSPT</desc>
-</wpt>
-<wpt lat="36.301110000" lon="-121.919097000">
-  <time>2004-11-05T21:24:38Z</time>
-  <name>PTSUR</name>
-  <cmt>PTSUR</cmt>
-  <desc>PTSUR</desc>
-</wpt>
-<wpt lat="36.238177000" lon="-121.855209000">
-  <time>2004-11-05T21:25:15Z</time>
-  <name>COOPERPT</name>
-  <cmt>COOPERPT</cmt>
-  <desc>COOPERPT</desc>
-</wpt>
-<wpt lat="36.225175000" lon="-121.801314000">
-  <time>2004-11-05T21:25:26Z</time>
-  <name>PFEIFENT</name>
-  <cmt>PFEIFENT</cmt>
-  <desc>PFEIFENT</desc>
-</wpt>
-<wpt lat="36.230449000" lon="-121.797444000">
-  <time>2004-11-05T21:25:31Z</time>
-  <name>PFEIFANC</name>
-  <cmt>PFEIFANC</cmt>
-  <desc>PFEIFANC</desc>
-</wpt>
-<wpt lat="35.879801000" lon="-121.498947000">
-  <time>2004-11-05T21:28:26Z</time>
-  <name>SANMRT01</name>
-  <cmt>SANMRT01</cmt>
-  <desc>SANMRT01</desc>
-</wpt>
-<wpt lat="35.652801000" lon="-121.308485000">
-  <time>2004-11-05T21:28:33Z</time>
-  <name>PDRSBLNC</name>
-  <cmt>PDRSBLNC</cmt>
-  <desc>PDRSBLNC</desc>
-</wpt>
-<wpt lat="35.623297000" lon="-121.185920000">
-  <time>2004-11-05T21:28:50Z</time>
-  <name>SNSMNENT</name>
-  <cmt>SNSMNENT</cmt>
-  <desc>SNSMNENT</desc>
-</wpt>
-<wpt lat="35.640478000" lon="-121.183772000">
-  <time>2004-11-05T21:28:53Z</time>
-  <name>SNSMNANC</name>
-  <cmt>SNSMNANC</cmt>
-  <desc>SNSMNANC</desc>
-</wpt>
-<wpt lat="35.572353000" lon="-121.152797000">
-  <time>2004-11-05T21:36:18Z</time>
-  <name>CAMBRIA</name>
-  <cmt>CAMBRIA</cmt>
-  <desc>CAMBRIA</desc>
-</wpt>
-<wpt lat="35.449214000" lon="-121.020825000">
-  <time>2004-11-05T21:36:26Z</time>
-  <name>PTESTERO</name>
-  <cmt>PTESTERO</cmt>
-  <desc>PTESTERO</desc>
-</wpt>
-<wpt lat="35.216602000" lon="-120.928391000">
-  <time>2004-11-05T21:36:35Z</time>
-  <name>PTBUCHON</name>
-  <cmt>PTBUCHON</cmt>
-  <desc>PTBUCHON</desc>
-</wpt>
-<wpt lat="34.883361000" lon="-120.684631000">
-  <time>2004-11-05T21:36:42Z</time>
-  <name>PTSAL01</name>
-  <cmt>PTSAL01</cmt>
-  <desc>PTSAL01</desc>
-</wpt>
-<wpt lat="34.884641000" lon="-120.652026000">
-  <time>2004-11-05T21:36:47Z</time>
-  <name>PTSALENT</name>
-  <cmt>A description of the Point Sal Entrance mark</cmt>
-  <desc>A description of the Point Sal Entrance mark</desc>
-</wpt>
-<wpt lat="34.896555000" lon="-120.649124000">
-  <time>2004-11-05T21:37:04Z</time>
-  <name>PTSALANC</name>
-  <cmt>PTSALANC</cmt>
-  <desc>PTSALANC</desc>
-</wpt>
-<wpt lat="34.758180000" lon="-120.642516000">
-  <time>2004-11-05T21:39:49Z</time>
-  <name>PURSMAPT</name>
-  <cmt>PURSMAPT</cmt>
-  <desc>PURSMAPT</desc>
-</wpt>
-<wpt lat="34.572579000" lon="-120.663636000">
-  <time>2004-11-05T21:39:54Z</time>
-  <name>PTARGLLO</name>
-  <cmt>PTARGLLO</cmt>
-  <desc>PTARGLLO</desc>
-</wpt>
-<wpt lat="34.113844000" lon="-120.492630000">
-  <time>2004-11-05T21:40:05Z</time>
-  <name>SANMGL01</name>
-  <cmt>SANMGL01</cmt>
-  <desc>SANMGL01</desc>
-</wpt>
-<wpt lat="34.029483000" lon="-120.471409000">
-  <time>2004-11-05T21:40:44Z</time>
-  <name>SANMGL02</name>
-  <cmt>SANMGL02</cmt>
-  <desc>SANMGL02</desc>
-</wpt>
-<wpt lat="34.019184000" lon="-120.444197000">
-  <time>2004-11-05T21:40:48Z</time>
-  <name>SANMGL03</name>
-  <cmt>SANMGL03</cmt>
-  <desc>SANMGL03</desc>
-</wpt>
-<wpt lat="34.023478000" lon="-120.438209000">
-  <time>2004-11-05T21:40:57Z</time>
-  <name>ADCOVENT</name>
-  <cmt>ADCOVENT</cmt>
-  <desc>ADCOVENT</desc>
-</wpt>
-<wpt lat="34.028615000" lon="-120.439696000">
-  <time>2004-11-05T21:40:59Z</time>
-  <name>ADCOVANC</name>
-  <cmt>ADCOVANC</cmt>
-  <desc>ADCOVANC</desc>
-</wpt>
-<rte>
-  <name>Into The Bay</name>
-  <rtept lat="37.763290000" lon="-122.282580000">
-    <time>2004-11-05T17:09:09Z</time>
-    <name>SFBALBAY</name>
-  </rtept>
-  <rtept lat="37.751613000" lon="-122.339028000">
-    <time>2004-11-05T17:09:10Z</time>
-    <name>SFBAY001</name>
-  </rtept>
-  <rtept lat="37.817420000" lon="-122.394305000">
-    <time>2004-11-05T17:09:13Z</time>
-    <name>SFBAY002</name>
-  </rtept>
-  <rtept lat="37.819339000" lon="-122.478302000">
-    <time>2004-11-05T17:09:16Z</time>
-    <name>SFGGBRDG</name>
-  </rtept>
-  <rtept lat="37.773033000" lon="-122.605838000">
-    <time>2004-11-05T17:09:20Z</time>
-    <name>SFCHNL01</name>
-  </rtept>
-  <rtept lat="37.518860000" lon="-122.529914000">
-    <time>2004-11-05T17:09:26Z</time>
-    <name>HMCOLREF</name>
-  </rtept>
-  <rtept lat="37.482348000" lon="-122.507704000">
-    <time>2004-11-05T17:09:27Z</time>
-    <name>HMPILL01</name>
-  </rtept>
-  <rtept lat="37.475062000" lon="-122.488531000">
-    <time>2004-11-05T21:16:24Z</time>
-    <name>HMPILLPT</name>
-  </rtept>
-  <rtept lat="37.476448000" lon="-122.475800000">
-    <time>2004-11-05T17:09:29Z</time>
-    <name>HMPILL02</name>
-  </rtept>
-  <rtept lat="37.495102000" lon="-122.483927000">
-    <time>2004-11-05T17:09:30Z</time>
-    <name>HMPILL03</name>
-  </rtept>
-</rte>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="34.019184000" minlon="-122.605838000" maxlat="37.819339000" maxlon="-120.438209000"/>
+  <wpt lat="37.229349000" lon="-122.441589000">
+    <time>2004-11-05T21:13:00Z</time>
+    <name>PESCDR01</name>
+    <cmt>PESCDR01</cmt>
+    <desc>PESCDR01</desc>
+  </wpt>
+  <wpt lat="37.183397000" lon="-122.411904000">
+    <time>2004-11-05T21:13:24Z</time>
+    <name>PIGEON01</name>
+    <cmt>PIGEON01</cmt>
+    <desc>PIGEON01</desc>
+  </wpt>
+  <wpt lat="37.090736000" lon="-122.348775000">
+    <time>2004-11-05T21:13:41Z</time>
+    <name>ANONUV01</name>
+    <cmt>ANONUV01</cmt>
+    <desc>ANONUV01</desc>
+  </wpt>
+  <wpt lat="36.929502000" lon="-122.113725000">
+    <time>2004-11-05T21:14:09Z</time>
+    <name>SCRUZ01</name>
+    <cmt>SCRUZ01</cmt>
+    <desc>SCRUZ01</desc>
+  </wpt>
+  <wpt lat="36.934235000" lon="-122.022130000">
+    <time>2004-11-05T21:14:16Z</time>
+    <name>SCRUZ02</name>
+    <cmt>SCRUZ02</cmt>
+    <desc>SCRUZ02</desc>
+  </wpt>
+  <wpt lat="36.960666000" lon="-122.024734000">
+    <time>2004-11-05T21:14:20Z</time>
+    <name>SCRUZENT</name>
+    <cmt>SCRUZENT</cmt>
+    <desc>SCRUZENT</desc>
+  </wpt>
+  <wpt lat="36.581344000" lon="-121.995411000">
+    <time>2004-11-05T21:24:22Z</time>
+    <name>CYPRSSPT</name>
+    <cmt>CYPRSSPT</cmt>
+    <desc>CYPRSSPT</desc>
+  </wpt>
+  <wpt lat="36.301110000" lon="-121.919097000">
+    <time>2004-11-05T21:24:38Z</time>
+    <name>PTSUR</name>
+    <cmt>PTSUR</cmt>
+    <desc>PTSUR</desc>
+  </wpt>
+  <wpt lat="36.238177000" lon="-121.855209000">
+    <time>2004-11-05T21:25:15Z</time>
+    <name>COOPERPT</name>
+    <cmt>COOPERPT</cmt>
+    <desc>COOPERPT</desc>
+  </wpt>
+  <wpt lat="36.225175000" lon="-121.801314000">
+    <time>2004-11-05T21:25:26Z</time>
+    <name>PFEIFENT</name>
+    <cmt>PFEIFENT</cmt>
+    <desc>PFEIFENT</desc>
+  </wpt>
+  <wpt lat="36.230449000" lon="-121.797444000">
+    <time>2004-11-05T21:25:31Z</time>
+    <name>PFEIFANC</name>
+    <cmt>PFEIFANC</cmt>
+    <desc>PFEIFANC</desc>
+  </wpt>
+  <wpt lat="35.879801000" lon="-121.498947000">
+    <time>2004-11-05T21:28:26Z</time>
+    <name>SANMRT01</name>
+    <cmt>SANMRT01</cmt>
+    <desc>SANMRT01</desc>
+  </wpt>
+  <wpt lat="35.652801000" lon="-121.308485000">
+    <time>2004-11-05T21:28:33Z</time>
+    <name>PDRSBLNC</name>
+    <cmt>PDRSBLNC</cmt>
+    <desc>PDRSBLNC</desc>
+  </wpt>
+  <wpt lat="35.623297000" lon="-121.185920000">
+    <time>2004-11-05T21:28:50Z</time>
+    <name>SNSMNENT</name>
+    <cmt>SNSMNENT</cmt>
+    <desc>SNSMNENT</desc>
+  </wpt>
+  <wpt lat="35.640478000" lon="-121.183772000">
+    <time>2004-11-05T21:28:53Z</time>
+    <name>SNSMNANC</name>
+    <cmt>SNSMNANC</cmt>
+    <desc>SNSMNANC</desc>
+  </wpt>
+  <wpt lat="35.572353000" lon="-121.152797000">
+    <time>2004-11-05T21:36:18Z</time>
+    <name>CAMBRIA</name>
+    <cmt>CAMBRIA</cmt>
+    <desc>CAMBRIA</desc>
+  </wpt>
+  <wpt lat="35.449214000" lon="-121.020825000">
+    <time>2004-11-05T21:36:26Z</time>
+    <name>PTESTERO</name>
+    <cmt>PTESTERO</cmt>
+    <desc>PTESTERO</desc>
+  </wpt>
+  <wpt lat="35.216602000" lon="-120.928391000">
+    <time>2004-11-05T21:36:35Z</time>
+    <name>PTBUCHON</name>
+    <cmt>PTBUCHON</cmt>
+    <desc>PTBUCHON</desc>
+  </wpt>
+  <wpt lat="34.883361000" lon="-120.684631000">
+    <time>2004-11-05T21:36:42Z</time>
+    <name>PTSAL01</name>
+    <cmt>PTSAL01</cmt>
+    <desc>PTSAL01</desc>
+  </wpt>
+  <wpt lat="34.884641000" lon="-120.652026000">
+    <time>2004-11-05T21:36:47Z</time>
+    <name>PTSALENT</name>
+    <cmt>A description of the Point Sal Entrance mark</cmt>
+    <desc>A description of the Point Sal Entrance mark</desc>
+  </wpt>
+  <wpt lat="34.896555000" lon="-120.649124000">
+    <time>2004-11-05T21:37:04Z</time>
+    <name>PTSALANC</name>
+    <cmt>PTSALANC</cmt>
+    <desc>PTSALANC</desc>
+  </wpt>
+  <wpt lat="34.758180000" lon="-120.642516000">
+    <time>2004-11-05T21:39:49Z</time>
+    <name>PURSMAPT</name>
+    <cmt>PURSMAPT</cmt>
+    <desc>PURSMAPT</desc>
+  </wpt>
+  <wpt lat="34.572579000" lon="-120.663636000">
+    <time>2004-11-05T21:39:54Z</time>
+    <name>PTARGLLO</name>
+    <cmt>PTARGLLO</cmt>
+    <desc>PTARGLLO</desc>
+  </wpt>
+  <wpt lat="34.113844000" lon="-120.492630000">
+    <time>2004-11-05T21:40:05Z</time>
+    <name>SANMGL01</name>
+    <cmt>SANMGL01</cmt>
+    <desc>SANMGL01</desc>
+  </wpt>
+  <wpt lat="34.029483000" lon="-120.471409000">
+    <time>2004-11-05T21:40:44Z</time>
+    <name>SANMGL02</name>
+    <cmt>SANMGL02</cmt>
+    <desc>SANMGL02</desc>
+  </wpt>
+  <wpt lat="34.019184000" lon="-120.444197000">
+    <time>2004-11-05T21:40:48Z</time>
+    <name>SANMGL03</name>
+    <cmt>SANMGL03</cmt>
+    <desc>SANMGL03</desc>
+  </wpt>
+  <wpt lat="34.023478000" lon="-120.438209000">
+    <time>2004-11-05T21:40:57Z</time>
+    <name>ADCOVENT</name>
+    <cmt>ADCOVENT</cmt>
+    <desc>ADCOVENT</desc>
+  </wpt>
+  <wpt lat="34.028615000" lon="-120.439696000">
+    <time>2004-11-05T21:40:59Z</time>
+    <name>ADCOVANC</name>
+    <cmt>ADCOVANC</cmt>
+    <desc>ADCOVANC</desc>
+  </wpt>
+  <rte>
+    <name>Into The Bay</name>
+    <rtept lat="37.763290000" lon="-122.282580000">
+      <time>2004-11-05T17:09:09Z</time>
+      <name>SFBALBAY</name>
+    </rtept>
+    <rtept lat="37.751613000" lon="-122.339028000">
+      <time>2004-11-05T17:09:10Z</time>
+      <name>SFBAY001</name>
+    </rtept>
+    <rtept lat="37.817420000" lon="-122.394305000">
+      <time>2004-11-05T17:09:13Z</time>
+      <name>SFBAY002</name>
+    </rtept>
+    <rtept lat="37.819339000" lon="-122.478302000">
+      <time>2004-11-05T17:09:16Z</time>
+      <name>SFGGBRDG</name>
+    </rtept>
+    <rtept lat="37.773033000" lon="-122.605838000">
+      <time>2004-11-05T17:09:20Z</time>
+      <name>SFCHNL01</name>
+    </rtept>
+    <rtept lat="37.518860000" lon="-122.529914000">
+      <time>2004-11-05T17:09:26Z</time>
+      <name>HMCOLREF</name>
+    </rtept>
+    <rtept lat="37.482348000" lon="-122.507704000">
+      <time>2004-11-05T17:09:27Z</time>
+      <name>HMPILL01</name>
+    </rtept>
+    <rtept lat="37.475062000" lon="-122.488531000">
+      <time>2004-11-05T21:16:24Z</time>
+      <name>HMPILLPT</name>
+    </rtept>
+    <rtept lat="37.476448000" lon="-122.475800000">
+      <time>2004-11-05T17:09:29Z</time>
+      <name>HMPILL02</name>
+    </rtept>
+    <rtept lat="37.495102000" lon="-122.483927000">
+      <time>2004-11-05T17:09:30Z</time>
+      <name>HMPILL03</name>
+    </rtept>
+  </rte>
 </gpx>

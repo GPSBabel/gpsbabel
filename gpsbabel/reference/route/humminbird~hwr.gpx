@@ -1,1106 +1,1101 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="42.401053392" minlon="-71.126604222" maxlat="42.468653151" maxlon="-71.102970477"/>
-<wpt lat="42.438878118" lon="-71.119274258">
-  <ele>0.000000</ele>
-  <time>2001-11-28T21:05:28Z</time>
-  <name>5066</name>
-  <cmt>5066</cmt>
-  <desc>5066</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.439224112" lon="-71.119687466">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:55Z</time>
-  <name>5067</name>
-  <cmt>5067</cmt>
-  <desc>5067</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.438918040" lon="-71.116148244">
-  <ele>0.000000</ele>
-  <time>2001-11-16T23:03:38Z</time>
-  <name>5096</name>
-  <cmt>5096</cmt>
-  <desc>5096</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.443901493" lon="-71.122040960">
-  <ele>0.000000</ele>
-  <time>2001-11-28T21:05:28Z</time>
-  <name>5142</name>
-  <cmt>5142</cmt>
-  <desc>5142</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.447301189" lon="-71.121448095">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:58Z</time>
-  <name>5156</name>
-  <cmt>5156</cmt>
-  <desc>5156</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.454871665" lon="-71.125095112">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:59Z</time>
-  <name>5224</name>
-  <cmt>5224</cmt>
-  <desc>5224</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.459082260" lon="-71.124987318">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:59Z</time>
-  <name>5229</name>
-  <cmt>5229</cmt>
-  <desc>5229</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.456980324" lon="-71.124475298">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:59Z</time>
-  <name>5237</name>
-  <cmt>5237</cmt>
-  <desc>5237</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.454399368" lon="-71.120989972">
-  <ele>0.000000</ele>
-  <time>2001-11-28T21:05:28Z</time>
-  <name>5254</name>
-  <cmt>5254</cmt>
-  <desc>5254</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.451439120" lon="-71.121744527">
-  <ele>0.000000</ele>
-  <time>2001-11-07T23:53:41Z</time>
-  <name>5258</name>
-  <cmt>5258</cmt>
-  <desc>5258</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.454406020" lon="-71.120657609">
-  <ele>0.000000</ele>
-  <time>2001-11-28T21:05:28Z</time>
-  <name>5264</name>
-  <cmt>5264</cmt>
-  <desc>5264</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.457758580" lon="-71.121043869">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:00Z</time>
-  <name>526708</name>
-  <cmt>526708</cmt>
-  <desc>526708</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.457086752" lon="-71.120316262">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:00Z</time>
-  <name>526750</name>
-  <cmt>526750</cmt>
-  <desc>526750</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.456594517" lon="-71.119678484">
-  <ele>0.000000</ele>
-  <time>2001-11-07T23:53:41Z</time>
-  <name>527614</name>
-  <cmt>527614</cmt>
-  <desc>527614</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.456255272" lon="-71.119355103">
-  <ele>0.000000</ele>
-  <time>2001-11-07T23:53:41Z</time>
-  <name>527631</name>
-  <cmt>527631</cmt>
-  <desc>527631</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.458151031" lon="-71.119130533">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:00Z</time>
-  <name>5278</name>
-  <cmt>5278</cmt>
-  <desc>5278</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.459374929" lon="-71.117693285">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:01Z</time>
-  <name>5289</name>
-  <cmt>5289</cmt>
-  <desc>5289</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.464183815" lon="-71.119831191">
-  <ele>0.000000</ele>
-  <time>2001-11-28T21:05:28Z</time>
-  <name>5374FIRE</name>
-  <cmt>5374FIRE</cmt>
-  <desc>5374FIRE</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.465647026" lon="-71.119400017">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:02Z</time>
-  <name>5376</name>
-  <cmt>5376</cmt>
-  <desc>5376</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.439017846" lon="-71.114459477">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:55Z</time>
-  <name>6006</name>
-  <cmt>6006</cmt>
-  <desc>6006</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.438592006" lon="-71.114800824">
-  <ele>0.000000</ele>
-  <time>2001-11-28T21:05:28Z</time>
-  <name>6006BLUE</name>
-  <cmt>6006BLUE</cmt>
-  <desc>6006BLUE</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.436755537" lon="-71.113219851">
-  <ele>0.000000</ele>
-  <time>2001-11-28T21:05:28Z</time>
-  <name>6014MEADOW</name>
-  <cmt>6014MEADOW</cmt>
-  <desc>6014MEADOW</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.441752469" lon="-71.113219851">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:55Z</time>
-  <name>6029</name>
-  <cmt>6029</cmt>
-  <desc>6029</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.436243179" lon="-71.109078780">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:05Z</time>
-  <name>6053</name>
-  <cmt>6053</cmt>
-  <desc>6053</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.439250726" lon="-71.107497808">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:57Z</time>
-  <name>6066</name>
-  <cmt>6066</cmt>
-  <desc>6066</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.439763060" lon="-71.107578653">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:57Z</time>
-  <name>6067</name>
-  <cmt>6067</cmt>
-  <desc>6067</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.434765967" lon="-71.105871921">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:57Z</time>
-  <name>6071</name>
-  <cmt>6071</cmt>
-  <desc>6071</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.433302030" lon="-71.106599528">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:56Z</time>
-  <name>6073</name>
-  <cmt>6073</cmt>
-  <desc>6073</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.437341084" lon="-71.104776020">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:57Z</time>
-  <name>6084</name>
-  <cmt>6084</cmt>
-  <desc>6084</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.442198248" lon="-71.110974151">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:55Z</time>
-  <name>6130</name>
-  <cmt>6130</cmt>
-  <desc>6130</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.442983343" lon="-71.111441257">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:58Z</time>
-  <name>6131</name>
-  <cmt>6131</cmt>
-  <desc>6131</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.444773057" lon="-71.108881159">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:05Z</time>
-  <name>6153</name>
-  <cmt>6153</cmt>
-  <desc>6153</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.443588791" lon="-71.106303096">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:05Z</time>
-  <name>6171</name>
-  <cmt>6171</cmt>
-  <desc>6171</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.447806803" lon="-71.106626476">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:04Z</time>
-  <name>6176</name>
-  <cmt>6176</cmt>
-  <desc>6176</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.448445467" lon="-71.106159371">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:04Z</time>
-  <name>6177</name>
-  <cmt>6177</cmt>
-  <desc>6177</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.453414852" lon="-71.106779184">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:55Z</time>
-  <name>6272</name>
-  <cmt>6272</cmt>
-  <desc>6272</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.453434809" lon="-71.107255272">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:56Z</time>
-  <name>6272</name>
-  <cmt>6272</cmt>
-  <desc>6272</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.458297368" lon="-71.106770201">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:04Z</time>
-  <name>6278</name>
-  <cmt>6278</cmt>
-  <desc>6278</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.451432468" lon="-71.105413798">
-  <ele>0.000000</ele>
-  <time>2001-11-16T23:03:38Z</time>
-  <name>6280</name>
-  <cmt>6280</cmt>
-  <desc>6280</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.453847243" lon="-71.105207194">
-  <ele>0.000000</ele>
-  <time>2001-11-16T23:03:38Z</time>
-  <name>6283</name>
-  <cmt>6283</cmt>
-  <desc>6283</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.459986868" lon="-71.106168354">
-  <ele>0.000000</ele>
-  <time>2001-11-16T23:03:38Z</time>
-  <name>6289</name>
-  <cmt>6289</cmt>
-  <desc>6289</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.457618894" lon="-71.105117366">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:04Z</time>
-  <name>6297</name>
-  <cmt>6297</cmt>
-  <desc>6297</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.467110202" lon="-71.113570180">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:02Z</time>
-  <name>6328</name>
-  <cmt>6328</cmt>
-  <desc>6328</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.464203768" lon="-71.109860284">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:03Z</time>
-  <name>6354</name>
-  <cmt>6354</cmt>
-  <desc>6354</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.466458428" lon="-71.110066888">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:02Z</time>
-  <name>635722</name>
-  <cmt>635722</cmt>
-  <desc>635722</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.466558190" lon="-71.109411144">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:02Z</time>
-  <name>635783</name>
-  <cmt>635783</cmt>
-  <desc>635783</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.463492103" lon="-71.107120530">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:03Z</time>
-  <name>6373</name>
-  <cmt>6373</cmt>
-  <desc>6373</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.401053392" lon="-71.110237562">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:56Z</time>
-  <name>6634</name>
-  <cmt>6634</cmt>
-  <desc>6634</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.432623283" lon="-71.106527665">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:56Z</time>
-  <name>6979</name>
-  <cmt>6979</cmt>
-  <desc>6979</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.431032858" lon="-71.107884068">
-  <ele>0.000000</ele>
-  <time>2001-11-16T23:03:38Z</time>
-  <name>6997</name>
-  <cmt>6997</cmt>
-  <desc>6997</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.465686931" lon="-71.107363066">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:03Z</time>
-  <name>BEAR HILL</name>
-  <cmt>BEAR HILL</cmt>
-  <desc>BEAR HILL</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.430953003" lon="-71.107623567">
-  <ele>0.000000</ele>
-  <time>2001-06-02T00:18:15Z</time>
-  <name>BELLEVUE</name>
-  <cmt>BELLEVUE</cmt>
-  <desc>BELLEVUE</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.438665198" lon="-71.114082200">
-  <ele>0.000000</ele>
-  <time>2001-11-28T21:05:28Z</time>
-  <name>6016</name>
-  <cmt>6016</cmt>
-  <desc>6016</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.456468132" lon="-71.124654954">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:59Z</time>
-  <name>5236BRIDGE</name>
-  <cmt>5236BRIDGE</cmt>
-  <desc>5236BRIDGE</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.465760091" lon="-71.119813226">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:01Z</time>
-  <name>5376BRIDGE</name>
-  <cmt>5376BRIDGE</cmt>
-  <desc>5376BRIDGE</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.442989996" lon="-71.105880904">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:05Z</time>
-  <name>6181CROSS</name>
-  <cmt>6181CROSS</cmt>
-  <desc>6181CROSS</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.435471307" lon="-71.109662662">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:05Z</time>
-  <name>6042CROSS</name>
-  <cmt>6042CROSS</cmt>
-  <desc>6042CROSS</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.458516872" lon="-71.103644187">
-  <ele>0.000000</ele>
-  <name>DARKHOLLPO</name>
-  <cmt>DARKHOLLPO</cmt>
-  <desc>DARKHOLLPO</desc>
-  <sym>Fish</sym>
-</wpt>
-<wpt lat="42.443109756" lon="-71.112671900">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:57Z</time>
-  <name>6121DEAD</name>
-  <cmt>6121DEAD</cmt>
-  <desc>6121DEAD</desc>
-  <sym>Danger</sym>
-</wpt>
-<wpt lat="42.449869134" lon="-71.119301206">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:59Z</time>
-  <name>5179DEAD</name>
-  <cmt>5179DEAD</cmt>
-  <desc>5179DEAD</desc>
-  <sym>Danger</sym>
-</wpt>
-<wpt lat="42.459627687" lon="-71.116525521">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:01Z</time>
-  <name>5299DEAD</name>
-  <cmt>5299DEAD</cmt>
-  <desc>5299DEAD</desc>
-  <sym>Danger</sym>
-</wpt>
-<wpt lat="42.465487404" lon="-71.119148498">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:02Z</time>
-  <name>5376DEAD</name>
-  <cmt>5376DEAD</cmt>
-  <desc>5376DEAD</desc>
-  <sym>Danger</sym>
-</wpt>
-<wpt lat="42.462773779" lon="-71.109986043">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:03Z</time>
-  <name>6353DEAD</name>
-  <cmt>6353DEAD</cmt>
-  <desc>6353DEAD</desc>
-  <sym>Danger</sym>
-</wpt>
-<wpt lat="42.446795571" lon="-71.108782348">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:04Z</time>
-  <name>6155DEAD</name>
-  <cmt>6155DEAD</cmt>
-  <desc>6155DEAD</desc>
-  <sym>Danger</sym>
-</wpt>
-<wpt lat="42.451206286" lon="-71.126604222">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:26:59Z</time>
-  <name>GATE14</name>
-  <cmt>GATE14</cmt>
-  <desc>GATE14</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.458496917" lon="-71.122076891">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:00Z</time>
-  <name>GATE16</name>
-  <cmt>GATE16</cmt>
-  <desc>GATE16</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.459374929" lon="-71.119238326">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:01Z</time>
-  <name>GATE17</name>
-  <cmt>GATE17</cmt>
-  <desc>GATE17</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.466352015" lon="-71.119238326">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:02Z</time>
-  <name>GATE19</name>
-  <cmt>GATE19</cmt>
-  <desc>GATE19</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.468653151" lon="-71.107695429">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:03Z</time>
-  <name>GATE21</name>
-  <cmt>GATE21</cmt>
-  <desc>GATE21</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.456720903" lon="-71.102970477">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:03Z</time>
-  <name>GATE24</name>
-  <cmt>GATE24</cmt>
-  <desc>GATE24</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.430846529" lon="-71.107686447">
-  <ele>0.000000</ele>
-  <time>2001-11-28T21:05:28Z</time>
-  <name>GATE5</name>
-  <cmt>GATE5</cmt>
-  <desc>GATE5</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.431239149" lon="-71.109240471">
-  <ele>0.000000</ele>
-  <time>2001-11-07T23:53:41Z</time>
-  <name>GATE6</name>
-  <cmt>GATE6</cmt>
-  <desc>GATE6</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.439503567" lon="-71.106554614">
-  <ele>0.000000</ele>
-  <time>2001-06-02T00:18:16Z</time>
-  <name>6077LOGS</name>
-  <cmt>6077LOGS</cmt>
-  <desc>6077LOGS</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.449762692" lon="-71.122319427">
-  <ele>0.000000</ele>
-  <time>2001-11-07T23:53:41Z</time>
-  <name>5148NANEPA</name>
-  <cmt>5148NANEPA</cmt>
-  <desc>5148NANEPA</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.457386083" lon="-71.119849157">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:00Z</time>
-  <name>5267OBSTAC</name>
-  <cmt>5267OBSTAC</cmt>
-  <desc>5267OBSTAC</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.434978901" lon="-71.109941129">
-  <ele>0.000000</ele>
-  <time>2001-11-07T23:53:41Z</time>
-  <name>PANTHRCAVE</name>
-  <cmt>PANTHRCAVE</cmt>
-  <desc>PANTHRCAVE</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.453255199" lon="-71.121214542">
-  <ele>0.000000</ele>
-  <time>2001-11-07T23:53:41Z</time>
-  <name>5252PURPLE</name>
-  <cmt>5252PURPLE</cmt>
-  <desc>5252PURPLE</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.457731973" lon="-71.117477698">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:01Z</time>
-  <name>5287WATER</name>
-  <cmt>5287WATER</cmt>
-  <desc>5287WATER</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.459275155" lon="-71.124574109">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:00Z</time>
-  <name>5239ROAD</name>
-  <cmt>5239ROAD</cmt>
-  <desc>5239ROAD</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.458782938" lon="-71.118986808">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:01Z</time>
-  <name>5278ROAD</name>
-  <cmt>5278ROAD</cmt>
-  <desc>5278ROAD</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.439995937" lon="-71.120927093">
-  <ele>0.000000</ele>
-  <time>2001-06-02T00:18:14Z</time>
-  <name>5058ROAD</name>
-  <cmt>5058ROAD</cmt>
-  <desc>5058ROAD</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.453414852" lon="-71.106779184">
-  <ele>0.000000</ele>
-  <time>2001-06-02T00:18:13Z</time>
-  <name>SHEEPFOLD</name>
-  <cmt>SHEEPFOLD</cmt>
-  <desc>SHEEPFOLD</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.455955937" lon="-71.107479842">
-  <ele>0.000000</ele>
-  <time>2001-06-02T03:27:04Z</time>
-  <name>SOAPBOX</name>
-  <cmt>SOAPBOX</cmt>
-  <desc>SOAPBOX</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.465913061" lon="-71.119328154">
-  <ele>0.000000</ele>
-  <time>2001-11-07T23:53:41Z</time>
-  <name>5376STREAM</name>
-  <cmt>5376STREAM</cmt>
-  <desc>5376STREAM</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.445358528" lon="-71.122849412">
-  <ele>0.000000</ele>
-  <time>2001-11-28T21:05:28Z</time>
-  <name>5144SUMMIT</name>
-  <cmt>5144SUMMIT</cmt>
-  <desc>5144SUMMIT</desc>
-  <sym>Normal</sym>
-</wpt>
-<wpt lat="42.441725856" lon="-71.121672665">
-  <ele>0.000000</ele>
-  <time>2001-06-02T00:18:16Z</time>
-  <name>5150TANK</name>
-  <cmt>5150TANK</cmt>
-  <desc>5150TANK</desc>
-  <sym>Normal</sym>
-</wpt>
-<rte>
-  <name>BELLEVUE</name>
-  <rtept lat="42.430953003" lon="-71.107623567">
-    <ele>0.000000</ele>
-    <time>2001-06-02T00:18:15Z</time>
-    <name>BELLEVUE</name>
-    <cmt>BELLEVUE</cmt>
-    <desc>BELLEVUE</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.431239149" lon="-71.109240471">
-    <ele>0.000000</ele>
-    <time>2001-11-07T23:53:41Z</time>
-    <name>GATE6</name>
-    <cmt>GATE6</cmt>
-    <desc>GATE6</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.434978901" lon="-71.109941129">
-    <ele>0.000000</ele>
-    <time>2001-11-07T23:53:41Z</time>
-    <name>PANTHRCAVE</name>
-    <cmt>PANTHRCAVE</cmt>
-    <desc>PANTHRCAVE</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.436755537" lon="-71.113219851">
-    <ele>0.000000</ele>
-    <time>2001-11-28T21:05:28Z</time>
-    <name>6014MEADOW</name>
-    <cmt>6014MEADOW</cmt>
-    <desc>6014MEADOW</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.439017846" lon="-71.114459477">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:26:55Z</time>
-    <name>6006</name>
-    <cmt>6006</cmt>
-    <desc>6006</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.438592006" lon="-71.114800824">
-    <ele>0.000000</ele>
-    <time>2001-11-28T21:05:28Z</time>
-    <name>6006BLUE</name>
-    <cmt>6006BLUE</cmt>
-    <desc>6006BLUE</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.438918040" lon="-71.116148244">
-    <ele>0.000000</ele>
-    <time>2001-11-16T23:03:38Z</time>
-    <name>5096</name>
-    <cmt>5096</cmt>
-    <desc>5096</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.438878118" lon="-71.119274258">
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="42.401053392" minlon="-71.126604222" maxlat="42.468653151" maxlon="-71.102970477"/>
+  <wpt lat="42.438878118" lon="-71.119274258">
     <ele>0.000000</ele>
     <time>2001-11-28T21:05:28Z</time>
     <name>5066</name>
     <cmt>5066</cmt>
     <desc>5066</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.439224112" lon="-71.119687466">
+  </wpt>
+  <wpt lat="42.439224112" lon="-71.119687466">
     <ele>0.000000</ele>
     <time>2001-06-02T03:26:55Z</time>
     <name>5067</name>
     <cmt>5067</cmt>
     <desc>5067</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.439995937" lon="-71.120927093">
+  </wpt>
+  <wpt lat="42.438918040" lon="-71.116148244">
     <ele>0.000000</ele>
-    <time>2001-06-02T00:18:14Z</time>
-    <name>5058ROAD</name>
-    <cmt>5058ROAD</cmt>
-    <desc>5058ROAD</desc>
+    <time>2001-11-16T23:03:38Z</time>
+    <name>5096</name>
+    <cmt>5096</cmt>
+    <desc>5096</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.441725856" lon="-71.121672665">
-    <ele>0.000000</ele>
-    <time>2001-06-02T00:18:16Z</time>
-    <name>5150TANK</name>
-    <cmt>5150TANK</cmt>
-    <desc>5150TANK</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.443901493" lon="-71.122040960">
+  </wpt>
+  <wpt lat="42.443901493" lon="-71.122040960">
     <ele>0.000000</ele>
     <time>2001-11-28T21:05:28Z</time>
     <name>5142</name>
     <cmt>5142</cmt>
     <desc>5142</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.445358528" lon="-71.122849412">
-    <ele>0.000000</ele>
-    <time>2001-11-28T21:05:28Z</time>
-    <name>5144SUMMIT</name>
-    <cmt>5144SUMMIT</cmt>
-    <desc>5144SUMMIT</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.447301189" lon="-71.121448095">
+  </wpt>
+  <wpt lat="42.447301189" lon="-71.121448095">
     <ele>0.000000</ele>
     <time>2001-06-02T03:26:58Z</time>
     <name>5156</name>
     <cmt>5156</cmt>
     <desc>5156</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.449762692" lon="-71.122319427">
+  </wpt>
+  <wpt lat="42.454871665" lon="-71.125095112">
     <ele>0.000000</ele>
-    <time>2001-11-07T23:53:41Z</time>
-    <name>5148NANEPA</name>
-    <cmt>5148NANEPA</cmt>
-    <desc>5148NANEPA</desc>
+    <time>2001-06-02T03:26:59Z</time>
+    <name>5224</name>
+    <cmt>5224</cmt>
+    <desc>5224</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.451439120" lon="-71.121744527">
+  </wpt>
+  <wpt lat="42.459082260" lon="-71.124987318">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:59Z</time>
+    <name>5229</name>
+    <cmt>5229</cmt>
+    <desc>5229</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.456980324" lon="-71.124475298">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:59Z</time>
+    <name>5237</name>
+    <cmt>5237</cmt>
+    <desc>5237</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.454399368" lon="-71.120989972">
+    <ele>0.000000</ele>
+    <time>2001-11-28T21:05:28Z</time>
+    <name>5254</name>
+    <cmt>5254</cmt>
+    <desc>5254</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.451439120" lon="-71.121744527">
     <ele>0.000000</ele>
     <time>2001-11-07T23:53:41Z</time>
     <name>5258</name>
     <cmt>5258</cmt>
     <desc>5258</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.453255199" lon="-71.121214542">
+  </wpt>
+  <wpt lat="42.454406020" lon="-71.120657609">
     <ele>0.000000</ele>
-    <time>2001-11-07T23:53:41Z</time>
-    <name>5252PURPLE</name>
-    <cmt>5252PURPLE</cmt>
-    <desc>5252PURPLE</desc>
+    <time>2001-11-28T21:05:28Z</time>
+    <name>5264</name>
+    <cmt>5264</cmt>
+    <desc>5264</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.456255272" lon="-71.119355103">
+  </wpt>
+  <wpt lat="42.457758580" lon="-71.121043869">
     <ele>0.000000</ele>
-    <time>2001-11-07T23:53:41Z</time>
-    <name>527631</name>
-    <cmt>527631</cmt>
-    <desc>527631</desc>
+    <time>2001-06-02T03:27:00Z</time>
+    <name>526708</name>
+    <cmt>526708</cmt>
+    <desc>526708</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.456594517" lon="-71.119678484">
+  </wpt>
+  <wpt lat="42.457086752" lon="-71.120316262">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:00Z</time>
+    <name>526750</name>
+    <cmt>526750</cmt>
+    <desc>526750</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.456594517" lon="-71.119678484">
     <ele>0.000000</ele>
     <time>2001-11-07T23:53:41Z</time>
     <name>527614</name>
     <cmt>527614</cmt>
     <desc>527614</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.457386083" lon="-71.119849157">
+  </wpt>
+  <wpt lat="42.456255272" lon="-71.119355103">
     <ele>0.000000</ele>
-    <time>2001-06-02T03:27:00Z</time>
-    <name>5267OBSTAC</name>
-    <cmt>5267OBSTAC</cmt>
-    <desc>5267OBSTAC</desc>
+    <time>2001-11-07T23:53:41Z</time>
+    <name>527631</name>
+    <cmt>527631</cmt>
+    <desc>527631</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.458151031" lon="-71.119130533">
+  </wpt>
+  <wpt lat="42.458151031" lon="-71.119130533">
     <ele>0.000000</ele>
     <time>2001-06-02T03:27:00Z</time>
     <name>5278</name>
     <cmt>5278</cmt>
     <desc>5278</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.459374929" lon="-71.117693285">
+  </wpt>
+  <wpt lat="42.459374929" lon="-71.117693285">
     <ele>0.000000</ele>
     <time>2001-06-02T03:27:01Z</time>
     <name>5289</name>
     <cmt>5289</cmt>
     <desc>5289</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.464183815" lon="-71.119831191">
+  </wpt>
+  <wpt lat="42.464183815" lon="-71.119831191">
     <ele>0.000000</ele>
     <time>2001-11-28T21:05:28Z</time>
     <name>5374FIRE</name>
     <cmt>5374FIRE</cmt>
     <desc>5374FIRE</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.465647026" lon="-71.119400017">
+  </wpt>
+  <wpt lat="42.465647026" lon="-71.119400017">
     <ele>0.000000</ele>
     <time>2001-06-02T03:27:02Z</time>
     <name>5376</name>
     <cmt>5376</cmt>
     <desc>5376</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.465913061" lon="-71.119328154">
-    <ele>0.000000</ele>
-    <time>2001-11-07T23:53:41Z</time>
-    <name>5376STREAM</name>
-    <cmt>5376STREAM</cmt>
-    <desc>5376STREAM</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.467110202" lon="-71.113570180">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:27:02Z</time>
-    <name>6328</name>
-    <cmt>6328</cmt>
-    <desc>6328</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.466458428" lon="-71.110066888">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:27:02Z</time>
-    <name>635722</name>
-    <cmt>635722</cmt>
-    <desc>635722</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.466558190" lon="-71.109411144">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:27:02Z</time>
-    <name>635783</name>
-    <cmt>635783</cmt>
-    <desc>635783</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.463492103" lon="-71.107120530">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:27:03Z</time>
-    <name>6373</name>
-    <cmt>6373</cmt>
-    <desc>6373</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.465686931" lon="-71.107363066">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:27:03Z</time>
-    <name>BEAR HILL</name>
-    <cmt>BEAR HILL</cmt>
-    <desc>BEAR HILL</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.459986868" lon="-71.106168354">
-    <ele>0.000000</ele>
-    <time>2001-11-16T23:03:38Z</time>
-    <name>6289</name>
-    <cmt>6289</cmt>
-    <desc>6289</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.457618894" lon="-71.105117366">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:27:04Z</time>
-    <name>6297</name>
-    <cmt>6297</cmt>
-    <desc>6297</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.453847243" lon="-71.105207194">
-    <ele>0.000000</ele>
-    <time>2001-11-16T23:03:38Z</time>
-    <name>6283</name>
-    <cmt>6283</cmt>
-    <desc>6283</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.451432468" lon="-71.105413798">
-    <ele>0.000000</ele>
-    <time>2001-11-16T23:03:38Z</time>
-    <name>6280</name>
-    <cmt>6280</cmt>
-    <desc>6280</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.448445467" lon="-71.106159371">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:27:04Z</time>
-    <name>6177</name>
-    <cmt>6177</cmt>
-    <desc>6177</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.447806803" lon="-71.106626476">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:27:04Z</time>
-    <name>6176</name>
-    <cmt>6176</cmt>
-    <desc>6176</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.444773057" lon="-71.108881159">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:27:05Z</time>
-    <name>6153</name>
-    <cmt>6153</cmt>
-    <desc>6153</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.443588791" lon="-71.106303096">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:27:05Z</time>
-    <name>6171</name>
-    <cmt>6171</cmt>
-    <desc>6171</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.442983343" lon="-71.111441257">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:26:58Z</time>
-    <name>6131</name>
-    <cmt>6131</cmt>
-    <desc>6131</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.442198248" lon="-71.110974151">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:26:55Z</time>
-    <name>6130</name>
-    <cmt>6130</cmt>
-    <desc>6130</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.441752469" lon="-71.113219851">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:26:55Z</time>
-    <name>6029</name>
-    <cmt>6029</cmt>
-    <desc>6029</desc>
-    <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.439017846" lon="-71.114459477">
+  </wpt>
+  <wpt lat="42.439017846" lon="-71.114459477">
     <ele>0.000000</ele>
     <time>2001-06-02T03:26:55Z</time>
     <name>6006</name>
     <cmt>6006</cmt>
     <desc>6006</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.436755537" lon="-71.113219851">
+  </wpt>
+  <wpt lat="42.438592006" lon="-71.114800824">
+    <ele>0.000000</ele>
+    <time>2001-11-28T21:05:28Z</time>
+    <name>6006BLUE</name>
+    <cmt>6006BLUE</cmt>
+    <desc>6006BLUE</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.436755537" lon="-71.113219851">
     <ele>0.000000</ele>
     <time>2001-11-28T21:05:28Z</time>
     <name>6014MEADOW</name>
     <cmt>6014MEADOW</cmt>
     <desc>6014MEADOW</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.434978901" lon="-71.109941129">
+  </wpt>
+  <wpt lat="42.441752469" lon="-71.113219851">
     <ele>0.000000</ele>
-    <time>2001-11-07T23:53:41Z</time>
-    <name>PANTHRCAVE</name>
-    <cmt>PANTHRCAVE</cmt>
-    <desc>PANTHRCAVE</desc>
+    <time>2001-06-02T03:26:55Z</time>
+    <name>6029</name>
+    <cmt>6029</cmt>
+    <desc>6029</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.431239149" lon="-71.109240471">
+  </wpt>
+  <wpt lat="42.436243179" lon="-71.109078780">
     <ele>0.000000</ele>
-    <time>2001-11-07T23:53:41Z</time>
-    <name>GATE6</name>
-    <cmt>GATE6</cmt>
-    <desc>GATE6</desc>
+    <time>2001-06-02T03:27:05Z</time>
+    <name>6053</name>
+    <cmt>6053</cmt>
+    <desc>6053</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.430953003" lon="-71.107623567">
+  </wpt>
+  <wpt lat="42.439250726" lon="-71.107497808">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:57Z</time>
+    <name>6066</name>
+    <cmt>6066</cmt>
+    <desc>6066</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.439763060" lon="-71.107578653">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:57Z</time>
+    <name>6067</name>
+    <cmt>6067</cmt>
+    <desc>6067</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.434765967" lon="-71.105871921">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:57Z</time>
+    <name>6071</name>
+    <cmt>6071</cmt>
+    <desc>6071</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.433302030" lon="-71.106599528">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:56Z</time>
+    <name>6073</name>
+    <cmt>6073</cmt>
+    <desc>6073</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.437341084" lon="-71.104776020">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:57Z</time>
+    <name>6084</name>
+    <cmt>6084</cmt>
+    <desc>6084</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.442198248" lon="-71.110974151">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:55Z</time>
+    <name>6130</name>
+    <cmt>6130</cmt>
+    <desc>6130</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.442983343" lon="-71.111441257">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:58Z</time>
+    <name>6131</name>
+    <cmt>6131</cmt>
+    <desc>6131</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.444773057" lon="-71.108881159">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:05Z</time>
+    <name>6153</name>
+    <cmt>6153</cmt>
+    <desc>6153</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.443588791" lon="-71.106303096">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:05Z</time>
+    <name>6171</name>
+    <cmt>6171</cmt>
+    <desc>6171</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.447806803" lon="-71.106626476">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:04Z</time>
+    <name>6176</name>
+    <cmt>6176</cmt>
+    <desc>6176</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.448445467" lon="-71.106159371">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:04Z</time>
+    <name>6177</name>
+    <cmt>6177</cmt>
+    <desc>6177</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.453414852" lon="-71.106779184">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:55Z</time>
+    <name>6272</name>
+    <cmt>6272</cmt>
+    <desc>6272</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.453434809" lon="-71.107255272">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:56Z</time>
+    <name>6272</name>
+    <cmt>6272</cmt>
+    <desc>6272</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.458297368" lon="-71.106770201">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:04Z</time>
+    <name>6278</name>
+    <cmt>6278</cmt>
+    <desc>6278</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.451432468" lon="-71.105413798">
+    <ele>0.000000</ele>
+    <time>2001-11-16T23:03:38Z</time>
+    <name>6280</name>
+    <cmt>6280</cmt>
+    <desc>6280</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.453847243" lon="-71.105207194">
+    <ele>0.000000</ele>
+    <time>2001-11-16T23:03:38Z</time>
+    <name>6283</name>
+    <cmt>6283</cmt>
+    <desc>6283</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.459986868" lon="-71.106168354">
+    <ele>0.000000</ele>
+    <time>2001-11-16T23:03:38Z</time>
+    <name>6289</name>
+    <cmt>6289</cmt>
+    <desc>6289</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.457618894" lon="-71.105117366">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:04Z</time>
+    <name>6297</name>
+    <cmt>6297</cmt>
+    <desc>6297</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.467110202" lon="-71.113570180">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:02Z</time>
+    <name>6328</name>
+    <cmt>6328</cmt>
+    <desc>6328</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.464203768" lon="-71.109860284">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:03Z</time>
+    <name>6354</name>
+    <cmt>6354</cmt>
+    <desc>6354</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.466458428" lon="-71.110066888">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:02Z</time>
+    <name>635722</name>
+    <cmt>635722</cmt>
+    <desc>635722</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.466558190" lon="-71.109411144">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:02Z</time>
+    <name>635783</name>
+    <cmt>635783</cmt>
+    <desc>635783</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.463492103" lon="-71.107120530">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:03Z</time>
+    <name>6373</name>
+    <cmt>6373</cmt>
+    <desc>6373</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.401053392" lon="-71.110237562">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:56Z</time>
+    <name>6634</name>
+    <cmt>6634</cmt>
+    <desc>6634</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.432623283" lon="-71.106527665">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:56Z</time>
+    <name>6979</name>
+    <cmt>6979</cmt>
+    <desc>6979</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.431032858" lon="-71.107884068">
+    <ele>0.000000</ele>
+    <time>2001-11-16T23:03:38Z</time>
+    <name>6997</name>
+    <cmt>6997</cmt>
+    <desc>6997</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.465686931" lon="-71.107363066">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:03Z</time>
+    <name>BEAR HILL</name>
+    <cmt>BEAR HILL</cmt>
+    <desc>BEAR HILL</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.430953003" lon="-71.107623567">
     <ele>0.000000</ele>
     <time>2001-06-02T00:18:15Z</time>
     <name>BELLEVUE</name>
     <cmt>BELLEVUE</cmt>
     <desc>BELLEVUE</desc>
     <sym>Normal</sym>
-  </rtept>
-</rte>
-<rte>
-  <name>Route2</name>
-  <rtept lat="42.445358528" lon="-71.122849412">
+  </wpt>
+  <wpt lat="42.438665198" lon="-71.114082200">
     <ele>0.000000</ele>
     <time>2001-11-28T21:05:28Z</time>
-    <name>5144SUMMIT</name>
-    <cmt>5144SUMMIT</cmt>
-    <desc>5144SUMMIT</desc>
+    <name>6016</name>
+    <cmt>6016</cmt>
+    <desc>6016</desc>
     <sym>Normal</sym>
-  </rtept>
-  <rtept lat="42.441725856" lon="-71.121672665">
-    <ele>0.000000</ele>
-    <time>2001-06-02T00:18:16Z</time>
-    <name>5150TANK</name>
-    <cmt>5150TANK</cmt>
-    <desc>5150TANK</desc>
-    <sym>Normal</sym>
-  </rtept>
-</rte>
-<rte>
-  <name>Route3</name>
-  <rtept lat="42.449869134" lon="-71.119301206">
-    <ele>0.000000</ele>
-    <time>2001-06-02T03:26:59Z</time>
-    <name>5179DEAD</name>
-    <cmt>5179DEAD</cmt>
-    <desc>5179DEAD</desc>
-    <sym>Danger</sym>
-  </rtept>
-  <rtept lat="42.456468132" lon="-71.124654954">
+  </wpt>
+  <wpt lat="42.456468132" lon="-71.124654954">
     <ele>0.000000</ele>
     <time>2001-06-02T03:26:59Z</time>
     <name>5236BRIDGE</name>
     <cmt>5236BRIDGE</cmt>
     <desc>5236BRIDGE</desc>
     <sym>Normal</sym>
-  </rtept>
-</rte>
+  </wpt>
+  <wpt lat="42.465760091" lon="-71.119813226">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:01Z</time>
+    <name>5376BRIDGE</name>
+    <cmt>5376BRIDGE</cmt>
+    <desc>5376BRIDGE</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.442989996" lon="-71.105880904">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:05Z</time>
+    <name>6181CROSS</name>
+    <cmt>6181CROSS</cmt>
+    <desc>6181CROSS</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.435471307" lon="-71.109662662">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:05Z</time>
+    <name>6042CROSS</name>
+    <cmt>6042CROSS</cmt>
+    <desc>6042CROSS</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.458516872" lon="-71.103644187">
+    <ele>0.000000</ele>
+    <name>DARKHOLLPO</name>
+    <cmt>DARKHOLLPO</cmt>
+    <desc>DARKHOLLPO</desc>
+    <sym>Fish</sym>
+  </wpt>
+  <wpt lat="42.443109756" lon="-71.112671900">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:57Z</time>
+    <name>6121DEAD</name>
+    <cmt>6121DEAD</cmt>
+    <desc>6121DEAD</desc>
+    <sym>Danger</sym>
+  </wpt>
+  <wpt lat="42.449869134" lon="-71.119301206">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:59Z</time>
+    <name>5179DEAD</name>
+    <cmt>5179DEAD</cmt>
+    <desc>5179DEAD</desc>
+    <sym>Danger</sym>
+  </wpt>
+  <wpt lat="42.459627687" lon="-71.116525521">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:01Z</time>
+    <name>5299DEAD</name>
+    <cmt>5299DEAD</cmt>
+    <desc>5299DEAD</desc>
+    <sym>Danger</sym>
+  </wpt>
+  <wpt lat="42.465487404" lon="-71.119148498">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:02Z</time>
+    <name>5376DEAD</name>
+    <cmt>5376DEAD</cmt>
+    <desc>5376DEAD</desc>
+    <sym>Danger</sym>
+  </wpt>
+  <wpt lat="42.462773779" lon="-71.109986043">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:03Z</time>
+    <name>6353DEAD</name>
+    <cmt>6353DEAD</cmt>
+    <desc>6353DEAD</desc>
+    <sym>Danger</sym>
+  </wpt>
+  <wpt lat="42.446795571" lon="-71.108782348">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:04Z</time>
+    <name>6155DEAD</name>
+    <cmt>6155DEAD</cmt>
+    <desc>6155DEAD</desc>
+    <sym>Danger</sym>
+  </wpt>
+  <wpt lat="42.451206286" lon="-71.126604222">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:26:59Z</time>
+    <name>GATE14</name>
+    <cmt>GATE14</cmt>
+    <desc>GATE14</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.458496917" lon="-71.122076891">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:00Z</time>
+    <name>GATE16</name>
+    <cmt>GATE16</cmt>
+    <desc>GATE16</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.459374929" lon="-71.119238326">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:01Z</time>
+    <name>GATE17</name>
+    <cmt>GATE17</cmt>
+    <desc>GATE17</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.466352015" lon="-71.119238326">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:02Z</time>
+    <name>GATE19</name>
+    <cmt>GATE19</cmt>
+    <desc>GATE19</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.468653151" lon="-71.107695429">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:03Z</time>
+    <name>GATE21</name>
+    <cmt>GATE21</cmt>
+    <desc>GATE21</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.456720903" lon="-71.102970477">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:03Z</time>
+    <name>GATE24</name>
+    <cmt>GATE24</cmt>
+    <desc>GATE24</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.430846529" lon="-71.107686447">
+    <ele>0.000000</ele>
+    <time>2001-11-28T21:05:28Z</time>
+    <name>GATE5</name>
+    <cmt>GATE5</cmt>
+    <desc>GATE5</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.431239149" lon="-71.109240471">
+    <ele>0.000000</ele>
+    <time>2001-11-07T23:53:41Z</time>
+    <name>GATE6</name>
+    <cmt>GATE6</cmt>
+    <desc>GATE6</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.439503567" lon="-71.106554614">
+    <ele>0.000000</ele>
+    <time>2001-06-02T00:18:16Z</time>
+    <name>6077LOGS</name>
+    <cmt>6077LOGS</cmt>
+    <desc>6077LOGS</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.449762692" lon="-71.122319427">
+    <ele>0.000000</ele>
+    <time>2001-11-07T23:53:41Z</time>
+    <name>5148NANEPA</name>
+    <cmt>5148NANEPA</cmt>
+    <desc>5148NANEPA</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.457386083" lon="-71.119849157">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:00Z</time>
+    <name>5267OBSTAC</name>
+    <cmt>5267OBSTAC</cmt>
+    <desc>5267OBSTAC</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.434978901" lon="-71.109941129">
+    <ele>0.000000</ele>
+    <time>2001-11-07T23:53:41Z</time>
+    <name>PANTHRCAVE</name>
+    <cmt>PANTHRCAVE</cmt>
+    <desc>PANTHRCAVE</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.453255199" lon="-71.121214542">
+    <ele>0.000000</ele>
+    <time>2001-11-07T23:53:41Z</time>
+    <name>5252PURPLE</name>
+    <cmt>5252PURPLE</cmt>
+    <desc>5252PURPLE</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.457731973" lon="-71.117477698">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:01Z</time>
+    <name>5287WATER</name>
+    <cmt>5287WATER</cmt>
+    <desc>5287WATER</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.459275155" lon="-71.124574109">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:00Z</time>
+    <name>5239ROAD</name>
+    <cmt>5239ROAD</cmt>
+    <desc>5239ROAD</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.458782938" lon="-71.118986808">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:01Z</time>
+    <name>5278ROAD</name>
+    <cmt>5278ROAD</cmt>
+    <desc>5278ROAD</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.439995937" lon="-71.120927093">
+    <ele>0.000000</ele>
+    <time>2001-06-02T00:18:14Z</time>
+    <name>5058ROAD</name>
+    <cmt>5058ROAD</cmt>
+    <desc>5058ROAD</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.453414852" lon="-71.106779184">
+    <ele>0.000000</ele>
+    <time>2001-06-02T00:18:13Z</time>
+    <name>SHEEPFOLD</name>
+    <cmt>SHEEPFOLD</cmt>
+    <desc>SHEEPFOLD</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.455955937" lon="-71.107479842">
+    <ele>0.000000</ele>
+    <time>2001-06-02T03:27:04Z</time>
+    <name>SOAPBOX</name>
+    <cmt>SOAPBOX</cmt>
+    <desc>SOAPBOX</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.465913061" lon="-71.119328154">
+    <ele>0.000000</ele>
+    <time>2001-11-07T23:53:41Z</time>
+    <name>5376STREAM</name>
+    <cmt>5376STREAM</cmt>
+    <desc>5376STREAM</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.445358528" lon="-71.122849412">
+    <ele>0.000000</ele>
+    <time>2001-11-28T21:05:28Z</time>
+    <name>5144SUMMIT</name>
+    <cmt>5144SUMMIT</cmt>
+    <desc>5144SUMMIT</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="42.441725856" lon="-71.121672665">
+    <ele>0.000000</ele>
+    <time>2001-06-02T00:18:16Z</time>
+    <name>5150TANK</name>
+    <cmt>5150TANK</cmt>
+    <desc>5150TANK</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <rte>
+    <name>BELLEVUE</name>
+    <rtept lat="42.430953003" lon="-71.107623567">
+      <ele>0.000000</ele>
+      <time>2001-06-02T00:18:15Z</time>
+      <name>BELLEVUE</name>
+      <cmt>BELLEVUE</cmt>
+      <desc>BELLEVUE</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.431239149" lon="-71.109240471">
+      <ele>0.000000</ele>
+      <time>2001-11-07T23:53:41Z</time>
+      <name>GATE6</name>
+      <cmt>GATE6</cmt>
+      <desc>GATE6</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.434978901" lon="-71.109941129">
+      <ele>0.000000</ele>
+      <time>2001-11-07T23:53:41Z</time>
+      <name>PANTHRCAVE</name>
+      <cmt>PANTHRCAVE</cmt>
+      <desc>PANTHRCAVE</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.436755537" lon="-71.113219851">
+      <ele>0.000000</ele>
+      <time>2001-11-28T21:05:28Z</time>
+      <name>6014MEADOW</name>
+      <cmt>6014MEADOW</cmt>
+      <desc>6014MEADOW</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.439017846" lon="-71.114459477">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:26:55Z</time>
+      <name>6006</name>
+      <cmt>6006</cmt>
+      <desc>6006</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.438592006" lon="-71.114800824">
+      <ele>0.000000</ele>
+      <time>2001-11-28T21:05:28Z</time>
+      <name>6006BLUE</name>
+      <cmt>6006BLUE</cmt>
+      <desc>6006BLUE</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.438918040" lon="-71.116148244">
+      <ele>0.000000</ele>
+      <time>2001-11-16T23:03:38Z</time>
+      <name>5096</name>
+      <cmt>5096</cmt>
+      <desc>5096</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.438878118" lon="-71.119274258">
+      <ele>0.000000</ele>
+      <time>2001-11-28T21:05:28Z</time>
+      <name>5066</name>
+      <cmt>5066</cmt>
+      <desc>5066</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.439224112" lon="-71.119687466">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:26:55Z</time>
+      <name>5067</name>
+      <cmt>5067</cmt>
+      <desc>5067</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.439995937" lon="-71.120927093">
+      <ele>0.000000</ele>
+      <time>2001-06-02T00:18:14Z</time>
+      <name>5058ROAD</name>
+      <cmt>5058ROAD</cmt>
+      <desc>5058ROAD</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.441725856" lon="-71.121672665">
+      <ele>0.000000</ele>
+      <time>2001-06-02T00:18:16Z</time>
+      <name>5150TANK</name>
+      <cmt>5150TANK</cmt>
+      <desc>5150TANK</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.443901493" lon="-71.122040960">
+      <ele>0.000000</ele>
+      <time>2001-11-28T21:05:28Z</time>
+      <name>5142</name>
+      <cmt>5142</cmt>
+      <desc>5142</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.445358528" lon="-71.122849412">
+      <ele>0.000000</ele>
+      <time>2001-11-28T21:05:28Z</time>
+      <name>5144SUMMIT</name>
+      <cmt>5144SUMMIT</cmt>
+      <desc>5144SUMMIT</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.447301189" lon="-71.121448095">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:26:58Z</time>
+      <name>5156</name>
+      <cmt>5156</cmt>
+      <desc>5156</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.449762692" lon="-71.122319427">
+      <ele>0.000000</ele>
+      <time>2001-11-07T23:53:41Z</time>
+      <name>5148NANEPA</name>
+      <cmt>5148NANEPA</cmt>
+      <desc>5148NANEPA</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.451439120" lon="-71.121744527">
+      <ele>0.000000</ele>
+      <time>2001-11-07T23:53:41Z</time>
+      <name>5258</name>
+      <cmt>5258</cmt>
+      <desc>5258</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.453255199" lon="-71.121214542">
+      <ele>0.000000</ele>
+      <time>2001-11-07T23:53:41Z</time>
+      <name>5252PURPLE</name>
+      <cmt>5252PURPLE</cmt>
+      <desc>5252PURPLE</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.456255272" lon="-71.119355103">
+      <ele>0.000000</ele>
+      <time>2001-11-07T23:53:41Z</time>
+      <name>527631</name>
+      <cmt>527631</cmt>
+      <desc>527631</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.456594517" lon="-71.119678484">
+      <ele>0.000000</ele>
+      <time>2001-11-07T23:53:41Z</time>
+      <name>527614</name>
+      <cmt>527614</cmt>
+      <desc>527614</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.457386083" lon="-71.119849157">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:00Z</time>
+      <name>5267OBSTAC</name>
+      <cmt>5267OBSTAC</cmt>
+      <desc>5267OBSTAC</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.458151031" lon="-71.119130533">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:00Z</time>
+      <name>5278</name>
+      <cmt>5278</cmt>
+      <desc>5278</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.459374929" lon="-71.117693285">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:01Z</time>
+      <name>5289</name>
+      <cmt>5289</cmt>
+      <desc>5289</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.464183815" lon="-71.119831191">
+      <ele>0.000000</ele>
+      <time>2001-11-28T21:05:28Z</time>
+      <name>5374FIRE</name>
+      <cmt>5374FIRE</cmt>
+      <desc>5374FIRE</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.465647026" lon="-71.119400017">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:02Z</time>
+      <name>5376</name>
+      <cmt>5376</cmt>
+      <desc>5376</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.465913061" lon="-71.119328154">
+      <ele>0.000000</ele>
+      <time>2001-11-07T23:53:41Z</time>
+      <name>5376STREAM</name>
+      <cmt>5376STREAM</cmt>
+      <desc>5376STREAM</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.467110202" lon="-71.113570180">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:02Z</time>
+      <name>6328</name>
+      <cmt>6328</cmt>
+      <desc>6328</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.466458428" lon="-71.110066888">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:02Z</time>
+      <name>635722</name>
+      <cmt>635722</cmt>
+      <desc>635722</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.466558190" lon="-71.109411144">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:02Z</time>
+      <name>635783</name>
+      <cmt>635783</cmt>
+      <desc>635783</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.463492103" lon="-71.107120530">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:03Z</time>
+      <name>6373</name>
+      <cmt>6373</cmt>
+      <desc>6373</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.465686931" lon="-71.107363066">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:03Z</time>
+      <name>BEAR HILL</name>
+      <cmt>BEAR HILL</cmt>
+      <desc>BEAR HILL</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.459986868" lon="-71.106168354">
+      <ele>0.000000</ele>
+      <time>2001-11-16T23:03:38Z</time>
+      <name>6289</name>
+      <cmt>6289</cmt>
+      <desc>6289</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.457618894" lon="-71.105117366">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:04Z</time>
+      <name>6297</name>
+      <cmt>6297</cmt>
+      <desc>6297</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.453847243" lon="-71.105207194">
+      <ele>0.000000</ele>
+      <time>2001-11-16T23:03:38Z</time>
+      <name>6283</name>
+      <cmt>6283</cmt>
+      <desc>6283</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.451432468" lon="-71.105413798">
+      <ele>0.000000</ele>
+      <time>2001-11-16T23:03:38Z</time>
+      <name>6280</name>
+      <cmt>6280</cmt>
+      <desc>6280</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.448445467" lon="-71.106159371">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:04Z</time>
+      <name>6177</name>
+      <cmt>6177</cmt>
+      <desc>6177</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.447806803" lon="-71.106626476">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:04Z</time>
+      <name>6176</name>
+      <cmt>6176</cmt>
+      <desc>6176</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.444773057" lon="-71.108881159">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:05Z</time>
+      <name>6153</name>
+      <cmt>6153</cmt>
+      <desc>6153</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.443588791" lon="-71.106303096">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:27:05Z</time>
+      <name>6171</name>
+      <cmt>6171</cmt>
+      <desc>6171</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.442983343" lon="-71.111441257">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:26:58Z</time>
+      <name>6131</name>
+      <cmt>6131</cmt>
+      <desc>6131</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.442198248" lon="-71.110974151">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:26:55Z</time>
+      <name>6130</name>
+      <cmt>6130</cmt>
+      <desc>6130</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.441752469" lon="-71.113219851">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:26:55Z</time>
+      <name>6029</name>
+      <cmt>6029</cmt>
+      <desc>6029</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.439017846" lon="-71.114459477">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:26:55Z</time>
+      <name>6006</name>
+      <cmt>6006</cmt>
+      <desc>6006</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.436755537" lon="-71.113219851">
+      <ele>0.000000</ele>
+      <time>2001-11-28T21:05:28Z</time>
+      <name>6014MEADOW</name>
+      <cmt>6014MEADOW</cmt>
+      <desc>6014MEADOW</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.434978901" lon="-71.109941129">
+      <ele>0.000000</ele>
+      <time>2001-11-07T23:53:41Z</time>
+      <name>PANTHRCAVE</name>
+      <cmt>PANTHRCAVE</cmt>
+      <desc>PANTHRCAVE</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.431239149" lon="-71.109240471">
+      <ele>0.000000</ele>
+      <time>2001-11-07T23:53:41Z</time>
+      <name>GATE6</name>
+      <cmt>GATE6</cmt>
+      <desc>GATE6</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.430953003" lon="-71.107623567">
+      <ele>0.000000</ele>
+      <time>2001-06-02T00:18:15Z</time>
+      <name>BELLEVUE</name>
+      <cmt>BELLEVUE</cmt>
+      <desc>BELLEVUE</desc>
+      <sym>Normal</sym>
+    </rtept>
+  </rte>
+  <rte>
+    <name>Route2</name>
+    <rtept lat="42.445358528" lon="-71.122849412">
+      <ele>0.000000</ele>
+      <time>2001-11-28T21:05:28Z</time>
+      <name>5144SUMMIT</name>
+      <cmt>5144SUMMIT</cmt>
+      <desc>5144SUMMIT</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="42.441725856" lon="-71.121672665">
+      <ele>0.000000</ele>
+      <time>2001-06-02T00:18:16Z</time>
+      <name>5150TANK</name>
+      <cmt>5150TANK</cmt>
+      <desc>5150TANK</desc>
+      <sym>Normal</sym>
+    </rtept>
+  </rte>
+  <rte>
+    <name>Route3</name>
+    <rtept lat="42.449869134" lon="-71.119301206">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:26:59Z</time>
+      <name>5179DEAD</name>
+      <cmt>5179DEAD</cmt>
+      <desc>5179DEAD</desc>
+      <sym>Danger</sym>
+    </rtept>
+    <rtept lat="42.456468132" lon="-71.124654954">
+      <ele>0.000000</ele>
+      <time>2001-06-02T03:26:59Z</time>
+      <name>5236BRIDGE</name>
+      <cmt>5236BRIDGE</cmt>
+      <desc>5236BRIDGE</desc>
+      <sym>Normal</sym>
+    </rtept>
+  </rte>
 </gpx>

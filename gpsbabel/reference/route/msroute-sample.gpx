@@ -1,90 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="50.497369766" minlon="12.135772705" maxlat="50.628690720" maxlon="12.998456955"/>
-<rte>
-  <rtept lat="50.497369766" lon="12.135772705">
-    <name>Plauen</name>
-  </rtept>
-  <rtept lat="50.540628433" lon="12.311897278">
-    <name>Treuen</name>
-  </rtept>
-  <rtept lat="50.533161163" lon="12.400903702">
-    <name>Rodewisch</name>
-  </rtept>
-  <rtept lat="50.537710190" lon="12.521152496">
-    <name>Stützengrün</name>
-  </rtept>
-  <rtept lat="50.545692444" lon="12.565097809">
-    <name>Hundshübel</name>
-  </rtept>
-  <rtept lat="50.576334000" lon="12.651100159">
-    <name>Zschorlau</name>
-  </rtept>
-  <rtept lat="50.592212677" lon="12.696161270">
-    <name>Aue</name>
-  </rtept>
-  <rtept lat="50.562858582" lon="12.730407715">
-    <name>Lauter</name>
-  </rtept>
-  <rtept lat="50.542688370" lon="12.785682678">
-    <name>Schwarzenberg</name>
-  </rtept>
-  <rtept lat="50.531187057" lon="12.876577377">
-    <name>Markersbach</name>
-  </rtept>
-  <rtept lat="50.558910370" lon="12.953481674">
-    <name>Schlettau</name>
-  </rtept>
-  <rtept lat="50.565433502" lon="12.998456955">
-    <name>Talstraße, 09456 Annaberg-Buchholz</name>
-  </rtept>
-  <rtept lat="50.580625534" lon="12.987041473">
-    <name>Frohnau</name>
-  </rtept>
-  <rtept lat="50.628261566" lon="12.929792404">
-    <name>Geyer</name>
-  </rtept>
-  <rtept lat="50.628690720" lon="12.814950943">
-    <name>Zwönitz</name>
-  </rtept>
-  <rtept lat="50.578479767" lon="12.811260223">
-    <name>Grünhain</name>
-  </rtept>
-  <rtept lat="50.564661026" lon="12.791776657">
-    <name>Beierfeld</name>
-  </rtept>
-  <rtept lat="50.525865555" lon="12.768001556">
-    <name>S274</name>
-  </rtept>
-  <rtept lat="50.499515533" lon="12.651443481">
-    <name>Sosa</name>
-  </rtept>
-  <rtept lat="50.518140793" lon="12.621316910">
-    <name>Blauenthal</name>
-  </rtept>
-  <rtept lat="50.506038666" lon="12.526988983">
-    <name>Schönheide</name>
-  </rtept>
-  <rtept lat="50.511016846" lon="12.456779480">
-    <name>Schnarrtanne</name>
-  </rtept>
-  <rtept lat="50.525093079" lon="12.416524887">
-    <name>K7820</name>
-  </rtept>
-  <rtept lat="50.533161163" lon="12.400903702">
-    <name>Rodewisch</name>
-  </rtept>
-  <rtept lat="50.540628433" lon="12.311897278">
-    <name>Treuen</name>
-  </rtept>
-  <rtept lat="50.553760529" lon="12.277307510">
-    <name>A72, 08233 Treuen</name>
-  </rtept>
-</rte>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="50.497369766" minlon="12.135772705" maxlat="50.628690720" maxlon="12.998456955"/>
+  <rte>
+    <rtept lat="50.497369766" lon="12.135772705">
+      <name>Plauen</name>
+    </rtept>
+    <rtept lat="50.540628433" lon="12.311897278">
+      <name>Treuen</name>
+    </rtept>
+    <rtept lat="50.533161163" lon="12.400903702">
+      <name>Rodewisch</name>
+    </rtept>
+    <rtept lat="50.537710190" lon="12.521152496">
+      <name>Stützengrün</name>
+    </rtept>
+    <rtept lat="50.545692444" lon="12.565097809">
+      <name>Hundshübel</name>
+    </rtept>
+    <rtept lat="50.576334000" lon="12.651100159">
+      <name>Zschorlau</name>
+    </rtept>
+    <rtept lat="50.592212677" lon="12.696161270">
+      <name>Aue</name>
+    </rtept>
+    <rtept lat="50.562858582" lon="12.730407715">
+      <name>Lauter</name>
+    </rtept>
+    <rtept lat="50.542688370" lon="12.785682678">
+      <name>Schwarzenberg</name>
+    </rtept>
+    <rtept lat="50.531187057" lon="12.876577377">
+      <name>Markersbach</name>
+    </rtept>
+    <rtept lat="50.558910370" lon="12.953481674">
+      <name>Schlettau</name>
+    </rtept>
+    <rtept lat="50.565433502" lon="12.998456955">
+      <name>Talstraße, 09456 Annaberg-Buchholz</name>
+    </rtept>
+    <rtept lat="50.580625534" lon="12.987041473">
+      <name>Frohnau</name>
+    </rtept>
+    <rtept lat="50.628261566" lon="12.929792404">
+      <name>Geyer</name>
+    </rtept>
+    <rtept lat="50.628690720" lon="12.814950943">
+      <name>Zwönitz</name>
+    </rtept>
+    <rtept lat="50.578479767" lon="12.811260223">
+      <name>Grünhain</name>
+    </rtept>
+    <rtept lat="50.564661026" lon="12.791776657">
+      <name>Beierfeld</name>
+    </rtept>
+    <rtept lat="50.525865555" lon="12.768001556">
+      <name>S274</name>
+    </rtept>
+    <rtept lat="50.499515533" lon="12.651443481">
+      <name>Sosa</name>
+    </rtept>
+    <rtept lat="50.518140793" lon="12.621316910">
+      <name>Blauenthal</name>
+    </rtept>
+    <rtept lat="50.506038666" lon="12.526988983">
+      <name>Schönheide</name>
+    </rtept>
+    <rtept lat="50.511016846" lon="12.456779480">
+      <name>Schnarrtanne</name>
+    </rtept>
+    <rtept lat="50.525093079" lon="12.416524887">
+      <name>K7820</name>
+    </rtept>
+    <rtept lat="50.533161163" lon="12.400903702">
+      <name>Rodewisch</name>
+    </rtept>
+    <rtept lat="50.540628433" lon="12.311897278">
+      <name>Treuen</name>
+    </rtept>
+    <rtept lat="50.553760529" lon="12.277307510">
+      <name>A72, 08233 Treuen</name>
+    </rtept>
+  </rte>
 </gpx>

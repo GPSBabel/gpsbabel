@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx 
-  version="1.0" 
-  creator="GPSBabel - http://www.gpsbabel.org" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns="http://www.topografix.com/GPX/1/0" 
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <bounds minlat="39.047567844" minlon="-119.913288116" maxlat="39.068486691" maxlon="-119.875101328"/>
   <wpt lat="39.050695896" lon="-119.911156178">
     <ele>2428.000000</ele>
@@ -180,7 +175,7 @@
       <ele>2599.000000</ele>
       <name>GPSRTE9</name>
     </rtept>
-</rte>
+  </rte>
   <trk>
     <name>crazy route 4.49 miles long</name>
     <desc>Style=GrnMedium, Width=3, Dashed=0, Color=#008000</desc>
@@ -250,7 +245,7 @@
       <trkpt lat="39.051038027" lon="-119.898489952"/>
       <trkpt lat="39.050744772" lon="-119.898489952"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>TRK 2</name>
     <desc>Style=GrnMedium, Width=3, Dashed=0, Color=#008000</desc>
@@ -299,7 +294,7 @@
       <trkpt lat="39.053775072" lon="-119.879365206"/>
       <trkpt lat="39.053481817" lon="-119.879678726"/>
     </trkseg>
-</trk>
+  </trk>
   <trk>
     <name>TRK 3</name>
     <desc>Style=GrnMedium, Width=3, Dashed=0, Color=#008000</desc>
@@ -350,5 +345,5 @@
       <trkpt lat="39.048643112" lon="-119.885322094"/>
       <trkpt lat="39.048887491" lon="-119.885071278"/>
     </trkseg>
-</trk>
+  </trk>
 </gpx>

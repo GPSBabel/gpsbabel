@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx 
-  version="1.1" 
-  creator="GPSBabel - http://www.gpsbabel.org" 
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xmlns="http://www.topografix.com/GPX/1/1" 
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<gpx version="1.1" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1">
   <metadata>
     <time>1970-01-01T00:00:00Z</time>
     <bounds minlat="21.278604576" minlon="-157.810719665" maxlat="21.278604576" maxlon="-157.810719665"/>
@@ -26,7 +21,7 @@
     </link>
     <sym>Waypoint</sym>
     <extensions>
-      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd">
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
         <gpxx:DisplayMode>SymbolAndDescription</gpxx:DisplayMode>
       </gpxx:WaypointExtension>
     </extensions>

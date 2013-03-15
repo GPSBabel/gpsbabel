@@ -1,139 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="50.307048000" minlon="8.231283000" maxlat="50.309623000" maxlon="8.232662000"/>
-<wpt lat="50.307048000" lon="8.232662000">
-  <ele>341.950000</ele>
-  <time>2009-11-06T21:32:32.528Z</time>
-  <name>RPT001</name>
-  <cmt>RPT001</cmt>
-  <desc>RPT001</desc>
-  <fix>2d</fix>
-  <sat>11</sat>
-  <hdop>0.766000</hdop>
-</wpt>
-<wpt lat="50.307475000" lon="8.232442000">
-  <ele>341.990000</ele>
-  <time>2009-11-06T21:32:33.529Z</time>
-  <name>RPT002</name>
-  <cmt>RPT002</cmt>
-  <desc>RPT002</desc>
-  <fix>2d</fix>
-  <sat>11</sat>
-  <hdop>0.766000</hdop>
-</wpt>
-<wpt lat="50.307902000" lon="8.232223000">
-  <ele>341.813000</ele>
-  <time>2009-11-06T21:32:34.530Z</time>
-  <name>RPT003</name>
-  <cmt>RPT003</cmt>
-  <desc>RPT003</desc>
-  <fix>2d</fix>
-  <sat>10</sat>
-  <hdop>0.832000</hdop>
-</wpt>
-<wpt lat="50.308332000" lon="8.232000000">
-  <ele>341.493000</ele>
-  <time>2009-11-06T21:32:35.531Z</time>
-  <name>RPT004</name>
-  <cmt>RPT004</cmt>
-  <desc>RPT004</desc>
-  <fix>2d</fix>
-  <sat>11</sat>
-  <hdop>0.766000</hdop>
-</wpt>
-<wpt lat="50.308765000" lon="8.231770000">
-  <ele>341.150000</ele>
-  <time>2009-11-06T21:32:36.532Z</time>
-  <name>RPT005</name>
-  <cmt>RPT005</cmt>
-  <desc>RPT005</desc>
-  <fix>2d</fix>
-  <sat>11</sat>
-  <hdop>0.766000</hdop>
-</wpt>
-<wpt lat="50.309198000" lon="8.231532000">
-  <ele>340.210000</ele>
-  <time>2009-11-06T21:32:37.533Z</time>
-  <name>RPT006</name>
-  <cmt>RPT006</cmt>
-  <desc>RPT006</desc>
-  <fix>2d</fix>
-  <sat>11</sat>
-  <hdop>0.766000</hdop>
-</wpt>
-<wpt lat="50.309623000" lon="8.231283000">
-  <ele>339.163000</ele>
-  <time>2009-11-06T21:32:38.534Z</time>
-  <name>RPT007</name>
-  <cmt>RPT007</cmt>
-  <desc>RPT007</desc>
-  <fix>2d</fix>
-  <sat>11</sat>
-  <hdop>0.766000</hdop>
-</wpt>
-<rte>
-  <name>Tracklog Thu Jan  1 00:00:00 1970</name>
-  <rtept lat="50.307048000" lon="8.232662000">
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="50.307048000" minlon="8.231283000" maxlat="50.309623000" maxlon="8.232662000"/>
+  <wpt lat="50.307048000" lon="8.232662000">
     <ele>341.950000</ele>
     <time>2009-11-06T21:32:32.528Z</time>
     <name>RPT001</name>
+    <cmt>RPT001</cmt>
+    <desc>RPT001</desc>
     <fix>2d</fix>
     <sat>11</sat>
     <hdop>0.766000</hdop>
-  </rtept>
-  <rtept lat="50.307475000" lon="8.232442000">
+  </wpt>
+  <wpt lat="50.307475000" lon="8.232442000">
     <ele>341.990000</ele>
     <time>2009-11-06T21:32:33.529Z</time>
     <name>RPT002</name>
+    <cmt>RPT002</cmt>
+    <desc>RPT002</desc>
     <fix>2d</fix>
     <sat>11</sat>
     <hdop>0.766000</hdop>
-  </rtept>
-  <rtept lat="50.307902000" lon="8.232223000">
+  </wpt>
+  <wpt lat="50.307902000" lon="8.232223000">
     <ele>341.813000</ele>
     <time>2009-11-06T21:32:34.530Z</time>
     <name>RPT003</name>
+    <cmt>RPT003</cmt>
+    <desc>RPT003</desc>
     <fix>2d</fix>
     <sat>10</sat>
     <hdop>0.832000</hdop>
-  </rtept>
-  <rtept lat="50.308332000" lon="8.232000000">
+  </wpt>
+  <wpt lat="50.308332000" lon="8.232000000">
     <ele>341.493000</ele>
     <time>2009-11-06T21:32:35.531Z</time>
     <name>RPT004</name>
+    <cmt>RPT004</cmt>
+    <desc>RPT004</desc>
     <fix>2d</fix>
     <sat>11</sat>
     <hdop>0.766000</hdop>
-  </rtept>
-  <rtept lat="50.308765000" lon="8.231770000">
+  </wpt>
+  <wpt lat="50.308765000" lon="8.231770000">
     <ele>341.150000</ele>
     <time>2009-11-06T21:32:36.532Z</time>
     <name>RPT005</name>
+    <cmt>RPT005</cmt>
+    <desc>RPT005</desc>
     <fix>2d</fix>
     <sat>11</sat>
     <hdop>0.766000</hdop>
-  </rtept>
-  <rtept lat="50.309198000" lon="8.231532000">
+  </wpt>
+  <wpt lat="50.309198000" lon="8.231532000">
     <ele>340.210000</ele>
     <time>2009-11-06T21:32:37.533Z</time>
     <name>RPT006</name>
+    <cmt>RPT006</cmt>
+    <desc>RPT006</desc>
     <fix>2d</fix>
     <sat>11</sat>
     <hdop>0.766000</hdop>
-  </rtept>
-  <rtept lat="50.309623000" lon="8.231283000">
+  </wpt>
+  <wpt lat="50.309623000" lon="8.231283000">
     <ele>339.163000</ele>
     <time>2009-11-06T21:32:38.534Z</time>
     <name>RPT007</name>
+    <cmt>RPT007</cmt>
+    <desc>RPT007</desc>
     <fix>2d</fix>
     <sat>11</sat>
     <hdop>0.766000</hdop>
-  </rtept>
-</rte>
+  </wpt>
+  <rte>
+    <name>Tracklog Thu Jan  1 00:00:00 1970</name>
+    <rtept lat="50.307048000" lon="8.232662000">
+      <ele>341.950000</ele>
+      <time>2009-11-06T21:32:32.528Z</time>
+      <name>RPT001</name>
+      <fix>2d</fix>
+      <sat>11</sat>
+      <hdop>0.766000</hdop>
+    </rtept>
+    <rtept lat="50.307475000" lon="8.232442000">
+      <ele>341.990000</ele>
+      <time>2009-11-06T21:32:33.529Z</time>
+      <name>RPT002</name>
+      <fix>2d</fix>
+      <sat>11</sat>
+      <hdop>0.766000</hdop>
+    </rtept>
+    <rtept lat="50.307902000" lon="8.232223000">
+      <ele>341.813000</ele>
+      <time>2009-11-06T21:32:34.530Z</time>
+      <name>RPT003</name>
+      <fix>2d</fix>
+      <sat>10</sat>
+      <hdop>0.832000</hdop>
+    </rtept>
+    <rtept lat="50.308332000" lon="8.232000000">
+      <ele>341.493000</ele>
+      <time>2009-11-06T21:32:35.531Z</time>
+      <name>RPT004</name>
+      <fix>2d</fix>
+      <sat>11</sat>
+      <hdop>0.766000</hdop>
+    </rtept>
+    <rtept lat="50.308765000" lon="8.231770000">
+      <ele>341.150000</ele>
+      <time>2009-11-06T21:32:36.532Z</time>
+      <name>RPT005</name>
+      <fix>2d</fix>
+      <sat>11</sat>
+      <hdop>0.766000</hdop>
+    </rtept>
+    <rtept lat="50.309198000" lon="8.231532000">
+      <ele>340.210000</ele>
+      <time>2009-11-06T21:32:37.533Z</time>
+      <name>RPT006</name>
+      <fix>2d</fix>
+      <sat>11</sat>
+      <hdop>0.766000</hdop>
+    </rtept>
+    <rtept lat="50.309623000" lon="8.231283000">
+      <ele>339.163000</ele>
+      <time>2009-11-06T21:32:38.534Z</time>
+      <name>RPT007</name>
+      <fix>2d</fix>
+      <sat>11</sat>
+      <hdop>0.766000</hdop>
+    </rtept>
+  </rte>
 </gpx>

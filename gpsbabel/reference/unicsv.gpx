@@ -1,55 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="35.972030000" minlon="-87.134700000" maxlat="36.112180000" maxlon="-86.620120000"/>
-<wpt lat="35.972030000" lon="-87.134700000">
-  <name>GCEBB</name>
-  <cmt>Mountain Bike Heaven by susy1313</cmt>
-  <desc>Mountain Bike Heaven by susy1313</desc>
-</wpt>
-<wpt lat="36.090680000" lon="-86.679550000">
-  <name>GC1A37</name>
-  <cmt>The Troll by a182pilot &amp; Family</cmt>
-  <desc>The Troll by a182pilot &amp; Family</desc>
-</wpt>
-<wpt lat="35.996270000" lon="-86.620120000">
-  <name>GC1C2B</name>
-  <cmt>Dive Bomber by JoGPS &amp; family</cmt>
-  <desc>Dive Bomber by JoGPS &amp; family</desc>
-</wpt>
-<wpt lat="36.038480000" lon="-86.648620000">
-  <name>GC25A9</name>
-  <cmt>FOSTER by JoGPS &amp; Family</cmt>
-  <desc>FOSTER by JoGPS &amp; Family</desc>
-</wpt>
-<wpt lat="36.112180000" lon="-86.741770000">
-  <name>GC2723</name>
-  <cmt>Logan Lighthouse by JoGps &amp; Family</cmt>
-  <desc>Logan Lighthouse by JoGps &amp; Family</desc>
-</wpt>
-<wpt lat="36.064080000" lon="-86.790520000">
-  <name>GC2B71</name>
-  <cmt>Ganier Cache by Susy1313</cmt>
-  <desc>Ganier Cache by Susy1313</desc>
-</wpt>
-<wpt lat="36.087770000" lon="-86.809730000">
-  <name>GC309F</name>
-  <cmt>Shy&apos;s Hill by FireFighterEng33</cmt>
-  <desc>Shy&apos;s Hill by FireFighterEng33</desc>
-</wpt>
-<wpt lat="36.057500000" lon="-86.892000000">
-  <name>GC317A</name>
-  <cmt>GittyUp by JoGPS / Warner Parks</cmt>
-  <desc>GittyUp by JoGPS / Warner Parks</desc>
-</wpt>
-<wpt lat="36.082800000" lon="-86.867280000">
-  <name>GC317D</name>
-  <cmt>Inlighting by JoGPS / Warner Parks</cmt>
-  <desc>Inlighting by JoGPS / Warner Parks</desc>
-</wpt>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="35.972030000" minlon="-87.134700000" maxlat="36.112180000" maxlon="-86.620120000"/>
+  <wpt lat="35.972030000" lon="-87.134700000">
+    <name>GCEBB</name>
+    <cmt>Mountain Bike Heaven by susy1313</cmt>
+    <desc>Mountain Bike Heaven by susy1313</desc>
+  </wpt>
+  <wpt lat="36.090680000" lon="-86.679550000">
+    <name>GC1A37</name>
+    <cmt>The Troll by a182pilot &amp; Family</cmt>
+    <desc>The Troll by a182pilot &amp; Family</desc>
+  </wpt>
+  <wpt lat="35.996270000" lon="-86.620120000">
+    <name>GC1C2B</name>
+    <cmt>Dive Bomber by JoGPS &amp; family</cmt>
+    <desc>Dive Bomber by JoGPS &amp; family</desc>
+  </wpt>
+  <wpt lat="36.038480000" lon="-86.648620000">
+    <name>GC25A9</name>
+    <cmt>FOSTER by JoGPS &amp; Family</cmt>
+    <desc>FOSTER by JoGPS &amp; Family</desc>
+  </wpt>
+  <wpt lat="36.112180000" lon="-86.741770000">
+    <name>GC2723</name>
+    <cmt>Logan Lighthouse by JoGps &amp; Family</cmt>
+    <desc>Logan Lighthouse by JoGps &amp; Family</desc>
+  </wpt>
+  <wpt lat="36.064080000" lon="-86.790520000">
+    <name>GC2B71</name>
+    <cmt>Ganier Cache by Susy1313</cmt>
+    <desc>Ganier Cache by Susy1313</desc>
+  </wpt>
+  <wpt lat="36.087770000" lon="-86.809730000">
+    <name>GC309F</name>
+    <cmt>Shy&apos;s Hill by FireFighterEng33</cmt>
+    <desc>Shy&apos;s Hill by FireFighterEng33</desc>
+  </wpt>
+  <wpt lat="36.057500000" lon="-86.892000000">
+    <name>GC317A</name>
+    <cmt>GittyUp by JoGPS / Warner Parks</cmt>
+    <desc>GittyUp by JoGPS / Warner Parks</desc>
+  </wpt>
+  <wpt lat="36.082800000" lon="-86.867280000">
+    <name>GC317D</name>
+    <cmt>Inlighting by JoGPS / Warner Parks</cmt>
+    <desc>Inlighting by JoGPS / Warner Parks</desc>
+  </wpt>
 </gpx>

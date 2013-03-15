@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="36.000000000" minlon="-87.000000000" maxlat="36.000000000" maxlon="-87.000000000"/>
-<trk>
-<trkseg>
-<trkpt lat="36.000000000" lon="-87.000000000">
-  <time>2010-05-06T06:00:00Z</time>
-</trkpt>
-<trkpt lat="36.000000000" lon="-87.000000000">
-  <time>2008-04-17T00:00:00Z</time>
-</trkpt>
-<trkpt lat="36.000000000" lon="-87.000000000">
-  <time>2010-05-06T06:00:05Z</time>
-</trkpt>
-</trkseg>
-</trk>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="36.000000000" minlon="-87.000000000" maxlat="36.000000000" maxlon="-87.000000000"/>
+  <trk>
+    <trkseg>
+      <trkpt lat="36.000000000" lon="-87.000000000">
+        <time>2010-05-06T06:00:00Z</time>
+      </trkpt>
+      <trkpt lat="36.000000000" lon="-87.000000000">
+        <time>2008-04-17T00:00:00Z</time>
+      </trkpt>
+      <trkpt lat="36.000000000" lon="-87.000000000">
+        <time>2010-05-06T06:00:05Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
 </gpx>

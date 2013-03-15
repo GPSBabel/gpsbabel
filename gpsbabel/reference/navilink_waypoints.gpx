@@ -1,74 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="51.759301600" minlon="-0.008520000" maxlat="51.775566600" maxlon="0.004690000"/>
-<wpt lat="51.768668300" lon="0.003845000">
-  <ele>67.970400</ele>
-  <time>2007-09-27T13:37:38Z</time>
-  <name>M000</name>
-  <cmt>M000</cmt>
-  <desc>M000</desc>
-  <sym>Star</sym>
-</wpt>
-<wpt lat="51.768668300" lon="0.003845000">
-  <ele>67.970400</ele>
-  <time>2007-10-03T17:04:53Z</time>
-  <name>M000</name>
-  <cmt>M000</cmt>
-  <desc>M000</desc>
-  <sym>Star</sym>
-</wpt>
-<wpt lat="51.775566600" lon="0.004690000">
-  <ele>0.000000</ele>
-  <time>2007-09-29T14:45:02Z</time>
-  <name>M001</name>
-  <cmt>M001</cmt>
-  <desc>M001</desc>
-  <sym>Star</sym>
-</wpt>
-<wpt lat="51.775566600" lon="0.004690000">
-  <ele>0.000000</ele>
-  <time>2007-10-03T17:04:53Z</time>
-  <name>M001</name>
-  <cmt>M001</cmt>
-  <desc>M001</desc>
-  <sym>Star</sym>
-</wpt>
-<wpt lat="51.759301600" lon="-0.008520000">
-  <ele>36.271200</ele>
-  <time>2007-10-03T16:04:48Z</time>
-  <name>M002</name>
-  <cmt>M002</cmt>
-  <desc>M002</desc>
-  <sym>Star</sym>
-</wpt>
-<wpt lat="51.759301600" lon="-0.008520000">
-  <ele>36.271200</ele>
-  <time>2007-10-03T17:04:53Z</time>
-  <name>M002</name>
-  <cmt>M002</cmt>
-  <desc>M002</desc>
-  <sym>Star</sym>
-</wpt>
-<wpt lat="51.759565000" lon="-0.008035000">
-  <ele>35.356800</ele>
-  <time>2007-10-03T16:07:12Z</time>
-  <name>SUBWAY</name>
-  <cmt>SUBWAY</cmt>
-  <desc>SUBWAY</desc>
-  <sym>Star</sym>
-</wpt>
-<wpt lat="51.759565000" lon="-0.008035000">
-  <ele>35.356800</ele>
-  <time>2007-10-03T17:04:53Z</time>
-  <name>SUBWAY</name>
-  <cmt>SUBWAY</cmt>
-  <desc>SUBWAY</desc>
-  <sym>Star</sym>
-</wpt>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="51.759301600" minlon="-0.008520000" maxlat="51.775566600" maxlon="0.004690000"/>
+  <wpt lat="51.768668300" lon="0.003845000">
+    <ele>67.970400</ele>
+    <time>2007-09-27T13:37:38Z</time>
+    <name>M000</name>
+    <cmt>M000</cmt>
+    <desc>M000</desc>
+    <sym>Star</sym>
+  </wpt>
+  <wpt lat="51.768668300" lon="0.003845000">
+    <ele>67.970400</ele>
+    <time>2007-10-03T17:04:53Z</time>
+    <name>M000</name>
+    <cmt>M000</cmt>
+    <desc>M000</desc>
+    <sym>Star</sym>
+  </wpt>
+  <wpt lat="51.775566600" lon="0.004690000">
+    <ele>0.000000</ele>
+    <time>2007-09-29T14:45:02Z</time>
+    <name>M001</name>
+    <cmt>M001</cmt>
+    <desc>M001</desc>
+    <sym>Star</sym>
+  </wpt>
+  <wpt lat="51.775566600" lon="0.004690000">
+    <ele>0.000000</ele>
+    <time>2007-10-03T17:04:53Z</time>
+    <name>M001</name>
+    <cmt>M001</cmt>
+    <desc>M001</desc>
+    <sym>Star</sym>
+  </wpt>
+  <wpt lat="51.759301600" lon="-0.008520000">
+    <ele>36.271200</ele>
+    <time>2007-10-03T16:04:48Z</time>
+    <name>M002</name>
+    <cmt>M002</cmt>
+    <desc>M002</desc>
+    <sym>Star</sym>
+  </wpt>
+  <wpt lat="51.759301600" lon="-0.008520000">
+    <ele>36.271200</ele>
+    <time>2007-10-03T17:04:53Z</time>
+    <name>M002</name>
+    <cmt>M002</cmt>
+    <desc>M002</desc>
+    <sym>Star</sym>
+  </wpt>
+  <wpt lat="51.759565000" lon="-0.008035000">
+    <ele>35.356800</ele>
+    <time>2007-10-03T16:07:12Z</time>
+    <name>SUBWAY</name>
+    <cmt>SUBWAY</cmt>
+    <desc>SUBWAY</desc>
+    <sym>Star</sym>
+  </wpt>
+  <wpt lat="51.759565000" lon="-0.008035000">
+    <ele>35.356800</ele>
+    <time>2007-10-03T17:04:53Z</time>
+    <name>SUBWAY</name>
+    <cmt>SUBWAY</cmt>
+    <desc>SUBWAY</desc>
+    <sym>Star</sym>
+  </wpt>
 </gpx>

@@ -1,87 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="44.890227611" minlon="-0.163863116" maxlat="47.497329021" maxlon="8.742374241"/>
-<wpt lat="44.890227611" lon="-0.163863116">
-  <time>2008-08-23T15:41:29Z</time>
-  <name>001</name>
-  <cmt>001</cmt>
-  <desc>001</desc>
-  <sym>Golf Course</sym>
-</wpt>
-<wpt lat="46.952818930" lon="7.443243075">
-  <time>2008-08-23T15:37:18Z</time>
-  <name>Bern</name>
-  <cmt>Bern</cmt>
-  <desc>Bern</desc>
-  <sym>City (Medium)</sym>
-</wpt>
-<wpt lat="45.574031182" lon="8.055719151">
-  <time>2008-08-23T15:37:12Z</time>
-  <name>Biella</name>
-  <cmt>Biella</cmt>
-  <desc>Biella</desc>
-  <sym>City (Small)</sym>
-</wpt>
-<wpt lat="45.722355004" lon="8.278202322">
-  <time>2008-08-23T15:37:15Z</time>
-  <name>Borgosesia</name>
-  <cmt>Borgosesia</cmt>
-  <desc>Borgosesia</desc>
-  <sym>City (Small)</sym>
-</wpt>
-<wpt lat="47.059938132" lon="8.313909434">
-  <time>2008-08-23T15:37:57Z</time>
-  <name>Luzern</name>
-  <cmt>Luzern</cmt>
-  <desc>Luzern</desc>
-  <sym>City (Medium)</sym>
-</wpt>
-<wpt lat="46.093140263" lon="7.077938437">
-  <time>2008-08-23T15:37:08Z</time>
-  <name>Martigny-Ville</name>
-  <cmt>Martigny-Ville</cmt>
-  <desc>Martigny-Ville</desc>
-  <sym>City (Small)</sym>
-</wpt>
-<wpt lat="46.996767931" lon="6.929629730">
-  <time>2008-08-23T15:37:21Z</time>
-  <name>Neuchatel</name>
-  <cmt>Neuchatel</cmt>
-  <desc>Neuchatel</desc>
-  <sym>City (Small)</sym>
-</wpt>
-<wpt lat="46.697383312" lon="6.904911806">
-  <time>2008-08-23T15:36:44Z</time>
-  <name>Romont</name>
-  <cmt>Romont</cmt>
-  <desc>Romont</desc>
-  <sym>City (Small)</sym>
-</wpt>
-<wpt lat="46.686400454" lon="7.684933803">
-  <time>2008-08-23T15:36:48Z</time>
-  <name>Spiez</name>
-  <cmt>Spiez</cmt>
-  <desc>Spiez</desc>
-  <sym>City (Small)</sym>
-</wpt>
-<wpt lat="47.497329021" lon="8.742374241">
-  <time>2008-08-23T15:37:40Z</time>
-  <name>Winterthur</name>
-  <cmt>Winterthur</cmt>
-  <desc>Winterthur</desc>
-  <sym>City (Medium)</sym>
-</wpt>
-<wpt lat="47.374420035" lon="8.537068242">
-  <time>2008-08-23T15:37:36Z</time>
-  <name>Zurich</name>
-  <cmt>Zurich</cmt>
-  <desc>Zurich</desc>
-  <sym>City (Large)</sym>
-</wpt>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="44.890227611" minlon="-0.163863116" maxlat="47.497329021" maxlon="8.742374241"/>
+  <wpt lat="44.890227611" lon="-0.163863116">
+    <time>2008-08-23T15:41:29Z</time>
+    <name>001</name>
+    <cmt>001</cmt>
+    <desc>001</desc>
+    <sym>Golf Course</sym>
+  </wpt>
+  <wpt lat="46.952818930" lon="7.443243075">
+    <time>2008-08-23T15:37:18Z</time>
+    <name>Bern</name>
+    <cmt>Bern</cmt>
+    <desc>Bern</desc>
+    <sym>City (Medium)</sym>
+  </wpt>
+  <wpt lat="45.574031182" lon="8.055719151">
+    <time>2008-08-23T15:37:12Z</time>
+    <name>Biella</name>
+    <cmt>Biella</cmt>
+    <desc>Biella</desc>
+    <sym>City (Small)</sym>
+  </wpt>
+  <wpt lat="45.722355004" lon="8.278202322">
+    <time>2008-08-23T15:37:15Z</time>
+    <name>Borgosesia</name>
+    <cmt>Borgosesia</cmt>
+    <desc>Borgosesia</desc>
+    <sym>City (Small)</sym>
+  </wpt>
+  <wpt lat="47.059938132" lon="8.313909434">
+    <time>2008-08-23T15:37:57Z</time>
+    <name>Luzern</name>
+    <cmt>Luzern</cmt>
+    <desc>Luzern</desc>
+    <sym>City (Medium)</sym>
+  </wpt>
+  <wpt lat="46.093140263" lon="7.077938437">
+    <time>2008-08-23T15:37:08Z</time>
+    <name>Martigny-Ville</name>
+    <cmt>Martigny-Ville</cmt>
+    <desc>Martigny-Ville</desc>
+    <sym>City (Small)</sym>
+  </wpt>
+  <wpt lat="46.996767931" lon="6.929629730">
+    <time>2008-08-23T15:37:21Z</time>
+    <name>Neuchatel</name>
+    <cmt>Neuchatel</cmt>
+    <desc>Neuchatel</desc>
+    <sym>City (Small)</sym>
+  </wpt>
+  <wpt lat="46.697383312" lon="6.904911806">
+    <time>2008-08-23T15:36:44Z</time>
+    <name>Romont</name>
+    <cmt>Romont</cmt>
+    <desc>Romont</desc>
+    <sym>City (Small)</sym>
+  </wpt>
+  <wpt lat="46.686400454" lon="7.684933803">
+    <time>2008-08-23T15:36:48Z</time>
+    <name>Spiez</name>
+    <cmt>Spiez</cmt>
+    <desc>Spiez</desc>
+    <sym>City (Small)</sym>
+  </wpt>
+  <wpt lat="47.497329021" lon="8.742374241">
+    <time>2008-08-23T15:37:40Z</time>
+    <name>Winterthur</name>
+    <cmt>Winterthur</cmt>
+    <desc>Winterthur</desc>
+    <sym>City (Medium)</sym>
+  </wpt>
+  <wpt lat="47.374420035" lon="8.537068242">
+    <time>2008-08-23T15:37:36Z</time>
+    <name>Zurich</name>
+    <cmt>Zurich</cmt>
+    <desc>Zurich</desc>
+    <sym>City (Large)</sym>
+  </wpt>
 </gpx>

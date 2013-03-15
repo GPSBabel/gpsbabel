@@ -1,299 +1,294 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<gpx
-  version="1.0"
-  creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
-<time>1970-01-01T00:00:00Z</time>
-<bounds minlat="28.353803737" minlon="-16.502955209" maxlat="28.359546000" maxlon="-16.494318496"/>
-<wpt lat="28.357846000" lon="-16.499208000">
-  <time>2011-09-26T00:00:51Z</time>
-  <name>Derecha</name>
-  <cmt>Derecha</cmt>
-  <desc>Derecha</desc>
-  <sym>right</sym>
-</wpt>
-<wpt lat="28.359546000" lon="-16.502867000">
-  <time>2011-09-26T00:00:00Z</time>
-  <name>LAP001</name>
-  <cmt>LAP001</cmt>
-  <desc>LAP001</desc>
-</wpt>
-<wpt lat="28.355463000" lon="-16.500421000">
-  <time>2011-09-26T00:02:22Z</time>
-  <name>Valle</name>
-  <cmt>Valle</cmt>
-  <desc>Valle</desc>
-  <sym>valley</sym>
-</wpt>
-<wpt lat="28.359197123" lon="-16.501778011">
-  <time>2011-09-26T00:00:13.731Z</time>
-  <name>wpt1</name>
-  <cmt>wpt1</cmt>
-  <desc>wpt1</desc>
-  <sym>flag, green</sym>
-</wpt>
-<wpt lat="28.354172000" lon="-16.497408000">
-  <time>2011-09-26T00:03:09Z</time>
-  <name>wpt5</name>
-  <cmt>wpt5</cmt>
-  <desc>wpt5</desc>
-  <sym>flag, green</sym>
-</wpt>
-<wpt lat="28.358886268" lon="-16.500621050">
-  <time>2011-09-26T00:00:28.528Z</time>
-  <name>wpt6</name>
-  <cmt>wpt6</cmt>
-  <desc>wpt6</desc>
-  <sym>flag, green</sym>
-</wpt>
-<rte>
-  <name>Route1</name>
-  <rtept lat="28.354379680" lon="-16.495831262">
-    <name>RPT001</name>
-  </rtept>
-  <rtept lat="28.354813996" lon="-16.495434295">
-    <name>RPT002</name>
-  </rtept>
-  <rtept lat="28.355380492" lon="-16.494962226">
-    <name>RPT003</name>
-  </rtept>
-  <rtept lat="28.355946985" lon="-16.494726192">
-    <name>RPT004</name>
-  </rtept>
-  <rtept lat="28.356522916" lon="-16.494490157">
-    <name>RPT005</name>
-  </rtept>
-  <rtept lat="28.356994989" lon="-16.494393598">
-    <name>RPT006</name>
-  </rtept>
-  <rtept lat="28.357646446" lon="-16.494318496">
-    <name>RPT007</name>
-  </rtept>
-  <rtept lat="28.358165720" lon="-16.494415056">
-    <name>RPT008</name>
-  </rtept>
-  <rtept lat="28.358609462" lon="-16.494683276">
-    <name>RPT009</name>
-  </rtept>
-  <rtept lat="28.359147614" lon="-16.495327007">
-    <name>RPT010</name>
-  </rtept>
-  <rtept lat="28.359374203" lon="-16.496067296">
-    <name>RPT011</name>
-  </rtept>
-  <rtept lat="28.359411968" lon="-16.496818315">
-    <name>RPT012</name>
-  </rtept>
-  <rtept lat="28.359355321" lon="-16.497612249">
-    <name>RPT013</name>
-  </rtept>
-  <rtept lat="28.359100408" lon="-16.498416911">
-    <name>RPT014</name>
-  </rtept>
-  <rtept lat="28.359005995" lon="-16.498888980">
-    <name>RPT015</name>
-  </rtept>
-  <rtept lat="28.358987113" lon="-16.499790202">
-    <name>RPT016</name>
-  </rtept>
-  <rtept lat="28.358826611" lon="-16.501227866">
-    <name>RPT017</name>
-  </rtept>
-  <rtept lat="28.358656668" lon="-16.502161275">
-    <name>RPT018</name>
-  </rtept>
-  <rtept lat="28.358052424" lon="-16.502794276">
-    <name>RPT019</name>
-  </rtept>
-  <rtept lat="28.357419853" lon="-16.502944480">
-    <name>RPT020</name>
-  </rtept>
-  <rtept lat="28.356683421" lon="-16.502955209">
-    <name>RPT021</name>
-  </rtept>
-  <rtept lat="28.356135815" lon="-16.502697717">
-    <name>RPT022</name>
-  </rtept>
-  <rtept lat="28.355389933" lon="-16.502150546">
-    <name>RPT023</name>
-  </rtept>
-  <rtept lat="28.355002828" lon="-16.501710664">
-    <name>RPT024</name>
-  </rtept>
-  <rtept lat="28.354521305" lon="-16.500734340">
-    <name>RPT025</name>
-  </rtept>
-  <rtept lat="28.354228613" lon="-16.499983321">
-    <name>RPT026</name>
-  </rtept>
-  <rtept lat="28.353935921" lon="-16.498942624">
-    <name>RPT027</name>
-  </rtept>
-  <rtept lat="28.353803737" lon="-16.497987758">
-    <name>RPT028</name>
-  </rtept>
-  <rtept lat="28.353926479" lon="-16.496775399">
-    <name>RPT029</name>
-  </rtept>
-  <rtept lat="28.353926479" lon="-16.496775399">
-    <name>RPT030</name>
-  </rtept>
-</rte>
-<trk>
-  <name>Track1</name>
-<trkseg>
-<trkpt lat="28.359546000" lon="-16.502867000">
-  <time>2011-09-26T00:00:00Z</time>
-</trkpt>
-<trkpt lat="28.359338000" lon="-16.502598000">
-  <time>2011-09-26T00:00:04Z</time>
-</trkpt>
-<trkpt lat="28.359270000" lon="-16.502511000">
-  <time>2011-09-26T00:00:05Z</time>
-</trkpt>
-<trkpt lat="28.359204000" lon="-16.502291000">
-  <time>2011-09-26T00:00:08Z</time>
-</trkpt>
-<trkpt lat="28.359192000" lon="-16.501396000">
-  <time>2011-09-26T00:00:18Z</time>
-</trkpt>
-<trkpt lat="28.359106000" lon="-16.501013000">
-  <time>2011-09-26T00:00:23Z</time>
-</trkpt>
-<trkpt lat="28.358917000" lon="-16.500654000">
-  <time>2011-09-26T00:00:28Z</time>
-</trkpt>
-<trkpt lat="28.358626000" lon="-16.500342000">
-  <time>2011-09-26T00:00:33Z</time>
-</trkpt>
-<trkpt lat="28.358246000" lon="-16.500081000">
-  <time>2011-09-26T00:00:39Z</time>
-</trkpt>
-<trkpt lat="28.357937000" lon="-16.499408000">
-  <time>2011-09-26T00:00:48Z</time>
-</trkpt>
-<trkpt lat="28.357846000" lon="-16.499208000">
-  <time>2011-09-26T00:00:51Z</time>
-</trkpt>
-<trkpt lat="28.357735000" lon="-16.499147000">
-  <time>2011-09-26T00:00:52Z</time>
-</trkpt>
-<trkpt lat="28.357665000" lon="-16.499194000">
-  <time>2011-09-26T00:00:54Z</time>
-</trkpt>
-<trkpt lat="28.357640000" lon="-16.499329000">
-  <time>2011-09-26T00:00:55Z</time>
-</trkpt>
-<trkpt lat="28.357788000" lon="-16.499707000">
-  <time>2011-09-26T00:01:00Z</time>
-</trkpt>
-<trkpt lat="28.357825000" lon="-16.500150000">
-  <time>2011-09-26T00:01:05Z</time>
-</trkpt>
-<trkpt lat="28.357952000" lon="-16.500374000">
-  <time>2011-09-26T00:01:08Z</time>
-</trkpt>
-<trkpt lat="28.358219000" lon="-16.500677000">
-  <time>2011-09-26T00:01:13Z</time>
-</trkpt>
-<trkpt lat="28.358334000" lon="-16.500943000">
-  <time>2011-09-26T00:01:17Z</time>
-</trkpt>
-<trkpt lat="28.358359000" lon="-16.501330000">
-  <time>2011-09-26T00:01:21Z</time>
-</trkpt>
-<trkpt lat="28.358330000" lon="-16.501666000">
-  <time>2011-09-26T00:01:25Z</time>
-</trkpt>
-<trkpt lat="28.358231000" lon="-16.501900000">
-  <time>2011-09-26T00:01:28Z</time>
-</trkpt>
-<trkpt lat="28.357924000" lon="-16.502231000">
-  <time>2011-09-26T00:01:34Z</time>
-</trkpt>
-<trkpt lat="28.357698000" lon="-16.502363000">
-  <time>2011-09-26T00:01:37Z</time>
-</trkpt>
-<trkpt lat="28.357644000" lon="-16.502394000">
-  <time>2011-09-26T00:01:38Z</time>
-</trkpt>
-<trkpt lat="28.357576000" lon="-16.502446000">
-  <time>2011-09-26T00:01:39Z</time>
-</trkpt>
-<trkpt lat="28.357330000" lon="-16.502535000">
-  <time>2011-09-26T00:01:43Z</time>
-</trkpt>
-<trkpt lat="28.356993000" lon="-16.502545000">
-  <time>2011-09-26T00:01:47Z</time>
-</trkpt>
-<trkpt lat="28.356918000" lon="-16.502569000">
-  <time>2011-09-26T00:01:48Z</time>
-</trkpt>
-<trkpt lat="28.356687000" lon="-16.502552000">
-  <time>2011-09-26T00:01:51Z</time>
-</trkpt>
-<trkpt lat="28.356734000" lon="-16.502402000">
-  <time>2011-09-26T00:01:53Z</time>
-</trkpt>
-<trkpt lat="28.356577000" lon="-16.502170000">
-  <time>2011-09-26T00:01:57Z</time>
-</trkpt>
-<trkpt lat="28.356407000" lon="-16.501902000">
-  <time>2011-09-26T00:02:01Z</time>
-</trkpt>
-<trkpt lat="28.356256000" lon="-16.501634000">
-  <time>2011-09-26T00:02:04Z</time>
-</trkpt>
-<trkpt lat="28.355854000" lon="-16.501039000">
-  <time>2011-09-26T00:02:13Z</time>
-</trkpt>
-<trkpt lat="28.355698000" lon="-16.500794000">
-  <time>2011-09-26T00:02:17Z</time>
-</trkpt>
-<trkpt lat="28.355463000" lon="-16.500421000">
-  <time>2011-09-26T00:02:22Z</time>
-</trkpt>
-<trkpt lat="28.355083000" lon="-16.500100000">
-  <time>2011-09-26T00:02:28Z</time>
-</trkpt>
-<trkpt lat="28.354960000" lon="-16.499323000">
-  <time>2011-09-26T00:02:38Z</time>
-</trkpt>
-<trkpt lat="28.354927000" lon="-16.499073000">
-  <time>2011-09-26T00:02:41Z</time>
-</trkpt>
-<trkpt lat="28.354983000" lon="-16.498794000">
-  <time>2011-09-26T00:02:44Z</time>
-</trkpt>
-<trkpt lat="28.354923000" lon="-16.498684000">
-  <time>2011-09-26T00:02:46Z</time>
-</trkpt>
-<trkpt lat="28.354913000" lon="-16.498582000">
-  <time>2011-09-26T00:02:47Z</time>
-</trkpt>
-<trkpt lat="28.354651000" lon="-16.498306000">
-  <time>2011-09-26T00:02:52Z</time>
-</trkpt>
-<trkpt lat="28.354870000" lon="-16.497995000">
-  <time>2011-09-26T00:02:56Z</time>
-</trkpt>
-<trkpt lat="28.354776000" lon="-16.497697000">
-  <time>2011-09-26T00:03:00Z</time>
-</trkpt>
-<trkpt lat="28.354747000" lon="-16.497604000">
-  <time>2011-09-26T00:03:01Z</time>
-</trkpt>
-<trkpt lat="28.354516000" lon="-16.497422000">
-  <time>2011-09-26T00:03:05Z</time>
-</trkpt>
-<trkpt lat="28.354305000" lon="-16.497400000">
-  <time>2011-09-26T00:03:08Z</time>
-</trkpt>
-<trkpt lat="28.354172000" lon="-16.497408000">
-  <time>2011-09-26T00:03:09Z</time>
-</trkpt>
-</trkseg>
-</trk>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="28.353803737" minlon="-16.502955209" maxlat="28.359546000" maxlon="-16.494318496"/>
+  <wpt lat="28.357846000" lon="-16.499208000">
+    <time>2011-09-26T00:00:51Z</time>
+    <name>Derecha</name>
+    <cmt>Derecha</cmt>
+    <desc>Derecha</desc>
+    <sym>right</sym>
+  </wpt>
+  <wpt lat="28.359546000" lon="-16.502867000">
+    <time>2011-09-26T00:00:00Z</time>
+    <name>LAP001</name>
+    <cmt>LAP001</cmt>
+    <desc>LAP001</desc>
+  </wpt>
+  <wpt lat="28.355463000" lon="-16.500421000">
+    <time>2011-09-26T00:02:22Z</time>
+    <name>Valle</name>
+    <cmt>Valle</cmt>
+    <desc>Valle</desc>
+    <sym>valley</sym>
+  </wpt>
+  <wpt lat="28.359197123" lon="-16.501778011">
+    <time>2011-09-26T00:00:13.731Z</time>
+    <name>wpt1</name>
+    <cmt>wpt1</cmt>
+    <desc>wpt1</desc>
+    <sym>flag, green</sym>
+  </wpt>
+  <wpt lat="28.354172000" lon="-16.497408000">
+    <time>2011-09-26T00:03:09Z</time>
+    <name>wpt5</name>
+    <cmt>wpt5</cmt>
+    <desc>wpt5</desc>
+    <sym>flag, green</sym>
+  </wpt>
+  <wpt lat="28.358886268" lon="-16.500621050">
+    <time>2011-09-26T00:00:28.528Z</time>
+    <name>wpt6</name>
+    <cmt>wpt6</cmt>
+    <desc>wpt6</desc>
+    <sym>flag, green</sym>
+  </wpt>
+  <rte>
+    <name>Route1</name>
+    <rtept lat="28.354379680" lon="-16.495831262">
+      <name>RPT001</name>
+    </rtept>
+    <rtept lat="28.354813996" lon="-16.495434295">
+      <name>RPT002</name>
+    </rtept>
+    <rtept lat="28.355380492" lon="-16.494962226">
+      <name>RPT003</name>
+    </rtept>
+    <rtept lat="28.355946985" lon="-16.494726192">
+      <name>RPT004</name>
+    </rtept>
+    <rtept lat="28.356522916" lon="-16.494490157">
+      <name>RPT005</name>
+    </rtept>
+    <rtept lat="28.356994989" lon="-16.494393598">
+      <name>RPT006</name>
+    </rtept>
+    <rtept lat="28.357646446" lon="-16.494318496">
+      <name>RPT007</name>
+    </rtept>
+    <rtept lat="28.358165720" lon="-16.494415056">
+      <name>RPT008</name>
+    </rtept>
+    <rtept lat="28.358609462" lon="-16.494683276">
+      <name>RPT009</name>
+    </rtept>
+    <rtept lat="28.359147614" lon="-16.495327007">
+      <name>RPT010</name>
+    </rtept>
+    <rtept lat="28.359374203" lon="-16.496067296">
+      <name>RPT011</name>
+    </rtept>
+    <rtept lat="28.359411968" lon="-16.496818315">
+      <name>RPT012</name>
+    </rtept>
+    <rtept lat="28.359355321" lon="-16.497612249">
+      <name>RPT013</name>
+    </rtept>
+    <rtept lat="28.359100408" lon="-16.498416911">
+      <name>RPT014</name>
+    </rtept>
+    <rtept lat="28.359005995" lon="-16.498888980">
+      <name>RPT015</name>
+    </rtept>
+    <rtept lat="28.358987113" lon="-16.499790202">
+      <name>RPT016</name>
+    </rtept>
+    <rtept lat="28.358826611" lon="-16.501227866">
+      <name>RPT017</name>
+    </rtept>
+    <rtept lat="28.358656668" lon="-16.502161275">
+      <name>RPT018</name>
+    </rtept>
+    <rtept lat="28.358052424" lon="-16.502794276">
+      <name>RPT019</name>
+    </rtept>
+    <rtept lat="28.357419853" lon="-16.502944480">
+      <name>RPT020</name>
+    </rtept>
+    <rtept lat="28.356683421" lon="-16.502955209">
+      <name>RPT021</name>
+    </rtept>
+    <rtept lat="28.356135815" lon="-16.502697717">
+      <name>RPT022</name>
+    </rtept>
+    <rtept lat="28.355389933" lon="-16.502150546">
+      <name>RPT023</name>
+    </rtept>
+    <rtept lat="28.355002828" lon="-16.501710664">
+      <name>RPT024</name>
+    </rtept>
+    <rtept lat="28.354521305" lon="-16.500734340">
+      <name>RPT025</name>
+    </rtept>
+    <rtept lat="28.354228613" lon="-16.499983321">
+      <name>RPT026</name>
+    </rtept>
+    <rtept lat="28.353935921" lon="-16.498942624">
+      <name>RPT027</name>
+    </rtept>
+    <rtept lat="28.353803737" lon="-16.497987758">
+      <name>RPT028</name>
+    </rtept>
+    <rtept lat="28.353926479" lon="-16.496775399">
+      <name>RPT029</name>
+    </rtept>
+    <rtept lat="28.353926479" lon="-16.496775399">
+      <name>RPT030</name>
+    </rtept>
+  </rte>
+  <trk>
+    <name>Track1</name>
+    <trkseg>
+      <trkpt lat="28.359546000" lon="-16.502867000">
+        <time>2011-09-26T00:00:00Z</time>
+      </trkpt>
+      <trkpt lat="28.359338000" lon="-16.502598000">
+        <time>2011-09-26T00:00:04Z</time>
+      </trkpt>
+      <trkpt lat="28.359270000" lon="-16.502511000">
+        <time>2011-09-26T00:00:05Z</time>
+      </trkpt>
+      <trkpt lat="28.359204000" lon="-16.502291000">
+        <time>2011-09-26T00:00:08Z</time>
+      </trkpt>
+      <trkpt lat="28.359192000" lon="-16.501396000">
+        <time>2011-09-26T00:00:18Z</time>
+      </trkpt>
+      <trkpt lat="28.359106000" lon="-16.501013000">
+        <time>2011-09-26T00:00:23Z</time>
+      </trkpt>
+      <trkpt lat="28.358917000" lon="-16.500654000">
+        <time>2011-09-26T00:00:28Z</time>
+      </trkpt>
+      <trkpt lat="28.358626000" lon="-16.500342000">
+        <time>2011-09-26T00:00:33Z</time>
+      </trkpt>
+      <trkpt lat="28.358246000" lon="-16.500081000">
+        <time>2011-09-26T00:00:39Z</time>
+      </trkpt>
+      <trkpt lat="28.357937000" lon="-16.499408000">
+        <time>2011-09-26T00:00:48Z</time>
+      </trkpt>
+      <trkpt lat="28.357846000" lon="-16.499208000">
+        <time>2011-09-26T00:00:51Z</time>
+      </trkpt>
+      <trkpt lat="28.357735000" lon="-16.499147000">
+        <time>2011-09-26T00:00:52Z</time>
+      </trkpt>
+      <trkpt lat="28.357665000" lon="-16.499194000">
+        <time>2011-09-26T00:00:54Z</time>
+      </trkpt>
+      <trkpt lat="28.357640000" lon="-16.499329000">
+        <time>2011-09-26T00:00:55Z</time>
+      </trkpt>
+      <trkpt lat="28.357788000" lon="-16.499707000">
+        <time>2011-09-26T00:01:00Z</time>
+      </trkpt>
+      <trkpt lat="28.357825000" lon="-16.500150000">
+        <time>2011-09-26T00:01:05Z</time>
+      </trkpt>
+      <trkpt lat="28.357952000" lon="-16.500374000">
+        <time>2011-09-26T00:01:08Z</time>
+      </trkpt>
+      <trkpt lat="28.358219000" lon="-16.500677000">
+        <time>2011-09-26T00:01:13Z</time>
+      </trkpt>
+      <trkpt lat="28.358334000" lon="-16.500943000">
+        <time>2011-09-26T00:01:17Z</time>
+      </trkpt>
+      <trkpt lat="28.358359000" lon="-16.501330000">
+        <time>2011-09-26T00:01:21Z</time>
+      </trkpt>
+      <trkpt lat="28.358330000" lon="-16.501666000">
+        <time>2011-09-26T00:01:25Z</time>
+      </trkpt>
+      <trkpt lat="28.358231000" lon="-16.501900000">
+        <time>2011-09-26T00:01:28Z</time>
+      </trkpt>
+      <trkpt lat="28.357924000" lon="-16.502231000">
+        <time>2011-09-26T00:01:34Z</time>
+      </trkpt>
+      <trkpt lat="28.357698000" lon="-16.502363000">
+        <time>2011-09-26T00:01:37Z</time>
+      </trkpt>
+      <trkpt lat="28.357644000" lon="-16.502394000">
+        <time>2011-09-26T00:01:38Z</time>
+      </trkpt>
+      <trkpt lat="28.357576000" lon="-16.502446000">
+        <time>2011-09-26T00:01:39Z</time>
+      </trkpt>
+      <trkpt lat="28.357330000" lon="-16.502535000">
+        <time>2011-09-26T00:01:43Z</time>
+      </trkpt>
+      <trkpt lat="28.356993000" lon="-16.502545000">
+        <time>2011-09-26T00:01:47Z</time>
+      </trkpt>
+      <trkpt lat="28.356918000" lon="-16.502569000">
+        <time>2011-09-26T00:01:48Z</time>
+      </trkpt>
+      <trkpt lat="28.356687000" lon="-16.502552000">
+        <time>2011-09-26T00:01:51Z</time>
+      </trkpt>
+      <trkpt lat="28.356734000" lon="-16.502402000">
+        <time>2011-09-26T00:01:53Z</time>
+      </trkpt>
+      <trkpt lat="28.356577000" lon="-16.502170000">
+        <time>2011-09-26T00:01:57Z</time>
+      </trkpt>
+      <trkpt lat="28.356407000" lon="-16.501902000">
+        <time>2011-09-26T00:02:01Z</time>
+      </trkpt>
+      <trkpt lat="28.356256000" lon="-16.501634000">
+        <time>2011-09-26T00:02:04Z</time>
+      </trkpt>
+      <trkpt lat="28.355854000" lon="-16.501039000">
+        <time>2011-09-26T00:02:13Z</time>
+      </trkpt>
+      <trkpt lat="28.355698000" lon="-16.500794000">
+        <time>2011-09-26T00:02:17Z</time>
+      </trkpt>
+      <trkpt lat="28.355463000" lon="-16.500421000">
+        <time>2011-09-26T00:02:22Z</time>
+      </trkpt>
+      <trkpt lat="28.355083000" lon="-16.500100000">
+        <time>2011-09-26T00:02:28Z</time>
+      </trkpt>
+      <trkpt lat="28.354960000" lon="-16.499323000">
+        <time>2011-09-26T00:02:38Z</time>
+      </trkpt>
+      <trkpt lat="28.354927000" lon="-16.499073000">
+        <time>2011-09-26T00:02:41Z</time>
+      </trkpt>
+      <trkpt lat="28.354983000" lon="-16.498794000">
+        <time>2011-09-26T00:02:44Z</time>
+      </trkpt>
+      <trkpt lat="28.354923000" lon="-16.498684000">
+        <time>2011-09-26T00:02:46Z</time>
+      </trkpt>
+      <trkpt lat="28.354913000" lon="-16.498582000">
+        <time>2011-09-26T00:02:47Z</time>
+      </trkpt>
+      <trkpt lat="28.354651000" lon="-16.498306000">
+        <time>2011-09-26T00:02:52Z</time>
+      </trkpt>
+      <trkpt lat="28.354870000" lon="-16.497995000">
+        <time>2011-09-26T00:02:56Z</time>
+      </trkpt>
+      <trkpt lat="28.354776000" lon="-16.497697000">
+        <time>2011-09-26T00:03:00Z</time>
+      </trkpt>
+      <trkpt lat="28.354747000" lon="-16.497604000">
+        <time>2011-09-26T00:03:01Z</time>
+      </trkpt>
+      <trkpt lat="28.354516000" lon="-16.497422000">
+        <time>2011-09-26T00:03:05Z</time>
+      </trkpt>
+      <trkpt lat="28.354305000" lon="-16.497400000">
+        <time>2011-09-26T00:03:08Z</time>
+      </trkpt>
+      <trkpt lat="28.354172000" lon="-16.497408000">
+        <time>2011-09-26T00:03:09Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
 </gpx>
