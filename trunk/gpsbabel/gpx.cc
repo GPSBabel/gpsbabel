@@ -1657,16 +1657,16 @@ static void
 gpx_write_common_extensions(const waypoint* waypointp, const gpx_point_type point_type)
 {
   // gpx version we are writing is >= 1.1.
-  if ((opt_humminbirdext && (waypointp->depth != 0 || waypointp->temperature != 0)) ||
-      (opt_garminext && gpxpt_waypoint==point_type && (waypointp->temperature != 0 || waypointp->depth != 0)) ||
-      (opt_garminext && gpxpt_track==point_type && (waypointp->temperature != 0 || waypointp->depth != 0 || waypointp->heartrate != 0 || waypointp->cadence != 0))) {
+  if ((opt_humminbirdext && (WAYPT_HAS(waypointp, depth) || WAYPT_HAS(waypointp, temperature))) ||
+      (opt_garminext && gpxpt_waypoint==point_type && (WAYPT_HAS(waypointp, temperature) || WAYPT_HAS(waypointp, depth))) ||
+      (opt_garminext && gpxpt_track==point_type && (WAYPT_HAS(waypointp, temperature) || WAYPT_HAS(waypointp, depth) || waypointp->heartrate != 0 || waypointp->cadence != 0))) {
     writer.writeStartElement("extensions");
 
     if (opt_humminbirdext) {
-      if (waypointp->depth != 0) {
+      if (WAYPT_HAS(waypointp, depth)) {
         writer.writeTextElement("h:depth", toString(waypointp->depth * 100.0));
       }
-      if (waypointp->temperature != 0) {
+      if (WAYPT_HAS(waypointp, temperature)) {
         writer.writeTextElement("h:temperature", toString(waypointp->temperature));
       }
     }
@@ -1678,12 +1678,12 @@ gpx_write_common_extensions(const waypoint* waypointp, const gpx_point_type poin
       // Although not required by the schema we assume that gpxtpx:TrackPointExtension must be a child of gpx:trkpt.
       switch (point_type) {
       case gpxpt_waypoint:
-        if (waypointp->temperature != 0 || waypointp->depth != 0) {
+        if (WAYPT_HAS(waypointp, temperature) || WAYPT_HAS(waypointp, depth)) {
           writer.writeStartElement("gpxx:WaypointExtension");
-          if (waypointp->temperature != 0) {
+          if (WAYPT_HAS(waypointp, temperature)) {
             writer.writeTextElement("gpxx:Temperature", toString(waypointp->temperature));
           }
-          if (waypointp->depth != 0) {
+          if (WAYPT_HAS(waypointp, depth)) {
             writer.writeTextElement("gpxx:Depth", toString(waypointp->depth));
           }
           writer.writeEndElement(); // "gpxx:WaypointExtension"
@@ -1693,13 +1693,13 @@ gpx_write_common_extensions(const waypoint* waypointp, const gpx_point_type poin
         /* we don't have any appropriate data for the children of gpxx:RoutePointExtension */
         break;
       case gpxpt_track:
-        if (waypointp->temperature != 0 || waypointp->depth != 0 || waypointp->heartrate != 0 || waypointp->cadence != 0) {
+        if (WAYPT_HAS(waypointp, temperature) || WAYPT_HAS(waypointp, depth) || waypointp->heartrate != 0 || waypointp->cadence != 0) {
           // gpxtpx:TrackPointExtension is a replacement for gpxx:TrackPointExtension.
           writer.writeStartElement("gpxtpx:TrackPointExtension");
-          if (waypointp->temperature != 0) {
+          if (WAYPT_HAS(waypointp, temperature)) {
             writer.writeTextElement("gpxtpx:atemp", toString(waypointp->temperature));
           }
-          if (waypointp->depth != 0) {
+          if (WAYPT_HAS(waypointp, depth)) {
             writer.writeTextElement("gpxtpx:depth", toString(waypointp->depth));
           }
           if (waypointp->heartrate != 0) {
