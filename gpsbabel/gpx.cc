@@ -1586,7 +1586,7 @@ write_gpx_url(const waypoint* waypointp)
  * Order counts.
  */
 static void
-gpx_write_common_acc(const waypoint* waypointp, const char* indent)
+gpx_write_common_acc(const waypoint* waypointp)
 {
   const char* fix = NULL;
 
@@ -1631,7 +1631,7 @@ gpx_write_common_acc(const waypoint* waypointp, const char* indent)
 
 
 static void
-gpx_write_common_position(const waypoint* waypointp, const char* indent)
+gpx_write_common_position(const waypoint* waypointp)
 {
   if (waypointp->altitude != unknown_alt) {
     writer.writeTextElement("ele", QString::number(waypointp->altitude, 'f', 6));
@@ -1648,7 +1648,7 @@ gpx_write_common_position(const waypoint* waypointp, const char* indent)
 }
 
 static void
-gpx_write_common_extensions(const waypoint* waypointp, const char* indent)
+gpx_write_common_extensions(const waypoint* waypointp)
 {
   // FIXME: gpxx:Temperature must be a child of gpxx:WaypointExtension or gpxx:TrackPointExtension.
   // FIXME: gpxx:Depth must be a child of gpxx:WaypointExtension or gpxx:TrackPointExtension.
@@ -1690,8 +1690,7 @@ gpx_write_common_extensions(const waypoint* waypointp, const char* indent)
 }
 
 static void
-gpx_write_common_description(const waypoint* waypointp, const char* indent,
-                             const char* oname)
+gpx_write_common_description(const waypoint* waypointp, const char* oname)
 {
   writer.writeOptionalTextElement("name", oname);
   writer.writeOptionalTextElement("cmt", waypointp->description);
@@ -1718,9 +1717,9 @@ gpx_waypt_pr(const waypoint* waypointp)
   oname = global_opts.synthesize_shortnames ?
           mkshort_from_wpt(mkshort_handle, waypointp) :
           waypointp->shortname;
-  gpx_write_common_position(waypointp, "  ");
-  gpx_write_common_description(waypointp, "  ", oname);
-  gpx_write_common_acc(waypointp, "  ");
+  gpx_write_common_position(waypointp);
+  gpx_write_common_description(waypointp, oname);
+  gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
     fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
@@ -1735,7 +1734,7 @@ gpx_waypt_pr(const waypoint* waypointp)
       garmin_fs_xml_fprint(waypointp, writer);
     }
   } else {
-    gpx_write_common_extensions(waypointp, "  ");
+    gpx_write_common_extensions(waypointp);
   }
   writer.writeEndElement();
 }
@@ -1782,7 +1781,7 @@ gpx_track_disp(const waypoint* waypointp)
   writer.writeAttribute("lat", toString(waypointp->latitude));
   writer.writeAttribute("lon", toString(waypointp->longitude));
 
-  gpx_write_common_position(waypointp, "  ");
+  gpx_write_common_position(waypointp);
 
   /* These were accidentally removed from 1.1 */
   if (gpx_wversion_num == 10) {
@@ -1800,10 +1799,10 @@ gpx_track_disp(const waypoint* waypointp)
   oname = global_opts.synthesize_shortnames ?
           mkshort_from_wpt(mkshort_handle, waypointp) :
           waypointp->shortname;
-  gpx_write_common_description(waypointp, "  ",
+  gpx_write_common_description(waypointp,
                                waypointp->wpt_flags.shortname_is_synthetic ?
                                NULL : oname);
-  gpx_write_common_acc(waypointp, "  ");
+  gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
     fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
@@ -1811,7 +1810,7 @@ gpx_track_disp(const waypoint* waypointp)
       fprint_xml_chain(fs_gpx->tag, waypointp);
     }
   } else {
-    gpx_write_common_extensions(waypointp, "  ");
+    gpx_write_common_extensions(waypointp);
   }
   writer.writeEndElement();
 }
@@ -1868,9 +1867,9 @@ gpx_route_disp(const waypoint* waypointp)
   oname = global_opts.synthesize_shortnames ?
           mkshort_from_wpt(mkshort_handle, waypointp) :
           waypointp->shortname;
-  gpx_write_common_position(waypointp, "    ");
-  gpx_write_common_description(waypointp, "    ", oname);
-  gpx_write_common_acc(waypointp, "    ");
+  gpx_write_common_position(waypointp);
+  gpx_write_common_description(waypointp, oname);
+  gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
     fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
@@ -1878,7 +1877,7 @@ gpx_route_disp(const waypoint* waypointp)
       fprint_xml_chain(fs_gpx->tag, waypointp);
     }
   } else {
-    gpx_write_common_extensions(waypointp, "    ");
+    gpx_write_common_extensions(waypointp);
   }
   writer.writeEndElement();
 }
