@@ -17,3 +17,6 @@ rm -f ${TMPDIR}/basecampe~gpx.gpx
 gpsbabel -i gpx -f ${REFERENCE}/basecamp.gpx -o gpx -F ${TMPDIR}/basecamp~gpx.gpx
 compare ${REFERENCE}/basecamp~gpx.gpx ${TMPDIR}/basecamp~gpx.gpx 
 
+rm -f ${TMPDIR}/extensiondata.gpx
+gpsbabel -i unicsv -f ${REFERENCE}/extensiondata.unicsv -x transform,trk=wpt -o gpx,garminextensions -F ${TMPDIR}/extensiondata.gpx
+compare ${REFERENCE}/extensiondata~unicsv.gpx ${TMPDIR}/extensiondata.gpx

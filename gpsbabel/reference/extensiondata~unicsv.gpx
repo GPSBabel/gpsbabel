@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1">
+  <metadata>
+    <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="39.852048000" minlon="-105.690364000" maxlat="40.075297000" maxlon="-105.409614000"/>
+  </metadata>
+  <wpt lat="40.075297000" lon="-105.414373000">
+    <ele>2294.000000</ele>
+    <name>Lickskillet</name>
+    <cmt>Lickskillet</cmt>
+    <desc>Lickskillet</desc>
+    <extensions>
+      <gpxx:WaypointExtension>
+        <gpxx:Temperature>20.000000</gpxx:Temperature>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="40.063311000" lon="-105.409614000">
+    <ele>2514.000000</ele>
+    <name>Gold Hill</name>
+    <cmt>Gold Hill</cmt>
+    <desc>Gold Hill</desc>
+    <extensions>
+      <gpxx:WaypointExtension>
+        <gpxx:Temperature>18.000000</gpxx:Temperature>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="39.966120000" lon="-105.482821000">
+    <ele>2499.000000</ele>
+    <name>Barker Reservoir Dam</name>
+    <cmt>Barker Reservoir Dam</cmt>
+    <desc>Barker Reservoir Dam</desc>
+    <extensions>
+      <gpxx:WaypointExtension>
+        <gpxx:Depth>37.000000000</gpxx:Depth>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="39.962905000" lon="-105.502236000">
+    <ele>2499.000000</ele>
+    <name>Barker Reservoir Shore</name>
+    <cmt>Barker Reservoir Shore</cmt>
+    <desc>Barker Reservoir Shore</desc>
+    <extensions>
+      <gpxx:WaypointExtension>
+        <gpxx:Depth>0.000000000</gpxx:Depth>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="39.852048000" lon="-105.690364000">
+    <ele>4063.000000</ele>
+    <name>James Peak</name>
+    <cmt>James Peak</cmt>
+    <desc>James Peak</desc>
+    <extensions>
+      <gpxx:WaypointExtension>
+        <gpxx:Temperature>0.000000</gpxx:Temperature>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <trk>
+    <trkseg>
+      <trkpt lat="40.075297000" lon="-105.414373000">
+        <ele>2294.000000</ele>
+        <name>Lickskillet</name>
+        <cmt>Lickskillet</cmt>
+        <desc>Lickskillet</desc>
+        <extensions>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:atemp>20.000000</gpxtpx:atemp>
+            <gpxtpx:hr>60</gpxtpx:hr>
+            <gpxtpx:cad>85</gpxtpx:cad>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+      <trkpt lat="40.063311000" lon="-105.409614000">
+        <ele>2514.000000</ele>
+        <name>Gold Hill</name>
+        <cmt>Gold Hill</cmt>
+        <desc>Gold Hill</desc>
+        <extensions>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:atemp>18.000000</gpxtpx:atemp>
+            <gpxtpx:hr>160</gpxtpx:hr>
+            <gpxtpx:cad>45</gpxtpx:cad>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+      <trkpt lat="39.966120000" lon="-105.482821000">
+        <ele>2499.000000</ele>
+        <name>Barker Reservoir Dam</name>
+        <cmt>Barker Reservoir Dam</cmt>
+        <desc>Barker Reservoir Dam</desc>
+        <extensions>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:depth>37.000000000</gpxtpx:depth>
+            <gpxtpx:hr>50</gpxtpx:hr>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+      <trkpt lat="39.962905000" lon="-105.502236000">
+        <ele>2499.000000</ele>
+        <name>Barker Reservoir Shore</name>
+        <cmt>Barker Reservoir Shore</cmt>
+        <desc>Barker Reservoir Shore</desc>
+        <extensions>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:depth>0.000000000</gpxtpx:depth>
+            <gpxtpx:hr>40</gpxtpx:hr>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+      <trkpt lat="39.852048000" lon="-105.690364000">
+        <ele>4063.000000</ele>
+        <name>James Peak</name>
+        <cmt>James Peak</cmt>
+        <desc>James Peak</desc>
+        <extensions>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:atemp>0.000000</gpxtpx:atemp>
+            <gpxtpx:hr>70</gpxtpx:hr>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
