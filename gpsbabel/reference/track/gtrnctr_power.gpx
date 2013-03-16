@@ -10,11 +10,6 @@
     <name>LAP001</name>
     <cmt>LAP001</cmt>
     <desc>LAP001</desc>
-    <extensions>
-      <gpxtpx:TrackPointExtension>
-        <gpxtpx:hr>88</gpxtpx:hr>
-      </gpxtpx:TrackPointExtension>
-    </extensions>
   </wpt>
   <trk>
     <name>2010-05-28T01:16:35.000Z</name>

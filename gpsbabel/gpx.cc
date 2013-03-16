@@ -86,6 +86,12 @@ static format_specific_data** fs_ptr;
 #endif
 
 typedef enum  {
+  gpxpt_waypoint,
+  gpxpt_track,
+  gpxpt_route
+} gpx_point_type;
+
+typedef enum  {
   tt_unknown = 0,
   tt_gpx,
 
@@ -1648,43 +1654,66 @@ gpx_write_common_position(const waypoint* waypointp)
 }
 
 static void
-gpx_write_common_extensions(const waypoint* waypointp)
+gpx_write_common_extensions(const waypoint* waypointp, const gpx_point_type point_type)
 {
-  // FIXME: gpxx:Temperature must be a child of gpxx:WaypointExtension or gpxx:TrackPointExtension.
-  // FIXME: gpxx:Depth must be a child of gpxx:WaypointExtension or gpxx:TrackPointExtension.
-  // FIXME: Although not required by the schema it seems gpxx:WaypointExtension should only be used as a child of gpx:wpt
-  // FIXME: Although not required by the schema it seems gpxx:RoutePointExtension should only be used as a child of gpx:rtept
-  // FIXME: Although not required by the schema it seems gpxx:TrackPointExtension should only be used as a child of gpx:trkpt
-  // FIXME: Although not required by the schema it seems gpxtpx:TrackPointExtension should only be used as a child of gpx:trkpt
-  if (((opt_humminbirdext || opt_garminext) && (waypointp->depth != 0 || waypointp->temperature != 0))
-      || (opt_garminext && (waypointp->heartrate != 0 || waypointp->cadence != 0))) {
+  // gpx version we are writing is >= 1.1.
+  if ((opt_humminbirdext && (waypointp->depth != 0 || waypointp->temperature != 0)) ||
+      (opt_garminext && gpxpt_waypoint==point_type && (waypointp->temperature != 0 || waypointp->depth != 0)) ||
+      (opt_garminext && gpxpt_track==point_type && (waypointp->temperature != 0 || waypointp->depth != 0 || waypointp->heartrate != 0 || waypointp->cadence != 0))) {
     writer.writeStartElement("extensions");
-    if (waypointp->depth != 0) {
-      if (opt_humminbirdext) {
+
+    if (opt_humminbirdext) {
+      if (waypointp->depth != 0) {
         writer.writeTextElement("h:depth", toString(waypointp->depth * 100.0));
       }
-      if (opt_garminext) {
-        writer.writeTextElement("gpxx:Depth", toString(waypointp->depth));
-      }
-    }
-    if (waypointp->temperature != 0) {
-      if (opt_humminbirdext) {
+      if (waypointp->temperature != 0) {
         writer.writeTextElement("h:temperature", toString(waypointp->temperature));
       }
-      if (opt_garminext) {
-        writer.writeTextElement("gpxx:Temperature", toString(waypointp->temperature));
+    }
+
+    if (opt_garminext) {
+      // Although not required by the schema we assume that gpxx:WaypointExtension must be a child of gpx:wpt.
+      // Although not required by the schema we assume that gpxx:RoutePointExtension must be a child of gpx:rtept.
+      // Although not required by the schema we assume that gpxx:TrackPointExtension  must be a child of gpx:trkpt.
+      // Although not required by the schema we assume that gpxtpx:TrackPointExtension must be a child of gpx:trkpt.
+      switch (point_type) {
+      case gpxpt_waypoint:
+        if (waypointp->temperature != 0 || waypointp->depth != 0) {
+          writer.writeStartElement("gpxx:WaypointExtension");
+          if (waypointp->temperature != 0) {
+            writer.writeTextElement("gpxx:Temperature", toString(waypointp->temperature));
+          }
+          if (waypointp->depth != 0) {
+            writer.writeTextElement("gpxx:Depth", toString(waypointp->depth));
+          }
+          writer.writeEndElement(); // "gpxx:WaypointExtension"
+        }
+        break;
+      case gpxpt_route:
+        /* we don't have any appropriate data for the children of gpxx:RoutePointExtension */
+        break;
+      case gpxpt_track:
+        if (waypointp->temperature != 0 || waypointp->depth != 0 || waypointp->heartrate != 0 || waypointp->cadence != 0) {
+          // gpxtpx:TrackPointExtension is a replacement for gpxx:TrackPointExtension.
+          writer.writeStartElement("gpxtpx:TrackPointExtension");
+          if (waypointp->temperature != 0) {
+            writer.writeTextElement("gpxtpx:atemp", toString(waypointp->temperature));
+          }
+          if (waypointp->depth != 0) {
+            writer.writeTextElement("gpxtpx:depth", toString(waypointp->depth));
+          }
+          if (waypointp->heartrate != 0) {
+            writer.writeTextElement("gpxtpx:hr", QString::number(waypointp->heartrate));
+          }
+          if (waypointp->cadence != 0) {
+            writer.writeTextElement("gpxtpx:cad", QString::number(waypointp->cadence));
+          }
+          writer.writeEndElement(); // "gpxtpx:TrackPointExtension"
+        }
+        break;
       }
     }
-    if (opt_garminext && (waypointp->heartrate != 0 || waypointp->cadence != 0)) {
-      writer.writeStartElement("gpxtpx:TrackPointExtension");
-      if (waypointp->heartrate != 0) {
-        writer.writeTextElement("gpxtpx:hr", QString::number(waypointp->heartrate));
-      }
-      if (waypointp->cadence != 0) {
-        writer.writeTextElement("gpxtpx:cad", QString::number(waypointp->cadence));
-      }
-      writer.writeEndElement(); // "gpxtpx:TrackPointExtension"
-    }
+
     writer.writeEndElement(); // "extensions"
   }
 }
@@ -1734,7 +1763,7 @@ gpx_waypt_pr(const waypoint* waypointp)
       garmin_fs_xml_fprint(waypointp, writer);
     }
   } else {
-    gpx_write_common_extensions(waypointp);
+    gpx_write_common_extensions(waypointp, gpxpt_waypoint);
   }
   writer.writeEndElement();
 }
@@ -1810,7 +1839,7 @@ gpx_track_disp(const waypoint* waypointp)
       fprint_xml_chain(fs_gpx->tag, waypointp);
     }
   } else {
-    gpx_write_common_extensions(waypointp);
+    gpx_write_common_extensions(waypointp, gpxpt_track);
   }
   writer.writeEndElement();
 }
@@ -1877,7 +1906,7 @@ gpx_route_disp(const waypoint* waypointp)
       fprint_xml_chain(fs_gpx->tag, waypointp);
     }
   } else {
-    gpx_write_common_extensions(waypointp);
+    gpx_write_common_extensions(waypointp, gpxpt_route);
   }
   writer.writeEndElement();
 }
