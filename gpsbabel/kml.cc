@@ -924,18 +924,6 @@ static void kml_output_point(const waypoint* waypointp, kml_point_type pt_type)
     break;
   }
 
-  switch (pt_type) {
-  case kmlpt_track:
-    style = "#track";
-    break;
-  case kmlpt_route:
-    style = "#route";
-    break;
-  default:
-    fatal("kml_output_point: unknown point type");
-    break;
-  }
-
   if (export_points) {
     kml_write_xml(1, "<Placemark>\n");
     if (atoi(opt_labels)) {
