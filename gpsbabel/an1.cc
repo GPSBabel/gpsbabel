@@ -779,12 +779,12 @@ Write_One_AN1_Waypoint(const waypoint* wpt)
   }
 
   if (!nourl && wpt->hasLink()) {
-    int len = 7+strlen(wpt->url);
+    int len = 7 + wpt->url.length();
     char* extra = (char*)xmalloc(len);
-    sprintf(extra, "{URL=%s}", wpt->url);
+    sprintf(extra, "{URL=%s}", wpt->url.toUtf8().data());
     rec->name = xstrappend(rec->name, extra);
     xfree(extra);
-    rec->url = xstrdup(wpt->url);
+    rec->url = xstrdup(wpt->url.toUtf8().data());
   }
 
   if (wpt->notes) {

@@ -141,7 +141,7 @@ enum {
   RCR,
   MILLISECOND,
   DISTANCE,
-} DATA_TYPES;
+} /* DATA_TYPES */;
 
 struct log_type {
   int id;

@@ -110,7 +110,7 @@ html_disp(const waypoint* wpt)
   if (strcmp(wpt->description, wpt->shortname)) {
     if (wpt->hasLink()) {
       char* d = html_entitize(wpt->description);
-      gbfprintf(file_out, "<a href=\"%s\">%s</a>", wpt->url, d);
+      gbfprintf(file_out, "<a href=\"%s\">%s</a>", wpt->url.toUtf8().data(), d);
       xfree(d);
     } else {
       gbfprintf(file_out, "%s", wpt->description);

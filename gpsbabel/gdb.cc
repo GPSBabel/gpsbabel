@@ -620,8 +620,8 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
     res->url = FREAD_CSTR;
     if (wpt_class != 0) {
-      res->description = res->url;
-      res->url = NULL;
+      res->description = xstrdup(res->url.toUtf8().data());
+      res->url.clear();
     }
   } else { // if (gdb_ver >= GDB_VER_3)
     int i, url_ct;
@@ -1342,7 +1342,7 @@ write_waypoint(
     FWRITE(zbuf, 3);
     FWRITE(zbuf, 4);
     descr = (wpt_class < gt_waypt_class_map_point) ?
-            wpt->url : wpt->description;
+            wpt->url.toUtf8().data() : wpt->description;
     if ((descr != NULL) && (wpt_class >= gt_waypt_class_map_point) && \
         (strcmp(descr, wpt->shortname) == 0)) {
       descr = NULL;
@@ -1378,7 +1378,7 @@ write_waypoint(
       cnt++;
     }
     for (url_next = wpt->url_next; (url_next); url_next = url_next->url_next)
-      if (url_next->url) {
+      if (!url_next->url.isEmpty()) {
         cnt++;
       }
     FWRITE_i32(cnt);
@@ -1386,8 +1386,8 @@ write_waypoint(
       FWRITE_CSTR(wpt->url);
     }
     for (url_next = wpt->url_next; (url_next); url_next = url_next->url_next)
-      if (url_next->url) {
-        FWRITE_CSTR(url_next->url);
+      if (!url_next->url.isEmpty()) {
+        FWRITE_CSTR(url_next->url.toUtf8().data());
       }
   }
 
@@ -1645,7 +1645,7 @@ write_waypoint_cb(const waypoint* refpt)
 
   if ((test != NULL) && (route_flag == 0)) {
     if ((str_not_equal(test->notes, refpt->notes)) ||
-        (str_not_equal(test->url, refpt->url))) {
+        test->url.compare(refpt->url)) {
       test = NULL;
     }
   }
