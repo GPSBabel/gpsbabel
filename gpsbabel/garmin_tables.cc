@@ -1039,7 +1039,7 @@ gt_lookup_datum_index(const char* datum_str, const char* module)
 gbuint32
 gt_color_value(const unsigned int garmin_index)
 {
-  if ((garmin_index >= 0) && (garmin_index < GT_COLORS_CT)) {
+  if ((garmin_index < GT_COLORS_CT)) {
     return gt_colors[garmin_index].rgb;
   } else {
     return unknown_color;  /* -1 */
@@ -1088,7 +1088,7 @@ gt_color_index_by_rgb(const int rgb)
 const char*
 gt_color_name(const unsigned int garmin_index)
 {
-  if ((garmin_index >= 0) && (garmin_index < GT_COLORS_CT)) {
+  if ((garmin_index < GT_COLORS_CT)) {
     return gt_colors[garmin_index].name;
   } else {
     return gt_colors[0].name;

@@ -384,7 +384,7 @@ routesimple_init(const char *args)
     fatal(MYNAME ": You may specify only one of crosstrack, length, or relative.\n");
   }
   if (!xteopt && !lenopt && !relopt) {
-    xteopt = "";
+    xteopt = (char *) "";
   }
 
   if (countopt) {

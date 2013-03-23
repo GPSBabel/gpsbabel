@@ -74,7 +74,7 @@ gzapi_open(gbfile* self, const char* mode)
 
   strcpy(openmode, mode);
   if (strchr(mode, 'b') == NULL) {
-    strncat(openmode, "b", sizeof(openmode));
+    strncat(openmode, "b", sizeof(openmode) - strlen(openmode) - 1);
   }
 
   if (self->is_pipe) {

@@ -772,7 +772,7 @@ skytraq_read_single_sector(unsigned int sector, gbuint8 *buf)
   unsigned int c, i, j, cs;
   gbuint8 buffer[16];
 
-  if (sector < 0  ||  sector > 0xFF) {
+  if (sector > 0xFF) {
     fatal(MYNAME ": Invalid sector number (%i)\n", sector);
   }
 
@@ -866,7 +866,7 @@ skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, gbuin
     fatal(MYNAME ": Invalid sector number (%i)\n", first_sector);
   }
   be_write16(&MSG_LOG_READ_MULTI_SECTORS[1], first_sector);
-  if (sector_count < 0  ||  sector_count > 0xFFFF) {
+  if (sector_count > 0xFFFF) {
     fatal(MYNAME ": Invalid sector count (%i)\n", sector_count);
   }
   be_write16(&MSG_LOG_READ_MULTI_SECTORS[3], sector_count);

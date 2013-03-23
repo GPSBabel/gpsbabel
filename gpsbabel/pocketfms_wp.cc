@@ -33,7 +33,7 @@ rd_init(const char *fname)
 
 double wppos_to_dec(char *value)
 {
-  if (strstr(value, "°") == NULL) {
+  if (strstr(value, "\xB0") == NULL) {
     return atof(value);
   } else {
     int degrees, minutes;
@@ -47,7 +47,7 @@ double wppos_to_dec(char *value)
       sign = -1;
     }
 
-    sscanf(value, "%d°%d'%f\"", &degrees, &minutes, &seconds);
+    sscanf(value, "%d\xB0%d'%f\"", &degrees, &minutes, &seconds);
     return sign * (degrees + ((float)minutes / 60) + (seconds / 3600));
   }
 }

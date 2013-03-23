@@ -128,7 +128,7 @@ text_disp(const waypoint *wpt)
   if (wpt->altitude != unknown_alt) {
     xasprintf(&altout, " alt:%d", (int)((altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude));
   } else {
-    altout = "";
+    altout = (char *) "";
   }
   xasprintf(&tmpout2, "%s (%d%c %6.0f %7.0f)%s", tmpout1, utmz, utmzc, utme, utmn, altout);
   gbfprintf(file_out, "%-16s  %59s\n",
