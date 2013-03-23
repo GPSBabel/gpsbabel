@@ -538,7 +538,7 @@ public:
    */
   url_link* url_next;
   bool hasLink() const {return url && *url; }
-  bool hasLinkText() const {return url && *url; }
+  bool hasLinkText() const {return url_link_text && *url_link_text; }
   char* url;
   char* url_link_text;
 
