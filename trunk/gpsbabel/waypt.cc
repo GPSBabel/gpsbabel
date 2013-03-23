@@ -64,17 +64,12 @@ waypt_dupe(const waypoint *wpt)
   if (wpt->notes) {
     tmp->notes = xstrdup(wpt->notes);
   }
-  if (wpt->url) {
-    tmp->url = xstrdup(wpt->url);
-  }
-  if (wpt->url_link_text) {
-    tmp->url_link_text = xstrdup(wpt->url_link_text);
-  }
+
+  tmp->url = (wpt->url);
+  tmp->url_link_text = wpt->url_link_text;
 
   for (url_link* url_next = wpt->url_next; url_next; url_next = url_next->url_next) {
-    waypt_add_url(tmp,
-                  (url_next->url) ? xstrdup(url_next->url) : NULL,
-                  (url_next->url_link_text) ? xstrdup(url_next->url_link_text) : NULL);
+    waypt_add_url(tmp, url_next->url, url_next->url_link_text);
   }
 
   tmp->icon_descr = wpt->icon_descr;
@@ -399,24 +394,12 @@ waypt_free(waypoint *wpt)
   if (wpt->notes) {
     xfree(wpt->notes);
   }
-  if (wpt->url) {
-    xfree(wpt->url);
-  }
-  if (wpt->url_link_text) {
-    xfree(wpt->url_link_text);
-  }
   if (wpt->url_next) {
     url_link *url_next;
 
     for (url_next = wpt->url_next; url_next;) {
 
       url_link *tonuke = url_next;
-      if (tonuke->url) {
-        xfree(tonuke->url);
-      }
-      if (tonuke->url_link_text) {
-        xfree(tonuke->url_link_text);
-      }
       url_next = tonuke->url_next;
       xfree(tonuke);
     }
@@ -509,7 +492,7 @@ waypt_restore(signed int count, queue *head_bak)
 }
 
 void
-waypt_add_url(waypoint *wpt, char *link, char *url_link_text)
+waypt_add_url(waypoint *wpt, const QString& link, const QString& url_link_text)
 {
   if ((link == NULL) && (url_link_text == NULL)) {
     return;
@@ -521,7 +504,7 @@ waypt_add_url(waypoint *wpt, char *link, char *url_link_text)
     wpt->url_link_text = url_link_text;
   } else {
     url_link *tail;
-    url_link *new_link = (url_link*) xcalloc(sizeof(url_link), 1);
+    url_link *new_link = new url_link;
     new_link->url = link;
     new_link->url_link_text = url_link_text;
 

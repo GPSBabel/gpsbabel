@@ -371,13 +371,11 @@ fs_xml* fs_xml_alloc(long type);
 class url_link {
  public: 
     url_link() :
-    url_next(NULL),
-    url(NULL),
-    url_link_text(NULL)
+    url_next(NULL)
      {} ;
   url_link* url_next;
-  char* url;
-  char* url_link_text;
+  QString url;
+  QString url_link_text;
 };
 
 /*
@@ -461,8 +459,6 @@ public:
   description(NULL), 
   notes(NULL), 
   url_next(NULL), 
-  url(NULL), 
-  url_link_text(NULL), 
 #if NEWTIME
 //  creation_time(QDateTime::fromTime_t(0)),
 #else
@@ -537,10 +533,10 @@ public:
    * members must match struct url_link...
    */
   url_link* url_next;
-  bool hasLink() const {return url && *url; }
-  bool hasLinkText() const {return url_link_text && *url_link_text; }
-  char* url;
-  char* url_link_text;
+  bool hasLink() const {return !url.isEmpty(); }
+  bool hasLinkText() const {return !url_link_text.isEmpty(); }
+  QString url;
+  QString url_link_text;
 
   wp_flags wpt_flags;
   QString icon_descr;
@@ -688,7 +684,8 @@ void waypt_flush(queue*);
 void waypt_flush_all(void);
 unsigned int waypt_count(void);
 void set_waypt_count(unsigned int nc);
-void waypt_add_url(waypoint* wpt, char* link, char* url_link_text);
+void waypt_add_url(waypoint* wpt, const QString& link,
+                   const QString& url_link_text);
 void free_gpx_extras(xml_tag* tag);
 void xcsv_setup_internal_style(const char* style_buf);
 void xcsv_read_internal_style(const char* style_buf);

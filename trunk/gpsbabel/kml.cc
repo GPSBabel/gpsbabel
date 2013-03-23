@@ -1390,7 +1390,7 @@ char* kml_geocache_get_logs(const waypoint* wpt)
   return r;
 }
 
-static void kml_write_data_element(const char* name, const char* value)
+static void kml_write_data_element(const char* name, const QString& value)
 {
   writer.writeStartElement("Data");
   writer.writeAttribute("name", name);
@@ -1557,8 +1557,10 @@ static void kml_waypt_pr(const waypoint* waypointp)
   if (waypointp->hasLink()) {
     writer.writeEmptyElement("snippet");
     if (waypointp->hasLinkText()) {
-      char* odesc = xml_entitize(waypointp->url);
-      char* olink = xml_entitize(waypointp->url_link_text);
+      // FIXME(robertlipe): these call to xml_entitize are suspicios with 
+      // new XML serializer.
+      char* odesc = xml_entitize(waypointp->url.toUtf8().data());
+      char* olink = xml_entitize(waypointp->url_link_text.toUtf8().data());
       writer.writeStartElement("description");
       writer.writeCDATA(QString("<a href=\"%1\">%2</a>").arg(odesc, olink));
       writer.writeEndElement(); // Close description tag

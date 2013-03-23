@@ -60,10 +60,14 @@ cst_add_wpt(const route_head* track, waypoint* wpt)
 
   if (wpt->shortname != NULL) {
     waypt_add(waypt_dupe(wpt));
+#if 0
     if (wpt->url != NULL) {
       xfree(wpt->url);
       wpt->url = NULL;
     }
+#else
+    wpt->url.clear();
+#endif
 
     if (temp_route == NULL) {
       temp_route = route_head_alloc();

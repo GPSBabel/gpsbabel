@@ -1013,7 +1013,7 @@ mmo_finalize_rtept_cb(const waypoint* wptref)
       wpt->notes = xstrdup(wpt2->notes);
     }
     if (wpt2->hasLink()) {
-      wpt->notes = xstrdup(wpt2->url);
+      wpt->notes = xstrdup(wpt2->url.toUtf8().data());
     }
 
     wpt->proximity = wpt2->proximity;
@@ -1310,7 +1310,7 @@ mmo_write_wpt_cb(const waypoint* wpt)
 
   if (wpt->hasLink()) {
     str = xstrdup("_FILE_ ");
-    str = xstrappend(str, wpt->url);
+    str = xstrappend(str, wpt->url.toUtf8().data());
     str = xstrappend(str, "\n");
   } else {
     str = xstrdup("");

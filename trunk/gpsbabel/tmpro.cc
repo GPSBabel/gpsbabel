@@ -220,7 +220,7 @@ tmpro_waypt_pr(const waypoint * wpt)
             wpt->altitude,
             colour,
             icon,
-            wpt->hasLink() ? wpt->url : ""
+            wpt->hasLink() ? wpt->url.toUtf8().data() : ""
            );
 
 
