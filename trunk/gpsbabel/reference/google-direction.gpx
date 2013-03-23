@@ -4,7 +4,7 @@
   <bounds minlat="43.604690000" minlon="1.444570000" maxlat="43.926910000" maxlon="2.146210000"/>
   <rte>
     <name>step001</name>
-    <desc>Head south on Rue du Palais toward Rue de l&apos;Ort en Salvy</desc>
+    <desc>Head south on Rue du Palais toward Rue de l'Ort en Salvy</desc>
     <rtept lat="43.926910000" lon="2.146200000">
       <name>RPT001</name>
     </rtept>
@@ -5133,7 +5133,7 @@
   </rte>
   <rte>
     <name>step015</name>
-    <desc>Turn right onto Route d&apos;Agde/D112Go through 2 roundabouts</desc>
+    <desc>Turn right onto Route d'Agde/D112Go through 2 roundabouts</desc>
     <rtept lat="43.627670000" lon="1.478470000">
       <name>RPT1692</name>
     </rtept>
@@ -5524,7 +5524,7 @@
   </rte>
   <rte>
     <name>step016</name>
-    <desc>Route d&apos;Agde/D112 turns slightly right and becomes Av. Yves BrunaudGo through 1 roundabout</desc>
+    <desc>Route d'Agde/D112 turns slightly right and becomes Av. Yves BrunaudGo through 1 roundabout</desc>
     <rtept lat="43.619580000" lon="1.468810000">
       <name>RPT1821</name>
     </rtept>
