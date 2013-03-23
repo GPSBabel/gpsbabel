@@ -6,8 +6,8 @@
     <ele>1272.900000</ele>
     <time>2005-06-18T08:53:36Z</time>
     <name>1</name>
-    <cmt>Vue de notre chemin du retour.., mais c&apos;est par la route qu&apos;on monte</cmt>
-    <desc>Vue de notre chemin du retour.., mais c&apos;est par la route qu&apos;on monte</desc>
+    <cmt>Vue de notre chemin du retour.., mais c'est par la route qu'on monte</cmt>
+    <desc>Vue de notre chemin du retour.., mais c'est par la route qu'on monte</desc>
     <url>file://C:/Mesdoc/Mes%20images/pic%20midi/DSCF0446.JPG</url>
   </wpt>
   <wpt lat="47.559400000" lon="2.713550000">
@@ -47,7 +47,7 @@
       <ele>1272.900000</ele>
       <time>2005-06-18T08:53:36Z</time>
       <name>1</name>
-      <desc>Vue de notre chemin du retour.., mais c&apos;est par la route qu&apos;on monte</desc>
+      <desc>Vue de notre chemin du retour.., mais c'est par la route qu'on monte</desc>
     </rtept>
     <rtept lat="47.559400000" lon="2.713550000">
       <ele>1525.300000</ele>
@@ -116,7 +116,7 @@
         <ele>1272.900000</ele>
         <time>2005-06-18T08:53:36Z</time>
         <name>1</name>
-        <desc>Vue de notre chemin du retour.., mais c&apos;est par la route qu&apos;on monte</desc>
+        <desc>Vue de notre chemin du retour.., mais c'est par la route qu'on monte</desc>
       </trkpt>
       <trkpt lat="47.565210000" lon="2.713680000">
         <ele>1272.900000</ele>

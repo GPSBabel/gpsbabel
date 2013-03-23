@@ -1362,11 +1362,6 @@ gpx_wr_deinit(void)
 {
   writer.writeEndDocument();
 
-  // TODO: technically, &apos is almost never required to be encoded, but
-  // the pre-Qt version of our serializer did, so we'll manually do it here
-  // for now, in the early days, just to keep things as we've always done it.
-  ostring.replace("'", "&apos;");
-
   // TODO: The old writer would more aggressively protect you from control
   // character nonsense.  The control-Z (032)is the only thing that appears in
   // our test suite, but let's toss things we know aren't allowed in GPX.
