@@ -28,6 +28,9 @@
 # include <windows.h>
 #endif
 
+#include "src/core/xmlstreamwriter.h"
+#include <QtCore/QRegExp>
+
 // options
 static char* opt_deficon = NULL;
 static char* opt_export_lines = NULL;
@@ -42,7 +45,7 @@ static char* opt_trackdirection = NULL;
 static char* opt_units = NULL;
 static char* opt_labels = NULL;
 static char* opt_max_position_points = NULL;
-static char *opt_rotate_colors = NULL;
+static char* opt_rotate_colors = NULL;
 
 static int export_lines;
 static int export_points;
@@ -56,17 +59,14 @@ static int rotate_colors;
 static int line_width;
 static int html_encrypt;
 
-static int indent_level;
-
 static waypoint* wpt_tmp;
 static int wpt_tmp_queued;
 static const char* posnfilename;
 static char* posnfilenametmp;
 
 static gbfile* ofd;
-
-#define COORD_FORMAT "%.6f"
-#define ALT_FORMAT   "%.2f"  // Beyond a centimeter is fantasy.
+static QString ostring;
+static gpsbabel::XmlStreamWriter writer(ostring);
 
 typedef enum  {
   kmlpt_unknown,
@@ -78,20 +78,15 @@ typedef enum  {
 } kml_point_type;
 
 static int realtime_positioning;
-static int do_indentation = 1;
 static bounds kml_bounds;
 static time_t kml_time_min;
 static time_t kml_time_max;
 
-#define TD(FMT,DATA) kml_write_xml(0, "<tr><td>" FMT " </td></tr>\n", DATA)
-#define TD2(FMT,DATA, DATA2) kml_write_xml(0, "<tr><td>" FMT " </td></tr>\n", DATA, DATA2)
+#define AUTOFORMATTING_OFF(AF) bool AF=writer.autoFormatting(); writer.setAutoFormatting(false);
+#define AUTOFORMATTING_RESTORE(AF) writer.setAutoFormatting(af);
 
 //  Icons provided and hosted by Google.  Used with permission.
 #define ICON_BASE "http://earth.google.com/images/kml-icons/"
-
-static const char kml22_hdr[] =
-  "<kml xmlns=\"http://www.opengis.net/kml/2.2\"\n"
-  "\txmlns:gx=\"http://www.google.com/kml/ext/2.2\">\n";
 
 // Multitrack ids to correlate Schema to SchemaData
 static const char kmt_heartrate[] = "heartrate";
@@ -165,7 +160,7 @@ arglist_t kml_args[] = {
     "0", ARGTYPE_INT, ARG_NOMINMAX
   },
   {
-    "rotate_colors", &opt_rotate_colors, 
+    "rotate_colors", &opt_rotate_colors,
     "Rotate colors for tracks and routes (default automatic)",
     NULL, ARGTYPE_FLOAT, "0", "360"
   },
@@ -437,6 +432,14 @@ kml_wr_init(const char* fname)
    * Reduce race conditions with network read link.
    */
   ofd = gbfopen(fname, "w", MYNAME);
+
+  writer.setAutoFormattingIndent(2);
+  // Technically, XML (and therefore KML) defaults ot UTF-8, so we should not
+  // have to declare this.  For compatibility with the existing Qt writer,
+  // we do...
+  //writer.setCodec("UTF-8");
+  //writer.writeStartDocument();
+
 }
 
 /*
@@ -454,7 +457,7 @@ kml_wr_position_init(const char* fname)
    * 30% of our output file is whitespace.  Since parse time
    * matters in this mode, turn the pretty formatting off.
    */
-  do_indentation = 0;
+  writer.setAutoFormatting(false);
 
   max_position_points = atoi(opt_max_position_points);
 }
@@ -462,6 +465,13 @@ kml_wr_position_init(const char* fname)
 static void
 kml_wr_deinit(void)
 {
+  writer.writeEndDocument();
+
+  // FIXME: Nuke illegal xml characters.
+  // If we have done things right this shouldn't be necessary.
+  ostring.replace(QRegExp("[\001-\010]"), " ").replace(QRegExp("[\013-\014]"), " ").replace(QRegExp("[\016-\037]"), " ");
+
+  gbfputs(ostring, ofd);
   gbfclose(ofd);
 
   if (posnfilenametmp) {
@@ -484,81 +494,15 @@ kml_wr_position_deinit(void)
   }
 }
 
-/*
- *  Indent is a direction to change indention level.
- * If positive, increase one level after printing this line.
- * If zero, just print this line at the current indent leve.
- * If negative, descrease the indent level.
- */
-static void
-kml_write_xml(int indent, const char* fmt, ...)
-{
-  va_list args;
-  va_start(args, fmt);
-
-  if (indent < 0) {
-    indent_level--;
-  }
-
-  if (indent_level < 0) {
-    fatal("Indention nesting problem in KML writer.");
-  }
-
-  if (fmt[1] != '!' && do_indentation) {
-    for (int i = 0; i < indent_level; i++) {
-      gbfputs("  ", ofd);
-    }
-  }
-
-  gbvfprintf(ofd, fmt, args);
-
-  if (indent > 0) {
-    indent_level++;
-  }
-
-  va_end(args);
-}
-
-/*
- * Write an optional tag with a value that may need to be entity escaped.
- * Never changes indention leve, but does honour it.
- */
-static void
-kml_write_xmle(const char* tag, const char* fmt, ...)
-{
-  va_list args;
-  va_start(args, fmt);
-
-  if (fmt && *fmt) {
-    char* tmp_ent = xml_entitize(fmt);
-    int needs_escaping = 0;
-    for (int i = 0; i < indent_level; i++) {
-      gbfputs("  ", ofd);
-    }
-    if (strspn(tmp_ent, "&'<>\"")) {
-      needs_escaping = 1;
-    }
-    gbfprintf(ofd, "<%s>", tag);
-    if (needs_escaping) {
-      gbfprintf(ofd, "<![CDATA[");
-    }
-    gbvfprintf(ofd, tmp_ent, args);
-    if (needs_escaping) {
-      gbfprintf(ofd, "]]>");
-    }
-    gbfprintf(ofd, "</%s>\n", tag);
-    xfree(tmp_ent);
-  }
-}
 
 void
 kml_output_linestyle(char* color, int width)
 {
   // Style settings for line strings
-  kml_write_xml(1, "<LineStyle>\n");
-  kml_write_xml(0, "<color>%s</color>\n", opt_line_color);
-  kml_write_xml(0, "<width>%d</width>\n", width);
-  kml_write_xml(-1, "</LineStyle>\n");
+  writer.writeStartElement("LineStyle");
+  writer.writeTextElement("color", opt_line_color);
+  writer.writeTextElement("width", QString::number(width));
+  writer.writeEndElement(); // Close LineStyle tag
 }
 
 
@@ -569,31 +513,31 @@ static void kml_write_bitmap_style_(const char* style, const char* bitmap,
   int is_track = !strncmp(style, "track", 5);
   int is_multitrack = !strncmp(style, "multiTrack", 5);
 
-  kml_write_xml(0, "<!-- %s %s style -->\n",
-                highlighted ? "Highlighted" : "Normal", style);
-  kml_write_xml(1, "<Style id=\"%s_%c\">\n", style, hovertag(highlighted));
+  writer.writeComment(QString(" ") + QString(highlighted ? "Highlighted" : "Normal") + QString(" ") + QString(style) + QString(" style "));
+  writer.writeStartElement("Style");
+  writer.writeAttribute("id", QString(style) + QString("_") + QString(hovertag(highlighted)));
 
-  kml_write_xml(1, "<IconStyle>\n");
+  writer.writeStartElement("IconStyle");
   if (highlighted) {
-    kml_write_xml(0, "<scale>1.2</scale>\n");
+    writer.writeTextElement("scale", "1.2");
   } else {
     if (is_track) {
-      kml_write_xml(0, "<scale>.5</scale>\n");
+      writer.writeTextElement("scale", ".5");
     }
   }
   /* Our icons are pre-rotated, so nail them to the maps. */
   if (force_heading) {
-    kml_write_xml(0, "<heading>0</heading>\n");
+    writer.writeTextElement("heading", "0");
   }
-  kml_write_xml(1, "<Icon>\n");
-  kml_write_xml(0, "<href>%s</href>\n", bitmap);
-  kml_write_xml(-1, "</Icon>\n");
-  kml_write_xml(-1, "</IconStyle>\n");
+  writer.writeStartElement("Icon");
+  writer.writeTextElement("href", bitmap);
+  writer.writeEndElement(); // Close Icon tag
+  writer.writeEndElement(); // Close IconStyle tag
 
   if (is_track && !highlighted) {
-    kml_write_xml(1, "<LabelStyle>\n");
-    kml_write_xml(0, "<scale>0</scale>\n");
-    kml_write_xml(-1, "</LabelStyle>\n");
+    writer.writeStartElement("LabelStyle");
+    writer.writeTextElement("scale", "0");
+    writer.writeEndElement(); //Close LabelStyle tag
   }
 
   if (is_multitrack) {
@@ -602,7 +546,7 @@ static void kml_write_bitmap_style_(const char* style, const char* bitmap,
                          line_width);
   }
 
-  kml_write_xml(-1, "</Style>\n");
+  writer.writeEndElement(); // Close Style tag
 }
 
 /* A wrapper for the above function to emit both a highlighted
@@ -639,16 +583,17 @@ static void kml_write_bitmap_style(kml_point_type pt_type, const char* bitmap,
   kml_write_bitmap_style_(style, bitmap, 0, force_heading);
   kml_write_bitmap_style_(style, bitmap, 1, force_heading);
 
-  kml_write_xml(1, "<StyleMap id=\"%s\">\n", style);
-  kml_write_xml(1, "<Pair>\n");
-  kml_write_xml(0, "<key>normal</key>\n");
-  kml_write_xml(0, "<styleUrl>#%s_%c</styleUrl>\n",style, hovertag(0));
-  kml_write_xml(-1, "</Pair>\n");
-  kml_write_xml(1, "<Pair>\n");
-  kml_write_xml(0, "<key>highlight</key>\n");
-  kml_write_xml(0, "<styleUrl>#%s_%c</styleUrl>\n",style, hovertag(1));
-  kml_write_xml(-1, "</Pair>\n");
-  kml_write_xml(-1, "</StyleMap>\n");
+  writer.writeStartElement("StyleMap");
+  writer.writeAttribute("id", style);
+  writer.writeStartElement("Pair");
+  writer.writeTextElement("key", "normal");
+  writer.writeTextElement("styleUrl", QString("#") + QString(style) + QString("_") + QString(hovertag(0)));
+  writer.writeEndElement(); // Close Pair tag
+  writer.writeStartElement("Pair");
+  writer.writeTextElement("key", "highlight");
+  writer.writeTextElement("styleUrl", QString("#") + QString(style) + QString("_") + QString(hovertag(1)));
+  writer.writeEndElement(); // Close Pair tag
+  writer.writeEndElement(); // Close StyleMap tag
 }
 
 static void kml_output_timestamp(const waypoint* waypointp)
@@ -657,10 +602,36 @@ static void kml_output_timestamp(const waypoint* waypointp)
     char time_string[64];
     xml_fill_in_time(time_string, waypointp->creation_time, waypointp->microseconds, XML_LONG_TIME);
     if (time_string[0]) {
-      kml_write_xml(0, "<TimeStamp><when>%s</when></TimeStamp>\n",
-                    time_string);
+      writer.writeStartElement("TimeStamp");
+      AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
+      writer.writeTextElement("when", time_string);
+      writer.writeEndElement(); // Close TimeStamp tag
+      AUTOFORMATTING_RESTORE(af);
     }
   }
+}
+
+static
+void kml_td(gpsbabel::XmlStreamWriter& hwriter, const QString& boldData, const QString& data)
+{
+  hwriter.writeCharacters("\n");
+  hwriter.writeStartElement("tr");
+  hwriter.writeStartElement("td");
+  hwriter.writeTextElement("b", boldData);
+  hwriter.writeCharacters(data);
+  hwriter.writeEndElement(); // Close td tag
+  hwriter.writeEndElement(); // Close tr tag
+}
+
+static
+void kml_td(gpsbabel::XmlStreamWriter& hwriter, const QString& data)
+{
+  hwriter.writeCharacters("\n");
+  hwriter.writeStartElement("tr");
+  hwriter.writeStartElement("td");
+  hwriter.writeCharacters(data);
+  hwriter.writeEndElement(); // Close td tag
+  hwriter.writeEndElement(); // Close tr tag
 }
 
 /*
@@ -680,79 +651,88 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
     return;
   }
 
+  QString hstring;
+  gpsbabel::XmlStreamWriter hwriter(hstring);
+
   max_alt = fmt_altitude(td->max_alt, &max_alt_units);
   min_alt = fmt_altitude(td->min_alt, &min_alt_units);
   distance = fmt_distance(td->distance_meters, &distance_units);
 
-  kml_write_xml(0, "<snippet/>\n");
+  writer.writeEmptyElement("snippet");
 
-  kml_write_xml(1, "<description>\n");
-  kml_write_xml(1, "<![CDATA[<table>\n");
+  writer.writeStartElement("description");
+
+  hwriter.writeStartElement("table");
 
   if (header->rte_desc) {
-    TD("<b>Description</b> %s", header->rte_desc);
+    kml_td(hwriter, "Description", QString(" %1 ").arg(header->rte_desc));
   }
-  TD2("<b>Distance</b> %.1f %s", distance, distance_units);
+  kml_td(hwriter, "Distance", QString(" %1 %2 ").arg(QString::number(distance, 'f', 1)).arg(distance_units));
   if (td->min_alt != -unknown_alt) {
-    TD2("<b>Min Alt</b> %.3f %s", min_alt, min_alt_units);
+    kml_td(hwriter, "Min Alt", QString(" %1 %2 ").arg(QString::number(min_alt, 'f', 3)).arg(min_alt_units));
   }
   if (td->max_alt != unknown_alt) {
-    TD2("<b>Max Alt</b> %.3f %s", max_alt, max_alt_units);
+    kml_td(hwriter, "Max Alt", QString(" %1 %2 ").arg(QString::number(max_alt, 'f', 3)).arg(max_alt_units));
   }
   if (td->min_spd) {
     const char* spd_units;
     double spd = fmt_speed(td->min_spd, &spd_units);
-    TD2("<b>Min Speed</b> %.1f %s", spd, spd_units);
+    kml_td(hwriter, "Min Speed", QString(" %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
   }
   if (td->max_spd) {
     const char* spd_units;
     double spd = fmt_speed(td->max_spd, &spd_units);
-    TD2("<b>Max Speed</b> %.1f %s", spd, spd_units);
+    kml_td(hwriter, "Max Speed", QString(" %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
   }
   if (td->max_spd && td->start && td->end) {
     const char* spd_units;
     time_t elapsed = td->end - td->start;
     double spd = fmt_speed(td->distance_meters / elapsed, &spd_units);
     if (spd > 1.0)  {
-      TD2("<b>Avg Speed</b> %.1f %s", spd, spd_units);
+      kml_td(hwriter, "Avg Speed", QString(" %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
     }
   }
   if (td->avg_hrt) {
-    TD("<b>Avg Heart Rate</b> %.1f bpm", td->avg_hrt);
+    kml_td(hwriter, "Avg Heart Rate", QString(" %1 bpm ").arg(QString::number(td->avg_hrt, 'f', 1)));
   }
   if (td->min_hrt < td->max_hrt) {
-    TD("<b>Min Heart Rate</b> %d bpm", td->min_hrt);
+    kml_td(hwriter, "Min Heart Rate", QString(" %1 bpm ").arg(QString::number(td->min_hrt)));
   }
   if (td->max_hrt) {
-    TD("<b>Max Heart Rate</b> %d bpm", td->max_hrt);
+    kml_td(hwriter, "Max Heart Rate", QString(" %1 bpm ").arg(QString::number(td->max_hrt)));
   }
   if (td->avg_cad) {
-    TD("<b>Avg Cadence</b> %.1f rpm", td->avg_cad);
+    kml_td(hwriter, "Avg Cadence", QString(" %1 rpm ").arg(QString::number(td->avg_cad, 'f', 1)));
   }
   if (td->max_cad) {
-    TD("<b>Max Cadence</b> %d rpm", td->max_cad);
+    kml_td(hwriter, "Max Cadence", QString(" %1 rpm ").arg(QString::number(td->max_cad)));
   }
   if (td->start && td->end) {
     char time_string[64];
 
     xml_fill_in_time(time_string, td->start, 0, XML_LONG_TIME);
-    TD("<b>Start Time</b> %s ", time_string);
+    kml_td(hwriter, "Start Time", QString(" %1 ").arg(time_string));
     xml_fill_in_time(time_string, td->end, 0, XML_LONG_TIME);
-    TD("<b>End Time</b> %s ", time_string);
+    kml_td(hwriter, "End Time", QString(" %1 ").arg(time_string));
   }
 
-  kml_write_xml(-1, "</table>]]>\n");
-  kml_write_xml(-1, "</description>\n");
+  hwriter.writeCharacters("\n");
+  hwriter.writeEndElement(); // Close table tag
+  //hwriter.writeEndDocument(); // FIXME: it seems like we should end the doc but it causes a reference mismatch by adding a final \n
+  writer.writeCharacters("\n");
+  writer.writeCDATA(hstring);
+  writer.writeCharacters("\n");
+  writer.writeEndElement(); // Close description tag
 
   /* We won't always have times. Garmin saved tracks, for example... */
   if (td->start && td->end) {
     char time_string[64];
-    kml_write_xml(1, "<TimeSpan>\n");
+    writer.writeStartElement("TimeSpan");
     xml_fill_in_time(time_string, td->start, 0, XML_LONG_TIME);
-    kml_write_xml(0, "<begin>%s</begin>\n", time_string);
+    writer.writeTextElement("begin", time_string);
     xml_fill_in_time(time_string, td->end, 0, XML_LONG_TIME);
-    kml_write_xml(0, "<end>%s</end>\n", time_string);
-    kml_write_xml(-1, "</TimeSpan>\n");
+    writer.writeTextElement("end", time_string);
+    writer.writeEndElement(); // Close TimeSpan tag
   }
 }
 
@@ -761,15 +741,15 @@ static
 void kml_output_header(const route_head* header, computed_trkdata* td)
 {
   if (!realtime_positioning)  {
-    kml_write_xml(1,  "<Folder>\n");
+    writer.writeStartElement("Folder");
   }
-  kml_write_xmle("name", header->rte_name);
+  writer.writeOptionalTextElement("name", header->rte_name);
   kml_output_trkdescription(header, td);
 
   if (export_points && header->rte_waypt_ct > 0) {
     // Put the points in a subfolder
-    kml_write_xml(1,  "<Folder>\n");
-    kml_write_xml(0,  "<name>Points</name>\n");
+    writer.writeStartElement("Folder");
+    writer.writeTextElement("name", "Points");
   }
 }
 
@@ -781,7 +761,7 @@ int kml_altitude_known(const waypoint* waypoint)
   }
   // We see way more data that's sourceed at 'zero' than is actually
   // precisely at 0 MSL.
-  if (fabs(waypoint->altitude) < .01) {
+  if (fabs(waypoint->altitude) < 0.01) {
     return 0;
   }
   return 1;
@@ -791,18 +771,16 @@ static
 void kml_write_coordinates(const waypoint* waypointp)
 {
   if (kml_altitude_known(waypointp)) {
-    kml_write_xml(0, "<coordinates>"
-                  COORD_FORMAT "," COORD_FORMAT "," ALT_FORMAT
-                  "</coordinates>\n",
-                  waypointp->longitude,
-                  waypointp->latitude,
-                  waypointp->altitude);
+    writer.writeTextElement("coordinates",
+                            QString::number(waypointp->longitude, 'f', 6) + QString(",") +
+                            QString::number(waypointp->latitude, 'f', 6) + QString(",") +
+                            QString::number(waypointp->altitude, 'f', 2)
+                           );
   } else {
-    kml_write_xml(0, "<coordinates>"
-                  COORD_FORMAT "," COORD_FORMAT
-                  "</coordinates>\n",
-                  waypointp->longitude,
-                  waypointp->latitude);
+    writer.writeTextElement("coordinates",
+                            QString::number(waypointp->longitude, 'f', 6) + QString(",") +
+                            QString::number(waypointp->latitude, 'f', 6)
+                           );
   }
 }
 
@@ -811,21 +789,21 @@ void kml_write_coordinates(const waypoint* waypointp)
  */
 static void kml_output_lookat(const waypoint* waypointp)
 {
-  kml_write_xml(1, "<LookAt>\n");
-  kml_write_xml(0, "<longitude>%f</longitude>\n", waypointp->longitude);
-  kml_write_xml(0, "<latitude>%f</latitude>\n", waypointp->latitude);
-  kml_write_xml(0, "<tilt>66</tilt>\n");
-  kml_write_xml(-1, "</LookAt>\n");
+  writer.writeStartElement("LookAt");
+  writer.writeTextElement("longitude", QString::number(waypointp->longitude, 'f', 6));
+  writer.writeTextElement("latitude", QString::number(waypointp->latitude, 'f', 6));
+  writer.writeTextElement("tilt","66");
+  writer.writeEndElement(); // Close LookAt tag
 }
 
 static void kml_output_positioning(void)
 {
   if (floating) {
-    kml_write_xml(0, "<altitudeMode>absolute</altitudeMode>\n");
+    writer.writeTextElement("altitudeMode", "absolute");
   }
 
   if (extrude) {
-    kml_write_xml(0, "<extrude>1</extrude>\n");
+    writer.writeTextElement("extrude", "1");
   }
 }
 
@@ -839,38 +817,42 @@ static void kml_output_description(const waypoint* pt)
     return;
   }
 
+  QString hstring;
+  gpsbabel::XmlStreamWriter hwriter(hstring);
+
   alt = fmt_altitude(pt->altitude, &alt_units);
 
-  kml_write_xml(1, "<description><![CDATA[\n");
-  kml_write_xml(1, "<table>\n");
+  writer.writeStartElement("description");
+  hwriter.writeCharacters("\n");
+  hwriter.writeStartElement("table");
 
-  TD("Longitude: %f", pt->longitude);
-  TD("Latitude: %f", pt->latitude);
+  kml_td(hwriter, QString("Longitude: %1 ").arg(QString::number(pt->longitude, 'f', 6)));
+  kml_td(hwriter, QString("Latitude: %1 ").arg(QString::number(pt->latitude, 'f', 6)));
   if (kml_altitude_known(pt)) {
-    TD2("Altitude: %.3f %s", alt, alt_units);
+    kml_td(hwriter, QString("Altitude: %1 %2 ").arg(QString::number(alt, 'f', 3)).arg(alt_units));
   }
   if (pt->heartrate) {
-    TD("Heart rate: %d", pt->heartrate);
+    kml_td(hwriter, QString("Heart rate: %1 ").arg(QString::number(pt->heartrate)));
   }
   if (pt->cadence) {
-    TD("Cadence: %d", pt->cadence);
+    kml_td(hwriter, QString("Cadence: %1 ").arg(QString::number(pt->cadence)));
   }
   /* Which unit is this temp in? C? F? K? */
   if WAYPT_HAS(pt, temperature) {
-    TD("Temperature: %.1f", pt->temperature);
+    kml_td(hwriter, QString("Temperature: %1 ").arg(QString::number(pt->temperature, 'f', 1)));
   }
   if WAYPT_HAS(pt, depth) {
     const char* depth_units;
     double depth = fmt_distance(pt->depth, &depth_units);
-    TD2("Depth: %.1f %s", depth, depth_units);
+    kml_td(hwriter, QString("Depth: %1 %2 ").arg(QString::number(depth, 'f', 1)).arg(depth_units));
   }
   if WAYPT_HAS(pt, speed) {
     const char* spd_units;
     double spd = fmt_speed(pt->speed, &spd_units);
-    TD2("Speed: %.1f %s", spd, spd_units);
+    kml_td(hwriter, QString("Speed: %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
   }
   if WAYPT_HAS(pt, course) {
-    TD("Heading: %.1f", pt->course);
+    kml_td(hwriter, QString("Heading: %1 ").arg(QString::number(pt->course, 'f', 1)));
   }
   /* This really shouldn't be here, but as of this writing,
    * Earth can't edit/display the TimeStamp.
@@ -881,12 +863,15 @@ static void kml_output_description(const waypoint* pt)
     xml_fill_in_time(time_string, pt->creation_time,
                      pt->microseconds, XML_LONG_TIME);
     if (time_string[0]) {
-      TD("Time: %s", time_string);
+      kml_td(hwriter, QString("Time: %1 ").arg(time_string));
     }
   }
 
-  kml_write_xml(-1, "</table>\n");
-  kml_write_xml(-1, "]]></description>\n");
+  hwriter.writeCharacters("\n");
+  hwriter.writeEndElement(); // Close table tag
+  hwriter.writeEndDocument();
+  writer.writeCDATA(hstring);
+  writer.writeEndElement(); // Close description tag
 }
 
 static void kml_recompute_time_bounds(const waypoint* waypointp)
@@ -925,24 +910,24 @@ static void kml_output_point(const waypoint* waypointp, kml_point_type pt_type)
   }
 
   if (export_points) {
-    kml_write_xml(1, "<Placemark>\n");
+    writer.writeStartElement("Placemark");
     if (atoi(opt_labels)) {
-      kml_write_xmle("name", waypointp->shortname);
+      writer.writeOptionalTextElement("name", waypointp->shortname);
     }
-    kml_write_xml(0, "<snippet/>\n");
+    writer.writeEmptyElement("snippet");
     kml_output_description(waypointp);
     kml_output_lookat(waypointp);
     kml_output_timestamp(waypointp);
 
 
     if (opt_deficon) {
-      kml_write_xml(1, "<Style>\n");
-      kml_write_xml(1, "<IconStyle>\n");
-      kml_write_xml(1, "<Icon>\n");
-      kml_write_xml(0, "<href>%s</href>\n", opt_deficon);
-      kml_write_xml(-1, "</Icon>\n");
-      kml_write_xml(-1, "</IconStyle>\n");
-      kml_write_xml(-1, "</Style>\n");
+      writer.writeStartElement("Style");
+      writer.writeStartElement("IconStyle");
+      writer.writeStartElement("Icon");
+      writer.writeTextElement("href", opt_deficon);
+      writer.writeEndElement(); // Close Icon tag
+      writer.writeEndElement(); // Close IconStyle tag
+      writer.writeEndElement(); // Close Style tag
     } else {
       if (trackdirection && (pt_type == kmlpt_track)) {
         char buf[100];
@@ -951,22 +936,22 @@ static void kml_output_point(const waypoint* waypointp, kml_point_type pt_type)
         } else
           snprintf(buf, sizeof(buf), "%s-%d", style,
                    (int)(waypointp->course / 22.5 + .5) % 16);
-        kml_write_xml(0, "<styleUrl>%s</styleUrl>\n", buf);
+        writer.writeTextElement("styleUrl", buf);
       } else {
-        kml_write_xml(0, "<styleUrl>%s</styleUrl>\n", style);
+        writer.writeTextElement("styleUrl", style);
       }
     }
 
-    kml_write_xml(1, "<Point>\n");
+    writer.writeStartElement("Point");
     kml_output_positioning();
 
     if (extrude) {
-      kml_write_xml(0, "<extrude>1</extrude>\n");
+      writer.writeTextElement("extrude", "1");
     }
     kml_write_coordinates(waypointp);
-    kml_write_xml(-1, "</Point>\n");
+    writer.writeEndElement(); // Close Point tag
 
-    kml_write_xml(-1, "</Placemark>\n");
+    writer.writeEndElement(); // Close Placemark tag
   }
 }
 
@@ -974,7 +959,7 @@ static void kml_output_tailer(const route_head* header)
 {
 
   if (export_points && header->rte_waypt_ct > 0) {
-    kml_write_xml(-1, "</Folder>\n");
+    writer.writeEndElement(); // Close Folder tag
   }
 
   // Add a linestring for this track?
@@ -990,32 +975,33 @@ static void kml_output_tailer(const route_head* header)
         break;
       }
     }
-    kml_write_xml(1, "<Placemark>\n");
-    kml_write_xml(0, "<name>Path</name>\n");
-    if (!rotate_colors)
-      kml_write_xml(0, "<styleUrl>#lineStyle</styleUrl>\n");
+    writer.writeStartElement("Placemark");
+    writer.writeTextElement("name", "Path");
+    if (!rotate_colors) {
+      writer.writeTextElement("styleUrl", "#lineStyle");
+    }
     if (header->line_color.bbggrr >= 0 || header->line_width >= 0 || rotate_colors) {
-      kml_write_xml(1, "<Style>\n");
-      kml_write_xml(1, "<LineStyle>\n");
+      writer.writeStartElement("Style");
+      writer.writeStartElement("LineStyle");
       if (rotate_colors) {
         kml_step_color();
-        kml_write_xml(0, "<color>%02x%06x</color>\n",
-                      kml_color_sequencer.color.opacity, kml_color_sequencer.color.bbggrr);
-        kml_write_xml(0, "<width>%s</width>\n", opt_line_width);
+        writer.writeTextElement("color", QString("%1%2")
+                                .arg(kml_color_sequencer.color.opacity, 2, 16, QChar('0')).arg(kml_color_sequencer.color.bbggrr, 6, 16, QChar('0')));
+        writer.writeTextElement("width", opt_line_width);
       } else {
         if (header->line_color.bbggrr >= 0) {
-          kml_write_xml(0, "<color>%02x%06x</color>\n",
-                        header->line_color.opacity, header->line_color.bbggrr);
+          writer.writeTextElement("color", QString("%1%2")
+                                  .arg(header->line_color.opacity, 2, 16, QChar('0')).arg(header->line_color.bbggrr, 6, 16, QChar('0')));
         }
         if (header->line_width >= 0) {
-            kml_write_xml(0, "<width>%d</width>\n",header->line_width);
+          writer.writeTextElement("width", QString::number(header->line_width));
         }
       }
-      kml_write_xml(-1, "</LineStyle>\n");
-      kml_write_xml(-1, "</Style>\n");
+      writer.writeEndElement(); // Close LineStyle tag
+      writer.writeEndElement(); // Close Style tag
     }
     if (needs_multigeometry) {
-      kml_write_xml(1, "<MultiGeometry>\n");
+      writer.writeStartElement("MultiGeometry");
     }
 
     QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
@@ -1023,33 +1009,36 @@ static void kml_output_tailer(const route_head* header)
       int first_in_trk = tpt->Q.prev == &header->waypoint_list;
       if (tpt->wpt_flags.new_trkseg) {
         if (!first_in_trk) {
-          kml_write_xml(-1, "</coordinates>\n");
-          kml_write_xml(-1, "</LineString>\n");
+          writer.writeEndElement(); // Close coordinates tag
+          writer.writeEndElement(); // Close LineString tag
         }
-        kml_write_xml(1, "<LineString>\n");
+        writer.writeStartElement("LineString");
         kml_output_positioning();
-        kml_write_xml(0, "<tessellate>1</tessellate>\n");
-        kml_write_xml(1, "<coordinates>\n");
+        writer.writeTextElement("tessellate","1");
+        writer.writeStartElement("coordinates");
+        writer.writeCharacters("\n");
       }
       if (kml_altitude_known(tpt)) {
-        kml_write_xml(0, COORD_FORMAT "," COORD_FORMAT "," ALT_FORMAT "\n",
-                      tpt->longitude, tpt->latitude, tpt->altitude);
+        writer.writeCharacters(QString::number(tpt->longitude, 'f', 6) + QString(",") +
+                               QString::number(tpt->latitude, 'f', 6) + QString(",") +
+                               QString::number(tpt->altitude, 'f', 2) + QString("\n")
+                              );
       } else {
-        kml_write_xml(0, COORD_FORMAT "," COORD_FORMAT "\n",
-                      tpt->longitude,
-                      tpt->latitude);
+        writer.writeCharacters(QString::number(tpt->longitude, 'f', 6) + QString(",") +
+                               QString::number(tpt->latitude, 'f', 6) + QString("\n")
+                              );
       }
     }
-    kml_write_xml(-1, "</coordinates>\n");
-    kml_write_xml(-1, "</LineString>\n");
+    writer.writeEndElement(); // Close coordinates tag
+    writer.writeEndElement(); // Close LineString tag
     if (needs_multigeometry) {
-      kml_write_xml(-1, "</MultiGeometry>\n");
+      writer.writeEndElement(); // Close MultiGeometry tag
     }
-    kml_write_xml(-1, "</Placemark>\n");
+    writer.writeEndElement(); // Close Placemark tag
   }
 
   if (!realtime_positioning)  {
-    kml_write_xml(-1, "</Folder>\n");
+    writer.writeEndElement();  // Close folder tag
   }
 }
 
@@ -1059,15 +1048,15 @@ static void kml_output_tailer(const route_head* header)
 
 // Text that's common to all tabs.
 static
-void kml_gc_all_tabs_text(void)
+void kml_gc_all_tabs_text(QString& cdataStr)
 {
-  // kml_write_xml(0, "<a href=\"http://www.geocaching.com\"><img style=\"float: left; padding: 10px\" src=\"http://www.geocaching.com/images/nav/logo_sub.gif\" /> </a>\n");
-  kml_write_xml(0, "<img align=\"right\" src=\"$[gc_icon]\" />\n");
-  kml_write_xml(0, "<a href=\"http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]\"><b>$[gc_num]</b></a> <b>$[gc_name]</b> \n");
-  kml_write_xml(0, "a $[gc_type],<br />on $[gc_placed] by <a href=\"http://www.geocaching.com/profile?id=$[gc_placer_id\">$[gc_placer]</a><br/>\n");
-  kml_write_xml(0, "Difficulty: <img src=\"http://www.geocaching.com/images/stars/$[gc_diff_stars].gif\" alt=\"$[gc_diff]\" width=\"61\" height=\"13\" />\n");
-  kml_write_xml(0, "&nbsp;Terrain: <img src=\"http://www.geocaching.com/images/stars/$[gc_terr_stars].gif\" alt=\"$[gc_terr]\" width=\"61\" height=\"13\" /><br />\n");
-  kml_write_xml(0, "Size: <img src=\"http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif\" width=\"45\" height=\"12\" alt=\"$[gc_cont_icon]\"/>&nbsp;($[gc_cont_icon])<br />\n");
+  // cdataStr.append("<a href=\"http://www.geocaching.com\"><img style=\"float: left; padding: 10px\" src=\"http://www.geocaching.com/images/nav/logo_sub.gif\" /> </a>\n");
+  cdataStr.append("<img align=\"right\" src=\"$[gc_icon]\" />\n");
+  cdataStr.append("<a href=\"http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]\"><b>$[gc_num]</b></a> <b>$[gc_name]</b> \n");
+  cdataStr.append("a $[gc_type],<br />on $[gc_placed] by <a href=\"http://www.geocaching.com/profile?id=$[gc_placer_id\">$[gc_placer]</a><br/>\n");
+  cdataStr.append("Difficulty: <img src=\"http://www.geocaching.com/images/stars/$[gc_diff_stars].gif\" alt=\"$[gc_diff]\" width=\"61\" height=\"13\" />\n");
+  cdataStr.append("&nbsp;Terrain: <img src=\"http://www.geocaching.com/images/stars/$[gc_terr_stars].gif\" alt=\"$[gc_terr]\" width=\"61\" height=\"13\" /><br />\n");
+  cdataStr.append("Size: <img src=\"http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif\" width=\"45\" height=\"12\" alt=\"$[gc_cont_icon]\"/>&nbsp;($[gc_cont_icon])<br />\n");
 
 }
 
@@ -1091,66 +1080,75 @@ static
 void kml_gc_make_balloonstyletext(void)
 {
   const char** tp;
-  kml_write_xml(1, "<BalloonStyle><text><![CDATA[\n");
+  QString cdataStr;
 
-  kml_write_xml(0, "<!DOCTYPE html>\n");
-  kml_write_xml(0, "<html>\n");
-  kml_write_xml(0, "<head>\n");
-  kml_write_xml(0, "<link href=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css\" rel=\"stylesheet\" type=\"text/css\"/>\n");
-  kml_write_xml(0, "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js\"></script>\n");
-  kml_write_xml(0, "<script src=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js\"></script>\n");
-  kml_write_xml(0, "<script>\n");
-  kml_write_xml(1, "$(document).ready(function() {\n");
-  kml_write_xml(0, "$(\"#tabs\").tabs();\n");
-  kml_write_xml(-1, "});\n");
-  kml_write_xml(0, "</script>\n");
-  kml_write_xml(0, "</head>\n");
+  writer.writeStartElement("BalloonStyle");
+  AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
+  writer.writeStartElement("text");
+  cdataStr.append("\n");
 
-  kml_write_xml(0, "<body>\n");
-  kml_write_xml(0, "<div id=\"tabs\">\n");
+  cdataStr.append("<!DOCTYPE html>\n");
+  cdataStr.append("<html>\n");
+  cdataStr.append("<head>\n");
+  cdataStr.append("<link href=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css\" rel=\"stylesheet\" type=\"text/css\"/>\n");
+  cdataStr.append("<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js\"></script>\n");
+  cdataStr.append("<script src=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js\"></script>\n");
+  cdataStr.append("<script>\n");
+  cdataStr.append("$(document).ready(function() {\n");
+  cdataStr.append("  $(\"#tabs\").tabs();\n");
+  cdataStr.append("});\n");
+  cdataStr.append("</script>\n");
+  cdataStr.append("</head>\n");
+
+  cdataStr.append("<body>\n");
+  cdataStr.append("<div id=\"tabs\">\n");
 
   // The tabbed menu bar.  Oddly, it has to be on top.
-  kml_write_xml(1, "<ul>\n");
-  kml_write_xml(0, "<li><a href=\"#fragment-1\"><span>Description</span></a></li>\n");
-  kml_write_xml(0, "<li><a href=\"#fragment-2\"><span>Logs</span></a></li>\n");
-  kml_write_xml(0, "<li><a href=\"#fragment-3\"><span>Extras</span></a></li>\n");
-  kml_write_xml(-1, "</ul>\n");
-  kml_write_xml(0, "\n");
+  cdataStr.append("<ul>\n");
+  cdataStr.append("  <li><a href=\"#fragment-1\"><span>Description</span></a></li>\n");
+  cdataStr.append("  <li><a href=\"#fragment-2\"><span>Logs</span></a></li>\n");
+  cdataStr.append("  <li><a href=\"#fragment-3\"><span>Extras</span></a></li>\n");
+  cdataStr.append("</ul>\n");
+  cdataStr.append("\n");
 
-  kml_write_xml(1, "<div id=\"fragment-1\">\n");
-  kml_gc_all_tabs_text();
-  kml_write_xml(0, "<p />$[gc_issues]\n");
-  kml_write_xml(0, "$[gc_short_desc]\n");
-  kml_write_xml(0, "$[gc_long_desc]\n");
-  kml_write_xml(-1, "</div>\n");
+  cdataStr.append("<div id=\"fragment-1\">\n");
+  kml_gc_all_tabs_text(cdataStr);
+  cdataStr.append("  <p />$[gc_issues]\n");
+  cdataStr.append("  $[gc_short_desc]\n");
+  cdataStr.append("  $[gc_long_desc]\n");
+  cdataStr.append("</div>\n");
 
-  kml_write_xml(1, "<div id=\"fragment-2\">\n");
-  kml_gc_all_tabs_text();
-  kml_write_xml(0, "$[gc_logs]\n");
-  kml_write_xml(-1, "</div>\n");
+  cdataStr.append("<div id=\"fragment-2\">\n");
+  kml_gc_all_tabs_text(cdataStr);
+  cdataStr.append("  $[gc_logs]\n");
+  cdataStr.append("</div>\n");
 
   // "Extra" stuff tab.
-  kml_write_xml(1, "<div id=\"fragment-3\">\n");
-  kml_gc_all_tabs_text();
-  kml_write_xml(0, "<h1>Extra Maps</h1>\n");
+  cdataStr.append("<div id=\"fragment-3\">\n");
+  kml_gc_all_tabs_text(cdataStr);
+  cdataStr.append("  <h1>Extra Maps</h1>\n");
 
-  kml_write_xml(1, "<ul>\n");
+  cdataStr.append("  <ul>\n");
   // Fortunately, all the mappy map URLs take lat/longs in the URLs, so
   // the substition is easy.
   for (tp = map_templates; *tp; tp++) {
-    kml_write_xml(0, "<li>\n");
-    kml_write_xml(0, *tp);
-    kml_write_xml(0, "</li>\n");
+    cdataStr.append("    <li>\n");
+    cdataStr.append("    ");
+    cdataStr.append(*tp);
+    cdataStr.append("</li>\n");
   }
-  kml_write_xml(-1, "<ul>\n");
+  cdataStr.append("  <ul>\n");
 
-  kml_write_xml(-1, "</div>\n"); //  fragment-3.
+  cdataStr.append("</div>\n"); //  fragment-3.
 
-  kml_write_xml(0, "</div>\n"); // tabs.
-  kml_write_xml(0, "</body>\n");
-  kml_write_xml(0, "</html>\n");
+  cdataStr.append("</div>\n"); // tabs.
+  cdataStr.append("</body>\n");
+  cdataStr.append("</html>\n");
 
-  kml_write_xml(-1, "]]></text></BalloonStyle>\n");
+  writer.writeCDATA(cdataStr);
+  writer.writeEndElement(); // Close text tag
+  writer.writeEndElement(); // Close BalloonStyle tag
+  AUTOFORMATTING_RESTORE(af);
 }
 
 static
@@ -1163,39 +1161,42 @@ void kml_gc_make_balloonstyle(void)
   // It's unfortunate that we have to repeat so much of the template
   // but KML doesn't have a cascading style-like substance.
   //
-  kml_write_xml(1, "<Style id=\"geocache_n\">\n");
-  kml_write_xml(1, "<IconStyle>\n");
-  kml_write_xml(0, "<scale>.6</scale>\n");
-  kml_write_xml(-1, "</IconStyle>\n");
-  kml_write_xml(1, "<LabelStyle>\n");
-  kml_write_xml(0, "<scale>0</scale>\n");
-  kml_write_xml(-1, "</LabelStyle>\n");
+  writer.writeStartElement("Style");
+  writer.writeAttribute("id", "geocache_n");
+  writer.writeStartElement("IconStyle");
+  writer.writeTextElement("scale", ".6");
+  writer.writeEndElement(); // Close IconStyle tag
+  writer.writeStartElement("LabelStyle");
+  writer.writeTextElement("scale", "0");
+  writer.writeEndElement(); // Close LabelStyle tag
   kml_gc_make_balloonstyletext();
-  kml_write_xml(-1, "</Style>\n");
+  writer.writeEndElement(); // Close Style tag
 
-  kml_write_xml(1, "<Style id=\"geocache_h\">\n");
-  kml_write_xml(1, "<IconStyle>\n");
-  kml_write_xml(0, "<scale>.8</scale>\n");
-  kml_write_xml(-1, "</IconStyle>\n");
-  kml_write_xml(1, "<LabelStyle>\n");
-  kml_write_xml(0, "<scale>1</scale>\n");
-  kml_write_xml(-1, "</LabelStyle>\n");
+  writer.writeStartElement("Style");
+  writer.writeAttribute("id", "geocache_h");
+  writer.writeStartElement("IconStyle");
+  writer.writeTextElement("scale", ".8");
+  writer.writeEndElement(); // Close IconStyle tag
+  writer.writeStartElement("LabelStyle");
+  writer.writeTextElement("scale", "1");
+  writer.writeEndElement(); // Close LabelStyle tag
   kml_gc_make_balloonstyletext();
-  kml_write_xml(-1, "</Style>\n");
+  writer.writeEndElement(); // Close Style tag
 
-  kml_write_xml(1, "<StyleMap id=\"geocache\">\n");
+  writer.writeStartElement("StyleMap");
+  writer.writeAttribute("id", "geocache");
 
-  kml_write_xml(1, "<Pair>\n");
-  kml_write_xml(0, "<key>normal</key>\n");
-  kml_write_xml(0, "<styleUrl>#geocache_n</styleUrl>\n");
-  kml_write_xml(-1, "</Pair>\n");
+  writer.writeStartElement("Pair");
+  writer.writeTextElement("key", "normal");
+  writer.writeTextElement("styleUrl", "#geocache_n");
+  writer.writeEndElement(); // Close Pair tag
 
-  kml_write_xml(1, "<Pair>\n");
-  kml_write_xml(0, "<key>highlight</key>\n");
-  kml_write_xml(0, "<styleUrl>#geocache_h</styleUrl>\n");
-  kml_write_xml(-1, "</Pair>\n");
+  writer.writeStartElement("Pair");
+  writer.writeTextElement("key", "highlight");
+  writer.writeTextElement("styleUrl", "#geocache_h");
+  writer.writeEndElement(); // Close Pair tag
 
-  kml_write_xml(-1, "</StyleMap>\n");
+  writer.writeEndElement(); // Close StyleMap tag
 }
 
 static
@@ -1389,26 +1390,70 @@ char* kml_geocache_get_logs(const waypoint* wpt)
   return r;
 }
 
+static void kml_write_data_element(const char* name, const char* value)
+{
+  writer.writeStartElement("Data");
+  writer.writeAttribute("name", name);
+  AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
+  writer.writeTextElement("value", value);
+  writer.writeEndElement(); // Close Data tag
+  AUTOFORMATTING_RESTORE(af);
+}
+
+static void kml_write_data_element(const char* name, const int value)
+{
+  writer.writeStartElement("Data");
+  writer.writeAttribute("name", name);
+  AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
+  writer.writeTextElement("value", QString::number(value));
+  writer.writeEndElement(); // Close Data tag
+  AUTOFORMATTING_RESTORE(af);
+}
+
+static void kml_write_data_element(const char* name, const double value)
+{
+  writer.writeStartElement("Data");
+  writer.writeAttribute("name", name);
+  AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
+  writer.writeTextElement("value", QString::number(value, 'f', 6));
+  writer.writeEndElement(); // Close Data tag
+  AUTOFORMATTING_RESTORE(af);
+}
+
+static void kml_write_cdata_element(const char* name, const char* value)
+{
+  writer.writeStartElement("Data");
+  writer.writeAttribute("name", name);
+  AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
+  writer.writeStartElement("value");
+  writer.writeCDATA(value);
+  writer.writeEndElement(); // Close value tag
+  writer.writeEndElement(); // Close Data tag
+  AUTOFORMATTING_RESTORE(af);
+}
+
 static void kml_geocache_pr(const waypoint* waypointp)
 {
-  char* p, *is;
+  char* is;
   char date_placed[100];  // Always long engough for a date.
 
   const char* issues = "";
   char* logs;
 
-  kml_write_xml(1, "<Placemark>\n");
+  writer.writeStartElement("Placemark");
 
-  kml_write_xml(1, "<name>\n");
-  kml_write_xml(0, "<![CDATA[%s]]>\n", waypointp->url_link_text);
-  kml_write_xml(-1, "</name>\n");
+  writer.writeStartElement("name");
+  writer.writeCharacters("\n"); // FIXME  forced formatting to match old references
+  writer.writeCDATA(waypointp->url_link_text);
+  writer.writeCharacters("\n"); // FIXME  forced formatting to match old references
+  writer.writeEndElement(); // Close name tag
 
   // Timestamp
   kml_output_timestamp(waypointp);
   if (waypointp->creation_time) {
 #if NEWTIME
-    strcpy(date_placed, 
-             qPrintable(waypointp->creation_time.toString("dd-MMM-yyyy")));
+    strcpy(date_placed,
+           qPrintable(waypointp->creation_time.toString("dd-MMM-yyyy")));
 #else
     strftime(date_placed, sizeof(date_placed),
              "%d-%b-%Y", localtime(&waypointp->creation_time));
@@ -1417,43 +1462,37 @@ static void kml_geocache_pr(const waypoint* waypointp)
     date_placed[0] = '\0';
   }
 
-  kml_write_xml(0, "<styleUrl>#geocache</styleUrl>\n");
+  writer.writeTextElement("styleUrl", "#geocache");
   is = kml_lookup_gc_icon(waypointp);
-  kml_write_xml(1, "<Style>\n");
-  kml_write_xml(1, "<IconStyle>\n");
-  kml_write_xml(1, "<Icon>\n");
-  kml_write_xml(0, "<href>%s</href>\n", is);
-  kml_write_xml(-1, "</Icon>\n");
-  kml_write_xml(-1, "</IconStyle>\n");
-  kml_write_xml(-1, "</Style>\n");
+  writer.writeStartElement("Style");
+  writer.writeStartElement("IconStyle");
+  writer.writeStartElement("Icon");
+  writer.writeTextElement("href", is);
+  writer.writeEndElement(); // Close Icon tag
+  writer.writeEndElement(); // Close IconStyle tag
+  writer.writeEndElement(); // Close Style tag
 
-  kml_write_xml(1, "<ExtendedData>\n");
+  writer.writeStartElement("ExtendedData");
 
   if (waypointp->shortname) {
-    p = xml_entitize(waypointp->shortname);
-    kml_write_xml(0, "<Data name=\"gc_num\"><value>%s</value></Data>\n", p);
-    xfree(p);
+    kml_write_data_element("gc_num", waypointp->shortname);
   }
 
   if (waypointp->hasLinkText()) {
-    p = xml_entitize(waypointp->url_link_text);
-    kml_write_xml(0, "<Data name=\"gc_name\"><value>%s</value></Data>\n", p);
-    xfree(p);
+    kml_write_data_element("gc_name", waypointp->url_link_text);
   }
 
   if (waypointp->gc_data->placer) {
-    p = xml_entitize(waypointp->gc_data->placer);
-    kml_write_xml(0, "<Data name=\"gc_placer\"><value>%s</value></Data>\n", p);
-    xfree(p);
+    kml_write_data_element("gc_placer", waypointp->gc_data->placer);
   }
 
-  kml_write_xml(0, "<Data name=\"gc_placer_id\"><value>%d</value></Data>\n", waypointp->gc_data->placer_id);
-  kml_write_xml(0, "<Data name=\"gc_placed\"><value>%s</value></Data>\n", date_placed);
+  kml_write_data_element("gc_placer_id", waypointp->gc_data->placer_id);
+  kml_write_data_element("gc_placed", date_placed);
 
-  kml_write_xml(0, "<Data name=\"gc_diff_stars\"><value>%s</value></Data>\n", kml_gc_mkstar(waypointp->gc_data->diff));
-  kml_write_xml(0, "<Data name=\"gc_terr_stars\"><value>%s</value></Data>\n", kml_gc_mkstar(waypointp->gc_data->terr));
+  kml_write_data_element("gc_diff_stars", kml_gc_mkstar(waypointp->gc_data->diff));
+  kml_write_data_element("gc_terr_stars", kml_gc_mkstar(waypointp->gc_data->terr));
 
-  kml_write_xml(0, "<Data name=\"gc_cont_icon\"><value>%s</value></Data>\n", kml_lookup_gc_container(waypointp));
+  kml_write_data_element("gc_cont_icon", kml_lookup_gc_container(waypointp));
 
   // Highlight any issues with the cache, such as temp unavail
   // or archived.
@@ -1462,27 +1501,27 @@ static void kml_geocache_pr(const waypoint* waypointp)
   } else if (waypointp->gc_data->is_available == status_false) {
     issues = "&lt;font color=\"red\"&gt;This cache is temporarily unavailable.&lt;/font&gt;&lt;br/&gt;\n";
   }
-  kml_write_xml(0, "<Data name=\"gc_issues\"><value>%s</value></Data>\n", issues);
+  kml_write_data_element("gc_issues", issues);
 
-  kml_write_xml(0, "<Data name=\"gc_lat\"><value>%f</value></Data>\n", waypointp->latitude);
-  kml_write_xml(0, "<Data name=\"gc_lon\"><value>%f</value></Data>\n", waypointp->longitude);
+  kml_write_data_element("gc_lat", waypointp->latitude);
+  kml_write_data_element("gc_lon", waypointp->longitude);
 
-  kml_write_xml(0, "<Data name=\"gc_type\"><value>%s</value></Data>\n", gs_get_cachetype(waypointp->gc_data->type));
-  kml_write_xml(0, "<Data name=\"gc_icon\"><value>%s</value></Data>\n", is);
-  kml_write_xml(0, "<Data name=\"gc_short_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data->desc_short.utfstring ? waypointp->gc_data->desc_short.utfstring : "");
-  kml_write_xml(0, "<Data name=\"gc_long_desc\"><value><![CDATA[%s]]></value></Data>\n", waypointp->gc_data->desc_long.utfstring ? waypointp->gc_data->desc_long.utfstring : "");
+  kml_write_data_element("gc_type", gs_get_cachetype(waypointp->gc_data->type));
+  kml_write_data_element("gc_icon", is);
+  kml_write_cdata_element("gc_short_desc", waypointp->gc_data->desc_short.utfstring ? waypointp->gc_data->desc_short.utfstring : "");
+  kml_write_cdata_element("gc_long_desc", waypointp->gc_data->desc_long.utfstring ? waypointp->gc_data->desc_long.utfstring : "");
   logs = kml_geocache_get_logs(waypointp);
-  kml_write_xml(0, "<Data name=\"gc_logs\"><value><![CDATA[%s]]></value></Data>\n", logs);
+  kml_write_cdata_element("gc_logs", logs);
   xfree(logs);
 
-  kml_write_xml(-1, "</ExtendedData>\n");
+  writer.writeEndElement(); // Close ExtendedData tag
 
   // Location
-  kml_write_xml(1, "<Point>\n");
+  writer.writeStartElement("Point");
   kml_write_coordinates(waypointp);
 
-  kml_write_xml(-1, "</Point>\n");
-  kml_write_xml(-1, "</Placemark>\n");
+  writer.writeEndElement(); // Close Point tag
+  writer.writeEndElement(); // Close Placemark tag
 
   xfree(is);
 }
@@ -1497,11 +1536,11 @@ static void kml_waypt_pr(const waypoint* waypointp)
 
 #if 0 // Experimental
   if (realtime_positioning) {
-    kml_write_xml(1, "<LookAt>\n");
-    kml_write_xml(0, "<longitude>%f</longitude>\n", waypointp->longitude);
-    kml_write_xml(0, "<latitude>%f</latitude>\n", waypointp->latitude);
-    kml_write_xml(0, "<altitude>1000</altitude>\n");
-    kml_write_xml(-1, "</LookAt>\n");
+    writer.wrteStartTag("LookAt");
+    writer.writeTextElement("longitude", QString::number(waypointp->longitude, 'f', 6);
+                            writer.writeTextElement("latitude", QString::number(waypointp->latitude, 'f', 6);
+                                writer.writeTextElement("altitude", "1000");
+                                writer.writeEndElement(); // Close LookAt tag
   }
 #endif
 
@@ -1510,28 +1549,27 @@ static void kml_waypt_pr(const waypoint* waypointp)
     return;
   }
 
-  kml_write_xml(1, "<Placemark>\n");
+  writer.writeStartElement("Placemark");
 
-  kml_write_xmle("name", waypointp->shortname);
+  writer.writeOptionalTextElement("name", waypointp->shortname);
 
   // Description
   if (waypointp->hasLink()) {
-    char* odesc = xml_entitize(waypointp->url);
-    kml_write_xml(0, "<snippet/>\n");
-    kml_write_xml(0, "<description>\n");
+    writer.writeEmptyElement("snippet");
     if (waypointp->hasLinkText()) {
+      char* odesc = xml_entitize(waypointp->url);
       char* olink = xml_entitize(waypointp->url_link_text);
-      kml_write_xml(0, "<![CDATA[<a href=\"%s\">%s</a>]]>", odesc, olink);
+      writer.writeStartElement("description");
+      writer.writeCDATA(QString("<a href=\"%1\">%2</a>").arg(odesc, olink));
+      writer.writeEndElement(); // Close description tag
       xfree(olink);
+      xfree(odesc);
     } else {
-      gbfputs(odesc, ofd);
+      writer.writeTextElement("description", waypointp->url);
     }
-
-    kml_write_xml(0, "</description>\n");
-    xfree(odesc);
   } else {
     if (strcmp(waypointp->shortname, waypointp->description)) {
-      kml_write_xmle("description", waypointp->description);
+      writer.writeOptionalTextElement("description", waypointp->description);
     }
   }
 
@@ -1541,24 +1579,24 @@ static void kml_waypt_pr(const waypoint* waypointp)
   // Icon - but only if it looks like a URL.
   icon = opt_deficon ? opt_deficon : waypointp->icon_descr;
   if (icon.contains("://")) {
-    kml_write_xml(1, "<Style>\n");
-    kml_write_xml(1, "<IconStyle>\n");
-    kml_write_xml(1, "<Icon>\n");
-    kml_write_xml(0, "<href>%s</href>\n", icon.toUtf8().data());
-    kml_write_xml(-1, "</Icon>\n");
-    kml_write_xml(-1, "</IconStyle>\n");
-    kml_write_xml(-1, "</Style>\n");
+    writer.writeStartElement("Style");
+    writer.writeStartElement("IconStyle");
+    writer.writeStartElement("Icon");
+    writer.writeTextElement("href", icon.toUtf8().data());
+    writer.writeEndElement(); // Close Icon tag
+    writer.writeEndElement(); // Close IconStyle tag
+    writer.writeEndElement(); // Close Style tag
   } else {
-    kml_write_xml(0, "<styleUrl>#waypoint</styleUrl>\n");
+    writer.writeTextElement("styleUrl", "#waypoint");
   }
 
   // Location
-  kml_write_xml(1, "<Point>\n");
+  writer.writeStartElement("Point");
   kml_output_positioning();
   kml_write_coordinates(waypointp);
-  kml_write_xml(-1, "</Point>\n");
+  writer.writeEndElement(); // Close Point tag
 
-  kml_write_xml(-1, "</Placemark>\n");
+  writer.writeEndElement(); // Close Placemark tag
 }
 
 /*
@@ -1604,11 +1642,12 @@ typedef enum {
   sl_double,
 } sl_element;
 static void kml_mt_simple_array(const route_head* header,
-                                const char* name, const char* fmt_string,
+                                const char* name,
                                 int offset, sl_element type)
 {
   queue* elem, *tmp;
-  kml_write_xml(1, "<gx:SimpleArrayData name=\"%s\">\n", name);
+  writer.writeStartElement("gx:SimpleArrayData");
+  writer.writeAttribute("name", name);
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
 
@@ -1617,34 +1656,34 @@ static void kml_mt_simple_array(const route_head* header,
     switch (type) {
     case sl_char: {
       char data = *(char*) datap;
-      kml_write_xmle("gx:value", fmt_string, data);
+      writer.writeTextElement("gx:value", QString(data));
     }
     break;
     case sl_uchar: {
       unsigned char data = *(unsigned char*) datap;
-      kml_write_xmle("gx:value", fmt_string, data);
+      writer.writeTextElement("gx:value", QString::number(data));
     }
     break;
     case sl_int: {
       int data = *(int*) datap;
-      kml_write_xmle("gx:value", fmt_string, data);
+      writer.writeTextElement("gx:value", QString::number(data));
     }
     break;
     case sl_float: {
       float data = *(float*) datap;
-      kml_write_xmle("gx:value", fmt_string, data);
+      writer.writeTextElement("gx:value", QString::number(data, 'f', 1));
     }
     break;
     case sl_double: {
       double data = *(double*) datap;
-      kml_write_xmle("gx:value", fmt_string, data);
+      writer.writeTextElement("gx:value", QString::number(data, 'f', 1));
     }
     break;
     default:
       fatal(MYNAME ": invalid type passed to kml_mt_simple_array.\n");
     }
   }
-  kml_write_xml(-1, "</gx:SimpleArrayData>\n");
+  writer.writeEndElement(); // Close SimpleArrayData tag
 }
 
 // True if at least two points in the track have timestamps.
@@ -1694,10 +1733,10 @@ static void kml_mt_hdr(const route_head* header)
     return;
   }
 
-  kml_write_xml(1, "<Placemark>\n");
-  kml_write_xmle("name", header->rte_name);
-  kml_write_xml(0, "<styleUrl>#multiTrack</styleUrl>\n");
-  kml_write_xml(1, "<gx:Track>\n");
+  writer.writeStartElement("Placemark");
+  writer.writeOptionalTextElement("name", header->rte_name);
+  writer.writeTextElement("styleUrl", "#multiTrack");
+  writer.writeStartElement("gx:Track");
   kml_output_positioning();
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
@@ -1708,10 +1747,11 @@ static void kml_mt_hdr(const route_head* header)
       xml_fill_in_time(time_string, tpt->creation_time, tpt->microseconds,
                        XML_LONG_TIME);
       if (time_string[0]) {
-        kml_write_xmle("when", time_string);
+        writer.writeTextElement("when", time_string);
       }
     } else {
-      kml_write_xml(0, "<when />\n");
+      writer.writeStartElement("when");
+      writer.writeEndElement(); // Close when tag
     }
   }
 
@@ -1720,11 +1760,16 @@ static void kml_mt_hdr(const route_head* header)
     waypoint* tpt = (waypoint*)elem;
 
     if (kml_altitude_known(tpt)) {
-      kml_write_xmle("gx:coord", COORD_FORMAT " " COORD_FORMAT " " ALT_FORMAT,
-                     tpt->longitude, tpt->latitude,tpt->altitude);
+      writer.writeTextElement("gx:coord",
+                              QString::number(tpt->longitude, 'f', 6) + QString(" ") +
+                              QString::number(tpt->latitude, 'f', 6) + QString(" ") +
+                              QString::number(tpt->altitude, 'f', 2)
+                             );
     } else {
-      kml_write_xmle("gx:coord", COORD_FORMAT " " COORD_FORMAT,
-                     tpt->longitude, tpt->latitude);
+      writer.writeTextElement("gx:coord",
+                              QString::number(tpt->longitude, 'f', 6) + QString(" ") +
+                              QString::number(tpt->latitude, 'f', 6)
+                             );
     }
 
     // Capture interesting traits to see if we need to do an ExtendedData
@@ -1748,39 +1793,40 @@ static void kml_mt_hdr(const route_head* header)
 
   if (has_cadence || has_depth || has_heartrate || has_temperature ||
       has_power) {
-    kml_write_xml(1, "<ExtendedData>\n");
-    kml_write_xml(1, "<SchemaData schemaUrl=\"#schema\">\n");
+    writer.writeStartElement("ExtendedData");
+    writer.writeStartElement("SchemaData");
+    writer.writeAttribute("schemaUrl", "#schema");
 
     if (has_cadence)
-      kml_mt_simple_array(header, kmt_cadence, "%u",
+      kml_mt_simple_array(header, kmt_cadence,
                           offsetof(waypoint, cadence), sl_uchar);
 
     if (has_depth)
-      kml_mt_simple_array(header, kmt_depth, "%.1f",
+      kml_mt_simple_array(header, kmt_depth,
                           offsetof(waypoint, depth), sl_double);
 
     if (has_heartrate)
-      kml_mt_simple_array(header, kmt_heartrate, "%u",
+      kml_mt_simple_array(header, kmt_heartrate,
                           offsetof(waypoint, heartrate), sl_uchar);
 
     if (has_temperature)
-      kml_mt_simple_array(header, kmt_temperature, "%.1f",
+      kml_mt_simple_array(header, kmt_temperature,
                           offsetof(waypoint, temperature), sl_float);
 
     if (has_power)
-      kml_mt_simple_array(header, kmt_power, "%.1f",
+      kml_mt_simple_array(header, kmt_power,
                           offsetof(waypoint, power), sl_float);
 
-    kml_write_xml(-1, "</SchemaData>\n");
-    kml_write_xml(-1, "</ExtendedData>\n");
+    writer.writeEndElement(); // Close SchemaData tag
+    writer.writeEndElement(); // Close ExtendedData tag
   }
 }
 
 static void kml_mt_tlr(const route_head* header)
 {
   if (track_has_time(header)) {
-    kml_write_xml(-1, "</gx:Track>\n");
-    kml_write_xml(-1, "</Placemark>\n");
+    writer.writeEndElement(); // Close gx:Track tag
+    writer.writeEndElement(); // Close Placemark tag
   }
 }
 
@@ -1821,15 +1867,15 @@ void kml_write_AbstractView(void)
     route_disp_all(NULL, NULL, kml_add_to_bounds);
   }
 
-  kml_write_xml(1, "<LookAt>\n");
+  writer.writeStartElement("LookAt");
 
   if (kml_time_min || kml_time_max) {
-    kml_write_xml(1, "<gx:TimeSpan>\n");
+    writer.writeStartElement("gx:TimeSpan");
     if (kml_time_min) {
       char time_string[64];
       xml_fill_in_time(time_string, kml_time_min, 0, XML_LONG_TIME);
       if (time_string[0]) {
-        kml_write_xml(0, "<begin>%s</begin>\n", time_string);
+        writer.writeTextElement("begin", time_string);
       }
     }
     if (kml_time_max) {
@@ -1845,10 +1891,10 @@ void kml_write_AbstractView(void)
       time_max = realtime_positioning ? kml_time_max + 600 : kml_time_max;
       xml_fill_in_time(time_string, time_max, 0, XML_LONG_TIME);
       if (time_string[0]) {
-        kml_write_xml(0, "<end>%s</end>\n", time_string);
+        writer.writeTextElement("end", time_string);
       }
     }
-    kml_write_xml(-1, "</gx:TimeSpan>\n");
+    writer.writeEndElement(); // Close gx:TimeSpan tag
   }
 
 // If our BB spans the antemeridian, flip sign on one.
@@ -1858,10 +1904,8 @@ void kml_write_AbstractView(void)
     kml_bounds.min_lon = -kml_bounds.max_lon;
   }
 
-  kml_write_xml(0, "<longitude>%f</longitude>\n",
-                (kml_bounds.min_lon + kml_bounds.max_lon) / 2);
-  kml_write_xml(0, "<latitude>%f</latitude>\n",
-                (kml_bounds.min_lat + kml_bounds.max_lat) / 2);
+  writer.writeTextElement("longitude", QString::number((kml_bounds.min_lon + kml_bounds.max_lon) / 2, 'f', 6));
+  writer.writeTextElement("latitude", QString::number((kml_bounds.min_lat + kml_bounds.max_lat) / 2, 'f', 6));
 
   // It turns out the length of the diagonal of the bounding box gives us a
   // reasonable guess for setting the camera altitude.
@@ -1871,19 +1915,20 @@ void kml_write_AbstractView(void)
   if (bb_size < 1000) {
     bb_size = 1000;
   }
-  kml_write_xml(0, "<range>%f</range>\n", bb_size * 1.3);
+  writer.writeTextElement("range", QString::number(bb_size * 1.3, 'f', 6));
 
-  kml_write_xml(-1, "</LookAt>\n");
+  writer.writeEndElement(); // Close LookAt tag
 }
 
 static
 void kml_mt_array_schema(const char* field_name, const char* display_name,
                          const char* type)
 {
-  kml_write_xml(1, "<gx:SimpleArrayField name=\"%s\" type=\"%s\">\n",
-                field_name, type);
-  kml_write_xml(0, "  <displayName>%s</displayName>\n", display_name);
-  kml_write_xml(-1, "</gx:SimpleArrayField>\n");
+  writer.writeStartElement("gx:SimpleArrayField");
+  writer.writeAttribute("name", field_name);
+  writer.writeAttribute("type", type);
+  writer.writeTextElement("displayName", display_name);
+  writer.writeEndElement(); // Close gx:SimpleArrayField tag
 }
 
 void kml_write(void)
@@ -1903,22 +1948,31 @@ void kml_write(void)
   trackdirection = (!! strcmp("0", opt_trackdirection));
   line_width = atol(opt_line_width);
 
-  kml_write_xml(0, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+  writer.writeProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\"");
+  // FIXME: This write of a blank line is needed for Qt 4.6 (as on Centos 6.3)
+  // to include just enough whitespace between <xml/> and <gpx...> to pass
+  // diff -w.  It's here for now to shim compatibility with our zillion
+  // reference files, but this blank link can go away some day.
+  writer.writeCharacters("\n");
 
-  kml_write_xml(1, kml22_hdr);
+  writer.setAutoFormatting(true);
 
-  kml_write_xml(1, "<Document>\n");
+  writer.writeStartElement("kml");
+  writer.writeAttribute("xmlns", "http://www.opengis.net/kml/2.2");
+  writer.writeAttribute("xmlns:gx","http://www.google.com/kml/ext/2.2");
+
+  writer.writeStartElement("Document");
 
   now = current_time();
   strftime(import_time, sizeof(import_time), "%c", localtime(&now));
   if (realtime_positioning) {
-    kml_write_xml(0, "<name>GPS position</name>\n");
+    writer.writeTextElement("name", "GPS position");
   } else {
-    kml_write_xml(0, "<name>GPS device</name>\n");
+    writer.writeTextElement("name", "GPS device");
   }
 
   if (now) {
-    kml_write_xml(0, "<snippet>Created %s</snippet>\n", import_time);
+    writer.writeTextElement("snippet", QString("Created ") + QString(import_time));
   }
 
   kml_write_AbstractView();
@@ -1951,9 +2005,10 @@ void kml_write(void)
   kml_write_bitmap_style(kmlpt_waypoint, ICON_WPT, NULL);
 
   if (track_waypt_count() || route_waypt_count()) {
-    kml_write_xml(1, "<Style id=\"lineStyle\">\n");
+    writer.writeStartElement("Style");
+    writer.writeAttribute("id", "lineStyle");
     kml_output_linestyle(opt_line_color, line_width);
-    kml_write_xml(-1, "</Style>\n");
+    writer.writeEndElement(); // Close Style tag
   }
 
   if (traits->trait_geocaches) {
@@ -1965,7 +2020,8 @@ void kml_write(void)
       traits->trait_power ||
       traits->trait_temperature ||
       traits->trait_depth) {
-    kml_write_xml(1, "<Schema id=\"schema\">\n");
+    writer.writeStartElement("Schema");
+    writer.writeAttribute("id", "schema");
 
     if (traits->trait_heartrate) {
       kml_mt_array_schema(kmt_heartrate, "Heart Rate", "int");
@@ -1982,27 +2038,27 @@ void kml_write(void)
     if (traits->trait_depth) {
       kml_mt_array_schema(kmt_depth, "Depth", "float");
     }
-    kml_write_xml(-1, "</Schema>\n");
+    writer.writeEndElement(); // Close Schema tag
   }
 
   if (waypt_count()) {
     if (!realtime_positioning) {
-      kml_write_xml(1, "<Folder>\n");
-      kml_write_xml(0, "<name>Waypoints</name>\n");
+      writer.writeStartElement("Folder");
+      writer.writeTextElement("name", "Waypoints");
     }
 
     waypt_disp_all(kml_waypt_pr);
 
     if (!realtime_positioning) {
-      kml_write_xml(-1, "</Folder>\n");
+      writer.writeEndElement(); // Close Folder tag
     }
   }
 
   // Output trackpoints
   if (track_waypt_count()) {
     if (!realtime_positioning) {
-      kml_write_xml(1,  "<Folder>\n");
-      kml_write_xml(0,  "<name>Tracks</name>\n");
+      writer.writeStartElement("Folder");
+      writer.writeTextElement("name", "Tracks");
     }
 
     kml_init_color_sequencer(track_count());
@@ -2014,25 +2070,25 @@ void kml_write(void)
                    kml_track_disp);
 
     if (!realtime_positioning) {
-      kml_write_xml(-1,  "</Folder>\n");
+      writer.writeEndElement(); // Close Folder tag
     }
   }
 
   // Output routes
   if (route_waypt_count()) {
     if (!realtime_positioning) {
-      kml_write_xml(1,  "<Folder>\n");
-      kml_write_xml(0,  "<name>Routes</name>\n");
+      writer.writeStartElement("Folder");
+      writer.writeTextElement("name", "Routes");
 
       kml_init_color_sequencer(route_count());
       route_disp_all(kml_route_hdr,
                      kml_route_tlr, kml_route_disp);
-      kml_write_xml(-1,  "</Folder>\n");
+      writer.writeEndElement(); // Close Folder tag
     }
   }
 
-  kml_write_xml(-1, "</Document>\n");
-  kml_write_xml(-1, "</kml>\n");
+  writer.writeEndElement(); // Close Document tag.
+  writer.writeEndElement(); // Close kml tag.
 }
 
 /*

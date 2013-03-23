@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2"
-	xmlns:gx="http://www.google.com/kml/ext/2.2">
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
   <Document>
     <name>GPS device</name>
     <LookAt>
@@ -195,7 +194,7 @@
       </Placemark>
       <Placemark>
         <name>NOTE 2</name>
-        <description>how GPX from GPSBabel shows Topo track desc as of 2012:(line name and line style are NOT related to actual color or width)&lt;trk&gt;  &lt;name&gt;red line&lt;/name&gt;  &lt;desc&gt;Style=red med, Width=3, Dashed=0, Color=#ff0000&lt;/desc&gt;&lt;number&gt;1&lt;/number&gt;&lt;trkseg&gt;...(Topo menu colors are stored in the file as web-style hex RGB)  Red=#ff0000, Yellow=#ffff00, Green=#008000, Blue=#000080,  Purple=#800080, Black=#000000, White=#ffffff(Topo solid  line widths: Hairline=1, Thin=2, Medium=3, Thick=4)(Topo dashed line widths: Hairline=1, Thin=2)SRE&apos;s tpo.c mod stuffs Style/Width/Dashed/Color fields into &quot;desc&quot; field  under the assumption that something will post-process GPX or KML output  and move information from desc to private extensions(solid  lines have &quot;Dashed=0&quot;, can have width of 1=hairline to 4=thick)(dashed lines have &quot;Dashed=1&quot;, can only have width of 1=hairline or 2=thin)</description>
+        <description>how GPX from GPSBabel shows Topo track desc as of 2012:(line name and line style are NOT related to actual color or width)&lt;trk&gt;  &lt;name&gt;red line&lt;/name&gt;  &lt;desc&gt;Style=red med, Width=3, Dashed=0, Color=#ff0000&lt;/desc&gt;&lt;number&gt;1&lt;/number&gt;&lt;trkseg&gt;...(Topo menu colors are stored in the file as web-style hex RGB)  Red=#ff0000, Yellow=#ffff00, Green=#008000, Blue=#000080,  Purple=#800080, Black=#000000, White=#ffffff(Topo solid  line widths: Hairline=1, Thin=2, Medium=3, Thick=4)(Topo dashed line widths: Hairline=1, Thin=2)SRE's tpo.c mod stuffs Style/Width/Dashed/Color fields into &quot;desc&quot; field  under the assumption that something will post-process GPX or KML output  and move information from desc to private extensions(solid  lines have &quot;Dashed=0&quot;, can have width of 1=hairline to 4=thick)(dashed lines have &quot;Dashed=1&quot;, can only have width of 1=hairline or 2=thin)</description>
         <styleUrl>#waypoint</styleUrl>
         <Point>
           <coordinates>-122.284910,37.522349</coordinates>
