@@ -1634,15 +1634,6 @@ static void kml_track_tlr(const route_head* header)
  */
 
 // Helper to write gx:SimpleList, iterating over a route queue and writing out.
-// Somewhat tortured to reduce duplication of iteration and formatting.
-typedef enum {
-  sl_unknown = 0,
-  sl_char,
-  sl_uchar,
-  sl_int,
-  sl_float,
-  sl_double,
-} sl_element;
 
 typedef enum {
   fld_cadence, 
@@ -1654,7 +1645,7 @@ typedef enum {
 
 static void kml_mt_simple_array(const route_head* header,
                                 const char* name,
-                                wp_field member, sl_element type)
+                                wp_field member)
 {
   queue* elem, *tmp;
   writer.writeStartElement("gx:SimpleArrayData");
@@ -1664,56 +1655,26 @@ static void kml_mt_simple_array(const route_head* header,
 
     waypoint* wpt = (waypoint *) elem;
     char *datap;
-     
 
     switch (member) {
       case fld_power: 
-        datap = (char *) &wpt->power;
+        writer.writeTextElement("gx:value", QString::number(wpt->power, 'f', 1));
         break;
       case fld_cadence: 
-        datap = (char *) &wpt->cadence;
+        writer.writeTextElement("gx:value", QString::number(wpt->cadence));
         break;
       case fld_depth: 
         datap = (char *) &wpt->depth;
+        writer.writeTextElement("gx:value", QString::number(wpt->depth, 'f', 1));
         break;
       case fld_heartrate: 
-        datap = (char *) &wpt->heartrate;
+        writer.writeTextElement("gx:value", QString::number(wpt->heartrate));
         break;
       case fld_temperature: 
-        datap = (char *) &wpt->temperature;
+        writer.writeTextElement("gx:value", QString::number(wpt->temperature, 'f', 1));
         break;
       default:
         fatal("Bad member type");
-    }
-
-    switch (type) {
-    case sl_char: {
-      signed char data = *(signed char*) datap;
-      writer.writeTextElement("gx:value", QString(data));
-    }
-    break;
-    case sl_uchar: {
-      unsigned char data = *(unsigned char*) datap;
-      writer.writeTextElement("gx:value", QString::number(data));
-    }
-    break;
-    case sl_int: {
-      int data = *(int*) datap;
-      writer.writeTextElement("gx:value", QString::number(data));
-    }
-    break;
-    case sl_float: {
-      float data = *(float*) datap;
-      writer.writeTextElement("gx:value", QString::number(data, 'f', 1));
-    }
-    break;
-    case sl_double: {
-      double data = *(double*) datap;
-      writer.writeTextElement("gx:value", QString::number(data, 'f', 1));
-    }
-    break;
-    default:
-      fatal(MYNAME ": invalid type passed to kml_mt_simple_array.\n");
     }
   }
   writer.writeEndElement(); // Close SimpleArrayData tag
@@ -1831,19 +1792,19 @@ static void kml_mt_hdr(const route_head* header)
     writer.writeAttribute("schemaUrl", "#schema");
 
     if (has_cadence)
-      kml_mt_simple_array(header, kmt_cadence, fld_cadence, sl_uchar);
+      kml_mt_simple_array(header, kmt_cadence, fld_cadence);
 
     if (has_depth)
-      kml_mt_simple_array(header, kmt_depth, fld_depth, sl_double);
+      kml_mt_simple_array(header, kmt_depth, fld_depth);
 
     if (has_heartrate)
-      kml_mt_simple_array(header, kmt_heartrate, fld_heartrate, sl_uchar);
+      kml_mt_simple_array(header, kmt_heartrate, fld_heartrate);
 
     if (has_temperature)
-      kml_mt_simple_array(header, kmt_temperature, fld_temperature, sl_float);
+      kml_mt_simple_array(header, kmt_temperature, fld_temperature);
 
     if (has_power)
-      kml_mt_simple_array(header, kmt_power, fld_power, sl_float);
+      kml_mt_simple_array(header, kmt_power, fld_power);
 
     writer.writeEndElement(); // Close SchemaData tag
     writer.writeEndElement(); // Close ExtendedData tag
