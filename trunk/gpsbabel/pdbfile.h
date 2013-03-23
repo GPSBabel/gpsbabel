@@ -40,7 +40,7 @@
 
 typedef struct pdbrec_s {
   gbuint32  offs;
-  gbuint32  size;
+  gbint32  size;
   gbuint32 id;
   gbuint8  category;
   gbuint8  flags;
@@ -58,8 +58,8 @@ typedef struct {
   time_t mtime;		/* modification time */
   time_t btime;		/* backup time */
   gbuint32 revision;
-  gbuint32 appinfo_offs;	/* offset to application info */
-  gbuint32 index_offs;	/* offset to sort-index info */
+  gbint32 appinfo_offs;	/* offset to application info */
+  gbint32 index_offs;	/* offset to sort-index info */
   gbuint32 creator;
   gbuint32 type;
   gbuint32 uid;

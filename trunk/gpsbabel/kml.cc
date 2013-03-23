@@ -1643,9 +1643,18 @@ typedef enum {
   sl_float,
   sl_double,
 } sl_element;
+
+typedef enum {
+  fld_cadence, 
+  fld_depth, 
+  fld_heartrate, 
+  fld_temperature, 
+  fld_power
+} wp_field;
+
 static void kml_mt_simple_array(const route_head* header,
                                 const char* name,
-                                int offset, sl_element type)
+                                wp_field member, sl_element type)
 {
   queue* elem, *tmp;
   writer.writeStartElement("gx:SimpleArrayData");
@@ -1653,11 +1662,33 @@ static void kml_mt_simple_array(const route_head* header,
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
 
-    char* datap = (char*) elem + offset;
+    waypoint* wpt = (waypoint *) elem;
+    char *datap;
+     
+
+    switch (member) {
+      case fld_power: 
+        datap = (char *) &wpt->power;
+        break;
+      case fld_cadence: 
+        datap = (char *) &wpt->cadence;
+        break;
+      case fld_depth: 
+        datap = (char *) &wpt->depth;
+        break;
+      case fld_heartrate: 
+        datap = (char *) &wpt->heartrate;
+        break;
+      case fld_temperature: 
+        datap = (char *) &wpt->temperature;
+        break;
+      default:
+        fatal("Bad member type");
+    }
 
     switch (type) {
     case sl_char: {
-      char data = *(char*) datap;
+      signed char data = *(signed char*) datap;
       writer.writeTextElement("gx:value", QString(data));
     }
     break;
@@ -1800,24 +1831,19 @@ static void kml_mt_hdr(const route_head* header)
     writer.writeAttribute("schemaUrl", "#schema");
 
     if (has_cadence)
-      kml_mt_simple_array(header, kmt_cadence,
-                          offsetof(waypoint, cadence), sl_uchar);
+      kml_mt_simple_array(header, kmt_cadence, fld_cadence, sl_uchar);
 
     if (has_depth)
-      kml_mt_simple_array(header, kmt_depth,
-                          offsetof(waypoint, depth), sl_double);
+      kml_mt_simple_array(header, kmt_depth, fld_depth, sl_double);
 
     if (has_heartrate)
-      kml_mt_simple_array(header, kmt_heartrate,
-                          offsetof(waypoint, heartrate), sl_uchar);
+      kml_mt_simple_array(header, kmt_heartrate, fld_heartrate, sl_uchar);
 
     if (has_temperature)
-      kml_mt_simple_array(header, kmt_temperature,
-                          offsetof(waypoint, temperature), sl_float);
+      kml_mt_simple_array(header, kmt_temperature, fld_temperature, sl_float);
 
     if (has_power)
-      kml_mt_simple_array(header, kmt_power,
-                          offsetof(waypoint, power), sl_float);
+      kml_mt_simple_array(header, kmt_power, fld_power, sl_float);
 
     writer.writeEndElement(); // Close SchemaData tag
     writer.writeEndElement(); // Close ExtendedData tag

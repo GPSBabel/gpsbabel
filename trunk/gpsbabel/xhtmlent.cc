@@ -1,4 +1,4 @@
-char *xhtml_entities =
+const char *xhtml_entities =
   "<!-- Portions (C) International Organization for Standardization 1986\n"
   "     Permission to copy in any form is granted for use with\n"
   "     conforming SGML systems and applications as defined in\n"

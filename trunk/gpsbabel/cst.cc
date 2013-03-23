@@ -231,7 +231,7 @@ cst_data_read(void)
           if (strcmp(cin + 2, "note") == 0) {
             buff = gbfgetstr(fin);
             if (buff == NULL) {
-              buff = "";
+              buff = (char *) "";
             }
             line++;
             cin = lrtrim(buff);
