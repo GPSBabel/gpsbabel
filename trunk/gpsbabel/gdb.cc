@@ -1337,15 +1337,15 @@ write_waypoint(
 
   /* VERSION DEPENDENT CODE */
   if (gdb_ver <= GDB_VER_2) {
-    char* descr;
+    QString descr;
 
     FWRITE(zbuf, 3);
     FWRITE(zbuf, 4);
     descr = (wpt_class < gt_waypt_class_map_point) ?
-            wpt->url.toUtf8().data() : wpt->description;
+            wpt->url : wpt->description;
     if ((descr != NULL) && (wpt_class >= gt_waypt_class_map_point) && \
-        (strcmp(descr, wpt->shortname) == 0)) {
-      descr = NULL;
+        descr.compare(wpt->shortname) == 0) {
+      descr.clear();
     }
     FWRITE_CSTR(descr);
   } else { /* if (gdb_ver > GDB_VER_3) */
