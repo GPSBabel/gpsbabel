@@ -1654,7 +1654,6 @@ static void kml_mt_simple_array(const route_head* header,
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
 
     waypoint* wpt = (waypoint *) elem;
-    char *datap;
 
     switch (member) {
       case fld_power: 
@@ -1664,7 +1663,6 @@ static void kml_mt_simple_array(const route_head* header,
         writer.writeTextElement("gx:value", QString::number(wpt->cadence));
         break;
       case fld_depth: 
-        datap = (char *) &wpt->depth;
         writer.writeTextElement("gx:value", QString::number(wpt->depth, 'f', 1));
         break;
       case fld_heartrate: 
