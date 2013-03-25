@@ -57,6 +57,10 @@ char * ShimString(QString s)
 {
   return xstrdup(s.toUtf8().data());
 }
+char * ShimString(QStringRef s) 
+{
+  return xstrdup(s.toString().toUtf8().data());
+}
 
 double ShimAttributeDouble(QXmlStreamAttributes a, QString v) 
 {
@@ -78,7 +82,7 @@ void GeoReadLoc()
       }
       if (reader.name() == "name") {
         QXmlStreamAttributes a = reader.attributes();
-        wpt->shortname = ShimString(a.value("id").toString());
+        wpt->shortname = ShimString(a.value("id"));
         wpt->description = ShimString(reader.readElementText());
       }
       if (reader.name() == "coord") {
@@ -327,7 +331,6 @@ void wpt_container(const char* args, const char** unused)
   }
   waypt_alloc_gc_data(wpt_tmp)->container = v;
 }
-#endif
 void wpt_diff(const char* args, const char** unused)
 {
   if (!args) {
@@ -343,6 +346,7 @@ void wpt_terr(const char* args, const char** unused)
   }
   waypt_alloc_gc_data(wpt_tmp)->terr = atof(args) * 10;
 }
+#endif
 
 static void
 geo_rd_init(const char* fname)
