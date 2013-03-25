@@ -1451,13 +1451,8 @@ static void kml_geocache_pr(const waypoint* waypointp)
   // Timestamp
   kml_output_timestamp(waypointp);
   if (waypointp->creation_time) {
-#if NEWTIME
     strcpy(date_placed,
            qPrintable(waypointp->creation_time.toString("dd-MMM-yyyy")));
-#else
-    strftime(date_placed, sizeof(date_placed),
-             "%d-%b-%Y", localtime(&waypointp->creation_time));
-#endif
   } else {
     date_placed[0] = '\0';
   }

@@ -41,9 +41,7 @@
 #include "inifile.h"
 #include "session.h"
 
-#if NEWTIME
 # include "src/core/datetime.h"
-#endif
 
 // Turn on Unicode in expat?
 #ifdef _UNICODE
@@ -459,11 +457,6 @@ public:
   description(NULL), 
   notes(NULL), 
   url_next(NULL), 
-#if NEWTIME
-//  creation_time(QDateTime::fromTime_t(0)),
-#else
-  creation_time(0), 
-#endif
   microseconds(0), 
   route_priority(0), 
   hdop(0), 
@@ -540,11 +533,7 @@ public:
 
   wp_flags wpt_flags;
   QString icon_descr;
-#if NEWTIME
   gpsbabel::DateTime creation_time;
-#else
-  time_t creation_time;	/* standardized in UTC/GMT */
-#endif
   int microseconds;	/* Optional millionths of a second. */
 
   /*
