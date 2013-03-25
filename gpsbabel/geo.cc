@@ -22,10 +22,11 @@
 static char* deficon = NULL;
 static char* nuke_placer;
 
-static waypoint* wpt_tmp;
 
 static gbfile* ofd;
 
+#include <QtCore/QFile>
+#include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
 #include <QtCore/QDebug>
 QString ostring;
@@ -39,6 +40,138 @@ arglist_t geo_args[] = {
 };
 
 #define MYNAME "geo"
+
+#define NEWREADER 0
+
+#if NEWREADER
+
+// This really should be class-local...
+QXmlStreamReader reader;
+QString geo_read_fname;
+
+geocache_container wpt_container(const QString&);
+
+// Compensate for most of class waypt still using C strings and needing 
+// copies anyway.
+char * ShimString(QString s) 
+{
+  return xstrdup(s.toUtf8().data());
+}
+
+double ShimAttributeDouble(QXmlStreamAttributes a, QString v) 
+{
+  QString rv  = a.value(v).toString();
+  return rv.toDouble();
+}
+
+void GeoReadLoc() 
+{
+  waypoint* wpt = NULL;
+  while (reader.tokenType() != QXmlStreamReader::EndDocument) {
+    if (reader.tokenType()==QXmlStreamReader::StartElement) {
+      if (reader.name() == "waypoint") {
+         wpt = waypt_new();
+         waypt_alloc_gc_data(wpt);
+         // There is no 'unknown' alt value and so many reference files have
+         // leaked it that we just paper over that here.
+         wpt->altitude = 0;
+      }
+      if (reader.name() == "name") {
+        QXmlStreamAttributes a = reader.attributes();
+        wpt->shortname = ShimString(a.value("id").toString());
+        wpt->description = ShimString(reader.readElementText());
+      }
+      if (reader.name() == "coord") {
+        QXmlStreamAttributes a = reader.attributes();
+        wpt->latitude = ShimAttributeDouble(a, "lat");
+        wpt->longitude = ShimAttributeDouble(a, "lon");
+      }
+      if (reader.name() == "type") {
+        wpt->icon_descr = ShimString(reader.readElementText());
+      }
+      if (reader.name() == "link") {
+        QXmlStreamAttributes a = reader.attributes();
+        wpt->url_link_text = a.value("text").toString();
+        wpt->url = reader.readElementText();
+      }
+      if (reader.name() == "difficulty") {
+        wpt->gc_data->diff = reader.readElementText().toInt() * 10;
+      }
+      if (reader.name() == "terrain") {
+        wpt->gc_data->terr = reader.readElementText().toInt() * 10;
+      }
+      if (reader.name() == "container") {
+        wpt->gc_data->container = wpt_container(reader.readElementText());
+      }
+    }
+
+    if (reader.tokenType() == QXmlStreamReader::EndElement) {
+      if (reader.name() == "waypoint") {
+         waypt_add(wpt);
+      }
+    }
+
+    reader.readNext();
+  }
+}
+
+static void
+geo_rd_init(const char* fname)
+{
+  geo_read_fname = fname;
+}
+
+static void
+geo_read(void)
+{
+  QFile file(geo_read_fname);
+  file.open(QIODevice::ReadOnly);
+  reader.setDevice(&file);
+
+  while (!reader.atEnd()) {
+    if (reader.name() == "loc") {
+      GeoReadLoc();
+    }
+    reader.readNextStartElement();
+  }
+}
+
+geocache_container wpt_container(const QString& args)
+{
+  geocache_container v;
+
+  switch (args.toInt()) {
+  case 1:
+    v = gc_unknown;
+    break;
+  case 2:
+    v = gc_micro;
+    break;
+  case 3:
+    v = gc_regular;
+    break;
+  case 4:
+    v = gc_large;
+    break;
+  case 5:
+    v = gc_virtual;;
+    break;
+  case 6:
+    v = gc_other;
+    break;
+  case 8:
+    v = gc_small;
+    break;
+  default:
+    v = gc_unknown;
+    break;
+  }
+  return v;
+}
+
+
+#else
+static waypoint* wpt_tmp;
 #define MY_CBUF 4096
 
 #if ! HAVE_LIBEXPAT
@@ -194,7 +327,7 @@ void wpt_container(const char* args, const char** unused)
   }
   waypt_alloc_gc_data(wpt_tmp)->container = v;
 }
-
+#endif
 void wpt_diff(const char* args, const char** unused)
 {
   if (!args) {
