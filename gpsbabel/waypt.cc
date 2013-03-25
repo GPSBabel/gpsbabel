@@ -231,15 +231,9 @@ set_waypt_count(unsigned int nc)
 void
 waypt_disp(const waypoint *wpt)
 {
-#if NEWTIME
   if (wpt->creation_time.isValid()) {
-  printf("%s", qPrintable(wpt->creation_time.toString()));
+    printf("%s ", qPrintable(wpt->creation_time.toString()));
   }
-#else
-  if (wpt->creation_time) {
-    printf("%s ", ctime(&wpt->creation_time));
-  }
-#endif
   printposn(wpt->latitude,1);
   printposn(wpt->longitude,0);
 

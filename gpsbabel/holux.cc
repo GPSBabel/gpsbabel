@@ -227,21 +227,12 @@ static void holux_disp(const waypoint* wpt)
   /*set the time */
   if (wpt->creation_time) {
     /* tm = gmtime(&wpt->creation_time);*/  /* I get the wrong result with gmtime ???  */
-#if NEWTIME
     QDate date(wpt->creation_time.date());
     QTime time(wpt->creation_time.time());
     pWptHxTmp->time = (time.hour() * 3600) + (time.minute()* 60) + time.second();
     pWptHxTmp->date.day = date.day();
     pWptHxTmp->date.month = date.month();
     pWptHxTmp->date.year = date.year();
-#else
-    struct tm* tm;
-    tm = localtime(&wpt->creation_time);
-    pWptHxTmp->time = (tm->tm_hour * 3600) + (tm->tm_min * 60) +tm->tm_sec;
-    pWptHxTmp->date.day = tm->tm_mday;
-    pWptHxTmp->date.month = tm->tm_mon + 1;
-    pWptHxTmp->date.year = tm->tm_year + 1900;
-#endif
   } else {
     pWptHxTmp->time = 0;
     pWptHxTmp->date.day = 0;
