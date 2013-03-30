@@ -94,16 +94,9 @@ waypt_dupe(const waypoint *wpt)
     tmp->gc_data->desc_short.is_html = wpt->gc_data->desc_short.is_html;
     tmp->gc_data->desc_long.is_html = wpt->gc_data->desc_long.is_html;
     tmp->gc_data->favorite_points = wpt->gc_data->favorite_points;
+    tmp->gc_data->desc_short.utfstring = wpt->gc_data->desc_short.utfstring;
+    tmp->gc_data->desc_long.utfstring = wpt->gc_data->desc_long.utfstring;
 
-    // memcpy(gc_data, wpt->gc_data, sizeof(*gc_data));
-    if (wpt->gc_data->desc_short.utfstring) {
-      tmp->gc_data->desc_short.utfstring =
-        xstrdup(wpt->gc_data->desc_short.utfstring);
-    }
-    if (wpt->gc_data->desc_long.utfstring) {
-      tmp->gc_data->desc_long.utfstring =
-        xstrdup(wpt->gc_data->desc_long.utfstring);
-    }
     if (wpt->gc_data->placer) {
       tmp->gc_data->placer = xstrdup(wpt->gc_data->placer);
     }
@@ -426,12 +419,6 @@ waypt_free(waypoint *wpt)
   if (wpt->gc_data != &empty_gc_data) {
     geocache_data *gc_data = (geocache_data *)wpt->gc_data;
 
-    if (gc_data->desc_short.utfstring) {
-      xfree(gc_data->desc_short.utfstring);
-    }
-    if (gc_data->desc_long.utfstring) {
-      xfree(gc_data->desc_long.utfstring);
-    }
     if (gc_data->placer) {
       xfree(gc_data->placer);
     }

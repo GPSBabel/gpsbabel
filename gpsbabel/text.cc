@@ -152,12 +152,12 @@ text_disp(const waypoint *wpt)
               gs_get_cachetype(wpt->gc_data->type), gs_get_container(wpt->gc_data->container),
               (int)(wpt->gc_data->diff / 10), (wpt->gc_data->diff%10)?".5":"",
               (int)(wpt->gc_data->terr / 10), (wpt->gc_data->terr%10)?".5":"");
-    if (wpt->gc_data->desc_short.utfstring) {
+    if (!wpt->gc_data->desc_short.utfstring.isEmpty()) {
       char *stripped_html = strip_html(&wpt->gc_data->desc_short);
       gbfprintf(file_out, "\n%s\n", stripped_html);
       xfree(stripped_html);
     }
-    if (wpt->gc_data->desc_long.utfstring) {
+    if (!wpt->gc_data->desc_long.utfstring.isEmpty()) {
       char *stripped_html = strip_html(&wpt->gc_data->desc_long);
       gbfprintf(file_out, "\n%s\n", stripped_html);
       xfree(stripped_html);

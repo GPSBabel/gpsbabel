@@ -1246,16 +1246,16 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
   if (wp->gc_data->hint && !opt_hint_at_end) {
     gbfprintf(fd, "HINT: %s\n", wp->gc_data->hint);
   }
-  if (wp->gc_data->desc_short.utfstring || wp->gc_data->desc_long.utfstring) {
+  if (!wp->gc_data->desc_short.utfstring.isEmpty() || !wp->gc_data->desc_long.utfstring.isEmpty()) {
     gbfputs("DESC: ", fd);
-    if (wp->gc_data->desc_short.utfstring) {
+    if (!wp->gc_data->desc_short.utfstring.isEmpty()) {
       char* s1 = strip_html(&wp->gc_data->desc_short);
       char* s2 = cet_str_utf8_to_any(s1, global_opts.charset);
       gbfprintf(fd, "%s\n", s2);
       xfree(s2);
       xfree(s1);
     }
-    if (wp->gc_data->desc_long.utfstring) {
+    if (!wp->gc_data->desc_long.utfstring.isEmpty()) {
       char* s1 = strip_html(&wp->gc_data->desc_long);
       char* s2 = cet_str_utf8_to_any(s1, global_opts.charset);
       gbfputs(s2, fd);
