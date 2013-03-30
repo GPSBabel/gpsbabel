@@ -75,23 +75,41 @@ waypt_dupe(const waypoint *wpt)
   tmp->icon_descr = wpt->icon_descr;
 
   if (wpt->gc_data != &empty_gc_data) {
-    geocache_data *gc_data = (geocache_data*) xmalloc(sizeof(*gc_data));
-    tmp->gc_data = (geocache_data *)gc_data;
+    // FIXME(robertlipe): Find out why the default copy constructor doesn't
+    // do a sensible thing here.  This will probably be easier once the 
+    // underlying types are refcounted.
+    tmp->gc_data = new geocache_data;
+    tmp->gc_data->id = wpt->gc_data->id;
+    tmp->gc_data->type = wpt->gc_data->type;
+    tmp->gc_data->container = wpt->gc_data->container;
+    tmp->gc_data->diff = wpt->gc_data->diff;
+    tmp->gc_data->terr = wpt->gc_data->terr;
+    tmp->gc_data->is_archived = wpt->gc_data->is_archived;
+    tmp->gc_data->is_available = wpt->gc_data->is_available;
+    tmp->gc_data->is_memberonly = wpt->gc_data->is_memberonly;
+    tmp->gc_data->has_customcoords = wpt->gc_data->has_customcoords;
+    tmp->gc_data->exported = wpt->gc_data->exported;
+    tmp->gc_data->last_found = wpt->gc_data->last_found;
+    tmp->gc_data->desc_short.is_html = wpt->gc_data->desc_short.is_html;
+    tmp->gc_data->desc_long.is_html = wpt->gc_data->desc_long.is_html;
 
-    memcpy(gc_data, wpt->gc_data, sizeof(*gc_data));
+    // memcpy(gc_data, wpt->gc_data, sizeof(*gc_data));
     if (wpt->gc_data->desc_short.utfstring) {
-      gc_data->desc_short.utfstring =
+      tmp->gc_data->desc_short.utfstring =
         xstrdup(wpt->gc_data->desc_short.utfstring);
     }
     if (wpt->gc_data->desc_long.utfstring) {
-      gc_data->desc_long.utfstring =
+      tmp->gc_data->desc_long.utfstring =
         xstrdup(wpt->gc_data->desc_long.utfstring);
     }
     if (wpt->gc_data->placer) {
-      gc_data->placer = xstrdup(wpt->gc_data->placer);
+      tmp->gc_data->placer = xstrdup(wpt->gc_data->placer);
     }
     if (wpt->gc_data->hint) {
-      gc_data->hint = xstrdup(wpt->gc_data->hint);
+      tmp->gc_data->hint = xstrdup(wpt->gc_data->hint);
+    }
+    if (wpt->gc_data->personal_note) {
+      tmp->gc_data->personal_note = xstrdup(wpt->gc_data->personal_note);
     }
   }
 
@@ -421,7 +439,7 @@ waypt_free(waypoint *wpt)
     if (gc_data->personal_note) {
       xfree(gc_data->personal_note);
     }
-    xfree(gc_data);
+    delete gc_data;
   }
   fs_chain_destroy(wpt->fs);
   delete wpt;
@@ -656,9 +674,7 @@ waypt_alloc_gc_data(waypoint *wpt)
 {
   geocache_data *res = (geocache_data *)wpt->gc_data;
   if (res == &empty_gc_data) {
-    res = (geocache_data*) xcalloc(1, sizeof(*res));
-    wpt->gc_data = (geocache_data *)res;
-
+    res = wpt->gc_data = new geocache_data;
   }
   return res;
 }
