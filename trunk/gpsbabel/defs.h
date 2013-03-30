@@ -282,6 +282,8 @@ class geocache_data {
     is_available(status_unknown),
     is_memberonly(status_unknown),
     has_customcoords(status_unknown),
+    exported(0),
+    last_found(0),
     placer(NULL),
     placer_id(0),
     hint(NULL),
