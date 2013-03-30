@@ -573,7 +573,6 @@ class route_head {
   route_head() :
     rte_name(NULL),
     rte_desc(NULL),
-    rte_url(NULL),
     rte_num(0),
     rte_waypt_ct(0),
     fs(NULL),
@@ -584,7 +583,7 @@ class route_head {
   queue waypoint_list;	/* List of child waypoints */
   char* rte_name;
   char* rte_desc;
-  char* rte_url;
+  QString rte_url;
   int rte_num;
   int rte_waypt_ct;		/* # waypoints in waypoint list */
   format_specific_data* fs;

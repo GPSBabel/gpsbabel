@@ -201,6 +201,7 @@ disp_summary(const gbfile* f)
 #define FREAD_i16 gbfgetint16(fin)
 #define FREAD_STR(a) gdb_fread_str(a,sizeof(a),fin)
 #define FREAD_CSTR gdb_fread_cstr(fin)
+#define FREAD_CSTR_AS_QSTR gdb_fread_cstr_as_qstr(fin)
 #define FREAD_DBL gbfgetdbl(fin)
 #define FREAD_LATLON GPS_Math_Semi_To_Deg(gbfgetint32(fin))
 
@@ -249,6 +250,15 @@ gdb_fread_cstr(gbfile* fin)
   return result;
 }
 
+static QString
+gdb_fread_cstr_as_qstr(gbfile* fin)
+{
+	char* result = gdb_fread_cstr(fin);
+    QString qresult = result;
+    xfree(result);
+    return qresult;
+}
+
 static int
 gdb_fread_str(char* buf, int size, gbfile* fin)
 {
@@ -267,7 +277,7 @@ gdb_fread_str(char* buf, int size, gbfile* fin)
   return res;
 }
 
-static char*
+static QString
 gdb_fread_strlist(void)
 {
   char* res = NULL;
@@ -287,7 +297,9 @@ gdb_fread_strlist(void)
     count--;
   }
 
-  return res;
+  QString qres = res;
+  xfree(res);
+  return qres;
 }
 
 static waypoint*
@@ -652,9 +664,9 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   DBG(GDB_DBG_WPTe, res->description)
   printf(MYNAME "-wpt \"%s\" (%d): description = %s\n",
          sn, wpt_class, nice(res->description));
-  DBG(GDB_DBG_WPTe, res->url)
+  DBG(GDB_DBG_WPTe, !res->url.isNull())
   printf(MYNAME "-wpt \"%s\" (%d): url = %s\n",
-         sn, wpt_class, nice(res->url));
+         sn, wpt_class, nice(qPrintable(res->url))); // FIXME: qPrintable and nice probably are fighting.
 #endif
   i = FREAD_i16;
   if (i != 0) {
@@ -703,7 +715,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 #if GDB_DEBUG
   DBG(GDB_DBG_WPTe, icon != GDB_DEF_ICON)
   printf(MYNAME "-wpt \"%s\" (%d): icon = \"%s\" (MapSource symbol %d)\n",
-         sn, wpt_class, nice(res->icon_descr), icon);
+         sn, wpt_class, nice(qPrintable(res->icon_descr)), icon); // FIXME: qPrintable and nice probably are fighting.
 #endif
   if ((str = GMSD_GET(cc, NULL))) {
     if (! GMSD_HAS(country)) {
@@ -918,7 +930,7 @@ read_route(void)
 
   /* VERSION DEPENDENT CODE */
   if (gdb_ver <= GDB_VER_2) {
-    rte->rte_url = FREAD_CSTR;
+    rte->rte_url = FREAD_CSTR_AS_QSTR;
   } else {
     rte->rte_url = gdb_fread_strlist();
 
@@ -993,12 +1005,12 @@ read_track(void)
   if (gdb_ver >= GDB_VER_3) {
     res->rte_url = gdb_fread_strlist();
   } else { /* if (gdb_ver <= GDB_VER_2) */
-    res->rte_url = FREAD_CSTR;
+    res->rte_url = FREAD_CSTR_AS_QSTR;
   }
 #if GDB_DEBUG
-  DBG(GDB_DBG_TRK, res->rte_url)
+  DBG(GDB_DBG_TRK, !res->rte_url.isNull())
   printf(MYNAME "-trk \"%s\": url = %s\n",
-         res->rte_name, res->rte_url);
+         res->rte_name, qPrintable(res->rte_url));
 #endif
   return res;
 }
