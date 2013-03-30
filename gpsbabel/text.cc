@@ -143,8 +143,8 @@ text_disp(const waypoint *wpt)
 
   if (strcmp(wpt->description, wpt->shortname)) {
     gbfprintf(file_out, "%s", wpt->description);
-    if (wpt->gc_data->placer) {
-      gbfprintf(file_out, " by %s", wpt->gc_data->placer);
+    if (!wpt->gc_data->placer.isEmpty()) {
+      gbfprintf(file_out, " by %s", wpt->gc_data->placer.toUtf8().data());
     }
   }
   if (wpt->gc_data->terr) {
@@ -162,12 +162,12 @@ text_disp(const waypoint *wpt)
       gbfprintf(file_out, "\n%s\n", stripped_html);
       xfree(stripped_html);
     }
-    if (wpt->gc_data->hint) {
+    if (!wpt->gc_data->hint.isEmpty()) {
       char *hint = NULL;
       if (txt_encrypt) {
         hint = rot13(wpt->gc_data->hint);
       } else {
-        hint = xstrdup(wpt->gc_data->hint);
+        hint = xstrdup(wpt->gc_data->hint.toUtf8().data());
       }
       gbfprintf(file_out, "\nHint: %s\n", hint);
       xfree(hint);

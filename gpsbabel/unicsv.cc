@@ -1479,13 +1479,13 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
     if (gc_data->last_found) {
       gb_setbit(&unicsv_outp_flags, fld_gc_last_found);
     }
-    if (gc_data->placer && *gc_data->placer) {
+    if (!gc_data->placer.isEmpty()) {
       gb_setbit(&unicsv_outp_flags, fld_gc_placer);
     }
     if (gc_data->placer_id) {
       gb_setbit(&unicsv_outp_flags, fld_gc_placer_id);
     }
-    if (gc_data->hint && *gc_data->hint) {
+    if (!gc_data->hint.isEmpty()) {
       gb_setbit(&unicsv_outp_flags, fld_gc_hint);
     }
   }

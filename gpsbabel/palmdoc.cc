@@ -464,12 +464,12 @@ palmdoc_disp(const waypoint *wpt)
       docprintf(10+strlen(stripped_html), "\n%s\n", stripped_html);
       xfree(stripped_html);
     }
-    if (wpt->gc_data->hint) {
+    if (!wpt->gc_data->hint.isEmpty()) {
       char *hint = NULL;
       if (palm_encrypt) {
         hint = rot13(wpt->gc_data->hint);
       } else {
-        hint = xstrdup(wpt->gc_data->hint);
+        hint = xstrdup(wpt->gc_data->hint.toUtf8().data());
       }
       docprintf(10+strlen(hint), "\nHint: %s\n", hint);
       xfree(hint);

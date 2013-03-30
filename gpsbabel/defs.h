@@ -283,11 +283,8 @@ class geocache_data {
     has_customcoords(status_unknown),
     exported(0),
     last_found(0),
-    placer(NULL),
     placer_id(0),
-    hint(NULL),
-    favorite_points(0),
-    personal_note(NULL)
+    favorite_points(0)
   {}
   int id; /* The decimal cache number */
   geocache_type type:5;
@@ -300,13 +297,13 @@ class geocache_data {
   status_type has_customcoords:2;
   time_t exported;
   time_t last_found;
-  char* placer; /* Placer name */
+  QString placer; /* Placer name */
   int placer_id; /* Placer id */
-  char* hint; /* all these UTF8, XML entities removed, May be not HTML. */
+  QString hint; /* all these UTF8, XML entities removed, May be not HTML. */
   utf_string desc_short;
   utf_string desc_long;
   int favorite_points;
-  char* personal_note;
+  QString personal_note;
 };
 
 typedef struct xml_tag {

@@ -270,7 +270,7 @@ maggeo_waypt_pr(const waypoint* waypointp)
   char* shortname;
   char* cname = NULL;
   const char* ctype = NULL;
-  char* placer = NULL;
+  QString placer;
   char* lfounddate = NULL;
   char* placeddate = NULL;
 
@@ -324,8 +324,8 @@ maggeo_waypt_pr(const waypoint* waypointp)
            0 : waypointp->altitude);
   append(obuf, shortname);
   append(obuf, cname);
-  append(obuf, placer);
-  append(obuf, waypointp->gc_data->hint);
+  append(obuf, placer.toUtf8().data());
+  append(obuf, waypointp->gc_data->hint.toUtf8().data());
   append(obuf, ctype);
   append(obuf, placeddate);
   append(obuf, lfounddate);

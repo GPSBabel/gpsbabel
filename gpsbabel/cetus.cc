@@ -505,7 +505,7 @@ cetus_writewpt(const waypoint* wpt)
               "" : " (Disabled)",
               wpt->gc_data->is_archived==status_true ?
               " (Archived)" : "",
-              wpt->gc_data->placer,
+              wpt->gc_data->placer.toUtf8().data(),
               gs_get_cachetype(wpt->gc_data->type),
               gs_get_container(wpt->gc_data->container),
               wpt->gc_data->diff/10.0,
@@ -557,8 +557,8 @@ cetus_writewpt(const waypoint* wpt)
   }
   vdata += strlen(vdata) + 1;
 
-  if (wpt->gc_data->hint) {
-    char* hint = xstrdup(wpt->gc_data->hint);
+  if (!wpt->gc_data->hint.isEmpty()) {
+    char* hint = xstrdup(wpt->gc_data->hint.toUtf8().data());
     rec->type = WptCache;
     strncpy(vdata, hint, NOTESZ + 1) ;
     xfree(hint);

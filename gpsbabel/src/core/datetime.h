@@ -44,6 +44,7 @@ public:
   }
 
   DateTime(QDate date, QTime time) : QDateTime(date, time) { }
+  DateTime(QDateTime dt) : QDateTime(dt) { }
 
 
   // Handle time_tm tm = wpt->creation_time;
