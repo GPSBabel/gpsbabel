@@ -85,7 +85,7 @@ read_tracks(void)
   trk_head->rte_num = 1;
   trk_head->rte_name = xstrdup("PocketFMS");
   trk_head->rte_desc = xstrdup("Breadcrumb");
-  trk_head->rte_url = xstrdup("www.pocketfms.com");
+  trk_head->rte_url = "www.pocketfms.com";
   track_add_head(trk_head);
 
   while (1 == gbfread(&bc, sizeof(bc), 1, file_in)) {

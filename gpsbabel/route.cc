@@ -67,13 +67,9 @@ track_count(void)
 route_head *
 route_head_alloc(void)
 {
-  route_head *rte_head;
-  rte_head = (route_head *) xcalloc(sizeof(*rte_head), 1);
+  route_head* rte_head = new route_head;
   QUEUE_INIT(&rte_head->Q);
   QUEUE_INIT(&rte_head->waypoint_list);
-  rte_head->line_color.bbggrr = -1;
-  rte_head->line_color.opacity = 255;
-  rte_head->line_width = -1;
   rte_head->session = curr_session();
   return rte_head;
 }
@@ -87,14 +83,12 @@ any_route_free(route_head *rte)
   if (rte->rte_desc) {
     xfree(rte->rte_desc);
   }
-  if (rte->rte_url) {
-    xfree(rte->rte_url);
-  }
   waypt_flush(&rte->waypoint_list);
   if (rte->fs) {
     fs_chain_destroy(rte->fs);
   }
-  xfree(rte);
+  delete rte;
+  rte = NULL;
 }
 
 
@@ -413,7 +407,7 @@ route_copy(int *dst_count, int *dst_wpt_count, queue **dst, queue *src)
     rte_new = route_head_alloc();
     rte_new->rte_name = xstrdup(rte_old->rte_name);
     rte_new->rte_desc = xstrdup(rte_old->rte_desc);
-    rte_new->rte_url = xstrdup(rte_old->rte_url);
+    rte_new->rte_url = rte_old->rte_url;
     rte_new->fs = fs_chain_copy(rte_old->fs);
     rte_new->rte_num = rte_old->rte_num;
     any_route_add_head(rte_new, *dst);
