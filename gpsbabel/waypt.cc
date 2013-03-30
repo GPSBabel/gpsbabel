@@ -90,8 +90,10 @@ waypt_dupe(const waypoint *wpt)
     tmp->gc_data->has_customcoords = wpt->gc_data->has_customcoords;
     tmp->gc_data->exported = wpt->gc_data->exported;
     tmp->gc_data->last_found = wpt->gc_data->last_found;
+    tmp->gc_data->placer_id = wpt->gc_data->placer_id;
     tmp->gc_data->desc_short.is_html = wpt->gc_data->desc_short.is_html;
     tmp->gc_data->desc_long.is_html = wpt->gc_data->desc_long.is_html;
+    tmp->gc_data->favorite_points = wpt->gc_data->favorite_points;
 
     // memcpy(gc_data, wpt->gc_data, sizeof(*gc_data));
     if (wpt->gc_data->desc_short.utfstring) {
