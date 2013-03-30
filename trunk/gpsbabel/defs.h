@@ -263,11 +263,10 @@ typedef enum {
 class utf_string{
  public:
   utf_string() :
-    is_html(false),
-    utfstring(NULL)
+    is_html(false)
   {};
   bool is_html;
-  char* utfstring;
+  QString utfstring;
 };
 
 class geocache_data {
@@ -996,7 +995,7 @@ const char* gs_get_container(geocache_container t);
 char* xml_entitize(const char* str);
 char* html_entitize(const char* str);
 char* strip_html(const utf_string*);
-char* strip_nastyhtml(const char* in);
+char* strip_nastyhtml(const QString& in);
 char* convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
 char* convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
 char* pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
@@ -1027,7 +1026,7 @@ xml_tag* xml_findfirst(xml_tag* root, const char* tagname);
 xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname);
 char* xml_attribute(xml_tag* tag, const char* attrname);
 
-char* rot13(const char* str);
+char* rot13(const QString& str);
 
 /*
  * PalmOS records like fixed-point numbers, which should be rounded

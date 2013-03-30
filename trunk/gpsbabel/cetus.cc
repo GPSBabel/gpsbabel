@@ -514,7 +514,7 @@ cetus_writewpt(const waypoint* wpt)
     desc_geo = xstrdup("");
   }
 
-  if (wpt->gc_data->desc_short.utfstring) {
+  if (!wpt->gc_data->desc_short.utfstring.isEmpty()) {
     char* stripped_html = strip_html(&wpt->gc_data->desc_short);
     desc_short = xstrdup(wpt->gc_data->diff == 0 ? "\n\n" : "");
     desc_short = xstrappend(desc_short, xstrdup(stripped_html));
@@ -523,7 +523,7 @@ cetus_writewpt(const waypoint* wpt)
     desc_short = xstrdup("");
   }
 
-  if (wpt->gc_data->desc_long.utfstring) {
+  if (!wpt->gc_data->desc_long.utfstring.isEmpty()) {
     char* stripped_html = strip_html(&wpt->gc_data->desc_long);
     desc_long = xstrdup("\n\n");
     desc_long = xstrappend(desc_long, xstrdup(stripped_html));

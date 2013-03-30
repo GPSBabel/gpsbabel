@@ -1420,7 +1420,7 @@ static void kml_write_data_element(const char* name, const double value)
   AUTOFORMATTING_RESTORE(af);
 }
 
-static void kml_write_cdata_element(const char* name, const char* value)
+static void kml_write_cdata_element(const char* name, const QString& value)
 {
   writer.writeStartElement("Data");
   writer.writeAttribute("name", name);
@@ -1503,8 +1503,8 @@ static void kml_geocache_pr(const waypoint* waypointp)
 
   kml_write_data_element("gc_type", gs_get_cachetype(waypointp->gc_data->type));
   kml_write_data_element("gc_icon", is);
-  kml_write_cdata_element("gc_short_desc", waypointp->gc_data->desc_short.utfstring ? waypointp->gc_data->desc_short.utfstring : "");
-  kml_write_cdata_element("gc_long_desc", waypointp->gc_data->desc_long.utfstring ? waypointp->gc_data->desc_long.utfstring : "");
+  kml_write_cdata_element("gc_short_desc", waypointp->gc_data->desc_short.utfstring);
+  kml_write_cdata_element("gc_long_desc", waypointp->gc_data->desc_long.utfstring);
   logs = kml_geocache_get_logs(waypointp);
   kml_write_cdata_element("gc_logs", logs);
   xfree(logs);

@@ -134,12 +134,12 @@ html_disp(const waypoint* wpt)
 
 
   gbfprintf(file_out, "<tr><td colspan=\"2\">");
-  if (wpt->gc_data->desc_short.utfstring) {
+  if (!wpt->gc_data->desc_short.utfstring.isEmpty()) {
     char* tmpstr = strip_nastyhtml(wpt->gc_data->desc_short.utfstring);
     gbfprintf(file_out, "<p class=\"gpsbabeldescshort\">%s</p>\n", tmpstr);
     xfree(tmpstr);
   }
-  if (wpt->gc_data->desc_long.utfstring) {
+  if (!wpt->gc_data->desc_long.utfstring.isEmpty()) {
     char* tmpstr = strip_nastyhtml(wpt->gc_data->desc_long.utfstring);
     gbfprintf(file_out, "<p class=\"gpsbabeldesclong\">%s</p>\n", tmpstr);
     xfree(tmpstr);

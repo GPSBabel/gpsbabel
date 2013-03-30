@@ -454,12 +454,12 @@ palmdoc_disp(const waypoint *wpt)
     docprintf(100, "%s/%s\n", gs_get_cachetype(wpt->gc_data->type),
               gs_get_container(wpt->gc_data->container));
 
-    if (wpt->gc_data->desc_short.utfstring) {
+    if (!wpt->gc_data->desc_short.utfstring.isEmpty()) {
       char *stripped_html = strip_html(&wpt->gc_data->desc_short);
       docprintf(10+strlen(stripped_html), "\n%s\n", stripped_html);
       xfree(stripped_html);
     }
-    if (wpt->gc_data->desc_long.utfstring) {
+    if (!wpt->gc_data->desc_long.utfstring.isEmpty()) {
       char *stripped_html = strip_html(&wpt->gc_data->desc_long);
       docprintf(10+strlen(stripped_html), "\n%s\n", stripped_html);
       xfree(stripped_html);

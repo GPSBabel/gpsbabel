@@ -1246,9 +1246,9 @@ strlower(char *src)
 }
 
 char *
-rot13(const char *s)
+rot13(const QString& s)
 {
-  char *result = xstrdup(s);
+  char *result = xstrdup(s.toUtf8().data());
   char *cur = result;
   int flip = 1;
   while (cur && *cur) {
@@ -1481,13 +1481,13 @@ pretty_deg_format(double lat, double lon, char fmt, const char *sep, int html)
  * <style> </style> - stop overriding styles for everything
  */
 char *
-strip_nastyhtml(const char * in)
+strip_nastyhtml(const QString& in)
 {
   char *returnstr, *sp;
   char *lcstr, *lcp;
 
-  sp = returnstr = xstrdup(in);
-  lcp = lcstr = strlower(xstrdup(in));
+  sp = returnstr = xstrdup(in.toUtf8().data());
+  lcp = lcstr = strlower(xstrdup(in.toUtf8().data()));
 
   while (lcp = strstr(lcstr, "<body>"), NULL != lcp) {
     sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */
@@ -1574,19 +1574,21 @@ strip_nastyhtml(const char * in)
 char *
 strip_html(const utf_string *in)
 {
-  char *outstring, *out;
-  char *instr = in->utfstring;
+  char* outstring, *out;
+  // If toUtf8() is used here, we double encode in the OSM test case.
+  // this may be a bug here or elsewhere.
+  char* instr = xstrdup(in->utfstring.toAscii().data());
   char tag[8];
   unsigned short int taglen = 0;
 
   if (!in->is_html) {
-    return xstrdup(in->utfstring);
+    return instr;
   }
   /*
    * We only shorten, so just dupe the input buf for space.
    */
 
-  outstring = out = xstrdup(in->utfstring);
+  outstring = out = xstrdup(in->utfstring.toUtf8().data());
 
   tag[0] = 0;
   while (*instr) {
