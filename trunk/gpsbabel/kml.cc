@@ -1477,7 +1477,7 @@ static void kml_geocache_pr(const waypoint* waypointp)
     kml_write_data_element("gc_name", waypointp->url_link_text);
   }
 
-  if (waypointp->gc_data->placer) {
+  if (!waypointp->gc_data->placer.isEmpty()) {
     kml_write_data_element("gc_placer", waypointp->gc_data->placer);
   }
 

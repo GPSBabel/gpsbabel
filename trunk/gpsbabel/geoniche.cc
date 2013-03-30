@@ -685,7 +685,7 @@ geoniche_geostuff(const waypoint* wpt)
     return NULL;
   }
 
-  snprintf(tbuf, sizeof(tbuf), "\n%s by %s\n\n", gs_get_cachetype(wpt->gc_data->type), wpt->gc_data->placer);
+  snprintf(tbuf, sizeof(tbuf), "\n%s by %s\n\n", gs_get_cachetype(wpt->gc_data->type), wpt->gc_data->placer.toUtf8().data());
   gs = xstrappend(gs, tbuf);
 
   /*

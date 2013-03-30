@@ -250,7 +250,8 @@ void wpt_name(const char* args, const char** unused)
   wpt_tmp->description = xstrappend(wpt_tmp->description,args);
   s = xstrrstr(wpt_tmp->description, " by ");
   if (s) {
-    waypt_alloc_gc_data(wpt_tmp)->placer = xstrdup(s + 4);
+    waypt_alloc_gc_data(wpt_tmp);
+    wpt_tmp->gc_data->placer = xstrdup(s + 4);
 
     if (nuke_placer) {
       // Sleaze alert.  We're casting away constness and writing into a string

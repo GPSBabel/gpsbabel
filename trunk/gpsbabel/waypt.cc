@@ -91,21 +91,14 @@ waypt_dupe(const waypoint *wpt)
     tmp->gc_data->exported = wpt->gc_data->exported;
     tmp->gc_data->last_found = wpt->gc_data->last_found;
     tmp->gc_data->placer_id = wpt->gc_data->placer_id;
+    tmp->gc_data->desc_short.utfstring = wpt->gc_data->desc_short.utfstring;
     tmp->gc_data->desc_short.is_html = wpt->gc_data->desc_short.is_html;
+    tmp->gc_data->desc_long.utfstring = wpt->gc_data->desc_long.utfstring;
     tmp->gc_data->desc_long.is_html = wpt->gc_data->desc_long.is_html;
     tmp->gc_data->favorite_points = wpt->gc_data->favorite_points;
-    tmp->gc_data->desc_short.utfstring = wpt->gc_data->desc_short.utfstring;
-    tmp->gc_data->desc_long.utfstring = wpt->gc_data->desc_long.utfstring;
-
-    if (wpt->gc_data->placer) {
-      tmp->gc_data->placer = xstrdup(wpt->gc_data->placer);
-    }
-    if (wpt->gc_data->hint) {
-      tmp->gc_data->hint = xstrdup(wpt->gc_data->hint);
-    }
-    if (wpt->gc_data->personal_note) {
-      tmp->gc_data->personal_note = xstrdup(wpt->gc_data->personal_note);
-    }
+    tmp->gc_data->placer = wpt->gc_data->placer;
+    tmp->gc_data->hint = wpt->gc_data->hint;
+    tmp->gc_data->personal_note = wpt->gc_data->personal_note;
   }
 
   /*
@@ -419,15 +412,6 @@ waypt_free(waypoint *wpt)
   if (wpt->gc_data != &empty_gc_data) {
     geocache_data *gc_data = (geocache_data *)wpt->gc_data;
 
-    if (gc_data->placer) {
-      xfree(gc_data->placer);
-    }
-    if (gc_data->hint) {
-      xfree(gc_data->hint);
-    }
-    if (gc_data->personal_note) {
-      xfree(gc_data->personal_note);
-    }
     delete gc_data;
   }
   fs_chain_destroy(wpt->fs);

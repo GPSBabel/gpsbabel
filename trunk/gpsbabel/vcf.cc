@@ -118,7 +118,7 @@ vcf_disp(const waypoint *wpt)
     vcf_print(s);
     xfree(s);
   } else {
-    vcf_print(wpt->gc_data->hint);
+    vcf_print(wpt->gc_data->hint.toUtf8().data());
   }
 
   gbfprintf(file_out, "\nEND:VCARD\n");

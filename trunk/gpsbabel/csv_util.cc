@@ -2001,12 +2001,12 @@ xcsv_waypt_pr(const waypoint* wpt)
       field_is_unknown = wpt->gc_data->type == gt_unknown;
       break;
     case XT_GEOCACHE_HINT:
-      writebuff(buff, fmp->printfc, NONULL(wpt->gc_data->hint));
-      field_is_unknown = !wpt->gc_data->hint;
+      writebuff(buff, fmp->printfc, wpt->gc_data->hint.toUtf8().data());
+      field_is_unknown = !wpt->gc_data->hint.isEmpty();
       break;
     case XT_GEOCACHE_PLACER:
-      writebuff(buff, fmp->printfc, NONULL(wpt->gc_data->placer));
-      field_is_unknown = !wpt->gc_data->placer;
+      writebuff(buff, fmp->printfc, wpt->gc_data->placer.toUtf8().data());
+      field_is_unknown = !wpt->gc_data->placer.isEmpty();
       break;
     case XT_GEOCACHE_ISAVAILABLE:
       if (wpt->gc_data->is_available == status_false) {
