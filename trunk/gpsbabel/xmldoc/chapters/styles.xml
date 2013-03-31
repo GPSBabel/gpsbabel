@@ -1373,7 +1373,7 @@ example:
 <para>The name of the route currently being operated on.  Needs string conversion.</para><para>example:<screen format="linespecific">ROUTE_NAME, "", "%s"</screen></para></section>
 
 <section id="style_street_addr">
-<title>STREET_NAME</title>
+<title>STREET_ADDR</title>
 <para>Street address including house number.  Notice that this is not used for any geocoding, it's merely textual description associated with a position.</para>
 <para>example:<screen format="linespecific">STREET_ADDR, "", "%s"</screen></para>
 </section>
