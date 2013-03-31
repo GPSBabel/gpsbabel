@@ -140,7 +140,7 @@ static raymarine_symbol_mapping_t raymarine_symbols[] = {
 #define RAYMARINE_STD_SYMBOL 3
 
 static int
-find_symbol_num(const QString descr)
+find_symbol_num(const QString& descr)
 {
   if (!descr.isNull()) {
 

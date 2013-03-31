@@ -79,7 +79,7 @@ avltree_t* avltree_dupe(const avltree_t* tree, const char* module);
 
 /* Find key [key] in tree */
 int avltree_find(const avltree_t* tree, const char* key, const void** data);
-int avltree_find(const avltree_t* tree, const QString key, const void** data);
+int avltree_find(const avltree_t* tree, const QString& key, const void** data);
 
 /* Get the first (the MIN-) entry of the tree */
 const char* avltree_first(const avltree_t* tree, const void** data);

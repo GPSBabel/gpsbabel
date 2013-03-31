@@ -1230,7 +1230,7 @@ gbfputcstr(const char* s, gbfile* file)
   }
 }
 int
-gbfputcstr(const QString s, gbfile* file)
+gbfputcstr(const QString& s, gbfile* file)
 {
   return gbfputcstr(qPrintable(s), file);
 }
@@ -1257,7 +1257,7 @@ gbfputpstr(const char* s, gbfile* file)
 }
 
 int
-gbfputpstr(const QString s, gbfile* file)
+gbfputpstr(const QString& s, gbfile* file)
 {
   const char *t = xstrdup(s.toUtf8().data());
   int r = gbfputpstr(t, file);

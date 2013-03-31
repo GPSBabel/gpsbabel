@@ -130,9 +130,9 @@ int gbfputint32(const gbint32 i, gbfile* file);
 int gbfputdbl(const double d, gbfile* file);	// write a double value
 int gbfputflt(const float f, gbfile* file);	// write a float value
 int gbfputcstr(const char* s, gbfile* file);	// write string including '\0'
-int gbfputcstr(const QString s, gbfile* file);	// write string including '\0'
+int gbfputcstr(const QString& s, gbfile* file);	// write string including '\0'
 int gbfputpstr(const char* s, gbfile* file);	// write as pascal string
-int gbfputpstr(const QString s, gbfile* file);	// write as pascal string
+int gbfputpstr(const QString& s, gbfile* file);	// write as pascal string
 
 gbsize_t gbfcopyfrom(gbfile* file, gbfile* src, gbsize_t count);
 
