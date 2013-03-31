@@ -772,7 +772,7 @@ gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, in
   return DEFAULT_ICON_DESCR;
 }
 
-int gt_find_icon_number_from_desc(const QString desc, garmin_formats_e garmin_format)
+int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_format)
 {
   static int find_flag = 0;
   icon_mapping_t* i;

@@ -1305,7 +1305,7 @@ unicsv_print_str(const char *str)
 }
 
 static void
-unicsv_print_str(const QString s)
+unicsv_print_str(const QString& s)
 {
   char *t = xstrdup(s.toUtf8().data());
   unicsv_print_str(t);

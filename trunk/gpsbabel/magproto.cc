@@ -1178,7 +1178,7 @@ mag_find_descr_from_token(const char* token)
 }
 
 QString
-mag_find_token_from_descr(QString icon)
+mag_find_token_from_descr(const QString& icon)
 {
   icon_mapping_t* i = icon_mapping;
 

@@ -174,7 +174,7 @@ static void (*write_route_point)(const waypoint* waypt) = NULL;
 static void (*write_route_end)(const route_head* track) = NULL;
 
 static int
-find_icon_from_descr(QString descr)
+find_icon_from_descr(const QString& descr)
 {
   unsigned int i;
 

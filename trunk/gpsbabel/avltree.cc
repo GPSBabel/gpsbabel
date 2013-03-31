@@ -194,7 +194,7 @@ avltree_find(const avltree_t* tree, const char* key, const void** data)
 }
 
 int
-avltree_find(const avltree_t* tree, const QString key, const void** data)
+avltree_find(const avltree_t* tree, const QString& key, const void** data)
 {
   const char*t = xstrdup(key.toUtf8().data());
   int r = avltree_find(tree, t, data);
