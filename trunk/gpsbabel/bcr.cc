@@ -154,7 +154,7 @@ bcr_handle_icon_str(const char* str, waypoint* wpt)
 }
 
 static const char*
-get_bcr_icon_from_icon_descr(QString icon_descr)
+get_bcr_icon_from_icon_descr(const QString& icon_descr)
 {
   const char* result = BCR_DEF_ICON;
 

@@ -53,16 +53,16 @@ geocache_container wpt_container(const QString&);
 
 // Compensate for most of class waypt still using C strings and needing 
 // copies anyway.
-char * ShimString(QString s) 
+char * ShimString(const QString& s) 
 {
   return xstrdup(s.toUtf8().data());
 }
-char * ShimString(QStringRef s) 
+char * ShimString(const QStringRef& s) 
 {
   return xstrdup(s.toString().toUtf8().data());
 }
 
-double ShimAttributeDouble(QXmlStreamAttributes a, QString v) 
+double ShimAttributeDouble(const QXmlStreamAttributes& a, const QString& v) 
 {
   QString rv  = a.value(v).toString();
   return rv.toDouble();

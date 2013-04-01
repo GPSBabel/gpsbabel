@@ -712,7 +712,7 @@ gtm_read(void)
   }
 }
 
-int icon_from_descr(QString descr)
+static int icon_from_descr(const QString& descr)
 {
   for (int i = 0; icon_descr[i]; i++) {
     if (descr.compare(icon_descr[i]) == 0) {
