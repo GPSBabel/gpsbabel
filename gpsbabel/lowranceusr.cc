@@ -267,8 +267,8 @@ lowranceusr_find_desc_from_icon_number(const int icon)
   return "";
 }
 
-int
-lowranceusr_find_icon_number_from_desc(QString desc)
+static int
+lowranceusr_find_icon_number_from_desc(const QString& desc)
 {
   const lowranceusr_icon_mapping_t* i;
   int n;

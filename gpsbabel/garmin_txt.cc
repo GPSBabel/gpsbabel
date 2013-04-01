@@ -524,7 +524,7 @@ print_string(const char* fmt, const char* string)
 }
 
 static void
-print_string(const char* fmt, QString string)
+print_string(const char* fmt, const QString& string)
 {
   print_string(fmt, string.toUtf8().data());
 }
