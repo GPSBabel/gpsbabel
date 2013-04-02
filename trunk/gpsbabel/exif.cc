@@ -20,6 +20,14 @@
 
  */
 
+/*
+ * Exif specifications can be found at
+ * 2012, version 2.3: http://www.cipa.jp/english/hyoujunka/kikaku/pdf/DC-008-2012_E.pdf
+ * 2010, version 2.3: http://www.cipa.jp/english/hyoujunka/kikaku/pdf/DC-008-2010_E.pdf
+ * 2002, version 2.2: http://www.exif.org/Exif2-2.PDF
+ * 1998, version 2.1: http://www.exif.org/Exif2-1.PDF
+ */
+
 #include <ctype.h>
 #include <math.h>
 #include <stdlib.h>
@@ -133,6 +141,8 @@ static char exif_success;
 static char* exif_fout_name;
 
 static char* opt_filename, *opt_overwrite, *opt_frame, *opt_name;
+
+static gbuint8 writer_gps_tag_version[4] = {2, 0, 0, 0};
 
 arglist_t exif_args[] = {
   { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX },
@@ -676,7 +686,7 @@ exif_waypt_from_exif_app(exif_app_t* app)
   char lat_ref = '\0';
   char lon_ref = '\0';
   char alt_ref = 0;
-  char speed_ref = '\0';
+  char speed_ref = 'K';
   char* datum = NULL;
   char mode = '\0';
   double gpsdop = unknown_alt;
@@ -780,7 +790,7 @@ exif_waypt_from_exif_app(exif_app_t* app)
 
   if (alt != unknown_alt) {
     double sign;
-    switch (alt_ref != 0) {
+    switch (alt_ref) {
     case 0:
       sign = 1.0;
       break;
@@ -790,7 +800,7 @@ exif_waypt_from_exif_app(exif_app_t* app)
       break;
 
     default:
-      warning(MYNAME ": Invalid GPSAltitudeRef (%d)! Using 0 (= Sea level).\n", alt_ref);
+      warning(MYNAME ": Invalid GPSAltitudeRef (%d)! Using default value 0 (= Sea level).\n", alt_ref);
       sign = 1.0;
     }
     wpt->altitude = sign * alt;
@@ -1255,7 +1265,7 @@ exif_write_apps(void)
       exif_tag_t* tag;
 
       exif_put_long(IFD0, IFD0_TAG_GPS_IFD_OFFS, 0, 0);
-      exif_put_long(GPS_IFD, GPS_IFD_TAG_VERSION, 0, 2);
+      exif_put_value(GPS_IFD, GPS_IFD_TAG_VERSION, EXIF_TYPE_BYTE, 4, 0, writer_gps_tag_version);
 
       sortqueue(&exif_app->ifds, exif_sort_ifds_cb);
 
@@ -1424,7 +1434,6 @@ exif_wr_deinit(void)
 static void
 exif_write(void)
 {
-  char alt_ref = 0;
   time_t frame;
 
   exif_wpt_ref = NULL;
@@ -1468,7 +1477,7 @@ exif_write(void)
     const waypoint* wpt = exif_wpt_ref;
 
     exif_put_long(IFD0, IFD0_TAG_GPS_IFD_OFFS, 0, 0);
-    exif_put_long(GPS_IFD, GPS_IFD_TAG_VERSION, 0, 2);
+    exif_put_value(GPS_IFD, GPS_IFD_TAG_VERSION, EXIF_TYPE_BYTE, 4, 0, writer_gps_tag_version);
     exif_put_str(GPS_IFD, GPS_IFD_TAG_DATUM, "WGS-84");
 
     exif_put_str(GPS_IFD, GPS_IFD_TAG_LATREF, wpt->latitude < 0 ? "S" : "N");
@@ -1480,6 +1489,12 @@ exif_write(void)
       exif_remove_tag(GPS_IFD, GPS_IFD_TAG_ALT);
       exif_remove_tag(GPS_IFD, GPS_IFD_TAG_ALTREF);
     } else {
+      gbuint8 alt_ref;
+      if (wpt->altitude >= 0.0) {
+        alt_ref = 0;
+      } else {
+        alt_ref = 1;
+      }
       exif_put_value(GPS_IFD, GPS_IFD_TAG_ALTREF, EXIF_TYPE_BYTE, 1, 0, &alt_ref);
       exif_put_double(GPS_IFD, GPS_IFD_TAG_ALT, 0, wpt->altitude);
     }
