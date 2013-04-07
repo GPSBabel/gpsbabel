@@ -141,7 +141,7 @@ typedef enum {
   gprmc
 } preferred_posn_type;
 
-enum {
+static enum {
   rm_unknown = 0,
   rm_serial,
   rm_file
