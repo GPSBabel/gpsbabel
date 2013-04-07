@@ -29,7 +29,7 @@
  * protocols as exhibited in the handhelds and dashtops.
  */
 
-enum {
+static enum {
   rs_fromintr,
   rs_frombulk
 } receive_state;
