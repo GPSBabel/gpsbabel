@@ -1023,7 +1023,7 @@ gpx_end(void* data, const XML_Char* xml_el)
   case tt_cache_log_type:
     if ((0 == strcmp(cdatastrp, "Found it")) &&
         (0 == wpt_tmp->gc_data->last_found)) {
-      waypt_alloc_gc_data(wpt_tmp)->last_found  = gc_log_date;
+      waypt_alloc_gc_data(wpt_tmp)->last_found = gc_log_date;
     }
     gc_log_date = 0;
     break;
