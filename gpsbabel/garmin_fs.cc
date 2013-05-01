@@ -337,7 +337,7 @@ garmin_fs_xml_convert(const int base_tag, int tag, const char* cdatastr, waypoin
     break;
   case 6:
     if (! garmin_fs_merge_category(cdatastr, waypt)) {
-      warning(MYNAME ": Unable to convert category \"%s \"!\n", cdatastr);
+      warning(MYNAME ": Unable to convert category \"%s\"!\n", cdatastr);
     }
     break;
   case 7:

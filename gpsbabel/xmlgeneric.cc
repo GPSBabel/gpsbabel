@@ -194,7 +194,6 @@ xml_consider_ignoring(const char *t)
 static void
 xml_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 {
-  char *e;
   xg_callback *cb;
   const char *el;
   const char **attrs;
