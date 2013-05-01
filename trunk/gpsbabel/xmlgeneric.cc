@@ -28,7 +28,7 @@
 static XML_Parser psr;
 #endif
 
-static vmem_t current_tag;
+static QString current_tag;
 static vmem_t cdatastr;
 static gbfile *ifd;
 static xg_tag_mapping *xg_tag_tbl;
@@ -158,11 +158,11 @@ xml_write_time(gbfile *ofd, const time_t timep, int microseconds, const char *el
  */
 
 xg_callback *
-xml_tbl_lookup(const char *tag, xg_cb_type cb_type)
+xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 {
   xg_tag_mapping *tm;
   for (tm = xg_tag_tbl; tm->tag_cb != NULL; tm++) {
-    if (str_match(tag, tm->tag_name) && (cb_type == tm->cb_type)) {
+    if (str_match(tag.toUtf8().data(), tm->tag_name) && (cb_type == tm->cb_type)) {
       return tm->tag_cb;
     }
   }
@@ -195,7 +195,6 @@ static void
 xml_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 {
   char *e;
-  char *ep;
   xg_callback *cb;
   const char *el;
   const char **attrs;
@@ -207,16 +206,12 @@ xml_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
     return;
   }
 
-  vmem_realloc(&current_tag, strlen(current_tag.mem) + 2 + strlen(el));
-
-  e = current_tag.mem;
-  ep = e + strlen(e);
-  *ep++ = '/';
-  strcpy(ep, el);
+  current_tag.append("/");
+  current_tag.append(el);
 
   memset(cdatastr.mem, 0, cdatastr.size);
 
-  cb = xml_tbl_lookup(e, cb_start);
+  cb = xml_tbl_lookup(current_tag, cb_start);
   if (cb) {
     (*cb)(NULL, attrs);
   }
@@ -241,7 +236,8 @@ xml_cdata(void *dta, const XML_Char *xml_s, int len)
 static void
 xml_end(void *data, const XML_Char *xml_el)
 {
-  char *s = strrchr(current_tag.mem, '/');
+  int pos = current_tag.lastIndexOf('/');
+  QString s = current_tag.mid(pos + 1);
   const char *el = xml_convert_to_char_string(xml_el);
   xg_callback *cb;
 
@@ -249,19 +245,19 @@ xml_end(void *data, const XML_Char *xml_el)
     return;
   }
 
-  if (strcmp(s + 1, el)) {
+  if (s.compare(el)) {
     fprintf(stderr, "Mismatched tag %s\n", el);
   }
-  cb = xml_tbl_lookup(current_tag.mem, cb_cdata);
+  cb = xml_tbl_lookup(current_tag, cb_cdata);
   if (cb) {
     (*cb)((char *) cdatastr.mem, NULL);
   }
 
-  cb = xml_tbl_lookup(current_tag.mem, cb_end);
+  cb = xml_tbl_lookup(current_tag, cb_end);
   if (cb) {
     (*cb)(el, NULL);
   }
-  *s = 0;
+  current_tag.truncate(pos);
   xml_free_converted_string(el);
 }
 
@@ -328,8 +324,7 @@ xml_init0(const char *fname, xg_tag_mapping *tbl, const char *encoding,
     ifd = NULL;
   }
 
-  current_tag = vmem_alloc(1,0);
-  *((char *)current_tag.mem) = '\0';
+  current_tag.clear();
 
   psr = XML_ParserCreate((const XML_Char *)encoding);
   if (!psr) {
@@ -365,7 +360,6 @@ xml_init_offset(const char *fname, xg_tag_mapping *tbl, const char *encoding,
 void
 xml_deinit(void)
 {
-  vmem_free(&current_tag);
   vmem_free(&cdatastr);
   if (ifd) {
     gbfclose(ifd);
