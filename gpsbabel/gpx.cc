@@ -48,7 +48,7 @@ static QXmlStreamAttributes gpx_namespace_attribute;
 
 static char* gpx_email = NULL;
 static char* gpx_author = NULL;
-static vmem_t current_tag;
+static QString current_tag;
 
 static waypoint* wpt_tmp;
 static int cache_descr_is_html;
@@ -443,13 +443,13 @@ tag_mapping tag_path_map[] = {
 };
 
 static tag_type
-get_tag(const char* t, int* passthrough)
+get_tag(const QString& t, int* passthrough)
 {
   tag_mapping* tm;
-  unsigned long tcrc = get_crc32_s(t);
+  unsigned long tcrc = get_crc32_s(t.toUtf8().data());
 
   for (tm = tag_path_map; tm->tag_type_ != 0; tm++) {
-    if ((tcrc == tm->crc) && (0 == strcmp(tm->tag_name, t))) {
+    if ((tcrc == tm->crc) && (t == tm->tag_name)) {
       *passthrough = tm->tag_passthrough;
       return tm->tag_type_;
     }
@@ -668,18 +668,12 @@ tag_log_wpt(const char** attrv)
 static void
 gpx_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
 {
-  char* e;
-  char* ep;
   int passthrough;
   int tag;
   const char* el = xml_convert_to_char_string(xml_el);
   const char** attr = xml_convert_attrs_to_char_string(xml_attr);
-
-  vmem_realloc(&current_tag, strlen(current_tag.mem) + 2 + strlen(el));
-  e = current_tag.mem;
-  ep = e + strlen(e);
-  *ep++ = '/';
-  strcpy(ep, el);
+  current_tag.append("/");
+  current_tag.append(el);
 
 
   /*
@@ -687,7 +681,7 @@ gpx_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
    */
   *(char*) cdatastr.mem = 0;
 
-  tag = get_tag(current_tag.mem, &passthrough);
+  tag = get_tag(qPrintable(current_tag), &passthrough);
   switch (tag) {
   case tt_gpx:
     tag_gpx(attr);
@@ -922,18 +916,19 @@ static void
 gpx_end(void* data, const XML_Char* xml_el)
 {
   const char* el = xml_convert_to_char_string(xml_el);
-  char* s = strrchr(current_tag.mem, '/');
+  int pos = current_tag.lastIndexOf('/');
+  QString s = current_tag.mid(pos + 1);
   float x;
   char* cdatastrp = cdatastr.mem;
   int passthrough;
   static time_t gc_log_date;
   tag_type tag;
 
-  if (strcmp(s + 1, el)) {
-    fprintf(stderr, "Mismatched tag %s\n", el);
+  if (s.compare(el)) {
+    fprintf(stderr, "Mismatched tag %s.  Expected %s\n", el, qPrintable(s));
   }
 
-  tag = get_tag(current_tag.mem, &passthrough);
+  tag = get_tag(qPrintable(current_tag), &passthrough);
   switch (tag) {
     /*
      * First, the tags that are file-global.
@@ -1202,7 +1197,7 @@ gpx_end(void* data, const XML_Char* xml_el)
   break;
   case tt_unknown:
     end_something_else();
-    *s = 0;
+    current_tag.truncate(pos);
     return;
   default:
     break;
@@ -1212,7 +1207,7 @@ gpx_end(void* data, const XML_Char* xml_el)
     end_something_else();
   }
 
-  *s = 0;
+  current_tag.truncate(pos);
   xml_free_converted_string(el);
 }
 
@@ -1285,8 +1280,7 @@ gpx_rd_init(const char* fname)
 
 
   file_time = 0;
-  current_tag = vmem_alloc(1, 0);
-  *((char*)current_tag.mem) = '\0';
+  current_tag.clear();
 
   prescan_tags();
 
@@ -1319,7 +1313,6 @@ static
 void
 gpx_rd_deinit(void)
 {
-  vmem_free(&current_tag);
   vmem_free(&cdatastr);
 
   if (gpx_email) {
