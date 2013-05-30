@@ -61,6 +61,7 @@
 
 #if CSVFMTS_ENABLED
 #include <ctype.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

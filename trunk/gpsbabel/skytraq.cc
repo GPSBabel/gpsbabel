@@ -24,10 +24,10 @@
  */
 
 #include <ctype.h>
+#include <math.h>
 
 #include "defs.h"
 #include "gbser.h"
-//#include "jeeps/gpsmath.h"
 
 #define MYNAME "skytraq"
 

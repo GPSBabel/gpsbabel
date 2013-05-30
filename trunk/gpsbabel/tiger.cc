@@ -19,6 +19,8 @@
 
  */
 
+#include <math.h>
+
 #include "defs.h"
 #include "csv_util.h"
 

@@ -20,16 +20,18 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-#include "defs.h"
-#include "xmlgeneric.h"
-#include "grtcirc.h"
+#include <math.h>
+#include <QtCore/QRegExp>
 
 #ifdef __WIN32__
 # include <windows.h>
 #endif
 
+#include "defs.h"
+#include "xmlgeneric.h"
+#include "grtcirc.h"
+
 #include "src/core/xmlstreamwriter.h"
-#include <QtCore/QRegExp>
 
 // options
 static char* opt_deficon = NULL;

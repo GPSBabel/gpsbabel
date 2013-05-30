@@ -19,6 +19,10 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 */
 
+#include <math.h>
+#include <string.h>
+#include <time.h>
+
 #include "defs.h"
 #include "cet.h"
 #include "cet_util.h"
@@ -26,8 +30,6 @@
 #include "garmin_fs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
-#include <string.h>
-#include <time.h>
 
 #define MYNAME "unicsv"
 

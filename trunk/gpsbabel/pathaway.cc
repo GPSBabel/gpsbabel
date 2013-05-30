@@ -48,7 +48,10 @@
 
 */
 
+
 #include <ctype.h>
+#include <math.h>
+
 #include "defs.h"
 #if PDBFMTS_ENABLED
 #include "csv_util.h"

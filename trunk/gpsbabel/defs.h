@@ -18,13 +18,6 @@
  */
 #ifndef gpsbabel_defs_h_included
 #define gpsbabel_defs_h_included
-#include <time.h>
-#include <stdlib.h>
-#include <math.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
-#include <stddef.h>
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif

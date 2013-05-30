@@ -22,11 +22,12 @@
 #include "defs.h"
 #include "jeeps/gpsmath.h"
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <ctype.h>
 #include <errno.h>
+#include <math.h>
 #include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 
 // First test Apple's clever macro that's really a runtime test so

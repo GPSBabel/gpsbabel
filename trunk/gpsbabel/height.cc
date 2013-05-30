@@ -21,6 +21,8 @@
 
  */
 
+#include <math.h>
+
 #include "defs.h"
 #include "filterdefs.h"
 

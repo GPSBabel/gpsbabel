@@ -22,10 +22,12 @@
 */
 
 
+#include <ctype.h>
+#include <math.h>
+
 #include "defs.h"
 #if PDBFMTS_ENABLED
 #include "jeeps/gpsmath.h"
-#include <ctype.h>
 #include "pdbfile.h"
 
 static pdbfile *file_out;

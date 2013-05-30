@@ -52,11 +52,13 @@
 
  */
 
+#include <ctype.h>
+#include <errno.h>
+#include <math.h>
+
 #include "defs.h"
 #include "gbser.h"
 #include "gbfile.h" /* used for csv output */
-#include <ctype.h>
-#include <errno.h>
 
 #define MYNAME "mtk_logger"
 

@@ -20,10 +20,12 @@
 
  */
 
-#include "defs.h"
 #include <ctype.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "defs.h"
 
 #define MYNAME "axim_gpb"
 

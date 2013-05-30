@@ -21,11 +21,12 @@
  */
 
 
-#include "defs.h"
 #include <ctype.h>
+#include <math.h>
 #include <time.h>
-#include "strptime.h"
 
+#include "defs.h"
+#include "strptime.h"
 
 #define MYNAME "skyforce"
 
