@@ -21,9 +21,11 @@
  */
 
 #include <ctype.h>
-#include <time.h>
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+
 #include "defs.h"
 #include "csv_util.h"
 #include "avltree.h"

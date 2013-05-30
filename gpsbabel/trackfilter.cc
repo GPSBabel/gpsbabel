@@ -38,6 +38,8 @@
 */
 
 #include <ctype.h>
+#include <math.h>
+
 #include "defs.h"
 #include "filterdefs.h"
 #include "strptime.h"

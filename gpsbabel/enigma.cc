@@ -21,6 +21,8 @@
 
  */
 
+#include <math.h>
+
 #include "defs.h"
 
 #define MYNAME "Enigma binary route and waypoint file format"

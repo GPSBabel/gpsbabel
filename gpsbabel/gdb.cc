@@ -63,9 +63,10 @@
 	    2008/09/11: Make format 'pipeable' (cached writes using gbfile memapi)
 */
 
+#include <ctype.h>
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 #include <time.h>
 
 #include "defs.h"

@@ -20,6 +20,8 @@
  */
 
 #include <stdio.h>
+#include <math.h>
+
 #include "defs.h"
 #include "cet_util.h"
 #include "grtcirc.h"
