@@ -254,7 +254,6 @@ vitosmt_waypt_pr(const waypoint *waypointp)
     WriteDouble(&workbuffer[position], waypointp->altitude);
   }
   position += sizeof(double);
-#if NEWTIME
   QDate date(waypointp->creation_time.date());
   QTime time(waypointp->creation_time.time());
   workbuffer[position++]	= date.year()-100;
@@ -262,17 +261,6 @@ vitosmt_waypt_pr(const waypoint *waypointp)
   workbuffer[position++]	= date.day();
   workbuffer[position++]	= time.hour();
   workbuffer[position++]	= time.minute();
-#else
-  struct tm*		tmstructp		=0;
-  tmstructp =  gmtime(&waypointp->creation_time);
-  seconds = (double) tmstructp->tm_sec + 0.0000001*waypointp->microseconds;
-
-  workbuffer[position++]	=tmstructp->tm_year-100;
-  workbuffer[position++]	=tmstructp->tm_mon+1;
-  workbuffer[position++]	=tmstructp->tm_mday;
-  workbuffer[position++]	=tmstructp->tm_hour;
-  workbuffer[position++]	=tmstructp->tm_min;
-#endif
 
   WriteDouble(&workbuffer[position], seconds);
   position += sizeof(double);

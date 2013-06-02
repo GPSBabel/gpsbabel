@@ -36,6 +36,22 @@ compare ${REFERENCE}/bounds-test.kml ${TMPDIR}/bnds.kml
 gpsbabel -i gpx -f ${REFERENCE}/track/bounds-test-track.gpx -o kml -F ${TMPDIR}/bnds-track.kml
 compare ${REFERENCE}/track/bounds-test-track.kml ${TMPDIR}/bnds-track.kml
 
+# Write the same file multiple times...File should always be identical.
+# This exercises two bugs discovered on 2013-06-02 in the QXmlWriter code.
+# 1) ostring wasn't cleared, so writing two KML files would accumulate them.
+# 2) There is, IMO, a bug when reinitializing the QXmlWriter that results
+#    in a blank line at the beginning of the output, which makes Google Earth
+#    grumpy.  This totally tanks the realtime tracking mode which relies on 
+#    this heavily.
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml,track=1 \
+  -F ${TMPDIR}/ge-eg-track1.kml \
+  -F ${TMPDIR}/ge-eg-track2.kml \
+  -F ${TMPDIR}/ge-eg-track3.kml
+
+# 1 should be == 2. 2 should be == 3. 
+compare ${TMPDIR}/ge-eg-track1.kml ${TMPDIR}/ge-eg-track2.kml
+compare ${TMPDIR}/ge-eg-track2.kml ${TMPDIR}/ge-eg-track3.kml
+
 
 set -e
 if which xmllint > /dev/null;
