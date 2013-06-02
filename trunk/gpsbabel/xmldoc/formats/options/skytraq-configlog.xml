@@ -1,0 +1,25 @@
+<para>
+  Set the logging configuration as tmin:tmax:dmin:dmax.
+  Here tmin and tmax are in seconds, and dmin and dmax in meters.
+  With dt = time since last log, dx = distance since last log,
+  and v the current speed, the device logs if
+</para>
+<para>
+   (dt > tmin and dx >= dmin and v >= vmin) or dt > tmax or dx > dmax or v > vmax
+</para>
+<para>
+   If you use this option, vmin is fixed at 0 and vmax at 65535 km/h.
+</para>
+<para>
+   Example. Set the device to log every 6 seconds (or 10km, whichever
+   happens first!)
+</para>
+
+<example id="skytraq-configulog">
+  <title>Set the logging parameters for Skytraq device</title>
+<para>
+<userinput>
+   gpsbabel -i skytraq,configlog=6:3600:0:10000 -f /dev/ttyUSB0
+</userinput>
+</para>
+</example>

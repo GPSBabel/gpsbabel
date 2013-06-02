@@ -67,6 +67,7 @@ static char *opt_last_sector = 0;	/* last sector to be read from the device (def
 static char *opt_dump_file = 0;		/* dump raw data to this file (optional) */
 static char *opt_no_output = 0;		/* disable output? (0/1) */
 static char *opt_set_location = 0;	/* set if the "targetlocation" options was used */
+static char *opt_configure_logging = 0;
 
 static
 arglist_t skytraq_args[] = {
@@ -76,6 +77,10 @@ arglist_t skytraq_args[] = {
   },
   {
     "targetlocation", &opt_set_location, "Set location finder target location as lat,lng",
+    "", ARGTYPE_STRING, "", ""
+  },
+  {
+    "configlog", &opt_configure_logging, "Configure logging parameter as tmin:tmax:dmin:dmax",
     "", ARGTYPE_STRING, "", ""
   },
   {
@@ -471,6 +476,43 @@ skytraq_set_baud(int baud)
 }
 
 static int
+skytraq_configure_logging(void)
+{
+   // an0008-1.4.14: logs if
+   // (dt > tmin & dd >= dmin & v >= vmin) | dt > tmax | dd > dmax | v > vmax
+   unsigned int tmin=6, tmax=3600, dmin=0, dmax=10000, nn=0;
+   gbuint8 MSG_LOG_CONFIGURE_CONTROL[] = {
+      0x18,			// message_id
+      0x00, 0x00, 0x0e, 0x10,	// max_time: was 0x0000ffff (big endian!)
+      0x00, 0x00, 0x00, 0x06,	// min_time: was 0x00000005
+      0x00, 0x00, 0x27, 0x10,	// max_distance: was 0x0000ffff
+      0x00, 0x00, 0x00, 0x00,	// min_distance
+      0x00, 0x00, 0xff, 0xff,	// max_speed
+      0x00, 0x00, 0x00, 0x00,	// min_speed
+      0x01,			// datalog_enable: NOTE: always ON
+      0x00			// reserved
+   };
+
+   if(opt_configure_logging) {
+      if(*opt_configure_logging) {
+	 nn = sscanf(opt_configure_logging, "%u:%u:%u:%u", &tmin, &tmax, &dmin, &dmax);
+	 if(nn>3) {
+	    db(0, "Reconfiguring logging to: tmin=%u, tmax=%u, dmin=%u, dmax=%u\n", tmin, tmax, dmin, dmax );
+	    be_write32(MSG_LOG_CONFIGURE_CONTROL+5, tmin);
+	    be_write32(MSG_LOG_CONFIGURE_CONTROL+1, tmax);
+	    be_write32(MSG_LOG_CONFIGURE_CONTROL+13, dmin);
+	    be_write32(MSG_LOG_CONFIGURE_CONTROL+9, dmax);
+	 } else {
+	    db(1, MYNAME "Option usage: configlog=tmin:tmax:dmin:dmax");
+	    return -1;
+	 }
+      }
+   }
+
+   return skytraq_wr_msg_verify(MSG_LOG_CONFIGURE_CONTROL, sizeof(MSG_LOG_CONFIGURE_CONTROL));
+}
+
+static int
 skytraq_get_log_buffer_status(gbuint32 *log_wr_ptr, gbuint16 *sectors_free, gbuint16 *sectors_total)
 {
   gbuint8 MSG_LOG_STATUS_CONTROL = 0x17;
@@ -479,6 +521,8 @@ skytraq_get_log_buffer_status(gbuint32 *log_wr_ptr, gbuint16 *sectors_free, gbui
     gbuint8 log_wr_ptr[4];
     gbuint8 sectors_free[2];
     gbuint8 sectors_total[2];
+    gbuint8 max_time[4], min_time[4], max_dist[4], min_dist[4], max_speed[4], min_speed[4];
+    gbuint8 datalog_enable[1], log_fifo_mode[1];
   } MSG_LOG_STATUS_OUTPUT;
   unsigned int rc;
 
@@ -496,6 +540,21 @@ skytraq_get_log_buffer_status(gbuint32 *log_wr_ptr, gbuint16 *sectors_free, gbui
   *log_wr_ptr = le_readu32(&MSG_LOG_STATUS_OUTPUT.log_wr_ptr);
   *sectors_free = le_readu16(&MSG_LOG_STATUS_OUTPUT.sectors_free);
   *sectors_total = le_readu16(&MSG_LOG_STATUS_OUTPUT.sectors_total);
+
+  // print logging parameters -- useful, but does this belong here?
+  unsigned int tmax, tmin, dmax, dmin, vmax, vmin;
+  // unsigned char log_bool, fifo_mode;
+  char* mystatus;
+  tmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_time);
+  tmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_time);
+  dmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_dist);
+  dmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_dist);
+  vmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_speed);
+  vmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_speed);
+  // log_bool = *(MSG_LOG_STATUS_OUTPUT.datalog_enable);
+  // fifo_mode = *(MSG_LOG_STATUS_OUTPUT.log_fifo_mode);
+  xasprintf(&mystatus, "#logging: tmin=%u, tmax=%u, dmin=%u, dmax=%u, vmin=%u, vmax=%u\n", tmin, tmax, dmin, dmax, vmin, vmax);
+  db(1, mystatus);
 
   return res_OK;
 }
@@ -1183,6 +1242,11 @@ skytraq_read(void)
   if (*opt_set_location) {
     skytraq_set_location();
     return;
+  }
+
+  if(*opt_configure_logging) {
+     skytraq_configure_logging();
+     return;
   }
 
   dlbaud = atoi(opt_dlbaud);
