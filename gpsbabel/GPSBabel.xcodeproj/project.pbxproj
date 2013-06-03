@@ -163,7 +163,6 @@
 		B4BD139BB80DBBAD99E9DBF5 /* gpsmem.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 167E6A209B1690AFB354B573 /* gpsmem.cc */; settings = {ATTRIBUTES = (); }; };
 		B4CD5045C03440AE8209C088 /* dg-100.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 53EFB25DEEA0706AD9ECBDF5 /* dg-100.cc */; settings = {ATTRIBUTES = (); }; };
 		B51FB3EA0972007A75C523FC /* pocketfms_wp.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 70381074760FF2DC70E4A0AB /* pocketfms_wp.cc */; settings = {ATTRIBUTES = (); }; };
-		B5D0289828979BE600E52362 /* jgpsutil.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 9F98F5463BD488624F859D17 /* jgpsutil.cc */; settings = {ATTRIBUTES = (); }; };
 		B606B2065D140A4B0C2461C9 /* gpsmath.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = F5CBFD778830F7DFDC9CB531 /* gpsmath.cc */; settings = {ATTRIBUTES = (); }; };
 		B7E5BB5DA98A017ACBEFDA95 /* vmem.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 9C1D770DC489E9C55DDFD0C9 /* vmem.cc */; settings = {ATTRIBUTES = (); }; };
 		B9190DCA28F6378A26D7BA3A /* garmin.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 5EFC950E466BBC55A171C6CB /* garmin.cc */; settings = {ATTRIBUTES = (); }; };
@@ -204,6 +203,7 @@
 		EAF55F7B41489C491E2A44A0 /* gpilots.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 3424BD07B24CF9DAD31BBCF0 /* gpilots.cc */; settings = {ATTRIBUTES = (); }; };
 		EBC238A8C05B15C994F62C0B /* kml.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 44E72687639004C36088D9D0 /* kml.cc */; settings = {ATTRIBUTES = (); }; };
 		EBED5AAEE398BDF7F9CF01AC /* axim_gpb.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = AED3F73C9E850301C5F9E9F2 /* axim_gpb.cc */; settings = {ATTRIBUTES = (); }; };
+		EC15D0B4175C183B00C9A23D /* gpsutil.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = EC15D0B3175C183B00C9A23D /* gpsutil.cc */; };
 		EC364AB6175C11EE00D370A8 /* bend.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = EC364AB5175C11EE00D370A8 /* bend.cc */; };
 		EC53883B2B75F9118BBEAEE6 /* shpopen.c in Build Sources */ = {isa = PBXBuildFile; fileRef = 38A17A3419708B2842F18281 /* shpopen.c */; settings = {ATTRIBUTES = (); }; };
 		EDCD1D87552CA871524D69E9 /* transform.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 73BF0B9F148276BC1CAC45FA /* transform.cc */; settings = {ATTRIBUTES = (); }; };
@@ -363,7 +363,6 @@
 		9F585F4587ECA6DFB6832635 /* inifile.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = inifile.cc; sourceTree = SOURCE_ROOT; };
 		9F59634817577C6D7405F6CA /* vcf.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vcf.cc; sourceTree = SOURCE_ROOT; };
 		9F888DED85F66D5FC988236E /* igc.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = igc.cc; sourceTree = SOURCE_ROOT; };
-		9F98F5463BD488624F859D17 /* jgpsutil.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = jgpsutil.cc; path = jeeps/jgpsutil.cc; sourceTree = SOURCE_ROOT; };
 		A06B4A7921BF566E50052495 /* mapsend.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mapsend.cc; sourceTree = SOURCE_ROOT; };
 		A482C4B471D8CE49C4396B99 /* mmo.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mmo.cc; sourceTree = SOURCE_ROOT; };
 		A6147C81C08AABB23EA63FEB /* g7towin.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = g7towin.cc; sourceTree = SOURCE_ROOT; };
@@ -424,6 +423,7 @@
 		E7D26B241B37BC0D0141FDA1 /* bushnell_trl.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bushnell_trl.cc; sourceTree = SOURCE_ROOT; };
 		E822ABAD2F7C121CBC216FB9 /* interpolate.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interpolate.cc; sourceTree = SOURCE_ROOT; };
 		EB67AC0AABBAD839571D92CB /* gopal.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gopal.cc; sourceTree = SOURCE_ROOT; };
+		EC15D0B3175C183B00C9A23D /* gpsutil.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gpsutil.cc; path = "Users/robertlipe/src/gpsbabel-reallyvirgin/jeeps/gpsutil.cc"; sourceTree = "<group>"; };
 		EC364AB3175C11AF00D370A8 /* GPSBabel */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GPSBabel; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC364AB5175C11EE00D370A8 /* bend.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bend.cc; sourceTree = SOURCE_ROOT; };
 		F23634C8B2CD5F154B8A03F1 /* queue.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = queue.cc; sourceTree = SOURCE_ROOT; };
@@ -466,6 +466,7 @@
 		05596AB53D8D521C69802C27 /* GPSBabel */ = {
 			isa = PBXGroup;
 			children = (
+				EC15D0B3175C183B00C9A23D /* gpsutil.cc */,
 				FB61758D0F0FDA4BA867C3D5 /* Sources */,
 				7CABE3C80E79AD2B307756D2 /* Sources [qmake] */,
 				ED1E82605DD74B483AF3C982 /* External Frameworks and Libraries */,
@@ -563,7 +564,6 @@
 				C383177DE7874C1F821D8C2D /* gpsrqst.cc */,
 				328FD0E11330E7B9816CDFE8 /* gpssend.cc */,
 				8FAE4FC5CFEFE47CA12BE42E /* gpsserial.cc */,
-				9F98F5463BD488624F859D17 /* jgpsutil.cc */,
 				2F993A753D7FE297E1AB1237 /* gpsusbread.cc */,
 				9BD6C839838A7B822B8074FC /* gpsusbsend.cc */,
 				F84DE8FD3EA44AB7C86687AC /* gpsusbcommon.cc */,
@@ -1041,11 +1041,11 @@
 				D7B636466B7D58A82983C08C /* gpsrqst.cc in Build Sources */,
 				59ADAC67B3CC01252A5DB335 /* gpssend.cc in Build Sources */,
 				C4374549843B449C46BD6076 /* gpsserial.cc in Build Sources */,
-				B5D0289828979BE600E52362 /* jgpsutil.cc in Build Sources */,
 				8DAA708342A390FADFA8EE82 /* gpsusbread.cc in Build Sources */,
 				6DE41B3F5331AE202449C7A1 /* gpsusbsend.cc in Build Sources */,
 				BE5F6FAE9B210BB1028C67C6 /* gpsusbcommon.cc in Build Sources */,
 				EC364AB6175C11EE00D370A8 /* bend.cc in Build Sources */,
+				EC15D0B4175C183B00C9A23D /* gpsutil.cc in Build Sources */,
 			);
 			name = "Build Sources";
 			runOnlyForDeploymentPostprocessing = 0;
