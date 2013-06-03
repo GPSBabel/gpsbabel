@@ -353,17 +353,16 @@ mapsend_waypt_pr(const waypoint* waypointp)
 static void
 mapsend_route_hdr(const route_head* rte)
 {
-  char* rname;
+  QString rname;
+  QString r = rte->rte_name;
 
   /* route name -- mapsend really seems to want something here.. */
-  if (!rte->rte_name) {
+  if (r.isEmpty()) {
     rname = xstrdup("Route");
   } else {
-    rname = xstrdup(rte->rte_name);
+    rname = rte->rte_name;
   }
   gbfputpstr(rname, mapsend_file_out);
-
-  xfree(rname);
 
   /* route # */
   gbfputint32(rte->rte_num, mapsend_file_out);

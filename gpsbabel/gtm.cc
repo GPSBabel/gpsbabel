@@ -143,6 +143,15 @@ fwrite_string(gbfile* fd, const char* str)
     fwrite_integer(fd, 0);
   }
 }
+static void
+fwrite_string(gbfile* fd, QString& str) {
+  if (str.isEmpty()) {
+    fwrite_integer(fd, 0);
+  } else {
+    fwrite_integer(fd, str.length());
+    gbfwrite(str.toAscii().data(), 1, str.length(), fd);
+  }
+}
 
 void
 fwrite_fixedstring(gbfile* fd, const char* str, int fieldlen)
