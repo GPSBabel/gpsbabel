@@ -504,7 +504,6 @@ psit_routehdr_w(gbfile *psit_file, const route_head *rte)
     } else {
       rname = xstrdup(rte->rte_name);
     }
-
     /* check for psitrex comment sign; replace with '$' */
     while ((c = strchr(rname, '#'))) {
       *c = '$';

@@ -426,6 +426,37 @@
 		EC364AB3175C11AF00D370A8 /* GPSBabel */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GPSBabel; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC364AB5175C11EE00D370A8 /* bend.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bend.cc; sourceTree = SOURCE_ROOT; };
 		ECCFD60E175C195300558D26 /* gpsutil.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gpsutil.cc; path = "/Users/robertlipe/src/gpsbabel-reallyvirgin/jeeps/gpsutil.cc"; sourceTree = "<absolute>"; };
+		ECE352B9175C42AB00FC07CB /* an1sym.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = an1sym.h; sourceTree = SOURCE_ROOT; };
+		ECE352BA175C42AB00FC07CB /* avltree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avltree.h; sourceTree = SOURCE_ROOT; };
+		ECE352BB175C42AB00FC07CB /* cet_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cet_util.h; sourceTree = SOURCE_ROOT; };
+		ECE352BC175C42AB00FC07CB /* cet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cet.h; sourceTree = SOURCE_ROOT; };
+		ECE352BD175C42AB00FC07CB /* csv_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = csv_util.h; sourceTree = SOURCE_ROOT; };
+		ECE352BE175C42AB00FC07CB /* defs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = defs.h; sourceTree = SOURCE_ROOT; };
+		ECE352BF175C42AB00FC07CB /* explorist_ini.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = explorist_ini.h; sourceTree = SOURCE_ROOT; };
+		ECE352C0175C42AB00FC07CB /* filterdefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = filterdefs.h; sourceTree = SOURCE_ROOT; };
+		ECE352C1175C42AB00FC07CB /* garmin_device_xml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = garmin_device_xml.h; sourceTree = SOURCE_ROOT; };
+		ECE352C2175C42AB00FC07CB /* garmin_fs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = garmin_fs.h; sourceTree = SOURCE_ROOT; };
+		ECE352C3175C42AB00FC07CB /* garmin_gpi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = garmin_gpi.h; sourceTree = SOURCE_ROOT; };
+		ECE352C4175C42AB00FC07CB /* garmin_tables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = garmin_tables.h; sourceTree = SOURCE_ROOT; };
+		ECE352C5175C42AB00FC07CB /* gbdatetime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gbdatetime.h; sourceTree = SOURCE_ROOT; };
+		ECE352C6175C42AB00FC07CB /* gbfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gbfile.h; sourceTree = SOURCE_ROOT; };
+		ECE352C7175C42AB00FC07CB /* gbser_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gbser_private.h; sourceTree = SOURCE_ROOT; };
+		ECE352C8175C42AB00FC07CB /* gbser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gbser.h; sourceTree = SOURCE_ROOT; };
+		ECE352C9175C42AB00FC07CB /* gbtypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gbtypes.h; sourceTree = SOURCE_ROOT; };
+		ECE352CA175C42AB00FC07CB /* grtcirc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grtcirc.h; sourceTree = SOURCE_ROOT; };
+		ECE352CB175C42AB00FC07CB /* height.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = height.h; sourceTree = SOURCE_ROOT; };
+		ECE352CC175C42AB00FC07CB /* holux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = holux.h; sourceTree = SOURCE_ROOT; };
+		ECE352CD175C42AB00FC07CB /* inifile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = inifile.h; sourceTree = SOURCE_ROOT; };
+		ECE352CE175C42AB00FC07CB /* magellan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = magellan.h; sourceTree = SOURCE_ROOT; };
+		ECE352CF175C42AB00FC07CB /* mapsend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mapsend.h; sourceTree = SOURCE_ROOT; };
+		ECE352D0175C42AB00FC07CB /* navilink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = navilink.h; sourceTree = SOURCE_ROOT; };
+		ECE352D1175C42AB00FC07CB /* pdbfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pdbfile.h; sourceTree = SOURCE_ROOT; };
+		ECE352D2175C42AB00FC07CB /* queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = queue.h; sourceTree = SOURCE_ROOT; };
+		ECE352D3175C42AB00FC07CB /* quovadis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = quovadis.h; sourceTree = SOURCE_ROOT; };
+		ECE352D4175C42AB00FC07CB /* session.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = session.h; sourceTree = SOURCE_ROOT; };
+		ECE352D5175C42AB00FC07CB /* strptime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strptime.h; sourceTree = SOURCE_ROOT; };
+		ECE352D6175C42AB00FC07CB /* uuid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uuid.h; sourceTree = SOURCE_ROOT; };
+		ECE352D7175C42AB00FC07CB /* xmlgeneric.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xmlgeneric.h; sourceTree = SOURCE_ROOT; };
 		F23634C8B2CD5F154B8A03F1 /* queue.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = queue.cc; sourceTree = SOURCE_ROOT; };
 		F50B0A339AAF046C1C09533A /* darwin.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = darwin.c; path = mac/libusb/darwin.c; sourceTree = SOURCE_ROOT; };
 		F5234B294500E1AAFDC9A3FD /* gnav_trl.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gnav_trl.cc; sourceTree = SOURCE_ROOT; };
@@ -466,6 +497,37 @@
 		05596AB53D8D521C69802C27 /* GPSBabel */ = {
 			isa = PBXGroup;
 			children = (
+				ECE352B9175C42AB00FC07CB /* an1sym.h */,
+				ECE352BA175C42AB00FC07CB /* avltree.h */,
+				ECE352BB175C42AB00FC07CB /* cet_util.h */,
+				ECE352BC175C42AB00FC07CB /* cet.h */,
+				ECE352BD175C42AB00FC07CB /* csv_util.h */,
+				ECE352BE175C42AB00FC07CB /* defs.h */,
+				ECE352BF175C42AB00FC07CB /* explorist_ini.h */,
+				ECE352C0175C42AB00FC07CB /* filterdefs.h */,
+				ECE352C1175C42AB00FC07CB /* garmin_device_xml.h */,
+				ECE352C2175C42AB00FC07CB /* garmin_fs.h */,
+				ECE352C3175C42AB00FC07CB /* garmin_gpi.h */,
+				ECE352C4175C42AB00FC07CB /* garmin_tables.h */,
+				ECE352C5175C42AB00FC07CB /* gbdatetime.h */,
+				ECE352C6175C42AB00FC07CB /* gbfile.h */,
+				ECE352C7175C42AB00FC07CB /* gbser_private.h */,
+				ECE352C8175C42AB00FC07CB /* gbser.h */,
+				ECE352C9175C42AB00FC07CB /* gbtypes.h */,
+				ECE352CA175C42AB00FC07CB /* grtcirc.h */,
+				ECE352CB175C42AB00FC07CB /* height.h */,
+				ECE352CC175C42AB00FC07CB /* holux.h */,
+				ECE352CD175C42AB00FC07CB /* inifile.h */,
+				ECE352CE175C42AB00FC07CB /* magellan.h */,
+				ECE352CF175C42AB00FC07CB /* mapsend.h */,
+				ECE352D0175C42AB00FC07CB /* navilink.h */,
+				ECE352D1175C42AB00FC07CB /* pdbfile.h */,
+				ECE352D2175C42AB00FC07CB /* queue.h */,
+				ECE352D3175C42AB00FC07CB /* quovadis.h */,
+				ECE352D4175C42AB00FC07CB /* session.h */,
+				ECE352D5175C42AB00FC07CB /* strptime.h */,
+				ECE352D6175C42AB00FC07CB /* uuid.h */,
+				ECE352D7175C42AB00FC07CB /* xmlgeneric.h */,
 				FB61758D0F0FDA4BA867C3D5 /* Sources */,
 				7CABE3C80E79AD2B307756D2 /* Sources [qmake] */,
 				ED1E82605DD74B483AF3C982 /* External Frameworks and Libraries */,

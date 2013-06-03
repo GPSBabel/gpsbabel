@@ -36,7 +36,7 @@
 /* macros */
 #define LAT_DIR(a) a < 0.0 ? 'S' : 'N'
 #define LON_DIR(a) a < 0.0 ? 'W' : 'E'
-#define NONULL(a) a ? a : ""
+#define NONULL(a) a.isNull() ? "" : a.toAscii().data()
 #define ISWHITESPACE(a) ((a == ' ') || (a == '\t'))
 
 /* convert excel time (days since 1900) to time_t and back again */
@@ -2038,12 +2038,14 @@ xcsv_waypt_pr(const waypoint* wpt)
       break;
     case XT_TRACK_NAME:
       if (csv_track) {
-        writebuff(buff, fmp->printfc, NONULL(csv_track->rte_name));
+        QString r = csv_track->rte_name;
+        writebuff(buff, fmp->printfc, NONULL(r));
       }
       break;
     case XT_ROUTE_NAME:
       if (csv_route) {
-        writebuff(buff, fmp->printfc, NONULL(csv_route->rte_name));
+        QString r = csv_route->rte_name;
+        writebuff(buff, fmp->printfc, NONULL(r));
       }
       break;
 
