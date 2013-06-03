@@ -203,9 +203,9 @@
 		EAF55F7B41489C491E2A44A0 /* gpilots.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 3424BD07B24CF9DAD31BBCF0 /* gpilots.cc */; settings = {ATTRIBUTES = (); }; };
 		EBC238A8C05B15C994F62C0B /* kml.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 44E72687639004C36088D9D0 /* kml.cc */; settings = {ATTRIBUTES = (); }; };
 		EBED5AAEE398BDF7F9CF01AC /* axim_gpb.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = AED3F73C9E850301C5F9E9F2 /* axim_gpb.cc */; settings = {ATTRIBUTES = (); }; };
-		EC15D0B4175C183B00C9A23D /* gpsutil.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = EC15D0B3175C183B00C9A23D /* gpsutil.cc */; };
 		EC364AB6175C11EE00D370A8 /* bend.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = EC364AB5175C11EE00D370A8 /* bend.cc */; };
 		EC53883B2B75F9118BBEAEE6 /* shpopen.c in Build Sources */ = {isa = PBXBuildFile; fileRef = 38A17A3419708B2842F18281 /* shpopen.c */; settings = {ATTRIBUTES = (); }; };
+		ECCFD60F175C195300558D26 /* gpsutil.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = ECCFD60E175C195300558D26 /* gpsutil.cc */; };
 		EDCD1D87552CA871524D69E9 /* transform.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 73BF0B9F148276BC1CAC45FA /* transform.cc */; settings = {ATTRIBUTES = (); }; };
 		EEFEDBC895201A4877507B5B /* lowranceusr.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 11496F48D97CCA586E31D6F9 /* lowranceusr.cc */; settings = {ATTRIBUTES = (); }; };
 		F055F3DC27B7FD46C343E15E /* gpslibusb.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 4A7EF0037AB628B7C6BD36C4 /* gpslibusb.cc */; settings = {ATTRIBUTES = (); }; };
@@ -423,9 +423,9 @@
 		E7D26B241B37BC0D0141FDA1 /* bushnell_trl.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bushnell_trl.cc; sourceTree = SOURCE_ROOT; };
 		E822ABAD2F7C121CBC216FB9 /* interpolate.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interpolate.cc; sourceTree = SOURCE_ROOT; };
 		EB67AC0AABBAD839571D92CB /* gopal.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gopal.cc; sourceTree = SOURCE_ROOT; };
-		EC15D0B3175C183B00C9A23D /* gpsutil.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gpsutil.cc; path = "Users/robertlipe/src/gpsbabel-reallyvirgin/jeeps/gpsutil.cc"; sourceTree = "<group>"; };
 		EC364AB3175C11AF00D370A8 /* GPSBabel */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GPSBabel; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC364AB5175C11EE00D370A8 /* bend.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bend.cc; sourceTree = SOURCE_ROOT; };
+		ECCFD60E175C195300558D26 /* gpsutil.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gpsutil.cc; path = "/Users/robertlipe/src/gpsbabel-reallyvirgin/jeeps/gpsutil.cc"; sourceTree = "<absolute>"; };
 		F23634C8B2CD5F154B8A03F1 /* queue.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = queue.cc; sourceTree = SOURCE_ROOT; };
 		F50B0A339AAF046C1C09533A /* darwin.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = darwin.c; path = mac/libusb/darwin.c; sourceTree = SOURCE_ROOT; };
 		F5234B294500E1AAFDC9A3FD /* gnav_trl.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gnav_trl.cc; sourceTree = SOURCE_ROOT; };
@@ -466,7 +466,6 @@
 		05596AB53D8D521C69802C27 /* GPSBabel */ = {
 			isa = PBXGroup;
 			children = (
-				EC15D0B3175C183B00C9A23D /* gpsutil.cc */,
 				FB61758D0F0FDA4BA867C3D5 /* Sources */,
 				7CABE3C80E79AD2B307756D2 /* Sources [qmake] */,
 				ED1E82605DD74B483AF3C982 /* External Frameworks and Libraries */,
@@ -562,6 +561,7 @@
 				48EC154B9F40DEE39DB513EA /* gpsdevice_ser.cc */,
 				D4CFA2DEF9C8934F1EE76ED2 /* gpsdevice_usb.cc */,
 				C383177DE7874C1F821D8C2D /* gpsrqst.cc */,
+				ECCFD60E175C195300558D26 /* gpsutil.cc */,
 				328FD0E11330E7B9816CDFE8 /* gpssend.cc */,
 				8FAE4FC5CFEFE47CA12BE42E /* gpsserial.cc */,
 				2F993A753D7FE297E1AB1237 /* gpsusbread.cc */,
@@ -1045,7 +1045,7 @@
 				6DE41B3F5331AE202449C7A1 /* gpsusbsend.cc in Build Sources */,
 				BE5F6FAE9B210BB1028C67C6 /* gpsusbcommon.cc in Build Sources */,
 				EC364AB6175C11EE00D370A8 /* bend.cc in Build Sources */,
-				EC15D0B4175C183B00C9A23D /* gpsutil.cc in Build Sources */,
+				ECCFD60F175C195300558D26 /* gpsutil.cc in Build Sources */,
 			);
 			name = "Build Sources";
 			runOnlyForDeploymentPostprocessing = 0;
