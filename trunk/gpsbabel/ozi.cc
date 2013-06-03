@@ -373,7 +373,7 @@ ozi_route_disp(const waypoint * waypointp)
    * W,1,7,7,007,-25.581670,-48.316660,36564.54196,10,1,4,0,65535,TR ILHA GALHETA,0,0
    */
 
-  gbfprintf(file_out, "W,%d,%d,,%s,%.6f,%.6f,%s,0,1,3,0,65535,%s,0,0\r\n",
+  gbfprintf(file_out, "W,%d,,%d,%s,%.6f,%.6f,%s,0,1,3,0,65535,%s,0,0\r\n",
             route_out_count,
             route_wpt_count,
             waypointp->shortname ? waypointp->shortname : "",
