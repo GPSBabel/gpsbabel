@@ -1368,6 +1368,8 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
   ptr = (unsigned char*)dest_h;
   ptr += (sizeof(*dest_h) + (dest_line_sz * (src_h.height - 1)));
 
+  gbfseek(f, src_h.image_offset, SEEK_SET);
+
   if (src_h.bpp == 24) {
     /* 24 bpp seems to be not supported, convert to 32 bpp */
     for (i = 0; i < src_h.height; i++) {
