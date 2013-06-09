@@ -678,7 +678,7 @@ read_tag(const char* caller, const int tag, waypoint* wpt)
 #ifdef GPI_DBG
   {
     int x;
-    unsigned char* b = xmalloc(sz);
+    unsigned char* b = (unsigned char*) xmalloc(sz);
     fprintf(stderr, "Tag: %x\n", tag);
     gbfread(b, 1, sz, fin);
     fprintf(stderr, "\n");
