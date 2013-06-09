@@ -97,13 +97,6 @@ gpsbabel -i tpg -f ${TMPDIR}/geo.tpg -o mxf -F ${TMPDIR}/tpg.mxf
 gpsbabel -i tpg -f ${REFERENCE}/tpg.tpg -o mxf -F ${TMPDIR}/topo.mxf
 compare ${TMPDIR}/tpg.mxf ${TMPDIR}/topo.mxf
 
-
-# OZI (OziExplorer 1.1) file format
-rm -f ${TMPDIR}/oz.wpt ${TMPDIR}/ozi.wpt
-gpsbabel -i ozi -f ${REFERENCE}/ozi.wpt -o ozi -F ${TMPDIR}/oz.wpt
-gpsbabel -i ozi -f ${TMPDIR}/oz.wpt -o ozi -F ${TMPDIR}/ozi.wpt
-compare ${TMPDIR}/ozi.wpt ${REFERENCE}
-
 # Holux support is a little funky to test.  Becuase it loses precision,
 # if we convert it to another format, we lose accuracy (rounding) in the
 # coords, so converting it so something else and comparing it never works.
@@ -111,8 +104,6 @@ compare ${TMPDIR}/ozi.wpt ${REFERENCE}
 # identical reference.
 gpsbabel -i holux -f ${REFERENCE}/paris.wpo -o holux -F ${TMPDIR}/paris.wpo
 # compare ${REFERENCE}/paris.wpo ${TMPDIR}/paris.wpo
-
-
 
 # GPSPilot Tracker for PalmOS
 # This test is eerily similar to the NAV Companion test.  In fact, the 
