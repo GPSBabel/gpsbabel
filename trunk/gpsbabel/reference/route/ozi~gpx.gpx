@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="-34.477470000" minlon="-58.523720000" maxlat="-34.445850000" maxlon="-57.854170000"/>
+  <rte>
+    <name>1 COSTANERO JA</name>
+    <rtept lat="-34.445850000" lon="-58.523720000">
+      <time>2010-11-25T20:26:00Z</time>
+      <name>MPCHIC</name>
+      <cmt>MARINA PUNTA CHICA</cmt>
+      <desc>MARINA PUNTA CHICA</desc>
+    </rtept>
+    <rtept lat="-34.447380000" lon="-58.507270000">
+      <time>2013-03-11T19:52:37Z</time>
+      <name>JA12</name>
+    </rtept>
+  </rte>
+  <rte>
+    <name>1 PCHI COLONIA</name>
+    <number>1</number>
+    <rtept lat="-34.467500000" lon="-57.854170000">
+      <time>2036-02-05T06:28:16Z</time>
+      <name>COLONI</name>
+      <cmt>07-OCT-00 18:22</cmt>
+      <desc>07-OCT-00 18:22</desc>
+    </rtept>
+    <rtept lat="-34.477470000" lon="-57.861670000">
+      <time>2012-09-02T00:05:55Z</time>
+      <name>COLBO3W </name>
+    </rtept>
+  </rte>
+</gpx>

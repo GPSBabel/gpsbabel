@@ -801,14 +801,17 @@ data_read(void)
       s = csv_lineparse(s, ",", "", linecount);
 
       i = 0;
+      bool header = false;
       while (s) {
         switch (ozi_objective) {
         case trkdata:
+          wpt_tmp = waypt_new();
           ozi_parse_track(i, s, wpt_tmp, trk_name);
           break;
         case rtedata:
           if (buff[0] == 'R') {
             ozi_parse_routeheader(i, s, wpt_tmp);
+            header = true;
           } else {
             ozi_parse_routepoint(i, s, wpt_tmp);
           }
@@ -829,16 +832,18 @@ data_read(void)
       switch (ozi_objective) {
       case trkdata:
         if (linecount > 6) {/* skipping over file header */
-          ozi_convert_datum(wpt_tmp);
-          track_add_wpt(trk_head, wpt_tmp);
+            ozi_convert_datum(wpt_tmp);
+            track_add_wpt(trk_head, wpt_tmp);
         } else {
           waypt_free(wpt_tmp);
         }
         break;
       case rtedata:
-        if (linecount > 5) {/* skipping over file header */
+        if (linecount > 5 && wpt_tmp) {/* skipping over file header */
           ozi_convert_datum(wpt_tmp);
+          if (!header) {
           route_add_wpt(rte_head, wpt_tmp);
+          }
         } else {
           waypt_free(wpt_tmp);
         }
