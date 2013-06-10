@@ -57,17 +57,17 @@ public:
     return t;
   }
 
-  const time_t operator-- (int)  {
+  time_t operator-- (int)  {
     setTime_t(toTime_t() - 1);
     return this->toTime_t();
   }
 
-  const time_t operator++ (int)  {
+  time_t operator++ (int)  {
     setTime_t(toTime_t() + 1);
     return this->toTime_t();
   }
 
-  const time_t operator+=(const time_t&t) {
+  time_t operator+=(const time_t&t) {
    setTime_t(toTime_t() + t);
     return this->toTime_t();
   }
