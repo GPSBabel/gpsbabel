@@ -88,9 +88,11 @@ static xg_callback	gtc_trk_utc;
 static xg_callback	gtc_trk_lat;
 static xg_callback	gtc_trk_long;
 static xg_callback	gtc_trk_alt;
+static xg_callback	gtc_trk_dist;
 static xg_callback	gtc_trk_hr;
 static xg_callback	gtc_trk_cad;
 static xg_callback	gtc_trk_pwr;
+static xg_callback	gtc_trk_spd;
 static xg_callback	gtc_wpt_crs_s, gtc_wpt_crs_e;
 static xg_callback	gtc_wpt_pnt_s, gtc_wpt_pnt_e;
 static xg_callback	gtc_wpt_ident;
@@ -132,9 +134,14 @@ static xg_tag_mapping gtc_map[] = {
   { gtc_trk_lat,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Position/LatitudeDegrees" },
   { gtc_trk_long, cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Position/LongitudeDegrees" },
   { gtc_trk_alt,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/AltitudeMeters" },
+  { gtc_trk_dist, cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/DistanceMeters" },
   { gtc_trk_hr,   cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/HeartRateBpm" },
   { gtc_trk_cad,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Cadence" },
   { gtc_trk_pwr,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/ns3:TPX/ns3:Watts" },
+  // It looks like Speed and Watts should be siblings, but Garmin can't get
+  // their namespace act very consistent.  This works for a sample provided
+  // by Laurent Desmons in 5/2013.
+  { gtc_trk_spd,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/TPX/Speed" },
 
   /* history tcx v1 */
   { gtc_trk_s,    cb_start, "/History/Run" },
@@ -297,6 +304,9 @@ gtc_waypt_pr(const waypoint* wpt)
   }
   if (wpt->altitude != unknown_alt) {
     gtc_write_xml(0, "<AltitudeMeters>%.1f</AltitudeMeters>\n", wpt->altitude);
+  }
+  if (wpt->odometer_distance) {
+    gtc_write_xml(0, "<DistanceMeters>%.2f</DistanceMeters>\n", wpt->odometer_distance);
   }
   // TODO: find a schema extension to include wpt->course and wpt->temperature
   // TODO: find a way to include DistanceMeters from odometer information
@@ -533,6 +543,12 @@ gtc_trk_alt(const char* args, const char** unused)
 }
 
 void
+gtc_trk_dist(const char* args, const char** unused)
+{
+  wpt_tmp->odometer_distance = atof(args);
+}
+
+void
 gtc_trk_hr(const char* args, const char** unused)
 {
   wpt_tmp->heartrate = atoi(args);
@@ -548,6 +564,12 @@ void
 gtc_trk_pwr(const char* args, const char** unused)
 {
   wpt_tmp->power = atof(args);
+}
+
+void
+gtc_trk_spd(const char* args, const char** unused)
+{
+  WAYPT_SET(wpt_tmp, speed, atof(args));
 }
 
 void

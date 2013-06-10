@@ -21,3 +21,8 @@ compare ${REFERENCE}/track/tcxtest~gpx-history.tcx ${TMPDIR}/tcxtest~gpx-history
 # Reading coursepoints
 gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr-readcp.tcx -o gpx -F ${TMPDIR}/tcxtest-readcp.gpx
 compare ${REFERENCE}/track/gtrnctr-readcp.gpx  ${TMPDIR}/tcxtest-readcp.gpx
+
+# Reading bike tracks, specifically to check distance and speed
+gpsbabel -t -i gtrnctr -f ${REFERENCE}/track/bike.tcx -o gpx -F ${TMPDIR}/bike~gpx.gpx -o unicsv -F ${TMPDIR}/bike~unicsv.csv
+compare ${REFERENCE}/track/bike~gpx.gpx ${TMPDIR}/bike~gpx.gpx
+compare ${REFERENCE}/track/bike~unicsv.csv ${TMPDIR}/bike~unicsv.csv

@@ -23,6 +23,11 @@
 #include "xmlgeneric.h"
 #include "cet_util.h"
 
+#define DEBUG_TAG 0
+#if DEBUG_TAG
+#include <QtCore/QDebug>
+#endif
+
 #if HAVE_LIBEXPAT
 #include <expat.h>
 static XML_Parser psr;
@@ -212,6 +217,9 @@ xml_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
 
   cb = xml_tbl_lookup(current_tag, cb_start);
   if (cb) {
+#if DEBUG_TAG
+    fprintf(stderr, "Start: %s\n", xml_el);
+#endif
     (*cb)(NULL, attrs);
   }
   xml_free_converted_string(el);
@@ -247,6 +255,9 @@ xml_end(void *data, const XML_Char *xml_el)
   if (s.compare(el)) {
     fprintf(stderr, "Mismatched tag %s\n", el);
   }
+#if DEBUG_TAG
+  qDebug() << current_tag;
+#endif
   cb = xml_tbl_lookup(current_tag, cb_cdata);
   if (cb) {
     (*cb)((char *) cdatastr.mem, NULL);
