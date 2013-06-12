@@ -742,7 +742,11 @@ serial_write_route_end(const route_head* route)
   unsigned      src;
   unsigned      sr;
   unsigned char id[1];
+  const char    *rte_name;
 
+  rte_name = route->rte_name;
+  if (rte_name == NULL)
+    rte_name = "NO NAME";
   if (route_id_ptr > MAX_ROUTE_LENGTH) {
     fatal(MYNAME ": Route %s too long\n", route->rte_name);
   }
@@ -753,7 +757,8 @@ serial_write_route_end(const route_head* route)
   le_write16(data + 0, 0x2000);
   data[2] = 0;
   data[3] = 0x20;
-  strncpy((char*)data + 4, route->rte_name, 6);
+  memset(data + 4, 0, 14);
+  strncpy((char*)data + 4, rte_name, 13);
   data[18] = 0;
   data[19] = 0;
   le_write32(data + 20, 0);
