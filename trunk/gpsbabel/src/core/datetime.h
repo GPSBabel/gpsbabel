@@ -79,6 +79,13 @@ public:
     return &t_;
   }
 
+  // Before Qt, GPSBabel had a 'microseconds' which is excessive and
+  // not really supported in QDateTime.  Milliseconds is fine, but we
+  // provide these shims for code that used usecs.
+  void addUSecs(qint64 usecs) const {
+    this->addMSecs(usecs / 1000);
+  }
+
   // Integer form: YYMMDD
   int ymd() const {
     QDate date(this->date());
