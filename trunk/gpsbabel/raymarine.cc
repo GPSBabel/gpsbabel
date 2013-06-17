@@ -218,7 +218,7 @@ raymarine_read(void)
       wpt->notes = xstrdup(str);
     }
     if (((str = inifile_readstr(fin, sect, "Time"))) && *str) {
-      wpt->creation_time = EXCEL_TO_TIMET(atof(str));
+      wpt->SetCreationTime(EXCEL_TO_TIMET(atof(str)));
     }
     if (((str = inifile_readstr(fin, sect, "Bmp"))) && *str) {
       unsigned int symbol = atoi(str);
@@ -349,7 +349,7 @@ write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char
     }
   }
   notes = csv_stringclean(notes, LINE_FEED);
-  time = (wpt->creation_time > 0) ? TIMET_TO_EXCEL(wpt->creation_time) : TIMET_TO_EXCEL(gpsbabel_time);
+  time = (wpt->creation_time > 0) ? TIMET_TO_EXCEL(wpt->GetCreationTime()) : TIMET_TO_EXCEL(gpsbabel_time);
   name = (char *)wpt->extra_data;
 
   gbfprintf(fout, "[Wp%d]" LINE_FEED

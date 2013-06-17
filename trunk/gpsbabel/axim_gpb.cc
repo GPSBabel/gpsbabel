@@ -114,7 +114,7 @@ decode_buff(const char* buff, route_head* track)
 
   tm.tm_year-=1900;
   tm.tm_mon--;
-  wpt->creation_time = mkgmtime(&tm);
+  wpt->SetCreationTime(mkgmtime(&tm));
 
   track_add_wpt(track, wpt);
 }

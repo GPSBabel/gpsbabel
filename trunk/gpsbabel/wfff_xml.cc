@@ -255,7 +255,7 @@ void wfff_e(const char *args, const char **unused)
       }
     }
 
-    wpt_tmp->creation_time = ap_first;
+    wpt_tmp->SetCreationTime(ap_first);
 
     waypt_add(wpt_tmp);
 

@@ -71,7 +71,7 @@ wintec_tes_read(void)
     wpt = waypt_new();
     wpt->latitude = latitude / 1.0e7;
     wpt->longitude = longitude / 1.0e7;
-    wpt->creation_time = wintec_date_to_time(date);
+    wpt->SetCreationTime(wintec_date_to_time(date));
     // The unit of altitude isn't clear and we have a lot of
     // samples with wildly negative values, so ignore those for now.
     wpt->altitude = alt;

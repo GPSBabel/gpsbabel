@@ -1179,15 +1179,15 @@ unicsv_parse_one_line(char *ibuf)
 
       ymd.tm_mon--;
       if (opt_utc) {
-        wpt->creation_time = mkgmtime(&ymd);
+        wpt->SetCreationTime(mkgmtime(&ymd));
       } else {
-        wpt->creation_time = mklocaltime(&ymd);
+        wpt->SetCreationTime(mklocaltime(&ymd));
       }
     } else if (ymd.tm_hour || ymd.tm_min || ymd.tm_sec) {
       if (opt_utc) {
-        wpt->creation_time = mkgmtime(&ymd);
+        wpt->SetCreationTime(mkgmtime(&ymd));
       } else {
-        wpt->creation_time = mklocaltime(&ymd);
+        wpt->SetCreationTime(mklocaltime(&ymd));
       }
     }
 
@@ -1729,13 +1729,13 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
     if (wpt->creation_time >= SECONDS_PER_DAY) {
       struct tm tm;
       char buf[32];
-      time_t time = wpt->creation_time;
+      time_t time = wpt->GetCreationTime();
 
       if (opt_utc) {
         time += atoi(opt_utc) * SECONDS_PER_HOUR;
         tm = *gmtime(&time);
       } else {
-        const time_t tt = wpt->creation_time;
+        const time_t tt = wpt->GetCreationTime();
         tm = *localtime(&tt);
       }
       tm.tm_year += 1900;
@@ -1750,13 +1750,13 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
     if (wpt->creation_time != 0) {
       struct tm tm;
       char buf[32], msec[12];
-      time_t time = wpt->creation_time;
+      time_t time = wpt->GetCreationTime();
 
       if (opt_utc) {
         time += atoi(opt_utc) * SECONDS_PER_HOUR;
         tm = *gmtime(&time);
       } else {
-        const time_t tt = wpt->creation_time;
+        const time_t tt = wpt->GetCreationTime();
         tm = *localtime(&tt);
       }
       snprintf(buf, sizeof(buf), "%02d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);

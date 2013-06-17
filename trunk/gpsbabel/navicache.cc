@@ -177,7 +177,7 @@ nav_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
         tm.tm_hour = 0;
         tm.tm_min = 0;
         tm.tm_sec = 0;
-        wpt_tmp->creation_time = mktime(&tm);
+        wpt_tmp->SetCreationTime(mktime(&tm));
       } else if (0 == strcmp(ap[0], "retired")) {
         if (!strcmp(ap[1], "yes") && noretired) {
           xfree(wpt_tmp);

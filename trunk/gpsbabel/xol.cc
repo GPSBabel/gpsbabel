@@ -199,11 +199,9 @@ xol_fatal_outside(const waypoint *wpt)
 static void
 xol_write_time(const waypoint *wpt)
 {
-  char time_string[64];
-
-  xml_fill_in_time(time_string, wpt->creation_time, wpt->microseconds, XML_LONG_TIME);
-  if (time_string[0]) {
-    gbfprintf(fout, " timestamp=\"%s\"", time_string);
+  QString time_string = wpt->CreationTimeXML();
+  if (!time_string.isEmpty()) {
+    gbfprintf(fout, " timestamp=\"%s\"", qPrintable(time_string));
   }
 }
 

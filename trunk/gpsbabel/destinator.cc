@@ -332,8 +332,8 @@ destinator_read_trk(void)
 
     snprintf(buff, sizeof(buff), "%06d%.f", date, time);
     strptime(buff, "%d%m%y%H%M%S", &tm);
-    wpt->creation_time = mkgmtime(&tm);
-    wpt->microseconds = ((int)time % 1000) * 1000;
+    wpt->SetCreationTime(mkgmtime(&tm),
+                         ((int)time % 1000) * 1000);
 
     if (wpt->fix > 0) {
       wpt->fix = (fix_type)(wpt->fix + 1);
@@ -438,7 +438,7 @@ destinator_trkpt_disp(const waypoint* wpt)
     struct tm tm;
     double time;
     int date;
-    const time_t ct = wpt->creation_time;
+    const time_t ct = wpt->GetCreationTime();
     tm = *gmtime(&ct);
     tm.tm_mon += 1;
     tm.tm_year -= 100;

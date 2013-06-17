@@ -488,7 +488,7 @@ psit_routehdr_w(gbfile *psit_file, const route_head *rte)
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
       testwpt = (waypoint *)elem;
       if (rte_datapoints == 0) {
-        uniqueValue = testwpt->creation_time;
+        uniqueValue = testwpt->GetCreationTime();
       }
       rte_datapoints++;
     }
@@ -597,8 +597,9 @@ psit_track_r(gbfile *psit_file, route_head **trk)
 
       if ((strcmp(psit_current_token, "1") == 0) || (track_head == NULL)) {
         track_head = route_head_alloc();
-        /* Add a number to the track name.  With Garmins, the "first" tracklog is usually ACTIVE LOG
-           the second is ACTIVE LOG001 and so on */
+        /* Add a number to the track name.  With Garmins, the "first"
+         tracklog is usually ACTIVE LOG
+         the second is ACTIVE LOG001 and so on */
         if (trk_num > 0) {
           sprintf(tbuf, "%s%03d", trkname, trk_num);
           track_head->rte_name = xstrdup(tbuf);
@@ -608,14 +609,14 @@ psit_track_r(gbfile *psit_file, route_head **trk)
         trk_num++;
         track_add_head(track_head);
       }
-
-      thisWaypoint->creation_time = dateTime;
+      
+      thisWaypoint->SetCreationTime(dateTime);
       track_add_wpt(track_head, thisWaypoint);
-
+      
       if (gbfeof(psit_file)) {
         break;
       }
-
+      
       psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), wscomma);
     } else {
       break;
@@ -647,7 +648,7 @@ psit_trackhdr_w(gbfile *psit_file, const route_head *trk)
       QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
         if (trk_datapoints == 0) {
           testwpt = (waypoint *)elem;
-          uniqueValue = testwpt->creation_time;
+          uniqueValue = testwpt->GetCreationTime();
         }
         trk_datapoints++;
       }
@@ -691,7 +692,7 @@ psit_trackhdr_w_wrapper(const route_head *trk)
 static void
 psit_trackdatapoint_w(gbfile *psit_file, const waypoint *wpt)
 {
-  time_t	t = wpt->creation_time;
+  time_t	t = wpt->GetCreationTime();
   struct tm *tmTime = gmtime(&t);
 
   gbfprintf(psit_file, "%11.6f,%11.6f,",
@@ -808,7 +809,8 @@ psit_write(void)
     route_disp_all(psit_routehdr_w_wrapper, psit_noop, psit_waypoint_w_wrapper);
   }
   if (global_opts.objective == trkdata) {
-    track_disp_all(psit_trackhdr_w_wrapper, psit_noop, psit_trackdatapoint_w_wrapper);
+    track_disp_all(psit_trackhdr_w_wrapper,
+                   psit_noop, psit_trackdatapoint_w_wrapper);
   }
 
   mkshort_del_handle(&mkshort_handle);

@@ -292,7 +292,7 @@ cst_data_read(void)
           pow = lrtrim(++pow);
           strptime(pow, "%Y %m %d %H:%M:%S", &tm);
 
-          wpt->creation_time = mkgmtime(&tm);
+          wpt->SetCreationTime(mkgmtime(&tm));
         }
         wpt->latitude /= 100000.0;
         wpt->longitude /= 100000.0;

@@ -292,7 +292,7 @@ ce_cdata(void* dta, const XML_Char* xml_s, int len)
           strncpy(secString, currentMark->created+13, 2);
           secString[2] = '\0';
           t.tm_sec = atoi(secString);
-          currentMark->wp->creation_time = mkgmtime(&t);
+          currentMark->wp->SetCreationTime(mkgmtime(&t));
         }
       } else if (inRoute) {
         currentRoute->r->rte_name = xstrdup(s);
@@ -524,7 +524,7 @@ ce_wr_deinit(void)
 static char*
 ce_gen_creation_time(time_t tm)
 {
-  xml_fill_in_time(time_buffer, tm, 0, XML_SHORT_TIME);
+  xml_fill_in_time(time_buffer, tm, XML_SHORT_TIME);
   return time_buffer;
 }
 
@@ -660,7 +660,7 @@ ce_mark_pr(const waypoint* wp)
     id = xml_buffer;
   }
   write_xml_entity_begin2(ofd, "\t", "Mark",
-                          "created", ce_gen_creation_time(wp->creation_time),
+                          "created", ce_gen_creation_time(wp->GetCreationTime()),
                           "id", id);
   ce_waypt_pr(wp);
   write_xml_entity_end(ofd, "\t", "Mark");

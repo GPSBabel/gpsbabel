@@ -129,7 +129,7 @@ hsa_ndv_end(void* data, const XML_Char* xml_el)
       } else if (strcmp(el, "Longitude") == 0) {
         wpt_tmp->longitude = atof(cdatastr);
       } else if (strcmp(el, "Time") == 0) {
-        wpt_tmp->creation_time = atoi(cdatastr);
+        wpt_tmp->SetCreationTime(atoi(cdatastr));
       }
     }
   }

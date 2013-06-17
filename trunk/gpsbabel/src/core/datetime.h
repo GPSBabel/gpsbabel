@@ -85,6 +85,9 @@ public:
   void addUSecs(qint64 usecs) const {
     this->addMSecs(usecs / 1000);
   }
+  int usec() const {
+    return this->time().msec() * 1000;
+  }
 
   // Integer form: YYMMDD
   int ymd() const {

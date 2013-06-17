@@ -52,8 +52,7 @@ void write_xml_entity_end(gbfile* ofd, const QString& indent, const QString& tag
 void write_optional_xml_entity(gbfile* ofd, const QString& indent,
                                const QString& tag, const QString& value);
 void xml_write_time(gbfile* ofd, const time_t timep, int microseconds, const char* elname);
-void xml_fill_in_time(char* time_string, const time_t timep, int microseconds,
-                      int long_or_short);
+void xml_fill_in_time(char* time_string, const time_t timep, int long_or_short);
 void write_xml_header(gbfile* ofd);
 void xml_ignore_tags(const char** taglist);
 

@@ -81,8 +81,8 @@ typedef enum  {
 
 static int realtime_positioning;
 static bounds kml_bounds;
-static time_t kml_time_min;
-static time_t kml_time_max;
+static gpsbabel::DateTime kml_time_min;
+static gpsbabel::DateTime kml_time_max;
 
 #define AUTOFORMATTING_OFF(AF) bool AF=writer->autoFormatting(); writer->setAutoFormatting(false);
 #define AUTOFORMATTING_RESTORE(AF) writer->setAutoFormatting(af);
@@ -605,16 +605,13 @@ static void kml_write_bitmap_style(kml_point_type pt_type, const char* bitmap,
 
 static void kml_output_timestamp(const waypoint* waypointp)
 {
-  if (waypointp->creation_time) {
-    char time_string[64];
-    xml_fill_in_time(time_string, waypointp->creation_time, waypointp->microseconds, XML_LONG_TIME);
-    if (time_string[0]) {
-      writer->writeStartElement("TimeStamp");
-      AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
-      writer->writeTextElement("when", time_string);
-      writer->writeEndElement(); // Close TimeStamp tag
-      AUTOFORMATTING_RESTORE(af);
-    }
+  QString time_string = waypointp->CreationTimeXML();
+  if(!time_string.isEmpty()) {
+    writer->writeStartElement("TimeStamp");
+    AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
+    writer->writeTextElement("when", time_string);
+    writer->writeEndElement(); // Close TimeStamp tag
+    AUTOFORMATTING_RESTORE(af);
   }
 }
 
@@ -717,9 +714,9 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   if (td->start && td->end) {
     char time_string[64];
 
-    xml_fill_in_time(time_string, td->start, 0, XML_LONG_TIME);
+    xml_fill_in_time(time_string, td->start, XML_LONG_TIME);
     kml_td(hwriter, "Start Time", QString(" %1 ").arg(time_string));
-    xml_fill_in_time(time_string, td->end, 0, XML_LONG_TIME);
+    xml_fill_in_time(time_string, td->end, XML_LONG_TIME);
     kml_td(hwriter, "End Time", QString(" %1 ").arg(time_string));
   }
 
@@ -735,9 +732,9 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   if (td->start && td->end) {
     char time_string[64];
     writer->writeStartElement("TimeSpan");
-    xml_fill_in_time(time_string, td->start, 0, XML_LONG_TIME);
+    xml_fill_in_time(time_string, td->start, XML_LONG_TIME);
     writer->writeTextElement("begin", time_string);
-    xml_fill_in_time(time_string, td->end, 0, XML_LONG_TIME);
+    xml_fill_in_time(time_string, td->end, XML_LONG_TIME);
     writer->writeTextElement("end", time_string);
     writer->writeEndElement(); // Close TimeSpan tag
   }
@@ -864,13 +861,10 @@ static void kml_output_description(const waypoint* pt)
   /* This really shouldn't be here, but as of this writing,
    * Earth can't edit/display the TimeStamp.
    */
-  if (pt->creation_time) {
-    char time_string[64];
-
-    xml_fill_in_time(time_string, pt->creation_time,
-                     pt->microseconds, XML_LONG_TIME);
-    if (time_string[0]) {
-      kml_td(hwriter, QString("Time: %1 ").arg(time_string));
+  if (pt->GetCreationTime()) {
+    QString time_string = pt->CreationTimeXML();
+    if(!time_string.isEmpty()) {
+      kml_td(hwriter, QString("Time: %1 ").arg(time_string));  
     }
   }
 
@@ -883,13 +877,13 @@ static void kml_output_description(const waypoint* pt)
 
 static void kml_recompute_time_bounds(const waypoint* waypointp)
 {
-  if (waypointp->creation_time && (waypointp->creation_time < kml_time_min)) {
-    kml_time_min = waypointp->creation_time;
+  if (waypointp->GetCreationTime() && (waypointp->GetCreationTime() < kml_time_min)) {
+    kml_time_min = waypointp->GetCreationTime();
   }
-  if (waypointp->creation_time > kml_time_max) {
-    kml_time_max = waypointp->creation_time;
+  if (waypointp->GetCreationTime() > kml_time_max) {
+    kml_time_max = waypointp->GetCreationTime();
     if (kml_time_min == 0) {
-      kml_time_min = waypointp->creation_time;
+      kml_time_min = waypointp->GetCreationTime();
     }
   }
 }
@@ -1459,7 +1453,7 @@ static void kml_geocache_pr(const waypoint* waypointp)
   kml_output_timestamp(waypointp);
   if (waypointp->creation_time) {
     strcpy(date_placed,
-           qPrintable(waypointp->creation_time.toString("dd-MMM-yyyy")));
+           qPrintable(waypointp->GetCreationTime().toString("dd-MMM-yyyy")));
   } else {
     date_placed[0] = '\0';
   }
@@ -1736,13 +1730,9 @@ static void kml_mt_hdr(const route_head* header)
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
     waypoint* tpt = (waypoint*)elem;
 
-    if (tpt->creation_time) {
-      char time_string[64];
-      xml_fill_in_time(time_string, tpt->creation_time, tpt->microseconds,
-                       XML_LONG_TIME);
-      if (time_string[0]) {
-        writer->writeTextElement("when", time_string);
-      }
+    if (tpt->GetCreationTime()) {
+      QString time_string = tpt->CreationTimeXML();
+      writer->writeOptionalTextElement("when", time_string);
     } else {
       writer->writeStartElement("when");
       writer->writeEndElement(); // Close when tag
@@ -1862,7 +1852,7 @@ void kml_write_AbstractView(void)
     writer->writeStartElement("gx:TimeSpan");
     if (kml_time_min) {
       char time_string[64];
-      xml_fill_in_time(time_string, kml_time_min, 0, XML_LONG_TIME);
+      xml_fill_in_time(time_string, kml_time_min, XML_LONG_TIME);
       if (time_string[0]) {
         writer->writeTextElement("begin", time_string);
       }
@@ -1878,7 +1868,7 @@ void kml_write_AbstractView(void)
       // ensure the right edge of that time slider includes us.
       //
       time_max = realtime_positioning ? kml_time_max + 600 : kml_time_max;
-      xml_fill_in_time(time_string, time_max, 0, XML_LONG_TIME);
+      xml_fill_in_time(time_string, time_max, XML_LONG_TIME);
       if (time_string[0]) {
         writer->writeTextElement("end", time_string);
       }
@@ -2104,7 +2094,7 @@ static route_head* posn_trk_head = NULL;
 static void
 kml_wr_position(waypoint* wpt)
 {
-  static time_t last_valid_fix;
+  static gpsbabel::DateTime last_valid_fix;
 
   kml_wr_init(posnfilenametmp);
 
@@ -2136,10 +2126,10 @@ kml_wr_position(waypoint* wpt)
   case fix_unknown:
     break;
   default:
-    last_valid_fix = wpt->creation_time;
+    last_valid_fix = wpt->GetCreationTime();
   }
 
-  wpt->icon_descr = kml_get_posn_icon(wpt->creation_time - last_valid_fix);
+  wpt->icon_descr = kml_get_posn_icon(wpt->GetCreationTime() - last_valid_fix);
 
 
   /* In order to avoid clutter while we're sitting still, don't add

@@ -308,7 +308,7 @@ gopal_read(void)
     //calculate the speed to reach this waypoint from the last. This way I try to sort out invalid waypoints
     speed=0;
     if (lastwpt !=NULL) {
-      speed=3.6*radtometers(gcdist(RAD(lastwpt->latitude), RAD(lastwpt->longitude), RAD(wpt->latitude), RAD(wpt->longitude))) / abs(wpt->creation_time - lastwpt->creation_time);
+      speed=3.6*radtometers(gcdist(RAD(lastwpt->latitude), RAD(lastwpt->longitude), RAD(wpt->latitude), RAD(wpt->longitude))) / abs(wpt->creation_time - lastwpt->GetCreationTime());
       //printf("speed line %d %lf \n",line,speed);
     }
     /* Error handling: in the tracklog of my device sometimes "jump" waypoints ;-) */
@@ -366,7 +366,7 @@ gopal_write_waypt(const waypoint* wpt)
     }
   }
   //MSVC handles time_t as int64, gcc and mac only int32, so convert it:
-  timestamp=(unsigned long)wpt->creation_time;
+  timestamp=(unsigned long)wpt->GetCreationTime();
   gbfprintf(fout, "%lu, %s, %lf, %lf, %5.1lf, %8.5lf, %d, %lf, %d\n",timestamp,tbuffer,  wpt->longitude, wpt->latitude,wpt->altitude,
             wpt->speed,fix,wpt->hdop,wpt->sat);
 }

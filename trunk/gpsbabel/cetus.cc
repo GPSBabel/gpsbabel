@@ -455,12 +455,12 @@ cetus_writewpt(const waypoint* wpt)
 
   rec = (struct cetus_wpt_s*) xcalloc(sizeof(*rec)+18 + NOTESZ + DESCSZ,1);
 
-  QDate date(wpt->creation_time.date());
+  QDate date(wpt->GetCreationTime().date());
   rec->day = date.day();
   rec->mon = date.month();
   be_write16(&rec->year, date.year());
 
-  QTime time(wpt->creation_time.time());
+  QTime time(wpt->GetCreationTime().time());
   rec->min = time.minute();
   rec->hour = time.hour();
   rec->sec = time.second();

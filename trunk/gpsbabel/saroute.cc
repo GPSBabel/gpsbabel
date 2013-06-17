@@ -381,12 +381,11 @@ my_read(void)
             if (totaldist > seglen) {
               totaldist = seglen;
             }
-            wpt_tmp->creation_time =
+            wpt_tmp->SetCreationTime(
               gpsbabel_time+starttime+
-              transittime * totaldist/seglen;
+              transittime * totaldist/seglen);
           } else {
-            wpt_tmp->creation_time =
-              gpsbabel_time+starttime;
+            wpt_tmp->SetCreationTime(gpsbabel_time+starttime);
             totaldist = 0;
           }
           oldlat = lat;

@@ -269,7 +269,7 @@ humminbird_read_wpt(gbfile* fin)
   wpt = waypt_new();
 
   wpt->shortname = xstrndup(w.name, sizeof(w.name));
-  wpt->creation_time = w.time;
+  wpt->SetCreationTime(w.time);
 
   guder = gudermannian_i1924(w.north);
   wpt->latitude = geocentric_to_geodetic_hwr(guder);
@@ -437,7 +437,7 @@ humminbird_read_track(gbfile* fin)
       /* Unless it's zero. Sometimes happens, possibly if
          the gps didn't have a lock when the track was
          saved. */
-      wpt->creation_time = th.time;
+      wpt->SetCreationTime(th.time);
     }
     track_add_wpt(trk, wpt);
   }
@@ -554,7 +554,7 @@ humminbird_read_track_old(gbfile* fin)
       /* Unless it's zero. Sometimes happens, possibly if
          the gps didn't have a lock when the track was
          saved. */
-      wpt->creation_time = th.time;
+      wpt->SetCreationTime(th.time);
     }
     track_add_wpt(trk, wpt);
   }
@@ -681,7 +681,7 @@ humminbird_write_waypoint(const waypoint* wpt)
   hum.depth = si_round(WAYPT_GET(wpt, depth, 0)*100.0);
   be_write16(&hum.depth, hum.depth);
 
-  be_write32(&hum.time, wpt->creation_time);
+  be_write32(&hum.time, wpt->GetCreationTime());
 
   east = wpt->longitude / 180.0 * EAST_SCALE;
   be_write32(&hum.east, si_round((east)));
@@ -782,7 +782,7 @@ humminbird_track_cb(const waypoint* wpt)
   north = si_round(inverse_gudermannian_i1924(lat));
 
   if (wpt->creation_time != 0) {
-    last_time = wpt->creation_time;
+    last_time = wpt->GetCreationTime();
   }
 
   if (i == 0) {

@@ -998,7 +998,7 @@ decode_waypoint(const void* data)
   const char* s;
   float f;
 
-  wp->creation_time = decode_time(&p->year);
+  wp->SetCreationTime(decode_time(&p->year));
   wp->latitude = delbin_rad2deg(le_read32(p->latitude));
   wp->longitude = delbin_rad2deg(le_read32(p->longitude));
   f = le_read_float(p->elevation);
@@ -1414,7 +1414,7 @@ write_waypoint(const waypoint* wp)
   waypoint_i++;
   le_write32(p->total, waypoint_n);
   le_write32(p->index, waypoint_i);
-  encode_time(wp->creation_time, &p->year);
+  encode_time(wp->GetCreationTime(), &p->year);
   le_write32(p->latitude, delbin_deg2rad(wp->latitude));
   le_write32(p->longitude, delbin_deg2rad(wp->longitude));
   if (wp->altitude > unknown_alt) {
@@ -1529,7 +1529,7 @@ decode_track_point(const void* data, unsigned* wp_array_i, unsigned max_point)
     waypoint* wp = waypt_new();
     float elev = le_read_float(p->point[i].elevation);
     wp_array[j] = wp;
-    wp->creation_time = decode_time(&p->point[i].year);
+    wp->SetCreationTime(decode_time(&p->point[i].year));
     wp->latitude = delbin_rad2deg(le_read32(p->point[i].latitude));
     wp->longitude = delbin_rad2deg(le_read32(p->point[i].longitude));
     if (elev > UNKNOWN_ELEV) {
@@ -1713,7 +1713,7 @@ write_track_points(void)
       le_write32(p->index, i + 1);
     }
     assert(p);
-    encode_time(wp->creation_time, &p->point[j].year);
+    encode_time(wp->GetCreationTime(), &p->point[j].year);
     le_write32(p->point[j].latitude, delbin_deg2rad(wp->latitude));
     le_write32(p->point[j].longitude, delbin_deg2rad(wp->longitude));
     f = UNKNOWN_ELEV;
@@ -1793,7 +1793,7 @@ write_track_end(const route_head* track)
   if (track->rte_name) {
     strncpy(p->name, track->rte_name, sizeof(p->name) - 1);
   } else {
-    sprintf(p->name, "%lu", (long)wp_array[0]->creation_time);
+    sprintf(p->name, "%lu", (long)wp_array[0]->GetCreationTime());
   }
   le_write32(p->total_points, waypoint_n);
   encode_time(current_time(), &p->year);
@@ -2186,7 +2186,7 @@ write_route_end(const route_head* route)
   if (route->rte_name) {
     strncpy(p->name, route->rte_name, sizeof(p->name) - 1);
   } else {
-    sprintf(p->name, "%lu", (long)wp_array[0]->creation_time);
+    sprintf(p->name, "%lu", (long)wp_array[0]->GetCreationTime());
   }
   p->type = 0;
   le_write32(p->total_route_point, route_point_n);
@@ -2222,7 +2222,7 @@ decode_navmsg(const void* data)
   t.tm_hour = p->hour;
   t.tm_min = p->minute;
   t.tm_sec = p->second;
-  wp->creation_time = mkgmtime(&t);
+  wp->SetCreationTime(mkgmtime(&t));
   wp->sat = p->satellites;
   wp->latitude = le_read_double(p->latitude);
   wp->longitude = le_read_double(p->longitude);

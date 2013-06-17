@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 #include "cet_util.h"
+#include <QtCore/QDebug>
 
 #define DEBUG_TAG 0
 #if DEBUG_TAG
@@ -107,42 +108,30 @@ write_xml_entity_end(gbfile *ofd, const QString& indent,
 }
 
 void
-xml_fill_in_time(char *time_string, const time_t timep, int microseconds, int long_or_short)
+xml_fill_in_time(char *time_string, const time_t timep, int long_or_short)
 {
-  struct tm *tm = gmtime(&timep);
-  const char *format;
-  int n;
+  QDateTime dt = QDateTime::fromTime_t(timep);
+  dt = dt.toUTC();
 
-  if (!tm) {
-    *time_string = 0;
-    return;
-  }
-
+  const char* format;
   if (long_or_short == XML_LONG_TIME) {
-    format = "%02d-%02d-%02dT%02d:%02d:%02d";
+    format = "yyyy-MM-ddTHH:mm:ssZ";
+    if (dt.time().msec()) {
+fprintf(stderr, "this should not be possible");
+abort();
+      format = "yyyy-MM-ddTHH:mm:ss.zzzZ";
+    }
   } else {
-    format = "%02d%02d%02dT%02d%02d%02d";
+    format = "yyyyMMddTHHmmssZ";
   }
-  n = sprintf(time_string, format,
-              tm->tm_year+1900,
-              tm->tm_mon+1,
-              tm->tm_mday,
-              tm->tm_hour,
-              tm->tm_min,
-              tm->tm_sec);
-  if (microseconds) {
-    n += sprintf(time_string + n, ".%03d", microseconds / 1000);
-  }
-  time_string[n++] = 'Z';
-  time_string[n++] = '\0';
-
+  strcpy(time_string, qPrintable(dt.toString(format)));
 }
 
 void
 xml_write_time(gbfile *ofd, const time_t timep, int microseconds, const char *elname)
 {
   char time_string[64];
-  xml_fill_in_time(time_string, timep, microseconds, XML_LONG_TIME);
+  xml_fill_in_time(time_string, timep, XML_LONG_TIME);
   if (time_string[0]) {
     gbfprintf(ofd, "<%s>%s</%s>\n",
               elname,

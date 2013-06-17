@@ -111,8 +111,7 @@ vitovtt_read(void)
 
     tmStruct.tm_sec = scaled_sec / vitovtt_secondscale;
     microseconds = (scaled_sec % vitovtt_secondscale) / vitovtt_microsecondscale;
-    wpt_tmp->creation_time	= mkgmtime(&tmStruct);
-    wpt_tmp->microseconds	= microseconds;
+    wpt_tmp->SetCreationTime(mkgmtime(&tmStruct), microseconds);
 
     /*
      * TODO: interpret speed, course, status

@@ -1173,37 +1173,36 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     /* TIME CONVERSIONS ***************************************************/
   case XT_EXCEL_TIME:
     /* Time as Excel Time  */
-    wpt->creation_time = EXCEL_TO_TIMET(atof(s));
+    wpt->SetCreationTime(EXCEL_TO_TIMET(atof(s)));
     break;
   case XT_TIMET_TIME:
     /* Time as time_t */
-    wpt->creation_time = (time_t) atol(s);
+    wpt->SetCreationTime((time_t) atol(s));
     break;
   case XT_TIMET_TIME_MS: {
     /* Time as time_t in milliseconds */
     int s_len = strlen(s);
     if (s_len < 4) {
       /* less than 1 epochsecond, an unusual case */
-      wpt->creation_time = (time_t) 0;
-      wpt->microseconds = (int) atoi(s) * 1000;
+      wpt->SetCreationTime(0,(int) atoi(s) * 1000);
     } else {
       char buff[32];
       int off = s_len - 3;
       strncpy(buff, s, off);
       buff[off] = '\0';
-      wpt->creation_time = (time_t) atol(buff);
+      time_t t = (time_t) atol(buff);
       s += off;
       strncpy(buff, s, 3);
       buff[3] = '\0';
-      wpt->microseconds = (int) atoi(buff) * 1000;
+      wpt->SetCreationTime(t, (int) MILLI_TO_MICRO(atoi(buff)));
     }
   }
   break;
   case XT_YYYYMMDD_TIME:
-    wpt->creation_time = yyyymmdd_to_time(s);
+    wpt->SetCreationTime(yyyymmdd_to_time(s));
     break;
   case XT_GMT_TIME:
-    wpt->creation_time += sscanftime(s, fmp->printfc, 1);
+    wpt->SetCreationTime(sscanftime(s, fmp->printfc, 1));
     break;
   case XT_LOCAL_TIME:
     if (getenv("GPSBABEL_FREEZE_TIME")) {
@@ -1224,7 +1223,7 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     wpt->creation_time = xml_parse_time(s, &wpt->microseconds);
     break;
   case XT_NET_TIME: {
-    time_t tt = wpt->creation_time;
+    time_t tt = wpt->GetCreationTime();
     dotnet_time_to_time_t(atof(s), &tt, &wpt->microseconds);
     }
     break;
@@ -1937,43 +1936,42 @@ xcsv_waypt_pr(const waypoint* wpt)
       /* TIME CONVERSIONS**************************************************/
     case XT_EXCEL_TIME:
       /* creation time as an excel (double) time */
-      writebuff(buff, fmp->printfc, TIMET_TO_EXCEL(wpt->creation_time));
+      writebuff(buff, fmp->printfc, TIMET_TO_EXCEL(wpt->GetCreationTime()));
       break;
     case XT_TIMET_TIME:
       /* time as a time_t variable */ {
-      time_t tt = wpt->creation_time;
+      time_t tt = wpt->GetCreationTime();
       writebuff(buff, fmp->printfc, tt); }
       break;
     case XT_TIMET_TIME_MS: {
       /* time as a time_t variable in milliseconds */
       char tbuf[24];
-      writetime(tbuf, sizeof(tbuf), "%s", wpt->creation_time, 0);
+      writetime(tbuf, sizeof(tbuf), "%s", wpt->GetCreationTime(), 0);
       char mbuf[32];
       snprintf(mbuf, sizeof(mbuf), "%s%03d", tbuf, wpt->microseconds / 1000);
       writebuff(buff, "%s", mbuf);
     }
     break;
     case XT_YYYYMMDD_TIME:
-      writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->creation_time));
+      writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->GetCreationTime()));
       break;
     case XT_GMT_TIME:
-      writetime(buff, sizeof buff, fmp->printfc, wpt->creation_time, 1);
+      writetime(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), 1);
       break;
     case XT_LOCAL_TIME:
-      writetime(buff, sizeof buff, fmp->printfc, wpt->creation_time, 0);
+      writetime(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), 0);
       break;
     case XT_HMSG_TIME:
-      writehms(buff, sizeof buff, fmp->printfc, wpt->creation_time, 1);
+      writehms(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), 1);
       break;
     case XT_HMSL_TIME:
-      writehms(buff, sizeof buff, fmp->printfc, wpt->creation_time, 0);
+      writehms(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), 0);
       break;
     case XT_ISO_TIME:
-      writetime(buff, sizeof buff, "%Y-%m-%dT%H:%M:%SZ", wpt->creation_time, 1);
+      writetime(buff, sizeof buff, "%Y-%m-%dT%H:%M:%SZ", wpt->GetCreationTime(), 1);
       break;
     case XT_ISO_TIME_MS:
-      xml_fill_in_time(buff, wpt->creation_time,
-                       wpt->microseconds, XML_LONG_TIME);
+      xml_fill_in_time(buff, wpt->GetCreationTime(), XML_LONG_TIME);
       break;
     case XT_GEOCACHE_LAST_FOUND:
       writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->gc_data->last_found));

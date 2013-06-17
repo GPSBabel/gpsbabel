@@ -105,7 +105,7 @@ parse_line(char* buff, int index, const char* delimiter, waypoint* wpt)
       if (cerr == NULL) {
         fatal(MYNAME ": Unable to convert date (%s)!\n", cin);
       }
-      wpt->creation_time = mkgmtime(&tm);
+      wpt->SetCreationTime(mkgmtime(&tm));
       break;
 
     case WAYPT__OFS + 1:
@@ -317,7 +317,7 @@ parse_waypt(char* buff)
   if (cerr == NULL) {
     fatal(MYNAME ": Unable to convert date (%s)!\n", buff);
   }
-  wpt->creation_time = mkgmtime(&tm);
+  wpt->SetCreationTime(mkgmtime(&tm));
 
   /* go over time stamp */
   i = 5;

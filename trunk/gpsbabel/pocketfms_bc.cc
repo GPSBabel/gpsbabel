@@ -108,7 +108,7 @@ read_tracks(void)
     wpt->latitude = le_read_float(&bc.latitude);
     wpt->longitude = le_read_float(&bc.longitude);
     wpt->altitude = FEET_TO_METERS(le_read_float(&bc.altitude));
-    wpt->creation_time = mkgmtime(&tm);
+    wpt->SetCreationTime(mkgmtime(&tm));
     wpt->hdop = le_read_float(&bc.ehpe);
     wpt->vdop = le_read_float(&bc.evpe);
     wpt->pdop = le_read_float(&bc.espe);
@@ -132,10 +132,10 @@ pocketfms_waypt_disp(const waypoint *wpt)
   struct tm *tm;
 
   memset(&bc, 0, sizeof(bc));
-  const time_t tt = wpt->creation_time;
+  const time_t tt = wpt->GetCreationTime();
   tm = localtime(&tt);
   if (wpt->creation_time) {
-    const time_t tt = wpt->creation_time;
+    const time_t tt = wpt->GetCreationTime();
     tm = gmtime(&tt);
   }
 

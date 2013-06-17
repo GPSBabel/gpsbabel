@@ -243,7 +243,7 @@ coto_track_read(void)
     rec->time = be_read32(&rec->time);
     if (rec->time != 0) {
       rec->time -= 2082844800U;
-      wpt_tmp->creation_time = rec->time;
+      wpt_tmp->SetCreationTime(rec->time);
     }
     track_add_wpt(trk_head, wpt_tmp);
   }

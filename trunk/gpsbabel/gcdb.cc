@@ -154,7 +154,7 @@ if (!strncmp("date", rec->dbfld[i].fldname,4)) {
 time_t tm;
 tm = be_read32(recdata) * 24 * 3600;
 tm -= EPOCH_1904;
-wpt->creation_time = tm;
+wpt->SetCreationTime(tm);
 warning("date %d\n", tm);
 }
 break;
@@ -266,7 +266,7 @@ gcdb_add_to_rec(rec, "terr", RECTYPE_TEXT, tbuf);
 * not the cache creation date.
 */
 if (wpt->creation_time) {
-gcdb_add_to_rec(rec, "date", RECTYPE_DATE, (void*) wpt->creation_time);
+gcdb_add_to_rec(rec, "date", RECTYPE_DATE, (void*) wpt->GetCreationTime());
 }
 #endif
 

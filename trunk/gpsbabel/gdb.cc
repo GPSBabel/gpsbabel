@@ -1406,7 +1406,7 @@ write_waypoint(
 
   FWRITE_i16(GMSD_GET(category, gdb_category));
   FWRITE_DBL(WAYPT_GET(wpt, temperature, 0), 0);
-  FWRITE_TIME(wpt->creation_time);
+  FWRITE_TIME(wpt->GetCreationTime());
 
   /* VERSION DEPENDENT CODE */
   if (gdb_ver >= GDB_VER_3) {
@@ -1588,7 +1588,7 @@ write_track(const route_head* trk, const char* trk_name)
     FWRITE_LATLON(wpt->latitude);
     FWRITE_LATLON(wpt->longitude);
     FWRITE_DBL(wpt->altitude, unknown_alt);
-    FWRITE_TIME(wpt->creation_time);
+    FWRITE_TIME(wpt->GetCreationTime());
     d = WAYPT_GET(wpt, depth, unknown_alt);
     FWRITE_DBL(d, unknown_alt);
     d = WAYPT_GET(wpt, temperature, -99999);

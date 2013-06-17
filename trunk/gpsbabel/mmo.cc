@@ -491,7 +491,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
     time = data->ctime;
   }
   if (time > 0) {
-    wpt->creation_time = time;
+    wpt->SetCreationTime(time);
   }
 
   if (mmo_version >= 0x18) {
@@ -726,7 +726,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
     unk = gbfgetc(fin);
     DBG((sobj, "Unknown = 0x%02X (%d)\n", unk, unk));
 
-    wpt->creation_time = gbfgetint32(fin);
+    wpt->SetCreationTime(gbfgetint32(fin));
     wpt->altitude = gbfgetflt(fin);
 
     if (unk != 0) {

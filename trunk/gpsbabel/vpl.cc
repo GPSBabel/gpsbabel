@@ -209,7 +209,7 @@ vpl_parse_75_sentence(const char *ibuf)
   waypt->hdop      = hdop_raw / (double) 8;
   waypt->vdop      = vdop_raw / (double) 8;
 
-  waypt->creation_time = mkgmtime(&tm);
+  waypt->SetCreationTime(mkgmtime(&tm));
 
   track_add_wpt(track_head, waypt);
 }

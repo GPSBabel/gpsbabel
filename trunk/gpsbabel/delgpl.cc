@@ -71,7 +71,7 @@ gpl_read(void)
     if (wpt_tmp->altitude <= unknown_alt + 1) {
       wpt_tmp->altitude = unknown_alt;
     }
-    wpt_tmp->creation_time = le_read32(&gp.tm);
+    wpt_tmp->SetCreationTime(le_read32(&gp.tm));
 
     switch (le_read32(&gp.status)) {
     case 1:
@@ -154,7 +154,7 @@ gpl_trackpt(const waypoint* wpt)
   le_write_double(&gp.alt, alt_feet);
   le_write_double(&gp.speed, speed);
   le_write_double(&gp.heading, heading);
-  le_write32(&gp.tm, wpt->creation_time);
+  le_write32(&gp.tm, wpt->GetCreationTime());
 
   gbfwrite(&gp, sizeof(gp), 1, gplfile_out);
 }

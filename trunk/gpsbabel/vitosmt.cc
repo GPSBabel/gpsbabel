@@ -168,8 +168,8 @@ vitosmt_read(void)
     tmStruct.tm_sec 	=(int)floor(seconds);
     tmStruct.tm_isdst	=-1;
 
-    wpt_tmp->creation_time = mkgmtime(&tmStruct);
-    wpt_tmp->microseconds = fmod(1000000*seconds+0.5,1000000);
+    wpt_tmp->SetCreationTime(mkgmtime(&tmStruct),
+                             fmod(1000000*seconds+0.5,1000000));
     wpt_tmp->shortname	= (char*) xcalloc(16,1);
     snprintf(wpt_tmp->shortname, 15 , "WP%04d", ++serial);
 
@@ -254,8 +254,8 @@ vitosmt_waypt_pr(const waypoint *waypointp)
     WriteDouble(&workbuffer[position], waypointp->altitude);
   }
   position += sizeof(double);
-  QDate date(waypointp->creation_time.date());
-  QTime time(waypointp->creation_time.time());
+  QDate date(waypointp->GetCreationTime().date());
+  QTime time(waypointp->GetCreationTime().time());
   workbuffer[position++]	= date.year()-100;
   workbuffer[position++]	= date.month();
   workbuffer[position++]	= date.day();

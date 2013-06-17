@@ -378,7 +378,7 @@ geoniche_read_asc(void)
     tm.tm_year -= 1900;
     sscanf(timestr, "%d:%d:%d", &tm.tm_hour, &tm.tm_min, &tm.tm_sec);
     if (tm.tm_year >= 1970) {
-      wpt->creation_time = mktime(&tm);
+      wpt->SetCreationTime(mktime(&tm));
     }
     xfree(datestr);
     xfree(timestr);
@@ -540,7 +540,7 @@ geoniche_read_bin(void)
 
     waypt->shortname = xstrdup(vdata + 63);
     waypt->altitude = altitude;
-    waypt->creation_time = mkgmtime(&created);
+    waypt->SetCreationTime(mkgmtime(&created));
 
     GPS_Math_DegMin_To_Deg(latdeg, lat, &waypt->latitude);
     GPS_Math_DegMin_To_Deg(londeg, lon, &waypt->longitude);
@@ -749,7 +749,7 @@ geoniche_writewpt(const waypoint* wpt)
     id = rec_ct;
   }
 
-  tx = (wpt->creation_time != 0) ? wpt->creation_time : gpsbabel_time;
+  tx = (wpt->GetCreationTime() != 0) ? wpt->GetCreationTime() : gpsbabel_time;
   if (tx == 0) {	/* maybe zero during testo (freezed time) */
     strcpy(datestr, "01/01/1904");	/* this seems to be the uninitialized date value for geoniche */
     strcpy(timestr, "00:00:00");

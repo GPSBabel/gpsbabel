@@ -113,7 +113,7 @@ skyforce_parse_trk(const char *str)
     fatal(MYNAME ": Could not parse date string (%s - %s).\n", buf, cx);
   }
 
-  wpt->creation_time = mkgmtime(&tm);
+  wpt->SetCreationTime(mkgmtime(&tm));
 
   len = strlen(str);
 
@@ -177,7 +177,7 @@ skyforce_waypt_disp_cb(const waypoint *wpt)
   if (global_opts.objective == trkdata) {
     struct tm tm;
 
-    const time_t tt = wpt->creation_time;
+    const time_t tt = wpt->GetCreationTime();
     tm = *gmtime(&tt);
     strftime(buf + 2, sizeof(buf) - 2, "%d%m%y  %H%M%S    ", &tm);
   } else {

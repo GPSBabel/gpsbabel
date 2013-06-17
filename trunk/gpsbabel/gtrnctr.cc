@@ -261,18 +261,18 @@ static void
 gtc_study_lap(const waypoint* wpt)
 {
   if (wpt->creation_time && (gtc_least_time == 0)) {
-    gtc_least_time = wpt->creation_time;
+    gtc_least_time = wpt->GetCreationTime();
     gtc_start_lat = wpt->latitude;
     gtc_start_long = wpt->longitude;
   }
 
-  if (wpt->creation_time && (gtc_least_time > wpt->creation_time)) {
-    gtc_least_time =  wpt->creation_time;
+  if (wpt->creation_time && (gtc_least_time > wpt->GetCreationTime())) {
+    gtc_least_time =  wpt->GetCreationTime();
     gtc_start_lat = wpt->latitude;
     gtc_start_long = wpt->longitude;
   }
   if (wpt->creation_time > gtc_most_time)  {
-    gtc_most_time = wpt->creation_time;
+    gtc_most_time = wpt->GetCreationTime();
     gtc_end_lat = wpt->latitude;
     gtc_end_long = wpt->longitude;
   }
@@ -288,12 +288,10 @@ gtc_waypt_pr(const waypoint* wpt)
   }
 
   if (wpt->creation_time) {
-    char time_string[100];
-    xml_fill_in_time(time_string, wpt->creation_time, wpt->microseconds,
-                     XML_LONG_TIME);
-    if (time_string[0]) {
+    QString time_string = wpt->CreationTimeXML();
+    if (!time_string.isEmpty()) {
       gtc_write_xml(0, "<Time>%s</Time>\n",
-                    time_string);
+                    qPrintable(time_string));
     }
   }
   if (wpt->latitude && wpt->longitude) {
@@ -394,7 +392,7 @@ gtc_act_hdr(const route_head* rte)
   route_disp(rte, gtc_study_lap);
   if (gtc_least_time) {
     char time_string[100];
-    xml_fill_in_time(time_string, gtc_least_time, 0, XML_LONG_TIME);
+    xml_fill_in_time(time_string, gtc_least_time, XML_LONG_TIME);
     gtc_write_xml(0, "<Id>%s</Id>\n", time_string);
     gtc_write_xml(1, "<Lap StartTime=\"%s\">\n", time_string);
   } else {

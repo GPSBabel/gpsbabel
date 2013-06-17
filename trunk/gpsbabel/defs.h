@@ -467,6 +467,7 @@ public:
   session(NULL), 
   extra_data(NULL) { }
  public:
+  QString CreationTimeXML() const;
   queue Q;			/* Master waypoint q.  Not for use
 					   by modules. */
 
@@ -524,6 +525,13 @@ public:
 
   wp_flags wpt_flags;
   QString icon_descr;
+
+  gpsbabel::DateTime  GetCreationTime() const { return creation_time; }
+  void SetCreationTime(time_t t) { creation_time = t; }
+  void SetCreationTime(time_t t, int us) {
+    creation_time = t; 
+    microseconds = us;
+  }
   gpsbabel::DateTime creation_time;
   int microseconds;	/* Optional millionths of a second. */
 
@@ -1009,7 +1017,7 @@ const char* get_filename(const char* fname);			/* extract the filename portion *
 #define str_iso8859_1_to_utf8(str) cet_str_iso8859_1_to_utf8((str))
 
 /* this lives in gpx.c */
-time_t xml_parse_time(const char* cdatastr, int* microsecs);
+gpsbabel::DateTime xml_parse_time(const char* cdatastr, int* microsecs);
 
 xml_tag* xml_findfirst(xml_tag* root, const char* tagname);
 xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname);

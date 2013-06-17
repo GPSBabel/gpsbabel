@@ -166,7 +166,7 @@ ozi_set_time_str(const char *str, waypoint *waypointp)
   int len;
 
   ozi_time = atof(str);
-  waypointp->creation_time = (ozi_time - DAYS_SINCE_1990) * SECONDS_PER_DAY;
+  waypointp->SetCreationTime((ozi_time - DAYS_SINCE_1990) * SECONDS_PER_DAY);
 
   dot = strchr(str, '.');
   /* get number of characters after dot */

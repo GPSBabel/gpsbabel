@@ -206,7 +206,7 @@ static void igc_task_rec(const char* rec)
   wpt->longitude = ('E' == lon_hemi[0] ? 1 : -1) *
                    (lon_deg + (lon_min * 1000 + lon_frac) / 1000.0 / 60);
 
-  wpt->creation_time = creation;
+  wpt->SetCreationTime(creation);
   wpt->description = xstrdup(tmp_str);
 
   // Name the waypoint according to the order of the task record
@@ -364,7 +364,7 @@ static void data_read(void)
         date += 24 * 60 * 60;
       }
       prev_tod = tod;
-      pres_wpt->creation_time = date + tod;
+      pres_wpt->SetCreationTime(date + tod);
 
       // Add the waypoint to the pressure altitude track
       if (pres_alt) {
@@ -582,7 +582,7 @@ static void wr_header(void)
   }
   // Date in header record is that of the first fix record
   date = !track ? current_time() :
-         ((waypoint*) QUEUE_FIRST(&track->waypoint_list))->creation_time;
+         ((waypoint*) QUEUE_FIRST(&track->waypoint_list))->GetCreationTime();
 
   if (NULL == (tm = gmtime(&date))) {
     fatal(MYNAME ": Bad track timestamp\n");
@@ -648,7 +648,7 @@ static void wr_task_hdr(const route_head* rte)
     fatal(MYNAME ": Too much waypoints (more than 99) in task route.\n");
   }
   // Gather data to write to the task identification (first) record
-  rte_time = wpt->creation_time ? wpt->creation_time : current_time();
+  rte_time = wpt->GetCreationTime() ? wpt->GetCreationTime() : current_time();
   if (NULL == (tm = gmtime(&rte_time))) {
     fatal(MYNAME ": Bad task route timestamp\n");
   }
@@ -692,7 +692,7 @@ static void wr_fix_record(const waypoint* wpt, int pres_alt, int gnss_alt)
 {
   struct tm* tm;
 
-  const time_t tt = wpt->creation_time;
+  const time_t tt = wpt->GetCreationTime();
   tm = gmtime(&tt);
 
   if (NULL == tm) {
@@ -742,7 +742,7 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
       return 0;
     }
   } while (alt_diff > -10.0);
-  pres_time = ((waypoint*) elem->next)->creation_time;
+  pres_time = ((waypoint*) elem->next)->GetCreationTime();
   if (global_opts.debug_level >= 1) {
     printf(MYNAME ": pressure landing time %s", ctime(&pres_time));
   }
@@ -758,7 +758,7 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
       return 0;
     }
     // Get a crude indication of groundspeed from the change in lat/lon
-    time_diff = wpt->creation_time - ((waypoint*) elem)->creation_time;
+    time_diff = wpt->GetCreationTime() - ((waypoint*) elem)->GetCreationTime();
     speed = !time_diff ? 0 :
             (fabs(wpt->latitude - ((waypoint*) elem)->latitude) +
              fabs(wpt->longitude - ((waypoint*) elem)->longitude)) / time_diff;
@@ -766,7 +766,7 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
       printf(MYNAME ": speed=%f\n", speed);
     }
   } while (speed < 0.00003);
-  gnss_time = ((waypoint*) elem->next)->creation_time;
+  gnss_time = ((waypoint*) elem->next)->GetCreationTime();
   if (global_opts.debug_level >= 1) {
     printf(MYNAME ": gnss landing time %s", ctime(&gnss_time));
   }
@@ -797,7 +797,7 @@ static double interpolate_alt(const route_head* track, time_t time)
     curr_elem = prev_elem = QUEUE_FIRST(&track->waypoint_list);
   }
   // Find the track points either side of the requested time
-  while (((waypoint*) curr_elem)->creation_time < time) {
+  while (((waypoint*) curr_elem)->GetCreationTime() < time) {
     if (QUEUE_LAST(&track->waypoint_list) == curr_elem) {
       // Requested time later than all track points, we can't interpolate
       return unknown_alt;
@@ -810,7 +810,7 @@ static double interpolate_alt(const route_head* track, time_t time)
   curr_wpt = (waypoint*) curr_elem;
 
   if (QUEUE_FIRST(&track->waypoint_list) == curr_elem) {
-    if (curr_wpt->creation_time == time) {
+    if (curr_wpt->GetCreationTime() == time) {
       // First point's creation time is an exact match so use it's altitude
       return curr_wpt->altitude;
     } else {
@@ -819,12 +819,12 @@ static double interpolate_alt(const route_head* track, time_t time)
     }
   }
   // Interpolate
-  if (0 == (time_diff = curr_wpt->creation_time - prev_wpt->creation_time)) {
+  if (0 == (time_diff = curr_wpt->GetCreationTime() - prev_wpt->GetCreationTime())) {
     // Avoid divide by zero
     return curr_wpt->altitude;
   }
   alt_diff = curr_wpt->altitude - prev_wpt->altitude;
-  return prev_wpt->altitude + (alt_diff / time_diff) * (time - prev_wpt->creation_time);
+  return prev_wpt->altitude + (alt_diff / time_diff) * (time - prev_wpt->GetCreationTime());
 }
 
 /*
@@ -861,7 +861,7 @@ static void wr_track(void)
     // Iterate through waypoints in both tracks simultaneously
     QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
       wpt = (waypoint*) elem;
-      pres_alt = interpolate_alt(pres_track, wpt->creation_time + time_adj);
+      pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime() + time_adj);
       wr_fix_record(wpt, (int) pres_alt, (int) wpt->altitude);
     }
   } else {

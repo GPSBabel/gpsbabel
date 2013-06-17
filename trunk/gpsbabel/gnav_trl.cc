@@ -100,7 +100,7 @@ gnav_trl_read(void)
 
     wpt = waypt_new();
 
-    wpt->creation_time = le_read32(&rec.time);
+    wpt->SetCreationTime(le_read32(&rec.time));
     wpt->latitude = le_read_float(&rec.lat);
     wpt->longitude = le_read_float(&rec.lon);
     wpt->altitude = read_altitude(&rec.alt);
@@ -118,7 +118,7 @@ gnav_trl_write_trkpt(const waypoint* wpt)
 {
   gnav_trl_t rec;
 
-  le_write32(&rec.time, wpt->creation_time);
+  le_write32(&rec.time, wpt->GetCreationTime());
   le_write_float(&rec.lat, wpt->latitude);
   le_write_float(&rec.lon, wpt->longitude);
   if (wpt->altitude != unknown_alt) {

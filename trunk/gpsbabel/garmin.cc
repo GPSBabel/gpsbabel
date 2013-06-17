@@ -345,7 +345,7 @@ waypt_read(void)
     wpt->longitude = gps_save_lon;
     wpt->shortname = xstrdup("Position");
     if (gps_save_time) {
-      wpt->creation_time = gps_save_time;
+      wpt->SetCreationTime(gps_save_time);
     }
     waypt_add(wpt);
     return;
@@ -390,7 +390,7 @@ waypt_read(void)
       wpt_tmp->altitude = way[i]->alt;
     }
     if (way[i]->time_populated) {
-      wpt_tmp->creation_time = way[i]->time;
+      wpt_tmp->SetCreationTime(way[i]->time);
     }
 #if SOON
     garmin_fs_garmin_after_read(way[i], wpt_tmp, gps_waypt_type);
@@ -418,7 +418,7 @@ unsigned int checkWayPointIsAtSplit(waypoint* wpt, GPS_PLap* laps, int nlaps)
     int i;
     for (i=(nlaps-1); i >= 0; i--) {
       GPS_PLap lap = laps[i];
-      time_t delta = lap->start_time - wpt->creation_time;
+      time_t delta = lap->start_time - wpt->GetCreationTime();
       if ((delta >= -1) && (delta <= 1)) {
         result = 1;
         break;
@@ -503,7 +503,7 @@ track_read(void)
     wpt->heartrate = array[i]->heartrate;
     wpt->cadence = array[i]->cadence;
     wpt->shortname = xstrdup(array[i]->trk_ident);
-    wpt->creation_time = array[i]->Time;
+    wpt->SetCreationTime(array[i]->Time);
     wpt->wpt_flags.is_split = checkWayPointIsAtSplit(wpt, laps,
                               nlaps);
     wpt->wpt_flags.new_trkseg = next_is_new_trkseg;
@@ -985,7 +985,7 @@ waypoint_prepare(void)
       tx_waylist[i]->alt = wpt->altitude;
     }
     if (wpt->creation_time) {
-      tx_waylist[i]->time = wpt->creation_time;
+      tx_waylist[i]->time = wpt->GetCreationTime();
       tx_waylist[i]->time_populated = 1;
     }
     if (category) {

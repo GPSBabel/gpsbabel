@@ -298,7 +298,7 @@ format_garmin_xt_proc_strk(void)
           wpt->latitude = PrevLat;	/* Degrees */
           wpt->longitude = PrevLon; 	/* Degrees */
           wpt->altitude = PrevEle; 			/* Meters. */
-          wpt->creation_time = Time;  		/* Unix Time adjusted to Garmin time */
+          wpt->SetCreationTime(Time);  		/* Unix Time adjusted to Garmin time */
 
           // add way point to the track
           track_add_wpt(tmp_track, wpt);
@@ -324,7 +324,7 @@ format_garmin_xt_proc_strk(void)
     wpt->latitude = PrevLat;	/* Degrees */
     wpt->longitude = PrevLon; 	/* Degrees */
     wpt->altitude = PrevEle; 			/* Meters. */
-    wpt->creation_time = Time;  		/* Unix Time adjusted to Garmin time */
+    wpt->SetCreationTime(Time);  		/* Unix Time adjusted to Garmin time */
 
     // add way point to the track
     track_add_wpt(tmp_track, wpt);
@@ -396,7 +396,7 @@ format_garmin_xt_proc_atrk(void)
     wpt->latitude = LatF*180/16777216;	/* Degrees */
     wpt->longitude = LonF*360/16777216; 	/* Degrees */
     wpt->altitude = AltF; 			/* Meters. */
-    wpt->creation_time = Tim;  		/* Unix Time adjusted to Garmin time */
+    wpt->SetCreationTime(Tim);  		/* Unix Time adjusted to Garmin time */
 
     track_add_wpt(track, wpt);
   }

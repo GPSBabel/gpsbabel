@@ -405,7 +405,7 @@ palmdoc_disp(const waypoint *wpt)
 {
   int latint, lonint;
   char tbuf[1024];
-  time_t tm = wpt->creation_time;
+  time_t tm = wpt->GetCreationTime();
   int32 utmz;
   double utme, utmn;
   char utmzc;
