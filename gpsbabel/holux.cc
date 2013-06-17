@@ -120,7 +120,7 @@ static void data_read(void)
     wpt_tmp->shortname = xstrdup(name);
     wpt_tmp->description = xstrdup(desc);
 
-    wpt_tmp->creation_time = 0;
+    wpt_tmp->SetCreationTime(0);
     if (pWptHxTmp->date.year) {
 #if 0
       /* Unless there's some endian swapping that I don't see,
@@ -140,7 +140,7 @@ static void data_read(void)
       tm.tm_mday = pWptHxTmp->date.day;
       tm.tm_mon = pWptHxTmp->date.month - 1;
       tm.tm_year = pWptHxTmp->date.year - 1900;
-      wpt_tmp->creation_time = mktime(&tm);
+      wpt_tmp->SetCreationTime(mktime(&tm));
     }
 
     lon = le_read32(&pWptHxTmp->pt.iLongitude) / 36000.0;
@@ -227,8 +227,8 @@ static void holux_disp(const waypoint* wpt)
   /*set the time */
   if (wpt->creation_time) {
     /* tm = gmtime(&wpt->creation_time);*/  /* I get the wrong result with gmtime ???  */
-    QDate date(wpt->creation_time.date());
-    QTime time(wpt->creation_time.time());
+    QDate date(wpt->GetCreationTime().date());
+    QTime time(wpt->GetCreationTime().time());
     pWptHxTmp->time = (time.hour() * 3600) + (time.minute()* 60) + time.second();
     pWptHxTmp->date.day = date.day();
     pWptHxTmp->date.month = date.month();

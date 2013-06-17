@@ -740,7 +740,7 @@ static void write_waypt(const waypoint* wpt)
   fwrite_integer(file_out, icon_from_descr(wpt->icon_descr));
   fwrite_byte(file_out, 3);
   if (wpt->creation_time) {
-    fwrite_long(file_out, wpt->creation_time-EPOCH89DIFF);
+    fwrite_long(file_out, wpt->GetCreationTime()-EPOCH89DIFF);
   } else {
     fwrite_long(file_out, 0);
   }
@@ -763,7 +763,7 @@ static void write_trk_waypt(const waypoint* wpt)
 {
   fwrite_double(file_out, wpt->latitude);
   fwrite_double(file_out, wpt->longitude);
-  fwrite_long(file_out, wpt->creation_time-EPOCH89DIFF);
+  fwrite_long(file_out, wpt->GetCreationTime()-EPOCH89DIFF);
   fwrite_byte(file_out, start_new);
   if (wpt->altitude == unknown_alt) {
     fwrite_single(file_out, unknown_alt_gtm);

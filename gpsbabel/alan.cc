@@ -505,7 +505,7 @@ static waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
   WP = waypt_new();
   WP->latitude  = -pt2deg(wpt->pt.y);
   WP->longitude =  pt2deg(wpt->pt.x);
-  WP->creation_time = unpack_time(wpt->date, wpt->time);
+  WP->SetCreationTime(unpack_time(wpt->date, wpt->time));
   for (j=WPT_NAME_LEN-1; j >= 0 && wpt->name[j] == ' '; j--) {};
   WP->shortname = xstrndup(wpt->name,j+1);
   for (j=WPT_COMMENT_LEN-1; j >= 0 && wpt->comment[j] == ' '; j--) {};
@@ -706,7 +706,7 @@ static int add_wpt(struct wprdata* wprdata, const waypoint* WP,int isroute)
   wpt->usecount = isroute ? 1 : 0;
   wpt->checked  = isroute ? 0 : 1;
   wpt->reserved = 0;
-  pack_time(WP->creation_time, &(wpt->date), &(wpt->time));
+  pack_time(WP->GetCreationTime(), &(wpt->date), &(wpt->time));
 
   wpthdr->idx[hdr_idx] = wpt_idx;
   wpthdr->used[wpt_idx] = WPT_USED;

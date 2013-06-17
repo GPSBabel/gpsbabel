@@ -70,7 +70,7 @@ sort_comp(const queue * a, const queue * b)
   case sm_description:
     return strcmp(x1->description, x2->description);
   case sm_time:
-    return x1->creation_time - x2->creation_time;
+    return x1->GetCreationTime() - x2->GetCreationTime();
   default:
     abort();
     return 0; /* Internal caller error. */

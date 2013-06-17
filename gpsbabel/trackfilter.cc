@@ -269,7 +269,7 @@ trackfilter_merge_qsort_cb(const void *a, const void *b)
   const waypoint *wa = *(waypoint **)a;
   const waypoint *wb = *(waypoint **)b;
 
-  return wa->creation_time - wb->creation_time;
+  return wa->GetCreationTime() - wb->GetCreationTime();
 }
 
 static fix_type
@@ -344,17 +344,16 @@ trackfilter_fill_track_list_cb(const route_head *track) 	/* callback for track_d
 
     i++;
     if (i == 1) {
-      track_list[track_ct].first_time = wpt->creation_time;
+      track_list[track_ct].first_time = wpt->GetCreationTime();
     } else if (i == track->rte_waypt_ct) {
-      track_list[track_ct].last_time = wpt->creation_time;
+      track_list[track_ct].last_time = wpt->GetCreationTime();
     }
 
-    if ((need_time != 0) && (prev != NULL) && (prev->creation_time > wpt->creation_time)) {
+    if ((need_time != 0) && (prev != NULL) && (prev->GetCreationTime() > wpt->GetCreationTime())) {
       if (opt_merge == NULL) {
-        char t1[64], t2[64];
-        xml_fill_in_time(t1, prev->creation_time, 0, XML_LONG_TIME);
-        xml_fill_in_time(t2, wpt->creation_time, 0, XML_LONG_TIME);
-        fatal(MYNAME "-init: Track points badly ordered (timestamp %s > %s)!\n", t1, t2);
+        QString t1 = prev->CreationTimeXML();
+        QString t2 = wpt->CreationTimeXML();
+        fatal(MYNAME "-init: Track points badly ordered (timestamp %s > %s)!\n", qPrintable(t1), qPrintable(t2));
       }
     }
     prev = wpt;
@@ -525,7 +524,7 @@ trackfilter_merge(void)
 
   for (i = 0; i < track_pts-timeless_pts; i++) {
     wpt = buff[i];
-    if ((prev == NULL) || (prev->creation_time != wpt->creation_time)) {
+    if ((prev == NULL) || (prev->GetCreationTime() != wpt->GetCreationTime())) {
       route_add_wpt(master, wpt);
       prev = wpt;
     } else {
@@ -708,7 +707,7 @@ trackfilter_split(void)
       }
 
       if (interval > 0) {
-        double tr_interval = difftime(buff[j]->creation_time,buff[i]->creation_time);
+        double tr_interval = difftime(buff[j]->GetCreationTime(),buff[i]->GetCreationTime());
         if (tr_interval <= interval) {
           new_track_flag = 0;
         }
@@ -725,7 +724,7 @@ trackfilter_split(void)
       printf(MYNAME ": splitting new track\n");
 #endif
       curr = (route_head *) route_head_alloc();
-      trackfilter_split_init_rte_name(curr, buff[j]->creation_time);
+      trackfilter_split_init_rte_name(curr, buff[j]->GetCreationTime());
       track_add_head(curr);
     }
     if (curr != NULL) {
@@ -812,12 +811,12 @@ trackfilter_synth(void)
                     RAD(wpt->longitude)));
         }
         if (opt_speed) {
-          if (oldtime != wpt->creation_time) {
+          if (oldtime != wpt->GetCreationTime()) {
             WAYPT_SET(wpt, speed, radtometers(gcdist(
                                                 RAD(oldlat), RAD(oldlon),
                                                 RAD(wpt->latitude),
                                                 RAD(wpt->longitude))) /
-                      labs(wpt->creation_time-oldtime));
+                      labs(wpt->GetCreationTime()-oldtime));
           } else {
             WAYPT_UNSET(wpt, speed);
           }
@@ -825,7 +824,7 @@ trackfilter_synth(void)
       }
       oldlat = wpt->latitude;
       oldlon = wpt->longitude;
-      oldtime = wpt->creation_time;
+      oldtime = wpt->GetCreationTime();
     }
   }
 }
@@ -893,7 +892,7 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
     QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp) {
       waypoint *wpt = (waypoint *)elem;
       if (wpt->creation_time > 0) {
-        inside = ((wpt->creation_time >= start) && (wpt->creation_time <= stop));
+        inside = ((wpt->GetCreationTime() >= start) && (wpt->GetCreationTime() <= stop));
       }
       // If the time is mangled so horribly that it's
       // negative, toss it.

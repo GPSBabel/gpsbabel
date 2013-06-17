@@ -219,8 +219,7 @@ jtr_read(void)
 
     wpt->latitude = lat;
     wpt->longitude = lon;
-    wpt->creation_time = time;
-    wpt->microseconds = micros;
+    wpt->SetCreationTime(time, micros);
     if (speed >= 0) {
       WAYPT_SET(wpt, speed, speed);
     }
@@ -275,7 +274,7 @@ jtr_trkpt_disp_cb(const waypoint* wpt)
   struct tm tm;
 
   if (wpt->creation_time > 0) {
-    const time_t tt = wpt->creation_time;
+    const time_t tt = wpt->GetCreationTime();
     tm = *gmtime(&tt);
 
     tm.tm_year += 1900;

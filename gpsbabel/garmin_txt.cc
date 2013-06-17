@@ -255,11 +255,11 @@ prework_wpt_cb(const waypoint* wpt)
   waypoint* prev = cur_info->prev_wpt;
 
   if (prev != NULL) {
-    cur_info->time += (wpt->creation_time - prev->creation_time);
+    cur_info->time += (wpt->GetCreationTime() - prev->GetCreationTime());
     cur_info->length += waypt_distance_ex(prev, wpt);
   } else {
     cur_info->first_wpt = (waypoint*)wpt;
-    cur_info->start = wpt->creation_time;
+    cur_info->start = wpt->GetCreationTime();
   }
   cur_info->prev_wpt = (waypoint*)wpt;
   cur_info->count++;
@@ -618,7 +618,7 @@ write_waypt(const waypoint* wpt)
   print_string("%s\t", GMSD_GET(state, ""));
   country = gt_get_icao_country(GMSD_GET(cc, ""));
   print_string("%s\t", (country != NULL) ? country : "");
-  print_date_and_time(wpt->creation_time, 0);
+  print_date_and_time(wpt->GetCreationTime(), 0);
   print_string("%s\t", wpt->hasLink() ? wpt->url : "");
   print_categories(GMSD_GET(category, 0));
 
@@ -719,7 +719,7 @@ track_disp_wpt_cb(const waypoint* wpt)
   gbfprintf(fout, "Trackpoint\t");
 
   print_position(wpt);
-  print_date_and_time(wpt->creation_time, 0);
+  print_date_and_time(wpt->GetCreationTime(), 0);
   if IS_VALID_ALT(wpt->altitude) {
     print_distance(wpt->altitude, 1, 0, 0);
   }
@@ -733,7 +733,7 @@ track_disp_wpt_cb(const waypoint* wpt)
   if (prev != NULL) {
     float temp;
     gbfprintf(fout, "\t");
-    delta = wpt->creation_time - prev->creation_time;
+    delta = wpt->GetCreationTime() - prev->GetCreationTime();
     temp = WAYPT_GET(wpt, temperature, -999);
     if (temp != -999) {
       print_temperature(temp);

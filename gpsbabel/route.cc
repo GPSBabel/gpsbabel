@@ -582,7 +582,7 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
     double tlat, tlon, plat, plon, dist;
 
     thisw = (waypoint *)elem;
-    timed = thisw->creation_time - prev->creation_time;
+    timed = thisw->GetCreationTime() - prev->GetCreationTime();
 
     /*
      * gcdist and heading want radians, not degrees.
@@ -651,12 +651,12 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
       tdata->max_cad = (int) thisw->cadence;
     }
 
-    if (thisw->creation_time && (thisw->creation_time < tdata->start)) {
-      tdata->start = thisw->creation_time;
+    if (thisw->GetCreationTime() && (thisw->GetCreationTime() < tdata->start)) {
+      tdata->start = thisw->GetCreationTime();
     }
 
     if (thisw->creation_time > tdata->end) {
-      tdata->end = thisw->creation_time;
+      tdata->end = thisw->GetCreationTime();
       if (tdata->start == 0) {
         tdata->start = tdata->end;
       }

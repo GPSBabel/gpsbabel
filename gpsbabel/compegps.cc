@@ -207,7 +207,7 @@ parse_wpt(char* buff)
       case 5:
         if (has_time) {
           compegps_parse_time(c, &tm);
-          wpt->creation_time = mkgmtime(&tm);
+          wpt->SetCreationTime(mkgmtime(&tm));
         }
       case 6:
         wpt->altitude = atof(c);
@@ -305,7 +305,7 @@ parse_trkpt(char* buff)
         break;
       case 5:
         compegps_parse_time(c, &tm);
-        wpt->creation_time = mkgmtime(&tm);
+        wpt->SetCreationTime(mkgmtime(&tm));
         break;
       case 7:
         wpt->altitude = atof(c);
@@ -562,7 +562,7 @@ write_trkpt_cb(const waypoint* wpt)
   buff[0] = '\0';
 
   if (wpt->creation_time != 0) {
-    const time_t tt = wpt->creation_time;
+    const time_t tt = wpt->GetCreationTime();
     struct tm tm = *gmtime(&tt);
 
     strftime(buff, sizeof(buff), "%d-%b-%y %H:%M:%S", &tm);

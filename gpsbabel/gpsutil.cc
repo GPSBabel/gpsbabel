@@ -114,7 +114,7 @@ data_read(void)
     wpt_tmp->altitude = alt;
     wpt_tmp->shortname = sn;
     wpt_tmp->description = xstrdup(desc);
-    wpt_tmp->creation_time = now;
+    wpt_tmp->SetCreationTime(now);
 
     if (latdir == 'S') {
       lat = -lat;

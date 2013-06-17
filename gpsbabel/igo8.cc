@@ -219,7 +219,7 @@ static void write_igo8_track_point(const waypoint* wpt)
   if (wpt->creation_time == 0) {
     le_write32(&point.unix_time, invented_time++);
   } else {
-    le_write32(&point.unix_time, wpt->creation_time);
+    le_write32(&point.unix_time, wpt->GetCreationTime());
   }
 
   // Write the first part of the Information Block, the start time

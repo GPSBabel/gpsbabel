@@ -659,3 +659,22 @@ waypt_empty_gc_data(const waypoint *wpt)
 {
   return (wpt->gc_data == &empty_gc_data);
 }
+
+QString
+waypoint::CreationTimeXML() const
+{
+  if (creation_time == 0) {
+    return NULL;
+  }
+
+  QDateTime dt = QDateTime::fromTime_t(creation_time);
+  dt = dt.addMSecs(MICRO_TO_MILLI(microseconds));
+  dt = dt.toUTC();
+
+  const char* format = "yyyy-MM-ddTHH:mm:ssZ";
+  if (dt.time().msec()) {
+    format = "yyyy-MM-ddTHH:mm:ss.zzzZ";
+  }
+
+  return dt.toString(format);
+}

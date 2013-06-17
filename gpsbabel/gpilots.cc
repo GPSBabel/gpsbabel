@@ -313,7 +313,7 @@ data_read(void)
            * Garmin/GPilotS count seconds from "UTC 12:00 AM December 31 1989".
            * gpsbabel counts seconds from "UTC 12:00 AM January 1 1970".
            */
-          wpt_tmp->creation_time = be_read32(&tp_cust->time) + 631065600;
+          wpt_tmp->SetCreationTime(be_read32(&tp_cust->time) + 631065600);
           fi.i = be_read32(&tp_cust->alt);
           wpt_tmp->altitude = fi.f;
           track_add_wpt(track_head, wpt_tmp);

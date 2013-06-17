@@ -254,7 +254,7 @@ data_read(void)
         tm.tm_year += 100;
       }
       wpt_tmp = waypt_new();
-      wpt_tmp->creation_time = mkgmtime(&tm);
+      wpt_tmp->SetCreationTime(mkgmtime(&tm));
       if (read_as_degrees) {
         wpt_tmp->longitude = lon;
         wpt_tmp->latitude = lat;
@@ -321,7 +321,7 @@ gpsutil_disp(const waypoint *wpt)
   double lon,lat;
   int icon_token = 0;
   char tbuf[1024];
-  time_t tm = wpt->creation_time;
+  time_t tm = wpt->GetCreationTime();
 
   lon = degrees2ddmm(wpt->longitude);
   lat = degrees2ddmm(wpt->latitude);
@@ -407,7 +407,7 @@ pcx_track_disp(const waypoint *wpt)
   lon = degrees2ddmm(wpt->longitude);
   lat = degrees2ddmm(wpt->latitude);
 
-  const time_t ct = wpt->creation_time;
+  const time_t ct = wpt->GetCreationTime();
   tm = gmtime(&ct);
 
   strftime(tbuf, sizeof(tbuf), "%d-%b-%y %H:%M:%S", tm);	/* currently ...%T does nothing under Windows */

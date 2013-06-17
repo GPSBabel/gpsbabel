@@ -179,7 +179,7 @@ ggv_log_read(void)
       tm.tm_year -= 1900;
       if (tm.tm_mon > 0) {
         tm.tm_mon--;
-        wpt->creation_time = mkgmtime(&tm);
+        wpt->SetCreationTime(mkgmtime(&tm));
       }
     }
 
@@ -224,7 +224,7 @@ ggv_log_track_head_cb(const route_head* trk)
     lonsec = 60.0 * (lonmin - floor(lonmin));
 
     if (wpt->creation_time > 0) {
-      tm = *gmtime(&wpt->creation_time);
+      tm = *gmtime(&wpt->GetCreationTime());
       tm.tm_mon += 1;
       tm.tm_year += 1900;
     } else {

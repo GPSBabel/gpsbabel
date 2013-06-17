@@ -437,8 +437,7 @@ process_pmtklox()
 
     if (global_opts.masked_objective & TRKDATAMASK) {
       trkpt  = waypt_new();
-      trkpt->creation_time = timestamp;
-      trkpt->microseconds = 0;
+      trkpt->SetCreationTime(timestamp);
       trkpt->latitude = latitude;
       trkpt->longitude = longitude;
       trkpt->altitude = height;
@@ -450,8 +449,7 @@ process_pmtklox()
 
     if (global_opts.masked_objective & WPTDATAMASK) {
       waypt  = waypt_new();
-      waypt->creation_time = timestamp;
-      waypt->microseconds = 0;
+      waypt->SetCreationTime(timestamp);
       waypt->latitude = latitude;
       waypt->longitude = longitude;
       waypt->altitude = height;

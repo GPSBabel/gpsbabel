@@ -703,7 +703,7 @@ static void Read_AN1_Waypoints(gbfile* f)
     wpt_tmp = waypt_new();
 
     if (rec->creation_time) {
-      wpt_tmp->creation_time = rec->creation_time;
+      wpt_tmp->SetCreationTime(rec->creation_time);
     }
     wpt_tmp->longitude = -DecodeOrd(rec->lon);
     wpt_tmp->latitude = DecodeOrd(rec->lat);
@@ -795,7 +795,7 @@ Write_One_AN1_Waypoint(const waypoint* wpt)
   }
 
 
-  rec->creation_time = rec->modification_time = wpt->creation_time;
+  rec->creation_time = rec->modification_time = wpt->GetCreationTime();
   rec->lat = EncodeOrd(wpt->latitude);
   rec->lon = EncodeOrd(-wpt->longitude);
   rec->serial = serial++;

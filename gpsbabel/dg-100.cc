@@ -282,7 +282,7 @@ process_gpsfile(gbuint8 data[], route_head** track)
     if (style >= 1) {
       bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
       bindate = be_read32(data + i + 12);
-      wpt->creation_time = bintime2utc(bindate, bintime);
+      wpt->SetCreationTime(bintime2utc(bindate, bintime));
       /* The device presents the speed as a fixed-point number
        * with a scaling factor of 100, in km/h.
        * The waypoint struct wants the speed as a

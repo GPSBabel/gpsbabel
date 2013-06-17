@@ -202,7 +202,7 @@ static int process_data(const unsigned char* data)
   case st_sample_alt:
     wpt = waypt_new();
     wpt->latitude = wpt->longitude = 0.0;
-    wpt->creation_time = creation;
+    wpt->SetCreationTime(creation);
     creation += interval;
     wpt->altitude = (data[0] << 8) + data[1];
     track_add_wpt(track, wpt);

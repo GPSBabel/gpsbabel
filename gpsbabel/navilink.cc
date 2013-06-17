@@ -415,7 +415,7 @@ decode_waypoint(const unsigned char* buffer)
   decode_position(buffer + 12, waypt);
   waypt->shortname = xstrdup((char*)buffer + 4);
   waypt->icon_descr = icon_table[buffer[28]];
-  waypt->creation_time = decode_datetime(buffer + 22);
+  waypt->SetCreationTime(decode_datetime(buffer + 22));
 
   return waypt;
 }
@@ -430,7 +430,7 @@ encode_waypoint(const waypoint* waypt, unsigned char* buffer)
   buffer[10] = 0;
   buffer[11] = 0;
   encode_position(waypt, buffer + 12);
-  encode_datetime(waypt->creation_time, buffer + 22);
+  encode_datetime(waypt->GetCreationTime(), buffer + 22);
   buffer[28] = find_icon_from_descr(waypt->icon_descr);
   buffer[29] = 0;
   buffer[30] = 0x00;
@@ -443,7 +443,7 @@ decode_trackpoint(const unsigned char* buffer)
   waypoint* waypt = waypt_new();
 
   decode_position(buffer + 12, waypt);
-  waypt->creation_time = decode_datetime(buffer + 22);
+  waypt->SetCreationTime(decode_datetime(buffer + 22));
   WAYPT_SET(waypt, course, le_read16(buffer + 2));
   WAYPT_SET(waypt, speed, KPH_TO_MPS(buffer[29] * 2));
 
@@ -465,7 +465,7 @@ encode_trackpoint(const waypoint* waypt, unsigned serial, unsigned char* buffer)
   le_write32(buffer + 4, x);
   le_write32(buffer + 8, y);
   encode_position(waypt, buffer + 12);
-  encode_datetime(waypt->creation_time, buffer + 22);
+  encode_datetime(waypt->GetCreationTime(), buffer + 22);
   buffer[28] = z;
   buffer[29] = MPS_TO_KPH(WAYPT_GET(waypt, speed, 0) / 2);
   buffer[30] = 0x5a;
@@ -852,7 +852,7 @@ navilink_decode_logpoint(const unsigned char* buffer)
   waypt->hdop = ((unsigned char)buffer[0]) * 0.2f;
   waypt->sat = buffer[1];
   waypt->microseconds = decode_sbp_usec(buffer + 2);
-  waypt->creation_time = decode_sbp_datetime_packed(buffer + 4);
+  waypt->SetCreationTime(decode_sbp_datetime_packed(buffer + 4));
   decode_sbp_position(buffer + 12, waypt);
   WAYPT_SET(waypt, speed, le_read16(buffer + 24) * 0.01f);
   WAYPT_SET(waypt, course, le_read16(buffer + 26) * 0.01f);

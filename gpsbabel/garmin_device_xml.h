@@ -1437,7 +1437,7 @@ gpx_write_common_position(const waypoint* waypointp, const char* indent)
               indent, waypointp->altitude);
   }
   if (waypointp->creation_time) {
-    xml_write_time(ofd, waypointp->creation_time, waypointp->microseconds, "time");
+    xml_write_time(ofd, waypointp->GetCreationTime(), waypointp->microseconds, "time");
   }
 }
 

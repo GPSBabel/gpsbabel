@@ -225,7 +225,7 @@ decode_sbn_datetime(const unsigned char *buffer, waypoint *waypt)
   tm.tm_mon = buffer[2] - 1;
   tm.tm_year = be_readu16(buffer) - 1900;
 
-  waypt->creation_time = mkgmtime(&tm);
+  waypt->SetCreationTime(mkgmtime(&tm));
   waypt->microseconds = (ms % 1000) * 1000;
 }
 

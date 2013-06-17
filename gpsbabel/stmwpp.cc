@@ -166,7 +166,7 @@ stmwpp_data_read(void)
     if (wpt != NULL) {
       time.tm_year -= 1900;
       time.tm_mon--;
-      wpt->creation_time = mkgmtime(&time);
+      wpt->SetCreationTime(mkgmtime(&time));
 
       switch (what) {
       case STM_WAYPT:
@@ -239,7 +239,7 @@ stmwpp_waypt_cb(const waypoint *wpt)
     return;
   }
 
-  const time_t tt = wpt->creation_time;
+  const time_t tt = wpt->GetCreationTime();
   tm = *gmtime(&tt);
   tm.tm_year += 1900;
   tm.tm_mon++;

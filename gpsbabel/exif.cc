@@ -1503,7 +1503,7 @@ exif_write(void)
       struct tm tm;
       char buf[32];
 
-      const time_t tt = wpt->creation_time;
+      const time_t tt = wpt->GetCreationTime();
       tm = *gmtime(&tt);
 
       tm.tm_year += 1900;

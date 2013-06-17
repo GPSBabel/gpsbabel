@@ -899,7 +899,7 @@ nmea_fix_timestamps(route_head* track)
           wpt->creation_time+=SECONDS_PER_DAY;
         }
       }
-      prev = wpt->creation_time;
+      prev = wpt->GetCreationTime();
     }
   }
 }
@@ -1261,19 +1261,19 @@ nmea_trackpt_pr(const waypoint* wpt)
       if (sleepus >= 0) {
         gb_sleep(sleepus);
       } else {
-        long wait_time = wpt->creation_time - last_time;
+        long wait_time = wpt->GetCreationTime() - last_time;
         if (wait_time > 0) {
           gb_sleep(wait_time * 1000000);
         }
       }
     }
-    last_time = wpt->creation_time;
+    last_time = wpt->GetCreationTime();
   }
 
   lat = degrees2ddmm(wpt->latitude);
   lon = degrees2ddmm(wpt->longitude);
 
-  time_t ct = wpt->creation_time;
+  time_t ct = wpt->GetCreationTime();
   tm = gmtime(&ct);
   if (tm) {
     hms = tm->tm_hour * 10000 + tm->tm_min * 100 + tm->tm_sec;

@@ -233,7 +233,8 @@ static void
 mapsend_read(void)
 {
   mapsend_hdr hdr;
-  int type, len;
+  int type;
+  gbsize_t len;
   char buf[3];
 
   /*
@@ -471,7 +472,7 @@ void mapsend_track_hdr(const route_head* trk)
 void mapsend_track_disp(const waypoint* wpt)
 {
   unsigned char c;
-  int t;
+  gbint32 t;
   static int last_time;
 
   /*
@@ -484,7 +485,7 @@ void mapsend_track_disp(const waypoint* wpt)
    *
    * This is rumoured (but yet unconfirmed) to be fixed in f/w 5.12.
    */
-  t = wpt->creation_time;
+  t = wpt->GetCreationTime();
   if (t < last_time)  {
     t = last_time;
   }

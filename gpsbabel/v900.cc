@@ -326,7 +326,7 @@ v900_read(void)
       int date, time;
       date = atoi(line.bas.common.date);
       time = atoi(line.bas.common.time);
-      wpt->creation_time = bintime2utc(date, time);
+      wpt->SetCreationTime(bintime2utc(date, time));
     }
 
     wpt->speed = KPH_TO_MPS(atoi(line.bas.common.speed));

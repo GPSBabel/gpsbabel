@@ -1148,7 +1148,7 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
       testwpt = (waypoint*)elem;
       if (rte_datapoints == 0) {
-        uniqueValue = testwpt->creation_time;
+        uniqueValue = testwpt->GetCreationTime();
       }
       if (testwpt->latitude > maxlat) {
         maxlat = testwpt->latitude;
@@ -1544,8 +1544,7 @@ mps_track_r(gbfile* mps_file, int mps_ver, route_head** trk)
     thisWaypoint = waypt_new();
     thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
     thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
-    thisWaypoint->creation_time = dateTime;
-    thisWaypoint->microseconds = 0;
+    thisWaypoint->SetCreationTime(dateTime);
     thisWaypoint->altitude = mps_altitude;
     if (mps_depth != unknown_alt) {
       WAYPT_SET(thisWaypoint, depth, mps_depth);
@@ -1582,7 +1581,7 @@ mps_trackhdr_w(gbfile* mps_file, int mps_ver, const route_head* trk)
     QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
       if (trk_datapoints == 0) {
         testwpt = (waypoint*)elem;
-        uniqueValue = testwpt->creation_time;
+        uniqueValue = testwpt->GetCreationTime();
       }
       trk_datapoints++;
     }
@@ -1637,7 +1636,7 @@ static void
 mps_trackdatapoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt)
 {
   int lat, lon;
-  time_t	t = wpt->creation_time;
+  time_t	t = wpt->GetCreationTime();
   char zbuf[10];
 
   double	mps_altitude = wpt->altitude;

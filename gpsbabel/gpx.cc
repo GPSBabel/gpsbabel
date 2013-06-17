@@ -31,6 +31,7 @@ static XML_Parser psr;
 #include <QtCore/QRegExp>
 //#include <QtCore/QTextCodec>
 #include <QtXml/QXmlStreamAttributes>
+#include <QtCore/QDebug>
 
 
 static xml_tag* cur_tag;
@@ -844,7 +845,7 @@ gs_get_container(geocache_container t)
   return "Unknown";
 }
 
-time_t
+gpsbabel::DateTime
 xml_parse_time(const char* cdatastr, int* microsecs)
 {
   int off_hr = 0;
@@ -909,7 +910,18 @@ xml_parse_time(const char* cdatastr, int* microsecs)
 
   xfree(timestr);
 
-  return rv;
+  // TOOD(robertlipe) - This really is a groady hack to shim in 
+  // the old interface (which had an explicit microsecs pointer argument
+  // as an optional output value) and the new form which uses QDateTime
+  // but, because of the above hackery, doesn't really work outside 1970
+  // 2038 but which we can't replace until Steven upgrades Qt.
+  // Baby steps.
+  QDateTime dt = QDateTime::fromTime_t(rv);
+  if (microsecs) {
+    dt = dt.addMSecs(*microsecs / 1000);
+// qDebug() << dt.toString("dd.MM.yyyy hh:mm:ss.zzz")  << " ZZZ " << *microsecs;
+  }
+  return dt;
 }
 
 static void
@@ -1131,7 +1143,7 @@ gpx_end(void* data, const XML_Char* xml_el)
   case tt_wpt_time:
   case tt_trk_trkseg_trkpt_time:
   case tt_rte_rtept_time:
-    wpt_tmp->creation_time = xml_parse_time(cdatastrp, &wpt_tmp->microseconds);
+    wpt_tmp->SetCreationTime(xml_parse_time(cdatastrp, &wpt_tmp->microseconds));
     break;
   case tt_wpt_cmt:
   case tt_rte_rtept_cmt:
@@ -1437,7 +1449,7 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
           strcmp(tag->tagname, "groundspeak:cache") == 0) {
         char time_string[64];
         xml_fill_in_time(time_string, wpt->gc_data->exported,
-                         0, XML_LONG_TIME);
+                         XML_LONG_TIME);
         if (time_string[0]) {
           writer.writeTextElement("time", time_string);
         }
@@ -1569,15 +1581,8 @@ gpx_write_common_position(const waypoint* waypointp)
   if (waypointp->altitude != unknown_alt) {
     writer.writeTextElement("ele", QString::number(waypointp->altitude, 'f', 6));
   }
-  if (waypointp->creation_time) {
-    char time_string[64];
-    // FIXME: Eventually use creation_time.toString()
-    xml_fill_in_time(time_string, waypointp->creation_time,
-                     waypointp->microseconds, XML_LONG_TIME);
-    if (time_string[0]) {
-      writer.writeTextElement("time", time_string);
-    }
-  }
+  QString t = waypointp->CreationTimeXML();
+  writer.writeOptionalTextElement("time", t);
 }
 
 static void
@@ -1946,7 +1951,7 @@ gpx_write(void)
 
   now = current_time();
   char time_string[64];
-  xml_fill_in_time(time_string, now, 0, XML_LONG_TIME);
+  xml_fill_in_time(time_string, now, XML_LONG_TIME);
   if (time_string[0]) {
     writer.writeTextElement("time", time_string);
   }

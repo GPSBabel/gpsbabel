@@ -129,7 +129,7 @@ hiketech_trkpt_pr(const waypoint* waypointp)
 {
   gbfprintf(ofd, " <pnt>\n");
   if (waypointp->creation_time) {
-    hiketech_print_utc(waypointp->creation_time, "  ", "utc");
+    hiketech_print_utc(waypointp->GetCreationTime(), "  ", "utc");
   }
   gbfprintf(ofd, "  <lat>%f</lat>\n", waypointp->latitude);
   gbfprintf(ofd, "  <long>%f</long>\n", waypointp->longitude);
@@ -259,7 +259,7 @@ void	ht_trk_utc(const char* args, const char** unused)
 
   utc = mkgmtime(&tm);
 
-  wpt_tmp->creation_time = utc;
+  wpt_tmp->SetCreationTime(utc);
 }
 
 static

@@ -993,8 +993,7 @@ mag_trkparse(char* trkmsg)
   dmy = dmy / 100;
   tm.tm_mday = dmy % 100;
 
-  waypt->creation_time = mkgmtime(&tm);
-  waypt->microseconds = CENTI_TO_MICRO(fracsecs);
+  waypt->SetCreationTime(mkgmtime(&tm), CENTI_TO_MICRO(fracsecs));
 
   if (latdir == 'S') {
     latdeg = -latdeg;
@@ -1443,7 +1442,7 @@ void mag_track_disp(const waypoint* waypointp)
   ilon = waypointp->longitude;
   tm = NULL;
   if (waypointp->creation_time) {
-    const time_t ct = waypointp->creation_time;
+    const time_t ct = waypointp->GetCreationTime();
     tm = gmtime(&ct);
     if (tm) {
       hms = tm->tm_hour * 10000 + tm->tm_min  * 100 +
