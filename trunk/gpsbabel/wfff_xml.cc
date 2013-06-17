@@ -173,7 +173,7 @@ void wfff_chan(const char *args, const char **unused)
 void wfff_first(const char *args, const char **unused)
 {
   if (args) {
-    ap_first = xml_parse_time(args, NULL);
+    ap_first = xml_parse_time(args);
   }
 }
 

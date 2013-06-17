@@ -147,7 +147,7 @@ void	gl_trk_pnt_e(const char* args, const char** unused)
 
 void	gl_trk_utc(const char* args, const char** unused)
 {
-  wpt_tmp->SetCreationTime(xml_parse_time(args, &wpt_tmp->microseconds));
+  wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
 
 void	gl_trk_lat(const char* args, const char** unused)

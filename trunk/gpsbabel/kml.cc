@@ -319,7 +319,7 @@ void wpt_desc(const char* args, const char** unused)
 
 void wpt_time(const char* args, const char** unused)
 {
-  wpt_tmp->creation_time = xml_parse_time(args, &wpt_tmp->microseconds);
+  wpt_tmp->creation_time = xml_parse_time(args);
 }
 
 void wpt_coord(const char* args, const char** attrv)
@@ -1349,7 +1349,7 @@ char* kml_geocache_get_logs(const waypoint* wpt)
 
     logpart = xml_findfirst(curlog, "groundspeak:date");
     if (logpart) {
-      logtime = xml_parse_time(logpart->cdata, NULL);
+      logtime = xml_parse_time(logpart->cdata);
       struct tm* logtm = localtime(&logtime);
       if (logtm) {
         char* temp;

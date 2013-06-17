@@ -210,8 +210,8 @@ read_track_point(cetus_track_point_t* data, const time_t basetime)
     break;			/* no GPS */
   }
 
-  wpt->creation_time = basetime +
-                       ((data->hour & 0x1F) * 3600) + (data->min * 60) + data->sec;
+  wpt->SetCreationTime(basetime +
+                       ((data->hour & 0x1F) * 3600) + (data->min * 60) + data->sec);
   if (data->dsec) {
     wpt->microseconds = (int)data->dsec * 10000;
   }

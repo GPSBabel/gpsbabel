@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <QtCore/QDebug>
 
 #include "defs.h"
 #include "cet_util.h"
@@ -667,9 +668,10 @@ waypoint::CreationTimeXML() const
     return NULL;
   }
 
-  QDateTime dt = QDateTime::fromTime_t(creation_time);
+  QDateTime dt = GetCreationTime();
   dt = dt.addMSecs(MICRO_TO_MILLI(microseconds));
   dt = dt.toUTC();
+// qDebug() << dt.toString("dd.MM.yyyy hh:mm:ss.zzz")  << " CML " << microseconds;
 
   const char* format = "yyyy-MM-ddTHH:mm:ssZ";
   if (dt.time().msec()) {

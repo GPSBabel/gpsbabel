@@ -660,7 +660,7 @@ gtm_read(void)
     wpt->latitude = fread_double(file_in);
     wpt->longitude = fread_double(file_in);
     convert_datum(&wpt->latitude, &wpt->longitude);
-    wpt->creation_time = fread_long(file_in);
+    wpt->SetCreationTime(fread_long(file_in));
     if (wpt->creation_time) {
       wpt->creation_time += EPOCH89DIFF;
     }

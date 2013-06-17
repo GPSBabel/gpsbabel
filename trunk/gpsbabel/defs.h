@@ -34,6 +34,7 @@
 #include "inifile.h"
 #include "session.h"
 
+#include <QtCore/QDebug>
 # include "src/core/datetime.h"
 
 // Turn on Unicode in expat?
@@ -526,11 +527,23 @@ public:
   wp_flags wpt_flags;
   QString icon_descr;
 
-  gpsbabel::DateTime  GetCreationTime() const { return creation_time; }
-  void SetCreationTime(time_t t) { creation_time = t; }
+  gpsbabel::DateTime  GetCreationTime() const {
+//QDateTime dt(creation_time);
+//qDebug() << dt.toString("dd.MM.yyyy hh:mm:ss.zzz");
+//fprintf(stderr, "ng %d\n", (int)creation_time);
+   return creation_time;
+}
+  void SetCreationTime(gpsbabel::DateTime t) { creation_time = t; 
+//qDebug() << t.toString("dd.MM.yyyy hh:mm:ss.zzz");
+//fprintf(stderr, "ns %d\n", (int)t);
+}
+  void SetCreationTime(time_t t) { creation_time = t; 
+//fprintf(stderr, "t %d\n", (int)t);
+}
   void SetCreationTime(time_t t, int us) {
     creation_time = t; 
     microseconds = us;
+//fprintf(stderr, "t/us %d %d\n", (int)t, us);
   }
   gpsbabel::DateTime creation_time;
   int microseconds;	/* Optional millionths of a second. */
@@ -1017,7 +1030,7 @@ const char* get_filename(const char* fname);			/* extract the filename portion *
 #define str_iso8859_1_to_utf8(str) cet_str_iso8859_1_to_utf8((str))
 
 /* this lives in gpx.c */
-gpsbabel::DateTime xml_parse_time(const char* cdatastr, int* microsecs);
+gpsbabel::DateTime xml_parse_time(const char* cdatastr);
 
 xml_tag* xml_findfirst(xml_tag* root, const char* tagname);
 xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname);

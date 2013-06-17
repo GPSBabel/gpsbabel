@@ -112,7 +112,7 @@ xol_shape(const char *args, const char **attrv)
       }
     } else if (strcmp(avp[0], "timestamp") == 0) {
       if (wpt) {
-        wpt->creation_time = xml_parse_time(avp[1], &wpt->microseconds);
+        wpt->creation_time = xml_parse_time(avp[1]);
       }
     } else if (strcmp(avp[0], "icon") == 0) {
       if (wpt) {

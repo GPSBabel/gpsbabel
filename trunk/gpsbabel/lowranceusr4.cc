@@ -441,8 +441,8 @@ lowranceusr4_parse_waypoints(void)
     // with, as a practical matter, we have no date, so don't even compute
     // or set it.
     if (create_date > 2440587) {
-      wpt_tmp->creation_time = lowranceusr4_get_timestamp(create_date,
-                                                          create_time);
+      wpt_tmp->SetCreationTime(lowranceusr4_get_timestamp(create_date,
+                                                          create_time));
     }
 
     /* Unused byte */
@@ -810,8 +810,8 @@ lowranceusr4_waypt_disp(const waypoint* wpt)
   gbfputflt(WAYPT_GET(wpt, proximity, 0.0), file_out);
 
   /* Creation date/time */
-  gbfputint32(lowranceusr4_jd_from_timestamp(wpt->creation_time), file_out);
-  gbfputint32(wpt->creation_time, file_out);
+  gbfputint32(lowranceusr4_jd_from_timestamp(wpt->GetCreationTime()), file_out);
+  gbfputint32(wpt->GetCreationTime(), file_out);
 
   /* Unused byte */
   gbfputc(0, file_out);
@@ -982,7 +982,7 @@ lowranceusr4_write_track_waypt(const waypoint* wpt)
   gbfputc(0, file_out);
 
   /* Timestamp */
-  gbfputint32(wpt->creation_time, file_out);
+  gbfputint32(wpt->GetCreationTime(), file_out);
 
   /* Long/Lat */
   gbfputdbl(wpt->longitude * DEGREESTORADIANS, file_out);

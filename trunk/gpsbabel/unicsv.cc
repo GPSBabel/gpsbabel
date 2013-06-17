@@ -947,7 +947,7 @@ unicsv_parse_one_line(char *ibuf)
 
     case fld_iso_time:
       is_localtime = 2;	/* fix result */
-      wpt->creation_time = xml_parse_time(s, &wpt->microseconds);
+      wpt->SetCreationTime(xml_parse_time(s));
       break;
 
     case fld_time:
@@ -1149,17 +1149,17 @@ unicsv_parse_one_line(char *ibuf)
         struct tm tm;
         tm = *gmtime(&t);
         if (opt_utc) {
-          wpt->creation_time = mkgmtime(&tm);
+          wpt->SetCreationTime(mkgmtime(&tm));
         } else {
-          wpt->creation_time = mklocaltime(&tm);
+          wpt->SetCreationTime(mklocaltime(&tm));
         }
       } else {
-        wpt->creation_time = t;
+        wpt->SetCreationTime(t);
       }
     } else if (time >= 0) {
-      wpt->creation_time = time;
+      wpt->SetCreationTime(time);
     } else if (date >= 0) {
-      wpt->creation_time = date;
+      wpt->SetCreationTime(date);
     } else if (ymd.tm_year || ymd.tm_mon || ymd.tm_mday) {
       if (ymd.tm_year < 100) {
         if (ymd.tm_year <= 70) {
