@@ -519,7 +519,7 @@ gtc_trk_pnt_e(const char* args, const char** unused)
 void
 gtc_trk_utc(const char* args, const char** unused)
 {
-  wpt_tmp->creation_time = xml_parse_time(args, NULL);
+  wpt_tmp->creation_time = xml_parse_time(args);
 }
 
 void

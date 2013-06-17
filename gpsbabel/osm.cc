@@ -527,7 +527,7 @@ osm_node(const char* args, const char** attrv)
     } else if (strcmp(avp[0], "lon") == 0) {
       wpt->longitude = atof(avp[1]);
     } else if (strcmp(avp[0], "timestamp") == 0) {
-      wpt->creation_time = xml_parse_time(avp[1], &wpt->microseconds);
+      wpt->creation_time = xml_parse_time(avp[1]);
     }
 
     avp += 2;

@@ -214,7 +214,7 @@ mapsend_track_read(void)
     if (wpt_tmp->altitude < unknown_alt + 1) {
       wpt_tmp->altitude = unknown_alt;
     }
-    wpt_tmp->creation_time = gbfgetint32(mapsend_file_in);
+    time_t t = gbfgetint32(mapsend_file_in);
     valid = gbfgetint32(mapsend_file_in);
 
     /* centiseconds only in >= version 3.0 */
@@ -223,7 +223,7 @@ mapsend_track_read(void)
     } else {
       centisecs = 0;
     }
-    wpt_tmp->microseconds = CENTI_TO_MICRO(centisecs);
+    wpt_tmp->SetCreationTime(t, CENTI_TO_MICRO(centisecs));
 
     track_add_wpt(track_head, wpt_tmp);
   }

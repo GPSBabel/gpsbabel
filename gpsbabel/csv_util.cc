@@ -1220,7 +1220,7 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     break;
   case XT_ISO_TIME:
   case XT_ISO_TIME_MS:
-    wpt->creation_time = xml_parse_time(s, &wpt->microseconds);
+    wpt->creation_time = xml_parse_time(s);
     break;
   case XT_NET_TIME: {
     time_t tt = wpt->GetCreationTime();

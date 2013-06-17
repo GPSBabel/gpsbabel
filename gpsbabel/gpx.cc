@@ -846,7 +846,7 @@ gs_get_container(geocache_container t)
 }
 
 gpsbabel::DateTime
-xml_parse_time(const char* cdatastr, int* microsecs)
+xml_parse_time(const char* cdatastr)
 {
   int off_hr = 0;
   int off_min = 0;
@@ -884,14 +884,16 @@ xml_parse_time(const char* cdatastr, int* microsecs)
     }
   }
 
+  double fsec = 0;
   pointstr = strchr(timestr, '.');
   if (pointstr) {
+    sscanf(pointstr, "%le", &fsec);
+#if 0
+    /* Round to avoid FP jitter */
     if (microsecs) {
-      double fsec;
-      sscanf(pointstr, "%le", &fsec);
-      /* Round to avoid FP jitter */
       *microsecs = .5 + (fsec * 1000000.0) ;
     }
+#endif
     *pointstr = '\0';
   }
 
@@ -917,9 +919,9 @@ xml_parse_time(const char* cdatastr, int* microsecs)
   // 2038 but which we can't replace until Steven upgrades Qt.
   // Baby steps.
   QDateTime dt = QDateTime::fromTime_t(rv);
-  if (microsecs) {
-    dt = dt.addMSecs(*microsecs / 1000);
-// qDebug() << dt.toString("dd.MM.yyyy hh:mm:ss.zzz")  << " ZZZ " << *microsecs;
+  if (fsec) {
+    dt = dt.addMSecs(fsec * 1000);
+// qDebug() << dt.toString("dd.MM.yyyy hh:mm:ss.zzz")  << " ZZZ " << fsec;
   }
   return dt;
 }
@@ -1025,7 +1027,7 @@ gpx_end(void* data, const XML_Char* xml_el)
     waypt_alloc_gc_data(wpt_tmp)->placer = xstrdup(cdatastrp);
     break;
   case tt_cache_log_date:
-    gc_log_date = xml_parse_time(cdatastrp, NULL);
+    gc_log_date = xml_parse_time(cdatastrp);
     break;
     /*
      * "Found it" logs follow the date according to the schema,
@@ -1143,7 +1145,7 @@ gpx_end(void* data, const XML_Char* xml_el)
   case tt_wpt_time:
   case tt_trk_trkseg_trkpt_time:
   case tt_rte_rtept_time:
-    wpt_tmp->SetCreationTime(xml_parse_time(cdatastrp, &wpt_tmp->microseconds));
+    wpt_tmp->SetCreationTime(xml_parse_time(cdatastrp));
     break;
   case tt_wpt_cmt:
   case tt_rte_rtept_cmt:

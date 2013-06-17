@@ -359,15 +359,13 @@ static void
 nmea_set_waypoint_time(waypoint* wpt, struct tm* time, int microseconds)
 {
   if (time->tm_year == 0) {
-    wpt->creation_time = ((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec;
-    wpt->microseconds = microseconds;
+    wpt->SetCreationTime(((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec, microseconds);
     if (wpt->wpt_flags.fmt_use == 0) {
       wpt->wpt_flags.fmt_use = 1;
       without_date++;
     }
   } else {
-    wpt->creation_time = mkgmtime(time);
-    wpt->microseconds = microseconds;
+    wpt->SetCreationTime(mkgmtime(time), microseconds);
     if (wpt->wpt_flags.fmt_use != 0) {
       wpt->wpt_flags.fmt_use = 0;
       without_date--;

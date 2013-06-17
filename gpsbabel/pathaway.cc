@@ -465,7 +465,7 @@ int ppdb_read_wpt(route_head *head, int isRoute)
         if (ppdb_decode_tm(str, &tm)) {
           tm.tm_year -= 1900;
           tm.tm_mon--;
-          wpt_tmp->creation_time = mkgmtime(&tm);
+          wpt_tmp->SetCreationTime(mkgmtime(&tm));
         }
         break;
       case 5:		/* name */
