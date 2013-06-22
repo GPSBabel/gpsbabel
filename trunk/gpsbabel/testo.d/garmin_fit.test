@@ -10,3 +10,6 @@ compare ${REFERENCE}/track/garmin-edge-200-output.gpx ${TMPDIR}/fit-sample.gpx
 
 gpsbabel -i garmin_fit -f ${REFERENCE}/track/garmin-edge-800.fit -o gpx -F ${TMPDIR}/fit-sample-800.gpx
 compare ${REFERENCE}/track/garmin-edge-800-output.gpx ${TMPDIR}/fit-sample-800.gpx
+
+gpsbabel -i garmin_fit -f ${REFERENCE}/track/garmin-forerunner-10.fit -o gpx -F ${TMPDIR}/fit-sample-10.gpx
+compare ${REFERENCE}/track/garmin-forerunner-10-output.gpx ${TMPDIR}/fit-sample-10.gpx
