@@ -362,7 +362,7 @@ lon_mm_to_deg(double x)
 static long
 lon_deg_to_mm(double x)
 {
-  return (long)(x * SEMIMINOR * DEGREESTORADIANS);
+  return lround(x * SEMIMINOR * DEGREESTORADIANS);
 }
 
 static double
