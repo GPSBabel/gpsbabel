@@ -24,6 +24,8 @@
 #include "inifile.h"
 #include "gbversion.h"
 
+#include <QtCore/QStringList>
+
 typedef struct {
   filter_vecs_t* vec;
   const char* name;
@@ -156,14 +158,14 @@ find_filter_vec(char* const vecname, char** opts)
 {
   fl_vecs_t* vec = filter_vec_list;
   char* v = xstrdup(vecname);
-  char* svecname = strtok(v, ",");
+  QString svecname = QString(v).split(",")[0];
   int found = 0;
 
   while (vec->vec) {
     arglist_t* ap;
     char* res;
 
-    if (case_ignore_strcmp(svecname, vec->name)) {
+    if (svecname.compare(vec->name, Qt::CaseInsensitive)) {
       vec++;
       continue;
     }
