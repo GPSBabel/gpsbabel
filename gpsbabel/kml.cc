@@ -1084,7 +1084,6 @@ void kml_gc_make_balloonstyletext(void)
   QString cdataStr;
 
   writer->writeStartElement("BalloonStyle");
-  AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
   writer->writeStartElement("text");
   cdataStr.append("\n");
 
@@ -1149,7 +1148,6 @@ void kml_gc_make_balloonstyletext(void)
   writer->writeCDATA(cdataStr);
   writer->writeEndElement(); // Close text tag
   writer->writeEndElement(); // Close BalloonStyle tag
-  AUTOFORMATTING_RESTORE(af);
 }
 
 static
@@ -1395,42 +1393,34 @@ static void kml_write_data_element(const char* name, const QString& value)
 {
   writer->writeStartElement("Data");
   writer->writeAttribute("name", name);
-  AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
   writer->writeTextElement("value", value);
   writer->writeEndElement(); // Close Data tag
-  AUTOFORMATTING_RESTORE(af);
 }
 
 static void kml_write_data_element(const char* name, const int value)
 {
   writer->writeStartElement("Data");
   writer->writeAttribute("name", name);
-  AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
   writer->writeTextElement("value", QString::number(value));
   writer->writeEndElement(); // Close Data tag
-  AUTOFORMATTING_RESTORE(af);
 }
 
 static void kml_write_data_element(const char* name, const double value)
 {
   writer->writeStartElement("Data");
   writer->writeAttribute("name", name);
-  AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
   writer->writeTextElement("value", QString::number(value, 'f', 6));
   writer->writeEndElement(); // Close Data tag
-  AUTOFORMATTING_RESTORE(af);
 }
 
 static void kml_write_cdata_element(const char* name, const QString& value)
 {
   writer->writeStartElement("Data");
   writer->writeAttribute("name", name);
-  AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
   writer->writeStartElement("value");
   writer->writeCDATA(value);
   writer->writeEndElement(); // Close value tag
   writer->writeEndElement(); // Close Data tag
-  AUTOFORMATTING_RESTORE(af);
 }
 
 static void kml_geocache_pr(const waypoint* waypointp)
