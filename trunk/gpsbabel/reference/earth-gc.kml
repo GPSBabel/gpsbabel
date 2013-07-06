@@ -45,7 +45,8 @@
       <LabelStyle>
         <scale>0</scale>
       </LabelStyle>
-      <BalloonStyle><text><![CDATA[
+      <BalloonStyle>
+        <text><![CDATA[
 <!DOCTYPE html>
         <html>
         <head>
@@ -122,7 +123,8 @@
         </div>
         </body>
         </html>
-      ]]></text></BalloonStyle>
+]]></text>
+      </BalloonStyle>
     </Style>
     <Style id="geocache_h">
       <IconStyle>
@@ -131,7 +133,8 @@
       <LabelStyle>
         <scale>1</scale>
       </LabelStyle>
-      <BalloonStyle><text><![CDATA[
+      <BalloonStyle>
+        <text><![CDATA[
 <!DOCTYPE html>
         <html>
         <head>
@@ -208,7 +211,8 @@
         </div>
         </body>
         </html>
-      ]]></text></BalloonStyle>
+]]></text>
+      </BalloonStyle>
     </Style>
     <StyleMap id="geocache">
       <Pair>
@@ -236,22 +240,51 @@
           </IconStyle>
         </Style>
         <ExtendedData>
-          <Data name="gc_num"><value>GC7FA4</value></Data>
-          <Data name="gc_name"><value>Points géodésiques du Québec</value></Data>
-          <Data name="gc_placer"><value>Sverdrup2</value></Data>
-          <Data name="gc_placer_id"><value>6293</value></Data>
-          <Data name="gc_placed"><value>15-Aug-2002</value></Data>
-          <Data name="gc_diff_stars"><value>stars1</value></Data>
-          <Data name="gc_terr_stars"><value>stars1</value></Data>
-          <Data name="gc_cont_icon"><value>virtual</value></Data>
-          <Data name="gc_issues"><value></value></Data>
-          <Data name="gc_lat"><value>46.133333</value></Data>
-          <Data name="gc_lon"><value>-73.000000</value></Data>
-          <Data name="gc_type"><value>Locationless (Reverse) Cache</value></Data>
-          <Data name="gc_icon"><value>http://www.geocaching.com/images/kml/8.png</value></Data>
-          <Data name="gc_short_desc"><value><![CDATA[LES COORDONÉES PUBLIÉES NE REPRÉSENTENT PAS LA LOCALISATION D'UNE CACHE
-PUBLISHED COORDINATES DO NOT REPRESENT THE LOCALIZATION OF A CACHE]]></value></Data>
-          <Data name="gc_long_desc"><value><![CDATA[Le but de cette cache virtuelle est de trouver les points géodésiques du territoire québécois. Les points géodésiques sont faciles à identifier (capuchons de laiton au niveau du sol). Généralement, il y a un panneau de couleur orange sur un poteau à proximité du point. Sur ce panneau, le numéro du point est identifié. Aussi, la distance relative du panneau au point est indiquée. 
+          <Data name="gc_num">
+            <value>GC7FA4</value>
+          </Data>
+          <Data name="gc_name">
+            <value>Points géodésiques du Québec</value>
+          </Data>
+          <Data name="gc_placer">
+            <value>Sverdrup2</value>
+          </Data>
+          <Data name="gc_placer_id">
+            <value>6293</value>
+          </Data>
+          <Data name="gc_placed">
+            <value>15-Aug-2002</value>
+          </Data>
+          <Data name="gc_diff_stars">
+            <value>stars1</value>
+          </Data>
+          <Data name="gc_terr_stars">
+            <value>stars1</value>
+          </Data>
+          <Data name="gc_cont_icon">
+            <value>virtual</value>
+          </Data>
+          <Data name="gc_issues">
+            <value></value>
+          </Data>
+          <Data name="gc_lat">
+            <value>46.133333</value>
+          </Data>
+          <Data name="gc_lon">
+            <value>-73.000000</value>
+          </Data>
+          <Data name="gc_type">
+            <value>Locationless (Reverse) Cache</value>
+          </Data>
+          <Data name="gc_icon">
+            <value>http://www.geocaching.com/images/kml/8.png</value>
+          </Data>
+          <Data name="gc_short_desc">
+            <value><![CDATA[LES COORDONÉES PUBLIÉES NE REPRÉSENTENT PAS LA LOCALISATION D'UNE CACHE
+PUBLISHED COORDINATES DO NOT REPRESENT THE LOCALIZATION OF A CACHE]]></value>
+          </Data>
+          <Data name="gc_long_desc">
+            <value><![CDATA[Le but de cette cache virtuelle est de trouver les points géodésiques du territoire québécois. Les points géodésiques sont faciles à identifier (capuchons de laiton au niveau du sol). Généralement, il y a un panneau de couleur orange sur un poteau à proximité du point. Sur ce panneau, le numéro du point est identifié. Aussi, la distance relative du panneau au point est indiquée. 
 <P>
 Pour inscrire votre découverte, vous devez prendre en note le NUMÉRO DU POINT(inscrit sur le point même ou au centre du panneau)LA COORDONNÉE(en format HDDD MM.MM WGS84 datum ET UTM NAD83 indiquer la zone SVP)et L'ALTITUDE RELATIVE. Si le points n'est pas visible (il se peut qu'il soit sous quelques centimètres de terre) vous pouvez prendre la coordonnée à l'emplacement du panneau SI LA PRÉCISION DE VOTRE GPS EST SUPÉRIEUR À LA DISTANCE INSCRITE SUR LE PANNEAU (ex : Précison du GPS de 5m et distance au point inscrite sur le panneau de 3m).
 <P>
@@ -285,8 +318,10 @@ And all old names of ministries and/or organization
 <P>
 
 PICTURES of points and of the panels will follow soon. YOU CAN ONLY LOG ONE POINT (ONE POINT PER GEOCACHER)
-Good luck!]]></value></Data>
-          <Data name="gc_logs"><value><![CDATA[<p><b>Found it</b> by Christopher R & Pooh B 2005-07-12<br />This marker is not in Quebec but it is a Geodesic marker in Clarenville, Newfoundland, Canada!
+Good luck!]]></value>
+          </Data>
+          <Data name="gc_logs">
+            <value><![CDATA[<p><b>Found it</b> by Christopher R & Pooh B 2005-07-12<br />This marker is not in Quebec but it is a Geodesic marker in Clarenville, Newfoundland, Canada!
 
 Found this one while hunting a traditional cache and thought of this cache right away! 
 
@@ -328,7 +363,8 @@ Judging by the coordinates it looks like the coords should be 45°29'31.5&quot; 
 </p><p><b>Found it</b> by Gps_Gulliver&DauphinBleu 2005-05-29<br />Point Geodesique situe near Port de Plaisance de Longueuil
 sur le bord du fleuve st-laurent.
 Il y a des sentiers et une grande piste cyclable
-Enjoy !</p>]]></value></Data>
+Enjoy !</p>]]></value>
+          </Data>
         </ExtendedData>
         <Point>
           <coordinates>-73.000000,46.133333</coordinates>
@@ -348,21 +384,50 @@ Enjoy !</p>]]></value></Data>
           </IconStyle>
         </Style>
         <ExtendedData>
-          <Data name="gc_num"><value>GCGCA8</value></Data>
-          <Data name="gc_name"><value>Oozy rat in a sanitary zoo</value></Data>
-          <Data name="gc_placer"><value>robertlipe</value></Data>
-          <Data name="gc_placer_id"><value>32733</value></Data>
-          <Data name="gc_placed"><value>29-Jun-2003</value></Data>
-          <Data name="gc_diff_stars"><value>stars3</value></Data>
-          <Data name="gc_terr_stars"><value>stars2</value></Data>
-          <Data name="gc_cont_icon"><value>not_chosen</value></Data>
-          <Data name="gc_issues"><value></value></Data>
-          <Data name="gc_lat"><value>35.921667</value></Data>
-          <Data name="gc_lon"><value>-86.861667</value></Data>
-          <Data name="gc_type"><value>Unknown Cache</value></Data>
-          <Data name="gc_icon"><value>http://www.geocaching.com/images/kml/8.png</value></Data>
-          <Data name="gc_short_desc"><value><![CDATA[The cache is not at the coordinates above.   These coords will get you to the correct park and within 1/2 mile of the cache.  The cache is within 35 feet of the trail.   It is not handicapped accessible.   It is a nice walk in the woods that is practical for all ages.  There is no space in the container for trading items.   You should bring a writing stick and bug spray is recommended.]]></value></Data>
-          <Data name="gc_long_desc"><value><![CDATA[So if the cache isn't at the above coordinates, where is it?  
+          <Data name="gc_num">
+            <value>GCGCA8</value>
+          </Data>
+          <Data name="gc_name">
+            <value>Oozy rat in a sanitary zoo</value>
+          </Data>
+          <Data name="gc_placer">
+            <value>robertlipe</value>
+          </Data>
+          <Data name="gc_placer_id">
+            <value>32733</value>
+          </Data>
+          <Data name="gc_placed">
+            <value>29-Jun-2003</value>
+          </Data>
+          <Data name="gc_diff_stars">
+            <value>stars3</value>
+          </Data>
+          <Data name="gc_terr_stars">
+            <value>stars2</value>
+          </Data>
+          <Data name="gc_cont_icon">
+            <value>not_chosen</value>
+          </Data>
+          <Data name="gc_issues">
+            <value></value>
+          </Data>
+          <Data name="gc_lat">
+            <value>35.921667</value>
+          </Data>
+          <Data name="gc_lon">
+            <value>-86.861667</value>
+          </Data>
+          <Data name="gc_type">
+            <value>Unknown Cache</value>
+          </Data>
+          <Data name="gc_icon">
+            <value>http://www.geocaching.com/images/kml/8.png</value>
+          </Data>
+          <Data name="gc_short_desc">
+            <value><![CDATA[The cache is not at the coordinates above.   These coords will get you to the correct park and within 1/2 mile of the cache.  The cache is within 35 feet of the trail.   It is not handicapped accessible.   It is a nice walk in the woods that is practical for all ages.  There is no space in the container for trading items.   You should bring a writing stick and bug spray is recommended.]]></value>
+          </Data>
+          <Data name="gc_long_desc">
+            <value><![CDATA[So if the cache isn't at the above coordinates, where is it?  
 
 <ul>
 
@@ -377,9 +442,12 @@ Enjoy !</p>]]></value></Data>
 
 Now that it's intuitively obvious to even the most casual observer where the cache is, turn on your geo-mojo and go find it.
 <br>
-<img SRC="http://www.mtgc.org/mtgc_member-banner.gif" WIDTH="500" HEIGHT="40" ALT="Member of Middle Tennessee GeoCachers Club [www.mtgc.org]" BORDER="0"></a></p>]]></value></Data>
-          <Data name="gc_logs"><value><![CDATA[<p><b>Found it</b> by littlepod 2005-07-03<br />Enjoyed the puzzle. We seemed to be about 50ft off though. TFTC.</p><p><b>Write note</b> by robertlipe 2005-04-29<br />TB Drop to show he's hanging out in Nashville until we blast off for Geowoodstock in a few weeks.</p><p><b>Found it</b> by Big Bumblebee 2005-04-18<br />Found it a while ago.  Thanks.</p><p><b>Write note</b> by robertlipe 2005-03-27<br />I had to renew my permit with the CDC and in doing so, I trolled out here verified that the infectious ooze is fully within specification and industry accepted tolerance.   Ooze On!</p><p><b>Found it</b> by Virtual Babe 2004-12-27<br />This was a great cache, however on this day I considered it a FIFM cache (Fun, Invigorating, Frustrating and Maddening), especially when the cache was not replaced in the proper spot by the previous cacher!  Thanks anyway!!
-</p><p><b>Write note</b> by robertlipe 2004-01-12<br />I got a complaint from the CDC about oozy rat this weekend.     I went out tonight in the dark and verified that the infectious ooze is fully within specification and industry accepted tolerance. (Although I realize now I did misstate the cache container to the reporting officer when confronted.   It's, uuuuh, smaller than I said.)</p><p><b>Write note</b> by robertlipe 2003-10-04<br />In the expectation that this cache will get some traffic in the next 48 hours, Ryan and I checked it earlier today.   The Rat is Oozing just as we planned it.</p><p><b>Write note</b> by robertlipe 2003-07-03<br />It won't earn him a smiley face, but I've confirmed that rickrich would have indeed sunk the battleship!      Thanx for playing. You get a copy of the home game and some rice-a-roni...</p>]]></value></Data>
+<img SRC="http://www.mtgc.org/mtgc_member-banner.gif" WIDTH="500" HEIGHT="40" ALT="Member of Middle Tennessee GeoCachers Club [www.mtgc.org]" BORDER="0"></a></p>]]></value>
+          </Data>
+          <Data name="gc_logs">
+            <value><![CDATA[<p><b>Found it</b> by littlepod 2005-07-03<br />Enjoyed the puzzle. We seemed to be about 50ft off though. TFTC.</p><p><b>Write note</b> by robertlipe 2005-04-29<br />TB Drop to show he's hanging out in Nashville until we blast off for Geowoodstock in a few weeks.</p><p><b>Found it</b> by Big Bumblebee 2005-04-18<br />Found it a while ago.  Thanks.</p><p><b>Write note</b> by robertlipe 2005-03-27<br />I had to renew my permit with the CDC and in doing so, I trolled out here verified that the infectious ooze is fully within specification and industry accepted tolerance.   Ooze On!</p><p><b>Found it</b> by Virtual Babe 2004-12-27<br />This was a great cache, however on this day I considered it a FIFM cache (Fun, Invigorating, Frustrating and Maddening), especially when the cache was not replaced in the proper spot by the previous cacher!  Thanks anyway!!
+</p><p><b>Write note</b> by robertlipe 2004-01-12<br />I got a complaint from the CDC about oozy rat this weekend.     I went out tonight in the dark and verified that the infectious ooze is fully within specification and industry accepted tolerance. (Although I realize now I did misstate the cache container to the reporting officer when confronted.   It's, uuuuh, smaller than I said.)</p><p><b>Write note</b> by robertlipe 2003-10-04<br />In the expectation that this cache will get some traffic in the next 48 hours, Ryan and I checked it earlier today.   The Rat is Oozing just as we planned it.</p><p><b>Write note</b> by robertlipe 2003-07-03<br />It won't earn him a smiley face, but I've confirmed that rickrich would have indeed sunk the battleship!      Thanx for playing. You get a copy of the home game and some rice-a-roni...</p>]]></value>
+          </Data>
         </ExtendedData>
         <Point>
           <coordinates>-86.861667,35.921667</coordinates>
