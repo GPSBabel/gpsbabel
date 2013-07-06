@@ -19,11 +19,9 @@ additional information.
  For operating systems where no binary is provided or if 
 you want the latest development version, you will have to build it from
 source.  The code should be compilable on any system with
-ISO C89 compilers, though we use a smattering of C99 like double slash 
-comments.  It's tested on Linux, Mac OS/X, and Windows cross compilers.
+ISO C++ It's tested on Linux, Mac OS/X, and Windows cross compilers.
 Less frequently, someone will build on MSVC, FreeBSD, OpenBSD, Solaris, 
-UnixWare, OpenServer, etc.  It's also exercised on a variety of 
-processors and compilers.
+etc.  
 </para>
 <para>
 You can grab a release from the <ulink url="http://www.gpsbabel.org/download.html">GPSBabel download page</ulink>, but if you're going to be doing any development, you'll find that working from the <ulink url="http://code.google.com/p/gpsbabel/source/checkout">GPSBabel SVN tree</ulink> is easier.
@@ -40,6 +38,12 @@ That can be done easily with the single command:
   In most cases, the code is as simple to build as running:
 </para>
 <para><userinput> ./configure &amp;&amp; make</userinput></para>
+  <para><ulink url="http://qt-project.org">Qt</ulink> 
+is required for all builds.  Mac and Windows users can download
+binaries from <ulink url="http://qt-project.org/downloads">Qt Downloads</ulink>
+Fedora users may need to 'yum install libqt4-core libqt4-dev'.  Ubuntu users may need to 
+'apt-get install libqt4-core libqt4-dev'.
+</para>
   <para><ulink url="http://expat.sourceforge.net">Expat</ulink> 
 is strongly recommended for source builds as it is
 required for reading all the XML formats such as GPX.  Fedora users
@@ -47,9 +51,10 @@ may need to 'yum install expat-devel'.  Ubuntu users may need to
 'apt-get install expat libexpat-dev'.
 </para>
   <para><ulink url="http://libusb.sourceforge.net">libusb</ulink> 
-is recommended for OS/X and Linux if you want to use a USB Garmin.
+is recommended for OS/X and Linux if you want to use a USB Garmin or 
+Delorme device.
 Fedora users may need to 'yum install libusb-devel'.  Ubuntu users may
-need to 'apt-get install libusb-dev'.
+need to 'yum install libusb-dev'.
 </para>
 <para>There are additional flags that can be passed to configure to
  customize your build of GPSBabel.   
