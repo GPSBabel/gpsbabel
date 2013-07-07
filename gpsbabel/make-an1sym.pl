@@ -288,7 +288,7 @@ print <<'END';
 };
 
 int FindIconByName( const char *name, GUID *guid ) {
-	int i = 0; 
+	unsigned int i = 0; 
 	for ( i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++ )
 	{
 		if ( !case_ignore_strcmp(name, default_guids[i].name)) {
@@ -300,7 +300,7 @@ int FindIconByName( const char *name, GUID *guid ) {
 }
 
 int FindIconByGuid( GUID *guid, char **name ) {
-	int i = 0; 
+	unsigned int i = 0; 
 	for ( i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++ )
 	{
 		if ( !memcmp(guid, &default_guids[i].guid, sizeof(GUID))) {

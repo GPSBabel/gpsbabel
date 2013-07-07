@@ -358,7 +358,7 @@ static void Destroy_AN1_Symbol(an1_symbol_record* symbol)
 
 static void Read_AN1_Waypoint(gbfile* f, an1_waypoint_record* wpt)
 {
-  short len;
+  unsigned short len;
 
   wpt->magic = ReadShort(f);
   wpt->unk1 = ReadLong(f);
