@@ -712,12 +712,15 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
     kml_td(hwriter, "Max Cadence", QString(" %1 rpm ").arg(QString::number(td->max_cad)));
   }
   if (td->start && td->end) {
-    char time_string[64];
-    // FIXME (robertl): this straddling of time and string types is killing me
-    xml_fill_in_time(time_string, QDateTime::fromTime_t(td->start), XML_LONG_TIME);
-    kml_td(hwriter, "Start Time", QString(" %1 ").arg(time_string));
-    xml_fill_in_time(time_string, QDateTime::fromTime_t(td->end), XML_LONG_TIME);
-    kml_td(hwriter, "End Time", QString(" %1 ").arg(time_string));
+    gpsbabel::DateTime t;
+    t = td->start;
+    if (t.isValid()) {
+      kml_td(hwriter, "Start Time", t.toPrettyString());
+    }
+    t = td->end;
+    if (t.isValid()) {
+      kml_td(hwriter, "End Time", t.toPrettyString());
+    }
   }
 
   hwriter.writeCharacters("\n");
@@ -730,13 +733,14 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
 
   /* We won't always have times. Garmin saved tracks, for example... */
   if (td->start && td->end) {
-    char time_string[64];
     writer->writeStartElement("TimeSpan");
-    // FIXME (robertl): this straddling of time and string types is gross
-    xml_fill_in_time(time_string, QDateTime::fromTime_t(td->start), XML_LONG_TIME);
-    writer->writeTextElement("begin", time_string);
-    xml_fill_in_time(time_string, QDateTime::fromTime_t(td->end), XML_LONG_TIME);
-    writer->writeTextElement("end", time_string);
+
+    gpsbabel::DateTime t;
+    t = td->start;
+    writer->writeTextElement("begin", t.toPrettyString());
+    t = td->end;
+    writer->writeTextElement("end", t.toPrettyString());
+
     writer->writeEndElement(); // Close TimeSpan tag
   }
 }
@@ -1841,15 +1845,10 @@ void kml_write_AbstractView(void)
 
   if (kml_time_min || kml_time_max) {
     writer->writeStartElement("gx:TimeSpan");
-    if (kml_time_min) {
-      char time_string[64];
-      xml_fill_in_time(time_string, kml_time_min, XML_LONG_TIME);
-      if (time_string[0]) {
-        writer->writeTextElement("begin", time_string);
-      }
+    if (kml_time_min.isValid()) {
+      writer->writeTextElement("begin", kml_time_min.toPrettyString());
     }
     if (kml_time_max) {
-      char time_string[64];
       gpsbabel::DateTime time_max;
       // In realtime tracking mode, we fudge the end time by a few minutes
       // to ensure that the freshest data (our current location) is contained
@@ -1859,10 +1858,7 @@ void kml_write_AbstractView(void)
       // ensure the right edge of that time slider includes us.
       //
       time_max = realtime_positioning ? kml_time_max + 600 : kml_time_max;
-      xml_fill_in_time(time_string, time_max, XML_LONG_TIME);
-      if (time_string[0]) {
-        writer->writeTextElement("end", time_string);
-      }
+      writer->writeTextElement("end", time_max.toPrettyString());
     }
     writer->writeEndElement(); // Close gx:TimeSpan tag
   }

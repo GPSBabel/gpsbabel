@@ -104,6 +104,19 @@ public:
     QTime time(this->time());
     return time.hour() * 10000 + time.minute() * 100 + time.second();
   }
+
+  // Like toString, but with subsecond time that's included only when
+  // the trailing digits aren't .000.  Always UTC.
+  QString toPrettyString() const {
+    const char* format;
+    if (this->time().msec()) {
+      format = "yyyy-MM-ddTHH:mm:ss.zzzZ";
+    } else {
+      format = "yyyy-MM-ddTHH:mm:ssZ";
+    }
+    return this->toUTC().toString(format);
+  }
+
  private:
   time_t t_;
 };

@@ -108,37 +108,13 @@ write_xml_entity_end(gbfile *ofd, const QString& indent,
 }
 
 void
-xml_fill_in_time(char *time_string, const gpsbabel::DateTime datetime, int long_or_short)
-{
-  QDateTime dt = datetime;
-  dt = dt.toUTC();
-
-  const char* format;
-  if (long_or_short == XML_LONG_TIME) {
-    format = "yyyy-MM-ddTHH:mm:ssZ";
-    if (dt.time().msec()) {
-fprintf(stderr, "this should not be possible");
-abort();
-      format = "yyyy-MM-ddTHH:mm:ss.zzzZ";
-    }
-  } else {
-    format = "yyyyMMddTHHmmssZ";
-  }
-  strcpy(time_string, qPrintable(dt.toString(format)));
-}
-
-void
 xml_write_time(gbfile *ofd, gpsbabel::DateTime dt, const char *elname)
 {
-  char time_string[64];
-  xml_fill_in_time(time_string, dt, XML_LONG_TIME);
-  if (time_string[0]) {
-    gbfprintf(ofd, "<%s>%s</%s>\n",
-              elname,
-              time_string,
-              elname
-             );
-  }
+  gbfprintf(ofd, "<%s>%s</%s>\n",
+            elname,
+            dt.toPrettyString().toUtf8().data(),
+            elname
+           );
 }
 
 /***********************************************************************

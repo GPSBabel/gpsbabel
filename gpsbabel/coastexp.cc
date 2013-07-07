@@ -65,7 +65,6 @@ static queue ce_route_head;				// List of routes currently found
 static ce_route* currentRoute = NULL;	// Current route being processed
 static queue ce_mark_head;				// List of stand-alone marks currently found
 static ce_mark* currentMark = NULL;		// Current mark being processed
-static char* time_buffer = NULL;		// Time buffer for processing times
 static char* uuid_buffer = NULL;		// UUID buffer for processing uuid's
 static char* xml_buffer = NULL;			// XML buffer for processing XML strings
 static int inRoute = 0;					// Are we processing a route?
@@ -501,7 +500,6 @@ ce_wr_init(const char* fname)
   QUEUE_INIT(&ce_mark_head);
 
   // Alloocate all buffers used for writing
-  time_buffer = (char*) xcalloc(MY_TBUF,1);
   uuid_buffer = (char*) xcalloc(MY_UBUF,1);
   xml_buffer = (char*) xcalloc(MY_XBUF, 1);
 
@@ -515,23 +513,21 @@ ce_wr_deinit(void)
   gbfclose(ofd);
 
   // Free the buffers used for writing
-  xfree(time_buffer);
   xfree(uuid_buffer);
   xfree(xml_buffer);
 }
 
 /* Generate a CE-style creation time based on supplied time */
-static char*
+static QString
 ce_gen_creation_time(time_t tm)
 {
   QDateTime qtm;
   qtm = QDateTime::fromTime_t(tm);
-  xml_fill_in_time(time_buffer, qtm, XML_SHORT_TIME);
-  return time_buffer;
+  return qtm.toUTC().toString("yyyyMMddTHHmmssZ");
 }
 
 /* Generate a CE-style creation time based on current time */
-static char*
+static QString
 ce_gen_current_time(void)
 {
   return ce_gen_creation_time(current_time());

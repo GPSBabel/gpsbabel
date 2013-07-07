@@ -28,7 +28,6 @@
 #include "grtcirc.h"
 #include "strptime.h"
 #include "jeeps/gpsmath.h"
-#include "xmlgeneric.h"  // for xml_fill_in_time.
 #include "garmin_fs.h"
 
 #define MYNAME "CSV_UTIL"
@@ -913,7 +912,7 @@ addhms(const char* s, const char* format)
 
 static
 int
-writetime(char* buff, size_t bufsize, const char* format, time_t t, int gmt)
+writetime(char* buff, size_t bufsize, const char* format, time_t t, bool gmt)
 {
   static struct tm* stmp;
 
@@ -922,7 +921,6 @@ writetime(char* buff, size_t bufsize, const char* format, time_t t, int gmt)
   } else {
     stmp = localtime(&t);
   }
-
   return strftime(buff, bufsize, format, stmp);
 }
 
@@ -1946,7 +1944,7 @@ xcsv_waypt_pr(const waypoint* wpt)
     case XT_TIMET_TIME_MS: {
       /* time as a time_t variable in milliseconds */
       char tbuf[24];
-      writetime(tbuf, sizeof(tbuf), "%s", wpt->GetCreationTime(), 0);
+      writetime(tbuf, sizeof(tbuf), "%s", wpt->GetCreationTime(), false);
       char mbuf[32];
       snprintf(mbuf, sizeof(mbuf), "%s%03d", tbuf, wpt->microseconds / 1000);
       writebuff(buff, "%s", mbuf);
@@ -1956,10 +1954,10 @@ xcsv_waypt_pr(const waypoint* wpt)
       writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->GetCreationTime()));
       break;
     case XT_GMT_TIME:
-      writetime(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), 1);
+      writetime(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), true);
       break;
     case XT_LOCAL_TIME:
-      writetime(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), 0);
+      writetime(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), false);
       break;
     case XT_HMSG_TIME:
       writehms(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), 1);
@@ -1968,10 +1966,10 @@ xcsv_waypt_pr(const waypoint* wpt)
       writehms(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), 0);
       break;
     case XT_ISO_TIME:
-      writetime(buff, sizeof buff, "%Y-%m-%dT%H:%M:%SZ", wpt->GetCreationTime(), 1);
+      writetime(buff, sizeof buff, "%Y-%m-%dT%H:%M:%SZ", wpt->GetCreationTime(), true);
       break;
     case XT_ISO_TIME_MS:
-      xml_fill_in_time(buff, wpt->GetCreationTime(), XML_LONG_TIME);
+        strcpy(buff, wpt->GetCreationTime().toPrettyString().toUtf8().data());
       break;
     case XT_GEOCACHE_LAST_FOUND:
       writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->gc_data->last_found));
