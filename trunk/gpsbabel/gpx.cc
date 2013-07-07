@@ -845,6 +845,18 @@ gs_get_container(geocache_container t)
   return "Unknown";
 }
 
+// This is a stupid hack.  OSM depends on our xml_parse_time behaviour
+// but QDataTime::fromString parses either local time or GMT; not with 
+// tz offsets.  So shim this all up for now.
+gpsbabel::DateTime
+xml_parse_full_time(const char* cdatastr) {
+#if 1
+  return QDateTime::fromString(cdatastr, Qt::ISODate);
+#else
+  return xml_parse_time(cdatastr);
+#endif
+}
+
 gpsbabel::DateTime
 xml_parse_time(const char* cdatastr)
 {
@@ -1027,7 +1039,7 @@ gpx_end(void* data, const XML_Char* xml_el)
     waypt_alloc_gc_data(wpt_tmp)->placer = xstrdup(cdatastrp);
     break;
   case tt_cache_log_date:
-    gc_log_date = xml_parse_time(cdatastrp);
+    gc_log_date = xml_parse_full_time(cdatastrp);
     break;
     /*
      * "Found it" logs follow the date according to the schema,
@@ -1145,7 +1157,7 @@ gpx_end(void* data, const XML_Char* xml_el)
   case tt_wpt_time:
   case tt_trk_trkseg_trkpt_time:
   case tt_rte_rtept_time:
-    wpt_tmp->SetCreationTime(xml_parse_time(cdatastrp));
+    wpt_tmp->SetCreationTime(xml_parse_full_time(cdatastrp));
     break;
   case tt_wpt_cmt:
   case tt_rte_rtept_cmt:
