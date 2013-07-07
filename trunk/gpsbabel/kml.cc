@@ -713,10 +713,10 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   }
   if (td->start && td->end) {
     char time_string[64];
-
-    xml_fill_in_time(time_string, td->start, XML_LONG_TIME);
+    // FIXME (robertl): this straddling of time and string types is killing me
+    xml_fill_in_time(time_string, QDateTime::fromTime_t(td->start), XML_LONG_TIME);
     kml_td(hwriter, "Start Time", QString(" %1 ").arg(time_string));
-    xml_fill_in_time(time_string, td->end, XML_LONG_TIME);
+    xml_fill_in_time(time_string, QDateTime::fromTime_t(td->end), XML_LONG_TIME);
     kml_td(hwriter, "End Time", QString(" %1 ").arg(time_string));
   }
 
@@ -732,9 +732,10 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   if (td->start && td->end) {
     char time_string[64];
     writer->writeStartElement("TimeSpan");
-    xml_fill_in_time(time_string, td->start, XML_LONG_TIME);
+    // FIXME (robertl): this straddling of time and string types is gross
+    xml_fill_in_time(time_string, QDateTime::fromTime_t(td->start), XML_LONG_TIME);
     writer->writeTextElement("begin", time_string);
-    xml_fill_in_time(time_string, td->end, XML_LONG_TIME);
+    xml_fill_in_time(time_string, QDateTime::fromTime_t(td->end), XML_LONG_TIME);
     writer->writeTextElement("end", time_string);
     writer->writeEndElement(); // Close TimeSpan tag
   }
@@ -1849,7 +1850,7 @@ void kml_write_AbstractView(void)
     }
     if (kml_time_max) {
       char time_string[64];
-      time_t time_max;
+      gpsbabel::DateTime time_max;
       // In realtime tracking mode, we fudge the end time by a few minutes
       // to ensure that the freshest data (our current location) is contained
       // within the timespan.   Earth's time may not match the GPS because

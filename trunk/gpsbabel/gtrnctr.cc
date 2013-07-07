@@ -38,8 +38,8 @@ static char gtc_sportlist[MAX_SPORTS][16] = { "Biking", "Running", "MultiSport",
 static int gtc_sport = 0;
 static int gtc_course_flag;
 
-static time_t gtc_least_time;
-static time_t gtc_most_time;
+static gpsbabel::DateTime gtc_least_time;
+static gpsbabel::DateTime gtc_most_time;
 static double gtc_start_lat;
 static double gtc_start_long;
 static double gtc_end_lat;

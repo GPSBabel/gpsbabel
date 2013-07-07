@@ -275,7 +275,6 @@ class geocache_data {
     is_available(status_unknown),
     is_memberonly(status_unknown),
     has_customcoords(status_unknown),
-    exported(0),
     last_found(0),
     placer_id(0),
     favorite_points(0)
@@ -289,7 +288,7 @@ class geocache_data {
   status_type is_available:2;
   status_type is_memberonly:2;
   status_type has_customcoords:2;
-  time_t exported;
+  gpsbabel::DateTime  exported;
   time_t last_found;
   QString placer; /* Placer name */
   int placer_id; /* Placer id */
@@ -528,22 +527,15 @@ public:
   QString icon_descr;
 
   gpsbabel::DateTime  GetCreationTime() const {
-//QDateTime dt(creation_time);
-//qDebug() << dt.toString("dd.MM.yyyy hh:mm:ss.zzz");
-//fprintf(stderr, "ng %d\n", (int)creation_time);
    return creation_time;
-}
+  }
   void SetCreationTime(gpsbabel::DateTime t) { creation_time = t; 
-//qDebug() << t.toString("dd.MM.yyyy hh:mm:ss.zzz");
-//fprintf(stderr, "ns %d\n", (int)t);
-}
+  }
   void SetCreationTime(time_t t) { creation_time = t; 
-//fprintf(stderr, "t %d\n", (int)t);
-}
+  }
   void SetCreationTime(time_t t, int us) {
     creation_time = t; 
     microseconds = us;
-//fprintf(stderr, "t/us %d %d\n", (int)t, us);
   }
   gpsbabel::DateTime creation_time;
   int microseconds;	/* Optional millionths of a second. */
@@ -619,7 +611,7 @@ typedef struct {
   double	avg_hrt;	/* Avg Heartrate */
   double	avg_cad;	/* Avg Cadence */
   time_t	start;		/* Min time */
-  time_t	end;		/* Max time */
+  time_t	 end;		/* Max time */
   int	min_hrt;        /* Min Heartrate */
   int	max_hrt;        /* Max Heartrate */
   int	max_cad;        /* Max Cadence */
@@ -996,7 +988,7 @@ char* strlower(char* src);
 signed int get_tz_offset(void);
 time_t mklocaltime(struct tm* t);
 time_t mkgmtime(struct tm* t);
-time_t current_time(void);
+gpsbabel::DateTime current_time(void);
 void dotnet_time_to_time_t(double dotnet, time_t* t, int* ms);
 signed int month_lookup(const char* m);
 const char* get_cache_icon(const waypoint* waypointp);

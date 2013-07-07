@@ -578,7 +578,7 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
   tdata->max_alt =  unknown_alt;
 
   QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
-    time_t timed;
+    gpsbabel::DateTime timed;
     double tlat, tlon, plat, plon, dist;
 
     thisw = (waypoint *)elem;

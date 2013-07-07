@@ -524,7 +524,9 @@ ce_wr_deinit(void)
 static char*
 ce_gen_creation_time(time_t tm)
 {
-  xml_fill_in_time(time_buffer, tm, XML_SHORT_TIME);
+  QDateTime qtm;
+  qtm = QDateTime::fromTime_t(tm);
+  xml_fill_in_time(time_buffer, qtm, XML_SHORT_TIME);
   return time_buffer;
 }
 
