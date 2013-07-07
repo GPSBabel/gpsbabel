@@ -1886,8 +1886,6 @@ gpx_write_bounds(void)
 static void
 gpx_write(void)
 {
-  time_t now = 0;
-
   /* if an output version is not specified and an input version is
    * available use it, otherwise use the default.
    */
@@ -1951,7 +1949,7 @@ gpx_write(void)
     gpx_write_gdata(&gpx_global->urlname, "urlname");
   }
 
-  now = current_time();
+  gpsbabel::DateTime now = current_time();
   char time_string[64];
   xml_fill_in_time(time_string, now, XML_LONG_TIME);
   if (time_string[0]) {

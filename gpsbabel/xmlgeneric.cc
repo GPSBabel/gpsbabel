@@ -108,9 +108,9 @@ write_xml_entity_end(gbfile *ofd, const QString& indent,
 }
 
 void
-xml_fill_in_time(char *time_string, const time_t timep, int long_or_short)
+xml_fill_in_time(char *time_string, const gpsbabel::DateTime datetime, int long_or_short)
 {
-  QDateTime dt = QDateTime::fromTime_t(timep);
+  QDateTime dt = datetime;
   dt = dt.toUTC();
 
   const char* format;
@@ -128,10 +128,10 @@ abort();
 }
 
 void
-xml_write_time(gbfile *ofd, const time_t timep, int microseconds, const char *elname)
+xml_write_time(gbfile *ofd, gpsbabel::DateTime dt, const char *elname)
 {
   char time_string[64];
-  xml_fill_in_time(time_string, timep, XML_LONG_TIME);
+  xml_fill_in_time(time_string, dt, XML_LONG_TIME);
   if (time_string[0]) {
     gbfprintf(ofd, "<%s>%s</%s>\n",
               elname,

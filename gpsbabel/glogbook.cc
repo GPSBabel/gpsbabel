@@ -96,7 +96,8 @@ glogbook_waypt_pr(const waypoint* wpt)
   }
   gbfprintf(ofd, "                </Position>\n");
   gbfprintf(ofd, "                ");
-  xml_write_time(ofd, wpt->GetCreationTime(), wpt->microseconds, "Time");
+  QDateTime dt = wpt->GetCreationTime();
+  xml_write_time(ofd, dt, "Time");
   gbfprintf(ofd, "            </Trackpoint>\n");
 }
 
