@@ -845,18 +845,6 @@ gs_get_container(geocache_container t)
   return "Unknown";
 }
 
-// This is a stupid hack.  OSM depends on our xml_parse_time behaviour
-// but QDataTime::fromString parses either local time or GMT; not with 
-// tz offsets.  So shim this all up for now.
-gpsbabel::DateTime
-xml_parse_full_time(const char* cdatastr) {
-#if 1
-  return QDateTime::fromString(cdatastr, Qt::ISODate);
-#else
-  return xml_parse_time(cdatastr);
-#endif
-}
-
 gpsbabel::DateTime
 xml_parse_time(const char* cdatastr)
 {
@@ -865,11 +853,7 @@ xml_parse_time(const char* cdatastr)
   int off_sign = 1;
   char* offsetstr = NULL;
   char* pointstr = NULL;
-  struct tm tm;
-  time_t rv = 0;
   char* timestr = xstrdup(cdatastr);
-
-  memset(&tm, 0, sizeof(tm));
 
   offsetstr = strchr(timestr, 'Z');
   if (offsetstr) {
@@ -909,32 +893,27 @@ xml_parse_time(const char* cdatastr)
     *pointstr = '\0';
   }
 
+  int year = 0, mon = 0, mday = 0, hour = 0, min = 0, sec = 0;
   sscanf(timestr, "%d-%d-%dT%d:%d:%d",
-         &tm.tm_year,
-         &tm.tm_mon,
-         &tm.tm_mday,
-         &tm.tm_hour,
-         &tm.tm_min,
-         &tm.tm_sec);
-  tm.tm_mon -= 1;
-  tm.tm_year -= 1900;
-  tm.tm_isdst = 0;
+         &year,
+         &mon,
+         &mday,
+         &hour,
+         &min,
+         &sec);
+  QDate date(year, mon, mday);
+  QTime time(hour, min, sec);
 
-  rv = mkgmtime(&tm) - off_sign*off_hr*3600 - off_sign*off_min*60;
-
-  xfree(timestr);
-
-  // TOOD(robertlipe) - This really is a groady hack to shim in 
-  // the old interface (which had an explicit microsecs pointer argument
-  // as an optional output value) and the new form which uses QDateTime
-  // but, because of the above hackery, doesn't really work outside 1970
-  // 2038 but which we can't replace until Steven upgrades Qt.
-  // Baby steps.
-  QDateTime dt = QDateTime::fromTime_t(rv);
+  // Fractional part of time.
   if (fsec) {
-    dt = dt.addMSecs(fsec * 1000);
-// qDebug() << dt.toString("dd.MM.yyyy hh:mm:ss.zzz")  << " ZZZ " << fsec;
+    time = time.addMSecs(fsec * 1000);
   }
+
+  // Any offsets that were stuck at the end.
+  time = time.addSecs(-off_sign*off_hr*3600 - off_sign*off_min*60);
+
+  QDateTime dt(date, time, Qt::UTC);
+  xfree(timestr);
   return dt;
 }
 
@@ -1039,7 +1018,7 @@ gpx_end(void* data, const XML_Char* xml_el)
     waypt_alloc_gc_data(wpt_tmp)->placer = xstrdup(cdatastrp);
     break;
   case tt_cache_log_date:
-    gc_log_date = xml_parse_full_time(cdatastrp);
+    gc_log_date = xml_parse_time(cdatastrp);
     break;
     /*
      * "Found it" logs follow the date according to the schema,
@@ -1157,7 +1136,7 @@ gpx_end(void* data, const XML_Char* xml_el)
   case tt_wpt_time:
   case tt_trk_trkseg_trkpt_time:
   case tt_rte_rtept_time:
-    wpt_tmp->SetCreationTime(xml_parse_full_time(cdatastrp));
+    wpt_tmp->SetCreationTime(xml_parse_time(cdatastrp));
     break;
   case tt_wpt_cmt:
   case tt_rte_rtept_cmt:
