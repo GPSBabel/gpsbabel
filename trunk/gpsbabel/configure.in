@@ -39,6 +39,7 @@ AC_CANONICAL_TARGET
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
+AC_LANG(C++)
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 AC_EXEEXT
@@ -154,12 +155,16 @@ AC_SUBST(RC)
 # On RHEL/OEL/SL/CENTOS/FEDORA qmake is from Qt3, and qmake-qt4 is from Qt4.
 # If qmake-qt4 isn't found look for the standard name qmake and assume it is
 # from a useful version Qt.
-AC_CHECK_TOOLS(QMAKE, [qmake-qt4 qmake])
+AC_CHECK_TOOLS(QMAKE, [qmake-qt4 qmake], "no")
 AC_CHECK_PROGS(LUPDATE, [lupdate-qt4 lupdate])
 AC_CHECK_PROGS(LRELEASE, [lrelease-qt4 lrelease])
 
+if test "$QMAKE" = no ; then
+  AC_MSG_ERROR([Qt4 is required, but not found]);
+fi
 
 QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -l QtCore"
+
 case "$target" in
     *-*-cygwin* | *-*-mingw32*)
 
