@@ -20,7 +20,6 @@
  */
 
 #include "defs.h"
-#include "xmlgeneric.h"
 #include "cet_util.h"
 #include "garmin_fs.h"
 #if HAVE_LIBEXPAT
@@ -1440,12 +1439,8 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
       }
       if (wpt && wpt->gc_data->exported &&
           strcmp(tag->tagname, "groundspeak:cache") == 0) {
-        char time_string[64];
-        xml_fill_in_time(time_string, wpt->gc_data->exported,
-                         XML_LONG_TIME);
-        if (time_string[0]) {
-          writer.writeTextElement("time", time_string);
-        }
+          writer.writeTextElement("time", 
+                                  wpt->gc_data->exported.toPrettyString());
       }
       writer.writeEndElement();
     }
@@ -1941,11 +1936,8 @@ gpx_write(void)
   }
 
   gpsbabel::DateTime now = current_time();
-  char time_string[64];
-  xml_fill_in_time(time_string, now, XML_LONG_TIME);
-  if (time_string[0]) {
-    writer.writeTextElement("time", time_string);
-  }
+  writer.writeTextElement("time", now.toPrettyString());
+
   gpx_write_gdata(&gpx_global->keywords, "keywords");
 
   gpx_write_bounds();

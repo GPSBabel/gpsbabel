@@ -267,7 +267,7 @@ gtc_study_lap(const waypoint* wpt)
   }
 
   if (wpt->creation_time && (gtc_least_time > wpt->GetCreationTime())) {
-    gtc_least_time =  wpt->GetCreationTime();
+    gtc_least_time = wpt->GetCreationTime();
     gtc_start_lat = wpt->latitude;
     gtc_start_long = wpt->longitude;
   }
@@ -391,8 +391,7 @@ gtc_act_hdr(const route_head* rte)
   gtc_new_study_lap(rte);
   route_disp(rte, gtc_study_lap);
   if (gtc_least_time) {
-    char time_string[100];
-    xml_fill_in_time(time_string, gtc_least_time, XML_LONG_TIME);
+    const char* time_string = gtc_least_time.toPrettyString().toUtf8().data();
     gtc_write_xml(0, "<Id>%s</Id>\n", time_string);
     gtc_write_xml(1, "<Lap StartTime=\"%s\">\n", time_string);
   } else {
