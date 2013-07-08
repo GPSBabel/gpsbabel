@@ -31,7 +31,8 @@
 
 static gbfile* ofd;
 static waypoint* wpt_tmp;
-char* urllink, *urllinkt;
+QString urllink;
+QString urllinkt;
 static char* binary = NULL;
 
 #define MYNAME "lmx"
@@ -376,19 +377,19 @@ lmx_lm_desc(const char* args, const char** unused)
 static void
 lmx_lm_mlink_s(const char* args, const char** unused)
 {
-  urllink = urllinkt = NULL;
+  urllink = urllinkt = QString();
 }
 
 static void
 lmx_lm_link(const char* args, const char** unused)
 {
-  urllink = xstrdup(args);
+  urllink = args;
 }
 
 static void
 lmx_lm_linkt(const char* args, const char** unused)
 {
-  urllinkt = xstrdup(args);
+  urllinkt = args;
 }
 
 static void

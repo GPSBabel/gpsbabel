@@ -1047,15 +1047,25 @@ cet_convert_waypt(const waypoint* wpt)
   w->shortname = cet_convert_string(wpt->shortname);
   w->description = cet_convert_string(wpt->description);
   w->notes = cet_convert_string(wpt->notes);
-  w->url = cet_convert_string(wpt->url);
-  w->url_link_text = cet_convert_string(wpt->url_link_text);
+
+  const char*url = cet_convert_string(wpt->url);
+  const char*url_link_text = cet_convert_string(wpt->url_link_text);
+  w->url = url;
+  w->url_link_text = url_link_text;
+  xfree(url);
+  xfree(url_link_text);
+
   for (url_next = w->url_next; url_next; url_next = url_next->url_next) {
     url_next->url = cet_convert_string(url_next->url);
     url_next->url_link_text = cet_convert_string(url_next->url_link_text);
   }
   if (gc_data) {
-    gc_data->placer = cet_convert_string(gc_data->placer);
-    gc_data->hint = cet_convert_string(gc_data->hint);
+    const char *placer = cet_convert_string(gc_data->placer);
+    const char *hint = cet_convert_string(gc_data->hint);
+    gc_data->placer = placer;
+    gc_data->hint = hint;
+    xfree(placer);
+    xfree(hint);
   }
 
   fs = wpt->fs;
@@ -1082,7 +1092,9 @@ cet_convert_route_hdr(const route_head* route)
 
   rte->rte_name = cet_convert_string(route->rte_name);
   rte->rte_desc = cet_convert_string(route->rte_desc);
-  rte->rte_url = cet_convert_string(route->rte_url);
+  const char*rte_url = cet_convert_string(route->rte_url);
+  rte->rte_url = rte_url;
+  xfree(rte_url);
 }
 
 /* cet_convert_route_tlr: internal used within cet_convert_strings process */

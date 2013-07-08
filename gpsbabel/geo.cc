@@ -251,7 +251,7 @@ void wpt_name(const char* args, const char** unused)
   s = xstrrstr(wpt_tmp->description, " by ");
   if (s) {
     waypt_alloc_gc_data(wpt_tmp);
-    wpt_tmp->gc_data->placer = xstrdup(s + 4);
+    wpt_tmp->gc_data->placer = QString(s + 4);
 
     if (nuke_placer) {
       // Sleaze alert.  We're casting away constness and writing into a string
@@ -266,14 +266,14 @@ void wpt_link_s(const char* args, const char** attrv)
   const char** avp = &attrv[0];
   while (*avp) {
     if (0 == strcmp(avp[0], "text")) {
-      wpt_tmp->url_link_text = xstrdup(avp[1]);
+      wpt_tmp->url_link_text = avp[1];
     }
     avp+=2;
   }
 }
 void wpt_link(const char* args, const char** attrv)
 {
-  wpt_tmp->url = xstrdup(args);
+  wpt_tmp->url = args;
 }
 
 void wpt_type(const char* args, const char** unused)
