@@ -1548,15 +1548,11 @@ static void kml_waypt_pr(const waypoint* waypointp)
   if (waypointp->hasLink()) {
     writer->writeEmptyElement("snippet");
     if (waypointp->hasLinkText()) {
-      // FIXME(robertlipe): these call to xml_entitize are suspicios with 
-      // new XML serializer.
-      char* odesc = xml_entitize(waypointp->url.toUtf8().data());
-      char* olink = xml_entitize(waypointp->url_link_text.toUtf8().data());
+      QString odesc = waypointp->url;
+      QString olink = waypointp->url_link_text;
       writer->writeStartElement("description");
       writer->writeCDATA(QString("<a href=\"%1\">%2</a>").arg(odesc, olink));
       writer->writeEndElement(); // Close description tag
-      xfree(olink);
-      xfree(odesc);
     } else {
       writer->writeTextElement("description", waypointp->url);
     }
@@ -1575,7 +1571,7 @@ static void kml_waypt_pr(const waypoint* waypointp)
     writer->writeStartElement("Style");
     writer->writeStartElement("IconStyle");
     writer->writeStartElement("Icon");
-    writer->writeTextElement("href", icon.toUtf8().data());
+    writer->writeTextElement("href", icon);
     writer->writeEndElement(); // Close Icon tag
     writer->writeEndElement(); // Close IconStyle tag
     writer->writeEndElement(); // Close Style tag
