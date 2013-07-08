@@ -142,10 +142,10 @@ maggeo_read(void)
         wpt_tmp->description = xstrdup(s);
         break;
       case 10:
-        gcdata->placer = xstrdup(s);
+        gcdata->placer = s;
         break;
       case 11:
-        gcdata->hint = xstrdup(s);
+        gcdata->hint = s;
         break;
       case 12: // cache type
         if (strcmp(s, "Mystery Cache") == 0) {

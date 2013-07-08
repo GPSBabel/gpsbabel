@@ -1195,7 +1195,7 @@ parse_waypoint(void)
       }
       break;
     case 17:
-      wpt->url = DUPSTR(str);
+      wpt->url = str;
       break;
     case 18:
       GMSD_SET(category, parse_categories(str));

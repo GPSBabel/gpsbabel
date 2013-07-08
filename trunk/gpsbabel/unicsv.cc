@@ -1116,13 +1116,13 @@ unicsv_parse_one_line(char *ibuf)
       }
       break;
       case fld_gc_placer:
-        gc_data->placer = xstrdup(s);
+        gc_data->placer = s;
         break;
       case fld_gc_placer_id:
         gc_data->placer_id = atoi(s);
         break;
       case fld_gc_hint:
-        gc_data->hint = xstrdup(s);
+        gc_data->hint = s;
         break;
 
       default:

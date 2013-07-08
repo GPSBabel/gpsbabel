@@ -468,9 +468,6 @@ geoniche_icon_to_descr(const int no)
       result = geoniche_icon_map[i];
     }
   }
-  if (result != NULL) {
-    result = xstrdup(result);
-  }
   return result;
 }
 

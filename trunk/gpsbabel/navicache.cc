@@ -133,7 +133,7 @@ nav_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
       } else if (0 == strcmp(ap[0], "name")) {
         wpt_tmp->description = xstrdup(ap[1]);
       } else if (0 == strcmp(ap[0], "user_name")) {
-        gc_data->placer = xstrdup(ap[1]);
+        gc_data->placer = ap[1];
       } else if (0 == strcmp(ap[0], "latitude")) {
         sscanf(ap[1], "%lf",
                &wpt_tmp->latitude);
@@ -187,10 +187,10 @@ nav_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
         gc_data->container = nc_mkcont(ap[1]);
       }  else if (0 == strcmp(ap[0], "description")) {
         gc_data->desc_long.is_html = 1;
-        gc_data->desc_long.utfstring = xstrdup(ap[1]);
+        gc_data->desc_long.utfstring = ap[1];
       } else if (0 == strcmp(ap[0], "comments")) {
         gc_data->desc_short.is_html = 1;
-        gc_data->desc_short.utfstring = xstrdup(ap[1]);
+        gc_data->desc_short.utfstring = ap[1];
       }
     }
     waypt_add(wpt_tmp);

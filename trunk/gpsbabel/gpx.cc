@@ -990,7 +990,7 @@ gpx_end(void* data, const XML_Char* xml_el)
   case tt_cache_hint:
     rtrim(cdatastrp);
     if (cdatastrp[0]) {
-      waypt_alloc_gc_data(wpt_tmp)->hint = xstrdup(cdatastrp);
+      waypt_alloc_gc_data(wpt_tmp)->hint = cdatastrp;
     }
     break;
   case tt_cache_desc_long:
@@ -998,7 +998,7 @@ gpx_end(void* data, const XML_Char* xml_el)
     if (cdatastrp[0]) {
       geocache_data* gc_data = waypt_alloc_gc_data(wpt_tmp);
       gc_data->desc_long.is_html = cache_descr_is_html;
-      gc_data->desc_long.utfstring = xstrdup(cdatastrp);
+      gc_data->desc_long.utfstring = cdatastrp;
     }
     break;
   case tt_cache_desc_short:
@@ -1006,7 +1006,7 @@ gpx_end(void* data, const XML_Char* xml_el)
     if (cdatastrp[0]) {
       geocache_data* gc_data = waypt_alloc_gc_data(wpt_tmp);
       gc_data->desc_short.is_html = cache_descr_is_html;
-      gc_data->desc_short.utfstring = xstrdup(cdatastrp);
+      gc_data->desc_short.utfstring = cdatastrp;
     }
     break;
   case tt_cache_terrain:
@@ -1014,7 +1014,7 @@ gpx_end(void* data, const XML_Char* xml_el)
     waypt_alloc_gc_data(wpt_tmp)->terr = x * 10;
     break;
   case tt_cache_placer:
-    waypt_alloc_gc_data(wpt_tmp)->placer = xstrdup(cdatastrp);
+    waypt_alloc_gc_data(wpt_tmp)->placer = cdatastrp;
     break;
   case tt_cache_log_date:
     gc_log_date = xml_parse_time(cdatastrp);
@@ -1179,12 +1179,12 @@ gpx_end(void* data, const XML_Char* xml_el)
   case tt_wpt_url:
   case tt_trk_trkseg_trkpt_url:
   case tt_rte_rtept_url:
-    wpt_tmp->url = xstrdup(cdatastrp);
+    wpt_tmp->url = cdatastrp;
     break;
   case tt_wpt_urlname:
   case tt_trk_trkseg_trkpt_urlname:
   case tt_rte_rtept_urlname:
-    wpt_tmp->url_link_text = xstrdup(cdatastrp);
+    wpt_tmp->url_link_text = cdatastrp;
     break;
   case tt_wpt_link:
 //TODO: implement GPX 1.1 	case tt_trk_trkseg_trkpt_link:

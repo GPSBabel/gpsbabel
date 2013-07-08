@@ -144,9 +144,8 @@ data_read(void)
           holder = csv_stringtrim(s, "", 0);
           if (strstr(holder, "http:") != NULL) {
             wpt_tmp->url = holder;
-          } else {
-            xfree(holder);
-          }
+          } 
+          xfree(holder);
           break;
         default:
           /* whoa! nelly */
