@@ -27,9 +27,10 @@
 static XML_Parser psr;
 #endif
 #include "src/core/xmlstreamwriter.h"
+#include <QtCore/QFile>
 #include <QtCore/QRegExp>
 //#include <QtCore/QTextCodec>
-#include <QtXml/QXmlStreamAttributes>
+// #include <QtXml/QXmlStreamAttributes>
 #include <QtCore/QDebug>
 
 
@@ -55,8 +56,8 @@ static int cache_descr_is_html;
 static gbfile* fd;
 static const char* input_fname;
 static gbfile* ofd = NULL;
-static QString ostring;
-static gpsbabel::XmlStreamWriter writer(ostring);
+static QFile oqfile;
+static gpsbabel::XmlStreamWriter writer(oqfile);
 static short_handle mkshort_handle;
 static const char* link_url;
 static char* link_text;
@@ -1343,6 +1344,14 @@ gpx_wr_init(const char* fname)
 {
   mkshort_handle = NULL;
   ofd = gbfopen(fname, "w", MYNAME);
+  oqfile.open(ofd->handle.std, QIODevice::WriteOnly);
+ 
+  // This is ia bit of a lie.  QXMLStreamWriter will pass everything
+  // through the QTextCodec on the way out and that defaults to UTF-8.
+  // Since we have so many C Strings in out output right now and those
+  // are already UTF-8 encoded via CET, if we don't outsmart that, we 
+  // get double encoding.
+  writer.setCodec("ISO 8859-1");
 
   writer.setAutoFormattingIndent(2);
   // Technically, XML (and therefore GPX) defaults ot UTF-8, so we should not
@@ -1358,15 +1367,7 @@ static void
 gpx_wr_deinit(void)
 {
   writer.writeEndDocument();
-
-  // TODO: The old writer would more aggressively protect you from control
-  // character nonsense.  The control-Z (032)is the only thing that appears in
-  // our test suite, but let's toss things we know aren't allowed in GPX.
-  // Let's just carpet-bomb the whole range for now.  I have a feeling we'll
-  // revisit this in time...
-  ostring.replace(QRegExp("[\014-\032]"), " ");
-
-  gbfputs(ostring, ofd);
+  oqfile.close();
   gbfclose(ofd);
   ofd = NULL;
 
@@ -1639,15 +1640,28 @@ gpx_write_common_extensions(const waypoint* waypointp, const gpx_point_type poin
 }
 
 static void
-gpx_write_common_description(const waypoint* waypointp, const char* oname)
+gpx_write_common_description(const waypoint* waypointp, QString oname)
 {
   writer.writeOptionalTextElement("name", oname);
-  writer.writeOptionalTextElement("cmt", waypointp->description);
+
+  // FIXME: the replace() nonsense here is to prevent bogus control
+  // characters from being embedded in the output stream. The only place
+  // this happens in our test suite is a ^Z in the German Garmin GPI test
+  // file.  Filter that out in the two fields below... Ideally, we should
+  // probably filter that in the input rather than here.
+
+  QString desc = waypointp->description;
+  desc = desc.replace(QRegExp("[\014-\032]"), " ");
+  writer.writeOptionalTextElement("cmt", desc);
+
   if (waypointp->notes && waypointp->notes[0]) {
-    writer.writeTextElement("desc", waypointp->notes);
+    QString note = waypointp->notes;
+    note = note.replace(QRegExp("[\014-\032]"), " ");
+    writer.writeTextElement("desc", note);
   } else {
     writer.writeOptionalTextElement("desc", waypointp->description);
   }
+
   write_gpx_url(waypointp);
   writer.writeOptionalTextElement("sym", waypointp->icon_descr);
 }
@@ -1655,7 +1669,7 @@ gpx_write_common_description(const waypoint* waypointp, const char* oname)
 static void
 gpx_waypt_pr(const waypoint* waypointp)
 {
-  const char* oname;
+  QString oname;
   fs_xml* fs_gpx;
   garmin_fs_t* gmsd;	/* gARmIN sPECIAL dATA */
 
