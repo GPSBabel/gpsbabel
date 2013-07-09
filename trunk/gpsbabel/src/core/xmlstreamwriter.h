@@ -17,7 +17,7 @@
 
  */
 
-
+#include <QtCore/QFile>
 #include <QtCore/QXmlStreamWriter>
 
 // As this code began in C, we have several hundred places that write
@@ -29,6 +29,7 @@ namespace gpsbabel {
 class XmlStreamWriter : public QXmlStreamWriter {
 public:
   XmlStreamWriter(QString& s) : QXmlStreamWriter(&s) {}
+  XmlStreamWriter(QFile& f) : QXmlStreamWriter(&f) {}
 
   // Dont emit the attribute if there's nothing interesting in it.
   void writeOptionalAttribute(QString tag, QString value) {
