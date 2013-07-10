@@ -681,7 +681,7 @@ gpx_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
    */
   *(char*) cdatastr.mem = 0;
 
-  tag = get_tag(qPrintable(current_tag), &passthrough);
+  tag = get_tag(current_tag, &passthrough);
   switch (tag) {
   case tt_gpx:
     tag_gpx(attr);
@@ -932,7 +932,7 @@ gpx_end(void* data, const XML_Char* xml_el)
     fprintf(stderr, "Mismatched tag %s.  Expected %s\n", el, qPrintable(s));
   }
 
-  tag = get_tag(qPrintable(current_tag), &passthrough);
+  tag = get_tag(current_tag, &passthrough);
   switch (tag) {
     /*
      * First, the tags that are file-global.
