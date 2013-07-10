@@ -1429,6 +1429,8 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
 
     if (!tag->cdata && !tag->child) {
       write_tag_attributes(tag);
+      // No children?  Self-closing tag.
+      writer.writeEndElement();
     } else {
       write_tag_attributes(tag);
 
