@@ -73,44 +73,38 @@ void GeoReadLoc()
   waypoint* wpt = NULL;
   while (reader.tokenType() != QXmlStreamReader::EndDocument) {
     if (reader.tokenType()==QXmlStreamReader::StartElement) {
-      if (reader.name() == "waypoint") {
+      QString tag_name = reader.name();
+      if (tag_name == "waypoint") {
          wpt = waypt_new();
          waypt_alloc_gc_data(wpt);
          // There is no 'unknown' alt value and so many reference files have
          // leaked it that we just paper over that here.
          wpt->altitude = 0;
-      }
-      if (reader.name() == "name") {
+      } else if (tag_name == "name") {
         QXmlStreamAttributes a = reader.attributes();
         wpt->shortname = ShimString(a.value("id"));
         wpt->description = ShimString(reader.readElementText());
-      }
-      if (reader.name() == "coord") {
+      } else if (tag_name == "coord") {
         QXmlStreamAttributes a = reader.attributes();
         wpt->latitude = ShimAttributeDouble(a, "lat");
         wpt->longitude = ShimAttributeDouble(a, "lon");
-      }
-      if (reader.name() == "type") {
+      } else if (tag_name == "type") {
         wpt->icon_descr = ShimString(reader.readElementText());
-      }
-      if (reader.name() == "link") {
+      } else if (tag_name == "link") {
         QXmlStreamAttributes a = reader.attributes();
         wpt->url_link_text = a.value("text").toString();
         wpt->url = reader.readElementText();
-      }
-      if (reader.name() == "difficulty") {
+      } else if (tag_name == "difficulty") {
         wpt->gc_data->diff = reader.readElementText().toInt() * 10;
-      }
-      if (reader.name() == "terrain") {
+      } else if (tag_name == "terrain") {
         wpt->gc_data->terr = reader.readElementText().toInt() * 10;
-      }
-      if (reader.name() == "container") {
+      } else if (tag_name == "container") {
         wpt->gc_data->container = wpt_container(reader.readElementText());
       }
     }
 
     if (reader.tokenType() == QXmlStreamReader::EndElement) {
-      if (reader.name() == "waypoint") {
+      if (tag_name == "waypoint") {
          waypt_add(wpt);
       }
     }
