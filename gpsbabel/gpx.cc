@@ -443,17 +443,16 @@ tag_mapping tag_path_map[] = {
   {(tag_type)0, 0, NULL, 0UL}
 };
 
+// Maintain a fast mapping from full tag names to the struct above.
+QHash<QString, tag_mapping*> hash;
+
 static tag_type
 get_tag(const QString& t, int* passthrough)
 {
-  tag_mapping* tm;
-  unsigned long tcrc = get_crc32_s(t.toUtf8().data());
-
-  for (tm = tag_path_map; tm->tag_type_ != 0; tm++) {
-    if ((tcrc == tm->crc) && (t == tm->tag_name)) {
-      *passthrough = tm->tag_passthrough;
-      return tm->tag_type_;
-    }
+  tag_mapping* tm = hash[t];
+  if (tm) {
+    *passthrough = tm->tag_passthrough;
+    return tm->tag_type_;
   }
   *passthrough = 1;
   return tt_unknown;
@@ -464,7 +463,7 @@ prescan_tags(void)
 {
   tag_mapping* tm;
   for (tm = tag_path_map; tm->tag_type_ != 0; tm++) {
-    tm->crc = get_crc32_s(tm->tag_name);
+    hash[tm->tag_name] = tm;
   }
 }
 
