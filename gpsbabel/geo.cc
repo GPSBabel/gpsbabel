@@ -341,7 +341,6 @@ void wpt_terr(const char* args, const char** unused)
   }
   waypt_alloc_gc_data(wpt_tmp)->terr = atof(args) * 10;
 }
-#endif
 
 static void
 geo_rd_init(const char* fname)
@@ -354,6 +353,7 @@ geo_read(void)
 {
   xml_read();
 }
+#endif
 #endif
 
 static void
