@@ -35,7 +35,7 @@ typedef struct xg_tag_mapping {
   const char* tag_name;
 } xg_tag_mapping;
 
-extern char* xhtml_entities;
+extern const char* xhtml_entities;
 
 void write_xml_entity(gbfile* ofd, const QString& indent,
                       const QString& tag, const QString& value);
