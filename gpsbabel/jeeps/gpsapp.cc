@@ -6673,7 +6673,7 @@ void GPS_D1011b_Get(GPS_PLap* Lap, UC* p)
     if (*p != 0xff) {
       (*Lap)->avg_cadence = *p;
     }
-    *p++;
+    p++;
     (*Lap)->trigger_method = *p++;
     break;
   default:
@@ -7189,7 +7189,7 @@ void GPS_D1007_Get(GPS_PCourse_Lap* clp, UC* p)
   if (*p != 0xff) {
     (*clp)->avg_cadence = *p;
   }
-  *p++;
+  p++;
 
   return;
 }
