@@ -149,7 +149,7 @@ fwrite_string(gbfile* fd, QString& str) {
     fwrite_integer(fd, 0);
   } else {
     fwrite_integer(fd, str.length());
-    gbfwrite(str.toAscii().data(), 1, str.length(), fd);
+    gbfwrite(str.toLatin1().data(), 1, str.length(), fd);
   }
 }
 
@@ -171,258 +171,160 @@ fwrite_fixedstring(gbfile* fd, const char* str, int fieldlen)
 
 /* Auxiliar functions */
 
-void
-set_datum(int n)
+#define MAX_INDATUM_INDEX 263
+
+static const int indatum_array[MAX_INDATUM_INDEX] = {
+  -1, // < 1
+  0, 0, 0, 0, 0, 0, 0, // < 8 : Adindan
+  1, // < 9 : Afgooye
+  2, // < 10 : Ain el Abd
+  -1, -1, -1, -1, // < 14
+  6, 6, 6, 6, 6, 6, 6, 6, 6, // < 23 : ARC 1950
+  7, 7, 7, // < 26 : ARC 1960
+  8, // < 27 : Ascension Island 58
+  -1, -1, -1, -1, -1, // < 32
+  13, // < 33 : Australian Geo 84
+  -1, // < 34
+  15, // < 35 : Bellevue IGN
+  16, // < 36 : Bermuda 1957
+  -1, -1, // < 38
+  17, // < 39 : Bukit Rimpah
+  18, // < 40 : Camp Area Astro
+  19, // < 41 : Campo Inchauspe
+  22, // < 42 : Canton Islan 1966
+  23, // < 43 : Cape
+  24, // < 44 : Cape Canaveral
+  26, // < 45 : Carthe
+  28, // < 46 : Chatham
+  29, // < 47 : Chua Astro
+  30, // < 48 : Corrego Alegre
+  -1, -1, // < 50
+  33, // < 51 : Djakarta (Batavia)
+  34, // < 52 : DOS 1968
+  35, // < 53 : Easter Island 1967
+  -1, // < 54
+  38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, 38, // < 69 : European 1950 Mean
+  39, // < 70 : European 1979 Mean
+  -1, // < 71
+  41, // < 72 : Gandajika
+  42, // < 73 : Geodetic Datum 49
+  -1, // < 74
+  45, // < 75 : Guam 1963
+  46, // < 76 : Gunung Segara
+  -1, // < 77
+  49, // < 78 : Hearth North
+  -1, // < 79
+  50, // < 80 : Hjorsey 1955
+  51, // < 81 : Hong Kong 1963
+  52, // < 82 : Hu-Tzu-Shan
+  53, 53, 53, 53, 53, 53, 53, // < 89 : Indian
+  -1, // < 90
+  55, // < 91 : Ireland 1965
+  -1, // < 92
+  56, // < 93 : ISTS 073 69
+  57, // < 94 : Johnston Island 61
+  58, // < 95 : Kandawala
+  59, // < 96 : Kerguelen Island
+  60, // < 97 : Kertau 48
+  -1, -1, // < 99
+  61, // < 100 : L.C. 5 Astro
+  -1, // < 101
+  63, // < 102 : Liberia 1964
+  64, 64, // < 104 : Luzon
+  -1, // < 105
+  65, // < 106 : Mahe 1971
+  -1, // < 107
+  69, // < 108 : Merchich
+  71, // < 109 : Midway Astro 61
+  73, 73, // < 111 : Minna
+  -1, // < 112
+  75, 75, 75, // < 115 : Nahrwan
+  76, // < 116 : Naparima BWI
+  3, 3, 3, // < 119 : Alaska NAD27
+  14, 14, // < 121 : Bahamas NAD27
+  20, 20, 20, 20, 20, // < 126 : Canada Mean NAD27
+  21, // < 127 : Canal Zone NAD27
+  31, // < 128 : Cuba NAD27
+  44, // < 129 : Greenland NAD27
+  -1, -1, // < 131
+  20, // < 132 : Canada Mean NAD27
+  -1, -1, -1, // < 135
+  70, // < 136 : Mexico NAD27
+  -1, -1, -1, -1, -1, -1, -1, -1, // < 144
+  80, // < 145 : Old Egyptian
+  81, // < 146 : Old Hawaiian
+  82, // < 147 : Old Hawaiian Kauai
+  83, // < 148 : Old Hawaiian Maui
+  81, // < 149 : Old Hawaiian Mean
+  84, // < 150 : Old Hawaiian Oahu
+  85, // < 151 : Oman
+  86, 86, 86, 86, 86, // < 156 : OSG Britain
+  87, // < 157 : Pico de Las Nieves
+  88, // < 158 : Pitcairn Astro 67
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // < 171
+  91, // < 172 : Puerto Rico
+  92, // < 173 : Pulkovo 1942
+  94, // < 174 : Quatar National
+  -1, -1, // < 176
+  95, // < 177 : Rome 1940
+  96, 96, 96, 96, 96, 96, 96, // < 184 : S-42 (Pulkovo 1942)
+  -1, // < 185
+  100, // < 186 : Santo DOS
+  99, // < 187 : Sao Braz
+  -1, -1, -1, -1, // < 191
+  105, 105, // < 193 : SAD-69/Mean
+  98, // < 194 : SAD-69/Brazil
+  105, 105, 105, 105, 105, 105, 105, 105, 105, 105, // < 204 : SAD-69/Mean
+  106, // < 205 : South Asia
+  109, // < 206 : Tananarive 1926
+  111, // < 207 : Timbalai 1948
+  112, 112, 112, 112, // < 211 : Tokyo mean
+  113, // < 212 : Tristan Astro 1968
+  115, // < 213 : Viti Levu 1916
+  -1, -1, // < 215
+  116, // < 216 : Wake Eniwetok 1960
+  117, // < 217 : WGS 72
+  118, // < 218 : WGS 84
+  119, // < 219 : Yacare
+  120, // < 220 : Zanderij
+  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, // < 231
+  98, // < 232 : SAD-69/Brazil
+  -1, -1, // < 234
+  117, // < 235 : WGS 72
+  0, // < 236 : Adindan
+  2, // < 237 : Ain el Abd
+  7, // < 238 : ARC 1960
+  8, // < 239 : Ascension Island 58
+  -1, -1, // < 241
+  52, // < 242 : Hu-Tzu-Shan
+  53, 53, 53, // < 245 : Indian
+  -1, // < 246
+  57, // < 247 : Johnston Island 61
+  64, // < 248 : Luzon
+  -1, // < 249
+  75, // < 250 : Nahrwan
+  76, // < 251 : Naparima BWI
+  -1, -1, -1, // < 254
+  82, // < 255 : Old Hawaiian Kauai
+  83, // < 256 : Old Hawaiian Maui
+  84, // < 257 : Old Hawaiian Oahu
+  -1, -1, // < 259
+  101, // < 260 : Sapper Hill 43
+  111, // < 261 : Timbalai 1948
+  112, // < 262 : Tokyo mean
+  116 // < 263 : Wake Eniwetok 1960
+};
+
+void set_datum(int n)
 {
   indatum = -1;
-  if (n < 1) {}
-  else if (n < 8)  {
-    indatum = 0;  /* Adindan */
-  } else if (n < 9)  {
-    indatum = 1;  /* Afgooye */
-  } else if (n < 10) {
-    indatum = 2;  /* Ain el Abd */
-  } else if (n < 14) {}
-  else if (n < 23) {
-    indatum = 6;  /* ARC 1950 */
-  } else if (n < 26) {
-    indatum = 7;  /* ARC 1960 */
-  } else if (n < 27) {
-    indatum = 8;  /* Ascension Island 58 */
-  } else if (n < 32) {}
-  else if (n < 33) {
-    indatum = 13;  /* Australian Geo 84 */
-  } else if (n < 34) {}
-  else if (n < 35) {
-    indatum = 15;  /* Bellevue IGN */
-  } else if (n < 36) {
-    indatum = 16;  /* Bermuda 1957 */
-  } else if (n < 38) {}
-  else if (n < 39) {
-    indatum = 17;  /* Bukit Rimpah */
-  } else if (n < 40) {
-    indatum = 18;  /* Camp Area Astro */
-  } else if (n < 41) {
-    indatum = 19;  /* Campo Inchauspe */
-  } else if (n < 42) {
-    indatum = 22;  /* Canton Islan 1966 */
-  } else if (n < 43) {
-    indatum = 23;  /* Cape */
-  } else if (n < 44) {
-    indatum = 24;  /* Cape Canaveral */
-  } else if (n < 45) {
-    indatum = 26;  /* Carthe */
-  } else if (n < 46) {
-    indatum = 28;  /* Chatham */
-  } else if (n < 47) {
-    indatum = 29;  /* Chua Astro */
-  } else if (n < 48) {
-    indatum = 30;  /* Corrego Alegre*/
-  } else if (n < 50) {}
-  else if (n < 51) {
-    indatum = 33;  /* Djakarta (Batavia) */
-  } else if (n < 52) {
-    indatum = 34;  /* DOS 1968 */
-  } else if (n < 53) {
-    indatum = 35;  /* Easter Island 1967 */
-  } else if (n < 54) {}
-  else if (n < 69) {
-    indatum = 38;  /* European 1950 Mean */
-  } else if (n < 70) {
-    indatum = 39;  /* European 1979 Mean */
-  } else if (n < 71) {}
-  else if (n < 72) {
-    indatum = 41;  /* Gandajika */
-  } else if (n < 73) {
-    indatum = 42;  /* Geodetic Datum 49 */
-  } else if (n < 74) {}
-  else if (n < 75) {
-    indatum = 45;  /* Guam 1963 */
-  } else if (n < 76) {
-    indatum = 46;  /* Gunung Segara */
-  } else if (n < 77) {}
-  else if (n < 78) {
-    indatum = 49;  /* Hearth North */
-  } else if (n < 79) {}
-  else if (n < 80) {
-    indatum = 50;  /* Hjorsey 1955 */
-  } else if (n < 81) {
-    indatum = 51;  /* Hong Kong 1963 */
-  } else if (n < 82) {
-    indatum = 52;  /* Hu-Tzu-Shan */
-  } else if (n < 89) {
-    indatum = 53;  /* Indian */
-  } else if (n < 90) {}
-  else if (n < 91) {
-    indatum = 55;  /* Ireland 1965 */
-  } else if (n < 92) {}
-  else if (n < 93) {
-    indatum = 56;  /* ISTS 073 69 */
-  } else if (n < 94) {
-    indatum = 57;  /* Johnston Island 61 */
-  } else if (n < 95) {
-    indatum = 58;  /* Kandawala */
-  } else if (n < 96) {
-    indatum = 59;  /* Kerguelen Island */
-  } else if (n < 97) {
-    indatum = 60;  /* Kertau 48 */
-  } else if (n < 99) {}
-  else if (n < 100) {
-    indatum = 61;  /* L.C. 5 Astro */
-  } else if (n < 101) {}
-  else if (n < 102) {
-    indatum = 63;  /* Liberia 1964 */
-  } else if (n < 104) {
-    indatum = 64;  /* Luzon */
-  } else if (n < 105) {}
-  else if (n < 106) {
-    indatum = 65;  /* Mahe 1971 */
-  } else if (n < 107) {}
-  else if (n < 108) {
-    indatum = 69;  /* Merchich */
-  } else if (n < 109) {
-    indatum = 71;  /* Midway Astro 61 */
-  } else if (n < 111) {
-    indatum = 73;  /* Minna */
-  } else if (n < 112) {}
-  else if (n < 115) {
-    indatum = 75;  /* Nahrwan */
-  } else if (n < 116) {
-    indatum = 76;  /* Naparima BWI  */
-  } else if (n < 119) {
-    indatum = 3;   /* Alaska NAD27 */
-  } else if (n < 121) {
-    indatum = 14;  /* Bahamas NAD27 */
-  } else if (n < 126) {
-    indatum = 20;  /* Canada Mean NAD27 */
-  } else if (n < 127) {
-    indatum = 21;  /* Canal Zone NAD27 */
-  } else if (n < 128) {
-    indatum = 31;  /* Cuba NAD27 */
-  } else if (n < 129) {
-    indatum = 44;  /* Greenland NAD27 */
-  } else if (n < 131) {}
-  else if (n < 132) {
-    indatum = 20;  /* Canada Mean NAD27 */
-  } else if (n < 135) {}
-  else if (n < 136) {
-    indatum = 70;  /* Mexico NAD27 */
-  } else if (n < 144) {}
-  else if (n < 145) {
-    indatum = 80;  /* Old Egyptian */
-  } else if (n < 146) {
-    indatum = 81;  /* Old Hawaiian */
-  } else if (n < 147) {
-    indatum = 82;  /* Old Hawaiian Kauai */
-  } else if (n < 148) {
-    indatum = 83;  /* Old Hawaiian Maui */
-  } else if (n < 149) {
-    indatum = 81;  /* Old Hawaiian Mean */
-  } else if (n < 150) {
-    indatum = 84;  /* Old Hawaiian Oahu */
-  } else if (n < 151) {
-    indatum = 85;  /* Oman */
-  } else if (n < 156) {
-    indatum = 86;  /* OSG Britain */
-  } else if (n < 157) {
-    indatum = 87;  /* Pico de Las Nieves */
-  } else if (n < 158) {
-    indatum = 88;  /* Pitcairn Astro 67 */
-  } else if (n < 171) {}
-  else if (n < 172) {
-    indatum = 91;  /* Puerto Rico */
-  } else if (n < 173) {
-    indatum = 92;  /* Pulkovo 1942 */
-  } else if (n < 174) {
-    indatum = 94;  /* Quatar National */
-  } else if (n < 176) {}
-  else if (n < 177) {
-    indatum = 95;  /* Rome 1940 */
-  } else if (n < 184) {
-    indatum = 96;  /* S-42 (Pulkovo 1942) */
-  } else if (n < 185) {}
-  else if (n < 186) {
-    indatum = 100;  /* Santo DOS */
-  } else if (n < 187) {
-    indatum = 99;  /* Sao Braz */
-  } else if (n < 191) {}
-  else if (n < 193) {
-    indatum = 105;  /* SAD-69/Mean */
-  } else if (n < 194) {
-    indatum = 98;   /* SAD-69/Brazil */
-  } else if (n < 204) {
-    indatum = 105;  /* SAD-69/Mean */
-  } else if (n < 205) {
-    indatum = 106;  /* South Asia */
-  } else if (n < 206) {
-    indatum = 109;  /* Tananarive 1926 */
-  } else if (n < 207) {
-    indatum = 111;  /* Timbalai 1948 */
-  } else if (n < 211) {
-    indatum = 112;  /* Tokyo mean */
-  } else if (n < 212) {
-    indatum = 113;  /* Tristan Astro 1968 */
-  } else if (n < 213) {
-    indatum = 115;  /* Viti Levu 1916 */
-  } else if (n < 215) {}
-  else if (n < 216) {
-    indatum = 116;  /* Wake Eniwetok 1960 */
-  } else if (n < 217) {
-    indatum = 117;  /* WGS 72 */
-  } else if (n < 218) {
-    indatum = 118;  /* WGS 84 */
-  } else if (n < 219) {
-    indatum = 119;  /* Yacare */
-  } else if (n < 220) {
-    indatum = 120;  /* Zanderij */
-  } else if (n < 231) {}
-  else if (n < 232) {
-    indatum = 98;   /* SAD-69/Brazil*/
-  } else if (n < 234) {}
-  else if (n < 235) {
-    indatum = 117;  /* WGS 72 */
-  } else if (n < 236) {
-    indatum = 0;    /* Adindan */
-  } else if (n < 237) {
-    indatum = 2;    /* Ain el Abd */
-  } else if (n < 238) {
-    indatum = 7;    /* ARC 1960 */
-  } else if (n < 239) {
-    indatum = 8;    /* Ascension Island 58 */
-  } else if (n < 241) {}
-  else if (n < 242) {
-    indatum = 52;   /* Hu-Tzu-Shan */
-  } else if (n < 245) {
-    indatum = 53;   /* Indian */
-  } else if (n < 246) {}
-  else if (n < 247) {
-    indatum = 57;   /* Johnston Island 61 */
-  } else if (n < 248) {
-    indatum = 64;   /* Luzon */
-  } else if (n < 249) {}
-  else if (n < 250) {
-    indatum = 75;  /* Nahrwan */
-  } else if (n < 251) {
-    indatum = 76;  /* Naparima BWI  */
-  } else if (n < 254) {}
-  else if (n < 255) {
-    indatum = 82;  /* Old Hawaiian Kauai */
-  } else if (n < 256) {
-    indatum = 83;  /* Old Hawaiian Maui */
-  } else if (n < 257) {
-    indatum = 84;  /* Old Hawaiian Oahu */
-  } else if (n < 259) {}
-  else if (n < 260) {
-    indatum = 101;  /* Sapper Hill 43 */
-  } else if (n < 261) {
-    indatum = 111;  /* Timbalai 1948 */
-  } else if (n < 262) {
-    indatum = 112;  /* Tokyo mean */
-  } else if (n < 263) {
-    indatum = 116;  /* Wake Eniwetok 1960 */
+  if (n > 0 && n < MAX_INDATUM_INDEX)
+  {
+	  indatum = indatum_array[n];
   }
 
-  if (indatum == -1) {
+  if (indatum == -1)
+  {
     warning(MYNAME ": Unsupported datum (%d), won't convert to WGS84\n", n);
   }
 }

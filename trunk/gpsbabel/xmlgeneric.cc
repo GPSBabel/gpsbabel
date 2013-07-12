@@ -62,7 +62,7 @@ void
 write_xml_entity(gbfile *ofd, const QString& indent,
                  const QString& tag, const QString& value)
 {
-  char *tmp_ent = xml_entitize(value.toAscii().data());
+  char *tmp_ent = xml_entitize(value.toLatin1().data());
   gbfprintf(ofd, "%s<%s>%s</%s>\n", qPrintable(indent), qPrintable(tag), tmp_ent, qPrintable(tag));
   xfree(tmp_ent);
 }
@@ -80,7 +80,7 @@ void
 write_xml_entity_begin0(gbfile *ofd, const QString& indent,
                         const QString& tag)
 {
-  gbfprintf(ofd, "%s<%s>\n", indent.toAscii().data(), tag.toAscii().data());
+  gbfprintf(ofd, "%s<%s>\n", indent.toLatin1().data(), tag.toLatin1().data());
 }
 
 void
@@ -88,7 +88,7 @@ write_xml_entity_begin1(gbfile *ofd, const QString& indent,
                         const QString& tag, const QString& attr,
                         const QString& attrval)
 {
-  gbfprintf(ofd, "%s<%s %s=\"%s\">\n", indent.toAscii().data(), tag.toAscii().data(), attr.toAscii().data(), attrval.toAscii().data());
+  gbfprintf(ofd, "%s<%s %s=\"%s\">\n", indent.toLatin1().data(), tag.toLatin1().data(), attr.toLatin1().data(), attrval.toLatin1().data());
 }
 
 void
@@ -97,14 +97,14 @@ write_xml_entity_begin2(gbfile *ofd, const QString& indent,
                         const QString& attrval1, const QString& attr2,
                         const QString& attrval2)
 {
-  gbfprintf(ofd, "%s<%s %s=\"%s\" %s=\"%s\">\n", indent.toAscii().data(), tag.toAscii().data(), attr1.toAscii().data(), attrval1.toAscii().data(), attr2.toAscii().data(), attrval2.toAscii().data());
+  gbfprintf(ofd, "%s<%s %s=\"%s\" %s=\"%s\">\n", indent.toLatin1().data(), tag.toLatin1().data(), attr1.toLatin1().data(), attrval1.toLatin1().data(), attr2.toLatin1().data(), attrval2.toLatin1().data());
 }
 
 void
 write_xml_entity_end(gbfile *ofd, const QString& indent,
                      const QString& tag)
 {
-  gbfprintf(ofd, "%s</%s>\n", indent.toAscii().data(), tag.toAscii().data());
+  gbfprintf(ofd, "%s</%s>\n", indent.toLatin1().data(), tag.toLatin1().data());
 }
 
 void

@@ -1582,7 +1582,7 @@ strip_html(const utf_string *in)
   char* outstring, *out;
   // If toUtf8() is used here, we double encode in the OSM test case.
   // this may be a bug here or elsewhere.
-  char* instr = xstrdup(in->utfstring.toAscii().data());
+  char* instr = xstrdup(in->utfstring.toLatin1().data());
   char tag[8];
   unsigned short int taglen = 0;
 
