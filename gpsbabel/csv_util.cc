@@ -35,7 +35,7 @@
 /* macros */
 #define LAT_DIR(a) a < 0.0 ? 'S' : 'N'
 #define LON_DIR(a) a < 0.0 ? 'W' : 'E'
-#define NONULL(a) a.isNull() ? "" : a.toAscii().data()
+#define NONULL(a) a.isNull() ? "" : a.toLatin1().data()
 #define ISWHITESPACE(a) ((a == ' ') || (a == '\t'))
 
 /* convert excel time (days since 1900) to time_t and back again */

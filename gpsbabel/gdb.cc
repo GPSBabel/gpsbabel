@@ -407,7 +407,7 @@ gdb_write_cstr_list(const char* str)
 static void
 gdb_write_cstr_list(const QString& str)
 {
-  return gdb_write_cstr_list(str.toAscii().data());
+	return gdb_write_cstr_list(str.toLatin1().data());
 }
 
 static void
