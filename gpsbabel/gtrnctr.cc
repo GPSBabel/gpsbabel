@@ -327,7 +327,7 @@ gtc_waypt_pr(const waypoint* wpt)
     if (wpt->power) {
       gtc_write_xml(0, "<Watts>%.0f</Watts>\n", wpt->power);
     }
-    gtc_write_xml(-1, "</TPX>\n", wpt->cadence);
+    gtc_write_xml(-1, "</TPX>\n");
     gtc_write_xml(-1, "</Extensions>\n");
   }
 
@@ -359,7 +359,7 @@ gtc_fake_hdr(void)
     gtc_write_xml(-1,"</MaximumHeartRateBpm>\n");
   }
   if (tdata->avg_cad) {
-    gtc_write_xml(0, "<Cadence>%.1f</Cadence>\n", tdata->avg_cad);
+    gtc_write_xml(0, "<Cadence>%d</Cadence>\n", tdata->avg_cad);
   }
   gtc_write_xml(0, "<Intensity>Active</Intensity>\n");
 

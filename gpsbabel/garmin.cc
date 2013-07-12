@@ -592,6 +592,7 @@ lap_read_as_track(void)
   int trk_num = 0;
   int index;
   int i;
+  char tbuf[128];
 
   ntracks = GPS_Command_Get_Lap(portname, &array, waypt_read_cb);
   if (ntracks <= 0) {
@@ -617,8 +618,8 @@ lap_read_as_track(void)
       trk_head = route_head_alloc();
       /*For D906, we would like to use the track_index in the last packet instead...*/
       trk_head->rte_num = ++trk_num;
-      trk_head->rte_name = xmalloc(32);
-      strftime(trk_head->rte_name, 32, "%Y-%m-%dT%H:%M:%SZ", stmp);
+      strftime(tbuf, 32, "%Y-%m-%dT%H:%M:%SZ", stmp);
+      trk_head->rte_name = xstrdup(tbuf);
       track_add_head(trk_head);
 
       wpt = waypt_new();
@@ -631,13 +632,12 @@ lap_read_as_track(void)
       wpt->creation_time = array[i]->start_time;
       wpt->microseconds = 0;
 
-      wpt->shortname = xmalloc(8);
-      sprintf(wpt->shortname, "#%d-0", index);
-      wpt->description = xmalloc(128);
-      sprintf(wpt->description, "D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d",
+      sprintf(tbuf, "#%d-0", index);
+	  wpt->shortname = xstrdup(tbuf);
+      sprintf(tbuf, "D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d",
               array[i]->total_distance, array[i]->calories, array[i]->max_speed, array[i]->avg_heart_rate,
               array[i]->max_heart_rate, array[i]->avg_cadence, array[i]->intensity, array[i]->trigger_method);
-
+	  wpt->description = xstrdup(tbuf);
       track_add_wpt(trk_head, wpt);
     }
     /*Allow even if no correct location, no skip if invalid */
@@ -655,13 +655,13 @@ lap_read_as_track(void)
     wpt->creation_time = array[i]->start_time + array[i]->total_time/100;
     wpt->microseconds = 10000*(array[i]->total_time % 100);
     /*Add fields with no mapping in the description */
-    wpt->shortname = xmalloc(8);
-    sprintf(wpt->shortname, "#%d", index);
-    wpt->description = xmalloc(128);
-    sprintf(wpt->description, "D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d (%f,%f)",
+    sprintf(tbuf, "#%d", index);
+    wpt->shortname = xstrdup(tbuf);
+    sprintf(tbuf, "D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d (%f,%f)",
             array[i]->total_distance, array[i]->calories, array[i]->max_speed, array[i]->avg_heart_rate,
             array[i]->max_heart_rate, array[i]->avg_cadence, array[i]->intensity, array[i]->trigger_method,
             array[i]->begin_lon, array[i]->begin_lat);
+	wpt->description = xstrdup(tbuf);
 
     track_add_wpt(trk_head, wpt);
   }
