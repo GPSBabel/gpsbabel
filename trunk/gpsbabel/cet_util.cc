@@ -1278,7 +1278,7 @@ const char* xml_convert_to_char_string_n(const XML_Char* src, int* n)
   *n = i;
 
   /* Appropriately size (not zero terminated) buffer */
-  utf8 = utf8b = xmalloc(i);
+  utf8 = utf8b = (char *)xmalloc(i);
 
   for (j = 0; utf8 < utf8b + i; j++) {
     utf8 += cet_ucs4_to_utf8(utf8, 6, src[j]);
@@ -1310,7 +1310,7 @@ const char* xml_convert_to_char_string(const XML_Char* src)
   }
 
   /* We return a NUL terminated string. */
-  utf8 = utf8b = xmalloc(i + 1);
+  utf8 = utf8b = (char *)xmalloc(i + 1);
   in = src;
 
   for (j = 0; utf8 < utf8b + i; j++) {
@@ -1351,7 +1351,7 @@ const char** xml_convert_attrs_to_char_string(const XML_Char** xml_attr)
   }
 
   // Allocate space
-  char_attrs = xmalloc((size + 1) * sizeof(char*));
+  char_attrs = (const char **)xmalloc((size + 1) * sizeof(char*));
 
   // Duplicate strings
   for (i = 0; i < size; ++i) {
