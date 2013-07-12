@@ -556,7 +556,8 @@ void tpo_process_tracks(void)
   }
   char style_name[track_style_count][TRACKNAMELENGTH]; // some huge value
   int style_color[track_style_count][3];  // keep R/G/B values separate because line_color needs BGR
-  int style_wide[track_style_count],style_dash[track_style_count];
+  int style_wide[track_style_count];
+  int *style_dash = (int*) xcalloc(sizeof(int), track_style_count);
   for (ii = 0; ii < track_style_count; ii++) {
 
     // clumsy way to skip two undefined bytes

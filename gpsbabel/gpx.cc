@@ -1441,7 +1441,7 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
       if (tag->child) {
         fprint_xml_chain(tag->child, wpt);
       }
-      if (wpt && wpt->gc_data->exported &&
+      if (wpt && wpt->gc_data->exported.isValid() &&
           strcmp(tag->tagname, "groundspeak:cache") == 0) {
           writer.writeTextElement("time", 
                                   wpt->gc_data->exported.toPrettyString());
