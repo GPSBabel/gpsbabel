@@ -17,7 +17,6 @@
 
  */
 #include "defs.h"
-#include "xmlgeneric.h"
 
 static char* deficon = NULL;
 static char* nuke_placer;
@@ -40,10 +39,6 @@ arglist_t geo_args[] = {
 };
 
 #define MYNAME "geo"
-
-#define NEWREADER 0
-
-#if NEWREADER
 
 // This really should be class-local...
 QXmlStreamReader reader;
@@ -72,8 +67,8 @@ void GeoReadLoc()
 {
   waypoint* wpt = NULL;
   while (reader.tokenType() != QXmlStreamReader::EndDocument) {
+    QStringRef tag_name = reader.name();
     if (reader.tokenType()==QXmlStreamReader::StartElement) {
-      QString tag_name = reader.name();
       if (tag_name == "waypoint") {
          wpt = waypt_new();
          waypt_alloc_gc_data(wpt);
@@ -167,199 +162,10 @@ geocache_container wpt_container(const QString& args)
   return v;
 }
 
-
-#else
-static waypoint* wpt_tmp;
-#define MY_CBUF 4096
-
-#if ! HAVE_LIBEXPAT
-static void
-geo_rd_init(const char* fname)
-{
-  fatal(MYNAME ": This build excluded GEO support because expat was not installed.\n");
-}
-
-void
-geo_read(void)
-{
-}
-#else
-
-static xg_callback	wpt_s, wpt_e;
-static xg_callback	wpt_link_s, wpt_link;
-static xg_callback	wpt_name, wpt_name_s, wpt_type, wpt_coord;
-static xg_callback	wpt_diff, wpt_terr, wpt_container;
-
-static
-xg_tag_mapping loc_map[] = {
-  { wpt_s, 	cb_start, 	"/loc/waypoint" },
-  { wpt_e, 	cb_end, 	"/loc/waypoint" },
-  { wpt_name_s, 	cb_start, 	"/loc/waypoint/name" },
-  { wpt_name, 	cb_cdata, 	"/loc/waypoint/name" },
-  { wpt_type, 	cb_cdata, 	"/loc/waypoint/type" },
-  { wpt_link_s, 	cb_start, 	"/loc/waypoint/link" },
-  { wpt_link, 	cb_cdata, 	"/loc/waypoint/link" },
-  { wpt_coord, 	cb_start, 	"/loc/waypoint/coord" },
-  { wpt_diff, 	cb_cdata, 	"/loc/waypoint/difficulty" },
-  { wpt_terr, 	cb_cdata, 	"/loc/waypoint/terrain" },
-  { wpt_container,cb_cdata, 	"/loc/waypoint/container" },
-  { NULL,	(xg_cb_type)0, 		NULL }
-};
-
-void wpt_s(const char* args, const char** unused)
-{
-  wpt_tmp = waypt_new();
-  /*
-   * 'geo' doesn't really have an 'unknown' and doesn't have any
-   * concept of alt.  Unfortunately, we have many reference files
-   * that have leaked the 'unknown_alt' value into them, so we paper
-   * over that here.
-   */
-  wpt_tmp->altitude = 0;
-}
-
-void wpt_e(const char* args, const char** unused)
-{
-  waypt_add(wpt_tmp);
-}
-
-void wpt_name_s(const char* args, const char** attrv)
-{
-  const char** avp = &attrv[0];
-  while (*avp) {
-    if (0 == strcmp(avp[0], "id")) {
-      wpt_tmp->shortname = xstrdup(avp[1]);
-    }
-    avp+=2;
-  }
-}
-
-void wpt_name(const char* args, const char** unused)
-{
-  const char* s;
-  if (!args) {
-    return;
-  }
-
-  wpt_tmp->description = xstrappend(wpt_tmp->description,args);
-  s = xstrrstr(wpt_tmp->description, " by ");
-  if (s) {
-    waypt_alloc_gc_data(wpt_tmp);
-    wpt_tmp->gc_data->placer = QString(s + 4);
-
-    if (nuke_placer) {
-      // Sleaze alert.  We're casting away constness and writing into a string
-      // that should probably be read-only...
-      *(char *)s = '\0';
-    }
-  }
-}
-
-void wpt_link_s(const char* args, const char** attrv)
-{
-  const char** avp = &attrv[0];
-  while (*avp) {
-    if (0 == strcmp(avp[0], "text")) {
-      wpt_tmp->url_link_text = avp[1];
-    }
-    avp+=2;
-  }
-}
-void wpt_link(const char* args, const char** attrv)
-{
-  wpt_tmp->url = args;
-}
-
-void wpt_type(const char* args, const char** unused)
-{
-  wpt_tmp->icon_descr = args;
-}
-
-void wpt_coord(const char* args, const char** attrv)
-{
-  const char** avp = &attrv[0];
-
-  while (*avp) {
-    if (strcmp(avp[0], "lat") == 0) {
-      sscanf(avp[1], "%lf",
-             &wpt_tmp->latitude);
-    } else if (strcmp(avp[0], "lon") == 0) {
-      sscanf(avp[1], "%lf",
-             &wpt_tmp->longitude);
-    }
-    avp+=2;
-  }
-}
-
-void wpt_container(const char* args, const char** unused)
-{
-  geocache_container v;
-
-  if (!args) {
-    return;
-  }
-  switch (atoi(args)) {
-  case 1:
-    v = gc_unknown;
-    break;
-  case 2:
-    v = gc_micro;
-    break;
-  case 3:
-    v = gc_regular;
-    break;
-  case 4:
-    v = gc_large;
-    break;
-  case 5:
-    v = gc_virtual;;
-    break;
-  case 6:
-    v = gc_other;
-    break;
-  case 8:
-    v = gc_small;
-    break;
-  default:
-    v = gc_unknown;
-    break;
-  }
-  waypt_alloc_gc_data(wpt_tmp)->container = v;
-}
-void wpt_diff(const char* args, const char** unused)
-{
-  if (!args) {
-    return;
-  }
-  waypt_alloc_gc_data(wpt_tmp)->diff = atof(args) * 10;
-}
-
-void wpt_terr(const char* args, const char** unused)
-{
-  if (!args) {
-    return;
-  }
-  waypt_alloc_gc_data(wpt_tmp)->terr = atof(args) * 10;
-}
-
-static void
-geo_rd_init(const char* fname)
-{
-  xml_init(fname, loc_map, NULL);
-}
-
-static void
-geo_read(void)
-{
-  xml_read();
-}
-#endif
-#endif
-
 static void
 geo_rd_deinit(void)
 {
-  xml_deinit();
+  
 }
 
 static void
