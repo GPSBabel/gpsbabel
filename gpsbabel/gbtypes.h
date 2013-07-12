@@ -33,8 +33,9 @@
 
 typedef unsigned long gbuint32;
 typedef unsigned short gbuint16;
-typedef long gbint32;
+typedef int gbint32;
 typedef short gbint16;
+#include <stdint.h>
 
 #else
 

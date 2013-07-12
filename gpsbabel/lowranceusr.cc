@@ -36,6 +36,11 @@
 #include <string.h>
 #include <math.h> /* for lat/lon conversion */
 
+#if defined(_MSC_VER)
+//Incomplete implementation, use existing GB function
+#define lround si_round 
+#endif
+
 typedef struct lowranceusr_icon_mapping {
   const int	value;
   const char*	icon;
