@@ -6670,7 +6670,10 @@ void GPS_D1011b_Get(GPS_PLap* Lap, UC* p)
     return;
   case pD1011:
   case pD1015:
-    (*Lap)->avg_cadence = *p++;
+    if (*p != 0xff) {
+      (*Lap)->avg_cadence = *p;
+    }
+    *p++;
     (*Lap)->trigger_method = *p++;
     break;
   default:
@@ -7183,7 +7186,10 @@ void GPS_D1007_Get(GPS_PCourse_Lap* clp, UC* p)
   (*clp)->avg_heart_rate = *p++;
   (*clp)->max_heart_rate = *p++;
   (*clp)->intensity = *p++;
-  (*clp)->avg_cadence = *p++;
+  if (*p != 0xff) {
+    (*clp)->avg_cadence = *p;
+  }
+  *p++;
 
   return;
 }
@@ -7232,7 +7238,7 @@ void GPS_D1007_Send(UC* data, GPS_PCourse_Lap clp, int32* len)
 
   *p++ = clp->intensity;
 
-  *p++ = clp->avg_cadence;
+  *p++ = clp->avg_cadence > 0 ? clp->avg_cadence : 0xff;
 
   *len = p-data;
 

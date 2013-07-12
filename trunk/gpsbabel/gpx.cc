@@ -994,11 +994,13 @@ gpx_end(void* data, const XML_Char* xml_el)
     }
     break;
   case tt_cache_desc_long:
-    rtrim(cdatastrp);
-    if (cdatastrp[0]) {
+    {
       geocache_data* gc_data = waypt_alloc_gc_data(wpt_tmp);
       gc_data->desc_long.is_html = cache_descr_is_html;
-      gc_data->desc_long.utfstring = cdatastrp;
+// FIXME: Forcing a premature conversion here saves 4% on GPX read times
+// on large PQs.  Once cdatastrp becomes  real QString this is just (minimal)
+// overhead.
+      gc_data->desc_long.utfstring = QString(cdatastrp).trimmed();
     }
     break;
   case tt_cache_desc_short:
