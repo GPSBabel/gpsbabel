@@ -22,23 +22,6 @@
 #ifndef gb_types_h_included
 #define gb_types_h_included
 
-
-/*
- *  If this is a problem and any interesting system doesn't have the C99-ism
- *  of <stdint.h> we'll come up with something more clever that'll likely
- *  include a gross collection of  __STDC_VERSION >= 199901L  || __GNUC__
- */
-
-#if defined(_MSC_VER)
-
-typedef unsigned long gbuint32;
-typedef unsigned short gbuint16;
-typedef int gbint32;
-typedef short gbint16;
-#include <stdint.h>
-
-#else
-
 # if defined (__FreeBSD__)
 #  include <inttypes.h>
 # else
@@ -49,8 +32,6 @@ typedef uint32_t	gbuint32;
 typedef uint16_t	gbuint16;
 typedef  int32_t 	 gbint32;
 typedef  int16_t	 gbint16;
-
-#endif /* defined(_MSC_VER) */
 
 typedef gbuint32	gbsize_t;
 typedef unsigned char	gbuint8;
