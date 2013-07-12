@@ -322,9 +322,9 @@ mapsend_waypt_pr(const waypoint* waypointp)
   if (!waypointp->icon_descr.isNull()) {
     iconp = mag_find_token_from_descr(waypointp->icon_descr);
     if (1 == iconp.size()) {
-      c = iconp[0].toAscii() - 'a';
+      c = iconp[0].toLatin1() - 'a';
     } else {
-      c = iconp[1].toAscii() - 'a' + 26;
+      c = iconp[1].toLatin1() - 'a' + 26;
     }
   } else  {
     c = 0;
@@ -332,9 +332,9 @@ mapsend_waypt_pr(const waypoint* waypointp)
   if (get_cache_icon(waypointp)) {
     iconp = mag_find_token_from_descr(get_cache_icon(waypointp));
     if (1 == iconp.size()) {
-      c = iconp[0].toAscii() - 'a';
+      c = iconp[0].toLatin1() - 'a';
     } else {
-      c = iconp[1].toAscii() - 'a' + 26;
+      c = iconp[1].toLatin1() - 'a' + 26;
     }
   }
 
@@ -400,9 +400,9 @@ mapsend_route_disp(const waypoint* waypointp)
   if (!waypointp->icon_descr.isNull()) {
     iconp = mag_find_token_from_descr(waypointp->icon_descr);
     if (1 == iconp.size()) {
-      c = iconp[0].toAscii() - 'a';
+      c = iconp[0].toLatin1() - 'a';
     } else {
-      c = iconp[1].toAscii() - 'a' + 26;
+      c = iconp[1].toLatin1() - 'a' + 26;
     }
   } else  {
     c = 0;
