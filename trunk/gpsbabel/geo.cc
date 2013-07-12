@@ -84,7 +84,7 @@ void GeoReadLoc()
         wpt->latitude = ShimAttributeDouble(a, "lat");
         wpt->longitude = ShimAttributeDouble(a, "lon");
       } else if (tag_name == "type") {
-        wpt->icon_descr = ShimString(reader.readElementText());
+        wpt->icon_descr = reader.readElementText();
       } else if (tag_name == "link") {
         QXmlStreamAttributes a = reader.attributes();
         wpt->url_link_text = a.value("text").toString();
