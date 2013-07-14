@@ -192,7 +192,9 @@
   "$Id: dbfopen.c,v 1.3 2006-07-13 03:27:54 robertl Exp $";*/
 
 #include "shapefil.h"
+#if HAVE_CONFIG_H
 #include "config.h"
+#endif
 
 #if SHAPELIB_ENABLED
 

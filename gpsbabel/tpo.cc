@@ -525,9 +525,13 @@ waypoint* tpo_convert_ll(int lat, int lon)
   return(waypoint_temp);
 }
 
-
-
-
+#define TRACKNAMELENGTH 256
+struct style_info{
+  char name[TRACKNAMELENGTH]; // some huge value
+  uint8_t color[3];  // keep R/G/B values separate because line_color needs BGR
+  uint8_t wide;
+  uint8_t dash;
+};
 
 // Track decoder for version 3.x files.  This block contains tracks
 // (called "freehand routes" or just "routes" in Topo).
@@ -536,7 +540,6 @@ void tpo_process_tracks(void)
 {
   unsigned int track_count, track_style_count;
   unsigned int xx,ii,tmp;
-#define TRACKNAMELENGTH 256
 
   int DEBUG=0;
 
@@ -554,26 +557,25 @@ void tpo_process_tracks(void)
   if (DEBUG) {
     printf("Unpacking %d track styles...\n",track_style_count);
   }
-  char style_name[track_style_count][TRACKNAMELENGTH]; // some huge value
-  int style_color[track_style_count][3];  // keep R/G/B values separate because line_color needs BGR
-  int style_wide[track_style_count];
-  int *style_dash = (int*) xcalloc(sizeof(int), track_style_count);
+
+  style_info *styles = (style_info *)xcalloc(track_style_count, sizeof(style_info));
+
   for (ii = 0; ii < track_style_count; ii++) {
 
-    // clumsy way to skip two undefined bytes
+    // clumsy way to skip two undefined bytes (compiler should unwind this)
     for (xx = 0; xx < 2; xx++) {
       tmp = (unsigned char) gbfgetc(tpo_file_in);
-      // printf("Skipping (visibility?) byte 0x%x\n",tmp);
+      // printf("Skipping unknown (visibility?) byte 0x%x\n",tmp);
     }
 
     // next three bytes are RGB color, fourth is unknown
     // Topo and web uses rrggbb, also need line_color.bbggrr for KML
     for (xx = 0; xx < 3; xx++) {
-      style_color[ii][xx] = (int) gbfgetc(tpo_file_in);
-      if((style_color[ii][xx] < 0) || (style_color[ii][xx] >255)) {
-        style_color[ii][xx] = 0; // assign black if out of range 0x00 to 0xff
-        // used to store strings: sprintf(style_color[ii], "%s%02x",style_color[ii],tmp);
+      int col = (int)gbfgetc(tpo_file_in);
+     if((col < 0) || (col >255)) {
+        col = 0; // assign black if out of range 0x00 to 0xff
       }
+      styles[ii].color[xx] = (uint8_t)col;
     }
 
     tmp = (unsigned char) gbfgetc(tpo_file_in);
@@ -588,24 +590,25 @@ void tpo_process_tracks(void)
       return;
     }
     if (tmp) {
-      style_name[ii][0] = '\0';
-      gbfread(style_name[ii], 1, tmp, tpo_file_in);
-      style_name[ii][tmp] = '\0';  // Terminator
+      styles[ii].name[0] = '\0';
+      gbfread(styles[ii].name, 1, tmp, tpo_file_in);
+      styles[ii].name[tmp] = '\0';  // Terminator
     } else { // Assign a generic style name
-      sprintf(style_name[ii], "STYLE %d", ii);
+      sprintf(styles[ii].name, "STYLE %d", ii);
     }
+    //TBD: Should this be TRACKNAMELENGTH?
     for (xx = 0; xx < 3; xx++) {
-      if (style_name[ii][xx] == (char) ',') {
-        style_name[ii][xx] = (char) '_';
+      if (styles[ii].name[xx] == (char) ',') {
+        styles[ii].name[xx] = (char) '_';
       }
-      if (style_name[ii][xx] == (char) '=') {
-        style_name[ii][xx] = (char) '_';
+      if (styles[ii].name[xx] == (char) '=') {
+        styles[ii].name[xx] = (char) '_';
       }
     }
 
     // one byte for line width (value 1-4), one byte for 'dashed' boolean
-    style_wide[ii] = (unsigned int) gbfgetc(tpo_file_in);
-    style_dash[ii] = (unsigned int) gbfgetc(tpo_file_in);
+    styles[ii].wide = (uint8_t) gbfgetc(tpo_file_in);
+    styles[ii].dash = (uint8_t) gbfgetc(tpo_file_in);
 
     // clumsy way to skip two undefined bytes
     for (xx = 0; xx < 2; xx++) {
@@ -614,7 +617,7 @@ void tpo_process_tracks(void)
     }
 
     if (DEBUG) {
-      printf("Track style %d: color=#%02x%02x%02x, width=%d, dashed=%d, name=%s\n",ii,style_color[ii][0],style_color[ii][1],style_color[ii][2],style_wide[ii],style_dash[ii],style_name[ii]);
+      printf("Track style %d: color=#%02x%02x%02x, width=%d, dashed=%d, name=%s\n",ii,styles[ii].color[0],styles[ii].color[1],styles[ii].color[2],styles[ii].wide,styles[ii].dash,styles[ii].name);
     }
   }
 
@@ -686,28 +689,28 @@ void tpo_process_tracks(void)
     track_temp->rte_name = track_name;
 
     // RGB line_color expressed for html=rrggbb and kml=bbggrr - not assigned before 2012
-    sprintf(rgb,"%02x%02x%02x",style_color[track_style][0],style_color[track_style][1],style_color[track_style][2]);
-    sprintf(bgr,"%02x%02x%02x",style_color[track_style][2],style_color[track_style][1],style_color[track_style][0]);
-    sscanf(bgr,"%06x",&bbggrr); // hex string to integer - probably not the best way to do style_color to bbggrr
+    sprintf(rgb,"%02x%02x%02x",styles[track_style].color[0],styles[track_style].color[1],styles[track_style].color[2]);
+    sprintf(bgr,"%02x%02x%02x",styles[track_style].color[2],styles[track_style].color[1],styles[track_style].color[0]);
+    bbggrr = styles[track_style].color[2] << 16 | styles[track_style].color[1] << 8 | styles[track_style].color[0];
     track_temp->line_color.bbggrr = bbggrr;
 
     // track texture (dashed=1, solid=0) mapped into opacity - not assigned before 2012
     track_temp->line_color.opacity = 0xff;   // 255
-    if(style_dash[track_style]) {
+    if(styles[track_style].dash) {
       track_temp->line_color.opacity = 0x50;
     }
 
     // track width, from 1=hairline to 4=thick in Topo - not assigned before 2012
     //  (what are correct values for KML or other outputs??)
-    track_temp->line_width = style_wide[track_style];
+    track_temp->line_width = styles[track_style].wide;
 
     if (DEBUG) printf("Track Name: %s, ?Type?: %d, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
-                        track_name, line_type, style_name[track_style], style_wide[track_style], style_dash[track_style],rgb);
+                        track_name, line_type, styles[track_style].name, styles[track_style].wide, styles[track_style].dash,rgb);
 
     // Track description
     // track_temp->rte_desc = NULL; // pre-2012 default, next line from SRE saves track style as track description
     xasprintf(&track_temp->rte_desc, "Style=%s, Width=%d, Dashed=%d, Color=#%s",
-            style_name[track_style], style_wide[track_style], style_dash[track_style], rgb);
+            styles[track_style].name, styles[track_style].wide, styles[track_style].dash, rgb);
 
     // Route number
     track_temp->rte_num = ii+1;
@@ -822,6 +825,7 @@ void tpo_process_tracks(void)
 
     xfree(buf);
   }
+  xfree(styles);
 //printf("\n");
 }
 
