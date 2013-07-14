@@ -95,7 +95,7 @@ JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \
 	jeeps/gpsprot.o jeeps/gpsread.o \
 	jeeps/gpsdevice.o jeeps/gpsdevice_ser.o jeeps/gpsdevice_usb.o \
-	jeeps/gpsrqst.o jeeps/gpssend.o jeeps/gpsserial.o jeeps/gpsutil.o \
+	jeeps/gpsrqst.o jeeps/gpssend.o jeeps/gpsserial.o jeeps/jgpsutil.o \
 	jeeps/gpsusbread.o jeeps/gpsusbsend.o \
 	jeeps/gpsusbcommon.o @OSJEEPS@
 
@@ -888,7 +888,7 @@ jeeps/gpsusbsend.o: jeeps/gpsusbsend.cc jeeps/gps.h jeeps/../defs.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
   jeeps/gpsproj.h jeeps/garminusb.h jeeps/gpsusbint.h
-jeeps/gpsutil.o: jeeps/gpsutil.cc jeeps/gps.h jeeps/../defs.h \
+jeeps/jgpsutil.o: jeeps/jgpsutil.cc jeeps/gps.h jeeps/../defs.h \
   jeeps/../config.h jeeps/../queue.h jeeps/../gbtypes.h \
   jeeps/../zlib/zlib.h jeeps/../zlib/zconf.h jeeps/../gbfile.h \
   jeeps/../defs.h jeeps/../cet.h jeeps/../cet_util.h jeeps/../inifile.h \
