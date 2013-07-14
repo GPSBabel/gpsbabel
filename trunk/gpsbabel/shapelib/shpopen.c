@@ -175,7 +175,9 @@
   "$Id: shpopen.c,v 1.5 2006-11-24 21:55:52 oliskoli Exp $";*/
 
 #include "shapefil.h"
+#if HAVE_CONFIG_H
 #include "config.h"
+#endif
 #if SHAPELIB_ENABLED
 
 #include <math.h>
