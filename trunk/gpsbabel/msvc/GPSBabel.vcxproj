@@ -3150,7 +3150,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\jeeps\gpsutil.c"
+					RelativePath="..\jeeps\jgpsutil.c"
 					>
 					<FileConfiguration
 						Name="Release|Win32"
