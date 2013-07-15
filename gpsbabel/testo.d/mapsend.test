@@ -3,3 +3,20 @@ rm -f ${TMPDIR}/mm.mapsend ${TMPDIR}/mm.gps
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o mapsend -F ${TMPDIR}/mm.mapsend
 gpsbabel -i mapsend -f ${TMPDIR}/mm.mapsend -o gpsutil -F ${TMPDIR}/mm.gps
 compare ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
+
+#
+# MAPSEND waypoint / route format
+#
+rm -f ${TMPDIR}/route.mapsend
+gpsbabel -r -i mapsend -f ${REFERENCE}/route/route.mapsend -o mapsend \
+         -F ${TMPDIR}/route.mapsend
+bincompare ${TMPDIR}/route.mapsend ${REFERENCE}/route/route.mapsend
+
+#
+# MAPSEND track format 
+#
+rm -f ${TMPDIR}/mapsend.trk
+gpsbabel -t -i mapsend -f ${REFERENCE}/track/mapsend.trk -o mapsend,trkver=3 \
+         -F ${TMPDIR}/mapsend.trk
+compare ${TMPDIR}/mapsend.trk ${REFERENCE}/track/
+

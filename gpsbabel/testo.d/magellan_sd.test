@@ -1,0 +1,8 @@
+#
+# magellan SD card waypoint / route format
+#
+rm -f ${TMPDIR}/magellan.rte
+gpsbabel -r -i magellan -f ${REFERENCE}/route/magellan.rte -o magellan \
+         -F ${TMPDIR}/magellan.rte
+compare ${REFERENCE}/route/magellan.rte ${TMPDIR}/magellan.rte
+
