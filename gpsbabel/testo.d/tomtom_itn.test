@@ -1,0 +1,6 @@
+#
+# TomTom Navigator Itinerary files (.asc)
+#
+gpsbabel -i tomtom_itn -f ${REFERENCE}/route/tomtom_itn.itn -o tomtom_itn -F ${TMPDIR}/tomtom_itn.itn
+compare ${REFERENCE}/route/tomtom_itn.itn ${TMPDIR}/tomtom_itn.itn
+

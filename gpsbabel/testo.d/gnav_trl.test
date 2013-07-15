@@ -1,0 +1,10 @@
+
+#
+# Google Navigator tracklines
+#
+gpsbabel -i gnav_trl -f ${REFERENCE}/track/gnav_trl.trl -t -o unicsv,utc=0 -F ${TMPDIR}/gnav_trl~trl.csv
+compare ${REFERENCE}/track/gnav_trl~trl.csv ${TMPDIR}/gnav_trl~trl.csv
+gpsbabel -i gnav_trl -f ${REFERENCE}/track/gnav_trl.trl -o gnav_trl -F ${TMPDIR}/gnav_trl.trl
+gpsbabel -i gnav_trl -f ${TMPDIR}/gnav_trl.trl -t -o unicsv,utc=0 -F ${TMPDIR}/gnav_trl~trl2.csv
+compare ${REFERENCE}/track/gnav_trl~trl.csv ${TMPDIR}/gnav_trl~trl2.csv
+

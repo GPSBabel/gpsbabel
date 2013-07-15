@@ -4,53 +4,6 @@
 # Magellan serial
 # TODO
 
-# CSV (Comma separated value) data.
-
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o csv -F ${TMPDIR}/csv.csv
-gpsbabel -i csv -f ${TMPDIR}/csv.csv -o csv -F ${TMPDIR}/csv2.csv
-compare ${TMPDIR}/csv2.csv ${TMPDIR}/csv.csv 
-# And the alternate command line version.
-gpsbabel -i csv -o gpx ${TMPDIR}/csv.csv ${TMPDIR}/csv3.gpx
-gpsbabel -i gpx -o csv ${TMPDIR}/csv3.gpx ${TMPDIR}/csv4.csv
-compare ${TMPDIR}/csv.csv ${TMPDIR}/csv4.csv 
-
-#
-# Delorme TopoUSA 4 is a CSV strain.  
-#
-rm -f ${TMPDIR}/xmap-1.gpx ${TMPDIR}/xmap-2.gpx ${TMPDIR}/xmap
-gpsbabel -i xmap -f ${REFERENCE}/xmap -o xmap -F ${TMPDIR}/xmap
-gpsbabel -i xmap -f ${REFERENCE}/xmap -o gpx -F ${TMPDIR}/xmap-1.gpx
-gpsbabel -i xmap -f ${TMPDIR}/xmap -o gpx -F ${TMPDIR}/xmap-2.gpx
-compare ${TMPDIR}/xmap-1.gpx ${TMPDIR}/xmap-2.gpx
-compare ${REFERENCE}/xmap ${TMPDIR}/xmap
-
-# Navitrak DNA marker format
-gpsbabel -i dna -f ${REFERENCE}/dnatest.txt -o dna -F ${TMPDIR}/dnatest.txt
-compare ${REFERENCE}/dnatest.txt ${TMPDIR}/dnatest.txt
-
-# PSP (PocketStreets 2002 Pushpin (.PSP)) file format. Use mxf as an 
-# intermediate format to avoid binary FP anomalies on compareerent platforms.
-rm -f ${TMPDIR}/psp.mxf ${TMPDIR}/mxf.psp
-gpsbabel -i psp -f ${REFERENCE}/ps.psp -o mxf -F ${TMPDIR}/psp.mxf
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o mxf -F ${TMPDIR}/mxf.psp
-compare ${TMPDIR}/psp.mxf ${TMPDIR}/mxf.psp
-gpsbabel -i psp -f ${REFERENCE}/ps.psp -o gpx -F ${TMPDIR}/psp1.gpx
-gpsbabel -i psp -f ${REFERENCE}/ps.psp -o psp -F ${TMPDIR}/xxx.psp
-gpsbabel -i psp -f ${TMPDIR}/xxx.psp -o gpx -F ${TMPDIR}/psp2.gpx
-compare ${TMPDIR}/psp1.gpx ${TMPDIR}/psp2.gpx
-
-# MXF (Maptech Exchange Format) file format
-rm -f ${TMPDIR}/mx.mxf ${TMPDIR}/mxf.mxf
-gpsbabel -i mxf -f ${REFERENCE}/mxf.mxf -o mxf -F ${TMPDIR}/mx.mxf
-gpsbabel -i mxf -f ${TMPDIR}/mx.mxf -o mxf -F ${TMPDIR}/mxf.mxf
-compare ${TMPDIR}/mxf.mxf ${REFERENCE}
-
-# tmpro (TopoMapPro Places) file format
-rm -f ${TMPDIR}/topomappro.txt ${TMPDIR}/mxf.mxf
-gpsbabel -i tmpro -f ${REFERENCE}/topomappro.txt -o tmpro -F ${TMPDIR}/tmp.txt
-gpsbabel -i tmpro -f ${TMPDIR}/tmp.txt -o tmpro -F ${TMPDIR}/topomappro.txt
-compare ${TMPDIR}/topomappro.txt ${REFERENCE}
-
 # TPG (NG Topo!) file format
 # This is hard to test as the datum conversions create minute
 # inconsistencies in the coordinates.  So..  we test our i/o 
@@ -80,43 +33,11 @@ gpsbabel -i gpspilot -f ${REFERENCE}/gpspilot.pdb -o gpsutil -F ${TMPDIR}/gpspil
 compare ${TMPDIR}/gpspil_t.gpu ${TMPDIR}/gpspilot.gpu
 compare ${REFERENCE}/gu.wpt ${TMPDIR}/gpspilot.gpu
 
-# QuoVadis GPS for PalmOS
-# This test is derived from the Cetus test.
-rm -f ${TMPDIR}/quovadis.pdb ${TMPDIR}/quovadis.gpu ${TMPDIR}/quovadist.gpu
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o quovadis -F ${TMPDIR}/quovadis.pdb
-gpsbabel -i quovadis -f ${TMPDIR}/quovadis.pdb -o gpsutil -F ${TMPDIR}/quovadis.gpu
-gpsbabel -i quovadis -f ${REFERENCE}/quovadis.pdb -o gpsutil -F ${TMPDIR}/quovadist.gpu
-compare ${TMPDIR}/quovadist.gpu ${TMPDIR}/quovadis.gpu
-compare ${REFERENCE}/quovadis.gpu ${TMPDIR}/quovadis.gpu
-
-# GpsDrive
-rm -f ${TMPDIR}/gpsdrive.txt
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpsdrive -F ${TMPDIR}/gpsdrive.txt
-compare ${TMPDIR}/gpsdrive.txt ${REFERENCE}
-gpsbabel -i gpsdrive -f ${REFERENCE}/gpsdrive.txt -o gpsdrive -F ${TMPDIR}/gpsdrive2.txt
-compare ${REFERENCE}/gpsdrive.txt ${TMPDIR}/gpsdrive2.txt
-
 # XMapHH Street Atlas USA file format
 rm -f ${TMPDIR}/xmapwpt.wpt ${TMPDIR}/xmapwpt.xmapwpt
 gpsbabel -i xmapwpt -f ${REFERENCE}/xmapwpt.wpt -o xmapwpt -F ${TMPDIR}/xmapwpt.xmapwpt
 gpsbabel -i xmapwpt -f ${TMPDIR}/xmapwpt.xmapwpt -o xmapwpt -F ${TMPDIR}/xmapwpt.wpt
 compare ${TMPDIR}/xmapwpt.wpt ${REFERENCE}
-
-# XCSV
-# Test that we can parse a style file, and read and write data in the 
-# same xcsv format (a complete test is virtually impossible).
-echo "RECORD_DELIMITER NEWLINE" > ${TMPDIR}/testo.style
-echo "FIELD_DELIMITER COMMA" >> ${TMPDIR}/testo.style
-echo "BADCHARS COMMA" >> ${TMPDIR}/testo.style
-echo "PROLOGUE Header" >> ${TMPDIR}/testo.style
-echo "EPILOGUE Footer" >> ${TMPDIR}/testo.style
-echo "IFIELD SHORTNAME,,%s" >> ${TMPDIR}/testo.style
-echo "IFIELD LAT_DIRDECIMAL,,%c%lf" >> ${TMPDIR}/testo.style
-echo "IFIELD LON_DECIMALDIR,,%lf%c" >> ${TMPDIR}/testo.style
-rm -f ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.geo
-gpsbabel -i xcsv,style=${TMPDIR}/testo.style -f ${TMPDIR}/xcsv.geo -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.xcsv
-compare ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
 
 # Garmin Mapsource This is a binary format with some undocumented
 # fields.  This test is therefore intentionally vague.  We read a file,
@@ -158,48 +79,6 @@ rm -f ${TMPDIR}/mps-route.mps
 gpsbabel -t -i mapsource -f ${REFERENCE}/route/route.mps -o mapsource,mpsverout=3 \
          -F ${TMPDIR}/mps-route.mps
 compare ${REFERENCE}/mps-empty.mps ${TMPDIR}/mps-route.mps
-
-#
-# Geocaching Database is a binary Palm format that, like the GPX variants
-# has a zillion "equivalent" encodings of any given record set.  So we
-# read the reference file, spin it to GPX and back to GCDB and then spin
-# that one to GPX.
-#
-
-gpsbabel -i gcdb -f ${REFERENCE}/GeocachingDB.PDB -o gpx -F ${TMPDIR}/gcdb1.gpx \
-		-o gcdb -F ${TMPDIR}/gcdb1.pdb
-gpsbabel -i gpx -f ${TMPDIR}/gcdb1.gpx -o gpx -F ${TMPDIR}/gcdb2.gpx
-compare ${TMPDIR}/gcdb1.gpx ${TMPDIR}/gcdb1.gpx
-
-#
-# Duplicate filter - Since filters have no format of their own, we use csv
-# as an intermediate format for testing the filter.
-#
-rm -f ${TMPDIR}/filterdupe.csv1 ${TMPDIR}/filterdupe.csv2
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o csv -F ${TMPDIR}/filterdupe.csv1
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -f ${REFERENCE}/../geocaching.loc -x duplicate,shortname \
-		-o csv -F ${TMPDIR}/filterdupe.csv2
-sort_and_compare ${TMPDIR}/filterdupe.csv1 ${TMPDIR}/filterdupe.csv2
-
-#
-# Position filter -  Since very small distances are essentialy a duplicate 
-# position filter, we can test very similarly to the duplicate filter.
-#
-rm -f ${TMPDIR}/filterpos.csv1 ${TMPDIR}/filterpos.csv2
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o csv -F ${TMPDIR}/filterpos.csv1
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -f ${REFERENCE}/../geocaching.loc -x position,distance=5f \
-		-o csv -F ${TMPDIR}/filterpos.csv2
-sort_and_compare ${TMPDIR}/filterpos.csv1 ${TMPDIR}/filterpos.csv2
-
-#
-# Radius filter
-#
-rm -f ${TMPDIR}/radius.csv
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc \
-		-x radius,lat=35.9720,lon=-87.1347,distance=14.7 \
-		-o csv -F ${TMPDIR}/radius.csv
-compare ${TMPDIR}/radius.csv ${REFERENCE}
-
 #
 # magellan SD card waypoint / route format
 #
@@ -246,22 +125,4 @@ rm -f ${TMPDIR}/mapsend.trk
 gpsbabel -t -i mapsend -f ${REFERENCE}/track/mapsend.trk -o mapsend,trkver=3 \
          -F ${TMPDIR}/mapsend.trk
 compare ${TMPDIR}/mapsend.trk ${REFERENCE}/track/
-
-#
-# copilot
-#
-rm -f ${TMPDIR}/copilot.pdb
-gpsbabel -i copilot -f ${REFERENCE}/UKultralight.pdb -o copilot -F ${TMPDIR}/cop.pdb
-gpsbabel -i copilot -f ${REFERENCE}/UKultralight.pdb -o gpx -F ${TMPDIR}/cop1.gpx
-gpsbabel -i copilot -f ${TMPDIR}/cop.pdb -o gpx -F ${TMPDIR}/cop2.gpx
-compare ${TMPDIR}/cop1.gpx ${TMPDIR}/cop2.gpx
-
-#
-# EasyGPS.   Another binary format.
-#
-rm -f ${TMPDIR}/easy.loc
-gpsbabel -i easygps -f ${REFERENCE}/easygps.loc -o easygps -F ${TMPDIR}/ez.loc
-gpsbabel -i easygps -f ${REFERENCE}/easygps.loc -o gpx -F ${TMPDIR}/ez1.gpx
-gpsbabel -i easygps -f ${TMPDIR}/ez.loc -o gpx -F ${TMPDIR}/ez2.gpx
-compare ${TMPDIR}/ez1.gpx ${TMPDIR}/ez2.gpx
 

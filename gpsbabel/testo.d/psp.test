@@ -1,0 +1,10 @@
+# PSP (PocketStreets 2002 Pushpin (.PSP)) file format. Use mxf as an 
+# intermediate format to avoid binary FP anomalies on compareerent platforms.
+rm -f ${TMPDIR}/psp.mxf ${TMPDIR}/mxf.psp
+gpsbabel -i psp -f ${REFERENCE}/ps.psp -o mxf -F ${TMPDIR}/psp.mxf
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o mxf -F ${TMPDIR}/mxf.psp
+compare ${TMPDIR}/psp.mxf ${TMPDIR}/mxf.psp
+gpsbabel -i psp -f ${REFERENCE}/ps.psp -o gpx -F ${TMPDIR}/psp1.gpx
+gpsbabel -i psp -f ${REFERENCE}/ps.psp -o psp -F ${TMPDIR}/xxx.psp
+gpsbabel -i psp -f ${TMPDIR}/xxx.psp -o gpx -F ${TMPDIR}/psp2.gpx
+compare ${TMPDIR}/psp1.gpx ${TMPDIR}/psp2.gpx

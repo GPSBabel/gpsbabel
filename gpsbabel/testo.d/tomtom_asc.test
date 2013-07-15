@@ -1,0 +1,7 @@
+
+#
+# TomTom Navigator Places of Interest (.asc)
+#
+gpsbabel -i tomtom_asc -f ${REFERENCE}/tomtom_poi.asc -o tomtom_asc -F ${TMPDIR}/tomtom_poi.asc
+compare ${REFERENCE}/tomtom_poi.asc ${TMPDIR}/tomtom_poi.asc
+

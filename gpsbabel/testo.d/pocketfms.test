@@ -1,0 +1,22 @@
+#
+# PocketFMS breadcrumb files
+#
+gpsbabel -i pocketfms_bc -f ${REFERENCE}/pocketfms_bc -o gpx -F ${TMPDIR}/pocketfms_bc.gpx
+compare ${REFERENCE}/pocketfms_bc.gpx ${TMPDIR}/pocketfms_bc.gpx
+gpsbabel -i gpx -f ${REFERENCE}/pocketfms_bc.gpx -o pocketfms_bc -F ${TMPDIR}/pocketfms_bc
+bincompare ${REFERENCE}/pocketfms_bc.babel ${TMPDIR}/pocketfms_bc
+
+#
+# PocketFMS flightplan files (.xml)
+#
+gpsbabel -i pocketfms_fp -f ${REFERENCE}/pocketfms_fp.xml -o gpx -F ${TMPDIR}/pocketfms_fp.gpx
+compare ${REFERENCE}/pocketfms_fp.gpx ${TMPDIR}/pocketfms_fp.gpx
+
+#
+# PocketFMS waypoints file (.txt)
+#
+gpsbabel -i gpx -f ${REFERENCE}/pocketfms_fp.gpx -o pocketfms_wp -F ${TMPDIR}/pocketfms_wp.txt
+compare ${REFERENCE}/pocketfms_wp.txt ${TMPDIR}/pocketfms_wp.txt
+gpsbabel -i pocketfms_wp -f ${REFERENCE}/pocketfms_wp.txt -o gpx -F ${TMPDIR}/pocketfms_wp.gpx
+compare ${REFERENCE}/pocketfms_wp.gpx ${TMPDIR}/pocketfms_wp.gpx
+

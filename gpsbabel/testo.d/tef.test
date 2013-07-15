@@ -1,0 +1,7 @@
+#
+# tef "TourExchangeFormat" read test
+#
+rm -f ${TMPDIR}/tef_xml*
+gpsbabel -i tef -f ${REFERENCE}/route/tef_xml.sample.xml -o gpx -F ${TMPDIR}/tef_xml.sample.gpx
+compare ${REFERENCE}/route/tef_xml.sample.gpx ${TMPDIR}/tef_xml.sample.gpx
+

@@ -1,0 +1,13 @@
+
+#
+# Geocaching Database is a binary Palm format that, like the GPX variants
+# has a zillion "equivalent" encodings of any given record set.  So we
+# read the reference file, spin it to GPX and back to GCDB and then spin
+# that one to GPX.
+#
+
+gpsbabel -i gcdb -f ${REFERENCE}/GeocachingDB.PDB -o gpx -F ${TMPDIR}/gcdb1.gpx \
+		-o gcdb -F ${TMPDIR}/gcdb1.pdb
+gpsbabel -i gpx -f ${TMPDIR}/gcdb1.gpx -o gpx -F ${TMPDIR}/gcdb2.gpx
+compare ${TMPDIR}/gcdb1.gpx ${TMPDIR}/gcdb1.gpx
+

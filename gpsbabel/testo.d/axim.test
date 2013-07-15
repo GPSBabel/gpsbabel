@@ -1,0 +1,7 @@
+#
+# Dell Axim Navigation System 'axim_gpb' test
+#
+rm -f ${TMPDIR}/axim-*
+gpsbabel -i axim_gpb -f ${REFERENCE}/track/axim-sample.gpb -o gpx -F ${TMPDIR}/axim-sample.gpx
+compare ${REFERENCE}/track/axim-sample.gpx ${TMPDIR}/axim-sample.gpx
+

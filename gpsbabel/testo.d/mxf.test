@@ -1,0 +1,7 @@
+
+# MXF (Maptech Exchange Format) file format
+rm -f ${TMPDIR}/mx.mxf ${TMPDIR}/mxf.mxf
+gpsbabel -i mxf -f ${REFERENCE}/mxf.mxf -o mxf -F ${TMPDIR}/mx.mxf
+gpsbabel -i mxf -f ${TMPDIR}/mx.mxf -o mxf -F ${TMPDIR}/mxf.mxf
+compare ${TMPDIR}/mxf.mxf ${REFERENCE}
+

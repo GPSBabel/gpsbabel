@@ -1,0 +1,5 @@
+#
+# G7ToWin (read only) test
+#
+gpsbabel -i g7towin -f ${REFERENCE}/expertgps.g7t -o garmin_txt,utc=0 -F ${TMPDIR}/expertgps-g7t.txt
+compare ${REFERENCE}/expertgps-g7t.txt ${TMPDIR}/expertgps-g7t.txt

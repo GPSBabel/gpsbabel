@@ -1,0 +1,39 @@
+
+# PsiTrex.  A text format that can't be handled by XCSV due to context of
+# data based on other data values in the file
+# Waypoints first
+rm -f ${TMPDIR}/psit-ww.txt ${TMPDIR}/psit-ww.mps
+gpsbabel -i psitrex -f ${REFERENCE}/psitwpts.txt -o mapsource -F ${TMPDIR}/psit-ww.mps
+gpsbabel -i mapsource -f ${TMPDIR}/psit-ww.mps -o psitrex -F ${TMPDIR}/psit-ww.txt
+compare ${REFERENCE}/psitwpts.txt ${TMPDIR}/psit-ww.txt
+
+# Now test correct "empty" handling - ask for routes when there aren't any
+# Uses mapsource as the empty handling for this has already happened above
+rm -f ${TMPDIR}/psit-wr.mps
+gpsbabel -r -i psitrex -f ${REFERENCE}/psitwpts.txt -o mapsource,mpsverout=3 -F ${TMPDIR}/psit-wr.mps
+compare ${REFERENCE}/mps-empty.mps ${TMPDIR}/psit-wr.mps
+
+# Routes next
+rm -f ${TMPDIR}/psit-rr.txt ${TMPDIR}/psit-rr.mps
+gpsbabel -r -i psitrex -f ${REFERENCE}/route/psitrtes.txt -o mapsource -F ${TMPDIR}/psit-rr.mps
+gpsbabel -r -i mapsource -f ${TMPDIR}/psit-rr.mps -o psitrex -F ${TMPDIR}/psit-rr.txt
+compare ${REFERENCE}/route/psitrtes.txt ${TMPDIR}/psit-rr.txt
+
+# Now test correct "empty" handling - ask for tracks when there aren't any
+# Uses mapsource as the empty handling for this has already happened above
+rm -f ${TMPDIR}/psit-rt.mps
+gpsbabel -t -i psitrex -f ${REFERENCE}/route/psitrtes.txt -o mapsource,mpsverout=3 -F ${TMPDIR}/psit-rt.mps
+compare ${REFERENCE}/mps-empty.mps ${TMPDIR}/psit-rt.mps
+
+# Tracks last
+rm -f ${TMPDIR}/psit-tt.txt ${TMPDIR}/psit-tt.mps
+gpsbabel -t -i psitrex -f ${REFERENCE}/track/psittrks.txt -o mapsource -F ${TMPDIR}/psit-tt.mps
+gpsbabel -t -i mapsource -f ${TMPDIR}/psit-tt.mps -o psitrex -F ${TMPDIR}/psit-tt.txt
+compare ${REFERENCE}/track/psittrks.txt ${TMPDIR}/psit-tt.txt
+
+# Now test correct "empty" handling - ask for waypoints when there aren't any
+# Uses mapsource as the empty handling for this has already happened above
+rm -f ${TMPDIR}/psit-tw.mps
+gpsbabel -i psitrex -f ${REFERENCE}/track/psittrks.txt -o mapsource,mpsverout=3 -F ${TMPDIR}/psit-tw.mps
+compare ${REFERENCE}/mps-empty.mps ${TMPDIR}/psit-tw.mps
+

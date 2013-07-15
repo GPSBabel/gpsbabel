@@ -1,0 +1,15 @@
+#
+# TomTom .ov2 tests
+#
+
+rm -f ${TMPDIR}/ov2.out
+gpsbabel -i arc -f ${REFERENCE}/google.arc -o tomtom -F ${TMPDIR}/ov2.out
+compare ${REFERENCE}/ov2-arc-out.ref ${TMPDIR}/ov2.out
+
+rm -f ${TMPDIR}/ov2.out
+gpsbabel -i geo -f ${REFERENCE}/gl.loc -o tomtom -F ${TMPDIR}/ov2.out
+compare ${REFERENCE}/ov2-geo-out.ref ${TMPDIR}/ov2.out
+
+rm -f ${TMPDIR}/ov2.out
+gpsbabel -i tomtom -f ${REFERENCE}/ov2-geo-out.ref -o gpsutil -F ${TMPDIR}/ov2.out
+compare ${REFERENCE}/ov2-in.ref ${TMPDIR}/ov2.out
