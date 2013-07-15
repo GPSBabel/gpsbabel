@@ -1,0 +1,9 @@
+
+#
+# saroute covers *.anr, *.rte, and *.rtd, but I only have an .anr for testing.
+# Unfortunately for us, this is a read-only format for now.
+#
+gpsbabel -t -i saroute -f ${REFERENCE}/track/i65.anr -o gpx -F ${TMPDIR}/gpl1.gpx
+gpsbabel -t -i gpx -f ${REFERENCE}/track/i65.anr.gpx -o gpx -F ${TMPDIR}/gpl2.gpx
+compare ${TMPDIR}/gpl1.gpx ${TMPDIR}/gpl2.gpx
+

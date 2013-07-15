@@ -1,0 +1,8 @@
+#
+# copilot
+#
+rm -f ${TMPDIR}/copilot.pdb
+gpsbabel -i copilot -f ${REFERENCE}/UKultralight.pdb -o copilot -F ${TMPDIR}/cop.pdb
+gpsbabel -i copilot -f ${REFERENCE}/UKultralight.pdb -o gpx -F ${TMPDIR}/cop1.gpx
+gpsbabel -i copilot -f ${TMPDIR}/cop.pdb -o gpx -F ${TMPDIR}/cop2.gpx
+compare ${TMPDIR}/cop1.gpx ${TMPDIR}/cop2.gpx

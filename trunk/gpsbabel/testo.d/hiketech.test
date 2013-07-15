@@ -1,0 +1,9 @@
+
+#
+# hiketech tests
+#
+rm -f ${TMPDIR}/hiketech*
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o hiketech -F ${TMPDIR}/hiketech.out
+compare ${REFERENCE}/hiketech.ref ${TMPDIR}/hiketech.out
+gpsbabel -i hiketech -f ${REFERENCE}/hiketech.ref -o gpx -F ${TMPDIR}/hiketech.gpx
+compare ${REFERENCE}/hiketech.gpx ${TMPDIR}/hiketech.gpx

@@ -1,0 +1,5 @@
+#
+# Navicache.
+gpsbabel -i navicache -f ${REFERENCE}/navicache.xml -o gpsutil -F ${TMPDIR}/navi.wpt
+compare ${REFERENCE}/navicache.ref ${TMPDIR}/navi.wpt
+#

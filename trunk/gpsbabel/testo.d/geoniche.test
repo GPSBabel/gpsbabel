@@ -1,0 +1,12 @@
+#
+# Geoniche: No reference file was available, so we created one and just
+# test it against itself.
+#
+rm -f ${TMPDIR}/gn.pdb ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
+gpsbabel -i geoniche -f ${REFERENCE}/geoniche.pdb -o geoniche -F ${TMPDIR}/gn.pdb
+gpsbabel -i geoniche -f ${REFERENCE}/geoniche.pdb -o gpx -F ${TMPDIR}/1.gpx
+gpsbabel -i geoniche -f ${TMPDIR}/gn.pdb -o gpx -F ${TMPDIR}/2.gpx
+compare ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
+#
+gpsbabel -i geoniche -f ${REFERENCE}/gn-targets.pdb -o gpx -F ${TMPDIR}/gn-targets.gpx
+compare ${REFERENCE}/gn-targets.gpx ${TMPDIR}/gn-targets.gpx

@@ -1,0 +1,16 @@
+#
+# Skyforce ascii files
+#
+gpsbabel -i skyforce -f ${REFERENCE}/skyforce_wpt.txt -o gpx -F ${TMPDIR}/skyforce_wpt.gpx
+compare ${REFERENCE}/skyforce_wpt.gpx ${TMPDIR}/skyforce_wpt.gpx
+gpsbabel -i skyforce -f ${REFERENCE}/route/skyforce_rte.txt -o gpx -F ${TMPDIR}/skyforce_rte.gpx
+compare ${REFERENCE}/route/skyforce_rte.gpx ${TMPDIR}/skyforce_rte.gpx
+gpsbabel -i skyforce -f ${REFERENCE}/track/skyforce_trk.txt -o gpx -F ${TMPDIR}/skyforce_trk.gpx
+compare ${REFERENCE}/track/skyforce_trk.gpx ${TMPDIR}/skyforce_trk.gpx
+
+gpsbabel -i skyforce \
+	-f ${REFERENCE}/skyforce_wpt.txt \
+	-f ${REFERENCE}/route/skyforce_rte.txt \
+	-f ${REFERENCE}/track/skyforce_trk.txt -o gpx -F ${TMPDIR}/skyforce.gpx
+compare ${REFERENCE}/skyforce.gpx ${TMPDIR}/skyforce.gpx
+

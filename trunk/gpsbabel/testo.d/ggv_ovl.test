@@ -1,0 +1,7 @@
+
+#
+# ggv_ovl 'Geogrid Viewer ascii overlay files'
+#
+gpsbabel -i ggv_ovl -f ${REFERENCE}/ggv_ovl.ovl -o gpx -F ${TMPDIR}/ggv_ovl~ovl.gpx
+compare ${REFERENCE}/ggv_ovl~ovl.gpx ${TMPDIR}/ggv_ovl~ovl.gpx
+

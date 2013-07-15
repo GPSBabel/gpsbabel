@@ -1,0 +1,6 @@
+#
+# Sportsim style-sheet
+#
+rm -f ${TMPDIR}/sportsim*
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,routes -o sportsim -F ${TMPDIR}/sportsim.txt
+compare ${REFERENCE}/track/sportsim-sample.txt ${TMPDIR}/sportsim.txt
