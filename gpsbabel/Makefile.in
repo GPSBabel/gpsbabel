@@ -36,7 +36,7 @@ RC=@RC@
 # but cc/gcc does:
 #  $(OUTPUT_SWITCH)main.o
 #  becomes -o main.o (gcc)
-#   or     -Fomain.o (cl.exe)
+#   or     -Fomain.o (cl.exe) (currently unused)
 OUTPUT_SWITCH=-o #
 
 QT_INC=@QT_INC@
@@ -409,9 +409,8 @@ mac-gui-dmg: mac-gui
 	mv gui/objects/GPSBabelFE.dmg  gui/objects/GPSBabel-$(VERSIOND).dmg
 
 msvc-build:
-	make CXX=@CL.EXE DEBUGGING="" EXTRA_CFLAGS="-nologo -W3 -WL -D__WIN32__ -I msvc/expat " OUTPUT_SWITCH="-Fo" $(OBJS)
-	echo $(OBJS) > objs.lst
-	LINK.EXE /NOLOGO @objs.lst ./msvc/expat/libexpat.lib /out:gpsbabel.exe 
+	@#Intended for development. Assume .NET 4 is used - may require tweaks
+	"$(word 1, $(wildcard $(SYSTEMROOT)/Microsoft.NET/Framework/v4*/msbuild.exe))" msvc/GPSBabel.vcxproj /nologo /maxcpucount
 
 # release check using CVS tree
 test-release: doc gpsbabel.html changes.html
