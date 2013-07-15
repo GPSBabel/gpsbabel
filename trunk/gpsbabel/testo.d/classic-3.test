@@ -6,12 +6,6 @@
 gpsbabel -i ignrando -f ${REFERENCE}/track/ignrando-sample.rdn -o ignrando -F ${TMPDIR}/ignrando-sample.rdn
 gpsbabel -i ignrando -f ${TMPDIR}/ignrando-sample.rdn -o gpx -F ${TMPDIR}/ignrando-sample.gpx
 compare ${REFERENCE}/track/ignrando-sample.gpx ${TMPDIR}/ignrando-sample.gpx
-#
-# Microsoft AutoRoute 2002 test (read-only)
-#
-gpsbabel -i msroute -f ${REFERENCE}/route/msroute-sample.axe -o gpx -F ${TMPDIR}/msroute-sample.gpx
-compare ${REFERENCE}/route/msroute-sample.gpx ${TMPDIR}/msroute-sample.gpx
-
 
 #
 # Testing the 'nuketypes' filter is funky.
@@ -44,25 +38,6 @@ gpsbabel -t -w -i wbt-bin -f ${REFERENCE}/wbt-201.tk1 -o gpx -F ${TMPDIR}/wbt-20
 grep -v time <${TMPDIR}/wbt-201.gpx >${TMPDIR}/wbt-201.gpx2
 compare ${REFERENCE}/wbt-201.gpx ${TMPDIR}/wbt-201.gpx2
 
-
-#
-# Suunto SDF
-#
-rm -f ${TMPDIR}/stmsdf*
-gpsbabel -i garmin_txt -f ${REFERENCE}/garmin_txt.txt -t -o stmsdf -F ${TMPDIR}/stmsdf-track.sdf -r -o stmsdf,index=2 -F ${TMPDIR}/stmsdf-route.sdf
-compare ${REFERENCE}/track/stmsdf-track.sdf ${TMPDIR}/stmsdf-track.sdf
-compare ${REFERENCE}/route/stmsdf-route.sdf ${TMPDIR}/stmsdf-route.sdf
-gpsbabel -i stmsdf -f ${TMPDIR}/stmsdf-track.sdf -f ${TMPDIR}/stmsdf-route.sdf -o garmin_txt,prec=2 -F ${TMPDIR}/stmsdf.txt
-compare ${REFERENCE}/stmsdf.txt ${TMPDIR}/stmsdf.txt
-
-#
-# Digital Mapping Tracklogs
-#
-rm -f ${TMPDIR}/dmtlog*
-gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o dmtlog -F ${TMPDIR}/dmtlog-sample.trl
-gpsbabel -i dmtlog -f ${TMPDIR}/dmtlog-sample.trl -o gpx -F ${TMPDIR}/dmtlog-sample.gpx
-compare ${REFERENCE}/track/dmtlog-sample.gpx ${TMPDIR}/dmtlog-sample.gpx
-
 #
 # gzipped file i/o
 #
@@ -76,11 +51,4 @@ compare ${REFERENCE}/route/cst-sample.gpx ${TMPDIR}/cst-sample.gpx
 #
 gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,routes,tracks -x transform,rte=wpt,del=y -o gpx -F ${TMPDIR}/transform-ver.gpx
 compare ${REFERENCE}/transform-rte.gpx ${TMPDIR}/transform-ver.gpx
-
-#
-# VITO SmartMap .vtt track file 'vitovtt' test
-#
-rm -f ${TMPDIR}/vitovtt-*
-gpsbabel -i vitovtt -f ${REFERENCE}/track/vitovtt-sample.vtt -o gpx -F ${TMPDIR}/vitovtt-sample.gpx
-compare ${REFERENCE}/track/vitovtt-sample.gpx ${TMPDIR}/vitovtt-sample.gpx
 

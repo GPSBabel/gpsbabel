@@ -1,50 +1,4 @@
 #!/bin/sh
-#
-# Route reversal filter.   Do it twice and be sure we get what we
-# started with.
-#
-rm -f ${TMPDIR}/reverse1.arc ${TMPDIR}/reverse2.arc ${TMPDIR}/reference.arc
-gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
-	  -o arc -F ${TMPDIR}/reference.arc
-gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
-         -x reverse \
-         -o arc -F ${TMPDIR}/reverse1.arc
-gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
-         -x reverse \
-         -x reverse \
-         -o arc -F ${TMPDIR}/reverse2.arc
-# Verify the first and last are the same
-compare ${TMPDIR}/reference.arc  ${TMPDIR}/reverse2.arc
-# Verify the first and second are different.
-#${DIFF}  ${TMPDIR}/reverse1.arc  ${TMPDIR}/reverse2.arc > /dev/null && {
-#		echo ERROR Failed reversal test.
-#		exit 1
-#}
-
-# parkrrrr: This isn't a straightforward compare; we *want* it to fail.
-# Obviously this test should just be rewritten with a new reference.
-#compare  ${TMPDIR}/reverse1.arc  ${TMPDIR}/reverse2.arc
-
-
-#
-# DeLorme .an1 tests
-#
-rm -f ${TMPDIR}/an1.out
-gpsbabel -i an1 -f ${REFERENCE}/foo.an1 -o csv -F ${TMPDIR}/an1.out
-compare ${REFERENCE}/an1-in.ref ${TMPDIR}/an1.out
-
-rm -f ${TMPDIR}/an1.out
-gpsbabel -i an1 -f ${REFERENCE}/foo.an1 -o an1 -F ${TMPDIR}/an1.out
-bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-an1.ref
-
-rm -f ${TMPDIR}/an1.out
-gpsbabel -i xmap -f ${REFERENCE}/xmap -o an1 -F ${TMPDIR}/an1.out
-bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-out.ref
-
-rm -f ${TMPDIR}/an1.out
-gpsbabel -i google -f ${REFERENCE}/google.js -o an1 -F ${TMPDIR}/an1.out
-bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-line-out.ref
-
 
 #
 # XCSV "human readable" tests
@@ -63,27 +17,6 @@ compare ${REFERENCE}/humanwrite.out ${TMPDIR}/humanwrite.out
 rm -f ${TMPDIR}/pathdist.out
 gpsbabel -i magellan -f ${REFERENCE}/dusky.trk -o xcsv,style=${REFERENCE}/gnuplot.style -F ${TMPDIR}/pathdist.out
 compare ${REFERENCE}/dusky.gnuplot ${TMPDIR}/pathdist.out
-
-# hsandv
-rm -f ${TMPDIR}/hsandv.exp ${TMPDIR}/1.exp ${TMPDIR}/1.exp ${TMPDIR}/Glad_5.exp
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o hsandv -F ${TMPDIR}/hsandv.exp
-compare ${TMPDIR}/hsandv.exp ${REFERENCE}
-#the hsandv format is too lossy to do this test :(
-#gpsbabel -i hsandv -f ${TMPDIR}/hsandv.exp -o geo -F ${TMPDIR}/1.exp
-#gpsbabel -i hsandv -f ${REFERENCE}/hsandv.exp -o geo -F ${TMPDIR}/2.exp
-#compare ${TMPDIR}/1.exp ${TMPDIR}/2.exp
-#test conversion from v4 to v5 files
-gpsbabel -i hsandv -f ${REFERENCE}/Glad_4.exp -o hsandv -F ${TMPDIR}/Glad_5.exp
-# FIXME: Can't compare directly because of potential FP rounding.
-# FIXME: compare ${TMPDIR}/Glad_5.exp reference
-
-#
-# stack filter tests
-# These don't actually test for proper behavior, for now, but they do
-# exercise all of the currently-extant filter code.
-#
-
-gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -x stack,push,copy,nowarn -x stack,push,copy -x stack,push -x stack,pop,replace -x stack,pop,append -x stack,push,copy -x stack,pop,discard -x stack,swap,depth=1 -o arc -F ${TMPDIR}/stackfilt.txt
 
 #
 # 'tabsep' isn't really tested in any non-trivial way, but we do exercise
@@ -107,15 +40,4 @@ gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc  -o geo -F ${TMPDIR}/geocustom
 # Write something to the various output-only formats
 #
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o text -F ${TMPDIR}/text.out -o html -F ${TMPDIR}/html.out -o vcard -F ${TMPDIR}/vcard.out #-o palmdoc -F ${TMPDIR}/pd.out
-
-#
-# Map&Guide Motorrad Routenplaner .bcr files test
-#
-rm -f ${TMPDIR}/bcr*
-gpsbabel -r -i bcr -f ${REFERENCE}/route/bcr-sample.bcr -o gpx -F ${TMPDIR}/bcr-sample.gpx
-compare ${REFERENCE}/route/bcr-sample.gpx ${TMPDIR}/bcr-sample.gpx
-gpsbabel -r -i gpx -f ${REFERENCE}/route/bcr-sample.gpx -o bcr -F ${TMPDIR}/bcr-sample2.bcr
-compare ${REFERENCE}/route/bcr-sample2.bcr ${TMPDIR}/bcr-sample2.bcr
-gpsbabel -r -i bcr -f ${TMPDIR}/bcr-sample2.bcr -o gpx -F ${TMPDIR}/bcr-sample2.gpx
-compare	${REFERENCE}/route/bcr-sample.gpx ${TMPDIR}/bcr-sample2.gpx
 
