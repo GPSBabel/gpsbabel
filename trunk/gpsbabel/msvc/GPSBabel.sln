@@ -1,20 +1,17 @@
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual C++ Express 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GPSBabel", "GPSBabel.vcproj", "{EB2609DB-5800-45B2-BCB2-06D72F389DCA}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Windows Desktop
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GPSBabel", "GPSBabel.vcxproj", "{588699A5-B1C9-4343-B765-23B4C0837435}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
-		Unicode|Win32 = Unicode|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EB2609DB-5800-45B2-BCB2-06D72F389DCA}.Debug|Win32.ActiveCfg = Debug|Win32
-		{EB2609DB-5800-45B2-BCB2-06D72F389DCA}.Debug|Win32.Build.0 = Debug|Win32
-		{EB2609DB-5800-45B2-BCB2-06D72F389DCA}.Release|Win32.ActiveCfg = Release|Win32
-		{EB2609DB-5800-45B2-BCB2-06D72F389DCA}.Release|Win32.Build.0 = Release|Win32
-		{EB2609DB-5800-45B2-BCB2-06D72F389DCA}.Unicode|Win32.ActiveCfg = Unicode|Win32
-		{EB2609DB-5800-45B2-BCB2-06D72F389DCA}.Unicode|Win32.Build.0 = Unicode|Win32
+		{588699A5-B1C9-4343-B765-23B4C0837435}.Debug|Win32.ActiveCfg = Debug|Win32
+		{588699A5-B1C9-4343-B765-23B4C0837435}.Debug|Win32.Build.0 = Debug|Win32
+		{588699A5-B1C9-4343-B765-23B4C0837435}.Release|Win32.ActiveCfg = Release|Win32
+		{588699A5-B1C9-4343-B765-23B4C0837435}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
