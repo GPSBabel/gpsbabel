@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
+#include <stdlib.h>
 
 #define	LINELENGTH	256
 #define	MYNAME		"MkWinTesto"
