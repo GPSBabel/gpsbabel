@@ -65,8 +65,6 @@ static char* link_text;
 static const char* input_string = NULL;
 static int input_string_len = 0;
 
-static time_t file_time;
-
 static char* snlen = NULL;
 static char* suppresswhite = NULL;
 static char* urlbase = NULL;
@@ -1285,7 +1283,6 @@ gpx_rd_init(const char* fname)
   }
 
 
-  file_time = 0;
   current_tag.clear();
 
   prescan_tags();
