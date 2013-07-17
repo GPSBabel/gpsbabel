@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "garmin_fs.h"
+#include <math.h>
 #if HAVE_LIBEXPAT
 #include <expat.h>
 static XML_Parser psr;
@@ -903,7 +904,7 @@ xml_parse_time(const char* cdatastr)
 
   // Fractional part of time.
   if (fsec) {
-    time = time.addMSecs(fsec * 1000);
+    time = time.addMSecs(lround(fsec * 1000));
   }
 
   // Any offsets that were stuck at the end.
