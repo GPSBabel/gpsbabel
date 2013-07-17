@@ -296,8 +296,8 @@ gtc_waypt_pr(const waypoint* wpt)
   }
   if (wpt->latitude && wpt->longitude) {
     gtc_write_xml(1, "<Position>\n");
-    gtc_write_xml(0, "<LatitudeDegrees>%f</LatitudeDegrees>\n", wpt->latitude);
-    gtc_write_xml(0, "<LongitudeDegrees>%f</LongitudeDegrees>\n", wpt->longitude);
+    gtc_write_xml(0, "<LatitudeDegrees>%.7f</LatitudeDegrees>\n", wpt->latitude);
+    gtc_write_xml(0, "<LongitudeDegrees>%.7f</LongitudeDegrees>\n", wpt->longitude);
     gtc_write_xml(-1, "</Position>\n");
   }
   if (wpt->altitude != unknown_alt) {
