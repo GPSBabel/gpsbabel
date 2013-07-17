@@ -1,115 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <time>1970-01-01T00:00:00Z</time>
-  <bounds minlat="50.874916077" minlon="4.361335754" maxlat="50.881267548" maxlon="4.373297691"/>
+  <bounds minlat="50.874917028" minlon="4.361335395" maxlat="50.881270678" maxlon="4.373297963"/>
   <trk>
     <trkseg>
-      <trkpt lat="50.874992371" lon="4.361335754">
+      <trkpt lat="50.874994141" lon="4.361335395">
         <ele>18.800000</ele>
         <time>2012-05-02T06:31:48Z</time>
         <speed>2.806000</speed>
       </trkpt>
-      <trkpt lat="50.874927521" lon="4.361547470">
+      <trkpt lat="50.874925829" lon="4.361547457">
         <ele>18.400000</ele>
         <time>2012-05-02T06:31:55Z</time>
         <speed>1.919000</speed>
       </trkpt>
-      <trkpt lat="50.874916077" lon="4.361658096">
+      <trkpt lat="50.874917028" lon="4.361658182">
         <ele>18.600000</ele>
         <time>2012-05-02T06:32:03Z</time>
         <speed>0.934000</speed>
       </trkpt>
-      <trkpt lat="50.875255585" lon="4.362043858">
+      <trkpt lat="50.875258088" lon="4.362043750">
         <ele>17.600000</ele>
         <time>2012-05-02T06:32:15Z</time>
         <speed>5.137000</speed>
       </trkpt>
-      <trkpt lat="50.875720978" lon="4.362524986">
+      <trkpt lat="50.875724038" lon="4.362525206">
         <ele>17.000000</ele>
         <time>2012-05-02T06:32:25Z</time>
         <speed>6.165000</speed>
       </trkpt>
-      <trkpt lat="50.876182556" lon="4.363010883">
+      <trkpt lat="50.876181438" lon="4.363010938">
         <ele>16.600000</ele>
         <time>2012-05-02T06:32:35Z</time>
         <speed>6.081000</speed>
       </trkpt>
-      <trkpt lat="50.876644135" lon="4.363592148">
+      <trkpt lat="50.876642527" lon="4.363591803">
         <ele>15.800000</ele>
         <time>2012-05-02T06:32:46Z</time>
         <speed>5.946000</speed>
       </trkpt>
-      <trkpt lat="50.877075195" lon="4.364209652">
+      <trkpt lat="50.877076709" lon="4.364209466">
         <ele>15.400000</ele>
         <time>2012-05-02T06:32:57Z</time>
         <speed>5.777000</speed>
       </trkpt>
-      <trkpt lat="50.877471924" lon="4.364851475">
+      <trkpt lat="50.877473089" lon="4.364851268">
         <ele>15.200000</ele>
         <time>2012-05-02T06:33:07Z</time>
         <speed>6.576000</speed>
       </trkpt>
-      <trkpt lat="50.877845764" lon="4.365548134">
+      <trkpt lat="50.877847341" lon="4.365548223">
         <ele>15.000000</ele>
         <time>2012-05-02T06:33:17Z</time>
         <speed>6.313000</speed>
       </trkpt>
-      <trkpt lat="50.878185272" lon="4.366267204">
+      <trkpt lat="50.878184378" lon="4.366267139">
         <ele>15.200000</ele>
         <time>2012-05-02T06:33:27Z</time>
         <speed>6.091000</speed>
       </trkpt>
-      <trkpt lat="50.878505707" lon="4.367033005">
+      <trkpt lat="50.878504231" lon="4.367033245">
         <ele>15.200000</ele>
         <time>2012-05-02T06:33:37Z</time>
         <speed>6.529000</speed>
       </trkpt>
-      <trkpt lat="50.878822327" lon="4.367795467">
+      <trkpt lat="50.878823498" lon="4.367795663">
         <ele>15.600000</ele>
         <time>2012-05-02T06:33:47Z</time>
         <speed>6.456000</speed>
       </trkpt>
-      <trkpt lat="50.879154205" lon="4.368566990">
+      <trkpt lat="50.879153158" lon="4.368567217">
         <ele>15.600000</ele>
         <time>2012-05-02T06:33:57Z</time>
         <speed>6.586000</speed>
       </trkpt>
-      <trkpt lat="50.879478455" lon="4.369322300">
+      <trkpt lat="50.879475861" lon="4.369322511">
         <ele>15.400000</ele>
         <time>2012-05-02T06:34:07Z</time>
         <speed>6.437000</speed>
       </trkpt>
-      <trkpt lat="50.879795074" lon="4.370081425">
+      <trkpt lat="50.879795044" lon="4.370081157">
         <ele>15.400000</ele>
         <time>2012-05-02T06:34:17Z</time>
         <speed>6.516000</speed>
       </trkpt>
-      <trkpt lat="50.880119324" lon="4.370834351">
+      <trkpt lat="50.880122357" lon="4.370834354">
         <ele>16.200000</ele>
         <time>2012-05-02T06:34:27Z</time>
         <speed>5.970000</speed>
       </trkpt>
-      <trkpt lat="50.880420685" lon="4.371550560">
+      <trkpt lat="50.880418742" lon="4.371550756">
         <ele>17.400000</ele>
         <time>2012-05-02T06:34:38Z</time>
         <speed>5.193000</speed>
       </trkpt>
-      <trkpt lat="50.880470276" lon="4.371663570">
+      <trkpt lat="50.880470793" lon="4.371663241">
         <ele>17.800000</ele>
         <time>2012-05-02T06:34:40Z</time>
         <speed>4.752000</speed>
       </trkpt>
-      <trkpt lat="50.880798340" lon="4.372401714">
+      <trkpt lat="50.880795592" lon="4.372401770">
         <ele>19.600000</ele>
         <time>2012-05-02T06:34:53Z</time>
         <speed>4.809000</speed>
       </trkpt>
-      <trkpt lat="50.881038666" lon="4.372861862">
+      <trkpt lat="50.881035901" lon="4.372862105">
         <ele>20.800000</ele>
         <time>2012-05-02T06:35:02Z</time>
         <speed>4.576000</speed>
       </trkpt>
-      <trkpt lat="50.881267548" lon="4.373297691">
+      <trkpt lat="50.881270678" lon="4.373297963">
         <ele>21.400000</ele>
         <time>2012-05-02T06:35:11Z</time>
         <speed>4.137000</speed>
