@@ -200,8 +200,8 @@ html_disp(const waypoint* wpt)
       logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
       if (logpart) {
         char* coordstr = NULL;
-        float lat = 0;
-        float lon = 0;
+        double lat = 0;
+        double lon = 0;
         coordstr = xml_attribute(logpart, "lat");
         if (coordstr) {
           lat = atof(coordstr);
