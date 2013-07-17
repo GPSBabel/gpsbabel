@@ -203,7 +203,7 @@ finalize_tracks(void)
 
   for (index = 0; index < count; index++) {
     waypoint *wpt = list[index];
-    if (wpt->microseconds == 2) {	/* log continued */
+    if (wpt->wpt_flags.fmt_use == 2) {	/* log continued */
       track = NULL;
     }
     if (track == NULL) {
@@ -222,10 +222,10 @@ finalize_tracks(void)
       }
     }
     track_add_wpt(track, wpt);
-    if (wpt->microseconds == 1) { /* log pause */
+    if (wpt->wpt_flags.fmt_use == 1) { /* log pause */
       track = NULL;
     }
-    wpt->microseconds = 0;
+    wpt->wpt_flags.fmt_use = 0;
   }
 
   xfree(list);
@@ -312,7 +312,7 @@ parse_point(char *line)
       break;
     case 11:
       if (what == 1) {
-        wpt->microseconds = atoi(str);  /* memory point type */
+        wpt->wpt_flags.fmt_use = atoi(str);  /* memory point type */
       }
       break;
     }

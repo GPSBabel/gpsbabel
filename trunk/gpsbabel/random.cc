@@ -161,7 +161,7 @@ random_read(void)
 
     wpt->creation_time = time;
     if RND(3) {
-      wpt->microseconds = rand_int(1000) * 1000;
+      wpt->creation_time.addMSecs(rand_int(1000) * 1000);
     }
     time += rand_int(10) + 1;
 

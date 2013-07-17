@@ -217,8 +217,7 @@ gopal_read(void)
       switch (column) {
       case  0: /* "-" */	/* unknown fields for the moment */
         sscanf(c, "%lu", &microsecs);
-        wpt->microseconds += microsecs % 1000000;
-        wpt->creation_time += microsecs / 1000000;
+        wpt->SetCreationTime(microsecs / 1000000, microsecs % 1000000);
         break;
       case  1:				/* Time UTC */
         sscanf(c,"%lf",&hmsd);
