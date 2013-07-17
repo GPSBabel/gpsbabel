@@ -200,8 +200,8 @@ waypoint_final()
     return;
   }
 
-  via = wpt_tmp->microseconds;
-  wpt_tmp->microseconds = 0;
+  via = wpt_tmp->wpt_flags.fmt_use ;
+  wpt_tmp->wpt_flags.fmt_use  = 0;
 
   if (version < 2) {	/* keep the old behaviour */
     wpt_tmp->notes = wpt_tmp->description;
@@ -252,7 +252,7 @@ tef_item_start(const char *args, const char **attrv)
 
   wpt_tmp = waypt_new();
   if ((waypoints == 1) || (waypoints == item_count)) {
-    wpt_tmp->microseconds++;
+    wpt_tmp->wpt_flags.fmt_use ++;
   }
 
   while (*avp) {
@@ -262,7 +262,7 @@ tef_item_start(const char *args, const char **attrv)
       wpt_tmp->description = trimmed_strdup(avp[1]);
     } else if ((0 == case_ignore_strcmp(avp[0], "ViaStation")) &&
                (0 == case_ignore_strcmp(avp[1], "true"))) {
-      wpt_tmp->microseconds = 1;  /* only a flag */
+      wpt_tmp->wpt_flags.fmt_use  = 1;  /* only a flag */
     }
 
     /* new in TEF V2 */

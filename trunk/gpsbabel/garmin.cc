@@ -705,8 +705,7 @@ pvt2wpt(GPS_PPvt_Data pvt, waypoint* wpt)
            pvt->tow
            - pvt->leap_scnds;
   wptimes = floor(wptime);
-  wpt->creation_time = wptimes;
-  wpt->microseconds = 1000000.0 * (wptime - wptimes);
+  wpt->SetCreationTime(wptimes, 1000000.0 * (wptime - wptimes));
 
   /*
    * The Garmin spec fifteen different models that use a different
