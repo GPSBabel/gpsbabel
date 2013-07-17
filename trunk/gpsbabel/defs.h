@@ -275,7 +275,6 @@ class geocache_data {
     is_available(status_unknown),
     is_memberonly(status_unknown),
     has_customcoords(status_unknown),
-    last_found(0),
     placer_id(0),
     favorite_points(0)
   {}
@@ -288,8 +287,8 @@ class geocache_data {
   status_type is_available:2;
   status_type is_memberonly:2;
   status_type has_customcoords:2;
-  gpsbabel::DateTime  exported;
-  time_t last_found;
+  gpsbabel::DateTime exported;
+  gpsbabel::DateTime last_found;
   QString placer; /* Placer name */
   int placer_id; /* Placer id */
   QString hint; /* all these UTF8, XML entities removed, May be not HTML. */
