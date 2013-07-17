@@ -139,7 +139,7 @@ ggv_log_read(void)
     wpt->longitude = xlon;
 
     WAYPT_SET(wpt, course, le_read16(&buf[16 + 0]));
-
+    int microseconds = 0;
     if (ggv_log_ver == 10) {
       double secs;
 
@@ -152,7 +152,7 @@ ggv_log_read(void)
       tm.tm_min =     le_read16(&buf[16 + 16]);
       secs =          le_read_double(&buf[16 + 18]);
       tm.tm_sec = (int)secs;
-      wpt->microseconds = (secs - tm.tm_sec) * 1000000;
+      microseconds = (secs - tm.tm_sec) * 1000000;
     } else {
       wpt->altitude = le_read16(&buf[16 + 4]);
       wpt->sat = (unsigned char)buf[16 + 14];
@@ -179,7 +179,7 @@ ggv_log_read(void)
       tm.tm_year -= 1900;
       if (tm.tm_mon > 0) {
         tm.tm_mon--;
-        wpt->SetCreationTime(mkgmtime(&tm));
+        wpt->SetCreationTime(mkgmtime(&tm), microseconds);
       }
     }
 

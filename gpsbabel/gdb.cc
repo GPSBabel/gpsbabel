@@ -1308,7 +1308,7 @@ write_waypoint(
   memset(zbuf, 0, sizeof(zbuf));
   memset(ffbuf, 0xFF, sizeof(ffbuf));
 
-  wpt_class = wpt->microseconds;		/* trick */
+  wpt_class = wpt->wpt_flags.fmt_use;		/* trick */
 
   FWRITE_CSTR(shortname);			/* uniqe (!!!) shortname */
   FWRITE_i32(wpt_class);			/* waypoint class */
@@ -1503,7 +1503,7 @@ write_route(const route_head* rte, const char* rte_name)
     /* extra_data may contain a modified shortname */
     FWRITE_CSTR((wpt->extra_data) ? (char*)wpt->extra_data : wpt->shortname);
 
-    wpt_class = wpt->microseconds;			/* trick */
+    wpt_class = wpt->wpt_flags.fmt_use;			/* trick */
 
     FWRITE_i32(wpt_class);				/* waypoint class */
     FWRITE_CSTR(GMSD_GET(cc, ""));			/* country */
@@ -1681,7 +1681,7 @@ write_waypoint_cb(const waypoint* refpt)
     if (wpt_class == -1) {
       wpt_class = (route_flag) ? GDB_DEF_HIDDEN_CLASS : GDB_DEF_CLASS;
     }
-    wpt->microseconds = wpt_class; 	/* trick, we need this for the route(s) */
+    wpt->wpt_flags.fmt_use = wpt_class; 	/* trick, we need this for the route(s) */
 
     icon = GMSD_GET(icon, -1);
     if (icon < 0) {
