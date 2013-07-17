@@ -161,27 +161,10 @@ ozi_get_time_str(const waypoint *waypointp, char *buff, gbsize_t buffsz)
 void
 ozi_set_time_str(const char *str, waypoint *waypointp)
 {
-  double ozi_time;
-  const char *dot;
-  int len;
+  double ozi_time = atof(str);
 
-  ozi_time = atof(str);
-  waypointp->SetCreationTime((ozi_time - DAYS_SINCE_1990) * SECONDS_PER_DAY);
-
-  dot = strchr(str, '.');
-  /* get number of characters after dot */
-  len = (dot) ? strlen(str) - (dot - str) - 1 : 0;
-  if (len >= 7) {
-    /* with default ozi time precision (%.7f) we can only handle tenths of second */
-    ozi_time -= ((double)waypointp->creation_time / SECONDS_PER_DAY) + DAYS_SINCE_1990;
-    ozi_time *= SECONDS_PER_DAY;
-    waypointp->microseconds = (ozi_time * 10) + 0.5;
-    if (waypointp->microseconds == 10) {
-      waypointp->creation_time++;
-      waypointp->microseconds = 0;
-    }
-    waypointp->microseconds *= 100000;
-  }
+  waypointp->SetCreationTime((ozi_time - DAYS_SINCE_1990) * SECONDS_PER_DAY,
+                              1000000 * (ozi_time - (int) ozi_time));
 }
 
 static void

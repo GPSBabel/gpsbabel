@@ -5,13 +5,13 @@
   <rte>
     <name>1 COSTANERO JA</name>
     <rtept lat="-34.445850000" lon="-58.523720000">
-      <time>2010-11-25T20:26:00Z</time>
+      <time>2010-11-25T20:26:00.851Z</time>
       <name>MPCHIC</name>
       <cmt>MARINA PUNTA CHICA</cmt>
       <desc>MARINA PUNTA CHICA</desc>
     </rtept>
     <rtept lat="-34.447380000" lon="-58.507270000">
-      <time>2013-03-11T19:52:37Z</time>
+      <time>2013-03-11T19:52:36.828Z</time>
       <name>JA12</name>
     </rtept>
   </rte>
@@ -25,7 +25,7 @@
       <desc>07-OCT-00 18:22</desc>
     </rtept>
     <rtept lat="-34.477470000" lon="-57.861670000">
-      <time>2012-09-02T00:05:55Z</time>
+      <time>2012-09-02T00:05:55.004Z</time>
       <name>COLBO3W </name>
     </rtept>
   </rte>
