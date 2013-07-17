@@ -188,7 +188,7 @@ maggeo_fmtdate(time_t t)
 
   cbuf[0] = '\0';
   if (t > 0) {
-    tm = gmtime(&t);
+    tm = localtime(&t);
     if (tm) {
       date = tm->tm_mday * 100000 + (1+tm->tm_mon) * 1000 +
              tm->tm_year;
