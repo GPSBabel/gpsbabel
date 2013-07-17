@@ -280,8 +280,8 @@ jtr_trkpt_disp_cb(const waypoint* wpt)
     tm.tm_year += 1900;
     tm.tm_mon += 1;
     snprintf(sdate, sizeof(sdate), "%02d%02d%02d", tm.tm_mday, tm.tm_mon, tm.tm_year % 100);
-    snprintf(stime, sizeof(stime), "%02d%02d%02d.%02d", tm.tm_hour, tm.tm_min, tm.tm_sec, wpt->microseconds / 10000);
-    if (wpt->microseconds / 10000 == 0) {
+    snprintf(stime, sizeof(stime), "%02d%02d%02d.%02d", tm.tm_hour, tm.tm_min, tm.tm_sec, wpt->creation_time.time().msec());
+    if (wpt->creation_time.time().msec() == 0) {
       stime[6] = 0;
     }
   } else {
