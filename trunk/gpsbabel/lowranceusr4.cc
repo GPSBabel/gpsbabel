@@ -30,11 +30,6 @@
 #include <math.h> /* for lat/lon conversion */
 #include <time.h> /* for gmtime */
 
-#if defined(_MSC_VER)
-//Incomplete implementation, use existing GB function
-#define round si_round
-#endif
-
 /* from waypt.c, we need to iterate over waypoints when extracting
    routes */
 extern queue waypt_head;
