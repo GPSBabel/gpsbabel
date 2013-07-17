@@ -21,3 +21,7 @@ compare ${REFERENCE}/basecamp~gpx.gpx ${TMPDIR}/basecamp~gpx.gpx
 rm -f ${TMPDIR}/extensiondata.gpx
 gpsbabel -i unicsv -f ${REFERENCE}/extensiondata.unicsv -x transform,trk=wpt -o gpx,garminextensions -F ${TMPDIR}/extensiondata.gpx
 compare ${REFERENCE}/extensiondata~unicsv.gpx ${TMPDIR}/extensiondata.gpx
+
+# Read, write GPX file with times that don't fit in time_t, subsecond.
+gpsbabel -i gpx -f ${REFERENCE}/bigtime.gpx -o gpx -F ${TMPDIR}/bigtime.gpx
+compare ${REFERENCE}/bigtime.gpx ${TMPDIR}/bigtime.gpx 
