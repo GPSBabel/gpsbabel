@@ -1037,6 +1037,13 @@ char* rot13(const QString& str);
 
 signed int si_round(double d);
 
+#if _MSC_VER
+//These functions are not included in the MS pre C99 implementation, use internal implementation
+//This asssumes that non-_MSC_VER includes math.h (all should include defs.h)
+#define round si_round
+#define lround si_round
+#endif
+
 /*
  * Data types for Palm/OS files.
  */
