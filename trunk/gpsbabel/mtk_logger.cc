@@ -776,7 +776,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
   }
   trk->creation_time  = itm->timestamp; // in UTC..
   if (bmask & (1<<MILLISECOND)) {
-    trk->microseconds  = MILLI_TO_MICRO(itm->timestamp_ms);
+    trk->creation_time = trk->creation_time.addMSecs(itm->timestamp_ms);
   }
 
   if (bmask & (1<<PDOP)) {
