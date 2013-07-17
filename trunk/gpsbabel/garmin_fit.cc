@@ -371,8 +371,8 @@ fit_parse_data(fit_message_def* def, int time_offset)
     }
 
     waypt = waypt_new();
-    waypt->latitude = (lat / (float)0x7fffffff) * 180;
-    waypt->longitude = (lon / (float)0x7fffffff) * 180;
+    waypt->latitude = (lat / (double)0x7fffffff) * 180;
+    waypt->longitude = (lon / (double)0x7fffffff) * 180;
     if (alt != 0xffff) {
       waypt->altitude = (alt / 5.0) - 500;
     }
