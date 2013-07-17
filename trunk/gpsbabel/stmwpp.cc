@@ -103,6 +103,7 @@ stmwpp_data_read(void)
 
     wpt = NULL;
     memset(&time, 0, sizeof(time));
+    int microseconds = 0;
 
     while ((c = csv_lineparse(buff, ",", "", column++))) {
       int new_what;
@@ -152,10 +153,10 @@ stmwpp_data_read(void)
 
       case 6:
         sscanf(c, "%d:%d:%d.%d", &time.tm_hour, &time.tm_min, &time.tm_sec, &fracsec);
-        wpt->microseconds = MILLI_TO_MICRO(fracsec);
+        microseconds = MILLI_TO_MICRO(fracsec);
         /* makes sense only for recorded trackpoints */
         if (what != STM_TRKPT) {
-          wpt->microseconds = 0;
+          microseconds = 0;
         }
         break;
 
@@ -166,7 +167,7 @@ stmwpp_data_read(void)
     if (wpt != NULL) {
       time.tm_year -= 1900;
       time.tm_mon--;
-      wpt->SetCreationTime(mkgmtime(&time));
+      wpt->SetCreationTime(mkgmtime(&time), microseconds);
 
       switch (what) {
       case STM_WAYPT:
