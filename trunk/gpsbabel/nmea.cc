@@ -356,16 +356,18 @@ nmea_wr_deinit(void)
 }
 
 static void
-nmea_set_waypoint_time(waypoint* wpt, struct tm* time, int microseconds)
+nmea_set_waypoint_time(waypoint* wpt, struct tm* time, double fsec)
 {
+  //fractions are stored as ms
+  int us = MILLI_TO_MICRO(lround(1000*fsec));
   if (time->tm_year == 0) {
-    wpt->SetCreationTime(((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec, microseconds);
+    wpt->SetCreationTime(((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec, us);
     if (wpt->wpt_flags.fmt_use == 0) {
       wpt->wpt_flags.fmt_use = 1;
       without_date++;
     }
   } else {
-    wpt->SetCreationTime(mkgmtime(time), microseconds);
+    wpt->SetCreationTime(mkgmtime(time), us);
     if (wpt->wpt_flags.fmt_use != 0) {
       wpt->wpt_flags.fmt_use = 0;
       without_date--;
@@ -376,7 +378,8 @@ nmea_set_waypoint_time(waypoint* wpt, struct tm* time, int microseconds)
 static void
 gpgll_parse(char* ibuf)
 {
-  double latdeg, lngdeg, microseconds;
+  double latdeg, lngdeg;
+  double fsec;
   char lngdir, latdir;
   double hmsd;
   int hms;
@@ -399,7 +402,7 @@ gpgll_parse(char* ibuf)
 
   hms = (int) hmsd;
   last_read_time = hms;
-  microseconds = MILLI_TO_MICRO(1000 * (hmsd - hms));
+  fsec = hmsd - hms;
 
   tm.tm_sec = hms % 100;
   hms = hms / 100;
@@ -409,7 +412,7 @@ gpgll_parse(char* ibuf)
 
   waypt = waypt_new();
 
-  nmea_set_waypoint_time(waypt, &tm, microseconds);
+  nmea_set_waypoint_time(waypt, &tm, fsec);
 
   if (latdir == 'S') {
     latdeg = -latdeg;
@@ -437,7 +440,7 @@ gpgga_parse(char* ibuf)
   double hdop;
   char altunits;
   waypoint* waypt;
-  double microseconds;
+  double fsec;
 
   if (trk_head == NULL) {
     trk_head = route_head_alloc();
@@ -460,7 +463,7 @@ gpgga_parse(char* ibuf)
   }
 
   last_read_time = hms;
-  microseconds = MILLI_TO_MICRO(1000 * (hms - (int)hms));
+  fsec = hms - (int)hms;
 
   tm.tm_sec = (long) hms % 100;
   hms = hms / 100;
@@ -470,7 +473,7 @@ gpgga_parse(char* ibuf)
 
   waypt  = waypt_new();
 
-  nmea_set_waypoint_time(waypt, &tm, microseconds);
+  nmea_set_waypoint_time(waypt, &tm, fsec);
 
   if (latdir == 'S') {
     latdeg = -latdeg;
@@ -517,7 +520,7 @@ gprmc_parse(char* ibuf)
   unsigned int dmy;
   double speed,course;
   waypoint* waypt;
-  double microseconds;
+  double fsec;
   char* dmybuf;
   int i;
 
@@ -554,7 +557,7 @@ gprmc_parse(char* ibuf)
   sscanf(dmybuf,"%u", &dmy);
 
   last_read_time = hms;
-  microseconds = MILLI_TO_MICRO(1000 * (hms - (int)hms));
+  fsec = hms - (int)hms;
 
   tm.tm_sec = (long) hms % 100;
   hms = hms / 100;
@@ -579,7 +582,7 @@ gprmc_parse(char* ibuf)
       }
       /* The change of date wasn't recorded when
        * going from 235959 to 000000. */
-      nmea_set_waypoint_time(curr_waypt, &tm, microseconds);
+      nmea_set_waypoint_time(curr_waypt, &tm, fsec);
     }
     /* This point is both a waypoint and a trackpoint. */
     if (amod_waypoint) {
@@ -595,7 +598,7 @@ gprmc_parse(char* ibuf)
 
   WAYPT_SET(waypt, course, course);
 
-  nmea_set_waypoint_time(waypt, &tm, microseconds);
+  nmea_set_waypoint_time(waypt, &tm, fsec);
 
   if (latdir == 'S') {
     latdeg = -latdeg;
