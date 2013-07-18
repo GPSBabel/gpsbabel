@@ -163,8 +163,10 @@ ozi_set_time_str(const char *str, waypoint *waypointp)
 {
   double ozi_time = atof(str);
 
-  waypointp->SetCreationTime((ozi_time - DAYS_SINCE_1990) * SECONDS_PER_DAY,
-                              1000000 * (ozi_time - (int) ozi_time));
+  if(ozi_time > DAYS_SINCE_1990) {
+    waypointp->SetCreationTime((ozi_time - DAYS_SINCE_1990) * SECONDS_PER_DAY,
+                               lround(1000000.0 * (ozi_time - (int) ozi_time)));
+  }
 }
 
 static void
