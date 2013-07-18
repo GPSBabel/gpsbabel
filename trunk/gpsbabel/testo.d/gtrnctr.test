@@ -3,11 +3,11 @@
 #
 # reading
 rm -f ${TMPDIR}/history~tcx.csv ${TMPDIR}/course~tcx.csv
-gpsbabel -i gtrnctr -f ${REFERENCE}/track/history.tcx -t -o unicsv,utc=0 -F ${TMPDIR}/history~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/history.tcx -t -o unicsv,utc=0,prec=7 -F ${TMPDIR}/history~tcx.csv
 compare ${REFERENCE}/track/history~tcx.csv ${TMPDIR}/history~tcx.csv
 gpsbabel -i gtrnctr -f ${REFERENCE}/track/history.tcx -t -o gpx -F ${TMPDIR}/history~tcx.gpx
 compare ${REFERENCE}/track/history~tcx.gpx ${TMPDIR}/history~tcx.gpx
-gpsbabel -i gtrnctr -f ${REFERENCE}/track/course.tcx -t -o unicsv,utc=0 -F ${TMPDIR}/course~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/course.tcx -t -o unicsv,utc=0,prec=7 -F ${TMPDIR}/course~tcx.csv
 compare ${REFERENCE}/track/course~tcx.csv ${TMPDIR}/course~tcx.csv
 gpsbabel -i gtrnctr -f ${REFERENCE}/track/course.tcx -t -o gpx -F ${TMPDIR}/course~tcx.gpx
 compare ${REFERENCE}/track/course~tcx.gpx ${TMPDIR}/course~tcx.gpx
@@ -23,7 +23,7 @@ gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr-readcp.tcx -o gpx -F ${TMPDIR}
 compare ${REFERENCE}/track/gtrnctr-readcp.gpx  ${TMPDIR}/tcxtest-readcp.gpx
 
 # Reading bike tracks, specifically to check distance and speed
-gpsbabel -t -i gtrnctr -f ${REFERENCE}/track/bike.tcx -o gpx -F ${TMPDIR}/bike~gpx.gpx -o unicsv -F ${TMPDIR}/bike~unicsv.csv
+gpsbabel -t -i gtrnctr -f ${REFERENCE}/track/bike.tcx -o gpx -F ${TMPDIR}/bike~gpx.gpx -o unicsv,prec=7 -F ${TMPDIR}/bike~unicsv.csv
 compare ${REFERENCE}/track/bike~gpx.gpx ${TMPDIR}/bike~gpx.gpx
 
 # Whack this for now.  Unicsv writes local time. 
