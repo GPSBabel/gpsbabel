@@ -659,15 +659,17 @@ itracku_rt_init(const char* fname)
 }
 
 static void
-nmea_set_waypoint_time(waypoint* wpt, struct tm* time, int microseconds)
+nmea_set_waypoint_time(waypoint* wpt, struct tm* time, double fsec)
 {
+  //fractions are stored as ms
+  int us = MILLI_TO_MICRO(lround(1000*fsec));
   if (time->tm_year == 0) {
-    wpt->SetCreationTime(((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec, microseconds);
+    wpt->SetCreationTime(((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec, us);
     if (wpt->wpt_flags.fmt_use == 0) {
       wpt->wpt_flags.fmt_use = 1;
     }
   } else {
-    wpt->SetCreationTime(mkgmtime(time), microseconds);
+    wpt->SetCreationTime(mkgmtime(time), us);
     if (wpt->wpt_flags.fmt_use != 0) {
       wpt->wpt_flags.fmt_use = 0;
     }
@@ -684,7 +686,7 @@ gprmc_parse(char* ibuf)
   unsigned int dmy;
   double speed,course;
   waypoint* waypt;
-  double microseconds;
+  double fsec;
   struct tm tm;
 
   int rc = sscanf(ibuf,"$GPRMC,%lf,%c,%lf,%c,%lf,%c,%lf,%lf,%u",
@@ -696,7 +698,7 @@ gprmc_parse(char* ibuf)
     return NULL;
   }
 
-  microseconds = MILLI_TO_MICRO(1000 * (hms - (int)hms));
+  fsec = hms - (int)hms;
 
   tm.tm_sec = (long) hms % 100;
   hms = hms / 100;
@@ -716,7 +718,7 @@ gprmc_parse(char* ibuf)
 
   WAYPT_SET(waypt, course, course);
 
-  nmea_set_waypoint_time(waypt, &tm, microseconds);
+  nmea_set_waypoint_time(waypt, &tm, fsec);
 
   if (latdir == 'S') {
     latdeg = -latdeg;
