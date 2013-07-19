@@ -604,13 +604,14 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
      * If we've moved as much as a meter,
      * conditionally recompute speeds.
      */
-    if (!WAYPT_HAS(thisw, speed)  && (dist > 1)) {
+    if (!WAYPT_HAS(thisw, speed) && (dist > 1)) {
       // Only recompute speed if the waypoint
       // didn't already have a speed
-      if(thisw->GetCreationTime().isValid() && prev->GetCreationTime().isValid() &&
-         thisw->GetCreationTime() > prev->GetCreationTime())
-      {
-        double timed = prev->GetCreationTime().msecsTo(thisw->GetCreationTime()) /1000.0;
+      if (thisw->GetCreationTime().isValid() &&
+          prev->GetCreationTime().isValid() &&
+          thisw->GetCreationTime() > prev->GetCreationTime()) {
+        double timed =
+            prev->GetCreationTime().msecsTo(thisw->GetCreationTime()) / 1000.0;
         WAYPT_SET(thisw, speed, dist / timed);
       }
     }
