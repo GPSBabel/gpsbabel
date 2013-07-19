@@ -319,7 +319,7 @@ void wpt_desc(const char* args, const char** unused)
 
 void wpt_time(const char* args, const char** unused)
 {
-  wpt_tmp->creation_time = xml_parse_time(args);
+  wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
 
 void wpt_coord(const char* args, const char** attrv)
@@ -406,8 +406,8 @@ kml_wr_init(const char* fname)
 {
   char u = 's';
   waypt_init_bounds(&kml_bounds);
-  kml_time_min = 0;
-  kml_time_max = 0;
+  kml_time_min = QDateTime();
+  kml_time_max = QDateTime();
 
   if (opt_units) {
     u = tolower(opt_units[0]);
@@ -837,36 +837,44 @@ static void kml_output_description(const waypoint* pt)
 
   kml_td(hwriter, QString("Longitude: %1 ").arg(QString::number(pt->longitude, 'f', 6)));
   kml_td(hwriter, QString("Latitude: %1 ").arg(QString::number(pt->latitude, 'f', 6)));
+
   if (kml_altitude_known(pt)) {
     kml_td(hwriter, QString("Altitude: %1 %2 ").arg(QString::number(alt, 'f', 3)).arg(alt_units));
   }
+
   if (pt->heartrate) {
     kml_td(hwriter, QString("Heart rate: %1 ").arg(QString::number(pt->heartrate)));
   }
+
   if (pt->cadence) {
     kml_td(hwriter, QString("Cadence: %1 ").arg(QString::number(pt->cadence)));
   }
+
   /* Which unit is this temp in? C? F? K? */
   if WAYPT_HAS(pt, temperature) {
     kml_td(hwriter, QString("Temperature: %1 ").arg(QString::number(pt->temperature, 'f', 1)));
   }
+
   if WAYPT_HAS(pt, depth) {
     const char* depth_units;
     double depth = fmt_distance(pt->depth, &depth_units);
     kml_td(hwriter, QString("Depth: %1 %2 ").arg(QString::number(depth, 'f', 1)).arg(depth_units));
   }
+
   if WAYPT_HAS(pt, speed) {
     const char* spd_units;
     double spd = fmt_speed(pt->speed, &spd_units);
     kml_td(hwriter, QString("Speed: %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
   }
+
   if WAYPT_HAS(pt, course) {
     kml_td(hwriter, QString("Heading: %1 ").arg(QString::number(pt->course, 'f', 1)));
   }
+
   /* This really shouldn't be here, but as of this writing,
    * Earth can't edit/display the TimeStamp.
    */
-  if (pt->GetCreationTime()) {
+  if (pt->GetCreationTime().isValid()) {
     QString time_string = pt->CreationTimeXML();
     if(!time_string.isEmpty()) {
       kml_td(hwriter, QString("Time: %1 ").arg(time_string));  
@@ -882,14 +890,19 @@ static void kml_output_description(const waypoint* pt)
 
 static void kml_recompute_time_bounds(const waypoint* waypointp)
 {
-  if (waypointp->GetCreationTime() && (waypointp->GetCreationTime() < kml_time_min)) {
-    kml_time_min = waypointp->GetCreationTime();
+  gpsbabel::DateTime t = waypointp->GetCreationTime();
+  if (t == 0)
+    return;
+
+  if (!t.isValid())
+    return;
+
+  if (!kml_time_min.isValid() || (t > 0 && t < kml_time_min)) {
+    kml_time_min = t;
   }
-  if (waypointp->GetCreationTime() > kml_time_max) {
-    kml_time_max = waypointp->GetCreationTime();
-    if (kml_time_min == 0) {
-      kml_time_min = waypointp->GetCreationTime();
-    }
+
+  if (!kml_time_max.isValid() || t > kml_time_max) {
+    kml_time_max = t;
   }
 }
 
@@ -1332,8 +1345,6 @@ char* kml_geocache_get_logs(const waypoint* wpt)
   root = fs_gpx->tag;
   curlog = xml_findfirst(root, "groundspeak:log");
   while (curlog) {
-    time_t logtime = 0;
-
     // Unless we have a broken GPX input, these logparts
     // branches will always be taken.
     logpart = xml_findfirst(curlog, "groundspeak:type");
@@ -1352,15 +1363,14 @@ char* kml_geocache_get_logs(const waypoint* wpt)
 
     logpart = xml_findfirst(curlog, "groundspeak:date");
     if (logpart) {
-      logtime = xml_parse_time(logpart->cdata);
-      struct tm* logtm = localtime(&logtime);
-      if (logtm) {
+      gpsbabel::DateTime t = xml_parse_time(logpart->cdata);
+      if (t.isValid()) {
         char* temp;
         xasprintf(&temp,
                   " %04d-%02d-%02d",
-                  logtm->tm_year+1900,
-                  logtm->tm_mon+1,
-                  logtm->tm_mday);
+                  t.date().year(),
+                  t.date().month(),
+                  t.date().day()),
         r = xstrappend(r, temp);
         xfree(temp);
       }
@@ -1446,7 +1456,7 @@ static void kml_geocache_pr(const waypoint* waypointp)
 
   // Timestamp
   kml_output_timestamp(waypointp);
-  if (waypointp->creation_time) {
+  if (waypointp->GetCreationTime().isValid()) {
     strcpy(date_placed,
            qPrintable(waypointp->GetCreationTime().toString("dd-MMM-yyyy")));
   } else {
@@ -1673,7 +1683,8 @@ static int track_has_time(const route_head* header)
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
     waypoint* tpt = (waypoint*)elem;
 
-    if (tpt->creation_time) {
+    // FIXME: implicit time_t test here.
+    if (tpt->GetCreationTime().isValid() && tpt->GetCreationTime() > 0) {
       points_with_time++;
       if (points_with_time >= 2) {
         return 1;
@@ -1720,8 +1731,8 @@ static void kml_mt_hdr(const route_head* header)
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
     waypoint* tpt = (waypoint*)elem;
-
-    if (tpt->GetCreationTime()) {
+    // FIXME: implicit time_t test here.
+    if (tpt->GetCreationTime().isValid() && tpt->GetCreationTime() > 0) {
       QString time_string = tpt->CreationTimeXML();
       writer->writeOptionalTextElement("when", time_string);
     } else {
@@ -1839,12 +1850,12 @@ void kml_write_AbstractView(void)
 
   writer->writeStartElement("LookAt");
 
-  if (kml_time_min || kml_time_max) {
+  if (kml_time_min.isValid() || kml_time_max.isValid()) {
     writer->writeStartElement("gx:TimeSpan");
     if (kml_time_min.isValid()) {
       writer->writeTextElement("begin", kml_time_min.toPrettyString());
     }
-    if (kml_time_max) {
+    if (kml_time_max.isValid()) {
       gpsbabel::DateTime time_max;
       // In realtime tracking mode, we fudge the end time by a few minutes
       // to ensure that the freshest data (our current location) is contained

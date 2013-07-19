@@ -30,8 +30,7 @@ static XML_Parser psr;
 #include "src/core/xmlstreamwriter.h"
 #include <QtCore/QFile>
 #include <QtCore/QRegExp>
-//#include <QtCore/QTextCodec>
-// #include <QtXml/QXmlStreamAttributes>
+#include <QtCore/QDateTime>
 #include <QtCore/QDebug>
 
 
@@ -844,7 +843,7 @@ gs_get_container(geocache_container t)
 }
 
 gpsbabel::DateTime
-xml_parse_time(const char* cdatastr)
+xml_parse_time(const char* cdatastr) 
 {
   int off_hr = 0;
   int off_min = 0;
@@ -862,7 +861,7 @@ xml_parse_time(const char* cdatastr)
     if (offsetstr) {
       /* positive offset; parse it */
       *offsetstr = '\0';
-      sscanf(offsetstr+1, "%d:%d", &off_hr, &off_min);
+      sscanf(offsetstr + 1, "%d:%d", &off_hr, &off_min);
     } else {
       offsetstr = strchr(timestr, 'T');
       if (offsetstr) {
@@ -870,8 +869,7 @@ xml_parse_time(const char* cdatastr)
         if (offsetstr) {
           /* negative offset; parse it */
           *offsetstr = '\0';
-          sscanf(offsetstr+1, "%d:%d",
-                 &off_hr, &off_min);
+          sscanf(offsetstr + 1, "%d:%d", &off_hr, &off_min);
           off_sign = -1;
         }
       }
@@ -892,26 +890,26 @@ xml_parse_time(const char* cdatastr)
   }
 
   int year = 0, mon = 0, mday = 0, hour = 0, min = 0, sec = 0;
-  sscanf(timestr, "%d-%d-%dT%d:%d:%d",
-         &year,
-         &mon,
-         &mday,
-         &hour,
-         &min,
-         &sec);
-  QDate date(year, mon, mday);
-  QTime time(hour, min, sec);
+  QDateTime dt;
+  int res = sscanf(timestr, "%d-%d-%dT%d:%d:%d", &year, &mon, &mday, &hour,
+                   &min, &sec);
+  if (res > 0) {
+    QDate date(year, mon, mday);
+    QTime time(hour, min, sec);
 
-  // Fractional part of time.
-  if (fsec) {
-    time = time.addMSecs(lround(fsec * 1000));
+    // Fractional part of time.
+    if (fsec) {
+      time = time.addMSecs(lround(fsec * 1000));
+    }
+
+    // Any offsets that were stuck at the end.
+    time = time.addSecs(-off_sign * off_hr * 3600 - off_sign * off_min * 60);
+
+    xfree(timestr);
+    dt = QDateTime(date, time, Qt::UTC);
+  } else {
+    dt = QDateTime();
   }
-
-  // Any offsets that were stuck at the end.
-  time = time.addSecs(-off_sign*off_hr*3600 - off_sign*off_min*60);
-
-  QDateTime dt(date, time, Qt::UTC);
-  xfree(timestr);
   return dt;
 }
 
@@ -1342,7 +1340,8 @@ static void
 gpx_wr_init(const char* fname)
 {
   mkshort_handle = NULL;
-  ofd = gbfopen(fname, "w", MYNAME);
+  // QFile requires binary mode on Windows.
+  ofd = gbfopen(fname, "wb", MYNAME);
   oqfile.open(ofd->handle.std, QIODevice::WriteOnly);
  
   // This is ia bit of a lie.  QXMLStreamWriter will pass everything
