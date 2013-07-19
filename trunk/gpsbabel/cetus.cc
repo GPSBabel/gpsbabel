@@ -186,7 +186,7 @@ read_track_point(cetus_track_point_t* data, const time_t basetime)
 
   i = be_read16(&data->speed);
   if (i != 10000) {
-    WAYPT_SET(wpt, speed, KNOTS_TO_MPS((float) i / 10));  /* meters/second */
+    WAYPT_SET(wpt, speed, KNOTS_TO_MPS((double) i / 10.0));  /* meters/second */
   }
   i = be_read16(&data->course);
   if (i != 4000) {
