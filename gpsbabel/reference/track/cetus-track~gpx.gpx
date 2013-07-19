@@ -80,7 +80,7 @@
         <ele>97.000000</ele>
         <time>2005-07-27T16:10:15Z</time>
         <course>245.600006</course>
-        <speed>17.285332</speed>
+        <speed>17.285334</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.500000</hdop>
@@ -98,7 +98,7 @@
         <ele>98.900000</ele>
         <time>2005-07-27T16:10:17Z</time>
         <course>237.199997</course>
-        <speed>19.600332</speed>
+        <speed>19.600334</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.500000</hdop>
@@ -107,7 +107,7 @@
         <ele>96.900000</ele>
         <time>2005-07-27T16:10:19Z</time>
         <course>237.800003</course>
-        <speed>19.497446</speed>
+        <speed>19.497444</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.500000</hdop>
@@ -134,7 +134,7 @@
         <ele>90.000000</ele>
         <time>2005-07-27T16:10:22Z</time>
         <course>231.600006</course>
-        <speed>17.182446</speed>
+        <speed>17.182444</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.500000</hdop>
@@ -215,7 +215,7 @@
         <ele>94.300000</ele>
         <time>2005-07-27T16:10:33Z</time>
         <course>200.199997</course>
-        <speed>11.009110</speed>
+        <speed>11.009111</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.500000</hdop>
@@ -233,7 +233,7 @@
         <ele>95.700000</ele>
         <time>2005-07-27T16:10:35Z</time>
         <course>194.399994</course>
-        <speed>16.668001</speed>
+        <speed>16.667999</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.500000</hdop>
@@ -359,7 +359,7 @@
         <ele>99.600000</ele>
         <time>2005-07-27T16:10:49Z</time>
         <course>221.199997</course>
-        <speed>22.069668</speed>
+        <speed>22.069666</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.500000</hdop>
@@ -368,7 +368,7 @@
         <ele>100.500000</ele>
         <time>2005-07-27T16:10:50Z</time>
         <course>221.199997</course>
-        <speed>22.069668</speed>
+        <speed>22.069666</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.500000</hdop>
@@ -377,7 +377,7 @@
         <ele>100.700000</ele>
         <time>2005-07-27T16:10:51Z</time>
         <course>227.600006</course>
-        <speed>22.686998</speed>
+        <speed>22.687000</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.500000</hdop>
@@ -386,7 +386,7 @@
         <ele>100.000000</ele>
         <time>2005-07-27T16:10:52Z</time>
         <course>227.600006</course>
-        <speed>22.686998</speed>
+        <speed>22.687000</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.500000</hdop>
@@ -413,7 +413,7 @@
         <ele>97.500000</ele>
         <time>2005-07-27T16:10:55Z</time>
         <course>228.699997</course>
-        <speed>21.709557</speed>
+        <speed>21.709555</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.500000</hdop>
@@ -422,7 +422,7 @@
         <ele>96.100000</ele>
         <time>2005-07-27T16:10:56Z</time>
         <course>228.699997</course>
-        <speed>21.709557</speed>
+        <speed>21.709555</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.500000</hdop>
@@ -611,7 +611,7 @@
         <ele>105.000000</ele>
         <time>2005-07-27T16:11:50Z</time>
         <course>232.600006</course>
-        <speed>6.739223</speed>
+        <speed>6.739222</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -665,7 +665,7 @@
         <ele>108.500000</ele>
         <time>2005-07-27T16:12:02Z</time>
         <course>227.899994</course>
-        <speed>10.494666</speed>
+        <speed>10.494667</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -692,7 +692,7 @@
         <ele>107.000000</ele>
         <time>2005-07-27T16:12:05Z</time>
         <course>225.800003</course>
-        <speed>15.896333</speed>
+        <speed>15.896334</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -701,7 +701,7 @@
         <ele>106.300000</ele>
         <time>2005-07-27T16:12:06Z</time>
         <course>225.800003</course>
-        <speed>15.896333</speed>
+        <speed>15.896334</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -863,7 +863,7 @@
         <ele>90.900000</ele>
         <time>2005-07-27T16:12:24Z</time>
         <course>223.800003</course>
-        <speed>17.799776</speed>
+        <speed>17.799778</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -872,7 +872,7 @@
         <ele>90.200000</ele>
         <time>2005-07-27T16:12:25Z</time>
         <course>223.800003</course>
-        <speed>17.799776</speed>
+        <speed>17.799778</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -899,7 +899,7 @@
         <ele>88.500000</ele>
         <time>2005-07-27T16:12:28Z</time>
         <course>222.699997</course>
-        <speed>17.285332</speed>
+        <speed>17.285334</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -944,7 +944,7 @@
         <ele>85.800000</ele>
         <time>2005-07-27T16:12:33Z</time>
         <course>222.300003</course>
-        <speed>15.742001</speed>
+        <speed>15.742000</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -1061,7 +1061,7 @@
         <ele>80.300000</ele>
         <time>2005-07-27T16:12:46Z</time>
         <course>243.699997</course>
-        <speed>13.787110</speed>
+        <speed>13.787111</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -1106,7 +1106,7 @@
         <ele>84.200000</ele>
         <time>2005-07-27T16:12:52Z</time>
         <course>250.100006</course>
-        <speed>5.504555</speed>
+        <speed>5.504556</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -1115,7 +1115,7 @@
         <ele>87.300000</ele>
         <time>2005-07-27T16:13:02Z</time>
         <course>259.000000</course>
-        <speed>5.041556</speed>
+        <speed>5.041555</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -1169,7 +1169,7 @@
         <ele>87.300000</ele>
         <time>2005-07-27T16:13:09Z</time>
         <course>259.899994</course>
-        <speed>15.227556</speed>
+        <speed>15.227555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -1178,7 +1178,7 @@
         <ele>87.200000</ele>
         <time>2005-07-27T16:13:10Z</time>
         <course>259.899994</course>
-        <speed>15.227556</speed>
+        <speed>15.227555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -1331,7 +1331,7 @@
         <ele>81.900000</ele>
         <time>2005-07-27T16:13:34Z</time>
         <course>278.200012</course>
-        <speed>11.009110</speed>
+        <speed>11.009111</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -1385,7 +1385,7 @@
         <ele>80.700000</ele>
         <time>2005-07-27T16:13:40Z</time>
         <course>276.399994</course>
-        <speed>12.243777</speed>
+        <speed>12.243778</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -1493,7 +1493,7 @@
         <ele>72.500000</ele>
         <time>2005-07-27T16:13:52Z</time>
         <course>269.700012</course>
-        <speed>13.478445</speed>
+        <speed>13.478444</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -1502,7 +1502,7 @@
         <ele>71.500000</ele>
         <time>2005-07-27T16:13:53Z</time>
         <course>269.700012</course>
-        <speed>13.478445</speed>
+        <speed>13.478444</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -1538,7 +1538,7 @@
         <ele>68.100000</ele>
         <time>2005-07-27T16:13:57Z</time>
         <course>273.600006</course>
-        <speed>13.529888</speed>
+        <speed>13.529889</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -1547,7 +1547,7 @@
         <ele>67.200000</ele>
         <time>2005-07-27T16:13:58Z</time>
         <course>273.600006</course>
-        <speed>13.529888</speed>
+        <speed>13.529889</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -1565,7 +1565,7 @@
         <ele>66.700000</ele>
         <time>2005-07-27T16:14:00Z</time>
         <course>273.700012</course>
-        <speed>12.192334</speed>
+        <speed>12.192333</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -1574,7 +1574,7 @@
         <ele>66.500000</ele>
         <time>2005-07-27T16:14:01Z</time>
         <course>273.700012</course>
-        <speed>12.192334</speed>
+        <speed>12.192333</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -1619,7 +1619,7 @@
         <ele>66.800000</ele>
         <time>2005-07-27T16:14:07Z</time>
         <course>273.799988</course>
-        <speed>8.848445</speed>
+        <speed>8.848444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -1682,7 +1682,7 @@
         <ele>57.000000</ele>
         <time>2005-07-27T16:14:55Z</time>
         <course>285.000000</course>
-        <speed>8.385444</speed>
+        <speed>8.385445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -1718,7 +1718,7 @@
         <ele>56.800000</ele>
         <time>2005-07-27T16:14:59Z</time>
         <course>281.299988</course>
-        <speed>13.015444</speed>
+        <speed>13.015445</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -1772,7 +1772,7 @@
         <ele>63.500000</ele>
         <time>2005-07-27T16:15:05Z</time>
         <course>267.399994</course>
-        <speed>12.500999</speed>
+        <speed>12.501000</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -1826,7 +1826,7 @@
         <ele>66.600000</ele>
         <time>2005-07-27T16:15:11Z</time>
         <course>280.200012</course>
-        <speed>15.742001</speed>
+        <speed>15.742000</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -1835,7 +1835,7 @@
         <ele>67.500000</ele>
         <time>2005-07-27T16:15:12Z</time>
         <course>280.200012</course>
-        <speed>15.742001</speed>
+        <speed>15.742000</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -2051,7 +2051,7 @@
         <ele>149.700000</ele>
         <time>2005-07-27T16:16:03Z</time>
         <course>284.700012</course>
-        <speed>13.015444</speed>
+        <speed>13.015445</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>4.600000</hdop>
@@ -2123,7 +2123,7 @@
         <ele>99.800000</ele>
         <time>2005-07-27T16:16:11Z</time>
         <course>293.299988</course>
-        <speed>17.182446</speed>
+        <speed>17.182444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -2177,7 +2177,7 @@
         <ele>95.500000</ele>
         <time>2005-07-27T16:16:17Z</time>
         <course>289.600006</course>
-        <speed>15.896333</speed>
+        <speed>15.896334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -2186,7 +2186,7 @@
         <ele>83.400000</ele>
         <time>2005-07-27T16:16:18Z</time>
         <course>289.600006</course>
-        <speed>15.896333</speed>
+        <speed>15.896334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -2213,7 +2213,7 @@
         <ele>58.300000</ele>
         <time>2005-07-27T16:16:21Z</time>
         <course>289.799988</course>
-        <speed>15.742001</speed>
+        <speed>15.742000</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -2222,7 +2222,7 @@
         <ele>55.200000</ele>
         <time>2005-07-27T16:16:22Z</time>
         <course>289.500000</course>
-        <speed>15.742001</speed>
+        <speed>15.742000</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -2231,7 +2231,7 @@
         <ele>53.600000</ele>
         <time>2005-07-27T16:16:23Z</time>
         <course>289.500000</course>
-        <speed>15.742001</speed>
+        <speed>15.742000</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -2303,7 +2303,7 @@
         <ele>45.600000</ele>
         <time>2005-07-27T16:16:31Z</time>
         <course>286.700012</course>
-        <speed>15.742001</speed>
+        <speed>15.742000</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -2447,7 +2447,7 @@
         <ele>49.200000</ele>
         <time>2005-07-27T16:17:29Z</time>
         <course>353.399994</course>
-        <speed>12.758222</speed>
+        <speed>12.758223</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -2456,7 +2456,7 @@
         <ele>50.000000</ele>
         <time>2005-07-27T16:17:30Z</time>
         <course>354.899994</course>
-        <speed>13.787110</speed>
+        <speed>13.787111</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -2465,7 +2465,7 @@
         <ele>50.300000</ele>
         <time>2005-07-27T16:17:31Z</time>
         <course>354.899994</course>
-        <speed>13.787110</speed>
+        <speed>13.787111</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -2582,7 +2582,7 @@
         <ele>45.600000</ele>
         <time>2005-07-27T16:17:44Z</time>
         <course>8.400000</course>
-        <speed>15.381888</speed>
+        <speed>15.381889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -2609,7 +2609,7 @@
         <ele>44.800000</ele>
         <time>2005-07-27T16:17:47Z</time>
         <course>11.900000</course>
-        <speed>15.484778</speed>
+        <speed>15.484777</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -2771,7 +2771,7 @@
         <ele>76.400000</ele>
         <time>2005-07-27T16:19:04Z</time>
         <course>346.799988</course>
-        <speed>19.497446</speed>
+        <speed>19.497444</speed>
         <fix>3d</fix>
         <sat>5</sat>
         <hdop>1.400000</hdop>
@@ -2780,7 +2780,7 @@
         <ele>76.100000</ele>
         <time>2005-07-27T16:19:05Z</time>
         <course>346.299988</course>
-        <speed>19.497446</speed>
+        <speed>19.497444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -2789,7 +2789,7 @@
         <ele>75.500000</ele>
         <time>2005-07-27T16:19:06Z</time>
         <course>346.299988</course>
-        <speed>19.497446</speed>
+        <speed>19.497444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -2888,7 +2888,7 @@
         <ele>55.800000</ele>
         <time>2005-07-27T16:19:17Z</time>
         <course>346.200012</course>
-        <speed>13.529888</speed>
+        <speed>13.529889</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -2933,7 +2933,7 @@
         <ele>52.900000</ele>
         <time>2005-07-27T16:19:23Z</time>
         <course>346.299988</course>
-        <speed>10.340334</speed>
+        <speed>10.340333</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -2969,7 +2969,7 @@
         <ele>52.700000</ele>
         <time>2005-07-27T16:19:29Z</time>
         <course>346.299988</course>
-        <speed>8.899888</speed>
+        <speed>8.899889</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -2978,7 +2978,7 @@
         <ele>52.600000</ele>
         <time>2005-07-27T16:19:31Z</time>
         <course>348.899994</course>
-        <speed>8.385444</speed>
+        <speed>8.385445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -2996,7 +2996,7 @@
         <ele>51.300000</ele>
         <time>2005-07-27T16:19:35Z</time>
         <course>347.799988</course>
-        <speed>7.819555</speed>
+        <speed>7.819556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -3014,7 +3014,7 @@
         <ele>48.300000</ele>
         <time>2005-07-27T16:19:39Z</time>
         <course>346.100006</course>
-        <speed>5.504555</speed>
+        <speed>5.504556</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -3149,7 +3149,7 @@
         <ele>52.100000</ele>
         <time>2005-07-27T16:20:18Z</time>
         <course>345.799988</course>
-        <speed>10.083112</speed>
+        <speed>10.083111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -3176,7 +3176,7 @@
         <ele>55.000000</ele>
         <time>2005-07-27T16:20:22Z</time>
         <course>349.600006</course>
-        <speed>10.751888</speed>
+        <speed>10.751889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -3185,7 +3185,7 @@
         <ele>55.900000</ele>
         <time>2005-07-27T16:20:23Z</time>
         <course>349.600006</course>
-        <speed>10.751888</speed>
+        <speed>10.751889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -3194,7 +3194,7 @@
         <ele>56.900000</ele>
         <time>2005-07-27T16:20:24Z</time>
         <course>349.299988</course>
-        <speed>10.751888</speed>
+        <speed>10.751889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -3275,7 +3275,7 @@
         <ele>61.500000</ele>
         <time>2005-07-27T16:20:44Z</time>
         <course>352.000000</course>
-        <speed>5.041556</speed>
+        <speed>5.041555</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -3356,7 +3356,7 @@
         <ele>58.100000</ele>
         <time>2005-07-27T16:21:02Z</time>
         <course>350.899994</course>
-        <speed>10.751888</speed>
+        <speed>10.751889</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -3365,7 +3365,7 @@
         <ele>56.900000</ele>
         <time>2005-07-27T16:21:03Z</time>
         <course>350.899994</course>
-        <speed>10.751888</speed>
+        <speed>10.751889</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -3419,7 +3419,7 @@
         <ele>53.800000</ele>
         <time>2005-07-27T16:21:09Z</time>
         <course>342.000000</course>
-        <speed>13.272666</speed>
+        <speed>13.272667</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -3437,7 +3437,7 @@
         <ele>53.300000</ele>
         <time>2005-07-27T16:21:11Z</time>
         <course>336.600006</course>
-        <speed>13.735667</speed>
+        <speed>13.735666</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -3446,7 +3446,7 @@
         <ele>53.100000</ele>
         <time>2005-07-27T16:21:12Z</time>
         <course>334.799988</course>
-        <speed>13.272666</speed>
+        <speed>13.272667</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -3455,7 +3455,7 @@
         <ele>52.900000</ele>
         <time>2005-07-27T16:21:13Z</time>
         <course>334.799988</course>
-        <speed>13.272666</speed>
+        <speed>13.272667</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -3464,7 +3464,7 @@
         <ele>52.900000</ele>
         <time>2005-07-27T16:21:14Z</time>
         <course>331.500000</course>
-        <speed>12.192334</speed>
+        <speed>12.192333</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -3473,7 +3473,7 @@
         <ele>52.800000</ele>
         <time>2005-07-27T16:21:15Z</time>
         <course>331.500000</course>
-        <speed>12.192334</speed>
+        <speed>12.192333</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>1.000000</hdop>
@@ -3617,7 +3617,7 @@
         <ele>51.300000</ele>
         <time>2005-07-27T16:21:45Z</time>
         <course>315.000000</course>
-        <speed>11.009110</speed>
+        <speed>11.009111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -3689,7 +3689,7 @@
         <ele>53.400000</ele>
         <time>2005-07-27T16:21:53Z</time>
         <course>317.700012</course>
-        <speed>10.340334</speed>
+        <speed>10.340333</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.900000</hdop>
@@ -3707,7 +3707,7 @@
         <ele>54.500000</ele>
         <time>2005-07-27T16:21:55Z</time>
         <course>321.899994</course>
-        <speed>12.449556</speed>
+        <speed>12.449555</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>1.400000</hdop>
@@ -3725,7 +3725,7 @@
         <ele>55.400000</ele>
         <time>2005-07-27T16:21:57Z</time>
         <course>316.700012</course>
-        <speed>15.381888</speed>
+        <speed>15.381889</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -3734,7 +3734,7 @@
         <ele>56.000000</ele>
         <time>2005-07-27T16:21:58Z</time>
         <course>316.700012</course>
-        <speed>15.381888</speed>
+        <speed>15.381889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.000000</hdop>
@@ -3743,7 +3743,7 @@
         <ele>56.200000</ele>
         <time>2005-07-27T16:21:59Z</time>
         <course>319.799988</course>
-        <speed>16.668001</speed>
+        <speed>16.667999</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -3752,7 +3752,7 @@
         <ele>56.200000</ele>
         <time>2005-07-27T16:22:00Z</time>
         <course>319.799988</course>
-        <speed>16.668001</speed>
+        <speed>16.667999</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -3770,7 +3770,7 @@
         <ele>55.100000</ele>
         <time>2005-07-27T16:22:02Z</time>
         <course>320.399994</course>
-        <speed>18.983002</speed>
+        <speed>18.983000</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -3779,7 +3779,7 @@
         <ele>54.900000</ele>
         <time>2005-07-27T16:22:03Z</time>
         <course>320.399994</course>
-        <speed>18.983002</speed>
+        <speed>18.983000</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.000000</hdop>
@@ -3788,7 +3788,7 @@
         <ele>55.200000</ele>
         <time>2005-07-27T16:22:04Z</time>
         <course>326.299988</course>
-        <speed>20.474888</speed>
+        <speed>20.474890</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -3806,7 +3806,7 @@
         <ele>56.100000</ele>
         <time>2005-07-27T16:22:06Z</time>
         <course>330.100006</course>
-        <speed>21.555223</speed>
+        <speed>21.555222</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -3815,7 +3815,7 @@
         <ele>56.900000</ele>
         <time>2005-07-27T16:22:07Z</time>
         <course>332.899994</course>
-        <speed>21.709557</speed>
+        <speed>21.709555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -3824,7 +3824,7 @@
         <ele>58.100000</ele>
         <time>2005-07-27T16:22:08Z</time>
         <course>332.899994</course>
-        <speed>21.709557</speed>
+        <speed>21.709555</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -3941,7 +3941,7 @@
         <ele>70.200000</ele>
         <time>2005-07-27T16:22:21Z</time>
         <course>340.600006</course>
-        <speed>21.709557</speed>
+        <speed>21.709555</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.400000</hdop>
@@ -4157,7 +4157,7 @@
         <ele>77.800000</ele>
         <time>2005-07-27T16:22:45Z</time>
         <course>2.900000</course>
-        <speed>25.567890</speed>
+        <speed>25.567888</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -4166,7 +4166,7 @@
         <ele>76.700000</ele>
         <time>2005-07-27T16:22:46Z</time>
         <course>358.500000</course>
-        <speed>25.567890</speed>
+        <speed>25.567888</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -4202,7 +4202,7 @@
         <ele>74.600000</ele>
         <time>2005-07-27T16:22:50Z</time>
         <course>347.000000</course>
-        <speed>26.442446</speed>
+        <speed>26.442444</speed>
         <fix>3d</fix>
         <sat>5</sat>
         <hdop>1.400000</hdop>
@@ -4211,7 +4211,7 @@
         <ele>73.700000</ele>
         <time>2005-07-27T16:22:51Z</time>
         <course>347.000000</course>
-        <speed>26.442446</speed>
+        <speed>26.442444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -4220,7 +4220,7 @@
         <ele>72.700000</ele>
         <time>2005-07-27T16:22:52Z</time>
         <course>338.100006</course>
-        <speed>24.384668</speed>
+        <speed>24.384666</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -4229,7 +4229,7 @@
         <ele>71.300000</ele>
         <time>2005-07-27T16:22:53Z</time>
         <course>338.100006</course>
-        <speed>24.384668</speed>
+        <speed>24.384666</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -4310,7 +4310,7 @@
         <ele>69.500000</ele>
         <time>2005-07-27T16:23:03Z</time>
         <course>327.500000</course>
-        <speed>26.442446</speed>
+        <speed>26.442444</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4355,7 +4355,7 @@
         <ele>71.700000</ele>
         <time>2005-07-27T16:23:08Z</time>
         <course>340.200012</course>
-        <speed>26.545332</speed>
+        <speed>26.545334</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4373,7 +4373,7 @@
         <ele>71.400000</ele>
         <time>2005-07-27T16:23:10Z</time>
         <course>339.000000</course>
-        <speed>26.956890</speed>
+        <speed>26.956888</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4382,7 +4382,7 @@
         <ele>71.300000</ele>
         <time>2005-07-27T16:23:11Z</time>
         <course>337.799988</course>
-        <speed>26.956890</speed>
+        <speed>26.956888</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4391,7 +4391,7 @@
         <ele>71.500000</ele>
         <time>2005-07-27T16:23:12Z</time>
         <course>336.399994</course>
-        <speed>26.905443</speed>
+        <speed>26.905445</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4400,7 +4400,7 @@
         <ele>71.400000</ele>
         <time>2005-07-27T16:23:13Z</time>
         <course>336.399994</course>
-        <speed>26.905443</speed>
+        <speed>26.905445</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4418,7 +4418,7 @@
         <ele>71.500000</ele>
         <time>2005-07-27T16:23:15Z</time>
         <course>336.000000</course>
-        <speed>26.905443</speed>
+        <speed>26.905445</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4481,7 +4481,7 @@
         <ele>73.200000</ele>
         <time>2005-07-27T16:23:22Z</time>
         <course>337.399994</course>
-        <speed>23.098557</speed>
+        <speed>23.098555</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4490,7 +4490,7 @@
         <ele>73.300000</ele>
         <time>2005-07-27T16:23:23Z</time>
         <course>337.399994</course>
-        <speed>23.098557</speed>
+        <speed>23.098555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -4499,7 +4499,7 @@
         <ele>73.800000</ele>
         <time>2005-07-27T16:23:24Z</time>
         <course>337.399994</course>
-        <speed>22.018221</speed>
+        <speed>22.018223</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4544,7 +4544,7 @@
         <ele>75.000000</ele>
         <time>2005-07-27T16:23:29Z</time>
         <course>336.600006</course>
-        <speed>21.195112</speed>
+        <speed>21.195110</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -4571,7 +4571,7 @@
         <ele>75.000000</ele>
         <time>2005-07-27T16:23:32Z</time>
         <course>336.799988</course>
-        <speed>21.709557</speed>
+        <speed>21.709555</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4580,7 +4580,7 @@
         <ele>73.700000</ele>
         <time>2005-07-27T16:23:33Z</time>
         <course>336.799988</course>
-        <speed>21.709557</speed>
+        <speed>21.709555</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4607,7 +4607,7 @@
         <ele>74.500000</ele>
         <time>2005-07-27T16:23:36Z</time>
         <course>336.299988</course>
-        <speed>22.172554</speed>
+        <speed>22.172556</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4616,7 +4616,7 @@
         <ele>74.400000</ele>
         <time>2005-07-27T16:23:37Z</time>
         <course>336.899994</course>
-        <speed>22.584112</speed>
+        <speed>22.584110</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4634,7 +4634,7 @@
         <ele>73.600000</ele>
         <time>2005-07-27T16:23:39Z</time>
         <course>334.899994</course>
-        <speed>22.686998</speed>
+        <speed>22.687000</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4643,7 +4643,7 @@
         <ele>73.600000</ele>
         <time>2005-07-27T16:23:40Z</time>
         <course>334.899994</course>
-        <speed>22.686998</speed>
+        <speed>22.687000</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4661,7 +4661,7 @@
         <ele>73.200000</ele>
         <time>2005-07-27T16:23:42Z</time>
         <course>327.399994</course>
-        <speed>22.584112</speed>
+        <speed>22.584110</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4670,7 +4670,7 @@
         <ele>73.500000</ele>
         <time>2005-07-27T16:23:43Z</time>
         <course>327.399994</course>
-        <speed>22.584112</speed>
+        <speed>22.584110</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4697,7 +4697,7 @@
         <ele>72.800000</ele>
         <time>2005-07-27T16:23:46Z</time>
         <course>314.899994</course>
-        <speed>21.040779</speed>
+        <speed>21.040777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -4706,7 +4706,7 @@
         <ele>72.700000</ele>
         <time>2005-07-27T16:23:47Z</time>
         <course>314.299988</course>
-        <speed>20.629221</speed>
+        <speed>20.629223</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4715,7 +4715,7 @@
         <ele>72.900000</ele>
         <time>2005-07-27T16:23:48Z</time>
         <course>314.299988</course>
-        <speed>20.629221</speed>
+        <speed>20.629223</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4724,7 +4724,7 @@
         <ele>73.000000</ele>
         <time>2005-07-27T16:23:49Z</time>
         <course>313.500000</course>
-        <speed>19.497446</speed>
+        <speed>19.497444</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4733,7 +4733,7 @@
         <ele>72.900000</ele>
         <time>2005-07-27T16:23:50Z</time>
         <course>313.500000</course>
-        <speed>19.497446</speed>
+        <speed>19.497444</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4823,7 +4823,7 @@
         <ele>72.300000</ele>
         <time>2005-07-27T16:24:00Z</time>
         <course>326.100006</course>
-        <speed>17.799776</speed>
+        <speed>17.799778</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4895,7 +4895,7 @@
         <ele>73.400000</ele>
         <time>2005-07-27T16:24:08Z</time>
         <course>17.400000</course>
-        <speed>18.983002</speed>
+        <speed>18.983000</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4922,7 +4922,7 @@
         <ele>71.500000</ele>
         <time>2005-07-27T16:24:11Z</time>
         <course>36.299999</course>
-        <speed>20.011890</speed>
+        <speed>20.011889</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4949,7 +4949,7 @@
         <ele>71.800000</ele>
         <time>2005-07-27T16:24:14Z</time>
         <course>42.400002</course>
-        <speed>20.680668</speed>
+        <speed>20.680666</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4958,7 +4958,7 @@
         <ele>71.700000</ele>
         <time>2005-07-27T16:24:15Z</time>
         <course>42.099998</course>
-        <speed>21.040779</speed>
+        <speed>21.040777</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4976,7 +4976,7 @@
         <ele>71.500000</ele>
         <time>2005-07-27T16:24:17Z</time>
         <course>37.000000</course>
-        <speed>20.011890</speed>
+        <speed>20.011889</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -4985,7 +4985,7 @@
         <ele>71.600000</ele>
         <time>2005-07-27T16:24:18Z</time>
         <course>37.000000</course>
-        <speed>20.011890</speed>
+        <speed>20.011889</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -5012,7 +5012,7 @@
         <ele>71.100000</ele>
         <time>2005-07-27T16:24:21Z</time>
         <course>28.500000</course>
-        <speed>19.600332</speed>
+        <speed>19.600334</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -5039,7 +5039,7 @@
         <ele>70.100000</ele>
         <time>2005-07-27T16:24:24Z</time>
         <course>19.799999</course>
-        <speed>19.497446</speed>
+        <speed>19.497444</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -5084,7 +5084,7 @@
         <ele>68.200000</ele>
         <time>2005-07-27T16:24:29Z</time>
         <course>2.200000</course>
-        <speed>20.680668</speed>
+        <speed>20.680666</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -5408,7 +5408,7 @@
         <ele>75.700000</ele>
         <time>2005-07-27T16:25:05Z</time>
         <course>333.700012</course>
-        <speed>19.600332</speed>
+        <speed>19.600334</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -5471,7 +5471,7 @@
         <ele>79.800000</ele>
         <time>2005-07-27T16:25:12Z</time>
         <course>332.600006</course>
-        <speed>21.040779</speed>
+        <speed>21.040777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -5561,7 +5561,7 @@
         <ele>88.100000</ele>
         <time>2005-07-27T16:25:22Z</time>
         <course>338.899994</course>
-        <speed>20.166224</speed>
+        <speed>20.166222</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -5588,7 +5588,7 @@
         <ele>86.600000</ele>
         <time>2005-07-27T16:25:25Z</time>
         <course>345.600006</course>
-        <speed>23.201443</speed>
+        <speed>23.201445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -5597,7 +5597,7 @@
         <ele>86.500000</ele>
         <time>2005-07-27T16:25:26Z</time>
         <course>345.600006</course>
-        <speed>23.201443</speed>
+        <speed>23.201445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -5642,7 +5642,7 @@
         <ele>83.400000</ele>
         <time>2005-07-27T16:25:31Z</time>
         <course>357.100006</course>
-        <speed>21.195112</speed>
+        <speed>21.195110</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -5651,7 +5651,7 @@
         <ele>82.700000</ele>
         <time>2005-07-27T16:25:32Z</time>
         <course>357.100006</course>
-        <speed>21.195112</speed>
+        <speed>21.195110</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -5741,7 +5741,7 @@
         <ele>69.600000</ele>
         <time>2005-07-27T16:25:42Z</time>
         <course>6.600000</course>
-        <speed>16.616554</speed>
+        <speed>16.616556</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -5750,7 +5750,7 @@
         <ele>68.800000</ele>
         <time>2005-07-27T16:25:43Z</time>
         <course>6.600000</course>
-        <speed>16.616554</speed>
+        <speed>16.616556</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -5804,7 +5804,7 @@
         <ele>60.900000</ele>
         <time>2005-07-27T16:25:49Z</time>
         <course>349.500000</course>
-        <speed>17.285332</speed>
+        <speed>17.285334</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.600000</hdop>
@@ -5903,7 +5903,7 @@
         <ele>55.000000</ele>
         <time>2005-07-27T16:26:00Z</time>
         <course>326.899994</course>
-        <speed>19.600332</speed>
+        <speed>19.600334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -5912,7 +5912,7 @@
         <ele>57.400000</ele>
         <time>2005-07-27T16:26:01Z</time>
         <course>326.899994</course>
-        <speed>19.600332</speed>
+        <speed>19.600334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -5948,7 +5948,7 @@
         <ele>60.300000</ele>
         <time>2005-07-27T16:26:05Z</time>
         <course>327.700012</course>
-        <speed>21.195112</speed>
+        <speed>21.195110</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -5993,7 +5993,7 @@
         <ele>57.300000</ele>
         <time>2005-07-27T16:26:10Z</time>
         <course>322.000000</course>
-        <speed>22.584112</speed>
+        <speed>22.584110</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -6002,7 +6002,7 @@
         <ele>56.500000</ele>
         <time>2005-07-27T16:26:11Z</time>
         <course>319.899994</course>
-        <speed>22.686998</speed>
+        <speed>22.687000</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -6011,7 +6011,7 @@
         <ele>55.900000</ele>
         <time>2005-07-27T16:26:12Z</time>
         <course>319.899994</course>
-        <speed>22.686998</speed>
+        <speed>22.687000</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -6047,7 +6047,7 @@
         <ele>54.000000</ele>
         <time>2005-07-27T16:26:16Z</time>
         <course>306.700012</course>
-        <speed>24.487555</speed>
+        <speed>24.487556</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -6074,7 +6074,7 @@
         <ele>51.500000</ele>
         <time>2005-07-27T16:26:19Z</time>
         <course>298.399994</course>
-        <speed>25.362110</speed>
+        <speed>25.362112</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -6083,7 +6083,7 @@
         <ele>50.500000</ele>
         <time>2005-07-27T16:26:20Z</time>
         <course>296.000000</course>
-        <speed>25.516443</speed>
+        <speed>25.516445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -6092,7 +6092,7 @@
         <ele>50.700000</ele>
         <time>2005-07-27T16:26:21Z</time>
         <course>292.399994</course>
-        <speed>25.362110</speed>
+        <speed>25.362112</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -6101,7 +6101,7 @@
         <ele>50.200000</ele>
         <time>2005-07-27T16:26:22Z</time>
         <course>289.700012</course>
-        <speed>25.413557</speed>
+        <speed>25.413555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -6110,7 +6110,7 @@
         <ele>49.900000</ele>
         <time>2005-07-27T16:26:23Z</time>
         <course>289.700012</course>
-        <speed>25.413557</speed>
+        <speed>25.413555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -6119,7 +6119,7 @@
         <ele>49.700000</ele>
         <time>2005-07-27T16:26:24Z</time>
         <course>286.799988</course>
-        <speed>24.899113</speed>
+        <speed>24.899111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -6191,7 +6191,7 @@
         <ele>45.200000</ele>
         <time>2005-07-27T16:26:32Z</time>
         <course>282.500000</course>
-        <speed>22.686998</speed>
+        <speed>22.687000</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -6200,7 +6200,7 @@
         <ele>44.300000</ele>
         <time>2005-07-27T16:26:33Z</time>
         <course>282.500000</course>
-        <speed>22.686998</speed>
+        <speed>22.687000</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -6344,7 +6344,7 @@
         <ele>60.400000</ele>
         <time>2005-07-27T16:28:42Z</time>
         <course>344.600006</course>
-        <speed>17.285332</speed>
+        <speed>17.285334</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.900000</hdop>
@@ -6353,7 +6353,7 @@
         <ele>58.000000</ele>
         <time>2005-07-27T16:28:43Z</time>
         <course>344.600006</course>
-        <speed>17.285332</speed>
+        <speed>17.285334</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.900000</hdop>
@@ -6560,7 +6560,7 @@
         <ele>44.600000</ele>
         <time>2005-07-27T16:29:55Z</time>
         <course>260.500000</course>
-        <speed>27.985779</speed>
+        <speed>27.985777</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -6569,7 +6569,7 @@
         <ele>42.700000</ele>
         <time>2005-07-27T16:29:56Z</time>
         <course>256.200012</course>
-        <speed>27.574221</speed>
+        <speed>27.574223</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.000000</hdop>
@@ -6587,7 +6587,7 @@
         <ele>40.100000</ele>
         <time>2005-07-27T16:29:58Z</time>
         <course>254.899994</course>
-        <speed>27.985779</speed>
+        <speed>27.985777</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -6596,7 +6596,7 @@
         <ele>38.700000</ele>
         <time>2005-07-27T16:29:59Z</time>
         <course>254.899994</course>
-        <speed>27.985779</speed>
+        <speed>27.985777</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -6704,7 +6704,7 @@
         <ele>31.400000</ele>
         <time>2005-07-27T16:30:11Z</time>
         <course>252.800003</course>
-        <speed>30.815224</speed>
+        <speed>30.815222</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -6749,7 +6749,7 @@
         <ele>28.800000</ele>
         <time>2005-07-27T16:30:16Z</time>
         <course>253.300003</course>
-        <speed>30.918110</speed>
+        <speed>30.918112</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.000000</hdop>
@@ -6758,7 +6758,7 @@
         <ele>28.700000</ele>
         <time>2005-07-27T16:30:17Z</time>
         <course>252.600006</course>
-        <speed>30.969557</speed>
+        <speed>30.969555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -6767,7 +6767,7 @@
         <ele>28.400000</ele>
         <time>2005-07-27T16:30:18Z</time>
         <course>252.600006</course>
-        <speed>30.969557</speed>
+        <speed>30.969555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -6929,7 +6929,7 @@
         <ele>30.600000</ele>
         <time>2005-07-27T16:30:36Z</time>
         <course>258.500000</course>
-        <speed>30.300779</speed>
+        <speed>30.300777</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>1.400000</hdop>
@@ -6938,7 +6938,7 @@
         <ele>29.900000</ele>
         <time>2005-07-27T16:30:38Z</time>
         <course>258.500000</course>
-        <speed>30.300779</speed>
+        <speed>30.300777</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>2.600000</hdop>
@@ -6956,7 +6956,7 @@
         <ele>29.200000</ele>
         <time>2005-07-27T16:30:40Z</time>
         <course>259.100006</course>
-        <speed>31.792665</speed>
+        <speed>31.792667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -6965,7 +6965,7 @@
         <ele>29.300000</ele>
         <time>2005-07-27T16:30:41Z</time>
         <course>259.100006</course>
-        <speed>31.278221</speed>
+        <speed>31.278223</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -6974,7 +6974,7 @@
         <ele>30.100000</ele>
         <time>2005-07-27T16:30:42Z</time>
         <course>258.600006</course>
-        <speed>30.455112</speed>
+        <speed>30.455111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -6983,7 +6983,7 @@
         <ele>31.100000</ele>
         <time>2005-07-27T16:30:43Z</time>
         <course>258.600006</course>
-        <speed>30.455112</speed>
+        <speed>30.455111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7100,7 +7100,7 @@
         <ele>30.800000</ele>
         <time>2005-07-27T16:30:56Z</time>
         <course>255.000000</course>
-        <speed>31.329668</speed>
+        <speed>31.329666</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7109,7 +7109,7 @@
         <ele>30.600000</ele>
         <time>2005-07-27T16:30:57Z</time>
         <course>255.600006</course>
-        <speed>30.918110</speed>
+        <speed>30.918112</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7118,7 +7118,7 @@
         <ele>30.600000</ele>
         <time>2005-07-27T16:30:58Z</time>
         <course>255.600006</course>
-        <speed>30.403666</speed>
+        <speed>30.403667</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7154,7 +7154,7 @@
         <ele>30.500000</ele>
         <time>2005-07-27T16:31:02Z</time>
         <course>256.299988</course>
-        <speed>26.390999</speed>
+        <speed>26.391001</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7163,7 +7163,7 @@
         <ele>30.400000</ele>
         <time>2005-07-27T16:31:03Z</time>
         <course>256.299988</course>
-        <speed>26.390999</speed>
+        <speed>26.391001</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7181,7 +7181,7 @@
         <ele>31.200000</ele>
         <time>2005-07-27T16:31:05Z</time>
         <course>256.899994</course>
-        <speed>25.413557</speed>
+        <speed>25.413555</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7280,7 +7280,7 @@
         <ele>54.000000</ele>
         <time>2005-07-27T16:31:29Z</time>
         <course>246.199997</course>
-        <speed>25.567890</speed>
+        <speed>25.567888</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7298,7 +7298,7 @@
         <ele>53.500000</ele>
         <time>2005-07-27T16:31:31Z</time>
         <course>246.199997</course>
-        <speed>25.413557</speed>
+        <speed>25.413555</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7307,7 +7307,7 @@
         <ele>52.300000</ele>
         <time>2005-07-27T16:31:32Z</time>
         <course>245.899994</course>
-        <speed>25.362110</speed>
+        <speed>25.362112</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7316,7 +7316,7 @@
         <ele>52.200000</ele>
         <time>2005-07-27T16:31:33Z</time>
         <course>245.899994</course>
-        <speed>25.362110</speed>
+        <speed>25.362112</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7325,7 +7325,7 @@
         <ele>52.600000</ele>
         <time>2005-07-27T16:31:34Z</time>
         <course>246.600006</course>
-        <speed>25.001999</speed>
+        <speed>25.002001</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7397,7 +7397,7 @@
         <ele>59.600000</ele>
         <time>2005-07-27T16:31:42Z</time>
         <course>259.799988</course>
-        <speed>25.567890</speed>
+        <speed>25.567888</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7406,7 +7406,7 @@
         <ele>60.700000</ele>
         <time>2005-07-27T16:31:43Z</time>
         <course>259.799988</course>
-        <speed>25.567890</speed>
+        <speed>25.567888</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7415,7 +7415,7 @@
         <ele>61.700000</ele>
         <time>2005-07-27T16:31:44Z</time>
         <course>264.200012</course>
-        <speed>26.390999</speed>
+        <speed>26.391001</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -7622,7 +7622,7 @@
         <ele>60.100000</ele>
         <time>2005-07-27T16:32:07Z</time>
         <course>273.500000</course>
-        <speed>27.419888</speed>
+        <speed>27.419889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7631,7 +7631,7 @@
         <ele>59.100000</ele>
         <time>2005-07-27T16:32:08Z</time>
         <course>273.500000</course>
-        <speed>27.419888</speed>
+        <speed>27.419889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7649,7 +7649,7 @@
         <ele>57.600000</ele>
         <time>2005-07-27T16:32:10Z</time>
         <course>271.200012</course>
-        <speed>27.059776</speed>
+        <speed>27.059778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7703,7 +7703,7 @@
         <ele>52.100000</ele>
         <time>2005-07-27T16:32:16Z</time>
         <course>272.799988</course>
-        <speed>26.442446</speed>
+        <speed>26.442444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7712,7 +7712,7 @@
         <ele>51.400000</ele>
         <time>2005-07-27T16:32:17Z</time>
         <course>274.100006</course>
-        <speed>26.545332</speed>
+        <speed>26.545334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7721,7 +7721,7 @@
         <ele>50.800000</ele>
         <time>2005-07-27T16:32:18Z</time>
         <course>274.100006</course>
-        <speed>26.545332</speed>
+        <speed>26.545334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7748,7 +7748,7 @@
         <ele>49.700000</ele>
         <time>2005-07-27T16:32:21Z</time>
         <course>276.399994</course>
-        <speed>26.956890</speed>
+        <speed>26.956888</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7757,7 +7757,7 @@
         <ele>49.600000</ele>
         <time>2005-07-27T16:32:22Z</time>
         <course>276.399994</course>
-        <speed>26.956890</speed>
+        <speed>26.956888</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7766,7 +7766,7 @@
         <ele>49.300000</ele>
         <time>2005-07-27T16:32:23Z</time>
         <course>276.399994</course>
-        <speed>27.111223</speed>
+        <speed>27.111221</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7838,7 +7838,7 @@
         <ele>51.600000</ele>
         <time>2005-07-27T16:32:31Z</time>
         <course>276.399994</course>
-        <speed>27.574221</speed>
+        <speed>27.574223</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7847,7 +7847,7 @@
         <ele>51.800000</ele>
         <time>2005-07-27T16:32:32Z</time>
         <course>276.500000</course>
-        <speed>27.985779</speed>
+        <speed>27.985777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7856,7 +7856,7 @@
         <ele>51.600000</ele>
         <time>2005-07-27T16:32:33Z</time>
         <course>276.500000</course>
-        <speed>27.985779</speed>
+        <speed>27.985777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7937,7 +7937,7 @@
         <ele>50.800000</ele>
         <time>2005-07-27T16:32:42Z</time>
         <course>274.500000</course>
-        <speed>28.088665</speed>
+        <speed>28.088667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7946,7 +7946,7 @@
         <ele>50.900000</ele>
         <time>2005-07-27T16:32:43Z</time>
         <course>274.500000</course>
-        <speed>28.088665</speed>
+        <speed>28.088667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7982,7 +7982,7 @@
         <ele>51.900000</ele>
         <time>2005-07-27T16:32:47Z</time>
         <course>269.200012</course>
-        <speed>27.111223</speed>
+        <speed>27.111221</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -7991,7 +7991,7 @@
         <ele>52.300000</ele>
         <time>2005-07-27T16:32:48Z</time>
         <course>269.200012</course>
-        <speed>27.111223</speed>
+        <speed>27.111221</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8000,7 +8000,7 @@
         <ele>52.800000</ele>
         <time>2005-07-27T16:32:49Z</time>
         <course>269.700012</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8036,7 +8036,7 @@
         <ele>53.000000</ele>
         <time>2005-07-27T16:32:53Z</time>
         <course>269.399994</course>
-        <speed>26.956890</speed>
+        <speed>26.956888</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8063,7 +8063,7 @@
         <ele>52.400000</ele>
         <time>2005-07-27T16:32:56Z</time>
         <course>272.700012</course>
-        <speed>25.567890</speed>
+        <speed>25.567888</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8072,7 +8072,7 @@
         <ele>52.200000</ele>
         <time>2005-07-27T16:32:57Z</time>
         <course>275.399994</course>
-        <speed>25.362110</speed>
+        <speed>25.362112</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8081,7 +8081,7 @@
         <ele>51.900000</ele>
         <time>2005-07-27T16:32:58Z</time>
         <course>275.399994</course>
-        <speed>25.362110</speed>
+        <speed>25.362112</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8090,7 +8090,7 @@
         <ele>50.700000</ele>
         <time>2005-07-27T16:32:59Z</time>
         <course>277.100006</course>
-        <speed>25.001999</speed>
+        <speed>25.002001</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8216,7 +8216,7 @@
         <ele>42.800000</ele>
         <time>2005-07-27T16:33:13Z</time>
         <course>314.000000</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8234,7 +8234,7 @@
         <ele>43.000000</ele>
         <time>2005-07-27T16:33:15Z</time>
         <course>313.700012</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8333,7 +8333,7 @@
         <ele>37.600000</ele>
         <time>2005-07-27T16:33:26Z</time>
         <course>298.200012</course>
-        <speed>26.082335</speed>
+        <speed>26.082333</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8342,7 +8342,7 @@
         <ele>37.300000</ele>
         <time>2005-07-27T16:33:27Z</time>
         <course>296.000000</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8351,7 +8351,7 @@
         <ele>36.400000</ele>
         <time>2005-07-27T16:33:28Z</time>
         <course>296.000000</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8360,7 +8360,7 @@
         <ele>36.000000</ele>
         <time>2005-07-27T16:33:29Z</time>
         <course>293.600006</course>
-        <speed>27.111223</speed>
+        <speed>27.111221</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8369,7 +8369,7 @@
         <ele>35.700000</ele>
         <time>2005-07-27T16:33:30Z</time>
         <course>292.100006</course>
-        <speed>27.574221</speed>
+        <speed>27.574223</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -8459,7 +8459,7 @@
         <ele>34.600000</ele>
         <time>2005-07-27T16:33:40Z</time>
         <course>294.000000</course>
-        <speed>25.001999</speed>
+        <speed>25.002001</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8576,7 +8576,7 @@
         <ele>34.900000</ele>
         <time>2005-07-27T16:33:53Z</time>
         <course>305.100006</course>
-        <speed>25.362110</speed>
+        <speed>25.362112</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -8585,7 +8585,7 @@
         <ele>35.000000</ele>
         <time>2005-07-27T16:33:54Z</time>
         <course>297.399994</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -8594,7 +8594,7 @@
         <ele>32.700000</ele>
         <time>2005-07-27T16:33:55Z</time>
         <course>292.899994</course>
-        <speed>27.059776</speed>
+        <speed>27.059778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8639,7 +8639,7 @@
         <ele>26.400000</ele>
         <time>2005-07-27T16:34:00Z</time>
         <course>288.700012</course>
-        <speed>29.889221</speed>
+        <speed>29.889223</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8648,7 +8648,7 @@
         <ele>26.800000</ele>
         <time>2005-07-27T16:34:01Z</time>
         <course>288.700012</course>
-        <speed>29.889221</speed>
+        <speed>29.889223</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -8738,7 +8738,7 @@
         <ele>21.400000</ele>
         <time>2005-07-27T16:34:11Z</time>
         <course>308.100006</course>
-        <speed>25.001999</speed>
+        <speed>25.002001</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8747,7 +8747,7 @@
         <ele>23.500000</ele>
         <time>2005-07-27T16:34:12Z</time>
         <course>313.000000</course>
-        <speed>24.899113</speed>
+        <speed>24.899111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8756,7 +8756,7 @@
         <ele>25.000000</ele>
         <time>2005-07-27T16:34:13Z</time>
         <course>313.000000</course>
-        <speed>24.899113</speed>
+        <speed>24.899111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8828,7 +8828,7 @@
         <ele>30.100000</ele>
         <time>2005-07-27T16:34:21Z</time>
         <course>334.700012</course>
-        <speed>25.876554</speed>
+        <speed>25.876556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8855,7 +8855,7 @@
         <ele>29.900000</ele>
         <time>2005-07-27T16:34:24Z</time>
         <course>335.000000</course>
-        <speed>26.905443</speed>
+        <speed>26.905445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8864,7 +8864,7 @@
         <ele>30.300000</ele>
         <time>2005-07-27T16:34:25Z</time>
         <course>334.899994</course>
-        <speed>26.905443</speed>
+        <speed>26.905445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8882,7 +8882,7 @@
         <ele>31.200000</ele>
         <time>2005-07-27T16:34:27Z</time>
         <course>335.100006</course>
-        <speed>26.442446</speed>
+        <speed>26.442444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8891,7 +8891,7 @@
         <ele>31.000000</ele>
         <time>2005-07-27T16:34:28Z</time>
         <course>335.100006</course>
-        <speed>26.442446</speed>
+        <speed>26.442444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8900,7 +8900,7 @@
         <ele>30.800000</ele>
         <time>2005-07-27T16:34:29Z</time>
         <course>335.200012</course>
-        <speed>25.928001</speed>
+        <speed>25.927999</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8990,7 +8990,7 @@
         <ele>26.800000</ele>
         <time>2005-07-27T16:34:39Z</time>
         <course>320.000000</course>
-        <speed>25.876554</speed>
+        <speed>25.876556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -8999,7 +8999,7 @@
         <ele>26.500000</ele>
         <time>2005-07-27T16:34:40Z</time>
         <course>316.500000</course>
-        <speed>25.876554</speed>
+        <speed>25.876556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9026,7 +9026,7 @@
         <ele>28.700000</ele>
         <time>2005-07-27T16:34:43Z</time>
         <course>308.299988</course>
-        <speed>25.516443</speed>
+        <speed>25.516445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9053,7 +9053,7 @@
         <ele>29.100000</ele>
         <time>2005-07-27T16:34:46Z</time>
         <course>300.200012</course>
-        <speed>25.567890</speed>
+        <speed>25.567888</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9098,7 +9098,7 @@
         <ele>31.000000</ele>
         <time>2005-07-27T16:34:51Z</time>
         <course>292.200012</course>
-        <speed>25.362110</speed>
+        <speed>25.362112</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9143,7 +9143,7 @@
         <ele>29.900000</ele>
         <time>2005-07-27T16:34:58Z</time>
         <course>279.399994</course>
-        <speed>24.487555</speed>
+        <speed>24.487556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9161,7 +9161,7 @@
         <ele>29.900000</ele>
         <time>2005-07-27T16:35:00Z</time>
         <course>277.700012</course>
-        <speed>24.384668</speed>
+        <speed>24.384666</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9296,7 +9296,7 @@
         <ele>27.800000</ele>
         <time>2005-07-27T16:35:15Z</time>
         <course>277.899994</course>
-        <speed>28.088665</speed>
+        <speed>28.088667</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -9305,7 +9305,7 @@
         <ele>27.000000</ele>
         <time>2005-07-27T16:35:19Z</time>
         <course>277.899994</course>
-        <speed>28.088665</speed>
+        <speed>28.088667</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>3.100000</hdop>
@@ -9314,7 +9314,7 @@
         <ele>26.500000</ele>
         <time>2005-07-27T16:35:20Z</time>
         <course>276.799988</course>
-        <speed>29.889221</speed>
+        <speed>29.889223</speed>
         <fix>3d</fix>
         <sat>5</sat>
         <hdop>2.500000</hdop>
@@ -9323,7 +9323,7 @@
         <ele>28.300000</ele>
         <time>2005-07-27T16:35:21Z</time>
         <course>274.799988</course>
-        <speed>29.786335</speed>
+        <speed>29.786333</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>2.000000</hdop>
@@ -9332,7 +9332,7 @@
         <ele>28.200000</ele>
         <time>2005-07-27T16:35:22Z</time>
         <course>274.799988</course>
-        <speed>29.786335</speed>
+        <speed>29.786333</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9404,7 +9404,7 @@
         <ele>18.600000</ele>
         <time>2005-07-27T16:35:30Z</time>
         <course>253.300003</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9413,7 +9413,7 @@
         <ele>18.400000</ele>
         <time>2005-07-27T16:35:31Z</time>
         <course>253.300003</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9422,7 +9422,7 @@
         <ele>17.900000</ele>
         <time>2005-07-27T16:35:32Z</time>
         <course>253.399994</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9431,7 +9431,7 @@
         <ele>18.100000</ele>
         <time>2005-07-27T16:35:33Z</time>
         <course>253.399994</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9440,7 +9440,7 @@
         <ele>18.400000</ele>
         <time>2005-07-27T16:35:34Z</time>
         <course>253.600006</course>
-        <speed>26.030888</speed>
+        <speed>26.030890</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9449,7 +9449,7 @@
         <ele>18.200000</ele>
         <time>2005-07-27T16:35:35Z</time>
         <course>253.500000</course>
-        <speed>25.413557</speed>
+        <speed>25.413555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9503,7 +9503,7 @@
         <ele>15.700000</ele>
         <time>2005-07-27T16:35:47Z</time>
         <course>250.500000</course>
-        <speed>12.449556</speed>
+        <speed>12.449555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9602,7 +9602,7 @@
         <ele>22.500000</ele>
         <time>2005-07-27T16:36:06Z</time>
         <course>253.600006</course>
-        <speed>12.449556</speed>
+        <speed>12.449555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9611,7 +9611,7 @@
         <ele>22.500000</ele>
         <time>2005-07-27T16:36:07Z</time>
         <course>253.600006</course>
-        <speed>12.449556</speed>
+        <speed>12.449555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9620,7 +9620,7 @@
         <ele>22.500000</ele>
         <time>2005-07-27T16:36:08Z</time>
         <course>252.600006</course>
-        <speed>12.706779</speed>
+        <speed>12.706778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9917,7 +9917,7 @@
         <ele>12.200000</ele>
         <time>2005-07-27T16:37:01Z</time>
         <course>250.300003</course>
-        <speed>12.243777</speed>
+        <speed>12.243778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9926,7 +9926,7 @@
         <ele>12.000000</ele>
         <time>2005-07-27T16:37:02Z</time>
         <course>250.300003</course>
-        <speed>12.243777</speed>
+        <speed>12.243778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -9935,7 +9935,7 @@
         <ele>12.100000</ele>
         <time>2005-07-27T16:37:03Z</time>
         <course>249.899994</course>
-        <speed>12.192334</speed>
+        <speed>12.192333</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10034,7 +10034,7 @@
         <ele>19.400000</ele>
         <time>2005-07-27T16:37:22Z</time>
         <course>253.800003</course>
-        <speed>13.272666</speed>
+        <speed>13.272667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10043,7 +10043,7 @@
         <ele>19.600000</ele>
         <time>2005-07-27T16:37:23Z</time>
         <course>253.800003</course>
-        <speed>13.272666</speed>
+        <speed>13.272667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10097,7 +10097,7 @@
         <ele>20.600000</ele>
         <time>2005-07-27T16:37:29Z</time>
         <course>253.600006</course>
-        <speed>15.484778</speed>
+        <speed>15.484777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10106,7 +10106,7 @@
         <ele>19.900000</ele>
         <time>2005-07-27T16:37:30Z</time>
         <course>253.000000</course>
-        <speed>16.770887</speed>
+        <speed>16.770889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10160,7 +10160,7 @@
         <ele>18.500000</ele>
         <time>2005-07-27T16:37:36Z</time>
         <course>253.199997</course>
-        <speed>15.896333</speed>
+        <speed>15.896334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10169,7 +10169,7 @@
         <ele>18.100000</ele>
         <time>2005-07-27T16:37:37Z</time>
         <course>253.199997</course>
-        <speed>15.896333</speed>
+        <speed>15.896334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10187,7 +10187,7 @@
         <ele>17.200000</ele>
         <time>2005-07-27T16:37:39Z</time>
         <course>253.699997</course>
-        <speed>15.742001</speed>
+        <speed>15.742000</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10196,7 +10196,7 @@
         <ele>16.700000</ele>
         <time>2005-07-27T16:37:40Z</time>
         <course>253.699997</course>
-        <speed>15.742001</speed>
+        <speed>15.742000</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10232,7 +10232,7 @@
         <ele>16.100000</ele>
         <time>2005-07-27T16:37:46Z</time>
         <course>252.100006</course>
-        <speed>16.770887</speed>
+        <speed>16.770889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10241,7 +10241,7 @@
         <ele>16.100000</ele>
         <time>2005-07-27T16:37:47Z</time>
         <course>252.100006</course>
-        <speed>16.770887</speed>
+        <speed>16.770889</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.100000</hdop>
@@ -10313,7 +10313,7 @@
         <ele>14.800000</ele>
         <time>2005-07-27T16:37:55Z</time>
         <course>254.500000</course>
-        <speed>15.381888</speed>
+        <speed>15.381889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10358,7 +10358,7 @@
         <ele>16.200000</ele>
         <time>2005-07-27T16:38:00Z</time>
         <course>253.600006</course>
-        <speed>10.751888</speed>
+        <speed>10.751889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10412,7 +10412,7 @@
         <ele>16.600000</ele>
         <time>2005-07-27T16:38:07Z</time>
         <course>256.700012</course>
-        <speed>8.642666</speed>
+        <speed>8.642667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10466,7 +10466,7 @@
         <ele>16.000000</ele>
         <time>2005-07-27T16:38:19Z</time>
         <course>264.200012</course>
-        <speed>12.243777</speed>
+        <speed>12.243778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10493,7 +10493,7 @@
         <ele>16.000000</ele>
         <time>2005-07-27T16:38:22Z</time>
         <course>267.799988</course>
-        <speed>12.449556</speed>
+        <speed>12.449555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10511,7 +10511,7 @@
         <ele>17.100000</ele>
         <time>2005-07-27T16:38:24Z</time>
         <course>274.299988</course>
-        <speed>12.706779</speed>
+        <speed>12.706778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10520,7 +10520,7 @@
         <ele>17.900000</ele>
         <time>2005-07-27T16:38:25Z</time>
         <course>274.299988</course>
-        <speed>12.706779</speed>
+        <speed>12.706778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10529,7 +10529,7 @@
         <ele>19.200000</ele>
         <time>2005-07-27T16:38:26Z</time>
         <course>278.299988</course>
-        <speed>12.706779</speed>
+        <speed>12.706778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10538,7 +10538,7 @@
         <ele>19.900000</ele>
         <time>2005-07-27T16:38:27Z</time>
         <course>278.299988</course>
-        <speed>12.706779</speed>
+        <speed>12.706778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10547,7 +10547,7 @@
         <ele>20.800000</ele>
         <time>2005-07-27T16:38:28Z</time>
         <course>277.799988</course>
-        <speed>12.192334</speed>
+        <speed>12.192333</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10601,7 +10601,7 @@
         <ele>26.300000</ele>
         <time>2005-07-27T16:38:34Z</time>
         <course>284.799988</course>
-        <speed>11.009110</speed>
+        <speed>11.009111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10673,7 +10673,7 @@
         <ele>31.800000</ele>
         <time>2005-07-27T16:38:42Z</time>
         <course>287.700012</course>
-        <speed>12.243777</speed>
+        <speed>12.243778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10682,7 +10682,7 @@
         <ele>32.700000</ele>
         <time>2005-07-27T16:38:43Z</time>
         <course>287.700012</course>
-        <speed>12.243777</speed>
+        <speed>12.243778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10736,7 +10736,7 @@
         <ele>33.100000</ele>
         <time>2005-07-27T16:38:49Z</time>
         <course>286.799988</course>
-        <speed>15.639111</speed>
+        <speed>15.639112</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10754,7 +10754,7 @@
         <ele>31.500000</ele>
         <time>2005-07-27T16:38:51Z</time>
         <course>286.000000</course>
-        <speed>16.770887</speed>
+        <speed>16.770889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10781,7 +10781,7 @@
         <ele>31.200000</ele>
         <time>2005-07-27T16:38:54Z</time>
         <course>286.000000</course>
-        <speed>17.696890</speed>
+        <speed>17.696888</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10871,7 +10871,7 @@
         <ele>32.200000</ele>
         <time>2005-07-27T16:39:04Z</time>
         <course>288.600006</course>
-        <speed>19.497446</speed>
+        <speed>19.497444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10880,7 +10880,7 @@
         <ele>33.100000</ele>
         <time>2005-07-27T16:39:05Z</time>
         <course>288.000000</course>
-        <speed>19.497446</speed>
+        <speed>19.497444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -10925,7 +10925,7 @@
         <ele>37.400000</ele>
         <time>2005-07-27T16:39:10Z</time>
         <course>287.299988</course>
-        <speed>19.497446</speed>
+        <speed>19.497444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11051,7 +11051,7 @@
         <ele>32.800000</ele>
         <time>2005-07-27T16:39:24Z</time>
         <course>256.600006</course>
-        <speed>23.098557</speed>
+        <speed>23.098555</speed>
         <fix>3d</fix>
         <sat>5</sat>
         <hdop>2.900000</hdop>
@@ -11105,7 +11105,7 @@
         <ele>33.800000</ele>
         <time>2005-07-27T16:39:30Z</time>
         <course>243.800003</course>
-        <speed>26.545332</speed>
+        <speed>26.545334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11132,7 +11132,7 @@
         <ele>35.600000</ele>
         <time>2005-07-27T16:39:33Z</time>
         <course>247.699997</course>
-        <speed>26.956890</speed>
+        <speed>26.956888</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11141,7 +11141,7 @@
         <ele>35.800000</ele>
         <time>2005-07-27T16:39:34Z</time>
         <course>251.000000</course>
-        <speed>27.059776</speed>
+        <speed>27.059778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11195,7 +11195,7 @@
         <ele>34.800000</ele>
         <time>2005-07-27T16:39:40Z</time>
         <course>252.699997</course>
-        <speed>26.545332</speed>
+        <speed>26.545334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11204,7 +11204,7 @@
         <ele>35.400000</ele>
         <time>2005-07-27T16:39:41Z</time>
         <course>252.899994</course>
-        <speed>26.545332</speed>
+        <speed>26.545334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11258,7 +11258,7 @@
         <ele>34.700000</ele>
         <time>2005-07-27T16:39:47Z</time>
         <course>253.000000</course>
-        <speed>26.390999</speed>
+        <speed>26.391001</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11267,7 +11267,7 @@
         <ele>34.500000</ele>
         <time>2005-07-27T16:39:48Z</time>
         <course>253.000000</course>
-        <speed>26.390999</speed>
+        <speed>26.391001</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11294,7 +11294,7 @@
         <ele>33.700000</ele>
         <time>2005-07-27T16:39:51Z</time>
         <course>252.100006</course>
-        <speed>25.362110</speed>
+        <speed>25.362112</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11303,7 +11303,7 @@
         <ele>33.700000</ele>
         <time>2005-07-27T16:39:52Z</time>
         <course>251.800003</course>
-        <speed>24.899113</speed>
+        <speed>24.899111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11312,7 +11312,7 @@
         <ele>33.600000</ele>
         <time>2005-07-27T16:39:53Z</time>
         <course>251.800003</course>
-        <speed>24.899113</speed>
+        <speed>24.899111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11384,7 +11384,7 @@
         <ele>32.200000</ele>
         <time>2005-07-27T16:40:01Z</time>
         <course>247.000000</course>
-        <speed>24.899113</speed>
+        <speed>24.899111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11528,7 +11528,7 @@
         <ele>37.300000</ele>
         <time>2005-07-27T16:40:17Z</time>
         <course>237.300003</course>
-        <speed>19.497446</speed>
+        <speed>19.497444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11537,7 +11537,7 @@
         <ele>38.200000</ele>
         <time>2005-07-27T16:40:18Z</time>
         <course>237.300003</course>
-        <speed>19.497446</speed>
+        <speed>19.497444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11636,7 +11636,7 @@
         <ele>36.300000</ele>
         <time>2005-07-27T16:40:29Z</time>
         <course>232.699997</course>
-        <speed>13.992889</speed>
+        <speed>13.992888</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11780,7 +11780,7 @@
         <ele>28.300000</ele>
         <time>2005-07-27T16:40:59Z</time>
         <course>235.699997</course>
-        <speed>5.041556</speed>
+        <speed>5.041555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11807,7 +11807,7 @@
         <ele>28.400000</ele>
         <time>2005-07-27T16:41:06Z</time>
         <course>233.899994</course>
-        <speed>8.848445</speed>
+        <speed>8.848444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -11942,7 +11942,7 @@
         <ele>30.400000</ele>
         <time>2005-07-27T16:41:25Z</time>
         <course>233.399994</course>
-        <speed>13.221223</speed>
+        <speed>13.221222</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12113,7 +12113,7 @@
         <ele>30.200000</ele>
         <time>2005-07-27T16:41:44Z</time>
         <course>232.899994</course>
-        <speed>15.742001</speed>
+        <speed>15.742000</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12266,7 +12266,7 @@
         <ele>28.600000</ele>
         <time>2005-07-27T16:42:01Z</time>
         <course>232.899994</course>
-        <speed>21.040779</speed>
+        <speed>21.040777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12347,7 +12347,7 @@
         <ele>29.700000</ele>
         <time>2005-07-27T16:42:10Z</time>
         <course>233.000000</course>
-        <speed>23.201443</speed>
+        <speed>23.201445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12383,7 +12383,7 @@
         <ele>30.400000</ele>
         <time>2005-07-27T16:42:14Z</time>
         <course>230.199997</course>
-        <speed>22.069668</speed>
+        <speed>22.069666</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12401,7 +12401,7 @@
         <ele>31.000000</ele>
         <time>2005-07-27T16:42:16Z</time>
         <course>224.100006</course>
-        <speed>21.555223</speed>
+        <speed>21.555222</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12428,7 +12428,7 @@
         <ele>31.300000</ele>
         <time>2005-07-27T16:42:19Z</time>
         <course>215.500000</course>
-        <speed>21.195112</speed>
+        <speed>21.195110</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12437,7 +12437,7 @@
         <ele>30.800000</ele>
         <time>2005-07-27T16:42:20Z</time>
         <course>214.800003</course>
-        <speed>21.143665</speed>
+        <speed>21.143667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12446,7 +12446,7 @@
         <ele>30.900000</ele>
         <time>2005-07-27T16:42:21Z</time>
         <course>214.800003</course>
-        <speed>21.143665</speed>
+        <speed>21.143667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12473,7 +12473,7 @@
         <ele>30.800000</ele>
         <time>2005-07-27T16:42:24Z</time>
         <course>210.600006</course>
-        <speed>24.384668</speed>
+        <speed>24.384666</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12482,7 +12482,7 @@
         <ele>31.000000</ele>
         <time>2005-07-27T16:42:25Z</time>
         <course>210.600006</course>
-        <speed>24.384668</speed>
+        <speed>24.384666</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12491,7 +12491,7 @@
         <ele>31.400000</ele>
         <time>2005-07-27T16:42:26Z</time>
         <course>211.399994</course>
-        <speed>25.413557</speed>
+        <speed>25.413555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12500,7 +12500,7 @@
         <ele>31.800000</ele>
         <time>2005-07-27T16:42:27Z</time>
         <course>210.699997</course>
-        <speed>25.928001</speed>
+        <speed>25.927999</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12509,7 +12509,7 @@
         <ele>32.600000</ele>
         <time>2005-07-27T16:42:28Z</time>
         <course>210.699997</course>
-        <speed>25.928001</speed>
+        <speed>25.927999</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12518,7 +12518,7 @@
         <ele>33.400000</ele>
         <time>2005-07-27T16:42:29Z</time>
         <course>211.100006</course>
-        <speed>25.516443</speed>
+        <speed>25.516445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12671,7 +12671,7 @@
         <ele>34.400000</ele>
         <time>2005-07-27T16:42:46Z</time>
         <course>211.500000</course>
-        <speed>25.362110</speed>
+        <speed>25.362112</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12707,7 +12707,7 @@
         <ele>31.700000</ele>
         <time>2005-07-27T16:42:50Z</time>
         <course>211.300003</course>
-        <speed>25.876554</speed>
+        <speed>25.876556</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -12716,7 +12716,7 @@
         <ele>31.300000</ele>
         <time>2005-07-27T16:42:51Z</time>
         <course>211.300003</course>
-        <speed>25.876554</speed>
+        <speed>25.876556</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -12779,7 +12779,7 @@
         <ele>29.500000</ele>
         <time>2005-07-27T16:42:58Z</time>
         <course>211.500000</course>
-        <speed>24.487555</speed>
+        <speed>24.487556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12806,7 +12806,7 @@
         <ele>29.900000</ele>
         <time>2005-07-27T16:43:01Z</time>
         <course>211.000000</course>
-        <speed>25.567890</speed>
+        <speed>25.567888</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12851,7 +12851,7 @@
         <ele>29.600000</ele>
         <time>2005-07-27T16:43:06Z</time>
         <course>210.199997</course>
-        <speed>26.905443</speed>
+        <speed>26.905445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12896,7 +12896,7 @@
         <ele>30.200000</ele>
         <time>2005-07-27T16:43:11Z</time>
         <course>210.800003</course>
-        <speed>25.516443</speed>
+        <speed>25.516445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12905,7 +12905,7 @@
         <ele>30.600000</ele>
         <time>2005-07-27T16:43:12Z</time>
         <course>211.600006</course>
-        <speed>25.876554</speed>
+        <speed>25.876556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12914,7 +12914,7 @@
         <ele>31.200000</ele>
         <time>2005-07-27T16:43:13Z</time>
         <course>211.600006</course>
-        <speed>25.876554</speed>
+        <speed>25.876556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12923,7 +12923,7 @@
         <ele>32.200000</ele>
         <time>2005-07-27T16:43:14Z</time>
         <course>211.600006</course>
-        <speed>26.545332</speed>
+        <speed>26.545334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12932,7 +12932,7 @@
         <ele>33.100000</ele>
         <time>2005-07-27T16:43:15Z</time>
         <course>211.699997</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12941,7 +12941,7 @@
         <ele>34.000000</ele>
         <time>2005-07-27T16:43:16Z</time>
         <course>211.699997</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12968,7 +12968,7 @@
         <ele>36.200000</ele>
         <time>2005-07-27T16:43:19Z</time>
         <course>211.300003</course>
-        <speed>26.030888</speed>
+        <speed>26.030890</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -12995,7 +12995,7 @@
         <ele>37.000000</ele>
         <time>2005-07-27T16:43:22Z</time>
         <course>211.399994</course>
-        <speed>24.899113</speed>
+        <speed>24.899111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13004,7 +13004,7 @@
         <ele>37.200000</ele>
         <time>2005-07-27T16:43:23Z</time>
         <course>211.399994</course>
-        <speed>24.899113</speed>
+        <speed>24.899111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13085,7 +13085,7 @@
         <ele>34.400000</ele>
         <time>2005-07-27T16:43:32Z</time>
         <course>221.399994</course>
-        <speed>26.442446</speed>
+        <speed>26.442444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13094,7 +13094,7 @@
         <ele>33.900000</ele>
         <time>2005-07-27T16:43:33Z</time>
         <course>221.399994</course>
-        <speed>26.442446</speed>
+        <speed>26.442444</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>1.600000</hdop>
@@ -13112,7 +13112,7 @@
         <ele>33.300000</ele>
         <time>2005-07-27T16:43:35Z</time>
         <course>223.899994</course>
-        <speed>25.567890</speed>
+        <speed>25.567888</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13184,7 +13184,7 @@
         <ele>30.600000</ele>
         <time>2005-07-27T16:43:43Z</time>
         <course>227.300003</course>
-        <speed>24.487555</speed>
+        <speed>24.487556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13202,7 +13202,7 @@
         <ele>30.100000</ele>
         <time>2005-07-27T16:43:45Z</time>
         <course>226.699997</course>
-        <speed>26.082335</speed>
+        <speed>26.082333</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13247,7 +13247,7 @@
         <ele>25.200000</ele>
         <time>2005-07-27T16:43:50Z</time>
         <course>227.600006</course>
-        <speed>27.059776</speed>
+        <speed>27.059778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13256,7 +13256,7 @@
         <ele>25.600000</ele>
         <time>2005-07-27T16:43:51Z</time>
         <course>226.699997</course>
-        <speed>27.059776</speed>
+        <speed>27.059778</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -13337,7 +13337,7 @@
         <ele>30.300000</ele>
         <time>2005-07-27T16:44:00Z</time>
         <course>231.000000</course>
-        <speed>26.545332</speed>
+        <speed>26.545334</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -13355,7 +13355,7 @@
         <ele>30.400000</ele>
         <time>2005-07-27T16:44:02Z</time>
         <course>230.600006</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13364,7 +13364,7 @@
         <ele>30.600000</ele>
         <time>2005-07-27T16:44:03Z</time>
         <course>230.600006</course>
-        <speed>26.596779</speed>
+        <speed>26.596777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13391,7 +13391,7 @@
         <ele>30.800000</ele>
         <time>2005-07-27T16:44:06Z</time>
         <course>231.300003</course>
-        <speed>25.516443</speed>
+        <speed>25.516445</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -13436,7 +13436,7 @@
         <ele>31.000000</ele>
         <time>2005-07-27T16:44:14Z</time>
         <course>226.800003</course>
-        <speed>25.413557</speed>
+        <speed>25.413555</speed>
         <fix>3d</fix>
         <sat>5</sat>
         <hdop>3.200000</hdop>
@@ -13445,7 +13445,7 @@
         <ele>30.300000</ele>
         <time>2005-07-27T16:44:15Z</time>
         <course>222.800003</course>
-        <speed>26.545332</speed>
+        <speed>26.545334</speed>
         <fix>3d</fix>
         <sat>5</sat>
         <hdop>3.200000</hdop>
@@ -13454,7 +13454,7 @@
         <ele>29.100000</ele>
         <time>2005-07-27T16:44:16Z</time>
         <course>222.800003</course>
-        <speed>26.545332</speed>
+        <speed>26.545334</speed>
         <fix>3d</fix>
         <sat>5</sat>
         <hdop>3.200000</hdop>
@@ -13733,7 +13733,7 @@
         <ele>33.300000</ele>
         <time>2005-07-27T16:48:30Z</time>
         <course>250.500000</course>
-        <speed>13.478445</speed>
+        <speed>13.478444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13751,7 +13751,7 @@
         <ele>33.800000</ele>
         <time>2005-07-27T16:48:32Z</time>
         <course>254.199997</course>
-        <speed>16.102110</speed>
+        <speed>16.102112</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13760,7 +13760,7 @@
         <ele>33.600000</ele>
         <time>2005-07-27T16:48:33Z</time>
         <course>254.199997</course>
-        <speed>16.102110</speed>
+        <speed>16.102112</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13832,7 +13832,7 @@
         <ele>30.800000</ele>
         <time>2005-07-27T16:48:41Z</time>
         <course>268.799988</course>
-        <speed>18.983002</speed>
+        <speed>18.983000</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13913,7 +13913,7 @@
         <ele>27.700000</ele>
         <time>2005-07-27T16:48:50Z</time>
         <course>269.399994</course>
-        <speed>13.015444</speed>
+        <speed>13.015445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -13922,7 +13922,7 @@
         <ele>27.000000</ele>
         <time>2005-07-27T16:48:51Z</time>
         <course>266.500000</course>
-        <speed>12.706779</speed>
+        <speed>12.706778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -14102,7 +14102,7 @@
         <ele>30.100000</ele>
         <time>2005-07-27T16:49:11Z</time>
         <course>252.000000</course>
-        <speed>12.706779</speed>
+        <speed>12.706778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -14111,7 +14111,7 @@
         <ele>30.300000</ele>
         <time>2005-07-27T16:49:12Z</time>
         <course>252.000000</course>
-        <speed>12.706779</speed>
+        <speed>12.706778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -14201,7 +14201,7 @@
         <ele>31.300000</ele>
         <time>2005-07-27T16:50:04Z</time>
         <course>168.800003</course>
-        <speed>6.739223</speed>
+        <speed>6.739222</speed>
         <fix>3d</fix>
         <sat>5</sat>
         <hdop>2.200000</hdop>
@@ -14282,7 +14282,7 @@
         <ele>86.600000</ele>
         <time>2005-07-27T16:50:24Z</time>
         <course>201.399994</course>
-        <speed>2.160666</speed>
+        <speed>2.160667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -14291,7 +14291,7 @@
         <ele>89.600000</ele>
         <time>2005-07-27T16:50:28Z</time>
         <course>265.799988</course>
-        <speed>2.160666</speed>
+        <speed>2.160667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -14507,7 +14507,7 @@
         <ele>53.900000</ele>
         <time>2005-07-27T16:51:19Z</time>
         <course>212.699997</course>
-        <speed>10.854778</speed>
+        <speed>10.854777</speed>
         <fix>3d</fix>
         <sat>5</sat>
         <hdop>2.200000</hdop>
@@ -14543,7 +14543,7 @@
         <ele>66.000000</ele>
         <time>2005-07-27T16:51:26Z</time>
         <course>217.100006</course>
-        <speed>3.189555</speed>
+        <speed>3.189556</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -14570,7 +14570,7 @@
         <ele>68.300000</ele>
         <time>2005-07-27T16:51:33Z</time>
         <course>189.399994</course>
-        <speed>5.247333</speed>
+        <speed>5.247334</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -14777,7 +14777,7 @@
         <ele>34.800000</ele>
         <time>2005-07-27T16:53:11Z</time>
         <course>67.500000</course>
-        <speed>10.854778</speed>
+        <speed>10.854777</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -14786,7 +14786,7 @@
         <ele>35.700000</ele>
         <time>2005-07-27T16:53:12Z</time>
         <course>67.500000</course>
-        <speed>10.854778</speed>
+        <speed>10.854777</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -14831,7 +14831,7 @@
         <ele>40.400000</ele>
         <time>2005-07-27T16:53:17Z</time>
         <course>67.400002</course>
-        <speed>16.102110</speed>
+        <speed>16.102112</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -14840,7 +14840,7 @@
         <ele>42.000000</ele>
         <time>2005-07-27T16:53:18Z</time>
         <course>67.400002</course>
-        <speed>16.102110</speed>
+        <speed>16.102112</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>2.200000</hdop>
@@ -14858,7 +14858,7 @@
         <ele>44.900000</ele>
         <time>2005-07-27T16:53:20Z</time>
         <course>78.300003</course>
-        <speed>16.616554</speed>
+        <speed>16.616556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -14867,7 +14867,7 @@
         <ele>46.200000</ele>
         <time>2005-07-27T16:53:21Z</time>
         <course>78.300003</course>
-        <speed>16.616554</speed>
+        <speed>16.616556</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -14957,7 +14957,7 @@
         <ele>42.700000</ele>
         <time>2005-07-27T16:53:33Z</time>
         <course>98.300003</course>
-        <speed>8.848445</speed>
+        <speed>8.848444</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -14984,7 +14984,7 @@
         <ele>40.500000</ele>
         <time>2005-07-27T16:53:57Z</time>
         <course>59.299999</course>
-        <speed>7.819555</speed>
+        <speed>7.819556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -14993,7 +14993,7 @@
         <ele>39.200000</ele>
         <time>2005-07-27T16:53:58Z</time>
         <course>59.299999</course>
-        <speed>7.819555</speed>
+        <speed>7.819556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -15047,7 +15047,7 @@
         <ele>34.400000</ele>
         <time>2005-07-27T16:54:05Z</time>
         <course>70.300003</course>
-        <speed>15.999223</speed>
+        <speed>15.999222</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -15056,7 +15056,7 @@
         <ele>35.800000</ele>
         <time>2005-07-27T16:54:06Z</time>
         <course>73.599998</course>
-        <speed>17.285332</speed>
+        <speed>17.285334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -15065,7 +15065,7 @@
         <ele>36.600000</ele>
         <time>2005-07-27T16:54:07Z</time>
         <course>73.599998</course>
-        <speed>17.285332</speed>
+        <speed>17.285334</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -15083,7 +15083,7 @@
         <ele>37.700000</ele>
         <time>2005-07-27T16:54:09Z</time>
         <course>78.699997</course>
-        <speed>17.285332</speed>
+        <speed>17.285334</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -15092,7 +15092,7 @@
         <ele>37.300000</ele>
         <time>2005-07-27T16:54:10Z</time>
         <course>79.699997</course>
-        <speed>16.616554</speed>
+        <speed>16.616556</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -15128,7 +15128,7 @@
         <ele>33.700000</ele>
         <time>2005-07-27T16:54:14Z</time>
         <course>75.699997</course>
-        <speed>15.896333</speed>
+        <speed>15.896334</speed>
         <fix>3d</fix>
         <sat>4</sat>
         <hdop>1.600000</hdop>
@@ -15137,7 +15137,7 @@
         <ele>33.700000</ele>
         <time>2005-07-27T16:54:15Z</time>
         <course>75.699997</course>
-        <speed>15.896333</speed>
+        <speed>15.896334</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.200000</hdop>
@@ -15182,7 +15182,7 @@
         <ele>29.500000</ele>
         <time>2005-07-27T16:54:20Z</time>
         <course>82.300003</course>
-        <speed>13.735667</speed>
+        <speed>13.735666</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -15335,7 +15335,7 @@
         <ele>31.700000</ele>
         <time>2005-07-27T16:54:49Z</time>
         <course>84.300003</course>
-        <speed>10.340334</speed>
+        <speed>10.340333</speed>
         <fix>3d</fix>
         <sat>5</sat>
         <hdop>2.300000</hdop>
@@ -15344,7 +15344,7 @@
         <ele>32.500000</ele>
         <time>2005-07-27T16:54:50Z</time>
         <course>82.699997</course>
-        <speed>10.340334</speed>
+        <speed>10.340333</speed>
         <fix>3d</fix>
         <sat>5</sat>
         <hdop>2.300000</hdop>
@@ -15353,7 +15353,7 @@
         <ele>32.200000</ele>
         <time>2005-07-27T16:54:52Z</time>
         <course>88.300003</course>
-        <speed>8.848445</speed>
+        <speed>8.848444</speed>
         <fix>3d</fix>
         <sat>5</sat>
         <hdop>2.300000</hdop>
@@ -15443,7 +15443,7 @@
         <ele>29.400000</ele>
         <time>2005-07-27T16:55:36Z</time>
         <course>83.099998</course>
-        <speed>13.735667</speed>
+        <speed>13.735666</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -15488,7 +15488,7 @@
         <ele>32.200000</ele>
         <time>2005-07-27T16:55:41Z</time>
         <course>80.699997</course>
-        <speed>15.484778</speed>
+        <speed>15.484777</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -15515,7 +15515,7 @@
         <ele>33.500000</ele>
         <time>2005-07-27T16:55:44Z</time>
         <course>84.000000</course>
-        <speed>16.307890</speed>
+        <speed>16.307888</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -15596,7 +15596,7 @@
         <ele>38.700000</ele>
         <time>2005-07-27T16:55:53Z</time>
         <course>81.199997</course>
-        <speed>17.799776</speed>
+        <speed>17.799778</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -15677,7 +15677,7 @@
         <ele>43.700000</ele>
         <time>2005-07-27T16:56:40Z</time>
         <course>104.800003</course>
-        <speed>16.770887</speed>
+        <speed>16.770889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
@@ -15722,7 +15722,7 @@
         <ele>44.200000</ele>
         <time>2005-07-27T16:56:45Z</time>
         <course>105.699997</course>
-        <speed>15.381888</speed>
+        <speed>15.381889</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -15731,7 +15731,7 @@
         <ele>44.700000</ele>
         <time>2005-07-27T16:56:46Z</time>
         <course>105.699997</course>
-        <speed>15.381888</speed>
+        <speed>15.381889</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -15740,7 +15740,7 @@
         <ele>45.300000</ele>
         <time>2005-07-27T16:56:47Z</time>
         <course>104.699997</course>
-        <speed>15.639111</speed>
+        <speed>15.639112</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -15749,7 +15749,7 @@
         <ele>45.000000</ele>
         <time>2005-07-27T16:56:48Z</time>
         <course>104.699997</course>
-        <speed>15.639111</speed>
+        <speed>15.639112</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -15821,7 +15821,7 @@
         <ele>41.400000</ele>
         <time>2005-07-27T16:56:56Z</time>
         <course>106.599998</course>
-        <speed>17.285332</speed>
+        <speed>17.285334</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -15830,7 +15830,7 @@
         <ele>40.700000</ele>
         <time>2005-07-27T16:56:57Z</time>
         <course>106.599998</course>
-        <speed>17.285332</speed>
+        <speed>17.285334</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -15857,7 +15857,7 @@
         <ele>38.500000</ele>
         <time>2005-07-27T16:57:00Z</time>
         <course>105.099998</course>
-        <speed>11.009110</speed>
+        <speed>11.009111</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -15929,7 +15929,7 @@
         <ele>44.200000</ele>
         <time>2005-07-27T16:58:11Z</time>
         <course>133.199997</course>
-        <speed>6.893555</speed>
+        <speed>6.893556</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -15956,7 +15956,7 @@
         <ele>43.200000</ele>
         <time>2005-07-27T16:58:17Z</time>
         <course>51.299999</course>
-        <speed>5.504555</speed>
+        <speed>5.504556</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -16010,7 +16010,7 @@
         <ele>34.400000</ele>
         <time>2005-07-27T16:58:45Z</time>
         <course>38.500000</course>
-        <speed>1.903445</speed>
+        <speed>1.903444</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -16271,7 +16271,7 @@
         <ele>41.300000</ele>
         <time>2005-07-27T17:07:37Z</time>
         <course>240.000000</course>
-        <speed>8.899888</speed>
+        <speed>8.899889</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -16289,7 +16289,7 @@
         <ele>41.000000</ele>
         <time>2005-07-27T17:07:39Z</time>
         <course>239.300003</course>
-        <speed>10.340334</speed>
+        <speed>10.340333</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.300000</hdop>
@@ -16316,7 +16316,7 @@
         <ele>41.600000</ele>
         <time>2005-07-27T17:07:42Z</time>
         <course>239.899994</course>
-        <speed>13.015444</speed>
+        <speed>13.015445</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -16325,7 +16325,7 @@
         <ele>41.900000</ele>
         <time>2005-07-27T17:07:43Z</time>
         <course>239.899994</course>
-        <speed>13.015444</speed>
+        <speed>13.015445</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.500000</hdop>
@@ -16334,7 +16334,7 @@
         <ele>43.800000</ele>
         <time>2005-07-27T17:07:44Z</time>
         <course>237.399994</course>
-        <speed>13.272666</speed>
+        <speed>13.272667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.000000</hdop>
@@ -16415,7 +16415,7 @@
         <ele>49.200000</ele>
         <time>2005-07-27T17:07:53Z</time>
         <course>241.199997</course>
-        <speed>13.015444</speed>
+        <speed>13.015445</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.000000</hdop>
@@ -16496,7 +16496,7 @@
         <ele>43.200000</ele>
         <time>2005-07-27T17:08:26Z</time>
         <course>242.899994</course>
-        <speed>6.996445</speed>
+        <speed>6.996444</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.000000</hdop>
@@ -16595,7 +16595,7 @@
         <ele>36.700000</ele>
         <time>2005-07-27T17:08:40Z</time>
         <course>241.199997</course>
-        <speed>12.706779</speed>
+        <speed>12.706778</speed>
         <fix>3d</fix>
         <sat>8</sat>
         <hdop>0.900000</hdop>
@@ -16613,7 +16613,7 @@
         <ele>37.000000</ele>
         <time>2005-07-27T17:08:42Z</time>
         <course>240.399994</course>
-        <speed>13.787110</speed>
+        <speed>13.787111</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.500000</hdop>
@@ -16649,7 +16649,7 @@
         <ele>38.400000</ele>
         <time>2005-07-27T17:08:46Z</time>
         <course>241.199997</course>
-        <speed>12.964001</speed>
+        <speed>12.964000</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.000000</hdop>
@@ -16856,7 +16856,7 @@
         <ele>38.700000</ele>
         <time>2005-07-27T17:09:37Z</time>
         <course>238.600006</course>
-        <speed>10.494666</speed>
+        <speed>10.494667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.000000</hdop>
@@ -16865,7 +16865,7 @@
         <ele>39.200000</ele>
         <time>2005-07-27T17:09:38Z</time>
         <course>238.600006</course>
-        <speed>10.494666</speed>
+        <speed>10.494667</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.000000</hdop>
@@ -16973,7 +16973,7 @@
         <ele>38.300000</ele>
         <time>2005-07-27T17:09:50Z</time>
         <course>246.600006</course>
-        <speed>10.751888</speed>
+        <speed>10.751889</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.600000</hdop>
@@ -16982,7 +16982,7 @@
         <ele>37.600000</ele>
         <time>2005-07-27T17:09:51Z</time>
         <course>242.899994</course>
-        <speed>11.009110</speed>
+        <speed>11.009111</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.000000</hdop>
@@ -16991,7 +16991,7 @@
         <ele>38.200000</ele>
         <time>2005-07-27T17:09:52Z</time>
         <course>243.899994</course>
-        <speed>10.751888</speed>
+        <speed>10.751889</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.000000</hdop>
@@ -17000,7 +17000,7 @@
         <ele>39.000000</ele>
         <time>2005-07-27T17:09:53Z</time>
         <course>243.899994</course>
-        <speed>10.751888</speed>
+        <speed>10.751889</speed>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.100000</hdop>
@@ -17108,7 +17108,7 @@
         <ele>38.100000</ele>
         <time>2005-07-27T17:10:18Z</time>
         <course>234.699997</course>
-        <speed>5.041556</speed>
+        <speed>5.041555</speed>
         <fix>3d</fix>
         <sat>7</sat>
         <hdop>1.100000</hdop>
