@@ -104,6 +104,14 @@ public:
     QTime time(this->time());
     return time.hour() * 10000 + time.minute() * 100 + time.second();
   }
+  // Qt 4.6 and under doesn't have msecsTo.  Fortunately, it's easy to
+  // provide.  It's a 64-bit because if the times aren't on the same day,
+  // the returned value can be quite large.
+  int64_t msecsTo(const QDateTime& dt) {
+    qint64 days = this->daysTo(dt);
+    qint64 msecs = this->time().msecsTo(dt.time());
+    return days * (1000 * 3600 * 24) + msecs;
+  }
 
   // Like toString, but with subsecond time that's included only when
   // the trailing digits aren't .000.  Always UTC.
@@ -116,6 +124,7 @@ public:
     }
     return this->toUTC().toString(format);
   }
+ 
 
  private:
   time_t t_;
