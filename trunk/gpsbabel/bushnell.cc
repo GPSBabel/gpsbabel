@@ -21,6 +21,7 @@
 
 
 #include "defs.h"
+#include <math.h>
 #define MYNAME "Bushnell"
 
 static gbfile* file_in;
@@ -235,8 +236,8 @@ bushnell_write_one(const waypoint* wpt)
   xasprintf(&fname, "%s-%d.wpt", ofname, wpt_count++);
 
   file_out = gbfopen_le(fname, "wb", MYNAME);
-  gbfputint32(wpt->latitude  * 10000000, file_out);
-  gbfputint32(wpt->longitude * 10000000, file_out);
+  gbfputint32(round(wpt->latitude  * 10000000), file_out);
+  gbfputint32(round(wpt->longitude * 10000000), file_out);
   gbfputc(bushnell_get_icon_from_name(wpt->icon_descr), file_out);
   gbfputc(0x01, file_out);  // Proximity alarm.  1 == "off", 3 == armed.
 
