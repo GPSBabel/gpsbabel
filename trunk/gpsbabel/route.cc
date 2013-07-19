@@ -578,11 +578,9 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
   tdata->max_alt =  unknown_alt;
 
   QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
-    gpsbabel::DateTime timed;
     double tlat, tlon, plat, plon, dist;
 
     thisw = (waypoint *)elem;
-    timed = thisw->GetCreationTime() - prev->GetCreationTime();
 
     /*
      * gcdist and heading want radians, not degrees.
@@ -606,12 +604,17 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
      * If we've moved as much as a meter,
      * conditionally recompute speeds.
      */
-    if (timed && (dist > 1)) {
-      if (!WAYPT_HAS(thisw, speed)) {
-        // Only recompute speed if the waypoint
-        // didn't already have a speed
-        WAYPT_SET(thisw, speed, dist / labs(timed));
+    if (!WAYPT_HAS(thisw, speed)  && (dist > 1)) {
+      // Only recompute speed if the waypoint
+      // didn't already have a speed
+      if(thisw->GetCreationTime().isValid() && prev->GetCreationTime().isValid() &&
+         thisw->GetCreationTime() > prev->GetCreationTime())
+      {
+        double timed = prev->GetCreationTime().msecsTo(thisw->GetCreationTime()) /1000.0;
+        WAYPT_SET(thisw, speed, dist / timed);
       }
+    }
+    if (WAYPT_HAS(thisw, speed)) {
       if (thisw->speed > tdata->max_spd) {
         tdata->max_spd = thisw->speed;
       }
