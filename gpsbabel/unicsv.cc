@@ -429,7 +429,7 @@ unicsv_parse_time(const char *str, int *msec, time_t *date)
   ct = sscanf(str, "%d%1[.://]%d%1[.://]%d%lf", &hour, sep, &min, sep, &sec, &ms);
   is_fatal(ct < 5, MYNAME ": Could not parse time string (%s).\n", str);
   if (ct == 6) {
-    *msec = (ms * 1000000) + 0.5;
+    *msec = lround((ms * 1000000));
     if (*msec > 999999) {
       *msec = 0;
       sec++;
@@ -1192,7 +1192,7 @@ unicsv_parse_one_line(char *ibuf)
     }
 
     if (msec >= 0) {
-      wpt->microseconds = msec;
+      wpt->creation_time.addMSecs(msec);
     }
 
     if (opt_utc) {

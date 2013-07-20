@@ -18,6 +18,7 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
  */
 
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -223,7 +224,7 @@ mapsend_track_read(void)
     } else {
       centisecs = 0;
     }
-    wpt_tmp->SetCreationTime(t, CENTI_TO_MICRO(centisecs));
+    wpt_tmp->SetCreationTime(t, 10.0 * centisecs);
 
     track_add_wpt(track_head, wpt_tmp);
   }
@@ -514,7 +515,7 @@ void mapsend_track_disp(const waypoint* wpt)
 
   /* 0 centiseconds */
   if (trk_version >= 30) {
-    c = MICRO_TO_CENTI(wpt->microseconds);
+    c = lround(wpt->GetCreationTime().msec() / 10.0);
     gbfwrite(&c, 1, 1, mapsend_file_out);
   }
 }

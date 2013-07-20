@@ -661,15 +661,13 @@ itracku_rt_init(const char* fname)
 static void
 nmea_set_waypoint_time(waypoint* wpt, struct tm* time, double fsec)
 {
-  //fractions are stored as ms
-  int us = MILLI_TO_MICRO(lround(1000*fsec));
   if (time->tm_year == 0) {
-    wpt->SetCreationTime(((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec, us);
+    wpt->SetCreationTime(((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec, lround(1000.0 * fsec));
     if (wpt->wpt_flags.fmt_use == 0) {
       wpt->wpt_flags.fmt_use = 1;
     }
   } else {
-    wpt->SetCreationTime(mkgmtime(time), us);
+    wpt->SetCreationTime(mkgmtime(time), lround(1000.0 * fsec));
     if (wpt->wpt_flags.fmt_use != 0) {
       wpt->wpt_flags.fmt_use = 0;
     }

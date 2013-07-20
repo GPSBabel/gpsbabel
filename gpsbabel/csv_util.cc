@@ -1182,7 +1182,7 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     int s_len = strlen(s);
     if (s_len < 4) {
       /* less than 1 epochsecond, an unusual case */
-      wpt->SetCreationTime(0,(int) atoi(s) * 1000);
+      wpt->SetCreationTime(0,(int) atoi(s));
     } else {
       char buff[32];
       int off = s_len - 3;
@@ -1192,7 +1192,7 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
       s += off;
       strncpy(buff, s, 3);
       buff[3] = '\0';
-      wpt->SetCreationTime(t, (int) MILLI_TO_MICRO(atoi(buff)));
+      wpt->SetCreationTime(t, atoi(buff));
     }
   }
   break;
@@ -1946,7 +1946,7 @@ xcsv_waypt_pr(const waypoint* wpt)
       char tbuf[24];
       writetime(tbuf, sizeof(tbuf), "%s", wpt->GetCreationTime(), false);
       char mbuf[32];
-      snprintf(mbuf, sizeof(mbuf), "%s%03d", tbuf, wpt->microseconds / 1000);
+      snprintf(mbuf, sizeof(mbuf), "%s%03d", tbuf, wpt->GetCreationTime().msec());
       writebuff(buff, "%s", mbuf);
     }
     break;
