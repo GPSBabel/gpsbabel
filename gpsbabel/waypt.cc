@@ -538,7 +538,8 @@ waypt_time(const waypoint *wpt)
   if (wpt->creation_time <= 0) {
     return (double) 0;
   } else {
-    return ((double)wpt->creation_time + ((double)wpt->microseconds / 1000000));
+
+    return ((double)wpt->creation_time + ((double)wpt->creation_time.msec() / 1000));
   }
 }
 

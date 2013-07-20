@@ -1761,15 +1761,15 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
       }
       snprintf(buf, sizeof(buf), "%02d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-      if (wpt->microseconds > 0) {
-        int len = 6;
-        int ms = wpt->microseconds;
+      int millisecs = wpt->GetCreationTime().msec();
+      if (millisecs > 0) {
+        int len = 3;
 
-        while (len && (ms % 10 == 0)) {
-          ms /= 10;
+        while (len && (millisecs % 10 == 0)) {
+          millisecs /= 10;
           len--;
         }
-        snprintf(msec, sizeof(msec), ".%0*d", len, ms);
+        snprintf(msec, sizeof(msec), ".%0*d", len, millisecs);
         strcat(buf, msec);
       }
       gbfprintf(fout, "%s%s", unicsv_fieldsep, buf);

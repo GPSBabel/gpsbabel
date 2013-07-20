@@ -334,8 +334,6 @@ destinator_read_trk(void)
     strptime(buff, "%d%m%y%H%M%S", &tm);
     int millisecs = (int) time % 1000;
     wpt->SetCreationTime(mkgmtime(&tm), millisecs);
-// FIXME: this is papering over a problem somewhere...
-wpt->microseconds = millisecs * 1000;
 
     if (wpt->fix > 0) {
       wpt->fix = (fix_type)(wpt->fix + 1);
