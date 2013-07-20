@@ -43,51 +43,40 @@ public:
     t_ = -1;
   }
 
-  DateTime(QDate date, QTime time) : QDateTime(date, time) { }
-  DateTime(QDateTime dt) : QDateTime(dt) { }
-
+  DateTime(QDate date, QTime time) : QDateTime(date, time) {}
+  DateTime(QDateTime dt) : QDateTime(dt) {}
 
   // Handle time_tm tm = wpt->creation_time;
-  operator const time_t() const  {
-    return this->toTime_t();
-  }
+  operator const time_t() const { return this->toTime_t(); }
 
   const time_t& operator=(const time_t& t) {
     this->setTime_t(t);
     return t;
   }
 
-  time_t operator-- (int)  {
+  time_t operator--(int) {
     setTime_t(toTime_t() - 1);
     return this->toTime_t();
   }
 
-  time_t operator++ (int)  {
+  time_t operator++(int) {
     setTime_t(toTime_t() + 1);
     return this->toTime_t();
   }
 
-  time_t operator+=(const time_t&t) {
-   setTime_t(toTime_t() + t);
+  time_t operator+=(const time_t& t) {
+    setTime_t(toTime_t() + t);
     return this->toTime_t();
   }
 
   // Handle       tm = *gmtime(&wpt->creation_time)  ...poorly.
-  inline const time_t* operator&() {
+  inline const time_t *operator&() {
     t_ = this->toTime_t();
-//fprintf(stderr, "inline set time_t %d\n", t_);
     return &t_;
   }
 
-  // Before Qt, GPSBabel had a 'microseconds' which is excessive and
-  // not really supported in QDateTime.  Milliseconds is fine, but we
-  // provide these shims for code that used usecs.
-  void addUSecs(qint64 usecs) const {
-    this->addMSecs(usecs / 1000);
-  }
-  int usec() const {
-    return this->time().msec() * 1000;
-  }
+  // A convenience method to return the number of milliseconds (0-999).
+  int msec() const { return this->time().msec(); }
 
   // Integer form: YYMMDD
   int ymd() const {
@@ -104,10 +93,11 @@ public:
     QTime time(this->time());
     return time.hour() * 10000 + time.minute() * 100 + time.second();
   }
+
   // Qt 4.6 and under doesn't have msecsTo.  Fortunately, it's easy to
   // provide.  It's a 64-bit because if the times aren't on the same day,
   // the returned value can be quite large.
-  int64_t msecsTo(const QDateTime& dt) {
+  int64_t msecsTo(const QDateTime &dt) {
     qint64 days = this->daysTo(dt);
     qint64 msecs = this->time().msecsTo(dt.time());
     return days * (1000 * 3600 * 24) + msecs;
@@ -124,9 +114,8 @@ public:
     }
     return this->toUTC().toString(format);
   }
- 
 
- private:
+private:
   time_t t_;
 };
 

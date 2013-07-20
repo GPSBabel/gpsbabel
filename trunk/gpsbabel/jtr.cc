@@ -41,7 +41,7 @@ static gbfile* fin, *fout;
 static avltree_t* trkpts;
 
 static time_t
-jtr_parse_time(const char* str, struct tm* tm, int* micro)
+jtr_parse_time(const char* str, struct tm* tm, int* milli)
 {
   long int hms;
   char* dot;
@@ -54,8 +54,8 @@ jtr_parse_time(const char* str, struct tm* tm, int* micro)
     hms = hms / 100;
     tm->tm_hour = hms % 100;
 
-    if ((*dot == '.') && (micro != NULL)) {
-      *micro = atoi(dot + 1) * 10000;
+    if ((*dot == '.') && (milli != NULL)) {
+      *milli = atoi(dot + 1) * 10;
     }
 
     return mkgmtime(tm);
@@ -115,7 +115,7 @@ jtr_read(void)
     double lat, lon;
     float speed, course, mcourse, mvar, mdev;
     time_t time = 0;
-    int micros = 0;
+    int mills = 0;
     char buf[32];
     char mvardir, mdevdir;
 
@@ -148,7 +148,7 @@ jtr_read(void)
       case 0:
         break;		/* GEOTAG2 */
       case 1:
-        jtr_parse_time(str, &tm, &micros);
+        jtr_parse_time(str, &tm, &mills);
         break;
       case 2:
         valid = *str;
@@ -219,7 +219,7 @@ jtr_read(void)
 
     wpt->latitude = lat;
     wpt->longitude = lon;
-    wpt->SetCreationTime(time, micros);
+    wpt->SetCreationTime(time, mills);
     if (speed >= 0) {
       WAYPT_SET(wpt, speed, speed);
     }

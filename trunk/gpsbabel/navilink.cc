@@ -796,10 +796,10 @@ serial_write_route_end(const route_head* route)
 }
 
 static int
-decode_sbp_usec(const unsigned char* buffer)
+decode_sbp_msec(const unsigned char* buffer)
 {
   int msec = le_read16(buffer);
-  return (msec % 1000) * 1000;
+  return (msec % 1000);
 }
 
 static time_t
@@ -852,7 +852,7 @@ navilink_decode_logpoint(const unsigned char* buffer)
   waypt->hdop = ((unsigned char)buffer[0]) * 0.2f;
   waypt->sat = buffer[1];
   waypt->SetCreationTime(decode_sbp_datetime_packed(buffer + 4),
-                         decode_sbp_usec(buffer + 2));
+                         decode_sbp_msec(buffer + 2));
   decode_sbp_position(buffer + 12, waypt);
   WAYPT_SET(waypt, speed, le_read16(buffer + 24) * 0.01f);
   WAYPT_SET(waypt, course, le_read16(buffer + 26) * 0.01f);

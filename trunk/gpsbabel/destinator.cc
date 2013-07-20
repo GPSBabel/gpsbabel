@@ -332,8 +332,10 @@ destinator_read_trk(void)
 
     snprintf(buff, sizeof(buff), "%06d%.f", date, time);
     strptime(buff, "%d%m%y%H%M%S", &tm);
-    wpt->SetCreationTime(mkgmtime(&tm),
-                         ((int)time % 1000) * 1000);
+    int millisecs = (int) time % 1000;
+    wpt->SetCreationTime(mkgmtime(&tm), millisecs);
+// FIXME: this is papering over a problem somewhere...
+wpt->microseconds = millisecs * 1000;
 
     if (wpt->fix > 0) {
       wpt->fix = (fix_type)(wpt->fix + 1);
@@ -446,7 +448,7 @@ destinator_trkpt_disp(const waypoint* wpt)
     gbfputint32(date, fout);
 
     time = ((int)tm.tm_hour * 10000) + ((int)tm.tm_min * 100) + tm.tm_sec;
-    time = (time * 1000) + (wpt->microseconds / 1000);
+    time = (time * 1000) + (wpt->GetCreationTime().msec());
     gbfputflt(time, fout);
   } else {
     gbfputint32(0, fout);	/* Is this invalid ? */

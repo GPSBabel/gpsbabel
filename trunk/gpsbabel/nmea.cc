@@ -358,16 +358,14 @@ nmea_wr_deinit(void)
 static void
 nmea_set_waypoint_time(waypoint* wpt, struct tm* time, double fsec)
 {
-  //fractions are stored as ms
-  int us = MILLI_TO_MICRO(lround(1000*fsec));
   if (time->tm_year == 0) {
-    wpt->SetCreationTime(((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec, us);
+    wpt->SetCreationTime(((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec, lround(1000.0 * fsec));
     if (wpt->wpt_flags.fmt_use == 0) {
       wpt->wpt_flags.fmt_use = 1;
       without_date++;
     }
   } else {
-    wpt->SetCreationTime(mkgmtime(time), us);
+    wpt->SetCreationTime(mkgmtime(time), lround(1000.0 * fsec));
     if (wpt->wpt_flags.fmt_use != 0) {
       wpt->wpt_flags.fmt_use = 0;
       without_date--;
@@ -1301,7 +1299,7 @@ nmea_trackpt_pr(const waypoint* wpt)
 
   if (opt_gprmc) {
     snprintf(obuf, sizeof(obuf), "GPRMC,%010.3f,%c,%08.3f,%c,%09.3f,%c,%.2f,%.2f,%06d,,",
-             (double) hms + (wpt->microseconds / 1000000.0),
+             (double) hms + (wpt->GetCreationTime().msec() / 1000.0),
              fix=='0' ? 'V' : 'A',
              fabs(lat), lat < 0 ? 'S' : 'N',
              fabs(lon), lon < 0 ? 'W' : 'E',
@@ -1320,7 +1318,7 @@ nmea_trackpt_pr(const waypoint* wpt)
   }
   if (opt_gpgga) {
     snprintf(obuf, sizeof(obuf), "GPGGA,%010.3f,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,0.0,M,,",
-             (double) hms + (wpt->microseconds / 1000000.0),
+             (double) hms + (wpt->GetCreationTime().msec() / 1000.0),
              fabs(lat), lat < 0 ? 'S' : 'N',
              fabs(lon), lon < 0 ? 'W' : 'E',
              fix,

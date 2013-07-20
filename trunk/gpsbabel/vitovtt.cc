@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <math.h>
 
 #define MYNAME "vitovtt"
 #include "defs.h"
@@ -68,7 +69,6 @@ vitovtt_read(void)
   double			altitude		= 0;
   struct tm		tmStruct;
   int				scaled_sec		= 0;
-  int				microseconds	= 0;
   double			speed			= 0;
   int				course			= 0;
   int				status			= 0;
@@ -110,9 +110,8 @@ vitovtt_read(void)
     wpt_tmp->altitude	= altitude;
 
     tmStruct.tm_sec = scaled_sec / vitovtt_secondscale;
-    microseconds = (scaled_sec % vitovtt_secondscale) / vitovtt_microsecondscale;
-    wpt_tmp->SetCreationTime(mkgmtime(&tmStruct), microseconds);
-
+    int microseconds = (scaled_sec % vitovtt_secondscale) / vitovtt_microsecondscale;
+    wpt_tmp->SetCreationTime(mkgmtime(&tmStruct), lround(microseconds/1000.0));
     /*
      * TODO: interpret speed, course, status
      */

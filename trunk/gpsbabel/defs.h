@@ -532,9 +532,9 @@ public:
   }
   void SetCreationTime(time_t t) { creation_time = t; 
   }
-  void SetCreationTime(time_t t, int us) {
-    creation_time = t; 
-    microseconds = us;
+  void SetCreationTime(time_t t, int ms) {
+    creation_time.setTime_t(t);
+    creation_time = creation_time.addMSecs(ms);
   }
   gpsbabel::DateTime creation_time;
   int microseconds;	/* Optional millionths of a second. */

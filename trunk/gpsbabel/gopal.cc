@@ -218,6 +218,9 @@ gopal_read(void)
       case  0: /* "-" */	/* unknown fields for the moment */
         sscanf(c, "%lu", &microsecs);
         wpt->SetCreationTime(microsecs / 1000000, microsecs % 1000000);
+// FIXME: this is totally papering over a problem where creation time is
+// being overwritten later.
+wpt->microseconds = microsecs % 1000000;
         break;
       case  1:				/* Time UTC */
         sscanf(c,"%lf",&hmsd);
