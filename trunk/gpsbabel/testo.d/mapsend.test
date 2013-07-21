@@ -2,7 +2,7 @@
 rm -f ${TMPDIR}/mm.mapsend ${TMPDIR}/mm.gps
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o mapsend -F ${TMPDIR}/mm.mapsend
 gpsbabel -i mapsend -f ${TMPDIR}/mm.mapsend -o gpsutil -F ${TMPDIR}/mm.gps
-compare ${TMPDIR}/mm.gps ${TMPDIR}/gu.wpt
+compare ${TMPDIR}/mm.gps ${REFERENCE}/gu.wpt
 
 #
 # MAPSEND waypoint / route format
