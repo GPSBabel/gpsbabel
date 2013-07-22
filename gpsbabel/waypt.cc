@@ -669,9 +669,7 @@ waypoint::CreationTimeXML() const
     return NULL;
   }
 
-  QDateTime dt = GetCreationTime();
-  dt = dt.addMSecs(MICRO_TO_MILLI(microseconds));
-  dt = dt.toUTC();
+  QDateTime dt = GetCreationTime().toUTC();
 // qDebug() << dt.toString("dd.MM.yyyy hh:mm:ss.zzz")  << " CML " << microseconds;
 
   const char* format = "yyyy-MM-ddTHH:mm:ssZ";

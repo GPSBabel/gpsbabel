@@ -52,6 +52,7 @@
 #include <ctype.h>
 #include "csv_util.h"
 #include <time.h>
+#include <math.h>
 #include "strptime.h"
 #include "jeeps/gpsmath.h"
 #include "grtcirc.h"
@@ -213,14 +214,13 @@ gopal_read(void)
     //TICK;    TIME;   LONG;     LAT;       HEIGHT; SPEED;  Fix; HDOP;    SAT
     //3801444, 080558, 2.944362, 43.262117, 295.28, 0.12964, 2, 2.900000, 3
     c = csv_lineparse(str, ",", "", column++);
+    double millisecs = 0;
     while (c != NULL) {
       switch (column) {
       case  0: /* "-" */	/* unknown fields for the moment */
         sscanf(c, "%lu", &microsecs);
-        wpt->SetCreationTime(microsecs / 1000000, microsecs % 1000000);
-// FIXME: this is totally papering over a problem where creation time is
-// being overwritten later.
-wpt->microseconds = microsecs % 1000000;
+        // Just save this; we'll use it on the next field.
+        millisecs = /*lround*/(microsecs % 1000000) / 1000.0;
         break;
       case  1:				/* Time UTC */
         sscanf(c,"%lf",&hmsd);
@@ -233,7 +233,9 @@ wpt->microseconds = microsecs % 1000000;
         tm.tm_year=trackdate.tm_year;
         tm.tm_mon=trackdate.tm_mon;
         tm.tm_mday=trackdate.tm_mday;
+        // This will probably be overwritten by field 9...if we have 9 fields.
         wpt->creation_time = tx+((((time_t)tm.tm_hour * 60) + tm.tm_min) * 60) + tm.tm_sec;
+        wpt->creation_time = wpt->creation_time.addMSecs(millisecs);
         if (global_opts.debug_level > 1) {
           strftime(tbuffer, sizeof(tbuffer), "%c", gmtime(&wpt->creation_time));
           printf("parsed timestamp: %s\n",tbuffer);
@@ -292,6 +294,7 @@ wpt->microseconds = microsecs % 1000000;
           fatal("Bad date '%s'.\n", c);
         }
         wpt->creation_time += mkgmtime(&tm2);
+        wpt->creation_time = wpt->creation_time.addMSecs(millisecs);
         break;
       case 10:  // Unknown.  Ignored.
       case 11:  // Bearing.  Ignored.
