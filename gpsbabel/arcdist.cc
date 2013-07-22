@@ -235,28 +235,19 @@ arcdist_process(void)
           /* Interpolate time */
           if (ptsopt) {
             wp->creation_time = ed->arcpt2->creation_time;
-            wp->microseconds = ed->arcpt2->microseconds;
           } else {
-            double wptimes = ed->arcpt1->creation_time +
-              ed->frac * (ed->arcpt2->creation_time - ed->arcpt1->creation_time);
-            wp->creation_time = floor(wptimes);
-            wp->microseconds = 1000000.0 * (wptimes - wp->creation_time);
-            if (ed->arcpt1->microseconds <=  ed->arcpt2->microseconds) {
-              wp->microseconds += ed->arcpt1->microseconds +
-                ed->frac * (ed->arcpt1->microseconds - ed->arcpt1->microseconds);
-            } else {
-              wp->microseconds += ed->arcpt1->microseconds +
-                ed->frac * (1000000 - ed->arcpt1->creation_time +
-                            ed->arcpt2->creation_time);
-              wp->creation_time--;
-            }
-
-            wp->creation_time += wp->microseconds / 1000000;
-            wp->microseconds %= 1000000;
+            // Apply the multiplier to the difference between the times 
+            // of the two points.   Add that to the first for the 
+            // interpolated time.
+            int scaled_time = ed->frac * 
+                  ed->arcpt1->creation_time.msecsTo(ed->arcpt2->creation_time);
+            QDateTime new_time(ed->arcpt1->creation_time.addMSecs(scaled_time));
+            wp->SetCreationTime(new_time);
           }
         }
         if (global_opts.debug_level >= 1) {
-          warning("Including waypoint %s at dist:%f lat:%f lon:%f\n", wp->shortname, ed->distance, wp->latitude, wp->longitude);
+          warning("Including waypoint %s at dist:%f lat:%f lon:%f\n", 
+                  wp->shortname, ed->distance, wp->latitude, wp->longitude);
         }
       }
       xfree(ed);
