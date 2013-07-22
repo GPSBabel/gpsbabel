@@ -515,7 +515,7 @@ void mapsend_track_disp(const waypoint* wpt)
 
   /* 0 centiseconds */
   if (trk_version >= 30) {
-    c = lround(wpt->GetCreationTime().msec() / 10.0);
+    c = lround(wpt->GetCreationTime().time().msec() / 10.0);
     gbfwrite(&c, 1, 1, mapsend_file_out);
   }
 }

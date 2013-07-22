@@ -238,7 +238,7 @@ ggv_log_track_head_cb(const route_head* trk)
       speed = waypt_speed(prev, wpt);
     }
     if (wpt->creation_time > 0) {
-      secs = (double)tm.tm_sec + (1000 * wpt->GetCreationTime().msec());
+      secs = (double)tm.tm_sec + wpt->GetCreationTime().time().msec() / 1000.0;
     }
 
     gbfputint16((gbint16) latint, fout);
