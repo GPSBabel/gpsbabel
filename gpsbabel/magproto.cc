@@ -1449,7 +1449,7 @@ void mag_track_disp(const waypoint* waypointp)
             tm->tm_sec;
       date = tm->tm_mday * 10000 + tm->tm_mon * 100 +
              tm->tm_year;
-      fracsec = lround(waypointp->GetCreationTime().msec()/10.0);
+      fracsec = lround(waypointp->GetCreationTime().time().msec()/10.0);
     }
   }
   if (!tm) {

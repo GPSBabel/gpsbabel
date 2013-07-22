@@ -75,9 +75,6 @@ public:
     return &t_;
   }
 
-  // A convenience method to return the number of milliseconds (0-999).
-  int msec() const { return this->time().msec(); }
-
   // Integer form: YYMMDD
   int ymd() const {
     QDate date(this->date());

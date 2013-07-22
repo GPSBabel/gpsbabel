@@ -1761,7 +1761,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
       }
       snprintf(buf, sizeof(buf), "%02d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-      int millisecs = wpt->GetCreationTime().msec();
+      int millisecs = wpt->GetCreationTime().time().msec();
       if (millisecs > 0) {
         int len = 3;
 

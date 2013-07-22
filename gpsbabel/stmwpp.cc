@@ -273,7 +273,7 @@ stmwpp_waypt_cb(const waypoint *wpt)
     gbfprintf(fout, ".%02d", 0);
     break;
   case STM_TRKPT:
-    gbfprintf(fout, ".%03d", wpt->GetCreationTime().msec());
+    gbfprintf(fout, ".%03d", wpt->GetCreationTime().time().msec());
     break;
   }
   gbfprintf(fout, ",\r\n");

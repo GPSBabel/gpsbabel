@@ -1947,7 +1947,7 @@ xcsv_waypt_pr(const waypoint* wpt)
       char tbuf[24];
       writetime(tbuf, sizeof(tbuf), "%s", wpt->GetCreationTime(), false);
       char mbuf[32];
-      snprintf(mbuf, sizeof(mbuf), "%s%03d", tbuf, wpt->GetCreationTime().msec());
+      snprintf(mbuf, sizeof(mbuf), "%s%03d", tbuf, wpt->GetCreationTime().time().msec());
       writebuff(buff, "%s", mbuf);
     }
     break;

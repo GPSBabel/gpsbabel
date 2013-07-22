@@ -293,7 +293,6 @@ destinator_read_trk(void)
     struct tm tm;
     char buff[20];
     int date;
-    double time;
 
     recno++;
 
@@ -317,7 +316,7 @@ destinator_read_trk(void)
     gbfseek(fin, 12 * sizeof(gbint32), SEEK_CUR);	/* SAT info */
 
     date = gbfgetint32(fin);
-    time = gbfgetflt(fin);
+    double milliseconds = gbfgetflt(fin);
 
     gbfseek(fin, 2 * 12, SEEK_CUR);			/* SAT info */
 
@@ -330,9 +329,9 @@ destinator_read_trk(void)
 
     memset(&tm, 0, sizeof(tm));
 
-    snprintf(buff, sizeof(buff), "%06d%.f", date, time);
+    snprintf(buff, sizeof(buff), "%06d%.f", date, milliseconds);
     strptime(buff, "%d%m%y%H%M%S", &tm);
-    int millisecs = (int) time % 1000;
+    int millisecs = lround(milliseconds) % 1000;
     wpt->SetCreationTime(mkgmtime(&tm), millisecs);
 
     if (wpt->fix > 0) {
@@ -436,7 +435,7 @@ destinator_trkpt_disp(const waypoint* wpt)
 
   if (wpt->creation_time) {
     struct tm tm;
-    double time;
+    double milliseconds;
     int date;
     const time_t ct = wpt->GetCreationTime();
     tm = *gmtime(&ct);
@@ -444,10 +443,11 @@ destinator_trkpt_disp(const waypoint* wpt)
     tm.tm_year -= 100;
     date = ((int)tm.tm_mday * 10000) + ((int)tm.tm_mon * 100) + tm.tm_year;
     gbfputint32(date, fout);
+    milliseconds = ((int)tm.tm_hour * 10000) + 
+                  ((int)tm.tm_min * 100) + tm.tm_sec;
+    milliseconds = (milliseconds * 1000) + (wpt->GetCreationTime().time().msec());
 
-    time = ((int)tm.tm_hour * 10000) + ((int)tm.tm_min * 100) + tm.tm_sec;
-    time = (time * 1000) + (wpt->GetCreationTime().msec());
-    gbfputflt(time, fout);
+    gbfputflt(milliseconds, fout);
   } else {
     gbfputint32(0, fout);	/* Is this invalid ? */
     gbfputflt(0, fout);

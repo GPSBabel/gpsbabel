@@ -190,7 +190,6 @@ gopal_read(void)
   line=0;
   while ((buff = gbfgetstr(fin))) {
     int nfields;
-    unsigned long microsecs;
     if ((line == 0) && fin->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
     }
@@ -214,13 +213,14 @@ gopal_read(void)
     //TICK;    TIME;   LONG;     LAT;       HEIGHT; SPEED;  Fix; HDOP;    SAT
     //3801444, 080558, 2.944362, 43.262117, 295.28, 0.12964, 2, 2.900000, 3
     c = csv_lineparse(str, ",", "", column++);
-    double millisecs = 0;
+    int millisecs = 0;
     while (c != NULL) {
       switch (column) {
       case  0: /* "-" */	/* unknown fields for the moment */
+        unsigned long microsecs;
         sscanf(c, "%lu", &microsecs);
         // Just save this; we'll use it on the next field.
-        millisecs = /*lround*/(microsecs % 1000000) / 1000.0;
+        millisecs = lround((microsecs % 1000000) / 1000.0);
         break;
       case  1:				/* Time UTC */
         sscanf(c,"%lf",&hmsd);
