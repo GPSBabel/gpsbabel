@@ -447,7 +447,6 @@ public:
   description(NULL), 
   notes(NULL), 
   url_next(NULL), 
-  microseconds(0), 
   route_priority(0), 
   hdop(0), 
   vdop(0), 
@@ -537,7 +536,6 @@ public:
     creation_time = creation_time.addMSecs(ms);
   }
   gpsbabel::DateTime creation_time;
-  int microseconds;	/* Optional millionths of a second. */
 
   /*
    * route priority is for use by the simplify filter.  If we have

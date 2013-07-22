@@ -1192,7 +1192,7 @@ unicsv_parse_one_line(char *ibuf)
     }
 
     if (msec >= 0) {
-      wpt->creation_time.addMSecs(msec);
+      wpt->creation_time = wpt->creation_time.addMSecs(msec);
     }
 
     if (opt_utc) {
