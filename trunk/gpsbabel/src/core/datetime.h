@@ -39,7 +39,7 @@ public:
   // As a crutch, mimic the old behaviour of an uninitialized creation time
   // being 1/1/1970.
   DateTime() {
-    this->setTime_t(0);
+    setTime_t(0);
     t_ = -1;
   }
 
@@ -47,56 +47,62 @@ public:
   DateTime(QDateTime dt) : QDateTime(dt) {}
 
   // Handle time_tm tm = wpt->creation_time;
-  operator const time_t() const { return this->toTime_t(); }
+  operator const time_t() const { return toTime_t(); }
 
   const time_t& operator=(const time_t& t) {
-    this->setTime_t(t);
+    setTime_t(t);
     return t;
   }
 
   time_t operator--(int) {
     setTime_t(toTime_t() - 1);
-    return this->toTime_t();
+    return toTime_t();
   }
 
   time_t operator++(int) {
     setTime_t(toTime_t() + 1);
-    return this->toTime_t();
+    return toTime_t();
   }
 
   time_t operator+=(const time_t& t) {
     setTime_t(toTime_t() + t);
-    return this->toTime_t();
+    return toTime_t();
   }
 
   // Handle       tm = *gmtime(&wpt->creation_time)  ...poorly.
   inline const time_t *operator&() {
-    t_ = this->toTime_t();
+    t_ = toTime_t();
     return &t_;
   }
 
   // Integer form: YYMMDD
   int ymd() const {
-    QDate date(this->date());
-    return date.year() * 10000 + date.month() * 100 + date.day();
+    QDate d(date());
+    return d.year() * 10000 + d.month() * 100 + d.day();
   }
 
   int ddmmyy() const {
-    QDate date(this->date());
-    return date.day() * 10000 + date.month() * 100 + date.year();
+    QDate d(date());
+    return d.day() * 10000 + d.month() * 100 + d.year();
   }
 
   int hms() const {
-    QTime time(this->time());
-    return time.hour() * 10000 + time.minute() * 100 + time.second();
+    QTime t(time());
+    return t.hour() * 10000 + t.minute() * 100 + t.second();
   }
+
+  // Temporary: Override the standard, also handle time_t 0 as invalid.
+  bool isValid() const {
+    return date().isValid() && time().isValid() && toTime_t() > 0;
+  }
+
 
   // Qt 4.6 and under doesn't have msecsTo.  Fortunately, it's easy to
   // provide.  It's a 64-bit because if the times aren't on the same day,
   // the returned value can be quite large.
   int64_t msecsTo(const QDateTime &dt) {
-    qint64 days = this->daysTo(dt);
-    qint64 msecs = this->time().msecsTo(dt.time());
+    qint64 days = daysTo(dt);
+    qint64 msecs = time().msecsTo(dt.time());
     return days * (1000 * 3600 * 24) + msecs;
   }
 
@@ -104,12 +110,12 @@ public:
   // the trailing digits aren't .000.  Always UTC.
   QString toPrettyString() const {
     const char* format;
-    if (this->time().msec()) {
+    if (time().msec()) {
       format = "yyyy-MM-ddTHH:mm:ss.zzzZ";
     } else {
       format = "yyyy-MM-ddTHH:mm:ssZ";
     }
-    return this->toUTC().toString(format);
+    return toUTC().toString(format);
   }
 
 private:

@@ -890,19 +890,16 @@ static void kml_output_description(const waypoint* pt)
 
 static void kml_recompute_time_bounds(const waypoint* waypointp)
 {
-  gpsbabel::DateTime t = waypointp->GetCreationTime();
-  if (t == 0)
-    return;
-
-  if (!t.isValid())
-    return;
-
-  if (!kml_time_min.isValid() || (t > 0 && t < kml_time_min)) {
-    kml_time_min = t;
-  }
-
-  if (!kml_time_max.isValid() || t > kml_time_max) {
-    kml_time_max = t;
+  if (waypointp->GetCreationTime().isValid())
+  {
+    if(!(kml_time_min.isValid()) ||
+        (waypointp->GetCreationTime() < kml_time_min)) {
+      kml_time_min = waypointp->GetCreationTime();
+    }
+    if (!(kml_time_max.isValid()) ||
+      (waypointp->GetCreationTime() > kml_time_max )) {
+      kml_time_max = waypointp->GetCreationTime();
+    }
   }
 }
 
@@ -1370,7 +1367,7 @@ char* kml_geocache_get_logs(const waypoint* wpt)
                   " %04d-%02d-%02d",
                   t.date().year(),
                   t.date().month(),
-                  t.date().day()),
+                  t.date().day());
         r = xstrappend(r, temp);
         xfree(temp);
       }
@@ -1683,8 +1680,7 @@ static int track_has_time(const route_head* header)
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
     waypoint* tpt = (waypoint*)elem;
 
-    // FIXME: implicit time_t test here.
-    if (tpt->GetCreationTime().isValid() && tpt->GetCreationTime() > 0) {
+    if (tpt->GetCreationTime().isValid()) {
       points_with_time++;
       if (points_with_time >= 2) {
         return 1;
@@ -1731,8 +1727,8 @@ static void kml_mt_hdr(const route_head* header)
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
     waypoint* tpt = (waypoint*)elem;
-    // FIXME: implicit time_t test here.
-    if (tpt->GetCreationTime().isValid() && tpt->GetCreationTime() > 0) {
+
+    if (tpt->GetCreationTime().isValid()) {
       QString time_string = tpt->CreationTimeXML();
       writer->writeOptionalTextElement("when", time_string);
     } else {

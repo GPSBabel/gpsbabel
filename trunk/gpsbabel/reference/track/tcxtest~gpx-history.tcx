@@ -17,11 +17,6 @@
               <LongitudeDegrees>-118.7587920</LongitudeDegrees>
             </Position>
             <AltitudeMeters>308.7</AltitudeMeters>
-            <Extensions>
-              <TPX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-                <Speed>0.010</Speed>
-              </TPX>
-            </Extensions>
           </Trackpoint>
           <Trackpoint>
             <Time>2008-08-21T13:08:54Z</Time>
