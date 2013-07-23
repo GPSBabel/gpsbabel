@@ -1182,7 +1182,7 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     int s_len = strlen(s);
     if (s_len < 4) {
       /* less than 1 epochsecond, an unusual case */
-      wpt->SetCreationTime(0,(int) atoi(s));
+      wpt->SetCreationTime(0, atoi(s));
     } else {
       char buff[32];
       int off = s_len - 3;
