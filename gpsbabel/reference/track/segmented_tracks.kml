@@ -613,8 +613,6 @@
 <tr><td><b>Distance</b> 1.1 mi </td></tr>
 <tr><td><b>Min Alt</b> 0.000 ft </td></tr>
 <tr><td><b>Max Alt</b> 0.000 ft </td></tr>
-<tr><td><b>Max Speed</b> 0.0 mph </td></tr>
-<tr><td><b>Avg Speed</b> 6.1 mph </td></tr>
 <tr><td><b>Start Time</b>2007-07-27T05:24:05Z</td></tr>
 <tr><td><b>End Time</b>2007-07-27T05:35:00Z</td></tr>
 </table>]]>
@@ -632,7 +630,6 @@
 <table>
 <tr><td>Longitude: -86.844140 </td></tr>
 <tr><td>Latitude: 35.836146 </td></tr>
-<tr><td>Speed: 0.0 mph </td></tr>
 <tr><td>Heading: 305.9 </td></tr>
 <tr><td>Time: 2007-07-27T05:24:05Z </td></tr>
 </table>
@@ -735,7 +732,6 @@
 <table>
 <tr><td>Longitude: -86.843137 </td></tr>
 <tr><td>Latitude: 35.835023 </td></tr>
-<tr><td>Speed: 0.0 mph </td></tr>
 <tr><td>Heading: 160.7 </td></tr>
 <tr><td>Time: 2007-07-27T05:30:00Z </td></tr>
 </table>
@@ -798,7 +794,6 @@
 <table>
 <tr><td>Longitude: -86.842084 </td></tr>
 <tr><td>Latitude: 35.835410 </td></tr>
-<tr><td>Speed: 0.0 mph </td></tr>
 <tr><td>Heading: 64.5 </td></tr>
 <tr><td>Time: 2007-07-27T05:31:00Z </td></tr>
 </table>
@@ -1081,7 +1076,6 @@
 <table>
 <tr><td>Longitude: -86.838782 </td></tr>
 <tr><td>Latitude: 35.836744 </td></tr>
-<tr><td>Speed: 0.0 mph </td></tr>
 <tr><td>Heading: 146.9 </td></tr>
 <tr><td>Time: 2007-07-27T05:35:00Z </td></tr>
 </table>

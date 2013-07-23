@@ -158,12 +158,7 @@ waypt_add(waypoint *wpt)
   if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
     fatal("Invalid longitude %f in waypoint %s.\n",
           lon_orig, wpt->shortname ? wpt->shortname : "");
-  if (!wpt->creation_time.isValid()) {
-    warning("%s: Invalid timestamp in waypoint %s.\n",
-            wpt->session->name,
-            wpt->shortname ? wpt->shortname : "");
-    wpt->creation_time = 0;
-  }
+
   /*
    * Some input may not have one or more of these types so we
    * try to be sure that we have these fields even if just by
