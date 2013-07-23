@@ -34,7 +34,7 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc cetus.cc copilot.cc \
 # ALL_FMTS=$$MINIMAL_FMTS
 FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc \
-        nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc
+        nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc
 
 SHAPE=shapelib/shpopen.c shapelib/dbfopen.c pdbfile.cc
 
@@ -62,13 +62,29 @@ SUBDIRS += jeeps
 macx|linux {
   DEFINES += HAVE_NANOSLEEP HAVE_LIBUSB HAVE_LIBEXPAT HAVE_GLOB
   DEFINES += HAVE_VA_COPY HAVE_VA_LIST_AS_ARRAY
-  SOURCES += gbser_posix.cc jeeps/gpslibusb.cc
+  SOURCES += gbser_posix.cc
+  JEEPS += jeeps/gpslibusb.cc
   INCLUDEPATH += jeeps
   LIBS += -lexpat
 }
 
 win32 {
-  SOURCES += gbser_win32.cc jeeps/gpsusbwin.c
+  DEFINES += __WIN32__ _CONSOLE
+  DEFINES -= -UNICODE -ZLIB_INHIBITED
+  DEFINES += HAVE_LIBEXPAT
+  CONFIG(debug, debug|release) {
+    DEFINES += _DEBUG
+  }
+  SOURCES += gbser_win.cc
+  JEEPS += jeeps/gpsusbwin.cc
+  INCLUDEPATH += msvc/expat
+  LIBS += ../gpsbabel/msvc/Expat/libexpat.lib setupapi.lib hid.lib
+  TEMPLATE=vcapp
+}
+
+win32-msvc*{
+  DEFINES += _CRT_SECURE_NO_DEPRECATE
+  QMAKE_CXXFLAGS += /MP
 }
 
 linux {
