@@ -27,3 +27,11 @@ compare ${REFERENCE}/track/trk_reverse_test-rev.gpx ${TMPDIR}/trk_reverse_test-r
 # seg2trk filter test
 gpsbabel -i gpx -f ${REFERENCE}/track/seg2trk_test.gpx -x track,seg2trk -o gpx -F ${TMPDIR}/seg2trk_test-seg.gpx
 compare ${REFERENCE}/track/seg2trk_test-seg.gpx ${TMPDIR}/seg2trk_test-seg.gpx
+
+# Verify that the merge/split code is numerically stable on subsecond input.
+# This would fail on GPSBabel <= 1.4.4 which didn't handle subsecond times
+# correctly in this filter.  Observe that the times in split-split are
+# always ascending and the order of the input track names is preserved.
+
+gpsbabel -i gpx -f ${REFERENCE}/track/split-raw.gpx -x track,merge,split=1m -o gpx -F ${TMPDIR}/split-raw-split.gpx
+compare ${REFERENCE}/track/split-split.gpx ${TMPDIR}/split-raw-split.gpx

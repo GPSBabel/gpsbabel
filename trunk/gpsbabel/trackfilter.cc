@@ -1,7 +1,7 @@
 /*
 
     Track manipulation filter
-    Copyright (c) 2009, 2010 Robert Lipe, robertlipe@gpsbabel.org
+    Copyright (c) 2009 - 2013 Robert Lipe, robertlipe@gpsbabel.org
     Copyright (C) 2005-2006 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
@@ -176,8 +176,8 @@ arglist_t trackfilter_args[] = {
 
 typedef struct trkflt_s {
   route_head *track;
-  time_t first_time;
-  time_t last_time;
+  QDateTime first_time;
+  QDateTime last_time;
 } trkflt_t;
 
 static trkflt_t *track_list = NULL;
@@ -259,8 +259,16 @@ trackfilter_init_qsort_cb(const void *a, const void *b)
 {
   const trkflt_t *ra = (const trkflt_t*) a;
   const trkflt_t *rb = (const trkflt_t*) b;
+  const QDateTime dta = ra->first_time;
+  const QDateTime dtb = rb->first_time;
 
-  return ra->first_time - rb->first_time;
+  if (dta > dtb) {
+    return 1;
+  }
+  if (dta == dtb) {
+    return 0;
+  }
+  return -1;
 }
 
 static int
@@ -268,8 +276,16 @@ trackfilter_merge_qsort_cb(const void *a, const void *b)
 {
   const waypoint *wa = *(waypoint **)a;
   const waypoint *wb = *(waypoint **)b;
+  const QDateTime dta = wa->GetCreationTime();
+  const QDateTime dtb = wb->GetCreationTime();
 
-  return wa->GetCreationTime() - wb->GetCreationTime();
+  if (dta > dtb) {
+    return 1;
+  }
+  if (dta == dtb) {
+    return 0;
+  }
+  return -1;
 }
 
 static fix_type
@@ -366,11 +382,12 @@ trackfilter_fill_track_list_cb(const route_head *track) 	/* callback for track_d
 *******************************************************************************/
 
 static void
-trackfilter_split_init_rte_name(route_head *track, const time_t time)
+trackfilter_split_init_rte_name(route_head *track, const QDateTime dt)
 {
   char buff[128], tbuff[128];
   struct tm tm;
 
+  time_t time = dt.toTime_t();
   tm = *localtime(&time);
 
   (opt_interval != 0) ?
@@ -760,8 +777,9 @@ trackfilter_move(void)
       wpt = (waypoint *)elem;
       wpt->creation_time += delta;
     }
-    track_list[i].first_time += delta;
-    track_list[i].last_time += delta;
+
+    track_list[i].first_time = track_list[i].first_time.addSecs(delta);
+    track_list[i].last_time = track_list[i].last_time.addSecs(delta);
   }
 }
 
@@ -1209,7 +1227,7 @@ trackfilter_init(const char *args)
   }
 
   if (count > 0) {
-    track_list = (trkflt_t *) xcalloc(count, sizeof(*track_list));
+    track_list = new trkflt_t[count];
 
     /* check all tracks for time and order (except merging) */
 
@@ -1223,10 +1241,7 @@ trackfilter_init(const char *args)
 static void
 trackfilter_deinit(void)
 {
-  if (track_list != NULL) {
-    xfree(track_list);
-    track_list = NULL;
-  }
+  delete[] track_list;
   track_ct = 0;
   track_pts = 0;
 }
