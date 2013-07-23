@@ -1,3 +1,6 @@
+#if 0
+//This file is no longer used, the defines are set in the project files
+
 #define HAVE_LIBEXPAT 1
 #define __va_copy(ap1, ap2) ((ap1) = (ap2))
 
@@ -19,10 +22,11 @@
 #define FILTERS_ENABLED 1
 
 /* 1 to enable Palm PDB support */
-#define  PDBFMTS_ENABLED 1
+#define PDBFMTS_ENABLED 1
 
 /* 1 to enable shapefile support */
 #define SHAPELIB_ENABLED 1
 
 /* 1 to inhibit our use of zlib. */
 #undef ZLIB_INHIBITED
+#endif

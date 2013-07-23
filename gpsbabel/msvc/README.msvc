@@ -1,27 +1,38 @@
 
-BUILDING GPSBABEL WITH Microsoft Visual Studio:
+Building GPSBabel on Windows with QtCreator or Microsoft Visual Studio:
 
-Microsoft Visual Studio (MSVS) support is provided for developers, not 
-intended for release builds or testing. Also, the MSVS project is enabled for
+Windows build support is provided for developers, not currently intended 
+for release builds or testing. Also, the Windows native projects are normally enabled for
 the command line application only, not the GUI.
-Note that the project is maintained separately from the regular build and is
-not used by most regular GPSBabel developers. The project may not be updated 
-with for instance new formats. 
+These project files may not be actively maintained. Releases are built with mingw.
+
 Note also that the Microsoft Visual C++ compiler (MSVC) is less standard 
 compliant than other compilers and may require code modifications to compile.
-Please share modifications and patches with the project.
+
+Qt:
+To build you need Qt http://qt-project.com. While the regular GPSBabel build 
+uses Qt 4.6, it is possible to use the console application with Qt 5.1. 
+
+QtCreator:
+The GPSBabel.pro file is enabled also for Windows build in QtCreator.
+To build you need to install a compiler (MS Visual Studio C++ or MinGW c/c++).
+Just open the GPSBabel.pro file in QtCreator.
+
+If you prefer to use the MS Visual editor, you can generate a GPSBabel.vcxproj file.
+To create the project, you can just open a command window, change directory to where you want to create the project file and type: <path-to-qmake> <path-to-GPSBabel.pro>
+For example: ../../Qt/5.1.0/msvc2012/bin/qmake.exe gpsbabel/GPSBabel.pro
+
+Microsoft Visual Studio:
+Note that the default project is maintained separately from the regular build and is
+not used by most regular GPSBabel developers. The project may not be updated 
+with for instance new formats. 
 
 The MSVS project is setup for MSVS2012. "Visual Studio Express 2012 for 
 Windows Desktop" is available for free for non-commercial projects from 
 Microsoft.
 The project file may be usable for MSVC2010 too (untested). Older versions 
 may work with a modified project file.
-The solution has three configurations: Debug, Release and Unicode. (Unicode 
-is similar to Release but sets XML_UNICODE=1, used by Google Earth.)
 
-To build you need Qt http://qt-project.com. While the regular GPSBabel build 
-uses Qt 4.6, it is possible to use Qt5.1 with the MSVS. 
-You may use QtCreator to modify the project, or modify the project manually.
 You need to modify MSVS default or the GPSBabel project for Qt. The following 
 are the default settings:
  * IncludePath (C:\Qt\5.1.0\msvc2012\include)
@@ -29,6 +40,7 @@ are the default settings:
 In addition, if you are using Qt 4, change project properties:
  * Linker->Input->AdditionalIncludeDirectories from qt5core.lib to qtcore.lib.
 
+Other libraries:
 Note that the "Microsoft Windows SDK" (previously "Microsoft Platform SDK")
 is required in addition to the actual compiler package for DeLorme (delbin).
 (Unless you have a special need for this format, it is simpler to patch the
@@ -37,14 +49,12 @@ is required in addition to the actual compiler package for DeLorme (delbin).
 The "Expat" directory contains the import library and header file for the
 Expat DLL.
 
+Running:
 To run GPSBabel, you must make sure that the dlls (Qt and libexpat.dll from
 the Expat directory) is in the DLL search path.  The easiest way to do this,
 and to avoid version conflicts with other programs that use expat, is to put 
 the dlls in the same directory as gpsbabel.exe.
 
-Note that if you build with "normal" GPSBabel build method, you may get
-compile errors as MSVS picks up incorrect config.h file.
- 
 If you experience any problems with this project file or with the build 
 process, please ask for assistance on the gpsbabel-code mailing list at
 http://lists.sourceforge.net/lists/listinfo/gpsbabel-code
