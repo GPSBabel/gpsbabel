@@ -224,7 +224,7 @@ mapsend_track_read(void)
     } else {
       centisecs = 0;
     }
-    wpt_tmp->SetCreationTime(t, 10.0 * centisecs);
+    wpt_tmp->SetCreationTime(t, 10 * centisecs);
 
     track_add_wpt(track_head, wpt_tmp);
   }

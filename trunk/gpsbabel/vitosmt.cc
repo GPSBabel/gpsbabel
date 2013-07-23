@@ -169,7 +169,7 @@ vitosmt_read(void)
     tmStruct.tm_isdst	=-1;
 
     double usec = fmod(1000000*seconds+0.5,1000000);
-    wpt_tmp->SetCreationTime(mkgmtime(&tmStruct),lround(usec/1000.0));
+    wpt_tmp->SetCreationTime(mkgmtime(&tmStruct), lround(usec/1000.0));
     wpt_tmp->shortname	= (char*) xcalloc(16,1);
     snprintf(wpt_tmp->shortname, 15 , "WP%04d", ++serial);
 

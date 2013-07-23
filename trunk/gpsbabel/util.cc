@@ -925,13 +925,15 @@ month_lookup(const char *m)
  * that interesting to us anyway.
  */
 #define EPOCH_TICKS 621355968000000000.0
-void dotnet_time_to_time_t(double dotnet, time_t *t, int *ms)
+void dotnet_time_to_time_t(double dotnet, time_t *t, int *millisecs)
 {
+  // TODO: replace this with better interface with normal return values
+  // and called via a QDateTime.
   *t = (dotnet - EPOCH_TICKS) / 10000000.;
 #if LATER
   // TODO: work out fractional seconds.
-  if (ms) {
-    *ms = dotnet % 10000;
+  if (millisecs) {
+    *millisecs = dotnet % 10000;
   }
 #endif
 }
