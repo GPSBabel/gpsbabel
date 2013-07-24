@@ -70,7 +70,7 @@ macx|linux {
 
 win32 {
   DEFINES += __WIN32__ _CONSOLE
-  DEFINES -= -UNICODE -ZLIB_INHIBITED
+  DEFINES -= UNICODE ZLIB_INHIBITED
   DEFINES += HAVE_LIBEXPAT
   CONFIG(debug, debug|release) {
     DEFINES += _DEBUG
