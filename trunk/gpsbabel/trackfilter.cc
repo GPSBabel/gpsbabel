@@ -387,8 +387,8 @@ trackfilter_split_init_rte_name(route_head *track, const QDateTime dt)
   char buff[128], tbuff[128];
   struct tm tm;
 
-  time_t time = dt.toTime_t();
-  tm = *localtime(&time);
+  time_t time = dt.toUTC().toTime_t();
+  tm = *gmtime(&time);
 
   (opt_interval != 0) ?
   strftime(tbuff, sizeof(tbuff), "%Y%m%d%H%M%S", &tm) :
