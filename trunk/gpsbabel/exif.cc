@@ -1106,7 +1106,7 @@ exif_remove_tag(const int ifd_nr, const int tag_id)
 static void
 exif_find_wpt_by_time(const waypoint* wpt)
 {
-  if (wpt->creation_time <= 0) {
+  if (!wpt->creation_time.isValid()) {
     return;
   }
 

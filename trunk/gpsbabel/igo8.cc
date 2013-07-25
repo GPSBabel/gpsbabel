@@ -216,10 +216,10 @@ static void write_igo8_track_point(const waypoint* wpt)
   // iGo8 appears to expect a time, if one isn't provided
   // then we shall make our own, where each point is one
   // second apart.
-  if (wpt->creation_time == 0) {
-    le_write32(&point.unix_time, invented_time++);
-  } else {
+  if (wpt->creation_time.isValid()) {
     le_write32(&point.unix_time, wpt->GetCreationTime());
+  } else {
+    le_write32(&point.unix_time, invented_time++);
   }
 
   // Write the first part of the Information Block, the start time

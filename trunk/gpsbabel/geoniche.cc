@@ -746,7 +746,11 @@ geoniche_writewpt(const waypoint* wpt)
     id = rec_ct;
   }
 
-  tx = (wpt->GetCreationTime() != 0) ? wpt->GetCreationTime() : gpsbabel_time;
+  if (wpt->GetCreationTime().isValid()) {
+    tx = wpt->GetCreationTime().toTime_t();
+  } else {
+    tx = gpsbabel_time;
+  }
   if (tx == 0) {	/* maybe zero during testo (freezed time) */
     strcpy(datestr, "01/01/1904");	/* this seems to be the uninitialized date value for geoniche */
     strcpy(timestr, "00:00:00");

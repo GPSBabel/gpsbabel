@@ -230,8 +230,8 @@ arcdist_process(void)
           }
         }
         if (trkopt &&
-             (ed->arcpt2->creation_time != 0) &&
-             (ptsopt || (ed->arcpt1->creation_time != 0))) {
+             (ed->arcpt2->GetCreationTime().isValid()) &&
+             (ptsopt || (ed->arcpt1->GetCreationTime().isValid()))) {
           /* Interpolate time */
           if (ptsopt) {
             wp->creation_time = ed->arcpt2->creation_time;
