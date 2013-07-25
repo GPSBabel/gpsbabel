@@ -570,9 +570,9 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
     *trkdatap = tdata;
   }
 
-  first.latitude = 0;
-  first.longitude = 0;
-  first.creation_time = 0;
+//  first.latitude = 0;
+//  first.longitude = 0;
+//  first.creation_time = 0;
   tdata->min_hrt =  9999;
   tdata->min_alt = -unknown_alt;
   tdata->max_alt =  unknown_alt;

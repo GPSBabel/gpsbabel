@@ -689,9 +689,9 @@ static void ppdb_write_wpt(const waypoint *wpt)
   buff = ppdb_strcat(buff, ",", NULL, &len);
   /* 4 time, date */
 
-  if (wpt->creation_time != 0) {
+  if (wpt->creation_time.isValid()) {
     tmp = str_pool_get(20);
-    const time_t tt = wpt->GetCreationTime();
+    const time_t tt = wpt->GetCreationTime().toTime_t();
     tm = *gmtime(&tt);
     strftime(tmp, 20, datefmt, &tm);
     buff = ppdb_strcat(buff, tmp, NULL, &len);

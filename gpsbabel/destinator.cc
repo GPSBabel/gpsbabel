@@ -433,11 +433,11 @@ destinator_trkpt_disp(const waypoint* wpt)
     gbfputint32(0, fout);
   }
 
-  if (wpt->creation_time) {
+  if (wpt->creation_time.isValid()) {
     struct tm tm;
     double milliseconds;
     int date;
-    const time_t ct = wpt->GetCreationTime();
+    const time_t ct = wpt->GetCreationTime().toTime_t();
     tm = *gmtime(&ct);
     tm.tm_mon += 1;
     tm.tm_year -= 100;

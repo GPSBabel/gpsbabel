@@ -781,7 +781,7 @@ humminbird_track_cb(const waypoint* wpt)
   lat = geodetic_to_geocentric_hwr(wpt->latitude);
   north = si_round(inverse_gudermannian_i1924(lat));
 
-  if (wpt->creation_time != 0) {
+  if (wpt->creation_time.isValid()) {
     last_time = wpt->GetCreationTime();
   }
 

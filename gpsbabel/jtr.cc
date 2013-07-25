@@ -273,7 +273,7 @@ jtr_trkpt_disp_cb(const waypoint* wpt)
   char stime[10], sdate[7], scourse[6], sspeed[8];
   struct tm tm;
 
-  if (wpt->creation_time > 0) {
+  if (wpt->creation_time.isValid()) {
     const time_t tt = wpt->GetCreationTime();
     tm = *gmtime(&tt);
 

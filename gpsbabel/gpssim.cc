@@ -121,12 +121,12 @@ gpssim_write_pt(const waypoint* wpt)
            wpt->altitude == unknown_alt ? 0 : wpt->altitude
           );
 
-  if (wpt->creation_time) {
+  if (wpt->creation_time.isValid()) {
     char tbuf[20];
     int hms, ymd;
     struct tm* tm;
 
-    const time_t tt = wpt->GetCreationTime();
+    const time_t tt = wpt->GetCreationTime().toTime_t();
     tm = gmtime(&tt);
     hms = tm->tm_hour * 10000 + tm->tm_min * 100 + tm->tm_sec;
     ymd = tm->tm_mday * 10000 + tm->tm_mon * 100 + tm->tm_year;
