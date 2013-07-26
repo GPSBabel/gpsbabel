@@ -40,7 +40,6 @@ public:
   // being 1/1/1970.
   DateTime() {
     setTime_t(0);
-    t_ = -1;
   }
 
   DateTime(QDate date, QTime time) : QDateTime(date, time) {}
@@ -57,12 +56,6 @@ public:
   time_t operator+=(const time_t& t) {
     setTime_t(toTime_t() + t);
     return toTime_t();
-  }
-
-  // Handle       tm = *gmtime(&wpt->creation_time)  ...poorly.
-  inline const time_t *operator&() {
-    t_ = toTime_t();
-    return &t_;
   }
 
   // Integer form: YYMMDD
@@ -107,9 +100,6 @@ public:
     }
     return toUTC().toString(format);
   }
-
-private:
-  time_t t_;
 };
 
 } // namespace gpsbabel

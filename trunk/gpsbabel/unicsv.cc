@@ -1368,7 +1368,7 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
   if (wpt->hasLink()) {
     gb_setbit(&unicsv_outp_flags, fld_url);
   }
-  if (wpt->creation_time != 0) {
+  if (wpt->creation_time.isValid()) {
     gb_setbit(&unicsv_outp_flags, fld_time);
     if (wpt->creation_time >= SECONDS_PER_DAY) {
       gb_setbit(&unicsv_outp_flags, fld_date);

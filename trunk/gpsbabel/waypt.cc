@@ -660,7 +660,7 @@ waypt_empty_gc_data(const waypoint *wpt)
 QString
 waypoint::CreationTimeXML() const
 {
-  if (creation_time == 0) {
+  if (!creation_time.isValid()) {
     return NULL;
   }
 

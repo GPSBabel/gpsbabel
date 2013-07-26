@@ -237,7 +237,8 @@ gopal_read(void)
         wpt->creation_time = tx+((((time_t)tm.tm_hour * 60) + tm.tm_min) * 60) + tm.tm_sec;
         wpt->creation_time = wpt->creation_time.addMSecs(millisecs);
         if (global_opts.debug_level > 1) {
-          strftime(tbuffer, sizeof(tbuffer), "%c", gmtime(&wpt->creation_time));
+          time_t t = wpt->GetCreationTime().toTime_t();
+          strftime(tbuffer, sizeof(tbuffer), "%c", gmtime(&t));
           printf("parsed timestamp: %s\n",tbuffer);
         }
         break;

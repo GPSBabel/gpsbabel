@@ -224,7 +224,8 @@ ggv_log_track_head_cb(const route_head* trk)
     lonsec = 60.0 * (lonmin - floor(lonmin));
 
     if (wpt->creation_time > 0) {
-      tm = *gmtime(&wpt->GetCreationTime());
+      time_t t = wpt->GetCreationTime().toTime_t();
+      tm = *gmtime(&t);
       tm.tm_mon += 1;
       tm.tm_year += 1900;
     } else {
