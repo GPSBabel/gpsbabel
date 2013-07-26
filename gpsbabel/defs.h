@@ -529,7 +529,7 @@ public:
   }
   void SetCreationTime(gpsbabel::DateTime t) { creation_time = t; 
   }
-  void SetCreationTime(time_t t) { creation_time = t; 
+  void SetCreationTime(time_t t) { creation_time = QDateTime::fromTime_t(t); 
   }
   void SetCreationTime(time_t t, int ms) {
     creation_time.setTime_t(t);
@@ -608,7 +608,7 @@ typedef struct {
   double	avg_hrt;	/* Avg Heartrate */
   double	avg_cad;	/* Avg Cadence */
   time_t	start;		/* Min time */
-  time_t	 end;		/* Max time */
+  time_t	end;		/* Max time */
   int	min_hrt;        /* Min Heartrate */
   int	max_hrt;        /* Max Heartrate */
   int	max_cad;        /* Max Cadence */

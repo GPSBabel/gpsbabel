@@ -425,7 +425,8 @@ trackfilter_pack_init_rte_name(route_head *track, const time_t default_time)
       tm = *localtime(&default_time);
     } else {
       wpt = (waypoint *) QUEUE_FIRST((queue *)&track->waypoint_list);
-      tm = *localtime(&wpt->creation_time);
+      time_t t = wpt->GetCreationTime().toTime_t();
+      tm = *localtime(&t);
     }
     strftime(buff, sizeof(buff), opt_title, &tm);
   } else {
@@ -692,9 +693,12 @@ trackfilter_split(void)
 
     if ((opt_interval == 0) && (opt_distance == 0)) {
       struct tm t1, t2;
+// FIXME: This whole function needs to be reconsidered for arbitrary time.
+      time_t tt1 = buff[i]->GetCreationTime().toTime_t();
+      time_t tt2 = buff[j]->GetCreationTime().toTime_t();
 
-      t1 = *localtime(&buff[i]->creation_time);
-      t2 = *localtime(&buff[j]->creation_time);
+      t1 = *localtime(&tt1);
+      t2 = *localtime(&tt2);
 
       new_track_flag = ((t1.tm_year != t2.tm_year) || (t1.tm_mon != t2.tm_mon) ||
                         (t1.tm_mday != t2.tm_mday));
@@ -1113,7 +1117,7 @@ trackfilter_faketime(void)             /* returns number of track points left af
       waypoint *wpt = (waypoint *)elem;
 
       if (opt_faketime != 0 && (wpt->creation_time == 0 || faketime.force)) {
-        wpt->creation_time = faketime.start;
+        wpt->creation_time = QDateTime::fromTime_t(faketime.start);
         faketime.start += faketime.step;
       }
     }
