@@ -326,7 +326,6 @@
     <ClInclude Include="..\gbfile.h" />
     <ClInclude Include="..\gbser.h" />
     <ClInclude Include="..\gbser_private.h" />
-    <ClInclude Include="..\gbtypes.h" />
     <ClInclude Include="..\grtcirc.h" />
     <ClInclude Include="..\inifile.h" />
     <ClInclude Include="..\magellan.h" />
