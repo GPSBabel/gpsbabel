@@ -29,7 +29,6 @@
 #if PDBFMTS_ENABLED
 
 #include "gbfile.h"
-#include "gbtypes.h"
 
 #include <time.h>
 
