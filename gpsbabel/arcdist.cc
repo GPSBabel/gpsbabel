@@ -234,14 +234,14 @@ arcdist_process(void)
              (ptsopt || (ed->arcpt1->GetCreationTime().isValid()))) {
           /* Interpolate time */
           if (ptsopt) {
-            wp->creation_time = ed->arcpt2->creation_time;
+            wp->SetCreationTime(ed->arcpt2->GetCreationTime());;
           } else {
             // Apply the multiplier to the difference between the times 
             // of the two points.   Add that to the first for the 
             // interpolated time.
             int scaled_time = ed->frac * 
-                  ed->arcpt1->creation_time.msecsTo(ed->arcpt2->creation_time);
-            QDateTime new_time(ed->arcpt1->creation_time.addMSecs(scaled_time));
+                  ed->arcpt1->GetCreationTime().msecsTo(ed->arcpt2->GetCreationTime());
+            QDateTime new_time(ed->arcpt1->GetCreationTime().addMSecs(scaled_time));
             wp->SetCreationTime(new_time);
           }
         }

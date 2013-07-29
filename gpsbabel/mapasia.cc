@@ -85,13 +85,10 @@ tr7_read(void)
   while (! gbfeof(fin)) {
     unsigned char buff[TR7_S_SIZE];
     double lat, lon;
-    struct tm tm;
     waypoint* wpt;
     float speed, course;
 
     gbfread(buff, 1, sizeof(buff), fin);
-
-    memset(&tm, 0, sizeof(tm));
 
     lat = (double)le_read32(&buff[TR7_S_LAT]) / 1000000.0;
     lon = (double)le_read32(&buff[TR7_S_LON]) / 1000000.0;
@@ -101,17 +98,13 @@ tr7_read(void)
       continue;
     }
 
-    tm.tm_year = le_read16(&buff[TR7_S_YEAR]);
-    tm.tm_mon = buff[TR7_S_MONTH];
-    tm.tm_mday = buff[TR7_S_DAY];
-    tm.tm_hour = buff[TR7_S_HOUR];
-    tm.tm_min = buff[TR7_S_MIN];
-    tm.tm_sec = buff[TR7_S_SEC];
-
-    if ((tm.tm_mday < 1) || (tm.tm_mday > 31) ||
-        (tm.tm_mon < 1) || (tm.tm_mon > 12) ||
-        (tm.tm_year <= 1970) ||
-        (tm.tm_year > tmref.tm_year+1)) {
+    QDate date(le_read16(&buff[TR7_S_YEAR]),
+               buff[TR7_S_MONTH],
+               buff[TR7_S_DAY]);
+    QTime time(buff[TR7_S_HOUR],
+               buff[TR7_S_MIN],
+               buff[TR7_S_SEC]);
+    if (!date.isValid() || !time.isValid()) {
       continue;
     }
 
@@ -126,9 +119,7 @@ tr7_read(void)
     wpt->latitude = lat;
     wpt->longitude = lon;
 
-    tm.tm_year -= 1900;
-    tm.tm_mon -= 1;
-    wpt->creation_time = mkgmtime(&tm);
+    wpt->SetCreationTime(QDateTime(date, time, Qt::UTC));
 
     WAYPT_SET(wpt, course, course);
     WAYPT_SET(wpt, speed, speed);
@@ -240,16 +231,18 @@ tr7_disp_waypt_cb(const waypoint* wpt)
     le_write16(&buff[TR7_S_COURSE], (int)(360 - course));
   }
 
-  if (wpt->creation_time) {
-    const time_t tt = wpt->creation_time;
-    tm = *gmtime(&tt);
+  QDateTime dt = wpt->GetCreationTime().toUTC();
+  if (dt.isValid()) {
+    QDate d = dt.date();
 
-    le_write16(&buff[TR7_S_YEAR], tm.tm_year + 1900);
-    buff[TR7_S_MONTH] = tm.tm_mon + 1;
-    buff[TR7_S_DAY] = tm.tm_mday;
-    buff[TR7_S_HOUR] = tm.tm_hour;
-    buff[TR7_S_MIN] = tm.tm_min;
-    buff[TR7_S_SEC] = tm.tm_sec;
+    le_write16(&buff[TR7_S_YEAR], d.year());
+    buff[TR7_S_MONTH] = d.month();
+    buff[TR7_S_DAY] = d.day();
+
+    QTime t = dt.time();
+    buff[TR7_S_HOUR] = t.hour();
+    buff[TR7_S_MIN] = t.minute();
+    buff[TR7_S_SEC] = t.second();
 
     if WAYPT_HAS(wpt, speed) {
       speed = wpt->speed;

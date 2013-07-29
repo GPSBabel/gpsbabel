@@ -376,7 +376,7 @@ fit_parse_data(fit_message_def* def, int time_offset)
     if (alt != 0xffff) {
       waypt->altitude = (alt / 5.0) - 500;
     }
-    waypt->creation_time = timestamp + 631065600;
+    waypt->SetCreationTime(QDateTime::fromTime_t(timestamp + 631065600));
     if (speed != 0xffff) {
       WAYPT_SET(waypt, speed, speed / 1000.0f);
     }

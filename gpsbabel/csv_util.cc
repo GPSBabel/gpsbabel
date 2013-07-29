@@ -831,27 +831,12 @@ xcsv_epilogue_add(char* epilogue)
 }
 
 static
-time_t
+QDateTime
 yyyymmdd_to_time(const char* s)
 {
-  int t = atol(s);
-  struct tm tm;
-
-  memset(&tm, 0, sizeof(tm));
-
-  tm.tm_mday = t % 100;
-  t = t / 100;
-  tm.tm_mon = t % 100 - 1;
-  t = t / 100;
-  tm.tm_year = t - 1900;
-
-  if (mkgmtime(&tm) > 0) {
-    return mktime(&tm);
-  } else {
-    return 0;
-  }
+  QDate d = QDate::fromString(s, "yyyyMMdd");
+  return QDateTime(d);
 }
-
 
 
 /*
@@ -924,26 +909,6 @@ writetime(char* buff, size_t bufsize, const char* format, time_t t, bool gmt)
   return strftime(buff, bufsize, format, stmp);
 }
 
-#if 0
-/* not used */
-static
-int
-writeisotime(char* buff, size_t bufsize, const char* format, time_t t)
-{
-  static struct tm* stmp;
-  char* ibuff = NULL;
-  int i;
-
-  ibuff = xmalloc(bufsize);
-  stmp = gmtime(&t);
-  strftime(ibuff, bufsize, format, stmp);
-  i = snprintf(buff, bufsize, format, ibuff);
-  xfree(ibuff);
-  return i;
-}
-#endif
-
-
 static
 int
 writehms(char* buff, size_t bufsize, const char* format, time_t t, int gmt)
@@ -968,16 +933,10 @@ writehms(char* buff, size_t bufsize, const char* format, time_t t, int gmt)
 
 static
 long
-time_to_yyyymmdd(time_t t)
+time_to_yyyymmdd(QDateTime t)
 {
-  long b;
-  struct tm* tm = gmtime(&t);
-
-  b = (1900 + tm->tm_year) * 10000 +
-      (1 + tm->tm_mon) * 100 +
-      tm->tm_mday;
-
-  return b;
+ QDate d = t.date();
+ return d.year() * 10000 + d.month() * 100 + d.day();
 }
 
 static garmin_fs_t*
@@ -1218,7 +1177,7 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     break;
   case XT_ISO_TIME:
   case XT_ISO_TIME_MS:
-    wpt->creation_time = xml_parse_time(s);
+    wpt->SetCreationTime(xml_parse_time(s));
     break;
   case XT_NET_TIME: {
     time_t tt = wpt->GetCreationTime();
@@ -1939,13 +1898,13 @@ xcsv_waypt_pr(const waypoint* wpt)
       break;
     case XT_TIMET_TIME:
       /* time as a time_t variable */ {
-      time_t tt = wpt->GetCreationTime();
+      time_t tt = wpt->GetCreationTime().toTime_t();
       writebuff(buff, fmp->printfc, tt); }
       break;
     case XT_TIMET_TIME_MS: {
       /* time as a time_t variable in milliseconds */
       char tbuf[24];
-      writetime(tbuf, sizeof(tbuf), "%s", wpt->GetCreationTime(), false);
+      writetime(tbuf, sizeof(tbuf), "%s", wpt->GetCreationTime().toTime_t(), false);
       char mbuf[32];
       snprintf(mbuf, sizeof(mbuf), "%s%03d", tbuf, wpt->GetCreationTime().time().msec());
       writebuff(buff, "%s", mbuf);
