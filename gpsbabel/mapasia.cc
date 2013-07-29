@@ -50,7 +50,6 @@ static gbfile* fin, *fout;
 static const waypoint* wpt_tmp;
 static const route_head* trk_tmp;
 static int course_tmp, speed_tmp;
-struct tm tmref;
 
 static
 arglist_t tr7_args[] = {
@@ -65,9 +64,6 @@ static void
 tr7_rd_init(const char* fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
-  tmref = *gmtime(&gpsbabel_now);
-  tmref.tm_year += 1900;
-  tmref.tm_mon += 1;
 }
 
 static void
@@ -212,7 +208,6 @@ static void
 tr7_disp_waypt_cb(const waypoint* wpt)
 {
   unsigned char buff[TR7_S_SIZE];
-  struct tm tm;
   double speed, course;
 
   memset(buff, 0, sizeof(buff));
