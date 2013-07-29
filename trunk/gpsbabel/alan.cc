@@ -683,10 +683,6 @@ static int add_wpt(struct wprdata* wprdata, const waypoint* WP,int isroute)
       wpt = &(wprdata->wpt[wpthdr->idx[hdr_idx]]);
       wpt->usecount ++;
     }
-    /*
-    warning(MYNAME ": using duplicate waypoint '%s' at (%f°, %f°)\n",
-      WP->shortname, WP->latitude, WP->longitude);
-    */
     return hdr_idx;
   }
 
