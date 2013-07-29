@@ -36,7 +36,7 @@ static gbfile* maggeofile_in;
 static gbfile* maggeofile_out;
 static short_handle desc_handle = NULL;
 
-static time_t maggeo_parsedate(char* dmy);
+static QDateTime maggeo_parsedate(char* dmy);
 
 static void
 maggeo_writemsg(const char* const buf)
@@ -173,29 +173,16 @@ maggeo_read(void)
 
 }
 
-/*
- * Note: returns allocated buffer that must be freed by caller.
- */
 static
-char*
-maggeo_fmtdate(time_t t)
+QString
+maggeo_fmtdate(QDateTime dt)
 {
-#define SZ 16
-
-  struct tm* tm = NULL;
-  int date;
-  char* cbuf = (char*) xmalloc(SZ);
-
-  cbuf[0] = '\0';
-  if (t > 0) {
-    tm = localtime(&t);
-    if (tm) {
-      date = tm->tm_mday * 100000 + (1+tm->tm_mon) * 1000 +
-             tm->tm_year;
-      snprintf(cbuf, SZ, "%07d", date);
-    }
-  }
-  return cbuf;
+  QDate date = dt.date();
+  int y = date.year() - 1900;
+  int m = date.month();
+  int d = date.day();
+  int r = d * 100000 + m * 1000 + y;
+  return QString("%1").arg(r, 7, 10, QChar('0'));
 }
 
 /*
@@ -204,31 +191,14 @@ maggeo_fmtdate(time_t t)
  * century is three digits but anything from before 2000, we'd have
  * two digit years.  This makes this easier to parse as strings.
  */
-static time_t maggeo_parsedate(char* dmy)
+static QDateTime maggeo_parsedate(char* dmy)
 {
-  struct tm tm;
-  char dd[3];
-  char mm[3];
-
-  if (strlen(dmy) < 5) {
-    return 0;
-  }
-
-  memset(&tm, 0, sizeof(tm));
-
-  dd[0] = dmy[0];
-  dd[1] = dmy[1];
-  dd[2] = 0;
-
-  mm[0] = dmy[2];
-  mm[1] = dmy[3];
-  mm[2] = 0;
-
-  tm.tm_mday = atoi(dd);
-  tm.tm_mon = atoi(mm) - 1;
-  tm.tm_year = atoi(dmy + 4);
-
-  return mktime(&tm);
+  QString date(dmy);
+  int d = date.mid(0,2).toInt();
+  int m = date.mid(2,2).toInt();
+  int y = date.mid(4,3).toInt();
+  QDateTime r(QDate (y + 1900, m, d));
+  return r;
 }
 
 /*
@@ -273,8 +243,6 @@ maggeo_waypt_pr(const waypoint* waypointp)
   char* cname = NULL;
   const char* ctype = NULL;
   QString placer;
-  char* lfounddate = NULL;
-  char* placeddate = NULL;
 
   ilat = waypointp->latitude;
   ilon = waypointp->longitude;
@@ -301,9 +269,10 @@ maggeo_waypt_pr(const waypoint* waypointp)
   } else {
     ctype = gs_get_cachetype(waypointp->gc_data->type);
   }
-  placeddate = maggeo_fmtdate(waypointp->creation_time);
-  lfounddate = maggeo_fmtdate(waypointp->gc_data->last_found);
-  cname = mkshort(desc_handle, waypointp->notes ? waypointp->notes : waypointp->description);
+  QString placeddate = maggeo_fmtdate(waypointp->creation_time);
+  QString lfounddate = maggeo_fmtdate(waypointp->gc_data->last_found);
+  cname = mkshort(desc_handle, 
+                  waypointp->notes ? waypointp->notes : waypointp->description);
   placer = waypointp->gc_data->placer;
 
   /*
@@ -329,8 +298,8 @@ maggeo_waypt_pr(const waypoint* waypointp)
   append(obuf, placer.toUtf8().data());
   append(obuf, waypointp->gc_data->hint.toUtf8().data());
   append(obuf, ctype);
-  append(obuf, placeddate);
-  append(obuf, lfounddate);
+  append(obuf, placeddate.toUtf8());
+  append(obuf, lfounddate.toUtf8());
 
   if (waypointp->gc_data->diff/10.0)
     sprintf(obuf + strlen(obuf), ",%3.1f",
@@ -346,12 +315,6 @@ maggeo_waypt_pr(const waypoint* waypointp)
     strcat(obuf, ",");
   }
 
-  if (lfounddate) {
-    xfree(lfounddate);
-  }
-  if (placeddate) {
-    xfree(placeddate);
-  }
   if (cname) {
     xfree(cname);
   }

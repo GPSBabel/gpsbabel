@@ -173,7 +173,7 @@ static char*
 mmo_readstr(void)
 {
   char* res;
-  unsigned int len;
+  signed int len;
 
   len = (unsigned)gbfgetc(fin);
   if (len == 0xFF) {
@@ -1270,7 +1270,7 @@ mmo_write_wpt_cb(const waypoint* wpt)
   int icon = 0;
   mmo_data_t* data;
 
-  time = wpt->creation_time;
+  time = wpt->GetCreationTime().toTime_t();
   if (time < 0) {
     time = 0;
   }
@@ -1378,9 +1378,9 @@ mmo_write_rte_head_cb(const route_head* rte)
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
     waypoint* wpt = (waypoint*)elem;
-
-    if ((wpt->creation_time > 0) && (wpt->creation_time < time)) {
-      time = wpt->creation_time;
+    QDateTime t = wpt->GetCreationTime();
+    if ((t.isValid()) && (t.toTime_t() < time)) {
+      time = t.toTime_t();
     }
   }
   if (time == 0x7FFFFFFF) {

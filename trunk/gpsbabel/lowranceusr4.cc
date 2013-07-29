@@ -689,7 +689,7 @@ lowranceusr4_parse_trails(void)
       gbfgetc(file_in);
 
       /* POSIX timestamp */
-      wpt_tmp->creation_time = gbfgetint32(file_in);
+      wpt_tmp->SetCreationTime(QDateTime::fromTime_t(gbfgetint32(file_in)));
 
       /* Long/Lat */
       wpt_tmp->longitude = gbfgetdbl(file_in) / DEGREESTORADIANS; /* rad to deg */

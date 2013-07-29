@@ -983,8 +983,9 @@ waypoint_prepare(void)
     } else {
       tx_waylist[i]->alt = wpt->altitude;
     }
-    if (wpt->creation_time) {
-      tx_waylist[i]->time = wpt->GetCreationTime();
+    gpsbabel::DateTime t = wpt->GetCreationTime();
+    if (t.isValid()) {
+      tx_waylist[i]->time = t.toTime_t();
       tx_waylist[i]->time_populated = 1;
     }
     if (category) {
@@ -1135,7 +1136,7 @@ track_waypt_pr(const waypoint* wpt)
   (*cur_tx_tracklist_entry)->lat = wpt->latitude;
   (*cur_tx_tracklist_entry)->lon = wpt->longitude;
   (*cur_tx_tracklist_entry)->alt = (wpt->altitude != unknown_alt) ? wpt->altitude : 1e25;
-  (*cur_tx_tracklist_entry)->Time = wpt->creation_time;
+  (*cur_tx_tracklist_entry)->Time = wpt->GetCreationTime().toTime_t();;
   if (wpt->shortname) {
     strncpy((*cur_tx_tracklist_entry)->trk_ident, wpt->shortname, sizeof((*cur_tx_tracklist_entry)->trk_ident));
     (*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
