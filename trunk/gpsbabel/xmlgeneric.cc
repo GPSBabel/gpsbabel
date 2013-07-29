@@ -23,6 +23,8 @@
 #include "xmlgeneric.h"
 #include "cet_util.h"
 #include <QtCore/QDebug>
+#include <QtCore/QXmlStreamReader>
+#include <QtCore/QFile>
 
 #define DEBUG_TAG 0
 #if DEBUG_TAG
@@ -191,7 +193,7 @@ xml_start(void *data, const XML_Char *xml_el, const XML_Char **xml_attr)
   xml_free_converted_attrs(attrs);
 }
 
-#if HAVE_LIBEXPAT
+#if 1
 static void
 xml_cdata(void *dta, const XML_Char *xml_s, int len)
 {
@@ -342,25 +344,78 @@ xml_deinit(void)
   }
   xg_ignore_taglist = NULL;
 }
-#else /* HAVE_LIBEXPAT */
+
+#else
+
+static const char *rd_fname;
+static QXmlStreamReader reader;
+
 void
 xml_init(const char *fname, xg_tag_mapping *tbl, const char *encoding)
 {
-  fatal("This format does not support reading XML files as libexpat was not present.");
+  rd_fname = fname;
+  xg_tag_tbl = tbl;
 }
 
 void xml_read(void)
 {
+  QFile file(rd_fname);
+  file.open(QIODevice::ReadOnly);
+  reader.setDevice(&file);
+
+  QString current_tag;
+  while (!reader.atEnd()) {
+    xg_callback *cb = xml_tbl_lookup(current_tag, cb_start);
+    switch (reader.tokenType()) {
+      case QXmlStreamReader::StartElement: {
+        if (cb) {
+          const char **attrs;
+          (*cb)(NULL, attrs);
+        }
+        current_tag.append("/");
+        current_tag.append(reader.name());
+        cb = xml_tbl_lookup(current_tag, cb_cdata);
+        if (cb) {
+          QString c = reader.readElementText();
+          (*cb)(c.toUtf8().data(), NULL);
+          current_tag.chop(reader.name().length() + 1);
+        }
+        }
+        break;
+      case QXmlStreamReader::Characters:
+        break;
+      case QXmlStreamReader::EndElement:
+        cb = xml_tbl_lookup(current_tag, cb_end);
+        if (cb) {
+          (*cb)(NULL, NULL);
+        }
+        current_tag.chop(reader.name().length() + 1);
+        break;
+      default:
+        break;
+    };
+    reader.readNextStartElement();
+  }
+
 }
 
-void xml_deinit(void)
+void xml_ignore_tags(const char **taglist)
+{
+  xg_ignore_taglist = taglist;
+}
+
+void xml_readprefixstring(const char *str)
 {
 }
 
-void xml_readstring(char *unused)
+void xml_readstring(char *str)
 {
 }
 
-#endif /* HAVE_LIBEXPAT */
+void
+xml_deinit(void)
+{
+}
+#endif
 
 /******************************************/
