@@ -37,23 +37,23 @@ static arglist_t msroute_args[] = {
 /* MS-AutoRoute structures */
 
 typedef struct msroute_head_s {
-  gbuint32 U1; 		/* 58/02/00/00 */
+  uint32_t U1; 		/* 58/02/00/00 */
   char masm[4];		/* "MASM " */
-  gbuint32 U2;
-  gbuint32 U3;
-  gbint32 waypts;
-  gbuint32 U5;
-  gbuint32 U6;
-  gbuint32 U7;
-  gbuint32 U8;
-  gbuint32 U9;
-  gbuint32 U10;
-  gbuint32 U11;
-  gbuint32 U12;
-  gbuint32 U13;
-  gbuint32 U14;
-  gbuint32 U15;
-  gbuint32 U16;
+  uint32_t U2;
+  uint32_t U3;
+  int32_t waypts;
+  uint32_t U5;
+  uint32_t U6;
+  uint32_t U7;
+  uint32_t U8;
+  uint32_t U9;
+  uint32_t U10;
+  uint32_t U11;
+  uint32_t U12;
+  uint32_t U13;
+  uint32_t U14;
+  uint32_t U15;
+  uint32_t U16;
 //	short U17;
 //	char U18;
 } msroute_head_t;
@@ -85,45 +85,45 @@ static const unsigned char ole_magic[8] = {
 typedef struct ole_head_s {
   char magic[8];
   char clsid[16];
-  gbuint16 rev;			/* offset 0x18 */
-  gbuint16 ver;			/* offset 0x1a */
-  gbint16 byte_order;		/* offset 0x1c */
-  gbuint16 fat1_size_shift;	/* offset 0x1e */
-  gbuint16 fat2_size_shift;	/* offset 0x20 */
-  gbuint16 U7;			/* offset 0x22 */
-  gbuint32 U8;			/* offset 0x24 */
-  gbuint32 U9;			/* offset 0x28 */
-  gbint32 fat1_blocks;		/* offset 0x2c */
-  gbint32 prop_start;		/* offset 0x30 */
-  gbuint32 U12;			/* offset 0x34 */
-  gbuint32 fat1_min_size;		/* offset 0x38 */
-  gbint32 fat2_start;		/* offset 0x3c */
-  gbint32 fat2_blocks;		/* offset 0x40 */
-  gbint32 fat1_extra_start;	/* offset 0x44 */
-  gbint32 fat1_extra_ct;		/* offset 0x48 */
-  gbint32 fat1[OLE_HEAD_FAT1_CT];	/* offset 0x4c */
+  uint16_t rev;			/* offset 0x18 */
+  uint16_t ver;			/* offset 0x1a */
+  int16_t byte_order;		/* offset 0x1c */
+  uint16_t fat1_size_shift;	/* offset 0x1e */
+  uint16_t fat2_size_shift;	/* offset 0x20 */
+  uint16_t U7;			/* offset 0x22 */
+  uint32_t U8;			/* offset 0x24 */
+  uint32_t U9;			/* offset 0x28 */
+  int32_t fat1_blocks;		/* offset 0x2c */
+  int32_t prop_start;		/* offset 0x30 */
+  uint32_t U12;			/* offset 0x34 */
+  uint32_t fat1_min_size;		/* offset 0x38 */
+  int32_t fat2_start;		/* offset 0x3c */
+  int32_t fat2_blocks;		/* offset 0x40 */
+  int32_t fat1_extra_start;	/* offset 0x44 */
+  int32_t fat1_extra_ct;		/* offset 0x48 */
+  int32_t fat1[OLE_HEAD_FAT1_CT];	/* offset 0x4c */
 } ole_head_t;
 
 typedef struct ole_prop_s {
-  gbuint16 name[32];
-  gbuint16 name_sz;		/* offset 0x40 */
+  uint16_t name[32];
+  uint16_t name_sz;		/* offset 0x40 */
   char ole_typ;			/* offset 0x42 */
   char U1;			/* offset 0x43 */
-  gbuint32 previous;		/* offset 0x44 */
-  gbuint32 next;			/* offset 0x48 */
-  gbuint32 dir;			/* offset 0x4c */
-  gbuint32 U5;			/* offset 0x50 */
-  gbuint32 U6;			/* offset 0x54 */
-  gbuint32 U7;			/* offset 0x58 */
-  gbuint32 U8;			/* offset 0x5c */
-  gbuint32 U9;			/* offset 0x60 */
-  gbuint32 U10;			/* offset 0x64 */
-  gbuint32 U11;			/* offset 0x68 */
-  gbuint32 U12;			/* offset 0x6c */
-  gbuint32 U13;			/* offset 0x70 */
-  gbint32 first_sector;		/* offset 0x74 */
-  gbint32 data_sz;		/* offset 0x78 */
-  gbuint32 U16;			/* offset 0x7c */
+  uint32_t previous;		/* offset 0x44 */
+  uint32_t next;			/* offset 0x48 */
+  uint32_t dir;			/* offset 0x4c */
+  uint32_t U5;			/* offset 0x50 */
+  uint32_t U6;			/* offset 0x54 */
+  uint32_t U7;			/* offset 0x58 */
+  uint32_t U8;			/* offset 0x5c */
+  uint32_t U9;			/* offset 0x60 */
+  uint32_t U10;			/* offset 0x64 */
+  uint32_t U11;			/* offset 0x68 */
+  uint32_t U12;			/* offset 0x6c */
+  uint32_t U13;			/* offset 0x70 */
+  int32_t first_sector;		/* offset 0x74 */
+  int32_t data_sz;		/* offset 0x78 */
+  uint32_t U16;			/* offset 0x7c */
 } ole_prop_t;
 
 #define DIR_ITEM_SIZE sizeof(ole_prop_t)
@@ -137,8 +137,8 @@ static int sector_sz = 512;
 #define max(a,b) ((a) > (b)) ? (a) : (b)
 #endif
 
-static gbint32* ole_fat1 = NULL;
-static gbint32* ole_fat2 = NULL;
+static int32_t* ole_fat1 = NULL;
+static int32_t* ole_fat2 = NULL;
 static int ole_fat1_ct;
 static int ole_fat2_ct;
 static int ole_size1;
@@ -413,12 +413,12 @@ ole_init(void)
 #else
   is_fatal((ole_size1 != 512), MYNAME ": Unsupported sector size %d", ole_size1);
 #endif
-  ole_fat1 = (gbint32*) xmalloc(head.fat1_blocks * sector_sz);
-  ole_fat1_ct = (head.fat1_blocks * sector_sz) / sizeof(gbint32);
+  ole_fat1 = (int32_t*) xmalloc(head.fat1_blocks * sector_sz);
+  ole_fat1_ct = (head.fat1_blocks * sector_sz) / sizeof(int32_t);
 
 #ifdef OLE_DEBUG
   printf(MYNAME "-big fat: %d maximum sectors, size in memory %d, max. datasize %d bytes\n",
-         ole_fat1_ct, head.fat1_blocks * sector_sz, head.fat1_blocks * sector_sz * sector_sz / sizeof(gbint32));
+         ole_fat1_ct, head.fat1_blocks * sector_sz, head.fat1_blocks * sector_sz * sector_sz / sizeof(int32_t));
 #endif
 
   i_offs = 0;				/* load "big fat" into memory */
@@ -475,7 +475,7 @@ ole_init(void)
       count++;
     } while (sector >= 0);
 
-    ole_fat2_ct = (count * sector_sz) / sizeof(gbint32);
+    ole_fat2_ct = (count * sector_sz) / sizeof(int32_t);
     if (ole_fat2_ct > 0) {
       le_read32_buff(&ole_fat2[0], ole_fat2_ct);
     }
@@ -620,14 +620,14 @@ msroute_read_journey(void)
       len = *cin++;
       wpt->shortname = cet_str_uni_to_utf8((const short*)cin, len);
       cin += (len * 2);		/* seek over wide string */
-      cin += (5 * sizeof(gbint32));	/* five unknown DWORDs */
+      cin += (5 * sizeof(int32_t));	/* five unknown DWORDs */
 
       /* offs 12 !!!! Latitude int32 LE	*/
       /* offs 16 !!!! Longitude int32 LE 	*/
       wpt->latitude = GPS_Math_Semi_To_Deg(le_read32(cin+12));
       wpt->longitude = GPS_Math_Semi_To_Deg(le_read32(cin+16));
 
-      cin += (23 * sizeof(gbint32));
+      cin += (23 * sizeof(int32_t));
       cin += 3;
 
 #ifdef OLE_DEBUG

@@ -370,7 +370,7 @@ parse_categories(char* buff)
   int cat = 0;
 
   while ((cin = csv_lineparse(buff, ",", "", cat++))) {
-    gbuint16 cx;
+    uint16_t cx;
 
     buff = NULL;
 

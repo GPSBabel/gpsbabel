@@ -63,16 +63,16 @@ gmsd_init(waypoint* wpt)
 static char*
 read_wcstr(const int discard)
 {
-  gbint16* buff = NULL, c;
+  int16_t* buff = NULL, c;
   int size = 0, pos = 0;
 
   while (gbfread(&c, sizeof(c), 1, fin) && (c != 0)) {
     if (size == 0) {
       size = 16;
-      buff = (gbint16*) xmalloc(size * sizeof(*buff));
+      buff = (int16_t*) xmalloc(size * sizeof(*buff));
     } else if (pos == size) {
       size += 16;
-      buff = (gbint16*) xrealloc(buff, size * sizeof(*buff));
+      buff = (int16_t*) xrealloc(buff, size * sizeof(*buff));
     }
     buff[pos] = c;
     pos += 1;
@@ -313,7 +313,7 @@ destinator_read_trk(void)
     wpt->fix = (fix_type) gbfgetint32(fin);
     wpt->sat = gbfgetint32(fin);
 
-    gbfseek(fin, 12 * sizeof(gbint32), SEEK_CUR);	/* SAT info */
+    gbfseek(fin, 12 * sizeof(int32_t), SEEK_CUR);	/* SAT info */
 
     date = gbfgetint32(fin);
     double milliseconds = gbfgetflt(fin);

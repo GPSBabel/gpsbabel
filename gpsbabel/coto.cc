@@ -57,17 +57,17 @@ struct record_track {
   pdb_double arc;		/* Course, unknown dimension */
   pdb_double x,y;		/* Internal virtual coordinates used for drawing the track on the Palm */
 
-  gbuint16 alt;		/* Altitude */
+  uint16_t alt;		/* Altitude */
 
   /* accuracy and precision information for use where applicable */
-  gbuint16 hdop; /* _dop * 10 */
-  gbuint16 vdop;
-  gbuint16 pdop;
-  gbuint8 sat_tracked;
-  gbuint8 fix_quality;
+  uint16_t hdop; /* _dop * 10 */
+  uint16_t vdop;
+  uint16_t pdop;
+  uint8_t sat_tracked;
+  uint8_t fix_quality;
 
-  gbuint16 speed; /* *10 */
-  gbuint32 time; /* Palm Time */
+  uint16_t speed; /* *10 */
+  uint32_t time; /* Palm Time */
 };
 
 struct record_wpt {
@@ -83,11 +83,11 @@ struct record_wpt {
 typedef char appinfo_category[16];
 
 typedef struct appinfo {
-  gbuint8 U0;
-  gbuint8 renamedCategories;
+  uint8_t U0;
+  uint8_t renamedCategories;
   appinfo_category categories[CATEGORY_NAME_LENGTH];
-  gbuint8 ids[16];
-  gbuint8 maxid;
+  uint8_t ids[16];
+  uint8_t maxid;
 } appinfo_t;
 
 #define APPINFO_SIZE sizeof(appinfo_t)
@@ -340,7 +340,7 @@ coto_wpt_write(const waypoint* wpt)
   char* notes = NULL;
   char* shortname = NULL;
   int size;
-  gbuint8 cat = 0;
+  uint8_t cat = 0;
   int i;
 
   mkshort_wr_handle = mkshort_new_handle();
@@ -398,7 +398,7 @@ coto_wpt_write(const waypoint* wpt)
     }
   }
 
-  pdb_write_rec(file_out, 0, cat, ct++, (const gbuint8*)rec, size);
+  pdb_write_rec(file_out, 0, cat, ct++, (const uint8_t*)rec, size);
 
   xfree(shortname);
   xfree(rec);

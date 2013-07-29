@@ -8,8 +8,8 @@
  */
 
 typedef unsigned char UC;
-typedef gbuint16      US;
-typedef gbuint16      uint16;
-typedef gbint16       int16;
-typedef gbuint32      uint32;
-typedef gbint32       int32;
+typedef uint16_t      US;
+typedef uint16_t      uint16;
+typedef int16_t       int16;
+typedef uint32_t      uint32;
+typedef int32_t       int32;

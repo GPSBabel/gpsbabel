@@ -391,10 +391,10 @@ static void
 read_CTrackFile(const int version)
 {
   char buf[128];
-  gbuint32 ver;
-  gbint32 tcount, wcount;
-  gbint16 u1;
-  gbint32 ux;
+  uint32_t ver;
+  int32_t tcount, wcount;
+  int16_t u1;
+  int32_t ux;
   route_head* track;
   int i;
   int datum;
@@ -521,7 +521,7 @@ read_CTrackFile(const int version)
 
   while (wcount > 0) {
     waypoint* wpt;
-    gbint32 namect, i;
+    int32_t namect, i;
 
     wcount--;
 
@@ -568,8 +568,8 @@ inflate_buff(const char* buff, const size_t size, char** out_buff)
   z_stream strm;
   char out[DEFLATE_BUFF_SIZE];
   char* cout = NULL;
-  gbuint32 bytes = 0;
-  gbuint32 have;
+  uint32_t bytes = 0;
+  uint32_t have;
 
   strm.zalloc = Z_NULL;
   strm.zfree = Z_NULL;
@@ -803,7 +803,7 @@ dmtlog_write(void)
   gbfputint32(4, fout);
   gbfputint32(1, fout);
   gbfputint32(0x100001, fout);
-  gbfputuint32((const gbuint32)gpsbabel_time, fout);
+  gbfputuint32((const uint32_t)gpsbabel_time, fout);
 
   header_written = 0;
   this_index = 0;

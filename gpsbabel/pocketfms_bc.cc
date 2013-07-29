@@ -28,8 +28,8 @@ static char header_id[] = "BRC";
 typedef struct breadcrumb {
   // header
   char		id[4];		  // 0x42 0x52 0x43 0x00 <=> "BRC"
-  gbuint16	version;	// 0x0100
-  gbuint16	reserve1;	// 0x0000
+  uint16_t	version;	// 0x0100
+  uint16_t	reserve1;	// 0x0000
   // data
   float		latitude;
   float		longitude;
@@ -41,14 +41,14 @@ typedef struct breadcrumb {
   float		ehpe;		// estimated horizontal position error
   float		evpe;		// estimated vertical position error
   float		espe;		// estimated speed position error
-  gbuint16	fix;		// 1..none, 2..2D, 3..3D, 4..dgps, 5pps
-  gbuint16	year;		// 1999..2999
-  gbuint16	month;		// 1..12
-  gbuint16	day;		// 0..31
-  gbuint16	hour;		// 0.23
-  gbuint16	minute;		// 0..59
-  gbuint16	second;		// 0..59
-  gbuint16	reserve2;	// 0x0000
+  uint16_t	fix;		// 1..none, 2..2D, 3..3D, 4..dgps, 5pps
+  uint16_t	year;		// 1999..2999
+  uint16_t	month;		// 1..12
+  uint16_t	day;		// 0..31
+  uint16_t	hour;		// 0.23
+  uint16_t	minute;		// 0..59
+  uint16_t	second;		// 0..59
+  uint16_t	reserve2;	// 0x0000
 } BREADCRUMB;
 
 static gbfile *file_in, *file_out;

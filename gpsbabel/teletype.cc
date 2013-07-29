@@ -34,7 +34,7 @@ arglist_t teletype_args[] = {
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static gbuint32 tty_wpt_count;
+static uint32_t tty_wpt_count;
 static gbfile* fin;
 
 static void
@@ -57,15 +57,15 @@ teletype_rd_deinit(void)
 static void
 teletype_read(void)
 {
-  gbuint32 i;
+  uint32_t i;
   for (i = 0; i < tty_wpt_count; i++) {
     waypoint* wpt = waypt_new();
     wpt->shortname = (gbfgetcstr(fin));
     wpt->description = (gbfgetcstr(fin));
 
     if (1) { // needs bit values of NEWFORMAT2
-      gbuint32 direction = gbfgetuint32(fin);
-      gbuint32 mins = gbfgetuint32(fin);
+      uint32_t direction = gbfgetuint32(fin);
+      uint32_t mins = gbfgetuint32(fin);
       (void) direction ;
       (void) mins ;
     }

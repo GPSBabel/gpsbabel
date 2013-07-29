@@ -42,7 +42,7 @@ static float
 le_read32_float(const void* src)
 {
   float f;
-  gbint32 i;
+  int32_t i;
 
   i = le_read32(src);
   memcpy(&f, &i, 4);

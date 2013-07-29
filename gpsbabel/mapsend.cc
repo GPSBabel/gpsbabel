@@ -473,7 +473,7 @@ void mapsend_track_hdr(const route_head* trk)
 void mapsend_track_disp(const waypoint* wpt)
 {
   unsigned char c;
-  gbint32 t;
+  int32_t t;
   static int last_time;
 
   /*

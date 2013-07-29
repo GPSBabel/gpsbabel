@@ -118,25 +118,25 @@ static void
 my_read(void)
 {
 
-  gbuint16 version;
-  gbuint32 count;
-  gbuint32 outercount;
-  gbuint32 recsize;
-  gbuint16 stringlen;
+  uint16_t version;
+  uint32_t count;
+  uint32_t outercount;
+  uint32_t recsize;
+  uint16_t stringlen;
   unsigned char *record;
   static int serial = 0;
   struct ll {
-    gbint32 lat;
-    gbint32 lon;
+    int32_t lat;
+    int32_t lon;
   } *latlon;
-  gbuint16 coordcount;
+  uint16_t coordcount;
   route_head *track_head = NULL;
   route_head *old_track_head = NULL;
   waypoint *wpt_tmp;
   char *routename = NULL;
   double seglen = 0.0;
-  gbint32  starttime = 0;
-  gbint32  transittime = 0;
+  int32_t  starttime = 0;
+  int32_t  transittime = 0;
   double totaldist = 0.0;
   double oldlat = 0;
   double oldlon = 0;
@@ -163,7 +163,7 @@ my_read(void)
    */
   record = ReadRecord(infile, recsize);
 
-  stringlen = le_read16((gbuint16 *)(record + 0x1a));
+  stringlen = le_read16((uint16_t *)(record + 0x1a));
   if (stringlen) {
     routename = (char *)xmalloc(stringlen + 1);
     routename[stringlen] = '\0';
@@ -305,7 +305,7 @@ my_read(void)
       ReadShort(infile);
       recsize = ReadLong(infile);
       record = ReadRecord(infile, recsize);
-      stringlen = le_read16((gbuint16 *)record);
+      stringlen = le_read16((uint16_t *)record);
       if (split && stringlen) {
         if (track_head->rte_waypt_ct) {
           old_track_head = track_head;
@@ -328,14 +328,14 @@ my_read(void)
       if (timesynth) {
         seglen = le_read_double(
                    record + 2 + stringlen + 0x08);
-        starttime = le_read32((gbuint32 *)
+        starttime = le_read32((uint32_t *)
                               (record + 2 + stringlen + 0x30));
-        transittime = le_read32((gbuint32 *)
+        transittime = le_read32((uint32_t *)
                                 (record + 2 + stringlen + 0x10));
         seglen /= 5280*12*2.54/100000; /* to miles */
       }
 
-      coordcount = le_read16((gbuint16 *)
+      coordcount = le_read16((uint16_t *)
                              (record + 2 + stringlen + 0x3c));
       latlon = (struct ll *)(record + 2 + stringlen + 0x3c + 2);
       count--;
@@ -422,7 +422,7 @@ my_read(void)
         first = 0;
       }
       if (version > 10) {
-        Skip(infile,2*sizeof(gbuint32));
+        Skip(infile,2*sizeof(uint32_t));
       }
       xfree(record);
     }

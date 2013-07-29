@@ -50,7 +50,7 @@ pdb_invalid_file(const pdbfile *pdb_in, const char *fmt, ...)
 /* try to read to EOF (avoid determining file-size) */
 
 static void *
-pdb_read_tail(gbfile *fin, gbint32 *size)
+pdb_read_tail(gbfile *fin, int32_t *size)
 {
   int count;
   char buff[256];
@@ -84,9 +84,9 @@ pdb_read_tail(gbfile *fin, gbint32 *size)
 static void
 pdb_load_data(pdbfile *fin)
 {
-  gbuint16 i, ct;
+  uint16_t i, ct;
   pdbrec_t *last_rec;
-  gbuint32 offs;
+  uint32_t offs;
   pdbrec_t *rec;
 
   /* load the header */
@@ -138,18 +138,18 @@ pdb_load_data(pdbfile *fin)
       (void) gbfgetuint32(fin->file);	/* type */
       rec->id = gbfgetint16(fin->file);
       rec->offs = gbfgetuint32(fin->file);
-      if ((gbint32)rec->offs < 0) {
+      if ((int32_t)rec->offs < 0) {
         pdb_invalid_file(fin, "Invalid offset to record (%0d, id = %d)", rec->offs, rec->id);
       }
     } else {
-      gbuint32 x;
+      uint32_t x;
 
       rec->offs = gbfgetint32(fin->file);
       x = gbfgetuint32(fin->file);
       rec->id = x & 0x0ffff;
       rec->category = (x >> 24) & 0x0f;
       rec->flags = (x >> 24) & 0xf0;
-      if ((gbint32)rec->offs < 0) {
+      if ((int32_t)rec->offs < 0) {
         pdb_invalid_file(fin, "Invalid offset to resource record (%0d, id = %d)", rec->offs, rec->id);
       }
     }
@@ -166,7 +166,7 @@ pdb_load_data(pdbfile *fin)
   last_rec = fin->rec_list;
 
   if (fin->appinfo_offs != 0) {
-    gbuint32 top;
+    uint32_t top;
 
     /* seek to application info offset */
     while (offs < fin->appinfo_offs) {
@@ -189,7 +189,7 @@ pdb_load_data(pdbfile *fin)
       fin->appinfo_len = gbfread(fin->appinfo, 1, top - offs, fin->file);
       offs += fin->appinfo_len;
     } else {
-      gbint32 size;
+      int32_t size;
       fin->appinfo = pdb_read_tail(fin->file, &size);
       fin->appinfo_len = size;
       offs += size;
@@ -203,7 +203,7 @@ pdb_load_data(pdbfile *fin)
       offs++;
     }
     if (rec->next) {
-      rec->size = (gbint32)rec->next->offs - (gbint32)offs;
+      rec->size = (int32_t)rec->next->offs - (int32_t)offs;
       if (rec->size > 0) {
         rec->data = (char*) xmalloc(rec->size);
         rec->size = gbfread(rec->data, 1, rec->size, fin->file);
@@ -234,7 +234,7 @@ pdb_open(const char *filename, const char *module)
 }
 
 int
-pdb_read_rec_by_id(pdbfile *fin, const gbuint32 rec_id, gbuint8 *flags, gbuint8 *category, void **data)
+pdb_read_rec_by_id(pdbfile *fin, const uint32_t rec_id, uint8_t *flags, uint8_t *category, void **data)
 {
   pdbrec_t *rec;
 
@@ -269,7 +269,7 @@ pdb_create(const char *filename, const char *module)
 }
 
 void
-pdb_write_rec(pdbfile *fout, const gbuint8 flags, const gbuint8 category, const gbuint32 rec_id, const void *data, const gbuint32 size)
+pdb_write_rec(pdbfile *fout, const uint8_t flags, const uint8_t category, const uint32_t rec_id, const void *data, const uint32_t size)
 {
   pdbrec_t *rec, *cur;
 
@@ -378,7 +378,7 @@ pdb_flush(pdbfile *file)
   gbfputuint16(file->rec_ct, fout);
 
   for (rec = file->rec_list; rec; rec = rec->next) {
-    gbuint32 attr;
+    uint32_t attr;
 
     gbfputint32(rec->offs, fout);
     attr = (rec->category & 0x0f) | (rec->flags & 0xf0);
@@ -444,7 +444,7 @@ pdb_eof(pdbfile *fin)
 }
 
 int
-pdb_read_rec(pdbfile *fin, gbuint8 *flags, gbuint8 *category, gbuint32 *rec_id, void **data)
+pdb_read_rec(pdbfile *fin, uint8_t *flags, uint8_t *category, uint32_t *rec_id, void **data)
 {
   if (pdb_eof(fin)) {
     return -1;

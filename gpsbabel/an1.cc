@@ -165,13 +165,13 @@ Skip(gbfile* f,
 static double
 DecodeOrd(long ord)
 {
-  return (double)((gbint32)(0x80000000 - ord)) / 0x800000;
+  return (double)((int32_t)(0x80000000 - ord)) / 0x800000;
 }
 
 static long
 EncodeOrd(double ord)
 {
-  return (gbint32)(0x80000000 - (gbint32)(ord * 0x800000));
+  return (int32_t)(0x80000000 - (int32_t)(ord * 0x800000));
 }
 
 typedef struct {

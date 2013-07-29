@@ -24,8 +24,8 @@
 #if PDBFMTS_ENABLED
 static pdbfile *file_in, *file_out;
 
-static gbuint8* rec_ptr = NULL;
-static gbuint8* current_rec = NULL;
+static uint8_t* rec_ptr = NULL;
+static uint8_t* current_rec = NULL;
 static int rec_index = 0;
 static int ct;
 static char *dbname = NULL;
@@ -149,11 +149,11 @@ quovadis_writewpt(waypoint *wpt)
   int	i;
 
   if (current_rec == NULL) {
-    gbuint8 dummy = 0;
+    uint8_t dummy = 0;
 
     pdb_write_rec(file_out, 0, 0, ct++, &dummy, 1);
 
-    current_rec = (gbuint8 *) xcalloc(MAXCHUNKSIZE, 1);
+    current_rec = (uint8_t *) xcalloc(MAXCHUNKSIZE, 1);
     rec_index = 0;
     rec_ptr = current_rec;
   }

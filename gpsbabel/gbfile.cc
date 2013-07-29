@@ -107,7 +107,7 @@ gzapi_close(gbfile* self)
 }
 
 static int
-gzapi_seek(gbfile* self, gbint32 offset, int whence)
+gzapi_seek(gbfile* self, int32_t offset, int whence)
 {
   int result;
 
@@ -267,7 +267,7 @@ stdapi_close(gbfile* self)
 }
 
 static int
-stdapi_seek(gbfile* self, gbint32 offset, int whence)
+stdapi_seek(gbfile* self, int32_t offset, int whence)
 {
   int result;
   gbsize_t pos = 0;
@@ -377,7 +377,7 @@ memapi_close(gbfile* self)
 }
 
 static int
-memapi_seek(gbfile* self, gbint32 offset, int whence)
+memapi_seek(gbfile* self, int32_t offset, int whence)
 {
   long long pos = (int)self->mempos;
 
@@ -857,7 +857,7 @@ gbfrewind(gbfile* file)
  */
 
 int
-gbfseek(gbfile* file, gbint32 offset, int whence)
+gbfseek(gbfile* file, int32_t offset, int whence)
 {
   return file->fileseek(file, offset, whence);
 }
@@ -902,7 +902,7 @@ gbfungetc(const int c, gbfile* file)
  * gbfgetint32: read a signed 32-bit integer from input stream
  */
 
-gbint32
+int32_t
 gbfgetint32(gbfile* file)
 {
   char buf[4];
@@ -921,7 +921,7 @@ gbfgetint32(gbfile* file)
  * gbfgetint16: read a signed 16-bit integer from input stream
  */
 
-gbint16
+int16_t
 gbfgetint16(gbfile* file)
 {
   char buf[2];
@@ -1156,7 +1156,7 @@ gbfgetstr(gbfile* file)
  */
 
 int
-gbfputint16(const gbint16 i, gbfile* file)
+gbfputint16(const int16_t i, gbfile* file)
 {
   char buf[2];
 
@@ -1173,7 +1173,7 @@ gbfputint16(const gbint16 i, gbfile* file)
  */
 
 int
-gbfputint32(const gbint32 i, gbfile* file)
+gbfputint32(const int32_t i, gbfile* file)
 {
   char buf[4];
 

@@ -645,7 +645,7 @@ static datum_mapping_t gt_mps_datum_names[] = {
 
 typedef struct garmin_color_s {
   const char* name;
-  gbint32 rgb;
+  int32_t rgb;
 } garmin_color_t;
 
 static garmin_color_t gt_colors[] = {
@@ -1036,7 +1036,7 @@ gt_lookup_datum_index(const char* datum_str, const char* module)
   return result;
 }
 
-gbuint32
+uint32_t
 gt_color_value(const unsigned int garmin_index)
 {
   if ((garmin_index < GT_COLORS_CT)) {
@@ -1046,7 +1046,7 @@ gt_color_value(const unsigned int garmin_index)
   }
 }
 
-gbuint32
+uint32_t
 gt_color_value_by_name(const char* name)
 {
   unsigned int i;

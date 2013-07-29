@@ -169,11 +169,11 @@ vpl_wr_init(const char *fname)
 void
 vpl_parse_75_sentence(const char *ibuf)
 {
-  gbuint32 ymd, hms;
-  gbint32 lat_raw, lon_raw;
-  gbint16 alt, speed_raw;
-  gbuint16 hdg_raw;
-  gbuint8 sats, hdop_raw, vdop_raw;
+  uint32_t ymd, hms;
+  int32_t lat_raw, lon_raw;
+  int16_t alt, speed_raw;
+  uint16_t hdg_raw;
+  uint8_t sats, hdop_raw, vdop_raw;
   waypoint *waypt;
   struct tm tm;
 

@@ -49,7 +49,7 @@ static struct {
   int len;
   int endian;
   route_head* track;
-  gbuint32 last_timestamp;
+  uint32_t last_timestamp;
   fit_message_def message_def[16];
 } fit_data;
 
@@ -120,7 +120,7 @@ fit_parse_header(void)
   }
 }
 
-static gbuint8
+static uint8_t
 fit_getuint8(void)
 {
   int val;
@@ -139,11 +139,11 @@ fit_getuint8(void)
     fatal(MYNAME ": unexpected end of file with fit_data.len=%d\n",fit_data.len);
   }
   fit_data.len--;
-  return (gbuint8)val;
+  return (uint8_t)val;
 
 }
 
-static gbuint16
+static uint16_t
 fit_getuint16(void)
 {
   char buf[2];
@@ -162,7 +162,7 @@ fit_getuint16(void)
 
 }
 
-static gbuint32
+static uint32_t
 fit_getuint32(void)
 {
   char buf[4];
@@ -182,7 +182,7 @@ fit_getuint32(void)
 }
 
 static void
-fit_parse_definition_message(gbuint8 header)
+fit_parse_definition_message(uint8_t header)
 {
   int local_id = header & 0x1f;
   fit_message_def* def = &fit_data.message_def[local_id];
@@ -229,7 +229,7 @@ fit_parse_definition_message(gbuint8 header)
   }
 }
 
-static gbuint32
+static uint32_t
 fit_read_field(fit_field_t* f)
 {
   int i;
@@ -266,16 +266,16 @@ static void
 fit_parse_data(fit_message_def* def, int time_offset)
 {
   fit_field_t* f;
-  gbuint32 timestamp = fit_data.last_timestamp + time_offset;
-  gbuint32 val;
-  gbint32 lat = 0x7fffffff;
-  gbint32 lon = 0x7fffffff;
-  gbuint16 alt = 0xffff;
-  gbuint16 speed = 0xffff;
-  gbuint8 heartrate = 0xff;
-  gbuint8 cadence = 0xff;
-  gbuint16 power = 0xffff;
-  gbint8 temperature = 0x7f;
+  uint32_t timestamp = fit_data.last_timestamp + time_offset;
+  uint32_t val;
+  int32_t lat = 0x7fffffff;
+  int32_t lon = 0x7fffffff;
+  uint16_t alt = 0xffff;
+  uint16_t speed = 0xffff;
+  uint8_t heartrate = 0xff;
+  uint8_t cadence = 0xff;
+  uint16_t power = 0xffff;
+  int8_t temperature = 0x7f;
   int i;
   waypoint* waypt;
 
@@ -398,7 +398,7 @@ fit_parse_data(fit_message_def* def, int time_offset)
 }
 
 static void
-fit_parse_data_message(gbuint8 header)
+fit_parse_data_message(uint8_t header)
 {
   int local_id = header & 0x1f;
   fit_message_def* def = &fit_data.message_def[local_id];
@@ -406,7 +406,7 @@ fit_parse_data_message(gbuint8 header)
 }
 
 static void
-fit_parse_compressed_message(gbuint8 header)
+fit_parse_compressed_message(uint8_t header)
 {
   int local_id = (header >> 5) & 3;
   fit_message_def* def = &fit_data.message_def[local_id];
@@ -419,7 +419,7 @@ fit_parse_compressed_message(gbuint8 header)
 static void
 fit_parse_record(void)
 {
-  gbuint8 header;
+  uint8_t header;
 
   header = fit_getuint8();
   // high bit 7 set -> compressed message (0 for normal)

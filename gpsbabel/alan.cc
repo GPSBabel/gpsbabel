@@ -49,44 +49,44 @@
 #define TRK_COMMENT_LEN 13
 
 struct wpthdr {
-  gbuint32 id;
-  gbint16 num;
-  gbint16 next;
-  gbint16 idx[MAXWPT];
-  gbuint8 used[MAXWPT];
+  uint32_t id;
+  int16_t num;
+  int16_t next;
+  int16_t idx[MAXWPT];
+  uint8_t used[MAXWPT];
 };
 
 struct wpt {
   char name[WPT_NAME_LEN];
   char comment[WPT_COMMENT_LEN];
   struct {
-    gbint32 x;				/* degree * 36000 */
-    gbint32 y;				/* degree * 36000  */
+    int32_t x;				/* degree * 36000 */
+    int32_t y;				/* degree * 36000  */
   } pt;
-  gbint32 date;
-  gbint32 time;
-  gbint16 usecount;
-  gbint8 checked;
-  gbint8 reserved;
+  int32_t date;
+  int32_t time;
+  int16_t usecount;
+  int8_t checked;
+  int8_t reserved;
 };
 
 struct rtehdr {
-  gbuint32 id;
-  gbint16 num;
-  gbint16 next;
-  gbint16 idx[MAXRTE];
-  gbuint8 used[MAXRTE];
-  gbint16 rteno;
+  uint32_t id;
+  int16_t num;
+  int16_t next;
+  int16_t idx[MAXRTE];
+  uint8_t used[MAXRTE];
+  int16_t rteno;
 };
 
 struct rte {
   char name[RTE_NAME_LEN];
   char comment[RTE_COMMENT_LEN];
-  gbint16 wptnum;
-  gbint16 wptidx[MAXWPTINRTE];
-  gbint16 reserved;
-  gbint32 date;
-  gbint32 time;
+  int16_t wptnum;
+  int16_t wptidx[MAXWPTINRTE];
+  int16_t reserved;
+  int32_t date;
+  int32_t time;
 };
 
 struct wprdata {
@@ -97,33 +97,33 @@ struct wprdata {
 };
 
 struct trkhdr {
-  gbint16 totalpt;
-  gbint16 next;
+  int16_t totalpt;
+  int16_t next;
   char name[TRK_NAME_LEN];		/* 10, null terminated */
   char comment[TRK_COMMENT_LEN];	/* 12, null terminated */
-  gbuint8 reserved[3];
-  gbuint32 occupied;
-  gbuint32 show;
-  gbuint32 fill;
+  uint8_t reserved[3];
+  uint32_t occupied;
+  uint32_t show;
+  uint32_t fill;
 };
 
 struct loghdr {
-  gbuint32 id;
-  gbint16 num;
-  gbint16 next;
-  gbint32 date;
-  gbint32 time;
+  uint32_t id;
+  int16_t num;
+  int16_t next;
+  int32_t date;
+  int32_t time;
   struct trkhdr trkhdr[MAXTRK];
 };
 
 struct trklog {
   struct {
-    gbint32 x;				/* degree * 36000 */
-    gbint32 y;				/* degree * 36000  */
+    int32_t x;				/* degree * 36000 */
+    int32_t y;				/* degree * 36000  */
   } pt[MAXPTINTRK];
   struct {
-    gbint16 speed;			/* km/h * 200 */
-    gbint16 height;			/* m * 5 */
+    int16_t speed;			/* km/h * 200 */
+    int16_t height;			/* m * 5 */
   } sh[MAXPTINTRK];
 };
 
@@ -156,15 +156,15 @@ struct trldata {
 
 #define MAP500_PT_SCALE 36000.0
 #define pt2deg(P) ((double)(P) / MAP500_PT_SCALE)
-#define deg2pt(D) (gbint32)si_round((double)(D) * MAP500_PT_SCALE)
+#define deg2pt(D) (int32_t)si_round((double)(D) * MAP500_PT_SCALE)
 
 #define MAP500_ALTITUDE_SCALE   5.0
 #define hgt2m(A) ((double)(A) / MAP500_ALTITUDE_SCALE)
-#define m2hgt(A) (gbint16)si_round((double)(A) * MAP500_ALTITUDE_SCALE)
+#define m2hgt(A) (int16_t)si_round((double)(A) * MAP500_ALTITUDE_SCALE)
 
 #define MAP500_SPEED_SCALE    720.0
 #define sp2mps(S) ((double)(S) / MAP500_SPEED_SCALE)
-#define mps2sp(S) (gbint16)si_round((double)(S) * MAP500_SPEED_SCALE)
+#define mps2sp(S) (int16_t)si_round((double)(S) * MAP500_SPEED_SCALE)
 
 #define  BYTEORDER_TEST  0x04030201	/* 32bit reference value */
 enum {
@@ -211,24 +211,24 @@ static unsigned int byte_order(void)
 
 static void sw_bytes(void* word)
 {
-  gbuint8* p = (gbuint8*) word;
-  gbuint16* r = (gbuint16*) word;
+  uint8_t* p = (uint8_t*) word;
+  uint16_t* r = (uint16_t*) word;
 
-  *r = (gbuint16)(p[1] << 8 | p[0]);
+  *r = (uint16_t)(p[1] << 8 | p[0]);
 }
 static void sw_words(void* dword)
 {
-  gbuint16* p = (gbuint16*) dword;
-  gbuint32* r = (gbuint32*) dword;
+  uint16_t* p = (uint16_t*) dword;
+  uint32_t* r = (uint32_t*) dword;
 
-  *r = (gbuint32)(p[0] << 16 | p[1]);
+  *r = (uint32_t)(p[0] << 16 | p[1]);
 }
 static void rev_bytes(void* dword)
 {
-  gbuint8* p = (gbuint8*) dword;
-  gbuint32* r = (gbuint32*) dword;
+  uint8_t* p = (uint8_t*) dword;
+  uint32_t* r = (uint32_t*) dword;
 
-  *r = (gbuint32)(p[3] << 24 | p[2] << 16 | p[1] << 8 | p[0]);
+  *r = (uint32_t)(p[3] << 24 | p[2] << 16 | p[1] << 8 | p[0]);
 }
 
 static void swap_wpthdr(struct wpthdr* wpthdr,
@@ -443,7 +443,7 @@ static void str2lab(char* dest, const char* src, int len, const char* fmt,
   }
 }
 
-static void pack_time(time_t t, gbint32* date, gbint32* time)
+static void pack_time(time_t t, int32_t* date, int32_t* time)
 {
   struct tm* tm;
 
@@ -452,7 +452,7 @@ static void pack_time(time_t t, gbint32* date, gbint32* time)
   *time = t % 86400;
 }
 
-static time_t unpack_time(gbint32 date, gbint32 time)
+static time_t unpack_time(int32_t date, int32_t time)
 {
   time_t result;
   short year, month, day;

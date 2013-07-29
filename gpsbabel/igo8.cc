@@ -72,23 +72,23 @@
 #define MYNAME "IGO8"
 
 typedef struct _igo8_id_block {
-  gbuint32 unknown_1;
-  gbuint32 unknown_2;
-  gbuint32 unknown_3;
-  gbuint32 track_number;
-  gbuint32 unknown_4;
+  uint32_t unknown_1;
+  uint32_t unknown_2;
+  uint32_t unknown_3;
+  uint32_t track_number;
+  uint32_t unknown_4;
 } igo8_id_block, *p_igo8_id_block;
 
 typedef struct _igo8_information_block {
-  gbuint32 start_time;       // In Unix time
-  gbuint32 zero;             // Doesn't appear to serve a purpose
-  gbuint32 total_file_size;  // In bytes
+  uint32_t start_time;       // In Unix time
+  uint32_t zero;             // Doesn't appear to serve a purpose
+  uint32_t total_file_size;  // In bytes
 } igo8_information_block, *p_igo8_information_block;
 
 typedef struct _igo8_point {
-  gbuint32 unix_time;
-  gbuint32 lon;
-  gbuint32 lat;
+  uint32_t unix_time;
+  uint32_t lon;
+  uint32_t lat;
 } igo8_point, *p_igo8_point;
 
 // Files
@@ -101,8 +101,8 @@ static char* igo8_option_title = NULL;
 static char* igo8_option_description = NULL;
 
 // Internal state
-static gbuint32 invented_time;
-static gbuint32 point_count;
+static uint32_t invented_time;
+static uint32_t point_count;
 static int in_point_count;
 
 // Exported options list
@@ -191,11 +191,11 @@ static void igo8_write_init(const char* fname)
 // Writer close callback
 static void igo8_write_deinit(void)
 {
-  gbuint32 normalized_file_size;
+  uint32_t normalized_file_size;
 
   // Seek to the start of the third long in the Information Block, this is
   // where we will write out the total size of the file.
-  gbfseek(igo8_file_out, IGO8_HEADER_SIZE + sizeof(gbuint32)*2, SEEK_SET);
+  gbfseek(igo8_file_out, IGO8_HEADER_SIZE + sizeof(uint32_t)*2, SEEK_SET);
 
   // The total size of the file is the number of points written + Information block + Header
   le_write32(&normalized_file_size, sizeof(igo8_point)*(point_count) + sizeof(igo8_information_block) + IGO8_HEADER_SIZE);
@@ -298,7 +298,7 @@ void write_header()
   char header[IGO8_HEADER_SIZE] = {'\0'};
   igo8_id_block tmp_id_block;
   p_igo8_id_block id_block = (p_igo8_id_block)header;
-  gbuint32 current_position = 0;
+  uint32_t current_position = 0;
   const char* title = "Title";
   const char* description = "Description";
 

@@ -513,7 +513,7 @@ static double get_param_float(const char *cmd)
     int mon    = (((tim) >> 22) & 0x0F); \
     int year   = (((tim) >> 26) & 0x3F);
 
-static time_t decode_date(gbuint32 tim)
+static time_t decode_date(uint32_t tim)
 {
   _SPLIT_DATE(tim)
   struct tm t;
@@ -528,7 +528,7 @@ static time_t decode_date(gbuint32 tim)
   return mkgmtime(&t);
 }
 
-static int check_date(gbuint32 tim)
+static int check_date(uint32_t tim)
 {
   _SPLIT_DATE(tim)
 
@@ -568,7 +568,7 @@ static waypoint *make_trackpoint(struct read_state *st, double lat, double lon, 
 
 static int wbt200_data_chunk(struct read_state *st, const void *buf, int fmt)
 {
-  gbuint32   tim;
+  uint32_t   tim;
   double     lat, lon, alt;
   time_t     rtim;
   waypoint   *tpt     = NULL;
@@ -577,8 +577,8 @@ static int wbt200_data_chunk(struct read_state *st, const void *buf, int fmt)
 
   tim = le_read32(bp + 0);
 
-  lat = (double)((gbint32) le_read32(bp + 4)) / 10000000;
-  lon = (double)((gbint32) le_read32(bp + 8)) / 10000000;
+  lat = (double)((int32_t) le_read32(bp + 4)) / 10000000;
+  lon = (double)((int32_t) le_read32(bp + 8)) / 10000000;
 
   /* Handle extra fields in longer records here. */
   if (buf_used >= 16) {
@@ -625,7 +625,7 @@ static int is_valid(struct buf_head *h, int fmt)
 
   for (;;) {
     size_t got = buf_read(h, buf, reclen);
-    gbuint32 tim;
+    uint32_t tim;
     /* Don't mind odd bytes at the end - we may
      * be examining an incomplete dataset.
      */
@@ -640,7 +640,7 @@ static int is_valid(struct buf_head *h, int fmt)
 
     if (reclen > 12) {
 #ifdef MAXALT
-      gbuint32 alt = le_read32(buf + 12);
+      uint32_t alt = le_read32(buf + 12);
       if (alt > MAXALT * 10) {
         return 0;
       }
@@ -804,8 +804,8 @@ static int all_null(const void *buf, const int len)
 
 static int wbt201_data_chunk(struct read_state *st, const void *buf)
 {
-  gbuint32    tim;
-  gbuint16    flags;
+  uint32_t    tim;
+  uint16_t    flags;
   double      lat, lon, alt;
   time_t      rtim;
   waypoint    *tpt     = NULL;
@@ -824,9 +824,9 @@ static int wbt201_data_chunk(struct read_state *st, const void *buf)
     return 0;
   }
 
-  lat   = (double)((gbint32) le_read32(bp +  6)) / 10000000;
-  lon   = (double)((gbint32) le_read32(bp + 10)) / 10000000;
-  alt   = (double)((gbint16) le_read16(bp + 14));
+  lat   = (double)((int32_t) le_read32(bp +  6)) / 10000000;
+  lon   = (double)((int32_t) le_read32(bp + 10)) / 10000000;
+  alt   = (double)((int16_t) le_read16(bp + 14));
 
   rtim = decode_date(tim);
 
