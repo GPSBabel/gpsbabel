@@ -18,6 +18,9 @@
  */
 #ifndef gpsbabel_defs_h_included
 #define gpsbabel_defs_h_included
+
+#include <stdint.h>
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
