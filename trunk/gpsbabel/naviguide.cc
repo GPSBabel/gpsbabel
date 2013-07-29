@@ -37,7 +37,7 @@
 
 /* Naviguide file header */
 typedef struct {
-  gbuint16 nof_wp;    /* Little endean format */
+  uint16_t nof_wp;    /* Little endean format */
   unsigned char pad1[6];      /* 0xff, 0xff, 0x01, 0x00, 0x06, 0x00 */
   char signature[9]; /* cWaypoint */
   unsigned char pad2[4];      /* 0x01, 0x00, 0x00, 0x00 */
@@ -47,16 +47,16 @@ typedef struct {
 typedef struct {
   unsigned char pad1[8];   /*  0xfe, 0xff, 0xff, 0xff, 0x01, 0x00, 0x00, 0x00 */
   /* coordination are in old israeli grid */
-  gbint32 East;
-  gbint32 North;
+  int32_t East;
+  int32_t North;
   unsigned char pad2[2];  /* 0x01, 0x01 */
-  gbuint32 Alt;
+  uint32_t Alt;
   char CommentLength;
 } ng_wp_data_t;
 
 typedef struct {
   unsigned char pad1[2]; /* 0x01, 0x80 */
-  gbuint16 next_wp;
+  uint16_t next_wp;
   unsigned char pad2[2]; /* 0x00, 0x00 */
 } ng_next_wp_t;
 
@@ -70,7 +70,7 @@ typedef struct {
 /* Global variables */
 
 static gbfile* file_in, *file_out;
-static gbuint16 nof_wp;
+static uint16_t nof_wp;
 static route_head* rte_head;
 static ng_file_header_t ng_file_header;
 static ng_wp_no_comment_t WPNC;
@@ -252,8 +252,8 @@ ng_waypt_rd(const waypoint* wpt)
     fatal(MYNAME ": Waypoint %d is out of the israeli grid area", current_wp_ix);
   }
 
-  WPNC.wp_data.North = (gbint32)lat;
-  WPNC.wp_data.East = (gbint32)lon;
+  WPNC.wp_data.North = (int32_t)lat;
+  WPNC.wp_data.East = (int32_t)lon;
 
   if (reorder_wp) {
     sprintf(temp_short_name, "A%03d", current_wp_ix);

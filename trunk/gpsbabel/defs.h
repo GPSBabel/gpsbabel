@@ -22,7 +22,6 @@
 #include "config.h"
 #endif
 #include "queue.h"
-#include "gbtypes.h"
 #if HAVE_LIBZ
 #include <zlib.h>
 #elif !ZLIB_INHIBITED
@@ -149,6 +148,8 @@
  * Common definitions.   There should be no protocol or file-specific
  * data in this file.
  */
+
+
 #define BASE_STRUCT(memberp, struct_type, member_name) \
    ((struct_type *)((char *)(memberp) - offsetof(struct_type, member_name)))
 
@@ -823,7 +824,7 @@ typedef struct arglist {
   char** argval;
   const char* helpstring;
   const char* defaultvalue;
-  const gbuint32 argtype;
+  const uint32_t argtype;
   const char* minvalue;		/* minimum value for numeric options */
   const char* maxvalue;		/* maximum value for numeric options */
   char* argvalptr;	/* !!! internal helper. Not used in definitions !!! */
@@ -1122,8 +1123,8 @@ typedef enum {
 
 /* bit manipulation functions (util.c) */
 
-char gb_getbit(const void* buf, const gbuint32 nr);
-void gb_setbit(void* buf, const gbuint32 nr);
+char gb_getbit(const void* buf, const uint32_t nr);
+void gb_setbit(void* buf, const uint32_t nr);
 
 void* gb_int2ptr(const int i);
 int gb_ptr2int(const void* p);

@@ -87,7 +87,7 @@ const unsigned dg100_numcommands = sizeof(dg100_commands) / sizeof(dg100_command
 struct dynarray16 {
   unsigned count; /* number of elements used */
   unsigned limit; /* number of elements allocated */
-  gbint16* data;
+  int16_t* data;
 };
 
 /* helper functions */
@@ -110,10 +110,10 @@ dynarray16_init(struct dynarray16* a, unsigned limit)
 {
   a->count = 0;
   a->limit = limit;
-  a->data = (gbint16*) xmalloc(sizeof(a->data[0]) * a->limit);
+  a->data = (int16_t*) xmalloc(sizeof(a->data[0]) * a->limit);
 }
 
-static gbint16*
+static int16_t*
 dynarray16_alloc(struct dynarray16* a, unsigned n)
 {
   unsigned oldcount, need;
@@ -126,7 +126,7 @@ dynarray16_alloc(struct dynarray16* a, unsigned n)
     need = a->count - a->limit;
     need = (need > elements_per_chunk) ? need : elements_per_chunk;
     a->limit += need;
-    a->data = (gbint16*) xrealloc(a->data, sizeof(a->data[0]) * a->limit);
+    a->data = (int16_t*) xrealloc(a->data, sizeof(a->data[0]) * a->limit);
   }
   return(a->data + oldcount);
 }
@@ -219,7 +219,7 @@ bin2deg(int val)
 }
 
 static void
-process_gpsfile(gbuint8 data[], route_head** track)
+process_gpsfile(uint8_t data[], route_head** track)
 {
   const int recordsizes[3] = {8, 20, 32};
   int i, style, recsize;
@@ -304,10 +304,10 @@ process_gpsfile(gbuint8 data[], route_head** track)
   }
 }
 
-static gbuint16
-dg100_checksum(gbuint8 buf[], int count)
+static uint16_t
+dg100_checksum(uint8_t buf[], int count)
 {
-  gbuint16 sum = 0;
+  uint16_t sum = 0;
   int i;
 
   for (i = 0; i < count; i++) {
@@ -320,10 +320,10 @@ dg100_checksum(gbuint8 buf[], int count)
 
 /* communication functions */
 static size_t
-dg100_send(gbuint8 cmd, const void* payload, size_t count)
+dg100_send(uint8_t cmd, const void* payload, size_t count)
 {
-  gbuint8 frame[FRAME_MAXLEN];
-  gbuint16 checksum, payload_len;
+  uint8_t frame[FRAME_MAXLEN];
+  uint16_t checksum, payload_len;
   size_t framelen, param_len;
   int n;
 
@@ -387,13 +387,13 @@ dg100_recv_byte()
  * framing around the data), so the caller must copy the data before calling
  * this function again */
 static int
-dg100_recv_frame(struct dg100_command** cmdinfo_result, gbuint8** payload)
+dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
 {
-  static gbuint8 buf[FRAME_MAXLEN];
-  gbuint16 frame_start_seq, payload_len_field;
-  gbuint16 payload_end_seq, payload_checksum, frame_end_seq;
-  gbuint16 frame_head, numheaders, sum;
-  gbuint8 c, cmd;
+  static uint8_t buf[FRAME_MAXLEN];
+  uint16_t frame_start_seq, payload_len_field;
+  uint16_t payload_end_seq, payload_checksum, frame_end_seq;
+  uint16_t frame_head, numheaders, sum;
+  uint8_t c, cmd;
   int i, param_len, frame_len;
   struct dg100_command* cmdinfo;
 
@@ -519,11 +519,11 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, gbuint8** payload)
 
 /* return value: number of bytes copied into buf, -1 on error */
 static int
-dg100_recv(gbuint8 expected_id, void* buf, unsigned int len)
+dg100_recv(uint8_t expected_id, void* buf, unsigned int len)
 {
   int n;
   struct dg100_command* cmdinfo;
-  gbuint8* data;
+  uint8_t* data;
   unsigned int copysize, trailing_bytes;
 
   n = dg100_recv_frame(&cmdinfo, &data);
@@ -550,11 +550,11 @@ dg100_recv(gbuint8 expected_id, void* buf, unsigned int len)
 /* the number of bytes to be sent is determined by cmd,
  * count is the size of recvbuf */
 static int
-dg100_request(gbuint8 cmd, const void* sendbuf, void* recvbuf, size_t count)
+dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count)
 {
   struct dg100_command* cmdinfo;
   int n, i, frames, fill;
-  gbuint8* buf;
+  uint8_t* buf;
 
   cmdinfo = dg100_findcmd(cmd);
   assert(cmdinfo != NULL);
@@ -563,7 +563,7 @@ dg100_request(gbuint8 cmd, const void* sendbuf, void* recvbuf, size_t count)
   /* the number of frames the answer will comprise */
   frames = (cmd == dg100cmd_getfile) ? 2 : 1;
   /* alias pointer for easy typecasting */
-  buf = (gbuint8*) recvbuf;
+  buf = (uint8_t*) recvbuf;
   fill = 0;
   for (i = 0; i < frames; i++) {
     n = dg100_recv(cmd, buf + fill, count - fill);
@@ -579,10 +579,10 @@ dg100_request(gbuint8 cmd, const void* sendbuf, void* recvbuf, size_t count)
 static void
 dg100_getfileheaders(struct dynarray16* headers)
 {
-  gbuint8 request[2];
-  gbuint8 answer[FRAME_MAXLEN];
+  uint8_t request[2];
+  uint8_t answer[FRAME_MAXLEN];
   int seqnum;
-  gbint16 numheaders, nextheader, *h;
+  int16_t numheaders, nextheader, *h;
   int i, offset;
 
   nextheader = 0;
@@ -618,10 +618,10 @@ dg100_getfileheaders(struct dynarray16* headers)
 }
 
 static void
-dg100_getfile(gbint16 num, route_head** track)
+dg100_getfile(int16_t num, route_head** track)
 {
-  gbuint8 request[2];
-  gbuint8 answer[2048];
+  uint8_t request[2];
+  uint8_t answer[2048];
 
   be_write16(request, num);
   dg100_request(dg100cmd_getfile, request, answer, sizeof(answer));
@@ -651,8 +651,8 @@ dg100_getfiles()
 static int
 dg100_erase()
 {
-  gbuint8 request[2] = { 0xFF, 0xFF };
-  gbuint8 answer[4];
+  uint8_t request[2] = { 0xFF, 0xFF };
+  uint8_t answer[4];
 
   dg100_request(dg100cmd_erase, request, answer, sizeof(answer));
   if (be_read32(answer) != 1) {

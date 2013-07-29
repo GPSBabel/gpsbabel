@@ -92,10 +92,10 @@ typedef struct garmin_fs_s {
 
   int protocol;		/* ... used by device (-1 is MapSource) */
 
-  gbint32 icon;
+  int32_t icon;
   int wpt_class;
-  gbint32 display;
-  gbint16 category;
+  int32_t display;
+  int16_t category;
   char* city;			/* city name */
   char* facility;			/* facility name */
   char* state;			/* state */
@@ -128,7 +128,7 @@ void garmin_fs_xml_fprint(const waypoint* waypt, QXmlStreamWriter&);
 /* common garmin_fs utilities */
 
 /* ..convert_category: returns 1=OK; 0=Unable to convert category */
-unsigned char garmin_fs_convert_category(const char* category_name, gbuint16* category);
+unsigned char garmin_fs_convert_category(const char* category_name, uint16_t* category);
 
 /* ..merge_category: returns 1=OK; 0=Unable to convert category */
 unsigned char garmin_fs_merge_category(const char* category_name, waypoint* waypt);

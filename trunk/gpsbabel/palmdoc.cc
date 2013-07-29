@@ -90,13 +90,13 @@ arglist_t palmdoc_args[] = {
 static struct buffer buf;
 
 struct doc_record0 {                 /* 16 bytes total */
-  gbuint16 version;          /* 1 = plain text, 2 = compressed */
-  gbuint16 reserved1;
-  gbuint32 doc_size;         /* in bytes, when uncompressed */
-  gbuint16 num_records;      /* PDB header numRecords - 1 */
-  gbuint16 rec_size;         /* usually RECORD_SIZE_MAX */
-  gbuint32 reserved2;
-  gbuint16 recsizes[1];
+  uint16_t version;          /* 1 = plain text, 2 = compressed */
+  uint16_t reserved1;
+  uint32_t doc_size;         /* in bytes, when uncompressed */
+  uint16_t num_records;      /* PDB header numRecords - 1 */
+  uint16_t rec_size;         /* usually RECORD_SIZE_MAX */
+  uint32_t reserved2;
+  uint16_t recsizes[1];
 };
 
 static struct recordsize {
@@ -112,7 +112,7 @@ static struct bookmark {
 
 struct bookmark_record {
   char text[16];
-  gbuint32 offset;
+  uint32_t offset;
 };
 
 static void put_byte(struct buffer *b, unsigned char c, int *space)

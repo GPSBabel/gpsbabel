@@ -39,7 +39,7 @@ wintec_tes_rd_deinit(void)
 }
 
 static time_t
-wintec_date_to_time(gbuint32 w)
+wintec_date_to_time(uint32_t w)
 {
   struct tm tm;
   memset(&tm, 0, sizeof(tm));
@@ -61,11 +61,11 @@ wintec_tes_read(void)
 
   while (!gbfeof(fin)) {
     waypoint *wpt;
-    gbuint16 flags = gbfgetuint16(fin);
-    gbuint32 date = gbfgetuint32(fin);
-    gbint32 latitude = gbfgetint32(fin);
-    gbint32 longitude = gbfgetint32(fin);
-    gbint16 alt = gbfgetint16(fin);  // Signed.  Meters.
+    uint16_t flags = gbfgetuint16(fin);
+    uint32_t date = gbfgetuint32(fin);
+    int32_t latitude = gbfgetint32(fin);
+    int32_t longitude = gbfgetint32(fin);
+    int16_t alt = gbfgetint16(fin);  // Signed.  Meters.
 
     (void) flags; // Silence 'unused' warning until we use flags.
     wpt = waypt_new();

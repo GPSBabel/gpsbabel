@@ -38,12 +38,12 @@
 
 /* memory layout of the iTrackU data record */
 typedef struct {
-  gbuint8 longitude[4];
-  gbuint8 latitude[4];
-  gbuint8 creation_time[4];
-  gbuint8 altitude[2];
-  gbuint8 speed;
-  gbuint8 flag;
+  uint8_t longitude[4];
+  uint8_t latitude[4];
+  uint8_t creation_time[4];
+  uint8_t altitude[2];
+  uint8_t speed;
+  uint8_t flag;
 } itracku_data_record;
 
 static int itracku_is_valid_data_record(itracku_data_record* d);
@@ -52,7 +52,7 @@ static waypoint* to_waypoint(itracku_data_record* d);
 
 /* itracku file access */
 static void itracku_file_read_data_record(gbfile* fin, itracku_data_record* d);
-static gbuint32 itracku_file_read_last_time(gbfile* fin);
+static uint32_t itracku_file_read_last_time(gbfile* fin);
 static void itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(waypoint* wpt));
 static void itracku_file_write_waypt(gbfile* fout, const waypoint* wpt);
 
@@ -85,8 +85,8 @@ static void* fd;  /* serial fd */
 static gbfile* fin; /* input file handle */
 static gbfile* fout; /* output file handle */
 static gbfile* fbackup; /* backup file handle */
-static gbuint32 backup_last_creation_time; /* time of last data record in backup file */
-static gbuint32 new_waypoint_count; /* count of new waypoints */
+static uint32_t backup_last_creation_time; /* time of last data record in backup file */
+static uint32_t new_waypoint_count; /* count of new waypoints */
 static char* port; /* serial port name */
 static char* backup_file_name; /* "backup" command option */
 static char* only_new; /* "new" command option */
@@ -198,12 +198,12 @@ itracku_device_update_data_read(void* buf, int len)
 // along (or anyone really cares about mega performance of this fairly obscure
 // target, we should revisit this.
 double
-deg_min_to_deg(volatile gbuint32 x)
+deg_min_to_deg(volatile uint32_t x)
 {
   double sign;
-  gbuint32 sep;
-  gbuint32 d;
-  gbuint32 m10000;
+  uint32_t sep;
+  uint32_t d;
+  uint32_t m10000;
   // determine the sign
   if (x > 0x80000000) {
     sign = -1.0;
@@ -226,10 +226,10 @@ deg_min_to_deg(volatile gbuint32 x)
 /*
 	Convert degrees to the degrees format of itracku.
 */
-gbuint32
+uint32_t
 deg_to_deg_min(double x)
 {
-  gbint32 sign;
+  int32_t sign;
   double d;
   double f;
 
@@ -248,8 +248,8 @@ deg_to_deg_min(double x)
   f = x - d;
 
   return
-    (gbuint32)d * 1000000 + // multiply integer degrees to shift it to the right digits.
-    (gbuint32)(f * 600000.0) + // multiply fractional part to convert to minutes and to to shift it to the right digits.
+    (uint32_t)d * 1000000 + // multiply integer degrees to shift it to the right digits.
+    (uint32_t)(f * 600000.0) + // multiply fractional part to convert to minutes and to to shift it to the right digits.
     ((sign > 0) ? 0 : 0x80000000); // add 0x80000000 for negative degrees
 }
 
@@ -257,7 +257,7 @@ deg_to_deg_min(double x)
 	Convert the itracku time format to time_t.
 */
 static time_t
-decode_itracku_time(gbuint32 date)
+decode_itracku_time(uint32_t date)
 {
   struct tm t;
   t.tm_sec = date & 63;
@@ -272,7 +272,7 @@ decode_itracku_time(gbuint32 date)
 /*
 	Convert time_t to the itracku time format.
 */
-static gbuint32
+static uint32_t
 encode_itracku_time(time_t time)
 {
   struct tm* t = gmtime(&time);
@@ -485,7 +485,7 @@ import_data_record(itracku_data_record* d)
     result = 0;
   } else {
     if (fbackup) {
-      if ((gbuint32)le_read32(d->creation_time) > backup_last_creation_time) {
+      if ((uint32_t)le_read32(d->creation_time) > backup_last_creation_time) {
         backup_last_creation_time = le_read32(d->creation_time);
         gbfwrite(d, sizeof(*d), 1, fbackup);
         result = -1;
@@ -533,7 +533,7 @@ itracku_file_read_data_record(gbfile* fin, itracku_data_record* d)
   gbfread(d, sizeof(*d), 1, fin);
 }
 
-static gbuint32
+static uint32_t
 itracku_file_read_last_time(gbfile* fin)
 {
   itracku_data_record d;
@@ -545,7 +545,7 @@ itracku_file_read_last_time(gbfile* fin)
   }
   gbfseek(fin, -(int)s, SEEK_END);
   itracku_file_read_data_record(fin, &d);
-  return (gbuint32) le_read32(d.creation_time);
+  return (uint32_t) le_read32(d.creation_time);
 }
 
 static void

@@ -94,14 +94,14 @@ static gbfile* fin, *fout;
 static int mmo_version;
 static int mmo_obj_ct;
 static int mmo_object_id;
-static gbuint32 mmo_filemark;
-static gbuint16 wpt_object_id;
-static gbuint16 rte_object_id;
-static gbuint16 trk_object_id;
-static gbuint16 cat_object_id;
-static gbuint16 ico_object_id;
-static gbuint16 pos_object_id;
-static gbuint16 txt_object_id;
+static uint32_t mmo_filemark;
+static uint16_t wpt_object_id;
+static uint16_t rte_object_id;
+static uint16_t trk_object_id;
+static uint16_t cat_object_id;
+static uint16_t ico_object_id;
+static uint16_t pos_object_id;
+static uint16_t txt_object_id;
 static gpsdata_type mmo_datatype;
 static route_head* mmo_rte;
 
@@ -144,11 +144,11 @@ static const mmo_icon_mapping_t mmo_icon_value_table[] = {
   { -1, NULL }
 };
 
-static const gbuint32 obj_type_ico = 0x00;
-static const gbuint32 obj_type_rte = 0x14;
-static const gbuint32 obj_type_trk = 0x1E;
-static const gbuint32 obj_type_txt = 0x32;
-static const gbuint32 obj_type_wpt = 0x3C;
+static const uint32_t obj_type_ico = 0x00;
+static const uint32_t obj_type_rte = 0x14;
+static const uint32_t obj_type_trk = 0x1E;
+static const uint32_t obj_type_txt = 0x32;
+static const uint32_t obj_type_wpt = 0x3C;
 
 /* helpers */
 
@@ -302,7 +302,7 @@ mmo_get_objid(const void* ptr)
 
 
 static mmo_data_t*
-mmo_get_object(const gbuint16 objid)
+mmo_get_object(const uint16_t objid)
 {
   char key[16];
   mmo_data_t* data;
@@ -427,7 +427,7 @@ mmo_read_CObjIcons(mmo_data_t* data)
   const char* sobj = "CObjIcons";
 #endif
   int icon_id;
-  gbuint16 u16;
+  uint16_t u16;
 
   DBG((sobj, ":-----------------------------------------------------\n"));
   DBG((sobj, "name = \"%s\" [ visible=%s, id=0x%04X ]\n",
@@ -495,7 +495,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
   }
 
   if (mmo_version >= 0x18) {
-    gbuint16 u16;
+    uint16_t u16;
     u16 = gbfgetuint16(fin);
     DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
     u16 = gbfgetuint16(fin);
@@ -625,7 +625,7 @@ mmo_read_CObjRoute(mmo_data_t* data)
   route_add_head(rte);
 
   if (mmo_version >= 0x18) {
-    gbuint16 u16;
+    uint16_t u16;
     u16 = gbfgetuint16(fin);
     DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
     u16 = gbfgetuint16(fin);
@@ -700,7 +700,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
   track_add_head(trk);
 
   if (mmo_version >= 0x18) {
-    gbuint16 u16;
+    uint16_t u16;
     u16 = gbfgetuint16(fin);
     DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
     u16 = gbfgetuint16(fin);
@@ -730,11 +730,11 @@ mmo_read_CObjTrack(mmo_data_t* data)
     wpt->altitude = gbfgetflt(fin);
 
     if (unk != 0) {
-      gbuint16 ux;
+      uint16_t ux;
       ux = gbfgetuint16(fin);
       DBG((sobj, "unknown value = 0x%04X (%d)\n", ux, ux));
       if (unk > 1) {
-        gbuint16 ux;
+        uint16_t ux;
         ux = gbfgetuint16(fin);
         DBG((sobj, "unknown value = 0x%04X (%d)\n", ux, ux));
       }
@@ -743,7 +743,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
   }
 
   if (mmo_version > 0) {
-    gbuint32 u32;
+    uint32_t u32;
 
     u32 = gbfgetuint32(fin); 	/* Min. update interval */
     DBG((sobj, "min. update interval = %d\n", u32));
@@ -776,7 +776,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
     trk->line_color.opacity = 255 - (u8 * 51);
 
     if (mmo_version >= 0x16) {
-      gbuint16 u16;
+      uint16_t u16;
       char* text;
 
       // XXX ARB was u8 = gbfgetc(fin); but actually a string
@@ -882,7 +882,7 @@ mmo_read_object(void)
 
   objid = gbfgetuint16(fin);
   if (objid == 0xFFFF) {
-    gbuint16 version;
+    uint16_t version;
     char* sobj;
     int len;
     DBG(("mmo_read_object", "Registering new object type\n"));
@@ -926,7 +926,7 @@ mmo_read_object(void)
     data->name = mmo_readstr();
 
     if (objid != cat_object_id) {
-      gbuint32 obj_type;
+      uint32_t obj_type;
       data->ctime = gbfgetuint32(fin);
       data->mtime = gbfgetuint32(fin);
       data->locked = gbfgetc(fin);
@@ -934,7 +934,7 @@ mmo_read_object(void)
 
       obj_type = gbfgetuint32(fin);
 #ifdef MMO_DBG
-      gbuint32 expected_type = 0xFFFFFFFF;
+      uint32_t expected_type = 0xFFFFFFFF;
       if (objid == ico_object_id) {
         expected_type = obj_type_ico;
       } else if (objid == trk_object_id) {
@@ -1196,7 +1196,7 @@ static int
 mmo_write_obj_mark(const char* sobj, const char* name)
 {
   char* key;
-  gbuint16 nr;
+  uint16_t nr;
   char buf[16];
   int res;
 
@@ -1229,7 +1229,7 @@ static void
 mmo_write_category(const char* sobj, const char* name)
 {
   char* key;
-  gbuint16 nr;
+  uint16_t nr;
 
   if (avltree_find(category_names, name, (const void**)&key)) {
     nr = (unsigned)atoi(key);
@@ -1243,7 +1243,7 @@ mmo_write_category(const char* sobj, const char* name)
 
 static int
 mmo_write_obj_head(const char* sobj, const char* name, const time_t ctime,
-                   const gbuint32 obj_type)
+                   const uint32_t obj_type)
 {
   int res;
 

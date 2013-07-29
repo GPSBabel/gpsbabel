@@ -221,9 +221,9 @@ typedef enum {
 } nuke_dest;
 
 typedef struct {
-  gbuint8 type;
-  gbuint8 mode;
-  gbuint8 location;
+  uint8_t type;
+  uint8_t mode;
+  uint8_t location;
   char object_name[64];
 } msg_delete_t;
 
@@ -232,20 +232,20 @@ typedef struct {
 // Input Waypoint Message
 // Message ID: 0xB014
 typedef struct {
-  gbuint8 total[4]; // U32
-  gbuint8 index[4]; // U32
-  gbuint8 year;
-  gbuint8 month;
-  gbuint8 day;
-  gbuint8 hour;
-  gbuint8 minute;
-  gbuint8 second;
-  gbuint8 latitude[4]; // S32 rad * 100000000
-  gbuint8 longitude[4]; // S32 rad * 100000000
-  gbuint8 elevation[4]; // F32 meters
-  gbuint8 color;
-  gbuint8 symbol;
-  gbuint8 name_size;
+  uint8_t total[4]; // U32
+  uint8_t index[4]; // U32
+  uint8_t year;
+  uint8_t month;
+  uint8_t day;
+  uint8_t hour;
+  uint8_t minute;
+  uint8_t second;
+  uint8_t latitude[4]; // S32 rad * 100000000
+  uint8_t longitude[4]; // S32 rad * 100000000
+  uint8_t elevation[4]; // F32 meters
+  uint8_t color;
+  uint8_t symbol;
+  uint8_t name_size;
   char name[1];
   // note_size[2] U16
   // note[note_size]
@@ -257,9 +257,9 @@ typedef struct {
 // input waypoint note
 // Message ID: 0xB016
 typedef struct {
-  gbuint8 index[2];
-  gbuint8 total[2];
-  gbuint8 name_size;
+  uint8_t index[2];
+  uint8_t total[2];
+  uint8_t name_size;
   char name[1];
   // note_size[2]
   // note[note_size]
@@ -270,42 +270,42 @@ typedef struct {
 // Input Track Point Message
 // Message ID: 0xB036
 typedef struct {
-  gbuint8 total[4]; // U32
-  gbuint8 index[4]; // U32
-  gbuint8 number;
+  uint8_t total[4]; // U32
+  uint8_t index[4]; // U32
+  uint8_t number;
   struct {
-    gbuint8 year;
-    gbuint8 month;
-    gbuint8 day;
-    gbuint8 hour;
-    gbuint8 minute;
-    gbuint8 second;
-    gbuint8 latitude[4]; // S32 rad * 100000000
-    gbuint8 longitude[4]; // S32 rad * 100000000
-    gbuint8 elevation[4]; // F32 meters
-    gbuint8 speed[2]; // U16 km/h * 10
-    gbuint8 heading[2]; // U16 deg * 100
-    gbuint8 status;
+    uint8_t year;
+    uint8_t month;
+    uint8_t day;
+    uint8_t hour;
+    uint8_t minute;
+    uint8_t second;
+    uint8_t latitude[4]; // S32 rad * 100000000
+    uint8_t longitude[4]; // S32 rad * 100000000
+    uint8_t elevation[4]; // F32 meters
+    uint8_t speed[2]; // U16 km/h * 10
+    uint8_t heading[2]; // U16 deg * 100
+    uint8_t status;
   } point[1];
 } msg_track_point_t;
 
 // Output Track Header (Name) Message
 // Message ID: 0xB032
 typedef struct {
-  gbuint8 total_tracks[2]; // U16
-  gbuint8 number[2]; // U16
+  uint8_t total_tracks[2]; // U16
+  uint8_t number[2]; // U16
   char name[32];
-  gbuint8 total_points[4]; // U32
-  gbuint8 year;
-  gbuint8 month;
-  gbuint8 day;
-  gbuint8 hour;
-  gbuint8 minute;
-  gbuint8 second;
-  gbuint8 color[2]; // U16
-  gbuint8 distance[4]; // U32 m
-  gbuint8 duration[4]; // U32 sec
-  gbuint8 comment_size[2]; // U16
+  uint8_t total_points[4]; // U32
+  uint8_t year;
+  uint8_t month;
+  uint8_t day;
+  uint8_t hour;
+  uint8_t minute;
+  uint8_t second;
+  uint8_t color[2]; // U16
+  uint8_t distance[4]; // U32 m
+  uint8_t duration[4]; // U32 sec
+  uint8_t comment_size[2]; // U16
   char comment[1];
 } msg_track_header_t;
 
@@ -313,28 +313,28 @@ typedef struct {
 // Message ID: 0xB035
 typedef struct {
   char name[32];
-  gbuint8 total_points[4]; // U32
-  gbuint8 year;
-  gbuint8 month;
-  gbuint8 day;
-  gbuint8 hour;
-  gbuint8 minute;
-  gbuint8 second;
-  gbuint8 color[2]; // U16
-  gbuint8 comment_size[2]; // U16
+  uint8_t total_points[4]; // U32
+  uint8_t year;
+  uint8_t month;
+  uint8_t day;
+  uint8_t hour;
+  uint8_t minute;
+  uint8_t second;
+  uint8_t color[2]; // U16
+  uint8_t comment_size[2]; // U16
   char comment[1];
 } msg_track_header_in_t;
 
 // Output Route Shape Message
 // Message ID: 0xB054
 typedef struct {
-  gbuint8 total[4]; // U32
-  gbuint8 index[4]; // U32
-  gbuint8 number;
-  gbuint8 reserved;
+  uint8_t total[4]; // U32
+  uint8_t index[4]; // U32
+  uint8_t number;
+  uint8_t reserved;
   struct {
-    gbuint8 latitude[4]; // S32 rad * 100000000
-    gbuint8 longitude[4]; // S32 rad * 100000000
+    uint8_t latitude[4]; // S32 rad * 100000000
+    uint8_t longitude[4]; // S32 rad * 100000000
   } point[1];
 } msg_route_shape_t;
 
@@ -343,21 +343,21 @@ typedef struct {
 // Input Route Itin Point Message
 // Message ID: 0xB056
 typedef struct {
-  gbuint8 total[4]; // U32
-  gbuint8 index[4]; // U32
+  uint8_t total[4]; // U32
+  uint8_t index[4]; // U32
   char name[32];
-  gbuint8 latitude[4]; // S32 rad * 100000000
-  gbuint8 longitude[4]; // S32 rad * 100000000
-  gbuint8 time_from_start[4]; // U32 sec
-  gbuint8 distance_from_start[4]; // F32 km
-  gbuint8 bearing_in[2]; // U16 deg * 100
-  gbuint8 bearing_out[2]; // U16 deg * 100
-  gbuint8 bearing_next[2]; // U16 deg * 100
-  gbuint8 itinerary_type;
-  gbuint8 turn_type;
-  gbuint8 road_class[2]; // U16
-  gbuint8 feature_code[4]; // U32
-  gbuint8 exit_label_size;
+  uint8_t latitude[4]; // S32 rad * 100000000
+  uint8_t longitude[4]; // S32 rad * 100000000
+  uint8_t time_from_start[4]; // U32 sec
+  uint8_t distance_from_start[4]; // F32 km
+  uint8_t bearing_in[2]; // U16 deg * 100
+  uint8_t bearing_out[2]; // U16 deg * 100
+  uint8_t bearing_next[2]; // U16 deg * 100
+  uint8_t itinerary_type;
+  uint8_t turn_type;
+  uint8_t road_class[2]; // U16
+  uint8_t feature_code[4]; // U32
+  uint8_t exit_label_size;
   char exit_label[1];
   // comment_size U8
   // comment[comment_size]
@@ -367,67 +367,67 @@ typedef struct {
 // Output Route Header (Name) Message
 // Message ID: 0xB052
 typedef struct {
-  gbuint8 total[2]; // U16
-  gbuint8 index[2]; // U16
+  uint8_t total[2]; // U16
+  uint8_t index[2]; // U16
   char name[64];
-  gbuint8 type;
-  gbuint8 total_route_point[4]; // U32
-  gbuint8 total_shape_point[4]; // U32
+  uint8_t type;
+  uint8_t total_route_point[4]; // U32
+  uint8_t total_shape_point[4]; // U32
 } msg_route_header_t;
 
 // Input Upload Route Header Message
 // Message ID: 0xB055
 typedef struct {
   char name[64];
-  gbuint8 type;
-  gbuint8 total_route_point[4]; // U32
-  gbuint8 total_shape_point[4]; // U32
+  uint8_t type;
+  uint8_t total_route_point[4]; // U32
+  uint8_t total_shape_point[4]; // U32
 } msg_route_header_in_t;
 
 // Output Navigation Message
 // Message ID: 0xA010
 typedef struct {
-  gbuint8 gps_week[2]; // U16
-  gbuint8 time_of_week[8]; // D64 sec
-  gbuint8 year[2]; // U16
-  gbuint8 month;
-  gbuint8 day;
-  gbuint8 hour;
-  gbuint8 minute;
-  gbuint8 second;
-  gbuint8 satellites;
-  gbuint8 latitude[8]; // D64 deg
-  gbuint8 longitude[8]; // D64 deg
-  gbuint8 elevation[8]; // D64 meters
-  gbuint8 geoid_offset[2]; // S16 meters * 10
-  gbuint8 speed[4]; // F32 km/h
-  gbuint8 heading[2]; // U16 deg * 100
-  gbuint8 magnetic_variation[2]; // S16 deg * 100
-  gbuint8 fix_status;
+  uint8_t gps_week[2]; // U16
+  uint8_t time_of_week[8]; // D64 sec
+  uint8_t year[2]; // U16
+  uint8_t month;
+  uint8_t day;
+  uint8_t hour;
+  uint8_t minute;
+  uint8_t second;
+  uint8_t satellites;
+  uint8_t latitude[8]; // D64 deg
+  uint8_t longitude[8]; // D64 deg
+  uint8_t elevation[8]; // D64 meters
+  uint8_t geoid_offset[2]; // S16 meters * 10
+  uint8_t speed[4]; // F32 km/h
+  uint8_t heading[2]; // U16 deg * 100
+  uint8_t magnetic_variation[2]; // S16 deg * 100
+  uint8_t fix_status;
 } msg_navigation_t;
 
 // Output Satellite Info Message
 // Message ID: 0xA020
 typedef struct {
-  gbuint8 gps_week[2]; // U16
-  gbuint8 time_of_week[8]; // D64 sec
-  gbuint8 hdop[2]; // U16
-  gbuint8 vdop[2]; // U16
-  gbuint8 pdop[2]; // U16
-  gbuint8 number;
+  uint8_t gps_week[2]; // U16
+  uint8_t time_of_week[8]; // D64 sec
+  uint8_t hdop[2]; // U16
+  uint8_t vdop[2]; // U16
+  uint8_t pdop[2]; // U16
+  uint8_t number;
   struct {
-    gbuint8 prn;
-    gbuint8 azimuth[2]; // S16 deg? * 100
-    gbuint8 elevation[2]; // S16 deg? * 100
-    gbuint8 Cn0[2]; // U16 snr * 100
-    gbuint8 status;
+    uint8_t prn;
+    uint8_t azimuth[2]; // S16 deg? * 100
+    uint8_t elevation[2]; // S16 deg? * 100
+    uint8_t Cn0[2]; // U16 snr * 100
+    uint8_t status;
   } sat[1];
 } msg_satellite_t;
 
 // Output Version Message
 // Message ID: 0xA001
 typedef struct {
-  gbuint8 firmware_version[4];
+  uint8_t firmware_version[4];
   char company[32];
   char product[32];
   char firmware[32];
@@ -439,19 +439,19 @@ typedef struct {
 // Output Device Capabilities Message
 // Message ID: 0xB001
 typedef struct {
-  gbuint8 max_waypoints[4]; // U32
-  gbuint8 max_tracks[2]; // U16
-  gbuint8 max_track_points[4]; // U32
-  gbuint8 max_routes[2]; // U16
-  gbuint8 max_route_points[4]; // U32
-  gbuint8 max_route_shape_points[4]; // U32
-  gbuint8 max_maps[2]; // U16
-  gbuint8 min_map_version[2]; // U16
-  gbuint8 max_map_version[2]; // U16
-  gbuint8 total_internal_file_memory[4]; // U32
-  gbuint8 avail_internal_file_memory[4]; // U32
-  gbuint8 total_external_file_memory[4]; // U32
-  gbuint8 avail_external_file_memory[4]; // U32
+  uint8_t max_waypoints[4]; // U32
+  uint8_t max_tracks[2]; // U16
+  uint8_t max_track_points[4]; // U32
+  uint8_t max_routes[2]; // U16
+  uint8_t max_route_points[4]; // U32
+  uint8_t max_route_shape_points[4]; // U32
+  uint8_t max_maps[2]; // U16
+  uint8_t min_map_version[2]; // U16
+  uint8_t max_map_version[2]; // U16
+  uint8_t total_internal_file_memory[4]; // U32
+  uint8_t avail_internal_file_memory[4]; // U32
+  uint8_t total_external_file_memory[4]; // U32
+  uint8_t avail_external_file_memory[4]; // U32
 } msg_capabilities_t;
 
 //-----------------------------------------------------------------------------
@@ -484,8 +484,8 @@ debug_out_time(const char* s)
 
 //-----------------------------------------------------------------------------
 
-static gbuint16
-checksum(const gbuint8* p, unsigned n)
+static uint16_t
+checksum(const uint8_t* p, unsigned n)
 {
   int x = 0;
   unsigned i;
@@ -496,7 +496,7 @@ checksum(const gbuint8* p, unsigned n)
   if (n & 1) {
     x += *p;
   }
-  return (gbuint16)-x;
+  return (uint16_t)-x;
 }
 
 //-----------------------------------------------------------------------------
@@ -511,7 +511,7 @@ packet_read(void* buf)
   }
   if (global_opts.debug_level >= DBGLVL_H) {
     unsigned j;
-    const gbuint8* p = (const gbuint8*) buf;
+    const uint8_t* p = (const uint8_t*) buf;
 
     debug_out_time("pcktrd");
     for (j = 0; j < n; j++) {
@@ -535,7 +535,7 @@ packet_write(const void* buf, unsigned size)
   unsigned n;
   if (global_opts.debug_level >= DBGLVL_H) {
     unsigned j;
-    const gbuint8* p = (const gbuint8*) buf;
+    const uint8_t* p = (const uint8_t*) buf;
 
     debug_out_time("pcktwr");
     for (j = 0; j < size; j++) {
@@ -564,7 +564,7 @@ typedef struct {
   unsigned size;
   // buffer size
   unsigned capacity;
-  gbuint8* buf;
+  uint8_t* buf;
   // convenience pointer to message data area
   void* data;
 } message_t;
@@ -573,7 +573,7 @@ static void
 message_init(message_t* m)
 {
   m->capacity = 100;
-  m->buf = (gbuint8*)xmalloc(m->capacity);
+  m->buf = (uint8_t*)xmalloc(m->capacity);
   m->data = m->buf + 2 + 8;
 }
 
@@ -582,7 +582,7 @@ message_init_size(message_t* m, unsigned size)
 {
   m->size = size;
   m->capacity = 2 + 8 + size + 4;
-  m->buf = (gbuint8*)xmalloc(m->capacity);
+  m->buf = (uint8_t*)xmalloc(m->capacity);
   m->data = m->buf + 2 + 8;
 }
 
@@ -601,7 +601,7 @@ message_ensure_size(message_t* m, unsigned size)
   if (m->capacity < 2 + 8 + size + 4) {
     m->capacity = 2 + 8 + size + 4;
     xfree(m->buf);
-    m->buf = (gbuint8*)xmalloc(m->capacity);
+    m->buf = (uint8_t*)xmalloc(m->capacity);
     m->data = m->buf + 2 + 8;
   }
 }
@@ -620,7 +620,7 @@ message_write(unsigned msg_id, message_t* m)
   unsigned chksum;
   unsigned count;
   unsigned n;
-  gbuint8* p = m->buf;
+  uint8_t* p = m->buf;
 
   // header (2 start bytes filled in later)
   p[2] = 0xdb;
@@ -631,7 +631,7 @@ message_write(unsigned msg_id, message_t* m)
   chksum = checksum(p + 2, 6);
   le_write16(p + 8, chksum);
   // message data (filled in by caller)
-  chksum = checksum((gbuint8*) m->data, m->size);
+  chksum = checksum((uint8_t*) m->data, m->size);
   n = 2 + 8 + m->size;
   // trailer (checksum and marker bytes)
   le_write16(p + n, chksum);
@@ -640,8 +640,8 @@ message_write(unsigned msg_id, message_t* m)
   // size of message not counting packet start bytes
   count = 8 + m->size + 4;
   do {
-    const gbuint8 save0 = p[0];
-    const gbuint8 save1 = p[1];
+    const uint8_t save0 = p[0];
+    const uint8_t save1 = p[1];
     n = delbin_os_packet_size - 2;
     if (n > count) {
       n = count;
@@ -663,9 +663,9 @@ message_write(unsigned msg_id, message_t* m)
 
 // read from the payload of a single packet
 static unsigned
-read_depacketize_1(gbuint8** p, unsigned n, int new_packet)
+read_depacketize_1(uint8_t** p, unsigned n, int new_packet)
 {
-  static gbuint8 buf[256];
+  static uint8_t buf[256];
   static unsigned buf_i, buf_n;
   if (new_packet) {
     buf_n = 0;
@@ -688,10 +688,10 @@ read_depacketize_1(gbuint8** p, unsigned n, int new_packet)
 
 // read from packet payloads until request is fulfilled
 static void
-read_depacketize(gbuint8* buf, unsigned n)
+read_depacketize(uint8_t* buf, unsigned n)
 {
   while (n) {
-    gbuint8* p;
+    uint8_t* p;
     unsigned nn = read_depacketize_1(&p, n, FALSE);
     memcpy(buf, p, nn);
     n -= nn;
@@ -708,8 +708,8 @@ message_read_1(unsigned msg_id, message_t* m)
   for (;;) {
     unsigned total;
     unsigned n;
-    gbuint8 buf[8];
-    gbuint8* p;
+    uint8_t buf[8];
+    uint8_t* p;
 
     n = read_depacketize_1(&p, 8, FALSE);
     memset(buf, 0, 8);
@@ -727,9 +727,9 @@ message_read_1(unsigned msg_id, message_t* m)
     m->buf[0] = m->buf[1] = 0;
     memcpy(m->buf + 2, buf, 8);
     // read message body and trailer
-    read_depacketize((gbuint8*) m->data, total);
-    p = (gbuint8*)m->data + m->size;
-    if (checksum((gbuint8*) m->data, m->size) == le_readu16(p) &&
+    read_depacketize((uint8_t*) m->data, total);
+    p = (uint8_t*)m->data + m->size;
+    if (checksum((uint8_t*) m->data, m->size) == le_readu16(p) &&
         p[2] == 0xad && p[3] == 0xbc) {
       if (global_opts.debug_level >= DBGLVL_M) {
         warning(MYNAME ": received %x\n", id);
@@ -789,7 +789,7 @@ message_read(unsigned msg_id, message_t* m)
       break;
     }
     if (id == MSG_ERROR) {
-      const gbuint8* p = (const gbuint8*) m->data;
+      const uint8_t* p = (const uint8_t*) m->data;
       fatal(MYNAME ": device error %u: \"%s\"\n", *p, p + 1);
     }
     message_ack(id, m);
@@ -963,22 +963,22 @@ send_batch(void)
 // Coordinate conversion
 
 static double
-delbin_rad2deg(gbint32 x)
+delbin_rad2deg(int32_t x)
 {
   return x * ((180 / M_PI) / 100000000);
 }
 
-static gbint32
+static int32_t
 delbin_deg2rad(double x)
 {
-  return (gbint32)(x * ((M_PI / 180) * 100000000));
+  return (int32_t)(x * ((M_PI / 180) * 100000000));
 }
 
 //-----------------------------------------------------------------------------
 // Waypoint reading
 
 static time_t
-decode_time(const gbuint8* p)
+decode_time(const uint8_t* p)
 {
   struct tm t;
   t.tm_year = p[0];
@@ -1124,7 +1124,7 @@ read_waypoints(void)
 // Waypoint writing
 
 static void
-encode_time(time_t time_, gbuint8* p)
+encode_time(time_t time_, uint8_t* p)
 {
   const struct tm* t = gmtime(&time_);
   p[0] = t->tm_year;
@@ -1496,7 +1496,7 @@ write_waypoints(void)
 // Track reading
 
 static void
-decode_sat_fix(waypoint* wp, const gbuint8 status)
+decode_sat_fix(waypoint* wp, const uint8_t status)
 {
   switch (status & 3) {
   case 1:
@@ -1723,10 +1723,10 @@ write_track_points(void)
     le_write_float(p->point[j].elevation, f);
     f = WAYPT_GET(wp, speed, 0);
     f *= (60 * 60) / 100;
-    le_write16(p->point[j].speed, (gbuint16)f);
+    le_write16(p->point[j].speed, (uint16_t)f);
     f = WAYPT_GET(wp, course, 0);
     f *= 100;
-    le_write16(p->point[j].heading, (gbuint16)f);
+    le_write16(p->point[j].heading, (uint16_t)f);
     switch (wp->fix) {
     default:
       p->point[j].status = 0;
@@ -2947,7 +2947,7 @@ linuxhid_os_packet_write(const void* buf, unsigned size)
 {
   struct hiddev_usage_ref_multi urefm;
   struct hiddev_report_info rinfo;
-  const gbuint8* p = (const gbuint8*) buf;
+  const uint8_t* p = (const uint8_t*) buf;
   unsigned i;
 
   for (i = 0; i < size; i++) {

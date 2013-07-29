@@ -82,7 +82,7 @@ html_disp(const waypoint* wpt)
   char tbuf[1024];
   char* cout;
   time_t tm = wpt->GetCreationTime();
-  gbint32 utmz;
+  int32_t utmz;
   double utme, utmn;
   char utmzc;
   fs_xml* fs_gpx = NULL;

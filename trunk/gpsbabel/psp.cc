@@ -69,7 +69,7 @@ static char *
 psp_read_str(gbfile *fin)
 {
   int len;
-  gbint16 *buff;
+  int16_t *buff;
   char *res;
 
   len = (unsigned char)gbfgetc(fin);
@@ -77,7 +77,7 @@ psp_read_str(gbfile *fin)
     return NULL;
   }
 
-  buff = (gbint16*) xmalloc(len * sizeof(*buff));
+  buff = (int16_t*) xmalloc(len * sizeof(*buff));
   gbfread(buff, sizeof(*buff), len, fin);
   res = cet_str_uni_to_utf8(buff, len);
   xfree(buff);

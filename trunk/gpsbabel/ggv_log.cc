@@ -126,13 +126,13 @@ ggv_log_read(void)
 
     wpt = waypt_new();
 
-    deg = (gbint16) le_read16(&buf[0]);
+    deg = (int16_t) le_read16(&buf[0]);
     min = le_read16(&buf[2]);
     sec = le_read_float(&buf[4]);
     xlat = (double)deg + ((double)min / (double)60) + (sec / (double)3600.0);
     wpt->latitude = xlat;
 
-    deg = (gbint16) le_read16(&buf[8]);
+    deg = (int16_t) le_read16(&buf[8]);
     min = le_read16(&buf[10]);
     sec = le_read_float(&buf[12]);
     xlon = (double)deg + ((double)min / (double)60) + (sec / (double)3600.0);
@@ -242,15 +242,15 @@ ggv_log_track_head_cb(const route_head* trk)
       secs = (double)tm.tm_sec + wpt->GetCreationTime().time().msec() / 1000.0;
     }
 
-    gbfputint16((gbint16) latint, fout);
-    gbfputint16((gbint16) latmin, fout);
+    gbfputint16((int16_t) latint, fout);
+    gbfputint16((int16_t) latmin, fout);
     gbfputflt(latsec, fout);
-    gbfputint16((gbint16) lonint, fout);
-    gbfputint16((gbint16) lonmin, fout);
+    gbfputint16((int16_t) lonint, fout);
+    gbfputint16((int16_t) lonmin, fout);
     gbfputflt(lonsec, fout);
-    gbfputint16((gbint16) course, fout);
-    gbfputint16((gbint16)(wpt->altitude != unknown_alt) ? wpt->altitude : 0, fout);
-    gbfputint16((gbint16) speed, fout);
+    gbfputint16((int16_t) course, fout);
+    gbfputint16((int16_t)(wpt->altitude != unknown_alt) ? wpt->altitude : 0, fout);
+    gbfputint16((int16_t) speed, fout);
     gbfputint16(0, fout);
     gbfputint16(tm.tm_year, fout);
     gbfputint16(tm.tm_mon, fout);

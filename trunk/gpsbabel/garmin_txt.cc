@@ -385,7 +385,7 @@ print_date_and_time(const time_t time, const int time_only)
 }
 
 static void
-print_categories(gbuint16 categories)
+print_categories(uint16_t categories)
 {
   int i, count;
   char* c;
@@ -925,12 +925,12 @@ parse_date_and_time(char* str, time_t* value)
   return 1;
 }
 
-static gbuint16
+static uint16_t
 parse_categories(const char* str)
 {
   char buff[256];
-  gbuint16 val;
-  gbuint16 res = 0;
+  uint16_t val;
+  uint16_t res = 0;
   char* cin, *cx;
 
   if (*str == '\0') {

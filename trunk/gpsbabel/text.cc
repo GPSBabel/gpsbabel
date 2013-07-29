@@ -98,7 +98,7 @@ text_disp(const waypoint *wpt)
   int latint, lonint;
   char tbuf[1024];
   time_t tm = wpt->GetCreationTime();
-  gbint32 utmz;
+  int32_t utmz;
   double utme, utmn;
   char utmzc;
   char *tmpout1, *tmpout2;

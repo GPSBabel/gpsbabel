@@ -165,7 +165,7 @@ rd_char(int *errors)
 }
 
 static int
-rd_buf(const gbuint8 *buf, int len)
+rd_buf(const uint8_t *buf, int len)
 {
   int rc, timeout, i;
   char dump[16*3+16+2];
@@ -212,7 +212,7 @@ static unsigned int
 rd_word(void)
 {
   int errors = 5;		/* allow this many errors */
-  gbuint8 buffer[2];
+  uint8_t buffer[2];
 
   buffer[0] = rd_char(&errors);
   buffer[1] = rd_char(&errors);
@@ -247,9 +247,9 @@ wr_buf(const unsigned char *str, int len)
 * %%%        SkyTraq protocol implementation                               %%% *
 *******************************************************************************/
 
-gbuint8 NL[2] = { 0x0D, 0x0A };
-gbuint8 MSG_START[2] = { 0xA0, 0xA1 };
-gbuint8 SECTOR_READ_END[13] = { 'E','N','D', 0, 'C','H','E','C','K','S','U','M','=' };
+uint8_t NL[2] = { 0x0D, 0x0A };
+uint8_t MSG_START[2] = { 0xA0, 0xA1 };
+uint8_t SECTOR_READ_END[13] = { 'E','N','D', 0, 'C','H','E','C','K','S','U','M','=' };
 
 static int
 skytraq_calc_checksum(const unsigned char *buf, int len)
@@ -315,7 +315,7 @@ skytraq_rd_msg(const void *payload, unsigned int len)
 }
 
 static void
-skytraq_wr_msg(const gbuint8 *payload, int len)
+skytraq_wr_msg(const uint8_t *payload, int len)
 {
   int cs;
 
@@ -332,9 +332,9 @@ skytraq_wr_msg(const gbuint8 *payload, int len)
 }
 
 static int
-skytraq_expect_ack(gbuint8 id)
+skytraq_expect_ack(uint8_t id)
 {
-  gbuint8 ack_msg[2];
+  uint8_t ack_msg[2];
   int i/*, rcv_len*/;
 
   for (i = 0; i < MSG_RETRIES; i++) {
@@ -371,7 +371,7 @@ skytraq_expect_ack(gbuint8 id)
 }
 
 static int
-skytraq_expect_msg(gbuint8 id, const gbuint8 *payload, int len)
+skytraq_expect_msg(uint8_t id, const uint8_t *payload, int len)
 {
   int i, rc;
 
@@ -389,7 +389,7 @@ skytraq_expect_msg(gbuint8 id, const gbuint8 *payload, int len)
 }
 
 static int
-skytraq_wr_msg_verify(const gbuint8 *payload, int len)
+skytraq_wr_msg_verify(const uint8_t *payload, int len)
 {
   int i, rc;
 
@@ -412,7 +412,7 @@ skytraq_wr_msg_verify(const gbuint8 *payload, int len)
 static int
 skytraq_system_restart(void)
 {
-  gbuint8 MSG_SYSTEM_RESTART[15] =
+  uint8_t MSG_SYSTEM_RESTART[15] =
   { 0x01, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
   db(2, "restart system\n");
@@ -425,7 +425,7 @@ skytraq_set_baud(int baud)
   /* Note: according to AN0003_v3.pdf, attrib == 0x00 means write to SRAM only, however
    * it seems to write to flash too. The Windows software sends 0x02 so we do here too.
    */
-  gbuint8 MSG_CONFIGURE_SERIAL_PORT[4]
+  uint8_t MSG_CONFIGURE_SERIAL_PORT[4]
     = { 0x05, 0x00, 0x00, 0x02 };
   int rc;
 
@@ -481,7 +481,7 @@ skytraq_configure_logging(void)
    // an0008-1.4.14: logs if
    // (dt > tmin & dd >= dmin & v >= vmin) | dt > tmax | dd > dmax | v > vmax
    unsigned int tmin=6, tmax=3600, dmin=0, dmax=10000, nn=0;
-   gbuint8 MSG_LOG_CONFIGURE_CONTROL[] = {
+   uint8_t MSG_LOG_CONFIGURE_CONTROL[] = {
       0x18,			// message_id
       0x00, 0x00, 0x0e, 0x10,	// max_time: was 0x0000ffff (big endian!)
       0x00, 0x00, 0x00, 0x06,	// min_time: was 0x00000005
@@ -513,16 +513,16 @@ skytraq_configure_logging(void)
 }
 
 static int
-skytraq_get_log_buffer_status(gbuint32 *log_wr_ptr, gbuint16 *sectors_free, gbuint16 *sectors_total)
+skytraq_get_log_buffer_status(uint32_t *log_wr_ptr, uint16_t *sectors_free, uint16_t *sectors_total)
 {
-  gbuint8 MSG_LOG_STATUS_CONTROL = 0x17;
+  uint8_t MSG_LOG_STATUS_CONTROL = 0x17;
   struct {
-    gbuint8 id[1];
-    gbuint8 log_wr_ptr[4];
-    gbuint8 sectors_free[2];
-    gbuint8 sectors_total[2];
-    gbuint8 max_time[4], min_time[4], max_dist[4], min_dist[4], max_speed[4], min_speed[4];
-    gbuint8 datalog_enable[1], log_fifo_mode[1];
+    uint8_t id[1];
+    uint8_t log_wr_ptr[4];
+    uint8_t sectors_free[2];
+    uint8_t sectors_total[2];
+    uint8_t max_time[4], min_time[4], max_dist[4], min_dist[4], max_speed[4], min_speed[4];
+    uint8_t datalog_enable[1], log_fifo_mode[1];
   } MSG_LOG_STATUS_OUTPUT;
   unsigned int rc;
 
@@ -531,7 +531,7 @@ skytraq_get_log_buffer_status(gbuint32 *log_wr_ptr, gbuint16 *sectors_free, gbui
     return res_ERROR;
   }
 
-  rc = skytraq_expect_msg(0x94, (gbuint8*)&MSG_LOG_STATUS_OUTPUT, sizeof(MSG_LOG_STATUS_OUTPUT));
+  rc = skytraq_expect_msg(0x94, (uint8_t*)&MSG_LOG_STATUS_OUTPUT, sizeof(MSG_LOG_STATUS_OUTPUT));
   if (rc < sizeof(MSG_LOG_STATUS_OUTPUT)) {
     db(1, MYNAME ": Didn't receive expected reply (%d)\n", rc);
     return res_ERROR;
@@ -669,18 +669,18 @@ make_trackpoint(struct read_state *st, double lat, double lon, double alt)
 }
 
 typedef struct {
-  gbuint32 gps_week;
-  gbuint32 gps_sec;
-  gbint32  x;
-  gbint32  y;
-  gbint32  z;
+  uint32_t gps_week;
+  uint32_t gps_sec;
+  int32_t  x;
+  int32_t  y;
+  int32_t  z;
 } full_item;
 
 typedef struct {
-  gbuint16 dt;
-  gbint16 dx;
-  gbint16 dy;
-  gbint16 dz;
+  uint16_t dt;
+  int16_t dx;
+  int16_t dy;
+  int16_t dz;
 } compact_item;
 
 struct full_item_frame {
@@ -807,7 +807,7 @@ process_data_item(struct read_state *pst, const item_frame *pitem, int len)
 }
 
 static int	/* returns number of bytes processed (terminates on 0xFF i.e. empty or padding bytes) */
-process_data_sector(struct read_state *pst, const gbuint8 *buf, int len)
+process_data_sector(struct read_state *pst, const uint8_t *buf, int len)
 {
   int plen, ilen;
 
@@ -824,12 +824,12 @@ process_data_sector(struct read_state *pst, const gbuint8 *buf, int len)
 
 /* Note: the buffer is being padded with 0xFFs if necessary so there are always SECTOR_SIZE valid bytes */
 static int
-skytraq_read_single_sector(unsigned int sector, gbuint8 *buf)
+skytraq_read_single_sector(unsigned int sector, uint8_t *buf)
 {
-  gbuint8 MSG_LOG_SECTOR_READ_CONTROL[2] = { 0x1B, (gbuint8)(sector) };
+  uint8_t MSG_LOG_SECTOR_READ_CONTROL[2] = { 0x1B, (uint8_t)(sector) };
   int errors = 5;		/* allow this many errors */
   unsigned int c, i, j, cs;
-  gbuint8 buffer[16];
+  uint8_t buffer[16];
 
   if (sector > 0xFF) {
     fatal(MYNAME ": Invalid sector number (%i)\n", sector);
@@ -837,7 +837,7 @@ skytraq_read_single_sector(unsigned int sector, gbuint8 *buf)
 
   db(2, "Reading sector #%i...\n", sector);
 
-  if (skytraq_wr_msg_verify((gbuint8*)&MSG_LOG_SECTOR_READ_CONTROL, sizeof(MSG_LOG_SECTOR_READ_CONTROL)) != res_OK) {
+  if (skytraq_wr_msg_verify((uint8_t*)&MSG_LOG_SECTOR_READ_CONTROL, sizeof(MSG_LOG_SECTOR_READ_CONTROL)) != res_OK) {
     db(1, MYNAME ": Didn't receive ACK\n");
     return res_ERROR;
   }
@@ -915,10 +915,10 @@ skytraq_read_single_sector(unsigned int sector, gbuint8 *buf)
 }
 
 static int
-skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, gbuint8 *buf)
+skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8_t *buf)
 {
-  gbuint8 MSG_LOG_READ_MULTI_SECTORS[5] = { 0x1D };
-  gbuint8 *buf_end_tag;
+  uint8_t MSG_LOG_READ_MULTI_SECTORS[5] = { 0x1D };
+  uint8_t *buf_end_tag;
   unsigned int cs, i, read_result;
 
   if (first_sector < 0  ||  first_sector > 0xFFFF) {
@@ -932,7 +932,7 @@ skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, gbuin
 
   db(2, "Reading %i sectors beginning from #%i...\n", sector_count, first_sector);
 
-  read_result = skytraq_wr_msg_verify((gbuint8*)&MSG_LOG_READ_MULTI_SECTORS, sizeof(MSG_LOG_READ_MULTI_SECTORS));
+  read_result = skytraq_wr_msg_verify((uint8_t*)&MSG_LOG_READ_MULTI_SECTORS, sizeof(MSG_LOG_READ_MULTI_SECTORS));
   if (read_result != res_OK) {
     return read_result;
   }
@@ -967,14 +967,14 @@ static void
 skytraq_read_tracks(void)
 {
   struct read_state st;
-  gbuint32 log_wr_ptr;
-  gbuint16 sectors_free, sectors_total, /*sectors_used_a, sectors_used_b,*/ sectors_used;
+  uint32_t log_wr_ptr;
+  uint16_t sectors_free, sectors_total, /*sectors_used_a, sectors_used_b,*/ sectors_used;
   int i, t, s, rc, got_sectors, total_sectors_read = 0;
   int read_at_once = MAX(atoi(opt_read_at_once), 1);
   int opt_first_sector_val = atoi(opt_first_sector);
   int opt_last_sector_val = atoi(opt_last_sector);
   int multi_read_supported = 1;
-  gbuint8 *buffer = NULL;
+  uint8_t *buffer = NULL;
   gbfile *dumpfile = NULL;
 
   state_init(&st);
@@ -1014,7 +1014,7 @@ skytraq_read_tracks(void)
     }
   }
 
-  buffer = (gbuint8*) xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6);
+  buffer = (uint8_t*) xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6);
   // m.ad/090930: removed code that tried reducing read_at_once if necessary since doesn't work with xmalloc
 
   if (opt_dump_file) {
@@ -1100,13 +1100,13 @@ skytraq_probe(void)
   int baud_rates[] = { 9600, 230400, 115200, 57600, 4800, 19200, 38400 };
   int baud_rates_count = sizeof(baud_rates)/sizeof(baud_rates[0]);
   int initbaud = atoi(opt_initbaud);
-  gbuint8 MSG_QUERY_SOFTWARE_VERSION[2] = { 0x02, 0x01 };
+  uint8_t MSG_QUERY_SOFTWARE_VERSION[2] = { 0x02, 0x01 };
   struct {
-    gbuint8 id;
-    gbuint8 sw_type;
-    gbuint8 kernel_ver[4];
-    gbuint8 odm_ver[4];
-    gbuint8 revision[4];
+    uint8_t id;
+    uint8_t sw_type;
+    uint8_t kernel_ver[4];
+    uint8_t odm_ver[4];
+    uint8_t revision[4];
   } MSG_SOFTWARE_VERSION;
   int i, rc;
 
@@ -1149,7 +1149,7 @@ skytraq_probe(void)
     		{
     			continue;
     		}*/
-    rc = skytraq_expect_msg(0x80, (gbuint8*)&MSG_SOFTWARE_VERSION, sizeof(MSG_SOFTWARE_VERSION));
+    rc = skytraq_expect_msg(0x80, (uint8_t*)&MSG_SOFTWARE_VERSION, sizeof(MSG_SOFTWARE_VERSION));
     if (rc < (int)sizeof(MSG_SOFTWARE_VERSION)) {
       db(2, "Didn't receive expected reply (%d)\n", rc);
     } else {
@@ -1172,7 +1172,7 @@ skytraq_probe(void)
 static int
 skytraq_erase()
 {
-  gbuint8 MSG_LOG_ERASE = 0x19;
+  uint8_t MSG_LOG_ERASE = 0x19;
 
   db(1, MYNAME ": Erasing logger memory...\n");
   if (skytraq_wr_msg_verify(&MSG_LOG_ERASE, sizeof(MSG_LOG_ERASE)) != res_OK) {
@@ -1188,8 +1188,8 @@ skytraq_set_location(void)
 {
   double lat, lng;
   unsigned int i;
-  gbuint8 MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-  gbuint8 MSG_GET_LOCATION = 0x35;
+  uint8_t MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+  uint8_t MSG_GET_LOCATION = 0x35;
 
   db(3, MYNAME ": set_location='%s'\n", opt_set_location);
 
@@ -1200,7 +1200,7 @@ skytraq_set_location(void)
     db(3, "%02x ", MSG_SET_LOCATION[i]);
   }
   db(3, "\n");
-  if (skytraq_wr_msg_verify((gbuint8*)&MSG_SET_LOCATION, sizeof(MSG_SET_LOCATION)) != res_OK) {
+  if (skytraq_wr_msg_verify((uint8_t*)&MSG_SET_LOCATION, sizeof(MSG_SET_LOCATION)) != res_OK) {
     fatal(MYNAME ": cannot set new location\n");
   }
   {
@@ -1294,10 +1294,10 @@ file_read(void)
   int opt_first_sector_val = atoi(opt_first_sector);
   int opt_last_sector_val = atoi(opt_last_sector);
   int sectors_read;
-  gbuint8 *buffer;
+  uint8_t *buffer;
 
   state_init(&st);
-  buffer = (gbuint8*) xmalloc(SECTOR_SIZE);
+  buffer = (uint8_t*) xmalloc(SECTOR_SIZE);
 
   if (opt_first_sector_val > 0) {
     db(4, MYNAME ": Seeking to first-sector index %i\n", opt_first_sector_val*SECTOR_SIZE);
@@ -1436,8 +1436,8 @@ void lla2ecef(double lat, double lng, double alt, double *ecef_x, double *ecef_y
 }
 static void miniHomer_get_poi()
 {
-  gbuint8 MSG_GET_POI[3] = { 0x4D, 0, 0};
-  gbuint8 buf[32];
+  uint8_t MSG_GET_POI[3] = { 0x4D, 0, 0};
+  uint8_t buf[32];
   unsigned int poi;
   double lat, lng, alt;
   double ecef_x, ecef_y, ecef_z;
@@ -1446,7 +1446,7 @@ static void miniHomer_get_poi()
   for (poi=0; poi<NUMPOI; poi++) {
     MSG_GET_POI[1]=(poi>>8)&0xff;
     MSG_GET_POI[2]=(poi)&0xff;
-    if (skytraq_wr_msg_verify((gbuint8*)&MSG_GET_POI, sizeof(MSG_GET_POI)) != res_OK) {
+    if (skytraq_wr_msg_verify((uint8_t*)&MSG_GET_POI, sizeof(MSG_GET_POI)) != res_OK) {
       warning(MYNAME ": cannot read poi %d '%s'\n", poi, poinames[poi]);
     }
     skytraq_rd_msg(buf, 25);
@@ -1479,10 +1479,10 @@ static void miniHomer_get_poi()
  * -1 in case of errors
  *  the number of the POI will not be checked - if it is not correct, miniHome will send NACK
  */
-static int miniHomer_set_poi(gbuint16 poinum, const char *opt_poi)
+static int miniHomer_set_poi(uint16_t poinum, const char *opt_poi)
 {
-#define MSG_SET_POI_SIZE (sizeof(gbuint8)+sizeof(gbuint16)+3*sizeof(double)+sizeof(gbuint8))
-  gbuint8 MSG_SET_POI[MSG_SET_POI_SIZE] = {
+#define MSG_SET_POI_SIZE (sizeof(uint8_t)+sizeof(uint16_t)+3*sizeof(double)+sizeof(uint8_t))
+  uint8_t MSG_SET_POI[MSG_SET_POI_SIZE] = {
     0x4C, 0,  0, 		// cmd + poi (u16)
     0, 0, 0, 0, 0, 0, 0, 0,	//lat (double ecef)
     0, 0, 0, 0, 0, 0, 0, 0,	//lng (double ecef)
@@ -1512,7 +1512,7 @@ static int miniHomer_set_poi(gbuint16 poinum, const char *opt_poi)
         be_write_double(MSG_SET_POI+11, ecef_y);
         be_write_double(MSG_SET_POI+19, ecef_z);
         MSG_SET_POI[27]=0;
-        if (skytraq_wr_msg_verify((gbuint8*)&MSG_SET_POI, sizeof(MSG_SET_POI)) == res_OK) {
+        if (skytraq_wr_msg_verify((uint8_t*)&MSG_SET_POI, sizeof(MSG_SET_POI)) == res_OK) {
           result=1;
         } else {
           warning(MYNAME ": cannot set poi %d '%s'\n", poinum, poinames[poinum]);

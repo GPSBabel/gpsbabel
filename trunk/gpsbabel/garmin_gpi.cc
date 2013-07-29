@@ -155,36 +155,36 @@ typedef struct gpi_waypt_data_s {
 } gpi_waypt_data_t;
 
 typedef struct {
-  gbint32 size;
-  gbint16 res1;
-  gbint16 res2;
-  gbint32 image_offset;
-  gbint32 header_size;
-  gbint32 width;
-  gbint32 height;
-  gbint16 planes;
-  gbint16 bpp;
-  gbint32 compression_type;
-  gbint32 image_data_size;
-  gbint32 resolution_h;
-  gbint32 resolution_v;
-  gbint32 used_colors;
-  gbint32 important_colors;
+  int32_t size;
+  int16_t res1;
+  int16_t res2;
+  int32_t image_offset;
+  int32_t header_size;
+  int32_t width;
+  int32_t height;
+  int16_t planes;
+  int16_t bpp;
+  int32_t compression_type;
+  int32_t image_data_size;
+  int32_t resolution_h;
+  int32_t resolution_v;
+  int32_t used_colors;
+  int32_t important_colors;
 } bmp_header_t;
 
 typedef struct {
-  gbint16 index;
-  gbint16 height;
-  gbint16 width;
-  gbint16 line_sz;
-  gbint16 bpp;
-  gbint16 fixed_0;
-  gbint32 image_size;
-  gbint32 fixed_2c;
-  gbint32 flag1;
-  gbint32 tr_color;
-  gbint32 flag2;
-  gbint32 size_2c;
+  int16_t index;
+  int16_t height;
+  int16_t width;
+  int16_t line_sz;
+  int16_t bpp;
+  int16_t fixed_0;
+  int32_t image_size;
+  int32_t fixed_2c;
+  int32_t flag1;
+  int32_t tr_color;
+  int32_t flag2;
+  int32_t size_2c;
 } gpi_bitmap_header_t;
 
 typedef struct {
@@ -201,7 +201,7 @@ typedef struct {
 } gpi_waypt_t;
 
 static gbfile* fin, *fout;
-static gbint16 codepage;	/* code-page, i.e. 1252 */
+static int16_t codepage;	/* code-page, i.e. 1252 */
 static reader_data_t* rdata;
 static writer_data_t* wdata;
 static short_handle short_h;
@@ -1378,7 +1378,7 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
 
       for (j = 0; j < src_h.width; j++) {
         int color;
-        color = (gbint32)gbfgetint16(f) | (gbfgetc(f) << 16);
+        color = (int32_t)gbfgetint16(f) | (gbfgetc(f) << 16);
         le_write32(p, color);
         p += 4;
       }

@@ -56,20 +56,20 @@
 #define WTYPE_ALTITUDECHANGE  26 // Location at which altitude should be changed
 
 union wpt_data {
-  gbint32     wp_altitude;  // Waypoint type 0-6,8: waypoint altitude in feet
-  gbint32     tg_altitude;  // Waypoint type 26: target altitude in feet
-  gbuint32    frequency;    // Waypoint type 9-25: freq in steps of 1000Hz (118Mhz = 180000)
-  gbint32     dummy;        // waypoint type 7, unused
+  int32_t     wp_altitude;  // Waypoint type 0-6,8: waypoint altitude in feet
+  int32_t     tg_altitude;  // Waypoint type 26: target altitude in feet
+  uint32_t    frequency;    // Waypoint type 9-25: freq in steps of 1000Hz (118Mhz = 180000)
+  int32_t     dummy;        // waypoint type 7, unused
 };
 
 typedef struct enigma_wpt {
-  gbint32			latitude;
-  gbint32			longitude;
+  int32_t			latitude;
+  int32_t			longitude;
   union wpt_data  data;
-  gbuint8         waypoint_type;
-  gbuint8         shortname_len;
+  uint8_t         waypoint_type;
+  uint8_t         shortname_len;
   char            shortname[6];
-  gbuint8         longname_len;
+  uint8_t         longname_len;
   char            longname[27];
 } ENIGMA_WPT;
 
@@ -81,7 +81,7 @@ rd_init(const char* fname)
   file_in = gbfopen_le(fname, "rb", MYNAME);
 }
 
-gbint32 decToEnigmaPosition(double val)
+int32_t decToEnigmaPosition(double val)
 {
   int degrees = fabs(val);
   double frac = fabs(val) - degrees;
@@ -91,7 +91,7 @@ gbint32 decToEnigmaPosition(double val)
   return sign * (enigmadeg + enigmafrac);
 }
 
-float enigmaPositionToDec(gbint32 val)
+float enigmaPositionToDec(int32_t val)
 {
   int deg = abs(val) / 180000;
   int enigmafrac = abs(val) % 180000;

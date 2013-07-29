@@ -131,7 +131,7 @@ typedef enum {
 typedef struct {
   const char *name;
   field_e type;
-  gbuint32 options;
+  uint32_t options;
 } field_t;
 
 /*

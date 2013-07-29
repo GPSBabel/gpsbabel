@@ -202,7 +202,7 @@ wr_deinit(void)
 static void
 bushnell_read(void)
 {
-  gbint32 lat_tmp,lon_tmp;
+  int32_t lat_tmp,lon_tmp;
   unsigned int proximity;
   unsigned int icon;
   waypoint* wpt_tmp = waypt_new();

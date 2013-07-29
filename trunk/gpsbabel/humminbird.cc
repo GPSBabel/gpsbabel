@@ -35,8 +35,8 @@
 /*
 I suspect that these are actually
 struct signature {
-	gbuint8 format, // 1 = track, 2 = waypoint, 3 = route
-	gbuint8 version,
+	uint8_t format, // 1 = track, 2 = waypoint, 3 = route
+	uint8_t version,
 	gpuint16 record_length
 }
 
@@ -60,79 +60,79 @@ Still, they're usful in the code as a plain signature.
 
 typedef struct humminbird_waypt_s {
   /* O.K.: the file can also contain routes with a different magic. */
-  /* gbuint32 signature; */   /* Just for error checking(?) */
-  gbuint16 num;          /* Always ascending in the file. */
-  gbuint16 zero;         /* Always seems to be zero. */
-  gbuint8  status;       /* Always seems to be 1. Ends up as <h:status>
+  /* uint32_t signature; */   /* Just for error checking(?) */
+  uint16_t num;          /* Always ascending in the file. */
+  uint16_t zero;         /* Always seems to be zero. */
+  uint8_t  status;       /* Always seems to be 1. Ends up as <h:status>
 	                          in gpx files exported by HumminbirdPC. */
-  gbuint8  icon;         /* See below */
-  gbuint16 depth;        /* Water depth. These are fishfinders. In centimeters */
-  gbuint32 time;         /* This is a time_t. In UTC */
-  gbint32  east;
-  gbint32  north;
+  uint8_t  icon;         /* See below */
+  uint16_t depth;        /* Water depth. These are fishfinders. In centimeters */
+  uint32_t time;         /* This is a time_t. In UTC */
+  int32_t  east;
+  int32_t  north;
   char     name[WPT_NAME_LEN];
 } humminbird_waypt_t;
 
 typedef struct humminbird_rte_s {
   /* O.K.: the file can contain also routes with a different magic. */
-  /* gbuint32 signature; */   /* Just for error checking(?) */
-  gbuint16 num;
-  gbuint16 zero;
-  gbuint8  status;
-  gbuint8  U0;
-  gbuint8  U1;
-  gbint8   count;
-  gbuint32 time;
+  /* uint32_t signature; */   /* Just for error checking(?) */
+  uint16_t num;
+  uint16_t zero;
+  uint8_t  status;
+  uint8_t  U0;
+  uint8_t  U1;
+  int8_t   count;
+  uint32_t time;
   char     name[RTE_NAME_LEN];
-  gbuint16 points[MAX_RTE_POINTS];
+  uint16_t points[MAX_RTE_POINTS];
 } humminbird_rte_t;
 
 typedef struct humminbird_trk_header_s {      /* 68 bytes, incl signature */
-  /* gbuint32 signature; */
-  gbuint16 trk_num;
-  gbuint16 zero;
-  gbuint16 num_points;
-  gbuint16 unknown;	/* Always zero so far. */
-  gbuint32 time;		/* a time_t, in UTC */
+  /* uint32_t signature; */
+  uint16_t trk_num;
+  uint16_t zero;
+  uint16_t num_points;
+  uint16_t unknown;	/* Always zero so far. */
+  uint32_t time;		/* a time_t, in UTC */
 
-  gbint32 start_east;	/* Start of track */
-  gbint32 start_north;
-  gbint32 end_east;	/* end of track */
-  gbint32 end_north;
+  int32_t start_east;	/* Start of track */
+  int32_t start_north;
+  int32_t end_east;	/* end of track */
+  int32_t end_north;
 
-  gbint32 sw_east; 	/* Bounding box, enclosing the track */
-  gbint32 sw_north;	/* sw is the south-west point */
-  gbint32 ne_east;	/* ne is the north-east point */
-  gbint32 ne_north;
+  int32_t sw_east; 	/* Bounding box, enclosing the track */
+  int32_t sw_north;	/* sw is the south-west point */
+  int32_t ne_east;	/* ne is the north-east point */
+  int32_t ne_north;
 
   char     name[20];
 } humminbird_trk_header_t;
 
 
 typedef struct humminbird_trk_point_s {
-  gbint16  deltaeast;
-  gbint16  deltanorth;
-  gbuint16 depth;		/* in centimeters */
+  int16_t  deltaeast;
+  int16_t  deltanorth;
+  uint16_t depth;		/* in centimeters */
 } humminbird_trk_point_t;
 
 typedef struct humminbird_trk_header_old_s {      /* 16 bytes, incl signature */
-  /* gbuint32 signature; */
-  gbuint16 trk_num;
-  gbuint16 zero;
-  gbuint16 num_points;
-  gbuint16 unknown;	/* Always zero so far. */
-  gbuint32 time;		/* a time_t, in UTC */
+  /* uint32_t signature; */
+  uint16_t trk_num;
+  uint16_t zero;
+  uint16_t num_points;
+  uint16_t unknown;	/* Always zero so far. */
+  uint32_t time;		/* a time_t, in UTC */
 
-  gbint32 start_east;	/* Start of track */
-  gbint32 start_north;
-  gbint32 end_east;	/* end of track */
-  gbint32 end_north;
+  int32_t start_east;	/* Start of track */
+  int32_t start_north;
+  int32_t end_east;	/* end of track */
+  int32_t end_north;
 
 } humminbird_trk_header_old_t;
 
 typedef struct humminbird_trk_point_old_s {
-  gbint16  deltaeast;
-  gbint16  deltanorth;
+  int16_t  deltaeast;
+  int16_t  deltanorth;
 } humminbird_trk_point_old_t;
 
 static const char* humminbird_icons[] = {
@@ -340,8 +340,8 @@ humminbird_read_track(gbfile* fin)
   waypoint* first_wpt;
   int i;
   int max_points = 0;
-  gbint32 accum_east;
-  gbint32 accum_north;
+  int32_t accum_east;
+  int32_t accum_north;
   double g_lat;
 
   if (! gbfread(&th, 1, sizeof(th), fin)) {
@@ -362,7 +362,7 @@ humminbird_read_track(gbfile* fin)
   th.ne_east     = be_read32(&th.ne_east);
   th.ne_north    = be_read32(&th.ne_north);
 
-  max_points = (131080 - sizeof(gbuint32) - sizeof(th)) / sizeof(humminbird_trk_point_t);
+  max_points = (131080 - sizeof(uint32_t) - sizeof(th)) / sizeof(humminbird_trk_point_t);
 
   if (th.num_points > max_points) {
     fatal(MYNAME ": Too many track points! (%d)\n", th.num_points);
@@ -397,7 +397,7 @@ humminbird_read_track(gbfile* fin)
 
   for (i=0 ; i<th.num_points-1 ; i++) {
     waypoint* wpt = waypt_new();
-    gbint16 next_deltaeast, next_deltanorth;
+    int16_t next_deltaeast, next_deltanorth;
     double guder;
 
     points[i].depth      = be_read16(&points[i].depth);
@@ -454,8 +454,8 @@ humminbird_read_track_old(gbfile* fin)
   waypoint* first_wpt;
   int i;
   int max_points = 0;
-  gbint32 accum_east;
-  gbint32 accum_north;
+  int32_t accum_east;
+  int32_t accum_north;
   double g_lat;
   const int file_len = 8048;
   char namebuf[TRK_NAME_LEN];
@@ -476,7 +476,7 @@ humminbird_read_track_old(gbfile* fin)
 
   // These files are always 8048 bytes long. Note that that's the value
   // of the second 16-bit word in the signature.
-  max_points = (file_len - (sizeof(th) + sizeof(gbuint32) + TRK_NAME_LEN)) / sizeof(humminbird_trk_point_old_t);
+  max_points = (file_len - (sizeof(th) + sizeof(uint32_t) + TRK_NAME_LEN)) / sizeof(humminbird_trk_point_old_t);
 
   if (th.num_points > max_points) {
     fatal(MYNAME ": Too many track points! (%d)\n", th.num_points);
@@ -516,7 +516,7 @@ humminbird_read_track_old(gbfile* fin)
 
   for (i=0 ; i<th.num_points-1 ; i++) {
     waypoint* wpt = waypt_new();
-//		gbint16 next_deltaeast, next_deltanorth;
+//		int16_t next_deltaeast, next_deltanorth;
     double guder;
 
     points[i].deltaeast  = be_read16(&points[i].deltaeast);
@@ -565,7 +565,7 @@ static void
 humminbird_read(void)
 {
   while (! gbfeof(fin)) {
-    gbuint32 signature;
+    uint32_t signature;
 
     signature = gbfgetuint32(fin);
 
@@ -703,15 +703,15 @@ humminbird_write_waypoint(const waypoint* wpt)
 
 static humminbird_trk_header_t* trk_head;
 static humminbird_trk_point_t* trk_points;
-static gbint32 last_east;
-static gbint32 last_north;
-static gbuint32 last_time;
+static int32_t last_east;
+static int32_t last_north;
+static uint32_t last_time;
 
 
 static void
 humminbird_track_head(const route_head* trk)
 {
-  int max_points = (131080 - sizeof(gbuint32)- sizeof(humminbird_trk_header_t)) / sizeof(humminbird_trk_point_t);
+  int max_points = (131080 - sizeof(uint32_t)- sizeof(humminbird_trk_header_t)) / sizeof(humminbird_trk_point_t);
 
   trk_head = NULL;
   last_time = 0;
@@ -730,7 +730,7 @@ humminbird_track_head(const route_head* trk)
 static void
 humminbird_track_tail(const route_head* rte)
 {
-  int max_points = (131080 - sizeof(gbuint32)- sizeof(humminbird_trk_header_t)) / sizeof(humminbird_trk_point_t);
+  int max_points = (131080 - sizeof(uint32_t)- sizeof(humminbird_trk_header_t)) / sizeof(humminbird_trk_point_t);
 
   if (trk_head == NULL) {
     return;
@@ -767,7 +767,7 @@ humminbird_track_tail(const route_head* rte)
 static void
 humminbird_track_cb(const waypoint* wpt)
 {
-  gbint32 north, east;
+  int32_t north, east;
   double lat;
   int i;
 

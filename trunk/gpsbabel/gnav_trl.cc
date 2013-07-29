@@ -31,10 +31,10 @@ arglist_t gnav_trl_args[] = {
 };
 
 typedef struct gnav_trl_s {
-  gbuint32 time;
+  uint32_t time;
   float lat;
   float lon;
-  gbuint32 alt;
+  uint32_t alt;
 } gnav_trl_t;
 
 static gbfile* fin, *fout;

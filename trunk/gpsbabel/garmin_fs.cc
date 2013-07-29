@@ -241,7 +241,7 @@ garmin_fs_xml_fprint(const waypoint* waypt,
     }
     if (gmsd->flags.category && gmsd->category) {
       int i;
-      gbuint16 cx = gmsd->category;
+      uint16_t cx = gmsd->category;
       writer.writeStartElement("gpxx:Categories");
       for (i = 0; i < 16; i++) {
         if (cx & 1) {
@@ -362,7 +362,7 @@ garmin_fs_xml_convert(const int base_tag, int tag, const char* cdatastr, waypoin
 }
 
 unsigned char
-garmin_fs_convert_category(const char* category_name, gbuint16* category)
+garmin_fs_convert_category(const char* category_name, uint16_t* category)
 {
   int i;
   int cat = 0;
@@ -395,7 +395,7 @@ garmin_fs_convert_category(const char* category_name, gbuint16* category)
 unsigned char
 garmin_fs_merge_category(const char* category_name, waypoint* waypt)
 {
-  gbuint16 cat;
+  uint16_t cat;
   garmin_fs_t* gmsd;
 
   if (!garmin_fs_convert_category(category_name, &cat)) {

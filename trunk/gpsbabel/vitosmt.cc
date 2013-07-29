@@ -343,17 +343,17 @@ vitosmt_write(void)
 
   /* write the complete the header */
   le_write32(&workbuffer[position],vitosmt_version);
-  position += sizeof(gbuint32);
+  position += sizeof(uint32_t);
   le_write32(&workbuffer[position],vitosmt_subversion);
-  position += sizeof(gbuint32);
+  position += sizeof(uint32_t);
   le_write32(&workbuffer[position],count);
-  position += sizeof(gbuint32);
+  position += sizeof(uint32_t);
   le_write32(&workbuffer[position],0);
-  position += sizeof(gbuint32);
+  position += sizeof(uint32_t);
   le_write32(&workbuffer[position],count-1);
-  position += sizeof(gbuint32);
+  position += sizeof(uint32_t);
   le_write32(&workbuffer[position],count);
-  position += sizeof(gbuint32);
+  position += sizeof(uint32_t);
 
   gbfrewind(ofs);
   (void)gbfwrite(workbuffer,vitosmt_headersize,1,ofs);

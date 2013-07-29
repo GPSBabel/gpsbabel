@@ -36,7 +36,7 @@ struct record0 {
   pdb_double	latitude; 	/* PDB double format, */
   pdb_double	longitude; 	/* similarly, neg = east */
   pdb_double	magvar; 	/* magnetic variation in degrees, neg = east */
-  gbuint32	elevation; 	/* feet */
+  uint32_t	elevation; 	/* feet */
 };
 
 struct record1 {
