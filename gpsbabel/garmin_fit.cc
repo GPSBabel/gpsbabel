@@ -192,9 +192,9 @@ fit_parse_definition_message(uint8_t header)
     free(def->fields);
   }
 
-  // first byte is reserved
-  is_fatal(fit_getuint8() != 0,
-           MYNAME ": Definition message reserved bits not zero\n");
+  // first byte is reserved.  It's usually 0 and we don't know what it is,
+  // but we've seen some files that are 0x40.  So we just read it and toss it.
+  i = fit_getuint8();
 
   // second byte is endianness
   def->endian = fit_getuint8();
