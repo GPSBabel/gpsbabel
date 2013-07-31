@@ -278,27 +278,6 @@ xfopen(const char *fname, const char *type, const char *errtxt)
   return f;
 }
 
-void
-xfprintf(const char *errtxt, FILE *stream, const char *format, ...)
-{
-  va_list ap;
-  va_start(ap, format);
-  if (vfprintf(stream, format, ap) < 0) {
-    fatal("%s writing output file.  Error was '%s'.\n",
-          errtxt, strerror(errno));
-  }
-  va_end(ap);
-}
-
-void
-xfputs(const char *errtxt, const char *s, FILE *stream)
-{
-  if (fputs(s, stream) < 0) {
-    fatal("%s Writing output file.  Error was '%s'.\n",
-          errtxt, strerror(errno));
-  }
-}
-
 /*
  * Allocate a string using a format list with optional arguments
  * Returns -1 on error.
