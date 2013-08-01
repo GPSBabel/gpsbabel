@@ -843,14 +843,14 @@ gs_get_container(geocache_container t)
 }
 
 gpsbabel::DateTime
-xml_parse_time(const char* cdatastr)
+xml_parse_time(const QString& dateTimeString)
 {
   int off_hr = 0;
   int off_min = 0;
   int off_sign = 1;
   char* offsetstr = NULL;
   char* pointstr = NULL;
-  char* timestr = xstrdup(cdatastr);
+  char* timestr = xstrdup(dateTimeString.toUtf8().data());
 
   offsetstr = strchr(timestr, 'Z');
   if (offsetstr) {
@@ -905,11 +905,11 @@ xml_parse_time(const char* cdatastr)
     // Any offsets that were stuck at the end.
     time = time.addSecs(-off_sign * off_hr * 3600 - off_sign * off_min * 60);
 
-    xfree(timestr);
     dt = QDateTime(date, time, Qt::UTC);
   } else {
     dt = QDateTime();
   }
+  xfree(timestr);
   return dt;
 }
 
