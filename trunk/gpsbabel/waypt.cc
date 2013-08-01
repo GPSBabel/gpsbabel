@@ -79,7 +79,7 @@ waypt_dupe(const waypoint *wpt)
 
   if (wpt->gc_data != &empty_gc_data) {
     // FIXME(robertlipe): Find out why the default copy constructor doesn't
-    // do a sensible thing here.  This will probably be easier once the 
+    // do a sensible thing here.  This will probably be easier once the
     // underlying types are refcounted.
     tmp->gc_data = new geocache_data;
     tmp->gc_data->id = wpt->gc_data->id;

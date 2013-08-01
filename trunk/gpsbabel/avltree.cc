@@ -200,7 +200,7 @@ avltree_find(const avltree_t* tree, const QString& key, const void** data)
   int r = avltree_find(tree, t, data);
   xfree(t);
   return r;
-  
+
 }
 
 

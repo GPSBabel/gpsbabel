@@ -113,7 +113,7 @@ fit_parse_header(void)
     debug_print(1,"%s: profile version=%d\n", MYNAME, ver);
     debug_print(1,"%s: fit_data.len=%d\n", MYNAME, fit_data.len);
   }
-  
+
   if (len > 12) {
     // Unused according to Ingo Arndt
     gbfgetuint16(fin);

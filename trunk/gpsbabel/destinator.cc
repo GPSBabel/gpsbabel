@@ -443,7 +443,7 @@ destinator_trkpt_disp(const waypoint* wpt)
     tm.tm_year -= 100;
     date = ((int)tm.tm_mday * 10000) + ((int)tm.tm_mon * 100) + tm.tm_year;
     gbfputint32(date, fout);
-    milliseconds = ((int)tm.tm_hour * 10000) + 
+    milliseconds = ((int)tm.tm_hour * 10000) +
                   ((int)tm.tm_min * 100) + tm.tm_sec;
     milliseconds = (milliseconds * 1000) + (wpt->GetCreationTime().time().msec());
 

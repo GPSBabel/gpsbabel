@@ -361,7 +361,7 @@ fs_xml* fs_xml_alloc(long type);
  * Structures and functions for multiple URLs per waypoint.
  */
 class url_link {
- public: 
+ public:
     url_link() :
     url_next(NULL)
      {} ;
@@ -385,7 +385,7 @@ class wp_flags {
     speed(0),
     depth(0),
     is_split(0),
-    new_trkseg(0) {} 
+    new_trkseg(0) {}
   unsigned int shortname_is_synthetic:1;
   unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
   unsigned int fmt_use:1;			/* lightweight "extra data" */
@@ -448,25 +448,25 @@ public:
   depth(0),
   proximity(0),
   shortname(NULL),
-  description(NULL), 
-  notes(NULL), 
-  url_next(NULL), 
-  route_priority(0), 
-  hdop(0), 
-  vdop(0), 
-  pdop(0), 
-  course(0), 
-  speed(0), 
-  fix(fix_unknown), 
-  sat(-1), 
-  heartrate(0), 
-  cadence(0), 
-  power(0), 
-  temperature(0), 
-  odometer_distance(0), 
-  gc_data(NULL), 
-  fs(NULL), 
-  session(NULL), 
+  description(NULL),
+  notes(NULL),
+  url_next(NULL),
+  route_priority(0),
+  hdop(0),
+  vdop(0),
+  pdop(0),
+  course(0),
+  speed(0),
+  fix(fix_unknown),
+  sat(-1),
+  heartrate(0),
+  cadence(0),
+  power(0),
+  temperature(0),
+  odometer_distance(0),
+  gc_data(NULL),
+  fs(NULL),
+  session(NULL),
   extra_data(NULL) { }
  public:
   QString CreationTimeXML() const;
@@ -531,9 +531,9 @@ public:
   gpsbabel::DateTime  GetCreationTime() const {
    return creation_time;
   }
-  void SetCreationTime(gpsbabel::DateTime t) { creation_time = t; 
+  void SetCreationTime(gpsbabel::DateTime t) { creation_time = t;
   }
-  void SetCreationTime(time_t t) { creation_time = QDateTime::fromTime_t(t); 
+  void SetCreationTime(time_t t) { creation_time = QDateTime::fromTime_t(t);
   }
   void SetCreationTime(time_t t, int ms) {
     creation_time.setTime_t(t);

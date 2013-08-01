@@ -40,9 +40,9 @@ static void reverse_route_wpt(const waypoint* waypointp)
 
     /* Cast away const-ness */
     waypoint* wpp = (waypoint *) waypointp;
-    
+
     int curr_new_trkseg;
-    
+
     curr_new_trkseg = waypointp->wpt_flags.new_trkseg;
     wpp->wpt_flags.new_trkseg = prev_new_trkseg;
     prev_new_trkseg = curr_new_trkseg;

@@ -391,9 +391,9 @@ gtc_act_hdr(const route_head* rte)
   gtc_new_study_lap(rte);
   route_disp(rte, gtc_study_lap);
   if (gtc_least_time) {
-    gtc_write_xml(0, "<Id>%s</Id>\n", 
+    gtc_write_xml(0, "<Id>%s</Id>\n",
                       gtc_least_time.toPrettyString().toUtf8().data());
-    gtc_write_xml(1, "<Lap StartTime=\"%s\">\n", 
+    gtc_write_xml(1, "<Lap StartTime=\"%s\">\n",
                       gtc_least_time.toPrettyString().toUtf8().data());
   } else {
     gtc_write_xml(1, "<Lap>\n");

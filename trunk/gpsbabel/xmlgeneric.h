@@ -41,8 +41,8 @@ void write_xml_entity(gbfile* ofd, const QString& indent,
                       const QString& tag, const QString& value);
 void write_xml_entity_begin0(gbfile* ofd, const QString& indent,
                              const QString& tag);
-void write_xml_entity_begin1(gbfile* ofd, const QString& indent, 
-                             const QString& tag, const QString& attr1, 
+void write_xml_entity_begin1(gbfile* ofd, const QString& indent,
+                             const QString& tag, const QString& attr1,
                              const QString& attrval1);
 void write_xml_entity_begin2(gbfile* ofd, const QString& indent, const QString& tag,
                              const QString& attr1, const QString& attrval1,

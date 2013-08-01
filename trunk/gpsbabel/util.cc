@@ -861,8 +861,8 @@ mklocaltime(struct tm *t)
 }
 
 /*
- * Historically, when we were C, this was A wrapper for time(2) that 
- * allowed us to "freeze" time for testing. The UNIX epoch 
+ * Historically, when we were C, this was A wrapper for time(2) that
+ * allowed us to "freeze" time for testing. The UNIX epoch
  * (1970-1-1-00:00:00UTC) was a convenient value for that.  Now in the
  * world of Qt, sub-second time is convenient, but regenerating all the
  * reference files would be tedious, so we uphold that convention.

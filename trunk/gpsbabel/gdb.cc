@@ -1231,7 +1231,7 @@ write_header(void)
   memset(&tm, 0, sizeof(tm));
 
   n = sscanf(gdb_release_date+7, "%d-%d-%d %d:%d:%d", &tm.tm_year, &tm.tm_mon, &tm.tm_mday, &tm.tm_hour, &tm.tm_min, &tm.tm_sec);
-  if (n != 6) { 
+  if (n != 6) {
     // The $Date string in gdb_release_date[] above is bad.
     fatal(MYNAME ": internal date format error on %s\n", gdb_release_date + 7);
   }

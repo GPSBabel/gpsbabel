@@ -1292,7 +1292,7 @@ find_vec(const char *vecname, const char **opts)
 
 #if CSVFMTS_ENABLED
     // xcsv_setup_internal_style( NULL );
-#endif // CSVFMTS_ENABLED		
+#endif // CSVFMTS_ENABLED
     xfree(v);
     vec->vec->name = vec->name;	/* needed for session information */
     return vec->vec;

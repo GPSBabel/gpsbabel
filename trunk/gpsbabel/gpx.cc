@@ -843,7 +843,7 @@ gs_get_container(geocache_container t)
 }
 
 gpsbabel::DateTime
-xml_parse_time(const char* cdatastr) 
+xml_parse_time(const char* cdatastr)
 {
   int off_hr = 0;
   int off_min = 0;
@@ -1343,11 +1343,11 @@ gpx_wr_init(const char* fname)
   // QFile requires binary mode on Windows.
   ofd = gbfopen(fname, "wb", MYNAME);
   oqfile.open(ofd->handle.std, QIODevice::WriteOnly);
- 
+
   // This is ia bit of a lie.  QXMLStreamWriter will pass everything
   // through the QTextCodec on the way out and that defaults to UTF-8.
   // Since we have so many C Strings in out output right now and those
-  // are already UTF-8 encoded via CET, if we don't outsmart that, we 
+  // are already UTF-8 encoded via CET, if we don't outsmart that, we
   // get double encoding.
   writer.setCodec("ISO 8859-1");
 
@@ -1440,7 +1440,7 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
       }
       if (wpt && wpt->gc_data->exported.isValid() &&
           strcmp(tag->tagname, "groundspeak:cache") == 0) {
-          writer.writeTextElement("time", 
+          writer.writeTextElement("time",
                                   wpt->gc_data->exported.toPrettyString());
       }
       writer.writeEndElement();
