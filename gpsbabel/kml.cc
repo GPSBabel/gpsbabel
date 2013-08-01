@@ -877,7 +877,7 @@ static void kml_output_description(const waypoint* pt)
   if (pt->GetCreationTime().isValid()) {
     QString time_string = pt->CreationTimeXML();
     if(!time_string.isEmpty()) {
-      kml_td(hwriter, QString("Time: %1 ").arg(time_string));  
+      kml_td(hwriter, QString("Time: %1 ").arg(time_string));
     }
   }
 
@@ -1630,10 +1630,10 @@ static void kml_track_tlr(const route_head* header)
 // Helper to write gx:SimpleList, iterating over a route queue and writing out.
 
 typedef enum {
-  fld_cadence, 
-  fld_depth, 
-  fld_heartrate, 
-  fld_temperature, 
+  fld_cadence,
+  fld_depth,
+  fld_heartrate,
+  fld_temperature,
   fld_power
 } wp_field;
 
@@ -1650,19 +1650,19 @@ static void kml_mt_simple_array(const route_head* header,
     waypoint* wpt = (waypoint *) elem;
 
     switch (member) {
-      case fld_power: 
+      case fld_power:
         writer->writeTextElement("gx:value", QString::number(wpt->power, 'f', 1));
         break;
-      case fld_cadence: 
+      case fld_cadence:
         writer->writeTextElement("gx:value", QString::number(wpt->cadence));
         break;
-      case fld_depth: 
+      case fld_depth:
         writer->writeTextElement("gx:value", QString::number(wpt->depth, 'f', 1));
         break;
-      case fld_heartrate: 
+      case fld_heartrate:
         writer->writeTextElement("gx:value", QString::number(wpt->heartrate));
         break;
-      case fld_temperature: 
+      case fld_temperature:
         writer->writeTextElement("gx:value", QString::number(wpt->temperature, 'f', 1));
         break;
       default:

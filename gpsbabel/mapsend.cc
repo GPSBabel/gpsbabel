@@ -317,7 +317,7 @@ mapsend_waypt_pr(const waypoint* waypointp)
 
   /* #, icon, status */
   gbfputint32(++cnt, mapsend_file_out);
- 
+
 
   QString iconp;
   if (!waypointp->icon_descr.isNull()) {

@@ -166,7 +166,7 @@ arglist_t trackfilter_args[] = {
     NULL, ARGTYPE_STRING, ARG_NOMINMAX
   },
   {
-    TRACKFILTER_DISCARD_OPTION,  &opt_discard,  
+    TRACKFILTER_DISCARD_OPTION,  &opt_discard,
     "Discard track points without timestamps during merge",
     NULL, ARGTYPE_BOOL, ARG_NOMINMAX
   },

@@ -609,14 +609,14 @@ psit_track_r(gbfile *psit_file, route_head **trk)
         trk_num++;
         track_add_head(track_head);
       }
-      
+
       thisWaypoint->SetCreationTime(dateTime);
       track_add_wpt(track_head, thisWaypoint);
-      
+
       if (gbfeof(psit_file)) {
         break;
       }
-      
+
       psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), wscomma);
     } else {
       break;

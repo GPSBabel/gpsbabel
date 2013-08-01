@@ -3,7 +3,7 @@
 
 #include "defs.h"
 #if CSVFMTS_ENABLED
-static char arc[] = 
+static char arc[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: GPSBabel arc filter format\n"
@@ -29,7 +29,7 @@ static char arc[] =
 "OFIELD	LAT_DECIMAL, \"\", \"%08.5f\"\n"
 "OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
 ;
-static char cambridge[] = 
+static char cambridge[] =
 "DESCRIPTION     Cambridge/Winpilot glider software\n"
 "SHORTLEN        8\n"
 "EXTENSION dat\n"
@@ -49,7 +49,7 @@ static char cambridge[] =
 "IFIELD SHORTNAME,\"\",\"%s\"\n"
 "IFIELD DESCRIPTION,\"\",\"%s\"\n"
 ;
-static char csv[] = 
+static char csv[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: DeLorme SA 9.0 CSV\n"
@@ -78,7 +78,7 @@ static char csv[] =
 "OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
 "OFIELD	DESCRIPTION, \"\", \"%s\"\n"
 ;
-static char cup[] = 
+static char cup[] =
 "#\n"
 "# (c) 2006, Robert Lipe, based on  sample files by Krzysztof Wojtas\n"
 "# Reference info: http://www.seeyou.ws/thankyou.php?fname=cup_format.pdf\n"
@@ -124,7 +124,7 @@ static char cup[] =
 
 
 ;
-static char custom[] = 
+static char custom[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: Custom \"Everything\" Style\n"
@@ -178,7 +178,7 @@ static char custom[] =
 "EPILOGUE	Epilogue Line 1\n"
 "EPILOGUE	Epilogue Line 2\n"
 ;
-static char dna[] = 
+static char dna[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: DNA Marker Format\n"
@@ -208,7 +208,7 @@ static char dna[] =
 "IFIELD	DESCRIPTION, \"\", \"%s\"\n"
 
 ;
-static char flysight[] = 
+static char flysight[] =
 "# Format:	FlySight\n"
 "# Author:	LukeH\n"
 "# Date:		10/10/10\n"
@@ -238,7 +238,7 @@ static char flysight[] =
 "IFIELD GPS_FIX,		\"\",	\"%s\"	# GPS fix type\n"
 "IFIELD GPS_SAT,		\"\",	\"%d\"	# Number of satellites used in fix\n"
 ;
-static char fugawi[] = 
+static char fugawi[] =
 "# fugawi XCSV style file\n"
 "#\n"
 "# Format: Fugawi\n"
@@ -281,7 +281,7 @@ static char fugawi[] =
 "IFIELD  GMT_TIME, \"\", \"%Y%m%d\"\n"
 "IFIELD  HMSG_TIME, \"\", \"%02d%02d%02d\"\n"
 ;
-static char garmin301[] = 
+static char garmin301[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: Garmin 301 Position + Heartrate data\n"
@@ -317,7 +317,7 @@ static char garmin301[] =
 "#EPILOGUE	Epilogue Line 1\n"
 "#EPILOGUE	Epilogue Line 2\n"
 ;
-static char garmin_poi[] = 
+static char garmin_poi[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: Garmin POI\n"
@@ -353,7 +353,7 @@ static char garmin_poi[] =
 "OFIELD GEOCACHE_TERR, \"\", \"/%3.1f)\", \"no_delim_before,optional\"\n"
 "OFIELD DESCRIPTION, \"\", \"%-.50s\"\n"
 ;
-static char geonet[] = 
+static char geonet[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: GEOnet Names Server (GNS) (http://earth-info.nga.mil/gns/html/cntry_files.html)\n"
@@ -404,7 +404,7 @@ static char geonet[] =
 "IFIELD	IGNORE, \"\", \"%s\"		# FULL_NAME_ND\n"
 "IFIELD	IGNORE, \"\", \"%s\"		# MOD_DATE\n"
 ;
-static char gpsdrive[] = 
+static char gpsdrive[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: GPSDrive\n"
@@ -438,7 +438,7 @@ static char gpsdrive[] =
 "OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
 "OFIELD	ICON_DESCR, \"\", \"%s\"\n"
 ;
-static char gpsdrivetrack[] = 
+static char gpsdrivetrack[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: GPSDriveTrack\n"
@@ -470,7 +470,7 @@ static char gpsdrivetrack[] =
 "# IFIELD	GMT_TIME, \"\", \"%a %b %d %H:%M:%S %Y\"\n"
 "IFIELD	LOCAL_TIME, \"\", \"%a %b %d %H:%M:%S %Y\"\n"
 ;
-static char gpsman[] = 
+static char gpsman[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: GPSMAN Format\n"
@@ -506,7 +506,7 @@ static char gpsman[] =
 
 "# gpsman.c likes mkshort len = 8, whitespace = 0.\n"
 ;
-static char iblue747[] = 
+static char iblue747[] =
 "# GPSBabel XCSV Style File http://www.gpsbabel.org/htmldoc-development/Styles.html\n"
 "# Author: Christian Barmala http://www.barmala.de/\n"
 "# License GNU Public License http://opensource.org/licenses/gpl-license.php\n"
@@ -550,7 +550,7 @@ static char iblue747[] =
 "IFIELD IGNORE,\"\",\"%s\"        # SAT INFO\n"
 "IFIELD PATH_DISTANCE_KM,\"\",\"%f\"        # DISTANCE\n"
 ;
-static char iblue757[] = 
+static char iblue757[] =
 "# GPSBabel XCSV Style File http://www.gpsbabel.org/htmldoc-development/Styles.html\n"
 "# Author: iBlue747csv by Christian Barmala http://www.barmala.de/\n"
 "#		  edited by Anthony Vella to suit the iBlue757 csv format (date format changed)\n"
@@ -595,7 +595,7 @@ static char iblue757[] =
 "IFIELD IGNORE,\"\",\"%s\"        # SAT INFO\n"
 "IFIELD PATH_DISTANCE_KM,\"\",\"%f\"        # DISTANCE\n"
 ;
-static char igo2008_poi[] = 
+static char igo2008_poi[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: iGO2008 points of interest\n"
@@ -630,7 +630,7 @@ static char igo2008_poi[] =
 "IFIELD	NOTES, \"\", \"%s\"\n"
 "IFIELD	PHONE_NR, \"\", \"%s\"\n"
 ;
-static char kompass_tk[] = 
+static char kompass_tk[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: Kompass / Deutscher Alpenverein (DAV) Waypoints\n"
@@ -650,7 +650,7 @@ static char kompass_tk[] =
 "IFIELD	LAT_DECIMAL, \"\", \"%.7f\"\n"
 "IFIELD	LON_DECIMAL, \"\", \"%.7f\"\n"
 ;
-static char kompass_wp[] = 
+static char kompass_wp[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: Kompass / Deutscher Alpenverein (DAV) Waypoints\n"
@@ -678,7 +678,7 @@ static char kompass_wp[] =
 "IFIELD  CONSTANT, \"1\", \"%s\"			# unknown\n"
 "IFIELD	DESCRIPTION, \"\", \"%s\"\n"
 ;
-static char ktf2[] = 
+static char ktf2[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: Kartex KTF 2.0 Degrees with decimals\n"
@@ -716,7 +716,7 @@ static char ktf2[] =
 "IFIELD	IGNORE, \"\", \"%s\" #Empty field\n"
 "IFIELD	CONSTANT, \"$\", \"%s\"\n"
 ;
-static char kwf2[] = 
+static char kwf2[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: Kartex KWF 2.0 Degrees with decimals\n"
@@ -756,7 +756,7 @@ static char kwf2[] =
 "IFIELD	DESCRIPTION, \"\", \"%s\"\n"
 "IFIELD	CONSTANT, \"$\", \"%s\"\n"
 ;
-static char land_air_sea[] = 
+static char land_air_sea[] =
 "# Format: GPS Tracking Key Pro text file\n"
 "# Author: Tyler Ritchie\n"
 "#   Date: 2011.02.04\n"
@@ -782,7 +782,7 @@ static char land_air_sea[] =
 "IFIELD IGNORE,\"\",\"%s\" #This is the bearing data\n"
 "IFIELD ALT_FEET,\"\",\"%dft\"\n"
 ;
-static char mainnav[] = 
+static char mainnav[] =
 "#\n"
 "#   Support for MainNav CSV format\n"
 "#\n"
@@ -835,7 +835,7 @@ static char mainnav[] =
 "IFIELD	IGNORE, \"\", \"%s\"	# JOURNEY_INDEX?\n"
 "IFIELD	IGNORE, \"\", \"%s\"	# ?\n"
 ;
-static char mapconverter[] = 
+static char mapconverter[] =
 "# Format: Mapopolis.com Mapconverter\n"
 "# Author: Gary Paulson\n"
 "#   Date: 01/13/2003\n"
@@ -872,7 +872,7 @@ static char mapconverter[] =
 "IFIELD  LON_DECIMAL, \"\", \"%08.5f\"       # Longitude\n"
 "IFIELD  LAT_DECIMAL, \"\", \"%08.5f\"       # Latitude\n"
 ;
-static char motoactv[] = 
+static char motoactv[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: MOTOACTV CSV\n"
@@ -914,7 +914,7 @@ static char motoactv[] =
 "IFIELD PATH_COURSE,\"\",\"%.1f\"\n"
 "IFIELD IGNORE,\"\",\"%s\" # step rate\n"
 ;
-static char mxf[] = 
+static char mxf[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: Ozi Explorer\n"
@@ -955,7 +955,7 @@ static char mxf[] =
 "OFIELD	CONSTANT, \"ff0000\", \"%s\"	# COLOR\n"
 "OFIELD	CONSTANT, \"47\", \"%s\"		# ICON\n"
 ;
-static char navigonwpt[] = 
+static char navigonwpt[] =
 "# gpsbabel XCSV style file\n"
 "# Author: Tom Glaab\n"
 "#\n"
@@ -997,7 +997,7 @@ static char navigonwpt[] =
 "OFIELD  CONSTANT, \"%s\",\"\"\n"
 "OFIELD  CONSTANT, \"%s\",\"49\"\n"
 ;
-static char nima[] = 
+static char nima[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: NIMA/GNIS Geographic Names File\n"
@@ -1044,7 +1044,7 @@ static char nima[] =
 "IFIELD	DESCRIPTION, \"\", \"%s\"		# FULL_NAME_ND\n"
 "IFIELD	IGNORE, \"\", \"%s\"		# MODIFY_DATE\n"
 ;
-static char openoffice[] = 
+static char openoffice[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: Tab delimited useful for OpenOffice, Ploticus etc.\n"
@@ -1093,7 +1093,7 @@ static char openoffice[] =
 "IFIELD	GPS_SAT, \"\", \"%d\"\n"
 "IFIELD	GPS_FIX, \"\", \"%s\"\n"
 ;
-static char ricoh[] = 
+static char ricoh[] =
 "DESCRIPTION Ricoh GPS Log File\n"
 "EXTENSION log\n"
 "DATATYPE TRACK\n"
@@ -1108,7 +1108,7 @@ static char ricoh[] =
 "IFIELD GMT_TIME,\"\",\"%d-%m-%Y %H:%M:%S\"\n"
 
 ;
-static char s_and_t[] = 
+static char s_and_t[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: MS S&T 2002/2003\n"
@@ -1151,7 +1151,7 @@ static char s_and_t[] =
 "IFIELD	GEOCACHE_DIFF, \"\", \"%3.1f\"	# Geocache Type\n"
 "IFIELD	GEOCACHE_TERR, \"\", \"%3.1f\"	# Geocache Type\n"
 ;
-static char saplus[] = 
+static char saplus[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: \n"
@@ -1181,7 +1181,7 @@ static char saplus[] =
 "IFIELD  IGNORE, \"\", \"\"                  # Holder for Geocache Type\n"
 
 ;
-static char sportsim[] = 
+static char sportsim[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: Sportsim track files\n"
@@ -1216,7 +1216,7 @@ static char sportsim[] =
 "IFIELD	TIMET_TIME, \"\", \"%ld\"\n"
 "IFIELD	CONSTANT, \";\", \"%s\"\n"
 ;
-static char tabsep[] = 
+static char tabsep[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: Dumps all fields in a traditional Unix tab separated style\n"
@@ -1275,7 +1275,7 @@ static char tabsep[] =
 "IFIELD	GEOCACHE_HINT, \"\", \"%s\"\n"
 "IFIELD	GEOCACHE_LAST_FOUND, \"\", \"%d\"\n"
 ;
-static char tomtom_asc[] = 
+static char tomtom_asc[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: TomTom Navigator Places of Interest\n"
@@ -1304,7 +1304,7 @@ static char tomtom_asc[] =
 "IFIELD	LAT_DECIMAL, \"\", \"%.6f\"\n"
 "IFIELD	SHORTNAME, \"\", \"\"%s\"\"\n"
 ;
-static char tomtom_itn[] = 
+static char tomtom_itn[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: TomTom Navigator Itineraries (Routes)\n"
@@ -1329,7 +1329,7 @@ static char tomtom_itn[] =
 "IFIELD	SHORTNAME, \"\", \"%s\"\n"
 "IFIELD	CONSTANT, \"0\", \"%s\"\n"
 ;
-static char tomtom_itn_places[] = 
+static char tomtom_itn_places[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: TomTom Navigator Itineraries (Routes)\n"
@@ -1354,7 +1354,7 @@ static char tomtom_itn_places[] =
 "IFIELD	SHORTNAME, \"\", \"%s\"\n"
 "IFIELD	CONSTANT, \"2\", \"%s\"\n"
 ;
-static char xmap[] = 
+static char xmap[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: DeLorme Xmap Conduit\n"
@@ -1388,7 +1388,7 @@ static char xmap[] =
 "OFIELD	LON_DECIMAL, \"\", \"%08.5f\"\n"
 "OFIELD	DESCRIPTION, \"\", \"%s\"\n"
 ;
-static char xmap2006[] = 
+static char xmap2006[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: DeLorme Xmap/Street Atlas Handheld 2006 Conduit\n"
@@ -1427,7 +1427,7 @@ static char xmap2006[] =
 
 
 ;
-static char xmapwpt[] = 
+static char xmapwpt[] =
 "# gpsbabel XCSV style file\n"
 "#\n"
 "# Format: DeLorme Xmap HH Street Atlas USA .WPT (PocketPC)\n"

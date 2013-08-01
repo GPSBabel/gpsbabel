@@ -20,7 +20,7 @@
 /*
  * Parse the output of the following command:
  * curl "http://maps.googleapis.com/maps/api/directions/xml?origin='Albi,%20france'&destination='toulouse,%20france'&sensor=false" > google-direction.xml
- * 
+ *
  * For more information, check:
  * https://developers.google.com/maps/documentation/directions/
  */

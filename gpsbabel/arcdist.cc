@@ -236,17 +236,17 @@ arcdist_process(void)
           if (ptsopt) {
             wp->SetCreationTime(ed->arcpt2->GetCreationTime());;
           } else {
-            // Apply the multiplier to the difference between the times 
-            // of the two points.   Add that to the first for the 
+            // Apply the multiplier to the difference between the times
+            // of the two points.   Add that to the first for the
             // interpolated time.
-            int scaled_time = ed->frac * 
+            int scaled_time = ed->frac *
                   ed->arcpt1->GetCreationTime().msecsTo(ed->arcpt2->GetCreationTime());
             QDateTime new_time(ed->arcpt1->GetCreationTime().addMSecs(scaled_time));
             wp->SetCreationTime(new_time);
           }
         }
         if (global_opts.debug_level >= 1) {
-          warning("Including waypoint %s at dist:%f lat:%f lon:%f\n", 
+          warning("Including waypoint %s at dist:%f lat:%f lon:%f\n",
                   wp->shortname, ed->distance, wp->latitude, wp->longitude);
         }
       }

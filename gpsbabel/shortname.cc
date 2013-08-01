@@ -300,7 +300,7 @@ main()
 
         sn.target_length(8);
         sn.whitespace_ok(false);
-        
+
 	while (*foop) {
 //		printf("%s %s\n", mkshort(*foop+39), *foop+39);
 		QString s = sn.Shorten(*foop + 39);
@@ -376,6 +376,6 @@ printf("%s\n", qPrintable(Shortname::DeleteLastVowel(5, "eat a orange", r)));
 printf("%s\n", qPrintable(Shortname::DeleteLastVowel(0, "xxx", r)));
 printf("%s\n", qPrintable(Shortname::DeleteLastVowel(0, "ixxx", r)));
 printf("%s\n", qPrintable(Shortname::DeleteLastVowel(0, "aexxx", r)));
-	
+
 }
 #endif

@@ -46,24 +46,24 @@ QString geo_read_fname;
 
 geocache_container wpt_container(const QString&);
 
-// Compensate for most of class waypt still using C strings and needing 
+// Compensate for most of class waypt still using C strings and needing
 // copies anyway.
-char * ShimString(const QString& s) 
+char * ShimString(const QString& s)
 {
   return xstrdup(s.toUtf8().data());
 }
-char * ShimString(const QStringRef& s) 
+char * ShimString(const QStringRef& s)
 {
   return xstrdup(s.toString().toUtf8().data());
 }
 
-double ShimAttributeDouble(const QXmlStreamAttributes& a, const QString& v) 
+double ShimAttributeDouble(const QXmlStreamAttributes& a, const QString& v)
 {
   QString rv  = a.value(v).toString();
   return rv.toDouble();
 }
 
-void GeoReadLoc() 
+void GeoReadLoc()
 {
   waypoint* wpt = NULL;
   while (reader.tokenType() != QXmlStreamReader::EndDocument) {
@@ -165,7 +165,7 @@ geocache_container wpt_container(const QString& args)
 static void
 geo_rd_deinit(void)
 {
-  
+
 }
 
 static void
@@ -215,9 +215,9 @@ geo_waypt_pr(const waypoint* waypointp)
   }
 
   if (waypointp->gc_data && waypointp->gc_data->diff) {
-    writer.writeTextElement("difficulty", 
+    writer.writeTextElement("difficulty",
                             QString::number(waypointp->gc_data->diff/10));
-    writer.writeTextElement("terrain", 
+    writer.writeTextElement("terrain",
                             QString::number(waypointp->gc_data->terr/10));
 
     int v = 1;
@@ -247,7 +247,7 @@ geo_waypt_pr(const waypoint* waypointp)
       v = 1;
       break;
     }
-    writer.writeTextElement("container", 
+    writer.writeTextElement("container",
                             QString::number(v));
   }
 
