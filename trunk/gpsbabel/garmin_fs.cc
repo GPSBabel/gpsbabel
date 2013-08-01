@@ -337,7 +337,12 @@ garmin_fs_xml_convert(const int base_tag, int tag, const char* cdatastr, waypoin
     break;
   case 6:
     if (! garmin_fs_merge_category(cdatastr, waypt)) {
-      warning(MYNAME ": Unable to convert category \"%s\"!\n", cdatastr);
+      // There's nothing a user can really do about this (well, they could
+      // create a gpsbabel.ini that mapped them to garmin category numbers
+      // but that feature is so obscure and used in so few outputs that 
+      // there's no reason to alarm the user.  Just silently disregard
+      // category names that don't map cleanly.
+      // warning(MYNAME ": Unable to convert category \"%s\"!\n", cdatastr);
     }
     break;
   case 7:
@@ -367,11 +372,13 @@ garmin_fs_convert_category(const char* category_name, uint16_t* category)
   int i;
   int cat = 0;
 
+  // Is the name  "Category" followed by a number? Use that number.
   if ((case_ignore_strncmp(category_name, "Category ", 9) == 0) &&
       (1 == sscanf(category_name + 9, "%d", &i)) &&
       (i >= 1) && (i <= 16)) {
     cat = (1 << --i);
   } else if (global_opts.inifile != NULL) {
+    // Do we have a gpsbabel.ini that maps category names to category #'s?
     for (i = 0; i < 16; i++) {
       char* c;
       char key[3];
@@ -398,6 +405,7 @@ garmin_fs_merge_category(const char* category_name, waypoint* waypt)
   uint16_t cat;
   garmin_fs_t* gmsd;
 
+  // Attempt to get a textual category name to a category number.
   if (!garmin_fs_convert_category(category_name, &cat)) {
     return 0;
   }
