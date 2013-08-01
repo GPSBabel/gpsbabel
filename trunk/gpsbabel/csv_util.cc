@@ -991,13 +991,13 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     wpt->notes = csv_stringtrim(s, "", 0);
     break;
   case XT_URL:
-    wpt->url = csv_stringtrim(s, "", 0);
+    wpt->url = QString(s).trimmed();
     break;
   case XT_URL_LINK_TEXT:
-    wpt->url_link_text = csv_stringtrim(s, "", 0);
+    wpt->url_link_text = QString(s).trimmed();
     break;
   case XT_ICON_DESCR:
-    wpt->icon_descr = csv_stringtrim(s, "", 0);
+    wpt->icon_descr = QString(s).trimmed();
     break;
 
     /* LATITUDE CONVERSIONS**************************************************/
@@ -1206,10 +1206,10 @@ fatal("XT_NET_TIME can't have possibly ever worked.");
     waypt_alloc_gc_data(wpt)->container = gs_mkcont(s);
     break;
   case XT_GEOCACHE_HINT:
-    waypt_alloc_gc_data(wpt)->hint = csv_stringtrim(s, "", 0);
+    waypt_alloc_gc_data(wpt)->hint = QString(s).trimmed();
     break;
   case XT_GEOCACHE_PLACER:
-    waypt_alloc_gc_data(wpt)->placer = csv_stringtrim(s, "", 0);
+    waypt_alloc_gc_data(wpt)->placer = QString(s).trimmed();
     break;
   case XT_GEOCACHE_ISAVAILABLE:
     gc_data = waypt_alloc_gc_data(wpt);
