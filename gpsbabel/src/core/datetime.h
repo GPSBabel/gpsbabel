@@ -46,7 +46,7 @@ public:
   DateTime(QDateTime dt) : QDateTime(dt) {}
 
   // Handle time_tm tm = wpt->creation_time;
-  operator const time_t() const { return toTime_t(); }
+  operator time_t() const { return toTime_t(); }
 
   const time_t& operator=(const time_t& t) {
     setTime_t(t);
