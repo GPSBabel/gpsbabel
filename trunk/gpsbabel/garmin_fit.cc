@@ -74,6 +74,7 @@ fit_rd_deinit(void)
     fit_message_def* def = &fit_data.message_def[local_id];
     if (def->fields) {
       xfree(def->fields);
+      def->fields = NULL;
     }
   }
 
