@@ -1021,7 +1021,7 @@ const char* get_filename(const char* fname);			/* extract the filename portion *
 #define str_iso8859_1_to_utf8(str) cet_str_iso8859_1_to_utf8((str))
 
 /* this lives in gpx.c */
-gpsbabel::DateTime xml_parse_time(const char* cdatastr);
+gpsbabel::DateTime xml_parse_time(const QString& cdatastr);
 
 xml_tag* xml_findfirst(xml_tag* root, const char* tagname);
 xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname);
