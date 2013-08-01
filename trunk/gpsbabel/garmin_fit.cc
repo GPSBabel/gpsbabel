@@ -68,6 +68,15 @@ fit_rd_init(const char* fname)
 static void
 fit_rd_deinit(void)
 {
+  int local_id;
+
+  for (local_id=0; local_id<16; local_id++) {
+    fit_message_def* def = &fit_data.message_def[local_id];
+    if (def->fields) {
+      xfree(def->fields);
+    }
+  }
+
   gbfclose(fin);
 }
 
@@ -184,12 +193,12 @@ fit_getuint32(void)
 static void
 fit_parse_definition_message(uint8_t header)
 {
-  int local_id = header & 0x1f;
+  int local_id = header & 0x0f;
   fit_message_def* def = &fit_data.message_def[local_id];
   int i;
 
   if (def->fields) {
-    free(def->fields);
+    xfree(def->fields);
   }
 
   // first byte is reserved.  It's usually 0 and we don't know what it is,
