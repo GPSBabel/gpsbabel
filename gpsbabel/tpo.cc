@@ -238,37 +238,6 @@ tpo_read_until_section(const char* section_name, int seek_bytes)
   }
 }
 
-static void
-tpo_rd_init(const char* fname)
-{
-
-  tpo_file_in = gbfopen_le(fname, "rb", MYNAME);
-  tpo_check_version_string();
-
-  if (tpo_version == 2.0) {
-    if (doing_wpts || doing_rtes) {
-      fatal(MYNAME ": this file format only supports tracks, not waypoints or routes.\n");
-    }
-
-    /*fprintf(stderr,"Version 2.x, Looking for CTopoRoute\n"); */
-    /* Back up 18 bytes if this section found */
-    tpo_read_until_section("CTopoRoute", -18);
-  } else if (tpo_version == 3.0) {
-    /*fprintf(stderr,"Version 3.x, Looking for 'Red Without Arrow'\n"); */
-    /* Go forward four more bytes if this section found.  "IEND"
-     * plus four bytes is the end of the embedded PNG image */
-    tpo_read_until_section("Red Without Arrow", 17);
-  } else {
-    fatal(MYNAME ": gpsbabel can only read TPO versions through 3.x.x\n");
-  }
-}
-
-static void
-tpo_rd_deinit(void)
-{
-  gbfclose(tpo_file_in);
-}
-
 
 
 
@@ -1067,6 +1036,7 @@ void tpo_process_map_notes(void)
       notes[name_length] = '\0';  // Terminator
       waypoint_temp->url = notes;
 //printf("Notes: %s\n", notes);
+      xfree(notes);
     }
 
     // Length of text for image path.  If non-zero, skip past
@@ -1082,6 +1052,7 @@ void tpo_process_map_notes(void)
       notes[name_length] = '\0';  // Terminator
       waypoint_temp->url = notes;
 //printf("Notes: %s\n", notes);
+      xfree(notes);
     }
 
 //UNKNOWN DATA LENGTH
@@ -1358,14 +1329,6 @@ void tpo_process_routes(void)
     }
 //printf("\n");
   }
-
-  // Free the waypoint index, we don't need it anymore.
-  for (ii = 0; ii < tpo_index_ptr; ii++) {
-    waypt_free(tpo_wp_index[ii]);
-  }
-
-  // Free the index array itself
-  xfree(tpo_wp_index);
 }
 
 
@@ -1443,6 +1406,47 @@ void tpo_read_3_x(void)
 
 
 
+
+static void
+tpo_rd_init(const char* fname)
+{
+
+  tpo_file_in = gbfopen_le(fname, "rb", MYNAME);
+  tpo_check_version_string();
+
+  if (tpo_version == 2.0) {
+    if (doing_wpts || doing_rtes) {
+      fatal(MYNAME ": this file format only supports tracks, not waypoints or routes.\n");
+    }
+
+    /*fprintf(stderr,"Version 2.x, Looking for CTopoRoute\n"); */
+    /* Back up 18 bytes if this section found */
+    tpo_read_until_section("CTopoRoute", -18);
+  } else if (tpo_version == 3.0) {
+    /*fprintf(stderr,"Version 3.x, Looking for 'Red Without Arrow'\n"); */
+    /* Go forward four more bytes if this section found.  "IEND"
+     * plus four bytes is the end of the embedded PNG image */
+    tpo_read_until_section("Red Without Arrow", 17);
+  } else {
+    fatal(MYNAME ": gpsbabel can only read TPO versions through 3.x.x\n");
+  }
+}
+
+static void
+tpo_rd_deinit(void)
+{
+  unsigned int i;
+
+  // Free the waypoint index, we don't need it anymore.
+  for (i = 0; i < tpo_index_ptr; i++) {
+    waypt_free(tpo_wp_index[i]);
+  }
+
+  // Free the index array itself
+  xfree(tpo_wp_index);
+
+  gbfclose(tpo_file_in);
+}
 
 static void
 tpo_read(void)
