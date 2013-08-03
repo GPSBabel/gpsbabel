@@ -714,6 +714,7 @@ main(int argc, char* argv[])
       ovecs->position_ops.wr_deinit();
     }
     exit(0);
+printf("early\n");
   }
 
 
