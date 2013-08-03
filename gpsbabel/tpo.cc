@@ -1412,7 +1412,10 @@ static void
 tpo_rd_init(const char* fname)
 {
 
+  // preprare for an attempt to deallocate memory that may or may not get allocated
+  // depending on the options used.
   tpo_index_ptr = 0;
+  tpo_wp_index = NULL;
 
   tpo_file_in = gbfopen_le(fname, "rb", MYNAME);
   tpo_check_version_string();
@@ -1444,9 +1447,13 @@ tpo_rd_deinit(void)
   for (i = 0; i < tpo_index_ptr; i++) {
     waypt_free(tpo_wp_index[i]);
   }
+  tpo_index_ptr = 0;
 
   // Free the index array itself
-  xfree(tpo_wp_index);
+  if (tpo_wp_index) {
+    xfree(tpo_wp_index);
+    tpo_wp_index = NULL;
+  }
 
   gbfclose(tpo_file_in);
 }
