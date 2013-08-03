@@ -631,7 +631,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
       xfree(temp);
     }
 
-    res->url = FREAD_CSTR;
+    res->url = FREAD_CSTR_AS_QSTR;
     if (wpt_class != 0) {
       res->description = xstrdup(res->url.toUtf8().data());
       res->url.clear();
