@@ -808,7 +808,7 @@ void tpo_process_tracks(void)
 // For version 3.x files.
 //
 waypoint** tpo_wp_index;
-unsigned int tpo_index_ptr = 0;
+unsigned int tpo_index_ptr;
 
 
 
@@ -837,6 +837,7 @@ void tpo_process_waypoints(void)
   // Fetch storage for the waypoint index (needed later for
   // routes)
   tpo_wp_index = (waypoint**) xmalloc(sizeof(waypoint*) * waypoint_count);
+  tpo_index_ptr = 0;
 
   if (waypoint_count == 0) {
     return;
@@ -1410,6 +1411,8 @@ void tpo_read_3_x(void)
 static void
 tpo_rd_init(const char* fname)
 {
+
+  tpo_index_ptr = 0;
 
   tpo_file_in = gbfopen_le(fname, "rb", MYNAME);
   tpo_check_version_string();
