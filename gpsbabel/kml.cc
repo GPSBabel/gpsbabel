@@ -292,6 +292,8 @@ void wpt_e(const char* args, const char** unused)
 {
   if (wpt_tmp_queued) {
     waypt_add(wpt_tmp);
+  } else {
+	waypt_free(wpt_tmp);
   }
   wpt_tmp_queued = 0;
 }
