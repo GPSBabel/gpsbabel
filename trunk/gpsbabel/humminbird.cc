@@ -139,22 +139,22 @@ typedef struct humminbird_trk_point_old_s {
 } humminbird_trk_point_old_t;
 
 typedef struct group_header {
-  gbuint8 status;
-  gbuint8 icon;
-  gbuint16 depth;
-  gbuint32 time;		/* a time_t, in UTC */
-  gbuint16 parent_idx;
-  gbuint16 reserved1;
-  gbuint16 first_body_index;
-  gbuint16 reserved2;
+  uint8_t status;
+  uint8_t icon;
+  uint16_t depth;
+  uint32_t time;		/* a time_t, in UTC */
+  uint16_t parent_idx;
+  uint16_t reserved1;
+  uint16_t first_body_index;
+  uint16_t reserved2;
   char name[WPT_NAME_LEN];
 } group_header_t;
 
 typedef struct group_body {
-  gbuint8 status;
-  gbuint8 icon;
-  gbuint16 next_idx;
-  gbuint16 item[MAX_ITEMS_PER_GROUP];
+  uint8_t status;
+  uint8_t icon;
+  uint16_t next_idx;
+  uint16_t item[MAX_ITEMS_PER_GROUP];
 } group_body_t;
 
 
