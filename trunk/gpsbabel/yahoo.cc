@@ -19,6 +19,8 @@
 
  */
 
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 
@@ -77,28 +79,28 @@ yahoo_wr_init(const char *fname)
   fatal("Writing file of type %s is not supported\n", MYNAME);
 }
 
-void	wpt_s(const char *args, const char **unused)
+void	wpt_s(const char *args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp = waypt_new();
 }
 
-void	wpt_e(const char *args, const char **unused)
+void	wpt_e(const char *args, const QXmlStreamAttributes* unused)
 {
   waypt_add(wpt_tmp);
   wpt_tmp = NULL;
 }
 
-void	wpt_lat(const char *args, const char **unused)
+void	wpt_lat(const char *args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->latitude = atof(args);
 }
 
-void	wpt_lon(const char *args, const char **unused)
+void	wpt_lon(const char *args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->longitude = atof(args);
 }
 
-void	wpt_addr(const char *args, const char **unused)
+void	wpt_addr(const char *args, const QXmlStreamAttributes* unused)
 {
   if (wpt_tmp->notes) {
     wpt_tmp->notes = xstrappend(wpt_tmp->notes, as);

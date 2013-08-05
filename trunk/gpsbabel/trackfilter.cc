@@ -40,6 +40,8 @@
 #include <ctype.h>
 #include <math.h>
 
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "filterdefs.h"
 #include "strptime.h"

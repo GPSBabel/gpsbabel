@@ -19,6 +19,8 @@
 
  */
 
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 
@@ -124,44 +126,44 @@ glogbook_write(void)
   gbfprintf(ofd, "</History>\n");
 }
 
-void	gl_trk_s(const char* args, const char** unused)
+void	gl_trk_s(const char* args, const QXmlStreamAttributes* unused)
 {
   trk_head = route_head_alloc();
   track_add_head(trk_head);
 }
 #if 0
-void	gl_trk_ident(const char* args, const char** unused)
+void	gl_trk_ident(const char* args, const QXmlStreamAttributes* unused)
 {
   trk_head->rte_name = xstrdup(args);
 }
 #endif
 
-void	gl_trk_pnt_s(const char* args, const char** unused)
+void	gl_trk_pnt_s(const char* args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp = waypt_new();
 }
 
-void	gl_trk_pnt_e(const char* args, const char** unused)
+void	gl_trk_pnt_e(const char* args, const QXmlStreamAttributes* unused)
 {
   track_add_wpt(trk_head, wpt_tmp);
 }
 
-void	gl_trk_utc(const char* args, const char** unused)
+void	gl_trk_utc(const char* args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
 
-void	gl_trk_lat(const char* args, const char** unused)
+void	gl_trk_lat(const char* args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->latitude = atof(args);
 }
 
-void	gl_trk_long(const char* args, const char** unused)
+void	gl_trk_long(const char* args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->longitude = atof(args);
 }
 
-void	gl_trk_alt(const char* args, const char** unused)
+void	gl_trk_alt(const char* args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->altitude = atof(args);
 }

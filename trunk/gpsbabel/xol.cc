@@ -20,6 +20,8 @@
 
 */
 
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 #include "jeeps/gpsmath.h"
@@ -38,20 +40,6 @@ static arglist_t xol_args[] = {
 
 #define MYNAME "xol"
 
-#if ! HAVE_LIBEXPAT
-void
-xol_rd_init(const char *fname)
-{
-  fatal(MYNAME ": This build excluded \"" MYNAME "\" support because expat was not installed.\n");
-}
-
-void
-xol_read(void)
-{
-}
-
-#else
-
 static xg_callback	xol_shape, xol_shape_end;
 static xg_callback	xol_waypt, xol_overlay;
 
@@ -68,64 +56,57 @@ xg_tag_mapping xol_map[] = {
 
 
 static void
-xol_overlay(const char *args, const char **attrv)
+xol_overlay(const char *args, const QXmlStreamAttributes* attrv)
 {
-  const char **avp = &attrv[0];
-
-  while (*avp) {
-    if (strcmp(avp[0], "version") == 0) {
-      if (strcmp(avp[1], "1.0") != 0) {
-        fatal(MYNAME ": Unsupported version %s.\n", avp[1]);
-      }
+  if (attrv->hasAttribute("version")) {
+    if (attrv->value("version") != "1.0") {
+      fatal(MYNAME ": Unsupported version %s.\n",
+            attrv->value("version").toString().toUtf8().constData());
     }
-
-    avp+=2;
   }
 }
 
 static void
-xol_shape(const char *args, const char **attrv)
+xol_shape(const char *args, const QXmlStreamAttributes* attrv)
 {
-  const char **avp = &attrv[0];
+  if (attrv->hasAttribute("type")) {
+    if (attrv->value("type") == "waypoint") {
+      wpt = waypt_new();
+    } else if (attrv->value("type") == "polyline") {
+      trk = route_head_alloc();
+      track_add_head(trk);
+    }
+  }
 
-  while (*avp) {
-    if (strcmp(avp[0], "type") == 0) {
-      if (strcmp(avp[1], "waypoint") == 0) {
-        wpt = waypt_new();
-      } else if (strcmp(avp[1], "polyline") == 0) {
-        trk = route_head_alloc();
-        track_add_head(trk);
-      }
-    } else if (strcmp(avp[0], "name") == 0) {
-      if (wpt) {
-        wpt->shortname = xstrdup(avp[1]);
-      } else if (trk) {
-        trk->rte_name = xstrdup(avp[1]);
-      }
-    } else if (strcmp(avp[0], "comment") == 0) {
-      if (wpt) {
-        wpt->notes = xstrdup(avp[1]);
-      }
-    } else if (strcmp(avp[0], "alt") == 0) {
-      if (wpt) {
-        wpt->altitude = atof(avp[1]);
-      }
-    } else if (strcmp(avp[0], "timestamp") == 0) {
-      if (wpt) {
-        wpt->creation_time = xml_parse_time(avp[1]);
-      }
-    } else if (strcmp(avp[0], "icon") == 0) {
-      if (wpt) {
-        wpt->icon_descr = avp[1];
-      }
+  if (attrv->hasAttribute("name")) {
+    if (wpt) {
+      wpt->shortname = xstrdup(attrv->value("name").toString().toUtf8().constData());
+    } else if (trk) {
+      trk->rte_name = xstrdup(attrv->value("name").toString().toUtf8().constData());
+    }
+  }
+
+  if (wpt) {
+    if (attrv->hasAttribute("comment")) {
+      wpt->notes = xstrdup(attrv->value("comment").toString().toUtf8().constData());
     }
 
-    avp+=2;
+    if (attrv->hasAttribute("alt")) {
+      wpt->altitude = attrv->value("alt").toString().toDouble();
+    }
+
+    if (attrv->hasAttribute("timestamp")) {
+      wpt->creation_time = xml_parse_time(attrv->value("timestamp").toString().toUtf8().constData());
+    }
+
+    if (attrv->hasAttribute("icon")) {
+      wpt->icon_descr = xstrdup(attrv->value("icon").toString().toUtf8().constData());
+    }
   }
 }
 
 static void
-xol_shape_end(const char *args, const char **unused)
+xol_shape_end(const char *args, const QXmlStreamAttributes* unused)
 {
   if (wpt) {
     if (trk) {
@@ -143,18 +124,16 @@ xol_shape_end(const char *args, const char **unused)
 }
 
 static void
-xol_waypt(const char *args, const char **attrv)
+xol_waypt(const char *args, const QXmlStreamAttributes* attrv)
 {
-  const char **avp = &attrv[0];
   int x=0, y=0;
 
-  while (*avp) {
-    if (strcmp(avp[0], "y") == 0) {
-      y = atoi(avp[1]);
-    } else if (strcmp(avp[0], "x") == 0) {
-      x = atoi(avp[1]);
-    }
-    avp+=2;
+  if (attrv->hasAttribute("y")) {
+    y = attrv->value("y").toString().toInt();
+  }
+
+  if (attrv->hasAttribute("x")) {
+    x = attrv->value("x").toString().toInt();
   }
 
   GPS_Math_Swiss_EN_To_WGS84((double)x, (double)y, &wpt->latitude, &wpt->longitude);
@@ -174,8 +153,6 @@ xol_read(void)
 {
   xml_read();
 }
-
-#endif
 
 static void
 xol_rd_deinit(void)

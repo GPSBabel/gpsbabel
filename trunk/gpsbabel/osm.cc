@@ -20,6 +20,8 @@
 
 */
 
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "avltree.h"
 #include "xmlgeneric.h"
@@ -35,7 +37,7 @@ static arglist_t osm_args[] = {
 
 #define MYNAME "osm"
 
-static avltree_t* waypoints;	/* AVL tree */
+static QMap<QString, const waypoint*> waypoints;
 
 static avltree_t* keys = NULL;
 static avltree_t* values = NULL;
@@ -493,7 +495,7 @@ osm_strip_html(const char* str)
 
 
 static void
-osm_node_end(const char* args, const char** unused)
+osm_node_end(const char* args, const QXmlStreamAttributes* unused)
 {
   if (wpt) {
     if (wpt->wpt_flags.fmt_use) {
@@ -507,49 +509,53 @@ osm_node_end(const char* args, const char** unused)
 
 
 static void
-osm_node(const char* args, const char** attrv)
+osm_node(const char* args, const QXmlStreamAttributes* attrv)
 {
-  const char** avp = &attrv[0];
-
   wpt = waypt_new();
 
-  while (*avp) {
-    if (strcmp(avp[0], "id") == 0) {
-      xasprintf(&wpt->description, "osm-id %s", avp[1]);
-      if (! avltree_insert(waypoints, avp[1], (void*)wpt)) {
-        warning(MYNAME ": Duplicate osm-id %s!\n", avp[1]);
-      } else {
-        wpt->wpt_flags.fmt_use = 1;
-      }
-    } else if (strcmp(avp[0], "user") == 0) ;
-    else if (strcmp(avp[0], "lat") == 0) {
-      wpt->latitude = atof(avp[1]);
-    } else if (strcmp(avp[0], "lon") == 0) {
-      wpt->longitude = atof(avp[1]);
-    } else if (strcmp(avp[0], "timestamp") == 0) {
-      wpt->creation_time = xml_parse_time(avp[1]);
-    }
+  if (attrv->hasAttribute("id")) {
+    QString atstr = attrv->value("id").toString();
 
-    avp += 2;
+    xasprintf(&wpt->description, "osm-id %s", CSTR(atstr));
+    if (waypoints.contains(atstr)) {
+      warning(MYNAME ": Duplicate osm-id %s!\n", CSTR(atstr));
+    } else {
+      waypoints.insert(atstr, wpt);
+      wpt->wpt_flags.fmt_use = 1;
+    }
+  }
+
+  // if (attrv->hasAttribute("user")) ; // ignored
+
+  if (attrv->hasAttribute("lat")) {
+    wpt->latitude = attrv->value("lat").toString().toDouble();
+  }
+  if (attrv->hasAttribute("lon")) {
+    wpt->longitude = attrv->value("lon").toString().toDouble();
+  }
+
+  if (attrv->hasAttribute("timestamp")) {
+    QByteArray tsutf8 = attrv->value("timestamp").toString().toUtf8();
+    wpt->creation_time = xml_parse_time(tsutf8.constData());
   }
 }
 
 
 static void
-osm_node_tag(const char* args, const char** attrv)
+osm_node_tag(const char* args, const QXmlStreamAttributes* attrv)
 {
-  const char** avp = &attrv[0];
+  QByteArray qkey, qvalue;
   const char* key = "", *value = "";
   char* str;
   signed char ikey;
 
-  while (*avp) {
-    if (strcmp(avp[0], "k") == 0) {
-      key = avp[1];
-    } else if (strcmp(avp[0], "v") == 0) {
-      value = avp[1];
-    }
-    avp+=2;
+  if (attrv->hasAttribute("k")) {
+    qkey = attrv->value("k").toString().toUtf8();
+    key = qkey.constData();
+  }
+  if (attrv->hasAttribute("v")) {
+    qvalue = attrv->value("v").toString().toUtf8();
+    value = qvalue.constData();
   }
 
   str = osm_strip_html(value);
@@ -601,53 +607,48 @@ osm_node_tag(const char* args, const char** attrv)
 
 
 static void
-osm_way(const char* args, const char** attrv)
+osm_way(const char* args, const QXmlStreamAttributes* attrv)
 {
-  const char** avp = &attrv[0];
-
   rte = route_head_alloc();
 
-  while (*avp) {
-    if (strcmp(avp[0], "id") == 0) {
-      xasprintf(&rte->rte_desc, "osm-id %s", avp[1]);
-    }
-    avp += 2;
+  if (attrv->hasAttribute("id")) {
+      xasprintf(&rte->rte_desc, "osm-id %s",
+                attrv->value("id").toString().toUtf8().constData());
   }
 }
 
 static void
-osm_way_nd(const char* args, const char** attrv)
+osm_way_nd(const char* args, const QXmlStreamAttributes* attrv)
 {
-  const char** avp = &attrv[0];
+  if (attrv->hasAttribute("ref")) {
+    QString atstr = attrv->value("ref").toString();
+    waypoint* tmp;
+    const waypoint* ctmp;
 
-  while (*avp) {
-    if (strcmp(avp[0], "ref") == 0) {
-      waypoint* tmp;
-      if (avltree_find(waypoints, avp[1], (const void**)&tmp)) {
-        tmp = waypt_dupe(tmp);
-        route_add_wpt(rte, tmp);
-      } else {
-        warning(MYNAME ": Way reference id \"%s\" wasn't listed under nodes!\n", avp[1]);
-      }
+    if (waypoints.contains(atstr)) {
+      ctmp = waypoints.value(atstr);
+      tmp = waypt_dupe(ctmp);
+      route_add_wpt(rte, tmp);
+    } else {
+      warning(MYNAME ": Way reference id \"%s\" wasn't listed under nodes!\n", CSTR(atstr));
     }
-    avp += 2;
   }
 }
 
 static void
-osm_way_tag(const char* args, const char** attrv)
+osm_way_tag(const char* args, const QXmlStreamAttributes* attrv)
 {
-  const char** avp = &attrv[0];
+  QByteArray qkey, qvalue;
   const char* key = "", *value = "";
   char* str;
 
-  while (*avp) {
-    if (strcmp(avp[0], "k") == 0) {
-      key = avp[1];
-    } else if (strcmp(avp[0], "v") == 0) {
-      value = avp[1];
-    }
-    avp += 2;
+  if (attrv->hasAttribute("k")) {
+    qkey = attrv->value("k").toString().toUtf8();
+    key = qkey.constData();
+  }
+  if (attrv->hasAttribute("v")) {
+    qvalue = attrv->value("v").toString().toUtf8();
+    value = qvalue.constData();
   }
 
   str = osm_strip_html(value);
@@ -667,7 +668,7 @@ osm_way_tag(const char* args, const char** attrv)
 }
 
 static void
-osm_way_end(const char* args, const char** unused)
+osm_way_end(const char* args, const QXmlStreamAttributes* unused)
 {
   if (rte) {
     route_add_head(rte);
@@ -683,7 +684,7 @@ osm_rd_init(const char* fname)
   wpt_loaded = 0;
   rte_loaded = 0;
 
-  waypoints = avltree_init(0, MYNAME);
+  waypoints.clear();
   if (! keys) {
     osm_features_init();
   }
@@ -703,7 +704,7 @@ static void
 osm_rd_deinit(void)
 {
   xml_deinit();
-  avltree_done(waypoints);
+  waypoints.clear();
 }
 
 /*******************************************************************************/
@@ -785,83 +786,92 @@ osm_release_ids(const waypoint* wpt)
   }
 }
 
+static QString
+osm_name_from_wpt(const waypoint* wpt)
+{
+  QString name = QString("%1\01%2\01%3")
+      .arg((wpt->shortname) ? wpt->shortname : "")
+      .arg(wpt->latitude)
+      .arg(wpt->longitude);
+  return name;
+}
+
 static void
 osm_waypt_disp(const waypoint* wpt)
 {
-  char* buff;
+  QString name = osm_name_from_wpt(wpt);
 
-  xasprintf(&buff, "%s\01%f\01%f", (wpt->shortname) ? wpt->shortname : "",
-            wpt->latitude, wpt->longitude);
-
-  if (avltree_insert(waypoints, buff, (const void*) wpt)) {
-    int* id;
-
-    id = (int*) xmalloc(sizeof(*id));
-    *id = --node_id;
-    ((waypoint*)(wpt))->extra_data = id;
-
-    gbfprintf(fout, "  <node id='%d' visible='true' lat='%0.7f' lon='%0.7f'", *id, wpt->latitude, wpt->longitude);
-    if (wpt->creation_time) {
-      QString time_string = wpt->CreationTimeXML();
-      gbfprintf(fout, " timestamp='%s'", qPrintable(time_string));
-    }
-    gbfprintf(fout, ">\n");
-
-    if (wpt->hdop) {
-      gbfprintf(fout, "    <tag k='gps:hdop' v='%f' />\n", wpt->hdop);
-    }
-    if (wpt->vdop) {
-      gbfprintf(fout, "    <tag k='gps:vdop' v='%f' />\n", wpt->vdop);
-    }
-    if (wpt->pdop) {
-      gbfprintf(fout, "    <tag k='gps:pdop' v='%f' />\n", wpt->pdop);
-    }
-    if (wpt->sat > 0) {
-      gbfprintf(fout, "    <tag k='gps:sat' v='%d' />\n", wpt->sat);
-    }
-
-    switch (wpt->fix) {
-    case fix_2d:
-      gbfprintf(fout, "    <tag k='gps:fix' v='2d' />\n");
-      break;
-    case fix_3d:
-      gbfprintf(fout, "    <tag k='gps:fix' v='3d' />\n");
-      break;
-    case fix_dgps:
-      gbfprintf(fout, "    <tag k='gps:fix' v='dgps' />\n");
-      break;
-    case fix_pps:
-      gbfprintf(fout, "    <tag k='gps:fix' v='pps' />\n");
-      break;
-    case fix_none:
-      gbfprintf(fout, "    <tag k='gps:fix' v='none' />\n");
-      break;
-    case fix_unknown:
-    default:
-      break;
-    }
-
-    if (strlen(created_by) !=0) {
-      gbfprintf(fout, "    <tag k='created_by' v='%s",created_by);
-      if (gpsbabel_time != 0)
-        if (strcmp("GPSBabel",created_by)==0) {
-          gbfprintf(fout, "-%s", gpsbabel_version);
-        }
-      gbfprintf(fout, "'/>\n");
-    }
-
-    osm_write_tag("name", wpt->shortname);
-    osm_write_tag("note", (wpt->notes) ? wpt->notes : wpt->description);
-    if (!wpt->icon_descr.isNull()) {
-      osm_disp_feature(wpt);
-    }
-
-    osm_write_opt_tag(opt_tagnd);
-
-    gbfprintf(fout, "  </node>\n");
+  if (waypoints.contains(name)) {
+    return;
   }
 
-  xfree(buff);
+  waypoints.insert(name, wpt);
+
+  int* id;
+
+  id = (int*) xmalloc(sizeof(*id));
+  *id = --node_id;
+  ((waypoint*)(wpt))->extra_data = id;
+
+  gbfprintf(fout, "  <node id='%d' visible='true' lat='%0.7f' lon='%0.7f'", *id, wpt->latitude, wpt->longitude);
+  if (wpt->creation_time) {
+    QString time_string = wpt->CreationTimeXML();
+    gbfprintf(fout, " timestamp='%s'", qPrintable(time_string));
+  }
+  gbfprintf(fout, ">\n");
+
+  if (wpt->hdop) {
+    gbfprintf(fout, "    <tag k='gps:hdop' v='%f' />\n", wpt->hdop);
+  }
+  if (wpt->vdop) {
+    gbfprintf(fout, "    <tag k='gps:vdop' v='%f' />\n", wpt->vdop);
+  }
+  if (wpt->pdop) {
+    gbfprintf(fout, "    <tag k='gps:pdop' v='%f' />\n", wpt->pdop);
+  }
+  if (wpt->sat > 0) {
+    gbfprintf(fout, "    <tag k='gps:sat' v='%d' />\n", wpt->sat);
+  }
+
+  switch (wpt->fix) {
+  case fix_2d:
+    gbfprintf(fout, "    <tag k='gps:fix' v='2d' />\n");
+    break;
+  case fix_3d:
+    gbfprintf(fout, "    <tag k='gps:fix' v='3d' />\n");
+    break;
+  case fix_dgps:
+    gbfprintf(fout, "    <tag k='gps:fix' v='dgps' />\n");
+    break;
+  case fix_pps:
+    gbfprintf(fout, "    <tag k='gps:fix' v='pps' />\n");
+    break;
+  case fix_none:
+    gbfprintf(fout, "    <tag k='gps:fix' v='none' />\n");
+    break;
+  case fix_unknown:
+  default:
+    break;
+  }
+
+  if (strlen(created_by) !=0) {
+    gbfprintf(fout, "    <tag k='created_by' v='%s",created_by);
+    if (gpsbabel_time != 0)
+      if (strcmp("GPSBabel",created_by)==0) {
+        gbfprintf(fout, "-%s", gpsbabel_version);
+      }
+    gbfprintf(fout, "'/>\n");
+  }
+
+  osm_write_tag("name", wpt->shortname);
+  osm_write_tag("note", (wpt->notes) ? wpt->notes : wpt->description);
+  if (!wpt->icon_descr.isNull()) {
+    osm_disp_feature(wpt);
+  }
+
+  osm_write_opt_tag(opt_tagnd);
+
+  gbfprintf(fout, "  </node>\n");
 }
 
 static void
@@ -879,22 +889,18 @@ osm_rte_disp_head(const route_head* rte)
 static void
 osm_rtept_disp(const waypoint* wpt_ref)
 {
-  char* buff;
-  waypoint* wpt;
+  QString name = osm_name_from_wpt(wpt_ref);
+  const waypoint* wpt;
 
   if (skip_rte) {
     return;
   }
 
-  xasprintf(&buff, "%s\01%f\01%f", (wpt_ref->shortname) ? wpt_ref->shortname : "",
-            wpt_ref->latitude, wpt_ref->longitude);
-
-  if (avltree_find(waypoints, buff, (const void**) &wpt)) {
+  if (waypoints.contains(name)) {
+    wpt = waypoints.value(name);
     int* id = (int*) wpt->extra_data;
     gbfprintf(fout, "    <nd ref='%d'/>\n", *id);
   }
-
-  xfree(buff);
 }
 
 static void
@@ -931,7 +937,7 @@ osm_wr_init(const char* fname)
   fout = gbfopen(fname, "w", MYNAME);
 
   osm_init_icons();
-  waypoints = avltree_init(0, MYNAME);
+  waypoints.clear();
   node_id = 0;
 }
 
@@ -964,7 +970,7 @@ osm_wr_deinit(void)
   route_disp_all(NULL, NULL, osm_release_ids);
   track_disp_all(NULL, NULL, osm_release_ids);
 
-  avltree_done(waypoints);
+  waypoints.clear();
 }
 
 static void

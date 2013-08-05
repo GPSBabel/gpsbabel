@@ -17,6 +17,7 @@
 
  */
 
+#include <QtCore/QTextCodec>
 
 #include "defs.h"
 #include "filterdefs.h"
@@ -243,6 +244,8 @@ main(int argc, char* argv[])
   queue* wpt_head_bak, *rte_head_bak, *trk_head_bak;	/* #ifdef UTF8_SUPPORT */
   signed int wpt_ct_bak, rte_ct_bak, trk_ct_bak;	/* #ifdef UTF8_SUPPORT */
   arg_stack_t* arg_stack = NULL;
+
+  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
   global_opts.objective = wptdata;
   global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */

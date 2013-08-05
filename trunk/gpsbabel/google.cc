@@ -16,6 +16,9 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 
@@ -65,7 +68,7 @@ xg_tag_mapping google_map[] = {
   { NULL, (xg_cb_type)0,              NULL }
 };
 
-void goog_script(const char* args, const char** unused)
+void goog_script(const char* args, const QXmlStreamAttributes *unused)
 {
   if (args) {
     if (script) {
@@ -76,7 +79,7 @@ void goog_script(const char* args, const char** unused)
   }
 }
 
-void goog_points(const char* args, const char** unused)
+void goog_points(const char* args, const QXmlStreamAttributes *unused)
 {
   if (args) {
     if (encoded_points) {
@@ -87,7 +90,7 @@ void goog_points(const char* args, const char** unused)
   }
 }
 
-void goog_levels(const char* args, const char** unused)
+void goog_levels(const char* args, const QXmlStreamAttributes *unused)
 {
   if (args) {
     if (encoded_levels) {
@@ -106,59 +109,64 @@ static int goog_segroute = 0;
  * The segments contain an index into the points array.  We use that
  * index to find the waypoint and insert a better name for it.
  */
-void goog_segment_s(const char* args, const char** attrv)
+void goog_segment_s(const char* args, const QXmlStreamAttributes* attrv)
 {
-  const char** avp = &attrv[0];
-  while (*avp) {
-    if (0 == strcmp(avp[0], "pointIndex")) {
-      snprintf(goog_segname, sizeof(goog_segname), "\\%5.5x", atoi(avp[1]));
-    }
-    avp += 2;
+  QStringRef ptidx = attrv->value("pointIndex");
+  if (!ptidx.isEmpty()) {
+    snprintf(goog_segname, sizeof(goog_segname), "\\%5.5x",
+        ptidx.toString().toUInt());
   }
-
 }
 
-void goog_segment(const char* args, const char** unused)
+void goog_segment(const char* args, const QXmlStreamAttributes *unused)
 {
   waypoint* wpt_tmp;
 
   wpt_tmp = route_find_waypt_by_name(routehead[goog_segroute], goog_segname);
   if (wpt_tmp) {
     xfree(wpt_tmp->shortname);
-    wpt_tmp->shortname = mkshort(desc_handle,args);
+    wpt_tmp->shortname = mkshort(desc_handle, args);
     wpt_tmp->description = xstrdup(args);
   }
 }
 
-void goog_td_s(const char* args, const char** attrv)
+void goog_td_s(const char* args, const QXmlStreamAttributes* attrv)
 {
-  const char** avp = &attrv[0];
-  int isdesc = 0;
-  int isseg = 0;
-  while (*avp) {
-    if (0 == strcmp(avp[0], "class")) {
-      isdesc = !strcmp(avp[1], "desc");
-      isseg = !strcmp(avp[1], "dirsegtext");
-    } else if (isdesc && (0 == strcmp(avp[0], "id"))) {
-      goog_segroute = 0;
-      snprintf(goog_segname, sizeof(goog_segname),
-               "\\%5.5x",
-               atoi(avp[1] + 6));
-    } else if (isseg && (0 == strcmp(avp[0], "id"))) {
-      if (strchr(strchr(avp[1],'_')+1,'_')) {
-        goog_segroute = atoi(strchr(avp[1],'_')+1);
-      } else {
-        goog_segroute = 0;
-      }
-      snprintf(goog_segname, sizeof(goog_segname),
-               "\\%5.5x",
-               atoi(strrchr(avp[1],'_') + 1)+routecount[goog_segroute]);
+  bool isdesc = false, isseg = false;
+  QStringRef aclass = attrv->value("class");
+  QStringRef id = attrv->value("id");
+
+  if (aclass.isEmpty() || id.isEmpty()) {
+    return;
+  }
+
+  isdesc = (aclass == "desc");
+  isseg = (aclass == "dirsegtext");
+
+  if (isdesc) {
+    QStringRef subid(id.string(), id.position() + 6, id.length() - 6);
+
+    goog_segroute = 0;
+    snprintf(goog_segname, sizeof(goog_segname), "\\%5.5x",
+             subid.toString().toUInt());
+  } else if (isseg) {
+    QString idstr = id.toString();
+    int first_us;
+
+    goog_segroute = 0;
+
+    first_us = idstr.indexOf("_");
+    if (idstr.indexOf("_", first_us + 1) != -1) {
+      goog_segroute = idstr.mid(first_us + 1).toUInt();
     }
-    avp += 2;
+
+    snprintf(goog_segname, sizeof(goog_segname), "\\%5.5x",
+             idstr.mid(idstr.lastIndexOf("_") + 1).toUInt() +
+               routecount[goog_segroute]);
   }
 }
 
-void goog_td_b(const char* args, const char** attrv)
+void goog_td_b(const char* args, const QXmlStreamAttributes* unused)
 {
   if (goog_segname[0] == '\\' && !strchr(args, '\xa0')) {
     if (goog_realname) {
@@ -169,10 +177,10 @@ void goog_td_b(const char* args, const char** attrv)
     strcpy(goog_realname, args);
   }
 }
-void goog_td_e(const char* args, const char** attrv)
+void goog_td_e(const char* args, const QXmlStreamAttributes* unused)
 {
   if (goog_segname[0] == '\\' && goog_realname) {
-    goog_segment(goog_realname, attrv);
+    goog_segment(goog_realname, NULL/*unused*/);
   }
   goog_segname[0] = '\0';
   if (goog_realname) {
@@ -203,7 +211,7 @@ static long decode_goog64(char** str)
   return result/2;
 }
 
-void goog_poly_e(const char* args, const char** unused)
+void goog_poly_e(const char* args, const QXmlStreamAttributes *unused)
 {
   long lat = 0;
   long lon = 0;
@@ -254,7 +262,7 @@ google_rd_init(const char* fname)
   desc_handle = mkshort_new_handle();
   setshort_length(desc_handle, 12);
 
-  xml_init(fname, google_map, "ISO-8859-1");
+  xml_init(fname, google_map, NULL);
 }
 
 static void

@@ -23,6 +23,8 @@
 
 */
 
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 
@@ -43,20 +45,6 @@ static arglist_t tef_xml_args[] = {
 };
 
 #define MYNAME "TourExchangeFormat"
-
-#if ! HAVE_LIBEXPAT
-void
-tef_xml_rd_init(const char *fname)
-{
-  fatal(MYNAME ": This build excluded TEF support because expat was not installed.\n");
-}
-
-void
-tef_xml_read(void)
-{
-}
-
-#else
 
 static char *
 trimmed_strdup(const char *str)
@@ -95,21 +83,20 @@ xg_tag_mapping tef_xml_map[] = {
  */
 
 void
-tef_start(const char *args, const char **attrv)
+tef_start(const char *args, const QXmlStreamAttributes* attrv)
 {
-  int valid = 0;
-  const char **avp = &attrv[0];
+  bool valid = false;
 
-  while (*avp) {
-    if (0 == case_ignore_strcmp(avp[0], "Comment")) {
-      if (0 == case_ignore_strcmp(avp[1], "TourExchangeFormat")) {
-        valid = 1;
+  foreach (QXmlStreamAttribute attr, *attrv) {
+    if (attr.name().compare("Comment", Qt::CaseInsensitive) == 0) {
+      if (attr.value().compare("TourExchangeFormat", Qt::CaseInsensitive) == 0) {
+        valid = true;
       }
-    } else if (0 == case_ignore_strcmp(avp[0], "Version")) {
-      version = atof(avp[1]);
+    } else if (attr.name().compare("Version", Qt::CaseInsensitive) == 0) {
+      version = attr.value().toString().toDouble();
     }
-    avp+=2;
   }
+
   if (!valid) {
     fatal(MYNAME ": Error in source file.\n");
   }
@@ -120,32 +107,24 @@ tef_start(const char *args, const char **attrv)
  */
 
 static void
-tef_header(const char *args, const char **attrv)
+tef_header(const char *args, const QXmlStreamAttributes* attrv)
 {
-  const char **avp = &attrv[0];
-
   route = route_head_alloc();
-  while (*avp) {
-    if (case_ignore_strcmp(avp[0], "Name") == 0) {
-      route->rte_name = trimmed_strdup(avp[1]);
-    } else if (case_ignore_strcmp(avp[0], "Software") == 0) {
-      route->rte_desc = trimmed_strdup(avp[1]);
+  foreach (QXmlStreamAttribute attr, *attrv) {
+    if (attr.name().compare("Name", Qt::CaseInsensitive) == 0) {
+      route->rte_name = trimmed_strdup(attr.value().toString().toUtf8().constData());
+    } else if (attr.name().compare("Software", Qt::CaseInsensitive) == 0) {
+      route->rte_desc = trimmed_strdup(attr.value().toString().toUtf8().constData());
     }
-    avp+=2;
   }
   route_add_head(route);
 }
 
 static void
-tef_list_start(const char *args, const char **attrv)
+tef_list_start(const char *args, const QXmlStreamAttributes* attrv)
 {
-  const char **avp = &attrv[0];
-
-  while (*avp) {
-    if (strcmp(avp[0], "ItemCount") == 0) {
-      sscanf(avp[1], "%d", &item_count);
-    }
-    avp+=2;
+  if (attrv->hasAttribute("ItemCount")) {
+    item_count = attrv->value("ItemCount").toString().toUInt();
   }
 }
 
@@ -229,13 +208,13 @@ waypoint_final()
 }
 
 static void
-tef_item_end(const char *args, const char **unused)
+tef_item_end(const char *args, const QXmlStreamAttributes* unused)
 {
   waypoint_final();
 }
 
 static void
-tef_list_end(const char *args, const char **unused)
+tef_list_end(const char *args, const QXmlStreamAttributes* unused)
 {
   waypoint_final();
   if (waypoints != item_count)
@@ -244,10 +223,8 @@ tef_list_end(const char *args, const char **unused)
 }
 
 static void
-tef_item_start(const char *args, const char **attrv)
+tef_item_start(const char *args, const QXmlStreamAttributes* attrv)
 {
-  const char **avp = &attrv[0];
-
   waypoints++;
 
   wpt_tmp = waypt_new();
@@ -255,59 +232,57 @@ tef_item_start(const char *args, const char **attrv)
     wpt_tmp->wpt_flags.fmt_use ++;
   }
 
-  while (*avp) {
-    if (0 == case_ignore_strcmp(avp[0], "SegDescription")) {
-      wpt_tmp->shortname = trimmed_strdup(avp[1]);
-    } else if (0 == case_ignore_strcmp(avp[0], "PointDescription")) {
-      wpt_tmp->description = trimmed_strdup(avp[1]);
-    } else if ((0 == case_ignore_strcmp(avp[0], "ViaStation")) &&
-               (0 == case_ignore_strcmp(avp[1], "true"))) {
-      wpt_tmp->wpt_flags.fmt_use  = 1;  /* only a flag */
-    }
+  foreach (QXmlStreamAttribute attr, *attrv) {
+    QString attrstr = attr.value().toString();
+    QByteArray attrtext = attrstr.toUtf8();
+
+    if (attr.name().compare("SegDescription", Qt::CaseInsensitive) == 0) {
+      wpt_tmp->shortname = trimmed_strdup(attrtext.constData());
+    } else if (attr.name().compare("PointDescription", Qt::CaseInsensitive) == 0) {
+      wpt_tmp->description = trimmed_strdup(attrtext.constData());
+    } else if (attr.name().compare("ViaStation", Qt::CaseInsensitive) == 0 &&
+               attr.value().compare("true", Qt::CaseInsensitive) == 0) {
+      wpt_tmp->wpt_flags.fmt_use = 1;  /* only a flag */
 
     /* new in TEF V2 */
-    else if (0 == case_ignore_strcmp(avp[0], "Instruction")) {
-      wpt_tmp->description = trimmed_strdup(avp[1]);
-    } else if (0 == case_ignore_strcmp(avp[0], "Altitude")) {
-      wpt_tmp->altitude = atof(avp[1]);
-    } else if (0 == case_ignore_strcmp(avp[0], "TimeStamp")) {
+    } else if (attr.name().compare("Instruction", Qt::CaseInsensitive) == 0) {
+      wpt_tmp->description = trimmed_strdup(attrtext.constData());
+    } else if (attr.name().compare("Altitude", Qt::CaseInsensitive) == 0) {
+      wpt_tmp->altitude = attrstr.toDouble();
+    } else if (attr.name().compare("TimeStamp", Qt::CaseInsensitive) == 0) {
       /* nothing for the moment */
     }
-
-    avp+=2;
   }
 }
 
-static void
-tef_point(const char *args, const char **attrv)
+static double
+tef_read_comma_float(const QStringRef& value)
 {
-  const char **avp = &attrv[0];
-  char *comma;
+  QString svalue = value.toString();
+  int cidx;
 
+  cidx = svalue.indexOf(',');
+  if (cidx == -1) {
+    return svalue.toDouble();
+  }
+
+  QString fixed = svalue.replace(cidx, 1, '.');
+  return fixed.toDouble();
+}
+
+static void
+tef_point(const char *args, const QXmlStreamAttributes* attrv)
+{
   if (!wpt_tmp) {
     return;
   }
 
-  // FIXME: this code should really not be writing into the arg list.
-  while (*avp) {
-    if (strcmp(avp[0], "y") == 0) {
-      char *tbuf = xstrdup(avp[1]);
-      comma = strstr(tbuf, ",");
-      if (comma) {
-        *comma='.';
-      }
-      sscanf(tbuf, "%lf", &wpt_tmp->latitude);
-      xfree(tbuf);
-    } else if (strcmp(avp[0], "x") == 0) {
-      char *tbuf = xstrdup(avp[1]);
-      comma = strstr(tbuf, ",");
-      if (comma) {
-        *comma='.';
-      }
-      sscanf(tbuf, "%lf", &wpt_tmp->longitude);
-      xfree(tbuf);
-    }
-    avp+=2;
+  if (attrv->hasAttribute("y")) {
+    wpt_tmp->latitude = tef_read_comma_float(attrv->value("y"));
+  }
+
+  if (attrv->hasAttribute("x")) {
+    wpt_tmp->longitude = tef_read_comma_float(attrv->value("x"));
   }
 }
 
@@ -327,8 +302,6 @@ tef_xml_read(void)
 {
   xml_read();
 }
-
-#endif
 
 static void
 tef_xml_rd_deinit(void)

@@ -52,7 +52,7 @@
   </rte>
   <rte>
     <name>step004</name>
-    <desc>Slight right onto Pl. LapÃ¨rouse</desc>
+    <desc>Slight right onto Pl. Lapèrouse</desc>
     <rtept lat="43.925620000" lon="2.145510000">
       <name>RPT013</name>
     </rtept>
@@ -77,7 +77,7 @@
   </rte>
   <rte>
     <name>step005</name>
-    <desc>Slight left to stay on Pl. LapÃ¨rouse</desc>
+    <desc>Slight left to stay on Pl. Lapèrouse</desc>
     <rtept lat="43.925830000" lon="2.145030000">
       <name>RPT020</name>
     </rtept>
@@ -147,7 +147,7 @@
   </rte>
   <rte>
     <name>step006</name>
-    <desc>Continue onto Av. GÃ©nÃ©ral de Gaulle</desc>
+    <desc>Continue onto Av. Général de Gaulle</desc>
     <rtept lat="43.924200000" lon="2.144330000">
       <name>RPT042</name>
     </rtept>
@@ -169,7 +169,7 @@
   </rte>
   <rte>
     <name>step007</name>
-    <desc>At the roundabout, take the 1st exit onto Av. MarÃ©chal Joffre</desc>
+    <desc>At the roundabout, take the 1st exit onto Av. Maréchal Joffre</desc>
     <rtept lat="43.922490000" lon="2.142280000">
       <name>RPT048</name>
     </rtept>
@@ -300,7 +300,7 @@
   </rte>
   <rte>
     <name>step009</name>
-    <desc>Turn right onto Av. FranÃ§ois Verdier/D988Continue to follow D988</desc>
+    <desc>Turn right onto Av. François Verdier/D988Continue to follow D988</desc>
     <rtept lat="43.919590000" lon="2.135000000">
       <name>RPT089</name>
     </rtept>
@@ -4834,7 +4834,7 @@
   </rte>
   <rte>
     <name>step013</name>
-    <desc>Keep left at the fork, follow signs for A61/PÃ©riphÃ©rique IntÃ©rieur/La Roseraie/Toulouse-Centre/Montpellier/Barcelone/Foix and merge onto A61Partial toll road</desc>
+    <desc>Keep left at the fork, follow signs for A61/Périphérique Intérieur/La Roseraie/Toulouse-Centre/Montpellier/Barcelone/Foix and merge onto A61Partial toll road</desc>
     <rtept lat="43.638120000" lon="1.483170000">
       <name>RPT1595</name>
     </rtept>
@@ -5624,7 +5624,7 @@
   </rte>
   <rte>
     <name>step017</name>
-    <desc>Continue onto Av. LÃ©on Blum</desc>
+    <desc>Continue onto Av. Léon Blum</desc>
     <rtept lat="43.614770000" lon="1.463970000">
       <name>RPT1853</name>
     </rtept>
@@ -5919,7 +5919,7 @@
   </rte>
   <rte>
     <name>step021</name>
-    <desc>Continue onto AllÃ©e Jean JaurÃ¨s/AllÃ©es Jean-JaurÃ¨s</desc>
+    <desc>Continue onto Allée Jean Jaurès/Allées Jean-Jaurès</desc>
     <rtept lat="43.609300000" lon="1.453880000">
       <name>RPT1946</name>
     </rtept>
@@ -5977,7 +5977,7 @@
   </rte>
   <rte>
     <name>step022</name>
-    <desc>Slight left onto AllÃ©e PrÃ©sident Roosevelt</desc>
+    <desc>Slight left onto Allée Président Roosevelt</desc>
     <rtept lat="43.605870000" lon="1.448620000">
       <name>RPT1964</name>
     </rtept>
@@ -5999,7 +5999,7 @@
   </rte>
   <rte>
     <name>step023</name>
-    <desc>Turn right onto Pl. du PrÃ©sident Thomas Wilson</desc>
+    <desc>Turn right onto Pl. du Président Thomas Wilson</desc>
     <rtept lat="43.605190000" lon="1.447670000">
       <name>RPT1970</name>
     </rtept>

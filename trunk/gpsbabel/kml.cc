@@ -22,6 +22,7 @@
  */
 #include <math.h>
 #include <QtCore/QRegExp>
+#include <QtCore/QXmlStreamAttributes>
 
 #ifdef __WIN32__
 # include <windows.h>
@@ -66,9 +67,9 @@ static int wpt_tmp_queued;
 static const char* posnfilename;
 static char* posnfilenametmp;
 
-static gbfile* ofd;
-static QString ostring;
-static gpsbabel::XmlStreamWriter* writer;
+static gbfile* ofd = NULL;
+static QFile oqfile;
+static gpsbabel::XmlStreamWriter* writer = new gpsbabel::XmlStreamWriter(oqfile);
 
 typedef enum  {
   kmlpt_unknown,
@@ -282,13 +283,13 @@ const char* kml_tags_to_ignore[] = {
   NULL,
 };
 
-void wpt_s(const char* args, const char** unused)
+void wpt_s(const char* args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp = waypt_new();
   wpt_tmp_queued = 0;
 }
 
-void wpt_e(const char* args, const char** unused)
+void wpt_e(const char* args, const QXmlStreamAttributes* unused)
 {
   if (wpt_tmp_queued) {
     waypt_add(wpt_tmp);
@@ -298,14 +299,14 @@ void wpt_e(const char* args, const char** unused)
   wpt_tmp_queued = 0;
 }
 
-void wpt_name(const char* args, const char** unused)
+void wpt_name(const char* args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     wpt_tmp->shortname = xstrdup(args);
   }
 }
 
-void wpt_desc(const char* args, const char** unused)
+void wpt_desc(const char* args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     char* tmp, *c;
@@ -319,12 +320,12 @@ void wpt_desc(const char* args, const char** unused)
   }
 }
 
-void wpt_time(const char* args, const char** unused)
+void wpt_time(const char* args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
 
-void wpt_coord(const char* args, const char** attrv)
+void wpt_coord(const char* args, const QXmlStreamAttributes* attrv)
 {
   int n = 0;
   double lat, lon, alt;
@@ -340,14 +341,14 @@ void wpt_coord(const char* args, const char** attrv)
   wpt_tmp_queued = 1;
 }
 
-void wpt_icon(const char* args, const char** unused)
+void wpt_icon(const char* args, const QXmlStreamAttributes* unused)
 {
   if (wpt_tmp)  {
     wpt_tmp->icon_descr = args;
   }
 }
 
-void trk_coord(const char* args, const char** attrv)
+void trk_coord(const char* args, const QXmlStreamAttributes* attrv)
 {
   int consumed = 0;
   double lat, lon, alt;
@@ -436,15 +437,10 @@ kml_wr_init(const char* fname)
    * Reduce race conditions with network read link.
    */
   ofd = gbfopen(fname, "w", MYNAME);
+  oqfile.open(ofd->handle.std, QIODevice::WriteOnly);
 
-  writer = new gpsbabel::XmlStreamWriter(ostring);
   writer->setAutoFormattingIndent(2);
-  // Technically, XML (and therefore KML) defaults ot UTF-8, so we should not
-  // have to declare this.  For compatibility with the existing Qt writer,
-  // we do...
-  //writer.setCodec("UTF-8");
-  //writer.writeStartDocument();
-
+  writer->setCodec("UTF-8");
 }
 
 /*
@@ -462,8 +458,8 @@ kml_wr_position_init(const char* fname)
    * 30% of our output file is whitespace.  Since parse time
    * matters in this mode, turn the pretty formatting off.
    */
-  writer = new gpsbabel::XmlStreamWriter(ostring);
   writer->setAutoFormatting(false);
+  writer->setCodec("UTF-8");
 
   max_position_points = atoi(opt_max_position_points);
 }
@@ -472,12 +468,7 @@ static void
 kml_wr_deinit(void)
 {
   writer->writeEndDocument();
-
-  // FIXME: Nuke illegal xml characters.
-  // If we have done things right this shouldn't be necessary.
-  ostring.replace(QRegExp("[\001-\010]"), " ").replace(QRegExp("[\013-\014]"), " ").replace(QRegExp("[\016-\037]"), " ");
-
-  gbfputs(ostring, ofd);
+  oqfile.close();
   gbfclose(ofd);
 
   if (posnfilenametmp) {
@@ -487,9 +478,6 @@ kml_wr_deinit(void)
 #endif
     rename(posnfilenametmp, posnfilename);
   }
-  delete writer;
-  writer = NULL;
-  ostring.clear();
   ofd = NULL;
 }
 
@@ -930,7 +918,7 @@ static void kml_output_point(const waypoint* waypointp, kml_point_type pt_type)
   if (export_points) {
     writer->writeStartElement("Placemark");
     if (atoi(opt_labels)) {
-      writer->writeOptionalTextElement("name", waypointp->shortname);
+      writer->writeOptionalTextElement("name", QString::fromUtf8(waypointp->shortname));
     }
     writer->writeEmptyElement("snippet");
     kml_output_description(waypointp);
@@ -1906,7 +1894,7 @@ void kml_write(void)
 {
   char import_time[100];
   time_t now;
-  const global_trait* traits =  get_traits();
+  const global_trait* traits = get_traits();
 
   // Parse options
   export_lines = (0 == strcmp("1", opt_export_lines));
@@ -1919,7 +1907,7 @@ void kml_write(void)
   trackdirection = (!! strcmp("0", opt_trackdirection));
   line_width = atol(opt_line_width);
 
-  writer->writeProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\"");
+  writer->writeStartDocument();
   // FIXME: This write of a blank line is needed for Qt 4.6 (as on Centos 6.3)
   // to include just enough whitespace between <xml/> and <gpx...> to pass
   // diff -w.  It's here for now to shim compatibility with our zillion

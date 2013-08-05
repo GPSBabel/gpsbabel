@@ -27,7 +27,7 @@ typedef enum {
   cb_end,
 } xg_cb_type;
 
-typedef void (xg_callback)(const char*, const char**);
+typedef void (xg_callback)(const char*, const QXmlStreamAttributes*);
 
 typedef struct xg_tag_mapping {
   xg_callback* tag_cb;
@@ -59,6 +59,6 @@ void xml_init(const char* fname, xg_tag_mapping* tbl,const char* encoding);
 void xml_init_offset(const char* fname, xg_tag_mapping* tbl,
                      const char* encoding, gbsize_t offset);
 void xml_read(void);
-void xml_readstring(char* str);
+void xml_readstring(const char* str);
 void xml_readprefixstring(const char* str);
 void xml_deinit(void);
