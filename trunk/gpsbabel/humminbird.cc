@@ -1,7 +1,7 @@
 /*
     Copyright (C) 2008  Björn Augustsson, oggust@gmail.com
     Copyright (C) 2008  Olaf Klein, o.b.klein@gpsbabel.org
-    Copyright (C) 2005  Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2005-2013 Robert Lipe, robertlipe@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -22,8 +22,9 @@
 #include <ctype.h>
 #include <math.h>
 #include <string.h>
+#include <QtCore/QMap.h>
+
 #include "defs.h"
-#include "avltree.h"
 
 #define MYNAME "humminbird"
 
@@ -31,11 +32,12 @@
 #define RTE_NAME_LEN		20
 #define TRK_NAME_LEN		20
 #define MAX_RTE_POINTS		50
+#define MAX_ITEMS_PER_GROUP	12
 
 /*
 I suspect that these are actually
 struct signature {
-	uint8_t format, // 1 = track, 2 = waypoint, 3 = route
+	uint8_t format, // 1 = track, 2 = waypoint, 3 = route, 4 = iTrack
 	uint8_t version,
 	gpuint16 record_length
 }
@@ -43,11 +45,12 @@ struct signature {
 The v3 TRK_MAGIC doesn't have a length, probably because it wouldn't fit.
 (It would be 0x200008)
 
-Still, they're usful in the code as a plain signature.
+Still, they're useful in the code as a plain signature.
 */
 #define TRK_MAGIC		0x01030000L
 #define TRK_MAGIC2		0x01021F70L
 #define WPT_MAGIC		0x02020024L
+#define WPT_MAGIC2		0x02030024L // New for 2013.  No visible diff?!
 #define RTE_MAGIC		0x03030088L
 
 #define EAST_SCALE		20038297.0 /* this is i1924_equ_axis*M_PI */
@@ -135,6 +138,26 @@ typedef struct humminbird_trk_point_old_s {
   int16_t  deltanorth;
 } humminbird_trk_point_old_t;
 
+typedef struct group_header {
+  gbuint8 status;
+  gbuint8 icon;
+  gbuint16 depth;
+  gbuint32 time;		/* a time_t, in UTC */
+  gbuint16 parent_idx;
+  gbuint16 reserved1;
+  gbuint16 first_body_index;
+  gbuint16 reserved2;
+  char name[WPT_NAME_LEN];
+} group_header_t;
+
+typedef struct group_body {
+  gbuint8 status;
+  gbuint8 icon;
+  gbuint16 next_idx;
+  gbuint16 item[MAX_ITEMS_PER_GROUP];
+} group_body_t;
+
+
 static const char* humminbird_icons[] = {
   "Normal",       /*  0 */
   "House",        /*  1 */
@@ -172,9 +195,9 @@ static gbfile* fin;
 static gbfile* fout;
 static int waypoint_num;
 static short_handle wptname_sh, rtename_sh, trkname_sh;
-static avltree_t* waypoints;
 static humminbird_rte_t* humrte;
 static int rte_num;
+static QMap<QString, waypoint*> map;
 
 static
 arglist_t humminbird_args[] = {
@@ -232,25 +255,21 @@ static void
 humminbird_rd_init(const char* fname)
 {
   fin = gbfopen_be(fname, "rb", MYNAME);
-  waypoints = avltree_init(0, MYNAME);
 }
 
 static void
 humminbird_rd_deinit(void)
 {
-  avltree_done(waypoints);
   gbfclose(fin);
 }
 
 static void
 humminbird_read_wpt(gbfile* fin)
 {
-
   humminbird_waypt_t w;
   double guder;
   int num_icons;
   waypoint* wpt;
-  char buff[10];
 
   if (! gbfread(&w, 1, sizeof(w), fin)) {
     fatal(MYNAME ": Unexpected end of file!\n");
@@ -286,11 +305,26 @@ humminbird_read_wpt(gbfile* fin)
     wpt->icon_descr = humminbird_icons[w.icon];
   }
 
-  waypt_add(wpt);
+  // In newer versions, this is an enum (though it looks like a bitfield)
+  // that describes a sub-status
+  switch (w.status) {
+  case 0: // Waypoint not used.  So why do we have one?
+    break;
+  case 1: // Waypoint permanent.
+  case 2: // Waypoint temporary.
+  case 3: // Waypoint man-overboard.
+    waypt_add(wpt);
+    break;
+  case 16: // Waypoint group header.
+  case 17: // Waypoint group body.
+  case 63: // Waypoint group invalid.
+  default:
+    break;
+  }
 
   /* register the point over his internal Humminbird "Number" */
-  snprintf(buff, sizeof(buff), "%d", w.num);
-  avltree_insert(waypoints, buff, wpt);
+  QString buff = QString::number(w.num);
+  map[buff] = wpt;
 }
 
 static void
@@ -311,13 +345,14 @@ humminbird_read_route(gbfile* fin)
     route_head* rte = NULL;
 
     for (i = 0; i < hrte.count; i++) {
-      waypoint* wpt;
+      const waypoint* wpt;
       char buff[10];
       hrte.points[i] = be_read16(&hrte.points[i]);
 
       /* locate the point over his internal Humminbird "Number" */
       snprintf(buff, sizeof(buff), "%d", hrte.points[i]);
-      if (avltree_find(waypoints, buff, (const void**) &wpt)) {
+      if ((map.value(buff))) {
+        wpt = map.value(buff);
         if (rte == NULL) {
           rte = route_head_alloc();
           route_add_head(rte);
@@ -571,6 +606,7 @@ humminbird_read(void)
 
     switch (signature) {
     case WPT_MAGIC:
+    case WPT_MAGIC2:
       humminbird_read_wpt(fin);
       break;
     case RTE_MAGIC:
@@ -624,8 +660,6 @@ humminbird_wr_init(const char* fname)
   setshort_repeating_whitespace_ok(trkname_sh, 1);
   setshort_defname(trkname_sh, "Track");
 
-  waypoints = avltree_init(0, MYNAME);
-
   waypoint_num = 0;
   rte_num = 0;
 }
@@ -633,7 +667,6 @@ humminbird_wr_init(const char* fname)
 static void
 humminbird_wr_deinit(void)
 {
-  avltree_done(waypoints);
   mkshort_del_handle(&wptname_sh);
   mkshort_del_handle(&rtename_sh);
   mkshort_del_handle(&trkname_sh);
@@ -910,12 +943,9 @@ humminbird_write_waypoint_wrapper(const waypoint* wpt)
   waypoint* tmpwpt;
 
   xasprintf(&key, "%s\01%.9f\01%.9f", wpt->shortname, wpt->latitude, wpt->longitude);
-
-  if (! avltree_find(waypoints, key, (const void**)&tmpwpt)) {
+  if (!(tmpwpt = map[key])) {
     tmpwpt = (waypoint*)wpt;
-
-    avltree_insert(waypoints, key, wpt);
-
+    map[key] = (waypoint*) wpt;
     tmpwpt->extra_data = gb_int2ptr(waypoint_num + 1);	/* NOT NULL */
     humminbird_write_waypoint(wpt);
   } else {

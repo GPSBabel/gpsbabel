@@ -17,3 +17,13 @@ gpsbabel -i humminbird -f ${REFERENCE}/humminbird.hwr -f ${REFERENCE}/track/humm
 gpsbabel -i gpx -f ${TMPDIR}/combo.gpx -o humminbird -F ${TMPDIR}/funky.hwr -o humminbird_ht -F ${TMPDIR}/funky.ht
 bincompare ${REFERENCE}/humminbird.hwr ${TMPDIR}/funky.hwr
 bincompare ${REFERENCE}/track/humminbird.ht ${TMPDIR}/funky.ht 
+
+# In 2012, Humminbird changed their format in incompatible ways.  We call them
+# v2 and v3 but we don't really know that they have names.  The version number
+# internally didn't change.
+
+gpsbabel -i humminbird -f ${REFERENCE}/humminbird-rte-v2.hwr  -o gpx,humminbirdextensions=1 -F ${TMPDIR}/humminbird-rte-v2~gpx.gpx
+compare ${REFERENCE}/humminbird-rte-v2~gpx.gpx ${TMPDIR}/humminbird-rte-v2~gpx.gpx 
+
+gpsbabel -i humminbird -f ${REFERENCE}/humminbird-rte-v3.hwr  -o gpx,humminbirdextensions=1 -F ${TMPDIR}/humminbird-rte-v3~gpx.gpx
+compare ${REFERENCE}/humminbird-rte-v3~gpx.gpx ${TMPDIR}/humminbird-rte-v3~gpx.gpx 
