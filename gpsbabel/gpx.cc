@@ -1344,21 +1344,9 @@ gpx_wr_init(const char* fname)
   ofd = gbfopen(fname, "wb", MYNAME);
   oqfile.open(ofd->handle.std, QIODevice::WriteOnly);
 
-  // This is ia bit of a lie.  QXMLStreamWriter will pass everything
-  // through the QTextCodec on the way out and that defaults to UTF-8.
-  // Since we have so many C Strings in out output right now and those
-  // are already UTF-8 encoded via CET, if we don't outsmart that, we
-  // get double encoding.
-  writer.setCodec("ISO 8859-1");
-
   writer.setAutoFormattingIndent(2);
-  // Technically, XML (and therefore GPX) defaults ot UTF-8, so we should not
-  // have to declare this.  For compatibility with the existing Qt writer,
-  // we do...
-  //  writer.setCodec("UTF-8");
-  //  writer.writeStartDocument();
-  writer.writeProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\"");
-
+  writer.setCodec("UTF-8");
+  writer.writeStartDocument();
 }
 
 static void
@@ -1650,16 +1638,16 @@ gpx_write_common_description(const waypoint* waypointp, QString oname)
   // file.  Filter that out in the two fields below... Ideally, we should
   // probably filter that in the input rather than here.
 
-  QString desc = waypointp->description;
+  QString desc = QString::fromUtf8(waypointp->description);
   desc = desc.replace(QRegExp("[\014-\032]"), " ");
   writer.writeOptionalTextElement("cmt", desc);
 
   if (waypointp->notes && waypointp->notes[0]) {
-    QString note = waypointp->notes;
+    QString note = QString::fromUtf8(waypointp->notes);
     note = note.replace(QRegExp("[\014-\032]"), " ");
     writer.writeTextElement("desc", note);
   } else {
-    writer.writeOptionalTextElement("desc", waypointp->description);
+    writer.writeOptionalTextElement("desc", QString::fromUtf8(waypointp->description));
   }
 
   write_gpx_url(waypointp);
@@ -1709,8 +1697,8 @@ gpx_track_hdr(const route_head* rte)
   current_trk_head = rte;
 
   writer.writeStartElement("trk");
-  writer.writeOptionalTextElement("name", rte->rte_name);
-  writer.writeOptionalTextElement("desc", rte->rte_desc);
+  writer.writeOptionalTextElement("name", QString::fromUtf8(rte->rte_name));
+  writer.writeOptionalTextElement("desc", QString::fromUtf8(rte->rte_desc));
   if (rte->rte_num) {
     writer.writeTextElement("number", QString::number(rte->rte_num));
   }
@@ -1801,8 +1789,8 @@ gpx_route_hdr(const route_head* rte)
 {
   fs_xml* fs_gpx;
   writer.writeStartElement("rte");
-  writer.writeOptionalTextElement("name", rte->rte_name);
-  writer.writeOptionalTextElement("desc", rte->rte_desc);
+  writer.writeOptionalTextElement("name", QString::fromUtf8(rte->rte_name));
+  writer.writeOptionalTextElement("desc", QString::fromUtf8(rte->rte_desc));
 
   if (rte->rte_num) {
     writer.writeTextElement("number", QString::number(rte->rte_num));

@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 
@@ -103,7 +105,7 @@ static xg_callback	ignr_nb_etapes, ignr_descr;
 static xg_callback	ignr_etape_begin, ignr_etape_end;
 
 static void
-ignr_start(const char* args, const char** attrv)
+ignr_start(const char* args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((track != NULL));
 
@@ -112,13 +114,13 @@ ignr_start(const char* args, const char** attrv)
 }
 
 static void
-ignr_nb_etapes(const char* args, const char** attrv)
+ignr_nb_etapes(const char* args, const QXmlStreamAttributes* attrv)
 {
   xmlpoints = atoi(args);
 }
 
 static void
-ignr_descr(const char* args, const char** attrv)
+ignr_descr(const char* args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((track == NULL));
 
@@ -128,7 +130,7 @@ ignr_descr(const char* args, const char** attrv)
 }
 
 static void
-ignr_etape_begin(const char* args, const char** attrv)
+ignr_etape_begin(const char* args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((wpt != NULL));
 
@@ -136,7 +138,7 @@ ignr_etape_begin(const char* args, const char** attrv)
 }
 
 static void
-ignr_etape_end(const char* args, const char** attrv)
+ignr_etape_end(const char* args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((track == NULL) || (wpt == NULL));
 
@@ -145,7 +147,7 @@ ignr_etape_end(const char* args, const char** attrv)
 }
 
 static void
-ignr_etape_pos(const char* args, const char** attrv)
+ignr_etape_pos(const char* args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((wpt == NULL) || (args == NULL));
 
@@ -155,7 +157,7 @@ ignr_etape_pos(const char* args, const char** attrv)
 }
 
 static void
-ignr_etape_alt(const char* args, const char** attrv)
+ignr_etape_alt(const char* args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((wpt == NULL));
   if (args == NULL) {

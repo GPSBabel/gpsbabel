@@ -24,6 +24,9 @@
  * For more information, check:
  * https://developers.google.com/maps/documentation/directions/
  */
+
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 
@@ -33,19 +36,6 @@ static short_handle desc_handle;
 
 #define MYNAME "googledir"
 #define MY_CBUF 4096
-
-#if ! HAVE_LIBEXPAT
-static void
-google_rd_init(const char* fname)
-{
-  fatal(MYNAME ": This build excluded Google Maps support because expat was not installed.\n");
-}
-
-static void
-google_read(void)
-{
-}
-#else
 
 static xg_callback      goog_points, goog_poly_e;
 static xg_callback      goog_instr;
@@ -61,7 +51,7 @@ xg_tag_mapping google_map[] = {
 };
 
 void
-goog_points(const char* args, const char** unused)
+goog_points(const char* args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     if (encoded_points) {
@@ -73,7 +63,7 @@ goog_points(const char* args, const char** unused)
 }
 
 void
-goog_instr(const char* args, const char** unused)
+goog_instr(const char* args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     if (instructions) {
@@ -110,7 +100,7 @@ decode_goog64(char** str)
 }
 
 static void
-goog_poly_e(const char* args, const char** unused)
+goog_poly_e(const char* args, const QXmlStreamAttributes* unused)
 {
   long lat = 0;
   long lon = 0;
@@ -121,18 +111,18 @@ goog_poly_e(const char* args, const char** unused)
     routehead->rte_name = (char*) xstrdup("overview");
     routehead->rte_desc = (char*) xstrdup("Overview");
   } else {
-	goog_step++;
+    goog_step++;
     xasprintf(&routehead->rte_name, "step%03d", goog_step);
     if (instructions == NULL) {
       xasprintf(&routehead->rte_desc, "Step %d", goog_step);
     } else {
       utf_string utf;
       utf.is_html = 1;
-      utf.utfstring = instructions;
+      utf.utfstring = QString::fromUtf8(instructions);
       routehead->rte_desc = strip_html(&utf);
       xfree(instructions);
       instructions = NULL;
-	}
+    }
   }
   route_add_head(routehead);
 
@@ -167,7 +157,8 @@ google_rd_init(const char* fname)
   desc_handle = mkshort_new_handle();
   setshort_length(desc_handle, 12);
 
-  xml_init(fname, google_map, "ISO-8859-1");
+  // leave default of UTF-8 unless xml file overrides with encoding=
+  xml_init(fname, google_map, NULL);
 }
 
 static void
@@ -184,7 +175,6 @@ google_read(void)
     instructions = NULL;
   }
 }
-#endif
 
 static void
 google_rd_deinit(void)

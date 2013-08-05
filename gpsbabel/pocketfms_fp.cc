@@ -19,6 +19,8 @@
 
  */
 
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 
@@ -83,7 +85,7 @@ wr_init(const char *fname)
   fatal("Writing file of type %s is not supported\n", MYNAME);
 }
 
-void	wpt_s(const char *args, const char **unused)
+void	wpt_s(const char *args, const QXmlStreamAttributes* unused)
 {
   if (isFirst == 1) {
     wpt_from = waypt_new();
@@ -94,7 +96,7 @@ void	wpt_s(const char *args, const char **unused)
   wpt_to = waypt_new();
 }
 
-void	wpt_e(const char *args, const char **unused)
+void	wpt_e(const char *args, const QXmlStreamAttributes* unused)
 {
   if (isFirst == 1) {
     route_add_wpt(route, wpt_from);
@@ -111,66 +113,63 @@ void	wpt_e(const char *args, const char **unused)
   wpt_to = NULL;
 }
 
-void	wpt_from_lat(const char *args, const char **unused)
+void	wpt_from_lat(const char *args, const QXmlStreamAttributes* unused)
 {
   if (wpt_from != NULL) {
     wpt_from->latitude = atof(args);
   }
 }
 
-void	wpt_from_lon(const char *args, const char **unused)
+void	wpt_from_lon(const char *args, const QXmlStreamAttributes* unused)
 {
   if (wpt_from != NULL) {
     wpt_from->longitude = atof(args);
   }
 }
 
-void	wpt_from_name(const char *args, const char **unused)
+void	wpt_from_name(const char *args, const QXmlStreamAttributes* unused)
 {
   if (wpt_from != NULL) {
     wpt_from->shortname = xstrappend(wpt_from->shortname, args);
   }
 }
 
-void	wpt_from_elev(const char *args, const char **unused)
+void	wpt_from_elev(const char *args, const QXmlStreamAttributes* unused)
 {
   if (wpt_from != NULL) {
     wpt_from->altitude = FEET_TO_METERS(atof(args));
   }
 }
 
-void	wpt_to_lat(const char *args, const char **unused)
+void	wpt_to_lat(const char *args, const QXmlStreamAttributes* unused)
 {
   wpt_to->latitude = atof(args);
 }
 
-void	wpt_to_lon(const char *args, const char **unused)
+void	wpt_to_lon(const char *args, const QXmlStreamAttributes* unused)
 {
   wpt_to->longitude = atof(args);
 }
 
-void	wpt_to_name(const char *args, const char **unused)
+void	wpt_to_name(const char *args, const QXmlStreamAttributes* unused)
 {
   wpt_to->shortname = xstrappend(wpt_to->shortname, args);
 }
 
-void	wpt_to_elev(const char *args, const char **unused)
+void	wpt_to_elev(const char *args, const QXmlStreamAttributes* unused)
 {
   dest_altitude = FEET_TO_METERS(atof(args));
 }
 
-void	wpt_altitude(const char *args, const char **attrv)
+void	wpt_altitude(const char *args, const QXmlStreamAttributes* attrv)
 {
   int isFeet = 0;
-  const char **avp = &attrv[0];
-  while (*avp) {
-    if (0 == strcmp(avp[0], "Value")) {
-      wpt_to->altitude = atof(avp[1]);
-    }
-    if (0 == strcmp(avp[0], "Unit")) {
-      isFeet = strcmp(avp[1], "ft") == 0 ? 1 : 0;
-    }
-    avp += 2;
+
+  if (attrv->hasAttribute("Value")) {
+    wpt_to->altitude = attrv->value("Value").toString().toDouble();
+  }
+  if (attrv->hasAttribute("Unit")) {
+    isFeet = (attrv->value("Unit") == "ft");
   }
   if (isFeet) {
     wpt_to->altitude = FEET_TO_METERS(wpt_to->altitude);

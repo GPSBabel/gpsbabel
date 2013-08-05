@@ -20,6 +20,8 @@
 
 */
 
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 #include "jeeps/gpsmath.h"
@@ -33,20 +35,6 @@ static arglist_t jogmap_args[] = {
 
 #define MYNAME "xol"
 
-#if ! HAVE_LIBEXPAT
-void
-jogmap_rd_init(const char* fname)
-{
-  fatal(MYNAME ": This build excluded \"" MYNAME "\" support because expat was not installed.\n");
-}
-
-void
-jogmap_read(void)
-{
-}
-
-#else
-
 // static xg_callback	jogmap_shape, xol_shape_end;
 // static xg_callback	jogmap_waypt, xol_overlay;
 
@@ -55,28 +43,23 @@ jogmap_read(void)
 
 
 static void
-jogmap_markers(const char* args, const char** attrv)
+jogmap_markers(const char* args, const QXmlStreamAttributes* attrv)
 {
   trk = route_head_alloc();
   track_add_head(trk);
 }
 
 static void
-jogmap_marker(const char* args, const char** attrv)
+jogmap_marker(const char* args, const QXmlStreamAttributes* attrv)
 {
-  const char** avp = &attrv[0];
   waypoint* wpt = waypt_new();
 
-  while (*avp) {
-    if (strcmp(avp[0], "lat") == 0) {
-      sscanf(avp[1], "%lf",
-             &wpt->latitude);
-    } else if (strcmp(avp[0], "lng") == 0) {
-      sscanf(avp[1], "%lf",
-             &wpt->longitude);
-    }
+  if (attrv->hasAttribute("lat")) {
+    wpt->latitude = attrv->value("lat").toString().toDouble();
+  }
 
-    avp+=2;
+  if (attrv->hasAttribute("lng")) {
+    wpt->longitude = attrv->value("lng").toString().toDouble();
   }
 
   if (trk) {
@@ -103,8 +86,6 @@ jogmap_read(void)
 {
   xml_read();
 }
-
-#endif
 
 static void
 jogmap_rd_deinit(void)

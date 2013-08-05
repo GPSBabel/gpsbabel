@@ -20,6 +20,8 @@
 
 */
 
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 
@@ -30,25 +32,6 @@ static arglist_t ikt_args[] = {
 #define MYNAME "ikt"
 
 static char* name, *text;
-
-#if ! HAVE_LIBEXPAT
-void
-ikt_rd_init(const char* fname)
-{
-  fatal(MYNAME ": This build excluded \" MYNAME \" support because expat was not installed.\n");
-}
-
-void
-ikt_read(void)
-{
-}
-
-static void
-ikt_object_end(void)
-{
-}
-
-#else
 
 static route_head* track;
 static waypoint* waypt;
@@ -97,52 +80,39 @@ ikt_object_end(void)
 }
 
 static void
-iktobj_waypt(const char* args, const char** attrv)
+iktobj_waypt(const char* args, const QXmlStreamAttributes* attrv)
 {
-  const char** avp = &attrv[0];
-
-  while (*avp) {
-    if (strcmp(avp[0], "X") == 0) {
-      waypt->longitude = atof(avp[1]);
-    } else if (strcmp(avp[0], "Y") == 0) {
-      waypt->latitude = atof(avp[1]);
-    }
-    avp+=2;
+  if (attrv->hasAttribute("X")) {
+    waypt->longitude = attrv->value("X").toString().toDouble();
+  }
+  if (attrv->hasAttribute("Y")) {
+    waypt->latitude = attrv->value("Y").toString().toDouble();
   }
 }
 
 static void
-iktobj_trkpt(const char* args, const char** attrv)
+iktobj_trkpt(const char* args, const QXmlStreamAttributes* attrv)
 {
-  const char** avp = &attrv[0];
-
   waypt = waypt_new();
-  while (*avp) {
-    if (strcmp(avp[0], "X") == 0) {
-      waypt->longitude = atof(avp[1]);
-    } else if (strcmp(avp[0], "Y") == 0) {
-      waypt->latitude = atof(avp[1]);
-    }
-    avp+=2;
-  }
+  iktobj_waypt(args, attrv);
   track_add_wpt(track, waypt);
   waypt = NULL;
 }
 
 static void
-iktobj_name(const char* args, const char** unused)
+iktobj_name(const char* args, const QXmlStreamAttributes* unused)
 {
   name = xstrdup(args);
 }
 
 static void
-iktobj_text(const char* args, const char** unused)
+iktobj_text(const char* args, const QXmlStreamAttributes* unused)
 {
   text = xstrdup(args);
 }
 
 static void
-iktobj_type(const char* args, const char** unused)
+iktobj_type(const char* args, const QXmlStreamAttributes* unused)
 {
   ikt_object_end();
 
@@ -174,8 +144,6 @@ ikt_read(void)
 {
   xml_read();
 }
-
-#endif
 
 static void
 ikt_rd_deinit(void)

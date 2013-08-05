@@ -18,6 +18,8 @@
 
  */
 
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 #if HAVE_LIBEXPAT

@@ -16,6 +16,9 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+
+#include <QtCore/QXmlStreamAttributes>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 
@@ -111,7 +114,7 @@ static double	ap_lat		=0.0;
 static double	ap_lon		=0.0;
 
 /*	Start of AP block */
-void wfff_s(const char *args, const char **unused)
+void wfff_s(const char *args, const QXmlStreamAttributes* unused)
 {
   xfreez(ap_mac);
   xfreez(ap_ssid);
@@ -128,84 +131,84 @@ void wfff_s(const char *args, const char **unused)
   ap_lon=0.0;
 }
 
-void wfff_mac(const char *args, const char **unused)
+void wfff_mac(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     ap_mac = xstrdup(args);
   }
 }
 
-void wfff_ssid(const char *args, const char **unused)
+void wfff_ssid(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     ap_ssid = xstrdup(args);
   }
 }
 
-void wfff_type(const char *args, const char **unused)
+void wfff_type(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     ap_type = xstrdup(args);
   }
 }
 
-void wfff_mnrssi(const char *args, const char **unused)
+void wfff_mnrssi(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     ap_mnrssi = atof(args);
   }
 }
 
-void wfff_mxrssi(const char *args, const char **unused)
+void wfff_mxrssi(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     ap_mxrssi = atof(args);
   }
 }
 
-void wfff_chan(const char *args, const char **unused)
+void wfff_chan(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     ap_chan = atoi(args);
   }
 }
 
-void wfff_first(const char *args, const char **unused)
+void wfff_first(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     ap_first = xml_parse_time(args);
   }
 }
 
-void wfff_last(const char *args, const char **unused)
+void wfff_last(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     ap_last = xstrdup(args);
   }
 }
 
-void wfff_wep(const char *args, const char **unused)
+void wfff_wep(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     ap_wep = xstrdup(args);
   }
 }
 
-void wfff_hdop(const char *args, const char **unused)
+void wfff_hdop(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     ap_hdop = atof(args);
   }
 }
 
-void wfff_lat(const char *args, const char **unused)
+void wfff_lat(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     ap_lat = atof(args);
   }
 }
 
-void wfff_lon(const char *args, const char **unused)
+void wfff_lon(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     ap_lon = atof(args);
@@ -215,7 +218,7 @@ void wfff_lon(const char *args, const char **unused)
 /*	End of AP Block, set waypoint and add */
 static long tosscount=0;
 
-void wfff_e(const char *args, const char **unused)
+void wfff_e(const char *args, const QXmlStreamAttributes* unused)
 {
   waypoint*	wpt_tmp		=0;
   char		desc[255]	="\0";

@@ -19,28 +19,31 @@
 
  */
 
+#include <QtCore/QByteArray>
+#include <QtCore/QDebug>
+#include <QtCore/QFile>
+#include <QtCore/QTextCodec>
+#include <QtCore/QXmlStreamAttributes>
+#include <QtCore/QXmlStreamReader>
+
 #include "defs.h"
 #include "xmlgeneric.h"
 #include "cet_util.h"
-#include <QtCore/QDebug>
-#include <QtCore/QXmlStreamReader>
-#include <QtCore/QFile>
 
 #define DEBUG_TAG 0
 #if DEBUG_TAG
 #include <QtCore/QDebug>
 #endif
 
-#if HAVE_LIBEXPAT
-#include <expat.h>
-static XML_Parser psr;
-#endif
-
 static QString current_tag;
-static vmem_t cdatastr;
-static gbfile* ifd;
 static xg_tag_mapping* xg_tag_tbl;
-static const char** xg_ignore_taglist;
+static QSet<QString> xg_ignore_taglist;
+
+static const char* rd_fname;
+static QByteArray reader_data;
+static const char* xg_encoding;
+static QTextCodec* utf8_codec = QTextCodec::codecForName("UTF-8");
+static QTextCodec* codec = utf8_codec;  // Qt has no vanilla ASCII encoding =(
 
 #define MY_CBUF 4096
 
@@ -54,9 +57,14 @@ write_xml_header(gbfile* ofd)
 
   if ((global_opts.charset != NULL) && (global_opts.charset != cs)) {
     snprintf(buff, sizeof(buff), " encoding=\"%s\"", global_opts.charset_name);
+    QTextCodec* tcodec = QTextCodec::codecForName(global_opts.charset_name);
+    if (tcodec) {
+      codec = tcodec;
+    }
   } else {
     buff[0] = 0;
   }
+
   gbfprintf(ofd, "<?xml version=\"1.0\"%s?>\n", buff);
 }
 
@@ -64,8 +72,9 @@ void
 write_xml_entity(gbfile* ofd, const QString& indent,
                  const QString& tag, const QString& value)
 {
-  char* tmp_ent = xml_entitize(value.toLatin1().data());
-  gbfprintf(ofd, "%s<%s>%s</%s>\n", qPrintable(indent), qPrintable(tag), tmp_ent, qPrintable(tag));
+  char* tmp_ent = xml_entitize(CSTRE(value));
+  gbfprintf(ofd, "%s<%s>%s</%s>\n", CSTRE(indent), CSTRE(tag), tmp_ent,
+          CSTRE(tag));
   xfree(tmp_ent);
 }
 
@@ -82,7 +91,7 @@ void
 write_xml_entity_begin0(gbfile* ofd, const QString& indent,
                         const QString& tag)
 {
-  gbfprintf(ofd, "%s<%s>\n", indent.toLatin1().data(), tag.toLatin1().data());
+  gbfprintf(ofd, "%s<%s>\n", CSTRE(indent), CSTRE(tag));
 }
 
 void
@@ -90,7 +99,8 @@ write_xml_entity_begin1(gbfile* ofd, const QString& indent,
                         const QString& tag, const QString& attr,
                         const QString& attrval)
 {
-  gbfprintf(ofd, "%s<%s %s=\"%s\">\n", indent.toLatin1().data(), tag.toLatin1().data(), attr.toLatin1().data(), attrval.toLatin1().data());
+  gbfprintf(ofd, "%s<%s %s=\"%s\">\n", CSTRE(indent), CSTRE(tag), CSTRE(attr),
+      CSTRE(attrval));
 }
 
 void
@@ -99,14 +109,15 @@ write_xml_entity_begin2(gbfile* ofd, const QString& indent,
                         const QString& attrval1, const QString& attr2,
                         const QString& attrval2)
 {
-  gbfprintf(ofd, "%s<%s %s=\"%s\" %s=\"%s\">\n", indent.toLatin1().data(), tag.toLatin1().data(), attr1.toLatin1().data(), attrval1.toLatin1().data(), attr2.toLatin1().data(), attrval2.toLatin1().data());
+  gbfprintf(ofd, "%s<%s %s=\"%s\" %s=\"%s\">\n", CSTRE(indent), CSTRE(tag),
+      CSTRE(attr1), CSTRE(attrval1), CSTRE(attr2), CSTRE(attrval2));
 }
 
 void
 write_xml_entity_end(gbfile* ofd, const QString& indent,
                      const QString& tag)
 {
-  gbfprintf(ofd, "%s</%s>\n", indent.toLatin1().data(), tag.toLatin1().data());
+  gbfprintf(ofd, "%s</%s>\n", CSTRE(indent), CSTRE(tag));
 }
 
 void
@@ -114,7 +125,7 @@ xml_write_time(gbfile* ofd, gpsbabel::DateTime dt, const char* elname)
 {
   gbfprintf(ofd, "<%s>%s</%s>\n",
             elname,
-            dt.toPrettyString().toUtf8().data(),
+            CSTRE(dt.toPrettyString()),
             elname
            );
 }
@@ -141,282 +152,140 @@ xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
   return NULL;
 }
 
-/*
- * See if tag element 't' is in our list of things to ignore.
- * Returns 0 if it is not on the list.
- */
-static int
-xml_consider_ignoring(const char* t)
-{
-  const char** il;
-
-  if (!xg_ignore_taglist) {
-    return 0;
-  }
-
-  for (il = xg_ignore_taglist; *il; il++) {
-    if (0 == strcmp(*il, t)) {
-      return 1;
-    }
-  }
-  return 0;
-}
-
-
-static void
-xml_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
-{
-  xg_callback* cb;
-  const char* el;
-  const char** attrs;
-
-  el = xml_convert_to_char_string(xml_el);
-  attrs = xml_convert_attrs_to_char_string(xml_attr);
-
-  if (xml_consider_ignoring(el)) {
-    return;
-  }
-
-  current_tag.append("/");
-  current_tag.append(el);
-
-  memset(cdatastr.mem, 0, cdatastr.size);
-
-  cb = xml_tbl_lookup(current_tag, cb_start);
-  if (cb) {
-#if DEBUG_TAG
-    fprintf(stderr, "Start: %s\n", xml_el);
-#endif
-    (*cb)(NULL, attrs);
-  }
-  xml_free_converted_string(el);
-  xml_free_converted_attrs(attrs);
-}
-
-#if 1
-static void
-xml_cdata(void* dta, const XML_Char* xml_s, int len)
-{
-  char* estr;
-  const char* s = xml_convert_to_char_string_n(xml_s, &len);
-
-  vmem_realloc(&cdatastr,  1 + len + strlen(cdatastr.mem));
-  estr = (char*) cdatastr.mem + strlen(cdatastr.mem);
-  memcpy(estr, s, len);
-  estr[len]  = 0;
-  xml_free_converted_string(s);
-}
-
-static void
-xml_end(void* data, const XML_Char* xml_el)
-{
-  int pos = current_tag.lastIndexOf('/');
-  QString s = current_tag.mid(pos + 1);
-  const char* el = xml_convert_to_char_string(xml_el);
-  xg_callback* cb;
-
-  if (xml_consider_ignoring(el)) {
-    return;
-  }
-
-  if (s.compare(el)) {
-    fprintf(stderr, "Mismatched tag %s\n", el);
-  }
-#if DEBUG_TAG
-  qDebug() << current_tag;
-#endif
-  cb = xml_tbl_lookup(current_tag, cb_cdata);
-  if (cb) {
-    (*cb)((char*) cdatastr.mem, NULL);
-  }
-
-  cb = xml_tbl_lookup(current_tag, cb_end);
-  if (cb) {
-    (*cb)(el, NULL);
-  }
-  current_tag.truncate(pos);
-  xml_free_converted_string(el);
-}
-
-void xml_read(void)
-{
-  int len;
-  char buf[MY_CBUF];
-
-  while ((len = gbfread(buf, 1, sizeof(buf), ifd))) {
-    char* str = buf;
-    if (ifd->unicode) {
-      str = cet_str_uni_to_utf8((short*)&buf, len >> 1);
-      len = strlen(str);
-    }
-    if (!XML_Parse(psr, str, len, gbfeof(ifd))) {
-      fatal(MYNAME ":Parse error at %d: %s\n",
-            (int) XML_GetCurrentLineNumber(psr),
-            XML_ErrorString(XML_GetErrorCode(psr)));
-    }
-    if (str != buf) {
-      xfree(str);
-    }
-  }
-  XML_ParserFree(psr);
-
-}
-
-void xml_readstring(char* str)
-{
-  int len = strlen(str);
-  if (!XML_Parse(psr, str, len, 1)) {
-    fatal(MYNAME ":Parse error at %d: %s\n",
-          (int) XML_GetCurrentLineNumber(psr),
-          XML_ErrorString(XML_GetErrorCode(psr)));
-  }
-  XML_ParserFree(psr);
-}
-
-void xml_readprefixstring(const char* str)
-{
-  int len = strlen(str);
-  if (!XML_Parse(psr, str, len, 0)) {
-    fatal(MYNAME ":Parse error at %d: %s\n",
-          (int) XML_GetCurrentLineNumber(psr),
-          XML_ErrorString(XML_GetErrorCode(psr)));
-  }
-}
-
-void xml_ignore_tags(const char** taglist)
-{
-  xg_ignore_taglist = taglist;
-}
-
-void
-xml_init0(const char* fname, xg_tag_mapping* tbl, const char* encoding,
-          gbsize_t offset)
-{
-  if (fname) {
-    ifd = gbfopen(fname, "r", MYNAME);
-    if (offset) {
-      gbfseek(ifd, offset, SEEK_SET);
-    }
-  } else {
-    ifd = NULL;
-  }
-
-  current_tag.clear();
-
-  psr = XML_ParserCreate((const XML_Char*)encoding);
-  if (!psr) {
-    fatal(MYNAME ": Cannot create XML Parser\n");
-  }
-
-  cdatastr = vmem_alloc(1, 0);
-  *((char*)cdatastr.mem) = '\0';
-
-  xg_tag_tbl = tbl;
-
-  cet_convert_init(CET_CHARSET_UTF8, 1);
-
-  XML_SetUnknownEncodingHandler(psr, cet_lib_expat_UnknownEncodingHandler, NULL);
-  XML_SetElementHandler(psr, xml_start, xml_end);
-  XML_SetCharacterDataHandler(psr, xml_cdata);
-}
-
-/* xml_init0 iwth a default seek argument of zero */
-void
-xml_init(const char* fname, xg_tag_mapping* tbl, const char* encoding)
-{
-  xml_init0(fname, tbl, encoding, 0);
-}
-
-void
-xml_init_offset(const char* fname, xg_tag_mapping* tbl, const char* encoding,
-                gbsize_t offset)
-{
-  xml_init0(fname, tbl, encoding, offset);
-}
-
-void
-xml_deinit(void)
-{
-  vmem_free(&cdatastr);
-  if (ifd) {
-    gbfclose(ifd);
-    ifd = NULL;
-  }
-  xg_ignore_taglist = NULL;
-}
-
-#else
-
-static const char* rd_fname;
-static QXmlStreamReader reader;
-
 void
 xml_init(const char* fname, xg_tag_mapping* tbl, const char* encoding)
 {
   rd_fname = fname;
   xg_tag_tbl = tbl;
-}
-
-void xml_read(void)
-{
-  QFile file(rd_fname);
-  file.open(QIODevice::ReadOnly);
-  reader.setDevice(&file);
-
-  QString current_tag;
-  while (!reader.atEnd()) {
-    switch (reader.tokenType()) {
-    case QXmlStreamReader::StartElement: {
-      current_tag.append("/");
-      current_tag.append(reader.name());
-      xg_callback* cb = xml_tbl_lookup(current_tag, cb_start);
-      if (cb) {
-        const char** attrs;
-        (*cb)(NULL, attrs);
-      }
-      cb = xml_tbl_lookup(current_tag, cb_cdata);
-      if (cb) {
-        QString c = reader.readElementText();
-        (*cb)(c.toUtf8().data(), NULL);
-        current_tag.chop(reader.name().length() + 1);
-      }
+  xg_encoding = encoding;
+  if (encoding) {
+    QTextCodec *tcodec = QTextCodec::codecForName(encoding);
+    if (tcodec) {
+      codec = tcodec;
     }
-    break;
-    case QXmlStreamReader::Characters:
-      break;
-    case QXmlStreamReader::EndElement: {
-      xg_callback* cb = xml_tbl_lookup(current_tag, cb_end);
-      if (cb) {
-        (*cb)(NULL, NULL);
-      }
-      current_tag.chop(reader.name().length() + 1);
-    }
-    break;
-    default:
-      break;
-    };
-    reader.readNextStartElement();
   }
-
-}
-
-void xml_ignore_tags(const char** taglist)
-{
-  xg_ignore_taglist = taglist;
-}
-
-void xml_readprefixstring(const char* str)
-{
-}
-
-void xml_readstring(char* str)
-{
 }
 
 void
 xml_deinit(void)
 {
+  reader_data.clear();
+  rd_fname = NULL;
+  xg_tag_tbl = NULL;
+  xg_encoding = NULL;
+  codec = utf8_codec;
 }
-#endif
+
+static bool
+xml_consider_ignoring(const QStringRef& name)
+{
+  return xg_ignore_taglist.contains(name.toString());
+}
+
+static void
+xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
+{
+  xg_callback* cb;
+  bool started = false;
+
+  while (!reader.atEnd()) {
+    switch (reader.tokenType()) {
+    case QXmlStreamReader::StartDocument:
+      if (!reader.documentEncoding().isEmpty()) {
+        codec = QTextCodec::codecForName( CSTR(reader.documentEncoding().toString()) );
+      }
+      if (codec == NULL) {
+        // According to http://www.opentag.com/xfaq_enc.htm#enc_default , we
+        // should assume UTF-8 in absense of other informations. Users can
+        // EASILY override this with xml_init().
+        codec = QTextCodec::codecForName("UTF-8");
+      }
+      started = true;
+      break;
+
+    case QXmlStreamReader::StartElement:
+      if (xml_consider_ignoring(reader.name())) {
+        goto readnext;
+      }
+
+      current_tag.append("/");
+      current_tag.append(reader.qualifiedName());
+
+      cb = xml_tbl_lookup(current_tag, cb_start);
+      if (cb) {
+        const QXmlStreamAttributes attrs = reader.attributes();
+        cb(NULL, &attrs);
+      }
+
+      cb = xml_tbl_lookup(current_tag, cb_cdata);
+      if (cb) {
+        QString c = reader.readElementText(QXmlStreamReader::IncludeChildElements);
+        cb(CSTRE(c), NULL);
+        current_tag.chop(reader.qualifiedName().length() + 1);
+      }
+      break;
+
+    case QXmlStreamReader::EndElement:
+      if (xml_consider_ignoring(reader.name())) {
+        goto readnext;
+      }
+
+      cb = xml_tbl_lookup(current_tag, cb_end);
+      if (cb) {
+        cb(CSTRE(reader.name().toString()), NULL);
+      }
+      current_tag.chop(reader.qualifiedName().length() + 1);
+      break;
+
+    case QXmlStreamReader::Characters:
+      break;
+
+    default:
+      break;
+    };
+
+readnext:
+    if (started) {
+      reader.readNextStartElement();
+    } else {
+      reader.readNext();
+    }
+  }
+}
+
+void xml_read(void)
+{
+  QFile file(rd_fname);
+  QString current_tag;
+
+  file.open(QIODevice::ReadOnly);
+
+  QXmlStreamReader reader(&file);
+
+  xml_run_parser(reader, current_tag);
+}
+
+void xml_ignore_tags(const char** taglist)
+{
+  for (; taglist && *taglist; taglist++) {
+    xg_ignore_taglist.insert(QString::fromUtf8(*taglist));
+  }
+}
+
+void xml_readprefixstring(const char* str)
+{
+  reader_data.append(str);
+}
+
+void xml_readstring(const char* str)
+{
+  QString current_tag;
+
+  reader_data.append(str);
+
+  QXmlStreamReader reader(reader_data);
+
+  xml_run_parser(reader, current_tag);
+}
 
 /******************************************/

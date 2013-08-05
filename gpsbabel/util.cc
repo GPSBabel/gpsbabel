@@ -1561,10 +1561,7 @@ char *
 strip_html(const utf_string *in)
 {
   char* outstring, *out;
-  // If toUtf8() is used here, we double encode in the OSM test case.
-  // this may be a bug here or elsewhere.
-  char* incopy, *instr;
-  incopy = instr = xstrdup(in->utfstring.toLatin1().data());
+  char* instr = xstrdup(CSTR(in->utfstring));
   char tag[8];
   unsigned short int taglen = 0;
 
@@ -1574,8 +1571,7 @@ strip_html(const utf_string *in)
   /*
    * We only shorten, so just dupe the input buf for space.
    */
-
-  outstring = out = xstrdup(in->utfstring.toUtf8().data());
+   outstring = out = xstrdup(CSTR(in->utfstring));
 
   tag[0] = 0;
   while (*instr) {
@@ -1638,9 +1634,6 @@ strip_html(const utf_string *in)
     instr++;
   }
   *out++ = 0;
-  if (incopy) {
-    xfree(incopy);
-  }
   return (outstring);
 }
 
