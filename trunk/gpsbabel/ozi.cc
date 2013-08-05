@@ -778,6 +778,7 @@ data_read(void)
     }
 
     if ((strlen(buff)) && (strstr(buff, ",") != NULL)) {
+      bool ozi_fsdata_used = false;
       ozi_fsdata *fsdata = ozi_alloc_fsdata();
       wpt_tmp = waypt_new();
 
@@ -790,7 +791,6 @@ data_read(void)
       while (s) {
         switch (ozi_objective) {
         case trkdata:
-          wpt_tmp = waypt_new();
           ozi_parse_track(i, s, wpt_tmp, trk_name);
           break;
         case rtedata:
@@ -827,7 +827,9 @@ data_read(void)
         if (linecount > 5 && wpt_tmp) {/* skipping over file header */
           ozi_convert_datum(wpt_tmp);
           if (!header) {
-          route_add_wpt(rte_head, wpt_tmp);
+            route_add_wpt(rte_head, wpt_tmp);
+          } else {
+            waypt_free(wpt_tmp);
           }
         } else {
           waypt_free(wpt_tmp);
@@ -836,6 +838,7 @@ data_read(void)
       case wptdata:
       case unknown_gpsdata:
         if (linecount > 4) {  /* skipping over file header */
+          ozi_fsdata_used = true;
           fs_chain_add(&(wpt_tmp->fs),
                        (format_specific_data *) fsdata);
           ozi_convert_datum(wpt_tmp);
@@ -847,6 +850,10 @@ data_read(void)
       case posndata:
         fatal(MYNAME ": realtime positioning not supported.\n");
         break;
+      }
+
+      if (!ozi_fsdata_used) {
+         fs_chain_destroy((format_specific_data *) fsdata);
       }
 
     } else {
