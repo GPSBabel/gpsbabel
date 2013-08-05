@@ -274,6 +274,8 @@ google_read(void)
   xml_read();
   xfree(routehead);
   xfree(routecount);
+  routehead = NULL;
+  routecount = NULL;
 
   if (encoded_points) {
     xfree(encoded_points);
