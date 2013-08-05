@@ -22,7 +22,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <string.h>
-#include <QtCore/QMap.h>
+#include <QtCore/QMap>
 
 #include "defs.h"
 
