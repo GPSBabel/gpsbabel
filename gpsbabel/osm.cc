@@ -23,7 +23,6 @@
 #include <QtCore/QXmlStreamAttributes>
 
 #include "defs.h"
-#include "avltree.h"
 #include "xmlgeneric.h"
 
 static char* opt_tag, *opt_tagnd, *created_by;
@@ -39,9 +38,9 @@ static arglist_t osm_args[] = {
 
 static QHash<QString, const waypoint*> waypoints;
 
-static avltree_t* keys = NULL;
-static avltree_t* values = NULL;
-static avltree_t* icons = NULL;
+static QHash<QString, int> keys;
+static QHash<QString, const struct osm_icon_mapping_s*> values;
+static QHash<QString, const struct osm_icon_mapping_s*> icons;
 
 static gbfile* fout;
 static int node_id;
@@ -429,12 +428,9 @@ osm_features_init(void)
 {
   int i;
 
-  keys = avltree_init(AVLTREE_STATIC_KEYS, MYNAME);
-  values = avltree_init(0, MYNAME);
-
   /* the first of osm_features is a place holder */
   for (i = 1; osm_features[i]; i++) {
-    avltree_insert(keys, osm_features[i], gb_int2ptr(i));
+    keys.insert(QString::fromUtf8(osm_features[i]), i);
   }
 
   for (i = 0; osm_icon_mappings[i].value; i++) {
@@ -442,7 +438,8 @@ osm_features_init(void)
 
     buff[0] = osm_icon_mappings[i].key;
     strncpy(&buff[1], osm_icon_mappings[i].value, sizeof(buff) - 1);
-    avltree_insert(values, buff, (const void*)&osm_icon_mappings[i]);
+
+    values.insert(QString::fromUtf8(buff), &osm_icon_mappings[i]);
   }
 }
 
@@ -450,16 +447,7 @@ osm_features_init(void)
 static char
 osm_feature_ikey(const char* key)
 {
-  int result;
-  const void* p;
-
-  if (avltree_find(keys, key, &p)) {
-    result = gb_ptr2int(p);
-  } else {
-    result = -1;
-  }
-
-  return result;
+  return keys.value(QString::fromUtf8(key), -1);
 }
 
 
@@ -468,13 +456,14 @@ osm_feature_symbol(const int ikey, const char* value)
 {
   char* result;
   char buff[128];
-  osm_icon_mapping_t* data;
+  QString key;
 
   buff[0] = ikey;
   strncpy(&buff[1], value, sizeof(buff) - 1);
 
-  if (avltree_find(values, buff, (const void**)&data)) {
-    result = xstrdup(data->icon);
+  key = QString::fromUtf8(buff);
+  if (values.contains(key)) {
+    result = xstrdup(values.value(key)->icon);
   } else {
     xasprintf(&result, "%s:%s", osm_features[ikey], value);
   }
@@ -685,7 +674,7 @@ osm_rd_init(const char* fname)
   rte_loaded = 0;
 
   waypoints.clear();
-  if (! keys) {
+  if (keys.isEmpty()) {
     osm_features_init();
   }
 
@@ -716,14 +705,13 @@ osm_init_icons(void)
 {
   int i;
 
-  if (icons) {
+  if (!icons.isEmpty()) {
     return;
   }
 
-  icons = avltree_init(AVLTREE_STATIC_KEYS, MYNAME);
-
   for (i = 0; osm_icon_mappings[i].value; i++) {
-    avltree_insert(icons, osm_icon_mappings[i].icon, (const void*)&osm_icon_mappings[i]);
+    icons.insert(QString::fromUtf8(osm_icon_mappings[i].icon),
+        &osm_icon_mappings[i]);
   }
 }
 
@@ -740,9 +728,10 @@ osm_write_tag(const char* key, const char* value)
 static void
 osm_disp_feature(const waypoint* wpt)
 {
-  osm_icon_mapping_t* map;
+  const osm_icon_mapping_t* map;
 
-  if (avltree_find(icons, wpt->icon_descr, (const void**) &map)) {
+  if (icons.contains(wpt->icon_descr)) {
+    map = icons.value(wpt->icon_descr);
     osm_write_tag(osm_features[map->key], map->value);
   }
 }
@@ -976,15 +965,9 @@ osm_wr_deinit(void)
 static void
 osm_exit(void)
 {
-  if (keys) {
-    avltree_done(keys);
-  }
-  if (values) {
-    avltree_done(values);
-  }
-  if (icons) {
-    avltree_done(icons);
-  }
+  keys.clear();
+  values.clear();
+  icons.clear();
 }
 
 /*-----------------------------------------------------------------------------*/
