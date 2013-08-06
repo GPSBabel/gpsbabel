@@ -55,7 +55,6 @@
 		31C7539FD6571DA2E853D115 /* nukedata.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 8E2A6D3F1B0F186866892D1A /* nukedata.cc */; settings = {ATTRIBUTES = (); }; };
 		3341888BC97300D78D00867C /* xhtmlent.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 5E17FF64DC5F6F9D05334035 /* xhtmlent.cc */; settings = {ATTRIBUTES = (); }; };
 		347D3679B6F1F7929773F65B /* gpsdevice_ser.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 48EC154B9F40DEE39DB513EA /* gpsdevice_ser.cc */; settings = {ATTRIBUTES = (); }; };
-		3642594AA793FB5D20FFE227 /* avltree.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 07CE2C504FD6B17475B9865D /* avltree.cc */; settings = {ATTRIBUTES = (); }; };
 		3676E26586DD9530CFC67BDA /* xmlgeneric.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = C68AD0BAB506B85906B50E49 /* xmlgeneric.cc */; settings = {ATTRIBUTES = (); }; };
 		3A7B28E55EDC37096D2258E6 /* easygps.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = C0F02A9CF60DDE07C74D0D15 /* easygps.cc */; settings = {ATTRIBUTES = (); }; };
 		3B412A97F7E962F93049635D /* inifile.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 9F585F4587ECA6DFB6832635 /* inifile.cc */; settings = {ATTRIBUTES = (); }; };
@@ -205,7 +204,7 @@
 		EBED5AAEE398BDF7F9CF01AC /* axim_gpb.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = AED3F73C9E850301C5F9E9F2 /* axim_gpb.cc */; settings = {ATTRIBUTES = (); }; };
 		EC364AB6175C11EE00D370A8 /* bend.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = EC364AB5175C11EE00D370A8 /* bend.cc */; };
 		EC53883B2B75F9118BBEAEE6 /* shpopen.c in Build Sources */ = {isa = PBXBuildFile; fileRef = 38A17A3419708B2842F18281 /* shpopen.c */; settings = {ATTRIBUTES = (); }; };
-		ECCFD60F175C195300558D26 /* gpsutil.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = ECCFD60E175C195300558D26 /* gpsutil.cc */; };
+		ECCFD60F175C195300558D26 /* jgpsutil.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = ECCFD60E175C195300558D26 /* jgpsutil.cc */; };
 		EDCD1D87552CA871524D69E9 /* transform.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 73BF0B9F148276BC1CAC45FA /* transform.cc */; settings = {ATTRIBUTES = (); }; };
 		EEFEDBC895201A4877507B5B /* lowranceusr.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 11496F48D97CCA586E31D6F9 /* lowranceusr.cc */; settings = {ATTRIBUTES = (); }; };
 		F055F3DC27B7FD46C343E15E /* gpslibusb.cc in Build Sources */ = {isa = PBXBuildFile; fileRef = 4A7EF0037AB628B7C6BD36C4 /* gpslibusb.cc */; settings = {ATTRIBUTES = (); }; };
@@ -228,7 +227,6 @@
 
 /* Begin PBXFileReference section */
 		0360A01B17BA5DDD9B8BF5CD /* gpscom.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpscom.cc; path = jeeps/gpscom.cc; sourceTree = SOURCE_ROOT; };
-		07CE2C504FD6B17475B9865D /* avltree.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = avltree.cc; sourceTree = SOURCE_ROOT; };
 		0A54DE5DF76CF036EC375E3F /* overlay.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = overlay.cc; sourceTree = SOURCE_ROOT; };
 		0BD1513DE96D6BE42A46F209 /* tmpro.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tmpro.cc; sourceTree = SOURCE_ROOT; };
 		0CABB43C7EA15628748C639D /* stmsdf.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stmsdf.cc; sourceTree = SOURCE_ROOT; };
@@ -425,9 +423,8 @@
 		EB67AC0AABBAD839571D92CB /* gopal.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gopal.cc; sourceTree = SOURCE_ROOT; };
 		EC364AB3175C11AF00D370A8 /* GPSBabel */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GPSBabel; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC364AB5175C11EE00D370A8 /* bend.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bend.cc; sourceTree = SOURCE_ROOT; };
-		ECCFD60E175C195300558D26 /* gpsutil.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gpsutil.cc; path = "/Users/robertlipe/src/gpsbabel-reallyvirgin/jeeps/gpsutil.cc"; sourceTree = "<absolute>"; };
+		ECCFD60E175C195300558D26 /* jgpsutil.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jgpsutil.cc; path = "/Users/robertlipe/src/gpsbabel-reallyvirgin/jeeps/jgpsutil.cc"; sourceTree = "<absolute>"; };
 		ECE352B9175C42AB00FC07CB /* an1sym.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = an1sym.h; sourceTree = SOURCE_ROOT; };
-		ECE352BA175C42AB00FC07CB /* avltree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avltree.h; sourceTree = SOURCE_ROOT; };
 		ECE352BB175C42AB00FC07CB /* cet_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cet_util.h; sourceTree = SOURCE_ROOT; };
 		ECE352BC175C42AB00FC07CB /* cet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cet.h; sourceTree = SOURCE_ROOT; };
 		ECE352BD175C42AB00FC07CB /* csv_util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = csv_util.h; sourceTree = SOURCE_ROOT; };
@@ -438,11 +435,9 @@
 		ECE352C2175C42AB00FC07CB /* garmin_fs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = garmin_fs.h; sourceTree = SOURCE_ROOT; };
 		ECE352C3175C42AB00FC07CB /* garmin_gpi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = garmin_gpi.h; sourceTree = SOURCE_ROOT; };
 		ECE352C4175C42AB00FC07CB /* garmin_tables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = garmin_tables.h; sourceTree = SOURCE_ROOT; };
-		ECE352C5175C42AB00FC07CB /* gbdatetime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gbdatetime.h; sourceTree = SOURCE_ROOT; };
 		ECE352C6175C42AB00FC07CB /* gbfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gbfile.h; sourceTree = SOURCE_ROOT; };
 		ECE352C7175C42AB00FC07CB /* gbser_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gbser_private.h; sourceTree = SOURCE_ROOT; };
 		ECE352C8175C42AB00FC07CB /* gbser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gbser.h; sourceTree = SOURCE_ROOT; };
-		ECE352C9175C42AB00FC07CB /* gbtypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gbtypes.h; sourceTree = SOURCE_ROOT; };
 		ECE352CA175C42AB00FC07CB /* grtcirc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grtcirc.h; sourceTree = SOURCE_ROOT; };
 		ECE352CB175C42AB00FC07CB /* height.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = height.h; sourceTree = SOURCE_ROOT; };
 		ECE352CC175C42AB00FC07CB /* holux.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = holux.h; sourceTree = SOURCE_ROOT; };
@@ -498,7 +493,6 @@
 			isa = PBXGroup;
 			children = (
 				ECE352B9175C42AB00FC07CB /* an1sym.h */,
-				ECE352BA175C42AB00FC07CB /* avltree.h */,
 				ECE352BB175C42AB00FC07CB /* cet_util.h */,
 				ECE352BC175C42AB00FC07CB /* cet.h */,
 				ECE352BD175C42AB00FC07CB /* csv_util.h */,
@@ -509,11 +503,9 @@
 				ECE352C2175C42AB00FC07CB /* garmin_fs.h */,
 				ECE352C3175C42AB00FC07CB /* garmin_gpi.h */,
 				ECE352C4175C42AB00FC07CB /* garmin_tables.h */,
-				ECE352C5175C42AB00FC07CB /* gbdatetime.h */,
 				ECE352C6175C42AB00FC07CB /* gbfile.h */,
 				ECE352C7175C42AB00FC07CB /* gbser_private.h */,
 				ECE352C8175C42AB00FC07CB /* gbser.h */,
-				ECE352C9175C42AB00FC07CB /* gbtypes.h */,
 				ECE352CA175C42AB00FC07CB /* grtcirc.h */,
 				ECE352CB175C42AB00FC07CB /* height.h */,
 				ECE352CC175C42AB00FC07CB /* holux.h */,
@@ -623,7 +615,7 @@
 				48EC154B9F40DEE39DB513EA /* gpsdevice_ser.cc */,
 				D4CFA2DEF9C8934F1EE76ED2 /* gpsdevice_usb.cc */,
 				C383177DE7874C1F821D8C2D /* gpsrqst.cc */,
-				ECCFD60E175C195300558D26 /* gpsutil.cc */,
+				ECCFD60E175C195300558D26 /* jgpsutil.cc */,
 				328FD0E11330E7B9816CDFE8 /* gpssend.cc */,
 				8FAE4FC5CFEFE47CA12BE42E /* gpsserial.cc */,
 				2F993A753D7FE297E1AB1237 /* gpsusbread.cc */,
@@ -639,7 +631,6 @@
 				D72960207933076DA4EF41C7 /* alan.cc */,
 				FDAC005E8FCA38479516787F /* an1.cc */,
 				1A57B649DDE25BC4E51A04FC /* arcdist.cc */,
-				07CE2C504FD6B17475B9865D /* avltree.cc */,
 				AED3F73C9E850301C5F9E9F2 /* axim_gpb.cc */,
 				9CFC21B04554B7E59783138E /* bcr.cc */,
 				EC364AB5175C11EE00D370A8 /* bend.cc */,
@@ -1075,7 +1066,6 @@
 				6F79128314B37D76ED1392F9 /* gbser.cc in Build Sources */,
 				99CBF7AAF19463D4AB9891C7 /* gbfile.cc in Build Sources */,
 				A7ED1C6D67C698E474225122 /* parse.cc in Build Sources */,
-				3642594AA793FB5D20FFE227 /* avltree.cc in Build Sources */,
 				3E2EEBA26F8B29A22DCF40BC /* session.cc in Build Sources */,
 				0F92C7DE5A6D0ECD279B47C7 /* main.cc in Build Sources */,
 				A7541BAE9601B73FD2E71B20 /* globals.cc in Build Sources */,
@@ -1110,7 +1100,7 @@
 				6DE41B3F5331AE202449C7A1 /* gpsusbsend.cc in Build Sources */,
 				BE5F6FAE9B210BB1028C67C6 /* gpsusbcommon.cc in Build Sources */,
 				EC364AB6175C11EE00D370A8 /* bend.cc in Build Sources */,
-				ECCFD60F175C195300558D26 /* gpsutil.cc in Build Sources */,
+				ECCFD60F175C195300558D26 /* jgpsutil.cc in Build Sources */,
 			);
 			name = "Build Sources";
 			runOnlyForDeploymentPostprocessing = 0;
