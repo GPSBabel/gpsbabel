@@ -28,7 +28,6 @@
 
 #include "defs.h"
 #include "csv_util.h"
-#include "avltree.h"
 
 #define MYNAME "jtr"
 
@@ -38,7 +37,7 @@ arglist_t jtr_args[] = {
 };
 
 static gbfile* fin, *fout;
-static avltree_t* trkpts;
+static QHash<QString, const waypoint *> trkpts;
 
 static time_t
 jtr_parse_time(const char* str, struct tm* tm, int* milli)
@@ -89,13 +88,12 @@ static void
 jtr_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
-  trkpts = avltree_init(0, MYNAME);
 }
 
 static void
 jtr_rd_deinit(void)
 {
-  avltree_done(trkpts);
+  trkpts.clear();
   gbfclose(fin);
 }
 
@@ -211,7 +209,7 @@ jtr_read(void)
     /* check for duplicates as suggested in format description */
 
     snprintf(buf, sizeof(buf), "%.6f\01%.6f\01%ld", lat, lon, (long)time);
-    if (avltree_find(trkpts, buf, NULL)) {
+    if (trkpts.contains(QString::fromUtf8(buf))) {
       continue;
     }
 
@@ -249,7 +247,7 @@ jtr_read(void)
       track_add_head(trk);
     }
 
-    avltree_insert(trkpts, buf, wpt);
+    trkpts.insert(QString::fromUtf8(buf), wpt);
     track_add_wpt(trk, wpt);
   }
 }
@@ -301,7 +299,7 @@ jtr_trkpt_disp_cb(const waypoint* wpt)
 
   xasprintf(&str, "GEOTAG2,%s,%c,%09.4f,%c,%010.4f,%c,%s,%s,%s,,E,A",
             stime,
-            time > 0 ? 'A' : 'V',
+            wpt->creation_time.isValid() ? 'A' : 'V',
             fabs(degrees2ddmm(wpt->latitude)),
             wpt->latitude < 0 ? 'S' : 'N',
             fabs(degrees2ddmm(wpt->longitude)),
