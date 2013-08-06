@@ -49,7 +49,6 @@
 #include <time.h>
 
 #include "defs.h"
-#include "avltree.h"
 
 #define MYNAME "mmo"
 
@@ -105,8 +104,10 @@ static uint16_t txt_object_id;
 static gpsdata_type mmo_datatype;
 static route_head* mmo_rte;
 
-static avltree_t* category_names, *objects, *mmobjects, *category_ids;
-static avltree_t* icons;
+static QHash<QString, int> category_names;
+static QHash<int, QString> icons;
+static QHash<int, mmo_data_t *> objects;
+static QHash<QString, unsigned> mmobjects;
 
 typedef struct mmo_icon_mapping_s {
   const int	value;
@@ -268,7 +269,6 @@ mmo_printbuf(const char* buf, int count, const char* comment)
 static mmo_data_t*
 mmo_register_object(const int objid, const void* ptr, const gpsdata_type type)
 {
-  char key[16];
   mmo_data_t* data;
 
   data = (mmo_data_t*) xcalloc(1, sizeof(*data));
@@ -278,8 +278,7 @@ mmo_register_object(const int objid, const void* ptr, const gpsdata_type type)
   data->type = type;
   data->objid = objid;
 
-  snprintf(key, sizeof(key), "%d", objid);
-  avltree_insert(objects, key, data);
+  objects.insert(objid, data);
 
   return data;
 }
@@ -288,27 +287,22 @@ mmo_register_object(const int objid, const void* ptr, const gpsdata_type type)
 static int
 mmo_get_objid(const void* ptr)
 {
-  const char* key;
-  mmo_data_t* data;
-
-  if ((key = avltree_first(objects, (const void**)&data))) do {
-      if (data->data == ptr) {
-        return atoi(key);
-      }
-    } while ((key = avltree_next(objects, key, (const void**)&data)));
-
-  return 0;
+  foreach(int key, objects.keys()) {
+    if (objects.value(key)->data == ptr) {
+      return key;
+    }
+  }
 }
 
 
 static mmo_data_t*
 mmo_get_object(const uint16_t objid)
 {
-  char key[16];
+  int key;
   mmo_data_t* data;
 
-  snprintf(key, sizeof(key), "%d", objid | 0x8000);
-  if (! avltree_find(objects, key, (const void**)&data)) {
+  key = objid | 0x8000;
+  if (!objects.contains(key)) {
 #ifdef MMO_DBG
     gbfseek(fin, -2, SEEK_CUR);
     int ni, n;
@@ -320,7 +314,7 @@ mmo_get_object(const uint16_t objid)
     fatal(MYNAME ": Unregistered object id 0x%04X!\n", objid | 0x8000);
   }
 
-  return data;
+  return objects.value(key);
 }
 
 static waypoint*
@@ -335,39 +329,22 @@ mmo_get_waypt(mmo_data_t* data)
 }
 
 static void
-mmo_release_avltree(avltree_t* tree, const int is_object)
+mmo_free_object(mmo_data_t *data)
 {
-  const char* key;
-  char* name;
-
-  if ((key = avltree_first(tree, (const void**)&name))) {
-    do {
-      if (name == NULL) {
-        continue;
-      }
-      if (is_object) {
-        mmo_data_t* data = (mmo_data_t*)name;
-        if (data->name) {
-          xfree(data->name);
-        }
-        if ((data->type == wptdata) && (data->refct == 0)) {
-          waypt_free((waypoint*)data->data);
-        }
-      }
-      xfree(name);
-    } while ((key = avltree_next(tree, key, (const void**)&name)));
+  if (data->name) {
+    xfree(data->name);
   }
-  avltree_done(tree);
+  if ((data->type == wptdata) && (data->refct == 0)) {
+    waypt_free((waypoint*)data->data);
+  }
+  xfree(data);
 }
 
 
 static void
 mmo_register_icon(const int id, const char* name)
 {
-  char key[16];
-
-  snprintf(key, sizeof(key), "%d", id);
-  avltree_insert(icons, key, xstrdup(name));
+  icons.insert(id, QString::fromUtf8(name));
 }
 
 
@@ -562,13 +539,9 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
   mmo_fillbuf(buf, 12, 1);
   i = le_read32(&buf[8]);		/* icon */
   if (i != -1) {
-    char key[16];
-    char* name;
-
-    snprintf(key, sizeof(key), "%d", i);
-    if (avltree_find(icons, key, (const void**)&name)) {
-      wpt->icon_descr = name;
-      DBG((sobj, "icon = \"%s\"\n", wpt->icon_descr.toUtf8().data()));
+    if (icons.contains(i)) {
+      wpt->icon_descr = icons.value(i);
+      DBG((sobj, "icon = \"%s\"\n", CSTR(wpt->icon_descr)));
     }
 #ifdef MMO_DBG
     else {
@@ -1036,10 +1009,6 @@ mmo_rd_init(const char* fname)
 
   fin = gbfopen_le(fname, "rb", MYNAME);
 
-  category_ids = avltree_init(0, MYNAME);
-  objects = avltree_init(0, MYNAME);
-  icons = avltree_init(0, MYNAME);
-
   ico_object_id = pos_object_id = txt_object_id = cat_object_id = 0;
   wpt_object_id = rte_object_id = trk_object_id = 0;
 
@@ -1058,9 +1027,13 @@ mmo_rd_deinit(void)
 {
   route_disp_session(curr_session(), NULL, NULL, mmo_finalize_rtept_cb);
 
-  mmo_release_avltree(icons, 0);
-  mmo_release_avltree(category_ids, 0);
-  mmo_release_avltree(objects, 1);
+  icons.clear();
+
+  foreach (int k, objects.keys()) {
+    mmo_free_object(objects.value(k));
+  }
+  objects.clear();
+
   gbfclose(fin);
 }
 
@@ -1116,12 +1089,9 @@ mmo_read(void)
 /**************************************************************************/
 
 static void
-mmo_register_category_names(const char* name)
+mmo_register_category_names(const QString& name)
 {
-  char key[16];
-
-  snprintf(key, sizeof(key), "%d", mmo_object_id);
-  avltree_insert(category_names, name, xstrdup(key));
+  category_names.insert(name, mmo_object_id);
 }
 
 
@@ -1195,22 +1165,21 @@ mmo_enum_route_cb(const route_head* rte)
 static int
 mmo_write_obj_mark(const char* sobj, const char* name)
 {
-  char* key;
+  QString key = QString::fromUtf8(sobj);
   uint16_t nr;
   char buf[16];
   int res;
 
-  if (avltree_find(mmobjects, sobj, (const void**)&key)) {
-    nr = (unsigned)atoi(key);
+  if (mmobjects.contains(key)) {
+    nr = mmobjects.value(key);
     gbfputuint16(nr, fout);
   } else {
     mmo_object_id++;
-    snprintf(buf, sizeof(buf), "%u", mmo_object_id);
 
     DBG(("write", "object \"%s\", registered type \"%s\" (id = 0x%04X)\n",
          name, sobj, mmo_object_id));
 
-    avltree_insert(mmobjects, sobj, xstrdup(buf));
+    mmobjects.insert(key, mmo_object_id);
 
     gbfputuint32(mmo_filemark, fout);
     gbfputuint16(strlen(sobj), fout);
@@ -1228,15 +1197,15 @@ mmo_write_obj_mark(const char* sobj, const char* name)
 static void
 mmo_write_category(const char* sobj, const char* name)
 {
-  char* key;
   uint16_t nr;
+  QString key = QString::fromUtf8(name);
 
-  if (avltree_find(category_names, name, (const void**)&key)) {
-    nr = (unsigned)atoi(key);
+  if (category_names.contains(key)) {
+    nr = category_names.value(key);
     gbfputuint16(nr & 0x7FFF, fout);
   } else {
     mmo_write_obj_mark(sobj, name);
-    mmo_register_category_names(name);
+    mmo_register_category_names(key);
   }
 }
 
@@ -1486,10 +1455,6 @@ mmo_wr_init(const char* fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
 
-  objects = avltree_init(0, MYNAME);
-  mmobjects = avltree_init(0, MYNAME);
-  category_names = avltree_init(0, MYNAME);
-
   mmo_object_id = 0x8000;
   mmo_obj_ct = 1;			/* ObjIcons always present */
   mmo_version = 0x12;		/* by default we write as version 0x12 */
@@ -1511,9 +1476,13 @@ mmo_wr_init(const char* fname)
 static void
 mmo_wr_deinit(void)
 {
-  mmo_release_avltree(mmobjects, 0);
-  mmo_release_avltree(category_names, 0);
-  mmo_release_avltree(objects, 1);
+  mmobjects.clear();
+  category_names.clear();
+
+  foreach (int k, objects.keys()) {
+    mmo_free_object(objects.value(k));
+  }
+  objects.clear();
 
   gbfclose(fout);
 }
