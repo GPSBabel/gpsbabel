@@ -37,7 +37,7 @@ static arglist_t osm_args[] = {
 
 #define MYNAME "osm"
 
-static QMap<QString, const waypoint*> waypoints;
+static QHash<QString, const waypoint*> waypoints;
 
 static avltree_t* keys = NULL;
 static avltree_t* values = NULL;
