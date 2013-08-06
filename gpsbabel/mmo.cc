@@ -292,6 +292,7 @@ mmo_get_objid(const void* ptr)
       return key;
     }
   }
+  return 0;
 }
 
 
@@ -299,7 +300,6 @@ static mmo_data_t*
 mmo_get_object(const uint16_t objid)
 {
   int key;
-  mmo_data_t* data;
 
   key = objid | 0x8000;
   if (!objects.contains(key)) {
@@ -1167,7 +1167,6 @@ mmo_write_obj_mark(const char* sobj, const char* name)
 {
   QString key = QString::fromUtf8(sobj);
   uint16_t nr;
-  char buf[16];
   int res;
 
   if (mmobjects.contains(key)) {
