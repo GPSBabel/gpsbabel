@@ -98,7 +98,6 @@
     <ClCompile Include="..\alan.cc" />
     <ClCompile Include="..\an1.cc" />
     <ClCompile Include="..\arcdist.cc" />
-    <ClCompile Include="..\avltree.cc" />
     <ClCompile Include="..\axim_gpb.cc" />
     <ClCompile Include="..\bcr.cc" />
     <ClCompile Include="..\bend.cc" />
@@ -311,7 +310,6 @@
     <Library Include="Expat\libexpat.lib" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\avltree.h" />
     <ClInclude Include="..\cet.h" />
     <ClInclude Include="..\cet_util.h" />
     <ClInclude Include="config.h" />

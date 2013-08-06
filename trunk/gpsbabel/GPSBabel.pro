@@ -55,11 +55,10 @@ SUPPORT = queue.cc route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           csv_util.cc strptime.c grtcirc.cc vmem.cc util_crc.cc xmlgeneric.cc \
           uuid.cc formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc \
           inifile.cc garmin_fs.cc gbsleep.cc units.cc gbser.cc \
-          gbfile.cc parse.cc avltree.cc session.cc main.cc globals.cc
+          gbfile.cc parse.cc session.cc main.cc globals.cc
 
 HEADERS =  \
 	an1sym.h \
-	avltree.h \
 	cet.h \
 	cet/ansi_x3_4_1968.h \
 	cet/atarist.h \
