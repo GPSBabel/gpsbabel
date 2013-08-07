@@ -68,13 +68,6 @@ waypt_dupe(const waypoint *wpt)
     tmp->notes = xstrdup(wpt->notes);
   }
 
-  tmp->url = (wpt->url);
-  tmp->url_link_text = wpt->url_link_text;
-
-  for (url_link* url_next = wpt->url_next; url_next; url_next = url_next->url_next) {
-    waypt_add_url(tmp, url_next->url, url_next->url_link_text);
-  }
-
   tmp->icon_descr = wpt->icon_descr;
 
   if (wpt->gc_data != &empty_gc_data) {
@@ -481,32 +474,7 @@ waypt_restore(signed int count, queue *head_bak)
 void
 waypt_add_url(waypoint *wpt, const QString& link, const QString& url_link_text)
 {
-  if ((link == NULL) && (url_link_text == NULL)) {
-    return;
-  }
-
-  /* Special case first one; it goes right into the waypoint. */
-  if ((wpt->url == NULL)  && (wpt->url_link_text == NULL)) {
-    wpt->url = link;
-    wpt->url_link_text = url_link_text;
-  } else {
-    url_link *tail;
-    url_link *new_link = new url_link;
-    new_link->url = link;
-    new_link->url_link_text = url_link_text;
-
-    /* Find current end of chain and tack this onto the end.. */
-    for (tail = wpt->url_next;; tail = tail->url_next) {
-      if (tail == NULL) {
-        wpt->url_next = new_link;
-        break;
-      }
-      if (tail->url_next == NULL) {
-        tail->url_next = new_link;
-        break;
-      }
-    }
-  }
+  wpt->url_link_list_.push_back(UrlLink(link, url_link_text));
 }
 
 double

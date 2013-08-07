@@ -87,8 +87,8 @@ void GeoReadLoc()
         wpt->icon_descr = reader.readElementText();
       } else if (tag_name == "link") {
         QXmlStreamAttributes a = reader.attributes();
-        wpt->url_link_text = a.value("text").toString();
-        wpt->url = reader.readElementText();
+        waypt_add_url(wpt, 
+                      reader.readElementText(), a.value("text").toString());
       } else if (tag_name == "difficulty") {
         wpt->gc_data->diff = reader.readElementText().toInt() * 10;
       } else if (tag_name == "terrain") {
@@ -207,10 +207,11 @@ geo_waypt_pr(const waypoint* waypointp)
 
   writer.writeTextElement("type", deficon ? deficon : waypointp->icon_descr);
 
-  if (waypointp->hasLink()) {
+  if (waypointp->HasUrlLink()) {
     writer.writeStartElement("link");
     writer.writeAttribute("text ", "Cache Details");
-    writer.writeCharacters(waypointp->url);
+    UrlLink link = waypointp->GetUrlLink();
+    writer.writeCharacters(link.url_);
     writer.writeEndElement();
   }
 

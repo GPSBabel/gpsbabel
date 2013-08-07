@@ -164,6 +164,7 @@ static int waypt_out_count;
 static route_head* csv_track, *csv_route;
 static double utm_northing, utm_easting, utm_zone = 0;
 static char utm_zonec;
+static UrlLink* link_;
 #endif // CSVFMTS_ENABLED
 
 
@@ -991,10 +992,12 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     wpt->notes = csv_stringtrim(s, "", 0);
     break;
   case XT_URL:
-    wpt->url = QString(s).trimmed();
+    if (!link_) link_ = new UrlLink;
+    link_->url_ = QString(s).trimmed();
     break;
   case XT_URL_LINK_TEXT:
-    wpt->url_link_text = QString(s).trimmed();
+    if (!link_) link_ = new UrlLink;
+    link_->url_link_text_ = QString(s).trimmed();
     break;
   case XT_ICON_DESCR:
     wpt->icon_descr = QString(s).trimmed();
@@ -1464,6 +1467,12 @@ xcsv_data_read(void)
                                        DATUM_WGS84);
       }
 
+      if (link_) {
+        wpt_tmp->AddUrlLink(*link_);
+        delete link_;
+        link_ = NULL;
+      }
+
       switch (xcsv_file.datatype) {
       case unknown_gpsdata:
       case wptdata:
@@ -1667,16 +1676,20 @@ xcsv_waypt_pr(const waypoint* wpt)
         strcpy(buff, xcsv_urlbase);
         off = strlen(xcsv_urlbase);
       }
-      if (wpt->hasLink()) {
-        snprintf(buff + off, sizeof(buff) - off, fmp->printfc, wpt->url.toUtf8().data());
+      if (wpt->HasUrlLink()) {
+        UrlLink l = wpt->GetUrlLink();
+        snprintf(buff + off, sizeof(buff) - off, fmp->printfc, l.url_.toUtf8().data());
       } else {
         strcpy(buff, (fmp->val && *fmp->val) ? fmp->val : "\"\"");
       }
     }
     break;
-    case XT_URL_LINK_TEXT:
+    case XT_URL_LINK_TEXT: 
+      if (wpt->HasUrlLink()) {
+      UrlLink l = wpt->GetUrlLink();
       snprintf(buff, sizeof(buff), fmp->printfc,
-               (wpt->hasLinkText()) ? wpt->url_link_text.toUtf8().data() : fmp->val);
+               !l.url_link_text_.isEmpty() ? l.url_link_text_.toUtf8().data() : fmp->val);
+      }
       break;
     case XT_ICON_DESCR:
       writebuff(buff, fmp->printfc,

@@ -129,7 +129,8 @@ nav_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
 
         id = atoi(ap[1]);
         xasprintf(&wpt_tmp->shortname, "N%05X", id);
-        wpt_tmp->url = QString(NC_URL) + QString::number(id);
+        UrlLink l(QString(NC_URL) + QString::number(id));
+        wpt_tmp->AddUrlLink(l);
       } else if (0 == strcmp(ap[0], "name")) {
         wpt_tmp->description = xstrdup(ap[1]);
       } else if (0 == strcmp(ap[0], "user_name")) {

@@ -36,7 +36,9 @@
 #include "inifile.h"
 #include "session.h"
 
+#include <Qtcore/QString>
 #include <QtCore/QDebug>
+
 # include "src/core/datetime.h"
 
 // Turn on Unicode in expat?
@@ -364,15 +366,21 @@ fs_xml* fs_xml_alloc(long type);
 /*
  * Structures and functions for multiple URLs per waypoint.
  */
-class url_link {
- public:
-    url_link() :
-    url_next(NULL)
-     {} ;
-  url_link* url_next;
-  QString url;
-  QString url_link_text;
+
+class UrlLink {
+ public: 
+   UrlLink() { } 
+   UrlLink(QString url) :
+    url_(url)
+   { }
+   UrlLink(QString url, QString url_link_text) :
+    url_(url),
+    url_link_text_(url_link_text)
+  { }
+  QString url_;
+  QString url_link_text_;
 };
+
 
 /*
  * Misc bitfields inside struct waypoint;
@@ -454,7 +462,6 @@ public:
   shortname(NULL),
   description(NULL),
   notes(NULL),
-  url_next(NULL),
   route_priority(0),
   hdop(0),
   vdop(0),
@@ -516,18 +523,13 @@ public:
    */
   char* notes;
 
-  /* This is a bit icky.   Multiple waypoint support is an
-   * afterthought and I don't want to change our data structures.
-   * So we have the first in the waypoint itself and subsequent
-   * ones in a linked list.
-   * We also use an implicit anonymous union here, so these three
-   * members must match struct url_link...
+  /* TODO: UrlLink should probably move to a "real" class of its own.
    */
-  url_link* url_next;
-  bool hasLink() const {return !url.isEmpty(); }
-  bool hasLinkText() const {return !url_link_text.isEmpty(); }
-  QString url;
-  QString url_link_text;
+  QList<UrlLink> url_link_list_;
+  bool HasUrlLink() const {return !url_link_list_.isEmpty(); }
+  const UrlLink& GetUrlLink() const { return url_link_list_[0]; }
+  const QList<UrlLink> GetUrlLinks() const { return url_link_list_; }
+  void AddUrlLink(const UrlLink l) { url_link_list_.push_back(l); }
 
   wp_flags wpt_flags;
   QString icon_descr;

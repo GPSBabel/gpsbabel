@@ -143,7 +143,8 @@ data_read(void)
           */
           holder = csv_stringtrim(s, "", 0);
           if (strstr(holder, "http:") != NULL) {
-            wpt_tmp->url = holder;
+            UrlLink link(holder);
+            wpt_tmp->AddUrlLink(link);
           }
           xfree(holder);
           break;
@@ -211,6 +212,13 @@ tmpro_waypt_pr(const waypoint * wpt)
   /* Number of characters */
   /*  25    6      80         8    8      8         8       8    4       4       128      */
 
+  const char *l;
+  if (wpt->HasUrlLink()) {
+    UrlLink link = wpt->GetUrlLink();
+    l  = link.url_.toUtf8().data();
+  } else {
+    l = "";
+  }
   gbfprintf(file_out, "new\t%.6s\t%.80s\t%08.6f\t%08.6f\t\t\t%.2f\t%d\t%d\t%.128s\n",
             shortname,
             description,
@@ -219,7 +227,7 @@ tmpro_waypt_pr(const waypoint * wpt)
             wpt->altitude,
             colour,
             icon,
-            wpt->hasLink() ? wpt->url.toUtf8().data() : ""
+            l
            );
 
 

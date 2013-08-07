@@ -744,8 +744,11 @@ unicsv_parse_one_line(char *ibuf)
       wpt->notes = xstrdup(s);
       break;
 
-    case fld_url:
-      wpt->url = xstrdup(s);
+    case fld_url: {
+qDebug() << s;
+      UrlLink l(s);
+      wpt->AddUrlLink(l);
+      } 
       break;
 
     case fld_altitude:
@@ -1365,7 +1368,7 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
       gb_setbit(&unicsv_outp_flags, fld_notes);
     }
   }
-  if (wpt->hasLink()) {
+  if (wpt->HasUrlLink()) {
     gb_setbit(&unicsv_outp_flags, fld_url);
   }
   if (wpt->creation_time.isValid()) {
@@ -1777,8 +1780,13 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
       gbfputs(unicsv_fieldsep, fout);
     }
   }
-  if FIELD_USED(fld_url) {
-    unicsv_print_str(wpt->url);
+  if (FIELD_USED(fld_url)) {
+    if (!wpt->HasUrlLink()) {
+      unicsv_print_str("");
+    } else {
+      UrlLink l = wpt->GetUrlLink();
+      unicsv_print_str(l.url_);
+    }
   }
 
   if FIELD_USED(fld_garmin_facility) {
