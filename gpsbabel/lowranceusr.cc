@@ -472,7 +472,6 @@ lowranceusr_parse_routes(void)
       buff[text_len] = '\0';
       rte_head->rte_name = xstrdup(buff);
     }
-    rte_head->rte_desc = '\0';	/* ???????? */
 
     /* num Legs */
     num_legs = gbfgetint16(file_in);
@@ -563,7 +562,6 @@ lowranceusr_parse_trails(void)
       buff[text_len] = '\0';
       trk_head->rte_name = xstrdup(buff);
     }
-    trk_head->rte_desc = '\0';
 
     if (global_opts.debug_level >= 1) {
       printf(MYNAME " parse_trails: trail name = %s\n", trk_head->rte_name);
@@ -605,7 +603,6 @@ lowranceusr_parse_trails(void)
             trk_tmp = route_head_alloc();
             trk_tmp->rte_num = ++trk_num;
             trk_tmp->rte_name = xstrdup(trk_head->rte_name);
-            trk_tmp->rte_desc = '\0';
             track_add_head(trk_tmp);
             trk_head = trk_tmp;
           }
