@@ -710,12 +710,14 @@ static void Read_AN1_Waypoints(gbfile* f)
     wpt_tmp->notes = xstrdup(rec->comment);
     wpt_tmp->description = xstrdup(rec->name);
     if (rec->url) {
-      wpt_tmp->url = xstrdup(rec->url);
+      UrlLink l(rec->url);
+      wpt_tmp->AddUrlLink(l);
     } else if (NULL != (url=strstr(wpt_tmp->description, "{URL="))) {
       *url = '\0';
       url += 5;
       url[strlen(url)-1] = '\0';
-      wpt_tmp->url = xstrdup(url);
+      UrlLink l(url);
+      wpt_tmp->AddUrlLink(l);
     }
 
     if (rec->image_name) {
@@ -778,13 +780,14 @@ Write_One_AN1_Waypoint(const waypoint* wpt)
     xfree(extra);
   }
 
-  if (!nourl && wpt->hasLink()) {
-    int len = 7 + wpt->url.length();
+  if (!nourl && wpt->HasUrlLink()) {
+    UrlLink l = wpt->GetUrlLink();
+    int len = 7 + l.url_.length();
     char* extra = (char*)xmalloc(len);
-    sprintf(extra, "{URL=%s}", wpt->url.toUtf8().data());
+    sprintf(extra, "{URL=%s}", l.url_.toUtf8().data());
     rec->name = xstrappend(rec->name, extra);
     xfree(extra);
-    rec->url = xstrdup(wpt->url.toUtf8().data());
+    rec->url = xstrdup(l.url_.toUtf8().data());
   }
 
   if (wpt->notes) {

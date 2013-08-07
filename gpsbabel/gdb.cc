@@ -631,10 +631,13 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
       xfree(temp);
     }
 
-    res->url = FREAD_CSTR_AS_QSTR;
+    QString linky = FREAD_CSTR_AS_QSTR;
+    UrlLink l(linky);
+    if (!linky.isEmpty()) {
+      res->AddUrlLink(l);
+    }
     if (wpt_class != 0) {
-      res->description = xstrdup(res->url.toUtf8().data());
-      res->url.clear();
+      res->description = xstrdup(l.url_.toUtf8().data());
     }
   } else { // if (gdb_ver >= GDB_VER_3)
     int i, url_ct;
@@ -1354,8 +1357,13 @@ write_waypoint(
 
     FWRITE(zbuf, 3);
     FWRITE(zbuf, 4);
+    QString ld;
+    if (wpt->HasUrlLink()) {
+      UrlLink l = wpt->GetUrlLink();
+      ld = l.url_;
+    }
     descr = (wpt_class < gt_waypt_class_map_point) ?
-            wpt->url : wpt->description;
+            ld : wpt->description;
     if ((descr != NULL) && (wpt_class >= gt_waypt_class_map_point) && \
         descr.compare(wpt->shortname) == 0) {
       descr.clear();
@@ -1363,7 +1371,7 @@ write_waypoint(
     FWRITE_CSTR(descr);
   } else { /* if (gdb_ver > GDB_VER_3) */
     int cnt;
-    url_link* url_next;
+//    url_link* url_next;
     const char* str;
 
     if (wpt_class < gt_waypt_class_map_point) {	/* street address */
@@ -1387,21 +1395,11 @@ write_waypoint(
     FWRITE_CSTR(str);				/* instruction */
 
     cnt = 0;
-    if (wpt->hasLink()) {
-      cnt++;
-    }
-    for (url_next = wpt->url_next; (url_next); url_next = url_next->url_next)
-      if (!url_next->url.isEmpty()) {
-        cnt++;
-      }
+    cnt += wpt->url_link_list_.size();
     FWRITE_i32(cnt);
-    if (wpt->hasLink()) {
-      FWRITE_CSTR(wpt->url);
+    foreach(UrlLink l, wpt->GetUrlLinks()) {
+      FWRITE_CSTR(l.url_.toUtf8().data());
     }
-    for (url_next = wpt->url_next; (url_next); url_next = url_next->url_next)
-      if (!url_next->url.isEmpty()) {
-        FWRITE_CSTR(url_next->url.toUtf8().data());
-      }
   }
 
   FWRITE_i16(GMSD_GET(category, gdb_category));
@@ -1656,9 +1654,16 @@ write_waypoint_cb(const waypoint* refpt)
   rtrim(((waypoint*)refpt)->shortname);
   test = gdb_find_wayptq(&wayptq_out, refpt, 1);
 
+  if (refpt->HasUrlLink() && test && test->HasUrlLink() && route_flag == 0) {
+    UrlLink orig_link = refpt->GetUrlLink();
+    UrlLink test_link = test->GetUrlLink();
+    if (orig_link.url_ != test_link.url_) {
+      test = NULL;
+    }
+  }
+
   if ((test != NULL) && (route_flag == 0)) {
-    if ((str_not_equal(test->notes, refpt->notes)) ||
-        test->url.compare(refpt->url)) {
+    if (str_not_equal(test->notes, refpt->notes)) {
       test = NULL;
     }
   }

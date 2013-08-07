@@ -84,6 +84,7 @@ data_read(void)
     waypoint* wpt_tmp;
 
     wpt_tmp = waypt_new();
+    UrlLink link;
 
     for (tag = gbfgetc(file_in); tag != 0xff; tag = gbfgetc(file_in)) {
       switch (tag) {
@@ -98,7 +99,7 @@ data_read(void)
         wpt_tmp->notes = gbfgetpstr(file_in);;
         break;
       case 6:
-        wpt_tmp->url_link_text = gbfgetpstr(file_in);;
+        link.url_link_text_ = gbfgetpstr(file_in);;
         break;
       case 7:
         wpt_tmp->icon_descr = gbfgetpstr(file_in);;
@@ -107,10 +108,10 @@ data_read(void)
         wpt_tmp->notes = gbfgetcstr(file_in);
         break;
       case 9: /* NULL Terminated (vs. pascal) link */
-        wpt_tmp->url = gbfgetcstr(file_in);
+        link.url_ = gbfgetcstr(file_in);
         break;
       case 0x10:
-        wpt_tmp->url_link_text = gbfgetcstr(file_in);
+        link.url_link_text_ = gbfgetcstr(file_in);
         break;
       case 0x63:
         wpt_tmp->latitude = gbfgetdbl(file_in);
@@ -133,6 +134,9 @@ data_read(void)
         printf("Unknown tag %x\n", tag);
         ;
       }
+    }
+    if (!link.url_.isEmpty() || !link.url_link_text_.isEmpty()) {
+       wpt_tmp->AddUrlLink(link);
     }
     waypt_add(wpt_tmp);
     p = gbfgetc(file_in);
@@ -167,13 +171,14 @@ ez_disp(const waypoint* wpt)
     gbfputc(5, file_out);
     gbfputpstr(wpt->notes, file_out);
   }
-  if (wpt->hasLinkText()) {
+  UrlLink link = wpt->GetUrlLink();
+  if (!link.url_link_text_.isEmpty()) {
     gbfputc(6, file_out);
-    gbfputpstr(wpt->url_link_text, file_out);
+    gbfputpstr(link.url_link_text_, file_out);
   }
-  if (wpt->hasLink()) {
+  if (!link.url_.isEmpty()) {
     gbfputc(9, file_out);
-    gbfputcstr(wpt->url, file_out);
+    gbfputcstr(link.url_, file_out);
   }
   gbfputc(0xff, file_out);
 }

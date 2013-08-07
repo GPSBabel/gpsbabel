@@ -52,6 +52,7 @@ static char* gpx_author = NULL;
 static QString current_tag;
 
 static waypoint* wpt_tmp;
+static UrlLink* link_;
 static int cache_descr_is_html;
 static gbfile* fd;
 static const char* input_fname;
@@ -498,6 +499,7 @@ tag_wpt(const char** attrv)
   const char** avp = &attrv[0];
 
   wpt_tmp = waypt_new();
+  link_ = new UrlLink;
 
   cur_tag = NULL;
   while (*avp) {
@@ -963,6 +965,11 @@ gpx_end(void* data, const XML_Char* xml_el)
      * Waypoint-specific tags.
      */
   case tt_wpt:
+    if (link_ && !link_->url_.isEmpty()) {
+      wpt_tmp->AddUrlLink(*link_);
+      delete link_;
+      link_ = NULL;
+    }
     waypt_add(wpt_tmp);
     logpoint_ct = 0;
     cur_tag = NULL;
@@ -1178,12 +1185,12 @@ gpx_end(void* data, const XML_Char* xml_el)
   case tt_wpt_url:
   case tt_trk_trkseg_trkpt_url:
   case tt_rte_rtept_url:
-    wpt_tmp->url = cdatastrp;
+    link_->url_ = cdatastrp;
     break;
   case tt_wpt_urlname:
   case tt_trk_trkseg_trkpt_urlname:
   case tt_rte_rtept_urlname:
-    wpt_tmp->url_link_text = cdatastrp;
+    link_->url_link_text_ = cdatastrp;
     break;
   case tt_wpt_link:
 //TODO: implement GPX 1.1 	case tt_trk_trkseg_trkpt_link:
@@ -1194,7 +1201,7 @@ gpx_end(void* data, const XML_Char* xml_el)
       lt = xstrdup(lrtrim(link_text));
     }
 
-    waypt_add_url(wpt_tmp, xstrdup(link_url), lt);
+    waypt_add_url(wpt_tmp, link_url, lt);
     link_text = NULL;
   }
   break;
@@ -1484,22 +1491,22 @@ void free_gpx_extras(xml_tag* tag)
 static void
 write_gpx_url(const waypoint* waypointp)
 {
-  if (waypointp->url == NULL) {
+  if (!waypointp->HasUrlLink()) {
     return;
   }
 
   if (gpx_wversion_num > 10) {
-    url_link* tail;
-    for (tail = (url_link*)&waypointp->url_next; tail; tail = tail->url_next) {
+    foreach(UrlLink l, waypointp->GetUrlLinks()) {
       writer.writeStartElement("link");
-      writer.writeAttribute("href", tail->url);
-      writer.writeOptionalTextElement("text", tail->url_link_text);
+      writer.writeAttribute("href", l.url_);
+      writer.writeOptionalTextElement("text", l.url_link_text_);
       writer.writeEndElement();
     }
     return;
   }
-  writer.writeTextElement("url", QString(urlbase) + QString(waypointp->url));
-  writer.writeOptionalTextElement("urlname", QString(waypointp->url_link_text));
+  UrlLink l = waypointp->GetUrlLink();
+  writer.writeTextElement("url", QString(urlbase) + QString(l.url_));
+  writer.writeOptionalTextElement("urlname", QString(l.url_link_text_));
 }
 
 /*

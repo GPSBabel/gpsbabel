@@ -1437,8 +1437,11 @@ static void kml_geocache_pr(const waypoint* waypointp)
 
   writer->writeStartElement("name");
   writer->writeCharacters("\n"); // FIXME  forced formatting to match old references
-  writer->writeCDATA(waypointp->url_link_text);
-  writer->writeCharacters("\n"); // FIXME  forced formatting to match old references
+  if (waypointp->HasUrlLink()) {
+    UrlLink link = waypointp->GetUrlLink();
+    writer->writeCDATA(link.url_link_text_);
+    writer->writeCharacters("\n"); // FIXME  forced formatting to match old references
+  }
   writer->writeEndElement(); // Close name tag
 
   // Timestamp
@@ -1466,8 +1469,9 @@ static void kml_geocache_pr(const waypoint* waypointp)
     kml_write_data_element("gc_num", waypointp->shortname);
   }
 
-  if (waypointp->hasLinkText()) {
-    kml_write_data_element("gc_name", waypointp->url_link_text);
+  if (waypointp->HasUrlLink()) {
+    UrlLink link = waypointp->GetUrlLink();
+    kml_write_data_element("gc_name", link.url_link_text_);
   }
 
   if (!waypointp->gc_data->placer.isEmpty()) {
@@ -1542,16 +1546,17 @@ static void kml_waypt_pr(const waypoint* waypointp)
   writer->writeOptionalTextElement("name", waypointp->shortname);
 
   // Description
-  if (waypointp->hasLink()) {
+  if (waypointp->HasUrlLink()) {
     writer->writeEmptyElement("snippet");
-    if (waypointp->hasLinkText()) {
-      QString odesc = waypointp->url;
-      QString olink = waypointp->url_link_text;
+    UrlLink link = waypointp->GetUrlLink();
+    if (!link.url_link_text_.isEmpty()) {
+      QString odesc = link.url_;
+      QString olink = link.url_link_text_;
       writer->writeStartElement("description");
       writer->writeCDATA(QString("<a href=\"%1\">%2</a>").arg(odesc, olink));
       writer->writeEndElement(); // Close description tag
     } else {
-      writer->writeTextElement("description", waypointp->url);
+      writer->writeTextElement("description", link.url_);
     }
   } else {
     if (strcmp(waypointp->shortname, waypointp->description)) {

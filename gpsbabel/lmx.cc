@@ -240,15 +240,16 @@ lmx_print(const waypoint* wpt)
   }
   lmx_end_tag(0x4A, 3); // coordinates
 
-  if (wpt->hasLink()) {
+  if (wpt->HasUrlLink()) {
     lmx_start_tag(0x65, 3); // mediaLink
     if (!binary) {
       gbfputc('\n', ofd);
     }
-    if (wpt->hasLinkText()) {
-      lmx_write_xml(0x48, wpt->url_link_text, 4);  // name
+    UrlLink link = wpt->GetUrlLink();
+    if (!link.url_link_text_.isEmpty()) {
+      lmx_write_xml(0x48, link.url_link_text_, 4);  // name
     }
-    lmx_write_xml(0x67, wpt->url, 4); // url
+    lmx_write_xml(0x67, link.url_, 4); // url
     lmx_end_tag(0x65, 3); // mediaLink
   }
 

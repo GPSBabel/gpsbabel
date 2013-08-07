@@ -1035,7 +1035,8 @@ void tpo_process_map_notes(void)
       notes[0] = '\0';
       gbfread(notes, 1, name_length, tpo_file_in);
       notes[name_length] = '\0';  // Terminator
-      waypoint_temp->url = notes;
+      UrlLink l(notes);
+      waypoint_temp->AddUrlLink(l);
 //printf("Notes: %s\n", notes);
       xfree(notes);
     }
@@ -1051,7 +1052,8 @@ void tpo_process_map_notes(void)
       notes[0] = '\0';
       gbfread(notes, 1, name_length, tpo_file_in);
       notes[name_length] = '\0';  // Terminator
-      waypoint_temp->url = notes;
+      UrlLink l(notes);
+      waypoint_temp->AddUrlLink(l);
 //printf("Notes: %s\n", notes);
       xfree(notes);
     }

@@ -515,7 +515,8 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
 
     cx = lrtrim(xstrndup(cx, cend - cx));
     if (*cx) {
-      wpt->url = cx;
+      UrlLink l(cx);
+      wpt->AddUrlLink(l);
     } else {
       xfree(cx);
     }
@@ -524,7 +525,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
       wpt->notes = xstrdup(cend);
     }
 
-    if (wpt->hasLink()) {
+    if (wpt->HasUrlLink()) {
       DBG((sobj, "url = \"%s\"\n", wpt->url));
     }
   } else if (*str) {
@@ -985,8 +986,9 @@ mmo_finalize_rtept_cb(const waypoint* wptref)
     if (wpt2->notes) {
       wpt->notes = xstrdup(wpt2->notes);
     }
-    if (wpt2->hasLink()) {
-      wpt->notes = xstrdup(wpt2->url.toUtf8().data());
+    if (wpt2->HasUrlLink()) {
+      UrlLink l = wpt2->GetUrlLink();
+      wpt->notes = xstrdup(l.url_.toUtf8().data());
     }
 
     wpt->proximity = wpt2->proximity;
@@ -1276,9 +1278,10 @@ mmo_write_wpt_cb(const waypoint* wpt)
     gbfputuint16(0, fout);  /* extra bytes */
   }
 
-  if (wpt->hasLink()) {
+  if (wpt->HasUrlLink()) {
     str = xstrdup("_FILE_ ");
-    str = xstrappend(str, wpt->url.toUtf8().data());
+    UrlLink l = wpt->GetUrlLink();
+    str = xstrappend(str, l.url_.toUtf8().data());
     str = xstrappend(str, "\n");
   } else {
     str = xstrdup("");

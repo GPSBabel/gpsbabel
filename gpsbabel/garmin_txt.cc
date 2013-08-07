@@ -619,7 +619,12 @@ write_waypt(const waypoint* wpt)
   country = gt_get_icao_country(GMSD_GET(cc, ""));
   print_string("%s\t", (country != NULL) ? country : "");
   print_date_and_time(wpt->GetCreationTime(), 0);
-  print_string("%s\t", wpt->hasLink() ? wpt->url : "");
+  if (wpt->HasUrlLink()) {
+    UrlLink l = wpt->GetUrlLink();
+    print_string("%s\t", l.url_);
+  } else {
+    print_string("%s\t", "");
+  }
   print_categories(GMSD_GET(category, 0));
 
   gbfprintf(fout, "\r\n");
@@ -1194,8 +1199,10 @@ parse_waypoint(void)
       wpt->creation_time = ct;
       }
       break;
-    case 17:
-      wpt->url = str;
+    case 17: {
+      UrlLink l(str);
+      wpt->AddUrlLink(l);
+      }
       break;
     case 18:
       GMSD_SET(category, parse_categories(str));

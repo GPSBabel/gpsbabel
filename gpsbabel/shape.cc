@@ -187,7 +187,8 @@ my_read(void)
       wpt->longitude = shp->dfXMin;
       wpt->shortname = xstrdup(name);
       if (url) {
-        wpt->url = xstrdup(url);
+        UrlLink l(url);
+        wpt->AddUrlLink(l);
       }
       waypt_add(wpt);
       break;

@@ -60,14 +60,10 @@ cst_add_wpt(const route_head* track, waypoint* wpt)
 
   if (wpt->shortname != NULL) {
     waypt_add(waypt_dupe(wpt));
-#if 0
-    if (wpt->url != NULL) {
-      xfree(wpt->url);
-      wpt->url = NULL;
-    }
-#else
-    wpt->url.clear();
-#endif
+   // Rather than creating a new waypt on each read, tis format bizarrely
+   // recycles the same one, relying on waypt_dupe() above and then manually
+   // resetting fields.  Weird.
+   wpt->url_link_list_.clear();
 
     if (temp_route == NULL) {
       temp_route = route_head_alloc();
@@ -220,7 +216,8 @@ cst_data_read(void)
         if (strncmp(cin + 2, "bitmap", 6) == 0) {
           cin = lrtrim(cin + 8);
           if (*cin != '\0') {
-            wpt->url = cst_make_url(cin);
+            UrlLink l(cst_make_url(cin));
+            wpt->AddUrlLink(l);
           }
         }
 
@@ -325,40 +322,6 @@ cst_data_read(void)
     warning(MYNAME ": Loaded %d point(s), but line %d says %d!\n", data_lines, line_of_count, cst_points);
   }
 }
-
-#if 0
-static void
-cst_wr_init(const char* fname)
-{
-  fout = gbfopen(fname, "w", MYNAME);
-}
-
-static void
-cst_wr_deinit(void)
-{
-  gbfclose(fout);
-}
-
-static void
-cst_route_hdr(const route_head* rte)
-{
-}
-
-static void
-cst_route_tlr(const route_head* rte)
-{
-}
-
-static void
-cst_write_wpt(const waypoint* wpt)
-{
-}
-
-static void
-cst_data_write(void)
-{
-}
-#endif
 
 ff_vecs_t cst_vecs = {
   ff_type_file,
