@@ -61,4 +61,5 @@ void xml_init_offset(const char* fname, xg_tag_mapping* tbl,
 void xml_read(void);
 void xml_readstring(const char* str);
 void xml_readprefixstring(const char* str);
+void xml_readunicode(const QString& str);
 void xml_deinit(void);
