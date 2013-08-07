@@ -272,11 +272,15 @@ void xml_ignore_tags(const char** taglist)
   }
 }
 
+// Chucks some bytes into the global QByteArray buffer and waits for
+// xml_readstring() to parse.
 void xml_readprefixstring(const char* str)
 {
   reader_data.append(str);
 }
 
+// Parses a bytestream as if it were a file. Looks for an <?xml encoding= to
+// determine file encoding, falls back to UTF-8 if unspecified.
 void xml_readstring(const char* str)
 {
   QString current_tag;
@@ -284,6 +288,16 @@ void xml_readstring(const char* str)
   reader_data.append(str);
 
   QXmlStreamReader reader(reader_data);
+
+  xml_run_parser(reader, current_tag);
+}
+
+// This is quite different from xml_readstring(). It doesn't have to interpret
+// encoding because the source is already Qt's internal UTF-16.
+void xml_readunicode(const QString& str)
+{
+  QString current_tag;
+  QXmlStreamReader reader(str);
 
   xml_run_parser(reader, current_tag);
 }

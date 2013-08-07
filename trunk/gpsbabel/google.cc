@@ -17,6 +17,7 @@
 
  */
 
+#include <QtCore/QFile>
 #include <QtCore/QXmlStreamAttributes>
 
 #include "defs.h"
@@ -28,24 +29,12 @@ static char* script = NULL;
 static route_head** routehead;
 static int* routecount;
 static short_handle desc_handle;
+static const char* rd_fname;
 
 static int serial = 0;
 
 #define MYNAME "google"
 #define MY_CBUF 4096
-
-#if ! HAVE_LIBEXPAT
-static void
-google_rd_init(const char* fname)
-{
-  fatal(MYNAME ": This build excluded Google Maps support because expat was not installed.\n");
-}
-
-static void
-google_read(void)
-{
-}
-#else
 
 static xg_callback      goog_points, goog_levels, goog_poly_e, goog_script;
 static xg_callback	goog_segment_s, goog_segment, goog_td_s, goog_td_b;
@@ -259,10 +248,52 @@ void goog_poly_e(const char* args, const QXmlStreamAttributes *unused)
 static void
 google_rd_init(const char* fname)
 {
+  rd_fname = fname;
+
   desc_handle = mkshort_new_handle();
   setshort_length(desc_handle, 12);
 
   xml_init(fname, google_map, NULL);
+}
+
+static void
+goog_read_file(void)
+{
+  QFile src(QString::fromUtf8(rd_fname));
+
+  src.open(QIODevice::ReadOnly);
+
+  QTextStream tstr(&src);
+  tstr.setCodec("ISO-8859-1");
+
+  QString preamble = tstr.read(256);
+  QString needle("http-equiv=\"content-type\" content=\"text/html; charset=");
+
+  if (!preamble.contains(needle)) {
+    // let QXmlStreamReader do its best if we can't figure it out...
+    xml_read();
+    return;
+  }
+
+  int idx = preamble.indexOf(needle);
+  QString charset = preamble.mid(idx + needle.length());
+
+  int endq = charset.indexOf('"');
+  if (endq != -1) {
+    charset = charset.left(endq);
+  }
+
+  QString wholefile;
+  if (charset == "ISO-8859-1") {
+    wholefile = preamble + tstr.readAll();
+  } else {
+    tstr.reset();
+    tstr.seek(0);
+    tstr.setCodec(CSTR(charset));
+    wholefile = tstr.readAll();
+  }
+
+  xml_readunicode(wholefile);
 }
 
 static void
@@ -271,7 +302,9 @@ google_read(void)
   routehead = (route_head**)xmalloc(sizeof(route_head*));
   routecount = (int*)xmalloc(sizeof(int));
   goog_segroute = 0;
-  xml_read();
+
+  goog_read_file();
+
   xfree(routehead);
   xfree(routecount);
   routehead = NULL;
@@ -512,7 +545,6 @@ google_read(void)
     encoded_levels = NULL;
   }
 }
-#endif
 
 static void
 google_rd_deinit(void)
