@@ -1561,10 +1561,11 @@ char *
 strip_html(const utf_string *in)
 {
   char* outstring, *out;
-  char* instr = xstrdup(CSTR(in->utfstring));
+  char* incopy, *instr;
   char tag[8];
   unsigned short int taglen = 0;
 
+  incopy = instr = xstrdup(CSTR(in->utfstring));
   if (!in->is_html) {
     return instr;
   }
@@ -1634,6 +1635,9 @@ strip_html(const utf_string *in)
     instr++;
   }
   *out++ = 0;
+  if (incopy) {
+    xfree(incopy);
+  }
   return (outstring);
 }
 
