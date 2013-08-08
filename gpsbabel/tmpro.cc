@@ -212,12 +212,11 @@ tmpro_waypt_pr(const waypoint * wpt)
   /* Number of characters */
   /*  25    6      80         8    8      8         8       8    4       4       128      */
 
-  const char *l;
+  const char *l = NULL;
   if (wpt->HasUrlLink()) {
+    // Yes, it's lame to allocate/copy here.
     UrlLink link = wpt->GetUrlLink();
-    l  = link.url_.toUtf8().data();
-  } else {
-    l = "";
+    l  = xstrdup(link.url_.toUtf8().data());
   }
   gbfprintf(file_out, "new\t%.6s\t%.80s\t%08.6f\t%08.6f\t\t\t%.2f\t%d\t%d\t%.128s\n",
             shortname,
@@ -236,6 +235,9 @@ tmpro_waypt_pr(const waypoint * wpt)
   }
   if (shortname) {
     xfree(shortname);
+  }
+  if (l) {
+    xfree(l);
   }
 }
 
