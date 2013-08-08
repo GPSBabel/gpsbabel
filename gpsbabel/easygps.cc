@@ -171,14 +171,16 @@ ez_disp(const waypoint* wpt)
     gbfputc(5, file_out);
     gbfputpstr(wpt->notes, file_out);
   }
-  UrlLink link = wpt->GetUrlLink();
-  if (!link.url_link_text_.isEmpty()) {
-    gbfputc(6, file_out);
-    gbfputpstr(link.url_link_text_, file_out);
-  }
-  if (!link.url_.isEmpty()) {
-    gbfputc(9, file_out);
-    gbfputcstr(link.url_, file_out);
+  if (wpt->HasUrlLink()) {
+    UrlLink link = wpt->GetUrlLink();
+    if (!link.url_link_text_.isEmpty()) {
+      gbfputc(6, file_out);
+      gbfputpstr(link.url_link_text_, file_out);
+    }
+    if (!link.url_.isEmpty()) {
+      gbfputc(9, file_out);
+      gbfputcstr(link.url_, file_out);
+    }
   }
   gbfputc(0xff, file_out);
 }
