@@ -7,6 +7,10 @@ export GPSBABEL_FREEZE_TIME
 MALLOC_CHECK_=2
 export MALLOC_CHECK_
 
+# Testcases are written for English/US locale (by default)
+LC_ALL=en_US.UTF-8
+export LC_ALL
+
 PNAME=${PNAME:-./gpsbabel}
 DIFF=${DIFF:-diff}
 BASEPATH=`dirname $0`
