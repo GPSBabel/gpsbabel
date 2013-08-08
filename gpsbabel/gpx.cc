@@ -965,8 +965,10 @@ gpx_end(void* data, const XML_Char* xml_el)
      * Waypoint-specific tags.
      */
   case tt_wpt:
-    if (link_ && !link_->url_.isEmpty()) {
-      wpt_tmp->AddUrlLink(*link_);
+    if (link_) {
+      if ( !link_->url_.isEmpty()) {
+        wpt_tmp->AddUrlLink(*link_);
+      }
       delete link_;
       link_ = NULL;
     }
@@ -1077,6 +1079,13 @@ gpx_end(void* data, const XML_Char* xml_el)
   case tt_rte:
     break;
   case tt_rte_rtept:
+    if (link_) {
+      if ( !link_->url_.isEmpty()) {
+        wpt_tmp->AddUrlLink(*link_);
+      }
+      delete link_;
+      link_ = NULL;
+    }
     route_add_wpt(rte_head, wpt_tmp);
     wpt_tmp = NULL;
     break;
@@ -1098,6 +1107,13 @@ gpx_end(void* data, const XML_Char* xml_el)
     next_trkpt_is_new_seg = 1;
     break;
   case tt_trk_trkseg_trkpt:
+    if (link_) {
+      if ( !link_->url_.isEmpty()) {
+        wpt_tmp->AddUrlLink(*link_);
+      }
+      delete link_;
+      link_ = NULL;
+    }
     track_add_wpt(trk_head, wpt_tmp);
     wpt_tmp = NULL;
     break;

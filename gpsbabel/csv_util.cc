@@ -1183,8 +1183,8 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     wpt->SetCreationTime(xml_parse_time(s));
     break;
   case XT_NET_TIME: {
-    time_t tt = wpt->GetCreationTime();
 fatal("XT_NET_TIME can't have possibly ever worked.");
+//    time_t tt = wpt->GetCreationTime();
 //    dotnet_time_to_time_t(atof(s), &tt, &wpt->microseconds);
     }
     break;
