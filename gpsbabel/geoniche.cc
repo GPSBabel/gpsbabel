@@ -218,7 +218,7 @@ geoniche_read_asc(void)
     int		id;
     int		route_id;
     char*		title;
-    char*		category;
+    QString		category;
     double		lat, lon, alt;
     char*		datestr, *timestr;
     int		icon;
@@ -277,6 +277,7 @@ geoniche_read_asc(void)
       fatal(MYNAME ": Premature EOD processing field 5 (Category).\n");
     }
     category = p;
+	xfree(p);
 
     /* Field 6: Latitude */
     p = field(&vdata, &vlen);
