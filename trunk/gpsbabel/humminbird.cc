@@ -309,6 +309,7 @@ humminbird_read_wpt(gbfile* fin)
   // that describes a sub-status
   switch (w.status) {
   case 0: // Waypoint not used.  So why do we have one?
+    waypt_free(wpt);
     break;
   case 1: // Waypoint permanent.
   case 2: // Waypoint temporary.
@@ -319,6 +320,7 @@ humminbird_read_wpt(gbfile* fin)
   case 17: // Waypoint group body.
   case 63: // Waypoint group invalid.
   default:
+    waypt_free(wpt);
     break;
   }
 

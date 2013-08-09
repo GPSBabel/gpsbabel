@@ -138,12 +138,17 @@ wr_init(const char* fname)
 static void
 wr_deinit(void)
 {
+  // pdb_close() will only free appinfo in read mode, and pdb_create() sets the mode to write.
+  struct appinfo* ai = (struct appinfo*) file_out->appinfo;
   pdb_close(file_out);
+  if (ai) {
+    free(ai);
+  }
 }
 
 /* helpers */
 
-static char*
+static QString
 coto_get_icon_descr(int category, const appinfo_t* app)
 {
   char buff[CATEGORY_NAME_LENGTH + 1] = "Not Assigned";
@@ -154,10 +159,10 @@ coto_get_icon_descr(int category, const appinfo_t* app)
 
     strncpy(buff, app->categories[category], sizeof(buff) - 1);
     if (buff[0] == '\0') {
-      return NULL;
+      return QString();
     }
   }
-  return xstrdup(buff);
+  return QString(buff);
 }
 
 static void

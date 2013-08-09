@@ -100,7 +100,7 @@ xol_shape(const char *args, const QXmlStreamAttributes* attrv)
     }
 
     if (attrv->hasAttribute("icon")) {
-      wpt->icon_descr = xstrdup(attrv->value("icon").toString().toUtf8().constData());
+      wpt->icon_descr = attrv->value("icon").toString();
     }
   }
 }
