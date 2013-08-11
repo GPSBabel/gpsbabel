@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <QtCore/QDebug>
+#include <QtCore/QList>
 
 #include "defs.h"
 #include "cet_util.h"
@@ -29,7 +30,16 @@
 #include "garmin_fs.h"
 #include "session.h"
 
+#define NEWQ 0  // Work in progress.
+
+#if NEWQ
+QList<waypoint*> waypt_list;
+queue waypt_head; // This is here solely to freak out the formats that are 
+                  // looking into what should be a private members.
+#else
 queue waypt_head;
+#endif
+
 static unsigned int waypt_ct;
 static short_handle mkshort_handle;
 static geocache_data empty_gc_data;
@@ -44,7 +54,9 @@ void
 waypt_init(void)
 {
   mkshort_handle = mkshort_new_handle();
+#if !NEWQ
   QUEUE_INIT(&waypt_head);
+#endif
 }
 
 // This whole thing is a poor-man's copy constructor. It exists mostly
@@ -128,8 +140,11 @@ waypt_add(waypoint *wpt)
 {
   double lat_orig = wpt->latitude;
   double lon_orig = wpt->longitude;
-
+#if NEWQ
+  waypt_list.append(wpt);
+#else
   ENQUEUE_TAIL(&waypt_head, &wpt->Q);
+#endif
 
   waypt_ct++;
 
@@ -268,12 +283,15 @@ waypt_disp_all(waypt_cb cb)
 void
 waypt_disp_session(const session_t *se, waypt_cb cb)
 {
+  int i = 0;
+#if NEWQ
+  foreach(waypoint* waypointp, waypt_list) {
+#else
   queue *elem, *tmp;
   waypoint *waypointp;
-  int i = 0;
-
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     waypointp = (waypoint *) elem;
+#endif
     if ((se == NULL) || (waypointp->session == se)) {
       if (global_opts.verbose_status) {
         i++;
@@ -343,13 +361,15 @@ waypt_add_to_bounds(bounds *bounds, const waypoint *waypointp)
 void
 waypt_compute_bounds(bounds *bounds)
 {
+  waypt_init_bounds(bounds);
+#if NEWQ
+  foreach(waypoint* waypointp, waypt_list) {
+#else
   queue *elem, *tmp;
   waypoint *waypointp;
-
-  waypt_init_bounds(bounds);
-
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     waypointp = (waypoint *) elem;
+#endif
     waypt_add_to_bounds(bounds, waypointp);
   }
 }
@@ -357,11 +377,15 @@ waypt_compute_bounds(bounds *bounds)
 waypoint *
 find_waypt_by_name(const char *name)
 {
+#if NEWQ
+  foreach(waypoint* waypointp, waypt_list) {
+#else
   queue *elem, *tmp;
   waypoint *waypointp;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     waypointp = (waypoint *) elem;
+#endif
     if (0 == strcmp(waypointp->shortname, name)) {
       return waypointp;
     }
@@ -412,6 +436,11 @@ waypt_free(waypoint *wpt)
 void
 waypt_flush(queue *head)
 {
+#if NEWQ
+  foreach(waypoint* q, waypt_list) {
+    waypt_free(q);
+  }
+#else
   queue *elem, *tmp;
 
   QUEUE_FOR_EACH(head, elem, tmp) {
@@ -421,6 +450,7 @@ waypt_flush(queue *head)
       waypt_ct--;
     }
   }
+#endif
 }
 
 void
@@ -429,7 +459,10 @@ waypt_flush_all()
   if (mkshort_handle) {
     mkshort_del_handle(&mkshort_handle);
   }
+#if NEWQ
+#else
   waypt_flush(&waypt_head);
+#endif
 }
 
 void
@@ -441,9 +474,13 @@ waypt_backup(signed int *count, queue **head_bak)
 
   qbackup = (queue *) xcalloc(1, sizeof(*qbackup));
   QUEUE_INIT(qbackup);
-
+#if NEWQ
+// Why doe sthis code exist?
+abort();
+#else
   QUEUE_MOVE(qbackup, &waypt_head);
   QUEUE_INIT(&waypt_head);
+#endif
 
   waypt_ct = 0;
 
@@ -464,9 +501,13 @@ waypt_restore(signed int count, queue *head_bak)
     return;
   }
 
+#if NEWQ
+abort();
+#else
   waypt_flush(&waypt_head);
   QUEUE_INIT(&waypt_head);
   QUEUE_MOVE(&waypt_head, head_bak);
+#endif
   waypt_ct = count;
   xfree(head_bak);
 }
