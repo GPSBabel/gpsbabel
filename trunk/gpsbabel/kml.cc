@@ -68,8 +68,8 @@ static const char* posnfilename;
 static char* posnfilenametmp;
 
 static gbfile* ofd = NULL;
-static QFile oqfile;
-static gpsbabel::XmlStreamWriter* writer = new gpsbabel::XmlStreamWriter(oqfile);
+static QFile* oqfile;
+static gpsbabel::XmlStreamWriter* writer;
 
 typedef enum  {
   kmlpt_unknown,
@@ -437,8 +437,10 @@ kml_wr_init(const char* fname)
    * Reduce race conditions with network read link.
    */
   ofd = gbfopen(fname, "w", MYNAME);
-  oqfile.open(ofd->handle.std, QIODevice::WriteOnly);
+  oqfile = new QFile;
+  oqfile->open(ofd->handle.std, QIODevice::WriteOnly);
 
+  writer = new gpsbabel::XmlStreamWriter(oqfile);
   writer->setAutoFormattingIndent(2);
   writer->setCodec("UTF-8");
 }
@@ -468,8 +470,13 @@ static void
 kml_wr_deinit(void)
 {
   writer->writeEndDocument();
-  oqfile.close();
+  delete writer;
+  writer = NULL;
+  oqfile->close();
+  delete oqfile;
+  oqfile = NULL;
   gbfclose(ofd);
+  ofd = NULL;
 
   if (posnfilenametmp) {
 #if __WIN32__
@@ -478,7 +485,6 @@ kml_wr_deinit(void)
 #endif
     rename(posnfilenametmp, posnfilename);
   }
-  ofd = NULL;
 }
 
 static void
@@ -646,7 +652,7 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   }
 
   QString hstring;
-  gpsbabel::XmlStreamWriter hwriter(hstring);
+  gpsbabel::XmlStreamWriter hwriter(&hstring);
 
   max_alt = fmt_altitude(td->max_alt, &max_alt_units);
   min_alt = fmt_altitude(td->min_alt, &min_alt_units);
@@ -817,7 +823,7 @@ static void kml_output_description(const waypoint* pt)
   }
 
   QString hstring;
-  gpsbabel::XmlStreamWriter hwriter(hstring);
+  gpsbabel::XmlStreamWriter hwriter(&hstring);
 
   alt = fmt_altitude(pt->altitude, &alt_units);
 
