@@ -59,7 +59,6 @@ arglist_t transform_args[] = {
 static void
 transform_waypoints(void)
 {
-  queue *elem, *tmp;
   route_head *rte;
 
   rte = route_head_alloc();
@@ -71,9 +70,13 @@ transform_waypoints(void)
     track_add_head(rte);
     break;
   }
-
+#if NEWQ
+  foreach(waypoint* wpt, waypt_list) {
+#else
+  queue *elem, *tmp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     waypoint *wpt = (waypoint *) elem;
+#endif
 
     wpt = waypt_dupe(wpt);
     switch (current_target) {

@@ -30,8 +30,6 @@
 #include "garmin_fs.h"
 #include "session.h"
 
-#define NEWQ 0  // Work in progress.
-
 #if NEWQ
 QList<waypoint*> waypt_list;
 queue waypt_head; // This is here solely to freak out the formats that are 
@@ -54,7 +52,9 @@ void
 waypt_init(void)
 {
   mkshort_handle = mkshort_new_handle();
-#if !NEWQ
+#if NEWQ
+  waypt_list.clear();
+#else
   QUEUE_INIT(&waypt_head);
 #endif
 }
@@ -433,14 +433,17 @@ waypt_free(waypoint *wpt)
   delete wpt;
 }
 
+#if NEWQ
+void
+waypt_flush(queue* head) {
+  while (!waypt_list.isEmpty()) {
+    waypt_free(waypt_list.takeFirst());
+  }
+}
+#else
 void
 waypt_flush(queue *head)
 {
-#if NEWQ
-  foreach(waypoint* q, waypt_list) {
-    waypt_free(q);
-  }
-#else
   queue *elem, *tmp;
 
   QUEUE_FOR_EACH(head, elem, tmp) {
@@ -450,8 +453,8 @@ waypt_flush(queue *head)
       waypt_ct--;
     }
   }
-#endif
 }
+#endif
 
 void
 waypt_flush_all()
@@ -475,8 +478,8 @@ waypt_backup(signed int *count, queue **head_bak)
   qbackup = (queue *) xcalloc(1, sizeof(*qbackup));
   QUEUE_INIT(qbackup);
 #if NEWQ
-// Why doe sthis code exist?
-abort();
+// Why does this code exist?
+//abort();
 #else
   QUEUE_MOVE(qbackup, &waypt_head);
   QUEUE_INIT(&waypt_head);
@@ -502,7 +505,7 @@ waypt_restore(signed int count, queue *head_bak)
   }
 
 #if NEWQ
-abort();
+//abort();
 #else
   waypt_flush(&waypt_head);
   QUEUE_INIT(&waypt_head);
