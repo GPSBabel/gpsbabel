@@ -292,8 +292,6 @@ fix_netstumbler_dupes(void)
 {
   int i, ct = waypt_count(), serial = 0;
   htable_t* htable, *bh;
-  queue* elem, *tmp;
-  extern queue waypt_head;
   const char* snptr;
   char* tmp_sn;
   unsigned long last_crc;
@@ -303,8 +301,18 @@ fix_netstumbler_dupes(void)
   bh = htable;
 
   i = 0;
+#if NEWQ
+  // Why, oh, why is this format running over the entire waypoint list and
+  // modifying it?  This seems wrong.
+  extern QList<waypoint*> waypt_list;
+  foreach(waypoint* waypointp, waypt_list) {
+    bh->wpt = waypointp;
+#else
+  queue* elem, *tmp;
+  extern queue waypt_head;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     bh->wpt = (waypoint*) elem;
+#endif
     snptr = bh->wpt->shortname;
     tmp_sn = strlower(xstrdup(snptr));
     bh->crc = get_crc32(tmp_sn, strlen(snptr));
