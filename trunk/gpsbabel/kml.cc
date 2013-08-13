@@ -437,7 +437,7 @@ kml_wr_init(const char* fname)
    * Reduce race conditions with network read link.
    */
   oqfile = new gpsbabel::File(fname);
-  oqfile->open(QIODevice::WriteOnly);
+  oqfile->open(QIODevice::WriteOnly | QIODevice::Text);
 
   writer = new gpsbabel::XmlStreamWriter(oqfile);
   writer->setAutoFormattingIndent(2);
