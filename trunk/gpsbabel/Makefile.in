@@ -599,7 +599,7 @@ gdb.o: gdb.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
   garmin_tables.h grtcirc.h
 geo.o: geo.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
-  cet.h cet_util.h inifile.h session.h src/core/datetime.h
+  cet.h cet_util.h inifile.h session.h src/core/datetime.h src/core/file.h
 geoniche.o: geoniche.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
   pdbfile.h jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h \
@@ -654,7 +654,7 @@ gpx.o: gpx.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
   jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
-  src/core/xmlstreamwriter.h
+  src/core/xmlstreamwriter.h src/core/file.h
 grtcirc.o: grtcirc.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
   grtcirc.h
@@ -834,7 +834,7 @@ jtr.o: jtr.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h csv_util.h
 kml.o: kml.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h xmlgeneric.h \
-  grtcirc.h src/core/xmlstreamwriter.h
+  grtcirc.h src/core/xmlstreamwriter.h src/core/file.h
 lmx.o: lmx.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h xmlgeneric.h
 lowranceusr.o: lowranceusr.cc defs.h config.h queue.h zlib/zlib.h \
@@ -1157,7 +1157,7 @@ xcsv.o: xcsv.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
 xhtmlent.o: xhtmlent.cc
 xmlgeneric.o: xmlgeneric.cc defs.h config.h queue.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h \
-  src/core/datetime.h xmlgeneric.h
+  src/core/datetime.h xmlgeneric.h src/core/file.h
 xmltag.o: xmltag.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h
 xol.o: xol.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \

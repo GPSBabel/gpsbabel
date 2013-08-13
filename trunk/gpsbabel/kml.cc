@@ -32,6 +32,7 @@
 #include "xmlgeneric.h"
 #include "grtcirc.h"
 
+#include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
 
 // options
@@ -67,8 +68,7 @@ static int wpt_tmp_queued;
 static const char* posnfilename;
 static char* posnfilenametmp;
 
-static gbfile* ofd = NULL;
-static QFile* oqfile;
+static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
 
 typedef enum  {
@@ -436,9 +436,8 @@ kml_wr_init(const char* fname)
   /*
    * Reduce race conditions with network read link.
    */
-  ofd = gbfopen(fname, "w", MYNAME);
-  oqfile = new QFile;
-  oqfile->open(ofd->handle.std, QIODevice::WriteOnly);
+  oqfile = new gpsbabel::File(fname);
+  oqfile->open(QIODevice::WriteOnly);
 
   writer = new gpsbabel::XmlStreamWriter(oqfile);
   writer->setAutoFormattingIndent(2);
@@ -475,8 +474,6 @@ kml_wr_deinit(void)
   oqfile->close();
   delete oqfile;
   oqfile = NULL;
-  gbfclose(ofd);
-  ofd = NULL;
 
   if (posnfilenametmp) {
 #if __WIN32__

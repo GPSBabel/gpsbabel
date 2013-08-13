@@ -52,6 +52,10 @@ gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml,track=1 \
 compare ${TMPDIR}/ge-eg-track1.kml ${TMPDIR}/ge-eg-track2.kml
 compare ${TMPDIR}/ge-eg-track2.kml ${TMPDIR}/ge-eg-track3.kml
 
+# test std output
+rm -f ${TMPDIR}/bnds_so.kml
+gpsbabel -i gpx -f ${REFERENCE}/bounds-test.gpx -o kml -F - 1> ${TMPDIR}/bnds_so.kml
+compare ${REFERENCE}/bounds-test.kml ${TMPDIR}/bnds_so.kml
 
 set -e
 if which xmllint > /dev/null;

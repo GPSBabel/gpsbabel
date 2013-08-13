@@ -27,8 +27,8 @@
 #include <expat.h>
 static XML_Parser psr;
 #endif
+#include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
-#include <QtCore/QFile>
 #include <QtCore/QRegExp>
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
@@ -56,8 +56,7 @@ static UrlLink* link_;
 static int cache_descr_is_html;
 static gbfile* fd;
 static const char* input_fname;
-static gbfile* ofd = NULL;
-static QFile* oqfile;
+static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
 static short_handle mkshort_handle;
 static const char* link_url;
@@ -1364,9 +1363,8 @@ gpx_wr_init(const char* fname)
 {
   mkshort_handle = NULL;
   // QFile requires binary mode on Windows.
-  ofd = gbfopen(fname, "wb", MYNAME);
-  oqfile = new QFile;
-  oqfile->open(ofd->handle.std, QIODevice::WriteOnly);
+  oqfile = new gpsbabel::File(fname);
+  oqfile->open(QIODevice::WriteOnly);
 
   writer = new gpsbabel::XmlStreamWriter(oqfile);
   writer->setAutoFormattingIndent(2);
@@ -1383,8 +1381,6 @@ gpx_wr_deinit(void)
   oqfile->close();
   delete oqfile;
   oqfile = NULL;
-  gbfclose(ofd);
-  ofd = NULL;
 
   mkshort_del_handle(&mkshort_handle);
 }

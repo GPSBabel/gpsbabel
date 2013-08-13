@@ -24,10 +24,10 @@ static char* nuke_placer;
 
 static gbfile* ofd;
 
-#include <QtCore/QFile>
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
 #include <QtCore/QDebug>
+#include "src/core/file.h"
 QString ostring;
 QXmlStreamWriter writer(&ostring);
 
@@ -117,7 +117,7 @@ geo_rd_init(const char* fname)
 static void
 geo_read(void)
 {
-  QFile file(geo_read_fname);
+  gpsbabel::File file(geo_read_fname);
   file.open(QIODevice::ReadOnly);
   reader.setDevice(&file);
 
