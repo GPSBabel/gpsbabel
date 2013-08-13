@@ -21,7 +21,6 @@
 
 #include <QtCore/QByteArray>
 #include <QtCore/QDebug>
-#include <QtCore/QFile>
 #include <QtCore/QTextCodec>
 #include <QtCore/QXmlStreamAttributes>
 #include <QtCore/QXmlStreamReader>
@@ -29,6 +28,7 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 #include "cet_util.h"
+#include "src/core/file.h"
 
 #define DEBUG_TAG 0
 #if DEBUG_TAG
@@ -255,7 +255,7 @@ readnext:
 
 void xml_read(void)
 {
-  QFile file(rd_fname);
+  gpsbabel::File file(rd_fname);
   QString current_tag;
 
   file.open(QIODevice::ReadOnly);
