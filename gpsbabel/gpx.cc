@@ -1362,9 +1362,8 @@ static void
 gpx_wr_init(const char* fname)
 {
   mkshort_handle = NULL;
-  // QFile requires binary mode on Windows.
   oqfile = new gpsbabel::File(fname);
-  oqfile->open(QIODevice::WriteOnly);
+  oqfile->open(QIODevice::WriteOnly | QIODevice::Text);
 
   writer = new gpsbabel::XmlStreamWriter(oqfile);
   writer->setAutoFormattingIndent(2);
