@@ -116,11 +116,12 @@ radius_process(void)
   int i, wc;
   queue temp_head;
   route_head *rte_head = NULL;
-
+#if NEWQ
+  foreach(waypoint* waypointp, waypt_list) {
+#else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    extra_data *ed;
-
     waypointp = (waypoint *)elem;
+#endif
     dist = gc_distance(waypointp->latitude,
                        waypointp->longitude,
                        home_pos->latitude,
@@ -135,7 +136,7 @@ radius_process(void)
       continue;
     }
 
-    ed = (extra_data *) xcalloc(1, sizeof(*ed));
+    extra_data *ed = (extra_data *) xcalloc(1, sizeof(*ed));
     ed->distance = dist;
     waypointp->extra_data = ed;
   }
