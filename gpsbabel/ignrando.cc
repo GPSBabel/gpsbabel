@@ -29,10 +29,6 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-#if HAVE_LIBEXPAT
-#include <expat.h>
-#endif
-
 #define MYNAME "IGNRando"
 
 static gbfile* fout;
@@ -51,26 +47,6 @@ static arglist_t ignr_args[] = {
   {"index", &index_opt, "Index of track to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL },
   ARG_TERMINATOR
 };
-
-#if ! HAVE_LIBEXPAT
-
-static void
-ignr_rd_init(const char* fname)
-{
-  fatal(MYNAME ": This build excluded \"" MYNAME "\" input support because expat was not installed.\n");
-}
-
-static void
-ignr_read(void)
-{
-}
-
-static void
-ignr_rd_deinit(void)
-{
-}
-
-#else
 
 
 static xg_callback	ignr_start;
@@ -190,8 +166,6 @@ ignr_read(void)
 {
   xml_read();
 }
-
-#endif
 
 /* write support */
 
