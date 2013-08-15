@@ -321,13 +321,13 @@ gpsutil_disp(const waypoint *wpt)
   double lon,lat;
   int icon_token = 0;
   char tbuf[1024];
-  time_t tm = wpt->GetCreationTime();
+  time_t tm = wpt->GetCreationTime().toTime_t();
 
   lon = degrees2ddmm(wpt->longitude);
   lat = degrees2ddmm(wpt->latitude);
 
   if (tm == 0) {
-    tm = current_time();
+    tm = current_time().toTime_t();
   }
   strftime(tbuf, sizeof(tbuf), "%d-%b-%y %I:%M:%S", localtime(&tm));
   strupper(tbuf);
@@ -407,7 +407,7 @@ pcx_track_disp(const waypoint *wpt)
   lon = degrees2ddmm(wpt->longitude);
   lat = degrees2ddmm(wpt->latitude);
 
-  const time_t ct = wpt->GetCreationTime();
+  const time_t ct = wpt->GetCreationTime().toTime_t();
   tm = gmtime(&ct);
 
   strftime(tbuf, sizeof(tbuf), "%d-%b-%y %H:%M:%S", tm);	/* currently ...%T does nothing under Windows */

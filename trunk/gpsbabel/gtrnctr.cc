@@ -262,13 +262,13 @@ gtc_new_study_lap(const route_head* rte)
 static void
 gtc_study_lap(const waypoint* wpt)
 {
-  if (wpt->creation_time && (gtc_least_time == 0)) {
+  if (wpt->creation_time.isValid() && (!gtc_least_time.isValid())) {
     gtc_least_time = wpt->GetCreationTime();
     gtc_start_lat = wpt->latitude;
     gtc_start_long = wpt->longitude;
   }
 
-  if (wpt->creation_time && (gtc_least_time > wpt->GetCreationTime())) {
+  if (wpt->creation_time.isValid() && (gtc_least_time > wpt->GetCreationTime())) {
     gtc_least_time = wpt->GetCreationTime();
     gtc_start_lat = wpt->latitude;
     gtc_start_long = wpt->longitude;
@@ -289,7 +289,7 @@ gtc_waypt_pr(const waypoint* wpt)
     gtc_write_xml(1, "<Trackpoint>\n");
   }
 
-  if (wpt->creation_time) {
+  if (wpt->creation_time.isValid()) {
     QString time_string = wpt->CreationTimeXML();
     if (!time_string.isEmpty()) {
       gtc_write_xml(0, "<Time>%s</Time>\n",
@@ -340,8 +340,8 @@ static void
 gtc_fake_hdr(void)
 {
   long secs = 0;
-  if (gtc_least_time && gtc_most_time) {
-    secs = gtc_most_time - gtc_least_time;
+  if (gtc_least_time.isValid() && gtc_most_time.isValid()) {
+    secs = gtc_most_time.toTime_t() - gtc_least_time.toTime_t();
   }
 
   /* write these in either case, course or activity format */
@@ -392,11 +392,11 @@ gtc_act_hdr(const route_head* rte)
   gtc_lap_start(NULL);
   gtc_new_study_lap(rte);
   route_disp(rte, gtc_study_lap);
-  if (gtc_least_time) {
+  if (gtc_least_time.isValid()) {
     gtc_write_xml(0, "<Id>%s</Id>\n",
-                      gtc_least_time.toPrettyString().toUtf8().data());
+                      CSTR(gtc_least_time.toPrettyString()));
     gtc_write_xml(1, "<Lap StartTime=\"%s\">\n",
-                      gtc_least_time.toPrettyString().toUtf8().data());
+                      CSTR(gtc_least_time.toPrettyString()));
   } else {
     gtc_write_xml(1, "<Lap>\n");
   }

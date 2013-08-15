@@ -488,13 +488,13 @@ psit_routehdr_w(gbfile *psit_file, const route_head *rte)
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
       testwpt = (waypoint *)elem;
       if (rte_datapoints == 0) {
-        uniqueValue = testwpt->GetCreationTime();
+        uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
       rte_datapoints++;
     }
 
     if (uniqueValue == 0) {
-      uniqueValue = current_time();
+      uniqueValue = current_time().toTime_t();
     }
 
     /* route name */
@@ -648,13 +648,13 @@ psit_trackhdr_w(gbfile *psit_file, const route_head *trk)
       QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
         if (trk_datapoints == 0) {
           testwpt = (waypoint *)elem;
-          uniqueValue = testwpt->GetCreationTime();
+          uniqueValue = testwpt->GetCreationTime().toTime_t();
         }
         trk_datapoints++;
       }
 
       if (uniqueValue == 0) {
-        uniqueValue = current_time();
+        uniqueValue = current_time().toTime_t();
       }
 
       /* track name */
@@ -692,7 +692,7 @@ psit_trackhdr_w_wrapper(const route_head *trk)
 static void
 psit_trackdatapoint_w(gbfile *psit_file, const waypoint *wpt)
 {
-  time_t	t = wpt->GetCreationTime();
+  time_t	t = wpt->GetCreationTime().toTime_t();
   struct tm *tmTime = gmtime(&t);
 
   gbfprintf(psit_file, "%11.6f,%11.6f,",

@@ -209,7 +209,7 @@ data_write(void)
   }
   file_out->name[PDB_DBNAMELEN-1] = 0;
   file_out->attr = PDB_FLAG_BACKUP;
-  file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+  file_out->ctime = file_out->mtime = current_time().toTime_t() + 2082844800U;
   file_out->type = MYTYPE_POINTS;
   file_out->creator = MYCREATOR;
   file_out->version = 0;

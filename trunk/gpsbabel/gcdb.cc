@@ -286,7 +286,7 @@ data_write(void)
   strncpy(file_out->name, "GeocachingDB", PDB_DBNAMELEN);
   file_out->name[PDB_DBNAMELEN-1] = 0;
   file_out->attr = PDB_FLAG_BACKUP;
-  file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+  file_out->ctime = file_out->mtime = current_time().toTime_t() + 2082844800U;
   file_out->type = MYTYPE;  /* CWpt */
   file_out->creator = MYCREATOR; /* cGPS */
   file_out->version = 1;

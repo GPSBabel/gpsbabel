@@ -225,7 +225,7 @@ static void holux_disp(const waypoint* wpt)
   }
 
   /*set the time */
-  if (wpt->creation_time) {
+  if (wpt->creation_time.isValid()) {
     /* tm = gmtime(&wpt->creation_time);*/  /* I get the wrong result with gmtime ???  */
     QDate date(wpt->GetCreationTime().date());
     QTime time(wpt->GetCreationTime().time());

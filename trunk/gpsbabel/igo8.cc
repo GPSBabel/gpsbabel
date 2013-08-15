@@ -217,7 +217,7 @@ static void write_igo8_track_point(const waypoint* wpt)
   // then we shall make our own, where each point is one
   // second apart.
   if (wpt->creation_time.isValid()) {
-    le_write32(&point.unix_time, wpt->GetCreationTime());
+    le_write32(&point.unix_time, wpt->GetCreationTime().toTime_t());
   } else {
     le_write32(&point.unix_time, invented_time++);
   }

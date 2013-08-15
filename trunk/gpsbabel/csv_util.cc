@@ -912,6 +912,13 @@ writetime(char* buff, size_t bufsize, const char* format, time_t t, bool gmt)
 
 static
 int
+writetime(char* buff, size_t bufsize, const char* format, const gpsbabel::DateTime& t, bool gmt)
+{
+  return writetime(buff, bufsize, format, t.toTime_t(), gmt);
+}
+
+static
+int
 writehms(char* buff, size_t bufsize, const char* format, time_t t, int gmt)
 {
   static struct tm no_time = {0};
@@ -930,6 +937,13 @@ writehms(char* buff, size_t bufsize, const char* format, time_t t, int gmt)
   return snprintf(buff, bufsize, format,
                   stmp->tm_hour, stmp->tm_min, stmp->tm_sec,
                   (stmp->tm_hour>=12?"PM":"AM"));
+}
+
+static
+int
+writehms(char* buff, size_t bufsize, const char* format, const gpsbabel::DateTime& t, int gmt)
+{
+  return writehms(buff, bufsize, format, t.toTime_t(), gmt);
 }
 
 static
@@ -1907,7 +1921,7 @@ xcsv_waypt_pr(const waypoint* wpt)
       /* TIME CONVERSIONS**************************************************/
     case XT_EXCEL_TIME:
       /* creation time as an excel (double) time */
-      writebuff(buff, fmp->printfc, TIMET_TO_EXCEL(wpt->GetCreationTime()));
+      writebuff(buff, fmp->printfc, TIMET_TO_EXCEL(wpt->GetCreationTime().toTime_t()));
       break;
     case XT_TIMET_TIME:
       /* time as a time_t variable */ {

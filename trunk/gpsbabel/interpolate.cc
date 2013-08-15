@@ -93,9 +93,9 @@ interpfilt_process(void)
         first = 0;
       } else {
         if (opt_interval &&
-            wpt->creation_time - time1 > interval) {
+            wpt->creation_time.toTime_t() - time1 > interval) {
           for (timen = time1+interval;
-               timen < wpt->creation_time;
+               timen < wpt->creation_time.toTime_t();
                timen += interval) {
             waypoint* wpt_new = waypt_dupe(wpt);
             wpt_new->creation_time = timen;
@@ -109,7 +109,7 @@ interpfilt_process(void)
             linepart(lat1, lon1,
                      wpt->latitude, wpt->longitude,
                      (double)(timen-time1)/
-                     (double)(wpt->creation_time-time1),
+                     (double)(wpt->creation_time.toTime_t() - time1),
                      &wpt_new->latitude,
                      &wpt_new->longitude);
             if (opt_route) {
@@ -131,7 +131,7 @@ interpfilt_process(void)
                  distn += dist) {
               waypoint* wpt_new = waypt_dupe(wpt);
               wpt_new->creation_time = distn/curdist*
-                                       (wpt->creation_time - time1) + time1;
+                                       (wpt->creation_time.toTime_t() - time1) + time1;
               if (wpt_new->shortname) {
                 xfree(wpt_new->shortname);
               }
@@ -161,7 +161,7 @@ interpfilt_process(void)
 
       lat1 = wpt->latitude;
       lon1 = wpt->longitude;
-      time1 = wpt->creation_time;
+      time1 = wpt->creation_time.toTime_t();
     }
   }
   route_flush(backuproute);

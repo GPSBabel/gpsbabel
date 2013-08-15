@@ -532,7 +532,7 @@ ce_gen_creation_time(time_t tm)
 static QString
 ce_gen_current_time(void)
 {
-  return ce_gen_creation_time(current_time());
+  return ce_gen_creation_time(current_time().toTime_t());
 }
 
 /* Generate a UUID (has same format as Microsoft registry GUIDs */
@@ -660,7 +660,7 @@ ce_mark_pr(const waypoint* wp)
     id = xml_buffer;
   }
   write_xml_entity_begin2(ofd, "\t", "Mark",
-                          "created", ce_gen_creation_time(wp->GetCreationTime()),
+                          "created", ce_gen_creation_time(wp->GetCreationTime().toTime_t()),
                           "id", id);
   ce_waypt_pr(wp);
   write_xml_entity_end(ofd, "\t", "Mark");
@@ -699,7 +699,7 @@ ce_write(void)
      the standalone waypoints.
   */
   time_t now = 0;
-  now = current_time();
+  now = current_time().toTime_t();
 
   write_xml_header(ofd);
   write_xml_entity_begin1(ofd, "", "NavObjectCollection", "created",

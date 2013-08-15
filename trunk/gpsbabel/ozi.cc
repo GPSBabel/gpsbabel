@@ -150,7 +150,7 @@ ozi_alloc_fsdata(void)
 void
 ozi_get_time_str(const waypoint *waypointp, char *buff, gbsize_t buffsz)
 {
-  if (waypointp->creation_time) {
+  if (waypointp->creation_time.isValid()) {
     double time = (waypt_time(waypointp) / SECONDS_PER_DAY) + DAYS_SINCE_1990;
     snprintf(buff, buffsz, "%.7f", time);
   } else {

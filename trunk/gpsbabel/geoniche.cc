@@ -822,7 +822,7 @@ data_write(void)
   file_out->name[PDB_DBNAMELEN-1] = 0;
 
   file_out->attr = PDB_FLAG_BACKUP;
-  file_out->ctime = file_out->mtime = current_time() + (49*365 + 17*366) * (60*60*24);
+  file_out->ctime = file_out->mtime = current_time().toTime_t() + (49*365 + 17*366) * (60*60*24);
   file_out->type = MYTYPE_ASC;
   file_out->creator = MYCREATOR;
   file_out->version = 0;

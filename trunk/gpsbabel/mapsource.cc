@@ -258,7 +258,7 @@ mps_wr_init(const char* fname)
       mpsmergeout = 0;
     } else {
       gbfclose(mps_file_out);
-      srand((unsigned) current_time());
+      srand((unsigned) current_time().toTime_t());
 
       for (;;) {
         /* create a temporary name  based on a random char and the existing name */
@@ -1148,7 +1148,7 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
       testwpt = (waypoint*)elem;
       if (rte_datapoints == 0) {
-        uniqueValue = testwpt->GetCreationTime();
+        uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
       if (testwpt->latitude > maxlat) {
         maxlat = testwpt->latitude;
@@ -1188,7 +1188,7 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
     }
 
     if (uniqueValue == 0) {
-      uniqueValue = current_time();
+      uniqueValue = current_time().toTime_t();
     }
 
     /* route name */
@@ -1581,13 +1581,13 @@ mps_trackhdr_w(gbfile* mps_file, int mps_ver, const route_head* trk)
     QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
       if (trk_datapoints == 0) {
         testwpt = (waypoint*)elem;
-        uniqueValue = testwpt->GetCreationTime();
+        uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
       trk_datapoints++;
     }
 
     if (uniqueValue == 0) {
-      uniqueValue = current_time();
+      uniqueValue = current_time().toTime_t();
     }
 
     /* track name */
@@ -1636,7 +1636,7 @@ static void
 mps_trackdatapoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt)
 {
   int lat, lon;
-  time_t	t = wpt->GetCreationTime();
+  time_t	t = wpt->GetCreationTime().toTime_t();
   char zbuf[10];
 
   double	mps_altitude = wpt->altitude;

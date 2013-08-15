@@ -349,7 +349,7 @@ write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char
     }
   }
   notes = csv_stringclean(notes, LINE_FEED);
-  time = (wpt->creation_time > 0) ? TIMET_TO_EXCEL(wpt->GetCreationTime()) : TIMET_TO_EXCEL(gpsbabel_time);
+  time = wpt->creation_time.isValid() ? TIMET_TO_EXCEL(wpt->GetCreationTime().toTime_t()) : TIMET_TO_EXCEL(gpsbabel_time);
   name = (char *)wpt->extra_data;
 
   gbfprintf(fout, "[Wp%d]" LINE_FEED

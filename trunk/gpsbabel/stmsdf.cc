@@ -169,7 +169,7 @@ track_qsort_cb(const void *a, const void *b)
   const waypoint *wa = *(waypoint **)a;
   const waypoint *wb = *(waypoint **)b;
 
-  return wa->GetCreationTime() - wb->GetCreationTime();
+  return wa->GetCreationTime().toTime_t() - wb->GetCreationTime().toTime_t();
 }
 
 static void
@@ -455,7 +455,7 @@ calculate(const waypoint *wpt, double *dist, double *speed, double *course,
       *dist = 0;  /* calc. diffs on 32- and 64-bit hosts */
     }
 
-    time = wpt->creation_time - trkpt_out->GetCreationTime();
+    time = wpt->creation_time.toTime_t() - trkpt_out->GetCreationTime().toTime_t();
     if (time == 0) {
       *speed = 0;
     } else {
@@ -526,7 +526,7 @@ any_waypt_calc_cb(const waypoint *wpt)
   }
 
   if ((all_points == 0) && (this_points == 0)) {
-    start_time = wpt->GetCreationTime();
+    start_time = wpt->GetCreationTime().toTime_t();
   }
 
   this_points++;
@@ -544,7 +544,7 @@ any_waypt_calc_cb(const waypoint *wpt)
 
   this_distance = this_distance + dist;
   if (trkpt_out != NULL) {
-    this_time += (wpt->GetCreationTime() - trkpt_out->GetCreationTime());
+    this_time += (wpt->GetCreationTime().toTime_t() - trkpt_out->GetCreationTime().toTime_t());
   }
 
   trkpt_out = (waypoint *)wpt;
@@ -585,7 +585,7 @@ track_disp_wpt_cb(const waypoint *wpt)
   track_points++;
   all_track_points++;
 
-  time_t ct = wpt->GetCreationTime();
+  time_t ct = wpt->GetCreationTime().toTime_t();
   tm = *localtime(&ct);
   strftime(tbuf, sizeof(tbuf), "%d.%m.%Y,%H:%M.%S", &tm);
 
@@ -669,8 +669,8 @@ route_disp_wpt_cb(const waypoint *wpt)
 static void
 track_disp_custom_cb(const waypoint *wpt)
 {
-  if (wpt->GetCreationTime() && (wpt->altitude != unknown_alt)) {
-    gbfprintf(fout, "%d,%.f\n", (int)(wpt->GetCreationTime() - start_time), wpt->altitude);
+  if (wpt->GetCreationTime().isValid() && (wpt->altitude != unknown_alt)) {
+    gbfprintf(fout, "%d,%.f\n", (int)(wpt->GetCreationTime().toTime_t() - start_time), wpt->altitude);
   }
 }
 

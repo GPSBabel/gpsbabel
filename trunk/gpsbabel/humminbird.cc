@@ -716,7 +716,7 @@ humminbird_write_waypoint(const waypoint* wpt)
   hum.depth = si_round(WAYPT_GET(wpt, depth, 0)*100.0);
   be_write16(&hum.depth, hum.depth);
 
-  be_write32(&hum.time, wpt->GetCreationTime());
+  be_write32(&hum.time, wpt->GetCreationTime().toTime_t());
 
   east = wpt->longitude / 180.0 * EAST_SCALE;
   be_write32(&hum.east, si_round((east)));
@@ -817,7 +817,7 @@ humminbird_track_cb(const waypoint* wpt)
   north = si_round(inverse_gudermannian_i1924(lat));
 
   if (wpt->creation_time.isValid()) {
-    last_time = wpt->GetCreationTime();
+    last_time = wpt->GetCreationTime().toTime_t();
   }
 
   if (i == 0) {

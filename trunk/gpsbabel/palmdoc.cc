@@ -405,7 +405,7 @@ palmdoc_disp(const waypoint *wpt)
 {
   int latint, lonint;
   char tbuf[1024];
-  time_t tm = wpt->GetCreationTime();
+  time_t tm = wpt->GetCreationTime().toTime_t();
   int32 utmz;
   double utme, utmn;
   char utmzc;
@@ -507,7 +507,7 @@ palmdoc_disp(const waypoint *wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:date");
       if (logpart) {
-        logtime = xml_parse_time(logpart->cdata);
+        logtime = xml_parse_time(logpart->cdata).toTime_t();
         logtm = localtime(&logtime);
         if (logtm) {
           docprintf(15,
@@ -584,7 +584,7 @@ data_write(void)
   }
   file_out->name[PDB_DBNAMELEN-1] = 0;
   file_out->attr = PDB_FLAG_BACKUP;
-  file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+  file_out->ctime = file_out->mtime = current_time().toTime_t() + 2082844800U;
   file_out->type = DOC_TYPE;
   file_out->creator = DOC_CREATOR;
   file_out->version = 1;

@@ -223,7 +223,7 @@ ggv_log_track_head_cb(const route_head* trk)
     latsec = 60.0 * (latmin - floor(latmin));
     lonsec = 60.0 * (lonmin - floor(lonmin));
 
-    if (wpt->creation_time > 0) {
+    if (wpt->creation_time.isValid()) {
       time_t t = wpt->GetCreationTime().toTime_t();
       tm = *gmtime(&t);
       tm.tm_mon += 1;
@@ -238,7 +238,7 @@ ggv_log_track_head_cb(const route_head* trk)
                  wpt->latitude, wpt->longitude);
       speed = waypt_speed(prev, wpt);
     }
-    if (wpt->creation_time > 0) {
+    if (wpt->creation_time.isValid()) {
       secs = (double)tm.tm_sec + wpt->GetCreationTime().time().msec() / 1000.0;
     }
 

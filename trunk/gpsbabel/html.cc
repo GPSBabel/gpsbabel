@@ -81,7 +81,7 @@ html_disp(const waypoint* wpt)
 {
   char tbuf[1024];
   char* cout;
-  time_t tm = wpt->GetCreationTime();
+  time_t tm = wpt->GetCreationTime().toTime_t();
   int32_t utmz;
   double utme, utmn;
   char utmzc;
@@ -187,7 +187,7 @@ html_disp(const waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:date");
       if (logpart) {
-        logtime = xml_parse_time(logpart->cdata);
+        logtime = xml_parse_time(logpart->cdata).toTime_t();
         logtm = localtime(&logtime);
         if (logtm) {
           gbfprintf(file_out,

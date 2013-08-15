@@ -118,7 +118,7 @@ gnav_trl_write_trkpt(const waypoint* wpt)
 {
   gnav_trl_t rec;
 
-  le_write32(&rec.time, wpt->GetCreationTime());
+  le_write32(&rec.time, wpt->GetCreationTime().toTime_t());
   le_write_float(&rec.lat, wpt->latitude);
   le_write_float(&rec.lon, wpt->longitude);
   if (wpt->altitude != unknown_alt) {

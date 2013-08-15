@@ -1279,7 +1279,7 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
       }
       logpart = xml_findfirst(curlog, "groundspeak:date");
       if (logpart) {
-        time_t logtime = xml_parse_time(logpart->cdata);
+        time_t logtime = xml_parse_time(logpart->cdata).toTime_t();
         const struct tm* logtm = gmtime(&logtime);
         gbfprintf(fd, "%d-%02d-%02d ", logtm->tm_year + 1900, logtm->tm_mon + 1, logtm->tm_mday);
       }
@@ -1414,7 +1414,7 @@ write_waypoint(const waypoint* wp)
   waypoint_i++;
   le_write32(p->total, waypoint_n);
   le_write32(p->index, waypoint_i);
-  encode_time(wp->GetCreationTime(), &p->year);
+  encode_time(wp->GetCreationTime().toTime_t(), &p->year);
   le_write32(p->latitude, delbin_deg2rad(wp->latitude));
   le_write32(p->longitude, delbin_deg2rad(wp->longitude));
   if (wp->altitude > unknown_alt) {
@@ -1713,7 +1713,7 @@ write_track_points(void)
       le_write32(p->index, i + 1);
     }
     assert(p);
-    encode_time(wp->GetCreationTime(), &p->point[j].year);
+    encode_time(wp->GetCreationTime().toTime_t(), &p->point[j].year);
     le_write32(p->point[j].latitude, delbin_deg2rad(wp->latitude));
     le_write32(p->point[j].longitude, delbin_deg2rad(wp->longitude));
     f = UNKNOWN_ELEV;
@@ -1793,10 +1793,10 @@ write_track_end(const route_head* track)
   if (track->rte_name) {
     strncpy(p->name, track->rte_name, sizeof(p->name) - 1);
   } else {
-    sprintf(p->name, "%lu", (long)wp_array[0]->GetCreationTime());
+    sprintf(p->name, "%lu", (long)wp_array[0]->GetCreationTime().toTime_t());
   }
   le_write32(p->total_points, waypoint_n);
-  encode_time(current_time(), &p->year);
+  encode_time(current_time().toTime_t(), &p->year);
   le_write16(p->color, track_color_index(track->line_color.bbggrr));
   le_write16(p->comment_size, comment_size);
   if (comment_size) {
@@ -2186,7 +2186,7 @@ write_route_end(const route_head* route)
   if (route->rte_name) {
     strncpy(p->name, route->rte_name, sizeof(p->name) - 1);
   } else {
-    sprintf(p->name, "%lu", (long)wp_array[0]->GetCreationTime());
+    sprintf(p->name, "%lu", (long)wp_array[0]->GetCreationTime().toTime_t());
   }
   p->type = 0;
   le_write32(p->total_route_point, route_point_n);

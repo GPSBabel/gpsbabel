@@ -728,7 +728,7 @@ mag_serial_init_common(const char* portname)
     mag_handon();
   }
 
-  now = current_time();
+  now = current_time().toTime_t();
   /*
    * The 315 can take up to 4.25 seconds to respond to initialization
    * commands.   Time out on the side of caution.
@@ -739,7 +739,7 @@ mag_serial_init_common(const char* portname)
 
   while (!got_version) {
     mag_readmsg(trkdata);
-    if (current_time() > later) {
+    if (current_time().toTime_t() > later) {
       fatal(MYNAME ": No acknowledgment from GPS on %s\n",
             portname);
     }
@@ -1441,8 +1441,8 @@ void mag_track_disp(const waypoint* waypointp)
   ilat = waypointp->latitude;
   ilon = waypointp->longitude;
   tm = NULL;
-  if (waypointp->creation_time) {
-    const time_t ct = waypointp->GetCreationTime();
+  if (waypointp->creation_time.isValid()) {
+    const time_t ct = waypointp->GetCreationTime().toTime_t();
     tm = gmtime(&ct);
     if (tm) {
       hms = tm->tm_hour * 10000 + tm->tm_min  * 100 +

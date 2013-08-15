@@ -254,7 +254,7 @@ main(int argc, char* argv[])
   global_opts.inifile = NULL;
 
   gpsbabel_now = time(NULL);			/* gpsbabel startup-time */
-  gpsbabel_time = current_time();			/* same like gpsbabel_now, but freezed to zero during testo */
+  gpsbabel_time = current_time().toTime_t();			/* same like gpsbabel_now, but freezed to zero during testo */
 
 #ifdef DEBUG_MEM
   debug_mem_open();

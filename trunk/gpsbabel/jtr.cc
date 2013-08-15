@@ -272,7 +272,7 @@ jtr_trkpt_disp_cb(const waypoint* wpt)
   struct tm tm;
 
   if (wpt->creation_time.isValid()) {
-    const time_t tt = wpt->GetCreationTime();
+    const time_t tt = wpt->GetCreationTime().toTime_t();
     tm = *gmtime(&tt);
 
     tm.tm_year += 1900;

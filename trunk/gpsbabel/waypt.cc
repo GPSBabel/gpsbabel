@@ -542,11 +542,10 @@ gcgeodist(const double lat1, const double lon1,
 double
 waypt_time(const waypoint *wpt)
 {
-  if (wpt->creation_time <= 0) {
+  if (!wpt->creation_time.isValid()) {
     return (double) 0;
   } else {
-
-    return ((double)wpt->creation_time + ((double)wpt->creation_time.time().msec() / 1000));
+    return ((double)wpt->creation_time.toMSecsSinceEpoch()) / 1000.0;
   }
 }
 

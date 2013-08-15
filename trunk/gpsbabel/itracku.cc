@@ -307,7 +307,7 @@ to_itracku_data_record(const waypoint* wp, itracku_data_record* d)
 {
   le_write32(d->longitude, deg_to_deg_min(wp->longitude));
   le_write32(d->latitude, deg_to_deg_min(wp->latitude));
-  le_write32(d->creation_time, encode_itracku_time(wp->creation_time));
+  le_write32(d->creation_time, encode_itracku_time(wp->creation_time.toTime_t()));
   d->speed = MPS_TO_KNOTS(wp->speed);
   le_write16(d->altitude, wp->altitude);
   d->flag = 0xff;

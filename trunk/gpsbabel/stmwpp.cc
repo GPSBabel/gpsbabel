@@ -238,7 +238,7 @@ stmwpp_waypt_cb(const waypoint *wpt)
     return;
   }
 
-  const time_t tt = wpt->GetCreationTime();
+  const time_t tt = wpt->GetCreationTime().toTime_t();
   tm = *gmtime(&tt);
   tm.tm_year += 1900;
   tm.tm_mon++;

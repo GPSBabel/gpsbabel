@@ -133,7 +133,7 @@ tr7_read(void)
     }
 
     if (prev) {	/* other track or bad timestamp */
-      if (wpt->creation_time && (prev->creation_time > wpt->creation_time)) {
+      if (wpt->creation_time.isValid() && (prev->creation_time.toTime_t() > wpt->creation_time.toTime_t())) {
         trk = NULL;
       } else if (waypt_distance(prev, wpt) > 9999.9) {
         trk = NULL;

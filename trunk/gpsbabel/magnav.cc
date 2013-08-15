@@ -142,12 +142,12 @@ my_writewpt(const waypoint* wpt)
   time_t tm_t;
   struct tm* tm;
   tm = NULL;
-  if (wpt->creation_time) {
-    const time_t tt = wpt->creation_time;
+  if (wpt->creation_time.isValid()) {
+    const time_t tt = wpt->creation_time.toTime_t();
     tm = gmtime(&tt);
   }
   if (!tm) {
-    tm_t = current_time();
+    tm_t = current_time().toTime_t();
     tm = gmtime(&tm_t);
   }
 
@@ -226,7 +226,7 @@ data_write(void)
 
   strncpy(file_out->name, "Companion Waypoints", PDB_DBNAMELEN);
   file_out->attr = PDB_FLAG_BACKUP;
-  file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+  file_out->ctime = file_out->mtime = current_time().toTime_t() + 2082844800U;
   file_out->type = MYTYPE;  /* CWpt */
   file_out->creator = MYCREATOR; /* cGPS */
   file_out->version = 1;

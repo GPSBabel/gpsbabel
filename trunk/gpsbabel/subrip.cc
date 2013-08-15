@@ -92,17 +92,17 @@ subrip_prevwp_pr(const waypoint *waypointp)
   time_t starttime;
   time_t endtime;
 
-  if (prevwpp->GetCreationTime() >= time_offset)
+  if (prevwpp->GetCreationTime().toTime_t() >= time_offset)
     /* if this condition is not true, the waypoint is before the beginning of
      * the video and will be ignored
      */
   {
 
-    starttime = gps_to_video_time(prevwpp->GetCreationTime());
+    starttime = gps_to_video_time(prevwpp->GetCreationTime().toTime_t());
     if (!waypointp) {
       endtime = starttime + 1;
     } else {
-      endtime = gps_to_video_time(waypointp->GetCreationTime());
+      endtime = gps_to_video_time(waypointp->GetCreationTime().toTime_t());
     }
     gbfprintf(fout, "%d\n", stnum);
     stnum++;
@@ -120,7 +120,7 @@ subrip_prevwp_pr(const waypoint *waypointp)
     } else if WAYPT_HAS(prevwpp, speed) {
       gbfprintf(fout, "\n");
     }
-    subrip_write_time(prevwpp->GetCreationTime());
+    subrip_write_time(prevwpp->GetCreationTime().toTime_t());
     gbfprintf(fout, " Lat=%0.5lf Lon=%0.5lf\n",
               prevwpp->latitude + .000005,
               prevwpp->longitude + .000005);
@@ -148,7 +148,7 @@ subrip_trkpt_pr(const waypoint *waypointp)
      * way of solving this should be trivial to you :-)
      */
   {
-    time_offset = sync_time(waypointp->GetCreationTime(), opt_videotime);
+    time_offset = sync_time(waypointp->GetCreationTime().toTime_t(), opt_videotime);
   }
 
   if (prevwpp) {

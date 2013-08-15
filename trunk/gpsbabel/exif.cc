@@ -1112,7 +1112,7 @@ exif_find_wpt_by_time(const waypoint* wpt)
 
   if (exif_wpt_ref == NULL) {
     exif_wpt_ref = wpt;
-  } else if (abs(exif_time_ref - wpt->creation_time) < abs(exif_time_ref - exif_wpt_ref->creation_time)) {
+  } else if (abs(exif_time_ref - wpt->creation_time.toTime_t()) < abs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t())) {
     exif_wpt_ref = wpt;
   }
 }
@@ -1460,12 +1460,12 @@ exif_write(void)
 
     if (exif_wpt_ref == NULL) {
       warning(MYNAME ": No point with a valid timestamp found.\n");
-    } else if (abs(exif_time_ref - exif_wpt_ref->creation_time) > frame) {
+    } else if (abs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t()) > frame) {
       warning(MYNAME ": No matching point found for image date %s!\n", str);
       if (exif_wpt_ref != NULL) {
-        char* str = exif_time_str(exif_wpt_ref->creation_time);
+        char* str = exif_time_str(exif_wpt_ref->creation_time.toTime_t());
         warning(MYNAME ": Best is from %s, %d second(s) away.\n",
-                str, abs(exif_time_ref - exif_wpt_ref->creation_time));
+                str, abs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t()));
         xfree(str);
       }
       exif_wpt_ref = NULL;
@@ -1499,11 +1499,11 @@ exif_write(void)
       exif_put_double(GPS_IFD, GPS_IFD_TAG_ALT, 0, wpt->altitude);
     }
 
-    if (wpt->creation_time) {
+    if (wpt->creation_time.isValid()) {
       struct tm tm;
       char buf[32];
 
-      const time_t tt = wpt->GetCreationTime();
+      const time_t tt = wpt->GetCreationTime().toTime_t();
       tm = *gmtime(&tt);
 
       tm.tm_year += 1900;
