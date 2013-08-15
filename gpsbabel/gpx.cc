@@ -47,8 +47,6 @@ static int gpx_wversion_num;
 static const char* gpx_creator;
 static QXmlStreamAttributes gpx_namespace_attribute;
 
-static char* gpx_email = NULL;
-static char* gpx_author = NULL;
 static QString current_tag;
 
 static waypoint* wpt_tmp;
@@ -301,7 +299,6 @@ typedef struct tag_mapping {
   tag_type tag_type_;		/* enum from above for this tag */
   int tag_passthrough;		/* true if we don't generate this */
   const char* tag_name;		/* xpath-ish tag name */
-  unsigned long crc;		/* Crc32 of tag_name */
 } tag_mapping;
 
 /*
@@ -311,33 +308,33 @@ typedef struct tag_mapping {
  */
 
 tag_mapping tag_path_map[] = {
-  { tt_gpx, 0, "/gpx", 0UL },
-  { tt_name, 0, "/gpx/name", 0UL },
-  { tt_desc, 0, "/gpx/desc", 0UL },
-  { tt_author, 0, "/gpx/author", 0UL },
-  { tt_email, 0, "/gpx/email", 0UL },
-  { tt_url, 0, "/gpx/url", 0UL },
-  { tt_urlname, 0, "/gpx/urlname", 0UL },
-  { tt_keywords, 0, "/gpx/keywords", 0UL },
+  { tt_gpx, 0, "/gpx" },
+  { tt_name, 0, "/gpx/name" },
+  { tt_desc, 0, "/gpx/desc" },
+  { tt_author, 0, "/gpx/author" },
+  { tt_email, 0, "/gpx/email" },
+  { tt_url, 0, "/gpx/url" },
+  { tt_urlname, 0, "/gpx/urlname" },
+  { tt_keywords, 0, "/gpx/keywords" },
 
-  { tt_wpt, 0, "/gpx/wpt", 0UL },
-  { tt_wpt_ele, 0, "/gpx/wpt/ele", 0UL },
-  { tt_wpt_time, 0, "/gpx/wpt/time", 0UL },
-  { tt_wpt_name, 0, "/gpx/wpt/name", 0UL },
-  { tt_wpt_cmt, 0, "/gpx/wpt/cmt", 0UL },
-  { tt_wpt_desc, 0, "/gpx/wpt/desc", 0UL },
-  { tt_wpt_url, 0, "/gpx/wpt/url", 0UL },
-  { tt_wpt_urlname, 0, "/gpx/wpt/urlname", 0UL },
-  { tt_wpt_link, 0, "/gpx/wpt/link", 0UL },			/* GPX 1.1 */
-  { tt_wpt_link_text, 0, "/gpx/wpt/link/text", 0UL },		/* GPX 1.1 */
-  { tt_wpt_sym, 0, "/gpx/wpt/sym", 0UL },
-  { tt_wpt_type, 1, "/gpx/wpt/type", 0UL },
+  { tt_wpt, 0, "/gpx/wpt" },
+  { tt_wpt_ele, 0, "/gpx/wpt/ele" },
+  { tt_wpt_time, 0, "/gpx/wpt/time" },
+  { tt_wpt_name, 0, "/gpx/wpt/name" },
+  { tt_wpt_cmt, 0, "/gpx/wpt/cmt" },
+  { tt_wpt_desc, 0, "/gpx/wpt/desc" },
+  { tt_wpt_url, 0, "/gpx/wpt/url" },
+  { tt_wpt_urlname, 0, "/gpx/wpt/urlname" },
+  { tt_wpt_link, 0, "/gpx/wpt/link" },			/* GPX 1.1 */
+  { tt_wpt_link_text, 0, "/gpx/wpt/link/text" },		/* GPX 1.1 */
+  { tt_wpt_sym, 0, "/gpx/wpt/sym" },
+  { tt_wpt_type, 1, "/gpx/wpt/type" },
 
   /* Double up the GPX 1.0 and GPX 1.1 styles */
 #define GEOTAG(type,name) \
-  {type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:" name, 0UL }, \
-  {type, 1, "/gpx/wpt/extensions/cache/" name, 0UL }, \
-  {type, 1, "/gpx/wpt/geocache/" name, 0UL }  /* opencaching.de */
+  {type, 1, "/gpx/wpt/groundspeak:cache/groundspeak:" name }, \
+  {type, 1, "/gpx/wpt/extensions/cache/" name }, \
+  {type, 1, "/gpx/wpt/geocache/" name }  /* opencaching.de */
 
 #define GARMIN_WPT_EXT "/gpx/wpt/extensions/gpxx:WaypointExtension"
 #define GARMIN_TRKPT_EXT "/gpx/trk/trkseg/trkpt/extensions/gpxtpx:TrackPointExtension"
@@ -365,80 +362,80 @@ tag_mapping tag_path_map[] = {
   { tt_cache_log_date, 1, "/gpx/wpt/groundspeak:cache/groundspeak:logs/groundspeak:log/groundspeak:date"},
   { tt_cache_log_date, 1, "/gpx/wpt/extensions/cache/logs/log/date"},
 
-  { tt_wpt_extensions, 0, "/gpx/wpt/extensions", 0UL },
+  { tt_wpt_extensions, 0, "/gpx/wpt/extensions" },
 
-  { tt_garmin_wpt_extensions, 0, GARMIN_WPT_EXT, 0UL },
-  { tt_garmin_wpt_proximity, 0, GARMIN_WPT_EXT "/gpxx:Proximity", 0UL },
-  { tt_garmin_wpt_temperature, 0, GARMIN_WPT_EXT "/gpxx:Temperature", 0UL },
-  { tt_garmin_wpt_temperature, 1, GARMIN_TRKPT_EXT "/gpxtpx:atemp", 0UL },
-  { tt_garmin_wpt_depth, 0, GARMIN_WPT_EXT "/gpxx:Depth", 0UL },
-  { tt_garmin_wpt_display_mode, 0, GARMIN_WPT_EXT "/gpxx:DisplayMode", 0UL },
-  { tt_garmin_wpt_categories, 0, GARMIN_WPT_EXT "/gpxx:Categories", 0UL },
-  { tt_garmin_wpt_category, 0, GARMIN_WPT_EXT "/gpxx:Categories/gpxx:Category", 0UL },
-  { tt_garmin_wpt_addr, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:StreetAddress", 0UL },
-  { tt_garmin_wpt_city, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:City", 0UL },
-  { tt_garmin_wpt_state, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:State", 0UL },
-  { tt_garmin_wpt_country, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:Country", 0UL },
-  { tt_garmin_wpt_postal_code, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:PostalCode", 0UL },
-  { tt_garmin_wpt_phone_nr, 0, GARMIN_WPT_EXT "/gpxx:PhoneNumber", 0UL },
+  { tt_garmin_wpt_extensions, 0, GARMIN_WPT_EXT },
+  { tt_garmin_wpt_proximity, 0, GARMIN_WPT_EXT "/gpxx:Proximity" },
+  { tt_garmin_wpt_temperature, 0, GARMIN_WPT_EXT "/gpxx:Temperature" },
+  { tt_garmin_wpt_temperature, 1, GARMIN_TRKPT_EXT "/gpxtpx:atemp" },
+  { tt_garmin_wpt_depth, 0, GARMIN_WPT_EXT "/gpxx:Depth" },
+  { tt_garmin_wpt_display_mode, 0, GARMIN_WPT_EXT "/gpxx:DisplayMode" },
+  { tt_garmin_wpt_categories, 0, GARMIN_WPT_EXT "/gpxx:Categories" },
+  { tt_garmin_wpt_category, 0, GARMIN_WPT_EXT "/gpxx:Categories/gpxx:Category" },
+  { tt_garmin_wpt_addr, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:StreetAddress" },
+  { tt_garmin_wpt_city, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:City" },
+  { tt_garmin_wpt_state, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:State" },
+  { tt_garmin_wpt_country, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:Country" },
+  { tt_garmin_wpt_postal_code, 0, GARMIN_WPT_EXT "/gpxx:Address/gpxx:PostalCode" },
+  { tt_garmin_wpt_phone_nr, 0, GARMIN_WPT_EXT "/gpxx:PhoneNumber"},
 
   // In Garmin space, but in core of waypoint.
-  { tt_trk_trkseg_trkpt_heartrate, 1, GARMIN_TRKPT_EXT "/gpxtpx:hr", 0UL },
-  { tt_trk_trkseg_trkpt_cadence, 1, GARMIN_TRKPT_EXT "/gpxtpx:cad", 0UL },
+  { tt_trk_trkseg_trkpt_heartrate, 1, GARMIN_TRKPT_EXT "/gpxtpx:hr" },
+  { tt_trk_trkseg_trkpt_cadence, 1, GARMIN_TRKPT_EXT "/gpxtpx:cad" },
 
-  { tt_humminbird_wpt_depth, 0, "/gpx/wpt/extensions/h:depth", 0UL },  // in centimeters.
-  { tt_humminbird_wpt_status, 0, "/gpx/wpt/extensions/h:status", 0UL },
+  { tt_humminbird_wpt_depth, 0, "/gpx/wpt/extensions/h:depth" },  // in centimeters.
+  { tt_humminbird_wpt_status, 0, "/gpx/wpt/extensions/h:status" },
 
-  { tt_rte, 0, "/gpx/rte", 0UL },
-  { tt_rte_name, 0, "/gpx/rte/name", 0UL },
-  { tt_rte_desc, 0, "/gpx/rte/desc", 0UL },
-  { tt_rte_number, 0, "/gpx/rte/number", 0UL },
-  { tt_rte_rtept, 0, "/gpx/rte/rtept", 0UL },
-  { tt_rte_rtept_ele, 0, "/gpx/rte/rtept/ele", 0UL },
-  { tt_rte_rtept_time, 0, "/gpx/rte/rtept/time", 0UL },
-  { tt_rte_rtept_name, 0, "/gpx/rte/rtept/name", 0UL },
-  { tt_rte_rtept_cmt, 0, "/gpx/rte/rtept/cmt", 0UL },
-  { tt_rte_rtept_desc, 0, "/gpx/rte/rtept/desc", 0UL },
-  { tt_rte_rtept_url, 0, "/gpx/rte/rtept/url", 0UL },
-  { tt_rte_rtept_urlname, 0, "/gpx/rte/rtept/urlname", 0UL },
-  { tt_rte_rtept_sym, 0, "/gpx/rte/rtept/sym", 0UL },
+  { tt_rte, 0, "/gpx/rte" },
+  { tt_rte_name, 0, "/gpx/rte/name" },
+  { tt_rte_desc, 0, "/gpx/rte/desc" },
+  { tt_rte_number, 0, "/gpx/rte/number" },
+  { tt_rte_rtept, 0, "/gpx/rte/rtept" },
+  { tt_rte_rtept_ele, 0, "/gpx/rte/rtept/ele" },
+  { tt_rte_rtept_time, 0, "/gpx/rte/rtept/time" },
+  { tt_rte_rtept_name, 0, "/gpx/rte/rtept/name" },
+  { tt_rte_rtept_cmt, 0, "/gpx/rte/rtept/cmt" },
+  { tt_rte_rtept_desc, 0, "/gpx/rte/rtept/desc" },
+  { tt_rte_rtept_url, 0, "/gpx/rte/rtept/url" },
+  { tt_rte_rtept_urlname, 0, "/gpx/rte/rtept/urlname" },
+  { tt_rte_rtept_sym, 0, "/gpx/rte/rtept/sym" },
 
-  { tt_trk, 0, "/gpx/trk", 0UL },
-  { tt_trk_name, 0, "/gpx/trk/name", 0UL },
-  { tt_trk_desc, 0, "/gpx/trk/desc", 0UL },
-  { tt_trk_trkseg, 0, "/gpx/trk/trkseg", 0UL },
-  { tt_trk_number, 0, "/gpx/trk/number", 0UL },
-  { tt_trk_trkseg_trkpt, 0, "/gpx/trk/trkseg/trkpt", 0UL },
-  { tt_trk_trkseg_trkpt_ele, 0, "/gpx/trk/trkseg/trkpt/ele", 0UL },
-  { tt_trk_trkseg_trkpt_time, 0, "/gpx/trk/trkseg/trkpt/time", 0UL },
-  { tt_trk_trkseg_trkpt_name, 0, "/gpx/trk/trkseg/trkpt/name", 0UL },
-  { tt_trk_trkseg_trkpt_cmt, 0, "/gpx/trk/trkseg/trkpt/cmt", 0UL },
-  { tt_trk_trkseg_trkpt_desc, 0, "/gpx/trk/trkseg/trkpt/desc", 0UL },
-  { tt_trk_trkseg_trkpt_url, 0, "/gpx/trk/trkseg/trkpt/url", 0UL },
-  { tt_trk_trkseg_trkpt_urlname, 0, "/gpx/trk/trkseg/trkpt/urlname", 0UL },
-  { tt_trk_trkseg_trkpt_sym, 0, "/gpx/trk/trkseg/trkpt/sym", 0UL },
-  { tt_trk_trkseg_trkpt_course, 0, "/gpx/trk/trkseg/trkpt/course", 0UL },
-  { tt_trk_trkseg_trkpt_speed, 0, "/gpx/trk/trkseg/trkpt/speed", 0UL },
+  { tt_trk, 0, "/gpx/trk" },
+  { tt_trk_name, 0, "/gpx/trk/name" },
+  { tt_trk_desc, 0, "/gpx/trk/desc" },
+  { tt_trk_trkseg, 0, "/gpx/trk/trkseg" },
+  { tt_trk_number, 0, "/gpx/trk/number" },
+  { tt_trk_trkseg_trkpt, 0, "/gpx/trk/trkseg/trkpt" },
+  { tt_trk_trkseg_trkpt_ele, 0, "/gpx/trk/trkseg/trkpt/ele" },
+  { tt_trk_trkseg_trkpt_time, 0, "/gpx/trk/trkseg/trkpt/time" },
+  { tt_trk_trkseg_trkpt_name, 0, "/gpx/trk/trkseg/trkpt/name" },
+  { tt_trk_trkseg_trkpt_cmt, 0, "/gpx/trk/trkseg/trkpt/cmt" },
+  { tt_trk_trkseg_trkpt_desc, 0, "/gpx/trk/trkseg/trkpt/desc" },
+  { tt_trk_trkseg_trkpt_url, 0, "/gpx/trk/trkseg/trkpt/url" },
+  { tt_trk_trkseg_trkpt_urlname, 0, "/gpx/trk/trkseg/trkpt/urlname" },
+  { tt_trk_trkseg_trkpt_sym, 0, "/gpx/trk/trkseg/trkpt/sym" },
+  { tt_trk_trkseg_trkpt_course, 0, "/gpx/trk/trkseg/trkpt/course" },
+  { tt_trk_trkseg_trkpt_speed, 0, "/gpx/trk/trkseg/trkpt/speed" },
 
-  { tt_humminbird_trk_trkseg_trkpt_depth, 0, "/gpx/trk/trkseg/trkpt/extensions/h:depth", 0UL },  // in centimeters.
+  { tt_humminbird_trk_trkseg_trkpt_depth, 0, "/gpx/trk/trkseg/trkpt/extensions/h:depth" },  // in centimeters.
 
   /* Common to tracks, routes, and waypts */
-  { tt_fix,  0, "/gpx/wpt/fix", 0UL },
-  { tt_fix,  0, "/gpx/trk/trkseg/trkpt/fix", 0UL },
-  { tt_fix,  0, "/gpx/rte/rtept/fix", 0UL },
-  { tt_sat,  0, "/gpx/wpt/sat", 0UL },
-  { tt_sat,  0, "/gpx/trk/trkseg/trkpt/sat", 0UL },
-  { tt_sat,  0, "/gpx/rte/rtept/sat", 0UL },
-  { tt_pdop, 0, "/gpx/wpt/pdop", 0UL },
-  { tt_pdop, 0, "/gpx/trk/trkseg/trkpt/pdop", 0UL },
-  { tt_pdop, 0, "/gpx/rte/rtept/pdop", 0UL },
-  { tt_hdop, 0, "/gpx/wpt/hdop", 0UL },
-  { tt_hdop, 0, "/gpx/trk/trkseg/trkpt/hdop", 0UL },
-  { tt_hdop, 0, "/gpx/rte/rtept/hdop", 0UL },
-  { tt_vdop, 0, "/gpx/wpt/vdop", 0UL },
-  { tt_vdop, 0, "/gpx/trk/trkseg/trkpt/vdop", 0UL },
-  { tt_vdop, 0, "/gpx/rte/rtept/hdop", 0UL },
-  {(tag_type)0, 0, NULL, 0UL}
+  { tt_fix,  0, "/gpx/wpt/fix" },
+  { tt_fix,  0, "/gpx/trk/trkseg/trkpt/fix" },
+  { tt_fix,  0, "/gpx/rte/rtept/fix" },
+  { tt_sat,  0, "/gpx/wpt/sat" },
+  { tt_sat,  0, "/gpx/trk/trkseg/trkpt/sat" },
+  { tt_sat,  0, "/gpx/rte/rtept/sat" },
+  { tt_pdop, 0, "/gpx/wpt/pdop" },
+  { tt_pdop, 0, "/gpx/trk/trkseg/trkpt/pdop" },
+  { tt_pdop, 0, "/gpx/rte/rtept/pdop" },
+  { tt_hdop, 0, "/gpx/wpt/hdop" },
+  { tt_hdop, 0, "/gpx/trk/trkseg/trkpt/hdop" },
+  { tt_hdop, 0, "/gpx/rte/rtept/hdop" },
+  { tt_vdop, 0, "/gpx/wpt/vdop" },
+  { tt_vdop, 0, "/gpx/trk/trkseg/trkpt/vdop" },
+  { tt_vdop, 0, "/gpx/rte/rtept/hdop" },
+  {(tag_type)0, 0, NULL}
 };
 
 // Maintain a fast mapping from full tag names to the struct above.
@@ -946,9 +943,6 @@ gpx_end(void* data, const XML_Char* xml_el)
     break;
   case tt_email:
     gpx_add_to_global(&gpx_global->email, cdatastrp);
-    if (gpx_email == NULL) {
-      gpx_email = xstrdup(cdatastrp);
-    }
     break;
   case tt_url:
     gpx_add_to_global(&gpx_global->url, cdatastrp);
@@ -965,7 +959,7 @@ gpx_end(void* data, const XML_Char* xml_el)
      */
   case tt_wpt:
     if (link_) {
-      if ( !link_->url_.isEmpty()) {
+      if (!link_->url_.isEmpty()) {
         wpt_tmp->AddUrlLink(*link_);
       }
       delete link_;
@@ -998,16 +992,15 @@ gpx_end(void* data, const XML_Char* xml_el)
       waypt_alloc_gc_data(wpt_tmp)->hint = cdatastrp;
     }
     break;
-  case tt_cache_desc_long:
-    {
-      geocache_data* gc_data = waypt_alloc_gc_data(wpt_tmp);
-      gc_data->desc_long.is_html = cache_descr_is_html;
+  case tt_cache_desc_long: {
+    geocache_data* gc_data = waypt_alloc_gc_data(wpt_tmp);
+    gc_data->desc_long.is_html = cache_descr_is_html;
 // FIXME: Forcing a premature conversion here saves 4% on GPX read times
 // on large PQs.  Once cdatastrp becomes  real QString this is just (minimal)
 // overhead.
-      gc_data->desc_long.utfstring = QString(cdatastrp).trimmed();
-    }
-    break;
+    gc_data->desc_long.utfstring = QString(cdatastrp).trimmed();
+  }
+  break;
   case tt_cache_desc_short:
     rtrim(cdatastrp);
     if (cdatastrp[0]) {
@@ -1079,7 +1072,7 @@ gpx_end(void* data, const XML_Char* xml_el)
     break;
   case tt_rte_rtept:
     if (link_) {
-      if ( !link_->url_.isEmpty()) {
+      if (!link_->url_.isEmpty()) {
         wpt_tmp->AddUrlLink(*link_);
       }
       delete link_;
@@ -1107,7 +1100,7 @@ gpx_end(void* data, const XML_Char* xml_el)
     break;
   case tt_trk_trkseg_trkpt:
     if (link_) {
-      if ( !link_->url_.isEmpty()) {
+      if (!link_->url_.isEmpty()) {
         wpt_tmp->AddUrlLink(*link_);
       }
       delete link_;
@@ -1339,14 +1332,6 @@ gpx_rd_deinit(void)
 {
   vmem_free(&cdatastr);
 
-  if (gpx_email) {
-    xfree(gpx_email);
-    gpx_email = NULL;
-  }
-  if (gpx_author) {
-    xfree(gpx_author);
-    gpx_author = NULL;
-  }
   if (fd) {
     gbfclose(fd);
   }
@@ -1452,8 +1437,8 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
       }
       if (wpt && wpt->gc_data->exported.isValid() &&
           strcmp(tag->tagname, "groundspeak:cache") == 0) {
-          writer->writeTextElement("time",
-                                  wpt->gc_data->exported.toPrettyString());
+        writer->writeTextElement("time",
+                                 wpt->gc_data->exported.toPrettyString());
       }
       writer->writeEndElement();
     }
