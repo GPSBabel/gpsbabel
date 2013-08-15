@@ -1844,7 +1844,7 @@ void kml_write_AbstractView(void)
       // the network position.  So we shove the end of the timespan out to
       // ensure the right edge of that time slider includes us.
       //
-      time_max = realtime_positioning ? kml_time_max + 600 : kml_time_max;
+      time_max.setTime_t(realtime_positioning ? kml_time_max.toTime_t() + 600 : kml_time_max.toTime_t());
       writer->writeTextElement("end", time_max.toPrettyString());
     }
     writer->writeEndElement(); // Close gx:TimeSpan tag
