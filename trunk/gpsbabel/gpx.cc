@@ -920,7 +920,7 @@ gpx_end(void* data, const XML_Char* xml_el)
   float x;
   char* cdatastrp = cdatastr.mem;
   int passthrough;
-  static time_t gc_log_date;
+  static QDateTime gc_log_date;
   tag_type tag;
 
   if (s.compare(el)) {
@@ -1017,7 +1017,7 @@ gpx_end(void* data, const XML_Char* xml_el)
     waypt_alloc_gc_data(wpt_tmp)->placer = cdatastrp;
     break;
   case tt_cache_log_date:
-    gc_log_date = xml_parse_time(cdatastrp).toTime_t();
+    gc_log_date = xml_parse_time(cdatastrp);
     break;
     /*
      * "Found it" logs follow the date according to the schema,
@@ -1029,7 +1029,7 @@ gpx_end(void* data, const XML_Char* xml_el)
         (0 == wpt_tmp->gc_data->last_found.toTime_t())) {
       waypt_alloc_gc_data(wpt_tmp)->last_found = gc_log_date;
     }
-    gc_log_date = 0;
+    gc_log_date = QDateTime();
     break;
   case tt_cache_favorite_points:
     waypt_alloc_gc_data(wpt_tmp)->favorite_points  = atoi(cdatastrp);
