@@ -415,7 +415,7 @@ lowranceusr_parse_waypt(waypoint* wpt_tmp)
 
   if (global_opts.debug_level >= 2) {
     printf(MYNAME " parse_waypt: creation time %d\n",
-           (int)wpt_tmp->creation_time);
+           (int)wpt_tmp->creation_time.toTime_t());
     printf(MYNAME " parse_waypt: base_time %d\n", (int)base_time_secs);
     printf(MYNAME " parse_waypt: waypt time %d\n", (int)waypt_time);
   }
@@ -749,8 +749,8 @@ lowranceusr_waypt_disp(const waypoint* wpt)
     gbfputint32(text_len, file_out);
   }
 
-  if (wpt->creation_time > base_time_secs) {
-    Time = wpt->creation_time - base_time_secs;
+  if (wpt->creation_time.toTime_t() > base_time_secs) {
+    Time = wpt->creation_time.toTime_t() - base_time_secs;
   } else {
     Time = 0;
   }
@@ -758,7 +758,7 @@ lowranceusr_waypt_disp(const waypoint* wpt)
   if (global_opts.debug_level >= 2) {
     time_t wpt_time = Time;
     printf(MYNAME " waypt_disp: base_time : %d\n", (int)base_time_secs);
-    printf(MYNAME " waypt_disp: creation time : %d\n", (int)wpt->creation_time);
+    printf(MYNAME " waypt_disp: creation time : %d\n", (int)wpt->creation_time.toTime_t());
     printf(MYNAME " waypt_disp: waypt time : %d\n", (int)wpt_time);
     printf(MYNAME " waypt_disp: waypt time (local): %s\n", ctime(&wpt_time));
   }

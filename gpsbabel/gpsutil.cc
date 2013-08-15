@@ -72,7 +72,7 @@ data_read(void)
    * Make sure that all waypoints in single read have same
    * timestamp.
    */
-  time_t now = current_time();
+  time_t now = current_time().toTime_t();
   icon[0] = 0;
 
   while ((ibuf = gbfgetstr(file_in))) {

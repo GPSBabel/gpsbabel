@@ -187,8 +187,8 @@ compute_xte(struct xte *xte_rec)
     }
     // if timestamps exist, distance to interpolated point
     if (wpt1->GetCreationTime() != wpt2->GetCreationTime()) {
-      frac = (double)(wpt3->GetCreationTime() - wpt1->GetCreationTime()) /
-             (wpt2->GetCreationTime() - wpt1->GetCreationTime());
+      frac = (double)(wpt3->GetCreationTime().toTime_t() - wpt1->GetCreationTime().toTime_t()) /
+             (wpt2->GetCreationTime().toTime_t() - wpt1->GetCreationTime().toTime_t());
       linepart(wpt1->latitude, wpt1->longitude,
                wpt2->latitude, wpt2->longitude,
                frac, &reslat, &reslon);

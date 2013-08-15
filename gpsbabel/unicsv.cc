@@ -1373,7 +1373,7 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
   }
   if (wpt->creation_time.isValid()) {
     gb_setbit(&unicsv_outp_flags, fld_time);
-    if (wpt->creation_time >= SECONDS_PER_DAY) {
+    if (wpt->creation_time.toTime_t() >= SECONDS_PER_DAY) {
       gb_setbit(&unicsv_outp_flags, fld_date);
     }
   }
@@ -1478,10 +1478,10 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
     if (gc_data->is_available) {
       gb_setbit(&unicsv_outp_flags, fld_gc_is_available);
     }
-    if (gc_data->exported) {
+    if (gc_data->exported.isValid()) {
       gb_setbit(&unicsv_outp_flags, fld_gc_exported);
     }
-    if (gc_data->last_found) {
+    if (gc_data->last_found.isValid()) {
       gb_setbit(&unicsv_outp_flags, fld_gc_last_found);
     }
     if (!gc_data->placer.isEmpty()) {
@@ -1729,16 +1729,16 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
     }
   }
   if FIELD_USED(fld_date) {
-    if (wpt->creation_time >= SECONDS_PER_DAY) {
+    if (wpt->creation_time.toTime_t() >= SECONDS_PER_DAY) {
       struct tm tm;
       char buf[32];
-      time_t time = wpt->GetCreationTime();
+      time_t time = wpt->GetCreationTime().toTime_t();
 
       if (opt_utc) {
         time += atoi(opt_utc) * SECONDS_PER_HOUR;
         tm = *gmtime(&time);
       } else {
-        const time_t tt = wpt->GetCreationTime();
+        const time_t tt = wpt->GetCreationTime().toTime_t();
         tm = *localtime(&tt);
       }
       tm.tm_year += 1900;
@@ -1750,16 +1750,16 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
     }
   }
   if FIELD_USED(fld_time) {
-    if (wpt->creation_time != 0) {
+    if (wpt->creation_time.isValid()) {
       struct tm tm;
       char buf[32], msec[12];
-      time_t time = wpt->GetCreationTime();
+      time_t time = wpt->GetCreationTime().toTime_t();
 
       if (opt_utc) {
         time += atoi(opt_utc) * SECONDS_PER_HOUR;
         tm = *gmtime(&time);
       } else {
-        const time_t tt = wpt->GetCreationTime();
+        const time_t tt = wpt->GetCreationTime().toTime_t();
         tm = *localtime(&tt);
       }
       snprintf(buf, sizeof(buf), "%02d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
@@ -1875,14 +1875,14 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
   }
   if FIELD_USED(fld_gc_exported) {
     if (gc_data) {
-      unicsv_print_data_time(gc_data->exported);
+      unicsv_print_data_time(gc_data->exported.toTime_t());
     } else {
       gbfputs(unicsv_fieldsep, fout);
     }
   }
   if FIELD_USED(fld_gc_last_found) {
     if (gc_data) {
-      unicsv_print_data_time(gc_data->last_found);
+      unicsv_print_data_time(gc_data->last_found.toTime_t());
     } else {
       gbfputs(unicsv_fieldsep, fout);
     }

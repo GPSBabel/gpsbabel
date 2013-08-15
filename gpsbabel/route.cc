@@ -655,12 +655,12 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
       tdata->max_cad = (int) thisw->cadence;
     }
 
-    if (thisw->GetCreationTime() && (thisw->GetCreationTime() < tdata->start)) {
-      tdata->start = thisw->GetCreationTime();
+    if (thisw->GetCreationTime().isValid() && (thisw->GetCreationTime().toTime_t() < tdata->start)) {
+      tdata->start = thisw->GetCreationTime().toTime_t();
     }
 
-    if (thisw->creation_time > tdata->end) {
-      tdata->end = thisw->GetCreationTime();
+    if (thisw->creation_time.toTime_t() > tdata->end) {
+      tdata->end = thisw->GetCreationTime().toTime_t();
       if (tdata->start == 0) {
         tdata->start = tdata->end;
       }

@@ -294,7 +294,7 @@ data_write(void)
   strncpy(file_out->name, out_fname, PDB_DBNAMELEN);
   file_out->name[PDB_DBNAMELEN-1] = 0;
   file_out->attr = PDB_FLAG_BACKUP;
-  file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+  file_out->ctime = file_out->mtime = current_time().toTime_t() + 2082844800U;
   file_out->type = wayp_TYPE;
   file_out->creator = GXPU_CREATOR;
   file_out->version = 4;

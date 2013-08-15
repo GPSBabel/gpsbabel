@@ -133,7 +133,7 @@ rw_init(const char* fname)
    * an affected unit.
    */
   if (resettime) {
-    GPS_Command_Send_Time(fname, current_time());
+    GPS_Command_Send_Time(fname, current_time().toTime_t());
     return;
   }
 
@@ -418,7 +418,7 @@ unsigned int checkWayPointIsAtSplit(waypoint* wpt, GPS_PLap* laps, int nlaps)
     int i;
     for (i=(nlaps-1); i >= 0; i--) {
       GPS_PLap lap = laps[i];
-      time_t delta = lap->start_time - wpt->GetCreationTime();
+      time_t delta = lap->start_time - wpt->GetCreationTime().toTime_t();
       if ((delta >= -1) && (delta <= 1)) {
         result = 1;
         break;

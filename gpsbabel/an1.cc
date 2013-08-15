@@ -798,7 +798,7 @@ Write_One_AN1_Waypoint(const waypoint* wpt)
   }
 
 
-  rec->creation_time = rec->modification_time = wpt->GetCreationTime();
+  rec->creation_time = rec->modification_time = wpt->GetCreationTime().toTime_t();
   rec->lat = EncodeOrd(wpt->latitude);
   rec->lon = EncodeOrd(-wpt->longitude);
   rec->serial = serial++;

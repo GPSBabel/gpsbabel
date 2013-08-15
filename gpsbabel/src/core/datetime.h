@@ -45,9 +45,6 @@ public:
   DateTime(QDate date, QTime time) : QDateTime(date, time) {}
   DateTime(QDateTime dt) : QDateTime(dt) {}
 
-  // Handle time_tm tm = wpt->creation_time;
-  operator time_t() const { return toTime_t(); }
-
   const time_t& operator=(const time_t& t) {
     setTime_t(t);
     return t;
@@ -56,6 +53,14 @@ public:
   time_t operator+=(const time_t& t) {
     setTime_t(toTime_t() + t);
     return toTime_t();
+  }
+
+  DateTime operator+(quint64 seconds) {
+    return DateTime::fromMSecsSinceEpoch(toMSecsSinceEpoch() + seconds*1000);
+  }
+
+  DateTime operator-(quint64 seconds) {
+    return DateTime::fromMSecsSinceEpoch(toMSecsSinceEpoch() - seconds*1000);
   }
 
   // Integer form: YYMMDD

@@ -377,7 +377,7 @@ int ppdb_decode_tm(char *str, struct tm *tm)
     struct tm now;
 
 
-    tnow = current_time();
+    tnow = current_time().toTime_t();
     now = *localtime(&tnow);
     now.tm_year += 1900;
     now.tm_mon++;
@@ -748,7 +748,7 @@ static void ppdb_write(void)
   }
 
   file_out->attr = PDB_FLAG_BACKUP;
-  file_out->ctime = file_out->mtime = current_time() + 2082844800U;
+  file_out->ctime = file_out->mtime = current_time().toTime_t() + 2082844800U;
   file_out->creator = PPDB_MAGIC;
   file_out->version = 3;
 

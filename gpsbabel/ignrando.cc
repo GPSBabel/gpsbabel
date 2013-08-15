@@ -263,7 +263,7 @@ ignr_write(void)
   }
   track_num = 0;
 
-  now = current_time();
+  now = current_time().toTime_t();
   tm = *localtime(&now);
 
   gbfprintf(fout, "<?xml version=\"1.0\" encoding=\"windows-1252\"?>\n");

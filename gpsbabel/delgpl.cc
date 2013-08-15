@@ -154,7 +154,7 @@ gpl_trackpt(const waypoint* wpt)
   le_write_double(&gp.alt, alt_feet);
   le_write_double(&gp.speed, speed);
   le_write_double(&gp.heading, heading);
-  le_write32(&gp.tm, wpt->GetCreationTime());
+  le_write32(&gp.tm, wpt->GetCreationTime().toTime_t());
 
   gbfwrite(&gp, sizeof(gp), 1, gplfile_out);
 }

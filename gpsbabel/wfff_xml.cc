@@ -176,7 +176,7 @@ void wfff_chan(const char *args, const QXmlStreamAttributes* unused)
 void wfff_first(const char *args, const QXmlStreamAttributes* unused)
 {
   if (args) {
-    ap_first = xml_parse_time(args);
+    ap_first = xml_parse_time(args).toTime_t();
   }
 }
 

@@ -324,7 +324,7 @@ vitosmt_write(void)
 
   workbuffer = (unsigned char*) xcalloc(vitosmt_headersize,1);
 
-  now = current_time();
+  now = current_time().toTime_t();
   count = 0;
   position = 0;
 

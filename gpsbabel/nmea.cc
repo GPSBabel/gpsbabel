@@ -894,11 +894,11 @@ nmea_fix_timestamps(route_head* track)
 
         dt = (prev / SECONDS_PER_DAY) * SECONDS_PER_DAY;
         wpt->creation_time += dt;
-        if (wpt->creation_time > prev) {
+        if (wpt->creation_time.toTime_t() > prev) {
           wpt->creation_time+=SECONDS_PER_DAY;
         }
       }
-      prev = wpt->GetCreationTime();
+      prev = wpt->GetCreationTime().toTime_t();
     }
   }
 }
@@ -1260,19 +1260,19 @@ nmea_trackpt_pr(const waypoint* wpt)
       if (sleepus >= 0) {
         gb_sleep(sleepus);
       } else {
-        long wait_time = wpt->GetCreationTime() - last_time;
+        long wait_time = wpt->GetCreationTime().toTime_t() - last_time;
         if (wait_time > 0) {
           gb_sleep(wait_time * 1000000);
         }
       }
     }
-    last_time = wpt->GetCreationTime();
+    last_time = wpt->GetCreationTime().toTime_t();
   }
 
   lat = degrees2ddmm(wpt->latitude);
   lon = degrees2ddmm(wpt->longitude);
 
-  time_t ct = wpt->GetCreationTime();
+  time_t ct = wpt->GetCreationTime().toTime_t();
   tm = gmtime(&ct);
   if (tm) {
     hms = tm->tm_hour * 10000 + tm->tm_min * 100 + tm->tm_sec;

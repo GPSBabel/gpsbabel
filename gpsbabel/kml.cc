@@ -1930,7 +1930,7 @@ void kml_write(void)
 
   writer->writeStartElement("Document");
 
-  now = current_time();
+  now = current_time().toTime_t();
   strftime(import_time, sizeof(import_time), "%c", localtime(&now));
   if (realtime_positioning) {
     writer->writeTextElement("name", "GPS position");
@@ -2091,7 +2091,7 @@ kml_wr_position(waypoint* wpt)
     track_add_head(posn_trk_head);
   }
 
-  if (last_valid_fix == 0) {
+  if (!last_valid_fix.isValid()) {
     last_valid_fix = current_time();
   }
 
@@ -2117,7 +2117,7 @@ kml_wr_position(waypoint* wpt)
     last_valid_fix = wpt->GetCreationTime();
   }
 
-  wpt->icon_descr = kml_get_posn_icon(wpt->GetCreationTime() - last_valid_fix);
+  wpt->icon_descr = kml_get_posn_icon(wpt->GetCreationTime().toTime_t() - last_valid_fix.toTime_t());
 
 
   /* In order to avoid clutter while we're sitting still, don't add

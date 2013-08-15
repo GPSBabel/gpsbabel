@@ -702,7 +702,7 @@ static int add_wpt(struct wprdata* wprdata, const waypoint* WP,int isroute)
   wpt->usecount = isroute ? 1 : 0;
   wpt->checked  = isroute ? 0 : 1;
   wpt->reserved = 0;
-  pack_time(WP->GetCreationTime(), &(wpt->date), &(wpt->time));
+  pack_time(WP->GetCreationTime().toTime_t(), &(wpt->date), &(wpt->time));
 
   wpthdr->idx[hdr_idx] = wpt_idx;
   wpthdr->used[wpt_idx] = WPT_USED;

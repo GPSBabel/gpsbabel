@@ -130,8 +130,8 @@ static void
 hiketech_trkpt_pr(const waypoint* waypointp)
 {
   gbfprintf(ofd, " <pnt>\n");
-  if (waypointp->creation_time) {
-    hiketech_print_utc(waypointp->GetCreationTime(), "  ", "utc");
+  if (waypointp->creation_time.isValid()) {
+    hiketech_print_utc(waypointp->GetCreationTime().toTime_t(), "  ", "utc");
   }
   gbfprintf(ofd, "  <lat>%f</lat>\n", waypointp->latitude);
   gbfprintf(ofd, "  <long>%f</long>\n", waypointp->longitude);

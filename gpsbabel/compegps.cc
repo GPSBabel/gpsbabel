@@ -564,7 +564,7 @@ write_trkpt_cb(const waypoint* wpt)
 // TOOD: This should probably attempt a gmtime and then fall back to the 1-1-1970
 // case or bypass the time_t completely and build string representations directly.
   if (wpt->creation_time.isValid()) {
-    const time_t tt = wpt->GetCreationTime();
+    const time_t tt = wpt->GetCreationTime().toTime_t();
     struct tm tm = *gmtime(&tt);
 
     strftime(buff, sizeof(buff), "%d-%b-%y %H:%M:%S", &tm);

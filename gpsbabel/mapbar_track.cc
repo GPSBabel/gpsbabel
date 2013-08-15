@@ -50,7 +50,7 @@ mapbar_track_rd_deinit(void)
 }
 
 static gpsbabel::DateTime
-read_time_t(void)
+read_datetime(void)
 {
   int hour = gbfgetint16(fin);
   int min = gbfgetint16(fin);
@@ -85,10 +85,8 @@ mapbar_track_read(void)
   is_fatal((track == NULL), MYNAME ": memory non-enough");
   track_add_head(track);
 
-  time_t start_time = read_time_t();
-  (void) start_time; // currently not used.
-  time_t end_time = read_time_t();
-  (void) end_time; // currently not used.
+  (void) read_datetime(); // start_time currently unused
+  (void) read_datetime(); // end_time currently unused
 
   char name[200] = {0};
   gbfread((void*)name, 1, 200, fin);

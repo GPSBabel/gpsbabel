@@ -581,8 +581,8 @@ static void wr_header(void)
     track = pres_track;
   }
   // Date in header record is that of the first fix record
-  date = !track ? current_time() :
-         ((waypoint*) QUEUE_FIRST(&track->waypoint_list))->GetCreationTime();
+  date = !track ? current_time().toTime_t() :
+         ((waypoint*) QUEUE_FIRST(&track->waypoint_list))->GetCreationTime().toTime_t();
 
   if (NULL == (tm = gmtime(&date))) {
     fatal(MYNAME ": Bad track timestamp\n");
@@ -648,7 +648,7 @@ static void wr_task_hdr(const route_head* rte)
     fatal(MYNAME ": Too much waypoints (more than 99) in task route.\n");
   }
   // Gather data to write to the task identification (first) record
-  rte_time = wpt->GetCreationTime() ? wpt->GetCreationTime() : current_time();
+  rte_time = wpt->GetCreationTime().isValid() ? wpt->GetCreationTime().toTime_t() : current_time().toTime_t();
   if (NULL == (tm = gmtime(&rte_time))) {
     fatal(MYNAME ": Bad task route timestamp\n");
   }
@@ -692,7 +692,7 @@ static void wr_fix_record(const waypoint* wpt, int pres_alt, int gnss_alt)
 {
   struct tm* tm;
 
-  const time_t tt = wpt->GetCreationTime();
+  const time_t tt = wpt->GetCreationTime().toTime_t();
   tm = gmtime(&tt);
 
   if (NULL == tm) {
@@ -742,7 +742,7 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
       return 0;
     }
   } while (alt_diff > -10.0);
-  pres_time = ((waypoint*) elem->next)->GetCreationTime();
+  pres_time = ((waypoint*) elem->next)->GetCreationTime().toTime_t();
   if (global_opts.debug_level >= 1) {
     printf(MYNAME ": pressure landing time %s", ctime(&pres_time));
   }
@@ -758,7 +758,7 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
       return 0;
     }
     // Get a crude indication of groundspeed from the change in lat/lon
-    time_diff = wpt->GetCreationTime() - ((waypoint*) elem)->GetCreationTime();
+    time_diff = wpt->GetCreationTime().toTime_t() - ((waypoint*) elem)->GetCreationTime().toTime_t();
     speed = !time_diff ? 0 :
             (fabs(wpt->latitude - ((waypoint*) elem)->latitude) +
              fabs(wpt->longitude - ((waypoint*) elem)->longitude)) / time_diff;
@@ -766,7 +766,7 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
       printf(MYNAME ": speed=%f\n", speed);
     }
   } while (speed < 0.00003);
-  gnss_time = ((waypoint*) elem->next)->GetCreationTime();
+  gnss_time = ((waypoint*) elem->next)->GetCreationTime().toTime_t();
   if (global_opts.debug_level >= 1) {
     printf(MYNAME ": gnss landing time %s", ctime(&gnss_time));
   }
@@ -797,7 +797,7 @@ static double interpolate_alt(const route_head* track, time_t time)
     curr_elem = prev_elem = QUEUE_FIRST(&track->waypoint_list);
   }
   // Find the track points either side of the requested time
-  while (((waypoint*) curr_elem)->GetCreationTime() < time) {
+  while (((waypoint*) curr_elem)->GetCreationTime().toTime_t() < time) {
     if (QUEUE_LAST(&track->waypoint_list) == curr_elem) {
       // Requested time later than all track points, we can't interpolate
       return unknown_alt;
@@ -810,7 +810,7 @@ static double interpolate_alt(const route_head* track, time_t time)
   curr_wpt = (waypoint*) curr_elem;
 
   if (QUEUE_FIRST(&track->waypoint_list) == curr_elem) {
-    if (curr_wpt->GetCreationTime() == time) {
+    if (curr_wpt->GetCreationTime().toTime_t() == time) {
       // First point's creation time is an exact match so use it's altitude
       return curr_wpt->altitude;
     } else {
@@ -819,12 +819,12 @@ static double interpolate_alt(const route_head* track, time_t time)
     }
   }
   // Interpolate
-  if (0 == (time_diff = curr_wpt->GetCreationTime() - prev_wpt->GetCreationTime())) {
+  if (0 == (time_diff = curr_wpt->GetCreationTime().toTime_t() - prev_wpt->GetCreationTime().toTime_t())) {
     // Avoid divide by zero
     return curr_wpt->altitude;
   }
   alt_diff = curr_wpt->altitude - prev_wpt->altitude;
-  return prev_wpt->altitude + (alt_diff / time_diff) * (time - prev_wpt->GetCreationTime());
+  return prev_wpt->altitude + (alt_diff / time_diff) * (time - prev_wpt->GetCreationTime().toTime_t());
 }
 
 /*
@@ -861,7 +861,7 @@ static void wr_track(void)
     // Iterate through waypoints in both tracks simultaneously
     QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
       wpt = (waypoint*) elem;
-      pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime() + time_adj);
+      pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime().toTime_t() + time_adj);
       wr_fix_record(wpt, (int) pres_alt, (int) wpt->altitude);
     }
   } else {

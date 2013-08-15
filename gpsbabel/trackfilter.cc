@@ -354,8 +354,8 @@ trackfilter_fill_track_list_cb(const route_head *track) 	/* callback for track_d
     track_pts++;
 
     wpt = (waypoint *)elem;
-    if(wpt->creation_time == 0) timeless_pts++;
-    if (!(opt_merge && opt_discard) && (need_time != 0) && (wpt->creation_time == 0)) {
+    if (!wpt->creation_time.isValid()) timeless_pts++;
+    if (!(opt_merge && opt_discard) && (need_time != 0) && (!wpt->creation_time.isValid())) {
       fatal(MYNAME "-init: Found track point at %f,%f without time!\n",
             wpt->latitude, wpt->longitude);
     }
@@ -525,7 +525,7 @@ trackfilter_merge(void)
     route_head *track = track_list[i].track;
     QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp) {
       wpt = (waypoint *)elem;
-      if(wpt->creation_time != 0) {
+      if(wpt->creation_time.isValid()) {
         buff[j++] = waypt_dupe(wpt);
       }
       track_del_wpt(track, wpt);
@@ -730,7 +730,7 @@ trackfilter_split(void)
       }
 
       if (interval > 0) {
-        double tr_interval = difftime(buff[j]->GetCreationTime(),buff[i]->GetCreationTime());
+        double tr_interval = difftime(buff[j]->GetCreationTime().toTime_t(), buff[i]->GetCreationTime().toTime_t());
         if (tr_interval <= interval) {
           new_track_flag = 0;
         }
@@ -835,12 +835,12 @@ trackfilter_synth(void)
                     RAD(wpt->longitude)));
         }
         if (opt_speed) {
-          if (oldtime != wpt->GetCreationTime()) {
+          if (oldtime != wpt->GetCreationTime().toTime_t()) {
             WAYPT_SET(wpt, speed, radtometers(gcdist(
                                                 RAD(oldlat), RAD(oldlon),
                                                 RAD(wpt->latitude),
                                                 RAD(wpt->longitude))) /
-                      labs(wpt->GetCreationTime()-oldtime));
+                      labs(wpt->GetCreationTime().toTime_t()-oldtime));
           } else {
             WAYPT_UNSET(wpt, speed);
           }
@@ -848,7 +848,7 @@ trackfilter_synth(void)
       }
       oldlat = wpt->latitude;
       oldlon = wpt->longitude;
-      oldtime = wpt->GetCreationTime();
+      oldtime = wpt->GetCreationTime().toTime_t();
     }
   }
 }
@@ -915,12 +915,12 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
 
     QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp) {
       waypoint *wpt = (waypoint *)elem;
-      if (wpt->creation_time > 0) {
-        inside = ((wpt->GetCreationTime() >= start) && (wpt->GetCreationTime() <= stop));
+      if (wpt->creation_time.isValid()) {
+        inside = ((wpt->GetCreationTime().toTime_t() >= start) && (wpt->GetCreationTime().toTime_t() <= stop));
       }
       // If the time is mangled so horribly that it's
       // negative, toss it.
-      if (wpt->creation_time < 0) {
+      if (!wpt->creation_time.isValid()) {
         inside = 0;
       }
 
@@ -1118,7 +1118,7 @@ trackfilter_faketime(void)             /* returns number of track points left af
     QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp) {
       waypoint *wpt = (waypoint *)elem;
 
-      if (opt_faketime != 0 && (wpt->creation_time == 0 || faketime.force)) {
+      if (opt_faketime != 0 && (!wpt->creation_time.isValid() || faketime.force)) {
         wpt->creation_time = QDateTime::fromTime_t(faketime.start);
         faketime.start += faketime.step;
       }

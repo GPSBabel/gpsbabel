@@ -134,8 +134,8 @@ pocketfms_waypt_disp(const waypoint *wpt)
   memset(&bc, 0, sizeof(bc));
   const time_t tt = wpt->GetCreationTime().toTime_t();
   tm = localtime(&tt);
-  if (wpt->creation_time) {
-    const time_t tt = wpt->GetCreationTime();
+  if (wpt->creation_time.isValid()) {
+    const time_t tt = wpt->GetCreationTime().toTime_t();
     tm = gmtime(&tt);
   }
 

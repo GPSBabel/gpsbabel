@@ -535,7 +535,7 @@ gtm_read(void)
     }
     fread_discard(file_in, 1);
     wpt->creation_time = fread_long(file_in);
-    if (wpt->creation_time) {
+    if (wpt->creation_time.isValid()) {
       wpt->creation_time += EPOCH89DIFF;
     }
     fread_discard(file_in, 2);
@@ -563,7 +563,7 @@ gtm_read(void)
     wpt->longitude = fread_double(file_in);
     convert_datum(&wpt->latitude, &wpt->longitude);
     wpt->SetCreationTime(fread_long(file_in));
-    if (wpt->creation_time) {
+    if (wpt->creation_time.isValid()) {
       wpt->creation_time += EPOCH89DIFF;
     }
     start_new = fread_byte(file_in);
@@ -641,8 +641,8 @@ static void write_waypt(const waypoint* wpt)
   fwrite_string(file_out, wpt->description);
   fwrite_integer(file_out, icon_from_descr(wpt->icon_descr));
   fwrite_byte(file_out, 3);
-  if (wpt->creation_time) {
-    fwrite_long(file_out, wpt->GetCreationTime()-EPOCH89DIFF);
+  if (wpt->creation_time.isValid()) {
+    fwrite_long(file_out, wpt->GetCreationTime().toTime_t()-EPOCH89DIFF);
   } else {
     fwrite_long(file_out, 0);
   }
@@ -665,7 +665,7 @@ static void write_trk_waypt(const waypoint* wpt)
 {
   fwrite_double(file_out, wpt->latitude);
   fwrite_double(file_out, wpt->longitude);
-  fwrite_long(file_out, wpt->GetCreationTime()-EPOCH89DIFF);
+  fwrite_long(file_out, wpt->GetCreationTime().toTime_t()-EPOCH89DIFF);
   fwrite_byte(file_out, start_new);
   if (wpt->altitude == unknown_alt) {
     fwrite_single(file_out, unknown_alt_gtm);

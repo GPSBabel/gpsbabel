@@ -803,7 +803,7 @@ osm_waypt_disp(const waypoint* wpt)
   ((waypoint*)(wpt))->extra_data = id;
 
   gbfprintf(fout, "  <node id='%d' visible='true' lat='%0.7f' lon='%0.7f'", *id, wpt->latitude, wpt->longitude);
-  if (wpt->creation_time) {
+  if (wpt->creation_time.isValid()) {
     QString time_string = wpt->CreationTimeXML();
     gbfprintf(fout, " timestamp='%s'", qPrintable(time_string));
   }

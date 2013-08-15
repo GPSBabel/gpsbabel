@@ -486,7 +486,7 @@ void mapsend_track_disp(const waypoint* wpt)
    *
    * This is rumoured (but yet unconfirmed) to be fixed in f/w 5.12.
    */
-  t = wpt->GetCreationTime();
+  t = wpt->GetCreationTime().toTime_t();
   if (t < last_time)  {
     t = last_time;
   }

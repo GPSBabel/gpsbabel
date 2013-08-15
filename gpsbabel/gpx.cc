@@ -1017,7 +1017,7 @@ gpx_end(void* data, const XML_Char* xml_el)
     waypt_alloc_gc_data(wpt_tmp)->placer = cdatastrp;
     break;
   case tt_cache_log_date:
-    gc_log_date = xml_parse_time(cdatastrp);
+    gc_log_date = xml_parse_time(cdatastrp).toTime_t();
     break;
     /*
      * "Found it" logs follow the date according to the schema,
@@ -1026,7 +1026,7 @@ gpx_end(void* data, const XML_Char* xml_el)
      */
   case tt_cache_log_type:
     if ((0 == strcmp(cdatastrp, "Found it")) &&
-        (0 == wpt_tmp->gc_data->last_found)) {
+        (0 == wpt_tmp->gc_data->last_found.toTime_t())) {
       waypt_alloc_gc_data(wpt_tmp)->last_found = gc_log_date;
     }
     gc_log_date = 0;
