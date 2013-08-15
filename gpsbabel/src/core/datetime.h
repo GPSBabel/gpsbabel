@@ -55,14 +55,6 @@ public:
     return toTime_t();
   }
 
-  DateTime operator+(quint64 seconds) {
-    return DateTime::fromMSecsSinceEpoch(toMSecsSinceEpoch() + seconds*1000);
-  }
-
-  DateTime operator-(quint64 seconds) {
-    return DateTime::fromMSecsSinceEpoch(toMSecsSinceEpoch() - seconds*1000);
-  }
-
   // Integer form: YYMMDD
   int ymd() const {
     QDate d(date());

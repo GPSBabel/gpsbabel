@@ -189,7 +189,7 @@ tiger_disp(const waypoint *wpt)
     pin = wpt->icon_descr;
   } else if (wpt->icon_descr.contains("-unfound")) {
     pin = unfoundmarker;
-  } else if (wpt->GetCreationTime() > current_time() - 3600 * 24 * thresh_days) {
+  } else if (wpt->GetCreationTime().toTime_t() > current_time().toTime_t() - 3600 * 24 * thresh_days) {
     pin = newmarker;
   } else {
     pin = oldmarker;
