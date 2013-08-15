@@ -269,9 +269,12 @@ polygon_process(void)
               fileline);
     } else if (lat1 != BADVAL && lon1 != BADVAL &&
                lat2 != BADVAL && lon2 != BADVAL) {
+#if NEWQ
+      foreach(waypoint* waypointp, waypt_list) {
+#else
       QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-
         waypointp = (waypoint *)elem;
+#endif
         if (waypointp->extra_data) {
           ed = (extra_data *) waypointp->extra_data;
         } else {
@@ -315,8 +318,12 @@ polygon_process(void)
   }
   gbfclose(file_in);
 
+#if NEWQ
+  foreach(waypoint* wp, waypt_list) {
+#else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     waypoint *wp = (waypoint *) elem;
+#endif
     ed = (extra_data *) wp->extra_data;
     wp->extra_data = NULL;
     if (ed) {

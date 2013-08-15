@@ -92,9 +92,12 @@ arcdist_arc_disp_wpt_cb(const waypoint *arcpt2)
   if (arcpt2 && arcpt2->latitude != BADVAL && arcpt2->longitude != BADVAL &&
       (ptsopt || (arcpt1 &&
                   (arcpt1->latitude != BADVAL && arcpt1->longitude != BADVAL)))) {
+#if NEWQ
+    foreach(waypoint* waypointp, waypt_list) {
+#else
     QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-
       waypointp = (waypoint*) elem;
+#endif
       if (waypointp->extra_data) {
         ed = (extra_data*) waypointp->extra_data;
       } else {
@@ -204,8 +207,12 @@ arcdist_process(void)
   }
 
   removed = 0;
+#if NEWQ
+  foreach(waypoint* wp, waypt_list) {
+#else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     waypoint* wp = (waypoint*) elem;
+#endif
     extra_data* ed;
     ed = (extra_data*) wp->extra_data;
     wp->extra_data = NULL;
