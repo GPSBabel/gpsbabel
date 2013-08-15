@@ -241,19 +241,6 @@ static void kml_step_color(void)
   kml_color_sequencer.seq = kml_color_sequencer.seq + kml_color_sequencer.step;
 }
 
-#if ! HAVE_LIBEXPAT
-static void
-kml_rd_init(const char* fname)
-{
-  fatal(MYNAME ": This build excluded KML support because expat was not installed.\n");
-}
-
-static void
-kml_read(void)
-{
-}
-#else
-
 static xg_callback wpt_s, wpt_e;
 static xg_callback wpt_name, wpt_desc, wpt_coord, wpt_icon, trk_coord, wpt_time;
 
@@ -396,7 +383,6 @@ kml_read(void)
 {
   xml_read();
 }
-#endif
 
 static void
 kml_rd_deinit(void)

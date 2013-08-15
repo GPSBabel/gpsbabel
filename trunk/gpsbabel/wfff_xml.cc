@@ -56,23 +56,6 @@ arglist_t wfff_xml_args[] = {
 #define MYNAME "wfff_xml"
 #define MY_CBUF 4096
 
-#if ! HAVE_LIBEXPAT
-void
-wfff_xml_rd_init(const char *fname)
-{
-  fatal(MYNAME ": This build excluded WFFF_XML support because expat was not installed.\n");
-}
-void
-wfff_xml_read(void)
-{
-}
-void
-wfff_xml_rd_deinit(void)
-{
-}
-
-#else
-
 static xg_callback	wfff_s,      wfff_e;
 static xg_callback	wfff_wep,    wfff_mac,    wfff_type;
 static xg_callback	wfff_ssid,   wfff_chan;
@@ -309,8 +292,6 @@ wfff_xml_rd_deinit(void)
   }
 
 }
-
-#endif
 
 ff_vecs_t wfff_xml_vecs = {
   ff_type_file,

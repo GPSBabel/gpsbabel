@@ -62,25 +62,6 @@ arglist_t gtc_args[] = {
   ARG_TERMINATOR
 };
 
-#if ! HAVE_LIBEXPAT
-static void
-gtc_rd_init(const char* fname)
-{
-  fatal(MYNAME ": this format does not support reading.\n");
-}
-
-static void
-gtc_read(void)
-{
-}
-
-static void
-gtc_rd_deinit(void)
-{
-
-}
-#else
-
 /* Tracks */
 static xg_callback	gtc_trk_s;
 static xg_callback	gtc_trk_ident;
@@ -197,7 +178,6 @@ gtc_rd_deinit(void)
 {
   xml_deinit();
 }
-#endif
 
 static void
 gtc_wr_init(const char* fname)

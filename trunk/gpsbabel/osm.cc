@@ -46,10 +46,8 @@ static gbfile* fout;
 static int node_id;
 static int skip_rte;
 
-#if HAVE_LIBEXPAT
 static route_head* rte;
 static waypoint* wpt;
-static int wpt_loaded, rte_loaded;
 
 static xg_callback	osm_node, osm_node_tag, osm_node_end;
 static xg_callback	osm_way, osm_way_nd, osm_way_tag, osm_way_end;
@@ -65,7 +63,6 @@ xg_tag_mapping osm_map[] = {
   { osm_way_end,	cb_end,		"/osm/way" },
   { NULL,	(xg_cb_type)0,		NULL }
 };
-#endif // HAVE_LIBEXPAT
 
 static const char* osm_features[] = {
   "- dummy -",	/*  0 */
@@ -403,21 +400,6 @@ static osm_icon_mapping_t osm_icon_mappings[] = {
   { -1, NULL, NULL }
 };
 
-#if ! HAVE_LIBEXPAT
-
-void
-osm_rd_init(const char* fname)
-{
-  fatal(MYNAME ": This build excluded \" MYNAME \" support because expat was not installed.\n");
-}
-
-void
-osm_read(void)
-{
-}
-
-#else
-
 
 /*******************************************************************************/
 /*                                   READER                                    */
@@ -670,8 +652,6 @@ osm_rd_init(const char* fname)
 {
   wpt = NULL;
   rte = NULL;
-  wpt_loaded = 0;
-  rte_loaded = 0;
 
   waypoints.clear();
   if (keys.isEmpty()) {
@@ -686,8 +666,6 @@ osm_read(void)
 {
   xml_read();
 }
-
-#endif
 
 static void
 osm_rd_deinit(void)
