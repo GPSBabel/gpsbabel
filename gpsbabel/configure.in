@@ -183,7 +183,9 @@ case "$target" in
 			[#include <hidsdi.h>],
 			[HANDLE              HidDeviceObject;
 			HIDD_ATTRIBUTES    Attributes;
-			HidD_GetAttributes(HidDeviceObject, &Attributes);],
+			PHIDP_PREPARSED_DATA HidPPD;
+			HidD_GetAttributes(HidDeviceObject, &Attributes);
+			HidD_GetPreparsedData(HidDeviceObject, &HidPPD);],
 			[AC_MSG_RESULT(yes)]
 			[AC_DEFINE(HAVE_WDK, 1, [Defined if you have Windows DDK])]
 			[USB_LIBS=${USB_LIBS}" -lhid"],
@@ -253,7 +255,7 @@ dnl Linux HID support
 case "$target" in
 	*-linux-*)
 	AC_MSG_CHECKING(for Linux HID interface)
-	AC_COMPILE_IFELSE([
+	AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 		#include <sys/ioctl.h>
 		#include <linux/types.h>
 		#include <linux/hiddev.h>
@@ -267,7 +269,7 @@ case "$target" in
 			ioctl(0, HIDIOCGFIELDINFO, &finfo);
 			ioctl(0, HIDIOCSUSAGES, &urefm);
 			ioctl(0, HIDIOCSREPORT, &rinfo);
-		}],
+		}])],
 		AC_MSG_RESULT(yes)
 		AC_DEFINE(HAVE_LINUX_HID, 1, [Defined if you have Linux HID]),
 		AC_MSG_RESULT(no))
