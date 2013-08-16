@@ -165,7 +165,7 @@ static void igo8_read(void)
 
     wpt_tmp->latitude = le_read32(&point.lat) / (double)0x800000;
     wpt_tmp->longitude = le_read32(&point.lon) / (double)0x800000;
-    wpt_tmp->creation_time = le_read32(&point.unix_time);
+    wpt_tmp->SetCreationTime(le_read32(&point.unix_time));
 
     track_add_wpt(track_head, wpt_tmp);
   }

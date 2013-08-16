@@ -856,9 +856,9 @@ exif_waypt_from_exif_app(exif_app_t* app)
     printf(MYNAME "-GPSTimeStamp =   %s\n", str);
     xfree(str);
 #endif
-    wpt->creation_time = timestamp;
+    wpt->SetCreationTime(timestamp);
   } else {
-    wpt->creation_time = exif_get_exif_time(app);
+    wpt->SetCreationTime(exif_get_exif_time(app));
   }
 
   tag = exif_find_tag(app, EXIF_IFD, EXIF_IFD_TAG_USER_CMT); /* UserComment */

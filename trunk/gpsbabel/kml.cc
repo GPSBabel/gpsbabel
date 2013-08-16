@@ -692,11 +692,11 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   }
   if (td->start && td->end) {
     gpsbabel::DateTime t;
-    t = td->start;
+    t = QDateTime::fromTime_t(td->start);
     if (t.isValid()) {
       kml_td(hwriter, "Start Time", t.toPrettyString());
     }
-    t = td->end;
+    t = QDateTime::fromTime_t(td->end);
     if (t.isValid()) {
       kml_td(hwriter, "End Time", t.toPrettyString());
     }
@@ -715,9 +715,9 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
     writer->writeStartElement("TimeSpan");
 
     gpsbabel::DateTime t;
-    t = td->start;
+    t = QDateTime::fromTime_t(td->start);
     writer->writeTextElement("begin", t.toPrettyString());
-    t = td->end;
+    t = QDateTime::fromTime_t(td->end);
     writer->writeTextElement("end", t.toPrettyString());
 
     writer->writeEndElement(); // Close TimeSpan tag

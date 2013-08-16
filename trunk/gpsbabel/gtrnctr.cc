@@ -229,8 +229,8 @@ gtc_write_xml(int indent, const char* fmt, ...)
 static void
 gtc_lap_start(const route_head* rte)
 {
-  gtc_least_time = 0;
-  gtc_most_time = 0;
+  gtc_least_time = gpsbabel::DateTime();
+  gtc_most_time = gpsbabel::DateTime();
 }
 
 static void

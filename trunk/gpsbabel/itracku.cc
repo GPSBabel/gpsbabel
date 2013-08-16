@@ -295,7 +295,7 @@ to_waypoint(itracku_data_record* d)
   wp = waypt_new();
   wp->longitude = deg_min_to_deg(le_read32(d->longitude));
   wp->latitude = deg_min_to_deg(le_read32(d->latitude));
-  wp->creation_time = decode_itracku_time(le_read32(d->creation_time));
+  wp->SetCreationTime(decode_itracku_time(le_read32(d->creation_time)));
   wp->speed = KNOTS_TO_MPS((float)d->speed);
   wp->wpt_flags.speed = 1;
   wp->altitude = le_read16(d->altitude);

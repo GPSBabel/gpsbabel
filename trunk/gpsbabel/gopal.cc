@@ -234,7 +234,7 @@ gopal_read(void)
         tm.tm_mon=trackdate.tm_mon;
         tm.tm_mday=trackdate.tm_mday;
         // This will probably be overwritten by field 9...if we have 9 fields.
-        wpt->creation_time = tx+((((time_t)tm.tm_hour * 60) + tm.tm_min) * 60) + tm.tm_sec;
+        wpt->SetCreationTime(tx+((((time_t)tm.tm_hour * 60) + tm.tm_min) * 60) + tm.tm_sec);
         wpt->creation_time = wpt->creation_time.addMSecs(millisecs);
         if (global_opts.debug_level > 1) {
           time_t t = wpt->GetCreationTime().toTime_t();
