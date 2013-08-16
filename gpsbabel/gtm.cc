@@ -534,7 +534,7 @@ gtm_read(void)
       wpt->icon_descr = icon_descr[icon];
     }
     fread_discard(file_in, 1);
-    wpt->creation_time = fread_long(file_in);
+    wpt->SetCreationTime(fread_long(file_in));
     if (wpt->creation_time.isValid()) {
       wpt->creation_time += EPOCH89DIFF;
     }

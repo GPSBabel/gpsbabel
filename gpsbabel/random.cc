@@ -159,7 +159,7 @@ random_read(void)
       WAYPT_SET(wpt, depth, rand_int(10000) / 10.0);
     }
 
-    wpt->creation_time = time;
+    wpt->SetCreationTime(time);
     if RND(3) {
       wpt->creation_time.addMSecs(rand_int(1000) * 1000);
     }

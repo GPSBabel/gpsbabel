@@ -410,7 +410,7 @@ lowranceusr_parse_waypt(waypoint* wpt_tmp)
   /* Time is number of seconds since Jan. 1, 2000 */
   waypt_time = gbfgetint32(file_in);
   if (waypt_time) {
-    wpt_tmp->creation_time = base_time_secs + waypt_time;
+    wpt_tmp->SetCreationTime(base_time_secs + waypt_time);
   }
 
   if (global_opts.debug_level >= 2) {

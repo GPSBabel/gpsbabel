@@ -1196,7 +1196,7 @@ parse_waypoint(void)
     case 16: {
       time_t ct;
       parse_date_and_time(str, &ct);
-      wpt->creation_time = ct;
+      wpt->SetCreationTime(ct);
       }
       break;
     case 17: {
@@ -1315,7 +1315,7 @@ parse_track_waypoint(void)
     case 2: {
       time_t ct;
       parse_date_and_time(str, &ct);
-      wpt->creation_time = ct;
+      wpt->SetCreationTime(ct);
       }
       break;
     case 3:

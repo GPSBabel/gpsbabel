@@ -240,7 +240,7 @@ data_read(void)
     wpt_tmp->description = xstrdup(desc);
     wpt_tmp->longitude = lon;
     wpt_tmp->latitude = lat;
-    wpt_tmp->creation_time = mktime(&tm);
+    wpt_tmp->SetCreationTime(mktime(&tm));
 
     waypt_add(wpt_tmp);
   }

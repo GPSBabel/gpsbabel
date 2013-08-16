@@ -45,11 +45,7 @@ public:
   DateTime(QDate date, QTime time) : QDateTime(date, time) {}
   DateTime(QDateTime dt) : QDateTime(dt) {}
 
-  const time_t& operator=(const time_t& t) {
-    setTime_t(t);
-    return t;
-  }
-
+  // TODO: this should go away in favor of .addSecs().
   time_t operator+=(const time_t& t) {
     setTime_t(toTime_t() + t);
     return toTime_t();

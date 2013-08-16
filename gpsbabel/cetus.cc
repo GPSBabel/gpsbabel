@@ -366,7 +366,7 @@ read_waypts(const pdbfile* pdb)
       tm.tm_mon = rec->mon - 1;
       tm.tm_year = be_read16(&rec->year) - 1900;
 
-      wpt_tmp->creation_time = mkgmtime(&tm);
+      wpt_tmp->SetCreationTime(mkgmtime(&tm));
 
     }
 

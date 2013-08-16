@@ -98,7 +98,7 @@ interpfilt_process(void)
                timen < wpt->creation_time.toTime_t();
                timen += interval) {
             waypoint* wpt_new = waypt_dupe(wpt);
-            wpt_new->creation_time = timen;
+            wpt_new->SetCreationTime(timen);
             if (wpt_new->shortname) {
               xfree(wpt_new->shortname);
             }
@@ -130,8 +130,8 @@ interpfilt_process(void)
                  distn < curdist;
                  distn += dist) {
               waypoint* wpt_new = waypt_dupe(wpt);
-              wpt_new->creation_time = distn/curdist*
-                                       (wpt->creation_time.toTime_t() - time1) + time1;
+              wpt_new->SetCreationTime(distn/curdist*
+                                       (wpt->creation_time.toTime_t() - time1) + time1);
               if (wpt_new->shortname) {
                 xfree(wpt_new->shortname);
               }

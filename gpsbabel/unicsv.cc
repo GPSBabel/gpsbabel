@@ -460,7 +460,7 @@ unicsv_parse_status(const char *str)
 #endif
 
 #ifdef UNICSV_GC_READY
-static time_t
+static QDateTime
 unicsv_adjust_time(const time_t time, time_t *date)
 {
   time_t res = time;
@@ -473,7 +473,7 @@ unicsv_adjust_time(const time_t time, time_t *date)
     struct tm tm = *gmtime(&res);
     res = mklocaltime(&tm);
   }
-  return res;
+  return QDateTime::fromTime_t(res);
 }
 #endif
 

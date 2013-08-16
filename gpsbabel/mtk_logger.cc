@@ -774,7 +774,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
   if (bmask & (1<<HEIGHT)) {
     trk->altitude       = itm->height;
   }
-  trk->creation_time  = itm->timestamp; // in UTC..
+  trk->SetCreationTime(itm->timestamp); // in UTC..
   if (bmask & (1<<MILLISECOND)) {
     trk->creation_time = trk->creation_time.addMSecs(itm->timestamp_ms);
   }

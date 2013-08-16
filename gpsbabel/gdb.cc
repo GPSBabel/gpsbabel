@@ -698,7 +698,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     }
   }
   if (FREAD_C == 1) {
-    res->creation_time = FREAD_i32;
+    res->SetCreationTime(FREAD_i32);
   }
 
   /* VERSION DEPENDENT CODE */
@@ -993,7 +993,7 @@ read_track(void)
       }
     }
     if (FREAD_C == 1) {
-      wpt->creation_time = FREAD_i32;
+      wpt->SetCreationTime(FREAD_i32);
     }
     if (FREAD_C == 1) {
       WAYPT_SET(wpt, depth, FREAD_DBL);
