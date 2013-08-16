@@ -4565,7 +4565,9 @@ main ()
 {
 HANDLE              HidDeviceObject;
 			HIDD_ATTRIBUTES    Attributes;
+			PHIDP_PREPARSED_DATA HidPPD;
 			HidD_GetAttributes(HidDeviceObject, &Attributes);
+			HidD_GetPreparsedData(HidDeviceObject, &HidPPD);
   ;
   return 0;
 }
