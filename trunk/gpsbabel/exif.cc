@@ -589,7 +589,6 @@ exif_examine_app(exif_app_t* app)
   uint16_t endianess;
   uint32_t ident;
   gbfile* ftmp = exif_app->fcache;
-  int i;
 
   gbfrewind(ftmp);
   ident = gbfgetuint32(ftmp);
@@ -611,7 +610,7 @@ exif_examine_app(exif_app_t* app)
   gbfseek(ftmp, 6, SEEK_SET);
   app->fexif = gbfopen(NULL, "wb", MYNAME);
   app->fexif->big_endian = ftmp->big_endian;
-  i = gbfcopyfrom(app->fexif, ftmp, 0x7FFFFFFF);
+  gbfcopyfrom(app->fexif, ftmp, 0x7FFFFFFF);
 
   exif_read_app(exif_app);
 }

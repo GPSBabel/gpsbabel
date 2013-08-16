@@ -225,5 +225,5 @@ ff_vecs_t navicache_vecs = {
   nav_write,
   NULL,
   nav_args,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  CET_CHARSET_UTF8, 0	/* CET-REVIEW */
 };
