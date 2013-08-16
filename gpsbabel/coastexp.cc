@@ -698,9 +698,6 @@ ce_write(void)
      If doing waypoints, we write out the route waypoints (without the routes) and
      the standalone waypoints.
   */
-  time_t now = 0;
-  now = current_time().toTime_t();
-
   write_xml_header(ofd);
   write_xml_entity_begin1(ofd, "", "NavObjectCollection", "created",
                           ce_gen_current_time());
