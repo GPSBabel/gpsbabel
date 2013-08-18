@@ -46,9 +46,12 @@ public:
   DateTime(QDateTime dt) : QDateTime(dt) {}
 
   // TODO: this should go away in favor of .addSecs().
-  time_t operator+=(const time_t& t) {
-    setTime_t(toTime_t() + t);
-    return toTime_t();
+  // add time_t without losing any existing milliseconds.
+  DateTime& operator+=(const time_t& t) {
+    QDateTime dt = addSecs(t);
+    setDate(dt.date());
+    setTime(dt.time());
+    return *this;
   }
 
   // Integer form: YYMMDD
