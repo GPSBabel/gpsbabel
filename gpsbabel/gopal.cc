@@ -295,7 +295,6 @@ gopal_read(void)
           fatal("Bad date '%s'.\n", c);
         }
         wpt->creation_time += mkgmtime(&tm2);
-        wpt->creation_time = wpt->creation_time.addMSecs(millisecs);
         break;
       case 10:  // Unknown.  Ignored.
       case 11:  // Bearing.  Ignored.
