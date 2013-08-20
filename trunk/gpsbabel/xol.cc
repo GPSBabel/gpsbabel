@@ -27,9 +27,9 @@
 #include "jeeps/gpsmath.h"
 #include "garmin_tables.h"
 
-static waypoint *wpt;
-static route_head *trk;
-static gbfile *fout;
+static waypoint* wpt;
+static route_head* trk;
+static gbfile* fout;
 static int space;
 static bounds all_bounds;
 static short_handle short_h;
@@ -56,7 +56,7 @@ xg_tag_mapping xol_map[] = {
 
 
 static void
-xol_overlay(const char *args, const QXmlStreamAttributes* attrv)
+xol_overlay(const char* args, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("version")) {
     if (attrv->value("version") != "1.0") {
@@ -67,7 +67,7 @@ xol_overlay(const char *args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-xol_shape(const char *args, const QXmlStreamAttributes* attrv)
+xol_shape(const char* args, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("type")) {
     if (attrv->value("type") == "waypoint") {
@@ -106,7 +106,7 @@ xol_shape(const char *args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-xol_shape_end(const char *args, const QXmlStreamAttributes* unused)
+xol_shape_end(const char* args, const QXmlStreamAttributes* unused)
 {
   if (wpt) {
     if (trk) {
@@ -124,7 +124,7 @@ xol_shape_end(const char *args, const QXmlStreamAttributes* unused)
 }
 
 static void
-xol_waypt(const char *args, const QXmlStreamAttributes* attrv)
+xol_waypt(const char* args, const QXmlStreamAttributes* attrv)
 {
   int x=0, y=0;
 
@@ -140,7 +140,7 @@ xol_waypt(const char *args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-xol_rd_init(const char *fname)
+xol_rd_init(const char* fname)
 {
   trk = NULL;
   wpt = NULL;
@@ -163,7 +163,7 @@ xol_rd_deinit(void)
 /* writer */
 
 static void
-xol_fatal_outside(const waypoint *wpt)
+xol_fatal_outside(const waypoint* wpt)
 {
   gbfprintf(fout, "#####\n");
   fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
@@ -174,7 +174,7 @@ xol_fatal_outside(const waypoint *wpt)
 
 
 static void
-xol_write_time(const waypoint *wpt)
+xol_write_time(const waypoint* wpt)
 {
   QString time_string = wpt->CreationTimeXML();
   if (!time_string.isEmpty()) {
@@ -183,23 +183,23 @@ xol_write_time(const waypoint *wpt)
 }
 
 static void
-xol_write_string(const char *name, const char *str)
+xol_write_string(const char* name, const char* str)
 {
   if (str && *str) {
-    char *temp = strenquote(str, '"');
+    char* temp = strenquote(str, '"');
     gbfprintf(fout, " %s=%s", name, temp);
     xfree(temp);
   }
 }
 
 static void
-xol_waypt_bound_calc(const waypoint *wpt)
+xol_waypt_bound_calc(const waypoint* wpt)
 {
   waypt_add_to_bounds(&all_bounds, wpt);
 }
 
 static void
-xol_wr_init(const char *fname)
+xol_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 
@@ -224,10 +224,10 @@ xol_wr_deinit(void)
 }
 
 static void
-xol_waypt_disp_cb(const waypoint *wpt)
+xol_waypt_disp_cb(const waypoint* wpt)
 {
   double x, y;
-  char *name;
+  char* name;
 
   name = wpt->shortname;
   if ((name == NULL) || (*name == '\0') || global_opts.synthesize_shortnames) {
@@ -261,7 +261,7 @@ xol_waypt_disp_cb(const waypoint *wpt)
 }
 
 static void
-xol_track_hdr_disp_cb(const route_head *trk)
+xol_track_hdr_disp_cb(const route_head* trk)
 {
   gbfprintf(fout, "%*s<shape type=\"polyline\"", space++*2, "");
   xol_write_string("name", trk->rte_name);
@@ -270,14 +270,14 @@ xol_track_hdr_disp_cb(const route_head *trk)
 }
 
 static void
-xol_track_tlr_disp_cb(const route_head *trk)
+xol_track_tlr_disp_cb(const route_head* trk)
 {
   gbfprintf(fout, "%*s</waypoints>\n", --space*2, "");
   gbfprintf(fout, "%*s</shape>\n", --space*2, "");
 }
 
 static void
-xol_trkpt_disp_cb(const waypoint *wpt)
+xol_trkpt_disp_cb(const waypoint* wpt)
 {
   double x, y;
 

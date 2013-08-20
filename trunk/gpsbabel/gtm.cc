@@ -144,7 +144,8 @@ fwrite_string(gbfile* fd, const char* str)
   }
 }
 static void
-fwrite_string(gbfile* fd, QString& str) {
+fwrite_string(gbfile* fd, QString& str)
+{
   if (str.isEmpty()) {
     fwrite_integer(fd, 0);
   } else {
@@ -318,13 +319,11 @@ static const int indatum_array[MAX_INDATUM_INDEX] = {
 void set_datum(int n)
 {
   indatum = -1;
-  if (n > 0 && n < MAX_INDATUM_INDEX)
-  {
-	  indatum = indatum_array[n];
+  if (n > 0 && n < MAX_INDATUM_INDEX) {
+    indatum = indatum_array[n];
   }
 
-  if (indatum == -1)
-  {
+  if (indatum == -1) {
     warning(MYNAME ": Unsupported datum (%d), won't convert to WGS84\n", n);
   }
 }

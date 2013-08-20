@@ -29,15 +29,15 @@ static SHPHandle ohandle;
 #define MYNAME "shape"
 
 static unsigned poly_count;
-static double *polybufx;
-static double *polybufy;
-static double *polybufz;
-static const char *ofname;
+static double* polybufx;
+static double* polybufy;
+static double* polybufz;
+static const char* ofname;
 static int nameidx;
 static int urlidx;
 
-static char *opt_name = NULL;
-static char *opt_url = NULL;
+static char* opt_name = NULL;
+static char* opt_url = NULL;
 
 static
 arglist_t shp_args[] = {
@@ -53,7 +53,7 @@ arglist_t shp_args[] = {
 };
 
 static void
-my_rd_init(const char *fname)
+my_rd_init(const char* fname)
 {
   ihandle = SHPOpen(fname, "rb");
   if (ihandle == NULL) {
@@ -70,7 +70,7 @@ my_rd_init(const char *fname)
       int nFields = 0;
       int i = 0;
       char name[12];
-      char *txt = xstrdup("  Database fields\n");
+      char* txt = xstrdup("  Database fields\n");
       nFields = DBFGetFieldCount(ihandledb);
       for (i = 0; i < nFields; i++) {
         char txtName[50];
@@ -112,17 +112,17 @@ void
 my_read(void)
 {
   int npts;
-  const char *etype = "unknown";
+  const char* etype = "unknown";
 
   SHPGetInfo(ihandle, &npts, NULL, NULL, NULL);
 
   while (npts) {
-    SHPObject *shp;
-    waypoint *wpt;
-    const char *name = "";
-    const char *url;
-    char *tmpName = NULL;
-    char *tmpIndex = opt_name;
+    SHPObject* shp;
+    waypoint* wpt;
+    const char* name = "";
+    const char* url;
+    char* tmpName = NULL;
+    char* tmpIndex = opt_name;
 
     shp = SHPReadObject(ihandle, npts-1);
     if (nameidx >0) {
@@ -134,7 +134,7 @@ my_read(void)
         tmpName = xstrdup("");
         tmpIndex = opt_name;
         while (tmpIndex) {
-          char *tmp2 = tmpIndex;
+          char* tmp2 = tmpIndex;
           tmpIndex = strchr(tmpIndex,'+');
           if (tmpIndex) {
             *tmpIndex = '\0';
@@ -168,7 +168,7 @@ my_read(void)
     switch (shp->nSHPType) {
     case SHPT_ARC: {
       int j;
-      route_head *routehead = route_head_alloc();
+      route_head* routehead = route_head_alloc();
       routehead->rte_name = xstrdup(name);
       route_add_head(routehead);
       for (j = 0; j < shp->nVertices; j++) {
@@ -251,7 +251,7 @@ my_rd_deinit(void)
 }
 
 void
-my_wr_init(const char *fname)
+my_wr_init(const char* fname)
 {
   ofname = fname;
 }
@@ -263,20 +263,20 @@ my_wr_deinit(void)
 }
 
 void
-my_write_wpt(const waypoint *wpt)
+my_write_wpt(const waypoint* wpt)
 {
-  SHPObject *shpobject;
+  SHPObject* shpobject;
 
   shpobject = SHPCreateSimpleObject(SHPT_POINT, 1,
-                                    (double *)(void *)&wpt->longitude,
-                                    (double *)(void *)&wpt->latitude,
-                                    (double *)(void *)&wpt->altitude);
+                                    (double*)(void*)&wpt->longitude,
+                                    (double*)(void*)&wpt->latitude,
+                                    (double*)(void*)&wpt->altitude);
   SHPWriteObject(ohandle, -1, shpobject);
   SHPDestroyObject(shpobject);
 }
 
 void
-poly_init(const route_head *h)
+poly_init(const route_head* h)
 {
   int ct = track_waypt_count();
   polybufx = (double*) xcalloc(ct, sizeof(double));
@@ -286,7 +286,7 @@ poly_init(const route_head *h)
 
 
 void
-poly_point(const waypoint *wpt)
+poly_point(const waypoint* wpt)
 {
   polybufx[poly_count] = wpt->longitude;
   polybufy[poly_count] = wpt->latitude;
@@ -295,9 +295,9 @@ poly_point(const waypoint *wpt)
 }
 
 void
-poly_deinit(const route_head *h)
+poly_deinit(const route_head* h)
 {
-  SHPObject *shpobject;
+  SHPObject* shpobject;
   shpobject = SHPCreateSimpleObject(SHPT_ARC, track_waypt_count(),
                                     polybufx, polybufy, polybufz);
   SHPWriteObject(ohandle, -1,  shpobject);

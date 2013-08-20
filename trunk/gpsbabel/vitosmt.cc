@@ -29,8 +29,8 @@
 #include "defs.h"
 #include "grtcirc.h"
 
-static gbfile				*infile	=NULL;
-static gbfile				*ofs	=NULL;
+static gbfile*				infile	=NULL;
+static gbfile*				ofs	=NULL;
 static long				count	=0;
 
 const long				vitosmt_version			=2;
@@ -38,10 +38,10 @@ const long				vitosmt_subversion		=1000;
 const size_t			vitosmt_headersize		=24;
 const size_t			vitosmt_datasize		=64;
 
-static unsigned char *
-ReadRecord(gbfile *f, gbsize_t size)
+static unsigned char*
+ReadRecord(gbfile* f, gbsize_t size)
 {
-  unsigned char *result = (unsigned char *) xmalloc(size);
+  unsigned char* result = (unsigned char*) xmalloc(size);
 
   gbfread(result, size, 1, f);
   return result;
@@ -57,7 +57,7 @@ WriteDouble(void* ptr, double d)
 
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   infile = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -76,8 +76,8 @@ vitosmt_read(void)
   long			check1			=-1;
   long			check2			=-2;
   long			check3			=-3;
-  route_head		*route_head		=0;
-  waypoint		*wpt_tmp		=0;
+  route_head*		route_head		=0;
+  waypoint*		wpt_tmp		=0;
   double			latrad			=0;
   double			lonrad			=0;
   double			elev			=0;
@@ -223,7 +223,7 @@ vitosmt_read(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   warning(MYNAME " write: format is experimental and may crash Vito Navigator II.\n");
   ofs = gbfopen_le(fname, "wb", MYNAME);
@@ -237,14 +237,14 @@ wr_deinit(void)
 }
 
 static void
-vitosmt_waypt_pr(const waypoint *waypointp)
+vitosmt_waypt_pr(const waypoint* waypointp)
 {
-  unsigned char *	workbuffer		=0;
+  unsigned char* 	workbuffer		=0;
   size_t			position		=0;
   double			seconds			=0;
 
   ++count;
-  workbuffer = (unsigned char *) xcalloc(vitosmt_datasize,1);
+  workbuffer = (unsigned char*) xcalloc(vitosmt_datasize,1);
 
   WriteDouble(&workbuffer[position], RAD(waypointp->latitude));
   position += sizeof(double);
@@ -319,7 +319,7 @@ static void
 vitosmt_write(void)
 {
   time_t now = 0;
-  unsigned char *	workbuffer					=0;
+  unsigned char* 	workbuffer					=0;
   size_t			position					=0;
 
   workbuffer = (unsigned char*) xcalloc(vitosmt_headersize,1);

@@ -48,11 +48,11 @@ geocache_container wpt_container(const QString&);
 
 // Compensate for most of class waypt still using C strings and needing
 // copies anyway.
-char * ShimString(const QString& s)
+char* ShimString(const QString& s)
 {
   return xstrdup(s.toUtf8().data());
 }
-char * ShimString(const QStringRef& s)
+char* ShimString(const QStringRef& s)
 {
   return xstrdup(s.toString().toUtf8().data());
 }
@@ -70,11 +70,11 @@ void GeoReadLoc()
     QStringRef tag_name = reader.name();
     if (reader.tokenType()==QXmlStreamReader::StartElement) {
       if (tag_name == "waypoint") {
-         wpt = waypt_new();
-         waypt_alloc_gc_data(wpt);
-         // There is no 'unknown' alt value and so many reference files have
-         // leaked it that we just paper over that here.
-         wpt->altitude = 0;
+        wpt = waypt_new();
+        waypt_alloc_gc_data(wpt);
+        // There is no 'unknown' alt value and so many reference files have
+        // leaked it that we just paper over that here.
+        wpt->altitude = 0;
       } else if (tag_name == "name") {
         QXmlStreamAttributes a = reader.attributes();
         wpt->shortname = ShimString(a.value("id"));
@@ -87,7 +87,7 @@ void GeoReadLoc()
         wpt->icon_descr = reader.readElementText();
       } else if (tag_name == "link") {
         QXmlStreamAttributes a = reader.attributes();
-        waypt_add_url(wpt, 
+        waypt_add_url(wpt,
                       reader.readElementText(), a.value("text").toString());
       } else if (tag_name == "difficulty") {
         wpt->gc_data->diff = reader.readElementText().toInt() * 10;
@@ -100,7 +100,7 @@ void GeoReadLoc()
 
     if (reader.tokenType() == QXmlStreamReader::EndElement) {
       if (tag_name == "waypoint") {
-         waypt_add(wpt);
+        waypt_add(wpt);
       }
     }
 

@@ -24,8 +24,8 @@
 #if FILTERS_ENABLED
 #define MYNAME "Polygon filter"
 
-static char *polyfileopt = NULL;
-static char *exclopt = NULL;
+static char* polyfileopt = NULL;
+static char* exclopt = NULL;
 
 /*
  * This test for insideness is essentially an odd/even test.  The
@@ -123,7 +123,7 @@ arglist_t polygon_args[] = {
 static void polytest(double lat1, double lon1,
                      double lat2, double lon2,
                      double wlat, double wlon,
-                     unsigned short *state, int first, int last)
+                     unsigned short* state, int first, int last)
 {
 
   if (lat1 == wlat) {
@@ -235,22 +235,22 @@ static void polytest(double lat1, double lon1,
 void
 polygon_process(void)
 {
-  queue * elem, * tmp;
-  waypoint * waypointp;
-  extra_data *ed;
+  queue* elem, * tmp;
+  waypoint* waypointp;
+  extra_data* ed;
   double lat1, lon1, lat2, lon2;
   double olat, olon;
   int fileline = 0;
   int first = 1;
   int last = 0;
-  char *line;
-  gbfile *file_in;
+  char* line;
+  gbfile* file_in;
 
   file_in = gbfopen(polyfileopt, "r", MYNAME);
 
   olat = olon = lat1 = lon1 = lat2 = lon2 = BADVAL;
   while ((line = gbfgetstr(file_in))) {
-    char *pound = NULL;
+    char* pound = NULL;
     int argsfound = 0;
 
     fileline++;
@@ -273,15 +273,15 @@ polygon_process(void)
       foreach(waypoint* waypointp, waypt_list) {
 #else
       QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-        waypointp = (waypoint *)elem;
+        waypointp = (waypoint*)elem;
 #endif
         if (waypointp->extra_data) {
-          ed = (extra_data *) waypointp->extra_data;
+          ed = (extra_data*) waypointp->extra_data;
         } else {
-          ed = (extra_data *) xcalloc(1, sizeof(*ed));
+          ed = (extra_data*) xcalloc(1, sizeof(*ed));
           ed->state = OUTSIDE;
           ed->override = 0;
-          waypointp->extra_data = (extra_data *) ed;
+          waypointp->extra_data = (extra_data*) ed;
         }
         if (lat2 == waypointp->latitude &&
             lon2 == waypointp->longitude) {
@@ -322,9 +322,9 @@ polygon_process(void)
   foreach(waypoint* wp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypoint *wp = (waypoint *) elem;
+    waypoint* wp = (waypoint*) elem;
 #endif
-    ed = (extra_data *) wp->extra_data;
+    ed = (extra_data*) wp->extra_data;
     wp->extra_data = NULL;
     if (ed) {
       if (ed->override) {
@@ -340,7 +340,7 @@ polygon_process(void)
 }
 
 void
-polygon_init(const char *args)
+polygon_init(const char* args)
 {
   /* do nothing */
 }

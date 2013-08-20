@@ -27,13 +27,13 @@
 #include "defs.h"
 #include "grtcirc.h"
 
-gbfile *infile;
+gbfile* infile;
 
-char *turns_important = NULL;
-char *turns_only = NULL;
-char *controls = NULL;
-char *split = NULL;
-char *timesynth = NULL;
+char* turns_important = NULL;
+char* turns_only = NULL;
+char* controls = NULL;
+char* split = NULL;
+char* timesynth = NULL;
 
 int control = 0;
 
@@ -66,23 +66,23 @@ arglist_t saroute_args[] = {
 #define ReadShort(f) gbfgetint16(f)
 #define ReadLong(f) gbfgetint32(f)
 
-unsigned char *
-ReadRecord(gbfile *f, gbsize_t size)
+unsigned char*
+ReadRecord(gbfile* f, gbsize_t size)
 {
-  unsigned char *result = (unsigned char *) xmalloc(size);
+  unsigned char* result = (unsigned char*) xmalloc(size);
 
   (void)gbfread(result, size, 1, f);
   return result;
 }
 
 void
-Skip(gbfile * f, gbsize_t distance)
+Skip(gbfile* f, gbsize_t distance)
 {
   gbfseek(f, distance, SEEK_CUR);
 }
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   infile = gbfopen(fname, "rb", MYNAME);
   if (split && (turns_important || turns_only)) {
@@ -123,17 +123,17 @@ my_read(void)
   uint32_t outercount;
   uint32_t recsize;
   uint16_t stringlen;
-  unsigned char *record;
+  unsigned char* record;
   static int serial = 0;
   struct ll {
     int32_t lat;
     int32_t lon;
   } *latlon;
   uint16_t coordcount;
-  route_head *track_head = NULL;
-  route_head *old_track_head = NULL;
-  waypoint *wpt_tmp;
-  char *routename = NULL;
+  route_head* track_head = NULL;
+  route_head* old_track_head = NULL;
+  waypoint* wpt_tmp;
+  char* routename = NULL;
   double seglen = 0.0;
   int32_t  starttime = 0;
   int32_t  transittime = 0;
@@ -163,9 +163,9 @@ my_read(void)
    */
   record = ReadRecord(infile, recsize);
 
-  stringlen = le_read16((uint16_t *)(record + 0x1a));
+  stringlen = le_read16((uint16_t*)(record + 0x1a));
   if (stringlen) {
-    routename = (char *)xmalloc(stringlen + 1);
+    routename = (char*)xmalloc(stringlen + 1);
     routename[stringlen] = '\0';
     memcpy(routename, record+0x1c, stringlen);
   }
@@ -197,7 +197,7 @@ my_read(void)
       double lon;
 
       record = ReadRecord(infile, recsize);
-      latlon = (struct ll *)(record);
+      latlon = (struct ll*)(record);
 
       /* These records are backwards for some reason */
       lat = (0x80000000UL -
@@ -228,7 +228,7 @@ my_read(void)
 
         wpt_tmp->shortname = (char*) xmalloc(addrlen+1);
         wpt_tmp->shortname[addrlen]='\0';
-        wpt_tmp->notes = (char *) xmalloc(cmtlen+1);
+        wpt_tmp->notes = (char*) xmalloc(cmtlen+1);
         wpt_tmp->notes[cmtlen] = '\0';
         memcpy(wpt_tmp->notes,
                record+obase+4+addrlen,
@@ -305,7 +305,7 @@ my_read(void)
       ReadShort(infile);
       recsize = ReadLong(infile);
       record = ReadRecord(infile, recsize);
-      stringlen = le_read16((uint16_t *)record);
+      stringlen = le_read16((uint16_t*)record);
       if (split && stringlen) {
         if (track_head->rte_waypt_ct) {
           old_track_head = track_head;
@@ -318,9 +318,9 @@ my_read(void)
         } // end if
         if (!track_head->rte_name) {
           track_head->rte_name =
-            (char *)xmalloc(stringlen+1);
+            (char*)xmalloc(stringlen+1);
           strncpy(track_head->rte_name,
-                  (const char *) record+2, stringlen);
+                  (const char*) record+2, stringlen);
           track_head->rte_name[stringlen] = '\0';
         }
       }
@@ -328,16 +328,16 @@ my_read(void)
       if (timesynth) {
         seglen = le_read_double(
                    record + 2 + stringlen + 0x08);
-        starttime = le_read32((uint32_t *)
+        starttime = le_read32((uint32_t*)
                               (record + 2 + stringlen + 0x30));
-        transittime = le_read32((uint32_t *)
+        transittime = le_read32((uint32_t*)
                                 (record + 2 + stringlen + 0x10));
         seglen /= 5280*12*2.54/100000; /* to miles */
       }
 
-      coordcount = le_read16((uint16_t *)
+      coordcount = le_read16((uint16_t*)
                              (record + 2 + stringlen + 0x3c));
-      latlon = (struct ll *)(record + 2 + stringlen + 0x3c + 2);
+      latlon = (struct ll*)(record + 2 + stringlen + 0x3c + 2);
       count--;
       if (count) {
         coordcount--;
@@ -361,13 +361,13 @@ my_read(void)
         wpt_tmp->latitude = lat;
         wpt_tmp->longitude = -lon;
         if (stringlen && ((coordcount>1) || count)) {
-          wpt_tmp->shortname = (char *) xmalloc(stringlen+1);
+          wpt_tmp->shortname = (char*) xmalloc(stringlen+1);
           wpt_tmp->shortname[stringlen] = '\0';
           memcpy(wpt_tmp->shortname,
-                 ((char *)record)+2,
+                 ((char*)record)+2,
                  stringlen);
         } else {
-          wpt_tmp->shortname = (char *) xmalloc(7);
+          wpt_tmp->shortname = (char*) xmalloc(7);
           sprintf(wpt_tmp->shortname, "\\%5.5x",
                   serial++);
         }
@@ -438,7 +438,7 @@ my_read(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   fatal(MYNAME ":Not enough information is known about this format to write it.\n");
 }

@@ -54,18 +54,18 @@ typedef enum {
   sdf_custom
 } sdf_section_e;
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 
 static int lineno;
 static int datum;
 static int filetype;
-static route_head *route;
+static route_head* route;
 static queue trackpts;
-static char *rte_name;
-static char *rte_desc;
+static char* rte_name;
+static char* rte_desc;
 
-static waypoint *trkpt_out;
-static route_head *trk_out;
+static waypoint* trkpt_out;
+static route_head* trk_out;
 
 static double trkpt_dist;
 static double minalt, maxalt, maxspeed;
@@ -91,7 +91,7 @@ static short_handle short_h;
 
 /* placeholders for options */
 
-static char *opt_route_index;
+static char* opt_route_index;
 static int opt_route_index_value;
 
 static
@@ -107,11 +107,11 @@ arglist_t stmsdf_args[] = {
 /* ----------------------------------------------------------- */
 
 static void
-parse_header(char *line)
+parse_header(char* line)
 {
-  char *str;
-  char *key = NULL;
-  const char *prod = NULL;
+  char* str;
+  char* key = NULL;
+  const char* prod = NULL;
   int column = -1;
 
   while ((str = csv_lineparse(line, "=", "", lineno))) {
@@ -164,10 +164,10 @@ parse_header(char *line)
 }
 
 static int
-track_qsort_cb(const void *a, const void *b)
+track_qsort_cb(const void* a, const void* b)
 {
-  const waypoint *wa = *(waypoint **)a;
-  const waypoint *wb = *(waypoint **)b;
+  const waypoint* wa = *(waypoint**)a;
+  const waypoint* wb = *(waypoint**)b;
 
   return wa->GetCreationTime().toTime_t() - wb->GetCreationTime().toTime_t();
 }
@@ -175,11 +175,11 @@ track_qsort_cb(const void *a, const void *b)
 static void
 finalize_tracks(void)
 {
-  waypoint **list;
+  waypoint** list;
   int count = 0;
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   int index;
-  route_head *track = NULL;
+  route_head* track = NULL;
   int trackno = 0;
 
   count = 0;
@@ -194,7 +194,7 @@ finalize_tracks(void)
 
   index = 0;
   QUEUE_FOR_EACH(&trackpts, elem, tmp) {
-    list[index] = (waypoint *)elem;
+    list[index] = (waypoint*)elem;
     dequeue(elem);
     index++;
   }
@@ -202,7 +202,7 @@ finalize_tracks(void)
   qsort(list, count, sizeof(*list), track_qsort_cb);
 
   for (index = 0; index < count; index++) {
-    waypoint *wpt = list[index];
+    waypoint* wpt = list[index];
     if (wpt->wpt_flags.fmt_use == 2) {	/* log continued */
       track = NULL;
     }
@@ -232,13 +232,13 @@ finalize_tracks(void)
 }
 
 static void
-parse_point(char *line)
+parse_point(char* line)
 {
-  char *str;
+  char* str;
   int column = -1;
   int what = -1;		/* -1 = unknown, 0 = tp, 1 = mp, 2 = wp, 3 = ap  */
-  waypoint *wpt = NULL;
-  char *cx;
+  waypoint* wpt = NULL;
+  char* cx;
   int hour, min, sec, day, month, year;
 
   year = hour = -1;
@@ -358,7 +358,7 @@ parse_point(char *line)
 /* ----------------------------------------------------------- */
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
 
@@ -386,11 +386,11 @@ rd_deinit(void)
 static void
 data_read(void)
 {
-  char *buf;
+  char* buf;
   sdf_section_e section = sdf_unknown;
 
   while ((buf = gbfgetstr(fin))) {
-    char *cin = lrtrim(buf);
+    char* cin = lrtrim(buf);
     if ((lineno++ == 0) && fin->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
     }
@@ -400,7 +400,7 @@ data_read(void)
     }
 
     if (*cin == '[') {
-      char *cend = strchr(++cin, ']');
+      char* cend = strchr(++cin, ']');
 
       if (cend != NULL) {
         *cend = '\0';
@@ -437,8 +437,8 @@ data_read(void)
 
 
 static void
-calculate(const waypoint *wpt, double *dist, double *speed, double *course,
-          double *asc, double *desc)
+calculate(const waypoint* wpt, double* dist, double* speed, double* course,
+          double* asc, double* desc)
 {
   if (trkpt_out != NULL) {
 
@@ -493,7 +493,7 @@ calculate(const waypoint *wpt, double *dist, double *speed, double *course,
 /* pre-calculation callbacks */
 
 static void
-any_hdr_calc_cb(const route_head *trk)
+any_hdr_calc_cb(const route_head* trk)
 {
 
   trkpt_out = NULL;
@@ -512,11 +512,11 @@ any_hdr_calc_cb(const route_head *trk)
     rte_desc = trk->rte_desc;
   }
 
-  trk_out = (route_head *)trk;
+  trk_out = (route_head*)trk;
 }
 
 static void
-any_waypt_calc_cb(const waypoint *wpt)
+any_waypt_calc_cb(const waypoint* wpt)
 {
   double speed, course, dist;
 
@@ -547,11 +547,11 @@ any_waypt_calc_cb(const waypoint *wpt)
     this_time += (wpt->GetCreationTime().toTime_t() - trkpt_out->GetCreationTime().toTime_t());
   }
 
-  trkpt_out = (waypoint *)wpt;
+  trkpt_out = (waypoint*)wpt;
 }
 
 static void
-any_tlr_calc_cb(const route_head *trk)
+any_tlr_calc_cb(const route_head* trk)
 {
   if (! this_valid) {
     return;
@@ -565,17 +565,17 @@ any_tlr_calc_cb(const route_head *trk)
 /* write callbacks */
 
 static void
-track_disp_hdr_cb(const route_head *trk)
+track_disp_hdr_cb(const route_head* trk)
 {
   track_index++;
   track_points = 0;
-  trk_out = (route_head *)trk;
+  trk_out = (route_head*)trk;
   trkpt_out = NULL;
 }
 
 
 static void
-track_disp_wpt_cb(const waypoint *wpt)
+track_disp_wpt_cb(const waypoint* wpt)
 {
   struct tm tm;
   char tbuf[32];
@@ -603,13 +603,13 @@ track_disp_wpt_cb(const waypoint *wpt)
   }
 
   if (flag == 1) {
-    const char *name = wpt->shortname;
+    const char* name = wpt->shortname;
     if (name == NULL) {
       name = "Log paused";
     }
     gbfprintf(fout, "\"MP\",\"%s\"", name);
   } else if (flag == 2) {
-    const char *name = wpt->shortname;
+    const char* name = wpt->shortname;
     if (name == NULL) {
       name = "Log continued";
     }
@@ -633,27 +633,27 @@ track_disp_wpt_cb(const waypoint *wpt)
     gbfprintf(fout, ",0\n");
   }
 
-  trkpt_out = (waypoint *)wpt;
+  trkpt_out = (waypoint*)wpt;
 }
 
 static void
-track_disp_tlr_cb(const route_head *rte)
+track_disp_tlr_cb(const route_head* rte)
 {
   trkpt_out = NULL;
 }
 
 static void
-route_disp_hdr_cb(const route_head *rte)
+route_disp_hdr_cb(const route_head* rte)
 {
   route_index++;
   this_route_valid = ((opt_route_index_value < 1) || (opt_route_index_value == track_index));
 }
 
 static void
-route_disp_wpt_cb(const waypoint *wpt)
+route_disp_wpt_cb(const waypoint* wpt)
 {
   if (this_route_valid) {
-    char *sn;
+    char* sn;
 
     if (global_opts.synthesize_shortnames) {
       sn = mkshort_from_wpt(short_h, wpt);
@@ -667,7 +667,7 @@ route_disp_wpt_cb(const waypoint *wpt)
 }
 
 static void
-track_disp_custom_cb(const waypoint *wpt)
+track_disp_custom_cb(const waypoint* wpt)
 {
   if (wpt->GetCreationTime().isValid() && (wpt->altitude != unknown_alt)) {
     gbfprintf(fout, "%d,%.f\n", (int)(wpt->GetCreationTime().toTime_t() - start_time), wpt->altitude);
@@ -675,7 +675,7 @@ track_disp_custom_cb(const waypoint *wpt)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
   short_h = mkshort_new_handle();

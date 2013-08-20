@@ -610,7 +610,7 @@ write_waypt(const waypoint* wpt)
   print_string("%s\t", icon_descr);
   if (dynamic) {
     // sleaze alert: cast away constness.
-    xfree((char *) icon_descr);
+    xfree((char*) icon_descr);
   }
 
   print_string("%s\t", GMSD_GET(facility, ""));
@@ -1197,13 +1197,13 @@ parse_waypoint(void)
       time_t ct;
       parse_date_and_time(str, &ct);
       wpt->SetCreationTime(ct);
-      }
-      break;
+    }
+    break;
     case 17: {
       UrlLink l(str);
       wpt->AddUrlLink(l);
-      }
-      break;
+    }
+    break;
     case 18:
       GMSD_SET(category, parse_categories(str));
       break;
@@ -1316,8 +1316,8 @@ parse_track_waypoint(void)
       time_t ct;
       parse_date_and_time(str, &ct);
       wpt->SetCreationTime(ct);
-      }
-      break;
+    }
+    break;
     case 3:
       if (parse_distance(str, &x, 1, MYNAME)) {
         wpt->altitude = x;

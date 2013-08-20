@@ -243,10 +243,9 @@ double linedistprj(double lat1, double lon1,
          * known to be positive. */
 
         *prjlat = DEG(asin(yp));
-        if(xp == 0 && zp == 0) {
+        if (xp == 0 && zp == 0) {
           *prjlon = 0;
-        }
-        else {
+        } else {
           *prjlon = DEG(atan2(zp, xp));
         }
         *frac = d1/(d1 + d2);

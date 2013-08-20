@@ -583,8 +583,8 @@ osm_way(const char* args, const QXmlStreamAttributes* attrv)
   rte = route_head_alloc();
 
   if (attrv->hasAttribute("id")) {
-      xasprintf(&rte->rte_desc, "osm-id %s",
-                attrv->value("id").toString().toUtf8().constData());
+    xasprintf(&rte->rte_desc, "osm-id %s",
+              attrv->value("id").toString().toUtf8().constData());
   }
 }
 
@@ -689,7 +689,7 @@ osm_init_icons(void)
 
   for (i = 0; osm_icon_mappings[i].value; i++) {
     icons.insert(QString::fromUtf8(osm_icon_mappings[i].icon),
-        &osm_icon_mappings[i]);
+                 &osm_icon_mappings[i]);
   }
 }
 
@@ -757,9 +757,9 @@ static QString
 osm_name_from_wpt(const waypoint* wpt)
 {
   QString name = QString("%1\01%2\01%3")
-      .arg((wpt->shortname) ? wpt->shortname : "")
-      .arg(wpt->latitude)
-      .arg(wpt->longitude);
+                 .arg((wpt->shortname) ? wpt->shortname : "")
+                 .arg(wpt->latitude)
+                 .arg(wpt->longitude);
   return name;
 }
 

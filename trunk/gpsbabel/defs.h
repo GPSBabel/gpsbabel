@@ -264,8 +264,9 @@ typedef enum {
   gc_small
 } geocache_container;
 
-class utf_string{
- public:
+class utf_string
+{
+public:
   utf_string() :
     is_html(false)
   {};
@@ -273,8 +274,9 @@ class utf_string{
   QString utfstring;
 };
 
-class geocache_data {
- public:
+class geocache_data
+{
+public:
   geocache_data() :
     id(0),
     type(gt_unknown),
@@ -333,8 +335,9 @@ typedef struct format_specific_data {
   fs_convert convert;
 } format_specific_data;
 
-class gb_color {
- public:
+class gb_color
+{
+public:
   gb_color() :
     bbggrr(-1),
     opacity(255) {}
@@ -367,13 +370,14 @@ fs_xml* fs_xml_alloc(long type);
  * Structures and functions for multiple URLs per waypoint.
  */
 
-class UrlLink {
- public: 
-   UrlLink() { } 
-   UrlLink(QString url) :
+class UrlLink
+{
+public:
+  UrlLink() { }
+  UrlLink(QString url) :
     url_(url)
-   { }
-   UrlLink(QString url, QString url_link_text) :
+  { }
+  UrlLink(QString url, QString url_link_text) :
     url_(url),
     url_link_text_(url_link_text)
   { }
@@ -385,9 +389,10 @@ class UrlLink {
 /*
  * Misc bitfields inside struct waypoint;
  */
-class wp_flags {
- public:
-   wp_flags() :
+class wp_flags
+{
+public:
+  wp_flags() :
     shortname_is_synthetic(0),
     cet_converted(0),
     fmt_use(0),
@@ -421,8 +426,9 @@ class wp_flags {
 // things, though it's u nlikely to matter in practical terms.  Don't use these
 // if a false positive would be deleterious.
 #
-class global_trait {
- public:
+class global_trait
+{
+public:
   global_trait() :
     trait_geocaches(0),
     trait_heartrate(0),
@@ -451,35 +457,36 @@ const global_trait* get_traits();
  * way to the target.
  */
 
-class waypoint {
+class waypoint
+{
 public:
- waypoint() :
-  latitude(0),  // These should probably use some invalid data, but
-  longitude(0), // it looks like we have code that relies on them being zero.
-  altitude(-99999999.0),
-  depth(0),
-  proximity(0),
-  shortname(NULL),
-  description(NULL),
-  notes(NULL),
-  route_priority(0),
-  hdop(0),
-  vdop(0),
-  pdop(0),
-  course(0),
-  speed(0),
-  fix(fix_unknown),
-  sat(-1),
-  heartrate(0),
-  cadence(0),
-  power(0),
-  temperature(0),
-  odometer_distance(0),
-  gc_data(NULL),
-  fs(NULL),
-  session(NULL),
-  extra_data(NULL) { }
- public:
+  waypoint() :
+    latitude(0),  // These should probably use some invalid data, but
+    longitude(0), // it looks like we have code that relies on them being zero.
+    altitude(-99999999.0),
+    depth(0),
+    proximity(0),
+    shortname(NULL),
+    description(NULL),
+    notes(NULL),
+    route_priority(0),
+    hdop(0),
+    vdop(0),
+    pdop(0),
+    course(0),
+    speed(0),
+    fix(fix_unknown),
+    sat(-1),
+    heartrate(0),
+    cadence(0),
+    power(0),
+    temperature(0),
+    odometer_distance(0),
+    gc_data(NULL),
+    fs(NULL),
+    session(NULL),
+    extra_data(NULL) { }
+public:
   QString CreationTimeXML() const;
   queue Q;			/* Master waypoint q.  Not for use
 					   by modules. */
@@ -526,20 +533,30 @@ public:
   /* TODO: UrlLink should probably move to a "real" class of its own.
    */
   QList<UrlLink> url_link_list_;
-  bool HasUrlLink() const {return !url_link_list_.isEmpty(); }
-  const UrlLink& GetUrlLink() const { return url_link_list_[0]; }
-  const QList<UrlLink> GetUrlLinks() const { return url_link_list_; }
-  void AddUrlLink(const UrlLink l) { url_link_list_.push_back(l); }
+  bool HasUrlLink() const {
+    return !url_link_list_.isEmpty();
+  }
+  const UrlLink& GetUrlLink() const {
+    return url_link_list_[0];
+  }
+  const QList<UrlLink> GetUrlLinks() const {
+    return url_link_list_;
+  }
+  void AddUrlLink(const UrlLink l) {
+    url_link_list_.push_back(l);
+  }
 
   wp_flags wpt_flags;
   QString icon_descr;
 
   gpsbabel::DateTime  GetCreationTime() const {
-   return creation_time;
+    return creation_time;
   }
-  void SetCreationTime(gpsbabel::DateTime t) { creation_time = t;
+  void SetCreationTime(gpsbabel::DateTime t) {
+    creation_time = t;
   }
-  void SetCreationTime(time_t t) { creation_time = QDateTime::fromTime_t(t);
+  void SetCreationTime(time_t t) {
+    creation_time = QDateTime::fromTime_t(t);
   }
   void SetCreationTime(time_t t, int ms) {
     creation_time.setTime_t(t);
@@ -581,8 +598,9 @@ public:
   void* extra_data;	/* Extra data added by, say, a filter. */
 };
 
-class route_head {
- public:
+class route_head
+{
+public:
   route_head() :
     rte_name(NULL),
     rte_desc(NULL),
@@ -918,7 +936,7 @@ void is_fatal(const int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);
 
-ff_vecs_t* find_vec(const char *, const char**);
+ff_vecs_t* find_vec(const char*, const char**);
 void assign_option(const char* vecname, arglist_t* ap, const char* val);
 void disp_vec_options(const char* vecname, arglist_t* ap);
 void disp_vecs(void);

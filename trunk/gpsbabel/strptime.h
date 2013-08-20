@@ -30,7 +30,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern char* strptime(const char*, const char*, struct tm*);
+  extern char* strptime(const char*, const char*, struct tm*);
 #ifdef __cplusplus
 }
 #endif

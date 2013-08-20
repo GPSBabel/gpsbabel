@@ -812,9 +812,9 @@ Write_One_AN1_Waypoint(const waypoint* wpt)
   }
   if (!rec->image_name && !wpt->icon_descr.isNull()) {
 // FIXME: WTH?
-char* t = xstrdup(wpt->icon_descr.toUtf8().data());
+    char* t = xstrdup(wpt->icon_descr.toUtf8().data());
     FindIconByName(t, &rec->guid);
-xfree(t);
+    xfree(t);
   }
 
   Write_AN1_Waypoint(outfile, rec);

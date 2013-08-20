@@ -24,7 +24,7 @@
 #include "defs.h"
 #include "csv_util.h"
 
-static gbfile *file_in, *file_out;
+static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;
 static short_handle mkshort_whandle;
 
@@ -32,19 +32,19 @@ static short_handle mkshort_whandle;
 
 static double maxlat, maxlon, minlat, minlon;
 static int rec_cnt;
-static char *nolabels = NULL;
-static char *genurl = NULL;
-static char *suppresswhite = NULL;
-static char *iconismarker = NULL;
-static char *snlen = NULL;
+static char* nolabels = NULL;
+static char* genurl = NULL;
+static char* suppresswhite = NULL;
+static char* iconismarker = NULL;
+static char* snlen = NULL;
 
-static char *margin  = NULL;
-static char *xpixels = NULL;
-static char *ypixels = NULL;
-static char *oldthresh = NULL;
-static char *oldmarker  = NULL;
-static char *newmarker  = NULL;
-static char *unfoundmarker  = NULL;
+static char* margin  = NULL;
+static char* xpixels = NULL;
+static char* ypixels = NULL;
+static char* oldthresh = NULL;
+static char* oldmarker  = NULL;
+static char* newmarker  = NULL;
+static char* unfoundmarker  = NULL;
 
 static int short_length;
 static double thresh_days;
@@ -55,8 +55,8 @@ static double thresh_days;
  *   the projection transformations.   Some trig geek can finish that.
  */
 #if CLICKMAP
-static gbfile *linkf;
-static char *clickmap = NULL;
+static gbfile* linkf;
+static char* clickmap = NULL;
 #endif
 
 
@@ -124,7 +124,7 @@ arglist_t tiger_args[] = {
 
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen(fname, "rb", MYNAME);
   mkshort_handle = mkshort_new_handle();
@@ -138,7 +138,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen(fname, "w", MYNAME);
   thresh_days = strtod(oldthresh, NULL);
@@ -156,8 +156,8 @@ data_read(void)
   double lat,lon;
   char desc[100];
   char icon[100];
-  char *ibuf;
-  waypoint *wpt_tmp;
+  char* ibuf;
+  waypoint* wpt_tmp;
   int line = 0;
 
   while ((ibuf = gbfgetstr(file_in))) {
@@ -179,7 +179,7 @@ data_read(void)
 }
 
 static void
-tiger_disp(const waypoint *wpt)
+tiger_disp(const waypoint* wpt)
 {
   QString pin;
   double lat = wpt->latitude;
@@ -212,8 +212,8 @@ tiger_disp(const waypoint *wpt)
 
   gbfprintf(file_out, "%f,%f:%s", lon, lat, pin.toUtf8().data());
   if (!nolabels) {
-    char *temp = NULL;
-    char *desc = csv_stringclean(wpt->description, ":");
+    char* temp = NULL;
+    char* desc = csv_stringclean(wpt->description, ":");
     if (global_opts.synthesize_shortnames) {
       temp = desc;
       desc = mkshort(mkshort_whandle, desc);
@@ -229,7 +229,7 @@ tiger_disp(const waypoint *wpt)
 
 #if CLICKMAP
 static void
-map_plot(const waypoint *wpt)
+map_plot(const waypoint* wpt)
 {
   static int x,y;
 
@@ -282,7 +282,7 @@ data_write(void)
   waypt_disp_all(tiger_disp);
 
   if (genurl) {
-    gbfile *urlf;
+    gbfile* urlf;
 
     urlf = gbfopen(genurl, "w", MYNAME);
     latsz = fabs(maxlat - minlat);

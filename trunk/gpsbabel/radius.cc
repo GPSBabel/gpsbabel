@@ -29,16 +29,16 @@
 #endif
 
 static double pos_dist;
-static char *distopt = NULL;
-static char *latopt = NULL;
-static char *lonopt = NULL;
-static char *exclopt = NULL;
-static char *nosort = NULL;
-static char *maxctarg = NULL;
-static char *routename = NULL;
+static char* distopt = NULL;
+static char* latopt = NULL;
+static char* lonopt = NULL;
+static char* exclopt = NULL;
+static char* nosort = NULL;
+static char* maxctarg = NULL;
+static char* routename = NULL;
 static int maxct;
 
-static waypoint * home_pos;
+static waypoint* home_pos;
 
 typedef struct {
   double distance;
@@ -89,12 +89,12 @@ gc_distance(double lat1, double lon1, double lat2, double lon2)
 }
 
 static int
-dist_comp(const void * a, const void * b)
+dist_comp(const void* a, const void* b)
 {
-  const waypoint *x1 = *(waypoint **)a;
-  const waypoint *x2 = *(waypoint **)b;
-  extra_data *x1e = (extra_data *) x1->extra_data;
-  extra_data *x2e = (extra_data *) x2->extra_data;
+  const waypoint* x1 = *(waypoint**)a;
+  const waypoint* x2 = *(waypoint**)b;
+  extra_data* x1e = (extra_data*) x1->extra_data;
+  extra_data* x2e = (extra_data*) x2->extra_data;
 
   if (x1e->distance > x2e->distance) {
     return 1;
@@ -109,18 +109,18 @@ dist_comp(const void * a, const void * b)
 void
 radius_process(void)
 {
-  queue * elem, * tmp;
-  waypoint * waypointp;
+  queue* elem, * tmp;
+  waypoint* waypointp;
   double dist;
-  waypoint ** comp;
+  waypoint** comp;
   int i, wc;
   queue temp_head;
-  route_head *rte_head = NULL;
+  route_head* rte_head = NULL;
 #if NEWQ
   foreach(waypoint* waypointp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (waypoint *)elem;
+    waypointp = (waypoint*)elem;
 #endif
     dist = gc_distance(waypointp->latitude,
                        waypointp->longitude,
@@ -136,7 +136,7 @@ radius_process(void)
       continue;
     }
 
-    extra_data *ed = (extra_data *) xcalloc(1, sizeof(*ed));
+    extra_data* ed = (extra_data*) xcalloc(1, sizeof(*ed));
     ed->distance = dist;
     waypointp->extra_data = ed;
   }
@@ -144,7 +144,7 @@ radius_process(void)
   wc = waypt_count();
   QUEUE_INIT(&temp_head);
 
-  comp = (waypoint **) xcalloc(wc, sizeof(*comp));
+  comp = (waypoint**) xcalloc(wc, sizeof(*comp));
 
   i = 0;
 
@@ -155,14 +155,14 @@ radius_process(void)
    */
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypoint *wp = (waypoint *) elem;
+    waypoint* wp = (waypoint*) elem;
     comp[i] = wp;
     waypt_del(wp);
     i++;
   }
 
   if (!nosort) {
-    qsort(comp, wc, sizeof(waypoint *), dist_comp);
+    qsort(comp, wc, sizeof(waypoint*), dist_comp);
   }
 
   if (routename) {
@@ -177,7 +177,7 @@ radius_process(void)
    * on through in the modified order.
    */
   for (i = 0; i < wc; i++) {
-    waypoint * wp = comp[i];
+    waypoint* wp = comp[i];
 
     xfree(wp->extra_data);
     wp->extra_data = NULL;
@@ -196,9 +196,9 @@ radius_process(void)
 }
 
 void
-radius_init(const char *args)
+radius_init(const char* args)
 {
-  char *fm;
+  char* fm;
 
   pos_dist = 0;
 
@@ -217,7 +217,7 @@ radius_init(const char *args)
     maxct = 0;
   }
 
-  home_pos = (waypoint *) xcalloc(sizeof(*home_pos), 1);
+  home_pos = (waypoint*) xcalloc(sizeof(*home_pos), 1);
 
   if (latopt) {
     home_pos->latitude = atof(latopt);

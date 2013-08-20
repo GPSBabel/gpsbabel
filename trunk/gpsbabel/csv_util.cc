@@ -950,8 +950,8 @@ static
 long
 time_to_yyyymmdd(QDateTime t)
 {
- QDate d = t.date();
- return d.year() * 10000 + d.month() * 100 + d.day();
+  QDate d = t.date();
+  return d.year() * 10000 + d.month() * 100 + d.day();
 }
 
 static garmin_fs_t*
@@ -1006,11 +1006,15 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     wpt->notes = csv_stringtrim(s, "", 0);
     break;
   case XT_URL:
-    if (!link_) link_ = new UrlLink;
+    if (!link_) {
+      link_ = new UrlLink;
+    }
     link_->url_ = QString(s).trimmed();
     break;
   case XT_URL_LINK_TEXT:
-    if (!link_) link_ = new UrlLink;
+    if (!link_) {
+      link_ = new UrlLink;
+    }
     link_->url_link_text_ = QString(s).trimmed();
     break;
   case XT_ICON_DESCR:
@@ -1197,11 +1201,11 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     wpt->SetCreationTime(xml_parse_time(s));
     break;
   case XT_NET_TIME: {
-fatal("XT_NET_TIME can't have possibly ever worked.");
+    fatal("XT_NET_TIME can't have possibly ever worked.");
 //    time_t tt = wpt->GetCreationTime();
 //    dotnet_time_to_time_t(atof(s), &tt, &wpt->microseconds);
-    }
-    break;
+  }
+  break;
   case XT_GEOCACHE_LAST_FOUND:
     waypt_alloc_gc_data(wpt)->last_found = yyyymmdd_to_time(s);
     break;
@@ -1698,11 +1702,11 @@ xcsv_waypt_pr(const waypoint* wpt)
       }
     }
     break;
-    case XT_URL_LINK_TEXT: 
+    case XT_URL_LINK_TEXT:
       if (wpt->HasUrlLink()) {
-      UrlLink l = wpt->GetUrlLink();
-      snprintf(buff, sizeof(buff), fmp->printfc,
-               !l.url_link_text_.isEmpty() ? l.url_link_text_.toUtf8().data() : fmp->val);
+        UrlLink l = wpt->GetUrlLink();
+        snprintf(buff, sizeof(buff), fmp->printfc,
+                 !l.url_link_text_.isEmpty() ? l.url_link_text_.toUtf8().data() : fmp->val);
       }
       break;
     case XT_ICON_DESCR:
@@ -1924,10 +1928,12 @@ xcsv_waypt_pr(const waypoint* wpt)
       writebuff(buff, fmp->printfc, TIMET_TO_EXCEL(wpt->GetCreationTime().toTime_t()));
       break;
     case XT_TIMET_TIME:
-      /* time as a time_t variable */ {
+      /* time as a time_t variable */
+    {
       time_t tt = wpt->GetCreationTime().toTime_t();
-      writebuff(buff, fmp->printfc, tt); }
-      break;
+      writebuff(buff, fmp->printfc, tt);
+    }
+    break;
     case XT_TIMET_TIME_MS: {
       /* time as a time_t variable in milliseconds */
       char tbuf[24];
@@ -1956,7 +1962,7 @@ xcsv_waypt_pr(const waypoint* wpt)
       writetime(buff, sizeof buff, "%Y-%m-%dT%H:%M:%SZ", wpt->GetCreationTime(), true);
       break;
     case XT_ISO_TIME_MS:
-        strcpy(buff, wpt->GetCreationTime().toPrettyString().toUtf8().data());
+      strcpy(buff, wpt->GetCreationTime().toPrettyString().toUtf8().data());
       break;
     case XT_GEOCACHE_LAST_FOUND:
       writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->gc_data->last_found));

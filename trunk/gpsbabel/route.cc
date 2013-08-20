@@ -64,7 +64,7 @@ track_count(void)
   return trk_head_ct;	/* total # of tracks */
 }
 
-route_head *
+route_head*
 route_head_alloc(void)
 {
   route_head* rte_head = new route_head;
@@ -75,7 +75,7 @@ route_head_alloc(void)
 }
 
 static void
-any_route_free(route_head *rte)
+any_route_free(route_head* rte)
 {
   if (rte->rte_name) {
     xfree(rte->rte_name);
@@ -93,62 +93,62 @@ any_route_free(route_head *rte)
 
 
 static void
-any_route_add_head(route_head *rte, queue *head)
+any_route_add_head(route_head* rte, queue* head)
 {
   ENQUEUE_TAIL(head, &rte->Q);
 }
 
 static void
-any_route_del_head(route_head *rte)
+any_route_del_head(route_head* rte)
 {
   dequeue(&rte->Q);
   any_route_free(rte);
 }
 
 void
-route_add_head(route_head *rte)
+route_add_head(route_head* rte)
 {
   any_route_add_head(rte, &my_route_head);
   rte_head_ct++;
 }
 
 void
-route_del_head(route_head *rte)
+route_del_head(route_head* rte)
 {
   any_route_del_head(rte);
   rte_head_ct--;
 }
 
 void
-track_add_head(route_head *rte)
+track_add_head(route_head* rte)
 {
   any_route_add_head(rte, &my_track_head);
   trk_head_ct++;
 }
 
 void
-track_del_head(route_head *rte)
+track_del_head(route_head* rte)
 {
   any_route_del_head(rte);
   trk_head_ct--;
 }
 
 void
-track_insert_head(route_head *rte, route_head *predecessor)
+track_insert_head(route_head* rte, route_head* predecessor)
 {
   ENQUEUE_AFTER(&predecessor->Q, &rte->Q);
   trk_head_ct++;
 }
 
 static
-route_head *
-common_route_by_name(queue *routes, const char *name)
+route_head*
+common_route_by_name(queue* routes, const char* name)
 {
-  queue *elem, *tmp;
-  route_head *rte;
+  queue* elem, *tmp;
+  route_head* rte;
 
   QUEUE_FOR_EACH(routes, elem, tmp) {
-    rte = (route_head *) elem;
+    rte = (route_head*) elem;
     if (0 == strcmp(rte->rte_name, name)) {
       return rte;
     }
@@ -157,20 +157,20 @@ common_route_by_name(queue *routes, const char *name)
   return NULL;
 }
 
-route_head *
-route_find_route_by_name(const char *name)
+route_head*
+route_find_route_by_name(const char* name)
 {
   return common_route_by_name(&my_route_head, name);
 }
 
-route_head *
-route_find_track_by_name(const char *name)
+route_head*
+route_find_track_by_name(const char* name)
 {
   return common_route_by_name(&my_track_head, name);
 }
 
 static void
-any_route_add_wpt(route_head *rte, waypoint *wpt, int *ct, int synth)
+any_route_add_wpt(route_head* rte, waypoint* wpt, int* ct, int synth)
 {
   ENQUEUE_TAIL(&rte->waypoint_list, &wpt->Q);
   rte->rte_waypt_ct++;	/* waypoints in this route */
@@ -187,7 +187,7 @@ any_route_add_wpt(route_head *rte, waypoint *wpt, int *ct, int synth)
 }
 
 void
-route_add_wpt(route_head *rte, waypoint *wpt)
+route_add_wpt(route_head* rte, waypoint* wpt)
 {
   // First point in a route is always a new segment.
   // This improves compatibility when reading from
@@ -200,7 +200,7 @@ route_add_wpt(route_head *rte, waypoint *wpt)
 }
 
 void
-track_add_wpt(route_head *rte, waypoint *wpt)
+track_add_wpt(route_head* rte, waypoint* wpt)
 {
   // First point in a track is always a new segment.
   // This improves compatibility when reading from
@@ -212,13 +212,13 @@ track_add_wpt(route_head *rte, waypoint *wpt)
   any_route_add_wpt(rte, wpt, &trk_waypts, 0);
 }
 
-waypoint *
-route_find_waypt_by_name(route_head *rh, const char *name)
+waypoint*
+route_find_waypt_by_name(route_head* rh, const char* name)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
-    waypoint *waypointp = (waypoint *) elem;
+    waypoint* waypointp = (waypoint*) elem;
     if (0 == strcmp(waypointp->shortname, name)) {
       return waypointp;
     }
@@ -227,7 +227,7 @@ route_find_waypt_by_name(route_head *rh, const char *name)
 }
 
 static void
-any_route_del_wpt(route_head *rte, waypoint *wpt, int *ct)
+any_route_del_wpt(route_head* rte, waypoint* wpt, int* ct)
 {
   if (wpt->wpt_flags.new_trkseg && wpt != (waypoint*)QUEUE_LAST(&rte->waypoint_list)) {
     waypoint* wpt_next = (waypoint*)QUEUE_NEXT(&wpt->Q);
@@ -242,50 +242,50 @@ any_route_del_wpt(route_head *rte, waypoint *wpt, int *ct)
 }
 
 void
-route_del_wpt(route_head *rte, waypoint *wpt)
+route_del_wpt(route_head* rte, waypoint* wpt)
 {
   any_route_del_wpt(rte, wpt, &rte_waypts);
 }
 
 void
-track_del_wpt(route_head *rte, waypoint *wpt)
+track_del_wpt(route_head* rte, waypoint* wpt)
 {
   any_route_del_wpt(rte, wpt, &trk_waypts);
 }
 
 void
-route_disp(const route_head *rh, waypt_cb cb)
+route_disp(const route_head* rh, waypt_cb cb)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   if (!cb)  {
     return;
   }
   QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
-    waypoint *waypointp;
-    waypointp = (waypoint *) elem;
+    waypoint* waypointp;
+    waypointp = (waypoint*) elem;
     (*cb)(waypointp);
   }
 
 }
 
 void
-route_reverse(const route_head *rte_hd)
+route_reverse(const route_head* rte_hd)
 {
   /* Cast away const-ness */
-  route_head *rh = (route_head *) rte_hd;
-  queue *elem, *tmp;
+  route_head* rh = (route_head*) rte_hd;
+  queue* elem, *tmp;
   QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
     ENQUEUE_HEAD(&rh->waypoint_list, dequeue(elem));
   }
 }
 
 static void
-common_disp_all(queue *qh, route_hdr rh, route_trl rt, waypt_cb wc)
+common_disp_all(queue* qh, route_hdr rh, route_trl rt, waypt_cb wc)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   QUEUE_FOR_EACH(qh, elem, tmp) {
-    const route_head *rhp;
-    rhp = (route_head *) elem;
+    const route_head* rhp;
+    rhp = (route_head*) elem;
     if (rh) {
       (*rh)(rhp);
     }
@@ -297,12 +297,12 @@ common_disp_all(queue *qh, route_hdr rh, route_trl rt, waypt_cb wc)
 }
 
 static void
-common_disp_session(const session_t *se, queue *qh, route_hdr rh, route_trl rt, waypt_cb wc)
+common_disp_session(const session_t* se, queue* qh, route_hdr rh, route_trl rt, waypt_cb wc)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   QUEUE_FOR_EACH(qh, elem, tmp) {
-    const route_head *rhp;
-    rhp = (route_head *) elem;
+    const route_head* rhp;
+    rhp = (route_head*) elem;
     if (rhp->session == se) {
       if (rh) {
         (*rh)(rhp);
@@ -322,7 +322,7 @@ route_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
 }
 
 void
-route_disp_session(const session_t *se, route_hdr rh, route_trl rt, waypt_cb wc)
+route_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc)
 {
   common_disp_session(se, &my_route_head, rh, rt, wc);
 }
@@ -334,20 +334,20 @@ track_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
 }
 
 void
-track_disp_session(const session_t *se, route_hdr rh, route_trl rt, waypt_cb wc)
+track_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc)
 {
   common_disp_session(se, &my_track_head, rh, rt, wc);
 }
 
 static void
-route_flush_q(queue *head)
+route_flush_q(queue* head)
 {
-  queue *elem, *tmp;
-  queue *q;
+  queue* elem, *tmp;
+  queue* q;
 
   QUEUE_FOR_EACH(head, elem, tmp) {
     q = dequeue(elem);
-    any_route_free((route_head *) q);
+    any_route_free((route_head*) q);
   }
 }
 
@@ -375,34 +375,34 @@ route_flush_all()
 }
 
 void
-route_flush(queue *head)
+route_flush(queue* head)
 {
-  queue *elem, *tmp;
-  queue *q;
+  queue* elem, *tmp;
+  queue* q;
   QUEUE_FOR_EACH(head, elem, tmp) {
     q = dequeue(elem);
-    any_route_free((route_head *)q);
+    any_route_free((route_head*)q);
   }
 }
 
 void
-route_copy(int *dst_count, int *dst_wpt_count, queue **dst, queue *src)
+route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src)
 {
-  queue *elem, *tmp, *elem2, *tmp2;
-  route_head *rte_new;
+  queue* elem, *tmp, *elem2, *tmp2;
+  route_head* rte_new;
   int junk;
   if (!dst_wpt_count) {
     dst_wpt_count = &junk;
   }
 
   if (!*dst) {
-    *dst = (queue *)xcalloc(1, sizeof(queue));
+    *dst = (queue*)xcalloc(1, sizeof(queue));
     QUEUE_INIT(*dst);
     *dst_count = 0;
     *dst_wpt_count = 0;
   }
   QUEUE_FOR_EACH(src, elem, tmp) {
-    route_head *rte_old = (route_head *)elem;
+    route_head* rte_old = (route_head*)elem;
 
     rte_new = route_head_alloc();
     rte_new->rte_name = xstrdup(rte_old->rte_name);
@@ -412,57 +412,57 @@ route_copy(int *dst_count, int *dst_wpt_count, queue **dst, queue *src)
     rte_new->rte_num = rte_old->rte_num;
     any_route_add_head(rte_new, *dst);
     QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2) {
-      any_route_add_wpt(rte_new, waypt_dupe((waypoint *)elem2), dst_wpt_count, 0);
+      any_route_add_wpt(rte_new, waypt_dupe((waypoint*)elem2), dst_wpt_count, 0);
     }
     (*dst_count)++;
   }
 }
 
 void
-route_append(queue *src)
+route_append(queue* src)
 {
-  queue *dst = &my_route_head;
+  queue* dst = &my_route_head;
   route_copy(&rte_head_ct, &rte_waypts, &dst, src);
 }
 
 void
-track_append(queue *src)
+track_append(queue* src)
 {
-  queue *dst = &my_track_head;
+  queue* dst = &my_track_head;
   route_copy(&trk_head_ct, &trk_waypts, &dst, src);
 }
 
 void
-route_backup(signed int *count, queue **head_bak)
+route_backup(signed int* count, queue** head_bak)
 {
   route_copy(count, NULL, head_bak, &my_route_head);
 }
 
 static void
-route_restore_hdr(const route_head *rte)
+route_restore_hdr(const route_head* rte)
 {
   rte_head_ct++;
 }
 
 static void
-track_restore_hdr(const route_head *trk)
+track_restore_hdr(const route_head* trk)
 {
   trk_head_ct++;
 }
 
 static void
-route_restore_tlr(const route_head *rte)
+route_restore_tlr(const route_head* rte)
 {
 }
 
 static void
-route_restore_wpt(const waypoint *wpt)
+route_restore_wpt(const waypoint* wpt)
 {
   rte_waypts++;
 }
 
 static void
-track_restore_wpt(const waypoint *wpt)
+track_restore_wpt(const waypoint* wpt)
 {
   trk_waypts++;
 }
@@ -479,7 +479,7 @@ common_restore_finish(void)
 }
 
 void
-route_restore(queue *head_bak)
+route_restore(queue* head_bak)
 {
   if (head_bak == NULL) {
     return;
@@ -493,13 +493,13 @@ route_restore(queue *head_bak)
 }
 
 void
-track_backup(signed int *count, queue **head_bak)
+track_backup(signed int* count, queue** head_bak)
 {
   route_copy(count, NULL, head_bak, &my_track_head);
 }
 
 void
-track_restore(queue *head_bak)
+track_restore(queue* head_bak)
 {
   if (head_bak == NULL) {
     return;
@@ -519,10 +519,10 @@ track_restore(queue *head_bak)
 void
 routes_to_tracks(void)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&my_route_head, elem, tmp) {
-    route_head *trk = (route_head *) elem;
+    route_head* trk = (route_head*) elem;
     dequeue(&trk->Q);
     ENQUEUE_TAIL(&my_track_head, &trk->Q);
   }
@@ -534,10 +534,10 @@ routes_to_tracks(void)
 void
 tracks_to_routes(void)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&my_track_head, elem, tmp) {
-    route_head *trk = (route_head *) elem;
+    route_head* trk = (route_head*) elem;
     dequeue(&trk->Q);
     ENQUEUE_TAIL(&my_route_head, &trk->Q);
   }
@@ -552,19 +552,19 @@ tracks_to_routes(void)
  * If trkdatap is non-null upon entry, a pointer to an allocated collection
  * (hopefully interesting) statistics about the track will be placed there.
  */
-void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
+void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
 {
   waypoint first;
-  waypoint *thisw;
-  waypoint *prev = &first;
-  queue *elem, *tmp;
+  waypoint* thisw;
+  waypoint* prev = &first;
+  queue* elem, *tmp;
   int tkpt = 0;
   int pts_hrt = 0;
   double tot_hrt = 0.0;
   int pts_cad = 0;
   double tot_cad = 0.0;
   char tkptname[100];
-  computed_trkdata *tdata = (computed_trkdata *)xcalloc(1, sizeof(computed_trkdata));
+  computed_trkdata* tdata = (computed_trkdata*)xcalloc(1, sizeof(computed_trkdata));
 
   if (trkdatap) {
     *trkdatap = tdata;
@@ -577,10 +577,10 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
   tdata->min_alt = -unknown_alt;
   tdata->max_alt =  unknown_alt;
 
-  QUEUE_FOR_EACH((queue *)&trk->waypoint_list, elem, tmp) {
+  QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
     double tlat, tlon, plat, plon, dist;
 
-    thisw = (waypoint *)elem;
+    thisw = (waypoint*)elem;
 
     /*
      * gcdist and heading want radians, not degrees.
@@ -611,7 +611,7 @@ void track_recompute(const route_head *trk, computed_trkdata **trkdatap)
           prev->GetCreationTime().isValid() &&
           thisw->GetCreationTime() > prev->GetCreationTime()) {
         double timed =
-            prev->GetCreationTime().msecsTo(thisw->GetCreationTime()) / 1000.0;
+          prev->GetCreationTime().msecsTo(thisw->GetCreationTime()) / 1000.0;
         WAYPT_SET(thisw, speed, dist / timed);
       }
     }

@@ -314,7 +314,7 @@ gopal_read(void)
     speed=0;
     if (lastwpt !=NULL) {
       speed=3.6*radtometers(gcdist(RAD(lastwpt->latitude), RAD(lastwpt->longitude), RAD(wpt->latitude), RAD(wpt->longitude))) /
-          abs(wpt->creation_time.toTime_t() - lastwpt->GetCreationTime().toTime_t());
+            abs(wpt->creation_time.toTime_t() - lastwpt->GetCreationTime().toTime_t());
       //printf("speed line %d %lf \n",line,speed);
     }
     /* Error handling: in the tracklog of my device sometimes "jump" waypoints ;-) */

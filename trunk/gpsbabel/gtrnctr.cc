@@ -332,12 +332,12 @@ gtc_fake_hdr(void)
   }
   if (tdata->avg_hrt) {
     gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0, "<Value>%d</Value>\n", (int) (tdata->avg_hrt + 0.5));
+    gtc_write_xml(0, "<Value>%d</Value>\n", (int)(tdata->avg_hrt + 0.5));
     gtc_write_xml(-1,"</AverageHeartRateBpm>\n");
   }
   if (tdata->max_hrt) {
     gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0, "<Value>%d</Value>\n", (int) (tdata->max_hrt + 0.5));
+    gtc_write_xml(0, "<Value>%d</Value>\n", (int)(tdata->max_hrt + 0.5));
     gtc_write_xml(-1,"</MaximumHeartRateBpm>\n");
   }
   if (tdata->avg_cad) {
@@ -374,9 +374,9 @@ gtc_act_hdr(const route_head* rte)
   route_disp(rte, gtc_study_lap);
   if (gtc_least_time.isValid()) {
     gtc_write_xml(0, "<Id>%s</Id>\n",
-                      CSTR(gtc_least_time.toPrettyString()));
+                  CSTR(gtc_least_time.toPrettyString()));
     gtc_write_xml(1, "<Lap StartTime=\"%s\">\n",
-                      CSTR(gtc_least_time.toPrettyString()));
+                  CSTR(gtc_least_time.toPrettyString()));
   } else {
     gtc_write_xml(1, "<Lap>\n");
   }
@@ -583,7 +583,7 @@ gtc_wpt_pnt_e(const char* args, const QXmlStreamAttributes* unusedd)
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     /* Add the begin position of a CourseLap as
     a waypoint. */
-    char *cbuf;
+    char* cbuf;
     xasprintf(&cbuf, "LAP%03d", lap_ct);
     wpt_tmp->shortname = cbuf;
     waypt_add(wpt_tmp);

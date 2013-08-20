@@ -144,7 +144,7 @@ static FILE* fin = NULL;
 
 /* copied from dg-100.cpp */
 static void
-v900_log(const char *fmt, ...)
+v900_log(const char* fmt, ...)
 {
   va_list ap;
 
@@ -158,7 +158,7 @@ v900_log(const char *fmt, ...)
 }
 
 static void
-v900_rd_init(const char *fname)
+v900_rd_init(const char* fname)
 {
   v900_log("%s(%s)\n",__func__,fname);
   /* note: file is opened in binary mode, since lines end with \r\n, and in windows text mode
@@ -217,7 +217,7 @@ v900_read(void)
   } line;
   int is_advanced_mode = 0;
   int lc = 0;
-  route_head *track;
+  route_head* track;
 
   v900_log("%s\n",__func__);
 
@@ -241,7 +241,7 @@ v900_read(void)
   track_add_head(track);
 
   while (1) {
-    waypoint *wpt;
+    waypoint* wpt;
     char c;
     int bad = 0;
     int record_len = is_advanced_mode ? sizeof(line.adv) : sizeof(line.bas);
@@ -356,7 +356,7 @@ v900_read(void)
 
     track_add_wpt(track, wpt);
     if (line.bas.common.tag != 'T') {
-      waypoint *wpt2;
+      waypoint* wpt2;
       // A 'G' tag appears to be a 'T' tag, but generated on the trailing
       // edge of a DGPS fix as it decays to an SPS fix.  See 1/13/13 email
       // thread on gpsbabel-misc with Jamie Robertson.
@@ -365,7 +365,7 @@ v900_read(void)
       wpt2 = waypt_dupe(wpt);
       if (line.bas.common.tag == 'V') {	// waypoint with voice recording?
         char vox_file_name[sizeof(line.adv.vox)+5];
-        const char *vox = is_advanced_mode ? line.adv.vox : line.bas.vox;
+        const char* vox = is_advanced_mode ? line.adv.vox : line.bas.vox;
         assert(vox[0] != '\0');
         strcpy(vox_file_name,vox);
         strcat(vox_file_name,".WAV");

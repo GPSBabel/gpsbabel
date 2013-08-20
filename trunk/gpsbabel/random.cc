@@ -25,7 +25,7 @@
 
 #define MYNAME "random"
 
-static char *opt_points, *opt_seed;
+static char* opt_points, *opt_seed;
 
 static arglist_t random_args[] = {
   {
@@ -54,10 +54,10 @@ rand_int(const int max)
 
 /* rand_str always returns a valid string with len >= 0 */
 
-static char *
-rand_str(const int maxlen, const char *fmt)
+static char*
+rand_str(const int maxlen, const char* fmt)
 {
-  char *res;
+  char* res;
   int i, len;
 
   len = rand_int(maxlen) + 1;
@@ -77,7 +77,7 @@ rand_str(const int maxlen, const char *fmt)
     res[i] = c;
   }
   if (fmt) {
-    char *tmp;
+    char* tmp;
     xasprintf(&tmp, fmt, res);
     xfree(res);
     return tmp;
@@ -87,7 +87,7 @@ rand_str(const int maxlen, const char *fmt)
 }
 
 static void
-random_rd_init(const char *fname)
+random_rd_init(const char* fname)
 {
 }
 
@@ -102,8 +102,8 @@ random_read(void)
 #define RND(a) (rand_int(a) > 0)
 
   int i, points;
-  route_head *head;
-  waypoint *prev = NULL;
+  route_head* head;
+  waypoint* prev = NULL;
   time_t time = gpsbabel_time;
 
   if (opt_seed) {
@@ -130,12 +130,12 @@ random_read(void)
 
   for (i = 0; i < points; i++) {
 
-    waypoint *wpt;
-    garmin_fs_t *gmsd;
+    waypoint* wpt;
+    garmin_fs_t* gmsd;
 
     wpt = waypt_new();
     gmsd = garmin_fs_alloc(-1);
-    fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
+    fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
     do {
       wpt->shortname = rand_str(8, "Wpt_%s");

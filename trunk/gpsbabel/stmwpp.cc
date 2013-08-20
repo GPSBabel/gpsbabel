@@ -30,9 +30,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static gbfile *fin, *fout;
-static route_head *track, *route;
-static waypoint *wpt;
+static gbfile* fin, *fout;
+static route_head* track, *route;
+static waypoint* wpt;
 static short_handle short_h;
 
 #define MYNAME "STMwpp"
@@ -46,7 +46,7 @@ static int track_index;
 static int track_num;
 static int what;
 
-static char *index_opt = NULL;
+static char* index_opt = NULL;
 
 static
 arglist_t stmwpp_args[] = {
@@ -59,7 +59,7 @@ arglist_t stmwpp_args[] = {
 
 
 static void
-stmwpp_rd_init(const char *fname)
+stmwpp_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
   track = NULL;
@@ -76,19 +76,19 @@ stmwpp_rd_deinit(void)
 static void
 stmwpp_data_read(void)
 {
-  char *buff;
+  char* buff;
   int line = 0;
 
   what = STM_NOTHING;
   buff = gbfgetstr(fin);
-  buff = (buff == NULL) ? (char *) "" : buff;
+  buff = (buff == NULL) ? (char*) "" : buff;
 
   if (case_ignore_strncmp(buff, "Datum,WGS 84,WGS 84,", 20) != 0) {
     fatal(MYNAME ": Invalid GPS datum or not \"WaypointPlus\"\" file!\n");
   }
 
   while ((buff = gbfgetstr(fin))) {
-    char *c;
+    char* c;
     int column = -1;
     struct tm time;
 
@@ -193,7 +193,7 @@ stmwpp_data_read(void)
 }
 
 static void
-stmwpp_rw_init(const char *fname)
+stmwpp_rw_init(const char* fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
   short_h = mkshort_new_handle();
@@ -207,7 +207,7 @@ stmwpp_rw_deinit(void)
 }
 
 static void
-stmwpp_track_hdr(const route_head *track)
+stmwpp_track_hdr(const route_head* track)
 {
   track_num++;
 }
@@ -216,7 +216,7 @@ static void
 stmwpp_write_double(const double val)
 {
   char buff[64];
-  char *c;
+  char* c;
 
   c = buff + snprintf(buff, sizeof(buff), "%3.7f", val);
   while (*--c == '0') {
@@ -229,7 +229,7 @@ stmwpp_write_double(const double val)
 }
 
 static void
-stmwpp_waypt_cb(const waypoint *wpt)
+stmwpp_waypt_cb(const waypoint* wpt)
 {
   char cdate[16], ctime[16];
   struct tm tm;
@@ -247,7 +247,7 @@ stmwpp_waypt_cb(const waypoint *wpt)
   snprintf(ctime, sizeof(ctime), "%02d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
 
   switch (what) {
-    char *sn;
+    char* sn;
 
   case STM_WAYPT:
   case STM_RTEPT:

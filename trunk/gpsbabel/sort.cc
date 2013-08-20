@@ -33,7 +33,7 @@ typedef enum {
 
 sort_mode_ sort_mode = sm_shortname;	/* How are we sorting these? */
 
-static char *opt_sm_gcid, *opt_sm_shortname, *opt_sm_description, *opt_sm_time;
+static char* opt_sm_gcid, *opt_sm_shortname, *opt_sm_description, *opt_sm_time;
 
 static
 arglist_t sort_args[] = {
@@ -57,10 +57,10 @@ arglist_t sort_args[] = {
 };
 
 static int
-sort_comp(const queue * a, const queue * b)
+sort_comp(const queue* a, const queue* b)
 {
-  const waypoint *x1 = (waypoint *)a;
-  const waypoint *x2 = (waypoint *)b;
+  const waypoint* x1 = (waypoint*)a;
+  const waypoint* x2 = (waypoint*)b;
 
   switch (sort_mode)  {
   case sm_gcid:
@@ -84,7 +84,7 @@ sort_process(void)
 }
 
 void
-sort_init(const char *args)
+sort_init(const char* args)
 {
   if (opt_sm_gcid) {
     sort_mode = sm_gcid;

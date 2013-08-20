@@ -23,7 +23,7 @@
 #include "stddef.h"
 
 void
-enqueue(queue *new_el, queue *old)
+enqueue(queue* new_el, queue* old)
 {
   new_el->next = old->next;
   new_el->prev = old;
@@ -31,11 +31,11 @@ enqueue(queue *new_el, queue *old)
   old->next = new_el;
 }
 
-queue *
-dequeue(queue *element)
+queue*
+dequeue(queue* element)
 {
-  queue *prev = element->prev;
-  queue *next = element->next;
+  queue* prev = element->prev;
+  queue* next = element->next;
 
   next->prev = prev;
   prev->next = next;
@@ -90,10 +90,10 @@ dequeue(queue *element)
 
 
 void
-sortqueue(queue *qh, int (*cmp)(const queue *, const queue *))
+sortqueue(queue* qh, int (*cmp)(const queue*, const queue*))
 {
 
-  queue *p, *q, *e, *tail, *oldhead, *list;
+  queue* p, *q, *e, *tail, *oldhead, *list;
   int insize, nmerges, psize, qsize, i;
 
   /*

@@ -742,11 +742,12 @@ serial_write_route_end(const route_head* route)
   unsigned      src;
   unsigned      sr;
   unsigned char id[1];
-  const char    *rte_name;
+  const char*    rte_name;
 
   rte_name = route->rte_name;
-  if (rte_name == NULL)
+  if (rte_name == NULL) {
     rte_name = "NO NAME";
+  }
   if (route_id_ptr > MAX_ROUTE_LENGTH) {
     fatal(MYNAME ": Route %s too long\n", route->rte_name);
   }

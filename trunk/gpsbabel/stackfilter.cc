@@ -26,15 +26,15 @@
 
 #define MYNAME "Stack filter"
 
-static char *opt_push = NULL;
-static char *opt_copy = NULL;
-static char *opt_pop = NULL;
-static char *opt_append = NULL;
-static char *opt_discard = NULL;
-static char *opt_replace = NULL;
-static char *opt_swap = NULL;
-static char *opt_depth = NULL;
-static char *nowarn = NULL;
+static char* opt_push = NULL;
+static char* opt_copy = NULL;
+static char* opt_pop = NULL;
+static char* opt_append = NULL;
+static char* opt_discard = NULL;
+static char* opt_replace = NULL;
+static char* opt_swap = NULL;
+static char* opt_depth = NULL;
+static char* nowarn = NULL;
 static int  warnings_enabled = 1;
 static int  swapdepth = 0;
 
@@ -86,21 +86,21 @@ struct stack_elt {
   unsigned int waypt_ct;
   int route_count;
   int track_count;
-  struct stack_elt *next;
-} *stack = NULL;
+  struct stack_elt* next;
+}* stack = NULL;
 
 
 void
 stackfilt_process(void)
 {
-  struct stack_elt *tmp_elt = NULL;
-  queue *elem = NULL;
-  queue *tmp = NULL;
+  struct stack_elt* tmp_elt = NULL;
+  queue* elem = NULL;
+  queue* tmp = NULL;
   queue tmp_queue;
   unsigned int tmp_count;
 
   if (opt_push) {
-    tmp_elt = (struct stack_elt *)xmalloc(sizeof(struct stack_elt));
+    tmp_elt = (struct stack_elt*)xmalloc(sizeof(struct stack_elt));
 
     QUEUE_MOVE(&(tmp_elt->waypts), &waypt_head);
     tmp_elt->waypt_ct = waypt_count();
@@ -109,7 +109,7 @@ stackfilt_process(void)
     stack = tmp_elt;
     if (opt_copy) {
       QUEUE_FOR_EACH(&(stack->waypts), elem, tmp) {
-        waypt_add(waypt_dupe((waypoint *)elem));
+        waypt_add(waypt_dupe((waypoint*)elem));
       }
     }
 
@@ -136,7 +136,7 @@ stackfilt_process(void)
     }
     if (opt_append) {
       QUEUE_FOR_EACH(&(stack->waypts), elem, tmp) {
-        waypt_add((waypoint *)elem);
+        waypt_add((waypoint*)elem);
       }
       route_append(&(stack->routes));
       route_flush(&(stack->routes));
@@ -191,7 +191,7 @@ stackfilt_process(void)
 }
 
 void
-stackfilt_init(const char *args)
+stackfilt_init(const char* args)
 {
 
   int invalid = 0;
@@ -239,7 +239,7 @@ stackfilt_deinit(void)
 void
 stackfilt_exit(void)
 {
-  struct stack_elt *tmp_elt = NULL;
+  struct stack_elt* tmp_elt = NULL;
 
   if (warnings_enabled && stack) {
     warning(MYNAME " Warning: leftover stack entries; "

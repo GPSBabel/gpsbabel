@@ -633,11 +633,11 @@ lap_read_as_track(void)
       wpt->microseconds = 0;
 
       sprintf(tbuf, "#%d-0", index);
-	  wpt->shortname = xstrdup(tbuf);
+      wpt->shortname = xstrdup(tbuf);
       sprintf(tbuf, "D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d",
               array[i]->total_distance, array[i]->calories, array[i]->max_speed, array[i]->avg_heart_rate,
               array[i]->max_heart_rate, array[i]->avg_cadence, array[i]->intensity, array[i]->trigger_method);
-	  wpt->description = xstrdup(tbuf);
+      wpt->description = xstrdup(tbuf);
       track_add_wpt(trk_head, wpt);
     }
     /*Allow even if no correct location, no skip if invalid */
@@ -661,7 +661,7 @@ lap_read_as_track(void)
             array[i]->total_distance, array[i]->calories, array[i]->max_speed, array[i]->avg_heart_rate,
             array[i]->max_heart_rate, array[i]->avg_cadence, array[i]->intensity, array[i]->trigger_method,
             array[i]->begin_lon, array[i]->begin_lat);
-	wpt->description = xstrdup(tbuf);
+    wpt->description = xstrdup(tbuf);
 
     track_add_wpt(trk_head, wpt);
   }

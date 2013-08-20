@@ -87,10 +87,10 @@ static struct {
  *   http://hexten.net/wiki/index.php/WBT-200_Comms_Protocol
  */
 
-static void *fd;
-static FILE *fl;
-static char *port;
-static char *erase;
+static void* fd;
+static FILE* fl;
+static char* port;
+static char* erase;
 
 typedef enum {
   UNKNOWN, WBT200, WBT201, WSG1000
@@ -99,7 +99,7 @@ typedef enum {
 static wintec_gps_types dev_type = UNKNOWN;
 
 struct buf_chunk {
-  struct buf_chunk    *next;
+  struct buf_chunk*    next;
   size_t              size;
   size_t              used;
   /* data follows in memory */
@@ -112,25 +112,25 @@ struct buf_chunk {
     ((void *) ((char *) buf_CHUNK_DATA(c) + (offset)))
 
 struct buf_head {
-  struct buf_chunk    *head;
-  struct buf_chunk    *tail;
+  struct buf_chunk*    head;
+  struct buf_chunk*    tail;
   size_t              alloc;
   size_t              used;
   /* read position */
-  struct buf_chunk    *current;
+  struct buf_chunk*    current;
   unsigned long       offset;
   /* shoehorned in here primarily out of laziness */
   unsigned            checksum;
 };
 
 struct read_state {
-  route_head          *route_head_;
+  route_head*          route_head_;
   unsigned            wpn, tpn;
 
   struct buf_head     data;
 };
 
-static void db(int l, const char *msg, ...)
+static void db(int l, const char* msg, ...)
 {
   va_list ap;
   va_start(ap, msg);
@@ -144,7 +144,7 @@ static void db(int l, const char *msg, ...)
  * tidy up its interface.
  */
 
-static void buf_init(struct buf_head *h, size_t alloc)
+static void buf_init(struct buf_head* h, size_t alloc)
 {
   h->head     = NULL;
   h->tail     = NULL;
@@ -154,9 +154,9 @@ static void buf_init(struct buf_head *h, size_t alloc)
   h->offset   = 0;
 }
 
-static void buf_empty(struct buf_head *h)
+static void buf_empty(struct buf_head* h)
 {
-  struct buf_chunk *chunk, *next;
+  struct buf_chunk* chunk, *next;
   for (chunk = h->head; chunk; chunk = next) {
     next = chunk->next;
     xfree(chunk);
@@ -167,15 +167,15 @@ static void buf_empty(struct buf_head *h)
   h->checksum = 0;
 }
 
-static void buf_rewind(struct buf_head *h)
+static void buf_rewind(struct buf_head* h)
 {
   h->current = h->head;
   h->offset  = 0;
 }
 
-static size_t buf_read(struct buf_head *h, void *data, size_t len)
+static size_t buf_read(struct buf_head* h, void* data, size_t len)
 {
-  char    *bp = (char *) data;
+  char*    bp = (char*) data;
   size_t  got = 0;
 
   while (len != 0 && h->current != NULL) {
@@ -203,9 +203,9 @@ static size_t buf_read(struct buf_head *h, void *data, size_t len)
   return got;
 }
 
-static void buf_extend(struct buf_head *h, size_t amt)
+static void buf_extend(struct buf_head* h, size_t amt)
 {
-  struct buf_chunk *c;
+  struct buf_chunk* c;
   size_t sz = amt + sizeof(struct buf_chunk);
 
   c = (struct buf_chunk*) xmalloc(sz);
@@ -222,9 +222,9 @@ static void buf_extend(struct buf_head *h, size_t amt)
   h->tail = c;
 }
 
-static void buf_update_checksum(struct buf_head *h, const void *data, size_t len)
+static void buf_update_checksum(struct buf_head* h, const void* data, size_t len)
 {
-  unsigned char *cp = (unsigned char *) data;
+  unsigned char* cp = (unsigned char*) data;
   unsigned i;
 
   db(4, "Updating checksum with %p, %lu, before: %02x ",
@@ -235,10 +235,10 @@ static void buf_update_checksum(struct buf_head *h, const void *data, size_t len
   db(4, "after: %02x\n", h->checksum);
 }
 
-static void buf_write(struct buf_head *h, const void *data, size_t len)
+static void buf_write(struct buf_head* h, const void* data, size_t len)
 {
   size_t avail;
-  const char *bp = (const char *) data;
+  const char* bp = (const char*) data;
 
   buf_update_checksum(h, data, len);
 
@@ -254,7 +254,7 @@ static void buf_write(struct buf_head *h, const void *data, size_t len)
       avail = len;
     }
 
-    memcpy((char *) buf_CHUNK_PTR(h->tail, h->tail->used), bp, avail);
+    memcpy((char*) buf_CHUNK_PTR(h->tail, h->tail->used), bp, avail);
     h->tail->used   += avail;
     bp              += avail;
     len             -= avail;
@@ -272,7 +272,7 @@ static void rd_drain()
   }
 }
 
-static void rd_line(char *buf, int len)
+static void rd_line(char* buf, int len)
 {
   int rc;
   if (rc = gbser_read_line(fd, buf, len, TIMEOUT, 0x0A, 0x0D), rc != gbser_OK) {
@@ -281,7 +281,7 @@ static void rd_line(char *buf, int len)
   db(3, "Got response: \"%s\"\n", buf);
 }
 
-static void wr_cmd(const char *cmd)
+static void wr_cmd(const char* cmd)
 {
   int rc;
   db(3, "Sending: %s\n", cmd);
@@ -290,13 +290,13 @@ static void wr_cmd(const char *cmd)
   }
 }
 
-static void wr_cmdl(const char *cmd)
+static void wr_cmdl(const char* cmd)
 {
   wr_cmd(cmd);
   wr_cmd(NL);
 }
 
-static int expect(const char *str)
+static int expect(const char* str)
 {
   int state = 0;
   int c, i;
@@ -391,7 +391,7 @@ static wintec_gps_types guess_device()
 
 }
 
-static void rd_init(const char *fname)
+static void rd_init(const char* fname)
 {
   port = xstrdup(fname);
 
@@ -414,7 +414,7 @@ static void rd_deinit(void)
   xfree(port);
 }
 
-static int rd_buf(void *buf, int len)
+static int rd_buf(void* buf, int len)
 {
   int rc;
   if (rc = gbser_read_wait(fd, buf, len, TIMEOUT), rc < 0) {
@@ -426,7 +426,7 @@ static int rd_buf(void *buf, int len)
   return 1;
 }
 
-static void file_init(const char *fname)
+static void file_init(const char* fname)
 {
   db(1, "Opening file...\n");
   if ((fl = fopen(fname, "rb")) == NULL) {
@@ -440,7 +440,7 @@ static void file_deinit(void)
   fclose(fl);
 }
 
-static int starts_with(const char *buf, const char *pat)
+static int starts_with(const char* buf, const char* pat)
 {
   size_t pat_len = strlen(pat);
   return (pat_len <= strlen(buf))
@@ -451,7 +451,7 @@ static int starts_with(const char *buf, const char *pat)
 /* Send a command then wait for a line starting with the command string
  * to be returned.
  */
-static int do_cmd(const char *cmd, const char *expect, char *buf, int len)
+static int do_cmd(const char* cmd, const char* expect, char* buf, int len)
 {
   int trycount;
 
@@ -481,24 +481,24 @@ static int do_cmd(const char *cmd, const char *expect, char *buf, int len)
 /* Issue a command that expects the same string to be echoed
  * back as an ACK
  */
-static int do_simple(const char *cmd, char *buf, int len)
+static int do_simple(const char* cmd, char* buf, int len)
 {
   return do_cmd(cmd, cmd, buf, len);
 }
 
-static char *get_param(const char *cmd, char *buf, int len)
+static char* get_param(const char* cmd, char* buf, int len)
 {
   int cl = do_simple(cmd, buf, len);
   return buf + cl + 1;
 }
 
-static int get_param_int(const char *cmd)
+static int get_param_int(const char* cmd)
 {
   char buf[80];
   return atoi(get_param(cmd, buf, sizeof(buf)));
 }
 
-static double get_param_float(const char *cmd)
+static double get_param_float(const char* cmd)
 {
   char buf[80];
   return atof(get_param(cmd, buf, sizeof(buf)));
@@ -540,10 +540,10 @@ static int check_date(uint32_t tim)
          mday > 0 && mday <= 31 && mon > 0 && mon <= 12 && year >= 4;
 }
 
-static waypoint *make_point(double lat, double lon, double alt, time_t tim, const char *fmt, int index)
+static waypoint* make_point(double lat, double lon, double alt, time_t tim, const char* fmt, int index)
 {
   char     wp_name[20];
-  waypoint *wpt = waypt_new();
+  waypoint* wpt = waypt_new();
 
   sprintf(wp_name, fmt, index);
 
@@ -556,23 +556,23 @@ static waypoint *make_point(double lat, double lon, double alt, time_t tim, cons
   return wpt;
 }
 
-static waypoint *make_waypoint(struct read_state *st, double lat, double lon, double alt, time_t tim)
+static waypoint* make_waypoint(struct read_state* st, double lat, double lon, double alt, time_t tim)
 {
   return make_point(lat, lon, alt, tim, "WP%04d", ++st->wpn);
 }
 
-static waypoint *make_trackpoint(struct read_state *st, double lat, double lon, double alt, time_t tim)
+static waypoint* make_trackpoint(struct read_state* st, double lat, double lon, double alt, time_t tim)
 {
   return make_point(lat, lon, alt, tim, "TP%04d", ++st->tpn);
 }
 
-static int wbt200_data_chunk(struct read_state *st, const void *buf, int fmt)
+static int wbt200_data_chunk(struct read_state* st, const void* buf, int fmt)
 {
   uint32_t   tim;
   double     lat, lon, alt;
   time_t     rtim;
-  waypoint   *tpt     = NULL;
-  const char *bp      = (const char*) buf;
+  waypoint*   tpt     = NULL;
+  const char* bp      = (const char*) buf;
   size_t     buf_used = fmt_version[fmt].reclen;
 
   tim = le_read32(bp + 0);
@@ -614,7 +614,7 @@ static int wbt200_data_chunk(struct read_state *st, const void *buf, int fmt)
 }
 
 /* Return true iff the data appears valid with the specified record length */
-static int is_valid(struct buf_head *h, int fmt)
+static int is_valid(struct buf_head* h, int fmt)
 {
   char buf[RECLEN_MAX];
   size_t reclen = fmt_version[fmt].reclen;
@@ -651,7 +651,7 @@ static int is_valid(struct buf_head *h, int fmt)
   return 1;
 }
 
-static void wbt200_process_data(struct read_state *pst, int fmt)
+static void wbt200_process_data(struct read_state* pst, int fmt)
 {
   char buf[RECLEN_MAX];
   size_t reclen = fmt_version[fmt].reclen;
@@ -669,7 +669,7 @@ static void wbt200_process_data(struct read_state *pst, int fmt)
   }
 }
 
-static void state_init(struct read_state *pst)
+static void state_init(struct read_state* pst)
 {
   pst->route_head_ = NULL;
   pst->wpn        = 0;
@@ -678,13 +678,13 @@ static void state_init(struct read_state *pst)
   buf_init(&pst->data, RECLEN_V1 * RECLEN_V2);
 }
 
-static void state_empty(struct read_state *pst)
+static void state_empty(struct read_state* pst)
 {
   buf_empty(&pst->data);
   state_init(pst);
 }
 
-static int want_bytes(struct buf_head *h, size_t len)
+static int want_bytes(struct buf_head* h, size_t len)
 {
   char buf[512];
 
@@ -788,9 +788,9 @@ static void wbt200_data_read(void)
   state_empty(&st);
 }
 
-static int all_null(const void *buf, const int len)
+static int all_null(const void* buf, const int len)
 {
-  const char *bp = (const char *) buf;
+  const char* bp = (const char*) buf;
   int i;
 
   for (i = 0; i < len; i++) {
@@ -802,14 +802,14 @@ static int all_null(const void *buf, const int len)
   return 1;
 }
 
-static int wbt201_data_chunk(struct read_state *st, const void *buf)
+static int wbt201_data_chunk(struct read_state* st, const void* buf)
 {
   uint32_t    tim;
   uint16_t    flags;
   double      lat, lon, alt;
   time_t      rtim;
-  waypoint    *tpt     = NULL;
-  const char  *bp      = (const char *) buf;
+  waypoint*    tpt     = NULL;
+  const char*  bp      = (const char*) buf;
 
   /* Zero records are skipped */
   if (all_null(buf, RECLEN_WBT201)) {
@@ -831,7 +831,7 @@ static int wbt201_data_chunk(struct read_state *st, const void *buf)
   rtim = decode_date(tim);
 
   if ((flags & WBT201_WAYPOINT) && (global_opts.masked_objective & WPTDATAMASK)) {
-    waypoint *wpt = make_waypoint(st, lat, lon, alt, rtim);
+    waypoint* wpt = make_waypoint(st, lat, lon, alt, rtim);
     waypt_add(wpt);
   }
 
@@ -854,7 +854,7 @@ static int wbt201_data_chunk(struct read_state *st, const void *buf)
   return 1;
 }
 
-static void wbt201_process_chunk(struct read_state *st)
+static void wbt201_process_chunk(struct read_state* st)
 {
   char buf[RECLEN_WBT201];
 
@@ -866,13 +866,13 @@ static void wbt201_process_chunk(struct read_state *st)
   }
 }
 
-static int wbt201_read_chunk(struct read_state *st, unsigned pos, unsigned limit)
+static int wbt201_read_chunk(struct read_state* st, unsigned pos, unsigned limit)
 {
   char cmd_buf[30];
   char line_buf[100];
   unsigned long cs;
-  char *lp, *op;
-  static const char *cs_prefix = "@AL,CS,";
+  char* lp, *op;
+  static const char* cs_prefix = "@AL,CS,";
 
   unsigned want = limit - pos;
   if (want > WBT201CHUNK) {
@@ -931,7 +931,7 @@ static void wbt201_data_read(void)
   struct read_state   st;
   unsigned            tries;
 
-  const char          *tmp;
+  const char*          tmp;
 
   double              ver_hw;
   double              ver_sw;
@@ -1017,7 +1017,7 @@ static void file_read(void)
   struct read_state   st;
   int                 fmt;
 
-  const char *        tk1_magic     = TK1_MAGIC;
+  const char*         tk1_magic     = TK1_MAGIC;
   size_t              tk1_magic_len = strlen(tk1_magic) + 1;
 
   state_init(&st);

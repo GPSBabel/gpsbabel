@@ -26,7 +26,7 @@
 
 #define MYNAME "sbp"
 
-static gbfile *file_handle = NULL;
+static gbfile* file_handle = NULL;
 
 static
 arglist_t sbp_args[] = {
@@ -38,7 +38,7 @@ arglist_t sbp_args[] = {
 *******************************************************************************/
 
 static void
-sbp_rd_init(const char *fname)
+sbp_rd_init(const char* fname)
 {
   file_handle = gbfopen(fname, "r", MYNAME);
 }
@@ -50,7 +50,7 @@ sbp_rd_deinit(void)
 }
 
 static void
-read_sbp_header(route_head *track)
+read_sbp_header(route_head* track)
 {
   /*
    * A complete SBP file contains 64 bytes header,
@@ -83,7 +83,7 @@ read_sbp_header(route_head *track)
   }
 }
 
-static waypoint *
+static waypoint*
 read_logpoint(void)
 {
   unsigned char buffer[SBP_RECORD_LEN];
@@ -99,8 +99,8 @@ static void
 sbp_read(void)
 {
   if (global_opts.masked_objective & TRKDATAMASK) {
-    waypoint *logpoint;
-    route_head     *track;
+    waypoint* logpoint;
+    route_head*     track;
 
     track = route_head_alloc();
     track_add_head(track);

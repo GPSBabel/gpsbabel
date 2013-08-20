@@ -106,7 +106,7 @@ static route_head* mmo_rte;
 
 static QHash<QString, int> category_names;
 static QHash<int, QString> icons;
-static QHash<int, mmo_data_t *> objects;
+static QHash<int, mmo_data_t*> objects;
 static QHash<QString, unsigned> mmobjects;
 
 typedef struct mmo_icon_mapping_s {
@@ -187,7 +187,7 @@ mmo_readstr(void)
       len = (unsigned)gbfgetc(fin);
       if (len > 0) {
         unsigned int ii, jj, ch, resbytes=0;
-        res = (char *) xmalloc(len*2 + 1); // bigger to allow for utf-8 expansion
+        res = (char*) xmalloc(len*2 + 1);  // bigger to allow for utf-8 expansion
         for (ii=0; ii<len; ii++) {
           char utf8buf[8];
           int utf8len;
@@ -208,7 +208,7 @@ mmo_readstr(void)
     // positive values of len are for strings longer than 254, handled below:
   }
   // length zero returns an empty string
-  res = (char *) xmalloc(len + 1);
+  res = (char*) xmalloc(len + 1);
   res[len] = '\0';
   if (len) {
     gbfread(res, len, 1, fin);
@@ -329,7 +329,7 @@ mmo_get_waypt(mmo_data_t* data)
 }
 
 static void
-mmo_free_object(mmo_data_t *data)
+mmo_free_object(mmo_data_t* data)
 {
   if (data->name) {
     xfree(data->name);
@@ -1031,7 +1031,7 @@ mmo_rd_deinit(void)
 
   icons.clear();
 
-  foreach (int k, objects.keys()) {
+  foreach(int k, objects.keys()) {
     mmo_free_object(objects.value(k));
   }
   objects.clear();
@@ -1481,7 +1481,7 @@ mmo_wr_deinit(void)
   mmobjects.clear();
   category_names.clear();
 
-  foreach (int k, objects.keys()) {
+  foreach(int k, objects.keys()) {
     mmo_free_object(objects.value(k));
   }
   objects.clear();

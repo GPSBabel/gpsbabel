@@ -34,7 +34,7 @@
 #define TM_YEAR_ZERO	1900
 #define TM_MONTH_ZERO	1
 
-static gbfile			*infile	= 0;
+static gbfile*			infile	= 0;
 static int				count	= 0;
 
 static const int			vitovtt_version				= 3;
@@ -47,7 +47,7 @@ static const int			vitovtt_secondscale			= 30000000;
 static const int			vitovtt_microsecondscale	= 30;
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   infile = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -62,8 +62,8 @@ static void
 vitovtt_read(void)
 {
   int				version			= 0;
-  route_head		*route_head		= 0;
-  waypoint		*wpt_tmp		= 0;
+  route_head*		route_head		= 0;
+  waypoint*		wpt_tmp		= 0;
   int				scaled_lat		= 0;
   int				scaled_lon		= 0;
   double			altitude		= 0;

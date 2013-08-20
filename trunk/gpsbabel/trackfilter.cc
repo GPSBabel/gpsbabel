@@ -71,23 +71,23 @@
 
 #undef TRACKF_DBG
 
-static char *opt_merge = NULL;
-static char *opt_pack = NULL;
-static char *opt_split = NULL;
-static char *opt_sdistance = NULL;
-static char *opt_move = NULL;
-static char *opt_title = NULL;
-static char *opt_start = NULL;
-static char *opt_stop = NULL;
-static char *opt_fix = NULL;
-static char *opt_course = NULL;
-static char *opt_speed = NULL;
-static char *opt_name = NULL;
-static char *opt_seg2trk = NULL;
-static char *opt_trk2seg = NULL;
-static char *opt_segment = NULL;
-static char *opt_faketime = NULL;
-static char *opt_discard = NULL;
+static char* opt_merge = NULL;
+static char* opt_pack = NULL;
+static char* opt_split = NULL;
+static char* opt_sdistance = NULL;
+static char* opt_move = NULL;
+static char* opt_title = NULL;
+static char* opt_start = NULL;
+static char* opt_stop = NULL;
+static char* opt_fix = NULL;
+static char* opt_course = NULL;
+static char* opt_speed = NULL;
+static char* opt_name = NULL;
+static char* opt_seg2trk = NULL;
+static char* opt_trk2seg = NULL;
+static char* opt_segment = NULL;
+static char* opt_faketime = NULL;
+static char* opt_discard = NULL;
 
 static
 arglist_t trackfilter_args[] = {
@@ -177,12 +177,12 @@ arglist_t trackfilter_args[] = {
 
 
 typedef struct trkflt_s {
-  route_head *track;
+  route_head* track;
   QDateTime first_time;
   QDateTime last_time;
 } trkflt_t;
 
-static trkflt_t *track_list = NULL;
+static trkflt_t* track_list = NULL;
 static int track_ct = 0;
 static int track_pts = 0;
 static int timeless_pts = 0;
@@ -198,7 +198,7 @@ static int
 trackfilter_opt_count(void)
 {
   int res = 0;
-  arglist_t *a = trackfilter_args;
+  arglist_t* a = trackfilter_args;
 
   while (a->argstring) {
     if (*a->argval != NULL) {
@@ -210,11 +210,11 @@ trackfilter_opt_count(void)
 }
 
 static int
-trackfilter_parse_time_opt(const char *arg)
+trackfilter_parse_time_opt(const char* arg)
 {
   time_t t0, t1;
   int sign = 1;
-  char *cin = (char *)arg;
+  char* cin = (char*)arg;
   char c;
 
   t0 = t1 = 0;
@@ -257,10 +257,10 @@ trackfilter_parse_time_opt(const char *arg)
 }
 
 static int
-trackfilter_init_qsort_cb(const void *a, const void *b)
+trackfilter_init_qsort_cb(const void* a, const void* b)
 {
-  const trkflt_t *ra = (const trkflt_t*) a;
-  const trkflt_t *rb = (const trkflt_t*) b;
+  const trkflt_t* ra = (const trkflt_t*) a;
+  const trkflt_t* rb = (const trkflt_t*) b;
   const QDateTime dta = ra->first_time;
   const QDateTime dtb = rb->first_time;
 
@@ -274,10 +274,10 @@ trackfilter_init_qsort_cb(const void *a, const void *b)
 }
 
 static int
-trackfilter_merge_qsort_cb(const void *a, const void *b)
+trackfilter_merge_qsort_cb(const void* a, const void* b)
 {
-  const waypoint *wa = *(waypoint **)a;
-  const waypoint *wb = *(waypoint **)b;
+  const waypoint* wa = *(waypoint**)a;
+  const waypoint* wb = *(waypoint**)b;
   const QDateTime dta = wa->GetCreationTime();
   const QDateTime dtb = wb->GetCreationTime();
 
@@ -291,7 +291,7 @@ trackfilter_merge_qsort_cb(const void *a, const void *b)
 }
 
 static fix_type
-trackfilter_parse_fix(int *nsats)
+trackfilter_parse_fix(int* nsats)
 {
   if (!opt_fix) {
     return fix_unknown;
@@ -321,40 +321,42 @@ trackfilter_parse_fix(int *nsats)
 }
 
 static void
-trackfilter_fill_track_list_cb(const route_head *track) 	/* callback for track_disp_all */
+trackfilter_fill_track_list_cb(const route_head* track) 	/* callback for track_disp_all */
 {
   int i;
-  waypoint *wpt, *prev;
-  queue *elem, *tmp;
+  waypoint* wpt, *prev;
+  queue* elem, *tmp;
 
   if (track->rte_waypt_ct == 0) {
-    track_del_head((route_head *)track);
+    track_del_head((route_head*)track);
     return;
   }
 
   if (opt_name != NULL) {
     if ((track->rte_name == NULL) ||
         (case_ignore_str_match(track->rte_name, opt_name) == 0)) {
-      QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp) {
-        waypoint *wpt = (waypoint *)elem;
-        track_del_wpt((route_head *)track, wpt);
+      QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
+        waypoint* wpt = (waypoint*)elem;
+        track_del_wpt((route_head*)track, wpt);
         waypt_free(wpt);
       }
-      track_del_head((route_head *)track);
+      track_del_head((route_head*)track);
       return;
     }
   }
 
-  track_list[track_ct].track = (route_head *)track;
+  track_list[track_ct].track = (route_head*)track;
 
   i = 0;
   prev = NULL;
 
-  QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp) {
+  QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
     track_pts++;
 
-    wpt = (waypoint *)elem;
-    if (!wpt->creation_time.isValid()) timeless_pts++;
+    wpt = (waypoint*)elem;
+    if (!wpt->creation_time.isValid()) {
+      timeless_pts++;
+    }
     if (!(opt_merge && opt_discard) && (need_time != 0) && (!wpt->creation_time.isValid())) {
       fatal(MYNAME "-init: Found track point at %f,%f without time!\n",
             wpt->latitude, wpt->longitude);
@@ -384,7 +386,7 @@ trackfilter_fill_track_list_cb(const route_head *track) 	/* callback for track_d
 *******************************************************************************/
 
 static void
-trackfilter_split_init_rte_name(route_head *track, const QDateTime dt)
+trackfilter_split_init_rte_name(route_head* track, const QDateTime dt)
 {
   char buff[128], tbuff[128];
   struct tm tm;
@@ -415,18 +417,18 @@ trackfilter_split_init_rte_name(route_head *track, const QDateTime dt)
 }
 
 static void
-trackfilter_pack_init_rte_name(route_head *track, const time_t default_time)
+trackfilter_pack_init_rte_name(route_head* track, const time_t default_time)
 {
   char buff[128];
 
   if (strchr(opt_title, '%') != NULL) {
     struct tm tm;
-    waypoint *wpt;
+    waypoint* wpt;
 
     if (track->rte_waypt_ct == 0) {
       tm = *localtime(&default_time);
     } else {
-      wpt = (waypoint *) QUEUE_FIRST((queue *)&track->waypoint_list);
+      wpt = (waypoint*) QUEUE_FIRST((queue*)&track->waypoint_list);
       time_t t = wpt->GetCreationTime().toTime_t();
       tm = *localtime(&t);
     }
@@ -458,7 +460,7 @@ trackfilter_title(void)
     fatal(MYNAME "-title: Missing your title!\n");
   }
   for (i = 0; i < track_ct; i++) {
-    route_head *track = track_list[i].track;
+    route_head* track = track_list[i].track;
     trackfilter_pack_init_rte_name(track, 0);
   }
 }
@@ -472,7 +474,7 @@ trackfilter_pack(void)
 {
   int i, j;
   trkflt_t prev;
-  route_head *master;
+  route_head* master;
 
   for (i = 1, j = 0; i < track_ct; i++, j++) {
     prev = track_list[j];
@@ -486,11 +488,11 @@ trackfilter_pack(void)
   master = track_list[0].track;
 
   for (i = 1; i < track_ct; i++) {
-    queue *elem, *tmp;
-    route_head *curr = track_list[i].track;
+    queue* elem, *tmp;
+    route_head* curr = track_list[i].track;
 
-    QUEUE_FOR_EACH((queue *)&curr->waypoint_list, elem, tmp) {
-      waypoint *wpt = (waypoint *)elem;
+    QUEUE_FOR_EACH((queue*)&curr->waypoint_list, elem, tmp) {
+      waypoint* wpt = (waypoint*)elem;
       track_del_wpt(curr, wpt);
       track_add_wpt(master, wpt);
     }
@@ -509,23 +511,23 @@ trackfilter_merge(void)
 {
   int i, j, dropped;
 
-  queue *elem, *tmp;
-  waypoint **buff;
-  waypoint *prev, *wpt;
-  route_head *master = track_list[0].track;
+  queue* elem, *tmp;
+  waypoint** buff;
+  waypoint* prev, *wpt;
+  route_head* master = track_list[0].track;
 
   if (track_pts-timeless_pts < 1) {
     return;
   }
 
-  buff = (waypoint **)xcalloc(track_pts-timeless_pts, sizeof(*buff));
+  buff = (waypoint**)xcalloc(track_pts-timeless_pts, sizeof(*buff));
 
   j = 0;
   for (i = 0; i < track_ct; i++) {	/* put all points into temp buffer */
-    route_head *track = track_list[i].track;
-    QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp) {
-      wpt = (waypoint *)elem;
-      if(wpt->creation_time.isValid()) {
+    route_head* track = track_list[i].track;
+    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
+      wpt = (waypoint*)elem;
+      if (wpt->creation_time.isValid()) {
         buff[j++] = waypt_dupe(wpt);
       }
       track_del_wpt(track, wpt);
@@ -566,13 +568,13 @@ trackfilter_merge(void)
 static void
 trackfilter_split(void)
 {
-  route_head *curr;
-  route_head *master = track_list[0].track;
+  route_head* curr;
+  route_head* master = track_list[0].track;
   int count = master->rte_waypt_ct;
 
-  waypoint **buff;
-  waypoint *wpt;
-  queue *elem, *tmp;
+  waypoint** buff;
+  waypoint* wpt;
+  queue* elem, *tmp;
   int i, j;
   double interval = -1;
   double distance = -1;
@@ -680,11 +682,11 @@ trackfilter_split(void)
 
   trackfilter_split_init_rte_name(master, track_list[0].first_time);
 
-  buff = (waypoint **) xcalloc(count, sizeof(*buff));
+  buff = (waypoint**) xcalloc(count, sizeof(*buff));
 
   i = 0;
-  QUEUE_FOR_EACH((queue *)&master->waypoint_list, elem, tmp) {
-    wpt = (waypoint *)elem;
+  QUEUE_FOR_EACH((queue*)&master->waypoint_list, elem, tmp) {
+    wpt = (waypoint*)elem;
     buff[i++] = wpt;
   }
 
@@ -746,7 +748,7 @@ trackfilter_split(void)
 #ifdef TRACKF_DBG
       printf(MYNAME ": splitting new track\n");
 #endif
-      curr = (route_head *) route_head_alloc();
+      curr = (route_head*) route_head_alloc();
       trackfilter_split_init_rte_name(curr, buff[j]->GetCreationTime());
       track_add_head(curr);
     }
@@ -768,8 +770,8 @@ static void
 trackfilter_move(void)
 {
   int i;
-  queue *elem, *tmp;
-  waypoint *wpt;
+  queue* elem, *tmp;
+  waypoint* wpt;
   time_t delta;
 
   delta = trackfilter_parse_time_opt(opt_move);
@@ -778,9 +780,9 @@ trackfilter_move(void)
   }
 
   for (i = 0; i < track_ct; i++) {
-    route_head *track = track_list[i].track;
-    QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp) {
-      wpt = (waypoint *)elem;
+    route_head* track = track_list[i].track;
+    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
+      wpt = (waypoint*)elem;
       wpt->creation_time += delta;
     }
 
@@ -797,8 +799,8 @@ static void
 trackfilter_synth(void)
 {
   int i;
-  queue *elem, *tmp;
-  waypoint *wpt;
+  queue* elem, *tmp;
+  waypoint* wpt;
 
   double oldlat = -999;
   double oldlon = -999;
@@ -810,10 +812,10 @@ trackfilter_synth(void)
   fix = trackfilter_parse_fix(&nsats);
 
   for (i = 0; i < track_ct; i++) {
-    route_head *track = track_list[i].track;
+    route_head* track = track_list[i].track;
     first = 1;
-    QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp) {
-      wpt = (waypoint *)elem;
+    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
+      wpt = (waypoint*)elem;
       if (opt_fix) {
         wpt->fix = fix;
         if (wpt->sat == 0) {
@@ -859,18 +861,18 @@ trackfilter_synth(void)
 *******************************************************************************/
 
 static time_t
-trackfilter_range_check(const char *timestr)
+trackfilter_range_check(const char* timestr)
 {
   int i;
   char fmt[20];
   char c;
-  char *cin;
+  char* cin;
   struct tm time;
 
 
   i = 0;
   strncpy(fmt, "00000101000000", sizeof(fmt));
-  cin = (char *)timestr;
+  cin = (char*)timestr;
 
   while ((c = *cin++)) {
     if (fmt[i] == '\0') {
@@ -893,7 +895,7 @@ static int
 trackfilter_range(void)		/* returns number of track points left after filtering */
 {
   time_t start, stop;
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   int i, dropped, inside = 0;
 
   if (opt_start != 0) {
@@ -911,10 +913,10 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
   dropped = inside = 0;
 
   for (i = 0; i < track_ct; i++) {
-    route_head *track = track_list[i].track;
+    route_head* track = track_list[i].track;
 
-    QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp) {
-      waypoint *wpt = (waypoint *)elem;
+    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
+      waypoint* wpt = (waypoint*)elem;
       if (wpt->creation_time.isValid()) {
         inside = ((wpt->GetCreationTime().toTime_t() >= start) && (wpt->GetCreationTime().toTime_t() <= stop));
       }
@@ -954,14 +956,14 @@ trackfilter_seg2trk(void)
   int i;
 
   for (i = 0; i < track_ct; i++) {
-    queue *elem, *tmp;
-    route_head *src = track_list[i].track;
-    route_head *dest = NULL;
-    route_head *insert_point = src;
+    queue* elem, *tmp;
+    route_head* src = track_list[i].track;
+    route_head* dest = NULL;
+    route_head* insert_point = src;
     int trk_seg_num = 1, first = 1;
 
-    QUEUE_FOR_EACH((queue *)&src->waypoint_list, elem, tmp) {
-      waypoint *wpt = (waypoint *)elem;
+    QUEUE_FOR_EACH((queue*)&src->waypoint_list, elem, tmp) {
+      waypoint* wpt = (waypoint*)elem;
       if (wpt->wpt_flags.new_trkseg && !first) {
 
         dest = route_head_alloc();
@@ -1002,17 +1004,17 @@ static void
 trackfilter_trk2seg(void)
 {
   int i, first;
-  route_head *master;
+  route_head* master;
 
   master = track_list[0].track;
 
   for (i = 1; i < track_ct; i++) {
-    queue *elem, *tmp;
-    route_head *curr = track_list[i].track;
+    queue* elem, *tmp;
+    route_head* curr = track_list[i].track;
 
     first = 1;
-    QUEUE_FOR_EACH((queue *)&curr->waypoint_list, elem, tmp) {
-      waypoint *wpt = (waypoint *)elem;
+    QUEUE_FOR_EACH((queue*)&curr->waypoint_list, elem, tmp) {
+      waypoint* wpt = (waypoint*)elem;
 
 
       int orig_new_trkseg = wpt->wpt_flags.new_trkseg;
@@ -1042,13 +1044,13 @@ typedef struct faketime_s {
 } faketime_t;
 
 static faketime_t
-trackfilter_faketime_check(const char *timestr)
+trackfilter_faketime_check(const char* timestr)
 {
   int i, j;
   char fmtstart[20];
   char fmtstep[20];
   char c;
-  const char *cin;
+  const char* cin;
   struct tm time;
   int timeparse = 1;
   faketime_t result;
@@ -1103,7 +1105,7 @@ trackfilter_faketime(void)             /* returns number of track points left af
 {
   faketime_t faketime;
 
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   int i, dropped, inside = 0;
 
   if (opt_faketime != 0) {
@@ -1113,10 +1115,10 @@ trackfilter_faketime(void)             /* returns number of track points left af
   dropped = inside = 0;
 
   for (i = 0; i < track_ct; i++) {
-    route_head *track = track_list[i].track;
+    route_head* track = track_list[i].track;
 
-    QUEUE_FOR_EACH((queue *)&track->waypoint_list, elem, tmp) {
-      waypoint *wpt = (waypoint *)elem;
+    QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
+      waypoint* wpt = (waypoint*)elem;
 
       if (opt_faketime != 0 && (!wpt->creation_time.isValid() || faketime.force)) {
         wpt->creation_time = QDateTime::fromTime_t(faketime.start);
@@ -1129,7 +1131,7 @@ trackfilter_faketime(void)             /* returns number of track points left af
 }
 
 static int
-trackfilter_points_are_same(const waypoint *wpta, const waypoint *wptb)
+trackfilter_points_are_same(const waypoint* wpta, const waypoint* wptb)
 {
   // We use a simpler (non great circle) test for lat/lon here as this
   // is used for keeping the 'bookends' of non-moving points.
@@ -1153,18 +1155,18 @@ trackfilter_points_are_same(const waypoint *wpta, const waypoint *wptb)
 }
 
 static void
-trackfilter_segment_head(const route_head *rte)
+trackfilter_segment_head(const route_head* rte)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   double avg_dist = 0;
   int index = 0;
-  waypoint *prev_wpt = NULL;
+  waypoint* prev_wpt = NULL;
   // Consider tossing trackpoints closer than this in radians.
   // (Empirically determined; It's a few dozen feet.)
   const double ktoo_close = 0.000005;
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    waypoint *wpt = (waypoint *)elem;
+    waypoint* wpt = (waypoint*)elem;
     if (index > 0) {
       double cur_dist = gcdist(RAD(prev_wpt->latitude),
                                RAD(prev_wpt->longitude),
@@ -1176,11 +1178,11 @@ trackfilter_segment_head(const route_head *rte)
       }
 
       if (cur_dist < ktoo_close) {
-        if (wpt != (waypoint *) QUEUE_LAST(&rte->waypoint_list)) {
-          waypoint *next_wpt = (waypoint *) QUEUE_NEXT(&wpt->Q);
+        if (wpt != (waypoint*) QUEUE_LAST(&rte->waypoint_list)) {
+          waypoint* next_wpt = (waypoint*) QUEUE_NEXT(&wpt->Q);
           if (trackfilter_points_are_same(prev_wpt, wpt) &&
               trackfilter_points_are_same(wpt, next_wpt)) {
-            track_del_wpt((route_head *)rte, wpt);
+            track_del_wpt((route_head*)rte, wpt);
             continue;
           }
         }
@@ -1202,7 +1204,7 @@ trackfilter_segment_head(const route_head *rte)
 *******************************************************************************/
 
 static void
-trackfilter_init(const char *args)
+trackfilter_init(const char* args)
 {
 
   int count = track_count();

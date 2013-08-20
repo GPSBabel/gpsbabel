@@ -38,11 +38,11 @@ typedef enum {
 
 typedef struct psit_icon_mapping {
   const int	value;
-  const char	*icon;
+  const char*	icon;
 } psit_icon_mapping_t;
 
-static gbfile *psit_file_in;
-static gbfile *psit_file_out;
+static gbfile* psit_file_in;
+static gbfile* psit_file_out;
 static short_handle mkshort_handle;
 
 /* 2 = not written any tracks out
@@ -52,7 +52,7 @@ static int	psit_track_state = 2;
 
 static char psit_current_token[256];
 
-char *snlen;
+char* snlen;
 
 static
 arglist_t psit_args[] = {
@@ -145,10 +145,10 @@ const psit_icon_mapping_t psit_icon_value_table[] = {
   {     -1, NULL }
 };
 
-static const char *
+static const char*
 psit_find_desc_from_icon_number(const int icon)
 {
-  const psit_icon_mapping_t *i;
+  const psit_icon_mapping_t* i;
 
   for (i = psit_icon_value_table; i->icon; i++) {
     if (icon == i->value) {
@@ -159,9 +159,9 @@ psit_find_desc_from_icon_number(const int icon)
 }
 
 static int
-psit_find_icon_number_from_desc(const char *desc)
+psit_find_icon_number_from_desc(const char* desc)
 {
-  const psit_icon_mapping_t *i;
+  const psit_icon_mapping_t* i;
   int def_icon = 18;
 
   if (!desc) {
@@ -180,7 +180,7 @@ psit_find_icon_number_from_desc(const char *desc)
 }
 
 static void
-psit_rd_init(const char *fname)
+psit_rd_init(const char* fname)
 {
   psit_file_in = gbfopen(fname, "r", MYNAME);
 }
@@ -192,7 +192,7 @@ psit_rd_deinit(void)
 }
 
 static void
-psit_wr_init(const char *fname)
+psit_wr_init(const char* fname)
 {
   psit_file_out = gbfopen(fname, "w", MYNAME);
 }
@@ -208,7 +208,7 @@ psit_wr_deinit(void)
  * and write into buf.
  */
 static void
-psit_getToken(gbfile *psit_file, char *buf, size_t sz, psit_tokenSep_type delimType)
+psit_getToken(gbfile* psit_file, char* buf, size_t sz, psit_tokenSep_type delimType)
 {
   int c = -1;
 
@@ -272,7 +272,7 @@ psit_getToken(gbfile *psit_file, char *buf, size_t sz, psit_tokenSep_type delimT
  *
  */
 static int
-psit_isKnownToken(char *buf)
+psit_isKnownToken(char* buf)
 {
   if (strcmp(buf, "Track:") == 0) {
     return 0;
@@ -294,11 +294,11 @@ psit_isKnownToken(char *buf)
  * MRCB
  */
 static void
-psit_waypoint_r(gbfile *psit_file, waypoint **wpt)
+psit_waypoint_r(gbfile* psit_file, waypoint** wpt)
 {
   int		garmin_icon_num;
 
-  waypoint	*thisWaypoint;
+  waypoint*	thisWaypoint;
 
   if (strlen(psit_current_token) > 0) {
     thisWaypoint = waypt_new();
@@ -339,11 +339,11 @@ psit_waypoint_r(gbfile *psit_file, waypoint **wpt)
  * MRCB
  */
 static void
-psit_waypoint_w(gbfile *psit_file, const waypoint *wpt)
+psit_waypoint_w(gbfile* psit_file, const waypoint* wpt)
 {
   int	icon;
-  const char *ident;
-  char *src = 0;  /* BUGBUG Passed to mkshort */
+  const char* ident;
+  char* src = 0;  /* BUGBUG Passed to mkshort */
 
   gbfprintf(psit_file, "%11.6f,%11.6f,",
             wpt->latitude,
@@ -376,7 +376,7 @@ psit_waypoint_w(gbfile *psit_file, const waypoint *wpt)
 }
 
 static void
-psit_waypoint_w_wrapper(const waypoint *wpt)
+psit_waypoint_w_wrapper(const waypoint* wpt)
 {
   psit_waypoint_w(psit_file_out, wpt);
 }
@@ -386,17 +386,17 @@ psit_waypoint_w_wrapper(const waypoint *wpt)
  * MRCB
  */
 static void
-psit_route_r(gbfile *psit_file, route_head **rte)
+psit_route_r(gbfile* psit_file, route_head** rte)
 {
   char rtename[256];
   unsigned int rte_num;
 
   int		garmin_icon_num;
 
-  route_head *rte_head;
+  route_head* rte_head;
   unsigned int rte_count;
 
-  waypoint	*thisWaypoint;
+  waypoint*	thisWaypoint;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
 
@@ -466,27 +466,27 @@ psit_route_r(gbfile *psit_file, route_head **rte)
  * MRCB
  */
 static void
-psit_routehdr_w(gbfile *psit_file, const route_head *rte)
+psit_routehdr_w(gbfile* psit_file, const route_head* rte)
 {
   char		hdr[20];
   unsigned int rte_datapoints;
-  char		*rname;
+  char*		rname;
 
-  waypoint	*testwpt;
+  waypoint*	testwpt;
   time_t		uniqueValue = 0;
   int			allWptNameLengths;
 
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   /* total nodes (waypoints) this route */
   rte_datapoints = 0;
   allWptNameLengths = 0;
 
   if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
-    char *c;
+    char* c;
 
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-      testwpt = (waypoint *)elem;
+      testwpt = (waypoint*)elem;
       if (rte_datapoints == 0) {
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
@@ -515,7 +515,7 @@ psit_routehdr_w(gbfile *psit_file, const route_head *rte)
 }
 
 static void
-psit_routehdr_w_wrapper(const route_head *rte)
+psit_routehdr_w_wrapper(const route_head* rte)
 {
   psit_routehdr_w(psit_file_out, rte);
 }
@@ -526,7 +526,7 @@ psit_routehdr_w_wrapper(const route_head *rte)
  * MRCB
  */
 static void
-psit_track_r(gbfile *psit_file, route_head **trk)
+psit_track_r(gbfile* psit_file, route_head** trk)
 {
   char tbuf[100];
   char trkname[256];
@@ -534,10 +534,10 @@ psit_track_r(gbfile *psit_file, route_head **trk)
 
   struct tm tmTime;
   time_t	dateTime = 0;
-  route_head *track_head = NULL;
+  route_head* track_head = NULL;
   unsigned int trk_count;
 
-  waypoint	*thisWaypoint;
+  waypoint*	thisWaypoint;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
   if (strlen(psit_current_token) == 0) {
@@ -629,25 +629,25 @@ psit_track_r(gbfile *psit_file, route_head **trk)
  * MRCB
  */
 static void
-psit_trackhdr_w(gbfile *psit_file, const route_head *trk)
+psit_trackhdr_w(gbfile* psit_file, const route_head* trk)
 {
   char		hdr[30];
   unsigned int trk_datapoints;
-  char		*tname;
-  waypoint	*testwpt;
+  char*		tname;
+  waypoint*	testwpt;
   time_t		uniqueValue = 0;
 
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   if (psit_track_state == 2) {
     /* total nodes (waypoints) this track */
     trk_datapoints = 0;
     if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
-      char *c;
+      char* c;
 
       QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
         if (trk_datapoints == 0) {
-          testwpt = (waypoint *)elem;
+          testwpt = (waypoint*)elem;
           uniqueValue = testwpt->GetCreationTime().toTime_t();
         }
         trk_datapoints++;
@@ -679,7 +679,7 @@ psit_trackhdr_w(gbfile *psit_file, const route_head *trk)
 }
 
 static void
-psit_trackhdr_w_wrapper(const route_head *trk)
+psit_trackhdr_w_wrapper(const route_head* trk)
 {
   psit_trackhdr_w(psit_file_out, trk);
 }
@@ -690,10 +690,10 @@ psit_trackhdr_w_wrapper(const route_head *trk)
  * MRCB
  */
 static void
-psit_trackdatapoint_w(gbfile *psit_file, const waypoint *wpt)
+psit_trackdatapoint_w(gbfile* psit_file, const waypoint* wpt)
 {
   time_t	t = wpt->GetCreationTime().toTime_t();
-  struct tm *tmTime = gmtime(&t);
+  struct tm* tmTime = gmtime(&t);
 
   gbfprintf(psit_file, "%11.6f,%11.6f,",
             wpt->latitude,
@@ -719,7 +719,7 @@ psit_trackdatapoint_w(gbfile *psit_file, const waypoint *wpt)
 }
 
 static void
-psit_trackdatapoint_w_wrapper(const waypoint *wpt)
+psit_trackdatapoint_w_wrapper(const waypoint* wpt)
 {
   psit_trackdatapoint_w(psit_file_out, wpt);
 }
@@ -728,9 +728,9 @@ psit_trackdatapoint_w_wrapper(const waypoint *wpt)
 static void
 psit_read(void)
 {
-  waypoint	*wpt;
-  route_head	*rte;
-  route_head	*trk;
+  waypoint*	wpt;
+  route_head*	rte;
+  route_head*	trk;
 
 #ifdef DUMP_ICON_TABLE
   printf("static icon_mapping_t icon_table[] = {\n");
@@ -779,7 +779,7 @@ psit_read(void)
 }
 
 static void
-psit_noop(const route_head *wp)
+psit_noop(const route_head* wp)
 {
   /* no-op */
 }

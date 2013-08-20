@@ -25,7 +25,7 @@
 
 #define MYNAME "sbn"
 
-static gbfile *file_handle = NULL;
+static gbfile* file_handle = NULL;
 
 static
 arglist_t sbn_args[] = {
@@ -62,12 +62,12 @@ arglist_t sbn_args[] = {
  * instead of serial, and integers are read in big endian order.
  */
 static size_t
-read_packet(int *type, void *payload, size_t max_len)
+read_packet(int* type, void* payload, size_t max_len)
 {
   size_t size, data_size;
   unsigned char start[4];
   unsigned int  checksum_exp, checksum_act;
-  unsigned char *data;
+  unsigned char* data;
 
   if (gbfread(start, sizeof(start), 1, file_handle) != 1) {
     if (gbfeof(file_handle)) {
@@ -91,7 +91,7 @@ read_packet(int *type, void *payload, size_t max_len)
   data_size = size + 4;
 
   /* data_size can be up to about 64k */
-  data = (unsigned char *) xmalloc(data_size);
+  data = (unsigned char*) xmalloc(data_size);
 
   if (gbfread(data, data_size, 1, file_handle) != 1) {
     fatal(MYNAME ": Format error: could not read %d bytes.\n",
@@ -122,7 +122,7 @@ read_packet(int *type, void *payload, size_t max_len)
 
 #ifdef LOCOSYS_PARSE_FILE_ID
 static size_t
-hdrcpy(char *dest, const char *src, size_t max_len)
+hdrcpy(char* dest, const char* src, size_t max_len)
 {
   size_t i;
 
@@ -136,7 +136,7 @@ hdrcpy(char *dest, const char *src, size_t max_len)
 #endif /* LOCOSYS_PARSE_FILE_ID */
 
 int
-locosys_decode_file_id(char *header, size_t len)
+locosys_decode_file_id(char* header, size_t len)
 {
 #ifdef LOCOSYS_PARSE_FILE_ID
   /*
@@ -153,7 +153,7 @@ locosys_decode_file_id(char *header, size_t len)
   char serial_num[INFO_SERIAL_NUM_LEN + 1];
   char log_rate[INFO_LOG_RATE_LEN + 1];
   char version[INFO_VERSION_LEN + 1];
-  char *p = header;
+  char* p = header;
 
   p += hdrcpy(username,   p, INFO_USERNAME_LEN);
   p += hdrcpy(serial_num, p, INFO_SERIAL_NUM_LEN);
@@ -170,7 +170,7 @@ locosys_decode_file_id(char *header, size_t len)
 }
 
 static void
-read_sbn_header(route_head *track)
+read_sbn_header(route_head* track)
 {
   char header[QRY_INFORMATION_LEN];
   size_t len;
@@ -186,7 +186,7 @@ read_sbn_header(route_head *track)
 }
 
 static int
-is_sbn_valid(const unsigned char *buffer)
+is_sbn_valid(const unsigned char* buffer)
 {
   /* valid navigation (any bit set implies navigation solution is not
    * optimal) */
@@ -194,7 +194,7 @@ is_sbn_valid(const unsigned char *buffer)
 }
 
 static fix_type
-decode_sbn_mode(const unsigned char *mode)
+decode_sbn_mode(const unsigned char* mode)
 {
   static const fix_type fixes[8] = {
     fix_none,     /* 000 No Nav */
@@ -213,7 +213,7 @@ decode_sbn_mode(const unsigned char *mode)
 }
 
 static void
-decode_sbn_datetime(const unsigned char *buffer, waypoint *waypt)
+decode_sbn_datetime(const unsigned char* buffer, waypoint* waypt)
 {
   struct tm tm;
   int ms = be_readu16(buffer + 6);
@@ -229,17 +229,17 @@ decode_sbn_datetime(const unsigned char *buffer, waypoint *waypt)
 }
 
 static void
-decode_sbn_position(const unsigned char *buffer, waypoint *waypt)
+decode_sbn_position(const unsigned char* buffer, waypoint* waypt)
 {
   waypt->latitude = be_read32(buffer + 0) * 0.0000001;
   waypt->longitude = be_read32(buffer + 4) * 0.0000001;
   waypt->altitude = be_read32(buffer + 12) * 0.01;
 }
 
-static waypoint *
-decode_sbn_record(unsigned char *buffer)
+static waypoint*
+decode_sbn_record(unsigned char* buffer)
 {
-  waypoint *waypt = NULL;
+  waypoint* waypt = NULL;
   waypt = waypt_new();
 
   if (is_sbn_valid(buffer)) {
@@ -259,7 +259,7 @@ decode_sbn_record(unsigned char *buffer)
 }
 
 static void
-add_logpoints(route_head *track)
+add_logpoints(route_head* track)
 {
   unsigned char buffer[SBN_RECORD_LEN];
   int type = 0;
@@ -279,7 +279,7 @@ add_logpoints(route_head *track)
 /**********************************************************************/
 
 static void
-sbn_rd_init(const char *fname)
+sbn_rd_init(const char* fname)
 {
   file_handle = gbfopen(fname, "r", MYNAME);
 }
@@ -294,7 +294,7 @@ static void
 sbn_read(void)
 {
   if (global_opts.masked_objective & TRKDATAMASK) {
-    route_head     *track;
+    route_head*     track;
 
     track = route_head_alloc();
     track_add_head(track);

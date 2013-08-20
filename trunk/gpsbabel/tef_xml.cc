@@ -28,13 +28,13 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static waypoint *wpt_tmp;
+static waypoint* wpt_tmp;
 static int item_count;
 static int waypoints;
 static double version;
-static route_head *route = NULL;
+static route_head* route = NULL;
 
-static char *routevia = NULL;
+static char* routevia = NULL;
 
 static arglist_t tef_xml_args[] = {
   {
@@ -46,10 +46,10 @@ static arglist_t tef_xml_args[] = {
 
 #define MYNAME "TourExchangeFormat"
 
-static char *
-trimmed_strdup(const char *str)
+static char*
+trimmed_strdup(const char* str)
 {
-  char *c1, *c2, *res;
+  char* c1, *c2, *res;
 
   c1 = xstrdup(str);
   c2 = lrtrim(c1);
@@ -83,11 +83,11 @@ xg_tag_mapping tef_xml_map[] = {
  */
 
 void
-tef_start(const char *args, const QXmlStreamAttributes* attrv)
+tef_start(const char* args, const QXmlStreamAttributes* attrv)
 {
   bool valid = false;
 
-  foreach (QXmlStreamAttribute attr, *attrv) {
+  foreach(QXmlStreamAttribute attr, *attrv) {
     if (attr.name().compare("Comment", Qt::CaseInsensitive) == 0) {
       if (attr.value().compare("TourExchangeFormat", Qt::CaseInsensitive) == 0) {
         valid = true;
@@ -107,10 +107,10 @@ tef_start(const char *args, const QXmlStreamAttributes* attrv)
  */
 
 static void
-tef_header(const char *args, const QXmlStreamAttributes* attrv)
+tef_header(const char* args, const QXmlStreamAttributes* attrv)
 {
   route = route_head_alloc();
-  foreach (QXmlStreamAttribute attr, *attrv) {
+  foreach(QXmlStreamAttribute attr, *attrv) {
     if (attr.name().compare("Name", Qt::CaseInsensitive) == 0) {
       route->rte_name = trimmed_strdup(attr.value().toString().toUtf8().constData());
     } else if (attr.name().compare("Software", Qt::CaseInsensitive) == 0) {
@@ -121,7 +121,7 @@ tef_header(const char *args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-tef_list_start(const char *args, const QXmlStreamAttributes* attrv)
+tef_list_start(const char* args, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("ItemCount")) {
     item_count = attrv->value("ItemCount").toString().toUInt();
@@ -137,11 +137,11 @@ tef_list_start(const char *args, const QXmlStreamAttributes* attrv)
  * should be "Wittlicher Strasse (L34)" for the example above
  */
 
-static char *
-fix_notes(const char *name, char *notes)
+static char*
+fix_notes(const char* name, char* notes)
 {
-  const char *cleft, *cright, *cback;
-  char *ctmp;
+  const char* cleft, *cright, *cback;
+  char* ctmp;
 
   if ((! name) || (! notes)) {
     return notes;
@@ -195,7 +195,7 @@ waypoint_final()
 
   if (route != NULL) {
     if ((via != 0) || (routevia == NULL)) {
-      waypoint *wpt = waypt_dupe(wpt_tmp);
+      waypoint* wpt = waypt_dupe(wpt_tmp);
       route_add_wpt(route, wpt);
     }
   }
@@ -208,13 +208,13 @@ waypoint_final()
 }
 
 static void
-tef_item_end(const char *args, const QXmlStreamAttributes* unused)
+tef_item_end(const char* args, const QXmlStreamAttributes* unused)
 {
   waypoint_final();
 }
 
 static void
-tef_list_end(const char *args, const QXmlStreamAttributes* unused)
+tef_list_end(const char* args, const QXmlStreamAttributes* unused)
 {
   waypoint_final();
   if (waypoints != item_count)
@@ -223,7 +223,7 @@ tef_list_end(const char *args, const QXmlStreamAttributes* unused)
 }
 
 static void
-tef_item_start(const char *args, const QXmlStreamAttributes* attrv)
+tef_item_start(const char* args, const QXmlStreamAttributes* attrv)
 {
   waypoints++;
 
@@ -232,7 +232,7 @@ tef_item_start(const char *args, const QXmlStreamAttributes* attrv)
     wpt_tmp->wpt_flags.fmt_use ++;
   }
 
-  foreach (QXmlStreamAttribute attr, *attrv) {
+  foreach(QXmlStreamAttribute attr, *attrv) {
     QString attrstr = attr.value().toString();
     QByteArray attrtext = attrstr.toUtf8();
 
@@ -244,7 +244,7 @@ tef_item_start(const char *args, const QXmlStreamAttributes* attrv)
                attr.value().compare("true", Qt::CaseInsensitive) == 0) {
       wpt_tmp->wpt_flags.fmt_use = 1;  /* only a flag */
 
-    /* new in TEF V2 */
+      /* new in TEF V2 */
     } else if (attr.name().compare("Instruction", Qt::CaseInsensitive) == 0) {
       wpt_tmp->description = trimmed_strdup(attrtext.constData());
     } else if (attr.name().compare("Altitude", Qt::CaseInsensitive) == 0) {
@@ -271,7 +271,7 @@ tef_read_comma_float(const QStringRef& value)
 }
 
 static void
-tef_point(const char *args, const QXmlStreamAttributes* attrv)
+tef_point(const char* args, const QXmlStreamAttributes* attrv)
 {
   if (!wpt_tmp) {
     return;
@@ -287,7 +287,7 @@ tef_point(const char *args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-tef_xml_rd_init(const char *fname)
+tef_xml_rd_init(const char* fname)
 {
   wpt_tmp = NULL;
   waypoints = 0;

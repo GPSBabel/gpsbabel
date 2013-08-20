@@ -24,17 +24,17 @@
 #include "jeeps/gpsmath.h"
 #include <ctype.h>
 
-static gbfile *file_out;
+static gbfile* file_out;
 static short_handle mkshort_handle;
 
-static char *suppresssep = NULL;
-static char *txt_encrypt = NULL;
-static char *includelogs = NULL;
-static char *degformat = NULL;
-static char *altunits = NULL;
-static char *split_output = NULL;
+static char* suppresssep = NULL;
+static char* txt_encrypt = NULL;
+static char* includelogs = NULL;
+static char* degformat = NULL;
+static char* altunits = NULL;
+static char* split_output = NULL;
 static int waypoint_count;
-static char *output_name;
+static char* output_name;
 
 #define MYNAME "TEXT"
 
@@ -72,7 +72,7 @@ arglist_t text_args[] = {
 
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   waypoint_count = 0;
   output_name = xstrdup(fname);
@@ -93,7 +93,7 @@ wr_deinit(void)
 }
 
 static void
-text_disp(const waypoint *wpt)
+text_disp(const waypoint* wpt)
 {
   int latint, lonint;
   char tbuf[1024];
@@ -101,14 +101,14 @@ text_disp(const waypoint *wpt)
   int32_t utmz;
   double utme, utmn;
   char utmzc;
-  char *tmpout1, *tmpout2;
-  char *altout;
-  fs_xml *fs_gpx;
+  char* tmpout1, *tmpout2;
+  char* altout;
+  fs_xml* fs_gpx;
 
   waypoint_count++;
 
   if (split_output) {
-    char *thisfname;
+    char* thisfname;
     xasprintf(&thisfname, "%s%d", output_name, waypoint_count);
     file_out = gbfopen(thisfname, "w", MYNAME);
   }
@@ -128,7 +128,7 @@ text_disp(const waypoint *wpt)
   if (wpt->altitude != unknown_alt) {
     xasprintf(&altout, " alt:%d", (int)((altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude));
   } else {
-    altout = (char *) "";
+    altout = (char*) "";
   }
   xasprintf(&tmpout2, "%s (%d%c %6.0f %7.0f)%s", tmpout1, utmz, utmzc, utme, utmn, altout);
   gbfprintf(file_out, "%-16s  %59s\n",
@@ -153,17 +153,17 @@ text_disp(const waypoint *wpt)
               (int)(wpt->gc_data->diff / 10), (wpt->gc_data->diff%10)?".5":"",
               (int)(wpt->gc_data->terr / 10), (wpt->gc_data->terr%10)?".5":"");
     if (!wpt->gc_data->desc_short.utfstring.isEmpty()) {
-      char *stripped_html = strip_html(&wpt->gc_data->desc_short);
+      char* stripped_html = strip_html(&wpt->gc_data->desc_short);
       gbfprintf(file_out, "\n%s\n", stripped_html);
       xfree(stripped_html);
     }
     if (!wpt->gc_data->desc_long.utfstring.isEmpty()) {
-      char *stripped_html = strip_html(&wpt->gc_data->desc_long);
+      char* stripped_html = strip_html(&wpt->gc_data->desc_long);
       gbfprintf(file_out, "\n%s\n", stripped_html);
       xfree(stripped_html);
     }
     if (!wpt->gc_data->hint.isEmpty()) {
-      char *hint = NULL;
+      char* hint = NULL;
       if (txt_encrypt) {
         hint = rot13(wpt->gc_data->hint);
       } else {
@@ -178,17 +178,17 @@ text_disp(const waypoint *wpt)
 
   fs_gpx = NULL;
   if (includelogs) {
-    fs_gpx = (fs_xml *)fs_chain_find(wpt->fs, FS_GPX);
+    fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
   }
 
   if (fs_gpx && fs_gpx->tag) {
-    xml_tag *root = fs_gpx->tag;
-    xml_tag *curlog = NULL;
-    xml_tag *logpart = NULL;
+    xml_tag* root = fs_gpx->tag;
+    xml_tag* curlog = NULL;
+    xml_tag* logpart = NULL;
     curlog = xml_findfirst(root, "groundspeak:log");
     while (curlog) {
       time_t logtime = 0;
-      struct tm *logtm = NULL;
+      struct tm* logtm = NULL;
       gbfprintf(file_out, "\n");
 
       logpart = xml_findfirst(curlog, "groundspeak:type");
@@ -216,7 +216,7 @@ text_disp(const waypoint *wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
       if (logpart) {
-        char *coordstr = NULL;
+        char* coordstr = NULL;
         double lat = 0;
         double lon = 0;
         coordstr = xml_attribute(logpart, "lat");
@@ -234,8 +234,8 @@ text_disp(const waypoint *wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:text");
       if (logpart) {
-        char *encstr = NULL;
-        char *s = NULL;
+        char* encstr = NULL;
+        char* s = NULL;
         int encoded = 0;
         encstr = xml_attribute(logpart, "encoded");
         encoded = (toupper(encstr[0]) != 'F');

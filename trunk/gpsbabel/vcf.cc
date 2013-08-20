@@ -25,10 +25,10 @@
 #include "defs.h"
 #include "jeeps/gpsmath.h"
 
-static gbfile *file_out;
+static gbfile* file_out;
 static short_handle mkshort_handle;
 
-static char *vcf_encrypt = NULL;
+static char* vcf_encrypt = NULL;
 
 #define MYNAME "VCF"
 
@@ -42,7 +42,7 @@ arglist_t vcf_args[] = {
 };
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen(fname, "w", MYNAME);
   mkshort_handle = mkshort_new_handle();
@@ -60,10 +60,10 @@ wr_deinit(void)
  * newlines as we go.
  */
 static void
-vcf_print_utf(const utf_string *s)
+vcf_print_utf(const utf_string* s)
 {
-  char *p, *p2, *p3;
-  char *stripped_html;
+  char* p, *p2, *p3;
+  char* stripped_html;
 
   if (!s) {
     return;
@@ -81,9 +81,9 @@ vcf_print_utf(const utf_string *s)
 }
 
 static void
-vcf_print(const char *s)
+vcf_print(const char* s)
 {
-  char *p;
+  char* p;
 
   if (!s) {
     return;
@@ -95,7 +95,7 @@ vcf_print(const char *s)
 }
 
 static void
-vcf_disp(const waypoint *wpt)
+vcf_disp(const waypoint* wpt)
 {
   int latint, lonint;
 
@@ -117,7 +117,7 @@ vcf_disp(const waypoint *wpt)
   vcf_print_utf(&wpt->gc_data->desc_long);
   gbfprintf(file_out, "\\n\\nHINT:\\n");
   if (vcf_encrypt) {
-    char *s = rot13(wpt->gc_data->hint);
+    char* s = rot13(wpt->gc_data->hint);
     vcf_print(s);
     xfree(s);
   } else {

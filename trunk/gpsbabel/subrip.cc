@@ -24,21 +24,21 @@
 
 #define MYNAME "subrip"
 
-static char * opt_videotime;
-static char * opt_gpstime;
-static char * opt_gpsdate;
+static char* opt_videotime;
+static char* opt_gpstime;
+static char* opt_gpsdate;
 static time_t time_offset;
 static int stnum;
-static gbfile *fout;
-static const waypoint * prevwpp;
+static gbfile* fout;
+static const waypoint* prevwpp;
 
 /* internal helper functions */
 
 static time_t
-sync_time(time_t arg_gpstime, char * arg_videotime)
+sync_time(time_t arg_gpstime, char* arg_videotime)
 {
   static time_t videotime_t;
-  static struct tm * ptm_video;
+  static struct tm* ptm_video;
   static time_t result;
 
   videotime_t = 0;
@@ -64,7 +64,7 @@ static void
 subrip_write_duration(time_t starttime, time_t endtime)
 {
   /* Writes start and end time for subtitle display to file. */
-  struct tm * tmptime;
+  struct tm* tmptime;
 
   tmptime = gmtime(&starttime);
   gbfprintf(fout, "%02d:%02d:%02d,000 --> ", tmptime->tm_hour, tmptime->tm_min, tmptime->tm_sec);
@@ -77,14 +77,14 @@ static void
 subrip_write_time(time_t arg_time)
 {
   /* Writes a timestamp to file. */
-  struct tm * tmptime;
+  struct tm* tmptime;
 
   tmptime = gmtime(&arg_time);
   gbfprintf(fout, "%02d:%02d:%02d", tmptime->tm_hour, tmptime->tm_min, tmptime->tm_sec);
 }
 
 static void
-subrip_prevwp_pr(const waypoint *waypointp)
+subrip_prevwp_pr(const waypoint* waypointp)
 {
   /* Now that we have the next waypoint, we can write out the subtitle for
    * the previous one.
@@ -131,7 +131,7 @@ subrip_prevwp_pr(const waypoint *waypointp)
 /* callback functions */
 
 static void
-subrip_trkpt_pr(const waypoint *waypointp)
+subrip_trkpt_pr(const waypoint* waypointp)
 {
   /*
    * To determine the duration of the subtitle, we need the timestamp of the
@@ -160,10 +160,10 @@ subrip_trkpt_pr(const waypoint *waypointp)
 /* global callback (exported) functions */
 
 static void
-subrip_wr_init(const char *fname)
+subrip_wr_init(const char* fname)
 {
   time_t gpstime_t;
-  struct tm * ptm_gps;
+  struct tm* ptm_gps;
 
   stnum = 1;
 

@@ -97,7 +97,8 @@ nav_rd_init(const char* fname)
 }
 
 static void
-NaviReadCache(const QXmlStreamReader& reader) {
+NaviReadCache(const QXmlStreamReader& reader)
+{
   const QXmlStreamAttributes a = reader.attributes();
   waypoint* wpt_tmp = waypt_new();
   geocache_data* gc_data;
@@ -185,8 +186,8 @@ nav_read(void)
   reader.setDevice(&file);
 
   while (!reader.atEnd()) {
-    if (reader.name() == "CacheDetails" && 
-        reader.tokenType() == QXmlStreamReader::StartElement) { 
+    if (reader.name() == "CacheDetails" &&
+        reader.tokenType() == QXmlStreamReader::StartElement) {
       NaviReadCache(reader);
     }
     reader.readNextStartElement();

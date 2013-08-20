@@ -26,11 +26,11 @@
 #include "garmin_tables.h"
 #include "csv_util.h"
 
-static gbfile *file_in, *file_out;
+static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;
 static short_handle mkshort_handle2;	/* for track and route names */
-static char *deficon = NULL;
-static char *cartoexploreur;
+static char* deficon = NULL;
+static char* cartoexploreur;
 static int read_as_degrees;
 static int read_gpsu;
 static int route_ctr;
@@ -56,7 +56,7 @@ arglist_t pcx_args[] = {
 };
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen(fname, "rb", MYNAME);
 }
@@ -68,7 +68,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen(fname, "w", MYNAME);
   mkshort_handle = mkshort_new_handle();
@@ -93,11 +93,11 @@ data_read(void)
   char date[10];
   char time[9];
   char month[4];
-  waypoint *wpt_tmp;
-  char *buff;
+  waypoint* wpt_tmp;
+  char* buff;
   struct tm tm;
-  route_head *track = NULL;
-  route_head *route = NULL;
+  route_head* track = NULL;
+  route_head* route = NULL;
   int n;
   char lathemi, lonhemi;
   char tbuf[20];
@@ -109,8 +109,8 @@ data_read(void)
   points = 0;
 
   while ((buff = gbfgetstr(file_in))) {
-    char *ibuf = lrtrim(buff);
-    char *cp;
+    char* ibuf = lrtrim(buff);
+    char* cp;
 
     if ((line++ == 0) && file_in->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
@@ -288,7 +288,7 @@ data_read(void)
       // where our other columns start.
     case 'F': {
       int col;
-      char *i = ibuf;
+      char* i = ibuf;
       sym_col = 0;
 
       for (col = 0, i = ibuf; *i; col++, i++) {
@@ -316,7 +316,7 @@ data_read(void)
 }
 
 static void
-gpsutil_disp(const waypoint *wpt)
+gpsutil_disp(const waypoint* wpt)
 {
   double lon,lat;
   int icon_token = 0;
@@ -358,9 +358,9 @@ gpsutil_disp(const waypoint *wpt)
 }
 
 static void
-pcx_track_hdr(const route_head *trk)
+pcx_track_hdr(const route_head* trk)
 {
-  char *name;
+  char* name;
   char buff[20];
 
   route_ctr++;
@@ -378,9 +378,9 @@ pcx_track_hdr(const route_head *trk)
 }
 
 static void
-pcx_route_hdr(const route_head *rte)
+pcx_route_hdr(const route_head* rte)
 {
-  char *name;
+  char* name;
   char buff[20];
 
   route_ctr++;
@@ -397,12 +397,12 @@ pcx_route_hdr(const route_head *rte)
 }
 
 void
-pcx_track_disp(const waypoint *wpt)
+pcx_track_disp(const waypoint* wpt)
 {
   double lon,lat;
   char tbuf[100];
-  struct tm *tm;
-  char *tp;
+  struct tm* tm;
+  char* tp;
 
   lon = degrees2ddmm(wpt->longitude);
   lat = degrees2ddmm(wpt->latitude);

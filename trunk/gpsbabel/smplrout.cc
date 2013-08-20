@@ -68,12 +68,12 @@ static int count = 0;
 static double totalerror = 0;
 static double error = 0;
 
-static char *countopt;
-static char *erroropt;
-static char *xteopt;
-static char *lenopt;
-static char *relopt;
-void (*waypt_del_fnp)(route_head *rte, waypoint *wpt);
+static char* countopt;
+static char* erroropt;
+static char* xteopt;
+static char* lenopt;
+static char* relopt;
+void (*waypt_del_fnp)(route_head* rte, waypoint* wpt);
 
 static
 arglist_t routesimple_args[] = {
@@ -105,37 +105,37 @@ struct xte_intermed;
 struct xte {
   double distance;
   int ordinal;
-  struct xte_intermed *intermed;
+  struct xte_intermed* intermed;
 };
 
 struct xte_intermed {
-  struct xte *xte_rec;
-  struct xte_intermed *next;
-  struct xte_intermed *prev;
-  const waypoint *wpt;
+  struct xte* xte_rec;
+  struct xte_intermed* next;
+  struct xte_intermed* prev;
+  const waypoint* wpt;
 };
 
 void
-free_xte(struct xte *xte_rec)
+free_xte(struct xte* xte_rec)
 {
   xfree(xte_rec->intermed);
 }
 
 #define HUGEVAL 2000000000
 
-static struct xte_intermed *tmpprev = NULL;
+static struct xte_intermed* tmpprev = NULL;
 static int xte_count = 0;
-static const route_head *cur_rte = NULL;
-static struct xte *xte_recs = NULL;
+static const route_head* cur_rte = NULL;
+static struct xte* xte_recs = NULL;
 
 void
-routesimple_waypt_pr(const waypoint *wpt)
+routesimple_waypt_pr(const waypoint* wpt)
 {
   if (!cur_rte) {
     return;
   }
   xte_recs[xte_count].ordinal=xte_count;
-  xte_recs[xte_count].intermed = (struct xte_intermed *) xmalloc(sizeof(struct xte_intermed));
+  xte_recs[xte_count].intermed = (struct xte_intermed*) xmalloc(sizeof(struct xte_intermed));
   xte_recs[xte_count].intermed->wpt = wpt;
   xte_recs[xte_count].intermed->xte_rec = xte_recs+xte_count;
   xte_recs[xte_count].intermed->next = NULL;
@@ -148,11 +148,11 @@ routesimple_waypt_pr(const waypoint *wpt)
 }
 
 void
-compute_xte(struct xte *xte_rec)
+compute_xte(struct xte* xte_rec)
 {
-  const waypoint *wpt3 = xte_rec->intermed->wpt;
-  const waypoint *wpt1 = NULL;
-  const waypoint *wpt2 = NULL;
+  const waypoint* wpt3 = xte_rec->intermed->wpt;
+  const waypoint* wpt1 = NULL;
+  const waypoint* wpt2 = NULL;
   double frac, reslat, reslon;
   /* if no previous, this is an endpoint and must be preserved. */
   if (!xte_rec->intermed->prev) {
@@ -210,18 +210,18 @@ compute_xte(struct xte *xte_rec)
 
 
 int
-compare_xte(const void *a, const void *b)
+compare_xte(const void* a, const void* b)
 {
-  double distdiff = ((struct xte *)a)->distance -
-                    ((struct xte *)b)->distance;
-  int priodiff = ((struct xte *)a)->intermed->wpt->route_priority -
-                 ((struct xte *)b)->intermed->wpt->route_priority;
+  double distdiff = ((struct xte*)a)->distance -
+                    ((struct xte*)b)->distance;
+  int priodiff = ((struct xte*)a)->intermed->wpt->route_priority -
+                 ((struct xte*)b)->intermed->wpt->route_priority;
 
-  if (HUGEVAL == ((struct xte *)a)->distance) {
+  if (HUGEVAL == ((struct xte*)a)->distance) {
     return -1;
   }
 
-  if (HUGEVAL == ((struct xte *)b)->distance) {
+  if (HUGEVAL == ((struct xte*)b)->distance) {
     return 1;
   }
 
@@ -241,7 +241,7 @@ compare_xte(const void *a, const void *b)
 }
 
 void
-routesimple_head(const route_head *rte)
+routesimple_head(const route_head* rte)
 {
   cur_rte = NULL;
   /* build array of XTE/wpt xref records */
@@ -259,13 +259,13 @@ routesimple_head(const route_head *rte)
     return;
   }
 
-  xte_recs = (struct xte *) xcalloc(rte->rte_waypt_ct, sizeof(struct xte));
+  xte_recs = (struct xte*) xcalloc(rte->rte_waypt_ct, sizeof(struct xte));
   cur_rte = rte;
 
 }
 
 void
-shuffle_xte(struct xte *xte_rec)
+shuffle_xte(struct xte* xte_rec)
 {
   struct xte tmp_xte;
   while (xte_rec > xte_recs && compare_xte(xte_rec, xte_rec-1) < 0) {
@@ -300,7 +300,7 @@ shuffle_xte(struct xte *xte_rec)
 }
 
 void
-routesimple_tail(const route_head *rte)
+routesimple_tail(const route_head* rte)
 {
   int i;
   if (!cur_rte) {
@@ -335,9 +335,9 @@ routesimple_tail(const route_head *rte)
         totalerror += xte_recs[i].distance;
       }
     }
-    (*waypt_del_fnp)((route_head *)(void *)rte,
-                     (waypoint *)(void *)(xte_recs[i].intermed->wpt));
-    waypt_free((waypoint *)(void *)(xte_recs[i].intermed->wpt));
+    (*waypt_del_fnp)((route_head*)(void*)rte,
+                     (waypoint*)(void*)(xte_recs[i].intermed->wpt));
+    waypt_free((waypoint*)(void*)(xte_recs[i].intermed->wpt));
 
     if (xte_recs[i].intermed->prev) {
       xte_recs[i].intermed->prev->next = xte_recs[i].intermed->next;
@@ -373,7 +373,7 @@ routesimple_process(void)
 }
 
 void
-routesimple_init(const char *args)
+routesimple_init(const char* args)
 {
   count = 0;
 
@@ -384,7 +384,7 @@ routesimple_init(const char *args)
     fatal(MYNAME ": You may specify only one of crosstrack, length, or relative.\n");
   }
   if (!xteopt && !lenopt && !relopt) {
-    xteopt = (char *) "";
+    xteopt = (char*) "";
   }
 
   if (countopt) {

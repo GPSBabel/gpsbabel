@@ -254,10 +254,10 @@ gdb_fread_cstr(gbfile* fin)
 static QString
 gdb_fread_cstr_as_qstr(gbfile* fin)
 {
-	char* result = gdb_fread_cstr(fin);
-    QString qresult = result;
-    xfree(result);
-    return qresult;
+  char* result = gdb_fread_cstr(fin);
+  QString qresult = result;
+  xfree(result);
+  return qresult;
 }
 
 static int
@@ -407,7 +407,7 @@ gdb_write_cstr_list(const char* str)
 static void
 gdb_write_cstr_list(const QString& str)
 {
-	return gdb_write_cstr_list(str.toLatin1().data());
+  return gdb_write_cstr_list(str.toLatin1().data());
 }
 
 static void
