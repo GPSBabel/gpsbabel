@@ -40,7 +40,6 @@ extern ff_vecs_t axim_gpb_vecs;
 extern ff_vecs_t bcr_vecs;
 extern ff_vecs_t brauniger_iq_vecs;
 extern ff_vecs_t cetus_vecs;
-extern ff_vecs_t coastexp_vecs;
 extern ff_vecs_t compegps_vecs;
 extern ff_vecs_t copilot_vecs;
 extern ff_vecs_t coto_vecs;
@@ -83,7 +82,6 @@ extern ff_vecs_t mag_svecs;
 extern ff_vecs_t magX_fvecs;
 extern ff_vecs_t mapsend_vecs;
 extern ff_vecs_t mps_vecs;
-extern ff_vecs_t msroute_vecs;
 extern ff_vecs_t mtk_vecs;
 extern ff_vecs_t mtk_fvecs;
 extern ff_vecs_t mtk_m241_vecs;
@@ -99,7 +97,6 @@ extern ff_vecs_t palmdoc_vecs;
 extern ff_vecs_t pcx_vecs;
 extern ff_vecs_t ppdb_vecs;
 extern ff_vecs_t psit_vecs;             /* MRCB */
-extern ff_vecs_t psp_vecs;
 extern ff_vecs_t quovadis_vecs;
 extern ff_vecs_t saroute_vecs;
 extern ff_vecs_t shape_vecs;
@@ -284,12 +281,6 @@ vecs_t vec_list[] = {
     NULL
   },
   {
-    &psp_vecs,
-    "psp",
-    "MS PocketStreets 2002 Pushpin",
-    "psp"
-  },
-  {
     &lowranceusr_vecs,
     "lowranceusr",
     "Lowrance USR",
@@ -301,32 +292,6 @@ vecs_t vec_list[] = {
     "Lowrance USR version 4",
     "usr"
   },
-#if PDBFMTS_ENABLED
-  {
-    &cetus_vecs,
-    "cetus",
-    "Cetus for Palm/OS",
-    "pdb"
-  },
-  {
-    &copilot_vecs,
-    "copilot",
-    "CoPilot Flight Planner for Palm/OS",
-    "pdb"
-  },
-  {
-    &gpspilot_vecs,
-    "gpspilot",
-    "GPSPilot Tracker for Palm/OS",
-    "pdb"
-  },
-  {
-    &magnav_vec,
-    "magnav",
-    "Magellan NAV Companion for Palm/OS",
-    "pdb"
-  },
-#endif /* PDBFMTS_ENABLED */
   {
     &holux_vecs,
     "holux",
@@ -357,14 +322,6 @@ vecs_t vec_list[] = {
     "TopoMapPro Places File",
     "tmpro"
   },
-#if PDBFMTS_ENABLED
-  {
-    &gcdb_vecs,
-    "gcdb",
-    "GeocachingDB for Palm/OS",
-    "pdb"
-  },
-#endif
   {
     &tiger_vecs,
     "tiger",
@@ -377,20 +334,6 @@ vecs_t vec_list[] = {
     "EasyGPS binary format",
     "loc"
   },
-#if PDBFMTS_ENABLED
-  {
-    &quovadis_vecs,
-    "quovadis",
-    "Quovadis",
-    "pdb"
-  },
-  {
-    &gpilots_vecs,
-    "gpilots",
-    "GpilotS",
-    "pdb"
-  },
-#endif
   {
     &saroute_vecs,
     "saroute",
@@ -401,12 +344,6 @@ vecs_t vec_list[] = {
     &navicache_vecs,
     "navicache",
     "Navicache.com XML",
-    NULL
-  },
-  {
-    &coastexp_vecs,
-    "coastexp",
-    "CoastalExplorer XML",
     NULL
   },
   {	/* MRCB */
@@ -421,14 +358,6 @@ vecs_t vec_list[] = {
     "shape",
     "ESRI shapefile",
     "shp"
-  },
-#endif
-#if PDBFMTS_ENABLED
-  {
-    &geoniche_vecs,
-    "geoniche",
-    "GeoNiche .pdb",
-    "pdb"
   },
 #endif
   {
@@ -449,24 +378,10 @@ vecs_t vec_list[] = {
     "HTML Output",
     "html"
   },
-#if PDBFMTS_ENABLED
-  {
-    &palmdoc_vecs,
-    "palmdoc",
-    "PalmDoc Output",
-    "pdb"
-  },
-#endif
   {
     &netstumbler_vecs,
     "netstumbler",
     "NetStumbler Summary File (text)",
-    NULL
-  },
-  {
-    &HsaEndeavourNavigator_vecs,
-    "hsandv",
-    "HSA Endeavour Navigator export File",
     NULL
   },
   {
@@ -599,14 +514,6 @@ vecs_t vec_list[] = {
     "Map&Guide 'TourExchangeFormat' XML",
     "xml"
   },
-#if PDBFMTS_ENABLED
-  {
-    &ppdb_vecs,
-    "pathaway",
-    "PathAway Database for Palm/OS",
-    "pdb"
-  },
-#endif
   {
     &vitosmt_vecs,
     "vitosmt",
@@ -625,14 +532,6 @@ vecs_t vec_list[] = {
     "Motorrad Routenplaner (Map&Guide) .bcr files",
     "bcr"
   },
-#if PDBFMTS_ENABLED
-  {
-    &coto_vecs,
-    "coto",
-    "cotoGPS for Palm/OS",
-    "pdb"
-  },
-#endif
   {
     &ignr_vecs,
     "ignrando",
@@ -656,18 +555,6 @@ vecs_t vec_list[] = {
   },
 #endif //  CSVFMTS_ENABLED
   {
-    &msroute_vecs,
-    "msroute",
-    "Microsoft AutoRoute 2002 (pin/route reader)",
-    "axe"
-  },
-  {
-    &msroute_vecs,
-    "msroute",
-    "Microsoft Streets and Trips (pin/route reader)" ,
-    "est"
-  },
-  {
     &cst_vecs,
     "cst",
     "CarteSurTable data file",
@@ -679,14 +566,6 @@ vecs_t vec_list[] = {
     "Navigon Mobile Navigator .rte files",
     "rte"
   },
-#if PDBFMTS_ENABLED
-  {
-    &magpdb_vecs,
-    "mag_pdb",
-    "Map&Guide to Palm/OS exported files (.pdb)",
-    "pdb"
-  },
-#endif
 #if CSVFMTS_ENABLED
   {
     &compegps_vecs,
