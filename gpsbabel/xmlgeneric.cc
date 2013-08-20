@@ -74,7 +74,7 @@ write_xml_entity(gbfile* ofd, const QString& indent,
 {
   char* tmp_ent = xml_entitize(CSTRE(value));
   gbfprintf(ofd, "%s<%s>%s</%s>\n", CSTRE(indent), CSTRE(tag), tmp_ent,
-          CSTRE(tag));
+            CSTRE(tag));
   xfree(tmp_ent);
 }
 
@@ -100,7 +100,7 @@ write_xml_entity_begin1(gbfile* ofd, const QString& indent,
                         const QString& attrval)
 {
   gbfprintf(ofd, "%s<%s %s=\"%s\">\n", CSTRE(indent), CSTRE(tag), CSTRE(attr),
-      CSTRE(attrval));
+            CSTRE(attrval));
 }
 
 void
@@ -110,7 +110,7 @@ write_xml_entity_begin2(gbfile* ofd, const QString& indent,
                         const QString& attrval2)
 {
   gbfprintf(ofd, "%s<%s %s=\"%s\" %s=\"%s\">\n", CSTRE(indent), CSTRE(tag),
-      CSTRE(attr1), CSTRE(attrval1), CSTRE(attr2), CSTRE(attrval2));
+            CSTRE(attr1), CSTRE(attrval1), CSTRE(attr2), CSTRE(attrval2));
 }
 
 void
@@ -159,7 +159,7 @@ xml_init(const char* fname, xg_tag_mapping* tbl, const char* encoding)
   xg_tag_tbl = tbl;
   xg_encoding = encoding;
   if (encoding) {
-    QTextCodec *tcodec = QTextCodec::codecForName(encoding);
+    QTextCodec* tcodec = QTextCodec::codecForName(encoding);
     if (tcodec) {
       codec = tcodec;
     }
@@ -192,7 +192,7 @@ xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
     switch (reader.tokenType()) {
     case QXmlStreamReader::StartDocument:
       if (!reader.documentEncoding().isEmpty()) {
-        codec = QTextCodec::codecForName( CSTR(reader.documentEncoding().toString()) );
+        codec = QTextCodec::codecForName(CSTR(reader.documentEncoding().toString()));
       }
       if (codec == NULL) {
         // According to http://www.opentag.com/xfaq_enc.htm#enc_default , we

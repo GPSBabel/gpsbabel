@@ -129,7 +129,7 @@ typedef enum {
 #define unicsv_unknown	1e25
 
 typedef struct {
-  const char *name;
+  const char* name;
   field_e type;
   uint32_t options;
 } field_t;
@@ -247,18 +247,18 @@ static field_t fields_def[] = {
   { NULL,		fld_terminator, 0 }
 };
 
-static field_e *unicsv_fields_tab;
+static field_e* unicsv_fields_tab;
 static int unicsv_fields_tab_ct;
 static double unicsv_altscale, unicsv_depthscale, unicsv_proximityscale
 ;
-static const char *unicsv_fieldsep;
-static gbfile *fin, *fout;
+static const char* unicsv_fieldsep;
+static gbfile* fin, *fout;
 static gpsdata_type unicsv_data_type;
-static route_head *unicsv_track, *unicsv_route;
+static route_head* unicsv_track, *unicsv_route;
 static char unicsv_outp_flags[(fld_terminator + 8) / 8];
 static grid_type unicsv_grid_idx;
 static int unicsv_datum_idx;
-static char *opt_datum, *opt_grid, *opt_utc, *opt_filename, *opt_format, *opt_prec;
+static char* opt_datum, *opt_grid, *opt_utc, *opt_filename, *opt_format, *opt_prec;
 static int unicsv_waypt_ct;
 static char unicsv_detect;
 static int llprec;
@@ -299,7 +299,7 @@ static arglist_t unicsv_args[] = {
 
 /* here we only need a simple yes(0) or no(1) */
 static int
-unicsv_strrcmp(const char *s1, const char *s2)
+unicsv_strrcmp(const char* s1, const char* s2)
 {
   int l1, l2;
 
@@ -313,7 +313,7 @@ unicsv_strrcmp(const char *s1, const char *s2)
 }
 
 static int
-unicsv_parse_gc_id(const char *str)
+unicsv_parse_gc_id(const char* str)
 {
   int res = 0;
 
@@ -351,7 +351,7 @@ unicsv_parse_gc_id(const char *str)
 // static int unicsv_parse_time(const char *str, int *msec, time_t *date);
 
 static time_t
-unicsv_parse_date(const char *str, int *consumed)
+unicsv_parse_date(const char* str, int* consumed)
 {
   int p1, p2, p3, ct;
   char sep[2];
@@ -407,7 +407,7 @@ unicsv_parse_date(const char *str, int *consumed)
 }
 
 static time_t
-unicsv_parse_time(const char *str, int *msec, time_t *date)
+unicsv_parse_time(const char* str, int* msec, time_t* date)
 {
   int hour, min, ct, sec;
   int consumed = 0;
@@ -443,7 +443,7 @@ unicsv_parse_time(const char *str, int *msec, time_t *date)
 
 #ifdef UNICSV_GC_READY
 static status_type
-unicsv_parse_status(const char *str)
+unicsv_parse_status(const char* str)
 {
   if ((case_ignore_strcmp(str, "true") == 0) ||
       (case_ignore_strcmp(str, "yes") == 0) ||
@@ -461,7 +461,7 @@ unicsv_parse_status(const char *str)
 
 #ifdef UNICSV_GC_READY
 static QDateTime
-unicsv_adjust_time(const time_t time, time_t *date)
+unicsv_adjust_time(const time_t time, time_t* date)
 {
   time_t res = time;
   if (date) {
@@ -478,10 +478,10 @@ unicsv_adjust_time(const time_t time, time_t *date)
 #endif
 
 static char
-unicsv_compare_fields(char *s, const field_t *f)
+unicsv_compare_fields(char* s, const field_t* f)
 {
-  char *name = (char *)f->name;
-  char *test = s;
+  char* name = (char*)f->name;
+  char* test = s;
   char result;
 
   if (!(f->options & STR_CASE)) {
@@ -505,13 +505,13 @@ unicsv_compare_fields(char *s, const field_t *f)
 
   if ((! result) && (strchr(test, ' ') != NULL)) {
     /* replace  ' ' with '_' and try again */
-    char *tmp = gstrsub(test, " ", "_");
+    char* tmp = gstrsub(test, " ", "_");
     result = unicsv_compare_fields(tmp, f);
     xfree(tmp);
   }
   if ((! result) && (strchr(test, '-') != NULL)) {
     /* replace  '-' with '_' and try again */
-    char *tmp = gstrsub(test, "-", "_");
+    char* tmp = gstrsub(test, "-", "_");
     result = unicsv_compare_fields(tmp, f);
     xfree(tmp);
   }
@@ -526,12 +526,12 @@ unicsv_compare_fields(char *s, const field_t *f)
 
 
 static void
-unicsv_fondle_header(char *ibuf)
+unicsv_fondle_header(char* ibuf)
 {
-  char *s;
-  char *buf = NULL;
+  char* s;
+  char* buf = NULL;
   int i, column;
-  const cet_cs_vec_t *ascii = &cet_cs_vec_ansi_x3_4_1968;	/* us-ascii */
+  const cet_cs_vec_t* ascii = &cet_cs_vec_ansi_x3_4_1968;	/* us-ascii */
 
   /* Convert the entire header to lower case for convenience.
    * If we see a tab in that header, we decree it to be tabsep.
@@ -562,7 +562,7 @@ unicsv_fondle_header(char *ibuf)
   column = -1;
   while ((s = csv_lineparse(ibuf, unicsv_fieldsep, "\"", 0))) {
 
-    field_t *f = &fields_def[0];
+    field_t* f = &fields_def[0];
 
     ibuf = NULL;
     column++;
@@ -620,9 +620,9 @@ unicsv_fondle_header(char *ibuf)
 }
 
 static void
-unicsv_rd_init(const char *fname)
+unicsv_rd_init(const char* fname)
 {
-  char *c;
+  char* c;
   unicsv_altscale = 1.0;
   unicsv_depthscale = 1.0;
   unicsv_proximityscale = 1.0;
@@ -657,10 +657,10 @@ unicsv_rd_deinit(void)
 }
 
 static void
-unicsv_parse_one_line(char *ibuf)
+unicsv_parse_one_line(char* ibuf)
 {
-  char *s;
-  waypoint *wpt = NULL;
+  char* s;
+  waypoint* wpt = NULL;
   int column;
   int  utm_zone = -9999;
   double utm_easting = 0;
@@ -675,14 +675,14 @@ unicsv_parse_one_line(char *ibuf)
   time_t date = -1, time = -1;
   int msec = -1;
   char is_localtime = 0;
-  garmin_fs_t *gmsd;
+  garmin_fs_t* gmsd;
   double d;
   struct tm ymd;
   int src_datum = unicsv_datum_idx;
   int ns = 1;
   int ew = 1;
 #ifdef UNICSV_GC_READY
-  geocache_data *gc_data = NULL;
+  geocache_data* gc_data = NULL;
 #endif
   wpt = waypt_new();
   wpt->latitude = unicsv_unknown;
@@ -745,11 +745,11 @@ unicsv_parse_one_line(char *ibuf)
       break;
 
     case fld_url: {
-qDebug() << s;
+      qDebug() << s;
       UrlLink l(s);
       wpt->AddUrlLink(l);
-      } 
-      break;
+    }
+    break;
 
     case fld_altitude:
       if (parse_distance(s, &d, unicsv_altscale, MYNAME)) {
@@ -1021,7 +1021,7 @@ qDebug() << s;
       gmsd = GMSD_FIND(wpt);
       if (! gmsd) {
         gmsd = garmin_fs_alloc(-1);
-        fs_chain_add(&wpt->fs, (format_specific_data *) gmsd);
+        fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
       }
       switch (unicsv_fields_tab[column]) {
       case fld_garmin_city:
@@ -1253,7 +1253,7 @@ qDebug() << s;
 static void
 unicsv_rd(void)
 {
-  char *buff;
+  char* buff;
 
   if (unicsv_fieldsep == NULL) {
     return;
@@ -1271,7 +1271,7 @@ unicsv_rd(void)
 /* =========================================================================== */
 
 static void
-unicsv_fatal_outside(const waypoint *wpt)
+unicsv_fatal_outside(const waypoint* wpt)
 {
   gbfprintf(fout, "#####\n");
   fatal(MYNAME ": %s (%s) is outside of convertable area of grid \"%s\"!\n",
@@ -1281,10 +1281,10 @@ unicsv_fatal_outside(const waypoint *wpt)
 }
 
 static void
-unicsv_print_str(const char *str)
+unicsv_print_str(const char* str)
 {
   if (str && *str) {
-    char *cout, *cx;
+    char* cout, *cx;
 
     cout = strenquote(str, UNICSV_QUOT_CHAR);
 
@@ -1312,7 +1312,7 @@ unicsv_print_str(const char *str)
 static void
 unicsv_print_str(const QString& s)
 {
-  char *t = xstrdup(s.toUtf8().data());
+  char* t = xstrdup(s.toUtf8().data());
   unicsv_print_str(t);
   xfree(t);
 }
@@ -1343,10 +1343,10 @@ unicsv_print_data_time(const time_t atime)
 #define FIELD_USED(a) (gb_getbit(&unicsv_outp_flags, a))
 
 static void
-unicsv_waypt_enum_cb(const waypoint *wpt)
+unicsv_waypt_enum_cb(const waypoint* wpt)
 {
-  const char *shortname;
-  garmin_fs_t *gmsd;
+  const char* shortname;
+  garmin_fs_t* gmsd;
 
   shortname = (wpt->shortname) ? wpt->shortname : "";
   gmsd = GMSD_FIND(wpt);
@@ -1455,7 +1455,7 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
 
 #ifdef UNICSV_GC_READY
   if (! waypt_empty_gc_data(wpt)) {
-    const geocache_data *gc_data = wpt->gc_data;
+    const geocache_data* gc_data = wpt->gc_data;
 
     if (gc_data->id) {
       gb_setbit(&unicsv_outp_flags, fld_gc_id);
@@ -1498,14 +1498,14 @@ unicsv_waypt_enum_cb(const waypoint *wpt)
 }
 
 static void
-unicsv_waypt_disp_cb(const waypoint *wpt)
+unicsv_waypt_disp_cb(const waypoint* wpt)
 {
   double lat, lon, alt;
-  char *cout = NULL;
-  const char *shortname;
-  garmin_fs_t *gmsd;
+  char* cout = NULL;
+  const char* shortname;
+  garmin_fs_t* gmsd;
 #ifdef UNICSV_GC_READY
-  const geocache_data *gc_data = NULL;
+  const geocache_data* gc_data = NULL;
 #endif
   unicsv_waypt_ct++;
 
@@ -1536,7 +1536,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
     break;
 
   case grid_lat_lon_dms: {
-    char *sep, *tmp;
+    char* sep, *tmp;
     cout = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, 0);
     sep = strchr(cout, ',');
     *sep = '\0';
@@ -1653,7 +1653,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
     }
   }
   if FIELD_USED(fld_fix) {
-    const char *fix;
+    const char* fix;
     switch (wpt->fix) {
     case fix_none:
       fix = "none";
@@ -1922,7 +1922,7 @@ unicsv_waypt_disp_cb(const waypoint *wpt)
 
 
 static void
-unicsv_wr_init(const char *filename)
+unicsv_wr_init(const char* filename)
 {
   fout = gbfopen(filename, "wb", MYNAME);
 

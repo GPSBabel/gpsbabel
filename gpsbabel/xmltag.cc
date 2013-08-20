@@ -26,10 +26,10 @@
 #include "defs.h"
 
 static void
-free_xml_tag(xml_tag *tag)
+free_xml_tag(xml_tag* tag)
 {
-  xml_tag *next = NULL;
-  char **ap;
+  xml_tag* next = NULL;
+  char** ap;
 
   while (tag) {
     if (tag->cdata) {
@@ -61,11 +61,11 @@ free_xml_tag(xml_tag *tag)
 }
 
 static void
-copy_xml_tag(xml_tag **copy, xml_tag *src, xml_tag *parent)
+copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
 {
-  xml_tag *res = NULL;
-  char **ap = NULL;
-  char **ap2 = NULL;
+  xml_tag* res = NULL;
+  char** ap = NULL;
+  char** ap2 = NULL;
   int count = 0;
 
   if (!src) {
@@ -86,7 +86,7 @@ copy_xml_tag(xml_tag **copy, xml_tag *src, xml_tag *parent)
       count++;
       ap++;
     }
-    res->attributes = (char **)xcalloc(count+1, sizeof(char *));
+    res->attributes = (char**)xcalloc(count+1, sizeof(char*));
     ap = src->attributes;
     ap2 = res->attributes;
     while (*ap) {
@@ -101,9 +101,9 @@ copy_xml_tag(xml_tag **copy, xml_tag *src, xml_tag *parent)
 }
 
 static void
-convert_xml_tag(xml_tag *tag)
+convert_xml_tag(xml_tag* tag)
 {
-  char **ap = NULL;
+  char** ap = NULL;
 
   if (tag == NULL) {
     return;
@@ -121,12 +121,12 @@ convert_xml_tag(xml_tag *tag)
   convert_xml_tag(tag->child);
 }
 
-fs_xml *fs_xml_alloc(long type);
+fs_xml* fs_xml_alloc(long type);
 
 static void
-fs_xml_destroy(void *fs)
+fs_xml_destroy(void* fs)
 {
-  fs_xml *xml = (fs_xml *)fs;
+  fs_xml* xml = (fs_xml*)fs;
   if (xml) {
     free_xml_tag(xml->tag);
   }
@@ -134,32 +134,32 @@ fs_xml_destroy(void *fs)
 }
 
 static void
-fs_xml_copy(void **copy, void *source)
+fs_xml_copy(void** copy, void* source)
 {
-  fs_xml *src = (fs_xml *)source;
+  fs_xml* src = (fs_xml*)source;
   if (!source) {
     *copy = NULL;
     return;
   }
-  *copy = (void *)fs_xml_alloc(src->fs.type);
+  *copy = (void*)fs_xml_alloc(src->fs.type);
   memcpy(*copy, source, sizeof(fs_xml));
-  copy_xml_tag(&(((fs_xml *)(*copy))->tag), src->tag, NULL);
+  copy_xml_tag(&(((fs_xml*)(*copy))->tag), src->tag, NULL);
 }
 
 static void
-fs_xml_convert(void *fs)
+fs_xml_convert(void* fs)
 {
-  fs_xml *xml = (fs_xml *)fs;
+  fs_xml* xml = (fs_xml*)fs;
   if (xml) {
     convert_xml_tag(xml->tag);
   }
 }
 
-fs_xml *fs_xml_alloc(long type)
+fs_xml* fs_xml_alloc(long type)
 {
-  fs_xml *result = NULL;
+  fs_xml* result = NULL;
 
-  result = (fs_xml *)xcalloc(1, sizeof(fs_xml));
+  result = (fs_xml*)xcalloc(1, sizeof(fs_xml));
   result->fs.type = type;
   result->fs.copy = fs_xml_copy;
   result->fs.destroy = fs_xml_destroy;

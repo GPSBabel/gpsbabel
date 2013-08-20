@@ -51,10 +51,10 @@ typedef struct breadcrumb {
   uint16_t	reserve2;	// 0x0000
 } BREADCRUMB;
 
-static gbfile *file_in, *file_out;
+static gbfile* file_in, *file_out;
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -66,7 +66,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen_le(fname, "wb", MYNAME);
 }
@@ -81,7 +81,7 @@ static void
 read_tracks(void)
 {
   struct breadcrumb bc;
-  route_head *trk_head = route_head_alloc();
+  route_head* trk_head = route_head_alloc();
   trk_head->rte_num = 1;
   trk_head->rte_name = xstrdup("PocketFMS");
   trk_head->rte_desc = xstrdup("Breadcrumb");
@@ -90,7 +90,7 @@ read_tracks(void)
 
   while (1 == gbfread(&bc, sizeof(bc), 1, file_in)) {
     struct tm tm;
-    waypoint *wpt;
+    waypoint* wpt;
 
     if (strcmp(bc.id, header_id) != 0) {
       fatal(MYNAME ": invalid breadcrumb header in input file.\n");
@@ -114,22 +114,22 @@ read_tracks(void)
     wpt->pdop = le_read_float(&bc.espe);
     wpt->course = le_read_float(&bc.course);
     wpt->speed = le_read_float(&bc.speed);
-    wpt->fix = (fix_type) (le_readu16(&bc.fix) - 1);
+    wpt->fix = (fix_type)(le_readu16(&bc.fix) - 1);
 
     track_add_wpt(trk_head, wpt);
   }
 }
 
 static void
-route_head_noop(const route_head *wp)
+route_head_noop(const route_head* wp)
 {
 }
 
 static void
-pocketfms_waypt_disp(const waypoint *wpt)
+pocketfms_waypt_disp(const waypoint* wpt)
 {
   struct breadcrumb bc;
-  struct tm *tm;
+  struct tm* tm;
 
   memset(&bc, 0, sizeof(bc));
   const time_t tt = wpt->GetCreationTime().toTime_t();

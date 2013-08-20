@@ -36,16 +36,16 @@ arglist_t skyforce_args[] = {
   ARG_TERMINATOR
 };
 
-static gbfile *fin, *fout;
+static gbfile* fin, *fout;
 static int rte_num, wpt_num;
 static short_handle short_h;
-static const waypoint *prev_wpt;
+static const waypoint* prev_wpt;
 
 
-static waypoint *
-skyforce_parse_coords(const char *str)
+static waypoint*
+skyforce_parse_coords(const char* str)
 {
-  waypoint *wpt;
+  waypoint* wpt;
 
   if (strlen(str) < 38) {
     fatal(MYNAME ": Incomplete line!\n");
@@ -69,10 +69,10 @@ skyforce_parse_coords(const char *str)
 }
 
 
-static waypoint *
-skyforce_parse_wpt(const char *str, int *rte_num)
+static waypoint*
+skyforce_parse_wpt(const char* str, int* rte_num)
 {
-  waypoint *wpt;
+  waypoint* wpt;
 
   wpt = skyforce_parse_coords(str);
   if (wpt == NULL) {
@@ -89,15 +89,15 @@ skyforce_parse_wpt(const char *str, int *rte_num)
 }
 
 
-static waypoint *
-skyforce_parse_trk(const char *str)
+static waypoint*
+skyforce_parse_trk(const char* str)
 {
-  char *cx;
+  char* cx;
   struct tm tm;
   char buf[15];
   int len;
 
-  waypoint *wpt;
+  waypoint* wpt;
 
   wpt = skyforce_parse_coords(str);
   if (wpt == NULL) {
@@ -132,7 +132,7 @@ skyforce_parse_trk(const char *str)
 
 
 static void
-skyforce_head_disp_cb(const route_head *head)
+skyforce_head_disp_cb(const route_head* head)
 {
   prev_wpt = NULL;
   if (head->rte_waypt_ct <= 0) {
@@ -152,7 +152,7 @@ skyforce_head_disp_cb(const route_head *head)
 
 
 static void
-skyforce_waypt_disp_cb(const waypoint *wpt)
+skyforce_waypt_disp_cb(const waypoint* wpt)
 {
   char buf[75];	/* long enough for all data types */
   double lat, lon;
@@ -181,7 +181,7 @@ skyforce_waypt_disp_cb(const waypoint *wpt)
     tm = *gmtime(&tt);
     strftime(buf + 2, sizeof(buf) - 2, "%d%m%y  %H%M%S    ", &tm);
   } else {
-    char *name;
+    char* name;
 
     if (rte_num > 999) {
       return;
@@ -241,7 +241,7 @@ skyforce_waypt_disp_cb(const waypoint *wpt)
 *******************************************************************************/
 
 static void
-skyforce_rd_init(const char *fname)
+skyforce_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
 }
@@ -257,8 +257,8 @@ skyforce_rd_deinit(void)
 static void
 skyforce_read(void)
 {
-  char *str;
-  route_head *rte, *trk;
+  char* str;
+  route_head* rte, *trk;
 
   wpt_num = 0;
   rte = trk = NULL;
@@ -266,7 +266,7 @@ skyforce_read(void)
 
   while ((str = gbfgetstr(fin))) {
 
-    waypoint *wpt;
+    waypoint* wpt;
     int i;
 
     str = lrtrim(str);
@@ -323,7 +323,7 @@ skyforce_read(void)
 
 
 static void
-skyforce_wr_init(const char *fname)
+skyforce_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 

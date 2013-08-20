@@ -28,7 +28,7 @@
  */
 
 static const struct {
-  const char *cn;
+  const char* cn;
   unsigned char r;
   unsigned char g;
   unsigned char b;
@@ -189,9 +189,9 @@ static const struct {
  */
 static int HexDigit(char hex)
 {
-  const char *Digits = "0123456789ABCDEF";
-  const char *digits = "0123456789abcdef";
-  const char *ofs = strchr(digits, hex);
+  const char* Digits = "0123456789ABCDEF";
+  const char* digits = "0123456789abcdef";
+  const char* ofs = strchr(digits, hex);
   if (ofs) {
     return ofs-digits;
   }
@@ -218,11 +218,11 @@ static int HexByte(const char* hex)
  */
 
 int
-color_to_bbggrr(const char *opt_color)
+color_to_bbggrr(const char* opt_color)
 {
   int color_num;
   unsigned int i;
-  char *ep;
+  char* ep;
 
   color_num = strtol(opt_color, &ep, 10);
 

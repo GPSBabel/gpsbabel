@@ -136,7 +136,7 @@ data_read(void)
       }
     }
     if (!link.url_.isEmpty() || !link.url_link_text_.isEmpty()) {
-       wpt_tmp->AddUrlLink(link);
+      wpt_tmp->AddUrlLink(link);
     }
     waypt_add(wpt_tmp);
     p = gbfgetc(file_in);

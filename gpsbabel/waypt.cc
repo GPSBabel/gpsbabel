@@ -32,8 +32,8 @@
 
 #if NEWQ
 QList<waypoint*> waypt_list;
-queue waypt_head; // This is here solely to freak out the formats that are 
-                  // looking into what should be a private members.
+queue waypt_head; // This is here solely to freak out the formats that are
+// looking into what should be a private members.
 #else
 queue waypt_head;
 #endif
@@ -61,8 +61,8 @@ waypt_init(void)
 
 // This whole thing is a poor-man's copy constructor. It exists mostly
 // as a bridge from our non-reference counted C types to classes now.
-waypoint *
-waypt_dupe(const waypoint *wpt)
+waypoint*
+waypt_dupe(const waypoint* wpt)
 {
   /*
    * This and waypt_free should be closely synced.
@@ -136,7 +136,7 @@ void update_common_traits(const waypoint* wpt)
 }
 
 void
-waypt_add(waypoint *wpt)
+waypt_add(waypoint* wpt)
 {
   double lat_orig = wpt->latitude;
   double lon_orig = wpt->longitude;
@@ -201,7 +201,7 @@ waypt_add(waypoint *wpt)
 }
 
 void
-waypt_del(waypoint *wpt)
+waypt_del(waypoint* wpt)
 {
   dequeue(&wpt->Q);
   waypt_ct--;
@@ -210,10 +210,10 @@ waypt_del(waypoint *wpt)
 /*
  * A constructor for a single waypoint.
  */
-waypoint *
+waypoint*
 waypt_new(void)
 {
-  waypoint *wpt = new waypoint;
+  waypoint* wpt = new waypoint;
 #ifdef DEBUG_MEM
   wpt->altitude = unknown_alt; // should this be "latitude" instead of "altitude"?
   wpt->longitude = unknown_alt;
@@ -241,7 +241,7 @@ set_waypt_count(unsigned int nc)
 }
 
 void
-waypt_disp(const waypoint *wpt)
+waypt_disp(const waypoint* wpt)
 {
   if (wpt->GetCreationTime().isValid()) {
     printf("%s ", qPrintable(wpt->creation_time.toString()));
@@ -250,7 +250,7 @@ waypt_disp(const waypoint *wpt)
   printposn(wpt->longitude,0);
 
   if (wpt->description) {
-    char *tmpdesc = xstrdup(wpt->description);
+    char* tmpdesc = xstrdup(wpt->description);
     printf("%s/%s",
            global_opts.synthesize_shortnames ?
            mkshort(mkshort_handle, tmpdesc) :
@@ -281,16 +281,16 @@ waypt_disp_all(waypt_cb cb)
 }
 
 void
-waypt_disp_session(const session_t *se, waypt_cb cb)
+waypt_disp_session(const session_t* se, waypt_cb cb)
 {
   int i = 0;
 #if NEWQ
   foreach(waypoint* waypointp, waypt_list) {
 #else
-  queue *elem, *tmp;
-  waypoint *waypointp;
+  queue* elem, *tmp;
+  waypoint* waypointp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (waypoint *) elem;
+    waypointp = (waypoint*) elem;
 #endif
     if ((se == NULL) || (waypointp->session == se)) {
       if (global_opts.verbose_status) {
@@ -306,7 +306,7 @@ waypt_disp_session(const session_t *se, waypt_cb cb)
 }
 
 void
-waypt_init_bounds(bounds *bounds)
+waypt_init_bounds(bounds* bounds)
 {
   /* Set data out of bounds so that even one waypoint will reset */
   bounds->max_lat = -9999;
@@ -318,7 +318,7 @@ waypt_init_bounds(bounds *bounds)
 }
 
 int
-waypt_bounds_valid(bounds *bounds)
+waypt_bounds_valid(bounds* bounds)
 {
   /* Returns true if bb has any 'real' data in it */
   return bounds->max_lat > -9999;
@@ -328,7 +328,7 @@ waypt_bounds_valid(bounds *bounds)
  * Recompund bounding box based on new position point.
  */
 void
-waypt_add_to_bounds(bounds *bounds, const waypoint *waypointp)
+waypt_add_to_bounds(bounds* bounds, const waypoint* waypointp)
 {
   if (waypointp->latitude > bounds->max_lat) {
     bounds->max_lat = waypointp->latitude;
@@ -359,32 +359,32 @@ waypt_add_to_bounds(bounds *bounds, const waypoint *waypointp)
  */
 
 void
-waypt_compute_bounds(bounds *bounds)
+waypt_compute_bounds(bounds* bounds)
 {
   waypt_init_bounds(bounds);
 #if NEWQ
   foreach(waypoint* waypointp, waypt_list) {
 #else
-  queue *elem, *tmp;
-  waypoint *waypointp;
+  queue* elem, *tmp;
+  waypoint* waypointp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (waypoint *) elem;
+    waypointp = (waypoint*) elem;
 #endif
     waypt_add_to_bounds(bounds, waypointp);
   }
 }
 
-waypoint *
-find_waypt_by_name(const char *name)
+waypoint*
+find_waypt_by_name(const char* name)
 {
 #if NEWQ
   foreach(waypoint* waypointp, waypt_list) {
 #else
-  queue *elem, *tmp;
-  waypoint *waypointp;
+  queue* elem, *tmp;
+  waypoint* waypointp;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (waypoint *) elem;
+    waypointp = (waypoint*) elem;
 #endif
     if (0 == strcmp(waypointp->shortname, name)) {
       return waypointp;
@@ -395,7 +395,7 @@ find_waypt_by_name(const char *name)
 }
 
 void
-waypt_free(waypoint *wpt)
+waypt_free(waypoint* wpt)
 {
   /*
    * This and waypt_dupe should be closely synced.
@@ -413,11 +413,11 @@ waypt_free(waypoint *wpt)
 #if 0
   // these are now ref counted...
   if (wpt->url_next) {
-    url_link *url_next;
+    url_link* url_next;
 
     for (url_next = wpt->url_next; url_next;) {
 
-      url_link *tonuke = url_next;
+      url_link* tonuke = url_next;
       url_next = tonuke->url_next;
       xfree(tonuke);
     }
@@ -425,7 +425,7 @@ waypt_free(waypoint *wpt)
 #endif
 
   if (wpt->gc_data != &empty_gc_data) {
-    geocache_data *gc_data = (geocache_data *)wpt->gc_data;
+    geocache_data* gc_data = (geocache_data*)wpt->gc_data;
 
     delete gc_data;
   }
@@ -435,19 +435,20 @@ waypt_free(waypoint *wpt)
 
 #if NEWQ
 void
-waypt_flush(queue* head) {
+waypt_flush(queue* head)
+{
   while (!waypt_list.isEmpty()) {
     waypt_free(waypt_list.takeFirst());
   }
 }
 #else
 void
-waypt_flush(queue *head)
+waypt_flush(queue* head)
 {
-  queue *elem, *tmp;
+  queue* elem, *tmp;
 
   QUEUE_FOR_EACH(head, elem, tmp) {
-    waypoint *q = (waypoint *) dequeue(elem);
+    waypoint* q = (waypoint*) dequeue(elem);
     waypt_free(q);
     if (head == &waypt_head) {
       waypt_ct--;
@@ -469,13 +470,13 @@ waypt_flush_all()
 }
 
 void
-waypt_backup(signed int *count, queue **head_bak)
+waypt_backup(signed int* count, queue** head_bak)
 {
-  queue *elem, *tmp, *qbackup;
-  waypoint *wpt;
+  queue* elem, *tmp, *qbackup;
+  waypoint* wpt;
   int no = 0;
 
-  qbackup = (queue *) xcalloc(1, sizeof(*qbackup));
+  qbackup = (queue*) xcalloc(1, sizeof(*qbackup));
   QUEUE_INIT(qbackup);
 #if NEWQ
 // Why does this code exist?
@@ -488,7 +489,7 @@ waypt_backup(signed int *count, queue **head_bak)
   waypt_ct = 0;
 
   QUEUE_FOR_EACH(qbackup, elem, tmp) {
-    wpt = (waypoint *)elem;
+    wpt = (waypoint*)elem;
     waypt_add(waypt_dupe(wpt));
     no++;
   }
@@ -498,7 +499,7 @@ waypt_backup(signed int *count, queue **head_bak)
 }
 
 void
-waypt_restore(signed int count, queue *head_bak)
+waypt_restore(signed int count, queue* head_bak)
 {
   if (head_bak == NULL) {
     return;
@@ -516,7 +517,7 @@ waypt_restore(signed int count, queue *head_bak)
 }
 
 void
-waypt_add_url(waypoint *wpt, const QString& link, const QString& url_link_text)
+waypt_add_url(waypoint* wpt, const QString& link, const QString& url_link_text)
 {
   wpt->url_link_list_.push_back(UrlLink(link, url_link_text));
 }
@@ -540,7 +541,7 @@ gcgeodist(const double lat1, const double lon1,
  */
 
 double
-waypt_time(const waypoint *wpt)
+waypt_time(const waypoint* wpt)
 {
   if (!wpt->creation_time.isValid()) {
     return (double) 0;
@@ -556,7 +557,7 @@ waypt_time(const waypoint *wpt)
  */
 
 double
-waypt_distance_ex(const waypoint *A, const waypoint *B)
+waypt_distance_ex(const waypoint* A, const waypoint* B)
 {
   double res = 0;
   garmin_fs_p gmsd;
@@ -566,11 +567,11 @@ waypt_distance_ex(const waypoint *A, const waypoint *B)
   }
 
   if ((gmsd = GMSD_FIND(A)) && (gmsd->ilinks != NULL)) {
-    garmin_ilink_t *link = gmsd->ilinks;
+    garmin_ilink_t* link = gmsd->ilinks;
 
     res = gcgeodist(A->latitude, A->longitude, link->lat, link->lon);
     while (link->next != NULL) {
-      garmin_ilink_t *prev = link;
+      garmin_ilink_t* prev = link;
       link = link->next;
       res += gcgeodist(prev->lat, prev->lon, link->lat, link->lon);
     }
@@ -583,7 +584,7 @@ waypt_distance_ex(const waypoint *A, const waypoint *B)
 }
 
 double
-waypt_distance(const waypoint *A, const waypoint *B)
+waypt_distance(const waypoint* A, const waypoint* B)
 {
   if ((A == NULL) || (B == NULL)) {
     return 0;
@@ -599,7 +600,7 @@ waypt_distance(const waypoint *A, const waypoint *B)
  */
 
 double
-waypt_speed_ex(const waypoint *A, const waypoint *B)
+waypt_speed_ex(const waypoint* A, const waypoint* B)
 {
   double dist, time;
 
@@ -622,7 +623,7 @@ waypt_speed_ex(const waypoint *A, const waypoint *B)
  */
 
 double
-waypt_speed(const waypoint *A, const waypoint *B)
+waypt_speed(const waypoint* A, const waypoint* B)
 {
   double dist, time;
 
@@ -643,7 +644,7 @@ waypt_speed(const waypoint *A, const waypoint *B)
  * Calculates "Course True" from A to B
  */
 double
-waypt_course(const waypoint *A, const waypoint *B)
+waypt_course(const waypoint* A, const waypoint* B)
 {
   if (A && B) {
     return heading_true_degrees(RAD(A->latitude), RAD(A->longitude), RAD(B->latitude), RAD(B->longitude));
@@ -652,10 +653,10 @@ waypt_course(const waypoint *A, const waypoint *B)
   }
 }
 
-geocache_data *
-waypt_alloc_gc_data(waypoint *wpt)
+geocache_data*
+waypt_alloc_gc_data(waypoint* wpt)
 {
-  geocache_data *res = (geocache_data *)wpt->gc_data;
+  geocache_data* res = (geocache_data*)wpt->gc_data;
   if (res == &empty_gc_data) {
     res = wpt->gc_data = new geocache_data;
   }
@@ -663,7 +664,7 @@ waypt_alloc_gc_data(waypoint *wpt)
 }
 
 int
-waypt_empty_gc_data(const waypoint *wpt)
+waypt_empty_gc_data(const waypoint* wpt)
 {
   return (wpt->gc_data == &empty_gc_data);
 }

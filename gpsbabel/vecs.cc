@@ -28,11 +28,11 @@
 #define MYNAME "vecs.c"
 
 typedef struct {
-  ff_vecs_t *vec;
-  const char *name;
-  const char *desc;
-  const char *extension;
-  const char *parent;
+  ff_vecs_t* vec;
+  const char* name;
+  const char* desc;
+  const char* extension;
+  const char* parent;
 } vecs_t;
 
 extern ff_vecs_t an1_vecs;
@@ -965,9 +965,9 @@ vecs_t vec_list[] = {
 void
 init_vecs(void)
 {
-  vecs_t *vec = vec_list;
+  vecs_t* vec = vec_list;
   while (vec->vec) {
-    arglist_t *ap;
+    arglist_t* ap;
     if (vec->vec->args) {
       for (ap = vec->vec->args; ap->argstring; ap++) {
         ap->argvalptr = NULL;
@@ -981,7 +981,7 @@ init_vecs(void)
 }
 
 int
-is_integer(const char *c)
+is_integer(const char* c)
 {
   return isdigit(c[0]) || ((c[0] == '+' || c[0] == '-') && isdigit(c[1]));
 }
@@ -989,9 +989,9 @@ is_integer(const char *c)
 void
 exit_vecs(void)
 {
-  vecs_t *vec = vec_list;
+  vecs_t* vec = vec_list;
   while (vec->vec) {
-    arglist_t *ap;
+    arglist_t* ap;
     if (vec->vec->exit) {
       (*vec->vec->exit)();
     }
@@ -1013,9 +1013,9 @@ exit_vecs(void)
 }
 
 void
-assign_option(const char *module, arglist_t *ap, const char *val)
+assign_option(const char* module, arglist_t* ap, const char* val)
 {
-  const char *c;
+  const char* c;
 
   if (ap->argval == NULL) {
     fatal("%s: No local variable defined for option \"%s\"!", module, ap->argstring);
@@ -1036,7 +1036,7 @@ assign_option(const char *module, arglist_t *ap, const char *val)
   if (case_ignore_strcmp(val, ap->argstring) == 0) {
     c = "";
   } else {
-    c = (char *)val;
+    c = (char*)val;
   }
 
   switch (ap->argtype & ARGTYPE_TYPEMASK) {
@@ -1098,7 +1098,7 @@ assign_option(const char *module, arglist_t *ap, const char *val)
 }
 
 void
-disp_vec_options(const char *vecname, arglist_t *ap)
+disp_vec_options(const char* vecname, arglist_t* ap)
 {
   for (; ap && ap->argstring; ap++) {
     if (*ap->argval && ap->argval) {
@@ -1112,13 +1112,13 @@ disp_vec_options(const char *vecname, arglist_t *ap)
   }
 }
 
-ff_vecs_t *
-find_vec(const char *vecname, const char **opts)
+ff_vecs_t*
+find_vec(const char* vecname, const char** opts)
 {
-  vecs_t *vec = vec_list;
-  style_vecs_t *svec = style_list;
-  char *v = xstrdup(vecname);
-  char *svecname = strtok(v, ",");
+  vecs_t* vec = vec_list;
+  style_vecs_t* svec = style_list;
+  char* v = xstrdup(vecname);
+  char* svecname = strtok(v, ",");
   int found = 0;
 
   if (vecname == NULL) {
@@ -1140,14 +1140,14 @@ find_vec(const char *vecname, const char **opts)
 
     if (vec->vec->args) {
       for (arglist_t* ap = vec->vec->args; ap->argstring; ap++) {
-        const char *opt;
+        const char* opt;
 
         if (res) {
           opt = get_option(*opts, ap->argstring);
           if (opt) {
             found = 1;
             assign_option(svecname, ap, opt);
-            xfree((char *)opt);
+            xfree((char*)opt);
             continue;
           }
         }
@@ -1197,14 +1197,14 @@ find_vec(const char *vecname, const char **opts)
 
     if (vec_list[0].vec->args) {
       for (arglist_t* ap = vec_list[0].vec->args; ap->argstring; ap++) {
-        const char *opt;
+        const char* opt;
 
         if (res) {
           opt = get_option(*opts, ap->argstring);
           if (opt) {
             found = 1;
             assign_option(svecname, ap, opt);
-            xfree((char *)opt);
+            xfree((char*)opt);
             continue;
           }
         }
@@ -1246,18 +1246,18 @@ find_vec(const char *vecname, const char **opts)
  * Find and return a specific argument in an arg list.
  * Modelled approximately after getenv.
  */
-char *
+char*
 #ifdef DEBUG_MEM
-GET_OPTION(const char *iarglist, const char *argname, DEBUG_PARAMS)
+GET_OPTION(const char* iarglist, const char* argname, DEBUG_PARAMS)
 #else
-get_option(const char *iarglist, const char *argname)
+get_option(const char* iarglist, const char* argname)
 #endif
 {
   size_t arglen = strlen(argname);
-  char *arglist;
-  char *rval = NULL;
-  char *arg;
-  char *argp;
+  char* arglist;
+  char* rval = NULL;
+  char* arg;
+  char* argp;
 
   if (!iarglist) {
     return NULL;
@@ -1299,11 +1299,11 @@ get_option(const char *iarglist, const char *argname)
  *  parse for help on available command line options.
  */
 static signed int
-alpha(const void *a, const void *b)
+alpha(const void* a, const void* b)
 {
 
-  const vecs_t *const *ap = (const vecs_t *const*) a;
-  const vecs_t *const *bp = (const vecs_t *const*) b;
+  const vecs_t* const* ap = (const vecs_t *const*) a;
+  const vecs_t* const* bp = (const vecs_t *const*) b;
 
   return case_ignore_strcmp((*ap)->desc , (*bp)->desc);
 }
@@ -1313,14 +1313,14 @@ alpha(const void *a, const void *b)
  * alphabetically.  Returns an allocated copy of a style_vecs_array
  * that's populated and sorted.
  */
-vecs_t **
-sort_and_unify_vecs(int *ctp)
+vecs_t**
+sort_and_unify_vecs(int* ctp)
 {
   int vc;
-  vecs_t **svp;
-  vecs_t *vec;
+  vecs_t** svp;
+  vecs_t* vec;
 #if CSVFMTS_ENABLED
-  style_vecs_t *svec;
+  style_vecs_t* svec;
 #endif
   int i = 0;
 
@@ -1334,7 +1334,7 @@ sort_and_unify_vecs(int *ctp)
 #endif // CSVFMTS_ENABLED
 
 
-  svp = (vecs_t **)xcalloc(vc, sizeof(style_vecs_t *));
+  svp = (vecs_t**)xcalloc(vc, sizeof(style_vecs_t*));
   /* Normal vecs are easy; populate the first part of the array. */
   for (vec = vec_list; vec->vec; vec++, i++) {
     svp[i] = vec;
@@ -1347,7 +1347,7 @@ sort_and_unify_vecs(int *ctp)
   /* Walk the style list, parse the entries, dummy up a "normal" vec */
   for (svec = style_list; svec->name; svec++, i++)  {
     xcsv_read_internal_style(svec->style_buf);
-    svp[i] = (vecs_t*) xcalloc(1, sizeof **svp);
+    svp[i] = (vecs_t*) xcalloc(1, sizeof** svp);
     svp[i]->name = svec->name;
     svp[i]->vec = (ff_vecs_t*) xmalloc(sizeof(*svp[i]->vec));
     svp[i]->extension = xcsv_file.extension;
@@ -1396,8 +1396,8 @@ sort_and_unify_vecs(int *ctp)
 void
 disp_vecs(void)
 {
-  vecs_t **svp;
-  arglist_t *ap;
+  vecs_t** svp;
+  arglist_t* ap;
   int vc;
   int i = 0;
 
@@ -1422,10 +1422,10 @@ disp_vecs(void)
 }
 
 void
-disp_vec(const char *vecname)
+disp_vec(const char* vecname)
 {
-  vecs_t **svp;
-  arglist_t *ap;
+  vecs_t** svp;
+  arglist_t* ap;
   int vc;
   int i = 0;
 
@@ -1456,7 +1456,7 @@ disp_vec(const char *vecname)
 static void
 disp_v1(ff_type t)
 {
-  const char *tstring;
+  const char* tstring;
 
   switch (t) {
   case ff_type_file:
@@ -1476,7 +1476,7 @@ disp_v1(ff_type t)
 }
 
 static void
-disp_v2(ff_vecs_t *v)
+disp_v2(ff_vecs_t* v)
 {
   int i;
   for (i = 0; i < 3; i++) {
@@ -1486,10 +1486,10 @@ disp_v2(ff_vecs_t *v)
   putchar('\t');
 }
 
-const char *
+const char*
 name_option(long type)
 {
-  const char *at[] = {
+  const char* at[] = {
     "unknown",
     "integer",
     "float",
@@ -1506,7 +1506,7 @@ name_option(long type)
 }
 
 static
-void disp_help_url(const vecs_t *vec, arglist_t *arg)
+void disp_help_url(const vecs_t* vec, arglist_t* arg)
 {
   printf("\t" WEB_DOC_DIR "/fmt_%s.html", vec->name);
   if (arg) {
@@ -1517,9 +1517,9 @@ void disp_help_url(const vecs_t *vec, arglist_t *arg)
 
 
 static void
-disp_v3(const vecs_t *vec)
+disp_v3(const vecs_t* vec)
 {
-  arglist_t *ap;
+  arglist_t* ap;
 
   disp_help_url(vec, NULL);
   for (ap = vec->vec->args; ap && ap->argstring; ap++) {
@@ -1546,8 +1546,8 @@ disp_v3(const vecs_t *vec)
 void
 disp_formats(int version)
 {
-  vecs_t **svp;
-  vecs_t *vec;
+  vecs_t** svp;
+  vecs_t* vec;
   int i, vc = 0;
 
   switch (version) {

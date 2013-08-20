@@ -1020,8 +1020,9 @@ cet_convert_string(char* str)
   return res;
 }
 
-const char *
-cet_convert_string(const QString& str) {
+const char*
+cet_convert_string(const QString& str)
+{
   // FIXME: this is really weird.  Since cet_convert_string wants to free
   // its argument (!) we make a duplicate just to satisfy that kind of goofy
   // requirement.
@@ -1048,8 +1049,8 @@ cet_convert_waypt(const waypoint* wpt)
   w->notes = cet_convert_string(wpt->notes);
 
   if (gc_data) {
-    const char *placer = cet_convert_string(gc_data->placer);
-    const char *hint = cet_convert_string(gc_data->hint);
+    const char* placer = cet_convert_string(gc_data->placer);
+    const char* hint = cet_convert_string(gc_data->hint);
     gc_data->placer = placer;
     gc_data->hint = hint;
     xfree(placer);
@@ -1080,7 +1081,7 @@ cet_convert_route_hdr(const route_head* route)
 
   rte->rte_name = cet_convert_string(route->rte_name);
   rte->rte_desc = cet_convert_string(route->rte_desc);
-  const char*rte_url = cet_convert_string(route->rte_url);
+  const char* rte_url = cet_convert_string(route->rte_url);
   rte->rte_url = rte_url;
   xfree(rte_url);
 }
@@ -1266,7 +1267,7 @@ const char* xml_convert_to_char_string_n(const XML_Char* src, int* n)
   *n = i;
 
   /* Appropriately size (not zero terminated) buffer */
-  utf8 = utf8b = (char *)xmalloc(i);
+  utf8 = utf8b = (char*)xmalloc(i);
 
   for (j = 0; utf8 < utf8b + i; j++) {
     utf8 += cet_ucs4_to_utf8(utf8, 6, src[j]);
@@ -1298,7 +1299,7 @@ const char* xml_convert_to_char_string(const XML_Char* src)
   }
 
   /* We return a NUL terminated string. */
-  utf8 = utf8b = (char *)xmalloc(i + 1);
+  utf8 = utf8b = (char*)xmalloc(i + 1);
   in = src;
 
   for (j = 0; utf8 < utf8b + i; j++) {
@@ -1339,7 +1340,7 @@ const char** xml_convert_attrs_to_char_string(const XML_Char** xml_attr)
   }
 
   // Allocate space
-  char_attrs = (const char **)xmalloc((size + 1) * sizeof(char*));
+  char_attrs = (const char**)xmalloc((size + 1) * sizeof(char*));
 
   // Duplicate strings
   for (i = 0; i < size; ++i) {

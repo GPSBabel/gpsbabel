@@ -495,7 +495,7 @@ waypoint* tpo_convert_ll(int lat, int lon)
 }
 
 #define TRACKNAMELENGTH 256
-struct style_info{
+struct style_info {
   char name[TRACKNAMELENGTH]; // some huge value
   uint8_t color[3];  // keep R/G/B values separate because line_color needs BGR
   uint8_t wide;
@@ -527,7 +527,7 @@ void tpo_process_tracks(void)
     printf("Unpacking %d track styles...\n",track_style_count);
   }
 
-  style_info *styles = (style_info *)xcalloc(track_style_count, sizeof(style_info));
+  style_info* styles = (style_info*)xcalloc(track_style_count, sizeof(style_info));
 
   for (ii = 0; ii < track_style_count; ii++) {
 
@@ -541,7 +541,7 @@ void tpo_process_tracks(void)
     // Topo and web uses rrggbb, also need line_color.bbggrr for KML
     for (xx = 0; xx < 3; xx++) {
       int col = (int)gbfgetc(tpo_file_in);
-     if((col < 0) || (col >255)) {
+      if ((col < 0) || (col >255)) {
         col = 0; // assign black if out of range 0x00 to 0xff
       }
       styles[ii].color[xx] = (uint8_t)col;
@@ -665,7 +665,7 @@ void tpo_process_tracks(void)
 
     // track texture (dashed=1, solid=0) mapped into opacity - not assigned before 2012
     track_temp->line_color.opacity = 0xff;   // 255
-    if(styles[track_style].dash) {
+    if (styles[track_style].dash) {
       track_temp->line_color.opacity = 0x50;
     }
 
@@ -679,7 +679,7 @@ void tpo_process_tracks(void)
     // Track description
     // track_temp->rte_desc = NULL; // pre-2012 default, next line from SRE saves track style as track description
     xasprintf(&track_temp->rte_desc, "Style=%s, Width=%d, Dashed=%d, Color=#%s",
-            styles[track_style].name, styles[track_style].wide, styles[track_style].dash, rgb);
+              styles[track_style].name, styles[track_style].wide, styles[track_style].dash, rgb);
 
     // Route number
     track_temp->rte_num = ii+1;

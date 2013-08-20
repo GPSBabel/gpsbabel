@@ -24,8 +24,8 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static waypoint *wpt_tmp;
-static char *as;
+static waypoint* wpt_tmp;
+static char* as;
 
 #define MYNAME "yahoo"
 
@@ -56,7 +56,7 @@ static xg_tag_mapping gl_map[] = {
 };
 
 static void
-yahoo_rd_init(const char *fname)
+yahoo_rd_init(const char* fname)
 {
   xml_init(fname, gl_map, NULL);
 }
@@ -74,33 +74,33 @@ yahoo_rd_deinit(void)
 }
 
 static void
-yahoo_wr_init(const char *fname)
+yahoo_wr_init(const char* fname)
 {
   fatal("Writing file of type %s is not supported\n", MYNAME);
 }
 
-void	wpt_s(const char *args, const QXmlStreamAttributes* unused)
+void	wpt_s(const char* args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp = waypt_new();
 }
 
-void	wpt_e(const char *args, const QXmlStreamAttributes* unused)
+void	wpt_e(const char* args, const QXmlStreamAttributes* unused)
 {
   waypt_add(wpt_tmp);
   wpt_tmp = NULL;
 }
 
-void	wpt_lat(const char *args, const QXmlStreamAttributes* unused)
+void	wpt_lat(const char* args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->latitude = atof(args);
 }
 
-void	wpt_lon(const char *args, const QXmlStreamAttributes* unused)
+void	wpt_lon(const char* args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->longitude = atof(args);
 }
 
-void	wpt_addr(const char *args, const QXmlStreamAttributes* unused)
+void	wpt_addr(const char* args, const QXmlStreamAttributes* unused)
 {
   if (wpt_tmp->notes) {
     wpt_tmp->notes = xstrappend(wpt_tmp->notes, as);

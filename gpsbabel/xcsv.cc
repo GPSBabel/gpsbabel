@@ -32,16 +32,16 @@
 #define MYNAME	"XCSV"
 #define ISSTOKEN(a,b) (strncmp(a,b, strlen(b)) == 0)
 
-static char *styleopt = NULL;
-static char *snlenopt = NULL;
-static char *snwhiteopt = NULL;
-static char *snupperopt = NULL;
-static char *snuniqueopt = NULL;
-char *prefer_shortnames = NULL;
-char *xcsv_urlbase = NULL;
-static char *opt_datum;
+static char* styleopt = NULL;
+static char* snlenopt = NULL;
+static char* snwhiteopt = NULL;
+static char* snupperopt = NULL;
+static char* snuniqueopt = NULL;
+char* prefer_shortnames = NULL;
+char* xcsv_urlbase = NULL;
+static char* opt_datum;
 
-static const char *intstylebuf = NULL;
+static const char* intstylebuf = NULL;
 
 static
 arglist_t xcsv_args[] = {
@@ -104,9 +104,9 @@ char_map_t xcsv_char_table[] = {
 void
 xcsv_destroy_style(void)
 {
-  queue *elem, *tmp;
-  field_map_t *fmp;
-  ogue_t *ogp;
+  queue* elem, *tmp;
+  field_map_t* fmp;
+  ogue_t* ogp;
   int internal = 0;
 
   /*
@@ -116,7 +116,7 @@ xcsv_destroy_style(void)
 
   /* destroy the prologue */
   QUEUE_FOR_EACH(&xcsv_file.prologue, elem, tmp) {
-    ogp = (ogue_t *)elem;
+    ogp = (ogue_t*)elem;
     if (ogp->val) {
       xfree(ogp->val);
     }
@@ -127,7 +127,7 @@ xcsv_destroy_style(void)
 
   /* destroy the epilogue */
   QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {
-    ogp = (ogue_t *)elem;
+    ogp = (ogue_t*)elem;
     if (ogp->val) {
       xfree(ogp->val);
     }
@@ -138,7 +138,7 @@ xcsv_destroy_style(void)
 
   /* destroy the ifields */
   QUEUE_FOR_EACH(&xcsv_file.ifield, elem, tmp) {
-    fmp = (field_map_t *) elem;
+    fmp = (field_map_t*) elem;
     if (fmp->key) {
       xfree(fmp->key);
     }
@@ -156,7 +156,7 @@ xcsv_destroy_style(void)
   /* destroy the ofields, if they are not re-mapped to ifields. */
   if (xcsv_file.ofield != &xcsv_file.ifield) {
     QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
-      fmp = (field_map_t *) elem;
+      fmp = (field_map_t*) elem;
       if (fmp->key) {
         xfree(fmp->key);
       }
@@ -211,10 +211,10 @@ xcsv_destroy_style(void)
   xcsv_file.is_internal = internal;
 }
 
-const char *
-xcsv_get_char_from_constant_table(char *key)
+const char*
+xcsv_get_char_from_constant_table(char* key)
 {
-  char_map_t *cm = xcsv_char_table;
+  char_map_t* cm = xcsv_char_table;
 
   while ((cm->key) && (strcmp(key, cm->key) != 0)) {
     cm++;
@@ -224,13 +224,13 @@ xcsv_get_char_from_constant_table(char *key)
 }
 
 static void
-xcsv_parse_style_line(char *sbuff)
+xcsv_parse_style_line(char* sbuff)
 {
   int i, linecount = 0;
-  char *s, *sp;
-  char *p;
-  const char *cp;
-  char *key, *val, *pfc;
+  char* s, *sp;
+  char* p;
+  const char* cp;
+  char* key, *val, *pfc;
 
   /*
    * tokens should be parsed longest to shortest, unless something
@@ -263,7 +263,7 @@ xcsv_parse_style_line(char *sbuff)
 
       /* field delimiters are always bad characters */
       if (0 == strcmp(p, "\\w")) {
-        char *s = xstrappend(xcsv_file.badchars, " \n\r");
+        char* s = xstrappend(xcsv_file.badchars, " \n\r");
         if (xcsv_file.badchars) {
           xfree(xcsv_file.badchars);
         }
@@ -290,38 +290,11 @@ xcsv_parse_style_line(char *sbuff)
 
         /* field_enclosers are always bad characters */
         if (xcsv_file.badchars) {
-          xcsv_file.badchars = (char *) xrealloc(xcsv_file.badchars,
-                                                 strlen(xcsv_file.badchars) +
-                                                 strlen(p) + 1);
+          xcsv_file.badchars = (char*) xrealloc(xcsv_file.badchars,
+                                                strlen(xcsv_file.badchars) +
+                                                strlen(p) + 1);
         } else {
-          xcsv_file.badchars = (char *) xcalloc(strlen(p) + 1, 1);
-        }
-
-        strcat(xcsv_file.badchars, p);
-
-        xfree(p);
-
-    } else
-
-      if (ISSTOKEN(sbuff, "RECORD_DELIMITER")) {
-        sp = csv_stringtrim(&sbuff[17], "\"", 1);
-        cp = xcsv_get_char_from_constant_table(sp);
-        if (cp) {
-          xcsv_file.record_delimiter = xstrdup(cp);
-          xfree(sp);
-        } else {
-          xcsv_file.record_delimiter = sp;
-        }
-
-        p = csv_stringtrim(xcsv_file.record_delimiter, " ", 0);
-
-        /* record delimiters are always bad characters */
-        if (xcsv_file.badchars) {
-          xcsv_file.badchars = (char *) xrealloc(xcsv_file.badchars,
-                                                 strlen(xcsv_file.badchars) +
-                                                 strlen(p) + 1);
-        } else {
-          xcsv_file.badchars = (char *) xcalloc(strlen(p) + 1, 1);
+          xcsv_file.badchars = (char*) xcalloc(strlen(p) + 1, 1);
         }
 
         strcat(xcsv_file.badchars, p);
@@ -330,140 +303,129 @@ xcsv_parse_style_line(char *sbuff)
 
       } else
 
-        if (ISSTOKEN(sbuff, "FORMAT_TYPE")) {
-          const char *p;
-          for (p = &sbuff[11]; *p && isspace(*p); p++) {
-            ;
+        if (ISSTOKEN(sbuff, "RECORD_DELIMITER")) {
+          sp = csv_stringtrim(&sbuff[17], "\"", 1);
+          cp = xcsv_get_char_from_constant_table(sp);
+          if (cp) {
+            xcsv_file.record_delimiter = xstrdup(cp);
+            xfree(sp);
+          } else {
+            xcsv_file.record_delimiter = sp;
           }
-          if (ISSTOKEN(p, "INTERNAL")) {
-            xcsv_file.type = ff_type_internal;
+
+          p = csv_stringtrim(xcsv_file.record_delimiter, " ", 0);
+
+          /* record delimiters are always bad characters */
+          if (xcsv_file.badchars) {
+            xcsv_file.badchars = (char*) xrealloc(xcsv_file.badchars,
+                                                  strlen(xcsv_file.badchars) +
+                                                  strlen(p) + 1);
+          } else {
+            xcsv_file.badchars = (char*) xcalloc(strlen(p) + 1, 1);
           }
-          /* this is almost inconcievable... */
-          if (ISSTOKEN(p, "SERIAL")) {
-            xcsv_file.type = ff_type_serial;
-          }
+
+          strcat(xcsv_file.badchars, p);
+
+          xfree(p);
+
         } else
 
-          if (ISSTOKEN(sbuff, "DESCRIPTION")) {
-            xcsv_file.description = csv_stringtrim(&sbuff[11],"", 0);
+          if (ISSTOKEN(sbuff, "FORMAT_TYPE")) {
+            const char* p;
+            for (p = &sbuff[11]; *p && isspace(*p); p++) {
+              ;
+            }
+            if (ISSTOKEN(p, "INTERNAL")) {
+              xcsv_file.type = ff_type_internal;
+            }
+            /* this is almost inconcievable... */
+            if (ISSTOKEN(p, "SERIAL")) {
+              xcsv_file.type = ff_type_serial;
+            }
           } else
 
-            if (ISSTOKEN(sbuff, "EXTENSION")) {
-              xcsv_file.extension = csv_stringtrim(&sbuff[10],"", 0);
+            if (ISSTOKEN(sbuff, "DESCRIPTION")) {
+              xcsv_file.description = csv_stringtrim(&sbuff[11],"", 0);
             } else
 
-              if (ISSTOKEN(sbuff, "SHORTLEN")) {
-                if (xcsv_file.mkshort_handle) {
-                  setshort_length(xcsv_file.mkshort_handle, atoi(&sbuff[9]));
-                }
+              if (ISSTOKEN(sbuff, "EXTENSION")) {
+                xcsv_file.extension = csv_stringtrim(&sbuff[10],"", 0);
               } else
 
-                if (ISSTOKEN(sbuff, "SHORTWHITE")) {
+                if (ISSTOKEN(sbuff, "SHORTLEN")) {
                   if (xcsv_file.mkshort_handle) {
-                    setshort_whitespace_ok(xcsv_file.mkshort_handle, atoi(&sbuff[12]));
+                    setshort_length(xcsv_file.mkshort_handle, atoi(&sbuff[9]));
                   }
                 } else
 
-                  if (ISSTOKEN(sbuff, "BADCHARS")) {
-                    sp = csv_stringtrim(&sbuff[9], "\"", 1);
-                    cp = xcsv_get_char_from_constant_table(sp);
-
-                    if (cp) {
-                      p = xstrdup(cp);
-                      xfree(sp);
-                    } else {
-                      p = sp;
+                  if (ISSTOKEN(sbuff, "SHORTWHITE")) {
+                    if (xcsv_file.mkshort_handle) {
+                      setshort_whitespace_ok(xcsv_file.mkshort_handle, atoi(&sbuff[12]));
                     }
-
-                    if (xcsv_file.badchars) {
-                      xcsv_file.badchars = (char *) xrealloc(xcsv_file.badchars,
-                                                             strlen(xcsv_file.badchars) +
-                                                             strlen(p) + 1);
-                    } else {
-                      xcsv_file.badchars = (char *) xcalloc(strlen(p) + 1, 1);
-                    }
-
-                    strcat(xcsv_file.badchars, p);
-
-                    xfree(p);
-
                   } else
 
-                    if (ISSTOKEN(sbuff, "PROLOGUE")) {
-                      xcsv_prologue_add(xstrdup(&sbuff[9]));
+                    if (ISSTOKEN(sbuff, "BADCHARS")) {
+                      sp = csv_stringtrim(&sbuff[9], "\"", 1);
+                      cp = xcsv_get_char_from_constant_table(sp);
+
+                      if (cp) {
+                        p = xstrdup(cp);
+                        xfree(sp);
+                      } else {
+                        p = sp;
+                      }
+
+                      if (xcsv_file.badchars) {
+                        xcsv_file.badchars = (char*) xrealloc(xcsv_file.badchars,
+                                                              strlen(xcsv_file.badchars) +
+                                                              strlen(p) + 1);
+                      } else {
+                        xcsv_file.badchars = (char*) xcalloc(strlen(p) + 1, 1);
+                      }
+
+                      strcat(xcsv_file.badchars, p);
+
+                      xfree(p);
+
                     } else
 
-                      if (ISSTOKEN(sbuff, "EPILOGUE")) {
-                        xcsv_epilogue_add(xstrdup(&sbuff[9]));
+                      if (ISSTOKEN(sbuff, "PROLOGUE")) {
+                        xcsv_prologue_add(xstrdup(&sbuff[9]));
                       } else
 
-                        if (ISSTOKEN(sbuff, "ENCODING")) {
-                          p = csv_stringtrim(&sbuff[8], "\"", 1);
-                          cet_convert_init(p, 1);
-                          xfree(p);
+                        if (ISSTOKEN(sbuff, "EPILOGUE")) {
+                          xcsv_epilogue_add(xstrdup(&sbuff[9]));
                         } else
 
-                          if (ISSTOKEN(sbuff, "DATUM")) {
-                            p = csv_stringtrim(&sbuff[5], "\"", 1);
-                            xcsv_file.gps_datum = GPS_Lookup_Datum_Index(p);
-                            is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", p);
+                          if (ISSTOKEN(sbuff, "ENCODING")) {
+                            p = csv_stringtrim(&sbuff[8], "\"", 1);
+                            cet_convert_init(p, 1);
                             xfree(p);
                           } else
 
-                            if (ISSTOKEN(sbuff, "DATATYPE")) {
-                              p = csv_stringtrim(&sbuff[8], "\"", 1);
-                              if (case_ignore_strcmp(p, "TRACK") == 0) {
-                                xcsv_file.datatype = trkdata;
-                              } else if (case_ignore_strcmp(p, "ROUTE") == 0) {
-                                xcsv_file.datatype = rtedata;
-                              } else if (case_ignore_strcmp(p, "WAYPOINT") == 0) {
-                                xcsv_file.datatype = wptdata;
-                              } else {
-                                fatal(MYNAME ": Unknown data type \"%s\"!\n", p);
-                              }
+                            if (ISSTOKEN(sbuff, "DATUM")) {
+                              p = csv_stringtrim(&sbuff[5], "\"", 1);
+                              xcsv_file.gps_datum = GPS_Lookup_Datum_Index(p);
+                              is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", p);
                               xfree(p);
-
                             } else
 
-                              if (ISSTOKEN(sbuff, "IFIELD")) {
-                                key = val = pfc = NULL;
-
-                                s = csv_lineparse(&sbuff[6], ",", "", linecount);
-
-                                i = 0;
-                                while (s) {
-                                  switch (i) {
-                                  case 0:
-                                    /* key */
-                                    key = csv_stringtrim(s, "\"", 1);
-                                    break;
-                                  case 1:
-                                    /* default value */
-                                    val = csv_stringtrim(s, "\"", 1);
-                                    break;
-                                  case 2:
-                                    /* printf conversion */
-                                    pfc = csv_stringtrim(s, "\"", 1);
-                                    break;
-                                  default:
-                                    break;
-                                  }
-                                  i++;
-
-                                  s = csv_lineparse(NULL, ",", "", linecount);
+                              if (ISSTOKEN(sbuff, "DATATYPE")) {
+                                p = csv_stringtrim(&sbuff[8], "\"", 1);
+                                if (case_ignore_strcmp(p, "TRACK") == 0) {
+                                  xcsv_file.datatype = trkdata;
+                                } else if (case_ignore_strcmp(p, "ROUTE") == 0) {
+                                  xcsv_file.datatype = rtedata;
+                                } else if (case_ignore_strcmp(p, "WAYPOINT") == 0) {
+                                  xcsv_file.datatype = wptdata;
+                                } else {
+                                  fatal(MYNAME ": Unknown data type \"%s\"!\n", p);
                                 }
-
-                                xcsv_ifield_add(key, val, pfc);
+                                xfree(p);
 
                               } else
 
-                                /*
-                                 * as OFIELDs are implemented as an after-thought, I'll
-                                 * leave this as it's own parsing for now.  We could
-                                 * change the world on ifield vs ofield format later..
-                                 */
-                                if (ISSTOKEN(sbuff, "OFIELD")) {
-                                  int options = 0;
+                                if (ISSTOKEN(sbuff, "IFIELD")) {
                                   key = val = pfc = NULL;
 
                                   s = csv_lineparse(&sbuff[6], ",", "", linecount);
@@ -483,26 +445,64 @@ xcsv_parse_style_line(char *sbuff)
                                       /* printf conversion */
                                       pfc = csv_stringtrim(s, "\"", 1);
                                       break;
-                                    case 3:
-                                      /* Any additional options. */
-                                      if (strstr(s, "no_delim_before")) {
-                                        options |= OPTIONS_NODELIM;
-                                      }
-                                      if (strstr(s, "absolute")) {
-                                        options |= OPTIONS_ABSOLUTE;
-                                      }
-                                      if (strstr(s, "optional")) {
-                                        options |= OPTIONS_OPTIONAL;
-                                      }
                                     default:
                                       break;
                                     }
                                     i++;
+
                                     s = csv_lineparse(NULL, ",", "", linecount);
                                   }
 
-                                  xcsv_ofield_add(key, val, pfc, options);
-                                }
+                                  xcsv_ifield_add(key, val, pfc);
+
+                                } else
+
+                                  /*
+                                   * as OFIELDs are implemented as an after-thought, I'll
+                                   * leave this as it's own parsing for now.  We could
+                                   * change the world on ifield vs ofield format later..
+                                   */
+                                  if (ISSTOKEN(sbuff, "OFIELD")) {
+                                    int options = 0;
+                                    key = val = pfc = NULL;
+
+                                    s = csv_lineparse(&sbuff[6], ",", "", linecount);
+
+                                    i = 0;
+                                    while (s) {
+                                      switch (i) {
+                                      case 0:
+                                        /* key */
+                                        key = csv_stringtrim(s, "\"", 1);
+                                        break;
+                                      case 1:
+                                        /* default value */
+                                        val = csv_stringtrim(s, "\"", 1);
+                                        break;
+                                      case 2:
+                                        /* printf conversion */
+                                        pfc = csv_stringtrim(s, "\"", 1);
+                                        break;
+                                      case 3:
+                                        /* Any additional options. */
+                                        if (strstr(s, "no_delim_before")) {
+                                          options |= OPTIONS_NODELIM;
+                                        }
+                                        if (strstr(s, "absolute")) {
+                                          options |= OPTIONS_ABSOLUTE;
+                                        }
+                                        if (strstr(s, "optional")) {
+                                          options |= OPTIONS_OPTIONAL;
+                                        }
+                                      default:
+                                        break;
+                                      }
+                                      i++;
+                                      s = csv_lineparse(NULL, ",", "", linecount);
+                                    }
+
+                                    xcsv_ofield_add(key, val, pfc, options);
+                                  }
   }
 }
 
@@ -513,10 +513,10 @@ xcsv_parse_style_line(char *sbuff)
  * that "ignore to end of line" comments work right.
  */
 static void
-xcsv_parse_style_buff(const char *sbuff)
+xcsv_parse_style_buff(const char* sbuff)
 {
   char ibuf[256];
-  char *ibufp;
+  char* ibufp;
   size_t i;
 
   while (*sbuff) {
@@ -534,10 +534,10 @@ xcsv_parse_style_buff(const char *sbuff)
 }
 
 static void
-xcsv_read_style(const char *fname)
+xcsv_read_style(const char* fname)
 {
-  char *sbuff;
-  gbfile *fp;
+  char* sbuff;
+  gbfile* fp;
 
   xcsv_file_init();
 
@@ -565,7 +565,7 @@ xcsv_read_style(const char *fname)
  * the xcsv parser and make it ready for general use.
  */
 void
-xcsv_read_internal_style(const char *style_buf)
+xcsv_read_internal_style(const char* style_buf)
 {
   xcsv_file_init();
   xcsv_file.is_internal = 1;
@@ -583,7 +583,7 @@ xcsv_read_internal_style(const char *style_buf)
 }
 
 void
-xcsv_setup_internal_style(const char *style_buf)
+xcsv_setup_internal_style(const char* style_buf)
 {
   xcsv_file_init();
   xcsv_destroy_style();
@@ -593,7 +593,7 @@ xcsv_setup_internal_style(const char *style_buf)
 
 
 static void
-xcsv_rd_init(const char *fname)
+xcsv_rd_init(const char* fname)
 {
 
   /*
@@ -630,7 +630,7 @@ xcsv_rd_deinit(void)
 }
 
 static void
-xcsv_wr_init(const char *fname)
+xcsv_wr_init(const char* fname)
 {
   /* if we don't have an internal style defined, we need to
    * read it from a user-supplied style file, or die trying.
@@ -649,7 +649,7 @@ xcsv_wr_init(const char *fname)
   }
 
   xcsv_file.xcsvfp = gbfopen(fname, "w", MYNAME);
-  xcsv_file.fname = (char *)fname;
+  xcsv_file.fname = (char*)fname;
 
   /* set mkshort options from the command line */
   if (global_opts.synthesize_shortnames) {
@@ -678,7 +678,7 @@ xcsv_wr_init(const char *fname)
 }
 
 static void
-xcsv_wr_position_init(const char *fname)
+xcsv_wr_position_init(const char* fname)
 {
   xcsv_wr_init(fname);
 }
@@ -699,7 +699,7 @@ xcsv_wr_position_deinit(void)
 
 
 static void
-xcsv_wr_position(waypoint *wpt)
+xcsv_wr_position(waypoint* wpt)
 {
   /* Tweak incoming name if we don't have a fix */
   switch (wpt->fix) {
@@ -736,6 +736,6 @@ ff_vecs_t xcsv_vecs = {
 
 };
 #else
-void xcsv_read_internal_style(const char *style_buf) {}
-void xcsv_setup_internal_style(const char *style_buf) {}
+void xcsv_read_internal_style(const char* style_buf) {}
+void xcsv_setup_internal_style(const char* style_buf) {}
 #endif //CSVFMTS_ENABLED

@@ -53,13 +53,13 @@
 
 typedef unsigned long long guid_t;
 
-static inifile_t *fin;
-static gbfile *fout;
-static waypoint **waypt_table;
+static inifile_t* fin;
+static gbfile* fout;
+static waypoint** waypt_table;
 static short_handle hshort_wpt, hshort_rte;
 static int waypt_table_sz, waypt_table_ct;
 static int rte_index, rte_wpt_index;
-static char *opt_location;
+static char* opt_location;
 
 #define MYNAME "raymarine"
 
@@ -79,8 +79,8 @@ arglist_t raymarine_args[] = {
 /* Bitmaps */
 
 typedef struct {
-  const char *name;
-  const char *mps_name;
+  const char* name;
+  const char* mps_name;
 } raymarine_symbol_mapping_t;
 
 static raymarine_symbol_mapping_t raymarine_symbols[] = {
@@ -144,7 +144,7 @@ find_symbol_num(const QString& descr)
 {
   if (!descr.isNull()) {
 
-    raymarine_symbol_mapping_t *a;
+    raymarine_symbol_mapping_t* a;
 
     a = &raymarine_symbols[0];
 
@@ -166,7 +166,7 @@ find_symbol_num(const QString& descr)
 /* ============================================= */
 
 static void
-raymarine_rd_init(const char *fname)
+raymarine_rd_init(const char* fname)
 {
   fin = inifile_init(fname, MYNAME);
   if (fin->unicode) {
@@ -183,7 +183,7 @@ raymarine_rd_done(void)
 static void
 raymarine_read(void)
 {
-  waypoint *wpt;
+  waypoint* wpt;
   unsigned int ix;
   unsigned int rx;
 
@@ -191,7 +191,7 @@ raymarine_read(void)
 
   for (ix = 0; ix < 0x3FFF; ix++) {
     char sect[10];
-    char *str, *name, *lat, *lon;
+    char* str, *name, *lat, *lon;
 
     /* built section identifier */
     snprintf(sect, sizeof(sect), "Wp%d", ix);
@@ -234,8 +234,8 @@ raymarine_read(void)
 
   for (rx = 0; rx < 0x3FFF; rx++) {
     char sect[10];
-    char *name;
-    route_head *rte;
+    char* name;
+    route_head* rte;
     int wx;
 
     snprintf(sect, sizeof(sect), "Rt%d", rx);
@@ -249,8 +249,8 @@ raymarine_read(void)
 
     for (wx = 0; wx < 0x3FFF; wx++) {
       char buff[32];
-      char *str;
-      waypoint * wpt;
+      char* str;
+      waypoint* wpt;
 
       snprintf(buff, sizeof(buff), "Mk%d", wx);
       str = inifile_readstr(fin, sect, buff);
@@ -275,7 +275,7 @@ raymarine_read(void)
 /* make waypoint shortnames unique */
 
 static char
-same_points(const waypoint *A, const waypoint *B)
+same_points(const waypoint* A, const waypoint* B)
 {
   return ( /* !!! We are case-sensitive !!! */
            (strcmp(A->shortname, B->shortname) == 0) &&
@@ -284,13 +284,13 @@ same_points(const waypoint *A, const waypoint *B)
 }
 
 static void
-register_waypt(const waypoint *ref, const char is_rtept)
+register_waypt(const waypoint* ref, const char is_rtept)
 {
   int i;
-  waypoint *wpt = (waypoint *) ref;
+  waypoint* wpt = (waypoint*) ref;
 
   for (i = 0; i < waypt_table_ct; i++) {
-    waypoint *cmp = waypt_table[i];
+    waypoint* cmp = waypt_table[i];
 
     if (same_points(wpt, cmp)) {
       wpt->extra_data = cmp->extra_data;
@@ -307,38 +307,38 @@ register_waypt(const waypoint *ref, const char is_rtept)
     }
   }
 
-  wpt->extra_data = (void *)mkshort(hshort_wpt, wpt->shortname);
+  wpt->extra_data = (void*)mkshort(hshort_wpt, wpt->shortname);
 
-  waypt_table[waypt_table_ct] = (waypoint *)wpt;
+  waypt_table[waypt_table_ct] = (waypoint*)wpt;
   waypt_table_ct++;
 }
 
 static void
-enum_waypt_cb(const waypoint *wpt)
+enum_waypt_cb(const waypoint* wpt)
 {
-  register_waypt((waypoint *) wpt, 0);
+  register_waypt((waypoint*) wpt, 0);
 }
 
 static void
-enum_rtept_cb(const waypoint *wpt)
+enum_rtept_cb(const waypoint* wpt)
 {
-  register_waypt((waypoint *) wpt, 1);
+  register_waypt((waypoint*) wpt, 1);
 }
 
 static int
-qsort_cb(const void *a, const void *b)
+qsort_cb(const void* a, const void* b)
 {
-  const waypoint *wa = *(waypoint **)a;
-  const waypoint *wb = *(waypoint **)b;
+  const waypoint* wa = *(waypoint**)a;
+  const waypoint* wb = *(waypoint**)b;
 
   return strcmp(wa->shortname, wb->shortname);
 }
 
 static void
-write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char *location)
+write_waypoint(gbfile* fout, const waypoint* wpt, const int waypt_no, const char* location)
 {
-  const char *notes;
-  char *name;
+  const char* notes;
+  char* name;
   double time;
 
   notes = wpt->notes;
@@ -350,7 +350,7 @@ write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char
   }
   notes = csv_stringclean(notes, LINE_FEED);
   time = wpt->creation_time.isValid() ? TIMET_TO_EXCEL(wpt->GetCreationTime().toTime_t()) : TIMET_TO_EXCEL(gpsbabel_time);
-  name = (char *)wpt->extra_data;
+  name = (char*)wpt->extra_data;
 
   gbfprintf(fout, "[Wp%d]" LINE_FEED
             "Loc=%s" LINE_FEED
@@ -384,10 +384,10 @@ write_waypoint(gbfile *fout, const waypoint *wpt, const int waypt_no, const char
 }
 
 static void
-write_route_head_cb(const route_head *rte)
+write_route_head_cb(const route_head* rte)
 {
   char buff[32];
-  char *name;
+  char* name;
 
   name = rte->rte_name;
   if ((name == NULL) || (*name == '\0')) {
@@ -408,9 +408,9 @@ write_route_head_cb(const route_head *rte)
 }
 
 static void
-write_route_wpt_cb(const waypoint *wpt)
+write_route_wpt_cb(const waypoint* wpt)
 {
-  static const char *items[] = {
+  static const char* items[] = {
     "Cog",
     "Eta",
     "Length",
@@ -423,8 +423,8 @@ write_route_wpt_cb(const waypoint *wpt)
     "PredictedTws"
   };
 
-  gbfprintf(fout, "Mk%d=%s" LINE_FEED, rte_wpt_index, (char *)wpt->extra_data);
-  for (unsigned i = 0; i < sizeof(items) / sizeof(char *); i++) {
+  gbfprintf(fout, "Mk%d=%s" LINE_FEED, rte_wpt_index, (char*)wpt->extra_data);
+  for (unsigned i = 0; i < sizeof(items) / sizeof(char*); i++) {
     gbfprintf(fout, "%s%d=%.15f" LINE_FEED, items[i], rte_wpt_index, 0.0);
   }
 
@@ -433,7 +433,7 @@ write_route_wpt_cb(const waypoint *wpt)
 }
 
 static void
-enum_route_hdr_cb(const route_head *rte)
+enum_route_hdr_cb(const route_head* rte)
 {
   is_fatal(rte->rte_waypt_ct > 50,
            MYNAME ": Routes with more than 50 points are not supported by Waymarine!");
@@ -457,7 +457,7 @@ raymarine_new_short_handle(void)
 }
 
 static void
-raymarine_wr_init(const char *fname)
+raymarine_wr_init(const char* fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
 
@@ -478,7 +478,7 @@ static void
 raymarine_write(void)
 {
   int i;
-  waypoint *wpt;
+  waypoint* wpt;
 
   waypt_table_sz = 0;
   waypt_table_ct = 0;
@@ -496,7 +496,7 @@ raymarine_write(void)
 
   /* write out waypoint summary */
   for (i = 0; i < waypt_table_ct; i++) {
-    waypoint *wpt = waypt_table[i];
+    waypoint* wpt = waypt_table[i];
     write_waypoint(fout, wpt, i, opt_location);
   }
 

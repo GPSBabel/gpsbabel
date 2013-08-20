@@ -1547,8 +1547,8 @@ static void file_read(void)
 
         // Tobias Verbree reports that an M-12ee is like a 245.
         if (memcmp(&buf[i], "HOLUXM1200", 10) == 0) {
-           dbg(2, "Detected Holux HOLUXM1200 !\n");
-           holux245_init();
+          dbg(2, "Detected Holux HOLUXM1200 !\n");
+          holux245_init();
         }
 
         // skip the 4 spaces that may occur on every device

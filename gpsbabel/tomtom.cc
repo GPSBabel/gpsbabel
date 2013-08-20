@@ -42,8 +42,8 @@
 
 #define MYNAME "TomTom"
 
-static gbfile *file_in;
-static gbfile *file_out;
+static gbfile* file_in;
+static gbfile* file_out;
 
 static
 arglist_t tomtom_args[] = {
@@ -51,7 +51,7 @@ arglist_t tomtom_args[] = {
 };
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -63,7 +63,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen_le(fname, "wb", MYNAME);
 }
@@ -80,15 +80,15 @@ wr_deinit(void)
 /*
  *  Decode a type 8 compressed record
  */
-char *
-decode_8(int sz, const unsigned char *inbuf)
+char*
+decode_8(int sz, const unsigned char* inbuf)
 {
   static const char encoding_8[] = "X. SaerionstldchumgpbkfzvACBMPG-";
   static const int encoding_8_high[8] = {0x2,0x3,0x4,0x5,0x6,0x7,0xe,0xf};
 
   // Maximally sized for laziness.
-  char *rval = (char *) xmalloc(sz * 3 + 1);
-  char *out = rval;
+  char* rval = (char*) xmalloc(sz * 3 + 1);
+  char* out = rval;
 
   int i;
   for (i = 0; i < sz;) {
@@ -121,7 +121,7 @@ decode_8(int sz, const unsigned char *inbuf)
 }
 
 void
-decode_latlon(double *lat, double *lon)
+decode_latlon(double* lat, double* lon)
 {
   unsigned char latbuf[3];
   unsigned char lonbuf[3];
@@ -151,8 +151,8 @@ data_read(void)
   long recsize;
   long x;
   long y;
-  char *desc;
-  waypoint *wpt_tmp;
+  char* desc;
+  waypoint* wpt_tmp;
   while (!gbfeof(file_in)) {
     rectype = read_char(file_in);
     if (rectype == EOF) {
@@ -188,7 +188,7 @@ data_read(void)
       check_recsize(recsize);
       x = read_long(file_in);
       y = read_long(file_in);
-      desc = (char *)xmalloc(recsize - 13);
+      desc = (char*)xmalloc(recsize - 13);
       gbfread(desc, recsize-13, 1, file_in);
 
       wpt_tmp = waypt_new();
@@ -239,17 +239,17 @@ data_read(void)
 
 
 struct hdr {
-  waypoint *wpt;
+  waypoint* wpt;
 };
 
-static int compare_lon(const void *a, const void *b);
+static int compare_lon(const void* a, const void* b);
 
 static
 int
-compare_lat(const void *a, const void *b)
+compare_lat(const void* a, const void* b)
 {
-  const struct hdr *wa = (const struct hdr*) a;
-  const struct hdr *wb = (const struct hdr*) b;
+  const struct hdr* wa = (const struct hdr*) a;
+  const struct hdr* wb = (const struct hdr*) b;
 
   double difference = wa->wpt->latitude - wb->wpt->latitude;
   if (difference < 0) {
@@ -266,10 +266,10 @@ compare_lat(const void *a, const void *b)
 
 static
 int
-compare_lon(const void *a, const void *b)
+compare_lon(const void* a, const void* b)
 {
-  const struct hdr *wa = (const struct hdr*)a;
-  const struct hdr *wb = (const struct hdr*)b;
+  const struct hdr* wa = (const struct hdr*)a;
+  const struct hdr* wb = (const struct hdr*)b;
 
   double difference = wa->wpt->longitude - wb->wpt->longitude;
   if (difference < 0) {
@@ -287,7 +287,7 @@ compare_lon(const void *a, const void *b)
 #define write_long(f,v) gbfputint32((v),f)
 
 static void
-write_float_as_long(gbfile *file, double value)
+write_float_as_long(gbfile* file, double value)
 {
   long tmp = (value + 0.500000000001);
   write_long(file, tmp);
@@ -297,19 +297,19 @@ write_float_as_long(gbfile *file, double value)
 #define write_string(f,s) gbfputcstr((s),f)
 
 struct blockheader {
-  struct hdr *start;
+  struct hdr* start;
   long count;
   long size;
   double minlat;
   double maxlat;
   double minlon;
   double maxlon;
-  struct blockheader *ch1;
-  struct blockheader *ch2;
+  struct blockheader* ch1;
+  struct blockheader* ch2;
 };
 
 static void
-write_blocks(gbfile *f, struct blockheader *blocks)
+write_blocks(gbfile* f, struct blockheader* blocks)
 {
   int i;
   write_char(f, 1);
@@ -350,12 +350,12 @@ write_blocks(gbfile *f, struct blockheader *blocks)
   }
 }
 
-static struct blockheader *
-compute_blocks(struct hdr *start, int count,
+static struct blockheader*
+compute_blocks(struct hdr* start, int count,
                double minlon, double maxlon, double minlat, double maxlat) {
-  struct blockheader *newblock;
+  struct blockheader* newblock;
 
-  newblock = (struct blockheader *)xcalloc(sizeof(*newblock), 1);
+  newblock = (struct blockheader*)xcalloc(sizeof(*newblock), 1);
   newblock->start = start;
   newblock->count = count;
   newblock->minlon = minlon;
@@ -365,7 +365,7 @@ compute_blocks(struct hdr *start, int count,
   newblock->size = 4 * 5 + 1;   /* hdr is 5 longs, 1 char */
   if (count < 20) {
     int i;
-    waypoint *wpt = NULL;
+    waypoint* wpt = NULL;
 
     for (i = 0; i < count; i++) {
       newblock->size += 4 * 3 + 1;
@@ -404,7 +404,7 @@ compute_blocks(struct hdr *start, int count,
 }
 
 static void
-free_blocks(struct blockheader *block)
+free_blocks(struct blockheader* block)
 {
   if (block->ch1) {
     free_blocks(block->ch1);
@@ -419,21 +419,21 @@ static void
 data_write(void)
 {
   int ct = waypt_count();
-  struct hdr *htable, *bh;
-  queue *elem, *tmp;
+  struct hdr* htable, *bh;
+  queue* elem, *tmp;
   extern queue waypt_head;
-  waypoint *waypointp;
+  waypoint* waypointp;
   double minlon = 200;
   double maxlon = -200;
   double minlat = 200;
   double maxlat = -200;
-  struct blockheader *blocks = NULL;
+  struct blockheader* blocks = NULL;
 
   htable = (struct hdr*) xmalloc(ct * sizeof(*htable));
   bh = htable;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (waypoint *) elem;
+    waypointp = (waypoint*) elem;
     bh->wpt = waypointp;
     if (waypointp->longitude > maxlon) {
       maxlon = waypointp->longitude;

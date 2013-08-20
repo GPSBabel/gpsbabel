@@ -214,7 +214,7 @@ garmin_fs_xml_fprint(const waypoint* waypt,
     writer->writeStartElement("extensions");
     writer->writeStartElement("gpxx:WaypointExtension");
     writer->writeNamespace("http://www.garmin.com/xmlschemas/GpxExtensions/v3",
-                          "gpxx");
+                           "gpxx");
     if WAYPT_HAS(waypt, proximity) {
       writer->writeTextElement("gpxx:Proximity", QString::number(waypt->proximity, 'f', 6));
     }
@@ -339,7 +339,7 @@ garmin_fs_xml_convert(const int base_tag, int tag, const char* cdatastr, waypoin
     if (! garmin_fs_merge_category(cdatastr, waypt)) {
       // There's nothing a user can really do about this (well, they could
       // create a gpsbabel.ini that mapped them to garmin category numbers
-      // but that feature is so obscure and used in so few outputs that 
+      // but that feature is so obscure and used in so few outputs that
       // there's no reason to alarm the user.  Just silently disregard
       // category names that don't map cleanly.
       // warning(MYNAME ": Unable to convert category \"%s\"!\n", cdatastr);

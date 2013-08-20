@@ -32,10 +32,10 @@
 #define MAXTPGSTRINGSIZE	256
 #define MAXTPGOUTPUTPINS	65535
 
-static gbfile *tpg_file_in;
-static gbfile *tpg_file_out;
+static gbfile* tpg_file_in;
+static gbfile* tpg_file_out;
 static short_handle mkshort_handle;
-static char *tpg_datum_opt;
+static char* tpg_datum_opt;
 static int tpg_datum_idx;
 
 static unsigned int waypt_out_count;
@@ -47,7 +47,7 @@ arglist_t tpg_args[] = {
 };
 
 static int
-valid_tpg_header(char * header, int len)
+valid_tpg_header(char* header, int len)
 {
   unsigned char header_bytes[] = { 0xFF, 0xFF, 0x01, 0x00, 0x0D,
                                    0x00, 0x43, 0x54, 0x6F, 0x70,
@@ -71,7 +71,7 @@ tpg_common_init(void)
 }
 
 static void
-tpg_rd_init(const char *fname)
+tpg_rd_init(const char* fname)
 {
   tpg_common_init();
   tpg_file_in = gbfopen_le(fname, "rb", MYNAME);
@@ -84,7 +84,7 @@ tpg_rd_deinit(void)
 }
 
 static void
-tpg_wr_init(const char *fname)
+tpg_wr_init(const char* fname)
 {
   tpg_common_init();
   tpg_file_out = gbfopen_le(fname, "wb", MYNAME);
@@ -103,7 +103,7 @@ static void
 tpg_read(void)
 {
   char buff[MAXTPGSTRINGSIZE + 1];
-  waypoint *wpt_tmp;
+  waypoint* wpt_tmp;
   double lat, lon, elev;
   double amt;
   short int pointcount;
@@ -166,15 +166,15 @@ tpg_read(void)
 }
 
 static void
-tpg_waypt_pr(const waypoint *wpt)
+tpg_waypt_pr(const waypoint* wpt)
 {
   double lon, lat;
   double amt;
   short int elev;
   char tbuf[64];
   char c,ocount;
-  char *shortname;
-  char *description;
+  char* shortname;
+  char* description;
   int i;
 
   /* these unknown 4 are probably point properties (color, icon, etc..) */

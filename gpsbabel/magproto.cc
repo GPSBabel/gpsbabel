@@ -1187,7 +1187,7 @@ mag_find_token_from_descr(const QString& icon)
   }
 
   for (i = icon_mapping; i->token; i++) {
-     if (icon.compare(i->icon, Qt::CaseInsensitive) == 0) {
+    if (icon.compare(i->icon, Qt::CaseInsensitive) == 0) {
       return i->token;
     }
   }

@@ -134,7 +134,7 @@ static arglist_t delbin_args[] = {
     ARG_NOMINMAX
   },
   {"hint_at_end", &opt_hint_at_end, "If true, geocache hint at end of text", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"gcsym", &opt_gcsym, "If set to 0, prefer user-provided symbols over Groundspeaks ones for geocaches", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, (char *) "1" },
+  {"gcsym", &opt_gcsym, "If set to 0, prefer user-provided symbols over Groundspeaks ones for geocaches", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, (char*) "1" },
   ARG_TERMINATOR
 };
 
@@ -2787,7 +2787,7 @@ libusb_os_deinit(void)
 static unsigned
 libusb_os_packet_read(void* buf)
 {
-  int n = usb_interrupt_read(usb_handle, endpoint_in, (char *) buf, delbin_os_packet_size, 2000);
+  int n = usb_interrupt_read(usb_handle, endpoint_in, (char*) buf, delbin_os_packet_size, 2000);
   if (n < 0) {
     fatal(MYNAME ": %s\n", usb_strerror());
   }

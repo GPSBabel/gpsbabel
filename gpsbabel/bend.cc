@@ -138,7 +138,7 @@ process_route(const route_head* route_orig, route_head* route_dest)
 
       double lat_orig_next = RAD(wpt_orig_next->latitude);
       double long_orig_next = RAD(wpt_orig_next->longitude);
-	  waypoint* wpt_dest_next = NULL;
+      waypoint* wpt_dest_next = NULL;
 
       if (is_small_angle(lat_orig, long_orig, lat_orig_prev,
                          long_orig_prev, lat_orig_next, long_orig_next)) {
@@ -152,7 +152,7 @@ process_route(const route_head* route_orig, route_head* route_dest)
         }
 
         wpt_dest_next = create_wpt_dest(wpt_orig,
-                                  lat_orig, long_orig, lat_orig_next, long_orig_next);
+                                        lat_orig, long_orig, lat_orig_next, long_orig_next);
         if (wpt_dest_next != NULL) {
           route_add_wpt(route_dest, wpt_dest_next);
 

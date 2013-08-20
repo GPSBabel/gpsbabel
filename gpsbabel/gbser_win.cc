@@ -259,7 +259,7 @@ unsigned gbser__read_buffer(void* handle, void** buf, unsigned* len)
 {
   gbser_handle* h = gbser__get_handle(handle);
   unsigned count = *len;
-  unsigned char* cp = (unsigned char *) *buf;
+  unsigned char* cp = (unsigned char*) *buf;
   if (count > h->inbuf_used) {
     count = h->inbuf_used;
   }
@@ -357,7 +357,7 @@ int gbser_write(void* handle, const void* buf, unsigned len)
 {
   gbser_handle* h = gbser__get_handle(handle);
   DWORD nwritten;
-  const char* bp = (const char *) buf;
+  const char* bp = (const char*) buf;
   /* Not sure we need to spin here - but this'll work even if we don't */
   while (len > 0) {
     if (!WriteFile(h->comport, bp, len, &nwritten, NULL)) {
@@ -426,7 +426,7 @@ int gbser_read_line(void* handle, void* buf,
                     unsigned len, unsigned ms,
                     int eol, int discard)
 {
-  char* bp = (char *) buf;
+  char* bp = (char*) buf;
   unsigned pos = 0;
   hp_time tv;
   get_time(&tv);

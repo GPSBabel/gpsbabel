@@ -23,15 +23,15 @@
 
 #define MYNAME "PocketFMS waypoint text file format"
 
-static gbfile *file_in, *file_out;
+static gbfile* file_in, *file_out;
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen_le(fname, "r", MYNAME);
 }
 
-double wppos_to_dec(char *value)
+double wppos_to_dec(char* value)
 {
   if (strstr(value, "\xB0") == NULL) {
     return atof(value);
@@ -55,11 +55,11 @@ double wppos_to_dec(char *value)
 static void
 data_read(void)
 {
-  char *buff;
+  char* buff;
   int linecount = 0;
   while ((buff = gbfgetstr(file_in))) {
-    char *s;
-    waypoint *wpt;
+    char* s;
+    waypoint* wpt;
     rtrim(buff);
     if (strlen(buff) == 0) {
       break;
@@ -94,23 +94,23 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen_le(fname, "w", MYNAME);
 }
 
 static void
-enigma_waypt_disp(const waypoint *wpt)
+enigma_waypt_disp(const waypoint* wpt)
 {
-  char *t;
+  char* t;
   if (wpt->shortname) {
     // The output might have a space or control character.
     int i, l = strlen(wpt->shortname);
     t = (char*) xmalloc(l + 1);
-    char *d = t;
+    char* d = t;
     for (i = 0; i < l; i++) {
       char s = wpt->shortname[i];
-      if(isgraph(s)) {
+      if (isgraph(s)) {
         *d++ = s;
       }
     }

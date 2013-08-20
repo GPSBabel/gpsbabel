@@ -38,18 +38,18 @@ arglist_t reverse_route_args[] = {
 static void reverse_route_wpt(const waypoint* waypointp)
 {
 
-    /* Cast away const-ness */
-    waypoint* wpp = (waypoint *) waypointp;
+  /* Cast away const-ness */
+  waypoint* wpp = (waypoint*) waypointp;
 
-    int curr_new_trkseg;
+  int curr_new_trkseg;
 
-    curr_new_trkseg = waypointp->wpt_flags.new_trkseg;
-    wpp->wpt_flags.new_trkseg = prev_new_trkseg;
-    prev_new_trkseg = curr_new_trkseg;
+  curr_new_trkseg = waypointp->wpt_flags.new_trkseg;
+  wpp->wpt_flags.new_trkseg = prev_new_trkseg;
+  prev_new_trkseg = curr_new_trkseg;
 }
 
 void
-reverse_route_head(const route_head *rte)
+reverse_route_head(const route_head* rte)
 {
   route_reverse(rte);
   prev_new_trkseg = 1;
@@ -63,7 +63,7 @@ reverse_route_process(void)
 }
 
 void
-reverse_route_init(const char *args)
+reverse_route_init(const char* args)
 {
   switch (global_opts.objective) {
   case rtedata:

@@ -39,28 +39,28 @@ typedef struct {
 } ozi_fsdata;
 
 
-static gbfile *file_in, *file_out;
+static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;
-static route_head *trk_head;
-static route_head *rte_head;
+static route_head* trk_head;
+static route_head* rte_head;
 
 static int track_out_count;
 static int route_out_count;
 static int route_wpt_count;
 static int new_track;
 
-static char *snlenopt = NULL;
-static char *snwhiteopt = NULL;
-static char *snupperopt = NULL;
-static char *snuniqueopt = NULL;
-static char *wptfgcolor = NULL;
-static char *wptbgcolor = NULL;
-static char *pack_opt = NULL;
+static char* snlenopt = NULL;
+static char* snwhiteopt = NULL;
+static char* snupperopt = NULL;
+static char* snuniqueopt = NULL;
+static char* wptfgcolor = NULL;
+static char* wptbgcolor = NULL;
+static char* pack_opt = NULL;
 static int datum;
-static char *proximityarg = NULL;
+static char* proximityarg = NULL;
 static double proximity;
-static char *altunit_opt;
-static char *proxunit_opt;
+static char* altunit_opt;
+static char* proxunit_opt;
 static char altunit;
 static char proxunit;
 static double alt_scale;
@@ -113,28 +113,28 @@ arglist_t ozi_args[] = {
 
 static gpsdata_type ozi_objective;
 
-static char *ozi_ofname = NULL;
+static char* ozi_ofname = NULL;
 
 static void
-ozi_copy_fsdata(ozi_fsdata **dest, ozi_fsdata *src)
+ozi_copy_fsdata(ozi_fsdata** dest, ozi_fsdata* src)
 {
   /* No strings to mess with.  Straight forward copy. */
-  *dest = (ozi_fsdata *)xmalloc(sizeof(*src));
-  **dest = *src;
+  *dest = (ozi_fsdata*)xmalloc(sizeof(*src));
+  ** dest = *src;
   (*dest)->fs.next = NULL;
 }
 
 static void
-ozi_free_fsdata(void *fsdata)
+ozi_free_fsdata(void* fsdata)
 {
   xfree(fsdata);
 }
 
 static
-ozi_fsdata *
+ozi_fsdata*
 ozi_alloc_fsdata(void)
 {
-  ozi_fsdata *fsdata = (ozi_fsdata*) xcalloc(sizeof(*fsdata), 1);
+  ozi_fsdata* fsdata = (ozi_fsdata*) xcalloc(sizeof(*fsdata), 1);
   fsdata->fs.type = FS_OZI;
   fsdata->fs.copy = (fs_copy) ozi_copy_fsdata;
   fsdata->fs.destroy = ozi_free_fsdata;
@@ -148,7 +148,7 @@ ozi_alloc_fsdata(void)
 }
 
 void
-ozi_get_time_str(const waypoint *waypointp, char *buff, gbsize_t buffsz)
+ozi_get_time_str(const waypoint* waypointp, char* buff, gbsize_t buffsz)
 {
   if (waypointp->creation_time.isValid()) {
     double time = (waypt_time(waypointp) / SECONDS_PER_DAY) + DAYS_SINCE_1990;
@@ -159,18 +159,18 @@ ozi_get_time_str(const waypoint *waypointp, char *buff, gbsize_t buffsz)
 }
 
 void
-ozi_set_time_str(const char *str, waypoint *waypointp)
+ozi_set_time_str(const char* str, waypoint* waypointp)
 {
   double ozi_time = atof(str);
 
-  if(ozi_time > DAYS_SINCE_1990) {
+  if (ozi_time > DAYS_SINCE_1990) {
     waypointp->SetCreationTime((ozi_time - DAYS_SINCE_1990) * SECONDS_PER_DAY,
                                lround(1000.0 * (ozi_time - (int) ozi_time)));
   }
 }
 
 static void
-ozi_convert_datum(waypoint *wpt)
+ozi_convert_datum(waypoint* wpt)
 {
   if (datum != DATUM_WGS84) {
     double lat, lon, alt;
@@ -182,10 +182,10 @@ ozi_convert_datum(waypoint *wpt)
 }
 
 static void
-ozi_openfile(char *fname)
+ozi_openfile(char* fname)
 {
-  char *c, *cx, *tmpname;
-  const char *ozi_extensions[] = {0, "plt", "wpt", "rte"};
+  char* c, *cx, *tmpname;
+  const char* ozi_extensions[] = {0, "plt", "wpt", "rte"};
   char buff[32];
 
   /* if we're doing multi-track output, sequence the filenames like:
@@ -232,9 +232,9 @@ ozi_openfile(char *fname)
 }
 
 static void
-ozi_track_hdr(const route_head * rte)
+ozi_track_hdr(const route_head* rte)
 {
-  static const char *ozi_trk_header =
+  static const char* ozi_trk_header =
     "OziExplorer Track Point File Version 2.1\r\n"
     "WGS 84\r\n"
     "Altitude is in %s\r\n"
@@ -254,7 +254,7 @@ ozi_track_hdr(const route_head * rte)
 }
 
 static void
-ozi_track_disp(const waypoint * waypointp)
+ozi_track_disp(const waypoint* waypointp)
 {
   double alt;
   char ozi_time[16];
@@ -275,7 +275,7 @@ ozi_track_disp(const waypoint * waypointp)
 }
 
 static void
-ozi_track_tlr(const route_head * rte)
+ozi_track_tlr(const route_head* rte)
 {
 }
 
@@ -286,9 +286,9 @@ ozi_track_pr()
 }
 
 static void
-ozi_route_hdr(const route_head * rte)
+ozi_route_hdr(const route_head* rte)
 {
-  static const char *ozi_route_header =
+  static const char* ozi_route_header =
     "OziExplorer Route File Version 1.0\r\n"
     "WGS 84\r\n"
     "Reserved 1\r\n"
@@ -322,7 +322,7 @@ ozi_route_hdr(const route_head * rte)
 }
 
 static void
-ozi_route_disp(const waypoint * waypointp)
+ozi_route_disp(const waypoint* waypointp)
 {
   double alt;
   char ozi_time[16];
@@ -370,7 +370,7 @@ ozi_route_disp(const waypoint * waypointp)
 }
 
 static void
-ozi_route_tlr(const route_head * rte)
+ozi_route_tlr(const route_head* rte)
 {
 }
 
@@ -418,7 +418,7 @@ ozi_init_units(const int direction)	/* 0 = in; 1 = out */
 }
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen(fname, "rb", MYNAME);
 
@@ -435,7 +435,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
 
   /* At this point, we have no idea whether we'll be writing waypoint,
@@ -443,7 +443,7 @@ wr_init(const char *fname)
    * we're actually ready to write.
    */
 
-  ozi_ofname = (char *)fname;
+  ozi_ofname = (char*)fname;
 
   mkshort_handle = mkshort_new_handle();
 
@@ -487,7 +487,7 @@ wr_deinit(void)
 }
 
 static void
-ozi_parse_waypt(int field, char *str, waypoint * wpt_tmp, ozi_fsdata *fsdata)
+ozi_parse_waypt(int field, char* str, waypoint* wpt_tmp, ozi_fsdata* fsdata)
 {
   double alt;
 
@@ -582,7 +582,7 @@ ozi_parse_waypt(int field, char *str, waypoint * wpt_tmp, ozi_fsdata *fsdata)
 }
 
 static void
-ozi_parse_track(int field, char *str, waypoint * wpt_tmp, char *trk_name)
+ozi_parse_track(int field, char* str, waypoint* wpt_tmp, char* trk_name)
 {
   double alt;
 
@@ -628,7 +628,7 @@ ozi_parse_track(int field, char *str, waypoint * wpt_tmp, char *trk_name)
 }
 
 static void
-ozi_parse_routepoint(int field, char *str, waypoint * wpt_tmp)
+ozi_parse_routepoint(int field, char* str, waypoint* wpt_tmp)
 {
   if (*str == '\0') {
     return;
@@ -688,7 +688,7 @@ ozi_parse_routepoint(int field, char *str, waypoint * wpt_tmp)
 }
 
 static void
-ozi_parse_routeheader(int field, char *str, waypoint * wpt_tmp)
+ozi_parse_routeheader(int field, char* str, waypoint* wpt_tmp)
 {
 
   switch (field) {
@@ -720,10 +720,10 @@ ozi_parse_routeheader(int field, char *str, waypoint * wpt_tmp)
 static void
 data_read(void)
 {
-  char *buff;
-  char *s = NULL;
-  char *trk_name = NULL;
-  waypoint *wpt_tmp;
+  char* buff;
+  char* s = NULL;
+  char* trk_name = NULL;
+  waypoint* wpt_tmp;
   int i;
   int linecount = 0;
 
@@ -754,7 +754,7 @@ data_read(void)
       }
     } else if (linecount == 3) {
       if (case_ignore_strncmp(buff, "Altitude is in ", 15) == 0) {
-        char *unit = &buff[15];
+        char* unit = &buff[15];
         if (case_ignore_strncmp(unit, "Feet", 4) == 0) {
           altunit = 'f';
           alt_scale = FEET_TO_METERS(1.0);
@@ -779,7 +779,7 @@ data_read(void)
 
     if ((strlen(buff)) && (strstr(buff, ",") != NULL)) {
       bool ozi_fsdata_used = false;
-      ozi_fsdata *fsdata = ozi_alloc_fsdata();
+      ozi_fsdata* fsdata = ozi_alloc_fsdata();
       wpt_tmp = waypt_new();
 
       /* data delimited by commas, possibly enclosed in quotes.  */
@@ -817,8 +817,8 @@ data_read(void)
       switch (ozi_objective) {
       case trkdata:
         if (linecount > 6) {/* skipping over file header */
-            ozi_convert_datum(wpt_tmp);
-            track_add_wpt(trk_head, wpt_tmp);
+          ozi_convert_datum(wpt_tmp);
+          track_add_wpt(trk_head, wpt_tmp);
         } else {
           waypt_free(wpt_tmp);
         }
@@ -840,7 +840,7 @@ data_read(void)
         if (linecount > 4) {  /* skipping over file header */
           ozi_fsdata_used = true;
           fs_chain_add(&(wpt_tmp->fs),
-                       (format_specific_data *) fsdata);
+                       (format_specific_data*) fsdata);
           ozi_convert_datum(wpt_tmp);
           waypt_add(wpt_tmp);
         } else {
@@ -853,7 +853,7 @@ data_read(void)
       }
 
       if (!ozi_fsdata_used) {
-         fs_chain_destroy((format_specific_data *) fsdata);
+        fs_chain_destroy((format_specific_data*) fsdata);
       }
 
     } else {
@@ -864,18 +864,18 @@ data_read(void)
 }
 
 static void
-ozi_waypt_pr(const waypoint * wpt)
+ozi_waypt_pr(const waypoint* wpt)
 {
   static int index = 0;
   double alt;
   char ozi_time[16];
-  char *description;
-  char *shortname;
+  char* description;
+  char* shortname;
   int faked_fsdata = 0;
-  ozi_fsdata *fs = NULL;
+  ozi_fsdata* fs = NULL;
   int icon = 0;
 
-  fs = (ozi_fsdata *) fs_chain_find(wpt->fs, FS_OZI);
+  fs = (ozi_fsdata*) fs_chain_find(wpt->fs, FS_OZI);
 
   if (!fs) {
     fs = ozi_alloc_fsdata();
@@ -945,7 +945,7 @@ ozi_waypt_pr(const waypoint * wpt)
 static void
 data_write(void)
 {
-  static const char *ozi_wpt_header =
+  static const char* ozi_wpt_header =
     "OziExplorer Waypoint File Version 1.1\r\n"
     "WGS 84\r\n"
     "Reserved 2\r\n"

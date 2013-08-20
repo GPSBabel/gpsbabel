@@ -46,7 +46,7 @@ static int waypt_uid;
 static int route_uid;
 static int track_uid;
 
-static waypoint **waypt_table;
+static waypoint** waypt_table;
 static int waypt_table_sz, waypt_table_ct;
 
 static char* opt_title;
@@ -108,7 +108,7 @@ lowranceusr4_readstr(char* buf, const int maxlen, gbfile* file, int bytes_per_ch
 }
 
 static void
-lowranceusr4_writestr(char *buf, gbfile *file, unsigned int bytes_per_char)
+lowranceusr4_writestr(char* buf, gbfile* file, unsigned int bytes_per_char)
 {
   unsigned int len = 0;
 
@@ -214,7 +214,7 @@ static time_t
 lowranceusr4_get_timestamp(int jd_number, time_t t)
 {
   int a, b, c, d, e, m;
-  struct tm *ptm, ntm;
+  struct tm* ptm, ntm;
   time_t out;
 
   /* get UTC time from time_t */
@@ -249,24 +249,24 @@ lowranceusr4_jd_from_timestamp(time_t t)
 
 
 static void
-lowranceusr4_copy_fsdata(lowranceusr4_fsdata **dest, lowranceusr4_fsdata *src)
+lowranceusr4_copy_fsdata(lowranceusr4_fsdata** dest, lowranceusr4_fsdata* src)
 {
-  *dest = (lowranceusr4_fsdata *)xmalloc(sizeof(*src));
-  **dest = *src;
+  *dest = (lowranceusr4_fsdata*)xmalloc(sizeof(*src));
+  ** dest = *src;
   (*dest)->fs.next = NULL;
 }
 
 static void
-lowranceusr4_free_fsdata(void *fsdata)
+lowranceusr4_free_fsdata(void* fsdata)
 {
   xfree(fsdata);
 }
 
 static
-lowranceusr4_fsdata *
+lowranceusr4_fsdata*
 lowranceusr4_alloc_fsdata(void)
 {
-  lowranceusr4_fsdata *fsdata = (lowranceusr4_fsdata*) xcalloc(sizeof(*fsdata), 1);
+  lowranceusr4_fsdata* fsdata = (lowranceusr4_fsdata*) xcalloc(sizeof(*fsdata), 1);
   fsdata->fs.type = FS_LOWRANCEUSR4;
   fsdata->fs.copy = (fs_copy) lowranceusr4_copy_fsdata;
   fsdata->fs.destroy = lowranceusr4_free_fsdata;
@@ -284,7 +284,7 @@ lowranceusr4_alloc_fsdata(void)
 
 /* make waypoint shortnames unique */
 static char
-same_points(const waypoint *A, const waypoint *B)
+same_points(const waypoint* A, const waypoint* B)
 {
   return ( /* !!! We are case-sensitive !!! */
            (strcmp(A->shortname, B->shortname) == 0) &&
@@ -293,13 +293,13 @@ same_points(const waypoint *A, const waypoint *B)
 }
 
 static void
-register_waypt(const waypoint *ref)
+register_waypt(const waypoint* ref)
 {
   int i;
-  waypoint *wpt = (waypoint *) ref;
+  waypoint* wpt = (waypoint*) ref;
 
   for (i = 0; i < waypt_table_ct; i++) {
-    waypoint *cmp = waypt_table[i];
+    waypoint* cmp = waypt_table[i];
 
     if (same_points(wpt, cmp)) {
       return;
@@ -320,18 +320,18 @@ register_waypt(const waypoint *ref)
            wpt->shortname, wpt->description, waypt_table_ct);
   }
 
-  waypt_table[waypt_table_ct] = (waypoint *)wpt;
+  waypt_table[waypt_table_ct] = (waypoint*)wpt;
   waypt_table_ct++;
 }
 
 /* end borrowed from raymarine.c */
 
 static int
-lowranceusr4_find_waypt_index(const waypoint *wpt)
+lowranceusr4_find_waypt_index(const waypoint* wpt)
 {
   int i;
   for (i = 0; i < waypt_table_ct; ++i) {
-    if (same_points(wpt, (const waypoint *)waypt_table[i])) {
+    if (same_points(wpt, (const waypoint*)waypt_table[i])) {
       return i;
     }
   }
@@ -358,8 +358,8 @@ lowranceusr4_parse_waypoints(void)
     waypoint* wpt_tmp;
 
     wpt_tmp = waypt_new();
-    lowranceusr4_fsdata *fsdata = lowranceusr4_alloc_fsdata();
-    fs_chain_add(&(wpt_tmp->fs), (format_specific_data *) fsdata);
+    lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
+    fs_chain_add(&(wpt_tmp->fs), (format_specific_data*) fsdata);
 
     /* read/parse waypoint, with fields as follows (taken mostly
        from http://lowranceusrv4togpxconverter.blogspot.com/):
@@ -442,7 +442,7 @@ lowranceusr4_parse_waypoints(void)
     // or set it.
     if (create_date > 2440587) {
       wpt_tmp->SetCreationTime(lowranceusr4_get_timestamp(create_date,
-                                                          create_time));
+                               create_time));
     }
 
     /* Unused byte */
@@ -471,18 +471,17 @@ lowranceusr4_parse_waypoints(void)
 static waypoint*
 lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
 {
-  queue *elem, *tmp;
-  waypoint *waypointp;
-  lowranceusr4_fsdata *fs = NULL;
+  queue* elem, *tmp;
+  waypoint* waypointp;
+  lowranceusr4_fsdata* fs = NULL;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (waypoint *) elem;
-    fs = (lowranceusr4_fsdata *) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
+    waypointp = (waypoint*) elem;
+    fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
 
     if (fs && fs->uid_unit == uid_unit &&
         fs->uid_seq_low == uid_seq_low &&
-        fs->uid_seq_high == uid_seq_high)
-    {
+        fs->uid_seq_high == uid_seq_high) {
       return waypointp;
     }
   }
@@ -514,8 +513,8 @@ lowranceusr4_parse_routes(void)
     route_add_head(rte_head);
     rte_head->rte_num = i+1;
 
-    lowranceusr4_fsdata *fsdata = lowranceusr4_alloc_fsdata();
-    fs_chain_add(&(rte_head->fs), (format_specific_data *) fsdata);
+    lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
+    fs_chain_add(&(rte_head->fs), (format_specific_data*) fsdata);
 
     /* read/parse route, with fields as follows (taken mostly
        from http://lowranceusrv4togpxconverter.blogspot.com/):
@@ -591,8 +590,8 @@ lowranceusr4_parse_trails(void)
     trk_head->rte_num = ++trk_num;
     track_add_head(trk_head);
 
-    lowranceusr4_fsdata *fsdata = lowranceusr4_alloc_fsdata();
-    fs_chain_add(&(trk_head->fs), (format_specific_data *) fsdata);
+    lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
+    fs_chain_add(&(trk_head->fs), (format_specific_data*) fsdata);
 
     /* read/parse trail, with fields as follows (taken mostly from
        http://lowranceusrv4togpxconverter.blogspot.com/):
@@ -849,7 +848,7 @@ lowranceusr4_write_waypoints(void)
       printf(MYNAME " writing out waypt %d (%s - %s)\n",
              i, waypt_table[i]->shortname, waypt_table[i]->description);
     }
-    lowranceusr4_waypt_disp((const waypoint *)waypt_table[i]);
+    lowranceusr4_waypt_disp((const waypoint*)waypt_table[i]);
   }
 }
 
@@ -1010,7 +1009,7 @@ data_write(void)
   short int MajorVersion, MinorVersion;
   int DataStreamVersion;
   time_t now;
-  struct tm *now_tm;
+  struct tm* now_tm;
   char buf[256];
 
   setshort_length(mkshort_handle, 15);

@@ -271,8 +271,7 @@ process_gpsfile(uint8_t data[], route_head** track)
     if (latitude >= 100) {
       manual_point = 1;
       latitude -= 100;
-    }
-    else if (latitude <= -100) {
+    } else if (latitude <= -100) {
       manual_point = 1;
       latitude += 100;
     }
@@ -297,8 +296,7 @@ process_gpsfile(uint8_t data[], route_head** track)
 
     if (manual_point) {
       waypt_add(wpt);
-    }
-    else {
+    } else {
       track_add_wpt(*track, wpt);
     }
   }

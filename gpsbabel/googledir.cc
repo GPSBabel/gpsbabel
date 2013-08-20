@@ -107,7 +107,7 @@ goog_poly_e(const char* args, const QXmlStreamAttributes* unused)
   char* str = encoded_points;
 
   route_head* routehead = route_head_alloc();
-  if (strcmp (args, "overview_polyline") == 0) {
+  if (strcmp(args, "overview_polyline") == 0) {
     routehead->rte_name = (char*) xstrdup("overview");
     routehead->rte_desc = (char*) xstrdup("Overview");
   } else {

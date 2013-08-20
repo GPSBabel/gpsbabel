@@ -45,7 +45,7 @@
 #ifdef DEBUG_MEM
 #define DEBUG_FILENAME "/tmp/gpsbabel.debug"
 
-static FILE *debug_mem_file = NULL;
+static FILE* debug_mem_file = NULL;
 void
 debug_mem_open()
 {
@@ -53,7 +53,7 @@ debug_mem_open()
 }
 
 void
-debug_mem_output(char *format, ...)
+debug_mem_output(char* format, ...)
 {
   va_list args;
   va_start(args, format);
@@ -74,14 +74,14 @@ debug_mem_close()
 }
 #endif
 
-void *
+void*
 #ifdef DEBUG_MEM
 XMALLOC(size_t size, DEBUG_PARAMS)
 #else
 xmalloc(size_t size)
 #endif
 {
-  void *obj = malloc(size);
+  void* obj = malloc(size);
 
 #ifdef DEBUG_MEM
   debug_mem_output("malloc, %x, %d, %s, %d\n",
@@ -94,14 +94,14 @@ xmalloc(size_t size)
   return obj;
 }
 
-void *
+void*
 #ifdef DEBUG_MEM
 XCALLOC(size_t nmemb, size_t size, DEBUG_PARAMS)
 #else
 xcalloc(size_t nmemb, size_t size)
 #endif
 {
-  void *obj = calloc(nmemb, size);
+  void* obj = calloc(nmemb, size);
 #ifdef DEBUG_MEM
   debug_mem_output("calloc, %x, %d, %d, %s, %d\n",
                    obj, nmemb, size, file, line);
@@ -116,26 +116,26 @@ xcalloc(size_t nmemb, size_t size)
 
 void
 #ifdef DEBUG_MEM
-XFREE(const void *mem, DEBUG_PARAMS)
+XFREE(const void* mem, DEBUG_PARAMS)
 #else
-xfree(const void *mem)
+xfree(const void* mem)
 #endif
 {
-  free((void *) mem);
+  free((void*) mem);
 #ifdef DEBUG_MEM
   debug_mem_output("free, %x, %s, %d\n",
                    mem, file, line);
 #endif
 }
 
-char *
+char*
 #ifdef DEBUG_MEM
-XSTRDUP(const char *s, DEBUG_PARAMS)
+XSTRDUP(const char* s, DEBUG_PARAMS)
 #else
-xstrdup(const char *s)
+xstrdup(const char* s)
 #endif
 {
-  char *o = s ? strdup(s) : strdup("");
+  char* o = s ? strdup(s) : strdup("");
 #ifdef DEBUG_MEM
   debug_mem_output("strdup, %x, %x, %s, %d\n",
                    o, s, file, line);
@@ -151,23 +151,23 @@ xstrdup(const char *s)
 /*
  * Duplicate at most sz bytes in str.
  */
-char *
+char*
 #ifdef DEBUG_MEM
-XSTRNDUP(const char *str, size_t sz, DEBUG_PARAMS)
+XSTRNDUP(const char* str, size_t sz, DEBUG_PARAMS)
 #else
-xstrndup(const char *str, size_t sz)
+xstrndup(const char* str, size_t sz)
 #endif
 {
   size_t newlen = 0;
-  char *cin = (char *)str;
-  char *newstr;
+  char* cin = (char*)str;
+  char* newstr;
 
   while ((newlen < sz) && (*cin != '\0')) {
     newlen++;
     cin++;
   }
 
-  newstr = (char *) xmalloc(newlen + 1);
+  newstr = (char*) xmalloc(newlen + 1);
   memcpy(newstr, str, newlen);
   newstr[newlen] = 0;
 
@@ -178,23 +178,23 @@ xstrndup(const char *str, size_t sz)
  * Lazily trim whitespace (though not from allocated version)
  * while copying.
  */
-char *
+char*
 #ifdef DEBUG_MEM
-XSTRNDUPT(const char *str, size_t sz, DEBUG_PARAMS)
+XSTRNDUPT(const char* str, size_t sz, DEBUG_PARAMS)
 #else
-xstrndupt(const char *str, size_t sz)
+xstrndupt(const char* str, size_t sz)
 #endif
 {
   size_t newlen = 0;
-  char *cin = (char *)str;
-  char *newstr;
+  char* cin = (char*)str;
+  char* newstr;
 
   while ((newlen < sz) && (*cin != '\0')) {
     newlen++;
     cin++;
   }
 
-  newstr = (char *) xmalloc(newlen + 1);
+  newstr = (char*) xmalloc(newlen + 1);
   memcpy(newstr, str, newlen);
   newstr[newlen] = 0;
   rtrim(newstr);
@@ -202,14 +202,14 @@ xstrndupt(const char *str, size_t sz)
   return newstr;
 }
 
-void *
+void*
 #ifdef DEBUG_MEM
-XREALLOC(void *p, size_t s, DEBUG_PARAMS)
+XREALLOC(void* p, size_t s, DEBUG_PARAMS)
 #else
-xrealloc(void *p, size_t s)
+xrealloc(void* p, size_t s)
 #endif
 {
-  char *o = (char *) realloc(p,s);
+  char* o = (char*) realloc(p,s);
 #ifdef DEBUG_MEM
   if (p != NULL) {
     debug_mem_output("realloc, %x, %x, %x, %s, %d\n", o, p, s, file, line);
@@ -228,11 +228,11 @@ xrealloc(void *p, size_t s)
 /*
 * For an allocated string, realloc it and append 's'
 */
-char *
+char*
 #ifdef DEBUG_MEM
-XSTRAPPEND(char *src, const char *newd, DEBUG_PARAMS)
+XSTRAPPEND(char* src, const char* newd, DEBUG_PARAMS)
 #else
-xstrappend(char *src, const char *newd)
+xstrappend(char* src, const char* newd)
 #endif
 {
   size_t newsz;
@@ -245,7 +245,7 @@ xstrappend(char *src, const char *newd)
   }
 
   newsz = strlen(src) + strlen(newd) + 1;
-  src = (char *) xxrealloc(src, newsz, file, line);
+  src = (char*) xxrealloc(src, newsz, file, line);
   strcat(src, newd);
 
   return src;
@@ -254,10 +254,10 @@ xstrappend(char *src, const char *newd)
 /*
  * Wrapper for open that honours - for stdin, stdout, unifies error text.
  */
-FILE *
-xfopen(const char *fname, const char *type, const char *errtxt)
+FILE*
+xfopen(const char* fname, const char* type, const char* errtxt)
 {
-  FILE *f;
+  FILE* f;
   int am_writing = strchr(type, 'w') != NULL;
 
   if (fname == NULL) {
@@ -288,7 +288,7 @@ xfopen(const char *fname, const char *type, const char *errtxt)
  */
 
 int
-xasprintf(char **strp, const char *fmt, ...)
+xasprintf(char** strp, const char* fmt, ...)
 {
   va_list args;
   int res;
@@ -301,7 +301,7 @@ xasprintf(char **strp, const char *fmt, ...)
 }
 
 int
-xvasprintf(char **strp, const char *fmt, va_list ap)
+xvasprintf(char** strp, const char* fmt, va_list ap)
 {
   /* From http://perfec.to/vsnprintf/pasprintf.c */
   /* size of first buffer malloc; start small to exercise grow routines */
@@ -310,9 +310,9 @@ xvasprintf(char **strp, const char *fmt, va_list ap)
 #else
 # define	FIRSTSIZE	1
 #endif
-  char *buf = NULL;
+  char* buf = NULL;
   int bufsize;
-  char *newbuf;
+  char* newbuf;
   size_t nextsize = 0;
   int outsize;
   va_list args;
@@ -320,12 +320,12 @@ xvasprintf(char **strp, const char *fmt, va_list ap)
   bufsize = 0;
   for (;;) {
     if (bufsize == 0) {
-      if ((buf = (char *) xmalloc(FIRSTSIZE)) == NULL) {
+      if ((buf = (char*) xmalloc(FIRSTSIZE)) == NULL) {
         *strp = NULL;
         return -1;
       }
       bufsize = FIRSTSIZE;
-    } else if ((newbuf = (char *) xrealloc(buf, nextsize)) != NULL) {
+    } else if ((newbuf = (char*) xrealloc(buf, nextsize)) != NULL) {
       buf = newbuf;
       bufsize = nextsize;
     } else {
@@ -379,7 +379,7 @@ xvasprintf(char **strp, const char *fmt, va_list ap)
   if (bufsize > outsize + 1) {
     const unsigned ptrsz = sizeof(buf);
     if (((bufsize + ptrsz + 1) / ptrsz) > ((outsize + ptrsz + 1) / ptrsz)) {
-      buf = (char *) xrealloc(buf, outsize + 1);
+      buf = (char*) xrealloc(buf, outsize + 1);
     }
 
   }
@@ -388,9 +388,9 @@ xvasprintf(char **strp, const char *fmt, va_list ap)
 }
 
 void
-rtrim(char *s)
+rtrim(char* s)
 {
-  char *t = s;
+  char* t = s;
 
   if (!s || !*s) {
     return;
@@ -410,10 +410,10 @@ rtrim(char *s)
 /*
  * Like trim, but trims whitespace from both beginning and end.
  */
-char *
-lrtrim(char *buff)
+char*
+lrtrim(char* buff)
 {
-  char *c;
+  char* c;
 
   if (buff[0] == '\0') {
     return buff;
@@ -430,8 +430,8 @@ lrtrim(char *buff)
   }
 
   if (c != buff) {
-    char *src = c;
-    char *dst = buff;
+    char* src = c;
+    char* dst = buff;
 
     while (*src) {
       *dst++ = *src++;
@@ -447,7 +447,7 @@ lrtrim(char *buff)
  */
 
 int
-case_ignore_strcmp(const char *s1, const char *s2)
+case_ignore_strcmp(const char* s1, const char* s2)
 {
   for (; toupper(*s1) == toupper(*s2); ++ s1, ++s2) {
     if (*s1 == 0) {
@@ -459,7 +459,7 @@ case_ignore_strcmp(const char *s1, const char *s2)
 }
 
 int
-case_ignore_strncmp(const char *s1, const char *s2, int n)
+case_ignore_strncmp(const char* s1, const char* s2, int n)
 {
   int rv = 0;
 
@@ -484,12 +484,12 @@ case_ignore_strncmp(const char *s1, const char *s2, int n)
  */
 
 int
-str_match(const char *str, const char *match)
+str_match(const char* str, const char* match)
 {
-  char *m, *s;
+  char* m, *s;
 
-  s = (char *)str;
-  m = (char *)match;
+  s = (char*)str;
+  m = (char*)match;
 
   while (*m || *s) {
     switch (*m) {
@@ -515,7 +515,7 @@ str_match(const char *str, const char *match)
       }
 
       do {
-        char *mx, *sx;
+        char* mx, *sx;
 
         while (*s && (*s != *m)) {
           s++;
@@ -588,9 +588,9 @@ str_match(const char *str, const char *match)
  */
 
 int
-case_ignore_str_match(const char *str, const char *match)
+case_ignore_str_match(const char* str, const char* match)
 {
-  char *s1, *s2;
+  char* s1, *s2;
   int res;
 
   s1 = strupper(xstrdup(str));
@@ -602,22 +602,22 @@ case_ignore_str_match(const char *str, const char *match)
   return res;
 }
 
-char *
-strenquote(const char *str, const char quot_char)
+char*
+strenquote(const char* str, const char quot_char)
 {
   int len;
-  const char *cin;
-  char *cout;
-  char *tmp;
+  const char* cin;
+  char* cout;
+  char* tmp;
 
   if (str == NULL) {
     cin = "";
   } else {
-    cin = (char *)str;
+    cin = (char*)str;
   }
 
   len = strlen(cin);
-  cout = tmp = (char *) xmalloc((len * 2) + 3);
+  cout = tmp = (char*) xmalloc((len * 2) + 3);
 
   *cout++ = quot_char;
   while (*cin) {
@@ -655,7 +655,7 @@ printposn(const double c, int is_lat)
 }
 
 void
-is_fatal(const int condition, const char *fmt, ...)
+is_fatal(const int condition, const char* fmt, ...)
 {
   va_list args;
   char buff[128];
@@ -675,39 +675,39 @@ is_fatal(const int condition, const char *fmt, ...)
  * Read 4 bytes in big-endian.   Return as "int" in native endianness.
  */
 signed int
-be_read32(const void *p)
+be_read32(const void* p)
 {
-  unsigned char *i = (unsigned char *) p;
+  unsigned char* i = (unsigned char*) p;
   return i[0] << 24 | i[1] << 16  | i[2] << 8 | i[3];
 }
 
 signed int
-be_read16(const void *p)
+be_read16(const void* p)
 {
-  unsigned char *i = (unsigned char *) p;
+  unsigned char* i = (unsigned char*) p;
   return i[0] << 8 | i[1];
 }
 
 unsigned int
-be_readu16(const void *p)
+be_readu16(const void* p)
 {
-  const unsigned char *i = (unsigned char *) p;
+  const unsigned char* i = (unsigned char*) p;
   return i[0] << 8 | i[1];
 }
 
 void
-be_write16(void *addr, const unsigned value)
+be_write16(void* addr, const unsigned value)
 {
-  unsigned char *p = (unsigned char *) addr;
+  unsigned char* p = (unsigned char*) addr;
   p[0] = value >> 8;
   p[1] = value;
 
 }
 
 void
-be_write32(void *pp, const unsigned i)
+be_write32(void* pp, const unsigned i)
 {
-  char *p = (char *)pp;
+  char* p = (char*)pp;
 
   p[0] = (i >> 24) & 0xff;
   p[1] = (i >> 16) & 0xff;
@@ -716,30 +716,30 @@ be_write32(void *pp, const unsigned i)
 }
 
 signed int
-le_read16(const void *addr)
+le_read16(const void* addr)
 {
-  const unsigned char *p = (const unsigned char *) addr;
+  const unsigned char* p = (const unsigned char*) addr;
   return p[0] | (p[1] << 8);
 }
 
 unsigned int
-le_readu16(const void *addr)
+le_readu16(const void* addr)
 {
-  const unsigned char *p = (const unsigned char *) addr;
+  const unsigned char* p = (const unsigned char*) addr;
   return p[0] | (p[1] << 8);
 }
 
 signed int
-le_read32(const void *addr)
+le_read32(const void* addr)
 {
-  const unsigned char *p = (const unsigned char *) addr;
+  const unsigned char* p = (const unsigned char*) addr;
   return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
 }
 
 unsigned int
-le_readu32(const void *addr)
+le_readu32(const void* addr)
 {
-  const unsigned char *p = (const unsigned char *) addr;
+  const unsigned char* p = (const unsigned char*) addr;
   return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
 }
 
@@ -748,10 +748,10 @@ le_readu32(const void *addr)
  *  in host endianness.
  */
 void
-le_read64(void *dest, const void *src)
+le_read64(void* dest, const void* src)
 {
-  char *cdest = (char *) dest;
-  const char *csrc = (const char *) src;
+  char* cdest = (char*) dest;
+  const char* csrc = (const char*) src;
 
   if (i_am_little_endian) {
     memcpy(dest, src, 8);
@@ -764,18 +764,18 @@ le_read64(void *dest, const void *src)
 }
 
 void
-le_write16(void *addr, const unsigned value)
+le_write16(void* addr, const unsigned value)
 {
-  unsigned char *p = (unsigned char *) addr;
+  unsigned char* p = (unsigned char*) addr;
   p[0] = value;
   p[1] = value >> 8;
 
 }
 
 void
-le_write32(void *addr, const unsigned value)
+le_write32(void* addr, const unsigned value)
 {
-  unsigned char *p = (unsigned char *) addr;
+  unsigned char* p = (unsigned char*) addr;
   p[0] = value;
   p[1] = value >> 8;
   p[2] = value >> 16;
@@ -807,7 +807,7 @@ si_round(double d)
 */
 
 time_t
-mkgmtime(struct tm *t)
+mkgmtime(struct tm* t)
 {
   short  month, year;
   time_t result;
@@ -844,7 +844,7 @@ mkgmtime(struct tm *t)
  *              which is evaluated by mktime
  */
 time_t
-mklocaltime(struct tm *t)
+mklocaltime(struct tm* t)
 {
   time_t result;
   struct tm check = *t;
@@ -881,13 +881,13 @@ current_time(void)
  * Return the (zero based) month number of the year or -1 for failure.
  */
 signed int
-month_lookup(const char *m)
+month_lookup(const char* m)
 {
-  static const char *months[] = {
+  static const char* months[] = {
     "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
     "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", NULL
   };
-  const char **mp;
+  const char** mp;
 
   for (mp = months; *mp; mp++) {
     if (0 == case_ignore_strcmp(*mp, m)) {
@@ -904,7 +904,7 @@ month_lookup(const char *m)
  * that interesting to us anyway.
  */
 #define EPOCH_TICKS 621355968000000000.0
-void dotnet_time_to_time_t(double dotnet, time_t *t, int *millisecs)
+void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs)
 {
   // TODO: replace this with better interface with normal return values
   // and called via a QDateTime.
@@ -924,8 +924,8 @@ void dotnet_time_to_time_t(double dotnet, time_t *t, int *millisecs)
  * a GPX file from geocaching.com.  Thus we sort of make all the other
  * formats do lookups based on these strings.
  */
-const char *
-get_cache_icon(const waypoint *waypointp)
+const char*
+get_cache_icon(const waypoint* waypointp)
 {
   if (!global_opts.smart_icons) {
     return NULL;
@@ -970,7 +970,7 @@ endian_read_double(const void* ptr, int read_le)
 {
   double ret;
   char r[8];
-  const void *p;
+  const void* p;
   int i;
 
   if (i_am_little_endian == read_le) {
@@ -985,7 +985,7 @@ endian_read_double(const void* ptr, int read_le)
 // Word order is different on arm, but not on arm-eabi.
 #if defined(__arm__) && !defined(__ARM_EABI__)
   memcpy(&ret, p + 4, 4);
-  memcpy(((void *)&ret) + 4, p, 4);
+  memcpy(((void*)&ret) + 4, p, 4);
 #else
   memcpy(&ret, p, 8);
 #endif
@@ -998,7 +998,7 @@ endian_read_float(const void* ptr, int read_le)
 {
   float ret;
   char r[4];
-  const void *p;
+  const void* p;
   int i;
 
   if (i_am_little_endian == read_le) {
@@ -1018,14 +1018,14 @@ void
 endian_write_double(void* ptr, double d, int write_le)
 {
   int i;
-  char *optr = (char *) ptr;
+  char* optr = (char*) ptr;
 // Word order is different on arm, but not on arm-eabi.
 #if defined(__arm__) && !defined(__ARM_EABI__)
   char r[8];
   memcpy(r + 4, &d, 4);
-  memcpy(r, ((void *)&d) + 4, 4);
+  memcpy(r, ((void*)&d) + 4, 4);
 #else
-  char *r = (char *)(void *)&d;
+  char* r = (char*)(void*)&d;
 #endif
 
 
@@ -1041,9 +1041,9 @@ endian_write_double(void* ptr, double d, int write_le)
 void
 endian_write_float(void* ptr, float f, int write_le)
 {
-  char *r = (char *)(void *)&f;
+  char* r = (char*)(void*)&f;
   int i;
-  char *optr = (char *) ptr;
+  char* optr = (char*) ptr;
 
   if (i_am_little_endian == write_le) {
     memcpy(ptr, &f, 4);
@@ -1055,49 +1055,49 @@ endian_write_float(void* ptr, float f, int write_le)
 }
 
 float
-le_read_float(const void *ptr)
+le_read_float(const void* ptr)
 {
   return endian_read_float(ptr, 1);
 }
 
 void
-le_write_float(void *ptr, float f)
+le_write_float(void* ptr, float f)
 {
   endian_write_float(ptr,f,1);
 }
 
 float
-be_read_float(void *ptr)
+be_read_float(void* ptr)
 {
   return endian_read_float(ptr, 0);
 }
 
 void
-be_write_float(void *ptr, float f)
+be_write_float(void* ptr, float f)
 {
   endian_write_float(ptr,f,0);
 }
 
 double
-le_read_double(const void *ptr)
+le_read_double(const void* ptr)
 {
   return endian_read_double(ptr,1);
 }
 
 void
-le_write_double(void *ptr, double d)
+le_write_double(void* ptr, double d)
 {
   endian_write_double(ptr,d,1);
 }
 
 double
-be_read_double(void *ptr)
+be_read_double(void* ptr)
 {
   return endian_read_double(ptr,0);
 }
 
 void
-be_write_double(void *ptr, double d)
+be_write_double(void* ptr, double d)
 {
   endian_write_double(ptr,d,0);
 }
@@ -1125,21 +1125,21 @@ double degrees2ddmm(double deg_val)
  * Returns an allocated copy if substitution was made, otherwise returns NULL.
  * Doesn't try to make an optimally sized dest buffer.
  */
-char *
-strsub(const char *s, const char *search, const char *replace)
+char*
+strsub(const char* s, const char* search, const char* replace)
 {
-  const char *p;
+  const char* p;
   int len = strlen(s);
   int slen = strlen(search);
   int rlen = strlen(replace);
-  char *d;
+  char* d;
 
   p = strstr(s, search);
   if (!slen || !p) {
     return NULL;
   }
 
-  d = (char *) xmalloc(len + rlen);
+  d = (char*) xmalloc(len + rlen);
 
   /* Copy first part */
   len = p - s;
@@ -1157,21 +1157,21 @@ strsub(const char *s, const char *search, const char *replace)
 /*
  *  As strsub, but do it globally.
  */
-char *
-gstrsub(const char *s, const char *search, const char *replace)
+char*
+gstrsub(const char* s, const char* search, const char* replace)
 {
   int ooffs = 0;
-  char *o, *c;
-  char *src = (char *)s;
+  char* o, *c;
+  char* src = (char*)s;
   int olen = strlen(src);
   int slen = strlen(search);
   int rlen = strlen(replace);
 
-  o = (char *) xmalloc(olen + 1);
+  o = (char*) xmalloc(olen + 1);
 
   while ((c = strstr(src, search))) {
     olen += (rlen - slen);
-    o = (char *) xrealloc(o, olen + 1);
+    o = (char*) xrealloc(o, olen + 1);
     memcpy(o + ooffs, src, c - src);
     ooffs += (c - src);
     src = c + slen;
@@ -1191,10 +1191,10 @@ gstrsub(const char *s, const char *search, const char *replace)
 /*
  * Like strstr, but starts from back of string.
  */
-const char *
-xstrrstr(const char *s1, const char *s2)
+const char*
+xstrrstr(const char* s1, const char* s2)
 {
-  const char *r = NULL, *next = NULL;
+  const char* r = NULL, *next = NULL;
 
   while (next = strstr(s1, s2), NULL != next) {
     r = next;
@@ -1206,10 +1206,10 @@ xstrrstr(const char *s1, const char *s2)
 /*
  *
  */
-char *
-strupper(char *src)
+char*
+strupper(char* src)
 {
-  char *c;
+  char* c;
 
   for (c = src; *c; c++) {
     *c = toupper(*c);
@@ -1220,10 +1220,10 @@ strupper(char *src)
 /*
  *
  */
-char *
-strlower(char *src)
+char*
+strlower(char* src)
 {
-  char *c;
+  char* c;
 
   for (c = src; *c; c++) {
     *c = tolower(*c);
@@ -1231,11 +1231,11 @@ strlower(char *src)
   return src;
 }
 
-char *
+char*
 rot13(const QString& s)
 {
-  char *result = xstrdup(s.toUtf8().data());
-  char *cur = result;
+  char* result = xstrdup(s.toUtf8().data());
+  char* cur = result;
   int flip = 1;
   while (cur && *cur) {
     if (flip) {
@@ -1259,19 +1259,19 @@ rot13(const QString& s)
  * a format usable for strftime and others
  */
 
-char *
-convert_human_date_format(const char *human_datef)
+char*
+convert_human_date_format(const char* human_datef)
 {
-  char *result, *cin, *cout;
+  char* result, *cin, *cout;
   char prev;
   int ylen;
 
-  result = (char *) xcalloc((2*strlen(human_datef)) + 1, 1);
+  result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
   cout = result;
   prev = '\0';
   ylen = 0;
 
-  for (cin = (char *)human_datef; *cin; cin++) {
+  for (cin = (char*)human_datef; *cin; cin++) {
     char okay = 1;
 
     if (toupper(*cin) != 'Y') {
@@ -1327,17 +1327,17 @@ convert_human_date_format(const char *human_datef)
  * a format usable for strftime and others
  */
 
-char *
-convert_human_time_format(const char *human_timef)
+char*
+convert_human_time_format(const char* human_timef)
 {
-  char *result, *cin, *cout;
+  char* result, *cin, *cout;
   char prev;
 
-  result = (char *) xcalloc((2*strlen(human_timef)) + 1, 1);
+  result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
   cout = result;
   prev = '\0';
 
-  for (cin = (char *)human_timef; *cin; cin++) {
+  for (cin = (char*)human_timef; *cin; cin++) {
     int okay = 1;
 
     if (isalpha(*cin)) {
@@ -1423,13 +1423,13 @@ convert_human_time_format(const char *human_timef)
  * sep = string between lat and lon (separator)
  * html = 1 for html output otherwise text
  */
-char *
-pretty_deg_format(double lat, double lon, char fmt, const char *sep, int html)
+char*
+pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html)
 {
   double  latmin, lonmin, latsec, lonsec;
   int     latint, lonint;
   char	latsig, lonsig;
-  char	*result;
+  char*	result;
   latsig = lat < 0 ? 'S':'N';
   lonsig = lon < 0 ? 'W':'E';
   latint = abs((int) lat);
@@ -1466,11 +1466,11 @@ pretty_deg_format(double lat, double lon, char fmt, const char *sep, int html)
  * </body> and </html>- stop processing altogether
  * <style> </style> - stop overriding styles for everything
  */
-char *
+char*
 strip_nastyhtml(const QString& in)
 {
-  char *returnstr, *sp;
-  char *lcstr, *lcp;
+  char* returnstr, *sp;
+  char* lcstr, *lcp;
 
   sp = returnstr = xstrdup(in.toUtf8().data());
   lcp = lcstr = strlower(xstrdup(in.toUtf8().data()));
@@ -1557,8 +1557,8 @@ strip_nastyhtml(const QString& in)
  *  pleasant for a human reader.   Yes, this falls down in all kinds of
  *  ways such as spaces within the tags, etc.
  */
-char *
-strip_html(const utf_string *in)
+char*
+strip_html(const utf_string* in)
 {
   char* outstring, *out;
   char* incopy, *instr;
@@ -1572,7 +1572,7 @@ strip_html(const utf_string *in)
   /*
    * We only shorten, so just dupe the input buf for space.
    */
-   outstring = out = xstrdup(CSTR(in->utfstring));
+  outstring = out = xstrdup(CSTR(in->utfstring));
 
   tag[0] = 0;
   while (*instr) {
@@ -1642,8 +1642,8 @@ strip_html(const utf_string *in)
 }
 
 typedef struct {
-  const char * text;
-  const char * entity;
+  const char* text;
+  const char* entity;
   int  not_html;
 } entity_types;
 
@@ -1689,13 +1689,13 @@ entity_types stdentities[] =  {
 };
 
 static
-char *
-entitize(const char * str, int is_html)
+char*
+entitize(const char* str, int is_html)
 {
   int elen, ecount, nsecount;
-  entity_types *ep;
-  const char * cp;
-  char * p, * tmp, * xstr;
+  entity_types* ep;
+  const char* cp;
+  char* p, * tmp, * xstr;
 
   int bytes = 0;
   int value = 0;
@@ -1728,7 +1728,7 @@ entitize(const char * str, int is_html)
 #endif
 
   /* enough space for the whole string plus entity replacements, if any */
-  tmp = (char *) xcalloc((strlen(str) + elen + 1), 1);
+  tmp = (char*) xcalloc((strlen(str) + elen + 1), 1);
   strcpy(tmp, str);
 
   /* no entity replacements */
@@ -1785,12 +1785,12 @@ entitize(const char * str, int is_html)
  * Public callers for the above to hide the absence of &apos from HTML
  */
 
-char * xml_entitize(const char * str)
+char* xml_entitize(const char* str)
 {
   return entitize(str, 0);
 }
 
-char * html_entitize(const char * str)
+char* html_entitize(const char* str)
 {
   return entitize(str, 1);
 }
@@ -1799,7 +1799,7 @@ char * html_entitize(const char * str)
  * xml_tag utilities
  */
 
-xml_tag *xml_next(xml_tag *root, xml_tag *cur)
+xml_tag* xml_next(xml_tag* root, xml_tag* cur)
 {
   if (cur->child) {
     cur = cur->child;
@@ -1817,25 +1817,25 @@ xml_tag *xml_next(xml_tag *root, xml_tag *cur)
   return cur;
 }
 
-xml_tag *xml_findnext(xml_tag *root, xml_tag *cur, const char *tagname)
+xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname)
 {
-  xml_tag *result = cur;
+  xml_tag* result = cur;
   do {
     result = xml_next(root, result);
   } while (result && case_ignore_strcmp(result->tagname, tagname));
   return result;
 }
 
-xml_tag *xml_findfirst(xml_tag *root, const char *tagname)
+xml_tag* xml_findfirst(xml_tag* root, const char* tagname)
 {
   return xml_findnext(root, root, tagname);
 }
 
-char *xml_attribute(xml_tag *tag, const char *attrname)
+char* xml_attribute(xml_tag* tag, const char* attrname)
 {
-  char *result = NULL;
+  char* result = NULL;
   if (tag->attributes) {
-    char **attr = tag->attributes;
+    char** attr = tag->attributes;
     while (attr && *attr) {
       if (0 == case_ignore_strcmp(*attr, attrname)) {
         result = attr[1];
@@ -1847,11 +1847,11 @@ char *xml_attribute(xml_tag *tag, const char *attrname)
   return result;
 }
 
-const char *get_filename(const char *fname)
+const char* get_filename(const char* fname)
 {
-  const char *res;
-  const char *cb;
-  const char *cs;
+  const char* res;
+  const char* cb;
+  const char* cs;
 
   cb = strrchr(fname, '\\');
   cs = strrchr(fname, '/');
@@ -1864,7 +1864,7 @@ const char *get_filename(const char *fname)
     res = (cs > cb) ? cs : cb;
   }
 
-  return (res == NULL) ? (char *) fname : ++res;
+  return (res == NULL) ? (char*) fname : ++res;
 }
 
 /* bit manipulation functions */
@@ -1872,18 +1872,18 @@ const char *get_filename(const char *fname)
 /*
  * setbit: Set bit number [nr] of buffer [buf]
  */
-void gb_setbit(void *buf, const uint32_t nr)
+void gb_setbit(void* buf, const uint32_t nr)
 {
-  unsigned char *bytes = (unsigned char *) buf;
+  unsigned char* bytes = (unsigned char*) buf;
   bytes[nr / 8] |= (1 << (nr % 8));
 }
 
 /*
  * setbit: Get state of bit number [nr] of buffer [buf]
  */
-char gb_getbit(const void *buf, const uint32_t nr)
+char gb_getbit(const void* buf, const uint32_t nr)
 {
-  const unsigned char *bytes = (const unsigned char *) buf;
+  const unsigned char* bytes = (const unsigned char*) buf;
   return (bytes[nr / 8] & (1 << (nr % 8)));
 
 }
@@ -1891,10 +1891,10 @@ char gb_getbit(const void *buf, const uint32_t nr)
 /*
  * gb_int2ptr: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
  */
-void *gb_int2ptr(const int i)
+void* gb_int2ptr(const int i)
 {
   union {
-    void *p;
+    void* p;
     int i;
   } x = { NULL };
 
@@ -1905,10 +1905,10 @@ void *gb_int2ptr(const int i)
 /*
  * gb_ptr2int: Needed, when sizeof(*void) != sizeof(int) ! compiler warning !
  */
-int gb_ptr2int(const void *p)
+int gb_ptr2int(const void* p)
 {
   union {
-    const void *p;
+    const void* p;
     int i;
   } x = { p };
 

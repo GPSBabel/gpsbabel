@@ -119,15 +119,15 @@ arglist_t vpl_args[] = {
   ARG_TERMINATOR
 };
 
-static gbfile *vpl_file_in;
-static route_head *track_head;
+static gbfile* vpl_file_in;
+static route_head* track_head;
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
 static void
-vpl_rd_init(const char *fname)
+vpl_rd_init(const char* fname)
 {
   vpl_file_in = gbfopen(fname, "r", MYNAME);
 }
@@ -141,7 +141,7 @@ vpl_rd_deinit(void)
 static void
 vpl_read(void)
 {
-  char *ibuf;
+  char* ibuf;
 
   // Set up a track
   if (track_head == NULL) {
@@ -157,7 +157,7 @@ vpl_read(void)
 }
 
 static void
-vpl_wr_init(const char *fname)
+vpl_wr_init(const char* fname)
 {
   fatal("Writing file of type %s is not support\n", MYNAME);
 }
@@ -167,14 +167,14 @@ vpl_wr_init(const char *fname)
 *******************************************************************************/
 
 void
-vpl_parse_75_sentence(const char *ibuf)
+vpl_parse_75_sentence(const char* ibuf)
 {
   uint32_t ymd, hms;
   int32_t lat_raw, lon_raw;
   int16_t alt, speed_raw;
   uint16_t hdg_raw;
   uint8_t sats, hdop_raw, vdop_raw;
-  waypoint *waypt;
+  waypoint* waypt;
   struct tm tm;
 
   // The files have DOS line endings (CR/LF) but we don't care, because we

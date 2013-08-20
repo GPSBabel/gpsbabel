@@ -34,9 +34,9 @@ arglist_t swapdata_args[] = {
 };
 
 static void
-swapdata_cb(const waypoint *ref)
+swapdata_cb(const waypoint* ref)
 {
-  waypoint *wpt = (waypoint *)ref;
+  waypoint* wpt = (waypoint*)ref;
   double x;
 
   x = wpt->latitude;

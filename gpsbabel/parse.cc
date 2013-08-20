@@ -41,9 +41,9 @@
  */
 
 int
-parse_distance(const char *str, double *val, double scale, const char *module)
+parse_distance(const char* str, double* val, double scale, const char* module)
 {
-  char *unit;
+  char* unit;
 
   if ((str == NULL) || (*str == '\0')) {
     return 0;
@@ -97,9 +97,9 @@ parse_distance(const char *str, double *val, double scale, const char *module)
  *  module:  calling module, i.e. "garmin_txt"
  */
 int
-parse_speed(const char *str, double *val, const double scale, const char *module)
+parse_speed(const char* str, double* val, const double scale, const char* module)
 {
-  char *unit;
+  char* unit;
 
   if ((str == NULL) || (*str == '\0')) {
     return 0;
@@ -152,8 +152,8 @@ parse_speed(const char *str, double *val, const double scale, const char *module
  */
 
 int
-parse_coordinates(const char *str, int datum, const grid_type grid,
-                  double *latitude, double *longitude, const char *module)
+parse_coordinates(const char* str, int datum, const grid_type grid,
+                  double* latitude, double* longitude, const char* module)
 {
   double lat, lon;
   unsigned char lathemi, lonhemi;
@@ -164,7 +164,7 @@ parse_coordinates(const char *str, int datum, const grid_type grid,
   char utmc;
   int valid, result, ct;
   double lx, ly;
-  const char *format;
+  const char* format;
 
   valid = 1;
 

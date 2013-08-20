@@ -281,7 +281,7 @@ void wpt_e(const char* args, const QXmlStreamAttributes* unused)
   if (wpt_tmp_queued) {
     waypt_add(wpt_tmp);
   } else {
-	waypt_free(wpt_tmp);
+    waypt_free(wpt_tmp);
   }
   wpt_tmp_queued = 0;
 }
@@ -585,7 +585,7 @@ static void kml_write_bitmap_style(kml_point_type pt_type, const char* bitmap,
 static void kml_output_timestamp(const waypoint* waypointp)
 {
   QString time_string = waypointp->CreationTimeXML();
-  if(!time_string.isEmpty()) {
+  if (!time_string.isEmpty()) {
     writer->writeStartElement("TimeStamp");
     AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
     writer->writeTextElement("when", time_string);
@@ -760,15 +760,15 @@ void kml_write_coordinates(const waypoint* waypointp)
 {
   if (kml_altitude_known(waypointp)) {
     writer->writeTextElement("coordinates",
-                            QString::number(waypointp->longitude, 'f', 6) + QString(",") +
-                            QString::number(waypointp->latitude, 'f', 6) + QString(",") +
-                            QString::number(waypointp->altitude, 'f', 2)
-                           );
+                             QString::number(waypointp->longitude, 'f', 6) + QString(",") +
+                             QString::number(waypointp->latitude, 'f', 6) + QString(",") +
+                             QString::number(waypointp->altitude, 'f', 2)
+                            );
   } else {
     writer->writeTextElement("coordinates",
-                            QString::number(waypointp->longitude, 'f', 6) + QString(",") +
-                            QString::number(waypointp->latitude, 'f', 6)
-                           );
+                             QString::number(waypointp->longitude, 'f', 6) + QString(",") +
+                             QString::number(waypointp->latitude, 'f', 6)
+                            );
   }
 }
 
@@ -855,7 +855,7 @@ static void kml_output_description(const waypoint* pt)
    */
   if (pt->GetCreationTime().isValid()) {
     QString time_string = pt->CreationTimeXML();
-    if(!time_string.isEmpty()) {
+    if (!time_string.isEmpty()) {
       kml_td(hwriter, QString("Time: %1 ").arg(time_string));
     }
   }
@@ -869,14 +869,13 @@ static void kml_output_description(const waypoint* pt)
 
 static void kml_recompute_time_bounds(const waypoint* waypointp)
 {
-  if (waypointp->GetCreationTime().isValid())
-  {
-    if(!(kml_time_min.isValid()) ||
+  if (waypointp->GetCreationTime().isValid()) {
+    if (!(kml_time_min.isValid()) ||
         (waypointp->GetCreationTime() < kml_time_min)) {
       kml_time_min = waypointp->GetCreationTime();
     }
     if (!(kml_time_max.isValid()) ||
-      (waypointp->GetCreationTime() > kml_time_max )) {
+        (waypointp->GetCreationTime() > kml_time_max)) {
       kml_time_max = waypointp->GetCreationTime();
     }
   }
@@ -981,12 +980,12 @@ static void kml_output_tailer(const route_head* header)
       if (rotate_colors) {
         kml_step_color();
         writer->writeTextElement("color", QString("%1%2")
-                                .arg(kml_color_sequencer.color.opacity, 2, 16, QChar('0')).arg(kml_color_sequencer.color.bbggrr, 6, 16, QChar('0')));
+                                 .arg(kml_color_sequencer.color.opacity, 2, 16, QChar('0')).arg(kml_color_sequencer.color.bbggrr, 6, 16, QChar('0')));
         writer->writeTextElement("width", opt_line_width);
       } else {
         if (header->line_color.bbggrr >= 0) {
           writer->writeTextElement("color", QString("%1%2")
-                                  .arg(header->line_color.opacity, 2, 16, QChar('0')).arg(header->line_color.bbggrr, 6, 16, QChar('0')));
+                                   .arg(header->line_color.opacity, 2, 16, QChar('0')).arg(header->line_color.bbggrr, 6, 16, QChar('0')));
         }
         if (header->line_width >= 0) {
           writer->writeTextElement("width", QString::number(header->line_width));
@@ -1015,13 +1014,13 @@ static void kml_output_tailer(const route_head* header)
       }
       if (kml_altitude_known(tpt)) {
         writer->writeCharacters(QString::number(tpt->longitude, 'f', 6) + QString(",") +
-                               QString::number(tpt->latitude, 'f', 6) + QString(",") +
-                               QString::number(tpt->altitude, 'f', 2) + QString("\n")
-                              );
+                                QString::number(tpt->latitude, 'f', 6) + QString(",") +
+                                QString::number(tpt->altitude, 'f', 2) + QString("\n")
+                               );
       } else {
         writer->writeCharacters(QString::number(tpt->longitude, 'f', 6) + QString(",") +
-                               QString::number(tpt->latitude, 'f', 6) + QString("\n")
-                              );
+                                QString::number(tpt->latitude, 'f', 6) + QString("\n")
+                               );
       }
     }
     writer->writeEndElement(); // Close coordinates tag
@@ -1519,9 +1518,9 @@ static void kml_waypt_pr(const waypoint* waypointp)
   if (realtime_positioning) {
     writer->wrteStartTag("LookAt");
     writer->writeTextElement("longitude", QString::number(waypointp->longitude, 'f', 6);
-                            writer->writeTextElement("latitude", QString::number(waypointp->latitude, 'f', 6);
-                                writer->writeTextElement("altitude", "1000");
-                                writer->writeEndElement(); // Close LookAt tag
+                             writer->writeTextElement("latitude", QString::number(waypointp->latitude, 'f', 6);
+                                 writer->writeTextElement("altitude", "1000");
+                                 writer->writeEndElement(); // Close LookAt tag
   }
 #endif
 
@@ -1631,26 +1630,26 @@ static void kml_mt_simple_array(const route_head* header,
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
 
-    waypoint* wpt = (waypoint *) elem;
+    waypoint* wpt = (waypoint*) elem;
 
     switch (member) {
-      case fld_power:
-        writer->writeTextElement("gx:value", QString::number(wpt->power, 'f', 1));
-        break;
-      case fld_cadence:
-        writer->writeTextElement("gx:value", QString::number(wpt->cadence));
-        break;
-      case fld_depth:
-        writer->writeTextElement("gx:value", QString::number(wpt->depth, 'f', 1));
-        break;
-      case fld_heartrate:
-        writer->writeTextElement("gx:value", QString::number(wpt->heartrate));
-        break;
-      case fld_temperature:
-        writer->writeTextElement("gx:value", QString::number(wpt->temperature, 'f', 1));
-        break;
-      default:
-        fatal("Bad member type");
+    case fld_power:
+      writer->writeTextElement("gx:value", QString::number(wpt->power, 'f', 1));
+      break;
+    case fld_cadence:
+      writer->writeTextElement("gx:value", QString::number(wpt->cadence));
+      break;
+    case fld_depth:
+      writer->writeTextElement("gx:value", QString::number(wpt->depth, 'f', 1));
+      break;
+    case fld_heartrate:
+      writer->writeTextElement("gx:value", QString::number(wpt->heartrate));
+      break;
+    case fld_temperature:
+      writer->writeTextElement("gx:value", QString::number(wpt->temperature, 'f', 1));
+      break;
+    default:
+      fatal("Bad member type");
     }
   }
   writer->writeEndElement(); // Close SimpleArrayData tag
@@ -1727,15 +1726,15 @@ static void kml_mt_hdr(const route_head* header)
 
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement("gx:coord",
-                              QString::number(tpt->longitude, 'f', 6) + QString(" ") +
-                              QString::number(tpt->latitude, 'f', 6) + QString(" ") +
-                              QString::number(tpt->altitude, 'f', 2)
-                             );
+                               QString::number(tpt->longitude, 'f', 6) + QString(" ") +
+                               QString::number(tpt->latitude, 'f', 6) + QString(" ") +
+                               QString::number(tpt->altitude, 'f', 2)
+                              );
     } else {
       writer->writeTextElement("gx:coord",
-                              QString::number(tpt->longitude, 'f', 6) + QString(" ") +
-                              QString::number(tpt->latitude, 'f', 6)
-                             );
+                               QString::number(tpt->longitude, 'f', 6) + QString(" ") +
+                               QString::number(tpt->latitude, 'f', 6)
+                              );
     }
 
     // Capture interesting traits to see if we need to do an ExtendedData
@@ -1763,20 +1762,25 @@ static void kml_mt_hdr(const route_head* header)
     writer->writeStartElement("SchemaData");
     writer->writeAttribute("schemaUrl", "#schema");
 
-    if (has_cadence)
+    if (has_cadence) {
       kml_mt_simple_array(header, kmt_cadence, fld_cadence);
+    }
 
-    if (has_depth)
+    if (has_depth) {
       kml_mt_simple_array(header, kmt_depth, fld_depth);
+    }
 
-    if (has_heartrate)
+    if (has_heartrate) {
       kml_mt_simple_array(header, kmt_heartrate, fld_heartrate);
+    }
 
-    if (has_temperature)
+    if (has_temperature) {
       kml_mt_simple_array(header, kmt_temperature, fld_temperature);
+    }
 
-    if (has_power)
+    if (has_power) {
       kml_mt_simple_array(header, kmt_power, fld_power);
+    }
 
     writer->writeEndElement(); // Close SchemaData tag
     writer->writeEndElement(); // Close ExtendedData tag

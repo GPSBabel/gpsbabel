@@ -37,7 +37,7 @@ arglist_t jtr_args[] = {
 };
 
 static gbfile* fin, *fout;
-static QHash<QString, const waypoint *> trkpts;
+static QHash<QString, const waypoint*> trkpts;
 
 static time_t
 jtr_parse_time(const char* str, struct tm* tm, int* milli)

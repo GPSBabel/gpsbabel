@@ -38,11 +38,11 @@
 
 #define MYNAME	"TMPro"
 
-static gbfile *file_in, *file_out;
+static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;
 
 static void
-rd_init(const char *fname)
+rd_init(const char* fname)
 {
   file_in = gbfopen(fname, "rb", MYNAME);
 }
@@ -54,7 +54,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char *fname)
+wr_init(const char* fname)
 {
   file_out = gbfopen(fname, "w", MYNAME);
 }
@@ -68,10 +68,10 @@ wr_deinit(void)
 static void
 data_read(void)
 {
-  char *buff;
-  char *s;
-  char *holder;
-  waypoint *wpt_tmp;
+  char* buff;
+  char* s;
+  char* holder;
+  waypoint* wpt_tmp;
   int i;
   int linecount = 0;
 
@@ -175,12 +175,12 @@ data_read(void)
 }
 
 static void
-tmpro_waypt_pr(const waypoint * wpt)
+tmpro_waypt_pr(const waypoint* wpt)
 {
   int icon = 1; /* default to "flag" */
   int colour = 255; /*default to red */
-  char *shortname = NULL;
-  char *description = NULL;
+  char* shortname = NULL;
+  char* description = NULL;
 
   if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
     if (wpt->description) {
@@ -212,7 +212,7 @@ tmpro_waypt_pr(const waypoint * wpt)
   /* Number of characters */
   /*  25    6      80         8    8      8         8       8    4       4       128      */
 
-  const char *l = NULL;
+  const char* l = NULL;
   if (wpt->HasUrlLink()) {
     // Yes, it's lame to allocate/copy here.
     UrlLink link = wpt->GetUrlLink();

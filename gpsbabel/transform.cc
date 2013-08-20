@@ -30,10 +30,10 @@
 #define MYNAME "transform"
 
 static char current_target;
-static route_head *current_trk;
-static route_head *current_rte;
+static route_head* current_trk;
+static route_head* current_rte;
 
-static char *opt_routes, *opt_tracks, *opt_waypts, *opt_delete;
+static char* opt_routes, *opt_tracks, *opt_waypts, *opt_delete;
 
 static
 arglist_t transform_args[] = {
@@ -59,7 +59,7 @@ arglist_t transform_args[] = {
 static void
 transform_waypoints(void)
 {
-  route_head *rte;
+  route_head* rte;
 
   rte = route_head_alloc();
   switch (current_target) {
@@ -73,9 +73,9 @@ transform_waypoints(void)
 #if NEWQ
   foreach(waypoint* wpt, waypt_list) {
 #else
-  queue *elem, *tmp;
+  queue* elem, *tmp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypoint *wpt = (waypoint *) elem;
+    waypoint* wpt = (waypoint*) elem;
 #endif
 
     wpt = waypt_dupe(wpt);
@@ -91,7 +91,7 @@ transform_waypoints(void)
 }
 
 static void
-transform_rte_disp_hdr_cb(const route_head *rte)
+transform_rte_disp_hdr_cb(const route_head* rte)
 {
   if (current_target == 'T') {
     current_trk = route_head_alloc();
@@ -104,7 +104,7 @@ transform_rte_disp_hdr_cb(const route_head *rte)
 }
 
 static void
-transform_trk_disp_hdr_cb(const route_head *trk)
+transform_trk_disp_hdr_cb(const route_head* trk)
 {
   if (current_target == 'R') {
     current_rte = route_head_alloc();
@@ -117,9 +117,9 @@ transform_trk_disp_hdr_cb(const route_head *trk)
 }
 
 static void
-transform_any_disp_wpt_cb(const waypoint *wpt)
+transform_any_disp_wpt_cb(const waypoint* wpt)
 {
-  waypoint *temp = waypt_dupe(wpt);
+  waypoint* temp = waypt_dupe(wpt);
   if (current_target == 'R') {
     route_add_wpt(current_rte, temp);
   } else if (current_target == 'T') {
@@ -146,7 +146,7 @@ transform_tracks(void)
 *******************************************************************************/
 
 static void
-transform_init(const char *args)
+transform_init(const char* args)
 {
 }
 

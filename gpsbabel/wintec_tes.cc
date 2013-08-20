@@ -27,7 +27,7 @@
 static gbfile* fin;
 
 static void
-wintec_tes_rd_init(const char *fname)
+wintec_tes_rd_init(const char* fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
 }
@@ -56,11 +56,11 @@ wintec_date_to_time(uint32_t w)
 static void
 wintec_tes_read(void)
 {
-  route_head *trk = route_head_alloc();
+  route_head* trk = route_head_alloc();
   track_add_head(trk);
 
   while (!gbfeof(fin)) {
-    waypoint *wpt;
+    waypoint* wpt;
     uint16_t flags = gbfgetuint16(fin);
     uint32_t date = gbfgetuint32(fin);
     int32_t latitude = gbfgetint32(fin);
@@ -85,7 +85,7 @@ wintec_tes_read(void)
     //  Wintec's software puts a waypoint in the track, so we
     //  mock that.
     if (flags &  0x02) {
-      waypoint *temp = waypt_dupe(wpt);
+      waypoint* temp = waypt_dupe(wpt);
       waypt_add(temp);
     }
 

@@ -31,16 +31,16 @@ vmem_alloc(size_t size, int flags)
    * By default, zero the allocated thingy.
    */
   if (flags & VMFL_NOZERO) {
-    vm.mem = (char *) xmalloc(size);
+    vm.mem = (char*) xmalloc(size);
   } else {
-    vm.mem = (char *) xcalloc(size, 1);
+    vm.mem = (char*) xcalloc(size, 1);
   }
   vm.size = size;
   return vm;
 }
 
 void
-vmem_free(vmem_t *vm)
+vmem_free(vmem_t* vm)
 {
   if (vm->mem) {
     xfree(vm->mem);
@@ -55,13 +55,13 @@ vmem_free(vmem_t *vm)
  * will only grow for a while then reach a steady state.
  */
 void
-vmem_realloc(vmem_t *vm, size_t size)
+vmem_realloc(vmem_t* vm, size_t size)
 {
   /*
    * Reallocate only if we must.
    */
   if (size > vm->size) {
-    vm->mem = (char *) xrealloc(vm->mem, size);
+    vm->mem = (char*) xrealloc(vm->mem, size);
     vm->size = size;
   }
   return;

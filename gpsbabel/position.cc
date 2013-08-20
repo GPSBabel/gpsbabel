@@ -30,13 +30,13 @@
 #  define M_PI 3.14159265358979323846
 #endif
 
-static route_head *cur_rte = NULL;
+static route_head* cur_rte = NULL;
 
 static double pos_dist;
 static double max_diff_time;
-static char *distopt = NULL;
-static char *timeopt = NULL;
-static char *purge_duplicates = NULL;
+static char* distopt = NULL;
+static char* timeopt = NULL;
+static char* purge_duplicates = NULL;
 static int check_time;
 
 typedef struct {
@@ -74,19 +74,19 @@ gc_distance(double lat1, double lon1, double lat2, double lon2)
 
 /* tear through a waypoint queue, processing points by distance */
 static void
-position_runqueue(queue *q, int nelems, int qtype)
+position_runqueue(queue* q, int nelems, int qtype)
 {
-  queue * elem, * tmp;
-  waypoint ** comp;
-  int * qlist;
+  queue* elem, * tmp;
+  waypoint** comp;
+  int* qlist;
   double dist, diff_time;
   int i = 0, j, anyitem;
 
-  comp = (waypoint **) xcalloc(nelems, sizeof(*comp));
-  qlist = (int *) xcalloc(nelems, sizeof(*qlist));
+  comp = (waypoint**) xcalloc(nelems, sizeof(*comp));
+  qlist = (int*) xcalloc(nelems, sizeof(*qlist));
 
   QUEUE_FOR_EACH(q, elem, tmp) {
-    comp[i] = (waypoint *)elem;
+    comp[i] = (waypoint*)elem;
     qlist[i] = 0;
     i++;
   }
@@ -160,25 +160,25 @@ position_runqueue(queue *q, int nelems, int qtype)
 }
 
 static void
-position_process_route(const route_head * rh)
+position_process_route(const route_head* rh)
 {
   int i = rh->rte_waypt_ct;
 
   if (i) {
-    cur_rte = (route_head *)rh;
-    position_runqueue((queue *)&rh->waypoint_list, i, rtedata);
+    cur_rte = (route_head*)rh;
+    position_runqueue((queue*)&rh->waypoint_list, i, rtedata);
     cur_rte = NULL;
   }
 
 }
 
 static void
-position_noop_w(const waypoint *w)
+position_noop_w(const waypoint* w)
 {
 }
 
 static void
-position_noop_t(const route_head *h)
+position_noop_t(const route_head* h)
 {
 }
 
@@ -195,9 +195,9 @@ void position_process(void)
 }
 
 void
-position_init(const char *args)
+position_init(const char* args)
 {
-  char *fm;
+  char* fm;
 
   pos_dist = 0;
   max_diff_time = 0;

@@ -80,7 +80,7 @@ arglist_t arcdist_args[] = {
 #define BADVAL 999999
 
 static void
-arcdist_arc_disp_wpt_cb(const waypoint *arcpt2)
+arcdist_arc_disp_wpt_cb(const waypoint* arcpt2)
 {
   queue* elem, * tmp;
   waypoint* waypointp;
@@ -144,7 +144,7 @@ arcdist_arc_disp_wpt_cb(const waypoint *arcpt2)
 }
 
 static void
-arcdist_arc_disp_hdr_cb(const route_head *rte)
+arcdist_arc_disp_hdr_cb(const route_head* rte)
 {
   /* Set arcpt1 to NULL */
   arcdist_arc_disp_wpt_cb(NULL);
@@ -170,7 +170,7 @@ arcdist_process(void)
 
     arcpt2->latitude = arcpt2->longitude = BADVAL;
     while ((line = gbfgetstr(file_in))) {
-      char * pound = NULL;
+      char* pound = NULL;
       int argsfound = 0;
 
       fileline++;
@@ -178,7 +178,7 @@ arcdist_process(void)
       pound = strchr(line, '#');
       if (pound) {
         if (0 == strncmp(pound, "#break", 6)) {
-         arcdist_arc_disp_hdr_cb(NULL);
+          arcdist_arc_disp_hdr_cb(NULL);
         }
         *pound = '\0';
       }
@@ -188,8 +188,7 @@ arcdist_process(void)
 
       if (argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
         warning(MYNAME ": Warning: Arc file contains unusable vertex on line %d.\n", fileline);
-      }
-      else {
+      } else {
         waypoint* arcpttmp = arcpt1;
         arcdist_arc_disp_wpt_cb(arcpt2);
         arcpt1 = arcpt2;
@@ -226,19 +225,19 @@ arcdist_process(void)
         wp->latitude = ed->prjlatitude;
         wp->route_priority = 1;
         if (!arcfileopt &&
-             (ed->arcpt2->altitude != unknown_alt) &&
-             (ptsopt || (ed->arcpt1->altitude != unknown_alt))) {
+            (ed->arcpt2->altitude != unknown_alt) &&
+            (ptsopt || (ed->arcpt1->altitude != unknown_alt))) {
           /* Interpolate alititude */
           if (ptsopt) {
             wp->altitude = ed->arcpt2->altitude;
           } else {
             wp->altitude = ed->arcpt1->altitude +
-              ed->frac * (ed->arcpt2->altitude - ed->arcpt1->altitude);
+                           ed->frac * (ed->arcpt2->altitude - ed->arcpt1->altitude);
           }
         }
         if (trkopt &&
-             (ed->arcpt2->GetCreationTime().isValid()) &&
-             (ptsopt || (ed->arcpt1->GetCreationTime().isValid()))) {
+            (ed->arcpt2->GetCreationTime().isValid()) &&
+            (ptsopt || (ed->arcpt1->GetCreationTime().isValid()))) {
           /* Interpolate time */
           if (ptsopt) {
             wp->SetCreationTime(ed->arcpt2->GetCreationTime());;
@@ -247,7 +246,7 @@ arcdist_process(void)
             // of the two points.   Add that to the first for the
             // interpolated time.
             int scaled_time = ed->frac *
-                  ed->arcpt1->GetCreationTime().msecsTo(ed->arcpt2->GetCreationTime());
+                              ed->arcpt1->GetCreationTime().msecsTo(ed->arcpt2->GetCreationTime());
             QDateTime new_time(ed->arcpt1->GetCreationTime().addMSecs(scaled_time));
             wp->SetCreationTime(new_time);
           }
