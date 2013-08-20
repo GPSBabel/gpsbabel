@@ -7,8 +7,6 @@ These values are also used internally by the
 <link linkend="fmt_gdb">GDB</link>,
 <link linkend="fmt_bcr">BCR</link>,
 <link linkend="fmt_mapsource">Mapsource</link>,
-<link linkend="fmt_geoniche">Geoniche</link>,
-<link linkend="fmt_gpilots">GPilotS</link>,
 <link linkend="fmt_pcx">PCX</link>, and
 <link linkend="fmt_psitrex">PSITrex</link> 
 formats.
