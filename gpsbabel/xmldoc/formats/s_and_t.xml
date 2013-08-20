@@ -10,12 +10,12 @@
   Streets &amp; Trips</ulink> to efficiently optimize a trip with many stops, such as 
   is often made by geocachers.
 </para>
-
+<!--
 <para>
   This format has nothing to do with the <link linkend="fmt_msroute1"> .est/axe format</link> 
   used by this program to store routes.
 </para>
-
+-->
 <para>
   Since modern versions of Streets and Trips support reading GPX, this format is probably
   not so useful.
