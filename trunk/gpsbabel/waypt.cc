@@ -546,7 +546,7 @@ waypt_time(const waypoint* wpt)
   if (!wpt->creation_time.isValid()) {
     return (double) 0;
   } else {
-    return (double)wpt->creation_time.toTime_t();
+    return ((double)wpt->creation_time.toMSecsSinceEpoch()) / 1000.0;
   }
 }
 
@@ -609,7 +609,7 @@ waypt_speed_ex(const waypoint* A, const waypoint* B)
     return 0;
   }
 
-  time = fabs(waypt_time(A) - waypt_time(B));
+  time = fabs(A->creation_time.msecsTo(B->creation_time)) / 1000.0;
   if (time > 0) {
     return (dist / time);
   } else {
@@ -632,7 +632,7 @@ waypt_speed(const waypoint* A, const waypoint* B)
     return 0;
   }
 
-  time = fabs(waypt_time(A) - waypt_time(B));
+  time = fabs(A->creation_time.msecsTo(B->creation_time)) / 1000.0;
   if (time > 0) {
     return (dist / time);
   } else {

@@ -23,6 +23,7 @@
 
 #include <time.h>
 
+#include <QtCore/qglobal.h>
 #include <QtCore/qdatetime.h>
 
 // As this code began in C, we have several hundred places that set and
@@ -79,10 +80,18 @@ public:
   // Qt 4.6 and under doesn't have msecsTo.  Fortunately, it's easy to
   // provide.  It's a 64-bit because if the times aren't on the same day,
   // the returned value can be quite large.
-  int64_t msecsTo(const QDateTime &dt) {
-    qint64 days = daysTo(dt);
-    qint64 msecs = time().msecsTo(dt.time());
+  qint64 msecsTo(const QDateTime &dt) const {
+    QDateTime dtutc = dt.toUTC();
+    QDateTime thisutc = toUTC();
+    qint64 days = thisutc.daysTo(dtutc);
+    qint64 msecs = thisutc.time().msecsTo(dtutc.time());
     return days * (1000 * 3600 * 24) + msecs;
+  }
+
+  // Qt 4.6 and under doesn't have toMSecsSinceEpoch.
+  qint64 toMSecsSinceEpoch() const {
+    QDateTime epoch = QDateTime(QDate(1970, 1, 1), QTime(0, 0, 0, 0), Qt::UTC);
+    return -msecsTo(epoch);
   }
 
   // Like toString, but with subsecond time that's included only when
