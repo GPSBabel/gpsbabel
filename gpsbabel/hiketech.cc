@@ -130,7 +130,17 @@ hiketech_trk_tlr(const route_head* rte)
 static QString
 hiketech_format_time(const QDateTime& t)
 {
+  // FIXME: Find out why these two blocks of code aren't equivalent.
+  // it produces times that are 12 hours too late.  Double TZ bump?
+  // for now, just go back to the way we've done it for a decade.  -- robert
+#if 0
   return t.toString("yyyy-MM-dd hh:mm:ss");
+#else
+  char tbuf[80];
+  time_t tm = t.toTime_t();
+  strftime(tbuf, sizeof(tbuf), "%Y-%m-%d %I:%M:%S", gmtime(&tm));
+  return QString(tbuf);
+#endif
 }
 
 static void
