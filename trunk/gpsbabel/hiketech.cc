@@ -20,14 +20,18 @@
  */
 
 #include <QtCore/QXmlStreamAttributes>
+#include "src/core/xmlstreamwriter.h"
+
 
 #include "defs.h"
 #include "xmlgeneric.h"
 
 static gbfile* ofd;
+static QString ostring;
+static gpsbabel::XmlStreamWriter writer(&ostring);
+
 static waypoint* wpt_tmp;
 static route_head* trk_head;
-
 
 #define MYNAME "hiketech"
 
@@ -97,78 +101,84 @@ static void
 hiketech_wr_init(const char* fname)
 {
   ofd = gbfopen(fname, "w", MYNAME);
+
 }
 
 static void
 hiketech_wr_deinit(void)
 {
+  writer.writeEndDocument();
+  gbfputs(ostring, ofd);
   gbfclose(ofd);
+  ofd = NULL;
 }
 
 static void
 hiketech_trk_hdr(const route_head* rte)
 {
-  gbfprintf(ofd, "<trk>\n");
-  write_optional_xml_entity(ofd, " ", "ident", rte->rte_name);
+  writer.writeStartElement("trk");
+  writer.setAutoFormattingIndent(1);
+  writer.writeOptionalTextElement("ident", rte->rte_name);
 }
 
 static void
 hiketech_trk_tlr(const route_head* rte)
 {
-  gbfprintf(ofd, "</trk>\n");
+  writer.writeEndElement(); // trk
 }
 
-static void
-hiketech_print_utc(time_t tm, const char* indent, const char* tag)
+static QString
+hiketech_format_time(const QDateTime& t)
 {
-  char tbuf[80];
-  strftime(tbuf, sizeof(tbuf), "%Y-%m-%d %I:%M:%S", gmtime(&tm));
-  gbfprintf(ofd, "%s<%s>%s</%s>\n",indent,tag,tbuf,tag);
+  return t.toString("yyyy-MM-dd hh:mm:ss");
 }
 
 static void
 hiketech_trkpt_pr(const waypoint* waypointp)
 {
-  gbfprintf(ofd, " <pnt>\n");
+  writer.writeStartElement("pnt"); 
   if (waypointp->creation_time.isValid()) {
-    hiketech_print_utc(waypointp->GetCreationTime().toTime_t(), "  ", "utc");
+    writer.writeTextElement("utc", 
+                            hiketech_format_time(waypointp->GetCreationTime()));
   }
-  gbfprintf(ofd, "  <lat>%f</lat>\n", waypointp->latitude);
-  gbfprintf(ofd, "  <long>%f</long>\n", waypointp->longitude);
+  writer.writeTextElement("lat", QString::number(waypointp->latitude,'f', 6));
+  writer.writeTextElement("long", QString::number(waypointp->longitude,'f', 6));
   if (waypointp->altitude != unknown_alt) {
-    gbfprintf(ofd, "  <alt>%f</alt>\n",
-              waypointp->altitude);
+    writer.writeTextElement("alt", QString::number(waypointp->altitude,'f', 6));
   }
-  gbfprintf(ofd, " </pnt>\n");
+  writer.writeEndElement(); // png
 }
 
 static void
 hiketech_waypt_pr(const waypoint* wpt)
 {
-  gbfprintf(ofd, "<wpt>\n");
-  write_xml_entity(ofd, "\t", "ident", wpt->shortname);
-  write_optional_xml_entity(ofd, "\t", "sym", wpt->icon_descr);
-  gbfprintf(ofd, "\t<lat>%f</lat>\n", wpt->latitude);
-  gbfprintf(ofd, "\t<long>%f</long>\n", wpt->longitude);
+  writer.writeStartElement("wpt"); 
+  writer.setAutoFormattingIndent(-1);
+  writer.writeTextElement("ident", wpt->shortname);
+  writer.writeTextElement("sym", wpt->icon_descr);
+  writer.writeTextElement("lat", QString::number(wpt->latitude, 'f', 6));
+  writer.writeTextElement("long", QString::number(wpt->longitude, 'f', 6));
+  writer.writeStartElement("color"); 
+  writer.writeTextElement("lbl", "FAFFB4");
+  writer.writeTextElement("obj", "FF8000");
+  writer.writeEndElement(); // color
 
-  /*
-   * These probably aren't technicallyconstants, but it's all
-   * we can do for now.
-   */
-  gbfprintf(ofd, "\t<color>\n\t\t<lbl>FAFFB4</lbl>\n\t\t<obj>FF8000</obj>\n\t</color>\n");
-  gbfprintf(ofd, "</wpt>\n");
+  writer.writeEndElement(); // wpt
 }
 
 static void
 hiketech_write(void)
 {
-  gbfprintf(ofd, "<hiketech version=\"1.2\" url=\"http://www.hiketech.com\">\n");
-  gbfprintf(ofd, "<gpsdata>\n");
+  writer.writeStartElement("hiketech");
+  writer.writeAttribute("version", "1.2");
+  writer.writeAttribute("url", "http://www.hiketech.com");
+  writer.setAutoFormatting(true);
+  writer.writeStartElement("gpsdata");
   track_disp_all(hiketech_trk_hdr, hiketech_trk_tlr, hiketech_trkpt_pr);
   track_disp_all(NULL, NULL, hiketech_trkpt_pr);
   waypt_disp_all(hiketech_waypt_pr);
-  gbfprintf(ofd, "</gpsdata>\n");
-  gbfprintf(ofd, "</hiketech>\n");
+  writer.writeEndElement(); // gpsdata
+  writer.writeEndElement(); // hiketech
 }
 
 static

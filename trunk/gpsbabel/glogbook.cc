@@ -20,14 +20,18 @@
  */
 
 #include <QtCore/QXmlStreamAttributes>
+#include <QtCore/QXmlStreamWriter>
 
 #include "defs.h"
 #include "xmlgeneric.h"
+#include "src/core/file.h"
 
 static gbfile* ofd;
+static QString ostring;
+static QXmlStreamWriter writer(&ostring);
+
 static waypoint* wpt_tmp;
 static route_head* trk_head;
-
 
 #define MYNAME "glogbook"
 
@@ -78,52 +82,61 @@ static void
 glogbook_wr_init(const char* fname)
 {
   ofd = gbfopen(fname, "w", MYNAME);
+  writer.setAutoFormatting(true);
+  writer.setAutoFormattingIndent(4);
+  writer.writeStartDocument();
 }
 
 static void
 glogbook_wr_deinit(void)
 {
+  writer.writeEndDocument();
+  gbfputs(ostring,ofd);
   gbfclose(ofd);
+  ofd = NULL;
 }
 
 static void
 glogbook_waypt_pr(const waypoint* wpt)
 {
-  gbfprintf(ofd, "            <Trackpoint>\n");
-  gbfprintf(ofd, "                <Position>\n");
-  gbfprintf(ofd, "                    <Latitude>%.5f</Latitude>\n", wpt->latitude);
-  gbfprintf(ofd, "                    <Longitude>%.5f</Longitude>\n", wpt->longitude);
-  if (wpt->altitude != unknown_alt) {
-    gbfprintf(ofd, "                    <Altitude>%.3f</Altitude>\n", wpt->altitude);
-  }
-  gbfprintf(ofd, "                </Position>\n");
-  gbfprintf(ofd, "                ");
-  QDateTime dt = wpt->GetCreationTime();
-  xml_write_time(ofd, dt, "Time");
-  gbfprintf(ofd, "            </Trackpoint>\n");
+  writer.writeStartElement("Trackpoint");
+
+  writer.writeStartElement("Position");
+  writer.writeTextElement("Latitude", QString::number(wpt->latitude,'f', 5));
+  writer.writeTextElement("Longitude", QString::number(wpt->longitude,'f', 5));
+  writer.writeTextElement("Altitude", QString::number(wpt->altitude,'f', 3));
+  writer.writeEndElement(); // Position
+
+  writer.writeTextElement("Time", wpt->GetCreationTime().toPrettyString());
+  writer.writeEndElement(); // Trackpoint
 }
 
 static void
 glogbook_hdr(const route_head* rte)
 {
-  gbfprintf(ofd, "        <Track>\n");
+  writer.writeStartElement("Track");
 }
 
 static void
 glogbook_ftr(const route_head* rte)
 {
-  gbfprintf(ofd, "        </Track>\n");
+  writer.writeEndElement();
 }
 
 static void
 glogbook_write(void)
 {
+#if 0
   gbfprintf(ofd, "<?xml version=\"1.0\" ?>\n");
   gbfprintf(ofd, "<History xmlns=\"http://www.garmin.com/xmlschemas/ForerunnerLogbook\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/ForerunnerLogbook http://www.garmin.com/xmlschemas/ForerunnerLogbookv1.xsd\" version=\"1\">\n");
   gbfprintf(ofd, "    <Run>\n");
+#else
+  writer.writeStartElement("History");
+  writer.writeStartElement("Run");
+#endif
   track_disp_all(glogbook_hdr, glogbook_ftr, glogbook_waypt_pr);
-  gbfprintf(ofd, "    </Run>\n");
-  gbfprintf(ofd, "</History>\n");
+  writer.writeEndElement(); // Run
+  writer.writeEndElement(); // History
 }
 
 void	gl_trk_s(const char* args, const QXmlStreamAttributes* unused)
