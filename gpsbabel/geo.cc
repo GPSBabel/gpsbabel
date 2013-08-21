@@ -28,8 +28,9 @@ static gbfile* ofd;
 #include <QtCore/QXmlStreamWriter>
 #include <QtCore/QDebug>
 #include "src/core/file.h"
-QString ostring;
-QXmlStreamWriter writer(&ostring);
+
+static QString ostring;
+static QXmlStreamWriter writer(&ostring);
 
 static
 arglist_t geo_args[] = {

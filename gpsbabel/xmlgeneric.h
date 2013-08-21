@@ -36,23 +36,6 @@ typedef struct xg_tag_mapping {
 } xg_tag_mapping;
 
 extern const char* xhtml_entities;
-
-void write_xml_entity(gbfile* ofd, const QString& indent,
-                      const QString& tag, const QString& value);
-void write_xml_entity_begin0(gbfile* ofd, const QString& indent,
-                             const QString& tag);
-void write_xml_entity_begin1(gbfile* ofd, const QString& indent,
-                             const QString& tag, const QString& attr1,
-                             const QString& attrval1);
-void write_xml_entity_begin2(gbfile* ofd, const QString& indent, const QString& tag,
-                             const QString& attr1, const QString& attrval1,
-                             const QString& attr2, const QString& attrval2);
-void write_xml_entity_end(gbfile* ofd, const QString& indent, const QString& tag);
-
-void write_optional_xml_entity(gbfile* ofd, const QString& indent,
-                               const QString& tag, const QString& value);
-void xml_write_time(gbfile* ofd, gpsbabel::DateTime time, const char* elname);
-void write_xml_header(gbfile* ofd);
 void xml_ignore_tags(const char** taglist);
 
 void xml_init(const char* fname, xg_tag_mapping* tbl,const char* encoding);
