@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="21.278604576" minlon="-157.810719665" maxlat="21.278604576" maxlon="-157.810719665"/>
+  </metadata>
+  <wpt lat="21.278604576" lon="-157.810719665">
+    <time>2007-03-10T22:41:34Z</time>
+    <name>001</name>
+    <cmt>3348 Martha St</cmt>
+    <desc>3348 Martha St</desc>
+    <link href="www.zero.com"/>
+    <link href="www.one.com">
+      <text>one</text>
+    </link>
+    <link href="www.two.com">
+      <text>two dots</text>
+    </link>
+    <link href="www.twoandahalf.com"/>
+    <link href="www.three.com">
+      <text>three dots</text>
+    </link>
+    <link href="www.four.com"/>
+    <sym>Waypoint</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:DisplayMode>SymbolAndDescription</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+</gpx>
