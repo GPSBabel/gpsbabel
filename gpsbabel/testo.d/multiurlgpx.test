@@ -5,3 +5,6 @@ rm -f ${TMPDIR}/mlink*
 gpsbabel -i gpx -f ${REFERENCE}/multiple-links.gpx -o gpx,gpxver=1.1 -F ${TMPDIR}/mlink-1.gpx
 compare ${REFERENCE}/multiple-links.gpx ${TMPDIR}/mlink-1.gpx 
 
+# test some more complicated gpx 1.1 linkTypes and a link with an empty text element
+gpsbabel -i gpx -f ${REFERENCE}/multiple-links-2.gpx -o gpx,gpxver=1.1 -F ${TMPDIR}/mlink-2.gpx
+compare ${REFERENCE}/multiple-links-2~gpx.gpx ${TMPDIR}/mlink-2.gpx 

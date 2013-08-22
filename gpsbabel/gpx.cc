@@ -58,7 +58,7 @@ static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
 static short_handle mkshort_handle;
 static const char* link_url;
-static char* link_text;
+static char* link_text = NULL;
 
 static const char* input_string = NULL;
 static int input_string_len = 0;
@@ -690,9 +690,6 @@ gpx_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
       link_url = attr[1];
     }
     break;
-  case tt_wpt_link_text:
-    link_text = cdatastr.mem;
-    break;
   case tt_rte:
     rte_head = route_head_alloc();
     route_add_head(rte_head);
@@ -1203,16 +1200,19 @@ gpx_end(void* data, const XML_Char* xml_el)
   case tt_wpt_link:
 //TODO: implement GPX 1.1 	case tt_trk_trkseg_trkpt_link:
 //TODO: implement GPX 1.1 	case tt_rte_rtept_link:
-  {
-    char* lt = link_text;
-    if (lt) {
-      lt = xstrdup(lrtrim(link_text));
+    waypt_add_url(wpt_tmp, link_url, link_text);
+    if (link_text) {
+      xfree(link_text);
+      link_text = NULL;
     }
-
-    waypt_add_url(wpt_tmp, link_url, lt);
-    link_text = NULL;
-  }
-  break;
+    break;
+  case tt_wpt_link_text:
+    if (cdatastrp[0]) {
+      link_text = xstrdup(lrtrim(cdatastrp));
+    } else {
+      link_text = NULL;
+    }
+    break;
   case tt_unknown:
     end_something_else();
     current_tag.truncate(pos);
