@@ -57,8 +57,8 @@ static const char* input_fname;
 static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
 static short_handle mkshort_handle;
-static const char* link_url;
-static char* link_text = NULL;
+static const char* link_url = NULL;
+static const char* link_text = NULL;
 
 static const char* input_string = NULL;
 static int input_string_len = 0;
@@ -687,7 +687,7 @@ gpx_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
     break;
   case tt_wpt_link:
     if (attr[0] && attr[1] && 0 == strcmp(attr[0], "href")) {
-      link_url = attr[1];
+      link_url = xstrdup(attr[1]);
     }
     break;
   case tt_rte:
@@ -1204,6 +1204,10 @@ gpx_end(void* data, const XML_Char* xml_el)
     if (link_text) {
       xfree(link_text);
       link_text = NULL;
+    }
+    if (link_url) {
+      xfree(link_url);
+      link_url = NULL;
     }
     break;
   case tt_wpt_link_text:
