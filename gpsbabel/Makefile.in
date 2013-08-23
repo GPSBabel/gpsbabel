@@ -110,7 +110,7 @@ ZLIB=zlib/adler32.o zlib/compress.o zlib/crc32.o zlib/deflate.o zlib/inffast.o \
 
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o vmem.o util_crc.o xmlgeneric.o \
-          uuid.o formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
+          formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
 	  inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ gbser.o \
 	  gbfile.o parse.o session.o \
 	$(PALM_DB) $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
@@ -1046,7 +1046,6 @@ util.o: util.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmem.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
 util_crc.o: util_crc.cc
-uuid.o: uuid.cc uuid.h
 v900.o: v900.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h
 vcf.o: vcf.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
