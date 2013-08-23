@@ -33,7 +33,13 @@ static char current_target;
 static route_head* current_trk;
 static route_head* current_rte;
 
-static char* opt_routes, *opt_tracks, *opt_waypts, *opt_delete;
+static char* opt_routes, *opt_tracks, *opt_waypts, *opt_delete, *rpt_name_digits, *opt_rpt_name;
+
+static char* current_namepart;
+
+static int name_digits, use_src_name;
+
+static char RPT[] = "RPT";
 
 static
 arglist_t transform_args[] = {
@@ -48,6 +54,14 @@ arglist_t transform_args[] = {
   {
     "trk", &opt_tracks, "Transform waypoint(s) or route(s) into tracks(s) [W/R]", NULL,
     ARGTYPE_STRING, ARG_NOMINMAX
+  },
+  {
+    "rptdigits", &rpt_name_digits, "Number of digits in generated names", NULL,
+    ARGTYPE_INT, "2", NULL
+  },
+  {
+    "rptname", &opt_rpt_name, "Use source name for route point names", "N",
+    ARGTYPE_BOOL, ARG_NOMINMAX
   },
   {
     "del", &opt_delete, "Delete source data after transformation", "N",
@@ -81,10 +95,10 @@ transform_waypoints(void)
     wpt = waypt_dupe(wpt);
     switch (current_target) {
     case 'R':
-      route_add_wpt(rte, wpt);
+      route_add_wpt_named(rte, wpt, RPT, name_digits);
       break;
     case 'T':
-      track_add_wpt(rte, wpt);
+      track_add_wpt_named(rte, wpt, RPT, name_digits);
       break;
     }
   }
@@ -93,6 +107,10 @@ transform_waypoints(void)
 static void
 transform_rte_disp_hdr_cb(const route_head* rte)
 {
+  current_namepart = RPT;
+  if (rte->rte_name && *rte->rte_name && use_src_name) {
+    current_namepart = rte->rte_name;
+  }
   if (current_target == 'T') {
     current_trk = route_head_alloc();
     track_add_head(current_trk);
@@ -106,6 +124,10 @@ transform_rte_disp_hdr_cb(const route_head* rte)
 static void
 transform_trk_disp_hdr_cb(const route_head* trk)
 {
+  current_namepart = RPT;
+  if (trk->rte_name && *trk->rte_name && use_src_name) {
+    current_namepart = trk->rte_name;
+  }
   if (current_target == 'R') {
     current_rte = route_head_alloc();
     route_add_head(current_rte);
@@ -121,9 +143,9 @@ transform_any_disp_wpt_cb(const waypoint* wpt)
 {
   waypoint* temp = waypt_dupe(wpt);
   if (current_target == 'R') {
-    route_add_wpt(current_rte, temp);
+    route_add_wpt_named(current_rte, temp, current_namepart, name_digits);
   } else if (current_target == 'T') {
-    track_add_wpt(current_trk, temp);
+    track_add_wpt_named(current_trk, temp, current_namepart, name_digits);
   } else {
     waypt_add(temp);
   }
@@ -159,6 +181,13 @@ static void
 transform_process(void)
 {
   int delete_after = (opt_delete && (*opt_delete == '1')) ? 1 : 0;
+
+  use_src_name = (opt_rpt_name && (*opt_rpt_name == '1')) ? 1 : 0;
+
+  name_digits = 3;
+  if (rpt_name_digits && *rpt_name_digits) {
+    name_digits = atoi(rpt_name_digits);
+  }
 
   if (opt_waypts != NULL) {
     current_target = 'W';

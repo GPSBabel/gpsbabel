@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+     <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="47.421095000" minlon="19.220695000" maxlat="47.421186000" maxlon="19.220939000"/>
+  </metadata>
+  <rte>
+    <rtept lat="47.421186000" lon="19.220939000">
+      <ele>152.000000</ele>
+      <time>2012-11-05T07:16:29Z</time>
+      <name>RPT01</name>
+      <hdop>2.000000</hdop>
+    </rtept>
+  </rte>
+  <rte>
+    <rtept lat="47.421095000" lon="19.220695000">
+      <ele>138.300000</ele>
+      <time>2012-11-05T07:17:37Z</time>
+      <name>RPT02</name>
+      <hdop>3.000000</hdop>
+    </rtept>
+  </rte>
+  <rte>
+    <name>Name Track</name>
+    <desc>Generated from track Name Track</desc>
+    <rtept lat="47.421186000" lon="19.220939000">
+      <ele>152.000000</ele>
+      <time>2012-11-05T07:16:29Z</time>
+      <name>Name Track03</name>
+      <hdop>2.000000</hdop>
+    </rtept>
+  </rte>
+  <rte>
+    <name>Name Track #2</name>
+    <desc>Generated from track Name Track #2</desc>
+    <rtept lat="47.421095000" lon="19.220695000">
+      <ele>138.300000</ele>
+      <time>2012-11-05T07:17:37Z</time>
+      <name>Name Track #204</name>
+      <hdop>3.000000</hdop>
+    </rtept>
+  </rte>
+</gpx>
