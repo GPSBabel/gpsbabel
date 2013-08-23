@@ -118,12 +118,6 @@ text_disp(const waypoint* wpt)
 
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                            &utme, &utmn, &utmz, &utmzc);
-#if 0
-  if (tm == 0) {
-    tm = time(NULL);
-  }
-  strftime(tbuf, sizeof(tbuf), "%d-%b-%Y", localtime(&tm));
-#endif
   tmpout1 = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 0);
   if (wpt->altitude != unknown_alt) {
     xasprintf(&altout, " alt:%d", (int)((altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude));
