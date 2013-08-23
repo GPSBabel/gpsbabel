@@ -138,7 +138,7 @@ format_skeleton_exit(void)		/* optional */
 ff_vecs_t format_skeleton_vecs = {
   ff_type_file,
   {
-    ff_cap_read | ff_cap_write 	/* waypoints */,
+    (ff_cap)(ff_cap_read | ff_cap_write) 	/* waypoints */,
     ff_cap_none 			/* tracks */,
     ff_cap_none 			/* routes */
   },

@@ -74,7 +74,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o  \
 	vcf.o overlay.o google.o xhtmlent.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o vitosmt.o bcr.o \
 	ignrando.o stmwpp.o cst.o nmn4.o compegps.o \
-	yahoo.o unicsv.o wfff_xml.o garmin_txt.o axim_gpb.o gpssim.o \
+	yahoo.o unicsv.o wfff_xml.o garmin_txt.o gpssim.o \
 	stmsdf.o dmtlog.o raymarine.o alan.o vitovtt.o \
 	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
 	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o vidaone.o \
@@ -423,8 +423,6 @@ an1.o: an1.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
 arcdist.o: arcdist.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
   filterdefs.h grtcirc.h
-axim_gpb.o: axim_gpb.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
-  gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h
 bcr.o: bcr.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h csv_util.h \
   garmin_tables.h
