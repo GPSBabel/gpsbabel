@@ -174,34 +174,6 @@ xstrndup(const char* str, size_t sz)
   return newstr;
 }
 
-/*
- * Lazily trim whitespace (though not from allocated version)
- * while copying.
- */
-char*
-#ifdef DEBUG_MEM
-XSTRNDUPT(const char* str, size_t sz, DEBUG_PARAMS)
-#else
-xstrndupt(const char* str, size_t sz)
-#endif
-{
-  size_t newlen = 0;
-  char* cin = (char*)str;
-  char* newstr;
-
-  while ((newlen < sz) && (*cin != '\0')) {
-    newlen++;
-    cin++;
-  }
-
-  newstr = (char*) xmalloc(newlen + 1);
-  memcpy(newstr, str, newlen);
-  newstr[newlen] = 0;
-  rtrim(newstr);
-
-  return newstr;
-}
-
 void*
 #ifdef DEBUG_MEM
 XREALLOC(void* p, size_t s, DEBUG_PARAMS)
@@ -1186,21 +1158,6 @@ gstrsub(const char* s, const char* search, const char* replace)
   }
   o[olen] = '\0';
   return o;
-}
-
-/*
- * Like strstr, but starts from back of string.
- */
-const char*
-xstrrstr(const char* s1, const char* s2)
-{
-  const char* r = NULL, *next = NULL;
-
-  while (next = strstr(s1, s2), NULL != next) {
-    r = next;
-    s1 = next + 1;
-  }
-  return r;
 }
 
 /*
