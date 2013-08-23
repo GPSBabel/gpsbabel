@@ -170,7 +170,7 @@ route_find_track_by_name(const char* name)
 }
 
 static void
-any_route_add_wpt(route_head* rte, waypoint* wpt, int* ct, int synth)
+any_route_add_wpt(route_head* rte, waypoint* wpt, int* ct, int synth, const char* namepart, int number_digits)
 {
   ENQUEUE_TAIL(&rte->waypoint_list, &wpt->Q);
   rte->rte_waypt_ct++;	/* waypoints in this route */
@@ -178,16 +178,14 @@ any_route_add_wpt(route_head* rte, waypoint* wpt, int* ct, int synth)
     (*ct)++;
   }
   if (synth && !wpt->shortname) {
-    char tmpnam[10];
-    snprintf(tmpnam, sizeof(tmpnam), "RPT%03d",*ct);
-    wpt->shortname = xstrdup(tmpnam);
+    xasprintf(&wpt->shortname,"%s%0*d", namepart, number_digits, *ct);
     wpt->wpt_flags.shortname_is_synthetic = 1;
   }
   update_common_traits(wpt);
 }
 
 void
-route_add_wpt(route_head* rte, waypoint* wpt)
+route_add_wpt_named(route_head* rte, waypoint* wpt, const char* namepart, int number_digits)
 {
   // First point in a route is always a new segment.
   // This improves compatibility when reading from
@@ -196,11 +194,18 @@ route_add_wpt(route_head* rte, waypoint* wpt)
     wpt->wpt_flags.new_trkseg = 1;
   }
 
-  any_route_add_wpt(rte, wpt, &rte_waypts, 1);
+  any_route_add_wpt(rte, wpt, &rte_waypts, 1, namepart, number_digits);
 }
 
 void
-track_add_wpt(route_head* rte, waypoint* wpt)
+route_add_wpt(route_head* rte, waypoint* wpt)
+{
+  const char RPT[] = "RPT";
+  route_add_wpt_named(rte, wpt, RPT, 3);
+}
+
+void
+track_add_wpt_named(route_head* rte, waypoint* wpt, const char* namepart, int number_digits)
 {
   // First point in a track is always a new segment.
   // This improves compatibility when reading from
@@ -209,7 +214,14 @@ track_add_wpt(route_head* rte, waypoint* wpt)
     wpt->wpt_flags.new_trkseg = 1;
   }
 
-  any_route_add_wpt(rte, wpt, &trk_waypts, 0);
+  any_route_add_wpt(rte, wpt, &trk_waypts, 0, namepart, number_digits);
+}
+
+void
+track_add_wpt(route_head* rte, waypoint* wpt)
+{
+  const char RPT[] = "RPT";
+  track_add_wpt_named(rte, wpt, RPT, 3);
 }
 
 waypoint*
@@ -401,6 +413,8 @@ route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src)
     *dst_count = 0;
     *dst_wpt_count = 0;
   }
+
+  const char RPT[] = "RPT";
   QUEUE_FOR_EACH(src, elem, tmp) {
     route_head* rte_old = (route_head*)elem;
 
@@ -412,7 +426,7 @@ route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src)
     rte_new->rte_num = rte_old->rte_num;
     any_route_add_head(rte_new, *dst);
     QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2) {
-      any_route_add_wpt(rte_new, waypt_dupe((waypoint*)elem2), dst_wpt_count, 0);
+      any_route_add_wpt(rte_new, waypt_dupe((waypoint*)elem2), dst_wpt_count, 0, RPT, 3);
     }
     (*dst_count)++;
   }
