@@ -30,3 +30,8 @@ compare ${REFERENCE}/bigtime.gpx ${TMPDIR}/bigtime.gpx
 rm -f ${TMPDIR}/basecamp~gpx_so.gpx
 gpsbabel -i gpx -f ${REFERENCE}/basecamp.gpx -o gpx -F - 1> ${TMPDIR}/basecamp~gpx_so.gpx
 compare ${REFERENCE}/basecamp~gpx.gpx ${TMPDIR}/basecamp~gpx_so.gpx 
+
+# test standard input
+rm -f ${TMPDIR}/basecamp~gpx_si.gpx
+gpsbabel -i gpx -f - -o gpx -F ${TMPDIR}/basecamp~gpx_si.gpx 0< ${REFERENCE}/basecamp.gpx
+compare ${REFERENCE}/basecamp~gpx.gpx ${TMPDIR}/basecamp~gpx_si.gpx 
