@@ -36,7 +36,6 @@
 #include "defs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
-#include "strptime.h"
 
 #define MYNAME "exif"
 
@@ -649,8 +648,9 @@ exif_find_tag(exif_app_t* app, const uint16_t ifd_nr, const uint16_t tag_id)
 static time_t
 exif_get_exif_time(exif_app_t* app)
 {
+  QDateTime res;
+
   exif_tag_t* tag;
-  time_t res = 0;
 
   tag = exif_find_tag(app, EXIF_IFD, 0x9003);			/* DateTimeOriginal from EXIF */
   if (! tag) {
@@ -659,20 +659,15 @@ exif_get_exif_time(exif_app_t* app)
   if (! tag) {
     tag = exif_find_tag(app, EXIF_IFD, 0x9004);  /* DateTimeDigitized from EXIF */
   }
+
   if (tag) {
-    struct tm tm;
-    char* c, *str;
+    char* str;
 
-    memset(&tm, 0, sizeof(tm));
     str = exif_read_str(tag);
-    c = strptime(str, "%Y:%m:%d %H:%M:%S", &tm);
-    if (c && (*c == '\0')) {
-      res = mklocaltime(&tm);
-    }
-
+    res = QDateTime::fromString(str, "yyyy:MM:dd hh:mm:ss");
     xfree(str);
   }
-  return res;
+  return res.toTime_t();
 }
 
 static waypoint*
@@ -850,6 +845,7 @@ exif_waypt_from_exif_app(exif_app_t* app)
   } else {
     timestamp = datestamp;
   }
+
   if (timestamp != UNKNOWN_TIMESTAMP) {
 #ifdef EXIF_DBG
     char* str = exif_time_str(timestamp);
