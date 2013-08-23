@@ -91,7 +91,6 @@ skyforce_parse_wpt(const char* str, int* rte_num)
 static waypoint*
 skyforce_parse_trk(const char* str)
 {
-  char* cx;
   char buf[15];
   int len;
 

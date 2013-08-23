@@ -27,7 +27,7 @@
 #define MYNAME "Interpolate filter"
 
 static char* opt_interval = NULL;
-int interval = 0;
+unsigned int interval = 0;
 static char* opt_dist = NULL;
 double dist = 0;
 static char* opt_route = NULL;
@@ -60,8 +60,8 @@ interpfilt_process(void)
   int count = 0;
   int first = 0;
   double lat1 = 0, lon1 = 0;
-  int time1 = 0;
-  int timen;
+  unsigned int time1 = 0;
+  unsigned int timen;
   double distn;
   double curdist;
   double rt1, rn1, rt2, rn2;
