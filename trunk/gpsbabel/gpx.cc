@@ -53,15 +53,12 @@ static waypoint* wpt_tmp;
 static UrlLink* link_;
 static int cache_descr_is_html;
 static gbfile* fd;
-static const char* input_fname;
 static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
 static short_handle mkshort_handle;
 static const char* link_url = NULL;
 static const char* link_text = NULL;
 
-static const char* input_string = NULL;
-static int input_string_len = 0;
 
 static char* snlen = NULL;
 static char* suppresswhite = NULL;
@@ -1290,16 +1287,7 @@ gpx_cdata(void* dta, const XML_Char* xml_el, int len)
 static void
 gpx_rd_init(const char* fname)
 {
-  if (fname[0]) {
-    fd = gbfopen(fname, "r", MYNAME);
-    input_fname = fname;
-  } else {
-    fd = NULL;
-    input_string = fname+1;
-    input_string_len = strlen(input_string);
-    input_fname = NULL;
-  }
-
+  fd = gbfopen(fname, "r", MYNAME);
 
   current_tag.clear();
 
@@ -1343,7 +1331,6 @@ gpx_rd_deinit(void)
   psr = NULL;
   wpt_tmp = NULL;
   cur_tag = NULL;
-  input_fname = NULL;
 }
 #endif
 
@@ -1378,28 +1365,12 @@ gpx_read(void)
 {
 #if HAVE_LIBEXPAT
   int len;
-  int done = 0;
   char* buf = (char*) xmalloc(MY_CBUF_SZ);
-  int result = 0;
 
-  while (!done) {
-    if (fd) {
-      len = gbfread(buf, 1, MY_CBUF_SZ - 1, fd);
-      done = gbfeof(fd) || !len;
-      result = XML_Parse(psr, buf, len, done);
-    } else if (input_string) {
-      done = 0;
-      result = XML_Parse(psr, input_string,
-                         input_string_len, done);
-      done = 1;
-    } else {
-      done = 1;
-      result = -1;
-    }
-    if (!result) {
-      fatal(MYNAME ": XML parse error at line %d of '%s' : %s\n",
+  while ((len = gbfread(buf, 1, MY_CBUF_SZ - 1, fd))) {
+    if (!XML_Parse(psr, buf, len, gbfeof(fd))) {
+      fatal(MYNAME ":Parse error at %d: %s\n",
             (int) XML_GetCurrentLineNumber(psr),
-            input_fname ? input_fname : "unknown file",
             XML_ErrorString(XML_GetErrorCode(psr)));
     }
   }
