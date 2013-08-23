@@ -240,8 +240,8 @@ static field_t fields_def[] = {
   { "avail",	fld_gc_is_available, STR_ANY },
   { "exported",	fld_gc_exported, STR_ANY },
   { "found",	fld_gc_last_found, STR_ANY },
-  { "placer",	fld_gc_placer, STR_ANY },
   { "placer_id",	fld_gc_placer_id, STR_ANY },
+  { "placer",	fld_gc_placer, STR_ANY },
   { "hint",	fld_gc_hint, STR_ANY },
 #endif
   { NULL,		fld_terminator, 0 }
@@ -745,7 +745,6 @@ unicsv_parse_one_line(char* ibuf)
       break;
 
     case fld_url: {
-      qDebug() << s;
       UrlLink l(s);
       wpt->AddUrlLink(l);
     }
