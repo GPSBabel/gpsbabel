@@ -79,9 +79,7 @@ wr_deinit(void)
 static void
 html_disp(const waypoint* wpt)
 {
-  char tbuf[1024];
   char* cout;
-  time_t tm = wpt->GetCreationTime().toTime_t();
   int32_t utmz;
   double utme, utmn;
   char utmzc;
@@ -90,12 +88,6 @@ html_disp(const waypoint* wpt)
 
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                            &utme, &utmn, &utmz, &utmzc);
-
-  if (tm == 0) {
-    tm = time(NULL);
-  }
-  strftime(tbuf, sizeof(tbuf), "%d-%b-%Y", localtime(&tm));
-
 
   gbfprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", wpt->shortname);
   gbfprintf(file_out, "<table width=\"100%%\">\n");

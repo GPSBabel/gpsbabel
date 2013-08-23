@@ -1890,8 +1890,6 @@ void kml_mt_array_schema(const char* field_name, const char* display_name,
 
 void kml_write(void)
 {
-  char import_time[100];
-  time_t now;
   const global_trait* traits = get_traits();
 
   // Parse options
@@ -1920,16 +1918,15 @@ void kml_write(void)
 
   writer->writeStartElement("Document");
 
-  now = current_time().toTime_t();
-  strftime(import_time, sizeof(import_time), "%c", localtime(&now));
   if (realtime_positioning) {
     writer->writeTextElement("name", "GPS position");
   } else {
     writer->writeTextElement("name", "GPS device");
   }
 
-  if (now) {
-    writer->writeTextElement("snippet", QString("Created ") + QString(import_time));
+  if (current_time().isValid()) {
+    writer->writeTextElement("snippet", QString("Created ") + 
+                             current_time().toString());
   }
 
   kml_write_AbstractView();

@@ -26,7 +26,6 @@
 #include <time.h>
 
 #include "defs.h"
-#include "strptime.h"
 
 #define MYNAME "skyforce"
 
@@ -93,7 +92,6 @@ static waypoint*
 skyforce_parse_trk(const char* str)
 {
   char* cx;
-  struct tm tm;
   char buf[15];
   int len;
 
@@ -103,18 +101,14 @@ skyforce_parse_trk(const char* str)
   if (wpt == NULL) {
     return NULL;
   }
-
-  memset(&tm, 0, sizeof(tm));
   strncpy(buf, str + 2, sizeof(buf) - 1);
   buf[14] = 0;
 
-  cx = strptime(buf, "%d%m%y  %H%M%S ", &tm);
-  if ((cx != NULL) && (*cx != '\0')) {
-    fatal(MYNAME ": Could not parse date string (%s - %s).\n", buf, cx);
-  }
+  QDateTime dt = QDateTime::fromString(buf, "ddMMyy  hhmmss");
+  dt.setTimeSpec(Qt::UTC);
+  dt = dt.addYears(100);
 
-  wpt->SetCreationTime(mkgmtime(&tm));
-
+  wpt->SetCreationTime(dt);
   len = strlen(str);
 
   if (len >= 45) {
