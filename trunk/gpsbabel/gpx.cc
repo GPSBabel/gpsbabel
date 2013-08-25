@@ -33,7 +33,7 @@ static QXmlStreamReader* reader;
 
 
 static xml_tag* cur_tag;
-static vmem_t cdatastr;
+static QString cdatastr;
 static char* opt_logpoint = NULL;
 static char* opt_humminbirdext = NULL;
 static char* opt_garminext = NULL;
@@ -53,8 +53,8 @@ static gpsbabel::File* iqfile;
 static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
 static short_handle mkshort_handle;
-static const char* link_url = NULL;
-static const char* link_text = NULL;
+static QString link_url;
+static QString link_text;
 
 
 static char* snlen = NULL;
@@ -202,10 +202,11 @@ struct gpx_global {
 }* gpx_global ;
 
 static void
-gpx_add_to_global(gpx_global_entry* ge, char* cdata)
+gpx_add_to_global(gpx_global_entry* ge, const QString& s)
 {
   queue* elem, *tmp;
   gpx_global_entry* gep;
+  const char* cdata = CSTR(s);
 
   QUEUE_FOR_EACH(&ge->queue, elem, tmp) {
     gep = BASE_STRUCT(elem, gpx_global_entry, queue);
@@ -638,11 +639,10 @@ gpx_start(const QString& el, const QXmlStreamAttributes& attr)
   int passthrough;
   int tag;
 
-
   /*
    * Reset end-of-string without actually emptying/reallocing cdatastr.
    */
-  *(char*) cdatastr.mem = 0;
+  cdatastr = QString();
 
   tag = get_tag(current_tag, &passthrough);
   switch (tag) {
@@ -654,7 +654,7 @@ gpx_start(const QString& el, const QXmlStreamAttributes& attr)
     break;
   case tt_wpt_link:
     if (attr.hasAttribute("href")) {
-      link_url = xstrdup(CSTR(attr.value("href").toString()));
+      link_url = attr.value("href").toString();
     }
     break;
   case tt_rte:
@@ -747,13 +747,13 @@ struct
 };
 
 geocache_type
-gs_mktype(const char* t)
+gs_mktype(const QString& t)
 {
   int i;
   int sz = sizeof(gs_type_map) / sizeof(gs_type_map[0]);
 
   for (i = 0; i < sz; i++) {
-    if (0 == case_ignore_strcmp(t, gs_type_map[i].name)) {
+    if (!t.compare(gs_type_map[i].name,Qt::CaseInsensitive)) {
       return gs_type_map[i].type;
     }
   }
@@ -775,13 +775,13 @@ gs_get_cachetype(geocache_type t)
 }
 
 geocache_container
-gs_mkcont(const char* t)
+gs_mkcont(const QString& t)
 {
   int i;
   int sz = sizeof(gs_container_map) / sizeof(gs_container_map[0]);
 
   for (i = 0; i < sz; i++) {
-    if (0 == case_ignore_strcmp(t, gs_container_map[i].name)) {
+    if (!t.compare(gs_container_map[i].name,Qt::CaseInsensitive)) {
       return gs_container_map[i].type;
     }
   }
@@ -879,7 +879,6 @@ gpx_end(const QString& el)
   int pos = current_tag.lastIndexOf('/');
   QString s = current_tag.mid(pos + 1);
   float x;
-  char* cdatastrp = cdatastr.mem;
   int passthrough;
   static QDateTime gc_log_date;
   tag_type tag;
@@ -895,25 +894,25 @@ gpx_end(const QString& el)
      * First, the tags that are file-global.
      */
   case tt_name:
-    gpx_add_to_global(&gpx_global->name, cdatastrp);
+    gpx_add_to_global(&gpx_global->name, cdatastr);
     break;
   case tt_desc:
-    gpx_add_to_global(&gpx_global->desc, cdatastrp);
+    gpx_add_to_global(&gpx_global->desc, cdatastr);
     break;
   case tt_author:
-    gpx_add_to_global(&gpx_global->author, cdatastrp);
+    gpx_add_to_global(&gpx_global->author, cdatastr);
     break;
   case tt_email:
-    gpx_add_to_global(&gpx_global->email, cdatastrp);
+    gpx_add_to_global(&gpx_global->email, cdatastr);
     break;
   case tt_url:
-    gpx_add_to_global(&gpx_global->url, cdatastrp);
+    gpx_add_to_global(&gpx_global->url, cdatastr);
     break;
   case tt_urlname:
-    gpx_add_to_global(&gpx_global->urlname, cdatastrp);
+    gpx_add_to_global(&gpx_global->urlname, cdatastr);
     break;
   case tt_keywords:
-    gpx_add_to_global(&gpx_global->keywords, cdatastrp);
+    gpx_add_to_global(&gpx_global->keywords, cdatastr);
     break;
 
     /*
@@ -936,23 +935,20 @@ gpx_end(const QString& el)
     if (wpt_tmp->notes != NULL) {
       xfree(wpt_tmp->notes);
     }
-    wpt_tmp->notes = xstrdup(cdatastrp);
+    wpt_tmp->notes = xstrdup(CSTR(cdatastr));
     break;
   case tt_cache_container:
-    waypt_alloc_gc_data(wpt_tmp)->container = gs_mkcont(cdatastrp);
+    waypt_alloc_gc_data(wpt_tmp)->container = gs_mkcont(cdatastr);
     break;
   case tt_cache_type:
-    waypt_alloc_gc_data(wpt_tmp)->type = gs_mktype(cdatastrp);
+    waypt_alloc_gc_data(wpt_tmp)->type = gs_mktype(cdatastr);
     break;
   case tt_cache_difficulty:
-    sscanf(cdatastrp, "%f", &x);
+    x = cdatastr.toDouble();
     waypt_alloc_gc_data(wpt_tmp)->diff = x * 10;
     break;
   case tt_cache_hint:
-    rtrim(cdatastrp);
-    if (cdatastrp[0]) {
-      waypt_alloc_gc_data(wpt_tmp)->hint = cdatastrp;
-    }
+   waypt_alloc_gc_data(wpt_tmp)->hint = cdatastr.trimmed();
     break;
   case tt_cache_desc_long: {
     geocache_data* gc_data = waypt_alloc_gc_data(wpt_tmp);
@@ -960,26 +956,25 @@ gpx_end(const QString& el)
 // FIXME: Forcing a premature conversion here saves 4% on GPX read times
 // on large PQs.  Once cdatastrp becomes  real QString this is just (minimal)
 // overhead.
-    gc_data->desc_long.utfstring = QString(cdatastrp).trimmed();
+    gc_data->desc_long.utfstring = QString(cdatastr).trimmed();
   }
   break;
   case tt_cache_desc_short:
-    rtrim(cdatastrp);
-    if (cdatastrp[0]) {
+    {
       geocache_data* gc_data = waypt_alloc_gc_data(wpt_tmp);
       gc_data->desc_short.is_html = cache_descr_is_html;
-      gc_data->desc_short.utfstring = cdatastrp;
+      gc_data->desc_short.utfstring = cdatastr;
     }
     break;
   case tt_cache_terrain:
-    sscanf(cdatastrp, "%f", &x);
+    x = cdatastr.toDouble();
     waypt_alloc_gc_data(wpt_tmp)->terr = x * 10;
     break;
   case tt_cache_placer:
-    waypt_alloc_gc_data(wpt_tmp)->placer = cdatastrp;
+    waypt_alloc_gc_data(wpt_tmp)->placer = cdatastr;
     break;
   case tt_cache_log_date:
-    gc_log_date = xml_parse_time(cdatastrp);
+    gc_log_date = xml_parse_time(cdatastr);
     break;
     /*
      * "Found it" logs follow the date according to the schema,
@@ -987,17 +982,17 @@ gpx_end(const QString& el)
      * last date we saw in this log.
      */
   case tt_cache_log_type:
-    if ((0 == strcmp(cdatastrp, "Found it")) &&
+    if ((cdatastr.compare("Found it") == 0) &&
         (0 == wpt_tmp->gc_data->last_found.toTime_t())) {
       waypt_alloc_gc_data(wpt_tmp)->last_found = gc_log_date;
     }
     gc_log_date = QDateTime();
     break;
   case tt_cache_favorite_points:
-    waypt_alloc_gc_data(wpt_tmp)->favorite_points  = atoi(cdatastrp);
+    waypt_alloc_gc_data(wpt_tmp)->favorite_points  = cdatastr.toInt();
     break;
   case tt_cache_personal_note:
-    waypt_alloc_gc_data(wpt_tmp)->personal_note  = xstrdup(cdatastrp);
+    waypt_alloc_gc_data(wpt_tmp)->personal_note  = cdatastr;
     break;
 
     /*
@@ -1014,7 +1009,7 @@ gpx_end(const QString& el)
   case tt_garmin_wpt_country:
   case tt_garmin_wpt_postal_code:
   case tt_garmin_wpt_phone_nr:
-    garmin_fs_xml_convert(tt_garmin_wpt_extensions, tag, cdatastrp, wpt_tmp);
+    garmin_fs_xml_convert(tt_garmin_wpt_extensions, tag, cdatastr, wpt_tmp);
     break;
 
     /*
@@ -1022,13 +1017,13 @@ gpx_end(const QString& el)
      */
   case tt_humminbird_wpt_depth:
   case tt_humminbird_trk_trkseg_trkpt_depth:
-    WAYPT_SET(wpt_tmp, depth, atof(cdatastrp) / 100.0)
+    WAYPT_SET(wpt_tmp, depth, cdatastr.toDouble() / 100.0)
     break;
     /*
      * Route-specific tags.
      */
   case tt_rte_name:
-    rte_head->rte_name = xstrdup(cdatastrp);
+    rte_head->rte_name = xstrdup(CSTR(cdatastr));
     break;
   case tt_rte:
     break;
@@ -1044,16 +1039,16 @@ gpx_end(const QString& el)
     wpt_tmp = NULL;
     break;
   case tt_rte_desc:
-    rte_head->rte_desc = xstrdup(cdatastrp);
+    rte_head->rte_desc = xstrdup(CSTR(cdatastr));
     break;
   case tt_rte_number:
-    rte_head->rte_num = atoi(cdatastrp);
+    rte_head->rte_num = cdatastr.toInt();
     break;
     /*
      * Track-specific tags.
      */
   case tt_trk_name:
-    trk_head->rte_name = xstrdup(cdatastrp);
+    trk_head->rte_name = xstrdup(CSTR(cdatastr));
     break;
   case tt_trk:
     break;
@@ -1072,22 +1067,22 @@ gpx_end(const QString& el)
     wpt_tmp = NULL;
     break;
   case tt_trk_desc:
-    trk_head->rte_desc = xstrdup(cdatastrp);
+    trk_head->rte_desc = xstrdup(CSTR(cdatastr));
     break;
   case tt_trk_number:
-    trk_head->rte_num = atoi(cdatastrp);
+    trk_head->rte_num = cdatastr.toInt();
     break;
   case tt_trk_trkseg_trkpt_course:
-    WAYPT_SET(wpt_tmp, course, atof(cdatastrp));
+    WAYPT_SET(wpt_tmp, course, cdatastr.toDouble());
     break;
   case tt_trk_trkseg_trkpt_speed:
-    WAYPT_SET(wpt_tmp, speed, atof(cdatastrp));
+    WAYPT_SET(wpt_tmp, speed, cdatastr.toDouble());
     break;
   case tt_trk_trkseg_trkpt_heartrate:
-    wpt_tmp->heartrate = atof(cdatastrp);
+    wpt_tmp->heartrate = cdatastr.toDouble();
     break;
   case tt_trk_trkseg_trkpt_cadence:
-    wpt_tmp->cadence = atof(cdatastrp);
+    wpt_tmp->cadence = cdatastr.toDouble();
     break;
 
     /*
@@ -1096,27 +1091,27 @@ gpx_end(const QString& el)
   case tt_wpt_ele:
   case tt_rte_rtept_ele:
   case tt_trk_trkseg_trkpt_ele:
-    sscanf(cdatastrp, "%lf", &wpt_tmp->altitude);
+    wpt_tmp->altitude = cdatastr.toDouble();
     break;
   case tt_wpt_name:
   case tt_rte_rtept_name:
   case tt_trk_trkseg_trkpt_name:
-    wpt_tmp->shortname = xstrdup(cdatastrp);
+    wpt_tmp->shortname = xstrdup(CSTR(cdatastr));
     break;
   case tt_wpt_sym:
   case tt_rte_rtept_sym:
   case tt_trk_trkseg_trkpt_sym:
-    wpt_tmp->icon_descr = cdatastrp;
+    wpt_tmp->icon_descr = xstrdup(CSTR(cdatastr));
     break;
   case tt_wpt_time:
   case tt_trk_trkseg_trkpt_time:
   case tt_rte_rtept_time:
-    wpt_tmp->SetCreationTime(xml_parse_time(cdatastrp));
+    wpt_tmp->SetCreationTime(xml_parse_time(cdatastr));
     break;
   case tt_wpt_cmt:
   case tt_rte_rtept_cmt:
   case tt_trk_trkseg_trkpt_cmt:
-    wpt_tmp->description = xstrdup(cdatastrp);
+    wpt_tmp->description = xstrdup(CSTR(cdatastr));
     break;
   case tt_wpt_desc:
   case tt_trk_trkseg_trkpt_desc:
@@ -1124,28 +1119,33 @@ gpx_end(const QString& el)
     if (wpt_tmp->notes != NULL) {
       xfree(wpt_tmp->notes);
     }
-    wpt_tmp->notes = xstrdup(cdatastrp);
+    wpt_tmp->notes = xstrdup(CSTR(cdatastr));
     break;
   case tt_pdop:
-    wpt_tmp->pdop = atof(cdatastrp);
+    wpt_tmp->pdop = cdatastr.toDouble();
     break;
   case tt_hdop:
-    wpt_tmp->hdop = atof(cdatastrp);
+    wpt_tmp->hdop = cdatastr.toDouble();
     break;
   case tt_vdop:
-    wpt_tmp->vdop = atof(cdatastrp);
+    wpt_tmp->vdop = cdatastr.toDouble();
     break;
   case tt_sat:
-    wpt_tmp->sat = atof(cdatastrp);
+    wpt_tmp->sat = cdatastr.toDouble();
     break;
-  case tt_fix:
-    wpt_tmp->fix = (fix_type)(atoi(cdatastrp)-1);
+  case tt_fix: {
+    // FIXME: this code seems to rely on atoi() parsing 3d and 2d as 3 and 2
+    // which toInt() doesn't do.
+    //wpt_tmp->fix = (fix_type)(cdatastr.toInt() - 1);
+    const char *t = CSTR(cdatastr);
+    wpt_tmp->fix = (fix_type)(atoi(t) - 1);
+    }
     if (wpt_tmp->fix < fix_2d) {
-      if (!case_ignore_strcmp(cdatastrp, "none")) {
+      if ((cdatastr.compare("none"), Qt::CaseInsensitive) == 0) {
         wpt_tmp->fix = fix_none;
-      } else if (!case_ignore_strcmp(cdatastrp, "dgps")) {
+      } else if ((cdatastr.compare("dgps"), Qt::CaseInsensitive) == 0) {
         wpt_tmp->fix = fix_dgps;
-      } else if (!case_ignore_strcmp(cdatastrp, "pps")) {
+      } else if ((cdatastr.compare("pps"), Qt::CaseInsensitive) == 0) {
         wpt_tmp->fix = fix_pps;
       } else {
         wpt_tmp->fix = fix_unknown;
@@ -1155,32 +1155,22 @@ gpx_end(const QString& el)
   case tt_wpt_url:
   case tt_trk_trkseg_trkpt_url:
   case tt_rte_rtept_url:
-    link_->url_ = cdatastrp;
+    link_->url_ = cdatastr;
     break;
   case tt_wpt_urlname:
   case tt_trk_trkseg_trkpt_urlname:
   case tt_rte_rtept_urlname:
-    link_->url_link_text_ = cdatastrp;
+    link_->url_link_text_ = cdatastr;
     break;
   case tt_wpt_link:
 //TODO: implement GPX 1.1 	case tt_trk_trkseg_trkpt_link:
 //TODO: implement GPX 1.1 	case tt_rte_rtept_link:
     waypt_add_url(wpt_tmp, link_url, link_text);
-    if (link_text) {
-      xfree(link_text);
-      link_text = NULL;
-    }
-    if (link_url) {
-      xfree(link_url);
-      link_url = NULL;
-    }
+    link_text = QString();
+    link_url = QString();
     break;
   case tt_wpt_link_text:
-    if (cdatastrp[0]) {
-      link_text = xstrdup(lrtrim(cdatastrp));
-    } else {
-      link_text = NULL;
-    }
+      link_text = cdatastr.trimmed();
     break;
   case tt_unknown:
     end_something_else();
@@ -1197,19 +1187,12 @@ gpx_end(const QString& el)
 
 
 static void
-gpx_cdata(const char* s)
+gpx_cdata(const QString& s)
 {
-  char* estr;
   int* cdatalen;
   char** cdata;
   xml_tag* tmp_tag;
-  size_t slen = strlen(cdatastr.mem);
-  int len = strlen(s);
-
-  vmem_realloc(&cdatastr,  1 + len + slen);
-  estr = ((char*) cdatastr.mem) + slen;
-  memcpy(estr, s, len);
-  estr[len]  = 0;
+  cdatastr = s;
 
   if (!cur_tag) {
     return;
@@ -1226,13 +1209,8 @@ gpx_cdata(const char* s)
     cdata = &(cur_tag->cdata);
     cdatalen = &(cur_tag->cdatalen);
   }
-  estr = *cdata;
-  *cdata = (char*) xrealloc(*cdata, *cdatalen + len + 1);
-  estr = *cdata + *cdatalen;
-  memcpy(estr, s, len);
-  *(estr+len) = '\0';
-  *cdatalen += len;
 
+  *cdata = xstrdup(CSTR(cdatastr));
 }
 
 static void
@@ -1246,9 +1224,7 @@ gpx_rd_init(const char* fname)
 
   prescan_tags();
 
-
-  cdatastr = vmem_alloc(1, 0);
-  *((char*)cdatastr.mem) = '\0';
+  cdatastr = QString();
 
   if (NULL == gpx_global) {
     gpx_global = (struct gpx_global*) xcalloc(sizeof(*gpx_global), 1);
@@ -1268,8 +1244,6 @@ static
 void
 gpx_rd_deinit(void)
 {
-  vmem_free(&cdatastr);
-
   delete reader;
   reader = NULL;
   iqfile->close();
@@ -1331,7 +1305,7 @@ gpx_read(void)
 //    It is tempting to skip this if reader->isWhitespace().
 //    That would lose all whitespace element values if the exist,
 //    but it would skip line endings and indentation that doesn't matter.
-      gpx_cdata(CSTR(reader->text().toString()));
+      gpx_cdata(reader->text().toString());
       break;
 
     default:
