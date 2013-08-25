@@ -186,11 +186,19 @@ nav_read(void)
   reader.setDevice(&file);
 
   while (!reader.atEnd()) {
-    if (reader.name() == "CacheDetails" &&
-        reader.tokenType() == QXmlStreamReader::StartElement) {
-      NaviReadCache(reader);
+    if (reader.tokenType() == QXmlStreamReader::StartElement) {
+      if (reader.name() == "CacheDetails") {
+        NaviReadCache(reader);
+      }
     }
-    reader.readNextStartElement();
+    reader.readNext();
+  }
+  if (reader.hasError())  {
+    fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
+          CSTR(reader.errorString()),
+          CSTR(file.fileName()),
+          (long) reader.lineNumber(),
+          (long) reader.columnNumber());
   }
 }
 
