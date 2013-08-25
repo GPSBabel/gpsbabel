@@ -1101,7 +1101,7 @@ gpx_end(const QString& el)
   case tt_wpt_sym:
   case tt_rte_rtept_sym:
   case tt_trk_trkseg_trkpt_sym:
-    wpt_tmp->icon_descr = xstrdup(CSTR(cdatastr));
+    wpt_tmp->icon_descr = cdatastr;
     break;
   case tt_wpt_time:
   case tt_trk_trkseg_trkpt_time:
