@@ -141,10 +141,10 @@ WEB=@DOCDIR@
 all: gpsbabel$(EXEEXT)
 
 gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@ 
-	$(CXX)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EXPAT_LIB@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
+	$(CXX)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
 gpsbabel-debug: $(OBJS)
-	$(CXX)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ @EXPAT_LIB@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
+	$(CXX)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
 Makefile gbversion.h: Makefile.in config.status xmldoc/makedoc.in \
 	  gbversion.h.in gui/setup.iss.in
@@ -282,7 +282,7 @@ doc: gpsbabel $(WEB)/htmldoc-$(DOCVERSION)/index.html gpsbabel.pdf # readme.txt
 FORCE:
 
 # file list for windows package
-WINFILES = gpsbabel.exe mingw/libexpat.dll win32/GPSBabelGUI.exe win32/gui-2/README.gui \
+WINFILES = gpsbabel.exe win32/GPSBabelGUI.exe win32/gui-2/README.gui \
            README.contrib AUTHORS COPYING gpsbabel.html
 
 #
@@ -343,13 +343,13 @@ release-rpm:
 #
 
 cross-configure:
-	  CXX=i386-mingw32-gcc LDFLAGS="-s" @srcdir@/configure --host=i386-pc-mingw32 --with-cet=all --with-expathdr=@srcdir@/mingw/include --with-libexpat=@srcdir@/mingw/lib 
+	  CXX=i386-mingw32-gcc LDFLAGS="-s" @srcdir@/configure --host=i386-pc-mingw32 --with-cet=all
 
 release-winbuild:
 	rm -fr /tmp/gpsbabel-$(VERSIOND)-cross
 	cp -a gpsbabel-$(VERSIOND) /tmp/gpsbabel-$(VERSIOND)-cross
 	cd /tmp/gpsbabel-$(VERSIOND)-cross ; \
-	  CXX=i386-mingw32-gcc LDFLAGS="-s" ./configure --host=i386-pc-mingw32 --with-cet=all --with-expathdr=mingw/include --with-libexpat=mingw/lib && make && \
+	  CXX=i386-mingw32-gcc LDFLAGS="-s" ./configure --host=i386-pc-mingw32 --with-cet=all && make && \
 	  zip -j /tmp/gpsbabel-$(VERSIOND).zip $(WINFILES)
 	rm -fr /tmp/gpsbabel-$(VERSIOND)-cross
 

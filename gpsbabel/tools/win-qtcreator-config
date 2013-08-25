@@ -6,7 +6,5 @@ S=.
 CFLAGS="$CFLAGS -I $S/mingw/include/" \
 CFLAGS="$CFLAGS -I $S/mingw/include/ddk" \
 CC=$CHAIN/bin/gcc \
-$S/configure  --host=i386-mingw32  \
-        --with-expathdr=$S/mingw/include \
-        --with-libexpat=$S/mingw/lib
+$S/configure  --host=i386-mingw32
 

@@ -1,7 +1,7 @@
 CC=/usr/local/cross-tools/bin/i386-mingw32msvc-gcc
 VPATH=..:../shapelib
 
-FILES=gpsbabel.exe libexpat.dll ../win32/GPSBabelGUI.exe ../win32/gui-2/README.gui \
+FILES=gpsbabel.exe ../win32/GPSBabelGUI.exe ../win32/gui-2/README.gui \
   ../README* ../style/README.style ../COPYING ../readme.html
 
 gpsbabel.exe:  wintesto.cmd
@@ -16,7 +16,7 @@ INHIBIT_USB=#-DNO_USB
 OSJEEPS=jeeps/gpsusbwin.o
 
 gpsbabel.exe: $(OBJS)
-	$(CC) -static $(CFLAGS) $(OBJS) lib/libexpat.a -o gpsbabel.exe  -lsetupapi
+	$(CC) -static $(CFLAGS) $(OBJS) -o gpsbabel.exe  -lsetupapi
 	zip -j /tmp/gpsbabel-$(VERSIOND).zip $(FILES)
 	cp gpsbabel.exe /tmp
 
@@ -34,7 +34,7 @@ usbfree:
 	$(MAKE) INHIBIT_USB=-DNO_USB gpsbabel-usbfree.exe
 
 gpsbabel-usbfree.exe: $(OBJS)
-	$(CC) -static $(CFLAGS) $(OBJS) lib/libexpat.a -o gpsbabel-usbfree.exe
+	$(CC) -static $(CFLAGS) $(OBJS) -o gpsbabel-usbfree.exe
 	zip -j /tmp/gpsbabel-nousb-$(VERSIOND).zip gpsbabel-usbfree.exe
 
 

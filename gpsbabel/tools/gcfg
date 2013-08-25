@@ -11,7 +11,5 @@ $S/configure --host=i386-pc-mingw32 \
   --disable-filters \
         --without-cet \
         --without-pdb \
-        --without-filters \
-        --with-expathdr=$S/mingw/includew \
-        --with-libexpat=$S/mingw/libw
+        --without-filters
 
