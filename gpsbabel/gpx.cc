@@ -206,18 +206,17 @@ gpx_add_to_global(gpx_global_entry* ge, const QString& s)
 {
   queue* elem, *tmp;
   gpx_global_entry* gep;
-  const char* cdata = CSTR(s);
 
   QUEUE_FOR_EACH(&ge->queue, elem, tmp) {
     gep = BASE_STRUCT(elem, gpx_global_entry, queue);
-    if (0 == strcmp(cdata, gep->tagdata)) {
+    if (0 == s.compare(gep->tagdata)) {
       return;
     }
   }
 
   gep = (gpx_global_entry*) xcalloc(sizeof(*gep), 1);
   QUEUE_INIT(&gep->queue);
-  gep->tagdata = xstrdup(cdata);
+  gep->tagdata = xstrdup(CSTR(s));
   ENQUEUE_TAIL(&ge->queue, &gep->queue);
 }
 
