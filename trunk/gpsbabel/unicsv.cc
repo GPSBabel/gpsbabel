@@ -1,7 +1,7 @@
 /*
     Universal CSV - support for csv files, divining field order from the header.
 
-    Copyright (C) 2006 Robert Lipe, robertlipe@usa.net,
+    Copyright (C) 2006-2013 Robert Lipe, robertlipe@gpsbabel.org
     copyright (C) 2007,2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
@@ -32,8 +32,6 @@
 #include "jeeps/gpsmath.h"
 
 #define MYNAME "unicsv"
-
-#define UNICSV_GC_READY
 
 /* "UNICSV_FIELD_SEP" and "UNICSV_LINE_SEP" are only used by the writer */
 
@@ -103,7 +101,6 @@ typedef enum {
   fld_garmin_fax_nr,
   fld_garmin_email,
   fld_garmin_facility,
-#ifdef UNICSV_GC_READY
   fld_gc_id,
   fld_gc_type,
   fld_gc_container,
@@ -116,7 +113,6 @@ typedef enum {
   fld_gc_placer,
   fld_gc_placer_id,
   fld_gc_hint,
-#endif
   fld_terminator
 } field_e;
 
@@ -229,7 +225,6 @@ static field_t fields_def[] = {
   { "email",	fld_garmin_email, STR_ANY },
   { "state",	fld_garmin_state, STR_ANY },
   { "faci",	fld_garmin_facility, STR_ANY },
-#ifdef UNICSV_GC_READY
   /* geocache details */
   { "gcid",	fld_gc_id, STR_ANY },
   { "type",	fld_gc_type, STR_ANY },
@@ -243,7 +238,6 @@ static field_t fields_def[] = {
   { "placer_id",	fld_gc_placer_id, STR_ANY },
   { "placer",	fld_gc_placer, STR_ANY },
   { "hint",	fld_gc_hint, STR_ANY },
-#endif
   { NULL,		fld_terminator, 0 }
 };
 
@@ -441,7 +435,6 @@ unicsv_parse_time(const char* str, int* msec, time_t* date)
   return ((hour * SECONDS_PER_HOUR) + (min * 60) + (int)sec);
 }
 
-#ifdef UNICSV_GC_READY
 static status_type
 unicsv_parse_status(const char* str)
 {
@@ -457,9 +450,7 @@ unicsv_parse_status(const char* str)
     return status_unknown;
   }
 }
-#endif
 
-#ifdef UNICSV_GC_READY
 static QDateTime
 unicsv_adjust_time(const time_t time, time_t* date)
 {
@@ -475,7 +466,6 @@ unicsv_adjust_time(const time_t time, time_t* date)
   }
   return QDateTime::fromTime_t(res);
 }
-#endif
 
 static char
 unicsv_compare_fields(char* s, const field_t* f)
@@ -681,9 +671,7 @@ unicsv_parse_one_line(char* ibuf)
   int src_datum = unicsv_datum_idx;
   int ns = 1;
   int ew = 1;
-#ifdef UNICSV_GC_READY
   geocache_data* gc_data = NULL;
-#endif
   wpt = waypt_new();
   wpt->latitude = unicsv_unknown;
   wpt->longitude = unicsv_unknown;
@@ -1057,7 +1045,6 @@ unicsv_parse_one_line(char* ibuf)
         break;
       }
       break;
-#ifdef UNICSV_GC_READY
     case fld_gc_id:
     case fld_gc_type:
     case fld_gc_container:
@@ -1131,7 +1118,6 @@ unicsv_parse_one_line(char* ibuf)
         break;
       }
       break;
-#endif
     case fld_terminator: /* dummy */
       checked--;
       break;
@@ -1316,28 +1302,21 @@ unicsv_print_str(const QString& s)
   xfree(t);
 }
 
-#ifdef UNICSV_GC_READY
 static void
-unicsv_print_data_time(const time_t atime)
+unicsv_print_data_time(const QDateTime& idt)
 {
-  struct tm tm;
-  time_t time = atime;
-  char buf[32] = "";
-
-  if (time) {
-    if (opt_utc) {
-      time += atoi(opt_utc) * SECONDS_PER_HOUR;
-      tm = *gmtime(&time);
-    } else {
-      tm = *localtime(&time);
-    }
-    snprintf(buf, sizeof(buf), "%04d/%02d/%02d %02d:%02d:%02d",
-             tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
-             tm.tm_hour, tm.tm_min, tm.tm_sec);
+  if (!idt.isValid()) {
+    return;
   }
-  unicsv_print_str(buf);
+  QDateTime dt = idt;
+    if (opt_utc) {
+      //time += atoi(opt_utc) * SECONDS_PER_HOUR;
+      dt = dt.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
+      dt = dt.toUTC();
+    }
+
+  unicsv_print_str(dt.toString("yyyy/MM/dd hh:mm:ss"));
 }
-#endif
 
 #define FIELD_USED(a) (gb_getbit(&unicsv_outp_flags, a))
 
@@ -1452,7 +1431,6 @@ unicsv_waypt_enum_cb(const waypoint* wpt)
     }
   }
 
-#ifdef UNICSV_GC_READY
   if (! waypt_empty_gc_data(wpt)) {
     const geocache_data* gc_data = wpt->gc_data;
 
@@ -1493,7 +1471,6 @@ unicsv_waypt_enum_cb(const waypoint* wpt)
       gb_setbit(&unicsv_outp_flags, fld_gc_hint);
     }
   }
-#endif
 }
 
 static void
@@ -1503,9 +1480,7 @@ unicsv_waypt_disp_cb(const waypoint* wpt)
   char* cout = NULL;
   const char* shortname;
   garmin_fs_t* gmsd;
-#ifdef UNICSV_GC_READY
   const geocache_data* gc_data = NULL;
-#endif
   unicsv_waypt_ct++;
 
   shortname = (wpt->shortname) ? wpt->shortname : "";
@@ -1819,7 +1794,6 @@ unicsv_waypt_disp_cb(const waypoint* wpt)
     unicsv_print_str(GMSD_GET(email, NULL));
   }
 
-#ifdef UNICSV_GC_READY
   if (waypt_empty_gc_data(wpt)) {
     gc_data = NULL;
   } else {
@@ -1874,14 +1848,14 @@ unicsv_waypt_disp_cb(const waypoint* wpt)
   }
   if FIELD_USED(fld_gc_exported) {
     if (gc_data) {
-      unicsv_print_data_time(gc_data->exported.toTime_t());
+      unicsv_print_data_time(gc_data->exported);
     } else {
       gbfputs(unicsv_fieldsep, fout);
     }
   }
   if FIELD_USED(fld_gc_last_found) {
     if (gc_data) {
-      unicsv_print_data_time(gc_data->last_found.toTime_t());
+      unicsv_print_data_time(gc_data->last_found);
     } else {
       gbfputs(unicsv_fieldsep, fout);
     }
@@ -1906,7 +1880,6 @@ unicsv_waypt_disp_cb(const waypoint* wpt)
       gbfputs(unicsv_fieldsep, fout);
     }
   }
-#endif
   if (opt_format) {
     unicsv_print_str(wpt->session->name);
   }
@@ -2104,7 +2077,6 @@ unicsv_wr(void)
     gbfprintf(fout, "%sEmail", unicsv_fieldsep);
   }
 
-#ifdef UNICSV_GC_READY
   if FIELD_USED(fld_gc_id) {
     gbfprintf(fout, "%sGCID", unicsv_fieldsep);
   }
@@ -2141,7 +2113,6 @@ unicsv_wr(void)
   if FIELD_USED(fld_gc_hint) {
     gbfprintf(fout, "%sHint", unicsv_fieldsep);
   }
-#endif
   if (opt_format) {
     gbfprintf(fout, "%sFormat", unicsv_fieldsep);
   }
