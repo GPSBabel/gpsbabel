@@ -12,9 +12,9 @@ checkgpsbabel() {
 #    echo $1 is not a universal binary.  Aborting
 #    exit 1
 #  }
-  otool -L $1 | grep expat && {
-    echo $1 does not staticly link expat.  Use tools/mac-config
-    exit 1
+#  otool -L $1 | grep expat && {
+#    echo $1 does not staticly link expat.  Use tools/mac-config
+#    exit 1
   }
 }
 

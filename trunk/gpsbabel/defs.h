@@ -41,11 +41,6 @@
 
 # include "src/core/datetime.h"
 
-// Turn on Unicode in expat?
-#ifdef _UNICODE
-#  define XML_UNICODE
-#endif
-
 #define CSTR(qstr) (qstr.toUtf8().constData())
 #define CSTRE_(qstr, enc) (enc->fromUnicode(qstr).constData())
 #define CSTRE(qstr) (CSTRE_(qstr, codec))

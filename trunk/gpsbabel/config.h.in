@@ -9,9 +9,6 @@
 /* 1 to enable all the filters. */
 #undef FILTERS_ENABLED
 
-/* Defined if you have libexpat */
-#undef HAVE_LIBEXPAT
-
 /* Define to 1 if you have the `m' library (-lm). */
 #undef HAVE_LIBM
 

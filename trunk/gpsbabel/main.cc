@@ -212,12 +212,6 @@ print_extended_info(void)
 #if SHAPELIB_ENABLED
     "SHAPELIB_ENABLED "
 #endif
-#if HAVE_LIBEXPAT
-    "HAVE_LIBEXPAT "
-#if defined(XML_UNICODE)
-    "XML_UNICODE "
-#endif
-#endif
 
 #if defined CET_WANTED
     "CET_ENABLED "

@@ -4,7 +4,5 @@ CHAIN=/usr/local/i386-mingw32-4.3.0
 S=.
 CFLAGS="-I$CHAIN/mingw/include/ddk" \
 CC=$CHAIN/bin/i386-mingw32-gcc \
-$S/configure  --host=i386-mingw32  \
-        --with-expathdr=$S/mingw/include \
-        --with-libexpat=$S/mingw/lib
+$S/configure  --host=i386-mingw32
 

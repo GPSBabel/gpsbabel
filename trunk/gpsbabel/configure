@@ -629,7 +629,6 @@ DOCDIR
 INSTALL_DEBUG
 GPSBABEL_DEBUG
 EFENCE_LIB
-EXPAT_LIB
 ZLIB
 GBSER
 OSJEEPS
@@ -727,8 +726,6 @@ enable_csv
 enable_most
 enable_filters
 with_zlib
-with_expathdr
-with_libexpat
 enable_efence
 with_doc
 '
@@ -1370,8 +1367,6 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-cet=(default,all,minimal)
   --with-zlib=(included)|system|no
-  --with-expathdr=DIR   Use this to specify the location of expat.h
-  --with-libexpat=DIR   Use this to specify expat library .
   --with-doc=DIR        Path where the documentation will be stored.
 
 Some influential environment variables:
@@ -4766,146 +4761,6 @@ esac
 $as_echo_n "checking for random stuff to make you feel better... " >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: failed" >&5
 $as_echo "failed" >&6; }
-
-
-# Check whether --with-expathdr was given.
-if test "${with_expathdr+set}" = set; then :
-  withval=$with_expathdr;  xpathdr="$withval"
-else
-
-	case "$target" in
-	*-*-darwin6*|*-*-darwin7*|*-*-darwin8*)
-		# Restrict test to OS/X 10.4 and earlier.  Leopard (10.5)
-		# provides expat and in a sensible location.
-		if test -f /sw/include/expat.h ; then
-			xpathdr=/sw/include/
-		fi
-		;;
-	*-gentoo-freebsd*)
-		;;
-	*-*-freebsd*)
- 		if test -f /usr/local/include/expat.h ; then
-			xpathdr=/usr/local/include
-		fi
-		;;
-	*) 	;;
-	esac
-
-
-fi
-
-
-if test "x-$xpathdr" != "x-" ; then
-	CFLAGS="$CFLAGS -I$xpathdr"
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libexpat" >&5
-$as_echo_n "checking for libexpat... " >&6; }
-
-# Check whether --with-libexpat was given.
-if test "${with_libexpat+set}" = set; then :
-  withval=$with_libexpat;
-    # If the developer specified a reference
-    # to a FILE and not a directory, assume they are a highly
-    # trained professional that has specified a .a to to be used.
-    if test -f $withval ; then
-      EXPAT_LIB=$withval
-    else
-      CFLAGS="$CFLAGS -L$withval"
-      EXPAT_LIB="-L$withval -lexpat"
-    fi
-
-else
-
-	case "$target" in
-	*-*-darwin6*|*-*-darwin7*|*-*-darwin8*)
-		# Restrict test to OS/X 10.4 and earlier.  Leopard (10.5)
-		# provides expat and in a sensible location.
-		if test -f /sw/lib/libexpat.a ; then
-			# libexpat installed via fink
-			EXPAT_LIB=/sw/lib/libexpat.a
-			LIBS="$LIBS -L/sw/lib"
-		fi
-		if test -f /opt/local/lib/libexpat.a ; then
-			# libexpat installed via macports
-			EXPAT_LIB=/opt/local/lib/libexpat.a
-			LIBS="$LIBS -L/opt/local/lib"
-		fi
-		if test -f /usr/local/lib/libexpat.a ; then
-			# libexpat installed from source
-			EXPAT_LIB=/usr/local/lib/libexpat.a
-			LIBS="$LIBS -L/usr/local/lib"
-		fi
-		;;
-	*-gentoo-freebsd*)
-		EXPAT_LIB=-lexpa
-		;;
-	*-*-freebsd*)
-		if test -f /usr/local/lib/libexpat.a ; then
-			EXPAT_LIB=/usr/local/lib/libexpat.a
-		fi
-		;;
-	esac
-
-
-fi
-
-
-if ! test "x${EXPAT_LIB}" = x; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $EXPAT_LIB" >&5
-$as_echo "$EXPAT_LIB" >&6; }
-
-$as_echo "#define HAVE_LIBEXPAT 1" >>confdefs.h
-
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: try to autodetect" >&5
-$as_echo "try to autodetect" >&6; }
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for XML_ParserCreate in -lexpat" >&5
-$as_echo_n "checking for XML_ParserCreate in -lexpat... " >&6; }
-if ${ac_cv_lib_expat_XML_ParserCreate+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lexpat  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char XML_ParserCreate ();
-int
-main ()
-{
-return XML_ParserCreate ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_link "$LINENO"; then :
-  ac_cv_lib_expat_XML_ParserCreate=yes
-else
-  ac_cv_lib_expat_XML_ParserCreate=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_expat_XML_ParserCreate" >&5
-$as_echo "$ac_cv_lib_expat_XML_ParserCreate" >&6; }
-if test "x$ac_cv_lib_expat_XML_ParserCreate" = xyes; then :
-
-$as_echo "#define HAVE_LIBEXPAT 1" >>confdefs.h
-
-    EXPAT_LIB=-lexpat
-
-fi
-
-fi
-
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for efence" >&5
 $as_echo_n "checking for efence... " >&6; }

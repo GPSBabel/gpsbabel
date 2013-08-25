@@ -1,7 +1,6 @@
 #if 0
 //This file is no longer used, the defines are set in the project files
 
-#define HAVE_LIBEXPAT 1
 #define __va_copy(ap1, ap2) ((ap1) = (ap2))
 
 // This controls the capabilities of our Character Encoding Transformations.

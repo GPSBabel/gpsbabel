@@ -9,7 +9,5 @@ CFLAGS="$XFLAGS  -O " \
   LDFLAGS="$XFLAGS "   ${SRC}/configure 
 
 # CFLAGS="$XFLAGS  -O  -arch i386 " \
-#   LDFLAGS="$XFLAGS -arch i386 "   ${SRC}/configure \
-#  --with-libexpat=${SRC}/mac/lib/libexpat.a \
-#  --with-expathdr=${SRC}/mac/include
+#   LDFLAGS="$XFLAGS -arch i386 "   ${SRC}/configure
 

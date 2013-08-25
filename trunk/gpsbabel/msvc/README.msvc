@@ -46,13 +46,10 @@ is required in addition to the actual compiler package for DeLorme (delbin).
 (Unless you have a special need for this format, it is simpler to patch the
  code that do not compile.)
 
-The "Expat" directory contains the import library and header file for the
-Expat DLL.
-
 Running:
-To run GPSBabel, you must make sure that the dlls (Qt and libexpat.dll from
-the Expat directory) is in the DLL search path.  The easiest way to do this,
-and to avoid version conflicts with other programs that use expat, is to put 
+To run GPSBabel, you must make sure that the dlls (Qt)
+are in the DLL search path.  The easiest way to do this,
+and to avoid version conflicts with other programs, is to put 
 the dlls in the same directory as gpsbabel.exe.
 
 If you experience any problems with this project file or with the build 
