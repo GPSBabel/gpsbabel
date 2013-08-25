@@ -1137,8 +1137,7 @@ gpx_end(const QString& el)
     // FIXME: this code seems to rely on atoi() parsing 3d and 2d as 3 and 2
     // which toInt() doesn't do.
     //wpt_tmp->fix = (fix_type)(cdatastr.toInt() - 1);
-    const char *t = CSTR(cdatastr);
-    wpt_tmp->fix = (fix_type)(atoi(t) - 1);
+    wpt_tmp->fix = (fix_type)(atoi(CSTR(cdatastr)) - 1);
     }
     if (wpt_tmp->fix < fix_2d) {
       if ((cdatastr.compare("none"), Qt::CaseInsensitive) == 0) {
