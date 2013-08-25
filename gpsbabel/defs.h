@@ -707,8 +707,8 @@ void waypt_restore(signed int count, queue* head_bak);
 
 geocache_data* waypt_alloc_gc_data(waypoint* wpt);
 int waypt_empty_gc_data(const waypoint* wpt);
-geocache_type gs_mktype(const char* t);
-geocache_container gs_mkcont(const char* t);
+geocache_type gs_mktype(const QString& t);
+geocache_container gs_mkcont(const QString& t);
 
 route_head* route_head_alloc(void);
 void route_add(waypoint*);
@@ -792,19 +792,6 @@ void setshort_whitespace_ok(short_handle,  int n);
 void setshort_repeating_whitespace_ok(short_handle,  int n);
 void setshort_defname(short_handle, const char* s);
 void setshort_is_utf8(short_handle h, const int is_utf8);
-
-/*
- *  Vmem flags values.
- */
-#define VMFL_NOZERO (1 << 0)
-typedef struct vmem {
-  char* mem;		/* visible memory object */
-  size_t size; 		/* allocated size of object */
-} vmem_t;
-vmem_t 	vmem_alloc(size_t, int flags);
-void 	vmem_free(vmem_t*);
-void 	vmem_realloc(vmem_t*, size_t);
-
 
 #define ARGTYPE_UNKNOWN    0x00000000
 #define ARGTYPE_INT        0x00000001

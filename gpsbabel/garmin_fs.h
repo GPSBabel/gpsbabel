@@ -121,7 +121,7 @@ void garmin_fs_convert(void* fs);
 char* garmin_fs_xstrdup(const char* src, size_t size);
 
 /* for GPX */
-void garmin_fs_xml_convert(const int base_tag, int tag, const char* cdatastr, waypoint* waypt);
+void garmin_fs_xml_convert(const int base_tag, int tag, const QString& cdatastr, waypoint* waypt);
 class QXmlStreamWriter;
 void garmin_fs_xml_fprint(const waypoint* waypt, QXmlStreamWriter*);
 

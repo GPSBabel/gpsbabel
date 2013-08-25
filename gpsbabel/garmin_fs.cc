@@ -284,10 +284,11 @@ garmin_fs_xml_fprint(const waypoint* waypt,
 }
 
 void
-garmin_fs_xml_convert(const int base_tag, int tag, const char* cdatastr, waypoint* waypt)
+garmin_fs_xml_convert(const int base_tag, int tag, const QString& Qcdatastr, waypoint* waypt)
 {
   garmin_fs_t* gmsd;
-
+// FIXME: eliminate C string copy/use here:
+  const char *cdatastr = xstrdup(CSTR(Qcdatastr));
   gmsd = GMSD_FIND(waypt);
   if (gmsd == NULL) {
     gmsd = garmin_fs_alloc(-1);
@@ -364,6 +365,7 @@ garmin_fs_xml_convert(const int base_tag, int tag, const char* cdatastr, waypoin
     GMSD_SETSTR(phone_nr, cdatastr);
     break;
   }
+  xfree(cdatastr);
 }
 
 unsigned char

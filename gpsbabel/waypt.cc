@@ -410,20 +410,6 @@ waypt_free(waypoint* wpt)
     xfree(wpt->notes);
   }
 
-#if 0
-  // these are now ref counted...
-  if (wpt->url_next) {
-    url_link* url_next;
-
-    for (url_next = wpt->url_next; url_next;) {
-
-      url_link* tonuke = url_next;
-      url_next = tonuke->url_next;
-      xfree(tonuke);
-    }
-  }
-#endif
-
   if (wpt->gc_data != &empty_gc_data) {
     geocache_data* gc_data = (geocache_data*)wpt->gc_data;
 
