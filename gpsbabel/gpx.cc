@@ -23,13 +23,8 @@
 #include "cet_util.h"
 #include "garmin_fs.h"
 #include <math.h>
-#if HAVE_LIBEXPAT && !defined(NEW_GPX_READER)
-#include <expat.h>
-static XML_Parser psr;
-#else
 #include <QtCore/QXmlStreamReader>
 static QXmlStreamReader* reader;
-#endif
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
 #include <QtCore/QRegExp>
@@ -47,7 +42,6 @@ static int logpoint_ct = 0;
 static char* gpx_version = NULL;
 static char* gpx_wversion;
 static int gpx_wversion_num;
-static const char* gpx_creator;
 static QXmlStreamAttributes gpx_namespace_attribute;
 
 static QString current_tag;
@@ -55,11 +49,7 @@ static QString current_tag;
 static waypoint* wpt_tmp;
 static UrlLink* link_;
 static int cache_descr_is_html;
-#ifndef NEW_GPX_READER
-static gbfile* fd;
-#else
 static gpsbabel::File* iqfile;
-#endif
 static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
 static short_handle mkshort_handle;
@@ -466,34 +456,6 @@ prescan_tags(void)
   }
 }
 
-#ifndef NEW_GPX_READER
-static void
-tag_gpx(const char** attrv)
-{
-  const char** avp;
-  for (avp = &attrv[0]; *avp; avp += 2) {
-    if (strcmp(avp[0], "version") == 0) {
-      /* Set the default output version to the highest input
-       * version.
-       */
-      if (! gpx_version) {
-        gpx_version = xstrdup(avp[1]);
-      } else if ((strtod(gpx_version, NULL) * 10) < (strtod(avp[1], NULL) * 10)) {
-        xfree(gpx_version);
-        gpx_version = xstrdup(avp[1]);
-      }
-    } else if (strcmp(avp[0], "src") == 0) {
-      gpx_creator = avp[1];
-    } else if (0 == strncmp(avp[0], "xmlns:", 6)) {
-      if (0 != strcmp(avp[0], "xmlns:xsi")) {
-        if (! gpx_namespace_attribute.hasAttribute(avp[0])) {
-          gpx_namespace_attribute.append(avp[0], avp[1]);
-        }
-      }
-    }
-  }
-}
-#else
 static void
 tag_gpx(const QXmlStreamAttributes& attr)
 {
@@ -507,11 +469,6 @@ tag_gpx(const QXmlStreamAttributes& attr)
       xfree(gpx_version);
       gpx_version = xstrdup(CSTR(attr.value("version").toString()));
     }
-  }
-  if (attr.hasAttribute("src")) {
-    /* TODO: this is unused */
-    /* FIXME: this data may be deallocated */
-    gpx_creator = CSTR(attr.value("src").toString());
   }
   /* save namespace declarations in case we pass through elements
    * that use them to the writer.
@@ -527,31 +484,7 @@ tag_gpx(const QXmlStreamAttributes& attr)
     }
   }
 }
-#endif
 
-#ifndef NEW_GPX_READER
-static void
-tag_wpt(const char** attrv)
-{
-  const char** avp = &attrv[0];
-
-  wpt_tmp = waypt_new();
-  link_ = new UrlLink;
-
-  cur_tag = NULL;
-  while (*avp) {
-    if (strcmp(avp[0], "lat") == 0) {
-      sscanf(avp[1], "%lf",
-             &wpt_tmp->latitude);
-    } else if (strcmp(avp[0], "lon") == 0) {
-      sscanf(avp[1], "%lf",
-             &wpt_tmp->longitude);
-    }
-    avp+=2;
-  }
-  fs_ptr = &wpt_tmp->fs;
-}
-#else
 static void
 tag_wpt(const QXmlStreamAttributes& attr)
 {
@@ -567,24 +500,7 @@ tag_wpt(const QXmlStreamAttributes& attr)
   }
   fs_ptr = &wpt_tmp->fs;
 }
-#endif
 
-#ifndef NEW_GPX_READER
-static void
-tag_cache_desc(const char** attrv)
-{
-  const char** avp;
-
-  cache_descr_is_html = 0;
-  for (avp = &attrv[0]; *avp; avp+=2) {
-    if (strcmp(avp[0], "html") == 0) {
-      if (strcmp(avp[1], "True") == 0) {
-        cache_descr_is_html = 1;
-      }
-    }
-  }
-}
-#else
 static void
 tag_cache_desc(const QXmlStreamAttributes& attr)
 {
@@ -595,34 +511,7 @@ tag_cache_desc(const QXmlStreamAttributes& attr)
     }
   }
 }
-#endif
 
-#ifndef NEW_GPX_READER
-static void
-tag_gs_cache(const char** attrv)
-{
-  const char** avp;
-  geocache_data* gc_data = waypt_alloc_gc_data(wpt_tmp);
-
-  for (avp = &attrv[0]; *avp; avp+=2) {
-    if (strcmp(avp[0], "id") == 0) {
-      gc_data->id = atoi(avp[1]);
-    } else if (strcmp(avp[0], "available") == 0) {
-      if (case_ignore_strcmp(avp[1], "True") == 0) {
-        gc_data->is_available = status_true;
-      } else if (case_ignore_strcmp(avp[1], "False") == 0) {
-        gc_data->is_available = status_false;
-      }
-    } else if (strcmp(avp[0], "archived") == 0) {
-      if (case_ignore_strcmp(avp[1], "True") == 0) {
-        gc_data->is_archived = status_true;
-      } else if (case_ignore_strcmp(avp[1], "False") == 0) {
-        gc_data->is_archived = status_false;
-      }
-    }
-  }
-}
-#else
 static void
 tag_gs_cache(const QXmlStreamAttributes& attr)
 {
@@ -646,42 +535,8 @@ tag_gs_cache(const QXmlStreamAttributes& attr)
     }
   }
 }
-#endif
 
 static void
-#ifndef NEW_GPX_READER
-start_something_else(const char* el, const char** attrv)
-{
-  const char** avp = attrv;
-  char** avcp = NULL;
-  int attr_count = 0;
-  xml_tag* new_tag;
-  fs_xml* fs_gpx;
-
-  if (!fs_ptr) {
-    return;
-  }
-
-  new_tag = (xml_tag*)xcalloc(sizeof(xml_tag),1);
-  new_tag->tagname = xstrdup(el);
-
-  /* count attributes */
-  while (*avp) {
-    attr_count++;
-    avp++;
-  }
-
-  /* copy attributes */
-  avp = attrv;
-  new_tag->attributes = (char**)xcalloc(sizeof(char*),attr_count+1);
-  avcp = new_tag->attributes;
-  while (*avp) {
-    *avcp = xstrdup(*avp);
-    avcp++;
-    avp++;
-  }
-  *avcp = NULL;
-#else
 start_something_else(const QString el, const QXmlStreamAttributes& attr)
 {
   char** avcp;
@@ -706,7 +561,6 @@ start_something_else(const QString el, const QXmlStreamAttributes& attr)
     avcp++;
   }
   *avcp = NULL; // this indicates the end of the attribute name value pairs.
-#endif
 
   if (cur_tag) {
     if (cur_tag->child) {
@@ -748,44 +602,6 @@ end_something_else()
   }
 }
 
-#ifndef NEW_GPX_READER
-static void
-tag_log_wpt(const char** attrv)
-{
-  waypoint* lwp_tmp;
-  const char** avp = &attrv[0];
-
-  /* create a new waypoint */
-  lwp_tmp = waypt_new();
-
-  /* extract the lat/lon attributes */
-  while (*avp) {
-    if (strcmp(avp[0], "lat") == 0) {
-      sscanf(avp[1], "%lf",
-             &lwp_tmp->latitude);
-    } else if (strcmp(avp[0], "lon") == 0) {
-      sscanf(avp[1], "%lf",
-             &lwp_tmp->longitude);
-    }
-    avp+=2;
-  }
-  /* Make a new shortname.  Since this is a groundspeak extension,
-    we assume that GCBLAH is the current shortname format and that
-    wpt_tmp refers to the currently parsed waypoint. Unfortunatley,
-    we need to keep track of log_wpt counts so we don't collide with
-    dupe shortnames.
-  */
-
-  if ((wpt_tmp->shortname) && (strlen(wpt_tmp->shortname) > 2)) {
-    /* copy of the shortname */
-    lwp_tmp->shortname = (char*) xcalloc(7, 1);
-    sprintf(lwp_tmp->shortname, "%-4.4s%02d",
-            &wpt_tmp->shortname[2], logpoint_ct++);
-
-    waypt_add(lwp_tmp);
-  }
-}
-#else
 static void
 tag_log_wpt(const QXmlStreamAttributes& attr)
 {
@@ -815,23 +631,12 @@ tag_log_wpt(const QXmlStreamAttributes& attr)
     waypt_add(lwp_tmp);
   }
 }
-#endif
 
 static void
-#ifndef NEW_GPX_READER
-gpx_start(void* data, const XML_Char* xml_el, const XML_Char** xml_attr)
-#else
 gpx_start(const QString& el, const QXmlStreamAttributes& attr)
-#endif
 {
   int passthrough;
   int tag;
-#ifndef NEW_GPX_READER
-  const char* el = xml_convert_to_char_string(xml_el);
-  const char** attr = xml_convert_attrs_to_char_string(xml_attr);
-  current_tag.append("/");
-  current_tag.append(el);
-#endif
 
 
   /*
@@ -848,15 +653,9 @@ gpx_start(const QString& el, const QXmlStreamAttributes& attr)
     tag_wpt(attr);
     break;
   case tt_wpt_link:
-#ifndef NEW_GPX_READER
-    if (attr[0] && attr[1] && 0 == strcmp(attr[0], "href")) {
-      link_url = xstrdup(attr[1]);
-    }
-#else
     if (attr.hasAttribute("href")) {
       link_url = xstrdup(CSTR(attr.value("href").toString()));
     }
-#endif
     break;
   case tt_rte:
     rte_head = route_head_alloc();
@@ -894,25 +693,15 @@ gpx_start(const QString& el, const QXmlStreamAttributes& attr)
     tag_cache_desc(attr);
     break;
   case tt_cache_placer:
-#ifndef NEW_GPX_READER
-    if (*attr && (0 == strcmp(attr[0], "id"))) {
-      waypt_alloc_gc_data(wpt_tmp)->placer_id = atoi(attr[1]);
-    }
-#else
     if (attr.hasAttribute("id")) {
       waypt_alloc_gc_data(wpt_tmp)->placer_id = attr.value("id").toString().toInt();
     }
-#endif
   default:
     break;
   }
   if (passthrough) {
     start_something_else(el, attr);
   }
-#ifndef NEW_GPX_READER
-  xml_free_converted_string(el);
-  xml_free_converted_attrs(attr);
-#endif
 }
 
 struct
@@ -1085,15 +874,8 @@ xml_parse_time(const QString& dateTimeString)
 }
 
 static void
-#ifndef NEW_GPX_READER
-gpx_end(void* data, const XML_Char* xml_el)
-#else
 gpx_end(const QString& el)
-#endif
 {
-#ifndef NEW_GPX_READER
-  const char* el = xml_convert_to_char_string(xml_el);
-#endif
   int pos = current_tag.lastIndexOf('/');
   QString s = current_tag.mid(pos + 1);
   float x;
@@ -1103,12 +885,8 @@ gpx_end(const QString& el)
   tag_type tag;
 
   if (s.compare(el)) {
-#ifndef NEW_GPX_READER
-    fprintf(stderr, "Mismatched tag %s.  Expected %s\n", el, qPrintable(s));
-#else
 //   TODO: I don't think this is necesary with QXmlStreamReader
     fprintf(stderr, "Mismatched tag %s.  Expected %s\n", CSTR(el), qPrintable(s));
-#endif
   }
 
   tag = get_tag(current_tag, &passthrough);
@@ -1406,9 +1184,6 @@ gpx_end(const QString& el)
     break;
   case tt_unknown:
     end_something_else();
-#ifndef NEW_GPX_READER
-    current_tag.truncate(pos);
-#endif
     return;
   default:
     break;
@@ -1418,43 +1193,18 @@ gpx_end(const QString& el)
     end_something_else();
   }
 
-#ifndef NEW_GPX_READER
-  current_tag.truncate(pos);
-  xml_free_converted_string(el);
-#endif
 }
 
-#if ! HAVE_LIBEXPAT && !defined(NEW_GPX_READER)
-static void
-gpx_rd_init(const char* fname)
-{
-  fatal(MYNAME ": This build excluded GPX support because expat was not installed.\n");
-}
 
 static void
-gpx_rd_deinit(void)
-{
-}
-
-#else /* NO_EXPAT */
-
-static void
-#ifndef NEW_GPX_READER
-gpx_cdata(void* dta, const XML_Char* xml_el, int len)
-#else
 gpx_cdata(const char* s)
-#endif
 {
   char* estr;
   int* cdatalen;
   char** cdata;
   xml_tag* tmp_tag;
   size_t slen = strlen(cdatastr.mem);
-#ifndef NEW_GPX_READER
-  const char* s = xml_convert_to_char_string_n(xml_el, &len);
-#else
   int len = strlen(s);
-#endif
 
   vmem_realloc(&cdatastr,  1 + len + slen);
   estr = ((char*) cdatastr.mem) + slen;
@@ -1483,33 +1233,19 @@ gpx_cdata(const char* s)
   *(estr+len) = '\0';
   *cdatalen += len;
 
-#ifndef NEW_GPX_READER
-  xml_free_converted_string(s);
-#endif
 }
 
 static void
 gpx_rd_init(const char* fname)
 {
-#ifndef NEW_GPX_READER
-  fd = gbfopen(fname, "r", MYNAME);
-#else
   iqfile = new gpsbabel::File(fname);
   iqfile->open(QIODevice::ReadOnly);
   reader = new QXmlStreamReader(iqfile);
-#endif
 
   current_tag.clear();
 
   prescan_tags();
 
-#ifndef NEW_GPX_READER
-  psr = XML_ParserCreate(NULL);
-  if (!psr) {
-    fatal(MYNAME ": Cannot create XML Parser\n");
-  }
-  XML_SetUnknownEncodingHandler(psr, cet_lib_expat_UnknownEncodingHandler, NULL);
-#endif
 
   cdatastr = vmem_alloc(1, 0);
   *((char*)cdatastr.mem) = '\0';
@@ -1525,10 +1261,6 @@ gpx_rd_init(const char* fname)
     QUEUE_INIT(&gpx_global->keywords.queue);
   }
 
-#ifndef NEW_GPX_READER
-  XML_SetElementHandler(psr, gpx_start, gpx_end);
-  XML_SetCharacterDataHandler(psr, gpx_cdata);
-#endif
   fs_ptr = NULL;
 }
 
@@ -1538,23 +1270,14 @@ gpx_rd_deinit(void)
 {
   vmem_free(&cdatastr);
 
-#ifndef NEW_GPX_READER
-  if (fd) {
-    gbfclose(fd);
-  }
-  XML_ParserFree(psr);
-  psr = NULL;
-#else
   delete reader;
   reader = NULL;
   iqfile->close();
   delete iqfile;
   iqfile = NULL;
-#endif
   wpt_tmp = NULL;
   cur_tag = NULL;
 }
-#endif
 
 static void
 gpx_wr_init(const char* fname)
@@ -1585,19 +1308,6 @@ gpx_wr_deinit(void)
 void
 gpx_read(void)
 {
-#if HAVE_LIBEXPAT && !defined(NEW_GPX_READER)
-  int len;
-  char* buf = (char*) xmalloc(MY_CBUF_SZ);
-
-  while ((len = gbfread(buf, 1, MY_CBUF_SZ - 1, fd))) {
-    if (!XML_Parse(psr, buf, len, gbfeof(fd))) {
-      fatal(MYNAME ":Parse error at %d: %s\n",
-            (int) XML_GetCurrentLineNumber(psr),
-            XML_ErrorString(XML_GetErrorCode(psr)));
-    }
-  }
-  xfree(buf);
-#else
   while (!reader->atEnd())  {
     reader->readNext();
     // do processing
@@ -1635,7 +1345,6 @@ gpx_read(void)
           (long) reader->lineNumber(),
           (long) reader->columnNumber());
   }
-#endif /* USE_LIBEXPAT */
 }
 
 static void
