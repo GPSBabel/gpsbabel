@@ -11,6 +11,6 @@ compare ${REFERENCE}/unicsv.gpx ${TMPDIR}/unicsv.gpx
 gpsbabel -i garmin_txt -f ${REFERENCE}/garmin_txt.txt -x nuketypes,routes,tracks -o unicsv -F ${TMPDIR}/garmin_txt-uni.csv
 compare ${REFERENCE}/garmin_txt-uni.csv ${TMPDIR}/garmin_txt-uni.csv 
 
-gpsbabel -i gpx -f reference/gc/GC7FA4.gpx -o unicsv -F ${TMPDIR}/gcunicsv-1.csv
-gpsbabel -i unicsv -f reference/gc/GC7FA4~unicsv.csv -o unicsv -F  ${TMPDIR}/gcunicsv-2.csv
+gpsbabel -i gpx -f reference/gc/GC7FA4.gpx -o unicsv,utc=0 -F ${TMPDIR}/gcunicsv-1.csv
+gpsbabel -i unicsv,utc=0 -f reference/gc/GC7FA4~unicsv.csv -o unicsv,utc=0 -F  ${TMPDIR}/gcunicsv-2.csv
 compare ${TMPDIR}/gcunicsv-1.csv ${TMPDIR}/gcunicsv-2.csv
