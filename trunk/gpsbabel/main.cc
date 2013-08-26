@@ -240,9 +240,11 @@ main(int argc, char* argv[])
   arg_stack_t* arg_stack = NULL;
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-  //Qt requires that source files are stored in utf-8 in Qt5 (setCodecForCStrings removed)
-  //Allow compile for newer Qt, even if testo may fail
-  //This should be addressed in the Qt4 builds too
+  // Qt 5.0 uses QString::fromUtf8 to convert from character pointers 
+  // and QBytreArrays to QStrings while previous version of Qt used 
+  // QString::fromAscii.  QString::fromAscii used the codec set
+  // by QTextCode::setCodecForCStrings.
+  // This makes the converstion consistent between Qt4 and Qt5.
   QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
 
