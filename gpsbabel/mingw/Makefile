@@ -4,8 +4,6 @@ VPATH=..:../shapelib
 FILES=gpsbabel.exe ../win32/GPSBabelGUI.exe ../win32/gui-2/README.gui \
   ../README* ../style/README.style ../COPYING ../readme.html
 
-gpsbabel.exe:  wintesto.cmd
-
 include ../Makefile
 CFLAGS=-Iinclude -I../coldsync -O $(INHIBIT_USB) $(EXTRA_CFLAGS)
 #
@@ -19,12 +17,6 @@ gpsbabel.exe: $(OBJS)
 	$(CC) -static $(CFLAGS) $(OBJS) -o gpsbabel.exe  -lsetupapi
 	zip -j /tmp/gpsbabel-$(VERSIOND).zip $(FILES)
 	cp gpsbabel.exe /tmp
-
-mkwintesto: mkwintesto.c
-	/usr/bin/cc mkwintesto.c -o mkwintesto
-
-wintesto.cmd: mkwintesto
-	./mkwintesto ../testo
 
 # The "usbfree" target is useful for generating an executable that 
 # works on NT 3.5 or 4.0 since it doesn't have USB support and tanks

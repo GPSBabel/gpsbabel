@@ -10,17 +10,16 @@ MINIMAL_FMTS =  magproto.cc explorist_ini.cc gpx.cc geo.cc mapsend.cc mapsource.
                garmin_device_xml.cc garmin_tables.cc internal_styles.cc nmea.cc \
                kml.cc wbt-200.cc
 
-ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc cetus.cc copilot.cc \
-        gpspilot.cc magnav.cc skytraq.cc \
-        psp.cc holux.cc tmpro.cc tpg.cc tpo.cc \
-        xcsv.cc gcdb.cc tiger.cc easygps.cc quovadis.cc \
-        gpilots.cc saroute.cc navicache.cc psitrex.cc geoniche.cc delgpl.cc \
-        ozi.cc text.cc html.cc palmdoc.cc netstumbler.cc hsa_ndv.cc \
-        igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc coastexp.cc \
+ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
+        skytraq.cc holux.cc tmpro.cc tpg.cc tpo.cc \
+        xcsv.cc tiger.cc easygps.cc \
+        saroute.cc navicache.cc psitrex.cc delgpl.cc \
+        ozi.cc text.cc html.cc netstumbler.cc \
+        igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc \
         vcf.cc overlay.cc google.cc xhtmlent.cc lowranceusr.cc an1.cc tomtom.cc \
-        tef_xml.cc maggeo.cc pathaway.cc vitosmt.cc gdb.cc bcr.cc coto.cc \
-        ignrando.cc stmwpp.cc msroute.cc cst.cc nmn4.cc mag_pdb.cc compegps.cc \
-        yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc axim_gpb.cc gpssim.cc \
+        tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc \
+        ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc \
+        yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc \
         stmsdf.cc gtrnctr.cc dmtlog.cc raymarine.cc alan.cc vitovtt.cc \
         ggv_log.cc g7towin.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc \
         navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc vidaone.cc \
@@ -31,12 +30,17 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc cetus.cc copilot.cc \
         subrip.cc garmin_xt.cc garmin_fit.cc lowranceusr4.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc
 
+DEPRECIATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc
+
+DEPRECIATED_HEADERS=geo.h quovadis.h
+DEPRECIATED_SHAPE=pdbfile.cc
+
 # ALL_FMTS=$$MINIMAL_FMTS
 FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc \
         nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc
 
-SHAPE=shapelib/shpopen.c shapelib/dbfopen.c pdbfile.cc
+SHAPE=shapelib/shpopen.c shapelib/dbfopen.c
 
 ZLIB=zlib/adler32.c zlib/compress.c zlib/crc32.c zlib/deflate.c zlib/inffast.c \
         zlib/inflate.c zlib/infback.c zlib/inftrees.c zlib/trees.c \
@@ -52,8 +56,8 @@ JEEPS += jeeps/gpsapp.cc jeeps/gpscom.cc \
 
 
 SUPPORT = queue.cc route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
-          csv_util.cc strptime.c grtcirc.cc vmem.cc util_crc.cc xmlgeneric.cc \
-          uuid.cc formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc \
+          csv_util.cc strptime.c grtcirc.cc util_crc.cc xmlgeneric.cc \
+          formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc \
           inifile.cc garmin_fs.cc gbsleep.cc units.cc gbser.cc \
           gbfile.cc parse.cc session.cc main.cc globals.cc
 
@@ -186,7 +190,6 @@ HEADERS =  \
 	gbser.h \
 	gbser_private.h \
 	gbversion.h \
-	geo.h \
 	grtcirc.h \
 	height.h \
 	holux.h \
@@ -217,7 +220,6 @@ HEADERS =  \
 	navilink.h \
 	pdbfile.h \
 	queue.h \
-	quovadis.h \
 	session.h \
 	shapelib/shapefil.h \
 	strptime.h \
@@ -238,31 +240,28 @@ HEADERS =  \
 SUBDIRS += jeeps
 
 macx|linux {
-  DEFINES += HAVE_NANOSLEEP HAVE_LIBUSB HAVE_LIBEXPAT HAVE_GLOB
+  DEFINES += HAVE_NANOSLEEP HAVE_LIBUSB HAVE_GLOB
   DEFINES += HAVE_VA_COPY HAVE_VA_LIST_AS_ARRAY
   SOURCES += gbser_posix.cc
   JEEPS += jeeps/gpslibusb.cc
   INCLUDEPATH += jeeps
-  LIBS += -lexpat
 }
 
 win32 {
   DEFINES += __WIN32__ _CONSOLE
   DEFINES -= UNICODE ZLIB_INHIBITED
-  DEFINES += HAVE_LIBEXPAT
   CONFIG(debug, debug|release) {
     DEFINES += _DEBUG
   }
   SOURCES += gbser_win.cc
   JEEPS += jeeps/gpsusbwin.cc
-  INCLUDEPATH += msvc/expat
-  LIBS += ../gpsbabel/msvc/Expat/libexpat.lib setupapi.lib hid.lib
-  TEMPLATE=vcapp
+  LIBS += setupapi.lib hid.lib
 }
 
 win32-msvc*{
   DEFINES += _CRT_SECURE_NO_DEPRECATE
-  QMAKE_CXXFLAGS += /MP
+  QMAKE_CXXFLAGS += /MP -wd4100
+  TEMPLATE=vcapp
 }
 
 linux {

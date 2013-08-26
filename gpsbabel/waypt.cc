@@ -595,7 +595,7 @@ waypt_speed_ex(const waypoint* A, const waypoint* B)
     return 0;
   }
 
-  time = fabs(A->creation_time.msecsTo(B->creation_time)) / 1000.0;
+  time = fabs((double)A->creation_time.msecsTo(B->creation_time)) / 1000.0;
   if (time > 0) {
     return (dist / time);
   } else {
@@ -618,7 +618,7 @@ waypt_speed(const waypoint* A, const waypoint* B)
     return 0;
   }
 
-  time = fabs(A->creation_time.msecsTo(B->creation_time)) / 1000.0;
+  time = fabs((double)A->creation_time.msecsTo(B->creation_time)) / 1000.0;
   if (time > 0) {
     return (dist / time);
   } else {
