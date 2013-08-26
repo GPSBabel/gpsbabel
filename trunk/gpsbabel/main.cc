@@ -239,7 +239,12 @@ main(int argc, char* argv[])
   signed int wpt_ct_bak, rte_ct_bak, trk_ct_bak;	/* #ifdef UTF8_SUPPORT */
   arg_stack_t* arg_stack = NULL;
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+  //Qt requires that source files are stored in utf-8 in Qt5 (setCodecForCStrings removed)
+  //Allow compile for newer Qt, even if testo may fail
+  //This should be addressed in the Qt4 builds too
   QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+#endif
 
   global_opts.objective = wptdata;
   global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
