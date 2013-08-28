@@ -103,7 +103,6 @@ static void
 xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
 {
   xg_callback* cb;
-  bool started = false;
 
   while (!reader.atEnd()) {
     switch (reader.tokenType()) {
@@ -117,7 +116,6 @@ xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
         // EASILY override this with xml_init().
         codec = QTextCodec::codecForName("UTF-8");
       }
-      started = true;
       break;
 
     case QXmlStreamReader::StartElement:
@@ -137,6 +135,9 @@ xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
       cb = xml_tbl_lookup(current_tag, cb_cdata);
       if (cb) {
         QString c = reader.readElementText(QXmlStreamReader::IncludeChildElements);
+        // readElementText eats the corresponding EndElement.
+        // does a caller ever expect to be able to use both a cb_cdata and a
+        // cb_end callback?
         cb(CSTRE(c), NULL);
         current_tag.chop(reader.qualifiedName().length() + 1);
       }
@@ -162,11 +163,11 @@ xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
     };
 
 readnext:
-    if (started) {
-      reader.readNextStartElement();
-    } else {
-      reader.readNext();
-    }
+    // readNextStartElement will cause a "Premature end of document." error
+    // if you use it to try to read past the end of the document.
+    // See https://bugreports.qt-project.org/browse/QTBUG-25944,
+    // which is a bug report from 2012 that doesn't seem to be going anywhere.
+    reader.readNext();
   }
 }
 
@@ -180,6 +181,13 @@ void xml_read(void)
   QXmlStreamReader reader(&file);
 
   xml_run_parser(reader, current_tag);
+  if (reader.hasError())  {
+    fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
+          CSTR(reader.errorString()),
+          CSTR(file.fileName()),
+          (long) reader.lineNumber(),
+          (long) reader.columnNumber());
+  }
 }
 
 void xml_ignore_tags(const char** taglist)
@@ -207,6 +215,13 @@ void xml_readstring(const char* str)
   QXmlStreamReader reader(reader_data);
 
   xml_run_parser(reader, current_tag);
+  if (reader.hasError())  {
+    fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
+          CSTR(reader.errorString()),
+          "unknown",
+          (long) reader.lineNumber(),
+          (long) reader.columnNumber());
+  }
 }
 
 // This is quite different from xml_readstring(). It doesn't have to interpret
