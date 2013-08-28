@@ -135,7 +135,8 @@ xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
       cb = xml_tbl_lookup(current_tag, cb_cdata);
       if (cb) {
         QString c = reader.readElementText(QXmlStreamReader::IncludeChildElements);
-        // readElementText eats the corresponding EndElement.
+        // readElementText advances the tokenType to QXmlStreamReader::EndElement,
+        // thus we will not process the EndElement case as we will issue a readNext first.
         // does a caller ever expect to be able to use both a cb_cdata and a
         // cb_end callback?
         cb(CSTRE(c), NULL);
