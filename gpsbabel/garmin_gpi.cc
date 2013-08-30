@@ -648,6 +648,9 @@ read_tag(const char* caller, const int tag, waypoint* wpt)
     }
     if ((mask & 0x10) && (str = gpi_read_string("Link"))) {
       waypt_add_url(wpt, str, str);
+      if (str) {
+        xfree(str);
+      }
     }
     break;
 

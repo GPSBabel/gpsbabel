@@ -652,13 +652,13 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
     url_ct = FREAD_i32;
     for (i = url_ct; (i); i--) {
-      char* str = FREAD_CSTR;
-      if (str && *str) {
+      QString str = FREAD_CSTR_AS_QSTR;
+      if (!str.isEmpty()) {
         waypt_add_url(res, str, NULL);
 #if GDB_DEBUG
         DBG(GDB_DBG_WPTe, 1)
         printf(MYNAME "-wpt \"%s\" (%d): url(%d) = %s\n",
-               sn, wpt_class, url_ct - i, str);
+               sn, wpt_class, url_ct - i, CSTR(str));
 #endif
       }
     }

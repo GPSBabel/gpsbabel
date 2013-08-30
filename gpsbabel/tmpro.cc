@@ -143,8 +143,7 @@ data_read(void)
           */
           holder = csv_stringtrim(s, "", 0);
           if (strstr(holder, "http:") != NULL) {
-            UrlLink link(holder);
-            wpt_tmp->AddUrlLink(link);
+            wpt_tmp->AddUrlLink(holder);
           }
           xfree(holder);
           break;

@@ -216,8 +216,11 @@ cst_data_read(void)
         if (strncmp(cin + 2, "bitmap", 6) == 0) {
           cin = lrtrim(cin + 8);
           if (*cin != '\0') {
-            UrlLink l(cst_make_url(cin));
-            wpt->AddUrlLink(l);
+            char* url = cst_make_url(cin);
+            wpt->AddUrlLink(url);
+            if (url) {
+              xfree(url);
+            }
           }
         }
 

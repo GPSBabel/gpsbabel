@@ -93,26 +93,41 @@ data_read(void)
         break;
       case 2:
       case 3:
-        wpt_tmp->description = gbfgetpstr(file_in);;
+        wpt_tmp->description = gbfgetpstr(file_in);
         break;
       case 5:
-        wpt_tmp->notes = gbfgetpstr(file_in);;
+        wpt_tmp->notes = gbfgetpstr(file_in);
         break;
-      case 6:
-        link.url_link_text_ = gbfgetpstr(file_in);;
-        break;
+      case 6: {
+        char* ult = gbfgetpstr(file_in);
+        link.url_link_text_ = ult;
+        if (ult) {
+          xfree(ult);
+        }
+      }
+      break;
       case 7:
-        wpt_tmp->icon_descr = gbfgetpstr(file_in);;
+        wpt_tmp->icon_descr = gbfgetpstr(file_in);
         break;
       case 8:  /* NULL Terminated (vs. pascal) descr */
         wpt_tmp->notes = gbfgetcstr(file_in);
         break;
-      case 9: /* NULL Terminated (vs. pascal) link */
-        link.url_ = gbfgetcstr(file_in);
-        break;
-      case 0x10:
-        link.url_link_text_ = gbfgetcstr(file_in);
-        break;
+      case 9: { /* NULL Terminated (vs. pascal) link */
+        char* url = gbfgetcstr(file_in);
+        link.url_ = url;
+        if (url) {
+          xfree(url);
+        }
+      }
+      break;
+      case 0x10: {
+        char* ult = gbfgetcstr(file_in);
+        link.url_link_text_ = ult;
+        if (ult) {
+          xfree(ult);
+        }
+      }
+      break;
       case 0x63:
         wpt_tmp->latitude = gbfgetdbl(file_in);
         break;
