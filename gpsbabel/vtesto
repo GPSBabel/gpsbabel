@@ -11,7 +11,7 @@ BASEPATH=`dirname $0`
 
 while getopts "l" opt; do
   case $opt in
-    l) OPTS="--leak-check=full --show-reachable=yes" ; QUIET="";;
+    l) OPTS="--leak-check=full --show-reachable=yes --suppressions=gpsbabel.supp" ; QUIET="";;
   esac
 done
 shift $(($OPTIND -1))
