@@ -647,7 +647,7 @@ read_tag(const char* caller, const int tag, waypoint* wpt)
       GMSD_SET(email, str);
     }
     if ((mask & 0x10) && (str = gpi_read_string("Link"))) {
-      waypt_add_url(wpt, xstrdup(str), str);
+      waypt_add_url(wpt, str, str);
     }
     break;
 
