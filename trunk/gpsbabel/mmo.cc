@@ -513,12 +513,11 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
       cend = cx + strlen(cx);
     }
 
-    cx = lrtrim(xstrndup(cx, cend - cx));
-    if (*cx) {
-      UrlLink l(cx);
-      wpt->AddUrlLink(l);
-    } else {
-      xfree(cx);
+    {
+      QString url = QString::fromUtf8(cx, cend-cx).trimmed();
+      if (!url.isEmpty()) {
+        wpt->AddUrlLink(url);
+      }
     }
 
     if (*cend++) {

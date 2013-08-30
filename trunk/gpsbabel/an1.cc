@@ -710,14 +710,12 @@ static void Read_AN1_Waypoints(gbfile* f)
     wpt_tmp->notes = xstrdup(rec->comment);
     wpt_tmp->description = xstrdup(rec->name);
     if (rec->url) {
-      UrlLink l(rec->url);
-      wpt_tmp->AddUrlLink(l);
+      wpt_tmp->AddUrlLink(rec->url);
     } else if (NULL != (url=strstr(wpt_tmp->description, "{URL="))) {
       *url = '\0';
       url += 5;
       url[strlen(url)-1] = '\0';
-      UrlLink l(url);
-      wpt_tmp->AddUrlLink(l);
+      wpt_tmp->AddUrlLink(url);
     }
 
     if (rec->image_name) {

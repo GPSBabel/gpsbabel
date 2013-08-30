@@ -369,10 +369,13 @@ class UrlLink
 {
 public:
   UrlLink() { }
-  UrlLink(QString url) :
+  UrlLink(const QString url) :
     url_(url)
   { }
-  UrlLink(QString url, QString url_link_text) :
+  UrlLink(const char* url) :
+    url_(url)
+  { }
+  UrlLink(const QString url, const QString url_link_text) :
     url_(url),
     url_link_text_(url_link_text)
   { }

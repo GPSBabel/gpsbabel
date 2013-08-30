@@ -733,8 +733,7 @@ unicsv_parse_one_line(char* ibuf)
       break;
 
     case fld_url: {
-      UrlLink l(s);
-      wpt->AddUrlLink(l);
+      wpt->AddUrlLink(s);
     }
     break;
 

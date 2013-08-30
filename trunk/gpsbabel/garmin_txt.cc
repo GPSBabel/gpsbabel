@@ -1200,8 +1200,7 @@ parse_waypoint(void)
     }
     break;
     case 17: {
-      UrlLink l(str);
-      wpt->AddUrlLink(l);
+      wpt->AddUrlLink(str);
     }
     break;
     case 18:
