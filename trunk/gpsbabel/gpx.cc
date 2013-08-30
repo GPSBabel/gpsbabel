@@ -1207,7 +1207,9 @@ gpx_cdata(const QString& s)
     cdata = &(cur_tag->cdata);
     cdatalen = &(cur_tag->cdatalen);
   }
-
+  if (*cdata) {
+    xfree(*cdata);
+  }
   *cdata = xstrdup(CSTR(cdatastr));
 }
 
