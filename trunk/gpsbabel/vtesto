@@ -9,11 +9,20 @@
 QUIET="-q"
 BASEPATH=`dirname $0`
 
-while getopts "l" opt; do
+while getopts "lj:" opt; do
   case $opt in
     l) OPTS="--leak-check=full --show-reachable=yes --suppressions=gpsbabel.supp" ; QUIET="";;
+    j) LOG=$OPTARG;;
   esac
 done
 shift $(($OPTIND -1))
 
-PNAME="valgrind $OPTS --error-exitcode=1 $QUIET ./gpsbabel" ${BASEPATH}/testo $*
+if [ "x$LOG" = "x" ]; then
+  PNAME="valgrind $OPTS --error-exitcode=125 $QUIET            ./gpsbabel" ${BASEPATH}/testo $*
+else
+# By default valgrind output goes to file descriptor 2, stderr.
+# Some of our tests redirect file descriptor 2 to a file and compare it to an expected result.
+# These compares will fail if valgrind sends output to file descriptor 2.
+# This option avoids those valgrind induced miscompares by using an alternate file descriptor.
+  PNAME="valgrind $OPTS --error-exitcode=125 $QUIET --log-fd=3 ./gpsbabel" ${BASEPATH}/testo $* 3>$LOG
+fi
