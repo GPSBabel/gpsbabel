@@ -9,8 +9,8 @@
 rm -f ${TMPDIR}/tpo-sample1.gpx ${TMPDIR}/tpo-sample2.tpo
 gpsbabel -t -i tpo2 -f ${REFERENCE}/track/tpo-sample1.tpo -o gpx -F ${TMPDIR}/tpo-sample1.gpx
 compare ${REFERENCE}/track/tpo-sample1.gpx ${TMPDIR}/tpo-sample1.gpx
-#gpsbabel -t -i gpx -f reference/track/tpo-sample2.gpx -o tpo2 -F ${TMPDIR}/tpo-sample2.tpo
-#bincompare ${TMPDIR}/tpo-sample2.tpo reference/track/tpo-sample2.tpo
+#gpsbabel -t -i gpx -f ${REFERENCE}/track/tpo-sample2.gpx -o tpo2 -F ${TMPDIR}/tpo-sample2.tpo
+#bincompare ${TMPDIR}/tpo-sample2.tpo ${REFERENCE}/track/tpo-sample2.tpo
 #
 # Version 3.x tests.  Remove the timestamp from the generated file
 # so that the compare will succeed.
