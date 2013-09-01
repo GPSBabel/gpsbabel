@@ -30,9 +30,9 @@ do
 	[ $A = "README" ] && continue
 	[ $A = "custom.style" ] && continue
 	ALIST="{ \"$A\", $A } , $ALIST"
-	echo "static char $A[] = "
-	$SED 's/\\/\\\\/;s/"/\\"/g;s/^\(.\)/"\1/g;s/\(.\)$/\1\\n"/g' $i
-	echo ";"
+	echo "static char $A[] ="
+	$SED 's/\\/\\\\/;s/"/\\"/g;s/^\(.\)/"\1/g;s/\(.\)$/\1\\n"/g;s/^\(.\)/  \1/' $i
+	echo "  ;"
 	nstyles=`expr $nstyles + 1`;
 done
 echo "style_vecs_t style_list[] = {$ALIST {0,0}};"
