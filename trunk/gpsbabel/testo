@@ -11,9 +11,9 @@ export MALLOC_CHECK_
 LC_ALL=en_US.UTF-8
 export LC_ALL
 
-PNAME=${PNAME:-./gpsbabel}
-DIFF=${DIFF:-diff}
 BASEPATH=`dirname $0`
+PNAME=${PNAME:-${BASEPATH}/gpsbabel}
+DIFF=${DIFF:-diff}
 REFERENCE=${BASEPATH}/reference
 # OD=${OD:-od -Ax -txC -v}
 if [ -x /usr/bin/hexdump ] ; then
