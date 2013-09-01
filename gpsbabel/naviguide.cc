@@ -377,7 +377,6 @@ data_read(void)
 
   if (process_rte) {
     rte_head = route_head_alloc();
-    rte_head->rte_waypt_ct = nof_wp;
     route_add_head(rte_head);
   }
 
