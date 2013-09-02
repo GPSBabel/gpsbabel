@@ -82,6 +82,8 @@ static char cup[] =
   "#\n"
   "# (c) 2006, Robert Lipe, based on  sample files by Krzysztof Wojtas\n"
   "# Reference info: http://www.seeyou.ws/thankyou.php?fname=cup_format.pdf\n"
+  "# Reference info: http://download.naviter.com/docs/cup_format.pdf\n"
+  "# Reference info: http://www.keepitsoaring.com/LKSC/Downloads/cup_format.pdf\n"
   "#\n"
 
   "DESCRIPTION      See You flight analysis data\n"
@@ -98,7 +100,7 @@ static char cup[] =
   "EPILOGUE -----Related Tasks-----\n"
 
 
-  "IFIELD SHORTNAME,\"\", \"\"%s\"\"\n"
+  "IFIELD IGNORE,\"\", \"\"%s\"\"\n"
   "IFIELD SHORTNAME,\"\", \"%s\"\n"
   "IFIELD CONSTANT,\"\", \"\"\n"
   "IFIELD LAT_DDMMDIR, \"%f\", \"%08.3f\", \"absolute\"\n"

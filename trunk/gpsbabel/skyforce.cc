@@ -197,6 +197,8 @@ skyforce_waypt_disp_cb(const waypoint* wpt)
       snprintf(buf + 2, sizeof(buf) - 2, "%03d ", rte_num);
     }
     snprintf(buf + 6, sizeof(buf) - 6, "%03d %-9s ", wpt_num, name);
+
+    xfree(name);
   }
 
 

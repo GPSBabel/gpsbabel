@@ -1,6 +1,8 @@
 #
 # (c) 2006, Robert Lipe, based on  sample files by Krzysztof Wojtas
 # Reference info: http://www.seeyou.ws/thankyou.php?fname=cup_format.pdf
+# Reference info: http://download.naviter.com/docs/cup_format.pdf
+# Reference info: http://www.keepitsoaring.com/LKSC/Downloads/cup_format.pdf
 #
 
 DESCRIPTION      See You flight analysis data
@@ -17,7 +19,7 @@ PROLOGUE name,code,country,lat,lon,elev,style,rwdir,rwlen,freq,desc
 EPILOGUE -----Related Tasks-----
 
 
-IFIELD SHORTNAME,"", ""%s""
+IFIELD IGNORE,"", ""%s""
 IFIELD SHORTNAME,"", "%s"
 IFIELD CONSTANT,"", ""
 IFIELD LAT_DDMMDIR, "%f", "%08.3f", "absolute"
