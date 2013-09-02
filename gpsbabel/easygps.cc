@@ -106,9 +106,14 @@ data_read(void)
         }
       }
       break;
-      case 7:
-        wpt_tmp->icon_descr = gbfgetpstr(file_in);
-        break;
+      case 7: {
+        char* id = gbfgetpstr(file_in);
+        wpt_tmp->icon_descr = id;
+        if (id) {
+          xfree(id);
+        }
+      }
+      break;
       case 8:  /* NULL Terminated (vs. pascal) descr */
         wpt_tmp->notes = gbfgetcstr(file_in);
         break;

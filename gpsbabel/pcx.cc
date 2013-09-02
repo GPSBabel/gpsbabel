@@ -392,6 +392,7 @@ pcx_route_hdr(const route_head* rte)
   if (!cartoexploreur) {
     gbfprintf(file_out, "\n\nR  %s\n", name);
   }
+  xfree(name);
   gbfprintf(file_out, "\n"
             "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
 }

@@ -433,7 +433,7 @@ osm_feature_ikey(const char* key)
 }
 
 
-static QString
+static char*
 osm_feature_symbol(const int ikey, const char* value)
 {
   char* result;
@@ -541,7 +541,11 @@ osm_node_tag(const char* args, const QXmlStreamAttributes* attrv)
     }
     wpt->shortname = xstrdup(str);
   } else if ((ikey = osm_feature_ikey(key)) >= 0) {
-    wpt->icon_descr = osm_feature_symbol(ikey, value);
+    char* id = osm_feature_symbol(ikey, value);
+    wpt->icon_descr = id;
+    if (id) {
+      xfree(id);
+    }
   } else if (strcmp(key, "note") == 0) {
     if (wpt->notes) {
       char* tmp;

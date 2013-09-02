@@ -360,7 +360,7 @@ mapsend_route_hdr(const route_head* rte)
 
   /* route name -- mapsend really seems to want something here.. */
   if (r.isEmpty()) {
-    rname = xstrdup("Route");
+    rname = "Route";
   } else {
     rname = rte->rte_name;
   }
