@@ -89,7 +89,7 @@ FMTS=@FMTS@
 
 FILTERS=bend.o position.o radius.o duplicate.o arcdist.o polygon.o smplrout.o \
 	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
-	nukedata.o interpolate.o transform.o height.o swapdata.o
+	nukedata.o interpolate.o transform.o height.o swapdata.o validate.o
 
 JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
 	jeeps/gpsmath.o jeeps/gpsmem.o  \

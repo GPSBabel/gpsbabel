@@ -49,6 +49,7 @@ extern filter_vecs_t interpolatefilt_vecs;
 extern filter_vecs_t transform_vecs;
 extern filter_vecs_t height_vecs;
 extern filter_vecs_t swapdata_vecs;
+extern filter_vecs_t validate_vecs;
 
 static
 fl_vecs_t filter_vec_list[] = {
@@ -137,6 +138,11 @@ fl_vecs_t filter_vec_list[] = {
     &swapdata_vecs,
     "swap",
     "Swap latitude and longitude of all loaded points"
+  },
+  {
+    &validate_vecs,
+    "validate",
+    "Validate internal data structures"
   },
 
 #elif defined (MINIMAL_FILTERS)
