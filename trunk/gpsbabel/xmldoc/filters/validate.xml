@@ -1,0 +1,3 @@
+<para>
+  This filter can be used to check internal data structures for validity.  The output of the filter is identical to the input, but if corruption is found a fatal error will be issued.
+</para>

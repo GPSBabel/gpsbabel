@@ -786,11 +786,10 @@ void tpo_process_tracks(void)
         jj++;
 
         waypoint_temp = tpo_convert_ll(lat, lon);
-        route_add_wpt(track_temp, waypoint_temp);
+        track_add_wpt(track_temp, waypoint_temp);
         waypoint_count++;
       }
     }
-    track_temp->rte_waypt_ct = waypoint_count;
 
     xfree(buf);
   }
@@ -1307,7 +1306,6 @@ void tpo_process_routes(void)
     // value.
     waypoint_cnt = tpo_read_int();
 
-    route_temp->rte_waypt_ct = waypoint_cnt;
 
     // Run through the list of waypoints, look up each in our
     // index, then add the waypoint to this route.

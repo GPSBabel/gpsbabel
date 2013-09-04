@@ -115,6 +115,7 @@ route_add_head(route_head* rte)
 void
 route_del_head(route_head* rte)
 {
+  rte_waypts -= rte->rte_waypt_ct;
   any_route_del_head(rte);
   rte_head_ct--;
 }
@@ -129,6 +130,7 @@ track_add_head(route_head* rte)
 void
 track_del_head(route_head* rte)
 {
+  trk_waypts -= rte->rte_waypt_ct;
   any_route_del_head(rte);
   trk_head_ct--;
 }
