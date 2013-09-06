@@ -182,12 +182,12 @@ text_disp(const waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:type");
       if (logpart) {
-        gbfprintf(file_out, "%s by ", logpart->cdata);
+        gbfprintf(file_out, "%s by ", CSTR(logpart->cdata));
       }
 
       logpart = xml_findfirst(curlog, "groundspeak:finder");
       if (logpart) {
-        gbfprintf(file_out, "%s on ", logpart->cdata);
+        gbfprintf(file_out, "%s on ", CSTR(logpart->cdata));
       }
 
       logpart = xml_findfirst(curlog, "groundspeak:date");
@@ -232,7 +232,7 @@ text_disp(const waypoint* wpt)
         if (txt_encrypt && encoded) {
           s = rot13(logpart->cdata);
         } else {
-          s = xstrdup(logpart->cdata);
+          s = xstrdup(CSTR(logpart->cdata));
         }
 
         gbfprintf(file_out, "%s", s);
