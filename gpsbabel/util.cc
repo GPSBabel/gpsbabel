@@ -20,6 +20,7 @@
  */
 
 #include "defs.h"
+#include "src/core/xmltag.h"
 #include "jeeps/gpsmath.h"
 
 #include <ctype.h>
