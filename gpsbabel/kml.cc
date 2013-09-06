@@ -1,8 +1,7 @@
 /*
 	Support for Google Earth & Keyhole "kml" format.
 
-	Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010  Robert Lipe,
-           robertlipe@gpsbabel.org
+	Copyright (C) 2005-2013 Robert Lipe, robertlipe@gpsbabel.org
 	Updates by Andrew Kirmse, akirmse at google.com
 
 	This program is free software; you can redistribute it and/or modify
@@ -1304,10 +1303,9 @@ char* kml_gc_mkstar(int rating)
   return tmp;
 }
 
-// Returns an allocated buffer that must be freed.
-char* kml_geocache_get_logs(const waypoint* wpt)
+QString kml_geocache_get_logs(const waypoint* wpt)
 {
-  char* r = xstrdup("");
+  QString r;
 
   fs_xml* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
   xml_tag* root = NULL;
@@ -1325,16 +1323,12 @@ char* kml_geocache_get_logs(const waypoint* wpt)
     // branches will always be taken.
     logpart = xml_findfirst(curlog, "groundspeak:type");
     if (logpart) {
-      r = xstrappend(r, "<p><b>");
-      r = xstrappend(r, logpart->cdata);
-      r = xstrappend(r, "</b>");
+      r = r + "<p><b>" + logpart->cdata + "</b>";
     }
 
     logpart = xml_findfirst(curlog, "groundspeak:finder");
     if (logpart) {
-      r = xstrappend(r, " by ");
-      r = xstrappend(r, logpart->cdata);
-      // xfree( f );
+      r = r + " by " + logpart->cdata;
     }
 
     logpart = xml_findfirst(curlog, "groundspeak:date");
@@ -1347,7 +1341,7 @@ char* kml_geocache_get_logs(const waypoint* wpt)
                   t.date().year(),
                   t.date().month(),
                   t.date().day());
-        r = xstrappend(r, temp);
+        r += temp;
         xfree(temp);
       }
     }
@@ -1364,17 +1358,17 @@ char* kml_geocache_get_logs(const waypoint* wpt)
       if (html_encrypt && encoded) {
         s = rot13(logpart->cdata);
       } else {
-        s = xstrdup(logpart->cdata);
+        s = xstrdup(CSTR(logpart->cdata));
       }
 
-      r = xstrappend(r, "<br />");
+      r = r + "<br />";
       t = html_entitize(s);
-      r = xstrappend(r, t);
+      r = r + t;
       xfree(t);
       xfree(s);
     }
 
-    r = xstrappend(r, "</p>");
+    r += "</p>";
     curlog = xml_findnext(root, curlog, "groundspeak:log");
   }
   return r;
@@ -1420,7 +1414,6 @@ static void kml_geocache_pr(const waypoint* waypointp)
   char date_placed[100];  // Always long engough for a date.
 
   const char* issues = "";
-  char* logs;
 
   writer->writeStartElement("Placemark");
 
@@ -1491,9 +1484,8 @@ static void kml_geocache_pr(const waypoint* waypointp)
   kml_write_data_element("gc_icon", is);
   kml_write_cdata_element("gc_short_desc", waypointp->gc_data->desc_short.utfstring);
   kml_write_cdata_element("gc_long_desc", waypointp->gc_data->desc_long.utfstring);
-  logs = kml_geocache_get_logs(waypointp);
+  QString logs = kml_geocache_get_logs(waypointp);
   kml_write_cdata_element("gc_logs", logs);
-  xfree(logs);
 
   writer->writeEndElement(); // Close ExtendedData tag
 

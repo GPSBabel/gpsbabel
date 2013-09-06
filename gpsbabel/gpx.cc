@@ -551,7 +551,7 @@ start_something_else(const QString el, const QXmlStreamAttributes& attr)
   }
 
   new_tag = new xml_tag;
-  new_tag->tagname = xstrdup(CSTR(el));
+  new_tag->tagname = el;
 
   attr_count = attr.size();
   new_tag->attributes = (char**)xcalloc(sizeof(char*),2*attr_count+1);
@@ -1189,7 +1189,7 @@ gpx_end(const QString& el)
 static void
 gpx_cdata(const QString& s)
 {
-  char** cdata;
+  QString* cdata;
   xml_tag* tmp_tag;
   cdatastr = s;
 
@@ -1206,10 +1206,7 @@ gpx_cdata(const QString& s)
   } else {
     cdata = &(cur_tag->cdata);
   }
-  if (*cdata) {
-    xfree(*cdata);
-  }
-  *cdata = xstrdup(CSTR(cdatastr));
+  *cdata = cdatastr;
 }
 
 static void
@@ -1339,27 +1336,27 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
   while (tag) {
     writer->writeStartElement(tag->tagname);
 
-    if (!tag->cdata && !tag->child) {
+    if (tag->cdata.isEmpty() && !tag->child) {
       write_tag_attributes(tag);
       // No children?  Self-closing tag.
       writer->writeEndElement();
     } else {
       write_tag_attributes(tag);
 
-      if (tag->cdata) {
+      if (!tag->cdata.isEmpty()) {
         writer->writeCharacters(tag->cdata);
       }
       if (tag->child) {
         fprint_xml_chain(tag->child, wpt);
       }
       if (wpt && wpt->gc_data->exported.isValid() &&
-          strcmp(tag->tagname, "groundspeak:cache") == 0) {
+          tag->tagname.compare("groundspeak:cache") == 0) {
         writer->writeTextElement("time",
                                  wpt->gc_data->exported.toPrettyString());
       }
       writer->writeEndElement();
     }
-    if (tag->parentcdata && tag->parentcdata[0]) {
+    if (!tag->parentcdata.isEmpty()) {
       // FIXME: The length check is necessary to get line endings correct in our test suite.
       // Writing the zero length string eats a newline, at least with Qt 4.6.2.
       writer->writeCharacters(tag->parentcdata);
@@ -1374,17 +1371,8 @@ void free_gpx_extras(xml_tag* tag)
   char** ap;
 
   while (tag) {
-    if (tag->cdata) {
-      xfree(tag->cdata);
-    }
     if (tag->child) {
       free_gpx_extras(tag->child);
-    }
-    if (tag->parentcdata) {
-      xfree(tag->parentcdata);
-    }
-    if (tag->tagname) {
-      xfree(tag->tagname);
     }
     if (tag->attributes) {
       ap = tag->attributes;

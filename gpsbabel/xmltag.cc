@@ -33,17 +33,8 @@ free_xml_tag(xml_tag* tag)
   char** ap;
 
   while (tag) {
-    if (tag->cdata) {
-      xfree(tag->cdata);
-    }
     if (tag->child) {
       free_gpx_extras(tag->child);
-    }
-    if (tag->parentcdata) {
-      xfree(tag->parentcdata);
-    }
-    if (tag->tagname) {
-      xfree(tag->tagname);
     }
     if (tag->attributes) {
       ap = tag->attributes;
@@ -61,6 +52,7 @@ free_xml_tag(xml_tag* tag)
   }
 }
 
+// FIXME: at some point, this becomes a plain ole copy constructor.
 static void
 copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
 {
@@ -77,10 +69,10 @@ copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
   res = new xml_tag;
   *copy = res;
 
-  memcpy(res, src, sizeof(xml_tag));
-  res->tagname = xstrdup(src->tagname);
-  res->cdata = xstrdup(src->cdata);
-  res->parentcdata = xstrdup(src->parentcdata);
+//  memcpy(res, src, sizeof(xml_tag));
+  res->tagname = (src->tagname);
+  res->cdata = (src->cdata);
+  res->parentcdata = (src->parentcdata);
   if (src->attributes) {
     ap = src->attributes;
     while (*ap) {

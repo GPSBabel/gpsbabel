@@ -1780,7 +1780,7 @@ xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname)
   xml_tag* result = cur;
   do {
     result = xml_next(root, result);
-  } while (result && case_ignore_strcmp(result->tagname, tagname));
+  } while (result && result->tagname.compare(tagname, Qt::CaseInsensitive));
   return result;
 }
 

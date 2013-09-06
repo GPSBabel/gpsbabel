@@ -168,12 +168,12 @@ html_disp(const waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:type");
       if (logpart) {
-        gbfprintf(file_out, "<span class=\"gpsbabellogtype\">%s</span> by ", logpart->cdata);
+        gbfprintf(file_out, "<span class=\"gpsbabellogtype\">%s</span> by ", CSTR(logpart->cdata));
       }
 
       logpart = xml_findfirst(curlog, "groundspeak:finder");
       if (logpart) {
-        char* f = html_entitize(logpart->cdata);
+        char* f = html_entitize(CSTR(logpart->cdata));
         gbfprintf(file_out, "<span class=\"gpsbabellogfinder\">%s</span> on ", f);
         xfree(f);
       }
@@ -223,7 +223,7 @@ html_disp(const waypoint* wpt)
         if (html_encrypt && encoded) {
           s = rot13(logpart->cdata);
         } else {
-          s = xstrdup(logpart->cdata);
+          s = xstrdup(CSTR(logpart->cdata));
         }
 
         t = html_entitize(s);

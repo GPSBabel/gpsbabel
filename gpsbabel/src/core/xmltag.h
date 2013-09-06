@@ -19,17 +19,14 @@
 class xml_tag {
  public:
   xml_tag() :
-    tagname(NULL),
-    cdata(NULL),
-    parentcdata(NULL),
     attributes(NULL),
     parent(NULL),
     sibling(NULL),
     child(NULL) {}
 
-  char* tagname;
-  char* cdata;
-  char* parentcdata;
+  QString tagname;
+  QString cdata;
+  QString parentcdata;
   char** attributes;
   xml_tag* parent;
   xml_tag* sibling;

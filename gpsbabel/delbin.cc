@@ -1277,7 +1277,7 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
     for (; curlog; curlog = xml_findnext(root, curlog, "groundspeak:log")) {
       xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
       if (logpart) {
-        gbfprintf(fd, "%s\n", logpart->cdata);
+        gbfprintf(fd, "%s\n", CSTR(logpart->cdata));
       }
       logpart = xml_findfirst(curlog, "groundspeak:date");
       if (logpart) {
@@ -1287,13 +1287,13 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
       }
       logpart = xml_findfirst(curlog, "groundspeak:finder");
       if (logpart) {
-        char* s = cet_str_utf8_to_any(logpart->cdata, global_opts.charset);
+        char* s = cet_str_utf8_to_any(CSTR(logpart->cdata), global_opts.charset);
         gbfputs(s, fd);
         xfree(s);
       }
       logpart = xml_findfirst(curlog, "groundspeak:text");
       if (logpart) {
-        char* s = cet_str_utf8_to_any(logpart->cdata, global_opts.charset);
+        char* s = cet_str_utf8_to_any(CSTR(logpart->cdata), global_opts.charset);
         gbfprintf(fd, ", %s", s);
         xfree(s);
       }
