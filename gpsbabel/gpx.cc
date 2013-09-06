@@ -1402,7 +1402,7 @@ void free_gpx_extras(xml_tag* tag)
     }
 
     next = tag->sibling;
-    xfree(tag);
+    delete tag;
     tag = next;
   }
 }
