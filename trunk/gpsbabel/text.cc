@@ -96,9 +96,6 @@ wr_deinit(void)
 static void
 text_disp(const waypoint* wpt)
 {
-  int latint, lonint;
-//  char tbuf[1024];
-//  time_t tm = wpt->GetCreationTime().toTime_t();
   int32_t utmz;
   double utme, utmn;
   char utmzc;
@@ -113,9 +110,6 @@ text_disp(const waypoint* wpt)
     xasprintf(&thisfname, "%s%d", output_name, waypoint_count);
     file_out = gbfopen(thisfname, "w", MYNAME);
   }
-
-  lonint = abs((int) wpt->longitude);
-  latint = abs((int) wpt->latitude);
 
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                            &utme, &utmn, &utmz, &utmzc);

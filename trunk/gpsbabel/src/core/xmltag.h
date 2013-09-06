@@ -35,9 +35,9 @@ class xml_tag {
   char* parentcdata;
   int parentcdatalen;
   char** attributes;
-  struct xml_tag* parent;
-  struct xml_tag* sibling;
-  struct xml_tag* child;
+  xml_tag* parent;
+  xml_tag* sibling;
+  xml_tag* child;
 };
 
 xml_tag* xml_findfirst(xml_tag* root, const char* tagname);
