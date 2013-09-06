@@ -74,7 +74,7 @@ copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
     return;
   }
 
-  res = (xml_tag*) xcalloc(1, sizeof(xml_tag));
+  res = new xml_tag;
   *copy = res;
 
   memcpy(res, src, sizeof(xml_tag));
