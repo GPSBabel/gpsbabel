@@ -27,6 +27,8 @@
 static QXmlStreamReader* reader;
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
+#include "src/core/xmltag.h"
+
 #include <QtCore/QRegExp>
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
@@ -548,7 +550,7 @@ start_something_else(const QString el, const QXmlStreamAttributes& attr)
     return;
   }
 
-  new_tag = (xml_tag*)xcalloc(sizeof(xml_tag),1);
+  new_tag = new xml_tag;
   new_tag->tagname = xstrdup(CSTR(el));
 
   attr_count = attr.size();

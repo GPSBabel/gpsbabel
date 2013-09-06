@@ -34,6 +34,7 @@
 
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
+#include "src/core/xmltag.h"
 
 // options
 static char* opt_deficon = NULL;

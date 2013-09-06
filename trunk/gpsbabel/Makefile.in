@@ -469,7 +469,8 @@ csv_util.o: csv_util.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h garmin_fs.h \
   jeeps/gps.h xcsv_tokens.gperf
 delbin.o: delbin.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
-  gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h
+  gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
+  src/core/xmltag.h
 delgpl.o: delgpl.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h
 destinator.o: destinator.cc defs.h config.h queue.h zlib/zlib.h \
@@ -631,7 +632,8 @@ gpx.o: gpx.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   jeeps/gps.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
-  jeeps/gpsproj.h src/core/file.h defs.h src/core/xmlstreamwriter.h
+  jeeps/gpsproj.h src/core/file.h defs.h src/core/xmlstreamwriter.h \
+  src/core/xmltag.h
 grtcirc.o: grtcirc.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
   grtcirc.h
@@ -660,7 +662,7 @@ html.o: html.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
-  jeeps/gpsproj.h
+  jeeps/gpsproj.h src/core/xmltag.h
 humminbird.o: humminbird.cc defs.h config.h queue.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h \
   src/core/datetime.h
@@ -844,7 +846,8 @@ jtr.o: jtr.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h csv_util.h
 kml.o: kml.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h xmlgeneric.h \
-  grtcirc.h src/core/file.h defs.h src/core/xmlstreamwriter.h
+  grtcirc.h src/core/file.h defs.h src/core/xmlstreamwriter.h \
+  src/core/xmltag.h
 lmx.o: lmx.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h xmlgeneric.h
 lowranceusr.o: lowranceusr.cc defs.h config.h queue.h zlib/zlib.h \
@@ -1051,7 +1054,7 @@ text.o: text.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
   jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
   jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
-  jeeps/gpsproj.h
+  jeeps/gpsproj.h src/core/xmltag.h
 tiger.o: tiger.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
   csv_util.h
@@ -1091,14 +1094,17 @@ units.o: units.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h
 util.o: util.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h \
-  jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
-  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
-  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
-  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
-  jeeps/gpsproj.h
+  src/core/xmltag.h jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h \
+  jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h \
+  jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h \
+  jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h \
+  jeeps/gpsinput.h jeeps/gpsproj.h
 util_crc.o: util_crc.cc
 v900.o: v900.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h
+validate.o: validate.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
+  filterdefs.h
 vcf.o: vcf.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h \
   jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \
@@ -1146,7 +1152,8 @@ xmlgeneric.o: xmlgeneric.cc defs.h config.h queue.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h \
   src/core/datetime.h xmlgeneric.h src/core/file.h defs.h
 xmltag.o: xmltag.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
-  gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h
+  gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
+  src/core/xmltag.h
 xol.o: xol.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h xmlgeneric.h \
   jeeps/gpsmath.h jeeps/gps.h jeeps/../defs.h jeeps/gpsport.h \

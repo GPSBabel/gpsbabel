@@ -21,6 +21,8 @@
  */
 
 #include "defs.h"
+#include "src/core/xmltag.h"
+
 #include <assert.h>
 
 #define MYNAME "delbin"

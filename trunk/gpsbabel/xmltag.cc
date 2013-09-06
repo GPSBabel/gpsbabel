@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include "defs.h"
+#include "src/core/xmltag.h"
 
 static void
 free_xml_tag(xml_tag* tag)
@@ -55,7 +56,7 @@ free_xml_tag(xml_tag* tag)
     }
 
     next = tag->sibling;
-    xfree(tag);
+    delete tag;
     tag = next;
   }
 }

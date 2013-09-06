@@ -305,18 +305,6 @@ public:
   QString personal_note;
 };
 
-typedef struct xml_tag {
-  char* tagname;
-  char* cdata;
-  int cdatalen;
-  char* parentcdata;
-  int parentcdatalen;
-  char** attributes;
-  struct xml_tag* parent;
-  struct xml_tag* sibling;
-  struct xml_tag* child;
-} xml_tag ;
-
 typedef void (*fs_destroy)(void*);
 typedef void (*fs_copy)(void**, void*);
 typedef void (*fs_convert)(void*);
@@ -345,13 +333,6 @@ format_specific_data* fs_chain_copy(format_specific_data* source);
 void fs_chain_destroy(format_specific_data* chain);
 format_specific_data* fs_chain_find(format_specific_data* chain, long type);
 void fs_chain_add(format_specific_data** chain, format_specific_data* data);
-
-typedef struct fs_xml {
-  format_specific_data fs;
-  xml_tag* tag;
-} fs_xml;
-
-fs_xml* fs_xml_alloc(long type);
 
 #define FS_GPX 0x67707800L
 #define FS_AN1W 0x616e3177L
@@ -701,7 +682,6 @@ unsigned int waypt_count(void);
 void set_waypt_count(unsigned int nc);
 void waypt_add_url(waypoint* wpt, const QString& link,
                    const QString& url_link_text);
-void free_gpx_extras(xml_tag* tag);
 void xcsv_setup_internal_style(const char* style_buf);
 void xcsv_read_internal_style(const char* style_buf);
 waypoint* find_waypt_by_name(const char* name);
@@ -1033,10 +1013,6 @@ const char* get_filename(const char* fname);			/* extract the filename portion *
 
 /* this lives in gpx.c */
 gpsbabel::DateTime xml_parse_time(const QString& cdatastr);
-
-xml_tag* xml_findfirst(xml_tag* root, const char* tagname);
-xml_tag* xml_findnext(xml_tag* root, xml_tag* cur, const char* tagname);
-char* xml_attribute(xml_tag* tag, const char* attrname);
 
 char* rot13(const QString& str);
 
