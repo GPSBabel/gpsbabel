@@ -1189,7 +1189,6 @@ gpx_end(const QString& el)
 static void
 gpx_cdata(const QString& s)
 {
-  int* cdatalen;
   char** cdata;
   xml_tag* tmp_tag;
   cdatastr = s;
@@ -1204,10 +1203,8 @@ gpx_cdata(const QString& s)
       tmp_tag = tmp_tag->sibling;
     }
     cdata = &(tmp_tag->parentcdata);
-    cdatalen = &(tmp_tag->parentcdatalen);
   } else {
     cdata = &(cur_tag->cdata);
-    cdatalen = &(cur_tag->cdatalen);
   }
   if (*cdata) {
     xfree(*cdata);
@@ -1362,12 +1359,10 @@ fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
       }
       writer->writeEndElement();
     }
-    if (tag->parentcdata) {
+    if (tag->parentcdata && tag->parentcdata[0]) {
       // FIXME: The length check is necessary to get line endings correct in our test suite.
       // Writing the zero length string eats a newline, at least with Qt 4.6.2.
-      if (tag->parentcdatalen > 0) {
-        writer->writeCharacters(tag->parentcdata);
-      }
+      writer->writeCharacters(tag->parentcdata);
     }
     tag = tag->sibling;
   }

@@ -21,9 +21,7 @@ class xml_tag {
   xml_tag() :
     tagname(NULL),
     cdata(NULL),
-    cdatalen(0),
     parentcdata(NULL),
-    parentcdatalen(0),
     attributes(NULL),
     parent(NULL),
     sibling(NULL),
@@ -31,9 +29,7 @@ class xml_tag {
 
   char* tagname;
   char* cdata;
-  int cdatalen;
   char* parentcdata;
-  int parentcdatalen;
   char** attributes;
   xml_tag* parent;
   xml_tag* sibling;
