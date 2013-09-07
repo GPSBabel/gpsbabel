@@ -102,8 +102,10 @@ convert_xml_tag(xml_tag* tag)
     return;
   }
 
-  tag->cdata = cet_convert_string(tag->cdata);
-  tag->parentcdata = cet_convert_string(tag->parentcdata);
+//  tag->cdata = cet_convert_string(tag->cdata);
+//  tag->parentcdata = cet_convert_string(tag->parentcdata);
+  tag->cdata = tag->cdata;
+  tag->parentcdata = tag->parentcdata;
 
   ap = tag->attributes;
   while (*ap) {
