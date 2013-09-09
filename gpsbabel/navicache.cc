@@ -106,13 +106,13 @@ NaviReadCache(const QXmlStreamReader& reader)
   if (a.hasAttribute("cache_id")) {
     int n = a.value("cache_id").toString().toInt();
     QString fn = QString("N%1").arg(n, 5, 16, QChar('0'));
-    wpt_tmp->shortname = xstrdup(CSTR(fn));
+    wpt_tmp->shortname = xstrdup(fn);
 
     UrlLink l(QString(NC_URL) + QString::number(n));
     wpt_tmp->AddUrlLink(l);
   }
   if (a.hasAttribute("name")) {
-    wpt_tmp->description = xstrdup(CSTR(a.value("name").toString()));
+    wpt_tmp->description = xstrdup(a.value("name").toString());
   }
   if (a.hasAttribute("user_name")) {
     gc_data->placer = a.value("user_name").toString();

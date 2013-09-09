@@ -218,7 +218,7 @@ gpx_add_to_global(gpx_global_entry* ge, const QString& s)
 
   gep = (gpx_global_entry*) xcalloc(sizeof(*gep), 1);
   QUEUE_INIT(&gep->queue);
-  gep->tagdata = xstrdup(CSTR(s));
+  gep->tagdata = xstrdup(s);
   ENQUEUE_TAIL(&ge->queue, &gep->queue);
 }
 
@@ -466,10 +466,10 @@ tag_gpx(const QXmlStreamAttributes& attr)
      * version.
      */
     if (! gpx_version) {
-      gpx_version = xstrdup(CSTR(attr.value("version").toString()));
+      gpx_version = xstrdup(attr.value("version").toString());
     } else if ((strtod(gpx_version, NULL) * 10) < (attr.value("version").toString().toDouble() * 10)) {
       xfree(gpx_version);
-      gpx_version = xstrdup(CSTR(attr.value("version").toString()));
+      gpx_version = xstrdup(attr.value("version").toString());
     }
   }
   /* save namespace declarations in case we pass through elements
@@ -557,9 +557,9 @@ start_something_else(const QString el, const QXmlStreamAttributes& attr)
   new_tag->attributes = (char**)xcalloc(sizeof(char*),2*attr_count+1);
   avcp = new_tag->attributes;
   for (int i = 0; i < attr_count; i++)  {
-    *avcp = xstrdup(CSTR(attr[i].name().toString()));
+    *avcp = xstrdup(attr[i].name().toString());
     avcp++;
-    *avcp = xstrdup(CSTR(attr[i].value().toString()));
+    *avcp = xstrdup(attr[i].value().toString());
     avcp++;
   }
   *avcp = NULL; // this indicates the end of the attribute name value pairs.
@@ -936,7 +936,7 @@ gpx_end(const QString& el)
     if (wpt_tmp->notes != NULL) {
       xfree(wpt_tmp->notes);
     }
-    wpt_tmp->notes = xstrdup(CSTR(cdatastr));
+    wpt_tmp->notes = xstrdup(cdatastr);
     break;
   case tt_cache_container:
     waypt_alloc_gc_data(wpt_tmp)->container = gs_mkcont(cdatastr);
@@ -1024,7 +1024,7 @@ gpx_end(const QString& el)
      * Route-specific tags.
      */
   case tt_rte_name:
-    rte_head->rte_name = xstrdup(CSTR(cdatastr));
+    rte_head->rte_name = xstrdup(cdatastr);
     break;
   case tt_rte:
     break;
@@ -1040,7 +1040,7 @@ gpx_end(const QString& el)
     wpt_tmp = NULL;
     break;
   case tt_rte_desc:
-    rte_head->rte_desc = xstrdup(CSTR(cdatastr));
+    rte_head->rte_desc = xstrdup(cdatastr);
     break;
   case tt_rte_number:
     rte_head->rte_num = cdatastr.toInt();
@@ -1049,7 +1049,7 @@ gpx_end(const QString& el)
      * Track-specific tags.
      */
   case tt_trk_name:
-    trk_head->rte_name = xstrdup(CSTR(cdatastr));
+    trk_head->rte_name = xstrdup(cdatastr);
     break;
   case tt_trk:
     break;
@@ -1068,7 +1068,7 @@ gpx_end(const QString& el)
     wpt_tmp = NULL;
     break;
   case tt_trk_desc:
-    trk_head->rte_desc = xstrdup(CSTR(cdatastr));
+    trk_head->rte_desc = xstrdup(cdatastr);
     break;
   case tt_trk_number:
     trk_head->rte_num = cdatastr.toInt();
@@ -1097,7 +1097,7 @@ gpx_end(const QString& el)
   case tt_wpt_name:
   case tt_rte_rtept_name:
   case tt_trk_trkseg_trkpt_name:
-    wpt_tmp->shortname = xstrdup(CSTR(cdatastr));
+    wpt_tmp->shortname = xstrdup(cdatastr);
     break;
   case tt_wpt_sym:
   case tt_rte_rtept_sym:
@@ -1112,7 +1112,7 @@ gpx_end(const QString& el)
   case tt_wpt_cmt:
   case tt_rte_rtept_cmt:
   case tt_trk_trkseg_trkpt_cmt:
-    wpt_tmp->description = xstrdup(CSTR(cdatastr));
+    wpt_tmp->description = xstrdup(cdatastr);
     break;
   case tt_wpt_desc:
   case tt_trk_trkseg_trkpt_desc:
@@ -1120,7 +1120,7 @@ gpx_end(const QString& el)
     if (wpt_tmp->notes != NULL) {
       xfree(wpt_tmp->notes);
     }
-    wpt_tmp->notes = xstrdup(CSTR(cdatastr));
+    wpt_tmp->notes = xstrdup(cdatastr);
     break;
   case tt_pdop:
     wpt_tmp->pdop = cdatastr.toDouble();

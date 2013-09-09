@@ -232,7 +232,7 @@ text_disp(const waypoint* wpt)
         if (txt_encrypt && encoded) {
           s = rot13(logpart->cdata);
         } else {
-          s = xstrdup(CSTR(logpart->cdata));
+          s = xstrdup(logpart->cdata);
         }
 
         gbfprintf(file_out, "%s", s);
