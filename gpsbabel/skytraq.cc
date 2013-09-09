@@ -35,6 +35,7 @@
 #define SECTOR_SIZE		4096
 #define FULL_ITEM_LEN		18
 #define COMPACT_ITEM_LEN	8
+#define MULTI_HZ_ITEM_LEN		20
 
 /* Maximum number of chars to skip while waiting for a reply: */
 #define RETRIES			250
@@ -686,24 +687,47 @@ typedef struct {
   int16_t dz;
 } compact_item;
 
+typedef struct {
+  uint32_t gps_week;
+  uint32_t gps_sec;
+  int32_t  lat;
+  int32_t  lon;
+  int32_t  alt;
+} multi_hz_item;
+
+
 struct full_item_frame {
   unsigned char ts[4];
   unsigned char x[4];
   unsigned char y[4];
   unsigned char z[4];
 };
+
 struct compact_item_frame {
   unsigned char dt[2]; /* big endian unsigned short */
   unsigned char dpos[4];
 };
 
+struct multi_hz_item_frame {
+    unsigned char v_kmh[2];
+    unsigned char ts[4];
+    unsigned char lat[4];
+    unsigned char lon[4];
+    unsigned char alt[4];
+};
+
 typedef struct {
   unsigned char type_and_speed[2];
   union {
+    struct multi_hz_item_frame multi_hz;
     struct full_item_frame full;
     struct compact_item_frame comp;
   };
 } item_frame;
+#define ITEM_WEEK_NUMBER(item) (item->type_and_speed[1] | ((item->type_and_speed[0] & 0x03) << 8))
+
+#define POW_2_M20 0.000000953674316
+#define POW_2_M7 0.0078125
 
 #define ITEM_TYPE(item) (item->type_and_speed[0] >> 4)
 #define ITEM_SPEED(item) (item->type_and_speed[1] | ((item->type_and_speed[0] & 0x0F) << 8))
@@ -712,14 +736,53 @@ static int
 process_data_item(struct read_state* pst, const item_frame* pitem, int len)
 {
   int res = 0;
-  double lat, lon, alt;
+  double lat, lon, alt, spe;
   unsigned int ts;
   int poi = 0;
   full_item f;
   compact_item c;
+  multi_hz_item m;
   waypoint* tpt = NULL;
 
   switch (ITEM_TYPE(pitem)) {
+
+  case 0xc:	/* POI item (same structure as full) */
+    poi = 1;
+    /* fall through: */
+
+  case 0x2:	/* Multi HZ item */
+	if (len < MULTI_HZ_ITEM_LEN) {
+	    db(1, MYNAME ": Not enough bytes in sector for a full item.\n");
+	    return res_ERROR;
+	}
+	m.gps_week = ITEM_WEEK_NUMBER(pitem);
+	ts = me_read32(pitem->multi_hz.ts);
+	m.gps_sec = ((int)(ts & 0x3FFFFFFF)) / 1000;
+	m.lat = me_read32(pitem->multi_hz.lat);
+	m.lon = me_read32(pitem->multi_hz.lon);
+	m.alt = me_read32(pitem->multi_hz.alt);
+	
+    pst->gps_week = m.gps_week;
+    pst->gps_sec = m.gps_sec;
+
+	spe = KPH_TO_MPS(be_read16(pitem->multi_hz.v_kmh));
+
+	db(4, "Got multi hz item: week=%i sec=%i lat=%i  lon=%i  alt=%i  speed=%f\n",
+	   m.gps_week, m.gps_sec,
+	   m.lat, m.lon, m.alt,
+	   spe);
+	   
+	lat = m.lat * POW_2_M20;
+	lon = m.lon * POW_2_M20;
+	alt = m.alt * POW_2_M7;
+	
+    tpt = make_trackpoint(pst, lat, lon, alt);
+    WAYPT_SET(tpt, speed, spe); /* convert speed to m/s */
+    track_add_wpt(pst->route_head_, tpt);
+
+    res = MULTI_HZ_ITEM_LEN;
+	break;
+
   case 0x6:	/* POI item (same structure as full) */
     poi = 1;
     /* fall through: */

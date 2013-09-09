@@ -17,3 +17,6 @@ compare ${REFERENCE}/skytraq-realdata.gpx ${TMPDIR}/skytraq-realdata.gpx
 
 gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq-artificial.bin -o gpx -F ${TMPDIR}/skytraq-artificial.gpx
 compare ${REFERENCE}/skytraq-artificial.gpx ${TMPDIR}/skytraq-artificial.gpx
+
+gpsbabel -t -w -i skytraq-bin -f ${REFERENCE}/skytraq-miniHomer2_8.bin -o gpx -F ${TMPDIR}/skytraq-miniHomer2_8.gpx
+compare ${REFERENCE}/skytraq-miniHomer2_8.gpx ${TMPDIR}/skytraq-miniHomer2_8.gpx
