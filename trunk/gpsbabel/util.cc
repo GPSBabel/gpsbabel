@@ -149,6 +149,11 @@ xstrdup(const char* s)
   return o;
 }
 
+char* xstrdup(const QString& s)
+{
+  return xstrdup(CSTR(s));
+}
+
 /*
  * Duplicate at most sz bytes in str.
  */
@@ -1523,14 +1528,14 @@ strip_html(const utf_string* in)
   char tag[8];
   unsigned short int taglen = 0;
 
-  incopy = instr = xstrdup(CSTR(in->utfstring));
+  incopy = instr = xstrdup(in->utfstring);
   if (!in->is_html) {
     return instr;
   }
   /*
    * We only shorten, so just dupe the input buf for space.
    */
-  outstring = out = xstrdup(CSTR(in->utfstring));
+  outstring = out = xstrdup(in->utfstring);
 
   tag[0] = 0;
   while (*instr) {

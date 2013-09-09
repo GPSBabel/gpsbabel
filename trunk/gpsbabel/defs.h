@@ -38,6 +38,7 @@
 
 #include <QtCore/QString>
 #include <QtCore/QDebug>
+#include <QtCore/QTextStream>
 
 # include "src/core/datetime.h"
 
@@ -216,6 +217,7 @@ extern const char gpsbabel_version[];
 extern time_t gpsbabel_now;	/* gpsbabel startup-time; initialized in main.c with time() */
 extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
 extern int geocaches_present;
+extern QTextStream cerr;
 
 #define MILLI_TO_MICRO(t) (t * 1000)  /* Milliseconds to Microseconds */
 #define MICRO_TO_MILLI(t) (t / 1000)  /* Microseconds to Milliseconds*/
@@ -920,6 +922,7 @@ void* xmalloc(size_t size);
 void* xrealloc(void* p, size_t s);
 void xfree(const void* mem);
 char* xstrdup(const char* s);
+char* xstrdup(const QString& s);
 char* xstrndup(const char* s, size_t n);
 char* xstrndupt(const char* s, size_t n);
 char* xstrappend(char* src, const char* addon);
