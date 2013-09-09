@@ -709,11 +709,11 @@ struct compact_item_frame {
 };
 
 struct multi_hz_item_frame {
-    unsigned char v_kmh[2];
-    unsigned char ts[4];
-    unsigned char lat[4];
-    unsigned char lon[4];
-    unsigned char alt[4];
+  unsigned char v_kmh[2];
+  unsigned char ts[4];
+  unsigned char lat[4];
+  unsigned char lon[4];
+  unsigned char alt[4];
 };
 
 typedef struct {
@@ -751,37 +751,37 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
     /* fall through: */
 
   case 0x2:	/* Multi HZ item */
-	if (len < MULTI_HZ_ITEM_LEN) {
-	    db(1, MYNAME ": Not enough bytes in sector for a full item.\n");
-	    return res_ERROR;
-	}
-	m.gps_week = ITEM_WEEK_NUMBER(pitem);
-	ts = me_read32(pitem->multi_hz.ts);
-	m.gps_sec = ((int)(ts & 0x3FFFFFFF)) / 1000;
-	m.lat = me_read32(pitem->multi_hz.lat);
-	m.lon = me_read32(pitem->multi_hz.lon);
-	m.alt = me_read32(pitem->multi_hz.alt);
-	
+    if (len < MULTI_HZ_ITEM_LEN) {
+      db(1, MYNAME ": Not enough bytes in sector for a full item.\n");
+      return res_ERROR;
+    }
+    m.gps_week = ITEM_WEEK_NUMBER(pitem);
+    ts = me_read32(pitem->multi_hz.ts);
+    m.gps_sec = ((int)(ts & 0x3FFFFFFF)) / 1000;
+    m.lat = me_read32(pitem->multi_hz.lat);
+    m.lon = me_read32(pitem->multi_hz.lon);
+    m.alt = me_read32(pitem->multi_hz.alt);
+
     pst->gps_week = m.gps_week;
     pst->gps_sec = m.gps_sec;
 
-	spe = KPH_TO_MPS(be_read16(pitem->multi_hz.v_kmh));
+    spe = KPH_TO_MPS(be_read16(pitem->multi_hz.v_kmh));
 
-	db(4, "Got multi hz item: week=%i sec=%i lat=%i  lon=%i  alt=%i  speed=%f\n",
-	   m.gps_week, m.gps_sec,
-	   m.lat, m.lon, m.alt,
-	   spe);
-	   
-	lat = m.lat * POW_2_M20;
-	lon = m.lon * POW_2_M20;
-	alt = m.alt * POW_2_M7;
-	
+    db(4, "Got multi hz item: week=%i sec=%i lat=%i  lon=%i  alt=%i  speed=%f\n",
+       m.gps_week, m.gps_sec,
+       m.lat, m.lon, m.alt,
+       spe);
+
+    lat = m.lat * POW_2_M20;
+    lon = m.lon * POW_2_M20;
+    alt = m.alt * POW_2_M7;
+
     tpt = make_trackpoint(pst, lat, lon, alt);
     WAYPT_SET(tpt, speed, spe); /* convert speed to m/s */
     track_add_wpt(pst->route_head_, tpt);
 
     res = MULTI_HZ_ITEM_LEN;
-	break;
+    break;
 
   case 0x6:	/* POI item (same structure as full) */
     poi = 1;
