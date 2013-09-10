@@ -11,6 +11,8 @@ gpsbabel -i gtrnctr -f ${REFERENCE}/track/course.tcx -t -o unicsv,utc=0,prec=7 -
 compare ${REFERENCE}/track/course~tcx.csv ${TMPDIR}/course~tcx.csv
 gpsbabel -i gtrnctr -f ${REFERENCE}/track/course.tcx -t -o gpx -F ${TMPDIR}/course~tcx.gpx
 compare ${REFERENCE}/track/course~tcx.gpx ${TMPDIR}/course~tcx.gpx
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr-lap_s.tcx -t -o gpx -F ${TMPDIR}/gtrnctr-lap_s.tcx.gpx
+compare ${REFERENCE}/track/gtrnctr-lap_s.tcx.gpx ${TMPDIR}/gtrnctr-lap_s.tcx.gpx
 # writing
 rm -f ${TMPDIR}tcxtest~gpx-course.tcx ${TMPDIR}tcxtest~gpx-history.tcx
 gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=1 -F ${TMPDIR}/tcxtest~gpx-course.tcx

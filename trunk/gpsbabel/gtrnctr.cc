@@ -487,6 +487,7 @@ gtc_trk_pnt_e(const char* args, const QXmlStreamAttributes* unusedd)
       snprintf(cbuf, sizeof(cbuf), "LAP%03d", lap_ct);
       wpt_lap_s->shortname = xstrdup(cbuf);
       waypt_add(wpt_lap_s);
+      lap_s = 0;
     }
 
     track_add_wpt(trk_head, wpt_tmp);
@@ -495,7 +496,6 @@ gtc_trk_pnt_e(const char* args, const QXmlStreamAttributes* unusedd)
   }
 
   wpt_tmp = NULL;
-  lap_s = 0;
 }
 
 void
