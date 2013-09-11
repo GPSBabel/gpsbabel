@@ -1374,7 +1374,7 @@ QString kml_geocache_get_logs(const waypoint* wpt)
   return r;
 }
 
-static void kml_write_data_element(const char* name, const QString& value)
+static void kml_write_data_element(const QString& name, const QString& value)
 {
   writer->writeStartElement("Data");
   writer->writeAttribute("name", name);
@@ -1382,7 +1382,7 @@ static void kml_write_data_element(const char* name, const QString& value)
   writer->writeEndElement(); // Close Data tag
 }
 
-static void kml_write_data_element(const char* name, const int value)
+static void kml_write_data_element(const QString& name, const int value)
 {
   writer->writeStartElement("Data");
   writer->writeAttribute("name", name);
@@ -1390,7 +1390,7 @@ static void kml_write_data_element(const char* name, const int value)
   writer->writeEndElement(); // Close Data tag
 }
 
-static void kml_write_data_element(const char* name, const double value)
+static void kml_write_data_element(const QString& name, const double value)
 {
   writer->writeStartElement("Data");
   writer->writeAttribute("name", name);
@@ -1398,7 +1398,7 @@ static void kml_write_data_element(const char* name, const double value)
   writer->writeEndElement(); // Close Data tag
 }
 
-static void kml_write_cdata_element(const char* name, const QString& value)
+static void kml_write_cdata_element(const QString& name, const QString& value)
 {
   writer->writeStartElement("Data");
   writer->writeAttribute("name", name);

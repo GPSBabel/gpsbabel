@@ -32,7 +32,7 @@
 
 #if NEWQ
 QList<waypoint*> waypt_list;
-queue waypt_head; // This is here solely to freak out the formats that are
+ queue waypt_head; // This is here solely to freak out the formats that are
 // looking into what should be a private members.
 #else
 queue waypt_head;
@@ -144,9 +144,9 @@ waypt_add(waypoint* wpt)
   waypt_list.append(wpt);
 #else
   ENQUEUE_TAIL(&waypt_head, &wpt->Q);
+  waypt_ct++;
 #endif
 
-  waypt_ct++;
 
   if (wpt->latitude < -90) {
     wpt->latitude += 180;
@@ -205,8 +205,11 @@ waypt_add(waypoint* wpt)
 void
 waypt_del(waypoint* wpt)
 {
+#if NEWQ
+#else
   dequeue(&wpt->Q);
   waypt_ct--;
+#endif
 }
 
 /*
@@ -233,7 +236,11 @@ waypt_new(void)
 unsigned int
 waypt_count(void)
 {
+#if NEWQ
+  return waypt_list.size();
+#else
   return waypt_ct;
+#endif
 }
 
 void

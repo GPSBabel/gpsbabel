@@ -1365,7 +1365,7 @@ write_waypoint(
     descr = (wpt_class < gt_waypt_class_map_point) ?
             ld : wpt->description;
     if ((descr != NULL) && (wpt_class >= gt_waypt_class_map_point) && \
-        descr.compare(wpt->shortname) == 0) {
+        descr == wpt->shortname ) {
       descr.clear();
     }
     FWRITE_CSTR(descr);
