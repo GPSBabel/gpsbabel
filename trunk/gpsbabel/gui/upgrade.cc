@@ -28,18 +28,23 @@
 #include "../config.h"
 #endif
 
+#include <stdio.h>
 #if HAVE_UNAME
 #include <sys/utsname.h>
 #endif // HAVE_UNAME
 
-#include <QHttp>
-#include <QMessageBox>
+#include <QDebug>
 #include <QDesktopServices>
 #include <QDomDocument>
 #include <QLocale>
+#include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QSysInfo>
 #include <QUrl>
-#include <stdio.h>
+#include <QVariant>
+
 
 #if 0
 static const bool testing = true;
@@ -50,7 +55,9 @@ static const bool testing = false;
 UpgradeCheck::UpgradeCheck(QWidget *parent, QList<Format> &formatList,
                            BabelData& bd) :
   QObject(parent),
-  http(0), 
+  manager(0), 
+  replyId(0),
+  upgradeUrl(QUrl("http://www.gpsbabel.org/upgrade_check.html")),
   formatList_(formatList), 
   updateStatus_(updateUnknown),
   bd_(bd)
@@ -59,11 +66,13 @@ UpgradeCheck::UpgradeCheck(QWidget *parent, QList<Format> &formatList,
 
 UpgradeCheck::~UpgradeCheck()
 {
-  if (http) {
-    http->clearPendingRequests();
-    http->abort();
-    delete http;
-    http = 0;
+  if (replyId) {
+    replyId->abort();
+    replyId = 0;
+  }
+  if (manager) {
+    delete manager;
+    manager = 0;
   }
 }
 
@@ -72,7 +81,7 @@ bool UpgradeCheck::isTestMode()
   return testing;
 }
 
-QString UpgradeCheck::getOsName(void)
+QString UpgradeCheck::getOsName()
 {
   // Do not translate these strings.
 #if defined (Q_OS_LINUX)
@@ -126,7 +135,6 @@ QString UpgradeCheck::getOsVersion()
   return "Unknown";
 }
 
-
 UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
                const QString &currentVersionIn,
                const QDateTime &lastCheckTime,
@@ -141,19 +149,15 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
     return UpgradeCheck::updateUnknown;
   }
 
-  http = new QHttp;
+  manager = new QNetworkAccessManager;
 
-  connect(http, SIGNAL(requestFinished(int, bool)),
-          this, SLOT(httpRequestFinished(int, bool)));
-  connect(http, SIGNAL(responseHeaderReceived(const QHttpResponseHeader &)),
-          this, SLOT(readResponseHeader(const QHttpResponseHeader &)));
+  connect(manager, SIGNAL(finished(QNetworkReply*)),
+          this, SLOT(httpRequestFinished(QNetworkReply*)));
 
-  QHttpRequestHeader header("POST", "/upgrade_check.html");
+  QNetworkRequest request = QNetworkRequest(upgradeUrl);
+  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+  request.setRawHeader("Accept-Encoding","identity");
 
-  const QString host("www.gpsbabel.org" );
-  header.setValue("Host",  host);
-
-  header.setContentType("application/x-www-form-urlencoded");
   QLocale locale;
 
   QString args = "current_version=" + currentVersion;
@@ -192,51 +196,80 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
   if (j && bd_.reportStatistics)
     args += QString("&uc=%1").arg(j);
 
-  if (false && testing)
-   fprintf(stderr, "Posting %s\n", qPrintable(args));
+  if (false && testing) {
+    qDebug() << "Posting " << args;
+  }
 
-  http->setHost(host, 80);
-  httpRequestId = http->request(header, args.toUtf8());
+  replyId = manager->post(request, args.toUtf8());
+  
 
   return UpgradeCheck::updateUnknown;
 }
 
-void UpgradeCheck::readResponseHeader(const QHttpResponseHeader &responseHeader)
-{
-  switch (responseHeader.statusCode()) {
-  case 200:                   // Ok
-  case 301:                   // Moved Permanently
-  case 302:                   // Found
-  case 303:                   // See Other
-  case 307:                   // Temporary Redirect
-    // these are not error conditions
-    break;
-
-  default:
-    QMessageBox::information(0, tr("HTTP"),
-           tr("Download failed: %1.")
-           .arg(responseHeader.reasonPhrase()));
-    httpRequestAborted = true;
-    http->abort();
-  }
+QDateTime UpgradeCheck::getUpgradeWarningTime() {
+  return upgradeWarningTime;
 }
 
-void UpgradeCheck::httpRequestFinished(int requestId, bool error)
+UpgradeCheck::updateStatus UpgradeCheck::getStatus() {
+  return updateStatus_;
+}
+
+void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
 {
 
-  if (http == 0 || error) {
+  if (reply == 0 ) {
     bd_.upgradeErrors++;
+    return;
+  } else if (reply != replyId) {
+    QMessageBox::information(0, tr("HTTP"),
+           tr("Unexpected reply."));
+  } else if (reply->error() != QNetworkReply::NoError ) {
+    bd_.upgradeErrors++;
+    QMessageBox::information(0, tr("HTTP"),
+           tr("Download failed: %1.")
+           .arg(reply->errorString()));
+    replyId = 0;
+    reply->deleteLater();
     return;
   }
 
-  // This is not an error state; it's just the internal state of Qt's network
-  // stack flailing around.
-  if (requestId != httpRequestId) {
+  // New post 1.4.4: Allow redirects in case a proxy server or something
+  // slightly rewrites the post.
+  // Note that adding port 80 to the url will cause a redirect, which is useful for testing.
+  // Also you use gpsbabel.org instead of www.gpsbabel.org to generate redirects.
+  QVariant attributeValue = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
+  if (!attributeValue.isNull() && attributeValue.isValid()) {
+    QUrl redirectUrl = attributeValue.toUrl();
+    if (redirectUrl.isValid()) {
+      if (testing) {
+        qDebug() << "redirect to " << redirectUrl.toString();
+      }
+      // Change the url for the next update check.
+      // TOODO: kick off another update check.  
+      upgradeUrl = redirectUrl;
+      replyId = 0;
+      reply->deleteLater();
+      return;
+    }
+  }
+  
+  QVariant statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+  if (testing) {
+    qDebug() << "http status code " << statusCode.toInt();
+  }
+  if (statusCode != 200) {
+    QVariant reason = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute);
+    QMessageBox::information(0, tr("HTTP"),
+           tr("Download failed: %1: %2.")
+           .arg(statusCode.toInt())
+           .arg(reason.toString()));
+    replyId = 0;
+    reply->deleteLater();
     return;
   }
 
   bd_.upgradeCallbacks++;
-  QString oresponse(http->readAll());
+  QString oresponse(reply->readAll());
 
   QDomDocument document;
   int line = -1;
@@ -246,8 +279,10 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
     QMessageBox::critical(0, tr("Error"),
            tr("Invalid return data at line %1: %2.")
            .arg(line)
-	   .arg( error_text));
+           .arg( error_text));
     bd_.upgradeErrors++;
+    replyId = 0;
+    reply->deleteLater();
     return;
   }
 
@@ -279,6 +314,7 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
 
     bool updateCandidate = updateIsMajor || updateIsMinor || (updateIsBeta && allowBeta);
     upgradeText = upgrade.firstChildElement("overview").text();
+
     // String compare, not a numeric one.  Server will return "best first".
     if((updateVersion > currentVersion) && updateCandidate) {
       bd_.upgradeOffers++;
@@ -319,4 +355,6 @@ void UpgradeCheck::httpRequestFinished(int requestId, bool error)
   for (int i = 0; i < formatList_.size(); i++) {
      formatList_[i].zeroUseCounts();
   }
+  replyId = 0;
+  reply->deleteLater();
 }
