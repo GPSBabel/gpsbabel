@@ -21,12 +21,11 @@
 
 #include "babeldata.h"
 #include "format.h"
-#include <QDialog>
 #include <QDateTime>
-#include <QHttp>
+#include <QUrl>
 
-class QHttp;
-class QHttpResponseHeader;
+class QNetworkAccessManager;
+class QNetworkReply;
 
 class UpgradeCheck : public QObject {
   Q_OBJECT
@@ -39,37 +38,34 @@ public:
     updateCurrent,
     updateNeeded,
   } updateStatus;
-  UpgradeCheck::updateStatus checkForUpgrade(const QString &babelVersion, 
-					     const QDateTime &lastCheckTime,
-                                             bool allowBeta);
-  QDateTime getUpgradeWarningTime() {
-    return upgradeWarningTime;
-  }
 
-  updateStatus getStatus() {
-    return updateStatus_;
-  }
+  UpgradeCheck::updateStatus checkForUpgrade(const QString &babelVersion,
+      const QDateTime &lastCheckTime,
+      bool allowBeta);
+  QDateTime getUpgradeWarningTime(void);
+  UpgradeCheck::updateStatus getStatus(void);
   static bool isTestMode(void);
 
 protected:
 
- private:
+private:
   QString currentVersion;
-  int     upgradeCheckMethod;
-  QHttp *http;
-  int httpRequestId;
+  int upgradeCheckMethod;
+  QNetworkAccessManager* manager;
+  QNetworkReply* replyId;
+  QUrl upgradeUrl;
   bool httpRequestAborted;
   QString latestVersion;
   QDateTime upgradeWarningTime;  // invalid time if this object never issued.
-  QString getOsName(void);
-  QString getOsVersion(void);
   QList<Format> &formatList_;
   updateStatus updateStatus_;
   BabelData& bd_;
 
+  QString getOsName(void);
+  QString getOsVersion(void);
+
 private slots:
-  void httpRequestFinished(int requestId, bool error);
-  void readResponseHeader(const QHttpResponseHeader &responseHeader);
+  void httpRequestFinished(QNetworkReply* reply);
 
 
 };
