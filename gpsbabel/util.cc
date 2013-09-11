@@ -421,36 +421,6 @@ lrtrim(char* buff)
 }
 
 /*
- *   Like strcmp, but case insensitive.  Like Berkeley's strcasecmp.
- */
-
-int
-case_ignore_strcmp(const char* s1, const char* s2)
-{
-  for (; toupper(*s1) == toupper(*s2); ++ s1, ++s2) {
-    if (*s1 == 0) {
-      return 0;
-    }
-  }
-  return (toupper(*s1) < toupper(*s2)) ? -1 : +1;
-
-}
-
-int
-case_ignore_strncmp(const char* s1, const char* s2, int n)
-{
-  int rv = 0;
-
-  while (n && ((rv = toupper(*s1) - toupper(*s2)) == 0)
-         && *s1) {
-    s1++;
-    s2++;
-    n--;
-  }
-  return rv;
-}
-
-/*
  * compare str with match
  * match may contain wildcards "*" and "?"
  *

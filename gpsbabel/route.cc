@@ -180,7 +180,13 @@ any_route_add_wpt(route_head* rte, waypoint* wpt, int* ct, int synth, const char
     (*ct)++;
   }
   if (synth && !wpt->shortname) {
+#if NEW_STRINGS
+    char *t;
+    xasprintf(&t, "%s%0*d", namepart, number_digits, *ct);
+    wpt->shortname = t;
+#else
     xasprintf(&wpt->shortname,"%s%0*d", namepart, number_digits, *ct);
+#endif
     wpt->wpt_flags.shortname_is_synthetic = 1;
   }
   update_common_traits(wpt);

@@ -227,7 +227,7 @@ static void
 xol_waypt_disp_cb(const waypoint* wpt)
 {
   double x, y;
-  char* name;
+  const char* name;
 
   name = wpt->shortname;
   if ((name == NULL) || (*name == '\0') || global_opts.synthesize_shortnames) {

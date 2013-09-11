@@ -437,6 +437,26 @@ const global_trait* get_traits();
  * be truncated, edited, or otherwise trimmed should be done on the
  * way to the target.
  */
+#if NEW_STRINGS
+class String {
+ public:
+  String() :
+    s_(NULL) {}
+  bool isEmpty() {
+    return s_ && *s_;
+  }
+  operator char*() const {
+    return s_;
+  }
+  char* operator=(char* s) {
+    s_ = s;
+    return s_;
+  }
+  char* s_;
+};
+#else
+typedef char* String;
+#endif
 
 class waypoint
 {
@@ -447,9 +467,11 @@ public:
     altitude(-99999999.0),
     depth(0),
     proximity(0),
+#if !NEW_STRINGS
     shortname(NULL),
     description(NULL),
     notes(NULL),
+#endif
     route_priority(0),
     hdop(0),
     vdop(0),
@@ -496,20 +518,20 @@ public:
    * minimum length for shortname is 6 characters for NMEA units,
    * 8 for Magellan and 10 for Vista.   These are only guidelines.
    */
-  char* shortname;
+  String shortname;
   /*
    * description is typically a human readable description of the
    * waypoint.   It may be used as a comment field in some receivers.
    * These are probably under 40 bytes, but that's only a guideline.
    */
-  char* description;
+  String description;
   /*
    * notes are relatively long - over 100 characters - prose associated
    * with the above.   Unlike shortname and description, these are never
    * used to compute anything else and are strictly "passed through".
    * Few formats support this.
    */
-  char* notes;
+  String notes;
 
   /* TODO: UrlLink should probably move to a "real" class of its own.
    */
@@ -963,8 +985,18 @@ void debug_mem_close();
 
 FILE* xfopen(const char* fname, const char* type, const char* errtxt);
 
-int case_ignore_strcmp(const char* s1, const char* s2);
-int case_ignore_strncmp(const char* s1, const char* s2, int n);
+// FIXME: case_ignore_strcmp() and case_ignore_strncmp() should probably
+// just be replaced at the call sites.  These shims are just here to make
+// them more accomidating of QString input.
+inline int
+case_ignore_strcmp(const QString& s1, const QString& s2) {
+  return QString::compare(s1, s2, Qt::CaseInsensitive);
+}
+// In 95% of the callers, this could be s1.startsWith(s2)...
+inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n) {
+  return s1.left(n).compare(s2, Qt::CaseInsensitive);
+}
+
 int str_match(const char* str, const char* match);
 int case_ignore_str_match(const char* str, const char* match);
 char* strenquote(const char* str, const char quot_char);
@@ -1172,5 +1204,9 @@ int color_to_bbggrr(const char* cname);
  */
 #define unknown_alt 	-99999999.0
 #define unknown_color	-1
+
+// TODO: this is a (probably temporary) shim for the C->QString conversion.
+// It's here instead of gps to avoid C/C++ linkage issues.
+int32_t GPS_Lookup_Datum_Index(const QString& n);
 
 #endif /* gpsbabel_defs_h_included */

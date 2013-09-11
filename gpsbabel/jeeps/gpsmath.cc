@@ -2572,6 +2572,11 @@ int32 GPS_Lookup_Datum_Index(const char* n)
   return -1;
 }
 
+int32 GPS_Lookup_Datum_Index(const QString& n)
+{
+  return GPS_Lookup_Datum_Index(CSTR(n));
+}
+
 const char*
 GPS_Math_Get_Datum_Name(const int datum_index)
 {

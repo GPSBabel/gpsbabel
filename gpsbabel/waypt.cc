@@ -160,12 +160,12 @@ waypt_add(waypoint* wpt)
   }
 
   if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-    fatal("%s: Invalid latitude %f in waypoint %s.\n",
+    fatal("%s: Invalid latitude %f in waypoint '%s'.\n",
           wpt->session->name,
-          lat_orig, wpt->shortname ? wpt->shortname : "");
+          lat_orig, wpt->shortname);
   if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
-    fatal("Invalid longitude %f in waypoint %s.\n",
-          lon_orig, wpt->shortname ? wpt->shortname : "");
+    fatal("Invalid longitude %f in waypoint '%s'.\n",
+          lon_orig, wpt->shortname);
 
   /*
    * Some input may not have one or more of these types so we
@@ -179,7 +179,9 @@ waypt_add(waypoint* wpt)
       wpt->shortname = xstrdup(wpt->notes);
     } else {
       /* Last ditch:  make up a name */
-      xasprintf(&wpt->shortname, "WPT%03d", waypt_ct);
+      char *sn;
+      xasprintf(&sn, "WPT%03d", waypt_ct);
+      wpt->shortname = sn;
     }
   }
 
