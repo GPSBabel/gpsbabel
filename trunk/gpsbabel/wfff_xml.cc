@@ -227,14 +227,16 @@ void wfff_e(const char* args, const QXmlStreamAttributes* unused)
     wpt_tmp->altitude = unknown_alt;
     wpt_tmp->fix = fix_unknown;
 
-    if (case_ignore_strncmp(ap_wep,"On",2)==0) {
-      if (case_ignore_strncmp(ap_type,"AP",2)==0) {
+    QString ap_wep_(ap_wep);
+    QString ap_type_(ap_type);
+    if (ap_wep_.startsWith("on", Qt::CaseInsensitive)) {
+      if (ap_type_.startsWith("AP", Qt::CaseInsensitive)) {
         wpt_tmp->icon_descr = aicicon; /* Infra Closed */
       } else {
         wpt_tmp->icon_descr = ahcicon; /* AdHoc Closed */
       }
     } else {
-      if (case_ignore_strncmp(ap_type,"AP",2)==0) {
+      if (ap_type_.startsWith("AP", Qt::CaseInsensitive)) {
         wpt_tmp->icon_descr = aioicon; /* Infra Open */
       } else {
         wpt_tmp->icon_descr = ahoicon;	/* AdHoc Open */

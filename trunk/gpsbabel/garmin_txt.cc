@@ -227,7 +227,7 @@ sort_waypt_cb(const void* a, const void* b)
   const waypoint* wa = *(waypoint**)a;
   const waypoint* wb = *(waypoint**)b;
 
-  return case_ignore_strcmp(wa->shortname, wb->shortname);
+  return case_ignore_strcmp(QString::fromLatin1(wa->shortname), QString::fromLatin1(wb->shortname));
 }
 
 

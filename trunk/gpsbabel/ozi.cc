@@ -720,15 +720,14 @@ ozi_parse_routeheader(int field, char* str, waypoint* wpt_tmp)
 static void
 data_read(void)
 {
-  char* buff;
+  QString buff;
   char* s = NULL;
   char* trk_name = NULL;
   waypoint* wpt_tmp;
   int i;
   int linecount = 0;
 
-  while ((buff = gbfgetstr(file_in))) {
-
+  while ((buff = gbfgetstr(file_in)), !buff.isNull()) {
     if ((linecount++ == 0) && file_in->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
     }
@@ -738,36 +737,37 @@ data_read(void)
      * to attempt to divine the data type we are parsing
      */
     if (linecount == 1) {
-      if (strstr(buff, "Track Point") != NULL) {
+      if (buff.contains("Track Point")) {
         trk_head = route_head_alloc();
         track_add_head(trk_head);
         ozi_objective = trkdata;
-      } else if (strstr(buff, "Route File") != NULL) {
+      } else if (buff.contains("Route File")) {
         ozi_objective = rtedata;
       } else {
         ozi_objective = wptdata;
       }
     } else if (linecount == 2) {
       datum = GPS_Lookup_Datum_Index(buff);
+
       if (datum < 0) {
-        fatal(MYNAME ": Unsupported datum '%s'.\n", buff);
+        fatal(MYNAME ": Unsupported datum '%s'.\n", CSTR(buff));
       }
     } else if (linecount == 3) {
-      if (case_ignore_strncmp(buff, "Altitude is in ", 15) == 0) {
-        char* unit = &buff[15];
-        if (case_ignore_strncmp(unit, "Feet", 4) == 0) {
+      if (buff.startsWith( "Altitude is in ", Qt::CaseInsensitive)) {
+        QString unit = buff.mid(15);
+        if (unit.startsWith("Feet", Qt::CaseInsensitive)) {
           altunit = 'f';
           alt_scale = FEET_TO_METERS(1.0);
-        } else if (case_ignore_strncmp(unit, "Meter", 5) == 0) {
+        } else if (unit.startsWith("Meter", Qt::CaseInsensitive)) {
           altunit = 'm';
           alt_scale = 1.0;
         } else {
-          fatal(MYNAME ": Unknown unit (%s) used by altitude values!\n", unit);
+          fatal(MYNAME ": Unknown unit (%s) used by altitude values!\n", CSTR(unit));
         }
       }
     } else if ((linecount == 5) && (ozi_objective == trkdata)) {
       int field = 0;
-      s = csv_lineparse(buff, ",", "", linecount);
+      s = csv_lineparse(CSTR(buff), ",", "", linecount);
       while (s) {
         field ++;
         if (field == 4) {
@@ -777,13 +777,13 @@ data_read(void)
       }
     }
 
-    if ((strlen(buff)) && (strstr(buff, ",") != NULL)) {
+    if (buff.contains(',')) {
       bool ozi_fsdata_used = false;
       ozi_fsdata* fsdata = ozi_alloc_fsdata();
       wpt_tmp = waypt_new();
 
       /* data delimited by commas, possibly enclosed in quotes.  */
-      s = buff;
+      s = xstrdup(CSTR(buff));
       s = csv_lineparse(s, ",", "", linecount);
 
       i = 0;
