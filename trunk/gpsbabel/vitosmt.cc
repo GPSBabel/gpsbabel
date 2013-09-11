@@ -318,13 +318,11 @@ vitosmt_waypt_pr(const waypoint* waypointp)
 static void
 vitosmt_write(void)
 {
-  time_t now = 0;
   unsigned char* 	workbuffer					=0;
   size_t			position					=0;
 
   workbuffer = (unsigned char*) xcalloc(vitosmt_headersize,1);
 
-  now = current_time().toTime_t();
   count = 0;
   position = 0;
 

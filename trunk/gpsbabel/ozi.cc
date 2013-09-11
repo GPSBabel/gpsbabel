@@ -324,19 +324,20 @@ ozi_route_hdr(const route_head* rte)
 static void
 ozi_route_disp(const waypoint* waypointp)
 {
-  double alt;
   char ozi_time[16];
 
   route_wpt_count++;
 
   ozi_get_time_str(waypointp, ozi_time, sizeof(ozi_time));
 
+/*
+  double alt;
   if (waypointp->altitude == unknown_alt) {
     alt = -777;
   } else {
     alt = waypointp->altitude * alt_scale;
   }
-
+*/
   /*
    *   Field 1 : W - indicating route waypoint details.
    *   Field 2 : Route Number - location in array of routes
@@ -721,7 +722,6 @@ static void
 data_read(void)
 {
   QString buff;
-  char* s = NULL;
   char* trk_name = NULL;
   waypoint* wpt_tmp;
   int i;
@@ -767,7 +767,7 @@ data_read(void)
       }
     } else if ((linecount == 5) && (ozi_objective == trkdata)) {
       int field = 0;
-      s = csv_lineparse(CSTR(buff), ",", "", linecount);
+      char* s = csv_lineparse(CSTR(buff), ",", "", linecount);
       while (s) {
         field ++;
         if (field == 4) {
@@ -783,8 +783,8 @@ data_read(void)
       wpt_tmp = waypt_new();
 
       /* data delimited by commas, possibly enclosed in quotes.  */
-      s = xstrdup(CSTR(buff));
-      s = csv_lineparse(s, ",", "", linecount);
+      char* orig_s = xstrdup(CSTR(buff));
+      char* s = csv_lineparse(orig_s, ",", "", linecount);
 
       i = 0;
       bool header = false;
@@ -813,6 +813,7 @@ data_read(void)
         i++;
         s = csv_lineparse(NULL, ",", "", linecount);
       }
+      xfree(orig_s);
 
       switch (ozi_objective) {
       case trkdata:
