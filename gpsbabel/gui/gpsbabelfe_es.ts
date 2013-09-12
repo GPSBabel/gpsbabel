@@ -240,12 +240,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>FileDlgManager</name>
     <message>
-        <location filename="optionsdlg.cpp" line="70"/>
+        <location filename="optionsdlg.cc" line="70"/>
         <source>Select input file</source>
         <translation>Seleccionar archivo de entrada</translation>
     </message>
     <message>
-        <location filename="optionsdlg.cpp" line="75"/>
+        <location filename="optionsdlg.cc" line="75"/>
         <source>Select output file</source>
         <translation>Seleccionar archivo de salida</translation>
     </message>
@@ -253,27 +253,27 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>FilterDialog</name>
     <message>
-        <location filename="filterdlg.cpp" line="41"/>
+        <location filename="filterdlg.cc" line="41"/>
         <source>Tracks</source>
         <translation>Registro de trazados</translation>
     </message>
     <message>
-        <location filename="filterdlg.cpp" line="44"/>
+        <location filename="filterdlg.cc" line="44"/>
         <source>Waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="filterdlg.cpp" line="47"/>
+        <location filename="filterdlg.cc" line="47"/>
         <source>Routes &amp; Tracks</source>
         <translation>Rutas y registro de trazados</translation>
     </message>
     <message>
-        <location filename="filterdlg.cpp" line="50"/>
+        <location filename="filterdlg.cc" line="50"/>
         <source>Miscellaneous</source>
         <translation>Miscelánea</translation>
     </message>
     <message>
-        <location filename="filterdlg.cpp" line="104"/>
+        <location filename="filterdlg.cc" line="104"/>
         <source>Are you sure you want to reset all filter options to default values?</source>
         <translation>¿Estás seguro de que quieres volver a las opciones por defecto de todos los filtros?</translation>
     </message>
@@ -304,139 +304,139 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>GMapDialog</name>
     <message>
-        <location filename="gmapdlg.cpp" line="55"/>
+        <location filename="gmapdlg.cc" line="55"/>
         <source>meters</source>
         <translation>metros</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="64"/>
+        <location filename="gmapdlg.cc" line="64"/>
         <source>feet</source>
         <translation>pies</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="68"/>
+        <location filename="gmapdlg.cc" line="68"/>
         <source>miles</source>
         <translation>millas</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="71"/>
+        <location filename="gmapdlg.cc" line="71"/>
         <source>Length: %1 %2
   %3 %4</source>
         <translation>Longitud:  %1 %2
   %3 %4</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="81"/>
+        <location filename="gmapdlg.cc" line="81"/>
         <source>Lat: %1</source>
         <translation>Lat: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="82"/>
+        <location filename="gmapdlg.cc" line="82"/>
         <source>Lng: %1</source>
         <translation>Lng: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="84"/>
+        <location filename="gmapdlg.cc" line="84"/>
         <source>Desc: %1</source>
         <translation>Desc: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="86"/>
+        <location filename="gmapdlg.cc" line="86"/>
         <source>Cmt: %1</source>
         <translatorcomment>Me falta contexto</translatorcomment>
         <translation>Cm:  %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="88"/>
+        <location filename="gmapdlg.cc" line="88"/>
         <source>Ele: %1</source>
         <translation>Ele: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="118"/>
+        <location filename="gmapdlg.cc" line="118"/>
         <source>Start: %1</source>
         <translation>Comenzar: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="120"/>
+        <location filename="gmapdlg.cc" line="120"/>
         <source>Stop: %1</source>
         <translation>Parar: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="123"/>
+        <location filename="gmapdlg.cc" line="123"/>
         <source>Points: %1</source>
         <translation>Puntos: %1</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="149"/>
+        <location filename="gmapdlg.cc" line="149"/>
         <source>Waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="164"/>
+        <location filename="gmapdlg.cc" line="164"/>
         <source>Tracks</source>
         <translation>Registro de trazados</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="179"/>
+        <location filename="gmapdlg.cc" line="179"/>
         <source>Routes</source>
         <translation>Rutas</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="521"/>
+        <location filename="gmapdlg.cc" line="521"/>
         <source>Show All Waypoints</source>
         <translation>Mostrar todos los puntos de interés</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="522"/>
+        <location filename="gmapdlg.cc" line="522"/>
         <source>Hide All Waypoints</source>
         <translation>Ocultar todos los puntos de interés</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="523"/>
-        <location filename="gmapdlg.cpp" line="531"/>
-        <location filename="gmapdlg.cpp" line="539"/>
+        <location filename="gmapdlg.cc" line="523"/>
+        <location filename="gmapdlg.cc" line="531"/>
+        <location filename="gmapdlg.cc" line="539"/>
         <source>Expand All</source>
         <translation>Expandir todo</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="524"/>
-        <location filename="gmapdlg.cpp" line="532"/>
-        <location filename="gmapdlg.cpp" line="540"/>
+        <location filename="gmapdlg.cc" line="524"/>
+        <location filename="gmapdlg.cc" line="532"/>
+        <location filename="gmapdlg.cc" line="540"/>
         <source>Collapse All</source>
         <translation>Colapsar todo</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="529"/>
+        <location filename="gmapdlg.cc" line="529"/>
         <source>Show All Routes</source>
         <translation>Mostrar todas las rutas</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="530"/>
+        <location filename="gmapdlg.cc" line="530"/>
         <source>Hide All Routes</source>
         <translation>Ocultar todas las rutas</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="537"/>
+        <location filename="gmapdlg.cc" line="537"/>
         <source>Show All Tracks</source>
         <translation>Mostrar todos los trazados</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="538"/>
+        <location filename="gmapdlg.cc" line="538"/>
         <source>Hide All Tracks</source>
         <translation>Ocultar todos los trazados</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="545"/>
+        <location filename="gmapdlg.cc" line="545"/>
         <source>Show Only This Waypoint</source>
         <translation>Mostras sólo este punto de interés</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="551"/>
+        <location filename="gmapdlg.cc" line="551"/>
         <source>Show Only This Track</source>
         <translation>Mostrar sólo este trazado</translation>
     </message>
     <message>
-        <location filename="gmapdlg.cpp" line="557"/>
+        <location filename="gmapdlg.cc" line="557"/>
         <source>Show Only This Route</source>
         <translation>Mostrar sólo esta ruta</translation>
     </message>
@@ -505,144 +505,144 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cpp" line="386"/>
-        <location filename="mainwindow.cpp" line="387"/>
+        <location filename="mainwindow.cc" line="386"/>
+        <location filename="mainwindow.cc" line="387"/>
         <source>default</source>
         <translation>Defecto</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="560"/>
+        <location filename="mainwindow.cc" line="560"/>
         <source>Select one or more input files</source>
         <translation>Seleccionar uno o más archivos de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="587"/>
+        <location filename="mainwindow.cc" line="587"/>
         <source>Output File Name</source>
         <translation>Nombre del fichero de salida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="647"/>
+        <location filename="mainwindow.cc" line="647"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>Se ha producido un error cuando se intentaba leer la configuración. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="658"/>
+        <location filename="mainwindow.cc" line="658"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation>El formato de alfunos ficheros o dispositivos no se halló durante la inicialización. Compruebe que el núcleo de &quot;gpsbabel&quot; está instalado correctamente y que se halla en la RUTA actual. Este programa no puede continuar.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="680"/>
+        <location filename="mainwindow.cc" line="680"/>
         <source>Input and output formats do not support %1</source>
         <translation>Formatos de entrada y salida inadmisibles %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="683"/>
+        <location filename="mainwindow.cc" line="683"/>
         <source>Input does not support %1; output format supports %2</source>
         <translation>Formatos de entrada inadmisible %1; Formatos de salida inadmisible %2</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="686"/>
+        <location filename="mainwindow.cc" line="686"/>
         <source>Input format supports %1; output format does not support %2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="689"/>
+        <location filename="mainwindow.cc" line="689"/>
         <source>Both input and output formats support %1</source>
         <translation>Formatos de entrada y salida admisibles (ambos) %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="710"/>
+        <location filename="mainwindow.cc" line="710"/>
         <source>waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="711"/>
+        <location filename="mainwindow.cc" line="711"/>
         <source>tracks</source>
         <translation>Registro de trazados</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="712"/>
+        <location filename="mainwindow.cc" line="712"/>
         <source>routes</source>
         <translation>Rutas</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="802"/>
+        <location filename="mainwindow.cc" line="802"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation>No hay opciones de entrada para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="809"/>
-        <location filename="mainwindow.cpp" line="829"/>
+        <location filename="mainwindow.cc" line="809"/>
+        <location filename="mainwindow.cc" line="829"/>
         <source>Options for %1</source>
         <translation>Opciones de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="822"/>
+        <location filename="mainwindow.cc" line="822"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation>No hay opciones de salida para el formato &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="843"/>
+        <location filename="mainwindow.cc" line="843"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation>Se han especificicado puntos de interés, trazados o rutas no traducibles</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="862"/>
+        <location filename="mainwindow.cc" line="862"/>
         <source>No input file specified</source>
         <translation>No se ha especificado el fichero de entrada</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="869"/>
+        <location filename="mainwindow.cc" line="869"/>
         <source>No valid output specified</source>
         <translation>El fichero de salida no es válido</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="874"/>
+        <location filename="mainwindow.cc" line="874"/>
         <source>No output file specified</source>
         <translation>No se ha especificado el fichero de salida</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="890"/>
+        <location filename="mainwindow.cc" line="890"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation>El proceso &quot;%1&quot; no comenzó</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="904"/>
+        <location filename="mainwindow.cc" line="904"/>
         <source>Process exited unsucessfully with code %1</source>
         <translation>El proceso terminó sin suerte y con el código %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1047"/>
+        <location filename="mainwindow.cc" line="1047"/>
         <source>Translation successful</source>
         <translation>Traducción realizada con éxito</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1057"/>
+        <location filename="mainwindow.cc" line="1057"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation>Error ejecutando gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1170"/>
+        <location filename="mainwindow.cc" line="1170"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>¿Estás seguro de que quieres volver a los formatos por defecto?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1194"/>
+        <location filename="mainwindow.cc" line="1194"/>
         <source>About %1</source>
         <translation>Acerca de %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1237"/>
+        <location filename="mainwindow.cc" line="1237"/>
         <source>One or more data filters are active</source>
         <translation>Uno o más filtros de datos están activos</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1239"/>
+        <location filename="mainwindow.cc" line="1239"/>
         <source>No data filters are active</source>
         <translation>Ningún filtro de datos está activo</translation>
     </message>
@@ -888,12 +888,12 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cpp" line="66"/>
+        <location filename="map.cc" line="66"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation>No se encuentra el fichero &quot;&quot;gmapbase.html&quot;. Compruebe la instalación</translation>
     </message>
     <message>
-        <location filename="map.cpp" line="86"/>
+        <location filename="map.cc" line="86"/>
         <source>Failed to load Google maps base page</source>
         <translation>Fallo al buscar la página básica de los mapas de Googe</translation>
     </message>
@@ -902,28 +902,28 @@ This program cannot continue.</source>
     <name>MiscFltWidget</name>
     <message>
         <location filename="miscfltui.ui" line="53"/>
-        <location filename="filterwidgets.cpp" line="221"/>
-        <location filename="filterwidgets.cpp" line="222"/>
-        <location filename="filterwidgets.cpp" line="225"/>
-        <location filename="filterwidgets.cpp" line="226"/>
+        <location filename="filterwidgets.cc" line="221"/>
+        <location filename="filterwidgets.cc" line="222"/>
+        <location filename="filterwidgets.cc" line="225"/>
+        <location filename="filterwidgets.cc" line="226"/>
         <source>Tracks</source>
         <translation>Trazados</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="60"/>
-        <location filename="filterwidgets.cpp" line="221"/>
-        <location filename="filterwidgets.cpp" line="223"/>
-        <location filename="filterwidgets.cpp" line="224"/>
-        <location filename="filterwidgets.cpp" line="226"/>
+        <location filename="filterwidgets.cc" line="221"/>
+        <location filename="filterwidgets.cc" line="223"/>
+        <location filename="filterwidgets.cc" line="224"/>
+        <location filename="filterwidgets.cc" line="226"/>
         <source>Waypoints</source>
         <translation>Puntos de interés</translation>
     </message>
     <message>
         <location filename="miscfltui.ui" line="46"/>
-        <location filename="filterwidgets.cpp" line="222"/>
-        <location filename="filterwidgets.cpp" line="223"/>
-        <location filename="filterwidgets.cpp" line="224"/>
-        <location filename="filterwidgets.cpp" line="225"/>
+        <location filename="filterwidgets.cc" line="222"/>
+        <location filename="filterwidgets.cc" line="223"/>
+        <location filename="filterwidgets.cc" line="224"/>
+        <location filename="filterwidgets.cc" line="225"/>
         <source>Routes</source>
         <translation>Rutas</translation>
     </message>
@@ -996,7 +996,7 @@ Algunos formatos de datos de los GPS solo permiten utilizar una parte de los pun
 <context>
     <name>OptionsDlg</name>
     <message>
-        <location filename="optionsdlg.cpp" line="189"/>
+        <location filename="optionsdlg.cc" line="189"/>
         <source>Help</source>
         <translation>Ayuda</translation>
     </message>
@@ -1052,52 +1052,52 @@ Algunos formatos de datos de los GPS solo permiten utilizar una parte de los pun
 <context>
     <name>ProcessWaitDialog</name>
     <message>
-        <location filename="processwait.cpp" line="43"/>
+        <location filename="processwait.cc" line="43"/>
         <source>Process failed to start</source>
         <translation>El proceso no se inició</translation>
     </message>
     <message>
-        <location filename="processwait.cpp" line="46"/>
+        <location filename="processwait.cc" line="46"/>
         <source>Process crashed</source>
         <translation>El proceso falló</translation>
     </message>
     <message>
-        <location filename="processwait.cpp" line="49"/>
+        <location filename="processwait.cc" line="49"/>
         <source>Process timedout</source>
         <translation>Se ha excedido un tiempo razonable de espera sin que nada ocurra</translation>
     </message>
     <message>
-        <location filename="processwait.cpp" line="52"/>
+        <location filename="processwait.cc" line="52"/>
         <source>Error while trying to write to process</source>
         <translation>Error cuando se trataba de escribir al proceso</translation>
     </message>
     <message>
-        <location filename="processwait.cpp" line="55"/>
+        <location filename="processwait.cc" line="55"/>
         <source>Error while trying to read from process</source>
         <translation>Error cuando se trataba de leer desde el proceso</translation>
     </message>
     <message>
-        <location filename="processwait.cpp" line="59"/>
+        <location filename="processwait.cc" line="59"/>
         <source>Unknown process error</source>
         <translation>Error desconocido en el proceso</translation>
     </message>
     <message>
-        <location filename="processwait.cpp" line="68"/>
+        <location filename="processwait.cc" line="68"/>
         <source> ... Process GPSBabel</source>
         <translation>GPSBabel se está ejecutando ...</translation>
     </message>
     <message>
-        <location filename="processwait.cpp" line="83"/>
+        <location filename="processwait.cc" line="83"/>
         <source>Stop Process</source>
         <translation>Parar el proceso</translation>
     </message>
     <message>
-        <location filename="processwait.cpp" line="154"/>
+        <location filename="processwait.cc" line="154"/>
         <source>Process did not terminate successfully</source>
         <translation>El proceso no terminó como se esperaba</translation>
     </message>
     <message>
-        <location filename="processwait.cpp" line="173"/>
+        <location filename="processwait.cc" line="173"/>
         <source>Process crashed whle running</source>
         <translation>El proceso falló cuando estaba ejecutándose</translation>
     </message>
@@ -1105,7 +1105,7 @@ Algunos formatos de datos de los GPS solo permiten utilizar una parte de los pun
 <context>
     <name>QObject</name>
     <message>
-        <location filename="formatload.cpp" line="155"/>
+        <location filename="formatload.cc" line="155"/>
         <source>Error processing formats from running process &quot;gpsbabel -^3&quot; at line %1</source>
         <translation>Error al procesar los formatos seleccionados en el proceso &quot;gpsbabel -^3&quot; en la línea %1</translation>
     </message>
@@ -1540,32 +1540,44 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
 <context>
     <name>UpgradeCheck</name>
     <message>
-        <location filename="upgrade.cpp" line="216"/>
+        <location filename="upgrade.cc" line="224"/>
+        <location filename="upgrade.cc" line="228"/>
+        <location filename="upgrade.cc" line="262"/>
         <source>HTTP</source>
         <translation>HTTP</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="217"/>
+        <location filename="upgrade.cc" line="225"/>
+        <source>Unexpected reply.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="upgrade.cc" line="229"/>
         <source>Download failed: %1.</source>
         <translation>La descarga falló: %1.</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="246"/>
+        <location filename="upgrade.cc" line="263"/>
+        <source>Download failed: %1: %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="upgrade.cc" line="279"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="247"/>
+        <location filename="upgrade.cc" line="280"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation>Ha devuelto datos no válidos en la línea %1: %2.</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="286"/>
+        <location filename="upgrade.cc" line="322"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation>Una nueva versióon de GPSBabel ha salido ya. &lt;br /&gt;Tu versión es la %1 &lt;br /&gt;La última versióon sería %2</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="303"/>
+        <location filename="upgrade.cc" line="339"/>
         <source>Do you wish to download an upgrade?</source>
         <translation>¿Quieres bajarte una actualización?</translation>
     </message>
@@ -1574,7 +1586,7 @@ Esta opción calcula (o recalcula) un valor para la velocidad de cada punto del 
         <translation type="obsolete">&lt;center&gt;&lt;b&gt;Una nueva versión de GPSBabel está disponible &lt;/b&gt;&lt;br&gt;La versión actual es %1 &lt;br&gt; La versión más reciente es %2&lt;/center&gt;</translation>
     </message>
     <message>
-        <location filename="upgrade.cpp" line="297"/>
+        <location filename="upgrade.cc" line="333"/>
         <source>Upgrade</source>
         <translation>Actualizar</translation>
     </message>

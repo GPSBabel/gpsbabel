@@ -1780,6 +1780,14 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
         <source>Invalid return data at line %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Unexpected reply.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download failed: %1: %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>VersionMismatch</name>
