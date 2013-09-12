@@ -112,7 +112,7 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           csv_util.o strptime.o grtcirc.o util_crc.o xmlgeneric.o \
           formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
 	  inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ gbser.o \
-	  gbfile.o parse.o session.o \
+	  gbfile.o parse.o session.o src/core/xmlstreamwriter.o \
 	$(PALM_DB) $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
@@ -1024,6 +1024,8 @@ smplrout.o: smplrout.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   filterdefs.h grtcirc.h
 sort.o: sort.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h filterdefs.h
+src/core/xmlstreamwriter.o: src/core/xmlstreamwriter.cc \
+  src/core/xmlstreamwriter.h
 stackfilter.o: stackfilter.cc defs.h config.h queue.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h \
   src/core/datetime.h filterdefs.h
