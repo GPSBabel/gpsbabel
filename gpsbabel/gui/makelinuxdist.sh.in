@@ -20,7 +20,19 @@ done
 #cp `ldd objects/gpsbabelfe-bin  | grep libaudio   |awk '{print $3}'` $DISTDIR
 
 cp -r $QT_INSTALL_PLUGINS/imageformats $DISTDIR/plugins
-cp -r $QT_INSTALL_PLUGINS/codecs $DISTDIR/plugins
+if [ -e $QT_INSTALL_PLUGINS/codecs ]
+then
+  cp -r $QT_INSTALL_PLUGINS/codecs $DISTDIR/plugins
+else
+  echo "Warning: $QT_INSTALL_PLUGINS/codecs not found, perhaps this is normal for Qt5"
+fi
+if [ -e $QT_INSTALL_PLUGINS/platforms ]
+then
+#  we need at least platforms/libqxcb.so
+  cp -r $QT_INSTALL_PLUGINS/platforms $DISTDIR/plugins
+else
+  echo "Wanring: $QT_INSTALL_PLUGINS/platforms not found, this is normal for Qt4"
+fi
 cp $QT_INSTALL_TRANSLATIONS/qt_*.qm $DISTDIR/translations/
 
 # copy the compiled translations

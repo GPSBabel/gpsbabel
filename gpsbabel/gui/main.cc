@@ -26,6 +26,7 @@
 #include <QCoreApplication>
 #include <QLibraryInfo>
 #include <QIcon>
+#include <QTextCodec>
 
 #include "mainwindow.h"
 #include "gmapdlg.h"
@@ -43,6 +44,15 @@ const char *pathSeparator = ":";
 //------------------------------------------------------------------------
 int main(int argc, char**argv)
 {
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+  // Qt 5.0 uses QString::fromUtf8 to convert from character pointers 
+  // and QBytreArrays to QStrings while previous version of Qt used 
+  // QString::fromAscii.  QString::fromAscii used the codec set
+  // by QTextCode::setCodecForCStrings.
+  // This makes the conversion consistent between Qt4 and Qt5.
+  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+#endif
+
   QApplication *app;
   app = new QApplication(argc, argv);
   app->setWindowIcon(QIcon(":/images/appicon.png"));

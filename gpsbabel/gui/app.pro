@@ -12,8 +12,13 @@ macx:DEFINES += HAVE_CONFIG_H
 ICON = images/appicon.icns
 
 QT += network \
-    xml \
-    webkit \
+      xml \
+      webkit
+
+greaterThan(QT_MAJOR_VERSION, 4) {
+  QT += widgets \
+        webkitwidgets
+}
 
 unix:DESTDIR = objects
 unix:MOC_DIR = objects
