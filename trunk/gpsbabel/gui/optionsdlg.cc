@@ -94,7 +94,7 @@ OptionsDlg::OptionsDlg(QWidget*parent,  const QString &fmtName, QList<FormatOpti
     QHBoxLayout *horizontalLayout = new QHBoxLayout();
 
     QCheckBox *checkBox = new QCheckBox(this);
-    checkBox->setText(tr(options[k].getDescription().toAscii().data()));
+    checkBox->setText(options[k].getDescription());
     horizontalLayout->addWidget(checkBox);
     checkBox->setChecked(options[k].getSelected());
     //checkBox->setWhatsThis(options[k].getHtml());
