@@ -17,34 +17,45 @@
 
  */
 
-#include <QtCore/QFile>
+#ifndef XMLSTREAMWRITER_H
+#define XMLSTREAMWRITER_H
+
+#include <QtCore/QtGlobal>
 #include <QtCore/QXmlStreamWriter>
 
-// As this code began in C, we have several hundred places that write
-// c strings.  Add a test that the string contains anything useful
-// before serializing an empty tag.
+class QFile;
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+class QRegExp;
+#else
+class QRegularExpression;
+#endif
 
-namespace gpsbabel {
+namespace gpsbabel
+{
 
-class XmlStreamWriter : public QXmlStreamWriter {
+class XmlStreamWriter : public QXmlStreamWriter
+{
+private:
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+  static QRegExp badXml10;
+#else
+  static QRegularExpression badXml10;
+#endif
+
 public:
-  XmlStreamWriter(QString* s) : QXmlStreamWriter(s) {}
-  XmlStreamWriter(QFile* f) : QXmlStreamWriter(f) {}
+  XmlStreamWriter(QString* s);
+  XmlStreamWriter(QFile* f);
 
-  // Dont emit the attribute if there's nothing interesting in it.
-  void writeOptionalAttribute(QString tag, QString value) {
-    if (!value.isEmpty()) {
-      writeAttribute(tag, value);
-    }
-  }
-
-  // Dont emit the tag if there's nothing interesting in it.
-  void writeOptionalTextElement(QString tag, QString value) {
-    if (!value.isEmpty()) {
-      writeTextElement(tag, value);
-    }
-  }
+  void writeOptionalAttribute(const QString& qualifiedName, QString value);
+  void writeOptionalTextElement(const QString& qualifiedName, QString text);
+  void writeAttribute(const QString& qualifiedName, QString value);
+  void writeCDATA(QString text);
+  void writeCharacters(QString text);
+  void writeTextElement(const QString& qualifiedName, QString value);
 
 };
 
-}; // namespace gpsbabel
+} // namespace gpsbabel
+
+#endif // XMLSTREAMWRITER_H
+

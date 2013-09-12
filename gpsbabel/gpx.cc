@@ -1544,22 +1544,12 @@ gpx_write_common_description(const waypoint* waypointp, QString oname)
 {
   writer->writeOptionalTextElement("name", oname);
 
-  // FIXME: the replace() nonsense here is to prevent bogus control
-  // characters from being embedded in the output stream. The only place
-  // this happens in our test suite is a ^Z in the German Garmin GPI test
-  // file.  Filter that out in the two fields below... Ideally, we should
-  // probably filter that in the input rather than here.
-
-  QString desc = QString::fromUtf8(waypointp->description);
-  desc = desc.replace(QRegExp("[\014-\032]"), " ");
-  writer->writeOptionalTextElement("cmt", desc);
+  writer->writeOptionalTextElement("cmt", waypointp->description);
 
   if (waypointp->notes && waypointp->notes[0]) {
-    QString note = QString::fromUtf8(waypointp->notes);
-    note = note.replace(QRegExp("[\014-\032]"), " ");
-    writer->writeTextElement("desc", note);
+    writer->writeTextElement("desc", waypointp->notes);
   } else {
-    writer->writeOptionalTextElement("desc", QString::fromUtf8(waypointp->description));
+    writer->writeOptionalTextElement("desc", waypointp->description);
   }
 
   write_gpx_url(waypointp);
@@ -1701,8 +1691,8 @@ gpx_route_hdr(const route_head* rte)
 {
   fs_xml* fs_gpx;
   writer->writeStartElement("rte");
-  writer->writeOptionalTextElement("name", QString::fromUtf8(rte->rte_name));
-  writer->writeOptionalTextElement("desc", QString::fromUtf8(rte->rte_desc));
+  writer->writeOptionalTextElement("name", rte->rte_name);
+  writer->writeOptionalTextElement("desc", rte->rte_desc);
 
   if (rte->rte_num) {
     writer->writeTextElement("number", QString::number(rte->rte_num));
