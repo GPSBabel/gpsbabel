@@ -23,8 +23,8 @@
 
 #include <time.h>
 
-#include <QtCore/qglobal.h>
-#include <QtCore/qdatetime.h>
+#include <QtCore/QtGlobal>
+#include <QtCore/QDateTime>
 
 // As this code began in C, we have several hundred places that set and
 // read creation_time as a time_t.  Provide some operator overloads to make
