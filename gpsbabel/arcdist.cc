@@ -253,7 +253,7 @@ arcdist_process(void)
         }
         if (global_opts.debug_level >= 1) {
           warning("Including waypoint %s at dist:%f lat:%f lon:%f\n",
-                  wp->shortname, ed->distance, wp->latitude, wp->longitude);
+                  CSTRc(wp->shortname), ed->distance, wp->latitude, wp->longitude);
         }
       }
       xfree(ed);

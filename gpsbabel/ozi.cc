@@ -246,7 +246,7 @@ ozi_track_hdr(const route_head* rte)
     ozi_openfile(ozi_ofname);
     gbfprintf(file_out, ozi_trk_header,
               altunit == 'f' ? "Feet" : "Meters",
-              rte->rte_name ? rte->rte_name : "ComplimentsOfGPSBabel");
+              rte->rte_name ? CSTRc(rte->rte_name) : "ComplimentsOfGPSBabel");
   }
 
   track_out_count++;
@@ -316,8 +316,8 @@ ozi_route_hdr(const route_head* rte)
 
   gbfprintf(file_out, "R,%d,%s,%s,\r\n",
             route_out_count,
-            rte->rte_name ? rte->rte_name : "",
-            rte->rte_desc ? rte->rte_desc : "");
+            rte->rte_name ? CSTRc(rte->rte_name) : "",
+            rte->rte_desc ? CSTRc(rte->rte_desc) : "");
 
 }
 
@@ -362,11 +362,11 @@ ozi_route_disp(const waypoint* waypointp)
   gbfprintf(file_out, "W,%d,,%d,%s,%.6f,%.6f,%s,0,1,3,0,65535,%s,0,0\r\n",
             route_out_count,
             route_wpt_count,
-            waypointp->shortname ? waypointp->shortname : "",
+            waypointp->shortname ? CSTRc(waypointp->shortname) : "",
             waypointp->latitude,
             waypointp->longitude,
             ozi_time,
-            waypointp->description ? waypointp->description : "");
+            waypointp->description ? CSTRc(waypointp->description) : "");
 
 }
 

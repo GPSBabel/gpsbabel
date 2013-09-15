@@ -1259,7 +1259,7 @@ unicsv_fatal_outside(const waypoint* wpt)
 {
   gbfprintf(fout, "#####\n");
   fatal(MYNAME ": %s (%s) is outside of convertable area of grid \"%s\"!\n",
-        wpt->shortname ? wpt->shortname : "Waypoint",
+        wpt->shortname ? CSTRc(wpt->shortname) : "Waypoint",
         pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
         gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME));
 }
@@ -1301,6 +1301,14 @@ unicsv_print_str(const QString& s)
   xfree(t);
 }
 
+#if NEW_STRINGS
+static void
+unicsv_print_str(const String& s)
+{
+  unicsv_print_str(s.s_);
+}
+#endif
+
 static void
 unicsv_print_data_time(const QDateTime& idt)
 {
@@ -1325,7 +1333,7 @@ unicsv_waypt_enum_cb(const waypoint* wpt)
   const char* shortname;
   garmin_fs_t* gmsd;
 
-  shortname = (wpt->shortname) ? wpt->shortname : "";
+  shortname = (wpt->shortname) ? CSTRc(wpt->shortname) : "";
   gmsd = GMSD_FIND(wpt);
 
   if (*shortname) {
@@ -1482,7 +1490,7 @@ unicsv_waypt_disp_cb(const waypoint* wpt)
   const geocache_data* gc_data = NULL;
   unicsv_waypt_ct++;
 
-  shortname = (wpt->shortname) ? wpt->shortname : "";
+  shortname = (wpt->shortname) ? CSTRc(wpt->shortname) : "";
   gmsd = GMSD_FIND(wpt);
 
   if (unicsv_datum_idx == DATUM_WGS84) {

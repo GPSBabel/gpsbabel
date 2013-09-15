@@ -772,7 +772,7 @@ Write_One_AN1_Waypoint(const waypoint* wpt)
     char* extra = (char*) xmalloc(25 + strlen(wpt->gc_data->placer.toUtf8().data()) + strlen(wpt->shortname));
     sprintf(extra, "\r\nBy %s\r\n%s (%1.1f/%1.1f)",
             wpt->gc_data->placer.toUtf8().data(),
-            wpt->shortname, wpt->gc_data->diff/10.0,
+            CSTRc(wpt->shortname), wpt->gc_data->diff/10.0,
             wpt->gc_data->terr/10.0);
     rec->name = xstrappend(rec->name, extra);
     xfree(extra);

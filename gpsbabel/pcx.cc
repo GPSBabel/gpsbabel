@@ -352,7 +352,7 @@ gpsutil_disp(const waypoint* wpt)
             fabs(lon),
             tbuf,
             (wpt->altitude == unknown_alt) ? -9999 : wpt->altitude,
-            (wpt->description != NULL) ? wpt->description : "",
+            (wpt->description != NULL) ? CSTRc(wpt->description) : "",
             0.0,
             icon_token);
 }

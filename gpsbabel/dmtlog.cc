@@ -728,7 +728,7 @@ write_header(const route_head* trk)
     queue* curr, *prev;
     QUEUE_FOR_EACH(&trk->waypoint_list, curr, prev) count++;
   }
-  write_str(trk && trk->rte_name && *trk->rte_name ? trk->rte_name : "Name", fout);
+  write_str(trk && trk->rte_name && *trk->rte_name ? CSTRc(trk->rte_name) : "Name", fout);
 
   xasprintf(&cout, "%d trackpoints and %d waypoints", count, waypt_count());
   write_str(cout, fout);
@@ -790,7 +790,7 @@ wpt_cb(const waypoint* wpt)
   if (names > 1) {
     write_str(wpt->description, fout);
   }
-  write_str(wpt->shortname && *wpt->shortname ? wpt->shortname : "Name", fout);
+  write_str(wpt->shortname && *wpt->shortname ? CSTRc(wpt->shortname) : "Name", fout);
 }
 
 static void

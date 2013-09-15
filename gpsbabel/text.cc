@@ -131,7 +131,7 @@ text_disp(const waypoint* wpt)
 
 
   if (strcmp(wpt->description, wpt->shortname)) {
-    gbfprintf(file_out, "%s", wpt->description);
+    gbfprintf(file_out, "%s", CSTRc(wpt->description));
     if (!wpt->gc_data->placer.isEmpty()) {
       gbfprintf(file_out, " by %s", wpt->gc_data->placer.toUtf8().data());
     }
@@ -162,7 +162,7 @@ text_disp(const waypoint* wpt)
       xfree(hint);
     }
   } else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
-    gbfprintf(file_out, "\n%s\n", wpt->notes);
+    gbfprintf(file_out, "\n%s\n", CSTRc(wpt->notes));
   }
 
   fs_gpx = NULL;

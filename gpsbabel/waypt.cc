@@ -162,10 +162,10 @@ waypt_add(waypoint* wpt)
   if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
     fatal("%s: Invalid latitude %f in waypoint '%s'.\n",
           wpt->session->name,
-          lat_orig, wpt->shortname);
+          lat_orig, CSTRc(wpt->shortname));
   if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
     fatal("Invalid longitude %f in waypoint '%s'.\n",
-          lon_orig, wpt->shortname);
+          lon_orig, CSTRc(wpt->shortname));
 
   /*
    * Some input may not have one or more of these types so we

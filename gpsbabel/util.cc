@@ -277,6 +277,19 @@ xasprintf(char** strp, const char* fmt, ...)
 
   return res;
 }
+#if NEW_STRINGS
+int
+xasprintf(String* strp, const char* fmt, ...)
+{
+  va_list args;
+  int res;
+  va_start(args, fmt);
+  res = xvasprintf(&strp->s_, fmt, args);
+  va_end(args);
+
+  return res;
+}
+#endif
 
 int
 xvasprintf(char** strp, const char* fmt, va_list ap)

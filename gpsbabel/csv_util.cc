@@ -212,6 +212,21 @@ csv_stringclean(const char* string, const char* chararray)
   return (tmp);
 }
 
+char*
+csv_stringclean(const QString& string_in, const QString& chararray_in)
+{
+  // TODO(robertl): replace this with a much more Qt-ish implementation.
+  // 
+  const char* string = xstrdup(CSTR(string_in));
+  const char* chararray = xstrdup(CSTR(chararray_in));
+
+  char* r = csv_stringclean(string, chararray);
+
+//  xfree(string);
+//  xfree(chararray);
+  return r;
+}
+
 /***********************************************************************************/
 /* csv_stringtrim() - trim whitespace and leading and trailing enclosures (quotes) */
 /*                    returns a copy of the modified string                        */

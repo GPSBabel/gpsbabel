@@ -43,7 +43,7 @@
 #define R_EARTH		6371000		/* radius of our big blue ball */
 #define BCR_DEF_ICON		"Standort"
 #define BCR_DEF_MPS_ICON	"Waypoint"
-#define BCR_UNKNOWN		(double) 999999999
+#define BCR_UNKNOWN		/*(double) */ 999999999
 
 /*
     6371014 would be a better value when converting to f.e. to mapsoure,
@@ -363,19 +363,19 @@ bcr_write_wpt(const waypoint* wpt)
 {
 }
 
-void bcr_write_line(gbfile* fout, const char* key, int* index, const char* value)
+void bcr_write_line(gbfile* fout, const QString& key, int* index, const QString& value)
 {
-  if (value == NULL) {			/* this is mostly used in the world of windows */
+  if (value.isEmpty()) {			/* this is mostly used in the world of windows */
     /* so we respectfully add a CR/LF on each line */
-    gbfprintf(fout, "%s\r\n", key);
+    gbfprintf(fout, "%s\r\n", CSTR(key));
   } else {
     char* tmp;
 
     tmp = (value != NULL) ? xstrdup(value) : xstrdup("");
     if (index != NULL) {
-      gbfprintf(fout, "%s%d=%s\r\n", key, *index, tmp);
+      gbfprintf(fout, "%s%d=%s\r\n", CSTR(key), *index, tmp);
     } else {
-      gbfprintf(fout, "%s=%s\r\n", key, tmp);
+      gbfprintf(fout, "%s=%s\r\n", CSTR(key), tmp);
     }
     xfree(tmp);
   }
@@ -386,7 +386,7 @@ bcr_route_header(const route_head* route)
 {
   queue* elem, *tmp;
   waypoint* wpt;
-  char* sout;
+  QString sout;
   int i, north, east, nmin, nmax, emin, emax;
 
   curr_rte_num++;
@@ -397,7 +397,7 @@ bcr_route_header(const route_head* route)
   bcr_write_line(fout, "[CLIENT]", NULL, NULL);			/* client section */
   bcr_write_line(fout, "REQUEST", NULL, "TRUE");
 
-  sout = route->rte_name;
+  sout = CSTRc(route->rte_name);
   if (rtename_opt != 0) {
     sout = rtename_opt;
   }
@@ -418,9 +418,8 @@ bcr_route_header(const route_head* route)
 
     icon = get_bcr_icon_from_icon_descr(wpt->icon_descr);
 
-    xasprintf(&sout, "%s,%.f", icon, BCR_UNKNOWN);
+    sout = QString("%1,%2").arg(icon).arg(BCR_UNKNOWN,10);
     bcr_write_line(fout, "STATION", &i, sout);
-    xfree(sout);
   }
 
   bcr_write_line(fout, "[COORDINATES]", NULL, NULL);		/* coords section */
@@ -448,29 +447,28 @@ bcr_route_header(const route_head* route)
       emin = east;
     }
 
-    xasprintf(&sout, "%d,%d", east, north);
+    sout = QString::number(east) + "," + QString::number(north);
     bcr_write_line(fout, "STATION", &i, sout);
-    xfree(sout);
   }
 
   bcr_write_line(fout, "[DESCRIPTION]", NULL, NULL);		/* descr. section */
 
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    char* s1, *s2, *sout;
+    char* s1, *s2;
 
     i++;
     wpt = (waypoint*) elem;
-    s1 = wpt->notes;
+    s1 = CSTRc(wpt->notes);
     if (s1 == NULL) {
-      s1 = wpt->description;
+      s1 = CSTRc(wpt->description);
     }
 
     if (prefer_shortnames_opt || (s1 == NULL) || (*s1 == '\0')) {
       s2 = s1;
-      s1 = wpt->shortname;
+      s1 = CSTRc(wpt->shortname);
     } else {
-      s2 = wpt->shortname;
+      s2 = CSTRc(wpt->shortname);
     }
 
     if (s1 == NULL) {
@@ -485,23 +483,21 @@ bcr_route_header(const route_head* route)
     }
 
     if (*s2) {
-      xasprintf(&sout, "%s,%s,@,0", s1, s2);
+      sout = QString("%1,%2,@,0").arg(s1).arg(s2);
     } else {
-      xasprintf(&sout, "%s,%s,@,0", s1, s1);
+      sout = QString("%1,%2,@,0").arg(s1).arg(s1);
     }
     bcr_write_line(fout, "STATION", &i, sout);
-
-    xfree(s1);
-    xfree(s2);
-    xfree(sout);
   }
 
-  bcr_write_line(fout, "[ROUTE]", NULL, NULL);			/* route section */
+  bcr_write_line(fout, "[ROUTE]", NULL, NULL);		/* route section */
 
-  xasprintf(&sout, "%d,%d,%d,%d", emin, nmax, emax, nmin);
+//  xasprintf(&sout, "%d,%d,%d,%d", emin, nmax, emax, nmin);
+  sout = QString::number(emin) + "," +
+         QString::number(nmax) + "," +
+         QString::number(emax) + "," +
+         QString::number(nmin);
   bcr_write_line(fout, "ROUTERECT", NULL, sout);
-  xfree(sout);
-
 }
 
 static void

@@ -789,6 +789,13 @@ gbfputs(const QString& s, gbfile* file)
   xfree(qs);
   return rv;
 }
+#if NEW_STRINGS
+int
+gbfputs(const String& s, gbfile* file)
+{
+  return gbfwrite(s.s_, 1, strlen(s.s_), file);
+}
+#endif
 
 /*
  * gbfwrite: (as fwrite)
@@ -1235,6 +1242,14 @@ gbfputcstr(const QString& s, gbfile* file)
   return gbfputcstr(qPrintable(s), file);
 }
 
+#if NEW_STRINGS
+int
+gbfputcstr(const String& s, gbfile* file)
+{
+  return gbfputcstr(s.s_, file);
+}
+#endif
+
 /*
  * gbfputcstr: write a pascal string into a stream
  *             return the number of written characters
@@ -1264,6 +1279,14 @@ gbfputpstr(const QString& s, gbfile* file)
   xfree(t);
   return r;
 }
+
+#if NEW_STRINGS
+int
+gbfputpstr(const String& s, gbfile* file)
+{
+  return gbfputpstr(s.s_, file);
+}
+#endif
 
 /* Much more higher level functions */
 

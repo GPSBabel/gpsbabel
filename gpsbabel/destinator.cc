@@ -394,7 +394,7 @@ destinator_wpt_disp(const waypoint* wpt)
   garmin_fs_t* gmsd = GMSD_FIND(wpt);
 
   write_wcstr(DST_DYN_POI);
-  write_wcstr((wpt->shortname) ? wpt->shortname : "WPT");
+  write_wcstr((wpt->shortname) ? CSTRc(wpt->shortname) : "WPT");
   write_wcstr((wpt->notes) ? wpt->notes : wpt->description);
 
   write_wcstr(NULL);				/* house number */
@@ -466,7 +466,7 @@ static void
 destinator_rtept_disp(const waypoint* wpt)
 {
   write_wcstr(DST_ITINERARY);
-  write_wcstr((wpt->shortname) ? wpt->shortname : "RTEPT");
+  write_wcstr((wpt->shortname) ? CSTRc(wpt->shortname) : "RTEPT");
   write_wcstr((wpt->notes) ? wpt->notes : wpt->description);
 
   gbfputint32(0, fout);

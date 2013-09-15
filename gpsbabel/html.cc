@@ -90,7 +90,7 @@ html_disp(const waypoint* wpt)
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                            &utme, &utmn, &utmz, &utmzc);
 
-  gbfprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", wpt->shortname);
+  gbfprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", CSTRc(wpt->shortname));
   gbfprintf(file_out, "<table width=\"100%%\">\n");
   gbfprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname);
   cout = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 1);
@@ -107,7 +107,7 @@ html_disp(const waypoint* wpt)
       gbfprintf(file_out, "<a href=\"%s\">%s</a>", link.url_.toUtf8().data(), d);
       xfree(d);
     } else {
-      gbfprintf(file_out, "%s", wpt->description);
+      gbfprintf(file_out, "%s", CSTRc(wpt->description));
     }
     if (!wpt->gc_data->placer.isEmpty()) {
       gbfprintf(file_out, " by %s", wpt->gc_data->placer.toUtf8().data());
@@ -148,7 +148,7 @@ html_disp(const waypoint* wpt)
     gbfprintf(file_out, "<p class=\"gpsbabelhint\"><strong>Hint:</strong> %s</p>\n", hint);
     xfree(hint);
   } else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
-    gbfprintf(file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", wpt->notes);
+    gbfprintf(file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", CSTRc(wpt->notes));
   }
 
   fs_gpx = NULL;

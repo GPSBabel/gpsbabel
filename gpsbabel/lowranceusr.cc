@@ -399,7 +399,7 @@ lowranceusr_parse_waypt(waypoint* wpt_tmp)
   }
 
   if (global_opts.debug_level >= 1)
-    printf(MYNAME " parse_waypt: Waypt name = %s Lat = %f Lon = %f alt = %f\n",wpt_tmp->shortname, wpt_tmp->latitude,
+    printf(MYNAME " parse_waypt: Waypt name = %s Lat = %f Lon = %f alt = %f\n",CSTRc(wpt_tmp->shortname), wpt_tmp->latitude,
            wpt_tmp->longitude, wpt_tmp->altitude);
 
   text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
@@ -564,7 +564,7 @@ lowranceusr_parse_trails(void)
     }
 
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " parse_trails: trail name = %s\n", trk_head->rte_name);
+      printf(MYNAME " parse_trails: trail name = %s\n", CSTRc(trk_head->rte_name));
     }
 
     /* visible */
@@ -921,7 +921,7 @@ lowranceusr_route_hdr(const route_head* rte)
 
   if (global_opts.debug_level >= 1)
     printf(MYNAME " route_hdr: route name \"%s\" num_legs = %d\n",
-           rte->rte_name, num_legs);
+           CSTRc(rte->rte_name), num_legs);
 
 }
 

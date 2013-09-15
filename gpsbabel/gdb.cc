@@ -363,7 +363,7 @@ gdb_add_route_waypt(route_head* rte, waypoint* ref, const int wpt_class)
     if (fabs(dist) > 100) {
       warning(MYNAME ": Route point mismatch!\n");
       warning(MYNAME ": \"%s\" from waypoints differs to \"%s\"\n",
-              tmp->shortname, ref->shortname);
+              CSTRc(tmp->shortname), CSTRc(ref->shortname));
       fatal(MYNAME ": from route table by more than %0.1f meters!\n",
             dist);
 
@@ -813,9 +813,9 @@ read_route(void)
 
       warnings++;
       if (warnings > 3) {
-        fatal(MYNAME "-rte_pt \"%s\": too many warnings!\n", wpt->shortname);
+        fatal(MYNAME "-rte_pt \"%s\": too many warnings!\n", CSTRc(wpt->shortname));
       }
-      warning(MYNAME "-rte_pt \"%s\" (class %d): possible error in route.\n", wpt->shortname, wpt_class);
+      warning(MYNAME "-rte_pt \"%s\" (class %d): possible error in route.\n", CSTRc(wpt->shortname), wpt_class);
       warning(MYNAME "-rte_pt (dump):");
       for (i = 0; i < 18; i++) {
         warning(" %02x", (unsigned char)buf[i]);
@@ -1290,10 +1290,10 @@ gdb_check_waypt(waypoint* wpt)
 
   if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
     fatal("Invalid latitude %f in waypoint %s.\n",
-          lat_orig, wpt->shortname ? wpt->shortname : "<no name>");
+          lat_orig, wpt->shortname ? CSTRc(wpt->shortname) : "<no name>");
   if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
     fatal("Invalid longitude %f in waypoint %s.\n",
-          lon_orig, wpt->shortname ? wpt->shortname : "<no name>");
+          lon_orig, wpt->shortname ? CSTRc(wpt->shortname) : "<no name>");
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -1365,7 +1365,7 @@ write_waypoint(
     descr = (wpt_class < gt_waypt_class_map_point) ?
             ld : wpt->description;
     if ((descr != NULL) && (wpt_class >= gt_waypt_class_map_point) && \
-        descr == wpt->shortname ) {
+        descr == CSTRc(wpt->shortname)) {
       descr.clear();
     }
     FWRITE_CSTR(descr);

@@ -74,13 +74,13 @@ data_read(void)
     wpt->shortname = xstrdup(s);
     s = csv_lineparse(NULL, "\\w", "", linecount);
     if (!s) {
-      fatal(MYNAME "Invalid latitude %s", wpt->shortname);
+      fatal(MYNAME "Invalid latitude %s", CSTRc(wpt->shortname));
     }
     wpt->latitude = wppos_to_dec(s);
 
     s = csv_lineparse(NULL, "\\w", "", linecount);
     if (!s) {
-      fatal(MYNAME "Invalid longitude %s", wpt->shortname);
+      fatal(MYNAME "Invalid longitude %s", CSTRc(wpt->shortname));
     }
     wpt->longitude = wppos_to_dec(s);
     waypt_add(wpt);

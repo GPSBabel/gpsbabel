@@ -331,16 +331,16 @@ write_blocks(gbfile* f, struct blockheader* blocks)
       if (global_opts.smart_names &&
           blocks->start[i].wpt->gc_data->diff &&
           blocks->start[i].wpt->gc_data->terr) {
-        snprintf(desc_field,sizeof(desc_field),"%s(t%ud%u)%s(type%dcont%d)",blocks->start[i].wpt->description,
+        snprintf(desc_field,sizeof(desc_field),"%s(t%ud%u)%s(type%dcont%d)",CSTRc(blocks->start[i].wpt->description),
                  blocks->start[i].wpt->gc_data->terr/10,
                  blocks->start[i].wpt->gc_data->diff/10,
-                 blocks->start[i].wpt->shortname,
+                 CSTRc(blocks->start[i].wpt->shortname),
                  (int) blocks->start[i].wpt->gc_data->type,
                  (int) blocks->start[i].wpt->gc_data->container);
         //Unfortunately enums mean we get numbers for cache type and container.
       } else {
         snprintf(desc_field, sizeof(desc_field), "%s",
-                 blocks->start[i].wpt->description);
+                 CSTRc(blocks->start[i].wpt->description));
       }
       write_long(f, strlen(desc_field) + 14);
       write_float_as_long(f, blocks->start[i].wpt->longitude*100000);
