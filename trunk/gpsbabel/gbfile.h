@@ -102,6 +102,10 @@ int gbfprintf(gbfile* file, const char* format, ...);
 int gbfputc(int c, gbfile* file);
 int gbfputs(const char* s, gbfile* file);
 int gbfputs(const QString& s, gbfile* file);
+#if NEW_STRINGS
+class String;
+int gbfputs(const String& s, gbfile* file);
+#endif
 int gbfwrite(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* file);
 int gbfflush(gbfile* file);
 
@@ -130,10 +134,18 @@ int gbfputint32(const int32_t i, gbfile* file);
 
 int gbfputdbl(const double d, gbfile* file);	// write a double value
 int gbfputflt(const float f, gbfile* file);	// write a float value
+
 int gbfputcstr(const char* s, gbfile* file);	// write string including '\0'
 int gbfputcstr(const QString& s, gbfile* file);	// write string including '\0'
+#if NEW_STRINGS
+int gbfputcstr(const String& s, gbfile* file);	// write string including '\0'
+#endif
+
 int gbfputpstr(const char* s, gbfile* file);	// write as pascal string
 int gbfputpstr(const QString& s, gbfile* file);	// write as pascal string
+#if NEW_STRINGS
+int gbfputpstr(const String& s, gbfile* file);	// write as pascal string
+#endif
 
 gbsize_t gbfcopyfrom(gbfile* file, gbfile* src, gbsize_t count);
 

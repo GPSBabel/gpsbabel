@@ -1349,7 +1349,6 @@ mag_waypt_pr(const waypoint* waypointp)
   QString icon_token;
   char* owpt;
   char* odesc;
-  char* isrc = NULL;
 
   ilat = waypointp->latitude;
   ilon = waypointp->longitude;
@@ -1376,7 +1375,7 @@ mag_waypt_pr(const waypoint* waypointp)
     icon_token = mag_find_token_from_descr(get_cache_icon(waypointp));
   }
 
-  isrc = waypointp->notes ? waypointp->notes : waypointp->description;
+  String isrc = waypointp->notes ? waypointp->notes : waypointp->description;
   owpt = global_opts.synthesize_shortnames ?
          mkshort_from_wpt(mkshort_handle, waypointp) : waypointp->shortname;
   odesc = isrc ? isrc : (char*)"";
@@ -1550,7 +1549,7 @@ mag_route_trl(const route_head* rte)
       expbuf[0] = 0;
       if (explorist) {
         snprintf(expbuf, sizeof(expbuf), "%s,",
-                 rte->rte_name ? rte->rte_name : "");
+                 rte->rte_name ? CSTRc(rte->rte_name) : "");
       }
       sprintf(obuff, "PMGNRTE,%d,%d,c,%d,%s%s,%s",
               numlines, thisline,

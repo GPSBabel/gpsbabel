@@ -496,7 +496,7 @@ write_waypt_cb(const waypoint* wpt)
   gbfprintf(fout, "27-MAR-62 00:00:00 %.6f",
             (wpt->altitude != unknown_alt) ? wpt->altitude : 0.0);
   if (wpt->description != NULL) {
-    gbfprintf(fout, " %s", wpt->description);
+    gbfprintf(fout, " %s", CSTRc(wpt->description));
   }
   gbfprintf(fout, "\n");
 

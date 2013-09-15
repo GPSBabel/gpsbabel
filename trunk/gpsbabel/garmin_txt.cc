@@ -351,7 +351,7 @@ print_position(const waypoint* wpt)
   if (! valid) {
     gbfprintf(fout, "#####\n");
     fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
-          wpt->shortname ? wpt->shortname : "Waypoint",
+          wpt->shortname ? CSTRc(wpt->shortname) : "Waypoint",
           pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
           gt_get_mps_grid_longname(grid_index, MYNAME));
   }
@@ -559,7 +559,7 @@ write_waypt(const waypoint* wpt)
     wpt_type = gt_waypt_class_names[0];
   }
 
-  gbfprintf(fout, "Waypoint\t%s\t", (wpt->shortname) ? wpt->shortname : "");
+  gbfprintf(fout, "Waypoint\t%s\t", (wpt->shortname) ? CSTRc(wpt->shortname) : "");
   if (wpt_class <= gt_waypt_class_airport_ndb) {
     const char* temp = wpt->notes;
     if (temp == NULL) {
@@ -646,7 +646,7 @@ route_disp_hdr_cb(const route_head* rte)
     gbfprintf(fout, "\r\n\r\nHeader\t%s\r\n", headers[route_header]);
   }
 
-  print_string("\r\nRoute\t%s\t", current_trk->rte_name ? current_trk->rte_name : "");
+  print_string("\r\nRoute\t%s\t", current_trk->rte_name ? CSTRc(current_trk->rte_name) : "");
   print_distance(cur_info->length, 0, 1, 0);
   print_course(cur_info->first_wpt, cur_info->last_wpt);
   gbfprintf(fout, "\t%d waypoints\t", cur_info->count);
@@ -666,7 +666,7 @@ route_disp_wpt_cb(const waypoint* wpt)
   waypoint* prev = cur_info->prev_wpt;
 
   gbfprintf(fout, "Route Waypoint\t");
-  gbfprintf(fout, "%s\t", wpt->shortname);
+  gbfprintf(fout, "%s\t", CSTRc(wpt->shortname));
 
   if (prev != NULL) {
     double dist = waypt_distance_ex(prev, wpt);
@@ -699,7 +699,7 @@ track_disp_hdr_cb(const route_head* track)
     gbfprintf(fout, "\r\n\r\nHeader\t%s\r\n", headers[track_header]);
   }
 
-  print_string("\r\nTrack\t%s\t", current_trk->rte_name ? current_trk->rte_name : "");
+  print_string("\r\nTrack\t%s\t", current_trk->rte_name ? CSTRc(current_trk->rte_name) : "");
   print_date_and_time(cur_info->start, 0);
   print_date_and_time(cur_info->time, 1);
   print_distance(cur_info->length, 0, 1, 0);

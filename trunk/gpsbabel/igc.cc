@@ -591,7 +591,7 @@ static void wr_header(void)
 
   // Other header data may have been stored in track description
   if (track && track->rte_desc && strncmp(track->rte_desc, HDRMAGIC, strlen(HDRMAGIC)) == 0) {
-    for (str = strtok(track->rte_desc + strlen(HDRMAGIC) + strlen(HDRDELIM), HDRDELIM);
+    for (str = strtok(CSTRc(track->rte_desc) + strlen(HDRMAGIC) + strlen(HDRDELIM), HDRDELIM);
          str; str = strtok(NULL, HDRDELIM)) {
       gbfprintf(file_out, "%s\r\n", str);
     }

@@ -944,7 +944,7 @@ humminbird_write_waypoint_wrapper(const waypoint* wpt)
   char* key;
   waypoint* tmpwpt;
 
-  xasprintf(&key, "%s\01%.9f\01%.9f", wpt->shortname, wpt->latitude, wpt->longitude);
+  xasprintf(&key, "%s\01%.9f\01%.9f", CSTRc(wpt->shortname), wpt->latitude, wpt->longitude);
   if (!(tmpwpt = map[key])) {
     tmpwpt = (waypoint*)wpt;
     map[key] = (waypoint*) wpt;

@@ -532,7 +532,7 @@ read_tag(const char* caller, const int tag, waypoint* wpt)
         } else {
           speed = MPS_TO_KPH(speed);
         }
-        xasprintf(&str, "%s@%.f", wpt->shortname ? wpt->shortname : "WPT", speed);
+        xasprintf(&str, "%s@%.f", wpt->shortname ? CSTRc(wpt->shortname) : "WPT", speed);
         if (wpt->shortname) {
           xfree(wpt->shortname);
         }

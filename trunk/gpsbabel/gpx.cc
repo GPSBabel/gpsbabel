@@ -623,7 +623,6 @@ tag_log_wpt(const QXmlStreamAttributes& attr)
     we need to keep track of log_wpt counts so we don't collide with
     dupe shortnames.
   */
-
   if ((wpt_tmp->shortname) && (strlen(wpt_tmp->shortname) > 2)) {
     /* copy of the shortname */
     lwp_tmp->shortname = (char*) xcalloc(7, 1);
@@ -1545,8 +1544,11 @@ gpx_write_common_description(const waypoint* waypointp, QString oname)
   writer->writeOptionalTextElement("name", oname);
 
   writer->writeOptionalTextElement("cmt", waypointp->description);
-
+#if NEW_STRINGS
+  if (!waypointp->notes.isEmpty()) {
+#else
   if (waypointp->notes && waypointp->notes[0]) {
+#endif
     writer->writeTextElement("desc", waypointp->notes);
   } else {
     writer->writeOptionalTextElement("desc", waypointp->description);

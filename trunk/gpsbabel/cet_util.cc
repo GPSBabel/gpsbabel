@@ -30,6 +30,8 @@
 #include "cet.h"
 #include "cet_util.h"
 
+#include <QtCore/QDebug>
+
 #define MYNAME "cet_util"
 
 static cet_cs_vec_t* cet_cs_vec_root = NULL;
@@ -990,11 +992,15 @@ cet_convert_waypt(const waypoint* wpt)
   }
 
   w->wpt_flags.cet_converted = 1;
-
-  w->shortname = cet_convert_string(wpt->shortname);
-  w->description = cet_convert_string(wpt->description);
-  w->notes = cet_convert_string(wpt->notes);
-
+#if NEW_STRINGS
+  w->shortname = cet_convert_string(CSTRc(wpt->shortname));
+  w->description = cet_convert_string(CSTRc(wpt->description));
+  w->notes = cet_convert_string(CSTRc(wpt->notes));
+#else
+  w->shortname = cet_convert_string(CSTRc(wpt->shortname));
+  w->description = cet_convert_string(CSTRc(wpt->description));
+  w->notes = cet_convert_string(CSTRc(wpt->notes));
+#endif
   if (gc_data) {
     const char* placer = cet_convert_string(gc_data->placer);
     const char* hint = cet_convert_string(gc_data->hint);
@@ -1026,8 +1032,8 @@ cet_convert_route_hdr(const route_head* route)
 
   rte->cet_converted = 1;
 
-  rte->rte_name = cet_convert_string(route->rte_name);
-  rte->rte_desc = cet_convert_string(route->rte_desc);
+  rte->rte_name = cet_convert_string(CSTRc(route->rte_name));
+  rte->rte_desc = cet_convert_string(CSTRc(route->rte_desc));
   const char* rte_url = cet_convert_string(route->rte_url);
   rte->rte_url = rte_url;
   xfree(rte_url);

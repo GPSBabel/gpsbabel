@@ -115,7 +115,7 @@ transform_rte_disp_hdr_cb(const route_head* rte)
     current_trk = route_head_alloc();
     track_add_head(current_trk);
     if (rte->rte_name && *rte->rte_name) {
-      xasprintf(&current_trk->rte_desc, "Generated from route %s", rte->rte_name);
+      xasprintf(&current_trk->rte_desc, "Generated from route %s", CSTRc(rte->rte_name));
       current_trk->rte_name = xstrdup(rte->rte_name); /* name the new trk */
     }
   }
@@ -132,7 +132,7 @@ transform_trk_disp_hdr_cb(const route_head* trk)
     current_rte = route_head_alloc();
     route_add_head(current_rte);
     if (trk->rte_name && *trk->rte_name) {
-      xasprintf(&current_rte->rte_desc, "Generated from track %s", trk->rte_name);
+      xasprintf(&current_rte->rte_desc, "Generated from track %s", CSTRc(trk->rte_name));
       current_rte->rte_name = xstrdup(trk->rte_name); /* name the new rte */
     }
   }

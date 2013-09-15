@@ -195,7 +195,7 @@ ignr_write_track_hdr(const route_head* track)
   gbfprintf(fout, "\t<INFORMATIONS>\n");
   gbfprintf(fout, "\t\t<NB_ETAPES>%d</NB_ETAPES>\n", track->rte_waypt_ct);
   if (track->rte_desc != NULL) {
-    gbfprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", track->rte_desc);
+    gbfprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", CSTRc(track->rte_desc));
   }
   gbfprintf(fout, "\t</INFORMATIONS>\n");
 }

@@ -549,7 +549,7 @@ osm_node_tag(const char* args, const QXmlStreamAttributes* attrv)
   } else if (strcmp(key, "note") == 0) {
     if (wpt->notes) {
       char* tmp;
-      xasprintf(&tmp, "%s; %s", wpt->notes, str);
+      xasprintf(&tmp, "%s; %s", CSTRc(wpt->notes), str);
       xfree(wpt->notes);
       wpt->notes = tmp;
     } else {
@@ -761,7 +761,7 @@ static QString
 osm_name_from_wpt(const waypoint* wpt)
 {
   QString name = QString("%1\01%2\01%3")
-                 .arg((wpt->shortname) ? wpt->shortname : "")
+                 .arg((wpt->shortname) ? CSTRc(wpt->shortname) : "")
                  .arg(wpt->latitude)
                  .arg(wpt->longitude);
   return name;

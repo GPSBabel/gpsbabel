@@ -167,7 +167,7 @@ xol_fatal_outside(const waypoint* wpt)
 {
   gbfprintf(fout, "#####\n");
   fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
-        wpt->shortname ? wpt->shortname : "Waypoint",
+        wpt->shortname ? CSTRc(wpt->shortname) : "Waypoint",
         pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
         gt_get_mps_grid_longname(grid_swiss, MYNAME));
 }

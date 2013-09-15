@@ -103,7 +103,7 @@ vcf_disp(const waypoint* wpt)
   latint = abs((int) wpt->latitude);
 
   gbfprintf(file_out, "BEGIN:VCARD\nVERSION:3.0\n");
-  gbfprintf(file_out, "N:%s;%s;;;\n", wpt->description,wpt->shortname);
+  gbfprintf(file_out, "N:%s;%s;;;\n", CSTRc(wpt->description),CSTRc(wpt->shortname));
   gbfprintf(file_out, "ADR:%c%d %06.3f %c%d %06.3f\n", wpt->latitude < 0 ? 'S' : 'N',  abs(latint), 60.0 * (fabs(wpt->latitude) - latint), wpt->longitude < 0 ? 'W' : 'E', abs(lonint), 60.0 * (fabs(wpt->longitude) - lonint));
 
   if (wpt->HasUrlLink()) {

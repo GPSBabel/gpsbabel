@@ -327,7 +327,7 @@ fix_netstumbler_dupes(void)
 
   for (i = 0, bh = htable; i < ct; i++, bh++) {
     if (last_crc == bh->crc) {
-      snprintf(ssid, sizeof ssid, "%s/%d", bh->wpt->shortname, ++serial);
+      snprintf(ssid, sizeof ssid, "%s/%d", CSTRc(bh->wpt->shortname), ++serial);
       xfree(bh->wpt->shortname);
       bh->wpt->shortname = xstrdup(ssid);
     } else {

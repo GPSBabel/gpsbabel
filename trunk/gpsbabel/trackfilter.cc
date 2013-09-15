@@ -405,7 +405,7 @@ trackfilter_split_init_rte_name(route_head* track, const QDateTime dt)
       snprintf(buff, sizeof(buff), "%s-%s", opt_title, tbuff);
     }
   } else if ((track->rte_name != NULL) && (strlen(track->rte_name) > 0)) {
-    snprintf(buff, sizeof(buff), "%s-%s", track->rte_name, tbuff);
+    snprintf(buff, sizeof(buff), "%s-%s", CSTRc(track->rte_name), tbuff);
   } else {
     strncpy(buff, tbuff, sizeof(buff));
   }
@@ -970,7 +970,7 @@ trackfilter_seg2trk(void)
         dest->rte_num = src->rte_num;
         /* name in the form TRACKNAME #n */
         if (src->rte_name) {
-          xasprintf(&dest->rte_name, "%s #%d", src->rte_name, ++trk_seg_num);
+          xasprintf(&dest->rte_name, "%s #%d", CSTRc(src->rte_name), ++trk_seg_num);
         }
 
         /* Insert after original track or after last newly

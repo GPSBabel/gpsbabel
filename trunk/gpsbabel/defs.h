@@ -438,24 +438,48 @@ const global_trait* get_traits();
  * way to the target.
  */
 #if NEW_STRINGS
+// Pretty much every occurrence of CSTRc() in the code should be treated
+// as a TODO.  90% of them are variadic functions (warning, gbfprint, fatal)
+// that should really support stream operators.
+
+#undef CSTRc
+#define CSTRc(s) s.s_
+
 class String {
  public:
   String() :
     s_(NULL) {}
-  bool isEmpty() {
-    return s_ && *s_;
+
+  bool isEmpty() const {
+    return !(s_ && *s_);
   }
+
+  // Support things that expect a pointer.  Almost all of these will
+  // ultimately go away, e.g. xfree(shortname);
+#if 1
   operator char*() const {
     return s_;
   }
+#endif
+  // Support shortname = foo;
+#if 1
   char* operator=(char* s) {
     s_ = s;
     return s_;
   }
+#endif
+
+  // If something is expecting a QString already, just let them have one.
+  operator QString() const {
+   return s_;
+  }
+
   char* s_;
 };
+
 #else
-typedef char* String;
+#define CSTRc(qstr) (qstr)
+ typedef char* String;
 #endif
 
 class waypoint
@@ -605,8 +629,11 @@ class route_head
 {
 public:
   route_head() :
+#if NEW_STRINGS
+#else
     rte_name(NULL),
     rte_desc(NULL),
+#endif
     rte_num(0),
     rte_waypt_ct(0),
     fs(NULL),
@@ -615,8 +642,8 @@ public:
     session(NULL) {}
   queue Q;		/* Link onto parent list. */
   queue waypoint_list;	/* List of child waypoints */
-  char* rte_name;
-  char* rte_desc;
+  String rte_name;
+  String rte_desc;
   QString rte_url;
   int rte_num;
   int rte_waypt_ct;		/* # waypoints in waypoint list */
@@ -943,7 +970,9 @@ void* xcalloc(size_t nmemb, size_t size);
 void* xmalloc(size_t size);
 void* xrealloc(void* p, size_t s);
 void xfree(const void* mem);
+#ifndef NEW_STRINGS
 char* xstrdup(const char* s);
+#endif
 char* xstrdup(const QString& s);
 char* xstrndup(const char* s, size_t n);
 char* xstrndupt(const char* s, size_t n);
@@ -1007,6 +1036,7 @@ const char* xstrrstr(const char* s1, const char* s2);
 void rtrim(char* s);
 char* lrtrim(char* s);
 int xasprintf(char** strp, const char* fmt, ...) PRINTFLIKE(2, 3);
+int xasprintf(String* strp, const char* fmt, ...) PRINTFLIKE(2, 3);
 int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);

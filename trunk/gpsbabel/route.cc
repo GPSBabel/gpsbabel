@@ -690,7 +690,7 @@ void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
     prev = thisw;
     if (!thisw->shortname || !thisw->shortname[0]) {
       snprintf(tkptname, sizeof(tkptname), "%s-%d",
-               trk->rte_name ? trk->rte_name : "" , tkpt);
+               trk->rte_name ? CSTRc(trk->rte_name) : "" , tkpt);
       thisw->shortname = xstrdup(tkptname);
     }
     tkpt++;

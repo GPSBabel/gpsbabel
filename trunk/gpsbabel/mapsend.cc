@@ -362,7 +362,7 @@ mapsend_route_hdr(const route_head* rte)
   if (r.isEmpty()) {
     rname = "Route";
   } else {
-    rname = rte->rte_name;
+    rname = CSTRc(rte->rte_name);
   }
   gbfputpstr(rname, mapsend_file_out);
 
