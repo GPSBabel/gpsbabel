@@ -47,19 +47,10 @@ static arglist_t tef_xml_args[] = {
 #define MYNAME "TourExchangeFormat"
 
 static char*
-trimmed_strdup(const char* str)
+trimmed_strdup(const QString& str)
 {
-  char* c1, *c2, *res;
-
-  c1 = xstrdup(str);
-  c2 = lrtrim(c1);
-  if (*c2) {
-    res = xstrdup(c2);
-  } else {
-    res = NULL;
-  }
-  xfree(c1);
-  return res;
+  QString trimmed = str.trimmed();
+  return xstrdup(CSTR(trimmed));
 }
 
 static xg_callback	tef_start, tef_header, tef_list_start, tef_list_end;
@@ -112,9 +103,9 @@ tef_header(const char* args, const QXmlStreamAttributes* attrv)
   route = route_head_alloc();
   foreach(QXmlStreamAttribute attr, *attrv) {
     if (attr.name().compare("Name", Qt::CaseInsensitive) == 0) {
-      route->rte_name = trimmed_strdup(attr.value().toString().toUtf8().constData());
+      route->rte_name = trimmed_strdup(attr.value().toString());
     } else if (attr.name().compare("Software", Qt::CaseInsensitive) == 0) {
-      route->rte_desc = trimmed_strdup(attr.value().toString().toUtf8().constData());
+      route->rte_desc = trimmed_strdup(attr.value().toString());
     }
   }
   route_add_head(route);
