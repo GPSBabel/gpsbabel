@@ -461,7 +461,7 @@ osm_strip_html(const char* str)
   utf.is_html = 1;
   utf.utfstring = (char*)str;
 
-  return strip_html(&utf);	// util.c
+  return strip_html(&utf);	// util.cc
 }
 
 

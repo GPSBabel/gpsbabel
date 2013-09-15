@@ -1490,6 +1490,14 @@ strip_nastyhtml(const QString& in)
 char*
 strip_html(const utf_string* in)
 {
+#if 0
+  // If we were willing to link core against QtGui (not out of the question)
+  // we could just do...and either decide whether to add handling for [IMG] 
+  // or just say we don't do that any more.
+  QTextDocument doc;
+  doc.setHtml( in->utfstring );
+  return xstrdup(CSTR(doc.toPlainText().simplified()));
+#else
   char* outstring, *out;
   char* incopy, *instr;
   char tag[8];
@@ -1569,6 +1577,7 @@ strip_html(const utf_string* in)
     xfree(incopy);
   }
   return (outstring);
+#endif
 }
 
 typedef struct {
