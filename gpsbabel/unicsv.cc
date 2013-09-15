@@ -241,7 +241,7 @@ static field_t fields_def[] = {
   { NULL,		fld_terminator, 0 }
 };
 
-static field_e* unicsv_fields_tab;
+static QVector<field_e> unicsv_fields_tab;
 static int unicsv_fields_tab_ct;
 static double unicsv_altscale, unicsv_depthscale, unicsv_proximityscale
 ;
@@ -288,15 +288,11 @@ static arglist_t unicsv_args[] = {
 
 /* helpers */
 
-// #define UNICSV_IS(f) (0 == strcmp(s, f))
-#define UNICSV_CONTAINS(f) (0 != strstr(s, f))
-
 /* here we only need a simple yes(0) or no(1) */
 static int
 unicsv_strrcmp(const char* s1, const char* s2)
 {
   int l1, l2;
-
   l1 = strlen(s1);
   l2 = strlen(s2);
   if ((l1 - l2) >= 0) {
@@ -305,6 +301,7 @@ unicsv_strrcmp(const char* s1, const char* s2)
     return 1;  /* false */
   }
 }
+
 
 static int
 unicsv_parse_gc_id(const char* str)
@@ -468,10 +465,10 @@ unicsv_adjust_time(const time_t time, time_t* date)
 }
 
 static char
-unicsv_compare_fields(char* s, const field_t* f)
+unicsv_compare_fields(const char* s, const field_t* f)
 {
   char* name = (char*)f->name;
-  char* test = s;
+  const char* test = s;
   char result;
 
   if (!(f->options & STR_CASE)) {
@@ -514,34 +511,33 @@ unicsv_compare_fields(char* s, const field_t* f)
   return result;
 }
 
+static char
+unicsv_compare_fields(const QString& s, const field_t* f)
+{
+  return unicsv_compare_fields(CSTR(s), f);
+}
+
 
 static void
 unicsv_fondle_header(char* ibuf)
 {
-  char* s;
+  QString s;
   char* buf = NULL;
-  int i, column;
+  int column;
   const cet_cs_vec_t* ascii = &cet_cs_vec_ansi_x3_4_1968;	/* us-ascii */
 
   /* Convert the entire header to lower case for convenience.
    * If we see a tab in that header, we decree it to be tabsep.
    */
   unicsv_fieldsep = ",";
-  for (s = ibuf; *s; s++) {
-    if (*s == '\t') {
-      unicsv_fieldsep = "\t";
-    } else if (*s == ';') {
-      unicsv_fieldsep = ";";
-    } else if (*s == '|') {
-      unicsv_fieldsep = "|";
-    } else {
-      continue;
-    }
-    break;
+  if (s.contains('\t')) {
+    unicsv_fieldsep = "\t";
+  } else if (s.contains(';')) {
+    unicsv_fieldsep = ";";
+  } else if (s.contains('|')) {
+    unicsv_fieldsep = "|";
   }
-  for (s = ibuf; *s; s++) {
-    *s = tolower(*s);
-  }
+  s = s.toLower();
 
   /* convert the header line into native ascii */
   if (global_opts.charset != ascii) {
@@ -550,27 +546,16 @@ unicsv_fondle_header(char* ibuf)
   }
 
   column = -1;
-  while ((s = csv_lineparse(ibuf, unicsv_fieldsep, "\"", 0))) {
+  while ((s = csv_lineparse(ibuf, unicsv_fieldsep, "\"", 0)) , !s.isEmpty()) {
+    s = s.trimmed();
 
     field_t* f = &fields_def[0];
 
     ibuf = NULL;
     column++;
     unicsv_fields_tab_ct++;
-    s = lrtrim(s);
 
-    if (column % 4 == 0) {
-      int sz = (column + 4) * sizeof(*unicsv_fields_tab);
-      if (column == 0) {
-        unicsv_fields_tab = (field_e*) xmalloc(sz);
-      } else {
-        unicsv_fields_tab = (field_e*) xrealloc(unicsv_fields_tab, sz);
-      }
-      for (i = 0; i < 4; i++) {
-        unicsv_fields_tab[column + i] = fld_terminator;
-      }
-    }
-
+    unicsv_fields_tab.append(fld_terminator);
     while (f->name) {
       if (unicsv_compare_fields(s, f)) {
         unicsv_fields_tab[column] = f->type;
@@ -579,27 +564,27 @@ unicsv_fondle_header(char* ibuf)
       f++;
     }
     if ((! f->name) && global_opts.debug_level) {
-      warning(MYNAME ": Unhandled column \"%s\".\n", s);
+      warning(MYNAME ": Unhandled column \"%s\".\n", CSTR(s));
     }
 
     /* handle some special items */
     if (f->type == fld_altitude) {
-      if (UNICSV_CONTAINS("ft") || UNICSV_CONTAINS("feet")) {
+      if (s.contains("ft") || s.contains("feet")) {
         unicsv_altscale = FEET_TO_METERS(1);
       }
     }
     if (f->type == fld_depth) {
-      if (UNICSV_CONTAINS("ft") || UNICSV_CONTAINS("feet")) {
+      if (s.contains("ft") || s.contains("feet")) {
         unicsv_depthscale = FEET_TO_METERS(1);
       }
     }
     if (f->type == fld_proximity) {
-      if (UNICSV_CONTAINS("ft") || UNICSV_CONTAINS("feet")) {
+      if (s.contains("ft") || s.contains("feet")) {
         unicsv_proximityscale = FEET_TO_METERS(1);
       }
     }
     if ((f->type == fld_time) || (f->type == fld_date)) {
-      if (UNICSV_CONTAINS("iso")) {
+      if (s.contains("iso")) {
         f->type = fld_iso_time;
       }
     }
@@ -617,7 +602,7 @@ unicsv_rd_init(const char* fname)
   unicsv_depthscale = 1.0;
   unicsv_proximityscale = 1.0;
 
-  unicsv_fields_tab = NULL;
+  unicsv_fields_tab.clear();
   unicsv_fields_tab_ct = 0;
   unicsv_data_type = global_opts.objective;
   unicsv_detect = (!(global_opts.masked_objective & (WPTDATAMASK | TRKDATAMASK | RTEDATAMASK | POSNDATAMASK)));
@@ -641,9 +626,7 @@ static void
 unicsv_rd_deinit(void)
 {
   gbfclose(fin);
-  if (unicsv_fields_tab) {
-    xfree(unicsv_fields_tab);
-  }
+  unicsv_fields_tab.clear();
 }
 
 static void
