@@ -488,6 +488,8 @@ bcr_route_header(const route_head* route)
       sout = QString("%1,%2,@,0").arg(s1).arg(s1);
     }
     bcr_write_line(fout, "STATION", &i, sout);
+    xfree(s1);
+    xfree(s2);
   }
 
   bcr_write_line(fout, "[ROUTE]", NULL, NULL);		/* route section */
