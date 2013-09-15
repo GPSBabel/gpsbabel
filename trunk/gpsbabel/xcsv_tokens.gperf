@@ -78,7 +78,7 @@ hash (register const char *str, register unsigned int len)
       249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
       249, 249, 249, 249, 249, 249
     };
-  register int hval = len;
+  register int hval = (int)len;
 
   switch (hval)
     {

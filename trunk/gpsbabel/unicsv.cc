@@ -1248,40 +1248,20 @@ unicsv_fatal_outside(const waypoint* wpt)
 }
 
 static void
-unicsv_print_str(const char* str)
-{
-  if (str && *str) {
-    char* cout, *cx;
-
-    cout = strenquote(str, UNICSV_QUOT_CHAR);
-
-    while ((cx = strstr(cout, "\r\n"))) {
-      memmove(cx, cx + 1, strlen(cx));
-      *cx++ = ',';
-      lrtrim(cx);
-    }
-    while ((cx = strchr(cout, '\r'))) {
-      *cx++ = ',';
-      lrtrim(cx);
-    }
-    while ((cx = strchr(cout, '\n'))) {
-      *cx++ = ',';
-      lrtrim(cx);
-    }
-
-    gbfprintf(fout, "%s%s", unicsv_fieldsep, cout);
-    xfree(cout);
-  } else {
-    gbfputs(unicsv_fieldsep, fout);
-  }
-}
-
-static void
 unicsv_print_str(const QString& s)
 {
-  char* t = xstrdup(s.toUtf8().data());
-  unicsv_print_str(t);
-  xfree(t);
+  gbfputs(unicsv_fieldsep, fout);
+  QString t;
+  if (!s.isEmpty()) {
+    t = strenquote(s, UNICSV_QUOT_CHAR);
+    // I'm not sure these three replacements are necessary; they're just a 
+    // slavish re-implementation of (what I think) the original C code 
+    // was doing.
+    t.replace("\r\n", ",");
+    t.replace("\r", ",");
+    t.replace("\n", ",");
+  }
+  gbfputs(t.trimmed(), fout);
 }
 
 #if NEW_STRINGS
@@ -1500,16 +1480,15 @@ unicsv_waypt_disp_cb(const waypoint* wpt)
     break;
 
   case grid_lat_lon_dms: {
-    char* sep, *tmp;
+    char* sep;
+    QString tmp;
     cout = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, 0);
     sep = strchr(cout, ',');
     *sep = '\0';
     tmp = strenquote(cout, UNICSV_QUOT_CHAR);
-    gbfprintf(fout, "%s%s", tmp, unicsv_fieldsep);
-    xfree(tmp);
+    gbfprintf(fout, "%s%s", CSTR(tmp), unicsv_fieldsep);
     tmp = strenquote(sep+1, UNICSV_QUOT_CHAR);
     gbfputs(tmp, fout);
-    xfree(tmp);
   }
   break;
 

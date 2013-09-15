@@ -1531,7 +1531,6 @@ xcsv_data_read(void)
         ;
       }
     }
-
   }
 }
 
@@ -2210,7 +2209,7 @@ xcsv_data_write(void)
   ogue_t* ogp;
   time_t time;
   struct tm tm;
-  char tbuf[32];
+//  char tbuf[32];
 
   /* reset the index counter */
   waypt_out_count = 0;
@@ -2224,44 +2223,30 @@ xcsv_data_write(void)
 
   /* output prologue lines, if any. */
   QUEUE_FOR_EACH(&xcsv_file.prologue, elem, tmp) {
-    char* cout, *ctmp;
     ogp = (ogue_t*) elem;
+    // If the XCSV description contains weird characters (like sportsim)
+    // this is where they get lost.
+    QString cout = ogp->val;
 
-    cout = xstrdup((ogp->val) ? ogp->val : "");
+    // Don't do potentially expensive replacements if token prefix 
+    // isn't present;
+    if (cout.contains("__")) {
+      cout.replace("__FILE__", xcsv_file.fname);
+      cout.replace("__VERSION__", time == 0 ? "" : gpsbabel_version);
 
-    while ((ctmp = strsub(cout, "__FILE__", xcsv_file.fname))) {
-      xfree(cout);
-      cout = ctmp;
+      QDateTime dt = QDateTime::fromTime_t(time);
+      dt = dt.toTimeSpec(Qt::UTC);
+
+      QString dts = dt.toString("ddd MMM dd hh:mm:ss yyyy");
+      cout.replace("__DATE_AND_TIME__", dts);
+
+      QString d = dt.toString("MM/dd/yyyy");
+      cout.replace("__DATE__", d);
+
+      QString t = dt.toString("hh:mm:ss");
+      cout.replace("__TIME__", t);
     }
-
-    while ((ctmp = strsub(cout, "__VERSION__", (time == 0) ? "" : gpsbabel_version))) {
-      xfree(cout);
-      cout = ctmp;
-    }
-
-    while (strstr(cout, "__DATE__")) {
-      strftime(tbuf, sizeof(tbuf), "%m/%d/%Y", &tm);
-      ctmp = strsub(cout, "__DATE__", tbuf);
-      xfree(cout);
-      cout = ctmp;
-    }
-
-    while (strstr(cout, "__TIME__")) {
-      strftime(tbuf, sizeof(tbuf), "%H:%S:%M", &tm);
-      ctmp = strsub(cout, "__TIME__", tbuf);
-      xfree(cout);
-      cout = ctmp;
-    }
-
-    while (strstr(cout, "__DATE_AND_TIME__")) {
-      strftime(tbuf, sizeof(tbuf), "%a %b %d %H:%M:%S %Y", &tm);
-      ctmp = strsub(cout, "__DATE_AND_TIME__", tbuf);
-      xfree(cout);
-      cout = ctmp;
-    }
-
-    gbfprintf(xcsv_file.xcsvfp, "%s", cout);
-    xfree(cout);
+    gbfprintf(xcsv_file.xcsvfp, "%s", CSTR(cout));
     gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
   }
 

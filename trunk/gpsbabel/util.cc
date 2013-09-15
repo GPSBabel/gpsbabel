@@ -563,36 +563,20 @@ case_ignore_str_match(const char* str, const char* match)
   return res;
 }
 
-char*
-strenquote(const char* str, const char quot_char)
+// for ruote_char = "
+// make str = blank into nothing
+// make str = foo into "foo"
+// make str = foo"bar into "foo""bar"
+// No, that doesn't seem obvious to me, either...
+
+QString
+strenquote(const QString& str, const QChar quot_char)
 {
-  int len;
-  const char* cin;
-  char* cout;
-  char* tmp;
-
-  if (str == NULL) {
-    cin = "";
-  } else {
-    cin = (char*)str;
-  }
-
-  len = strlen(cin);
-  cout = tmp = (char*) xmalloc((len * 2) + 3);
-
-  *cout++ = quot_char;
-  while (*cin) {
-    *cout++	= *cin;
-    if (*cin++ == quot_char) {
-      *cout++	= quot_char;
-    }
-  }
-  *cout++ = quot_char;
-  *cout = '\0';
-
-  cout = xstrdup(tmp);
-  xfree(tmp);
-  return cout;
+  QString replacement = QString("%1%1").arg(quot_char);
+  QString t = str;
+  t.replace(quot_char, replacement);
+  QString r = quot_char + t + quot_char;
+  return r;
 }
 
 void

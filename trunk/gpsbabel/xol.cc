@@ -186,9 +186,8 @@ static void
 xol_write_string(const char* name, const char* str)
 {
   if (str && *str) {
-    char* temp = strenquote(str, '"');
-    gbfprintf(fout, " %s=%s", name, temp);
-    xfree(temp);
+    QString temp = strenquote(str, '"');
+    gbfprintf(fout, " %s=%s", name, CSTR(temp));
   }
 }
 
