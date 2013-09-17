@@ -741,5 +741,6 @@ main(int argc, char* argv[])
 
 void signal_handler(int sig)
 {
+  (void)sig;
   tracking_status.request_terminate = 1;
 }

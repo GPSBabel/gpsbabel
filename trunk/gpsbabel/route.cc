@@ -463,29 +463,34 @@ route_backup(signed int* count, queue** head_bak)
 static void
 route_restore_hdr(const route_head* rte)
 {
+  (void)rte;
   rte_head_ct++;
 }
 
 static void
 track_restore_hdr(const route_head* trk)
 {
+  (void)trk;
   trk_head_ct++;
 }
 
 static void
 route_restore_tlr(const route_head* rte)
 {
+  (void)rte;
 }
 
 static void
 route_restore_wpt(const waypoint* wpt)
 {
+  (void)wpt;
   rte_waypts++;
 }
 
 static void
 track_restore_wpt(const waypoint* wpt)
 {
+  (void)wpt;
   trk_waypts++;
 }
 
