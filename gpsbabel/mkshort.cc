@@ -387,7 +387,8 @@ mkshort(short_handle h, const char* istring)
   char* tstring;
   char* cp;
   char* np;
-  int i, l, nlen, replaced;
+  int i, l, replaced;
+  size_t nlen;
   mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
 
   if (hdl->is_utf8) {
@@ -531,9 +532,7 @@ mkshort(short_handle h, const char* istring)
   while ((np != ostring) && *(np-1) && isdigit(*(np-1))) {
     np--;
   }
-  if (np) {
-    nlen = strlen(np);
-  }
+  nlen = strlen(np);
 
   /*
    * Now brutally truncate the resulting string, preserve trailing
@@ -549,12 +548,12 @@ mkshort(short_handle h, const char* istring)
       ostring = tmp;
     }
   } else if ((/*i = */strlen(ostring)) > hdl->target_len) {
-    char* dp = &ostring[hdl->target_len] - strlen(np);
+    char* dp = &ostring[hdl->target_len] - nlen;
     if (dp < ostring) {
       dp = ostring;
     }
-    memmove(dp, np, strlen(np));
-    dp[strlen(np)] = 0;
+    memmove(dp, np, nlen);
+    dp[nlen] = 0;
     rtrim(ostring);
   }
 

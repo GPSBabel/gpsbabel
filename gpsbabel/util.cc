@@ -859,6 +859,8 @@ void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs)
   if (millisecs) {
     *millisecs = dotnet % 10000;
   }
+#else
+  (void)millisecs;
 #endif
 }
 

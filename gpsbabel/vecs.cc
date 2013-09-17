@@ -185,364 +185,423 @@ vecs_t vec_list[] = {
     &xcsv_vecs,
     "xcsv",
     "? Character Separated Values",
-    NULL
+    NULL,
+    NULL,
   },
 #endif
   {
     &geo_vecs,
     "geo",
     "Geocaching.com .loc",
-    "loc"
+    "loc",
+    NULL,
   },
   {
     &gpx_vecs,
     "gpx",
     "GPX XML",
-    "gpx"
+    "gpx",
+    NULL,
   },
   {
     &mag_svecs,
     "magellan",
     "Magellan serial protocol",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &mag_fvecs,
     "magellan",
     "Magellan SD files (as for Meridian)",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &magX_fvecs,
     "magellanx",
     "Magellan SD files (as for eXplorist)",
-    "upt"
+    "upt",
+    NULL,
   },
   {
     &garmin_vecs,
     "garmin",
     "Garmin serial/USB protocol",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &gdb_vecs,
     "gdb",
     "Garmin MapSource - gdb",
-    "gdb"
+    "gdb",
+    NULL,
   },
   {
     &gtc_vecs,
     "gtrnctr",
     "Garmin Training Center",
-    "xml"
+    "xml",
+    NULL,
   },
   {
     &mapsend_vecs,
     "mapsend",
     "Magellan Mapsend",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &mps_vecs,
     "mapsource",
     "Garmin MapSource - mps",
-    "mps"
+    "mps",
+    NULL,
   },
   {
     &nmea_vecs,
     "nmea",
     "NMEA 0183 sentences",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &ozi_vecs,
     "ozi",
     "OziExplorer",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &pcx_vecs,
     "pcx",
     "Garmin PCX5",
-    "pcx"
+    "pcx",
+    NULL,
   },
   {
     &kml_vecs,
     "kml",
     "Google Earth (Keyhole) Markup Language",
-    "kml"
+    "kml",
+    NULL,
   },
 #if MAXIMAL_ENABLED
   {
     &gpsutil_vecs,
     "gpsutil",
     "gpsutil",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &lowranceusr_vecs,
     "lowranceusr",
     "Lowrance USR",
-    "usr"
+    "usr",
+    NULL,
   },
   {
     &lowranceusr4_vecs,
     "lowranceusr4",
     "Lowrance USR version 4",
-    "usr"
+    "usr",
+    NULL,
   },
   {
     &holux_vecs,
     "holux",
     "Holux (gm-100) .wpo Format",
-    "wpo"
+    "wpo",
+    NULL,
   },
   {
     &tpg_vecs,
     "tpg",
     "National Geographic Topo .tpg (waypoints)",
-    "tpg"
+    "tpg",
+    NULL,
   },
   {
     &tpo2_vecs,
     "tpo2",
     "National Geographic Topo 2.x .tpo",
-    "tpo"
+    "tpo",
+    NULL,
   },
   {
     &tpo3_vecs,
     "tpo3",
     "National Geographic Topo 3.x/4.x .tpo",
-    "tpo"
+    "tpo",
+    NULL,
   },
   {
     &tmpro_vecs,
     "tmpro",
     "TopoMapPro Places File",
-    "tmpro"
+    "tmpro",
+    NULL,
   },
   {
     &tiger_vecs,
     "tiger",
     "U.S. Census Bureau Tiger Mapping Service",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &easygps_vecs,
     "easygps",
     "EasyGPS binary format",
-    "loc"
+    "loc",
+    NULL,
   },
   {
     &saroute_vecs,
     "saroute",
     "DeLorme Street Atlas Route",
-    "anr"
+    "anr",
+    NULL,
   },
   {
     &navicache_vecs,
     "navicache",
     "Navicache.com XML",
-    NULL
+    NULL,
+    NULL,
   },
   {	/* MRCB */
     &psit_vecs,
     "psitrex",
     "KuDaTa PsiTrex text",
-    NULL
+    NULL,
+    NULL,
   },
 #if SHAPELIB_ENABLED
   {
     &shape_vecs,
     "shape",
     "ESRI shapefile",
-    "shp"
+    "shp",
+    NULL,
   },
 #endif
   {
     &gpl_vecs,
     "gpl",
     "DeLorme GPL",
-    "gpl"
+    "gpl",
+    NULL,
   },
   {
     &text_vecs,
     "text",
     "Textual Output",
-    "txt"
+    "txt",
+    NULL,
   },
   {
     &html_vecs,
     "html",
     "HTML Output",
-    "html"
+    "html",
+    NULL,
   },
   {
     &netstumbler_vecs,
     "netstumbler",
     "NetStumbler Summary File (text)",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &igc_vecs,
     "igc",
     "FAI/IGC Flight Recorder Data Format",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &brauniger_iq_vecs,
     "baroiq",
     "Brauniger IQ Series Barograph Download",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &mtk_vecs,
     "mtk",
     "MTK Logger (iBlue 747,Qstarz BT-1000,...) download",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &mtk_fvecs,
     "mtk-bin",
     "MTK Logger (iBlue 747,...) Binary File Format",
-    "bin"
+    "bin",
+    NULL,
   },
   {
     &mtk_m241_vecs,
     "m241",
     "Holux M-241 (MTK based) download",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &mtk_m241_fvecs,
     "m241-bin",
     "Holux M-241 (MTK based) Binary File Format",
-    "bin"
+    "bin",
+    NULL,
   },
   {
     &mtk_locus_vecs,
     "mtk_locus",
     "MediaTek Locus",
-    NULL
+    NULL,
+    NULL,
   },
 #endif // MAXIMAL_ENABLED
   {
     &wbt_svecs,
     "wbt",
     "Wintec WBT-100/200 GPS Download",
-    NULL
+    NULL,
+    NULL,
   },
 #if MAXIMAL_ENABLED
   {
     &vpl_vecs,
     "vpl",
     "Honda/Acura Navigation System VP Log File Format",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &wbt_fvecs,
     "wbt-bin",
     "Wintec WBT-100/200 Binary File Format",
-    "bin"
+    "bin",
+    NULL,
   },
   {
     &wbt_fvecs,
     "wbt-tk1",
     "Wintec WBT-201/G-Rays 2 Binary File Format",
-    "tk1"
+    "tk1",
+    NULL,
   },
   {
     &hiketech_vecs,
     "hiketech",
     "HikeTech",
-    "gps"
+    "gps",
+    NULL,
   },
   {
     &glogbook_vecs,
     "glogbook",
     "Garmin Logbook XML",
-    "xml"
+    "xml",
+    NULL,
   },
   {
     &vcf_vecs,
     "vcard",
     "Vcard Output (for iPod)",
     "vcf",
+    NULL,
   },
 #if 0
   {
     &overlay_vecs,
     "overlay",
     "Geogrid-Viewer",
-    "ovl"
+    "ovl",
+    NULL,
   },
 #endif
   {
     &google_vecs,
     "google",
     "Google Maps XML",
-    "xml"
+    "xml",
+    NULL,
   },
   {
     &google_dir_vecs,
     "googledir",
     "Google Directions XML",
-    "xml"
+    "xml",
+    NULL,
   },
   {
     &maggeo_vecs,
     "maggeo",
     "Magellan Explorist Geocaching",
-    "gs"
+    "gs",
+    NULL,
   },
   {
     &an1_vecs,
     "an1",
     "DeLorme .an1 (drawing) file",
-    "an1"
+    "an1",
+    NULL,
   },
   {
     &tomtom_vecs,
     "tomtom",
     "TomTom POI file (.ov2)",
-    "ov2"
+    "ov2",
+    NULL,
   },
   {
     &tef_xml_vecs,
     "tef",
     "Map&Guide 'TourExchangeFormat' XML",
-    "xml"
+    "xml",
+    NULL,
   },
   {
     &vitosmt_vecs,
     "vitosmt",
     "Vito Navigator II tracks",
-    "smt"
+    "smt",
+    NULL,
   },
   {
     &wfff_xml_vecs,
     "wfff",
     "WiFiFoFum 2.0 for PocketPC XML",
-    "xml"
+    "xml",
+    NULL,
   },
   {
     &bcr_vecs,
     "bcr",
     "Motorrad Routenplaner (Map&Guide) .bcr files",
-    "bcr"
+    "bcr",
+    NULL,
   },
   {
     &ignr_vecs,
     "ignrando",
     "IGN Rando track files",
-    "rdn"
+    "rdn",
+    NULL,
   },
 #if CSVFMTS_ENABLED
   {
     &stmsdf_vecs,
     "stmsdf",
     "Suunto Trek Manager (STM) .sdf files",
-    "sdf"
+    "sdf",
+    NULL,
   },
 #endif
 #if CSVFMTS_ENABLED
@@ -550,408 +609,474 @@ vecs_t vec_list[] = {
     &stmwpp_vecs,
     "stmwpp",
     "Suunto Trek Manager (STM) WaypointPlus files",
-    "txt"
+    "txt",
+    NULL,
   },
 #endif //  CSVFMTS_ENABLED
   {
     &cst_vecs,
     "cst",
     "CarteSurTable data file",
-    "cst"
+    "cst",
+    NULL,
   },
   {
     &nmn4_vecs,
     "nmn4",
     "Navigon Mobile Navigator .rte files",
-    "rte"
+    "rte",
+    NULL,
   },
 #if CSVFMTS_ENABLED
   {
     &compegps_vecs,
     "compegps",
     "CompeGPS data files (.wpt/.trk/.rte)",
-    NULL
+    NULL,
+    NULL,
   },
 #endif //CSVFMTS_ENABLED
   {
     &yahoo_vecs,
     "yahoo",
     "Yahoo Geocode API data",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &unicsv_vecs,
     "unicsv",
     "Universal csv with field structure in first line",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &gtm_vecs,
     "gtm",
     "GPS TrackMaker",
-    "gtm"
+    "gtm",
+    NULL,
   },
   {
     &gpssim_vecs,
     "gpssim",
     "Franson GPSGate Simulation",
-    "gpssim"
+    "gpssim",
+    NULL,
   },
 #if CSVFMTS_ENABLED
   {
     &garmin_txt_vecs,
     "garmin_txt",
     "Garmin MapSource - txt (tab delimited)",
-    "txt"
+    "txt",
+    NULL,
   },
 #endif // CSVFMTS_ENABLED
   {
     &gtc_vecs,
     "gtrnctr",
     "Garmin Training Center (.tcx)",
-    "xml"
+    "xml",
+    NULL,
   },
   {
     &dmtlog_vecs,
     "dmtlog",
     "TrackLogs digital mapping (.trl)",
-    "trl"
+    "trl",
+    NULL,
   },
   {
     &raymarine_vecs,
     "raymarine",
     "Raymarine Waypoint File (.rwf)",
-    "rwf"
+    "rwf",
+    NULL,
   },
   {
     &alanwpr_vecs,
     "alanwpr",
     "Alan Map500 waypoints and routes (.wpr)",
-    "wpr"
+    "wpr",
+    NULL,
   },
   {
     &alantrl_vecs,
     "alantrl",
     "Alan Map500 tracklogs (.trl)",
-    "trl"
+    "trl",
+    NULL,
   },
   {
     &vitovtt_vecs,
     "vitovtt",
     "Vito SmartMap tracks (.vtt)",
-    "vtt"
+    "vtt",
+    NULL,
   },
   {
     &ggv_log_vecs,
     "ggv_log",
     "Geogrid-Viewer tracklogs (.log)",
-    "log"
+    "log",
+    NULL,
   },
 #if CSVFMTS_ENABLED
   {
     &g7towin_vecs,
     "g7towin",
     "G7ToWin data files (.g7t)",
-    "g7t"
+    "g7t",
+    NULL,
   },
 #endif
   {
     &garmin_gpi_vecs,
     "garmin_gpi",
     "Garmin Points of Interest (.gpi)",
-    "gpi"
+    "gpi",
+    NULL,
   },
   {
     &lmx_vecs,
     "lmx",
     "Nokia Landmark Exchange",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &random_vecs,
     "random",
     "Internal GPS data generator",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &xol_vecs,
     "xol",
     "Swiss Map 25/50/100 (.xol)",
-    "xol"
+    "xol",
+    NULL,
   },
   {
     &dg100_vecs,
     "dg-100",
     "GlobalSat DG-100/BT-335 Download",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &dg200_vecs,
     "dg-200",
     "GlobalSat DG-200 Download",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &navilink_vecs,
     "navilink",
     "NaviGPS GT-11/BGT-11 Download",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &ik3d_vecs,
     "ik3d",
     "MagicMaps IK3D project file (.ikt)",
-    "ikt"
+    "ikt",
+    NULL,
   },
   {
     &osm_vecs,
     "osm",
     "OpenStreetMap data files",
-    "osm"
+    "osm",
+    NULL,
   },
   {
     &destinator_poi_vecs,
     "destinator_poi",
     "Destinator Points of Interest (.dat)",
-    "dat"
+    "dat",
+    NULL,
   },
   {
     &destinator_itn_vecs,
     "destinator_itn",
     "Destinator Itineraries (.dat)",
-    "dat"
+    "dat",
+    NULL,
   },
   {
     &destinator_trl_vecs,
     "destinator_trl",
     "Destinator TrackLogs (.dat)",
-    "dat"
+    "dat",
+    NULL,
   },
   {
     &exif_vecs,
     "exif",
     "Embedded Exif-GPS data (.jpg)",
-    "jpg"
+    "jpg",
+    NULL,
   },
   {
     &vidaone_vecs,
     "vidaone",
     "VidaOne GPS for Pocket PC (.gpb)",
-    "gpb"
+    "gpb",
+    NULL,
   },
   {
     &igo8_vecs,
     "igo8",
     "IGO8 .trk",
-    "trk"
+    "trk",
+    NULL,
   },
   {
     &gopal_vecs,
     "gopal",
     "GoPal GPS track log (.trk)",
-    "trk"
+    "trk",
+    NULL,
   },
   {
     &humminbird_vecs,
     "humminbird",
     "Humminbird waypoints and routes (.hwr)",
-    "hwr"
+    "hwr",
+    NULL,
   },
   {
     &humminbird_ht_vecs,
     "humminbird_ht",
     "Humminbird tracks (.ht)",
-    "ht"
+    "ht",
+    NULL,
   },
   {
     &mapasia_tr7_vecs,
     "mapasia_tr7",
     "MapAsia track file (.tr7)",
-    "tr7"
+    "tr7",
+    NULL,
   },
   {
     &gnav_trl_vecs,
     "gnav_trl",
     "Google Navigator Tracklines (.trl)",
-    "trl"
+    "trl",
+    NULL,
   },
   {
     &navitel_trk_vecs,
     "navitel_trk",
     "Navitel binary track (.bin)",
-    "bin"
+    "bin",
+    NULL,
   },
   {
     &ggv_ovl_vecs,
     "ggv_ovl",
     "Geogrid-Viewer ascii overlay file (.ovl)",
-    "ovl"
+    "ovl",
+    NULL,
   },
 #if CSVFMTS_ENABLED
   {
     &jtr_vecs,
     "jtr",
     "Jelbert GeoTagger data file",
-    "jtr"
+    "jtr",
+    NULL,
   },
 #endif
   {
     &itracku_vecs,
     "itracku",
     "XAiOX iTrackU Logger",
-    NULL
+    NULL,
+    NULL,
   },
 
   {
     &itracku_fvecs,
     "itracku-bin",
     "XAiOX iTrackU Logger Binary File Format",
-    "bin"
+    "bin",
+    NULL,
   },
   {
     &sbp_vecs,
     "sbp",
     "NaviGPS GT-31/BGT-31 datalogger (.sbp)",
-    "sbp"
+    "sbp",
+    NULL,
   },
   {
     &sbn_vecs,
     "sbn",
     "NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)",
-    "sbn"
+    "sbn",
+    NULL,
   },
   {
     &mmo_vecs,
     "mmo",
     "Memory-Map Navigator overlay files (.mmo)",
-    "mmo"
+    "mmo",
+    NULL,
   },
   {
     &bushnell_vecs,
     "bushnell",
     "Bushnell GPS Waypoint file",
-    "wpt"
+    "wpt",
+    NULL,
   },
   {
     &bushnell_trl_vecs,
     "bushnell_trl",
     "Bushnell GPS Trail file",
-    "trl"
+    "trl",
+    NULL,
   },
   {
     &skyforce_vecs,
     "skyforce",
     "Skymap / KMD150 ascii files",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &pocketfms_bc_vecs,
     "pocketfms_bc",
     "PocketFMS breadcrumbs",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &pocketfms_fp_vecs,
     "pocketfms_fp",
     "PocketFMS flightplan (.xml)",
-    "xml"
+    "xml",
+    NULL,
   },
   {
     &pocketfms_wp_vecs,
     "pocketfms_wp",
     "PocketFMS waypoints (.txt)",
-    "txt"
+    "txt",
+    NULL,
   },
   {
     &v900_vecs,
     "v900",
     "Columbus/Visiontac V900 files (.csv)",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &ng_vecs,
     "naviguide",
     "Naviguide binary route file (.twl)",
-    "twl"
+    "twl",
+    NULL,
   },
   {
     &enigma_vecs,
     "enigma",
     "Enigma binary waypoint file (.ert)",
-    "ert"
+    "ert",
+    NULL,
   },
   {
     &delbin_vecs,
     "delbin",
     "DeLorme PN-20/PN-30/PN-40 USB protocol",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &skytraq_vecs,
     "skytraq",
     "SkyTraq Venus based loggers (download)",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &teletype_vecs,
     "teletype",
     "Teletype [ Get Jonathon Johnson to describe",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &skytraq_fvecs,
     "skytraq-bin",
     "SkyTraq Venus based loggers Binary File Format",
-    "bin"
+    "bin",
+    NULL,
   },
   {
     &miniHomer_vecs,
     "miniHomer",
     "MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &jogmap_vecs,
     "jogmap",
     "Jogmap.de XML format",
-    "xml"
+    "xml",
+    NULL,
   },
   {
     &wintec_tes_vecs,
     "wintec_tes",
     "Wintec TES file",
-    "tes"
+    "tes",
+    NULL,
   },
   {
     &subrip_vecs,
     "subrip",
     "SubRip subtitles for video mapping (.srt)",
-    "srt"
+    "srt",
+    NULL,
   },
   {
     &format_garmin_xt_vecs,
     "garmin_xt",
     "Mobile Garmin XT Track files",
-    NULL
+    NULL,
+    NULL,
   },
   {
     &format_fit_vecs,
     "garmin_fit",
-    "Flexible and Interoperable Data Transfer (FIT) Activity file"
-    "fit"
+    "Flexible and Interoperable Data Transfer (FIT) Activity file",
+    "fit",
+    NULL,
   },
   {
     &mapbar_track_vecs,
     "mapbar",
     "Mapbar (China) navigation track for Sonim Xp3300",
-    "trk"
+    "trk",
+    NULL,
   },
 #endif // MAXIMAL_ENABLED
   {
     NULL,
     NULL,
     NULL,
-    NULL
+    NULL,
+    NULL,
   }
 };
 
