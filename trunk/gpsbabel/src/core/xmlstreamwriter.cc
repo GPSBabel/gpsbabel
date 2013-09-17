@@ -18,14 +18,9 @@
  */
 
 #include <src/core/xmlstreamwriter.h>
-#include <QtCore/QtGlobal>
 
 #include <QtCore/QFile>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-#include <QtCore/QRegExp>
-#else
-#include <QtCore/QRegularExpression>
-#endif
+#include <QtCore/QTextCodec>
 #include <QtCore/QXmlStreamWriter>
 
 // As this code began in C, we have several hundred places that write
@@ -37,50 +32,75 @@
 namespace gpsbabel
 {
 
-XmlStreamWriter:: XmlStreamWriter(QString* s) : QXmlStreamWriter(s) {}
+XmlTextCodec* XmlTextCodec::instance = new XmlTextCodec();
 
-XmlStreamWriter::XmlStreamWriter(QFile* f) : QXmlStreamWriter(f) {}
+XmlTextCodec::XmlTextCodec() : QTextCodec()
+{
+  utf8Codec = QTextCodec::codecForName("UTF-8");
+}
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-QRegExp XmlStreamWriter::badXml10 = QRegExp("[\\x0000-\\x0008]|[\\x000b-\\x000c]|[\\x000e-\\x001f]");
-#else
-QRegularExpression XmlStreamWriter::badXml10 = QRegularExpression("[\\x00-\\x08]|[\\x0b-\\x0c]|[\\x0e-\\x1f]");
-#endif
+QByteArray XmlTextCodec::convertFromUnicode(const QChar* chars, int len, QTextCodec::ConverterState* state) const
+{
+// Qt 4.7.4, 4.6.2 don't have IgnoreHeader set on the first call, which can
+// result in a BOM being output by utf8Codec.
+  state->flags |= QTextCodec::IgnoreHeader;
+  QByteArray r = utf8Codec->fromUnicode(chars, len, state);
+  char* data = r.data();
+  for (int i = 0; i < r.size(); i++) {
+    if ((0x00 <= data[i] && data[i] <= 0x08) ||
+        (0x0b <= data[i] && data[i] <= 0x0c) ||
+        (0x0e <= data[i] && data[i] <= 0x1f)) {
+      data[i] = ' ';
+    }
+  }
+  return r;
+}
+
+QString XmlTextCodec::convertToUnicode(const char* chars, int len, QTextCodec::ConverterState* state) const
+{
+  return utf8Codec->toUnicode(chars, len, state);
+}
+
+int XmlTextCodec::mibEnum() const
+{
+  return UTF8_FOR_XML_MIB;
+}
+
+// Our name must not overlap with UTF-8 or it may be returned by QTextCodec::codecForName("UTF-8")
+QByteArray XmlTextCodec::name() const
+{
+  return QByteArray("UTF-8-XML");
+}
+
+XmlStreamWriter::XmlStreamWriter(QString* string) : QXmlStreamWriter(string)
+{
+}
+
+XmlStreamWriter::XmlStreamWriter(QFile* f) : QXmlStreamWriter(f)
+{
+  setCodec(XmlTextCodec::instance);
+}
+
+// We must overide the encoding, we don't want to use XmlTextCode::name().
+void XmlStreamWriter::writeStartDocument()
+{
+  writeProcessingInstruction("xml version=\"1.0\" encoding=\"UTF-8\"");
+}
 
 // Dont emit the attribute if there's nothing interesting in it.
-void XmlStreamWriter::writeOptionalAttribute(const QString& qualifiedName, QString value)
+void XmlStreamWriter::writeOptionalAttribute(const QString& qualifiedName, const QString& value)
 {
   if (!value.isEmpty()) {
-    QXmlStreamWriter::writeAttribute(qualifiedName, value.replace(badXml10, " "));
+    QXmlStreamWriter::writeAttribute(qualifiedName, value);
   }
 }
 
 // Dont emit the element if there's nothing interesting in it.
-void XmlStreamWriter::writeOptionalTextElement(const QString& qualifiedName, QString text)
+void XmlStreamWriter::writeOptionalTextElement(const QString& qualifiedName, const QString& text)
 {
   if (!text.isEmpty()) {
-    QXmlStreamWriter::writeTextElement(qualifiedName, text.replace(badXml10, " "));
+    QXmlStreamWriter::writeTextElement(qualifiedName, text);
   }
-}
-
-void XmlStreamWriter::writeAttribute(const QString& qualifiedName, QString value)
-{
-  QXmlStreamWriter::writeAttribute(qualifiedName, value.replace(badXml10, " "));
-}
-
-void XmlStreamWriter::writeCDATA(QString text)
-{
-  QXmlStreamWriter::writeCDATA(text.replace(badXml10, " "));
-}
-
-void XmlStreamWriter::writeCharacters(QString text)
-{
-  QXmlStreamWriter::writeCharacters(text.replace(badXml10, " "));
-}
-
-void XmlStreamWriter::writeTextElement(const QString& qualifiedName, QString value)
-{
-  QXmlStreamWriter::writeTextElement(qualifiedName, value.replace(badXml10, " "));
 }
 
 } // namespace gpsbabel

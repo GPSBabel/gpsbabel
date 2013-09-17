@@ -20,39 +20,41 @@
 #ifndef XMLSTREAMWRITER_H
 #define XMLSTREAMWRITER_H
 
-#include <QtCore/QtGlobal>
+#include <QtCore/QTextCodec>
 #include <QtCore/QXmlStreamWriter>
 
 class QFile;
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-class QRegExp;
-#else
-class QRegularExpression;
-#endif
 
 namespace gpsbabel
 {
 
-class XmlStreamWriter : public QXmlStreamWriter
+// From the "vendor" range, see:
+// https://www.iana.org/assignments/character-sets/character-sets.xhtml
+const int UTF8_FOR_XML_MIB = 2000;
+
+class XmlTextCodec : public QTextCodec
 {
 private:
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-  static QRegExp badXml10;
-#else
-  static QRegularExpression badXml10;
-#endif
-
+  QTextCodec* utf8Codec;
 public:
-  XmlStreamWriter(QString* s);
+  XmlTextCodec();
+  static XmlTextCodec *instance;
+  virtual QByteArray name() const;
+  virtual int mibEnum() const;
+protected:
+  virtual QByteArray convertFromUnicode(const QChar* chars, int len, QTextCodec::ConverterState* state) const;
+  virtual QString convertToUnicode(const char* chars, int len, QTextCodec::ConverterState* state) const;
+};
+
+class XmlStreamWriter : public QXmlStreamWriter
+{
+public:
+  XmlStreamWriter(QString* string);
   XmlStreamWriter(QFile* f);
 
-  void writeOptionalAttribute(const QString& qualifiedName, QString value);
-  void writeOptionalTextElement(const QString& qualifiedName, QString text);
-  void writeAttribute(const QString& qualifiedName, QString value);
-  void writeCDATA(QString text);
-  void writeCharacters(QString text);
-  void writeTextElement(const QString& qualifiedName, QString value);
-
+  void writeStartDocument(void);
+  void writeOptionalAttribute(const QString& qualifiedName, const QString& value);
+  void writeOptionalTextElement(const QString& qualifiedName, const QString& text);
 };
 
 } // namespace gpsbabel
