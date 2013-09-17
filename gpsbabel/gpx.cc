@@ -1257,7 +1257,6 @@ gpx_wr_init(const char* fname)
 
   writer = new gpsbabel::XmlStreamWriter(oqfile);
   writer->setAutoFormattingIndent(2);
-  writer->setCodec("UTF-8");
   writer->writeStartDocument();
 }
 
