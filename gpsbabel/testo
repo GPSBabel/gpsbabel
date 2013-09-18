@@ -21,6 +21,10 @@ if [ -x /usr/bin/hexdump ] ; then
 else
 	OD=${OD:-od -Ax -txC -v}
 fi
+XMLWF=xmlwf
+# set up a variable so we can skip extra tests when running valgrind
+echo "${PNAME}" | grep -q valgrind
+RUNNINGVALGRIND=$?
 
 TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
 mkdir -p $TMPDIR
@@ -65,6 +69,31 @@ gpsbabel()
 	}
 }
 
+utf8bomcheck()
+{
+  if [ ${RUNNINGVALGRIND} -ne  0 ]; then
+    if [ "$(head -c3 $1)" == $'\xef\xbb\xbf' ]; then
+      echo "ERROR: UTF-8 BOM found in $1"
+      let errorcount=errorcount+1
+    fi
+  fi
+}
+
+xmlwfcheck()
+{
+  if [ ${RUNNINGVALGRIND} -ne 0 ]; then
+    if which ${XMLWF} >& /dev/null; then
+      # xmlwf is a bit lame, exit status is always 0
+      rm -f ${TMPDIR}/xmlwf.out
+      ${XMLWF} $1 |& tee ${TMPDIR}/xmlwf.out
+      if [ -s ${TMPDIR}/xmlwf.out ]; then
+        echo "ERROR: xml is not well-formed in $1"
+        let errorcount=errorcount+1
+      fi
+    fi
+  fi
+}
+
 # Some formats are just too boring to test.   The ones that
 # are xcsv include 
 # garmin301 
@@ -81,8 +110,7 @@ gpsbabel()
 
 let errorcount=0;
 
-if [ $# -ge 1 ];
-then
+if [ $# -ge 1 ]; then
   while [ $# -ge 1 ];
   do
     t=${BASEPATH}/testo.d/$1.test
@@ -90,13 +118,41 @@ then
     . $t
     shift;
   done
-  exit $errorcount
+else
+  for i in ${BASEPATH}/testo.d/*.test
+  do
+    echo Running $i
+    . $i
+  done
 fi
 
-for i in ${BASEPATH}/testo.d/*.test
-do
-  echo Running $i
-  . $i
-done
+# Multiple tests produce these files in addition to gpx.test and kml.test,
+# e.g. tpo.test has produced problematic gpx and kml files.
+# For this reason this check isn't incorporated into each test.
+
+# reference/basecamp.gpx has a UTF-8 BOM which is useful for verifying this test.
+#cp reference/basecamp.gpx ${TMPDIR}
+#cp LineStyles.gpx.badchar ${TMPDIR}/bad.gpx
+XMLS=$(find ${TMPDIR} -name "*.gpx" -o -name "*.kml")
+
+if [ ${RUNNINGVALGRIND} -ne  0 ]; then
+  echo "Running UTF-8 BOM test"
+  for i in ${XMLS}
+  do
+    utf8bomcheck $i
+  done
+fi
+
+if [ ${RUNNINGVALGRIND} -ne  0 ]; then
+  if which ${XMLWF} >& /dev/null; then
+    echo "Running well-formed XML test"
+    for i in ${XMLS}
+    do
+      xmlwfcheck $i
+    done
+  else
+    echo "Skipping well-formed XML test"
+  fi
+fi
 
 exit $errorcount
