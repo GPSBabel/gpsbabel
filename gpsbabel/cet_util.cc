@@ -386,15 +386,16 @@ const char* cet_cs_utf8_alias[] = {
 cet_cs_vec_t cet_cs_vec_utf8 = {
   CET_CHARSET_UTF8,
   cet_cs_utf8_alias,
-  NULL,	/* dec */
-  NULL,	/* enc */
-  NULL,	/* link */
-  0,
-  0,
-  NULL,	/* extra */
-  0,	/* extras */
   NULL,
-  0
+  NULL,
+  NULL,
+  0,
+  0,
+  NULL,
+  0,
+  NULL,
+  0,
+  NULL,
 };
 
 void
@@ -1044,6 +1045,7 @@ cet_convert_route_hdr(const route_head* route)
 static void
 cet_convert_route_tlr(const route_head* route)
 {
+  (void)route;
 }
 
 /* %%% cet_convert_strings (public) %%%
@@ -1056,6 +1058,8 @@ void
 cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, const char* format)
 {
   char* cs_name_from, *cs_name_to;
+
+  (void)format;
 
   converter = NULL;
 

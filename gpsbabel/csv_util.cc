@@ -936,7 +936,7 @@ static
 int
 writehms(char* buff, size_t bufsize, const char* format, time_t t, int gmt)
 {
-  static struct tm no_time = {0};
+  static struct tm no_time = tm();
   static struct tm* stmp = &no_time;
 
   if (gmt) {
@@ -2195,6 +2195,7 @@ next:
 static void
 xcsv_noop(const route_head* wp)
 {
+  (void)wp;
   /* no-op */
 }
 

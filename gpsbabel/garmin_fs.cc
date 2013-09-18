@@ -463,6 +463,8 @@ garmin_fs_garmin_before_write(const waypoint* wpt, GPS_PWay way, const int proto
 {
   garmin_fs_t* gmsd = GMSD_FIND(wpt);
 
+  (void)protoid; // unused for now.
+
   if (gmsd == NULL) {
     return;
   }

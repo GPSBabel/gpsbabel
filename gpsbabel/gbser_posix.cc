@@ -325,11 +325,15 @@ int gbser__fill_buffer(void* handle, unsigned want, unsigned* ms)
       time_left = *ms - elapsed(&tv);
 
       if (FD_ISSET(h->fd, &rec)) {
+#if 0
+        // See below comment.
+
         unsigned vmin = 0, vtime = 0;
         if (time_left >= 100) {
           vmin  = want - h->inbuf_used;
           vtime = (unsigned) time_left / 100;
         }
+#endif
         // The commented out call to set_rx_timeout here is totally
         // legal by POSIX standards but does result in a flurry of
         // of tcsetattrs that slightly tweak VMIN/VTIME while there

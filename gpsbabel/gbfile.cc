@@ -359,6 +359,8 @@ stdapi_error(gbfile* self)
 static gbfile*
 memapi_open(gbfile* self, const char* mode)
 {
+  (void)mode;
+
   self->mempos = 0;
   self->memsz = 0;
   self->handle.mem = NULL;
@@ -445,6 +447,7 @@ memapi_write(const void* buf, const gbsize_t size, const gbsize_t members, gbfil
 static int
 memapi_flush(gbfile* self)
 {
+  (void)self;
   return 0;
 }
 
@@ -475,12 +478,14 @@ memapi_ungetc(const int c, gbfile* self)
 static void
 memapi_clearerr(gbfile* self)
 {
+  (void)self;
   return;
 }
 
 static int
 memapi_error(gbfile* self)
 {
+  (void)self;
   return 0;
 }
 
