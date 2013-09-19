@@ -10,8 +10,8 @@ compare ${TMPDIR}/magfile ${REFERENCE}/magfile
 # Magellanx is just like, but with longer names. (which this admittedly
 # doesn't actually exercise...)
 #
-gpsbabel -i magellan -f ${REFERENCE}/magfile -o magellanx -F ${TMPDIR}/magfile2
-compare ${TMPDIR}/magfile2 ${REFERENCE}/magfile
+gpsbabel -i magellan -f ${REFERENCE}/magxfile -o magellanx -F ${TMPDIR}/magxfile
+compare ${TMPDIR}/magxfile ${REFERENCE}/magxfile
 
 # Magellanx routes, however, have an extra 'name' field in them.
 gpsbabel -r -i magellanx -f ${REFERENCE}/route/magexplorist.rte -o magellanx -F ${TMPDIR}/magxfile.rte
