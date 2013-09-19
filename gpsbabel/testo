@@ -85,7 +85,7 @@ xmlwfcheck()
     if which ${XMLWF} >& /dev/null; then
       # xmlwf is a bit lame, exit status is always 0
       rm -f ${TMPDIR}/xmlwf.out
-      ${XMLWF} $1 |& tee ${TMPDIR}/xmlwf.out
+      ${XMLWF} $1 2>&1 | tee ${TMPDIR}/xmlwf.out
       if [ -s ${TMPDIR}/xmlwf.out ]; then
         echo "ERROR: xml is not well-formed in $1"
         let errorcount=errorcount+1
