@@ -912,6 +912,15 @@ mag_deinit(void)
   trk_head = NULL;
 }
 
+static void
+mag_wr_deinit(void)
+{
+  if (explorist) {
+    mag_writemsg("PMGNCMD,END");
+  }
+  mag_deinit();
+}
+
 /*
  * I'm tired of arguing with scanf about optional fields .  Detokenize
  * an incoming string that may contain empty fields.
@@ -1671,7 +1680,7 @@ ff_vecs_t magX_fvecs = {
   magX_rd_init,
   magX_wr_init,
   mag_deinit,
-  mag_deinit,
+  mag_wr_deinit,
   mag_read,
   mag_write,
   NULL,
