@@ -384,7 +384,7 @@ waypt_compute_bounds(bounds* bounds)
 }
 
 waypoint*
-find_waypt_by_name(const char* name)
+find_waypt_by_name(const QString& name)
 {
 #if NEWQ
   foreach(waypoint* waypointp, waypt_list) {
@@ -395,7 +395,7 @@ find_waypt_by_name(const char* name)
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     waypointp = (waypoint*) elem;
 #endif
-    if (0 == strcmp(waypointp->shortname, name)) {
+    if (waypointp->shortname == name) {
       return waypointp;
     }
   }
