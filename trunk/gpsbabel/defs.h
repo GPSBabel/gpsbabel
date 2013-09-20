@@ -437,49 +437,12 @@ const global_trait* get_traits();
  * be truncated, edited, or otherwise trimmed should be done on the
  * way to the target.
  */
-#if NEW_STRINGS
-// Pretty much every occurrence of CSTRc() in the code should be treated
-// as a TODO.  90% of them are variadic functions (warning, gbfprint, fatal)
-// that should really support stream operators.
-
-#undef CSTRc
-#define CSTRc(s) s.s_
-
-class String {
- public:
-  String() :
-    s_(NULL) {}
-
-  bool isEmpty() const {
-    return !(s_ && *s_);
-  }
-
-  // Support things that expect a pointer.  Almost all of these will
-  // ultimately go away, e.g. xfree(shortname);
-#if 1
-  operator char*() const {
-    return s_;
-  }
-#endif
-  // Support shortname = foo;
-#if 1
-  char* operator=(char* s) {
-    s_ = s;
-    return s_;
-  }
-#endif
-
-  // If something is expecting a QString already, just let them have one.
-  operator QString() const {
-   return s_;
-  }
-
-  char* s_;
-};
-
+#if NEW_STRINGS 
+  typedef QString String;
+  #define CSTRc(qstr) (qstr.toLatin1().constData())
 #else
-#define CSTRc(qstr) (qstr)
- typedef char* String;
+  #define CSTRc(qstr) (qstr)
+  typedef char* String;
 #endif
 
 class waypoint
@@ -735,7 +698,7 @@ void waypt_add_url(waypoint* wpt, const QString& link,
                    const QString& url_link_text);
 void xcsv_setup_internal_style(const char* style_buf);
 void xcsv_read_internal_style(const char* style_buf);
-waypoint* find_waypt_by_name(const char* name);
+waypoint* find_waypt_by_name(const QString& name);
 void waypt_backup(signed int* count, queue** head_bak);
 void waypt_restore(signed int count, queue* head_bak);
 
@@ -808,6 +771,7 @@ typedef mkshort_handle_imp* short_handle;
 
 #ifndef DEBUG_MEM
 char* mkshort(short_handle,  const char*);
+char* mkshort(short_handle,  const QString&);
 short_handle mkshort_new_handle(void);
 #else
 char* MKSHORT(short_handle,  const char*, DEBUG_PARAMS);
