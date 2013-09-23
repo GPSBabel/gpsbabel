@@ -40,6 +40,7 @@ csv_stringclean(const char* string, const char* chararray);
 CSV_STRINGCLEAN(const char* string, const char* chararray,DEBUG_PARAMS);
 #define csv_stringclean(s,c) CSV_STRINGCLEAN(s,c,__FILE__,__LINE__)
 #endif
+QString csv_stringclean(const QString& string, const char* chararray);
 
 void
 xcsv_data_read(void);

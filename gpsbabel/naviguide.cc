@@ -130,16 +130,15 @@ ng_convert_datum(waypoint* wpt)
 /*=================== File read/write utilities ==========================================*/
 
 static void
-ng_fwrite_wp_data(char* s, char* d, ng_wp_data_t* wp_data, gbfile* f)
+ng_fwrite_wp_data(const QString& s, const QString& d, ng_wp_data_t* wp_data, gbfile* f)
 {
   int i;
   char z[50];
 
   memset(z, 0, 50);
-
-  i = (s == NULL) ? 0 : strlen(s);
+  i = s.length();
   gbfwrite(&i, 1, 1, f);
-  gbfwrite(s, 1, i, f);
+  gbfwrite(CSTR(s), 1, i, f);
 
   gbfwrite(&wp_data->pad1[0], 8, 1, f);
   gbfputint32(wp_data->East, f);
@@ -147,9 +146,9 @@ ng_fwrite_wp_data(char* s, char* d, ng_wp_data_t* wp_data, gbfile* f)
   gbfwrite(&wp_data->pad2[0], 2, 1, f);
   gbfputint32(wp_data->Alt, f);
 
-  i = (d == NULL) ? 0 : strlen(d);
+  i = d.length();
   gbfwrite(&i, 1, 1, f);
-  gbfwrite(d, 1, i, f);
+  gbfwrite(CSTR(d), 1, i, f);
   gbfwrite(z, 44, 1, f);
 }
 
@@ -238,8 +237,6 @@ ng_fill_waypoint_default(void)
 static void
 ng_waypt_rd(const waypoint* wpt)
 {
-  char* s = NULL;
-
   char z[50];
   double lat, lon;
   static int current_wp_ix=0;
@@ -255,6 +252,7 @@ ng_waypt_rd(const waypoint* wpt)
   WPNC.wp_data.North = (int32_t)lat;
   WPNC.wp_data.East = (int32_t)lon;
 
+  String s;
   if (reorder_wp) {
     sprintf(temp_short_name, "A%03d", current_wp_ix);
     s = temp_short_name;

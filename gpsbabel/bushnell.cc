@@ -242,7 +242,7 @@ bushnell_write_one(const waypoint* wpt)
   gbfputc(0x01, file_out);  // Proximity alarm.  1 == "off", 3 == armed.
 
   ident = mkshort(mkshort_handle, wpt->shortname);
-  strncpy(tbuf, wpt->shortname, sizeof(tbuf));
+  strncpy(tbuf, CSTRc(wpt->shortname), sizeof(tbuf));
   tbuf[sizeof(tbuf)-1] = 0;
   gbfwrite(tbuf, sizeof(tbuf), 1, file_out);
 

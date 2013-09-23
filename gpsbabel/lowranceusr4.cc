@@ -108,13 +108,11 @@ lowranceusr4_readstr(char* buf, const int maxlen, gbfile* file, int bytes_per_ch
 }
 
 static void
-lowranceusr4_writestr(char* buf, gbfile* file, unsigned int bytes_per_char)
+lowranceusr4_writestr(const QString& buf, gbfile* file, unsigned int bytes_per_char)
 {
   unsigned int len = 0;
 
-  if (buf) {
-    len = strlen(buf);
-  }
+  len = buf.length();
 
   if (0xffffffff / bytes_per_char < len) {
     /* be pedantic and check for the unlikely event that we are asked
@@ -125,10 +123,10 @@ lowranceusr4_writestr(char* buf, gbfile* file, unsigned int bytes_per_char)
   gbfputint32(len*bytes_per_char, file_out);
 
   if (bytes_per_char == 1) {
-    (void) gbfwrite(buf, 1, len, file);
+    (void) gbfwrite(CSTR(buf), 1, len, file);
   } else {
     for (unsigned int i = 0; i < len; ++i) {
-      gbfputc(buf[i], file_out);
+      gbfputc(buf[i].cell(), file_out);
       for (unsigned int j = 1; j < bytes_per_char; ++j) {
         gbfputc('\0', file_out);
       }
@@ -287,7 +285,11 @@ static char
 same_points(const waypoint* A, const waypoint* B)
 {
   return ( /* !!! We are case-sensitive !!! */
+#if NEW_STRINGS
+           (A->shortname == B->shortname) &&
+#else
            (strcmp(A->shortname, B->shortname) == 0) &&
+#endif
            (A->latitude == B->latitude) &&
            (A->longitude == B->longitude));
 }

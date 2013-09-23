@@ -174,12 +174,12 @@ enigma_waypt_disp(const waypoint* wpt)
     le_write32(&ewpt.data.wp_altitude, METERS_TO_FEET(wpt->altitude) + 1000);
   }
   if (wpt->shortname != NULL) {
-    ewpt.shortname_len = min(6, strlen(wpt->shortname));
-    strncpy(ewpt.shortname, wpt->shortname, 6);
+    ewpt.shortname_len = min(6, strlen(CSTRc(wpt->shortname)));
+    strncpy(ewpt.shortname, CSTRc(wpt->shortname), 6);
   }
   if (wpt->description != NULL) {
-    ewpt.longname_len = min(27, strlen(wpt->description));
-    strncpy(ewpt.longname, wpt->description, 27);
+    ewpt.longname_len = min(27, strlen(CSTRc(wpt->description)));
+    strncpy(ewpt.longname, CSTRc(wpt->description), 27);
   }
   gbfwrite(&ewpt, sizeof(ewpt), 1, file_out);
 }
