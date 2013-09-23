@@ -144,7 +144,7 @@ fwrite_string(gbfile* fd, const char* str)
   }
 }
 static void
-fwrite_string(gbfile* fd, QString& str)
+fwrite_string(gbfile* fd, const QString& str)
 {
   if (str.isEmpty()) {
     fwrite_integer(fd, 0);
@@ -168,6 +168,12 @@ fwrite_fixedstring(gbfile* fd, const char* str, int fieldlen)
   for (; len != fieldlen; len++) {
     gbfputc(' ', fd);
   }
+}
+
+void
+fwrite_fixedstring(gbfile* fd, const QString& str, int fieldlen)
+{
+  fwrite_fixedstring(fd, CSTR(str), fieldlen);
 }
 
 /* Auxiliar functions */

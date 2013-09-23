@@ -345,7 +345,7 @@ gpsutil_disp(const waypoint* wpt)
   gbfprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5.f %-40.40s %5e  %d\n",
             global_opts.synthesize_shortnames ?
             mkshort_from_wpt(mkshort_handle, wpt) :
-            wpt->shortname,
+            CSTRc(wpt->shortname),
             lat < 0.0 ? 'S' : 'N',
             fabs(lat),
             lon < 0.0 ? 'W' : 'E',
