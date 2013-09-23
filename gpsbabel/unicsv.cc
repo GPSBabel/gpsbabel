@@ -1293,13 +1293,12 @@ unicsv_print_data_time(const QDateTime& idt)
 static void
 unicsv_waypt_enum_cb(const waypoint* wpt)
 {
-  const char* shortname;
   garmin_fs_t* gmsd;
 
-  shortname = (wpt->shortname) ? CSTRc(wpt->shortname) : "";
+  const QString& shortname = wpt->shortname;
   gmsd = GMSD_FIND(wpt);
 
-  if (*shortname) {
+  if (!shortname.isEmpty()) {
     gb_setbit(&unicsv_outp_flags, fld_shortname);
   }
   if (wpt->altitude != unknown_alt) {
@@ -1308,10 +1307,10 @@ unicsv_waypt_enum_cb(const waypoint* wpt)
   if (!wpt->icon_descr.isNull()) {
     gb_setbit(&unicsv_outp_flags, fld_symbol);
   }
-  if (wpt->description && *wpt->description && (strcmp(shortname, wpt->description) != 0)) {
+  if (wpt->description && *wpt->description && shortname != wpt->description) {
     gb_setbit(&unicsv_outp_flags, fld_description);
   }
-  if (wpt->notes && *wpt->notes && (strcmp(shortname, wpt->notes) != 0)) {
+  if (wpt->notes && *wpt->notes && shortname != wpt->notes) {
     if ((! wpt->description) || (strcmp(wpt->description, wpt->notes) != 0)) {
       gb_setbit(&unicsv_outp_flags, fld_notes);
     }
