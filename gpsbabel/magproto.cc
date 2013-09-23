@@ -112,7 +112,7 @@ static route_head* trk_head;
 static int ignore_unable;
 
 static waypoint* mag_wptparse(char*);
-typedef char* (cleanse_fn)(char*);
+typedef char* (cleanse_fn)(const char*);
 static cleanse_fn* mag_cleanse;
 static const char** os_get_magellan_mountpoints();
 
@@ -224,10 +224,11 @@ static icon_mapping_t* icon_mapping = map330_icon_table;
  *   freed when you're done with it.
  */
 static char*
-m315_cleanse(char* istring)
+m315_cleanse(const char* istring)
 {
   char* rstring = (char*) xmalloc(strlen(istring)+1);
-  char* i,*o;
+  char* o;
+  const char* i;
   static char m315_valid_chars[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789";
   for (o=rstring,i=istring; *i; i++) {
@@ -243,13 +244,14 @@ m315_cleanse(char* istring)
  * Do same for 330, Meridian, and SportTrak.
  */
 char*
-m330_cleanse(char* istring)
+m330_cleanse(const char* istring)
 {
   static char m330_valid_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
                                    "abcdefghijklmnopqrstuvwxyz"
                                    "0123456789+-.'/!@#<%^&>()=:\\";
   char* rstring = (char*) xmalloc(strlen(istring)+1);
-  char* o, *i;
+  char* o; 
+  const char* i;
 
   for (o=rstring,i=istring; *i; i++) {
     if (strchr(m330_valid_chars, *i)) {
