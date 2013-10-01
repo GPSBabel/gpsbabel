@@ -38,12 +38,12 @@ static char* mountpoint, *base, *path, *ext;
 static xg_callback device_s, id_s, path_s, ext_s, base_s, dir_s;
 jmp_buf gdx_jmp_buf;
 
-void type_s(const char* args, const QXmlStreamAttributes* unused)
+void type_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   type = strcmp(args, "GPSData");
 }
 
-void device_s(const char* args, const QXmlStreamAttributes* unused)
+void device_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (my_gdx_info) {
     fatal(MYNAME ": More than one device type found in file.\n");
@@ -52,27 +52,27 @@ void device_s(const char* args, const QXmlStreamAttributes* unused)
   my_gdx_info->device_desc = xstrdup(args);
 }
 
-void id_s(const char* args, const QXmlStreamAttributes* unused)
+void id_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   my_gdx_info->device_id = xstrdup(args);
 }
 
-void path_s(const char* args, const QXmlStreamAttributes* unused)
+void path_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   path = xstrdup(args);
 }
 
-void ext_s(const char* args, const QXmlStreamAttributes* unused)
+void ext_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   ext = xstrdup(args);
 }
 
-void base_s(const char* args, const QXmlStreamAttributes* unused)
+void base_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   base = xstrdup(args);
 }
 
-void dir_s(const char* args, const QXmlStreamAttributes* unused)
+void dir_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (type) {
     return;

@@ -80,7 +80,7 @@ ikt_object_end(void)
 }
 
 static void
-iktobj_waypt(const char* args, const QXmlStreamAttributes* attrv)
+iktobj_waypt(xg_string args, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("X")) {
     waypt->longitude = attrv->value("X").toString().toDouble();
@@ -91,7 +91,7 @@ iktobj_waypt(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-iktobj_trkpt(const char* args, const QXmlStreamAttributes* attrv)
+iktobj_trkpt(xg_string args, const QXmlStreamAttributes* attrv)
 {
   waypt = waypt_new();
   iktobj_waypt(args, attrv);
@@ -100,19 +100,19 @@ iktobj_trkpt(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-iktobj_name(const char* args, const QXmlStreamAttributes* unused)
+iktobj_name(xg_string args, const QXmlStreamAttributes* unused)
 {
   name = xstrdup(args);
 }
 
 static void
-iktobj_text(const char* args, const QXmlStreamAttributes* unused)
+iktobj_text(xg_string args, const QXmlStreamAttributes* unused)
 {
   text = xstrdup(args);
 }
 
 static void
-iktobj_type(const char* args, const QXmlStreamAttributes* unused)
+iktobj_type(xg_string args, const QXmlStreamAttributes* unused)
 {
   ikt_object_end();
 

@@ -451,7 +451,7 @@ gtc_trk_s(const char* unused, const QXmlStreamAttributes* unusedattrs)
 }
 
 void
-gtc_trk_ident(const char* args, const QXmlStreamAttributes* unused)
+gtc_trk_ident(xg_string args, const QXmlStreamAttributes* unused)
 {
   trk_head->rte_name = xstrdup(args);
 }
@@ -476,7 +476,7 @@ gtc_trk_pnt_s(const char* unused, const QXmlStreamAttributes* unusedattrs)
 }
 
 void
-gtc_trk_pnt_e(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_trk_pnt_e(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     if (lap_s) {
@@ -499,55 +499,55 @@ gtc_trk_pnt_e(const char* args, const QXmlStreamAttributes* unusedd)
 }
 
 void
-gtc_trk_utc(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_trk_utc(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->creation_time = xml_parse_time(args);
 }
 
 void
-gtc_trk_lat(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_trk_lat(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->latitude = atof(args);
 }
 
 void
-gtc_trk_long(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_trk_long(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->longitude = atof(args);
 }
 
 void
-gtc_trk_alt(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_trk_alt(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->altitude = atof(args);
 }
 
 void
-gtc_trk_dist(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_trk_dist(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->odometer_distance = atof(args);
 }
 
 void
-gtc_trk_hr(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_trk_hr(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->heartrate = atoi(args);
 }
 
 void
-gtc_trk_cad(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_trk_cad(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->cadence = atoi(args);
 }
 
 void
-gtc_trk_pwr(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_trk_pwr(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->power = atof(args);
 }
 
 void
-gtc_trk_spd(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_trk_spd(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   WAYPT_SET(wpt_tmp, speed, atof(args));
 }
@@ -559,7 +559,7 @@ gtc_wpt_crs_s(const char* unused, const QXmlStreamAttributes* unusedattrs)
 }
 
 void
-gtc_wpt_crs_e(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_wpt_crs_e(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     waypt_add(wpt_tmp);
@@ -578,7 +578,7 @@ gtc_wpt_pnt_s(const char* unused, const QXmlStreamAttributes* unusedattrs)
 }
 
 void
-gtc_wpt_pnt_e(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_wpt_pnt_e(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     /* Add the begin position of a CourseLap as
@@ -595,7 +595,7 @@ gtc_wpt_pnt_e(const char* args, const QXmlStreamAttributes* unusedd)
 }
 
 void
-gtc_wpt_ident(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_wpt_ident(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->shortname = xstrdup(args);
   /* Set also as notes for compatibility with garmin usb format */
@@ -603,25 +603,25 @@ gtc_wpt_ident(const char* args, const QXmlStreamAttributes* unusedd)
 }
 
 void
-gtc_wpt_lat(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_wpt_lat(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->latitude = atof(args);
 }
 
 void
-gtc_wpt_long(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_wpt_long(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->longitude = atof(args);
 }
 
 void
-gtc_wpt_icon(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_wpt_icon(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->icon_descr = args;
 }
 
 void
-gtc_wpt_notes(const char* args, const QXmlStreamAttributes* unusedd)
+gtc_wpt_notes(xg_string args, const QXmlStreamAttributes* unusedd)
 {
   wpt_tmp->description = xstrdup(args);
 }

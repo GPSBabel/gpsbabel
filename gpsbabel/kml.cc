@@ -270,13 +270,13 @@ const char* kml_tags_to_ignore[] = {
   NULL,
 };
 
-void wpt_s(const char* args, const QXmlStreamAttributes* unused)
+void wpt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp = waypt_new();
   wpt_tmp_queued = 0;
 }
 
-void wpt_e(const char* args, const QXmlStreamAttributes* unused)
+void wpt_e(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (wpt_tmp_queued) {
     waypt_add(wpt_tmp);
@@ -286,14 +286,14 @@ void wpt_e(const char* args, const QXmlStreamAttributes* unused)
   wpt_tmp_queued = 0;
 }
 
-void wpt_name(const char* args, const QXmlStreamAttributes* unused)
+void wpt_name(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     wpt_tmp->shortname = xstrdup(args);
   }
 }
 
-void wpt_desc(const char* args, const QXmlStreamAttributes* unused)
+void wpt_desc(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     char* tmp, *c;
@@ -307,12 +307,12 @@ void wpt_desc(const char* args, const QXmlStreamAttributes* unused)
   }
 }
 
-void wpt_time(const char* args, const QXmlStreamAttributes* unused)
+void wpt_time(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
 
-void wpt_coord(const char* args, const QXmlStreamAttributes* attrv)
+void wpt_coord(xg_string args, const QXmlStreamAttributes* attrv)
 {
   int n = 0;
   double lat, lon, alt;
@@ -328,14 +328,14 @@ void wpt_coord(const char* args, const QXmlStreamAttributes* attrv)
   wpt_tmp_queued = 1;
 }
 
-void wpt_icon(const char* args, const QXmlStreamAttributes* unused)
+void wpt_icon(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (wpt_tmp)  {
     wpt_tmp->icon_descr = args;
   }
 }
 
-void trk_coord(const char* args, const QXmlStreamAttributes* attrv)
+void trk_coord(xg_string args, const QXmlStreamAttributes* attrv)
 {
   int consumed = 0;
   double lat, lon, alt;

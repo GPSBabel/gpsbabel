@@ -57,7 +57,7 @@ xg_tag_mapping google_map[] = {
   { NULL, (xg_cb_type)0,              NULL }
 };
 
-void goog_script(const char* args, const QXmlStreamAttributes* unused)
+void goog_script(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     if (script) {
@@ -68,7 +68,7 @@ void goog_script(const char* args, const QXmlStreamAttributes* unused)
   }
 }
 
-void goog_points(const char* args, const QXmlStreamAttributes* unused)
+void goog_points(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     if (encoded_points) {
@@ -79,7 +79,7 @@ void goog_points(const char* args, const QXmlStreamAttributes* unused)
   }
 }
 
-void goog_levels(const char* args, const QXmlStreamAttributes* unused)
+void goog_levels(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (args) {
     if (encoded_levels) {
@@ -98,7 +98,7 @@ static int goog_segroute = 0;
  * The segments contain an index into the points array.  We use that
  * index to find the waypoint and insert a better name for it.
  */
-void goog_segment_s(const char* args, const QXmlStreamAttributes* attrv)
+void goog_segment_s(xg_string args, const QXmlStreamAttributes* attrv)
 {
   QStringRef ptidx = attrv->value("pointIndex");
   if (!ptidx.isEmpty()) {
@@ -107,7 +107,7 @@ void goog_segment_s(const char* args, const QXmlStreamAttributes* attrv)
   }
 }
 
-void goog_segment(const char* args, const QXmlStreamAttributes* unused)
+void goog_segment(xg_string args, const QXmlStreamAttributes* unused)
 {
   waypoint* wpt_tmp;
 
@@ -119,7 +119,7 @@ void goog_segment(const char* args, const QXmlStreamAttributes* unused)
   }
 }
 
-void goog_td_s(const char* args, const QXmlStreamAttributes* attrv)
+void goog_td_s(xg_string args, const QXmlStreamAttributes* attrv)
 {
   bool isdesc = false, isseg = false;
   QStringRef aclass = attrv->value("class");
@@ -155,7 +155,7 @@ void goog_td_s(const char* args, const QXmlStreamAttributes* attrv)
   }
 }
 
-void goog_td_b(const char* args, const QXmlStreamAttributes* unused)
+void goog_td_b(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (goog_segname[0] == '\\' && !strchr(args, '\xa0')) {
     if (goog_realname) {
@@ -166,7 +166,7 @@ void goog_td_b(const char* args, const QXmlStreamAttributes* unused)
     strcpy(goog_realname, args);
   }
 }
-void goog_td_e(const char* args, const QXmlStreamAttributes* unused)
+void goog_td_e(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (goog_segname[0] == '\\' && goog_realname) {
     goog_segment(goog_realname, NULL/*unused*/);
@@ -200,7 +200,7 @@ static long decode_goog64(char** str)
   return result/2;
 }
 
-void goog_poly_e(const char* args, const QXmlStreamAttributes* unused)
+void goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
 {
   long lat = 0;
   long lon = 0;

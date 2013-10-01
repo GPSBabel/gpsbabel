@@ -192,81 +192,81 @@ hiketech_write(void)
 }
 
 static
-void	 ht_wpt_s(const char* args, const QXmlStreamAttributes* unused)
+void	 ht_wpt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp = waypt_new();
 }
 
 static
-void  	ht_ident(const char* args, const QXmlStreamAttributes* unused)
+void  	ht_ident(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->shortname = xstrdup(args);
 }
 
 static
-void 	ht_sym(const char* args, const QXmlStreamAttributes* unused)
+void 	ht_sym(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->icon_descr = args;
 }
 
 static
-void  	ht_lat(const char* args, const QXmlStreamAttributes* unused)
+void  	ht_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->latitude = atof(args);
 }
 
 static
-void  	ht_long(const char* args, const QXmlStreamAttributes* unused)
+void  	ht_long(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->longitude = atof(args);
 }
 
 static
-void  	ht_alt(const char* args, const QXmlStreamAttributes* unused)
+void  	ht_alt(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->altitude = atof(args);
 }
 
 static
-void  	ht_wpt_e(const char* args, const QXmlStreamAttributes* unused)
+void  	ht_wpt_e(xg_string args, const QXmlStreamAttributes* unused)
 {
   waypt_add(wpt_tmp);
   wpt_tmp = NULL;
 }
 
 static
-void	ht_trk_s(const char* args, const QXmlStreamAttributes* unused)
+void	ht_trk_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   trk_head = route_head_alloc();
   track_add_head(trk_head);
 }
 
 static
-void	ht_trk_e(const char* args, const QXmlStreamAttributes* unused)
+void	ht_trk_e(xg_string args, const QXmlStreamAttributes* unused)
 {
 
 }
 
 static
-void	ht_trk_ident(const char* args, const QXmlStreamAttributes* unused)
+void	ht_trk_ident(xg_string args, const QXmlStreamAttributes* unused)
 {
   trk_head->rte_name = xstrdup(args);
 }
 
 static
-void	ht_trk_pnt_s(const char* args, const QXmlStreamAttributes* unused)
+void	ht_trk_pnt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp = waypt_new();
 }
 
 static
-void	ht_trk_pnt_e(const char* args, const QXmlStreamAttributes* unused)
+void	ht_trk_pnt_e(xg_string args, const QXmlStreamAttributes* unused)
 {
   track_add_wpt(trk_head, wpt_tmp);
 }
 
 static
-void	ht_trk_utc(const char* args, const QXmlStreamAttributes* unused)
+void	ht_trk_utc(xg_string args, const QXmlStreamAttributes* unused)
 {
   struct tm tm;
   time_t utc;
@@ -285,19 +285,19 @@ void	ht_trk_utc(const char* args, const QXmlStreamAttributes* unused)
 }
 
 static
-void	ht_trk_lat(const char* args, const QXmlStreamAttributes* unused)
+void	ht_trk_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->latitude = atof(args);
 }
 
 static
-void	ht_trk_long(const char* args, const QXmlStreamAttributes* unused)
+void	ht_trk_long(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->longitude = atof(args);
 }
 
 static
-void	ht_trk_alt(const char* args, const QXmlStreamAttributes* unused)
+void	ht_trk_alt(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->altitude = atof(args);
 }

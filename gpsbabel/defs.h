@@ -440,9 +440,11 @@ const global_trait* get_traits();
 #if NEW_STRINGS 
   typedef QString String;
   #define CSTRc(qstr) (qstr.toLatin1().constData())
+  typedef const QString& xg_string;
 #else
   #define CSTRc(qstr) (qstr)
   typedef char* String;
+  typedef const char* xg_string;
 #endif
 
 class waypoint
