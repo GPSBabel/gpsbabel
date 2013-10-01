@@ -81,7 +81,7 @@ static xg_callback	ignr_nb_etapes, ignr_descr;
 static xg_callback	ignr_etape_begin, ignr_etape_end;
 
 static void
-ignr_start(const char* args, const QXmlStreamAttributes* attrv)
+ignr_start(xg_string args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((track != NULL));
 
@@ -90,13 +90,13 @@ ignr_start(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-ignr_nb_etapes(const char* args, const QXmlStreamAttributes* attrv)
+ignr_nb_etapes(xg_string args, const QXmlStreamAttributes* attrv)
 {
   xmlpoints = atoi(args);
 }
 
 static void
-ignr_descr(const char* args, const QXmlStreamAttributes* attrv)
+ignr_descr(xg_string args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((track == NULL));
 
@@ -106,7 +106,7 @@ ignr_descr(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-ignr_etape_begin(const char* args, const QXmlStreamAttributes* attrv)
+ignr_etape_begin(xg_string args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((wpt != NULL));
 
@@ -114,7 +114,7 @@ ignr_etape_begin(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-ignr_etape_end(const char* args, const QXmlStreamAttributes* attrv)
+ignr_etape_end(xg_string args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((track == NULL) || (wpt == NULL));
 
@@ -123,7 +123,7 @@ ignr_etape_end(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-ignr_etape_pos(const char* args, const QXmlStreamAttributes* attrv)
+ignr_etape_pos(xg_string args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((wpt == NULL) || (args == NULL));
 
@@ -133,7 +133,7 @@ ignr_etape_pos(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-ignr_etape_alt(const char* args, const QXmlStreamAttributes* attrv)
+ignr_etape_alt(xg_string args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((wpt == NULL));
   if (args == NULL) {

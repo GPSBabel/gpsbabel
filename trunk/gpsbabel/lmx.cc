@@ -336,67 +336,67 @@ lmx_rd_deinit(void)
 
 
 static void
-lmx_lm_start(const char* args, const QXmlStreamAttributes* unused)
+lmx_lm_start(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp = waypt_new();
 }
 
 static void
-lmx_lm_end(const char* args, const QXmlStreamAttributes* unused)
+lmx_lm_end(xg_string args, const QXmlStreamAttributes* unused)
 {
   waypt_add(wpt_tmp);
 }
 
 static void
-lmx_lm_lat(const char* args, const QXmlStreamAttributes* unused)
+lmx_lm_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->latitude = atof(args);
 }
 
 static void
-lmx_lm_lon(const char* args, const QXmlStreamAttributes* unused)
+lmx_lm_lon(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->longitude = atof(args);
 }
 
 static void
-lmx_lm_alt(const char* args, const QXmlStreamAttributes* unused)
+lmx_lm_alt(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->altitude = atof(args);
 }
 
 static void
-lmx_lm_name(const char* args, const QXmlStreamAttributes* unused)
+lmx_lm_name(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->shortname = xstrdup(args);
 }
 
 static void
-lmx_lm_desc(const char* args, const QXmlStreamAttributes* unused)
+lmx_lm_desc(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->description = xstrdup(args);
 }
 
 static void
-lmx_lm_mlink_s(const char* args, const QXmlStreamAttributes* unused)
+lmx_lm_mlink_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   urllink = urllinkt = QString();
 }
 
 static void
-lmx_lm_link(const char* args, const QXmlStreamAttributes* unused)
+lmx_lm_link(xg_string args, const QXmlStreamAttributes* unused)
 {
   urllink = args;
 }
 
 static void
-lmx_lm_linkt(const char* args, const QXmlStreamAttributes* unused)
+lmx_lm_linkt(xg_string args, const QXmlStreamAttributes* unused)
 {
   urllinkt = args;
 }
 
 static void
-lmx_lm_mlink_e(const char* args, const QXmlStreamAttributes* unused)
+lmx_lm_mlink_e(xg_string args, const QXmlStreamAttributes* unused)
 {
   waypt_add_url(wpt_tmp, urllink, urllinkt);
 }

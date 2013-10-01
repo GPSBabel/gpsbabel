@@ -43,14 +43,14 @@ static arglist_t jogmap_args[] = {
 
 
 static void
-jogmap_markers(const char* args, const QXmlStreamAttributes* attrv)
+jogmap_markers(xg_string args, const QXmlStreamAttributes* attrv)
 {
   trk = route_head_alloc();
   track_add_head(trk);
 }
 
 static void
-jogmap_marker(const char* args, const QXmlStreamAttributes* attrv)
+jogmap_marker(xg_string args, const QXmlStreamAttributes* attrv)
 {
   waypoint* wpt = waypt_new();
 

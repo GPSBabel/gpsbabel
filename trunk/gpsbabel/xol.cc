@@ -56,7 +56,7 @@ xg_tag_mapping xol_map[] = {
 
 
 static void
-xol_overlay(const char* args, const QXmlStreamAttributes* attrv)
+xol_overlay(xg_string args, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("version")) {
     if (attrv->value("version") != "1.0") {
@@ -67,7 +67,7 @@ xol_overlay(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-xol_shape(const char* args, const QXmlStreamAttributes* attrv)
+xol_shape(xg_string args, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("type")) {
     if (attrv->value("type") == "waypoint") {
@@ -106,7 +106,7 @@ xol_shape(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-xol_shape_end(const char* args, const QXmlStreamAttributes* unused)
+xol_shape_end(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (wpt) {
     if (trk) {
@@ -124,7 +124,7 @@ xol_shape_end(const char* args, const QXmlStreamAttributes* unused)
 }
 
 static void
-xol_waypt(const char* args, const QXmlStreamAttributes* attrv)
+xol_waypt(xg_string args, const QXmlStreamAttributes* attrv)
 {
   int x=0, y=0;
 

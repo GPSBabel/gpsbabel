@@ -74,7 +74,7 @@ xg_tag_mapping tef_xml_map[] = {
  */
 
 void
-tef_start(const char* args, const QXmlStreamAttributes* attrv)
+tef_start(xg_string args, const QXmlStreamAttributes* attrv)
 {
   bool valid = false;
 
@@ -98,7 +98,7 @@ tef_start(const char* args, const QXmlStreamAttributes* attrv)
  */
 
 static void
-tef_header(const char* args, const QXmlStreamAttributes* attrv)
+tef_header(xg_string args, const QXmlStreamAttributes* attrv)
 {
   route = route_head_alloc();
   foreach(QXmlStreamAttribute attr, *attrv) {
@@ -112,7 +112,7 @@ tef_header(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-tef_list_start(const char* args, const QXmlStreamAttributes* attrv)
+tef_list_start(xg_string args, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("ItemCount")) {
     item_count = attrv->value("ItemCount").toString().toUInt();
@@ -199,13 +199,13 @@ waypoint_final()
 }
 
 static void
-tef_item_end(const char* args, const QXmlStreamAttributes* unused)
+tef_item_end(xg_string args, const QXmlStreamAttributes* unused)
 {
   waypoint_final();
 }
 
 static void
-tef_list_end(const char* args, const QXmlStreamAttributes* unused)
+tef_list_end(xg_string args, const QXmlStreamAttributes* unused)
 {
   waypoint_final();
   if (waypoints != item_count)
@@ -214,7 +214,7 @@ tef_list_end(const char* args, const QXmlStreamAttributes* unused)
 }
 
 static void
-tef_item_start(const char* args, const QXmlStreamAttributes* attrv)
+tef_item_start(xg_string args, const QXmlStreamAttributes* attrv)
 {
   waypoints++;
 
@@ -262,7 +262,7 @@ tef_read_comma_float(const QStringRef& value)
 }
 
 static void
-tef_point(const char* args, const QXmlStreamAttributes* attrv)
+tef_point(xg_string args, const QXmlStreamAttributes* attrv)
 {
   if (!wpt_tmp) {
     return;

@@ -466,7 +466,7 @@ osm_strip_html(const char* str)
 
 
 static void
-osm_node_end(const char* args, const QXmlStreamAttributes* unused)
+osm_node_end(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (wpt) {
     if (wpt->wpt_flags.fmt_use) {
@@ -480,7 +480,7 @@ osm_node_end(const char* args, const QXmlStreamAttributes* unused)
 
 
 static void
-osm_node(const char* args, const QXmlStreamAttributes* attrv)
+osm_node(xg_string args, const QXmlStreamAttributes* attrv)
 {
   wpt = waypt_new();
 
@@ -513,7 +513,7 @@ osm_node(const char* args, const QXmlStreamAttributes* attrv)
 
 
 static void
-osm_node_tag(const char* args, const QXmlStreamAttributes* attrv)
+osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
 {
   QByteArray qkey, qvalue;
   const char* key = "", *value = "";
@@ -582,7 +582,7 @@ osm_node_tag(const char* args, const QXmlStreamAttributes* attrv)
 
 
 static void
-osm_way(const char* args, const QXmlStreamAttributes* attrv)
+osm_way(xg_string args, const QXmlStreamAttributes* attrv)
 {
   rte = route_head_alloc();
 
@@ -593,7 +593,7 @@ osm_way(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-osm_way_nd(const char* args, const QXmlStreamAttributes* attrv)
+osm_way_nd(xg_string args, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("ref")) {
     QString atstr = attrv->value("ref").toString();
@@ -611,7 +611,7 @@ osm_way_nd(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-osm_way_tag(const char* args, const QXmlStreamAttributes* attrv)
+osm_way_tag(xg_string args, const QXmlStreamAttributes* attrv)
 {
   QByteArray qkey, qvalue;
   const char* key = "", *value = "";
@@ -643,7 +643,7 @@ osm_way_tag(const char* args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-osm_way_end(const char* args, const QXmlStreamAttributes* unused)
+osm_way_end(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (rte) {
     route_add_head(rte);
