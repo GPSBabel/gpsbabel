@@ -17,7 +17,7 @@
 
  */
 
-#include <src/core/xmlstreamwriter.h>
+#include "src/core/xmlstreamwriter.h"
 
 #include <QtCore/QFile>
 #include <QtCore/QTextCodec>
