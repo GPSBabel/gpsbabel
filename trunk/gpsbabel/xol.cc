@@ -54,7 +54,6 @@ xg_tag_mapping xol_map[] = {
   { NULL,	(xg_cb_type)0,		NULL }
 };
 
-
 static void
 xol_overlay(xg_string args, const QXmlStreamAttributes* attrv)
 {
@@ -167,7 +166,11 @@ xol_fatal_outside(const waypoint* wpt)
 {
   gbfprintf(fout, "#####\n");
   fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
+#if NEW_STRINGS
+        wpt->shortname.isEmpty() ? "Waypoint" : CSTRc(wpt->shortname),
+#else
         wpt->shortname ? CSTRc(wpt->shortname) : "Waypoint",
+#endif
         pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
         gt_get_mps_grid_longname(grid_swiss, MYNAME));
 }
@@ -183,11 +186,11 @@ xol_write_time(const waypoint* wpt)
 }
 
 static void
-xol_write_string(const char* name, const char* str)
+xol_write_string(const QString& name, const QString& str)
 {
-  if (str && *str) {
+  if (!str.isEmpty()) {
     QString temp = strenquote(str, '"');
-    gbfprintf(fout, " %s=%s", name, CSTR(temp));
+    gbfprintf(fout, " %s=%s", CSTR(name), CSTR(temp));
   }
 }
 
@@ -226,10 +229,9 @@ static void
 xol_waypt_disp_cb(const waypoint* wpt)
 {
   double x, y;
-  const char* name;
 
-  name = wpt->shortname;
-  if ((name == NULL) || (*name == '\0') || global_opts.synthesize_shortnames) {
+  QString name = wpt->shortname;
+  if (name.isEmpty() || global_opts.synthesize_shortnames) {
     name = mkshort_from_wpt(short_h, wpt);
   } else {
     name = mkshort(short_h, name);
@@ -255,8 +257,6 @@ xol_waypt_disp_cb(const waypoint* wpt)
   gbfprintf(fout, "%*s<point x=\"%.f\" y=\"%.f\"/>\n", space*2, "", x, y);
   gbfprintf(fout, "%*s</points>\n", --space*2, "");
   gbfprintf(fout, "%*s</shape>\n", --space*2, "");
-
-  xfree(name);
 }
 
 static void
