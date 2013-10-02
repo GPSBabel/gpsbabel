@@ -38,7 +38,8 @@ DEPRECIATED_SHAPE=pdbfile.cc
 # ALL_FMTS=$$MINIMAL_FMTS
 FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc \
-        nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc
+        nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc \
+		validate.cc
 
 SHAPE=shapelib/shpopen.c shapelib/dbfopen.c
 
@@ -59,7 +60,7 @@ SUPPORT = queue.cc route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           csv_util.cc strptime.c grtcirc.cc util_crc.cc xmlgeneric.cc \
           formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc \
           inifile.cc garmin_fs.cc gbsleep.cc units.cc gbser.cc \
-          gbfile.cc parse.cc session.cc main.cc globals.cc
+          gbfile.cc parse.cc session.cc main.cc globals.cc src/core/xmlstreamwriter.cc
 
 HEADERS =  \
 	an1sym.h \
@@ -235,7 +236,8 @@ HEADERS =  \
 	zlib/zconf.h \
 	zlib/zconf.in.h \
 	zlib/zlib.h \
-	zlib/zutil.h
+	zlib/zutil.h \
+	src/core/xmlstreamwriter.h
 
 SUBDIRS += jeeps
 
