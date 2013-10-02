@@ -572,6 +572,12 @@ mkshort(short_handle h, const char* istring)
   return ostring;
 }
 
+char *
+mkshort(short_handle h, const QString& istring)
+{
+  return mkshort(h, CSTR(istring));
+}
+
 /*
  * As above, but arg list is a waypoint so we can centralize
  * the code that considers the alternate sources.
