@@ -773,7 +773,7 @@ typedef mkshort_handle_imp* short_handle;
 
 #ifndef DEBUG_MEM
 char* mkshort(short_handle,  const char*);
-char* mkshort(short_handle,  const QString&);
+QString mkshort(short_handle,  const QString&);
 short_handle mkshort_new_handle(void);
 #else
 char* MKSHORT(short_handle,  const char*, DEBUG_PARAMS);
