@@ -572,10 +572,13 @@ mkshort(short_handle h, const char* istring)
   return ostring;
 }
 
-char *
+QString
 mkshort(short_handle h, const QString& istring)
 {
-  return mkshort(h, CSTR(istring));
+  char *t =  mkshort(h, CSTR(istring));
+  QString r(t);
+  xfree(t);
+  return r;
 }
 
 /*
