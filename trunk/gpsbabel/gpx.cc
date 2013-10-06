@@ -1670,7 +1670,7 @@ gpx_track_disp(const waypoint* waypointp)
 }
 
 static void
-gpx_track_tlr(const route_head* rte)
+gpx_track_tlr(const route_head*)
 {
   if (!QUEUE_EMPTY(&current_trk_head->waypoint_list)) {
     writer->writeEndElement();
@@ -1737,7 +1737,7 @@ gpx_route_disp(const waypoint* waypointp)
 }
 
 static void
-gpx_route_tlr(const route_head* rte)
+gpx_route_tlr(const route_head*)
 {
   writer->writeEndElement(); // Close rte tag.
 }
@@ -1895,35 +1895,35 @@ static
 arglist_t gpx_args[] = {
   {
     "snlen", &snlen, "Length of generated shortnames",
-    "32", ARGTYPE_INT, "1", NULL
+    "32", ARGTYPE_INT, "1", NULL, NULL
   },
   {
     "suppresswhite", &suppresswhite,
     "No whitespace in generated shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
   },
   {
     "logpoint", &opt_logpoint,
     "Create waypoints from geocache log entries",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
   },
   {
     "urlbase", &urlbase, "Base URL for link tag in output",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, NULL
   },
   {
     "gpxver", &gpx_wversion, "Target GPX version for output",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, NULL
   },
   {
     "humminbirdextensions", &opt_humminbirdext,
     "Add info (depth) as Humminbird extension",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
   },
   {
     "garminextensions", &opt_garminext,
     "Add info (depth) as Garmin extension",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
   },
   ARG_TERMINATOR
 };
@@ -1939,5 +1939,7 @@ ff_vecs_t gpx_vecs = {
   gpx_write,
   gpx_exit,
   gpx_args,
-  CET_CHARSET_UTF8, 0	/* non-fixed to create non UTF-8 XML's for testing | CET-REVIEW */
+  CET_CHARSET_UTF8, 0,	/* non-fixed to create non UTF-8 XML's for testing | CET-REVIEW */
+  NULL_POS_OPS,
+  NULL,
 };

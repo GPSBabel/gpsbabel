@@ -77,35 +77,38 @@ static char* mpsuseprox = NULL;
 
 static
 arglist_t mps_args[] = {
-  {"snlen", &snlen, "Length of generated shortnames", "10", ARGTYPE_INT, "1", NULL },
+  {
+    "snlen", &snlen, "Length of generated shortnames", "10", ARGTYPE_INT, "1",
+    NULL, NULL
+  },
   {
     "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
   },
   {
     "mpsverout", &mpsverout,
     "Version of mapsource file to generate (3,4,5)", NULL,
-    ARGTYPE_INT, ARG_NOMINMAX
+    ARGTYPE_INT, ARG_NOMINMAX, NULL
   },
   {
     "mpsmergeout", &mpsmergeouts, "Merge output with existing file",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
   },
   {
     "mpsusedepth", &mpsusedepth,
     "Use depth values on output (default is ignore)", NULL,
-    ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BOOL, ARG_NOMINMAX, NULL
   },
   {
     "mpsuseprox", &mpsuseprox,
     "Use proximity values on output (default is ignore)",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
   },
   ARG_TERMINATOR
 };
 
 static void
-mps_noop(const route_head* wp)
+mps_noop(const route_head*)
 {
   /* no-op */
 }
@@ -429,6 +432,8 @@ mps_mapsegment_r(gbfile* mps_file, int mps_ver)
 {
   int reclen;
 
+  (void)mps_ver;
+
 #if 0
   /* At the moment we're not doing anything with map segments, but here's the template code as if we were */
   char hdr[100];
@@ -464,6 +469,8 @@ mps_mapsetname_r(gbfile* mps_file, int mps_ver)
 {
   int reclen;
 
+  (void)mps_ver;
+
   /* At the moment we're not doing anything with mapsetnames, but here's the template code as if we were
   char hdr[100];
   mps_readstr(mps_file, hdr, sizeof(hdr));
@@ -489,6 +496,8 @@ mps_mapsetname_w(gbfile* mps_file, int mps_ver)
 {
   char hdr[100];
   int reclen;
+
+  (void)mps_ver;
 
   hdr[0] = 'V';	/* mapsetname start of record indicator			*/
   hdr[1] = 0;		/* zero length null terminated string			*/
@@ -944,6 +953,7 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
 #endif
 
     mpsclass = gbfgetint32(mps_file);			/* class */
+    (void)mpsclass;
     mps_readstr(mps_file, tbuf, sizeof(tbuf));	/* country */
 
     if ((mps_ver == 4) || (mps_ver == 5)) {
@@ -1456,6 +1466,7 @@ mps_routetrlr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
   char		hdr[2];
   int			value = 0;
 
+  (void)mps_ver;
   hdr[0] = 1;
 
   if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
@@ -1489,6 +1500,8 @@ mps_track_r(gbfile* mps_file, int mps_ver, route_head** trk)
   waypoint*	thisWaypoint;
   double	mps_altitude = unknown_alt;
   double	mps_depth = unknown_alt;
+
+  (void)mps_ver;
 
   trkname = gbfgetcstr(mps_file);
 #ifdef	MPS_DEBUG
@@ -1575,6 +1588,8 @@ mps_trackhdr_w(gbfile* mps_file, int mps_ver, const route_head* trk)
 
   queue* elem, *tmp;
 
+  (void)mps_ver;
+
   /* total nodes (waypoints) this track */
   trk_datapoints = 0;
   if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
@@ -1641,6 +1656,8 @@ mps_trackdatapoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt)
 
   double	mps_altitude = wpt->altitude;
   double	mps_depth = unknown_alt;
+
+  (void)mps_ver;
 
   lat = GPS_Math_Deg_To_Semi(wpt->latitude);
   lon = GPS_Math_Deg_To_Semi(wpt->longitude);
@@ -2093,5 +2110,7 @@ ff_vecs_t mps_vecs = {
   mps_write,
   NULL,
   mps_args,
-  CET_CHARSET_MS_ANSI	/* CET-REVIEW */
+  CET_CHARSET_MS_ANSI, 0,	/* CET-REVIEW */
+  NULL_POS_OPS,
+  NULL,
 };
