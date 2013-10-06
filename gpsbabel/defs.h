@@ -828,7 +828,7 @@ void setshort_is_utf8(short_handle h, const int is_utf8);
 #define ARGTYPE_FLAGMASK 0xfffff000
 
 #define ARG_NOMINMAX NULL, NULL
-#define ARG_TERMINATOR {0, 0, 0, 0, 0, ARG_NOMINMAX}
+#define ARG_TERMINATOR {0, 0, 0, 0, 0, ARG_NOMINMAX, NULL}
 
 typedef struct arglist {
   const char* argstring;
@@ -877,6 +877,8 @@ typedef struct position_ops {
   ff_writeposn wr_position;
   ff_deinit wr_deinit;
 } position_ops_t;
+
+#define NULL_POS_OPS { 0, 0, 0, 0, 0, 0, }
 
 /*
  *  Describe the file format to the caller.

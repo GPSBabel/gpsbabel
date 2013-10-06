@@ -679,23 +679,23 @@ static
 arglist_t mag_sargs[] = {
   {
     "deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING,
-    ARG_NOMINMAX
+    ARG_NOMINMAX, NULL
   },
   {
     "maxcmts", &cmts, "Max number of comments to write (maxcmts=200)",
-    "200", ARGTYPE_INT, ARG_NOMINMAX
+    "200", ARGTYPE_INT, ARG_NOMINMAX, NULL
   },
   {
     "baud", &bs, "Numeric value of bitrate (baud=4800)", "4800",
-    ARGTYPE_INT, ARG_NOMINMAX
+    ARGTYPE_INT, ARG_NOMINMAX, NULL
   },
   {
     "noack", &noack, "Suppress use of handshaking in name of speed",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
   },
   {
     "nukewpt", &nukewpt, "Delete all waypoints", NULL, ARGTYPE_BOOL,
-    ARG_NOMINMAX
+    ARG_NOMINMAX, NULL
   },
   ARG_TERMINATOR
 };
@@ -704,11 +704,11 @@ static
 arglist_t mag_fargs[] = {
   {
     "deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING,
-    ARG_NOMINMAX
+    ARG_NOMINMAX, NULL
   },
   {
     "maxcmts", &cmts, "Max number of comments to write (maxcmts=200)",
-    NULL, ARGTYPE_INT, ARG_NOMINMAX
+    NULL, ARGTYPE_INT, ARG_NOMINMAX, NULL
   },
   ARG_TERMINATOR
 };
@@ -987,6 +987,7 @@ mag_trkparse(char* trkmsg)
   lngdir = ifield[4][0];
   alt = atof(ifield[5]);
   altunits = ifield[6][0];
+  (void)altunits;
   sscanf(ifield[7], "%d.%d", &hms, &fracsecs);
   /* Field 8 is constant */
   /* Field nine is optional track name */
@@ -1030,7 +1031,6 @@ mag_trkparse(char* trkmsg)
 void
 mag_rteparse(char* rtemsg)
 {
-  char descr[100];
   int n;
   int frags,frag,rtenum;
   char xbuf[100],next_stop[100],abuf[100];
@@ -1040,7 +1040,6 @@ mag_rteparse(char* rtemsg)
   char* p;
   char* rte_name = NULL;
 
-  descr[0] = 0;
 #if 0
   sscanf(rtemsg,"$PMGNRTE,%d,%d,%c,%d%n",
          &frags,&frag,xbuf,&rtenum,&n);
@@ -1431,7 +1430,7 @@ mag_waypt_pr(const waypoint* waypointp)
 }
 
 static
-void mag_track_nop(const route_head* rte)
+void mag_track_nop(const route_head*)
 {
   return;
 }
@@ -1577,7 +1576,7 @@ mag_route_trl(const route_head* rte)
 }
 
 static void
-mag_route_hdr(const route_head* rh)
+mag_route_hdr(const route_head*)
 {
 }
 
@@ -1656,7 +1655,9 @@ ff_vecs_t mag_svecs = {
   mag_write,
   NULL,
   mag_sargs,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
+  NULL_POS_OPS,
+  NULL,
 };
 
 ff_vecs_t mag_fvecs = {
@@ -1670,7 +1671,9 @@ ff_vecs_t mag_fvecs = {
   mag_write,
   NULL,
   mag_fargs,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
+  NULL_POS_OPS,
+  NULL,
 };
 
 /*
@@ -1687,5 +1690,7 @@ ff_vecs_t magX_fvecs = {
   mag_write,
   NULL,
   mag_fargs,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
+  NULL_POS_OPS,
+  NULL,
 };
