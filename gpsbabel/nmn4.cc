@@ -50,7 +50,7 @@ arglist_t nmn4_args[] = {
 /* helpers */
 
 static char*
-nmn4_concat(const char* arg0, ...)
+nmn4_concat(char* arg0, ...)
 {
   va_list args;
   char* src, *res;
@@ -70,7 +70,7 @@ nmn4_concat(const char* arg0, ...)
         res = xstrappend(res, c);
       }
     }
-//    xfree(src);
+    xfree(src);
     src = va_arg(args, char*);
   }
   va_end(args);
@@ -95,12 +95,11 @@ static void
 nmn4_read_data(void)
 {
   char* buff;
-  char* str;
-  QString c;
+  char* str, *c;
   int column;
   int line = 0;
 
-  QString zip1, zip2, city, street, number;
+  char* zip1, *zip2, *city, *street, *number;
   route_head* route;
   waypoint* wpt;
 
@@ -119,12 +118,12 @@ nmn4_read_data(void)
     nmn4_check_line(buff);
 
     /* for a quiet compiler */
-    zip1 = zip2 = city = street = number = QString();
+    zip1 = zip2 = city = street = number = NULL;
 
     wpt = waypt_new();
 
     column = -1;
-    c = QString::fromLatin1(csv_lineparse(str, "|", "", column++));
+    c = csv_lineparse(str, "|", "", column++);
     while (c != NULL) {
       switch (column) {
       case  0: /* "-" */	/* unknown fields for the moment */
@@ -139,36 +138,46 @@ nmn4_read_data(void)
         break;
 
       case  4: 				/* ZIP Code */
-        if (c[0] != '-') {
-          zip1 = c;
+        if (*c != '-') {
+          zip1 = xstrdup(c);
+        } else {
+          zip1 = xstrdup("");
         }
         break;
 
       case  5: 				/* City */
-        if (c[0] != '-') {
-          city = c;
+        if (*c != '-') {
+          city = xstrdup(c);
+        } else {
+          city = xstrdup("");
         }
         break;
 
       case  6: 				/* ZIP Code -2- */
-        if (c[0] != '-') {
-          zip2 = c;
+        if (*c != '-') {
+          zip2 = xstrdup(c);
+        } else {
+          zip2 = xstrdup("");
         }
         break;
 
       case  7: 				/* Street */
-        if (c[0] != '-') {
-          street = c;
+        if (*c != '-') {
+          street = xstrdup(c);
+        } else {
+          street = xstrdup("");
         }
         break;
 
       case  8: 				/* Number */
-        if (c[0] != '-') {
-          number = c;
+        if (*c != '-') {
+          number = xstrdup(c);
+        } else {
+          number = xstrdup("");
         }
 
         /*
-           This is our final index
+          	   This is our final index
            All stuff for generating names or comments
            is hold locally.
 
@@ -176,40 +185,32 @@ nmn4_read_data(void)
            Instead we construct a description from that.
         */
 
-        if (zip1 == zip2) {
-          zip2 = QString();
+        if (strcmp(zip1, zip2) == 0) {
+          *zip2 = '\0';
         }
-        if (!city.isEmpty()) {
+        if (*city != '\0') {
           /*
           if any field following city has a value, add a comma to city
           */
-          if (!street.isEmpty() || !number.isEmpty() || !zip2.isEmpty()) {
-            city += ",";
+          if ((*street != '\0') || (*number != '\0') || (*zip2 != '\0')) {
+            city = xstrappend(city, ",");
           }
         }
 
         /* concats all fields to one string and release */
-#if NEW_STRINGS
-        wpt->description = zip1.trimmed() + " " +
-          city.trimmed() + " " +
-          street.trimmed() + " " +
-          number.trimmed() + " " +
-          zip2.trimmed();
-#else
-        wpt->description = nmn4_concat(CSTR(zip1), CSTR(city), CSTR(street), CSTR(number), CSTR(zip2), NULL);
-#endif
+        wpt->description = nmn4_concat(zip1, city, street, number, zip2, NULL);
         break;
 
       case 11: 				/* longitude */
-        wpt->longitude = c.toDouble();
+        sscanf(c, "%lf", &wpt->longitude);
         break;
 
       case 12: 				/* latitude */
-        wpt->latitude = c.toDouble();
+        sscanf(c, "%lf", &wpt->latitude);
         break;
 
       }
-      c = QString::fromLatin1(csv_lineparse(NULL, "|", "", column++));
+      c = csv_lineparse(NULL, "|", "", column++);
     }
     route_add_wpt(route, wpt);
   }
