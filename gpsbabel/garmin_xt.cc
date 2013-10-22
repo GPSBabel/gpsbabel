@@ -235,7 +235,7 @@ format_garmin_xt_proc_strk(void)
   int 		Count = 0; // Used to obtain number of read bytes
   int		NumberOfTracks = 0, TracksCompleted = 0; // Number of tracks in the file and number of processed tracks
   uint16_t	trackbytes = 0; // Bytes in track
-  uint8_t	TrackBlock[STRK_BLOCK_SIZE]; // File Block
+  uint8_t	TrackBlock[STRK_BLOCK_SIZE + 1]; // File Block
   uint8_t 	ii; // temp variable
   double		Lat = 0, Lon = 0; // wpt data
   double		PrevLat = 0, PrevLon = 0, PrevEle = 0; // wpt data
