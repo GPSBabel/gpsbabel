@@ -119,9 +119,9 @@ OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 DEPFILES = $(OBJS:.o=.d)
 
 .cc.o:
-	$(CXX)  @CPPFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
+	$(CXX)  @CPPFLAGS@ @CXXFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
 .c.o:
-	$(CC)  @CPPFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
+	$(CC)  @CPPFLAGS@ @CFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
 
 
 
@@ -141,7 +141,7 @@ WEB=@DOCDIR@
 all: gpsbabel$(EXEEXT)
 
 gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@ 
-	$(CXX)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
+	$(CXX)  $(CXXFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
 gpsbabel-debug: $(OBJS)
 	$(CXX)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
