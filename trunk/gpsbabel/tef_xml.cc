@@ -129,7 +129,7 @@ tef_list_start(xg_string args, const QXmlStreamAttributes* attrv)
  */
 
 static char*
-fix_notes(const char* name, char* notes)
+fix_notes(char* name, char* notes)
 {
   const char* cleft, *cright, *cback;
   char* ctmp;
@@ -162,6 +162,20 @@ fix_notes(const char* name, char* notes)
   return notes;
 }
 
+static char*
+fix_notes(const QString& name, const QString& notes)
+{
+
+// WTH?  fix_notes() modifies the note string...and
+// may reallocate it.
+  char* cname = xstrdup(name);
+  char* cnotes = xstrdup(notes);
+  char *r =  fix_notes(cname, cnotes);
+  xfree(cname);
+  xfree(cnotes);
+  return r;
+}
+
 static void
 waypoint_final()
 {
@@ -175,7 +189,11 @@ waypoint_final()
 
   if (version < 2) {	/* keep the old behaviour */
     wpt_tmp->notes = wpt_tmp->description;
+#if NEW_STRINGS
+    wpt_tmp->description = QString();
+#else
     wpt_tmp->description = NULL;
+#endif
   }
 
   wpt_tmp->notes = fix_notes(wpt_tmp->shortname, wpt_tmp->notes);

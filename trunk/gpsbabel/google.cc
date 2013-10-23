@@ -34,7 +34,6 @@ static const char* rd_fname;
 static int serial = 0;
 
 #define MYNAME "google"
-#define MY_CBUF 4096
 
 static xg_callback      goog_points, goog_levels, goog_poly_e, goog_script;
 static xg_callback	goog_segment_s, goog_segment, goog_td_s, goog_td_b;
@@ -59,9 +58,13 @@ xg_tag_mapping google_map[] = {
 
 void goog_script(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  if (true) {
+#else
   if (args) {
+#endif
     if (script) {
-      script = xstrappend(script, args);
+      script = xstrappend(script, CSTRc(args));
     } else {
       script = xstrdup(args);
     }
@@ -70,9 +73,13 @@ void goog_script(xg_string args, const QXmlStreamAttributes* unused)
 
 void goog_points(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  if (true) {
+#else
   if (args) {
+#endif
     if (encoded_points) {
-      encoded_points = xstrappend(encoded_points, args);
+      encoded_points = xstrappend(encoded_points, CSTRc(args));
     } else {
       encoded_points = xstrdup(args);
     }
@@ -81,9 +88,13 @@ void goog_points(xg_string args, const QXmlStreamAttributes* unused)
 
 void goog_levels(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  if (true) {
+#else
   if (args) {
+#endif
     if (encoded_levels) {
-      encoded_levels = xstrappend(encoded_levels, args);
+      encoded_levels = xstrappend(encoded_levels, CSTRc(args));
     } else {
       encoded_levels = xstrdup(args);
     }
@@ -113,8 +124,11 @@ void goog_segment(xg_string args, const QXmlStreamAttributes* unused)
 
   wpt_tmp = route_find_waypt_by_name(routehead[goog_segroute], goog_segname);
   if (wpt_tmp) {
+#if NEW_STRINGS
+#else
     xfree(wpt_tmp->shortname);
-    wpt_tmp->shortname = mkshort(desc_handle, args);
+#endif
+    wpt_tmp->shortname = mkshort(desc_handle, CSTRc(args));
     wpt_tmp->description = xstrdup(args);
   }
 }
@@ -157,13 +171,13 @@ void goog_td_s(xg_string args, const QXmlStreamAttributes* attrv)
 
 void goog_td_b(xg_string args, const QXmlStreamAttributes* unused)
 {
-  if (goog_segname[0] == '\\' && !strchr(args, '\xa0')) {
+  if (goog_segname[0] == '\\' && !strchr(CSTRc(args), '\xa0')) {
     if (goog_realname) {
       xfree(goog_realname);
       goog_realname = NULL;
     }
-    goog_realname = (char*) xmalloc(strlen(args)+1);
-    strcpy(goog_realname, args);
+    goog_realname = (char*) xmalloc(strlen(CSTRc(args))+1);
+    strcpy(goog_realname, CSTRc(args));
   }
 }
 void goog_td_e(xg_string args, const QXmlStreamAttributes* unused)
@@ -238,7 +252,11 @@ void goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
       wpt_tmp->longitude = lon / 100000.0;
       wpt_tmp->route_priority=level;
       wpt_tmp->shortname = (char*) xmalloc(7);
+#if NEW_STRINGS
+      wpt_tmp->shortname = QString().sprintf( "\\%5.5x", serial++);
+#else
       sprintf(wpt_tmp->shortname, "\\%5.5x", serial++);
+#endif
       route_add_wpt(routehead[goog_segroute], wpt_tmp);
     }
   }

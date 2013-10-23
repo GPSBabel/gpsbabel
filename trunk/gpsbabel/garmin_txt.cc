@@ -226,8 +226,11 @@ sort_waypt_cb(const void* a, const void* b)
 {
   const waypoint* wa = *(waypoint**)a;
   const waypoint* wb = *(waypoint**)b;
-
+#if NEW_STRINGS
+  return wa->shortname.compare(wb->shortname, Qt::CaseInsensitive);
+#else
   return case_ignore_strcmp(QString::fromLatin1(wa->shortname), QString::fromLatin1(wb->shortname));
+#endif
 }
 
 
@@ -351,7 +354,11 @@ print_position(const waypoint* wpt)
   if (! valid) {
     gbfprintf(fout, "#####\n");
     fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
+#if NEW_STRINGS
+          wpt->shortname.isEmpty() ? "Waypoint" : CSTR(wpt->shortname),
+#else
           wpt->shortname ? CSTRc(wpt->shortname) : "Waypoint",
+#endif
           pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
           gt_get_mps_grid_longname(grid_index, MYNAME));
   }
@@ -559,11 +566,19 @@ write_waypt(const waypoint* wpt)
     wpt_type = gt_waypt_class_names[0];
   }
 
+#if NEW_STRINGS
+  gbfprintf(fout, "Waypoint\t%s\t", CSTRc(wpt->shortname));
+#else
   gbfprintf(fout, "Waypoint\t%s\t", (wpt->shortname) ? CSTRc(wpt->shortname) : "");
+#endif
   if (wpt_class <= gt_waypt_class_airport_ndb) {
-    const char* temp = wpt->notes;
-    if (temp == NULL) {
+    QString temp = wpt->notes;
+    if (temp.isEmpty()) {
+#if NEW_STRINGS
+      if (wpt->description != wpt->shortname) {
+#else
       if (wpt->description && (strcmp(wpt->description, wpt->shortname) != 0)) {
+#endif
         temp = wpt->description;
       } else {
         temp = "";
@@ -645,8 +660,11 @@ route_disp_hdr_cb(const route_head* rte)
     gtxt_flags.route_header_written = 1;
     gbfprintf(fout, "\r\n\r\nHeader\t%s\r\n", headers[route_header]);
   }
-
+#if NEW_STRINGS
+  print_string("\r\nRoute\t%s\t", current_trk->rte_name);
+#else
   print_string("\r\nRoute\t%s\t", current_trk->rte_name ? CSTRc(current_trk->rte_name) : "");
+#endif
   print_distance(cur_info->length, 0, 1, 0);
   print_course(cur_info->first_wpt, cur_info->last_wpt);
   gbfprintf(fout, "\t%d waypoints\t", cur_info->count);
@@ -698,8 +716,11 @@ track_disp_hdr_cb(const route_head* track)
     gtxt_flags.track_header_written = 1;
     gbfprintf(fout, "\r\n\r\nHeader\t%s\r\n", headers[track_header]);
   }
-
+#if NEW_STRINGS
+  print_string("\r\nTrack\t%s\t", current_trk->rte_name);
+#else
   print_string("\r\nTrack\t%s\t", current_trk->rte_name ? CSTRc(current_trk->rte_name) : "");
+#endif
   print_date_and_time(cur_info->start, 0);
   print_date_and_time(cur_info->time, 1);
   print_distance(cur_info->length, 0, 1, 0);

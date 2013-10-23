@@ -61,8 +61,8 @@ static int datum;
 static int filetype;
 static route_head* route;
 static queue trackpts;
-static char* rte_name;
-static char* rte_desc;
+static QString rte_name;
+static QString rte_desc;
 
 static waypoint* trkpt_out;
 static route_head* trk_out;
@@ -212,7 +212,7 @@ finalize_tracks(void)
       trackno++;
       if (rte_name != NULL) {
         if (trackno > 1) {
-          xasprintf(&track->rte_name, "%s (%d)", rte_name, trackno);
+          xasprintf(&track->rte_name, "%s (%d)", CSTR(rte_name), trackno);
         } else {
           track->rte_name	= xstrdup(rte_name);
         }
@@ -366,7 +366,7 @@ rd_init(const char* fname)
   route = NULL;
   datum = DATUM_WGS84;
   filetype = 28;
-  rte_name = rte_desc = NULL;
+  rte_name = rte_desc = QString();
 
   QUEUE_INIT(&trackpts);
 }
@@ -375,12 +375,8 @@ static void
 rd_deinit(void)
 {
   gbfclose(fin);
-  if (rte_name) {
-    xfree(rte_name);
-  }
-  if (rte_desc) {
-    xfree(rte_desc);
-  }
+  rte_name = QString();
+  rte_desc = QString();
 }
 
 static void
@@ -507,7 +503,11 @@ any_hdr_calc_cb(const route_head* trk)
     return;
   }
 
-  if (!rte_name && trk->rte_name) {
+#if NEW_STRINGS
+  if (rte_name.isEmpty() && !trk->rte_name.isEmpty()) {
+#else
+  if (rte_name.isEmpty() && trk->rte_name) {
+#endif
     rte_name = trk->rte_name;
     rte_desc = trk->rte_desc;
   }
@@ -603,17 +603,17 @@ track_disp_wpt_cb(const waypoint* wpt)
   }
 
   if (flag == 1) {
-    const char* name = wpt->shortname;
+    QString name = wpt->shortname;
     if (name == NULL) {
       name = "Log paused";
     }
-    gbfprintf(fout, "\"MP\",\"%s\"", name);
+    gbfprintf(fout, "\"MP\",\"%s\"", CSTR(name));
   } else if (flag == 2) {
-    const char* name = wpt->shortname;
+    QString name = wpt->shortname;
     if (name == NULL) {
       name = "Log continued";
     }
-    gbfprintf(fout, "\"MP\",\"%s\"", name);
+    gbfprintf(fout, "\"MP\",\"%s\"", CSTR(name));
   } else {
     gbfprintf(fout, "\"TP\"");
   }
@@ -653,7 +653,7 @@ static void
 route_disp_wpt_cb(const waypoint* wpt)
 {
   if (this_route_valid) {
-    char* sn;
+    QString sn;
 
     if (global_opts.synthesize_shortnames) {
       sn = mkshort_from_wpt(short_h, wpt);
@@ -661,8 +661,7 @@ route_disp_wpt_cb(const waypoint* wpt)
       sn = mkshort(short_h, wpt->shortname);
     }
     gbfprintf(fout, "\"WP\",\"%s\",%.8lf,%.8lf,%.f\n",
-              sn, wpt->latitude, wpt->longitude, ALT(wpt));
-    xfree(sn);
+              CSTR(sn), wpt->latitude, wpt->longitude, ALT(wpt));
   }
 }
 
@@ -696,8 +695,8 @@ data_write(void)
   gbfprintf(fout, "SOURCE=FILE\n");
   gbfprintf(fout, "DATUM=WGS84\n");
 
-  rte_name = NULL;
-  rte_desc = NULL;
+  rte_name = QString();
+  rte_desc = QString();
   trkpt_out = NULL;
   opt_route_index_value = -1;	/* take all tracks from data pool */
   track_index = 0;
@@ -729,8 +728,8 @@ data_write(void)
     opt_route_index_value = atoi(opt_route_index);
     route_disp_all(any_hdr_calc_cb, any_tlr_calc_cb, any_waypt_calc_cb);
     gbfprintf(fout, "DISTANCE=%.f\n", all_dist);
-    if (rte_name) {
-      gbfprintf(fout, "NAME=%s\n", rte_name);
+    if (!rte_name.isEmpty()) {
+      gbfprintf(fout, "NAME=%s\n", CSTR(rte_name));
     }
     gbfprintf(fout, "[POINTS]\n");
     if (route_points > 0) {
@@ -744,8 +743,8 @@ data_write(void)
 
     track_disp_all(any_hdr_calc_cb, any_tlr_calc_cb, any_waypt_calc_cb);
     if (all_track_points > 0) {
-      if (rte_name) {
-        gbfprintf(fout, "NAME=%s\n", rte_name);
+      if (!rte_name.isEmpty()) {
+        gbfprintf(fout, "NAME=%s\n", CSTR(rte_name));
       }
       if (minalt != -unknown_alt) {
         gbfprintf(fout, "MINALT=%.f\n", minalt);

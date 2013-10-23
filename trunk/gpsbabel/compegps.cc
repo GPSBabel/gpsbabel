@@ -217,8 +217,13 @@ parse_wpt(char* buff)
         break;
       default:
         if (col > 7) {
+#if NEW_STRINGS
+          wpt->description += " ";
+          wpt->description += c;
+#else
           wpt->description = xstrappend(wpt->description, " ");
           wpt->description = xstrappend(wpt->description, c);
+#endif
         }
       }
     }
@@ -480,7 +485,7 @@ compegps_data_read(void)
 static void
 write_waypt_cb(const waypoint* wpt)
 {
-  char* name;
+  QString name;
 
   if (curr_index != target_index) {
     return;
@@ -488,7 +493,7 @@ write_waypt_cb(const waypoint* wpt)
 
   name = (snlen > 0) ? mkshort_from_wpt(sh, wpt) : csv_stringclean(wpt->shortname, " ");
 
-  gbfprintf(fout, "W  %s A ", name);
+  gbfprintf(fout, "W  %s A ", CSTR(name));
   gbfprintf(fout, "%.10f%c%c ",
             fabs(wpt->latitude), 0xBA, (wpt->latitude >= 0) ? 'N' : 'S');
   gbfprintf(fout, "%.10f%c%c ",
@@ -506,27 +511,24 @@ write_waypt_cb(const waypoint* wpt)
               wpt->icon_descr.isNull() ? "Waypoint" : wpt->icon_descr.toUtf8().data(),
               WAYPT_GET(wpt, proximity, 0));
   }
-  xfree(name);
 }
 
 static void
 write_route_hdr_cb(const route_head* rte)
 {
-  char* name;
   curr_route = (route_head*) rte;
   curr_index++;
   if (curr_index != target_index) {
     return;
   }
 
-  name = rte->rte_name;
+  QString name = rte->rte_name;
   if (name != NULL) {
     name = csv_stringclean(name, ",");
   } else {
     name = xstrdup(" ");
   }
-  gbfprintf(fout, "R  16711680,%s,1,-1\n", name);
-  xfree(name);
+  gbfprintf(fout, "R  16711680,%s,1,-1\n", CSTR(name));
 }
 
 static void
@@ -592,11 +594,8 @@ write_trkpt_cb(const waypoint* wpt)
   if (track_info_flag != 0) {
     track_info_flag = 0;
     if (curr_track->rte_name != NULL) {
-      char* name;
-
-      name = csv_stringclean(curr_track->rte_name, "|");
-      gbfprintf(fout, "t 4294967295|%s|-1|-1\n", name);
-      xfree(name);
+      QString name = csv_stringclean(curr_track->rte_name, "|");
+      gbfprintf(fout, "t 4294967295|%s|-1|-1\n", CSTR(name));
     }
   }
 }

@@ -40,7 +40,11 @@ jmp_buf gdx_jmp_buf;
 
 void type_s(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  type = args.compare("GPSData");
+#else
   type = strcmp(args, "GPSData");
+#endif
 }
 
 void device_s(xg_string args, const QXmlStreamAttributes* unused)
@@ -77,7 +81,11 @@ void dir_s(xg_string args, const QXmlStreamAttributes* unused)
   if (type) {
     return;
   }
+#if NEW_STRINGS
+  if ((args == "OutputFromUnit")) {
+#else
   if (0 == strcmp(args, "OutputFromUnit")) {
+#endif
     xasprintf(&my_gdx_info->from_device.path,  "%s%c%s",
               mountpoint, GB_PATHSEP, path);
     my_gdx_info->from_device.basename = xstrdup(base);
@@ -86,13 +94,17 @@ void dir_s(xg_string args, const QXmlStreamAttributes* unused)
               my_gdx_info->from_device.path,
               my_gdx_info->from_device.basename,
               my_gdx_info->from_device.extension);
+#if NEW_STRINGS
+  } if ((args == "InputToUnit")) {
+#else
   } else if (0 == strcmp(args, "InputToUnit")) {
+#endif
     xasprintf(&my_gdx_info->to_device.path,  "%s%c%s",
               mountpoint, GB_PATHSEP, path);
     my_gdx_info->to_device.basename = xstrdup(base);
     my_gdx_info->to_device.extension = xstrdup(ext);
   } else {
-    fatal(MYNAME ":Unknown direction '%s'\n", args);
+    fatal(MYNAME ":Unknown direction '%s'\n", CSTRc(args));
   }
 
   if (base) {

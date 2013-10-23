@@ -222,7 +222,11 @@ static void route_add_name(const route_head* hd)
   route_head* route;
 
   route = (route_head*) hd;
+#if NEW_STRINGS
+  grp = route->rte_name.toInt();
+#else
   grp = atoi(route->rte_name);
+#endif
   i = 0;
   while (i<groups_cnt && groups[i].group!=grp) {
     i++;
@@ -233,8 +237,12 @@ static void route_add_name(const route_head* hd)
   } else {
     strcpy(name,groups[i].name);
   }
+#if NEW_STRINGS
+  route->rte_name = name;
+#else
   route->rte_name = (char*) xrealloc(route->rte_name,(strlen(name)+1)*sizeof(char));
   strcpy(route->rte_name,name);
+#endif
 }
 
 static void ovl_read(void)
@@ -527,7 +535,7 @@ static void symbol_init(const route_head* hd)
   govl_group_cnt++;
 }
 
-static void symbol_text(double east,double north,char* text,int group)
+static void symbol_text(double east,double north,const QString& text,int group)
 {
   gbfprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
   gbfprintf(fpout,"Typ=2\n");                           // Text
@@ -540,7 +548,7 @@ static void symbol_text(double east,double north,char* text,int group)
   gbfprintf(fpout,"Dir=%d\n",100+((int) govl_dir));
   gbfprintf(fpout,"XKoord=%.8lf\n",east);  // precision 8 = better than 1mm
   gbfprintf(fpout,"YKoord=%.8lf\n",north);
-  gbfprintf(fpout,"Text=%s\n",text);
+  gbfprintf(fpout,"Text=%s\n",CSTR(text));
   govl_symbol_cnt++;
 }
 
@@ -631,21 +639,20 @@ static void symbol_deinit(const route_head* hd)
 static void overlay_waypt_pr(const waypoint* waypointp)
 {
   const char* oname;
-  char* odesc;
 
   /*
    * Desparation time, try very hard to get a good shortname
   */
-  odesc = waypointp->notes;
-  if (!odesc) {
+  QString odesc = waypointp->notes;
+  if (odesc.isEmpty()) {
     odesc = waypointp->description;
   }
-  if (!odesc) {
+  if (odesc.isEmpty()) {
     odesc = waypointp->shortname;
   }
   oname = global_opts.synthesize_shortnames ?
-          mkshort(mkshort_handle, odesc) :
-          waypointp->shortname;
+          mkshort(mkshort_handle, CSTR(odesc)) :
+          CSTRc(waypointp->shortname);
 
   gbfprintf(fpout,"[Symbol %d]\n",govl_symbol_cnt+1);
   gbfprintf(fpout,"Typ=1\n");

@@ -113,6 +113,21 @@ void wfff_s(xg_string args, const QXmlStreamAttributes* unused)
   ap_lat=0.0;
   ap_lon=0.0;
 }
+#if NEW_STRINGS
+// anything here involving 'xstrdup' should be fixed by fixing the underlying data type.
+void wfff_mac(const QString& args, const QXmlStreamAttributes* unused) { ap_mac = xstrdup(args); }
+void wfff_ssid(const QString& args, const QXmlStreamAttributes* unused) { ap_ssid = xstrdup(args); }
+void wfff_type(const QString& args, const QXmlStreamAttributes* unused) { ap_type = xstrdup(args); }
+void wfff_mnrssi(const QString& args, const QXmlStreamAttributes* unused) { ap_mnrssi = args.toDouble(); }
+void wfff_mxrssi(const QString& args, const QXmlStreamAttributes* unused) { ap_mxrssi = args.toDouble(); }
+void wfff_chan(const QString& args, const QXmlStreamAttributes* unused) { ap_chan = args.toInt(); }
+void wfff_first(const QString& args, const QXmlStreamAttributes* unused) { ap_first = xml_parse_time(args).toTime_t(); }
+void wfff_last(const QString& args, const QXmlStreamAttributes* unused) { ap_last = xstrdup(args); }
+void wfff_wep(const QString& args, const QXmlStreamAttributes* unused) { ap_wep = xstrdup(args); }
+void wfff_hdop(const QString& args, const QXmlStreamAttributes* unused) { ap_hdop = args.toDouble(); }
+void wfff_lat(const QString& args, const QXmlStreamAttributes* unused) { ap_lat = args.toDouble(); }
+void wfff_lon(const QString& args, const QXmlStreamAttributes* unused) { ap_lon = args.toDouble(); }
+#else
 
 void wfff_mac(xg_string args, const QXmlStreamAttributes* unused)
 {
@@ -197,6 +212,7 @@ void wfff_lon(xg_string args, const QXmlStreamAttributes* unused)
     ap_lon = atof(args);
   }
 }
+#endif
 
 /*	End of AP Block, set waypoint and add */
 static long tosscount=0;

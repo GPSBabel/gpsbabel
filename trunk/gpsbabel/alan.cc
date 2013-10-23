@@ -443,6 +443,12 @@ static void str2lab(char* dest, const char* src, int len, const char* fmt,
   }
 }
 
+static void str2lab(char* dest, const QString& src, int len, const char* fmt,
+                    int n)
+{
+  str2lab(dest, CSTR(src), len, fmt, n);
+}
+
 static void pack_time(time_t t, int32_t* date, int32_t* time)
 {
   struct tm* tm;
@@ -818,7 +824,7 @@ static void trl_track_hdr(const route_head* TL)
   }
 
   if (TL->rte_name != NULL) {
-    strncpy(trkhdr[idx].name, TL->rte_name, TRK_NAME_LEN);
+    strncpy(trkhdr[idx].name, CSTRc(TL->rte_name), TRK_NAME_LEN);
   }
   if (*(trkhdr[idx].name) == '\0') {
     sprintf(trkhdr[idx].name, "T%03d", idx);
@@ -826,8 +832,8 @@ static void trl_track_hdr(const route_head* TL)
   trkhdr[idx].name[TRK_NAME_LEN-1] = '\0';
 
   if (TL->rte_desc != NULL) {
-    strncpy(trkhdr[idx].comment, TL->rte_desc, TRK_COMMENT_LEN);
-    l = strlen(TL->rte_desc);
+    strncpy(trkhdr[idx].comment, CSTRc(TL->rte_desc), TRK_COMMENT_LEN);
+    l = strlen(CSTRc(TL->rte_desc));
     if (l < TRK_COMMENT_LEN-1) {
       memset(trkhdr[idx].comment + l, ' ', TRK_COMMENT_LEN - l);
     }

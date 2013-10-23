@@ -212,19 +212,31 @@ void 	ht_sym(xg_string args, const QXmlStreamAttributes* unused)
 static
 void  	ht_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->latitude = args.toDouble();
+#else
   wpt_tmp->latitude = atof(args);
+#endif
 }
 
 static
 void  	ht_long(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->longitude = args.toDouble();
+#else
   wpt_tmp->longitude = atof(args);
+#endif
 }
 
 static
 void  	ht_alt(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->altitude = args.toDouble();
+#else
   wpt_tmp->altitude = atof(args);
+#endif
 }
 
 static
@@ -271,7 +283,7 @@ void	ht_trk_utc(xg_string args, const QXmlStreamAttributes* unused)
   struct tm tm;
   time_t utc;
 
-  sscanf(args, "%d-%d-%d %d:%d:%d",
+  sscanf(CSTRc(args), "%d-%d-%d %d:%d:%d",
          &tm.tm_year, &tm.tm_mon,
          &tm.tm_mday, &tm.tm_hour,
          &tm.tm_min, &tm.tm_sec);
@@ -287,19 +299,31 @@ void	ht_trk_utc(xg_string args, const QXmlStreamAttributes* unused)
 static
 void	ht_trk_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->latitude = args.toDouble();
+#else
   wpt_tmp->latitude = atof(args);
+#endif
 }
 
 static
 void	ht_trk_long(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->longitude = args.toDouble();
+#else
   wpt_tmp->longitude = atof(args);
+#endif
 }
 
 static
 void	ht_trk_alt(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->altitude = args.toDouble();
+#else
   wpt_tmp->altitude = atof(args);
+#endif
 }
 
 

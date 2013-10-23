@@ -92,17 +92,25 @@ ignr_start(xg_string args, const QXmlStreamAttributes* attrv)
 static void
 ignr_nb_etapes(xg_string args, const QXmlStreamAttributes* attrv)
 {
+#if NEW_STRINGS
+  xmlpoints = args.toInt();
+#else
   xmlpoints = atoi(args);
+#endif
 }
 
 static void
 ignr_descr(xg_string args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((track == NULL));
-
+#if NEW_STRINGS
+qDebug() << args;
+  track->rte_desc = args;
+#else
   if ((args != NULL) && (strlen(args) > 0)) {
     track->rte_desc = xstrdup(args);
   }
+#endif
 }
 
 static void
@@ -125,10 +133,14 @@ ignr_etape_end(xg_string args, const QXmlStreamAttributes* attrv)
 static void
 ignr_etape_pos(xg_string args, const QXmlStreamAttributes* attrv)
 {
+#if NEW_STRINGS
+  ignr_xml_error((wpt == NULL) || (args.isEmpty()));
+#else
   ignr_xml_error((wpt == NULL) || (args == NULL));
+#endif
 
-  if (2 != sscanf(args, "%lf,%lf", &wpt->latitude, &wpt->longitude)) {
-    fatal(MYNAME ": Invalid coordinates \"%s\"!\n", args);
+  if (2 != sscanf(CSTRc(args), "%lf,%lf", &wpt->latitude, &wpt->longitude)) {
+    fatal(MYNAME ": Invalid coordinates \"%s\"!\n", CSTRc(args));
   }
 }
 
@@ -140,8 +152,8 @@ ignr_etape_alt(xg_string args, const QXmlStreamAttributes* attrv)
     return;
   }
 
-  if (1 != sscanf(args, "%lf", &wpt->altitude)) {
-    fatal(MYNAME ": Invalid altitude \"%s\"!\n", args);
+  if (1 != sscanf(CSTRc(args), "%lf", &wpt->altitude)) {
+    fatal(MYNAME ": Invalid altitude \"%s\"!\n", CSTRc(args));
   }
 }
 

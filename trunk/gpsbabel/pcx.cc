@@ -344,7 +344,7 @@ gpsutil_disp(const waypoint* wpt)
 
   gbfprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5.f %-40.40s %5e  %d\n",
             global_opts.synthesize_shortnames ?
-            mkshort_from_wpt(mkshort_handle, wpt) :
+            CSTRc(mkshort_from_wpt(mkshort_handle, wpt)) :
             CSTRc(wpt->shortname),
             lat < 0.0 ? 'S' : 'N',
             fabs(lat),
@@ -360,39 +360,35 @@ gpsutil_disp(const waypoint* wpt)
 static void
 pcx_track_hdr(const route_head* trk)
 {
-  char* name;
   char buff[20];
 
   route_ctr++;
   snprintf(buff, sizeof(buff)-1, "Trk%03d", route_ctr);
 
-  name = mkshort(mkshort_handle2, (trk->rte_name != NULL) ? trk->rte_name : buff);
+  QString name = mkshort(mkshort_handle2, (trk->rte_name != NULL) ? trk->rte_name : buff);
   /* Carto Exploreur (popular in France) chokes on trackname headers,
    * so provide option to supppress these.
    */
   if (!cartoexploreur) {
-    gbfprintf(file_out, "\n\nH  TN %s\n", name);
+    gbfprintf(file_out, "\n\nH  TN %s\n", CSTR(name));
   }
-  xfree(name);
   gbfprintf(file_out, "H  LATITUDE    LONGITUDE    DATE      TIME     ALT  ;track\n");
 }
 
 static void
 pcx_route_hdr(const route_head* rte)
 {
-  char* name;
   char buff[20];
 
   route_ctr++;
   snprintf(buff, sizeof(buff)-1, "Rte%03d", route_ctr);
 
-  name = mkshort(mkshort_handle2, (rte->rte_name != NULL) ? rte->rte_name : buff);
+  QString name = mkshort(mkshort_handle2, (rte->rte_name != NULL) ? rte->rte_name : buff);
 
   /* see pcx_track_hdr */
   if (!cartoexploreur) {
-    gbfprintf(file_out, "\n\nR  %s\n", name);
+    gbfprintf(file_out, "\n\nR  %s\n", CSTR(name));
   }
-  xfree(name);
   gbfprintf(file_out, "\n"
             "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
 }

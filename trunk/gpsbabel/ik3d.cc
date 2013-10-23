@@ -115,8 +115,11 @@ static void
 iktobj_type(xg_string args, const QXmlStreamAttributes* unused)
 {
   ikt_object_end();
-
+#if NEW_STRINGS
+  switch (args.toInt()) {
+#else
   switch (atoi(args)) {
+#endif
   case 0:
     waypt = waypt_new();
     break;
@@ -124,7 +127,7 @@ iktobj_type(xg_string args, const QXmlStreamAttributes* unused)
     track = route_head_alloc();
     break;
   default:
-    fatal(MYNAME ": Unknown object type %s!\n", args);
+    fatal(MYNAME ": Unknown object type %s!\n", CSTRc(args));
   }
 }
 

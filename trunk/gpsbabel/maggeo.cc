@@ -241,14 +241,11 @@ maggeo_waypt_pr(const waypoint* waypointp)
   double ilon, ilat;
   double lon, lat;
   int lon_deg, lat_deg;
-  char* shortname;
-  char* cname = NULL;
   const char* ctype = NULL;
   QString placer;
 
   ilat = waypointp->latitude;
   ilon = waypointp->longitude;
-  shortname = waypointp->shortname;
 
   lon = fabs(ilon);
   lat = fabs(ilat);
@@ -273,8 +270,12 @@ maggeo_waypt_pr(const waypoint* waypointp)
   }
   QString placeddate = maggeo_fmtdate(waypointp->creation_time);
   QString lfounddate = maggeo_fmtdate(waypointp->gc_data->last_found);
-  cname = mkshort(desc_handle,
+  QString cname = mkshort(desc_handle,
+#if NEW_STRINGS
+                  waypointp->notes.isEmpty() ? waypointp->description : waypointp->notes);
+#else
                   waypointp->notes ? waypointp->notes : waypointp->description);
+#endif
   placer = waypointp->gc_data->placer;
 
   /*
@@ -295,8 +296,8 @@ maggeo_waypt_pr(const waypoint* waypointp)
            lon, ilon < 0 ? 'W' : 'E',
            waypointp->altitude == unknown_alt ?
            0 : waypointp->altitude);
-  append(obuf, shortname);
-  append(obuf, cname);
+  append(obuf, CSTRc(waypointp->shortname));
+  append(obuf, CSTR(cname));
   append(obuf, placer.toUtf8().data());
   append(obuf, waypointp->gc_data->hint.toUtf8().data());
   append(obuf, ctype);
@@ -315,10 +316,6 @@ maggeo_waypt_pr(const waypoint* waypointp)
             waypointp->gc_data->terr/10.0);
   else {
     strcat(obuf, ",");
-  }
-
-  if (cname) {
-    xfree(cname);
   }
 
   maggeo_writemsg(obuf);

@@ -682,7 +682,6 @@ humminbird_write_waypoint(const waypoint* wpt)
   double lat, north, east;
   int i;
   int num_icons = sizeof(humminbird_icons) / sizeof(humminbird_icons[0]);
-  char* name;
 
   be_write16(&hum.num, waypoint_num++);
   hum.zero   = 0;
@@ -725,12 +724,12 @@ humminbird_write_waypoint(const waypoint* wpt)
   north = inverse_gudermannian_i1924(lat);
   be_write32(&hum.north, si_round(north));
 
+  QString name;
   name = (global_opts.synthesize_shortnames)
          ? mkshort_from_wpt(wptname_sh, wpt)
          : mkshort(wptname_sh, wpt->shortname);
   memset(&hum.name, 0, sizeof(hum.name));
-  memcpy(&hum.name, name, strlen(name));
-  xfree(name);
+  memcpy(&hum.name, CSTR(name), name.length());
 
   gbfputuint32(WPT_MAGIC, fout);
   gbfwrite(&hum, sizeof(hum), 1, fout);
@@ -751,13 +750,12 @@ humminbird_track_head(const route_head* trk)
   trk_head = NULL;
   last_time = 0;
   if (trk->rte_waypt_ct > 0) {
-    char* name;
+    QString name;
     trk_head = (humminbird_trk_header_t*) xcalloc(1, sizeof(humminbird_trk_header_t));
     trk_points = (humminbird_trk_point_t*) xcalloc(max_points, sizeof(humminbird_trk_point_t));
 
     name = mkshort(trkname_sh, trk->rte_name);
-    strncpy(trk_head->name, name, sizeof(trk_head->name));
-    xfree(name);
+    strncpy(trk_head->name, CSTR(name), sizeof(trk_head->name));
     be_write16(&trk_head->trk_num, trk->rte_num);
   }
 }
@@ -893,7 +891,6 @@ humminbird_rte_tail(const route_head* rte)
 
   if (humrte->count > 0) {
     int i;
-    char* name;
 
     humrte->num = rte_num++;
     humrte->time = gpsbabel_time;
@@ -904,9 +901,8 @@ humminbird_rte_tail(const route_head* rte)
     be_write16(&humrte->num, humrte->num);
     be_write32(&humrte->time, humrte->time);
 
-    name = mkshort(rtename_sh, rte->rte_name);
-    strncpy(humrte->name, name, sizeof(humrte->name));
-    xfree(name);
+    QString name = mkshort(rtename_sh, rte->rte_name);
+    strncpy(humrte->name, CSTR(name), sizeof(humrte->name));
 
     gbfputuint32(RTE_MAGIC, fout);
     gbfwrite(humrte, sizeof(*humrte), 1, fout);

@@ -148,8 +148,8 @@ gpsutil_disp(const waypoint* wpt)
 
   gbfprintf(file_out, "%-8.8s %08.3f%c %09.3f%c %07.0f%c %-30.30s %s\n",
             global_opts.synthesize_shortnames ?
-            mkshort_from_wpt(mkshort_handle, wpt) :
-            wpt->shortname,
+            CSTRc(mkshort_from_wpt(mkshort_handle, wpt)) :
+            CSTRc(wpt->shortname),
             fabs(lat),
             lat < 0.0 ? 'S' : 'N',
             fabs(lon),
@@ -157,7 +157,7 @@ gpsutil_disp(const waypoint* wpt)
             ((wpt->altitude == unknown_alt) ||
              (wpt->altitude < 0.0)) ? 0 : wpt->altitude,
             'm',
-            wpt->description ? tdesc : "",
+            CSTRc(wpt->description) ? tdesc : "",
             icon_token.toUtf8().data());
 
   xfree(tdesc);

@@ -585,7 +585,7 @@ mkshort(short_handle h, const QString& istring)
  * As above, but arg list is a waypoint so we can centralize
  * the code that considers the alternate sources.
  */
-char*
+String
 mkshort_from_wpt(short_handle h, const waypoint* wpt)
 {
   /* This probably came from a Groundspeak Pocket Query
@@ -594,15 +594,27 @@ mkshort_from_wpt(short_handle h, const waypoint* wpt)
    * more stuff than should be in any one field...
    */
   if (wpt->gc_data->diff && wpt->gc_data->terr &&
+#if NEW_STRINGS
+      !wpt->notes.isEmpty()) {
+#else
       wpt->notes && wpt->notes[0]) {
+#endif
     return mkshort(h, wpt->notes);
   }
 
+#if NEW_STRINGS
+  if (!wpt->description.isEmpty()) {
+#else
   if (wpt->description) {
+#endif
     return mkshort(h, wpt->description);
   }
 
+#if NEW_STRINGS
+  if (!wpt->notes.isEmpty()) {
+#else
   if (wpt->notes) {
+#endif
     return mkshort(h, wpt->notes);
   }
 

@@ -173,8 +173,8 @@ tpg_waypt_pr(const waypoint* wpt)
   short int elev;
   char tbuf[64];
   char c,ocount;
-  char* shortname;
-  char* description;
+  QString shortname;
+  QString description;
   int i;
 
   /* these unknown 4 are probably point properties (color, icon, etc..) */
@@ -190,8 +190,13 @@ tpg_waypt_pr(const waypoint* wpt)
    * and a shortname
    */
 
+#if NEW_STRINGS
+  if ((wpt->shortname.isEmpty()) || (global_opts.synthesize_shortnames)) {
+    if (!wpt->description.isEmpty()) {
+#else
   if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
     if (wpt->description) {
+#endif
       if (global_opts.synthesize_shortnames) {
         shortname = mkshort_from_wpt(mkshort_handle, wpt);
       } else {
@@ -204,9 +209,12 @@ tpg_waypt_pr(const waypoint* wpt)
   } else {
     shortname = xstrdup(wpt->shortname);
   }
-
+#if NEW_STRINGS
+  if (wpt->description.isEmpty()) {
+#else
   if (! wpt->description) {
-    if (shortname) {
+#endif
+    if (!shortname.isEmpty()) {
       description = xstrdup(shortname);
     } else {
       description = xstrdup("");
@@ -233,7 +241,7 @@ tpg_waypt_pr(const waypoint* wpt)
   elev = (short int) METERS_TO_FEET(wpt->altitude);
 
   /* 1 bytes stringsize for shortname */
-  c = strlen(shortname);
+  c = shortname.length();
   ocount = 0;
   /*
    * It's reported the only legal characters are upper case
@@ -241,7 +249,7 @@ tpg_waypt_pr(const waypoint* wpt)
    * count and one to output.
    */
   for (i = 0; i < c; i++) {
-    char oc = toupper(shortname[i]);
+    char oc = shortname[i].toUpper().cell();
     if (isalnum(oc) || oc == ' ') {
       ocount++;
     }
@@ -250,7 +258,7 @@ tpg_waypt_pr(const waypoint* wpt)
   gbfwrite(&ocount, 1, 1, tpg_file_out);
 
   for (i = 0; i < c; i++) {
-    char oc = toupper(shortname[i]);
+    char oc = shortname[i].toUpper().cell();
     if (isalnum(oc) || oc == ' ') {
       gbfputc(oc, tpg_file_out);
     }
@@ -280,9 +288,6 @@ tpg_waypt_pr(const waypoint* wpt)
   } else {
     gbfwrite(unknown2, 1, 2, tpg_file_out);
   }
-
-  xfree(shortname);
-  xfree(description);
 }
 
 static void

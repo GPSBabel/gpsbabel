@@ -30,8 +30,8 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static char* encoded_points = NULL;
-static char* instructions = NULL;
+static QString encoded_points;
+static QString instructions;
 static short_handle desc_handle;
 
 #define MYNAME "googledir"
@@ -53,25 +53,13 @@ xg_tag_mapping google_map[] = {
 void
 goog_points(xg_string args, const QXmlStreamAttributes* unused)
 {
-  if (args) {
-    if (encoded_points) {
-      encoded_points = xstrappend(encoded_points, args);
-    } else {
-      encoded_points = xstrdup(args);
-    }
-  }
+  encoded_points += args;
 }
 
 void
 goog_instr(xg_string args, const QXmlStreamAttributes* unused)
 {
-  if (args) {
-    if (instructions) {
-      instructions = xstrappend(instructions, args);
-    } else {
-      instructions = xstrdup(args);
-    }
-  }
+  instructions += args;
 }
 
 static int goog_step = 0;
@@ -104,10 +92,16 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
 {
   long lat = 0;
   long lon = 0;
-  char* str = encoded_points;
+//NEW_STRINGS.  Kind of silly to make a copy here.
+  char* ostr = xstrdup(encoded_points);
+  char* str = ostr;
 
   route_head* routehead = route_head_alloc();
+#if NEW_STRINGS
+  if (args == "overview_polyline") {
+#else
   if (strcmp(args, "overview_polyline") == 0) {
+#endif
     routehead->rte_name = (char*) xstrdup("overview");
     routehead->rte_desc = (char*) xstrdup("Overview");
   } else {
@@ -118,10 +112,9 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
     } else {
       utf_string utf;
       utf.is_html = 1;
-      utf.utfstring = QString::fromUtf8(instructions);
+      utf.utfstring = /*QString::fromUtf8*/(instructions);
       routehead->rte_desc = strip_html(&utf);
-      xfree(instructions);
-      instructions = NULL;
+      instructions = QString();
     }
   }
   route_add_head(routehead);
@@ -140,15 +133,9 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
       route_add_wpt(routehead, wpt_tmp);
     }
   }
-
-  if (encoded_points) {
-    xfree(encoded_points);
-    encoded_points = NULL;
-  }
-  if (instructions) {
-    xfree(instructions);
-    instructions = NULL;
-  }
+xfree(ostr);
+  encoded_points = QString();
+  instructions = QString();
 }
 
 static void
@@ -166,14 +153,8 @@ google_read(void)
 {
   xml_read();
 
-  if (encoded_points) {
-    xfree(encoded_points);
-    encoded_points = NULL;
-  }
-  if (instructions) {
-    xfree(instructions);
-    instructions = NULL;
-  }
+  encoded_points = QString();
+  instructions = QString();
 }
 
 static void

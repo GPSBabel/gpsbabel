@@ -246,7 +246,11 @@ ozi_track_hdr(const route_head* rte)
     ozi_openfile(ozi_ofname);
     gbfprintf(file_out, ozi_trk_header,
               altunit == 'f' ? "Feet" : "Meters",
+#if NEW_STRINGS
+              rte->rte_name.isEmpty() ? "ComplimentsOfGPSBabel" : CSTRc(rte->rte_name));
+#else
               rte->rte_name ? CSTRc(rte->rte_name) : "ComplimentsOfGPSBabel");
+#endif
   }
 
   track_out_count++;
@@ -316,9 +320,13 @@ ozi_route_hdr(const route_head* rte)
 
   gbfprintf(file_out, "R,%d,%s,%s,\r\n",
             route_out_count,
+#if NEW_STRINGS
+            CSTRc(rte->rte_name),
+            CSTRc(rte->rte_desc));
+#else
             rte->rte_name ? CSTRc(rte->rte_name) : "",
             rte->rte_desc ? CSTRc(rte->rte_desc) : "");
-
+#endif
 }
 
 static void
@@ -362,11 +370,19 @@ ozi_route_disp(const waypoint* waypointp)
   gbfprintf(file_out, "W,%d,,%d,%s,%.6f,%.6f,%s,0,1,3,0,65535,%s,0,0\r\n",
             route_out_count,
             route_wpt_count,
+#if NEW_STRINGS
+            CSTR(waypointp->shortname),
+#else
             waypointp->shortname ? CSTRc(waypointp->shortname) : "",
+#endif
             waypointp->latitude,
             waypointp->longitude,
             ozi_time,
+#if NEW_STRINGS
+            CSTR(waypointp->description));
+#else
             waypointp->description ? CSTRc(waypointp->description) : "");
+#endif
 
 }
 
@@ -870,8 +886,13 @@ ozi_waypt_pr(const waypoint* wpt)
   static int index = 0;
   double alt;
   char ozi_time[16];
+#if NEW_STRINGS
+  QString description;
+  QString shortname;
+#else
   char* description;
   char* shortname;
+#endif
   int faked_fsdata = 0;
   ozi_fsdata* fs = NULL;
   int icon = 0;
@@ -890,9 +911,13 @@ ozi_waypt_pr(const waypoint* wpt)
   } else {
     alt = wpt->altitude * alt_scale;
   }
-
+#if NEW_STRINGS
+  if ((wpt->shortname.isEmpty()) || (global_opts.synthesize_shortnames)) {
+    if (!wpt->description.isEmpty()) {
+#else
   if ((!wpt->shortname) || (global_opts.synthesize_shortnames)) {
     if (wpt->description) {
+#endif
       if (global_opts.synthesize_shortnames) {
         shortname = mkshort_from_wpt(mkshort_handle, wpt);
       } else {
@@ -905,9 +930,13 @@ ozi_waypt_pr(const waypoint* wpt)
   } else {
     shortname = csv_stringclean(wpt->shortname, BADCHARS);
   }
-
+#if NEW_STRINGS
+  if (wpt->description.isEmpty()) {
+    if (!shortname.isEmpty()) {
+#else
   if (!wpt->description) {
     if (shortname) {
+#endif
       description = csv_stringclean(shortname, BADCHARS);
     } else {
       description = xstrdup("");
@@ -924,8 +953,8 @@ ozi_waypt_pr(const waypoint* wpt)
 
   gbfprintf(file_out,
             "%d,%s,%.6f,%.6f,%s,%d,%d,%d,%d,%d,%s,%d,%d,",
-            index, shortname, wpt->latitude, wpt->longitude, ozi_time, icon,
-            1, 3, fs->fgcolor, fs->bgcolor, description, 0, 0);
+            index, CSTRc(shortname), wpt->latitude, wpt->longitude, ozi_time, icon,
+            1, 3, fs->fgcolor, fs->bgcolor, CSTRc(description), 0, 0);
   if (WAYPT_HAS(wpt, proximity) && (wpt->proximity > 0)) {
     gbfprintf(file_out, "%.1f,", wpt->proximity * prox_scale);
   } else if (proximity > 0) {
@@ -934,9 +963,11 @@ ozi_waypt_pr(const waypoint* wpt)
     gbfprintf(file_out,"%d,", 0);
   }
   gbfprintf(file_out, "%.0f,%d,%d,%d\r\n", alt, 6, 0, 17);
-
+#if NEW_STRINGS
+#else
   xfree(description);
   xfree(shortname);
+#endif
 
   if (faked_fsdata) {
     xfree(fs);

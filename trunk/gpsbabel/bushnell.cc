@@ -232,7 +232,6 @@ bushnell_write_one(const waypoint* wpt)
   gbfile* file_out;
   static int wpt_count;
   char* fname;
-  char* ident;
   xasprintf(&fname, "%s-%d.wpt", ofname, wpt_count++);
 
   file_out = gbfopen_le(fname, "wb", MYNAME);
@@ -241,7 +240,6 @@ bushnell_write_one(const waypoint* wpt)
   gbfputc(bushnell_get_icon_from_name(wpt->icon_descr), file_out);
   gbfputc(0x01, file_out);  // Proximity alarm.  1 == "off", 3 == armed.
 
-  ident = mkshort(mkshort_handle, wpt->shortname);
   strncpy(tbuf, CSTRc(wpt->shortname), sizeof(tbuf));
   tbuf[sizeof(tbuf)-1] = 0;
   gbfwrite(tbuf, sizeof(tbuf), 1, file_out);
@@ -250,7 +248,6 @@ bushnell_write_one(const waypoint* wpt)
   gbfwrite(padding, sizeof(padding), 1, file_out);
 
   xfree(fname);
-  xfree(ident);
   gbfclose(file_out);
 }
 

@@ -92,20 +92,35 @@ void	wpt_e(xg_string args, const QXmlStreamAttributes* unused)
 
 void	wpt_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->latitude = args.toDouble();
+#else
   wpt_tmp->latitude = atof(args);
+#endif
 }
 
 void	wpt_lon(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->longitude = args.toDouble();
+#else
   wpt_tmp->longitude = atof(args);
+#endif
 }
 
 void	wpt_addr(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  if (!wpt_tmp->notes.isEmpty()) {
+    wpt_tmp->notes += as;
+  }
+  wpt_tmp->notes += args;
+#else
   if (wpt_tmp->notes) {
     wpt_tmp->notes = xstrappend(wpt_tmp->notes, as);
   }
   wpt_tmp->notes = xstrappend(wpt_tmp->notes, args);
+#endif
 }
 
 ff_vecs_t yahoo_vecs = {

@@ -121,7 +121,7 @@ text_disp(const waypoint* wpt)
   }
   xasprintf(&tmpout2, "%s (%d%c %6.0f %7.0f)%s", tmpout1, utmz, utmzc, utme, utmn, altout);
   gbfprintf(file_out, "%-16s  %59s\n",
-            (global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname,
+            (global_opts.synthesize_shortnames) ? CSTRc(mkshort_from_wpt(mkshort_handle, wpt)) : CSTRc(wpt->shortname),
             tmpout2);
   xfree(tmpout2);
   xfree(tmpout1);
@@ -129,8 +129,11 @@ text_disp(const waypoint* wpt)
     xfree(altout);
   }
 
-
+#if NEW_STRINGS
+  if (wpt->description != wpt->shortname) {
+#else
   if (strcmp(wpt->description, wpt->shortname)) {
+#endif
     gbfprintf(file_out, "%s", CSTRc(wpt->description));
     if (!wpt->gc_data->placer.isEmpty()) {
       gbfprintf(file_out, " by %s", wpt->gc_data->placer.toUtf8().data());
@@ -156,12 +159,16 @@ text_disp(const waypoint* wpt)
       if (txt_encrypt) {
         hint = rot13(wpt->gc_data->hint);
       } else {
-        hint = xstrdup(wpt->gc_data->hint.toUtf8().data());
+        hint = xstrdup(wpt->gc_data->hint);
       }
       gbfprintf(file_out, "\nHint: %s\n", hint);
       xfree(hint);
     }
+#if NEW_STRINGS
+  } else if (!wpt->notes.isEmpty() && (wpt->description.isEmpty() || wpt->notes != wpt->description)) {
+#else
   } else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
+#endif
     gbfprintf(file_out, "\n%s\n", CSTRc(wpt->notes));
   }
 

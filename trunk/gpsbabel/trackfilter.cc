@@ -334,7 +334,7 @@ trackfilter_fill_track_list_cb(const route_head* track) 	/* callback for track_d
 
   if (opt_name != NULL) {
     if ((track->rte_name == NULL) ||
-        (case_ignore_str_match(track->rte_name, opt_name) == 0)) {
+        (case_ignore_str_match(CSTRc(track->rte_name), opt_name) == 0)) {
       QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
         waypoint* wpt = (waypoint*)elem;
         track_del_wpt((route_head*)track, wpt);
@@ -404,16 +404,23 @@ trackfilter_split_init_rte_name(route_head* track, const QDateTime dt)
     } else {
       snprintf(buff, sizeof(buff), "%s-%s", opt_title, tbuff);
     }
+#if NEW_STRINGS
+  } else if (!track->rte_name.isEmpty()) {
+#else
   } else if ((track->rte_name != NULL) && (strlen(track->rte_name) > 0)) {
+#endif
     snprintf(buff, sizeof(buff), "%s-%s", CSTRc(track->rte_name), tbuff);
   } else {
     strncpy(buff, tbuff, sizeof(buff));
   }
-
+#if NEW_STRINGS
+  track->rte_name = buff;
+#else
   if (track->rte_name != NULL) {
     xfree(track->rte_name);
   }
   track->rte_name = xstrdup(buff);
+#endif
 }
 
 static void
@@ -436,11 +443,14 @@ trackfilter_pack_init_rte_name(route_head* track, const time_t default_time)
   } else {
     strncpy(buff, opt_title, sizeof(buff));
   }
-
+#if NEW_STRINGS
+  track->rte_name = buff;
+#else
   if (track->rte_name != NULL) {
     xfree(track->rte_name);
   }
   track->rte_name = xstrdup(buff);
+#endif
 }
 
 /*******************************************************************************
@@ -969,7 +979,11 @@ trackfilter_seg2trk(void)
         dest = route_head_alloc();
         dest->rte_num = src->rte_num;
         /* name in the form TRACKNAME #n */
+#if NEW_STRINGS
+        if (!src->rte_name.isEmpty()) {
+#else
         if (src->rte_name) {
+#endif
           xasprintf(&dest->rte_name, "%s #%d", CSTRc(src->rte_name), ++trk_seg_num);
         }
 

@@ -25,6 +25,8 @@
 #include "jeeps/gpsmath.h"
 #include <ctype.h>
 #include <math.h>
+#include <QtCore/QDebug>
+#include <QtCore/QTextCodec>
 
 #define MYNAME        "Naviguide"
 
@@ -369,18 +371,19 @@ ng_read_file_header(void)
 static void
 data_read(void)
 {
-  int n;
-  unsigned i;
-  waypoint* wpt_tmp;
-
   if (process_rte) {
     rte_head = route_head_alloc();
     route_add_head(rte_head);
   }
 
-  for (n = 0; n < nof_wp; ++n) {
+  QTextCodec* codec = QTextCodec::codecForName("Hebrew");
+  if (!codec) {
+    fatal(MYNAME ": Unable to locate codec for Hebrew");
+  }
 
-    wpt_tmp = waypt_new();
+  for (int n = 0; n < nof_wp; ++n) {
+
+    waypoint* wpt_tmp = waypt_new();
 
     /* Read waypoint data */
 
@@ -397,7 +400,7 @@ data_read(void)
 
     }
     /* Clear commas form the comment for CSV file commonality */
-    for (i = 0; i <strlen(strComment); ++i) {
+    for (unsigned i = 0; i <strlen(strComment); ++i) {
       if (strComment[i] == ',') {
         strComment[i] = ' ';
       }
@@ -405,9 +408,13 @@ data_read(void)
 
     /* put the data in the waypoint structure */
     ng_convert_datum(wpt_tmp);
-
+#if NEW_STRINGS
+    wpt_tmp->shortname = codec->toUnicode(WPNC.strName);
+    wpt_tmp->description = codec->toUnicode(strComment);
+#else
     wpt_tmp->shortname = xstrdup(WPNC.strName);
     wpt_tmp->description = xstrdup(strComment);
+#endif
 
     if (process_rte) {
       route_add_wpt(rte_head, wpt_tmp);

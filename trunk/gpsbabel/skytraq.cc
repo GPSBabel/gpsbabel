@@ -267,7 +267,8 @@ skytraq_rd_msg(const void* payload, unsigned int len)
 {
   int errors = 5;		/* allow this many errors */
   unsigned int c, i, state;
-  unsigned int rcv_len, calc_cs, rcv_cs;
+  signed int rcv_len;
+  unsigned int calc_cs, rcv_cs;
 
   for (i = 0, state = 0; i < RETRIES && state < sizeof(MSG_START); i++) {
     c = rd_char(&errors);
@@ -1596,7 +1597,7 @@ static const char* mhport;
 static void
 miniHomer_rd_init(const char* fname)
 {
-  opt_set_location="";	// otherwise it will lead to bus error
+  opt_set_location=NULL;	// otherwise it will lead to bus error
   skytraq_rd_init(fname);	// sets global var serial_handle
   mhport=fname;
 }

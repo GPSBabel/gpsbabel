@@ -994,9 +994,9 @@ cet_convert_waypt(const waypoint* wpt)
 
   w->wpt_flags.cet_converted = 1;
 #if NEW_STRINGS
-  w->shortname = cet_convert_string(CSTRc(wpt->shortname));
-  w->description = cet_convert_string(CSTRc(wpt->description));
-  w->notes = cet_convert_string(CSTRc(wpt->notes));
+//  w->shortname = cet_convert_string(wpt->shortname);
+//  w->description = cet_convert_string(wpt->description);
+//  w->notes = cet_convert_string(wpt->notes);
 #else
   w->shortname = cet_convert_string(CSTRc(wpt->shortname));
   w->description = cet_convert_string(CSTRc(wpt->description));

@@ -196,18 +196,17 @@ lmx_write_xml(int tag, const QString& data, int indent)
 static void
 lmx_print(const waypoint* wpt)
 {
-  const char* oname;
-  char* odesc;
-  char tbuf[100];
+  QString oname;
+  QString odesc;
 
   /*
    * Desparation time, try very hard to get a good shortname
    */
   odesc = wpt->notes;
-  if (!odesc) {
+  if (odesc.isEmpty()) {
     odesc = wpt->description;
   }
-  if (!odesc) {
+  if (odesc.isEmpty()) {
     odesc = wpt->shortname;
   }
 
@@ -217,10 +216,14 @@ lmx_print(const waypoint* wpt)
   if (!binary) {
     gbfputc('\n', ofd);
   }
-  if (oname) {
+  if (!oname.isEmpty()) {
     lmx_write_xml(0x48, oname, 3); // name
   }
+#if NEW_STRINGS
+  if (!wpt->description.isEmpty()) {
+#else
   if (wpt->description) {
+#endif
     lmx_write_xml(0x49, wpt->description, 3); // description
   }
   lmx_start_tag(0x4A, 3); // coordinates
@@ -228,6 +231,7 @@ lmx_print(const waypoint* wpt)
     gbfputc('\n', ofd);
   }
 
+  char tbuf[100];
   sprintf(tbuf, "%f", wpt->latitude);
   lmx_write_xml(0x4B, tbuf, 4); // latitude
 
@@ -350,31 +354,51 @@ lmx_lm_end(xg_string args, const QXmlStreamAttributes* unused)
 static void
 lmx_lm_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->latitude = args.toDouble();
+#else
   wpt_tmp->latitude = atof(args);
+#endif
 }
 
 static void
 lmx_lm_lon(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->longitude = args.toDouble();
+#else
   wpt_tmp->longitude = atof(args);
+#endif
 }
 
 static void
 lmx_lm_alt(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->altitude = args.toDouble();
+#else
   wpt_tmp->altitude = atof(args);
+#endif
 }
 
 static void
 lmx_lm_name(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->shortname = args;
+#else
   wpt_tmp->shortname = xstrdup(args);
+#endif
 }
 
 static void
 lmx_lm_desc(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->description = args;
+#else
   wpt_tmp->description = xstrdup(args);
+#endif
 }
 
 static void

@@ -461,8 +461,11 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
        data->name, data->visible ? "yes" : "NO", data->objid));
 
   data->data = wpt = waypt_new();
+#if NEW_STRINGS
+  wpt->shortname = QString::fromLatin1(data->name);
+#else
   wpt->shortname = xstrdup(data->name);
-
+#endif
   time = data->mtime;
   if (! time) {
     time = data->ctime;
@@ -521,7 +524,11 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
     }
 
     if (*cend++) {
+#if NEW_STRINGS
+      wpt->notes = QString::fromLatin1(cend);
+#else
       wpt->notes = xstrdup(cend);
+#endif
     }
 
     if (wpt->HasUrlLink()) {
@@ -531,9 +538,12 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
     wpt->notes = xstrdup(str);
   }
   xfree(str);
-
+#if NEW_STRINGS
+  if (!wpt->notes.isEmpty()) {
+#else
   if (wpt->notes) {
-    DBG((sobj, "notes = \"%s\"\n", wpt->notes));
+#endif
+    DBG((sobj, "notes = \"%s\"\n", CSTRc(wpt->notes)));
   }
 
   mmo_fillbuf(buf, 12, 1);
@@ -980,15 +990,20 @@ mmo_finalize_rtept_cb(const waypoint* wptref)
     wpt->latitude = wpt2->latitude;
     wpt->longitude = wpt2->longitude;
 
+#if NEW_STRINGS
+    wpt->shortname = wpt2->shortname;
+    wpt->description = wpt2->description;
+    wpt->notes = wpt2->notes;
+#else
     xfree(wpt->shortname);
     wpt->shortname = xstrdup(wpt2->shortname);
-
     if (wpt2->description) {
       wpt->description = xstrdup(wpt2->description);
     }
     if (wpt2->notes) {
       wpt->notes = xstrdup(wpt2->notes);
     }
+#endif
     if (wpt2->HasUrlLink()) {
       UrlLink l = wpt2->GetUrlLink();
       wpt->notes = xstrdup(l.url_.toUtf8().data());
@@ -1237,7 +1252,7 @@ mmo_write_obj_head(const char* sobj, const char* name, const time_t ctime,
 static void
 mmo_write_wpt_cb(const waypoint* wpt)
 {
-  char* str, *cx;
+  char* str;
   int objid;
   time_t time;
   int icon = 0;
@@ -1265,7 +1280,11 @@ mmo_write_wpt_cb(const waypoint* wpt)
   DBG(("write", "waypoint \"%s\"\n", wpt->shortname ? wpt->shortname : "Mark"));
 
   objid = mmo_write_obj_head("CObjWaypoint",
+#if NEW_STRINGS
+                             wpt->shortname.isEmpty() ? "Mark" : CSTRc(wpt->shortname), time, obj_type_wpt);
+#else
                              (wpt->shortname && *wpt->shortname) ? CSTRc(wpt->shortname) : "Mark", time, obj_type_wpt);
+#endif
   data = mmo_register_object(objid, wpt, wptdata);
   data->refct = 1;
   mmo_write_category("CCategory", (mmo_datatype == rtedata) ? "Waypoints" : "Marks");
@@ -1290,7 +1309,7 @@ mmo_write_wpt_cb(const waypoint* wpt)
     str = xstrdup("");
   }
 
-  cx = wpt->notes;
+  QString cx = wpt->notes;
   if (cx == NULL) {
     cx = wpt->description;
   }
@@ -1304,7 +1323,7 @@ mmo_write_wpt_cb(const waypoint* wpt)
       tmp.is_html = 1;
       cx = kml = strip_html(&tmp);
     }
-    str = xstrappend(str, cx);
+    str = xstrappend(str, CSTR(cx));
     if (kml) {
       xfree(kml);
     }
@@ -1362,7 +1381,11 @@ mmo_write_rte_head_cb(const route_head* rte)
   }
 
   objid = mmo_write_obj_head("CObjRoute",
+#if NEW_STRINGS
+                             rte->rte_name.isEmpty() ? "Route" :  CSTRc(rte->rte_name), time, obj_type_rte);
+#else
                              (rte->rte_name && *rte->rte_name) ? CSTRc(rte->rte_name) : "Route", time, obj_type_rte);
+#endif
   mmo_register_object(objid, rte, rtedata);
   mmo_write_category("CCategory", "Route");
   gbfputc(0, fout); /* unknown */
@@ -1413,7 +1436,11 @@ mmo_write_trk_head_cb(const route_head* trk)
   }
 
   objid = mmo_write_obj_head("CObjTrack",
+#if NEW_STRINGS
+                             trk->rte_name.isEmpty() ? "Track" : CSTRc(trk->rte_name), gpsbabel_time, obj_type_trk);
+#else
                              (trk->rte_name && *trk->rte_name) ? CSTRc(trk->rte_name) : "Track", gpsbabel_time, obj_type_trk);
+#endif
   mmo_write_category("CCategory", "Track");
   gbfputuint16(trk->rte_waypt_ct, fout);
 
@@ -1518,7 +1545,6 @@ mmo_write(void)
   track_disp_all(mmo_write_trk_head_cb, mmo_write_trk_tail_cb, mmo_write_wpt_cb);
 }
 
-/**************************************************************************/
 
 ff_vecs_t mmo_vecs = {
   ff_type_file,
@@ -1534,5 +1560,3 @@ ff_vecs_t mmo_vecs = {
   CET_CHARSET_MS_ANSI, 0
 
 };
-
-/**************************************************************************/

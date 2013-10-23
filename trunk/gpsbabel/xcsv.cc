@@ -704,10 +704,14 @@ xcsv_wr_position(waypoint* wpt)
   /* Tweak incoming name if we don't have a fix */
   switch (wpt->fix) {
   case fix_none:
+#if NEW_STRINGS
+    wpt->shortname = "ESTIMATED Position";
+#else
     if (wpt->shortname) {
       xfree(wpt->shortname);
     }
     wpt->shortname = xstrdup("ESTIMATED Position");
+#endif
     break;
   default:
     break;

@@ -207,7 +207,7 @@ duplicate_process(void)
     memset(&dupe, '\0', sizeof(dupe));
 
     if (snopt) {
-      strncpy(dupe.shortname, waypointp->shortname, sizeof(dupe.shortname) - 1);
+      strncpy(dupe.shortname, CSTRc(waypointp->shortname), sizeof(dupe.shortname) - 1);
     }
 
     if (lcopt) {

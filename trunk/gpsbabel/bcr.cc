@@ -319,8 +319,12 @@ bcr_data_read(void)
           *c = '\0';
         }
         if (*str) {
+#if NEW_STRINGS
+          wpt->shortname = str;
+#else
           xfree(wpt->shortname);
           wpt->shortname = xstrdup(str);
+#endif
         }
       }
     }
@@ -455,7 +459,7 @@ bcr_route_header(const route_head* route)
 
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    char* s1, *s2;
+    const char* s1, *s2;
 
     i++;
     wpt = (waypoint*) elem;
@@ -487,6 +491,7 @@ bcr_route_header(const route_head* route)
     } else {
       sout = QString("%1,%2,@,0").arg(s1).arg(s1);
     }
+
     bcr_write_line(fout, "STATION", &i, sout);
     xfree(s1);
     xfree(s2);

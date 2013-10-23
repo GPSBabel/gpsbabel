@@ -92,7 +92,7 @@ html_disp(const waypoint* wpt)
 
   gbfprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", CSTRc(wpt->shortname));
   gbfprintf(file_out, "<table width=\"100%%\">\n");
-  gbfprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? mkshort_from_wpt(mkshort_handle, wpt) : wpt->shortname);
+  gbfprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? CSTRc(mkshort_from_wpt(mkshort_handle, wpt)) : CSTRc(wpt->shortname));
   cout = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 1);
   gbfprintf(file_out, "%s (%d%c %6.0f %7.0f)", cout, utmz, utmzc, utme, utmn);
   xfree(cout);
@@ -100,9 +100,13 @@ html_disp(const waypoint* wpt)
     gbfprintf(file_out, " alt:%d", (int)((altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude));
   }
   gbfprintf(file_out, "<br>\n");
+#if NEW_STRINGS
+  if (wpt->description != wpt->shortname) {
+#else
   if (strcmp(wpt->description, wpt->shortname)) {
+#endif
     if (wpt->HasUrlLink()) {
-      char* d = html_entitize(wpt->description);
+      char* d = html_entitize(CSTRc(wpt->description));
       UrlLink link = wpt->GetUrlLink();
       gbfprintf(file_out, "<a href=\"%s\">%s</a>", link.url_.toUtf8().data(), d);
       xfree(d);
@@ -147,7 +151,11 @@ html_disp(const waypoint* wpt)
     }
     gbfprintf(file_out, "<p class=\"gpsbabelhint\"><strong>Hint:</strong> %s</p>\n", hint);
     xfree(hint);
+#if NEW_STRINGS
+  } else if (!wpt->notes.isEmpty() && (wpt->description.isEmpty() || wpt->notes != wpt->description)) {
+#else
   } else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
+#endif
     gbfprintf(file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", CSTRc(wpt->notes));
   }
 
