@@ -712,10 +712,10 @@ geocache_container gs_mkcont(const QString& t);
 route_head* route_head_alloc(void);
 void route_add(waypoint*);
 void route_add_wpt(route_head* rte, waypoint* wpt);
-void route_add_wpt_named(route_head* rte, waypoint* wpt, const char* namepart, int number_digits);
+void route_add_wpt_named(route_head* rte, waypoint* wpt, const QString& namepart, int number_digits);
 void route_del_wpt(route_head* rte, waypoint* wpt);
 void track_add_wpt(route_head* rte, waypoint* wpt);
-void track_add_wpt_named(route_head* rte, waypoint* wpt, const char* namepart, int number_digits);
+void track_add_wpt_named(route_head* rte, waypoint* wpt, const QString& namepart, int number_digits);
 void track_del_wpt(route_head* rte, waypoint* wpt);
 void route_add_head(route_head* rte);
 void route_del_head(route_head* rte);
@@ -781,7 +781,7 @@ short_handle MKSHORT_NEW_HANDLE(DEBUG_PARAMS);
 #define mkshort( a, b) MKSHORT(a,b,__FILE__, __LINE__)
 #define mkshort_new_handle() MKSHORT_NEW_HANDLE(__FILE__,__LINE__)
 #endif
-char* mkshort_from_wpt(short_handle h, const waypoint* wpt);
+String mkshort_from_wpt(short_handle h, const waypoint* wpt);
 void mkshort_del_handle(short_handle* h);
 void setshort_length(short_handle, int n);
 void setshort_badchars(short_handle,  const char*);
@@ -1018,7 +1018,7 @@ const char* get_cache_icon(const waypoint* waypointp);
 const char* gs_get_cachetype(geocache_type t);
 const char* gs_get_container(geocache_container t);
 char* xml_entitize(const char* str);
-char* html_entitize(const char* str);
+char* html_entitize(const QString& str);
 char* strip_html(const utf_string*);
 char* strip_nastyhtml(const QString& in);
 char* convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m,%Y,%d" */
