@@ -215,7 +215,10 @@ csv_stringclean(const char* string, const char* chararray)
 QString
 csv_stringclean(const QString& string, const char* chararray)
 {
-  return csv_stringclean(CSTR(string), chararray);
+  char *t = csv_stringclean(CSTR(string), chararray);
+  QString r(t);
+  xfree(t);
+  return r;
 }
 
 char*

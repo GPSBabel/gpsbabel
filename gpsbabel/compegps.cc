@@ -490,8 +490,8 @@ write_waypt_cb(const waypoint* wpt)
   if (curr_index != target_index) {
     return;
   }
-
-  name = (snlen > 0) ? mkshort_from_wpt(sh, wpt) : csv_stringclean(wpt->shortname, " ");
+// NEW_STRING: remove extra ctor below.
+  name = (snlen > 0) ? mkshort_from_wpt(sh, wpt) : csv_stringclean(QString(wpt->shortname), " ");
 
   gbfprintf(fout, "W  %s A ", CSTR(name));
   gbfprintf(fout, "%.10f%c%c ",
@@ -594,7 +594,8 @@ write_trkpt_cb(const waypoint* wpt)
   if (track_info_flag != 0) {
     track_info_flag = 0;
     if (curr_track->rte_name != NULL) {
-      QString name = csv_stringclean(curr_track->rte_name, "|");
+// NEW_STRING: remove extra ctor below.
+      QString name = csv_stringclean(QString(curr_track->rte_name), "|");
       gbfprintf(fout, "t 4294967295|%s|-1|-1\n", CSTR(name));
     }
   }
