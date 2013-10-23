@@ -866,18 +866,19 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
 }
 
 const char*
-gt_get_icao_country(const char* cc)
+gt_get_icao_country(const QString& cc)
 {
   gt_country_code_t* x = &gt_country_codes[0];
 
-  if ((cc == NULL) || (*cc == '\0')) {
+  if (cc.isEmpty()) {
     return NULL;
   }
 
   do {
     const char* ccx = x->cc;
+    const QString qccx = x->cc;
     while (ccx != NULL) {
-      if (strncmp(ccx, cc, 2) == 0) {
+      if (qccx.left(2) == cc) {
         return x->country;
       }
       if ((ccx[0] == cc[0]) && (ccx[1] == '*')) {
@@ -895,22 +896,22 @@ gt_get_icao_country(const char* cc)
 }
 
 const char*
-gt_get_icao_cc(const char* country, const char* shortname)
+gt_get_icao_cc(const QString& country, const QString& shortname)
 {
   static char res[3];
   gt_country_code_t* x = &gt_country_codes[0];
 
-  if ((country == NULL) || (*country == '\0')) {
+  if (country.isEmpty()) {
     const char* test;
     if (shortname == NULL) {
       return NULL;
     }
-    switch (strlen(shortname)) {
+    switch (shortname.length()) {
     case 3:
-      strncpy(res, shortname, 1);
+      strncpy(res, CSTR(shortname), 1);
       break;
     case 4:
-      strncpy(res, shortname, 2);
+      strncpy(res, CSTR(shortname), 2);
       break;
     default:
       return NULL;
@@ -924,7 +925,7 @@ gt_get_icao_cc(const char* country, const char* shortname)
   }
 
   do {
-    if (case_ignore_strcmp(country, x->country) != 0) {
+    if (country.compare(x->country, Qt::CaseInsensitive) != 0) {
       x++;
       continue;
     }
@@ -938,10 +939,10 @@ gt_get_icao_cc(const char* country, const char* shortname)
       }
       return res;
     }
-    if (shortname && (strlen(shortname) == 4)) {
+    if (shortname.length() == 4) {
       const char* ccx = x->cc;
 
-      strncpy(res, shortname, 2);
+      strncpy(res, CSTR(shortname), 2);
       res[2] = '\0';
       while (ccx != NULL) {
         if (strncmp(ccx, res, 2) == 0) {

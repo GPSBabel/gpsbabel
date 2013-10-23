@@ -39,7 +39,7 @@ static gbfile* fin, *fout;
 static char* xmlbin;
 static waypoint* xmlwpt;
 static route_head* xmltrk;
-static char* xmlgrid;
+static QString xmlgrid;
 static int xmldatum;
 static double xmlEasting, xmlNorthing;
 static double xmlLatitude, xmlLongitude;
@@ -123,7 +123,7 @@ convert_datum(waypoint* wpt, int datum)
 static void
 finalize_pt(waypoint* wpt)
 {
-  if (strcmp(xmlgrid, "BNG") == 0) {
+  if (xmlgrid == "BNG") {
     GPS_Math_NGENToAiry1830LatLon(xmlEasting, xmlNorthing,
                                   &wpt->latitude, &wpt->longitude);
     xmldatum = DATUM_OSGB36;
@@ -150,8 +150,12 @@ finalize_pt(waypoint* wpt)
 static void
 tlog3a_xgcb_version(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  if (args != "1") {
+#else
   if (strcmp(args, "1") != 0) {
-    fatal(MYNAME ": Unsupported file version '%s'!\n", args);
+#endif
+    fatal(MYNAME ": Unsupported file version '%s'!\n", CSTRc(args));
   }
 }
 
@@ -167,11 +171,20 @@ tlog3a_xgcb_data(xg_string args, const QXmlStreamAttributes* unused)
   char* bin;
   char* cin, *cout;
   char cl, ch;
-
+#if NEW_STRINGS
+// This function needs rethinking.
+  len = args.length();
+#else
   len = strlen(args);
+#endif
   bin = (char*) xmalloc((len >> 1) + 1);
 
+#if NEW_STRINGS
+  char* cincopy  = xstrdup(args);
+  cin = cincopy;
+#else
   cin = (char*)args;
+#endif
   cout = bin;
 
   cl = 0x10;
@@ -200,6 +213,9 @@ tlog3a_xgcb_data(xg_string args, const QXmlStreamAttributes* unused)
   }
   xmlbin = bin;
   xmlbinsize = (cout - bin);
+#if NEW_STRINGS
+  xfree(cincopy);
+#endif
 }
 #endif
 
@@ -211,7 +227,11 @@ tlog3b_xgcb_tfna(xg_string args, const QXmlStreamAttributes* unused)
     xmltrk = route_head_alloc();
     track_add_head(xmltrk);
   }
+#if NEW_STRINGS
+  xmltrk->rte_name = args;
+#else
   xmltrk->rte_name = strdup(args);
+#endif
 }
 
 
@@ -222,7 +242,11 @@ tlog3b_xgcb_tfdes(xg_string args, const QXmlStreamAttributes* unused)
     xmltrk = route_head_alloc();
     track_add_head(xmltrk);
   }
+#if NEW_STRINGS
+  xmltrk->rte_desc = args;
+#else
   xmltrk->rte_desc = strdup(args);
+#endif
 }
 
 
@@ -259,9 +283,13 @@ tlog3b_xgcb_tpten(xg_string args, const QXmlStreamAttributes* unused)
 static void
 tlog3b_xgcb_wptid(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  xmlwpt->shortname = args;
+#else
   if (*args) {
     xmlwpt->shortname = xstrdup(args);
   }
+#endif
 }
 
 
@@ -275,6 +303,8 @@ tlog3b_xgcb_wptdt(xg_string args, const QXmlStreamAttributes* unused)
 static void
 tlog3b_xgcb_wptgr(xg_string args, const QXmlStreamAttributes* unused)
 {
+  xmlgrid = args;
+/*
   if (xmlgrid != NULL) {
     if (strcmp(xmlgrid, args) == 0) {
       return;
@@ -282,27 +312,40 @@ tlog3b_xgcb_wptgr(xg_string args, const QXmlStreamAttributes* unused)
     xfree(xmlgrid);
   }
   xmlgrid = xstrdup(args);
+*/
 }
 
 
 static void
 tlog3b_xgcb_wptno(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  xmlNorthing = args.toDouble();
+#else
   xmlNorthing = atof(args);
+#endif
 }
 
 
 static void
 tlog3b_xgcb_wptea(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  xmlEasting = args.toDouble();
+#else
   xmlEasting = atof(args);
+#endif
 }
 
 
 static void
 tlog3b_xgcb_wptal(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  xmlAltitude = args.toDouble();
+#else
   xmlAltitude = atof(args);
+#endif
 }
 
 
@@ -365,6 +408,12 @@ write_str(const char* str, gbfile* f)
   } else {
     gbfputc(0, f);
   }
+}
+
+static void
+write_str(const QString& str, gbfile* f)
+{
+  write_str(CSTR(str), f);
 }
 
 static int
@@ -661,16 +710,13 @@ dmtlog_rd_init(const char* fname)
   xmlbin = NULL;
   xmltrk = NULL;
   xmlwpt = NULL;
-  xmlgrid = NULL;
+  xmlgrid = QString();
 }
 
 static void
 dmtlog_rd_deinit(void)
 {
   gbfclose(fin);
-  if (xmlgrid != NULL) {
-    xfree(xmlgrid);
-  }
 }
 
 static void
@@ -728,7 +774,15 @@ write_header(const route_head* trk)
     queue* curr, *prev;
     QUEUE_FOR_EACH(&trk->waypoint_list, curr, prev) count++;
   }
+#if NEW_STRINGS
+  if (!trk || trk->rte_name.isEmpty()) {
+    write_str("Name", fout);
+  } else {
+    write_str(trk->rte_name, fout);
+  }
+#else
   write_str(trk && trk->rte_name && *trk->rte_name ? CSTRc(trk->rte_name) : "Name", fout);
+#endif
 
   xasprintf(&cout, "%d trackpoints and %d waypoints", count, waypt_count());
   write_str(cout, fout);
@@ -783,14 +837,22 @@ wpt_cb(const waypoint* wpt)
   gbfputdbl(wpt->altitude != unknown_alt ? wpt->altitude : 0, fout);
 
   names = 1;
+#if NEW_STRINGS
+  if (!wpt->description.isEmpty()) {
+#else
   if (wpt->description && *wpt->description) {
+#endif
     names = 2;
   }
   gbfputint32(names, fout);
   if (names > 1) {
     write_str(wpt->description, fout);
   }
+#if NEW_STRINGS
+  write_str(wpt->shortname.isEmpty() ? "Name" : wpt->shortname, fout);
+#else
   write_str(wpt->shortname && *wpt->shortname ? CSTRc(wpt->shortname) : "Name", fout);
+#endif
 }
 
 static void

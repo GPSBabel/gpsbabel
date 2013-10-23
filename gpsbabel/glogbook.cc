@@ -168,17 +168,29 @@ void	gl_trk_utc(xg_string args, const QXmlStreamAttributes* unused)
 
 void	gl_trk_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->latitude = args.toDouble();
+#else
   wpt_tmp->latitude = atof(args);
+#endif
 }
 
 void	gl_trk_long(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->longitude = args.toDouble();
+#else
   wpt_tmp->longitude = atof(args);
+#endif
 }
 
 void	gl_trk_alt(xg_string args, const QXmlStreamAttributes* unused)
 {
+#if NEW_STRINGS
+  wpt_tmp->altitude = args.toDouble();
+#else
   wpt_tmp->altitude = atof(args);
+#endif
 }
 
 

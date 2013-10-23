@@ -212,17 +212,16 @@ tiger_disp(const waypoint* wpt)
 
   gbfprintf(file_out, "%f,%f:%s", lon, lat, pin.toUtf8().data());
   if (!nolabels) {
-    char* temp = NULL;
-    char* desc = csv_stringclean(wpt->description, ":");
+    QString temp;
+    QString desc = csv_stringclean(wpt->description, ":");
     if (global_opts.synthesize_shortnames) {
       temp = desc;
       desc = mkshort(mkshort_whandle, desc);
     }
-    gbfprintf(file_out, ":%s", desc);
+    gbfprintf(file_out, ":%s", CSTR(desc));
     if (temp != NULL) {
       desc = temp;
     }
-    xfree(desc);
   }
   gbfprintf(file_out, "\n");
 }

@@ -69,7 +69,8 @@ waypt_dupe(const waypoint* wpt)
    */
   waypoint* tmp = new waypoint;
   *tmp = *wpt;
-
+#if NEW_STRINGS
+#else
   if (wpt->shortname) {
     tmp->shortname = xstrdup(wpt->shortname);
   }
@@ -79,6 +80,7 @@ waypt_dupe(const waypoint* wpt)
   if (wpt->notes) {
     tmp->notes = xstrdup(wpt->notes);
   }
+#endif
 
   tmp->icon_descr = wpt->icon_descr;
 
@@ -172,6 +174,21 @@ waypt_add(waypoint* wpt)
    * try to be sure that we have these fields even if just by
    * copying them from elsewhere.
    */
+#if NEW_STRINGS
+  // Note tests for isNull here as some formats intentionally set "".
+  // This is kind of goofy, but it emulates the C string implementation.
+  if (wpt->shortname.isNull()) {
+    if (!wpt->description.isNull()) {
+      wpt->shortname = wpt->description;
+    } else if (!wpt->notes.isNull()) {
+      wpt->shortname = wpt->notes;
+    } else {
+      QString n;
+      n.sprintf("%03d", waypt_ct);
+      wpt->shortname = QString("WPT%1").arg(n);
+    }
+  }
+#else
   if (wpt->shortname == NULL) {
     if (wpt->description) {
       wpt->shortname = xstrdup(wpt->description);
@@ -184,7 +201,19 @@ waypt_add(waypoint* wpt)
       wpt->shortname = sn;
     }
   }
+#endif
 
+#if NEW_STRINGS
+  if (wpt->description.isEmpty()) {
+    if (!wpt->notes.isNull()) {
+      wpt->description = wpt->notes;
+    } else {
+      if (!wpt->shortname.isNull()) {
+        wpt->description = wpt->shortname;
+      }
+    }
+  }
+#else
   if (wpt->description == NULL || strlen(wpt->description) == 0) {
     if (wpt->description) {
       xfree(wpt->description);
@@ -197,6 +226,7 @@ waypt_add(waypoint* wpt)
       }
     }
   }
+#endif
 
   update_common_traits(wpt);
 
@@ -257,13 +287,16 @@ waypt_disp(const waypoint* wpt)
   }
   printposn(wpt->latitude,1);
   printposn(wpt->longitude,0);
-
+#if NEW_STRINGS
+  if (!wpt->description.isEmpty()) {
+#else
   if (wpt->description) {
+#endif
     char* tmpdesc = xstrdup(wpt->description);
     printf("%s/%s",
            global_opts.synthesize_shortnames ?
            mkshort(mkshort_handle, tmpdesc) :
-           wpt->shortname,
+           CSTRc(wpt->shortname),
            tmpdesc);
     if (tmpdesc) {
       xfree(tmpdesc);
@@ -409,6 +442,8 @@ waypt_free(waypoint* wpt)
   /*
    * This and waypt_dupe should be closely synced.
    */
+#if NEW_STRINGS
+#else
   if (wpt->shortname) {
     xfree(wpt->shortname);
   }
@@ -418,6 +453,7 @@ waypt_free(waypoint* wpt)
   if (wpt->notes) {
     xfree(wpt->notes);
   }
+#endif
 
   if (wpt->gc_data != &empty_gc_data) {
     geocache_data* gc_data = (geocache_data*)wpt->gc_data;

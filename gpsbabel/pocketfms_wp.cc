@@ -103,13 +103,23 @@ static void
 enigma_waypt_disp(const waypoint* wpt)
 {
   char* t;
+#if NEW_STRINGS
+  if (!wpt->shortname.isEmpty()) {
+    // The output might have a space or control character.
+    int i, l = wpt->shortname.length();
+#else
   if (wpt->shortname) {
     // The output might have a space or control character.
     int i, l = strlen(wpt->shortname);
+#endif
     t = (char*) xmalloc(l + 1);
     char* d = t;
     for (i = 0; i < l; i++) {
+#if NEW_STRINGS
+      char s = wpt->shortname[i].cell();
+#else
       char s = wpt->shortname[i];
+#endif
       if (isgraph(s)) {
         *d++ = s;
       }

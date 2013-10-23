@@ -276,8 +276,11 @@ compare(const void* a, const void* b)
 
     waypoint* wpt_a = ((const htable_t*)a)->wpt;
     waypoint* wpt_b = ((const htable_t*)b)->wpt;
-
+#if NEW_STRINGS
+    return wpt_a->description.compare(wpt_b->description);
+#else
     return strcmp(wpt_a->description, wpt_b->description);
+#endif
   }
 }
 
@@ -292,8 +295,6 @@ fix_netstumbler_dupes(void)
 {
   int i, ct = waypt_count(), serial = 0;
   htable_t* htable, *bh;
-  const char* snptr;
-  char* tmp_sn;
   unsigned long last_crc;
   char ssid[32 + 5 + 1];
 
@@ -313,10 +314,9 @@ fix_netstumbler_dupes(void)
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     bh->wpt = (waypoint*) elem;
 #endif
-    snptr = bh->wpt->shortname;
-    tmp_sn = strlower(xstrdup(snptr));
-    bh->crc = get_crc32(tmp_sn, strlen(snptr));
-    xfree(tmp_sn);
+    QString snptr = bh->wpt->shortname;
+    QString tmp_sn = snptr.toLower();
+    bh->crc = get_crc32(CSTR(tmp_sn), tmp_sn.length());
     i ++;
     bh ++;
   }
@@ -327,9 +327,13 @@ fix_netstumbler_dupes(void)
 
   for (i = 0, bh = htable; i < ct; i++, bh++) {
     if (last_crc == bh->crc) {
+#if NEW_STRINGS
+      bh->wpt->shortname += QString("/%1").arg(++serial);
+#else
       snprintf(ssid, sizeof ssid, "%s/%d", CSTRc(bh->wpt->shortname), ++serial);
       xfree(bh->wpt->shortname);
       bh->wpt->shortname = xstrdup(ssid);
+#endif
     } else {
       last_crc = bh->crc;
     }

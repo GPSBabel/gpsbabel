@@ -135,14 +135,14 @@ mps_wpt_q_deinit(queue* whichQueue)
  *
  */
 waypoint*
-mps_find_wpt_q_by_name(const queue* whichQueue, const char* name)
+mps_find_wpt_q_by_name(const queue* whichQueue, const QString& name)
 {
   queue* elem, *tmp;
   waypoint* waypointp;
 
   QUEUE_FOR_EACH(whichQueue, elem, tmp) {
     waypointp = (waypoint*) elem;
-    if (0 == strcmp(waypointp->shortname, name)) {
+    if (waypointp->shortname == name) {
       return waypointp;
     }
   }
@@ -619,8 +619,6 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isR
   int reclen;
   int lat, lon;
   int icon;
-  const char* src = "";         /* default to empty string */
-  char* ident;
   char* ascii_description;
   char zbuf[25];
   char ffbuf[25];
@@ -636,16 +634,25 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isR
   if (WAYPT_HAS(wpt, depth) && mpsusedepth) {
     mps_depth = wpt->depth;
   }
-
+  QString src;
+#if NEW_STRINGS
+  if (!wpt->description.isEmpty()) {
+    src = wpt->description;
+  }
+  if (!wpt->notes.isEmpty()) {
+    src = wpt->notes;
+  }
+#else
   if (wpt->description) {
     src = wpt->description;
   }
   if (wpt->notes) {
     src = wpt->notes;
   }
-  ident = global_opts.synthesize_shortnames ?
+#endif
+  QString ident = global_opts.synthesize_shortnames ?
           mkshort(mkshort_handle, src) :
-          wpt->shortname;
+          CSTRc(wpt->shortname);
 
   memset(zbuf, 0, sizeof(zbuf));
   memset(ffbuf, 0xff, sizeof(ffbuf));
@@ -659,8 +666,12 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isR
   icon = mps_converted_icon_number(icon, mps_ver, MAPSOURCE);
 
   /* two NULL (0x0) bytes at end of each string */
+#if NEW_STRINGS
+  ascii_description = xstrdup(wpt->description);
+#else
   ascii_description = wpt->description ? xstrdup(wpt->description) : xstrdup("");
-  reclen = strlen(ident) + strlen(ascii_description) + 2;
+#endif
+  reclen = ident.length() + strlen(ascii_description) + 2;
   if ((mps_ver == 4) || (mps_ver == 5)) {
     /* v4.06 & V5.0*/
     reclen += 85;				/* "W" (1) + strlen(name) + NULL (1) + class(4) + country(sz) +
@@ -668,8 +679,12 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isR
 										+ NULL (1) + prox(9) + display(4) + colour(4) + symbol(4) + city(sz) +
 										state(sz) + facility(sz) + unknown2(1) + depth(9) + unknown3(7) */
     /* -1 as reclen is interpreted from zero meaning a reclength of one */
+#if NEW_STRINGS
+    if (!wpt->notes.isEmpty()) {
+#else
     if (wpt->notes) {
-      reclen += strlen(wpt->notes);
+#endif
+      reclen += strlen(CSTRc(wpt->notes));
     }
   } else {
     /* v3.02 */
@@ -716,7 +731,11 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isR
     gbfputc(1, mps_file);
     gbfputdbl(mps_altitude, mps_file);
   }
+#if NEW_STRINGS
+  if (!wpt->description.isEmpty()) {
+#else
   if (wpt->description) {
+#endif
     gbfputs(ascii_description, mps_file);
   }
   gbfwrite(zbuf, 1, 1, mps_file);	/* NULL termination */
@@ -748,7 +767,11 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isR
   gbfwrite(zbuf, 2, 1, mps_file);		/* unknown */
   if ((mps_ver == 4) || (mps_ver == 5)) {
     gbfwrite(zbuf, 4, 1, mps_file);	/* unknown */
+#if NEW_STRINGS
+    if (!wpt->notes.isEmpty()) {
+#else
     if (wpt->notes) {
+#endif
       gbfputs(wpt->notes, mps_file);
     }
     gbfwrite(zbuf, 1, 1, mps_file);	/* string termination */
@@ -767,10 +790,10 @@ mps_waypoint_w_unique_wrapper(const waypoint* wpt)
   waypoint* wptfound = NULL;
 
   /* Search for this waypoint in the ones already written */
-  wptfound = mps_find_wpt_q_by_name(&written_wpt_head, wpt->shortname);
+  wptfound = mps_find_wpt_q_by_name(&written_wpt_head, CSTRc(wpt->shortname));
   /* is the next line necessary? Assumes we know who's called us and in what order */
   if (wptfound == NULL) {
-    wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, wpt->shortname);
+    wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, CSTRc(wpt->shortname));
   }
 
   /* if this waypoint hasn't been written then it is okay to do so */
@@ -797,11 +820,11 @@ mps_route_wpt_w_unique_wrapper(const waypoint* wpt)
   waypoint* wptfound = NULL;
 
   /* Search for this waypoint in the ones already written */
-  wptfound = mps_find_wpt_q_by_name(&written_wpt_head, wpt->shortname);
+  wptfound = mps_find_wpt_q_by_name(&written_wpt_head, CSTRc(wpt->shortname));
   if (wptfound == NULL)
     /* so, not a real wpt, so must check route wpts already written as reals */
   {
-    wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, wpt->shortname);
+    wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, CSTRc(wpt->shortname));
   }
 
   /* if this waypoint hasn't been written then it is okay to do so
@@ -1127,8 +1150,6 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
   char*		rname;
   char		hdr[20];
   char		zbuf[20];
-  const char*		src = "";
-  char*		ident;
 
   waypoint*	testwpt;
   time_t		uniqueValue = 0;
@@ -1183,16 +1204,25 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
         }
       }
 
+      QString src;
+#if NEW_STRINGS
+      if (!testwpt->description.isEmpty()) {
+#else
       if (testwpt->description) {
+#endif
         src = testwpt->description;
       }
+#if NEW_STRINGS
+      if (!testwpt->notes.isEmpty()) {
+#else
       if (testwpt->notes) {
+#endif
         src = testwpt->notes;
       }
-      ident = global_opts.synthesize_shortnames ?
+      QString ident = global_opts.synthesize_shortnames ?
               mkshort(mkshort_handle, src) :
-              testwpt->shortname;
-      allWptNameLengths += strlen(ident) + 1;
+              CSTRc(testwpt->shortname);
+      allWptNameLengths += ident.length() + 1;
 
       rte_datapoints++;
     }
@@ -1202,7 +1232,11 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
     }
 
     /* route name */
+#if NEW_STRINGS
+    if (rte->rte_name.isEmpty()) {
+#else
     if (!rte->rte_name) {
+#endif
       sprintf(hdr, "Route%04x", (unsigned) uniqueValue);
       rname = xstrdup(hdr);
     } else {
@@ -1291,8 +1325,6 @@ mps_routedatapoint_w(gbfile* mps_file, int mps_ver, const waypoint* rtewpt)
   int			lon;
   char		zbuf[20];
   char		ffbuf[20];
-  const char*		src = "";
-  char*		ident;
   int			reclen;
 
   int			maxlat;
@@ -1402,15 +1434,25 @@ mps_routedatapoint_w(gbfile* mps_file, int mps_ver, const waypoint* rtewpt)
 
   }
 
+  QString src;
+#if NEW_STRINGS
+  if (!rtewpt->description.isEmpty()) {
+    src = rtewpt->description;
+  }
+  if (!rtewpt->notes.isEmpty()) {
+    src = rtewpt->notes;
+  }
+#else
   if (rtewpt->description) {
     src = rtewpt->description;
   }
   if (rtewpt->notes) {
     src = rtewpt->notes;
   }
-  ident = global_opts.synthesize_shortnames ?
+#endif
+  QString ident = global_opts.synthesize_shortnames ?
           mkshort(mkshort_handle, src) :
-          rtewpt->shortname;
+          CSTRc(rtewpt->shortname);
 
   gbfputs(ident, mps_file);
   gbfwrite(zbuf, 1, 1, mps_file);	/* NULL termination to ident */
@@ -1606,7 +1648,11 @@ mps_trackhdr_w(gbfile* mps_file, int mps_ver, const route_head* trk)
     }
 
     /* track name */
+#if NEW_STRINGS
+    if (trk->rte_name.isEmpty()) {
+#else
     if (!trk->rte_name) {
+#endif
       sprintf(hdr, "Track%04x", (unsigned) uniqueValue);
       tname = xstrdup(hdr);
     } else {

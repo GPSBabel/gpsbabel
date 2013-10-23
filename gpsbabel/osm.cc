@@ -532,14 +532,24 @@ osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
   str = osm_strip_html(value);
 
   if (strcmp(key, "name") == 0) {
+#if NEW_STRINGS
+    if (wpt->shortname.isEmpty()) {
+      wpt->shortname = str;
+    }
+#else
     if (! wpt->shortname) {
       wpt->shortname = xstrdup(str);
     }
+#endif
   } else if (strcmp(key, "name:en") == 0) {
+#if NEW_STRINGS
+    wpt->shortname = str;
+#else
     if (wpt->shortname) {
       xfree(wpt->shortname);
     }
     wpt->shortname = xstrdup(str);
+#endif
   } else if ((ikey = osm_feature_ikey(key)) >= 0) {
     char* id = osm_feature_symbol(ikey, value);
     wpt->icon_descr = id;
@@ -547,6 +557,14 @@ osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
       xfree(id);
     }
   } else if (strcmp(key, "note") == 0) {
+#if NEW_STRINGS
+    if (wpt->notes.isEmpty()) {
+      wpt->notes = str;
+    } else {
+      wpt->notes += "; ";
+      wpt->notes += str;
+    }
+#else
     if (wpt->notes) {
       char* tmp;
       xasprintf(&tmp, "%s; %s", CSTRc(wpt->notes), str);
@@ -555,6 +573,7 @@ osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
     } else {
       wpt->notes = xstrdup(str);
     }
+#endif
   } else if (strcmp(key, "gps:hdop") == 0) {
     wpt->hdop = atof(str);
   } else if (strcmp(key, "gps:vdop") == 0) {
@@ -629,14 +648,24 @@ osm_way_tag(xg_string args, const QXmlStreamAttributes* attrv)
   str = osm_strip_html(value);
 
   if (strcmp(key, "name") == 0) {
+#if NEW_STRINGS
+    if (rte->rte_name.isEmpty()) {
+      rte->rte_name = str;
+    }
+#else
     if (! rte->rte_name) {
       rte->rte_name = xstrdup(str);
     }
+#endif
   } else if (strcmp(key, "name:en") == 0) {
+#if NEW_STRINGS
+    rte->rte_name = str;
+#else
     if (rte->rte_name) {
       xfree(rte->rte_name);
     }
     rte->rte_name = xstrdup(str);
+#endif
   }
 
   xfree(str);
@@ -698,11 +727,11 @@ osm_init_icons(void)
 }
 
 static void
-osm_write_tag(const char* key, const char* value)
+osm_write_tag(const QString& key, const QString& value)
 {
-  if (value && *value) {
-    char* str = xml_entitize(value);
-    gbfprintf(fout, "    <tag k='%s' v='%s'/>\n", key, str);
+  if (!value.isEmpty()) {
+    char* str = xml_entitize(CSTR(value));
+    gbfprintf(fout, "    <tag k='%s' v='%s'/>\n", CSTR(key), str);
     xfree(str);
   }
 }
@@ -761,7 +790,11 @@ static QString
 osm_name_from_wpt(const waypoint* wpt)
 {
   QString name = QString("%1\01%2\01%3")
+#if NEW_STRINGS
+                 .arg(wpt->shortname)
+#else
                  .arg((wpt->shortname) ? CSTRc(wpt->shortname) : "")
+#endif
                  .arg(wpt->latitude)
                  .arg(wpt->longitude);
   return name;
@@ -835,7 +868,11 @@ osm_waypt_disp(const waypoint* wpt)
   }
 
   osm_write_tag("name", wpt->shortname);
+#if NEW_STRINGS
+  osm_write_tag("note", (wpt->notes.isEmpty()) ? wpt->description : wpt->notes);
+#else
   osm_write_tag("note", (wpt->notes) ? wpt->notes : wpt->description);
+#endif
   if (!wpt->icon_descr.isNull()) {
     osm_disp_feature(wpt);
   }

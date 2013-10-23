@@ -66,8 +66,8 @@ typedef struct gt_country_code_s {
 
 extern gt_country_code_t gt_country_codes[];
 
-const char* gt_get_icao_country(const char* cc);
-const char* gt_get_icao_cc(const char* country, const char* shortname);
+const char* gt_get_icao_country(const QString& cc);
+const char* gt_get_icao_cc(const QString& country, const QString& shortname);
 
 /* this order is used by most devices */
 typedef enum {

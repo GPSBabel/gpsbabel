@@ -287,10 +287,14 @@ nmea_rd_init(const char* fname)
     if (!wpt) {
       return;
     }
+#if NEW_STRINGS
+    wpt->shortname = "Position";
+#else
     if (wpt->shortname) {
       xfree(wpt->shortname);
     }
     wpt->shortname = xstrdup("Position");
+#endif
     nmea_add_wpt(wpt, NULL);
     return;
   }
@@ -1210,7 +1214,7 @@ nmea_wayptpr(const waypoint* wpt)
 {
   char obuf[200];
   double lat,lon;
-  char* s;
+  String s;
   int cksum;
 
   lat = degrees2ddmm(wpt->latitude);
@@ -1223,7 +1227,7 @@ nmea_wayptpr(const waypoint* wpt)
 
   snprintf(obuf, sizeof(obuf),  "GPWPL,%08.3f,%c,%09.3f,%c,%s",
            fabs(lat), lat < 0 ? 'S' : 'N',
-           fabs(lon), lon < 0 ? 'W' : 'E', s
+           fabs(lon), lon < 0 ? 'W' : 'E', CSTRc(s)
 
           );
   cksum = nmea_cksum(obuf);
@@ -1232,8 +1236,10 @@ nmea_wayptpr(const waypoint* wpt)
     gbfflush(file_out);
     gb_sleep(sleepus);
   }
-
+#if NEW_STRINGS
+#else
   xfree(s);
+#endif
 
 }
 

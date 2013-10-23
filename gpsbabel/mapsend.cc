@@ -275,10 +275,10 @@ mapsend_waypt_pr(const waypoint* waypointp)
   unsigned int c = 0;
   double falt;
   static int cnt = 0;
-  const char* sn = global_opts.synthesize_shortnames ?
+  QString sn = global_opts.synthesize_shortnames ?
                    mkshort_from_wpt(mkshort_handle, waypointp) :
                    waypointp->shortname;
-  char* tmp;
+  QString tmp;
 
   /*
    * The format spec doesn't call out the character set of waypoint
@@ -298,10 +298,15 @@ mapsend_waypt_pr(const waypoint* waypointp)
 
   tmp = mkshort(wpt_handle, sn);
   gbfputpstr(tmp, mapsend_file_out);
-  if (tmp) {
-    xfree(tmp);
-  }
 
+#if NEW_STRINGS
+  c = waypointp->description.length();
+  if (c > 30) {
+    c = 30;
+  }
+  gbfputc(c, mapsend_file_out);
+  gbfwrite(CSTR(waypointp->description), 1, c, mapsend_file_out);
+#else
   tmp = waypointp->description;
   if (tmp) {
     c = strlen(tmp);
@@ -314,6 +319,7 @@ mapsend_waypt_pr(const waypoint* waypointp)
   }
   gbfputc(c, mapsend_file_out);
   gbfwrite(tmp, 1, c, mapsend_file_out);
+#endif
 
   /* #, icon, status */
   gbfputint32(++cnt, mapsend_file_out);
@@ -388,9 +394,13 @@ mapsend_route_disp(const waypoint* waypointp)
   route_wp_count++;
 
   /* waypoint name */
+#if NEW_STRINGS
+  c = waypointp->shortname.length();
+#else
   c = waypointp->shortname ? strlen(waypointp->shortname) : 0;
+#endif
   gbfwrite(&c, 1, 1, mapsend_file_out);
-  gbfwrite(waypointp->shortname, 1, c, mapsend_file_out);
+  gbfwrite(CSTRc(waypointp->shortname), 1, c, mapsend_file_out);
 
   /* waypoint number */
   gbfputint32(route_wp_count, mapsend_file_out);
@@ -419,7 +429,6 @@ void mapsend_track_hdr(const route_head* trk)
    */
   const char* verstring = "30";
   queue* elem, *tmp;
-  char* tname;
   int i;
   mapsend_hdr hdr = {13, {'4','D','5','3','3','3','3','4',' ','M','S'},
     {'3','0'}, ms_type_track, {0, 0, 0}
@@ -449,8 +458,12 @@ void mapsend_track_hdr(const route_head* trk)
   hdr.ms_version[1] = verstring[1];
 
   gbfwrite(&hdr, sizeof(hdr), 1, mapsend_file_out);
-
+#if NEW_STRINGS
+  QString tname = trk->rte_name.isEmpty() ? "Track" : trk->rte_name;
+  gbfputpstr(tname, mapsend_file_out);
+#else
   /* track name */
+  char* tname;
   if (!trk->rte_name) {
     tname = xstrdup("Track");
   } else {
@@ -459,6 +472,7 @@ void mapsend_track_hdr(const route_head* trk)
   gbfputpstr(tname, mapsend_file_out);
 
   xfree(tname);
+#endif
 
   /* total nodes (waypoints) this track */
   i = 0;

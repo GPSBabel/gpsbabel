@@ -66,9 +66,17 @@ sort_comp(const queue* a, const queue* b)
   case sm_gcid:
     return x1->gc_data->id - x2->gc_data->id;
   case sm_shortname:
+#if NEW_STRINGS
+    return x1->shortname.compare(x2->shortname);
+#else
     return strcmp(x1->shortname, x2->shortname);
+#endif
   case sm_description:
+#if NEW_STRINGS
+    return x1->description.compare(x2->description);
+#else
     return strcmp(x1->description, x2->description);
+#endif
   case sm_time:
     return x1->GetCreationTime().toTime_t() - x2->GetCreationTime().toTime_t();
   default:

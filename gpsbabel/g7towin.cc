@@ -129,10 +129,14 @@ parse_line(char* buff, int index, const char* delimiter, waypoint* wpt)
 
     case WPT_cA_OFS + 1:
     case WPT_c1_OFS + 1:
+#if NEW_STRINGS
+      wpt->shortname = cin;
+#else
       if (wpt->shortname) {
         xfree(wpt->shortname);
       }
       wpt->shortname = xstrdup(cin);
+#endif
       break;
 
     case WPT_cA_OFS + 4:

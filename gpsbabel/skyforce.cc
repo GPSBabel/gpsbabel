@@ -174,8 +174,6 @@ skyforce_waypt_disp_cb(const waypoint* wpt)
     tm = *gmtime(&tt);
     strftime(buf + 2, sizeof(buf) - 2, "%d%m%y  %H%M%S    ", &tm);
   } else {
-    char* name;
-
     if (rte_num > 999) {
       return;
     }
@@ -187,6 +185,7 @@ skyforce_waypt_disp_cb(const waypoint* wpt)
       }
       return;
     }
+    QString name;
     if (global_opts.synthesize_shortnames) {
       name = mkshort_from_wpt(short_h, wpt);
     } else {
@@ -196,9 +195,7 @@ skyforce_waypt_disp_cb(const waypoint* wpt)
     if (global_opts.objective == rtedata) {
       snprintf(buf + 2, sizeof(buf) - 2, "%03d ", rte_num);
     }
-    snprintf(buf + 6, sizeof(buf) - 6, "%03d %-9s ", wpt_num, name);
-
-    xfree(name);
+    snprintf(buf + 6, sizeof(buf) - 6, "%03d %-9s ", wpt_num, CSTR(name));
   }
 
 

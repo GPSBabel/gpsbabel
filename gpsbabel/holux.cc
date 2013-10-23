@@ -155,7 +155,7 @@ static void data_read(void)
 
 
 
-char* mknshort(char* stIn,unsigned int sLen)
+const char* mknshort(const char* stIn,unsigned int sLen)
 {
 #define MAX_STRINGLEN 255
   static char strOut[MAX_STRINGLEN];
@@ -214,14 +214,14 @@ static void holux_disp(const waypoint* wpt)
 
   memset(pWptHxTmp->name,0x20,sizeof(pWptHxTmp->name));
   if (wpt->shortname != NULL) {
-    strncpy(pWptHxTmp->name, mknshort(wpt->shortname,sizeof(pWptHxTmp->name)),sizeof(pWptHxTmp->name));
+    strncpy(pWptHxTmp->name, mknshort(CSTRc(wpt->shortname),sizeof(pWptHxTmp->name)),sizeof(pWptHxTmp->name));
   } else {
     sprintf(pWptHxTmp->name,"W%d",sIndex);
   }
 
   memset(pWptHxTmp->comment,0x20,sizeof(pWptHxTmp->comment));
   if (wpt->description != NULL) {
-    strncpy(pWptHxTmp->comment, mknshort(wpt->description,sizeof(pWptHxTmp->comment)),sizeof(pWptHxTmp->comment));
+    strncpy(pWptHxTmp->comment, mknshort(CSTRc(wpt->description),sizeof(pWptHxTmp->comment)),sizeof(pWptHxTmp->comment));
   }
 
   /*set the time */

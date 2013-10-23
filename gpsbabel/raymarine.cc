@@ -278,7 +278,11 @@ static char
 same_points(const waypoint* A, const waypoint* B)
 {
   return ( /* !!! We are case-sensitive !!! */
+#if NEW_STRINGS
+           (A->shortname == B->shortname) &&
+#else
            (strcmp(A->shortname, B->shortname) == 0) &&
+#endif
            (A->latitude == B->latitude) &&
            (A->longitude == B->longitude));
 }
@@ -307,7 +311,7 @@ register_waypt(const waypoint* ref, const char is_rtept)
     }
   }
 
-  wpt->extra_data = (void*)mkshort(hshort_wpt, wpt->shortname);
+  wpt->extra_data = (void*)mkshort(hshort_wpt, CSTR(wpt->shortname));
 
   waypt_table[waypt_table_ct] = (waypoint*)wpt;
   waypt_table_ct++;
@@ -330,14 +334,17 @@ qsort_cb(const void* a, const void* b)
 {
   const waypoint* wa = *(waypoint**)a;
   const waypoint* wb = *(waypoint**)b;
-
+#if NEW_STRINGS
+  return wa->shortname.compare(wb->shortname);
+#else
   return strcmp(wa->shortname, wb->shortname);
+#endif
 }
 
 static void
 write_waypoint(gbfile* fout, const waypoint* wpt, const int waypt_no, const char* location)
 {
-  const char* notes;
+  QString notes;
   char* name;
   double time;
 
@@ -367,7 +374,7 @@ write_waypoint(gbfile* fout, const waypoint* wpt, const int waypt_no, const char
             "Notes=%s" LINE_FEED,
             0.0, 0.0,
             find_symbol_num(wpt->icon_descr),
-            notes
+            CSTR(notes)
            );
   gbfprintf(fout, "Rel=" LINE_FEED
             "RelSet=0" LINE_FEED
@@ -380,29 +387,24 @@ write_waypoint(gbfile* fout, const waypoint* wpt, const int waypt_no, const char
             "Time=%.10f00000" LINE_FEED,
             0.0, -32678.0, 65535.0, time
            );
-  xfree(notes);
 }
 
 static void
 write_route_head_cb(const route_head* rte)
 {
-  char buff[32];
-  char* name;
+  QString name;
 
   name = rte->rte_name;
-  if ((name == NULL) || (*name == '\0')) {
-    snprintf(buff, sizeof(buff), "Route%d", rte_index);
-    name = buff;
+  if (name.isEmpty()) {
+    name=QString("Route%1").arg(rte_index);
   }
   name = mkshort(hshort_rte, name);
   gbfprintf(fout, "[Rt%d]" LINE_FEED
             "Name=%s" LINE_FEED
             "Visible=1" LINE_FEED,
             rte_index,
-            name
+            CSTR(name)
            );
-  xfree(name);
-
   rte_index++;
   rte_wpt_index = 0;
 }

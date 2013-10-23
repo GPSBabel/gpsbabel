@@ -623,12 +623,18 @@ tag_log_wpt(const QXmlStreamAttributes& attr)
     we need to keep track of log_wpt counts so we don't collide with
     dupe shortnames.
   */
+#if NEW_STRINGS
+  if (wpt_tmp->shortname.size() > 2) {
+// FIXME: think harder about this later.
+    lwp_tmp->shortname = wpt_tmp->shortname.mid(2, 4) + "-FIXME";
+
+#else
   if ((wpt_tmp->shortname) && (strlen(wpt_tmp->shortname) > 2)) {
     /* copy of the shortname */
     lwp_tmp->shortname = (char*) xcalloc(7, 1);
     sprintf(lwp_tmp->shortname, "%-4.4s%02d",
             &wpt_tmp->shortname[2], logpoint_ct++);
-
+#endif
     waypt_add(lwp_tmp);
   }
 }
@@ -932,10 +938,14 @@ gpx_end(const QString& el)
     wpt_tmp = NULL;
     break;
   case tt_cache_name:
+#if NEW_STRINGS 
+    wpt_tmp->notes = cdatastr;
+#else
     if (wpt_tmp->notes != NULL) {
       xfree(wpt_tmp->notes);
     }
     wpt_tmp->notes = xstrdup(cdatastr);
+#endif
     break;
   case tt_cache_container:
     waypt_alloc_gc_data(wpt_tmp)->container = gs_mkcont(cdatastr);
@@ -1116,10 +1126,14 @@ gpx_end(const QString& el)
   case tt_wpt_desc:
   case tt_trk_trkseg_trkpt_desc:
   case tt_rte_rtept_desc:
+#if NEW_STRINGS 
+    wpt_tmp->notes = cdatastr;
+#else
     if (wpt_tmp->notes != NULL) {
       xfree(wpt_tmp->notes);
     }
     wpt_tmp->notes = xstrdup(cdatastr);
+#endif
     break;
   case tt_pdop:
     wpt_tmp->pdop = cdatastr.toDouble();
@@ -1603,8 +1617,13 @@ gpx_track_hdr(const route_head* rte)
   current_trk_head = rte;
 
   writer->writeStartElement("trk");
+#if NEW_STRINGS 
+  writer->writeOptionalTextElement("name", rte->rte_name);
+  writer->writeOptionalTextElement("desc", rte->rte_desc);
+#else
   writer->writeOptionalTextElement("name", QString::fromUtf8(rte->rte_name));
   writer->writeOptionalTextElement("desc", QString::fromUtf8(rte->rte_desc));
+#endif
   if (rte->rte_num) {
     writer->writeTextElement("number", QString::number(rte->rte_num));
   }
@@ -1622,7 +1641,6 @@ gpx_track_hdr(const route_head* rte)
 static void
 gpx_track_disp(const waypoint* waypointp)
 {
-  const char* oname;
   fs_xml* fs_gpx;
   int first_in_trk;
   first_in_trk = waypointp->Q.prev == &current_trk_head->waypoint_list;
@@ -1653,6 +1671,11 @@ gpx_track_disp(const waypoint* waypointp)
   /* GPX doesn't require a name on output, so if we made one up
    * on input, we might as well say nothing.
    */
+#if NEW_STRINGS 
+  QString oname;
+#else
+  const char* oname;
+#endif
   oname = global_opts.synthesize_shortnames ?
           mkshort_from_wpt(mkshort_handle, waypointp) :
           waypointp->shortname;
@@ -1715,7 +1738,11 @@ gpx_route_hdr(const route_head* rte)
 static void
 gpx_route_disp(const waypoint* waypointp)
 {
+#if NEW_STRINGS 
+  QString oname;
+#else
   const char* oname;
+#endif
   fs_xml* fs_gpx;
   writer->writeStartElement("rtept");
   writer->writeAttribute("lat", toString(waypointp->latitude));

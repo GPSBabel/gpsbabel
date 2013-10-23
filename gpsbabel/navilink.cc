@@ -207,7 +207,11 @@ compare_waypoints(const waypoint* waypt1, const waypoint* waypt2)
   return waypt1->latitude == waypt2->latitude &&
          waypt1->longitude == waypt2->longitude &&
          waypt1->altitude == waypt2->altitude &&
+#if NEW_STRINGS
+         waypt1->shortname == waypt2->shortname;
+#else
          strcmp(waypt1->shortname, waypt2->shortname) == 0;
+#endif
 }
 
 unsigned
@@ -426,7 +430,7 @@ encode_waypoint(const waypoint* waypt, unsigned char* buffer)
   buffer[0] = 0x00;
   buffer[1] = 0x40;
   le_write16(buffer + 2, 0);
-  strncpy((char*)buffer + 4, waypt->shortname, 6);
+  strncpy((char*)buffer + 4, CSTRc(waypt->shortname), 6);
   buffer[10] = 0;
   buffer[11] = 0;
   encode_position(waypt, buffer + 12);
@@ -739,10 +743,10 @@ static void
 serial_write_route_end(const route_head* route)
 {
   unsigned char* data;
-  unsigned      src;
-  unsigned      sr;
+  unsigned src;
+  unsigned sr;
   unsigned char id[1];
-  const char*    rte_name;
+  QString rte_name;
 
   rte_name = route->rte_name;
   if (rte_name == NULL) {
@@ -759,7 +763,7 @@ serial_write_route_end(const route_head* route)
   data[2] = 0;
   data[3] = 0x20;
   memset(data + 4, 0, 14);
-  strncpy((char*)data + 4, rte_name, 13);
+  strncpy((char*)data + 4, CSTR(rte_name), 13);
   data[18] = 0;
   data[19] = 0;
   le_write32(data + 20, 0);

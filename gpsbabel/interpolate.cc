@@ -99,6 +99,10 @@ interpfilt_process(void)
                timen += interval) {
             waypoint* wpt_new = waypt_dupe(wpt);
             wpt_new->SetCreationTime(timen);
+#if NEW_STRINGS
+            wpt_new->shortname = QString();
+            wpt_new->description = QString();
+#else
             if (wpt_new->shortname) {
               xfree(wpt_new->shortname);
             }
@@ -106,6 +110,7 @@ interpfilt_process(void)
               xfree(wpt_new->description);
             }
             wpt_new->shortname = wpt_new->description = NULL;
+#endif
             linepart(lat1, lon1,
                      wpt->latitude, wpt->longitude,
                      (double)(timen-time1)/
@@ -132,6 +137,10 @@ interpfilt_process(void)
               waypoint* wpt_new = waypt_dupe(wpt);
               wpt_new->SetCreationTime(distn/curdist*
                                        (wpt->creation_time.toTime_t() - time1) + time1);
+#if NEW_STRINGS
+              wpt_new->shortname = QString();
+              wpt_new->description = QString();
+#else
               if (wpt_new->shortname) {
                 xfree(wpt_new->shortname);
               }
@@ -139,6 +148,7 @@ interpfilt_process(void)
                 xfree(wpt_new->description);
               }
               wpt_new->shortname = wpt_new->description = NULL;
+#endif
               linepart(lat1, lon1,
                        wpt->latitude, wpt->longitude,
                        distn/curdist,

@@ -384,7 +384,11 @@ read_poi(const int sz, const int tag)
 
   (void) gbfgetint16(fin);	/* ? always 1 ? */
   (void) gbfgetc(fin);		/* seems to 1 when extra options present */
+#if NEW_STRINGS
+  wpt->shortname = QString::fromLatin1(gpi_read_string("Shortname"));
+#else
   wpt->shortname = gpi_read_string("Shortname");
+#endif
 
   while (gbftell(fin) < (gbsize_t)(pos + sz - 4)) {
     int tag = gbfgetint32(fin);
@@ -392,13 +396,21 @@ read_poi(const int sz, const int tag)
       break;
     }
   }
-
+#if NEW_STRINGS
+  if (wpt->description.isEmpty() && !wpt->notes.isEmpty()) {
+    wpt->description = wpt->notes;
+  }
+  if (wpt->notes.isEmpty() && !wpt->description.isEmpty()) {
+    wpt->notes = wpt->description;
+  }
+#else
   if (wpt->notes && !wpt->description) {
     wpt->description = xstrdup(wpt->notes);
   }
   if (wpt->description && !wpt->notes) {
     wpt->notes = xstrdup(wpt->description);
   }
+#endif
 
   waypt_add(wpt);
 
@@ -526,17 +538,27 @@ read_tag(const char* caller, const int tag, waypoint* wpt)
       /* speed isn't part of a normal waypoint
       WAYPT_SET(wpt, speed, speed);
       */
+#if NEW_STRINGS
+      if ((wpt->shortname.isEmpty()  || (wpt->shortname).indexOf('@'))) {
+#else
       if ((wpt->shortname == NULL) || (! strchr(wpt->shortname, '@'))) {
+#endif
         if (units == 's') {
           speed = MPS_TO_MPH(speed);
         } else {
           speed = MPS_TO_KPH(speed);
         }
+#if NEW_STRINGS
+// double check
+        QString base = wpt->shortname.isEmpty() ? "WPT" : wpt->shortname;
+        wpt->shortname = base + QString("@.%1").arg(speed);
+#else
         xasprintf(&str, "%s@%.f", wpt->shortname ? CSTRc(wpt->shortname) : "WPT", speed);
         if (wpt->shortname) {
           xfree(wpt->shortname);
         }
         wpt->shortname = str;
+#endif
       }
     }
 
@@ -577,10 +599,18 @@ read_tag(const char* caller, const int tag, waypoint* wpt)
       break;
     }
 
+#if NEW_STRINGS
+    if (!wpt->description.isEmpty()) {
+#else
     if (wpt->description) {
+#endif
       wpt->notes = str;
     } else {
+#if NEW_STRINGS
+      wpt->description = QString::fromLatin1(str);
+#else
       wpt->description = str;
+#endif
     }
     break;
 
@@ -722,17 +752,32 @@ write_string(const char* str, const char long_format)
   gbfwrite(str, 1, len, fout);
 }
 
+static void
+write_string(const QString& str, const char long_format)
+{
+  write_string(CSTR(str), long_format);
+}
+
 
 static int
 compare_wpt_cb(const queue* a, const queue* b)
 {
   const waypoint* wa = (waypoint*) a;
   const waypoint* wb = (waypoint*) b;
-
+#if NEW_STRINGS
+  return wa->shortname.compare(wb->shortname);
+#else
   return strcmp(wa->shortname, wb->shortname);
+#endif
 }
 
+static char
+compare_strings(const QString& s1, const QString& s2)
+{
+  return s1.compare(s2);
+}
 
+#if !NEW_STRINGS
 static char
 compare_strings(const char* s1, const char* s2)
 {
@@ -748,6 +793,7 @@ compare_strings(const char* s1, const char* s2)
     return 1;
   }
 }
+#endif
 
 
 static writer_data_t*
@@ -889,11 +935,15 @@ wdata_compute_size(writer_data_t* data)
     waypoint* wpt = (waypoint*) elem;
     gpi_waypt_t* dt;
     garmin_fs_t* gmsd;
-    char* str;
+    QString str;
 
     res += 12;		/* tag/sz/sub-sz */
     res += 19;		/* poi fixed size */
+#if NEW_STRINGS
+    res += wpt->shortname.length();
+#else
     res += strlen(wpt->shortname);
+#endif
     if (! opt_hide_bitmap) {
       res += 10;  /* tag(4) */
     }
@@ -903,8 +953,13 @@ wdata_compute_size(writer_data_t* data)
 
     if (alerts) {
       char* pos;
-
+#if NEW_STRINGS
+// examine closely.
+      QString t = wpt->shortname.mid(wpt->shortname.indexOf('@'));
+      if ((pos = xstrdup(CSTR(t)))) {
+#else
       if ((pos = strchr(wpt->shortname, '@'))) {
+#endif
         double speed, scale;
         if (units == 's') {
           scale = MPH_TO_MPS(1);
@@ -936,13 +991,21 @@ wdata_compute_size(writer_data_t* data)
       }
     }
 
-    str = NULL;
+    str = QString();
     if (opt_descr) {
+#if NEW_STRINGS
+      if (!wpt->description.isEmpty()) {
+#else
       if (wpt->description && *wpt->description) {
+#endif
         str = xstrdup(wpt->description);
       }
     } else if (opt_notes) {
+#if NEW_STRINGS
+      if (!wpt->notes.isEmpty()) {
+#else
       if (wpt->notes && *wpt->notes) {
+#endif
         str = xstrdup(wpt->notes);
       }
     } else if (opt_pos) {
@@ -950,9 +1013,9 @@ wdata_compute_size(writer_data_t* data)
     }
 
 
-    if (str) {
+    if (!str.isEmpty()) {
       dt->addr_is_dynamic = 1;
-      dt->addr = str;
+      dt->addr = xstrdup(CSTR(str));
       dt->mask |= GPI_ADDR_ADDR;
       dt->sz += (8 + strlen(dt->addr));
     }
@@ -991,12 +1054,12 @@ wdata_compute_size(writer_data_t* data)
     }
 
     str = wpt->description;
-    if (! str) {
+    if (str.isEmpty()) {
       str = wpt->notes;
     }
 //		if (str && (strcmp(str, wpt->shortname) == 0)) str = NULL;
-    if (str) {
-      res += (12 + 4 + strlen(str));
+    if (!str.isEmpty()) {
+      res += (12 + 4 + str.length());
     }
   }
 
@@ -1038,25 +1101,28 @@ wdata_write(const writer_data_t* data)
   gbfputc(data->alert, fout);
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    char* str;
+    QString str;
     int s0, s1;
     waypoint* wpt = (waypoint*)elem;
     gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
 
     str = wpt->description;
-    if (! str) {
+    if (str.isEmpty()) {
       str = wpt->notes;
     }
 //		if (str && (strcmp(str, wpt->shortname) == 0)) str = NULL;
 
     gbfputint32(0x80002, fout);
-
+#if NEW_STRINGS
+    s0 = s1 = 19 + wpt->shortname.length();
+#else
     s0 = s1 = 19 + strlen(wpt->shortname);
+#endif
     if (! opt_hide_bitmap) {
       s0 += 10;  /* tag(4) */
     }
-    if (str) {
-      s0 += (12 + 4 + strlen(str));  /* descr */
+    if (!str.isEmpty()) {
+      s0 += (12 + 4 + str.length());  /* descr */
     }
     if (dt->sz) {
       s0 += (12 + dt->sz);  /* address part */
@@ -1111,9 +1177,9 @@ wdata_write(const writer_data_t* data)
       gbfputint16(0, fout);
     }
 
-    if (str) {
+    if (!str.isEmpty()) {
       gbfputint32(0xa, fout);
-      gbfputint32(strlen(str) + 8, fout);	/* string + string header */
+      gbfputint32(str.length() + 8, fout);	/* string + string header */
       write_string(str, 1);
     }
 
@@ -1227,7 +1293,6 @@ static void
 enum_waypt_cb(const waypoint* ref)
 {
   waypoint* wpt;
-  char* str;
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&wdata->Q, elem, tmp) {
@@ -1245,10 +1310,15 @@ enum_waypt_cb(const waypoint* ref)
 
   wpt = waypt_dupe(ref);
 
+  QString str;
   if (*opt_unique == '1') {
     str = mkshort(short_h, wpt->shortname);
+#if NEW_STRINGS
+    wpt->shortname = str;
+#else
     xfree(wpt->shortname);
     wpt->shortname = str;
+#endif
   }
 
   wdata_add_wpt(wdata, wpt);
