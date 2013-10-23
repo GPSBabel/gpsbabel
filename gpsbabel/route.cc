@@ -77,12 +77,14 @@ route_head_alloc(void)
 static void
 any_route_free(route_head* rte)
 {
+#if !NEW_STRINGS
   if (rte->rte_name) {
     xfree(rte->rte_name);
   }
   if (rte->rte_desc) {
     xfree(rte->rte_desc);
   }
+#endif
   waypt_flush(&rte->waypoint_list);
   if (rte->fs) {
     fs_chain_destroy(rte->fs);
@@ -151,7 +153,11 @@ common_route_by_name(queue* routes, const char* name)
 
   QUEUE_FOR_EACH(routes, elem, tmp) {
     rte = (route_head*) elem;
+#if NEW_STRINGS
+    if (rte->rte_name == name) {
+#else
     if (0 == strcmp(rte->rte_name, name)) {
+#endif
       return rte;
     }
   }
@@ -172,20 +178,21 @@ route_find_track_by_name(const char* name)
 }
 
 static void
-any_route_add_wpt(route_head* rte, waypoint* wpt, int* ct, int synth, const char* namepart, int number_digits)
+any_route_add_wpt(route_head* rte, waypoint* wpt, int* ct, int synth, const QString& namepart, int number_digits)
 {
   ENQUEUE_TAIL(&rte->waypoint_list, &wpt->Q);
   rte->rte_waypt_ct++;	/* waypoints in this route */
   if (ct) {
     (*ct)++;
   }
-  if (synth && !wpt->shortname) {
 #if NEW_STRINGS
+  if (synth && wpt->shortname.isEmpty()) {
     char *t;
-    xasprintf(&t, "%s%0*d", namepart, number_digits, *ct);
+    xasprintf(&t, "%s%0*d", CSTRc(namepart), number_digits, *ct);
     wpt->shortname = t;
 #else
-    xasprintf(&wpt->shortname,"%s%0*d", namepart, number_digits, *ct);
+  if (synth && !wpt->shortname) {
+    xasprintf(&wpt->shortname,"%s%0*d", CSTR(namepart), number_digits, *ct);
 #endif
     wpt->wpt_flags.shortname_is_synthetic = 1;
   }
@@ -193,7 +200,7 @@ any_route_add_wpt(route_head* rte, waypoint* wpt, int* ct, int synth, const char
 }
 
 void
-route_add_wpt_named(route_head* rte, waypoint* wpt, const char* namepart, int number_digits)
+route_add_wpt_named(route_head* rte, waypoint* wpt, const QString& namepart, int number_digits)
 {
   // First point in a route is always a new segment.
   // This improves compatibility when reading from
@@ -213,7 +220,7 @@ route_add_wpt(route_head* rte, waypoint* wpt)
 }
 
 void
-track_add_wpt_named(route_head* rte, waypoint* wpt, const char* namepart, int number_digits)
+track_add_wpt_named(route_head* rte, waypoint* wpt, const QString& namepart, int number_digits)
 {
   // First point in a track is always a new segment.
   // This improves compatibility when reading from
@@ -239,7 +246,11 @@ route_find_waypt_by_name(route_head* rh, const char* name)
 
   QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
     waypoint* waypointp = (waypoint*) elem;
+#if NEW_STRINGS
+    if (waypointp->shortname == name) {
+#else
     if (0 == strcmp(waypointp->shortname, name)) {
+#endif
       return waypointp;
     }
   }
@@ -590,7 +601,10 @@ void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
   double tot_hrt = 0.0;
   int pts_cad = 0;
   double tot_cad = 0.0;
+#if NEW_STRINGS
+#else
   char tkptname[100];
+#endif
   computed_trkdata* tdata = (computed_trkdata*)xcalloc(1, sizeof(computed_trkdata));
 
   if (trkdatap) {
@@ -693,10 +707,15 @@ void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
       }
     }
     prev = thisw;
+#if NEW_STRINGS
+    if (thisw->shortname.isEmpty()) {
+      thisw->shortname = QString("%1-%2").arg(trk->rte_name).arg(tkpt);
+#else
     if (!thisw->shortname || !thisw->shortname[0]) {
       snprintf(tkptname, sizeof(tkptname), "%s-%d",
                trk->rte_name ? CSTRc(trk->rte_name) : "" , tkpt);
       thisw->shortname = xstrdup(tkptname);
+#endif
     }
     tkpt++;
   }

@@ -279,12 +279,15 @@ xasprintf(char** strp, const char* fmt, ...)
 }
 #if NEW_STRINGS
 int
-xasprintf(String* strp, const char* fmt, ...)
+xasprintf(QString* strp, const char* fmt, ...)
 {
   va_list args;
   int res;
   va_start(args, fmt);
-  res = xvasprintf(&strp->s_, fmt, args);
+  char *cstrp;
+  res = xvasprintf(&cstrp, fmt, args);
+  *strp = cstrp;
+  xfree(cstrp);
   va_end(args);
 
   return res;
@@ -1734,6 +1737,10 @@ char* xml_entitize(const char* str)
 char* html_entitize(const char* str)
 {
   return entitize(str, 1);
+}
+char* html_entitize(const QString& str)
+{
+  return entitize(CSTR(str), 1);
 }
 
 /*
