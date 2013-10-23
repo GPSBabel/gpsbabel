@@ -130,10 +130,10 @@ parse_header(char* line)
         is_fatal((ver != 1),
                  MYNAME ": This version '%d' is not yet supported. Please report!", ver);
       } else if (case_ignore_strcmp(key, "NAME") == 0) {
-        rte_name = xstrdup(str);
+        rte_name = str;
       } else if (case_ignore_strcmp(key, "NOTES") == 0) /* ToDo */;
       else if (case_ignore_strcmp(key, "SOURCE") == 0) {
-        rte_desc = xstrdup(str);
+        rte_desc = str;
       } else if (case_ignore_strcmp(key, "TYPE") == 0) {
         filetype = atoi(str);
         switch (filetype) {
@@ -658,7 +658,8 @@ route_disp_wpt_cb(const waypoint* wpt)
     if (global_opts.synthesize_shortnames) {
       sn = mkshort_from_wpt(short_h, wpt);
     } else {
-      sn = mkshort(short_h, wpt->shortname);
+// NEW_STRINGS: eliminate extra ctor below.
+      sn = mkshort(short_h, QString(wpt->shortname));
     }
     gbfprintf(fout, "\"WP\",\"%s\",%.8lf,%.8lf,%.f\n",
               CSTR(sn), wpt->latitude, wpt->longitude, ALT(wpt));

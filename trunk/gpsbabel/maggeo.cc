@@ -274,7 +274,7 @@ maggeo_waypt_pr(const waypoint* waypointp)
 #if NEW_STRINGS
                   waypointp->notes.isEmpty() ? waypointp->description : waypointp->notes);
 #else
-                  waypointp->notes ? waypointp->notes : waypointp->description);
+                  QString(waypointp->notes ? waypointp->notes : waypointp->description));
 #endif
   placer = waypointp->gc_data->placer;
 

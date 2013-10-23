@@ -207,7 +207,7 @@ tpg_waypt_pr(const waypoint* wpt)
       shortname = xstrdup("");
     }
   } else {
-    shortname = xstrdup(wpt->shortname);
+    shortname = wpt->shortname;
   }
 #if NEW_STRINGS
   if (wpt->description.isEmpty()) {
@@ -215,12 +215,12 @@ tpg_waypt_pr(const waypoint* wpt)
   if (! wpt->description) {
 #endif
     if (!shortname.isEmpty()) {
-      description = xstrdup(shortname);
+      description = shortname;
     } else {
-      description = xstrdup("");
+      description = "";
     }
   } else {
-    description = xstrdup(wpt->description);
+    description = wpt->description;
   }
 
   /* convert lat/long to NAD27/CONUS datum */

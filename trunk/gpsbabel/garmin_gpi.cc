@@ -1310,14 +1310,13 @@ enum_waypt_cb(const waypoint* ref)
 
   wpt = waypt_dupe(ref);
 
-  QString str;
   if (*opt_unique == '1') {
-    str = mkshort(short_h, wpt->shortname);
 #if NEW_STRINGS
-    wpt->shortname = str;
+    wpt->shortname = mkshort(short_h, wpt->shortname);
 #else
+    char* str = mkshort(short_h, wpt->shortname);
     xfree(wpt->shortname);
-    wpt->shortname = xstrdup(str);
+    wpt->shortname = str;
 #endif
   }
 

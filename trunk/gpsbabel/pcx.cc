@@ -364,8 +364,8 @@ pcx_track_hdr(const route_head* trk)
 
   route_ctr++;
   snprintf(buff, sizeof(buff)-1, "Trk%03d", route_ctr);
-
-  QString name = mkshort(mkshort_handle2, (trk->rte_name != NULL) ? trk->rte_name : buff);
+// NEW_STRINGS - remove extr ctor below.
+  QString name = mkshort(mkshort_handle2, (trk->rte_name != NULL) ? QString(trk->rte_name) : buff);
   /* Carto Exploreur (popular in France) chokes on trackname headers,
    * so provide option to supppress these.
    */
