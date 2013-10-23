@@ -212,6 +212,12 @@ csv_stringclean(const char* string, const char* chararray)
   return (tmp);
 }
 
+QString
+csv_stringclean(const QString& string, const char* chararray)
+{
+  return csv_stringclean(CSTR(string), chararray);
+}
+
 char*
 csv_stringclean(const QString& string_in, const QString& chararray_in)
 {
@@ -1561,9 +1567,6 @@ static void
 xcsv_waypt_pr(const waypoint* wpt)
 {
   char buff[1024];
-  char* shortname = NULL;
-  char* description = NULL;
-  char* anyname = NULL;
   const char* write_delimiter;
   int i;
   field_map_t* fmp;
@@ -1587,9 +1590,17 @@ xcsv_waypt_pr(const waypoint* wpt)
   } else {
     write_delimiter = xcsv_file.field_delimiter;
   }
-
+#if NEW_STRINGS
+  QString description;
+  QString shortname;
+  if (wpt->shortname.isEmpty() || global_opts.synthesize_shortnames) {
+    if (!wpt->description.isEmpty()) {
+#else
+  char* description = NULL;
+  char* shortname = NULL;
   if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
     if (wpt->description) {
+#endif
       if (global_opts.synthesize_shortnames) {
         shortname = mkshort_from_wpt(xcsv_file.mkshort_handle, wpt);
       } else {
@@ -1601,9 +1612,13 @@ xcsv_waypt_pr(const waypoint* wpt)
   } else {
     shortname = csv_stringclean(wpt->shortname, xcsv_file.badchars);
   }
-
+#if NEW_STRINGS
+  if (wpt->description.isEmpty()) {
+    if (!shortname.isEmpty()) {
+#else
   if (! wpt->description) {
     if (shortname) {
+#endif
       description = csv_stringclean(shortname, xcsv_file.badchars);
     } else {
       /* no description -- let description default on output */
@@ -1613,6 +1628,12 @@ xcsv_waypt_pr(const waypoint* wpt)
   }
 
   if (prefer_shortnames) {
+#if NEW_STRINGS
+// TODO: try to figure out that original code...
+    description = shortname;
+  }
+
+#else
     if (description) {
       xfree(description);
     }
@@ -1622,6 +1643,7 @@ xcsv_waypt_pr(const waypoint* wpt)
     description = xstrdup(odesc);
     xfree(odesc);
   }
+#endif
   if ((xcsv_file.gps_datum > -1) && (xcsv_file.gps_datum != GPS_DATUM_WGS84)) {
     double alt;
     GPS_Math_WGS84_To_Known_Datum_M(latitude, longitude, 0.0,
@@ -1673,9 +1695,33 @@ xcsv_waypt_pr(const waypoint* wpt)
     break;
     case XT_SHORTNAME:
       writebuff(buff, fmp->printfc,
+#if NEW_STRINGS
+                shortname.isEmpty() ? fmp->val : CSTR(shortname));
+#else
                 (shortname && *shortname) ? shortname : fmp->val);
+#endif
       break;
     case XT_ANYNAME:
+#if NEW_STRINGS
+      {
+      QString anyname = wpt->shortname;
+      if (anyname.isEmpty()) {
+        anyname = mkshort(xcsv_file.mkshort_handle, wpt->description);
+      }
+      if (anyname.isEmpty()) {
+        anyname = mkshort(xcsv_file.mkshort_handle, wpt->description);
+      }
+      if (anyname.isEmpty()) {
+        anyname = wpt->notes;
+      }
+      if (anyname.isEmpty()) {
+        anyname = xstrdup(fmp->val);
+      }
+      writebuff(buff, fmp->printfc, CSTR(anyname));
+      }
+#else
+      {
+      char* anyname = NULL;
       if (wpt->shortname) {
         anyname = xstrdup(wpt->shortname);
       } else if (wpt->description) {
@@ -1693,14 +1739,25 @@ xcsv_waypt_pr(const waypoint* wpt)
       writebuff(buff, fmp->printfc, anyname);
 
       xfree(anyname);
+      }
+#endif
       break;
     case XT_DESCRIPTION:
       writebuff(buff, fmp->printfc,
+#if NEW_STRINGS
+                description.isEmpty() ? fmp->val : CSTR(description));
+#else
                 (description && *description) ? description : fmp->val);
+#endif
       break;
     case XT_NOTES:
+#if NEW_STRINGS
+      writebuff(buff, fmp->printfc,
+                wpt->notes.isEmpty() ? fmp->val : CSTR(wpt->notes));
+#else
       writebuff(buff, fmp->printfc,
                 (wpt->notes && *wpt->notes) ? wpt->notes : fmp->val);
+#endif
       break;
     case XT_URL: {
       int off = 0;
@@ -2179,7 +2236,8 @@ next:
   }
 
   gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
-
+#if NEW_STRINGS
+#else
   if (description && description != shortname) {
     xfree(description);
   }
@@ -2187,7 +2245,7 @@ next:
   if (shortname) {
     xfree(shortname);
   }
-
+#endif
   /* increment the index counter */
   waypt_out_count++;
 }
