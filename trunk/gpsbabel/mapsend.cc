@@ -278,7 +278,6 @@ mapsend_waypt_pr(const waypoint* waypointp)
   QString sn = global_opts.synthesize_shortnames ?
                    mkshort_from_wpt(mkshort_handle, waypointp) :
                    waypointp->shortname;
-  QString tmp;
 
   /*
    * The format spec doesn't call out the character set of waypoint
@@ -296,8 +295,8 @@ mapsend_waypt_pr(const waypoint* waypointp)
    */
 
 
-  tmp = mkshort(wpt_handle, sn);
-  gbfputpstr(tmp, mapsend_file_out);
+  QString tmp1 = mkshort(wpt_handle, sn);
+  gbfputpstr(tmp1, mapsend_file_out);
 
 #if NEW_STRINGS
   c = waypointp->description.length();
@@ -307,7 +306,7 @@ mapsend_waypt_pr(const waypoint* waypointp)
   gbfputc(c, mapsend_file_out);
   gbfwrite(CSTR(waypointp->description), 1, c, mapsend_file_out);
 #else
-  tmp = waypointp->description;
+  char* tmp = waypointp->description;
   if (tmp) {
     c = strlen(tmp);
   } else {

@@ -721,6 +721,7 @@ lowranceusr_waypt_disp(const waypoint* wpt)
     } else if (!wpt->description.isEmpty()) {
       name = wpt->description;
 #else
+  char* name = NULL;
   if ((! wpt->shortname) || global_opts.synthesize_shortnames) {
     if (wpt->description && global_opts.synthesize_shortnames) {
       name = mkshort_from_wpt(mkshort_handle, wpt);
@@ -734,15 +735,19 @@ lowranceusr_waypt_disp(const waypoint* wpt)
     name = wpt->shortname;
   }
 
+#if NEW_STRINGS
   text_len = name.length();
+#else
+  text_len = strlen(name);
+#endif
   if (text_len > MAXUSRSTRINGSIZE) {
     text_len = MAXUSRSTRINGSIZE;
   }
   gbfputint32(text_len, file_out);
-  gbfwrite(CSTR(name), 1, text_len, file_out);
+  gbfwrite(CSTRc(name), 1, text_len, file_out);
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " waypt_disp: Waypt name = %s\n", CSTR(name));
+    printf(MYNAME " waypt_disp: Waypt name = %s\n", CSTRc(name));
   }
 
   /**

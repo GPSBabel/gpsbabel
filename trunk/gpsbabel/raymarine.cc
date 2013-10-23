@@ -311,7 +311,7 @@ register_waypt(const waypoint* ref, const char is_rtept)
     }
   }
 
-  wpt->extra_data = (void*)mkshort(hshort_wpt, CSTR(wpt->shortname));
+  wpt->extra_data = (void*)mkshort(hshort_wpt, CSTRc(wpt->shortname));
 
   waypt_table[waypt_table_ct] = (waypoint*)wpt;
   waypt_table_ct++;
