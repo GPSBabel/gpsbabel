@@ -1317,7 +1317,7 @@ enum_waypt_cb(const waypoint* ref)
     wpt->shortname = str;
 #else
     xfree(wpt->shortname);
-    wpt->shortname = str;
+    wpt->shortname = xstrdup(str);
 #endif
   }
 
