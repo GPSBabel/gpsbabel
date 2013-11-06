@@ -1824,13 +1824,15 @@ write_route_cb(const route_head* rte)
     return;
   }
 
-  QString name;
+  char *tname;
   if (rte->rte_name == NULL) {
     snprintf(buf, sizeof(buf), "Route%04d", rte->rte_num);
-    name = mkshort(short_h, buf);
+    tname = mkshort(short_h, buf);
   } else {
-    name = mkshort(short_h, rte->rte_name);
+    tname = mkshort(short_h, rte->rte_name);
   }
+  xfree(tname);
+  QString name(tname);
 
   rte_ct++;	/* increase informational number of written routes */
 
@@ -1844,25 +1846,34 @@ static void
 write_track_cb(const route_head* trk)
 {
   gbfile* fsave;
-  QString name;
   char buf[32];
 
   if (ELEMENTS(trk) <= 0) {
     return;
   }
 
+  char* tname; 
   if (trk->rte_name == NULL) {
     snprintf(buf, sizeof(buf), "Track%04d", trk->rte_num);
-    name = mkshort(short_h, buf);
+    tname = mkshort(short_h, buf);
   } else {
-    name = mkshort(short_h, trk->rte_name);
+    tname = mkshort(short_h, trk->rte_name);
   }
+
+  QString name(tname);
+#if NEW_STRINGS
+#else
+  xfree (tname);
+#endif
 
   trk_ct++;	/* increase informational number of written tracks */
 
   fsave = fout;
   fout = ftmp;
   write_track(trk, name);
+#if NEW_STRINGS
+#else
+#endif
   finalize_item(fsave, 'T');
 
 }
