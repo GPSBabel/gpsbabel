@@ -27,6 +27,9 @@
 #include <math.h>
 
 #include "defs.h"
+#if REALLY_MINIMAL
+ff_vecs_t igc_vecs;
+#else
 
 static gbfile* file_in, *file_out;
 static char manufacturer[4];
@@ -927,3 +930,4 @@ ff_vecs_t igc_vecs = {
   igc_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
+#endif

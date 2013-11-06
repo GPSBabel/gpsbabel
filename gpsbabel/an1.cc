@@ -693,8 +693,8 @@ static void Read_AN1_Waypoints(gbfile* f)
   unsigned long i = 0;
   an1_waypoint_record* rec = NULL;
   waypoint* wpt_tmp;
-  char* icon = NULL;
   char* url = NULL;
+  char* icon = NULL;
   ReadShort(f);
   count = ReadLong(f);
   for (i = 0; i < count; i++) {
@@ -711,12 +711,20 @@ static void Read_AN1_Waypoints(gbfile* f)
     wpt_tmp->description = xstrdup(rec->name);
     if (rec->url) {
       wpt_tmp->AddUrlLink(rec->url);
+#if NEW_STRINGS
+    } else {
+      int u = wpt_tmp->description.indexOf("{URL=");
+      QString us = wpt_tmp->description.mid(u);
+      wpt_tmp->AddUrlLink(us);
+    }
+#else
     } else if (NULL != (url=strstr(wpt_tmp->description, "{URL="))) {
       *url = '\0';
       url += 5;
       url[strlen(url)-1] = '\0';
       wpt_tmp->AddUrlLink(url);
     }
+#endif
 
     if (rec->image_name) {
       wpt_tmp->icon_descr = xstrdup(rec->image_name);
@@ -769,7 +777,11 @@ Write_One_AN1_Waypoint(const waypoint* wpt)
   rec->name = xstrdup(wpt->description);
 
   if (!nogc && wpt->gc_data->id) {
+#if NEW_STRINGS
+    char* extra = (char*) xmalloc(25 + wpt->gc_data->placer.length() + wpt->shortname.length());
+#else
     char* extra = (char*) xmalloc(25 + strlen(wpt->gc_data->placer.toUtf8().data()) + strlen(wpt->shortname));
+#endif
     sprintf(extra, "\r\nBy %s\r\n%s (%1.1f/%1.1f)",
             wpt->gc_data->placer.toUtf8().data(),
             CSTRc(wpt->shortname), wpt->gc_data->diff/10.0,
@@ -787,8 +799,11 @@ Write_One_AN1_Waypoint(const waypoint* wpt)
     xfree(extra);
     rec->url = xstrdup(l.url_.toUtf8().data());
   }
-
+#if NEW_STRINGS
+  if (!wpt->notes.isEmpty()) {
+#else
   if (wpt->notes) {
+#endif
     if (rec->comment) {
       xfree(rec->comment);
     }
@@ -867,9 +882,13 @@ static void Read_AN1_Lines(gbfile* f)
       wpt_tmp->latitude = DecodeOrd(vert->lat);
       wpt_tmp->longitude = -DecodeOrd(vert->lon);
       wpt_tmp->shortname = (char*) xmalloc(7);
+#if NEW_STRINGS
+      wpt_tmp->shortname = QString().sprintf("\\%5.5lx", rtserial++);
+#else
       sprintf(wpt_tmp->shortname, "\\%5.5lx", rtserial++);
       fs_chain_add(&wpt_tmp->fs,
                    (format_specific_data*)vert);
+#endif
       route_add_wpt(rte_head, wpt_tmp);
     }
   }

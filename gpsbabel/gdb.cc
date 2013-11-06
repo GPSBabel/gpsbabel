@@ -201,7 +201,11 @@ disp_summary(const gbfile* f)
 #define FREAD_i32 gbfgetint32(fin)
 #define FREAD_i16 gbfgetint16(fin)
 #define FREAD_STR(a) gdb_fread_str(a,sizeof(a),fin)
+#if NEW_STRINGS
+#define FREAD_CSTR QString::fromLatin1(gdb_fread_cstr(fin))
+#else
 #define FREAD_CSTR gdb_fread_cstr(fin)
+#endif
 #define FREAD_CSTR_AS_QSTR gdb_fread_cstr_as_qstr(fin)
 #define FREAD_DBL gbfgetdbl(fin)
 #define FREAD_LATLON GPS_Math_Semi_To_Deg(gbfgetint32(fin))
@@ -281,12 +285,14 @@ gdb_fread_str(char* buf, int size, gbfile* fin)
 static QString
 gdb_fread_strlist(void)
 {
-  char* res = NULL;
+//  char* res = NULL;
+  QString res;
   int count;
 
   count = FREAD_i32;
 
   while (count > 0) {
+#if HUH
     char* str = FREAD_CSTR;
     if (str != NULL) {
       if (*str && (res == NULL)) {
@@ -295,11 +301,17 @@ gdb_fread_strlist(void)
         xfree(str);
       }
     }
+#else
+    QString str = FREAD_CSTR;
+    if (!str.isEmpty()) {
+      res = str;
+    }
+#endif
     count--;
   }
 
   QString qres = res;
-  xfree(res);
+//  xfree(res);
   return qres;
 }
 
@@ -307,11 +319,19 @@ static waypoint*
 gdb_find_wayptq(const queue* Q, const waypoint* wpt, const char exact)
 {
   queue* elem, *tmp;
+#if NEW_STRINGS
+  QString name = wpt->shortname;
+#else
   const char* name = wpt->shortname;
+#endif
 
   QUEUE_FOR_EACH(Q, elem, tmp) {
     waypoint* tmp = (waypoint*)elem;
+#if NEW_STRINGS
+    if (name.compare(tmp->shortname,Qt::CaseInsensitive) == 0) {
+#else
     if (case_ignore_strcmp(name, tmp->shortname) == 0) {
+#endif
 
       if (! exact) {
         return tmp;
@@ -370,7 +390,11 @@ gdb_add_route_waypt(route_head* rte, waypoint* ref, const int wpt_class)
     }
   }
   res = NULL;
+#if NEW_STRINGS
+  turn_point = (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && !tmp->description.isEmpty());
+#else
   turn_point = (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && tmp->description);
+#endif
   if (turn_point || (gdb_via == 0) || (wpt_class < gt_waypt_class_map_point)) {
     res = waypt_dupe(tmp);
     route_add_wpt(rte, res);
@@ -507,7 +531,6 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
   gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&res->fs, (format_specific_data*) gmsd);
-
   res->shortname = FREAD_CSTR;
 #if GDB_DEBUG
   sn = xstrdup(nice(res->shortname));
@@ -611,7 +634,6 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   /* VERSION DEPENDENT CODE */
 
   if (gdb_ver <= GDB_VER_2) {
-    char* temp;
 
     FREAD(buf, 2);				/* ?????????????????????????????????? */
     waypt_flag = FREAD_C;
@@ -621,15 +643,12 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
       FREAD(buf, 2);
     }
 
-    temp = FREAD_CSTR;				/* undocumented & unused string */
+    QString junk = FREAD_CSTR;				/* undocumented & unused string */
 #if GDB_DEBUG
     DBG(GDB_DBG_WPTe, temp)
     printf(MYNAME "-wpt \"%s\" (%d): Unknown string = %s\n",
            sn, wpt_class, nice(temp));
 #endif
-    if (temp) {
-      xfree(temp);
-    }
 
     QString linky = FREAD_CSTR_AS_QSTR;
     UrlLink l(linky);
@@ -649,7 +668,6 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
     FREAD(buf, 5);				/* instruction depended */
     res->description = FREAD_CSTR;		/* instruction */
-
     url_ct = FREAD_i32;
     for (i = url_ct; (i); i--) {
       QString str = FREAD_CSTR_AS_QSTR;
@@ -726,8 +744,11 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
       GMSD_SETSTR(country, gt_get_icao_country(str));
     }
   }
-
+#if NEW_STRINGS
+  if (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && !res->description.isEmpty()) {
+#else
   if (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && res->description) {
+#endif
     wpt_class = gt_waypt_class_user_waypoint;
     GMSD_SET(wpt_class, wpt_class);
 #ifdef GMSD_EXPERIMENTAL
@@ -1289,18 +1310,30 @@ gdb_check_waypt(waypoint* wpt)
   }
 
   if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
+#if NEW_STRINGS
+    fatal("Invalid latitude %f in waypoint %s.\n",
+          lat_orig, !wpt->shortname.isEmpty() ? CSTRc(wpt->shortname) : "<no name>");
+  if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
+    fatal("Invalid longitude %f in waypoint %s.\n",
+          lon_orig, !wpt->shortname.isEmpty() ? CSTRc(wpt->shortname) : "<no name>");
+#else
     fatal("Invalid latitude %f in waypoint %s.\n",
           lat_orig, wpt->shortname ? CSTRc(wpt->shortname) : "<no name>");
   if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
     fatal("Invalid longitude %f in waypoint %s.\n",
           lon_orig, wpt->shortname ? CSTRc(wpt->shortname) : "<no name>");
+#endif
 }
 
 /*-----------------------------------------------------------------------------*/
 
 static void
 write_waypoint(
+#if NEW_STRINGS
+  const waypoint* wpt, const QString& shortname, garmin_fs_t* gmsd,
+#else
   const waypoint* wpt, const char* shortname, garmin_fs_t* gmsd,
+#endif
   const int icon, const int display)
 {
   char zbuf[32], ffbuf[32];
@@ -1336,7 +1369,11 @@ write_waypoint(
   FWRITE_LATLON(wpt->latitude);		/* latitude */
   FWRITE_LATLON(wpt->longitude);		/* longitude */
   FWRITE_DBL(wpt->altitude, unknown_alt);	/* altitude */
+#if NEW_STRINGS
+  if (!wpt->notes.isEmpty()) {
+#else
   if (wpt->notes) {
+#endif
     FWRITE_CSTR(wpt->notes);
   } else {
     FWRITE_CSTR(wpt->description);
@@ -1372,7 +1409,8 @@ write_waypoint(
   } else { /* if (gdb_ver > GDB_VER_3) */
     int cnt;
 //    url_link* url_next;
-    const char* str;
+//    const char* str;
+    QString str;
 
     if (wpt_class < gt_waypt_class_map_point) {	/* street address */
       str  = GMSD_GET(addr, "");
@@ -1384,7 +1422,16 @@ write_waypoint(
 
     /* GBD doesn't have a native description field */
     /* here we misuse the instruction field */
-
+#if 1
+    QString d = wpt->description;
+    if (wpt->description == wpt->shortname) {
+      d.clear();
+    }
+    if (str == wpt->notes) {
+      d.clear();
+    }
+    FWRITE_CSTR(d);				/* instruction */
+#else
     str = wpt->description;
     if (str && (strcmp(str, wpt->shortname) == 0)) {
       str = NULL;
@@ -1393,6 +1440,7 @@ write_waypoint(
       str = NULL;
     }
     FWRITE_CSTR(str);				/* instruction */
+#endif
 
     cnt = 0;
     cnt += wpt->url_link_list_.size();
@@ -1450,7 +1498,7 @@ route_write_bounds(bounds* bounds)
 }
 
 static void
-write_route(const route_head* rte, const char* rte_name)
+write_route(const route_head* rte, const QString& rte_name)
 {
   bounds bounds;
   int points, index;
@@ -1565,7 +1613,7 @@ write_route(const route_head* rte, const char* rte_name)
 }
 
 static void
-write_track(const route_head* trk, const char* trk_name)
+write_track(const route_head* trk, const QString& trk_name)
 {
   queue* elem, *tmp;
   int points = ELEMENTS(trk);
@@ -1622,7 +1670,8 @@ finalize_item(gbfile* origin, const char identifier)
 }
 
 /*-----------------------------------------------------------------------------*/
-
+#if NEW_STRINGS
+#else
 static char
 str_not_equal(const char* s1, const char* s2)
 {
@@ -1641,6 +1690,7 @@ str_not_equal(const char* s1, const char* s2)
     return 0;
   }
 }
+#endif
 
 static void
 write_waypoint_cb(const waypoint* refpt)
@@ -1650,8 +1700,12 @@ write_waypoint_cb(const waypoint* refpt)
   gbfile* fsave;
 
   /* do this when backup always happens in main */
-
+#if NEW_STRINGS
+// but, but, casting away the const here is wrong...
+  ((waypoint*)refpt)->shortname = refpt->shortname.trimmed();
+#else
   rtrim(((waypoint*)refpt)->shortname);
+#endif
   test = gdb_find_wayptq(&wayptq_out, refpt, 1);
 
   if (refpt->HasUrlLink() && test && test->HasUrlLink() && route_flag == 0) {
@@ -1663,14 +1717,22 @@ write_waypoint_cb(const waypoint* refpt)
   }
 
   if ((test != NULL) && (route_flag == 0)) {
+#if NEW_STRINGS
+    if (test->notes != refpt->notes) {
+#else
     if (str_not_equal(test->notes, refpt->notes)) {
+#endif
       test = NULL;
     }
   }
 
   if (test == NULL) {
     int icon, display, wpt_class;
+#if NEW_STRINGS
+    QString name;
+#else
     char* name;
+#endif
     waypoint* wpt = waypt_dupe(refpt);
 
     gdb_check_waypt(wpt);
@@ -1718,6 +1780,16 @@ write_waypoint_cb(const waypoint* refpt)
 
     name = wpt->shortname;
 
+#if NEW_STRINGS
+    if (global_opts.synthesize_shortnames || name.isEmpty()) {
+      name = wpt->notes;
+      if (name.isEmpty()) {
+        name = wpt->description;
+      }
+      if (name.isEmpty()) {
+        name = wpt->shortname;
+      }
+#else
     if (global_opts.synthesize_shortnames || (*name == '\0')) {
       name = wpt->notes;
       if (!name) {
@@ -1726,10 +1798,16 @@ write_waypoint_cb(const waypoint* refpt)
       if (!name) {
         name = wpt->shortname;
       }
+#endif
     }
 
     name = mkshort(short_h, name);
+#if NEW_STRINGS
+#warning WTH is THIS?  Have some dead beef instead.
+    wpt->extra_data = (void*) 0xdeadbeef;
+#else
     wpt->extra_data = (void*)name;
+#endif
     write_waypoint(wpt, name, gmsd, icon, display);
 
     finalize_item(fsave, 'W');
@@ -1740,13 +1818,13 @@ static void
 write_route_cb(const route_head* rte)
 {
   gbfile* fsave;
-  char* name;
   char buf[32];
 
   if (ELEMENTS(rte) <= 0) {
     return;
   }
 
+  QString name;
   if (rte->rte_name == NULL) {
     snprintf(buf, sizeof(buf), "Route%04d", rte->rte_num);
     name = mkshort(short_h, buf);
@@ -1760,15 +1838,13 @@ write_route_cb(const route_head* rte)
   fout = ftmp;
   write_route(rte, name);
   finalize_item(fsave, 'R');
-
-  xfree(name);
 }
 
 static void
 write_track_cb(const route_head* trk)
 {
   gbfile* fsave;
-  char* name;
+  QString name;
   char buf[32];
 
   if (ELEMENTS(trk) <= 0) {
@@ -1789,7 +1865,6 @@ write_track_cb(const route_head* trk)
   write_track(trk, name);
   finalize_item(fsave, 'T');
 
-  xfree(name);
 }
 
 /*-----------------------------------------------------------------------------*/
