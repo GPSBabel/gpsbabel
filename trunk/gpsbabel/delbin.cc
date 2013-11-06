@@ -22,7 +22,9 @@
 
 #include "defs.h"
 #include "src/core/xmltag.h"
-
+#if REALLY_MINIMAL
+ff_vecs_t delbin_vecs;
+#else
 #include <assert.h>
 
 #define MYNAME "delbin"
@@ -3356,3 +3358,4 @@ waypoint_symbol_index(const char* name)
 }
 
 // vi: ts=4 sw=4 noexpandtab
+#endif

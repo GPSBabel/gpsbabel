@@ -225,7 +225,10 @@ my_read(void)
 
         addrlen = le_read16(&record[obase]);
         cmtlen = le_read16(&record[obase+2+addrlen]);
-
+#if NEW_STRINGS
+        wpt_tmp->shortname = "booger";
+        wpt_tmp->notes = "goober";
+#else
         wpt_tmp->shortname = (char*) xmalloc(addrlen+1);
         wpt_tmp->shortname[addrlen]='\0';
         wpt_tmp->notes = (char*) xmalloc(cmtlen+1);
@@ -236,9 +239,14 @@ my_read(void)
         memcpy(wpt_tmp->shortname,
                record+obase+2,
                addrlen);
+#endif
       } else {
+#if NEW_STRINGS
+        wpt_tmp->shortname = QString().sprintf("\\%5.5x", serial++);
+#else
         wpt_tmp->shortname = (char*) xmalloc(7);
         sprintf(wpt_tmp->shortname, "\\%5.5x", serial++);
+#endif
       }
       if (control == 2) {
         waypt_add(wpt_tmp);
@@ -316,6 +324,11 @@ my_read(void)
             route_add_head(track_head);
           }
         } // end if
+#if NEW_STRINGS
+        if (track_head->rte_name.isEmpty()) {
+          track_head->rte_name = "I made this up";
+        }
+#else
         if (!track_head->rte_name) {
           track_head->rte_name =
             (char*)xmalloc(stringlen+1);
@@ -323,6 +336,7 @@ my_read(void)
                   (const char*) record+2, stringlen);
           track_head->rte_name[stringlen] = '\0';
         }
+#endif
       }
 
       if (timesynth) {
@@ -361,15 +375,23 @@ my_read(void)
         wpt_tmp->latitude = lat;
         wpt_tmp->longitude = -lon;
         if (stringlen && ((coordcount>1) || count)) {
+#if NEW_STRINGS
+          wpt_tmp->shortname = QString(((char*)record)+2);
+#else
           wpt_tmp->shortname = (char*) xmalloc(stringlen+1);
           wpt_tmp->shortname[stringlen] = '\0';
           memcpy(wpt_tmp->shortname,
                  ((char*)record)+2,
                  stringlen);
+#endif
         } else {
+#if NEW_STRINGS
+          wpt_tmp->shortname = QString().sprintf("\\%5.5x", serial++);
+#else
           wpt_tmp->shortname = (char*) xmalloc(7);
           sprintf(wpt_tmp->shortname, "\\%5.5x",
                   serial++);
+#endif
         }
         if (timesynth) {
           if (!first) {

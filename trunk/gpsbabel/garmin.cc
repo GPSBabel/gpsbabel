@@ -30,6 +30,11 @@
 #include "garmin_fs.h"
 #include "garmin_device_xml.h"
 
+#if REALLY_MINIMAL
+//  I just don't want to cope with this format right now.
+ff_vecs_t garmin_vecs = { };
+#else
+
 #define SOON 1
 
 #define MYNAME "GARMIN"
@@ -360,8 +365,13 @@ waypt_read(void)
 
     wpt_tmp->shortname = xstrdup(way[i]->ident);
     wpt_tmp->description = xstrdup(way[i]->cmnt);
+#if NEW_STRINGS 
+    wpt_tmp->shortname = wpt_tmp->shortname.simplified();
+    wpt_tmp->description = wpt_tmp->description.simplified();
+#else
     rtrim(wpt_tmp->shortname);
     rtrim(wpt_tmp->description);
+#endif
     wpt_tmp->longitude = way[i]->lon;
     wpt_tmp->latitude = way[i]->lat;
     if (gps_waypt_type == 103) {
@@ -904,17 +914,26 @@ waypoint_prepare(void)
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     waypoint* wpt;
     char* ident;
-    char* src = NULL;
     char obuf[256];
 
     wpt = (waypoint*) elem;
-
+#if NEW_STRINGS 
+    QString src;
+    if (!wpt->description.isEmpty()) {
+      src = wpt->description;
+    }
+    if (!wpt->notes.isEmpty()) {
+      src = wpt->notes;
+    }
+#else
+    char *src = NULL;
     if (wpt->description) {
       src = wpt->description;
     }
     if (wpt->notes) {
       src = wpt->notes;
     }
+#endif
 
     /*
      * mkshort will do collision detection and namespace
@@ -1084,13 +1103,20 @@ route_waypt_pr(const waypoint* wpt)
   }
 
   rte->ident[sizeof(rte->ident)-1] = 0;
-
+#if NEW_STRINGS
+  if (wpt->description.isEmpty()) {
+    strncpy(rte->cmnt, CSTR(wpt->description), sizeof(rte->cmnt));
+    rte->cmnt[sizeof(rte->cmnt)-1] = 0;
+  } else {
+  }
+#else
   if (wpt->description) {
     strncpy(rte->cmnt, wpt->description, sizeof(rte->cmnt));
     rte->cmnt[sizeof(rte->cmnt)-1] = 0;
   } else  {
     rte->cmnt[0] = 0;
   }
+#endif
   cur_tx_routelist_entry++;
 }
 
@@ -1289,3 +1315,4 @@ d103_icon_number_from_symbol(const QString& s)
   }
   return 0;
 }
+#endif
