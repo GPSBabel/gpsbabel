@@ -1831,8 +1831,8 @@ write_route_cb(const route_head* rte)
   } else {
     tname = mkshort(short_h, rte->rte_name);
   }
-  xfree(tname);
   QString name(tname);
+  xfree(tname);
 
   rte_ct++;	/* increase informational number of written routes */
 
