@@ -1290,7 +1290,7 @@ gpx_wr_deinit(void)
 void
 gpx_read(void)
 {
-  while (!reader->atEnd())  {
+    for (bool atEnd = false; !reader->atEnd() && !atEnd;)  {
     reader->readNext();
     // do processing
     switch (reader->tokenType()) {
@@ -1316,10 +1316,15 @@ gpx_read(void)
       gpx_cdata(reader->text().toString());
       break;
 
+    case QXmlStreamReader::Invalid:
+      atEnd = true;
+      break;
+
     default:
       break;
     }
   }
+
   if (reader->hasError())  {
     fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
           CSTR(reader->errorString()),
