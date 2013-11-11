@@ -27,9 +27,6 @@
 #include <math.h>
 
 #include "defs.h"
-#if REALLY_MINIMAL
-ff_vecs_t igc_vecs;
-#else
 
 static gbfile* file_in, *file_out;
 static char manufacturer[4];
@@ -467,14 +464,22 @@ static void data_read(void)
 
 static void detect_pres_track(const route_head* rh)
 {
+#if NEW_STRINGS
+  if (rh->rte_name.startsWith(PRESTRKNAME)) {
+#else
   if (rh->rte_name && strncmp(rh->rte_name, PRESTRKNAME, 6) == 0) {
+#endif
     head = rh;
   }
 }
 
 static void detect_gnss_track(const route_head* rh)
 {
+#if NEW_STRINGS
+  if (rh->rte_name.startsWith(GNSSTRKNAME)) {
+#else
   if (rh->rte_name && strncmp(rh->rte_name, GNSSTRKNAME, 6) == 0) {
+#endif
     head = rh;
   }
 }
@@ -488,9 +493,15 @@ static void detect_other_track(const route_head* rh)
   }
   // Find other track with the most waypoints
   if (rh->rte_waypt_ct > max_waypt_ct &&
+#if NEW_STRINGS
+      (rh->rte_name.isEmpty() || 
+       (!rh->rte_name.startsWith(PRESTRKNAME) &&
+       !rh->rte_name.startsWith(GNSSTRKNAME)))) {
+#else
       (!rh->rte_name ||
        (strncmp(rh->rte_name, PRESTRKNAME, 6) != 0 &&
         strncmp(rh->rte_name, GNSSTRKNAME, 6) != 0))) {
+#endif
     head = rh;
     max_waypt_ct = rh->rte_waypt_ct;
   }
@@ -593,18 +604,32 @@ static void wr_header(void)
   gbfprintf(file_out, "HFDTE%s\r\n", date2str(tm));
 
   // Other header data may have been stored in track description
+#if NEW_STRINGS
+  if (track && track->rte_desc.startsWith(HDRMAGIC)) {
+    char *rd = xstrdup(track->rte_desc);
+    for (str = strtok(rd + strlen(HDRMAGIC) + strlen(HDRDELIM), HDRDELIM);
+         str; str = strtok(NULL, HDRDELIM)) {
+      gbfprintf(file_out, "%s\r\n", str);
+    }
+    xfree(rd);
+#else
   if (track && track->rte_desc && strncmp(track->rte_desc, HDRMAGIC, strlen(HDRMAGIC)) == 0) {
     for (str = strtok(CSTRc(track->rte_desc) + strlen(HDRMAGIC) + strlen(HDRDELIM), HDRDELIM);
          str; str = strtok(NULL, HDRDELIM)) {
       gbfprintf(file_out, "%s\r\n", str);
     }
+#endif
   } else {
     // IGC header info not found so synthesise it.
     // If a waypoint is supplied with a short name of "PILOT", use
     // its description as the pilot's name in the header.
     str = dflt_str;
+#if NEW_STRINGS
+    if (NULL != (wpt = find_waypt_by_name("PILOT")) && !wpt->description.isEmpty()) {
+#else
     if (NULL != (wpt = find_waypt_by_name("PILOT")) && wpt->description) {
-      str = wpt->description;
+#endif
+      str = CSTRc(wpt->description);
     }
     gbfprintf(file_out, "HFPLTPILOT:%s\r\n", str);
   }
@@ -617,7 +642,11 @@ static void wr_header(void)
 static void wr_task_wpt_name(const waypoint* wpt, const char* alt_name)
 {
   gbfprintf(file_out, "C%s%s\r\n", latlon2str(wpt),
+#if NEW_STRINGS
+            !wpt->description.isEmpty() ? CSTR(wpt->description) : !wpt->shortname.isEmpty() ? CSTR(wpt->shortname) : alt_name);
+#else
             wpt->description ? wpt->description : wpt->shortname ? wpt->shortname : alt_name);
+#endif
 }
 
 static void wr_task_hdr(const route_head* rte)
@@ -637,11 +666,19 @@ static void wr_task_hdr(const route_head* rte)
   // See if the takeoff and landing waypoints are there or if we need to
   // generate them.
   wpt = (waypoint*) QUEUE_LAST(&rte->waypoint_list);
+#if NEW_STRINGS
+  if (wpt->shortname.startsWith("LANDING")) {
+#else
   if (wpt->shortname && strncmp(wpt->shortname, "LANDING", 6) == 0) {
+#endif
     num_tps--;
   }
   wpt = (waypoint*) QUEUE_FIRST(&rte->waypoint_list);
+#if NEW_STRINGS
+  if (wpt->shortname.startsWith("TAKEOFF")) {
+#else
   if (wpt->shortname && strncmp(wpt->shortname, "TAKEOFF", 6) == 0) {
+#endif
     have_takeoff = 1;
     num_tps--;
   }
@@ -656,9 +693,16 @@ static void wr_task_hdr(const route_head* rte)
     fatal(MYNAME ": Bad task route timestamp\n");
   }
 
+#if NEW_STRINGS
+  if (!rte->rte_desc.isEmpty()) {
+    // desc will be something like "IGCDATE160701: 500KTri" 
+    sscanf(CSTR(rte->rte_desc), DATEMAGIC "%6[0-9]: %s", flight_date, task_desc);
+  }
+#else
   if (rte->rte_desc) {
     sscanf(rte->rte_desc, DATEMAGIC "%6[0-9]: %s", flight_date, task_desc);
   }
+#endif
 
   gbfprintf(file_out, "C%s%s%s%04u%02u%s\r\n", date2str(tm),
             tod2str(tm), flight_date, task_num++, num_tps, task_desc);
@@ -678,7 +722,9 @@ static void wr_task_tlr(const route_head* rte)
 {
   // If the landing waypoint is not supplied we need to generate it.
   const waypoint* wpt = (waypoint*) QUEUE_LAST(&rte->waypoint_list);
-  if (!wpt->shortname || strncmp(wpt->shortname, "LANDIN", 6) != 0) {
+  QString sn = wpt->shortname;
+//  if (!wpt->shortname || strncmp(wpt->shortname, "LANDIN", 6) != 0) {
+  if (sn.isEmpty() || !sn.startsWith("LANDIN")) {
     wr_task_wpt_name(wpt, "LANDING");
   }
 }
@@ -930,4 +976,3 @@ ff_vecs_t igc_vecs = {
   igc_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };
-#endif
