@@ -30,13 +30,6 @@
 #include "garmin_fs.h"
 #include "garmin_device_xml.h"
 
-#if REALLY_MINIMAL
-//  I just don't want to cope with this format right now.
-ff_vecs_t garmin_vecs = { };
-#else
-
-#define SOON 1
-
 #define MYNAME "GARMIN"
 static const char* portname;
 static short_handle mkshort_handle;
@@ -402,9 +395,7 @@ waypt_read(void)
     if (way[i]->time_populated) {
       wpt_tmp->SetCreationTime(way[i]->time);
     }
-#if SOON
     garmin_fs_garmin_after_read(way[i], wpt_tmp, gps_waypt_type);
-#endif
     waypt_add(wpt_tmp);
     GPS_Way_Del(&way[i]);
   }
@@ -940,8 +931,8 @@ waypoint_prepare(void)
      * cleaning
      */
     ident = mkshort(mkshort_handle,
-                    global_opts.synthesize_shortnames ? src :
-                    wpt->shortname);
+                    global_opts.synthesize_shortnames ? CSTRc(src) :
+                    CSTRc(wpt->shortname));
     /* Should not be a strcpy as 'ident' isn't really a C string,
      * but rather a garmin "fixed length" buffer that's padded
      * to the end with spaces.  So this is NOT (strlen+1).
@@ -955,9 +946,13 @@ waypoint_prepare(void)
 
     // If we were explictly given a comment from GPX, use that.
     //  This logic really is horrible and needs to be untangled.
+#if NEW_STRINGS
+    if (!wpt->description.isEmpty() &&
+#else
     if (wpt->description &&
+#endif
         global_opts.smart_names && !wpt->gc_data->diff) {
-      memcpy(tx_waylist[i]->cmnt, wpt->description, strlen(wpt->description));
+      memcpy(tx_waylist[i]->cmnt, CSTRc(wpt->description), strlen(CSTRc(wpt->description)));
     } else {
       if (global_opts.smart_names &&
           wpt->gc_data->diff && wpt->gc_data->terr) {
@@ -967,10 +962,10 @@ waypoint_prepare(void)
         snprintf(obuf, sizeof(obuf), "%s%d/%d %s",
                  get_gc_info(wpt),
                  wpt->gc_data->diff, wpt->gc_data->terr,
-                 src);
+                 CSTRc(src));
         memcpy(tx_waylist[i]->cmnt, obuf, strlen(obuf));
       } else  {
-        memcpy(tx_waylist[i]->cmnt, src, strlen(src));
+        memcpy(tx_waylist[i]->cmnt, CSTRc(src), strlen(CSTRc(src)));
       }
     }
 
@@ -1013,9 +1008,7 @@ waypoint_prepare(void)
     if (categorybits) {
       tx_waylist[i]->category = categorybits;
     }
-#if SOON
     garmin_fs_garmin_before_write(wpt, tx_waylist[i], gps_waypt_type);
-#endif
     i++;
   }
 
@@ -1049,8 +1042,12 @@ route_hdr_pr(const route_head* rte)
 {
   (*cur_tx_routelist_entry)->rte_num = rte->rte_num;
   (*cur_tx_routelist_entry)->isrte = 1;
+#if NEW_STRINGS
+  if (!rte->rte_name.isEmpty()) {
+#else
   if (rte->rte_name) {
-    strncpy((*cur_tx_routelist_entry)->rte_ident, rte->rte_name,
+#endif
+    strncpy((*cur_tx_routelist_entry)->rte_ident, CSTRc(rte->rte_name),
             sizeof((*cur_tx_routelist_entry)->rte_ident));
   }
 }
@@ -1059,7 +1056,6 @@ static void
 route_waypt_pr(const waypoint* wpt)
 {
   GPS_PWay rte = *cur_tx_routelist_entry;
-  char* s, *d;
 
   /*
    * As stupid as this is, libjeeps seems to want an empty
@@ -1091,9 +1087,15 @@ route_waypt_pr(const waypoint* wpt)
   // enforce that here, since jeeps doesn't.
   //
   // This was strncpy(rte->ident, wpt->shortname, sizeof(rte->ident));
+  char* s, *d;
   d = rte->ident;
+#if NEW_STRINGS
+  for (int idx = 0; idx < wpt->shortname.length(); idx++) {
+    int c = wpt->shortname[idx].toAscii();
+#else
   for (s = wpt->shortname; *s; s++) {
     int c = *s;
+#endif
     if (receiver_must_upper && isalpha(c)) {
       c = toupper(c);
     }
@@ -1146,8 +1148,12 @@ static void
 track_hdr_pr(const route_head* trk_head)
 {
   (*cur_tx_tracklist_entry)->ishdr = gpsTrue;
+#if NEW_STRINGS
+  if (!trk_head->rte_name.isEmpty()) {
+#else
   if (trk_head->rte_name) {
-    strncpy((*cur_tx_tracklist_entry)->trk_ident, trk_head->rte_name, sizeof((*cur_tx_tracklist_entry)->trk_ident));
+#endif
+    strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(trk_head->rte_name), sizeof((*cur_tx_tracklist_entry)->trk_ident));
     (*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
   } else {
     sprintf((*cur_tx_tracklist_entry)->trk_ident, "TRACK%02d", my_track_count);
@@ -1163,8 +1169,12 @@ track_waypt_pr(const waypoint* wpt)
   (*cur_tx_tracklist_entry)->lon = wpt->longitude;
   (*cur_tx_tracklist_entry)->alt = (wpt->altitude != unknown_alt) ? wpt->altitude : 1e25;
   (*cur_tx_tracklist_entry)->Time = wpt->GetCreationTime().toTime_t();;
+#if NEW_STRINGS
+  if (!wpt->shortname.isEmpty()) {
+#else
   if (wpt->shortname) {
-    strncpy((*cur_tx_tracklist_entry)->trk_ident, wpt->shortname, sizeof((*cur_tx_tracklist_entry)->trk_ident));
+#endif
+    strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(wpt->shortname), sizeof((*cur_tx_tracklist_entry)->trk_ident));
     (*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
   }
   (*cur_tx_tracklist_entry)->tnew = wpt->wpt_flags.new_trkseg;
@@ -1315,4 +1325,3 @@ d103_icon_number_from_symbol(const QString& s)
   }
   return 0;
 }
-#endif
