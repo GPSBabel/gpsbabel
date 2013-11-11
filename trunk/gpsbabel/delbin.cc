@@ -22,9 +22,6 @@
 
 #include "defs.h"
 #include "src/core/xmltag.h"
-#if REALLY_MINIMAL
-ff_vecs_t delbin_vecs;
-#else
 #include <assert.h>
 
 #define MYNAME "delbin"
@@ -1096,7 +1093,11 @@ read_waypoints(void)
       const char* s = p->name + p->name_size;
       unsigned nn = le_readu16(s);
       if (notes_max < notes_i + nn) {
+#if NEW_STRINGS
+// This section needs a serious rethinking.
+#else
         char* old = wp->notes;
+#endif
         if (notes_max == 0) {
           notes_max = nn;
         }
@@ -1104,15 +1105,18 @@ read_waypoints(void)
           notes_max += notes_max;
         } while (notes_max < notes_i + nn);
         wp->notes = (char*) xmalloc(notes_max);
+#if NEW_STRINGS
+#else
         if (old) {
           memcpy(wp->notes, old, notes_i);
           xfree(old);
         }
+#endif
       }
       if (nn) {
 #if NEW_STRINGS
-#warning gross code avoided.
-abort();
+        // Is this really what this code was trying to do?
+        wp->notes += QString::fromUtf8(s + 2, nn);
 #else
         memcpy(wp->notes + notes_i, s + 2, nn);
 #endif
@@ -1198,7 +1202,11 @@ get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size
   if (0 == (wp->icon_descr.compare("Geocache Found"))) {
     gc_sym = 124;
   }
+#if NEW_STRINGS
+  if (!wp->description.isEmpty()) {
+#else
   if (wp->description) {
+#endif
     gbfputs(wp->description, fd);
     if (!wp->gc_data->placer.isEmpty()) {
       gbfprintf(fd, " by %s", wp->gc_data->placer.toUtf8().data());
@@ -1378,20 +1386,29 @@ write_waypoint(const waypoint* wp)
 {
   message_t m;
   msg_waypoint_t* p;
+#if NEW_STRINGS
+  QString name = wp->shortname;
+#else
   const char* name = wp->shortname;
-  unsigned name_size;
+#endif
   char* notes;
+  unsigned name_size;
   unsigned notes_size = 0;
   unsigned extended_notes_size = 0;
-  char* notes_freeable = NULL;
+  const char* notes_freeable = NULL;
   int symbol = -1;
   float elev = UNKNOWN_ELEV;
   char* pp;
 
   if (waypt_empty_gc_data(wp)) {
+#if NEW_STRINGS
+    notes = xstrdup(wp->notes);
+    if (notes == NULL && wp->description.isEmpty() && wp->shortname != wp->description) {
+#else
     notes = wp->notes;
     if (notes == NULL && wp->description && strcmp(wp->shortname, wp->description)) {
-      notes = wp->description;
+#endif
+      notes = xstrdup(wp->description);
     }
     if (notes) {
       notes_size = strlen(notes) + 1;
@@ -1399,7 +1416,11 @@ write_waypoint(const waypoint* wp)
   } else {
     get_gc_notes(wp, &symbol, &notes, &notes_size);
     notes_freeable = notes;
+#if NEW_STRINGS
+    if (!wp->description.isEmpty()) {
+#else
     if (wp->description) {
+#endif
       name = mkshort(mkshort_handle, wp->description);
     }
   }
@@ -1413,7 +1434,7 @@ write_waypoint(const waypoint* wp)
     }
   }
 
-  name_size = strlen(name) + 1;
+  name_size = strlen(CSTRc(name)) + 1;
   if (name_size > 255) {
     name_size = 255;
   }
@@ -1438,7 +1459,7 @@ write_waypoint(const waypoint* wp)
   }
   p->symbol = symbol;
   p->name_size = name_size;
-  memcpy(p->name, name, name_size - 1);
+  memcpy(p->name, CSTRc(name), name_size - 1);
   p->name[name_size - 1] = 0;
   pp = p->name + name_size;
   m.size = (pp + 2 + notes_size) - (char*)p;
@@ -1447,22 +1468,25 @@ write_waypoint(const waypoint* wp)
     pp[2] = 0;
   } else {
     le_write16(pp, notes_size);
+#if NEW_STRINGS
+#else
     if (notes) {
       memcpy(pp + 2, notes, notes_size - 1);
       pp[2 + notes_size - 1] = 0;
     }
+#endif
   }
 
   add_to_batch(MSG_WAYPOINT_IN, &m);
 
   if (extended_notes_size) {
-    write_waypoint_notes(notes, extended_notes_size, name);
+    write_waypoint_notes(notes, extended_notes_size, CSTRc(name));
   }
   if (notes_freeable) {
     xfree(notes_freeable);
   }
   if (global_opts.debug_level >= DBGLVL_L) {
-    warning(MYNAME ": wrote waypoint %u '%s'\n", waypoint_i, name);
+    warning(MYNAME ": wrote waypoint %u '%s'\n", waypoint_i, CSTRc(name));
   }
 }
 
@@ -1571,7 +1595,7 @@ read_track(route_head* track)
     m.size = MSG_REQUEST_TRACKS_SIZE;
     memset(m.data, 0, m.size);
     ((char*)m.data)[0] = 1;  // Download single track
-    strcpy((char*)m.data + 1, track->rte_name);
+    strcpy((char*)m.data + 1, CSTRc(track->rte_name));
     message_write(MSG_REQUEST_TRACKS, &m);
     if (get_batch(&msg_array, &msg_array_n)) {
       break;
@@ -1793,14 +1817,22 @@ write_track_end(const route_head* track)
   if (waypoint_n == 0) {
     return;
   }
+#if NEW_STRINGS
+  if (!track->rte_desc.isEmpty()) {
+#else
   if (track->rte_desc) {
-    comment_size = strlen(track->rte_desc) + 1;
+#endif
+    comment_size = strlen(CSTRc(track->rte_desc)) + 1;
   }
   message_init_size(&m, sizeof(msg_track_header_in_t) - 1 + comment_size);
   p = (msg_track_header_in_t*) m.data;
   memset(p->name, 0, sizeof(p->name));
+#if NEW_STRINGS
+  if (!track->rte_name.isEmpty()) {
+#else
   if (track->rte_name) {
-    strncpy(p->name, track->rte_name, sizeof(p->name) - 1);
+#endif
+    strncpy(p->name, CSTRc(track->rte_name), sizeof(p->name) - 1);
   } else {
     sprintf(p->name, "%lu", (long)wp_array[0]->GetCreationTime().toTime_t());
   }
@@ -1809,7 +1841,7 @@ write_track_end(const route_head* track)
   le_write16(p->color, track_color_index(track->line_color.bbggrr));
   le_write16(p->comment_size, comment_size);
   if (comment_size) {
-    memcpy(p->comment, track->rte_desc, comment_size);
+    memcpy(p->comment, CSTRc(track->rte_desc), comment_size);
   }
   add_to_batch(MSG_TRACK_HEADER_IN, &m);
   write_track_points();
@@ -1920,8 +1952,13 @@ decode_route_point(const void* data)
   }
   if (fd->memlen) {
     gbfputc(0, fd);
+#if NEW_STRINGS
+    // Reconsider if there's a less grubby way to do this.
+    wp->notes = QString::fromUtf8((const char*) fd->handle.mem, fd->memlen);
+#else
     wp->notes = (char*) xmalloc(fd->memlen);
     memcpy(wp->notes, fd->handle.mem, fd->memlen);
+#endif
   }
   gbfclose(fd);
   return wp;
@@ -1944,7 +1981,7 @@ read_route(route_head* route)
     m.size = MSG_REQUEST_ROUTES_SIZE;
     memset(m.data, 0, m.size);
     ((char*)m.data)[0] = 1;  // Download single route
-    strcpy((char*)m.data + 1, route->rte_name);
+    strcpy((char*)m.data + 1, CSTRc(route->rte_name));
     message_write(MSG_REQUEST_ROUTES, &m);
     if (get_batch(&msg_array, &msg_array_n)) {
       break;
@@ -2129,8 +2166,12 @@ write_route_points(void)
     shape_n = shape_point_counts[route_point_i];
     le_write32(p->total, route_point_n);
     le_write32(p->index, route_point_i);
+#if NEW_STRINGS
+    if (!wp->shortname.isEmpty()) {
+#else 
     if (wp->shortname) {
-      strncpy(p->name, wp->shortname, sizeof(p->name) - 1);
+#endif
+      strncpy(p->name, CSTRc(wp->shortname), sizeof(p->name) - 1);
     } else {
       sprintf(p->name, "RPT%u", route_point_i);
     }
@@ -2170,9 +2211,13 @@ write_route_begin(const route_head* track)
 static void
 write_route_point(const waypoint* wp)
 {
-  const char* s = wp->shortname;
   wp_array[waypoint_i++] = (waypoint*)wp;
+#if NEW_STRINGS
+  if (wp->shortname.startsWith("SHP")) {
+#else
+  const char* s = wp->shortname;
   if (s && s[0] == 'S' && s[1] == 'H' && s[2] == 'P' && s[3] >= '0' && s[3] <= '9') {
+#endif
     shape_point_n++;
     shape_point_counts[route_point_n]++;
   } else {
@@ -2192,8 +2237,12 @@ write_route_end(const route_head* route)
   message_init_size(&m, sizeof(msg_route_header_in_t));
   p = (msg_route_header_in_t*) m.data;
   memset(p->name, 0, sizeof(p->name));
+#if NEW_STRINGS
+  if (!route->rte_name.isEmpty()) {
+#else
   if (route->rte_name) {
-    strncpy(p->name, route->rte_name, sizeof(p->name) - 1);
+#endif
+    strncpy(p->name, CSTRc(route->rte_name), sizeof(p->name) - 1);
   } else {
     sprintf(p->name, "%lu", (long)wp_array[0]->GetCreationTime().toTime_t());
   }
@@ -3358,4 +3407,3 @@ waypoint_symbol_index(const char* name)
 }
 
 // vi: ts=4 sw=4 noexpandtab
-#endif
