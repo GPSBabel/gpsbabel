@@ -1824,15 +1824,19 @@ write_route_cb(const route_head* rte)
     return;
   }
 
-  char *tname;
+  String tname;
   if (rte->rte_name == NULL) {
     snprintf(buf, sizeof(buf), "Route%04d", rte->rte_num);
     tname = mkshort(short_h, buf);
   } else {
     tname = mkshort(short_h, rte->rte_name);
   }
+
   QString name(tname);
+#if NEW_STRINGS
+#else
   xfree(tname);
+#endif
 
   rte_ct++;	/* increase informational number of written routes */
 
@@ -1852,7 +1856,7 @@ write_track_cb(const route_head* trk)
     return;
   }
 
-  char* tname; 
+  String tname; 
   if (trk->rte_name == NULL) {
     snprintf(buf, sizeof(buf), "Track%04d", trk->rte_num);
     tname = mkshort(short_h, buf);
@@ -1863,7 +1867,7 @@ write_track_cb(const route_head* trk)
   QString name(tname);
 #if NEW_STRINGS
 #else
-  xfree (tname);
+  xfree(tname);
 #endif
 
   trk_ct++;	/* increase informational number of written tracks */
