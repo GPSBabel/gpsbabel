@@ -715,7 +715,9 @@ static void Read_AN1_Waypoints(gbfile* f)
     } else {
       int u = wpt_tmp->description.indexOf("{URL=");
       QString us = wpt_tmp->description.mid(u);
-      wpt_tmp->AddUrlLink(us);
+      if (!us.isEmpty()) {
+        wpt_tmp->AddUrlLink(us);
+      }
     }
 #else
     } else if (NULL != (url=strstr(wpt_tmp->description, "{URL="))) {
