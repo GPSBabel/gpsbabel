@@ -104,7 +104,6 @@ ignr_descr(xg_string args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((track == NULL));
 #if NEW_STRINGS
-qDebug() << args;
   track->rte_desc = args;
 #else
   if ((args != NULL) && (strlen(args) > 0)) {
