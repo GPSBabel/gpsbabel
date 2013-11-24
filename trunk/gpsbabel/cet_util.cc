@@ -1032,9 +1032,13 @@ cet_convert_route_hdr(const route_head* route)
   }
 
   rte->cet_converted = 1;
-
+#if NEW_STRINGS
+//  rte->rte_name = route->rte_name;
+//  rte->rte_desc = route->rte_desc;
+#else
   rte->rte_name = cet_convert_string(CSTRc(route->rte_name));
   rte->rte_desc = cet_convert_string(CSTRc(route->rte_desc));
+#endif
   const char* rte_url = cet_convert_string(route->rte_url);
   rte->rte_url = rte_url;
   xfree(rte_url);
