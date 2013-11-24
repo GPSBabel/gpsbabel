@@ -459,42 +459,40 @@ bcr_route_header(const route_head* route)
 
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    const char* s1, *s2;
+    QString s1, s2;
 
     i++;
     wpt = (waypoint*) elem;
-    s1 = CSTRc(wpt->notes);
-    if (s1 == NULL) {
-      s1 = CSTRc(wpt->description);
+    s1 = wpt->notes;
+    if (s1.isEmpty()) {
+      s1 = wpt->description;
     }
 
-    if (prefer_shortnames_opt || (s1 == NULL) || (*s1 == '\0')) {
+    if (prefer_shortnames_opt || (s1.isEmpty())) {
       s2 = s1;
-      s1 = CSTRc(wpt->shortname);
+      s1 = wpt->shortname;
     } else {
-      s2 = CSTRc(wpt->shortname);
+      s2 = wpt->shortname;
     }
 
-    if (s1 == NULL) {
-      s1 = xstrdup("");
+    if (s1.isEmpty()) {
+      s1 = QString();
     } else {
       s1 = csv_stringclean(s1, ",\t\r\n");
     }
-    if (s2 == NULL) {
-      s2 = xstrdup("");
+    if (s2.isEmpty()) {
+      s2 = QString();
     } else {
       s2 = csv_stringclean(s2, ",\t\r\n");
     }
 
-    if (*s2) {
-      sout = QString("%1,%2,@,0").arg(s1).arg(s2);
-    } else {
+    if (s2.isEmpty()) {
       sout = QString("%1,%2,@,0").arg(s1).arg(s1);
+    } else {
+      sout = QString("%1,%2,@,0").arg(s1).arg(s2);
     }
 
     bcr_write_line(fout, "STATION", &i, sout);
-    xfree(s1);
-    xfree(s2);
   }
 
   bcr_write_line(fout, "[ROUTE]", NULL, NULL);		/* route section */
