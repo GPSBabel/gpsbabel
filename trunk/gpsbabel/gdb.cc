@@ -150,7 +150,16 @@ gdb_flush_waypt_queue(queue* Q)
     waypoint* wpt = (waypoint*)elem;
     dequeue(elem);
     if (wpt->extra_data) {
+#if NEW_STRINGS
+      // FIXME
+      // wpt->extra_data may be holding a pointer to a QString, courtesy
+      // the grossness at the end of write_waypt_cb().  If that leaks,
+      // (and I think it will) find some way to do the approximate equivalent
+      // of:
+      // delete static_cast<QString*>(wpt->extra_data);
+#else
       xfree(wpt->extra_data);
+#endif
     }
     waypt_free(wpt);
   }
@@ -202,7 +211,9 @@ disp_summary(const gbfile* f)
 #define FREAD_i16 gbfgetint16(fin)
 #define FREAD_STR(a) gdb_fread_str(a,sizeof(a),fin)
 #if NEW_STRINGS
-#define FREAD_CSTR QString::fromLatin1(gdb_fread_cstr(fin))
+#define FREAD_CSTR \
+  (gdb_ver >= GDB_VER_UTF8) ? QString::fromUtf8(gdb_fread_cstr(fin)) : \
+  QString::fromLatin1(gdb_fread_cstr(fin))
 #else
 #define FREAD_CSTR gdb_fread_cstr(fin)
 #endif
@@ -406,8 +417,21 @@ gdb_add_route_waypt(route_head* rte, waypoint* ref, const int wpt_class)
 /*******************************************************************************/
 /* TOOLS AND MACROS FOR THE WRITER */
 /*-----------------------------------------------------------------------------*/
-
+#if NEW_STRINGS
+void FWRITE_CSTR(QString a)  {
+  if (a.isEmpty()) {
+    gbfputc(0, fout);
+    return;
+  }
+  if (gdb_ver >= GDB_VER_UTF8) {
+    gbfputcstr(a.toUtf8().constData(), fout);
+  } else {
+    gbfputcstr(a.toLatin1().constData(), fout);
+  }
+}
+#else
 #define FWRITE_CSTR(a) ((a) == NULL) ? gbfputc(0,fout) : gbfputcstr((a),fout)
+#endif
 #define FWRITE_i16(a) gbfputint16((a),fout)
 #define FWRITE_i32(a) gbfputint32((a),fout)
 #define FWRITE(a, b) gbfwrite(a,(b),1,fout)
@@ -1803,8 +1827,8 @@ write_waypoint_cb(const waypoint* refpt)
 
     name = mkshort(short_h, name);
 #if NEW_STRINGS
-#warning WTH is THIS?  Have some dead beef instead.
-    wpt->extra_data = (void*) 0xdeadbeef;
+    // This is sooooo tacky.
+    wpt->extra_data = static_cast<void*>(&name);
 #else
     wpt->extra_data = (void*)name;
 #endif
@@ -1875,11 +1899,8 @@ write_track_cb(const route_head* trk)
   fsave = fout;
   fout = ftmp;
   write_track(trk, name);
-#if NEW_STRINGS
-#else
-#endif
-  finalize_item(fsave, 'T');
 
+  finalize_item(fsave, 'T');
 }
 
 /*-----------------------------------------------------------------------------*/
