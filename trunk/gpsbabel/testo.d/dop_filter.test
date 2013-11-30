@@ -1,8 +1,9 @@
 #
 # Dop filter test
 #
-OLD_LANG=$LANG
-LANG=C
+(
+# avoid "sed: RE error: illegal byte sequence" on Mac OS X 10.9, and probably other OSs, by setting LC_ALL
+LC_ALL=C
 rm -f ${TMPDIR}/dop*
 sed '/<hdop>50/d' ${REFERENCE}/dop-test.gpx | gpsbabel -i gpx -f - -o openoffice -F - | sed  's/RPT...//g' > ${TMPDIR}/dop-hdop.ref
 gpsbabel -i gpx -f ${REFERENCE}/dop-test.gpx -x discard,hdop=50 -o openoffice -F - | sed 's/RPT...//g' > ${TMPDIR}/dop-hdop.fil
@@ -10,4 +11,4 @@ compare ${TMPDIR}/dop-hdop.ref ${TMPDIR}/dop-hdop.fil
 sed '/<vdop>50/d' ${REFERENCE}/dop-test.gpx | gpsbabel -i gpx -f - -o openoffice -F - | sed 's/RPT...//g' > ${TMPDIR}/dop-vdop.ref
 gpsbabel -i gpx -f ${REFERENCE}/dop-test.gpx -x discard,vdop=50 -o openoffice -F - | sed 's/RPT...//g' > ${TMPDIR}/dop-vdop.fil
 compare ${TMPDIR}/dop-vdop.ref ${TMPDIR}/dop-vdop.fil
-LANG=$OLD_LANG
+)
