@@ -51,14 +51,11 @@ LRELEASE=@LRELEASE@
 #OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
 #DEBUGGING=-g $(EXTRA_DEBUGGING)
 # add -DDEBUG_MEM to turn on memory allocation logging
-GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I$(srcdir) -I$(QT_INC) \
+GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I$(srcdir) @QT_INC_OPT@$(QT_INC) \
 	$(OPTIMIZATION) -DHAVE_CONFIG_H @CFLAGS@
 LDFLAGS=$(EXTRA_LDFLAGS) @LDFLAGS@
 PREFIX=@prefix@
 INSTALL_DIR=$(DESTDIR)/$(PREFIX)
-
-# OTHER_ROOT=/opt/local	# For DarwinPorts on OSX
-# OTHER_ROOT=/sw		# Uncomment For Fink on OS X.
 
 MINIMAL_FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin.o \
 	garmin_device_xml.o garmin_tables.o internal_styles.o nmea.o kml.o \
@@ -216,7 +213,7 @@ leaktest:
 	tools/memdebug | grep -v '^command line:'
 
 dep:
-	make clean && make EXTRA_CFLAGS="-isystem /sw/include -isystem $(QT_INC) -MMD"  && cat $(sort $(DEPFILES)) > /tmp/dep && rm $(DEPFILES)
+	make clean && make EXTRA_CFLAGS="-isystem /sw/include @QT_SYSINC_OPT@ $(QT_INC) -MMD"  && cat $(sort $(DEPFILES)) > /tmp/dep && rm $(DEPFILES)
 	echo 'internal_styles.cc: mkstyle.sh $$(srcdir)/style/*.style' >> /tmp/dep
 	echo '	$$(srcdir)/mkstyle.sh > internal_styles.cc || (rm -f internal_styles.cc ; exit 1)'  >> /tmp/dep
 	echo Edit Makefile.in and bring in /tmp/dep

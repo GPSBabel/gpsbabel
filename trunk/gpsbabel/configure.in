@@ -164,6 +164,9 @@ if test "$QMAKE" = no ; then
 fi
 
 QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -l QtCore"
+QT_INC=$($QMAKE -query QT_INSTALL_HEADERS)
+QT_INC_OPT="-I"
+QT_SYSINC_OPT="-isystem"
 
 case "$target" in
     *-*-cygwin* | *-*-mingw32*)
@@ -205,15 +208,19 @@ case "$target" in
       AC_DEFINE(HAVE_LIBUSB, 1)
       CFLAGS="$CFLAGS -Imac/libusb/"
  
+      # On mac use frameworks for includes and library files.
       # Macports uses a non-standard build of Qt with an added 
       # QT_INSTALL_FRAMEWORKS flag, so look for thier custom
       # version first.  That will fail on 'normal' Qt so fall 
       # back to QT_INSTALL_LIBS.
-      QT_LIBS=$($QMAKE -query QT_INSTALL_FRAMEWORKS)
-      if test $QT_LIBS = "**Unknown**" ; then
-         QT_LIBS=$($QMAKE -query QT_INSTALL_LIBS)
+      QT_FW_OR_LIBS=$($QMAKE -query QT_INSTALL_FRAMEWORKS)
+      if test $QT_FW_OR_LIBS = "**Unknown**" ; then
+         QT_FW_OR_LIBS=$($QMAKE -query QT_INSTALL_LIBS)
       fi
-      QT_LIBS="-F$QT_LIBS -framework QtCore"
+      QT_LIBS="-F$QT_FW_OR_LIBS -framework QtCore"
+      QT_INC="$QT_FW_OR_LIBS"
+      QT_INC_OPT="-F"
+      QT_SYSINC_OPT="-iframework"
       ;;
     *)
 	GBSER=gbser_posix.o
@@ -374,8 +381,9 @@ fi
 #
 # There's probably some more "autoconfish" way to do this.
 #
-QT_INC=$($QMAKE -query QT_INSTALL_HEADERS)
 AC_SUBST(QT_INC)
+AC_SUBST(QT_INC_OPT)
+AC_SUBST(QT_SYSINC_OPT)
 AC_SUBST(QT_LIBS)
 
 AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc jeeps/Makefile shapelib/Makefile zlib/empty])
