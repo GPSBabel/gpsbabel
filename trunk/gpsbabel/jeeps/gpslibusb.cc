@@ -26,7 +26,12 @@
 #include "config.h"
 #endif
 #if HAVE_LIBUSB
-#include "usb.h"
+#  if __APPLE__
+     // We use our own (slightly modified) libusb.
+#    include "mac/libusb/usb.h"
+#  else
+#    include "usb.h"
+#  endif
 #include "gps.h"
 #include "garminusb.h"
 #include "gpsusbcommon.h"
