@@ -206,9 +206,8 @@ case "$target" in
       mac/libusb/usb.o "
       USB_LIBS="-framework  IOKit -framework CoreFoundation"
       AC_DEFINE(HAVE_LIBUSB, 1)
-      CFLAGS="$CFLAGS -Imac/libusb/"
  
-      # On mac use frameworks for includes and library files.
+      # On Mac, use frameworks for includes and library files.
       # Macports uses a non-standard build of Qt with an added 
       # QT_INSTALL_FRAMEWORKS flag, so look for thier custom
       # version first.  That will fail on 'normal' Qt so fall 

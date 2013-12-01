@@ -4599,9 +4599,8 @@ rm -f core conftest.err conftest.$ac_objext \
       USB_LIBS="-framework  IOKit -framework CoreFoundation"
       $as_echo "#define HAVE_LIBUSB 1" >>confdefs.h
 
-      CFLAGS="$CFLAGS -Imac/libusb/"
 
-      # On mac use frameworks for includes and library files.
+      # On Mac, use frameworks for includes and library files.
       # Macports uses a non-standard build of Qt with an added
       # QT_INSTALL_FRAMEWORKS flag, so look for thier custom
       # version first.  That will fail on 'normal' Qt so fall
