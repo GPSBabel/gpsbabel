@@ -17,7 +17,7 @@ BADCHARS		TAB
 #
 # HEADER STUFF:
 #
-PROLOGUE	Index	Lat			Lon			Icon	Name	Description	Notes	URL	Link Text	Altitude (m)	Distance (km)	Speed (m/s)	Course (°)	Time	HDOP	VDOP	PDOP	Satellites	Fix
+PROLOGUE	Index	Lat			Lon			Icon	Name	Description	Notes	URL	Link Text	Altitude (m)	Distance (km)	Speed (m/s)	Course (Â°)	Time	HDOP	VDOP	PDOP	Satellites	Fix
 
 #
 # INDIVIDUAL DATA FIELDS:
@@ -25,10 +25,10 @@ PROLOGUE	Index	Lat			Lon			Icon	Name	Description	Notes	URL	Link Text	Altitude (m
 IFIELD	INDEX, "", "%d"
 IFIELD	LAT_DECIMAL, "", "%f"
 IFIELD	LAT_DIR, "", "%c"
-IFIELD	LAT_HUMAN_READABLE, "", "%d° %f' %c"
+IFIELD	LAT_HUMAN_READABLE, "", "%dÂ° %f' %c"
 IFIELD	LON_DECIMAL, "", "%f"
 IFIELD	LON_DIR, "", "%c"
-IFIELD	LON_HUMAN_READABLE, "", "%d° %f' %c"
+IFIELD	LON_HUMAN_READABLE, "", "%dÂ° %f' %c"
 IFIELD	ICON_DESCR, "", "%s"
 IFIELD	SHORTNAME, "", "%s"
 IFIELD	DESCRIPTION, "", "%s"
