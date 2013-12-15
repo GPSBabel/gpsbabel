@@ -127,13 +127,13 @@ WEB=@DOCDIR@
 
 # Declaring a target PHONY whose names matches a subdirectory can be
 # particularly important, e.g. gui.
-.PHONY: all clean tag more-clean check torture
-	install install-debug leaktest
-	dep doc
-	release-sourcecheck release-tarball release-rpm
-	cross-configure
-	release-winbuild release-upload mac-upload release rpm mac-release
-	gui linux-gui mac-gui mac-gui-dmg msvc-build test-release
+.PHONY: all clean tag more-clean check torture \
+install install-debug leaktest \
+dep doc \
+release-sourcecheck release-tarball release-rpm \
+cross-configure \
+release-winbuild release-upload mac-upload release rpm mac-release \
+gui linux-gui mac-gui mac-gui-dmg msvc-build test-release
 
 all: gpsbabel$(EXEEXT)
 
