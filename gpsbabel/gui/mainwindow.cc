@@ -63,7 +63,7 @@ QString MainWindow::findBabelVersion()
     return QString();
 
   QString str = babel.readAll();
-  is_beta = str.contains("-beta");
+  isBeta_ = str.contains("-beta");
   str.replace("Version",  "");
   str.replace("GPSBabel",  "");
   str.replace(QRegExp("^[\\s]*"),  "");
@@ -79,7 +79,7 @@ bool MainWindow::allowBetaUpgrades()
   // If this is a beta version (which means the user consciously downloaded
   // it and decided to be on the beta track or the user has ticked the 
   // 'suggest beta upgrade' box, allow betas to be suggested for installation.
-  return is_beta || bd.allowBetaUpgrades;
+  return isBeta_ || babelData_.allowBetaUpgrades;
 }
 
 //------------------------------------------------------------------------
@@ -112,19 +112,26 @@ static QString MakeOptions(const QList<FormatOption>& options)
   QString str;
   for (int i=0; i<options.size(); i++) {
     if (options[i].getSelected()) {
-      str += ",";
-      str += options[i].getName();
-      if (options[i].getType() == FormatOption::OPTbool) {
-        str += "=1";
+      // For OPTbool, 'selected' is the key, not value.
+     if (options[i].getType() == FormatOption::OPTbool) {
+       // Only write "foo=1" if that's not already the default.
+       if (options[i].getDefaultValue() != "1") {
+          str += "," + options[i].getName() + "=1";
+        }
       } else {
-        str += "=" + options[i].getValue().toString();
+        str += "," + options[i].getName() + "=" + options[i].getValue().toString();
       }
     } else {
-      if (options[i].getType() == FormatOption::OPTbool) {
-        str += "," + options[i].getName() + "=0";
+      // For every boolean option not selected, explictly
+      // turn it off here, but only if the default isn't zero
+      // or given.
+      if (options[i].getType() == FormatOption::OPTbool &&
+          options[i].getDefaultValue() != "0" &&
+          options[i].getDefaultValue() != "") {
+            str += "," + options[i].getName() + "=0";
+        }
       }
     }
-  }
   return str;
 }
 
@@ -140,56 +147,56 @@ static QString MakeOptionsNoLeadingComma(const QList<FormatOption>& options)
 MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 {
   loadFormats();
-  ui.setupUi(this);
+  ui_.setupUi(this);
   setWindowTitle(appName);
-  babelVersion = findBabelVersion();
-  fmtChgInterlock = false;
+  babelVersion_ = findBabelVersion();
+  fmtChgInterlock_ = false;
   loadDeviceNameCombos();
   loadCharSetCombos();
 
-  connect(ui.inputFileOptBtn,        SIGNAL(clicked()), this, SLOT(inputFileOptBtnClicked()));
-  connect(ui.inputDeviceOptBtn,      SIGNAL(clicked()), this, SLOT(inputDeviceOptBtnClicked()));
-  connect(ui.inputFileNameBrowseBtn, SIGNAL(clicked()), this, SLOT(browseInputFile()));
+  connect(ui_.inputFileOptBtn,        SIGNAL(clicked()), this, SLOT(inputFileOptBtnClicked()));
+  connect(ui_.inputDeviceOptBtn,      SIGNAL(clicked()), this, SLOT(inputDeviceOptBtnClicked()));
+  connect(ui_.inputFileNameBrowseBtn, SIGNAL(clicked()), this, SLOT(browseInputFile()));
 
-  ui.outputFileOptBtn->setAutoExclusive(false);
-  ui.outputDeviceOptBtn->setAutoExclusive(false);
-  connect(ui.outputFileOptBtn,        SIGNAL(clicked()), this, SLOT(outputFileOptBtnClicked()));
-  connect(ui.outputDeviceOptBtn,      SIGNAL(clicked()), this, SLOT(outputDeviceOptBtnClicked()));
-  connect(ui.outputFileNameBrowseBtn, SIGNAL(clicked()), this, SLOT(browseOutputFile()));
+  ui_.outputFileOptBtn->setAutoExclusive(false);
+  ui_.outputDeviceOptBtn->setAutoExclusive(false);
+  connect(ui_.outputFileOptBtn,        SIGNAL(clicked()), this, SLOT(outputFileOptBtnClicked()));
+  connect(ui_.outputDeviceOptBtn,      SIGNAL(clicked()), this, SLOT(outputDeviceOptBtnClicked()));
+  connect(ui_.outputFileNameBrowseBtn, SIGNAL(clicked()), this, SLOT(browseOutputFile()));
 
-  connect(ui.actionQuit, SIGNAL(triggered()), this, SLOT(closeActionX()));
-  connect(ui.actionHelp, SIGNAL(triggered()), this, SLOT(helpActionX()));
-  connect(ui.actionAbout, SIGNAL(triggered()), this, SLOT(aboutActionX()));
-  connect(ui.actionVisit_Website, SIGNAL(triggered()), this, SLOT(visitWebsiteActionX()));
-  connect(ui.actionMake_a_Donation, SIGNAL(triggered()), this, SLOT(donateActionX()));
-  connect(ui.actionUpgradeCheck, SIGNAL(triggered()), this, SLOT(upgradeCheckActionX()));
-  connect(ui.actionPreferences, SIGNAL(triggered()), this, SLOT(preferencesActionX()));
+  connect(ui_.actionQuit, SIGNAL(triggered()), this, SLOT(closeActionX()));
+  connect(ui_.actionHelp, SIGNAL(triggered()), this, SLOT(helpActionX()));
+  connect(ui_.actionAbout, SIGNAL(triggered()), this, SLOT(aboutActionX()));
+  connect(ui_.actionVisit_Website, SIGNAL(triggered()), this, SLOT(visitWebsiteActionX()));
+  connect(ui_.actionMake_a_Donation, SIGNAL(triggered()), this, SLOT(donateActionX()));
+  connect(ui_.actionUpgradeCheck, SIGNAL(triggered()), this, SLOT(upgradeCheckActionX()));
+  connect(ui_.actionPreferences, SIGNAL(triggered()), this, SLOT(preferencesActionX()));
 
-  connect(ui.inputFormatCombo,  SIGNAL(currentIndexChanged(int)),
+  connect(ui_.inputFormatCombo,  SIGNAL(currentIndexChanged(int)),
 	  this,                 SLOT(inputFormatChanged(int)));
-  connect(ui.outputFormatCombo, SIGNAL(currentIndexChanged(int)),
+  connect(ui_.outputFormatCombo, SIGNAL(currentIndexChanged(int)),
 	  this,                 SLOT(outputFormatChanged(int)));
-  connect(ui.inputOptionsBtn,   SIGNAL(clicked()),
+  connect(ui_.inputOptionsBtn,   SIGNAL(clicked()),
 	  this,                 SLOT(inputOptionButtonClicked()));
-  connect(ui.outputOptionsBtn , SIGNAL(clicked()),
+  connect(ui_.outputOptionsBtn , SIGNAL(clicked()),
 	  this,                 SLOT(outputOptionButtonClicked()));
-  connect(ui.moreOptionButton , SIGNAL(clicked()),
+  connect(ui_.moreOptionButton , SIGNAL(clicked()),
 	  this,                 SLOT(moreOptionButtonClicked()));
 
-  connect(ui.buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(applyActionX()));
-  connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(closeActionX()));
-  connect(ui.xlateFiltersBtn, SIGNAL(clicked()), this, SLOT(filtersClicked()));
+  connect(ui_.buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(applyActionX()));
+  connect(ui_.buttonBox, SIGNAL(rejected()), this, SLOT(closeActionX()));
+  connect(ui_.xlateFiltersBtn, SIGNAL(clicked()), this, SLOT(filtersClicked()));
 
-  connect(ui.inputFileNameText, SIGNAL(textEdited(QString)), this, SLOT(inputFileNameEdited()));
-  connect(ui.outputFileNameText, SIGNAL(textEdited(QString)), this, SLOT(outputFileNameEdited()));
-
-
-  ui.buttonBox->button(QDialogButtonBox::Apply)->setIcon(QIcon(":images/runit.png"));
-  ui.buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon(":images/exit.png"));
+  connect(ui_.inputFileNameText, SIGNAL(textEdited(QString)), this, SLOT(inputFileNameEdited()));
+  connect(ui_.outputFileNameText, SIGNAL(textEdited(QString)), this, SLOT(outputFileNameEdited()));
 
 
-  ui.inputOptionsText->setReadOnly(true);
-  ui.outputOptionsText->setReadOnly(true);
+  ui_.buttonBox->button(QDialogButtonBox::Apply)->setIcon(QIcon(":images/runit.png"));
+  ui_.buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon(":images/exit.png"));
+
+
+  ui_.inputOptionsText->setReadOnly(true);
+  ui_.outputOptionsText->setReadOnly(true);
 #if 0
   // 02/28/10  - let's try letting people edit these outside the browse.
   ui.inputFileNameText->setReadOnly(true);
@@ -197,18 +204,18 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
 #else
   setAcceptDrops(true);
 #endif
-  ui.wayPtLabel->setText("");
-  ui.trackLabel->setText("");
-  ui.routeLabel->setText("");
-  lights[0] = QPixmap::fromImage(QImage(":images/00.png").scaledToHeight(20, Qt::SmoothTransformation));
-  lights[1] = QPixmap::fromImage(QImage(":images/01.png").scaledToHeight(20, Qt::SmoothTransformation));
-  lights[2] = QPixmap::fromImage(QImage(":images/10.png").scaledToHeight(20, Qt::SmoothTransformation));
-  lights[3] = QPixmap::fromImage(QImage(":images/11.png").scaledToHeight(20, Qt::SmoothTransformation));
+  ui_.wayPtLabel->setText("");
+  ui_.trackLabel->setText("");
+  ui_.routeLabel->setText("");
+  lights_[0] = QPixmap::fromImage(QImage(":images/00.png").scaledToHeight(20, Qt::SmoothTransformation));
+  lights_[1] = QPixmap::fromImage(QImage(":images/01.png").scaledToHeight(20, Qt::SmoothTransformation));
+  lights_[2] = QPixmap::fromImage(QImage(":images/10.png").scaledToHeight(20, Qt::SmoothTransformation));
+  lights_[3] = QPixmap::fromImage(QImage(":images/11.png").scaledToHeight(20, Qt::SmoothTransformation));
 
-  ui.outputWindow->setReadOnly(true);
+  ui_.outputWindow->setReadOnly(true);
 
-  langPath = QApplication::applicationDirPath();
-  langPath.append("/translations/");
+  langPath_ = QApplication::applicationDirPath();
+  langPath_.append("/translations/");
 
   // Start up in the current system language.
   loadLanguage(QLocale::system().name());
@@ -219,17 +226,17 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   //--- Restore from registry
   restoreSettings();
 
-  upgrade = new UpgradeCheck(parent, formatList, bd);
-  if (bd.startupVersionCheck) {
-    upgrade->checkForUpgrade(babelVersion, bd.upgradeCheckTime, 
+  upgrade = new UpgradeCheck(parent, formatList_, babelData_);
+  if (babelData_.startupVersionCheck) {
+    upgrade->checkForUpgrade(babelVersion_, babelData_.upgradeCheckTime,
                              allowBetaUpgrades());
   }
 
-  if (!bd.ignoreVersionMismatch && babelVersion != VERSION) {
-    VersionMismatch vm(0, babelVersion, QString(VERSION));
+  if (!babelData_.ignoreVersionMismatch && babelVersion_ != VERSION) {
+    VersionMismatch vm(0, babelVersion_, QString(VERSION));
 
     vm.exec();
-    bd.ignoreVersionMismatch = vm.neverAgain();
+    babelData_.ignoreVersionMismatch = vm.neverAgain();
   }
 }
 
@@ -297,7 +304,7 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
   // remove the old translator
   qApp->removeTranslator(&translator);
 
-  QString full_filename(langPath + "/" + filename);
+  QString full_filename(langPath_ + "/" + filename);
 
   // load the new translator
   if (translator.load(full_filename))
@@ -306,15 +313,15 @@ void MainWindow::switchTranslator(QTranslator& translator, const QString& filena
 
 void MainWindow::loadLanguage(const QString& rLanguage)
 {
-  if (currLang != rLanguage) {
-    currLang = rLanguage;
-    QLocale locale = QLocale(currLang);
+  if (currLang_ != rLanguage) {
+    currLang_ = rLanguage;
+    QLocale locale = QLocale(currLang_);
     QLocale::setDefault(locale);
     QString languageName = QLocale::languageToString(locale.language());
 
-    switchTranslator(translator, QString("gpsbabelfe_%1.qm").arg(rLanguage));
-    switchTranslator(translatorCore, QString("gpsbabel__%1.qm").arg(rLanguage));
-    switchTranslator(translatorQt, QString("qt_%1.qm").arg(rLanguage));
+    switchTranslator(translator_, QString("gpsbabelfe_%1.qm").arg(rLanguage));
+    switchTranslator(translatorCore_, QString("gpsbabel__%1.qm").arg(rLanguage));
+    switchTranslator(translatorQt_, QString("qt_%1.qm").arg(rLanguage));
   }
 }
 
@@ -324,7 +331,7 @@ void MainWindow::changeEvent(QEvent* event)
         switch(event->type()) {
         // This event is sent if a translator is loaded.
         case QEvent::LanguageChange:
-            ui.retranslateUi(this);
+            ui_.retranslateUi(this);
             break;
         // This event is sent if the system language changes.
         case QEvent::LocaleChange:
@@ -345,29 +352,29 @@ void MainWindow::changeEvent(QEvent* event)
 //------------------------------------------------------------------------
 void MainWindow::loadInputDeviceNameCombo(const QString &format)
 {
-  ui.inputDeviceNameCombo->clear();
+  ui_.inputDeviceNameCombo->clear();
   // Later, we can probe the system for multiple USB devices and populate 
   // here.
   if (formatSupportsUSB(format))
-    ui.inputDeviceNameCombo->addItem("usb:");
+    ui_.inputDeviceNameCombo->addItem("usb:");
   if (formatSupportsSerial(format))
-    osLoadDeviceNameCombos(ui.inputDeviceNameCombo);
+    osLoadDeviceNameCombos(ui_.inputDeviceNameCombo);
   // If only one choice, just disable it.
-  ui.inputDeviceNameCombo->setEnabled(ui.inputDeviceNameCombo->count() > 1);
+  ui_.inputDeviceNameCombo->setEnabled(ui_.inputDeviceNameCombo->count() > 1);
 }
 
 //------------------------------------------------------------------------
 void MainWindow::loadOutputDeviceNameCombo(const QString &format)
 {
-  ui.outputDeviceNameCombo->clear();
+  ui_.outputDeviceNameCombo->clear();
   // Later, we can probe the system for multiple USB devices and populate 
   // here.
   if (formatSupportsUSB(format))
-    ui.outputDeviceNameCombo->addItem("usb:");
+    ui_.outputDeviceNameCombo->addItem("usb:");
   if (formatSupportsSerial(format))
-    osLoadDeviceNameCombos(ui.outputDeviceNameCombo);
+    osLoadDeviceNameCombos(ui_.outputDeviceNameCombo);
   // If only one choice, just disable it.
-  ui.outputDeviceNameCombo->setEnabled(ui.outputDeviceNameCombo->count() > 1);
+  ui_.outputDeviceNameCombo->setEnabled(ui_.outputDeviceNameCombo->count() > 1);
 }
 
 //------------------------------------------------------------------------
@@ -379,125 +386,125 @@ void MainWindow::loadDeviceNameCombos()
 //------------------------------------------------------------------------
 void MainWindow::loadCharSetCombos()
 {
-  charSets = getCharSets();
+  charSets_ = getCharSets();
 
-  ui.inputCharSetCombo->clear();
-  ui.outputCharSetCombo->clear();
-  ui.inputCharSetCombo->addItem(tr("default"), QVariant(-1));
-  ui.outputCharSetCombo->addItem(tr("default"), QVariant(-1));
-  for (int i=0; i<charSets.size(); i++) {
-    ui.inputCharSetCombo->addItem(charSets[i], QVariant(i));
-    ui.outputCharSetCombo->addItem(charSets[i], QVariant(i));
+  ui_.inputCharSetCombo->clear();
+  ui_.outputCharSetCombo->clear();
+  ui_.inputCharSetCombo->addItem(tr("default"), QVariant(-1));
+  ui_.outputCharSetCombo->addItem(tr("default"), QVariant(-1));
+  for (int i=0; i<charSets_.size(); i++) {
+    ui_.inputCharSetCombo->addItem(charSets_[i], QVariant(i));
+    ui_.outputCharSetCombo->addItem(charSets_[i], QVariant(i));
   }
 }
 //------------------------------------------------------------------------
 void MainWindow::checkCharSetCombos()
 {
-  ui.inputCharSetCombo->setEnabled(bd.enableCharSetXform);
-  ui.outputCharSetCombo->setEnabled(bd.enableCharSetXform);
-  ui.inputCharSetCombo->setVisible(bd.enableCharSetXform);
-  ui.outputCharSetCombo->setVisible(bd.enableCharSetXform);
+  ui_.inputCharSetCombo->setEnabled(babelData_.enableCharSetXform);
+  ui_.outputCharSetCombo->setEnabled(babelData_.enableCharSetXform);
+  ui_.inputCharSetCombo->setVisible(babelData_.enableCharSetXform);
+  ui_.outputCharSetCombo->setVisible(babelData_.enableCharSetXform);
 }
 //------------------------------------------------------------------------
 void MainWindow::inputFileOptBtnClicked()
 {
-  fmtChgInterlock = true;
-  QString fmt = bd.inputFileFormat;
-  ui.inputStackedWidget->setCurrentWidget(ui.inputFilePage);
+  fmtChgInterlock_ = true;
+  QString fmt = babelData_.inputFileFormat;
+  ui_.inputStackedWidget->setCurrentWidget(ui_.inputFilePage);
   QList<int>indices = inputFileFormatIndices();
-  ui.inputFormatCombo->clear();
+  ui_.inputFormatCombo->clear();
   for (int i=0; i<indices.size(); i++) {
     int k = indices[i];
-    if (!formatList[k].isHidden())
-      ui.inputFormatCombo->addItem(formatList[k].getDescription(), QVariant(k));
+    if (!formatList_[k].isHidden())
+      ui_.inputFormatCombo->addItem(formatList_[k].getDescription(), QVariant(k));
   }
-  setComboToFormat(ui.inputFormatCombo, fmt, true);
-  fmtChgInterlock = false;
+  setComboToFormat(ui_.inputFormatCombo, fmt, true);
+  fmtChgInterlock_ = false;
 }
 
 //------------------------------------------------------------------------
 void MainWindow::inputDeviceOptBtnClicked()
 {
-  fmtChgInterlock = true;
-  QString fmt = bd.inputDeviceFormat;
-  ui.inputStackedWidget->setCurrentWidget(ui.inputDevicePage);
+  fmtChgInterlock_ = true;
+  QString fmt = babelData_.inputDeviceFormat;
+  ui_.inputStackedWidget->setCurrentWidget(ui_.inputDevicePage);
   QList<int>indices = inputDeviceFormatIndices();
-  ui.inputFormatCombo->clear();
+  ui_.inputFormatCombo->clear();
   for (int i=0; i<indices.size(); i++) {
     int k = indices[i];
-    if (!formatList[k].isHidden())
-      ui.inputFormatCombo->addItem(formatList[k].getDescription(), QVariant(k));
+    if (!formatList_[k].isHidden())
+      ui_.inputFormatCombo->addItem(formatList_[k].getDescription(), QVariant(k));
   }
-  setComboToFormat(ui.inputFormatCombo, fmt, false);
-  fmtChgInterlock = false;
+  setComboToFormat(ui_.inputFormatCombo, fmt, false);
+  fmtChgInterlock_ = false;
 }
 
 //------------------------------------------------------------------------
 void MainWindow:: outputFileOptBtnClicked()
 {
-  fmtChgInterlock = true;
-  if (ui.outputFileOptBtn->isChecked()) {
-    ui.outputFilePage->setEnabled(true);
-    ui.outputDeviceOptBtn->setChecked(false);
-    QString fmt = bd.outputFileFormat;
-    ui.outputStackedWidget->setCurrentWidget(ui.outputFilePage);
+  fmtChgInterlock_ = true;
+  if (ui_.outputFileOptBtn->isChecked()) {
+    ui_.outputFilePage->setEnabled(true);
+    ui_.outputDeviceOptBtn->setChecked(false);
+    QString fmt = babelData_.outputFileFormat;
+    ui_.outputStackedWidget->setCurrentWidget(ui_.outputFilePage);
     QList<int>indices = outputFileFormatIndices();
-    ui.outputFormatCombo->clear();
+    ui_.outputFormatCombo->clear();
     for (int i=0; i<indices.size(); i++) {
       int k = indices[i];
-      ui.outputFormatCombo->addItem(formatList[k].getDescription(), QVariant(k));
+      ui_.outputFormatCombo->addItem(formatList_[k].getDescription(), QVariant(k));
     }
-    setComboToFormat(ui.outputFormatCombo, fmt, true);
+    setComboToFormat(ui_.outputFormatCombo, fmt, true);
   }
   else {
-    ui.outputStackedWidget->setCurrentWidget(ui.outputFilePage);
-    ui.outputFilePage->setEnabled(false);
+    ui_.outputStackedWidget->setCurrentWidget(ui_.outputFilePage);
+    ui_.outputFilePage->setEnabled(false);
   }
-  fmtChgInterlock = false;
+  fmtChgInterlock_ = false;
 }
 
 //------------------------------------------------------------------------
 void MainWindow:: outputDeviceOptBtnClicked()
 {
-  fmtChgInterlock = true;
-  if (ui.outputDeviceOptBtn->isChecked()) {
-    ui.outputDevicePage->setEnabled(true);
-    ui.outputFileOptBtn->setChecked(false);
-    QString fmt = bd.outputDeviceFormat;
-    ui.outputStackedWidget->setCurrentWidget(ui.outputDevicePage);
+  fmtChgInterlock_ = true;
+  if (ui_.outputDeviceOptBtn->isChecked()) {
+    ui_.outputDevicePage->setEnabled(true);
+    ui_.outputFileOptBtn->setChecked(false);
+    QString fmt = babelData_.outputDeviceFormat;
+    ui_.outputStackedWidget->setCurrentWidget(ui_.outputDevicePage);
     QList<int>indices = outputDeviceFormatIndices();
-    ui.outputFormatCombo->clear();
+    ui_.outputFormatCombo->clear();
     for (int i=0; i<indices.size(); i++) {
       int k = indices[i];
-      ui.outputFormatCombo->addItem(formatList[k].getDescription(), QVariant(k));
+      ui_.outputFormatCombo->addItem(formatList_[k].getDescription(), QVariant(k));
     }
-    setComboToFormat(ui.outputFormatCombo, fmt, false);
+    setComboToFormat(ui_.outputFormatCombo, fmt, false);
   }
   else {
-    ui.outputStackedWidget->setCurrentWidget(ui.outputDevicePage);
-    ui.outputDevicePage->setEnabled(false);
+    ui_.outputStackedWidget->setCurrentWidget(ui_.outputDevicePage);
+    ui_.outputDevicePage->setEnabled(false);
   }
-  fmtChgInterlock = false;
+  fmtChgInterlock_ = false;
 }
 void MainWindow::inputFileNameEdited()
 {
-  bd.inputFileNames.clear();
-  bd.inputFileNames << ui.inputFileNameText->text();
+  babelData_.inputFileNames.clear();
+  babelData_.inputFileNames << ui_.inputFileNameText->text();
 }
 
 void MainWindow::outputFileNameEdited()
 {
-  bd.outputFileName = ui.outputFileNameText->text();
+  babelData_.outputFileName = ui_.outputFileNameText->text();
 
 }
 
 //------------------------------------------------------------------------
 QString MainWindow::filterForFormat(int idx)
 {
-  QString str = formatList[idx].getDescription();
+  QString str = formatList_[idx].getDescription();
   str.replace(QRegExp("\\("), "[");
   str.replace(QRegExp("\\)"), "]");
-  QStringList extensions = formatList[idx].getExtensions();
+  QStringList extensions = formatList_[idx].getExtensions();
 
   // If we don't have any meaningful extensions available for this format,
   // don't be clever here; just fall through to "All files" case.
@@ -518,7 +525,7 @@ QString MainWindow::ensureExtensionPresent(const QString &name, int idx)
 {
   QString outname = name;
   if (QFileInfo(name).suffix().length() == 0) {
-    QStringList extensions = formatList[idx].getExtensions();
+    QStringList extensions = formatList_[idx].getExtensions();
     if (extensions.size() > 0)
       outname += "." + extensions[0];
   }
@@ -528,7 +535,7 @@ QString MainWindow::ensureExtensionPresent(const QString &name, int idx)
 //------------------------------------------------------------------------
 bool MainWindow::filterForFormatIncludes(int idx, const QString &fmt)
 {
-  QStringList extensions = formatList[idx].getExtensions();
+  QStringList extensions = formatList_[idx].getExtensions();
   for (int i=0; i<extensions.size(); i++) {
     if (fmt == extensions[i])
       return true;
@@ -549,8 +556,8 @@ int MainWindow::currentComboFormatIndex(QComboBox *comboBox)
 //------------------------------------------------------------------------
 void MainWindow::browseInputFile()
 {
-  QString startFile = bd.inputFileNames.size() ? bd.inputFileNames[0] : bd.inputBrowse;
-  int idx = currentComboFormatIndex(ui.inputFormatCombo);
+  QString startFile = babelData_.inputFileNames.size() ? babelData_.inputFileNames[0] : babelData_.inputBrowse;
+  int idx = currentComboFormatIndex(ui_.inputFormatCombo);
   QFileInfo finfo(startFile);
   if (!finfo.isDir() && (!filterForFormatIncludes(idx, finfo.suffix()))) {
     startFile = finfo.dir().absolutePath();
@@ -561,23 +568,23 @@ void MainWindow::browseInputFile()
 				  startFile,
 				  filterForFormat(idx));
   if (userList.size()) {
-    bd.inputBrowse = userList[0];
-    bd.inputFileNames = userList;
+    babelData_.inputBrowse = userList[0];
+    babelData_.inputFileNames = userList;
     QString str;
-    for (int i=0; i<bd.inputFileNames.size(); i++) {
+    for (int i=0; i<babelData_.inputFileNames.size(); i++) {
       if (i != 0)
         str += ", ";
-      str += "\"" + bd.inputFileNames[i] + "\"";
+      str += "\"" + babelData_.inputFileNames[i] + "\"";
     }
-    ui.inputFileNameText->setText(str);
+    ui_.inputFileNameText->setText(str);
   }
 }
 
 //------------------------------------------------------------------------
 void MainWindow::browseOutputFile()
 {
-  int idx = currentComboFormatIndex(ui.outputFormatCombo);
-  QString startFile = bd.outputFileName.length() == 0 ? bd.outputBrowse : bd.outputFileName;
+  int idx = currentComboFormatIndex(ui_.outputFormatCombo);
+  QString startFile = babelData_.outputFileName.length() == 0 ? babelData_.outputBrowse : babelData_.outputFileName;
   QFileInfo finfo(startFile);
   if (!finfo.isDir() && (!filterForFormatIncludes(idx, finfo.suffix()))) {
     startFile = finfo.dir().absolutePath();
@@ -589,9 +596,9 @@ void MainWindow::browseOutputFile()
 				 filterForFormat(idx));
   if (str.length() != 0) {
     str = ensureExtensionPresent(str, idx);
-    bd.outputBrowse = str;
-    bd.outputFileName = str;
-    ui.outputFileNameText->setText(str);
+    babelData_.outputBrowse = str;
+    babelData_.outputFileName = str;
+    ui_.outputFileNameText->setText(str);
   }
 }
 
@@ -599,8 +606,8 @@ void MainWindow::browseOutputFile()
 QList<int> MainWindow::inputFileFormatIndices()
 {
   QList<int>indices;
-  for (int i=0; i<formatList.size(); i++) {
-    if (formatList[i].isReadSomething() && formatList[i].isFileFormat())
+  for (int i=0; i<formatList_.size(); i++) {
+    if (formatList_[i].isReadSomething() && formatList_[i].isFileFormat())
       indices<<i;
   }
   return indices;
@@ -610,8 +617,8 @@ QList<int> MainWindow::inputFileFormatIndices()
 QList<int> MainWindow::inputDeviceFormatIndices()
 {
   QList<int>indices;
-  for (int i=0; i<formatList.size(); i++) {
-    if (formatList[i].isReadSomething() && formatList[i].isDeviceFormat())
+  for (int i=0; i<formatList_.size(); i++) {
+    if (formatList_[i].isReadSomething() && formatList_[i].isDeviceFormat())
       indices<<i;
   }
   return indices;
@@ -621,8 +628,8 @@ QList<int> MainWindow::inputDeviceFormatIndices()
 QList<int> MainWindow::outputFileFormatIndices()
 {
   QList<int>indices;
-  for (int i=0; i<formatList.size(); i++) {
-    if (formatList[i].isWriteSomething() && formatList[i].isFileFormat())
+  for (int i=0; i<formatList_.size(); i++) {
+    if (formatList_[i].isWriteSomething() && formatList_[i].isFileFormat())
       indices<<i;
   }
   return indices;
@@ -632,8 +639,8 @@ QList<int> MainWindow::outputFileFormatIndices()
 QList<int> MainWindow::outputDeviceFormatIndices()
 {
   QList<int>indices;
-  for (int i=0; i<formatList.size(); i++) {
-    if (formatList[i].isWriteSomething() && formatList[i].isDeviceFormat())
+  for (int i=0; i<formatList_.size(); i++) {
+    if (formatList_[i].isWriteSomething() && formatList_[i].isDeviceFormat())
       indices<<i;
   }
   return indices;
@@ -642,7 +649,7 @@ QList<int> MainWindow::outputDeviceFormatIndices()
 //------------------------------------------------------------------------
 void MainWindow::loadFormats()
 {
-  if (!FormatLoad().getFormats(formatList)) {
+  if (!FormatLoad().getFormats(formatList_)) {
     QMessageBox::information(0, QString(appName),
 			     tr("Error reading format configuration.  "
 				"Check that the backend program \"gpsbabel\" is properly installed "
@@ -671,7 +678,7 @@ static int iconIndex(bool a, bool b)
 //------------------------------------------------------------------------
 void MainWindow::setIndicatorLights(QLabel *label, const QString &type, int code)
 {
-  label->setPixmap(lights[code]);
+  label->setPixmap(lights_[code]);
   QString s;
   switch (code)
     {
@@ -695,21 +702,21 @@ void MainWindow::setIndicatorLights(QLabel *label, const QString &type, int code
 //------------------------------------------------------------------------
 void MainWindow::crossCheckInOutFormats()
 {
-  if (ui.inputFormatCombo->count() == 0 ||
-      ui.outputFormatCombo->count() == 0) {
+  if (ui_.inputFormatCombo->count() == 0 ||
+      ui_.outputFormatCombo->count() == 0) {
     // During format/device switch this is true
     return;
   }
-  Format ifmt = formatList[currentComboFormatIndex(ui.inputFormatCombo)];
-  Format ofmt = formatList[currentComboFormatIndex(ui.outputFormatCombo)];
+  Format ifmt = formatList_[currentComboFormatIndex(ui_.inputFormatCombo)];
+  Format ofmt = formatList_[currentComboFormatIndex(ui_.outputFormatCombo)];
 
-  ui.xlateWayPtsCk->setEnabled(ifmt.isReadWaypoints() && ofmt.isWriteWaypoints());
-  ui.xlateTracksCk->setEnabled(ifmt.isReadTracks()    && ofmt.isWriteTracks());
-  ui.xlateRoutesCk->setEnabled(ifmt.isReadRoutes()    && ofmt.isWriteRoutes());
+  ui_.xlateWayPtsCk->setEnabled(ifmt.isReadWaypoints() && ofmt.isWriteWaypoints());
+  ui_.xlateTracksCk->setEnabled(ifmt.isReadTracks()    && ofmt.isWriteTracks());
+  ui_.xlateRoutesCk->setEnabled(ifmt.isReadRoutes()    && ofmt.isWriteRoutes());
 
-  setIndicatorLights(ui.wayPtLabel, tr("waypoints"), iconIndex(ifmt.isReadWaypoints(), ofmt.isWriteWaypoints()));
-  setIndicatorLights(ui.trackLabel, tr("tracks"), iconIndex(ifmt.isReadTracks(), ofmt.isWriteTracks()));
-  setIndicatorLights(ui.routeLabel, tr("routes"), iconIndex(ifmt.isReadRoutes(), ofmt.isWriteRoutes()));
+  setIndicatorLights(ui_.wayPtLabel, tr("waypoints"), iconIndex(ifmt.isReadWaypoints(), ofmt.isWriteWaypoints()));
+  setIndicatorLights(ui_.trackLabel, tr("tracks"), iconIndex(ifmt.isReadTracks(), ofmt.isWriteTracks()));
+  setIndicatorLights(ui_.routeLabel, tr("routes"), iconIndex(ifmt.isReadRoutes(), ofmt.isWriteRoutes()));
 }
 
 //------------------------------------------------------------------------
@@ -717,9 +724,9 @@ void MainWindow::displayOptionsText(QLineEdit *le, QComboBox *combo, bool isInpu
 {
   int fidx = combo->itemData(combo->currentIndex()).toInt();
   if (isInput)
-    le->setText(MakeOptionsNoLeadingComma(formatList[fidx].getInputOptions()));
+    le->setText(MakeOptionsNoLeadingComma(formatList_[fidx].getInputOptions()));
   else
-    le->setText(MakeOptionsNoLeadingComma(formatList[fidx].getOutputOptions()));
+    le->setText(MakeOptionsNoLeadingComma(formatList_[fidx].getOutputOptions()));
 
 }
 
@@ -727,9 +734,9 @@ void MainWindow::displayOptionsText(QLineEdit *le, QComboBox *combo, bool isInpu
 void MainWindow::setComboToFormat(QComboBox *comboBox, const QString &name, bool isFile)
 {
   int fidx = -1;
-  for (int i=0; i<formatList.size(); i++) {
-    if (formatList[i].getName() == name &&
-	formatList[i].isFileFormat() == isFile) {
+  for (int i=0; i<formatList_.size(); i++) {
+    if (formatList_[i].getName() == name &&
+    formatList_[i].isFileFormat() == isFile) {
       fidx = i;
       break;
     }
@@ -759,76 +766,76 @@ bool MainWindow::formatSupportsSerial(const QString &format)
 //------------------------------------------------------------------------
 void MainWindow::inputFormatChanged(int comboIdx)
 {
-  if (fmtChgInterlock)
+  if (fmtChgInterlock_)
     return;
-  int fidx = ui.inputFormatCombo->itemData(comboIdx).toInt();
-  ui.inputOptionsBtn->setEnabled(formatList[fidx].getInputOptions().size()>0);
-  displayOptionsText(ui.inputOptionsText,  ui.inputFormatCombo, true);
+  int fidx = ui_.inputFormatCombo->itemData(comboIdx).toInt();
+  ui_.inputOptionsBtn->setEnabled(formatList_[fidx].getInputOptions().size()>0);
+  displayOptionsText(ui_.inputOptionsText,  ui_.inputFormatCombo, true);
   crossCheckInOutFormats();
 
-  if (ui.inputFileOptBtn->isChecked())
-    bd.inputFileFormat =formatList[fidx].getName();
+  if (ui_.inputFileOptBtn->isChecked())
+    babelData_.inputFileFormat =formatList_[fidx].getName();
   else
-    bd.inputDeviceFormat = formatList[fidx].getName();
+    babelData_.inputDeviceFormat = formatList_[fidx].getName();
 
-  loadInputDeviceNameCombo(formatList[fidx].getName());
+  loadInputDeviceNameCombo(formatList_[fidx].getName());
 }
 
 //------------------------------------------------------------------------
 void MainWindow::outputFormatChanged(int comboIdx)
 {
-  if (fmtChgInterlock)
+  if (fmtChgInterlock_)
     return;
-  int fidx = ui.outputFormatCombo->itemData(comboIdx).toInt();
-  ui.outputOptionsBtn->setEnabled(formatList[fidx].getOutputOptions().size()>0);
-  displayOptionsText(ui.outputOptionsText,  ui.outputFormatCombo, false);
+  int fidx = ui_.outputFormatCombo->itemData(comboIdx).toInt();
+  ui_.outputOptionsBtn->setEnabled(formatList_[fidx].getOutputOptions().size()>0);
+  displayOptionsText(ui_.outputOptionsText,  ui_.outputFormatCombo, false);
   crossCheckInOutFormats();
 
-  if (ui.outputFileOptBtn->isChecked())
-    bd.outputFileFormat =formatList[fidx].getName();
-  else if (ui.outputDeviceOptBtn->isChecked())
-    bd.outputDeviceFormat = formatList[fidx].getName();
+  if (ui_.outputFileOptBtn->isChecked())
+    babelData_.outputFileFormat =formatList_[fidx].getName();
+  else if (ui_.outputDeviceOptBtn->isChecked())
+    babelData_.outputDeviceFormat = formatList_[fidx].getName();
 
-  loadOutputDeviceNameCombo(formatList[fidx].getName());
+  loadOutputDeviceNameCombo(formatList_[fidx].getName());
 }
 
 //------------------------------------------------------------------------
 void MainWindow::inputOptionButtonClicked()
 {
-  int fidx = currentComboFormatIndex(ui.inputFormatCombo);
-  if (formatList[fidx].getInputOptionsRef()->size() == 0) {
+  int fidx = currentComboFormatIndex(ui_.inputFormatCombo);
+  if (formatList_[fidx].getInputOptionsRef()->size() == 0) {
     QMessageBox::information
       (0, appName,
-       tr("There are no input options for format \"%1\"").arg(formatList[fidx].getDescription()));
+       tr("There are no input options for format \"%1\"").arg(formatList_[fidx].getDescription()));
   }
   else {
     OptionsDlg optionDlg(0,
-			 formatList[fidx].getName(),
-			 formatList[fidx].getInputOptionsRef(),
-			 formatList[fidx].getHtml());
-    optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList[fidx].getName()));
+             formatList_[fidx].getName(),
+             formatList_[fidx].getInputOptionsRef(),
+             formatList_[fidx].getHtml());
+    optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList_[fidx].getName()));
     optionDlg.exec();
-    displayOptionsText(ui.inputOptionsText,  ui.inputFormatCombo, true);
+    displayOptionsText(ui_.inputOptionsText,  ui_.inputFormatCombo, true);
   }
 }
 
 //------------------------------------------------------------------------
 void MainWindow::outputOptionButtonClicked()
 {
-  int fidx = currentComboFormatIndex(ui.outputFormatCombo);
-  if (formatList[fidx].getOutputOptionsRef()->size() == 0) {
+  int fidx = currentComboFormatIndex(ui_.outputFormatCombo);
+  if (formatList_[fidx].getOutputOptionsRef()->size() == 0) {
     QMessageBox::information
       (0, appName,
-       tr("There are no output options for format \"%1\"").arg(formatList[fidx].getDescription()));
+       tr("There are no output options for format \"%1\"").arg(formatList_[fidx].getDescription()));
   }
   else {
     OptionsDlg optionDlg(0, 
-			 formatList[fidx].getName(), 
-			 formatList[fidx].getOutputOptionsRef(),
-			 formatList[fidx].getHtml());
-    optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList[fidx].getName()));
+             formatList_[fidx].getName(),
+             formatList_[fidx].getOutputOptionsRef(),
+             formatList_[fidx].getHtml());
+    optionDlg.setWindowTitle(QString(appName) + " - " + tr("Options for %1").arg(formatList_[fidx].getName()));
     optionDlg.exec();
-    displayOptionsText(ui.outputOptionsText,  ui.outputFormatCombo, false);
+    displayOptionsText(ui_.outputOptionsText,  ui_.outputFormatCombo, false);
   }
 }
 
@@ -837,40 +844,40 @@ void MainWindow::outputOptionButtonClicked()
 //------------------------------------------------------------------------
 bool MainWindow::isOkToGo()
 {
-  if (!((ui.xlateWayPtsCk->isChecked() && ui.xlateWayPtsCk->isEnabled()) ||
-	(ui.xlateRoutesCk->isChecked() && ui.xlateRoutesCk->isEnabled()) ||
-	(ui.xlateTracksCk->isChecked() && ui.xlateTracksCk->isEnabled()))) {
+  if (!((ui_.xlateWayPtsCk->isChecked() && ui_.xlateWayPtsCk->isEnabled()) ||
+    (ui_.xlateRoutesCk->isChecked() && ui_.xlateRoutesCk->isEnabled()) ||
+    (ui_.xlateTracksCk->isChecked() && ui_.xlateTracksCk->isEnabled()))) {
     QMessageBox::information(0, QString(appName), tr("No valid waypoints/routes/tracks translation specified"));
     return false;
   }
 
   // Paper over what didn't happen in inputBrowse() if the user edited
   // the filename fields directly.
-  if ((bd.inputType == BabelData::fileType) &&
-      (bd.inputFileNames.size() == 0) &&
-      (!ui.inputFileNameText->text().isEmpty())) {
-    bd.inputFileNames << ui.inputFileNameText->text();
+  if ((babelData_.inputType == BabelData::fileType) &&
+      (babelData_.inputFileNames.size() == 0) &&
+      (!ui_.inputFileNameText->text().isEmpty())) {
+    babelData_.inputFileNames << ui_.inputFileNameText->text();
   }
-  if ((bd.outputType == BabelData::fileType) &&
-      (bd.outputFileName.size() == 0) &&
-      (!ui.outputFileNameText->text().isEmpty())) {
-    bd.outputFileName = ui.outputFileNameText->text();
+  if ((babelData_.outputType == BabelData::fileType) &&
+      (babelData_.outputFileName.size() == 0) &&
+      (!ui_.outputFileNameText->text().isEmpty())) {
+    babelData_.outputFileName = ui_.outputFileNameText->text();
   }
 
-  if ((bd.inputType == BabelData::fileType) &&
-      (bd.inputFileNames.size() == 0)) {
+  if ((babelData_.inputType == BabelData::fileType) &&
+      (babelData_.inputFileNames.size() == 0)) {
     QMessageBox::information(0, QString(appName), tr("No input file specified"));
     return false;
   }
 
-  if (bd.outputType == BabelData::noType && bd.previewGmap == true) {
+  if (babelData_.outputType == BabelData::noType && babelData_.previewGmap == true) {
   }
-  if (bd.outputType == BabelData::noType && bd.previewGmap == false) {
+  if (babelData_.outputType == BabelData::noType && babelData_.previewGmap == false) {
     QMessageBox::information(0, QString(appName), tr("No valid output specified"));
     return false;
   }
-  else if (bd.outputType == BabelData::fileType &&
-	   bd.outputFileName.length() == 0) {
+  else if (babelData_.outputType == BabelData::fileType &&
+       babelData_.outputFileName.length() == 0) {
     QMessageBox::information(0, QString(appName), tr("No output file specified"));
     return false;
   }
@@ -919,8 +926,8 @@ bool MainWindow::runGpsbabel(const QStringList &args, QString &errorString,
 //------------------------------------------------------------------------
 int MainWindow::formatIndexFromName(bool isFile, const QString &nm)
 {
-  for (int i= 0; i<formatList.size(); i++) {
-    if (nm == formatList[i].getName() && formatList[i].isFileFormat() == isFile)
+  for (int i= 0; i<formatList_.size(); i++) {
+    if (nm == formatList_[i].getName() && formatList_[i].isFileFormat() == isFile)
       return i;
   }
   return 0;
@@ -930,14 +937,14 @@ int MainWindow::formatIndexFromName(bool isFile, const QString &nm)
 QString MainWindow::charSetFromCombo(QComboBox *combo)
 {
   int i = combo->itemData((combo->currentIndex())).toInt();
-  return (i >=0 ) ? charSets[i] : QString();
+  return (i >=0 ) ? charSets_[i] : QString();
 }
 
 //------------------------------------------------------------------------
 void MainWindow::setComboToCharSet(QComboBox *combo, const QString &cset)
 {
-  for (int i=0; i<charSets.size(); i++) {
-    if (charSets[i] == cset) {
+  for (int i=0; i<charSets_.size(); i++) {
+    if (charSets_[i] == cset) {
       combo->setCurrentIndex(i+1); // first index is default;
     }
   }
@@ -951,74 +958,74 @@ void MainWindow::applyActionX()
 
   QStringList args;
 
-  if (bd.debugLevel >=0)     args << QString("-D%1").arg(bd.debugLevel);
-  if (bd.synthShortNames)    args << "-s";
+  if (babelData_.debugLevel >=0)     args << QString("-D%1").arg(babelData_.debugLevel);
+  if (babelData_.synthShortNames)    args << "-s";
 
   // Input char set if specified
-  if (bd.enableCharSetXform && bd.inputCharSet != QString())
-    args << "-c" << bd.inputCharSet;
+  if (babelData_.enableCharSetXform && babelData_.inputCharSet != QString())
+    args << "-c" << babelData_.inputCharSet;
 
-  Format ifmt = formatList[currentComboFormatIndex(ui.inputFormatCombo)];
-  Format ofmt = formatList[currentComboFormatIndex(ui.outputFormatCombo)];
+  Format ifmt = formatList_[currentComboFormatIndex(ui_.inputFormatCombo)];
+  Format ofmt = formatList_[currentComboFormatIndex(ui_.outputFormatCombo)];
 
-  if (bd.xlateWayPts && ifmt.isReadWaypoints() && ofmt.isWriteWaypoints())
+  if (babelData_.xlateWayPts && ifmt.isReadWaypoints() && ofmt.isWriteWaypoints())
     args << "-w";
-  if (bd.xlateRoutes && ifmt.isReadRoutes()    && ofmt.isWriteRoutes())
+  if (babelData_.xlateRoutes && ifmt.isReadRoutes()    && ofmt.isWriteRoutes())
     args << "-r";
-  if (bd.xlateTracks && ifmt.isReadTracks()    && ofmt.isWriteTracks())
+  if (babelData_.xlateTracks && ifmt.isReadTracks()    && ofmt.isWriteTracks())
     args << "-t";
 
   // Input type, with options
-  bool iisFile = (bd.inputType == BabelData::fileType);
+  bool iisFile = (babelData_.inputType == BabelData::fileType);
   int fidx = formatIndexFromName(iisFile, iisFile ?
-				 bd.inputFileFormat : bd.inputDeviceFormat);
+                 babelData_.inputFileFormat : babelData_.inputDeviceFormat);
   args << "-i";
-  args << (formatList[fidx].getName() + MakeOptions(formatList[fidx].getInputOptions()));
+  args << (formatList_[fidx].getName() + MakeOptions(formatList_[fidx].getInputOptions()));
 
   // Input file(s) or device
   int read_use_count = 0;
-  if (bd.inputType == BabelData::fileType) {
-    for (int i=0; i<bd.inputFileNames.size(); i++) {
-      args << "-f" << bd.inputFileNames[i];
+  if (babelData_.inputType == BabelData::fileType) {
+    for (int i=0; i<babelData_.inputFileNames.size(); i++) {
+      args << "-f" << babelData_.inputFileNames[i];
       read_use_count++;
     }
   }
   else {
-    args << "-f" << bd.inputDeviceName;
+    args << "-f" << babelData_.inputDeviceName;
     read_use_count++;
   }
-  formatList[fidx].bumpReadUseCount(read_use_count);
+  formatList_[fidx].bumpReadUseCount(read_use_count);
 
   // --- Filters!
-  args << filterData.getAllFilterStrings();
+  args << filterData_.getAllFilterStrings();
 
   // Output char set if specified
-  if (bd.enableCharSetXform && bd.outputCharSet != QString())
-    args << "-c" << bd.outputCharSet;
+  if (babelData_.enableCharSetXform && babelData_.outputCharSet != QString())
+    args << "-c" << babelData_.outputCharSet;
 
   // Output type, with options
-  if (bd.outputType != BabelData::noType) {
-    bool outIsFile = (bd.outputType == BabelData::fileType);
+  if (babelData_.outputType != BabelData::noType) {
+    bool outIsFile = (babelData_.outputType == BabelData::fileType);
     fidx = formatIndexFromName(outIsFile, (outIsFile ?
-					   bd.outputFileFormat : bd.outputDeviceFormat));
+                       babelData_.outputFileFormat : babelData_.outputDeviceFormat));
     args << "-o";
-    args << (formatList[fidx].getName() + MakeOptions(formatList[fidx].getOutputOptions()));
+    args << (formatList_[fidx].getName() + MakeOptions(formatList_[fidx].getOutputOptions()));
 
     // output file or device option
     if (outIsFile) {
-      if (bd.outputFileName != "")
-	      args << "-F" << bd.outputFileName;
+      if (babelData_.outputFileName != "")
+          args << "-F" << babelData_.outputFileName;
     }
-    else if (bd.outputType == BabelData::deviceType) {
-      args << "-F" << bd.outputDeviceName;
+    else if (babelData_.outputType == BabelData::deviceType) {
+      args << "-F" << babelData_.outputDeviceName;
     }
     // GUI only ever writes a single file at a time.
-    formatList[fidx].bumpWriteUseCount(1);
+    formatList_[fidx].bumpWriteUseCount(1);
   }
 
   // Now output for preview in google maps
   QString tempName;
-  if (bd.previewGmap) {
+  if (babelData_.previewGmap) {
     QTemporaryFile ftemp;
     ftemp.open();
     tempName = ftemp.fileName();
@@ -1034,27 +1041,27 @@ void MainWindow::applyActionX()
     args << "-F" << tempName;
   }
 
-  ui.outputWindow->clear();
-  ui.outputWindow->appendPlainText("gpsbabel " + args.join(" "));
+  ui_.outputWindow->clear();
+  ui_.outputWindow->appendPlainText("gpsbabel " + args.join(" "));
 
   QString errorString, outputString;
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
   bool x = runGpsbabel(args, errorString, outputString);
   QApplication::restoreOverrideCursor();
 
-  ui.outputWindow->appendPlainText(outputString);
+  ui_.outputWindow->appendPlainText(outputString);
   if (x) {
-    ui.outputWindow->appendPlainText(tr("Translation successful"));
-    if (bd.previewGmap) {
+    ui_.outputWindow->appendPlainText(tr("Translation successful"));
+    if (babelData_.previewGmap) {
       this->hide();
-      GMapDialog dlg(0, tempName, bd.debugLevel >=1 ? ui.outputWindow : 0);
+      GMapDialog dlg(0, tempName, babelData_.debugLevel >=1 ? ui_.outputWindow : 0);
       dlg.show();
       dlg.exec();
       this->show();
     }
   }
   else
-    ui.outputWindow->appendPlainText(tr("Error running gpsbabel: %1\n").arg(errorString));
+    ui_.outputWindow->appendPlainText(tr("Error running gpsbabel: %1\n").arg(errorString));
 }
 
 //------------------------------------------------------------------------
@@ -1062,17 +1069,17 @@ void MainWindow::closeActionX()
 {
   QDateTime wt= upgrade->getUpgradeWarningTime();
   if (wt.isValid()) {
-    bd.upgradeCheckTime = wt;
+    babelData_.upgradeCheckTime = wt;
   }
-  bd.runCount++;
+  babelData_.runCount++;
 
   QDateTime now = QDateTime::currentDateTime();
-  if ((bd.runCount > 5) && (bd.donateSplashed.daysTo(now) > 30)) {
+  if ((babelData_.runCount > 5) && (babelData_.donateSplashed.daysTo(now) > 30)) {
     Donate donate(0);
-    if (bd.donateSplashed.date() == QDate(2010,1,1))
+    if (babelData_.donateSplashed.date() == QDate(2010,1,1))
       donate.showNever(false);
     donate.exec();
-    bd.donateSplashed = now;
+    babelData_.donateSplashed = now;
   }
   saveSettings();
   delete upgrade;
@@ -1109,16 +1116,16 @@ void MainWindow::dropEvent(QDropEvent *event)
   foreach (QString format, event->mimeData()->formats()) {
     if (format == "text/uri-list") {
       QList<QUrl> urlList = event->mimeData()->urls();
-      bd.inputFileNames.clear();
+      babelData_.inputFileNames.clear();
       for (int i = 0; i < urlList.size(); ++i) {
         QFileInfo file_info(urlList.at(i).path());
         QString name = file_info.filePath();
         QString ext = file_info.suffix();
 
         QString fmt = getFormatNameForExtension(ext);
-        setComboToFormat(ui.inputFormatCombo, fmt, true);
-        ui.inputFileNameText->setText(name);
-        bd.inputFileNames << ui.inputFileNameText->text();
+        setComboToFormat(ui_.inputFormatCombo, fmt, true);
+        ui_.inputFileNameText->setText(name);
+        babelData_.inputFileNames << ui_.inputFileNameText->text();
         event->acceptProposedAction();
       }
     }
@@ -1141,23 +1148,23 @@ void MainWindow::saveSettings()
   getWidgetValues();
 
   QSettings settings;
-  bd.saveSettings(settings);
-  for (int i=0; i<formatList.size(); i++)
-    formatList[i].saveSettings(settings);
-  for (int i=0; i<filterData.filters.size(); i++)
-    filterData.filters[i]->saveSettings(settings);
+  babelData_.saveSettings(settings);
+  for (int i=0; i<formatList_.size(); i++)
+    formatList_[i].saveSettings(settings);
+  for (int i=0; i<filterData_.filters.size(); i++)
+    filterData_.filters[i]->saveSettings(settings);
 }
 
 //------------------------------------------------------------------------
 void MainWindow::restoreSettings()
 {
   QSettings settings;
-  bd.restoreSettings(settings);
-  for (int i=0; i<formatList.size(); i++)
-    formatList[i].restoreSettings(settings);
+  babelData_.restoreSettings(settings);
+  for (int i=0; i<formatList_.size(); i++)
+    formatList_[i].restoreSettings(settings);
 
-  for (int i=0; i<filterData.filters.size(); i++)
-    filterData.filters[i]->restoreSettings(settings);
+  for (int i=0; i<filterData_.filters.size(); i++)
+    filterData_.filters[i]->restoreSettings(settings);
 
   setWidgetValues();
 }
@@ -1170,18 +1177,18 @@ void MainWindow::resetFormatDefaults()
      tr("Are you sure you want to reset all format options to default values?"),
      QMessageBox::Yes | QMessageBox::No);
   if (ret == QMessageBox::Yes) {
-    for (int i=0; i<formatList.size(); i++)
-      formatList[i].setToDefault();
-    displayOptionsText(ui.inputOptionsText,  ui.inputFormatCombo, true);
-    displayOptionsText(ui.outputOptionsText,  ui.outputFormatCombo, false);
+    for (int i=0; i<formatList_.size(); i++)
+      formatList_[i].setToDefault();
+    displayOptionsText(ui_.inputOptionsText,  ui_.inputFormatCombo, true);
+    displayOptionsText(ui_.outputOptionsText,  ui_.outputFormatCombo, false);
   }
 }
 
 //------------------------------------------------------------------------
 void MainWindow::moreOptionButtonClicked()
 {
-  AdvDlg advDlg(0, bd.synthShortNames,
-		bd.enableCharSetXform, bd.previewGmap, bd.debugLevel);
+  AdvDlg advDlg(0, babelData_.synthShortNames,
+        babelData_.enableCharSetXform, babelData_.previewGmap, babelData_.debugLevel);
   connect(advDlg.formatButton(), SIGNAL(clicked()),
 	  this, SLOT(resetFormatDefaults()));
   advDlg.exec();
@@ -1190,7 +1197,7 @@ void MainWindow::moreOptionButtonClicked()
 //------------------------------------------------------------------------
 void MainWindow::aboutActionX()
 {
-  AboutDlg aboutDlg(0, babelVersion, QString(appName) + QString(" " VERSION));
+  AboutDlg aboutDlg(0, babelVersion_, QString(appName) + QString(" " VERSION));
   aboutDlg.setWindowTitle(tr("About %1").arg(appName));
   aboutDlg.exec();
 }
@@ -1198,7 +1205,7 @@ void MainWindow::aboutActionX()
 //------------------------------------------------------------------------
 void MainWindow::upgradeCheckActionX()
 {
-    upgrade->checkForUpgrade(babelVersion, 
+    upgrade->checkForUpgrade(babelVersion_,
                             QDateTime(QDate(2000, 1, 1), QTime(0, 0)), 
                             allowBetaUpgrades());
 }
@@ -1206,7 +1213,7 @@ void MainWindow::upgradeCheckActionX()
 //------------------------------------------------------------------------
 void MainWindow::preferencesActionX()
 {
-  Preferences preferences(0, formatList, bd);
+  Preferences preferences(0, formatList_, babelData_);
   preferences.exec();
 
   // We may have changed the list of displayed formats.  Resynchronize.
@@ -1222,7 +1229,7 @@ void MainWindow::helpActionX()
 //------------------------------------------------------------------------
 void MainWindow::filtersClicked()
 {
-  FilterDialog dlg(0, filterData);
+  FilterDialog dlg(0, filterData_);
   dlg.runDialog();
   updateFilterStatus();
 }
@@ -1231,64 +1238,64 @@ void MainWindow::filtersClicked()
 //------------------------------------------------------------------------
 void MainWindow::updateFilterStatus()
 {
-  bool filterActive = filterData.getAllFilterStrings().size();
-  ui.filterStatus->setEnabled(filterActive);
+  bool filterActive = filterData_.getAllFilterStrings().size();
+  ui_.filterStatus->setEnabled(filterActive);
   if (filterActive)
-    ui.filterStatus->setToolTip(tr("One or more data filters are active"));
+    ui_.filterStatus->setToolTip(tr("One or more data filters are active"));
   else {
-    ui.filterStatus->setToolTip(tr("No data filters are active"));
+    ui_.filterStatus->setToolTip(tr("No data filters are active"));
   }
 }
 //------------------------------------------------------------------------
 void MainWindow::setWidgetValues()
 {
-  if (bd.inputType == BabelData::fileType) {
-    ui.inputFileOptBtn->setChecked(true);
+  if (babelData_.inputType == BabelData::fileType) {
+    ui_.inputFileOptBtn->setChecked(true);
     inputFileOptBtnClicked();
-    setComboToFormat(ui.inputFormatCombo, bd.inputFileFormat, true);
-    ui.inputStackedWidget->setCurrentWidget(ui.inputFilePage);
+    setComboToFormat(ui_.inputFormatCombo, babelData_.inputFileFormat, true);
+    ui_.inputStackedWidget->setCurrentWidget(ui_.inputFilePage);
   }
   else {
-    ui.inputDeviceOptBtn->setChecked(true);
+    ui_.inputDeviceOptBtn->setChecked(true);
     inputDeviceOptBtnClicked();
-    setComboToFormat(ui.inputFormatCombo, bd.inputDeviceFormat, false);
-    loadInputDeviceNameCombo(bd.inputDeviceFormat);
-    ui.inputStackedWidget->setCurrentWidget(ui.inputDevicePage);
+    setComboToFormat(ui_.inputFormatCombo, babelData_.inputDeviceFormat, false);
+    loadInputDeviceNameCombo(babelData_.inputDeviceFormat);
+    ui_.inputStackedWidget->setCurrentWidget(ui_.inputDevicePage);
   }
-  setComboToDevice(ui.inputDeviceNameCombo, bd.inputDeviceName);
-  setComboToCharSet(ui.inputCharSetCombo, bd.inputCharSet);
+  setComboToDevice(ui_.inputDeviceNameCombo, babelData_.inputDeviceName);
+  setComboToCharSet(ui_.inputCharSetCombo, babelData_.inputCharSet);
 
-  if (bd.outputType == BabelData::fileType) {
-    ui.outputFileOptBtn->setChecked(true);
+  if (babelData_.outputType == BabelData::fileType) {
+    ui_.outputFileOptBtn->setChecked(true);
     outputFileOptBtnClicked();
-    setComboToFormat(ui.outputFormatCombo, bd.outputFileFormat, true);
-    ui.outputStackedWidget->setCurrentWidget(ui.outputFilePage);
+    setComboToFormat(ui_.outputFormatCombo, babelData_.outputFileFormat, true);
+    ui_.outputStackedWidget->setCurrentWidget(ui_.outputFilePage);
   }
-  else if (bd.outputType == BabelData::deviceType) {
-    ui.outputDeviceOptBtn->setChecked(true);
+  else if (babelData_.outputType == BabelData::deviceType) {
+    ui_.outputDeviceOptBtn->setChecked(true);
     outputDeviceOptBtnClicked();
-    setComboToFormat(ui.outputFormatCombo, bd.outputDeviceFormat, false);
-    loadOutputDeviceNameCombo(bd.outputDeviceFormat);
-    ui.outputStackedWidget->setCurrentWidget(ui.outputDevicePage);
+    setComboToFormat(ui_.outputFormatCombo, babelData_.outputDeviceFormat, false);
+    loadOutputDeviceNameCombo(babelData_.outputDeviceFormat);
+    ui_.outputStackedWidget->setCurrentWidget(ui_.outputDevicePage);
   }
   else {
-    ui.outputFileOptBtn->setChecked(false);
-    ui.outputDeviceOptBtn->setChecked(false);
-    setComboToFormat(ui.outputFormatCombo, bd.outputFileFormat, true);
-    ui.outputStackedWidget->setCurrentWidget(ui.outputFilePage);
-    ui.outputFilePage->setDisabled(true);
+    ui_.outputFileOptBtn->setChecked(false);
+    ui_.outputDeviceOptBtn->setChecked(false);
+    setComboToFormat(ui_.outputFormatCombo, babelData_.outputFileFormat, true);
+    ui_.outputStackedWidget->setCurrentWidget(ui_.outputFilePage);
+    ui_.outputFilePage->setDisabled(true);
   }
 
-  setComboToDevice(ui.outputDeviceNameCombo, bd.outputDeviceName);
-  setComboToCharSet(ui.outputCharSetCombo, bd.outputCharSet);
+  setComboToDevice(ui_.outputDeviceNameCombo, babelData_.outputDeviceName);
+  setComboToCharSet(ui_.outputCharSetCombo, babelData_.outputCharSet);
 
-  ui.xlateWayPtsCk->setChecked(bd.xlateWayPts);
-  ui.xlateTracksCk->setChecked(bd.xlateTracks);
-  ui.xlateRoutesCk->setChecked(bd.xlateRoutes);
+  ui_.xlateWayPtsCk->setChecked(babelData_.xlateWayPts);
+  ui_.xlateTracksCk->setChecked(babelData_.xlateTracks);
+  ui_.xlateRoutesCk->setChecked(babelData_.xlateRoutes);
 
   crossCheckInOutFormats();
-  displayOptionsText(ui.inputOptionsText,  ui.inputFormatCombo, true);
-  displayOptionsText(ui.outputOptionsText,  ui.outputFormatCombo, false);
+  displayOptionsText(ui_.inputOptionsText,  ui_.inputFormatCombo, true);
+  displayOptionsText(ui_.outputOptionsText,  ui_.outputFormatCombo, false);
   checkCharSetCombos();
   updateFilterStatus();
 }
@@ -1296,38 +1303,38 @@ void MainWindow::setWidgetValues()
 //------------------------------------------------------------------------
 void MainWindow::getWidgetValues()
 {
-  int comboIdx = ui.inputFormatCombo->currentIndex();
-  int fidx = ui.inputFormatCombo->itemData(comboIdx).toInt();
-  if (ui.inputFileOptBtn->isChecked()){
-    bd.inputType = BabelData::fileType;
-    bd.inputFileFormat =formatList[fidx].getName();
+  int comboIdx = ui_.inputFormatCombo->currentIndex();
+  int fidx = ui_.inputFormatCombo->itemData(comboIdx).toInt();
+  if (ui_.inputFileOptBtn->isChecked()){
+    babelData_.inputType = BabelData::fileType;
+    babelData_.inputFileFormat =formatList_[fidx].getName();
   }
   else {
-    bd.inputType = BabelData::deviceType;
-    bd.inputDeviceFormat =formatList[fidx].getName();
+    babelData_.inputType = BabelData::deviceType;
+    babelData_.inputDeviceFormat =formatList_[fidx].getName();
   }
-  bd.inputDeviceName = ui.inputDeviceNameCombo->currentText();
-  bd.inputCharSet = charSetFromCombo(ui.inputCharSetCombo);
+  babelData_.inputDeviceName = ui_.inputDeviceNameCombo->currentText();
+  babelData_.inputCharSet = charSetFromCombo(ui_.inputCharSetCombo);
 
-  comboIdx = ui.outputFormatCombo->currentIndex();
-  fidx = ui.outputFormatCombo->itemData(comboIdx).toInt();
-  if (ui.outputFileOptBtn->isChecked()){
-    bd.outputType = BabelData::fileType;
-    bd.outputFileFormat =formatList[fidx].getName();
+  comboIdx = ui_.outputFormatCombo->currentIndex();
+  fidx = ui_.outputFormatCombo->itemData(comboIdx).toInt();
+  if (ui_.outputFileOptBtn->isChecked()){
+    babelData_.outputType = BabelData::fileType;
+    babelData_.outputFileFormat =formatList_[fidx].getName();
   }
-  else if (ui.outputDeviceOptBtn->isChecked()){
-    bd.outputType = BabelData::deviceType;
-    bd.outputDeviceFormat =formatList[fidx].getName();
+  else if (ui_.outputDeviceOptBtn->isChecked()){
+    babelData_.outputType = BabelData::deviceType;
+    babelData_.outputDeviceFormat =formatList_[fidx].getName();
   }
   else {
-    bd.outputType = BabelData::noType;
+    babelData_.outputType = BabelData::noType;
   }
-  bd.outputDeviceName = ui.outputDeviceNameCombo->currentText();
-  bd.outputCharSet = charSetFromCombo(ui.outputCharSetCombo);
+  babelData_.outputDeviceName = ui_.outputDeviceNameCombo->currentText();
+  babelData_.outputCharSet = charSetFromCombo(ui_.outputCharSetCombo);
 
-  bd.xlateWayPts = ui.xlateWayPtsCk->isChecked();
-  bd.xlateTracks = ui.xlateTracksCk->isChecked();
-  bd.xlateRoutes = ui.xlateRoutesCk->isChecked();
+  babelData_.xlateWayPts = ui_.xlateWayPtsCk->isChecked();
+  babelData_.xlateTracks = ui_.xlateTracksCk->isChecked();
+  babelData_.xlateRoutes = ui_.xlateRoutesCk->isChecked();
 }
 
 // This could be made faster, but any attempt to do so would have to be
@@ -1338,11 +1345,11 @@ void MainWindow::getWidgetValues()
 // in the list of formats.
 QString MainWindow::getFormatNameForExtension(QString ext)
 {
-  for (int i = 0; i < formatList.size(); i++) {
-    QStringList extensions = formatList[i].getExtensions();
+  for (int i = 0; i < formatList_.size(); i++) {
+    QStringList extensions = formatList_[i].getExtensions();
     for (int j = 0; j < extensions.size(); ++j) {
       if (extensions[j] == ext) {
-        return formatList[i].getName();;
+        return formatList_[i].getName();;
       }
     }
   }

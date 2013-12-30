@@ -30,7 +30,6 @@
 #include <QSpinBox>
 #include "optionsdlg.h"
 #include "help.h"
-#include <QDebug>
 
 //------------------------------------------------------------------------
 static void SetSizeStuff(QWidget* w)
@@ -95,7 +94,6 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
   if (htmlArg.isEmpty()) {
     html = "fmt_" + fmtName + ".html";
   }
-  qDebug() << "Now" << html;
   QVBoxLayout* verticalLayout = new QVBoxLayout(this);
   for (int k=0; k<options.size(); k++) {
     QHBoxLayout* horizontalLayout = new QHBoxLayout();
@@ -188,6 +186,17 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     }
     checkBoxes.push_back(checkBox);
     fields.push_back(w);
+#if LATER
+    // 2013-12-30 robertlipe - because we can't pass arguments
+    // to slots, this requires QSignalMapper or the new lambda
+    // functions added in Qt5.  Not worth it right now, but
+    // an idea worth picking up later.
+    QPushButton* help = new QPushButton(tr("Help"), this);
+    help->setIcon(QIcon(":/images/help.png"));
+    help->setProperty("page", options[k].getHtml();)
+    connect(help, SIGNAL(clicked()), this,  SLOT(helpClicked()));
+    horizontalLayout->addWidget(help);
+#endif
 
     verticalLayout->addLayout(horizontalLayout);
   }

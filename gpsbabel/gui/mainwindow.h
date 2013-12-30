@@ -40,20 +40,20 @@ class MainWindow: public QMainWindow {
 
 
 private:
-  Ui_MainWindow     ui;
-  QList<Format>  formatList;
-  QString        babelVersion;
-  bool		 is_beta;
-  QPixmap        lights[4];
-  QStringList    charSets;
-  AllFiltersData filterData;
-  BabelData      bd;
-  bool           fmtChgInterlock;
-  QTranslator     translator;     // translation for the GUI.
-  QTranslator     translatorCore; // translation for the core application.
-  QTranslator     translatorQt;   // translations for Qt.
-  QString         currLang;       // currently loaded language.
-  QString         langPath;       // Absolute path of language files. 
+  Ui_MainWindow     ui_;
+  QList<Format>  formatList_;
+  QString        babelVersion_;
+  bool		 isBeta_;
+  QPixmap        lights_[4];
+  QStringList    charSets_;
+  AllFiltersData filterData_;
+  BabelData      babelData_;
+  bool           fmtChgInterlock_;
+  QTranslator     translator_;     // translation for the GUI.
+  QTranslator     translatorCore_; // translation for the core application.
+  QTranslator     translatorQt_;   // translations for Qt.
+  QString         currLang_;       // currently loaded language.
+  QString         langPath_;       // Absolute path of language files.
 
 private:
   void loadFormats();
