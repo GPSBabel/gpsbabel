@@ -32,28 +32,28 @@ AdvDlg::AdvDlg(QWidget* parent,
 	       bool &previewGmap,
 	       int  &debugLevel):
   QDialog(parent),
-  synthShortNames(synthShortNames),
-  enableCharSetXform(enableCharSetXform),
-  previewGmap(previewGmap),
-  debugLevel(debugLevel)
+  synthShortNames_(synthShortNames),
+  enableCharSetXform_(enableCharSetXform),
+  previewGmap_(previewGmap),
+  debugLevel_(debugLevel)
 {
-  ui.setupUi(this);
-  ui.synthShortNames->setChecked(synthShortNames);
-  ui.enableCharSetXform->setChecked(enableCharSetXform);
-  ui.previewGmap->setChecked(previewGmap);
-  ui.debugCombo->setCurrentIndex(debugLevel+1);
-  ui.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":images/ok"));
-  ui.buttonBox->button(QDialogButtonBox::Cancel)->setIcon(QIcon(":images/cancel"));
-  connect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(acceptClicked()));
-  connect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(rejectClicked()));
+  ui_.setupUi(this);
+  ui_.synthShortNames->setChecked(synthShortNames);
+  ui_.enableCharSetXform->setChecked(enableCharSetXform);
+  ui_.previewGmap->setChecked(previewGmap);
+  ui_.debugCombo->setCurrentIndex(debugLevel+1);
+  ui_.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":images/ok"));
+  ui_.buttonBox->button(QDialogButtonBox::Cancel)->setIcon(QIcon(":images/cancel"));
+  connect(ui_.buttonBox, SIGNAL(accepted()), this, SLOT(acceptClicked()));
+  connect(ui_.buttonBox, SIGNAL(rejected()), this, SLOT(rejectClicked()));
 }
 
 void AdvDlg::acceptClicked()
 {
-  synthShortNames = ui.synthShortNames->isChecked();
-  enableCharSetXform = ui.enableCharSetXform->isChecked();
-  previewGmap = ui.previewGmap->isChecked();
-  debugLevel = ui.debugCombo->currentIndex()-1;
+  synthShortNames_ = ui_.synthShortNames->isChecked();
+  enableCharSetXform_ = ui_.enableCharSetXform->isChecked();
+  previewGmap_ = ui_.previewGmap->isChecked();
+  debugLevel_ = ui_.debugCombo->currentIndex()-1;
   accept();
 }
 

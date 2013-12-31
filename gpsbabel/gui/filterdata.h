@@ -32,7 +32,7 @@
 
 class FilterData {
 public:
-  FilterData(): inUse(true) {};
+  FilterData(): inUse_(true) {};
   virtual ~FilterData() {};
 
   void saveSettings(QSettings &st) {
@@ -49,7 +49,7 @@ public:
   virtual QStringList makeOptionString() = 0;
 
 public:
-  bool inUse;
+  bool inUse_;
 };
 //------------------------------------------------------------------------
 
@@ -77,7 +77,7 @@ class TrackFilterData: public FilterData  {
   }
   virtual void makeSettingGroup(SettingGroup &sg)
   {
-    sg.addVarSetting(new BoolSetting("trks.inUse", inUse));
+    sg.addVarSetting(new BoolSetting("trks.inUse", inUse_));
     sg.addVarSetting(new BoolSetting("trks.GPSFixes", GPSFixes));
     sg.addVarSetting(new IntSetting("trks.GPSFixesVal", GPSFixesVal));
     sg.addVarSetting(new BoolSetting("trks.course", course));
@@ -142,7 +142,7 @@ class WayPtsFilterData: public FilterData  {
   virtual QStringList makeOptionString();
   virtual void makeSettingGroup(SettingGroup &sg)
   {
-    sg.addVarSetting(new BoolSetting("wpts.inUse", inUse));
+    sg.addVarSetting(new BoolSetting("wpts.inUse", inUse_));
     sg.addVarSetting(new BoolSetting("wpts.radius", radius));
     sg.addVarSetting(new DoubleSetting("wpts.radiusVal", radiusVal));
     sg.addVarSetting(new IntSetting("wpts.radiusUnit", radiusUnit));
@@ -170,56 +170,56 @@ class WayPtsFilterData: public FilterData  {
 class RtTrkFilterData: public FilterData  {
  public:
   RtTrkFilterData(): FilterData(), 
-		     simplify(false),
-		     reverse(false),
-		     limitTo(100)
+         simplify_(false),
+         reverse_(false),
+         limitTo_(100)
     {
     }
   
   virtual QStringList makeOptionString();
   virtual void makeSettingGroup(SettingGroup &sg) {
-    sg.addVarSetting(new BoolSetting("rttrk.inUse", inUse));
-    sg.addVarSetting(new BoolSetting("rttrk.reverse", reverse));
-    sg.addVarSetting(new BoolSetting("rttrk.simplify", simplify));
-    sg.addVarSetting(new IntSetting("rttrk.limitTo", limitTo));
+    sg.addVarSetting(new BoolSetting("rttrk.inUse", inUse_));
+    sg.addVarSetting(new BoolSetting("rttrk.reverse", reverse_));
+    sg.addVarSetting(new BoolSetting("rttrk.simplify", simplify_));
+    sg.addVarSetting(new IntSetting("rttrk.limitTo", limitTo_));
   }
 
  public:
-  bool simplify, reverse;
-  int limitTo;
+  bool simplify_, reverse_;
+  int limitTo_;
 };
 
 //------------------------------------------------------------------------
 class MiscFltFilterData: public FilterData  {
  public:
   MiscFltFilterData(): FilterData(), 
-		       nukeRoutes(false),
-		       nukeTracks(false),
-		       nukeWaypoints(false),
-		       transform(false),
-		       del(false),
-		       swap(false),
-		       transformVal(0)
+           nukeRoutes_(false),
+           nukeTracks_(false),
+           nukeWaypoints_(false),
+           transform_(false),
+           del_(false),
+           swap_(false),
+           transformVal_(0)
     {
     }
   
   virtual QStringList makeOptionString();
   virtual void makeSettingGroup(SettingGroup &sg)
   {
-    sg.addVarSetting(new BoolSetting("mscflt.nukeRoutes", nukeRoutes));
-    sg.addVarSetting(new BoolSetting("mscflt.nukeTracks", nukeTracks));
-    sg.addVarSetting(new BoolSetting("mscflt.nukeWaypoints", nukeWaypoints));
-    sg.addVarSetting(new BoolSetting("mscflt.inUse", inUse));
-    sg.addVarSetting(new BoolSetting("mscflt.transform", transform));
-    sg.addVarSetting(new IntSetting("mscflt.transformVal", transformVal));
-    sg.addVarSetting(new BoolSetting("mscflt.delete", del));
-    sg.addVarSetting(new BoolSetting("mscflt.swap", swap));
+    sg.addVarSetting(new BoolSetting("mscflt.nukeRoutes", nukeRoutes_));
+    sg.addVarSetting(new BoolSetting("mscflt.nukeTracks", nukeTracks_));
+    sg.addVarSetting(new BoolSetting("mscflt.nukeWaypoints", nukeWaypoints_));
+    sg.addVarSetting(new BoolSetting("mscflt.inUse", inUse_));
+    sg.addVarSetting(new BoolSetting("mscflt.transform", transform_));
+    sg.addVarSetting(new IntSetting("mscflt.transformVal", transformVal_));
+    sg.addVarSetting(new BoolSetting("mscflt.delete", del_));
+    sg.addVarSetting(new BoolSetting("mscflt.swap", swap_));
   }
 
  public:
-  bool nukeRoutes, nukeTracks, nukeWaypoints;
-  bool transform, del, swap;
-  int transformVal;
+  bool nukeRoutes_, nukeTracks_, nukeWaypoints_;
+  bool transform_, del_, swap_;
+  int transformVal_;
 };
 
 

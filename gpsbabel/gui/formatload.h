@@ -34,8 +34,8 @@ class FormatLoad {
   
   bool getFormats(QList<Format> &formatList);
  private:
-  QStringList lines;
-  int currentLine;
+  QStringList lines_;
+  int currentLine_;
   bool skipToValidLine();
   bool processFormat(Format &format);
 };

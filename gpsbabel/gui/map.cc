@@ -48,15 +48,15 @@ static QString stripDoubleQuotes(const QString s) {
 Map::Map(QWidget *parent,
 	 const Gpx  &gpx, QPlainTextEdit *te):
     QWebView(parent),
-    gpx(gpx),
-    mapPresent(false),
-    busyCursor(false),
-    te(te)
+    gpx_(gpx),
+    mapPresent_(false),
+    busyCursor_(false),
+    textEdit_(te)
 {
-  busyCursor = true;
-  stopWatch.start();
+  busyCursor_ = true;
+  stopWatch_.start();
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-  manager = new QNetworkAccessManager(this);
+  manager_ = new QNetworkAccessManager(this);
   connect(this,SIGNAL(loadFinished(bool)),
 	  this,SLOT(loadFinishedX(bool)));
   this->logTimeX("Start map constuctor");
@@ -74,7 +74,7 @@ Map::Map(QWidget *parent,
 //------------------------------------------------------------------------
 Map::~Map()
 {
-  if (busyCursor)
+  if (busyCursor_)
     QApplication::restoreOverrideCursor();
 }
 //------------------------------------------------------------------------
@@ -89,7 +89,7 @@ void Map::loadFinishedX(bool f)
     showGpxData();
   }
   QApplication::restoreOverrideCursor();
-  busyCursor = false;
+  busyCursor_ = false;
 }
 
 //------------------------------------------------------------------------
@@ -157,11 +157,11 @@ void Map::showGpxData()
     << QString("var numLevels = %1;").arg(numLevels)
     ;
 
-  mapPresent = true;
+  mapPresent_ = true;
 
   // Waypoints.
   int num=0;
-  foreach (const  GpxWaypoint &pt, gpx.getWaypoints() ) {
+  foreach (const  GpxWaypoint &pt, gpx_.getWaypoints() ) {
     scriptStr
       << QString("waypts[%1] = new GMarker(new GLatLng(%2), "
 		 "{title:\"%3\",icon:blueIcon});")
@@ -183,7 +183,7 @@ void Map::showGpxData()
 
   // Tracks
   num = 0;
-  foreach (const GpxTrack &trk, gpx.getTracks()) {
+  foreach (const GpxTrack &trk, gpx_.getTracks()) {
     vector <LatLng> epts;
     foreach (const GpxTrackSegment seg, trk.getTrackSegments()) {
       foreach (const GpxTrackPoint pt, seg.getTrackPoints()) {
@@ -219,7 +219,7 @@ void Map::showGpxData()
 
   // Routes
   num = 0;
-  foreach (const GpxRoute &rte, gpx.getRoutes()) {
+  foreach (const GpxRoute &rte, gpx_.getRoutes()) {
     vector <LatLng> epts;
     foreach (const GpxRoutePoint &pt, rte.getRoutePoints()) {
       epts.push_back(pt.getLocation());
@@ -274,10 +274,10 @@ void Map::markerClicked(int t, int i){
 void Map::logTimeX(const QString &s)
 {
   //  fprintf(stderr, "Log: %s:  %d ms\n", s.toStdString().c_str(), stopWatch.elapsed());
-  if (te) {
-    te->appendPlainText(QString("%1: %2 ms").arg(s).arg(stopWatch.elapsed()));
+  if (textEdit_) {
+    textEdit_->appendPlainText(QString("%1: %2 ms").arg(s).arg(stopWatch_.elapsed()));
   }
-  stopWatch.start();
+  stopWatch_.start();
 }
 //------------------------------------------------------------------------
 void Map::showTracks(const QList<GpxTrack> &tracks)
@@ -386,7 +386,7 @@ void Map::panTo(const LatLng &loc)
 void Map::resizeEvent ( QResizeEvent * ev)
 {
   QWebView::resizeEvent(ev);
-  if (mapPresent)
+  if (mapPresent_)
     evaluateJS(QString("map.checkResize();"));
 }
 

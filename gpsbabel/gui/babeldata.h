@@ -32,43 +32,43 @@
 class BabelData {
 public:
   BabelData(): 
-    inputType(fileType), 
-    inputFileFormat(QString()),
-    inputDeviceFormat(QString()),
-    inputFileNames(QStringList()),
-    inputDeviceName(QString()),
-    inputCharSet(QString()),
-    xlateWayPts(true),
-    xlateRoutes(true),
-    xlateTracks(true),
-    outputType(fileType),
-    outputFileFormat(QString()),
-    outputDeviceFormat(QString()),
-    outputFileName(QString()),
-    outputDeviceName(QString()),
-    outputCharSet(QString()),
-    synthShortNames(false),
-    forceGPSTypes(false),
-    enableCharSetXform(false),
-    debugLevel(-1),
-    inputBrowse(QString()),
-    outputBrowse(QString()),
-    previewGmap(false),
-    upgradeCheckMethod(0),
-    upgradeCheckTime(QDateTime(QDate(2001, 1, 1), QTime(0, 0))),
-    installationUuid(QUuid::createUuid().toString()),
-    upgradeCallbacks(0),
-    upgradeAccept(0),
-    upgradeDeclines(0),
-    upgradeErrors(0),
-    upgradeOffers(0),
-    runCount(0),
-    startupVersionCheck(true),
-    reportStatistics(true),
-    allowBetaUpgrades(false),
-    ignoreVersionMismatch(false),
-    disableDonateDialog(false),
-    donateSplashed(QDateTime(QDate(2010, 1, 1), QTime(0, 0, 0)))
+    inputType_(fileType_),
+    inputFileFormat_(QString()),
+    inputDeviceFormat_(QString()),
+    inputFileNames_(QStringList()),
+    inputDeviceName_(QString()),
+    inputCharSet_(QString()),
+    xlateWayPts_(true),
+    xlateRoutes_(true),
+    xlateTracks_(true),
+    outputType_(fileType_),
+    outputFileFormat_(QString()),
+    outputDeviceFormat_(QString()),
+    outputFileName_(QString()),
+    outputDeviceName_(QString()),
+    outputCharSet_(QString()),
+    synthShortNames_(false),
+    forceGPSTypes_(false),
+    enableCharSetXform_(false),
+    debugLevel_(-1),
+    inputBrowse_(QString()),
+    outputBrowse_(QString()),
+    previewGmap_(false),
+    upgradeCheckMethod_(0),
+    upgradeCheckTime_(QDateTime(QDate(2001, 1, 1), QTime(0, 0))),
+    installationUuid_(QUuid::createUuid().toString()),
+    upgradeCallbacks_(0),
+    upgradeAccept_(0),
+    upgradeDeclines_(0),
+    upgradeErrors_(0),
+    upgradeOffers_(0),
+    runCount_(0),
+    startupVersionCheck_(true),
+    reportStatistics_(true),
+    allowBetaUpgrades_(false),
+    ignoreVersionMismatch_(false),
+    disableDonateDialog_(false),
+    donateSplashed_(QDateTime(QDate(2010, 1, 1), QTime(0, 0, 0)))
   {
   };
   
@@ -84,97 +84,97 @@ public:
   }
 
   void makeSettingGroup(SettingGroup &sg) {
-    sg.addVarSetting(new IntSetting("app.inputType", inputType));
-    sg.addVarSetting(new StringSetting("app.inputFileFormat", inputFileFormat));
-    sg.addVarSetting(new StringSetting("app.inputDeviceFormat", inputDeviceFormat));
-    sg.addVarSetting(new StringSetting("app.inputCharSet", inputCharSet));
-    sg.addVarSetting(new StringSetting("app.inputDeviceName", inputDeviceName));
+    sg.addVarSetting(new IntSetting("app.inputType", inputType_));
+    sg.addVarSetting(new StringSetting("app.inputFileFormat", inputFileFormat_));
+    sg.addVarSetting(new StringSetting("app.inputDeviceFormat", inputDeviceFormat_));
+    sg.addVarSetting(new StringSetting("app.inputCharSet", inputCharSet_));
+    sg.addVarSetting(new StringSetting("app.inputDeviceName", inputDeviceName_));
 
-    sg.addVarSetting(new BoolSetting("app.xlateWayPts", xlateWayPts));
-    sg.addVarSetting(new BoolSetting("app.xlateRoutes", xlateRoutes));
-    sg.addVarSetting(new BoolSetting("app.xlateTracks", xlateTracks));
+    sg.addVarSetting(new BoolSetting("app.xlateWayPts", xlateWayPts_));
+    sg.addVarSetting(new BoolSetting("app.xlateRoutes", xlateRoutes_));
+    sg.addVarSetting(new BoolSetting("app.xlateTracks", xlateTracks_));
 
-    sg.addVarSetting(new IntSetting("app.outputType", outputType));
-    sg.addVarSetting(new StringSetting("app.outputFileFormat", outputFileFormat));
-    sg.addVarSetting(new StringSetting("app.outputDeviceFormat", outputDeviceFormat));
-    sg.addVarSetting(new StringSetting("app.outputCharSet", outputCharSet));
-    sg.addVarSetting(new StringSetting("app.outputDeviceName", outputDeviceName));
+    sg.addVarSetting(new IntSetting("app.outputType", outputType_));
+    sg.addVarSetting(new StringSetting("app.outputFileFormat", outputFileFormat_));
+    sg.addVarSetting(new StringSetting("app.outputDeviceFormat", outputDeviceFormat_));
+    sg.addVarSetting(new StringSetting("app.outputCharSet", outputCharSet_));
+    sg.addVarSetting(new StringSetting("app.outputDeviceName", outputDeviceName_));
 
-    sg.addVarSetting(new BoolSetting("app.synthShortNames", synthShortNames));
-    sg.addVarSetting(new BoolSetting("app.forceGPSTypes", forceGPSTypes));
-    sg.addVarSetting(new BoolSetting("app.enableCharSetXform", enableCharSetXform));
+    sg.addVarSetting(new BoolSetting("app.synthShortNames", synthShortNames_));
+    sg.addVarSetting(new BoolSetting("app.forceGPSTypes", forceGPSTypes_));
+    sg.addVarSetting(new BoolSetting("app.enableCharSetXform", enableCharSetXform_));
 
-    sg.addVarSetting(new StringSetting("app.inputBrowse", inputBrowse));
-    sg.addVarSetting(new StringSetting("app.outputBrowse", outputBrowse));
+    sg.addVarSetting(new StringSetting("app.inputBrowse", inputBrowse_));
+    sg.addVarSetting(new StringSetting("app.outputBrowse", outputBrowse_));
 
-    sg.addVarSetting(new BoolSetting("app.previewGmap", previewGmap));
-    sg.addVarSetting(new IntSetting("app.upgradeCheckMethod", upgradeCheckMethod));
-    sg.addVarSetting(new DateTimeSetting("app.upgradeCheckTime", upgradeCheckTime));
-    sg.addVarSetting(new DateTimeSetting("app.donateSplashed", donateSplashed));
-    sg.addVarSetting(new StringSetting("app.installationUuid", installationUuid));
-    sg.addVarSetting(new IntSetting("app.upgradeCallbacks", upgradeCallbacks));
-    sg.addVarSetting(new IntSetting("app.upgradeAccept", upgradeAccept));
-    sg.addVarSetting(new IntSetting("app.upgradeDeclines", upgradeDeclines));
-    sg.addVarSetting(new IntSetting("app.upgradeErrors", upgradeErrors));
-    sg.addVarSetting(new IntSetting("app.upgradeOffers", upgradeOffers));
-    sg.addVarSetting(new IntSetting("app.runCount", runCount));
+    sg.addVarSetting(new BoolSetting("app.previewGmap", previewGmap_));
+    sg.addVarSetting(new IntSetting("app.upgradeCheckMethod", upgradeCheckMethod_));
+    sg.addVarSetting(new DateTimeSetting("app.upgradeCheckTime", upgradeCheckTime_));
+    sg.addVarSetting(new DateTimeSetting("app.donateSplashed", donateSplashed_));
+    sg.addVarSetting(new StringSetting("app.installationUuid", installationUuid_));
+    sg.addVarSetting(new IntSetting("app.upgradeCallbacks", upgradeCallbacks_));
+    sg.addVarSetting(new IntSetting("app.upgradeAccept", upgradeAccept_));
+    sg.addVarSetting(new IntSetting("app.upgradeDeclines", upgradeDeclines_));
+    sg.addVarSetting(new IntSetting("app.upgradeErrors", upgradeErrors_));
+    sg.addVarSetting(new IntSetting("app.upgradeOffers", upgradeOffers_));
+    sg.addVarSetting(new IntSetting("app.runCount", runCount_));
 
     // Global preferences.
-    sg.addVarSetting(new BoolSetting("app.startupVersionCheck", startupVersionCheck));
-    sg.addVarSetting(new BoolSetting("app.reportStatistics", reportStatistics));
-    sg.addVarSetting(new BoolSetting("app.allowBetaUpgrades", allowBetaUpgrades));
-    sg.addVarSetting(new BoolSetting("app.ignoreVersionMismatch", ignoreVersionMismatch));
-    sg.addVarSetting(new BoolSetting("app.disableDonateDialog", disableDonateDialog));
+    sg.addVarSetting(new BoolSetting("app.startupVersionCheck", startupVersionCheck_));
+    sg.addVarSetting(new BoolSetting("app.reportStatistics", reportStatistics_));
+    sg.addVarSetting(new BoolSetting("app.allowBetaUpgrades", allowBetaUpgrades_));
+    sg.addVarSetting(new BoolSetting("app.ignoreVersionMismatch", ignoreVersionMismatch_));
+    sg.addVarSetting(new BoolSetting("app.disableDonateDialog", disableDonateDialog_));
 
   }
 
-  static const int noType;
-  static const int fileType;
-  static const int deviceType;
+  static const int noType_;
+  static const int fileType_;
+  static const int deviceType_;
 
-  int inputType;
-  QString inputFileFormat;
-  QString inputDeviceFormat;
-  QStringList inputFileNames;
-  QString inputDeviceName;
-  QString inputCharSet;
+  int inputType_;
+  QString inputFileFormat_;
+  QString inputDeviceFormat_;
+  QStringList inputFileNames_;
+  QString inputDeviceName_;
+  QString inputCharSet_;
 
-  bool xlateWayPts;
-  bool xlateRoutes;
-  bool xlateTracks;
+  bool xlateWayPts_;
+  bool xlateRoutes_;
+  bool xlateTracks_;
   
-  int outputType;
-  QString outputFileFormat;
-  QString outputDeviceFormat;
-  QString outputFileName;
-  QString outputDeviceName;
-  QString outputCharSet;
+  int outputType_;
+  QString outputFileFormat_;
+  QString outputDeviceFormat_;
+  QString outputFileName_;
+  QString outputDeviceName_;
+  QString outputCharSet_;
 
-  bool synthShortNames;
-  bool forceGPSTypes;
-  bool enableCharSetXform;
-  int  debugLevel;
+  bool synthShortNames_;
+  bool forceGPSTypes_;
+  bool enableCharSetXform_;
+  int  debugLevel_;
 
-  QString inputBrowse, outputBrowse;
+  QString inputBrowse_, outputBrowse_;
 
-  bool  previewGmap;
-  int   upgradeCheckMethod;
-  QDateTime upgradeCheckTime;
-  QString installationUuid;
-  int upgradeCallbacks;
-  int upgradeAccept;
-  int upgradeDeclines;
-  int upgradeErrors;
-  int upgradeOffers;
-  int runCount;
+  bool  previewGmap_;
+  int   upgradeCheckMethod_;
+  QDateTime upgradeCheckTime_;
+  QString installationUuid_;
+  int upgradeCallbacks_;
+  int upgradeAccept_;
+  int upgradeDeclines_;
+  int upgradeErrors_;
+  int upgradeOffers_;
+  int runCount_;
 
   // Global preferences.
-  bool startupVersionCheck;
-  bool reportStatistics;
-  bool allowBetaUpgrades;
-  bool ignoreVersionMismatch;
-  bool disableDonateDialog;
-  QDateTime donateSplashed;
+  bool startupVersionCheck_;
+  bool reportStatistics_;
+  bool allowBetaUpgrades_;
+  bool ignoreVersionMismatch_;
+  bool disableDonateDialog_;
+  QDateTime donateSplashed_;
 
 };
 

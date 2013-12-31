@@ -35,16 +35,16 @@ class FormatListEntry : public QListWidgetItem {
 Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
                          BabelData& bd) : QDialog(parent),
   formatList_(formatList),
-  bd_(bd)
+  babelData_(bd)
 {
   ui_.setupUi(this);
 
-  ui_.startupCheck->setChecked(bd_.startupVersionCheck);
-  ui_.reportStatisticsCheck->setChecked(bd_.reportStatistics);
-  ui_.ignoreVersionMismatchCheck->setChecked(bd_.ignoreVersionMismatch);
+  ui_.startupCheck->setChecked(babelData_.startupVersionCheck_);
+  ui_.reportStatisticsCheck->setChecked(babelData_.reportStatistics_);
+  ui_.ignoreVersionMismatchCheck->setChecked(babelData_.ignoreVersionMismatch_);
   // Because of an unfortunate bug in 1.4.0, we turn this off in 1.4.1.
   if (VERSION == QString("1.4.1"))
-    bd_.ignoreVersionMismatch = false;
+    babelData_.ignoreVersionMismatch_ = false;
 
   connect (ui_.buttonBox, SIGNAL(accepted()), this, SLOT(acceptClicked()));
   connect (ui_.buttonBox, SIGNAL(rejected()), this, SLOT(rejectClicked()));
@@ -82,9 +82,9 @@ void Preferences::acceptClicked()
     formatList_[i].setHidden(item->checkState() == Qt::Unchecked);
   }
 
-  bd_.startupVersionCheck = ui_.startupCheck->isChecked();
-  bd_.reportStatistics = ui_.reportStatisticsCheck->isChecked();
-  bd_.ignoreVersionMismatch = ui_.ignoreVersionMismatchCheck->isChecked();
+  babelData_.startupVersionCheck_ = ui_.startupCheck->isChecked();
+  babelData_.reportStatistics_ = ui_.reportStatisticsCheck->isChecked();
+  babelData_.ignoreVersionMismatch_ = ui_.ignoreVersionMismatchCheck->isChecked();
   accept();
 }
 

@@ -30,10 +30,10 @@ class VersionMismatch: public QDialog {
  public:
   VersionMismatch(QWidget *parent,  const QString &ver1,
     	          const QString &ver2);
-  bool neverAgain() { return ui.neverAgain->isChecked(); }
+  bool neverAgain() { return ui_.neverAgain->isChecked(); }
 
  private:
-  Ui_VersionMismatch  ui;
+  Ui_VersionMismatch  ui_;
 };
 
 #endif

@@ -87,32 +87,32 @@ void FileDlgManager::buttonClicked()
 OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOption>* opts,
                        const QString& htmlArg):
   QDialog(parent),
-  fmtName(fmtName),
-  options(*opts),
-  html(htmlArg)
+  fmtName_(fmtName),
+  options_(*opts),
+  html_(htmlArg)
 {
   if (htmlArg.isEmpty()) {
-    html = "fmt_" + fmtName + ".html";
+    html_ = "fmt_" + fmtName + ".html";
   }
   QVBoxLayout* verticalLayout = new QVBoxLayout(this);
-  for (int k=0; k<options.size(); k++) {
+  for (int k=0; k<options_.size(); k++) {
     QHBoxLayout* horizontalLayout = new QHBoxLayout();
 
     QCheckBox* checkBox = new QCheckBox(this);
-    checkBox->setText(options[k].getDescription());
+    checkBox->setText(options_[k].getDescription());
     horizontalLayout->addWidget(checkBox);
-    checkBox->setChecked(options[k].getSelected());
+    checkBox->setChecked(options_[k].getSelected());
     //checkBox->setWhatsThis(options[k].getHtml());
 
     QSpacerItem* horizontalSpacer = new QSpacerItem(0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     horizontalLayout->addItem(horizontalSpacer);
 
     QWidget* w = 0;
-    switch (options[k].getType()) {
+    switch (options_[k].getType()) {
     case FormatOption::OPTstring: {
       QLineEdit* lineEdit = new QLineEdit(this);
       SetSizeStuff(lineEdit);
-      lineEdit->setText(getOptionValue(options, k).toString());
+      lineEdit->setText(getOptionValue(options_, k).toString());
       w = lineEdit;
       horizontalLayout->addWidget(lineEdit);
     }
@@ -120,10 +120,10 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
 
     case FormatOption::OPTinFile:
     case FormatOption::OPToutFile: {
-      bool inFile = options[k].getType() == FormatOption::OPTinFile;
+      bool inFile = options_[k].getType() == FormatOption::OPTinFile;
       QLineEdit* lineEdit = new QLineEdit(this);
       QToolButton* button = new QToolButton(this);
-      lineEdit->setText(getOptionValue(options, k).toString());
+      lineEdit->setText(getOptionValue(options_, k).toString());
       button->setIcon(QIcon(inFile ? ":images/file.png" : ":images/save.png"));
       w = lineEdit;
       horizontalSpacer->changeSize(5, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
@@ -137,17 +137,17 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
       // This is quirky.  It means that GPSBabel's bool options that default
       // to true get turned on here, even if user turned them off on last
       // exit.
-      checkBox->setChecked(getOptionValue(options,k).toBool());
+      checkBox->setChecked(getOptionValue(options_,k).toBool());
       w = 0;
       break;
 
     case FormatOption::OPTfloat: {
       QLineEdit* lineEdit = new QLineEdit(this);
       SetSizeStuff(lineEdit);
-      lineEdit->setText(getOptionValue(options, k).toString());
+      lineEdit->setText(getOptionValue(options_, k).toString());
       w = lineEdit;
-      double minVal = options[k].getMinValue().toDouble();
-      double maxVal = options[k].getMaxValue().toDouble();
+      double minVal = options_[k].getMinValue().toDouble();
+      double maxVal = options_[k].getMaxValue().toDouble();
       if (minVal < maxVal) {
         QDoubleValidator* v = new QDoubleValidator(this);
         v->setRange(minVal, maxVal);
@@ -161,31 +161,31 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
       QLineEdit* lineEdit = new QLineEdit(this);
       SetSizeStuff(lineEdit);
       w = lineEdit;
-      int minVal = options[k].getMinValue().toInt();
-      int maxVal = options[k].getMaxValue().toInt();
+      int minVal = options_[k].getMinValue().toInt();
+      int maxVal = options_[k].getMaxValue().toInt();
       if (minVal < maxVal) {
         QIntValidator* iv = new QIntValidator(this);
         iv->setRange(minVal, maxVal);
         lineEdit->setValidator(iv);
       }
-      lineEdit->setText(getOptionValue(options, k).toString());
+      lineEdit->setText(getOptionValue(options_, k).toString());
       horizontalLayout->addWidget(lineEdit);
     }
     break;
 
     case FormatOption::OPTboundedInt: {
       QSpinBox* spinBox = new QSpinBox(this);
-      spinBox->setRange(options[k].getMinValue().toInt(),
-                        options[k].getMaxValue().toInt());
-      spinBox->setValue(getOptionValue(options, k).toInt());
+      spinBox->setRange(options_[k].getMinValue().toInt(),
+                        options_[k].getMaxValue().toInt());
+      spinBox->setValue(getOptionValue(options_, k).toInt());
       SetSizeStuff(spinBox);
       w = spinBox;
       horizontalLayout->addWidget(spinBox);
     }
     break;
     }
-    checkBoxes.push_back(checkBox);
-    fields.push_back(w);
+    checkBoxes_.push_back(checkBox);
+    fields_.push_back(w);
 #if LATER
     // 2013-12-30 robertlipe - because we can't pass arguments
     // to slots, this requires QSignalMapper or the new lambda
@@ -207,39 +207,39 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
   QHBoxLayout* lay = new QHBoxLayout();
   lay->addWidget(helpButton);
 
-  buttonBox = new QDialogButtonBox(this);
-  buttonBox->setOrientation(Qt::Horizontal);
-  buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-  lay->addWidget(buttonBox);
+  buttonBox_ = new QDialogButtonBox(this);
+  buttonBox_->setOrientation(Qt::Horizontal);
+  buttonBox_->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+  lay->addWidget(buttonBox_);
   verticalLayout->addLayout(lay);
-  buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":images/ok"));
-  buttonBox->button(QDialogButtonBox::Cancel)->setIcon(QIcon(":images/cancel"));
+  buttonBox_->button(QDialogButtonBox::Ok)->setIcon(QIcon(":images/ok"));
+  buttonBox_->button(QDialogButtonBox::Cancel)->setIcon(QIcon(":images/cancel"));
 
-  connect(buttonBox, SIGNAL(accepted()), this, SLOT(acceptClicked()));
-  connect(buttonBox, SIGNAL(rejected()), this, SLOT(rejectClicked()));
+  connect(buttonBox_, SIGNAL(accepted()), this, SLOT(acceptClicked()));
+  connect(buttonBox_, SIGNAL(rejected()), this, SLOT(rejectClicked()));
   connect(helpButton, SIGNAL(clicked()), this,  SLOT(helpClicked()));
 }
 
 //------------------------------------------------------------------------
 void OptionsDlg::acceptClicked()
 {
-  for (int k=0; k<options.size(); k++) {
-    options[k].setSelected(checkBoxes[k]->isChecked());
-    if (fields[k]) {
-      if (options[k].getType() == FormatOption::OPTboundedInt) {
-        int value = static_cast<QSpinBox*>(fields[k])->value();
-        value = qMax(qMin(value, options[k].getMaxValue().toInt()),options[k].getMinValue().toInt());
-        options[k].setValue(QVariant(value));
-      } else if (options[k].getType() == FormatOption::OPTint) {
-        int value = static_cast<QLineEdit*>(fields[k])->text().toInt();
-        value = qMax(qMin(value, options[k].getMaxValue().toInt()),options[k].getMinValue().toInt());
-        options[k].setValue(QVariant(value));
-      } else if (options[k].getType() == FormatOption::OPTfloat) {
-        double value = static_cast<QLineEdit*>(fields[k])->text().toDouble();
-        value = qMax(qMin(value, options[k].getMaxValue().toDouble()),options[k].getMinValue().toDouble());
-        options[k].setValue(QVariant(value));
+  for (int k=0; k<options_.size(); k++) {
+    options_[k].setSelected(checkBoxes_[k]->isChecked());
+    if (fields_[k]) {
+      if (options_[k].getType() == FormatOption::OPTboundedInt) {
+        int value = static_cast<QSpinBox*>(fields_[k])->value();
+        value = qMax(qMin(value, options_[k].getMaxValue().toInt()),options_[k].getMinValue().toInt());
+        options_[k].setValue(QVariant(value));
+      } else if (options_[k].getType() == FormatOption::OPTint) {
+        int value = static_cast<QLineEdit*>(fields_[k])->text().toInt();
+        value = qMax(qMin(value, options_[k].getMaxValue().toInt()),options_[k].getMinValue().toInt());
+        options_[k].setValue(QVariant(value));
+      } else if (options_[k].getType() == FormatOption::OPTfloat) {
+        double value = static_cast<QLineEdit*>(fields_[k])->text().toDouble();
+        value = qMax(qMin(value, options_[k].getMaxValue().toDouble()),options_[k].getMinValue().toDouble());
+        options_[k].setValue(QVariant(value));
       } else {
-        options[k].setValue(static_cast<QLineEdit*>(fields[k])->text());
+        options_[k].setValue(static_cast<QLineEdit*>(fields_[k])->text());
       }
     }
   }
@@ -255,5 +255,5 @@ void OptionsDlg::rejectClicked()
 //------------------------------------------------------------------------
 void OptionsDlg::helpClicked()
 {
-  ShowHelp(html);
+  ShowHelp(html_);
 }

@@ -62,26 +62,26 @@ QString ProcessWaitDialog::processErrorString( QProcess::ProcessError err)
 }
 //------------------------------------------------------------------------
 ProcessWaitDialog::ProcessWaitDialog(QWidget *parent, QProcess *process):
-  QDialog(parent), process(process)
+  QDialog(parent), process_(process)
 {
   this->resize(400, 220);
   this->setWindowTitle(QString(appName) + tr(" ... Process GPSBabel"));
   QVBoxLayout *layout = new QVBoxLayout(this);
 
-  textEdit = new QPlainTextEdit(this);
-  textEdit->setReadOnly(true);
-  layout->addWidget(textEdit);
+  textEdit_ = new QPlainTextEdit(this);
+  textEdit_->setReadOnly(true);
+  layout->addWidget(textEdit_);
 
-  progressBar = new QProgressBar(this);
-  progressBar->setTextVisible(false);
-  layout->addWidget(progressBar);
+  progressBar_ = new QProgressBar(this);
+  progressBar_->setTextVisible(false);
+  layout->addWidget(progressBar_);
 
-  buttonBox = new QDialogButtonBox(this);
-  buttonBox->setOrientation(Qt::Horizontal);
-  buttonBox->setStandardButtons(QDialogButtonBox::Abort);
-  QPushButton* btn = buttonBox->button(QDialogButtonBox::Abort);
+  buttonBox_ = new QDialogButtonBox(this);
+  buttonBox_->setOrientation(Qt::Horizontal);
+  buttonBox_->setStandardButtons(QDialogButtonBox::Abort);
+  QPushButton* btn = buttonBox_->button(QDialogButtonBox::Abort);
   btn->setText(tr("Stop Process"));
-  layout->addWidget(buttonBox);
+  layout->addWidget(buttonBox_);
 
   connect(process, SIGNAL(error(QProcess::ProcessError)),
 	  this,    SLOT  (errorX(QProcess::ProcessError)));
@@ -93,24 +93,24 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget *parent, QProcess *process):
 	  this,    SLOT  (readyReadStandardOutputX()));
   connect(btn,     SIGNAL(clicked()),
 	  this,    SLOT  (stopClickedX()));
-  estatus = QProcess::CrashExit;  // Assume all errors are crashes for now.
+  exitStatus_ = QProcess::CrashExit;  // Assume all errors are crashes for now.
 
-  bufferedOut = "";
+  bufferedOut_ = "";
 
   //
   for (int i=0; i<=100; i+=2)
-    progressVals.push_back(i);
+    progressVals_.push_back(i);
   for (int i=98; i>0; i-=2)
-    progressVals.push_back(i);
-  progressIndex = progressVals.size()/2;
+    progressVals_.push_back(i);
+  progressIndex_ = progressVals_.size()/2;
 
-  timer = new QTimer(this);
-  timer->setInterval(100);
-  timer->setSingleShot(false);
-  connect(timer, SIGNAL(timeout()), this, SLOT(timeoutX()));
-  stopCount = -1;
-  timer->start();
-  errorString = "";
+  timer_ = new QTimer(this);
+  timer_->setInterval(100);
+  timer_->setSingleShot(false);
+  connect(timer_, SIGNAL(timeout()), this, SLOT(timeoutX()));
+  stopCount_ = -1;
+  timer_->start();
+  errorString_ = "";
 
 }
 
@@ -121,38 +121,38 @@ ProcessWaitDialog::~ProcessWaitDialog()
 //------------------------------------------------------------------------
 bool ProcessWaitDialog::getExitedNormally()
 {
-  return (errorString.length() == 0);
+  return (errorString_.length() == 0);
 };
 
 //------------------------------------------------------------------------
 QString ProcessWaitDialog::getErrorString()
 {
-  return errorString;
+  return errorString_;
 };
 
 //------------------------------------------------------------------------
 int ProcessWaitDialog::getExitCode()
 {
-  return ecode;
+  return ecode_;
 };
 
 //------------------------------------------------------------------------
 void ProcessWaitDialog::stopClickedX()
 {
-  process->terminate();
+  process_->terminate();
 };
 //------------------------------------------------------------------------
 void ProcessWaitDialog::timeoutX()
 {
-  progressIndex++;
-  int idx = progressIndex % progressVals.size();
-  progressBar->setValue(progressVals[idx]);
-  if (stopCount >=0)
-    stopCount++;
-  if (stopCount > 150) {
-    process->kill();
-    errorString = QString(tr("Process did not terminate successfully"));
-    timer->stop();
+  progressIndex_++;
+  int idx = progressIndex_ % progressVals_.size();
+  progressBar_->setValue(progressVals_[idx]);
+  if (stopCount_ >=0)
+    stopCount_++;
+  if (stopCount_ > 150) {
+    process_->kill();
+    errorString_ = QString(tr("Process did not terminate successfully"));
+    timer_->stop();
     accept();
   }
 };
@@ -160,18 +160,18 @@ void ProcessWaitDialog::timeoutX()
 //------------------------------------------------------------------------
 void ProcessWaitDialog::errorX(QProcess::ProcessError err)
 {
-  errorString = processErrorString(err);
-  timer->stop();
+  errorString_ = processErrorString(err);
+  timer_->stop();
   accept();
 };
 
 //------------------------------------------------------------------------
 void ProcessWaitDialog::finishedX(int exitCode, QProcess::ExitStatus es)
 {
-  ecode = exitCode;
+  ecode_ = exitCode;
   if (es == QProcess::CrashExit)
-    errorString = QString(tr("Process crashed whle running"));
-  timer->stop();
+    errorString_ = QString(tr("Process crashed whle running"));
+  timer_->stop();
   accept();
 };
 
@@ -182,16 +182,16 @@ void ProcessWaitDialog::finishedX(int exitCode, QProcess::ExitStatus es)
 //
 void ProcessWaitDialog::appendToText(const char *ptr)
 {
-  outputString += QString(ptr);
+  outputString_ += QString(ptr);
   for (const char *cptr = ptr; *cptr; cptr++) {
     if (*cptr == '\r')
       continue;
     if (*cptr == '\n') {
-      textEdit->appendPlainText(QString::fromStdString(bufferedOut));
-      bufferedOut = "";
+      textEdit_->appendPlainText(QString::fromStdString(bufferedOut_));
+      bufferedOut_ = "";
       continue;
     }
-    bufferedOut += *cptr;
+    bufferedOut_ += *cptr;
   }
 }
 
@@ -199,14 +199,14 @@ void ProcessWaitDialog::appendToText(const char *ptr)
 //------------------------------------------------------------------------
 void ProcessWaitDialog::readyReadStandardErrorX()
 {
-  QByteArray d = process->readAllStandardError();
+  QByteArray d = process_->readAllStandardError();
   appendToText(d.data());
 };
 
 //------------------------------------------------------------------------
 void ProcessWaitDialog::readyReadStandardOutputX()
  {
-  QByteArray d = process->readAllStandardOutput();
+  QByteArray d = process_->readAllStandardOutput();
   appendToText(d.data());
 };
 

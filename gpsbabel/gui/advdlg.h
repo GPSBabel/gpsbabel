@@ -29,18 +29,18 @@ class AdvDlg: public QDialog {
   
 public:
   AdvDlg(QWidget* parent, 
-	 bool &synthShortNames, 
-	 bool &enableCharSetXform,
-	 bool &previewGmap,
-	 int   &debugLevel);
-  QPushButton* formatButton() { return ui.formatButton; };
+   bool &synthShortNames_,
+   bool &enableCharSetXform_,
+   bool &previewGmap_,
+   int   &debugLevel_);
+  QPushButton* formatButton() { return ui_.formatButton; };
 
 private:
-  Ui_AdvUi ui;
-  bool &synthShortNames;
-  bool &enableCharSetXform;
-  bool &previewGmap;
-  int  &debugLevel;
+  Ui_AdvUi ui_;
+  bool &synthShortNames_;
+  bool &enableCharSetXform_;
+  bool &previewGmap_;
+  int  &debugLevel_;
 
  protected:
 

@@ -54,7 +54,7 @@ class Map : public QWebView
   Q_OBJECT
     public:
   Map(QWidget *parent, 
-      const Gpx  &gpx, QPlainTextEdit *te);
+      const Gpx  &gpx_, QPlainTextEdit *textEdit_);
   ~Map();
 
   public slots:
@@ -88,12 +88,12 @@ class Map : public QWebView
   void routeClicked(int i);
   
  private:
-  QNetworkAccessManager *manager;
-  const Gpx &gpx;
-  bool mapPresent;
-  bool busyCursor;
-  QTime stopWatch;
-  QPlainTextEdit *te;
+  QNetworkAccessManager *manager_;
+  const Gpx &gpx_;
+  bool mapPresent_;
+  bool busyCursor_;
+  QTime stopWatch_;
+  QPlainTextEdit *textEdit_;
 
   void evaluateJS(const QString &s, bool update = true);
   void evaluateJS(const QStringList &s, bool update = true);

@@ -33,7 +33,7 @@ class Preferences : public QDialog {
  private:
   QList<Format>& formatList_;
   Ui_Preferences ui_;
-  BabelData& bd_;
+  BabelData& babelData_;
 
  private slots:
   void enableAllClicked();

@@ -206,9 +206,9 @@ RtTrkWidget::RtTrkWidget(QWidget *parent, RtTrkFilterData &rfd): FilterWidget(pa
   addCheckEnabler(ui.simplifyCheck,
 		  QList<QWidget*>() << ui.limitToLabel << ui.limitToSpin << ui.pointLabel);
 
-  fopts << new BoolFilterOption(rfd.simplify, ui.simplifyCheck);
-  fopts << new BoolFilterOption(rfd.reverse, ui.reverseCheck);
-  fopts << new IntSpinFilterOption(rfd.limitTo, ui.limitToSpin, 1, 5000);
+  fopts << new BoolFilterOption(rfd.simplify_, ui.simplifyCheck);
+  fopts << new BoolFilterOption(rfd.reverse_, ui.reverseCheck);
+  fopts << new IntSpinFilterOption(rfd.limitTo_, ui.limitToSpin, 1, 5000);
   setWidgetValues();
   checkChecks();
 }
@@ -227,13 +227,13 @@ MiscFltWidget::MiscFltWidget(QWidget *parent, MiscFltFilterData &mfd): FilterWid
   addCheckEnabler(ui.transformCheck,
 		  QList<QWidget*>() << ui.transformCombo << ui.deleteCheck);
 
-  fopts << new BoolFilterOption(mfd.transform, ui.transformCheck);
-  fopts << new BoolFilterOption(mfd.swap, ui.swapCheck);
-  fopts << new BoolFilterOption(mfd.del, ui.deleteCheck);
-  fopts << new BoolFilterOption(mfd.nukeTracks, ui.nukeTracks);
-  fopts << new BoolFilterOption(mfd.nukeRoutes, ui.nukeRoutes);
-  fopts << new BoolFilterOption(mfd.nukeWaypoints, ui.nukeWaypoints);
-  fopts << new ComboFilterOption(mfd.transformVal,  ui.transformCombo);
+  fopts << new BoolFilterOption(mfd.transform_, ui.transformCheck);
+  fopts << new BoolFilterOption(mfd.swap_, ui.swapCheck);
+  fopts << new BoolFilterOption(mfd.del_, ui.deleteCheck);
+  fopts << new BoolFilterOption(mfd.nukeTracks_, ui.nukeTracks);
+  fopts << new BoolFilterOption(mfd.nukeRoutes_, ui.nukeRoutes);
+  fopts << new BoolFilterOption(mfd.nukeWaypoints_, ui.nukeWaypoints);
+  fopts << new ComboFilterOption(mfd.transformVal_,  ui.transformCombo);
 
   setWidgetValues();
   checkChecks();
