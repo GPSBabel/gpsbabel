@@ -72,7 +72,7 @@ fread_bool(gbfile* fd)
 #define fread_single(a) gbfgetflt(a)
 #define fread_double(a) gbfgetdbl(a)
 
-static char*
+QString
 fread_string(gbfile* fd)
 {
   char* val;
@@ -88,20 +88,18 @@ fread_string(gbfile* fd)
     len--;
   }
   val[len] = 0;
-  return val;
+  QString v(val);
+  xfree(val);
+  return v;
 }
 
 static void
 fread_string_discard(gbfile* fd)
 {
-  char* temp = fread_string(fd);
-
-  if (temp != NULL) {
-    xfree(temp);
-  }
+  fread_string(fd);
 }
 
-static char*
+QString
 fread_fixedstring(gbfile* fd, int len)
 {
   char* val = (char*) xmalloc(len+1);
@@ -111,7 +109,10 @@ fread_fixedstring(gbfile* fd, int len)
     len--;
   }
   val[len] = 0;
-  return val;
+  QString v(val);
+  xfree(val);
+
+  return v;
 }
 
 /* Write functions, according to specification. */
@@ -394,20 +395,18 @@ static void
 gtm_rd_init(const char* fname)
 {
   int version;
-  char* name;
   file_in = gbfopen_le(fname, "rb", MYNAME);
   version = fread_integer(file_in);
-  name = fread_fixedstring(file_in, 10);
+  QString name = fread_fixedstring(file_in, 10);
   if (version == -29921) {
     fatal(MYNAME ": Uncompress the file first\n");
   }
-  if (strcmp(name, "TrackMaker") != 0) {
+  if (name != "TrackMaker") {
     fatal(MYNAME ": Invalid file format\n");
   }
   if (version != 211) {
     fatal(MYNAME ": Invalid format version\n");
   }
-  xfree(name);
 
   /* Header */
   fread_discard(file_in, 15);
@@ -515,7 +514,6 @@ gtm_read(void)
   route_head* rte_head = NULL;
   waypoint* wpt;
   int real_tr_count = 0;
-  char* route_name;
   unsigned int icon;
   int i;
 
@@ -603,7 +601,7 @@ gtm_read(void)
     convert_datum(&wpt->latitude, &wpt->longitude);
     wpt->shortname = fread_fixedstring(file_in, 10);
     wpt->description = fread_string(file_in);
-    route_name = fread_string(file_in);
+    QString route_name = fread_string(file_in);
     icon = fread_integer(file_in);
     if (icon < sizeof(icon_descr)/sizeof(char*)) {
       wpt->icon_descr = icon_descr[icon];
@@ -621,8 +619,6 @@ gtm_read(void)
       rte_head = route_head_alloc();
       rte_head->rte_name = route_name;
       route_add_head(rte_head);
-    } else {
-      xfree(route_name);
     }
     route_add_wpt(rte_head, wpt);
   }

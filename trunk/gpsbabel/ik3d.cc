@@ -31,7 +31,7 @@ static arglist_t ikt_args[] = {
 
 #define MYNAME "ikt"
 
-static char* name, *text;
+static QString name, text;
 
 static route_head* track;
 static waypoint* waypt;
@@ -59,22 +59,14 @@ ikt_object_end(void)
   if (track) {
     track->rte_name = name;
     track_add_head(track);
-    name = NULL;
   } else if (waypt) {
     waypt->shortname = name;
     waypt->description = text;
     waypt_add(waypt);
-    name = NULL;
-    text = NULL;
   }
-  if (name) {
-    xfree(name);
-    name = NULL;
-  }
-  if (text) {
-    xfree(text);
-    text = NULL;
-  }
+
+  name = QString();
+  text = QString();
   track = NULL;
   waypt = NULL;
 }
@@ -102,13 +94,13 @@ iktobj_trkpt(xg_string args, const QXmlStreamAttributes* attrv)
 static void
 iktobj_name(xg_string args, const QXmlStreamAttributes* unused)
 {
-  name = xstrdup(args);
+  name = args;
 }
 
 static void
 iktobj_text(xg_string args, const QXmlStreamAttributes* unused)
 {
-  text = xstrdup(args);
+  text = args;
 }
 
 static void
@@ -138,8 +130,8 @@ ikt_rd_init(const char* fname)
 
   track = NULL;
   waypt = NULL;
-  name = NULL;
-  text = NULL;
+  name = QString();
+  text = QString();
 }
 
 static void
@@ -152,13 +144,6 @@ static void
 ikt_rd_deinit(void)
 {
   ikt_object_end();
-  if (name) {
-    xfree(name);
-  }
-  if (text) {
-    xfree(text);
-  }
-
   xml_deinit();
 }
 
