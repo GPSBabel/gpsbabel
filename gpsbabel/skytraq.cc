@@ -643,8 +643,8 @@ state_init(struct read_state* pst)
   route_head* track;
 
   track = route_head_alloc();
-  track->rte_name = xstrdup("SkyTraq tracklog");
-  track->rte_desc = xstrdup("SkyTraq GPS tracklog data");
+  track->rte_name = "SkyTraq tracklog";
+  track->rte_desc = "SkyTraq GPS tracklog data";
   track_add_head(track);
 
   pst->route_head_ = track;
