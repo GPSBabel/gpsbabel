@@ -255,10 +255,10 @@ void goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
 // NEW_STRINGS FIXME(robertlipe): this is broken somehow there should be no need
 // to overallocate like this, but it's needed ot get an1 to not scribble
 // on itself.
-      wpt_tmp->shortname = (char*) xmalloc(7000);
 #if NEW_STRINGS
       wpt_tmp->shortname = QString().sprintf( "\\%5.5x", serial++);
 #else
+      wpt_tmp->shortname = (char*) xmalloc(7);
       sprintf(wpt_tmp->shortname, "\\%5.5x", serial++);
 #endif
       route_add_wpt(routehead[goog_segroute], wpt_tmp);
