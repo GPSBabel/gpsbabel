@@ -21,7 +21,7 @@
  */
 
 #include "defs.h"
-#include "zconf.h"
+#include "zlib/zconf.h"
 #include "gbfile.h"
 
 #include <assert.h>
