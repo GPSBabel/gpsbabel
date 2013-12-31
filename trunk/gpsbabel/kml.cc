@@ -286,50 +286,21 @@ void wpt_e(xg_string args, const QXmlStreamAttributes* unused)
   wpt_tmp_queued = 0;
 }
 
-#if NEW_STRINGS
 void wpt_name(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->shortname = args;
 }
-#else
-void wpt_name(xg_string args, const QXmlStreamAttributes* unused)
-{
-  if (args) {
-    wpt_tmp->shortname = xstrdup(args);
-  }
-}
-#endif
 
-#if NEW_STRINGS
 void wpt_desc(const QString& args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->description += args.trimmed();
 }
-#else
-void wpt_desc(xg_string args, const QXmlStreamAttributes* unused)
-{
-  if (args) {
-    char* tmp, *c;
-
-    tmp = xstrdup((char*)args);
-    c = lrtrim(tmp);
-    if (*c) {
-      wpt_tmp->description = xstrappend(wpt_tmp->description, c);
-    }
-    xfree(tmp);
-  }
-}
-#endif
 
 void wpt_time(xg_string args, const QXmlStreamAttributes* unused)
 {
   wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
-#if NEW_STRINGS
 void wpt_coord(const QString& args, const QXmlStreamAttributes* attrv)
-#else
-void wpt_coord(xg_string args, const QXmlStreamAttributes* attrv)
-#endif
 {
   int n = 0;
   double lat, lon, alt;
@@ -360,21 +331,13 @@ void trk_coord(xg_string args, const QXmlStreamAttributes* attrv)
   int n = 0;
 
   route_head* trk_head = route_head_alloc();
-#if NEW_STRINGS 
+
   QString iargs = args;
   if (!wpt_tmp->shortname.isEmpty()) {
-#else
-  if (wpt_tmp->shortname) {
-#endif
-    trk_head->rte_name  = xstrdup(wpt_tmp->shortname);
+    trk_head->rte_name  = wpt_tmp->shortname;
   }
   track_add_head(trk_head);
-#if NEW_STRINGS
   while ((n = sscanf(CSTR(iargs), "%lf,%lf,%lf%n", &lon, &lat, &alt, &consumed)) > 0) {
-#else
-  while ((n = sscanf(args, "%lf,%lf,%lf%n", &lon, &lat, &alt, &consumed)) > 0) {
-#endif
-
     trkpt = waypt_new();
     trkpt->latitude = lat;
     trkpt->longitude = lon;
@@ -389,11 +352,7 @@ void trk_coord(xg_string args, const QXmlStreamAttributes* attrv)
     }
 
     track_add_wpt(trk_head, trkpt);
-#if NEW_STRINGS
     iargs = iargs.mid(consumed);
-#else
-    args += consumed;
-#endif
   }
 }
 
@@ -672,11 +631,7 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   writer->writeStartElement("description");
 
   hwriter.writeStartElement("table");
-#if NEW_STRINGS 
   if (!header->rte_desc.isEmpty()) {
-#else
-  if (header->rte_desc) {
-#endif
     kml_td(hwriter, "Description", QString(" %1 ").arg(header->rte_desc));
   }
   kml_td(hwriter, "Distance", QString(" %1 %2 ").arg(QString::number(distance, 'f', 1)).arg(distance_units));
@@ -935,11 +890,7 @@ static void kml_output_point(const waypoint* waypointp, kml_point_type pt_type)
   if (export_points) {
     writer->writeStartElement("Placemark");
     if (atoi(opt_labels)) {
-#if NEW_STRINGS 
       writer->writeOptionalTextElement("name", waypointp->shortname);
-#else
-      writer->writeOptionalTextElement("name", QString::fromUtf8(waypointp->shortname));
-#endif
     }
     writer->writeEmptyElement("snippet");
     kml_output_description(waypointp);
@@ -1479,12 +1430,7 @@ static void kml_geocache_pr(const waypoint* waypointp)
   writer->writeEndElement(); // Close Style tag
 
   writer->writeStartElement("ExtendedData");
-#if NEW_STRINGS 
   if (!waypointp->shortname.isEmpty()) {
-#else
-  if (waypointp->shortname) {
-#endif
-
     kml_write_data_element("gc_num", waypointp->shortname);
   }
 
@@ -1577,11 +1523,7 @@ static void kml_waypt_pr(const waypoint* waypointp)
       writer->writeTextElement("description", link.url_);
     }
   } else {
-#if NEW_STRINGS 
     if (waypointp->shortname != waypointp->description) {
-#else
-    if (strcmp(waypointp->shortname, waypointp->description)) {
-#endif
       writer->writeOptionalTextElement("description", waypointp->description);
     }
   }
@@ -2117,28 +2059,17 @@ kml_wr_position(waypoint* wpt)
   }
 
   /* We want our waypoint to have a name, but not our trackpoint */
-#if NEW_STRINGS 
   if (wpt->shortname.isEmpty()) {
-#else
-  if (!wpt->shortname) {
-#endif
     if (wpt->fix == fix_none) {
-      wpt->shortname = xstrdup("ESTIMATED Position");
+      wpt->shortname = "ESTIMATED Position";
     } else {
-      wpt->shortname = xstrdup("Position");
+      wpt->shortname = "Position";
     }
   }
 
   switch (wpt->fix) {
   case fix_none:
-#if NEW_STRINGS 
     wpt->shortname = "ESTIMATED Position";
-#else
-    if (wpt->shortname) {
-      xfree(wpt->shortname);
-    }
-    wpt->shortname = xstrdup("ESTIMATED Position");
-#endif
     break;
   case fix_unknown:
     break;

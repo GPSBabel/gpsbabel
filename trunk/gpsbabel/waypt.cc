@@ -69,18 +69,6 @@ waypt_dupe(const waypoint* wpt)
    */
   waypoint* tmp = new waypoint;
   *tmp = *wpt;
-#if NEW_STRINGS
-#else
-  if (wpt->shortname) {
-    tmp->shortname = xstrdup(wpt->shortname);
-  }
-  if (wpt->description) {
-    tmp->description = xstrdup(wpt->description);
-  }
-  if (wpt->notes) {
-    tmp->notes = xstrdup(wpt->notes);
-  }
-#endif
 
   tmp->icon_descr = wpt->icon_descr;
 
@@ -174,7 +162,7 @@ waypt_add(waypoint* wpt)
    * try to be sure that we have these fields even if just by
    * copying them from elsewhere.
    */
-#if NEW_STRINGS
+
   // Note tests for isNull here as some formats intentionally set "".
   // This is kind of goofy, but it emulates the C string implementation.
   if (wpt->shortname.isNull()) {
@@ -188,22 +176,7 @@ waypt_add(waypoint* wpt)
       wpt->shortname = QString("WPT%1").arg(n);
     }
   }
-#else
-  if (wpt->shortname == NULL) {
-    if (wpt->description) {
-      wpt->shortname = xstrdup(wpt->description);
-    } else if (wpt->notes) {
-      wpt->shortname = xstrdup(wpt->notes);
-    } else {
-      /* Last ditch:  make up a name */
-      char *sn;
-      xasprintf(&sn, "WPT%03d", waypt_ct);
-      wpt->shortname = sn;
-    }
-  }
-#endif
 
-#if NEW_STRINGS
   if (wpt->description.isEmpty()) {
     if (!wpt->notes.isNull()) {
       wpt->description = wpt->notes;
@@ -213,20 +186,6 @@ waypt_add(waypoint* wpt)
       }
     }
   }
-#else
-  if (wpt->description == NULL || strlen(wpt->description) == 0) {
-    if (wpt->description) {
-      xfree(wpt->description);
-    }
-    if (wpt->notes != NULL) {
-      wpt->description = xstrdup(wpt->notes);
-    } else  {
-      if (wpt->shortname != NULL) {
-        wpt->description = xstrdup(wpt->shortname);
-      }
-    }
-  }
-#endif
 
   update_common_traits(wpt);
 
@@ -442,18 +401,6 @@ waypt_free(waypoint* wpt)
   /*
    * This and waypt_dupe should be closely synced.
    */
-#if NEW_STRINGS
-#else
-  if (wpt->shortname) {
-    xfree(wpt->shortname);
-  }
-  if (wpt->description) {
-    xfree(wpt->description);
-  }
-  if (wpt->notes) {
-    xfree(wpt->notes);
-  }
-#endif
 
   if (wpt->gc_data != &empty_gc_data) {
     geocache_data* gc_data = (geocache_data*)wpt->gc_data;

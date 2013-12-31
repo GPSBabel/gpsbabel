@@ -214,11 +214,11 @@ finalize_tracks(void)
         if (trackno > 1) {
           xasprintf(&track->rte_name, "%s (%d)", CSTR(rte_name), trackno);
         } else {
-          track->rte_name	= xstrdup(rte_name);
+          track->rte_name = rte_name;
         }
       }
       if (rte_desc != NULL) {
-        track->rte_desc = xstrdup(rte_desc);
+        track->rte_desc = rte_desc;
       }
     }
     track_add_wpt(track, wpt);

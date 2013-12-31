@@ -79,15 +79,15 @@ xol_shape(xg_string args, const QXmlStreamAttributes* attrv)
 
   if (attrv->hasAttribute("name")) {
     if (wpt) {
-      wpt->shortname = xstrdup(attrv->value("name").toString().toUtf8().constData());
+      wpt->shortname = attrv->value("name").toString();
     } else if (trk) {
-      trk->rte_name = xstrdup(attrv->value("name").toString().toUtf8().constData());
+      trk->rte_name = attrv->value("name").toString();
     }
   }
 
   if (wpt) {
     if (attrv->hasAttribute("comment")) {
-      wpt->notes = xstrdup(attrv->value("comment").toString().toUtf8().constData());
+      wpt->notes = attrv->value("comment").toString();
     }
 
     if (attrv->hasAttribute("alt")) {

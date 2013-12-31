@@ -532,24 +532,11 @@ osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
   str = osm_strip_html(value);
 
   if (strcmp(key, "name") == 0) {
-#if NEW_STRINGS
     if (wpt->shortname.isEmpty()) {
       wpt->shortname = str;
     }
-#else
-    if (! wpt->shortname) {
-      wpt->shortname = xstrdup(str);
-    }
-#endif
   } else if (strcmp(key, "name:en") == 0) {
-#if NEW_STRINGS
     wpt->shortname = str;
-#else
-    if (wpt->shortname) {
-      xfree(wpt->shortname);
-    }
-    wpt->shortname = xstrdup(str);
-#endif
   } else if ((ikey = osm_feature_ikey(key)) >= 0) {
     char* id = osm_feature_symbol(ikey, value);
     wpt->icon_descr = id;
@@ -557,23 +544,12 @@ osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
       xfree(id);
     }
   } else if (strcmp(key, "note") == 0) {
-#if NEW_STRINGS
     if (wpt->notes.isEmpty()) {
       wpt->notes = str;
     } else {
       wpt->notes += "; ";
       wpt->notes += str;
     }
-#else
-    if (wpt->notes) {
-      char* tmp;
-      xasprintf(&tmp, "%s; %s", CSTRc(wpt->notes), str);
-      xfree(wpt->notes);
-      wpt->notes = tmp;
-    } else {
-      wpt->notes = xstrdup(str);
-    }
-#endif
   } else if (strcmp(key, "gps:hdop") == 0) {
     wpt->hdop = atof(str);
   } else if (strcmp(key, "gps:vdop") == 0) {
@@ -648,24 +624,11 @@ osm_way_tag(xg_string args, const QXmlStreamAttributes* attrv)
   str = osm_strip_html(value);
 
   if (strcmp(key, "name") == 0) {
-#if NEW_STRINGS
     if (rte->rte_name.isEmpty()) {
       rte->rte_name = str;
     }
-#else
-    if (! rte->rte_name) {
-      rte->rte_name = xstrdup(str);
-    }
-#endif
   } else if (strcmp(key, "name:en") == 0) {
-#if NEW_STRINGS
     rte->rte_name = str;
-#else
-    if (rte->rte_name) {
-      xfree(rte->rte_name);
-    }
-    rte->rte_name = xstrdup(str);
-#endif
   }
 
   xfree(str);
