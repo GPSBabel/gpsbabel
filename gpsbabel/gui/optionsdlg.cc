@@ -134,10 +134,8 @@ OptionsDlg::OptionsDlg(QWidget* parent,  const QString& fmtName, QList<FormatOpt
     break;
 
     case FormatOption::OPTbool:
-      // This is quirky.  It means that GPSBabel's bool options that default
-      // to true get turned on here, even if user turned them off on last
-      // exit.
-      checkBox->setChecked(getOptionValue(options_,k).toBool());
+      // If it was selected before, select it again.
+      checkBox->setChecked(options_[k].getSelected());
       w = 0;
       break;
 
