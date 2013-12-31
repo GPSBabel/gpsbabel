@@ -236,8 +236,8 @@ v900_read(void)
   v900_log("is_advance_mode=%d\n",is_advanced_mode);
 
   track = route_head_alloc();
-  track->rte_name = xstrdup("V900 tracklog");
-  track->rte_desc = xstrdup("V900 GPS tracklog data");
+  track->rte_name = "V900 tracklog";
+  track->rte_desc = "V900 GPS tracklog data";
   track_add_head(track);
 
   while (1) {
@@ -369,9 +369,9 @@ v900_read(void)
         assert(vox[0] != '\0');
         strcpy(vox_file_name,vox);
         strcat(vox_file_name,".WAV");
-        wpt2->shortname = xstrdup(vox_file_name);
-        wpt2->description = xstrdup(vox_file_name);
-        waypt_add_url(wpt2, xstrdup(vox_file_name), xstrdup(vox_file_name));
+        wpt2->shortname = vox_file_name;
+        wpt2->description = vox_file_name;
+        waypt_add_url(wpt2, vox_file_name, vox_file_name);
       }
       waypt_add(wpt2);
     }
