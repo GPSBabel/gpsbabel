@@ -45,7 +45,8 @@ SHAPE=shapelib/shpopen.c shapelib/dbfopen.c
 
 ZLIB=zlib/adler32.c zlib/compress.c zlib/crc32.c zlib/deflate.c zlib/inffast.c \
         zlib/inflate.c zlib/infback.c zlib/inftrees.c zlib/trees.c \
-        zlib/uncompr.c zlib/gzio.c zlib/zutil.c
+	zlib/uncompr.o zlib/gzlib.o zlib/gzclose.o zlib/gzread.o \
+        zlib/gzwrite.o zlib/zutil.o
 
 JEEPS += jeeps/gpsapp.cc jeeps/gpscom.cc \
          jeeps/gpsmath.cc jeeps/gpsmem.cc  \
