@@ -21,6 +21,7 @@
  */
 
 #include "defs.h"
+#include "zconf.h"
 #include "gbfile.h"
 
 #include <assert.h>
@@ -85,9 +86,9 @@ gzapi_open(gbfile* self, const char* mode)
       fd = stdout;
     }
     SET_BINARY_MODE(fd);
-    self->handle.gz = (void**)gzdopen(fileno(fd), openmode);
+    self->handle.gz = gzdopen(fileno(fd), openmode);
   } else {
-    self->handle.gz = (void**)gzopen(self->name, openmode);
+    self->handle.gz = gzopen(self->name, openmode);
   }
 
   if (self->handle.gz == NULL) {

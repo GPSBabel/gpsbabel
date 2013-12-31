@@ -55,7 +55,7 @@ typedef struct gbfile_s {
     FILE* std;
     unsigned char* mem;
 #if !ZLIB_INHIBITED
-    gzFile* gz;
+    gzFile gz;
 #endif
   } handle;
   char*   name;
