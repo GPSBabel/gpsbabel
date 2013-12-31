@@ -99,7 +99,7 @@ static int header_ct[unknown_header + 1];
 /* macros */
 
 #define IS_VALID_ALT(a) (((a) != unknown_alt) && ((a) < GARMIN_UNKNOWN_ALT))
-#define DUPSTR(a) (((a) != NULL) && ((a)[0] != 0)) ? xstrdup((a)) : NULL
+#define DUPSTR(a) (((a) != NULL) && ((a)[0] != 0)) ? ((a)) : NULL
 
 static char* opt_datum = NULL;
 static char* opt_dist = NULL;
