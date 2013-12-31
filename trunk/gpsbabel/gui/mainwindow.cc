@@ -27,6 +27,7 @@
 #include <QSettings>
 #include <QTemporaryFile>
 #include <QTextStream>
+// #include <QDebug>
 
 #include "mainwindow.h"
 #include "../gbversion.h"
@@ -112,11 +113,12 @@ static QString MakeOptions(const QList<FormatOption>& options)
   QString str;
   for (int i = 0; i< options.size(); i++) {
     FormatOption option = options[i];
+    QVariant default_value = option.getDefaultValue();
     if (option.getSelected()) {
       // For OPTbool, 'selected' is the key, not value.
      if (option.getType() == FormatOption::OPTbool) {
        // Only write "foo=1" if that's not already the default.
-       if (option.getDefaultValue() != "1") {
+       if (default_value != "1") {
           str += "," + option.getName() + "=1";
         }
       } else {
@@ -127,8 +129,8 @@ static QString MakeOptions(const QList<FormatOption>& options)
       // turn it off here, but only if the default isn't zero
       // or given.
       if (option.getType() == FormatOption::OPTbool &&
-          option.getDefaultValue() != "0" &&
-          option.getDefaultValue() != "") {
+          default_value != "0" &&
+          default_value != "") {
             str += "," + option.getName() + "=0";
         }
       }
