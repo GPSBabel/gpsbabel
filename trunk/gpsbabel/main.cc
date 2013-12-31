@@ -320,10 +320,10 @@ main(int argc, char* argv[])
     }
 
     switch (c) {
-    case 'c':
-      optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
-      cet_convert_init(optarg, 1);
-      break;
+    //case 'c':
+    //  optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
+    //  cet_convert_init(optarg, 1);
+    //  break;
     case 'i':
       optarg = argv[argn][2]
                ? argv[argn]+2 : argv[++argn];
