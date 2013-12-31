@@ -393,7 +393,7 @@ gpgll_parse(char* ibuf)
     track_add_head(trk_head);
   }
 
-  sscanf(ibuf,"$GPGLL,%lf,%c,%lf,%c,%lf,%c,",
+  sscanf(ibuf,"$%*2cGLL,%lf,%c,%lf,%c,%lf,%c,",
          &latdeg,&latdir,
          &lngdeg,&lngdir,
          &hmsd,&valid);
@@ -449,7 +449,7 @@ gpgga_parse(char* ibuf)
     track_add_head(trk_head);
   }
 
-  sscanf(ibuf,"$GPGGA,%lf,%lf,%c,%lf,%c,%d,%d,%lf,%lf,%c",
+  sscanf(ibuf,"$%*2cGGA,%lf,%lf,%c,%lf,%c,%d,%d,%lf,%lf,%c",
          &hms, &latdeg,&latdir,
          &lngdeg,&lngdir,
          &fix,&nsats,&hdop,&alt,&altunits);
@@ -535,7 +535,7 @@ gprmc_parse(char* ibuf)
    * Read everything except the dmy, in case lngdeg
    * and lngdir are missing.
    */
-  sscanf(ibuf,"$GPRMC,%lf,%c,%lf,%c,%lf,%c,%lf,%lf",
+  sscanf(ibuf,"$%*2cRMC,%lf,%c,%lf,%c,%lf,%c,%lf,%lf",
          &hms, &fix, &latdeg, &latdir,
          &lngdeg, &lngdir,
          &speed, &course);
@@ -630,7 +630,7 @@ gpwpl_parse(char* ibuf)
   char latdir, lngdir;
   char sname[99];
 
-  sscanf(ibuf,"$GPWPL,%lf,%c,%lf,%c,%[^*]",
+  sscanf(ibuf,"$%*2cWPL,%lf,%c,%lf,%c,%[^*]",
          &latdeg,&latdir,
          &lngdeg,&lngdir,
          sname);
@@ -658,7 +658,7 @@ gpzda_parse(char* ibuf)
   double hms;
   int dd, mm, yy, lclhrs, lclmins;
 
-  sscanf(ibuf,"$GPZDA,%lf,%d,%d,%d,%d,%d",
+  sscanf(ibuf,"$%*2cZDA,%lf,%d,%d,%d,%d,%d",
          &hms, &dd, &mm, &yy, &lclhrs, &lclmins);
   tm.tm_sec  = (int) hms % 100;
   tm.tm_min  = (((int) hms - tm.tm_sec) / 100) % 100;
@@ -680,7 +680,7 @@ gpgsa_parse(char* ibuf)
 
   memset(prn,0xff,sizeof(prn));
 
-  scn = sscanf(ibuf,"$GPGSA,%c,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+  scn = sscanf(ibuf,"$%*2cGSA,%c,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
                &fixauto, &fix,
                &prn[0],&prn[1],&prn[2],&prn[3],&prn[4],&prn[5],
                &prn[6],&prn[7],&prn[8],&prn[9],&prn[10],&prn[11]);
@@ -737,7 +737,7 @@ gpvtg_parse(char* ibuf)
   double	speed_k;
   char	ck;
 
-  sscanf(ibuf,"$GPVTG,%f,%c,%f,%c,%lf,%c,%lf,%c",
+  sscanf(ibuf,"$%*2cVTG,%f,%c,%f,%c,%lf,%c,%lf,%c",
          &course,&ct,&magcourse,&cm,&speed_n,&cn,&speed_k,&ck);
 
   if (curr_waypt) {
@@ -907,6 +907,20 @@ nmea_fix_timestamps(route_head* track)
   }
 }
 
+static int
+notalkerid_strmatch(const char * s1, const char *sentenceFormatterMnemonicCode)
+{
+/*
+ * compare leading start of parametric sentence character ('$'), sentence address field, and trailing comma
+ * to the desired sentence formatter mneumonic code (the 3rd-5th characters of the sentence address field).
+ * The talker identifier mneumonic (the 1st-2nd characters of the sentence address field)
+ * is likely "GP" for Global Posilioning System (GPS)
+ * but other talkers like "IN" for Integrated Navigation can emit relevant sentences,
+ * so we ignore the talker identifier mneumonic.
+ */
+return strncmp(s1,"$",1) || strncmp(s1+3,sentenceFormatterMnemonicCode,3) || strncmp(s1+6,",",1);
+}
+
 void
 nmea_parse_one_line(char* ibuf)
 {
@@ -963,12 +977,12 @@ nmea_parse_one_line(char* ibuf)
     tbuf = gstrsub(tbuf, ",,", ",0,");
   }
 
-  if (0 == strncmp(tbuf, "$GPWPL,", 7)) {
+  if (0 == notalkerid_strmatch(tbuf, "WPL")) {
     gpwpl_parse(tbuf);
-  } else if (opt_gpgga && (0 == strncmp(tbuf, "$GPGGA,", 7))) {
+  } else if (opt_gpgga && (0 == notalkerid_strmatch(tbuf, "GGA"))) {
     posn_type = gpgga;
     gpgga_parse(tbuf);
-  } else if (opt_gprmc && (0 == strncmp(tbuf, "$GPRMC,", 7))) {
+  } else if (opt_gprmc && (0 == notalkerid_strmatch(tbuf, "RMC"))) {
     if (posn_type != gpgga) {
       posn_type = gprmc;
     }
@@ -977,17 +991,17 @@ nmea_parse_one_line(char* ibuf)
      * it contains the full date.
      */
     gprmc_parse(tbuf);
-  } else if (0 == strncmp(tbuf, "$GPGLL,", 7)) {
+  } else if (0 == notalkerid_strmatch(tbuf, "GLL")) {
     if ((posn_type != gpgga) && (posn_type != gprmc)) {
       gpgll_parse(tbuf);
     }
-  } else if (0 == strncmp(tbuf, "$GPZDA,",7)) {
+  } else if (0 == notalkerid_strmatch(tbuf, "ZDA")) {
     gpzda_parse(tbuf);
   } else if (0 == strncmp(tbuf, "$PCMPT,", 7)) {
     pcmpt_parse(tbuf);
-  } else if (opt_gpvtg && (0 == strncmp(tbuf, "$GPVTG,",7))) {
+  } else if (opt_gpvtg && (0 == notalkerid_strmatch(tbuf, "VTG"))) {
     gpvtg_parse(tbuf); /* speed and course */
-  } else if (opt_gpgsa && (0 == strncmp(tbuf, "$GPGSA,",7))) {
+  } else if (opt_gpgsa && (0 == notalkerid_strmatch(tbuf, "GSA"))) {
     gpgsa_parse(tbuf); /* GPS fix */
   } else if (0 == strncmp(tbuf, "$ADPMB,5,0", 10)) {
     amod_waypoint = 1;
