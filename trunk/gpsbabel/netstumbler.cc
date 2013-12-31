@@ -296,7 +296,6 @@ fix_netstumbler_dupes(void)
   int i, ct = waypt_count(), serial = 0;
   htable_t* htable, *bh;
   unsigned long last_crc;
-  char ssid[32 + 5 + 1];
 
   htable = (htable_t*) xmalloc(ct * sizeof *htable);
   bh = htable;
@@ -330,6 +329,7 @@ fix_netstumbler_dupes(void)
 #if NEW_STRINGS
       bh->wpt->shortname += QString("/%1").arg(++serial);
 #else
+      char ssid[32 + 5 + 1];
       snprintf(ssid, sizeof ssid, "%s/%d", CSTRc(bh->wpt->shortname), ++serial);
       xfree(bh->wpt->shortname);
       bh->wpt->shortname = xstrdup(ssid);

@@ -1828,7 +1828,10 @@ write_waypoint_cb(const waypoint* refpt)
     name = mkshort(short_h, name);
 #if NEW_STRINGS
     // This is sooooo tacky.
-    wpt->extra_data = static_cast<void*>(&name);
+    // Actually, it's not just tacky.  I can't figure out what this code
+    // was trying to do, but it's wrong and it breaks things.  
+    //   robertl 2013-12-30.
+    // wpt->extra_data = static_cast<void*>(&name);
 #else
     wpt->extra_data = (void*)name;
 #endif
