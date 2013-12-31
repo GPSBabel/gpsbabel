@@ -680,7 +680,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
       res->AddUrlLink(l);
     }
     if (wpt_class != 0) {
-      res->description = xstrdup(l.url_.toUtf8().data());
+      res->description = l.url_;
     }
   } else { // if (gdb_ver >= GDB_VER_3)
     int i, url_ct;

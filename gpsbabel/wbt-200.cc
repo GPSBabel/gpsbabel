@@ -551,7 +551,7 @@ static waypoint* make_point(double lat, double lon, double alt, time_t tim, cons
   wpt->longitude      = lon;
   wpt->altitude       = alt;
   wpt->SetCreationTime(tim);
-  wpt->shortname      = xstrdup(wp_name);
+  wpt->shortname      = wp_name;
 
   return wpt;
 }

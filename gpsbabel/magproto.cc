@@ -1269,8 +1269,8 @@ mag_wptparse(char* trkmsg)
   waypt->longitude = ddmm2degrees(lngdeg);
 
   waypt->altitude = alt;
-  waypt->shortname = xstrdup(shortname);
-  waypt->description = xstrdup(descr);
+  waypt->shortname = shortname;
+  waypt->description = descr;
   waypt->icon_descr = mag_find_descr_from_token(icon_token);
 
   return waypt;

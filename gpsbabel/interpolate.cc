@@ -77,8 +77,8 @@ interpfilt_process(void)
     route_head* rte_old = (route_head*)elem;
 
     rte_new = route_head_alloc();
-    rte_new->rte_name = xstrdup(rte_old->rte_name);
-    rte_new->rte_desc = xstrdup(rte_old->rte_desc);
+    rte_new->rte_name = rte_old->rte_name;
+    rte_new->rte_desc = rte_old->rte_desc;
     rte_new->fs = fs_chain_copy(rte_old->fs);
     rte_new->rte_num = rte_old->rte_num;
     if (opt_route) {

@@ -43,7 +43,7 @@ rd_init(const char* fname)
   trk_head = route_head_alloc();
   track_add_head(trk_head);
 
-  trk_head->rte_name = xstrdup(lrtrim(h));
+  trk_head->rte_name = lrtrim(h);
 }
 
 static void
