@@ -55,16 +55,16 @@ private slots:
 class OptionsDlg: public QDialog {
 Q_OBJECT
  public:
-  OptionsDlg(QWidget *parent, const QString &fmtName, QList<FormatOption> *options,
-	     const QString &html);
+  OptionsDlg(QWidget *parent, const QString &fmtName_, QList<FormatOption> *options_,
+       const QString &html_);
   
  private:
-  QString fmtName;
-  QList<FormatOption> &options;
-  QDialogButtonBox *buttonBox;
-  QList<QCheckBox*> checkBoxes;
-  QList<QWidget*> fields;
-  QString html;
+  QString fmtName_;
+  QList<FormatOption> &options_;
+  QDialogButtonBox *buttonBox_;
+  QList<QCheckBox*> checkBoxes_;
+  QList<QWidget*> fields_;
+  QString html_;
 
  private slots:
   void acceptClicked();

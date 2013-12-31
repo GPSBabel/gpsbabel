@@ -23,7 +23,7 @@
 #include "format.h"
 #include "mainwindow.h"
 
-QString Format::htmlBase = QString();
+QString Format::htmlBase_ = QString();
 
 static void saveOptions(QSettings &settings, const QString &prefix, const QList<FormatOption> &options) {
   for (int i=0; i<options.size(); i++) {
@@ -49,30 +49,30 @@ static void restoreOptions(QSettings &settings, const QString&prefix, QList<Form
 
 void Format::saveSettings(QSettings &settings)
 {
-  saveOptions(settings, name+".input", inputOptions);
-  saveOptions(settings, name+".output", outputOptions);
-  settings.setValue(name + ".readcount", getReadUseCount());
-  settings.setValue(name + ".writecount", getWriteUseCount());
-  settings.setValue(name+".hidden", isHidden());
+  saveOptions(settings, name_+".input", inputOptions_);
+  saveOptions(settings, name_+".output", outputOptions_);
+  settings.setValue(name_ + ".readcount", getReadUseCount());
+  settings.setValue(name_ + ".writecount", getWriteUseCount());
+  settings.setValue(name_+".hidden", isHidden());
 }
 
 void Format::restoreSettings(QSettings &settings)
 {
-  restoreOptions(settings, name + ".input", inputOptions);
-  restoreOptions(settings, name + ".output", outputOptions);
-  bumpReadUseCount(settings.value(name + ".readcount").toInt());
-  bumpWriteUseCount(settings.value(name + ".writecount").toInt());
-  hidden_ = settings.value(name + ".hidden", false).toBool();
+  restoreOptions(settings, name_ + ".input", inputOptions_);
+  restoreOptions(settings, name_ + ".output", outputOptions_);
+  bumpReadUseCount(settings.value(name_ + ".readcount").toInt());
+  bumpWriteUseCount(settings.value(name_ + ".writecount").toInt());
+  hidden_ = settings.value(name_ + ".hidden", false).toBool();
 }
 
 void Format::setToDefault()
 {
-  for (int i=0; i<inputOptions.size(); i++) {
-    inputOptions[i].setSelected(false);
-    inputOptions[i].setValue(QVariant());
+  for (int i=0; i<inputOptions_.size(); i++) {
+    inputOptions_[i].setSelected(false);
+    inputOptions_[i].setValue(QVariant());
   }
-  for (int i=0; i<outputOptions.size(); i++) {
-    outputOptions[i].setSelected(false);
-    outputOptions[i].setValue(QVariant());
+  for (int i=0; i<outputOptions_.size(); i++) {
+    outputOptions_[i].setSelected(false);
+    outputOptions_[i].setValue(QVariant());
   }
 }

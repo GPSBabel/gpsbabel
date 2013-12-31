@@ -43,13 +43,13 @@ class ProcessWaitDialog: public QDialog
   
  public:
   //
-  ProcessWaitDialog(QWidget *parent, QProcess *process);
+  ProcessWaitDialog(QWidget *parent, QProcess *process_);
   ~ProcessWaitDialog();
   
   bool getExitedNormally();
   int getExitCode();
   QString getErrorString();
-  QString getOutputString() const {return outputString;};
+  QString getOutputString() const {return outputString_;};
 
  protected:
   void closeEvent (QCloseEvent*event);
@@ -66,19 +66,19 @@ class ProcessWaitDialog: public QDialog
   void stopClickedX();
 
  private:
-  vector <int> progressVals;
-  int          progressIndex;
-  int          stopCount;
-  string       bufferedOut;
-  QProcess::ExitStatus estatus;
-  int                  ecode;
-  QProcess     *process;
-  QProgressBar *progressBar;
-  QPlainTextEdit *textEdit;
-  QDialogButtonBox *buttonBox;
-  QTimer           *timer;
-  QString          errorString;
-  QString          outputString;
+  vector <int> progressVals_;
+  int          progressIndex_;
+  int          stopCount_;
+  string       bufferedOut_;
+  QProcess::ExitStatus exitStatus_;
+  int                  ecode_;
+  QProcess     *process_;
+  QProgressBar *progressBar_;
+  QPlainTextEdit *textEdit_;
+  QDialogButtonBox *buttonBox_;
+  QTimer           *timer_;
+  QString          errorString_;
+  QString          outputString_;
 };
 
 #endif

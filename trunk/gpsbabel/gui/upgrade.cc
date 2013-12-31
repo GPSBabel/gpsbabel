@@ -55,24 +55,24 @@ static const bool testing = false;
 UpgradeCheck::UpgradeCheck(QWidget *parent, QList<Format> &formatList,
                            BabelData& bd) :
   QObject(parent),
-  manager(0), 
-  replyId(0),
-  upgradeUrl(QUrl("http://www.gpsbabel.org/upgrade_check.html")),
+  manager_(0), 
+  replyId_(0),
+  upgradeUrl_(QUrl("http://www.gpsbabel.org/upgrade_check.html")),
   formatList_(formatList), 
   updateStatus_(updateUnknown),
-  bd_(bd)
+  babelData_(bd)
 {
 }
 
 UpgradeCheck::~UpgradeCheck()
 {
-  if (replyId) {
-    replyId->abort();
-    replyId = 0;
+  if (replyId_) {
+    replyId_->abort();
+    replyId_ = 0;
   }
-  if (manager) {
-    delete manager;
-    manager = 0;
+  if (manager_) {
+    delete manager_;
+    manager_ = 0;
   }
 }
 
@@ -140,8 +140,8 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
                const QDateTime &lastCheckTime,
                bool allowBeta)
 {
-  currentVersion = currentVersionIn;
-  currentVersion.remove("GPSBabel Version ");
+  currentVersion_ = currentVersionIn;
+  currentVersion_.remove("GPSBabel Version ");
 
   QDateTime soonestCheckTime = lastCheckTime.addDays(1);
   if (!testing && QDateTime::currentDateTime() < soonestCheckTime) {
@@ -149,20 +149,20 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
     return UpgradeCheck::updateUnknown;
   }
 
-  manager = new QNetworkAccessManager;
+  manager_ = new QNetworkAccessManager;
 
-  connect(manager, SIGNAL(finished(QNetworkReply*)),
+  connect(manager_, SIGNAL(finished(QNetworkReply*)),
           this, SLOT(httpRequestFinished(QNetworkReply*)));
 
-  QNetworkRequest request = QNetworkRequest(upgradeUrl);
+  QNetworkRequest request = QNetworkRequest(upgradeUrl_);
   request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
   request.setRawHeader("Accept-Encoding","identity");
 
   QLocale locale;
 
-  QString args = "current_version=" + currentVersion;
+  QString args = "current_version=" + currentVersion_;
   args += "&current_gui_version=" VERSION;
-  args += "&installation=" + bd_.installationUuid;
+  args += "&installation=" + babelData_.installationUuid_;
   args += "&os=" + getOsName();
 #if HAVE_UNAME
   struct utsname utsname;
@@ -175,12 +175,12 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
   args += QString("&beta_ok=%1").arg(allowBeta); 
   args += "&lang=" + QLocale::languageToString(locale.language());
   args += "&last_checkin=" + lastCheckTime.toString(Qt::ISODate);
-  args += QString("&ugcb=%1").arg(bd_.upgradeCallbacks); 
-  args += QString("&ugdec=%1").arg(bd_.upgradeDeclines); 
-  args += QString("&ugacc=%1").arg(bd_.upgradeAccept); 
-  args += QString("&ugoff=%1").arg(bd_.upgradeOffers); 
-  args += QString("&ugerr=%1").arg(bd_.upgradeErrors); 
-  args += QString("&rc=%1").arg(bd_.runCount); 
+  args += QString("&ugcb=%1").arg(babelData_.upgradeCallbacks_); 
+  args += QString("&ugdec=%1").arg(babelData_.upgradeDeclines_); 
+  args += QString("&ugacc=%1").arg(babelData_.upgradeAccept_); 
+  args += QString("&ugoff=%1").arg(babelData_.upgradeOffers_); 
+  args += QString("&ugerr=%1").arg(babelData_.upgradeErrors_); 
+  args += QString("&rc=%1").arg(babelData_.runCount_); 
 
   int j = 0;
 
@@ -193,21 +193,21 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
     if (wc)
       args += QString("&uc%1=wr/%2/%3").arg(j++).arg(formatName).arg(wc);
   }
-  if (j && bd_.reportStatistics)
+  if (j && babelData_.reportStatistics_)
     args += QString("&uc=%1").arg(j);
 
   if (false && testing) {
     qDebug() << "Posting " << args;
   }
 
-  replyId = manager->post(request, args.toUtf8());
+  replyId_ = manager_->post(request, args.toUtf8());
   
 
   return UpgradeCheck::updateUnknown;
 }
 
 QDateTime UpgradeCheck::getUpgradeWarningTime() {
-  return upgradeWarningTime;
+  return upgradeWarningTime_;
 }
 
 UpgradeCheck::updateStatus UpgradeCheck::getStatus() {
@@ -218,17 +218,17 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
 {
 
   if (reply == 0 ) {
-    bd_.upgradeErrors++;
+    babelData_.upgradeErrors_++;
     return;
-  } else if (reply != replyId) {
+  } else if (reply != replyId_) {
     QMessageBox::information(0, tr("HTTP"),
            tr("Unexpected reply."));
   } else if (reply->error() != QNetworkReply::NoError ) {
-    bd_.upgradeErrors++;
+    babelData_.upgradeErrors_++;
     QMessageBox::information(0, tr("HTTP"),
            tr("Download failed: %1.")
            .arg(reply->errorString()));
-    replyId = 0;
+    replyId_ = 0;
     reply->deleteLater();
     return;
   }
@@ -246,8 +246,8 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
       }
       // Change the url for the next update check.
       // TOODO: kick off another update check.  
-      upgradeUrl = redirectUrl;
-      replyId = 0;
+      upgradeUrl_ = redirectUrl;
+      replyId_ = 0;
       reply->deleteLater();
       return;
     }
@@ -263,12 +263,12 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
            tr("Download failed: %1: %2.")
            .arg(statusCode.toInt())
            .arg(reason.toString()));
-    replyId = 0;
+    replyId_ = 0;
     reply->deleteLater();
     return;
   }
 
-  bd_.upgradeCallbacks++;
+  babelData_.upgradeCallbacks_++;
   QString oresponse(reply->readAll());
 
   QDomDocument document;
@@ -280,8 +280,8 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
            tr("Invalid return data at line %1: %2.")
            .arg(line)
            .arg( error_text));
-    bd_.upgradeErrors++;
-    replyId = 0;
+    babelData_.upgradeErrors_++;
+    replyId_ = 0;
     reply->deleteLater();
     return;
   }
@@ -290,7 +290,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
   QString upgradeText;
 
   if (testing)
-    currentVersion =  "1.3.1"; // for testing
+    currentVersion_ =  "1.3.1"; // for testing
 
   bool allowBeta = true;  // TODO: come from prefs or current version...
 
@@ -320,13 +320,13 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
     upgradeText = upgrade.firstChildElement("overview").text();
 
     // String compare, not a numeric one.  Server will return "best first".
-    if((updateVersion > currentVersion) && updateCandidate) {
-      bd_.upgradeOffers++;
+    if((updateVersion > currentVersion_) && updateCandidate) {
+      babelData_.upgradeOffers_++;
       updateStatus_ = updateNeeded;
       response = tr("A new version of GPSBabel is available.<br />"
         "Your version is %1 <br />"
         "The latest version is %2")
-          .arg(currentVersion)
+          .arg(currentVersion_)
           .arg(updateVersion);
       break;
     }
@@ -347,18 +347,18 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
       case QMessageBox::Yes:
         // downloadUrl.addQueryItem("os", getOsName());
         QDesktopServices::openUrl(downloadUrl);
-        bd_.upgradeAccept++;
+        babelData_.upgradeAccept_++;
         break;
       default: ;
-        bd_.upgradeDeclines++;
+        babelData_.upgradeDeclines_++;
     }
   }
 
-  upgradeWarningTime = QDateTime(QDateTime::currentDateTime());
+  upgradeWarningTime_ = QDateTime(QDateTime::currentDateTime());
 
   for (int i = 0; i < formatList_.size(); i++) {
      formatList_[i].zeroUseCounts();
   }
-  replyId = 0;
+  replyId_ = 0;
   reply->deleteLater();
 }

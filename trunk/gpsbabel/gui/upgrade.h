@@ -49,17 +49,17 @@ public:
 protected:
 
 private:
-  QString currentVersion;
-  int upgradeCheckMethod;
-  QNetworkAccessManager* manager;
-  QNetworkReply* replyId;
-  QUrl upgradeUrl;
-  bool httpRequestAborted;
-  QString latestVersion;
-  QDateTime upgradeWarningTime;  // invalid time if this object never issued.
+  QString currentVersion_;
+  int upgradeCheckMethod_;
+  QNetworkAccessManager* manager_;
+  QNetworkReply* replyId_;
+  QUrl upgradeUrl_;
+  bool httpRequestAborted_;
+  QString latestVersion_;
+  QDateTime upgradeWarningTime_;  // invalid time if this object never issued.
   QList<Format> &formatList_;
   updateStatus updateStatus_;
-  BabelData& bd_;
+  BabelData& babelData_;
 
   QString getOsName(void);
   QString getOsVersion(void);

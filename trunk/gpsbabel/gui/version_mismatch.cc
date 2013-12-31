@@ -24,11 +24,11 @@
 VersionMismatch::VersionMismatch(QWidget *parent, const QString &ver1,
                                  const QString &ver2): QDialog(parent)
 {
-  ui.setupUi(this);
+  ui_.setupUi(this);
 
-  ui.ClVersion->setText(ver1);
-  ui.ClVersion->adjustSize();
+  ui_.ClVersion->setText(ver1);
+  ui_.ClVersion->adjustSize();
 
-  ui.GuiVersion->setText(ver2);
-  ui.GuiVersion->adjustSize();
+  ui_.GuiVersion->setText(ver2);
+  ui_.GuiVersion->adjustSize();
 }

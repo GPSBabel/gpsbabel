@@ -260,39 +260,39 @@ class GpxWaypoint: public GpxItem
 {
  public:
  GpxWaypoint(): GpxItem(), 
-    location(LatLng(0, 0)), 
-    elevation (-1.0E-100),
-    name(QString()),
-    comment(QString()),
-    description(QString()),
-    symbol(QString())
+    location_(LatLng(0, 0)),
+    elevation_ (-1.0E-100),
+    name_(QString()),
+    comment_(QString()),
+    description_(QString()),
+    symbol_(QString())
       {};
   
-  void setLocation(const LatLng& pt) { location = pt; };
-  LatLng getLocation() const { return location; };
+  void setLocation(const LatLng& pt) { location_ = pt; };
+  LatLng getLocation() const { return location_; };
 
-  void setElevation(double e) { elevation = e; };
-  double getElevation () const { return elevation; };
+  void setElevation(double e) { elevation_ = e; };
+  double getElevation () const { return elevation_; };
 
-  void setName(const QString &s) { name = s; };
-  QString getName() const { return name; };
+  void setName(const QString &s) { name_ = s; };
+  QString getName() const { return name_; };
 
-  void setComment(const QString &s) { comment = s; };
-  QString getComment() const { return comment; };
+  void setComment(const QString &s) { comment_ = s; };
+  QString getComment() const { return comment_; };
 
-  void setDescription(const QString &s) { description = s; };
-  QString getDescription() const { return description; };
+  void setDescription(const QString &s) { description_ = s; };
+  QString getDescription() const { return description_; };
 
-  void setSymbol(const QString &s) { symbol = s; };
-  QString getSymbol() const { return symbol; };
+  void setSymbol(const QString &s) { symbol_ = s; };
+  QString getSymbol() const { return symbol_; };
 
  private:
-  LatLng location;
-  double  elevation;
-  QString name;
-  QString comment;
-  QString description;
-  QString symbol;
+  LatLng location_;
+  double  elevation_;
+  QString name_;
+  QString comment_;
+  QString description_;
+  QString symbol_;
 };
 
 //------------------------------------------------------------------------

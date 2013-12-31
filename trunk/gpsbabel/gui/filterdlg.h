@@ -32,19 +32,19 @@ class FilterDialog: public QDialog
 {
 Q_OBJECT
  public:
- FilterDialog(QWidget *parent, AllFiltersData &fd);
+ FilterDialog(QWidget *parent, AllFiltersData &fd_);
   ~FilterDialog() {}
 
   void runDialog();
   
 
  private:
-  static int lastPage;
-  QList <FilterWidget *>pages;
-  QList <bool *>usePages;
-  QStackedWidget *widgetStack;
-  Ui_FilterDlg ui;
-  AllFiltersData &fd;
+  static int lastPage_;
+  QList <FilterWidget *>pages_;
+  QList <bool *>usePages_;
+  QStackedWidget *widgetStack_;
+  Ui_FilterDlg ui_;
+  AllFiltersData &fd_;
 
   void addFilterPage(const QString & name, FilterWidget *w, bool *);
 

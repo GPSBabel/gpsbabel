@@ -37,14 +37,15 @@ Q_OBJECT
   GMapDialog(QWidget *parent, const QString &gpxFileName, QPlainTextEdit *te);
 
  private:
-  Ui_GMapDlg ui;
-  Map *mapWidget;
-  bool showWaypoints, showRoutes, showTracks;
-  QStandardItemModel *model;
-  QStandardItem *wptItem, *trkItem, *rteItem;
-  QList<QStandardItem *> wptList, trkList, rteList;
-  Gpx gpx;
-  
+  Ui_GMapDlg ui_;
+  Map *mapWidget_;
+  bool showWaypoints_, showRoutes_, showTracks_;
+  QStandardItemModel *model_;
+  QStandardItem *wptItem_, *trkItem_, *rteItem_;
+  QList<QStandardItem *> wptList_, trkList_, rteList_;
+  Gpx gpx_;
+  int menuIndex_;
+
   void appendWaypointInfo(QStandardItem *it, const GpxWaypoint &wpt);
   void appendTrackInfo(QStandardItem *it, const GpxTrack &trk);
   void appendRouteInfo(QStandardItem *it, const GpxRoute &rte);
@@ -54,8 +55,6 @@ Q_OBJECT
   int routeIndex(QStandardItem *it);
   QString formatLength(double l);
 
-  int menuIndex;
-  
   //
 private slots:
   void itemChangedX(QStandardItem *);

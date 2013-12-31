@@ -26,7 +26,7 @@
 QStringList WayPtsFilterData::makeOptionString()
 {
   QStringList args;
-  if (!inUse)
+  if (!inUse_)
     return args;
 
   if (radius) {
@@ -79,7 +79,7 @@ QStringList TrackFilterData::makeOptionString()
 {
   static const char *fixStrings[] = {"none", "pps", "dgpss", "3d", "2d"}; // match with designer!
   QStringList args;
-  if (!inUse)
+  if (!inUse_)
     return args;
 
   QString s;
@@ -131,11 +131,11 @@ QStringList TrackFilterData::makeOptionString()
 QStringList RtTrkFilterData::makeOptionString()
 {
   QStringList args;
-  if (!inUse)
+  if (!inUse_)
     return args;
 
-  if (reverse)  args << QString("-x") << QString("reverse");
-  if (simplify) args << QString("-x") << QString("simplify,count=%1").arg(limitTo);
+  if (reverse_)  args << QString("-x") << QString("reverse");
+  if (simplify_) args << QString("-x") << QString("simplify,count=%1").arg(limitTo_);
 
   return args;
 }
@@ -144,21 +144,21 @@ QStringList RtTrkFilterData::makeOptionString()
 QStringList MiscFltFilterData::makeOptionString()
 {
   QStringList args;
-  if (!inUse)
+  if (!inUse_)
     return args;
 
-  if (nukeRoutes || nukeTracks || nukeWaypoints) {
+  if (nukeRoutes_ || nukeTracks_ || nukeWaypoints_) {
     args << QString("-x");
     QString s = "nuketypes";
-    if (nukeRoutes) s += ",routes";
-    if (nukeTracks) s += ",tracks";
-    if (nukeWaypoints) s += ",waypoints";
+    if (nukeRoutes_) s += ",routes";
+    if (nukeTracks_) s += ",tracks";
+    if (nukeWaypoints_) s += ",waypoints";
     args << s;
   }
 
-  if (swap) args << "-x" << "swap";
+  if (swap_) args << "-x" << "swap";
 
-  if (transform) {
+  if (transform_) {
     static const char *xformStr[] = {
       "wpt=trk",
       "trk=rte",
@@ -168,8 +168,8 @@ QStringList MiscFltFilterData::makeOptionString()
       "trk=wpt",
     };
     args << QString("-x");
-    QString s= QString("transform,%1").arg(xformStr[transformVal]);
-    if (del) s += ",del";
+    QString s= QString("transform,%1").arg(xformStr[transformVal_]);
+    if (del_) s += ",del";
     args << s;
   }
   return args;

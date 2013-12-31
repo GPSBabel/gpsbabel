@@ -27,9 +27,9 @@
 AboutDlg::AboutDlg(QWidget *parent, const QString &ver1,
 		   const QString &ver2): QDialog(parent)
 {
-  ui.setupUi(this);
-  QTextDocument *doc = ui.textEdit->document();
-  ui.textEdit->setReadOnly(true);
+  ui_.setupUi(this);
+  QTextDocument *doc = ui_.textEdit->document();
+  ui_.textEdit->setReadOnly(true);
   QString tt = doc->toHtml();
   tt.replace(QRegExp("\\$appname\\$"),  QString(appName));
   tt.replace(QRegExp("\\$babelversion\\$"),  ver1);
@@ -42,6 +42,6 @@ AboutDlg::AboutDlg(QWidget *parent, const QString &ver1,
   doc->setHtml(tt);
   QTextCursor cur(doc);
   cur.setPosition(0);
-  ui.textEdit->setTextCursor(cur);
-  ui.textEdit->ensureCursorVisible();
+  ui_.textEdit->setTextCursor(cur);
+  ui_.textEdit->ensureCursorVisible();
 }

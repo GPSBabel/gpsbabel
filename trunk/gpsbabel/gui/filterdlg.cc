@@ -26,44 +26,44 @@
 #include "help.h"
 #include "appname.h"
 
-int FilterDialog::lastPage = 0;
+int FilterDialog::lastPage_ = 0;
 
-FilterDialog::FilterDialog(QWidget*parent, AllFiltersData &fd): QDialog(parent), fd(fd)
+FilterDialog::FilterDialog(QWidget*parent, AllFiltersData &fd): QDialog(parent), fd_(fd)
 {
-  ui.setupUi(this);
-  ui.filterList->clear();
+  ui_.setupUi(this);
+  ui_.filterList->clear();
 
-  widgetStack = new QStackedWidget(ui.frame);
-  QHBoxLayout *layout = new QHBoxLayout(ui.frame);
-  layout->addWidget(widgetStack);
+  widgetStack_ = new QStackedWidget(ui_.frame);
+  QHBoxLayout *layout = new QHBoxLayout(ui_.frame);
+  layout->addWidget(widgetStack_);
   layout->setContentsMargins(2, 2, 2, 2);
 
   addFilterPage(tr("Tracks"),
-		new TrackWidget(widgetStack, fd.trackFilterData), &fd.trackFilterData.inUse);
+		new TrackWidget(widgetStack_, fd.trackFilterData), &fd.trackFilterData.inUse_);
 
   addFilterPage(tr("Waypoints"),
-		new WayPtsWidget(widgetStack, fd.wayPtsFilterData), &fd.wayPtsFilterData.inUse);
+		new WayPtsWidget(widgetStack_, fd.wayPtsFilterData), &fd.wayPtsFilterData.inUse_);
 
   addFilterPage(tr("Routes & Tracks"),
-		new RtTrkWidget(widgetStack, fd.rtTrkFilterData), &fd.rtTrkFilterData.inUse);
+		new RtTrkWidget(widgetStack_, fd.rtTrkFilterData), &fd.rtTrkFilterData.inUse_);
 
   addFilterPage(tr("Miscellaneous"),
-		new MiscFltWidget(widgetStack, fd.miscFltFilterData), &fd.miscFltFilterData.inUse);
+		new MiscFltWidget(widgetStack_, fd.miscFltFilterData), &fd.miscFltFilterData.inUse_);
 
-  connect(ui.filterList, SIGNAL(currentRowChanged(int)),
+  connect(ui_.filterList, SIGNAL(currentRowChanged(int)),
 	  this, SLOT(pageSelectionChanged(int)));
 
-  connect(ui.filterList, SIGNAL(itemClicked(QListWidgetItem *)),
+  connect(ui_.filterList, SIGNAL(itemClicked(QListWidgetItem *)),
 	  this, SLOT(itemClickedX(QListWidgetItem*)));
 
-  connect(ui.helpButton, SIGNAL(clicked()), this, SLOT(helpX()));
-  connect(ui.resetButton, SIGNAL(clicked()), this, SLOT(resetX()));
+  connect(ui_.helpButton, SIGNAL(clicked()), this, SLOT(helpX()));
+  connect(ui_.resetButton, SIGNAL(clicked()), this, SLOT(resetX()));
 
 
-  ui.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":images/ok"));
-  ui.buttonBox->button(QDialogButtonBox::Cancel)->setIcon(QIcon(":images/cancel"));
+  ui_.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":images/ok"));
+  ui_.buttonBox->button(QDialogButtonBox::Cancel)->setIcon(QIcon(":images/cancel"));
 
-  ui.filterList->setCurrentRow(lastPage);
+  ui_.filterList->setCurrentRow(lastPage_);
 
   // So that it occupies minimum space.
   this->resize(100, 100);
@@ -76,24 +76,24 @@ void FilterDialog::addFilterPage(const QString &name, FilterWidget *fw, bool*use
   QListWidgetItem *it = new QListWidgetItem(name);
   it->setCheckState(*use? Qt::Checked:Qt::Unchecked);
   fw->setEnabled(*use);
-  ui.filterList->addItem(it);
-  widgetStack->addWidget(fw);
-  pages    << fw;
-  usePages << use;
+  ui_.filterList->addItem(it);
+  widgetStack_->addWidget(fw);
+  pages_    << fw;
+  usePages_ << use;
 }
 
 //------------------------------------------------------------------------
 void FilterDialog::itemClickedX(QListWidgetItem *it)
 {
-  int row = ui.filterList->row(it);
+  int row = ui_.filterList->row(it);
   bool b = (it->checkState() == Qt::Checked);
-  pages[row]->setEnabled(b);
-  pages[row]->checkChecks();
+  pages_[row]->setEnabled(b);
+  pages_[row]->checkChecks();
 }
 //------------------------------------------------------------------------
 void FilterDialog::pageSelectionChanged(int i)
 {
-  widgetStack->setCurrentWidget(pages[i]);
+  widgetStack_->setCurrentWidget(pages_[i]);
 }
 
 //------------------------------------------------------------------------
@@ -105,12 +105,12 @@ void FilterDialog::resetX()
      QMessageBox::Yes | QMessageBox::No);
 
   if (ret == QMessageBox::Yes) {
-    fd.defaultAll();
-    for (int i=0; i<pages.size(); i++) {
-      pages[i]->setWidgetValues();
-      pages[i]->setEnabled(*(usePages[i]));
-      pages[i]->checkChecks();
-      ui.filterList->item(i)->setCheckState(*(usePages[i]) ? Qt::Checked: Qt::Unchecked);
+    fd_.defaultAll();
+    for (int i=0; i<pages_.size(); i++) {
+      pages_[i]->setWidgetValues();
+      pages_[i]->setEnabled(*(usePages_[i]));
+      pages_[i]->checkChecks();
+      ui_.filterList->item(i)->setCheckState(*(usePages_[i]) ? Qt::Checked: Qt::Unchecked);
     }
   }
 }
@@ -125,10 +125,10 @@ void FilterDialog::helpX()
 void FilterDialog::runDialog()
 {
   if (exec()) {
-    for (int i=0; i<pages.size(); i++) {
-      pages[i]->getWidgetValues();
-      *(usePages[i]) = ui.filterList->item(i)->checkState() == Qt::Checked;
+    for (int i=0; i<pages_.size(); i++) {
+      pages_[i]->getWidgetValues();
+      *(usePages_[i]) = ui_.filterList->item(i)->checkState() == Qt::Checked;
     }
   }
-  lastPage = ui.filterList->currentRow();
+  lastPage_ = ui_.filterList->currentRow();
 }

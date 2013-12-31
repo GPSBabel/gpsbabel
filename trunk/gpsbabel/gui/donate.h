@@ -30,13 +30,13 @@ class Donate: public QDialog {
  public:
   Donate(QWidget *parent);
   void showNever(bool f)  { 
-    ui.neverAgain->setVisible(f); 
-    ui.textLine2->setVisible(f); 
+    ui_.neverAgain->setVisible(f);
+    ui_.textLine2->setVisible(f);
   }
-  bool neverAgain() { return ui.neverAgain->isChecked(); }
+  bool neverAgain() { return ui_.neverAgain->isChecked(); }
 
  private:
-  Ui_Donate  ui;
+  Ui_Donate  ui_;
 
  private slots:
   void contributeClicked();

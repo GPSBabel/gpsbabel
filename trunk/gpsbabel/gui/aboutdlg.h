@@ -33,7 +33,7 @@ class AboutDlg: public QDialog {
 	   const QString &ver2);
 
  private:
-  Ui_AboutDlg  ui;
+  Ui_AboutDlg  ui_;
 
 };
 

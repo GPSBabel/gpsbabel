@@ -26,8 +26,8 @@
 // A completely simple QDialog, in a class of its own for layout.
 Donate::Donate(QWidget *parent) : QDialog(parent)
 {
-  ui.setupUi(this);
-  connect(ui.contributeButton, SIGNAL(clicked()), this, SLOT(contributeClicked()));
+  ui_.setupUi(this);
+  connect(ui_.contributeButton, SIGNAL(clicked()), this, SLOT(contributeClicked()));
 }
 
 void Donate::contributeClicked()

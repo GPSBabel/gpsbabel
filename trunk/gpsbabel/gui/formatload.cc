@@ -38,26 +38,26 @@ static QString xlt(const QString &f) {
 bool FormatLoad::skipToValidLine()
 {
   QRegExp regex("^(file|serial)");
-  while (currentLine <lines.size() && regex.indexIn(lines[currentLine]) != 0)
-    currentLine++;
-  return (currentLine<lines.size());
+  while (currentLine_ <lines_.size() && regex.indexIn(lines_[currentLine_]) != 0)
+    currentLine_++;
+  return (currentLine_<lines_.size());
 }
 
 //------------------------------------------------------------------------
 bool FormatLoad::processFormat(Format &format)
 {
-  QStringList hfields = lines[currentLine++].split("\t");
+  QStringList hfields = lines_[currentLine_++].split("\t");
   if (hfields.size() < 5) {
     return false;
   }
-  QString htmlPage = lines[currentLine++];
+  QString htmlPage = lines_[currentLine_++];
   htmlPage.replace(QRegExp("^[\\s]*"), "");
   htmlPage.replace(QRegExp("[\\s]$"), "");
 
   QRegExp regex("^option");
   QList <FormatOption> optionList;
-  while (currentLine <lines.size() && regex.indexIn(lines[currentLine]) == 0) {
-    QStringList ofields = lines[currentLine].split("\t");
+  while (currentLine_ <lines_.size() && regex.indexIn(lines_[currentLine_]) == 0) {
+    QStringList ofields = lines_[currentLine_].split("\t");
     if (ofields.size() < 9) {
       return false;
     }
@@ -99,7 +99,7 @@ bool FormatLoad::processFormat(Format &format)
     optionList << FormatOption(name, xlt(description),
 			       type, QVariant(optionDef), QVariant(optionMin),
 			       QVariant(optionMax), optionHtml);
-    currentLine++;
+    currentLine_++;
   }
   QList <FormatOption> optionList2 = optionList;
 
@@ -141,18 +141,18 @@ bool FormatLoad::getFormats(QList<Format> &formatList)
     QString l = tstream.readLine();
     k++;
     if (!QRegExp("^[\\s]*$").exactMatch(l)) {
-      lines << l;
+      lines_ << l;
       lineList<<k;
     }
   }
-  currentLine = 0;
+  currentLine_ = 0;
 
   for  (bool dataPresent = skipToValidLine(); dataPresent; dataPresent=skipToValidLine()) {
     Format format;
     if (!processFormat(format)) {
       QMessageBox::information
 	(0, appName,
-	 QObject::tr("Error processing formats from running process \"gpsbabel -^3\" at line %1").arg(lineList[currentLine]));
+   QObject::tr("Error processing formats from running process \"gpsbabel -^3\" at line %1").arg(lineList[currentLine_]));
     }
     else {
       formatList << format;
