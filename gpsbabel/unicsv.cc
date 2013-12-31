@@ -704,15 +704,15 @@ unicsv_parse_one_line(char* ibuf)
       break;
 
     case fld_shortname:
-      wpt->shortname = xstrdup(s);
+      wpt->shortname = s;
       break;
 
     case fld_description:
-      wpt->description = xstrdup(s);
+      wpt->description = s;
       break;
 
     case fld_notes:
-      wpt->notes = xstrdup(s);
+      wpt->notes = s;
       break;
 
     case fld_url: {
