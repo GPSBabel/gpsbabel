@@ -38,8 +38,8 @@ static gbfile*			infile	= 0;
 static int				count	= 0;
 
 static const int			vitovtt_version				= 3;
-static const size_t			vitovtt_headersize			= 16;
-static const size_t			vitovtt_datasize			= 32;
+// static const size_t			vitovtt_headersize			= 16;
+// static const size_t			vitovtt_datasize			= 32;
 
 static const double			vitovtt_latitudescale		= 20000000.0;
 static const double			vitovtt_longitudescale		= 10000000.0;

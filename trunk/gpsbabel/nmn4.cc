@@ -48,7 +48,8 @@ arglist_t nmn4_args[] = {
 
 
 /* helpers */
-
+#if NEW_STRINGS
+#else
 static char*
 nmn4_concat(const char* arg0, ...)
 {
@@ -77,6 +78,7 @@ nmn4_concat(const char* arg0, ...)
 
   return res;
 }
+#endif
 
 static void
 nmn4_check_line(char* line)
