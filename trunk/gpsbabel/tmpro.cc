@@ -70,7 +70,6 @@ data_read(void)
 {
   char* buff;
   char* s;
-  char* holder;
   waypoint* wpt_tmp;
   int i;
   int linecount = 0;
@@ -100,18 +99,13 @@ data_read(void)
           /* ignore: group  */
           break;
         case 1:
-          wpt_tmp->shortname = csv_stringtrim(s, "", 0);
+          wpt_tmp->shortname = csv_stringtrim(s, "");
           break;
         case 2:
           /* Description is not a TopoMapPro format requirement.
              If we assign "" then .loc/.gpx will generate empty XML tags :(
           */
-          holder = csv_stringtrim(s, "", 0);
-          if (strlen(holder)) {
-            wpt_tmp->description = holder;
-          } else {
-            xfree(holder);
-          }
+          wpt_tmp->description = csv_stringtrim(s, "");
           break;
         case 3:
           wpt_tmp->latitude = atof(s);
@@ -141,11 +135,12 @@ data_read(void)
              use the TopoMapLinks links.
              (plus discards length 0 strings (so no empty XML tags))
           */
-          holder = csv_stringtrim(s, "", 0);
-          if (strstr(holder, "http:") != NULL) {
-            wpt_tmp->AddUrlLink(holder);
+          {
+          QString link = csv_stringtrim(s, "");
+          if (link.contains("http:")) {
+            wpt_tmp->AddUrlLink(link);
           }
-          xfree(holder);
+          }
           break;
         default:
           /* whoa! nelly */
