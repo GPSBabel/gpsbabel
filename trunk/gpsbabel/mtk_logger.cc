@@ -747,7 +747,6 @@ mtk_retry:
 static route_head*  trk_head = NULL;
 static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
 {
-  char     wp_name[20];
   waypoint* trk = waypt_new();
 
   if (global_opts.masked_objective& TRKDATAMASK && (trk_head == NULL || (mtk_info.track_event & MTK_EVT_START))) {
@@ -845,8 +844,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
     /* Button press -- create waypoint, start count at 1 */
     waypoint* w = waypt_dupe(trk);
 
-    sprintf(wp_name, "WP%06d", waypt_count()+1);
-    w->shortname      = xstrdup(wp_name);
+    w->shortname = QString().sprintf("WP%06d", waypt_count()+1);
     waypt_add(w);
   }
   // In theory we would not add the waypoint to the list of
@@ -855,8 +853,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
   // trackpoint unless we include/duplicate it.
 
   if (global_opts.masked_objective & TRKDATAMASK) {
-    sprintf(wp_name, "TP%06d", idx);
-    trk->shortname      = xstrdup(wp_name);
+    trk->shortname = QString().sprintf("TP%06d", idx);
 
     track_add_wpt(trk_head, trk);
   }

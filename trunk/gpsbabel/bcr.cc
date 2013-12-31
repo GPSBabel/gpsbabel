@@ -143,7 +143,7 @@ bcr_handle_icon_str(const char* str, waypoint* wpt)
         }
         return;
       }
-      wpt->description = xstrdup(m->symbol_DE);
+      wpt->description = m->symbol_DE;
       if (m->mps_name != NULL) {
         nr = gt_find_icon_number_from_desc(m->mps_name, MAPSOURCE);
         wpt->icon_descr = gt_find_desc_from_icon_number(nr, MAPSOURCE, NULL);
@@ -265,7 +265,7 @@ bcr_data_read(void)
   route = route_head_alloc();
 
   if ((str = inifile_readstr(ini, "client", "routename"))) {
-    route->rte_name = xstrdup(str);
+    route->rte_name = str;
   }
 
   route_add_head(route);
@@ -288,7 +288,7 @@ bcr_data_read(void)
 
     wpt = waypt_new();
 
-    wpt->shortname = xstrdup(station);
+    wpt->shortname = station;
     bcr_mercator_to_wgs84(mlat, mlon, &wpt->latitude, &wpt->longitude);
 
     if (NULL != (str = inifile_readstr(ini, "client", station))) {
@@ -310,7 +310,7 @@ bcr_data_read(void)
         *c = '\0';
       }
       if (*str) {
-        wpt->notes = xstrdup(str);
+        wpt->notes = str;
       }
       if ((str = c)) {
         str++;
@@ -319,12 +319,7 @@ bcr_data_read(void)
           *c = '\0';
         }
         if (*str) {
-#if NEW_STRINGS
           wpt->shortname = str;
-#else
-          xfree(wpt->shortname);
-          wpt->shortname = xstrdup(str);
-#endif
         }
       }
     }

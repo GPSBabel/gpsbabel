@@ -516,11 +516,13 @@ static waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
   WP->shortname = xstrndup(wpt->name,j+1);
   for (j=WPT_COMMENT_LEN-1; j >= 0 && wpt->comment[j] == ' '; j--) {};
   if (j >= 0) {
-    WP->description = xstrndup(wpt->comment, j+1);
+    char *s = xstrndup(wpt->comment, j+1);
+    WP->description = s;
+    xfree(s);
   } else {
-    WP->description = xstrdup("");
+    WP->description = "";
   }
-  WP->notes = xstrdup("");
+  WP->notes = "";
 
   return WP;
 }
@@ -617,12 +619,16 @@ static void trl_read(void)
     for (j=TRK_NAME_LEN-1;
          j >= 0 && (trkhdr->name[j] == ' ' || trkhdr->name[j] == '\0');
          j--) {};
-    TL->rte_name = xstrndup(trkhdr->name,j+1);
+    char *s1 = xstrndup(trkhdr->name,j+1);
+    TL->rte_name = s1;
+    xfree(s1);
     /*  TL->rte_name[TRK_NAME_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
     for (j=TRK_COMMENT_LEN-1;
          j >= 0 && (trkhdr->comment[j] == ' ' || trkhdr->comment[j] == '\0');
          j--) {};
-    TL->rte_desc = xstrndup(trkhdr->comment,j+1);
+    s1 = xstrndup(trkhdr->comment,j+1);
+    TL->rte_desc = s1;
+    xfree(s1);
     /*  TL->rte_desc[TRK_COMMENT_LEN+1] = 0; */	/* MAYBE BAD ADDRESS (Valgrind) */
     TL->rte_num = i;
 

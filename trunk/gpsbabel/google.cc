@@ -130,7 +130,7 @@ void goog_segment(xg_string args, const QXmlStreamAttributes* unused)
     xfree(wpt_tmp->shortname);
 #endif
     wpt_tmp->shortname = mkshort(desc_handle, CSTRc(args));
-    wpt_tmp->description = xstrdup(args);
+    wpt_tmp->description = args;
   }
 }
 
