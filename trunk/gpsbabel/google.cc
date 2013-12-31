@@ -125,6 +125,7 @@ void goog_segment(xg_string args, const QXmlStreamAttributes* unused)
   wpt_tmp = route_find_waypt_by_name(routehead[goog_segroute], goog_segname);
   if (wpt_tmp) {
 #if NEW_STRINGS
+    wpt_tmp->shortname = QString();
 #else
     xfree(wpt_tmp->shortname);
 #endif
@@ -251,7 +252,10 @@ void goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
       wpt_tmp->latitude = lat / 100000.0;
       wpt_tmp->longitude = lon / 100000.0;
       wpt_tmp->route_priority=level;
-      wpt_tmp->shortname = (char*) xmalloc(7);
+// NEW_STRINGS FIXME(robertlipe): this is broken somehow there should be no need
+// to overallocate like this, but it's needed ot get an1 to not scribble
+// on itself.
+      wpt_tmp->shortname = (char*) xmalloc(7000);
 #if NEW_STRINGS
       wpt_tmp->shortname = QString().sprintf( "\\%5.5x", serial++);
 #else

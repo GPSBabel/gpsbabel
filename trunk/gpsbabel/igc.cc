@@ -612,6 +612,7 @@ static void wr_header(void)
       gbfprintf(file_out, "%s\r\n", str);
     }
     xfree(rd);
+    rd = NULL;
 #else
   if (track && track->rte_desc && strncmp(track->rte_desc, HDRMAGIC, strlen(HDRMAGIC)) == 0) {
     for (str = strtok(CSTRc(track->rte_desc) + strlen(HDRMAGIC) + strlen(HDRDELIM), HDRDELIM);
@@ -625,11 +626,15 @@ static void wr_header(void)
     // its description as the pilot's name in the header.
     str = dflt_str;
 #if NEW_STRINGS
+// FIXME: This almost certainly introduces a memory leak because str
+// is a c string that's used for totally too many things.  Just let it
+// leak for now. 2013-12-31 robertl
     if (NULL != (wpt = find_waypt_by_name("PILOT")) && !wpt->description.isEmpty()) {
+      str = xstrdup(CSTRc(wpt->description));
 #else
     if (NULL != (wpt = find_waypt_by_name("PILOT")) && wpt->description) {
-#endif
       str = CSTRc(wpt->description);
+#endif
     }
     gbfprintf(file_out, "HFPLTPILOT:%s\r\n", str);
   }
