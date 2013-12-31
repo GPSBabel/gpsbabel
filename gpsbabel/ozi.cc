@@ -159,9 +159,9 @@ ozi_get_time_str(const waypoint* waypointp, char* buff, gbsize_t buffsz)
 }
 
 void
-ozi_set_time_str(const char* str, waypoint* waypointp)
+ozi_set_time_str(const QString& str, waypoint* waypointp)
 {
-  double ozi_time = atof(str);
+  double ozi_time = str.toDouble();
 
   if (ozi_time > DAYS_SINCE_1990) {
     waypointp->SetCreationTime((ozi_time - DAYS_SINCE_1990) * SECONDS_PER_DAY,
@@ -504,11 +504,11 @@ wr_deinit(void)
 }
 
 static void
-ozi_parse_waypt(int field, char* str, waypoint* wpt_tmp, ozi_fsdata* fsdata)
+ozi_parse_waypt(int field, const QString& str, waypoint* wpt_tmp, ozi_fsdata* fsdata)
 {
   double alt;
 
-  if (*str == '\0') {
+  if (str.isEmpty()) {
     return;
   }
 
@@ -518,15 +518,15 @@ ozi_parse_waypt(int field, char* str, waypoint* wpt_tmp, ozi_fsdata* fsdata)
     break;
   case 1:
     /* waypoint name */
-    wpt_tmp->shortname = csv_stringtrim(str, "", 0);
+    wpt_tmp->shortname = csv_stringtrim(str, "");
     break;
   case 2:
     /* degrees latitude */
-    wpt_tmp->latitude = atof(str);
+    wpt_tmp->latitude = str.toDouble();
     break;
   case 3:
     /* degrees longitude */
-    wpt_tmp->longitude = atof(str);
+    wpt_tmp->longitude = str.toDouble();
     break;
   case 4:
     /* DAYS since 1900 00:00:00 in days.days (5.5) */
@@ -538,7 +538,7 @@ ozi_parse_waypt(int field, char* str, waypoint* wpt_tmp, ozi_fsdata* fsdata)
        tables are, so we read just the numbers.  This converts badly to
        other types, but it at least maintains fidelity for an ozi->ozi
        operation. */
-    if (str && isdigit(str[0])) {
+    if (str.toInt() > 0) {
       wpt_tmp->icon_descr = str;
     }
     break;
@@ -550,15 +550,15 @@ ozi_parse_waypt(int field, char* str, waypoint* wpt_tmp, ozi_fsdata* fsdata)
     break;
   case 8:
     /* foreground color (0=black) */
-    fsdata->fgcolor = atoi(str);
+    fsdata->fgcolor = str.toInt();
     break;
   case 9:
     /* background color (65535=yellow) */
-    fsdata->bgcolor = atoi(str);
+    fsdata->bgcolor = str.toInt();
     break;
   case 10:
     /* Description */
-    wpt_tmp->description = csv_stringtrim(str, "", 0);
+    wpt_tmp->description = csv_stringtrim(str, "");
     break;
   case 11:
     /* pointer direction 0,1,2,3 bottom,top,left,right */
@@ -568,11 +568,11 @@ ozi_parse_waypt(int field, char* str, waypoint* wpt_tmp, ozi_fsdata* fsdata)
     break;
   case 13:
     /* proximity distance - meters */
-    WAYPT_SET(wpt_tmp, proximity, atof(str) * prox_scale);
+    WAYPT_SET(wpt_tmp, proximity, str.toDouble() * prox_scale);
     break;
   case 14:
     /* altitude */
-    alt = atof(str);
+    alt = str.toDouble();
     if (alt == -777) {
       wpt_tmp->altitude = unknown_alt;
     } else {
@@ -666,7 +666,7 @@ ozi_parse_routepoint(int field, char* str, waypoint* wpt_tmp)
     break;
   case 4:
     /* waypoint name */
-    wpt_tmp->shortname = csv_stringclean(str, ",");
+    wpt_tmp->shortname = csv_stringclean(str, QString(","));
     break;
   case 5:
     /* latitude */
@@ -697,7 +697,7 @@ ozi_parse_routepoint(int field, char* str, waypoint* wpt_tmp)
     break;
   case 13:
     /* description */
-    wpt_tmp->description = csv_stringclean(str, ",");
+    wpt_tmp->description = csv_stringclean(str, QString(","));
     break;
   default:
     break;
@@ -705,7 +705,7 @@ ozi_parse_routepoint(int field, char* str, waypoint* wpt_tmp)
 }
 
 static void
-ozi_parse_routeheader(int field, char* str, waypoint* wpt_tmp)
+ozi_parse_routeheader(int field, const QString& str, waypoint* wpt_tmp)
 {
 
   switch (field) {
@@ -716,7 +716,7 @@ ozi_parse_routeheader(int field, char* str, waypoint* wpt_tmp)
     break;
   case 1:
     /* route # */
-    rte_head->rte_num = atoi(str);
+    rte_head->rte_num = str.toInt();
     break;
   case 2:
     /* route name */
@@ -811,7 +811,7 @@ data_read(void)
           break;
         case rtedata:
           if (buff[0] == 'R') {
-            ozi_parse_routeheader(i, s, wpt_tmp);
+            ozi_parse_routeheader(i, QString(s), wpt_tmp);
             header = true;
           } else {
             ozi_parse_routepoint(i, s, wpt_tmp);

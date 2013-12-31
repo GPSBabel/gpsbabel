@@ -23,6 +23,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <stdlib.h>
+#include <QtCore/QRegExp>
 #include "defs.h"
 #include "csv_util.h"
 #include "grtcirc.h"
@@ -174,6 +175,7 @@ static UrlLink* link_;
 /*     usage: p = csv_stringclean(stringtoclean, "&,\"")             */
 /*            (strip out ampersands, commas, and quotes.             */
 /*********************************************************************/
+
 char*
 #ifdef DEBUG_MEM
 CSV_STRINGCLEAN(const char* string, const char* chararray, DEBUG_PARAMS)
@@ -213,14 +215,14 @@ csv_stringclean(const char* string, const char* chararray)
 }
 
 QString
-csv_stringclean(const QString& string, const char* chararray)
+csv_stringclean(const QString& source, const QString& to_nuke)
 {
-  char *t = csv_stringclean(CSTR(string), chararray);
-  QString r(t);
-  xfree(t);
-  return r;
+  QString r = source;
+  QString regex = QString("[%1]").arg(to_nuke);
+  return r.remove(QRegExp(regex));
 }
 
+#if 0
 char*
 csv_stringclean(const QString& string_in, const QString& chararray_in)
 {
@@ -235,6 +237,7 @@ csv_stringclean(const QString& string_in, const QString& chararray_in)
 //  xfree(chararray);
   return r;
 }
+#endif
 
 /***********************************************************************************/
 /* csv_stringtrim() - trim whitespace and leading and trailing enclosures (quotes) */
@@ -299,6 +302,15 @@ csv_stringtrim(const char* string, const char* enclosure, int strip_max)
   tmp[(p2 - p1) + 1] = '\0';
 
   return (tmp);
+}
+
+// Is this really the replacement for the above?  
+QString
+csv_stringtrim(const QString& source, const QString& enclosure) 
+{
+  QString r = source;
+  r.replace(enclosure, "");
+  return r.trimmed();
 }
 
 /*****************************************************************************/
