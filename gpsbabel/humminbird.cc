@@ -287,7 +287,11 @@ humminbird_read_wpt(gbfile* fin)
 
   wpt = waypt_new();
 
-  wpt->shortname = xstrndup(w.name, sizeof(w.name));
+  // Could probably find a way to eliminate the alloc/copy.
+  char *s = xstrndup(w.name, sizeof(w.name));
+  wpt->shortname = s;
+  xfree(s);
+
   wpt->SetCreationTime(w.time);
 
   guder = gudermannian_i1924(w.north);
@@ -358,7 +362,10 @@ humminbird_read_route(gbfile* fin)
         if (rte == NULL) {
           rte = route_head_alloc();
           route_add_head(rte);
-          rte->rte_name = xstrndup(hrte.name, sizeof(hrte.name));
+          // TODO: find a way to eliminate the copy.
+          char *s = xstrndup(hrte.name, sizeof(hrte.name));
+          rte->rte_name = s;
+          xfree(s);
           /* rte->rte_num = hrte.num + 1; only internal number */
         }
         route_add_wpt(rte, waypt_dupe(wpt));
@@ -419,7 +426,10 @@ humminbird_read_track(gbfile* fin)
   trk = route_head_alloc();
   track_add_head(trk);
 
-  trk->rte_name = xstrndup(th.name, sizeof(th.name));
+  // TODO: find a way to eliminate the copy.
+  char *s = xstrndup(th.name, sizeof(th.name));
+  trk->rte_name = s;
+  xfree(s);
   trk->rte_num  = th.trk_num;
 
   /* We create one wpt for the info in the header */

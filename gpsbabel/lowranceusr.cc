@@ -395,7 +395,7 @@ lowranceusr_parse_waypt(waypoint* wpt_tmp)
   text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
   if (text_len) {
     buff[text_len] = '\0';
-    wpt_tmp->shortname = xstrdup(buff);
+    wpt_tmp->shortname = buff;
   }
 
   if (global_opts.debug_level >= 1)
@@ -405,7 +405,7 @@ lowranceusr_parse_waypt(waypoint* wpt_tmp)
   text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
   if (text_len) {
     buff[text_len] = '\0';
-    wpt_tmp->description = xstrdup(buff);
+    wpt_tmp->description = buff;
   }
   /* Time is number of seconds since Jan. 1, 2000 */
   waypt_time = gbfgetint32(file_in);
@@ -470,7 +470,7 @@ lowranceusr_parse_routes(void)
     text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
     if (text_len) {
       buff[text_len] = '\0';
-      rte_head->rte_name = xstrdup(buff);
+      rte_head->rte_name = buff;
     }
 
     /* num Legs */
@@ -520,7 +520,7 @@ lowranceusr_parse_icons(void)
       wpt_tmp->longitude = lon_mm_to_deg(gbfgetint32(file_in));
       wpt_tmp->altitude = 0;
       snprintf(buff, sizeof(buff), "Icon %d", i+1);
-      wpt_tmp->shortname = xstrdup(buff);
+      wpt_tmp->shortname = buff;
       /* symbol */
       wpt_tmp->icon_descr = lowranceusr_find_desc_from_icon_number(gbfgetint32(file_in));
       waypt_add(wpt_tmp);
@@ -560,7 +560,7 @@ lowranceusr_parse_trails(void)
 
     if (text_len) {
       buff[text_len] = '\0';
-      trk_head->rte_name = xstrdup(buff);
+      trk_head->rte_name = buff;
     }
 
     if (global_opts.debug_level >= 1) {
@@ -602,7 +602,7 @@ lowranceusr_parse_trails(void)
           if (!buff[0] && seg_break && j) {
             trk_tmp = route_head_alloc();
             trk_tmp->rte_num = ++trk_num;
-            trk_tmp->rte_name = xstrdup(trk_head->rte_name);
+            trk_tmp->rte_name = trk_head->rte_name;
             track_add_head(trk_tmp);
             trk_head = trk_tmp;
           }

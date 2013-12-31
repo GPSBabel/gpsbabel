@@ -185,7 +185,7 @@ parse_wpt(char* buff)
           *cx-- = '\0';
         }
         if (*c != '\0') {
-          wpt->shortname = xstrdup(c);
+          wpt->shortname = c;
         }
         break;
       case 2:
@@ -213,17 +213,12 @@ parse_wpt(char* buff)
         wpt->altitude = atof(c);
         break;
       case 7:
-        wpt->description = xstrdup(c);
+        wpt->description = c;
         break;
       default:
         if (col > 7) {
-#if NEW_STRINGS
           wpt->description += " ";
           wpt->description += c;
-#else
-          wpt->description = xstrappend(wpt->description, " ");
-          wpt->description = xstrappend(wpt->description, c);
-#endif
         }
       }
     }
@@ -340,7 +335,7 @@ parse_track_info(const char* buff, route_head* track)	/* "t" */
       case 0:
         break;	/* unknown field */
       case 1:
-        track->rte_name = xstrdup(c);
+        track->rte_name = c;
         break;
       case 2:
         break;	/* unknown field */
@@ -369,7 +364,7 @@ parse_rte_info(const char* buff, route_head* route)	/* "R" */
       case 0:
         break;				/* unknown field (colour?) */
       case 1:
-        route->rte_name = xstrdup(c);
+        route->rte_name = c;
         break;
       case 2:
         break;				/* unknown field */
@@ -526,7 +521,7 @@ write_route_hdr_cb(const route_head* rte)
   if (name != NULL) {
     name = csv_stringclean(name, ",");
   } else {
-    name = xstrdup(" ");
+    name = " ";
   }
   gbfprintf(fout, "R  16711680,%s,1,-1\n", CSTR(name));
 }

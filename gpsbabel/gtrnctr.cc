@@ -474,7 +474,7 @@ gtc_trk_s(const xg_string unused, const QXmlStreamAttributes* unusedattrs)
 void
 gtc_trk_ident(xg_string args, const QXmlStreamAttributes* unused)
 {
-  trk_head->rte_name = xstrdup(args);
+  trk_head->rte_name = args;
 }
 
 void
@@ -506,7 +506,7 @@ gtc_trk_pnt_e(xg_string args, const QXmlStreamAttributes* unused)
       char cbuf[10];
       waypoint* wpt_lap_s = waypt_dupe(wpt_tmp);
       snprintf(cbuf, sizeof(cbuf), "LAP%03d", lap_ct);
-      wpt_lap_s->shortname = xstrdup(cbuf);
+      wpt_lap_s->shortname = cbuf;
       waypt_add(wpt_lap_s);
       lap_s = 0;
     }
@@ -654,9 +654,7 @@ gtc_wpt_pnt_e(xg_string args, const QXmlStreamAttributes* unused)
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     /* Add the begin position of a CourseLap as
     a waypoint. */
-    char* cbuf;
-    xasprintf(&cbuf, "LAP%03d", lap_ct);
-    wpt_tmp->shortname = cbuf;
+    wpt_tmp->shortname = QString().sprintf("LAP%03d", lap_ct);
     waypt_add(wpt_tmp);
   } else {
     waypt_free(wpt_tmp);
@@ -692,9 +690,9 @@ void gtc_wpt_notes(const QString& args, const QXmlStreamAttributes* unused)
 void
 gtc_wpt_ident(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp->shortname = xstrdup(args);
+  wpt_tmp->shortname = args;
   /* Set also as notes for compatibility with garmin usb format */
-  wpt_tmp->notes = xstrdup(args);
+  wpt_tmp->notes = args;
 }
 
 void
@@ -718,7 +716,7 @@ gtc_wpt_icon(xg_string args, const QXmlStreamAttributes* unused)
 void
 gtc_wpt_notes(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp->description = xstrdup(args);
+  wpt_tmp->description = args;
 }
 #endif
 

@@ -402,7 +402,7 @@ lowranceusr4_parse_waypoints(void)
     text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
     if (text_len) {
       buff[text_len] = '\0';
-      wpt_tmp->shortname = xstrdup(buff);
+      wpt_tmp->shortname = buff;
     }
 
     /* Long/Lat */
@@ -427,7 +427,7 @@ lowranceusr4_parse_waypoints(void)
     text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
     if (text_len) {
       buff[text_len] = '\0';
-      wpt_tmp->description = xstrdup(buff);
+      wpt_tmp->description = buff;
     }
 
     /* Alarm radius; XXX: I'm not sure what the units are here,
@@ -544,7 +544,7 @@ lowranceusr4_parse_routes(void)
     text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
     if (text_len) {
       buff[text_len] = '\0';
-      rte_head->rte_name = xstrdup(buff);
+      rte_head->rte_name = buff;
     }
 
     num_legs = gbfgetint32(file_in);
@@ -643,7 +643,7 @@ lowranceusr4_parse_trails(void)
     text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
     if (text_len) {
       buff[text_len] = '\0';
-      trk_head->rte_name = xstrdup(buff);
+      trk_head->rte_name = buff;
     }
 
     /* Flags, discard for now */
@@ -656,7 +656,7 @@ lowranceusr4_parse_trails(void)
     text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
     if (text_len) {
       buff[text_len] = '\0';
-      trk_head->rte_desc = xstrdup(buff);
+      trk_head->rte_desc = buff;
     }
 
     /* Creation date/time, discard for now */
