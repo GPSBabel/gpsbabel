@@ -127,9 +127,10 @@ tef_list_start(xg_string args, const QXmlStreamAttributes* attrv)
  * fix_notes tries to create a new PointDescription, which
  * should be "Wittlicher Strasse (L34)" for the example above
  */
-
+// FIXME: the calling convention here is screwy.  notes is an input AND
+// output argument and may be modified.
 static char*
-fix_notes(char* name, char* notes)
+fix_notes(const char* name, char* notes)
 {
   const char* cleft, *cright, *cback;
   char* ctmp;
@@ -166,13 +167,13 @@ static char*
 fix_notes(const QString& name, const QString& notes)
 {
 
-// WTH?  fix_notes() modifies the note string...and
-// may reallocate it.
   char* cname = xstrdup(name);
   char* cnotes = xstrdup(notes);
   char *r =  fix_notes(cname, cnotes);
   xfree(cname);
-  xfree(cnotes);
+// WTH?  fix_notes() modifies the note string...and
+// may reallocate it.
+//  xfree(cnotes);
   return r;
 }
 
