@@ -357,9 +357,11 @@ psit_waypoint_w(gbfile* psit_file, const waypoint* wpt)
 
   ident = global_opts.synthesize_shortnames ?
           mkshort(mkshort_handle, src) :
-          CSTRc(wpt->shortname);
+          xstrdup(CSTRc(wpt->shortname));
 
   gbfprintf(psit_file, " %-6s, ", ident);
+  xfree(ident);
+
   icon = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
 
   if (get_cache_icon(wpt) && wpt->icon_descr.compare("Geocache Found") != 0) {
