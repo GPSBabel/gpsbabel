@@ -381,6 +381,34 @@ void DBFClose( DBFHandle hDBF );
 
 <!-------------------------------------------------------------------------->
 
+<h2>DBFIsRecordDeleted()</h2>
+
+<pre>
+int DBFIsRecordDeleted( DBFHandle hDBF, int iShape );
+
+  hDBF:		The access handle for the file to be checked.
+  iShape:       The record index to check.
+</pre>
+
+  Returns TRUE (non-zero) if the record is marked for deletion, otherwise
+  it returns FALSE.<p>
+
+<!-------------------------------------------------------------------------->
+
+<h2>DBFMarkRecordDeleted()</h2>
+
+<pre>
+int DBFMarkRecordDeleted( DBFHandle hDBF, int iShape, int bIsDeleted );
+
+  hDBF:		The access handle for the file.
+  iShape:       The record index to update.
+  bIsDeleted:   TRUE to mark record deleted, or FALSE to undelete it.
+</pre>
+
+  Returns TRUE on success, or FALSE on error.<p>
+
+<!-------------------------------------------------------------------------->
+
 <h2>DBFGetNativeFieldType()</h2>
 
 <pre>
