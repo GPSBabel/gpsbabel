@@ -184,7 +184,7 @@ gopal_read(void)
   strftime(routename,sizeof(routename),"Tracklog %c",gmtime(&tx));
 
   route = route_head_alloc();
-  route->rte_name=xstrdup(routename);
+  route->rte_name = routename;
   route_add_head(route);
 
   line=0;

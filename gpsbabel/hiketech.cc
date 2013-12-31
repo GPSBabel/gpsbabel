@@ -200,7 +200,7 @@ void	 ht_wpt_s(xg_string args, const QXmlStreamAttributes* unused)
 static
 void  	ht_ident(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp->shortname = xstrdup(args);
+  wpt_tmp->shortname = args;
 }
 
 static
@@ -212,31 +212,19 @@ void 	ht_sym(xg_string args, const QXmlStreamAttributes* unused)
 static
 void  	ht_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->latitude = args.toDouble();
-#else
-  wpt_tmp->latitude = atof(args);
-#endif
 }
 
 static
 void  	ht_long(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->longitude = args.toDouble();
-#else
-  wpt_tmp->longitude = atof(args);
-#endif
 }
 
 static
 void  	ht_alt(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->altitude = args.toDouble();
-#else
-  wpt_tmp->altitude = atof(args);
-#endif
 }
 
 static
@@ -262,7 +250,7 @@ void	ht_trk_e(xg_string args, const QXmlStreamAttributes* unused)
 static
 void	ht_trk_ident(xg_string args, const QXmlStreamAttributes* unused)
 {
-  trk_head->rte_name = xstrdup(args);
+  trk_head->rte_name = args;
 }
 
 static
@@ -299,31 +287,19 @@ void	ht_trk_utc(xg_string args, const QXmlStreamAttributes* unused)
 static
 void	ht_trk_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->latitude = args.toDouble();
-#else
-  wpt_tmp->latitude = atof(args);
-#endif
 }
 
 static
 void	ht_trk_long(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->longitude = args.toDouble();
-#else
-  wpt_tmp->longitude = atof(args);
-#endif
 }
 
 static
 void	ht_trk_alt(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->altitude = args.toDouble();
-#else
-  wpt_tmp->altitude = atof(args);
-#endif
 }
 
 

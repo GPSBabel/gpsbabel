@@ -109,7 +109,7 @@ parse_line(char* buff, int index, const char* delimiter, waypoint* wpt)
       break;
 
     case WAYPT__OFS + 1:
-      wpt->description = xstrdup(cin);
+      wpt->description = (cin);
       break;
 
     case WAYPT__OFS + 2:
@@ -129,14 +129,7 @@ parse_line(char* buff, int index, const char* delimiter, waypoint* wpt)
 
     case WPT_cA_OFS + 1:
     case WPT_c1_OFS + 1:
-#if NEW_STRINGS
       wpt->shortname = cin;
-#else
-      if (wpt->shortname) {
-        xfree(wpt->shortname);
-      }
-      wpt->shortname = xstrdup(cin);
-#endif
       break;
 
     case WPT_cA_OFS + 4:
@@ -298,7 +291,9 @@ parse_waypt(char* buff)
     cin--;
   }
   if (cin >= buff) {
-    wpt->shortname = xstrndup(buff, cin - buff + 1);
+    char*s = xstrndup(buff, cin - buff + 1);
+    wpt->shortname = s;
+    xfree(s);
   }
 
   if (gardown) {
@@ -549,7 +544,7 @@ data_read(void)
             s = strrchr(cdata, ',');
             if (s) {
               *s = '\0';
-              head->rte_name = xstrdup(cdata);
+              head->rte_name = cdata;
             }
           }
         }
@@ -562,7 +557,7 @@ data_read(void)
       head = route_head_alloc();
       cdata += 3; /*skip route number */
       if (*cdata) {
-        head->rte_name = xstrdup(cdata);
+        head->rte_name = cdata;
       }
       route_add_head(head);
       break;

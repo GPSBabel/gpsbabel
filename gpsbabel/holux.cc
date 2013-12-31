@@ -117,8 +117,8 @@ static void data_read(void)
     strncpy(desc,pWptHxTmp->comment,sizeof(pWptHxTmp->comment));
     desc[sizeof(pWptHxTmp->comment)]=0;
 
-    wpt_tmp->shortname = xstrdup(name);
-    wpt_tmp->description = xstrdup(desc);
+    wpt_tmp->shortname = name;
+    wpt_tmp->description = desc;
 
     wpt_tmp->SetCreationTime(0);
     if (pWptHxTmp->date.year) {
