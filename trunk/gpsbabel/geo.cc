@@ -47,23 +47,6 @@ QString geo_read_fname;
 
 geocache_container wpt_container(const QString&);
 
-// Compensate for most of class waypt still using C strings and needing
-// copies anyway.
-char* ShimString(const QString& s)
-{
-  return xstrdup(s.toUtf8().data());
-}
-char* ShimString(const QStringRef& s)
-{
-  return xstrdup(s.toString().toUtf8().data());
-}
-
-double ShimAttributeDouble(const QXmlStreamAttributes& a, const QString& v)
-{
-  QString rv  = a.value(v).toString();
-  return rv.toDouble();
-}
-
 void GeoReadLoc()
 {
   waypoint* wpt = NULL;
@@ -82,12 +65,12 @@ void GeoReadLoc()
         wpt->altitude = 0;
       } else if (current_tag == "/loc/waypoint/name") {
         QXmlStreamAttributes a = reader.attributes();
-        wpt->shortname = ShimString(a.value("id"));
-        wpt->description = ShimString(reader.readElementText());
+        wpt->shortname = a.value("id").toString();
+        wpt->description = reader.readElementText();
       } else if (current_tag == "/loc/waypoint/coord") {
         QXmlStreamAttributes a = reader.attributes();
-        wpt->latitude = ShimAttributeDouble(a, "lat");
-        wpt->longitude = ShimAttributeDouble(a, "lon");
+        wpt->latitude = a.value("lat").toString().toDouble();
+        wpt->longitude = a.value("lon").toString().toDouble();
       } else if (current_tag == "/loc/waypoint/type") {
         wpt->icon_descr = reader.readElementText();
       } else if (current_tag == "/loc/waypoint/link") {

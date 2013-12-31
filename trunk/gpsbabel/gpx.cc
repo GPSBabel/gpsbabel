@@ -1033,7 +1033,7 @@ gpx_end(const QString& el)
      * Route-specific tags.
      */
   case tt_rte_name:
-    rte_head->rte_name = xstrdup(cdatastr);
+    rte_head->rte_name = cdatastr;
     break;
   case tt_rte:
     break;
@@ -1049,7 +1049,7 @@ gpx_end(const QString& el)
     wpt_tmp = NULL;
     break;
   case tt_rte_desc:
-    rte_head->rte_desc = xstrdup(cdatastr);
+    rte_head->rte_desc = cdatastr;
     break;
   case tt_rte_number:
     rte_head->rte_num = cdatastr.toInt();
@@ -1058,7 +1058,7 @@ gpx_end(const QString& el)
      * Track-specific tags.
      */
   case tt_trk_name:
-    trk_head->rte_name = xstrdup(cdatastr);
+    trk_head->rte_name = cdatastr;
     break;
   case tt_trk:
     break;
@@ -1077,7 +1077,7 @@ gpx_end(const QString& el)
     wpt_tmp = NULL;
     break;
   case tt_trk_desc:
-    trk_head->rte_desc = xstrdup(cdatastr);
+    trk_head->rte_desc = cdatastr;
     break;
   case tt_trk_number:
     trk_head->rte_num = cdatastr.toInt();
@@ -1106,7 +1106,7 @@ gpx_end(const QString& el)
   case tt_wpt_name:
   case tt_rte_rtept_name:
   case tt_trk_trkseg_trkpt_name:
-    wpt_tmp->shortname = xstrdup(cdatastr);
+    wpt_tmp->shortname = cdatastr;
     break;
   case tt_wpt_sym:
   case tt_rte_rtept_sym:
@@ -1121,7 +1121,7 @@ gpx_end(const QString& el)
   case tt_wpt_cmt:
   case tt_rte_rtept_cmt:
   case tt_trk_trkseg_trkpt_cmt:
-    wpt_tmp->description = xstrdup(cdatastr);
+    wpt_tmp->description = cdatastr;
     break;
   case tt_wpt_desc:
   case tt_trk_trkseg_trkpt_desc:
