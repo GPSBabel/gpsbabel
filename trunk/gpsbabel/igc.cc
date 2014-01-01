@@ -587,7 +587,7 @@ static void wr_header(void)
   struct tm* tm;
   time_t date;
   static const char dflt_str[] = "Unknown";
-  const char* str;
+  const char* str = NULL;
   waypoint* wpt;
 
   get_tracks(&pres_track, &track);
@@ -621,22 +621,25 @@ static void wr_header(void)
     }
 #endif
   } else {
-    // IGC header info not found so synthesise it.
-    // If a waypoint is supplied with a short name of "PILOT", use
-    // its description as the pilot's name in the header.
-    str = dflt_str;
 #if NEW_STRINGS
 // FIXME: This almost certainly introduces a memory leak because str
 // is a c string that's used for totally too many things.  Just let it
 // leak for now. 2013-12-31 robertl
     if (NULL != (wpt = find_waypt_by_name("PILOT")) && !wpt->description.isEmpty()) {
-      str = CSTRc(wpt->description);
+      xfree(str);
+      str = xstrdup(CSTRc(wpt->description));
 #else
     if (NULL != (wpt = find_waypt_by_name("PILOT")) && wpt->description) {
       str = CSTRc(wpt->description);
 #endif
+    } else {
+      // IGC header info not found so synthesise it.
+      // If a waypoint is supplied with a short name of "PILOT", use
+      // its description as the pilot's name in the header.
+      str = xstrdup(dflt_str);
     }
     gbfprintf(file_out, "HFPLTPILOT:%s\r\n", str);
+    xfree(str);
   }
 }
 
