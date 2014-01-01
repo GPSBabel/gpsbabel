@@ -123,8 +123,9 @@ int16_t gbfgetint16(gbfile* file);
 double gbfgetdbl(gbfile* file);			// read a double value
 float gbfgetflt(gbfile* file);			// read a float value
 char* gbfgetstr(gbfile* file);			// read until any type of line-breaks or EOF
-QString gbfgetpstr(gbfile* file);			// read a pascal string
-char* gbfgetcstr(gbfile* file);			// read a null terminated string
+QString gbfgetpstr(gbfile* file);		// read a pascal string
+QString gbfgetcstr(gbfile* file);		// read a null terminated string
+char* gbfgetcstr_old(gbfile* file);		// read a null terminated string
 
 int gbfputint16(const int16_t i, gbfile* file);
 #define gbfputuint16(a,b) gbfputint16((uint16_t)(a),(b))

@@ -981,7 +981,7 @@ gbfgetflt(gbfile* file)
  */
 
 char*
-gbfgetcstr(gbfile* file)
+gbfgetcstr_old(gbfile* file)
 {
   char* result;
   int len = 0;
@@ -1009,6 +1009,15 @@ gbfgetcstr(gbfile* file)
   result[len] = '\0';
 
   return result;
+}
+
+QString
+gbfgetcstr(gbfile* file)
+{
+  char* result = gbfgetcstr_old(file);
+  QString rv(result);
+  xfree(result);
+  return rv; 
 }
 
 /*
