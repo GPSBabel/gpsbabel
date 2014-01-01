@@ -231,13 +231,13 @@ data_read(void)
 
     if (snmac) {
       snprintf(desc, sizeof desc, "%s/%d Mbps/Ch %d", ssid, speed, channel);
-      wpt_tmp->shortname = xstrdup(mac);
+      wpt_tmp->shortname = (mac);
     } else {
       snprintf(desc, sizeof desc, "%d Mbps/Ch %d/%s", speed, channel, mac);
-      wpt_tmp->shortname = xstrdup(ssid);
+      wpt_tmp->shortname = (ssid);
     }
 
-    wpt_tmp->description = xstrdup(desc);
+    wpt_tmp->description = desc;
     wpt_tmp->longitude = lon;
     wpt_tmp->latitude = lat;
     wpt_tmp->SetCreationTime(mktime(&tm));
@@ -326,14 +326,7 @@ fix_netstumbler_dupes(void)
 
   for (i = 0, bh = htable; i < ct; i++, bh++) {
     if (last_crc == bh->crc) {
-#if NEW_STRINGS
       bh->wpt->shortname += QString("/%1").arg(++serial);
-#else
-      char ssid[32 + 5 + 1];
-      snprintf(ssid, sizeof ssid, "%s/%d", CSTRc(bh->wpt->shortname), ++serial);
-      xfree(bh->wpt->shortname);
-      bh->wpt->shortname = xstrdup(ssid);
-#endif
     } else {
       last_crc = bh->crc;
     }

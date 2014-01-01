@@ -78,7 +78,10 @@ skyforce_parse_wpt(const char* str, int* rte_num)
     return NULL;
   }
 
-  wpt->shortname = lrtrim(xstrndup(str + 10, 9));
+  // The line has fixed columns and starts like:
+  // R 001 029 BEARHILL  N42...
+  // Grab "BEARHILL" and whack trailing space.
+  wpt->shortname = QString(str).mid(10,9).trimmed();
 
   if (rte_num) {
     *rte_num = atoi(str + 2);
