@@ -580,13 +580,13 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, waypoint** wpt, unsigned int* mpsc
   if ((mps_ver == 4) || (mps_ver == 5)) {
     gbfread(tbuf, 6, 1, mps_file);				/* unknown */
     QScopedPointer<char, QScopedPointerPodDeleter>wptnotes (gbfgetcstr(mps_file));
-    thisWaypoint->notes = *wptnotes;
+    thisWaypoint->notes = wptnotes.take();
   } else {
     gbfread(tbuf, 2, 1, mps_file);				/* unknown */
   }
 
   thisWaypoint->shortname = wptname;
-  thisWaypoint->description = *wptdesc;
+  thisWaypoint->description = wptdesc.take();
   thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
   thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
   thisWaypoint->altitude = mps_altitude;
@@ -959,7 +959,7 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
 #endif
 
   rte_head = route_head_alloc();
-  rte_head->rte_name = *rtename;
+  rte_head->rte_name = rtename.take();
   route_add_head(rte_head);
   *rte = rte_head;
 
@@ -1563,7 +1563,7 @@ mps_track_r(gbfile* mps_file, int mps_ver, route_head** trk)
 #endif
 
   track_head = route_head_alloc();
-  track_head->rte_name = *trkname;
+  track_head->rte_name = trkname.take();
   track_add_head(track_head);
   *trk = track_head;
 
