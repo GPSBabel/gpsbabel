@@ -43,7 +43,7 @@ static int broken_sportrak;
 
 #define debug_serial  (global_opts.debug_level > 1)
 
-static char* termread(char* ibuf, int size);
+static QString termread(char* ibuf, int size);
 static void termwrite(char* obuf, int size);
 static void mag_readmsg(gpsdata_type objective);
 static void mag_handon(void);
@@ -420,13 +420,12 @@ mag_readmsg(gpsdata_type objective)
   int isz;
   unsigned int isum;
   char* isump;
-  char* gr;
   int retrycnt = 20;
 
 retry:
-  gr = termread(ibuf, sizeof(ibuf));
+  QString gr = termread(ibuf, sizeof(ibuf));
 
-  if (!gr) {
+  if (gr.isEmpty()) {
     if (!got_version) {
       /*
        * The 315 can take up to six seconds to respond to
@@ -597,7 +596,7 @@ terminit(const char* portname, int create_ok)
   }
 }
 
-static char* termread(char* ibuf, int size)
+static QString termread(char* ibuf, int size)
 {
   if (is_file) {
     return gbfgets(ibuf, size, magfile_h);
