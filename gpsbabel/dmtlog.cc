@@ -283,13 +283,7 @@ tlog3b_xgcb_tpten(xg_string args, const QXmlStreamAttributes* unused)
 static void
 tlog3b_xgcb_wptid(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   xmlwpt->shortname = args;
-#else
-  if (*args) {
-    xmlwpt->shortname = xstrdup(args);
-  }
-#endif
 }
 
 
@@ -319,33 +313,20 @@ tlog3b_xgcb_wptgr(xg_string args, const QXmlStreamAttributes* unused)
 static void
 tlog3b_xgcb_wptno(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   xmlNorthing = args.toDouble();
-#else
-  xmlNorthing = atof(args);
-#endif
 }
-
 
 static void
 tlog3b_xgcb_wptea(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   xmlEasting = args.toDouble();
-#else
-  xmlEasting = atof(args);
-#endif
 }
 
 
 static void
 tlog3b_xgcb_wptal(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   xmlAltitude = args.toDouble();
-#else
-  xmlAltitude = atof(args);
-#endif
 }
 
 
@@ -595,10 +576,10 @@ read_CTrackFile(const int version)
       if (name && *name) {
         switch (i) {
         case 0:
-          wpt->description = xstrdup(name);
+          wpt->description = name;
           break;
         case 1:
-          wpt->shortname = xstrdup(name);
+          wpt->shortname = name;
           break;
         }
       }

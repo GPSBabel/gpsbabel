@@ -219,7 +219,7 @@ bushnell_read(void)
 
   // Apparently this is always zero terminated, though it's never been
   // observed to be longer than 19 bytes + a null terminator.
-  wpt_tmp->shortname = xstrdup(gbfgetstr(file_in));
+  wpt_tmp->shortname = gbfgetstr(file_in);
 
   waypt_add(wpt_tmp);
 }
