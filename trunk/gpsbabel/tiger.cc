@@ -171,7 +171,7 @@ data_read(void)
       wpt_tmp->longitude = lon;
       wpt_tmp->latitude = lat;
       wpt_tmp->description = desc;
-      wpt_tmp->shortname = mkshort(mkshort_handle, desc);
+      wpt_tmp->shortname = mkshort(mkshort_handle, QString(desc));
 
       waypt_add(wpt_tmp);
     }

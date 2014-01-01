@@ -124,12 +124,7 @@ void goog_segment(xg_string args, const QXmlStreamAttributes* unused)
 
   wpt_tmp = route_find_waypt_by_name(routehead[goog_segroute], goog_segname);
   if (wpt_tmp) {
-#if NEW_STRINGS
-    wpt_tmp->shortname = QString();
-#else
-    xfree(wpt_tmp->shortname);
-#endif
-    wpt_tmp->shortname = mkshort(desc_handle, CSTRc(args));
+    wpt_tmp->shortname = mkshort(desc_handle, args);
     wpt_tmp->description = args;
   }
 }
