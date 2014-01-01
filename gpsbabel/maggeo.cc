@@ -138,10 +138,10 @@ maggeo_read(void)
         }
         break;
       case 8:
-        wpt_tmp->shortname = xstrdup(s);
+        wpt_tmp->shortname = s;
         break;
       case 9:
-        wpt_tmp->description = xstrdup(s);
+        wpt_tmp->description = s;
         break;
       case 10:
         gcdata->placer = s;
