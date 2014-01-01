@@ -975,7 +975,6 @@ void tpo_process_map_notes(void)
     int lat;
     int lon;
     unsigned int name_length;
-    char* waypoint_name;
     waypoint* waypoint_temp;
     unsigned int num_bytes;
     unsigned int jj;
@@ -991,9 +990,7 @@ void tpo_process_map_notes(void)
     waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
-    xasprintf(&waypoint_name, "NOTE %d", ii+1);
-//printf("Waypoint Name: %s\t\t", waypoint_name);
-    waypoint_temp->shortname = waypoint_name;
+    waypoint_temp->shortname = QString().sprintf("NOTE %d", ii+1);
 
 //UNKNOWN DATA LENGTH
     (void)tpo_read_int();
@@ -1015,6 +1012,7 @@ void tpo_process_map_notes(void)
       gbfread(comment, 1, name_length, tpo_file_in);
       comment[name_length] = '\0';  // Terminator
       waypoint_temp->description = comment;
+      xfree(comment);
 //printf("Comment: %s\n", comment);
     } else {
 //            waypoint_temp->description = NULL;
