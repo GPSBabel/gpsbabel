@@ -209,17 +209,40 @@ disp_summary(const gbfile* f)
 #define FREAD(a,b) gbfread(a,(b),1,fin)
 #define FREAD_i32 gbfgetint32(fin)
 #define FREAD_i16 gbfgetint16(fin)
-#define FREAD_STR(a) gdb_fread_str(a,sizeof(a),fin)
-#if NEW_STRINGS
-#define FREAD_CSTR \
-  (gdb_ver >= GDB_VER_UTF8) ? QString::fromUtf8(gdb_fread_cstr(fin)) : \
-  QString::fromLatin1(gdb_fread_cstr(fin))
-#else
-#define FREAD_CSTR gdb_fread_cstr(fin)
-#endif
-#define FREAD_CSTR_AS_QSTR gdb_fread_cstr_as_qstr(fin)
 #define FREAD_DBL gbfgetdbl(fin)
 #define FREAD_LATLON GPS_Math_Semi_To_Deg(gbfgetint32(fin))
+
+#define FREAD_STR(a) gdb_fread_str(a,sizeof(a),fin)
+
+// This is all very messy.  Some versions of GDB store strings as 
+// 8859-1 strings and others as UTF8.  This wrapper tries to hide 
+// all that while (while keeping the character sets correct) and
+// not pushing that decision  down into gbfread.  This module is
+// still pretty messy and the points as to which fields are encode
+// which ways in which versions are not at all clear, leaing to 
+// encoding issues on read and leaks because of teh differences 
+// in calling conventions on who owns/destroys the result.
+//#define FREAD_CSTR \
+//  (gdb_ver >= GDB_VER_UTF8) ? QString::fromUtf8(gdb_fread_cstr(fin)) : \
+//  QString::fromLatin1(gdb_fread_cstr(fin))
+#define FREAD_CSTR_AS_QSTR gbfgetcstr(fin)
+
+static char* gdb_fread_cstr(gbfile* fin);
+
+QString fread_cstr()
+{
+  QString rv;
+  char* s = gdb_fread_cstr(fin);
+  if (gdb_ver >= GDB_VER_UTF8) { 
+    rv = QString::fromUtf8(s);
+  } else {
+    rv = QString::fromLatin1(s);
+  }
+  
+  xfree(s);
+
+  return rv;
+}
 
 #if GDB_DEBUG
 static char*
@@ -257,22 +280,14 @@ nice(const char* str)
 static char*
 gdb_fread_cstr(gbfile* fin)
 {
-  char* result = gbfgetcstr(fin);
+  char* result = gbfgetcstr_old(fin);
 
   if (result && (*result == '\0')) {
     xfree(result);
     result = NULL;
   }
-  return result;
-}
 
-static QString
-gdb_fread_cstr_as_qstr(gbfile* fin)
-{
-  char* result = gdb_fread_cstr(fin);
-  QString qresult = result;
-  xfree(result);
-  return qresult;
+  return result;
 }
 
 static int
@@ -303,21 +318,10 @@ gdb_fread_strlist(void)
   count = FREAD_i32;
 
   while (count > 0) {
-#if HUH
-    char* str = FREAD_CSTR;
-    if (str != NULL) {
-      if (*str && (res == NULL)) {
-        res = str;
-      } else {
-        xfree(str);
-      }
-    }
-#else
-    QString str = FREAD_CSTR;
+    QString str = fread_cstr();
     if (!str.isEmpty()) {
       res = str;
     }
-#endif
     count--;
   }
 
@@ -555,7 +559,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 
   gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&res->fs, (format_specific_data*) gmsd);
-  res->shortname = FREAD_CSTR;
+  res->shortname = fread_cstr();
 #if GDB_DEBUG
   sn = xstrdup(nice(res->shortname));
 #endif
@@ -598,7 +602,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
          res->latitude < 0 ? 'S' : 'N', res->latitude,
          res->longitude < 0 ? 'W' : 'E', res->longitude);
 #endif
-  res->notes = FREAD_CSTR;
+  res->notes = fread_cstr();
 #if GDB_DEBUG
   DBG(GDB_DBG_WPTe, res->notes) {
     char* str = gstrsub(res->notes, "\r\n", ", ");
@@ -691,7 +695,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     GMSD_SETSTR(addr, bufp);
 
     FREAD(buf, 5);				/* instruction depended */
-    res->description = FREAD_CSTR;		/* instruction */
+    res->description = FREAD_CSTR_AS_QSTR;	/* instruction */
     url_ct = FREAD_i32;
     for (i = url_ct; (i); i--) {
       QString str = FREAD_CSTR_AS_QSTR;
@@ -801,7 +805,7 @@ read_route(void)
   warnings = 0;
 
   rte = route_head_alloc();
-  rte->rte_name = FREAD_CSTR;
+  rte->rte_name = fread_cstr();
   FREAD(buf, 1);			/* display/autoname - 1 byte */
 
   if (FREAD_C == 0) {		/* max. data flag */
@@ -838,7 +842,7 @@ read_route(void)
     wpt = waypt_new();
     rtept_ct++;
 
-    wpt->shortname = FREAD_CSTR;	/* shortname */
+    wpt->shortname = fread_cstr();	/* shortname */
     wpt_class = FREAD_i32;		/* waypoint class */
     FREAD_STR(buf);			/* country code */
     FREAD(buf, 18 + 4);		/* subclass part 1-3 / unknown */
@@ -979,7 +983,7 @@ read_route(void)
 
   /* VERSION DEPENDENT CODE */
   if (gdb_ver <= GDB_VER_2) {
-    rte->rte_url = FREAD_CSTR_AS_QSTR;
+    rte->rte_url = fread_cstr();
   } else {
     rte->rte_url = gdb_fread_strlist();
 
@@ -987,7 +991,7 @@ read_route(void)
     rte->line_color.bbggrr = gt_color_value(color_idx);
     FREAD(buf, 1);			/* ?????????????????????????????????? */
 
-    rte->rte_desc = FREAD_CSTR;
+    rte->rte_desc = fread_cstr();
 #if 0
     /* replace CRLF's with ", " */
     if (rte->rte_desc) {
@@ -1015,7 +1019,7 @@ read_track(void)
   trk_ct++;
 
   res = route_head_alloc();
-  res->rte_name = FREAD_CSTR;
+  res->rte_name = fread_cstr();
 //	res->rte_num = trk_ct;
 
   FREAD(&dummy, 1);		/* display - 1 byte */

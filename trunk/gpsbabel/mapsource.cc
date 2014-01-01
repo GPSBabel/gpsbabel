@@ -551,7 +551,7 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, waypoint** wpt, unsigned int* mpsc
     gbfseek(mps_file, 8, SEEK_CUR);
   }
 
-  QScopedPointer<char, QScopedPointerPodDeleter>wptdesc (gbfgetcstr(mps_file));
+  QString wptdesc = gbfgetcstr(mps_file);
 
   if (gbfgetc(mps_file) == 1) {				/* proximity validity */
     mps_proximity = gbfgetdbl(mps_file);
@@ -579,14 +579,13 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, waypoint** wpt, unsigned int* mpsc
 
   if ((mps_ver == 4) || (mps_ver == 5)) {
     gbfread(tbuf, 6, 1, mps_file);				/* unknown */
-    QScopedPointer<char, QScopedPointerPodDeleter>wptnotes (gbfgetcstr(mps_file));
-    thisWaypoint->notes = wptnotes.take();
+    thisWaypoint->notes = gbfgetcstr(mps_file);
   } else {
     gbfread(tbuf, 2, 1, mps_file);				/* unknown */
   }
 
   thisWaypoint->shortname = wptname;
-  thisWaypoint->description = wptdesc.take();
+  thisWaypoint->description = wptdesc;
   thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
   thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
   thisWaypoint->altitude = mps_altitude;
@@ -914,7 +913,7 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
   double	mps_altitude = unknown_alt;
   double	mps_depth = unknown_alt;
 
-  QScopedPointer<char, QScopedPointerPodDeleter>rtename(gbfgetcstr(mps_file));
+  QString rtename = gbfgetcstr(mps_file);
 #ifdef	MPS_DEBUG
   fprintf(stderr, "mps_route_r: reading route %s\n", rtename);
 #endif
@@ -959,7 +958,7 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
 #endif
 
   rte_head = route_head_alloc();
-  rte_head->rte_name = rtename.take();
+  rte_head->rte_name = rtename;
   route_add_head(rte_head);
   *rte = rte_head;
 
@@ -1541,7 +1540,7 @@ mps_track_r(gbfile* mps_file, int mps_ver, route_head** trk)
 
   (void)mps_ver;
 
-  QScopedPointer<char, QScopedPointerPodDeleter>trkname (gbfgetcstr(mps_file));
+  QString trkname = gbfgetcstr(mps_file);
 #ifdef	MPS_DEBUG
   fprintf(stderr, "mps_track_r: reading track %s\n", trkname);
 #endif
@@ -1563,7 +1562,7 @@ mps_track_r(gbfile* mps_file, int mps_ver, route_head** trk)
 #endif
 
   track_head = route_head_alloc();
-  track_head->rte_name = trkname.take();
+  track_head->rte_name = trkname;
   track_add_head(track_head);
   *trk = track_head;
 

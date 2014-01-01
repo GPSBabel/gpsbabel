@@ -112,19 +112,13 @@ data_read(void)
         wpt_tmp->notes = gbfgetcstr(file_in);
         break;
       case 9: { /* NULL Terminated (vs. pascal) link */
-        char* url = gbfgetcstr(file_in);
+        QString url = gbfgetcstr(file_in);
         link.url_ = url;
-        if (url) {
-          xfree(url);
-        }
       }
       break;
       case 0x10: {
-        char* ult = gbfgetcstr(file_in);
+        QString ult = gbfgetcstr(file_in);
         link.url_link_text_ = ult;
-        if (ult) {
-          xfree(ult);
-        }
       }
       break;
       case 0x63:
