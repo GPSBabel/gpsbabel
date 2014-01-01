@@ -226,16 +226,16 @@ void wfff_e(xg_string args, const QXmlStreamAttributes* unused)
     wpt_tmp = waypt_new();
 
     if (snmac) {
-      wpt_tmp->shortname = xstrdup(ap_mac);
+      wpt_tmp->shortname = ap_mac;
     } else {
-      wpt_tmp->shortname = xstrdup(ap_ssid);
+      wpt_tmp->shortname = ap_ssid;
     }
 
     snprintf(desc, sizeof desc,
              "%s/%s/WEP %s/Ch %d/%2.0fdB/%2.0fdB/%s",
              (snmac?ap_ssid:ap_mac), ap_type, ap_wep,
              ap_chan, ap_mnrssi, ap_mxrssi, ap_last);
-    wpt_tmp->description = xstrdup(desc);
+    wpt_tmp->description = desc;
 
     wpt_tmp->latitude = ap_lat;
     wpt_tmp->longitude = ap_lon;
