@@ -707,8 +707,8 @@ static void Read_AN1_Waypoints(gbfile* f)
     }
     wpt_tmp->longitude = -DecodeOrd(rec->lon);
     wpt_tmp->latitude = DecodeOrd(rec->lat);
-    wpt_tmp->notes = xstrdup(rec->comment);
-    wpt_tmp->description = xstrdup(rec->name);
+    wpt_tmp->notes = rec->comment;
+    wpt_tmp->description = rec->name;
     if (rec->url) {
       wpt_tmp->AddUrlLink(rec->url);
 #if NEW_STRINGS

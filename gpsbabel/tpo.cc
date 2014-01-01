@@ -281,7 +281,7 @@ void tpo_read_2_x(void)
 
     /* generate a generic track name */
     sprintf(buff, "Track %d", i+1);
-    track_temp->rte_name = xstrdup(buff);
+    track_temp->rte_name = buff;
 
     /* zoom level 1-5 visibility flags */
     gbfread(&buff[0], 1, 10, tpo_file_in);
@@ -656,6 +656,7 @@ void tpo_process_tracks(void)
       xasprintf(&track_name, "TRK %d", ii+1);
     }
     track_temp->rte_name = track_name;
+    xfree(track_name);
 
     // RGB line_color expressed for html=rrggbb and kml=bbggrr - not assigned before 2012
     sprintf(rgb,"%02x%02x%02x",styles[track_style].color[0],styles[track_style].color[1],styles[track_style].color[2]);
@@ -884,6 +885,7 @@ void tpo_process_waypoints(void)
 
     // Assign the waypoint name
     waypoint_temp->shortname = waypoint_name;
+    xfree(waypoint_name);
 
     // Grab the altitude in meters
     altitude = gbfgetint32(tpo_file_in);
@@ -905,9 +907,7 @@ void tpo_process_waypoints(void)
       gbfread(comment, 1, name_length, tpo_file_in);
       comment[name_length] = '\0';  // Terminator
       waypoint_temp->description = comment;
-//printf("\tComment: %s\n", waypoint_name);
-    } else {
-//            waypoint_temp->description = NULL;
+      xfree(comment);
     }
 
 //        waypoint_temp->notes = NULL;
@@ -1110,7 +1110,6 @@ void tpo_process_symbols(void)
   for (ii = 0; ii < waypoint_count; ii++) {
     int lat;
     int lon;
-    char* waypoint_name;
     waypoint* waypoint_temp;
 
 
@@ -1127,9 +1126,7 @@ void tpo_process_symbols(void)
     waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
-    xasprintf(&waypoint_name, "SYM %d", ii+1);
-//printf("Waypoint Name: %s\n", waypoint_name);
-    waypoint_temp->shortname = waypoint_name;
+    waypoint_temp->shortname = QString().sprintf("SYM %d", ii+1);
 
 //        waypoint_temp->description = NULL;
 //        waypoint_temp->notes = NULL;
@@ -1175,7 +1172,6 @@ void tpo_process_text_labels(void)
     int lat;
     int lon;
     unsigned int name_length;
-    char* waypoint_name;
     waypoint* waypoint_temp;
 
 
@@ -1192,9 +1188,7 @@ void tpo_process_text_labels(void)
     waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
-    xasprintf(&waypoint_name, "TXT %d", ii+1);
-//printf("Waypoint Name: %s\t\t", waypoint_name);
-    waypoint_temp->shortname = waypoint_name;
+    waypoint_temp->shortname = QString().sprintf("TXT %d", ii+1);
 
     for (jj = 0; jj < 16; jj++) {
 //UNKNOWN DATA LENGTH
@@ -1212,6 +1206,7 @@ void tpo_process_text_labels(void)
       gbfread(comment, 1, name_length, tpo_file_in);
       comment[name_length] = '\0';  // Terminator
       waypoint_temp->description = comment;
+      xfree(comment);
 //printf("Comment: %s\n", comment);
     } else {
 //            waypoint_temp->description = NULL;
@@ -1290,6 +1285,8 @@ void tpo_process_routes(void)
       xasprintf(&route_name, "RTE %d", ii+1);
     }
     route_temp->rte_name = route_name;
+    xfree(route_name);
+
 //printf("Route Name: %s\n", route_name);
 
 //UNKNOWN DATA LENGTH

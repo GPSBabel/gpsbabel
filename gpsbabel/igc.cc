@@ -184,9 +184,9 @@ static void igc_task_rec(const char* rec)
 
     // Create a route to store the task data in.
     rte_head = route_head_alloc();
-    rte_head->rte_name = xstrdup(task_num);
+    rte_head->rte_name = task_num;
     sprintf(tmp_str, DATEMAGIC "%s: %s", flight_date, task_desc);
-    rte_head->rte_desc = xstrdup(tmp_str);
+    rte_head->rte_desc = tmp_str;
     route_add_head(rte_head);
     state++;
     return;
@@ -207,7 +207,7 @@ static void igc_task_rec(const char* rec)
                    (lon_deg + (lon_min * 1000 + lon_frac) / 1000.0 / 60);
 
   wpt->SetCreationTime(creation);
-  wpt->description = xstrdup(tmp_str);
+  wpt->description = tmp_str;
 
   // Name the waypoint according to the order of the task record
   switch (state) {
@@ -249,7 +249,7 @@ static void igc_task_rec(const char* rec)
     waypt_free(wpt);
     return;
   }
-  wpt->shortname = xstrdup(short_name);
+  wpt->shortname = short_name;
   route_add_wpt(rte_head, wpt);
 }
 
@@ -331,15 +331,15 @@ static void data_read(void)
       // Create a track for pressure altitude waypoints
       if (!pres_head) {
         pres_head = route_head_alloc();
-        pres_head->rte_name = xstrdup(PRESTRKNAME);
-        pres_head->rte_desc = xstrdup(trk_desc);
+        pres_head->rte_name = PRESTRKNAME;
+        pres_head->rte_desc = trk_desc;
         track_add_head(pres_head);
       }
       // Create a second track for GNSS altitude waypoints
       if (!gnss_head) {
         gnss_head = route_head_alloc();
-        gnss_head->rte_name = xstrdup(GNSSTRKNAME);
-        gnss_head->rte_desc = xstrdup(trk_desc);
+        gnss_head->rte_name = GNSSTRKNAME;
+        gnss_head->rte_desc = trk_desc;
         track_add_head(gnss_head);
       }
       // Create a waypoint from the fix record data
@@ -630,7 +630,7 @@ static void wr_header(void)
 // is a c string that's used for totally too many things.  Just let it
 // leak for now. 2013-12-31 robertl
     if (NULL != (wpt = find_waypt_by_name("PILOT")) && !wpt->description.isEmpty()) {
-      str = xstrdup(CSTRc(wpt->description));
+      str = CSTRc(wpt->description);
 #else
     if (NULL != (wpt = find_waypt_by_name("PILOT")) && wpt->description) {
       str = CSTRc(wpt->description);
