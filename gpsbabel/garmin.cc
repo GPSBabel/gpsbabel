@@ -1087,13 +1087,13 @@ route_waypt_pr(const waypoint* wpt)
   // enforce that here, since jeeps doesn't.
   //
   // This was strncpy(rte->ident, wpt->shortname, sizeof(rte->ident));
-  char* s, *d;
+  char* d;
   d = rte->ident;
 #if NEW_STRINGS
   for (int idx = 0; idx < wpt->shortname.length(); idx++) {
-    int c = wpt->shortname[idx].toAscii();
+    int c = wpt->shortname[idx].toLatin1();
 #else
-  for (s = wpt->shortname; *s; s++) {
+  for (char* s = wpt->shortname; *s; s++) {
     int c = *s;
 #endif
     if (receiver_must_upper && isalpha(c)) {
