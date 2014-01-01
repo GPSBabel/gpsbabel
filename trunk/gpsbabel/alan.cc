@@ -513,7 +513,9 @@ static waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
   WP->longitude =  pt2deg(wpt->pt.x);
   WP->SetCreationTime(unpack_time(wpt->date, wpt->time));
   for (j=WPT_NAME_LEN-1; j >= 0 && wpt->name[j] == ' '; j--) {};
-  WP->shortname = xstrndup(wpt->name,j+1);
+  char *s = xstrndup(wpt->name,j+1);
+  WP->shortname = s;
+  xfree(s);
   for (j=WPT_COMMENT_LEN-1; j >= 0 && wpt->comment[j] == ' '; j--) {};
   if (j >= 0) {
     char *s = xstrndup(wpt->comment, j+1);
@@ -565,12 +567,16 @@ static void wpr_read(void)
     RT = route_head_alloc();
     RT->rte_num = i;
     for (j=RTE_NAME_LEN-1; j >= 0 && rte->name[j] == ' '; j--) {};
-    RT->rte_name = xstrndup(rte->name,j+1);
+    char *s = xstrndup(rte->name,j+1);
+    RT->rte_name = s;
+    xfree(s);
     for (j=RTE_COMMENT_LEN-1; j >= 0 && rte->comment[j] == ' '; j--) {};
     if (j >= 0) {
-      RT->rte_desc = xstrndup(rte->comment,j+1);
+      char *s = xstrndup(rte->comment,j+1);
+      RT->rte_desc = s;
+      xfree(s);
     } else {
-      RT->rte_desc = xstrdup("");
+      RT->rte_desc = "";
     }
 
     route_add_head(RT);
