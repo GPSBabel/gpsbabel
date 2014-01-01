@@ -95,7 +95,7 @@ void gbfclose(gbfile* file);
 
 gbsize_t gbfread(void* buf, const gbsize_t size, const gbsize_t members, gbfile* file);
 int gbfgetc(gbfile* file);
-char* gbfgets(char* buf, int len, gbfile* file);
+QString gbfgets(char* buf, int len, gbfile* file);
 
 int gbvfprintf(gbfile* file, const char* format, va_list ap);
 int gbfprintf(gbfile* file, const char* format, ...);

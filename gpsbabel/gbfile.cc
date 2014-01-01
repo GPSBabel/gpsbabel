@@ -656,7 +656,7 @@ gbfgetc(gbfile* file)
  * gbfgets: (as fgets)
  */
 
-char*
+QString 
 gbfgets(char* buf, int len, gbfile* file)
 {
   char* result = buf;
@@ -682,7 +682,10 @@ gbfgets(char* buf, int len, gbfile* file)
     }
   }
   *buf = '\0';
-  return (*result != '\0') ? result : NULL;
+
+  QString rv(result);
+  return rv;
+
 }
 
 /*
