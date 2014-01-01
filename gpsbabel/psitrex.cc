@@ -318,8 +318,8 @@ psit_waypoint_r(gbfile* psit_file, waypoint** wpt)
     /* the name */
     psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), comma);
     rtrim(psit_current_token);
-    thisWaypoint->shortname = xstrdup(psit_current_token);
-    thisWaypoint->description = xstrdup("");
+    thisWaypoint->shortname = psit_current_token;
+    thisWaypoint->description = "";
 
     psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
     rtrim(psit_current_token);
@@ -411,7 +411,7 @@ psit_route_r(gbfile* psit_file, route_head** rte)
   rtrim(rtename);
 
   rte_head = route_head_alloc();
-  rte_head->rte_name = xstrdup(rtename);
+  rte_head->rte_name = rtename;
   route_add_head(rte_head);
   *rte = rte_head;
 
@@ -440,8 +440,8 @@ psit_route_r(gbfile* psit_file, route_head** rte)
       /* the name */
       psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), comma);
       rtrim(psit_current_token);
-      thisWaypoint->shortname = xstrdup(psit_current_token);
-      thisWaypoint->description = xstrdup("");
+      thisWaypoint->shortname = psit_current_token;
+      thisWaypoint->description = "";
 
       psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
       rtrim(psit_current_token);
@@ -539,7 +539,6 @@ psit_routehdr_w_wrapper(const route_head* rte)
 static void
 psit_track_r(gbfile* psit_file, route_head** trk)
 {
-  char tbuf[100];
   char trkname[256];
   unsigned int trk_num;
 
@@ -612,10 +611,9 @@ psit_track_r(gbfile* psit_file, route_head** trk)
          tracklog is usually ACTIVE LOG
          the second is ACTIVE LOG001 and so on */
         if (trk_num > 0) {
-          sprintf(tbuf, "%s%03d", trkname, trk_num);
-          track_head->rte_name = xstrdup(tbuf);
+          track_head->rte_name = QString().sprintf("%s%03d", trkname, trk_num);
         } else {
-          track_head->rte_name = xstrdup(trkname);
+          track_head->rte_name = trkname;
         }
         trk_num++;
         track_add_head(track_head);

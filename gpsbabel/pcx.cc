@@ -157,11 +157,11 @@ data_read(void)
       wpt_tmp->altitude = alt;
       cp = lrtrim(name);
       if (*cp != '\0') {
-        wpt_tmp->shortname = xstrdup(cp);
+        wpt_tmp->shortname = cp;
       }
       cp = lrtrim(desc);
       if (*cp != '\0') {
-        wpt_tmp->description = xstrdup(cp);
+        wpt_tmp->description = cp;
       }
       wpt_tmp->icon_descr = gt_find_desc_from_icon_number(symnum, PCX, NULL);
 
@@ -202,11 +202,11 @@ data_read(void)
       if (track == NULL) {
         if (ibuf[3] == 'L' && ibuf[4] == 'A') {
           track = route_head_alloc();
-          track->rte_name = xstrdup("track");
+          track->rte_name = "track";
           track_add_head(track);
         } else if (ibuf[3] == 'T' && ibuf[4] == 'N') {
           track = route_head_alloc();
-          track->rte_name = xstrdup(&ibuf[6]);
+          track->rte_name = &ibuf[6];
           track_add_head(track);
         }
       }
@@ -217,7 +217,7 @@ data_read(void)
         n++;
       }
       route = route_head_alloc();
-      route->rte_name = xstrdup(&ibuf[n]);
+      route->rte_name = &ibuf[n];
       route_add_head(route);
       break;
     case 'T':
@@ -266,7 +266,7 @@ data_read(void)
       /* Did we get a track point before a track header? */
       if (track == NULL) {
         track = route_head_alloc();
-        track->rte_name = xstrdup("Default");
+        track->rte_name = "Default";
         track_add_head(track);
       }
       track_add_wpt(track, wpt_tmp);

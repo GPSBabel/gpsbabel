@@ -68,19 +68,11 @@ rd_deinit(void)
     waypoint* head = (waypoint*) QUEUE_FIRST(&route->waypoint_list);
     waypoint* tail = (waypoint*) QUEUE_LAST(&route->waypoint_list);
     if (head != NULL) {
-      route->rte_name = xstrdup(head->shortname);
+      route->rte_name = head->shortname;
     }
-#if NEW_STRINGS
     route->rte_name += " - ";
-#else
-    route->rte_name = xstrappend(route->rte_name, " - ");
-#endif
     if (tail != NULL) {
-#if NEW_STRINGS
       route->rte_name += tail->shortname;
-#else
-      route->rte_name = xstrappend(route->rte_name, tail->shortname);
-#endif
       tail->altitude = dest_altitude;
     }
   }
@@ -98,7 +90,7 @@ void	wpt_s(xg_string args, const QXmlStreamAttributes* unused)
   if (isFirst == 1) {
     wpt_from = waypt_new();
     route = route_head_alloc();
-    route->rte_desc=xstrdup("PocketFMS flightplan");
+    route->rte_desc="PocketFMS flightplan";
     route_add_head(route);
   }
   wpt_to = waypt_new();
@@ -124,81 +116,49 @@ void	wpt_e(xg_string args, const QXmlStreamAttributes* unused)
 void	wpt_from_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (wpt_from != NULL) {
-#if NEW_STRINGS
     wpt_from->latitude = args.toDouble();
-#else
-    wpt_from->latitude = atof(args);
-#endif
   }
 }
 
 void	wpt_from_lon(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (wpt_from != NULL) {
-#if NEW_STRINGS
     wpt_from->longitude = args.toDouble();
-#else
-    wpt_from->longitude = atof(args);
-#endif
   }
 }
 
 void	wpt_from_name(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (wpt_from != NULL) {
-#if NEW_STRINGS
     wpt_from->shortname += args;
-#else
-    wpt_from->shortname = xstrappend(wpt_from->shortname, args);
-#endif
   }
 }
 
 void	wpt_from_elev(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (wpt_from != NULL) {
-#if NEW_STRINGS
     wpt_from->altitude = FEET_TO_METERS(args.toDouble());
-#else
-    wpt_from->altitude = FEET_TO_METERS(atof(args));
-#endif
   }
 }
 
 void	wpt_to_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_to->latitude = args.toDouble();
-#else
-  wpt_to->latitude = atof(args);
-#endif
 }
 
 void	wpt_to_lon(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_to->longitude = args.toDouble();
-#else
-  wpt_to->longitude = atof(args);
-#endif
 }
 
 void	wpt_to_name(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_to->shortname += args;
-#else
-  wpt_to->shortname = xstrappend(wpt_to->shortname, args);
-#endif
 }
 
 void	wpt_to_elev(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   dest_altitude = FEET_TO_METERS(args.toDouble());
-#else
-  dest_altitude = FEET_TO_METERS(atof(args));
-#endif
 }
 
 void	wpt_altitude(xg_string args, const QXmlStreamAttributes* attrv)

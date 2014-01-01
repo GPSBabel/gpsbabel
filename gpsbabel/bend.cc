@@ -175,8 +175,8 @@ static void
 process_route_orig(const route_head* route_orig)
 {
   route_head* route_dest = route_head_alloc();
-  route_dest->rte_name = xstrdup(route_orig->rte_name);
-  route_dest->rte_desc = xstrdup(route_orig->rte_desc);
+  route_dest->rte_name = route_orig->rte_name;
+  route_dest->rte_desc = route_orig->rte_desc;
   route_dest->fs = fs_chain_copy(route_orig->fs);
   route_dest->rte_num = route_orig->rte_num;
 
