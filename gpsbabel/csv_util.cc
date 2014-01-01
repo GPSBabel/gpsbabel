@@ -1033,13 +1033,13 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     /* IGNORE -- Calculated Sequence # For Ouput*/
     break;
   case XT_SHORTNAME:
-    wpt->shortname = csv_stringtrim(s, enclosure, 0);
+    wpt->shortname = csv_stringtrim(s, enclosure);
     break;
   case XT_DESCRIPTION:
-    wpt->description = csv_stringtrim(s, enclosure, 0);
+    wpt->description = csv_stringtrim(s, enclosure);
     break;
   case XT_NOTES:
-    wpt->notes = csv_stringtrim(s, "", 0);
+    wpt->notes = csv_stringtrim(s, "");
     break;
   case XT_URL:
     if (!link_) {
@@ -1270,9 +1270,9 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     break;
   case XT_GEOCACHE_ISAVAILABLE:
     gc_data = waypt_alloc_gc_data(wpt);
-    if (case_ignore_strcmp(csv_stringtrim(s, "", 0), "False") == 0) {
+    if (case_ignore_strcmp(csv_stringtrim(s, ""), "False") == 0) {
       gc_data->is_available = status_false;
-    } else if (case_ignore_strcmp(csv_stringtrim(s, "", 0), "True") == 0) {
+    } else if (case_ignore_strcmp(csv_stringtrim(s, ""), "True") == 0) {
       gc_data->is_available = status_true;
     } else {
       gc_data->is_available = status_unknown;
@@ -1280,9 +1280,9 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     break;
   case XT_GEOCACHE_ISARCHIVED:
     gc_data = waypt_alloc_gc_data(wpt);
-    if (case_ignore_strcmp(csv_stringtrim(s, "", 0), "False") == 0) {
+    if (case_ignore_strcmp(csv_stringtrim(s, ""), "False") == 0) {
       gc_data->is_archived = status_false;
-    } else if (case_ignore_strcmp(csv_stringtrim(s, "", 0), "True") == 0) {
+    } else if (case_ignore_strcmp(csv_stringtrim(s, ""), "True") == 0) {
       gc_data->is_archived = status_true;
     } else {
       gc_data->is_archived = status_unknown;
@@ -1319,7 +1319,7 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     /* Tracks and routes *********************************************/
   case XT_ROUTE_NAME:
     if (csv_route) {
-      csv_route->rte_name = csv_stringtrim(s, enclosure, 0);
+      csv_route->rte_name = csv_stringtrim(s, enclosure);
     }
     break;
   case XT_TRACK_NEW:
@@ -1334,7 +1334,7 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     if (!csv_track) {
       csv_track = route_head_alloc();
     }
-    csv_track->rte_name = csv_stringtrim(s, enclosure, 0);
+    csv_track->rte_name = csv_stringtrim(s, enclosure);
     break;
 
     /* OTHER STUFF ***************************************************/
