@@ -1013,7 +1013,7 @@ gbfgetcstr(gbfile* file)
  *             The result is a temporary allocated entity: use it or free it!
  */
 
-char*
+QString
 gbfgetpstr(gbfile* file)
 {
   int len;
@@ -1026,7 +1026,9 @@ gbfgetpstr(gbfile* file)
   }
   result[len] = '\0';
 
-  return result;
+  QString r(result);
+  xfree(result);
+  return r;
 }
 
 static char*

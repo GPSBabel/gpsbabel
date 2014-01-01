@@ -99,19 +99,13 @@ data_read(void)
         wpt_tmp->notes = gbfgetpstr(file_in);
         break;
       case 6: {
-        char* ult = gbfgetpstr(file_in);
+        QString ult = gbfgetpstr(file_in);
         link.url_link_text_ = ult;
-        if (ult) {
-          xfree(ult);
-        }
       }
       break;
       case 7: {
-        char* id = gbfgetpstr(file_in);
+        QString id = gbfgetpstr(file_in);
         wpt_tmp->icon_descr = id;
-        if (id) {
-          xfree(id);
-        }
       }
       break;
       case 8:  /* NULL Terminated (vs. pascal) descr */

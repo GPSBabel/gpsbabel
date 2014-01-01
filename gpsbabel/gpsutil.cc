@@ -113,7 +113,7 @@ data_read(void)
     wpt_tmp = waypt_new();
     wpt_tmp->altitude = alt;
     wpt_tmp->shortname = sn;
-    wpt_tmp->description = xstrdup(desc);
+    wpt_tmp->description = desc;
     wpt_tmp->SetCreationTime(now);
 
     if (latdir == 'S') {

@@ -102,8 +102,8 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
 #else
   if (strcmp(args, "overview_polyline") == 0) {
 #endif
-    routehead->rte_name = (char*) xstrdup("overview");
-    routehead->rte_desc = (char*) xstrdup("Overview");
+    routehead->rte_name = "overview";
+    routehead->rte_desc = "Overview";
   } else {
     goog_step++;
     xasprintf(&routehead->rte_name, "step%03d", goog_step);
@@ -113,7 +113,9 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
       utf_string utf;
       utf.is_html = 1;
       utf.utfstring = /*QString::fromUtf8*/(instructions);
-      routehead->rte_desc = strip_html(&utf);
+      char *s = strip_html(&utf);
+      routehead->rte_desc = s;
+      xfree(s);
       instructions = QString();
     }
   }
