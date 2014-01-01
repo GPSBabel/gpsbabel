@@ -355,7 +355,7 @@ format_garmin_xt_proc_atrk(void)
     track = route_head_alloc();
     // header option was not set to ignore
     if (method !=1) {
-      track->rte_name = xstrdup("ATRK XT");
+      track->rte_name = "ATRK XT";
     }
     track_add_head(track);
   }
