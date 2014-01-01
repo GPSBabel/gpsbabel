@@ -208,14 +208,14 @@ raymarine_read(void)
     }
 
     wpt = waypt_new();
-    wpt->shortname = xstrdup(name);
+    wpt->shortname = name;
     wpt->latitude = atof(lat);
     wpt->longitude = atof(lon);
     waypt_add(wpt);
 
     /* try to read optional values */
     if (((str = inifile_readstr(fin, sect, "Notes"))) && *str) {
-      wpt->notes = xstrdup(str);
+      wpt->notes = str;
     }
     if (((str = inifile_readstr(fin, sect, "Time"))) && *str) {
       wpt->SetCreationTime(EXCEL_TO_TIMET(atof(str)));
@@ -244,7 +244,7 @@ raymarine_read(void)
     }
 
     rte = route_head_alloc();
-    rte->rte_name = xstrdup(name);
+    rte->rte_name = name;
     route_add_head(rte);
 
     for (wx = 0; wx < 0x3FFF; wx++) {
