@@ -196,6 +196,8 @@ data_read(void)
       wpt_tmp->longitude = x/100000.0;
       wpt_tmp->latitude = y/100000.0;
       wpt_tmp->description = desc;
+      xfree(desc);
+      desc = NULL;
       // TODO:: description in rectype 3 contains two zero-terminated strings
       // First is same as rectype 2, second apparently contains the unique ID of the waypoint
       // See http://www.tomtom.com/lib/doc/PRO/TTN6_SDK_documentation.zip
