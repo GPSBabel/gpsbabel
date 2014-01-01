@@ -127,13 +127,14 @@ static arglist_t garmin_gpi_args[] = {
 };
 
 typedef struct {
+ public:
   int D2;
   char S3[9];		/* "GRMRECnn" */
-  time_t crdate;		/* creation date and time */
+  time_t crdate;	/* creation date and time */
   char POI[4];		/* "POI" */
   char S8[3];
-  char* group;
-  char* category;
+  QString group;
+  QString category;
 } reader_data_t;
 
 typedef struct writer_data_s {
@@ -332,7 +333,8 @@ read_header(void)
   }
 
   gbfread(&rdata->POI, 1, sizeof(rdata->POI) - 1, fin);
-  if (strcmp(rdata->POI, "POI") != 0) {
+
+  if (strncmp(rdata->POI, "POI", 3) != 0) {
     fatal(MYNAME ": Wrong or unsupported GPI file!\n");
   }
 
@@ -374,6 +376,7 @@ read_poi(const int sz, const int tag)
 #ifdef GPI_DBG
   dbginfo("poi sublen = %1$d (0x%1$x)\n", len);
 #endif
+  (void) len;
   pos = gbftell(fin);
 
   wpt = waypt_new();
@@ -396,21 +399,13 @@ read_poi(const int sz, const int tag)
       break;
     }
   }
-#if NEW_STRINGS
+
   if (wpt->description.isEmpty() && !wpt->notes.isEmpty()) {
     wpt->description = wpt->notes;
   }
   if (wpt->notes.isEmpty() && !wpt->description.isEmpty()) {
     wpt->notes = wpt->description;
   }
-#else
-  if (wpt->notes && !wpt->description) {
-    wpt->description = xstrdup(wpt->notes);
-  }
-  if (wpt->description && !wpt->notes) {
-    wpt->notes = xstrdup(wpt->description);
-  }
-#endif
 
   waypt_add(wpt);
 
@@ -435,6 +430,8 @@ read_poi_list(const int sz)
   i = gbfgetint32(fin);	/* mostly 23 (0x17) */
 #ifdef GPI_DBG
   dbginfo("list sublen = %1$d (0x%1$x)\n", i);
+#else
+  (void) i;
 #endif
   (void) gbfgetint32(fin);	/* max-lat */
   (void) gbfgetint32(fin);	/* max-lon */
@@ -477,10 +474,9 @@ read_poi_group(const int sz, const int tag)
     subsz = gbfgetint32(fin);	/* ? offset to category data ? */
 #ifdef GPI_DBG
     dbginfo("group sublen = %d (-> %x / %d)\n", subsz, pos + subsz + 4, pos + subsz + 4);
+#else
+    (void)subsz;
 #endif
-  }
-  if (rdata->group) {
-    xfree(rdata->group);  /* currently unused */
   }
   rdata->group = gpi_read_string("Group");
 
@@ -575,9 +571,6 @@ read_tag(const char* caller, const int tag, waypoint* wpt)
 
   case 0x7:
     (void) gbfgetint16(fin);	/* category number */
-    if (rdata->category) {
-      xfree(rdata->category);
-    }
     rdata->category = gpi_read_string("Category");
     break;
 
@@ -993,19 +986,11 @@ wdata_compute_size(writer_data_t* data)
 
     str = QString();
     if (opt_descr) {
-#if NEW_STRINGS
       if (!wpt->description.isEmpty()) {
-#else
-      if (wpt->description && *wpt->description) {
-#endif
         str = xstrdup(wpt->description);
       }
     } else if (opt_notes) {
-#if NEW_STRINGS
       if (!wpt->notes.isEmpty()) {
-#else
-      if (wpt->notes && *wpt->notes) {
-#endif
         str = xstrdup(wpt->notes);
       }
     } else if (opt_pos) {
@@ -1490,7 +1475,7 @@ garmin_gpi_rd_init(const char* fname)
   char cp[8];
 
   fin = gbfopen_le(fname, "rb", MYNAME);
-  rdata = (reader_data_t*) xcalloc(1, sizeof(*rdata));
+  rdata = new reader_data_t;
 
   read_header();
 
@@ -1589,13 +1574,7 @@ garmin_gpi_wr_init(const char* fname)
 static void
 garmin_gpi_rd_deinit(void)
 {
-  if (rdata->category) {
-    xfree(rdata->category);
-  }
-  if (rdata->group) {
-    xfree(rdata->group);
-  }
-  xfree(rdata);
+  delete rdata;
   gbfclose(fin);
 }
 
