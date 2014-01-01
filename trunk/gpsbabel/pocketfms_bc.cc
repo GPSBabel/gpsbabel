@@ -83,8 +83,8 @@ read_tracks(void)
   struct breadcrumb bc;
   route_head* trk_head = route_head_alloc();
   trk_head->rte_num = 1;
-  trk_head->rte_name = xstrdup("PocketFMS");
-  trk_head->rte_desc = xstrdup("Breadcrumb");
+  trk_head->rte_name = "PocketFMS";
+  trk_head->rte_desc = "Breadcrumb";
   trk_head->rte_url = "www.pocketfms.com";
   track_add_head(trk_head);
 

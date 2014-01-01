@@ -461,11 +461,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
        data->name, data->visible ? "yes" : "NO", data->objid));
 
   data->data = wpt = waypt_new();
-#if NEW_STRINGS
   wpt->shortname = QString::fromLatin1(data->name);
-#else
-  wpt->shortname = xstrdup(data->name);
-#endif
 
   time = data->mtime;
   if (! time) {
@@ -609,7 +605,7 @@ mmo_read_CObjRoute(mmo_data_t* data)
        data->name, data->visible ? "yes" : "NO", data->objid));
 
   data->data = rte = route_head_alloc();
-  rte->rte_name = xstrdup(data->name);
+  rte->rte_name = data->name;
   route_add_head(rte);
 
   if (mmo_version >= 0x18) {
@@ -684,7 +680,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
        data->name, data->visible ? "yes" : "NO", data->objid));
 
   trk = route_head_alloc();
-  trk->rte_name = xstrdup(data->name);
+  trk->rte_name = data->name;
   track_add_head(trk);
 
   if (mmo_version >= 0x18) {
@@ -994,24 +990,10 @@ mmo_finalize_rtept_cb(const waypoint* wptref)
 
     wpt->latitude = wpt2->latitude;
     wpt->longitude = wpt2->longitude;
-#if NEW_STRINGS
     wpt->shortname = (wpt2->shortname);
-#else
-    xfree(wpt->shortname);
-    wpt->shortname = xstrdup(wpt2->shortname);
-#endif
 
-#if NEW_STRINGS
-      wpt->description = (wpt2->description);
-      wpt->notes = (wpt2->notes);
-#else
-    if (wpt2->description) {
-      wpt->description = xstrdup(wpt2->description);
-    }
-    if (wpt2->notes) {
-      wpt->notes = xstrdup(wpt2->notes);
-    }
-#endif
+    wpt->description = (wpt2->description);
+    wpt->notes = (wpt2->notes);
     if (wpt2->HasUrlLink()) {
       UrlLink l = wpt2->GetUrlLink();
       wpt->notes = xstrdup(l.url_.toUtf8().data());

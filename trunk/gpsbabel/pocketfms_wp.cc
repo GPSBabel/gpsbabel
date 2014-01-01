@@ -71,7 +71,7 @@ data_read(void)
     if (!s) {
       fatal(MYNAME "Invalid name");
     }
-    wpt->shortname = xstrdup(s);
+    wpt->shortname = s;
     s = csv_lineparse(NULL, "\\w", "", linecount);
     if (!s) {
       fatal(MYNAME "Invalid latitude %s", CSTRc(wpt->shortname));
@@ -126,7 +126,7 @@ enigma_waypt_disp(const waypoint* wpt)
     }
     *d = 0;
   } else {
-    t = xstrdup("NONAME");
+    t = "NONAME";
   }
   gbfprintf(file_out, "%s %f %f\n", t, wpt->latitude, wpt->longitude);
   xfree(t);
