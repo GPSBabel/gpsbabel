@@ -93,7 +93,9 @@ mapbar_track_read(void)
   // At this point, name is a UCS-16 encoded, zero terminated string.
   // All our internals use UTF-8 encoding, so convert now.
   int olen = strlen(name);
-  track->rte_name = cet_str_uni_to_utf8((const short int*) name, olen);
+
+  QScopedPointer<char, QScopedPointerPodDeleter>rte_name (cet_str_uni_to_utf8((const short int*) name, olen));
+  track->rte_name = rte_name.take();
 
   // skip two pair waypoint
   gbfseek(fin, 8*4, SEEK_CUR);
