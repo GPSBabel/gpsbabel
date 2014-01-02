@@ -112,7 +112,7 @@ static route_head* trk_head;
 static int ignore_unable;
 
 static waypoint* mag_wptparse(char*);
-typedef char* (cleanse_fn)(const char*);
+typedef QString (cleanse_fn)(const char*);
 static cleanse_fn* mag_cleanse;
 static const char** os_get_magellan_mountpoints();
 
@@ -223,7 +223,7 @@ static icon_mapping_t* icon_mapping = map330_icon_table;
  *   that's valid for a waypoint name or comment.   The string should be
  *   freed when you're done with it.
  */
-static char*
+static QString
 m315_cleanse(const char* istring)
 {
   char* rstring = (char*) xmalloc(strlen(istring)+1);
@@ -237,13 +237,15 @@ m315_cleanse(const char* istring)
     }
   }
   *o = 0;
-  return rstring;
+  QString rv(rstring);
+  xfree(rstring);
+  return rv;
 }
 
 /*
  * Do same for 330, Meridian, and SportTrak.
  */
-char*
+QString
 m330_cleanse(const char* istring)
 {
   static char m330_valid_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ "
@@ -259,7 +261,9 @@ m330_cleanse(const char* istring)
     }
   }
   *o = 0;
-  return rstring;
+  QString rv(rstring);
+  xfree(rstring);
+  return rv;
 }
 
 /*
@@ -522,7 +526,6 @@ retry:
       trk_head = route_head_alloc();
 
       /* Whack trailing extension if present. */
-#if NEW_STRINGS
       QString s = get_filename(curfname);
       int idx = s.indexOf('.');
       if (idx > 0) {
@@ -530,15 +533,6 @@ retry:
       }
         
       trk_head->rte_name = s;
-#else
-      char* e;
-      const char* s = get_filename(curfname);
-      trk_head->rte_name = xstrdup(s);
-      e = strrchr(trk_head->rte_name, '.');
-      if (e) {
-        *e = '\0';
-      }
-#endif
       track_add_head(trk_head);
     }
 
@@ -1118,7 +1112,7 @@ mag_rteparse(char* rtemsg)
     if (broken_sportrak && abuf[0]) {
       rte_elem = (mag_rte_elem*) xcalloc(sizeof(*rte_elem),1);
       QUEUE_INIT(&rte_elem->Q);
-      rte_elem->wpt_name = xstrdup(abuf);
+      rte_elem->wpt_name = (abuf);
 
       ENQUEUE_TAIL(&mag_rte_head->Q, &rte_elem->Q);
     }
@@ -1138,7 +1132,7 @@ mag_rteparse(char* rtemsg)
     rte_head = route_head_alloc();
     route_add_head(rte_head);
     rte_head->rte_num = rtenum;
-    rte_head->rte_name = xstrdup(rte_name);
+    rte_head->rte_name = rte_name;
 
     /*
      * It is quite feasible that we have 200 waypoints,
