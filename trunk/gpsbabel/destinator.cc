@@ -60,7 +60,7 @@ gmsd_init(waypoint* wpt)
   return gmsd;
 }
 
-static char*
+static QString
 read_wcstr(const int discard)
 {
   int16_t* buff = NULL, c;
@@ -91,7 +91,10 @@ read_wcstr(const int discard)
       }
     }
     xfree(buff);
-    return res;
+    QString rv = QString::fromUtf8(res);
+    xfree(res);
+    return rv;
+    //return res;
   } else {
     return NULL;
   }
@@ -154,16 +157,15 @@ destinator_read_poi(void)
   gbfrewind(fin);
 
   while (!(gbfeof(fin))) {
-    char* str, *hnum;
+    QString str, hnum;
     double ll;
     garmin_fs_t* gmsd;
 
     if (count == 0) {
       str = read_wcstr(0);
-      if ((str == NULL) || (strcmp(str, DST_DYN_POI) != 0)) {
+      if ((str != DST_DYN_POI)) {
         fatal(MYNAME "_poi: Invalid record header!\n");
       }
-      xfree(str);
     } else if (! read_until_wcstr(DST_DYN_POI)) {
       break;
     }
@@ -178,33 +180,29 @@ destinator_read_poi(void)
     hnum = read_wcstr(0);			/* house number */
 
     str = read_wcstr(0); 			/* street */
-    if (!str) {
+    if (str.isEmpty()) {
       str = hnum;
-      hnum = NULL;
+      hnum = QString();
     }
-    if (str) {
+    if (!str.isEmpty()) {
       gmsd = gmsd_init(wpt);
-      if (hnum) {
-        str = xstrappend(str, " ");
-        str = xstrappend(str, hnum);
+      if (!hnum.isEmpty()) {
+        str += " ";
+        str += hnum;
       }
-      GMSD_SET(addr, str);
+      GMSD_SETSTRQ(addr, str);
     }
 
-    if ((str = read_wcstr(0))) {		/* city */
+    if ((str = read_wcstr(0), !str.isEmpty())) {		/* city */
       gmsd = gmsd_init(wpt);
-      GMSD_SET(city, str);
-    }
-
-    if (hnum) {
-      xfree(hnum);
+      GMSD_SETSTRQ(city, str);
     }
 
     (void) read_wcstr(1);			/* unknown */
 
-    if ((str = read_wcstr(0))) {		/* postcode */
+    if ((str = read_wcstr(0), !str.isEmpty())) {		/* postcode */
       gmsd = gmsd_init(wpt);
-      GMSD_SET(postal_code, str);
+      GMSD_SETSTRQ(postal_code, str);
     }
 
     (void) read_wcstr(1);			/* unknown */
@@ -235,15 +233,14 @@ destinator_read_rte(void)
   gbfrewind(fin);
 
   while (!(gbfeof(fin))) {
-    char* str;
+    QString str;
     waypoint* wpt;
 
     if (count == 0) {
       str = read_wcstr(0);
-      if ((str == NULL) || (strcmp(str, DST_ITINERARY) != 0)) {
+      if ((str != DST_ITINERARY)) {
         fatal(MYNAME "_itn: Invalid record header!\n");
       }
-      xfree(str);
     } else if (! read_until_wcstr(DST_ITINERARY)) {
       break;
     }
