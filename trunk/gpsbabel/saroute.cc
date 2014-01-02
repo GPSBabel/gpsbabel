@@ -183,9 +183,9 @@ my_read(void)
     track_head = route_head_alloc();
     route_add_head(track_head);
     if (control) {
-      track_head->rte_name = xstrdup("control points");
+      track_head->rte_name = "control points";
     } else {
-      track_head->rte_name = xstrdup(routename);
+      track_head->rte_name = routename;
     }
   }
   count = ReadLong(infile);
@@ -305,7 +305,7 @@ my_read(void)
         route_add_head(track_head);
       }
       if (routename && !split) {
-        track_head->rte_name = xstrdup(routename);
+        track_head->rte_name = routename;
       }
     }
     while (count) {
