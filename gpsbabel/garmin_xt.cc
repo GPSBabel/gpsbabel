@@ -268,6 +268,7 @@ format_garmin_xt_proc_strk(void)
     tmp_track->line_color.opacity = 255;
     // update track name
     tmp_track->rte_name = trk_name;
+    xfree(trk_name);
     track_add_head(tmp_track);
 
     // This is the 1st coordinate of the track

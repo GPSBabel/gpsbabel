@@ -111,8 +111,14 @@ data_read(void)
     waypoint* wpt = waypt_new();
     wpt->latitude = enigmaPositionToDec(le_read32(&ewpt.latitude));
     wpt->longitude = enigmaPositionToDec(le_read32(&ewpt.longitude));
-    wpt->shortname = xstrndup(ewpt.shortname, ewpt.shortname_len);
-    wpt->description = xstrndup(ewpt.longname, ewpt.longname_len);
+    char*sn = xstrndup(ewpt.shortname, ewpt.shortname_len);
+    wpt->shortname = sn;
+    xfree(sn);
+
+    char* ds = xstrndup(ewpt.longname, ewpt.longname_len);
+    wpt->description = ds;
+    xfree(ds);
+
     switch (ewpt.waypoint_type) {
     case WTYPE_WAYPOINT:        // 0
     case WTYPE_AIRPORT:         // 1
