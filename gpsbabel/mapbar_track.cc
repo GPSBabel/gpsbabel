@@ -88,14 +88,11 @@ mapbar_track_read(void)
   (void) read_datetime(); // start_time currently unused
   (void) read_datetime(); // end_time currently unused
 
-  char name[200] = {0};
+  ushort name[200] = {0};
   gbfread((void*)name, 1, 200, fin);
   // At this point, name is a UCS-16 encoded, zero terminated string.
-  // All our internals use UTF-8 encoding, so convert now.
-  int olen = strlen(name);
-
-  QScopedPointer<char, QScopedPointerPodDeleter>rte_name (cet_str_uni_to_utf8((const short int*) name, olen));
-  track->rte_name = rte_name.take();
+  // All our internals use Qt encoding, so convert now.
+  track->rte_name = QString().fromUtf16(name);
 
   // skip two pair waypoint
   gbfseek(fin, 8*4, SEEK_CUR);
