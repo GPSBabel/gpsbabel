@@ -938,14 +938,7 @@ gpx_end(const QString& el)
     wpt_tmp = NULL;
     break;
   case tt_cache_name:
-#if NEW_STRINGS 
     wpt_tmp->notes = cdatastr;
-#else
-    if (wpt_tmp->notes != NULL) {
-      xfree(wpt_tmp->notes);
-    }
-    wpt_tmp->notes = xstrdup(cdatastr);
-#endif
     break;
   case tt_cache_container:
     waypt_alloc_gc_data(wpt_tmp)->container = gs_mkcont(cdatastr);
@@ -1126,14 +1119,7 @@ gpx_end(const QString& el)
   case tt_wpt_desc:
   case tt_trk_trkseg_trkpt_desc:
   case tt_rte_rtept_desc:
-#if NEW_STRINGS 
     wpt_tmp->notes = cdatastr;
-#else
-    if (wpt_tmp->notes != NULL) {
-      xfree(wpt_tmp->notes);
-    }
-    wpt_tmp->notes = xstrdup(cdatastr);
-#endif
     break;
   case tt_pdop:
     wpt_tmp->pdop = cdatastr.toDouble();

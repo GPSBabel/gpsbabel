@@ -224,10 +224,11 @@ append(char* buf, const char* str)
   /* Actually, this function needs needs refactored... */
   cleansed2 = xstrdup(cleansed1);
 #else
-  cleansed2 = m330_cleanse(cleansed1);
+  cleansed2 = xstrdup(m330_cleanse(cleansed1));
 #endif
 
   strcat(buf, cleansed2);
+
 
   xfree(cleansed1);
   xfree(cleansed2);

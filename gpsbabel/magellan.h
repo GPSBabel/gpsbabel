@@ -48,7 +48,7 @@ QString mag_find_descr_from_token(const char* token);
 QString mag_find_token_from_descr(const QString& icon);
 
 unsigned int mag_checksum(const char* const buf);
-char* m330_cleanse(const char* istring);
+QString m330_cleanse(const char* istring);
 
 waypoint* mag_trkparse(char* trkmsg);
 void mag_rteparse(char* rtemsg);
