@@ -237,7 +237,7 @@ gpi_gmsd_init(waypoint* wpt)
 
 /* read a standard string with or without 'EN' (or whatever) header */
 static char*
-gpi_read_string(const char* field)
+gpi_read_string_old(const char* field)
 {
   int l1;
   char* res = NULL;
@@ -284,6 +284,15 @@ gpi_read_string(const char* field)
   dbginfo("%s: %s\n", field, (res == NULL) ? "<NULL>" : res);
 #endif
   return res;
+}
+
+static QString
+gpi_read_string(const char* field)
+{
+  char*s = gpi_read_string_old(field);
+  QString rv = QString::fromLatin1(s);
+  xfree(s);
+  return rv;
 }
 
 static void
@@ -388,7 +397,7 @@ read_poi(const int sz, const int tag)
   (void) gbfgetint16(fin);	/* ? always 1 ? */
   (void) gbfgetc(fin);		/* seems to 1 when extra options present */
 #if NEW_STRINGS
-  wpt->shortname = QString::fromLatin1(gpi_read_string("Shortname"));
+  wpt->shortname = gpi_read_string("Shortname");
 #else
   wpt->shortname = gpi_read_string("Shortname");
 #endif
@@ -506,7 +515,8 @@ read_tag(const char* caller, const int tag, waypoint* wpt)
   int pos, sz, dist;
   double speed;
   short mask;
-  char* str;
+  QString str;
+  char* cstr;
   garmin_fs_t* gmsd;
 
   sz = gbfgetint32(fin);
@@ -600,7 +610,7 @@ read_tag(const char* caller, const int tag, waypoint* wpt)
       wpt->notes = str;
     } else {
 #if NEW_STRINGS
-      wpt->description = QString::fromLatin1(str);
+      wpt->description = str;
 #else
       wpt->description = str;
 #endif
@@ -629,51 +639,48 @@ read_tag(const char* caller, const int tag, waypoint* wpt)
 #ifdef GPI_DBG
     dbginfo("GPI Address field mask: %d (0x%02x)\n", mask, mask);
 #endif
-    if ((mask & GPI_ADDR_CITY) && (str = gpi_read_string("City"))) {
+    if ((mask & GPI_ADDR_CITY) && (cstr = gpi_read_string_old("City"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(city, str);
+      GMSD_SET(city, cstr);
     }
-    if ((mask & GPI_ADDR_COUNTRY) && (str = gpi_read_string("Country"))) {
+    if ((mask & GPI_ADDR_COUNTRY) && (cstr = gpi_read_string_old("Country"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(country, str);
+      GMSD_SET(country, cstr);
     }
-    if ((mask & GPI_ADDR_STATE) && (str = gpi_read_string("State"))) {
+    if ((mask & GPI_ADDR_STATE) && (cstr = gpi_read_string_old("State"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(state, str);
+      GMSD_SET(state, cstr);
     }
-    if ((mask & GPI_ADDR_POSTAL_CODE) && (str = gpi_read_string("Postal code"))) {
+    if ((mask & GPI_ADDR_POSTAL_CODE) && (cstr = gpi_read_string_old("Postal code"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(postal_code, str);
+      GMSD_SET(postal_code, cstr);
     }
-    if ((mask & GPI_ADDR_ADDR) && (str = gpi_read_string("Street address"))) {
+    if ((mask & GPI_ADDR_ADDR) && (cstr = gpi_read_string_old("Street address"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(addr, str);
+      GMSD_SET(addr, cstr);
     }
     break;
 
   case 0xc:
     mask = gbfgetint16(fin);
-    if ((mask & 1) && (str = gpi_read_string("Phone"))) {
+    if ((mask & 1) && (cstr = gpi_read_string_old("Phone"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(phone_nr, str);
+      GMSD_SET(phone_nr, cstr);
     }
-    if ((mask & 2) && (str = gpi_read_string("Phone2"))) {
+    if ((mask & 2) && (cstr = gpi_read_string_old("Phone2"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(phone_nr2, str);
+      GMSD_SET(phone_nr2, cstr);
     }
-    if ((mask & 4) && (str = gpi_read_string("Fax"))) {
+    if ((mask & 4) && (cstr = gpi_read_string_old("Fax"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(fax_nr, str);
+      GMSD_SET(fax_nr, cstr);
     }
-    if ((mask & 8) && (str = gpi_read_string("Email"))) {
+    if ((mask & 8) && (cstr = gpi_read_string_old("Email"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(email, str);
+      GMSD_SET(email, cstr);
     }
-    if ((mask & 0x10) && (str = gpi_read_string("Link"))) {
+    if ((mask & 0x10) && (str = gpi_read_string("Link"), !str.isEmpty())) {
       waypt_add_url(wpt, str, str);
-      if (str) {
-        xfree(str);
-      }
     }
     break;
 
@@ -685,9 +692,9 @@ read_tag(const char* caller, const int tag, waypoint* wpt)
 #ifdef GPI_DBG
     dbginfo("GPI Phone field mask: %d (0x%02x)\n", mask, mask);
 #endif
-    if ((mask & 1) && (str = gpi_read_string("Phone"))) {
+    if ((mask & 1) && (cstr = gpi_read_string_old("Phone"))) {
       gmsd = gpi_gmsd_init(wpt);
-      GMSD_SET(phone_nr, str);
+      GMSD_SET(phone_nr, cstr);
     }
     break;
 
