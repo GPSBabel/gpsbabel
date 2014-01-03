@@ -58,7 +58,13 @@ public:
       defaultValue_(defaultValue), minValue_(minValue), maxValue_(maxValue), html_(html)
   {
     value_ = QVariant();
-    isSelected_ = false;
+    // Boolean values pay more atention to 'selected' than value.  Make 
+    // them match here. For non-bools, just make them unchecked.
+    if (type_ == OPTbool && defaultValue.toBool() == true) {
+      isSelected_ = true;
+    } else {
+      isSelected_ = false;
+    }
   }
 
   FormatOption(const FormatOption & c)
