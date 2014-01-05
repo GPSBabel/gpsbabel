@@ -408,13 +408,8 @@ data_read(void)
 
     /* put the data in the waypoint structure */
     ng_convert_datum(wpt_tmp);
-#if NEW_STRINGS
     wpt_tmp->shortname = codec->toUnicode(WPNC.strName);
     wpt_tmp->description = codec->toUnicode(strComment);
-#else
-    wpt_tmp->shortname = xstrdup(WPNC.strName);
-    wpt_tmp->description = xstrdup(strComment);
-#endif
 
     if (process_rte) {
       route_add_wpt(rte_head, wpt_tmp);

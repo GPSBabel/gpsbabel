@@ -219,11 +219,7 @@ lmx_print(const waypoint* wpt)
   if (!oname.isEmpty()) {
     lmx_write_xml(0x48, oname, 3); // name
   }
-#if NEW_STRINGS
   if (!wpt->description.isEmpty()) {
-#else
-  if (wpt->description) {
-#endif
     lmx_write_xml(0x49, wpt->description, 3); // description
   }
   lmx_start_tag(0x4A, 3); // coordinates
@@ -354,51 +350,31 @@ lmx_lm_end(xg_string args, const QXmlStreamAttributes* unused)
 static void
 lmx_lm_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->latitude = args.toDouble();
-#else
-  wpt_tmp->latitude = atof(args);
-#endif
 }
 
 static void
 lmx_lm_lon(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->longitude = args.toDouble();
-#else
-  wpt_tmp->longitude = atof(args);
-#endif
 }
 
 static void
 lmx_lm_alt(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->altitude = args.toDouble();
-#else
-  wpt_tmp->altitude = atof(args);
-#endif
 }
 
 static void
 lmx_lm_name(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->shortname = args;
-#else
-  wpt_tmp->shortname = xstrdup(args);
-#endif
 }
 
 static void
 lmx_lm_desc(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->description = args;
-#else
-  wpt_tmp->description = xstrdup(args);
-#endif
 }
 
 static void

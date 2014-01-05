@@ -135,11 +135,7 @@ stmwpp_data_read(void)
         break;
 
       case 2:
-#if NEW_STRINGS
         wpt->shortname = QString::fromLatin1(c);
-#else
-        wpt->shortname = xstrdup(c);
-#endif
         break;
 
       case 3:

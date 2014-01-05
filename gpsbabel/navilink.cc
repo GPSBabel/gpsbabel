@@ -207,11 +207,7 @@ compare_waypoints(const waypoint* waypt1, const waypoint* waypt2)
   return waypt1->latitude == waypt2->latitude &&
          waypt1->longitude == waypt2->longitude &&
          waypt1->altitude == waypt2->altitude &&
-#if NEW_STRINGS
          waypt1->shortname == waypt2->shortname;
-#else
-         strcmp(waypt1->shortname, waypt2->shortname) == 0;
-#endif
 }
 
 unsigned

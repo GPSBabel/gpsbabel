@@ -341,7 +341,7 @@ waypt_read(void)
     waypoint* wpt = waypt_new();
     wpt->latitude = gps_save_lat;
     wpt->longitude = gps_save_lon;
-    wpt->shortname = xstrdup("Position");
+    wpt->shortname = "Position";
     if (gps_save_time) {
       wpt->SetCreationTime(gps_save_time);
     }
@@ -356,15 +356,10 @@ waypt_read(void)
   for (i = 0; i < n; i++) {
     waypoint* wpt_tmp = waypt_new();
 
-    wpt_tmp->shortname = xstrdup(way[i]->ident);
-    wpt_tmp->description = xstrdup(way[i]->cmnt);
-#if NEW_STRINGS 
+    wpt_tmp->shortname = way[i]->ident;
+    wpt_tmp->description = QString(way[i]->cmnt).simplified();
     wpt_tmp->shortname = wpt_tmp->shortname.simplified();
     wpt_tmp->description = wpt_tmp->description.simplified();
-#else
-    rtrim(wpt_tmp->shortname);
-    rtrim(wpt_tmp->description);
-#endif
     wpt_tmp->longitude = way[i]->lon;
     wpt_tmp->latitude = way[i]->lat;
     if (gps_waypt_type == 103) {
@@ -481,7 +476,7 @@ track_read(void)
     if (trk_head == NULL || array[i]->ishdr) {
       trk_head = route_head_alloc();
       trk_head->rte_num = trk_num;
-      trk_head->rte_name = xstrdup(trk_name);
+      trk_head->rte_name = trk_name;
       trk_num++;
       track_add_head(trk_head);
     }
@@ -503,7 +498,7 @@ track_read(void)
     wpt->altitude = array[i]->alt;
     wpt->heartrate = array[i]->heartrate;
     wpt->cadence = array[i]->cadence;
-    wpt->shortname = xstrdup(array[i]->trk_ident);
+    wpt->shortname = array[i]->trk_ident;
     wpt->SetCreationTime(array[i]->Time);
     wpt->wpt_flags.is_split = checkWayPointIsAtSplit(wpt, laps,
                               nlaps);
@@ -562,7 +557,7 @@ route_read(void)
       rte_head = route_head_alloc();
       route_add_head(rte_head);
       if (csrc) {
-        rte_head->rte_name = xstrdup(csrc);
+        rte_head->rte_name = csrc;
       }
     } else {
       if (array[i]->islink)  {
@@ -620,7 +615,7 @@ lap_read_as_track(void)
       /*For D906, we would like to use the track_index in the last packet instead...*/
       trk_head->rte_num = ++trk_num;
       strftime(tbuf, 32, "%Y-%m-%dT%H:%M:%SZ", stmp);
-      trk_head->rte_name = xstrdup(tbuf);
+      trk_head->rte_name = tbuf;
       track_add_head(trk_head);
 
       wpt = waypt_new();
@@ -634,11 +629,11 @@ lap_read_as_track(void)
       wpt->microseconds = 0;
 
       sprintf(tbuf, "#%d-0", index);
-      wpt->shortname = xstrdup(tbuf);
+      wpt->shortname = tbuf;
       sprintf(tbuf, "D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d",
               array[i]->total_distance, array[i]->calories, array[i]->max_speed, array[i]->avg_heart_rate,
               array[i]->max_heart_rate, array[i]->avg_cadence, array[i]->intensity, array[i]->trigger_method);
-      wpt->description = xstrdup(tbuf);
+      wpt->description = tbuf;
       track_add_wpt(trk_head, wpt);
     }
     /*Allow even if no correct location, no skip if invalid */
@@ -657,12 +652,12 @@ lap_read_as_track(void)
     wpt->microseconds = 10000*(array[i]->total_time % 100);
     /*Add fields with no mapping in the description */
     sprintf(tbuf, "#%d", index);
-    wpt->shortname = xstrdup(tbuf);
+    wpt->shortname = tbuf;
     sprintf(tbuf, "D:%f Cal:%d MS:%f AH:%d MH:%d AC:%d I:%d T:%d (%f,%f)",
             array[i]->total_distance, array[i]->calories, array[i]->max_speed, array[i]->avg_heart_rate,
             array[i]->max_heart_rate, array[i]->avg_cadence, array[i]->intensity, array[i]->trigger_method,
             array[i]->begin_lon, array[i]->begin_lat);
-    wpt->description = xstrdup(tbuf);
+    wpt->description = tbuf;
 
     track_add_wpt(trk_head, wpt);
   }
@@ -761,7 +756,7 @@ pvt_read(posn_status* posn_status)
     pvt2wpt(pvt, wpt);
     GPS_Pvt_Del(&pvt);
 
-    wpt->shortname = xstrdup("Position");
+    wpt->shortname = "Position";
 
     if (gps_errno && posn_status) {
       posn_status->request_terminate = 1;

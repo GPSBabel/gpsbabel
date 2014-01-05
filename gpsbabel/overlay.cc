@@ -222,11 +222,7 @@ static void route_add_name(const route_head* hd)
   route_head* route;
 
   route = (route_head*) hd;
-#if NEW_STRINGS
   grp = route->rte_name.toInt();
-#else
-  grp = atoi(route->rte_name);
-#endif
   i = 0;
   while (i<groups_cnt && groups[i].group!=grp) {
     i++;
@@ -237,12 +233,7 @@ static void route_add_name(const route_head* hd)
   } else {
     strcpy(name,groups[i].name);
   }
-#if NEW_STRINGS
   route->rte_name = name;
-#else
-  route->rte_name = (char*) xrealloc(route->rte_name,(strlen(name)+1)*sizeof(char));
-  strcpy(route->rte_name,name);
-#endif
 }
 
 static void ovl_read(void)
@@ -299,7 +290,7 @@ static void ovl_read(void)
             case 3: // Linie
               route_head = route_head_alloc();
               route_head->rte_num = sym_cnt;
-              route_head->rte_name = xstrdup(pstr); /* use group-number for the moment */
+              route_head->rte_name = pstr; /* use group-number for the moment */
               route_add_head(route_head);
               break;
             }
@@ -375,7 +366,7 @@ static void ovl_read(void)
               wpt->latitude = aktY;
               wpt->longitude = aktX;
               wpt->altitude = 0.0;
-              wpt->shortname = strdup(aktPath);
+              wpt->shortname = aktPath;
               waypt_add(wpt);
               break;
 #endif
