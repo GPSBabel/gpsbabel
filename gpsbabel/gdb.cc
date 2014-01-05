@@ -1849,25 +1849,17 @@ static void
 write_route_cb(const route_head* rte)
 {
   gbfile* fsave;
-  char buf[32];
 
   if (ELEMENTS(rte) <= 0) {
     return;
   }
 
-  String tname;
-  if (rte->rte_name == NULL) {
-    snprintf(buf, sizeof(buf), "Route%04d", rte->rte_num);
-    tname = mkshort(short_h, buf);
+  QString name;
+  if (rte->rte_name.isNull()) {
+    name = mkshort(short_h, QString().sprintf("Route%04d", rte->rte_num));
   } else {
-    tname = mkshort(short_h, rte->rte_name);
+    name = mkshort(short_h, rte->rte_name);
   }
-
-  QString name(tname);
-#if NEW_STRINGS
-#else
-  xfree(tname);
-#endif
 
   rte_ct++;	/* increase informational number of written routes */
 
@@ -1881,25 +1873,17 @@ static void
 write_track_cb(const route_head* trk)
 {
   gbfile* fsave;
-  char buf[32];
 
   if (ELEMENTS(trk) <= 0) {
     return;
   }
 
-  String tname; 
-  if (trk->rte_name == NULL) {
-    snprintf(buf, sizeof(buf), "Track%04d", trk->rte_num);
-    tname = mkshort(short_h, buf);
+  QString name; 
+  if (trk->rte_name.isNull()) {
+    name = mkshort(short_h, QString().sprintf("Track%04d", trk->rte_num));
   } else {
-    tname = mkshort(short_h, trk->rte_name);
+    name = mkshort(short_h, trk->rte_name);
   }
-
-  QString name(tname);
-#if NEW_STRINGS
-#else
-  xfree(tname);
-#endif
 
   trk_ct++;	/* increase informational number of written tracks */
 

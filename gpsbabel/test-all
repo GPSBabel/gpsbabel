@@ -55,9 +55,9 @@ function try_run() # command line
     local RES=0
     local SEVERITY=""
     
-    [ $vg -ne 0 ] && CMD="valgrind -q $CMD"
+    [ $vg -ne 0 ] && CMD="valgrind --error-exitcode=125 --leak-check=full --show-reachable=yes --suppressions=gpsbabel.supp --log-fd=3 $CMD"
 
-    ${CMD} > $TEMPDIR/.result 2>&1
+    ${CMD} > $TEMPDIR/.result 2>&1 3>>vg.log
     RES=$?
     if [ $RES -ne 0 -o -s $TEMPDIR/.result ]; then
         if [ $RES -ne 0 ]; then
