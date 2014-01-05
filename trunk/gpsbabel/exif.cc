@@ -892,14 +892,7 @@ exif_waypt_from_exif_app(exif_app_t* app)
     if (((c = strchr(cx, '.'))) && (c != cx)) {
       *c = '\0';
     }
-#if NEW_STRINGS
     wpt->shortname = cx;
-#else
-    if (wpt->shortname) {
-      xfree(wpt->shortname);
-    }
-    wpt->shortname = xstrdup(cx);
-#endif
     xfree(str);
   }
 
