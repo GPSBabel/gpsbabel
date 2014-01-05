@@ -144,12 +144,6 @@ void	gl_trk_s(xg_string args, const QXmlStreamAttributes* unused)
   trk_head = route_head_alloc();
   track_add_head(trk_head);
 }
-#if 0
-void	gl_trk_ident(xg_string args, const QXmlStreamAttributes* unused)
-{
-  trk_head->rte_name = xstrdup(args);
-}
-#endif
 
 void	gl_trk_pnt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
@@ -168,29 +162,17 @@ void	gl_trk_utc(xg_string args, const QXmlStreamAttributes* unused)
 
 void	gl_trk_lat(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->latitude = args.toDouble();
-#else
-  wpt_tmp->latitude = atof(args);
-#endif
 }
 
 void	gl_trk_long(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->longitude = args.toDouble();
-#else
-  wpt_tmp->longitude = atof(args);
-#endif
 }
 
 void	gl_trk_alt(xg_string args, const QXmlStreamAttributes* unused)
 {
-#if NEW_STRINGS
   wpt_tmp->altitude = args.toDouble();
-#else
-  wpt_tmp->altitude = atof(args);
-#endif
 }
 
 

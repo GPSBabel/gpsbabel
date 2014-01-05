@@ -1011,7 +1011,7 @@ decode_waypoint(const void* data)
 //    wp->icon_descr = wp->icon_descr;
 //  }
   if (p->name_size && p->name[0]) {
-    wp->description = xstrdup(p->name);
+    wp->description = p->name;
   }
   s = p->name + p->name_size;
   if (le_readu16(s) &&  s[2]) {
@@ -1401,13 +1401,8 @@ write_waypoint(const waypoint* wp)
   char* pp;
 
   if (waypt_empty_gc_data(wp)) {
-#if NEW_STRINGS
     notes = xstrdup(wp->notes);
     if (notes == NULL && wp->description.isEmpty() && wp->shortname != wp->description) {
-#else
-    notes = wp->notes;
-    if (notes == NULL && wp->description && strcmp(wp->shortname, wp->description)) {
-#endif
       notes = xstrdup(wp->description);
     }
     if (notes) {
@@ -1617,7 +1612,7 @@ read_track(route_head* track)
   // process track messages
   p = (const msg_track_header_t*) msg_array[0].data;
   if (le_readu16(p->comment_size)) {
-    track->rte_desc = xstrdup(p->comment);
+    track->rte_desc = p->comment;
   }
   track->line_color.bbggrr = track_color(p->color[0]);
   n_point = le_readu32(p->total_points);
@@ -1706,7 +1701,7 @@ read_tracks(void)
       const msg_track_header_t* p = (msg_track_header_t*) msg_array[i].data;
       if (le_readu32(p->total_points)) {
         track_array[i] = route_head_alloc();
-        track_array[i]->rte_name = xstrdup(p->name);
+        track_array[i]->rte_name = p->name;
       }
     } else {
       fatal(MYNAME ": unexpected message %x while reading track headers\n", id);
@@ -1873,7 +1868,7 @@ decode_route_shape(const void* data, unsigned* wp_array_i)
     wp->latitude = delbin_rad2deg(le_read32(p->point[i].latitude));
     wp->longitude = delbin_rad2deg(le_read32(p->point[i].longitude));
     sprintf(buf, "SHP%03u", j);
-    wp->shortname = xstrdup(buf);
+    wp->shortname = buf;
   }
   *wp_array_i = j;
 }
@@ -1886,7 +1881,7 @@ decode_route_point(const void* data)
   gbfile* fd = gbfopen(NULL, "w", MYNAME);
   waypoint* wp = waypt_new();
   if (p->name[0]) {
-    wp->shortname = xstrdup(p->name);
+    wp->shortname = p->name;
   }
   // give these a higher priority than the shape points
   wp->route_priority = 1;
@@ -2094,7 +2089,7 @@ read_routes(void)
     unsigned id = message_get_id(&msg_array[i]);
     if (id == MSG_ROUTE_HEADER_OUT) {
       route_array[i] = route_head_alloc();
-      route_array[i]->rte_name = xstrdup(((msg_route_header_t*)msg_array[i].data)->name);
+      route_array[i]->rte_name = ((msg_route_header_t*)msg_array[i].data)->name;
     } else {
       fatal(MYNAME ": unexpected message %x while reading route headers\n", id);
     }
@@ -2292,7 +2287,7 @@ decode_navmsg(const void* data)
   wp->course /= 100;
   wp->wpt_flags.course = 1;
   decode_sat_fix(wp, p->fix_status);
-  wp->shortname = xstrdup("Position");
+  wp->shortname = "Position";
   return wp;
 }
 

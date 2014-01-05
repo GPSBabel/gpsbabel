@@ -261,8 +261,8 @@ process_gpsfile(uint8_t data[], route_head** track)
       strftime(buf, 4096, "DG-100 tracklog (%Y/%m/%d %H:%M:%S)",
                gmtime(&creation_time));
       *track = route_head_alloc();
-      (*track)->rte_name = xstrdup(buf);
-      (*track)->rte_desc = xstrdup("DG-100 GPS tracklog data");
+      (*track)->rte_name = buf;
+      (*track)->rte_desc = "DG-100 GPS tracklog data";
       track_add_head(*track);
     }
 

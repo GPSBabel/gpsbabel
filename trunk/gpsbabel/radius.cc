@@ -167,7 +167,7 @@ radius_process(void)
 
   if (routename) {
     rte_head = route_head_alloc();
-    rte_head->rte_name = xstrdup(routename);
+    rte_head->rte_name = routename;
     route_add_head(rte_head);
   }
 

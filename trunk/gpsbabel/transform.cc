@@ -121,13 +121,9 @@ transform_rte_disp_hdr_cb(const route_head* rte)
   if (current_target == 'T') {
     current_trk = route_head_alloc();
     track_add_head(current_trk);
-#if NEW_STRINGS
      if (!rte->rte_name.isEmpty()) {
-#else
-    if (rte->rte_name && *rte->rte_name) {
-#endif
       xasprintf(&current_trk->rte_desc, "Generated from route %s", CSTRc(rte->rte_name));
-      current_trk->rte_name = xstrdup(rte->rte_name); /* name the new trk */
+      current_trk->rte_name = rte->rte_name; /* name the new trk */
     }
   }
 }
@@ -146,18 +142,11 @@ transform_trk_disp_hdr_cb(const route_head* trk)
   if (current_target == 'R') {
     current_rte = route_head_alloc();
     route_add_head(current_rte);
-#if NEW_STRINGS
     if (!trk->rte_name.isEmpty()) {
       current_rte->rte_desc = "Generated from track ";
       current_rte->rte_desc += trk->rte_name;
       current_rte->rte_name = trk->rte_name; /* name the new rte */
     }
-#else
-    if (trk->rte_name && *trk->rte_name) {
-      xasprintf(&current_rte->rte_desc, "Generated from track %s", CSTRc(trk->rte_name));
-      current_rte->rte_name = xstrdup(trk->rte_name); /* name the new rte */
-    }
-#endif
   }
 }
 

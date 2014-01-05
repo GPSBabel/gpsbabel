@@ -632,21 +632,12 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isR
     mps_depth = wpt->depth;
   }
   QString src;
-#if NEW_STRINGS
   if (!wpt->description.isEmpty()) {
     src = wpt->description;
   }
   if (!wpt->notes.isEmpty()) {
     src = wpt->notes;
   }
-#else
-  if (wpt->description) {
-    src = wpt->description;
-  }
-  if (wpt->notes) {
-    src = wpt->notes;
-  }
-#endif
   QString ident = global_opts.synthesize_shortnames ?
           mkshort(mkshort_handle, src) :
           CSTRc(wpt->shortname);
@@ -663,11 +654,7 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isR
   icon = mps_converted_icon_number(icon, mps_ver, MAPSOURCE);
 
   /* two NULL (0x0) bytes at end of each string */
-#if NEW_STRINGS
   ascii_description = xstrdup(wpt->description);
-#else
-  ascii_description = wpt->description ? xstrdup(wpt->description) : xstrdup("");
-#endif
   reclen = ident.length() + strlen(ascii_description) + 2;
   if ((mps_ver == 4) || (mps_ver == 5)) {
     /* v4.06 & V5.0*/
@@ -764,11 +751,7 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isR
   gbfwrite(zbuf, 2, 1, mps_file);		/* unknown */
   if ((mps_ver == 4) || (mps_ver == 5)) {
     gbfwrite(zbuf, 4, 1, mps_file);	/* unknown */
-#if NEW_STRINGS
     if (!wpt->notes.isEmpty()) {
-#else
-    if (wpt->notes) {
-#endif
       gbfputs(wpt->notes, mps_file);
     }
     gbfwrite(zbuf, 1, 1, mps_file);	/* string termination */
@@ -1037,7 +1020,7 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
         fprintf(stderr, "mps_route_r: reached the point we never should\n");
 #endif
         thisWaypoint = waypt_new();
-        thisWaypoint->shortname = xstrdup(wptname);
+        thisWaypoint->shortname = wptname;
         thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
         thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
         thisWaypoint->altitude = mps_altitude;
@@ -1121,7 +1104,7 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
     } else {
       /* should never reach here, but we do need a fallback position */
       thisWaypoint = waypt_new();
-      thisWaypoint->shortname = xstrdup(wptname);
+      thisWaypoint->shortname = wptname;
       thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
       thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
       thisWaypoint->altitude = mps_altitude;
@@ -1201,18 +1184,10 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
       }
 
       QString src;
-#if NEW_STRINGS
       if (!testwpt->description.isEmpty()) {
-#else
-      if (testwpt->description) {
-#endif
         src = testwpt->description;
       }
-#if NEW_STRINGS
       if (!testwpt->notes.isEmpty()) {
-#else
-      if (testwpt->notes) {
-#endif
         src = testwpt->notes;
       }
       QString ident = global_opts.synthesize_shortnames ?
@@ -1228,11 +1203,7 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
     }
 
     /* route name */
-#if NEW_STRINGS
     if (rte->rte_name.isEmpty()) {
-#else
-    if (!rte->rte_name) {
-#endif
       sprintf(hdr, "Route%04x", (unsigned) uniqueValue);
       rname = xstrdup(hdr);
     } else {
@@ -1431,21 +1402,12 @@ mps_routedatapoint_w(gbfile* mps_file, int mps_ver, const waypoint* rtewpt)
   }
 
   QString src;
-#if NEW_STRINGS
   if (!rtewpt->description.isEmpty()) {
     src = rtewpt->description;
   }
   if (!rtewpt->notes.isEmpty()) {
     src = rtewpt->notes;
   }
-#else
-  if (rtewpt->description) {
-    src = rtewpt->description;
-  }
-  if (rtewpt->notes) {
-    src = rtewpt->notes;
-  }
-#endif
   QString ident = global_opts.synthesize_shortnames ?
           mkshort(mkshort_handle, src) :
           CSTRc(rtewpt->shortname);
@@ -1643,11 +1605,7 @@ mps_trackhdr_w(gbfile* mps_file, int mps_ver, const route_head* trk)
     }
 
     /* track name */
-#if NEW_STRINGS
     if (trk->rte_name.isEmpty()) {
-#else
-    if (!trk->rte_name) {
-#endif
       sprintf(hdr, "Track%04x", (unsigned) uniqueValue);
       tname = xstrdup(hdr);
     } else {

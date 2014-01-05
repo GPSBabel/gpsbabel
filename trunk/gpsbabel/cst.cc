@@ -236,11 +236,7 @@ cst_data_read(void)
             line++;
             cin = lrtrim(buff);
             if (*cin != '\0') {
-#if NEW_STRINGS
               wpt->notes = QString::fromLatin1(cin);
-#else
-              wpt->notes = xstrdup(cin);
-#endif
             }
           } else if (strcmp(cin + 2, "end") == 0) {
             data = 1;
@@ -286,11 +282,7 @@ cst_data_read(void)
           track = route_head_alloc();
           track_add_head(track);
         } else if (strncmp(name, "NAME:", 5) == 0) {
-#if NEW_STRINGS
           wpt->shortname = QString::fromLatin1(((char*)&name) + 5);
-#else
-          wpt->shortname = xstrdup(((char*)&name) + 5);
-#endif
         }
 
         pow = strrchr(cin, '^');

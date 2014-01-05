@@ -169,7 +169,7 @@ my_read(void)
     case SHPT_ARC: {
       int j;
       route_head* routehead = route_head_alloc();
-      routehead->rte_name = xstrdup(name);
+      routehead->rte_name = name;
       route_add_head(routehead);
       for (j = 0; j < shp->nVertices; j++) {
         wpt = waypt_new();

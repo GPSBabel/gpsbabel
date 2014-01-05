@@ -191,8 +191,8 @@ static int process_data(const unsigned char* data)
     }
     if (remaining) {
       track = route_head_alloc();
-      track->rte_name = xstrdup(PRESTRKNAME);
-      track->rte_desc = xstrdup("Brauniger-IQ Barograph");
+      track->rte_name = PRESTRKNAME;
+      track->rte_desc = "Brauniger-IQ Barograph";
       track_add_head(track);
     } else {
       warning(MYNAME ": No barograph recorded for this flight\n");

@@ -103,13 +103,7 @@ static void
 ignr_descr(xg_string args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((track == NULL));
-#if NEW_STRINGS
   track->rte_desc = args;
-#else
-  if ((args != NULL) && (strlen(args) > 0)) {
-    track->rte_desc = xstrdup(args);
-  }
-#endif
 }
 
 static void

@@ -729,7 +729,7 @@ static void Read_AN1_Waypoints(gbfile* f)
 #endif
 
     if (rec->image_name) {
-      wpt_tmp->icon_descr = xstrdup(rec->image_name);
+      wpt_tmp->icon_descr = rec->image_name;
     } else if (FindIconByGuid(&rec->guid, &icon)) {
       wpt_tmp->icon_descr = icon;
     }

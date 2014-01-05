@@ -521,29 +521,17 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
     }
 
     if (*cend++) {
-#if NEW_STRINGS
       wpt->notes = QString::fromLatin1(cend);
-#else
-      wpt->notes = xstrdup(cend);
-#endif
     }
 
     if (wpt->HasUrlLink()) {
       DBG((sobj, "url = \"%s\"\n", wpt->url));
     }
   } else if (*str) {
-#if NEW_STRINGS
     wpt->notes = QString::fromLatin1(str);
-#else
-    wpt->notes = xstrdup(str);
-#endif
   }
   xfree(str);
-#if NEW_STRINGS
   if (!wpt->notes.isEmpty()) {
-#else
-  if (wpt->notes) {
-#endif
     DBG((sobj, "notes = \"%s\"\n", wpt->notes));
   }
 
@@ -990,13 +978,13 @@ mmo_finalize_rtept_cb(const waypoint* wptref)
 
     wpt->latitude = wpt2->latitude;
     wpt->longitude = wpt2->longitude;
-    wpt->shortname = (wpt2->shortname);
+    wpt->shortname = wpt2->shortname;
 
-    wpt->description = (wpt2->description);
+    wpt->description = wpt2->description;
     wpt->notes = (wpt2->notes);
     if (wpt2->HasUrlLink()) {
       UrlLink l = wpt2->GetUrlLink();
-      wpt->notes = xstrdup(l.url_.toUtf8().data());
+      wpt->notes = l.url_;
     }
 
     wpt->proximity = wpt2->proximity;
