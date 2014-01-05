@@ -872,7 +872,7 @@ static void Read_AN1_Lines(gbfile* f)
     if (rec->lineweight) {
       rte_head->line_width = rec->lineweight;
     }
-    rte_head->rte_name = xstrdup(rec->name);
+    rte_head->rte_name = rec->name;
     fs_chain_add(&rte_head->fs, (format_specific_data*)rec);
     route_add_head(rte_head);
     for (j = 0; j < (unsigned) rec->pointcount; j++) {
@@ -883,14 +883,14 @@ static void Read_AN1_Lines(gbfile* f)
       wpt_tmp = waypt_new();
       wpt_tmp->latitude = DecodeOrd(vert->lat);
       wpt_tmp->longitude = -DecodeOrd(vert->lon);
-      wpt_tmp->shortname = (char*) xmalloc(7);
 #if NEW_STRINGS
       wpt_tmp->shortname = QString().sprintf("\\%5.5lx", rtserial++);
 #else
+      wpt_tmp->shortname = (char*) xmalloc(7);
       sprintf(wpt_tmp->shortname, "\\%5.5lx", rtserial++);
+#endif
       fs_chain_add(&wpt_tmp->fs,
                    (format_specific_data*)vert);
-#endif
       route_add_wpt(rte_head, wpt_tmp);
     }
   }
