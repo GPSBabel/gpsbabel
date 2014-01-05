@@ -287,14 +287,7 @@ nmea_rd_init(const char* fname)
     if (!wpt) {
       return;
     }
-#if NEW_STRINGS
     wpt->shortname = "Position";
-#else
-    if (wpt->shortname) {
-      xfree(wpt->shortname);
-    }
-    wpt->shortname = xstrdup("Position");
-#endif
     nmea_add_wpt(wpt, NULL);
     return;
   }
@@ -646,7 +639,7 @@ gpwpl_parse(char* ibuf)
   }
   waypt->longitude = ddmm2degrees(lngdeg);
 
-  waypt->shortname = xstrdup(sname);
+  waypt->shortname = sname;
 
   curr_waypt = NULL; /* waypoints won't be updated with GPS fixes */
   nmea_add_wpt(waypt, NULL);

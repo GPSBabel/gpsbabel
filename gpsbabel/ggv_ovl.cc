@@ -175,7 +175,7 @@ ggv_ovl_read(void)
     case OVL_SYMBOL_TRIANGLE:
 
       wpt = waypt_new();
-      wpt->shortname = xstrdup(symbol);
+      wpt->shortname = symbol;
 
       if ((cx = inifile_readstr(inifile, symbol, "YKoord"))) {
         wpt->latitude = atof(cx);
