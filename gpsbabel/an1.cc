@@ -258,6 +258,7 @@ void Destroy_AN1_Waypoint(void* vwpt)
   an1_waypoint_record* wpt = (an1_waypoint_record*)vwpt;
   xfree(wpt->name);
   xfree(wpt->fontname);
+
   if (wpt->url) {
     xfree(wpt->url);
   }
@@ -399,7 +400,6 @@ static void Read_AN1_Waypoint(gbfile* f, an1_waypoint_record* wpt)
       if (oldurlstr) {
         *oldurlstr = 0;
       }
-
       wpt->url = (char*) xcalloc(len+1, 1);
       memcpy(wpt->url, ofs, len);
       ofs += len;
@@ -693,7 +693,6 @@ static void Read_AN1_Waypoints(gbfile* f)
   unsigned long i = 0;
   an1_waypoint_record* rec = NULL;
   waypoint* wpt_tmp;
-  char* url = NULL;
   char* icon = NULL;
   ReadShort(f);
   count = ReadLong(f);
@@ -709,9 +708,9 @@ static void Read_AN1_Waypoints(gbfile* f)
     wpt_tmp->latitude = DecodeOrd(rec->lat);
     wpt_tmp->notes = rec->comment;
     wpt_tmp->description = rec->name;
+
     if (rec->url) {
       wpt_tmp->AddUrlLink(rec->url);
-#if NEW_STRINGS
     } else {
       int u = wpt_tmp->description.indexOf("{URL=");
       QString us = wpt_tmp->description.mid(u);
@@ -719,14 +718,6 @@ static void Read_AN1_Waypoints(gbfile* f)
         wpt_tmp->AddUrlLink(us);
       }
     }
-#else
-    } else if (NULL != (url=strstr(wpt_tmp->description, "{URL="))) {
-      *url = '\0';
-      url += 5;
-      url[strlen(url)-1] = '\0';
-      wpt_tmp->AddUrlLink(url);
-    }
-#endif
 
     if (rec->image_name) {
       wpt_tmp->icon_descr = rec->image_name;
@@ -799,13 +790,12 @@ Write_One_AN1_Waypoint(const waypoint* wpt)
     sprintf(extra, "{URL=%s}", l.url_.toUtf8().data());
     rec->name = xstrappend(rec->name, extra);
     xfree(extra);
-    rec->url = xstrdup(l.url_.toUtf8().data());
+    if(rec->url) {
+      xfree(rec->url);
+    }
+    rec->url = xstrdup(l.url_);
   }
-#if NEW_STRINGS
   if (!wpt->notes.isEmpty()) {
-#else
-  if (wpt->notes) {
-#endif
     if (rec->comment) {
       xfree(rec->comment);
     }
@@ -883,12 +873,7 @@ static void Read_AN1_Lines(gbfile* f)
       wpt_tmp = waypt_new();
       wpt_tmp->latitude = DecodeOrd(vert->lat);
       wpt_tmp->longitude = -DecodeOrd(vert->lon);
-#if NEW_STRINGS
       wpt_tmp->shortname = QString().sprintf("\\%5.5lx", rtserial++);
-#else
-      wpt_tmp->shortname = (char*) xmalloc(7);
-      sprintf(wpt_tmp->shortname, "\\%5.5lx", rtserial++);
-#endif
       fs_chain_add(&wpt_tmp->fs,
                    (format_specific_data*)vert);
       route_add_wpt(rte_head, wpt_tmp);
