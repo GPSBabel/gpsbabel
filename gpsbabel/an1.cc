@@ -713,9 +713,13 @@ static void Read_AN1_Waypoints(gbfile* f)
       wpt_tmp->AddUrlLink(rec->url);
     } else {
       int u = wpt_tmp->description.indexOf("{URL=");
-      QString us = wpt_tmp->description.mid(u);
-      if (!us.isEmpty()) {
-        wpt_tmp->AddUrlLink(us);
+      if (u != -1) {
+        QString us = wpt_tmp->description.mid(u);
+        us.remove(0,5); // throw away anything up to and including "{URL="
+        us.chop(1); // throw away final character, assumed to be "}"
+        if (!us.isEmpty()) {
+          wpt_tmp->AddUrlLink(us);
+        }
       }
     }
 
