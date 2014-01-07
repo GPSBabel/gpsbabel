@@ -272,6 +272,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+// GPSBabel-local: add stdint for MSVC.
+#include <stdint.h>
 
 SHP_CVSID("$Id: shpopen.c,v 1.73 2012-01-24 22:33:01 fwarmerdam Exp $")
 
