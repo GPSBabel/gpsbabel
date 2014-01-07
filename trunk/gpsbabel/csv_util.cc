@@ -1709,11 +1709,12 @@ xcsv_waypt_pr(const waypoint* wpt)
     }
     break;
     case XT_SHORTNAME:
-      writebuff(buff, fmp->printfc,
 #if NEW_STRINGS
+		writebuff(buff, fmp->printfc,
                 shortname.isEmpty() ? fmp->val : CSTR(shortname));
 #else
-                (shortname && *shortname) ? shortname : fmp->val);
+		writebuff(buff, fmp->printfc,
+			(shortname && *shortname) ? shortname : fmp->val);
 #endif
       break;
     case XT_ANYNAME:
@@ -1758,11 +1759,12 @@ xcsv_waypt_pr(const waypoint* wpt)
 #endif
       break;
     case XT_DESCRIPTION:
-      writebuff(buff, fmp->printfc,
 #if NEW_STRINGS
+		writebuff(buff, fmp->printfc,
                 description.isEmpty() ? fmp->val : CSTR(description));
 #else
-                (description && *description) ? description : fmp->val);
+		writebuff(buff, fmp->printfc,
+			(description && *description) ? description : fmp->val);
 #endif
       break;
     case XT_NOTES:

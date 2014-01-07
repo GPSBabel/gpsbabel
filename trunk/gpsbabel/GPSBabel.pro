@@ -39,14 +39,14 @@ DEPRECIATED_SHAPE=pdbfile.cc
 FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc \
         nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc \
-		validate.cc
+        validate.cc
 
-SHAPE=shapelib/shpopen.c shapelib/dbfopen.c
+SHAPE=shapelib/shpopen.c shapelib/dbfopen.c shapelib/safileio.c
 
 ZLIB=zlib/adler32.c zlib/compress.c zlib/crc32.c zlib/deflate.c zlib/inffast.c \
         zlib/inflate.c zlib/infback.c zlib/inftrees.c zlib/trees.c \
-	zlib/uncompr.o zlib/gzlib.o zlib/gzclose.o zlib/gzread.o \
-        zlib/gzwrite.o zlib/zutil.o
+        zlib/uncompr.c zlib/gzlib.c zlib/gzclose.c zlib/gzread.c \
+        zlib/gzwrite.c zlib/zutil.c
 
 JEEPS += jeeps/gpsapp.cc jeeps/gpscom.cc \
          jeeps/gpsmath.cc jeeps/gpsmem.cc  \
@@ -263,6 +263,7 @@ win32 {
 
 win32-msvc*{
   DEFINES += _CRT_SECURE_NO_DEPRECATE
+  INCLUDEPATH += ../../src/core src/core
   QMAKE_CXXFLAGS += /MP -wd4100
   TEMPLATE=vcapp
 }
@@ -281,6 +282,8 @@ macx {
 }
 
 SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$SHAPE $$ZLIB $$JEEPS
+
+DEFINES += NEW_STRINGS
 
 # We don't care about stripping things out of the build.  Full monty, baby.
 DEFINES += MAXIMAL_ENABLED
