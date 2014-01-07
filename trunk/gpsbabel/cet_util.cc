@@ -986,30 +986,12 @@ cet_convert_waypt(const waypoint* wpt)
 {
   waypoint* w = (waypoint*)wpt;
   format_specific_data* fs;
-  geocache_data* gc_data = (geocache_data*)wpt->gc_data;
 
   if ((cet_output == 0) && (w->wpt_flags.cet_converted != 0)) {
     return;
   }
 
   w->wpt_flags.cet_converted = 1;
-#if NEW_STRINGS
-//  w->shortname = cet_convert_string(wpt->shortname);
-//  w->description = cet_convert_string(wpt->description);
-//  w->notes = cet_convert_string(wpt->notes);
-#else
-  w->shortname = cet_convert_string(CSTRc(wpt->shortname));
-  w->description = cet_convert_string(CSTRc(wpt->description));
-  w->notes = cet_convert_string(CSTRc(wpt->notes));
-#endif
-  if (gc_data) {
-    const char* placer = cet_convert_string(gc_data->placer);
-    const char* hint = cet_convert_string(gc_data->hint);
-    gc_data->placer = placer;
-    gc_data->hint = hint;
-    xfree(placer);
-    xfree(hint);
-  }
 
   fs = wpt->fs;
   while (fs != NULL) {
@@ -1032,16 +1014,6 @@ cet_convert_route_hdr(const route_head* route)
   }
 
   rte->cet_converted = 1;
-#if NEW_STRINGS
-//  rte->rte_name = route->rte_name;
-//  rte->rte_desc = route->rte_desc;
-#else
-  rte->rte_name = cet_convert_string(CSTRc(route->rte_name));
-  rte->rte_desc = cet_convert_string(CSTRc(route->rte_desc));
-#endif
-  const char* rte_url = cet_convert_string(route->rte_url);
-  rte->rte_url = rte_url;
-  xfree(rte_url);
 }
 
 /* cet_convert_route_tlr: internal used within cet_convert_strings process */
