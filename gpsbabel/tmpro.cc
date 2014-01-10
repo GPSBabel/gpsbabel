@@ -154,7 +154,7 @@ data_read(void)
       }
 
       if (i != 11) {
-        xfree(wpt_tmp);
+        waypt_free(wpt_tmp);
         warning(MYNAME ": WARNING - extracted %d fields from line %d. \nData on line ignored.\n",
                 i, linecount);
       } else {

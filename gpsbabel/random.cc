@@ -86,6 +86,15 @@ rand_str(const int maxlen, const char* fmt)
   }
 }
 
+static QString 
+rand_qstr(const int maxlen, const char* fmt)
+{
+  char * str = rand_str(maxlen, fmt);
+  QString qstr = QString(str);
+  xfree(str);
+  return qstr;
+}
+
 static void
 random_rd_init(const char* fname)
 {
@@ -117,13 +126,16 @@ random_read(void)
   if (doing_trks || doing_rtes) {
     head = route_head_alloc();
     if (doing_trks) {
-      head->rte_name = rand_str(8, "Trk_%s");
+      head->rte_name = rand_qstr(8, "Trk_%s");
       track_add_head(head);
     } else {
-      head->rte_name = rand_str(8, "Rte_%s");
+      head->rte_name = rand_qstr(8, "Rte_%s");
       route_add_head(head);
     }
-    head->rte_desc = rand_str(16, NULL);
+    head->rte_desc = rand_qstr(16, NULL);
+	if RND(3) {
+      head->rte_url = rand_qstr(8, "http://rteurl.example.com/%s");
+    }
   } else {
     head = NULL;
   }
@@ -138,7 +150,7 @@ random_read(void)
     fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
     do {
-      wpt->shortname = rand_str(8, "Wpt_%s");
+      wpt->shortname = rand_qstr(8, "Wpt_%s");
     } while (wpt->shortname == NULL);
 
     wpt->latitude = rand_dbl(180) - 90;
@@ -157,6 +169,15 @@ random_read(void)
     }
     if RND(3) {
       WAYPT_SET(wpt, depth, rand_int(10000) / 10.0);
+    }
+    if RND(3) {
+      wpt->AddUrlLink(rand_qstr(8, "http://link1.example.com/%s"));
+      if RND(3) {
+        wpt->AddUrlLink(rand_qstr(8, "http://link2.example.com/%s"));
+      }
+    }
+    if RND(3) {
+      wpt->icon_descr = rand_qstr(3, "Icon_%s");
     }
 
     wpt->SetCreationTime(time);
@@ -189,10 +210,10 @@ random_read(void)
         wpt->longitude = prev->longitude + (rand_dbl(1) / 100);
       }
       if RND(3) {
-        wpt->description = rand_str(16, "Des_%s");
+        wpt->description = rand_qstr(16, "Des_%s");
       }
       if RND(3) {
-        wpt->notes = rand_str(16, "Nts_%s");
+        wpt->notes = rand_qstr(16, "Nts_%s");
       }
       if RND(3) {
         GMSD_SET(addr, rand_str(8, "Adr_%s"));
