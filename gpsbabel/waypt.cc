@@ -67,36 +67,11 @@ waypt_dupe(const waypoint* wpt)
   /*
    * This and waypt_free should be closely synced.
    */
-  waypoint* tmp = new waypoint;
-  *tmp = *wpt;
+  waypoint* tmp = new waypoint(*wpt);
 
-  tmp->icon_descr = wpt->icon_descr;
-
+  // deep copy geocache data unless it is the special static empty_gc_data.
   if (wpt->gc_data != &empty_gc_data) {
-    // FIXME(robertlipe): Find out why the default copy constructor doesn't
-    // do a sensible thing here.  This will probably be easier once the
-    // underlying types are refcounted.
-    tmp->gc_data = new geocache_data;
-    tmp->gc_data->id = wpt->gc_data->id;
-    tmp->gc_data->type = wpt->gc_data->type;
-    tmp->gc_data->container = wpt->gc_data->container;
-    tmp->gc_data->diff = wpt->gc_data->diff;
-    tmp->gc_data->terr = wpt->gc_data->terr;
-    tmp->gc_data->is_archived = wpt->gc_data->is_archived;
-    tmp->gc_data->is_available = wpt->gc_data->is_available;
-    tmp->gc_data->is_memberonly = wpt->gc_data->is_memberonly;
-    tmp->gc_data->has_customcoords = wpt->gc_data->has_customcoords;
-    tmp->gc_data->exported = wpt->gc_data->exported;
-    tmp->gc_data->last_found = wpt->gc_data->last_found;
-    tmp->gc_data->placer_id = wpt->gc_data->placer_id;
-    tmp->gc_data->desc_short.utfstring = wpt->gc_data->desc_short.utfstring;
-    tmp->gc_data->desc_short.is_html = wpt->gc_data->desc_short.is_html;
-    tmp->gc_data->desc_long.utfstring = wpt->gc_data->desc_long.utfstring;
-    tmp->gc_data->desc_long.is_html = wpt->gc_data->desc_long.is_html;
-    tmp->gc_data->favorite_points = wpt->gc_data->favorite_points;
-    tmp->gc_data->placer = wpt->gc_data->placer;
-    tmp->gc_data->hint = wpt->gc_data->hint;
-    tmp->gc_data->personal_note = wpt->gc_data->personal_note;
+    tmp->gc_data = new geocache_data(*wpt->gc_data);
   }
 
   /*
@@ -104,7 +79,12 @@ waypt_dupe(const waypoint* wpt)
    * on the master Q.
    */
   QUEUE_INIT(&tmp->Q);
+
+  // deep copy fs chain data.
   tmp->fs = fs_chain_copy(wpt->fs);
+
+  // note: session is not deep copied.
+  // note: extra_data is not deep copied.
 
   return tmp;
 }
@@ -403,9 +383,7 @@ waypt_free(waypoint* wpt)
    */
 
   if (wpt->gc_data != &empty_gc_data) {
-    geocache_data* gc_data = (geocache_data*)wpt->gc_data;
-
-    delete gc_data;
+	delete wpt->gc_data;
   }
   fs_chain_destroy(wpt->fs);
   delete wpt;
