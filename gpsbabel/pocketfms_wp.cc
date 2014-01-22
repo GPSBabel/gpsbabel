@@ -59,13 +59,13 @@ data_read(void)
   int linecount = 0;
   while ((buff = gbfgetstr(file_in))) {
     char* s;
-    waypoint* wpt;
+    Waypoint* wpt;
     rtrim(buff);
     if (strlen(buff) == 0) {
       break;
     }
     linecount++;
-    wpt = new waypoint;
+    wpt = new Waypoint;
     s = buff;
     s = csv_lineparse(s, "\\w", "", linecount);
     if (!s) {
@@ -100,7 +100,7 @@ wr_init(const char* fname)
 }
 
 static void
-enigma_waypt_disp(const waypoint* wpt)
+enigma_waypt_disp(const Waypoint* wpt)
 {
   char* t;
 #if NEW_STRINGS

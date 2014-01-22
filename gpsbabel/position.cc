@@ -77,16 +77,16 @@ static void
 position_runqueue(queue* q, int nelems, int qtype)
 {
   queue* elem, * tmp;
-  waypoint** comp;
+  Waypoint** comp;
   int* qlist;
   double dist, diff_time;
   int i = 0, j, anyitem;
 
-  comp = (waypoint**) xcalloc(nelems, sizeof(*comp));
+  comp = (Waypoint**) xcalloc(nelems, sizeof(*comp));
   qlist = (int*) xcalloc(nelems, sizeof(*qlist));
 
   QUEUE_FOR_EACH(q, elem, tmp) {
-    comp[i] = (waypoint*)elem;
+    comp[i] = (Waypoint*)elem;
     qlist[i] = 0;
     i++;
   }
@@ -173,7 +173,7 @@ position_process_route(const route_head* rh)
 }
 
 static void
-position_noop_w(const waypoint* w)
+position_noop_w(const Waypoint* w)
 {
 }
 

@@ -28,7 +28,7 @@
 
 extern queue waypt_head;
 #if NEWQ
-extern QList<waypoint*> waypt_list;
+extern QList<Waypoint*> waypt_list;
 #endif
 
 typedef struct filter_vecs {

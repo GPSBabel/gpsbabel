@@ -205,7 +205,7 @@ bushnell_read(void)
   int32_t lat_tmp,lon_tmp;
   unsigned int proximity;
   unsigned int icon;
-  waypoint* wpt_tmp = new waypoint;
+  Waypoint* wpt_tmp = new Waypoint;
 
   lat_tmp = gbfgetint32(file_in);
   lon_tmp = gbfgetint32(file_in);
@@ -225,7 +225,7 @@ bushnell_read(void)
 }
 
 static void
-bushnell_write_one(const waypoint* wpt)
+bushnell_write_one(const Waypoint* wpt)
 {
   char tbuf[20]; // 19 text bytes + null terminator.
   char padding[2] = {0, 0};

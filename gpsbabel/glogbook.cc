@@ -30,7 +30,7 @@ static gbfile* ofd;
 static QString ostring;
 static QXmlStreamWriter writer(&ostring);
 
-static waypoint* wpt_tmp;
+static Waypoint* wpt_tmp;
 static route_head* trk_head;
 
 #define MYNAME "glogbook"
@@ -97,7 +97,7 @@ glogbook_wr_deinit(void)
 }
 
 static void
-glogbook_waypt_pr(const waypoint* wpt)
+glogbook_waypt_pr(const Waypoint* wpt)
 {
   writer.writeStartElement("Trackpoint");
 
@@ -147,7 +147,7 @@ void	gl_trk_s(xg_string args, const QXmlStreamAttributes* unused)
 
 void	gl_trk_pnt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp = new waypoint;
+  wpt_tmp = new Waypoint;
 }
 
 void	gl_trk_pnt_e(xg_string args, const QXmlStreamAttributes* unused)

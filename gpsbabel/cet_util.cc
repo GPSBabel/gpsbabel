@@ -913,9 +913,9 @@ cet_convert_init(const char* cs_name, const int force)
 /* -------------------------------------------------------------------- */
 
 static void
-cet_flag_waypt(const waypoint* wpt)
+cet_flag_waypt(const Waypoint* wpt)
 {
-  ((waypoint*)(wpt))->wpt_flags.cet_converted = 1;
+  ((Waypoint*)(wpt))->wpt_flags.cet_converted = 1;
 }
 
 static void
@@ -982,9 +982,9 @@ cet_convert_string(const QString& str)
 /* cet_convert_waypt: internal used within cet_convert_strings process */
 
 static void
-cet_convert_waypt(const waypoint* wpt)
+cet_convert_waypt(const Waypoint* wpt)
 {
-  waypoint* w = (waypoint*)wpt;
+  Waypoint* w = (Waypoint*)wpt;
   format_specific_data* fs;
 
   if ((cet_output == 0) && (w->wpt_flags.cet_converted != 0)) {

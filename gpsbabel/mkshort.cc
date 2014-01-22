@@ -586,7 +586,7 @@ mkshort(short_handle h, const QString& istring)
  * the code that considers the alternate sources.
  */
 String
-mkshort_from_wpt(short_handle h, const waypoint* wpt)
+mkshort_from_wpt(short_handle h, const Waypoint* wpt)
 {
   /* This probably came from a Groundspeak Pocket Query
    * so use the 'cache name' instead of the description field

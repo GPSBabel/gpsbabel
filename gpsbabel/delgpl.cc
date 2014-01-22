@@ -54,7 +54,7 @@ gpl_rd_init(const char* fname)
 static void
 gpl_read(void)
 {
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   route_head* track_head;
   gpl_point_t gp;
   double alt_feet;
@@ -63,7 +63,7 @@ gpl_read(void)
   track_add_head(track_head);
 
   while (gbfread(&gp, sizeof(gp), 1, gplfile_in) > 0) {
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
     wpt_tmp->latitude = le_read_double(&gp.lat);
     wpt_tmp->longitude = le_read_double(&gp.lon);
     alt_feet = le_read_double(&gp.alt);
@@ -122,7 +122,7 @@ gpl_wr_deinit(void)
 }
 
 static void
-gpl_trackpt(const waypoint* wpt)
+gpl_trackpt(const Waypoint* wpt)
 {
   double alt_feet = METERS_TO_FEET(wpt->altitude);
   int status = 3;

@@ -50,7 +50,7 @@ static gpsdata_type data_type;
 /*-----------------------------------------------------------------------------*/
 
 static garmin_fs_t*
-gmsd_init(waypoint* wpt)
+gmsd_init(Waypoint* wpt)
 {
   garmin_fs_t* gmsd = GMSD_FIND(wpt);
   if (gmsd == NULL) {
@@ -151,7 +151,7 @@ read_until_wcstr(const char* str)
 static void
 destinator_read_poi(void)
 {
-  waypoint* wpt;
+  Waypoint* wpt;
   int count = 0;
 
   gbfrewind(fin);
@@ -172,7 +172,7 @@ destinator_read_poi(void)
 
     count++;
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     wpt->shortname = read_wcstr(0);
     wpt->notes = read_wcstr(0);		/* comment */
@@ -234,7 +234,7 @@ destinator_read_rte(void)
 
   while (!(gbfeof(fin))) {
     QString str;
-    waypoint* wpt;
+    Waypoint* wpt;
 
     if (count == 0) {
       str = read_wcstr(0);
@@ -247,7 +247,7 @@ destinator_read_rte(void)
 
     count++;
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     wpt->shortname = read_wcstr(0);
     wpt->notes = read_wcstr(0);
@@ -286,7 +286,7 @@ destinator_read_trk(void)
   gbfrewind(fin);
 
   while (!(gbfeof(fin))) {
-    waypoint* wpt;
+    Waypoint* wpt;
     struct tm tm;
     char buff[20];
     int date;
@@ -297,7 +297,7 @@ destinator_read_trk(void)
       break;
     }
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     wpt->longitude = gbfgetdbl(fin);
     wpt->latitude = gbfgetdbl(fin);
@@ -386,7 +386,7 @@ destinator_read(void)
 /*-----------------------------------------------------------------------------*/
 
 static void
-destinator_wpt_disp(const waypoint* wpt)
+destinator_wpt_disp(const Waypoint* wpt)
 {
   garmin_fs_t* gmsd = GMSD_FIND(wpt);
 
@@ -419,7 +419,7 @@ destinator_wpt_disp(const waypoint* wpt)
 }
 
 static void
-destinator_trkpt_disp(const waypoint* wpt)
+destinator_trkpt_disp(const Waypoint* wpt)
 {
   int i;
 
@@ -465,7 +465,7 @@ destinator_trkpt_disp(const waypoint* wpt)
 }
 
 static void
-destinator_rtept_disp(const waypoint* wpt)
+destinator_rtept_disp(const Waypoint* wpt)
 {
   write_wcstr(DST_ITINERARY);
 #if NEW_STRINGS

@@ -78,7 +78,7 @@ wr_deinit(void)
 }
 
 static void
-html_disp(const waypoint* wpt)
+html_disp(const Waypoint* wpt)
 {
   char* cout;
   int32_t utmz;
@@ -248,7 +248,7 @@ html_disp(const waypoint* wpt)
 }
 
 static void
-html_index(const waypoint* wpt)
+html_index(const Waypoint* wpt)
 {
   char* sn = html_entitize(wpt->shortname);
   char* d = html_entitize(wpt->description);

@@ -70,7 +70,7 @@ arglist_t g7towin_args[] = {
 #define WPT_cD_OFS	0x0cD00
 
 static void
-parse_line(char* buff, int index, const char* delimiter, waypoint* wpt)
+parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
 {
   char* cin;
   garmin_fs_p gmsd = GMSD_FIND(wpt);
@@ -264,16 +264,16 @@ parse_line(char* buff, int index, const char* delimiter, waypoint* wpt)
   }
 }
 
-static waypoint*
+static Waypoint*
 parse_waypt(char* buff)
 {
   char* cin, *cerr;
   int i;
   struct tm tm;
-  waypoint* wpt;
+  Waypoint* wpt;
   garmin_fs_p gmsd;
 
-  wpt = new waypoint;
+  wpt = new Waypoint;
   gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
@@ -341,13 +341,13 @@ parse_waypt(char* buff)
   return wpt;
 }
 
-static waypoint*
+static Waypoint*
 parse_trkpt(char* buff)
 {
   garmin_fs_p gmsd;
-  waypoint* wpt;
+  Waypoint* wpt;
 
-  wpt = new waypoint;
+  wpt = new Waypoint;
   gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
@@ -409,8 +409,8 @@ data_read(void)
 {
   char* buff;
   int line = 0;
-  waypoint* wpt = NULL;
-  waypoint* prev = NULL;
+  Waypoint* wpt = NULL;
+  Waypoint* prev = NULL;
   route_head* head = NULL;
 
   while ((buff = gbfgetstr(fin))) {
@@ -459,7 +459,7 @@ data_read(void)
       break;
 
     case 'I': /* event point */
-      wpt = new waypoint;
+      wpt = new Waypoint;
       cdata += parse_coordinates(cdata, datum, grid,
                                  &wpt->latitude, &wpt->longitude, MYNAME);
       xasprintf(&wpt->shortname, "Event%d", ++event_ct);

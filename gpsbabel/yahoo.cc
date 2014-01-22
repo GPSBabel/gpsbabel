@@ -24,7 +24,7 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static waypoint* wpt_tmp;
+static Waypoint* wpt_tmp;
 static char* as;
 
 #define MYNAME "yahoo"
@@ -81,7 +81,7 @@ yahoo_wr_init(const char* fname)
 
 void	wpt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp = new waypoint;
+  wpt_tmp = new Waypoint;
 }
 
 void	wpt_e(xg_string args, const QXmlStreamAttributes* unused)

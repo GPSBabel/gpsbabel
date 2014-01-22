@@ -73,7 +73,7 @@ static char* erroropt;
 static char* xteopt;
 static char* lenopt;
 static char* relopt;
-void (*waypt_del_fnp)(route_head* rte, waypoint* wpt);
+void (*waypt_del_fnp)(route_head* rte, Waypoint* wpt);
 
 static
 arglist_t routesimple_args[] = {
@@ -112,7 +112,7 @@ struct xte_intermed {
   struct xte* xte_rec;
   struct xte_intermed* next;
   struct xte_intermed* prev;
-  const waypoint* wpt;
+  const Waypoint* wpt;
 };
 
 void
@@ -129,7 +129,7 @@ static const route_head* cur_rte = NULL;
 static struct xte* xte_recs = NULL;
 
 void
-routesimple_waypt_pr(const waypoint* wpt)
+routesimple_waypt_pr(const Waypoint* wpt)
 {
   if (!cur_rte) {
     return;
@@ -150,9 +150,9 @@ routesimple_waypt_pr(const waypoint* wpt)
 void
 compute_xte(struct xte* xte_rec)
 {
-  const waypoint* wpt3 = xte_rec->intermed->wpt;
-  const waypoint* wpt1 = NULL;
-  const waypoint* wpt2 = NULL;
+  const Waypoint* wpt3 = xte_rec->intermed->wpt;
+  const Waypoint* wpt1 = NULL;
+  const Waypoint* wpt2 = NULL;
   double frac, reslat, reslon;
   /* if no previous, this is an endpoint and must be preserved. */
   if (!xte_rec->intermed->prev) {
@@ -336,8 +336,8 @@ routesimple_tail(const route_head* rte)
       }
     }
     (*waypt_del_fnp)((route_head*)(void*)rte,
-                     (waypoint*)(void*)(xte_recs[i].intermed->wpt));
-    delete (waypoint*)(void*)(xte_recs[i].intermed->wpt);
+                     (Waypoint*)(void*)(xte_recs[i].intermed->wpt));
+    delete (Waypoint*)(void*)(xte_recs[i].intermed->wpt);
 
     if (xte_recs[i].intermed->prev) {
       xte_recs[i].intermed->prev->next = xte_recs[i].intermed->next;

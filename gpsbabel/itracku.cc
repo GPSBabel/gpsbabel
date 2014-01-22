@@ -47,14 +47,14 @@ typedef struct {
 } itracku_data_record;
 
 static int itracku_is_valid_data_record(itracku_data_record* d);
-static void to_itracku_data_record(const waypoint* wp, itracku_data_record* d);
-static waypoint* to_waypoint(itracku_data_record* d);
+static void to_itracku_data_record(const Waypoint* wp, itracku_data_record* d);
+static Waypoint* to_waypoint(itracku_data_record* d);
 
 /* itracku file access */
 static void itracku_file_read_data_record(gbfile* fin, itracku_data_record* d);
 static uint32_t itracku_file_read_last_time(gbfile* fin);
-static void itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(waypoint* wpt));
-static void itracku_file_write_waypt(gbfile* fout, const waypoint* wpt);
+static void itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(Waypoint* wpt));
+static void itracku_file_write_waypt(gbfile* fout, const Waypoint* wpt);
 
 /* itracku device access */
 static const unsigned char read_update_data_command[] = { 0x60, 0xb5, 0, 0, 0, 0, 0 }; /* command string to start memory dump */
@@ -74,7 +74,7 @@ static char* update_data_buffer_read;
 static char* update_data_buffer_write;
 static char* update_data_buffer_end;
 
-static void itracku_device_dump_waypts(void* fd, void (*waypt_add)(waypoint* wpt));
+static void itracku_device_dump_waypts(void* fd, void (*waypt_add)(Waypoint* wpt));
 static int itracku_device_update_data_init();
 static int itracku_device_update_data_read(void* buf, int len);
 static void itracku_device_write_string(const char* s);
@@ -288,11 +288,11 @@ encode_itracku_time(time_t time)
 /*
 	Converts a itracku waypoint record to a gpsbabel waypoint.
 */
-static waypoint*
+static Waypoint*
 to_waypoint(itracku_data_record* d)
 {
-  waypoint* wp;
-  wp = new waypoint;
+  Waypoint* wp;
+  wp = new Waypoint;
   wp->longitude = deg_min_to_deg(le_read32(d->longitude));
   wp->latitude = deg_min_to_deg(le_read32(d->latitude));
   wp->SetCreationTime(decode_itracku_time(le_read32(d->creation_time)));
@@ -303,7 +303,7 @@ to_waypoint(itracku_data_record* d)
 }
 
 static void
-to_itracku_data_record(const waypoint* wp, itracku_data_record* d)
+to_itracku_data_record(const Waypoint* wp, itracku_data_record* d)
 {
   le_write32(d->longitude, deg_to_deg_min(wp->longitude));
   le_write32(d->latitude, deg_to_deg_min(wp->latitude));
@@ -509,7 +509,7 @@ itracku_is_valid_data_record(itracku_data_record* d)
 }
 
 static void
-itracku_device_dump_waypts(void* fd, void (*waypt_add)(waypoint* wpt))
+itracku_device_dump_waypts(void* fd, void (*waypt_add)(Waypoint* wpt))
 {
   itracku_data_record d;
 
@@ -549,7 +549,7 @@ itracku_file_read_last_time(gbfile* fin)
 }
 
 static void
-itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(waypoint* wpt))
+itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(Waypoint* wpt))
 {
   itracku_data_record d;
 
@@ -564,7 +564,7 @@ itracku_file_read_waypts(gbfile* fin, void (*waypt_add)(waypoint* wpt))
 }
 
 static void
-itracku_file_write_waypt(gbfile* fout, const waypoint* wpt)
+itracku_file_write_waypt(gbfile* fout, const Waypoint* wpt)
 {
   itracku_data_record d;
   to_itracku_data_record(wpt, &d);
@@ -572,7 +572,7 @@ itracku_file_write_waypt(gbfile* fout, const waypoint* wpt)
 }
 
 static void
-itracku_waypt_input(void (*waypt_add)(waypoint* wpt))
+itracku_waypt_input(void (*waypt_add)(Waypoint* wpt))
 {
   if (fd) {
     itracku_device_dump_waypts(fd, waypt_add);
@@ -590,7 +590,7 @@ itracku_read_waypt(void)
 static route_head* itracku_read_trk_track;
 
 static void
-itracku_read_trk_waypt_add(waypoint* wpt)
+itracku_read_trk_waypt_add(Waypoint* wpt)
 {
   track_add_wpt(itracku_read_trk_track, wpt);
 }
@@ -635,7 +635,7 @@ itracku_wr_deinit(void)
 }
 
 static void
-itracku_output_waypoint(const waypoint* wp)
+itracku_output_waypoint(const Waypoint* wp)
 {
   itracku_file_write_waypt(fout, wp);
 }
@@ -659,7 +659,7 @@ itracku_rt_init(const char* fname)
 }
 
 static void
-nmea_set_waypoint_time(waypoint* wpt, struct tm* time, double fsec)
+nmea_set_waypoint_time(Waypoint* wpt, struct tm* time, double fsec)
 {
   if (time->tm_year == 0) {
     wpt->SetCreationTime(((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec, lround(1000.0 * fsec));
@@ -674,7 +674,7 @@ nmea_set_waypoint_time(waypoint* wpt, struct tm* time, double fsec)
   }
 }
 
-static waypoint*
+static Waypoint*
 gprmc_parse(char* ibuf)
 {
   double latdeg, lngdeg;
@@ -683,7 +683,7 @@ gprmc_parse(char* ibuf)
   char fix;
   unsigned int dmy;
   double speed,course;
-  waypoint* waypt;
+  Waypoint* waypt;
   double fsec;
   struct tm tm;
 
@@ -710,7 +710,7 @@ gprmc_parse(char* ibuf)
   dmy = dmy / 100;
   tm.tm_mday = dmy;
 
-  waypt  = new waypoint;
+  waypt  = new Waypoint;
 
   WAYPT_SET(waypt, speed, KNOTS_TO_MPS(speed));
 
@@ -738,11 +738,11 @@ gprmc_parse(char* ibuf)
 
 	andreas.grimme@gmx.net
 */
-static waypoint*
+static Waypoint*
 itracku_rt_position(posn_status* posn_status)
 {
   char line[1024];
-  waypoint* wpt;
+  Waypoint* wpt;
   while (1) {
     gbser_read_line(fd, line, sizeof(line), 5000, 13, 10);
     dbg(1, line);

@@ -699,7 +699,7 @@ xcsv_wr_position_deinit(void)
 
 
 static void
-xcsv_wr_position(waypoint* wpt)
+xcsv_wr_position(Waypoint* wpt)
 {
   /* Tweak incoming name if we don't have a fix */
   switch (wpt->fix) {

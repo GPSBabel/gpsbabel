@@ -104,9 +104,9 @@ static double wgs84_separation(double lat, double lon)
 
 
 static void
-correct_height(const waypoint* wpt)
+correct_height(const Waypoint* wpt)
 {
-  waypoint* waypointp = (waypoint*) wpt;
+  Waypoint* waypointp = (Waypoint*) wpt;
 
   if (addopt) {
     waypointp->altitude += addf;

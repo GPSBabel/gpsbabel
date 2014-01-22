@@ -493,12 +493,12 @@ static time_t unpack_time(int32_t date, int32_t time)
 
 /**************************************************************************/
 
-static waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
+static Waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
 {
   struct wpthdr* wpthdr;
   struct wpt* wpt;
   int j, idx;
-  waypoint* WP;
+  Waypoint* WP;
 
   wpthdr = &(wprdata->wpthdr);
   idx = wpthdr->idx[n];
@@ -508,7 +508,7 @@ static waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
   }
   wpt = &(wprdata->wpt[idx]);
 
-  WP = new waypoint;
+  WP = new Waypoint;
   WP->latitude  = -pt2deg(wpt->pt.y);
   WP->longitude =  pt2deg(wpt->pt.x);
   WP->SetCreationTime(unpack_time(wpt->date, wpt->time));
@@ -535,7 +535,7 @@ static void wpr_read(void)
   struct rtehdr* rtehdr;
   struct rte* rte;
   int i, j, idx;
-  waypoint* WP;
+  Waypoint* WP;
   route_head* RT;
 
   if (gbfread(&wprdata, sizeof(struct wprdata), 1, fin) != 1) {
@@ -596,7 +596,7 @@ static void trl_read(void)
   struct trldata trldata;
   struct trkhdr* trkhdr;
   struct trklog* trklog;
-  waypoint* WP;
+  Waypoint* WP;
   route_head* TL;
   int i, j;
 
@@ -643,7 +643,7 @@ static void trl_read(void)
     /* track points */
     trklog = &(trldata.trklog[i]);
     for (j=0; j<trkhdr->totalpt; j++) {
-      WP = new waypoint;
+      WP = new Waypoint;
       WP->latitude  = -pt2deg(trklog->pt[j].y);
       WP->longitude =  pt2deg(trklog->pt[j].x);
       WP->altitude  =  hgt2m(trklog->sh[j].height);
@@ -659,7 +659,7 @@ static void trl_read(void)
 
 /**************************************************************************/
 
-static int find_wpt(struct wprdata* wprdata, const waypoint* WP)
+static int find_wpt(struct wprdata* wprdata, const Waypoint* WP)
 {
   struct wpt pattern, *wpt;
   int i, wpt_idx;
@@ -685,7 +685,7 @@ static int find_wpt(struct wprdata* wprdata, const waypoint* WP)
   return -1;
 }
 
-static int add_wpt(struct wprdata* wprdata, const waypoint* WP,int isroute)
+static int add_wpt(struct wprdata* wprdata, const Waypoint* WP,int isroute)
 {
   struct wpthdr* wpthdr;
   int hdr_idx, wpt_idx;
@@ -733,7 +733,7 @@ static int add_wpt(struct wprdata* wprdata, const waypoint* WP,int isroute)
   return hdr_idx;
 }
 
-static void wpr_waypoint(const waypoint* WP)
+static void wpr_waypoint(const Waypoint* WP)
 {
   add_wpt(&WPR, WP, 0);
 }
@@ -771,7 +771,7 @@ static void wpr_route_hdr(const route_head* RT)
   /* rtehdr->rteno = rte_idx; */
 }
 
-static void wpr_route_wpt(const waypoint* WP)
+static void wpr_route_wpt(const Waypoint* WP)
 {
   struct rte* rte;
   int wpt_idx;
@@ -860,7 +860,7 @@ static void trl_track_hdr(const route_head* TL)
   TRL.loghdr.num = idx;
 }
 
-static void trl_track_wpt(const waypoint* WP)
+static void trl_track_wpt(const Waypoint* WP)
 {
   struct trklog* trklog;
   struct trkhdr* trkhdr;

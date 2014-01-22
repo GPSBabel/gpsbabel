@@ -219,11 +219,11 @@ static long tosscount=0;
 
 void wfff_e(xg_string args, const QXmlStreamAttributes* unused)
 {
-  waypoint*	wpt_tmp		=0;
+  Waypoint*	wpt_tmp		=0;
   char		desc[255]	="\0";
 
   if ((ap_hdop>=1)&&(ap_hdop<50)) { // Discard invalid GPS fix
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
 
     if (snmac) {
       wpt_tmp->shortname = ap_mac;

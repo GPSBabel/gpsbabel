@@ -47,7 +47,7 @@
 #define TR7_S_FIX	29
 
 static gbfile* fin, *fout;
-static const waypoint* wpt_tmp;
+static const Waypoint* wpt_tmp;
 static const route_head* trk_tmp;
 static int course_tmp, speed_tmp;
 
@@ -71,7 +71,7 @@ tr7_read(void)
 {
   route_head* trk = NULL;
   unsigned int magic;
-  waypoint* prev = NULL;
+  Waypoint* prev = NULL;
 
   magic = gbfgetint32(fin);
   if (magic != TR7_TRACK_MAGIC) {
@@ -81,7 +81,7 @@ tr7_read(void)
   while (! gbfeof(fin)) {
     unsigned char buff[TR7_S_SIZE];
     double lat, lon;
-    waypoint* wpt;
+    Waypoint* wpt;
     float speed, course;
 
     gbfread(buff, 1, sizeof(buff), fin);
@@ -110,7 +110,7 @@ tr7_read(void)
       continue;
     }
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     wpt->latitude = lat;
     wpt->longitude = lon;
@@ -158,7 +158,7 @@ tr7_check_after_read_head_cb(const route_head* trk)
 }
 
 static void
-tr7_check_after_read_wpt_cb(const waypoint* wpt)
+tr7_check_after_read_wpt_cb(const Waypoint* wpt)
 {
   if (wpt->speed != 0) {
     speed_tmp = 1;
@@ -173,7 +173,7 @@ tr7_check_after_read_trailer_cb(const route_head* trk)
 {
   queue* elem, *tmp;
   QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
-    waypoint* wpt = (waypoint*)elem;
+    Waypoint* wpt = (Waypoint*)elem;
     if (speed_tmp == 0) {
       WAYPT_UNSET(wpt, speed);
     }
@@ -205,7 +205,7 @@ tr7_disp_track_head_cb(const route_head* trk)
 }
 
 static void
-tr7_disp_waypt_cb(const waypoint* wpt)
+tr7_disp_waypt_cb(const Waypoint* wpt)
 {
   unsigned char buff[TR7_S_SIZE];
   double speed, course;

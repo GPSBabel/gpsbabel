@@ -49,7 +49,7 @@ geocache_container wpt_container(const QString&);
 
 void GeoReadLoc()
 {
-  waypoint* wpt = NULL;
+  Waypoint* wpt = NULL;
   QString current_tag;
 
   while (!reader.atEnd()) {
@@ -58,7 +58,7 @@ void GeoReadLoc()
       current_tag.append("/");
       current_tag.append(tag_name);
       if (current_tag == "/loc/waypoint") {
-        wpt = new waypoint;
+        wpt = new Waypoint;
         wpt->AllocGCData();
         // There is no 'unknown' alt value and so many reference files have
         // leaked it that we just paper over that here.
@@ -181,7 +181,7 @@ geo_wr_deinit(void)
 }
 
 static void
-geo_waypt_pr(const waypoint* waypointp)
+geo_waypt_pr(const Waypoint* waypointp)
 {
   writer.writeStartElement("waypoint");
 

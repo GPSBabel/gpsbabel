@@ -112,7 +112,7 @@ random_read(void)
 
   int i, points;
   route_head* head;
-  waypoint* prev = NULL;
+  Waypoint* prev = NULL;
   time_t time = gpsbabel_time;
 
   if (opt_seed) {
@@ -142,10 +142,10 @@ random_read(void)
 
   for (i = 0; i < points; i++) {
 
-    waypoint* wpt;
+    Waypoint* wpt;
     garmin_fs_t* gmsd;
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
     gmsd = garmin_fs_alloc(-1);
     fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 

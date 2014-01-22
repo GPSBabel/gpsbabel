@@ -53,7 +53,7 @@ arglist_t dup_args[] = {
 typedef struct btree_node {
   struct btree_node* left, *right;
   unsigned long data;
-  waypoint* wpt;
+  Waypoint* wpt;
 } btree_node;
 
 static btree_node*
@@ -107,7 +107,7 @@ free_tree(btree_node* tree)
 }
 
 typedef struct {
-  waypoint* wpt;
+  Waypoint* wpt;
   int index;
 } wpt_ptr;
 
@@ -174,7 +174,7 @@ compare(const void* a, const void* b)
 static void
 duplicate_process(void)
 {
-  waypoint* waypointp;
+  Waypoint* waypointp;
   btree_node* newnode, * btmp, * sup_tree = NULL;
   btree_node* oldnode = NULL;
   unsigned long crc = 0;
@@ -183,7 +183,7 @@ duplicate_process(void)
     char lat[13];
     char lon[13];
   } dupe;
-  waypoint* delwpt = NULL;
+  Waypoint* delwpt = NULL;
 
   int i, ct = waypt_count();
   wpt_ptr* htable, *bh;
@@ -194,7 +194,7 @@ duplicate_process(void)
 
   i = 0;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    bh->wpt = (waypoint*) elem;
+    bh->wpt = (Waypoint*) elem;
     bh->index = i;
     i ++;
     bh ++;

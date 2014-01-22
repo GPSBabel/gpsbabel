@@ -32,7 +32,7 @@
 
 static gbfile* fin, *fout;
 static route_head* track, *route;
-static waypoint* wpt;
+static Waypoint* wpt;
 static short_handle short_h;
 
 #define MYNAME "STMwpp"
@@ -125,7 +125,7 @@ stmwpp_data_read(void)
         }
 
         what = new_what;
-        wpt = new waypoint;
+        wpt = new Waypoint;
         break;
 
       case 1:
@@ -175,7 +175,7 @@ stmwpp_data_read(void)
             route = route_head_alloc();
             route_add_head(route);
           }
-          route_add_wpt(route, new waypoint(*wpt));
+          route_add_wpt(route, new Waypoint(*wpt));
         }
         break;
 
@@ -229,7 +229,7 @@ stmwpp_write_double(const double val)
 }
 
 static void
-stmwpp_waypt_cb(const waypoint* wpt)
+stmwpp_waypt_cb(const Waypoint* wpt)
 {
   char cdate[16], ctime[16];
   struct tm tm;

@@ -249,7 +249,7 @@ static void ovl_read(void)
   int     keyw,i;
   double  rwert;
   route_head* route_head = NULL;
-  waypoint*   wpt;
+  Waypoint*   wpt;
   int      sym_cnt;
   int lineno = 0;
 
@@ -313,7 +313,7 @@ static void ovl_read(void)
             }
             break;
           case KEY_PUNKTE  :
-            isSection = SECTION_PUNKTE; // Linie, Fläche
+            isSection = SECTION_PUNKTE; // Linie, Flï¿½che
             break;
 #ifdef WITH_BITMAP
           case KEY_PATH     :
@@ -362,7 +362,7 @@ static void ovl_read(void)
             switch (aktTyp) {
 #ifdef WITH_BITMAP
             case 1: // Bitmap
-              wpt = new waypoint;
+              wpt = new Waypoint;
               wpt->latitude = aktY;
               wpt->longitude = aktX;
               wpt->altitude = 0.0;
@@ -374,13 +374,13 @@ static void ovl_read(void)
               isSection = SECTION_SYMBOL;
               break;
             case 3: // Linie
-              wpt = new waypoint;
+              wpt = new Waypoint;
               wpt->latitude = aktY;
               wpt->longitude = aktX;
               wpt->altitude = 0.0;
               route_add_wpt(route_head, wpt);
               break;
-            case 4: // Fläche
+            case 4: // Flï¿½che
               break;
             case 5: // Rechteck
               break;
@@ -503,7 +503,7 @@ static void ovl_wr_deinit(void)
     gbfprintf(fpout,"CenterLat=%.8lf\n",govl_sum_n/govl_sumcnt); // precision 8 = better than 1mm
     gbfprintf(fpout,"CenterLong=%.8lf\n",govl_sum_e/govl_sumcnt);
   } else {
-    gbfprintf(fpout,"CenterLong=10.52374295\n"); // Braunschweiger Löwe, Mittelpunkt der Welt :-)
+    gbfprintf(fpout,"CenterLong=10.52374295\n"); // Braunschweiger Lï¿½we, Mittelpunkt der Welt :-)
     gbfprintf(fpout,"CenterLat=52.26474445\n");
   }
   gbfprintf(fpout,"RefOn=0\n");
@@ -543,7 +543,7 @@ static void symbol_text(double east,double north,const QString& text,int group)
   govl_symbol_cnt++;
 }
 
-static void symbol_point(const waypoint* wpt)
+static void symbol_point(const Waypoint* wpt)
 {
   double east,north;
 
@@ -565,7 +565,7 @@ static void symbol_point(const waypoint* wpt)
 static void symbol_deinit(const route_head* hd)
 {
   queue* elem, *tmp;
-  waypoint* waypointp;
+  Waypoint* waypointp;
   int i;
   double lat1,lon1,lat2,lon2;
   double lats,lons,late,lone;
@@ -576,7 +576,7 @@ static void symbol_deinit(const route_head* hd)
   dist = 0.0;
   i = 0;
   QUEUE_FOR_EACH(&(hd->waypoint_list), elem, tmp) {
-    waypointp = (waypoint*) elem;
+    waypointp = (Waypoint*) elem;
     lat2 = RAD(waypointp->latitude);
     lon2 = RAD(waypointp->longitude);
     if (i) {
@@ -596,7 +596,7 @@ static void symbol_deinit(const route_head* hd)
   i = 0;
   elem = QUEUE_FIRST(&(hd->waypoint_list));
   while (elem!=&(hd->waypoint_list) && dd<dist/2.0) {
-    waypointp = (waypoint*) elem;
+    waypointp = (Waypoint*) elem;
     lat2 = RAD(waypointp->latitude);
     lon2 = RAD(waypointp->longitude);
     if (i) {
@@ -627,7 +627,7 @@ static void symbol_deinit(const route_head* hd)
   govl_dir = 0.0; // restore
 }
 
-static void overlay_waypt_pr(const waypoint* waypointp)
+static void overlay_waypt_pr(const Waypoint* waypointp)
 {
   const char* oname;
 

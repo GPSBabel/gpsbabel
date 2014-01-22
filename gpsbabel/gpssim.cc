@@ -103,7 +103,7 @@ gpssim_write_spd(double knotsperhour)
 }
 
 static void
-gpssim_write_pt(const waypoint* wpt)
+gpssim_write_pt(const Waypoint* wpt)
 {
   char obuf[1024];
   double lat, lon;

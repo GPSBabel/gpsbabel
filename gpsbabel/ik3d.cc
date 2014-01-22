@@ -34,7 +34,7 @@ static arglist_t ikt_args[] = {
 static QString name, text;
 
 static route_head* track;
-static waypoint* waypt;
+static Waypoint* waypt;
 
 static xg_callback	iktobj_waypt, iktobj_type, iktobj_name, iktobj_trkpt, iktobj_text;
 
@@ -85,7 +85,7 @@ iktobj_waypt(xg_string args, const QXmlStreamAttributes* attrv)
 static void
 iktobj_trkpt(xg_string args, const QXmlStreamAttributes* attrv)
 {
-  waypt = new waypoint;
+  waypt = new Waypoint;
   iktobj_waypt(args, attrv);
   track_add_wpt(track, waypt);
   waypt = NULL;
@@ -113,7 +113,7 @@ iktobj_type(xg_string args, const QXmlStreamAttributes* unused)
   switch (atoi(args)) {
 #endif
   case 0:
-    waypt = new waypoint;
+    waypt = new Waypoint;
     break;
   case 1:
     track = route_head_alloc();

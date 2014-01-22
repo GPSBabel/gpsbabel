@@ -120,7 +120,7 @@ void goog_segment_s(xg_string args, const QXmlStreamAttributes* attrv)
 
 void goog_segment(xg_string args, const QXmlStreamAttributes* unused)
 {
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
 
   wpt_tmp = route_find_waypt_by_name(routehead[goog_segroute], goog_segname);
   if (wpt_tmp) {
@@ -243,7 +243,7 @@ void goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
     }
 
     {
-      waypoint* wpt_tmp = new waypoint;
+      Waypoint* wpt_tmp = new Waypoint;
       wpt_tmp->latitude = lat / 100000.0;
       wpt_tmp->longitude = lon / 100000.0;
       wpt_tmp->route_priority=level;

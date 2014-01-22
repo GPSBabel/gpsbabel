@@ -747,7 +747,7 @@ mtk_retry:
 static route_head*  trk_head = NULL;
 static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
 {
-  waypoint* trk = new waypoint;
+  Waypoint* trk = new Waypoint;
 
   if (global_opts.masked_objective& TRKDATAMASK && (trk_head == NULL || (mtk_info.track_event & MTK_EVT_START))) {
     char spds[50];
@@ -842,7 +842,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
          )
      ) {
     /* Button press -- create waypoint, start count at 1 */
-    waypoint* w = new waypoint(*trk);
+    Waypoint* w = new Waypoint(*trk);
 
     w->shortname = QString().sprintf("WP%06d", waypt_count()+1);
     waypt_add(w);

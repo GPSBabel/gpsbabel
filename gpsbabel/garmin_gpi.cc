@@ -222,7 +222,7 @@ static time_t gpi_timestamp = 0;
 
 /* look for or initialize GMSD */
 static garmin_fs_t*
-gpi_gmsd_init(waypoint* wpt)
+gpi_gmsd_init(Waypoint* wpt)
 {
   garmin_fs_t* gmsd = GMSD_FIND(wpt);
   if (wpt == NULL) {
@@ -363,7 +363,7 @@ read_header(void)
 }
 
 /* gpi tag handler */
-static int read_tag(const char* caller, const int tag, waypoint* wpt);
+static int read_tag(const char* caller, const int tag, Waypoint* wpt);
 
 
 /* read a single poi with all options */
@@ -371,7 +371,7 @@ static void
 read_poi(const int sz, const int tag)
 {
   int pos, len;
-  waypoint* wpt;
+  Waypoint* wpt;
 
 #ifdef GPI_DBG
   PP;
@@ -388,7 +388,7 @@ read_poi(const int sz, const int tag)
   (void) len;
   pos = gbftell(fin);
 
-  wpt = new waypoint;
+  wpt = new Waypoint;
   wpt->icon_descr = DEFAULT_ICON;
 
   wpt->latitude = GPS_Math_Semi_To_Deg(gbfgetint32(fin));
@@ -510,7 +510,7 @@ read_poi_group(const int sz, const int tag)
 // length field)
 /* gpi tag handler */
 static int
-read_tag(const char* caller, const int tag, waypoint* wpt)
+read_tag(const char* caller, const int tag, Waypoint* wpt)
 {
   int pos, sz, dist;
   double speed;
@@ -762,8 +762,8 @@ write_string(const QString& str, const char long_format)
 static int
 compare_wpt_cb(const queue* a, const queue* b)
 {
-  const waypoint* wa = (waypoint*) a;
-  const waypoint* wb = (waypoint*) b;
+  const Waypoint* wa = (Waypoint*) a;
+  const Waypoint* wb = (Waypoint*) b;
 #if NEW_STRINGS
   return wa->shortname.compare(wb->shortname);
 #else
@@ -815,7 +815,7 @@ wdata_free(writer_data_t* data)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    waypoint* wpt = (waypoint*)elem;
+    Waypoint* wpt = (Waypoint*)elem;
 
     if (wpt->extra_data) {
       gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
@@ -845,7 +845,7 @@ wdata_free(writer_data_t* data)
 
 
 static void
-wdata_add_wpt(writer_data_t* data, waypoint* wpt)
+wdata_add_wpt(writer_data_t* data, Waypoint* wpt)
 {
   data->ct++;
   ENQUEUE_TAIL(&data->Q, &wpt->Q);
@@ -873,7 +873,7 @@ wdata_check(writer_data_t* data)
 
   center_lat = center_lon = 0;
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    waypoint* wpt = (waypoint*) elem;
+    Waypoint* wpt = (Waypoint*) elem;
     center_lat += wpt->latitude;
     center_lon += wpt->longitude;
   }
@@ -881,7 +881,7 @@ wdata_check(writer_data_t* data)
   center_lon /= data->ct;
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    waypoint* wpt = (waypoint*) elem;
+    Waypoint* wpt = (Waypoint*) elem;
     writer_data_t** ref;
 
     if (wpt->latitude < center_lat) {
@@ -932,7 +932,7 @@ wdata_compute_size(writer_data_t* data)
   res = 23;	/* bounds, ... of tag 0x80008 */
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    waypoint* wpt = (waypoint*) elem;
+    Waypoint* wpt = (Waypoint*) elem;
     gpi_waypt_t* dt;
     garmin_fs_t* gmsd;
     QString str;
@@ -1095,7 +1095,7 @@ wdata_write(const writer_data_t* data)
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
     QString str;
     int s0, s1;
-    waypoint* wpt = (waypoint*)elem;
+    Waypoint* wpt = (Waypoint*)elem;
     gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
 
     str = wpt->description;
@@ -1282,13 +1282,13 @@ write_header(void)
 
 
 static void
-enum_waypt_cb(const waypoint* ref)
+enum_waypt_cb(const Waypoint* ref)
 {
-  waypoint* wpt;
+  Waypoint* wpt;
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&wdata->Q, elem, tmp) {
-    waypoint* cmp = (waypoint*) elem;
+    Waypoint* cmp = (Waypoint*) elem;
 
     /* sort out nearly equal waypoints */
     if ((compare_strings(cmp->shortname, ref->shortname) == 0) &&
@@ -1300,7 +1300,7 @@ enum_waypt_cb(const waypoint* ref)
     }
   }
 
-  wpt = new waypoint(*ref);
+  wpt = new Waypoint(*ref);
 
   if (*opt_unique == '1') {
 #if NEW_STRINGS

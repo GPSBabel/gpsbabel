@@ -134,7 +134,7 @@ typedef struct exif_app_s {
 static gbfile* fin, *fout;
 static queue exif_apps;
 static exif_app_t* exif_app;
-const waypoint* exif_wpt_ref;
+const Waypoint* exif_wpt_ref;
 time_t exif_time_ref;
 static char exif_success;
 static char* exif_fout_name;
@@ -670,10 +670,10 @@ exif_get_exif_time(exif_app_t* app)
   return res.toTime_t();
 }
 
-static waypoint*
+static Waypoint*
 exif_waypt_from_exif_app(exif_app_t* app)
 {
-  waypoint* wpt;
+  Waypoint* wpt;
   queue* elem, *tmp;
   exif_ifd_t* ifd;
   exif_tag_t* tag;
@@ -693,7 +693,7 @@ exif_waypt_from_exif_app(exif_app_t* app)
     return NULL;
   }
 
-  wpt = new waypoint;
+  wpt = new Waypoint;
 
   wpt->latitude = unknown_alt;
   wpt->longitude = unknown_alt;
@@ -1095,7 +1095,7 @@ exif_remove_tag(const int ifd_nr, const int tag_id)
 }
 
 static void
-exif_find_wpt_by_time(const waypoint* wpt)
+exif_find_wpt_by_time(const Waypoint* wpt)
 {
   if (!wpt->creation_time.isValid()) {
     return;
@@ -1109,7 +1109,7 @@ exif_find_wpt_by_time(const waypoint* wpt)
 }
 
 static void
-exif_find_wpt_by_name(const waypoint* wpt)
+exif_find_wpt_by_name(const Waypoint* wpt)
 {
   if (exif_wpt_ref != NULL) {
     return;
@@ -1354,7 +1354,7 @@ static void
 exif_read(void)
 {
   uint16_t soi;
-  waypoint* wpt;
+  Waypoint* wpt;
 
   soi = gbfgetuint16(fin);
   is_fatal(soi != 0xFFD8, MYNAME ": Unknown image file.");	/* only jpeg for now */
@@ -1465,7 +1465,7 @@ exif_write(void)
   }
 
   if (exif_wpt_ref != NULL) {
-    const waypoint* wpt = exif_wpt_ref;
+    const Waypoint* wpt = exif_wpt_ref;
 
     exif_put_long(IFD0, IFD0_TAG_GPS_IFD_OFFS, 0, 0);
     exif_put_value(GPS_IFD, GPS_IFD_TAG_VERSION, EXIF_TYPE_BYTE, 4, 0, writer_gps_tag_version);

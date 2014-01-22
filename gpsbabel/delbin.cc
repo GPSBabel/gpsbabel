@@ -152,7 +152,7 @@ static unsigned track_color_index(int bgr);
 
 static unsigned waypoint_i;
 static unsigned waypoint_n;
-static waypoint** wp_array;
+static Waypoint** wp_array;
 
 //-----------------------------------------------------------------------------
 // Message ids and sizes. Only the needed ones are here.
@@ -991,10 +991,10 @@ decode_time(const uint8_t* p)
   return mkgmtime(&t);
 }
 
-static waypoint*
+static Waypoint*
 decode_waypoint(const void* data)
 {
-  waypoint* wp = new waypoint;
+  Waypoint* wp = new Waypoint;
   const msg_waypoint_t* p = (const msg_waypoint_t*)data;
   const char* s;
   float f;
@@ -1026,7 +1026,7 @@ read_waypoints(void)
   message_t m;
   message_t* msg_array;
   unsigned msg_array_n;
-  waypoint* wp = NULL;
+  Waypoint* wp = NULL;
   unsigned n_point;
   unsigned notes_i = 0;
   unsigned notes_max = 0;
@@ -1149,7 +1149,7 @@ encode_time(time_t time_, uint8_t* p)
 }
 
 static void
-get_gc_notes(const waypoint* wp, int* symbol, char** notes, unsigned* notes_size)
+get_gc_notes(const Waypoint* wp, int* symbol, char** notes, unsigned* notes_size)
 {
   fs_xml* fs_gpx;
   xml_tag* root = NULL;
@@ -1382,7 +1382,7 @@ add_nuke(nuke_type type)
 }
 
 static void
-write_waypoint(const waypoint* wp)
+write_waypoint(const Waypoint* wp)
 {
   message_t m;
   msg_waypoint_t* p;
@@ -1524,7 +1524,7 @@ write_waypoints(void)
 // Track reading
 
 static void
-decode_sat_fix(waypoint* wp, const uint8_t status)
+decode_sat_fix(Waypoint* wp, const uint8_t status)
 {
   switch (status & 3) {
   case 1:
@@ -1554,7 +1554,7 @@ decode_track_point(const void* data, unsigned* wp_array_i, unsigned max_point)
     fatal(MYNAME ": read too many track points\n");
   }
   for (i = 0; i < n; i++, j++) {
-    waypoint* wp = new waypoint;
+    Waypoint* wp = new Waypoint;
     float elev = le_read_float(p->point[i].elevation);
     wp_array[j] = wp;
     wp->SetCreationTime(decode_time(&p->point[i].year));
@@ -1616,7 +1616,7 @@ read_track(route_head* track)
   }
   track->line_color.bbggrr = track_color(p->color[0]);
   n_point = le_readu32(p->total_points);
-  wp_array = (waypoint**) xcalloc(n_point, sizeof(*wp_array));
+  wp_array = (Waypoint**) xcalloc(n_point, sizeof(*wp_array));
   message_free(&msg_array[0]);
   for (i = 1; i < msg_array_n; i++) {
     unsigned id = message_get_id(&msg_array[i]);
@@ -1731,7 +1731,7 @@ write_track_points(void)
   unsigned j = 0;
 
   do {
-    const waypoint* wp = wp_array[i];
+    const Waypoint* wp = wp_array[i];
     float f;
 
     if (j == 0) {
@@ -1792,14 +1792,14 @@ write_track_begin(const route_head* track)
   waypoint_i = 0;
   waypoint_n = track->rte_waypt_ct;
   if (waypoint_n) {
-    wp_array = (waypoint**) xmalloc(waypoint_n * sizeof(*wp_array));
+    wp_array = (Waypoint**) xmalloc(waypoint_n * sizeof(*wp_array));
   }
 }
 
 static void
-write_track_point(const waypoint* wp)
+write_track_point(const Waypoint* wp)
 {
-  wp_array[waypoint_i++] = (waypoint*)wp;
+  wp_array[waypoint_i++] = (Waypoint*)wp;
 }
 
 static void
@@ -1863,7 +1863,7 @@ decode_route_shape(const void* data, unsigned* wp_array_i)
 
   for (i = 0; i < n; i++, j++) {
     char buf[32];
-    waypoint* wp = new waypoint;
+    Waypoint* wp = new Waypoint;
     wp_array[j] = wp;
     wp->latitude = delbin_rad2deg(le_read32(p->point[i].latitude));
     wp->longitude = delbin_rad2deg(le_read32(p->point[i].longitude));
@@ -1873,13 +1873,13 @@ decode_route_shape(const void* data, unsigned* wp_array_i)
   *wp_array_i = j;
 }
 
-static waypoint*
+static Waypoint*
 decode_route_point(const void* data)
 {
   const msg_route_point_t* p = (const msg_route_point_t*) data;
   const char* s = NULL;
   gbfile* fd = gbfopen(NULL, "w", MYNAME);
-  waypoint* wp = new waypoint;
+  Waypoint* wp = new Waypoint;
   if (p->name[0]) {
     wp->shortname = p->name;
   }
@@ -1999,7 +1999,7 @@ read_route(route_head* route)
   route_total = le_readu32(p->total_route_point);
   shape_total = le_readu32(p->total_shape_point);
   total = route_total + shape_total;
-  wp_array = (waypoint**) xcalloc(total, sizeof(*wp_array));
+  wp_array = (Waypoint**) xcalloc(total, sizeof(*wp_array));
   if (global_opts.debug_level >= DBGLVL_L) {
     warning(MYNAME ": route '%s' %u points, %u shape points\n",
             CSTRc(route->rte_name), route_total, shape_total);
@@ -2111,7 +2111,7 @@ static unsigned shape_point_n;
 static unsigned* shape_point_counts;
 
 static void
-write_route_shape_points(waypoint** array, unsigned n)
+write_route_shape_points(Waypoint** array, unsigned n)
 {
   message_t m;
   const unsigned pt_per_msg = 25;
@@ -2150,7 +2150,7 @@ write_route_points(void)
   while (i < waypoint_n) {
     message_t m;
     unsigned shape_n;
-    const waypoint* wp = wp_array[i];
+    const Waypoint* wp = wp_array[i];
     msg_route_point_t* p;
     char* s;
 
@@ -2198,15 +2198,15 @@ write_route_begin(const route_head* track)
   shape_point_n = 0;
   waypoint_n = track->rte_waypt_ct;
   if (waypoint_n) {
-    wp_array = (waypoint**) xmalloc(waypoint_n * sizeof(*wp_array));
+    wp_array = (Waypoint**) xmalloc(waypoint_n * sizeof(*wp_array));
     shape_point_counts = (unsigned int*) xcalloc(waypoint_n, sizeof(*shape_point_counts));
   }
 }
 
 static void
-write_route_point(const waypoint* wp)
+write_route_point(const Waypoint* wp)
 {
-  wp_array[waypoint_i++] = (waypoint*)wp;
+  wp_array[waypoint_i++] = (Waypoint*)wp;
 #if NEW_STRINGS
   if (wp->shortname.startsWith("SHP")) {
 #else
@@ -2262,10 +2262,10 @@ write_routes(void)
 //-----------------------------------------------------------------------------
 // Current position
 
-static waypoint*
+static Waypoint*
 decode_navmsg(const void* data)
 {
-  waypoint* wp = new waypoint;
+  Waypoint* wp = new Waypoint;
   const msg_navigation_t* p = (const msg_navigation_t*) data;
   struct tm t;
 
@@ -2291,10 +2291,10 @@ decode_navmsg(const void* data)
   return wp;
 }
 
-static waypoint*
+static Waypoint*
 read_position(void)
 {
-  waypoint* wp;
+  Waypoint* wp;
   message_t m;
 
   message_init(&m);
@@ -2449,7 +2449,7 @@ delbin_write(void)
   }
 }
 
-static waypoint*
+static Waypoint*
 delbin_rd_position(posn_status* status)
 {
   return read_position();

@@ -338,7 +338,7 @@ waypt_read(void)
   GPS_PWay* way = NULL;
 
   if (getposn) {
-    waypoint* wpt = new waypoint;
+    Waypoint* wpt = new Waypoint;
     wpt->latitude = gps_save_lat;
     wpt->longitude = gps_save_lon;
     wpt->shortname = "Position";
@@ -354,7 +354,7 @@ waypt_read(void)
   }
 
   for (i = 0; i < n; i++) {
-    waypoint* wpt_tmp = new waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
 
     wpt_tmp->shortname = way[i]->ident;
     wpt_tmp->description = QString(way[i]->cmnt).simplified();
@@ -406,7 +406,7 @@ static int lap_read_nop_cb(int n, struct GPS_SWay** dp)
 
 // returns 1 if the waypoint's start_time can be found
 // in the laps array, 0 otherwise
-unsigned int checkWayPointIsAtSplit(waypoint* wpt, GPS_PLap* laps, int nlaps)
+unsigned int checkWayPointIsAtSplit(Waypoint* wpt, GPS_PLap* laps, int nlaps)
 {
   int result = 0;
 
@@ -459,7 +459,7 @@ track_read(void)
   }
 
   for (i = 0; i < ntracks; i++) {
-    waypoint* wpt;
+    Waypoint* wpt;
 
     /*
      * This is probably always in slot zero, but the Garmin
@@ -491,7 +491,7 @@ track_read(void)
     if (array[i]->no_latlon || array[i]->ishdr) {
       continue;
     }
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     wpt->longitude = array[i]->lon;
     wpt->latitude = array[i]->lat;
@@ -563,7 +563,7 @@ route_read(void)
       if (array[i]->islink)  {
         continue;
       } else {
-        waypoint* wpt_tmp = new waypoint;
+        Waypoint* wpt_tmp = new Waypoint;
         wpt_tmp->latitude = array[i]->lat;
         wpt_tmp->longitude = array[i]->lon;
         wpt_tmp->shortname = array[i]->ident;
@@ -595,7 +595,7 @@ lap_read_as_track(void)
     return;
   }
   for (i = 0; i < ntracks; i++) {
-    waypoint* wpt;
+    Waypoint* wpt;
     if (array[i]->index == -1) {
       index=i;
     } else {
@@ -618,7 +618,7 @@ lap_read_as_track(void)
       trk_head->rte_name = tbuf;
       track_add_head(trk_head);
 
-      wpt = new waypoint;
+      wpt = new Waypoint;
 
       wpt->longitude = array[i]->begin_lon;
       wpt->latitude = array[i]->begin_lat;
@@ -641,7 +641,7 @@ lap_read_as_track(void)
     *			continue;
     *		}
     */
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     wpt->longitude = array[i]->end_lon;
     wpt->latitude = array[i]->end_lat;
@@ -674,7 +674,7 @@ lap_read_as_track(void)
  * to the data type we use throughout.   Yes, we do lose some data that way.
  */
 static void
-pvt2wpt(GPS_PPvt_Data pvt, waypoint* wpt)
+pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
 {
   double wptime, wptimes;
 
@@ -746,10 +746,10 @@ pvt_init(const char* fname)
   GPS_Command_Pvt_On(fname, &pvt_fd);
 }
 
-static waypoint*
+static Waypoint*
 pvt_read(posn_status* posn_status)
 {
-  waypoint* wpt = new waypoint;
+  Waypoint* wpt = new Waypoint;
   GPS_PPvt_Data pvt = GPS_Pvt_New();
 
   if (GPS_Command_Pvt_Get(&pvt_fd, &pvt)) {
@@ -852,7 +852,7 @@ waypt_write_cb(GPS_PWay* way)
  * description.
  */
 const char*
-get_gc_info(waypoint* wpt)
+get_gc_info(Waypoint* wpt)
 {
   if (global_opts.smart_names) {
     if (wpt->gc_data->type == gt_virtual) {
@@ -898,11 +898,11 @@ waypoint_prepare(void)
   i = 0;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypoint* wpt;
+    Waypoint* wpt;
     char* ident;
     char obuf[256];
 
-    wpt = (waypoint*) elem;
+    wpt = (Waypoint*) elem;
 #if NEW_STRINGS 
     QString src;
     if (!wpt->description.isEmpty()) {
@@ -1048,7 +1048,7 @@ route_hdr_pr(const route_head* rte)
 }
 
 static void
-route_waypt_pr(const waypoint* wpt)
+route_waypt_pr(const Waypoint* wpt)
 {
   GPS_PWay rte = *cur_tx_routelist_entry;
 
@@ -1158,7 +1158,7 @@ track_hdr_pr(const route_head* trk_head)
 }
 
 static void
-track_waypt_pr(const waypoint* wpt)
+track_waypt_pr(const Waypoint* wpt)
 {
   (*cur_tx_tracklist_entry)->lat = wpt->latitude;
   (*cur_tx_tracklist_entry)->lon = wpt->longitude;

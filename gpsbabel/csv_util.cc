@@ -522,7 +522,7 @@ ddmmdir_to_degrees(const char* ddmmdir)
 
 /*****************************************************************************
  * human_to_dec() - convert a "human-readable" lat and/or lon to decimal
- * usage: human_to_dec( "N 41° 09.12' W 085° 09.36'", &lat, &lon );
+ * usage: human_to_dec( "N 41ï¿½ 09.12' W 085ï¿½ 09.36'", &lat, &lon );
  *        human_to_dec( "41 9 5.652 N", &lat, &lon );
  *
  *        which: 0-no preference    1-prefer lat    2-prefer lon
@@ -991,7 +991,7 @@ time_to_yyyymmdd(QDateTime t)
 }
 
 static garmin_fs_t*
-gmsd_init(waypoint* wpt)
+gmsd_init(Waypoint* wpt)
 {
   garmin_fs_t* gmsd = GMSD_FIND(wpt);
   if (gmsd == NULL) {
@@ -1006,7 +1006,7 @@ gmsd_init(waypoint* wpt)
 /* usage: xcsv_parse_val("-123.34", *waypt, *field_map)                      */
 /*****************************************************************************/
 static void
-xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
+xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
                route_head** trk)
 {
   const char* enclosure = "";
@@ -1423,7 +1423,7 @@ xcsv_data_read(void)
 {
   char* buff;
   char* s;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   int linecount = 0;
   queue* elem, *tmp;
   field_map_t* fmp;
@@ -1473,7 +1473,7 @@ xcsv_data_read(void)
     }
 
     if (strlen(buff)) {
-      wpt_tmp = new waypoint;
+      wpt_tmp = new Waypoint;
 
       s = buff;
       s = csv_lineparse(s, xcsv_file.field_delimiter,
@@ -1579,7 +1579,7 @@ xcsv_resetpathlen(const route_head* head)
 /*                  (the output meat)                                        */
 /*****************************************************************************/
 static void
-xcsv_waypt_pr(const waypoint* wpt)
+xcsv_waypt_pr(const Waypoint* wpt)
 {
   char buff[1024];
   const char* write_delimiter;

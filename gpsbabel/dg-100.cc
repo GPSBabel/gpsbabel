@@ -224,7 +224,7 @@ process_gpsfile(uint8_t data[], route_head** track)
   const int recordsizes[3] = {8, 20, 32};
   int i, style, recsize;
   int lat, lon, bintime, bindate;
-  waypoint* wpt;
+  Waypoint* wpt;
 
   /* the first record of each file is always full-sized; its style field
    * determines the format of all subsequent records in the file */
@@ -266,7 +266,7 @@ process_gpsfile(uint8_t data[], route_head** track)
       track_add_head(*track);
     }
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
     latitude = bin2deg(lat);
     if (latitude >= 100) {
       manual_point = 1;

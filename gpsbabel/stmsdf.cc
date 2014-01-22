@@ -64,7 +64,7 @@ static queue trackpts;
 static QString rte_name;
 static QString rte_desc;
 
-static waypoint* trkpt_out;
+static Waypoint* trkpt_out;
 static route_head* trk_out;
 
 static double trkpt_dist;
@@ -166,8 +166,8 @@ parse_header(char* line)
 static int
 track_qsort_cb(const void* a, const void* b)
 {
-  const waypoint* wa = *(waypoint**)a;
-  const waypoint* wb = *(waypoint**)b;
+  const Waypoint* wa = *(Waypoint**)a;
+  const Waypoint* wb = *(Waypoint**)b;
 
   return wa->GetCreationTime().toTime_t() - wb->GetCreationTime().toTime_t();
 }
@@ -175,7 +175,7 @@ track_qsort_cb(const void* a, const void* b)
 static void
 finalize_tracks(void)
 {
-  waypoint** list;
+  Waypoint** list;
   int count = 0;
   queue* elem, *tmp;
   int index;
@@ -190,11 +190,11 @@ finalize_tracks(void)
     return;
   }
 
-  list = (waypoint**)xmalloc(count * sizeof(*list));
+  list = (Waypoint**)xmalloc(count * sizeof(*list));
 
   index = 0;
   QUEUE_FOR_EACH(&trackpts, elem, tmp) {
-    list[index] = (waypoint*)elem;
+    list[index] = (Waypoint*)elem;
     dequeue(elem);
     index++;
   }
@@ -202,7 +202,7 @@ finalize_tracks(void)
   qsort(list, count, sizeof(*list), track_qsort_cb);
 
   for (index = 0; index < count; index++) {
-    waypoint* wpt = list[index];
+    Waypoint* wpt = list[index];
     if (wpt->wpt_flags.fmt_use == 2) {	/* log continued */
       track = NULL;
     }
@@ -237,7 +237,7 @@ parse_point(char* line)
   char* str;
   int column = -1;
   int what = -1;		/* -1 = unknown, 0 = tp, 1 = mp, 2 = wp, 3 = ap  */
-  waypoint* wpt = NULL;
+  Waypoint* wpt = NULL;
   char* cx;
   int hour, min, sec, day, month, year;
 
@@ -264,7 +264,7 @@ parse_point(char* line)
         warning(MYNAME ": Unknown point type %s at line %d!\n", str, lineno);
         return;
       }
-      wpt = new waypoint;
+      wpt = new Waypoint;
       break;
 
     case 1:
@@ -433,7 +433,7 @@ data_read(void)
 
 
 static void
-calculate(const waypoint* wpt, double* dist, double* speed, double* course,
+calculate(const Waypoint* wpt, double* dist, double* speed, double* course,
           double* asc, double* desc)
 {
   if (trkpt_out != NULL) {
@@ -516,7 +516,7 @@ any_hdr_calc_cb(const route_head* trk)
 }
 
 static void
-any_waypt_calc_cb(const waypoint* wpt)
+any_waypt_calc_cb(const Waypoint* wpt)
 {
   double speed, course, dist;
 
@@ -547,7 +547,7 @@ any_waypt_calc_cb(const waypoint* wpt)
     this_time += (wpt->GetCreationTime().toTime_t() - trkpt_out->GetCreationTime().toTime_t());
   }
 
-  trkpt_out = (waypoint*)wpt;
+  trkpt_out = (Waypoint*)wpt;
 }
 
 static void
@@ -575,7 +575,7 @@ track_disp_hdr_cb(const route_head* trk)
 
 
 static void
-track_disp_wpt_cb(const waypoint* wpt)
+track_disp_wpt_cb(const Waypoint* wpt)
 {
   struct tm tm;
   char tbuf[32];
@@ -633,7 +633,7 @@ track_disp_wpt_cb(const waypoint* wpt)
     gbfprintf(fout, ",0\n");
   }
 
-  trkpt_out = (waypoint*)wpt;
+  trkpt_out = (Waypoint*)wpt;
 }
 
 static void
@@ -650,7 +650,7 @@ route_disp_hdr_cb(const route_head* rte)
 }
 
 static void
-route_disp_wpt_cb(const waypoint* wpt)
+route_disp_wpt_cb(const Waypoint* wpt)
 {
   if (this_route_valid) {
     QString sn;
@@ -667,7 +667,7 @@ route_disp_wpt_cb(const waypoint* wpt)
 }
 
 static void
-track_disp_custom_cb(const waypoint* wpt)
+track_disp_custom_cb(const Waypoint* wpt)
 {
   if (wpt->GetCreationTime().isValid() && (wpt->altitude != unknown_alt)) {
     gbfprintf(fout, "%d,%.f\n", (int)(wpt->GetCreationTime().toTime_t() - start_time), wpt->altitude);

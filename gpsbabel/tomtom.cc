@@ -152,7 +152,7 @@ data_read(void)
   long x;
   long y;
   char* desc;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   while (!gbfeof(file_in)) {
     rectype = read_char(file_in);
     if (rectype == EOF) {
@@ -191,7 +191,7 @@ data_read(void)
       desc = (char*)xmalloc(recsize - 13);
       gbfread(desc, recsize-13, 1, file_in);
 
-      wpt_tmp = new waypoint;
+      wpt_tmp = new Waypoint;
 
       wpt_tmp->longitude = x/100000.0;
       wpt_tmp->latitude = y/100000.0;
@@ -212,7 +212,7 @@ data_read(void)
 #if 0 // Fallthrough for now to silently ignore these until this is done.
       recsize = read_char(file_in) ;
       check_recsize(recsize);
-      wpt_tmp = new waypoint;
+      wpt_tmp = new Waypoint;
       decode_latlon(&wpt_tmp->latitude, &wpt_tmp->longitude);
       gbfread(tbuf, 3, 1, file_in);
       gbfread(tbuf, 3, 1, file_in);
@@ -241,7 +241,7 @@ data_read(void)
 
 
 struct hdr {
-  waypoint* wpt;
+  Waypoint* wpt;
 };
 
 static int compare_lon(const void* a, const void* b);
@@ -375,7 +375,7 @@ compute_blocks(struct hdr* start, int count,
   newblock->size = 4 * 5 + 1;   /* hdr is 5 longs, 1 char */
   if (count < 20) {
     int i;
-    waypoint* wpt = NULL;
+    Waypoint* wpt = NULL;
 
     for (i = 0; i < count; i++) {
       newblock->size += 4 * 3 + 1;
@@ -436,7 +436,7 @@ data_write(void)
   struct hdr* htable, *bh;
   queue* elem, *tmp;
   extern queue waypt_head;
-  waypoint* waypointp;
+  Waypoint* waypointp;
   double minlon = 200;
   double maxlon = -200;
   double minlat = 200;
@@ -447,7 +447,7 @@ data_write(void)
   bh = htable;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (waypoint*) elem;
+    waypointp = (Waypoint*) elem;
     bh->wpt = waypointp;
     if (waypointp->longitude > maxlon) {
       maxlon = waypointp->longitude;

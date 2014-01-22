@@ -197,7 +197,7 @@ static int waypoint_num;
 static short_handle wptname_sh, rtename_sh, trkname_sh;
 static humminbird_rte_t* humrte;
 static int rte_num;
-static QMap<QString, waypoint*> map;
+static QMap<QString, Waypoint*> map;
 
 static
 arglist_t humminbird_args[] = {
@@ -269,7 +269,7 @@ humminbird_read_wpt(gbfile* fin)
   humminbird_waypt_t w;
   double guder;
   int num_icons;
-  waypoint* wpt;
+  Waypoint* wpt;
 
   if (! gbfread(&w, 1, sizeof(w), fin)) {
     fatal(MYNAME ": Unexpected end of file!\n");
@@ -285,7 +285,7 @@ humminbird_read_wpt(gbfile* fin)
 
   /* All right! Copy the data to the gpsbabel struct... */
 
-  wpt = new waypoint;
+  wpt = new Waypoint;
 
   // Could probably find a way to eliminate the alloc/copy.
   char *s = xstrndup(w.name, sizeof(w.name));
@@ -351,7 +351,7 @@ humminbird_read_route(gbfile* fin)
     route_head* rte = NULL;
 
     for (i = 0; i < hrte.count; i++) {
-      const waypoint* wpt;
+      const Waypoint* wpt;
       char buff[10];
       hrte.points[i] = be_read16(&hrte.points[i]);
 
@@ -368,7 +368,7 @@ humminbird_read_route(gbfile* fin)
           xfree(s);
           /* rte->rte_num = hrte.num + 1; only internal number */
         }
-        route_add_wpt(rte, new waypoint(*wpt));
+        route_add_wpt(rte, new Waypoint(*wpt));
       }
     }
   }
@@ -381,7 +381,7 @@ humminbird_read_track(gbfile* fin)
   humminbird_trk_header_t th;
   humminbird_trk_point_t* points;
   route_head* trk;
-  waypoint* first_wpt;
+  Waypoint* first_wpt;
   int i;
   int max_points = 0;
   int32_t accum_east;
@@ -434,7 +434,7 @@ humminbird_read_track(gbfile* fin)
 
   /* We create one wpt for the info in the header */
 
-  first_wpt = new waypoint;
+  first_wpt = new Waypoint;
   g_lat = gudermannian_i1924(accum_north);
   first_wpt->latitude  = geocentric_to_geodetic_hwr(g_lat);
   first_wpt->longitude = accum_east/EAST_SCALE * 180.0;
@@ -443,7 +443,7 @@ humminbird_read_track(gbfile* fin)
   track_add_wpt(trk, first_wpt);
 
   for (i=0 ; i<th.num_points-1 ; i++) {
-    waypoint* wpt = new waypoint;
+    Waypoint* wpt = new Waypoint;
     int16_t next_deltaeast, next_deltanorth;
     double guder;
 
@@ -498,7 +498,7 @@ humminbird_read_track_old(gbfile* fin)
   humminbird_trk_header_old_t th;
   humminbird_trk_point_old_t* points;
   route_head* trk;
-  waypoint* first_wpt;
+  Waypoint* first_wpt;
   int i;
   int max_points = 0;
   int32_t accum_east;
@@ -554,7 +554,7 @@ humminbird_read_track_old(gbfile* fin)
 
   /* We create one wpt for the info in the header */
 
-  first_wpt = new waypoint;
+  first_wpt = new Waypoint;
   g_lat = gudermannian_i1924(accum_north);
   first_wpt->latitude  = geocentric_to_geodetic_hwr(g_lat);
   first_wpt->longitude = accum_east/EAST_SCALE * 180.0;
@@ -562,7 +562,7 @@ humminbird_read_track_old(gbfile* fin)
   track_add_wpt(trk, first_wpt);
 
   for (i=0 ; i<th.num_points-1 ; i++) {
-    waypoint* wpt = new waypoint;
+    Waypoint* wpt = new Waypoint;
 //		int16_t next_deltaeast, next_deltanorth;
     double guder;
 
@@ -686,7 +686,7 @@ humminbird_wr_deinit(void)
 }
 
 static void
-humminbird_write_waypoint(const waypoint* wpt)
+humminbird_write_waypoint(const Waypoint* wpt)
 {
   humminbird_waypt_t hum;
   double lat, north, east;
@@ -810,7 +810,7 @@ humminbird_track_tail(const route_head* rte)
 }
 
 static void
-humminbird_track_cb(const waypoint* wpt)
+humminbird_track_cb(const Waypoint* wpt)
 {
   int32_t north, east;
   double lat;
@@ -925,7 +925,7 @@ humminbird_rte_tail(const route_head* rte)
 }
 
 static void
-humminbird_write_rtept(const waypoint* wpt)
+humminbird_write_rtept(const Waypoint* wpt)
 {
   int i;
 
@@ -947,20 +947,20 @@ humminbird_write_rtept(const waypoint* wpt)
 }
 
 static void
-humminbird_write_waypoint_wrapper(const waypoint* wpt)
+humminbird_write_waypoint_wrapper(const Waypoint* wpt)
 {
   char* key;
-  waypoint* tmpwpt;
+  Waypoint* tmpwpt;
 
   xasprintf(&key, "%s\01%.9f\01%.9f", CSTRc(wpt->shortname), wpt->latitude, wpt->longitude);
   if (!(tmpwpt = map[key])) {
-    tmpwpt = (waypoint*)wpt;
-    map[key] = (waypoint*) wpt;
+    tmpwpt = (Waypoint*)wpt;
+    map[key] = (Waypoint*) wpt;
     tmpwpt->extra_data = gb_int2ptr(waypoint_num + 1);	/* NOT NULL */
     humminbird_write_waypoint(wpt);
   } else {
     void* p = tmpwpt->extra_data;
-    tmpwpt = (waypoint*)wpt;
+    tmpwpt = (Waypoint*)wpt;
     tmpwpt->extra_data = p;
   }
 

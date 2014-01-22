@@ -30,7 +30,7 @@ static char* opt_gpsdate;
 static time_t time_offset;
 static int stnum;
 static gbfile* fout;
-static const waypoint* prevwpp;
+static const Waypoint* prevwpp;
 
 /* internal helper functions */
 
@@ -84,7 +84,7 @@ subrip_write_time(time_t arg_time)
 }
 
 static void
-subrip_prevwp_pr(const waypoint* waypointp)
+subrip_prevwp_pr(const Waypoint* waypointp)
 {
   /* Now that we have the next waypoint, we can write out the subtitle for
    * the previous one.
@@ -131,7 +131,7 @@ subrip_prevwp_pr(const waypoint* waypointp)
 /* callback functions */
 
 static void
-subrip_trkpt_pr(const waypoint* waypointp)
+subrip_trkpt_pr(const Waypoint* waypointp)
 {
   /*
    * To determine the duration of the subtitle, we need the timestamp of the

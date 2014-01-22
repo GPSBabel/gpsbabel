@@ -81,7 +81,7 @@ static void data_read(void)
   char name[9], desc[90];
   double lat,lon;
   unsigned char* HxWpt;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   int iCount;
   int iDataRead;
   int iWptNum;
@@ -105,7 +105,7 @@ static void data_read(void)
 
   /* Get the waypoints */
   for (iCount = 0; iCount < iWptNum ; iCount ++) {
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
 
     iWptIndex = le_read16(&((WPTHDR*)HxWpt)->idx[iCount]);
     pWptHxTmp = (WPT*)&HxWpt[OFFS_WPT + (sizeof(WPT) * iWptIndex)];
@@ -185,7 +185,7 @@ const char* mknshort(const char* stIn,unsigned int sLen)
 
 
 
-static void holux_disp(const waypoint* wpt)
+static void holux_disp(const Waypoint* wpt)
 {
   double lon,lat;
   short sIndex;

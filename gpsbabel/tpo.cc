@@ -261,7 +261,7 @@ void tpo_read_2_x(void)
   short* lon_delta, *lat_delta;
   int i, j;
   route_head* track_temp;
-  waypoint* waypoint_temp;
+  Waypoint* waypoint_temp;
 
   /* track count */
   track_count = gbfgetint16(tpo_file_in);
@@ -342,7 +342,7 @@ void tpo_read_2_x(void)
     /* multiply all the deltas by the scaling factors to determine the waypoint positions */
     for (j=0; j<waypoint_count; j++) {
 
-      waypoint_temp = new waypoint;
+      waypoint_temp = new Waypoint;
 
       /* convert incoming NAD27/CONUS coordinates to WGS84 */
       GPS_Math_Known_Datum_To_WGS84_M(
@@ -455,14 +455,14 @@ int tpo_find_block(unsigned int block_desired)
 //
 // For version 3.x files.
 //
-waypoint* tpo_convert_ll(int lat, int lon)
+Waypoint* tpo_convert_ll(int lat, int lon)
 {
   double latitude;
   double longitude;
-  waypoint* waypoint_temp;
+  Waypoint* waypoint_temp;
 
 
-  waypoint_temp = new waypoint;
+  waypoint_temp = new Waypoint;
 
   latitude = (double)lat / 0x800000;
   longitude = (double)lon / 0x800000;
@@ -705,7 +705,7 @@ void tpo_process_tracks(void)
     // Process the track bytes
     llvalid = 0;
     for (jj = 0; jj < track_byte_count;) {
-      waypoint* waypoint_temp;
+      Waypoint* waypoint_temp;
 
       // Time to read a new latlong?
       if (!llvalid) {
@@ -807,7 +807,7 @@ void tpo_process_tracks(void)
 //
 // For version 3.x files.
 //
-waypoint** tpo_wp_index;
+Waypoint** tpo_wp_index;
 unsigned int tpo_index_ptr;
 
 
@@ -836,7 +836,7 @@ void tpo_process_waypoints(void)
 
   // Fetch storage for the waypoint index (needed later for
   // routes)
-  tpo_wp_index = (waypoint**) xmalloc(sizeof(waypoint*) * waypoint_count);
+  tpo_wp_index = (Waypoint**) xmalloc(sizeof(Waypoint*) * waypoint_count);
   tpo_index_ptr = 0;
 
   if (waypoint_count == 0) {
@@ -845,8 +845,8 @@ void tpo_process_waypoints(void)
 
   // Read/process each waypoint in the file
   for (ii = 0; ii < waypoint_count; ii++) {
-    waypoint* waypoint_temp;
-    waypoint* waypoint_temp2;
+    Waypoint* waypoint_temp;
+    Waypoint* waypoint_temp2;
     unsigned int name_length;
     char* waypoint_name;
     int lat;
@@ -916,7 +916,7 @@ void tpo_process_waypoints(void)
 
     // For routes (later), we need a duplicate of each waypoint
     // indexed by the order we read them in.
-    waypoint_temp2 = new waypoint(*waypoint_temp);
+    waypoint_temp2 = new Waypoint(*waypoint_temp);
 
     // Attach the copy to our index
     tpo_wp_index[tpo_index_ptr++] = waypoint_temp2;
@@ -975,7 +975,7 @@ void tpo_process_map_notes(void)
     int lat;
     int lon;
     unsigned int name_length;
-    waypoint* waypoint_temp;
+    Waypoint* waypoint_temp;
     unsigned int num_bytes;
     unsigned int jj;
 
@@ -1110,7 +1110,7 @@ void tpo_process_symbols(void)
   for (ii = 0; ii < waypoint_count; ii++) {
     int lat;
     int lon;
-    waypoint* waypoint_temp;
+    Waypoint* waypoint_temp;
 
 
 //UNKNOWN DATA LENGTH
@@ -1172,7 +1172,7 @@ void tpo_process_text_labels(void)
     int lat;
     int lon;
     unsigned int name_length;
-    waypoint* waypoint_temp;
+    Waypoint* waypoint_temp;
 
 
 //UNKNOWN DATA LENGTH
@@ -1306,7 +1306,7 @@ void tpo_process_routes(void)
     // index, then add the waypoint to this route.
     //
     for (jj = 0; jj < waypoint_cnt; jj++) {
-      waypoint* waypoint_temp;
+      Waypoint* waypoint_temp;
       unsigned char val;
 
 
@@ -1316,7 +1316,7 @@ void tpo_process_routes(void)
 //printf("val: %x\t\t", val);
 
       // Duplicate a waypoint from our index of waypoints.
-      waypoint_temp = new waypoint(*tpo_wp_index[val-1]);
+      waypoint_temp = new Waypoint(*tpo_wp_index[val-1]);
 
       // Add the waypoint to the route
       route_add_wpt(route_temp, waypoint_temp);
@@ -1751,7 +1751,7 @@ tpo_track_hdr(const route_head* rte)
   unsigned char unknown1[] = { 0xFF, 0x00, 0x00, 0x00 };
   unsigned char bounding_box[8] = { 0x00, 0x80, 0x00, 0x80, 0xFF, 0x7F, 0xFF, 0x7F };
 
-  waypoint* first_track_waypoint = (waypoint*) QUEUE_FIRST(&rte->waypoint_list);
+  Waypoint* first_track_waypoint = (Waypoint*) QUEUE_FIRST(&rte->waypoint_list);
 
   /* zoom level 1-5 visibility flags */
   gbfwrite(visibility_flags, 1, sizeof(visibility_flags), tpo_file_out);
@@ -1809,7 +1809,7 @@ tpo_track_hdr(const route_head* rte)
 }
 
 static void
-tpo_track_disp(const waypoint* waypointp)
+tpo_track_disp(const Waypoint* waypointp)
 {
   double lat, lon, amt, x, y, z;
   short lat_delta, lon_delta;

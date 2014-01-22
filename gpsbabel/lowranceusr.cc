@@ -378,7 +378,7 @@ lat_deg_to_mm(double x)
 }
 
 static void
-lowranceusr_parse_waypt(waypoint* wpt_tmp)
+lowranceusr_parse_waypt(Waypoint* wpt_tmp)
 {
   char buff[MAXUSRSTRINGSIZE + 1];
   int text_len;
@@ -453,7 +453,7 @@ lowranceusr_parse_routes(void)
   short int num_routes, num_legs;
   int i,j;
   int text_len;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
 
   num_routes = gbfgetint16(file_in);
 
@@ -481,7 +481,7 @@ lowranceusr_parse_routes(void)
 
     /* waypoints */
     for (j=0; j < num_legs; j++) {
-      wpt_tmp = new waypoint;
+      wpt_tmp = new Waypoint;
       lowranceusr_parse_waypt(wpt_tmp);
       route_add_wpt(rte_head, wpt_tmp);
     }
@@ -512,8 +512,8 @@ lowranceusr_parse_icons(void)
       /* symbol */
       (void) gbfread(&buff[0], 4, 1, file_in);
     } else {
-      waypoint* wpt_tmp;
-      wpt_tmp = new waypoint;
+      Waypoint* wpt_tmp;
+      wpt_tmp = new Waypoint;
 
       /* position coord lat & long */
       wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
@@ -536,7 +536,7 @@ lowranceusr_parse_trails(void)
   short int num_trails, num_trail_points, num_section_points;
   int i,j, trk_num, itmp;
   int text_len;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   route_head* trk_tmp;
 
   /* num trails */
@@ -594,7 +594,7 @@ lowranceusr_parse_trails(void)
         }
 
         for (j=0; j < num_section_points; j++, num_trail_points--) {
-          wpt_tmp = new waypoint;
+          wpt_tmp = new Waypoint;
           wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
           wpt_tmp->longitude = lon_mm_to_deg(gbfgetint32(file_in));
           /* continuous */
@@ -653,9 +653,9 @@ data_read(void)
   }
 
   for (i = 0; i < NumWaypoints; i++) {
-    waypoint* wpt_tmp;
+    Waypoint* wpt_tmp;
 
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
 
     /* Object num */
     object_num = gbfgetint16(file_in);
@@ -675,7 +675,7 @@ data_read(void)
 }
 
 static void
-lowranceusr_waypt_disp(const waypoint* wpt)
+lowranceusr_waypt_disp(const Waypoint* wpt)
 {
   int text_len, Lat, Lon, Time, SymbolId;
   short int WayptType;
@@ -805,7 +805,7 @@ lowranceusr_waypt_disp(const waypoint* wpt)
 }
 
 static void
-lowranceusr_waypt_pr(const waypoint* wpt)
+lowranceusr_waypt_pr(const Waypoint* wpt)
 {
 
   /* our personal waypoint counter */
@@ -829,7 +829,7 @@ lowranceusr_waypt_pr(const waypoint* wpt)
  * 4 bytes symbol
  */
 static void
-lowranceusr_write_icon(const waypoint* wpt)
+lowranceusr_write_icon(const Waypoint* wpt)
 {
   int latmm = lat_deg_to_mm(wpt->latitude);
   int lonmm = lon_deg_to_mm(wpt->longitude);
@@ -964,7 +964,7 @@ lowranceusr_route_hdr(const route_head* rte)
 }
 
 static void
-lowranceusr_track_disp(const waypoint* wpt)
+lowranceusr_track_disp(const Waypoint* wpt)
 {
   int lat, lon;
 

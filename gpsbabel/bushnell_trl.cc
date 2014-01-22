@@ -97,7 +97,7 @@ bushnell_read(void)
   int lat_tmp,lon_tmp;
 
   while (1) {
-    waypoint* wpt_tmp;
+    Waypoint* wpt_tmp;
 
     lat_tmp = gbfgetint32(file_in);
     lon_tmp = gbfgetint32(file_in);
@@ -106,7 +106,7 @@ bushnell_read(void)
       break;
     }
 
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
     wpt_tmp->latitude  = lat_tmp / 10000000.0;
     wpt_tmp->longitude = lon_tmp / 10000000.0;
 
@@ -115,7 +115,7 @@ bushnell_read(void)
 }
 
 static void
-bushnell_write_one(const waypoint* wpt)
+bushnell_write_one(const Waypoint* wpt)
 {
   int32_t lat = wpt->latitude  * 10000000.0;
   int32_t lon = wpt->longitude * 10000000.0;

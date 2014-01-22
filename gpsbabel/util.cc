@@ -875,7 +875,7 @@ void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs)
  * formats do lookups based on these strings.
  */
 const char*
-get_cache_icon(const waypoint* waypointp)
+get_cache_icon(const Waypoint* waypointp)
 {
   if (!global_opts.smart_icons) {
     return NULL;

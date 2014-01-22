@@ -37,7 +37,7 @@
 static gbfile* fin, *fout;
 
 static char* xmlbin;
-static waypoint* xmlwpt;
+static Waypoint* xmlwpt;
 static route_head* xmltrk;
 static QString xmlgrid;
 static int xmldatum;
@@ -107,7 +107,7 @@ static xg_tag_mapping tlog3b_xgcb_map[] = {
 /* helpers */
 
 static void
-convert_datum(waypoint* wpt, int datum)
+convert_datum(Waypoint* wpt, int datum)
 {
   if (datum != DATUM_WGS84) {
     double lat = wpt->latitude;
@@ -121,7 +121,7 @@ convert_datum(waypoint* wpt, int datum)
 
 
 static void
-finalize_pt(waypoint* wpt)
+finalize_pt(Waypoint* wpt)
 {
   if (xmlgrid == "BNG") {
     GPS_Math_NGENToAiry1830LatLon(xmlEasting, xmlNorthing,
@@ -253,7 +253,7 @@ tlog3b_xgcb_tfdes(xg_string args, const QXmlStreamAttributes* unused)
 static void
 tlog3b_xgcb_wptst(xg_string args, const QXmlStreamAttributes* unused)
 {
-  xmlwpt = new waypoint;
+  xmlwpt = new Waypoint;
   xmldatum = DATUM_WGS84;
 }
 
@@ -261,7 +261,7 @@ tlog3b_xgcb_wptst(xg_string args, const QXmlStreamAttributes* unused)
 static void
 tlog3b_xgcb_tptst(xg_string args, const QXmlStreamAttributes* unused)
 {
-  xmlwpt = new waypoint;
+  xmlwpt = new Waypoint;
   xmldatum = DATUM_WGS84;
 }
 
@@ -473,7 +473,7 @@ read_CTrackFile(const int version)
   }
 
   while (tcount > 0) {
-    waypoint* wpt;
+    Waypoint* wpt;
 
     tcount--;
 
@@ -481,7 +481,7 @@ read_CTrackFile(const int version)
       datum = read_datum(fin);
     }
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);
@@ -517,7 +517,7 @@ read_CTrackFile(const int version)
     }
 
     while (! gbfeof(fin)) {
-      waypoint* wpt;
+      Waypoint* wpt;
 
       i = gbfgetc(fin);
       if (i == 0) {
@@ -527,7 +527,7 @@ read_CTrackFile(const int version)
       gbfungetc(i, fin);
       datum = read_datum(fin);
 
-      wpt = new waypoint;
+      wpt = new Waypoint;
 
       wpt->latitude = gbfgetdbl(fin);
       wpt->longitude = gbfgetdbl(fin);
@@ -552,12 +552,12 @@ read_CTrackFile(const int version)
   datum = read_datum(fin);
 
   while (wcount > 0) {
-    waypoint* wpt;
+    Waypoint* wpt;
     int32_t namect, i;
 
     wcount--;
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);
@@ -797,7 +797,7 @@ track_tlr_cb(const route_head* trk)
 }
 
 static void
-track_wpt_cb(const waypoint* wpt)
+track_wpt_cb(const Waypoint* wpt)
 {
   if (this_index != track_index) {
     return;
@@ -809,7 +809,7 @@ track_wpt_cb(const waypoint* wpt)
 }
 
 static void
-wpt_cb(const waypoint* wpt)
+wpt_cb(const Waypoint* wpt)
 {
   int names;
 

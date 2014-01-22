@@ -52,14 +52,14 @@ arglist_t cst_args[] = {
 /* helpers */
 
 static void
-cst_add_wpt(const route_head* track, waypoint* wpt)
+cst_add_wpt(const route_head* track, Waypoint* wpt)
 {
   if ((wpt == NULL) || (track == NULL)) {
     return;
   }
 
   if (wpt->shortname != NULL) {
-    waypt_add(new waypoint(*wpt));
+    waypt_add(new Waypoint(*wpt));
     // Rather than creating a new waypt on each read, tis format bizarrely
     // recycles the same one, relying on new waypoint(*) above and then manually
     // resetting fields.  Weird.
@@ -69,9 +69,9 @@ cst_add_wpt(const route_head* track, waypoint* wpt)
       temp_route = route_head_alloc();
       route_add_head(temp_route);
     }
-    route_add_wpt(temp_route, new waypoint(*wpt));
+    route_add_wpt(temp_route, new Waypoint(*wpt));
   }
-  track_add_wpt((route_head*)track, (waypoint*)wpt);
+  track_add_wpt((route_head*)track, (Waypoint*)wpt);
 }
 
 static char*
@@ -164,7 +164,7 @@ cst_data_read(void)
   int cst_version;
   int cst_points = -1;
   route_head* track = NULL;
-  waypoint* wpt = NULL;
+  Waypoint* wpt = NULL;
 
   while ((buff = gbfgetstr(fin))) {
     char* cin = buff;
@@ -266,7 +266,7 @@ cst_data_read(void)
         wpt = NULL;
 
 
-        wpt = new waypoint;
+        wpt = new Waypoint;
 
         if (5 != sscanf(cin, "%lf %lf %lf %d %s",
                         &wpt->longitude,

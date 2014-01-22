@@ -52,7 +52,7 @@ static gbfile* fin, *fout;
 static route_head* current_trk, *current_rte;
 static int waypoints;
 static int routepoints;
-static waypoint** wpt_a;
+static Waypoint** wpt_a;
 static int wpt_a_ct;
 static grid_type grid_index;
 static int datum_index;
@@ -130,9 +130,9 @@ typedef struct info_s {
   double speed;
   double total;
   int count;
-  waypoint* prev_wpt;
-  waypoint* first_wpt;
-  waypoint* last_wpt;
+  Waypoint* prev_wpt;
+  Waypoint* first_wpt;
+  Waypoint* last_wpt;
 } info_t;
 
 static info_t* route_info;
@@ -177,7 +177,7 @@ init_date_and_time_format(void)
 }
 
 static void
-convert_datum(const waypoint* wpt, double* dest_lat, double* dest_lon)
+convert_datum(const Waypoint* wpt, double* dest_lat, double* dest_lon)
 {
   double alt;
 
@@ -193,7 +193,7 @@ convert_datum(const waypoint* wpt, double* dest_lat, double* dest_lon)
 /* Waypoint preparation */
 
 static void
-enum_waypt_cb(const waypoint* wpt)
+enum_waypt_cb(const Waypoint* wpt)
 {
   garmin_fs_p gmsd;
   int wpt_class;
@@ -208,15 +208,15 @@ enum_waypt_cb(const waypoint* wpt)
       return;
     }
     for (i = 0; i < wpt_a_ct; i++) {		/* check for duplicates */
-      waypoint* tmp = wpt_a[i];
+      Waypoint* tmp = wpt_a[i];
       if (case_ignore_strcmp(tmp->shortname, wpt->shortname) == 0) {
-        wpt_a[i] = (waypoint*)wpt;
+        wpt_a[i] = (Waypoint*)wpt;
         waypoints--;
         return;
 
       }
     }
-    wpt_a[wpt_a_ct++] = (waypoint*)wpt;
+    wpt_a[wpt_a_ct++] = (Waypoint*)wpt;
   }
 
 }
@@ -224,8 +224,8 @@ enum_waypt_cb(const waypoint* wpt)
 static int
 sort_waypt_cb(const void* a, const void* b)
 {
-  const waypoint* wa = *(waypoint**)a;
-  const waypoint* wb = *(waypoint**)b;
+  const Waypoint* wa = *(Waypoint**)a;
+  const Waypoint* wb = *(Waypoint**)b;
 #if NEW_STRINGS
   return wa->shortname.compare(wb->shortname, Qt::CaseInsensitive);
 #else
@@ -253,18 +253,18 @@ prework_tlr_cb(const route_head* rte)
 }
 
 static void
-prework_wpt_cb(const waypoint* wpt)
+prework_wpt_cb(const Waypoint* wpt)
 {
-  waypoint* prev = cur_info->prev_wpt;
+  Waypoint* prev = cur_info->prev_wpt;
 
   if (prev != NULL) {
     cur_info->time += (wpt->GetCreationTime().toTime_t() - prev->GetCreationTime().toTime_t());
     cur_info->length += waypt_distance_ex(prev, wpt);
   } else {
-    cur_info->first_wpt = (waypoint*)wpt;
+    cur_info->first_wpt = (Waypoint*)wpt;
     cur_info->start = wpt->GetCreationTime().toTime_t();
   }
-  cur_info->prev_wpt = (waypoint*)wpt;
+  cur_info->prev_wpt = (Waypoint*)wpt;
   cur_info->count++;
   routepoints++;
 }
@@ -273,7 +273,7 @@ prework_wpt_cb(const waypoint* wpt)
 /* output helpers */
 
 static void
-print_position(const waypoint* wpt)
+print_position(const Waypoint* wpt)
 {
   int valid = 1;
   double lat, lon, north, east;
@@ -427,7 +427,7 @@ print_categories(uint16_t categories)
 }
 
 static void
-print_course(const waypoint* A, const waypoint* B)		/* seems to be okay */
+print_course(const Waypoint* A, const Waypoint* B)		/* seems to be okay */
 {
   if ((A != NULL) && (B != NULL) && (A != B)) {
     int course;
@@ -540,7 +540,7 @@ print_string(const char* fmt, const QString& string)
 /* main cb's */
 
 static void
-write_waypt(const waypoint* wpt)
+write_waypt(const Waypoint* wpt)
 {
   unsigned char wpt_class;
   garmin_fs_p gmsd;
@@ -679,9 +679,9 @@ route_disp_tlr_cb(const route_head* rte)
 }
 
 static void
-route_disp_wpt_cb(const waypoint* wpt)
+route_disp_wpt_cb(const Waypoint* wpt)
 {
-  waypoint* prev = cur_info->prev_wpt;
+  Waypoint* prev = cur_info->prev_wpt;
 
   gbfprintf(fout, "Route Waypoint\t");
   gbfprintf(fout, "%s\t", CSTRc(wpt->shortname));
@@ -698,7 +698,7 @@ route_disp_wpt_cb(const waypoint* wpt)
 
   gbfprintf(fout, "\r\n");
 
-  cur_info->prev_wpt = (waypoint*)wpt;
+  cur_info->prev_wpt = (Waypoint*)wpt;
 }
 
 static void
@@ -736,9 +736,9 @@ track_disp_tlr_cb(const route_head* track)
 }
 
 static void
-track_disp_wpt_cb(const waypoint* wpt)
+track_disp_wpt_cb(const Waypoint* wpt)
 {
-  waypoint* prev = cur_info->prev_wpt;
+  Waypoint* prev = cur_info->prev_wpt;
   time_t delta;
   double dist, depth;
 
@@ -773,7 +773,7 @@ track_disp_wpt_cb(const waypoint* wpt)
   }
   gbfprintf(fout, "\r\n");
 
-  cur_info->prev_wpt = (waypoint*)wpt;
+  cur_info->prev_wpt = (Waypoint*)wpt;
 }
 
 /*******************************************************************************
@@ -869,14 +869,14 @@ garmin_txt_write(void)
     int i;
 
     wpt_a_ct = 0;
-    wpt_a = (waypoint**)xcalloc(waypoints, sizeof(*wpt_a));
+    wpt_a = (Waypoint**)xcalloc(waypoints, sizeof(*wpt_a));
     waypt_disp_all(enum_waypt_cb);
     route_disp_all(NULL, NULL, enum_waypt_cb);
     qsort(wpt_a, waypoints, sizeof(*wpt_a), sort_waypt_cb);
 
     gbfprintf(fout, "Header\t%s\r\n\r\n", headers[waypt_header]);
     for (i = 0; i < waypoints; i++) {
-      waypoint* wpt = wpt_a[i];
+      Waypoint* wpt = wpt_a[i];
       write_waypt(wpt);
     }
     xfree(wpt_a);
@@ -1136,12 +1136,12 @@ parse_waypoint(void)
 {
   char* str;
   int column = -1;
-  waypoint* wpt;
+  Waypoint* wpt;
   garmin_fs_p gmsd = NULL;
 
   bind_fields(waypt_header);
 
-  wpt = new waypoint;
+  wpt = new Waypoint;
   gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
@@ -1289,7 +1289,7 @@ parse_route_waypoint(void)
 {
   char* str;
   int column = -1;
-  waypoint* wpt = NULL;
+  Waypoint* wpt = NULL;
 
   bind_fields(rtept_header);
 
@@ -1300,7 +1300,7 @@ parse_route_waypoint(void)
       is_fatal((*str == '\0'), MYNAME ": Route waypoint without name at line %d!\n", current_line);
       wpt = find_waypt_by_name(str);
       is_fatal((wpt == NULL), MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", str, current_line);
-      wpt = new waypoint(*wpt);
+      wpt = new Waypoint(*wpt);
       break;
     }
   }
@@ -1314,10 +1314,10 @@ parse_track_waypoint(void)
 {
   char* str;
   int column = -1;
-  waypoint* wpt;
+  Waypoint* wpt;
 
   bind_fields(trkpt_header);
-  wpt = new waypoint;
+  wpt = new Waypoint;
 
   while ((str = csv_lineparse(NULL, "\t", "", column++))) {
     int field_no;

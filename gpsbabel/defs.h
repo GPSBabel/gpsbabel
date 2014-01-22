@@ -447,7 +447,7 @@ const global_trait* get_traits();
   typedef const char* xg_string;
 #endif
 
-class waypoint
+class Waypoint
 {
 private:
   static geocache_data empty_gc_data;
@@ -538,12 +538,12 @@ public:
   void* extra_data;	/* Extra data added by, say, a filter. */
 
 private:
-  waypoint& operator=(const waypoint& other);
+  Waypoint& operator=(const Waypoint& other);
 
 public:
-  waypoint();
-  ~waypoint();
-  waypoint(const waypoint& other);
+  Waypoint();
+  ~Waypoint();
+  Waypoint(const Waypoint& other);
 
   bool HasUrlLink() const;
   const UrlLink& GetUrlLink() const;
@@ -628,8 +628,8 @@ typedef void (*ff_deinit)(void);
 typedef void (*ff_read)(void);
 typedef void (*ff_write)(void);
 typedef void (*ff_exit)(void);
-typedef void (*ff_writeposn)(waypoint*);
-typedef waypoint* (*ff_readposn)(posn_status*);
+typedef void (*ff_writeposn)(Waypoint*);
+typedef Waypoint* (*ff_readposn)(posn_status*);
 
 #ifndef DEBUG_MEM
 char* get_option(const char* iarglist, const char* argname);
@@ -644,19 +644,19 @@ typedef void (*filter_process)(void);
 typedef void (*filter_deinit)(void);
 typedef void (*filter_exit)(void);
 
-typedef void (*waypt_cb)(const waypoint*);
+typedef void (*waypt_cb)(const Waypoint*);
 typedef void (*route_hdr)(const route_head*);
 typedef void (*route_trl)(const route_head*);
-void waypt_add(waypoint*);
-waypoint* waypt_dupe(const waypoint*);
-waypoint* waypt_new(void);
-void waypt_del(waypoint*);
-void waypt_free(waypoint*);
+void waypt_add(Waypoint*);
+Waypoint* waypt_dupe(const Waypoint*);
+Waypoint* waypt_new(void);
+void waypt_del(Waypoint*);
+void waypt_free(Waypoint*);
 void waypt_disp_all(waypt_cb);
 void waypt_disp_session(const session_t* se, waypt_cb cb);
 void waypt_init_bounds(bounds* bounds);
 int waypt_bounds_valid(bounds* bounds);
-void waypt_add_to_bounds(bounds* bounds, const waypoint* waypointp);
+void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
 void waypt_compute_bounds(bounds*);
 double gcgeodist(const double lat1, const double lon1,
                  const double lat2, const double lon2);
@@ -664,31 +664,31 @@ void waypt_flush(queue*);
 void waypt_flush_all(void);
 unsigned int waypt_count(void);
 void set_waypt_count(unsigned int nc);
-void waypt_add_url(waypoint* wpt, const QString& link,
+void waypt_add_url(Waypoint* wpt, const QString& link,
                    const QString& url_link_text);
 void xcsv_setup_internal_style(const char* style_buf);
 void xcsv_read_internal_style(const char* style_buf);
-waypoint* find_waypt_by_name(const QString& name);
+Waypoint* find_waypt_by_name(const QString& name);
 void waypt_backup(signed int* count, queue** head_bak);
 void waypt_restore(signed int count, queue* head_bak);
 
-geocache_data* waypt_alloc_gc_data(waypoint* wpt);
-int waypt_empty_gc_data(const waypoint* wpt);
+geocache_data* waypt_alloc_gc_data(Waypoint* wpt);
+int waypt_empty_gc_data(const Waypoint* wpt);
 geocache_type gs_mktype(const QString& t);
 geocache_container gs_mkcont(const QString& t);
 
 route_head* route_head_alloc(void);
-void route_add(waypoint*);
-void route_add_wpt(route_head* rte, waypoint* wpt);
-void route_add_wpt_named(route_head* rte, waypoint* wpt, const QString& namepart, int number_digits);
-void route_del_wpt(route_head* rte, waypoint* wpt);
-void track_add_wpt(route_head* rte, waypoint* wpt);
-void track_add_wpt_named(route_head* rte, waypoint* wpt, const QString& namepart, int number_digits);
-void track_del_wpt(route_head* rte, waypoint* wpt);
+void route_add(Waypoint*);
+void route_add_wpt(route_head* rte, Waypoint* wpt);
+void route_add_wpt_named(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits);
+void route_del_wpt(route_head* rte, Waypoint* wpt);
+void track_add_wpt(route_head* rte, Waypoint* wpt);
+void track_add_wpt_named(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits);
+void track_del_wpt(route_head* rte, Waypoint* wpt);
 void route_add_head(route_head* rte);
 void route_del_head(route_head* rte);
 void route_reverse(const route_head* rte_hd);
-waypoint* route_find_waypt_by_name(route_head* rh, const char* name);
+Waypoint* route_find_waypt_by_name(route_head* rh, const char* name);
 void track_add_head(route_head* rte);
 void track_del_head(route_head* rte);
 void track_insert_head(route_head* rte, route_head* predecessor);
@@ -749,7 +749,7 @@ short_handle MKSHORT_NEW_HANDLE(DEBUG_PARAMS);
 #define mkshort( a, b) MKSHORT(a,b,__FILE__, __LINE__)
 #define mkshort_new_handle() MKSHORT_NEW_HANDLE(__FILE__,__LINE__)
 #endif
-String mkshort_from_wpt(short_handle h, const waypoint* wpt);
+String mkshort_from_wpt(short_handle h, const Waypoint* wpt);
 void mkshort_del_handle(short_handle* h);
 void setshort_length(short_handle, int n);
 void setshort_badchars(short_handle,  const char*);
@@ -876,14 +876,14 @@ extern style_vecs_t style_list[];
 
 void waypt_init(void);
 void route_init(void);
-void waypt_disp(const waypoint*);
+void waypt_disp(const Waypoint*);
 void waypt_status_disp(int total_ct, int myct);
-double waypt_time(const waypoint* wpt);
-double waypt_speed(const waypoint* A, const waypoint* B);
-double waypt_speed_ex(const waypoint* A, const waypoint* B);
-double waypt_course(const waypoint* A, const waypoint* B);
-double waypt_distance(const waypoint* A, const waypoint* B);
-double waypt_distance_ex(const waypoint* A, const waypoint* B);
+double waypt_time(const Waypoint* wpt);
+double waypt_speed(const Waypoint* A, const Waypoint* B);
+double waypt_speed_ex(const Waypoint* A, const Waypoint* B);
+double waypt_course(const Waypoint* A, const Waypoint* B);
+double waypt_distance(const Waypoint* A, const Waypoint* B);
+double waypt_distance_ex(const Waypoint* A, const Waypoint* B);
 
 NORETURN fatal(const char*, ...) PRINTFLIKE(1, 2);
 void is_fatal(const int condition, const char*, ...) PRINTFLIKE(2, 3);
@@ -982,7 +982,7 @@ time_t mkgmtime(struct tm* t);
 gpsbabel::DateTime current_time(void);
 void dotnet_time_to_time_t(double dotnet, time_t* t, int* ms);
 signed int month_lookup(const char* m);
-const char* get_cache_icon(const waypoint* waypointp);
+const char* get_cache_icon(const Waypoint* waypointp);
 const char* gs_get_cachetype(geocache_type t);
 const char* gs_get_container(geocache_container t);
 char* xml_entitize(const char* str);

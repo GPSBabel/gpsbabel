@@ -66,7 +66,7 @@ static void validate_head_trl(const route_head* header)
   }
 }
 
-static void validate_point(const waypoint* waypointp)
+static void validate_point(const Waypoint* waypointp)
 {
   point_ct += 1;
 }

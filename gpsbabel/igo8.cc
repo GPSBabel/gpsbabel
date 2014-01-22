@@ -151,7 +151,7 @@ static void igo8_read_init(const char* fname)
 // Reader callback
 static void igo8_read(void)
 {
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   route_head* track_head;
   igo8_point point;
 
@@ -161,7 +161,7 @@ static void igo8_read(void)
   while (in_point_count &&
          gbfread(&point, sizeof(point), 1, igo8_file_in) > 0) {
     in_point_count--;
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
 
     wpt_tmp->latitude = le_read32(&point.lat) / (double)0x800000;
     wpt_tmp->longitude = le_read32(&point.lon) / (double)0x800000;
@@ -207,7 +207,7 @@ static void igo8_write_deinit(void)
 }
 
 // Write point callback
-static void write_igo8_track_point(const waypoint* wpt)
+static void write_igo8_track_point(const Waypoint* wpt)
 {
   igo8_point point;
 

@@ -36,7 +36,7 @@ static arglist_t osm_args[] = {
 
 #define MYNAME "osm"
 
-static QHash<QString, const waypoint*> waypoints;
+static QHash<QString, const Waypoint*> waypoints;
 
 static QHash<QString, int> keys;
 static QHash<QString, const struct osm_icon_mapping_s*> values;
@@ -47,7 +47,7 @@ static int node_id;
 static int skip_rte;
 
 static route_head* rte;
-static waypoint* wpt;
+static Waypoint* wpt;
 
 static xg_callback	osm_node, osm_node_tag, osm_node_end;
 static xg_callback	osm_way, osm_way_nd, osm_way_tag, osm_way_end;
@@ -482,7 +482,7 @@ osm_node_end(xg_string args, const QXmlStreamAttributes* unused)
 static void
 osm_node(xg_string args, const QXmlStreamAttributes* attrv)
 {
-  wpt = new waypoint;
+  wpt = new Waypoint;
 
   if (attrv->hasAttribute("id")) {
     QString atstr = attrv->value("id").toString();
@@ -592,12 +592,12 @@ osm_way_nd(xg_string args, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("ref")) {
     QString atstr = attrv->value("ref").toString();
-    waypoint* tmp;
-    const waypoint* ctmp;
+    Waypoint* tmp;
+    const Waypoint* ctmp;
 
     if (waypoints.contains(atstr)) {
       ctmp = waypoints.value(atstr);
-      tmp = new waypoint(*ctmp);
+      tmp = new Waypoint(*ctmp);
       route_add_wpt(rte, tmp);
     } else {
       warning(MYNAME ": Way reference id \"%s\" wasn't listed under nodes!\n", CSTR(atstr));
@@ -700,7 +700,7 @@ osm_write_tag(const QString& key, const QString& value)
 }
 
 static void
-osm_disp_feature(const waypoint* wpt)
+osm_disp_feature(const Waypoint* wpt)
 {
   const osm_icon_mapping_t* map;
 
@@ -740,17 +740,17 @@ osm_write_opt_tag(const char* atag)
 }
 
 static void
-osm_release_ids(const waypoint* wpt)
+osm_release_ids(const Waypoint* wpt)
 {
   if (wpt && wpt->extra_data) {
-    waypoint* tmp = (waypoint*)wpt;
+    Waypoint* tmp = (Waypoint*)wpt;
     xfree(tmp->extra_data);
     tmp->extra_data = NULL;
   }
 }
 
 static QString
-osm_name_from_wpt(const waypoint* wpt)
+osm_name_from_wpt(const Waypoint* wpt)
 {
   QString name = QString("%1\01%2\01%3")
 #if NEW_STRINGS
@@ -764,7 +764,7 @@ osm_name_from_wpt(const waypoint* wpt)
 }
 
 static void
-osm_waypt_disp(const waypoint* wpt)
+osm_waypt_disp(const Waypoint* wpt)
 {
   QString name = osm_name_from_wpt(wpt);
 
@@ -778,7 +778,7 @@ osm_waypt_disp(const waypoint* wpt)
 
   id = (int*) xmalloc(sizeof(*id));
   *id = --node_id;
-  ((waypoint*)(wpt))->extra_data = id;
+  ((Waypoint*)(wpt))->extra_data = id;
 
   gbfprintf(fout, "  <node id='%d' visible='true' lat='%0.7f' lon='%0.7f'", *id, wpt->latitude, wpt->longitude);
   if (wpt->creation_time.isValid()) {
@@ -858,10 +858,10 @@ osm_rte_disp_head(const route_head* rte)
 }
 
 static void
-osm_rtept_disp(const waypoint* wpt_ref)
+osm_rtept_disp(const Waypoint* wpt_ref)
 {
   QString name = osm_name_from_wpt(wpt_ref);
-  const waypoint* wpt;
+  const Waypoint* wpt;
 
   if (skip_rte) {
     return;

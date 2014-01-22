@@ -118,7 +118,7 @@ my_read(void)
 
   while (npts) {
     SHPObject* shp;
-    waypoint* wpt;
+    Waypoint* wpt;
     const char* name = "";
     const char* url;
     char* tmpName = NULL;
@@ -172,7 +172,7 @@ my_read(void)
       routehead->rte_name = name;
       route_add_head(routehead);
       for (j = 0; j < shp->nVertices; j++) {
-        wpt = new waypoint;
+        wpt = new Waypoint;
         wpt->latitude = shp->padfY[j];
         wpt->longitude = shp->padfX[j];
         wpt->altitude = shp->padfZ[j];
@@ -182,7 +182,7 @@ my_read(void)
     break;
 
     case SHPT_POINT:
-      wpt = new waypoint;
+      wpt = new Waypoint;
       wpt->latitude = shp->dfYMin;
       wpt->longitude = shp->dfXMin;
       wpt->shortname = name;
@@ -262,7 +262,7 @@ my_wr_deinit(void)
 }
 
 void
-my_write_wpt(const waypoint* wpt)
+my_write_wpt(const Waypoint* wpt)
 {
   SHPObject* shpobject;
 
@@ -285,7 +285,7 @@ poly_init(const route_head* h)
 
 
 void
-poly_point(const waypoint* wpt)
+poly_point(const Waypoint* wpt)
 {
   polybufx[poly_count] = wpt->longitude;
   polybufy[poly_count] = wpt->latitude;

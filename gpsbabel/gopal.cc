@@ -1,7 +1,7 @@
 /*
 
 
-	Copyright (C) 2008  Dr. Jürgen Neumann, Juergen.Neumann@online.de
+	Copyright (C) 2008  Dr. Jï¿½rgen Neumann, Juergen.Neumann@online.de
 	Copyright (C) 2005  Robert Lipe, robertlipe@usa.net (based on nmea.c)
 	Copyright (C) 20XX  probably many others from the gpsbabel development team ;-)
 
@@ -175,7 +175,7 @@ gopal_read(void)
   double hmsd,speed;
   int fix, hms;
   route_head* route;
-  waypoint* wpt, *lastwpt=NULL;
+  Waypoint* wpt, *lastwpt=NULL;
   double long_old,lat_old;
   char tbuffer[64];
   struct tm tm2;
@@ -206,7 +206,7 @@ gopal_read(void)
     if ((nfields == 8) && (tx == 0)) {
       // fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"date\" switch!\n", buff);
     }
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     column = -1;
     // the format of gopal is quite simple. Unfortunately the developers forgot the date as the first element...
@@ -333,7 +333,7 @@ gopal_read(void)
       long_old=wpt->longitude;
       lat_old=wpt->latitude;
       route_add_wpt(route,wpt);
-      waypt_add(new waypoint(*wpt));
+      waypt_add(new Waypoint(*wpt));
     }
   }
 }
@@ -350,7 +350,7 @@ gopal_route_tlr(const route_head* rte)
 }
 
 static void
-gopal_write_waypt(const waypoint* wpt)
+gopal_write_waypt(const Waypoint* wpt)
 {
   char tbuffer[64];
   unsigned long timestamp;

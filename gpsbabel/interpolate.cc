@@ -88,7 +88,7 @@ interpfilt_process(void)
     }
     first = 1;
     QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2) {
-      waypoint* wpt = (waypoint*)elem2;
+      Waypoint* wpt = (Waypoint*)elem2;
       if (first) {
         first = 0;
       } else {
@@ -97,7 +97,7 @@ interpfilt_process(void)
           for (timen = time1+interval;
                timen < wpt->creation_time.toTime_t();
                timen += interval) {
-            waypoint* wpt_new = new waypoint(*wpt);
+            Waypoint* wpt_new = new Waypoint(*wpt);
             wpt_new->SetCreationTime(timen);
 #if NEW_STRINGS
             wpt_new->shortname = QString();
@@ -134,7 +134,7 @@ interpfilt_process(void)
             for (distn = dist;
                  distn < curdist;
                  distn += dist) {
-              waypoint* wpt_new = new waypoint(*wpt);
+              Waypoint* wpt_new = new Waypoint(*wpt);
               wpt_new->SetCreationTime(distn/curdist*
                                        (wpt->creation_time.toTime_t() - time1) + time1);
 #if NEW_STRINGS
@@ -164,9 +164,9 @@ interpfilt_process(void)
         }
       }
       if (opt_route) {
-        route_add_wpt(rte_new, new waypoint(*wpt));
+        route_add_wpt(rte_new, new Waypoint(*wpt));
       } else {
-        track_add_wpt(rte_new, new waypoint(*wpt));
+        track_add_wpt(rte_new, new Waypoint(*wpt));
       }
 
       lat1 = wpt->latitude;

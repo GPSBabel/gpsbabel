@@ -66,7 +66,7 @@ data_read(void)
   long alt;
   char alttype;
   char icon[3];
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   int line = 0;
   /*
    * Make sure that all waypoints in single read have same
@@ -110,7 +110,7 @@ data_read(void)
     rtrim(sn);
     rtrim(desc);
     rtrim(icon);
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
     wpt_tmp->altitude = alt;
     wpt_tmp->shortname = sn;
     xfree(sn);
@@ -136,7 +136,7 @@ data_read(void)
 }
 
 static void
-gpsutil_disp(const waypoint* wpt)
+gpsutil_disp(const Waypoint* wpt)
 {
   double lon,lat;
   QString icon_token;

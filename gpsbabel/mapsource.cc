@@ -42,7 +42,7 @@ static	int		mps_ver_temp = 0;
 static char* tempname;
 static char* fin_name;
 
-static	const waypoint*	prevRouteWpt;
+static	const Waypoint*	prevRouteWpt;
 /* Private queues of written out waypoints */
 static queue written_wpt_head;
 static queue written_route_wpt_head;
@@ -125,7 +125,7 @@ mps_wpt_q_deinit(queue* whichQueue)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(whichQueue, elem, tmp) {
-    waypoint* q = (waypoint*) dequeue(elem);
+    Waypoint* q = (Waypoint*) dequeue(elem);
     delete q;
   }
 }
@@ -134,14 +134,14 @@ mps_wpt_q_deinit(queue* whichQueue)
  * Find a waypoint that we've already written out
  *
  */
-waypoint*
+Waypoint*
 mps_find_wpt_q_by_name(const queue* whichQueue, const QString& name)
 {
   queue* elem, *tmp;
-  waypoint* waypointp;
+  Waypoint* waypointp;
 
   QUEUE_FOR_EACH(whichQueue, elem, tmp) {
-    waypointp = (waypoint*) elem;
+    waypointp = (Waypoint*) elem;
     if (waypointp->shortname == name) {
       return waypointp;
     }
@@ -154,9 +154,9 @@ mps_find_wpt_q_by_name(const queue* whichQueue, const QString& name)
  *
  */
 void
-mps_wpt_q_add(const queue* whichQueue, const waypoint* wpt)
+mps_wpt_q_add(const queue* whichQueue, const Waypoint* wpt)
 {
-  waypoint* written_wpt = new waypoint(*wpt);
+  Waypoint* written_wpt = new Waypoint(*wpt);
   ENQUEUE_TAIL(whichQueue, &written_wpt->Q);
 }
 
@@ -513,7 +513,7 @@ mps_mapsetname_w(gbfile* mps_file, int mps_ver)
  * MRCB
  */
 static void
-mps_waypoint_r(gbfile* mps_file, int mps_ver, waypoint** wpt, unsigned int* mpsclass)
+mps_waypoint_r(gbfile* mps_file, int mps_ver, Waypoint** wpt, unsigned int* mpsclass)
 {
   char tbuf[100];
   char wptname[MPSNAMEBUFFERLEN];
@@ -522,12 +522,12 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, waypoint** wpt, unsigned int* mpsc
   int	icon;
   int dynamic;
 
-  waypoint*	thisWaypoint = NULL;
+  Waypoint*	thisWaypoint = NULL;
   double	mps_altitude = unknown_alt;
   double	mps_proximity = unknown_alt;
   double	mps_depth = unknown_alt;
 
-  thisWaypoint = new waypoint;
+  thisWaypoint = new Waypoint;
   *wpt = thisWaypoint;
 
   mps_readstr(mps_file, wptname, sizeof(wptname));
@@ -611,7 +611,7 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, waypoint** wpt, unsigned int* mpsc
  * MRCB
  */
 static void
-mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isRouteWpt)
+mps_waypoint_w(gbfile* mps_file, int mps_ver, const Waypoint* wpt, const int isRouteWpt)
 {
   int reclen;
   int lat, lon;
@@ -765,9 +765,9 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt, const int isR
  *
  */
 static void
-mps_waypoint_w_unique_wrapper(const waypoint* wpt)
+mps_waypoint_w_unique_wrapper(const Waypoint* wpt)
 {
-  waypoint* wptfound = NULL;
+  Waypoint* wptfound = NULL;
 
   /* Search for this waypoint in the ones already written */
   wptfound = mps_find_wpt_q_by_name(&written_wpt_head, CSTRc(wpt->shortname));
@@ -795,9 +795,9 @@ mps_waypoint_w_unique_wrapper(const waypoint* wpt)
  *
  */
 static void
-mps_route_wpt_w_unique_wrapper(const waypoint* wpt)
+mps_route_wpt_w_unique_wrapper(const Waypoint* wpt)
 {
-  waypoint* wptfound = NULL;
+  Waypoint* wptfound = NULL;
 
   /* Search for this waypoint in the ones already written */
   wptfound = mps_find_wpt_q_by_name(&written_wpt_head, CSTRc(wpt->shortname));
@@ -834,9 +834,9 @@ mps_route_wpt_w_unique_wrapper(const waypoint* wpt)
  *
  */
 static void
-mps_waypoint_w_uniqloc_wrapper(waypoint* wpt)
+mps_waypoint_w_uniqloc_wrapper(Waypoint* wpt)
 {
-  waypoint* wptfound = NULL;
+  Waypoint* wptfound = NULL;
   char*			newName;
 
   /* Search for this waypoint in the ones already written */
@@ -856,7 +856,7 @@ mps_waypoint_w_uniqloc_wrapper(waypoint* wpt)
         ((wpt->longitude - wptfound->longitude) != 0)) {
       /* Not the same lat lon, so rename and add */
       newName = mkshort(written_wpt_mkshort_handle, wpt->shortname);
-      wptfound = new waypoint(*wpt);
+      wptfound = new Waypoint(*wpt);
       xfree(wptfound->shortname);
       wptfound->shortname = newName;
       mps_waypoint_w(mps_file_out, mps_ver_out, wptfound, (1==0));
@@ -890,8 +890,8 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
   route_head* rte_head;
   int rte_count;
 
-  waypoint*	thisWaypoint;
-  waypoint*	tempWpt;
+  Waypoint*	thisWaypoint;
+  Waypoint*	tempWpt;
 
   double	mps_altitude = unknown_alt;
   double	mps_depth = unknown_alt;
@@ -1008,18 +1008,18 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
     tempWpt = find_waypt_by_name(wptname);
 
     if (tempWpt != NULL) {
-      thisWaypoint = new waypoint(*tempWpt);
+      thisWaypoint = new Waypoint(*tempWpt);
     } else {
       tempWpt = mps_find_wpt_q_by_name(&read_route_wpt_head, wptname);
 
       if (tempWpt != NULL) {
-        thisWaypoint = new waypoint(*tempWpt);
+        thisWaypoint = new Waypoint(*tempWpt);
       } else {
         /* should never reach here, but we do need a fallback position */
 #ifdef	MPS_DEBUG
         fprintf(stderr, "mps_route_r: reached the point we never should\n");
 #endif
-        thisWaypoint = new waypoint;
+        thisWaypoint = new Waypoint;
         thisWaypoint->shortname = wptname;
         thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
         thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
@@ -1095,15 +1095,15 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
   tempWpt = find_waypt_by_name(wptname);
 
   if (tempWpt != NULL) {
-    thisWaypoint = new waypoint(*tempWpt);
+    thisWaypoint = new Waypoint(*tempWpt);
   } else {
     tempWpt = mps_find_wpt_q_by_name(&read_route_wpt_head, wptname);
 
     if (tempWpt != NULL) {
-      thisWaypoint = new waypoint(*tempWpt);
+      thisWaypoint = new Waypoint(*tempWpt);
     } else {
       /* should never reach here, but we do need a fallback position */
-      thisWaypoint = new waypoint;
+      thisWaypoint = new Waypoint;
       thisWaypoint->shortname = wptname;
       thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
       thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
@@ -1130,7 +1130,7 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
   char		hdr[20];
   char		zbuf[20];
 
-  waypoint*	testwpt;
+  Waypoint*	testwpt;
   time_t		uniqueValue = 0;
   int			allWptNameLengths;
 
@@ -1156,7 +1156,7 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
 
   if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-      testwpt = (waypoint*)elem;
+      testwpt = (Waypoint*)elem;
       if (rte_datapoints == 0) {
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
@@ -1286,7 +1286,7 @@ mps_routehdr_w_wrapper(const route_head* rte)
  * MRCB
  */
 static void
-mps_routedatapoint_w(gbfile* mps_file, int mps_ver, const waypoint* rtewpt)
+mps_routedatapoint_w(gbfile* mps_file, int mps_ver, const Waypoint* rtewpt)
 {
   int			lat;
   int			lon;
@@ -1302,7 +1302,7 @@ mps_routedatapoint_w(gbfile* mps_file, int mps_ver, const waypoint* rtewpt)
   double		minalt=-unknown_alt;
 
   double		mps_altitude;
-  waypoint*	wptfound;
+  Waypoint*	wptfound;
 
   memset(zbuf, 0, sizeof(zbuf));
   memset(ffbuf, 0xff, sizeof(ffbuf));
@@ -1450,7 +1450,7 @@ mps_routedatapoint_w(gbfile* mps_file, int mps_ver, const waypoint* rtewpt)
 }
 
 static void
-mps_routedatapoint_w_wrapper(const waypoint* rte)
+mps_routedatapoint_w_wrapper(const Waypoint* rte)
 {
   mps_routedatapoint_w(mps_file_out, mps_ver_out, rte);
 }
@@ -1496,7 +1496,7 @@ mps_track_r(gbfile* mps_file, int mps_ver, route_head** trk)
   route_head* track_head;
   int trk_count;
 
-  waypoint*	thisWaypoint;
+  Waypoint*	thisWaypoint;
   double	mps_altitude = unknown_alt;
   double	mps_depth = unknown_alt;
 
@@ -1553,7 +1553,7 @@ mps_track_r(gbfile* mps_file, int mps_ver, route_head** trk)
       gbfseek(mps_file, 8, SEEK_CUR);
     }
 
-    thisWaypoint = new waypoint;
+    thisWaypoint = new Waypoint;
     thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
     thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
     thisWaypoint->SetCreationTime(dateTime);
@@ -1582,7 +1582,7 @@ mps_trackhdr_w(gbfile* mps_file, int mps_ver, const route_head* trk)
   int			tname_len;
   char*		tname;
   char		hdr[20];
-  waypoint*	testwpt;
+  Waypoint*	testwpt;
   time_t		uniqueValue = 0;
 
   queue* elem, *tmp;
@@ -1594,7 +1594,7 @@ mps_trackhdr_w(gbfile* mps_file, int mps_ver, const route_head* trk)
   if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
     QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
       if (trk_datapoints == 0) {
-        testwpt = (waypoint*)elem;
+        testwpt = (Waypoint*)elem;
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
       trk_datapoints++;
@@ -1647,7 +1647,7 @@ mps_trackhdr_w_wrapper(const route_head* trk)
  * MRCB
  */
 static void
-mps_trackdatapoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt)
+mps_trackdatapoint_w(gbfile* mps_file, int mps_ver, const Waypoint* wpt)
 {
   int lat, lon;
   time_t	t = wpt->GetCreationTime().toTime_t();
@@ -1692,7 +1692,7 @@ mps_trackdatapoint_w(gbfile* mps_file, int mps_ver, const waypoint* wpt)
 }
 
 static void
-mps_trackdatapoint_w_wrapper(const waypoint* wpt)
+mps_trackdatapoint_w_wrapper(const Waypoint* wpt)
 {
   mps_trackdatapoint_w(mps_file_out, mps_ver_out, wpt);
 }
@@ -1701,7 +1701,7 @@ mps_trackdatapoint_w_wrapper(const waypoint* wpt)
 static void
 mps_read(void)
 {
-  waypoint*		wpt;
+  Waypoint*		wpt;
   route_head*		rte;
   route_head*		trk;
 
@@ -1826,7 +1826,7 @@ void
 mps_write(void)
 {
   int				short_length;
-  waypoint*		wpt;
+  Waypoint*		wpt;
   route_head*		rte;
   route_head*		trk;
 

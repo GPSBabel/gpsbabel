@@ -63,7 +63,7 @@ static int rotate_colors;
 static int line_width;
 static int html_encrypt;
 
-static waypoint* wpt_tmp;
+static Waypoint* wpt_tmp;
 static int wpt_tmp_queued;
 static const char* posnfilename;
 static char* posnfilenametmp;
@@ -272,7 +272,7 @@ const char* kml_tags_to_ignore[] = {
 
 void wpt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp = new waypoint;
+  wpt_tmp = new Waypoint;
   wpt_tmp_queued = 0;
 }
 
@@ -327,7 +327,7 @@ void trk_coord(xg_string args, const QXmlStreamAttributes* attrv)
 {
   int consumed = 0;
   double lat, lon, alt;
-  waypoint* trkpt;
+  Waypoint* trkpt;
   int n = 0;
 
   route_head* trk_head = route_head_alloc();
@@ -338,7 +338,7 @@ void trk_coord(xg_string args, const QXmlStreamAttributes* attrv)
   }
   track_add_head(trk_head);
   while ((n = sscanf(CSTR(iargs), "%lf,%lf,%lf%n", &lon, &lat, &alt, &consumed)) > 0) {
-    trkpt = new waypoint;
+    trkpt = new Waypoint;
     trkpt->latitude = lat;
     trkpt->longitude = lon;
 
@@ -567,7 +567,7 @@ static void kml_write_bitmap_style(kml_point_type pt_type, const char* bitmap,
   writer->writeEndElement(); // Close StyleMap tag
 }
 
-static void kml_output_timestamp(const waypoint* waypointp)
+static void kml_output_timestamp(const Waypoint* waypointp)
 {
   QString time_string = waypointp->CreationTimeXML();
   if (!time_string.isEmpty()) {
@@ -726,7 +726,7 @@ void kml_output_header(const route_head* header, computed_trkdata* td)
 }
 
 static
-int kml_altitude_known(const waypoint* waypoint)
+int kml_altitude_known(const Waypoint* waypoint)
 {
   if (waypoint->altitude == unknown_alt) {
     return 0;
@@ -740,7 +740,7 @@ int kml_altitude_known(const waypoint* waypoint)
 }
 
 static
-void kml_write_coordinates(const waypoint* waypointp)
+void kml_write_coordinates(const Waypoint* waypointp)
 {
   if (kml_altitude_known(waypointp)) {
     writer->writeTextElement("coordinates",
@@ -759,7 +759,7 @@ void kml_write_coordinates(const waypoint* waypointp)
 /* Rather than a default "top down" view, view from the side to highlight
  * topo features.
  */
-static void kml_output_lookat(const waypoint* waypointp)
+static void kml_output_lookat(const Waypoint* waypointp)
 {
   writer->writeStartElement("LookAt");
   writer->writeTextElement("longitude", QString::number(waypointp->longitude, 'f', 6));
@@ -780,7 +780,7 @@ static void kml_output_positioning(void)
 }
 
 /* Output something interesing when we can for route and trackpoints */
-static void kml_output_description(const waypoint* pt)
+static void kml_output_description(const Waypoint* pt)
 {
   const char* alt_units;
   double alt;
@@ -851,7 +851,7 @@ static void kml_output_description(const waypoint* pt)
   writer->writeEndElement(); // Close description tag
 }
 
-static void kml_recompute_time_bounds(const waypoint* waypointp)
+static void kml_recompute_time_bounds(const Waypoint* waypointp)
 {
   if (waypointp->GetCreationTime().isValid()) {
     if (!(kml_time_min.isValid()) ||
@@ -865,13 +865,13 @@ static void kml_recompute_time_bounds(const waypoint* waypointp)
   }
 }
 
-static void kml_add_to_bounds(const waypoint* waypointp)
+static void kml_add_to_bounds(const Waypoint* waypointp)
 {
   waypt_add_to_bounds(&kml_bounds, waypointp);
   kml_recompute_time_bounds(waypointp);
 }
 
-static void kml_output_point(const waypoint* waypointp, kml_point_type pt_type)
+static void kml_output_point(const Waypoint* waypointp, kml_point_type pt_type)
 {
   const char* style;
 
@@ -946,7 +946,7 @@ static void kml_output_tailer(const route_head* header)
     queue* elem, *tmp;
 
     QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-      waypoint* tpt = (waypoint*) elem;
+      Waypoint* tpt = (Waypoint*) elem;
       int first_in_trk = tpt->Q.prev == &header->waypoint_list;
       if (!first_in_trk && tpt->wpt_flags.new_trkseg) {
         needs_multigeometry = 1;
@@ -983,7 +983,7 @@ static void kml_output_tailer(const route_head* header)
     }
 
     QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-      waypoint* tpt = (waypoint*) elem;
+      Waypoint* tpt = (Waypoint*) elem;
       int first_in_trk = tpt->Q.prev == &header->waypoint_list;
       if (tpt->wpt_flags.new_trkseg) {
         if (!first_in_trk) {
@@ -1177,7 +1177,7 @@ void kml_gc_make_balloonstyle(void)
 
 static
 char*
-kml_lookup_gc_icon(const waypoint* waypointp)
+kml_lookup_gc_icon(const Waypoint* waypointp)
 {
   const char* icon;
   char* rb;
@@ -1236,7 +1236,7 @@ kml_lookup_gc_icon(const waypoint* waypointp)
 
 static const
 char*
-kml_lookup_gc_container(const waypoint* waypointp)
+kml_lookup_gc_container(const Waypoint* waypointp)
 {
   const char* cont;
 
@@ -1287,7 +1287,7 @@ char* kml_gc_mkstar(int rating)
   return tmp;
 }
 
-QString kml_geocache_get_logs(const waypoint* wpt)
+QString kml_geocache_get_logs(const Waypoint* wpt)
 {
   QString r;
 
@@ -1392,7 +1392,7 @@ static void kml_write_cdata_element(const QString& name, const QString& value)
   writer->writeEndElement(); // Close Data tag
 }
 
-static void kml_geocache_pr(const waypoint* waypointp)
+static void kml_geocache_pr(const Waypoint* waypointp)
 {
   char* is;
   char date_placed[100];  // Always long engough for a date.
@@ -1486,7 +1486,7 @@ static void kml_geocache_pr(const waypoint* waypointp)
  * WAYPOINTS
  */
 
-static void kml_waypt_pr(const waypoint* waypointp)
+static void kml_waypt_pr(const Waypoint* waypointp)
 {
   QString icon;
 
@@ -1568,7 +1568,7 @@ static void kml_track_hdr(const route_head* header)
   xfree(td);
 }
 
-static void kml_track_disp(const waypoint* waypointp)
+static void kml_track_disp(const Waypoint* waypointp)
 {
   kml_output_point(waypointp, kmlpt_track);
 }
@@ -1606,7 +1606,7 @@ static void kml_mt_simple_array(const route_head* header,
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
 
-    waypoint* wpt = (waypoint*) elem;
+    Waypoint* wpt = (Waypoint*) elem;
 
     switch (member) {
     case fld_power:
@@ -1637,7 +1637,7 @@ static int track_has_time(const route_head* header)
   queue* elem, *tmp;
   int points_with_time = 0;
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    waypoint* tpt = (waypoint*)elem;
+    Waypoint* tpt = (Waypoint*)elem;
 
     if (tpt->GetCreationTime().isValid()) {
       points_with_time++;
@@ -1655,7 +1655,7 @@ static void write_as_linestring(const route_head* header)
   queue* elem, *tmp;
   kml_track_hdr(header);
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    waypoint* tpt = (waypoint*)elem;
+    Waypoint* tpt = (Waypoint*)elem;
     kml_track_disp(tpt);
   }
   kml_track_tlr(header);
@@ -1685,7 +1685,7 @@ static void kml_mt_hdr(const route_head* header)
   kml_output_positioning();
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    waypoint* tpt = (waypoint*)elem;
+    Waypoint* tpt = (Waypoint*)elem;
 
     if (tpt->GetCreationTime().isValid()) {
       QString time_string = tpt->CreationTimeXML();
@@ -1698,7 +1698,7 @@ static void kml_mt_hdr(const route_head* header)
 
   // TODO: How to handle clamped, floating, extruded, etc.?
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    waypoint* tpt = (waypoint*)elem;
+    Waypoint* tpt = (Waypoint*)elem;
 
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement("gx:coord",
@@ -1780,7 +1780,7 @@ static void kml_route_hdr(const route_head* header)
   kml_output_header(header, NULL);
 }
 
-static void kml_route_disp(const waypoint* waypointp)
+static void kml_route_disp(const Waypoint* waypointp)
 {
   kml_output_point(waypointp, kmlpt_route);
 }
@@ -2043,7 +2043,7 @@ kml_get_posn_icon(int freshness)
 static route_head* posn_trk_head = NULL;
 
 static void
-kml_wr_position(waypoint* wpt)
+kml_wr_position(Waypoint* wpt)
 {
   static gpsbabel::DateTime last_valid_fix;
 
@@ -2084,11 +2084,11 @@ kml_wr_position(waypoint* wpt)
      track points if we've not moved a minimum distance from the
      beginnning of our accumulated track. */
   {
-    waypoint* newest_posn= (waypoint*) QUEUE_LAST(&posn_trk_head->waypoint_list);
+    Waypoint* newest_posn= (Waypoint*) QUEUE_LAST(&posn_trk_head->waypoint_list);
 
     if (radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
                            RAD(newest_posn->latitude), RAD(newest_posn->longitude))) > 50) {
-      track_add_wpt(posn_trk_head, new waypoint(*wpt));
+      track_add_wpt(posn_trk_head, new Waypoint(*wpt));
     } else {
       /* If we haven't move more than our threshold, pretend
        * we didn't move at  all to prevent Earth from jittering
@@ -2109,7 +2109,7 @@ kml_wr_position(waypoint* wpt)
    */
   while (max_position_points &&
          (posn_trk_head->rte_waypt_ct >= max_position_points)) {
-    waypoint* tonuke = (waypoint*) QUEUE_FIRST(&posn_trk_head->waypoint_list);
+    Waypoint* tonuke = (Waypoint*) QUEUE_FIRST(&posn_trk_head->waypoint_list);
     track_del_wpt(posn_trk_head, tonuke);
   }
 

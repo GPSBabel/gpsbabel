@@ -34,7 +34,7 @@
 static gbfile* fout;
 
 static route_head* track;
-static waypoint* wpt;
+static Waypoint* wpt;
 static int track_index;		/* index of track we'll write */
 static int track_num;		/* current index of track within track_disp_all */
 
@@ -111,7 +111,7 @@ ignr_etape_begin(xg_string args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((wpt != NULL));
 
-  wpt = new waypoint;
+  wpt = new Waypoint;
 }
 
 static void
@@ -211,7 +211,7 @@ ignr_write_track_trl(const route_head* track)
 }
 
 static void
-ignr_write_waypt(const waypoint* wpt)
+ignr_write_waypt(const Waypoint* wpt)
 {
   if (track_num != track_index) {
     return;

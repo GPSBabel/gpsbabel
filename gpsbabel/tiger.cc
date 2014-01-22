@@ -157,7 +157,7 @@ data_read(void)
   char desc[100];
   char icon[100];
   char* ibuf;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   int line = 0;
 
   while ((ibuf = gbfgetstr(file_in))) {
@@ -166,7 +166,7 @@ data_read(void)
     }
     if (sscanf(ibuf, "%lf,%lf:%100[^:]:%100[^\n]",
                &lon, &lat, icon, desc)) {
-      wpt_tmp = new waypoint;
+      wpt_tmp = new Waypoint;
 
       wpt_tmp->longitude = lon;
       wpt_tmp->latitude = lat;
@@ -179,7 +179,7 @@ data_read(void)
 }
 
 static void
-tiger_disp(const waypoint* wpt)
+tiger_disp(const Waypoint* wpt)
 {
   QString pin;
   double lat = wpt->latitude;
@@ -229,7 +229,7 @@ tiger_disp(const waypoint* wpt)
 
 #if CLICKMAP
 static void
-map_plot(const waypoint* wpt)
+map_plot(const Waypoint* wpt)
 {
   static int x,y;
 

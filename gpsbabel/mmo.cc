@@ -317,14 +317,14 @@ mmo_get_object(const uint16_t objid)
   return objects.value(key);
 }
 
-static waypoint*
+static Waypoint*
 mmo_get_waypt(mmo_data_t* data)
 {
   data->refct++;
   if (data->refct == 1) {
-    return (waypoint*)data->data;
+    return (Waypoint*)data->data;
   } else {
-    return new waypoint(*(waypoint*)data->data);
+    return new Waypoint(*(Waypoint*)data->data);
   }
 }
 
@@ -335,7 +335,7 @@ mmo_free_object(mmo_data_t* data)
     xfree(data->name);
   }
   if ((data->type == wptdata) && (data->refct == 0)) {
-    delete (waypoint*)data->data;
+    delete (Waypoint*)data->data;
   }
   xfree(data);
 }
@@ -448,7 +448,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
 #ifdef MMO_DBG
   const char* sobj = "CObjWaypoint";
 #endif
-  waypoint* wpt;
+  Waypoint* wpt;
   time_t time;
   int rtelinks;
   mmo_data_t** rtelink = NULL;
@@ -460,7 +460,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
   DBG((sobj, "name = \"%s\" [ visible=%s, id=0x%04X ]\n",
        data->name, data->visible ? "yes" : "NO", data->objid));
 
-  data->data = wpt = new waypoint;
+  data->data = wpt = new Waypoint;
   wpt->shortname = QString::fromLatin1(data->name);
 
   time = data->mtime;
@@ -630,12 +630,12 @@ mmo_read_CObjRoute(mmo_data_t* data)
     DBG((sobj, "read next waypoint\n"));
     tmp = mmo_read_object();
     if (tmp && tmp->data && (tmp->type = wptdata)) {
-      waypoint* wpt;
+      Waypoint* wpt;
 
       /* FIXME: At this point this waypoint maybe not fully loaded (initialized) !!!
       	  We need a final procedure to handle this !!! */
       if (! tmp->loaded) {
-        wpt = new waypoint;
+        wpt = new Waypoint;
         wpt->latitude = 0;
         wpt->longitude = 0;
         xasprintf(&wpt->shortname, "\01%p", tmp);
@@ -687,10 +687,10 @@ mmo_read_CObjTrack(mmo_data_t* data)
   DBG((sobj, "track has %d point(s)\n", tp));
 
   for (ctp = 0; ctp < tp; ctp++) {
-    waypoint* wpt;
+    Waypoint* wpt;
     char unk;
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);
@@ -961,20 +961,20 @@ mmo_read_object(void)
 }
 
 static void
-mmo_finalize_rtept_cb(const waypoint* wptref)
+mmo_finalize_rtept_cb(const Waypoint* wptref)
 {
-  waypoint* wpt = (waypoint*)wptref;
+  Waypoint* wpt = (Waypoint*)wptref;
 
   if ((wpt->shortname[0] == 1) && (wpt->latitude == 0) && (wpt->longitude == 0)) {
     mmo_data_t* data;
-    waypoint* wpt2;
+    Waypoint* wpt2;
 #if NEW_STRINGS
 #warning this code is on drugs.
     abort();
 #else
     sscanf(wpt->shortname + 1, "%p", &data);
 #endif
-    wpt2 = (waypoint*)data->data;
+    wpt2 = (Waypoint*)data->data;
 
     wpt->latitude = wpt2->latitude;
     wpt->longitude = wpt2->longitude;
@@ -1145,7 +1145,7 @@ mmo_writestr(const char* str)
 
 
 static void
-mmo_enum_waypt_cb(const waypoint* wpt)
+mmo_enum_waypt_cb(const Waypoint* wpt)
 {
   mmo_obj_ct++;
 }
@@ -1228,7 +1228,7 @@ mmo_write_obj_head(const char* sobj, const char* name, const time_t ctime,
 
 
 static void
-mmo_write_wpt_cb(const waypoint* wpt)
+mmo_write_wpt_cb(const Waypoint* wpt)
 {
   char* str; 
   String cx;
@@ -1349,7 +1349,7 @@ mmo_write_rte_head_cb(const route_head* rte)
   mmo_rte = (route_head*)rte;
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    waypoint* wpt = (waypoint*)elem;
+    Waypoint* wpt = (Waypoint*)elem;
     QDateTime t = wpt->GetCreationTime();
     if ((t.isValid()) && (t.toTime_t() < time)) {
       time = t.toTime_t();
@@ -1398,7 +1398,7 @@ mmo_write_rte_tail_cb(const route_head* rte)
   }
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    waypoint* wpt = (waypoint*)elem;
+    Waypoint* wpt = (Waypoint*)elem;
     int objid = mmo_get_objid(wpt);
     gbfputuint16(objid & 0x7FFF, fout);
   }

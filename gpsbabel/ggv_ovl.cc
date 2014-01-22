@@ -118,7 +118,7 @@ ggv_ovl_read(void)
     switch (type) {
 
       char coord[32];
-      waypoint* wpt;
+      Waypoint* wpt;
       char* cx;
       int group;
 
@@ -146,7 +146,7 @@ ggv_ovl_read(void)
 
         for (j = 0; j < points; j++) {
 
-          wpt = new waypoint;
+          wpt = new Waypoint;
 
           snprintf(coord, sizeof(coord), "YKoord%d", j);
           if ((cx = inifile_readstr(inifile, symbol, coord))) {
@@ -174,7 +174,7 @@ ggv_ovl_read(void)
     case OVL_SYMBOL_CIRCLE:
     case OVL_SYMBOL_TRIANGLE:
 
-      wpt = new waypoint;
+      wpt = new Waypoint;
       wpt->shortname = symbol;
 
       if ((cx = inifile_readstr(inifile, symbol, "YKoord"))) {
@@ -203,12 +203,12 @@ ggv_ovl_read(void)
 
 /* prototypes used in main functions */
 
-static void waypt_disp_cb(const waypoint* wpt);
+static void waypt_disp_cb(const Waypoint* wpt);
 static void track_disp_cb(const route_head* trk);
 static void route_disp_cb(const route_head* rte);
 static void write_bounds(void);
-static void draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP color, const waypoint* wpt);
-static int get_direction(const waypoint* A, const waypoint* B);
+static void draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP color, const Waypoint* wpt);
+static int get_direction(const Waypoint* A, const Waypoint* B);
 // static void draw_symbol_text(const char *text, const waypoint *reference);
 
 /* -----------------------------------------------------------------------*/
@@ -255,7 +255,7 @@ ggv_ovl_write(void)
 /**************************************************************************/
 
 static void
-waypt_disp_cb(const waypoint* wpt)
+waypt_disp_cb(const Waypoint* wpt)
 {
   draw_symbol_basics(OVL_SYMBOL_CIRCLE, 1, color, wpt);
   gbfprintf(fout, "Width=20\n");
@@ -290,7 +290,7 @@ track_disp_cb(const route_head* trk)
 
   QUEUE_FOR_EACH(&(trk->waypoint_list), elem, tmp) {
 
-    waypoint* wpt = (waypoint*) elem;
+    Waypoint* wpt = (Waypoint*) elem;
 
     gbfprintf(fout, "XKoord%d=%0.8f\n", i, wpt->longitude);
     gbfprintf(fout, "YKoord%d=%0.8f\n", i, wpt->latitude);
@@ -306,7 +306,7 @@ route_disp_cb(const route_head* rte)
 {
   int i;
   queue* elem, *tmp;
-  waypoint* prev;
+  Waypoint* prev;
   int waypt_ct = rte->rte_waypt_ct;
 
   if (waypt_ct <= 0) {
@@ -322,7 +322,7 @@ route_disp_cb(const route_head* rte)
 
   QUEUE_FOR_EACH(&(rte->waypoint_list), elem, tmp) {
 
-    waypoint* wpt = (waypoint*) elem;
+    Waypoint* wpt = (Waypoint*) elem;
 
     if (prev != NULL) {
       draw_symbol_basics(OVL_SYMBOL_TRIANGLE, 1, (OVL_COLOR_TYP)9 /* color */, prev);
@@ -343,7 +343,7 @@ route_disp_cb(const route_head* rte)
 /* -----------------------------------------------------------------------*/
 
 static void
-waypt_bound_calc(const waypoint* waypointp)
+waypt_bound_calc(const Waypoint* waypointp)
 {
   waypt_add_to_bounds(&all_bounds, waypointp);
 }
@@ -371,7 +371,7 @@ write_bounds(void)
 }
 
 static void
-draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP color, const waypoint* wpt)
+draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP color, const Waypoint* wpt)
 {
   symbol_ct++;
 
@@ -391,7 +391,7 @@ draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP 
 /* the following code comes from first overlay module */
 
 static int
-get_direction(const waypoint* A, const waypoint* B)
+get_direction(const Waypoint* A, const Waypoint* B)
 {
   double lata, lona, latb, lonb;
   double dist, dir;
@@ -420,9 +420,9 @@ get_direction(const waypoint* A, const waypoint* B)
 
 #if 0
 static void
-draw_symbol_text(const char* text, const waypoint* reference)
+draw_symbol_text(const char* text, const Waypoint* reference)
 {
-  waypoint wpt;
+  Waypoint wpt;
 
   if ((reference == NULL) || (text == NULL)) {
     return;

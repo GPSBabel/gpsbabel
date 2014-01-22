@@ -32,7 +32,7 @@
 #include "xmlgeneric.h"
 
 static gbfile* ofd;
-static waypoint* wpt_tmp;
+static Waypoint* wpt_tmp;
 QString urllink;
 QString urllinkt;
 static char* binary = NULL;
@@ -194,7 +194,7 @@ lmx_write_xml(int tag, const QString& data, int indent)
 }
 
 static void
-lmx_print(const waypoint* wpt)
+lmx_print(const Waypoint* wpt)
 {
   QString oname;
   QString odesc;
@@ -338,7 +338,7 @@ lmx_rd_deinit(void)
 static void
 lmx_lm_start(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp = new waypoint;
+  wpt_tmp = new Waypoint;
 }
 
 static void

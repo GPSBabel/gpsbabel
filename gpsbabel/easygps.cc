@@ -81,9 +81,9 @@ data_read(void)
   char ibuf[10];
   do {
     unsigned char tag;
-    waypoint* wpt_tmp;
+    Waypoint* wpt_tmp;
 
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
     UrlLink link;
 
     for (tag = gbfgetc(file_in); tag != 0xff; tag = gbfgetc(file_in)) {
@@ -153,7 +153,7 @@ data_read(void)
 
 
 static void
-ez_disp(const waypoint* wpt)
+ez_disp(const Waypoint* wpt)
 {
   gbfputc('W', file_out);
 #if NEW_STRINGS

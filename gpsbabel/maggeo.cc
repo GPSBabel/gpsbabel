@@ -85,7 +85,7 @@ maggeo_read(void)
   char* buff;
 
   while ((buff = gbfgetstr(maggeofile_in))) {
-    waypoint* wpt_tmp;
+    Waypoint* wpt_tmp;
     geocache_data* gcdata;
     char* s = NULL;
     int fld;
@@ -101,7 +101,7 @@ maggeo_read(void)
     buff += 9; /* skip field no. 1 */
     fld = 1;
 
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
     gcdata = wpt_tmp->AllocGCData();
 
     while ((s = csv_lineparse(buff, ",", "", fld++))) {
@@ -236,7 +236,7 @@ append(char* buf, const char* str)
 }
 
 static void
-maggeo_waypt_pr(const waypoint* waypointp)
+maggeo_waypt_pr(const Waypoint* waypointp)
 {
   char obuf[4096];
   double ilon, ilat;

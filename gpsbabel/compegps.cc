@@ -155,12 +155,12 @@ compegps_parse_time(const char* c, struct tm* tm)
 
 /* specialized readers */
 
-static waypoint*
+static Waypoint*
 parse_wpt(char* buff)
 {
   int col = -1;
   char* c, *cx;
-  waypoint* wpt = new waypoint;
+  Waypoint* wpt = new Waypoint;
   struct tm tm;
   int has_time = 0;
   memset(&tm, 0, sizeof(tm));
@@ -229,7 +229,7 @@ parse_wpt(char* buff)
 }
 
 static void
-parse_wpt_info(const char* buff, waypoint* wpt)		/* "w" */
+parse_wpt_info(const char* buff, Waypoint* wpt)		/* "w" */
 {
   char* c;
   int col = -1;
@@ -272,13 +272,13 @@ parse_wpt_info(const char* buff, waypoint* wpt)		/* "w" */
   }
 }
 
-static waypoint*
+static Waypoint*
 parse_trkpt(char* buff)
 {
   int col = -1;
   char* c;
   struct tm tm;
-  waypoint* wpt = new waypoint;
+  Waypoint* wpt = new Waypoint;
 
   c = strstr(buff, "A ");
   if (c == buff) {
@@ -396,7 +396,7 @@ compegps_data_read(void)
   char* buff;
   int line = 0;
   int input_datum;
-  waypoint* wpt = NULL;
+  Waypoint* wpt = NULL;
   route_head* route = NULL;
   route_head* track = NULL;
 
@@ -478,7 +478,7 @@ compegps_data_read(void)
 /* ----------------------------------------------------------- */
 
 static void
-write_waypt_cb(const waypoint* wpt)
+write_waypt_cb(const Waypoint* wpt)
 {
   QString name;
 
@@ -548,7 +548,7 @@ write_track_hdr_cb(const route_head* trk)
 }
 
 static void
-write_trkpt_cb(const waypoint* wpt)
+write_trkpt_cb(const Waypoint* wpt)
 {
   char buff[128];
 
