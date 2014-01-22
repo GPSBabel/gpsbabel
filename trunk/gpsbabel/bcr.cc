@@ -126,7 +126,7 @@ bcr_icon_mapping_t bcr_icon_mapping[] = {
 };
 
 static void
-bcr_handle_icon_str(const char* str, waypoint* wpt)
+bcr_handle_icon_str(const char* str, Waypoint* wpt)
 {
   bcr_icon_mapping_t* m;
 
@@ -214,11 +214,11 @@ bcr_rd_deinit(void)
 static void
 bcr_create_waypts_from_route(route_head* route)
 {
-  waypoint* wpt;
+  Waypoint* wpt;
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    wpt = new waypoint(*(waypoint*) elem);
+    wpt = new Waypoint(*(Waypoint*) elem);
     waypt_add(wpt);
   }
 }
@@ -275,7 +275,7 @@ bcr_data_read(void)
     char station[32];
     char* str;
     int mlat, mlon;		/* mercator data */
-    waypoint* wpt;
+    Waypoint* wpt;
 
     snprintf(station, sizeof(station), "STATION%d", index);
     if (NULL == (str = inifile_readstr(ini, "coordinates", station))) {
@@ -286,7 +286,7 @@ bcr_data_read(void)
       fatal(MYNAME ": structure error at %s (Coordinates)!\n", station);
     }
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     wpt->shortname = station;
     bcr_mercator_to_wgs84(mlat, mlon, &wpt->latitude, &wpt->longitude);
@@ -358,7 +358,7 @@ bcr_route_trailer(const route_head* rte)
 }
 
 static void
-bcr_write_wpt(const waypoint* wpt)
+bcr_write_wpt(const Waypoint* wpt)
 {
 }
 
@@ -384,7 +384,7 @@ static void
 bcr_route_header(const route_head* route)
 {
   queue* elem, *tmp;
-  waypoint* wpt;
+  Waypoint* wpt;
   QString sout;
   int i, north, east, nmin, nmax, emin, emax;
 
@@ -411,7 +411,7 @@ bcr_route_header(const route_head* route)
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
     const char* icon;
-    waypoint* wpt = (waypoint*) elem;
+    Waypoint* wpt = (Waypoint*) elem;
 
     i++;
 
@@ -429,7 +429,7 @@ bcr_route_header(const route_head* route)
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
     i++;
-    wpt = (waypoint*) elem;
+    wpt = (Waypoint*) elem;
 
     bcr_wgs84_to_mercator(wpt->latitude, wpt->longitude, &north, &east);
 
@@ -457,7 +457,7 @@ bcr_route_header(const route_head* route)
     QString s1, s2;
 
     i++;
-    wpt = (waypoint*) elem;
+    wpt = (Waypoint*) elem;
     s1 = wpt->notes;
     if (s1.isEmpty()) {
       s1 = wpt->description;

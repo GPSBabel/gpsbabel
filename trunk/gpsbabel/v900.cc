@@ -241,7 +241,7 @@ v900_read(void)
   track_add_head(track);
 
   while (1) {
-    waypoint* wpt;
+    Waypoint* wpt;
     char c;
     int bad = 0;
     int record_len = is_advanced_mode ? sizeof(line.adv) : sizeof(line.bas);
@@ -300,7 +300,7 @@ v900_read(void)
       line.bas.cr = 0;	/* null terminate vox field */
     }
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     /* lat is a string in the form: 31.768380N */
     c = line.bas.common.latitude_NS;	/* N/S */
@@ -356,13 +356,13 @@ v900_read(void)
 
     track_add_wpt(track, wpt);
     if (line.bas.common.tag != 'T') {
-      waypoint* wpt2;
+      Waypoint* wpt2;
       // A 'G' tag appears to be a 'T' tag, but generated on the trailing
       // edge of a DGPS fix as it decays to an SPS fix.  See 1/13/13 email
       // thread on gpsbabel-misc with Jamie Robertson.
       assert(line.bas.common.tag == 'C' || line.bas.common.tag == 'G' ||
              line.bas.common.tag == 'V');
-      wpt2 = new waypoint(*wpt);
+      wpt2 = new Waypoint(*wpt);
       if (line.bas.common.tag == 'V') {	// waypoint with voice recording?
         char vox_file_name[sizeof(line.adv.vox)+5];
         const char* vox = is_advanced_mode ? line.adv.vox : line.bas.vox;

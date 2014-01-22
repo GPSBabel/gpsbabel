@@ -181,12 +181,12 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>FileDlgManager</name>
     <message>
-        <location filename="optionsdlg.cc" line="70"/>
+        <location filename="optionsdlg.cc" line="73"/>
         <source>Select input file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="optionsdlg.cc" line="75"/>
+        <location filename="optionsdlg.cc" line="77"/>
         <source>Select output file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -444,144 +444,144 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cc" line="386"/>
-        <location filename="mainwindow.cc" line="387"/>
+        <location filename="mainwindow.cc" line="396"/>
+        <location filename="mainwindow.cc" line="397"/>
         <source>default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="560"/>
+        <location filename="mainwindow.cc" line="570"/>
         <source>Select one or more input files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="587"/>
+        <location filename="mainwindow.cc" line="597"/>
         <source>Output File Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="647"/>
+        <location filename="mainwindow.cc" line="657"/>
         <source>Error reading format configuration.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="658"/>
+        <location filename="mainwindow.cc" line="668"/>
         <source>Some file/device formats were not found during initialization.  Check that the backend program &quot;gpsbabel&quot; is properly installed and is in the current PATH
 
 This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="680"/>
+        <location filename="mainwindow.cc" line="690"/>
         <source>Input and output formats do not support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="683"/>
+        <location filename="mainwindow.cc" line="693"/>
         <source>Input does not support %1; output format supports %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="686"/>
+        <location filename="mainwindow.cc" line="696"/>
         <source>Input format supports %1; output format does not support %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="689"/>
+        <location filename="mainwindow.cc" line="699"/>
         <source>Both input and output formats support %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="710"/>
+        <location filename="mainwindow.cc" line="720"/>
         <source>waypoints</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="711"/>
+        <location filename="mainwindow.cc" line="721"/>
         <source>tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="712"/>
+        <location filename="mainwindow.cc" line="722"/>
         <source>routes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="802"/>
+        <location filename="mainwindow.cc" line="812"/>
         <source>There are no input options for format &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="809"/>
-        <location filename="mainwindow.cc" line="829"/>
+        <location filename="mainwindow.cc" line="819"/>
+        <location filename="mainwindow.cc" line="839"/>
         <source>Options for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="822"/>
+        <location filename="mainwindow.cc" line="832"/>
         <source>There are no output options for format &quot;%1&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="843"/>
+        <location filename="mainwindow.cc" line="853"/>
         <source>No valid waypoints/routes/tracks translation specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="862"/>
+        <location filename="mainwindow.cc" line="872"/>
         <source>No input file specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="869"/>
+        <location filename="mainwindow.cc" line="879"/>
         <source>No valid output specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="874"/>
+        <location filename="mainwindow.cc" line="884"/>
         <source>No output file specified</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="890"/>
+        <location filename="mainwindow.cc" line="900"/>
         <source>Process &quot;%1&quot; did not start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="904"/>
+        <location filename="mainwindow.cc" line="914"/>
         <source>Process exited unsucessfully with code %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1047"/>
+        <location filename="mainwindow.cc" line="1057"/>
         <source>Translation successful</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1057"/>
+        <location filename="mainwindow.cc" line="1067"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1170"/>
+        <location filename="mainwindow.cc" line="1180"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1194"/>
+        <location filename="mainwindow.cc" line="1204"/>
         <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1237"/>
+        <location filename="mainwindow.cc" line="1247"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1239"/>
+        <location filename="mainwindow.cc" line="1249"/>
         <source>No data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
@@ -602,8 +602,8 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="44"/>
-        <location filename="mainwinui.ui" line="428"/>
-        <location filename="mainwinui.ui" line="632"/>
+        <location filename="mainwinui.ui" line="438"/>
+        <location filename="mainwinui.ui" line="642"/>
         <source>File</source>
         <translation type="unfinished">Fájl</translation>
     </message>
@@ -614,13 +614,13 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="60"/>
-        <location filename="mainwinui.ui" line="444"/>
+        <location filename="mainwinui.ui" line="454"/>
         <source>Device</source>
         <translation type="unfinished">Készülék</translation>
     </message>
     <message>
         <location filename="mainwinui.ui" line="89"/>
-        <location filename="mainwinui.ui" line="473"/>
+        <location filename="mainwinui.ui" line="483"/>
         <source>Format</source>
         <translation type="unfinished">Formátum</translation>
     </message>
@@ -646,7 +646,7 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="162"/>
-        <location filename="mainwinui.ui" line="543"/>
+        <location filename="mainwinui.ui" line="553"/>
         <source>Device Name:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -662,159 +662,159 @@ This program cannot continue.</source>
     </message>
     <message>
         <location filename="mainwinui.ui" line="203"/>
-        <location filename="mainwinui.ui" line="584"/>
+        <location filename="mainwinui.ui" line="594"/>
         <source>Options</source>
         <translation type="unfinished">Beállítások</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="218"/>
+        <location filename="mainwinui.ui" line="228"/>
         <source>Translation Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="227"/>
-        <location filename="mainwinui.ui" line="270"/>
-        <location filename="mainwinui.ui" line="310"/>
+        <location filename="mainwinui.ui" line="237"/>
+        <location filename="mainwinui.ui" line="280"/>
+        <location filename="mainwinui.ui" line="320"/>
         <source>-</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="237"/>
+        <location filename="mainwinui.ui" line="247"/>
         <source>If selected, translate waypoints.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="240"/>
+        <location filename="mainwinui.ui" line="250"/>
         <source>Waypoints</source>
         <translation type="unfinished">Útpontok</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="277"/>
+        <location filename="mainwinui.ui" line="287"/>
         <source>If selected, translate routes.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="280"/>
+        <location filename="mainwinui.ui" line="290"/>
         <source>Routes</source>
         <translation type="unfinished">Útvonalak</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="317"/>
+        <location filename="mainwinui.ui" line="327"/>
         <source>If selected, translate tracks.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="320"/>
+        <location filename="mainwinui.ui" line="330"/>
         <source>Tracks</source>
         <translation type="unfinished">Nyomvonalak</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="356"/>
+        <location filename="mainwinui.ui" line="366"/>
         <source>Data Filters between input and output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="359"/>
+        <location filename="mainwinui.ui" line="369"/>
         <source>Filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="392"/>
+        <location filename="mainwinui.ui" line="402"/>
         <source>More translation options. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="395"/>
+        <location filename="mainwinui.ui" line="405"/>
         <source>More Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="405"/>
+        <location filename="mainwinui.ui" line="415"/>
         <source>Output</source>
         <translation type="unfinished">Kimenet</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="425"/>
+        <location filename="mainwinui.ui" line="435"/>
         <source>If selected, output is to a file. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="441"/>
+        <location filename="mainwinui.ui" line="451"/>
         <source>If selected, output is to a device or GPS unit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="480"/>
+        <location filename="mainwinui.ui" line="490"/>
         <source>Output data format.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="487"/>
+        <location filename="mainwinui.ui" line="497"/>
         <source>Character encoding of output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="508"/>
+        <location filename="mainwinui.ui" line="518"/>
         <source>Browse for an output file name. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="511"/>
+        <location filename="mainwinui.ui" line="521"/>
         <source>File Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="550"/>
+        <location filename="mainwinui.ui" line="560"/>
         <source>Name of port to which output device is connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="581"/>
+        <location filename="mainwinui.ui" line="591"/>
         <source>Options for the selected output format. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="605"/>
+        <location filename="mainwinui.ui" line="615"/>
         <source>Output of GPSBabel translation process. </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="639"/>
+        <location filename="mainwinui.ui" line="649"/>
         <source>Help</source>
         <translation type="unfinished">Segítség</translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="655"/>
+        <location filename="mainwinui.ui" line="665"/>
         <source>GPSBabel Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="660"/>
+        <location filename="mainwinui.ui" line="670"/>
         <source>About GPSBabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="665"/>
+        <location filename="mainwinui.ui" line="675"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="670"/>
+        <location filename="mainwinui.ui" line="680"/>
         <source>Preferences...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="675"/>
+        <location filename="mainwinui.ui" line="685"/>
         <source>Check for Upgrade</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="680"/>
+        <location filename="mainwinui.ui" line="690"/>
         <source>Visit Website...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwinui.ui" line="685"/>
+        <location filename="mainwinui.ui" line="695"/>
         <source>Make a Donation...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -927,7 +927,8 @@ Some GPS data formats support only some subset of waypoints, tracks, and routes.
 <context>
     <name>OptionsDlg</name>
     <message>
-        <location filename="optionsdlg.cc" line="189"/>
+        <location filename="optionsdlg.cc" line="192"/>
+        <location filename="optionsdlg.cc" line="203"/>
         <source>Help</source>
         <translation type="unfinished">Segítség</translation>
     </message>
@@ -1444,17 +1445,17 @@ This option computes a value for the GPS speed at each trackpoint. This is most 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="322"/>
+        <location filename="upgrade.cc" line="326"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="339"/>
+        <location filename="upgrade.cc" line="343"/>
         <source>Do you wish to download an upgrade?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="333"/>
+        <location filename="upgrade.cc" line="337"/>
         <source>Upgrade</source>
         <translation type="unfinished"></translation>
     </message>

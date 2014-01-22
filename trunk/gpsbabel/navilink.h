@@ -29,7 +29,7 @@
 #define SBP_RECORD_LEN 32
 
 /* defined in navilink.c */
-waypoint* navilink_decode_logpoint(const unsigned char* buffer);
+Waypoint* navilink_decode_logpoint(const unsigned char* buffer);
 unsigned navilink_checksum_packet(const unsigned char* packet, unsigned length);
 
 /* defined in sbn.c */

@@ -94,7 +94,7 @@ wr_deinit(void)
 }
 
 static void
-text_disp(const waypoint* wpt)
+text_disp(const Waypoint* wpt)
 {
   int32_t utmz;
   double utme, utmn;

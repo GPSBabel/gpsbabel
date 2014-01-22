@@ -26,7 +26,7 @@
 
 static int isFirst = 1;
 static route_head* route = NULL;
-static waypoint* wpt_to, *wpt_from;
+static Waypoint* wpt_to, *wpt_from;
 static double dest_altitude;
 
 #define MYNAME "PocketFMS FlightPlan"
@@ -65,8 +65,8 @@ static void
 rd_deinit(void)
 {
   if (route != NULL) {
-    waypoint* head = (waypoint*) QUEUE_FIRST(&route->waypoint_list);
-    waypoint* tail = (waypoint*) QUEUE_LAST(&route->waypoint_list);
+    Waypoint* head = (Waypoint*) QUEUE_FIRST(&route->waypoint_list);
+    Waypoint* tail = (Waypoint*) QUEUE_LAST(&route->waypoint_list);
     if (head != NULL) {
       route->rte_name = head->shortname;
     }
@@ -88,12 +88,12 @@ wr_init(const char* fname)
 void	wpt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (isFirst == 1) {
-    wpt_from = new waypoint;
+    wpt_from = new Waypoint;
     route = route_head_alloc();
     route->rte_desc="PocketFMS flightplan";
     route_add_head(route);
   }
-  wpt_to = new waypoint;
+  wpt_to = new Waypoint;
 }
 
 void	wpt_e(xg_string args, const QXmlStreamAttributes* unused)
@@ -101,14 +101,14 @@ void	wpt_e(xg_string args, const QXmlStreamAttributes* unused)
   if (isFirst == 1) {
     route_add_wpt(route, wpt_from);
     if (doing_wpts) {
-      waypt_add(new waypoint(*wpt_from));
+      waypt_add(new Waypoint(*wpt_from));
     }
     wpt_from = NULL;
     isFirst = 0;
   }
   route_add_wpt(route, wpt_to);
   if (doing_wpts) {
-    waypt_add(new waypoint(*wpt_to));
+    waypt_add(new Waypoint(*wpt_to));
   }
   wpt_to = NULL;
 }

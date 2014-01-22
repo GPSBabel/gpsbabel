@@ -88,14 +88,14 @@ transform_waypoints(void)
     break;
   }
 #if NEWQ
-  foreach(waypoint* wpt, waypt_list) {
+  foreach(Waypoint* wpt, waypt_list) {
 #else
   queue* elem, *tmp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypoint* wpt = (waypoint*) elem;
+    Waypoint* wpt = (Waypoint*) elem;
 #endif
 
-    wpt = new waypoint(*wpt);
+    wpt = new Waypoint(*wpt);
     switch (current_target) {
     case 'R':
       route_add_wpt_named(rte, wpt, RPT, name_digits);
@@ -151,9 +151,9 @@ transform_trk_disp_hdr_cb(const route_head* trk)
 }
 
 static void
-transform_any_disp_wpt_cb(const waypoint* wpt)
+transform_any_disp_wpt_cb(const Waypoint* wpt)
 {
-  waypoint* temp = new waypoint(*wpt);
+  Waypoint* temp = new Waypoint(*wpt);
   if (current_target == 'R') {
     route_add_wpt_named(current_rte, temp, current_namepart, name_digits);
   } else if (current_target == 'T') {

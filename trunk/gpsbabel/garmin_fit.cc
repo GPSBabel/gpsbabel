@@ -287,7 +287,7 @@ fit_parse_data(fit_message_def* def, int time_offset)
   uint16_t power = 0xffff;
   int8_t temperature = 0x7f;
   int i;
-  waypoint* waypt;
+  Waypoint* waypt;
 
   if (global_opts.debug_level >= 7) {
     debug_print(7,"%s: parsing fit data ID %d with num_fields=%d\n", MYNAME, def->global_id, def->num_fields);
@@ -380,7 +380,7 @@ fit_parse_data(fit_message_def* def, int time_offset)
       break;
     }
 
-    waypt = new waypoint;
+    waypt = new Waypoint;
     waypt->latitude = (lat / (double)0x7fffffff) * 180;
     waypt->longitude = (lon / (double)0x7fffffff) * 180;
     if (alt != 0xffff) {

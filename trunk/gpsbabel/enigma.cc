@@ -108,7 +108,7 @@ data_read(void)
   route_add_head(route);
 
   while (1 == gbfread(&ewpt, sizeof(ewpt), 1, file_in)) {
-    waypoint* wpt = new waypoint;
+    Waypoint* wpt = new Waypoint;
     wpt->latitude = enigmaPositionToDec(le_read32(&ewpt.latitude));
     wpt->longitude = enigmaPositionToDec(le_read32(&ewpt.longitude));
     char*sn = xstrndup(ewpt.shortname, ewpt.shortname_len);
@@ -167,7 +167,7 @@ wr_init(const char* fname)
 #endif
 
 static void
-enigma_waypt_disp(const waypoint* wpt)
+enigma_waypt_disp(const Waypoint* wpt)
 {
   struct enigma_wpt ewpt;
 

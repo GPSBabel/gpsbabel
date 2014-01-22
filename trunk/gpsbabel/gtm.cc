@@ -436,11 +436,11 @@ gtm_rd_deinit(void)
   gbfclose(file_in);
 }
 
-static void count_route_waypts(const waypoint* wpt)
+static void count_route_waypts(const Waypoint* wpt)
 {
   rt_count++;
 }
-static void count_track_waypts(const waypoint* wpt)
+static void count_track_waypts(const Waypoint* wpt)
 {
   tr_count++;
 }
@@ -512,7 +512,7 @@ gtm_read(void)
   route_head* first_trk_head = NULL;
   route_head* trk_head = NULL;
   route_head* rte_head = NULL;
-  waypoint* wpt;
+  Waypoint* wpt;
   int real_tr_count = 0;
   unsigned int icon;
   int i;
@@ -526,7 +526,7 @@ gtm_read(void)
 
   /* Waypoints */
   for (i = 0; i != wp_count; i++) {
-    wpt = new waypoint;
+    wpt = new Waypoint;
     wpt->latitude = fread_double(file_in);
     wpt->longitude = fread_double(file_in);
     convert_datum(&wpt->latitude, &wpt->longitude);
@@ -561,7 +561,7 @@ gtm_read(void)
 
   /* Tracklogs */
   for (i = 0; i != tr_count; i++) {
-    wpt = new waypoint;
+    wpt = new Waypoint;
     wpt->latitude = fread_double(file_in);
     wpt->longitude = fread_double(file_in);
     convert_datum(&wpt->latitude, &wpt->longitude);
@@ -595,7 +595,7 @@ gtm_read(void)
 
   /* Routes */
   for (i = 0; i != rt_count; i++) {
-    wpt = new waypoint;
+    wpt = new Waypoint;
     wpt->latitude = fread_double(file_in);
     wpt->longitude = fread_double(file_in);
     convert_datum(&wpt->latitude, &wpt->longitude);
@@ -634,7 +634,7 @@ static int icon_from_descr(const QString& descr)
   return 48;
 }
 
-static void write_waypt(const waypoint* wpt)
+static void write_waypt(const Waypoint* wpt)
 {
   fwrite_double(file_out, wpt->latitude);
   fwrite_double(file_out, wpt->longitude);
@@ -662,7 +662,7 @@ static void start_rte(const route_head* rte)
   start_new = 1;
 }
 
-static void write_trk_waypt(const waypoint* wpt)
+static void write_trk_waypt(const Waypoint* wpt)
 {
   fwrite_double(file_out, wpt->latitude);
   fwrite_double(file_out, wpt->longitude);
@@ -686,7 +686,7 @@ static void write_trk_style(const route_head* trk)
   fwrite_integer(file_out, 0);
 }
 
-static void write_rte_waypt(const waypoint* wpt)
+static void write_rte_waypt(const Waypoint* wpt)
 {
   fwrite_double(file_out, wpt->latitude);
   fwrite_double(file_out, wpt->longitude);

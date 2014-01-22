@@ -294,14 +294,14 @@ psit_isKnownToken(char* buf)
  * MRCB
  */
 static void
-psit_waypoint_r(gbfile* psit_file, waypoint** wpt)
+psit_waypoint_r(gbfile* psit_file, Waypoint** wpt)
 {
   int		garmin_icon_num;
 
-  waypoint*	thisWaypoint;
+  Waypoint*	thisWaypoint;
 
   if (strlen(psit_current_token) > 0) {
-    thisWaypoint = new waypoint;
+    thisWaypoint = new Waypoint;
 
     thisWaypoint->latitude = atof(psit_current_token);
 
@@ -339,7 +339,7 @@ psit_waypoint_r(gbfile* psit_file, waypoint** wpt)
  * MRCB
  */
 static void
-psit_waypoint_w(gbfile* psit_file, const waypoint* wpt)
+psit_waypoint_w(gbfile* psit_file, const Waypoint* wpt)
 {
   int	icon;
   const char* ident;
@@ -378,7 +378,7 @@ psit_waypoint_w(gbfile* psit_file, const waypoint* wpt)
 }
 
 static void
-psit_waypoint_w_wrapper(const waypoint* wpt)
+psit_waypoint_w_wrapper(const Waypoint* wpt)
 {
   psit_waypoint_w(psit_file_out, wpt);
 }
@@ -398,7 +398,7 @@ psit_route_r(gbfile* psit_file, route_head** rte)
   route_head* rte_head;
   unsigned int rte_count;
 
-  waypoint*	thisWaypoint;
+  Waypoint*	thisWaypoint;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
 
@@ -423,7 +423,7 @@ psit_route_r(gbfile* psit_file, route_head** rte)
 
   while (psit_isKnownToken(psit_current_token) != 0) {
     if (strlen(psit_current_token) > 0) {
-      thisWaypoint = new waypoint;
+      thisWaypoint = new Waypoint;
 
       thisWaypoint->latitude = atof(psit_current_token);
 
@@ -474,7 +474,7 @@ psit_routehdr_w(gbfile* psit_file, const route_head* rte)
   unsigned int rte_datapoints;
   char*		rname;
 
-  waypoint*	testwpt;
+  Waypoint*	testwpt;
   time_t		uniqueValue = 0;
   int			allWptNameLengths;
 
@@ -488,7 +488,7 @@ psit_routehdr_w(gbfile* psit_file, const route_head* rte)
     char* c;
 
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-      testwpt = (waypoint*)elem;
+      testwpt = (Waypoint*)elem;
       if (rte_datapoints == 0) {
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
@@ -547,7 +547,7 @@ psit_track_r(gbfile* psit_file, route_head** trk)
   route_head* track_head = NULL;
   unsigned int trk_count;
 
-  waypoint*	thisWaypoint;
+  Waypoint*	thisWaypoint;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
   if (strlen(psit_current_token) == 0) {
@@ -568,7 +568,7 @@ psit_track_r(gbfile* psit_file, route_head** trk)
 
   while (psit_isKnownToken(psit_current_token) != 0) {
     if (strlen(psit_current_token) > 0) {
-      thisWaypoint = new waypoint;
+      thisWaypoint = new Waypoint;
 
       thisWaypoint->latitude = atof(psit_current_token);
 
@@ -643,7 +643,7 @@ psit_trackhdr_w(gbfile* psit_file, const route_head* trk)
   char		hdr[30];
   unsigned int trk_datapoints;
   char*		tname;
-  waypoint*	testwpt;
+  Waypoint*	testwpt;
   time_t		uniqueValue = 0;
 
   queue* elem, *tmp;
@@ -656,7 +656,7 @@ psit_trackhdr_w(gbfile* psit_file, const route_head* trk)
 
       QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
         if (trk_datapoints == 0) {
-          testwpt = (waypoint*)elem;
+          testwpt = (Waypoint*)elem;
           uniqueValue = testwpt->GetCreationTime().toTime_t();
         }
         trk_datapoints++;
@@ -703,7 +703,7 @@ psit_trackhdr_w_wrapper(const route_head* trk)
  * MRCB
  */
 static void
-psit_trackdatapoint_w(gbfile* psit_file, const waypoint* wpt)
+psit_trackdatapoint_w(gbfile* psit_file, const Waypoint* wpt)
 {
   time_t	t = wpt->GetCreationTime().toTime_t();
   struct tm* tmTime = gmtime(&t);
@@ -732,7 +732,7 @@ psit_trackdatapoint_w(gbfile* psit_file, const waypoint* wpt)
 }
 
 static void
-psit_trackdatapoint_w_wrapper(const waypoint* wpt)
+psit_trackdatapoint_w_wrapper(const Waypoint* wpt)
 {
   psit_trackdatapoint_w(psit_file_out, wpt);
 }
@@ -741,7 +741,7 @@ psit_trackdatapoint_w_wrapper(const waypoint* wpt)
 static void
 psit_read(void)
 {
-  waypoint*	wpt;
+  Waypoint*	wpt;
   route_head*	rte;
   route_head*	trk;
 

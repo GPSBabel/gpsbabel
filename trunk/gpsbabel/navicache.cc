@@ -100,7 +100,7 @@ static void
 NaviReadCache(const QXmlStreamReader& reader)
 {
   const QXmlStreamAttributes a = reader.attributes();
-  waypoint* wpt_tmp = new waypoint;
+  Waypoint* wpt_tmp = new Waypoint;
   geocache_data* gc_data;
   gc_data = wpt_tmp->AllocGCData();
   if (a.hasAttribute("cache_id")) {

@@ -59,8 +59,8 @@ arglist_t sort_args[] = {
 static int
 sort_comp(const queue* a, const queue* b)
 {
-  const waypoint* x1 = (waypoint*)a;
-  const waypoint* x2 = (waypoint*)b;
+  const Waypoint* x1 = (Waypoint*)a;
+  const Waypoint* x2 = (Waypoint*)b;
 
   switch (sort_mode)  {
   case sm_gcid:

@@ -43,7 +43,7 @@ static unsigned char* track_data;
 static unsigned char* track_data_ptr;
 static unsigned char* track_data_end;
 static unsigned track_serial;
-static waypoint** route_waypts;
+static Waypoint** route_waypts;
 static unsigned* route_ids;
 static unsigned route_id_ptr;
 
@@ -165,12 +165,12 @@ arglist_t navilink_args[] = {
   ARG_TERMINATOR
 };
 
-static void (*write_waypoint)(const waypoint*) = NULL;
+static void (*write_waypoint)(const Waypoint*) = NULL;
 static void (*write_track_start)(const route_head* track) = NULL;
-static void (*write_track_point)(const waypoint* waypt) = NULL;
+static void (*write_track_point)(const Waypoint* waypt) = NULL;
 static void (*write_track_end)(const route_head* track) = NULL;
 static void (*write_route_start)(const route_head* track) = NULL;
-static void (*write_route_point)(const waypoint* waypt) = NULL;
+static void (*write_route_point)(const Waypoint* waypt) = NULL;
 static void (*write_route_end)(const route_head* track) = NULL;
 
 static int
@@ -188,9 +188,9 @@ find_icon_from_descr(const QString& descr)
 }
 
 static void
-free_waypoints(waypoint** waypts)
+free_waypoints(Waypoint** waypts)
 {
-  waypoint** wayptp;
+  Waypoint** wayptp;
 
   for (wayptp = waypts; wayptp < waypts + MAX_WAYPOINTS; wayptp++) {
     if (*wayptp) {
@@ -202,7 +202,7 @@ free_waypoints(waypoint** waypts)
 }
 
 static unsigned
-compare_waypoints(const waypoint* waypt1, const waypoint* waypt2)
+compare_waypoints(const Waypoint* waypt1, const Waypoint* waypt2)
 {
   return waypt1->latitude == waypt2->latitude &&
          waypt1->longitude == waypt2->longitude &&
@@ -380,7 +380,7 @@ encode_datetime(time_t datetime, unsigned char* buffer)
 }
 
 static void
-decode_position(const unsigned char* buffer, waypoint* waypt)
+decode_position(const unsigned char* buffer, Waypoint* waypt)
 {
   waypt->latitude = le_read32(buffer + 0) / 10000000.0;
   waypt->longitude = le_read32(buffer + 4) / 10000000.0;
@@ -388,7 +388,7 @@ decode_position(const unsigned char* buffer, waypoint* waypt)
 }
 
 static void
-encode_position(const waypoint* waypt, unsigned char* buffer)
+encode_position(const Waypoint* waypt, unsigned char* buffer)
 {
   le_write32(buffer + 0, (int)(waypt->latitude * 10000000));
   le_write32(buffer + 4, (int)(waypt->longitude * 10000000));
@@ -407,10 +407,10 @@ decode_waypoint_id(const unsigned char* buffer)
   return id;
 }
 
-static waypoint*
+static Waypoint*
 decode_waypoint(const unsigned char* buffer)
 {
-  waypoint* waypt = new waypoint;
+  Waypoint* waypt = new Waypoint;
 
   decode_position(buffer + 12, waypt);
   char* s = xstrdup((char*)buffer + 4);
@@ -423,7 +423,7 @@ decode_waypoint(const unsigned char* buffer)
 }
 
 static void
-encode_waypoint(const waypoint* waypt, unsigned char* buffer)
+encode_waypoint(const Waypoint* waypt, unsigned char* buffer)
 {
   buffer[0] = 0x00;
   buffer[1] = 0x40;
@@ -439,10 +439,10 @@ encode_waypoint(const waypoint* waypt, unsigned char* buffer)
   buffer[31] = 0x7e;
 }
 
-static waypoint*
+static Waypoint*
 decode_trackpoint(const unsigned char* buffer)
 {
-  waypoint* waypt = new waypoint;
+  Waypoint* waypt = new Waypoint;
 
   decode_position(buffer + 12, waypt);
   waypt->SetCreationTime(decode_datetime(buffer + 22));
@@ -453,7 +453,7 @@ decode_trackpoint(const unsigned char* buffer)
 }
 
 static void
-encode_trackpoint(const waypoint* waypt, unsigned serial, unsigned char* buffer)
+encode_trackpoint(const Waypoint* waypt, unsigned serial, unsigned char* buffer)
 {
   double x;
   double y;
@@ -474,16 +474,16 @@ encode_trackpoint(const waypoint* waypt, unsigned serial, unsigned char* buffer)
   buffer[31] = 0x7e;
 }
 
-static waypoint**
+static Waypoint**
 serial_read_waypoints(void)
 {
-  waypoint**       waypts = NULL;
+  Waypoint**       waypts = NULL;
   unsigned char  information[32];
   unsigned short total;
   unsigned short start;
 
   if (global_opts.masked_objective & RTEDATAMASK) {
-    waypts = (waypoint**) xcalloc(MAX_WAYPOINTS, sizeof(waypoint*));
+    waypts = (Waypoint**) xcalloc(MAX_WAYPOINTS, sizeof(Waypoint*));
   }
 
   write_packet(PID_QRY_INFORMATION, NULL, 0);
@@ -533,7 +533,7 @@ serial_read_waypoints(void)
 }
 
 static unsigned int
-serial_write_waypoint_packet(const waypoint* waypt)
+serial_write_waypoint_packet(const Waypoint* waypt)
 {
   unsigned char data[32];
   unsigned char id[2];
@@ -548,7 +548,7 @@ serial_write_waypoint_packet(const waypoint* waypt)
 }
 
 static void
-serial_write_waypoint(const waypoint* waypt)
+serial_write_waypoint(const Waypoint* waypt)
 {
   serial_write_waypoint_packet(waypt);
 }
@@ -637,7 +637,7 @@ serial_write_track_start(const route_head* track)
 }
 
 static void
-serial_write_track_point(const waypoint* waypt)
+serial_write_track_point(const Waypoint* waypt)
 {
   if (track_data_ptr >= track_data_end) {
     serial_write_track();
@@ -659,7 +659,7 @@ serial_write_track_end(const route_head* track)
 }
 
 static void
-serial_read_routes(waypoint** waypts)
+serial_read_routes(Waypoint** waypts)
 {
   unsigned char information[32];
   unsigned char routec;
@@ -704,7 +704,7 @@ serial_read_routes(waypoint** waypts)
         } else if (waypts[id] == NULL) {
           fatal(MYNAME ": Non-existent waypoint in route\n");
         } else {
-          route_add_wpt(route, new waypoint(*waypts[id]));
+          route_add_wpt(route, new Waypoint(*waypts[id]));
         }
       }
     }
@@ -719,7 +719,7 @@ serial_write_route_start(const route_head* route)
 }
 
 static void
-serial_write_route_point(const waypoint* waypt)
+serial_write_route_point(const Waypoint* waypt)
 {
   unsigned w;
 
@@ -731,7 +731,7 @@ serial_write_route_point(const waypoint* waypt)
 
   if (w == MAX_WAYPOINTS) {
     w = serial_write_waypoint_packet(waypt);
-    route_waypts[w] = new waypoint(*waypt);
+    route_waypts[w] = new Waypoint(*waypt);
   }
 
   route_ids[route_id_ptr++] = w;
@@ -839,18 +839,18 @@ decode_sbp_datetime_packed(const unsigned char* buffer)
 }
 
 static void
-decode_sbp_position(const unsigned char* buffer, waypoint* waypt)
+decode_sbp_position(const unsigned char* buffer, Waypoint* waypt)
 {
   waypt->latitude = le_read32(buffer + 0) / 10000000.0;
   waypt->longitude = le_read32(buffer + 4) / 10000000.0;
   waypt->altitude = le_read32(buffer + 8) / 100.0;
 }
 
-waypoint*
+Waypoint*
 navilink_decode_logpoint(const unsigned char* buffer)
 {
-  waypoint* waypt = NULL;
-  waypt = new waypoint;
+  Waypoint* waypt = NULL;
+  waypt = new Waypoint;
 
   waypt->hdop = ((unsigned char)buffer[0]) * 0.2f;
   waypt->sat = buffer[1];
@@ -996,7 +996,7 @@ file_read(void)
 }
 
 static void
-file_write_waypoint(const waypoint* waypt)
+file_write_waypoint(const Waypoint* waypt)
 {
   unsigned char data[32];
 
@@ -1011,7 +1011,7 @@ file_write_track_start(const route_head* track)
 }
 
 static void
-file_write_track_point(const waypoint* waypt)
+file_write_track_point(const Waypoint* waypt)
 {
   unsigned char data[32];
 
@@ -1031,7 +1031,7 @@ file_write_route_start(const route_head* track)
 }
 
 static void
-file_write_route_point(const waypoint* waypt)
+file_write_route_point(const Waypoint* waypt)
 {
 }
 
@@ -1186,7 +1186,7 @@ navilink_read(void)
     }
   } else {
     if (serial_handle) {
-      waypoint** waypts = NULL;
+      Waypoint** waypts = NULL;
 
       if (global_opts.masked_objective & (WPTDATAMASK|RTEDATAMASK)) {
         waypts = serial_read_waypoints();

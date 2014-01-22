@@ -111,7 +111,7 @@ ggv_log_read(void)
     double xlat, xlon;
     float sec;
     struct tm tm;
-    waypoint* wpt;
+    Waypoint* wpt;
 
     if (len != bufsz) {
       break;
@@ -124,7 +124,7 @@ ggv_log_read(void)
 
     memset(&tm, 0, sizeof(tm));
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     deg = (int16_t) le_read16(&buf[0]);
     min = le_read16(&buf[2]);
@@ -206,14 +206,14 @@ static void
 ggv_log_track_head_cb(const route_head* trk)
 {
   queue* elem, *tmp;
-  waypoint* prev = NULL;
+  Waypoint* prev = NULL;
 
   QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
     double  latmin, lonmin, latsec, lonsec;
     int     latint, lonint;
     double  course = 0, speed = 0;
     struct tm tm;
-    waypoint* wpt = (waypoint*)elem;
+    Waypoint* wpt = (Waypoint*)elem;
     double secs = 0;
 
     latint = wpt->latitude;

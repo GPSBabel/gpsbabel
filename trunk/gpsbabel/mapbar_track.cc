@@ -64,13 +64,13 @@ read_datetime(void)
 }
 
 static const double DIV_RATE  = 100000.0f;
-static waypoint*
+static Waypoint*
 read_waypoint(void)
 {
   int longitude = gbfgetint32(fin);
   int latitude = gbfgetint32(fin);
 
-  waypoint* ret = new waypoint;
+  Waypoint* ret = new Waypoint;
 
   ret->latitude = double(latitude)/DIV_RATE;
   ret->longitude = double(longitude)/DIV_RATE;
@@ -115,7 +115,7 @@ mapbar_track_read(void)
 
     const int amount = length/8;
     for (int i = 0; i < amount; ++i) {
-      waypoint* tmp = read_waypoint();
+      Waypoint* tmp = read_waypoint();
       track_add_wpt(track, tmp);
     }
 

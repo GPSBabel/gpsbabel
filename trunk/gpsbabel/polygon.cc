@@ -236,7 +236,7 @@ void
 polygon_process(void)
 {
   queue* elem, * tmp;
-  waypoint* waypointp;
+  Waypoint* waypointp;
   extra_data* ed;
   double lat1, lon1, lat2, lon2;
   double olat, olon;
@@ -270,10 +270,10 @@ polygon_process(void)
     } else if (lat1 != BADVAL && lon1 != BADVAL &&
                lat2 != BADVAL && lon2 != BADVAL) {
 #if NEWQ
-      foreach(waypoint* waypointp, waypt_list) {
+      foreach(Waypoint* waypointp, waypt_list) {
 #else
       QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-        waypointp = (waypoint*)elem;
+        waypointp = (Waypoint*)elem;
 #endif
         if (waypointp->extra_data) {
           ed = (extra_data*) waypointp->extra_data;
@@ -319,10 +319,10 @@ polygon_process(void)
   gbfclose(file_in);
 
 #if NEWQ
-  foreach(waypoint* wp, waypt_list) {
+  foreach(Waypoint* wp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypoint* wp = (waypoint*) elem;
+    Waypoint* wp = (Waypoint*) elem;
 #endif
     ed = (extra_data*) wp->extra_data;
     wp->extra_data = NULL;

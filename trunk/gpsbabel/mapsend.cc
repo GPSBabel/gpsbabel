@@ -115,13 +115,13 @@ mapsend_wpt_read(void)
   int wpt_number;
   char wpt_icon;
   char wpt_status;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   route_head* rte_head;
 
   wpt_count = gbfgetint32(mapsend_file_in);
 
   while (wpt_count--) {
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
 
     wpt_tmp->shortname = gbfgetpstr(mapsend_file_in);
     wpt_tmp->description = gbfgetpstr(mapsend_file_in);
@@ -162,7 +162,7 @@ mapsend_wpt_read(void)
     wpt_count = gbfgetint32(mapsend_file_in);
 
     while (wpt_count--) {
-      wpt_tmp = new waypoint;
+      wpt_tmp = new Waypoint;
 
       /* waypoint name */
       wpt_tmp->shortname = gbfgetpstr(mapsend_file_in);
@@ -193,7 +193,7 @@ mapsend_track_read(void)
   int valid;
   unsigned char centisecs;
   route_head* track_head;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
 
   track_head = route_head_alloc();
   track_head->rte_name = gbfgetpstr(mapsend_file_in);
@@ -202,7 +202,7 @@ mapsend_track_read(void)
   trk_count = gbfgetuint32(mapsend_file_in);
 
   while (trk_count--) {
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
 
     wpt_tmp->longitude = gbfgetdbl(mapsend_file_in);
     wpt_tmp->latitude = -gbfgetdbl(mapsend_file_in);
@@ -270,7 +270,7 @@ mapsend_read(void)
 
 
 static void
-mapsend_waypt_pr(const waypoint* waypointp)
+mapsend_waypt_pr(const Waypoint* waypointp)
 {
   unsigned int c = 0;
   double falt;
@@ -385,7 +385,7 @@ mapsend_noop(const route_head* wp)
 }
 
 static void
-mapsend_route_disp(const waypoint* waypointp)
+mapsend_route_disp(const Waypoint* waypointp)
 {
   unsigned char c;
   QString iconp;
@@ -483,7 +483,7 @@ void mapsend_track_hdr(const route_head* trk)
 
 }
 
-void mapsend_track_disp(const waypoint* wpt)
+void mapsend_track_disp(const Waypoint* wpt)
 {
   unsigned char c;
   int32_t t;

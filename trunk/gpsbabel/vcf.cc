@@ -95,7 +95,7 @@ vcf_print(const char* s)
 }
 
 static void
-vcf_disp(const waypoint* wpt)
+vcf_disp(const Waypoint* wpt)
 {
   int latint, lonint;
 

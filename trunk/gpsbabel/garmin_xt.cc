@@ -255,7 +255,7 @@ format_garmin_xt_proc_strk(void)
   // Process all tracks one by one
   while ((TracksCompleted < NumberOfTracks) && (!gbfeof(fin))) {
     route_head* tmp_track;
-    waypoint*	wpt;
+    Waypoint*	wpt;
     char*	trk_name;
     trk_name = (char*) xmalloc(30);
 
@@ -293,7 +293,7 @@ format_garmin_xt_proc_strk(void)
         // Add point to the track if not the first point
         if (!FirstCoo) {
           //create new waypoint
-          wpt = new waypoint;
+          wpt = new Waypoint;
 
           //populate wpt;
           wpt->latitude = PrevLat;	/* Degrees */
@@ -319,7 +319,7 @@ format_garmin_xt_proc_strk(void)
     format_garmin_xt_decomp_last_ele(Count, &PrevEle, TrackBlock);
 
     //create new waypoint
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     //populate wpt;
     wpt->latitude = PrevLat;	/* Degrees */
@@ -342,7 +342,7 @@ format_garmin_xt_proc_atrk(void)
   uint32_t	Lat=0, Lon=0;
   uint32_t	Tim=0;
   double		LatF = 0, LonF = 0, AltF = 0;
-  waypoint*	wpt;
+  Waypoint*	wpt;
   int		method = 0;
   unsigned char 	buf[3];
   int32_t 	num_trackpoints;
@@ -391,7 +391,7 @@ format_garmin_xt_proc_atrk(void)
     AltF = (double)uu * GARMIN_XT_ELE - 1500;
 
     //create new waypoint
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     //populate wpt;
     wpt->latitude = LatF*180/16777216;	/* Degrees */

@@ -692,14 +692,14 @@ static void Read_AN1_Waypoints(gbfile* f)
   unsigned long count = 0;
   unsigned long i = 0;
   an1_waypoint_record* rec = NULL;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   char* icon = NULL;
   ReadShort(f);
   count = ReadLong(f);
   for (i = 0; i < count; i++) {
     rec = Alloc_AN1_Waypoint();
     Read_AN1_Waypoint(f, rec);
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
 
     if (rec->creation_time) {
       wpt_tmp->SetCreationTime(rec->creation_time);
@@ -736,7 +736,7 @@ static void Read_AN1_Waypoints(gbfile* f)
 }
 
 static void
-Write_One_AN1_Waypoint(const waypoint* wpt)
+Write_One_AN1_Waypoint(const Waypoint* wpt)
 {
   an1_waypoint_record* rec;
   int local;
@@ -847,7 +847,7 @@ static void Read_AN1_Lines(gbfile* f)
   an1_line_record* rec = NULL;
   an1_vertex_record* vert = NULL;
   route_head* rte_head;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
 
   ReadShort(f);
   count = ReadLong(f);
@@ -874,7 +874,7 @@ static void Read_AN1_Lines(gbfile* f)
       Read_AN1_Vertex(f, vert);
 
       /* create route point */
-      wpt_tmp = new waypoint;
+      wpt_tmp = new Waypoint;
       wpt_tmp->latitude = DecodeOrd(vert->lat);
       wpt_tmp->longitude = -DecodeOrd(vert->lon);
       wpt_tmp->shortname = QString().sprintf("\\%5.5lx", rtserial++);
@@ -1005,7 +1005,7 @@ Write_One_AN1_Line(const route_head* rte)
 }
 
 static void
-Write_One_AN1_Vertex(const waypoint* wpt)
+Write_One_AN1_Vertex(const Waypoint* wpt)
 {
   an1_vertex_record* rec;
   int local;

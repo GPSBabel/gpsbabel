@@ -109,7 +109,7 @@ stackfilt_process(void)
     stack = tmp_elt;
     if (opt_copy) {
       QUEUE_FOR_EACH(&(stack->waypts), elem, tmp) {
-        waypt_add(new waypoint(*(waypoint*)elem));
+        waypt_add(new Waypoint(*(Waypoint*)elem));
       }
     }
 
@@ -136,7 +136,7 @@ stackfilt_process(void)
     }
     if (opt_append) {
       QUEUE_FOR_EACH(&(stack->waypts), elem, tmp) {
-        waypt_add((waypoint*)elem);
+        waypt_add((Waypoint*)elem);
       }
       route_append(&(stack->routes));
       route_flush(&(stack->routes));

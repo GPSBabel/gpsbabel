@@ -84,7 +84,7 @@ static int process_data(const unsigned char* data)
   static route_head* track;
   static unsigned char interval;
   time_t finish;
-  waypoint* wpt = NULL;
+  Waypoint* wpt = NULL;
   int i;
 
   if (global_opts.debug_level >= 3) {
@@ -200,7 +200,7 @@ static int process_data(const unsigned char* data)
     break;
 
   case st_sample_alt:
-    wpt = new waypoint;
+    wpt = new Waypoint;
     wpt->latitude = wpt->longitude = 0.0;
     wpt->SetCreationTime(creation);
     creation += interval;

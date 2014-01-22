@@ -348,8 +348,8 @@ process_pmtklox()
   int wordnum;
   int bytenum;
   int fixnum;
-  static waypoint* trkpt;
-  static waypoint* waypt;
+  static Waypoint* trkpt;
+  static Waypoint* waypt;
 
   token = strtok(line, ",");
   if ((token == NULL) || (strcmp(token, "$PMTKLOX") != 0)) {
@@ -436,7 +436,7 @@ process_pmtklox()
     }
 
     if (global_opts.masked_objective & TRKDATAMASK) {
-      trkpt  = new waypoint;
+      trkpt  = new Waypoint;
       trkpt->SetCreationTime(timestamp);
       trkpt->latitude = latitude;
       trkpt->longitude = longitude;
@@ -448,7 +448,7 @@ process_pmtklox()
     }
 
     if (global_opts.masked_objective & WPTDATAMASK) {
-      waypt  = new waypoint;
+      waypt  = new Waypoint;
       waypt->SetCreationTime(timestamp);
       waypt->latitude = latitude;
       waypt->longitude = longitude;

@@ -57,12 +57,12 @@ navitel_read_track(void)
 
   for (i = 0; i < points; i++) {
     int lat, lon;
-    waypoint* wpt;
+    Waypoint* wpt;
 
     lon = gbfgetint32(fin);
     lat = gbfgetint32(fin);
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
     wpt->latitude = GPS_Math_Semi_To_Deg(lat & 0x7FFFFFFF);
     wpt->longitude = GPS_Math_Semi_To_Deg(lon);
 
@@ -87,7 +87,7 @@ navitel_wr_deinit(void)
 }
 
 static void
-navitel_enum_trkpts(const waypoint* wpt)
+navitel_enum_trkpts(const Waypoint* wpt)
 {
   trkpts++;
 }
@@ -99,7 +99,7 @@ navitel_disp_trk_head(const route_head* trk)
 }
 
 static void
-navitel_disp_trkpts(const waypoint* wpt)
+navitel_disp_trkpts(const Waypoint* wpt)
 {
   int lat, lon;
 

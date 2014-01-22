@@ -38,19 +38,19 @@ arglist_t skyforce_args[] = {
 static gbfile* fin, *fout;
 static int rte_num, wpt_num;
 static short_handle short_h;
-static const waypoint* prev_wpt;
+static const Waypoint* prev_wpt;
 
 
-static waypoint*
+static Waypoint*
 skyforce_parse_coords(const char* str)
 {
-  waypoint* wpt;
+  Waypoint* wpt;
 
   if (strlen(str) < 38) {
     fatal(MYNAME ": Incomplete line!\n");
   }
 
-  wpt = new waypoint;
+  wpt = new Waypoint;
 
   wpt->latitude = atof(str + 21);
   if (str[20] == 'S') {
@@ -68,10 +68,10 @@ skyforce_parse_coords(const char* str)
 }
 
 
-static waypoint*
+static Waypoint*
 skyforce_parse_wpt(const char* str, int* rte_num)
 {
-  waypoint* wpt;
+  Waypoint* wpt;
 
   wpt = skyforce_parse_coords(str);
   if (wpt == NULL) {
@@ -91,13 +91,13 @@ skyforce_parse_wpt(const char* str, int* rte_num)
 }
 
 
-static waypoint*
+static Waypoint*
 skyforce_parse_trk(const char* str)
 {
   char buf[15];
   int len;
 
-  waypoint* wpt;
+  Waypoint* wpt;
 
   wpt = skyforce_parse_coords(str);
   if (wpt == NULL) {
@@ -148,7 +148,7 @@ skyforce_head_disp_cb(const route_head* head)
 
 
 static void
-skyforce_waypt_disp_cb(const waypoint* wpt)
+skyforce_waypt_disp_cb(const Waypoint* wpt)
 {
   char buf[75];	/* long enough for all data types */
   double lat, lon;
@@ -261,7 +261,7 @@ skyforce_read(void)
 
   while ((str = gbfgetstr(fin))) {
 
-    waypoint* wpt;
+    Waypoint* wpt;
     int i;
 
     str = lrtrim(str);

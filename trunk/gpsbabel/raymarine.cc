@@ -55,7 +55,7 @@ typedef unsigned long long guid_t;
 
 static inifile_t* fin;
 static gbfile* fout;
-static waypoint** waypt_table;
+static Waypoint** waypt_table;
 static short_handle hshort_wpt, hshort_rte;
 static int waypt_table_sz, waypt_table_ct;
 static int rte_index, rte_wpt_index;
@@ -183,7 +183,7 @@ raymarine_rd_done(void)
 static void
 raymarine_read(void)
 {
-  waypoint* wpt;
+  Waypoint* wpt;
   unsigned int ix;
   unsigned int rx;
 
@@ -207,7 +207,7 @@ raymarine_read(void)
       break;
     }
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
     wpt->shortname = name;
     wpt->latitude = atof(lat);
     wpt->longitude = atof(lon);
@@ -250,7 +250,7 @@ raymarine_read(void)
     for (wx = 0; wx < 0x3FFF; wx++) {
       char buff[32];
       char* str;
-      waypoint* wpt;
+      Waypoint* wpt;
 
       snprintf(buff, sizeof(buff), "Mk%d", wx);
       str = inifile_readstr(fin, sect, buff);
@@ -263,7 +263,7 @@ raymarine_read(void)
         fatal(MYNAME ": No associated waypoint for route point %s (Route %s)!\n",
               str, CSTRc(rte->rte_name));
 
-      route_add_wpt(rte, new waypoint(*wpt));
+      route_add_wpt(rte, new Waypoint(*wpt));
     }
   }
 }
@@ -275,7 +275,7 @@ raymarine_read(void)
 /* make waypoint shortnames unique */
 
 static char
-same_points(const waypoint* A, const waypoint* B)
+same_points(const Waypoint* A, const Waypoint* B)
 {
   return ( /* !!! We are case-sensitive !!! */
 #if NEW_STRINGS
@@ -288,13 +288,13 @@ same_points(const waypoint* A, const waypoint* B)
 }
 
 static void
-register_waypt(const waypoint* ref, const char is_rtept)
+register_waypt(const Waypoint* ref, const char is_rtept)
 {
   int i;
-  waypoint* wpt = (waypoint*) ref;
+  Waypoint* wpt = (Waypoint*) ref;
 
   for (i = 0; i < waypt_table_ct; i++) {
-    waypoint* cmp = waypt_table[i];
+    Waypoint* cmp = waypt_table[i];
 
     if (same_points(wpt, cmp)) {
       wpt->extra_data = cmp->extra_data;
@@ -305,35 +305,35 @@ register_waypt(const waypoint* ref, const char is_rtept)
   if (waypt_table_ct >= waypt_table_sz) {
     waypt_table_sz += 32;
     if (waypt_table) {
-      waypt_table = (waypoint**) xrealloc(waypt_table, waypt_table_sz * sizeof(wpt));
+      waypt_table = (Waypoint**) xrealloc(waypt_table, waypt_table_sz * sizeof(wpt));
     } else {
-      waypt_table = (waypoint**) xmalloc(waypt_table_sz * sizeof(wpt));
+      waypt_table = (Waypoint**) xmalloc(waypt_table_sz * sizeof(wpt));
     }
   }
 
   wpt->extra_data = (void*)mkshort(hshort_wpt, CSTRc(wpt->shortname));
 
-  waypt_table[waypt_table_ct] = (waypoint*)wpt;
+  waypt_table[waypt_table_ct] = (Waypoint*)wpt;
   waypt_table_ct++;
 }
 
 static void
-enum_waypt_cb(const waypoint* wpt)
+enum_waypt_cb(const Waypoint* wpt)
 {
-  register_waypt((waypoint*) wpt, 0);
+  register_waypt((Waypoint*) wpt, 0);
 }
 
 static void
-enum_rtept_cb(const waypoint* wpt)
+enum_rtept_cb(const Waypoint* wpt)
 {
-  register_waypt((waypoint*) wpt, 1);
+  register_waypt((Waypoint*) wpt, 1);
 }
 
 static int
 qsort_cb(const void* a, const void* b)
 {
-  const waypoint* wa = *(waypoint**)a;
-  const waypoint* wb = *(waypoint**)b;
+  const Waypoint* wa = *(Waypoint**)a;
+  const Waypoint* wb = *(Waypoint**)b;
 #if NEW_STRINGS
   return wa->shortname.compare(wb->shortname);
 #else
@@ -342,7 +342,7 @@ qsort_cb(const void* a, const void* b)
 }
 
 static void
-write_waypoint(gbfile* fout, const waypoint* wpt, const int waypt_no, const char* location)
+write_waypoint(gbfile* fout, const Waypoint* wpt, const int waypt_no, const char* location)
 {
   QString notes;
   char* name;
@@ -410,7 +410,7 @@ write_route_head_cb(const route_head* rte)
 }
 
 static void
-write_route_wpt_cb(const waypoint* wpt)
+write_route_wpt_cb(const Waypoint* wpt)
 {
   static const char* items[] = {
     "Cog",
@@ -480,7 +480,7 @@ static void
 raymarine_write(void)
 {
   int i;
-  waypoint* wpt;
+  Waypoint* wpt;
 
   waypt_table_sz = 0;
   waypt_table_ct = 0;
@@ -498,7 +498,7 @@ raymarine_write(void)
 
   /* write out waypoint summary */
   for (i = 0; i < waypt_table_ct; i++) {
-    waypoint* wpt = waypt_table[i];
+    Waypoint* wpt = waypt_table[i];
     write_waypoint(fout, wpt, i, opt_location);
   }
 

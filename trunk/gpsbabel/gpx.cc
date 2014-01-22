@@ -48,7 +48,7 @@ static QXmlStreamAttributes gpx_namespace_attribute;
 
 static QString current_tag;
 
-static waypoint* wpt_tmp;
+static Waypoint* wpt_tmp;
 static UrlLink* link_;
 static int cache_descr_is_html;
 static gpsbabel::File* iqfile;
@@ -490,7 +490,7 @@ tag_gpx(const QXmlStreamAttributes& attr)
 static void
 tag_wpt(const QXmlStreamAttributes& attr)
 {
-  wpt_tmp = new waypoint;
+  wpt_tmp = new Waypoint;
   link_ = new UrlLink;
 
   cur_tag = NULL;
@@ -608,7 +608,7 @@ static void
 tag_log_wpt(const QXmlStreamAttributes& attr)
 {
   /* create a new waypoint */
-  waypoint* lwp_tmp = new waypoint;
+  Waypoint* lwp_tmp = new Waypoint;
 
   /* extract the lat/lon attributes */
   if (attr.hasAttribute("lat")) {
@@ -1334,7 +1334,7 @@ write_tag_attributes(xml_tag* tag)
 }
 
 static void
-fprint_xml_chain(xml_tag* tag, const waypoint* wpt)
+fprint_xml_chain(xml_tag* tag, const Waypoint* wpt)
 {
   while (tag) {
     writer->writeStartElement(tag->tagname);
@@ -1397,7 +1397,7 @@ void free_gpx_extras(xml_tag* tag)
  * Handle the grossness of GPX 1.0 vs. 1.1 handling of linky links.
  */
 static void
-write_gpx_url(const waypoint* waypointp)
+write_gpx_url(const Waypoint* waypointp)
 {
   if (!waypointp->HasUrlLink()) {
     return;
@@ -1423,7 +1423,7 @@ write_gpx_url(const waypoint* waypointp)
  * Order counts.
  */
 static void
-gpx_write_common_acc(const waypoint* waypointp)
+gpx_write_common_acc(const Waypoint* waypointp)
 {
   const char* fix = NULL;
 
@@ -1468,7 +1468,7 @@ gpx_write_common_acc(const waypoint* waypointp)
 
 
 static void
-gpx_write_common_position(const waypoint* waypointp)
+gpx_write_common_position(const Waypoint* waypointp)
 {
   if (waypointp->altitude != unknown_alt) {
     writer->writeTextElement("ele", QString::number(waypointp->altitude, 'f', 6));
@@ -1478,7 +1478,7 @@ gpx_write_common_position(const waypoint* waypointp)
 }
 
 static void
-gpx_write_common_extensions(const waypoint* waypointp, const gpx_point_type point_type)
+gpx_write_common_extensions(const Waypoint* waypointp, const gpx_point_type point_type)
 {
   // gpx version we are writing is >= 1.1.
   if ((opt_humminbirdext && (WAYPT_HAS(waypointp, depth) || WAYPT_HAS(waypointp, temperature))) ||
@@ -1546,7 +1546,7 @@ gpx_write_common_extensions(const waypoint* waypointp, const gpx_point_type poin
 }
 
 static void
-gpx_write_common_description(const waypoint* waypointp, QString oname)
+gpx_write_common_description(const Waypoint* waypointp, QString oname)
 {
   writer->writeOptionalTextElement("name", oname);
 
@@ -1566,7 +1566,7 @@ gpx_write_common_description(const waypoint* waypointp, QString oname)
 }
 
 static void
-gpx_waypt_pr(const waypoint* waypointp)
+gpx_waypt_pr(const Waypoint* waypointp)
 {
   QString oname;
   fs_xml* fs_gpx;
@@ -1630,7 +1630,7 @@ gpx_track_hdr(const route_head* rte)
 }
 
 static void
-gpx_track_disp(const waypoint* waypointp)
+gpx_track_disp(const Waypoint* waypointp)
 {
   fs_xml* fs_gpx;
   int first_in_trk;
@@ -1727,7 +1727,7 @@ gpx_route_hdr(const route_head* rte)
 }
 
 static void
-gpx_route_disp(const waypoint* waypointp)
+gpx_route_disp(const Waypoint* waypointp)
 {
 #if NEW_STRINGS 
   QString oname;
@@ -1771,7 +1771,7 @@ void gpx_route_pr()
 }
 
 static void
-gpx_waypt_bound_calc(const waypoint* waypointp)
+gpx_waypt_bound_calc(const Waypoint* waypointp)
 {
   waypt_add_to_bounds(&all_bounds, waypointp);
 }

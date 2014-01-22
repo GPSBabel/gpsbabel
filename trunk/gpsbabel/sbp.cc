@@ -83,7 +83,7 @@ read_sbp_header(route_head* track)
   }
 }
 
-static waypoint*
+static Waypoint*
 read_logpoint(void)
 {
   unsigned char buffer[SBP_RECORD_LEN];
@@ -99,7 +99,7 @@ static void
 sbp_read(void)
 {
   if (global_opts.masked_objective & TRKDATAMASK) {
-    waypoint* logpoint;
+    Waypoint* logpoint;
     route_head*     track;
 
     track = route_head_alloc();

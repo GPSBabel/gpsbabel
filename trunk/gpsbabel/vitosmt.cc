@@ -77,7 +77,7 @@ vitosmt_read(void)
   long			check2			=-2;
   long			check3			=-3;
   route_head*		route_head		=0;
-  waypoint*		wpt_tmp		=0;
+  Waypoint*		wpt_tmp		=0;
   double			latrad			=0;
   double			lonrad			=0;
   double			elev			=0;
@@ -154,7 +154,7 @@ vitosmt_read(void)
     gpsvalid	=gbfgetc(infile);	/* fix is valid */
     gpssats		=gbfgetc(infile);	/* number of sats */
 
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
 
     wpt_tmp->latitude	=DEG(latrad);
     wpt_tmp->longitude	=DEG(lonrad);
@@ -241,7 +241,7 @@ wr_deinit(void)
 }
 
 static void
-vitosmt_waypt_pr(const waypoint* waypointp)
+vitosmt_waypt_pr(const Waypoint* waypointp)
 {
   unsigned char* 	workbuffer		=0;
   size_t			position		=0;

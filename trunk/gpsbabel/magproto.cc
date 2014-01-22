@@ -111,7 +111,7 @@ static int is_file = 0;
 static route_head* trk_head;
 static int ignore_unable;
 
-static waypoint* mag_wptparse(char*);
+static Waypoint* mag_wptparse(char*);
 typedef QString (cleanse_fn)(const char*);
 static cleanse_fn* mag_cleanse;
 static const char** os_get_magellan_mountpoints();
@@ -487,7 +487,7 @@ retry:
     return;
   }
   if (strncmp(ibuf, "$PMGNWPL,", 7) == 0) {
-    waypoint* wpt = mag_wptparse(ibuf);
+    Waypoint* wpt = mag_wptparse(ibuf);
     waypoint_read_count++;
     if (global_opts.verbose_status) {
       waypt_status_disp(waypoint_read_count,
@@ -514,7 +514,7 @@ retry:
     }
   }
   if (strncmp(ibuf, "$PMGNTRK,", 7) == 0) {
-    waypoint* wpt = mag_trkparse(ibuf);
+    Waypoint* wpt = mag_trkparse(ibuf);
     /*
      * Allow lazy allocation of track head.
      */
@@ -961,7 +961,7 @@ void parse_istring(char* istring)
  * $PMGNTRK,3605.259,N,08644.389,W,00151,M,201444.61,A,,020302*66
  * create and return a populated waypoint.
  */
-waypoint*
+Waypoint*
 mag_trkparse(char* trkmsg)
 {
   double latdeg, lngdeg;
@@ -972,9 +972,9 @@ mag_trkparse(char* trkmsg)
   int hms;
   int fracsecs;
   struct tm tm;
-  waypoint* waypt;
+  Waypoint* waypt;
 
-  waypt  = new waypoint;
+  waypt  = new Waypoint;
 
   memset(&tm, 0, sizeof(tm));
 
@@ -1142,20 +1142,20 @@ mag_rteparse(char* rtemsg)
 
     QUEUE_FOR_EACH(&mag_rte_head->Q, elem, tmp) {
       mag_rte_elem* re = (mag_rte_elem*) elem;
-      waypoint* waypt;
+      Waypoint* waypt;
       queue* welem, *wtmp;
 
       /*
        * Copy route points from temp wpt queue.
        */
       QUEUE_FOR_EACH(&rte_wpt_tmp, welem, wtmp) {
-        waypt = (waypoint*)welem;
+        waypt = (Waypoint*)welem;
 #if NEW_STRINGS
         if (waypt->shortname == re->wpt_name) {
 #else
         if (strcmp(waypt->shortname, re->wpt_name) == 0) {
 #endif
-          waypoint* wpt = new waypoint(*waypt);
+          Waypoint* wpt = new Waypoint(*waypt);
           route_add_wpt(rte_head, wpt);
           break;
         }
@@ -1215,7 +1215,7 @@ mag_find_token_from_descr(const QString& icon)
  * $PMGNWPL,3549.499,N,08650.827,W,0000257,M,HOME,HOME,c*4D
  * create and return a populated waypoint.
  */
-static waypoint*
+static Waypoint*
 mag_wptparse(char* trkmsg)
 {
   double latdeg, lngdeg;
@@ -1226,7 +1226,7 @@ mag_wptparse(char* trkmsg)
   char shortname[100];
   char descr[256];
   char icon_token[100];
-  waypoint* waypt;
+  Waypoint* waypt;
   char* icons;
   char* icone;
   char* blah;
@@ -1235,7 +1235,7 @@ mag_wptparse(char* trkmsg)
   descr[0] = 0;
   icon_token[0] = 0;
 
-  waypt  = new waypoint;
+  waypt  = new Waypoint;
 
   sscanf(trkmsg,"$PMGNWPL,%lf,%c,%lf,%c,%d,%c,%[^,],%[^,]",
          &latdeg,&latdir,
@@ -1355,7 +1355,7 @@ mag_read(void)
 
 static
 void
-mag_waypt_pr(const waypoint* waypointp)
+mag_waypt_pr(const Waypoint* waypointp)
 {
   double lon, lat;
   double ilon, ilat;
@@ -1453,7 +1453,7 @@ void mag_track_nop(const route_head*)
 }
 
 static
-void mag_track_disp(const waypoint* waypointp)
+void mag_track_disp(const Waypoint* waypointp)
 {
   double ilon, ilat;
   double lon, lat;
@@ -1527,7 +1527,7 @@ static void
 mag_route_trl(const route_head* rte)
 {
   queue* elem, *tmp;
-  waypoint* waypointp;
+  Waypoint* waypointp;
   char obuff[256];
   char buff1[64], buff2[64];
   char* pbuff, *owpt;
@@ -1545,7 +1545,7 @@ mag_route_trl(const route_head* rte)
 
   thisline = i = 0;
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    waypointp = (waypoint*) elem;
+    waypointp = (Waypoint*) elem;
     i++;
 
     if (deficon) {

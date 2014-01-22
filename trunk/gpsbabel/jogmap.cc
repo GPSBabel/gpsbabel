@@ -52,7 +52,7 @@ jogmap_markers(xg_string args, const QXmlStreamAttributes* attrv)
 static void
 jogmap_marker(xg_string args, const QXmlStreamAttributes* attrv)
 {
-  waypoint* wpt = new waypoint;
+  Waypoint* wpt = new Waypoint;
 
   if (attrv->hasAttribute("lat")) {
     wpt->latitude = attrv->value("lat").toString().toDouble();

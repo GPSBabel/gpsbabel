@@ -27,7 +27,7 @@
 static gbfile* ofd;
 static int lap_ct = 0;
 static int lap_s = 0;
-static waypoint* wpt_tmp;
+static Waypoint* wpt_tmp;
 static route_head* trk_head;
 static computed_trkdata* tdata;
 
@@ -255,7 +255,7 @@ gtc_new_study_lap(const route_head* rte)
 }
 
 static void
-gtc_study_lap(const waypoint* wpt)
+gtc_study_lap(const Waypoint* wpt)
 {
   if (wpt->creation_time.isValid() && (!gtc_least_time.isValid())) {
     gtc_least_time = wpt->GetCreationTime();
@@ -276,7 +276,7 @@ gtc_study_lap(const waypoint* wpt)
 }
 
 static void
-gtc_waypt_pr(const waypoint* wpt)
+gtc_waypt_pr(const Waypoint* wpt)
 {
   if (wpt->wpt_flags.is_split != 0) {
     gtc_write_xml(1, "<Trackpoint split=\"yes\">\n");
@@ -493,7 +493,7 @@ gtc_trk_lap_e(xg_string unused, const QXmlStreamAttributes* unusedattrs)
 void
 gtc_trk_pnt_s(xg_string unused, const QXmlStreamAttributes* unusedattrs)
 {
-  wpt_tmp = new waypoint;
+  wpt_tmp = new Waypoint;
 }
 
 void
@@ -504,7 +504,7 @@ gtc_trk_pnt_e(xg_string args, const QXmlStreamAttributes* unused)
       /* Add the first point of an ActivityLap as
       a waypoint as well as a trackpoint. */
       char cbuf[10];
-      waypoint* wpt_lap_s = new waypoint(*wpt_tmp);
+      Waypoint* wpt_lap_s = new Waypoint(*wpt_tmp);
       snprintf(cbuf, sizeof(cbuf), "LAP%03d", lap_ct);
       wpt_lap_s->shortname = cbuf;
       waypt_add(wpt_lap_s);
@@ -626,7 +626,7 @@ gtc_wpt_crs_s(const QString& args, const QXmlStreamAttributes* unused)
 gtc_wpt_crs_s(const char* unused, const QXmlStreamAttributes* unusedattrs)
 #endif
 {
-  wpt_tmp = new waypoint;
+  wpt_tmp = new Waypoint;
 }
 
 void
@@ -644,7 +644,7 @@ gtc_wpt_crs_e(xg_string args, const QXmlStreamAttributes* unused)
 void
 gtc_wpt_pnt_s(xg_string unused, const QXmlStreamAttributes* unusedattrs)
 {
-  wpt_tmp = new waypoint;
+  wpt_tmp = new Waypoint;
   lap_ct++;
 }
 

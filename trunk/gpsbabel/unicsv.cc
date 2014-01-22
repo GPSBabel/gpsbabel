@@ -633,7 +633,7 @@ static void
 unicsv_parse_one_line(char* ibuf)
 {
   char* s;
-  waypoint* wpt = NULL;
+  Waypoint* wpt = NULL;
   int column;
   int  utm_zone = -9999;
   double utm_easting = 0;
@@ -655,7 +655,7 @@ unicsv_parse_one_line(char* ibuf)
   int ns = 1;
   int ew = 1;
   geocache_data* gc_data = NULL;
-  wpt = new waypoint;
+  wpt = new Waypoint;
   wpt->latitude = unicsv_unknown;
   wpt->longitude = unicsv_unknown;
   memset(&ymd, 0, sizeof(ymd));
@@ -1238,7 +1238,7 @@ unicsv_rd(void)
 /* =========================================================================== */
 
 static void
-unicsv_fatal_outside(const waypoint* wpt)
+unicsv_fatal_outside(const Waypoint* wpt)
 {
   gbfprintf(fout, "#####\n");
   fatal(MYNAME ": %s (%s) is outside of convertable area of grid \"%s\"!\n",
@@ -1287,7 +1287,7 @@ unicsv_print_data_time(const QDateTime& idt)
 #define FIELD_USED(a) (gb_getbit(&unicsv_outp_flags, a))
 
 static void
-unicsv_waypt_enum_cb(const waypoint* wpt)
+unicsv_waypt_enum_cb(const Waypoint* wpt)
 {
   garmin_fs_t* gmsd;
 
@@ -1448,7 +1448,7 @@ unicsv_waypt_enum_cb(const waypoint* wpt)
 }
 
 static void
-unicsv_waypt_disp_cb(const waypoint* wpt)
+unicsv_waypt_disp_cb(const Waypoint* wpt)
 {
   double lat, lon, alt;
   char* cout = NULL;

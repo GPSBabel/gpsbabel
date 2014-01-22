@@ -80,13 +80,13 @@ arglist_t fix_args[] = {
  * Decide whether to keep or toss this point.
  */
 static void
-fix_process_wpt(const waypoint* wpt)
+fix_process_wpt(const Waypoint* wpt)
 {
   int del = 0;
   int delh = 0;
   int delv = 0;
 
-  waypoint* waypointp = (waypoint*) wpt;
+  Waypoint* waypointp = (Waypoint*) wpt;
 
   if ((hdopf >= 0.0) && (waypointp->hdop > hdopf)) {
     delh = 1;

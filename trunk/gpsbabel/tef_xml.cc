@@ -28,7 +28,7 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 
-static waypoint* wpt_tmp;
+static Waypoint* wpt_tmp;
 static int item_count;
 static int waypoints;
 static double version;
@@ -211,7 +211,7 @@ waypoint_final()
 
   if (route != NULL) {
     if ((via != 0) || (routevia == NULL)) {
-      waypoint* wpt = new waypoint(*wpt_tmp);
+      Waypoint* wpt = new Waypoint(*wpt_tmp);
       route_add_wpt(route, wpt);
     }
   }
@@ -243,7 +243,7 @@ tef_item_start(xg_string args, const QXmlStreamAttributes* attrv)
 {
   waypoints++;
 
-  wpt_tmp = new waypoint;
+  wpt_tmp = new Waypoint;
   if ((waypoints == 1) || (waypoints == item_count)) {
     wpt_tmp->wpt_flags.fmt_use ++;
   }

@@ -46,7 +46,7 @@ static int waypt_uid;
 static int route_uid;
 static int track_uid;
 
-static waypoint** waypt_table;
+static Waypoint** waypt_table;
 static int waypt_table_sz, waypt_table_ct;
 
 static char* opt_title;
@@ -282,7 +282,7 @@ lowranceusr4_alloc_fsdata(void)
 
 /* make waypoint shortnames unique */
 static char
-same_points(const waypoint* A, const waypoint* B)
+same_points(const Waypoint* A, const Waypoint* B)
 {
   return ( /* !!! We are case-sensitive !!! */
 #if NEW_STRINGS
@@ -295,13 +295,13 @@ same_points(const waypoint* A, const waypoint* B)
 }
 
 static void
-register_waypt(const waypoint* ref)
+register_waypt(const Waypoint* ref)
 {
   int i;
-  waypoint* wpt = (waypoint*) ref;
+  Waypoint* wpt = (Waypoint*) ref;
 
   for (i = 0; i < waypt_table_ct; i++) {
-    waypoint* cmp = waypt_table[i];
+    Waypoint* cmp = waypt_table[i];
 
     if (same_points(wpt, cmp)) {
       return;
@@ -311,9 +311,9 @@ register_waypt(const waypoint* ref)
   if (waypt_table_ct >= waypt_table_sz) {
     waypt_table_sz += 32;
     if (waypt_table) {
-      waypt_table = (waypoint**) xrealloc(waypt_table, waypt_table_sz * sizeof(wpt));
+      waypt_table = (Waypoint**) xrealloc(waypt_table, waypt_table_sz * sizeof(wpt));
     } else {
-      waypt_table = (waypoint**) xmalloc(waypt_table_sz * sizeof(wpt));
+      waypt_table = (Waypoint**) xmalloc(waypt_table_sz * sizeof(wpt));
     }
   }
 
@@ -322,18 +322,18 @@ register_waypt(const waypoint* ref)
            CSTRc(wpt->shortname), CSTRc(wpt->description), waypt_table_ct);
   }
 
-  waypt_table[waypt_table_ct] = (waypoint*)wpt;
+  waypt_table[waypt_table_ct] = (Waypoint*)wpt;
   waypt_table_ct++;
 }
 
 /* end borrowed from raymarine.c */
 
 static int
-lowranceusr4_find_waypt_index(const waypoint* wpt)
+lowranceusr4_find_waypt_index(const Waypoint* wpt)
 {
   int i;
   for (i = 0; i < waypt_table_ct; ++i) {
-    if (same_points(wpt, (const waypoint*)waypt_table[i])) {
+    if (same_points(wpt, (const Waypoint*)waypt_table[i])) {
       return i;
     }
   }
@@ -357,9 +357,9 @@ lowranceusr4_parse_waypoints(void)
   }
 
   for (i = 0; i < num_waypts; ++i) {
-    waypoint* wpt_tmp;
+    Waypoint* wpt_tmp;
 
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
     lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
     fs_chain_add(&(wpt_tmp->fs), (format_specific_data*) fsdata);
 
@@ -470,15 +470,15 @@ lowranceusr4_parse_waypoints(void)
   }
 }
 
-static waypoint*
+static Waypoint*
 lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
 {
   queue* elem, *tmp;
-  waypoint* waypointp;
+  Waypoint* waypointp;
   lowranceusr4_fsdata* fs = NULL;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (waypoint*) elem;
+    waypointp = (Waypoint*) elem;
     fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
 
     if (fs && fs->uid_unit == uid_unit &&
@@ -501,7 +501,7 @@ lowranceusr4_parse_routes(void)
   unsigned int num_routes, i, j, text_len;
   unsigned int num_legs;
   char buff[MAXUSRSTRINGSIZE + 1];
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   unsigned int uid_unit, uid_seq_low, uid_seq_high;
 
   num_routes = gbfgetint32(file_in);
@@ -564,7 +564,7 @@ lowranceusr4_parse_routes(void)
           printf(MYNAME " parse_routes: added wpt %s to route %s\n",
                  CSTRc(wpt_tmp->shortname), CSTRc(rte_head->rte_name));
         }
-        route_add_wpt(rte_head, new waypoint(*wpt_tmp));
+        route_add_wpt(rte_head, new Waypoint(*wpt_tmp));
       }
     }
 
@@ -578,7 +578,7 @@ lowranceusr4_parse_trails(void)
 {
   int num_trails, num_trail_pts, M, i, j, k, trk_num, text_len;
   char buff[MAXUSRSTRINGSIZE + 1];
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
 
   /* num trails */
   num_trails = gbfgetint32(file_in);
@@ -683,7 +683,7 @@ lowranceusr4_parse_trails(void)
     }
 
     for (j = 0; j < num_trail_pts; ++j) {
-      wpt_tmp = new waypoint;
+      wpt_tmp = new Waypoint;
 
       /* Some unknown bytes */
       gbfgetint16(file_in);
@@ -773,7 +773,7 @@ data_read(void)
 
 
 static void
-lowranceusr4_waypt_disp(const waypoint* wpt)
+lowranceusr4_waypt_disp(const Waypoint* wpt)
 {
   /* UID unit number */
   gbfputint32(opt_serialnum_i, file_out);
@@ -850,7 +850,7 @@ lowranceusr4_write_waypoints(void)
       printf(MYNAME " writing out waypt %d (%s - %s)\n",
              i, CSTRc(waypt_table[i]->shortname), CSTRc(waypt_table[i]->description));
     }
-    lowranceusr4_waypt_disp((const waypoint*)waypt_table[i]);
+    lowranceusr4_waypt_disp((const Waypoint*)waypt_table[i]);
   }
 }
 
@@ -880,7 +880,7 @@ lowranceusr4_write_route_hdr(const route_head* rte)
 }
 
 static void
-lowranceusr4_write_wpt_uids(const waypoint* wpt)
+lowranceusr4_write_wpt_uids(const Waypoint* wpt)
 {
   int waypt_idx;
 
@@ -976,7 +976,7 @@ lowranceusr4_write_track_hdr(const route_head* trk)
 }
 
 static void
-lowranceusr4_write_track_waypt(const waypoint* wpt)
+lowranceusr4_write_track_waypt(const Waypoint* wpt)
 {
   /* Some unknown bytes */
   gbfputint16(0, file_out);

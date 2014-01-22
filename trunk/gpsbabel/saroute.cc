@@ -132,7 +132,7 @@ my_read(void)
   uint16_t coordcount;
   route_head* track_head = NULL;
   route_head* old_track_head = NULL;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   char* routename = NULL;
   double seglen = 0.0;
   int32_t  starttime = 0;
@@ -205,7 +205,7 @@ my_read(void)
       lon = (0x80000000UL -
              le_read32(&latlon->lat)) / (double)(0x800000);
 
-      wpt_tmp = new waypoint;
+      wpt_tmp = new Waypoint;
       wpt_tmp->latitude = lat;
       wpt_tmp->longitude = -lon;
       if (control) {
@@ -363,7 +363,7 @@ my_read(void)
         double lat;
         double lon;
 
-        wpt_tmp = new waypoint;
+        wpt_tmp = new Waypoint;
 
         lat = (0x80000000UL -
                le_read32(&latlon->lat)) /
@@ -425,10 +425,10 @@ my_read(void)
           if (old_track_head) {
             if (timesynth) {
               track_add_wpt(old_track_head,
-                            new waypoint(*wpt_tmp));
+                            new Waypoint(*wpt_tmp));
             } else {
               route_add_wpt(old_track_head,
-                            new waypoint(*wpt_tmp));
+                            new Waypoint(*wpt_tmp));
             }
             old_track_head = NULL;
           }

@@ -27,7 +27,7 @@
 #include "jeeps/gpsmath.h"
 #include "garmin_tables.h"
 
-static waypoint* wpt;
+static Waypoint* wpt;
 static route_head* trk;
 static gbfile* fout;
 static int space;
@@ -70,7 +70,7 @@ xol_shape(xg_string args, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("type")) {
     if (attrv->value("type") == "waypoint") {
-      wpt = new waypoint;
+      wpt = new Waypoint;
     } else if (attrv->value("type") == "polyline") {
       trk = route_head_alloc();
       track_add_head(trk);
@@ -162,7 +162,7 @@ xol_rd_deinit(void)
 /* writer */
 
 static void
-xol_fatal_outside(const waypoint* wpt)
+xol_fatal_outside(const Waypoint* wpt)
 {
   gbfprintf(fout, "#####\n");
   fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
@@ -177,7 +177,7 @@ xol_fatal_outside(const waypoint* wpt)
 
 
 static void
-xol_write_time(const waypoint* wpt)
+xol_write_time(const Waypoint* wpt)
 {
   QString time_string = wpt->CreationTimeXML();
   if (!time_string.isEmpty()) {
@@ -195,7 +195,7 @@ xol_write_string(const QString& name, const QString& str)
 }
 
 static void
-xol_waypt_bound_calc(const waypoint* wpt)
+xol_waypt_bound_calc(const Waypoint* wpt)
 {
   waypt_add_to_bounds(&all_bounds, wpt);
 }
@@ -226,7 +226,7 @@ xol_wr_deinit(void)
 }
 
 static void
-xol_waypt_disp_cb(const waypoint* wpt)
+xol_waypt_disp_cb(const Waypoint* wpt)
 {
   double x, y;
 
@@ -276,7 +276,7 @@ xol_track_tlr_disp_cb(const route_head* trk)
 }
 
 static void
-xol_trkpt_disp_cb(const waypoint* wpt)
+xol_trkpt_disp_cb(const Waypoint* wpt)
 {
   double x, y;
 

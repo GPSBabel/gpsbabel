@@ -213,7 +213,7 @@ decode_sbn_mode(const unsigned char* mode)
 }
 
 static void
-decode_sbn_datetime(const unsigned char* buffer, waypoint* waypt)
+decode_sbn_datetime(const unsigned char* buffer, Waypoint* waypt)
 {
   struct tm tm;
   int ms = be_readu16(buffer + 6);
@@ -229,18 +229,18 @@ decode_sbn_datetime(const unsigned char* buffer, waypoint* waypt)
 }
 
 static void
-decode_sbn_position(const unsigned char* buffer, waypoint* waypt)
+decode_sbn_position(const unsigned char* buffer, Waypoint* waypt)
 {
   waypt->latitude = be_read32(buffer + 0) * 0.0000001;
   waypt->longitude = be_read32(buffer + 4) * 0.0000001;
   waypt->altitude = be_read32(buffer + 12) * 0.01;
 }
 
-static waypoint*
+static Waypoint*
 decode_sbn_record(unsigned char* buffer)
 {
-  waypoint* waypt = NULL;
-  waypt = new waypoint;
+  Waypoint* waypt = NULL;
+  waypt = new Waypoint;
 
   if (is_sbn_valid(buffer)) {
     waypt->fix = decode_sbn_mode(buffer + 3);

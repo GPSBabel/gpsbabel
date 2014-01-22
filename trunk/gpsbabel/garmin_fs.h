@@ -122,9 +122,9 @@ void garmin_fs_convert(void* fs);
 char* garmin_fs_xstrdup(const char* src, size_t size);
 
 /* for GPX */
-void garmin_fs_xml_convert(const int base_tag, int tag, const QString& cdatastr, waypoint* waypt);
+void garmin_fs_xml_convert(const int base_tag, int tag, const QString& cdatastr, Waypoint* waypt);
 class QXmlStreamWriter;
-void garmin_fs_xml_fprint(const waypoint* waypt, QXmlStreamWriter*);
+void garmin_fs_xml_fprint(const Waypoint* waypt, QXmlStreamWriter*);
 
 /* common garmin_fs utilities */
 
@@ -132,11 +132,11 @@ void garmin_fs_xml_fprint(const waypoint* waypt, QXmlStreamWriter*);
 unsigned char garmin_fs_convert_category(const char* category_name, uint16_t* category);
 
 /* ..merge_category: returns 1=OK; 0=Unable to convert category */
-unsigned char garmin_fs_merge_category(const char* category_name, waypoint* waypt);
+unsigned char garmin_fs_merge_category(const char* category_name, Waypoint* waypt);
 
 #define GMSD_SECTION_CATEGORIES "Garmin Categories"
 
-void garmin_fs_garmin_after_read(const GPS_PWay way, waypoint* wpt, const int protoid);
-void garmin_fs_garmin_before_write(const waypoint* wpt, GPS_PWay way, const int protoid);
+void garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid);
+void garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int protoid);
 
 #endif

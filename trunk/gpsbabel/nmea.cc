@@ -153,8 +153,8 @@ static route_head* trk_head;
 static short_handle mkshort_handle;
 static preferred_posn_type posn_type;
 static struct tm tm;
-static waypoint* curr_waypt;
-static waypoint* last_waypt;
+static Waypoint* curr_waypt;
+static Waypoint* last_waypt;
 static void* gbser_handle;
 static const char* posn_fname;
 static queue pcmpt_head;
@@ -187,7 +187,7 @@ static double last_read_time;   /* Last timestamp of GGA or PRMC */
 static int datum;
 static int had_checksum;
 
-static waypoint* nmea_rd_posn(posn_status*);
+static Waypoint* nmea_rd_posn(posn_status*);
 static void nmea_rd_posn_init(const char* fname);
 
 arglist_t nmea_args[] = {
@@ -227,7 +227,7 @@ nmea_cksum(const char* const buf)
 }
 
 static void
-nmea_add_wpt(waypoint* wpt, route_head* trk)
+nmea_add_wpt(Waypoint* wpt, route_head* trk)
 {
   if (datum != DATUM_WGS84) {
     double lat, lon, alt;
@@ -245,7 +245,7 @@ nmea_add_wpt(waypoint* wpt, route_head* trk)
 }
 
 static void
-nmea_release_wpt(waypoint* wpt)
+nmea_release_wpt(Waypoint* wpt)
 {
   if (wpt && ((wpt->Q.next == NULL) || (wpt->Q.next == &wpt->Q))) {
     /* This waypoint isn't queued.
@@ -280,7 +280,7 @@ nmea_rd_init(const char* fname)
    * it as one waypoint.
    */
   if (getposn) {
-    waypoint* wpt;
+    Waypoint* wpt;
     posn_status st;
     nmea_rd_posn_init(fname);
     wpt = nmea_rd_posn(&st);
@@ -353,7 +353,7 @@ nmea_wr_deinit(void)
 }
 
 static void
-nmea_set_waypoint_time(waypoint* wpt, struct tm* time, double fsec)
+nmea_set_waypoint_time(Waypoint* wpt, struct tm* time, double fsec)
 {
   if (time->tm_year == 0) {
     wpt->SetCreationTime(((((time_t)time->tm_hour * 60) + time->tm_min) * 60) + time->tm_sec, lround(1000.0 * fsec));
@@ -379,7 +379,7 @@ gpgll_parse(char* ibuf)
   double hmsd;
   int hms;
   char valid = 0;
-  waypoint* waypt;
+  Waypoint* waypt;
 
   if (trk_head == NULL) {
     trk_head = route_head_alloc();
@@ -405,7 +405,7 @@ gpgll_parse(char* ibuf)
   hms = hms / 100;
   tm.tm_hour = hms % 100;
 
-  waypt = new waypoint;
+  waypt = new Waypoint;
 
   nmea_set_waypoint_time(waypt, &tm, fsec);
 
@@ -434,7 +434,7 @@ gpgga_parse(char* ibuf)
   int nsats = 0;
   double hdop;
   char altunits;
-  waypoint* waypt;
+  Waypoint* waypt;
   double fsec;
 
   if (trk_head == NULL) {
@@ -466,7 +466,7 @@ gpgga_parse(char* ibuf)
   hms = hms / 100;
   tm.tm_hour = (long) hms % 100;
 
-  waypt  = new waypoint;
+  waypt  = new Waypoint;
 
   nmea_set_waypoint_time(waypt, &tm, fsec);
 
@@ -514,7 +514,7 @@ gprmc_parse(char* ibuf)
   char fix;
   unsigned int dmy;
   double speed,course;
-  waypoint* waypt;
+  Waypoint* waypt;
   double fsec;
   char* dmybuf;
   int i;
@@ -581,13 +581,13 @@ gprmc_parse(char* ibuf)
     }
     /* This point is both a waypoint and a trackpoint. */
     if (amod_waypoint) {
-      waypt_add(new waypoint(*curr_waypt));
+      waypt_add(new Waypoint(*curr_waypt));
       amod_waypoint = 0;
     }
     return;
   }
 
-  waypt  = new waypoint;
+  waypt  = new Waypoint;
 
   WAYPT_SET(waypt, speed, KNOTS_TO_MPS(speed));
 
@@ -610,7 +610,7 @@ gprmc_parse(char* ibuf)
 
   /* This point is both a waypoint and a trackpoint. */
   if (amod_waypoint) {
-    waypt_add(new waypoint(*waypt));
+    waypt_add(new Waypoint(*waypt));
     amod_waypoint = 0;
   }
 }
@@ -618,7 +618,7 @@ gprmc_parse(char* ibuf)
 static void
 gpwpl_parse(char* ibuf)
 {
-  waypoint* waypt;
+  Waypoint* waypt;
   double latdeg, lngdeg;
   char latdir, lngdir;
   char sname[99];
@@ -628,7 +628,7 @@ gpwpl_parse(char* ibuf)
          &lngdeg,&lngdir,
          sname);
 
-  waypt  = new waypoint;
+  waypt  = new Waypoint;
 
   if (latdir == 'S') {
     latdeg = -latdeg;
@@ -800,7 +800,7 @@ pcmpt_parse(char* ibuf)
   }
 
   if (lat || lon) {
-    curr_waypt = new waypoint;
+    curr_waypt = new Waypoint;
     curr_waypt->longitude = pcmpt_deg(lon);
     curr_waypt->latitude = pcmpt_deg(lat);
 
@@ -833,7 +833,7 @@ pcmpt_parse(char* ibuf)
     trk_head = route_head_alloc();
     track_add_head(trk_head);
     QUEUE_FOR_EACH(&pcmpt_head, elem, tmp) {
-      waypoint* wpt = (waypoint*) dequeue(elem);
+      Waypoint* wpt = (Waypoint*) dequeue(elem);
       nmea_add_wpt(wpt, trk_head);
     }
   }
@@ -848,7 +848,7 @@ nmea_fix_timestamps(route_head* track)
 
   if (tm.tm_year == 0) {
     queue* elem, *temp;
-    waypoint* prev = NULL;
+    Waypoint* prev = NULL;
     time_t delta_tm;
 
     if (optdate == NULL) {
@@ -860,7 +860,7 @@ nmea_fix_timestamps(route_head* track)
     delta_tm = mkgmtime(&opt_tm);
 
     QUEUE_FOR_EACH(&track->waypoint_list, elem, temp) {
-      waypoint* wpt = (waypoint*)elem;
+      Waypoint* wpt = (Waypoint*)elem;
 
       wpt->creation_time += delta_tm;
       if ((prev != NULL) && (prev->creation_time > wpt->creation_time)) {	/* go over midnight ? */
@@ -882,7 +882,7 @@ nmea_fix_timestamps(route_head* track)
     /* go backward through the track and complete timestamps */
 
     for (elem = QUEUE_LAST(&track->waypoint_list); elem != &track->waypoint_list; elem=elem->prev) {
-      waypoint* wpt = (waypoint*)elem;
+      Waypoint* wpt = (Waypoint*)elem;
 
       if (wpt->wpt_flags.fmt_use != 0) {
         time_t dt;
@@ -1162,7 +1162,7 @@ int hunt_sirf(void)
   return 0;
 }
 
-static waypoint*
+static Waypoint*
 nmea_rd_posn(posn_status* posn_status)
 {
   char ibuf[1024];
@@ -1204,7 +1204,7 @@ nmea_rd_posn(posn_status* posn_status)
     nmea_parse_one_line(ibuf);
     if (lt != last_read_time) {
       if (last_read_time) {
-        waypoint* w = curr_waypt;
+        Waypoint* w = curr_waypt;
 
         lt = last_read_time;
         curr_waypt = NULL;
@@ -1217,7 +1217,7 @@ nmea_rd_posn(posn_status* posn_status)
 }
 
 static void
-nmea_wayptpr(const waypoint* wpt)
+nmea_wayptpr(const Waypoint* wpt)
 {
   char obuf[200];
   double lat,lon;
@@ -1257,7 +1257,7 @@ nmea_track_init(const route_head* rte)
 }
 
 void
-nmea_trackpt_pr(const waypoint* wpt)
+nmea_trackpt_pr(const Waypoint* wpt)
 {
   char obuf[200];
   char fix='0';
@@ -1390,7 +1390,7 @@ nmea_wr_posn_init(const char* fname)
 }
 
 static void
-nmea_wr_posn(waypoint* wpt)
+nmea_wr_posn(Waypoint* wpt)
 {
   nmea_trackpt_pr(wpt);
 }

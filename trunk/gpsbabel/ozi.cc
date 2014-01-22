@@ -148,7 +148,7 @@ ozi_alloc_fsdata(void)
 }
 
 void
-ozi_get_time_str(const waypoint* waypointp, char* buff, gbsize_t buffsz)
+ozi_get_time_str(const Waypoint* waypointp, char* buff, gbsize_t buffsz)
 {
   if (waypointp->creation_time.isValid()) {
     double time = (waypt_time(waypointp) / SECONDS_PER_DAY) + DAYS_SINCE_1990;
@@ -159,7 +159,7 @@ ozi_get_time_str(const waypoint* waypointp, char* buff, gbsize_t buffsz)
 }
 
 void
-ozi_set_time_str(const QString& str, waypoint* waypointp)
+ozi_set_time_str(const QString& str, Waypoint* waypointp)
 {
   double ozi_time = str.toDouble();
 
@@ -170,7 +170,7 @@ ozi_set_time_str(const QString& str, waypoint* waypointp)
 }
 
 static void
-ozi_convert_datum(waypoint* wpt)
+ozi_convert_datum(Waypoint* wpt)
 {
   if (datum != DATUM_WGS84) {
     double lat, lon, alt;
@@ -254,7 +254,7 @@ ozi_track_hdr(const route_head* rte)
 }
 
 static void
-ozi_track_disp(const waypoint* waypointp)
+ozi_track_disp(const Waypoint* waypointp)
 {
   double alt;
   char ozi_time[16];
@@ -321,7 +321,7 @@ ozi_route_hdr(const route_head* rte)
 }
 
 static void
-ozi_route_disp(const waypoint* waypointp)
+ozi_route_disp(const Waypoint* waypointp)
 {
   char ozi_time[16];
 
@@ -487,7 +487,7 @@ wr_deinit(void)
 }
 
 static void
-ozi_parse_waypt(int field, const QString& str, waypoint* wpt_tmp, ozi_fsdata* fsdata)
+ozi_parse_waypt(int field, const QString& str, Waypoint* wpt_tmp, ozi_fsdata* fsdata)
 {
   double alt;
 
@@ -582,7 +582,7 @@ ozi_parse_waypt(int field, const QString& str, waypoint* wpt_tmp, ozi_fsdata* fs
 }
 
 static void
-ozi_parse_track(int field, char* str, waypoint* wpt_tmp, char* trk_name)
+ozi_parse_track(int field, char* str, Waypoint* wpt_tmp, char* trk_name)
 {
   double alt;
 
@@ -628,7 +628,7 @@ ozi_parse_track(int field, char* str, waypoint* wpt_tmp, char* trk_name)
 }
 
 static void
-ozi_parse_routepoint(int field, char* str, waypoint* wpt_tmp)
+ozi_parse_routepoint(int field, char* str, Waypoint* wpt_tmp)
 {
   if (*str == '\0') {
     return;
@@ -688,7 +688,7 @@ ozi_parse_routepoint(int field, char* str, waypoint* wpt_tmp)
 }
 
 static void
-ozi_parse_routeheader(int field, const QString& str, waypoint* wpt_tmp)
+ozi_parse_routeheader(int field, const QString& str, Waypoint* wpt_tmp)
 {
 
   switch (field) {
@@ -722,7 +722,7 @@ data_read(void)
 {
   QString buff;
   char* trk_name = NULL;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   int i;
   int linecount = 0;
 
@@ -779,7 +779,7 @@ data_read(void)
     if (buff.contains(',')) {
       bool ozi_fsdata_used = false;
       ozi_fsdata* fsdata = ozi_alloc_fsdata();
-      wpt_tmp = new waypoint;
+      wpt_tmp = new Waypoint;
 
       /* data delimited by commas, possibly enclosed in quotes.  */
       char* orig_s = xstrdup(CSTR(buff));
@@ -864,7 +864,7 @@ data_read(void)
 }
 
 static void
-ozi_waypt_pr(const waypoint* wpt)
+ozi_waypt_pr(const Waypoint* wpt)
 {
   static int index = 0;
   double alt;

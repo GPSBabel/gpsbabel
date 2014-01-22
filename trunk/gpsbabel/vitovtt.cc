@@ -63,7 +63,7 @@ vitovtt_read(void)
 {
   int				version			= 0;
   route_head*		route_head		= 0;
-  waypoint*		wpt_tmp		= 0;
+  Waypoint*		wpt_tmp		= 0;
   int				scaled_lat		= 0;
   int				scaled_lon		= 0;
   double			altitude		= 0;
@@ -103,7 +103,7 @@ vitovtt_read(void)
     course				= gbfgetint16(infile);
     status				= gbfgetint32(infile);
 
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
 
     wpt_tmp->latitude	= scaled_lat / vitovtt_latitudescale;
     wpt_tmp->longitude	= scaled_lon / vitovtt_longitudescale;

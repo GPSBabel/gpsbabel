@@ -60,7 +60,7 @@ wintec_tes_read(void)
   track_add_head(trk);
 
   while (!gbfeof(fin)) {
-    waypoint* wpt;
+    Waypoint* wpt;
     uint16_t flags = gbfgetuint16(fin);
     uint32_t date = gbfgetuint32(fin);
     int32_t latitude = gbfgetint32(fin);
@@ -68,7 +68,7 @@ wintec_tes_read(void)
     int16_t alt = gbfgetint16(fin);  // Signed.  Meters.
 
     (void) flags; // Silence 'unused' warning until we use flags.
-    wpt = new waypoint;
+    wpt = new Waypoint;
     wpt->latitude = latitude / 1.0e7;
     wpt->longitude = longitude / 1.0e7;
     wpt->SetCreationTime(wintec_date_to_time(date));
@@ -85,7 +85,7 @@ wintec_tes_read(void)
     //  Wintec's software puts a waypoint in the track, so we
     //  mock that.
     if (flags &  0x02) {
-      waypoint* temp = new waypoint(*wpt);
+      Waypoint* temp = new Waypoint(*wpt);
       waypt_add(temp);
     }
 

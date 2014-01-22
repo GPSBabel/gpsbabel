@@ -37,7 +37,7 @@ arglist_t jtr_args[] = {
 };
 
 static gbfile* fin, *fout;
-static QHash<QString, const waypoint*> trkpts;
+static QHash<QString, const Waypoint*> trkpts;
 
 static time_t
 jtr_parse_time(const char* str, struct tm* tm, int* milli)
@@ -105,7 +105,7 @@ jtr_read(void)
   route_head* trk = NULL;
 
   while ((str = gbfgetstr(fin))) {
-    waypoint* wpt;
+    Waypoint* wpt;
     struct tm tm;
     char* tmp;
     int column = -1;
@@ -213,7 +213,7 @@ jtr_read(void)
       continue;
     }
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     wpt->latitude = lat;
     wpt->longitude = lon;
@@ -265,7 +265,7 @@ jtr_wr_deinit(void)
 }
 
 static void
-jtr_trkpt_disp_cb(const waypoint* wpt)
+jtr_trkpt_disp_cb(const Waypoint* wpt)
 {
   char* str, *tmp;
   char stime[10], sdate[7], scourse[6], sspeed[8];

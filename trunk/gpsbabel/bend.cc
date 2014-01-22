@@ -70,8 +70,8 @@ bend_init(const char* args)
   route_flush_all_routes();
 }
 
-static waypoint*
-create_wpt_dest(const waypoint* wpt_orig, double lat_orig,
+static Waypoint*
+create_wpt_dest(const Waypoint* wpt_orig, double lat_orig,
                 double long_orig, double lat_orig_adj, double long_orig_adj)
 {
   double distance = gcdist(lat_orig, long_orig,
@@ -79,7 +79,7 @@ create_wpt_dest(const waypoint* wpt_orig, double lat_orig,
   double frac;
   double lat_dest;
   double long_dest;
-  waypoint* wpt_dest = NULL;
+  Waypoint* wpt_dest = NULL;
   distance = radtometers(distance);
   if (distance <= maxDist) {
     return NULL;
@@ -90,7 +90,7 @@ create_wpt_dest(const waypoint* wpt_orig, double lat_orig,
   linepart(lat_orig, long_orig, lat_orig_adj, long_orig_adj, frac,
            &lat_dest, &long_dest);
 
-  wpt_dest = new waypoint(*wpt_orig);
+  wpt_dest = new Waypoint(*wpt_orig);
   wpt_dest->latitude = DEG(lat_dest);
   wpt_dest->longitude = DEG(long_dest);
 
@@ -117,16 +117,16 @@ is_small_angle(double lat_orig, double long_orig, double lat_orig_prev,
 static void
 process_route(const route_head* route_orig, route_head* route_dest)
 {
-  waypoint* wpt_orig_prev = NULL;
-  waypoint* wpt_orig = NULL;
+  Waypoint* wpt_orig_prev = NULL;
+  Waypoint* wpt_orig = NULL;
 
   queue* elem, *tmp;
   QUEUE_FOR_EACH(&route_orig->waypoint_list, elem, tmp) {
-    waypoint* wpt_orig_next = (waypoint*)elem;
+    Waypoint* wpt_orig_next = (Waypoint*)elem;
 
     if (wpt_orig_prev == NULL) {
       if (wpt_orig != NULL) {
-        waypoint* waypoint_dest = new waypoint(*wpt_orig);
+        Waypoint* waypoint_dest = new Waypoint(*wpt_orig);
         route_add_wpt(route_dest, waypoint_dest);
       }
     } else {
@@ -138,14 +138,14 @@ process_route(const route_head* route_orig, route_head* route_dest)
 
       double lat_orig_next = RAD(wpt_orig_next->latitude);
       double long_orig_next = RAD(wpt_orig_next->longitude);
-      waypoint* wpt_dest_next = NULL;
+      Waypoint* wpt_dest_next = NULL;
 
       if (is_small_angle(lat_orig, long_orig, lat_orig_prev,
                          long_orig_prev, lat_orig_next, long_orig_next)) {
-        waypoint* waypoint_dest = new waypoint(*wpt_orig);
+        Waypoint* waypoint_dest = new Waypoint(*wpt_orig);
         route_add_wpt(route_dest, waypoint_dest);
       } else {
-        waypoint* wpt_dest_prev = create_wpt_dest(wpt_orig,
+        Waypoint* wpt_dest_prev = create_wpt_dest(wpt_orig,
                                   lat_orig, long_orig, lat_orig_prev, long_orig_prev);
         if (wpt_dest_prev != NULL) {
           route_add_wpt(route_dest, wpt_dest_prev);
@@ -166,7 +166,7 @@ process_route(const route_head* route_orig, route_head* route_dest)
   }
 
   if (wpt_orig != NULL) {
-    waypoint* waypoint_dest = new waypoint(*wpt_orig);
+    Waypoint* waypoint_dest = new Waypoint(*wpt_orig);
     route_add_wpt(route_dest, waypoint_dest);
   }
 }

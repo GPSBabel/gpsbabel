@@ -70,7 +70,7 @@ data_read(void)
 {
   char* buff;
   char* s;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   int i;
   int linecount = 0;
 
@@ -82,7 +82,7 @@ data_read(void)
     /* skip the line if it contains "sHyperLink" as it is a header (I hope :) */
     if ((strlen(buff)) && (strstr(buff, "sHyperLink") == NULL)) {
 
-      wpt_tmp = new waypoint;
+      wpt_tmp = new Waypoint;
 
       /* data delimited by tabs, not enclosed in quotes.  */
       s = buff;
@@ -169,7 +169,7 @@ data_read(void)
 }
 
 static void
-tmpro_waypt_pr(const waypoint* wpt)
+tmpro_waypt_pr(const Waypoint* wpt)
 {
   int icon = 1; /* default to "flag" */
   int colour = 255; /*default to red */

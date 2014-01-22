@@ -658,10 +658,10 @@ state_init(struct read_state* pst)
   pst->z          = 0;
 }
 
-static waypoint*
+static Waypoint*
 make_trackpoint(struct read_state* st, double lat, double lon, double alt)
 {
-  waypoint* wpt = new waypoint;
+  Waypoint* wpt = new Waypoint;
 
   xasprintf(&wpt->shortname, "TP%04d", ++st->tpn);
 
@@ -743,7 +743,7 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
   full_item f;
   compact_item c;
   multi_hz_item m;
-  waypoint* tpt = NULL;
+  Waypoint* tpt = NULL;
 
   switch (ITEM_TYPE(pitem)) {
 
@@ -858,7 +858,7 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
     WAYPT_SET(tpt, speed, KPH_TO_MPS(ITEM_SPEED(pitem))); /* convert speed to m/s */
 
     if (poi) {
-      waypt_add(new waypoint(*tpt));
+      waypt_add(new Waypoint(*tpt));
     }
 
     if (0 == pst->route_head_) {
@@ -1508,7 +1508,7 @@ static void miniHomer_get_poi()
   unsigned int poi;
   double lat, lng, alt;
   double ecef_x, ecef_y, ecef_z;
-  waypoint* wpt;
+  Waypoint* wpt;
 
   for (poi=0; poi<NUMPOI; poi++) {
     MSG_GET_POI[1]=(poi>>8)&0xff;
@@ -1527,7 +1527,7 @@ static void miniHomer_get_poi()
     } else {
       ECEF_to_LLA(ecef_x, ecef_y, ecef_z, &lat, &lng, &alt);
 
-      wpt = new waypoint;
+      wpt = new Waypoint;
       xasprintf(&wpt->shortname, "POI_%s", poinames[poi]);
       xasprintf(&wpt->description, "miniHomer points to this coordinates if the %s symbol is on", poinames[poi]);
       wpt->latitude       = lat;

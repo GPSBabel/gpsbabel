@@ -178,7 +178,7 @@ void garmin_fs_convert(void* fs)
 /* GPX - out */
 
 void
-garmin_fs_xml_fprint(const waypoint* waypt,
+garmin_fs_xml_fprint(const Waypoint* waypt,
                      QXmlStreamWriter* writer)
 {
   const char* phone, *addr;
@@ -284,7 +284,7 @@ garmin_fs_xml_fprint(const waypoint* waypt,
 }
 
 void
-garmin_fs_xml_convert(const int base_tag, int tag, const QString& Qcdatastr, waypoint* waypt)
+garmin_fs_xml_convert(const int base_tag, int tag, const QString& Qcdatastr, Waypoint* waypt)
 {
   garmin_fs_t* gmsd;
 // FIXME: eliminate C string copy/use here:
@@ -402,7 +402,7 @@ garmin_fs_convert_category(const char* category_name, uint16_t* category)
 }
 
 unsigned char
-garmin_fs_merge_category(const char* category_name, waypoint* waypt)
+garmin_fs_merge_category(const char* category_name, Waypoint* waypt)
 {
   uint16_t cat;
   garmin_fs_t* gmsd;
@@ -424,7 +424,7 @@ garmin_fs_merge_category(const char* category_name, waypoint* waypt)
 }
 
 void
-garmin_fs_garmin_after_read(const GPS_PWay way, waypoint* wpt, const int protoid)
+garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid)
 {
   garmin_fs_t* gmsd = NULL;
 
@@ -459,7 +459,7 @@ garmin_fs_garmin_after_read(const GPS_PWay way, waypoint* wpt, const int protoid
 }
 
 void
-garmin_fs_garmin_before_write(const waypoint* wpt, GPS_PWay way, const int protoid)
+garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int protoid)
 {
   garmin_fs_t* gmsd = GMSD_FIND(wpt);
 

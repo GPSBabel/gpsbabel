@@ -29,7 +29,7 @@ static int rte_waypts;
 static int trk_head_ct;
 static int trk_waypts;
 
-extern void update_common_traits(const waypoint* wpt);
+extern void update_common_traits(const Waypoint* wpt);
 
 void
 route_init(void)
@@ -166,7 +166,7 @@ route_find_track_by_name(const char* name)
 }
 
 static void
-any_route_add_wpt(route_head* rte, waypoint* wpt, int* ct, int synth, const QString& namepart, int number_digits)
+any_route_add_wpt(route_head* rte, Waypoint* wpt, int* ct, int synth, const QString& namepart, int number_digits)
 {
   ENQUEUE_TAIL(&rte->waypoint_list, &wpt->Q);
   rte->rte_waypt_ct++;	/* waypoints in this route */
@@ -181,7 +181,7 @@ any_route_add_wpt(route_head* rte, waypoint* wpt, int* ct, int synth, const QStr
 }
 
 void
-route_add_wpt_named(route_head* rte, waypoint* wpt, const QString& namepart, int number_digits)
+route_add_wpt_named(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits)
 {
   // First point in a route is always a new segment.
   // This improves compatibility when reading from
@@ -194,14 +194,14 @@ route_add_wpt_named(route_head* rte, waypoint* wpt, const QString& namepart, int
 }
 
 void
-route_add_wpt(route_head* rte, waypoint* wpt)
+route_add_wpt(route_head* rte, Waypoint* wpt)
 {
   const char RPT[] = "RPT";
   route_add_wpt_named(rte, wpt, RPT, 3);
 }
 
 void
-track_add_wpt_named(route_head* rte, waypoint* wpt, const QString& namepart, int number_digits)
+track_add_wpt_named(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits)
 {
   // First point in a track is always a new segment.
   // This improves compatibility when reading from
@@ -214,19 +214,19 @@ track_add_wpt_named(route_head* rte, waypoint* wpt, const QString& namepart, int
 }
 
 void
-track_add_wpt(route_head* rte, waypoint* wpt)
+track_add_wpt(route_head* rte, Waypoint* wpt)
 {
   const char RPT[] = "RPT";
   track_add_wpt_named(rte, wpt, RPT, 3);
 }
 
-waypoint*
+Waypoint*
 route_find_waypt_by_name(route_head* rh, const char* name)
 {
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
-    waypoint* waypointp = (waypoint*) elem;
+    Waypoint* waypointp = (Waypoint*) elem;
     if (waypointp->shortname == name) {
       return waypointp;
     }
@@ -235,10 +235,10 @@ route_find_waypt_by_name(route_head* rh, const char* name)
 }
 
 static void
-any_route_del_wpt(route_head* rte, waypoint* wpt, int* ct)
+any_route_del_wpt(route_head* rte, Waypoint* wpt, int* ct)
 {
-  if (wpt->wpt_flags.new_trkseg && wpt != (waypoint*)QUEUE_LAST(&rte->waypoint_list)) {
-    waypoint* wpt_next = (waypoint*)QUEUE_NEXT(&wpt->Q);
+  if (wpt->wpt_flags.new_trkseg && wpt != (Waypoint*)QUEUE_LAST(&rte->waypoint_list)) {
+    Waypoint* wpt_next = (Waypoint*)QUEUE_NEXT(&wpt->Q);
     wpt_next->wpt_flags.new_trkseg = 1;
   }
   wpt->wpt_flags.new_trkseg = 0;
@@ -250,13 +250,13 @@ any_route_del_wpt(route_head* rte, waypoint* wpt, int* ct)
 }
 
 void
-route_del_wpt(route_head* rte, waypoint* wpt)
+route_del_wpt(route_head* rte, Waypoint* wpt)
 {
   any_route_del_wpt(rte, wpt, &rte_waypts);
 }
 
 void
-track_del_wpt(route_head* rte, waypoint* wpt)
+track_del_wpt(route_head* rte, Waypoint* wpt)
 {
   any_route_del_wpt(rte, wpt, &trk_waypts);
 }
@@ -269,8 +269,8 @@ route_disp(const route_head* rh, waypt_cb cb)
     return;
   }
   QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
-    waypoint* waypointp;
-    waypointp = (waypoint*) elem;
+    Waypoint* waypointp;
+    waypointp = (Waypoint*) elem;
     (*cb)(waypointp);
   }
 
@@ -422,7 +422,7 @@ route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src)
     rte_new->rte_num = rte_old->rte_num;
     any_route_add_head(rte_new, *dst);
     QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2) {
-      any_route_add_wpt(rte_new, new waypoint(*(waypoint*)elem2), dst_wpt_count, 0, RPT, 3);
+      any_route_add_wpt(rte_new, new Waypoint(*(Waypoint*)elem2), dst_wpt_count, 0, RPT, 3);
     }
     (*dst_count)++;
   }
@@ -469,14 +469,14 @@ route_restore_tlr(const route_head* rte)
 }
 
 static void
-route_restore_wpt(const waypoint* wpt)
+route_restore_wpt(const Waypoint* wpt)
 {
   (void)wpt;
   rte_waypts++;
 }
 
 static void
-track_restore_wpt(const waypoint* wpt)
+track_restore_wpt(const Waypoint* wpt)
 {
   (void)wpt;
   trk_waypts++;
@@ -569,9 +569,9 @@ tracks_to_routes(void)
  */
 void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
 {
-  waypoint first;
-  waypoint* thisw;
-  waypoint* prev = &first;
+  Waypoint first;
+  Waypoint* thisw;
+  Waypoint* prev = &first;
   queue* elem, *tmp;
   int tkpt = 0;
   int pts_hrt = 0;
@@ -594,7 +594,7 @@ void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
   QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
     double tlat, tlon, plat, plon, dist;
 
-    thisw = (waypoint*)elem;
+    thisw = (Waypoint*)elem;
 
     /*
      * gcdist and heading want radians, not degrees.

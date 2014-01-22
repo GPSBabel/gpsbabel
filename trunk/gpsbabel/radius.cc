@@ -38,7 +38,7 @@ static char* maxctarg = NULL;
 static char* routename = NULL;
 static int maxct;
 
-static waypoint* home_pos;
+static Waypoint* home_pos;
 
 typedef struct {
   double distance;
@@ -91,8 +91,8 @@ gc_distance(double lat1, double lon1, double lat2, double lon2)
 static int
 dist_comp(const void* a, const void* b)
 {
-  const waypoint* x1 = *(waypoint**)a;
-  const waypoint* x2 = *(waypoint**)b;
+  const Waypoint* x1 = *(Waypoint**)a;
+  const Waypoint* x2 = *(Waypoint**)b;
   extra_data* x1e = (extra_data*) x1->extra_data;
   extra_data* x2e = (extra_data*) x2->extra_data;
 
@@ -110,17 +110,17 @@ void
 radius_process(void)
 {
   queue* elem, * tmp;
-  waypoint* waypointp;
+  Waypoint* waypointp;
   double dist;
-  waypoint** comp;
+  Waypoint** comp;
   int i, wc;
   queue temp_head;
   route_head* rte_head = NULL;
 #if NEWQ
-  foreach(waypoint* waypointp, waypt_list) {
+  foreach(Waypoint* waypointp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (waypoint*)elem;
+    waypointp = (Waypoint*)elem;
 #endif
     dist = gc_distance(waypointp->latitude,
                        waypointp->longitude,
@@ -144,7 +144,7 @@ radius_process(void)
   wc = waypt_count();
   QUEUE_INIT(&temp_head);
 
-  comp = (waypoint**) xcalloc(wc, sizeof(*comp));
+  comp = (Waypoint**) xcalloc(wc, sizeof(*comp));
 
   i = 0;
 
@@ -155,14 +155,14 @@ radius_process(void)
    */
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypoint* wp = (waypoint*) elem;
+    Waypoint* wp = (Waypoint*) elem;
     comp[i] = wp;
     waypt_del(wp);
     i++;
   }
 
   if (!nosort) {
-    qsort(comp, wc, sizeof(waypoint*), dist_comp);
+    qsort(comp, wc, sizeof(Waypoint*), dist_comp);
   }
 
   if (routename) {
@@ -177,7 +177,7 @@ radius_process(void)
    * on through in the modified order.
    */
   for (i = 0; i < wc; i++) {
-    waypoint* wp = comp[i];
+    Waypoint* wp = comp[i];
 
     xfree(wp->extra_data);
     wp->extra_data = NULL;
@@ -217,7 +217,7 @@ radius_init(const char* args)
     maxct = 0;
   }
 
-  home_pos = (waypoint*) xcalloc(sizeof(*home_pos), 1);
+  home_pos = (Waypoint*) xcalloc(sizeof(*home_pos), 1);
 
   if (latopt) {
     home_pos->latitude = atof(latopt);

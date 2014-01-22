@@ -77,7 +77,7 @@ vidaone_read(void)
   route_head* trk = NULL;
 
   while (! gbfeof(fin)) {
-    waypoint* wpt = new waypoint;
+    Waypoint* wpt = new Waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);
@@ -114,7 +114,7 @@ vidaone_wr_deinit(void)
 }
 
 static void
-vidaone_trkpt(const waypoint* wpt)
+vidaone_trkpt(const Waypoint* wpt)
 {
   gbfputdbl(wpt->latitude, fout);
   gbfputdbl(wpt->longitude, fout);

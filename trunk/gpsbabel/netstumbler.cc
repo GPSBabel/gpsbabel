@@ -82,7 +82,7 @@ data_read(void)
   char mac[2 + 17 + 2 + 1];			/* "( " + MAC + " )" + null */
   char desc[sizeof ssid - 1 + 15 + 1];	/* room for channel/speed */
   double lat = 0, lon = 0;
-  waypoint* wpt_tmp;
+  Waypoint* wpt_tmp;
   int line_no = 0;
   int stealth_num = 0, whitespace_num = 0;
   long flags = 0;
@@ -209,7 +209,7 @@ data_read(void)
       continue;
     }
 
-    wpt_tmp = new waypoint;
+    wpt_tmp = new Waypoint;
 
     if (stealth) {
       if (!snmac) {
@@ -249,7 +249,7 @@ data_read(void)
 
 typedef struct {
   unsigned long crc;
-  waypoint* wpt;
+  Waypoint* wpt;
 } htable_t;
 
 static
@@ -274,8 +274,8 @@ compare(const void* a, const void* b)
      * to make the testo script happy.
      * */
 
-    waypoint* wpt_a = ((const htable_t*)a)->wpt;
-    waypoint* wpt_b = ((const htable_t*)b)->wpt;
+    Waypoint* wpt_a = ((const htable_t*)a)->wpt;
+    Waypoint* wpt_b = ((const htable_t*)b)->wpt;
 #if NEW_STRINGS
     return wpt_a->description.compare(wpt_b->description);
 #else
@@ -304,14 +304,14 @@ fix_netstumbler_dupes(void)
 #if NEWQ
   // Why, oh, why is this format running over the entire waypoint list and
   // modifying it?  This seems wrong.
-  extern QList<waypoint*> waypt_list;
-  foreach(waypoint* waypointp, waypt_list) {
+  extern QList<Waypoint*> waypt_list;
+  foreach(Waypoint* waypointp, waypt_list) {
     bh->wpt = waypointp;
 #else
   queue* elem, *tmp;
   extern queue waypt_head;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    bh->wpt = (waypoint*) elem;
+    bh->wpt = (Waypoint*) elem;
 #endif
     QString snptr = bh->wpt->shortname;
     QString tmp_sn = snptr.toLower();

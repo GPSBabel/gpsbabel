@@ -41,7 +41,7 @@ typedef struct {
   double distance;
   double prjlatitude, prjlongitude;
   double frac;
-  waypoint* arcpt1, * arcpt2;
+  Waypoint* arcpt1, * arcpt2;
 } extra_data;
 
 static
@@ -80,23 +80,23 @@ arglist_t arcdist_args[] = {
 #define BADVAL 999999
 
 static void
-arcdist_arc_disp_wpt_cb(const waypoint* arcpt2)
+arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
 {
   queue* elem, * tmp;
-  waypoint* waypointp;
+  Waypoint* waypointp;
   extra_data* ed;
   double dist;
   double prjlat, prjlon, frac;
-  static waypoint* arcpt1 = NULL;
+  static Waypoint* arcpt1 = NULL;
 
   if (arcpt2 && arcpt2->latitude != BADVAL && arcpt2->longitude != BADVAL &&
       (ptsopt || (arcpt1 &&
                   (arcpt1->latitude != BADVAL && arcpt1->longitude != BADVAL)))) {
 #if NEWQ
-    foreach(waypoint* waypointp, waypt_list) {
+    foreach(Waypoint* waypointp, waypt_list) {
 #else
     QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-      waypointp = (waypoint*) elem;
+      waypointp = (Waypoint*) elem;
 #endif
       if (waypointp->extra_data) {
         ed = (extra_data*) waypointp->extra_data;
@@ -133,14 +133,14 @@ arcdist_arc_disp_wpt_cb(const waypoint* arcpt2)
             ed->prjlongitude = prjlon;
             ed->frac = frac;
             ed->arcpt1 = arcpt1;
-            ed->arcpt2 = (waypoint*) arcpt2;
+            ed->arcpt2 = (Waypoint*) arcpt2;
           }
         }
         waypointp->extra_data = ed;
       }
     }
   }
-  arcpt1 = (waypoint*) arcpt2;
+  arcpt1 = (Waypoint*) arcpt2;
 }
 
 static void
@@ -160,12 +160,12 @@ arcdist_process(void)
     int fileline = 0;
     char* line;
     gbfile* file_in;
-    waypoint* arcpt2, * arcpt1;
+    Waypoint* arcpt2, * arcpt1;
 
     file_in = gbfopen(arcfileopt, "r", MYNAME);
 
-    arcpt1 = new waypoint;
-    arcpt2 = new waypoint;
+    arcpt1 = new Waypoint;
+    arcpt2 = new Waypoint;
     arcdist_arc_disp_hdr_cb(NULL);
 
     arcpt2->latitude = arcpt2->longitude = BADVAL;
@@ -189,7 +189,7 @@ arcdist_process(void)
       if (argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
         warning(MYNAME ": Warning: Arc file contains unusable vertex on line %d.\n", fileline);
       } else {
-        waypoint* arcpttmp = arcpt1;
+        Waypoint* arcpttmp = arcpt1;
         arcdist_arc_disp_wpt_cb(arcpt2);
         arcpt1 = arcpt2;
         arcpt2 = arcpttmp;
@@ -207,10 +207,10 @@ arcdist_process(void)
 
   removed = 0;
 #if NEWQ
-  foreach(waypoint* wp, waypt_list) {
+  foreach(Waypoint* wp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypoint* wp = (waypoint*) elem;
+    Waypoint* wp = (Waypoint*) elem;
 #endif
     extra_data* ed;
     ed = (extra_data*) wp->extra_data;

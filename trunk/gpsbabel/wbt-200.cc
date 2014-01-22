@@ -540,10 +540,10 @@ static int check_date(uint32_t tim)
          mday > 0 && mday <= 31 && mon > 0 && mon <= 12 && year >= 4;
 }
 
-static waypoint* make_point(double lat, double lon, double alt, time_t tim, const char* fmt, int index)
+static Waypoint* make_point(double lat, double lon, double alt, time_t tim, const char* fmt, int index)
 {
   char     wp_name[20];
-  waypoint* wpt = new waypoint;
+  Waypoint* wpt = new Waypoint;
 
   sprintf(wp_name, fmt, index);
 
@@ -556,12 +556,12 @@ static waypoint* make_point(double lat, double lon, double alt, time_t tim, cons
   return wpt;
 }
 
-static waypoint* make_waypoint(struct read_state* st, double lat, double lon, double alt, time_t tim)
+static Waypoint* make_waypoint(struct read_state* st, double lat, double lon, double alt, time_t tim)
 {
   return make_point(lat, lon, alt, tim, "WP%04d", ++st->wpn);
 }
 
-static waypoint* make_trackpoint(struct read_state* st, double lat, double lon, double alt, time_t tim)
+static Waypoint* make_trackpoint(struct read_state* st, double lat, double lon, double alt, time_t tim)
 {
   return make_point(lat, lon, alt, tim, "TP%04d", ++st->tpn);
 }
@@ -571,7 +571,7 @@ static int wbt200_data_chunk(struct read_state* st, const void* buf, int fmt)
   uint32_t   tim;
   double     lat, lon, alt;
   time_t     rtim;
-  waypoint*   tpt     = NULL;
+  Waypoint*   tpt     = NULL;
   const char* bp      = (const char*) buf;
   size_t     buf_used = fmt_version[fmt].reclen;
 
@@ -808,7 +808,7 @@ static int wbt201_data_chunk(struct read_state* st, const void* buf)
   uint16_t    flags;
   double      lat, lon, alt;
   time_t      rtim;
-  waypoint*    tpt     = NULL;
+  Waypoint*    tpt     = NULL;
   const char*  bp      = (const char*) buf;
 
   /* Zero records are skipped */
@@ -831,7 +831,7 @@ static int wbt201_data_chunk(struct read_state* st, const void* buf)
   rtim = decode_date(tim);
 
   if ((flags & WBT201_WAYPOINT) && (global_opts.masked_objective & WPTDATAMASK)) {
-    waypoint* wpt = make_waypoint(st, lat, lon, alt, rtim);
+    Waypoint* wpt = make_waypoint(st, lat, lon, alt, rtim);
     waypt_add(wpt);
   }
 

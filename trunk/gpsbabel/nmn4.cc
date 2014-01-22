@@ -104,7 +104,7 @@ nmn4_read_data(void)
 
   QString zip1, zip2, city, street, number;
   route_head* route;
-  waypoint* wpt;
+  Waypoint* wpt;
 
   route = route_head_alloc();
   route_add_head(route);
@@ -123,7 +123,7 @@ nmn4_read_data(void)
     /* for a quiet compiler */
     zip1 = zip2 = city = street = number = QString();
 
-    wpt = new waypoint;
+    wpt = new Waypoint;
 
     column = -1;
     c = csv_lineparse(str, "|", "", column++);
@@ -229,7 +229,7 @@ nmn4_route_tlr(const route_head* rte)
 }
 
 static void
-nmn4_write_waypt(const waypoint* wpt)
+nmn4_write_waypt(const Waypoint* wpt)
 {
   char city[128], street[128], zipc[32], number[32];
 

@@ -113,7 +113,7 @@ arglist_t ng_args[] = {
 /*===================Utilities ==========================================*/
 
 static void
-ng_convert_datum(waypoint* wpt)
+ng_convert_datum(Waypoint* wpt)
 {
   double lat, lon, east, north, alt;
 
@@ -237,7 +237,7 @@ ng_fill_waypoint_default(void)
 
 
 static void
-ng_waypt_rd(const waypoint* wpt)
+ng_waypt_rd(const Waypoint* wpt)
 {
   char z[50];
   double lat, lon;
@@ -383,7 +383,7 @@ data_read(void)
 
   for (int n = 0; n < nof_wp; ++n) {
 
-    waypoint* wpt_tmp = new waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
 
     /* Read waypoint data */
 

@@ -35,11 +35,11 @@ arglist_t reverse_route_args[] = {
 /*
  * reverse_route_wpt fixes up the waypoint flag new_trkseg
  */
-static void reverse_route_wpt(const waypoint* waypointp)
+static void reverse_route_wpt(const Waypoint* waypointp)
 {
 
   /* Cast away const-ness */
-  waypoint* wpp = (waypoint*) waypointp;
+  Waypoint* wpp = (Waypoint*) waypointp;
 
   int curr_new_trkseg;
 

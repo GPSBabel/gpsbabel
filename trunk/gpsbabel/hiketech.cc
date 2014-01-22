@@ -30,7 +30,7 @@ static gbfile* ofd;
 static QString ostring;
 static gpsbabel::XmlStreamWriter writer(&ostring);
 
-static waypoint* wpt_tmp;
+static Waypoint* wpt_tmp;
 static route_head* trk_head;
 
 #define MYNAME "hiketech"
@@ -144,7 +144,7 @@ hiketech_format_time(const QDateTime& t)
 }
 
 static void
-hiketech_trkpt_pr(const waypoint* waypointp)
+hiketech_trkpt_pr(const Waypoint* waypointp)
 {
   writer.writeStartElement("pnt"); 
   if (waypointp->creation_time.isValid()) {
@@ -160,7 +160,7 @@ hiketech_trkpt_pr(const waypoint* waypointp)
 }
 
 static void
-hiketech_waypt_pr(const waypoint* wpt)
+hiketech_waypt_pr(const Waypoint* wpt)
 {
   writer.writeStartElement("wpt"); 
   writer.setAutoFormattingIndent(-1);
@@ -194,7 +194,7 @@ hiketech_write(void)
 static
 void	 ht_wpt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp = new waypoint;
+  wpt_tmp = new Waypoint;
 }
 
 static
@@ -256,7 +256,7 @@ void	ht_trk_ident(xg_string args, const QXmlStreamAttributes* unused)
 static
 void	ht_trk_pnt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp = new waypoint;
+  wpt_tmp = new Waypoint;
 }
 
 static
