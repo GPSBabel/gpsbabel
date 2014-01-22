@@ -32,7 +32,7 @@
 
 #if NEWQ
 QList<waypoint*> waypt_list;
- queue waypt_head; // This is here solely to freak out the formats that are
+queue waypt_head; // This is here solely to freak out the formats that are
 // looking into what should be a private members.
 #else
 queue waypt_head;
@@ -40,7 +40,7 @@ queue waypt_head;
 
 static unsigned int waypt_ct;
 static short_handle mkshort_handle;
-static geocache_data empty_gc_data;
+geocache_data waypoint::empty_gc_data;
 static global_trait traits;
 
 const global_trait* get_traits(void)
@@ -64,29 +64,7 @@ waypt_init(void)
 waypoint*
 waypt_dupe(const waypoint* wpt)
 {
-  /*
-   * This and waypt_free should be closely synced.
-   */
-  waypoint* tmp = new waypoint(*wpt);
-
-  // deep copy geocache data unless it is the special static empty_gc_data.
-  if (wpt->gc_data != &empty_gc_data) {
-    tmp->gc_data = new geocache_data(*wpt->gc_data);
-  }
-
-  /*
-   * It's important that this duplicated waypoint not appear
-   * on the master Q.
-   */
-  QUEUE_INIT(&tmp->Q);
-
-  // deep copy fs chain data.
-  tmp->fs = fs_chain_copy(wpt->fs);
-
-  // note: session is not deep copied.
-  // note: extra_data is not deep copied.
-
-  return tmp;
+  return new waypoint(*wpt);
 }
 
 void update_common_traits(const waypoint* wpt)
@@ -188,17 +166,6 @@ waypoint*
 waypt_new(void)
 {
   waypoint* wpt = new waypoint;
-#ifdef DEBUG_MEM
-  wpt->altitude = unknown_alt; // should this be "latitude" instead of "altitude"?
-  wpt->longitude = unknown_alt;
-#endif
-  wpt->altitude = unknown_alt;
-  wpt->fix = fix_unknown;
-  wpt->sat = -1;
-  wpt->session = curr_session();
-  wpt->gc_data = &empty_gc_data;
-
-  QUEUE_INIT(&wpt->Q);
   return wpt;
 }
 
@@ -378,14 +345,6 @@ find_waypt_by_name(const QString& name)
 void
 waypt_free(waypoint* wpt)
 {
-  /*
-   * This and waypt_dupe should be closely synced.
-   */
-
-  if (wpt->gc_data != &empty_gc_data) {
-	delete wpt->gc_data;
-  }
-  fs_chain_destroy(wpt->fs);
   delete wpt;
 }
 
@@ -612,17 +571,141 @@ waypt_course(const waypoint* A, const waypoint* B)
 geocache_data*
 waypt_alloc_gc_data(waypoint* wpt)
 {
-  geocache_data* res = (geocache_data*)wpt->gc_data;
-  if (res == &empty_gc_data) {
-    res = wpt->gc_data = new geocache_data;
-  }
-  return res;
+  return wpt->AllocGCData();
 }
 
 int
 waypt_empty_gc_data(const waypoint* wpt)
 {
-  return (wpt->gc_data == &empty_gc_data);
+  return wpt->EmptyGCData();
+}
+
+
+waypoint::waypoint() :
+  // Q(),
+  latitude(0),  // These should probably use some invalid data, but
+  longitude(0), // it looks like we have code that relies on them being zero.
+  altitude(unknown_alt),
+  depth(0),
+  proximity(0),
+#if !NEW_STRINGS
+  shortname(NULL),
+  description(NULL),
+  notes(NULL),
+#endif
+  // url_link_list_(),
+  // wpt_flags(),
+  // icon_descr(),
+  // creation_time(),
+  route_priority(0),
+  hdop(0),
+  vdop(0),
+  pdop(0),
+  course(0),
+  speed(0),
+  fix(fix_unknown),
+  sat(-1),
+  heartrate(0),
+  cadence(0),
+  power(0),
+  temperature(0),
+  odometer_distance(0),
+  gc_data(&waypoint::empty_gc_data),
+  fs(NULL),
+  session(curr_session()),
+  extra_data(NULL)
+{
+  QUEUE_INIT(&Q);
+}
+
+waypoint::~waypoint()
+{
+  if (gc_data != &waypoint::empty_gc_data) {
+    delete gc_data;
+  }
+  fs_chain_destroy(fs);
+}
+
+waypoint::waypoint(const waypoint& other) :
+  // Q(other.Q),
+  latitude(other.latitude),
+  longitude(other.longitude),
+  altitude(other.altitude),
+  depth(other.depth),
+  proximity(other.proximity),
+  shortname(other.shortname),
+  description(other.description),
+  notes(other.notes),
+  url_link_list_(other.url_link_list_),
+  wpt_flags(other.wpt_flags),
+  icon_descr(other.icon_descr),
+  creation_time(other.creation_time),
+  route_priority(other.route_priority),
+  hdop(other.hdop),
+  vdop(other.vdop),
+  pdop(other.pdop),
+  course(other.course),
+  speed(other.speed),
+  fix(other.fix),
+  sat(other.sat),
+  heartrate(other.heartrate),
+  cadence(other.cadence),
+  power(other.power),
+  temperature(other.temperature),
+  odometer_distance(other.odometer_distance),
+  gc_data(other.gc_data),
+  fs(other.fs),
+  session(other.session),
+  extra_data(other.extra_data)
+{
+  // deep copy geocache data unless it is the specail static empty_gc_data.
+  if (other.gc_data != &waypoint::empty_gc_data) {
+    gc_data = new geocache_data(*other.gc_data);
+  }
+
+  /*
+   * It's important that this duplicated waypoint not appear
+   * on the master Q.
+   */
+  QUEUE_INIT(&Q);
+
+  // deep copy fs chain data.
+  fs = fs_chain_copy(other.fs);
+
+  // note: session is not deep copied.
+  // note: extra_data is not deep copied.
+}
+
+waypoint& waypoint::operator=(const waypoint& other)
+{
+  // the default assignment operator is not appropriate as we do deep copy of some members,
+  // and we haven't bothered to write an appropriate one.
+  // this is a dummy so the compiler can catch attempts to use the assignment operator.
+  return *this;
+}
+
+bool
+waypoint::HasUrlLink() const
+{
+  return !url_link_list_.isEmpty();
+}
+
+const UrlLink&
+waypoint::GetUrlLink() const
+{
+  return url_link_list_[0];
+}
+
+const QList<UrlLink>
+waypoint::GetUrlLinks() const
+{
+  return url_link_list_;
+}
+
+void
+waypoint::AddUrlLink(const UrlLink l)
+{
+  url_link_list_.push_back(l);
 }
 
 QString
@@ -641,4 +724,44 @@ waypoint::CreationTimeXML() const
   }
 
   return dt.toString(format);
+}
+
+gpsbabel::DateTime
+waypoint::GetCreationTime() const
+{
+  return creation_time;
+}
+
+void
+waypoint::SetCreationTime(gpsbabel::DateTime t)
+{
+  creation_time = t;
+}
+
+void
+waypoint::SetCreationTime(time_t t)
+{
+  creation_time = QDateTime::fromTime_t(t);
+}
+
+void
+waypoint::SetCreationTime(time_t t, int ms)
+{
+  creation_time.setTime_t(t);
+  creation_time = creation_time.addMSecs(ms);
+}
+
+geocache_data*
+waypoint::AllocGCData()
+{
+  if (gc_data == &waypoint::empty_gc_data) {
+    gc_data = new geocache_data;
+  }
+  return gc_data;
+}
+
+int
+waypoint::EmptyGCData() const
+{
+  return (gc_data == &waypoint::empty_gc_data);
 }

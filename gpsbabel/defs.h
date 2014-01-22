@@ -449,37 +449,10 @@ const global_trait* get_traits();
 
 class waypoint
 {
+private:
+  static geocache_data empty_gc_data;
+
 public:
-  waypoint() :
-    latitude(0),  // These should probably use some invalid data, but
-    longitude(0), // it looks like we have code that relies on them being zero.
-    altitude(-99999999.0),
-    depth(0),
-    proximity(0),
-#if !NEW_STRINGS
-    shortname(NULL),
-    description(NULL),
-    notes(NULL),
-#endif
-    route_priority(0),
-    hdop(0),
-    vdop(0),
-    pdop(0),
-    course(0),
-    speed(0),
-    fix(fix_unknown),
-    sat(-1),
-    heartrate(0),
-    cadence(0),
-    power(0),
-    temperature(0),
-    odometer_distance(0),
-    gc_data(NULL),
-    fs(NULL),
-    session(NULL),
-    extra_data(NULL) { }
-public:
-  QString CreationTimeXML() const;
   queue Q;			/* Master waypoint q.  Not for use
 					   by modules. */
 
@@ -525,35 +498,10 @@ public:
   /* TODO: UrlLink should probably move to a "real" class of its own.
    */
   QList<UrlLink> url_link_list_;
-  bool HasUrlLink() const {
-    return !url_link_list_.isEmpty();
-  }
-  const UrlLink& GetUrlLink() const {
-    return url_link_list_[0];
-  }
-  const QList<UrlLink> GetUrlLinks() const {
-    return url_link_list_;
-  }
-  void AddUrlLink(const UrlLink l) {
-    url_link_list_.push_back(l);
-  }
 
   wp_flags wpt_flags;
   QString icon_descr;
 
-  gpsbabel::DateTime  GetCreationTime() const {
-    return creation_time;
-  }
-  void SetCreationTime(gpsbabel::DateTime t) {
-    creation_time = t;
-  }
-  void SetCreationTime(time_t t) {
-    creation_time = QDateTime::fromTime_t(t);
-  }
-  void SetCreationTime(time_t t, int ms) {
-    creation_time.setTime_t(t);
-    creation_time = creation_time.addMSecs(ms);
-  }
   gpsbabel::DateTime creation_time;
 
   /*
@@ -588,6 +536,26 @@ public:
   format_specific_data* fs;
   session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
+
+private:
+  waypoint& operator=(const waypoint& other);
+
+public:
+  waypoint();
+  ~waypoint();
+  waypoint(const waypoint& other);
+
+  bool HasUrlLink() const;
+  const UrlLink& GetUrlLink() const;
+  const QList<UrlLink> GetUrlLinks() const;
+  void AddUrlLink(const UrlLink l);
+  QString CreationTimeXML() const;
+  gpsbabel::DateTime  GetCreationTime() const;
+  void SetCreationTime(gpsbabel::DateTime t);
+  void SetCreationTime(time_t t);
+  void SetCreationTime(time_t t, int ms);
+  geocache_data* AllocGCData();
+  int EmptyGCData() const;
 };
 
 class route_head
