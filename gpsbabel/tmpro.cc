@@ -82,7 +82,7 @@ data_read(void)
     /* skip the line if it contains "sHyperLink" as it is a header (I hope :) */
     if ((strlen(buff)) && (strstr(buff, "sHyperLink") == NULL)) {
 
-      wpt_tmp = waypt_new();
+      wpt_tmp = new waypoint;
 
       /* data delimited by tabs, not enclosed in quotes.  */
       s = buff;
@@ -154,7 +154,7 @@ data_read(void)
       }
 
       if (i != 11) {
-        waypt_free(wpt_tmp);
+        delete wpt_tmp;
         warning(MYNAME ": WARNING - extracted %d fields from line %d. \nData on line ignored.\n",
                 i, linecount);
       } else {

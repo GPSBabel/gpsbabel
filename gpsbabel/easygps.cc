@@ -83,7 +83,7 @@ data_read(void)
     unsigned char tag;
     waypoint* wpt_tmp;
 
-    wpt_tmp = waypt_new();
+    wpt_tmp = new waypoint;
     UrlLink link;
 
     for (tag = gbfgetc(file_in); tag != 0xff; tag = gbfgetc(file_in)) {

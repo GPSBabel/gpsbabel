@@ -172,7 +172,7 @@ my_read(void)
       routehead->rte_name = name;
       route_add_head(routehead);
       for (j = 0; j < shp->nVertices; j++) {
-        wpt = waypt_new();
+        wpt = new waypoint;
         wpt->latitude = shp->padfY[j];
         wpt->longitude = shp->padfX[j];
         wpt->altitude = shp->padfZ[j];
@@ -182,7 +182,7 @@ my_read(void)
     break;
 
     case SHPT_POINT:
-      wpt = waypt_new();
+      wpt = new waypoint;
       wpt->latitude = shp->dfYMin;
       wpt->longitude = shp->dfXMin;
       wpt->shortname = name;

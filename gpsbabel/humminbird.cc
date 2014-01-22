@@ -285,7 +285,7 @@ humminbird_read_wpt(gbfile* fin)
 
   /* All right! Copy the data to the gpsbabel struct... */
 
-  wpt = waypt_new();
+  wpt = new waypoint;
 
   // Could probably find a way to eliminate the alloc/copy.
   char *s = xstrndup(w.name, sizeof(w.name));
@@ -313,7 +313,7 @@ humminbird_read_wpt(gbfile* fin)
   // that describes a sub-status
   switch (w.status) {
   case 0: // Waypoint not used.  So why do we have one?
-    waypt_free(wpt);
+    delete wpt;
     break;
   case 1: // Waypoint permanent.
   case 2: // Waypoint temporary.
@@ -324,7 +324,7 @@ humminbird_read_wpt(gbfile* fin)
   case 17: // Waypoint group body.
   case 63: // Waypoint group invalid.
   default:
-    waypt_free(wpt);
+    delete wpt;
     break;
   }
 
@@ -368,7 +368,7 @@ humminbird_read_route(gbfile* fin)
           xfree(s);
           /* rte->rte_num = hrte.num + 1; only internal number */
         }
-        route_add_wpt(rte, waypt_dupe(wpt));
+        route_add_wpt(rte, new waypoint(*wpt));
       }
     }
   }
@@ -434,7 +434,7 @@ humminbird_read_track(gbfile* fin)
 
   /* We create one wpt for the info in the header */
 
-  first_wpt = waypt_new();
+  first_wpt = new waypoint;
   g_lat = gudermannian_i1924(accum_north);
   first_wpt->latitude  = geocentric_to_geodetic_hwr(g_lat);
   first_wpt->longitude = accum_east/EAST_SCALE * 180.0;
@@ -443,7 +443,7 @@ humminbird_read_track(gbfile* fin)
   track_add_wpt(trk, first_wpt);
 
   for (i=0 ; i<th.num_points-1 ; i++) {
-    waypoint* wpt = waypt_new();
+    waypoint* wpt = new waypoint;
     int16_t next_deltaeast, next_deltanorth;
     double guder;
 
@@ -554,7 +554,7 @@ humminbird_read_track_old(gbfile* fin)
 
   /* We create one wpt for the info in the header */
 
-  first_wpt = waypt_new();
+  first_wpt = new waypoint;
   g_lat = gudermannian_i1924(accum_north);
   first_wpt->latitude  = geocentric_to_geodetic_hwr(g_lat);
   first_wpt->longitude = accum_east/EAST_SCALE * 180.0;
@@ -562,7 +562,7 @@ humminbird_read_track_old(gbfile* fin)
   track_add_wpt(trk, first_wpt);
 
   for (i=0 ; i<th.num_points-1 ; i++) {
-    waypoint* wpt = waypt_new();
+    waypoint* wpt = new waypoint;
 //		int16_t next_deltaeast, next_deltanorth;
     double guder;
 

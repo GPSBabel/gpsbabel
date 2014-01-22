@@ -251,7 +251,7 @@ nmea_release_wpt(waypoint* wpt)
     /* This waypoint isn't queued.
        Release it, because we don't have any reference to this
        waypoint (! memory leak !) */
-    waypt_free(wpt);
+    delete wpt;
   }
 }
 
@@ -405,7 +405,7 @@ gpgll_parse(char* ibuf)
   hms = hms / 100;
   tm.tm_hour = hms % 100;
 
-  waypt = waypt_new();
+  waypt = new waypoint;
 
   nmea_set_waypoint_time(waypt, &tm, fsec);
 
@@ -466,7 +466,7 @@ gpgga_parse(char* ibuf)
   hms = hms / 100;
   tm.tm_hour = (long) hms % 100;
 
-  waypt  = waypt_new();
+  waypt  = new waypoint;
 
   nmea_set_waypoint_time(waypt, &tm, fsec);
 
@@ -581,13 +581,13 @@ gprmc_parse(char* ibuf)
     }
     /* This point is both a waypoint and a trackpoint. */
     if (amod_waypoint) {
-      waypt_add(waypt_dupe(curr_waypt));
+      waypt_add(new waypoint(*curr_waypt));
       amod_waypoint = 0;
     }
     return;
   }
 
-  waypt  = waypt_new();
+  waypt  = new waypoint;
 
   WAYPT_SET(waypt, speed, KNOTS_TO_MPS(speed));
 
@@ -610,7 +610,7 @@ gprmc_parse(char* ibuf)
 
   /* This point is both a waypoint and a trackpoint. */
   if (amod_waypoint) {
-    waypt_add(waypt_dupe(waypt));
+    waypt_add(new waypoint(*waypt));
     amod_waypoint = 0;
   }
 }
@@ -628,7 +628,7 @@ gpwpl_parse(char* ibuf)
          &lngdeg,&lngdir,
          sname);
 
-  waypt  = waypt_new();
+  waypt  = new waypoint;
 
   if (latdir == 'S') {
     latdeg = -latdeg;
@@ -800,7 +800,7 @@ pcmpt_parse(char* ibuf)
   }
 
   if (lat || lon) {
-    curr_waypt = waypt_new();
+    curr_waypt = new waypoint;
     curr_waypt->longitude = pcmpt_deg(lon);
     curr_waypt->latitude = pcmpt_deg(lat);
 

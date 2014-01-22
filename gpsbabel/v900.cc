@@ -300,7 +300,7 @@ v900_read(void)
       line.bas.cr = 0;	/* null terminate vox field */
     }
 
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     /* lat is a string in the form: 31.768380N */
     c = line.bas.common.latitude_NS;	/* N/S */
@@ -362,7 +362,7 @@ v900_read(void)
       // thread on gpsbabel-misc with Jamie Robertson.
       assert(line.bas.common.tag == 'C' || line.bas.common.tag == 'G' ||
              line.bas.common.tag == 'V');
-      wpt2 = waypt_dupe(wpt);
+      wpt2 = new waypoint(*wpt);
       if (line.bas.common.tag == 'V') {	// waypoint with voice recording?
         char vox_file_name[sizeof(line.adv.vox)+5];
         const char* vox = is_advanced_mode ? line.adv.vox : line.bas.vox;

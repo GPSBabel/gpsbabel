@@ -147,7 +147,7 @@ void	gl_trk_s(xg_string args, const QXmlStreamAttributes* unused)
 
 void	gl_trk_pnt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp = waypt_new();
+  wpt_tmp = new waypoint;
 }
 
 void	gl_trk_pnt_e(xg_string args, const QXmlStreamAttributes* unused)

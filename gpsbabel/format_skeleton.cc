@@ -84,7 +84,7 @@ format_skeleton_read(void)
 //
 // For waypoints:
 //         while (have waypoints) {
-//                 waypoint = waypt_new()
+//                 waypoint = new waypoint
 //                 populate waypoint
 //                 waypt_add(waypoint);
 //         }
@@ -95,7 +95,7 @@ format_skeleton_read(void)
 //         populate struct route_hdr
 //	   route_add_head(route);
 //         while (have more routepoints) {
-//                 waypoint = waypt_new()
+//                 waypoint = new waypoint
 //                 populate waypoint
 //                 route_add_wpt(route, waypoint)
 //         }

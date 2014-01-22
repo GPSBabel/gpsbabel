@@ -161,7 +161,7 @@ gdb_flush_waypt_queue(queue* Q)
       xfree(wpt->extra_data);
 #endif
     }
-    waypt_free(wpt);
+    delete wpt;
   }
 }
 
@@ -411,10 +411,10 @@ gdb_add_route_waypt(route_head* rte, waypoint* ref, const int wpt_class)
   turn_point = (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && tmp->description);
 #endif
   if (turn_point || (gdb_via == 0) || (wpt_class < gt_waypt_class_map_point)) {
-    res = waypt_dupe(tmp);
+    res = new waypoint(*tmp);
     route_add_wpt(rte, res);
   }
-  waypt_free(ref);
+  delete ref;
   return res;
 }
 
@@ -555,7 +555,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
   char* sn;
 #endif
   waypt_ct++;
-  res = waypt_new();
+  res = new waypoint;
 
   gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&res->fs, (format_specific_data*) gmsd);
@@ -839,7 +839,7 @@ read_route(void)
 
     waypoint* wpt;
 
-    wpt = waypt_new();
+    wpt = new waypoint;
     rtept_ct++;
 
     wpt->shortname = fread_cstr();	/* shortname */
@@ -936,8 +936,8 @@ read_route(void)
       /* Without links we need all informations from wpt */
       waypoint* tmp = gdb_reader_find_waypt(wpt, 0);
       if (tmp != NULL) {
-        waypt_free(wpt);
-        wpt = waypt_dupe(tmp);
+        delete wpt;
+        wpt = new waypoint(*tmp);
       } else {
         if (waypt_bounds_valid(&bounds)) {
           warning(MYNAME ": (has bounds)\n");
@@ -1029,7 +1029,7 @@ read_track(void)
   points = FREAD_i32;
 
   for (index = 0; index < points; index++) {
-    waypoint* wpt = waypt_new();
+    waypoint* wpt = new waypoint;
 
     trkpt_ct++;
 
@@ -1146,7 +1146,7 @@ read_data(void)
       if ((gdb_via == 0) || (wpt_class == 0)) {
         waypoint* dupe;
         waypt_add(wpt);
-        dupe = waypt_dupe(wpt);
+        dupe = new waypoint(*wpt);
         ENQUEUE_TAIL(&wayptq_in, &dupe->Q);
       } else {
         ENQUEUE_TAIL(&wayptq_in_hidden, &wpt->Q);
@@ -1761,7 +1761,7 @@ write_waypoint_cb(const waypoint* refpt)
 #else
     char* name;
 #endif
-    waypoint* wpt = waypt_dupe(refpt);
+    waypoint* wpt = new waypoint(*refpt);
 
     gdb_check_waypt(wpt);
     ENQUEUE_TAIL(&wayptq_out, &wpt->Q);

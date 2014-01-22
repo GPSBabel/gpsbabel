@@ -974,7 +974,7 @@ mag_trkparse(char* trkmsg)
   struct tm tm;
   waypoint* waypt;
 
-  waypt  = waypt_new();
+  waypt  = new waypoint;
 
   memset(&tm, 0, sizeof(tm));
 
@@ -1155,7 +1155,7 @@ mag_rteparse(char* rtemsg)
 #else
         if (strcmp(waypt->shortname, re->wpt_name) == 0) {
 #endif
-          waypoint* wpt = waypt_dupe(waypt);
+          waypoint* wpt = new waypoint(*waypt);
           route_add_wpt(rte_head, wpt);
           break;
         }
@@ -1235,7 +1235,7 @@ mag_wptparse(char* trkmsg)
   descr[0] = 0;
   icon_token[0] = 0;
 
-  waypt  = waypt_new();
+  waypt  = new waypoint;
 
   sscanf(trkmsg,"$PMGNWPL,%lf,%c,%lf,%c,%d,%c,%[^,],%[^,]",
          &latdeg,&latdir,

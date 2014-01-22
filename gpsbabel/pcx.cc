@@ -153,7 +153,7 @@ data_read(void)
       name[sizeof(name)-1] = '\0';
       desc[sizeof(desc)-1] = '\0';
 
-      wpt_tmp = waypt_new();
+      wpt_tmp = new waypoint;
       wpt_tmp->altitude = alt;
       cp = lrtrim(name);
       if (*cp != '\0') {
@@ -184,7 +184,7 @@ data_read(void)
         wpt_tmp->latitude = ddmm2degrees(lat);
       }
       if (route != NULL) {
-        route_add_wpt(route, waypt_dupe(wpt_tmp));
+        route_add_wpt(route, new waypoint(*wpt_tmp));
       }
       waypt_add(wpt_tmp);
       points++;
@@ -253,7 +253,7 @@ data_read(void)
       if (tm.tm_year < 70) {
         tm.tm_year += 100;
       }
-      wpt_tmp = waypt_new();
+      wpt_tmp = new waypoint;
       wpt_tmp->SetCreationTime(mkgmtime(&tm));
       if (read_as_degrees) {
         wpt_tmp->longitude = lon;

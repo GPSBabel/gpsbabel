@@ -218,7 +218,7 @@ bcr_create_waypts_from_route(route_head* route)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    wpt = waypt_dupe((waypoint*) elem);
+    wpt = new waypoint(*(waypoint*) elem);
     waypt_add(wpt);
   }
 }
@@ -286,7 +286,7 @@ bcr_data_read(void)
       fatal(MYNAME ": structure error at %s (Coordinates)!\n", station);
     }
 
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     wpt->shortname = station;
     bcr_mercator_to_wgs84(mlat, mlon, &wpt->latitude, &wpt->longitude);

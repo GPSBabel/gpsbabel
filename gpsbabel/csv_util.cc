@@ -1243,33 +1243,33 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
   }
   break;
   case XT_GEOCACHE_LAST_FOUND:
-    waypt_alloc_gc_data(wpt)->last_found = yyyymmdd_to_time(s);
+    wpt->AllocGCData()->last_found = yyyymmdd_to_time(s);
     break;
 
     /* GEOCACHING STUFF ***************************************************/
   case XT_GEOCACHE_DIFF:
     /* Geocache Difficulty as an int */
-    waypt_alloc_gc_data(wpt)->diff = atof(s) * 10;
+    wpt->AllocGCData()->diff = atof(s) * 10;
     break;
   case XT_GEOCACHE_TERR:
     /* Geocache Terrain as an int */
-    waypt_alloc_gc_data(wpt)->terr = atof(s) * 10;
+    wpt->AllocGCData()->terr = atof(s) * 10;
     break;
   case XT_GEOCACHE_TYPE:
     /* Geocache Type */
-    waypt_alloc_gc_data(wpt)->type = gs_mktype(s);
+    wpt->AllocGCData()->type = gs_mktype(s);
     break;
   case XT_GEOCACHE_CONTAINER:
-    waypt_alloc_gc_data(wpt)->container = gs_mkcont(s);
+    wpt->AllocGCData()->container = gs_mkcont(s);
     break;
   case XT_GEOCACHE_HINT:
-    waypt_alloc_gc_data(wpt)->hint = QString(s).trimmed();
+    wpt->AllocGCData()->hint = QString(s).trimmed();
     break;
   case XT_GEOCACHE_PLACER:
-    waypt_alloc_gc_data(wpt)->placer = QString(s).trimmed();
+    wpt->AllocGCData()->placer = QString(s).trimmed();
     break;
   case XT_GEOCACHE_ISAVAILABLE:
-    gc_data = waypt_alloc_gc_data(wpt);
+    gc_data = wpt->AllocGCData();
     if (case_ignore_strcmp(csv_stringtrim(s, ""), "False") == 0) {
       gc_data->is_available = status_false;
     } else if (case_ignore_strcmp(csv_stringtrim(s, ""), "True") == 0) {
@@ -1279,7 +1279,7 @@ xcsv_parse_val(const char* s, waypoint* wpt, const field_map_t* fmp,
     }
     break;
   case XT_GEOCACHE_ISARCHIVED:
-    gc_data = waypt_alloc_gc_data(wpt);
+    gc_data = wpt->AllocGCData();
     if (case_ignore_strcmp(csv_stringtrim(s, ""), "False") == 0) {
       gc_data->is_archived = status_false;
     } else if (case_ignore_strcmp(csv_stringtrim(s, ""), "True") == 0) {
@@ -1473,7 +1473,7 @@ xcsv_data_read(void)
     }
 
     if (strlen(buff)) {
-      wpt_tmp = waypt_new();
+      wpt_tmp = new waypoint;
 
       s = buff;
       s = csv_lineparse(s, xcsv_file.field_delimiter,

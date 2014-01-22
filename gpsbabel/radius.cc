@@ -132,7 +132,7 @@ radius_process(void)
 
     if ((dist >= pos_dist) == (exclopt == NULL)) {
       waypt_del(waypointp);
-      waypt_free(waypointp);
+      delete waypointp;
       continue;
     }
 

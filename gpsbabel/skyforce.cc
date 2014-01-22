@@ -50,7 +50,7 @@ skyforce_parse_coords(const char* str)
     fatal(MYNAME ": Incomplete line!\n");
   }
 
-  wpt = waypt_new();
+  wpt = new waypoint;
 
   wpt->latitude = atof(str + 21);
   if (str[20] == 'S') {

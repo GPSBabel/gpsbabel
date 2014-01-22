@@ -338,7 +338,7 @@ lmx_rd_deinit(void)
 static void
 lmx_lm_start(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp = waypt_new();
+  wpt_tmp = new waypoint;
 }
 
 static void

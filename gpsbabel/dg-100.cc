@@ -266,7 +266,7 @@ process_gpsfile(uint8_t data[], route_head** track)
       track_add_head(*track);
     }
 
-    wpt = waypt_new();
+    wpt = new waypoint;
     latitude = bin2deg(lat);
     if (latitude >= 100) {
       manual_point = 1;

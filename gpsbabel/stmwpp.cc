@@ -125,7 +125,7 @@ stmwpp_data_read(void)
         }
 
         what = new_what;
-        wpt = waypt_new();
+        wpt = new waypoint;
         break;
 
       case 1:
@@ -175,7 +175,7 @@ stmwpp_data_read(void)
             route = route_head_alloc();
             route_add_head(route);
           }
-          route_add_wpt(route, waypt_dupe(wpt));
+          route_add_wpt(route, new waypoint(*wpt));
         }
         break;
 

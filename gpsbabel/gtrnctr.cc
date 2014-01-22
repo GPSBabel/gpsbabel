@@ -493,7 +493,7 @@ gtc_trk_lap_e(xg_string unused, const QXmlStreamAttributes* unusedattrs)
 void
 gtc_trk_pnt_s(xg_string unused, const QXmlStreamAttributes* unusedattrs)
 {
-  wpt_tmp = waypt_new();
+  wpt_tmp = new waypoint;
 }
 
 void
@@ -504,7 +504,7 @@ gtc_trk_pnt_e(xg_string args, const QXmlStreamAttributes* unused)
       /* Add the first point of an ActivityLap as
       a waypoint as well as a trackpoint. */
       char cbuf[10];
-      waypoint* wpt_lap_s = waypt_dupe(wpt_tmp);
+      waypoint* wpt_lap_s = new waypoint(*wpt_tmp);
       snprintf(cbuf, sizeof(cbuf), "LAP%03d", lap_ct);
       wpt_lap_s->shortname = cbuf;
       waypt_add(wpt_lap_s);
@@ -513,7 +513,7 @@ gtc_trk_pnt_e(xg_string args, const QXmlStreamAttributes* unused)
 
     track_add_wpt(trk_head, wpt_tmp);
   } else {
-    waypt_free(wpt_tmp);
+    delete wpt_tmp;
   }
 
   wpt_tmp = NULL;
@@ -626,7 +626,7 @@ gtc_wpt_crs_s(const QString& args, const QXmlStreamAttributes* unused)
 gtc_wpt_crs_s(const char* unused, const QXmlStreamAttributes* unusedattrs)
 #endif
 {
-  wpt_tmp = waypt_new();
+  wpt_tmp = new waypoint;
 }
 
 void
@@ -635,7 +635,7 @@ gtc_wpt_crs_e(xg_string args, const QXmlStreamAttributes* unused)
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     waypt_add(wpt_tmp);
   } else {
-    waypt_free(wpt_tmp);
+    delete wpt_tmp;
   }
 
   wpt_tmp = NULL;
@@ -644,7 +644,7 @@ gtc_wpt_crs_e(xg_string args, const QXmlStreamAttributes* unused)
 void
 gtc_wpt_pnt_s(xg_string unused, const QXmlStreamAttributes* unusedattrs)
 {
-  wpt_tmp = waypt_new();
+  wpt_tmp = new waypoint;
   lap_ct++;
 }
 
@@ -657,7 +657,7 @@ gtc_wpt_pnt_e(xg_string args, const QXmlStreamAttributes* unused)
     wpt_tmp->shortname = QString().sprintf("LAP%03d", lap_ct);
     waypt_add(wpt_tmp);
   } else {
-    waypt_free(wpt_tmp);
+    delete wpt_tmp;
   }
 
   wpt_tmp = NULL;

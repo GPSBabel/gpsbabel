@@ -145,7 +145,7 @@ random_read(void)
     waypoint* wpt;
     garmin_fs_t* gmsd;
 
-    wpt = waypt_new();
+    wpt = new waypoint;
     gmsd = garmin_fs_alloc(-1);
     fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 

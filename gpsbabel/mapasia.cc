@@ -110,7 +110,7 @@ tr7_read(void)
       continue;
     }
 
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     wpt->latitude = lat;
     wpt->longitude = lon;
@@ -123,12 +123,12 @@ tr7_read(void)
 #if 0		/* unsure, not validated items */
     wpt->fix = buff[TR7_S_FIX];
     if (buff[TR7_S_VALID] != 'A') {
-      waypt_free(wpt);
+      delete wpt;
       continue;
     }
 #endif
     if (waypt_speed(prev, wpt) > 9999.9) {	/* filter out some bad trackpoints */
-      waypt_free(wpt);
+      delete wpt;
       continue;
     }
 

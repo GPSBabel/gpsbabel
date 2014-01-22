@@ -699,7 +699,7 @@ static void Read_AN1_Waypoints(gbfile* f)
   for (i = 0; i < count; i++) {
     rec = Alloc_AN1_Waypoint();
     Read_AN1_Waypoint(f, rec);
-    wpt_tmp = waypt_new();
+    wpt_tmp = new waypoint;
 
     if (rec->creation_time) {
       wpt_tmp->SetCreationTime(rec->creation_time);
@@ -874,7 +874,7 @@ static void Read_AN1_Lines(gbfile* f)
       Read_AN1_Vertex(f, vert);
 
       /* create route point */
-      wpt_tmp = waypt_new();
+      wpt_tmp = new waypoint;
       wpt_tmp->latitude = DecodeOrd(vert->lat);
       wpt_tmp->longitude = -DecodeOrd(vert->lon);
       wpt_tmp->shortname = QString().sprintf("\\%5.5lx", rtserial++);

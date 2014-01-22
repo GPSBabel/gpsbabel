@@ -111,7 +111,7 @@ ignr_etape_begin(xg_string args, const QXmlStreamAttributes* attrv)
 {
   ignr_xml_error((wpt != NULL));
 
-  wpt = waypt_new();
+  wpt = new waypoint;
 }
 
 static void

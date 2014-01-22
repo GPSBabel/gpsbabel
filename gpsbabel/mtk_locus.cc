@@ -436,7 +436,7 @@ process_pmtklox()
     }
 
     if (global_opts.masked_objective & TRKDATAMASK) {
-      trkpt  = waypt_new();
+      trkpt  = new waypoint;
       trkpt->SetCreationTime(timestamp);
       trkpt->latitude = latitude;
       trkpt->longitude = longitude;
@@ -448,7 +448,7 @@ process_pmtklox()
     }
 
     if (global_opts.masked_objective & WPTDATAMASK) {
-      waypt  = waypt_new();
+      waypt  = new waypoint;
       waypt->SetCreationTime(timestamp);
       waypt->latitude = latitude;
       waypt->longitude = longitude;

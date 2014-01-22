@@ -253,7 +253,7 @@ tlog3b_xgcb_tfdes(xg_string args, const QXmlStreamAttributes* unused)
 static void
 tlog3b_xgcb_wptst(xg_string args, const QXmlStreamAttributes* unused)
 {
-  xmlwpt = waypt_new();
+  xmlwpt = new waypoint;
   xmldatum = DATUM_WGS84;
 }
 
@@ -261,7 +261,7 @@ tlog3b_xgcb_wptst(xg_string args, const QXmlStreamAttributes* unused)
 static void
 tlog3b_xgcb_tptst(xg_string args, const QXmlStreamAttributes* unused)
 {
-  xmlwpt = waypt_new();
+  xmlwpt = new waypoint;
   xmldatum = DATUM_WGS84;
 }
 
@@ -481,7 +481,7 @@ read_CTrackFile(const int version)
       datum = read_datum(fin);
     }
 
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);
@@ -527,7 +527,7 @@ read_CTrackFile(const int version)
       gbfungetc(i, fin);
       datum = read_datum(fin);
 
-      wpt = waypt_new();
+      wpt = new waypoint;
 
       wpt->latitude = gbfgetdbl(fin);
       wpt->longitude = gbfgetdbl(fin);
@@ -557,7 +557,7 @@ read_CTrackFile(const int version)
 
     wcount--;
 
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);

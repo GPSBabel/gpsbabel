@@ -58,8 +58,8 @@ void GeoReadLoc()
       current_tag.append("/");
       current_tag.append(tag_name);
       if (current_tag == "/loc/waypoint") {
-        wpt = waypt_new();
-        waypt_alloc_gc_data(wpt);
+        wpt = new waypoint;
+        wpt->AllocGCData();
         // There is no 'unknown' alt value and so many reference files have
         // leaked it that we just paper over that here.
         wpt->altitude = 0;

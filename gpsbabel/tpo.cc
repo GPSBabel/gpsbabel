@@ -342,7 +342,7 @@ void tpo_read_2_x(void)
     /* multiply all the deltas by the scaling factors to determine the waypoint positions */
     for (j=0; j<waypoint_count; j++) {
 
-      waypoint_temp = waypt_new();
+      waypoint_temp = new waypoint;
 
       /* convert incoming NAD27/CONUS coordinates to WGS84 */
       GPS_Math_Known_Datum_To_WGS84_M(
@@ -462,7 +462,7 @@ waypoint* tpo_convert_ll(int lat, int lon)
   waypoint* waypoint_temp;
 
 
-  waypoint_temp = waypt_new();
+  waypoint_temp = new waypoint;
 
   latitude = (double)lat / 0x800000;
   longitude = (double)lon / 0x800000;
@@ -916,7 +916,7 @@ void tpo_process_waypoints(void)
 
     // For routes (later), we need a duplicate of each waypoint
     // indexed by the order we read them in.
-    waypoint_temp2 = waypt_dupe(waypoint_temp);
+    waypoint_temp2 = new waypoint(*waypoint_temp);
 
     // Attach the copy to our index
     tpo_wp_index[tpo_index_ptr++] = waypoint_temp2;
@@ -1316,7 +1316,7 @@ void tpo_process_routes(void)
 //printf("val: %x\t\t", val);
 
       // Duplicate a waypoint from our index of waypoints.
-      waypoint_temp = waypt_dupe(tpo_wp_index[val-1]);
+      waypoint_temp = new waypoint(*tpo_wp_index[val-1]);
 
       // Add the waypoint to the route
       route_add_wpt(route_temp, waypoint_temp);
@@ -1438,7 +1438,7 @@ tpo_rd_deinit(void)
 
   // Free the waypoint index, we don't need it anymore.
   for (i = 0; i < tpo_index_ptr; i++) {
-    waypt_free(tpo_wp_index[i]);
+    delete tpo_wp_index[i];
   }
   tpo_index_ptr = 0;
 

@@ -101,8 +101,8 @@ maggeo_read(void)
     buff += 9; /* skip field no. 1 */
     fld = 1;
 
-    wpt_tmp = waypt_new();
-    gcdata = waypt_alloc_gc_data(wpt_tmp);
+    wpt_tmp = new waypoint;
+    gcdata = wpt_tmp->AllocGCData();
 
     while ((s = csv_lineparse(buff, ",", "", fld++))) {
       buff = NULL;

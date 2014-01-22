@@ -273,7 +273,7 @@ parse_waypt(char* buff)
   waypoint* wpt;
   garmin_fs_p gmsd;
 
-  wpt = waypt_new();
+  wpt = new waypoint;
   gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
@@ -347,7 +347,7 @@ parse_trkpt(char* buff)
   garmin_fs_p gmsd;
   waypoint* wpt;
 
-  wpt = waypt_new();
+  wpt = new waypoint;
   gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
@@ -459,7 +459,7 @@ data_read(void)
       break;
 
     case 'I': /* event point */
-      wpt = waypt_new();
+      wpt = new waypoint;
       cdata += parse_coordinates(cdata, datum, grid,
                                  &wpt->latitude, &wpt->longitude, MYNAME);
       xasprintf(&wpt->shortname, "Event%d", ++event_ct);

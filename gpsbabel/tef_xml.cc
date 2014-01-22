@@ -211,13 +211,13 @@ waypoint_final()
 
   if (route != NULL) {
     if ((via != 0) || (routevia == NULL)) {
-      waypoint* wpt = waypt_dupe(wpt_tmp);
+      waypoint* wpt = new waypoint(*wpt_tmp);
       route_add_wpt(route, wpt);
     }
   }
 
   if (via == 0) {
-    waypt_free(wpt_tmp);
+    delete wpt_tmp;
   }
 
   wpt_tmp = NULL;
@@ -243,7 +243,7 @@ tef_item_start(xg_string args, const QXmlStreamAttributes* attrv)
 {
   waypoints++;
 
-  wpt_tmp = waypt_new();
+  wpt_tmp = new waypoint;
   if ((waypoints == 1) || (waypoints == item_count)) {
     wpt_tmp->wpt_flags.fmt_use ++;
   }

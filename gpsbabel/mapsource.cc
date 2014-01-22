@@ -126,7 +126,7 @@ mps_wpt_q_deinit(queue* whichQueue)
 
   QUEUE_FOR_EACH(whichQueue, elem, tmp) {
     waypoint* q = (waypoint*) dequeue(elem);
-    waypt_free(q);
+    delete q;
   }
 }
 
@@ -156,7 +156,7 @@ mps_find_wpt_q_by_name(const queue* whichQueue, const QString& name)
 void
 mps_wpt_q_add(const queue* whichQueue, const waypoint* wpt)
 {
-  waypoint* written_wpt = waypt_dupe(wpt);
+  waypoint* written_wpt = new waypoint(*wpt);
   ENQUEUE_TAIL(whichQueue, &written_wpt->Q);
 }
 
@@ -527,7 +527,7 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, waypoint** wpt, unsigned int* mpsc
   double	mps_proximity = unknown_alt;
   double	mps_depth = unknown_alt;
 
-  thisWaypoint = waypt_new();
+  thisWaypoint = new waypoint;
   *wpt = thisWaypoint;
 
   mps_readstr(mps_file, wptname, sizeof(wptname));
@@ -856,7 +856,7 @@ mps_waypoint_w_uniqloc_wrapper(waypoint* wpt)
         ((wpt->longitude - wptfound->longitude) != 0)) {
       /* Not the same lat lon, so rename and add */
       newName = mkshort(written_wpt_mkshort_handle, wpt->shortname);
-      wptfound = waypt_dupe(wpt);
+      wptfound = new waypoint(*wpt);
       xfree(wptfound->shortname);
       wptfound->shortname = newName;
       mps_waypoint_w(mps_file_out, mps_ver_out, wptfound, (1==0));
@@ -1008,18 +1008,18 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
     tempWpt = find_waypt_by_name(wptname);
 
     if (tempWpt != NULL) {
-      thisWaypoint = waypt_dupe(tempWpt);
+      thisWaypoint = new waypoint(*tempWpt);
     } else {
       tempWpt = mps_find_wpt_q_by_name(&read_route_wpt_head, wptname);
 
       if (tempWpt != NULL) {
-        thisWaypoint = waypt_dupe(tempWpt);
+        thisWaypoint = new waypoint(*tempWpt);
       } else {
         /* should never reach here, but we do need a fallback position */
 #ifdef	MPS_DEBUG
         fprintf(stderr, "mps_route_r: reached the point we never should\n");
 #endif
-        thisWaypoint = waypt_new();
+        thisWaypoint = new waypoint;
         thisWaypoint->shortname = wptname;
         thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
         thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
@@ -1095,15 +1095,15 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
   tempWpt = find_waypt_by_name(wptname);
 
   if (tempWpt != NULL) {
-    thisWaypoint = waypt_dupe(tempWpt);
+    thisWaypoint = new waypoint(*tempWpt);
   } else {
     tempWpt = mps_find_wpt_q_by_name(&read_route_wpt_head, wptname);
 
     if (tempWpt != NULL) {
-      thisWaypoint = waypt_dupe(tempWpt);
+      thisWaypoint = new waypoint(*tempWpt);
     } else {
       /* should never reach here, but we do need a fallback position */
-      thisWaypoint = waypt_new();
+      thisWaypoint = new waypoint;
       thisWaypoint->shortname = wptname;
       thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
       thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
@@ -1553,7 +1553,7 @@ mps_track_r(gbfile* mps_file, int mps_ver, route_head** trk)
       gbfseek(mps_file, 8, SEEK_CUR);
     }
 
-    thisWaypoint = waypt_new();
+    thisWaypoint = new waypoint;
     thisWaypoint->latitude = GPS_Math_Semi_To_Deg(lat);
     thisWaypoint->longitude = GPS_Math_Semi_To_Deg(lon);
     thisWaypoint->SetCreationTime(dateTime);
@@ -1749,14 +1749,14 @@ mps_read(void)
         fprintf(stderr,"Lost sync with the file reading waypoint - %s\n", wpt->shortname);
 #endif
         gbfseek(mps_file_in, mpsFileInPos + reclen, SEEK_SET);
-        waypt_free(wpt);
+        delete wpt;
       } else {
         /* only add to the "real" list if a "user" waypoint otherwise add to the private list */
         if (mpsWptClass == MPSDEFAULTWPTCLASS) {
           waypt_add(wpt);
         } else {
           mps_wpt_q_add(&read_route_wpt_head, wpt);
-          waypt_free(wpt);
+          delete wpt;
         }
 #ifdef DUMP_ICON_TABLE
         printf("\t{  %4u, \"%s\" },\n", icon, wpt->shortname);
@@ -1905,7 +1905,7 @@ mps_write(void)
            since we're here because the user didn't request waypoints, this should be acceptable */
         mps_waypoint_r(mps_file_temp, mps_ver_temp, &wpt, &mpsWptClass);
         mps_wpt_q_add(&written_wpt_head, wpt);
-        waypt_free(wpt);
+        delete wpt;
         /* now return to the start of the waypoint data to do a "clean" copy */
         gbfseek(mps_file_temp, tempFilePos, SEEK_SET);
 
@@ -1941,7 +1941,7 @@ mps_write(void)
           if (mpsWptClass == MPSDEFAULTWPTCLASS) {
             waypt_add(wpt);
           } else {
-            waypt_free(wpt);
+            delete wpt;
           }
         } else {
           break;

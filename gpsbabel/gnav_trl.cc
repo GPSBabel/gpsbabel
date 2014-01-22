@@ -98,7 +98,7 @@ gnav_trl_read(void)
       fatal(MYNAME ": Unexpected EOF (end of file)!\n");
     }
 
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     wpt->SetCreationTime(le_read32(&rec.time));
     wpt->latitude = le_read_float(&rec.lat);

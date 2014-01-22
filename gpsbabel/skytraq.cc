@@ -661,7 +661,7 @@ state_init(struct read_state* pst)
 static waypoint*
 make_trackpoint(struct read_state* st, double lat, double lon, double alt)
 {
-  waypoint* wpt = waypt_new();
+  waypoint* wpt = new waypoint;
 
   xasprintf(&wpt->shortname, "TP%04d", ++st->tpn);
 
@@ -858,7 +858,7 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
     WAYPT_SET(tpt, speed, KPH_TO_MPS(ITEM_SPEED(pitem))); /* convert speed to m/s */
 
     if (poi) {
-      waypt_add(waypt_dupe(tpt));
+      waypt_add(new waypoint(*tpt));
     }
 
     if (0 == pst->route_head_) {
@@ -1527,7 +1527,7 @@ static void miniHomer_get_poi()
     } else {
       ECEF_to_LLA(ecef_x, ecef_y, ecef_z, &lat, &lng, &alt);
 
-      wpt = waypt_new();
+      wpt = new waypoint;
       xasprintf(&wpt->shortname, "POI_%s", poinames[poi]);
       xasprintf(&wpt->description, "miniHomer points to this coordinates if the %s symbol is on", poinames[poi]);
       wpt->latitude       = lat;

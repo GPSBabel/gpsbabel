@@ -59,9 +59,9 @@ cst_add_wpt(const route_head* track, waypoint* wpt)
   }
 
   if (wpt->shortname != NULL) {
-    waypt_add(waypt_dupe(wpt));
+    waypt_add(new waypoint(*wpt));
     // Rather than creating a new waypt on each read, tis format bizarrely
-    // recycles the same one, relying on waypt_dupe() above and then manually
+    // recycles the same one, relying on new waypoint(*) above and then manually
     // resetting fields.  Weird.
     wpt->url_link_list_.clear();
 
@@ -69,7 +69,7 @@ cst_add_wpt(const route_head* track, waypoint* wpt)
       temp_route = route_head_alloc();
       route_add_head(temp_route);
     }
-    route_add_wpt(temp_route, waypt_dupe(wpt));
+    route_add_wpt(temp_route, new waypoint(*wpt));
   }
   track_add_wpt((route_head*)track, (waypoint*)wpt);
 }
@@ -266,7 +266,7 @@ cst_data_read(void)
         wpt = NULL;
 
 
-        wpt = waypt_new();
+        wpt = new waypoint;
 
         if (5 != sscanf(cin, "%lf %lf %lf %d %s",
                         &wpt->longitude,

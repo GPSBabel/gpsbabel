@@ -422,7 +422,7 @@ route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src)
     rte_new->rte_num = rte_old->rte_num;
     any_route_add_head(rte_new, *dst);
     QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2) {
-      any_route_add_wpt(rte_new, waypt_dupe((waypoint*)elem2), dst_wpt_count, 0, RPT, 3);
+      any_route_add_wpt(rte_new, new waypoint(*(waypoint*)elem2), dst_wpt_count, 0, RPT, 3);
     }
     (*dst_count)++;
   }

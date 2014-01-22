@@ -472,7 +472,7 @@ osm_node_end(xg_string args, const QXmlStreamAttributes* unused)
     if (wpt->wpt_flags.fmt_use) {
       waypt_add(wpt);
     } else {
-      waypt_free(wpt);
+      delete wpt;
     }
     wpt = NULL;
   }
@@ -482,7 +482,7 @@ osm_node_end(xg_string args, const QXmlStreamAttributes* unused)
 static void
 osm_node(xg_string args, const QXmlStreamAttributes* attrv)
 {
-  wpt = waypt_new();
+  wpt = new waypoint;
 
   if (attrv->hasAttribute("id")) {
     QString atstr = attrv->value("id").toString();
@@ -597,7 +597,7 @@ osm_way_nd(xg_string args, const QXmlStreamAttributes* attrv)
 
     if (waypoints.contains(atstr)) {
       ctmp = waypoints.value(atstr);
-      tmp = waypt_dupe(ctmp);
+      tmp = new waypoint(*ctmp);
       route_add_wpt(rte, tmp);
     } else {
       warning(MYNAME ": Way reference id \"%s\" wasn't listed under nodes!\n", CSTR(atstr));

@@ -272,7 +272,7 @@ const char* kml_tags_to_ignore[] = {
 
 void wpt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp = waypt_new();
+  wpt_tmp = new waypoint;
   wpt_tmp_queued = 0;
 }
 
@@ -281,7 +281,7 @@ void wpt_e(xg_string args, const QXmlStreamAttributes* unused)
   if (wpt_tmp_queued) {
     waypt_add(wpt_tmp);
   } else {
-    waypt_free(wpt_tmp);
+    delete wpt_tmp;
   }
   wpt_tmp_queued = 0;
 }
@@ -338,7 +338,7 @@ void trk_coord(xg_string args, const QXmlStreamAttributes* attrv)
   }
   track_add_head(trk_head);
   while ((n = sscanf(CSTR(iargs), "%lf,%lf,%lf%n", &lon, &lat, &alt, &consumed)) > 0) {
-    trkpt = waypt_new();
+    trkpt = new waypoint;
     trkpt->latitude = lat;
     trkpt->longitude = lon;
 
@@ -2088,7 +2088,7 @@ kml_wr_position(waypoint* wpt)
 
     if (radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
                            RAD(newest_posn->latitude), RAD(newest_posn->longitude))) > 50) {
-      track_add_wpt(posn_trk_head, waypt_dupe(wpt));
+      track_add_wpt(posn_trk_head, new waypoint(*wpt));
     } else {
       /* If we haven't move more than our threshold, pretend
        * we didn't move at  all to prevent Earth from jittering
