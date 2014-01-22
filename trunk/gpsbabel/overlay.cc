@@ -362,7 +362,7 @@ static void ovl_read(void)
             switch (aktTyp) {
 #ifdef WITH_BITMAP
             case 1: // Bitmap
-              wpt = waypt_new();
+              wpt = new waypoint;
               wpt->latitude = aktY;
               wpt->longitude = aktX;
               wpt->altitude = 0.0;
@@ -374,7 +374,7 @@ static void ovl_read(void)
               isSection = SECTION_SYMBOL;
               break;
             case 3: // Linie
-              wpt = waypt_new();
+              wpt = new waypoint;
               wpt->latitude = aktY;
               wpt->longitude = aktX;
               wpt->altitude = 0.0;

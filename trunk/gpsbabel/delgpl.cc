@@ -63,7 +63,7 @@ gpl_read(void)
   track_add_head(track_head);
 
   while (gbfread(&gp, sizeof(gp), 1, gplfile_in) > 0) {
-    wpt_tmp = waypt_new();
+    wpt_tmp = new waypoint;
     wpt_tmp->latitude = le_read_double(&gp.lat);
     wpt_tmp->longitude = le_read_double(&gp.lon);
     alt_feet = le_read_double(&gp.alt);
@@ -95,7 +95,7 @@ gpl_read(void)
     // in time.  The only thing I see "special" about those
     // trackpoints is that these fields are zeroed.  Toss them.
     if ((wpt_tmp->speed == 0.0) && (wpt_tmp->course == 0.0)) {
-      waypt_free(wpt_tmp);
+      delete wpt_tmp;
       continue;
     }
     track_add_wpt(track_head, wpt_tmp);

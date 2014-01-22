@@ -191,7 +191,7 @@ data_read(void)
       desc = (char*)xmalloc(recsize - 13);
       gbfread(desc, recsize-13, 1, file_in);
 
-      wpt_tmp = waypt_new();
+      wpt_tmp = new waypoint;
 
       wpt_tmp->longitude = x/100000.0;
       wpt_tmp->latitude = y/100000.0;
@@ -212,7 +212,7 @@ data_read(void)
 #if 0 // Fallthrough for now to silently ignore these until this is done.
       recsize = read_char(file_in) ;
       check_recsize(recsize);
-      wpt_tmp = waypt_new();
+      wpt_tmp = new waypoint;
       decode_latlon(&wpt_tmp->latitude, &wpt_tmp->longitude);
       gbfread(tbuf, 3, 1, file_in);
       gbfread(tbuf, 3, 1, file_in);

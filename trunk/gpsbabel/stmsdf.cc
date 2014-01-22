@@ -264,7 +264,7 @@ parse_point(char* line)
         warning(MYNAME ": Unknown point type %s at line %d!\n", str, lineno);
         return;
       }
-      wpt = waypt_new();
+      wpt = new waypoint;
       break;
 
     case 1:

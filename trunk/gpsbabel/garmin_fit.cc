@@ -380,7 +380,7 @@ fit_parse_data(fit_message_def* def, int time_offset)
       break;
     }
 
-    waypt = waypt_new();
+    waypt = new waypoint;
     waypt->latitude = (lat / (double)0x7fffffff) * 180;
     waypt->longitude = (lon / (double)0x7fffffff) * 180;
     if (alt != 0xffff) {

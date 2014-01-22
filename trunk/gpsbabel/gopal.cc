@@ -206,7 +206,7 @@ gopal_read(void)
     if ((nfields == 8) && (tx == 0)) {
       // fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"date\" switch!\n", buff);
     }
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     column = -1;
     // the format of gopal is quite simple. Unfortunately the developers forgot the date as the first element...
@@ -333,7 +333,7 @@ gopal_read(void)
       long_old=wpt->longitude;
       lat_old=wpt->latitude;
       route_add_wpt(route,wpt);
-      waypt_add(waypt_dupe(wpt));
+      waypt_add(new waypoint(*wpt));
     }
   }
 }

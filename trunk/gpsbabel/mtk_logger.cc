@@ -747,7 +747,7 @@ mtk_retry:
 static route_head*  trk_head = NULL;
 static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
 {
-  waypoint* trk = waypt_new();
+  waypoint* trk = new waypoint;
 
   if (global_opts.masked_objective& TRKDATAMASK && (trk_head == NULL || (mtk_info.track_event & MTK_EVT_START))) {
     char spds[50];
@@ -826,7 +826,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
      */
     if ((trk->fix == fix_unknown || trk->fix == fix_none)  &&
         trk->latitude - 90.0 < .000001 && trk->longitude < 0.000001) {
-      waypt_free(trk);
+      delete trk;
       return -1;
     }
   }
@@ -842,7 +842,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
          )
      ) {
     /* Button press -- create waypoint, start count at 1 */
-    waypoint* w = waypt_dupe(trk);
+    waypoint* w = new waypoint(*trk);
 
     w->shortname = QString().sprintf("WP%06d", waypt_count()+1);
     waypt_add(w);

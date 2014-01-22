@@ -338,7 +338,7 @@ waypt_read(void)
   GPS_PWay* way = NULL;
 
   if (getposn) {
-    waypoint* wpt = waypt_new();
+    waypoint* wpt = new waypoint;
     wpt->latitude = gps_save_lat;
     wpt->longitude = gps_save_lon;
     wpt->shortname = "Position";
@@ -354,7 +354,7 @@ waypt_read(void)
   }
 
   for (i = 0; i < n; i++) {
-    waypoint* wpt_tmp = waypt_new();
+    waypoint* wpt_tmp = new waypoint;
 
     wpt_tmp->shortname = way[i]->ident;
     wpt_tmp->description = QString(way[i]->cmnt).simplified();
@@ -491,7 +491,7 @@ track_read(void)
     if (array[i]->no_latlon || array[i]->ishdr) {
       continue;
     }
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     wpt->longitude = array[i]->lon;
     wpt->latitude = array[i]->lat;
@@ -563,7 +563,7 @@ route_read(void)
       if (array[i]->islink)  {
         continue;
       } else {
-        waypoint* wpt_tmp = waypt_new();
+        waypoint* wpt_tmp = new waypoint;
         wpt_tmp->latitude = array[i]->lat;
         wpt_tmp->longitude = array[i]->lon;
         wpt_tmp->shortname = array[i]->ident;
@@ -618,7 +618,7 @@ lap_read_as_track(void)
       trk_head->rte_name = tbuf;
       track_add_head(trk_head);
 
-      wpt = waypt_new();
+      wpt = new waypoint;
 
       wpt->longitude = array[i]->begin_lon;
       wpt->latitude = array[i]->begin_lat;
@@ -641,7 +641,7 @@ lap_read_as_track(void)
     *			continue;
     *		}
     */
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     wpt->longitude = array[i]->end_lon;
     wpt->latitude = array[i]->end_lat;
@@ -749,7 +749,7 @@ pvt_init(const char* fname)
 static waypoint*
 pvt_read(posn_status* posn_status)
 {
-  waypoint* wpt = waypt_new();
+  waypoint* wpt = new waypoint;
   GPS_PPvt_Data pvt = GPS_Pvt_New();
 
   if (GPS_Command_Pvt_Get(&pvt_fd, &pvt)) {
@@ -773,7 +773,7 @@ pvt_read(posn_status* posn_status)
     fatal(MYNAME ": Fatal error reading position.\n");
   }
 
-  waypt_free(wpt);
+  delete wpt;
   GPS_Pvt_Del(&pvt);
 
   return NULL;

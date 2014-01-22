@@ -301,7 +301,7 @@ psit_waypoint_r(gbfile* psit_file, waypoint** wpt)
   waypoint*	thisWaypoint;
 
   if (strlen(psit_current_token) > 0) {
-    thisWaypoint = waypt_new();
+    thisWaypoint = new waypoint;
 
     thisWaypoint->latitude = atof(psit_current_token);
 
@@ -423,7 +423,7 @@ psit_route_r(gbfile* psit_file, route_head** rte)
 
   while (psit_isKnownToken(psit_current_token) != 0) {
     if (strlen(psit_current_token) > 0) {
-      thisWaypoint = waypt_new();
+      thisWaypoint = new waypoint;
 
       thisWaypoint->latitude = atof(psit_current_token);
 
@@ -568,7 +568,7 @@ psit_track_r(gbfile* psit_file, route_head** trk)
 
   while (psit_isKnownToken(psit_current_token) != 0) {
     if (strlen(psit_current_token) > 0) {
-      thisWaypoint = waypt_new();
+      thisWaypoint = new waypoint;
 
       thisWaypoint->latitude = atof(psit_current_token);
 

@@ -526,7 +526,7 @@ gtm_read(void)
 
   /* Waypoints */
   for (i = 0; i != wp_count; i++) {
-    wpt = waypt_new();
+    wpt = new waypoint;
     wpt->latitude = fread_double(file_in);
     wpt->longitude = fread_double(file_in);
     convert_datum(&wpt->latitude, &wpt->longitude);
@@ -561,7 +561,7 @@ gtm_read(void)
 
   /* Tracklogs */
   for (i = 0; i != tr_count; i++) {
-    wpt = waypt_new();
+    wpt = new waypoint;
     wpt->latitude = fread_double(file_in);
     wpt->longitude = fread_double(file_in);
     convert_datum(&wpt->latitude, &wpt->longitude);
@@ -595,7 +595,7 @@ gtm_read(void)
 
   /* Routes */
   for (i = 0; i != rt_count; i++) {
-    wpt = waypt_new();
+    wpt = new waypoint;
     wpt->latitude = fread_double(file_in);
     wpt->longitude = fread_double(file_in);
     convert_datum(&wpt->latitude, &wpt->longitude);

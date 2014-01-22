@@ -693,7 +693,7 @@ exif_waypt_from_exif_app(exif_app_t* app)
     return NULL;
   }
 
-  wpt = waypt_new();
+  wpt = new waypoint;
 
   wpt->latitude = unknown_alt;
   wpt->longitude = unknown_alt;

@@ -779,7 +779,7 @@ data_read(void)
     if (buff.contains(',')) {
       bool ozi_fsdata_used = false;
       ozi_fsdata* fsdata = ozi_alloc_fsdata();
-      wpt_tmp = waypt_new();
+      wpt_tmp = new waypoint;
 
       /* data delimited by commas, possibly enclosed in quotes.  */
       char* orig_s = xstrdup(CSTR(buff));
@@ -820,7 +820,7 @@ data_read(void)
           ozi_convert_datum(wpt_tmp);
           track_add_wpt(trk_head, wpt_tmp);
         } else {
-          waypt_free(wpt_tmp);
+          delete wpt_tmp;
         }
         break;
       case rtedata:
@@ -829,10 +829,10 @@ data_read(void)
           if (!header) {
             route_add_wpt(rte_head, wpt_tmp);
           } else {
-            waypt_free(wpt_tmp);
+            delete wpt_tmp;
           }
         } else {
-          waypt_free(wpt_tmp);
+          delete wpt_tmp;
         }
         break;
       case wptdata:
@@ -844,7 +844,7 @@ data_read(void)
           ozi_convert_datum(wpt_tmp);
           waypt_add(wpt_tmp);
         } else {
-          waypt_free(wpt_tmp);
+          delete wpt_tmp;
         }
         break;
       case posndata:

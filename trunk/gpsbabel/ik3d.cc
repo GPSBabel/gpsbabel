@@ -85,7 +85,7 @@ iktobj_waypt(xg_string args, const QXmlStreamAttributes* attrv)
 static void
 iktobj_trkpt(xg_string args, const QXmlStreamAttributes* attrv)
 {
-  waypt = waypt_new();
+  waypt = new waypoint;
   iktobj_waypt(args, attrv);
   track_add_wpt(track, waypt);
   waypt = NULL;
@@ -113,7 +113,7 @@ iktobj_type(xg_string args, const QXmlStreamAttributes* unused)
   switch (atoi(args)) {
 #endif
   case 0:
-    waypt = waypt_new();
+    waypt = new waypoint;
     break;
   case 1:
     track = route_head_alloc();

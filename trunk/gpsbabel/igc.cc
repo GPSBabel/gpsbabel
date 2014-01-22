@@ -199,7 +199,7 @@ static void igc_task_rec(const char* rec)
     fatal(MYNAME ": task waypoint (C) record parse error\n%s", rec);
   }
 
-  wpt = waypt_new();
+  wpt = new waypoint;
   wpt->latitude = ('N' == lat_hemi[0] ? 1 : -1) *
                   (lat_deg + (lat_min * 1000 + lat_frac) / 1000.0 / 60);
 
@@ -246,7 +246,7 @@ static void igc_task_rec(const char* rec)
 
   // Zero lat and lon indicates an unknown waypoint
   if (coords_match(wpt->latitude, wpt->longitude, 0.0, 0.0)) {
-    waypt_free(wpt);
+    delete wpt;
     return;
   }
   wpt->shortname = short_name;
@@ -350,7 +350,7 @@ static void data_read(void)
                  &validity, &pres_alt, &gnss_alt) != 14) {
         fatal(MYNAME ": fix (B) record parse error\n%s\n", ibuf);
       }
-      pres_wpt = waypt_new();
+      pres_wpt = new waypoint;
 
       pres_wpt->latitude = ('N' == lat_hemi[0] ? 1 : -1) *
                            (lat_deg + (lat_min * 1000 + lat_frac) / 1000.0 / 60);
@@ -377,7 +377,7 @@ static void data_read(void)
 
       // Add the same waypoint with GNSS altitude to the second
       // track
-      gnss_wpt = waypt_dupe(pres_wpt);
+      gnss_wpt = new waypoint(*pres_wpt);
 
       if (gnss_alt) {
         gnss_valid = 1;

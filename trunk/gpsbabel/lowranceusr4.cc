@@ -359,7 +359,7 @@ lowranceusr4_parse_waypoints(void)
   for (i = 0; i < num_waypts; ++i) {
     waypoint* wpt_tmp;
 
-    wpt_tmp = waypt_new();
+    wpt_tmp = new waypoint;
     lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
     fs_chain_add(&(wpt_tmp->fs), (format_specific_data*) fsdata);
 
@@ -564,7 +564,7 @@ lowranceusr4_parse_routes(void)
           printf(MYNAME " parse_routes: added wpt %s to route %s\n",
                  CSTRc(wpt_tmp->shortname), CSTRc(rte_head->rte_name));
         }
-        route_add_wpt(rte_head, waypt_dupe(wpt_tmp));
+        route_add_wpt(rte_head, new waypoint(*wpt_tmp));
       }
     }
 
@@ -683,7 +683,7 @@ lowranceusr4_parse_trails(void)
     }
 
     for (j = 0; j < num_trail_pts; ++j) {
-      wpt_tmp = waypt_new();
+      wpt_tmp = new waypoint;
 
       /* Some unknown bytes */
       gbfgetint16(file_in);

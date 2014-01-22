@@ -110,7 +110,7 @@ data_read(void)
     rtrim(sn);
     rtrim(desc);
     rtrim(icon);
-    wpt_tmp = waypt_new();
+    wpt_tmp = new waypoint;
     wpt_tmp->altitude = alt;
     wpt_tmp->shortname = sn;
     xfree(sn);

@@ -207,7 +207,7 @@ raymarine_read(void)
       break;
     }
 
-    wpt = waypt_new();
+    wpt = new waypoint;
     wpt->shortname = name;
     wpt->latitude = atof(lat);
     wpt->longitude = atof(lon);
@@ -263,7 +263,7 @@ raymarine_read(void)
         fatal(MYNAME ": No associated waypoint for route point %s (Route %s)!\n",
               str, CSTRc(rte->rte_name));
 
-      route_add_wpt(rte, waypt_dupe(wpt));
+      route_add_wpt(rte, new waypoint(*wpt));
     }
   }
 }

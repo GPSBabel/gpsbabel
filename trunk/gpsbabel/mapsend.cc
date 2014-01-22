@@ -121,7 +121,7 @@ mapsend_wpt_read(void)
   wpt_count = gbfgetint32(mapsend_file_in);
 
   while (wpt_count--) {
-    wpt_tmp = waypt_new();
+    wpt_tmp = new waypoint;
 
     wpt_tmp->shortname = gbfgetpstr(mapsend_file_in);
     wpt_tmp->description = gbfgetpstr(mapsend_file_in);
@@ -162,7 +162,7 @@ mapsend_wpt_read(void)
     wpt_count = gbfgetint32(mapsend_file_in);
 
     while (wpt_count--) {
-      wpt_tmp = waypt_new();
+      wpt_tmp = new waypoint;
 
       /* waypoint name */
       wpt_tmp->shortname = gbfgetpstr(mapsend_file_in);
@@ -202,7 +202,7 @@ mapsend_track_read(void)
   trk_count = gbfgetuint32(mapsend_file_in);
 
   while (trk_count--) {
-    wpt_tmp = waypt_new();
+    wpt_tmp = new waypoint;
 
     wpt_tmp->longitude = gbfgetdbl(mapsend_file_in);
     wpt_tmp->latitude = -gbfgetdbl(mapsend_file_in);

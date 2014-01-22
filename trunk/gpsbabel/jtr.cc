@@ -213,7 +213,7 @@ jtr_read(void)
       continue;
     }
 
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     wpt->latitude = lat;
     wpt->longitude = lon;

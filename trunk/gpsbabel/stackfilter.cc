@@ -109,7 +109,7 @@ stackfilt_process(void)
     stack = tmp_elt;
     if (opt_copy) {
       QUEUE_FOR_EACH(&(stack->waypts), elem, tmp) {
-        waypt_add(waypt_dupe((waypoint*)elem));
+        waypt_add(new waypoint(*(waypoint*)elem));
       }
     }
 

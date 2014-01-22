@@ -105,7 +105,7 @@ static void data_read(void)
 
   /* Get the waypoints */
   for (iCount = 0; iCount < iWptNum ; iCount ++) {
-    wpt_tmp = waypt_new();
+    wpt_tmp = new waypoint;
 
     iWptIndex = le_read16(&((WPTHDR*)HxWpt)->idx[iCount]);
     pWptHxTmp = (WPT*)&HxWpt[OFFS_WPT + (sizeof(WPT) * iWptIndex)];

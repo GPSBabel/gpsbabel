@@ -655,7 +655,7 @@ unicsv_parse_one_line(char* ibuf)
   int ns = 1;
   int ew = 1;
   geocache_data* gc_data = NULL;
-  wpt = waypt_new();
+  wpt = new waypoint;
   wpt->latitude = unicsv_unknown;
   wpt->longitude = unicsv_unknown;
   memset(&ymd, 0, sizeof(ymd));
@@ -1040,7 +1040,7 @@ unicsv_parse_one_line(char* ibuf)
     case fld_gc_placer_id:
     case fld_gc_hint:
 
-      gc_data = waypt_alloc_gc_data(wpt);
+      gc_data = wpt->AllocGCData();
 
       switch (unicsv_fields_tab[column]) {
 
@@ -1107,7 +1107,7 @@ unicsv_parse_one_line(char* ibuf)
   }
 
   if (checked == 0) {
-    waypt_free(wpt);
+    delete wpt;
     return;
   }
 
@@ -1405,7 +1405,7 @@ unicsv_waypt_enum_cb(const waypoint* wpt)
     }
   }
 
-  if (! waypt_empty_gc_data(wpt)) {
+  if (! wpt->EmptyGCData()) {
     const geocache_data* gc_data = wpt->gc_data;
 
     if (gc_data->id) {
@@ -1766,7 +1766,7 @@ unicsv_waypt_disp_cb(const waypoint* wpt)
     unicsv_print_str(GMSD_GET(email, NULL));
   }
 
-  if (waypt_empty_gc_data(wpt)) {
+  if (wpt->EmptyGCData()) {
     gc_data = NULL;
   } else {
     gc_data = wpt->gc_data;

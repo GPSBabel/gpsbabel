@@ -293,7 +293,7 @@ format_garmin_xt_proc_strk(void)
         // Add point to the track if not the first point
         if (!FirstCoo) {
           //create new waypoint
-          wpt = waypt_new();
+          wpt = new waypoint;
 
           //populate wpt;
           wpt->latitude = PrevLat;	/* Degrees */
@@ -319,7 +319,7 @@ format_garmin_xt_proc_strk(void)
     format_garmin_xt_decomp_last_ele(Count, &PrevEle, TrackBlock);
 
     //create new waypoint
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     //populate wpt;
     wpt->latitude = PrevLat;	/* Degrees */
@@ -391,7 +391,7 @@ format_garmin_xt_proc_atrk(void)
     AltF = (double)uu * GARMIN_XT_ELE - 1500;
 
     //create new waypoint
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     //populate wpt;
     wpt->latitude = LatF*180/16777216;	/* Degrees */

@@ -81,7 +81,7 @@ yahoo_wr_init(const char* fname)
 
 void	wpt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp = waypt_new();
+  wpt_tmp = new waypoint;
 }
 
 void	wpt_e(xg_string args, const QXmlStreamAttributes* unused)

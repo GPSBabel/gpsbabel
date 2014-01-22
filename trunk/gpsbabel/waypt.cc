@@ -59,14 +59,6 @@ waypt_init(void)
 #endif
 }
 
-// This whole thing is a poor-man's copy constructor. It exists mostly
-// as a bridge from our non-reference counted C types to classes now.
-waypoint*
-waypt_dupe(const waypoint* wpt)
-{
-  return new waypoint(*wpt);
-}
-
 void update_common_traits(const waypoint* wpt)
 {
   /* This is a bit tacky, but it allows a hint whether we've seen
@@ -157,16 +149,6 @@ waypt_del(waypoint* wpt)
   dequeue(&wpt->Q);
   waypt_ct--;
 #endif
-}
-
-/*
- * A constructor for a single waypoint.
- */
-waypoint*
-waypt_new(void)
-{
-  waypoint* wpt = new waypoint;
-  return wpt;
 }
 
 unsigned int
@@ -342,18 +324,12 @@ find_waypt_by_name(const QString& name)
   return NULL;
 }
 
-void
-waypt_free(waypoint* wpt)
-{
-  delete wpt;
-}
-
 #if NEWQ
 void
 waypt_flush(queue* head)
 {
   while (!waypt_list.isEmpty()) {
-    waypt_free(waypt_list.takeFirst());
+    delete waypt_list.takeFirst();
   }
 }
 #else
@@ -364,7 +340,7 @@ waypt_flush(queue* head)
 
   QUEUE_FOR_EACH(head, elem, tmp) {
     waypoint* q = (waypoint*) dequeue(elem);
-    waypt_free(q);
+    delete q;
     if (head == &waypt_head) {
       waypt_ct--;
     }
@@ -405,7 +381,7 @@ waypt_backup(signed int* count, queue** head_bak)
 
   QUEUE_FOR_EACH(qbackup, elem, tmp) {
     wpt = (waypoint*)elem;
-    waypt_add(waypt_dupe(wpt));
+    waypt_add(new waypoint(*wpt));
     no++;
   }
 
@@ -567,19 +543,6 @@ waypt_course(const waypoint* A, const waypoint* B)
     return 0;
   }
 }
-
-geocache_data*
-waypt_alloc_gc_data(waypoint* wpt)
-{
-  return wpt->AllocGCData();
-}
-
-int
-waypt_empty_gc_data(const waypoint* wpt)
-{
-  return wpt->EmptyGCData();
-}
-
 
 waypoint::waypoint() :
   // Q(),

@@ -200,7 +200,7 @@ static int process_data(const unsigned char* data)
     break;
 
   case st_sample_alt:
-    wpt = waypt_new();
+    wpt = new waypoint;
     wpt->latitude = wpt->longitude = 0.0;
     wpt->SetCreationTime(creation);
     creation += interval;

@@ -695,7 +695,7 @@ main(int argc, char* argv[])
 
       if (tracking_status.request_terminate) {
         if (wpt) {
-          waypt_free(wpt);
+          delete wpt;
         }
         break;
       }
@@ -708,7 +708,7 @@ main(int argc, char* argv[])
           /* Just print to screen */
           waypt_disp(wpt);
         }
-        waypt_free(wpt);
+        delete wpt;
       }
     }
     if (ivecs->position_ops.rd_deinit) {

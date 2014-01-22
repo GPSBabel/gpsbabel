@@ -994,7 +994,7 @@ decode_time(const uint8_t* p)
 static waypoint*
 decode_waypoint(const void* data)
 {
-  waypoint* wp = waypt_new();
+  waypoint* wp = new waypoint;
   const msg_waypoint_t* p = (const msg_waypoint_t*)data;
   const char* s;
   float f;
@@ -1400,7 +1400,7 @@ write_waypoint(const waypoint* wp)
   float elev = UNKNOWN_ELEV;
   char* pp;
 
-  if (waypt_empty_gc_data(wp)) {
+  if (wp->EmptyGCData()) {
     notes = xstrdup(wp->notes);
     if (notes == NULL && wp->description.isEmpty() && wp->shortname != wp->description) {
       notes = xstrdup(wp->description);
@@ -1554,7 +1554,7 @@ decode_track_point(const void* data, unsigned* wp_array_i, unsigned max_point)
     fatal(MYNAME ": read too many track points\n");
   }
   for (i = 0; i < n; i++, j++) {
-    waypoint* wp = waypt_new();
+    waypoint* wp = new waypoint;
     float elev = le_read_float(p->point[i].elevation);
     wp_array[j] = wp;
     wp->SetCreationTime(decode_time(&p->point[i].year));
@@ -1863,7 +1863,7 @@ decode_route_shape(const void* data, unsigned* wp_array_i)
 
   for (i = 0; i < n; i++, j++) {
     char buf[32];
-    waypoint* wp = waypt_new();
+    waypoint* wp = new waypoint;
     wp_array[j] = wp;
     wp->latitude = delbin_rad2deg(le_read32(p->point[i].latitude));
     wp->longitude = delbin_rad2deg(le_read32(p->point[i].longitude));
@@ -1879,7 +1879,7 @@ decode_route_point(const void* data)
   const msg_route_point_t* p = (const msg_route_point_t*) data;
   const char* s = NULL;
   gbfile* fd = gbfopen(NULL, "w", MYNAME);
-  waypoint* wp = waypt_new();
+  waypoint* wp = new waypoint;
   if (p->name[0]) {
     wp->shortname = p->name;
   }
@@ -2265,7 +2265,7 @@ write_routes(void)
 static waypoint*
 decode_navmsg(const void* data)
 {
-  waypoint* wp = waypt_new();
+  waypoint* wp = new waypoint;
   const msg_navigation_t* p = (const msg_navigation_t*) data;
   struct tm t;
 

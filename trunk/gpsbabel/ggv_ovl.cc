@@ -146,7 +146,7 @@ ggv_ovl_read(void)
 
         for (j = 0; j < points; j++) {
 
-          wpt = waypt_new();
+          wpt = new waypoint;
 
           snprintf(coord, sizeof(coord), "YKoord%d", j);
           if ((cx = inifile_readstr(inifile, symbol, coord))) {
@@ -174,7 +174,7 @@ ggv_ovl_read(void)
     case OVL_SYMBOL_CIRCLE:
     case OVL_SYMBOL_TRIANGLE:
 
-      wpt = waypt_new();
+      wpt = new waypoint;
       wpt->shortname = symbol;
 
       if ((cx = inifile_readstr(inifile, symbol, "YKoord"))) {

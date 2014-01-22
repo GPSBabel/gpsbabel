@@ -508,7 +508,7 @@ static waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
   }
   wpt = &(wprdata->wpt[idx]);
 
-  WP = waypt_new();
+  WP = new waypoint;
   WP->latitude  = -pt2deg(wpt->pt.y);
   WP->longitude =  pt2deg(wpt->pt.x);
   WP->SetCreationTime(unpack_time(wpt->date, wpt->time));
@@ -643,7 +643,7 @@ static void trl_read(void)
     /* track points */
     trklog = &(trldata.trklog[i]);
     for (j=0; j<trkhdr->totalpt; j++) {
-      WP = waypt_new();
+      WP = new waypoint;
       WP->latitude  = -pt2deg(trklog->pt[j].y);
       WP->longitude =  pt2deg(trklog->pt[j].x);
       WP->altitude  =  hgt2m(trklog->sh[j].height);

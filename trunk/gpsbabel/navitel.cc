@@ -62,7 +62,7 @@ navitel_read_track(void)
     lon = gbfgetint32(fin);
     lat = gbfgetint32(fin);
 
-    wpt = waypt_new();
+    wpt = new waypoint;
     wpt->latitude = GPS_Math_Semi_To_Deg(lat & 0x7FFFFFFF);
     wpt->longitude = GPS_Math_Semi_To_Deg(lon);
 

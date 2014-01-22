@@ -88,12 +88,12 @@ wr_init(const char* fname)
 void	wpt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
   if (isFirst == 1) {
-    wpt_from = waypt_new();
+    wpt_from = new waypoint;
     route = route_head_alloc();
     route->rte_desc="PocketFMS flightplan";
     route_add_head(route);
   }
-  wpt_to = waypt_new();
+  wpt_to = new waypoint;
 }
 
 void	wpt_e(xg_string args, const QXmlStreamAttributes* unused)
@@ -101,14 +101,14 @@ void	wpt_e(xg_string args, const QXmlStreamAttributes* unused)
   if (isFirst == 1) {
     route_add_wpt(route, wpt_from);
     if (doing_wpts) {
-      waypt_add(waypt_dupe(wpt_from));
+      waypt_add(new waypoint(*wpt_from));
     }
     wpt_from = NULL;
     isFirst = 0;
   }
   route_add_wpt(route, wpt_to);
   if (doing_wpts) {
-    waypt_add(waypt_dupe(wpt_to));
+    waypt_add(new waypoint(*wpt_to));
   }
   wpt_to = NULL;
 }

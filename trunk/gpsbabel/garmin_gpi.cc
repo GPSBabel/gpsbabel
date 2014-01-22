@@ -388,7 +388,7 @@ read_poi(const int sz, const int tag)
   (void) len;
   pos = gbftell(fin);
 
-  wpt = waypt_new();
+  wpt = new waypoint;
   wpt->icon_descr = DEFAULT_ICON;
 
   wpt->latitude = GPS_Math_Semi_To_Deg(gbfgetint32(fin));
@@ -824,7 +824,7 @@ wdata_free(writer_data_t* data)
       }
       xfree(dt);
     }
-    waypt_free(wpt);
+    delete wpt;
   }
 
   if (data->top_left) {
@@ -1300,7 +1300,7 @@ enum_waypt_cb(const waypoint* ref)
     }
   }
 
-  wpt = waypt_dupe(ref);
+  wpt = new waypoint(*ref);
 
   if (*opt_unique == '1') {
 #if NEW_STRINGS

@@ -95,7 +95,7 @@ transform_waypoints(void)
     waypoint* wpt = (waypoint*) elem;
 #endif
 
-    wpt = waypt_dupe(wpt);
+    wpt = new waypoint(*wpt);
     switch (current_target) {
     case 'R':
       route_add_wpt_named(rte, wpt, RPT, name_digits);
@@ -153,7 +153,7 @@ transform_trk_disp_hdr_cb(const route_head* trk)
 static void
 transform_any_disp_wpt_cb(const waypoint* wpt)
 {
-  waypoint* temp = waypt_dupe(wpt);
+  waypoint* temp = new waypoint(*wpt);
   if (current_target == 'R') {
     route_add_wpt_named(current_rte, temp, current_namepart, name_digits);
   } else if (current_target == 'T') {

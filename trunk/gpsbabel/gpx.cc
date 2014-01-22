@@ -490,7 +490,7 @@ tag_gpx(const QXmlStreamAttributes& attr)
 static void
 tag_wpt(const QXmlStreamAttributes& attr)
 {
-  wpt_tmp = waypt_new();
+  wpt_tmp = new waypoint;
   link_ = new UrlLink;
 
   cur_tag = NULL;
@@ -517,7 +517,7 @@ tag_cache_desc(const QXmlStreamAttributes& attr)
 static void
 tag_gs_cache(const QXmlStreamAttributes& attr)
 {
-  geocache_data* gc_data = waypt_alloc_gc_data(wpt_tmp);
+  geocache_data* gc_data = wpt_tmp->AllocGCData();
 
   if (attr.hasAttribute("id")) {
     gc_data->id = attr.value("id").toString().toInt();
@@ -608,7 +608,7 @@ static void
 tag_log_wpt(const QXmlStreamAttributes& attr)
 {
   /* create a new waypoint */
-  waypoint* lwp_tmp = waypt_new();
+  waypoint* lwp_tmp = new waypoint;
 
   /* extract the lat/lon attributes */
   if (attr.hasAttribute("lat")) {
@@ -700,7 +700,7 @@ gpx_start(const QString& el, const QXmlStreamAttributes& attr)
     break;
   case tt_cache_placer:
     if (attr.hasAttribute("id")) {
-      waypt_alloc_gc_data(wpt_tmp)->placer_id = attr.value("id").toString().toInt();
+      wpt_tmp->AllocGCData()->placer_id = attr.value("id").toString().toInt();
     }
   default:
     break;
@@ -941,20 +941,20 @@ gpx_end(const QString& el)
     wpt_tmp->notes = cdatastr;
     break;
   case tt_cache_container:
-    waypt_alloc_gc_data(wpt_tmp)->container = gs_mkcont(cdatastr);
+    wpt_tmp->AllocGCData()->container = gs_mkcont(cdatastr);
     break;
   case tt_cache_type:
-    waypt_alloc_gc_data(wpt_tmp)->type = gs_mktype(cdatastr);
+    wpt_tmp->AllocGCData()->type = gs_mktype(cdatastr);
     break;
   case tt_cache_difficulty:
     x = cdatastr.toDouble();
-    waypt_alloc_gc_data(wpt_tmp)->diff = x * 10;
+    wpt_tmp->AllocGCData()->diff = x * 10;
     break;
   case tt_cache_hint:
-   waypt_alloc_gc_data(wpt_tmp)->hint = cdatastr.trimmed();
+   wpt_tmp->AllocGCData()->hint = cdatastr.trimmed();
     break;
   case tt_cache_desc_long: {
-    geocache_data* gc_data = waypt_alloc_gc_data(wpt_tmp);
+    geocache_data* gc_data = wpt_tmp->AllocGCData();
     gc_data->desc_long.is_html = cache_descr_is_html;
 // FIXME: Forcing a premature conversion here saves 4% on GPX read times
 // on large PQs.  Once cdatastrp becomes  real QString this is just (minimal)
@@ -964,17 +964,17 @@ gpx_end(const QString& el)
   break;
   case tt_cache_desc_short:
     {
-      geocache_data* gc_data = waypt_alloc_gc_data(wpt_tmp);
+      geocache_data* gc_data = wpt_tmp->AllocGCData();
       gc_data->desc_short.is_html = cache_descr_is_html;
       gc_data->desc_short.utfstring = cdatastr;
     }
     break;
   case tt_cache_terrain:
     x = cdatastr.toDouble();
-    waypt_alloc_gc_data(wpt_tmp)->terr = x * 10;
+    wpt_tmp->AllocGCData()->terr = x * 10;
     break;
   case tt_cache_placer:
-    waypt_alloc_gc_data(wpt_tmp)->placer = cdatastr;
+    wpt_tmp->AllocGCData()->placer = cdatastr;
     break;
   case tt_cache_log_date:
     gc_log_date = xml_parse_time(cdatastr);
@@ -987,15 +987,15 @@ gpx_end(const QString& el)
   case tt_cache_log_type:
     if ((cdatastr.compare("Found it") == 0) &&
         (0 == wpt_tmp->gc_data->last_found.toTime_t())) {
-      waypt_alloc_gc_data(wpt_tmp)->last_found = gc_log_date;
+      wpt_tmp->AllocGCData()->last_found = gc_log_date;
     }
     gc_log_date = QDateTime();
     break;
   case tt_cache_favorite_points:
-    waypt_alloc_gc_data(wpt_tmp)->favorite_points  = cdatastr.toInt();
+    wpt_tmp->AllocGCData()->favorite_points  = cdatastr.toInt();
     break;
   case tt_cache_personal_note:
-    waypt_alloc_gc_data(wpt_tmp)->personal_note  = cdatastr;
+    wpt_tmp->AllocGCData()->personal_note  = cdatastr;
     break;
 
     /*

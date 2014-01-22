@@ -100,9 +100,9 @@ static void
 NaviReadCache(const QXmlStreamReader& reader)
 {
   const QXmlStreamAttributes a = reader.attributes();
-  waypoint* wpt_tmp = waypt_new();
+  waypoint* wpt_tmp = new waypoint;
   geocache_data* gc_data;
-  gc_data = waypt_alloc_gc_data(wpt_tmp);
+  gc_data = wpt_tmp->AllocGCData();
   if (a.hasAttribute("cache_id")) {
     int n = a.value("cache_id").toString().toInt();
     QString fn = QString("N%1").arg(n, 5, 16, QChar('0'));
@@ -154,7 +154,7 @@ NaviReadCache(const QXmlStreamReader& reader)
 
   if (a.hasAttribute("retired")) {
     if (a.value("terrain").toString() == "yes" && noretired) {
-      waypt_free(wpt_tmp);
+      delete wpt_tmp;
       return;
     }
   }

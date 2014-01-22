@@ -104,7 +104,7 @@ read_tracks(void)
     tm.tm_min = le_readu16(&bc.minute);
     tm.tm_sec = le_readu16(&bc.second);
 
-    wpt = waypt_new();
+    wpt = new waypoint;
     wpt->latitude = le_read_float(&bc.latitude);
     wpt->longitude = le_read_float(&bc.longitude);
     wpt->altitude = FEET_TO_METERS(le_read_float(&bc.altitude));

@@ -154,7 +154,7 @@ vitosmt_read(void)
     gpsvalid	=gbfgetc(infile);	/* fix is valid */
     gpssats		=gbfgetc(infile);	/* number of sats */
 
-    wpt_tmp = waypt_new();
+    wpt_tmp = new waypoint;
 
     wpt_tmp->latitude	=DEG(latrad);
     wpt_tmp->longitude	=DEG(lonrad);

@@ -135,7 +135,7 @@ fix_process_wpt(const waypoint* wpt)
     default:
       return;
     }
-    waypt_free(waypointp);
+    delete waypointp;
   }
 }
 

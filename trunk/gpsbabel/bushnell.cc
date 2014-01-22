@@ -205,7 +205,7 @@ bushnell_read(void)
   int32_t lat_tmp,lon_tmp;
   unsigned int proximity;
   unsigned int icon;
-  waypoint* wpt_tmp = waypt_new();
+  waypoint* wpt_tmp = new waypoint;
 
   lat_tmp = gbfgetint32(file_in);
   lon_tmp = gbfgetint32(file_in);

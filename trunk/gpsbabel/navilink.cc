@@ -194,7 +194,7 @@ free_waypoints(waypoint** waypts)
 
   for (wayptp = waypts; wayptp < waypts + MAX_WAYPOINTS; wayptp++) {
     if (*wayptp) {
-      waypt_free(*wayptp);
+      delete *wayptp;
     }
   }
 
@@ -410,7 +410,7 @@ decode_waypoint_id(const unsigned char* buffer)
 static waypoint*
 decode_waypoint(const unsigned char* buffer)
 {
-  waypoint* waypt = waypt_new();
+  waypoint* waypt = new waypoint;
 
   decode_position(buffer + 12, waypt);
   char* s = xstrdup((char*)buffer + 4);
@@ -442,7 +442,7 @@ encode_waypoint(const waypoint* waypt, unsigned char* buffer)
 static waypoint*
 decode_trackpoint(const unsigned char* buffer)
 {
-  waypoint* waypt = waypt_new();
+  waypoint* waypt = new waypoint;
 
   decode_position(buffer + 12, waypt);
   waypt->SetCreationTime(decode_datetime(buffer + 22));
@@ -704,7 +704,7 @@ serial_read_routes(waypoint** waypts)
         } else if (waypts[id] == NULL) {
           fatal(MYNAME ": Non-existent waypoint in route\n");
         } else {
-          route_add_wpt(route, waypt_dupe(waypts[id]));
+          route_add_wpt(route, new waypoint(*waypts[id]));
         }
       }
     }
@@ -731,7 +731,7 @@ serial_write_route_point(const waypoint* waypt)
 
   if (w == MAX_WAYPOINTS) {
     w = serial_write_waypoint_packet(waypt);
-    route_waypts[w] = waypt_dupe(waypt);
+    route_waypts[w] = new waypoint(*waypt);
   }
 
   route_ids[route_id_ptr++] = w;
@@ -850,7 +850,7 @@ waypoint*
 navilink_decode_logpoint(const unsigned char* buffer)
 {
   waypoint* waypt = NULL;
-  waypt = waypt_new();
+  waypt = new waypoint;
 
   waypt->hdop = ((unsigned char)buffer[0]) * 0.2f;
   waypt->sat = buffer[1];

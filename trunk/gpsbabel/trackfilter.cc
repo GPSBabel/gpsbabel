@@ -338,7 +338,7 @@ trackfilter_fill_track_list_cb(const route_head* track) 	/* callback for track_d
       QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
         waypoint* wpt = (waypoint*)elem;
         track_del_wpt((route_head*)track, wpt);
-        waypt_free(wpt);
+        delete wpt;
       }
       track_del_head((route_head*)track);
       return;
@@ -520,10 +520,10 @@ trackfilter_merge(void)
     QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
       wpt = (waypoint*)elem;
       if (wpt->creation_time.isValid()) {
-        buff[j++] = waypt_dupe(wpt);
+        buff[j++] = new waypoint(*wpt);
       }
       track_del_wpt(track, wpt);
-      waypt_free(wpt);
+      delete wpt;
     }
     if (track != master) {	/* i > 0 */
       track_del_head(track);
@@ -542,7 +542,7 @@ trackfilter_merge(void)
       route_add_wpt(master, wpt);
       prev = wpt;
     } else {
-      waypt_free(wpt);
+      delete wpt;
       dropped++;
     }
   }
@@ -920,7 +920,7 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
 
       if (! inside) {
         track_del_wpt(track, wpt);
-        waypt_free(wpt);
+        delete wpt;
         dropped++;
       }
     }

@@ -240,7 +240,7 @@ static waypoint*
 decode_sbn_record(unsigned char* buffer)
 {
   waypoint* waypt = NULL;
-  waypt = waypt_new();
+  waypt = new waypoint;
 
   if (is_sbn_valid(buffer)) {
     waypt->fix = decode_sbn_mode(buffer + 3);

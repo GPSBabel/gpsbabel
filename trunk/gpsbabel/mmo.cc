@@ -324,7 +324,7 @@ mmo_get_waypt(mmo_data_t* data)
   if (data->refct == 1) {
     return (waypoint*)data->data;
   } else {
-    return waypt_dupe((waypoint*)data->data);
+    return new waypoint(*(waypoint*)data->data);
   }
 }
 
@@ -335,7 +335,7 @@ mmo_free_object(mmo_data_t* data)
     xfree(data->name);
   }
   if ((data->type == wptdata) && (data->refct == 0)) {
-    waypt_free((waypoint*)data->data);
+    delete (waypoint*)data->data;
   }
   xfree(data);
 }
@@ -460,7 +460,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
   DBG((sobj, "name = \"%s\" [ visible=%s, id=0x%04X ]\n",
        data->name, data->visible ? "yes" : "NO", data->objid));
 
-  data->data = wpt = waypt_new();
+  data->data = wpt = new waypoint;
   wpt->shortname = QString::fromLatin1(data->name);
 
   time = data->mtime;
@@ -635,7 +635,7 @@ mmo_read_CObjRoute(mmo_data_t* data)
       /* FIXME: At this point this waypoint maybe not fully loaded (initialized) !!!
       	  We need a final procedure to handle this !!! */
       if (! tmp->loaded) {
-        wpt = waypt_new();
+        wpt = new waypoint;
         wpt->latitude = 0;
         wpt->longitude = 0;
         xasprintf(&wpt->shortname, "\01%p", tmp);
@@ -690,7 +690,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
     waypoint* wpt;
     char unk;
 
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);

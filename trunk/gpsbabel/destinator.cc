@@ -172,7 +172,7 @@ destinator_read_poi(void)
 
     count++;
 
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     wpt->shortname = read_wcstr(0);
     wpt->notes = read_wcstr(0);		/* comment */
@@ -247,7 +247,7 @@ destinator_read_rte(void)
 
     count++;
 
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     wpt->shortname = read_wcstr(0);
     wpt->notes = read_wcstr(0);
@@ -297,7 +297,7 @@ destinator_read_trk(void)
       break;
     }
 
-    wpt = waypt_new();
+    wpt = new waypoint;
 
     wpt->longitude = gbfgetdbl(fin);
     wpt->latitude = gbfgetdbl(fin);

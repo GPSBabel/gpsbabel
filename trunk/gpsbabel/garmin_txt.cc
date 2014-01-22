@@ -1141,7 +1141,7 @@ parse_waypoint(void)
 
   bind_fields(waypt_header);
 
-  wpt = waypt_new();
+  wpt = new waypoint;
   gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
@@ -1300,7 +1300,7 @@ parse_route_waypoint(void)
       is_fatal((*str == '\0'), MYNAME ": Route waypoint without name at line %d!\n", current_line);
       wpt = find_waypt_by_name(str);
       is_fatal((wpt == NULL), MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", str, current_line);
-      wpt = waypt_dupe(wpt);
+      wpt = new waypoint(*wpt);
       break;
     }
   }
@@ -1317,7 +1317,7 @@ parse_track_waypoint(void)
   waypoint* wpt;
 
   bind_fields(trkpt_header);
-  wpt = waypt_new();
+  wpt = new waypoint;
 
   while ((str = csv_lineparse(NULL, "\t", "", column++))) {
     int field_no;

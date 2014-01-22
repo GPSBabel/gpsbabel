@@ -481,7 +481,7 @@ lowranceusr_parse_routes(void)
 
     /* waypoints */
     for (j=0; j < num_legs; j++) {
-      wpt_tmp = waypt_new();
+      wpt_tmp = new waypoint;
       lowranceusr_parse_waypt(wpt_tmp);
       route_add_wpt(rte_head, wpt_tmp);
     }
@@ -513,7 +513,7 @@ lowranceusr_parse_icons(void)
       (void) gbfread(&buff[0], 4, 1, file_in);
     } else {
       waypoint* wpt_tmp;
-      wpt_tmp = waypt_new();
+      wpt_tmp = new waypoint;
 
       /* position coord lat & long */
       wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
@@ -594,7 +594,7 @@ lowranceusr_parse_trails(void)
         }
 
         for (j=0; j < num_section_points; j++, num_trail_points--) {
-          wpt_tmp = waypt_new();
+          wpt_tmp = new waypoint;
           wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
           wpt_tmp->longitude = lon_mm_to_deg(gbfgetint32(file_in));
           /* continuous */
@@ -655,7 +655,7 @@ data_read(void)
   for (i = 0; i < NumWaypoints; i++) {
     waypoint* wpt_tmp;
 
-    wpt_tmp = waypt_new();
+    wpt_tmp = new waypoint;
 
     /* Object num */
     object_num = gbfgetint16(file_in);

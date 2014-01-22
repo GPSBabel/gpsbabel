@@ -164,8 +164,8 @@ arcdist_process(void)
 
     file_in = gbfopen(arcfileopt, "r", MYNAME);
 
-    arcpt1 = waypt_new();
-    arcpt2 = waypt_new();
+    arcpt1 = new waypoint;
+    arcpt2 = new waypoint;
     arcdist_arc_disp_hdr_cb(NULL);
 
     arcpt2->latitude = arcpt2->longitude = BADVAL;
@@ -195,8 +195,8 @@ arcdist_process(void)
         arcpt2 = arcpttmp;
       }
     }
-    waypt_free(arcpt1);
-    waypt_free(arcpt2);
+    delete arcpt1;
+    delete arcpt2;
 
     gbfclose(file_in);
   } else if (rteopt) {
@@ -218,7 +218,7 @@ arcdist_process(void)
     if (ed) {
       if ((ed->distance >= pos_dist) == (exclopt == NULL)) {
         waypt_del(wp);
-        waypt_free(wp);
+        delete wp;
         removed++;
       } else if (projectopt) {
         wp->longitude = ed->prjlongitude;

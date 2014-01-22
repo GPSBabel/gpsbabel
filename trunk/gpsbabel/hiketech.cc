@@ -194,7 +194,7 @@ hiketech_write(void)
 static
 void	 ht_wpt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp = waypt_new();
+  wpt_tmp = new waypoint;
 }
 
 static
@@ -256,7 +256,7 @@ void	ht_trk_ident(xg_string args, const QXmlStreamAttributes* unused)
 static
 void	ht_trk_pnt_s(xg_string args, const QXmlStreamAttributes* unused)
 {
-  wpt_tmp = waypt_new();
+  wpt_tmp = new waypoint;
 }
 
 static

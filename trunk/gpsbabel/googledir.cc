@@ -126,7 +126,7 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
     lon += decode_goog64(&str);
 
     {
-      waypoint* wpt_tmp = waypt_new();
+      waypoint* wpt_tmp = new waypoint;
       wpt_tmp->latitude = lat / 100000.0;
       wpt_tmp->longitude = lon / 100000.0;
       /* FIXME no need for name

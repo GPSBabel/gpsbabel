@@ -233,7 +233,7 @@ duplicate_process(void)
 
     if (btmp == NULL) {
       if (delwpt) {
-        waypt_free(delwpt);
+        delete delwpt;
       }
       if (correct_coords && oldnode && oldnode->wpt) {
         oldnode->wpt->latitude = waypointp->latitude;
@@ -245,7 +245,7 @@ duplicate_process(void)
       if (purge_duplicates && oldnode) {
         if (oldnode->wpt) {
           waypt_del(oldnode->wpt);
-          waypt_free(oldnode->wpt);
+          delete oldnode->wpt;
           oldnode->wpt = NULL;
         }
       }
@@ -256,7 +256,7 @@ duplicate_process(void)
   }
 
   if (delwpt) {
-    waypt_free(delwpt);
+    delete delwpt;
   }
 
   xfree(htable);

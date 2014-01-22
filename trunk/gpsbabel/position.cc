@@ -115,7 +115,7 @@ position_runqueue(queue* q, int nelems, int qtype)
             switch (qtype) {
             case wptdata:
               waypt_del(comp[j]);
-              waypt_free(comp[j]);
+              delete comp[j];
               break;
             case trkdata:
               track_del_wpt(cur_rte, comp[j]);
@@ -145,7 +145,7 @@ position_runqueue(queue* q, int nelems, int qtype)
         default:
           break;
         }
-        waypt_free(comp[i]);
+        delete comp[i];
       }
     }
   }

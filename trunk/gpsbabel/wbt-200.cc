@@ -543,7 +543,7 @@ static int check_date(uint32_t tim)
 static waypoint* make_point(double lat, double lon, double alt, time_t tim, const char* fmt, int index)
 {
   char     wp_name[20];
-  waypoint* wpt = waypt_new();
+  waypoint* wpt = new waypoint;
 
   sprintf(wp_name, fmt, index);
 

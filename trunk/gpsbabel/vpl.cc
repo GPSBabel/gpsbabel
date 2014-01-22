@@ -195,7 +195,7 @@ vpl_parse_75_sentence(const char* ibuf)
   ymd /= 100;
   tm.tm_year = ymd % 100 + 100;
 
-  waypt = waypt_new();
+  waypt = new waypoint;
 
   // Lat/Lon are both stored *0xE1000 which we have to divide out
   // for decimal degrees
