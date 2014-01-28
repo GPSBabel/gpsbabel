@@ -1,0 +1,39 @@
+#/bin/sh
+
+# set -e
+
+# for the customizations that I'm tired of fighting babelmain.xsl to get
+# docbook to produce HTML that plays nice with Smarty.  
+# This tries to codify a bunch of manual and automated fixes that were needed
+# before to bludgeon our docbook output into Dreamweaver's terrible templating
+# system.
+
+DIR=$1
+TITLE=$2
+
+SED=sed
+[ -f /opt/local/bin/gsed ] && SED=/opt/local/bin/gsed
+
+[ ! -d $DIR/tpl ] && mkdir -p $DIR/tpl
+
+
+for f in $DIR/*.html
+do
+  base=$(echo $f | sed "s/.html$//")
+  $SED -i \
+  -e '/^<?xml/d' \
+  -e '/^<!DOCTYPE head/d' \
+  -e "s#<title>#{block name=title}${TITLE}#" \
+  -e 's#<\/title>.*#{/block}#' \
+  -e '/^<head/d' \
+  -e 's#style="clear: both"##' \
+  $f
+  mv ${base}.html $(dirname $base)/tpl/$(basename $f .html).tpl
+  cat > ${base}.html  << EOF
+<?php
+require("../lib/smarty_common.php");
+\$smarty->display(\$template);
+?>
+EOF
+
+done
