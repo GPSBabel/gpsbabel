@@ -229,6 +229,7 @@ $(WEB)/htmldoc-$(DOCVERSION)/index.html: FORCE
 	 --stringparam root.filename "index" \
 	 xmldoc/babelmain.xsl \
 	 xmldoc/readme.xml
+	tools/fixdoc $(WEB)/htmldoc-$(DOCVERSION) "GPSBabel $(DOCVERSION):"
 	chmod 755 tools/mkcapabilities
 	tools/mkcapabilities
 
@@ -263,6 +264,10 @@ gpsbabel.html: FORCE # gpsbabel
 	xsltproc \
 	  --output $@ \
 	  --stringparam toc.section.depth "1" \
+	  --stringparam html.cleanup "1" \
+	  --stringparam make.clean.html "1" \
+	  --stringparam html.valid.html "1" \
+	  --stringparam html.stylesheet \
 	  --stringparam html.stylesheet \
 	  "http://www.gpsbabel.org/style3.css" \
 	  http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl \
