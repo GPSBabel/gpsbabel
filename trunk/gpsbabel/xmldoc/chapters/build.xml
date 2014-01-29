@@ -19,9 +19,9 @@ additional information.
  For operating systems where no binary is provided or if 
 you want the latest development version, you will have to build it from
 source.  The code should be compilable on any system with
-ISO C++ It's tested on Linux, Mac OS/X, and Windows cross compilers.
+ISO C++. It's tested on Linux, Mac OS/X, and Windows cross compilers.
 Less frequently, someone will build on MSVC, FreeBSD, OpenBSD, Solaris, 
-etc.  
+etc.   Both Clang/LLVM and GNU C++ are regularly exercised.
 </para>
 <para>
 You can grab a release from the <ulink url="http://www.gpsbabel.org/download.html">GPSBabel download page</ulink>, but if you're going to be doing any development, you'll find that working from the <ulink url="http://code.google.com/p/gpsbabel/source/checkout">GPSBabel SVN tree</ulink> is easier.
@@ -45,12 +45,6 @@ CentOS users may need to 'yum install libqt4-core libqt4-dev'.
 Fedora users may need to 'yum install qt4-devel'.
 Ubuntu users may need to 'apt-get install libqt4-core libqt4-dev'.
 </para>
-  <para><ulink url="http://expat.sourceforge.net">Expat</ulink> 
-is strongly recommended for source builds as it is
-required for reading all the XML formats such as GPX.  Fedora users
-may need to 'yum install expat-devel'.  Ubuntu users may need to 
-'apt-get install expat libexpat-dev'.
-</para>
   <para><ulink url="http://libusb.sourceforge.net">libusb</ulink> 
 is recommended for OS/X and Linux if you want to use a USB Garmin or 
 Delorme device.
@@ -64,9 +58,6 @@ need to 'yum install libusb-dev'.
 <para>
 lists all the supported options, but of interest we have:</para><para>
  <option>--disable-shapefile</option> Excludes the shapefile support.
-</para>
-<para>
- <option>--disable-pdb</option> Excludes the Palm database support and all formats that rely on it.
 </para>
 <para>
   <option>--disable-csv</option> Excludes all support for our something-separated formats.
