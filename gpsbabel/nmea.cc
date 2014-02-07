@@ -1298,7 +1298,7 @@ nmea_trackpt_pr(const Waypoint* wpt)
   switch (wpt->fix) {
   case fix_dgps:
     fix='2';
-    /* or */
+    break;
   case fix_3d:
   case fix_2d:
     fix='1';
