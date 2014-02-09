@@ -102,7 +102,6 @@ wr_init(const char* fname)
 static void
 enigma_waypt_disp(const Waypoint* wpt)
 {
-  char* t;
 #if NEW_STRINGS
   if (!wpt->shortname.isEmpty()) {
     // The output might have a space or control character.
@@ -112,7 +111,7 @@ enigma_waypt_disp(const Waypoint* wpt)
     // The output might have a space or control character.
     int i, l = strlen(wpt->shortname);
 #endif
-    t = (char*) xmalloc(l + 1);
+    char *t = (char*) xmalloc(l + 1);
     char* d = t;
     for (i = 0; i < l; i++) {
 #if NEW_STRINGS
@@ -125,11 +124,11 @@ enigma_waypt_disp(const Waypoint* wpt)
       }
     }
     *d = 0;
+    gbfprintf(file_out, "%s %f %f\n", t, wpt->latitude, wpt->longitude);
+    xfree(t);
   } else {
-    t = "NONAME";
+    gbfprintf(file_out, "%s %f %f\n", "NONAME", wpt->latitude, wpt->longitude);
   }
-  gbfprintf(file_out, "%s %f %f\n", t, wpt->latitude, wpt->longitude);
-  xfree(t);
 }
 
 static void
