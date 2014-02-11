@@ -308,7 +308,10 @@ static void ovl_read(void)
             break;
           case KEY_AREA     :
             aktArea = atoi(pstr);
-            if (aktTyp==5 || aktTyp==5 || aktTyp==7) {
+            // 2014-02-11.  This code originally tested five twice.
+            // I changed it to test 5, 6, and 7 as that was "obviously"
+            // the author's intent.
+            if (aktTyp == 5 || aktTyp == 6 || aktTyp == 7) {
               isSection = SECTION_PUNKTE;  // Rechteck, Kreis, Dreieck
             }
             break;

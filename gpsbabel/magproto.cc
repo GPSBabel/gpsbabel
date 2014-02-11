@@ -1530,7 +1530,7 @@ mag_route_trl(const route_head* rte)
   Waypoint* waypointp;
   char obuff[256];
   char buff1[64], buff2[64];
-  char* pbuff, *owpt;
+  char* pbuff;
   QString icon_token;
   int i, numlines, thisline;
 
