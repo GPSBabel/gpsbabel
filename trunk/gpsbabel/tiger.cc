@@ -154,8 +154,8 @@ static void
 data_read(void)
 {
   double lat,lon;
-  char desc[100];
-  char icon[100];
+  char desc[101];
+  char icon[101];
   char* ibuf;
   Waypoint* wpt_tmp;
   int line = 0;
