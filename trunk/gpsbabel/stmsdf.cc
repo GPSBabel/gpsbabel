@@ -142,10 +142,14 @@ parse_header(char* line)
         case 28: /* X9 TrackLog (Suunto Trek Manager */
           break;
 
+        // 2014-02-11: Added breaks after 78 and 79 as the author "obviously"
+        // meant to treat those as handled.
         case 78:
           prod = "S6 SkiChrono";
+          break;
         case 79:
           prod = "S6 Skilog";
+          break;
 
         default:
           if (prod == NULL) {
