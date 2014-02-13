@@ -376,7 +376,7 @@ public:
   wp_flags() :
     shortname_is_synthetic(0),
     cet_converted(0),
-    fmt_use(1),
+    fmt_use(0),
     temperature(0),
     proximity(0),
     course(0),
@@ -386,7 +386,7 @@ public:
     new_trkseg(0) {}
   unsigned int shortname_is_synthetic:1;
   unsigned int cet_converted:1;		/* strings are converted to UTF8; interesting only for input */
-  unsigned int fmt_use:1;			/* lightweight "extra data" */
+  unsigned int fmt_use:2;			/* lightweight "extra data" */
   /* "flagged fields" */
   unsigned int temperature:1;		/* temperature field is set */
   unsigned int proximity:1;		/* proximity field is set */
