@@ -148,7 +148,9 @@ static const mmo_icon_mapping_t mmo_icon_value_table[] = {
 static const uint32_t obj_type_ico = 0x00;
 static const uint32_t obj_type_rte = 0x14;
 static const uint32_t obj_type_trk = 0x1E;
+#ifdef MMO_DBG
 static const uint32_t obj_type_txt = 0x32;
+#endif
 static const uint32_t obj_type_wpt = 0x3C;
 
 /* helpers */

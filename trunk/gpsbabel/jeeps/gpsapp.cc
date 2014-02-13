@@ -211,10 +211,6 @@ static int32 GPS_A000(const char* port)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Make_Packet(&tra, LINK_ID[0].Pid_Product_Rqst,NULL,0);
   if (!GPS_Write_Packet(fd,tra)) {
     return SERIAL_ERROR;
@@ -227,10 +223,10 @@ static int32 GPS_A000(const char* port)
   GPS_Packet_Read(fd, &rec);
   GPS_Send_Ack(fd, &tra, &rec);
 
-  id = GPS_Util_Get_Short(rec->data);
-  version = GPS_Util_Get_Short((rec->data)+2);
+  id = GPS_Util_Get_Short(rec.data);
+  version = GPS_Util_Get_Short((rec.data)+2);
 
-  (void) strcpy(gps_save_string,(char*)rec->data+4);
+  (void) strcpy(gps_save_string,(char*)rec.data+4);
   gps_save_id = id;
   gps_save_version = (double)((double)version/(double)100.);
 
@@ -317,7 +313,7 @@ static int32 GPS_A000(const char* port)
      * reach behind that automation here and hand that ourselves.
      */
     for (i = 0; i < 25; i++) {
-      rec->type = 0;
+      rec.type = 0;
 
       if (gps_is_usb) {
         GPS_Packet_Read_usb(fd, &rec, 0);
@@ -333,7 +329,7 @@ static int32 GPS_A000(const char* port)
         GPS_Send_Ack(fd, &tra, &rec);
       }
 
-      if (rec->type == 0xfd) {
+      if (rec.type == 0xfd) {
         GPS_A001(rec);
         goto carry_on;
       }
@@ -347,7 +343,7 @@ static int32 GPS_A000(const char* port)
        *
        * Garmin acknowledges this is a firmware defect.
        */
-      if (rec->type < 0xf8) {
+      if (rec.type < 0xf8) {
         i = 0;
       }
     }
@@ -359,9 +355,6 @@ carry_on:
   if (gps_pvt_transfer != -1) {
     GPS_A800_Off(port,&fd);
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -391,8 +384,8 @@ static void GPS_A001(GPS_PPacket packet)
   US data;
   US lasta=0;
 
-  entries = packet->n / 3;
-  p = packet->data;
+  entries = packet.n / 3;
+  p = packet.data;
 
   for (i=0; i<entries; ++i,p+=3) {
     tag = *p;
@@ -873,10 +866,6 @@ int32 GPS_A100_Get(const char* port, GPS_PWay** way, int (*cb)(int, GPS_PWay*))
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Wpt);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -895,7 +884,7 @@ int32 GPS_A100_Get(const char* port, GPS_PWay** way, int (*cb)(int, GPS_PWay*))
   GPS_Packet_Read(fd, &rec);
   GPS_Send_Ack(fd, &tra, &rec);
 
-  n = GPS_Util_Get_Short(rec->data);
+  n = GPS_Util_Get_Short(rec.data);
 
   if (n)
     if (!((*way)=(GPS_PWay*)malloc(n*sizeof(GPS_PWay)))) {
@@ -918,52 +907,52 @@ int32 GPS_A100_Get(const char* port, GPS_PWay** way, int (*cb)(int, GPS_PWay*))
 
     switch (gps_waypt_type) {
     case pD100:
-      GPS_D100_Get(&((*way)[i]),rec->data);
+      GPS_D100_Get(&((*way)[i]),rec.data);
       break;
     case pD101:
-      GPS_D101_Get(&((*way)[i]),rec->data);
+      GPS_D101_Get(&((*way)[i]),rec.data);
       break;
     case pD102:
-      GPS_D102_Get(&((*way)[i]),rec->data);
+      GPS_D102_Get(&((*way)[i]),rec.data);
       break;
     case pD103:
-      GPS_D103_Get(&((*way)[i]),rec->data);
+      GPS_D103_Get(&((*way)[i]),rec.data);
       break;
     case pD104:
-      GPS_D104_Get(&((*way)[i]),rec->data);
+      GPS_D104_Get(&((*way)[i]),rec.data);
       break;
     case pD105:
-      GPS_D105_Get(&((*way)[i]),rec->data);
+      GPS_D105_Get(&((*way)[i]),rec.data);
       break;
     case pD106:
-      GPS_D106_Get(&((*way)[i]),rec->data);
+      GPS_D106_Get(&((*way)[i]),rec.data);
       break;
     case pD107:
-      GPS_D107_Get(&((*way)[i]),rec->data);
+      GPS_D107_Get(&((*way)[i]),rec.data);
       break;
     case pD108:
-      GPS_D108_Get(&((*way)[i]),rec->data);
+      GPS_D108_Get(&((*way)[i]),rec.data);
       break;
     case pD109:
-      GPS_D109_Get(&((*way)[i]),rec->data, 109);
+      GPS_D109_Get(&((*way)[i]),rec.data, 109);
       break;
     case pD110:
-      GPS_D109_Get(&((*way)[i]),rec->data, 110);
+      GPS_D109_Get(&((*way)[i]),rec.data, 110);
       break;
     case pD150:
-      GPS_D150_Get(&((*way)[i]),rec->data);
+      GPS_D150_Get(&((*way)[i]),rec.data);
       break;
     case pD151:
-      GPS_D151_Get(&((*way)[i]),rec->data);
+      GPS_D151_Get(&((*way)[i]),rec.data);
       break;
     case pD152:
-      GPS_D152_Get(&((*way)[i]),rec->data);
+      GPS_D152_Get(&((*way)[i]),rec.data);
       break;
     case pD154:
-      GPS_D154_Get(&((*way)[i]),rec->data);
+      GPS_D154_Get(&((*way)[i]),rec.data);
       break;
     case pD155:
-      GPS_D155_Get(&((*way)[i]),rec->data);
+      GPS_D155_Get(&((*way)[i]),rec.data);
       break;
     default:
       GPS_Error("A100_GET: Unknown waypoint protocol: %d", gps_waypt_type);
@@ -982,8 +971,8 @@ int32 GPS_A100_Get(const char* port, GPS_PWay** way, int (*cb)(int, GPS_PWay*))
     return gps_errno;
   }
 
-  if (rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
-    GPS_Error("A100_GET: Error transferring waypoints.  Expected %d completion code.  Got %d.  %d of %d received", LINK_ID[gps_link_type].Pid_Xfer_Cmplt, rec->type, i, n);
+  if (rec.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+    GPS_Error("A100_GET: Error transferring waypoints.  Expected %d completion code.  Got %d.  %d of %d received", LINK_ID[gps_link_type].Pid_Xfer_Cmplt, rec.type, i, n);
     return FRAMING_ERROR;
   }
 
@@ -991,9 +980,6 @@ int32 GPS_A100_Get(const char* port, GPS_PWay** way, int (*cb)(int, GPS_PWay*))
     GPS_Error("A100_GET: Waypoint entry number mismatch");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -1027,10 +1013,6 @@ int32 GPS_A100_Send(const char* port, GPS_PWay* way, int32 n, int (*cb)(GPS_PWay
 
   if (!GPS_Device_On(port,&fd)) {
     return gps_errno;
-  }
-
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
   }
 
   GPS_Util_Put_Short(data, (short) n);
@@ -1130,9 +1112,6 @@ int32 GPS_A100_Send(const char* port, GPS_PWay* way, int32 n, int (*cb)(GPS_PWay
     return gps_errno;
   }
 
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
-
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
   }
@@ -1158,10 +1137,6 @@ int32 GPS_A101_Get(const char* port)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Wpt_Cats);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -1180,7 +1155,7 @@ int32 GPS_A101_Get(const char* port)
   GPS_Packet_Read(fd, &rec);
   GPS_Send_Ack(fd, &tra, &rec);
 
-  n = GPS_Util_Get_Short(rec->data);
+  n = GPS_Util_Get_Short(rec.data);
   for (i = 0; i < n; ++i) {
     if (!GPS_Packet_Read(fd, &rec)) {
       return gps_errno;
@@ -1190,7 +1165,7 @@ int32 GPS_A101_Get(const char* port)
     }
     switch (gps_category_type) {
     case pD120:
-      GPS_D120_Get(i,(char*) rec->data);
+      GPS_D120_Get(i,(char*) rec.data);
       break;
     }
   }
@@ -1201,8 +1176,8 @@ int32 GPS_A101_Get(const char* port)
     return gps_errno;
   }
 
-  if (rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
-    GPS_Error("A101_Get: Error transferring waypoints.  Expected %d completion code.  Got %d.  %d of %d received", LINK_ID[gps_link_type].Pid_Xfer_Cmplt, rec->type, i, n);
+  if (rec.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+    GPS_Error("A101_Get: Error transferring waypoints.  Expected %d completion code.  Got %d.  %d of %d received", LINK_ID[gps_link_type].Pid_Xfer_Cmplt, rec.type, i, n);
     return FRAMING_ERROR;
   }
 
@@ -2816,10 +2791,6 @@ int32 GPS_A200_Get(const char* port, GPS_PWay** way)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Rte);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -2838,7 +2809,7 @@ int32 GPS_A200_Get(const char* port, GPS_PWay** way)
     return gps_errno;
   }
 
-  n = GPS_Util_Get_Short(rec->data);
+  n = GPS_Util_Get_Short(rec.data);
 
   if (n)
     if (!((*way)=(GPS_PWay*)malloc(n*sizeof(GPS_PWay)))) {
@@ -2859,16 +2830,16 @@ int32 GPS_A200_Get(const char* port, GPS_PWay** way)
       return gps_errno;
     }
 
-    if (rec->type == LINK_ID[gps_link_type].Pid_Rte_Hdr) {
+    if (rec.type == LINK_ID[gps_link_type].Pid_Rte_Hdr) {
       switch (gps_rte_hdr_type) {
       case pD200:
-        GPS_D200_Get(&((*way)[i]),rec->data);
+        GPS_D200_Get(&((*way)[i]),rec.data);
         break;
       case pD201:
-        GPS_D201_Get(&((*way)[i]),rec->data);
+        GPS_D201_Get(&((*way)[i]),rec.data);
         break;
       case pD202:
-        GPS_D202_Get(&((*way)[i]),rec->data);
+        GPS_D202_Get(&((*way)[i]),rec.data);
         break;
       default:
         GPS_Error("A200_GET: Unknown route protocol");
@@ -2877,7 +2848,7 @@ int32 GPS_A200_Get(const char* port, GPS_PWay** way)
       continue;
     }
 
-    if (rec->type != LINK_ID[gps_link_type].Pid_Rte_Wpt_Data) {
+    if (rec.type != LINK_ID[gps_link_type].Pid_Rte_Wpt_Data) {
       GPS_Error("A200_GET: Non Pid_rte_Wpt_Data");
       return FRAMING_ERROR;
     }
@@ -2887,52 +2858,52 @@ int32 GPS_A200_Get(const char* port, GPS_PWay** way)
 
     switch (gps_rte_type) {
     case pD100:
-      GPS_D100_Get(&((*way)[i]),rec->data);
+      GPS_D100_Get(&((*way)[i]),rec.data);
       break;
     case pD101:
-      GPS_D101_Get(&((*way)[i]),rec->data);
+      GPS_D101_Get(&((*way)[i]),rec.data);
       break;
     case pD102:
-      GPS_D102_Get(&((*way)[i]),rec->data);
+      GPS_D102_Get(&((*way)[i]),rec.data);
       break;
     case pD103:
-      GPS_D103_Get(&((*way)[i]),rec->data);
+      GPS_D103_Get(&((*way)[i]),rec.data);
       break;
     case pD104:
-      GPS_D104_Get(&((*way)[i]),rec->data);
+      GPS_D104_Get(&((*way)[i]),rec.data);
       break;
     case pD105:
-      GPS_D105_Get(&((*way)[i]),rec->data);
+      GPS_D105_Get(&((*way)[i]),rec.data);
       break;
     case pD106:
-      GPS_D106_Get(&((*way)[i]),rec->data);
+      GPS_D106_Get(&((*way)[i]),rec.data);
       break;
     case pD107:
-      GPS_D107_Get(&((*way)[i]),rec->data);
+      GPS_D107_Get(&((*way)[i]),rec.data);
       break;
     case pD108:
-      GPS_D108_Get(&((*way)[i]),rec->data);
+      GPS_D108_Get(&((*way)[i]),rec.data);
       break;
     case pD109:
-      GPS_D109_Get(&((*way)[i]),rec->data,109);
+      GPS_D109_Get(&((*way)[i]),rec.data,109);
       break;
     case pD110:
-      GPS_D109_Get(&((*way)[i]),rec->data,110);
+      GPS_D109_Get(&((*way)[i]),rec.data,110);
       break;
     case pD150:
-      GPS_D150_Get(&((*way)[i]),rec->data);
+      GPS_D150_Get(&((*way)[i]),rec.data);
       break;
     case pD151:
-      GPS_D151_Get(&((*way)[i]),rec->data);
+      GPS_D151_Get(&((*way)[i]),rec.data);
       break;
     case pD152:
-      GPS_D152_Get(&((*way)[i]),rec->data);
+      GPS_D152_Get(&((*way)[i]),rec.data);
       break;
     case pD154:
-      GPS_D154_Get(&((*way)[i]),rec->data);
+      GPS_D154_Get(&((*way)[i]),rec.data);
       break;
     case pD155:
-      GPS_D155_Get(&((*way)[i]),rec->data);
+      GPS_D155_Get(&((*way)[i]),rec.data);
       break;
     default:
       GPS_Error("A200_GET: Unknown route protocol");
@@ -2949,7 +2920,7 @@ int32 GPS_A200_Get(const char* port, GPS_PWay** way)
     return gps_errno;
   }
 
-  if (rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+  if (rec.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
     GPS_Error("A200_GET: Error transferring routes");
     return FRAMING_ERROR;
   }
@@ -2958,9 +2929,6 @@ int32 GPS_A200_Get(const char* port, GPS_PWay** way)
     GPS_Error("A200_GET: Route entry number mismatch");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
 
   if (!GPS_Device_Off(fd)) {
@@ -2995,10 +2963,6 @@ int32 GPS_A201_Get(const char* port, GPS_PWay** way)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Rte);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -3017,7 +2981,7 @@ int32 GPS_A201_Get(const char* port, GPS_PWay** way)
     return gps_errno;
   }
 
-  n = GPS_Util_Get_Short(rec->data);
+  n = GPS_Util_Get_Short(rec.data);
 
   if (n)
     if (!((*way)=(GPS_PWay*)malloc(n*sizeof(GPS_PWay)))) {
@@ -3038,16 +3002,16 @@ int32 GPS_A201_Get(const char* port, GPS_PWay** way)
       return gps_errno;
     }
 
-    if (rec->type == LINK_ID[gps_link_type].Pid_Rte_Hdr) {
+    if (rec.type == LINK_ID[gps_link_type].Pid_Rte_Hdr) {
       switch (gps_rte_hdr_type) {
       case pD200:
-        GPS_D200_Get(&((*way)[i]),rec->data);
+        GPS_D200_Get(&((*way)[i]),rec.data);
         break;
       case pD201:
-        GPS_D201_Get(&((*way)[i]),rec->data);
+        GPS_D201_Get(&((*way)[i]),rec.data);
         break;
       case pD202:
-        GPS_D202_Get(&((*way)[i]),rec->data);
+        GPS_D202_Get(&((*way)[i]),rec.data);
         break;
       default:
         GPS_Error("A201_GET: Unknown route protocol");
@@ -3058,10 +3022,10 @@ int32 GPS_A201_Get(const char* port, GPS_PWay** way)
     }
 
 
-    if (rec->type == LINK_ID[gps_link_type].Pid_Rte_Link_Data) {
+    if (rec.type == LINK_ID[gps_link_type].Pid_Rte_Link_Data) {
       switch (gps_rte_link_type) {
       case pD210:
-        GPS_D210_Get(&((*way)[i]),rec->data);
+        GPS_D210_Get(&((*way)[i]),rec.data);
         break;
       default:
         GPS_Error("A201_GET: Unknown route protocol");
@@ -3072,7 +3036,7 @@ int32 GPS_A201_Get(const char* port, GPS_PWay** way)
       continue;
     }
 
-    if (rec->type != LINK_ID[gps_link_type].Pid_Rte_Wpt_Data) {
+    if (rec.type != LINK_ID[gps_link_type].Pid_Rte_Wpt_Data) {
       GPS_Error("A200_GET: Non Pid_rte_Wpt_Data");
       return FRAMING_ERROR;
     }
@@ -3082,52 +3046,52 @@ int32 GPS_A201_Get(const char* port, GPS_PWay** way)
 
     switch (gps_rte_type) {
     case pD100:
-      GPS_D100_Get(&((*way)[i]),rec->data);
+      GPS_D100_Get(&((*way)[i]),rec.data);
       break;
     case pD101:
-      GPS_D101_Get(&((*way)[i]),rec->data);
+      GPS_D101_Get(&((*way)[i]),rec.data);
       break;
     case pD102:
-      GPS_D102_Get(&((*way)[i]),rec->data);
+      GPS_D102_Get(&((*way)[i]),rec.data);
       break;
     case pD103:
-      GPS_D103_Get(&((*way)[i]),rec->data);
+      GPS_D103_Get(&((*way)[i]),rec.data);
       break;
     case pD104:
-      GPS_D104_Get(&((*way)[i]),rec->data);
+      GPS_D104_Get(&((*way)[i]),rec.data);
       break;
     case pD105:
-      GPS_D105_Get(&((*way)[i]),rec->data);
+      GPS_D105_Get(&((*way)[i]),rec.data);
       break;
     case pD106:
-      GPS_D106_Get(&((*way)[i]),rec->data);
+      GPS_D106_Get(&((*way)[i]),rec.data);
       break;
     case pD107:
-      GPS_D107_Get(&((*way)[i]),rec->data);
+      GPS_D107_Get(&((*way)[i]),rec.data);
       break;
     case pD108:
-      GPS_D108_Get(&((*way)[i]),rec->data);
+      GPS_D108_Get(&((*way)[i]),rec.data);
       break;
     case pD109:
-      GPS_D109_Get(&((*way)[i]),rec->data,109);
+      GPS_D109_Get(&((*way)[i]),rec.data,109);
       break;
     case pD110:
-      GPS_D109_Get(&((*way)[i]),rec->data,110);
+      GPS_D109_Get(&((*way)[i]),rec.data,110);
       break;
     case pD150:
-      GPS_D150_Get(&((*way)[i]),rec->data);
+      GPS_D150_Get(&((*way)[i]),rec.data);
       break;
     case pD151:
-      GPS_D151_Get(&((*way)[i]),rec->data);
+      GPS_D151_Get(&((*way)[i]),rec.data);
       break;
     case pD152:
-      GPS_D152_Get(&((*way)[i]),rec->data);
+      GPS_D152_Get(&((*way)[i]),rec.data);
       break;
     case pD154:
-      GPS_D154_Get(&((*way)[i]),rec->data);
+      GPS_D154_Get(&((*way)[i]),rec.data);
       break;
     case pD155:
-      GPS_D155_Get(&((*way)[i]),rec->data);
+      GPS_D155_Get(&((*way)[i]),rec.data);
       break;
     default:
       GPS_Error("A200_GET: Unknown route protocol");
@@ -3144,7 +3108,7 @@ int32 GPS_A201_Get(const char* port, GPS_PWay** way)
     return gps_errno;
   }
 
-  if (rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+  if (rec.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
     GPS_Error("A200_GET: Error transferring routes");
     return FRAMING_ERROR;
   }
@@ -3153,9 +3117,6 @@ int32 GPS_A201_Get(const char* port, GPS_PWay** way)
     GPS_Error("A200_GET: Route entry number mismatch");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
 
   if (!GPS_Device_Off(fd)) {
@@ -3189,10 +3150,6 @@ int32 GPS_A200_Send(const char* port, GPS_PWay* way, int32 n)
 
   if (!GPS_Device_On(port,&fd)) {
     return gps_errno;
-  }
-
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
   }
 
   GPS_Util_Put_Short(data,(US) n);
@@ -3301,9 +3258,6 @@ int32 GPS_A200_Send(const char* port, GPS_PWay* way, int32 n)
     return FRAMING_ERROR;
   }
 
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
-
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
   }
@@ -3335,10 +3289,6 @@ int32 GPS_A201_Send(const char* port, GPS_PWay* way, int32 n)
 
   if (!GPS_Device_On(port,&fd)) {
     return gps_errno;
-  }
-
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
   }
 
   GPS_Util_Put_Short(data,(US) n);
@@ -3463,9 +3413,6 @@ int32 GPS_A201_Send(const char* port, GPS_PWay* way, int32 n)
     GPS_Error("A200_Send: Route complete data not acknowledged");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -3727,10 +3674,6 @@ int32 GPS_A300_Get(const char* port, GPS_PTrack** trk, pcb_fn cb)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Trk);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -3749,7 +3692,7 @@ int32 GPS_A300_Get(const char* port, GPS_PTrack** trk, pcb_fn cb)
   }
 
 
-  n = GPS_Util_Get_Short(rec->data);
+  n = GPS_Util_Get_Short(rec.data);
 
   if (n)
     if (!((*trk)=(GPS_PTrack*)malloc(n*sizeof(GPS_PTrack)))) {
@@ -3778,9 +3721,6 @@ int32 GPS_A300_Get(const char* port, GPS_PTrack** trk, pcb_fn cb)
     return FRAMING_ERROR;
   }
 
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
-
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
   }
@@ -3806,10 +3746,6 @@ drain_run_cmd(gpsdevh* fd)
   GPS_PPacket rec;
   static UC data[2];
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Runs);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -3829,13 +3765,11 @@ drain_run_cmd(gpsdevh* fd)
     if (!GPS_Send_Ack(fd, &tra, &rec)) {
       return gps_errno;
     }
-    if (rec->type == LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+    if (rec.type == LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
       break;
     }
   }
 
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
   return 0;
 }
 
@@ -3899,10 +3833,6 @@ int32 GPS_A301_Get(const char* port, GPS_PTrack** trk, pcb_fn cb, int protoid)
     drain_run_cmd(fd);
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data, Cmnd_Transfer_Trk);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
                   data,2);
@@ -3920,7 +3850,7 @@ int32 GPS_A301_Get(const char* port, GPS_PTrack** trk, pcb_fn cb, int protoid)
   }
 
 
-  n = GPS_Util_Get_Short(rec->data);
+  n = GPS_Util_Get_Short(rec.data);
 
   if (n)
     if (!((*trk)=(GPS_PTrack*)malloc(n*sizeof(GPS_PTrack)))) {
@@ -3939,14 +3869,14 @@ int32 GPS_A301_Get(const char* port, GPS_PTrack** trk, pcb_fn cb, int protoid)
     if (!GPS_Send_Ack(fd, &tra, &rec)) {
       return gps_errno;
     }
-    if (rec->type == Pid_Trk_Hdr) {
+    if (rec.type == Pid_Trk_Hdr) {
       switch (trk_hdr_type) {
       case pD310:
       case pD312:
-        GPS_D310_Get(&((*trk)[i]),rec->data);
+        GPS_D310_Get(&((*trk)[i]),rec.data);
         break;
       case pD311:
-        GPS_D311_Get(&((*trk)[i]),rec->data);
+        GPS_D311_Get(&((*trk)[i]),rec.data);
         break;
       default:
         GPS_Error("A301_Get: Unknown track protocol");
@@ -3956,7 +3886,7 @@ int32 GPS_A301_Get(const char* port, GPS_PTrack** trk, pcb_fn cb, int protoid)
       continue;
     }
 
-    if (rec->type != Pid_Trk_Data) {
+    if (rec.type != Pid_Trk_Data) {
       GPS_Error("A301_Get: Non-Pid_Trk_Data");
       return FRAMING_ERROR;
     }
@@ -3965,17 +3895,17 @@ int32 GPS_A301_Get(const char* port, GPS_PTrack** trk, pcb_fn cb, int protoid)
 
     switch (trk_type) {
     case pD300:
-      GPS_D300b_Get(&((*trk)[i]),rec->data);
+      GPS_D300b_Get(&((*trk)[i]),rec.data);
       break;
     case pD301:
-      GPS_D301b_Get(&((*trk)[i]),rec->data);
+      GPS_D301b_Get(&((*trk)[i]),rec.data);
       break;
     case pD302:
-      GPS_D302b_Get(&((*trk)[i]),rec->data);
+      GPS_D302b_Get(&((*trk)[i]),rec.data);
       break;
     case pD303:
     case pD304:
-      GPS_D303b_Get(&((*trk)[i]),rec->data);
+      GPS_D303b_Get(&((*trk)[i]),rec.data);
       /* Fitness devices don't send track segment markers, so we have
        * to create them ourselves. We do so at the beginning of the
        * track or if the device signals a pause by sending two
@@ -4005,7 +3935,7 @@ int32 GPS_A301_Get(const char* port, GPS_PTrack** trk, pcb_fn cb, int protoid)
   if (!GPS_Send_Ack(fd, &tra, &rec)) {
     return gps_errno;
   }
-  if (rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+  if (rec.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
     GPS_Error("A301_Get: Error transferring tracks");
     return FRAMING_ERROR;
   }
@@ -4014,9 +3944,6 @@ int32 GPS_A301_Get(const char* port, GPS_PTrack** trk, pcb_fn cb, int protoid)
     GPS_Error("A301_GET: Track entry number mismatch");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -4057,10 +3984,6 @@ int32 GPS_A300_Send(const char* port, GPS_PTrack* trk, int32 n)
 
   if (!GPS_Device_On(port, &fd)) {
     return gps_errno;
-  }
-
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
   }
 
   GPS_Util_Put_Short(data,(US) n);
@@ -4107,9 +4030,6 @@ int32 GPS_A300_Send(const char* port, GPS_PTrack* trk, int32 n)
     GPS_Error("A300_Send: Track complete data not acknowledged");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -4180,10 +4100,6 @@ int32 GPS_A301_Send(const char* port, GPS_PTrack* trk, int32 n, int protoid,
 
   if (protoid != 302 && !GPS_Device_On(port, &fd)) {
     return gps_errno;
-  }
-
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
   }
 
   GPS_Util_Put_Short(data,(US) n);
@@ -4260,9 +4176,6 @@ int32 GPS_A301_Send(const char* port, GPS_PTrack* trk, int32 n, int protoid,
     return FRAMING_ERROR;
   }
 
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
-
   if (protoid != 302 && !GPS_Device_Off(fd)) {
     return gps_errno;
   }
@@ -4287,10 +4200,6 @@ int32 GPS_D300_Get(GPS_PTrack* trk, int32 entries, gpsdevh* fd)
   GPS_PPacket rec;
   int32 i;
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
 
   for (i=0; i<entries; ++i) {
     if (!GPS_Packet_Read(fd, &rec)) {
@@ -4300,7 +4209,7 @@ int32 GPS_D300_Get(GPS_PTrack* trk, int32 entries, gpsdevh* fd)
       return gps_errno;
     }
 
-    GPS_A300_Translate(rec->data, &trk[i]);
+    GPS_A300_Translate(rec.data, &trk[i]);
   }
 
 
@@ -4312,13 +4221,10 @@ int32 GPS_D300_Get(GPS_PTrack* trk, int32 entries, gpsdevh* fd)
   }
 
 
-  if (rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+  if (rec.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
     GPS_Error("D300_GET: Error transferring track log");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   return i;
 }
@@ -4836,10 +4742,6 @@ int32 GPS_A400_Get(const char* port, GPS_PWay** way)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
 
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Prx);
@@ -4854,8 +4756,6 @@ int32 GPS_A400_Get(const char* port, GPS_PWay** way)
 
   if (!GPS_Device_Chars_Ready(fd)) {
     GPS_Warning("A400 (ppx) protocol not supported");
-    GPS_Packet_Del(&rec);
-    GPS_Packet_Del(&tra);
 
     if (!GPS_Device_Off(fd)) {
       return gps_errno;
@@ -4872,7 +4772,7 @@ int32 GPS_A400_Get(const char* port, GPS_PWay** way)
     return gps_errno;
   }
 
-  n = GPS_Util_Get_Short(rec->data);
+  n = GPS_Util_Get_Short(rec.data);
 
   if (n)
     if (!((*way)=(GPS_PWay*)malloc(n*sizeof(GPS_PWay)))) {
@@ -4896,52 +4796,52 @@ int32 GPS_A400_Get(const char* port, GPS_PWay** way)
 
     switch (gps_prx_waypt_type) {
     case pD400:
-      GPS_D400_Get(&((*way)[i]),rec->data);
+      GPS_D400_Get(&((*way)[i]),rec.data);
       break;
     case pD101:
-      GPS_D101_Get(&((*way)[i]),rec->data);
+      GPS_D101_Get(&((*way)[i]),rec.data);
       break;
     case pD102:
-      GPS_D102_Get(&((*way)[i]),rec->data);
+      GPS_D102_Get(&((*way)[i]),rec.data);
       break;
     case pD403:
-      GPS_D403_Get(&((*way)[i]),rec->data);
+      GPS_D403_Get(&((*way)[i]),rec.data);
       break;
     case pD104:
-      GPS_D104_Get(&((*way)[i]),rec->data);
+      GPS_D104_Get(&((*way)[i]),rec.data);
       break;
     case pD105:
-      GPS_D105_Get(&((*way)[i]),rec->data);
+      GPS_D105_Get(&((*way)[i]),rec.data);
       break;
     case pD106:
-      GPS_D106_Get(&((*way)[i]),rec->data);
+      GPS_D106_Get(&((*way)[i]),rec.data);
       break;
     case pD107:
-      GPS_D107_Get(&((*way)[i]),rec->data);
+      GPS_D107_Get(&((*way)[i]),rec.data);
       break;
     case pD108:
-      GPS_D108_Get(&((*way)[i]),rec->data);
+      GPS_D108_Get(&((*way)[i]),rec.data);
       break;
     case pD109:
-      GPS_D109_Get(&((*way)[i]),rec->data,109);
+      GPS_D109_Get(&((*way)[i]),rec.data,109);
       break;
     case pD110:
-      GPS_D109_Get(&((*way)[i]),rec->data,110);
+      GPS_D109_Get(&((*way)[i]),rec.data,110);
       break;
     case pD450:
-      GPS_D450_Get(&((*way)[i]),rec->data);
+      GPS_D450_Get(&((*way)[i]),rec.data);
       break;
     case pD151:
-      GPS_D151_Get(&((*way)[i]),rec->data);
+      GPS_D151_Get(&((*way)[i]),rec.data);
       break;
     case pD152:
-      GPS_D152_Get(&((*way)[i]),rec->data);
+      GPS_D152_Get(&((*way)[i]),rec.data);
       break;
     case pD154:
-      GPS_D154_Get(&((*way)[i]),rec->data);
+      GPS_D154_Get(&((*way)[i]),rec.data);
       break;
     case pD155:
-      GPS_D155_Get(&((*way)[i]),rec->data);
+      GPS_D155_Get(&((*way)[i]),rec.data);
       break;
     default:
       GPS_Error("A400_GET: Unknown prx waypoint protocol");
@@ -4956,7 +4856,7 @@ int32 GPS_A400_Get(const char* port, GPS_PWay** way)
     return gps_errno;
   }
 
-  if (rec->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+  if (rec.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
     GPS_Error("A400_GET: Error transferring prx waypoints");
     return FRAMING_ERROR;
   }
@@ -4965,10 +4865,6 @@ int32 GPS_A400_Get(const char* port, GPS_PWay** way)
     GPS_Error("A400_GET: Prx waypoint entry number mismatch");
     return FRAMING_ERROR;
   }
-
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -5004,10 +4900,6 @@ int32 GPS_A400_Send(const char* port, GPS_PWay* way, int32 n)
 
   if (!GPS_Device_On(port, &fd)) {
     return gps_errno;
-  }
-
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
   }
 
 
@@ -5095,9 +4987,6 @@ int32 GPS_A400_Send(const char* port, GPS_PWay* way, int32 n)
     GPS_Error("A400_Send: Prx waypoint complete data not acknowledged");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -5410,10 +5299,6 @@ int32 GPS_A500_Get(const char* port, GPS_PAlmanac** alm)
     return gps_errno;
   }
 
-  if (!(trapkt = GPS_Packet_New()) || !(recpkt = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Alm);
   GPS_Make_Packet(&trapkt, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -5431,7 +5316,7 @@ int32 GPS_A500_Get(const char* port, GPS_PAlmanac** alm)
     return gps_errno;
   }
 
-  n = GPS_Util_Get_Short(recpkt->data);
+  n = GPS_Util_Get_Short(recpkt.data);
 
   if (n)
     if (!((*alm)=(GPS_PAlmanac*)malloc(n*sizeof(GPS_PAlmanac)))) {
@@ -5453,20 +5338,20 @@ int32 GPS_A500_Get(const char* port, GPS_PAlmanac** alm)
 
     switch (gps_almanac_type) {
     case pD500:
-      GPS_A500_Translate(recpkt->data, &((*alm)[i]));
+      GPS_A500_Translate(recpkt.data, &((*alm)[i]));
       break;
     case pD501:
-      GPS_A500_Translate(recpkt->data, &((*alm)[i]));
-      (*alm)[i]->hlth=recpkt->data[42];
+      GPS_A500_Translate(recpkt.data, &((*alm)[i]));
+      (*alm)[i]->hlth=recpkt.data[42];
       break;
     case pD550:
-      (*alm)[i]->svid = recpkt->data[0];
-      GPS_A500_Translate(recpkt->data+1, &((*alm)[i]));
+      (*alm)[i]->svid = recpkt.data[0];
+      GPS_A500_Translate(recpkt.data+1, &((*alm)[i]));
       break;
     case pD551:
-      (*alm)[i]->svid = recpkt->data[0];
-      GPS_A500_Translate(recpkt->data+1, &((*alm)[i]));
-      (*alm)[i]->hlth = recpkt->data[43];
+      (*alm)[i]->svid = recpkt.data[0];
+      GPS_A500_Translate(recpkt.data+1, &((*alm)[i]));
+      (*alm)[i]->hlth = recpkt.data[43];
       break;
     default:
       GPS_Error("A500_GET: Unknown almanac protocol");
@@ -5482,7 +5367,7 @@ int32 GPS_A500_Get(const char* port, GPS_PAlmanac** alm)
   if (!GPS_Send_Ack(fd, &trapkt, &recpkt)) {
     return gps_errno;
   }
-  if (recpkt->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+  if (recpkt.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
     GPS_Error("A500_Get: Error transferring almanac");
     return FRAMING_ERROR;
   }
@@ -5491,9 +5376,6 @@ int32 GPS_A500_Get(const char* port, GPS_PAlmanac** alm)
     GPS_Error("A500_GET: Almanac entry number mismatch");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&trapkt);
-  GPS_Packet_Del(&recpkt);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -5529,10 +5411,6 @@ int32 GPS_A500_Send(const char* port, GPS_PAlmanac* alm, int32 n)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
 
   GPS_Util_Put_Short(data,(US) n);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Records,
@@ -5551,8 +5429,6 @@ int32 GPS_A500_Send(const char* port, GPS_PAlmanac* alm, int32 n)
     case pD500:
       if (n!=32) {
         GPS_Error("A500_Send: SATELLITES: n!=32 specified");
-        GPS_Packet_Del(&tra);
-        GPS_Packet_Del(&rec);
         return PROTOCOL_ERROR;
       }
       GPS_D500_Send(data,alm[i]);
@@ -5561,8 +5437,6 @@ int32 GPS_A500_Send(const char* port, GPS_PAlmanac* alm, int32 n)
     case pD501:
       if (n!=32) {
         GPS_Error("A500_Send: SATELLITES: n!=32 specified");
-        GPS_Packet_Del(&tra);
-        GPS_Packet_Del(&rec);
         return PROTOCOL_ERROR;
       }
       GPS_D501_Send(data,alm[i]);
@@ -5621,8 +5495,8 @@ int32 GPS_A500_Send(const char* port, GPS_PAlmanac* alm, int32 n)
       return gps_errno;
     }
 
-    if (rec->type == LINK_ID[gps_link_type].Pid_Command_Data &&
-        GPS_Util_Get_Short(rec->data) == COMMAND_ID[gps_device_command].
+    if (rec.type == LINK_ID[gps_link_type].Pid_Command_Data &&
+        GPS_Util_Get_Short(rec.data) == COMMAND_ID[gps_device_command].
         Cmnd_Transfer_Time) {
       GPS_User("INFO: GPS time request. Sending....");
       ret = GPS_Rqst_Send_Time(fd,gps_save_time);
@@ -5649,8 +5523,8 @@ int32 GPS_A500_Send(const char* port, GPS_PAlmanac* alm, int32 n)
       return gps_errno;
     }
 
-    if (rec->type == LINK_ID[gps_link_type].Pid_Command_Data &&
-        GPS_Util_Get_Short(rec->data) == COMMAND_ID[gps_device_command].
+    if (rec.type == LINK_ID[gps_link_type].Pid_Command_Data &&
+        GPS_Util_Get_Short(rec.data) == COMMAND_ID[gps_device_command].
         Cmnd_Transfer_Posn) {
       GPS_User("INFO: GPS position request. Sending....");
       ret = GPS_Rqst_Send_Position(fd,gps_save_lat,gps_save_lon);
@@ -5676,9 +5550,6 @@ int32 GPS_A500_Send(const char* port, GPS_PAlmanac* alm, int32 n)
     }
   }
 
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -5898,10 +5769,6 @@ time_t GPS_A600_Get(const char* port)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Time);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -5928,9 +5795,6 @@ time_t GPS_A600_Get(const char* port)
     GPS_Error("A600_Get: Unknown data/time protocol");
     return PROTOCOL_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -5964,10 +5828,6 @@ int32 GPS_A600_Send(const char* port, time_t Time)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   switch (gps_date_time_type) {
   case pD600:
     GPS_D600_Send(&tra,Time);
@@ -5999,8 +5859,8 @@ int32 GPS_A600_Send(const char* port, time_t Time)
       return gps_errno;
     }
 
-    if (rec->type == LINK_ID[gps_link_type].Pid_Command_Data &&
-        GPS_Util_Get_Short(rec->data) == COMMAND_ID[gps_device_command].
+    if (rec.type == LINK_ID[gps_link_type].Pid_Command_Data &&
+        GPS_Util_Get_Short(rec.data) == COMMAND_ID[gps_device_command].
         Cmnd_Transfer_Posn) {
       GPS_User("INFO: GPS position request. Sending....");
       ret = GPS_Rqst_Send_Position(fd,gps_save_lat,gps_save_lon);
@@ -6019,9 +5879,6 @@ int32 GPS_A600_Send(const char* port, time_t Time)
     }
   }
 
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -6047,7 +5904,7 @@ time_t GPS_D600_Get(GPS_PPacket packet)
   UC* p;
   static struct tm ts;
 
-  p = packet->data;
+  p = packet.data;
 
   ts.tm_mon  = *p++ - 1;
   ts.tm_mday = *p++;
@@ -6121,10 +5978,6 @@ int32 GPS_A700_Get(const char* port, double* lat, double* lon)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
 
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Posn);
@@ -6152,9 +6005,6 @@ int32 GPS_A700_Get(const char* port, double* lat, double* lon)
     GPS_Error("A700_Get: Unknown position protocol");
     return PROTOCOL_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -6185,10 +6035,6 @@ int32 GPS_A700_Send(const char* port, double lat, double lon)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
 
   switch (gps_position_type) {
   case pD700:
@@ -6206,9 +6052,6 @@ int32 GPS_A700_Send(const char* port, double lat, double lon)
     return 0;
   }
 
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -6234,7 +6077,7 @@ void GPS_D700_Get(GPS_PPacket packet, double* lat, double* lon)
   UC* p;
   double t;
 
-  p = packet->data;
+  p = packet.data;
 
   t    = GPS_Util_Get_Double(p);
   *lat = GPS_Math_Rad_To_Deg(t);
@@ -6300,10 +6143,6 @@ int32 GPS_A800_On(const char* port, gpsdevh** fd)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
 
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Start_Pvt_Data);
@@ -6316,9 +6155,6 @@ int32 GPS_A800_On(const char* port, gpsdevh** fd)
     GPS_Error("A800_on: Pvt start data not acknowledged");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&rec);
-  GPS_Packet_Del(&tra);
 
   return 1;
 }
@@ -6340,10 +6176,6 @@ int32 GPS_A800_Off(const char* port, gpsdevh** fd)
   GPS_PPacket tra;
   GPS_PPacket rec;
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
 
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Stop_Pvt_Data);
@@ -6357,9 +6189,6 @@ int32 GPS_A800_Off(const char* port, gpsdevh** fd)
     return FRAMING_ERROR;
   }
 
-
-  GPS_Packet_Del(&rec);
-  GPS_Packet_Del(&tra);
 
 //    if(!GPS_Device_Off(*fd))
 //	return gps_errno;
@@ -6382,26 +6211,16 @@ int32 GPS_A800_Get(gpsdevh** fd, GPS_PPvt_Data* packet)
   GPS_PPacket tra;
   GPS_PPacket rec;
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
 
   if (!GPS_Packet_Read(*fd, &rec)) {
-    GPS_Packet_Del(&rec);
-    GPS_Packet_Del(&tra);
     return gps_errno;
   }
 
   if (!GPS_Send_Ack(*fd, &tra, &rec)) {
-    GPS_Packet_Del(&rec);
-    GPS_Packet_Del(&tra);
     return gps_errno;
   }
 
-  if (rec->type != LINK_ID[gps_link_type].Pid_Pvt_Data) {
-    GPS_Packet_Del(&rec);
-    GPS_Packet_Del(&tra);
+  if (rec.type != LINK_ID[gps_link_type].Pid_Pvt_Data) {
     return 0;
   }
 
@@ -6411,13 +6230,8 @@ int32 GPS_A800_Get(gpsdevh** fd, GPS_PPvt_Data* packet)
     break;
   default:
     GPS_Error("A800_GET: Unknown pvt protocol");
-    GPS_Packet_Del(&rec);
-    GPS_Packet_Del(&tra);
     return PROTOCOL_ERROR;
   }
-
-  GPS_Packet_Del(&rec);
-  GPS_Packet_Del(&tra);
 
   return 1;
 }
@@ -6437,7 +6251,7 @@ void GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data* pvt)
 {
   UC* p;
 
-  p = packet->data;
+  p = packet.data;
 
   (*pvt)->alt = GPS_Util_Get_Float(p);
   p+=sizeof(float);
@@ -6509,10 +6323,6 @@ int32 GPS_A906_Get(const char* port, GPS_PLap** lap, pcb_fn cb)
     return gps_errno;
   }
 
-  if (!(trapkt = GPS_Packet_New()) || !(recpkt = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Laps);
   GPS_Make_Packet(&trapkt, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -6530,7 +6340,7 @@ int32 GPS_A906_Get(const char* port, GPS_PLap** lap, pcb_fn cb)
     return gps_errno;
   }
 
-  n = GPS_Util_Get_Short(recpkt->data);
+  n = GPS_Util_Get_Short(recpkt.data);
 
   if (n)
     if (!((*lap)=(GPS_PLap*)malloc(n*sizeof(GPS_PLap)))) {
@@ -6555,7 +6365,7 @@ int32 GPS_A906_Get(const char* port, GPS_PLap** lap, pcb_fn cb)
     case pD1001:
     case pD1011:
     case pD1015:
-      GPS_D1011b_Get(&((*lap)[i]),recpkt->data);
+      GPS_D1011b_Get(&((*lap)[i]),recpkt.data);
       break;
     default:
       GPS_Error("A906_Get: Unknown Lap protocol %d\n", gps_lap_type);
@@ -6572,7 +6382,7 @@ int32 GPS_A906_Get(const char* port, GPS_PLap** lap, pcb_fn cb)
   if (!GPS_Send_Ack(fd, &trapkt, &recpkt)) {
     return gps_errno;
   }
-  if (recpkt->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+  if (recpkt.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
     GPS_Error("A906_Get: Error transferring laps");
     return FRAMING_ERROR;
   }
@@ -6581,9 +6391,6 @@ int32 GPS_A906_Get(const char* port, GPS_PLap** lap, pcb_fn cb)
     GPS_Error("A906_GET: Lap entry number mismatch");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&trapkt);
-  GPS_Packet_Del(&recpkt);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -6733,10 +6540,6 @@ int32  GPS_A1006_Get
     return gps_errno;
   }
 
-  if (!(trapkt = GPS_Packet_New()) || !(recpkt = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Courses);
   GPS_Make_Packet(&trapkt, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -6754,7 +6557,7 @@ int32  GPS_A1006_Get
     return gps_errno;
   }
 
-  n = GPS_Util_Get_Short(recpkt->data);
+  n = GPS_Util_Get_Short(recpkt.data);
 
 
   if (n)
@@ -6777,7 +6580,7 @@ int32  GPS_A1006_Get
 
     switch (gps_course_type) {
     case pD1006:
-      GPS_D1006_Get(&((*crs)[i]),recpkt->data);
+      GPS_D1006_Get(&((*crs)[i]),recpkt.data);
       break;
     default:
       GPS_Error("A1006_Get: Unknown Course protocol %d\n",
@@ -6797,7 +6600,7 @@ int32  GPS_A1006_Get
   if (!GPS_Send_Ack(fd, &trapkt, &recpkt)) {
     return gps_errno;
   }
-  if (recpkt->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+  if (recpkt.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
     GPS_Error("A1006_Get: Error transferring courses");
     return FRAMING_ERROR;
   }
@@ -6806,9 +6609,6 @@ int32  GPS_A1006_Get
     GPS_Error("A1006_GET: Course entry number mismatch");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&trapkt);
-  GPS_Packet_Del(&recpkt);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -6842,10 +6642,6 @@ int32 GPS_A1006_Send(const char* port,
   GPS_PPacket rec;
   int32 i;
   int32 len;
-
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
 
   GPS_Util_Put_Short(data,(US) n_crs);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Records,
@@ -6892,9 +6688,6 @@ int32 GPS_A1006_Send(const char* port,
     GPS_Error("A1006_Send: Course complete data not acknowledged");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   return 1;
 }
@@ -6984,10 +6777,6 @@ int32 GPS_A1007_Get(const char* port, GPS_PCourse_Lap** clp, pcb_fn cb)
     return gps_errno;
   }
 
-  if (!(trapkt = GPS_Packet_New()) || !(recpkt = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Course_Laps);
   GPS_Make_Packet(&trapkt, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -7005,7 +6794,7 @@ int32 GPS_A1007_Get(const char* port, GPS_PCourse_Lap** clp, pcb_fn cb)
     return gps_errno;
   }
 
-  n = GPS_Util_Get_Short(recpkt->data);
+  n = GPS_Util_Get_Short(recpkt.data);
 
 
   if (n)
@@ -7028,7 +6817,7 @@ int32 GPS_A1007_Get(const char* port, GPS_PCourse_Lap** clp, pcb_fn cb)
 
     switch (gps_course_lap_type) {
     case pD1007:
-      GPS_D1007_Get(&((*clp)[i]),recpkt->data);
+      GPS_D1007_Get(&((*clp)[i]),recpkt.data);
       break;
     default:
       GPS_Error("A1007_Get: Unknown Course Lap protocol %d\n",
@@ -7048,7 +6837,7 @@ int32 GPS_A1007_Get(const char* port, GPS_PCourse_Lap** clp, pcb_fn cb)
   if (!GPS_Send_Ack(fd, &trapkt, &recpkt)) {
     return gps_errno;
   }
-  if (recpkt->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+  if (recpkt.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
     GPS_Error("A1007_Get: Error transferring course laps");
     return FRAMING_ERROR;
   }
@@ -7057,9 +6846,6 @@ int32 GPS_A1007_Get(const char* port, GPS_PCourse_Lap** clp, pcb_fn cb)
     GPS_Error("A1007_GET: Course Lap entry number mismatch");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&trapkt);
-  GPS_Packet_Del(&recpkt);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -7093,10 +6879,6 @@ int32 GPS_A1007_Send(const char* port,
   GPS_PPacket rec;
   int32 i;
   int32 len;
-
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
 
   GPS_Util_Put_Short(data,(US) n_clp);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Records,
@@ -7143,9 +6925,6 @@ int32 GPS_A1007_Send(const char* port,
     GPS_Error("A1007_Send: CourseLap complete data not acknowledged");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   return 1;
 }
@@ -7272,10 +7051,6 @@ int32 GPS_A1008_Get(const char* port, GPS_PCourse_Point** cpt, pcb_fn cb)
     return gps_errno;
   }
 
-  if (!(trapkt = GPS_Packet_New()) || !(recpkt = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Course_Points);
   GPS_Make_Packet(&trapkt, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -7293,7 +7068,7 @@ int32 GPS_A1008_Get(const char* port, GPS_PCourse_Point** cpt, pcb_fn cb)
     return gps_errno;
   }
 
-  n = GPS_Util_Get_Short(recpkt->data);
+  n = GPS_Util_Get_Short(recpkt.data);
 
 
   if (n)
@@ -7316,7 +7091,7 @@ int32 GPS_A1008_Get(const char* port, GPS_PCourse_Point** cpt, pcb_fn cb)
 
     switch (gps_course_point_type) {
     case pD1012:
-      GPS_D1012_Get(&((*cpt)[i]),recpkt->data);
+      GPS_D1012_Get(&((*cpt)[i]),recpkt.data);
       break;
     default:
       GPS_Error("A1008_Get: Unknown Course Point protocol %d\n",
@@ -7336,7 +7111,7 @@ int32 GPS_A1008_Get(const char* port, GPS_PCourse_Point** cpt, pcb_fn cb)
   if (!GPS_Send_Ack(fd, &trapkt, &recpkt)) {
     return gps_errno;
   }
-  if (recpkt->type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
+  if (recpkt.type != LINK_ID[gps_link_type].Pid_Xfer_Cmplt) {
     GPS_Error("A1008_Get: Error transferring course points");
     return FRAMING_ERROR;
   }
@@ -7345,9 +7120,6 @@ int32 GPS_A1008_Get(const char* port, GPS_PCourse_Point** cpt, pcb_fn cb)
     GPS_Error("A1008_GET: Course Point entry number mismatch");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&trapkt);
-  GPS_Packet_Del(&recpkt);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;
@@ -7382,10 +7154,6 @@ int32 GPS_A1008_Send(const char* port,
   GPS_PPacket rec;
   int32 i;
   int32 len;
-
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
 
   GPS_Util_Put_Short(data,(US) n_cpt);
   GPS_Make_Packet(&tra, LINK_ID[gps_link_type].Pid_Records,
@@ -7432,9 +7200,6 @@ int32 GPS_A1008_Send(const char* port,
     GPS_Error("A1008_Send: CoursePoint complete data not acknowledged");
     return FRAMING_ERROR;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   return 1;
 }
@@ -7536,10 +7301,6 @@ int32 GPS_A1009_Get(const char* port, GPS_PCourse_Limits limits)
     return gps_errno;
   }
 
-  if (!(trapkt = GPS_Packet_New()) || !(recpkt = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,
                      COMMAND_ID[gps_device_command].Cmnd_Transfer_Course_Limits);
   GPS_Make_Packet(&trapkt, LINK_ID[gps_link_type].Pid_Command_Data,
@@ -7559,16 +7320,13 @@ int32 GPS_A1009_Get(const char* port, GPS_PCourse_Limits limits)
 
   switch (gps_course_limits_type) {
   case pD1013:
-    GPS_D1013_Get(limits,recpkt->data);
+    GPS_D1013_Get(limits,recpkt.data);
     break;
   default:
     GPS_Error("A1009_Get: Unknown Course Limits protocol %d\n",
               gps_course_limits_type);
     return PROTOCOL_ERROR;
   }
-
-  GPS_Packet_Del(&trapkt);
-  GPS_Packet_Del(&recpkt);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;

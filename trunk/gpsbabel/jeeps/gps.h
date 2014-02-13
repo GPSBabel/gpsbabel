@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-// extern "C"
-//{
-#endif
-
 #ifndef gps_h
 #define gps_h
 
@@ -40,7 +35,18 @@ typedef struct GPS_SPacket {
   US type;
   uint32 n;
   UC* data;
-} GPS_OPacket, *GPS_PPacket;
+} GPS_OPacket;
+
+class GPS_PPacket {
+public:
+  GPS_PPacket() : type(0), n(0) {
+    memset(data, 0, MAX_GPS_PACKET_SIZE);
+  }
+  US type;
+  uint32 n;
+  UC data[MAX_GPS_PACKET_SIZE];
+};
+
 
 typedef struct GPS_Serial_SPacket {
   UC dle;
@@ -281,8 +287,4 @@ extern char* gps_aviation_sym[];
 extern char* gps_16_sym[];
 
 
-#endif
-
-#ifdef __cplusplus
-// }
 #endif

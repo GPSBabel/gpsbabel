@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpsprotocols_h
 #define gpsprotocols_h
 
@@ -379,8 +374,4 @@ extern "C"
   void   GPS_Unknown_Protocol_Print(void);
 
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif

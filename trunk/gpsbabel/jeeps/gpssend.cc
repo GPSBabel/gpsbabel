@@ -49,25 +49,25 @@ Build_Serial_Packet(GPS_PPacket in, GPS_Serial_PPacket out)
   UC  chk=0;
   US  bytes=0;
 
-  p = in->data;
+  p = in.data;
   q = out->data;
 
   out->dle   = DLE;
   out->edle  = DLE;
   out->etx   = ETX;
-  out->n     = in->n;
-  out->type  = in->type;
+  out->n     = in.n;
+  out->type  = in.type;
 
-  chk -= in->type;
+  chk -= in.type;
 
-  if (in->n == DLE) {
+  if (in.n == DLE) {
     ++bytes;
     *q++ = DLE;
   }
 
-  chk -= in->n;
+  chk -= in.n;
 
-  for (i = 0; i < in->n; ++i) {
+  for (i = 0; i < in.n; ++i) {
     if (*p == DLE) {
       ++bytes;
       *q++ = DLE;
@@ -126,7 +126,7 @@ int32 GPS_Serial_Write_Packet(gpsdevh* fd, GPS_PPacket packet)
   UC ser_pkt_data[MAX_GPS_PACKET_SIZE * sizeof(UC)];
   US bytes;
 
-  if (packet->type >= 0xff || packet->n >= 0xff) {
+  if (packet.type >= 0xff || packet.n >= 0xff) {
     GPS_Error("SEND: Unsupported packet type/size for serial protocol");
     return 0;
   }
@@ -176,7 +176,6 @@ int32 GPS_Serial_Write_Packet(gpsdevh* fd, GPS_PPacket packet)
     return 0;
   }
 
-
   return 1;
 }
 
@@ -196,7 +195,7 @@ int32 GPS_Serial_Send_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec)
 {
   UC data[2];
 
-  GPS_Util_Put_Short(data,(US)(*rec)->type);
+  GPS_Util_Put_Short(data,(US)rec->type);
   GPS_Make_Packet(tra,LINK_ID[0].Pid_Ack_Byte,data,2);
   if (!GPS_Write_Packet(fd,*tra)) {
     GPS_Error("Error acknowledging packet");

@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpsfmt_h
 #define gpsfmt_h
 
@@ -20,8 +15,4 @@ extern "C"
   int32  GPS_Fmt_Print_Proximity(GPS_PWay* way, int32 n, FILE* outf);
   int32  GPS_Fmt_Print_Route(GPS_PWay* way, int32 n, FILE* outf);
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif

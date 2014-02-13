@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpsserial_h
 #define gpsserial_h
 
@@ -29,8 +24,4 @@ extern "C"
   void   GPS_Serial_Error(const char* hdr, ...);
 
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif
