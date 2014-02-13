@@ -74,7 +74,7 @@ static int32 GPS_A600_Rqst(gpsdevh* fd, time_t Time)
 
   switch (gps_date_time_type) {
   case pD600:
-    GPS_D600_Send(&tra,Time);
+    GPS_D600_Send(tra,Time);
     break;
   default:
     GPS_Error("A600_Rqst: Unknown data/time protocol");
@@ -139,7 +139,7 @@ static int32 GPS_A700_Rqst(gpsdevh* fd, double lat, double lon)
 
   switch (gps_position_type) {
   case pD700:
-    GPS_D700_Send(&tra,lat,lon);
+    GPS_D700_Send(tra,lat,lon);
     break;
   default:
     GPS_Error("A700_Rqst: Unknown position protocol");
