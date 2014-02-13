@@ -209,6 +209,7 @@ parse_wpt(char* buff)
           compegps_parse_time(c, &tm);
           wpt->SetCreationTime(mkgmtime(&tm));
         }
+        break;
       case 6:
         wpt->altitude = atof(c);
         break;

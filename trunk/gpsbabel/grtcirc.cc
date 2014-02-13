@@ -296,7 +296,6 @@ double linedistprj(double lat1, double lon1,
       return 0;
     }
   }
-  return 0;
 }
 
 

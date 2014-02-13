@@ -684,6 +684,7 @@ gt_switch_display_mode_value(const unsigned char display_mode, const int protoid
     case 109:
     case 110:
       return display_mode & 3;
+      break;
     case 104:
       switch (display_mode) {
       case 0:

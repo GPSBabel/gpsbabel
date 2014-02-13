@@ -429,7 +429,6 @@ read_CTrackFile(const int version)
   int32_t ux;
   route_head* track;
   int i;
-  int datum;
 
   u1 = gbfgetint16(fin);
 
@@ -461,6 +460,7 @@ read_CTrackFile(const int version)
   }
 
   tcount = gbfgetint32(fin);
+  int datum = 118;
   if (tcount > 0) {
     datum = read_datum(fin);
     if (version == 8) {
@@ -487,6 +487,9 @@ read_CTrackFile(const int version)
     wpt->longitude = gbfgetdbl(fin);
     wpt->altitude = gbfgetdbl(fin);
 
+    if (datum < 0) {
+      fatal(MYNAME ": Invalid datum %d found", datum);
+    }
     convert_datum(wpt, datum);
 
     track_add_wpt(track, wpt);
