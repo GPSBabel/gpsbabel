@@ -5830,7 +5830,7 @@ int32 GPS_A600_Send(const char* port, time_t Time)
 
   switch (gps_date_time_type) {
   case pD600:
-    GPS_D600_Send(&tra,Time);
+    GPS_D600_Send(tra,Time);
     break;
   default:
     GPS_Error("A600_Send: Unknown data/time protocol");
@@ -5928,7 +5928,7 @@ time_t GPS_D600_Get(GPS_PPacket packet)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D600_Send(GPS_PPacket* packet, time_t Time)
+void GPS_D600_Send(GPS_PPacket& packet, time_t Time)
 {
   UC data[10];
   UC* p;
@@ -5948,7 +5948,7 @@ void GPS_D600_Send(GPS_PPacket* packet, time_t Time)
   *p++ = ts->tm_min;
   *p   = ts->tm_sec;
 
-  GPS_Make_Packet(packet, LINK_ID[gps_link_type].Pid_Date_Time_Data,
+  GPS_Make_Packet(&packet, LINK_ID[gps_link_type].Pid_Date_Time_Data,
                   data,8);
 
   return;
@@ -6038,7 +6038,7 @@ int32 GPS_A700_Send(const char* port, double lat, double lon)
 
   switch (gps_position_type) {
   case pD700:
-    GPS_D700_Send(&tra,lat,lon);
+    GPS_D700_Send(tra,lat,lon);
     break;
   default:
     GPS_Error("A700_Send: Unknown position protocol");
@@ -6102,7 +6102,7 @@ void GPS_D700_Get(GPS_PPacket packet, double* lat, double* lon)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D700_Send(GPS_PPacket* packet, double lat, double lon)
+void GPS_D700_Send(GPS_PPacket& packet, double lat, double lon)
 {
   UC data[16];
   UC* p;
@@ -6116,7 +6116,7 @@ void GPS_D700_Send(GPS_PPacket* packet, double lat, double lon)
   p+=sizeof(double);
   GPS_Util_Put_Double(p,lon);
 
-  GPS_Make_Packet(packet, LINK_ID[gps_link_type].Pid_Position_Data,
+  GPS_Make_Packet(&packet, LINK_ID[gps_link_type].Pid_Position_Data,
                   data,16);
 
   return;
@@ -6247,7 +6247,7 @@ int32 GPS_A800_Get(gpsdevh** fd, GPS_PPvt_Data* packet)
 **
 ** @return [void]
 ************************************************************************/
-void GPS_D800_Get(GPS_PPacket packet, GPS_PPvt_Data* pvt)
+void GPS_D800_Get(GPS_PPacket& packet, GPS_PPvt_Data* pvt)
 {
   UC* p;
 
