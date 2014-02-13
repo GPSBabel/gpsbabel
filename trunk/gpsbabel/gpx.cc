@@ -1140,11 +1140,11 @@ gpx_end(const QString& el)
     wpt_tmp->fix = (fix_type)(atoi(CSTR(cdatastr)) - 1);
     }
     if (wpt_tmp->fix < fix_2d) {
-      if ((cdatastr.compare("none"), Qt::CaseInsensitive) == 0) {
+      if ((cdatastr.compare("none", Qt::CaseInsensitive)) == 0) {
         wpt_tmp->fix = fix_none;
-      } else if ((cdatastr.compare("dgps"), Qt::CaseInsensitive) == 0) {
+      } else if ((cdatastr.compare("dgps", Qt::CaseInsensitive)) == 0) {
         wpt_tmp->fix = fix_dgps;
-      } else if ((cdatastr.compare("pps"), Qt::CaseInsensitive) == 0) {
+      } else if ((cdatastr.compare("pps", Qt::CaseInsensitive)) == 0) {
         wpt_tmp->fix = fix_pps;
       } else {
         wpt_tmp->fix = fix_unknown;

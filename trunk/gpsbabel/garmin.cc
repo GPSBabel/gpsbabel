@@ -1314,7 +1314,7 @@ d103_icon_number_from_symbol(const QString& s)
   }
 
   for (i = 0; i < sizeof(d103_icons) / sizeof(d103_icons[0]); i++) {
-    if (0 == (s.compare(d103_icons[i]), Qt::CaseInsensitive)) {
+    if (0 == (s.compare(d103_icons[i], Qt::CaseInsensitive))) {
       return i;
     }
   }
