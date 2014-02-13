@@ -30,55 +30,6 @@
 #include <stdio.h>
 #include <limits.h>
 
-/* @func GPS_Packet_New ***********************************************
-**
-** Packet constructor
-**
-** @return [GPS_PPacket] virgin packet
-**********************************************************************/
-
-GPS_PPacket GPS_Packet_New(void)
-{
-  GPS_PPacket ret;
-  int hdr_size = sizeof(GPS_OPacket) ;
-  if (!(ret=(GPS_PPacket)calloc(1, hdr_size)))
-
-  {
-    perror("malloc");
-    fprintf(stderr,"GPS_Packet_New: Insufficient memory");
-    fflush(stderr);
-    return NULL;
-  }
-  if (!(ret->data = (UC*)calloc(1, MAX_GPS_PACKET_SIZE*sizeof(UC)))) {
-    perror("malloc");
-    fprintf(stderr,"GPS_Packet_New: Insufficient data memory");
-    fflush(stderr);
-    return NULL;
-  }
-
-  return ret;
-}
-
-
-/* @func GPS_Packet_Del ***********************************************
-**
-** Packet destructor
-**
-** @param [w] thys [GPS_PPacket *] packet to delete
-**
-** @return [void]
-**********************************************************************/
-
-void GPS_Packet_Del(GPS_PPacket* thys)
-{
-  free((void*)(*thys)->data);
-  free((void*)*thys);
-
-  return;
-}
-
-
-
 /* @func GPS_Pvt_New ***********************************************
 **
 ** Pvt constructor

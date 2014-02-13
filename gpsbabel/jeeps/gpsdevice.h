@@ -19,11 +19,6 @@
 
  */
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpsdevice_h
 #define gpsdevice_h
 
@@ -65,7 +60,3 @@ extern "C"
   } gps_device_ops;
 
 #endif /* gpsdevice.h */
-
-#ifdef __cplusplus
-}
-#endif

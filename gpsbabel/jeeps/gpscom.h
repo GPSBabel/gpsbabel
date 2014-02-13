@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpscom_h
 #define gpscom_h
 
@@ -49,8 +44,4 @@ extern "C"
   int32  GPS_Command_Get_Fitness_User_Profile(const char* port, void** lap, int (*cb)(int, struct GPS_SWay**));
   int32  GPS_Command_Get_Workout_Limits(const char* port, void** lap, int (*cb)(int, struct GPS_SWay**));
   int32  GPS_Command_Get_Course_Limits(const char* port, void** lap, int (*cb)(int, struct GPS_SWay**));
-#endif
-
-#ifdef __cplusplus
-}
 #endif

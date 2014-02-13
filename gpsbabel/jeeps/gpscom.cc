@@ -49,10 +49,6 @@ int32 GPS_Command_Off(const char* port)
     return gps_errno;
   }
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
   GPS_Util_Put_Short(data,COMMAND_ID[gps_device_command].Cmnd_Turn_Off_Pwr);
 
   /* robertl - LINK_ID isn't set yet.  Hardcode it to Garmin spec value */
@@ -68,9 +64,6 @@ int32 GPS_Command_Off(const char* port)
     }
     GPS_User("Power off command acknowledged");
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   if (!GPS_Device_Off(fd)) {
     return gps_errno;

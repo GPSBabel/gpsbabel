@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpsmath_h
 #define gpsmath_h
 
@@ -143,8 +138,4 @@ extern "C"
   int32 GPS_Lookup_Datum_Index(const char* n);
   const char* GPS_Math_Get_Datum_Name(const int datum_index);
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif

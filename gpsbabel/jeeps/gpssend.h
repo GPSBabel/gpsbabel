@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpssend_h
 #define gpssend_h
 
@@ -17,8 +12,4 @@ extern "C"
   void   GPS_Make_Packet(GPS_PPacket* packet, US type, UC* data, uint32 n);
 
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif

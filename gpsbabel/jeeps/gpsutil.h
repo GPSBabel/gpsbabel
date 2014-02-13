@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpsutil_h
 #define gpsutil_h
 
@@ -42,8 +37,4 @@ extern "C"
   void   GPS_Disable_Diagnose(void);
 
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif

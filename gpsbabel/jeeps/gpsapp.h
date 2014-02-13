@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpsapp_h
 #define gpsapp_h
 
@@ -116,8 +111,4 @@ extern "C"
 
   void GPS_Prepare_Track_For_Device(GPS_PTrack** trk, int32* n);
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif

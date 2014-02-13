@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpsproj_h
 #define gpsproj_h
 
@@ -150,8 +145,4 @@ extern "C"
                                    double* lambda, double phi0, double lambda0,
                                    double E0, double N0, double a, double b);
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif

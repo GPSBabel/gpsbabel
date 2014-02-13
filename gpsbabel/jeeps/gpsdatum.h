@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpsdatum_h
 #define gpsdatum_h
 
@@ -239,8 +234,4 @@ extern "C"
 
 
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif

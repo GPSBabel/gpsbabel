@@ -1,16 +1,8 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpsmem_h
 #define gpsmem_h
 
 
 #include "gps.h"
-
-  GPS_PPacket       GPS_Packet_New(void);
-  void              GPS_Packet_Del(GPS_PPacket* thys);
   GPS_PPvt_Data     GPS_Pvt_New(void);
   void              GPS_Pvt_Del(GPS_PPvt_Data* thys);
   GPS_PAlmanac      GPS_Almanac_New(void);
@@ -28,8 +20,4 @@ extern "C"
   GPS_PCourse_Point GPS_Course_Point_New(void);
   void              GPS_Course_Point_Del(GPS_PCourse_Point* thys);
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif

@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 #ifndef gpsinput_h
 #define gpsinput_h
 
@@ -16,8 +11,4 @@ extern "C"
   int32  GPS_Input_Get_Route(GPS_PWay** way, FILE* inf);
 
 
-#endif
-
-#ifdef __cplusplus
-}
 #endif

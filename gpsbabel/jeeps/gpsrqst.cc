@@ -72,11 +72,6 @@ static int32 GPS_A600_Rqst(gpsdevh* fd, time_t Time)
   GPS_PPacket tra;
   GPS_PPacket rec;
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
-
   switch (gps_date_time_type) {
   case pD600:
     GPS_D600_Send(&tra,Time);
@@ -92,9 +87,6 @@ static int32 GPS_A600_Rqst(gpsdevh* fd, time_t Time)
   if (!GPS_Get_Ack(fd, &tra, &rec)) {
     return gps_errno;
   }
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   return 1;
 }
@@ -145,19 +137,12 @@ static int32 GPS_A700_Rqst(gpsdevh* fd, double lat, double lon)
   GPS_PPacket tra;
   GPS_PPacket rec;
 
-  if (!(tra = GPS_Packet_New()) || !(rec = GPS_Packet_New())) {
-    return MEMORY_ERROR;
-  }
-
-
   switch (gps_position_type) {
   case pD700:
     GPS_D700_Send(&tra,lat,lon);
     break;
   default:
     GPS_Error("A700_Rqst: Unknown position protocol");
-    GPS_Packet_Del(&tra);
-    GPS_Packet_Del(&rec);
     return PROTOCOL_ERROR;
   }
 
@@ -169,9 +154,6 @@ static int32 GPS_A700_Rqst(gpsdevh* fd, double lat, double lon)
     return gps_errno;
   }
 
-
-  GPS_Packet_Del(&tra);
-  GPS_Packet_Del(&rec);
 
   return 1;
 }
