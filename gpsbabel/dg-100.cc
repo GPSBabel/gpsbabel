@@ -258,7 +258,7 @@ process_gpsfile(uint8_t data[], route_head** track)
       bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
       bindate = be_read32(data + i + 12);
       creation_time = bintime2utc(bindate, bintime);
-      strftime(buf, 4096, "DG-100 tracklog (%Y/%m/%d %H:%M:%S)",
+      strftime(buf, sizeof(buf), "DG-100 tracklog (%Y/%m/%d %H:%M:%S)",
                gmtime(&creation_time));
       *track = route_head_alloc();
       (*track)->rte_name = buf;
