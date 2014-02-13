@@ -417,6 +417,14 @@ test-release: doc gpsbabel.html changes.html
 	rm -f gpsbabel-$(VERSIOND)/internal_styles.cc
 	make release-tarball release-winbuild release-rpm
 
+# Build entire tree, upload to Coverity.
+cov-upload: FORCE
+	make clean
+	cov-build --dir cov-int make
+	echo If that says 100%, press enter. Otherwise interrupt.
+	read junk
+	cov-upload
+
 # Machine generated from here down. 
 alan.o: alan.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h
