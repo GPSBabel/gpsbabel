@@ -481,7 +481,7 @@ bcr_route_header(const route_head* route)
       s2 = csv_stringclean(s2, ",\t\r\n");
     }
 
-    if (s2.isEmpty()) {
+    if (sout.isEmpty()) {
       sout = QString("%1,%2,@,0").arg(s1).arg(s1);
     } else {
       sout = QString("%1,%2,@,0").arg(s1).arg(s2);

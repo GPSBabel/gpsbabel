@@ -417,8 +417,6 @@ trackfilter_split_init_rte_name(route_head* track, const QDateTime dt)
 static void
 trackfilter_pack_init_rte_name(route_head* track, const time_t default_time)
 {
-  char buff[128];
-
   if (strchr(opt_title, '%') != NULL) {
     struct tm tm;
     Waypoint* wpt;
@@ -430,11 +428,12 @@ trackfilter_pack_init_rte_name(route_head* track, const time_t default_time)
       time_t t = wpt->GetCreationTime().toTime_t();
       tm = *localtime(&t);
     }
+    char buff[128];
     strftime(buff, sizeof(buff), opt_title, &tm);
+    track->rte_name = buff;
   } else {
-    strncpy(buff, opt_title, sizeof(buff));
+    track->rte_name = opt_title;
   }
-  track->rte_name = buff;
 }
 
 /*******************************************************************************

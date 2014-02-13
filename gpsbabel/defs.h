@@ -376,7 +376,7 @@ public:
   wp_flags() :
     shortname_is_synthetic(0),
     cet_converted(0),
-    fmt_use(0),
+    fmt_use(1),
     temperature(0),
     proximity(0),
     course(0),
