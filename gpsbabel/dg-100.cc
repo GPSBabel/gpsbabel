@@ -181,11 +181,9 @@ dg100_log(const char* fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);
-  if (global_opts.debug_level < 1) {
-    return;
+  if (global_opts.debug_level > 0) {
+    vfprintf(stderr, fmt, ap);
   }
-
-  vfprintf(stderr, fmt, ap);
   va_end(ap);
 }
 

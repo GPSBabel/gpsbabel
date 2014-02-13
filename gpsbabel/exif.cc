@@ -567,7 +567,6 @@ exif_read_app(exif_app_t* app)
   if (ifd == NULL) {
     return;
   }
-
   if (ifd->next_ifd) {
     ifd = exif_read_ifd(app, IFD1, ifd->next_ifd, &exif_ifd_ofs, &gps_ifd_ofs, &inter_ifd_ofs);
   }
@@ -580,6 +579,9 @@ exif_read_app(exif_app_t* app)
   if (inter_ifd_ofs) {
     ifd = exif_read_ifd(app, 4, inter_ifd_ofs, NULL, NULL, NULL);
   }
+  // The return values of exif_read_ifd above aren't actually used.  
+  // Warning hush.
+  (void) ifd;
 }
 
 static void

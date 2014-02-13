@@ -156,7 +156,7 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
                   double* latitude, double* longitude, const char* module)
 {
   double lat, lon;
-  unsigned char lathemi, lonhemi;
+  unsigned char lathemi=0, lonhemi=0;
   int deg_lat, deg_lon, min_lat, min_lon;
   char map[3];
   int utmz;

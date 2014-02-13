@@ -149,7 +149,7 @@ gopal_rd_init(const char* fname)
       strncpy(&buff[0],&filename[2],8);
     }
     // in buff we should now have something wich looks like a valid date starting with YYYYMMDD
-    ck = (char*)strptime(buff, "%Y%m%d", &filenamedate);
+    /*ck = (char*)*/strptime(buff, "%Y%m%d", &filenamedate);
     // if (((ck == NULL) || (*ck != '\0') )&&!(optdate))
     // fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"date\" switch!\n", buff);
     // /* else */ if (filenamedate.tm_year < 70)

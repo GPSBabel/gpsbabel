@@ -268,17 +268,17 @@ static void ovl_read(void)
     }
     lineno++;
     line = lrtrim(line);
-    if ((pstr = strstr(line,"[Symbol "))!= NULL) {
+    if ((strstr(line,"[Symbol "))!= NULL) {
       sym_cnt++;
       isSection = SECTION_SYMBOL;
-    } else if ((pstr = strstr(line,"[Overlay]"))!= NULL) {
+    } else if ((strstr(line,"[Overlay]"))!= NULL) {
       isSection = SECTION_OVERLAY;
     } else if (isSection==SECTION_SYMBOL) {
       pstr = strtok(line,"=");
-      if (pstr!=NULL) {
+      if (pstr != NULL) {
         keyw = isKeyword(pstr,Keywords);
         pstr = strtok(NULL,"\n");
-        if (pstr!=NULL) {
+        if (pstr != NULL) {
           switch (keyw) {
           case KEY_TYP     :
             aktTyp = atoi(pstr);

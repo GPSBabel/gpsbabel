@@ -506,14 +506,11 @@ void GPS_Error(const char* fmt, ...)
   va_list argp;
   va_start(argp, fmt);
 
-  if (!gps_error) {
-    return;
+  if (gps_error) {
+    fprintf(stderr, "[ERROR] ");
+    vfprintf(stderr, fmt, argp);
+    fprintf(stderr, "\n");
   }
-
-
-  fprintf(stderr, "[ERROR] ");
-  vfprintf(stderr, fmt, argp);
-  fprintf(stderr, "\n");
 
   va_end(argp);
   return;

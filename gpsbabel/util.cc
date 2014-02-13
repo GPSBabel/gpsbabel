@@ -1089,7 +1089,7 @@ strsub(const char* s, const char* search, const char* replace)
     return NULL;
   }
 
-  d = (char*) xmalloc(len + rlen);
+  d = (char*) xmalloc(len + rlen + 1);
 
   /* Copy first part */
   len = p - s;

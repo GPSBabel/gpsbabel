@@ -767,7 +767,7 @@ humminbird_track_head(const route_head* trk)
 
 // NEW_STRING: remove speare ctor below.
     name = mkshort(trkname_sh, QString(trk->rte_name));
-    strncpy(trk_head->name, CSTR(name), sizeof(trk_head->name));
+    strncpy(trk_head->name, CSTR(name), sizeof(trk_head->name)-1);
     be_write16(&trk_head->trk_num, trk->rte_num);
   }
 }
