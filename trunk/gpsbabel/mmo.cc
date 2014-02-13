@@ -497,10 +497,8 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
     DBG((sobj, "rtelinks = %d\n", rtelinks));
 
     for (i = 0; i < rtelinks; i++) {
-      mmo_data_t* tmp;
-
       DBG((sobj, "read rtelink number %d\n", i + 1));
-      rtelink[i] = tmp = mmo_read_object();
+      rtelink[i] = mmo_read_object();
     }
 
   }

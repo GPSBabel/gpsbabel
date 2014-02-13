@@ -388,7 +388,7 @@ trackfilter_fill_track_list_cb(const route_head* track) 	/* callback for track_d
 static void
 trackfilter_split_init_rte_name(route_head* track, const QDateTime dt)
 {
-  char buff[128], tbuff[128];
+  char tbuff[128];
   struct tm tm;
 
   time_t time = dt.toUTC().toTime_t();
@@ -398,6 +398,8 @@ trackfilter_split_init_rte_name(route_head* track, const QDateTime dt)
   strftime(tbuff, sizeof(tbuff), "%Y%m%d%H%M%S", &tm) :
   strftime(tbuff, sizeof(tbuff), "%Y%m%d", &tm);
 
+  // TODO: this should be q QString.
+  char buff[128];
   if ((opt_title != NULL) && (strlen(opt_title) > 0)) {
     if (strchr(opt_title, '%') != NULL) {
       strftime(buff, sizeof(buff), opt_title, &tm);
@@ -405,7 +407,7 @@ trackfilter_split_init_rte_name(route_head* track, const QDateTime dt)
       snprintf(buff, sizeof(buff), "%s-%s", opt_title, tbuff);
     }
   } else if (!track->rte_name.isEmpty()) {
-    snprintf(buff, sizeof(buff), "%s-%s", CSTRc(track->rte_name), tbuff);
+    snprintf(buff, sizeof(buff) - 1, "%s-%s", CSTRc(track->rte_name), tbuff);
   } else {
     strncpy(buff, tbuff, sizeof(buff));
   }

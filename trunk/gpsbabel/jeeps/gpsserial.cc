@@ -82,6 +82,8 @@ void GPS_Serial_Error(const char* mb, ...)
   FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0,
                 GetLastError(), 0, s, sizeof(msg) - b - 2, 0);
   GPS_Error(msg);
+
+  va_end(ap);
 }
 
 int32 GPS_Serial_On(const char* port, gpsdevh** dh)
