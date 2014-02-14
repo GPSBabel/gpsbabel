@@ -180,15 +180,11 @@ waypt_disp(const Waypoint* wpt)
 #else
   if (wpt->description) {
 #endif
-    char* tmpdesc = xstrdup(wpt->description);
     printf("%s/%s",
            global_opts.synthesize_shortnames ?
-           mkshort(mkshort_handle, tmpdesc) :
-           CSTRc(wpt->shortname),
-           tmpdesc);
-    if (tmpdesc) {
-      xfree(tmpdesc);
-    }
+           qPrintable(mkshort(mkshort_handle, wpt->description)) :
+           qPrintable(wpt->shortname),
+           qPrintable(wpt->description));
   }
 
   if (wpt->altitude != unknown_alt) {
