@@ -109,6 +109,7 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget *parent, QProcess *process):
   timer_->setSingleShot(false);
   connect(timer_, SIGNAL(timeout()), this, SLOT(timeoutX()));
   stopCount_ = -1;
+  ecode_ = 0;
   timer_->start();
   errorString_ = "";
 

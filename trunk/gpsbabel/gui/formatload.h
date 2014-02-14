@@ -29,7 +29,7 @@
 
 class FormatLoad {
  public:
-  FormatLoad() {};
+  FormatLoad() : currentLine_(0) {};
   ~FormatLoad() {};
   
   bool getFormats(QList<Format> &formatList);

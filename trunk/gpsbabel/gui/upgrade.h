@@ -50,11 +50,9 @@ protected:
 
 private:
   QString currentVersion_;
-  int upgradeCheckMethod_;
   QNetworkAccessManager* manager_;
   QNetworkReply* replyId_;
   QUrl upgradeUrl_;
-  bool httpRequestAborted_;
   QString latestVersion_;
   QDateTime upgradeWarningTime_;  // invalid time if this object never issued.
   QList<Format> &formatList_;
