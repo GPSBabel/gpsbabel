@@ -36,7 +36,7 @@ using std::string;
 
 //------------------------------------------------------------------------
 PolylineEncoder::PolylineEncoder(int numLevels, double zoomFactor, double vs):
-  numLevels(numLevels), zoomFactor(zoomFactor), verySmall(vs)
+  numLevels(numLevels), verySmall(vs)
 {
   if (verySmall <=0.0)
     verySmall = 1.0E-5;

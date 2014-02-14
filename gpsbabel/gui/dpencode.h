@@ -45,7 +45,6 @@ private:
 		       const vector <double> &dists);
 
   int numLevels;
-  double zoomFactor;
   double verySmall;
   vector <double> zoomLevelBreaks;
 };

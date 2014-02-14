@@ -220,7 +220,9 @@ static int32 GPS_A000(const char* port)
     return SERIAL_ERROR;
   }
 
-  GPS_Packet_Read(fd, &rec);
+  if (!GPS_Packet_Read(fd, &rec)) {
+    return gps_errno;
+  }
   GPS_Send_Ack(fd, &tra, &rec);
 
   id = GPS_Util_Get_Short(rec.data);
@@ -881,7 +883,9 @@ int32 GPS_A100_Get(const char* port, GPS_PWay** way, int (*cb)(int, GPS_PWay*))
     return FRAMING_ERROR;
   }
 
-  GPS_Packet_Read(fd, &rec);
+  if (!GPS_Packet_Read(fd, &rec)) {
+    return gps_errno;
+  }
   GPS_Send_Ack(fd, &tra, &rec);
 
   n = GPS_Util_Get_Short(rec.data);
@@ -1152,7 +1156,9 @@ int32 GPS_A101_Get(const char* port)
     return FRAMING_ERROR;
   }
 
-  GPS_Packet_Read(fd, &rec);
+  if (!GPS_Packet_Read(fd, &rec)) {
+    return gps_errno;
+  }
   GPS_Send_Ack(fd, &tra, &rec);
 
   n = GPS_Util_Get_Short(rec.data);

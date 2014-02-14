@@ -39,7 +39,6 @@ Q_OBJECT
  private:
   Ui_GMapDlg ui_;
   Map *mapWidget_;
-  bool showWaypoints_, showRoutes_, showTracks_;
   QStandardItemModel *model_;
   QStandardItem *wptItem_, *trkItem_, *rteItem_;
   QList<QStandardItem *> wptList_, trkList_, rteList_;
