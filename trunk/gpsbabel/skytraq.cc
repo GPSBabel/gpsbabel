@@ -557,6 +557,7 @@ skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* sectors_free, uint
   // fifo_mode = *(MSG_LOG_STATUS_OUTPUT.log_fifo_mode);
   xasprintf(&mystatus, "#logging: tmin=%u, tmax=%u, dmin=%u, dmax=%u, vmin=%u, vmax=%u\n", tmin, tmax, dmin, dmax, vmin, vmax);
   db(1, mystatus);
+  xfree(mystatus);
 
   return res_OK;
 }
