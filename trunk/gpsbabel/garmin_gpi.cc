@@ -1491,7 +1491,7 @@ garmin_gpi_rd_init(const char* fname)
     snprintf(cp, sizeof(cp), "CP%d", codepage);
     cet_convert_init(cp, 1);
   } else {
-    warning(MYNAME ": Unsupported code page (%d).\n", codepage);
+    fatal(MYNAME ": Unsupported code page (%d). File is likely encrypted.\n", codepage);
   }
 
   units = tolower(opt_units[0]);
