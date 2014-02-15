@@ -5,6 +5,13 @@
    with all possible features.
 </para>
 <para>
+  Some of the third party and commercial GPI files are using some kind of
+  encryption or compression that makes the file contents completely unreadable
+  to us. If you get an error "Unsupported code page NNN. File is likely
+   encrypted." means we could basically recognize it as a Garmin GPI file,
+   but it's mangled beyond what we're likely to successfully read.
+</para>
+<para>
    The layout of GPI files isn't documented and our module was created
    via reverse engineering. If you get a problem on reading or writing 
    a GPI file, please provide that file (mailto:gpsbabel-misc@lists.sourceforge.net).
