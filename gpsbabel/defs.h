@@ -561,18 +561,6 @@ public:
 class route_head
 {
 public:
-  route_head() :
-#if NEW_STRINGS
-#else
-    rte_name(NULL),
-    rte_desc(NULL),
-#endif
-    rte_num(0),
-    rte_waypt_ct(0),
-    fs(NULL),
-    cet_converted(0),
-    line_width(-1),
-    session(NULL) {}
   queue Q;		/* Link onto parent list. */
   queue waypoint_list;	/* List of child waypoints */
   String rte_name;
@@ -585,6 +573,10 @@ public:
   gb_color line_color;         /* Optional line color for rendering */
   int line_width;         /* in pixels (sigh).  < 0 is unknown. */
   session_t* session;	/* pointer to a session struct */
+
+public:
+  route_head();
+  ~route_head();
 };
 
 /*
