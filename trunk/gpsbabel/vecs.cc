@@ -90,7 +90,6 @@ extern ff_vecs_t navicache_vecs;
 extern ff_vecs_t netstumbler_vecs;
 extern ff_vecs_t nmea_vecs;
 extern ff_vecs_t nmn4_vecs;
-extern ff_vecs_t overlay_vecs;
 extern ff_vecs_t ozi_vecs;
 extern ff_vecs_t palmdoc_vecs;
 extern ff_vecs_t pcx_vecs;
@@ -516,15 +515,6 @@ vecs_t vec_list[] = {
     "vcf",
     NULL,
   },
-#if 0
-  {
-    &overlay_vecs,
-    "overlay",
-    "Geogrid-Viewer",
-    "ovl",
-    NULL,
-  },
-#endif
   {
     &google_vecs,
     "google",
