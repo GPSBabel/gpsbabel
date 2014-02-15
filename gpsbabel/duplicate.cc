@@ -193,8 +193,13 @@ duplicate_process(void)
   bh = htable;
 
   i = 0;
+#if NEWQ
+  foreach(Waypoint* waypointp, waypt_list) {
+    bh->wpt = waypointp;
+#else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     bh->wpt = (Waypoint*) elem;
+#endif
     bh->index = i;
     i ++;
     bh ++;
