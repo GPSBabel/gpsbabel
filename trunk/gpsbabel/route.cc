@@ -68,23 +68,15 @@ route_head*
 route_head_alloc(void)
 {
   route_head* rte_head = new route_head;
-  QUEUE_INIT(&rte_head->Q);
-  QUEUE_INIT(&rte_head->waypoint_list);
-  rte_head->session = curr_session();
   return rte_head;
 }
 
 static void
 any_route_free(route_head* rte)
 {
-  waypt_flush(&rte->waypoint_list);
-  if (rte->fs) {
-    fs_chain_destroy(rte->fs);
-  }
   delete rte;
   rte = NULL;
 }
-
 
 static void
 any_route_add_head(route_head* rte, queue* head)
@@ -696,5 +688,33 @@ void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
 
   if (!trkdatap) {
     xfree(tdata);
+  }
+}
+
+route_head::route_head() :
+  // Q(),
+  // waypoint_list(),
+#if !NEW_STRINGS
+  rte_name(NULL),
+  rte_desc(NULL),
+#endif
+  // rte_url(),
+  rte_num(0),
+  rte_waypt_ct(0),
+  fs(NULL),
+  cet_converted(0),
+  // line_color(),
+  line_width(-1),
+  session(curr_session())
+{
+  QUEUE_INIT(&Q);
+  QUEUE_INIT(&waypoint_list);
+};
+
+route_head::~route_head()
+{
+  waypt_flush(&waypoint_list);
+  if (fs) {
+    fs_chain_destroy(fs);
   }
 }
