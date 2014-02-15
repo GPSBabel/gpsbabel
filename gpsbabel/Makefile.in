@@ -68,7 +68,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o  \
 	saroute.o navicache.o psitrex.o delgpl.o \
 	text.o html.o netstumbler.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o  \
-	vcf.o overlay.o google.o xhtmlent.o lowranceusr.o an1.o tomtom.o \
+	vcf.o google.o xhtmlent.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o vitosmt.o bcr.o \
 	ignrando.o stmwpp.o cst.o nmn4.o compegps.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o gpssim.o \
@@ -900,9 +900,6 @@ nukedata.o: nukedata.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   filterdefs.h
 osm.o: osm.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h xmlgeneric.h
-overlay.o: overlay.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
-  gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
-  grtcirc.h
 ozi.o: ozi.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h csv_util.h \
   jeeps/gpsmath.h jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h \
