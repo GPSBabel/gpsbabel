@@ -704,7 +704,6 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
   }
 
   /* Try and make sure we have a name */
-#if NEW_STRINGS
 // this kind of thing would probably be more readable like
 // name = blah.
 // if name.isEmpty()
@@ -720,26 +719,12 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
       name = wpt->shortname;
     } else if (!wpt->description.isEmpty()) {
       name = wpt->description;
-#else
-  char* name = NULL;
-  if ((! wpt->shortname) || global_opts.synthesize_shortnames) {
-    if (wpt->description && global_opts.synthesize_shortnames) {
-      name = mkshort_from_wpt(mkshort_handle, wpt);
-    } else if (wpt->shortname) {
-      name = wpt->shortname;
-    } else if (wpt->description) {
-      name = wpt->description;
-#endif
     }
   } else {
     name = wpt->shortname;
   }
 
-#if NEW_STRINGS
   text_len = name.length();
-#else
-  text_len = strlen(name);
-#endif
   if (text_len > MAXUSRSTRINGSIZE) {
     text_len = MAXUSRSTRINGSIZE;
   }
@@ -753,11 +738,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
   /**
    * Comments are now used by the iFinder (Expedition C supports them)
    */
-#if NEW_STRINGS
   if (wpt->description != wpt->shortname) {
-#else
-  if (wpt->description && strcmp(wpt->description, wpt->shortname) != 0) {
-#endif
     comment = xstrdup(wpt->description);
     text_len = strlen(comment);
     if (text_len > MAXUSRSTRINGSIZE) {
@@ -866,18 +847,11 @@ lowranceusr_track_hdr(const route_head* trk)
   char visible=1;
 
   ++trail_count;
-#if NEW_STRINGS
-// This whole function needs to be replaced...
+//TODO: This whole function needs to be replaced...
   if (!trk->rte_name.isEmpty()) {
     name = xstrdup(trk->rte_name);
   } else if (!trk->rte_desc.isEmpty()) {
     name = xstrdup(trk->rte_desc);
-#else
-  if (trk->rte_name) {
-    name = xstrdup(trk->rte_name);
-  } else if (trk->rte_desc) {
-    name = xstrdup(trk->rte_desc);
-#endif
   } else {
     tmp_name[0]='\0';
     snprintf(tmp_name, sizeof(tmp_name), "Babel %d", trail_count);
@@ -927,18 +901,11 @@ lowranceusr_route_hdr(const route_head* rte)
   char route_reversed=0;
 
   /* route name */
-#if NEW_STRINGS
-// This whole function needs to be replaced...
+  //TODO: This whole function needs to be replaced...
   if (!rte->rte_name.isEmpty()) {
     name = xstrdup(rte->rte_name);
   } else if (!rte->rte_desc.isEmpty()) {
     name = xstrdup(rte->rte_desc);
-#else
-  if (rte->rte_name) {
-    name = xstrdup(rte->rte_name);
-  } else if (rte->rte_desc) {
-    name = xstrdup(rte->rte_desc);
-#endif
   } else {
     tmp_name[0]='\0';
     snprintf(tmp_name, sizeof(tmp_name), "Babel R%d", ++lowrance_route_count);
@@ -992,17 +959,10 @@ lowranceusr_merge_track_hdr(const route_head* trk)
   char* name, tmp_name[20];
 
   if (++trail_count == 1) {
-#if NEW_STRINGS
     if (!trk->rte_name.isEmpty()) {
       name = xstrdup(trk->rte_name);
     } else if (!trk->rte_desc.isEmpty()) {
       name = xstrdup(trk->rte_desc);
-#else
-    if (trk->rte_name) {
-      name = xstrdup(trk->rte_name);
-    } else if (trk->rte_desc) {
-      name = xstrdup(trk->rte_desc);
-#endif
     } else {
       tmp_name[0]='\0';
       snprintf(tmp_name, sizeof(tmp_name), "Babel %d", trail_count);

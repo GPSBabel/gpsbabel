@@ -396,7 +396,7 @@ bcr_route_header(const route_head* route)
   bcr_write_line(fout, "[CLIENT]", NULL, NULL);			/* client section */
   bcr_write_line(fout, "REQUEST", NULL, "TRUE");
 
-  sout = CSTRc(route->rte_name);
+  sout = route->rte_name;
   if (rtename_opt != 0) {
     sout = rtename_opt;
   }

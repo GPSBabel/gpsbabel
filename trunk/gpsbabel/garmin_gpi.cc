@@ -544,27 +544,14 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
       /* speed isn't part of a normal waypoint
       WAYPT_SET(wpt, speed, speed);
       */
-#if NEW_STRINGS
       if ((wpt->shortname.isEmpty()  || (wpt->shortname).indexOf('@'))) {
-#else
-      if ((wpt->shortname == NULL) || (! strchr(wpt->shortname, '@'))) {
-#endif
         if (units == 's') {
           speed = MPS_TO_MPH(speed);
         } else {
           speed = MPS_TO_KPH(speed);
         }
-#if NEW_STRINGS
-// double check
         QString base = wpt->shortname.isEmpty() ? "WPT" : wpt->shortname;
         wpt->shortname = base + QString("@.%1").arg(speed);
-#else
-        xasprintf(&str, "%s@%.f", wpt->shortname ? CSTRc(wpt->shortname) : "WPT", speed);
-        if (wpt->shortname) {
-          xfree(wpt->shortname);
-        }
-        wpt->shortname = str;
-#endif
       }
     }
 

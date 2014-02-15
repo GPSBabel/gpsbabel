@@ -334,20 +334,11 @@ static Waypoint*
 gdb_find_wayptq(const queue* Q, const Waypoint* wpt, const char exact)
 {
   queue* elem, *tmp;
-#if NEW_STRINGS
   QString name = wpt->shortname;
-#else
-  const char* name = wpt->shortname;
-#endif
 
   QUEUE_FOR_EACH(Q, elem, tmp) {
     Waypoint* tmp = (Waypoint*)elem;
-#if NEW_STRINGS
     if (name.compare(tmp->shortname,Qt::CaseInsensitive) == 0) {
-#else
-    if (case_ignore_strcmp(name, tmp->shortname) == 0) {
-#endif
-
       if (! exact) {
         return tmp;
       }
@@ -405,11 +396,7 @@ gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
     }
   }
   res = NULL;
-#if NEW_STRINGS
   turn_point = (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && !tmp->description.isEmpty());
-#else
-  turn_point = (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && tmp->description);
-#endif
   if (turn_point || (gdb_via == 0) || (wpt_class < gt_waypt_class_map_point)) {
     res = new Waypoint(*tmp);
     route_add_wpt(rte, res);
@@ -421,7 +408,6 @@ gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
 /*******************************************************************************/
 /* TOOLS AND MACROS FOR THE WRITER */
 /*-----------------------------------------------------------------------------*/
-#if NEW_STRINGS
 void FWRITE_CSTR(QString a)  {
   if (a.isEmpty()) {
     gbfputc(0, fout);
@@ -433,9 +419,7 @@ void FWRITE_CSTR(QString a)  {
     gbfputcstr(a.toLatin1().constData(), fout);
   }
 }
-#else
-#define FWRITE_CSTR(a) ((a) == NULL) ? gbfputc(0,fout) : gbfputcstr((a),fout)
-#endif
+
 #define FWRITE_i16(a) gbfputint16((a),fout)
 #define FWRITE_i32(a) gbfputint32((a),fout)
 #define FWRITE(a, b) gbfwrite(a,(b),1,fout)
@@ -772,11 +756,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
       GMSD_SETSTR(country, gt_get_icao_country(str));
     }
   }
-#if NEW_STRINGS
   if (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && !res->description.isEmpty()) {
-#else
-  if (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && res->description) {
-#endif
     wpt_class = gt_waypt_class_user_waypoint;
     GMSD_SET(wpt_class, wpt_class);
 #ifdef GMSD_EXPERIMENTAL
@@ -1338,30 +1318,18 @@ gdb_check_waypt(Waypoint* wpt)
   }
 
   if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-#if NEW_STRINGS
     fatal("Invalid latitude %f in waypoint %s.\n",
           lat_orig, !wpt->shortname.isEmpty() ? CSTRc(wpt->shortname) : "<no name>");
   if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
     fatal("Invalid longitude %f in waypoint %s.\n",
           lon_orig, !wpt->shortname.isEmpty() ? CSTRc(wpt->shortname) : "<no name>");
-#else
-    fatal("Invalid latitude %f in waypoint %s.\n",
-          lat_orig, wpt->shortname ? CSTRc(wpt->shortname) : "<no name>");
-  if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
-    fatal("Invalid longitude %f in waypoint %s.\n",
-          lon_orig, wpt->shortname ? CSTRc(wpt->shortname) : "<no name>");
-#endif
 }
 
 /*-----------------------------------------------------------------------------*/
 
 static void
 write_waypoint(
-#if NEW_STRINGS
   const Waypoint* wpt, const QString& shortname, garmin_fs_t* gmsd,
-#else
-  const Waypoint* wpt, const char* shortname, garmin_fs_t* gmsd,
-#endif
   const int icon, const int display)
 {
   char zbuf[32], ffbuf[32];
@@ -1397,11 +1365,7 @@ write_waypoint(
   FWRITE_LATLON(wpt->latitude);		/* latitude */
   FWRITE_LATLON(wpt->longitude);		/* longitude */
   FWRITE_DBL(wpt->altitude, unknown_alt);	/* altitude */
-#if NEW_STRINGS
   if (!wpt->notes.isEmpty()) {
-#else
-  if (wpt->notes) {
-#endif
     FWRITE_CSTR(wpt->notes);
   } else {
     FWRITE_CSTR(wpt->description);
@@ -1698,27 +1662,6 @@ finalize_item(gbfile* origin, const char identifier)
 }
 
 /*-----------------------------------------------------------------------------*/
-#if NEW_STRINGS
-#else
-static char
-str_not_equal(const char* s1, const char* s2)
-{
-  if (s1) {
-    if (!s2) {
-      return 1;
-    }
-    if (strcmp(s1, s2) != 0) {
-      return 1;
-    } else {
-      return 0;
-    }
-  } else if (s2) {
-    return 1;
-  } else {
-    return 0;
-  }
-}
-#endif
 
 static void
 write_waypoint_cb(const Waypoint* refpt)
@@ -1745,22 +1688,13 @@ write_waypoint_cb(const Waypoint* refpt)
   }
 
   if ((test != NULL) && (route_flag == 0)) {
-#if NEW_STRINGS
     if (test->notes != refpt->notes) {
-#else
-    if (str_not_equal(test->notes, refpt->notes)) {
-#endif
       test = NULL;
     }
   }
 
   if (test == NULL) {
     int icon, display, wpt_class;
-#if NEW_STRINGS
-    QString name;
-#else
-    char* name;
-#endif
     Waypoint* wpt = new Waypoint(*refpt);
 
     gdb_check_waypt(wpt);
@@ -1806,9 +1740,8 @@ write_waypoint_cb(const Waypoint* refpt)
       break;
     }
 
-    name = wpt->shortname;
+    QString name = wpt->shortname;
 
-#if NEW_STRINGS
     if (global_opts.synthesize_shortnames || name.isEmpty()) {
       name = wpt->notes;
       if (name.isEmpty()) {
@@ -1817,16 +1750,6 @@ write_waypoint_cb(const Waypoint* refpt)
       if (name.isEmpty()) {
         name = wpt->shortname;
       }
-#else
-    if (global_opts.synthesize_shortnames || (*name == '\0')) {
-      name = wpt->notes;
-      if (!name) {
-        name = wpt->description;
-      }
-      if (!name) {
-        name = wpt->shortname;
-      }
-#endif
     }
 
     name = mkshort(short_h, name);

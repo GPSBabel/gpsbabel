@@ -1202,11 +1202,7 @@ get_gc_notes(const Waypoint* wp, int* symbol, char** notes, unsigned* notes_size
   if (0 == (wp->icon_descr.compare("Geocache Found"))) {
     gc_sym = 124;
   }
-#if NEW_STRINGS
   if (!wp->description.isEmpty()) {
-#else
-  if (wp->description) {
-#endif
     gbfputs(wp->description, fd);
     if (!wp->gc_data->placer.isEmpty()) {
       gbfprintf(fd, " by %s", wp->gc_data->placer.toUtf8().data());
@@ -1386,11 +1382,7 @@ write_waypoint(const Waypoint* wp)
 {
   message_t m;
   msg_waypoint_t* p;
-#if NEW_STRINGS
   QString name = wp->shortname;
-#else
-  const char* name = wp->shortname;
-#endif
   char* notes;
   unsigned name_size;
   unsigned notes_size = 0;
@@ -1411,11 +1403,7 @@ write_waypoint(const Waypoint* wp)
   } else {
     get_gc_notes(wp, &symbol, &notes, &notes_size);
     notes_freeable = notes;
-#if NEW_STRINGS
     if (!wp->description.isEmpty()) {
-#else
-    if (wp->description) {
-#endif
       name = mkshort(mkshort_handle, wp->description);
     }
   }
@@ -1812,21 +1800,13 @@ write_track_end(const route_head* track)
   if (waypoint_n == 0) {
     return;
   }
-#if NEW_STRINGS
   if (!track->rte_desc.isEmpty()) {
-#else
-  if (track->rte_desc) {
-#endif
     comment_size = strlen(CSTRc(track->rte_desc)) + 1;
   }
   message_init_size(&m, sizeof(msg_track_header_in_t) - 1 + comment_size);
   p = (msg_track_header_in_t*) m.data;
   memset(p->name, 0, sizeof(p->name));
-#if NEW_STRINGS
   if (!track->rte_name.isEmpty()) {
-#else
-  if (track->rte_name) {
-#endif
     strncpy(p->name, CSTRc(track->rte_name), sizeof(p->name) - 1);
   } else {
     sprintf(p->name, "%lu", (long)wp_array[0]->GetCreationTime().toTime_t());
@@ -2161,11 +2141,7 @@ write_route_points(void)
     shape_n = shape_point_counts[route_point_i];
     le_write32(p->total, route_point_n);
     le_write32(p->index, route_point_i);
-#if NEW_STRINGS
     if (!wp->shortname.isEmpty()) {
-#else 
-    if (wp->shortname) {
-#endif
       strncpy(p->name, CSTRc(wp->shortname), sizeof(p->name) - 1);
     } else {
       sprintf(p->name, "RPT%u", route_point_i);
@@ -2207,12 +2183,7 @@ static void
 write_route_point(const Waypoint* wp)
 {
   wp_array[waypoint_i++] = (Waypoint*)wp;
-#if NEW_STRINGS
   if (wp->shortname.startsWith("SHP")) {
-#else
-  const char* s = wp->shortname;
-  if (s && s[0] == 'S' && s[1] == 'H' && s[2] == 'P' && s[3] >= '0' && s[3] <= '9') {
-#endif
     shape_point_n++;
     shape_point_counts[route_point_n]++;
   } else {
@@ -2232,11 +2203,7 @@ write_route_end(const route_head* route)
   message_init_size(&m, sizeof(msg_route_header_in_t));
   p = (msg_route_header_in_t*) m.data;
   memset(p->name, 0, sizeof(p->name));
-#if NEW_STRINGS
   if (!route->rte_name.isEmpty()) {
-#else
-  if (route->rte_name) {
-#endif
     strncpy(p->name, CSTRc(route->rte_name), sizeof(p->name) - 1);
   } else {
     sprintf(p->name, "%lu", (long)wp_array[0]->GetCreationTime().toTime_t());
