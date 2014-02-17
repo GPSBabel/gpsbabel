@@ -639,6 +639,7 @@ unicsv_parse_one_line(char* ibuf)
   double utm_easting = 0;
   double utm_northing = 0;
   char utm_zc = 'N';
+  // Zones are always two bytes.  Spare one for null termination..
   char bng_zone[3] = "";
   double bng_easting = 0;
   double bng_northing = 0;
@@ -761,7 +762,7 @@ unicsv_parse_one_line(char* ibuf)
       break;
 
     case fld_bng_zone:
-      strncpy(bng_zone, s, sizeof(bng_zone));
+      strncpy(bng_zone, s, sizeof(bng_zone) -1 );
       strupper(bng_zone);
       break;
 

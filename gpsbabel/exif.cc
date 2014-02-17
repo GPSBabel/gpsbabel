@@ -1278,7 +1278,7 @@ exif_write_apps(void)
 
       len += 4; /* DWORD(0) after last ifd */
 
-      if ((tag = exif_find_tag(app, IFD1, IFD1_TAG_JPEG_OFFS))) {
+      if ((exif_find_tag(app, IFD1, IFD1_TAG_JPEG_OFFS))) {
         exif_put_long(IFD1, IFD1_TAG_JPEG_OFFS, 0, len);
       }
 
