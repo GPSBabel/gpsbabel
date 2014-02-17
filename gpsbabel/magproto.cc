@@ -340,7 +340,7 @@ mag_writeack(int osum)
     return;
   }
 
-  i = sprintf(nbuf, "PMGNCSM,%02X", osum);
+  (void) sprintf(nbuf, "PMGNCSM,%02X", osum);
   nsum = mag_checksum(nbuf);
   i = sprintf(obuf, "$%s*%02X\r\n",nbuf, nsum);
 
@@ -1176,13 +1176,11 @@ mag_rteparse(char* rtemsg)
 QString
 mag_find_descr_from_token(const char* token)
 {
-  icon_mapping_t* i = icon_mapping;
-
   if (icon_mapping == NULL) {
     return "unknown";
   }
 
-  for (i = icon_mapping; i->token; i++) {
+  for (icon_mapping_t* i = icon_mapping; i->token; i++) {
     if (token[0] == 0) {
       break;
     }

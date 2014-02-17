@@ -452,9 +452,12 @@ exif_read_ifd(exif_app_t* app, const uint16_t ifd_nr, gbsize_t offs,
 
   for (i = 0; i < ifd->count; i++) {
     exif_tag_t* tag;
-    offs = gbftell(fin);
 
     tag = (exif_tag_t*) xcalloc(sizeof(*tag), 1);
+#ifdef EXIF_DBG
+    tag->offs = offs;
+    offs = gbftell(fin);
+#endif
 
     ENQUEUE_TAIL(&ifd->tags, &tag->Q);
 
@@ -463,9 +466,6 @@ exif_read_ifd(exif_app_t* app, const uint16_t ifd_nr, gbsize_t offs,
     tag->count = gbfgetuint32(fin);
     tag->size = exif_type_size(tag->type) * tag->count;
     tag->data = &tag->value;
-#ifdef EXIF_DBG
-    tag->offs = offs;
-#endif
 
     if (BYTE_TYPE(tag->type) && (tag->count <= 4)) {
       gbfread(tag->data, 4, 1, fin);

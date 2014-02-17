@@ -291,7 +291,7 @@ data_read(void)
       char* i = ibuf;
       sym_col = 0;
 
-      for (col = 0, i = ibuf; *i; col++, i++) {
+      for (col = 0; *i; col++, i++) {
         if (0 == case_ignore_strncmp(i, "comment", 7)) {
           comment_col = col;
         }
