@@ -122,7 +122,7 @@ waypt_add(Waypoint* wpt)
       wpt->shortname = wpt->notes;
     } else {
       QString n;
-      n.sprintf("%03d", waypt_ct);
+      n.sprintf("%03d", waypt_count());
       wpt->shortname = QString("WPT%1").arg(n);
     }
   }
@@ -144,7 +144,9 @@ waypt_add(Waypoint* wpt)
 void
 waypt_del(Waypoint* wpt)
 {
+  // the wpt must be on waypt_list, and is assumed unique.
 #if NEWQ
+  waypt_list.removeOne(wpt);
 #else
   dequeue(&wpt->Q);
   waypt_ct--;
@@ -221,7 +223,7 @@ waypt_disp_session(const session_t* se, waypt_cb cb)
     if ((se == NULL) || (waypointp->session == se)) {
       if (global_opts.verbose_status) {
         i++;
-        waypt_status_disp(waypt_ct, i);
+        waypt_status_disp(waypt_count(), i);
       }
       (*cb)(waypointp);
     }
@@ -324,8 +326,16 @@ find_waypt_by_name(const QString& name)
 void
 waypt_flush(queue* head)
 {
-  while (!waypt_list.isEmpty()) {
-    delete waypt_list.takeFirst();
+// TODO: This is incorrect when head != &waypt_head
+// We need to pass in a QList<Waypoint*> instead of a queue* that we ignore!
+  if (head != &waypt_head) {
+    if (global_opts.debug_level >= 1) {
+      warning("NEWQ version of waypt_flush is unimplemented for this list.\n");
+    }
+  } else {
+    while (!waypt_list.isEmpty()) {
+      delete waypt_list.takeFirst();
+    }
   }
 }
 #else
@@ -351,6 +361,8 @@ waypt_flush_all()
     mkshort_del_handle(&mkshort_handle);
   }
 #if NEWQ
+  // TODO: eventually we shoud pass the list instead of the queue.
+  waypt_flush(&waypt_head);
 #else
   waypt_flush(&waypt_head);
 #endif

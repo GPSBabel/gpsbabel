@@ -32,7 +32,11 @@
 
 /* from waypt.c, we need to iterate over waypoints when extracting
    routes */
+#if NEWQ
+extern QList<Waypoint*> waypt_list;
+#else
 extern queue waypt_head;
+#endif
 
 static gbfile* file_in;
 static gbfile* file_out;
@@ -473,12 +477,18 @@ lowranceusr4_parse_waypoints(void)
 static Waypoint*
 lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
 {
+#if !NEWQ
   queue* elem, *tmp;
-  Waypoint* waypointp;
+#endif
   lowranceusr4_fsdata* fs = NULL;
 
+#if NEWQ
+  // Iterate with waypt_disp_all?
+  foreach(Waypoint* waypointp, waypt_list) {
+#else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = (Waypoint*) elem;
+#endif
     fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
 
     if (fs && fs->uid_unit == uid_unit &&

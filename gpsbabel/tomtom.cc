@@ -434,9 +434,12 @@ data_write(void)
 {
   int ct = waypt_count();
   struct hdr* htable, *bh;
+#if NEWQ
+  extern QList<Waypoint*> waypt_list;
+#else
   queue* elem, *tmp;
   extern queue waypt_head;
-  Waypoint* waypointp;
+#endif
   double minlon = 200;
   double maxlon = -200;
   double minlat = 200;
@@ -446,8 +449,13 @@ data_write(void)
   htable = (struct hdr*) xmalloc(ct * sizeof(*htable));
   bh = htable;
 
+#if NEWQ
+  // Iterate with waypt_disp_all?
+  foreach(Waypoint* waypointp, waypt_list) {
+#else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = (Waypoint*) elem;
+#endif
     bh->wpt = waypointp;
     if (waypointp->longitude > maxlon) {
       maxlon = waypointp->longitude;
