@@ -1395,8 +1395,6 @@ static void kml_write_cdata_element(const QString& name, const QString& value)
 static void kml_geocache_pr(const Waypoint* waypointp)
 {
   char* is;
-  char date_placed[100];  // Always long engough for a date.
-
   const char* issues = "";
 
   writer->writeStartElement("Placemark");
@@ -1412,11 +1410,9 @@ static void kml_geocache_pr(const Waypoint* waypointp)
 
   // Timestamp
   kml_output_timestamp(waypointp);
+  QString date_placed;
   if (waypointp->GetCreationTime().isValid()) {
-    strcpy(date_placed,
-           qPrintable(waypointp->GetCreationTime().toString("dd-MMM-yyyy")));
-  } else {
-    date_placed[0] = '\0';
+    date_placed = waypointp->GetCreationTime().toString("dd-MMM-yyyy");
   }
 
   writer->writeTextElement("styleUrl", "#geocache");

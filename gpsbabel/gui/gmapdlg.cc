@@ -145,6 +145,7 @@ GMapDialog::GMapDialog(QWidget *parent, const QString &gpxFileName, QPlainTextEd
   lay->addWidget(mapWidget_);
 
   model_ = new QStandardItemModel(this);
+  menuIndex_ = -1; // Actually set for real in showContextMenu().
 
   wptItem_ = new StandardItem(tr("Waypoints"));
   wptItem_->setCheckable(true);
@@ -211,7 +212,6 @@ GMapDialog::GMapDialog(QWidget *parent, const QString &gpxFileName, QPlainTextEd
   connect(ui_.copyButton, SIGNAL(clicked()), this, SLOT(copyButtonClickedX()));
 
   ui_.copyButton->hide(); // Hide for now, not working
-
 }
 
 //-------------------------------------------------------------------------
