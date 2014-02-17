@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>674</width>
+    <width>675</width>
     <height>582</height>
    </rect>
   </property>
@@ -622,7 +622,7 @@
        <string/>
       </property>
       <property name="standardButtons">
-       <set>QDialogButtonBox::Apply|QDialogButtonBox::Close</set>
+       <set>QDialogButtonBox::Close|QDialogButtonBox::Help|QDialogButtonBox::Ok</set>
       </property>
      </widget>
     </item>
@@ -633,7 +633,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>674</width>
+     <width>675</width>
      <height>22</height>
     </rect>
    </property>

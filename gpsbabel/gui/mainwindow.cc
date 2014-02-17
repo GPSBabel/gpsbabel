@@ -186,17 +186,20 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   connect(ui_.moreOptionButton , SIGNAL(clicked()),
 	  this,                 SLOT(moreOptionButtonClicked()));
 
-  connect(ui_.buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(applyActionX()));
+  connect(ui_.buttonBox, SIGNAL(accepted()), this, SLOT(applyActionX()));
   connect(ui_.buttonBox, SIGNAL(rejected()), this, SLOT(closeActionX()));
+  connect(ui_.buttonBox, SIGNAL(helpRequested()), this, SLOT(helpActionX()));
+
   connect(ui_.xlateFiltersBtn, SIGNAL(clicked()), this, SLOT(filtersClicked()));
 
   connect(ui_.inputFileNameText, SIGNAL(textEdited(QString)), this, SLOT(inputFileNameEdited()));
   connect(ui_.outputFileNameText, SIGNAL(textEdited(QString)), this, SLOT(outputFileNameEdited()));
 
-
-  ui_.buttonBox->button(QDialogButtonBox::Apply)->setIcon(QIcon(":images/runit.png"));
+#if defined (Q_OS_WIN)
+  // Windows users like the colored buttons.  They look out of place elsewhere.
+  ui_.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":images/runit.png"));
   ui_.buttonBox->button(QDialogButtonBox::Close)->setIcon(QIcon(":images/exit.png"));
-
+#endif
 
   ui_.inputOptionsText->setReadOnly(true);
   ui_.outputOptionsText->setReadOnly(true);
