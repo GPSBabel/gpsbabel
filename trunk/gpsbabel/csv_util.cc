@@ -918,7 +918,7 @@ addhms(const char* s, const char* format)
   char* ampm = NULL;
   int ac;
 
-  ampm = (char*) xmalloc(strlen(s));
+  ampm = (char*) xmalloc(strlen(s) + 1);
   ac = sscanf(s, format, &hour, &min, &sec, &ampm);
   /* If no time format in arg string, assume AM */
   if (ac < 4) {

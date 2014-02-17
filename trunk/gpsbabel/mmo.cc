@@ -629,7 +629,7 @@ mmo_read_CObjRoute(mmo_data_t* data)
 
     DBG((sobj, "read next waypoint\n"));
     tmp = mmo_read_object();
-    if (tmp && tmp->data && (tmp->type = wptdata)) {
+    if (tmp && tmp->data && (tmp->type == wptdata)) {
       Waypoint* wpt;
 
       /* FIXME: At this point this waypoint maybe not fully loaded (initialized) !!!
