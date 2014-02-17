@@ -118,7 +118,7 @@ DiagS(void* buf, size_t sz)
 ** @return [int32] number of bytes in the packet
 ************************************************************************/
 
-int32 GPS_Serial_Write_Packet(gpsdevh* fd, GPS_PPacket packet)
+int32 GPS_Serial_Write_Packet(gpsdevh* fd, GPS_PPacket& packet)
 {
   size_t ret;
   const char* m1, *m2;
