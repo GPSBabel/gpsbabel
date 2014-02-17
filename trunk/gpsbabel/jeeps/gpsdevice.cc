@@ -60,7 +60,7 @@ int32  GPS_Device_Flush(gpsdevh* fd)
   return (ops->Device_Flush)(fd);
 }
 
-int32  GPS_Write_Packet(gpsdevh* fd, GPS_PPacket packet)
+int32  GPS_Write_Packet(gpsdevh* fd, GPS_PPacket& packet)
 {
   return (ops->Write_Packet)(fd, packet);
 }

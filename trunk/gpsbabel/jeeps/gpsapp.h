@@ -41,13 +41,13 @@
   int32  GPS_A500_Send(const char* port, GPS_PAlmanac* alm, int32 n);
 
   time_t GPS_A600_Get(const char* port);
-  time_t GPS_D600_Get(GPS_PPacket packet);
+  time_t GPS_D600_Get(GPS_PPacket& packet);
   int32  GPS_A600_Send(const char* port, time_t Time);
   void   GPS_D600_Send(GPS_PPacket& packet, time_t Time);
 
   int32  GPS_A700_Get(const char* port, double* lat, double* lon);
   int32  GPS_A700_Send(const char* port, double lat, double lon);
-  void   GPS_D700_Get(GPS_PPacket packet, double* lat, double* lon);
+  void   GPS_D700_Get(GPS_PPacket& packet, double* lat, double* lon);
   void   GPS_D700_Send(GPS_PPacket& packet, double lat, double lon);
 
   int32  GPS_A800_On(const char* port, gpsdevh** fd);
