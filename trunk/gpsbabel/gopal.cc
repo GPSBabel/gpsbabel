@@ -176,10 +176,9 @@ gopal_read(void)
   int fix, hms;
   route_head* route;
   Waypoint* wpt, *lastwpt=NULL;
-  double long_old,lat_old;
+  double lat_old;
   char tbuffer[64];
   struct tm tm2;
-  long_old=0;
   lat_old=0;
   strftime(routename,sizeof(routename),"Tracklog %c",gmtime(&tx));
 
@@ -306,7 +305,6 @@ gopal_read(void)
 
     if ((wpt->fix != fix_none)&&(lat_old==0)) { //first-time init
       lat_old=wpt->latitude;
-      long_old=wpt->longitude;
       //route_add_wpt(route, wpt);
       lastwpt=wpt;
     }
@@ -330,7 +328,6 @@ gopal_read(void)
         fprintf(stderr,"valid                line %5lu: \"%s\" %lf km/h\n",line,buff,speed);
       }
       lastwpt=wpt;
-      long_old=wpt->longitude;
       lat_old=wpt->latitude;
       route_add_wpt(route,wpt);
       waypt_add(new Waypoint(*wpt));

@@ -1830,7 +1830,7 @@ mps_write(void)
   route_head*		rte;
   route_head*		trk;
 
-  char			recType;
+  char			recType = -1;
   int				reclen;
   /* TODO: This kills a compiler warning but I'm not sure it's right */
   int				reclen2 = 0;
