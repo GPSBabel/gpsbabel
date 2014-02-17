@@ -885,8 +885,12 @@ waypoint_prepare(void)
 {
   int i;
   int n = waypt_count();
+#if NEWQ
+  extern QList<Waypoint*> waypt_list;
+#else
   queue* elem, *tmp;
   extern queue waypt_head;
+#endif
   int icon;
 
   tx_waylist = (struct GPS_SWay**) xcalloc(n,sizeof(*tx_waylist));
@@ -897,12 +901,16 @@ waypoint_prepare(void)
 
   i = 0;
 
+#if NEWQ
+  // Iterate with waypt_disp_all?
+  foreach(Waypoint* wpt, waypt_list) {
+#else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wpt;
+    Waypoint* wpt = (Waypoint*) elem;
+#endif
     char* ident;
     char obuf[256];
 
-    wpt = (Waypoint*) elem;
 #if NEW_STRINGS 
     QString src;
     if (!wpt->description.isEmpty()) {

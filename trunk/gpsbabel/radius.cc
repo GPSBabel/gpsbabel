@@ -109,8 +109,9 @@ dist_comp(const void* a, const void* b)
 void
 radius_process(void)
 {
+#if !NEWQ
   queue* elem, * tmp;
-  Waypoint* waypointp;
+#endif
   double dist;
   Waypoint** comp;
   int i, wc;
@@ -120,7 +121,7 @@ radius_process(void)
   foreach(Waypoint* waypointp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (Waypoint*)elem;
+    Waypoint* waypointp = (Waypoint*)elem;
 #endif
     dist = gc_distance(waypointp->latitude,
                        waypointp->longitude,
@@ -154,8 +155,12 @@ radius_process(void)
    * for qsort.
    */
 
+#if NEWQ
+  foreach(Waypoint* wp, waypt_list) {
+#else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     Waypoint* wp = (Waypoint*) elem;
+#endif
     comp[i] = wp;
     waypt_del(wp);
     i++;
