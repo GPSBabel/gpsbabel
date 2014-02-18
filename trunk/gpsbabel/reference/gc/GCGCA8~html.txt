@@ -2,7 +2,6 @@
 <html>
 <head>
  <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
- <meta name="Generator" content="GPSBabel 1.4.4">
  <title>GPSBabel HTML Output</title>
  <style>
   p.gpsbabelwaypoint { font-size: 120%; font-weight: bold }
