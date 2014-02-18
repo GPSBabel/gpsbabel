@@ -73,7 +73,7 @@ public:
   QList <elementState> stateStack;
 
   virtual bool startElement (const QString & ,
-			     const QString & localName, const QString & qName,
+                 const QString & localName, const QString &,
 			     const QXmlAttributes & atts )
   {
     if (localName == "wpt") {
@@ -135,7 +135,7 @@ public:
 
   virtual bool endElement (const QString & ,
 			   const QString & localName,
-			   const QString & qName)
+               const QString &)
   {
     if (localName == "wpt") {
       state = stateStack.takeLast();
