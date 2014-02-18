@@ -1203,7 +1203,7 @@ void MainWindow::moreOptionButtonClicked()
 //------------------------------------------------------------------------
 void MainWindow::aboutActionX()
 {
-  AboutDlg aboutDlg(0, babelVersion_, QString(appName) + QString(" " VERSION));
+  AboutDlg aboutDlg(0, babelVersion_, QString(appName) + QString(" " VERSION), babelData_.installationUuid_);
   aboutDlg.setWindowTitle(tr("About %1").arg(appName));
   aboutDlg.exec();
 }

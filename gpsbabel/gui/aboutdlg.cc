@@ -25,7 +25,7 @@
 #include "upgrade.h"
 
 AboutDlg::AboutDlg(QWidget *parent, const QString &ver1,
-		   const QString &ver2): QDialog(parent)
+       const QString &ver2, const QString& installationId): QDialog(parent)
 {
   ui_.setupUi(this);
   QTextDocument *doc = ui_.textEdit->document();
@@ -34,6 +34,7 @@ AboutDlg::AboutDlg(QWidget *parent, const QString &ver1,
   tt.replace(QRegExp("\\$appname\\$"),  QString(appName));
   tt.replace(QRegExp("\\$babelversion\\$"),  ver1);
   tt.replace(QRegExp("\\$babelfeversion\\$"),  ver2);
+  tt.replace(QRegExp("\\$installationId\\$"),  installationId);
 
   // Not localized as it should never be seen.
   tt.replace(QRegExp("\\$upgradetestmode\\$"),  
