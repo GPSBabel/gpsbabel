@@ -1,0 +1,10 @@
+#!/bin/bash
+# this is how the test case was created 2013-01-03
+# note that this test has multiple segments which causes different code paths
+# to be tested in google.c
+wget 'http://maps.google.com/maps?saddr=boulder,co&daddr=ward,co+to:nederland,co+to:rollinsville,co+to:39.9571355,-105.3453097+to:boulder,co&hl=en&sll=40.022356,-105.413818&sspn=0.371235,0.837021&geocode=FYqUYgId7rK5-SnTr40nTo1rhzFYgBugfDs5yA%3BFRB0YwIdFBK2-Sl_2wWdTdtrhzH8DveOBQELaw%3BFSDDYQIdUQi2-SlbUkVOxMZrhzGyTOyqmFxkjQ%3BFaYWYQIddDC2-SmHY9U0U8drhzHf72g2RkeUsA%3BFY-yYQId4464-Sl_sr6fEOtrhzFNyj12wpz7yQ%3BFYqUYgId7rK5-SnTr40nTo1rhzFYgBugfDs5yA&mra=dpe&mrsp=4&sz=11&via=4&t=m&z=11&output=js' -O google_multisegment.js
+
+wget 'http://maps.google.com/maps?saddr=boulder,co&daddr=ward,co+to:nederland,co+to:rollinsville,co+to:39.9571355,-105.3453097+to:boulder,co&hl=en&sll=40.022356,-105.413818&sspn=0.371235,0.837021&geocode=FYqUYgId7rK5-SnTr40nTo1rhzFYgBugfDs5yA%3BFRB0YwIdFBK2-Sl_2wWdTdtrhzH8DveOBQELaw%3BFSDDYQIdUQi2-SlbUkVOxMZrhzGyTOyqmFxkjQ%3BFaYWYQIddDC2-SmHY9U0U8drhzHf72g2RkeUsA%3BFY-yYQId4464-Sl_sr6fEOtrhzFNyj12wpz7yQ%3BFYqUYgId7rK5-SnTr40nTo1rhzFYgBugfDs5yA&mra=dpe&mrsp=4&sz=11&via=4&t=m&z=11&output=js&oe=UTF-8' -O google_multisegment_utf8.js
+
+wget 'http://maps.google.com/maps?saddr=boulder,co&daddr=ward,co+to:nederland,co+to:rollinsville,co+to:39.9571355,-105.3453097+to:boulder,co&hl=en&sll=40.022356,-105.413818&sspn=0.371235,0.837021&geocode=FYqUYgId7rK5-SnTr40nTo1rhzFYgBugfDs5yA%3BFRB0YwIdFBK2-Sl_2wWdTdtrhzH8DveOBQELaw%3BFSDDYQIdUQi2-SlbUkVOxMZrhzGyTOyqmFxkjQ%3BFaYWYQIddDC2-SmHY9U0U8drhzHf72g2RkeUsA%3BFY-yYQId4464-Sl_sr6fEOtrhzFNyj12wpz7yQ%3BFYqUYgId7rK5-SnTr40nTo1rhzFYgBugfDs5yA&mra=dpe&mrsp=4&sz=11&via=4&t=m&z=11&output=js&oe=UTF-16' -O google_multisegment_utf16.js
+

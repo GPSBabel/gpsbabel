@@ -1,0 +1,17 @@
+
+#
+# Kartex waypoints and tracks
+#
+rm -f ${TMPDIR}/kartex*
+gpsbabel -i kwf2 -f ${REFERENCE}/waypointsDd.kwf -o kwf2 -F ${TMPDIR}/kartex-1a.kwf
+compare ${REFERENCE}/kartex-out.kwf ${TMPDIR}/kartex-1a.kwf
+# ! different format of coords; this checks LATLON_HUMAN_READABLE !
+gpsbabel -i kwf2 -f ${REFERENCE}/waypointsDMm.kwf -o kwf2 -F ${TMPDIR}/kartex-1b.kwf
+compare ${TMPDIR}/kartex-1a.kwf ${TMPDIR}/kartex-1b.kwf 
+#
+gpsbabel -i ktf2 -f ${REFERENCE}/track/trackDd.ktf -o ktf2 -F ${TMPDIR}/kartex-2a.ktf
+compare ${REFERENCE}/track/kartex-out.ktf ${TMPDIR}/kartex-2a.ktf
+# ! different format of coords; this checks LATLON_HUMAN_READABLE !
+gpsbabel -i ktf2 -f ${REFERENCE}/track/trackDMm.ktf -o ktf2 -F ${TMPDIR}/kartex-2b.ktf
+compare ${TMPDIR}/kartex-2a.ktf ${TMPDIR}/kartex-2b.ktf
+

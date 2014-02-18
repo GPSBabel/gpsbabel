@@ -1,0 +1,59 @@
+#!/bin/sh
+set -e -v
+QT_INSTALL_PLUGINS=`@QMAKE@ -query QT_INSTALL_PLUGINS`
+QT_INSTALL_TRANSLATIONS=`@QMAKE@ -query QT_INSTALL_TRANSLATIONS`
+
+DISTNAME=GPSBabel@PACKAGE_VERSION@@PACKAGE_RELEASE@
+DISTDIR=$DISTNAME
+rm -rf $DISTDIR
+mkdir $DISTDIR
+mkdir $DISTDIR/plugins
+mkdir $DISTDIR/translations
+mkdir $DISTDIR/help
+
+QT_LIBS=`ldd objects/gpsbabelfe-bin | grep libQt | awk '{print $3}'`
+for lib in $QT_LIBS
+do
+	cp $lib $DISTDIR
+done
+#cp `ldd objects/gpsbabelfe-bin  | grep libphonon |awk '{print $3}'` $DISTDIR
+#cp `ldd objects/gpsbabelfe-bin  | grep libaudio   |awk '{print $3}'` $DISTDIR
+
+cp -r $QT_INSTALL_PLUGINS/imageformats $DISTDIR/plugins
+if [ -e $QT_INSTALL_PLUGINS/codecs ]
+then
+  cp -r $QT_INSTALL_PLUGINS/codecs $DISTDIR/plugins
+else
+  echo "Warning: $QT_INSTALL_PLUGINS/codecs not found, perhaps this is normal for Qt5"
+fi
+if [ -e $QT_INSTALL_PLUGINS/platforms ]
+then
+#  we need at least platforms/libqxcb.so
+  cp -r $QT_INSTALL_PLUGINS/platforms $DISTDIR/plugins
+else
+  echo "Wanring: $QT_INSTALL_PLUGINS/platforms not found, this is normal for Qt4"
+fi
+cp $QT_INSTALL_TRANSLATIONS/qt_*.qm $DISTDIR/translations/
+
+# copy the compiled translations
+cp *.qm $DISTDIR/translations
+
+# Now our gui
+cp gmapbase.html $DISTDIR/
+cp gpsbabelfe $DISTDIR/
+chmod +x $DISTDIR/gpsbabelfe
+cp objects/gpsbabelfe-bin $DISTDIR
+cp qt.conf $DISTDIR/
+cp ../gpsbabel $DISTDIR/
+#
+cp -r help/*.html $DISTDIR/help
+
+cp ../COPYING $DISTDIR/
+#cp AUTHORS $DISTDIR/
+cp ../README* $DISTDIR/
+
+
+rm -f $DISTDIR.tar $DISTDIR.tar.bz2
+tar cvf $DISTDIR.tar $DISTDIR
+bzip2 $DISTDIR.tar
+

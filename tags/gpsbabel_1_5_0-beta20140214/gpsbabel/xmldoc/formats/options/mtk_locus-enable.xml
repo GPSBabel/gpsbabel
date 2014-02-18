@@ -1,0 +1,2 @@
+<para>This option sets logging on the device to on or off.  Setting the logging off does not erase the saved fixes.</para>
+<para>Only valid when using a USB device as input.</para>

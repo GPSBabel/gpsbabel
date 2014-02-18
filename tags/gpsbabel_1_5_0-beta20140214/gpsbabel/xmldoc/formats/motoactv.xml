@@ -1,0 +1,20 @@
+<para>
+The <productname>MotoACTV</productname> smart watch creates csv
+format files. GPSBabel can read and write these files through
+the xcsv format when using the included motoactv.style specification. 
+</para>
+<para>
+The specific format of the csv file has changed over time, to
+add new data fields. The current version of the GPSBabel style
+specification expects to work with this ordered set of fields:
+</para>
+<para>
+"DISTANCE","activity_id","HEARTRATE","SPEED","STEPS_PER_MINUTE",
+"LATITUDE","repetitions","temperature","INSTANT_TORQUE_CRANK",
+"timestamp_epoch","ELEVATION","POWER","STRIDES","wheel_torque",
+"CALORIEBURN","LONGITUDE","CADENCE","heading","STEP_RATE"
+</para>
+<para><userinput>
+gpsbabel -i xcsv,style=motoactv.style -f rawDataCsv.csv
+-x transform,trk=wpt -o gtrnctr,course=0 -F outfile.tcx
+</userinput></para>

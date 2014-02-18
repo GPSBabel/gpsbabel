@@ -1,0 +1,6 @@
+<para>
+  Much like the <option>erase</option> this optio erases the data in the GPS.
+  It does not transfer data before doing so, making it much faster.  This may
+  be handy in a work flow where you want to transfer the data from the GPS,
+  check it on a map, and then remove it from the unit.
+</para>

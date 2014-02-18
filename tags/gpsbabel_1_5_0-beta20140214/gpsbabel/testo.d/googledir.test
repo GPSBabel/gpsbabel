@@ -1,0 +1,6 @@
+#
+# Quick tests for Google Direction XML format
+# Note: Reference files are from GPSBabel's own output.
+#
+gpsbabel -i googledir -f ${REFERENCE}/google-direction.xml -o gpx -F ${TMPDIR}/google-direction.gpx
+compare  ${REFERENCE}/google-direction.gpx ${TMPDIR}/google-direction.gpx

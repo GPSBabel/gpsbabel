@@ -1,0 +1,14 @@
+#
+# Transformation filter (transform) tests
+#
+rm -f ${TMPDIR}/transform-rte.gpx
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,routes,tracks -x transform,rte=wpt,del=y -o gpx,gpxver=1.1 -F ${TMPDIR}/transform-rte.gpx
+compare ${REFERENCE}/transform-rte.gpx ${TMPDIR}/transform-rte.gpx 
+
+rm -f ${TMPDIR}/transform-wpt.gpx
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,waypoints,tracks -x transform,wpt=rte,del=y -o gpx,gpxver=1.1 -F ${TMPDIR}/transform-wpt.gpx
+compare ${REFERENCE}/transform-wpt.gpx ${TMPDIR}/transform-wpt.gpx 
+
+rm -f ${TMPDIR}/transform-names.gpx
+gpsbabel -t -i gpx -f ${REFERENCE}/track/seg2trk_test-seg.gpx -x nuketypes,routes,waypoints -x transform,rte=trk,del=y,rptname=y,rptdigits=2 -o gpx,gpxver=1.1 -F ${TMPDIR}/transform-names.gpx
+compare ${REFERENCE}/transform-names.gpx ${TMPDIR}/transform-names.gpx 

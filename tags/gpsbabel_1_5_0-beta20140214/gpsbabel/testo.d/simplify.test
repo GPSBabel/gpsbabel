@@ -1,0 +1,9 @@
+#
+# Simplify filter
+#
+rm -f ${TMPDIR}/simplify.txt
+gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
+         -x simplify,count=10 \
+         -o arc -F ${TMPDIR}/simplify.txt
+compare ${REFERENCE}/simplify_output.txt ${TMPDIR}/simplify.txt
+

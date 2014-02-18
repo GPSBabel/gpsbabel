@@ -1,0 +1,3 @@
+<para>This option will enable the logger after download.</para>
+<para>By default the logger is re-enabled when download is finished if previously were enabled.
+But if the download is aborted or failed the log functionality won't be enabled again.</para>

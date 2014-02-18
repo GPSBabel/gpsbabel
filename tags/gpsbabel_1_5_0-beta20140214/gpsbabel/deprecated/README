@@ -1,0 +1,43 @@
+Every community needs a retirement home.  deprecated/ is ours.
+
+This is where formats get moved once they become unused or are little used
+and problematic to refit into newer infrastructure.  Formats are moved here
+so they remain examples for future developers or so that they can be revived
+by interested parties and updated in the future.  As I am writing this, the
+formats being deleted are each under .02% (yes, the decimal is in the correct
+place) of our expected users.
+
+This allows us to modernize our core systems without getting bogged down
+in reimplementing formats that nobody[1] has used in years.  It also allows
+us to more easily bring back formats if we were wrong on how popular something
+was.
+
+Epitaths
+
+* cetus, copilot, coto, gcdb, geoniche, gpilots, gpspilot, mag_pdb, magnav, 
+  mapopolis, palmdoc, pathaway, pdbfile, quovadis: Palm/OS has been in decline
+  for years.  We've seen no list traffic about these in years.  Many of them
+  have particularly grubby internal implementations.  None of these programs
+  have been updated since the demise of Palm/OS.
+* hsa_ndv: Zero list traffic from anyone other than original author, 
+  who has quit responding to email, contributed it ten years ago.
+  Use of "raw" expat (which we're removing), strange structure, poor test
+  suite coverage.  Company that created HSA is gone.
+* coastexp: Extremely little use (three posts since submitted ten years ago,
+  zero in the last five years)   Uses expat.  Probably easier to revive than
+  hsa_ndv if there's interest.
+* msroute: Long a problematic format when it was added in 2005.  It read
+  Microsoft AutoRoute 2002 files.  It somewhat worked until about 2007 but
+  pretty much every annual Microsoft update broke it.  As AutoRoute and 
+  Streets & Trips has added GPX, this format has outlived its usefulness.
+* psp: If desktop Microsoft S&T from 2002 was dead (see msroute) 
+  PocketStreets 2002 Pushpin is even more dead.  Not used or made in years.
+* axim_gpb: Dell Axim Navigation (their iPaq-wannabe) hasn't been used or
+  made in years.  Usage stats are near zero.
+
+R.I.P.
+
+-- Robert Lipe
+
+[1] That's in the purely mathematical sense, not a personal one.  We have
+ millions of users...

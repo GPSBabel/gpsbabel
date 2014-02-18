@@ -1,0 +1,20 @@
+
+      
+      
+      <para> This format is designed to read the XML emitted when you
+use the <ulink url="https://developers.google.com/maps/documentation/directions/">
+	Google Directions API</ulink>.
+</para>
+<para>
+If you use a Unix-compatible
+operating system, this shell script might be useful:
+</para>
+<programlisting format="linespecific"><![CDATA[
+#!/bin/sh 
+FROM="233 S. Upper Wacker Dr, Chicago, IL" 
+TO="1060 W. Addison St, Chicago, IL" 
+wget -O - "http://maps.googleapis.com/maps/api/directions/xml?origin=$FROM&destination=$TO&sensor=false" \
+2&amp;&gt;/dev/null &gt;google_map.js
+gpsbabel -i google -f google_map.js -o gpx -F google_map.gpx
+]]></programlisting>
+    

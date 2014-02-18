@@ -1,0 +1,6 @@
+#
+# XCSV "human writeable" tests
+#
+rm -f ${TMPDIR}/humanwrite.out
+gpsbabel -i xcsv,style=${REFERENCE}/humanread.style -f ${REFERENCE}/human.in -o xcsv,style=${REFERENCE}/humanwrite.style -F ${TMPDIR}/humanwrite.out
+compare ${REFERENCE}/humanwrite.out ${TMPDIR}/humanwrite.out

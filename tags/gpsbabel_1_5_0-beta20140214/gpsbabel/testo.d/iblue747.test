@@ -1,0 +1,6 @@
+#
+# iBlue747 (style) track files
+#
+gpsbabel -i iblue747 -f ${REFERENCE}/track/iblue747.csv -o gpx -F ${TMPDIR}/iblue747~csv.gpx
+compare ${REFERENCE}/track/iblue747~csv.gpx ${TMPDIR}/iblue747~csv.gpx
+

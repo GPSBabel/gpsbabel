@@ -1,0 +1,10 @@
+<para>
+  With this default option waypoint names are generated from source filename.
+</para>
+<para>
+  <userinput>
+     gpsbabel -i exif -f "C:\Pictures\IMG_1199.JPG",filename=Y -o gpx -F OUT.GPX
+  </userinput>
+  The resulting waypoint in OUT.GPX has name IMG_1199.
+</para>
+

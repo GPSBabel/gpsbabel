@@ -1,0 +1,6 @@
+<para>
+This option splits tracks at segment boundaries into multiple tracks. This
+is useful to restore the behaviour of GPSBabel versions up to 1.3.6 which
+didn't support track segment markers and automatically put each segment into
+a separate track.
+</para>

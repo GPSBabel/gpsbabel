@@ -1,0 +1,11 @@
+#
+# Map&Guide Motorrad Routenplaner .bcr files test
+#
+rm -f ${TMPDIR}/bcr*
+gpsbabel -r -i bcr -f ${REFERENCE}/route/bcr-sample.bcr -o gpx -F ${TMPDIR}/bcr-sample.gpx
+compare ${REFERENCE}/route/bcr-sample.gpx ${TMPDIR}/bcr-sample.gpx
+gpsbabel -r -i gpx -f ${REFERENCE}/route/bcr-sample.gpx -o bcr -F ${TMPDIR}/bcr-sample2.bcr
+compare ${REFERENCE}/route/bcr-sample2.bcr ${TMPDIR}/bcr-sample2.bcr
+gpsbabel -r -i bcr -f ${TMPDIR}/bcr-sample2.bcr -o gpx -F ${TMPDIR}/bcr-sample2.gpx
+compare	${REFERENCE}/route/bcr-sample.gpx ${TMPDIR}/bcr-sample2.gpx
+

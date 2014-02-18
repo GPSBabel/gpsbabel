@@ -1,0 +1,5 @@
+#  Test HTML and Text output of a geocache.
+
+gpsbabel -i gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o html -F ${TMPDIR}/gc.html -o text -F ${TMPDIR}/gc.txt
+compare ${REFERENCE}/gc/GCGCA8~text.txt ${TMPDIR}/gc.txt
+compare ${REFERENCE}/gc/GCGCA8~html.txt ${TMPDIR}/gc.html

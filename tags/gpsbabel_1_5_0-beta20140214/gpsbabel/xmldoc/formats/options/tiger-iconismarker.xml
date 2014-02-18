@@ -1,0 +1,4 @@
+<para> This options signifies that the icon in the incoming format is to be used
+without change in the generated Tiger output file.  Without this option,
+GPSBabel tries to color pins based on their creation time and certain 
+Geocaching traits when available.</para>

@@ -1,0 +1,11 @@
+#
+# Garmin logbook.   This format has an extra section (lap data with things
+# like heartbeat and calories burned) that we don't know what to do with,
+# so we convert it to gpx, convert it to itself, convert THAT to gpx, and
+# compare those.
+#
+rm -f ${TMPDIR}/glogbook*
+gpsbabel -i glogbook -f ${REFERENCE}/track/garmin_logbook.xml -o gpx -F ${TMPDIR}/glog1.gpx
+gpsbabel -i glogbook -f ${REFERENCE}/track/garmin_logbook.xml -o glogbook -F ${TMPDIR}/glog.xml
+gpsbabel -i glogbook -f ${TMPDIR}/glog.xml -o gpx -F ${TMPDIR}/glog2.gpx
+compare ${TMPDIR}/glog1.gpx ${TMPDIR}/glog2.gpx

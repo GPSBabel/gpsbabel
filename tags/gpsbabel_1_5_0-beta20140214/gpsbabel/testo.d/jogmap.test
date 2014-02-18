@@ -1,0 +1,7 @@
+#
+# Jogmap XML tests
+#
+rm -f ${TMPDIR}/jogmap.*
+gpsbabel -i jogmap -f ${REFERENCE}/track/jogmap.xml -o gpx -F ${TMPDIR}/jogmap.gpx
+compare ${REFERENCE}/track/jogmap-gpx.gpx ${TMPDIR}/jogmap.gpx 
+

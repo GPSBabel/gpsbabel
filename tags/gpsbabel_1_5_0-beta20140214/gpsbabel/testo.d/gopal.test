@@ -1,0 +1,21 @@
+# GoPal
+# GoPal is a bit tricky, because it's a lossy format regarding the first field (timetick).
+# so we first read a reference gopal file, and then write it out as gopal trk file, now with a computed timestamp.
+# Doing so results in more useful timestamps.
+# Next we convert this tst file to gpx to test the writing path, but gpx does not save speed, so do it twice...
+GoPalName=track20080703_173036.trk 
+rm -f ${TMPDIR}/${GoPalName}.*
+#step 1: reference file
+gpsbabel -i gopal -f ${REFERENCE}/track20080703_173036.trk -o gopal -F ${TMPDIR}/${GoPalName}.tst
+#step2: gpx without speed information
+gpsbabel -i gopal -f ${TMPDIR}/${GoPalName}.tst -o gpx  -F ${TMPDIR}/${GoPalName}.im
+gpsbabel -i gpx -f ${TMPDIR}/${GoPalName}.im  -o gopal -F ${TMPDIR}/${GoPalName}.tst2
+#step 3: do it again to have 2 identical gopal files:
+gpsbabel -i gopal -f ${TMPDIR}/${GoPalName}.tst -o gpx  -F ${TMPDIR}/${GoPalName}.im2
+gpsbabel -i gpx -f ${TMPDIR}/${GoPalName}.im2  -o gopal -F ${TMPDIR}/${GoPalName}.tst3
+compare ${TMPDIR}/${GoPalName}.tst2 ${TMPDIR}/${GoPalName}.tst3
+
+# Gopal with 11 fields is slightly more sane.
+gpsbabel -i gopal -f ${REFERENCE}/gopal-11.trk -o gpx -F ${TMPDIR}/gopal-11-gpx.gpx
+compare ${REFERENCE}/gopal-11-gpx.gpx ${TMPDIR}/gopal-11-gpx.gpx
+

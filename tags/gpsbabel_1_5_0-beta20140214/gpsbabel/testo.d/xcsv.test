@@ -1,0 +1,17 @@
+
+# XCSV
+# Test that we can parse a style file, and read and write data in the 
+# same xcsv format (a complete test is virtually impossible).
+echo "RECORD_DELIMITER NEWLINE" > ${TMPDIR}/testo.style
+echo "FIELD_DELIMITER COMMA" >> ${TMPDIR}/testo.style
+echo "BADCHARS COMMA" >> ${TMPDIR}/testo.style
+echo "PROLOGUE Header" >> ${TMPDIR}/testo.style
+echo "EPILOGUE Footer" >> ${TMPDIR}/testo.style
+echo "IFIELD SHORTNAME,,%s" >> ${TMPDIR}/testo.style
+echo "IFIELD LAT_DIRDECIMAL,,%c%lf" >> ${TMPDIR}/testo.style
+echo "IFIELD LON_DECIMALDIR,,%lf%c" >> ${TMPDIR}/testo.style
+rm -f ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.geo
+gpsbabel -i xcsv,style=${TMPDIR}/testo.style -f ${TMPDIR}/xcsv.geo -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.xcsv
+compare ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
+

@@ -1,0 +1,5 @@
+<para>
+  This option is similar to the 'sat' option. Some GPSes will log
+  points with a fix value of 'unknown'.
+  This option allows you to discard those points.
+</para>

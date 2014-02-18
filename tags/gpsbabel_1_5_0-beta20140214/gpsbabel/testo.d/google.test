@@ -1,0 +1,26 @@
+#
+# Google Maps XML test
+#
+rm -f ${TMPDIR}/google.out
+gpsbabel -i google -f ${REFERENCE}/google.xml -o csv -F ${TMPDIR}/google.out
+compare ${REFERENCE}/google.csv ${TMPDIR}/google.out
+
+rm -f ${TMPDIR}/google.out
+gpsbabel -i google -f ${REFERENCE}/google.js -o csv -F ${TMPDIR}/google.out
+compare ${REFERENCE}/google.csv ${TMPDIR}/google.out
+
+rm -f ${TMPDIR}/google.out
+gpsbabel -i google -f ${REFERENCE}/google_jan_06.html -o csv -F ${TMPDIR}/google.out
+compare ${REFERENCE}/google_jan_06.csv ${TMPDIR}/google.out
+
+rm -f ${TMPDIR}/google.out
+gpsbabel -i google -f ${REFERENCE}/google_multisegment.js -o gpx -F ${TMPDIR}/google.out
+compare ${REFERENCE}/google_multisegment.gpx ${TMPDIR}/google.out
+
+rm -f ${TMPDIR}/google.out
+gpsbabel -i google -f ${REFERENCE}/google_multisegment_utf8.js -o gpx -F ${TMPDIR}/google.out
+compare ${REFERENCE}/google_multisegment.gpx ${TMPDIR}/google.out
+
+rm -f ${TMPDIR}/google.out
+gpsbabel -i google -f ${REFERENCE}/google_multisegment_utf16.js -o gpx -F ${TMPDIR}/google.out
+compare ${REFERENCE}/google_multisegment.gpx ${TMPDIR}/google.out

@@ -1,0 +1,8 @@
+<para>
+   This value specifies the grid to be used on write. It is similar to
+   the grid option of garmin_txt (see <xref linkend="garmin_grid" />). The only difference is that unicsv does not
+   write a degree sign (°) into the output file.
+</para>
+<para>
+   Without this option unicsv writes the coordinates as simple numbers like in the samples above.
+</para>

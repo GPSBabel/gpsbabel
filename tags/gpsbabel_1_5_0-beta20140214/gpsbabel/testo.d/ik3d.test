@@ -1,0 +1,6 @@
+#
+# MagicMaps IK3D Project File .ikt test
+#
+gpsbabel -i ik3d -f ${REFERENCE}/ik3d-sample.ikt -o gpx -F ${TMPDIR}/ik3d-sample.gpx
+compare ${REFERENCE}/ik3d-sample.gpx ${TMPDIR}/ik3d-sample.gpx
+

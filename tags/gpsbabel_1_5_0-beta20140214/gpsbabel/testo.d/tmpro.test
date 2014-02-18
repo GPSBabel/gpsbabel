@@ -1,0 +1,6 @@
+# tmpro (TopoMapPro Places) file format
+rm -f ${TMPDIR}/topomappro.txt ${TMPDIR}/mxf.mxf
+gpsbabel -i tmpro -f ${REFERENCE}/topomappro.txt -o tmpro -F ${TMPDIR}/tmp.txt
+gpsbabel -i tmpro -f ${TMPDIR}/tmp.txt -o tmpro -F ${TMPDIR}/topomappro.txt
+compare ${TMPDIR}/topomappro.txt ${REFERENCE}
+

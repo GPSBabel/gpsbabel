@@ -1,0 +1,6 @@
+rm -f ${TMPDIR}/wintec_tes.*
+
+# Currently one-way.
+gpsbabel -i wintec_tes -f ${REFERENCE}/track/wintec_tes.tes -o gpx -F ${TMPDIR}/wintec_tes.gpx
+compare ${REFERENCE}/track/wintec_tes~gpx.gpx ${TMPDIR}/wintec_tes.gpx
+

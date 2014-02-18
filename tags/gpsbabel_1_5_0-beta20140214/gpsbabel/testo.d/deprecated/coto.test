@@ -1,0 +1,17 @@
+
+#
+# cotoGPS tests
+#
+rm -f ${TMPDIR}/coto*
+# Track reading
+gpsbabel -i coto -f ${REFERENCE}/cototesttrack.pdb -o xcsv,style=${REFERENCE}/cototest.style -F ${TMPDIR}/cototrack.csv
+compare ${REFERENCE}/cototesttrack.csv ${TMPDIR}/cototrack.csv
+# Marker read
+gpsbabel -i coto -f ${REFERENCE}/cototestmarker.pdb -o gpx -F ${TMPDIR}/cotomarker.gpx
+compare ${REFERENCE}/cototestmarker.gpx ${TMPDIR}/cotomarker.gpx
+# Marker write
+gpsbabel -i gpx -f ${REFERENCE}/cototestmarker.gpx -o coto -F ${TMPDIR}/cotomarker.pdb
+# bincompare ${REFERENCE}/cototestmarker.pdb ${TMPDIR}/cotomarker.pdb
+gpsbabel -i coto -f ${TMPDIR}/cotomarker.pdb -o gpx -F ${TMPDIR}/cotomarker.gpx
+compare ${REFERENCE}/cototestmarker.gpx ${TMPDIR}/cotomarker.gpx
+
