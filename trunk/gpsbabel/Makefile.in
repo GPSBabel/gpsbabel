@@ -382,7 +382,7 @@ mac-release:
 	curl -u anonymous:anonymous --upload-file gpsbabel-osx.tgz ftp://upload.sf.net/incoming/
 
 gui: gpsbabel
-	cd gui ; $(QMAKE) && make
+	cd gui ; $(QMAKE) -spec macx-g++ app.pro && make
 	cd gui ; $(LUPDATE) app.pro
 	cd gui ; $(LRELEASE) app.pro
 
