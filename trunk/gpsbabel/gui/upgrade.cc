@@ -105,10 +105,10 @@ QString UpgradeCheck::getOsVersion()
   case QSysInfo::MV_10_5: return "10.5"; break;
   case QSysInfo::MV_10_6: return "10.6"; break;
   case QSysInfo::MV_10_7: return "10.7"; break;
-  //case QSysInfo::MV_10_8: return "10.8"; break;
-  default: 
-    if (QSysInfo::MacintoshVersion == 10) {
-      return "10.8";
+  case QSysInfo::MV_10_8: return "10.8"; break;
+  default:
+    if (QSysInfo::MacintoshVersion == 11) {
+      return "10.9";
       break;
     }
     return QString("Unknown Mac %1").arg(QSysInfo::MacintoshVersion);
@@ -128,6 +128,8 @@ QString UpgradeCheck::getOsVersion()
   case QSysInfo::WV_6_0: return "Vista"; break;
   case QSysInfo::WV_6_1: return "7"; break;
   default:
+       if (QSysInfo::WindowsVersion == 0x00a0) return "8";
+       if (QSysInfo::WindowsVersion == 0x00b0) return "8.1";
       return "Windows/Unknown";
   }
 #endif
@@ -164,7 +166,7 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
   args += "&current_gui_version=" VERSION;
   args += "&installation=" + babelData_.installationUuid_;
   args += "&os=" + getOsName();
-#if HAVE_UNAME
+#if HAVE_UNAME || defined (Q_OS_MAC)
   struct utsname utsname;
   if (0 == uname(&utsname)) {
     args += "&cpu=" + QString(utsname.machine);
@@ -338,6 +340,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
 
     information.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     information.setDefaultButton(QMessageBox::Yes);
+    information.setTextFormat(Qt::RichText);
     information.setText(response);
     
     information.setInformativeText(tr("Do you wish to download an upgrade?"));
