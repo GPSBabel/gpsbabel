@@ -22,14 +22,14 @@
 
 class FormatListEntry : public QListWidgetItem {
  public:
-  FormatListEntry(Format& fmt) : fmt_(fmt)  {
+  FormatListEntry(Format& fmt) /*: fmt_(fmt)*/  {
     setText(fmt.getDescription());
     bool enabled = !fmt.isHidden();
     setCheckState(enabled ? Qt::Checked : Qt::Unchecked);
   }
 
  private:
-   Format& fmt_;
+   //Format& fmt_;
 };
 
 Preferences::Preferences(QWidget* parent, QList<Format>& formatList,
