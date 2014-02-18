@@ -45,9 +45,9 @@ Source: qtdir\plugins\*; 		DestDir: "{app}\plugins"; Flags: ignoreversion recurs
 Source: gmapbase.html; 			DestDir: "{app}"; Flags: ignoreversion
 Source: qt.conf;       			DestDir: "{app}"; Flags: ignoreversion
 
-Source: release\gpsbabelfe.exe; 	DestDir: "{app}"; Flags: ignoreversion
-Source: release\libexpat.dll;   	DestDir: "{app}"; Flags: ignoreversion
-Source: release\gpsbabel.exe;   	DestDir: "{app}"; Flags: ignoreversion
+Source: \gpsbabel\gui\release\gpsbabelfe.exe; 	DestDir: "{app}"; Flags: ignoreversion
+;Source: release\libexpat.dll;   	DestDir: "{app}"; Flags: ignoreversion
+Source: \gpsbabel\gpsbabel\release\gpsbabel.exe;   	DestDir: "{app}"; Flags: ignoreversion
 ; Source: release\help\*;           	DestDir: "{app}\help"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; Translation strings extracted from source code.  Include it in the dist

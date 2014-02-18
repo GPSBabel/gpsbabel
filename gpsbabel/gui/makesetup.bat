@@ -4,29 +4,34 @@ rem Copy the Qt stuff into a local directory. The Inno Setup compiler
 rem cannot handle %QTDIR environment variable in the source file
 rem specification
 
+echo on
 rd /q /s qtdir
 mkdir qtdir
 mkdir qtdir\bin
 mkdir qtdir\translations
 mkdir qtdir\plugins
 mkdir qtdir\plugins\imageformats
+mkdir qtdir\plugins\platforms
 mkdir qtdir\mingw
 
 rem Basic Qt runtime DLLs
-if "%QTDIR%"=="" call \QtSDK\Desktop\Qt\4.7.4\mingw\bin\qtenv2.bat
-copy %QTDIR%\bin\QtCore4.dll qtdir\bin
-copy %QTDIR%\bin\QtGui4.dll qtdir\bin
-copy %QTDIR%\bin\QtWebkit4.dll qtdir\bin
-copy %QTDIR%\bin\QtXml4.dll qtdir\bin
-copy %QTDIR%\bin\QtNetwork4.dll qtdir\bin
-copy %QTDIR%\bin\mingwm10.dll qtdir\bin
+rem  if "%QTDIR%"=="" call \QtSDK\Desktop\Qt\4.7.4\mingw\bin\qtenv2.bat
+if "%QTDIR%"=="" call \Qt\Qt5.2.1\5.2.1\mingw48_32\bin\qtenv2.bat
+if "%QTDIR%"=="" set QTDIR=\Qt\Qt5.2.1\5.2.1\mingw48_32
+copy %QTDIR%\bin\Qt5Core.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Gui.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Webkit.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Xml.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Network.dll qtdir\bin
+rem copy %QTDIR%\bin\mingwm10.dll qtdir\bin
 copy %QTDIR%\bin\libgcc_s_dw2-1.dll qtdir\bin
-copy %QTDIR%\bin\phonon4.dll qtdir\bin
+rem copy %QTDIR%\bin\phonon.dll qtdir\bin
 
 rem Image format plugins needed at runtime, but not debug verions
 xcopy %QTDIR%\plugins\imageformats qtdir\plugins\imageformats
-del qtdir\plugins\imageformats\*d4*.dll
-del qtdir\plugins\imageformats\lib*d4*.a
+xcopy %QTDIR%\plugins\platforms qtdir\plugins\platforms
+rem del qtdir\plugins\imageformats\*d4*.dll
+rem del qtdir\plugins\imageformats\lib*d4*.a
 
 rem Mingw runtime support
 copy %QTDIR%\..\mingw\bin\mingwm10.dll qtdir\mingw

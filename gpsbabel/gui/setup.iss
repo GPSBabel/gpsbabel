@@ -16,7 +16,7 @@
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{1B8FE958-A304-4902-BF7A-4E2F0F5B7017}
 AppName=GPSBabel
-AppVerName=GPSBabel 1.4.4
+AppVerName=GPSBabel 1.5.0
 AppPublisher=GPSBabel
 AppPublisherURL=http://www.gpsbabel.org
 AppSupportURL=http://www.gpsbabel.org
@@ -24,7 +24,7 @@ AppUpdatesURL=http://www.gpsbabel.org
 DefaultDirName={pf}\GPSBabel
 DefaultGroupName=GPSBabel
 OutputDir=release
-OutputBaseFilename=GPSBabel-1.4.4-Setup
+OutputBaseFilename=GPSBabel-1.5.0-Setup
 SetupIconFile=images\babel2.ico
 Compression=lzma
 SolidCompression=yes
@@ -45,9 +45,9 @@ Source: qtdir\plugins\*; 		DestDir: "{app}\plugins"; Flags: ignoreversion recurs
 Source: gmapbase.html; 			DestDir: "{app}"; Flags: ignoreversion
 Source: qt.conf;       			DestDir: "{app}"; Flags: ignoreversion
 
-Source: release\gpsbabelfe.exe; 	DestDir: "{app}"; Flags: ignoreversion
-Source: release\libexpat.dll;   	DestDir: "{app}"; Flags: ignoreversion
-Source: release\gpsbabel.exe;   	DestDir: "{app}"; Flags: ignoreversion
+Source: \gpsbabel\gui\release\gpsbabelfe.exe; 	DestDir: "{app}"; Flags: ignoreversion
+;Source: release\libexpat.dll;   	DestDir: "{app}"; Flags: ignoreversion
+Source: \gpsbabel\gpsbabel\release\gpsbabel.exe;   	DestDir: "{app}"; Flags: ignoreversion
 ; Source: release\help\*;           	DestDir: "{app}\help"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; Translation strings extracted from source code.  Include it in the dist
