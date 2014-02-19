@@ -12,7 +12,7 @@ mkplist() {
   [ ! -d $D ] && mkdir $D
   sed "s/LANGUAGE/$1/" ../tools/skeleton-locversion-plist > $D/locversion.plist
   # optional as en, it, and hu aren't translated in Qt yet.
-  [ ! -f "$QTDIR/qt_$1.qm" ]  && echo "Bad QTDIR"
+  [ ! -f "$QTDIR/qt_$1.qm" ]  && echo "Bad QTDIR for $1"
   cp "$QTDIR/qt_$1.qm" $LANGDIR
   [ -f gpsbabelfe_${1}.qm ] && cp gpsbabelfe_${1}.qm  $LANGDIR
 }
