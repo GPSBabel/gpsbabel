@@ -51,13 +51,13 @@ xg_tag_mapping google_map[] = {
 };
 
 void
-goog_points(xg_string args, const QXmlStreamAttributes* unused)
+goog_points(xg_string args, const QXmlStreamAttributes*)
 {
   encoded_points += args;
 }
 
 void
-goog_instr(xg_string args, const QXmlStreamAttributes* unused)
+goog_instr(xg_string args, const QXmlStreamAttributes*)
 {
   instructions += args;
 }
@@ -88,7 +88,7 @@ decode_goog64(char** str)
 }
 
 static void
-goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
+goog_poly_e(xg_string args, const QXmlStreamAttributes*)
 {
   long lat = 0;
   long lon = 0;

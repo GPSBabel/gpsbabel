@@ -85,7 +85,7 @@ wr_init(const char* fname)
   fatal("Writing file of type %s is not supported\n", MYNAME);
 }
 
-void	wpt_s(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_s(xg_string args, const QXmlStreamAttributes*)
 {
   if (isFirst == 1) {
     wpt_from = new Waypoint;
@@ -96,7 +96,7 @@ void	wpt_s(xg_string args, const QXmlStreamAttributes* unused)
   wpt_to = new Waypoint;
 }
 
-void	wpt_e(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_e(xg_string args, const QXmlStreamAttributes*)
 {
   if (isFirst == 1) {
     route_add_wpt(route, wpt_from);
@@ -113,50 +113,50 @@ void	wpt_e(xg_string args, const QXmlStreamAttributes* unused)
   wpt_to = NULL;
 }
 
-void	wpt_from_lat(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_from_lat(xg_string args, const QXmlStreamAttributes*)
 {
   if (wpt_from != NULL) {
     wpt_from->latitude = args.toDouble();
   }
 }
 
-void	wpt_from_lon(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_from_lon(xg_string args, const QXmlStreamAttributes*)
 {
   if (wpt_from != NULL) {
     wpt_from->longitude = args.toDouble();
   }
 }
 
-void	wpt_from_name(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_from_name(xg_string args, const QXmlStreamAttributes*)
 {
   if (wpt_from != NULL) {
     wpt_from->shortname += args;
   }
 }
 
-void	wpt_from_elev(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_from_elev(xg_string args, const QXmlStreamAttributes*)
 {
   if (wpt_from != NULL) {
     wpt_from->altitude = FEET_TO_METERS(args.toDouble());
   }
 }
 
-void	wpt_to_lat(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_to_lat(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_to->latitude = args.toDouble();
 }
 
-void	wpt_to_lon(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_to_lon(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_to->longitude = args.toDouble();
 }
 
-void	wpt_to_name(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_to_name(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_to->shortname += args;
 }
 
-void	wpt_to_elev(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_to_elev(xg_string args, const QXmlStreamAttributes*)
 {
   dest_altitude = FEET_TO_METERS(args.toDouble());
 }

@@ -692,13 +692,6 @@ void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
 }
 
 route_head::route_head() :
-  // Q(),
-  // waypoint_list(),
-#if !NEW_STRINGS
-  rte_name(NULL),
-  rte_desc(NULL),
-#endif
-  // rte_url(),
   rte_num(0),
   rte_waypt_ct(0),
   fs(NULL),

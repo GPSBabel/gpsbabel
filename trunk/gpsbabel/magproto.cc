@@ -1150,11 +1150,7 @@ mag_rteparse(char* rtemsg)
        */
       QUEUE_FOR_EACH(&rte_wpt_tmp, welem, wtmp) {
         waypt = (Waypoint*)welem;
-#if NEW_STRINGS
         if (waypt->shortname == re->wpt_name) {
-#else
-        if (strcmp(waypt->shortname, re->wpt_name) == 0) {
-#endif
           Waypoint* wpt = new Waypoint(*waypt);
           route_add_wpt(rte_head, wpt);
           break;

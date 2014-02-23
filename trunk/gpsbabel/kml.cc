@@ -270,13 +270,13 @@ const char* kml_tags_to_ignore[] = {
   NULL,
 };
 
-void wpt_s(xg_string args, const QXmlStreamAttributes* unused)
+void wpt_s(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
   wpt_tmp_queued = 0;
 }
 
-void wpt_e(xg_string args, const QXmlStreamAttributes* unused)
+void wpt_e(xg_string args, const QXmlStreamAttributes*)
 {
   if (wpt_tmp_queued) {
     waypt_add(wpt_tmp);
@@ -286,17 +286,17 @@ void wpt_e(xg_string args, const QXmlStreamAttributes* unused)
   wpt_tmp_queued = 0;
 }
 
-void wpt_name(xg_string args, const QXmlStreamAttributes* unused)
+void wpt_name(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp->shortname = args;
 }
 
-void wpt_desc(const QString& args, const QXmlStreamAttributes* unused)
+void wpt_desc(const QString& args, const QXmlStreamAttributes*)
 {
   wpt_tmp->description += args.trimmed();
 }
 
-void wpt_time(xg_string args, const QXmlStreamAttributes* unused)
+void wpt_time(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
@@ -316,7 +316,7 @@ void wpt_coord(const QString& args, const QXmlStreamAttributes* attrv)
   wpt_tmp_queued = 1;
 }
 
-void wpt_icon(xg_string args, const QXmlStreamAttributes* unused)
+void wpt_icon(xg_string args, const QXmlStreamAttributes*)
 {
   if (wpt_tmp)  {
     wpt_tmp->icon_descr = args;

@@ -148,7 +148,7 @@ finalize_pt(Waypoint* wpt)
 
 #if !ZLIB_INHIBITED
 static void
-tlog3a_xgcb_version(xg_string args, const QXmlStreamAttributes* unused)
+tlog3a_xgcb_version(xg_string args, const QXmlStreamAttributes*)
 {
 #if NEW_STRINGS
   if (args != "1") {
@@ -160,12 +160,12 @@ tlog3a_xgcb_version(xg_string args, const QXmlStreamAttributes* unused)
 }
 
 static void
-tlog3a_xgcb_length(xg_string args, const QXmlStreamAttributes* unused)
+tlog3a_xgcb_length(xg_string args, const QXmlStreamAttributes*)
 {
 }
 
 static void
-tlog3a_xgcb_data(xg_string args, const QXmlStreamAttributes* unused)
+tlog3a_xgcb_data(xg_string args, const QXmlStreamAttributes*)
 {
   int len;
   char* bin;
@@ -221,7 +221,7 @@ tlog3a_xgcb_data(xg_string args, const QXmlStreamAttributes* unused)
 
 
 static void
-tlog3b_xgcb_tfna(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_tfna(xg_string args, const QXmlStreamAttributes*)
 {
   if (xmltrk == NULL) {
     xmltrk = route_head_alloc();
@@ -236,7 +236,7 @@ tlog3b_xgcb_tfna(xg_string args, const QXmlStreamAttributes* unused)
 
 
 static void
-tlog3b_xgcb_tfdes(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_tfdes(xg_string args, const QXmlStreamAttributes*)
 {
   if (xmltrk == NULL) {
     xmltrk = route_head_alloc();
@@ -251,7 +251,7 @@ tlog3b_xgcb_tfdes(xg_string args, const QXmlStreamAttributes* unused)
 
 
 static void
-tlog3b_xgcb_wptst(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_wptst(xg_string args, const QXmlStreamAttributes*)
 {
   xmlwpt = new Waypoint;
   xmldatum = DATUM_WGS84;
@@ -259,7 +259,7 @@ tlog3b_xgcb_wptst(xg_string args, const QXmlStreamAttributes* unused)
 
 
 static void
-tlog3b_xgcb_tptst(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_tptst(xg_string args, const QXmlStreamAttributes*)
 {
   xmlwpt = new Waypoint;
   xmldatum = DATUM_WGS84;
@@ -267,7 +267,7 @@ tlog3b_xgcb_tptst(xg_string args, const QXmlStreamAttributes* unused)
 
 
 static void
-tlog3b_xgcb_tpten(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_tpten(xg_string args, const QXmlStreamAttributes*)
 {
   finalize_pt(xmlwpt);
 
@@ -281,21 +281,21 @@ tlog3b_xgcb_tpten(xg_string args, const QXmlStreamAttributes* unused)
 
 
 static void
-tlog3b_xgcb_wptid(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_wptid(xg_string args, const QXmlStreamAttributes*)
 {
   xmlwpt->shortname = args;
 }
 
 
 static void
-tlog3b_xgcb_wptdt(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_wptdt(xg_string args, const QXmlStreamAttributes*)
 {
   xmldatum = GPS_Lookup_Datum_Index(args);
 }
 
 
 static void
-tlog3b_xgcb_wptgr(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_wptgr(xg_string args, const QXmlStreamAttributes*)
 {
   xmlgrid = args;
 /*
@@ -311,34 +311,34 @@ tlog3b_xgcb_wptgr(xg_string args, const QXmlStreamAttributes* unused)
 
 
 static void
-tlog3b_xgcb_wptno(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_wptno(xg_string args, const QXmlStreamAttributes*)
 {
   xmlNorthing = args.toDouble();
 }
 
 static void
-tlog3b_xgcb_wptea(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_wptea(xg_string args, const QXmlStreamAttributes*)
 {
   xmlEasting = args.toDouble();
 }
 
 
 static void
-tlog3b_xgcb_wptal(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_wptal(xg_string args, const QXmlStreamAttributes*)
 {
   xmlAltitude = args.toDouble();
 }
 
 
 static void
-tlog3b_xgcb_tptdt(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_tptdt(xg_string args, const QXmlStreamAttributes*)
 {
   xmldatum = GPS_Lookup_Datum_Index(args);
 }
 
 
 static void
-tlog3b_xgcb_wpten(xg_string args, const QXmlStreamAttributes* unused)
+tlog3b_xgcb_wpten(xg_string args, const QXmlStreamAttributes*)
 {
   finalize_pt(xmlwpt);
   waypt_add(xmlwpt);

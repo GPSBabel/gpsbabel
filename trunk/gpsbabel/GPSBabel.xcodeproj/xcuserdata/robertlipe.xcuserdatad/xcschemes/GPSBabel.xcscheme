@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0460"
+   LastUpgradeVersion = "0500"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A5EF549525D1BC892548E4D1"
+               BlueprintIdentifier = "8BA83BB8960C7E077E682D92"
                BuildableName = "GPSBabel"
                BlueprintName = "GPSBabel"
                ReferencedContainer = "container:GPSBabel.xcodeproj">
@@ -32,7 +32,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A5EF549525D1BC892548E4D1"
+            BlueprintIdentifier = "8BA83BB8960C7E077E682D92"
             BuildableName = "GPSBabel"
             BlueprintName = "GPSBabel"
             ReferencedContainer = "container:GPSBabel.xcodeproj">
@@ -51,7 +51,7 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A5EF549525D1BC892548E4D1"
+            BlueprintIdentifier = "8BA83BB8960C7E077E682D92"
             BuildableName = "GPSBabel"
             BlueprintName = "GPSBabel"
             ReferencedContainer = "container:GPSBabel.xcodeproj">
@@ -69,7 +69,7 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A5EF549525D1BC892548E4D1"
+            BlueprintIdentifier = "8BA83BB8960C7E077E682D92"
             BuildableName = "GPSBabel"
             BlueprintName = "GPSBabel"
             ReferencedContainer = "container:GPSBabel.xcodeproj">

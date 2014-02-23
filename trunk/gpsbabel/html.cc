@@ -100,11 +100,7 @@ html_disp(const Waypoint* wpt)
     gbfprintf(file_out, " alt:%d", (int)((altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude));
   }
   gbfprintf(file_out, "<br>\n");
-#if NEW_STRINGS
   if (wpt->description != wpt->shortname) {
-#else
-  if (strcmp(wpt->description, wpt->shortname)) {
-#endif
     if (wpt->HasUrlLink()) {
       char* d = html_entitize(CSTRc(wpt->description));
       UrlLink link = wpt->GetUrlLink();
@@ -151,11 +147,7 @@ html_disp(const Waypoint* wpt)
     }
     gbfprintf(file_out, "<p class=\"gpsbabelhint\"><strong>Hint:</strong> %s</p>\n", hint);
     xfree(hint);
-#if NEW_STRINGS
   } else if (!wpt->notes.isEmpty() && (wpt->description.isEmpty() || wpt->notes != wpt->description)) {
-#else
-  } else if (wpt->notes && (!wpt->description || strcmp(wpt->notes,wpt->description))) {
-#endif
     gbfprintf(file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", CSTRc(wpt->notes));
   }
 

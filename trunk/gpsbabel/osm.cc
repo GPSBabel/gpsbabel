@@ -466,7 +466,7 @@ osm_strip_html(const char* str)
 
 
 static void
-osm_node_end(xg_string args, const QXmlStreamAttributes* unused)
+osm_node_end(xg_string args, const QXmlStreamAttributes*)
 {
   if (wpt) {
     if (wpt->wpt_flags.fmt_use) {
@@ -635,7 +635,7 @@ osm_way_tag(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-osm_way_end(xg_string args, const QXmlStreamAttributes* unused)
+osm_way_end(xg_string args, const QXmlStreamAttributes*)
 {
   if (rte) {
     route_add_head(rte);
@@ -753,11 +753,7 @@ static QString
 osm_name_from_wpt(const Waypoint* wpt)
 {
   QString name = QString("%1\01%2\01%3")
-#if NEW_STRINGS
                  .arg(wpt->shortname)
-#else
-                 .arg((wpt->shortname) ? CSTRc(wpt->shortname) : "")
-#endif
                  .arg(wpt->latitude)
                  .arg(wpt->longitude);
   return name;

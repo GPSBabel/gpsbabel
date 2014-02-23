@@ -224,13 +224,13 @@ waypoint_final()
 }
 
 static void
-tef_item_end(xg_string args, const QXmlStreamAttributes* unused)
+tef_item_end(xg_string args, const QXmlStreamAttributes*)
 {
   waypoint_final();
 }
 
 static void
-tef_list_end(xg_string args, const QXmlStreamAttributes* unused)
+tef_list_end(xg_string args, const QXmlStreamAttributes*)
 {
   waypoint_final();
   if (waypoints != item_count)
