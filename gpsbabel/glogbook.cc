@@ -139,38 +139,38 @@ glogbook_write(void)
   writer.writeEndElement(); // History
 }
 
-void	gl_trk_s(xg_string args, const QXmlStreamAttributes* unused)
+void	gl_trk_s(xg_string args, const QXmlStreamAttributes*)
 {
   trk_head = route_head_alloc();
   track_add_head(trk_head);
 }
 
-void	gl_trk_pnt_s(xg_string args, const QXmlStreamAttributes* unused)
+void	gl_trk_pnt_s(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
 }
 
-void	gl_trk_pnt_e(xg_string args, const QXmlStreamAttributes* unused)
+void	gl_trk_pnt_e(xg_string args, const QXmlStreamAttributes*)
 {
   track_add_wpt(trk_head, wpt_tmp);
 }
 
-void	gl_trk_utc(xg_string args, const QXmlStreamAttributes* unused)
+void	gl_trk_utc(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
 
-void	gl_trk_lat(xg_string args, const QXmlStreamAttributes* unused)
+void	gl_trk_lat(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp->latitude = args.toDouble();
 }
 
-void	gl_trk_long(xg_string args, const QXmlStreamAttributes* unused)
+void	gl_trk_long(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp->longitude = args.toDouble();
 }
 
-void	gl_trk_alt(xg_string args, const QXmlStreamAttributes* unused)
+void	gl_trk_alt(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp->altitude = args.toDouble();
 }

@@ -79,48 +79,33 @@ yahoo_wr_init(const char* fname)
   fatal("Writing file of type %s is not supported\n", MYNAME);
 }
 
-void	wpt_s(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_s(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
 }
 
-void	wpt_e(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_e(xg_string args, const QXmlStreamAttributes*)
 {
   waypt_add(wpt_tmp);
   wpt_tmp = NULL;
 }
 
-void	wpt_lat(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_lat(xg_string args, const QXmlStreamAttributes*)
 {
-#if NEW_STRINGS
   wpt_tmp->latitude = args.toDouble();
-#else
-  wpt_tmp->latitude = atof(args);
-#endif
 }
 
-void	wpt_lon(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_lon(xg_string args, const QXmlStreamAttributes*)
 {
-#if NEW_STRINGS
   wpt_tmp->longitude = args.toDouble();
-#else
-  wpt_tmp->longitude = atof(args);
-#endif
 }
 
-void	wpt_addr(xg_string args, const QXmlStreamAttributes* unused)
+void	wpt_addr(xg_string args, const QXmlStreamAttributes*)
 {
-#if NEW_STRINGS
   if (!wpt_tmp->notes.isEmpty()) {
     wpt_tmp->notes += as;
   }
   wpt_tmp->notes += args;
-#else
-  if (wpt_tmp->notes) {
-    wpt_tmp->notes = xstrappend(wpt_tmp->notes, as);
-  }
-  wpt_tmp->notes = xstrappend(wpt_tmp->notes, args);
-#endif
 }
 
 ff_vecs_t yahoo_vecs = {

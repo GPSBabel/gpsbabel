@@ -105,7 +105,7 @@ xol_shape(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-xol_shape_end(xg_string args, const QXmlStreamAttributes* unused)
+xol_shape_end(xg_string args, const QXmlStreamAttributes*)
 {
   if (wpt) {
     if (trk) {

@@ -47,39 +47,6 @@ arglist_t nmn4_args[] = {
 };
 
 
-/* helpers */
-#if NEW_STRINGS
-#else
-static char*
-nmn4_concat(const char* arg0, ...)
-{
-  va_list args;
-  char* src, *res;
-
-  res = NULL;
-  va_start(args, arg0);
-  src = (char*)arg0;
-
-  while (src != NULL) {
-    char* c = lrtrim(src);
-
-    if (*c != '\0') {
-      if (res == NULL) {
-        res = xstrdup(c);
-      } else {
-        res = xstrappend(res, " ");
-        res = xstrappend(res, c);
-      }
-    }
-//    xfree(src);
-    src = va_arg(args, char*);
-  }
-  va_end(args);
-
-  return res;
-}
-#endif
-
 static void
 nmn4_check_line(char* line)
 {
@@ -191,15 +158,12 @@ nmn4_read_data(void)
         }
 
         /* concats all fields to one string and release */
-#if NEW_STRINGS
         wpt->description = zip1.trimmed() + " " +
           city.trimmed() + " " +
           street.trimmed() + " " +
           number.trimmed() + " " +
           zip2.trimmed();
-#else
-        wpt->description = nmn4_concat(zip1.toLatin1().data(), city.toLatin1().data(), street.toLatin1().data(), number.toLatin1().data(), zip2.toLatin1().data(), NULL);
-#endif
+
         break;
 
       case 11: 				/* longitude */

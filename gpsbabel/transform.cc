@@ -34,11 +34,7 @@ static route_head* current_trk;
 static route_head* current_rte;
 
 static char* opt_routes, *opt_tracks, *opt_waypts, *opt_delete, *rpt_name_digits, *opt_rpt_name;
-#if NEW_STRINGS
 static QString current_namepart;
-#else
-static char* current_namepart;
-#endif
 
 static int name_digits, use_src_name;
 
@@ -111,11 +107,7 @@ static void
 transform_rte_disp_hdr_cb(const route_head* rte)
 {
   current_namepart = RPT;
-#if NEW_STRINGS
   if (!rte->rte_name.isEmpty() && use_src_name) {
-#else
-  if (rte->rte_name && *rte->rte_name && use_src_name) {
-#endif
     current_namepart = rte->rte_name;
   }
   if (current_target == 'T') {
@@ -132,11 +124,7 @@ static void
 transform_trk_disp_hdr_cb(const route_head* trk)
 {
   current_namepart = RPT;
-#if NEW_STRINGS
   if (!trk->rte_name.isEmpty() && use_src_name) {
-#else
-  if (trk->rte_name && *trk->rte_name && use_src_name) {
-#endif
     current_namepart = trk->rte_name;
   }
   if (current_target == 'R') {

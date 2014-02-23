@@ -261,11 +261,7 @@ compare_lat(const void* a, const void* b)
     return 1;
   }
   if (wa->wpt->longitude - wb->wpt->longitude == 0) {
-#if NEW_STRINGS
     return wa->wpt->shortname.compare(wb->wpt->shortname);
-#else
-    return strcmp(wa->wpt->shortname, wb->wpt->shortname);
-#endif
   }
   return compare_lon(a,b);
 }
@@ -285,11 +281,7 @@ compare_lon(const void* a, const void* b)
     return 1;
   }
   if (wa->wpt->latitude - wb->wpt->latitude == 0) {
-#if NEW_STRINGS
     return wa->wpt->shortname.compare(wb->wpt->shortname);
-#else
-    return strcmp(wa->wpt->shortname, wb->wpt->shortname);
-#endif
   }
   return compare_lat(a,b);
 }
@@ -381,11 +373,7 @@ compute_blocks(struct hdr* start, int count,
       newblock->size += 4 * 3 + 1;
       /* wpt const part 3 longs, 1 char */
       wpt = start[i].wpt;
-#if NEW_STRINGS
       newblock->size += wpt->description.length() + 1;
-#else
-      newblock->size += strlen(wpt->description) + 1;
-#endif
     }
   } else {
     if ((maxlat-minlat)>(maxlon-minlon)) {

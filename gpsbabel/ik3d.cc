@@ -92,19 +92,19 @@ iktobj_trkpt(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-iktobj_name(xg_string args, const QXmlStreamAttributes* unused)
+iktobj_name(xg_string args, const QXmlStreamAttributes*)
 {
   name = args;
 }
 
 static void
-iktobj_text(xg_string args, const QXmlStreamAttributes* unused)
+iktobj_text(xg_string args, const QXmlStreamAttributes*)
 {
   text = args;
 }
 
 static void
-iktobj_type(xg_string args, const QXmlStreamAttributes* unused)
+iktobj_type(xg_string args, const QXmlStreamAttributes*)
 {
   ikt_object_end();
 #if NEW_STRINGS

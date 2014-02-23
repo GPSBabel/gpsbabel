@@ -56,7 +56,7 @@ xg_tag_mapping google_map[] = {
   { NULL, (xg_cb_type)0,              NULL }
 };
 
-void goog_script(xg_string args, const QXmlStreamAttributes* unused)
+void goog_script(xg_string args, const QXmlStreamAttributes*)
 {
 #if NEW_STRINGS
   if (true) {
@@ -71,7 +71,7 @@ void goog_script(xg_string args, const QXmlStreamAttributes* unused)
   }
 }
 
-void goog_points(xg_string args, const QXmlStreamAttributes* unused)
+void goog_points(xg_string args, const QXmlStreamAttributes*)
 {
 #if NEW_STRINGS
   if (true) {
@@ -86,7 +86,7 @@ void goog_points(xg_string args, const QXmlStreamAttributes* unused)
   }
 }
 
-void goog_levels(xg_string args, const QXmlStreamAttributes* unused)
+void goog_levels(xg_string args, const QXmlStreamAttributes*)
 {
 #if NEW_STRINGS
   if (true) {
@@ -118,7 +118,7 @@ void goog_segment_s(xg_string args, const QXmlStreamAttributes* attrv)
   }
 }
 
-void goog_segment(xg_string args, const QXmlStreamAttributes* unused)
+void goog_segment(xg_string args, const QXmlStreamAttributes*)
 {
   Waypoint* wpt_tmp;
 
@@ -165,7 +165,7 @@ void goog_td_s(xg_string args, const QXmlStreamAttributes* attrv)
   }
 }
 
-void goog_td_b(xg_string args, const QXmlStreamAttributes* unused)
+void goog_td_b(xg_string args, const QXmlStreamAttributes*)
 {
   if (goog_segname[0] == '\\' && !strchr(CSTRc(args), '\xa0')) {
     if (goog_realname) {
@@ -176,7 +176,7 @@ void goog_td_b(xg_string args, const QXmlStreamAttributes* unused)
     strcpy(goog_realname, CSTRc(args));
   }
 }
-void goog_td_e(xg_string args, const QXmlStreamAttributes* unused)
+void goog_td_e(xg_string args, const QXmlStreamAttributes*)
 {
   if (goog_segname[0] == '\\' && goog_realname) {
     goog_segment(goog_realname, NULL/*unused*/);
@@ -210,7 +210,7 @@ static long decode_goog64(char** str)
   return result/2;
 }
 
-void goog_poly_e(xg_string args, const QXmlStreamAttributes* unused)
+void goog_poly_e(xg_string args, const QXmlStreamAttributes*)
 {
   long lat = 0;
   long lon = 0;
