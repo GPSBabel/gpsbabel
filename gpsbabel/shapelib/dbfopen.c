@@ -686,8 +686,11 @@ DBFCreateLL( const char * pszFilename, const char * pszCodePage, SAHooks *psHook
 /*      Create the file.                                                */
 /* -------------------------------------------------------------------- */
     fp = psHooks->FOpen( pszFullname, "wb" );
-    if( fp == NULL )
+    if( fp == NULL ) {
+        free(pszBasename);
+        free(pszFullname);
         return( NULL );
+    }
     
     psHooks->FWrite( &chZero, 1, 1, fp );
     psHooks->FClose( fp );
