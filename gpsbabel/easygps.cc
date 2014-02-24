@@ -156,19 +156,11 @@ static void
 ez_disp(const Waypoint* wpt)
 {
   gbfputc('W', file_out);
-#if NEW_STRINGS
   if (!wpt->shortname.isEmpty()) {
-#else
-  if (wpt->shortname) {
-#endif
     gbfputc(1, file_out);
     gbfputpstr(wpt->shortname, file_out);
   }
-#if NEW_STRINGS
   if (!wpt->description.isEmpty()) {
-#else
-  if (wpt->description) {
-#endif
     gbfputc(3, file_out);
     gbfputpstr(wpt->description, file_out);
   }
@@ -181,11 +173,7 @@ ez_disp(const Waypoint* wpt)
 
   gbfputc(0x64, file_out);
   gbfputdbl(wpt->longitude, file_out);
-#if NEW_STRINGS
   if (!wpt->notes.isEmpty()) {
-#else
-  if (wpt->notes) {
-#endif
     gbfputc(5, file_out);
     gbfputpstr(wpt->notes, file_out);
   }

@@ -35,7 +35,6 @@ static QString instructions;
 static short_handle desc_handle;
 
 #define MYNAME "googledir"
-#define MY_CBUF 4096
 
 static xg_callback      goog_points, goog_poly_e;
 static xg_callback      goog_instr;
@@ -68,16 +67,16 @@ static long
 decode_goog64(const QByteArray& str, int& pos)
 {
   long result = 0;
-  unsigned char c = 0;
   unsigned char shift = 0;
 
   if (pos >= str.size()) {
     return 0;
   }
 
+  unsigned char c;
   do {
-    c = (unsigned char)str.at(pos++)-'?';
-    result |= (c & 31)<<shift;
+    c = str.at(pos++) - '?';
+    result |= (c & 31) << shift;
     shift += 5;
   } while (c & ~31);
 
@@ -95,11 +94,7 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes*)
   const QByteArray qbstr = encoded_points.toUtf8();
 
   route_head* routehead = route_head_alloc();
-#if NEW_STRINGS
   if (args == "overview_polyline") {
-#else
-  if (strcmp(args, "overview_polyline") == 0) {
-#endif
     routehead->rte_name = "overview";
     routehead->rte_desc = "Overview";
   } else {
@@ -110,10 +105,8 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes*)
     } else {
       utf_string utf;
       utf.is_html = 1;
-      utf.utfstring = /*QString::fromUtf8*/(instructions);
-      char *s = strip_html(&utf);
-      routehead->rte_desc = s;
-      xfree(s);
+      utf.utfstring = instructions;
+      routehead->rte_desc = strip_html(&utf);
       instructions = QString();
     }
   }

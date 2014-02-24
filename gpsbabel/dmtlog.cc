@@ -150,11 +150,7 @@ finalize_pt(Waypoint* wpt)
 static void
 tlog3a_xgcb_version(xg_string args, const QXmlStreamAttributes*)
 {
-#if NEW_STRINGS
   if (args != "1") {
-#else
-  if (strcmp(args, "1") != 0) {
-#endif
     fatal(MYNAME ": Unsupported file version '%s'!\n", CSTRc(args));
   }
 }

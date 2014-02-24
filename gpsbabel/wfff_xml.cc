@@ -54,7 +54,6 @@ arglist_t wfff_xml_args[] = {
 #define xfreez(p) { if (p) xfree(p); p=0; }
 
 #define MYNAME "wfff_xml"
-#define MY_CBUF 4096
 
 static xg_callback	wfff_s,      wfff_e;
 static xg_callback	wfff_wep,    wfff_mac,    wfff_type;

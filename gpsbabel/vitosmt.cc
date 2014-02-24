@@ -170,12 +170,7 @@ vitosmt_read(void)
 
     double usec = fmod(1000000*seconds+0.5,1000000);
     wpt_tmp->SetCreationTime(mkgmtime(&tmStruct), lround(usec/1000.0));
-#if NEW_STRINGS
     wpt_tmp->shortname = QString().sprintf("WP%04d", ++serial);
-#else
-    wpt_tmp->shortname	= (char*) xcalloc(16,1);
-    snprintf(wpt_tmp->shortname, 15 , "WP%04d", ++serial);
-#endif
 
     WAYPT_SET(wpt_tmp, speed, KNOTS_TO_MPS(speed)); /* meters per second */
     WAYPT_SET(wpt_tmp, course, course);

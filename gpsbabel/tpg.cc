@@ -190,13 +190,8 @@ tpg_waypt_pr(const Waypoint* wpt)
    * and a shortname
    */
 
-#if NEW_STRINGS
   if ((wpt->shortname.isEmpty()) || (global_opts.synthesize_shortnames)) {
     if (!wpt->description.isEmpty()) {
-#else
-  if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
-    if (wpt->description) {
-#endif
       if (global_opts.synthesize_shortnames) {
         shortname = mkshort_from_wpt(mkshort_handle, wpt);
       } else {
@@ -209,11 +204,7 @@ tpg_waypt_pr(const Waypoint* wpt)
   } else {
     shortname = wpt->shortname;
   }
-#if NEW_STRINGS
   if (wpt->description.isEmpty()) {
-#else
-  if (! wpt->description) {
-#endif
     if (!shortname.isEmpty()) {
       description = shortname;
     } else {

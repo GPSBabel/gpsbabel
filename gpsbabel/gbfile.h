@@ -102,9 +102,6 @@ int gbfprintf(gbfile* file, const char* format, ...);
 int gbfputc(int c, gbfile* file);
 int gbfputs(const char* s, gbfile* file);
 int gbfputs(const QString& s, gbfile* file);
-#if NEW_STRINGS 
-typedef QString String;
-#endif
 int gbfwrite(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* file);
 int gbfflush(gbfile* file);
 

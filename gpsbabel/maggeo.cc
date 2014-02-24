@@ -272,11 +272,7 @@ maggeo_waypt_pr(const Waypoint* waypointp)
   QString placeddate = maggeo_fmtdate(waypointp->creation_time);
   QString lfounddate = maggeo_fmtdate(waypointp->gc_data->last_found);
   QString cname = mkshort(desc_handle,
-#if NEW_STRINGS
                   waypointp->notes.isEmpty() ? waypointp->description : waypointp->notes);
-#else
-                  QString(waypointp->notes ? waypointp->notes : waypointp->description));
-#endif
   placer = waypointp->gc_data->placer;
 
   /*

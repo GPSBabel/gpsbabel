@@ -177,11 +177,7 @@ waypt_disp(const Waypoint* wpt)
   }
   printposn(wpt->latitude,1);
   printposn(wpt->longitude,0);
-#if NEW_STRINGS
   if (!wpt->description.isEmpty()) {
-#else
-  if (wpt->description) {
-#endif
     printf("%s/%s",
            global_opts.synthesize_shortnames ?
            qPrintable(mkshort(mkshort_handle, wpt->description)) :
@@ -559,15 +555,6 @@ Waypoint::Waypoint() :
   altitude(unknown_alt),
   depth(0),
   proximity(0),
-#if !NEW_STRINGS
-  shortname(NULL),
-  description(NULL),
-  notes(NULL),
-#endif
-  // url_link_list_(),
-  // wpt_flags(),
-  // icon_descr(),
-  // creation_time(),
   route_priority(0),
   hdop(0),
   vdop(0),

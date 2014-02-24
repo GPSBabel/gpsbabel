@@ -663,11 +663,7 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const Waypoint* wpt, const int isR
 										+ NULL (1) + prox(9) + display(4) + colour(4) + symbol(4) + city(sz) +
 										state(sz) + facility(sz) + unknown2(1) + depth(9) + unknown3(7) */
     /* -1 as reclen is interpreted from zero meaning a reclength of one */
-#if NEW_STRINGS
     if (!wpt->notes.isEmpty()) {
-#else
-    if (wpt->notes) {
-#endif
       reclen += strlen(CSTRc(wpt->notes));
     }
   } else {
@@ -715,11 +711,7 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const Waypoint* wpt, const int isR
     gbfputc(1, mps_file);
     gbfputdbl(mps_altitude, mps_file);
   }
-#if NEW_STRINGS
   if (!wpt->description.isEmpty()) {
-#else
-  if (wpt->description) {
-#endif
     gbfputs(ascii_description, mps_file);
   }
   gbfwrite(zbuf, 1, 1, mps_file);	/* NULL termination */

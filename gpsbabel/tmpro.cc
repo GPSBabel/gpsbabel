@@ -173,17 +173,10 @@ tmpro_waypt_pr(const Waypoint* wpt)
 {
   int icon = 1; /* default to "flag" */
   int colour = 255; /*default to red */
-#if NEW_STRINGS
   QString shortname;
   QString description;
   if ((wpt->shortname.isEmpty()) || (global_opts.synthesize_shortnames)) {
     if (!wpt->description.isEmpty()) {
-#else
-  char* shortname = NULL;
-  char* description = NULL;
-  if ((! wpt->shortname) || (global_opts.synthesize_shortnames)) {
-    if (wpt->description) {
-#endif
       if (global_opts.synthesize_shortnames) {
         shortname = mkshort_from_wpt(mkshort_handle, wpt);
       } else {
@@ -197,13 +190,8 @@ tmpro_waypt_pr(const Waypoint* wpt)
     shortname = csv_stringclean(wpt->shortname, ",\"");
   }
 
-#if NEW_STRINGS
   if (wpt->description.isEmpty()) {
     if (!shortname.isEmpty()) {
-#else
-  if (! wpt->description) {
-    if (shortname) {
-#endif
       description = csv_stringclean(shortname, ",\"");
     } else {
       description = xstrdup("");
@@ -234,15 +222,6 @@ tmpro_waypt_pr(const Waypoint* wpt)
             l ? l : ""
            );
 
-#if NEW_STRINGS
-#else
-  if (description) {
-    xfree(description);
-  }
-  if (shortname) {
-    xfree(shortname);
-  }
-#endif
   if (l) {
     xfree(l);
   }
