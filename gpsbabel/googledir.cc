@@ -106,7 +106,9 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes*)
       utf_string utf;
       utf.is_html = 1;
       utf.utfstring = instructions;
-      routehead->rte_desc = strip_html(&utf);
+      char *s = strip_html(&utf);
+      routehead->rte_desc = s;
+      xfree(s);
       instructions = QString();
     }
   }
