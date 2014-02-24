@@ -223,11 +223,7 @@ tlog3b_xgcb_tfna(xg_string args, const QXmlStreamAttributes*)
     xmltrk = route_head_alloc();
     track_add_head(xmltrk);
   }
-#if NEW_STRINGS
   xmltrk->rte_name = args;
-#else
-  xmltrk->rte_name = strdup(args);
-#endif
 }
 
 
@@ -238,11 +234,7 @@ tlog3b_xgcb_tfdes(xg_string args, const QXmlStreamAttributes*)
     xmltrk = route_head_alloc();
     track_add_head(xmltrk);
   }
-#if NEW_STRINGS
   xmltrk->rte_desc = args;
-#else
-  xmltrk->rte_desc = strdup(args);
-#endif
 }
 
 
@@ -744,7 +736,6 @@ static void
 write_header(const route_head* trk)
 {
   int count, i;
-  char* cout;
   const char ZERO = '\0';
 
   header_written = 1;
@@ -754,19 +745,17 @@ write_header(const route_head* trk)
     queue* curr, *prev;
     QUEUE_FOR_EACH(&trk->waypoint_list, curr, prev) count++;
   }
-#if NEW_STRINGS
   if (!trk || trk->rte_name.isEmpty()) {
     write_str("Name", fout);
   } else {
     write_str(trk->rte_name, fout);
   }
-#else
-  write_str(trk && trk->rte_name && *trk->rte_name ? CSTRc(trk->rte_name) : "Name", fout);
-#endif
 
-  xasprintf(&cout, "%d trackpoints and %d waypoints", count, waypt_count());
+  // This fails for internationalization, but as this text is in the 
+  // file itself, it shouldn't be localized.
+  QString cout = QString::number(count) + " trackpoints and " +
+                 QString::number(waypt_count()) + " waypoints";
   write_str(cout, fout);
-  xfree(cout);
 
   for (i = 3; i <= 8; i++) {
     gbfputc(ZERO, fout);
@@ -817,22 +806,14 @@ wpt_cb(const Waypoint* wpt)
   gbfputdbl(wpt->altitude != unknown_alt ? wpt->altitude : 0, fout);
 
   names = 1;
-#if NEW_STRINGS
   if (!wpt->description.isEmpty()) {
-#else
-  if (wpt->description && *wpt->description) {
-#endif
     names = 2;
   }
   gbfputint32(names, fout);
   if (names > 1) {
     write_str(wpt->description, fout);
   }
-#if NEW_STRINGS
   write_str(wpt->shortname.isEmpty() ? "Name" : wpt->shortname, fout);
-#else
-  write_str(wpt->shortname && *wpt->shortname ? CSTRc(wpt->shortname) : "Name", fout);
-#endif
 }
 
 static void
