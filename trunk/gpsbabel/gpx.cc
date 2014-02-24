@@ -73,7 +73,6 @@ static format_specific_data** fs_ptr;
 
 
 #define MYNAME "GPX"
-#define MY_CBUF_SZ 4096
 #ifndef CREATOR_NAME_URL
 #  define CREATOR_NAME_URL "GPSBabel - http://www.gpsbabel.org"
 #endif

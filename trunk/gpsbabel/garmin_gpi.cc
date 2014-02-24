@@ -396,11 +396,7 @@ read_poi(const int sz, const int tag)
 
   (void) gbfgetint16(fin);	/* ? always 1 ? */
   (void) gbfgetc(fin);		/* seems to 1 when extra options present */
-#if NEW_STRINGS
   wpt->shortname = gpi_read_string("Shortname");
-#else
-  wpt->shortname = gpi_read_string("Shortname");
-#endif
 
   while (gbftell(fin) < (gbsize_t)(pos + sz - 4)) {
     int tag = gbfgetint32(fin);
@@ -589,18 +585,10 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
       break;
     }
 
-#if NEW_STRINGS
     if (!wpt->description.isEmpty()) {
-#else
-    if (wpt->description) {
-#endif
       wpt->notes = str;
     } else {
-#if NEW_STRINGS
       wpt->description = str;
-#else
-      wpt->description = str;
-#endif
     }
     break;
 
@@ -752,11 +740,7 @@ compare_wpt_cb(const queue* a, const queue* b)
 {
   const Waypoint* wa = (Waypoint*) a;
   const Waypoint* wb = (Waypoint*) b;
-#if NEW_STRINGS
   return wa->shortname.compare(wb->shortname);
-#else
-  return strcmp(wa->shortname, wb->shortname);
-#endif
 }
 
 static char
@@ -764,25 +748,6 @@ compare_strings(const QString& s1, const QString& s2)
 {
   return s1.compare(s2);
 }
-
-#if !NEW_STRINGS
-static char
-compare_strings(const char* s1, const char* s2)
-{
-  if (s1 == s2) {
-    return 0;
-  } else if (s1) {
-    if (s2) {
-      return strcmp(s1, s2);
-    } else {
-      return 1;
-    }
-  } else {
-    return 1;
-  }
-}
-#endif
-
 
 static writer_data_t*
 wdata_alloc()
@@ -927,11 +892,7 @@ wdata_compute_size(writer_data_t* data)
 
     res += 12;		/* tag/sz/sub-sz */
     res += 19;		/* poi fixed size */
-#if NEW_STRINGS
     res += wpt->shortname.length();
-#else
-    res += strlen(wpt->shortname);
-#endif
     if (! opt_hide_bitmap) {
       res += 10;  /* tag(4) */
     }
@@ -1291,13 +1252,7 @@ enum_waypt_cb(const Waypoint* ref)
   wpt = new Waypoint(*ref);
 
   if (*opt_unique == '1') {
-#if NEW_STRINGS
     wpt->shortname = mkshort(short_h, wpt->shortname);
-#else
-    char* str = mkshort(short_h, wpt->shortname);
-    xfree(wpt->shortname);
-    wpt->shortname = str;
-#endif
   }
 
   wdata_add_wpt(wdata, wpt);

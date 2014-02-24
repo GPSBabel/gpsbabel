@@ -1243,11 +1243,7 @@ unicsv_fatal_outside(const Waypoint* wpt)
 {
   gbfprintf(fout, "#####\n");
   fatal(MYNAME ": %s (%s) is outside of convertable area of grid \"%s\"!\n",
-#if NEW_STRINGS
         wpt->shortname.isEmpty() ? "Waypoint" : CSTR(wpt->shortname),
-#else
-        wpt->shortname ? CSTRc(wpt->shortname) : "Waypoint",
-#endif
         pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
         gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME));
 }
@@ -1304,20 +1300,11 @@ unicsv_waypt_enum_cb(const Waypoint* wpt)
   if (!wpt->icon_descr.isNull()) {
     gb_setbit(&unicsv_outp_flags, fld_symbol);
   }
-#if NEW_STRINGS
   if (!wpt->description.isEmpty() && shortname != wpt->description) {
-#else
-  if (wpt->description && *wpt->description && shortname != wpt->description) {
-#endif
     gb_setbit(&unicsv_outp_flags, fld_description);
   }
-#if NEW_STRINGS
   if (!wpt->notes.isEmpty() && shortname != wpt->notes) {
     if ((wpt->description.isEmpty()) || (wpt->description != wpt->notes)) {
-#else
-  if (wpt->notes && *wpt->notes && shortname != wpt->notes) {
-    if ((! wpt->description) || (strcmp(wpt->description, wpt->notes) != 0)) {
-#endif
       gb_setbit(&unicsv_outp_flags, fld_notes);
     }
   }

@@ -1231,7 +1231,7 @@ static void
 mmo_write_wpt_cb(const Waypoint* wpt)
 {
   char* str; 
-  String cx;
+  QString cx;
   int objid;
   time_t time;
   int icon = 0;

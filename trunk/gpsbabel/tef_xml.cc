@@ -196,11 +196,7 @@ waypoint_final()
 
   if (version < 2) {	/* keep the old behaviour */
     wpt_tmp->notes = wpt_tmp->description;
-#if NEW_STRINGS
     wpt_tmp->description = QString();
-#else
-    wpt_tmp->description = NULL;
-#endif
   }
 
   wpt_tmp->notes = fix_notes(wpt_tmp->shortname, wpt_tmp->notes);

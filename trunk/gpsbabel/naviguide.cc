@@ -254,7 +254,7 @@ ng_waypt_rd(const Waypoint* wpt)
   WPNC.wp_data.North = (int32_t)lat;
   WPNC.wp_data.East = (int32_t)lon;
 
-  String s;
+  QString s;
   if (reorder_wp) {
     sprintf(temp_short_name, "A%03d", current_wp_ix);
     s = temp_short_name;

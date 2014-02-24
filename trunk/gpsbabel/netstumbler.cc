@@ -276,11 +276,7 @@ compare(const void* a, const void* b)
 
     Waypoint* wpt_a = ((const htable_t*)a)->wpt;
     Waypoint* wpt_b = ((const htable_t*)b)->wpt;
-#if NEW_STRINGS
     return wpt_a->description.compare(wpt_b->description);
-#else
-    return strcmp(wpt_a->description, wpt_b->description);
-#endif
   }
 }
 

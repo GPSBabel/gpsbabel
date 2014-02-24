@@ -278,11 +278,7 @@ static char
 same_points(const Waypoint* A, const Waypoint* B)
 {
   return ( /* !!! We are case-sensitive !!! */
-#if NEW_STRINGS
            (A->shortname == B->shortname) &&
-#else
-           (strcmp(A->shortname, B->shortname) == 0) &&
-#endif
            (A->latitude == B->latitude) &&
            (A->longitude == B->longitude));
 }
@@ -334,11 +330,7 @@ qsort_cb(const void* a, const void* b)
 {
   const Waypoint* wa = *(Waypoint**)a;
   const Waypoint* wb = *(Waypoint**)b;
-#if NEW_STRINGS
   return wa->shortname.compare(wb->shortname);
-#else
-  return strcmp(wa->shortname, wb->shortname);
-#endif
 }
 
 static void

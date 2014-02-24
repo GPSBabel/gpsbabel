@@ -139,11 +139,7 @@ xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
         // thus we will not process the EndElement case as we will issue a readNext first.
         // does a caller ever expect to be able to use both a cb_cdata and a
         // cb_end callback?
-#if NEW_STRINGS
         cb(c, NULL);
-#else
-        cb(CSTRE(c), NULL);
-#endif
         current_tag.chop(reader.qualifiedName().length() + 1);
       }
       break;
@@ -155,11 +151,7 @@ xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
 
       cb = xml_tbl_lookup(current_tag, cb_end);
       if (cb) {
-#if NEW_STRINGS
         cb(reader.name().toString(), NULL);
-#else
-        cb(CSTRE(reader.name().toString()), NULL);
-#endif
       }
       current_tag.chop(reader.qualifiedName().length() + 1);
       break;

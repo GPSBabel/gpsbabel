@@ -107,11 +107,7 @@ static void
 iktobj_type(xg_string args, const QXmlStreamAttributes*)
 {
   ikt_object_end();
-#if NEW_STRINGS
   switch (args.toInt()) {
-#else
-  switch (atoi(args)) {
-#endif
   case 0:
     waypt = new Waypoint;
     break;

@@ -289,11 +289,7 @@ static char
 same_points(const Waypoint* A, const Waypoint* B)
 {
   return ( /* !!! We are case-sensitive !!! */
-#if NEW_STRINGS
            (A->shortname == B->shortname) &&
-#else
-           (strcmp(A->shortname, B->shortname) == 0) &&
-#endif
            (A->latitude == B->latitude) &&
            (A->longitude == B->longitude));
 }

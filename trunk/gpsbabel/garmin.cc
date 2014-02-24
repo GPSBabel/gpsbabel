@@ -911,7 +911,6 @@ waypoint_prepare(void)
     char* ident;
     char obuf[256];
 
-#if NEW_STRINGS 
     QString src;
     if (!wpt->description.isEmpty()) {
       src = wpt->description;
@@ -919,15 +918,6 @@ waypoint_prepare(void)
     if (!wpt->notes.isEmpty()) {
       src = wpt->notes;
     }
-#else
-    char *src = NULL;
-    if (wpt->description) {
-      src = wpt->description;
-    }
-    if (wpt->notes) {
-      src = wpt->notes;
-    }
-#endif
 
     /*
      * mkshort will do collision detection and namespace
@@ -949,11 +939,7 @@ waypoint_prepare(void)
 
     // If we were explictly given a comment from GPX, use that.
     //  This logic really is horrible and needs to be untangled.
-#if NEW_STRINGS
     if (!wpt->description.isEmpty() &&
-#else
-    if (wpt->description &&
-#endif
         global_opts.smart_names && !wpt->gc_data->diff) {
       memcpy(tx_waylist[i]->cmnt, CSTRc(wpt->description), strlen(CSTRc(wpt->description)));
     } else {
@@ -1045,11 +1031,7 @@ route_hdr_pr(const route_head* rte)
 {
   (*cur_tx_routelist_entry)->rte_num = rte->rte_num;
   (*cur_tx_routelist_entry)->isrte = 1;
-#if NEW_STRINGS
   if (!rte->rte_name.isEmpty()) {
-#else
-  if (rte->rte_name) {
-#endif
     strncpy((*cur_tx_routelist_entry)->rte_ident, CSTRc(rte->rte_name),
             sizeof((*cur_tx_routelist_entry)->rte_ident));
   }
@@ -1092,13 +1074,8 @@ route_waypt_pr(const Waypoint* wpt)
   // This was strncpy(rte->ident, wpt->shortname, sizeof(rte->ident));
   char* d;
   d = rte->ident;
-#if NEW_STRINGS
   for (int idx = 0; idx < wpt->shortname.length(); idx++) {
     int c = wpt->shortname[idx].toLatin1();
-#else
-  for (char* s = wpt->shortname; *s; s++) {
-    int c = *s;
-#endif
     if (receiver_must_upper && isalpha(c)) {
       c = toupper(c);
     }
@@ -1151,11 +1128,7 @@ static void
 track_hdr_pr(const route_head* trk_head)
 {
   (*cur_tx_tracklist_entry)->ishdr = gpsTrue;
-#if NEW_STRINGS
   if (!trk_head->rte_name.isEmpty()) {
-#else
-  if (trk_head->rte_name) {
-#endif
     strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(trk_head->rte_name), sizeof((*cur_tx_tracklist_entry)->trk_ident));
     (*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
   } else {
@@ -1172,11 +1145,7 @@ track_waypt_pr(const Waypoint* wpt)
   (*cur_tx_tracklist_entry)->lon = wpt->longitude;
   (*cur_tx_tracklist_entry)->alt = (wpt->altitude != unknown_alt) ? wpt->altitude : 1e25;
   (*cur_tx_tracklist_entry)->Time = wpt->GetCreationTime().toTime_t();;
-#if NEW_STRINGS
   if (!wpt->shortname.isEmpty()) {
-#else
-  if (wpt->shortname) {
-#endif
     strncpy((*cur_tx_tracklist_entry)->trk_ident, CSTRc(wpt->shortname), sizeof((*cur_tx_tracklist_entry)->trk_ident));
     (*cur_tx_tracklist_entry)->trk_ident[sizeof((*cur_tx_tracklist_entry)->trk_ident)-1] = 0;
   }

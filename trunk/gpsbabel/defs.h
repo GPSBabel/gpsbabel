@@ -43,8 +43,6 @@
 # include "src/core/datetime.h"
 
 #define CSTR(qstr) (qstr.toUtf8().constData())
-#define CSTRE_(qstr, enc) (enc->fromUnicode(qstr).constData())
-#define CSTRE(qstr) (CSTRE_(qstr, codec))
 
 /*
  * Amazingly, this constant is not specified in the standard...
@@ -431,22 +429,20 @@ const global_trait* get_traits();
 #define WAYPT_GET(wpt,member,def) ((wpt->wpt_flags.member) ? (wpt->member) : (def))
 #define WAYPT_UNSET(wpt,member) wpt->wpt_flags.member = 0
 #define WAYPT_HAS(wpt,member) (wpt->wpt_flags.member)
+
+#define CSTRc(qstr) (qstr.toLatin1().constData())
+// Maybe the XmlGeneric string callback really shouldn't have a type
+// of its own; this was a crutch during the move from char* to QString.
+// It's "just" a search and replace to make it go away, but it might
+// be convenient to overload some day.
+typedef const QString& xg_string;
+
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
  * cater to any specific model or protocol.  Anything that needs to
  * be truncated, edited, or otherwise trimmed should be done on the
  * way to the target.
  */
-#if NEW_STRINGS 
-  typedef QString String;
-  #define CSTRc(qstr) (qstr.toLatin1().constData())
-  typedef const QString& xg_string;
-#else
-  #define CSTRc(qstr) (qstr)
-  typedef char* String;
-  typedef const char* xg_string;
-#endif
-
 class Waypoint
 {
 private:
@@ -480,20 +476,20 @@ public:
    * minimum length for shortname is 6 characters for NMEA units,
    * 8 for Magellan and 10 for Vista.   These are only guidelines.
    */
-  String shortname;
+  QString shortname;
   /*
    * description is typically a human readable description of the
    * waypoint.   It may be used as a comment field in some receivers.
    * These are probably under 40 bytes, but that's only a guideline.
    */
-  String description;
+  QString description;
   /*
    * notes are relatively long - over 100 characters - prose associated
    * with the above.   Unlike shortname and description, these are never
    * used to compute anything else and are strictly "passed through".
    * Few formats support this.
    */
-  String notes;
+  QString notes;
 
   /* TODO: UrlLink should probably move to a "real" class of its own.
    */
@@ -563,8 +559,8 @@ class route_head
 public:
   queue Q;		/* Link onto parent list. */
   queue waypoint_list;	/* List of child waypoints */
-  String rte_name;
-  String rte_desc;
+  QString rte_name;
+  QString rte_desc;
   QString rte_url;
   int rte_num;
   int rte_waypt_ct;		/* # waypoints in waypoint list */
@@ -741,7 +737,7 @@ short_handle MKSHORT_NEW_HANDLE(DEBUG_PARAMS);
 #define mkshort( a, b) MKSHORT(a,b,__FILE__, __LINE__)
 #define mkshort_new_handle() MKSHORT_NEW_HANDLE(__FILE__,__LINE__)
 #endif
-String mkshort_from_wpt(short_handle h, const Waypoint* wpt);
+QString mkshort_from_wpt(short_handle h, const Waypoint* wpt);
 void mkshort_del_handle(short_handle* h);
 void setshort_length(short_handle, int n);
 void setshort_badchars(short_handle,  const char*);
@@ -898,9 +894,6 @@ void* xcalloc(size_t nmemb, size_t size);
 void* xmalloc(size_t size);
 void* xrealloc(void* p, size_t s);
 void xfree(const void* mem);
-#ifndef NEW_STRINGS
-char* xstrdup(const char* s);
-#endif
 char* xstrdup(const QString& s);
 char* xstrndup(const char* s, size_t n);
 char* xstrndupt(const char* s, size_t n);
@@ -964,7 +957,7 @@ const char* xstrrstr(const char* s1, const char* s2);
 void rtrim(char* s);
 char* lrtrim(char* s);
 int xasprintf(char** strp, const char* fmt, ...) PRINTFLIKE(2, 3);
-int xasprintf(String* strp, const char* fmt, ...) PRINTFLIKE(2, 3);
+int xasprintf(QString* strp, const char* fmt, ...) PRINTFLIKE(2, 3);
 int xvasprintf(char** strp, const char* fmt, va_list ap);
 char* strupper(char* src);
 char* strlower(char* src);

@@ -507,11 +507,7 @@ any_hdr_calc_cb(const route_head* trk)
     return;
   }
 
-#if NEW_STRINGS
   if (rte_name.isEmpty() && !trk->rte_name.isEmpty()) {
-#else
-  if (rte_name.isEmpty() && trk->rte_name) {
-#endif
     rte_name = trk->rte_name;
     rte_desc = trk->rte_desc;
   }

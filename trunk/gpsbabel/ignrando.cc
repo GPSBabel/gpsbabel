@@ -92,11 +92,7 @@ ignr_start(xg_string args, const QXmlStreamAttributes* attrv)
 static void
 ignr_nb_etapes(xg_string args, const QXmlStreamAttributes* attrv)
 {
-#if NEW_STRINGS
   xmlpoints = args.toInt();
-#else
-  xmlpoints = atoi(args);
-#endif
 }
 
 static void
@@ -126,11 +122,7 @@ ignr_etape_end(xg_string args, const QXmlStreamAttributes* attrv)
 static void
 ignr_etape_pos(xg_string args, const QXmlStreamAttributes* attrv)
 {
-#if NEW_STRINGS
   ignr_xml_error((wpt == NULL) || (args.isEmpty()));
-#else
-  ignr_xml_error((wpt == NULL) || (args == NULL));
-#endif
 
   if (2 != sscanf(CSTRc(args), "%lf,%lf", &wpt->latitude, &wpt->longitude)) {
     fatal(MYNAME ": Invalid coordinates \"%s\"!\n", CSTRc(args));

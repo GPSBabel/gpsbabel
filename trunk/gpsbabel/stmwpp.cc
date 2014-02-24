@@ -246,7 +246,7 @@ stmwpp_waypt_cb(const Waypoint* wpt)
   snprintf(cdate, sizeof(cdate), "%02d/%02d/%04d", tm.tm_mon, tm.tm_mday, tm.tm_year);
   snprintf(ctime, sizeof(ctime), "%02d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-  String sn;
+  QString sn;
   switch (what) {
 
   case STM_WAYPT:
@@ -257,10 +257,6 @@ stmwpp_waypt_cb(const Waypoint* wpt)
       sn = mkshort(short_h, wpt->shortname);
     }
     gbfprintf(fout, "WP,D,%s,", CSTRc(sn));
-#if NEW_STRINGS
-#else
-    xfree(sn);
-#endif
     break;
 
   case STM_TRKPT:

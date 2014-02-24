@@ -1221,7 +1221,7 @@ nmea_wayptpr(const Waypoint* wpt)
 {
   char obuf[200];
   double lat,lon;
-  String s;
+  QString s;
   int cksum;
 
   lat = degrees2ddmm(wpt->latitude);
@@ -1243,11 +1243,6 @@ nmea_wayptpr(const Waypoint* wpt)
     gbfflush(file_out);
     gb_sleep(sleepus);
   }
-#if NEW_STRINGS
-#else
-  xfree(s);
-#endif
-
 }
 
 void
