@@ -65,18 +65,18 @@ goog_instr(xg_string args, const QXmlStreamAttributes*)
 static int goog_step = 0;
 
 static long
-decode_goog64(char** str)
+decode_goog64(const QByteArray& str, int& pos)
 {
   long result = 0;
   unsigned char c = 0;
   unsigned char shift = 0;
 
-  if (!(**str)) {
+  if (pos >= str.size()) {
     return 0;
   }
 
   do {
-    c = (unsigned char)(*(*str)++)-'?';
+    c = (unsigned char)str.at(pos++)-'?';
     result |= (c & 31)<<shift;
     shift += 5;
   } while (c & ~31);
@@ -92,9 +92,7 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes*)
 {
   long lat = 0;
   long lon = 0;
-//NEW_STRINGS.  Kind of silly to make a copy here.
-  char* ostr = xstrdup(encoded_points);
-  char* str = ostr;
+  const QByteArray qbstr = encoded_points.toUtf8();
 
   route_head* routehead = route_head_alloc();
 #if NEW_STRINGS
@@ -106,9 +104,9 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes*)
     routehead->rte_desc = "Overview";
   } else {
     goog_step++;
-    xasprintf(&routehead->rte_name, "step%03d", goog_step);
+    routehead->rte_name = QString("step%1").arg(goog_step, 3, 10, QChar('0'));
     if (instructions == NULL) {
-      xasprintf(&routehead->rte_desc, "Step %d", goog_step);
+      routehead->rte_desc = QString("Step %1").arg(goog_step);
     } else {
       utf_string utf;
       utf.is_html = 1;
@@ -121,21 +119,17 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes*)
   }
   route_add_head(routehead);
 
-  while (str && *str) {
-    lat += decode_goog64(&str);
-    lon += decode_goog64(&str);
+  for (int qbpos=0; qbpos < qbstr.size();) {
+    lat += decode_goog64(qbstr, qbpos);
+    lon += decode_goog64(qbstr, qbpos);
 
     {
       Waypoint* wpt_tmp = new Waypoint;
       wpt_tmp->latitude = lat / 100000.0;
       wpt_tmp->longitude = lon / 100000.0;
-      /* FIXME no need for name
-      xsaprintf(wpt_tmp->shortname, "\\%5.5x", serial++);
-      */
       route_add_wpt(routehead, wpt_tmp);
     }
   }
-xfree(ostr);
   encoded_points = QString();
   instructions = QString();
 }
