@@ -8,3 +8,6 @@
 	and one is an XML based format.  All three types are supported 
 	by our reader.
 </para>
+<para>
+Users should note that this format orders waypoints in reverse order within the file. If direction of travel is important to you, consider using the Reverse filter to retain waypoint order.
+</para>
