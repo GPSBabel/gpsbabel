@@ -404,7 +404,7 @@ mac-gui: gui
 
 mac-gui-dmg: mac-gui
 	rm -f gui/objects/GPSBabelFE.dmg
-	cd gui/objects ; macdeployqt GPSBabelFE.app -dmg
+	cd gui/objects ; macdeployqt GPSBabelFE.app  -executable=GPSBabelFE.app/Contents/MacOS/gpsbabel -dmg
 	mv gui/objects/GPSBabelFE.dmg  gui/objects/GPSBabel-$(VERSIOND).dmg
 
 msvc-build:
