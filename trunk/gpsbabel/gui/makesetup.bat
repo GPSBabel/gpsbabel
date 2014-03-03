@@ -24,8 +24,11 @@ copy %QTDIR%\bin\Qt5Webkit.dll qtdir\bin
 copy %QTDIR%\bin\Qt5Xml.dll qtdir\bin
 copy %QTDIR%\bin\Qt5Network.dll qtdir\bin
 rem copy %QTDIR%\bin\mingwm10.dll qtdir\bin
+# Because *obviously* libraries should live in the bin directory...
+copy %QTDIR%\bin\libwinpthread*.dll qtdir\bin
+copy %QTDIR%\bin\libgicu*.dll qtdir\bin
+copy %QTDIR%\bin\libgstdc++*.dll qtdir\bin
 copy %QTDIR%\bin\libgcc_s_dw2-1.dll qtdir\bin
-rem copy %QTDIR%\bin\phonon.dll qtdir\bin
 
 rem Image format plugins needed at runtime, but not debug verions
 xcopy %QTDIR%\plugins\imageformats qtdir\plugins\imageformats
