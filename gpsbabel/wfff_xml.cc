@@ -82,13 +82,13 @@ xg_tag_mapping loc_map[] = {
 };
 
 /* work variables for wfff_xxx */
-static char* 	ap_mac		=0;
-static char* 	ap_ssid		=0;
-static char* 	ap_type		=0;
-static char* 	ap_wep		=0;
+static QString	ap_mac;
+static QString	ap_ssid;
+static QString	ap_type;
+static QString	ap_wep;
 static int		ap_chan		=0;
 static time_t	ap_first	=0;
-static char* 	ap_last		=0;
+static QString 	ap_last;
 static float	ap_mnrssi	=0.0;
 static float	ap_mxrssi	=0.0;
 static float	ap_hdop		=0.0;
@@ -96,24 +96,18 @@ static double	ap_lat		=0.0;
 static double	ap_lon		=0.0;
 
 /*	Start of AP block */
-void wfff_s(xg_string args, const QXmlStreamAttributes*)
+void wfff_s(xg_string, const QXmlStreamAttributes*)
 {
-  xfreez(ap_mac);
-  xfreez(ap_ssid);
-  xfreez(ap_type);
-  xfreez(ap_wep);
-  xfreez(ap_last);
   ap_mnrssi=0.0;
   ap_mxrssi=0.0;
   ap_chan=0;
   ap_hdop=0.0;
   ap_first=0;
-  ap_last=0;
+  ap_last=QString();
   ap_lat=0.0;
   ap_lon=0.0;
 }
-#if NEW_STRINGS
-// anything here involving 'xstrdup' should be fixed by fixing the underlying data type.
+
 void wfff_mac(const QString& args, const QXmlStreamAttributes*) { ap_mac = xstrdup(args); }
 void wfff_ssid(const QString& args, const QXmlStreamAttributes*) { ap_ssid = xstrdup(args); }
 void wfff_type(const QString& args, const QXmlStreamAttributes*) { ap_type = xstrdup(args); }
@@ -126,92 +120,6 @@ void wfff_wep(const QString& args, const QXmlStreamAttributes*) { ap_wep = xstrd
 void wfff_hdop(const QString& args, const QXmlStreamAttributes*) { ap_hdop = args.toDouble(); }
 void wfff_lat(const QString& args, const QXmlStreamAttributes*) { ap_lat = args.toDouble(); }
 void wfff_lon(const QString& args, const QXmlStreamAttributes*) { ap_lon = args.toDouble(); }
-#else
-
-void wfff_mac(xg_string args, const QXmlStreamAttributes*)
-{
-  if (args) {
-    ap_mac = xstrdup(args);
-  }
-}
-
-void wfff_ssid(xg_string args, const QXmlStreamAttributes*)
-{
-  if (args) {
-    ap_ssid = xstrdup(args);
-  }
-}
-
-void wfff_type(xg_string args, const QXmlStreamAttributes*)
-{
-  if (args) {
-    ap_type = xstrdup(args);
-  }
-}
-
-void wfff_mnrssi(xg_string args, const QXmlStreamAttributes*)
-{
-  if (args) {
-    ap_mnrssi = atof(args);
-  }
-}
-
-void wfff_mxrssi(xg_string args, const QXmlStreamAttributes*)
-{
-  if (args) {
-    ap_mxrssi = atof(args);
-  }
-}
-
-void wfff_chan(xg_string args, const QXmlStreamAttributes*)
-{
-  if (args) {
-    ap_chan = atoi(args);
-  }
-}
-
-void wfff_first(xg_string args, const QXmlStreamAttributes*)
-{
-  if (args) {
-    ap_first = xml_parse_time(args).toTime_t();
-  }
-}
-
-void wfff_last(xg_string args, const QXmlStreamAttributes*)
-{
-  if (args) {
-    ap_last = xstrdup(args);
-  }
-}
-
-void wfff_wep(xg_string args, const QXmlStreamAttributes*)
-{
-  if (args) {
-    ap_wep = xstrdup(args);
-  }
-}
-
-void wfff_hdop(xg_string args, const QXmlStreamAttributes*)
-{
-  if (args) {
-    ap_hdop = atof(args);
-  }
-}
-
-void wfff_lat(xg_string args, const QXmlStreamAttributes*)
-{
-  if (args) {
-    ap_lat = atof(args);
-  }
-}
-
-void wfff_lon(xg_string args, const QXmlStreamAttributes*)
-{
-  if (args) {
-    ap_lon = atof(args);
-  }
-}
-#endif
 
 /*	End of AP Block, set waypoint and add */
 static long tosscount=0;
@@ -232,8 +140,8 @@ void wfff_e(xg_string args, const QXmlStreamAttributes*)
 
     snprintf(desc, sizeof desc,
              "%s/%s/WEP %s/Ch %d/%2.0fdB/%2.0fdB/%s",
-             (snmac?ap_ssid:ap_mac), ap_type, ap_wep,
-             ap_chan, ap_mnrssi, ap_mxrssi, ap_last);
+             snmac?CSTR(ap_ssid):CSTR(ap_mac), CSTR(ap_type), CSTR(ap_wep),
+             ap_chan, ap_mnrssi, ap_mxrssi, CSTR(ap_last));
     wpt_tmp->description = desc;
 
     wpt_tmp->latitude = ap_lat;
@@ -265,16 +173,7 @@ void wfff_e(xg_string args, const QXmlStreamAttributes*)
   } else {
     tosscount++;
   }
-
-  /* cleanup */
-  xfreez(ap_mac);
-  xfreez(ap_ssid);
-  xfreez(ap_type);
-  xfreez(ap_wep);
-  xfreez(ap_last);
-
 }
-
 
 void
 wfff_xml_rd_init(const char* fname)
@@ -293,14 +192,6 @@ wfff_xml_read(void)
 void
 wfff_xml_rd_deinit(void)
 {
-
-  /* cleanup */
-  xfreez(ap_mac);
-  xfreez(ap_ssid);
-  xfreez(ap_type);
-  xfreez(ap_wep);
-  xfreez(ap_last);
-
   xml_deinit();
 
   if (tosscount) {

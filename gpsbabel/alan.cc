@@ -6,7 +6,7 @@
     Currently supports OS 2.xx only.
 
     Copyright (C) 2007  Gunar Megger, 0xff@quantentunnel.de
-    Copyright (C) 2005  Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

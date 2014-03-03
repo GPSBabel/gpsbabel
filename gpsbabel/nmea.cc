@@ -1246,7 +1246,7 @@ nmea_wayptpr(const Waypoint* wpt)
 }
 
 void
-nmea_track_init(const route_head* rte)
+nmea_track_init(const route_head*)
 {
   last_time = -1;
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -58,46 +58,30 @@ xg_tag_mapping google_map[] = {
 
 void goog_script(xg_string args, const QXmlStreamAttributes*)
 {
-#if NEW_STRINGS
-  if (true) {
-#else
-  if (args) {
-#endif
-    if (script) {
-      script = xstrappend(script, CSTRc(args));
-    } else {
-      script = xstrdup(args);
-    }
+  if (script) {
+    script = xstrappend(script, CSTRc(args));
+  } else {
+    script = xstrdup(args);
   }
 }
+
 
 void goog_points(xg_string args, const QXmlStreamAttributes*)
 {
-#if NEW_STRINGS
-  if (true) {
-#else
-  if (args) {
-#endif
-    if (encoded_points) {
-      encoded_points = xstrappend(encoded_points, CSTRc(args));
-    } else {
-      encoded_points = xstrdup(args);
-    }
+  if (encoded_points) {
+    encoded_points = xstrappend(encoded_points, CSTRc(args));
+  } else {
+    encoded_points = xstrdup(args);
   }
 }
 
+
 void goog_levels(xg_string args, const QXmlStreamAttributes*)
 {
-#if NEW_STRINGS
-  if (true) {
-#else
-  if (args) {
-#endif
-    if (encoded_levels) {
-      encoded_levels = xstrappend(encoded_levels, CSTRc(args));
-    } else {
-      encoded_levels = xstrdup(args);
-    }
+  if (encoded_levels) {
+    encoded_levels = xstrappend(encoded_levels, CSTRc(args));
+  } else {
+    encoded_levels = xstrdup(args);
   }
 }
 

@@ -63,7 +63,7 @@ goog_instr(xg_string args, const QXmlStreamAttributes*)
 
 static int goog_step = 0;
 
-static long
+long
 decode_goog64(const QByteArray& str, int& pos)
 {
   long result = 0;

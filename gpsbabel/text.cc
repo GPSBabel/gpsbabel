@@ -2,7 +2,7 @@
     Output only format for Human Readable formats.
 
     Copyright (C) 2004 Scott Brynen, scott (at) brynen.com
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2014 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
