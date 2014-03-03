@@ -108,18 +108,42 @@ void wfff_s(xg_string, const QXmlStreamAttributes*)
   ap_lon=0.0;
 }
 
-void wfff_mac(const QString& args, const QXmlStreamAttributes*) { ap_mac = xstrdup(args); }
-void wfff_ssid(const QString& args, const QXmlStreamAttributes*) { ap_ssid = xstrdup(args); }
-void wfff_type(const QString& args, const QXmlStreamAttributes*) { ap_type = xstrdup(args); }
-void wfff_mnrssi(const QString& args, const QXmlStreamAttributes*) { ap_mnrssi = args.toDouble(); }
-void wfff_mxrssi(const QString& args, const QXmlStreamAttributes*) { ap_mxrssi = args.toDouble(); }
-void wfff_chan(const QString& args, const QXmlStreamAttributes*) { ap_chan = args.toInt(); }
-void wfff_first(const QString& args, const QXmlStreamAttributes*) { ap_first = xml_parse_time(args).toTime_t(); }
-void wfff_last(const QString& args, const QXmlStreamAttributes*) { ap_last = xstrdup(args); }
-void wfff_wep(const QString& args, const QXmlStreamAttributes*) { ap_wep = xstrdup(args); }
-void wfff_hdop(const QString& args, const QXmlStreamAttributes*) { ap_hdop = args.toDouble(); }
-void wfff_lat(const QString& args, const QXmlStreamAttributes*) { ap_lat = args.toDouble(); }
-void wfff_lon(const QString& args, const QXmlStreamAttributes*) { ap_lon = args.toDouble(); }
+void wfff_mac(const QString& args, const QXmlStreamAttributes*) { 
+  ap_mac = args; 
+}
+void wfff_ssid(const QString& args, const QXmlStreamAttributes*) {
+  ap_ssid = args;
+}
+void wfff_type(const QString& args, const QXmlStreamAttributes*) {
+  ap_type = args;
+}
+void wfff_mnrssi(const QString& args, const QXmlStreamAttributes*) {
+  ap_mnrssi = args.toDouble();
+}
+void wfff_mxrssi(const QString& args, const QXmlStreamAttributes*) {
+  ap_mxrssi = args.toDouble();
+}
+void wfff_chan(const QString& args, const QXmlStreamAttributes*) {
+  ap_chan = args.toInt();
+}
+void wfff_first(const QString& args, const QXmlStreamAttributes*) {
+  ap_first = xml_parse_time(args).toTime_t();
+}
+void wfff_last(const QString& args, const QXmlStreamAttributes*) {
+  ap_last = args;
+}
+void wfff_wep(const QString& args, const QXmlStreamAttributes*) {
+  ap_wep = args;
+}
+void wfff_hdop(const QString& args, const QXmlStreamAttributes*) {
+  ap_hdop = args.toDouble();
+}
+void wfff_lat(const QString& args, const QXmlStreamAttributes*) {
+  ap_lat = args.toDouble();
+}
+void wfff_lon(const QString& args, const QXmlStreamAttributes*) {
+  ap_lon = args.toDouble();
+}
 
 /*	End of AP Block, set waypoint and add */
 static long tosscount=0;
