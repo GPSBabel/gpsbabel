@@ -35,3 +35,7 @@ void route_add_wpt_named(route_head* rte, Waypoint* wpt,
                          const QString& namepart, int number_digits) {
   __coverity_escape__(wpt);
 }
+void track_add_wpt_named(route_head* rte, Waypoint* wpt,
+                         const QString& namepart, int number_digits) {
+  __coverity_escape__(wpt);
+}
