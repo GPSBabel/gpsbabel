@@ -1,0 +1,1889 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		5236EF6DEE49756C361ABF26 /* Qt Preprocess */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 6CC3B5D2136C7CD6A5CF5A59 /* Build configuration list for PBXNativeTarget "GPSBabel" */;
+			buildPhases = (
+				5E618435888B9D49F8540165 /* Qt Qmake */,
+				7EF0942E79C014DCEC8976BC /* Qt Preprocessors */,
+			);
+			dependencies = (
+			);
+			name = "Qt Preprocess";
+			productName = "Qt Preprocess";
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		00132A2E2117A5D2949D24C1 /* pocketfms_bc.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 0651458CA410E9E20B94B4FA /* pocketfms_bc.cc */; settings = {ATTRIBUTES = (); }; };
+		011D0263493530B6B01100C4 /* dg-100.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = A48C2523D33629342449D72F /* dg-100.cc */; settings = {ATTRIBUTES = (); }; };
+		030A80F89994857934EB903F /* descriptors.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 84F86CB89775E98D6D0B99B2 /* descriptors.c */; settings = {ATTRIBUTES = (); }; };
+		03D3DB50AC20F3090EE40902 /* tmpro.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 3ABCB24FF1506AD8119BB42A /* tmpro.cc */; settings = {ATTRIBUTES = (); }; };
+		08981CD2537028EFB1AAABA0 /* tef_xml.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D7DEFE3BFAE203BB76846079 /* tef_xml.cc */; settings = {ATTRIBUTES = (); }; };
+		08BEBE1519C5601E2BF55484 /* vpl.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 7AA6E364AF1FB69E9FD0A7DB /* vpl.cc */; settings = {ATTRIBUTES = (); }; };
+		08D1F200A155C4CBB054153E /* infback.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9E56800965DB564EDB415C47 /* infback.c */; settings = {ATTRIBUTES = (); }; };
+		0A1FEDD5AF6B7705DCFD27A6 /* gtrnctr.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = EBA833A7FA20DA8E3CD6DD28 /* gtrnctr.cc */; settings = {ATTRIBUTES = (); }; };
+		0B6EF4DE673E4362D596F28F /* mapasia.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 231DE25EB5826C5445F27280 /* mapasia.cc */; settings = {ATTRIBUTES = (); }; };
+		0CB7C51E38C0047A3432388C /* vecs.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 4179A1A1D57283E9B4004332 /* vecs.cc */; settings = {ATTRIBUTES = (); }; };
+		0CFD81EE929550DFE9587D20 /* bcr.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = C99E7C8612913B8859C5274A /* bcr.cc */; settings = {ATTRIBUTES = (); }; };
+		0FE72D7AB1AFAD8978A8FF7E /* random.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = CDF5521B019C332DD7D9E79B /* random.cc */; settings = {ATTRIBUTES = (); }; };
+		10B4A88AEB061E73D3684C21 /* gpsread.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 5C7B06C99E994A5FBBDD1AAD /* gpsread.cc */; settings = {ATTRIBUTES = (); }; };
+		11FBD19650871FCCB6E30987 /* garmin_xt.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 6E1BBC9393ACD0F8DB04365F /* garmin_xt.cc */; settings = {ATTRIBUTES = (); }; };
+		124BA380AAEE1F3675A79C8D /* mapsource.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = F21BB8019963E9C78491FEF6 /* mapsource.cc */; settings = {ATTRIBUTES = (); }; };
+		1322DEA537B6DED283007F15 /* humminbird.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = A1B4AD222D24446693AFC9D7 /* humminbird.cc */; settings = {ATTRIBUTES = (); }; };
+		13EC324613FAD0CF9627DAFA /* trees.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = BBBFAB349677BFF3DC73F633 /* trees.c */; settings = {ATTRIBUTES = (); }; };
+		14CC0CBAEBE12AC6BD13C88E /* navicache.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = AF5C70F38FE37E25BA89BD2C /* navicache.cc */; settings = {ATTRIBUTES = (); }; };
+		15B66249468984BDA45D364A /* kml.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 6CB7C861BBBA3A049830939C /* kml.cc */; settings = {ATTRIBUTES = (); }; };
+		15BC5E993EE7EA29E46AAF63 /* ggv_log.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = A8C268AF24B9D57AD4DC8AC3 /* ggv_log.cc */; settings = {ATTRIBUTES = (); }; };
+		1744603E0519CCB4C78909F9 /* gpsdevice_ser.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = C0A0B8D35F5B16FC8227BB4A /* gpsdevice_ser.cc */; settings = {ATTRIBUTES = (); }; };
+		17D4A6D12DC1B01AF26CB31D /* itracku.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 5C87A85632844BE1F5ED62C9 /* itracku.cc */; settings = {ATTRIBUTES = (); }; };
+		18FF1C9B5EA4DF41E0E66566 /* globals.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = C3B6BBE8BAF262C4B9ADF471 /* globals.cc */; settings = {ATTRIBUTES = (); }; };
+		19E4F984FF38B4ED82345D09 /* gpslibusb.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 564003A8A736467A5571BD78 /* gpslibusb.cc */; settings = {ATTRIBUTES = (); }; };
+		1E39B8F32EE9BC91969FBC05 /* bushnell.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D23F97BC9EA63BC27AE2B0D2 /* bushnell.cc */; settings = {ATTRIBUTES = (); }; };
+		1EC66524C0374C2CDFEAABE9 /* naviguide.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 592CB5D15F31EEC8DA5B4B09 /* naviguide.cc */; settings = {ATTRIBUTES = (); }; };
+		200ADC78DDEF7C109618A6E5 /* gzwrite.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 18FC32D8725418F770CE2D80 /* gzwrite.c */; settings = {ATTRIBUTES = (); }; };
+		22B5A0D3DA673AA2587A62EA /* exif.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 0362D514C3BACC474D3B72D2 /* exif.cc */; settings = {ATTRIBUTES = (); }; };
+		24E8AAA889AF32E3E2B72BE4 /* crc32.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 0042FA7F258FEDFFA7653321 /* crc32.c */; settings = {ATTRIBUTES = (); }; };
+		27524CC7B229A62C91616CA5 /* garmin_fs.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 772C154E2EE35E94F0BD1BB0 /* garmin_fs.cc */; settings = {ATTRIBUTES = (); }; };
+		27AC9746E8D0FDF3FC72E15F /* position.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 5A2FD2EA92BB0EE51CE5ADEC /* position.cc */; settings = {ATTRIBUTES = (); }; };
+		2951F8B5EE1624DB0E5BC2E2 /* formspec.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D1A218B305E86A0C618B6B74 /* formspec.cc */; settings = {ATTRIBUTES = (); }; };
+		29CB676460EA032E73FAE9EB /* vitosmt.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 0AA7F58D6F18AB233162FE65 /* vitosmt.cc */; settings = {ATTRIBUTES = (); }; };
+		2A44CBC8B5CB7776A06EAAEA /* sbn.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 675A950399FF212BB12FD266 /* sbn.cc */; settings = {ATTRIBUTES = (); }; };
+		2B460BC8E86D3F75555EA357 /* tpg.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 010F98573A7BB5CE1F39D041 /* tpg.cc */; settings = {ATTRIBUTES = (); }; };
+		2BA9C8EB3F6E3588F789531E /* polygon.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = E1271157867BA56140AF7F7E /* polygon.cc */; settings = {ATTRIBUTES = (); }; };
+		2D786A151D9AAC57B3BF1DC1 /* stmsdf.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 70DAA4A212B9051F8E5A13EC /* stmsdf.cc */; settings = {ATTRIBUTES = (); }; };
+		324F84F64DE6F4B4D725322A /* jtr.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 80B7A8FC9BC9BF47EBDE5143 /* jtr.cc */; settings = {ATTRIBUTES = (); }; };
+		325D2DAC60592F8E8D329853 /* gpssim.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 11B64C661B8FD3A144B7A13A /* gpssim.cc */; settings = {ATTRIBUTES = (); }; };
+		34358574BF25412EC04521D5 /* compegps.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 5AED85D2707E7F3F4B10E6D1 /* compegps.cc */; settings = {ATTRIBUTES = (); }; };
+		343C21215B69B6BDD30ED5C7 /* lowranceusr.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 69F027FA9DCC3B652AE17650 /* lowranceusr.cc */; settings = {ATTRIBUTES = (); }; };
+		35D9A1BCECCEB0C12BB9E39A /* tiger.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D08CD082F95B61D506A2F829 /* tiger.cc */; settings = {ATTRIBUTES = (); }; };
+		374177D6B2311CC0BB059BD9 /* fatal.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 2D80B1EFC87258C420888B51 /* fatal.cc */; settings = {ATTRIBUTES = (); }; };
+		389304D2D87822730EF71C3A /* grtcirc.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = A4416DCF43A78619A31DAB67 /* grtcirc.cc */; settings = {ATTRIBUTES = (); }; };
+		3A4EBF130B113F615A28173F /* interpolate.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = EF2C6AC4EF226A91521A8FA2 /* interpolate.cc */; settings = {ATTRIBUTES = (); }; };
+		3BA4928AE54B3AE6DB7EF283 /* googledir.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 96E621B9E6D899BD85384D4C /* googledir.cc */; settings = {ATTRIBUTES = (); }; };
+		3DCF66B42F6FC750D0F4F4AD /* skyforce.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = F747F9C16DC860D3A9B5C99B /* skyforce.cc */; settings = {ATTRIBUTES = (); }; };
+		3E8689DBCB3DD630E975B19A /* gbsleep.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = C29830B2BF06A5EF5700A915 /* gbsleep.cc */; settings = {ATTRIBUTES = (); }; };
+		4078746DCA9746AFC596F47D /* garmin_gpi.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 454F130338242D872BC1968E /* garmin_gpi.cc */; settings = {ATTRIBUTES = (); }; };
+		41E7141F600DAC79E331CA95 /* glogbook.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = F0D21CCB23229E91D341C05C /* glogbook.cc */; settings = {ATTRIBUTES = (); }; };
+		43FC5828D8865E242BCF5A99 /* internal_styles.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = C35E76061956DD8CED6B46BC /* internal_styles.cc */; settings = {ATTRIBUTES = (); }; };
+		45142B8874422581CD0683A1 /* discard.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 843A93802308B52AEEEE5D49 /* discard.cc */; settings = {ATTRIBUTES = (); }; };
+		4564C5307F4E7CCA19368389 /* an1.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = EF7912420E29D775A0FEA4F8 /* an1.cc */; settings = {ATTRIBUTES = (); }; };
+		47C493B76A5CC9F2875CE5DD /* bushnell_trl.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 1E98E5ACF88530DF68348545 /* bushnell_trl.cc */; settings = {ATTRIBUTES = (); }; };
+		4A4F30747C596BA60B103660 /* csv_util.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = DF7B174E834FE06F73015778 /* csv_util.cc */; settings = {ATTRIBUTES = (); }; };
+		4B74EBCF3C1A48A5E49A9590 /* lowranceusr4.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 8087C6D3AADECC4A9896B29F /* lowranceusr4.cc */; settings = {ATTRIBUTES = (); }; };
+		4C6AEDB08FA3AE3B04A18AAC /* dmtlog.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 2BDFD34C116D2040736CCEF5 /* dmtlog.cc */; settings = {ATTRIBUTES = (); }; };
+		4D00E1577798CB42AEC52895 /* ggv_ovl.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 90F6247FF53386FD063EBE4E /* ggv_ovl.cc */; settings = {ATTRIBUTES = (); }; };
+		4DA1C8D51417C48290F99A3B /* netstumbler.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 253CD778C6ADDA02C8568BE9 /* netstumbler.cc */; settings = {ATTRIBUTES = (); }; };
+		4E96F9217B1618CCCDF4D519 /* mtk_logger.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9F643FFCD4D394AE7CC243D6 /* mtk_logger.cc */; settings = {ATTRIBUTES = (); }; };
+		4F1D804C57FB7DB3847FA829 /* trackfilter.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 5CBA913F944D290A1078D5A4 /* trackfilter.cc */; settings = {ATTRIBUTES = (); }; };
+		50255ECC33691EFA92536675 /* gpsusbsend.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 71899E60E3520A7655042F85 /* gpsusbsend.cc */; settings = {ATTRIBUTES = (); }; };
+		504B3FBF53CD94ADE4531EFB /* delgpl.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 728351C028CB866BF7E658C1 /* delgpl.cc */; settings = {ATTRIBUTES = (); }; };
+		51418F017E34C42EA6422B7B /* gpx.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = F96FC2683C81903B6DCB72C9 /* gpx.cc */; settings = {ATTRIBUTES = (); }; };
+		5460AA96C1CD6AC25435FBF8 /* rgbcolors.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D393478D329A72480CF519EA /* rgbcolors.cc */; settings = {ATTRIBUTES = (); }; };
+		5549425A613B05F384386B35 /* yahoo.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 8EC57628919393F3F3E95A3C /* yahoo.cc */; settings = {ATTRIBUTES = (); }; };
+		5564807B6620D872CAC01D5B /* delbin.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 069C5640A3003E7414C3C202 /* delbin.cc */; settings = {ATTRIBUTES = (); }; };
+		564114A2E9F66D64454C64A3 /* garmin_txt.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = C041F84866DE3A5F46E48BF8 /* garmin_txt.cc */; settings = {ATTRIBUTES = (); }; };
+		57E7A4BC71FA7AA63802D2B9 /* zutil.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 35019879D27E85B75662F92E /* zutil.c */; settings = {ATTRIBUTES = (); }; };
+		5900FC48BF249BACA4AB1EFD /* igc.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 5DC9259204F291973B559A0E /* igc.cc */; settings = {ATTRIBUTES = (); }; };
+		5A4440E436093511F349F897 /* cst.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 2E6CB899ABC641131765B713 /* cst.cc */; settings = {ATTRIBUTES = (); }; };
+		5A85366A69433314FF38CB47 /* garmin.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = EFD435D35DCB32917731FBE6 /* garmin.cc */; settings = {ATTRIBUTES = (); }; };
+		5D961603BED0C5DB886C685D /* tpo.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9A2F026605AD0EFB4C7E78AF /* tpo.cc */; settings = {ATTRIBUTES = (); }; };
+		5E343E9274EE78FEBCAE811F /* teletype.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = E2DB7324703280E55123E43F /* teletype.cc */; settings = {ATTRIBUTES = (); }; };
+		5EEA9FB7F12492DA0530D76F /* util_crc.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 18F2BE505F97AED9285DEFA8 /* util_crc.cc */; settings = {ATTRIBUTES = (); }; };
+		5F0ED2A0578EDE80A56F3E5C /* reverse_route.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 751F37CB9317891C64F038AC /* reverse_route.cc */; settings = {ATTRIBUTES = (); }; };
+		607436F11C551E338B29D733 /* garmin_tables.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 076D201BDFF08831F6121621 /* garmin_tables.cc */; settings = {ATTRIBUTES = (); }; };
+		60BF8640090F93058D4C5163 /* gnav_trl.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = DC734378B4D566EF6DB5207A /* gnav_trl.cc */; settings = {ATTRIBUTES = (); }; };
+		63148122CD295A00B34E8361 /* route.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = BA69268070A7275673A1D20B /* route.cc */; settings = {ATTRIBUTES = (); }; };
+		63C792C0FD626F45C55E678D /* subrip.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = CD27560E4ACADA19F0ADB856 /* subrip.cc */; settings = {ATTRIBUTES = (); }; };
+		68693DDAA206D2272F20DB7D /* skytraq.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 1AB5E4A4386953AE85A70957 /* skytraq.cc */; settings = {ATTRIBUTES = (); }; };
+		6A22AF4FF5F6A22201C4BF0C /* alan.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 60ED8779C2E567CABD5772BE /* alan.cc */; settings = {ATTRIBUTES = (); }; };
+		6BFCF06E2F601E75E0BD16CA /* gpsdevice.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 1614A87D702BDB9A154D575F /* gpsdevice.cc */; settings = {ATTRIBUTES = (); }; };
+		6D678188E8F63E38AF71BA9A /* gpsusbread.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 438C122048F1C4A74E865C99 /* gpsusbread.cc */; settings = {ATTRIBUTES = (); }; };
+		6E1B68D0E42EFB945B37044B /* gzclose.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9DD796BE10A702709DE6CF8B /* gzclose.c */; settings = {ATTRIBUTES = (); }; };
+		705E753C27E6D832BD6FF749 /* easygps.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = C597D8F76B8F191C12B4AD98 /* easygps.cc */; settings = {ATTRIBUTES = (); }; };
+		7071E8FEDD8E1B1E924A0B0B /* inflate.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 90EF8487AE26796AD4BCFE49 /* inflate.c */; settings = {ATTRIBUTES = (); }; };
+		71FDACCED7D9D782B5E77ECE /* brauniger_iq.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 59F0C1E637ECCEFB0C7C489A /* brauniger_iq.cc */; settings = {ATTRIBUTES = (); }; };
+		75197664F3D716F35F8C3EC6 /* enigma.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 02D9D445B9D03025C7B35DA7 /* enigma.cc */; settings = {ATTRIBUTES = (); }; };
+		7548CF7E8C89D4A3C89904A5 /* tomtom.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = E8E2435ED88B051AE6C8B166 /* tomtom.cc */; settings = {ATTRIBUTES = (); }; };
+		75986A0EFB58924CD42AB4AA /* xcsv.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 27F98C7BFB62A11A517E8A0D /* xcsv.cc */; settings = {ATTRIBUTES = (); }; };
+		7625BB1BF10FC9156F2CB6C9 /* nmn4.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 7EE014B00379E9E5DE6B822F /* nmn4.cc */; settings = {ATTRIBUTES = (); }; };
+		76A7590CAADF3CCA3C38A74D /* ik3d.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = BF29268AF36956A1432E7D08 /* ik3d.cc */; settings = {ATTRIBUTES = (); }; };
+		7B58930EDE9C0BCE8A8046F6 /* mapbar_track.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 982BCA060C4984355C180A7E /* mapbar_track.cc */; settings = {ATTRIBUTES = (); }; };
+		7BA4444A23DDCC5BCD22AA16 /* geo.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = AB7332B53F1724B76A68E12F /* geo.cc */; settings = {ATTRIBUTES = (); }; };
+		7C2E07EDDD73441B85064E25 /* queue.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 165DE978B9BBA40B33DF8EBD /* queue.cc */; settings = {ATTRIBUTES = (); }; };
+		7CA50A5CF72D54208D3C7CFC /* darwin.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = EF2CC9D7A9639B1ED2FF032D /* darwin.c */; settings = {ATTRIBUTES = (); }; };
+		7CD99BDEB8D138A25CD0400D /* gbser.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 989EF67AA2B11776C2FC129E /* gbser.cc */; settings = {ATTRIBUTES = (); }; };
+		7D7F57E6D30839C226F2F09B /* inftrees.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 8C36D51CB57E205197208F22 /* inftrees.c */; settings = {ATTRIBUTES = (); }; };
+		7E6BFD9CCBD241EB10B39C32 /* error.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9B33FDAD91F903973E21AA09 /* error.c */; settings = {ATTRIBUTES = (); }; };
+		7E842BC46B04605224C56C52 /* wintec_tes.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = AD9B169743BA909DB5230F53 /* wintec_tes.cc */; settings = {ATTRIBUTES = (); }; };
+		7FEB484760B344FCA1CD17B3 /* units.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D404F7E121C59FF373986E4C /* units.cc */; settings = {ATTRIBUTES = (); }; };
+		80CB27CF2DBCAEF89CA583B7 /* gzread.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = EF695F463503793B92425D0B /* gzread.c */; settings = {ATTRIBUTES = (); }; };
+		824D9832E39F11B8A1C2EE5F /* shape.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 72F1B3AA6E5C07DEA7CACC36 /* shape.cc */; settings = {ATTRIBUTES = (); }; };
+		833A346CC3D2E2A5AA599EE0 /* shpopen.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 760E43358C8C9445F9367320 /* shpopen.c */; settings = {ATTRIBUTES = (); }; };
+		836B45D8A4D0B2956014CDAF /* deflate.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 7AEC5DDF49B79EFE7E4256E7 /* deflate.c */; settings = {ATTRIBUTES = (); }; };
+		840CF58B32ED1026574F8C47 /* hiketech.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = F2619446CF90523DCEA186C4 /* hiketech.cc */; settings = {ATTRIBUTES = (); }; };
+		87BCBD62FCB790E3A1988BDF /* sort.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 1E03FE2E81FA51DC78DC54E7 /* sort.cc */; settings = {ATTRIBUTES = (); }; };
+		87E615C9FA52B776B24DE87E /* nukedata.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 4DB22869D110D98A0BFE91DE /* nukedata.cc */; settings = {ATTRIBUTES = (); }; };
+		8909918613102810C1C92F4E /* waypt.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 35C4B6DA1F1A68182C661FB1 /* waypt.cc */; settings = {ATTRIBUTES = (); }; };
+		895E3138194AB640EADA4443 /* saroute.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = ED0F01C3D8AEA4274A3ACE25 /* saroute.cc */; settings = {ATTRIBUTES = (); }; };
+		899A0AE685F7DE4AA93E02B7 /* cet.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 924BD64AA604957AD9306079 /* cet.cc */; settings = {ATTRIBUTES = (); }; };
+		8A258376CF7AAEBAD5CA962C /* xmlstreamwriter.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = E7FBACCA97CAB532131E7EC7 /* xmlstreamwriter.cc */; settings = {ATTRIBUTES = (); }; };
+		8D267F2E4776F0ECA2F49DC8 /* IOKit.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = A1A67BEAA744704B29168D39 /* IOKit.framework */; };
+		8D9936FEA575EC53D0F6D52D /* explorist_ini.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 0087A696E951709AE03C162A /* explorist_ini.cc */; settings = {ATTRIBUTES = (); }; };
+		8DB5DF5926E54BE8F7E84CEC /* gpsserial.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9004F08DBE85C786DE6D0548 /* gpsserial.cc */; settings = {ATTRIBUTES = (); }; };
+		900ED1F5D2B3166BD1B440A0 /* mkshort.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 7DD1338C6E4594FB354ECCF1 /* mkshort.cc */; settings = {ATTRIBUTES = (); }; };
+		906860B893ADA747B1C04D08 /* lmx.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = BE51BF0B439330F82B883512 /* lmx.cc */; settings = {ATTRIBUTES = (); }; };
+		90691963AFBB4B4582DAE881 /* navilink.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = AB2E81EFB3A04845448D38EA /* navilink.cc */; settings = {ATTRIBUTES = (); }; };
+		92DAA29372E15F58507E6BF8 /* garmin_device_xml.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = CA6A08EDD24CE32AB6273838 /* garmin_device_xml.cc */; settings = {ATTRIBUTES = (); }; };
+		93336D8D9822E184AAEE54CD /* main.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = A2EBA7FC67AFFD0911B220B6 /* main.cc */; settings = {ATTRIBUTES = (); }; };
+		938887FE720526A36BED0924 /* height.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D39A2D56D3030F0F1137EE34 /* height.cc */; settings = {ATTRIBUTES = (); }; };
+		93BEFB2CF811A2EF57551C54 /* transform.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 92245C57EA99CBE85FFD9759 /* transform.cc */; settings = {ATTRIBUTES = (); }; };
+		94045C586821383CA81F0C85 /* navitel.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 5F898F472F7B475D7A44604D /* navitel.cc */; settings = {ATTRIBUTES = (); }; };
+		948BCB3751C01FE1CADDA6F5 /* holux.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 1DB3DA0C8C5D30E820AEA519 /* holux.cc */; settings = {ATTRIBUTES = (); }; };
+		94A1224CE4548B79A8824E47 /* gpscom.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 178AF004875134FDF993D388 /* gpscom.cc */; settings = {ATTRIBUTES = (); }; };
+		968B64F68E52DF245DC42C94 /* ignrando.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 124810C4E8297C1D83590EDC /* ignrando.cc */; settings = {ATTRIBUTES = (); }; };
+		975FA1FA9210F74178FC5CF9 /* uncompr.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = D7D8FB5B8D7FFC6C57169288 /* uncompr.c */; settings = {ATTRIBUTES = (); }; };
+		97A3927C9DCA9F8ED05D080B /* mtk_locus.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = E4F26604EFD6F22EAFA161FD /* mtk_locus.cc */; settings = {ATTRIBUTES = (); }; };
+		97BE896E5C8289D2C4C24A28 /* usb.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9F84B356B9886A49ED6CE79F /* usb.c */; settings = {ATTRIBUTES = (); }; };
+		97E418F00633EBA37F9916FC /* strptime.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = AC298414F3EB5096EB52EAAD /* strptime.c */; settings = {ATTRIBUTES = (); }; };
+		98D8C0CB3A3D9DA0A1EEB047 /* gpsmath.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 6FDD796981CFA4F253C28095 /* gpsmath.cc */; settings = {ATTRIBUTES = (); }; };
+		99F74A702655BD8810B8D9B9 /* dbfopen.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 6AD67164FE35998E071F02F7 /* dbfopen.c */; settings = {ATTRIBUTES = (); }; };
+		9B36955786EBBE1B36994928 /* pocketfms_fp.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = FCED3C24C02785ECB2EEA075 /* pocketfms_fp.cc */; settings = {ATTRIBUTES = (); }; };
+		9B959019CCF121EFE8626A6F /* gpsprot.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 1E05B032477FC474F39CBD7E /* gpsprot.cc */; settings = {ATTRIBUTES = (); }; };
+		9CD6DA009750CD06A3F086BF /* psitrex.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 173E6C061A62B7A81A52F77C /* psitrex.cc */; settings = {ATTRIBUTES = (); }; };
+		9D60F3623FA7BC891898BC6D /* mmo.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = A5B2C7C8F765BA778777636A /* mmo.cc */; settings = {ATTRIBUTES = (); }; };
+		9E70CB913F2977250267BE11 /* gpsmem.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D1554DD77B6C46AECFF6982A /* gpsmem.cc */; settings = {ATTRIBUTES = (); }; };
+		A04D8133BEC6EC2323B31B5B /* gpsdevice_usb.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D2C9FE8E5F27D89B13D158C4 /* gpsdevice_usb.cc */; settings = {ATTRIBUTES = (); }; };
+		A3B2915AE45D27236A90C94C /* gpssend.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 1901E8A80FE68867F89076A8 /* gpssend.cc */; settings = {ATTRIBUTES = (); }; };
+		A6726F229003747F395F6361 /* safileio.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 72BFC3A9A53301F2CA8C28EA /* safileio.c */; settings = {ATTRIBUTES = (); }; };
+		A67A8F4ABF869CFC727C48A8 /* wbt-200.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = A2D67CE8AAF9F0091A1ABB8E /* wbt-200.cc */; settings = {ATTRIBUTES = (); }; };
+		A7DCB406E468BDA81D51DACF /* bend.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D0407CC01B79C6CE1D372CF9 /* bend.cc */; settings = {ATTRIBUTES = (); }; };
+		A8ED8B4129A26D6BB790DBFF /* cet_util.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 335A647E71162789E6AAABEE /* cet_util.cc */; settings = {ATTRIBUTES = (); }; };
+		A915D676162423AA30BD9107 /* stmwpp.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 36B03533DB535E0F1C984CBE /* stmwpp.cc */; settings = {ATTRIBUTES = (); }; };
+		A9A7AC1FC4DEDB40BD24AEA2 /* jgpsutil.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 30A6EAD14E2A7ADAFD244E66 /* jgpsutil.cc */; settings = {ATTRIBUTES = (); }; };
+		A9E02C5179FC2BACF490E637 /* gtm.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 7AAB07C2D5C27FCF59E09428 /* gtm.cc */; settings = {ATTRIBUTES = (); }; };
+		AC9FEA3EA1950354FAB664B4 /* osm.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 931280D416620DD8CE863267 /* osm.cc */; settings = {ATTRIBUTES = (); }; };
+		AD95FF465EB53E6F7D499108 /* QtCore.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = DB51AD164EEC19F2CFE7B213 /* QtCore.framework */; };
+		B109539D7D7E9ECCF73ADE94 /* xol.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = E19F15F07E839FA18ADA9C49 /* xol.cc */; settings = {ATTRIBUTES = (); }; };
+		B3438420BD40463A76DE6E58 /* ozi.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = F83A268020FF401070B931D4 /* ozi.cc */; settings = {ATTRIBUTES = (); }; };
+		B4C20BC8A292E7F19EFEF5B9 /* nmea.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = BCFBDD179AFFEAF3DCD950E8 /* nmea.cc */; settings = {ATTRIBUTES = (); }; };
+		B4EC5F766681D5A928723B86 /* xhtmlent.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 57ABC2AD51FA15597AD2654D /* xhtmlent.cc */; settings = {ATTRIBUTES = (); }; };
+		B77AD63CBB85027F264E8346 /* gbser_posix.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 8EB86755D7197AB1673D4B4D /* gbser_posix.cc */; settings = {ATTRIBUTES = (); }; };
+		B9DF7A0A497DDA2207F88DBC /* inffast.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9F18BBC44AA39D7C42B154E6 /* inffast.c */; settings = {ATTRIBUTES = (); }; };
+		BA7D395DD0F275798BC64B1B /* mapsend.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 1D9E1FD131EDCA4FA13EF768 /* mapsend.cc */; settings = {ATTRIBUTES = (); }; };
+		BBB46F266209158593EF06D6 /* duplicate.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = BBDDF98C0F1CC4B40AB5C77D /* duplicate.cc */; settings = {ATTRIBUTES = (); }; };
+		BE475E8AE2F688F244C55F9D /* sbp.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = F87177B44D8DE390784A8B04 /* sbp.cc */; settings = {ATTRIBUTES = (); }; };
+		BE9622042845342458DCAE42 /* vitovtt.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D27765E1061D8963E90DED9E /* vitovtt.cc */; settings = {ATTRIBUTES = (); }; };
+		C631BADA280B688F6E0F25F1 /* radius.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = FF2C35C1B7BD3C59EB7461C1 /* radius.cc */; settings = {ATTRIBUTES = (); }; };
+		CA32F3F4F2500590134080CB /* smplrout.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = EA9762DFBC96E4F5111131EC /* smplrout.cc */; settings = {ATTRIBUTES = (); }; };
+		CAB1C039A0FDF4F8B8C13F06 /* session.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 117B0F8F3911F4618C3D893E /* session.cc */; settings = {ATTRIBUTES = (); }; };
+		CBE119949BB11F79F7CCEFC3 /* parse.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = B372FC9384853E078AE9269D /* parse.cc */; settings = {ATTRIBUTES = (); }; };
+		CD781783CB62C019D01BA3FE /* swapdata.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 71DB454958580621AAE74D31 /* swapdata.cc */; settings = {ATTRIBUTES = (); }; };
+		CD9DAE8D9624F359F5165809 /* destinator.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 3C3F664CD39F3DE6CD28CD4D /* destinator.cc */; settings = {ATTRIBUTES = (); }; };
+		D17515A014C50994811799DC /* gpsapp.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 34827BD41C7223761F2CE2CF /* gpsapp.cc */; settings = {ATTRIBUTES = (); }; };
+		D1F9072E3F8DEED0E7FCDFF7 /* util.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = E46FA41F5FC3DD6EFA2EE38A /* util.cc */; settings = {ATTRIBUTES = (); }; };
+		D224F50FE60EF43AD5064FCB /* gpsusbcommon.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 593EEAFB42F5B53385521673 /* gpsusbcommon.cc */; settings = {ATTRIBUTES = (); }; };
+		D2FB0131B5EB1E0523942E36 /* pcx.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = CE1DA24C52606089E3CA7347 /* pcx.cc */; settings = {ATTRIBUTES = (); }; };
+		D5024BF67C4BE07DCF97991E /* stackfilter.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 5F1BE32D40757A67D1C6E3F5 /* stackfilter.cc */; settings = {ATTRIBUTES = (); }; };
+		D67A229D48F4EBB61DDAFF0C /* v900.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 4C6B863D15102CC6E9E9A3C5 /* v900.cc */; settings = {ATTRIBUTES = (); }; };
+		D7DBA8491D616D51B5F6B04D /* google.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 5C50AC40F8B204C70EFE5939 /* google.cc */; settings = {ATTRIBUTES = (); }; };
+		D820D4CB972482E3BB146C2F /* adler32.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 43F9BA4B59FD88E896CFBC2A /* adler32.c */; settings = {ATTRIBUTES = (); }; };
+		D9F7B0D4A2DE2CFD4A3A6935 /* gdb.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 784E06A868414179607BE69E /* gdb.cc */; settings = {ATTRIBUTES = (); }; };
+		DAFF463E4FB010E7815372D1 /* vidaone.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 4D466ABFF9BD45DFE6467402 /* vidaone.cc */; settings = {ATTRIBUTES = (); }; };
+		DB131408468294E5265B983D /* pocketfms_wp.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 8313EA26EDEA2105E99CA7B1 /* pocketfms_wp.cc */; settings = {ATTRIBUTES = (); }; };
+		DCA22671614D16C5386F4DFE /* unicsv.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = DB8CCE39C41E81028BBEAD9E /* unicsv.cc */; settings = {ATTRIBUTES = (); }; };
+		E00226148B5022D2235C5E49 /* raymarine.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 27A9D1017BA7D193592C7083 /* raymarine.cc */; settings = {ATTRIBUTES = (); }; };
+		E0BE7FEF1EDC599D451863CF /* vcf.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 9D3FDB58B56653F4548206CE /* vcf.cc */; settings = {ATTRIBUTES = (); }; };
+		E3D07EF056050EDAC8355BEF /* text.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 991C0FC00CDC24A39BB0DFEC /* text.cc */; settings = {ATTRIBUTES = (); }; };
+		E43E16A2D76FBD6FB57E24B6 /* gopal.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = DFDA6BD62752F70AB6E8B9CC /* gopal.cc */; settings = {ATTRIBUTES = (); }; };
+		E538F06244E883715CE8C6B6 /* wfff_xml.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 3719193D1185FD89B5D319A6 /* wfff_xml.cc */; settings = {ATTRIBUTES = (); }; };
+		E5703B217D8EF7AA967397A7 /* maggeo.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 288FA831E0AF8447799FC537 /* maggeo.cc */; settings = {ATTRIBUTES = (); }; };
+		E7840A8C69F357DCAAA291EB /* magproto.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 78633242EC81E52255C26B0B /* magproto.cc */; settings = {ATTRIBUTES = (); }; };
+		E9AC0AA10ABBAD0A036147C1 /* gpsrqst.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 188D2DF9D95F87196B52820F /* gpsrqst.cc */; settings = {ATTRIBUTES = (); }; };
+		EB645EC676A2BF3E9FDEF3BB /* inifile.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = B5B3A2F6B20DC4489E13AA8D /* inifile.cc */; settings = {ATTRIBUTES = (); }; };
+		EE1FC2BC3AEACDFCC85A9075 /* xmlgeneric.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 6CC1D6899F618A8BB3FC097C /* xmlgeneric.cc */; settings = {ATTRIBUTES = (); }; };
+		EFE96BA7A76A49E68A1480EF /* gbfile.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 3892F8AF7E2966D87D6D86C9 /* gbfile.cc */; settings = {ATTRIBUTES = (); }; };
+		F2156682DF09BD492B45B239 /* compress.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 0F50609911CBF5D8F56BCE7D /* compress.c */; settings = {ATTRIBUTES = (); }; };
+		F3C4CCB923D1D01784092299 /* jogmap.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = DA8458CEA37C8E1FA2B352B7 /* jogmap.cc */; settings = {ATTRIBUTES = (); }; };
+		F5354B65FBC51A227F678411 /* gzlib.c in Compile Sources */ = {isa = PBXBuildFile; fileRef = 2263450906BFC54F170D6F72 /* gzlib.c */; settings = {ATTRIBUTES = (); }; };
+		F67AD6E392E066E0FCC55DEA /* garmin_fit.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 84C1C5B18C02EABBC7029810 /* garmin_fit.cc */; settings = {ATTRIBUTES = (); }; };
+		F75D239D00BA70C424B27EB4 /* igo8.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = EF7887AAC775E044230F38A2 /* igo8.cc */; settings = {ATTRIBUTES = (); }; };
+		F8B465CE34D8DF87AAE95913 /* CoreFoundation.framework in Link Binary With Libraries */ = {isa = PBXBuildFile; fileRef = 4D765E1B1EA6C757220C63E7 /* CoreFoundation.framework */; };
+		F9E132866998AFCFC175119C /* g7towin.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = F6DA2C9A1708C286D18105B4 /* g7towin.cc */; settings = {ATTRIBUTES = (); }; };
+		FAE0F2FDAD03CDB0E2FEF9F5 /* xmltag.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 175639FE22BDAC4BF877F382 /* xmltag.cc */; settings = {ATTRIBUTES = (); }; };
+		FB66C56358AD610819DAA408 /* filter_vecs.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D2B32BB71D325BCE4FEFB82D /* filter_vecs.cc */; settings = {ATTRIBUTES = (); }; };
+		FB9B10FAEC8D0440D65B5ED3 /* arcdist.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 4A66EC287D14F5B48B049158 /* arcdist.cc */; settings = {ATTRIBUTES = (); }; };
+		FC7236768B8CAA2AD70B6F85 /* html.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 4941BF82337C6C1E41AD7CFD /* html.cc */; settings = {ATTRIBUTES = (); }; };
+		FDB8112FCDB8A8D4F9DA03B6 /* gpsutil.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = D07193CA94ADEB1307B0E6C6 /* gpsutil.cc */; settings = {ATTRIBUTES = (); }; };
+		FEB987D1B1330E4E3AD57BD9 /* validate.cc in Compile Sources */ = {isa = PBXBuildFile; fileRef = 510340523EBDCC0350960526 /* validate.cc */; settings = {ATTRIBUTES = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		EC1B054218B9D020004FA0F3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6DB9C3763D02B1415CD9D565 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5236EF6DEE49756C361ABF26;
+			remoteInfo = "Qt Preprocess";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0042FA7F258FEDFFA7653321 /* crc32.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = crc32.c; path = zlib/crc32.c; sourceTree = "<absolute>"; };
+		0087A696E951709AE03C162A /* explorist_ini.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = explorist_ini.cc; sourceTree = "<absolute>"; };
+		010F98573A7BB5CE1F39D041 /* tpg.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tpg.cc; sourceTree = "<absolute>"; };
+		02D9D445B9D03025C7B35DA7 /* enigma.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = enigma.cc; sourceTree = "<absolute>"; };
+		03461DB87A24C8A99F7E61A9 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<absolute>"; };
+		0362D514C3BACC474D3B72D2 /* exif.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = exif.cc; sourceTree = "<absolute>"; };
+		03AF0F13740167F5105F8356 /* qt_lib_printsupport_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_printsupport_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_printsupport_private.pri; sourceTree = "<absolute>"; };
+		043059EBF7C319F55DD4996F /* iso_8859_1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_1.h; path = cet/iso_8859_1.h; sourceTree = "<absolute>"; };
+		04880B9DC563853A9F944A88 /* qt_lib_script_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_script_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_script_private.pri; sourceTree = "<absolute>"; };
+		052288E1E2A588248EC0B514 /* koi_7.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = koi_7.h; path = cet/koi_7.h; sourceTree = "<absolute>"; };
+		05817A32EFF6DCB2E3095719 /* inffast.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = inffast.h; path = zlib/inffast.h; sourceTree = "<absolute>"; };
+		0624A5CCA9623C3079C36EAC /* qt_lib_macextras.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_macextras.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_macextras.pri; sourceTree = "<absolute>"; };
+		0651458CA410E9E20B94B4FA /* pocketfms_bc.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pocketfms_bc.cc; sourceTree = "<absolute>"; };
+		069C5640A3003E7414C3C202 /* delbin.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = delbin.cc; sourceTree = "<absolute>"; };
+		06F5C78CAFA396D310A9E7A2 /* qt_lib_testlib.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_testlib.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_testlib.pri; sourceTree = "<absolute>"; };
+		074DFC06F127C84047E92DFF /* latin_greek_1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = latin_greek_1.h; path = cet/latin_greek_1.h; sourceTree = "<absolute>"; };
+		076D201BDFF08831F6121621 /* garmin_tables.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = garmin_tables.cc; sourceTree = "<absolute>"; };
+		08DC93DB8800F86340F7BCA6 /* keybcs2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = keybcs2.h; path = cet/keybcs2.h; sourceTree = "<absolute>"; };
+		0AA7F58D6F18AB233162FE65 /* vitosmt.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vitosmt.cc; sourceTree = "<absolute>"; };
+		0ABE9A87053F5E59FFA85948 /* deflate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = deflate.h; path = zlib/deflate.h; sourceTree = "<absolute>"; };
+		0DAA23F8F3573511ED4C7878 /* qt_lib_help_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_help_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_help_private.pri; sourceTree = "<absolute>"; };
+		0F50609911CBF5D8F56BCE7D /* compress.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = compress.c; path = zlib/compress.c; sourceTree = "<absolute>"; };
+		0FF148BDA72593489A283F03 /* nf_z_62_010__1973_.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nf_z_62_010__1973_.h; path = cet/nf_z_62_010__1973_.h; sourceTree = "<absolute>"; };
+		10C6CF1F7F277792B6349BB1 /* qt_lib_concurrent.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_concurrent.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_concurrent.pri; sourceTree = "<absolute>"; };
+		117B0F8F3911F4618C3D893E /* session.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = session.cc; sourceTree = "<absolute>"; };
+		11B64C661B8FD3A144B7A13A /* gpssim.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gpssim.cc; sourceTree = "<absolute>"; };
+		124810C4E8297C1D83590EDC /* ignrando.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ignrando.cc; sourceTree = "<absolute>"; };
+		12B19E65F1AD157EABA8700C /* mac_is.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mac_is.h; path = cet/mac_is.h; sourceTree = "<absolute>"; };
+		12D5BD720E8832E8520B47BB /* cwi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cwi.h; path = cet/cwi.h; sourceTree = "<absolute>"; };
+		12D7D450C769675EE1947536 /* ibm284.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm284.h; path = cet/ibm284.h; sourceTree = "<absolute>"; };
+		1383AEEC11B8AB4513A3F9AC /* qt_lib_webkitwidgets_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_webkitwidgets_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_webkitwidgets_private.pri; sourceTree = "<absolute>"; };
+		13B305DD22DDE9AA0C3BA319 /* qt_lib_serialport.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_serialport.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_serialport.pri; sourceTree = "<absolute>"; };
+		14EF82215D56D2D7186E6872 /* ansi_x3_4_1968.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ansi_x3_4_1968.h; path = cet/ansi_x3_4_1968.h; sourceTree = "<absolute>"; };
+		15AF60CD47AC99C6FA5C538E /* ibm278.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm278.h; path = cet/ibm278.h; sourceTree = "<absolute>"; };
+		1614A87D702BDB9A154D575F /* gpsdevice.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsdevice.cc; path = jeeps/gpsdevice.cc; sourceTree = "<absolute>"; };
+		16476267D56C5DF63F92D424 /* config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = config.h; path = msvc/config.h; sourceTree = "<absolute>"; };
+		165DE978B9BBA40B33DF8EBD /* queue.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = queue.cc; sourceTree = "<absolute>"; };
+		173E6C061A62B7A81A52F77C /* psitrex.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = psitrex.cc; sourceTree = "<absolute>"; };
+		175639FE22BDAC4BF877F382 /* xmltag.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = xmltag.cc; sourceTree = "<absolute>"; };
+		1773FB20FE6F19FEC667402C /* iso_8859_15.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_15.h; path = cet/iso_8859_15.h; sourceTree = "<absolute>"; };
+		178AF004875134FDF993D388 /* gpscom.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpscom.cc; path = jeeps/gpscom.cc; sourceTree = "<absolute>"; };
+		17B061465F496BFFDB7166E3 /* qt_lib_declarative_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_declarative_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_declarative_private.pri; sourceTree = "<absolute>"; };
+		17BEDBDCF5DBF29C66AA67B8 /* gpsport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsport.h; path = jeeps/gpsport.h; sourceTree = "<absolute>"; };
+		188D2DF9D95F87196B52820F /* gpsrqst.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsrqst.cc; path = jeeps/gpsrqst.cc; sourceTree = "<absolute>"; };
+		18F2BE505F97AED9285DEFA8 /* util_crc.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = util_crc.cc; sourceTree = "<absolute>"; };
+		18FC32D8725418F770CE2D80 /* gzwrite.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = gzwrite.c; path = zlib/gzwrite.c; sourceTree = "<absolute>"; };
+		1901E8A80FE68867F89076A8 /* gpssend.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpssend.cc; path = jeeps/gpssend.cc; sourceTree = "<absolute>"; };
+		1A4FDD798E14FEB07831D3CB /* ibm285.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm285.h; path = cet/ibm285.h; sourceTree = "<absolute>"; };
+		1AB5E4A4386953AE85A70957 /* skytraq.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = skytraq.cc; sourceTree = "<absolute>"; };
+		1B047BE5D23FF5C4790BCAB7 /* gpsprot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsprot.h; path = jeeps/gpsprot.h; sourceTree = "<absolute>"; };
+		1B403603E8577D731CB84D2C /* qdevice.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qdevice.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/qdevice.pri; sourceTree = "<absolute>"; };
+		1B56CFA310C4E398443394D0 /* gpsdatum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsdatum.h; path = jeeps/gpsdatum.h; sourceTree = "<absolute>"; };
+		1B63D26930B5A21E4BF9F7DF /* ibm851.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm851.h; path = cet/ibm851.h; sourceTree = "<absolute>"; };
+		1BD461BF053B2DE0723DDE08 /* bs_viewdata.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bs_viewdata.h; path = cet/bs_viewdata.h; sourceTree = "<absolute>"; };
+		1D9E1FD131EDCA4FA13EF768 /* mapsend.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mapsend.cc; sourceTree = "<absolute>"; };
+		1DB3DA0C8C5D30E820AEA519 /* holux.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = holux.cc; sourceTree = "<absolute>"; };
+		1E03FE2E81FA51DC78DC54E7 /* sort.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sort.cc; sourceTree = "<absolute>"; };
+		1E05B032477FC474F39CBD7E /* gpsprot.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsprot.cc; path = jeeps/gpsprot.cc; sourceTree = "<absolute>"; };
+		1E98E5ACF88530DF68348545 /* bushnell_trl.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bushnell_trl.cc; sourceTree = "<absolute>"; };
+		1F9B01E0FCC51E7AE991885F /* qt_lib_scripttools.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_scripttools.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_scripttools.pri; sourceTree = "<absolute>"; };
+		1FC8F20F59CFB996D8AC1BB5 /* qt_lib_sql_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_sql_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_sql_private.pri; sourceTree = "<absolute>"; };
+		209F80A63D1D93761C09DB9E /* clang.conf */ = {isa = PBXFileReference; lastKnownFileType = file; name = clang.conf; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/common/clang.conf; sourceTree = "<absolute>"; };
+		2263450906BFC54F170D6F72 /* gzlib.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = gzlib.c; path = zlib/gzlib.c; sourceTree = "<absolute>"; };
+		22D9DD390E43C6C2018D59B3 /* ibm437.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm437.h; path = cet/ibm437.h; sourceTree = "<absolute>"; };
+		22F4898815CA6B206DF0E4B5 /* qt_lib_positioning.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_positioning.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_positioning.pri; sourceTree = "<absolute>"; };
+		231DE25EB5826C5445F27280 /* mapasia.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mapasia.cc; sourceTree = "<absolute>"; };
+		253CD778C6ADDA02C8568BE9 /* netstumbler.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = netstumbler.cc; sourceTree = "<absolute>"; };
+		268421B7E202AC3403847D37 /* iso_646_irv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_646_irv.h; path = cet/iso_646_irv.h; sourceTree = "<absolute>"; };
+		27A9D1017BA7D193592C7083 /* raymarine.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = raymarine.cc; sourceTree = "<absolute>"; };
+		27C75197D6CBFF9E84A2236B /* garminusb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = garminusb.h; path = jeeps/garminusb.h; sourceTree = "<absolute>"; };
+		27F98C7BFB62A11A517E8A0D /* xcsv.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = xcsv.cc; sourceTree = "<absolute>"; };
+		288FA831E0AF8447799FC537 /* maggeo.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = maggeo.cc; sourceTree = "<absolute>"; };
+		2952603298F97B80750B4E46 /* gpsproj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsproj.h; path = jeeps/gpsproj.h; sourceTree = "<absolute>"; };
+		29CF770C39C8513C73942D7F /* gps.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gps.h; path = jeeps/gps.h; sourceTree = "<absolute>"; };
+		2A399AD495C5E6D61E6B786C /* ibm865.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm865.h; path = cet/ibm865.h; sourceTree = "<absolute>"; };
+		2A74E3FC85EF6E7AA721D611 /* qt_lib_gui_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_gui_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_gui_private.pri; sourceTree = "<absolute>"; };
+		2B8E9E67B344BA364CD96B15 /* cet_util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cet_util.h; sourceTree = "<absolute>"; };
+		2B9A72B9534943C10436B796 /* ns_4551_1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ns_4551_1.h; path = cet/ns_4551_1.h; sourceTree = "<absolute>"; };
+		2BDFD34C116D2040736CCEF5 /* dmtlog.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dmtlog.cc; sourceTree = "<absolute>"; };
+		2D80B1EFC87258C420888B51 /* fatal.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fatal.cc; sourceTree = "<absolute>"; };
+		2E6CB899ABC641131765B713 /* cst.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cst.cc; sourceTree = "<absolute>"; };
+		2ECB049E3C1775CA5FC37BC4 /* bs_4730.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bs_4730.h; path = cet/bs_4730.h; sourceTree = "<absolute>"; };
+		2EFFD59380BDC687C9FE0E2E /* shapefil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = shapefil.h; path = shapelib/shapefil.h; sourceTree = "<absolute>"; };
+		2F48A3A98BA6A8B7E277DF63 /* qt_lib_webkit_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_webkit_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_webkit_private.pri; sourceTree = "<absolute>"; };
+		30A6EAD14E2A7ADAFD244E66 /* jgpsutil.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = jgpsutil.cc; path = jeeps/jgpsutil.cc; sourceTree = "<absolute>"; };
+		30AD3BDA8F0983F60FF4C197 /* uuid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = uuid.h; sourceTree = "<absolute>"; };
+		30F63E9AB1442541CF7261D3 /* qt_lib_bootstrap_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_bootstrap_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_bootstrap_private.pri; sourceTree = "<absolute>"; };
+		32B5D023B46642C6CCA49544 /* magellan.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = magellan.h; sourceTree = "<absolute>"; };
+		335A647E71162789E6AAABEE /* cet_util.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cet_util.cc; sourceTree = "<absolute>"; };
+		3434598623B1B166ACEB9832 /* iec_p27_1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iec_p27_1.h; path = cet/iec_p27_1.h; sourceTree = "<absolute>"; };
+		34827BD41C7223761F2CE2CF /* gpsapp.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsapp.cc; path = jeeps/gpsapp.cc; sourceTree = "<absolute>"; };
+		34BAB4AC366FBDD6C36CB57A /* iso_8859_2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_2.h; path = cet/iso_8859_2.h; sourceTree = "<absolute>"; };
+		35019879D27E85B75662F92E /* zutil.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = zutil.c; path = zlib/zutil.c; sourceTree = "<absolute>"; };
+		35304A22E5B6B8173091BFC8 /* GPSBabel */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GPSBabel; sourceTree = BUILT_PRODUCTS_DIR; };
+		35C4B6DA1F1A68182C661FB1 /* waypt.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = waypt.cc; sourceTree = "<absolute>"; };
+		36B03533DB535E0F1C984CBE /* stmwpp.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stmwpp.cc; sourceTree = "<absolute>"; };
+		3719193D1185FD89B5D319A6 /* wfff_xml.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = wfff_xml.cc; sourceTree = "<absolute>"; };
+		371B95D65924441173AF6EBA /* ibm903.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm903.h; path = cet/ibm903.h; sourceTree = "<absolute>"; };
+		385EBB40F8C9DF1AC9D92757 /* garmin_fs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = garmin_fs.h; sourceTree = "<absolute>"; };
+		386FA2C92EC935469C0DF589 /* iso_8859_8.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_8.h; path = cet/iso_8859_8.h; sourceTree = "<absolute>"; };
+		3892F8AF7E2966D87D6D86C9 /* gbfile.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gbfile.cc; sourceTree = "<absolute>"; };
+		39AC48965EE59016FA84EB13 /* garmin_device_xml.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = garmin_device_xml.h; sourceTree = "<absolute>"; };
+		39C004E4BE67405F37CFE832 /* gpsusbcommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsusbcommon.h; path = jeeps/gpsusbcommon.h; sourceTree = "<absolute>"; };
+		3A1353D94B10462E6F5C7B2D /* dec_mcs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = dec_mcs.h; path = cet/dec_mcs.h; sourceTree = "<absolute>"; };
+		3A3A363223F6DDF4E6286558 /* qt_lib_webkitwidgets.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_webkitwidgets.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_webkitwidgets.pri; sourceTree = "<absolute>"; };
+		3ABCB24FF1506AD8119BB42A /* tmpro.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tmpro.cc; sourceTree = "<absolute>"; };
+		3ABF1363C047A8BA17FB96A6 /* qt_lib_nfc.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_nfc.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_nfc.pri; sourceTree = "<absolute>"; };
+		3AC2F61CFC26E38115878E52 /* ksc5636.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ksc5636.h; path = cet/ksc5636.h; sourceTree = "<absolute>"; };
+		3B5CE23A06FCB1CC0C725C60 /* ibm861.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm861.h; path = cet/ibm861.h; sourceTree = "<absolute>"; };
+		3BCE40FF91BC73A26877A738 /* ibm868.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm868.h; path = cet/ibm868.h; sourceTree = "<absolute>"; };
+		3C3F664CD39F3DE6CD28CD4D /* destinator.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = destinator.cc; sourceTree = "<absolute>"; };
+		3D5BECB5E52C7FD792B06508 /* qt_lib_xml_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_xml_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_xml_private.pri; sourceTree = "<absolute>"; };
+		3D9262AAFCC81B7E9BE813F2 /* qt_lib_printsupport.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_printsupport.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_printsupport.pri; sourceTree = "<absolute>"; };
+		3DA6F2EF2D193AB17B32F061 /* gbfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gbfile.h; sourceTree = "<absolute>"; };
+		3E499673895DE7E457F830A9 /* qt_lib_bluetooth_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_bluetooth_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_bluetooth_private.pri; sourceTree = "<absolute>"; };
+		3E5B1251153FD135D99BD61F /* cp1253.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cp1253.h; path = cet/cp1253.h; sourceTree = "<absolute>"; };
+		4179A1A1D57283E9B4004332 /* vecs.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vecs.cc; sourceTree = "<absolute>"; };
+		41A71C4A30348C463F06BBBA /* inffixed.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = inffixed.h; path = zlib/inffixed.h; sourceTree = "<absolute>"; };
+		424C0054FA808AC84FAF64EB /* qt_lib_core.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_core.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_core.pri; sourceTree = "<absolute>"; };
+		438C122048F1C4A74E865C99 /* gpsusbread.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsusbread.cc; path = jeeps/gpsusbread.cc; sourceTree = "<absolute>"; };
+		43ECA44980756B4FEB187402 /* gpssend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpssend.h; path = jeeps/gpssend.h; sourceTree = "<absolute>"; };
+		43F9BA4B59FD88E896CFBC2A /* adler32.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = adler32.c; path = zlib/adler32.c; sourceTree = "<absolute>"; };
+		454F130338242D872BC1968E /* garmin_gpi.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = garmin_gpi.cc; sourceTree = "<absolute>"; };
+		4799519A83D0DF63D127A8EF /* hp_roman8.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = hp_roman8.h; path = cet/hp_roman8.h; sourceTree = "<absolute>"; };
+		48A8657A4B19FD3DA27C219D /* ibm891.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm891.h; path = cet/ibm891.h; sourceTree = "<absolute>"; };
+		48B56BBB6719569A75C9FAE6 /* din_66003.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = din_66003.h; path = cet/din_66003.h; sourceTree = "<absolute>"; };
+		4915AB70071E05AABDD7F282 /* atarist.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = atarist.h; path = cet/atarist.h; sourceTree = "<absolute>"; };
+		493D53C40ACE7F39187281A2 /* qt_lib_concurrent_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_concurrent_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_concurrent_private.pri; sourceTree = "<absolute>"; };
+		4941BF82337C6C1E41AD7CFD /* html.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = html.cc; sourceTree = "<absolute>"; };
+		49A3B8289AD332E1E76D5DE4 /* koi8_u.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = koi8_u.h; path = cet/koi8_u.h; sourceTree = "<absolute>"; };
+		49DE1022729CC9A4977F1CBC /* qt_lib_xml.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_xml.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_xml.pri; sourceTree = "<absolute>"; };
+		4A4DAEA92FE953B483ECA69C /* qt_lib_qmltest.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_qmltest.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_qmltest.pri; sourceTree = "<absolute>"; };
+		4A66EC287D14F5B48B049158 /* arcdist.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = arcdist.cc; sourceTree = "<absolute>"; };
+		4B3784C03BC81E42514233C1 /* qt_lib_openglextensions.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_openglextensions.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_openglextensions.pri; sourceTree = "<absolute>"; };
+		4B69BED6F34FE2ED2A3E32D3 /* qt_lib_positioning_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_positioning_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_positioning_private.pri; sourceTree = "<absolute>"; };
+		4B7A73FDCED15E153AAE2BAA /* msz_7795_3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = msz_7795_3.h; path = cet/msz_7795_3.h; sourceTree = "<absolute>"; };
+		4BE20B4F7F54AD3D9C55AAB5 /* gpsfmt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsfmt.h; path = jeeps/gpsfmt.h; sourceTree = "<absolute>"; };
+		4C19A93AAE03C17F202873F3 /* koi8_r.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = koi8_r.h; path = cet/koi8_r.h; sourceTree = "<absolute>"; };
+		4C6B863D15102CC6E9E9A3C5 /* v900.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = v900.cc; sourceTree = "<absolute>"; };
+		4D466ABFF9BD45DFE6467402 /* vidaone.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vidaone.cc; sourceTree = "<absolute>"; };
+		4D765E1B1EA6C757220C63E7 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
+		4DB22869D110D98A0BFE91DE /* nukedata.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nukedata.cc; sourceTree = "<absolute>"; };
+		510340523EBDCC0350960526 /* validate.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = validate.cc; sourceTree = "<absolute>"; };
+		55DC83E717E680DA59C67388 /* qt_lib_widgets_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_widgets_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_widgets_private.pri; sourceTree = "<absolute>"; };
+		564003A8A736467A5571BD78 /* gpslibusb.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpslibusb.cc; path = jeeps/gpslibusb.cc; sourceTree = "<absolute>"; };
+		57ABC2AD51FA15597AD2654D /* xhtmlent.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = xhtmlent.cc; sourceTree = "<absolute>"; };
+		592CB5D15F31EEC8DA5B4B09 /* naviguide.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = naviguide.cc; sourceTree = "<absolute>"; };
+		593EEAFB42F5B53385521673 /* gpsusbcommon.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsusbcommon.cc; path = jeeps/gpsusbcommon.cc; sourceTree = "<absolute>"; };
+		59EF02706A6EA852D76C1B57 /* qt_lib_xmlpatterns.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_xmlpatterns.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_xmlpatterns.pri; sourceTree = "<absolute>"; };
+		59F0C1E637ECCEFB0C7C489A /* brauniger_iq.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = brauniger_iq.cc; sourceTree = "<absolute>"; };
+		5A2FD2EA92BB0EE51CE5ADEC /* position.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = position.cc; sourceTree = "<absolute>"; };
+		5AED85D2707E7F3F4B10E6D1 /* compegps.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = compegps.cc; sourceTree = "<absolute>"; };
+		5BDD1743508DDAC088E167F4 /* inflate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = inflate.h; path = zlib/inflate.h; sourceTree = "<absolute>"; };
+		5C0A08DF630840A6C5A9FE11 /* jis_x0201.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jis_x0201.h; path = cet/jis_x0201.h; sourceTree = "<absolute>"; };
+		5C50AC40F8B204C70EFE5939 /* google.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = google.cc; sourceTree = "<absolute>"; };
+		5C7B06C99E994A5FBBDD1AAD /* gpsread.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsread.cc; path = jeeps/gpsread.cc; sourceTree = "<absolute>"; };
+		5C87A85632844BE1F5ED62C9 /* itracku.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = itracku.cc; sourceTree = "<absolute>"; };
+		5CBA913F944D290A1078D5A4 /* trackfilter.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = trackfilter.cc; sourceTree = "<absolute>"; };
+		5D0DB4DECCFB88C7EE512041 /* ibm273.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm273.h; path = cet/ibm273.h; sourceTree = "<absolute>"; };
+		5D85253EC6F2FC8C967A55C0 /* koi_8_cs2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = koi_8_cs2.h; path = cet/koi_8_cs2.h; sourceTree = "<absolute>"; };
+		5DC9259204F291973B559A0E /* igc.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = igc.cc; sourceTree = "<absolute>"; };
+		5E03E64A25C98B9C0CE947C0 /* qt_lib_designercomponents_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_designercomponents_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_designercomponents_private.pri; sourceTree = "<absolute>"; };
+		5F1BE32D40757A67D1C6E3F5 /* stackfilter.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stackfilter.cc; sourceTree = "<absolute>"; };
+		5F898F472F7B475D7A44604D /* navitel.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = navitel.cc; sourceTree = "<absolute>"; };
+		60DF968BE7A03226C99DB336 /* qt_lib_opengl.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_opengl.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_opengl.pri; sourceTree = "<absolute>"; };
+		60ED8779C2E567CABD5772BE /* alan.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = alan.cc; sourceTree = "<absolute>"; };
+		61244F9891ECF1BB2EB1AFC1 /* qt_lib_designer.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_designer.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_designer.pri; sourceTree = "<absolute>"; };
+		61932C05D18DAA4F58B44A25 /* jis_c6220_1969_ro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jis_c6220_1969_ro.h; path = cet/jis_c6220_1969_ro.h; sourceTree = "<absolute>"; };
+		6396A832C50CAFBBBC8163E2 /* csa_z243_4_1985_gr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = csa_z243_4_1985_gr.h; path = cet/csa_z243_4_1985_gr.h; sourceTree = "<absolute>"; };
+		649BBB4D77CB714D3AD3DE68 /* jus_i_b1_003_serb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jus_i_b1_003_serb.h; path = cet/jus_i_b1_003_serb.h; sourceTree = "<absolute>"; };
+		674835B42DA54D5641B225DB /* qt_lib_qtmultimediaquicktools_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_qtmultimediaquicktools_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_qtmultimediaquicktools_private.pri; sourceTree = "<absolute>"; };
+		675A950399FF212BB12FD266 /* sbn.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sbn.cc; sourceTree = "<absolute>"; };
+		6879A28B3F5CF75047F0580B /* ds_2089.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ds_2089.h; path = cet/ds_2089.h; sourceTree = "<absolute>"; };
+		68C42ADF549314E71179DAED /* gpsmem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsmem.h; path = jeeps/gpsmem.h; sourceTree = "<absolute>"; };
+		69C4352A8B8C90F8ED0C1483 /* gost_19768_87.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gost_19768_87.h; path = cet/gost_19768_87.h; sourceTree = "<absolute>"; };
+		69D6F55E9A47DEB5568AD724 /* gbser_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gbser_private.h; sourceTree = "<absolute>"; };
+		69F027FA9DCC3B652AE17650 /* lowranceusr.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = lowranceusr.cc; sourceTree = "<absolute>"; };
+		6A67E0AF6E863B59F61CB8CF /* csn_369103.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = csn_369103.h; path = cet/csn_369103.h; sourceTree = "<absolute>"; };
+		6AD67164FE35998E071F02F7 /* dbfopen.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = dbfopen.c; path = shapelib/dbfopen.c; sourceTree = "<absolute>"; };
+		6BECA49142B4D160A830809B /* ibm850.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm850.h; path = cet/ibm850.h; sourceTree = "<absolute>"; };
+		6CB7C861BBBA3A049830939C /* kml.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = kml.cc; sourceTree = "<absolute>"; };
+		6CC1D6899F618A8BB3FC097C /* xmlgeneric.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = xmlgeneric.cc; sourceTree = "<absolute>"; };
+		6D3F8BAFC1E3359FB76C7C06 /* gpsusbint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsusbint.h; path = jeeps/gpsusbint.h; sourceTree = "<absolute>"; };
+		6E1BBC9393ACD0F8DB04365F /* garmin_xt.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = garmin_xt.cc; sourceTree = "<absolute>"; };
+		6E41063A82B6499582C268D8 /* explorist_ini.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = explorist_ini.h; sourceTree = "<absolute>"; };
+		6E761A97D842D70E6B05E6C7 /* es.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = es.h; path = cet/es.h; sourceTree = "<absolute>"; };
+		6FDD796981CFA4F253C28095 /* gpsmath.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsmath.cc; path = jeeps/gpsmath.cc; sourceTree = "<absolute>"; };
+		706E24A92EC3331FA9452B41 /* cet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cet.h; sourceTree = "<absolute>"; };
+		70DAA4A212B9051F8E5A13EC /* stmsdf.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stmsdf.cc; sourceTree = "<absolute>"; };
+		71899E60E3520A7655042F85 /* gpsusbsend.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsusbsend.cc; path = jeeps/gpsusbsend.cc; sourceTree = "<absolute>"; };
+		71DB454958580621AAE74D31 /* swapdata.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = swapdata.cc; sourceTree = "<absolute>"; };
+		725923DB8A8207C15723ED7C /* qt_lib_opengl_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_opengl_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_opengl_private.pri; sourceTree = "<absolute>"; };
+		72792BB16200EA6306F23DAD /* iso_8859_9.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_9.h; path = cet/iso_8859_9.h; sourceTree = "<absolute>"; };
+		728351C028CB866BF7E658C1 /* delgpl.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = delgpl.cc; sourceTree = "<absolute>"; };
+		72BFC3A9A53301F2CA8C28EA /* safileio.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = safileio.c; path = shapelib/safileio.c; sourceTree = "<absolute>"; };
+		72F1B3AA6E5C07DEA7CACC36 /* shape.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shape.cc; sourceTree = "<absolute>"; };
+		74EFBF92DD36BC738ED17284 /* qt_lib_multimediawidgets_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_multimediawidgets_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_multimediawidgets_private.pri; sourceTree = "<absolute>"; };
+		751F37CB9317891C64F038AC /* reverse_route.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = reverse_route.cc; sourceTree = "<absolute>"; };
+		75A324D42FA30489134EC210 /* qt_lib_multimedia.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_multimedia.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_multimedia.pri; sourceTree = "<absolute>"; };
+		760E43358C8C9445F9367320 /* shpopen.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = shpopen.c; path = shapelib/shpopen.c; sourceTree = "<absolute>"; };
+		772C154E2EE35E94F0BD1BB0 /* garmin_fs.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = garmin_fs.cc; sourceTree = "<absolute>"; };
+		7808F3799E8718C82395E8BA /* qt_lib_svg.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_svg.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_svg.pri; sourceTree = "<absolute>"; };
+		784E06A868414179607BE69E /* gdb.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gdb.cc; sourceTree = "<absolute>"; };
+		78633242EC81E52255C26B0B /* magproto.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = magproto.cc; sourceTree = "<absolute>"; };
+		789AE2BDC92C0271399A12B1 /* xmlgeneric.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xmlgeneric.h; sourceTree = "<absolute>"; };
+		78E06E9DA89E146CE1AF04D5 /* ibm256.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm256.h; path = cet/ibm256.h; sourceTree = "<absolute>"; };
+		7AA6E364AF1FB69E9FD0A7DB /* vpl.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vpl.cc; sourceTree = "<absolute>"; };
+		7AAB07C2D5C27FCF59E09428 /* gtm.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gtm.cc; sourceTree = "<absolute>"; };
+		7AEC5DDF49B79EFE7E4256E7 /* deflate.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = deflate.c; path = zlib/deflate.c; sourceTree = "<absolute>"; };
+		7AFA58D3B9EC7E3E5A606EAF /* qt_lib_sql.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_sql.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_sql.pri; sourceTree = "<absolute>"; };
+		7BADDA67E5296B5A4D8A422F /* pdbfile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pdbfile.h; sourceTree = "<absolute>"; };
+		7DAA8406B05B6249D0206A23 /* zlib.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = zlib.h; path = zlib/zlib.h; sourceTree = "<absolute>"; };
+		7DAC69FC48F1779106026008 /* iso_5427.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_5427.h; path = cet/iso_5427.h; sourceTree = "<absolute>"; };
+		7DC3A615E626A625F7A3C020 /* qt_lib_network.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_network.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_network.pri; sourceTree = "<absolute>"; };
+		7DD1338C6E4594FB354ECCF1 /* mkshort.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mkshort.cc; sourceTree = "<absolute>"; };
+		7E30D5E8267F02E22E2C7BE7 /* qt_lib_uitools_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_uitools_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_uitools_private.pri; sourceTree = "<absolute>"; };
+		7EE014B00379E9E5DE6B822F /* nmn4.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nmn4.cc; sourceTree = "<absolute>"; };
+		7F95B3DA0501344D1E0B0833 /* ibm297.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm297.h; path = cet/ibm297.h; sourceTree = "<absolute>"; };
+		8087C6D3AADECC4A9896B29F /* lowranceusr4.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = lowranceusr4.cc; sourceTree = "<absolute>"; };
+		809849C354B49C7EFE89A6C9 /* ibm277.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm277.h; path = cet/ibm277.h; sourceTree = "<absolute>"; };
+		80A6343853896B2415311DEE /* xmlstreamwriter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = xmlstreamwriter.h; path = src/core/xmlstreamwriter.h; sourceTree = "<absolute>"; };
+		80B7A8FC9BC9BF47EBDE5143 /* jtr.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = jtr.cc; sourceTree = "<absolute>"; };
+		8313EA26EDEA2105E99CA7B1 /* pocketfms_wp.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pocketfms_wp.cc; sourceTree = "<absolute>"; };
+		843A93802308B52AEEEE5D49 /* discard.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = discard.cc; sourceTree = "<absolute>"; };
+		84C1C5B18C02EABBC7029810 /* garmin_fit.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = garmin_fit.cc; sourceTree = "<absolute>"; };
+		84F86CB89775E98D6D0B99B2 /* descriptors.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = descriptors.c; path = mac/libusb/descriptors.c; sourceTree = "<absolute>"; };
+		868FD3726C0747D1B77062B1 /* inftrees.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = inftrees.h; path = zlib/inftrees.h; sourceTree = "<absolute>"; };
+		8751C3A1FC83E468C6FD940C /* nextstep.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nextstep.h; path = cet/nextstep.h; sourceTree = "<absolute>"; };
+		88CE708320D25CF3AC2794C0 /* shell-unix.conf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "shell-unix.conf"; path = "../../Qt5.2.1/5.2.1/clang_64/mkspecs/common/shell-unix.conf"; sourceTree = "<absolute>"; };
+		891D92EF8AA4A61B70C78B8F /* garmin_gpi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = garmin_gpi.h; sourceTree = "<absolute>"; };
+		899D1A64D731E2C3BE35CA87 /* qt_lib_clucene_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_clucene_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_clucene_private.pri; sourceTree = "<absolute>"; };
+		89A2982EE3162872BA1D1AB7 /* koi_8.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = koi_8.h; path = cet/koi_8.h; sourceTree = "<absolute>"; };
+		8A23BF8471BB3ABA33E9EFE9 /* gpsdevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsdevice.h; path = jeeps/gpsdevice.h; sourceTree = "<absolute>"; };
+		8BE0AE7DA447D49D386393B2 /* qt_lib_quickparticles_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_quickparticles_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_quickparticles_private.pri; sourceTree = "<absolute>"; };
+		8C2AAD179DE5E5A8DA0A02C9 /* qt_lib_webkit.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_webkit.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_webkit.pri; sourceTree = "<absolute>"; };
+		8C3616A0A684FFABEE369F42 /* qt_lib_multimedia_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_multimedia_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_multimedia_private.pri; sourceTree = "<absolute>"; };
+		8C36D51CB57E205197208F22 /* inftrees.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = inftrees.c; path = zlib/inftrees.c; sourceTree = "<absolute>"; };
+		8EB86755D7197AB1673D4B4D /* gbser_posix.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gbser_posix.cc; sourceTree = "<absolute>"; };
+		8EC57628919393F3F3E95A3C /* yahoo.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yahoo.cc; sourceTree = "<absolute>"; };
+		8FA8C6D6A3BDFA9B322E8751 /* qt_lib_core_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_core_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_core_private.pri; sourceTree = "<absolute>"; };
+		9004F08DBE85C786DE6D0548 /* gpsserial.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsserial.cc; path = jeeps/gpsserial.cc; sourceTree = "<absolute>"; };
+		90EF8487AE26796AD4BCFE49 /* inflate.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = inflate.c; path = zlib/inflate.c; sourceTree = "<absolute>"; };
+		90F6247FF53386FD063EBE4E /* ggv_ovl.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ggv_ovl.cc; sourceTree = "<absolute>"; };
+		92004F7FA29439F87F3B2696 /* cp1257.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cp1257.h; path = cet/cp1257.h; sourceTree = "<absolute>"; };
+		92245C57EA99CBE85FFD9759 /* transform.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = transform.cc; sourceTree = "<absolute>"; };
+		924087C652BA61E8DC23D6CC /* iso_10367_box.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_10367_box.h; path = cet/iso_10367_box.h; sourceTree = "<absolute>"; };
+		924BD64AA604957AD9306079 /* cet.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cet.cc; sourceTree = "<absolute>"; };
+		9299C3C2F2535AD8859747A6 /* iso_8859_5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_5.h; path = cet/iso_8859_5.h; sourceTree = "<absolute>"; };
+		931280D416620DD8CE863267 /* osm.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = osm.cc; sourceTree = "<absolute>"; };
+		956376E7DD771427B094240B /* ibm860.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm860.h; path = cet/ibm860.h; sourceTree = "<absolute>"; };
+		95C907C8F9FA5573D15E8157 /* csv_util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = csv_util.h; sourceTree = "<absolute>"; };
+		96E621B9E6D899BD85384D4C /* googledir.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = googledir.cc; sourceTree = "<absolute>"; };
+		981E831BB311581530D1FBC6 /* qmake.conf */ = {isa = PBXFileReference; lastKnownFileType = file; name = qmake.conf; path = "../../Qt5.2.1/5.2.1/clang_64/mkspecs/macx-clang/qmake.conf"; sourceTree = "<absolute>"; };
+		982BCA060C4984355C180A7E /* mapbar_track.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mapbar_track.cc; sourceTree = "<absolute>"; };
+		988A7109C0915DCB0322D87E /* an1sym.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = an1sym.h; sourceTree = "<absolute>"; };
+		989EF67AA2B11776C2FC129E /* gbser.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gbser.cc; sourceTree = "<absolute>"; };
+		99044A0CA465CE75C587AE21 /* qt_lib_widgets.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_widgets.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_widgets.pri; sourceTree = "<absolute>"; };
+		990FEF4030BE5A745F3D6B90 /* gpsinput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsinput.h; path = jeeps/gpsinput.h; sourceTree = "<absolute>"; };
+		991C0FC00CDC24A39BB0DFEC /* text.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = text.cc; sourceTree = "<absolute>"; };
+		99803DEF190E9A8F366613E1 /* csa_z243_4_1985_1.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = csa_z243_4_1985_1.h; path = cet/csa_z243_4_1985_1.h; sourceTree = "<absolute>"; };
+		99D9FEBE232EDD715CEF0B57 /* qt_lib_sensors.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_sensors.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_sensors.pri; sourceTree = "<absolute>"; };
+		9A2F026605AD0EFB4C7E78AF /* tpo.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tpo.cc; sourceTree = "<absolute>"; };
+		9A2FCA057E2668B214B122DD /* cp1256.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cp1256.h; path = cet/cp1256.h; sourceTree = "<absolute>"; };
+		9A938E1197C4C8CE62C0DA4A /* qt_lib_network_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_network_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_network_private.pri; sourceTree = "<absolute>"; };
+		9A9DA1A8E0CFBF13AA9D36C9 /* qt_lib_xmlpatterns_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_xmlpatterns_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_xmlpatterns_private.pri; sourceTree = "<absolute>"; };
+		9B29925EAA16498D41B6638D /* qt_lib_qml_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_qml_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_qml_private.pri; sourceTree = "<absolute>"; };
+		9B33FDAD91F903973E21AA09 /* error.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = error.c; path = mac/libusb/error.c; sourceTree = "<absolute>"; };
+		9C2D8B31D4FCB6A30AE5BE30 /* iso_8859_supp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_supp.h; path = cet/iso_8859_supp.h; sourceTree = "<absolute>"; };
+		9CA950E6D60830C27838A97E /* sen_850200_b.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sen_850200_b.h; path = cet/sen_850200_b.h; sourceTree = "<absolute>"; };
+		9D1598E3784872B3AB67A20B /* clang-mac.conf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "clang-mac.conf"; path = "../../Qt5.2.1/5.2.1/clang_64/mkspecs/common/clang-mac.conf"; sourceTree = "<absolute>"; };
+		9D3FDB58B56653F4548206CE /* vcf.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vcf.cc; sourceTree = "<absolute>"; };
+		9D98B68FAA75ED1EB4FF9FC0 /* qt_lib_svg_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_svg_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_svg_private.pri; sourceTree = "<absolute>"; };
+		9DD796BE10A702709DE6CF8B /* gzclose.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = gzclose.c; path = zlib/gzclose.c; sourceTree = "<absolute>"; };
+		9E3DAF9C09E840B084870D5E /* gbversion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gbversion.h; sourceTree = "<absolute>"; };
+		9E56800965DB564EDB415C47 /* infback.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = infback.c; path = zlib/infback.c; sourceTree = "<absolute>"; };
+		9EB1B0ADB698A66106A28954 /* qt_lib_quick_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_quick_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_quick_private.pri; sourceTree = "<absolute>"; };
+		9F18BBC44AA39D7C42B154E6 /* inffast.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = inffast.c; path = zlib/inffast.c; sourceTree = "<absolute>"; };
+		9F643FFCD4D394AE7CC243D6 /* mtk_logger.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mtk_logger.cc; sourceTree = "<absolute>"; };
+		9F84B356B9886A49ED6CE79F /* usb.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = usb.c; path = mac/libusb/usb.c; sourceTree = "<absolute>"; };
+		9F896A8E2BBAF423C2904218 /* macintosh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = macintosh.h; path = cet/macintosh.h; sourceTree = "<absolute>"; };
+		A05097B17C6A5F32616E28B9 /* qt_lib_qml.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_qml.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_qml.pri; sourceTree = "<absolute>"; };
+		A1530355AAD0BCC2C3ABFA8B /* ibm863.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm863.h; path = cet/ibm863.h; sourceTree = "<absolute>"; };
+		A1902EAA6C018BBB9C46D487 /* ibm037.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm037.h; path = cet/ibm037.h; sourceTree = "<absolute>"; };
+		A1A67BEAA744704B29168D39 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		A1B4AD222D24446693AFC9D7 /* humminbird.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = humminbird.cc; sourceTree = "<absolute>"; };
+		A1BC91E8BC35AF1211435BC7 /* ibm862.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm862.h; path = cet/ibm862.h; sourceTree = "<absolute>"; };
+		A2D67CE8AAF9F0091A1ABB8E /* wbt-200.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "wbt-200.cc"; sourceTree = "<absolute>"; };
+		A2EBA7FC67AFFD0911B220B6 /* main.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cc; sourceTree = "<absolute>"; };
+		A32D7B614D3368F64058B5D9 /* qconfig.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qconfig.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/qconfig.pri; sourceTree = "<absolute>"; };
+		A33EC6FA210D7F735635229A /* pt2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = pt2.h; path = cet/pt2.h; sourceTree = "<absolute>"; };
+		A4416DCF43A78619A31DAB67 /* grtcirc.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = grtcirc.cc; sourceTree = "<absolute>"; };
+		A48C2523D33629342449D72F /* dg-100.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "dg-100.cc"; sourceTree = "<absolute>"; };
+		A4B8ABEA943631F46F2FEC65 /* strptime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = strptime.h; sourceTree = "<absolute>"; };
+		A5B2C7C8F765BA778777636A /* mmo.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mmo.cc; sourceTree = "<absolute>"; };
+		A5E92A5F22E7C0D09CAE2741 /* qt_lib_help.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_help.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_help.pri; sourceTree = "<absolute>"; };
+		A6F587B6C00F60F1B9E38DC5 /* macx.conf */ = {isa = PBXFileReference; lastKnownFileType = file; name = macx.conf; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/common/macx.conf; sourceTree = "<absolute>"; };
+		A6FC7AB55367785D8EF4AF42 /* macintosh_ce.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = macintosh_ce.h; path = cet/macintosh_ce.h; sourceTree = "<absolute>"; };
+		A7790850E72548F840109C47 /* gcc-base.conf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "gcc-base.conf"; path = "../../Qt5.2.1/5.2.1/clang_64/mkspecs/common/gcc-base.conf"; sourceTree = "<absolute>"; };
+		A886D7F6A42C4BADC3857DBC /* jus_i_b1_002.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jus_i_b1_002.h; path = cet/jus_i_b1_002.h; sourceTree = "<absolute>"; };
+		A8C268AF24B9D57AD4DC8AC3 /* ggv_log.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ggv_log.cc; sourceTree = "<absolute>"; };
+		AA3A1EC1936FCB4ADF983558 /* ibm871.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm871.h; path = cet/ibm871.h; sourceTree = "<absolute>"; };
+		AB2E81EFB3A04845448D38EA /* navilink.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = navilink.cc; sourceTree = "<absolute>"; };
+		AB7332B53F1724B76A68E12F /* geo.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = geo.cc; sourceTree = "<absolute>"; };
+		AB745978DF0F41D1801ABDA6 /* .qmake.stash */ = {isa = PBXFileReference; lastKnownFileType = file; path = .qmake.stash; sourceTree = "<absolute>"; };
+		ABA14E230D8D6110CD6651E6 /* grtcirc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = grtcirc.h; sourceTree = "<absolute>"; };
+		AC298414F3EB5096EB52EAAD /* strptime.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = strptime.c; sourceTree = "<absolute>"; };
+		AD9B169743BA909DB5230F53 /* wintec_tes.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = wintec_tes.cc; sourceTree = "<absolute>"; };
+		AF484C190D559F744954C6A1 /* filterdefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = filterdefs.h; sourceTree = "<absolute>"; };
+		AF5C70F38FE37E25BA89BD2C /* navicache.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = navicache.cc; sourceTree = "<absolute>"; };
+		B0571E5C710AE9C3693493F1 /* zutil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = zutil.h; path = zlib/zutil.h; sourceTree = "<absolute>"; };
+		B24ED47E58C74BDF0B3FF3C9 /* navilink.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = navilink.h; sourceTree = "<absolute>"; };
+		B2E199C4D48EAE87E95C51B2 /* qt_lib_macextras_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_macextras_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_macextras_private.pri; sourceTree = "<absolute>"; };
+		B372FC9384853E078AE9269D /* parse.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = parse.cc; sourceTree = "<absolute>"; };
+		B3823843810289C97054F382 /* nats_sefi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nats_sefi.h; path = cet/nats_sefi.h; sourceTree = "<absolute>"; };
+		B3B290EDC4ECB05031652300 /* qt_lib_platformsupport_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_platformsupport_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_platformsupport_private.pri; sourceTree = "<absolute>"; };
+		B425771D8B397720D9E45771 /* qt_lib_qmltest_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_qmltest_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_qmltest_private.pri; sourceTree = "<absolute>"; };
+		B42DAE0443E40DDC88570D30 /* inifile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = inifile.h; sourceTree = "<absolute>"; };
+		B48FC017153AC795793F0699 /* zconf.in.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = zconf.in.h; path = zlib/zconf.in.h; sourceTree = "<absolute>"; };
+		B4C44D141A8288D0E2D90270 /* iso_8859_3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_3.h; path = cet/iso_8859_3.h; sourceTree = "<absolute>"; };
+		B5296C0F59AEDB4067243023 /* sami.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sami.h; path = cet/sami.h; sourceTree = "<absolute>"; };
+		B5B3A2F6B20DC4489E13AA8D /* inifile.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = inifile.cc; sourceTree = "<absolute>"; };
+		B7FB8C90E4170CCBB881C210 /* gpsmath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsmath.h; path = jeeps/gpsmath.h; sourceTree = "<absolute>"; };
+		B9BEC65DB9CBA1108C1CE3C2 /* ibm857.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm857.h; path = cet/ibm857.h; sourceTree = "<absolute>"; };
+		BA69268070A7275673A1D20B /* route.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = route.cc; sourceTree = "<absolute>"; };
+		BAA6D607BE289682C04C278B /* qt_lib_qmldevtools_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_qmldevtools_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_qmldevtools_private.pri; sourceTree = "<absolute>"; };
+		BB1B8262A13F905185B72E9C /* ibm852.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm852.h; path = cet/ibm852.h; sourceTree = "<absolute>"; };
+		BBBFAB349677BFF3DC73F633 /* trees.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = trees.c; path = zlib/trees.c; sourceTree = "<absolute>"; };
+		BBDDF98C0F1CC4B40AB5C77D /* duplicate.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = duplicate.cc; sourceTree = "<absolute>"; };
+		BCDDE3E8C682CAD8A9568697 /* qt_lib_uitools.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_uitools.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_uitools.pri; sourceTree = "<absolute>"; };
+		BCFBDD179AFFEAF3DCD950E8 /* nmea.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nmea.cc; sourceTree = "<absolute>"; };
+		BE35E2003F734C0AF7AF6749 /* tcvn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = tcvn.h; path = cet/tcvn.h; sourceTree = "<absolute>"; };
+		BE51BF0B439330F82B883512 /* lmx.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = lmx.cc; sourceTree = "<absolute>"; };
+		BE73B1CEF665A5E4DEBB0259 /* cp1251.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cp1251.h; path = cet/cp1251.h; sourceTree = "<absolute>"; };
+		BE94D1D2A69A2E091BBD18BB /* holux.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = holux.h; sourceTree = "<absolute>"; };
+		BF29268AF36956A1432E7D08 /* ik3d.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ik3d.cc; sourceTree = "<absolute>"; };
+		BF56EFC67E0AF04799C7F6CA /* height.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = height.h; sourceTree = "<absolute>"; };
+		C041F84866DE3A5F46E48BF8 /* garmin_txt.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = garmin_txt.cc; sourceTree = "<absolute>"; };
+		C0A0B8D35F5B16FC8227BB4A /* gpsdevice_ser.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsdevice_ser.cc; path = jeeps/gpsdevice_ser.cc; sourceTree = "<absolute>"; };
+		C0B33A6E41DA75B49D768CDC /* trees.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = trees.h; path = zlib/trees.h; sourceTree = "<absolute>"; };
+		C0C164264A6F28BCE30C7AA1 /* baltic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = baltic.h; path = cet/baltic.h; sourceTree = "<absolute>"; };
+		C10899F72F362DDCEBC6ABA1 /* ibm1047.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm1047.h; path = cet/ibm1047.h; sourceTree = "<absolute>"; };
+		C126E1940EADD0511368BD15 /* zconf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = zconf.h; path = zlib/zconf.h; sourceTree = "<absolute>"; };
+		C1BDF66547C1455890DCF390 /* gpsrqst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsrqst.h; path = jeeps/gpsrqst.h; sourceTree = "<absolute>"; };
+		C2192DC0306296DF2CA30BC2 /* sen_850200_c.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sen_850200_c.h; path = cet/sen_850200_c.h; sourceTree = "<absolute>"; };
+		C239D528C296422BB0492A11 /* ibm500.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm500.h; path = cet/ibm500.h; sourceTree = "<absolute>"; };
+		C24721A845C60E14D4E5EAE6 /* iso_8859_7.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_7.h; path = cet/iso_8859_7.h; sourceTree = "<absolute>"; };
+		C29830B2BF06A5EF5700A915 /* gbsleep.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gbsleep.cc; sourceTree = "<absolute>"; };
+		C2F51A446D3F1E1826ADD54F /* iso_6937_2_25.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_6937_2_25.h; path = cet/iso_6937_2_25.h; sourceTree = "<absolute>"; };
+		C329A549E09B278A70BD4CE9 /* ibm864.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm864.h; path = cet/ibm864.h; sourceTree = "<absolute>"; };
+		C35E76061956DD8CED6B46BC /* internal_styles.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = internal_styles.cc; sourceTree = "<absolute>"; };
+		C362A7C807B7D93E17EB06B2 /* ibm280.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm280.h; path = cet/ibm280.h; sourceTree = "<absolute>"; };
+		C3B6BBE8BAF262C4B9ADF471 /* globals.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = globals.cc; sourceTree = "<absolute>"; };
+		C550F920140A4C3D5D846788 /* qt_lib_quick.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_quick.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_quick.pri; sourceTree = "<absolute>"; };
+		C597D8F76B8F191C12B4AD98 /* easygps.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = easygps.cc; sourceTree = "<absolute>"; };
+		C8C333EB52EE6137F7F29524 /* cp1250.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cp1250.h; path = cet/cp1250.h; sourceTree = "<absolute>"; };
+		C8D80DFB5E91523BD432FB0D /* csa_z243_4_1985_2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = csa_z243_4_1985_2.h; path = cet/csa_z243_4_1985_2.h; sourceTree = "<absolute>"; };
+		C8EF3D1B7FBC889C239DF2EF /* iso_8859_13.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_13.h; path = cet/iso_8859_13.h; sourceTree = "<absolute>"; };
+		C90F1F0BE8998942C7BA8CC4 /* es2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = es2.h; path = cet/es2.h; sourceTree = "<absolute>"; };
+		C99E7C8612913B8859C5274A /* bcr.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bcr.cc; sourceTree = "<absolute>"; };
+		CA432F3B261F1DB8F5AA4B08 /* iso_8859_6.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_6.h; path = cet/iso_8859_6.h; sourceTree = "<absolute>"; };
+		CA6A08EDD24CE32AB6273838 /* garmin_device_xml.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = garmin_device_xml.cc; sourceTree = "<absolute>"; };
+		CB768F346168A91E5EAD7E6A /* it.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = it.h; path = cet/it.h; sourceTree = "<absolute>"; };
+		CCA304D91898E797D1660641 /* mac.conf */ = {isa = PBXFileReference; lastKnownFileType = file; name = mac.conf; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/common/mac.conf; sourceTree = "<absolute>"; };
+		CD27560E4ACADA19F0ADB856 /* subrip.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = subrip.cc; sourceTree = "<absolute>"; };
+		CD72E1DD69CC44668F6A6756 /* qt_lib_openglextensions_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_openglextensions_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_openglextensions_private.pri; sourceTree = "<absolute>"; };
+		CDF5521B019C332DD7D9E79B /* random.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = random.cc; sourceTree = "<absolute>"; };
+		CE1DA24C52606089E3CA7347 /* pcx.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pcx.cc; sourceTree = "<absolute>"; };
+		CE3496047167CAE45DCBA0D7 /* qt_lib_bluetooth.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_bluetooth.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_bluetooth.pri; sourceTree = "<absolute>"; };
+		CE4BFF521716F57F85685B83 /* garmin_tables.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = garmin_tables.h; sourceTree = "<absolute>"; };
+		CF9C0E44DC6C833433DCDBFC /* jus_i_b1_003_mac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = jus_i_b1_003_mac.h; path = cet/jus_i_b1_003_mac.h; sourceTree = "<absolute>"; };
+		CFB181CC540DA086DE94BF77 /* session.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = session.h; sourceTree = "<absolute>"; };
+		D0407CC01B79C6CE1D372CF9 /* bend.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bend.cc; sourceTree = "<absolute>"; };
+		D07193CA94ADEB1307B0E6C6 /* gpsutil.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gpsutil.cc; sourceTree = "<absolute>"; };
+		D08CD082F95B61D506A2F829 /* tiger.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tiger.cc; sourceTree = "<absolute>"; };
+		D1554DD77B6C46AECFF6982A /* gpsmem.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsmem.cc; path = jeeps/gpsmem.cc; sourceTree = "<absolute>"; };
+		D1A218B305E86A0C618B6B74 /* formspec.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = formspec.cc; sourceTree = "<absolute>"; };
+		D23F97BC9EA63BC27AE2B0D2 /* bushnell.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bushnell.cc; sourceTree = "<absolute>"; };
+		D27765E1061D8963E90DED9E /* vitovtt.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = vitovtt.cc; sourceTree = "<absolute>"; };
+		D2A6110DB5D503BF265B4407 /* qt_lib_designer_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_designer_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_designer_private.pri; sourceTree = "<absolute>"; };
+		D2B32BB71D325BCE4FEFB82D /* filter_vecs.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = filter_vecs.cc; sourceTree = "<absolute>"; };
+		D2C9FE8E5F27D89B13D158C4 /* gpsdevice_usb.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = gpsdevice_usb.cc; path = jeeps/gpsdevice_usb.cc; sourceTree = "<absolute>"; };
+		D393478D329A72480CF519EA /* rgbcolors.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rgbcolors.cc; sourceTree = "<absolute>"; };
+		D39A2D56D3030F0F1137EE34 /* height.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = height.cc; sourceTree = "<absolute>"; };
+		D4048AA71829E789DE7FFC9B /* qt_lib_script.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_script.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_script.pri; sourceTree = "<absolute>"; };
+		D404F7E121C59FF373986E4C /* units.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = units.cc; sourceTree = "<absolute>"; };
+		D74AEA32FCBE26C2BB0BBA03 /* crc32.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = crc32.h; path = zlib/crc32.h; sourceTree = "<absolute>"; };
+		D76E2D87C0D0ECEB046141EE /* GPSBabel.pro */ = {isa = PBXFileReference; lastKnownFileType = text; path = GPSBabel.pro; sourceTree = "<absolute>"; };
+		D7D1038F7A971A294D4964AB /* defs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = defs.h; sourceTree = "<absolute>"; };
+		D7D8FB5B8D7FFC6C57169288 /* uncompr.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = uncompr.c; path = zlib/uncompr.c; sourceTree = "<absolute>"; };
+		D7DEFE3BFAE203BB76846079 /* tef_xml.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tef_xml.cc; sourceTree = "<absolute>"; };
+		D80756093E494CDEACF8061D /* mapsend.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mapsend.h; sourceTree = "<absolute>"; };
+		D842F9622F47F76F214CF391 /* gpsread.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsread.h; path = jeeps/gpsread.h; sourceTree = "<absolute>"; };
+		D8E166A06F5982DDA9C9EE66 /* ibm1004.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm1004.h; path = cet/ibm1004.h; sourceTree = "<absolute>"; };
+		D914C5B5D9C829B90E9E5F42 /* koi8_ru.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = koi8_ru.h; path = cet/koi8_ru.h; sourceTree = "<absolute>"; };
+		D965EB38410CF3E7A3ED90C7 /* qt_lib_nfc_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_nfc_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_nfc_private.pri; sourceTree = "<absolute>"; };
+		DA8458CEA37C8E1FA2B352B7 /* jogmap.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = jogmap.cc; sourceTree = "<absolute>"; };
+		DAC95149EF63406BAF8AC514 /* gpscom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpscom.h; path = jeeps/gpscom.h; sourceTree = "<absolute>"; };
+		DB51AD164EEC19F2CFE7B213 /* QtCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QtCore.framework; path = ../../Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework; sourceTree = "<absolute>"; };
+		DB6A0A5DC8AF09CF2DD7897C /* ibm869.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm869.h; path = cet/ibm869.h; sourceTree = "<absolute>"; };
+		DB8CCE39C41E81028BBEAD9E /* unicsv.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = unicsv.cc; sourceTree = "<absolute>"; };
+		DBD49DB4168E8DC09EA636E2 /* cp1254.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cp1254.h; path = cet/cp1254.h; sourceTree = "<absolute>"; };
+		DC734378B4D566EF6DB5207A /* gnav_trl.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gnav_trl.cc; sourceTree = "<absolute>"; };
+		DC884C2984AA266722F0FBAD /* qt_lib_testlib_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_testlib_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_testlib_private.pri; sourceTree = "<absolute>"; };
+		DEA773784595637F6E684C8D /* nats_dano.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nats_dano.h; path = cet/nats_dano.h; sourceTree = "<absolute>"; };
+		DEC185992FC9A8689F19957F /* pt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = pt.h; path = cet/pt.h; sourceTree = "<absolute>"; };
+		DF00E7C1B02C92929EF05510 /* ibm855.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm855.h; path = cet/ibm855.h; sourceTree = "<absolute>"; };
+		DF7B174E834FE06F73015778 /* csv_util.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = csv_util.cc; sourceTree = "<absolute>"; };
+		DFDA6BD62752F70AB6E8B9CC /* gopal.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gopal.cc; sourceTree = "<absolute>"; };
+		E060321D4F85BBF83C8BC9E7 /* queue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = queue.h; sourceTree = "<absolute>"; };
+		E114E332F2E0A92567F99EB6 /* qt_lib_declarative.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_declarative.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_declarative.pri; sourceTree = "<absolute>"; };
+		E1271157867BA56140AF7F7E /* polygon.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = polygon.cc; sourceTree = "<absolute>"; };
+		E15D408F7FF293E4EED8F4A9 /* qt_lib_sensors_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_sensors_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_sensors_private.pri; sourceTree = "<absolute>"; };
+		E19956391AE9EFCC0822F2E0 /* ns_4551_2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ns_4551_2.h; path = cet/ns_4551_2.h; sourceTree = "<absolute>"; };
+		E19F15F07E839FA18ADA9C49 /* xol.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = xol.cc; sourceTree = "<absolute>"; };
+		E249112E4EFEE303A48372F0 /* nc_nc00_10.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nc_nc00_10.h; path = cet/nc_nc00_10.h; sourceTree = "<absolute>"; };
+		E2DB7324703280E55123E43F /* teletype.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = teletype.cc; sourceTree = "<absolute>"; };
+		E3CCD6986A3A990071A329D9 /* gpsserial.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsserial.h; path = jeeps/gpsserial.h; sourceTree = "<absolute>"; };
+		E46FA41F5FC3DD6EFA2EE38A /* util.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = util.cc; sourceTree = "<absolute>"; };
+		E4F26604EFD6F22EAFA161FD /* mtk_locus.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mtk_locus.cc; sourceTree = "<absolute>"; };
+		E53F6A403AD976483A55793B /* gpsapp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsapp.h; path = jeeps/gpsapp.h; sourceTree = "<absolute>"; };
+		E54A6E7F28222567C7742B38 /* gpsutil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gpsutil.h; path = jeeps/gpsutil.h; sourceTree = "<absolute>"; };
+		E68807A03E056AC8D78503D1 /* unix.conf */ = {isa = PBXFileReference; lastKnownFileType = file; name = unix.conf; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/common/unix.conf; sourceTree = "<absolute>"; };
+		E7FBACCA97CAB532131E7EC7 /* xmlstreamwriter.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xmlstreamwriter.cc; path = src/core/xmlstreamwriter.cc; sourceTree = "<absolute>"; };
+		E8E2435ED88B051AE6C8B166 /* tomtom.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tomtom.cc; sourceTree = "<absolute>"; };
+		EA9762DFBC96E4F5111131EC /* smplrout.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = smplrout.cc; sourceTree = "<absolute>"; };
+		EAA03D6B7249FD426CB69DFC /* cp1255.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cp1255.h; path = cet/cp1255.h; sourceTree = "<absolute>"; };
+		EBA833A7FA20DA8E3CD6DD28 /* gtrnctr.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gtrnctr.cc; sourceTree = "<absolute>"; };
+		ECD1D489A43E38428C92A80C /* qt_lib_multimediawidgets.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_multimediawidgets.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_multimediawidgets.pri; sourceTree = "<absolute>"; };
+		ECD79F4CA3D370760BE09EA5 /* ibm904.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm904.h; path = cet/ibm904.h; sourceTree = "<absolute>"; };
+		ED0F01C3D8AEA4274A3ACE25 /* saroute.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = saroute.cc; sourceTree = "<absolute>"; };
+		ED7819A31AF39A58246FCB5A /* viscii.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = viscii.h; path = cet/viscii.h; sourceTree = "<absolute>"; };
+		EF2C6AC4EF226A91521A8FA2 /* interpolate.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interpolate.cc; sourceTree = "<absolute>"; };
+		EF2CC9D7A9639B1ED2FF032D /* darwin.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = darwin.c; path = mac/libusb/darwin.c; sourceTree = "<absolute>"; };
+		EF695F463503793B92425D0B /* gzread.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = gzread.c; path = zlib/gzread.c; sourceTree = "<absolute>"; };
+		EF7887AAC775E044230F38A2 /* igo8.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = igo8.cc; sourceTree = "<absolute>"; };
+		EF7912420E29D775A0FEA4F8 /* an1.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = an1.cc; sourceTree = "<absolute>"; };
+		EF8B2AF9975C91AEDFF408F1 /* cp1252.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = cp1252.h; path = cet/cp1252.h; sourceTree = "<absolute>"; };
+		EFA7A5960FF1872B38F546F7 /* ecma_cyrillic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ecma_cyrillic.h; path = cet/ecma_cyrillic.h; sourceTree = "<absolute>"; };
+		EFD435D35DCB32917731FBE6 /* garmin.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = garmin.cc; sourceTree = "<absolute>"; };
+		F0D21CCB23229E91D341C05C /* glogbook.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = glogbook.cc; sourceTree = "<absolute>"; };
+		F21BB8019963E9C78491FEF6 /* mapsource.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mapsource.cc; sourceTree = "<absolute>"; };
+		F2619446CF90523DCEA186C4 /* hiketech.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = hiketech.cc; sourceTree = "<absolute>"; };
+		F390C9B4FEBD36374268E49A /* vps.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = vps.h; path = cet/vps.h; sourceTree = "<absolute>"; };
+		F4AC992D97B2A10B80C0648F /* gcc-base-mac.conf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "gcc-base-mac.conf"; path = "../../Qt5.2.1/5.2.1/clang_64/mkspecs/common/gcc-base-mac.conf"; sourceTree = "<absolute>"; };
+		F5C6D36FB2455CF9096B0F86 /* qmake.conf */ = {isa = PBXFileReference; lastKnownFileType = file; name = qmake.conf; path = "../../Qt5.2.1/5.2.1/clang_64/mkspecs/macx-xcode/qmake.conf"; sourceTree = "<absolute>"; };
+		F632459B174DF47FE33A3B31 /* iso_8859_4.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_4.h; path = cet/iso_8859_4.h; sourceTree = "<absolute>"; };
+		F6ACF563DB14472C091A4199 /* iso_8859_14.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_14.h; path = cet/iso_8859_14.h; sourceTree = "<absolute>"; };
+		F6DA2C9A1708C286D18105B4 /* g7towin.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = g7towin.cc; sourceTree = "<absolute>"; };
+		F747F9C16DC860D3A9B5C99B /* skyforce.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = skyforce.cc; sourceTree = "<absolute>"; };
+		F83A268020FF401070B931D4 /* ozi.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ozi.cc; sourceTree = "<absolute>"; };
+		F87177B44D8DE390784A8B04 /* sbp.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sbp.cc; sourceTree = "<absolute>"; };
+		F8909523EC24B6F09CD4B724 /* qt_lib_serialport_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_serialport_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_serialport_private.pri; sourceTree = "<absolute>"; };
+		F8B487ABE5B956C880343EC5 /* gb_1988_80.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = gb_1988_80.h; path = cet/gb_1988_80.h; sourceTree = "<absolute>"; };
+		F96FC2683C81903B6DCB72C9 /* gpx.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gpx.cc; sourceTree = "<absolute>"; };
+		F97A93232DDA31259B79C826 /* qt_lib_scripttools_private.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_scripttools_private.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_scripttools_private.pri; sourceTree = "<absolute>"; };
+		F99350ADD20271C765358FF2 /* gbser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gbser.h; sourceTree = "<absolute>"; };
+		FB72B6E942AC72C65C465D2E /* nf_z_62_010.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = nf_z_62_010.h; path = cet/nf_z_62_010.h; sourceTree = "<absolute>"; };
+		FBB07B7CE735DD87E353AA58 /* qt_lib_gui.pri */ = {isa = PBXFileReference; lastKnownFileType = file; name = qt_lib_gui.pri; path = ../../Qt5.2.1/5.2.1/clang_64/mkspecs/modules/qt_lib_gui.pri; sourceTree = "<absolute>"; };
+		FC8B62ABB6F19BF07A0E91F0 /* ibm1026.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ibm1026.h; path = cet/ibm1026.h; sourceTree = "<absolute>"; };
+		FCED3C24C02785ECB2EEA075 /* pocketfms_fp.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pocketfms_fp.cc; sourceTree = "<absolute>"; };
+		FD7A72D7031AD16239692EE2 /* iso_8859_10.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = iso_8859_10.h; path = cet/iso_8859_10.h; sourceTree = "<absolute>"; };
+		FF2C35C1B7BD3C59EB7461C1 /* radius.cc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = radius.cc; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D1C883685E82D5676953459A /* Link Binary With Libraries */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D267F2E4776F0ECA2F49DC8 /* IOKit.framework in Link Binary With Libraries */,
+				F8B465CE34D8DF87AAE95913 /* CoreFoundation.framework in Link Binary With Libraries */,
+				AD95FF465EB53E6F7D499108 /* QtCore.framework in Link Binary With Libraries */,
+			);
+			name = "Link Binary With Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0299D51769DB4B45D0DCEAFA /* macx-clang */ = {
+			isa = PBXGroup;
+			children = (
+				981E831BB311581530D1FBC6 /* qmake.conf */,
+			);
+			name = "macx-clang";
+			sourceTree = "<Group>";
+		};
+		06EB17EFDE52209171D8DB3D /* libusb */ = {
+			isa = PBXGroup;
+			children = (
+				EF2CC9D7A9639B1ED2FF032D /* darwin.c */,
+				84F86CB89775E98D6D0B99B2 /* descriptors.c */,
+				9B33FDAD91F903973E21AA09 /* error.c */,
+				9F84B356B9886A49ED6CE79F /* usb.c */,
+			);
+			name = libusb;
+			sourceTree = "<Group>";
+		};
+		0F31A571D7ED8C2CACD41364 /* shapelib */ = {
+			isa = PBXGroup;
+			children = (
+				760E43358C8C9445F9367320 /* shpopen.c */,
+				6AD67164FE35998E071F02F7 /* dbfopen.c */,
+				72BFC3A9A53301F2CA8C28EA /* safileio.c */,
+				2EFFD59380BDC687C9FE0E2E /* shapefil.h */,
+			);
+			name = shapelib;
+			sourceTree = "<Group>";
+		};
+		2932C3CEBE15315DACC8D87E /* modules */ = {
+			isa = PBXGroup;
+			children = (
+				CE3496047167CAE45DCBA0D7 /* qt_lib_bluetooth.pri */,
+				3E499673895DE7E457F830A9 /* qt_lib_bluetooth_private.pri */,
+				30F63E9AB1442541CF7261D3 /* qt_lib_bootstrap_private.pri */,
+				899D1A64D731E2C3BE35CA87 /* qt_lib_clucene_private.pri */,
+				10C6CF1F7F277792B6349BB1 /* qt_lib_concurrent.pri */,
+				493D53C40ACE7F39187281A2 /* qt_lib_concurrent_private.pri */,
+				424C0054FA808AC84FAF64EB /* qt_lib_core.pri */,
+				8FA8C6D6A3BDFA9B322E8751 /* qt_lib_core_private.pri */,
+				E114E332F2E0A92567F99EB6 /* qt_lib_declarative.pri */,
+				17B061465F496BFFDB7166E3 /* qt_lib_declarative_private.pri */,
+				61244F9891ECF1BB2EB1AFC1 /* qt_lib_designer.pri */,
+				D2A6110DB5D503BF265B4407 /* qt_lib_designer_private.pri */,
+				5E03E64A25C98B9C0CE947C0 /* qt_lib_designercomponents_private.pri */,
+				FBB07B7CE735DD87E353AA58 /* qt_lib_gui.pri */,
+				2A74E3FC85EF6E7AA721D611 /* qt_lib_gui_private.pri */,
+				A5E92A5F22E7C0D09CAE2741 /* qt_lib_help.pri */,
+				0DAA23F8F3573511ED4C7878 /* qt_lib_help_private.pri */,
+				0624A5CCA9623C3079C36EAC /* qt_lib_macextras.pri */,
+				B2E199C4D48EAE87E95C51B2 /* qt_lib_macextras_private.pri */,
+				75A324D42FA30489134EC210 /* qt_lib_multimedia.pri */,
+				8C3616A0A684FFABEE369F42 /* qt_lib_multimedia_private.pri */,
+				ECD1D489A43E38428C92A80C /* qt_lib_multimediawidgets.pri */,
+				74EFBF92DD36BC738ED17284 /* qt_lib_multimediawidgets_private.pri */,
+				7DC3A615E626A625F7A3C020 /* qt_lib_network.pri */,
+				9A938E1197C4C8CE62C0DA4A /* qt_lib_network_private.pri */,
+				3ABF1363C047A8BA17FB96A6 /* qt_lib_nfc.pri */,
+				D965EB38410CF3E7A3ED90C7 /* qt_lib_nfc_private.pri */,
+				60DF968BE7A03226C99DB336 /* qt_lib_opengl.pri */,
+				725923DB8A8207C15723ED7C /* qt_lib_opengl_private.pri */,
+				4B3784C03BC81E42514233C1 /* qt_lib_openglextensions.pri */,
+				CD72E1DD69CC44668F6A6756 /* qt_lib_openglextensions_private.pri */,
+				B3B290EDC4ECB05031652300 /* qt_lib_platformsupport_private.pri */,
+				22F4898815CA6B206DF0E4B5 /* qt_lib_positioning.pri */,
+				4B69BED6F34FE2ED2A3E32D3 /* qt_lib_positioning_private.pri */,
+				3D9262AAFCC81B7E9BE813F2 /* qt_lib_printsupport.pri */,
+				03AF0F13740167F5105F8356 /* qt_lib_printsupport_private.pri */,
+				A05097B17C6A5F32616E28B9 /* qt_lib_qml.pri */,
+				9B29925EAA16498D41B6638D /* qt_lib_qml_private.pri */,
+				BAA6D607BE289682C04C278B /* qt_lib_qmldevtools_private.pri */,
+				4A4DAEA92FE953B483ECA69C /* qt_lib_qmltest.pri */,
+				B425771D8B397720D9E45771 /* qt_lib_qmltest_private.pri */,
+				674835B42DA54D5641B225DB /* qt_lib_qtmultimediaquicktools_private.pri */,
+				C550F920140A4C3D5D846788 /* qt_lib_quick.pri */,
+				9EB1B0ADB698A66106A28954 /* qt_lib_quick_private.pri */,
+				8BE0AE7DA447D49D386393B2 /* qt_lib_quickparticles_private.pri */,
+				D4048AA71829E789DE7FFC9B /* qt_lib_script.pri */,
+				04880B9DC563853A9F944A88 /* qt_lib_script_private.pri */,
+				1F9B01E0FCC51E7AE991885F /* qt_lib_scripttools.pri */,
+				F97A93232DDA31259B79C826 /* qt_lib_scripttools_private.pri */,
+				99D9FEBE232EDD715CEF0B57 /* qt_lib_sensors.pri */,
+				E15D408F7FF293E4EED8F4A9 /* qt_lib_sensors_private.pri */,
+				13B305DD22DDE9AA0C3BA319 /* qt_lib_serialport.pri */,
+				F8909523EC24B6F09CD4B724 /* qt_lib_serialport_private.pri */,
+				7AFA58D3B9EC7E3E5A606EAF /* qt_lib_sql.pri */,
+				1FC8F20F59CFB996D8AC1BB5 /* qt_lib_sql_private.pri */,
+				7808F3799E8718C82395E8BA /* qt_lib_svg.pri */,
+				9D98B68FAA75ED1EB4FF9FC0 /* qt_lib_svg_private.pri */,
+				06F5C78CAFA396D310A9E7A2 /* qt_lib_testlib.pri */,
+				DC884C2984AA266722F0FBAD /* qt_lib_testlib_private.pri */,
+				BCDDE3E8C682CAD8A9568697 /* qt_lib_uitools.pri */,
+				7E30D5E8267F02E22E2C7BE7 /* qt_lib_uitools_private.pri */,
+				8C2AAD179DE5E5A8DA0A02C9 /* qt_lib_webkit.pri */,
+				2F48A3A98BA6A8B7E277DF63 /* qt_lib_webkit_private.pri */,
+				3A3A363223F6DDF4E6286558 /* qt_lib_webkitwidgets.pri */,
+				1383AEEC11B8AB4513A3F9AC /* qt_lib_webkitwidgets_private.pri */,
+				99044A0CA465CE75C587AE21 /* qt_lib_widgets.pri */,
+				55DC83E717E680DA59C67388 /* qt_lib_widgets_private.pri */,
+				49DE1022729CC9A4977F1CBC /* qt_lib_xml.pri */,
+				3D5BECB5E52C7FD792B06508 /* qt_lib_xml_private.pri */,
+				59EF02706A6EA852D76C1B57 /* qt_lib_xmlpatterns.pri */,
+				9A9DA1A8E0CFBF13AA9D36C9 /* qt_lib_xmlpatterns_private.pri */,
+			);
+			name = modules;
+			sourceTree = "<Group>";
+		};
+		2EB56BE3C2D93CDAB0C52E67 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				8EB86755D7197AB1673D4B4D /* gbser_posix.cc */,
+				5AF61CE04FC3E5728FB4CE68 /* mac */,
+				78633242EC81E52255C26B0B /* magproto.cc */,
+				0087A696E951709AE03C162A /* explorist_ini.cc */,
+				F96FC2683C81903B6DCB72C9 /* gpx.cc */,
+				AB7332B53F1724B76A68E12F /* geo.cc */,
+				1D9E1FD131EDCA4FA13EF768 /* mapsend.cc */,
+				F21BB8019963E9C78491FEF6 /* mapsource.cc */,
+				EFD435D35DCB32917731FBE6 /* garmin.cc */,
+				CA6A08EDD24CE32AB6273838 /* garmin_device_xml.cc */,
+				076D201BDFF08831F6121621 /* garmin_tables.cc */,
+				C35E76061956DD8CED6B46BC /* internal_styles.cc */,
+				BCFBDD179AFFEAF3DCD950E8 /* nmea.cc */,
+				6CB7C861BBBA3A049830939C /* kml.cc */,
+				A2D67CE8AAF9F0091A1ABB8E /* wbt-200.cc */,
+				7AAB07C2D5C27FCF59E09428 /* gtm.cc */,
+				D07193CA94ADEB1307B0E6C6 /* gpsutil.cc */,
+				CE1DA24C52606089E3CA7347 /* pcx.cc */,
+				1AB5E4A4386953AE85A70957 /* skytraq.cc */,
+				1DB3DA0C8C5D30E820AEA519 /* holux.cc */,
+				3ABCB24FF1506AD8119BB42A /* tmpro.cc */,
+				010F98573A7BB5CE1F39D041 /* tpg.cc */,
+				9A2F026605AD0EFB4C7E78AF /* tpo.cc */,
+				27F98C7BFB62A11A517E8A0D /* xcsv.cc */,
+				D08CD082F95B61D506A2F829 /* tiger.cc */,
+				C597D8F76B8F191C12B4AD98 /* easygps.cc */,
+				ED0F01C3D8AEA4274A3ACE25 /* saroute.cc */,
+				AF5C70F38FE37E25BA89BD2C /* navicache.cc */,
+				173E6C061A62B7A81A52F77C /* psitrex.cc */,
+				728351C028CB866BF7E658C1 /* delgpl.cc */,
+				F83A268020FF401070B931D4 /* ozi.cc */,
+				991C0FC00CDC24A39BB0DFEC /* text.cc */,
+				4941BF82337C6C1E41AD7CFD /* html.cc */,
+				253CD778C6ADDA02C8568BE9 /* netstumbler.cc */,
+				5DC9259204F291973B559A0E /* igc.cc */,
+				59F0C1E637ECCEFB0C7C489A /* brauniger_iq.cc */,
+				72F1B3AA6E5C07DEA7CACC36 /* shape.cc */,
+				F2619446CF90523DCEA186C4 /* hiketech.cc */,
+				F0D21CCB23229E91D341C05C /* glogbook.cc */,
+				9D3FDB58B56653F4548206CE /* vcf.cc */,
+				5C50AC40F8B204C70EFE5939 /* google.cc */,
+				57ABC2AD51FA15597AD2654D /* xhtmlent.cc */,
+				69F027FA9DCC3B652AE17650 /* lowranceusr.cc */,
+				EF7912420E29D775A0FEA4F8 /* an1.cc */,
+				E8E2435ED88B051AE6C8B166 /* tomtom.cc */,
+				D7DEFE3BFAE203BB76846079 /* tef_xml.cc */,
+				288FA831E0AF8447799FC537 /* maggeo.cc */,
+				0AA7F58D6F18AB233162FE65 /* vitosmt.cc */,
+				784E06A868414179607BE69E /* gdb.cc */,
+				C99E7C8612913B8859C5274A /* bcr.cc */,
+				124810C4E8297C1D83590EDC /* ignrando.cc */,
+				36B03533DB535E0F1C984CBE /* stmwpp.cc */,
+				2E6CB899ABC641131765B713 /* cst.cc */,
+				7EE014B00379E9E5DE6B822F /* nmn4.cc */,
+				5AED85D2707E7F3F4B10E6D1 /* compegps.cc */,
+				8EC57628919393F3F3E95A3C /* yahoo.cc */,
+				DB8CCE39C41E81028BBEAD9E /* unicsv.cc */,
+				3719193D1185FD89B5D319A6 /* wfff_xml.cc */,
+				C041F84866DE3A5F46E48BF8 /* garmin_txt.cc */,
+				11B64C661B8FD3A144B7A13A /* gpssim.cc */,
+				70DAA4A212B9051F8E5A13EC /* stmsdf.cc */,
+				EBA833A7FA20DA8E3CD6DD28 /* gtrnctr.cc */,
+				2BDFD34C116D2040736CCEF5 /* dmtlog.cc */,
+				27A9D1017BA7D193592C7083 /* raymarine.cc */,
+				60ED8779C2E567CABD5772BE /* alan.cc */,
+				D27765E1061D8963E90DED9E /* vitovtt.cc */,
+				A8C268AF24B9D57AD4DC8AC3 /* ggv_log.cc */,
+				F6DA2C9A1708C286D18105B4 /* g7towin.cc */,
+				454F130338242D872BC1968E /* garmin_gpi.cc */,
+				BE51BF0B439330F82B883512 /* lmx.cc */,
+				CDF5521B019C332DD7D9E79B /* random.cc */,
+				E19F15F07E839FA18ADA9C49 /* xol.cc */,
+				A48C2523D33629342449D72F /* dg-100.cc */,
+				AB2E81EFB3A04845448D38EA /* navilink.cc */,
+				9F643FFCD4D394AE7CC243D6 /* mtk_logger.cc */,
+				BF29268AF36956A1432E7D08 /* ik3d.cc */,
+				931280D416620DD8CE863267 /* osm.cc */,
+				3C3F664CD39F3DE6CD28CD4D /* destinator.cc */,
+				0362D514C3BACC474D3B72D2 /* exif.cc */,
+				4D466ABFF9BD45DFE6467402 /* vidaone.cc */,
+				EF7887AAC775E044230F38A2 /* igo8.cc */,
+				DFDA6BD62752F70AB6E8B9CC /* gopal.cc */,
+				A1B4AD222D24446693AFC9D7 /* humminbird.cc */,
+				231DE25EB5826C5445F27280 /* mapasia.cc */,
+				DC734378B4D566EF6DB5207A /* gnav_trl.cc */,
+				5F898F472F7B475D7A44604D /* navitel.cc */,
+				90F6247FF53386FD063EBE4E /* ggv_ovl.cc */,
+				80B7A8FC9BC9BF47EBDE5143 /* jtr.cc */,
+				F87177B44D8DE390784A8B04 /* sbp.cc */,
+				675A950399FF212BB12FD266 /* sbn.cc */,
+				A5B2C7C8F765BA778777636A /* mmo.cc */,
+				F747F9C16DC860D3A9B5C99B /* skyforce.cc */,
+				5C87A85632844BE1F5ED62C9 /* itracku.cc */,
+				4C6B863D15102CC6E9E9A3C5 /* v900.cc */,
+				069C5640A3003E7414C3C202 /* delbin.cc */,
+				0651458CA410E9E20B94B4FA /* pocketfms_bc.cc */,
+				FCED3C24C02785ECB2EEA075 /* pocketfms_fp.cc */,
+				8313EA26EDEA2105E99CA7B1 /* pocketfms_wp.cc */,
+				592CB5D15F31EEC8DA5B4B09 /* naviguide.cc */,
+				02D9D445B9D03025C7B35DA7 /* enigma.cc */,
+				7AA6E364AF1FB69E9FD0A7DB /* vpl.cc */,
+				E2DB7324703280E55123E43F /* teletype.cc */,
+				DA8458CEA37C8E1FA2B352B7 /* jogmap.cc */,
+				D23F97BC9EA63BC27AE2B0D2 /* bushnell.cc */,
+				1E98E5ACF88530DF68348545 /* bushnell_trl.cc */,
+				AD9B169743BA909DB5230F53 /* wintec_tes.cc */,
+				CD27560E4ACADA19F0ADB856 /* subrip.cc */,
+				6E1BBC9393ACD0F8DB04365F /* garmin_xt.cc */,
+				84C1C5B18C02EABBC7029810 /* garmin_fit.cc */,
+				8087C6D3AADECC4A9896B29F /* lowranceusr4.cc */,
+				E4F26604EFD6F22EAFA161FD /* mtk_locus.cc */,
+				96E621B9E6D899BD85384D4C /* googledir.cc */,
+				982BCA060C4984355C180A7E /* mapbar_track.cc */,
+				5A2FD2EA92BB0EE51CE5ADEC /* position.cc */,
+				FF2C35C1B7BD3C59EB7461C1 /* radius.cc */,
+				BBDDF98C0F1CC4B40AB5C77D /* duplicate.cc */,
+				4A66EC287D14F5B48B049158 /* arcdist.cc */,
+				E1271157867BA56140AF7F7E /* polygon.cc */,
+				EA9762DFBC96E4F5111131EC /* smplrout.cc */,
+				751F37CB9317891C64F038AC /* reverse_route.cc */,
+				1E03FE2E81FA51DC78DC54E7 /* sort.cc */,
+				5F1BE32D40757A67D1C6E3F5 /* stackfilter.cc */,
+				5CBA913F944D290A1078D5A4 /* trackfilter.cc */,
+				843A93802308B52AEEEE5D49 /* discard.cc */,
+				4DB22869D110D98A0BFE91DE /* nukedata.cc */,
+				EF2C6AC4EF226A91521A8FA2 /* interpolate.cc */,
+				92245C57EA99CBE85FFD9759 /* transform.cc */,
+				D39A2D56D3030F0F1137EE34 /* height.cc */,
+				71DB454958580621AAE74D31 /* swapdata.cc */,
+				D0407CC01B79C6CE1D372CF9 /* bend.cc */,
+				510340523EBDCC0350960526 /* validate.cc */,
+				165DE978B9BBA40B33DF8EBD /* queue.cc */,
+				BA69268070A7275673A1D20B /* route.cc */,
+				35C4B6DA1F1A68182C661FB1 /* waypt.cc */,
+				D2B32BB71D325BCE4FEFB82D /* filter_vecs.cc */,
+				E46FA41F5FC3DD6EFA2EE38A /* util.cc */,
+				4179A1A1D57283E9B4004332 /* vecs.cc */,
+				7DD1338C6E4594FB354ECCF1 /* mkshort.cc */,
+				DF7B174E834FE06F73015778 /* csv_util.cc */,
+				AC298414F3EB5096EB52EAAD /* strptime.c */,
+				A4416DCF43A78619A31DAB67 /* grtcirc.cc */,
+				18F2BE505F97AED9285DEFA8 /* util_crc.cc */,
+				6CC1D6899F618A8BB3FC097C /* xmlgeneric.cc */,
+				D1A218B305E86A0C618B6B74 /* formspec.cc */,
+				175639FE22BDAC4BF877F382 /* xmltag.cc */,
+				924BD64AA604957AD9306079 /* cet.cc */,
+				335A647E71162789E6AAABEE /* cet_util.cc */,
+				2D80B1EFC87258C420888B51 /* fatal.cc */,
+				D393478D329A72480CF519EA /* rgbcolors.cc */,
+				B5B3A2F6B20DC4489E13AA8D /* inifile.cc */,
+				772C154E2EE35E94F0BD1BB0 /* garmin_fs.cc */,
+				C29830B2BF06A5EF5700A915 /* gbsleep.cc */,
+				D404F7E121C59FF373986E4C /* units.cc */,
+				989EF67AA2B11776C2FC129E /* gbser.cc */,
+				3892F8AF7E2966D87D6D86C9 /* gbfile.cc */,
+				B372FC9384853E078AE9269D /* parse.cc */,
+				117B0F8F3911F4618C3D893E /* session.cc */,
+				A2EBA7FC67AFFD0911B220B6 /* main.cc */,
+				C3B6BBE8BAF262C4B9ADF471 /* globals.cc */,
+				921315FAA7F261D737F4F4C7 /* src */,
+				0F31A571D7ED8C2CACD41364 /* shapelib */,
+				944AAB2A67F3462B34674BF8 /* zlib */,
+				6438147E0B104D443B95028E /* jeeps */,
+				988A7109C0915DCB0322D87E /* an1sym.h */,
+				706E24A92EC3331FA9452B41 /* cet.h */,
+				3AA4B27908870C60BBF42BFF /* cet */,
+				2B8E9E67B344BA364CD96B15 /* cet_util.h */,
+				03461DB87A24C8A99F7E61A9 /* config.h */,
+				95C907C8F9FA5573D15E8157 /* csv_util.h */,
+				D7D1038F7A971A294D4964AB /* defs.h */,
+				6E41063A82B6499582C268D8 /* explorist_ini.h */,
+				AF484C190D559F744954C6A1 /* filterdefs.h */,
+				39AC48965EE59016FA84EB13 /* garmin_device_xml.h */,
+				385EBB40F8C9DF1AC9D92757 /* garmin_fs.h */,
+				891D92EF8AA4A61B70C78B8F /* garmin_gpi.h */,
+				CE4BFF521716F57F85685B83 /* garmin_tables.h */,
+				3DA6F2EF2D193AB17B32F061 /* gbfile.h */,
+				F99350ADD20271C765358FF2 /* gbser.h */,
+				69D6F55E9A47DEB5568AD724 /* gbser_private.h */,
+				9E3DAF9C09E840B084870D5E /* gbversion.h */,
+				ABA14E230D8D6110CD6651E6 /* grtcirc.h */,
+				BF56EFC67E0AF04799C7F6CA /* height.h */,
+				BE94D1D2A69A2E091BBD18BB /* holux.h */,
+				B42DAE0443E40DDC88570D30 /* inifile.h */,
+				32B5D023B46642C6CCA49544 /* magellan.h */,
+				D80756093E494CDEACF8061D /* mapsend.h */,
+				46D4BD8182A7548BA57AA8B7 /* msvc */,
+				B24ED47E58C74BDF0B3FF3C9 /* navilink.h */,
+				7BADDA67E5296B5A4D8A422F /* pdbfile.h */,
+				E060321D4F85BBF83C8BC9E7 /* queue.h */,
+				CFB181CC540DA086DE94BF77 /* session.h */,
+				A4B8ABEA943631F46F2FEC65 /* strptime.h */,
+				30AD3BDA8F0983F60FF4C197 /* uuid.h */,
+				789AE2BDC92C0271399A12B1 /* xmlgeneric.h */,
+			);
+			name = Sources;
+			sourceTree = "<Group>";
+		};
+		35A022BA52A944E55BE8A2F8 /* .. */ = {
+			isa = PBXGroup;
+			children = (
+				62944C450691EA7F2CBEAC9A /* Qt5.2.1 */,
+			);
+			name = ..;
+			sourceTree = "<Group>";
+		};
+		3AA4B27908870C60BBF42BFF /* cet */ = {
+			isa = PBXGroup;
+			children = (
+				14EF82215D56D2D7186E6872 /* ansi_x3_4_1968.h */,
+				4915AB70071E05AABDD7F282 /* atarist.h */,
+				C0C164264A6F28BCE30C7AA1 /* baltic.h */,
+				2ECB049E3C1775CA5FC37BC4 /* bs_4730.h */,
+				1BD461BF053B2DE0723DDE08 /* bs_viewdata.h */,
+				C8C333EB52EE6137F7F29524 /* cp1250.h */,
+				BE73B1CEF665A5E4DEBB0259 /* cp1251.h */,
+				EF8B2AF9975C91AEDFF408F1 /* cp1252.h */,
+				3E5B1251153FD135D99BD61F /* cp1253.h */,
+				DBD49DB4168E8DC09EA636E2 /* cp1254.h */,
+				EAA03D6B7249FD426CB69DFC /* cp1255.h */,
+				9A2FCA057E2668B214B122DD /* cp1256.h */,
+				92004F7FA29439F87F3B2696 /* cp1257.h */,
+				99803DEF190E9A8F366613E1 /* csa_z243_4_1985_1.h */,
+				C8D80DFB5E91523BD432FB0D /* csa_z243_4_1985_2.h */,
+				6396A832C50CAFBBBC8163E2 /* csa_z243_4_1985_gr.h */,
+				6A67E0AF6E863B59F61CB8CF /* csn_369103.h */,
+				12D5BD720E8832E8520B47BB /* cwi.h */,
+				3A1353D94B10462E6F5C7B2D /* dec_mcs.h */,
+				48B56BBB6719569A75C9FAE6 /* din_66003.h */,
+				6879A28B3F5CF75047F0580B /* ds_2089.h */,
+				EFA7A5960FF1872B38F546F7 /* ecma_cyrillic.h */,
+				6E761A97D842D70E6B05E6C7 /* es.h */,
+				C90F1F0BE8998942C7BA8CC4 /* es2.h */,
+				F8B487ABE5B956C880343EC5 /* gb_1988_80.h */,
+				69C4352A8B8C90F8ED0C1483 /* gost_19768_87.h */,
+				4799519A83D0DF63D127A8EF /* hp_roman8.h */,
+				A1902EAA6C018BBB9C46D487 /* ibm037.h */,
+				D8E166A06F5982DDA9C9EE66 /* ibm1004.h */,
+				FC8B62ABB6F19BF07A0E91F0 /* ibm1026.h */,
+				C10899F72F362DDCEBC6ABA1 /* ibm1047.h */,
+				78E06E9DA89E146CE1AF04D5 /* ibm256.h */,
+				5D0DB4DECCFB88C7EE512041 /* ibm273.h */,
+				809849C354B49C7EFE89A6C9 /* ibm277.h */,
+				15AF60CD47AC99C6FA5C538E /* ibm278.h */,
+				C362A7C807B7D93E17EB06B2 /* ibm280.h */,
+				12D7D450C769675EE1947536 /* ibm284.h */,
+				1A4FDD798E14FEB07831D3CB /* ibm285.h */,
+				7F95B3DA0501344D1E0B0833 /* ibm297.h */,
+				22D9DD390E43C6C2018D59B3 /* ibm437.h */,
+				C239D528C296422BB0492A11 /* ibm500.h */,
+				6BECA49142B4D160A830809B /* ibm850.h */,
+				1B63D26930B5A21E4BF9F7DF /* ibm851.h */,
+				BB1B8262A13F905185B72E9C /* ibm852.h */,
+				DF00E7C1B02C92929EF05510 /* ibm855.h */,
+				B9BEC65DB9CBA1108C1CE3C2 /* ibm857.h */,
+				956376E7DD771427B094240B /* ibm860.h */,
+				3B5CE23A06FCB1CC0C725C60 /* ibm861.h */,
+				A1BC91E8BC35AF1211435BC7 /* ibm862.h */,
+				A1530355AAD0BCC2C3ABFA8B /* ibm863.h */,
+				C329A549E09B278A70BD4CE9 /* ibm864.h */,
+				2A399AD495C5E6D61E6B786C /* ibm865.h */,
+				3BCE40FF91BC73A26877A738 /* ibm868.h */,
+				DB6A0A5DC8AF09CF2DD7897C /* ibm869.h */,
+				AA3A1EC1936FCB4ADF983558 /* ibm871.h */,
+				48A8657A4B19FD3DA27C219D /* ibm891.h */,
+				371B95D65924441173AF6EBA /* ibm903.h */,
+				ECD79F4CA3D370760BE09EA5 /* ibm904.h */,
+				3434598623B1B166ACEB9832 /* iec_p27_1.h */,
+				924087C652BA61E8DC23D6CC /* iso_10367_box.h */,
+				7DAC69FC48F1779106026008 /* iso_5427.h */,
+				268421B7E202AC3403847D37 /* iso_646_irv.h */,
+				C2F51A446D3F1E1826ADD54F /* iso_6937_2_25.h */,
+				043059EBF7C319F55DD4996F /* iso_8859_1.h */,
+				FD7A72D7031AD16239692EE2 /* iso_8859_10.h */,
+				C8EF3D1B7FBC889C239DF2EF /* iso_8859_13.h */,
+				F6ACF563DB14472C091A4199 /* iso_8859_14.h */,
+				1773FB20FE6F19FEC667402C /* iso_8859_15.h */,
+				34BAB4AC366FBDD6C36CB57A /* iso_8859_2.h */,
+				B4C44D141A8288D0E2D90270 /* iso_8859_3.h */,
+				F632459B174DF47FE33A3B31 /* iso_8859_4.h */,
+				9299C3C2F2535AD8859747A6 /* iso_8859_5.h */,
+				CA432F3B261F1DB8F5AA4B08 /* iso_8859_6.h */,
+				C24721A845C60E14D4E5EAE6 /* iso_8859_7.h */,
+				386FA2C92EC935469C0DF589 /* iso_8859_8.h */,
+				72792BB16200EA6306F23DAD /* iso_8859_9.h */,
+				9C2D8B31D4FCB6A30AE5BE30 /* iso_8859_supp.h */,
+				CB768F346168A91E5EAD7E6A /* it.h */,
+				61932C05D18DAA4F58B44A25 /* jis_c6220_1969_ro.h */,
+				5C0A08DF630840A6C5A9FE11 /* jis_x0201.h */,
+				A886D7F6A42C4BADC3857DBC /* jus_i_b1_002.h */,
+				CF9C0E44DC6C833433DCDBFC /* jus_i_b1_003_mac.h */,
+				649BBB4D77CB714D3AD3DE68 /* jus_i_b1_003_serb.h */,
+				08DC93DB8800F86340F7BCA6 /* keybcs2.h */,
+				4C19A93AAE03C17F202873F3 /* koi8_r.h */,
+				D914C5B5D9C829B90E9E5F42 /* koi8_ru.h */,
+				49A3B8289AD332E1E76D5DE4 /* koi8_u.h */,
+				052288E1E2A588248EC0B514 /* koi_7.h */,
+				89A2982EE3162872BA1D1AB7 /* koi_8.h */,
+				5D85253EC6F2FC8C967A55C0 /* koi_8_cs2.h */,
+				3AC2F61CFC26E38115878E52 /* ksc5636.h */,
+				074DFC06F127C84047E92DFF /* latin_greek_1.h */,
+				12B19E65F1AD157EABA8700C /* mac_is.h */,
+				9F896A8E2BBAF423C2904218 /* macintosh.h */,
+				A6FC7AB55367785D8EF4AF42 /* macintosh_ce.h */,
+				4B7A73FDCED15E153AAE2BAA /* msz_7795_3.h */,
+				DEA773784595637F6E684C8D /* nats_dano.h */,
+				B3823843810289C97054F382 /* nats_sefi.h */,
+				E249112E4EFEE303A48372F0 /* nc_nc00_10.h */,
+				8751C3A1FC83E468C6FD940C /* nextstep.h */,
+				FB72B6E942AC72C65C465D2E /* nf_z_62_010.h */,
+				0FF148BDA72593489A283F03 /* nf_z_62_010__1973_.h */,
+				2B9A72B9534943C10436B796 /* ns_4551_1.h */,
+				E19956391AE9EFCC0822F2E0 /* ns_4551_2.h */,
+				DEC185992FC9A8689F19957F /* pt.h */,
+				A33EC6FA210D7F735635229A /* pt2.h */,
+				B5296C0F59AEDB4067243023 /* sami.h */,
+				9CA950E6D60830C27838A97E /* sen_850200_b.h */,
+				C2192DC0306296DF2CA30BC2 /* sen_850200_c.h */,
+				BE35E2003F734C0AF7AF6749 /* tcvn.h */,
+				ED7819A31AF39A58246FCB5A /* viscii.h */,
+				F390C9B4FEBD36374268E49A /* vps.h */,
+			);
+			name = cet;
+			sourceTree = "<Group>";
+		};
+		46D4BD8182A7548BA57AA8B7 /* msvc */ = {
+			isa = PBXGroup;
+			children = (
+				16476267D56C5DF63F92D424 /* config.h */,
+			);
+			name = msvc;
+			sourceTree = "<Group>";
+		};
+		4CA377249E93E3B74623F218 /* macx-xcode */ = {
+			isa = PBXGroup;
+			children = (
+				F5C6D36FB2455CF9096B0F86 /* qmake.conf */,
+			);
+			name = "macx-xcode";
+			sourceTree = "<Group>";
+		};
+		5AF61CE04FC3E5728FB4CE68 /* mac */ = {
+			isa = PBXGroup;
+			children = (
+				06EB17EFDE52209171D8DB3D /* libusb */,
+			);
+			name = mac;
+			sourceTree = "<Group>";
+		};
+		62944C450691EA7F2CBEAC9A /* Qt5.2.1 */ = {
+			isa = PBXGroup;
+			children = (
+				B3CCB435BA3A9020F08BD384 /* 5.2.1 */,
+			);
+			name = Qt5.2.1;
+			sourceTree = "<Group>";
+		};
+		6438147E0B104D443B95028E /* jeeps */ = {
+			isa = PBXGroup;
+			children = (
+				34827BD41C7223761F2CE2CF /* gpsapp.cc */,
+				178AF004875134FDF993D388 /* gpscom.cc */,
+				6FDD796981CFA4F253C28095 /* gpsmath.cc */,
+				D1554DD77B6C46AECFF6982A /* gpsmem.cc */,
+				1E05B032477FC474F39CBD7E /* gpsprot.cc */,
+				5C7B06C99E994A5FBBDD1AAD /* gpsread.cc */,
+				1614A87D702BDB9A154D575F /* gpsdevice.cc */,
+				C0A0B8D35F5B16FC8227BB4A /* gpsdevice_ser.cc */,
+				D2C9FE8E5F27D89B13D158C4 /* gpsdevice_usb.cc */,
+				188D2DF9D95F87196B52820F /* gpsrqst.cc */,
+				1901E8A80FE68867F89076A8 /* gpssend.cc */,
+				9004F08DBE85C786DE6D0548 /* gpsserial.cc */,
+				30A6EAD14E2A7ADAFD244E66 /* jgpsutil.cc */,
+				438C122048F1C4A74E865C99 /* gpsusbread.cc */,
+				71899E60E3520A7655042F85 /* gpsusbsend.cc */,
+				593EEAFB42F5B53385521673 /* gpsusbcommon.cc */,
+				564003A8A736467A5571BD78 /* gpslibusb.cc */,
+				27C75197D6CBFF9E84A2236B /* garminusb.h */,
+				29CF770C39C8513C73942D7F /* gps.h */,
+				E53F6A403AD976483A55793B /* gpsapp.h */,
+				DAC95149EF63406BAF8AC514 /* gpscom.h */,
+				1B56CFA310C4E398443394D0 /* gpsdatum.h */,
+				8A23BF8471BB3ABA33E9EFE9 /* gpsdevice.h */,
+				4BE20B4F7F54AD3D9C55AAB5 /* gpsfmt.h */,
+				990FEF4030BE5A745F3D6B90 /* gpsinput.h */,
+				B7FB8C90E4170CCBB881C210 /* gpsmath.h */,
+				68C42ADF549314E71179DAED /* gpsmem.h */,
+				17BEDBDCF5DBF29C66AA67B8 /* gpsport.h */,
+				2952603298F97B80750B4E46 /* gpsproj.h */,
+				1B047BE5D23FF5C4790BCAB7 /* gpsprot.h */,
+				D842F9622F47F76F214CF391 /* gpsread.h */,
+				C1BDF66547C1455890DCF390 /* gpsrqst.h */,
+				43ECA44980756B4FEB187402 /* gpssend.h */,
+				E3CCD6986A3A990071A329D9 /* gpsserial.h */,
+				39C004E4BE67405F37CFE832 /* gpsusbcommon.h */,
+				6D3F8BAFC1E3359FB76C7C06 /* gpsusbint.h */,
+				E54A6E7F28222567C7742B38 /* gpsutil.h */,
+			);
+			name = jeeps;
+			sourceTree = "<Group>";
+		};
+		74B182DB50CB5611B5C1C297 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D76E2D87C0D0ECEB046141EE /* GPSBabel.pro */,
+				A3E1AA9917EC82D3446C262A /* .. */,
+				AB745978DF0F41D1801ABDA6 /* .qmake.stash */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<Group>";
+		};
+		7B6E44AA3A523F07E24FB5F8 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				88CE708320D25CF3AC2794C0 /* shell-unix.conf */,
+				E68807A03E056AC8D78503D1 /* unix.conf */,
+				CCA304D91898E797D1660641 /* mac.conf */,
+				A6F587B6C00F60F1B9E38DC5 /* macx.conf */,
+				A7790850E72548F840109C47 /* gcc-base.conf */,
+				F4AC992D97B2A10B80C0648F /* gcc-base-mac.conf */,
+				209F80A63D1D93761C09DB9E /* clang.conf */,
+				9D1598E3784872B3AB67A20B /* clang-mac.conf */,
+			);
+			name = common;
+			sourceTree = "<Group>";
+		};
+		84C794952CA84E8BC4F1F36E /* clang_64 */ = {
+			isa = PBXGroup;
+			children = (
+				CA36F56B439FB594733B43B9 /* mkspecs */,
+			);
+			name = clang_64;
+			sourceTree = "<Group>";
+		};
+		921315FAA7F261D737F4F4C7 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E62C659644C6E75254031504 /* core */,
+			);
+			name = src;
+			sourceTree = "<Group>";
+		};
+		944AAB2A67F3462B34674BF8 /* zlib */ = {
+			isa = PBXGroup;
+			children = (
+				43F9BA4B59FD88E896CFBC2A /* adler32.c */,
+				0F50609911CBF5D8F56BCE7D /* compress.c */,
+				0042FA7F258FEDFFA7653321 /* crc32.c */,
+				7AEC5DDF49B79EFE7E4256E7 /* deflate.c */,
+				9F18BBC44AA39D7C42B154E6 /* inffast.c */,
+				90EF8487AE26796AD4BCFE49 /* inflate.c */,
+				9E56800965DB564EDB415C47 /* infback.c */,
+				8C36D51CB57E205197208F22 /* inftrees.c */,
+				BBBFAB349677BFF3DC73F633 /* trees.c */,
+				D7D8FB5B8D7FFC6C57169288 /* uncompr.c */,
+				2263450906BFC54F170D6F72 /* gzlib.c */,
+				9DD796BE10A702709DE6CF8B /* gzclose.c */,
+				EF695F463503793B92425D0B /* gzread.c */,
+				18FC32D8725418F770CE2D80 /* gzwrite.c */,
+				35019879D27E85B75662F92E /* zutil.c */,
+				D74AEA32FCBE26C2BB0BBA03 /* crc32.h */,
+				0ABE9A87053F5E59FFA85948 /* deflate.h */,
+				05817A32EFF6DCB2E3095719 /* inffast.h */,
+				41A71C4A30348C463F06BBBA /* inffixed.h */,
+				5BDD1743508DDAC088E167F4 /* inflate.h */,
+				868FD3726C0747D1B77062B1 /* inftrees.h */,
+				C0B33A6E41DA75B49D768CDC /* trees.h */,
+				C126E1940EADD0511368BD15 /* zconf.h */,
+				B48FC017153AC795793F0699 /* zconf.in.h */,
+				7DAA8406B05B6249D0206A23 /* zlib.h */,
+				B0571E5C710AE9C3693493F1 /* zutil.h */,
+			);
+			name = zlib;
+			sourceTree = "<Group>";
+		};
+		A3E1AA9917EC82D3446C262A /* .. */ = {
+			isa = PBXGroup;
+			children = (
+				35A022BA52A944E55BE8A2F8 /* .. */,
+			);
+			name = ..;
+			sourceTree = "<Group>";
+		};
+		AF39DD055C3EF8226FBE929D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A1A67BEAA744704B29168D39 /* IOKit.framework */,
+				4D765E1B1EA6C757220C63E7 /* CoreFoundation.framework */,
+				DB51AD164EEC19F2CFE7B213 /* QtCore.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<Group>";
+		};
+		B3CCB435BA3A9020F08BD384 /* 5.2.1 */ = {
+			isa = PBXGroup;
+			children = (
+				84C794952CA84E8BC4F1F36E /* clang_64 */,
+			);
+			name = 5.2.1;
+			sourceTree = "<Group>";
+		};
+		CA36F56B439FB594733B43B9 /* mkspecs */ = {
+			isa = PBXGroup;
+			children = (
+				1B403603E8577D731CB84D2C /* qdevice.pri */,
+				7B6E44AA3A523F07E24FB5F8 /* common */,
+				A32D7B614D3368F64058B5D9 /* qconfig.pri */,
+				2932C3CEBE15315DACC8D87E /* modules */,
+				0299D51769DB4B45D0DCEAFA /* macx-clang */,
+				4CA377249E93E3B74623F218 /* macx-xcode */,
+			);
+			name = mkspecs;
+			sourceTree = "<Group>";
+		};
+		E62C659644C6E75254031504 /* core */ = {
+			isa = PBXGroup;
+			children = (
+				E7FBACCA97CAB532131E7EC7 /* xmlstreamwriter.cc */,
+				80A6343853896B2415311DEE /* xmlstreamwriter.h */,
+			);
+			name = core;
+			sourceTree = "<Group>";
+		};
+		E8C543AB96796ECAA2E65C57 /* GPSBabel */ = {
+			isa = PBXGroup;
+			children = (
+				2EB56BE3C2D93CDAB0C52E67 /* Sources */,
+				74B182DB50CB5611B5C1C297 /* Supporting Files */,
+				AF39DD055C3EF8226FBE929D /* Frameworks */,
+				FE0A091FDBFB3E9C31B7A1BD /* Products */,
+			);
+			name = GPSBabel;
+			sourceTree = "<Group>";
+		};
+		FE0A091FDBFB3E9C31B7A1BD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				35304A22E5B6B8173091BFC8 /* GPSBabel */,
+			);
+			name = Products;
+			sourceTree = "<Group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8BA83BB8960C7E077E682D92 /* GPSBabel */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6CC3B5D2136C7CD6A5CF5A59 /* Build configuration list for PBXNativeTarget "GPSBabel" */;
+			buildPhases = (
+				F7E50F631C51CD5B5DC0BC43 /* Compile Sources */,
+				D1C883685E82D5676953459A /* Link Binary With Libraries */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				23D563D1C6DE58A2168F728E /* PBXTargetDependency */,
+			);
+			name = GPSBabel;
+			productName = GPSBabel;
+			productReference = 35304A22E5B6B8173091BFC8 /* GPSBabel */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6DB9C3763D02B1415CD9D565 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0500;
+			};
+			buildConfigurationList = DAC4C1AA5EDEA1C85E9CA5E6 /* Build configuration list for PBXProject "GPSBabel" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
+			mainGroup = E8C543AB96796ECAA2E65C57 /* GPSBabel */;
+			productRefGroup = FE0A091FDBFB3E9C31B7A1BD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8BA83BB8960C7E077E682D92 /* GPSBabel */,
+				5236EF6DEE49756C361ABF26 /* Qt Preprocess */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		5E618435888B9D49F8540165 /* Qt Qmake */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "Qt Qmake";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/robertlipe/src/gpsbabel -f GPSBabel.xcodeproj/qt_makeqmake.mak";
+		};
+		7EF0942E79C014DCEC8976BC /* Qt Preprocessors */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "Qt Preprocessors";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/robertlipe/src/gpsbabel -f GPSBabel.xcodeproj/qt_preprocess.mak";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F7E50F631C51CD5B5DC0BC43 /* Compile Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B77AD63CBB85027F264E8346 /* gbser_posix.cc in Compile Sources */,
+				7CA50A5CF72D54208D3C7CFC /* darwin.c in Compile Sources */,
+				030A80F89994857934EB903F /* descriptors.c in Compile Sources */,
+				7E6BFD9CCBD241EB10B39C32 /* error.c in Compile Sources */,
+				97BE896E5C8289D2C4C24A28 /* usb.c in Compile Sources */,
+				E7840A8C69F357DCAAA291EB /* magproto.cc in Compile Sources */,
+				8D9936FEA575EC53D0F6D52D /* explorist_ini.cc in Compile Sources */,
+				51418F017E34C42EA6422B7B /* gpx.cc in Compile Sources */,
+				7BA4444A23DDCC5BCD22AA16 /* geo.cc in Compile Sources */,
+				BA7D395DD0F275798BC64B1B /* mapsend.cc in Compile Sources */,
+				124BA380AAEE1F3675A79C8D /* mapsource.cc in Compile Sources */,
+				5A85366A69433314FF38CB47 /* garmin.cc in Compile Sources */,
+				92DAA29372E15F58507E6BF8 /* garmin_device_xml.cc in Compile Sources */,
+				607436F11C551E338B29D733 /* garmin_tables.cc in Compile Sources */,
+				43FC5828D8865E242BCF5A99 /* internal_styles.cc in Compile Sources */,
+				B4C20BC8A292E7F19EFEF5B9 /* nmea.cc in Compile Sources */,
+				15B66249468984BDA45D364A /* kml.cc in Compile Sources */,
+				A67A8F4ABF869CFC727C48A8 /* wbt-200.cc in Compile Sources */,
+				A9E02C5179FC2BACF490E637 /* gtm.cc in Compile Sources */,
+				FDB8112FCDB8A8D4F9DA03B6 /* gpsutil.cc in Compile Sources */,
+				D2FB0131B5EB1E0523942E36 /* pcx.cc in Compile Sources */,
+				68693DDAA206D2272F20DB7D /* skytraq.cc in Compile Sources */,
+				948BCB3751C01FE1CADDA6F5 /* holux.cc in Compile Sources */,
+				03D3DB50AC20F3090EE40902 /* tmpro.cc in Compile Sources */,
+				2B460BC8E86D3F75555EA357 /* tpg.cc in Compile Sources */,
+				5D961603BED0C5DB886C685D /* tpo.cc in Compile Sources */,
+				75986A0EFB58924CD42AB4AA /* xcsv.cc in Compile Sources */,
+				35D9A1BCECCEB0C12BB9E39A /* tiger.cc in Compile Sources */,
+				705E753C27E6D832BD6FF749 /* easygps.cc in Compile Sources */,
+				895E3138194AB640EADA4443 /* saroute.cc in Compile Sources */,
+				14CC0CBAEBE12AC6BD13C88E /* navicache.cc in Compile Sources */,
+				9CD6DA009750CD06A3F086BF /* psitrex.cc in Compile Sources */,
+				504B3FBF53CD94ADE4531EFB /* delgpl.cc in Compile Sources */,
+				B3438420BD40463A76DE6E58 /* ozi.cc in Compile Sources */,
+				E3D07EF056050EDAC8355BEF /* text.cc in Compile Sources */,
+				FC7236768B8CAA2AD70B6F85 /* html.cc in Compile Sources */,
+				4DA1C8D51417C48290F99A3B /* netstumbler.cc in Compile Sources */,
+				5900FC48BF249BACA4AB1EFD /* igc.cc in Compile Sources */,
+				71FDACCED7D9D782B5E77ECE /* brauniger_iq.cc in Compile Sources */,
+				824D9832E39F11B8A1C2EE5F /* shape.cc in Compile Sources */,
+				840CF58B32ED1026574F8C47 /* hiketech.cc in Compile Sources */,
+				41E7141F600DAC79E331CA95 /* glogbook.cc in Compile Sources */,
+				E0BE7FEF1EDC599D451863CF /* vcf.cc in Compile Sources */,
+				D7DBA8491D616D51B5F6B04D /* google.cc in Compile Sources */,
+				B4EC5F766681D5A928723B86 /* xhtmlent.cc in Compile Sources */,
+				343C21215B69B6BDD30ED5C7 /* lowranceusr.cc in Compile Sources */,
+				4564C5307F4E7CCA19368389 /* an1.cc in Compile Sources */,
+				7548CF7E8C89D4A3C89904A5 /* tomtom.cc in Compile Sources */,
+				08981CD2537028EFB1AAABA0 /* tef_xml.cc in Compile Sources */,
+				E5703B217D8EF7AA967397A7 /* maggeo.cc in Compile Sources */,
+				29CB676460EA032E73FAE9EB /* vitosmt.cc in Compile Sources */,
+				D9F7B0D4A2DE2CFD4A3A6935 /* gdb.cc in Compile Sources */,
+				0CFD81EE929550DFE9587D20 /* bcr.cc in Compile Sources */,
+				968B64F68E52DF245DC42C94 /* ignrando.cc in Compile Sources */,
+				A915D676162423AA30BD9107 /* stmwpp.cc in Compile Sources */,
+				5A4440E436093511F349F897 /* cst.cc in Compile Sources */,
+				7625BB1BF10FC9156F2CB6C9 /* nmn4.cc in Compile Sources */,
+				34358574BF25412EC04521D5 /* compegps.cc in Compile Sources */,
+				5549425A613B05F384386B35 /* yahoo.cc in Compile Sources */,
+				DCA22671614D16C5386F4DFE /* unicsv.cc in Compile Sources */,
+				E538F06244E883715CE8C6B6 /* wfff_xml.cc in Compile Sources */,
+				564114A2E9F66D64454C64A3 /* garmin_txt.cc in Compile Sources */,
+				325D2DAC60592F8E8D329853 /* gpssim.cc in Compile Sources */,
+				2D786A151D9AAC57B3BF1DC1 /* stmsdf.cc in Compile Sources */,
+				0A1FEDD5AF6B7705DCFD27A6 /* gtrnctr.cc in Compile Sources */,
+				4C6AEDB08FA3AE3B04A18AAC /* dmtlog.cc in Compile Sources */,
+				E00226148B5022D2235C5E49 /* raymarine.cc in Compile Sources */,
+				6A22AF4FF5F6A22201C4BF0C /* alan.cc in Compile Sources */,
+				BE9622042845342458DCAE42 /* vitovtt.cc in Compile Sources */,
+				15BC5E993EE7EA29E46AAF63 /* ggv_log.cc in Compile Sources */,
+				F9E132866998AFCFC175119C /* g7towin.cc in Compile Sources */,
+				4078746DCA9746AFC596F47D /* garmin_gpi.cc in Compile Sources */,
+				906860B893ADA747B1C04D08 /* lmx.cc in Compile Sources */,
+				0FE72D7AB1AFAD8978A8FF7E /* random.cc in Compile Sources */,
+				B109539D7D7E9ECCF73ADE94 /* xol.cc in Compile Sources */,
+				011D0263493530B6B01100C4 /* dg-100.cc in Compile Sources */,
+				90691963AFBB4B4582DAE881 /* navilink.cc in Compile Sources */,
+				4E96F9217B1618CCCDF4D519 /* mtk_logger.cc in Compile Sources */,
+				76A7590CAADF3CCA3C38A74D /* ik3d.cc in Compile Sources */,
+				AC9FEA3EA1950354FAB664B4 /* osm.cc in Compile Sources */,
+				CD9DAE8D9624F359F5165809 /* destinator.cc in Compile Sources */,
+				22B5A0D3DA673AA2587A62EA /* exif.cc in Compile Sources */,
+				DAFF463E4FB010E7815372D1 /* vidaone.cc in Compile Sources */,
+				F75D239D00BA70C424B27EB4 /* igo8.cc in Compile Sources */,
+				E43E16A2D76FBD6FB57E24B6 /* gopal.cc in Compile Sources */,
+				1322DEA537B6DED283007F15 /* humminbird.cc in Compile Sources */,
+				0B6EF4DE673E4362D596F28F /* mapasia.cc in Compile Sources */,
+				60BF8640090F93058D4C5163 /* gnav_trl.cc in Compile Sources */,
+				94045C586821383CA81F0C85 /* navitel.cc in Compile Sources */,
+				4D00E1577798CB42AEC52895 /* ggv_ovl.cc in Compile Sources */,
+				324F84F64DE6F4B4D725322A /* jtr.cc in Compile Sources */,
+				BE475E8AE2F688F244C55F9D /* sbp.cc in Compile Sources */,
+				2A44CBC8B5CB7776A06EAAEA /* sbn.cc in Compile Sources */,
+				9D60F3623FA7BC891898BC6D /* mmo.cc in Compile Sources */,
+				3DCF66B42F6FC750D0F4F4AD /* skyforce.cc in Compile Sources */,
+				17D4A6D12DC1B01AF26CB31D /* itracku.cc in Compile Sources */,
+				D67A229D48F4EBB61DDAFF0C /* v900.cc in Compile Sources */,
+				5564807B6620D872CAC01D5B /* delbin.cc in Compile Sources */,
+				00132A2E2117A5D2949D24C1 /* pocketfms_bc.cc in Compile Sources */,
+				9B36955786EBBE1B36994928 /* pocketfms_fp.cc in Compile Sources */,
+				DB131408468294E5265B983D /* pocketfms_wp.cc in Compile Sources */,
+				1EC66524C0374C2CDFEAABE9 /* naviguide.cc in Compile Sources */,
+				75197664F3D716F35F8C3EC6 /* enigma.cc in Compile Sources */,
+				08BEBE1519C5601E2BF55484 /* vpl.cc in Compile Sources */,
+				5E343E9274EE78FEBCAE811F /* teletype.cc in Compile Sources */,
+				F3C4CCB923D1D01784092299 /* jogmap.cc in Compile Sources */,
+				1E39B8F32EE9BC91969FBC05 /* bushnell.cc in Compile Sources */,
+				47C493B76A5CC9F2875CE5DD /* bushnell_trl.cc in Compile Sources */,
+				7E842BC46B04605224C56C52 /* wintec_tes.cc in Compile Sources */,
+				63C792C0FD626F45C55E678D /* subrip.cc in Compile Sources */,
+				11FBD19650871FCCB6E30987 /* garmin_xt.cc in Compile Sources */,
+				F67AD6E392E066E0FCC55DEA /* garmin_fit.cc in Compile Sources */,
+				4B74EBCF3C1A48A5E49A9590 /* lowranceusr4.cc in Compile Sources */,
+				97A3927C9DCA9F8ED05D080B /* mtk_locus.cc in Compile Sources */,
+				3BA4928AE54B3AE6DB7EF283 /* googledir.cc in Compile Sources */,
+				7B58930EDE9C0BCE8A8046F6 /* mapbar_track.cc in Compile Sources */,
+				27AC9746E8D0FDF3FC72E15F /* position.cc in Compile Sources */,
+				C631BADA280B688F6E0F25F1 /* radius.cc in Compile Sources */,
+				BBB46F266209158593EF06D6 /* duplicate.cc in Compile Sources */,
+				FB9B10FAEC8D0440D65B5ED3 /* arcdist.cc in Compile Sources */,
+				2BA9C8EB3F6E3588F789531E /* polygon.cc in Compile Sources */,
+				CA32F3F4F2500590134080CB /* smplrout.cc in Compile Sources */,
+				5F0ED2A0578EDE80A56F3E5C /* reverse_route.cc in Compile Sources */,
+				87BCBD62FCB790E3A1988BDF /* sort.cc in Compile Sources */,
+				D5024BF67C4BE07DCF97991E /* stackfilter.cc in Compile Sources */,
+				4F1D804C57FB7DB3847FA829 /* trackfilter.cc in Compile Sources */,
+				45142B8874422581CD0683A1 /* discard.cc in Compile Sources */,
+				87E615C9FA52B776B24DE87E /* nukedata.cc in Compile Sources */,
+				3A4EBF130B113F615A28173F /* interpolate.cc in Compile Sources */,
+				93BEFB2CF811A2EF57551C54 /* transform.cc in Compile Sources */,
+				938887FE720526A36BED0924 /* height.cc in Compile Sources */,
+				CD781783CB62C019D01BA3FE /* swapdata.cc in Compile Sources */,
+				A7DCB406E468BDA81D51DACF /* bend.cc in Compile Sources */,
+				FEB987D1B1330E4E3AD57BD9 /* validate.cc in Compile Sources */,
+				7C2E07EDDD73441B85064E25 /* queue.cc in Compile Sources */,
+				63148122CD295A00B34E8361 /* route.cc in Compile Sources */,
+				8909918613102810C1C92F4E /* waypt.cc in Compile Sources */,
+				FB66C56358AD610819DAA408 /* filter_vecs.cc in Compile Sources */,
+				D1F9072E3F8DEED0E7FCDFF7 /* util.cc in Compile Sources */,
+				0CB7C51E38C0047A3432388C /* vecs.cc in Compile Sources */,
+				900ED1F5D2B3166BD1B440A0 /* mkshort.cc in Compile Sources */,
+				4A4F30747C596BA60B103660 /* csv_util.cc in Compile Sources */,
+				97E418F00633EBA37F9916FC /* strptime.c in Compile Sources */,
+				389304D2D87822730EF71C3A /* grtcirc.cc in Compile Sources */,
+				5EEA9FB7F12492DA0530D76F /* util_crc.cc in Compile Sources */,
+				EE1FC2BC3AEACDFCC85A9075 /* xmlgeneric.cc in Compile Sources */,
+				2951F8B5EE1624DB0E5BC2E2 /* formspec.cc in Compile Sources */,
+				FAE0F2FDAD03CDB0E2FEF9F5 /* xmltag.cc in Compile Sources */,
+				899A0AE685F7DE4AA93E02B7 /* cet.cc in Compile Sources */,
+				A8ED8B4129A26D6BB790DBFF /* cet_util.cc in Compile Sources */,
+				374177D6B2311CC0BB059BD9 /* fatal.cc in Compile Sources */,
+				5460AA96C1CD6AC25435FBF8 /* rgbcolors.cc in Compile Sources */,
+				EB645EC676A2BF3E9FDEF3BB /* inifile.cc in Compile Sources */,
+				27524CC7B229A62C91616CA5 /* garmin_fs.cc in Compile Sources */,
+				3E8689DBCB3DD630E975B19A /* gbsleep.cc in Compile Sources */,
+				7FEB484760B344FCA1CD17B3 /* units.cc in Compile Sources */,
+				7CD99BDEB8D138A25CD0400D /* gbser.cc in Compile Sources */,
+				EFE96BA7A76A49E68A1480EF /* gbfile.cc in Compile Sources */,
+				CBE119949BB11F79F7CCEFC3 /* parse.cc in Compile Sources */,
+				CAB1C039A0FDF4F8B8C13F06 /* session.cc in Compile Sources */,
+				93336D8D9822E184AAEE54CD /* main.cc in Compile Sources */,
+				18FF1C9B5EA4DF41E0E66566 /* globals.cc in Compile Sources */,
+				8A258376CF7AAEBAD5CA962C /* xmlstreamwriter.cc in Compile Sources */,
+				833A346CC3D2E2A5AA599EE0 /* shpopen.c in Compile Sources */,
+				99F74A702655BD8810B8D9B9 /* dbfopen.c in Compile Sources */,
+				A6726F229003747F395F6361 /* safileio.c in Compile Sources */,
+				D820D4CB972482E3BB146C2F /* adler32.c in Compile Sources */,
+				F2156682DF09BD492B45B239 /* compress.c in Compile Sources */,
+				24E8AAA889AF32E3E2B72BE4 /* crc32.c in Compile Sources */,
+				836B45D8A4D0B2956014CDAF /* deflate.c in Compile Sources */,
+				B9DF7A0A497DDA2207F88DBC /* inffast.c in Compile Sources */,
+				7071E8FEDD8E1B1E924A0B0B /* inflate.c in Compile Sources */,
+				08D1F200A155C4CBB054153E /* infback.c in Compile Sources */,
+				7D7F57E6D30839C226F2F09B /* inftrees.c in Compile Sources */,
+				13EC324613FAD0CF9627DAFA /* trees.c in Compile Sources */,
+				975FA1FA9210F74178FC5CF9 /* uncompr.c in Compile Sources */,
+				F5354B65FBC51A227F678411 /* gzlib.c in Compile Sources */,
+				6E1B68D0E42EFB945B37044B /* gzclose.c in Compile Sources */,
+				80CB27CF2DBCAEF89CA583B7 /* gzread.c in Compile Sources */,
+				200ADC78DDEF7C109618A6E5 /* gzwrite.c in Compile Sources */,
+				57E7A4BC71FA7AA63802D2B9 /* zutil.c in Compile Sources */,
+				D17515A014C50994811799DC /* gpsapp.cc in Compile Sources */,
+				94A1224CE4548B79A8824E47 /* gpscom.cc in Compile Sources */,
+				98D8C0CB3A3D9DA0A1EEB047 /* gpsmath.cc in Compile Sources */,
+				9E70CB913F2977250267BE11 /* gpsmem.cc in Compile Sources */,
+				9B959019CCF121EFE8626A6F /* gpsprot.cc in Compile Sources */,
+				10B4A88AEB061E73D3684C21 /* gpsread.cc in Compile Sources */,
+				6BFCF06E2F601E75E0BD16CA /* gpsdevice.cc in Compile Sources */,
+				1744603E0519CCB4C78909F9 /* gpsdevice_ser.cc in Compile Sources */,
+				A04D8133BEC6EC2323B31B5B /* gpsdevice_usb.cc in Compile Sources */,
+				E9AC0AA10ABBAD0A036147C1 /* gpsrqst.cc in Compile Sources */,
+				A3B2915AE45D27236A90C94C /* gpssend.cc in Compile Sources */,
+				8DB5DF5926E54BE8F7E84CEC /* gpsserial.cc in Compile Sources */,
+				A9A7AC1FC4DEDB40BD24AEA2 /* jgpsutil.cc in Compile Sources */,
+				6D678188E8F63E38AF71BA9A /* gpsusbread.cc in Compile Sources */,
+				50255ECC33691EFA92536675 /* gpsusbsend.cc in Compile Sources */,
+				D224F50FE60EF43AD5064FCB /* gpsusbcommon.cc in Compile Sources */,
+				19E4F984FF38B4ED82345D09 /* gpslibusb.cc in Compile Sources */,
+			);
+			name = "Compile Sources";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		23D563D1C6DE58A2168F728E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5236EF6DEE49756C361ABF26 /* Qt Preprocess */;
+			targetProxy = EC1B054218B9D020004FA0F3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		339EE1B2CC4FC24589A0EA95 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CC = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1.0;
+				DYLIB_CURRENT_VERSION = 1.0.0;
+				FRAMEWORK_SEARCH_PATHS = (
+					/Users/robertlipe/Qt5.2.1/5.2.1/clang_64/lib,
+					/Users/robertlipe/Qt5.2.1/5.2.1/clang_64/lib,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					jeeps,
+					mac/libusb,
+					../../Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers,
+					.,
+					"../../Qt5.2.1/5.2.1/clang_64/mkspecs/macx-clang",
+				);
+				LDPLUSPLUS = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++";
+				LIBRARY_SEARCH_PATHS = (
+					/System/Library/Frameworks/,
+					/Users/robertlipe/Qt5.2.1/5.2.1/clang_64/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-fPIE",
+					"-DHAVE_NANOSLEEP",
+					"-DHAVE_LIBUSB",
+					"-DHAVE_GLOB",
+					"-DHAVE_VA_COPY",
+					"-DHAVE_VA_LIST_AS_ARRAY",
+					"-DNEW_STRINGS",
+					"-DMAXIMAL_ENABLED",
+					"-DFILTERS_ENABLED",
+					"-DPDBFMTS_ENABLED",
+					"-DSHAPELIB_ENABLED",
+					"-DCSVFMTS_ENABLED",
+					"-DCET_WANTED",
+					"-DQT_NO_DEBUG",
+					"-DQT_CORE_LIB",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-fPIE",
+					"-DHAVE_NANOSLEEP",
+					"-DHAVE_LIBUSB",
+					"-DHAVE_GLOB",
+					"-DHAVE_VA_COPY",
+					"-DHAVE_VA_LIST_AS_ARRAY",
+					"-DNEW_STRINGS",
+					"-DMAXIMAL_ENABLED",
+					"-DFILTERS_ENABLED",
+					"-DPDBFMTS_ENABLED",
+					"-DSHAPELIB_ENABLED",
+					"-DCSVFMTS_ENABLED",
+					"-DCET_WANTED",
+					"-DQT_NO_DEBUG",
+					"-DQT_CORE_LIB",
+				);
+				OTHER_LDFLAGS = (
+					"-headerpad_max_install_names",
+					"-F/Users/robertlipe/Qt5.2.1/5.2.1/clang_64/lib",
+				);
+				PRODUCT_NAME = GPSBabel;
+				QT_LIBRARY_SUFFIX = "";
+				SDKROOT = macosx;
+				SYMROOT = /Users/robertlipe/src/gpsbabel;
+			};
+			name = Release;
+		};
+		3AA6C32AC930069E80220CF1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CC = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1.0;
+				DYLIB_CURRENT_VERSION = 1.0.0;
+				FRAMEWORK_SEARCH_PATHS = (
+					/Users/robertlipe/Qt5.2.1/5.2.1/clang_64/lib,
+					/Users/robertlipe/Qt5.2.1/5.2.1/clang_64/lib,
+				);
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					jeeps,
+					mac/libusb,
+					../../Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers,
+					.,
+					"../../Qt5.2.1/5.2.1/clang_64/mkspecs/macx-clang",
+				);
+				LDPLUSPLUS = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++";
+				LIBRARY_SEARCH_PATHS = (
+					/System/Library/Frameworks/,
+					/Users/robertlipe/Qt5.2.1/5.2.1/clang_64/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-fPIE",
+					"-DHAVE_NANOSLEEP",
+					"-DHAVE_LIBUSB",
+					"-DHAVE_GLOB",
+					"-DHAVE_VA_COPY",
+					"-DHAVE_VA_LIST_AS_ARRAY",
+					"-DNEW_STRINGS",
+					"-DMAXIMAL_ENABLED",
+					"-DFILTERS_ENABLED",
+					"-DPDBFMTS_ENABLED",
+					"-DSHAPELIB_ENABLED",
+					"-DCSVFMTS_ENABLED",
+					"-DCET_WANTED",
+					"-DQT_NO_DEBUG",
+					"-DQT_CORE_LIB",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"-pipe",
+					"-O2",
+					"-Wall",
+					"-W",
+					"-fPIE",
+					"-DHAVE_NANOSLEEP",
+					"-DHAVE_LIBUSB",
+					"-DHAVE_GLOB",
+					"-DHAVE_VA_COPY",
+					"-DHAVE_VA_LIST_AS_ARRAY",
+					"-DNEW_STRINGS",
+					"-DMAXIMAL_ENABLED",
+					"-DFILTERS_ENABLED",
+					"-DPDBFMTS_ENABLED",
+					"-DSHAPELIB_ENABLED",
+					"-DCSVFMTS_ENABLED",
+					"-DCET_WANTED",
+					"-DQT_NO_DEBUG",
+					"-DQT_CORE_LIB",
+				);
+				OTHER_LDFLAGS = (
+					"-headerpad_max_install_names",
+					"-F/Users/robertlipe/Qt5.2.1/5.2.1/clang_64/lib",
+				);
+				PRODUCT_NAME = GPSBabel;
+				QT_LIBRARY_SUFFIX = _debug;
+				SDKROOT = macosx;
+				SYMROOT = /Users/robertlipe/src/gpsbabel;
+			};
+			name = Debug;
+		};
+		6666AA5E688052234F6758D8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				PRODUCT_NAME = GPSBabel;
+				QT_LIBRARY_SUFFIX = "";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		77418F46922677BB04ED38DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = GPSBabel;
+				QT_LIBRARY_SUFFIX = _debug;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6CC3B5D2136C7CD6A5CF5A59 /* Build configuration list for PBXNativeTarget "GPSBabel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77418F46922677BB04ED38DD /* Debug */,
+				6666AA5E688052234F6758D8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DAC4C1AA5EDEA1C85E9CA5E6 /* Build configuration list for PBXProject "GPSBabel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3AA6C32AC930069E80220CF1 /* Debug */,
+				339EE1B2CC4FC24589A0EA95 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6DB9C3763D02B1415CD9D565 /* Project object */;
+}

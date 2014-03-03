@@ -1,0 +1,11 @@
+
+# TPG (NG Topo!) file format
+# This is hard to test as the datum conversions create minute
+# inconsistencies in the coordinates.  So..  we test our i/o 
+# against a format that rounds higher than we care to compare
+# for binary data. 
+rm -f ${TMPDIR}/topo.mxf ${TMPDIR}/tpg.mxf ${TMPDIR}/geo.tpg
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o tpg -F ${TMPDIR}/geo.tpg
+gpsbabel -i tpg -f ${TMPDIR}/geo.tpg -o mxf -F ${TMPDIR}/tpg.mxf
+gpsbabel -i tpg -f ${REFERENCE}/tpg.tpg -o mxf -F ${TMPDIR}/topo.mxf
+compare ${TMPDIR}/tpg.mxf ${TMPDIR}/topo.mxf

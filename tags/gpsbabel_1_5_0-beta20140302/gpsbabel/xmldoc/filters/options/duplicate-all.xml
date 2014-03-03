@@ -1,0 +1,17 @@
+<para>
+When this option is specified, GPSBabel will remove all instances of a
+duplicated waypoint, not just the second and subsequent instances.  If
+your input file contains waypoints A, B, B, and C, the output file will
+contain waypoints A, B, and C without the <option>all</option> option, 
+or just A and C with the <option>all</option> option.
+</para>
+<example id="duplicate_to_ignore">
+<title>Using the duplicate filter to implement an "ignore list."</title>
+<para>
+This option may be used to implement an "ignore list."  In the following 
+example, the duplicate filter is used to remove a list of waypoints to be
+ignored from a larger collection of waypoints:
+</para>
+<para><userinput>gpsbabel -i gpx -f waypoints.gpx -i csv -f to_ignore.csv -x duplicate,shortname,all -o gpx -F filtered.gpx</userinput></para>
+</example>
+

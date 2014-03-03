@@ -1,0 +1,20 @@
+
+#
+# DeLorme .an1 tests
+#
+rm -f ${TMPDIR}/an1.out
+gpsbabel -i an1 -f ${REFERENCE}/foo.an1 -o csv -F ${TMPDIR}/an1.out
+compare ${REFERENCE}/an1-in.ref ${TMPDIR}/an1.out
+
+rm -f ${TMPDIR}/an1.out
+gpsbabel -i an1 -f ${REFERENCE}/foo.an1 -o an1 -F ${TMPDIR}/an1.out
+bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-an1.ref
+
+rm -f ${TMPDIR}/an1.out
+gpsbabel -i xmap -f ${REFERENCE}/xmap -o an1 -F ${TMPDIR}/an1.out
+bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-out.ref
+
+rm -f ${TMPDIR}/an1.out
+gpsbabel -i google -f ${REFERENCE}/google.js -o an1 -F ${TMPDIR}/an1.out
+bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-line-out.ref
+

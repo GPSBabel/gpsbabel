@@ -1,0 +1,3 @@
+<para>Writes raw data as it is read from the logger to the file given as this option's argument
+(additional to decoding it as usual). The resulting binary files can be read and decoded by the skytraq-bin format.
+Mainly useful for debugging/development purposes.</para>

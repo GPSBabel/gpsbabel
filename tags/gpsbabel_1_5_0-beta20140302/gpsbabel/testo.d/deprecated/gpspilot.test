@@ -1,0 +1,9 @@
+# GPSPilot Tracker for PalmOS
+# This test is eerily similar to the NAV Companion test.  In fact, the 
+# converted reference file (magnavr.gpu) is identical.
+rm -f ${TMPDIR}/gpspilot.pdb ${TMPDIR}/gpspilot.gpu ${TMPDIR}/gpspil_t.gpu
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpspilot -F ${TMPDIR}/gpspilot.pdb
+gpsbabel -i gpspilot -f ${TMPDIR}/gpspilot.pdb -o gpsutil -F ${TMPDIR}/gpspilot.gpu
+gpsbabel -i gpspilot -f ${REFERENCE}/gpspilot.pdb -o gpsutil -F ${TMPDIR}/gpspil_t.gpu
+compare ${TMPDIR}/gpspil_t.gpu ${TMPDIR}/gpspilot.gpu
+compare ${REFERENCE}/gu.wpt ${TMPDIR}/gpspilot.gpu

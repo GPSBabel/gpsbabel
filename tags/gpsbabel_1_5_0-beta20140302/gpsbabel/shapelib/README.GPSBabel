@@ -1,0 +1,8 @@
+This is a subset of Shapelib v1.3.10 from http://shapelib.maptools.org/
+
+The source is largely unmodified.  It's subsetted here only to reduce 
+the amount of size in our tree that it takes and to reduce ongoing 
+merge maintenance.
+
+shpopen.c: int32_t instead of int32 was used to eliminate clang warnings.
+shpopen.c: include <stdint.h> for MSVC.

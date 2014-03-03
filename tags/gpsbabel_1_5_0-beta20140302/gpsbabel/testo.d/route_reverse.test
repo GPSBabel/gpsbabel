@@ -1,0 +1,26 @@
+#
+# Route reversal filter.   Do it twice and be sure we get what we
+# started with.
+#
+rm -f ${TMPDIR}/reverse1.arc ${TMPDIR}/reverse2.arc ${TMPDIR}/reference.arc
+gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
+	  -o arc -F ${TMPDIR}/reference.arc
+gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
+         -x reverse \
+         -o arc -F ${TMPDIR}/reverse1.arc
+gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx \
+         -x reverse \
+         -x reverse \
+         -o arc -F ${TMPDIR}/reverse2.arc
+# Verify the first and last are the same
+compare ${TMPDIR}/reference.arc  ${TMPDIR}/reverse2.arc
+# Verify the first and second are different.
+#${DIFF}  ${TMPDIR}/reverse1.arc  ${TMPDIR}/reverse2.arc > /dev/null && {
+#		echo ERROR Failed reversal test.
+#		exit 1
+#}
+
+# parkrrrr: This isn't a straightforward compare; we *want* it to fail.
+# Obviously this test should just be rewritten with a new reference.
+#compare  ${TMPDIR}/reverse1.arc  ${TMPDIR}/reverse2.arc
+

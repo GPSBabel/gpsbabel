@@ -1,0 +1,3 @@
+<para>
+When used with the <option>-s</option> to generate smart shortnames, this suboption controls whether whitespace is allowed in the generated shortnames.
+</para>

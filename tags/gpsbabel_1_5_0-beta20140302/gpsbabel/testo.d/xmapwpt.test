@@ -1,0 +1,6 @@
+
+# XMapHH Street Atlas USA file format
+rm -f ${TMPDIR}/xmapwpt.wpt ${TMPDIR}/xmapwpt.xmapwpt
+gpsbabel -i xmapwpt -f ${REFERENCE}/xmapwpt.wpt -o xmapwpt -F ${TMPDIR}/xmapwpt.xmapwpt
+gpsbabel -i xmapwpt -f ${TMPDIR}/xmapwpt.xmapwpt -o xmapwpt -F ${TMPDIR}/xmapwpt.wpt
+compare ${TMPDIR}/xmapwpt.wpt ${REFERENCE}

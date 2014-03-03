@@ -1,0 +1,8 @@
+<para>
+This option is only valid when used with the <option>pop</option> option.
+This is the default behavior of the <option>pop</option> option, so you 
+should never need to specify it, but it is included for the sake of 
+readability.  When this option is specified, the popped state replaces 
+the current state.
+</para>
+

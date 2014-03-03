@@ -1,0 +1,44 @@
+<para>
+<ulink url="http://www.magellangs.com">Magellan</ulink> NAV Companion for Palm/OS is not really designed
+for this sort of use, but its file format is supported and with a
+little bit of patience you can both read and write NAV Companion
+waypoints.  This conversion is based on
+partially incomplete reverse-engineering of the record format, so it
+may not work with all versions of NAV Companion.  It has been tested
+with version 2.10 and 3.20.
+</para>
+<para>
+Translating NAV Companion waypoints to another format is as easy
+as with any other format.  Just find the Companion_Waypoints database
+in your palm backup directory and use it as the input file. 
+</para>
+<para>
+When translating waypoints back to NAV Companion, though, you need 
+to jump through some hoops:  
+</para>
+<para>
+First, you must merge any waypoints that already exist in the database 
+in your Palm Backup directory with the ones you are adding; failure to 
+do so will result in only the new points being available in NAV Companion, 
+even if you give the new database a different name (it will overwrite 
+the old database, even in your backup directory.  That's a feature of 
+PalmOS, not of NAV Companion.)  
+</para>
+<para>
+To merge the databases, use a command line like the following:
+</para>
+<para><userinput>gpsbabel -i magnav -f Companion_Waypoints.PDB -i geo -f geocaching.loc -o magnav -F merged.pdb</userinput></para>
+<para>
+Second, you must use the installer to install your new PDB file.  Don't
+make the mistake of copying it over the existing Companion_Waypoints.PDB
+file; the one on the handheld will overwrite it rather than merging with
+it.
+</para>
+<para>
+Finally, because NAV Companion is not designed to work with desktop 
+applications, you must tell NAV Companion that its waypoints database 
+has changed out from under it.  One way to do this is to go to the 
+waypoints screen and attempt to scroll; that will force it to reread 
+the database and fix the record pointers that it keeps on the heap.
+</para>
+

@@ -1,0 +1,4 @@
+<para>
+This option should be 'f' if you want the altitude expressed in feet and
+'m' for meters.  The default is 'f'.
+</para>

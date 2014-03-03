@@ -1,0 +1,25 @@
+<para>
+   The bitmap (BMP) should be 24x24 (or smaller) and can be in
+   RGB-colors (24- and 32-bit) or 8-bit indexed color format.
+</para>
+<para>
+  If you're starting from images in another format, you may need to
+  use another tool like Gimp or ImageMagick's convert to get the imaga
+  into oen of the above formats to avoid errors about "Unsupported color 
+  depth".
+</para>
+<para>
+  Not all devices can support all color depths.   GPSBabel (and its 
+  developers) have no way of knowing what is supported on any given model
+  so some experimentation may be necessary on your part.   It was reported
+  that a Nuvi 3790, for example, will read the POIs only if they use 8BPP.
+</para>
+<para>
+   A color value of 0xFF00FF (blue=255, green=0, red=255), 
+   also called "Magenta", can be used for transparent areas.
+</para>
+<para>
+  <userinput>
+    gpsbabel -i gpx -f "My Points.gpx" -o garmin_gpi,bitmap="tux.bmp" -F "My Points.gpi"
+  </userinput>
+</para>

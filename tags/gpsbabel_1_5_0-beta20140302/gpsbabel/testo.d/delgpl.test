@@ -1,0 +1,8 @@
+#
+# Delorme GPL file.   This is sort of a track format.
+#
+rm -f ${TMPDIR}/gpl1.gpx ${TMPDIR}/gpl2.gpx ${TMPDIR}/gpl1.gpl
+gpsbabel -t -i gpl -f ${REFERENCE}/track/webpark1.gpl -o gpx -F ${TMPDIR}/gpl1.gpx
+gpsbabel -t -i gpl -f ${REFERENCE}/track/webpark1.gpl -o gpl -F ${TMPDIR}/gpl1.gpl
+gpsbabel -t -i gpl -f ${TMPDIR}/gpl1.gpl -o gpx -F ${TMPDIR}/gpl2.gpx
+compare ${TMPDIR}/gpl1.gpx ${TMPDIR}/gpl2.gpx

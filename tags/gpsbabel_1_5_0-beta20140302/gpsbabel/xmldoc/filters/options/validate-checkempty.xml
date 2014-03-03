@@ -1,0 +1,3 @@
+<para>
+This option will cause a fatal error if there are no waypoints, no route waypoints and no track waypoints, i.e. the reader didn't produce anything.
+</para>

@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DirectionsResponse>
+ <status>OK</status>
+ <route>
+  <summary>A68</summary>
+  <leg>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.9269100</lat>
+     <lng>2.1462000</lng>
+    </start_location>
+    <end_location>
+     <lat>43.9266100</lat>
+     <lng>2.1460700</lng>
+    </end_location>
+    <polyline>
+     <points>enbkGwdbLF@BAn@X</points>
+    </polyline>
+    <duration>
+     <value>3</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Head &lt;b&gt;south&lt;/b&gt; on &lt;b&gt;Rue du Palais&lt;/b&gt; toward &lt;b&gt;Rue de l'Ort en Salvy&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>35</value>
+     <text>35 m</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.9266100</lat>
+     <lng>2.1460700</lng>
+    </start_location>
+    <end_location>
+     <lat>43.9265500</lat>
+     <lng>2.1462100</lng>
+    </end_location>
+    <polyline>
+     <points>ilbkG}cbLJ[</points>
+    </polyline>
+    <duration>
+     <value>12</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Turn &lt;b&gt;left&lt;/b&gt; onto &lt;b&gt;Pl. du Palais&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>13</value>
+     <text>13 m</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.9265500</lat>
+     <lng>2.1462100</lng>
+    </start_location>
+    <end_location>
+     <lat>43.9256200</lat>
+     <lng>2.1455100</lng>
+    </end_location>
+    <polyline>
+     <points>}kbkGydbLZRxCnABF?J?R</points>
+    </polyline>
+    <duration>
+     <value>16</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Turn &lt;b&gt;right&lt;/b&gt; onto &lt;b&gt;Rue du Sel&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>125</value>
+     <text>0.1 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.9256200</lat>
+     <lng>2.1455100</lng>
+    </start_location>
+    <end_location>
+     <lat>43.9258300</lat>
+     <lng>2.1450300</lng>
+    </end_location>
+    <polyline>
+     <points>cfbkGm`bLEFAHCJCNMJKd@</points>
+    </polyline>
+    <duration>
+     <value>33</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Slight &lt;b&gt;right&lt;/b&gt; onto &lt;b&gt;Pl. Lapèrouse&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>46</value>
+     <text>46 m</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.9258300</lat>
+     <lng>2.1450300</lng>
+    </start_location>
+    <end_location>
+     <lat>43.9242000</lat>
+     <lng>2.1443300</lng>
+    </end_location>
+    <polyline>
+     <points>mgbkGm}aL?^?B@BBFBFDBB@H@NBHAR@tABJAB?F?JBNBNHLHPN~@X</points>
+    </polyline>
+    <duration>
+     <value>82</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Slight &lt;b&gt;left&lt;/b&gt; to stay on &lt;b&gt;Pl. Lapèrouse&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>206</value>
+     <text>0.2 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.9242000</lat>
+     <lng>2.1443300</lng>
+    </start_location>
+    <end_location>
+     <lat>43.9224900</lat>
+     <lng>2.1422800</lng>
+    </end_location>
+    <polyline>
+     <points>g}akGayaL|ArB\b@fCbDl@n@b@l@</points>
+    </polyline>
+    <duration>
+     <value>23</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Continue onto &lt;b&gt;Av. Général de Gaulle&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>251</value>
+     <text>0.3 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.9224900</lat>
+     <lng>2.1422800</lng>
+    </start_location>
+    <end_location>
+     <lat>43.9223300</lat>
+     <lng>2.1392200</lng>
+    </end_location>
+    <polyline>
+     <points>qrakGglaL?H@B?BDBD@BjAXfLKvA</points>
+    </polyline>
+    <duration>
+     <value>40</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>At the roundabout, take the &lt;b&gt;1st&lt;/b&gt; exit onto &lt;b&gt;Av. Maréchal Joffre&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>250</value>
+     <text>0.2 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.9223300</lat>
+     <lng>2.1392200</lng>
+    </start_location>
+    <end_location>
+     <lat>43.9195900</lat>
+     <lng>2.1350000</lng>
+    </end_location>
+    <polyline>
+     <points>qqakGcy`LA??@?@A??@?@?@?@?@A@@@?@?@?@?@@@?@?@@??@@??@Rf@R\p@rAV^z@pB|A~DlBlEdAh@`BbA</points>
+    </polyline>
+    <duration>
+     <value>61</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>At the roundabout, take the &lt;b&gt;1st&lt;/b&gt; exit onto &lt;b&gt;Bd Lacombe&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>470</value>
+     <text>0.5 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.9195900</lat>
+     <lng>2.1350000</lng>
+    </start_location>
+    <end_location>
+     <lat>43.9183600</lat>
+     <lng>2.1182700</lng>
+    </end_location>
+    <polyline>
+     <points>m`akGw~_LRrGBlAH`D@JJlE@`@CTBz@D`B?l@JrDDX`@jPb@fQFxD@lFBjBHvDAb@@V?@?@@NBNFTRl@^nADTDV</points>
+    </polyline>
+    <duration>
+     <value>145</value>
+     <text>2 mins</text>
+    </duration>
+    <html_instructions>Turn &lt;b&gt;right&lt;/b&gt; onto &lt;b&gt;Av. François Verdier/D988&lt;/b&gt;&lt;div style=&quot;font-size:0.9em&quot;&gt;Continue to follow D988&lt;/div&gt;</html_instructions>
+    <distance>
+     <value>1355</value>
+     <text>1.4 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.9183600</lat>
+     <lng>2.1182700</lng>
+    </start_location>
+    <end_location>
+     <lat>43.9183100</lat>
+     <lng>2.1140400</lng>
+    </end_location>
+    <polyline>
+     <points>wx`kGev|KAFAF?H@H@FBHBDBDFP@L?L?LCZIj@C`@Gj@C~@?`@?HAb@?d@@p@@dADhDH`B</points>
+    </polyline>
+    <duration>
+     <value>37</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>At the roundabout, take the &lt;b&gt;2nd&lt;/b&gt; exit onto the &lt;b&gt;N88&lt;/b&gt; ramp to &lt;b&gt;Montauban/Toulouse/Gaillac&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>346</value>
+     <text>0.3 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.9183100</lat>
+     <lng>2.1140400</lng>
+    </start_location>
+    <end_location>
+     <lat>43.9149800</lat>
+     <lng>2.0585100</lng>
+    </end_location>
+    <polyline>
+     <points>mx`kGw{{KLxG@xB?|BClCE|BEnDAdB@|AFzCBfAFtB@r@DxANfGFlBDpBFzBFhCHpCL~ENrCRnCXdC`@hCf@hCh@hCf@|B^hB\tA^pBTlAPnALnALpAHrADrA@rA@pAApAApACbAA\AfAEpACtAEtAEvACvAEvACxAEjA?LGzAExACxAExAEtACvAAtACtAArA?tA?rA@rA@rABtABtADjCFtCLjEHjDFxCBpC@vAF^B^HvAXjKDbBDxB?FHrCHdDF`CDpA@|A?b@DlC@`@DbB?XD|BBv@Bj@DbA@RFxA?ZLhERdHHtCBdA@ZB\?\Dh@</points>
+    </polyline>
+    <duration>
+     <value>154</value>
+     <text>3 mins</text>
+    </duration>
+    <html_instructions>Merge onto &lt;b&gt;N88&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>4497</value>
+     <text>4.5 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.9149800</lat>
+     <lng>2.0585100</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6381200</lat>
+     <lng>1.4831700</lng>
+    </end_location>
+    <polyline>
+     <points>sc`kGu`qKH|@LjAFv@P`BJr@PpANt@Nt@H\Hd@Nj@FZBFBHHVJb@@BDPBHBJBD`@hANb@Tp@LXDLDFRj@`@|@d@dATf@b@`AnBfE|BbF`BpDdBxD`A|BXj@p@|AHPTf@Xn@lBfE|AhDbBzDpArCtA~Cx@fBl@nAlApCrAzCb@|@j@fAh@dAj@`AZh@^n@`@n@`@l@d@p@l@z@\b@p@|@v@|@n@v@BBj@l@^^LLVVd@b@v@t@lAfAnAfAlAdAjAfAz@t@t@n@j@f@f@b@h@f@r@n@h@f@z@r@|@v@r@n@h@d@f@f@d@d@b@d@b@h@d@f@\b@d@f@f@p@^f@`@j@`@h@p@bAh@z@d@v@j@bAr@lAl@bA`@n@j@`Ar@lANVp@hAp@jA^n@T^Tb@tA|BdAfB|@zA|@zANV~@~AzBtDFLHLPX|@|Ar@pAl@dAj@hAt@~At@bBf@jAl@vAf@tA@Bh@xARf@L`@h@~Af@`B\jAHT@BDNp@lCHV`@`Bb@rBTbARdAP~@Nv@Jr@RjAV~ABNLhARvAJ`AF\P~AP|AJjA@NP|B?BP|B?FFtAB`@F|AHvB@HBlADrBD~B?L@tB?~@A`C?d@A|AC|AClBARK~CM|CS`DAHQjC?HQvBAHYvCQ|AGj@WrCCJ?BCPIv@QzAE^K|@I`AUzBU|BW|BUzBCNGt@Ix@U|BU|BU`CAJ?BALK|@UzBU~BQzAO|AU|B[|CQ`BUvB]jDSrB[~Ci@fFMjA]tDGt@Ix@Gr@IfAIfAInBI|AE`BE~BE~BAT?d@IpIAhA?JAl@CbCE`DG`EEdCAz@EjCAv@GbFCbBAz@C`CEbCC`CC|BAfBA|AB`B@bBB~AD|AJbCJzBJ`BF`AL|AT|BP~A@N@DTdBT`B\tBf@xC@D^nBf@tCr@tDh@tCj@vCh@vC`@zBPbAf@lDX|BPzAP~BV|CD~@BZFdAVnFPdDFvAHvAV|EZ|FBfA^~Hb@~Ib@|Ib@dJ`@dI`@`I^|H`@`IR~DJhBDt@@N@FH~@LlA@LLlA^|CXrB`@dCd@hCf@~Bh@`Cv@vCl@pBDPt@`Cv@|B|@zBh@pAh@hABDTh@HNt@xApA|BjApBxAzBLTfA`Br@fAdDhFhAdBBDt@hAnB|CfA~AdDjFr@fA|DdG~BnDj@x@f@r@n@v@t@v@|@~@fAz@dAv@`An@BB~@j@lAl@jBp@|Af@tA\jB^|Cn@vDv@RD~Cn@bFfAvDt@fFdAdDr@~@Tl@N?@PDlA^XJh@RdA`@|@b@jB~@fAn@pAz@pA~@VRz@p@lAjAHFJLDDBDj@j@JJ~@`ArAbB@@dArAnAjBfAfBdAnB`AnBn@vAp@~Ar@lBj@fB@BJZFRbAnDNl@t@|C?@BHvArHdD~PpBlKdD|PnBbKJh@TlAz@pEr@rDx@nE|@vEj@rCbAnFlApGjAfG|@tE|@vElAnGt@|DTnAfArFz@tEr@nD|@zE|@vEr@pD\lBJf@l@`D\dBn@hDx@`Ex@nELp@DNVxARz@Lt@Nr@VtA?@BHBLVjAZ|A\tAXlA`@`B`@~A`@vAr@`Cb@xAh@`Bd@zAp@lBd@pAd@nAd@jAr@bBn@zAp@xAh@jAj@jAj@hAh@fA`@t@l@hAl@dAj@~@b@v@^l@j@|@b@p@f@t@f@v@h@t@t@bAV^V\dAvAV\h@r@Zd@@B\b@b@n@bArAdAvAtAlBhCjDdAxAtAhBtAnBfB`CfB`ChBbCpAhBjDxEfBbCtAjBd@n@pAfB~CfELPdBbCzCdEfBdCbChDBBxBzC|AxBtAnBpBlC`AxAvAnBdChDHNv@hAXb@?@T^^l@Zh@^p@^p@Zj@LZNV|@lB|@rBt@nBdAtC~@lC~AvEhAdD~BzGBJvBnGzAjEvA`EtA`EhAdDzC|IRl@dDrJXz@h@`BXbA`@|AV~@Rx@Rz@TbAVlAXzAZfB|@lF~@nFHj@n@pDp@hEBP`BlJBNb@jCFZ@FBNFXVtA^vBXtAP|@Pt@Rx@\rAT~@\lA`@rAb@tALZHXd@lAd@nAZt@f@jAf@lAx@bBt@xAx@dBx@`Bj@jAj@jAZn@\n@Zp@\p@l@lAxD`I\p@\p@Zr@\l@Zp@l@jAf@hAj@fAl@lAj@hAfAzBvAvCfAzB~CnGhD`HtDzHP^R^Xj@Tb@R`@FPl@pAb@fAb@jA^dAd@xAFPFR@Db@vA\tAXjA\~ALj@Nl@Nx@N|@V|ALr@PpAL|@NnANjA@DF~@PjBXlDP~ANtALjATzARnAVvAb@tBZvA\rA^zA^pAJXDNBHX|@l@`BVr@\z@z@nBd@dA`@v@l@nA\n@j@|@d@v@^l@f@t@f@n@j@t@v@`AbAjAjArA`@d@vFlG|DnEbG|G|ClDhDrDjD`DdCdCxJhMTV`BtBpEvE^^TRvCfCrE`DlC`B~XrPnClBNJFDPLv@l@HHfA|@|AxAjAhAr@v@d@h@|@dA|@hANTDDHLNTHJhElGvMrUpAtBhHtMVf@HNbCdE~AvCHNT^DLjApB\l@dAjBvBrDxAnC`@t@\x@vAbDpAfDx@dCb@xAb@vAr@rCz@vDp@hDj@lDb@zCZtCXxCV`DNlCJbCJfDBzAB`C?`DCxCC`CGfBIlCIxAOzBSnC_@dF?@KjAEj@qBrW}@nLwArREj@Gn@q@zIW|DMbCGtBGnBChBAxB?|B?lB@b@@tAHlCFhBFzAJjBN`CV|C\pDj@bG|@jJVfCRtB@F?@`@dEfA`LrAhNtAzNt@rHXlC?BD\VxB|@pFp@rD~@fEz@~CnBjGhBbGpBtGHRZ`AbA`D|@`DTv@Rt@Tr@Nd@L`@J^J^J^H\L`@b@`BF\T`AHd@R~@Lh@TtAP|@RxAFf@Ff@Ff@Dj@Dd@Dj@Dl@Bb@Bf@Bl@@h@@h@@f@?j@@f@?F?J?@?P?H?j@Ah@?d@Ad@Ad@Cd@Ch@Cd@A^Ej@Ef@Cd@Ed@Gh@Gj@Gj@Il@Il@Kp@]`CQlAOxAK|@KfAOhBIlAGfAGhAEhAChAEjAAbACbA?pA?zA@pA?J@V?B@X?VBtA@PBdADjAHfBJ`BHfAHx@Fx@JhANhARxADZHl@\xBb@fCJl@VtAZlBf@lCf@pCF\@FDV?BFV?DNv@^jB@H^rB`@vBVpADPZfB`@`CZ`BXzATpADX^rBVzAPfA\jBV|AVzATnAN|@VvARjAVvAZfBV`BJn@DVVrAVjAVvAF\VlAVjAd@vBZrA\xAl@`Cj@xB^xAh@lB`@rA^rAp@vB^jA@BTr@HP^hAXt@Tr@jAfDbDhI|CjHj@jAjAdCZn@lBrDhC|EpAtBd@v@?@~B|DxCpEtDjF~C~DvCnDjBvB@@x@|@@?|@`AtCxC|CvCJJ~@x@`DlCjEjDlEzCrA|@j@^x@d@?@@?vCjBxBtAfHlE`BbAnBnA?@B?@Bh@^p@b@TNbCzAFBhAn@`Bx@l@X`Cv@l@N@?\J@?nATvARz@HD@R@D?N@R@xADv@A\?bBG`AIhAOp@KxA[bAYB?TKDAfBq@XMb@Q~@i@jCcB|AkAfBoAh@[tAs@l@Uh@QHCLELCJCDAJCJE@?NC@?NELCJCBADAB?HAd@Gz@Ib@Ax@CfA@`BHbBPrDf@PBh@F~@LRBdCVlAF|@F\@B?P@V?X@zDBvB?B?@?@?`B?pXEhFCnC?^?`@?tA@D?L?fBHnAJn@FZHz@PhBd@hBr@^PnAn@B@RL@@HDJFHFbAp@d@^nBfBh@j@NNzBbClClCFFFFDD|@x@hA~@fAv@LJ@?PNpBpArAt@dBz@DBNDFBnCdARFd@N@?r@TZLzCl@nBZjBRjCPxFVfFXnBPjBTTDdBVhBZJBbB\bBb@xBl@vBp@xAh@tAh@PHPH|@\r@Z`Af@tAt@~CfBhDzBpCrBvD`DZXj@h@tCrCpBtBbBfBfUxUHJ~JhK^`@TVLPb@h@JLv@fAXb@LRBBBBPVbBrCn@nAfA~B?@@BNZ`AlCp@pBh@hB\nAZpAv@~Dh@tDRzA\nDJ|APzDJdEFvJD`H@z@?d@?D?B?B?VBpD?VFjEF`ERlFXnEH|@`@rDd@|DBLj@pDr@bDj@dCj@vBz@nCzBjGvAlDzBvF|@tBv@rBd@fAN`@@@@B?@FL`BhEvAxEx@xCVfADL@BJd@f@rB\`BtA|JBPLt@@HVzAZ|A@@Nr@@Bf@nBt@jCzAzEDRL`@ZlAj@xB\xAVlA`@lB^bBf@~BBLDRBJBLBLf@`CFVFX@?H`@z@`ENp@Rx@vBbKb@pBlAnFH\DV@BBJLj@\rABJBDXfAd@|Ab@tAh@zARf@b@jAz@rBLZHRz@pB~AxDrC|GdC`G|@|Bd@rA`@nA^pAj@rBJh@TrA</points>
+    </polyline>
+    <duration>
+     <value>1796</value>
+     <text>30 mins</text>
+    </duration>
+    <html_instructions>Continue onto &lt;b&gt;A68&lt;/b&gt;&lt;div style=&quot;font-size:0.9em&quot;&gt;Partial toll road&lt;/div&gt;</html_instructions>
+    <distance>
+     <value>61345</value>
+     <text>61.3 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6381200</lat>
+     <lng>1.4831700</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6307000</lat>
+     <lng>1.4783300</lng>
+    </end_location>
+    <polyline>
+     <points>gajiGyt`HHXb@nC?DDRBT?DD`@BTHlA@Z?HBp@@TAl@A`AAr@APKxAKvAGp@AZ?@Er@AF?@AL?LAB?B?FAX?X?BAl@@`@@T@J?DFl@?B?B@B@LDN?@@@BPL^@BP^X`@TT\R\Jn@FTAVCZIXQXWZ]Vg@\u@Vi@N[LULOJMFGPMPKTIVIB?HCTEDEBCBGjAKJ?fFa@hN_A</points>
+    </polyline>
+    <duration>
+     <value>70</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Keep &lt;b&gt;left&lt;/b&gt; at the fork, follow signs for &lt;b&gt;A61/Périphérique Intérieur/La Roseraie/Toulouse-Centre/Montpellier/Barcelone/Foix&lt;/b&gt; and merge onto &lt;b&gt;A61&lt;/b&gt;&lt;div style=&quot;font-size:0.9em&quot;&gt;Partial toll road&lt;/div&gt;</html_instructions>
+    <distance>
+     <value>1413</value>
+     <text>1.4 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6307000</lat>
+     <lng>1.4783300</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6276700</lat>
+     <lng>1.4784700</lng>
+    </end_location>
+    <polyline>
+     <points>{rhiGqv_H\Jx@CJ?r@?J@tBBJ?x@?pBIdBUHAZG</points>
+    </polyline>
+    <duration>
+     <value>22</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Take exit &lt;b&gt;15-La Roseraie&lt;/b&gt; toward &lt;b&gt;Lavaur/Jolimont&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>339</value>
+     <text>0.3 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6276700</lat>
+     <lng>1.4784700</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6195800</lat>
+     <lng>1.4688100</lng>
+    </end_location>
+    <polyline>
+     <points>}_hiGmw_Ht@tAZj@JTBHBJ?DAF?HBFBHBHBDBDDDHBTNLLLP^x@T`@JJNPRVZZv@p@@@j@h@XXJLX\DDBDDDNPBFLHTNNJNFNHBBRLjBxAFFRTTT\d@Z^HLV`@b@p@HJh@|@`@l@^b@l@r@JNFLFLH\A@A@?@A@?@A@?@?@?@?@?@?@?@?@@@?@?@@@@@@@@@@?@?@?@?@?@??A@?@??A@??A?A@??A?A@??A?AX^^v@\x@d@hAh@zAJZBPFRFLZn@HJFHPVx@v@LHRPNHFBF@JAJCVOLGFAD@@?B@HB</points>
+    </polyline>
+    <duration>
+     <value>186</value>
+     <text>3 mins</text>
+    </duration>
+    <html_instructions>Turn &lt;b&gt;right&lt;/b&gt; onto &lt;b&gt;Route d'Agde/D112&lt;/b&gt;&lt;div style=&quot;font-size:0.9em&quot;&gt;Go through 2 roundabouts&lt;/div&gt;</html_instructions>
+    <distance>
+     <value>1253</value>
+     <text>1.3 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6195800</lat>
+     <lng>1.4688100</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6147700</lat>
+     <lng>1.4639700</lng>
+    </end_location>
+    <polyline>
+     <points>kmfiGa{}GbCzDxBdE@Bt@nAZh@d@l@HLvAzALJVN`A^l@HfBTX@F@F@LHBF@FDFF@H?DA@AFFj@d@DD`@h@`@t@@DJR</points>
+    </polyline>
+    <duration>
+     <value>74</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>&lt;b&gt;Route d'Agde/D112&lt;/b&gt; turns slightly &lt;b&gt;right&lt;/b&gt; and becomes &lt;b&gt;Av. Yves Brunaud&lt;/b&gt;&lt;div style=&quot;font-size:0.9em&quot;&gt;Go through 1 roundabout&lt;/div&gt;</html_instructions>
+    <distance>
+     <value>688</value>
+     <text>0.7 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6147700</lat>
+     <lng>1.4639700</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6140800</lat>
+     <lng>1.4610300</lng>
+    </end_location>
+    <polyline>
+     <points>ioeiGy||GL`@DNBPDR@NDp@@rAAz@?v@?P@H?F@H@HBNBLDNBJDJHLBFBBVb@Zl@</points>
+    </polyline>
+    <duration>
+     <value>21</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Continue onto &lt;b&gt;Av. Léon Blum&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>259</value>
+     <text>0.3 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6140800</lat>
+     <lng>1.4610300</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6117400</lat>
+     <lng>1.4573100</lng>
+    </end_location>
+    <polyline>
+     <points>_keiGmj|GHNdEfHxBnDJPLP\l@T`@Vb@JRDLBHBLDVBT</points>
+    </polyline>
+    <duration>
+     <value>33</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Continue onto &lt;b&gt;Av. Georges Pompidou&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>399</value>
+     <text>0.4 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6117400</lat>
+     <lng>1.4573100</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6095500</lat>
+     <lng>1.4542600</lng>
+    </end_location>
+    <polyline>
+     <points>k|diGes{GA@GNCTALAL?L?H@H?JBLBNBNDJNVVb@HHp@lAPZT^LTZf@HHFHHFDBF@L@LAJ?PANCTCFAB@D?DBDDBD?@BDDHFHBF@@BFHLDFHNBBVf@</points>
+    </polyline>
+    <duration>
+     <value>55</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Turn &lt;b&gt;right&lt;/b&gt; onto &lt;b&gt;Bd de Marengo&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>393</value>
+     <text>0.4 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6095500</lat>
+     <lng>1.4542600</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6093000</lat>
+     <lng>1.4538800</lng>
+    </end_location>
+    <polyline>
+     <points>undiGc`{Gp@jA</points>
+    </polyline>
+    <duration>
+     <value>40</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Continue onto &lt;b&gt;Pont Riquet&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>42</value>
+     <text>42 m</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6093000</lat>
+     <lng>1.4538800</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6058700</lat>
+     <lng>1.4486200</lng>
+    </end_location>
+    <polyline>
+     <points>cmdiGw}zGNXV^FH~AjCxDrGVb@p@jAhB~CBBXf@R\d@~@HRH\FTV`@b@r@</points>
+    </polyline>
+    <duration>
+     <value>91</value>
+     <text>2 mins</text>
+    </duration>
+    <html_instructions>Continue onto &lt;b&gt;Allée Jean Jaurès/Allées Jean-Jaurès&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>571</value>
+     <text>0.6 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6058700</lat>
+     <lng>1.4486200</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6051900</lat>
+     <lng>1.4476700</lng>
+    </end_location>
+    <polyline>
+     <points>uwciG{|yGHJ~@rAn@fAFHDJ</points>
+    </polyline>
+    <duration>
+     <value>54</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Slight &lt;b&gt;left&lt;/b&gt; onto &lt;b&gt;Allée Président Roosevelt&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>108</value>
+     <text>0.1 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6051900</lat>
+     <lng>1.4476700</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6048900</lat>
+     <lng>1.4468900</lng>
+    </end_location>
+    <polyline>
+     <points>msciG}vyGCHALALALBLDNHRJPNRNLD@</points>
+    </polyline>
+    <duration>
+     <value>22</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Turn &lt;b&gt;right&lt;/b&gt; onto &lt;b&gt;Pl. du Président Thomas Wilson&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>81</value>
+     <text>81 m</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6048900</lat>
+     <lng>1.4468900</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6049500</lat>
+     <lng>1.4445900</lng>
+    </end_location>
+    <polyline>
+     <points>qqciGaryG?|@?j@A~@?bA?^AZErCAL</points>
+    </polyline>
+    <duration>
+     <value>29</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Take the 2nd &lt;b&gt;right&lt;/b&gt; onto &lt;b&gt;Rue Lafayette&lt;/b&gt;</html_instructions>
+    <distance>
+     <value>185</value>
+     <text>0.2 km</text>
+    </distance>
+   </step>
+   <step>
+    <travel_mode>DRIVING</travel_mode>
+    <start_location>
+     <lat>43.6049500</lat>
+     <lng>1.4445900</lng>
+    </start_location>
+    <end_location>
+     <lat>43.6046900</lat>
+     <lng>1.4445900</lng>
+    </end_location>
+    <polyline>
+     <points>}qciGucyGR@F@H?LC</points>
+    </polyline>
+    <duration>
+     <value>26</value>
+     <text>1 min</text>
+    </duration>
+    <html_instructions>Turn &lt;b&gt;left&lt;/b&gt; onto &lt;b&gt;Rue Roschach&lt;/b&gt;&lt;div style=&quot;font-size:0.9em&quot;&gt;Restricted usage road&lt;/div&gt;&lt;div style=&quot;font-size:0.9em&quot;&gt;Destination will be on the right&lt;/div&gt;</html_instructions>
+    <distance>
+     <value>29</value>
+     <text>29 m</text>
+    </distance>
+   </step>
+   <duration>
+    <value>3125</value>
+    <text>52 mins</text>
+   </duration>
+   <distance>
+    <value>74699</value>
+    <text>74.7 km</text>
+   </distance>
+   <start_location>
+    <lat>43.9269100</lat>
+    <lng>2.1462000</lng>
+   </start_location>
+   <end_location>
+    <lat>43.6046900</lat>
+    <lng>1.4445900</lng>
+   </end_location>
+   <start_address>Albi, France</start_address>
+   <end_address>Toulouse, France</end_address>
+  </leg>
+  <copyrights>Map data ©2012 Google</copyrights>
+  <overview_polyline>
+   <points>enbkGwdbLJ?n@XJ[tDbBBRKp@]`Bl@b@fDHnB|@pHjJd@~@h@xNO`B?NXp@xCbGjElKfDlBb@nOL`IV|InAzo@RbK`AhD@p@XtA]nG`@`ZOxPJfL|@p^z@tSlCbPdCnLbA~HRlIIdGe@fTg@pR?fTv@rb@dA|[f@nWxAvg@nBtOhAxEjGzOnc@raApKtT~HzKbGhG|NnMfKhJ~GbIrIbNjH|LxNnVdHtM`GdO|D|MpDvQtBnP|@zMd@dTYdUcBxVoEvb@uF|j@aEva@e@|F_@nLYtWi@p`@ShZVdLl@|J|CjU~Gb_@dBjMr@xJzBnd@pGjrAbArOhBdNnDbP`DbKtC|GfDpGzFdJzTp]|KvPjEbFrEfDvIrDfb@xItRrExGxCbG~D`FvEzEzF~GrL`ElKxAbF~Qv_AdL|l@d[jaBdK`i@pGvVvIxUzIhQxHxLrYr`@~q@v_AbUj[lEhHxApCvFfNxSpm@rQhi@dEhR~Mrw@nExPhGfOnVdg@l`@dx@rE|LhDrNvB`OlCfWfEpQdGfO|CtFzChE`a@pd@tItI~NnQhJdKlDzC`JbGf^rTzCbCbGdG~JhNbp@xjA`GjOvD|N|ChSlAlQRfPYpOqExm@cD~b@_BrWMpMLtJj@rL~C~\`Ity@tAbNfEfVnP~i@`ChIdCpK~AvL\nIQbNw@nI}BxRo@fQDxIx@dQhCrRzGj_@jJbi@`D`RfE`SvHnX`JnVpHlPnJ~PnM|RdLhNnGxGjKjJxOdLrErCbT|MrErCzIzDxHpApI@vGaAbBg@dF{BzJ{GdFoBtA[vE]hDJvGx@nC\vJl@xl@ErNVpFhA|EvBnG~EvK|K`DbC|HrE|G`CrKjB|UtApInAlIrB~NzFtF|CzHnFtKxJjj@xk@hDvEzEdJdC~GzCjMfB~O\`KLxS@jBBdFNlKl@|LtA|LvDrQjK`YjDrIJTxDbLpA`Fz@jDdCfPfDxNjC~IbCnKdCnLrFdWrDfPlE|MfQlb@rChJnAfH^vEM`Je@vJNbCn@vBjBvAxBGfBoBrAqCr@s@bA_@h@SbIu@fOs@dAC`EDzGa@ZGt@tAf@`ADb@Jd@VTpAhBfEpEbBpBvEbDpDzE~DzF@j@LZPMvAnC~ArEt@|A`BbBr@`@|@]R@hGhK`CtDdBfBxAn@vDb@ZZ\Fz@p@pAxB\vAHlHd@fBpKvQrB~DG~Bb@pBnD~F^Vx@Ap@GTNd@z@lSl]`AfCdCtDx@fBAv@j@hATN?hBC~DG`DZBVC</points>
+  </overview_polyline>
+  <bounds>
+   <southwest>
+    <lat>43.6046900</lat>
+    <lng>1.4445700</lng>
+   </southwest>
+   <northeast>
+    <lat>43.9269100</lat>
+    <lng>2.1462100</lng>
+   </northeast>
+  </bounds>
+ </route>
+</DirectionsResponse>

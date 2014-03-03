@@ -1,0 +1,12 @@
+
+#
+# STMwpp "Suunto Trek Manager" WaypointPlus format tests
+#
+rm -f ${TMPDIR}/stmwpp-*
+gpsbabel -i stmwpp -f ${REFERENCE}/track/stmwpp-track.txt -o gpx -F ${TMPDIR}/stmwpp-track.gpx
+compare ${REFERENCE}/track/stmwpp-track.gpx ${TMPDIR}/stmwpp-track.gpx
+gpsbabel -i stmwpp -f ${REFERENCE}/route/stmwpp-route.txt -o gpx -F ${TMPDIR}/stmwpp-route.gpx
+compare ${REFERENCE}/route/stmwpp-route.gpx ${TMPDIR}/stmwpp-route.gpx
+gpsbabel -i stmwpp -f ${REFERENCE}/route/stmwpp-route.txt -o stmwpp -F ${TMPDIR}/stmwpp-route.txt
+compare ${REFERENCE}/route/stmwpp-route.txt ${TMPDIR}/stmwpp-route.txt
+

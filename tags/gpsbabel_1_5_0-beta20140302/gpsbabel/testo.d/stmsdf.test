@@ -1,0 +1,11 @@
+
+#
+# Suunto SDF
+#
+rm -f ${TMPDIR}/stmsdf*
+gpsbabel -i garmin_txt -f ${REFERENCE}/garmin_txt.txt -t -o stmsdf -F ${TMPDIR}/stmsdf-track.sdf -r -o stmsdf,index=2 -F ${TMPDIR}/stmsdf-route.sdf
+compare ${REFERENCE}/track/stmsdf-track.sdf ${TMPDIR}/stmsdf-track.sdf
+compare ${REFERENCE}/route/stmsdf-route.sdf ${TMPDIR}/stmsdf-route.sdf
+gpsbabel -i stmsdf -f ${TMPDIR}/stmsdf-track.sdf -f ${TMPDIR}/stmsdf-route.sdf -o garmin_txt,prec=2 -F ${TMPDIR}/stmsdf.txt
+compare ${REFERENCE}/stmsdf.txt ${TMPDIR}/stmsdf.txt
+

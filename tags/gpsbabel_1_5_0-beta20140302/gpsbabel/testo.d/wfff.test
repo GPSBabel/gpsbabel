@@ -1,0 +1,6 @@
+#
+# Wfff.
+#
+gpsbabel -i wfff -f ${REFERENCE}/wfff.xml -o gpsutil -F ${TMPDIR}/wfff.gpu
+compare ${REFERENCE}/wfff.gpu ${TMPDIR}/wfff.gpu
+

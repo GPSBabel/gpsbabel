@@ -1,0 +1,16 @@
+<para>
+There are three main types of data that GPSBabel deals with:
+waypoints, tracks, and routes.   The nuketypes filter allows
+removing all the data of any or all of those three types.
+</para>
+<example id="example_nuketypes_filter">
+<title>Filtering data types with nuketypes</title>
+<para>
+If you have a GPX file that contains routes, tracks, and
+waypoints and you want a GPX file that contains only tracks,
+you may use this filter to remove the waypoints and the routes 
+with this command:
+</para>
+<para><userinput>gpsbabel -i gpx -f bigfile.gpx -x nuketypes,waypoints,routes -o gpx -F tracksonly.gpx</userinput></para>
+</example>
+   

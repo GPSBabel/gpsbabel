@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+ <title>GPSBabel HTML Output</title>
+ <style>
+  p.gpsbabelwaypoint { font-size: 120%; font-weight: bold }
+ </style>
+</head>
+<body>
+<p class="index">
+<a href="#GCGCA8">GCGCA8 - Oozy rat in a sanitary zoo</a><br>
+</p>
+
+<a name="GCGCA8"><hr></a>
+<table width="100%">
+<tr><td><p class="gpsbabelwaypoint">GCGCA8 - N35&deg;55.300 W86&deg;51.700 (16S 512480 3975269)<br>
+<a href="http://www.geocaching.com/seek/cache_details.aspx?guid=cda94cd6-d657-49bd-8e7e-0031ef1b2613">Oozy rat in a sanitary zoo</a> by robertlipe</p></td>
+<td align="right"><p class="gpsbabelcacheinfo">3 / 2<br>
+Unknown Cache / Unknown</p></td></tr>
+<tr><td colspan="2"><p class="gpsbabeldescshort">The cache is not at the coordinates above.   These coords will get you to the correct park and within 1/2 mile of the cache.  The cache is within 35 feet of the trail.   It is not handicapped accessible.   It is a nice walk in the woods that is practical for all ages.  There is no space in the container for trading items.   You should bring a writing stick and bug spray is recommended.</p>
+<p class="gpsbabeldesclong">So if the cache isn't at the above coordinates, where is it?  
+
+<ul>
+
+<li>Too bad I hid a boot
+<li>Too hot to hoot
+<li>Never odd or even
+<li>Do geese see God?
+<li>"Do nine men interpret?" "Nine men," I nod
+<li>Rats live on no evil star
+<li>Go hang a salami, I'm a lasagna hog
+</ul>
+
+Now that it's intuitively obvious to even the most casual observer where the cache is, turn on your geo-mojo and go find it.
+<br>
+<img SRC="http://www.mtgc.org/mtgc_member-banner.gif" WIDTH="500" HEIGHT="40" ALT="Member of Middle Tennessee GeoCachers Club [www.mtgc.org]" BORDER="0"></a></p></p>
+</td></tr></table>
+</body></html>

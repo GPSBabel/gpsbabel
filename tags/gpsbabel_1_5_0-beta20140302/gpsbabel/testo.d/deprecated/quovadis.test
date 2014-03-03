@@ -1,0 +1,10 @@
+
+# QuoVadis GPS for PalmOS
+# This test is derived from the Cetus test.
+rm -f ${TMPDIR}/quovadis.pdb ${TMPDIR}/quovadis.gpu ${TMPDIR}/quovadist.gpu
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o quovadis -F ${TMPDIR}/quovadis.pdb
+gpsbabel -i quovadis -f ${TMPDIR}/quovadis.pdb -o gpsutil -F ${TMPDIR}/quovadis.gpu
+gpsbabel -i quovadis -f ${REFERENCE}/quovadis.pdb -o gpsutil -F ${TMPDIR}/quovadist.gpu
+compare ${TMPDIR}/quovadist.gpu ${TMPDIR}/quovadis.gpu
+compare ${REFERENCE}/quovadis.gpu ${TMPDIR}/quovadis.gpu
+

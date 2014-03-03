@@ -1,0 +1,7 @@
+<para>
+  This format supports the <ulink url="http://www.vidaone.com">VidaOne</ulink> GPS for pocket PC GPB file type.
+</para>
+<para>
+  This is have a very simple binary format which stores only the coordinates 
+  in the tracklog (.gpb) files.
+</para>

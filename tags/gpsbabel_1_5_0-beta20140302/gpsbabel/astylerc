@@ -1,0 +1,19 @@
+# One True Brace Style - function curlies are in column zero for easy
+# selection in vi.
+--style=1tbs
+
+# Two column indents.
+-s2
+
+# Even single line ifs and elses get braces.
+--add-brackets
+
+# Insert space after 'if', 'for', 'while'.
+--pad-header
+
+# Remove extraneous spaces in parens.
+--unpad-paren
+
+# Prefer char* foo to char *foo.
+--align-pointer=type
+--align-reference=type

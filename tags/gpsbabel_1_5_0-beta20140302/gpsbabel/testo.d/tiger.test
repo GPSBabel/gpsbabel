@@ -1,0 +1,8 @@
+# Tiger
+# This one is a little tacky, becuase it's a very lossy format.
+# so we simply test we can write it, and then read it and write it and
+# get an identical file back.
+rm -f ${TMPDIR}/tiger
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o tiger -F ${TMPDIR}/tiger
+gpsbabel -i tiger -f ${TMPDIR}/tiger -o tiger -F ${TMPDIR}/tiger2
+compare ${TMPDIR}/tiger ${TMPDIR}/tiger2

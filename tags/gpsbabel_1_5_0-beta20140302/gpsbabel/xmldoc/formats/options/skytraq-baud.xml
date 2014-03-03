@@ -1,0 +1,7 @@
+<para>The following baud rates can be used: 4800, 9600, 19200, 38400, 57600, 115200, 230400.
+Note that your logger might not support all of them (especially 230400 which isn't documented
+in the chipset manual, though there are known devices that are capable of this speed).</para>
+
+<para>If <userinput>baud=0</userinput> (zero) download takes place at the baud rate the
+device is currently set to. This is especially useful for Bluetooth connections since they
+often don't allow changing the baud rate.</para>

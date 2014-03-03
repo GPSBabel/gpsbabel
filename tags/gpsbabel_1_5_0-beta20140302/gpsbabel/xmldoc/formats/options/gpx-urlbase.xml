@@ -1,0 +1,4 @@
+<para>
+  This is a fairly esoteric option.  If the GPX file you are reading has only base pathnames (e.g "foo.html") the value you specify to this argument will be prepended to that.  For example, "-o gpx,urlbase=c:\My Documents\Whatever" would result in the link to that waypoint being written to refer to <filename>c:\My Document\WHatever\foo.html</filename>
+</para>
+
