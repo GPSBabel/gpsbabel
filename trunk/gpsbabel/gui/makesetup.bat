@@ -18,17 +18,26 @@ rem Basic Qt runtime DLLs
 rem  if "%QTDIR%"=="" call \QtSDK\Desktop\Qt\4.7.4\mingw\bin\qtenv2.bat
 rem  if "%QTDIR%"=="" call \Qt\Qt5.2.1\5.2.1\mingw48_32\bin\qtenv2.bat
 if "%QTDIR%"=="" set QTDIR=\Qt\Qt5.2.1\5.2.1\mingw48_32
+copy %QTDIR%\bin\icu*.dll qtdir\bin
+copy %QTDIR%\bin\libgcc_s_dw2-1.dll qtdir\bin
+copy %QTDIR%\bin\libstdc*.dll qtdir\bin
+copy %QTDIR%\bin\libwinpthread*.dll qtdir\bin
 copy %QTDIR%\bin\Qt5Core.dll qtdir\bin
 copy %QTDIR%\bin\Qt5Gui.dll qtdir\bin
-copy %QTDIR%\bin\Qt5Webkit.dll qtdir\bin
-copy %QTDIR%\bin\Qt5Xml.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Multimedia.dll qtdir\bin
+copy %QTDIR%\bin\Qt5MultimediaWidgets.dll qtdir\bin
 copy %QTDIR%\bin\Qt5Network.dll qtdir\bin
-rem copy %QTDIR%\bin\mingwm10.dll qtdir\bin
-Rem  Because *obviously* libraries should live in the bin directory...
-copy %QTDIR%\bin\libwinpthread*.dll qtdir\bin
-copy %QTDIR%\bin\icu*.dll qtdir\bin
-copy %QTDIR%\bin\libstdc*.dll qtdir\bin
-copy %QTDIR%\bin\libgcc_s_dw2-1.dll qtdir\bin
+copy %QTDIR%\bin\Qt5OpenGL.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Positioning.dll qtdir\bin
+copy %QTDIR%\bin\Qt5PrintSupport.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Qml.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Quick.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Sensors.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Sql.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Webkit.dll qtdir\bin
+copy %QTDIR%\bin\Qt5WebkitWidgets.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Widgets.dll qtdir\bin
+copy %QTDIR%\bin\Qt5Xml.dll qtdir\bin
 
 rem Image format plugins needed at runtime, but not debug verions
 xcopy %QTDIR%\plugins\imageformats qtdir\plugins\imageformats
