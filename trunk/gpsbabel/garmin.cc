@@ -320,7 +320,7 @@ rw_deinit(void)
 }
 
 static int
-waypt_read_cb(int total_ct, GPS_PWay* way)
+waypt_read_cb(int total_ct, GPS_PWay* )
 {
   static int i;
 
@@ -399,7 +399,7 @@ waypt_read(void)
   }
 }
 
-static int lap_read_nop_cb(int n, struct GPS_SWay** dp)
+static int lap_read_nop_cb(int, struct GPS_SWay**)
 {
   return 0;
 }
@@ -835,7 +835,7 @@ sane_GPS_Way_New(void)
 }
 
 static int
-waypt_write_cb(GPS_PWay* way)
+waypt_write_cb(GPS_PWay*)
 {
   static int i;
   int n = waypt_count();
@@ -1103,7 +1103,7 @@ route_waypt_pr(const Waypoint* wpt)
 }
 
 static void
-route_noop(const route_head* wp)
+route_noop(const route_head* )
 {
 }
 

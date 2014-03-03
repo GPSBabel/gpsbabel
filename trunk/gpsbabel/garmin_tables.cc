@@ -667,7 +667,7 @@ static garmin_color_t gt_colors[] = {
   { "Cyan",		0xFFFF00 },
   { "White",		0xFFFFFF },
   { "Transparent",	unknown_color }, /* Currently not handled */
-  { NULL }
+  { NULL, 0 }
 };
 
 #define GT_COLORS_CT ((sizeof(gt_colors) / sizeof(gt_colors[0])) - 1)

@@ -270,13 +270,13 @@ const char* kml_tags_to_ignore[] = {
   NULL,
 };
 
-void wpt_s(xg_string args, const QXmlStreamAttributes*)
+void wpt_s(xg_string, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
   wpt_tmp_queued = 0;
 }
 
-void wpt_e(xg_string args, const QXmlStreamAttributes*)
+void wpt_e(xg_string, const QXmlStreamAttributes*)
 {
   if (wpt_tmp_queued) {
     waypt_add(wpt_tmp);
@@ -300,7 +300,7 @@ void wpt_time(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
-void wpt_coord(const QString& args, const QXmlStreamAttributes* attrv)
+void wpt_coord(const QString& args, const QXmlStreamAttributes*)
 {
   int n = 0;
   double lat, lon, alt;
@@ -323,7 +323,7 @@ void wpt_icon(xg_string args, const QXmlStreamAttributes*)
   }
 }
 
-void trk_coord(xg_string args, const QXmlStreamAttributes* attrv)
+void trk_coord(xg_string args, const QXmlStreamAttributes*)
 {
   int consumed = 0;
   double lat, lon, alt;
@@ -467,7 +467,7 @@ kml_wr_position_deinit(void)
 
 
 void
-kml_output_linestyle(char* color, int width)
+kml_output_linestyle(char* /*color*/, int width)
 {
   // Style settings for line strings
   writer->writeStartElement("LineStyle");

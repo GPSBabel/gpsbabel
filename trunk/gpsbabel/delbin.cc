@@ -2,7 +2,7 @@
 	DeLorme PN-20/40 USB "DeLBin" protocol
 
     Copyright (C) 2009 Paul Cornett, pc-gpsb at bullseye.com
-    Copyright (C) 2005, 2009  Robert Lipe, robertlipe@gpsbabel.org
+    Copyright (C) 2005-2014 Robert Lipe, robertlipe+source@gpsbabel.orgg
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
