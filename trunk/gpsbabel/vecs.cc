@@ -240,7 +240,7 @@ vecs_t vec_list[] = {
   {
     &gtc_vecs,
     "gtrnctr",
-    "Garmin Training Center",
+    "Garmin Training Center (.xml)",
     "xml",
     NULL,
   },
