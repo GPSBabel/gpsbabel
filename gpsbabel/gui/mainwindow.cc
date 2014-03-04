@@ -532,7 +532,7 @@ QString MainWindow::ensureExtensionPresent(const QString &name, int idx)
   QString outname = name;
   if (QFileInfo(name).suffix().length() == 0) {
     QStringList extensions = formatList_[idx].getExtensions();
-    if (extensions.size() > 0)
+    if (extensions.size() > 0 && !extensions[0].isEmpty())
       outname += "." + extensions[0];
   }
   return outname;
