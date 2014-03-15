@@ -522,8 +522,14 @@ trackfilter_merge(void)
       wpt = (Waypoint*)elem;
       if (wpt->creation_time.isValid()) {
         buff[j++] = new Waypoint(*wpt);
+        // we will put the merged points in one track segment,
+        // as it isn't clear how track segments in the original tracks
+        // should relate to the merged track.
+        // track_add_wpt will set new_trkseg for the first point
+        // after the sort.
+        wpt->wpt_flags.new_trkseg = 0;
       }
-      track_del_wpt(track, wpt);
+      track_del_wpt(track, wpt); // copies any new_trkseg flag forward.
       delete wpt;
     }
     if (track != master) {	/* i > 0 */
@@ -540,7 +546,7 @@ trackfilter_merge(void)
   for (i = 0; i < track_pts-timeless_pts; i++) {
     wpt = buff[i];
     if ((prev == NULL) || (prev->GetCreationTime() != wpt->GetCreationTime())) {
-      route_add_wpt(master, wpt);
+      track_add_wpt(master, wpt);
       prev = wpt;
     } else {
       delete wpt;
