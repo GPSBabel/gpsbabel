@@ -209,6 +209,8 @@ find_filter_vec(char* const vecname, char** opts)
           }
         }
       }
+    } else {
+      *opts = NULL;
     }
     if (opts && opts[0] && !found) {
       warning("'%s' is an unknown option to %s.\n", *opts, vec->name);
