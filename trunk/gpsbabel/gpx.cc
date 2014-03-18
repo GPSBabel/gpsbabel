@@ -479,8 +479,8 @@ tag_gpx(const QXmlStreamAttributes& attr)
     QString prefix = ns[i].prefix().toString();
     QString namespaceUri = ns[i].namespaceUri().toString();
     if (!prefix.isEmpty() && (0 != prefix.compare("xsi"))) {
-      if (! gpx_namespace_attribute.hasAttribute(prefix)) {
-        gpx_namespace_attribute.append(prefix.prepend("xmlns:"), namespaceUri);
+      if (! gpx_namespace_attribute.hasAttribute(prefix.prepend("xmlns:"))) {
+        gpx_namespace_attribute.append(prefix, namespaceUri);
       }
     }
   }
