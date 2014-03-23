@@ -1063,6 +1063,7 @@ void MainWindow::applyActionX()
       GMapDialog dlg(0, tempName, babelData_.debugLevel_ >=1 ? ui_.outputWindow : 0);
       dlg.show();
       dlg.exec();
+      QFile(tempName).remove();
       this->show();
     }
   }
