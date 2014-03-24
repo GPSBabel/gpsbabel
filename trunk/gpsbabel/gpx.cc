@@ -429,7 +429,7 @@ tag_mapping tag_path_map[] = {
   { tt_hdop, 0, "/gpx/rte/rtept/hdop" },
   { tt_vdop, 0, "/gpx/wpt/vdop" },
   { tt_vdop, 0, "/gpx/trk/trkseg/trkpt/vdop" },
-  { tt_vdop, 0, "/gpx/rte/rtept/hdop" },
+  { tt_vdop, 0, "/gpx/rte/rtept/vdop" },
   {(tag_type)0, 0, NULL}
 };
 
