@@ -96,22 +96,22 @@ typedef enum  {
   tt_keywords,
 
   tt_wpt,
-  tt_wpt_cmt,
-  tt_wpt_desc,
-  tt_wpt_name,
-  tt_wpt_sym,
-  tt_wpt_url,
-  tt_wpt_ele,
-  tt_wpt_time,
-  tt_wpt_type,
-  tt_wpt_urlname,
-  tt_wpt_link, 		/* New in GPX 1.1 */
-  tt_wpt_link_text, 	/* New in GPX 1.1 */
-  tt_pdop,		/* PDOPS are common for all three */
-  tt_hdop,		/* PDOPS are common for all three */
-  tt_vdop,		/* PDOPS are common for all three */
-  tt_fix,
-  tt_sat,
+  tt_wpttype_ele,
+  tt_wpttype_time,
+  tt_wpttype_name,
+  tt_wpttype_cmt,
+  tt_wpttype_desc,
+  tt_wpttype_url,		/* Not in GPX 1.1 */
+  tt_wpttype_urlname,	/* Not in GPX 1.1 */
+  tt_wpttype_link,		/* New in GPX 1.1 */
+  tt_wpttype_link_text,	/* New in GPX 1.1 */
+  tt_wpttype_sym,
+  tt_wpttype_type,
+  tt_wpttype_fix,
+  tt_wpttype_sat,
+  tt_wpttype_hdop,		/* HDOPS are common for all three */
+  tt_wpttype_vdop,		/* VDOPS are common for all three */
+  tt_wpttype_pdop,		/* PDOPS are common for all three */
   tt_cache,
   tt_cache_name,
   tt_cache_container,
@@ -150,30 +150,14 @@ typedef enum  {
   tt_rte_cmt,
   tt_rte_number,
   tt_rte_rtept,
-  tt_rte_rtept_ele,
-  tt_rte_rtept_name,
-  tt_rte_rtept_desc,
-  tt_rte_rtept_sym,
-  tt_rte_rtept_time,
-  tt_rte_rtept_cmt,
-  tt_rte_rtept_url,
-  tt_rte_rtept_urlname,
   tt_trk,
   tt_trk_desc,
   tt_trk_name,
   tt_trk_trkseg,
   tt_trk_number,
   tt_trk_trkseg_trkpt,
-  tt_trk_trkseg_trkpt_cmt,
-  tt_trk_trkseg_trkpt_name,
-  tt_trk_trkseg_trkpt_sym,
-  tt_trk_trkseg_trkpt_url,
-  tt_trk_trkseg_trkpt_urlname,
-  tt_trk_trkseg_trkpt_desc,
-  tt_trk_trkseg_trkpt_ele,
-  tt_trk_trkseg_trkpt_time,
-  tt_trk_trkseg_trkpt_course,
-  tt_trk_trkseg_trkpt_speed,
+  tt_trk_trkseg_trkpt_course,	/* Not in GPX 1.1 */
+  tt_trk_trkseg_trkpt_speed,	/* Not in GPX 1.1 */
   tt_trk_trkseg_trkpt_heartrate,
   tt_trk_trkseg_trkpt_cadence,
 
@@ -313,17 +297,6 @@ tag_mapping tag_path_map[] = {
   { tt_keywords, 0, "/gpx/keywords" },
 
   { tt_wpt, 0, "/gpx/wpt" },
-  { tt_wpt_ele, 0, "/gpx/wpt/ele" },
-  { tt_wpt_time, 0, "/gpx/wpt/time" },
-  { tt_wpt_name, 0, "/gpx/wpt/name" },
-  { tt_wpt_cmt, 0, "/gpx/wpt/cmt" },
-  { tt_wpt_desc, 0, "/gpx/wpt/desc" },
-  { tt_wpt_url, 0, "/gpx/wpt/url" },
-  { tt_wpt_urlname, 0, "/gpx/wpt/urlname" },
-  { tt_wpt_link, 0, "/gpx/wpt/link" },			/* GPX 1.1 */
-  { tt_wpt_link_text, 0, "/gpx/wpt/link/text" },		/* GPX 1.1 */
-  { tt_wpt_sym, 0, "/gpx/wpt/sym" },
-  { tt_wpt_type, 1, "/gpx/wpt/type" },
 
   /* Double up the GPX 1.0 and GPX 1.1 styles */
 #define GEOTAG(type,name) \
@@ -386,14 +359,6 @@ tag_mapping tag_path_map[] = {
   { tt_rte_desc, 0, "/gpx/rte/desc" },
   { tt_rte_number, 0, "/gpx/rte/number" },
   { tt_rte_rtept, 0, "/gpx/rte/rtept" },
-  { tt_rte_rtept_ele, 0, "/gpx/rte/rtept/ele" },
-  { tt_rte_rtept_time, 0, "/gpx/rte/rtept/time" },
-  { tt_rte_rtept_name, 0, "/gpx/rte/rtept/name" },
-  { tt_rte_rtept_cmt, 0, "/gpx/rte/rtept/cmt" },
-  { tt_rte_rtept_desc, 0, "/gpx/rte/rtept/desc" },
-  { tt_rte_rtept_url, 0, "/gpx/rte/rtept/url" },
-  { tt_rte_rtept_urlname, 0, "/gpx/rte/rtept/urlname" },
-  { tt_rte_rtept_sym, 0, "/gpx/rte/rtept/sym" },
 
   { tt_trk, 0, "/gpx/trk" },
   { tt_trk_name, 0, "/gpx/trk/name" },
@@ -401,35 +366,34 @@ tag_mapping tag_path_map[] = {
   { tt_trk_trkseg, 0, "/gpx/trk/trkseg" },
   { tt_trk_number, 0, "/gpx/trk/number" },
   { tt_trk_trkseg_trkpt, 0, "/gpx/trk/trkseg/trkpt" },
-  { tt_trk_trkseg_trkpt_ele, 0, "/gpx/trk/trkseg/trkpt/ele" },
-  { tt_trk_trkseg_trkpt_time, 0, "/gpx/trk/trkseg/trkpt/time" },
-  { tt_trk_trkseg_trkpt_name, 0, "/gpx/trk/trkseg/trkpt/name" },
-  { tt_trk_trkseg_trkpt_cmt, 0, "/gpx/trk/trkseg/trkpt/cmt" },
-  { tt_trk_trkseg_trkpt_desc, 0, "/gpx/trk/trkseg/trkpt/desc" },
-  { tt_trk_trkseg_trkpt_url, 0, "/gpx/trk/trkseg/trkpt/url" },
-  { tt_trk_trkseg_trkpt_urlname, 0, "/gpx/trk/trkseg/trkpt/urlname" },
-  { tt_trk_trkseg_trkpt_sym, 0, "/gpx/trk/trkseg/trkpt/sym" },
   { tt_trk_trkseg_trkpt_course, 0, "/gpx/trk/trkseg/trkpt/course" },
   { tt_trk_trkseg_trkpt_speed, 0, "/gpx/trk/trkseg/trkpt/speed" },
 
   { tt_humminbird_trk_trkseg_trkpt_depth, 0, "/gpx/trk/trkseg/trkpt/extensions/h:depth" },  // in centimeters.
 
   /* Common to tracks, routes, and waypts */
-  { tt_fix,  0, "/gpx/wpt/fix" },
-  { tt_fix,  0, "/gpx/trk/trkseg/trkpt/fix" },
-  { tt_fix,  0, "/gpx/rte/rtept/fix" },
-  { tt_sat,  0, "/gpx/wpt/sat" },
-  { tt_sat,  0, "/gpx/trk/trkseg/trkpt/sat" },
-  { tt_sat,  0, "/gpx/rte/rtept/sat" },
-  { tt_pdop, 0, "/gpx/wpt/pdop" },
-  { tt_pdop, 0, "/gpx/trk/trkseg/trkpt/pdop" },
-  { tt_pdop, 0, "/gpx/rte/rtept/pdop" },
-  { tt_hdop, 0, "/gpx/wpt/hdop" },
-  { tt_hdop, 0, "/gpx/trk/trkseg/trkpt/hdop" },
-  { tt_hdop, 0, "/gpx/rte/rtept/hdop" },
-  { tt_vdop, 0, "/gpx/wpt/vdop" },
-  { tt_vdop, 0, "/gpx/trk/trkseg/trkpt/vdop" },
-  { tt_vdop, 0, "/gpx/rte/rtept/vdop" },
+#define GPXWPTTYPETAG(type,passthrough,name) \
+  {type, passthrough, "/gpx/wpt/" name }, \
+  {type, passthrough, "/gpx/trk/trkseg/trkpt/" name }, \
+  {type, passthrough, "/gpx/rte/rtept/" name }
+
+  GPXWPTTYPETAG(tt_wpttype_ele, 0, "ele"),
+  GPXWPTTYPETAG(tt_wpttype_time, 0, "time"),
+  GPXWPTTYPETAG(tt_wpttype_name, 0, "name"),
+  GPXWPTTYPETAG(tt_wpttype_cmt, 0, "cmt"),
+  GPXWPTTYPETAG(tt_wpttype_desc, 0, "desc"),
+  GPXWPTTYPETAG(tt_wpttype_url, 0, "url"),				/* GPX 1.0 */
+  GPXWPTTYPETAG(tt_wpttype_urlname, 0, "urlname"),		/* GPX 1.0 */
+  GPXWPTTYPETAG(tt_wpttype_link, 0, "link"),			/* GPX 1.1 */
+  GPXWPTTYPETAG(tt_wpttype_link_text, 0, "link/text"),	/* GPX 1.1 */
+  GPXWPTTYPETAG(tt_wpttype_sym, 0, "sym"),
+  GPXWPTTYPETAG(tt_wpttype_type, 1, "type"),
+  GPXWPTTYPETAG(tt_wpttype_fix, 0, "fix"),
+  GPXWPTTYPETAG(tt_wpttype_sat, 0, "sat"),
+  GPXWPTTYPETAG(tt_wpttype_hdop, 0, "hdop"),
+  GPXWPTTYPETAG(tt_wpttype_vdop, 0, "vdop"),
+  GPXWPTTYPETAG(tt_wpttype_pdop, 0, "pdop"),
+
   {(tag_type)0, 0, NULL}
 };
 
@@ -657,7 +621,7 @@ gpx_start(const QString& el, const QXmlStreamAttributes& attr)
   case tt_wpt:
     tag_wpt(attr);
     break;
-  case tt_wpt_link:
+  case tt_wpttype_link:
     if (attr.hasAttribute("href")) {
       link_url = attr.value("href").toString();
     }
@@ -1090,49 +1054,37 @@ gpx_end(const QString& el)
     /*
      * Items that are actually in multiple categories.
      */
-  case tt_wpt_ele:
-  case tt_rte_rtept_ele:
-  case tt_trk_trkseg_trkpt_ele:
+  case tt_wpttype_ele:
     wpt_tmp->altitude = cdatastr.toDouble();
     break;
-  case tt_wpt_name:
-  case tt_rte_rtept_name:
-  case tt_trk_trkseg_trkpt_name:
+  case tt_wpttype_name:
     wpt_tmp->shortname = cdatastr;
     break;
-  case tt_wpt_sym:
-  case tt_rte_rtept_sym:
-  case tt_trk_trkseg_trkpt_sym:
+  case tt_wpttype_sym:
     wpt_tmp->icon_descr = cdatastr;
     break;
-  case tt_wpt_time:
-  case tt_trk_trkseg_trkpt_time:
-  case tt_rte_rtept_time:
+  case tt_wpttype_time:
     wpt_tmp->SetCreationTime(xml_parse_time(cdatastr));
     break;
-  case tt_wpt_cmt:
-  case tt_rte_rtept_cmt:
-  case tt_trk_trkseg_trkpt_cmt:
+  case tt_wpttype_cmt:
     wpt_tmp->description = cdatastr;
     break;
-  case tt_wpt_desc:
-  case tt_trk_trkseg_trkpt_desc:
-  case tt_rte_rtept_desc:
+  case tt_wpttype_desc:
     wpt_tmp->notes = cdatastr;
     break;
-  case tt_pdop:
+  case tt_wpttype_pdop:
     wpt_tmp->pdop = cdatastr.toDouble();
     break;
-  case tt_hdop:
+  case tt_wpttype_hdop:
     wpt_tmp->hdop = cdatastr.toDouble();
     break;
-  case tt_vdop:
+  case tt_wpttype_vdop:
     wpt_tmp->vdop = cdatastr.toDouble();
     break;
-  case tt_sat:
+  case tt_wpttype_sat:
     wpt_tmp->sat = cdatastr.toDouble();
     break;
-  case tt_fix: {
+  case tt_wpttype_fix: {
     // FIXME: this code seems to rely on atoi() parsing 3d and 2d as 3 and 2
     // which toInt() doesn't do.
     //wpt_tmp->fix = (fix_type)(cdatastr.toInt() - 1);
@@ -1150,24 +1102,18 @@ gpx_end(const QString& el)
       }
     }
     break;
-  case tt_wpt_url:
-  case tt_trk_trkseg_trkpt_url:
-  case tt_rte_rtept_url:
+  case tt_wpttype_url:
     link_->url_ = cdatastr;
     break;
-  case tt_wpt_urlname:
-  case tt_trk_trkseg_trkpt_urlname:
-  case tt_rte_rtept_urlname:
+  case tt_wpttype_urlname:
     link_->url_link_text_ = cdatastr;
     break;
-  case tt_wpt_link:
-//TODO: implement GPX 1.1 	case tt_trk_trkseg_trkpt_link:
-//TODO: implement GPX 1.1 	case tt_rte_rtept_link:
+  case tt_wpttype_link:
     waypt_add_url(wpt_tmp, link_url, link_text);
     link_text = QString();
     link_url = QString();
     break;
-  case tt_wpt_link_text:
+  case tt_wpttype_link_text:
       link_text = cdatastr.trimmed();
     break;
   case tt_unknown:
