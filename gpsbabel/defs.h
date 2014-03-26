@@ -360,8 +360,14 @@ public:
     url_(url),
     url_link_text_(url_link_text)
   { }
+  UrlLink(const QString url, const QString url_link_text, const QString url_link_type) :
+    url_(url),
+    url_link_text_(url_link_text),
+    url_link_type_(url_link_type)
+  { }
   QString url_;
   QString url_link_text_;
+  QString url_link_type_;
 };
 
 
@@ -654,6 +660,9 @@ unsigned int waypt_count(void);
 void set_waypt_count(unsigned int nc);
 void waypt_add_url(Waypoint* wpt, const QString& link,
                    const QString& url_link_text);
+void waypt_add_url(Waypoint* wpt, const QString& link,
+                   const QString& url_link_text,
+                   const QString& url_link_type);
 void xcsv_setup_internal_style(const char* style_buf);
 void xcsv_read_internal_style(const char* style_buf);
 Waypoint* find_waypt_by_name(const QString& name);

@@ -12,6 +12,7 @@
     <link href="www.zero.com"/>
     <link href="www.one.com">
       <text>one</text>
+      <type>text/html</type>
     </link>
     <link href="www.two.com">
       <text>two dots</text>
