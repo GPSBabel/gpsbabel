@@ -417,6 +417,12 @@ waypt_add_url(Waypoint* wpt, const QString& link, const QString& url_link_text)
   wpt->url_link_list_.push_back(UrlLink(link, url_link_text));
 }
 
+void
+waypt_add_url(Waypoint* wpt, const QString& link, const QString& url_link_text, const QString& url_link_type)
+{
+  wpt->url_link_list_.push_back(UrlLink(link, url_link_text, url_link_type));
+}
+
 double
 gcgeodist(const double lat1, const double lon1,
           const double lat2, const double lon2)

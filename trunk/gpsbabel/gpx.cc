@@ -57,6 +57,7 @@ static gpsbabel::XmlStreamWriter* writer;
 static short_handle mkshort_handle;
 static QString link_url;
 static QString link_text;
+static QString link_type;
 
 
 static char* snlen = NULL;
@@ -105,6 +106,7 @@ typedef enum  {
   tt_wpttype_urlname,	/* Not in GPX 1.1 */
   tt_wpttype_link,		/* New in GPX 1.1 */
   tt_wpttype_link_text,	/* New in GPX 1.1 */
+  tt_wpttype_link_type,	/* New in GPX 1.1 */
   tt_wpttype_sym,
   tt_wpttype_type,
   tt_wpttype_fix,
@@ -386,6 +388,7 @@ tag_mapping tag_path_map[] = {
   GPXWPTTYPETAG(tt_wpttype_urlname, 0, "urlname"),		/* GPX 1.0 */
   GPXWPTTYPETAG(tt_wpttype_link, 0, "link"),			/* GPX 1.1 */
   GPXWPTTYPETAG(tt_wpttype_link_text, 0, "link/text"),	/* GPX 1.1 */
+  GPXWPTTYPETAG(tt_wpttype_link_type, 0, "link/type"),	/* GPX 1.1 */
   GPXWPTTYPETAG(tt_wpttype_sym, 0, "sym"),
   GPXWPTTYPETAG(tt_wpttype_type, 1, "type"),
   GPXWPTTYPETAG(tt_wpttype_fix, 0, "fix"),
@@ -1109,12 +1112,16 @@ gpx_end(const QString& el)
     link_->url_link_text_ = cdatastr;
     break;
   case tt_wpttype_link:
-    waypt_add_url(wpt_tmp, link_url, link_text);
+    waypt_add_url(wpt_tmp, link_url, link_text, link_type);
+    link_type = QString();
     link_text = QString();
     link_url = QString();
     break;
   case tt_wpttype_link_text:
       link_text = cdatastr.trimmed();
+    break;
+  case tt_wpttype_link_type:
+      link_type = cdatastr.trimmed();
     break;
   case tt_unknown:
     end_something_else();
@@ -1353,6 +1360,7 @@ write_gpx_url(const Waypoint* waypointp)
       writer->writeStartElement("link");
       writer->writeAttribute("href", l.url_);
       writer->writeOptionalTextElement("text", l.url_link_text_);
+      writer->writeOptionalTextElement("type", l.url_link_type_);
       writer->writeEndElement();
     }
     return;
