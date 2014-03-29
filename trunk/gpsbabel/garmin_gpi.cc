@@ -105,7 +105,7 @@ static arglist_t garmin_gpi_args[] = {
   },
   {
     "proximity", &opt_proximity, "Default proximity",
-    NULL, ARGTYPE_FLOAT, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX
   },
   {
     "sleep", &opt_sleep, "After output job done sleep n second(s)",
@@ -113,7 +113,7 @@ static arglist_t garmin_gpi_args[] = {
   },
   {
     "speed", &opt_speed, "Default speed",
-    NULL, ARGTYPE_FLOAT, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX
   },
   {
     "unique", &opt_unique, "Create unique waypoint names (default = yes)",
@@ -540,14 +540,14 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
       /* speed isn't part of a normal waypoint
       WAYPT_SET(wpt, speed, speed);
       */
-      if ((wpt->shortname.isEmpty()  || (wpt->shortname).indexOf('@'))) {
+      if ((wpt->shortname.isEmpty()  || ((wpt->shortname).indexOf('@'))==-1)) {
         if (units == 's') {
           speed = MPS_TO_MPH(speed);
         } else {
           speed = MPS_TO_KPH(speed);
         }
         QString base = wpt->shortname.isEmpty() ? "WPT" : wpt->shortname;
-        wpt->shortname = base + QString("@.%1").arg(speed);
+        wpt->shortname = base + QString("@%1").arg(speed,0,'f',0);
       }
     }
 
@@ -901,12 +901,14 @@ wdata_compute_size(writer_data_t* data)
     wpt->extra_data = dt;
 
     if (alerts) {
-      char* pos;
 #if NEW_STRINGS
 // examine closely.
-      QString t = wpt->shortname.mid(wpt->shortname.indexOf('@'));
-      if ((pos = xstrdup(CSTR(t)))) {
+      const char* pos;
+      int pidx;
+      if ((pidx = wpt->shortname.indexOf('@')) != -1) {
+        pos = CSTR(wpt->shortname.mid(pidx));
 #else
+      char* pos;
       if ((pos = strchr(wpt->shortname, '@'))) {
 #endif
         double speed, scale;
