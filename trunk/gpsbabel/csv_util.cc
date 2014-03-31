@@ -175,7 +175,7 @@ static UrlLink* link_;
 /*     usage: p = csv_stringclean(stringtoclean, "&,\"")             */
 /*            (strip out ampersands, commas, and quotes.             */
 /*********************************************************************/
-
+#if 0
 char*
 #ifdef DEBUG_MEM
 CSV_STRINGCLEAN(const char* string, const char* chararray, DEBUG_PARAMS)
@@ -213,6 +213,16 @@ csv_stringclean(const char* string, const char* chararray)
   }
   return (tmp);
 }
+#else
+// Implement the C version via Qt - the reverse of most of our shims.
+char*
+csv_stringclean(const char* source, const char* chararray)
+{
+  /* Make a copy of the source... */
+  QString cleansed(csv_stringclean(QString(source), chararray));
+  return xstrdup(cleansed);
+}
+#endif
 
 QString
 csv_stringclean(const QString& source, const QString& to_nuke)
@@ -221,23 +231,6 @@ csv_stringclean(const QString& source, const QString& to_nuke)
   QString regex = QString("[%1]").arg(to_nuke);
   return r.remove(QRegExp(regex));
 }
-
-#if 0
-char*
-csv_stringclean(const QString& string_in, const QString& chararray_in)
-{
-  // TODO(robertl): replace this with a much more Qt-ish implementation.
-  // 
-  const char* string = xstrdup(CSTR(string_in));
-  const char* chararray = xstrdup(CSTR(chararray_in));
-
-  char* r = csv_stringclean(string, chararray);
-
-//  xfree(string);
-//  xfree(chararray);
-  return r;
-}
-#endif
 
 /***********************************************************************************/
 /* csv_stringtrim() - trim whitespace and leading and trailing enclosures (quotes) */
@@ -697,8 +690,8 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
  * dec_to_human - convert decimal degrees to human readable
  */
 
-void
-dec_to_human(char* buff, const char* format, const char* dirs, double val)
+QString
+dec_to_human(const char* format, const char* dirs, double val)
 {
   char* subformat = NULL;
   const char* formatptr = NULL;
@@ -722,7 +715,7 @@ dec_to_human(char* buff, const char* format, const char* dirs, double val)
   subformat = (char*) xmalloc(strlen(format)+2);
   formatptr = format;
 
-  buff[0] = '\0';
+  QString buff;
 
   while (formatptr && *formatptr) {
     strcpy(subformat, formatptr);
@@ -732,7 +725,7 @@ dec_to_human(char* buff, const char* format, const char* dirs, double val)
       *(type+1) = '\0';
       switch (*type) {
       case 'c':
-        sprintf(buff+strlen(buff), subformat, dirs[sign]);
+        buff += QString().sprintf(subformat, dirs[sign]);
         break;
       case 'd':
       case 'i':
@@ -743,7 +736,7 @@ dec_to_human(char* buff, const char* format, const char* dirs, double val)
         if (index>2) {
           fatal(MYNAME ": too many format specifiers\n");
         }
-        sprintf(buff+strlen(buff), subformat, intvals[index]);
+        buff += QString().sprintf(subformat, intvals[index]);
         index++;
         break;
       case 'e':
@@ -754,11 +747,11 @@ dec_to_human(char* buff, const char* format, const char* dirs, double val)
         if (index>2) {
           fatal(MYNAME ": too many format specifiers\n");
         }
-        sprintf(buff+strlen(buff), subformat, dblvals[index]);
+        buff += QString().sprintf(subformat, dblvals[index]);
         index++;
         break;
       case '%':
-        sprintf(buff+strlen(buff), "%s", subformat);
+        buff += subformat;
         break;
       default:
         fatal(MYNAME ": invalid format specifier\n");
@@ -766,12 +759,13 @@ dec_to_human(char* buff, const char* format, const char* dirs, double val)
 
       }
     } else {
-      sprintf(buff+strlen(buff), "%s", subformat);
+      buff += subformat;
     }
     formatptr += strlen(subformat);
   }
 
   xfree(subformat);
+  return buff;
 }
 
 /*****************************************************************************/
@@ -933,8 +927,8 @@ addhms(const char* s, const char* format)
 }
 
 static
-int
-writetime(char* buff, size_t bufsize, const char* format, time_t t, bool gmt)
+QString
+writetime(const char* format, time_t t, bool gmt)
 {
   static struct tm* stmp;
 
@@ -943,19 +937,26 @@ writetime(char* buff, size_t bufsize, const char* format, time_t t, bool gmt)
   } else {
     stmp = localtime(&t);
   }
-  return strftime(buff, bufsize, format, stmp);
+
+  // It's unfortunate that we publish the definition of "strftime specifiers"
+  // in the style definitions.  For this reason, we have to bust everything
+  // down to a time_t and then let strftime handle them.
+
+  char tbuff[1024];
+  strftime(tbuff, sizeof tbuff, format, stmp);
+  QDateTime dt = QDateTime::fromTime_t(t);
+  return QString(tbuff);
 }
 
 static
-int
-writetime(char* buff, size_t bufsize, const char* format, const gpsbabel::DateTime& t, bool gmt)
+QString
+writetime(const char* format, const gpsbabel::DateTime& t, bool gmt)
 {
-  return writetime(buff, bufsize, format, t.toTime_t(), gmt);
+  return writetime(format, t.toTime_t(), gmt);
 }
 
-static
-int
-writehms(char* buff, size_t bufsize, const char* format, time_t t, int gmt)
+QString 
+writehms(const char* format, time_t t, int gmt)
 {
   static struct tm no_time = tm();
   static struct tm* stmp = &no_time;
@@ -970,16 +971,15 @@ writehms(char* buff, size_t bufsize, const char* format, time_t t, int gmt)
     stmp = &no_time;
   }
 
-  return snprintf(buff, bufsize, format,
-                  stmp->tm_hour, stmp->tm_min, stmp->tm_sec,
-                  (stmp->tm_hour>=12?"PM":"AM"));
+  return QString().sprintf(format,
+                            stmp->tm_hour, stmp->tm_min, stmp->tm_sec,
+                            (stmp->tm_hour >= 12 ? "PM" : "AM"));
 }
 
-static
-int
-writehms(char* buff, size_t bufsize, const char* format, const gpsbabel::DateTime& t, int gmt)
+QString
+writehms(const char* format, const gpsbabel::DateTime& t, int gmt)
 {
-  return writehms(buff, bufsize, format, t.toTime_t(), gmt);
+  return writehms(format, t.toTime_t(), gmt);
 }
 
 static
@@ -1581,7 +1581,7 @@ xcsv_resetpathlen(const route_head* head)
 static void
 xcsv_waypt_pr(const Waypoint* wpt)
 {
-  char buff[1024];
+  QString buff;
   const char* write_delimiter;
   int i;
   field_map_t* fmp;
@@ -1666,26 +1666,26 @@ xcsv_waypt_pr(const Waypoint* wpt)
     }
 
     i++;
-#define writebuff(b, fmt, data) snprintf(b, sizeof(b), fmt, data)
+
     switch (fmp->hashed_key) {
     case XT_IGNORE:
       /* IGNORE -- Write the char printf conversion */
-      writebuff(buff, fmp->printfc, "");
+      buff = QString().sprintf(fmp->printfc, "");
       break;
     case XT_INDEX:
-      writebuff(buff, fmp->printfc, waypt_out_count + atoi(fmp->val));
+      buff = QString().sprintf(fmp->printfc, waypt_out_count + atoi(fmp->val));
       break;
     case XT_CONSTANT: {
       const char* cp = xcsv_get_char_from_constant_table(fmp->val);
       if (cp) {
-        writebuff(buff, fmp->printfc, cp);
+        buff = QString().sprintf(fmp->printfc, cp);
       } else {
-        writebuff(buff, fmp->printfc, fmp->val);
+        buff = QString().sprintf(fmp->printfc, fmp->val);
       }
     }
     break;
     case XT_SHORTNAME:
-		writebuff(buff, fmp->printfc,
+		buff = QString().sprintf(fmp->printfc,
                 shortname.isEmpty() ? fmp->val : CSTR(shortname));
 
       break;
@@ -1704,41 +1704,39 @@ xcsv_waypt_pr(const Waypoint* wpt)
       if (anyname.isEmpty()) {
         anyname = xstrdup(fmp->val);
       }
-      writebuff(buff, fmp->printfc, CSTR(anyname));
+      buff = QString().sprintf(fmp->printfc, CSTR(anyname));
       }
 
       break;
     case XT_DESCRIPTION:
-      writebuff(buff, fmp->printfc,
+      buff = QString().sprintf(fmp->printfc,
                 description.isEmpty() ? fmp->val : CSTR(description));
       break;
     case XT_NOTES:
-      writebuff(buff, fmp->printfc,
+      buff = QString().sprintf(fmp->printfc,
                 wpt->notes.isEmpty() ? fmp->val : CSTR(wpt->notes));
       break;
     case XT_URL: {
-      int off = 0;
       if (xcsv_urlbase) {
-        strcpy(buff, xcsv_urlbase);
-        off = strlen(xcsv_urlbase);
+        buff = xcsv_urlbase;
       }
       if (wpt->HasUrlLink()) {
         UrlLink l = wpt->GetUrlLink();
-        snprintf(buff + off, sizeof(buff) - off, fmp->printfc, l.url_.toUtf8().data());
+        buff += QString().sprintf(fmp->printfc, CSTR(l.url_));
       } else {
-        strcpy(buff, (fmp->val && *fmp->val) ? fmp->val : "\"\"");
+        buff += QString().sprintf(fmp->val && *fmp->val ? fmp->val : "\"\"");
       }
     }
     break;
     case XT_URL_LINK_TEXT:
       if (wpt->HasUrlLink()) {
         UrlLink l = wpt->GetUrlLink();
-        snprintf(buff, sizeof(buff), fmp->printfc,
+        buff = QString().sprintf(fmp->printfc,
                  !l.url_link_text_.isEmpty() ? l.url_link_text_.toUtf8().data() : fmp->val);
       }
       break;
     case XT_ICON_DESCR:
-      writebuff(buff, fmp->printfc,
+      buff = QString().sprintf(fmp->printfc,
                 (!wpt->icon_descr.isNull()) ?
                 wpt->icon_descr.toUtf8().data() : fmp->val);
       break;
@@ -1746,85 +1744,84 @@ xcsv_waypt_pr(const Waypoint* wpt)
       /* LATITUDE CONVERSION***********************************************/
     case XT_LAT_DECIMAL:
       /* latitude as a pure decimal value */
-      writebuff(buff, fmp->printfc, lat);
+      buff = QString().sprintf(fmp->printfc, lat);
       break;
     case XT_LAT_DECIMALDIR:
       /* latitude as a decimal value with N/S after it */
-      snprintf(buff, sizeof(buff), fmp->printfc, fabs(lat),
+      buff = QString().sprintf(fmp->printfc, fabs(lat),
                LAT_DIR(lat));
       break;
     case XT_LAT_DIRDECIMAL:
       /* latitude as a decimal value with N/S before it */
-      snprintf(buff, sizeof(buff), fmp->printfc,
+      buff = QString().sprintf(fmp->printfc,
                LAT_DIR(lat),
                fabs(lat));
       break;
     case XT_LAT_INT32DEG:
       /* latitude as an integer offset from 0 degrees */
-      writebuff(buff, fmp->printfc,
+      buff = QString().sprintf(fmp->printfc,
                 dec_to_intdeg(lat));
       break;
     case XT_LAT_DDMMDIR:
       /*latitude as (degrees * 100) + decimal minutes, with N/S after it */
-      dec_to_human(buff, fmp->printfc, "SN", degrees2ddmm(lat));
+      buff = dec_to_human(fmp->printfc, "SN", degrees2ddmm(lat));
       break;
     case XT_LAT_HUMAN_READABLE:
-      dec_to_human(buff, fmp->printfc, "SN", lat);
+      buff = dec_to_human(fmp->printfc, "SN", lat);
       break;
     case XT_LAT_NMEA:
-      writebuff(buff, fmp->printfc, degrees2ddmm(lat));
+      buff = QString().sprintf(fmp->printfc, degrees2ddmm(lat));
       break;
       // case XT_LAT_10E is handled outside the switch.
       /* LONGITUDE CONVERSIONS*********************************************/
     case XT_LON_DECIMAL:
       /* longitude as a pure decimal value */
-      writebuff(buff, fmp->printfc, lon);
+      buff = QString().sprintf(fmp->printfc, lon);
       break;
     case XT_LON_DECIMALDIR:
       /* latitude as a decimal value with N/S after it */
-      snprintf(buff, sizeof(buff),  fmp->printfc,
+      buff = QString().sprintf(fmp->printfc,
                fabs(lon),
                LON_DIR(lon));
       break;
     case XT_LON_DIRDECIMAL:
       /* latitude as a decimal value with N/S before it */
-      snprintf(buff, sizeof(buff), fmp->printfc,
+      buff = QString().sprintf(fmp->printfc,
                LON_DIR(lon),
                fabs(lon));
       break;
     case XT_LON_INT32DEG:
       /* longitudee as an integer offset from 0 degrees */
-      writebuff(buff, fmp->printfc,
+      buff = QString().sprintf(fmp->printfc,
                 dec_to_intdeg(lon));
       break;
     case XT_LON_DDMMDIR:
       /* longidute as (degrees * 100) + decimal minutes, with W/E after it*/
-      dec_to_human(buff, fmp->printfc, "WE", degrees2ddmm(lon));
+      buff = dec_to_human(fmp->printfc, "WE", degrees2ddmm(lon));
       break;
     case XT_LON_HUMAN_READABLE:
-      dec_to_human(buff, fmp->printfc, "WE", lon);
+      buff = dec_to_human(fmp->printfc, "WE", lon);
       break;
     case XT_LATLON_HUMAN_READABLE:
-      dec_to_human(buff, fmp->printfc, "SN", lat);
-      if (!isspace(buff[strlen(buff)])) {
-        strcat(buff, " ");
-      }
-      dec_to_human(buff+strlen(buff), fmp->printfc, "WE",
-                   lon);
+      buff = dec_to_human(fmp->printfc, "SN", lat);
+        buff += " ";
+      buff += dec_to_human(fmp->printfc, "WE", lon);
+      // Tidy up leading, trailing, middle whitespace.
+      buff = buff.simplified();
       break;
     case XT_LON_NMEA:
-      writebuff(buff, fmp->printfc, degrees2ddmm(lon));
+      buff = QString().sprintf(fmp->printfc, degrees2ddmm(lon));
       break;
       // case XT_LON_10E is handled outside the switch.
       /* DIRECTIONS *******************************************************/
     case XT_LAT_DIR:
       /* latitude N/S as a char */
-      writebuff(buff, fmp->printfc,
+      buff = QString().sprintf(fmp->printfc,
                 LAT_DIR(lat));
       break;
     case XT_LON_DIR:
       /* longitude E/W as a char */
-      writebuff(buff, fmp->printfc,
+      buff = QString().sprintf(fmp->printfc,
                 LON_DIR(lon));
       break;
 
@@ -1835,7 +1832,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
       if (! GPS_Math_WGS84_To_UKOSMap_M(wpt->latitude, wpt->longitude, &east, &north, map))
         fatal(MYNAME ": Position (%.5f/%.5f) outside of BNG.\n",
               wpt->latitude, wpt->longitude);
-      snprintf(buff, sizeof(buff), fmp->printfc, map, (int)(east + 0.5), (int)(north + 0.5));
+      buff = QString().sprintf(fmp->printfc, map, (int)(east + 0.5), (int)(north + 0.5));
     }
     break;
     case XT_UTM: {
@@ -1844,18 +1841,18 @@ xcsv_waypt_pr(const Waypoint* wpt)
                                &utme, &utmn, &utmz, &utmzc);
       snprintf(tbuf, sizeof(tbuf), "%d%c %6.0f %7.0f",
                utmz, utmzc, utme, utmn);
-      writebuff(buff, fmp->printfc, tbuf);
+      buff = QString().sprintf(fmp->printfc, tbuf);
     }
     break;
     case XT_UTM_ZONE:
       GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                                &utme, &utmn, &utmz, &utmzc);
-      writebuff(buff, fmp->printfc, utmz);
+      buff = QString().sprintf(fmp->printfc, utmz);
       break;
     case XT_UTM_ZONEC:
       GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                                &utme, &utmn, &utmz, &utmzc);
-      writebuff(buff, fmp->printfc, utmzc);
+      buff = QString().sprintf(fmp->printfc, utmzc);
       break;
     case XT_UTM_ZONEF: {
       char tbuf[10];
@@ -1863,29 +1860,29 @@ xcsv_waypt_pr(const Waypoint* wpt)
                                &utme, &utmn, &utmz, &utmzc);
       tbuf[0] = 0;
       snprintf(tbuf, sizeof(tbuf), "%d%c", utmz, utmzc);
-      writebuff(buff, fmp->printfc, tbuf);
+      buff = QString().sprintf(fmp->printfc, tbuf);
     }
     break;
     case XT_UTM_NORTHING:
       GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                                &utme, &utmn, &utmz, &utmzc);
-      writebuff(buff, fmp->printfc, utmn);
+      buff = QString().sprintf(fmp->printfc, utmn);
       break;
     case XT_UTM_EASTING:
       GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                                &utme, &utmn, &utmz, &utmzc);
-      writebuff(buff, fmp->printfc, utme);
+      buff = QString().sprintf(fmp->printfc, utme);
       break;
 
       /* ALTITUDE CONVERSIONS**********************************************/
     case XT_ALT_FEET:
       /* altitude in feet as a decimal value */
-      writebuff(buff, fmp->printfc,
+      buff = QString().sprintf(fmp->printfc,
                 METERS_TO_FEET(wpt->altitude));
       break;
     case XT_ALT_METERS:
       /* altitude in meters as a decimal value */
-      writebuff(buff, fmp->printfc,
+      buff = QString().sprintf(fmp->printfc,
                 wpt->altitude);
       break;
 
@@ -1895,192 +1892,190 @@ xcsv_waypt_pr(const Waypoint* wpt)
     case XT_PATH_DISTANCE_MILES:
       /* path (route/track) distance in miles */
       if (wpt->odometer_distance) {
-        writebuff(buff, fmp->printfc, METERS_TO_MILES(wpt->odometer_distance));
+        buff = QString().sprintf(fmp->printfc, METERS_TO_MILES(wpt->odometer_distance));
       } else {
-        writebuff(buff, fmp->printfc, pathdist);
+        buff = QString().sprintf(fmp->printfc, pathdist);
       }
       break;
     case XT_PATH_DISTANCE_METERS:
       /* path (route/track) distance in meters */
       if (wpt->odometer_distance) {
-        writebuff(buff, fmp->printfc, wpt->odometer_distance);
+        buff = QString().sprintf(fmp->printfc, wpt->odometer_distance);
       } else {
-        writebuff(buff, fmp->printfc, MILES_TO_METERS(pathdist));
+        buff = QString().sprintf(fmp->printfc, MILES_TO_METERS(pathdist));
       }
       break;
     case XT_PATH_DISTANCE_KM:
       /* path (route/track) distance in kilometers */
       if (wpt->odometer_distance) {
-        writebuff(buff, fmp->printfc, wpt->odometer_distance / 1000.0);
+        buff = QString().sprintf(fmp->printfc, wpt->odometer_distance / 1000.0);
       } else {
-        writebuff(buff, fmp->printfc, MILES_TO_METERS(pathdist) / 1000.0);
+        buff = QString().sprintf(fmp->printfc, MILES_TO_METERS(pathdist) / 1000.0);
       }
       break;
     case XT_PATH_SPEED:
-      writebuff(buff, fmp->printfc, wpt->speed);
+      buff = QString().sprintf(fmp->printfc, wpt->speed);
       break;
     case XT_PATH_SPEED_KPH:
-      writebuff(buff, fmp->printfc, MPS_TO_KPH(wpt->speed));
+      buff = QString().sprintf(fmp->printfc, MPS_TO_KPH(wpt->speed));
       break;
     case XT_PATH_SPEED_MPH:
-      writebuff(buff, fmp->printfc, MPS_TO_MPH(wpt->speed));
+      buff = QString().sprintf(fmp->printfc, MPS_TO_MPH(wpt->speed));
       break;
     case XT_PATH_SPEED_KNOTS:
-      writebuff(buff, fmp->printfc, MPS_TO_KNOTS(wpt->speed));
+      buff = QString().sprintf(fmp->printfc, MPS_TO_KNOTS(wpt->speed));
       break;
     case XT_PATH_COURSE:
-      writebuff(buff, fmp->printfc, wpt->course);
+      buff = QString().sprintf(fmp->printfc, wpt->course);
       break;
 
       /* HEART RATE CONVERSION***********************************************/
     case XT_HEART_RATE:
-      writebuff(buff, fmp->printfc, wpt->heartrate);
+      buff = QString().sprintf(fmp->printfc, wpt->heartrate);
       break;
       /* CADENCE CONVERSION***********************************************/
     case XT_CADENCE:
-      writebuff(buff, fmp->printfc, wpt->cadence);
+      buff = QString().sprintf(fmp->printfc, wpt->cadence);
       break;
       /* POWER CONVERSION***********************************************/
     case XT_POWER:
-      writebuff(buff, fmp->printfc, wpt->power);
+      buff = QString().sprintf(fmp->printfc, wpt->power);
       break;
     case XT_TEMPERATURE:
-      writebuff(buff, fmp->printfc, wpt->temperature);
+      buff = QString().sprintf(fmp->printfc, wpt->temperature);
       break;
     case XT_TEMPERATURE_F:
-      writebuff(buff, fmp->printfc, CELSIUS_TO_FAHRENHEIT(wpt->temperature));
+      buff = QString().sprintf(fmp->printfc, CELSIUS_TO_FAHRENHEIT(wpt->temperature));
       break;
       /* TIME CONVERSIONS**************************************************/
     case XT_EXCEL_TIME:
       /* creation time as an excel (double) time */
-      writebuff(buff, fmp->printfc, TIMET_TO_EXCEL(wpt->GetCreationTime().toTime_t()));
+      buff = QString().sprintf(fmp->printfc, TIMET_TO_EXCEL(wpt->GetCreationTime().toTime_t()));
       break;
     case XT_TIMET_TIME:
       /* time as a time_t variable */
     {
       time_t tt = wpt->GetCreationTime().toTime_t();
-      writebuff(buff, fmp->printfc, tt);
+      buff = QString().sprintf(fmp->printfc, tt);
     }
     break;
+
     case XT_TIMET_TIME_MS: {
       /* time as a time_t variable in milliseconds */
-      char tbuf[24];
-      writetime(tbuf, sizeof(tbuf), "%s", wpt->GetCreationTime().toTime_t(), false);
-      char mbuf[32];
-      snprintf(mbuf, sizeof(mbuf), "%s%03d", tbuf, wpt->GetCreationTime().time().msec());
-      writebuff(buff, "%s", mbuf);
+      buff = writetime("%ld", wpt->GetCreationTime().toTime_t(), false);
+      buff += QString().sprintf("%03d", wpt->GetCreationTime().time().msec());
+
     }
     break;
     case XT_YYYYMMDD_TIME:
-      writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->GetCreationTime()));
+      buff = QString().sprintf(fmp->printfc, time_to_yyyymmdd(wpt->GetCreationTime()));
       break;
     case XT_GMT_TIME:
-      writetime(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), true);
+      buff = writetime(fmp->printfc, wpt->GetCreationTime(), true);
       break;
     case XT_LOCAL_TIME:
-      writetime(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), false);
+      buff = writetime(fmp->printfc, wpt->GetCreationTime(), false);
       break;
     case XT_HMSG_TIME:
-      writehms(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), 1);
+      buff = writehms(fmp->printfc, wpt->GetCreationTime(), 1);
       break;
     case XT_HMSL_TIME:
-      writehms(buff, sizeof buff, fmp->printfc, wpt->GetCreationTime(), 0);
+      buff = writehms(fmp->printfc, wpt->GetCreationTime(), 0);
       break;
     case XT_ISO_TIME:
-      writetime(buff, sizeof buff, "%Y-%m-%dT%H:%M:%SZ", wpt->GetCreationTime(), true);
+      buff = writetime("%Y-%m-%dT%H:%M:%SZ", wpt->GetCreationTime(), true);
       break;
     case XT_ISO_TIME_MS:
-      strcpy(buff, wpt->GetCreationTime().toPrettyString().toUtf8().data());
+      buff = wpt->GetCreationTime().toPrettyString();
       break;
     case XT_GEOCACHE_LAST_FOUND:
-      writebuff(buff, fmp->printfc, time_to_yyyymmdd(wpt->gc_data->last_found));
+      buff = QString().sprintf(fmp->printfc, time_to_yyyymmdd(wpt->gc_data->last_found));
       break;
-
       /* GEOCACHE STUFF **************************************************/
     case XT_GEOCACHE_DIFF:
       /* Geocache Difficulty as a double */
-      writebuff(buff, fmp->printfc, wpt->gc_data->diff / 10.0);
+      buff = QString().sprintf(fmp->printfc, wpt->gc_data->diff / 10.0);
       field_is_unknown = !wpt->gc_data->diff;
       break;
     case XT_GEOCACHE_TERR:
       /* Geocache Terrain as a double */
-      writebuff(buff, fmp->printfc, wpt->gc_data->terr / 10.0);
+      buff = QString().sprintf(fmp->printfc, wpt->gc_data->terr / 10.0);
       field_is_unknown = !wpt->gc_data->terr;
       break;
     case XT_GEOCACHE_CONTAINER:
       /* Geocache Container */
-      writebuff(buff, fmp->printfc, gs_get_container(wpt->gc_data->container));
+      buff = QString().sprintf(fmp->printfc, gs_get_container(wpt->gc_data->container));
       field_is_unknown = wpt->gc_data->container == gc_unknown;
       break;
     case XT_GEOCACHE_TYPE:
       /* Geocache Type */
-      writebuff(buff, fmp->printfc, gs_get_cachetype(wpt->gc_data->type));
+      buff = QString().sprintf(fmp->printfc, gs_get_cachetype(wpt->gc_data->type));
       field_is_unknown = wpt->gc_data->type == gt_unknown;
       break;
     case XT_GEOCACHE_HINT:
-      writebuff(buff, fmp->printfc, wpt->gc_data->hint.toUtf8().data());
+      buff = QString().sprintf(fmp->printfc, wpt->gc_data->hint.toUtf8().data());
       field_is_unknown = !wpt->gc_data->hint.isEmpty();
       break;
     case XT_GEOCACHE_PLACER:
-      writebuff(buff, fmp->printfc, wpt->gc_data->placer.toUtf8().data());
+      buff = QString().sprintf(fmp->printfc, wpt->gc_data->placer.toUtf8().data());
       field_is_unknown = !wpt->gc_data->placer.isEmpty();
       break;
     case XT_GEOCACHE_ISAVAILABLE:
       if (wpt->gc_data->is_available == status_false) {
-        writebuff(buff, fmp->printfc, "False");
+        buff = QString().sprintf(fmp->printfc, "False");
       } else if (wpt->gc_data->is_available == status_true) {
-        writebuff(buff, fmp->printfc, "True");
+        buff = QString().sprintf(fmp->printfc, "True");
       } else {
-        writebuff(buff, fmp->printfc, "Unknown");
+        buff = QString().sprintf(fmp->printfc, "Unknown");
       }
       break;
     case XT_GEOCACHE_ISARCHIVED:
       if (wpt->gc_data->is_archived == status_false) {
-        writebuff(buff, fmp->printfc, "False");
+        buff = QString().sprintf(fmp->printfc, "False");
       } else if (wpt->gc_data->is_archived == status_true) {
-        writebuff(buff, fmp->printfc, "True");
+        buff = QString().sprintf(fmp->printfc, "True");
       } else {
-        writebuff(buff, fmp->printfc, "Unknown");
+        buff = QString().sprintf(fmp->printfc, "Unknown");
       }
       break;
       /* Tracks and Routes ***********************************************/
     case XT_TRACK_NEW:
       if (csv_track) {
         if (WAYPT_HAS(wpt,new_trkseg)) {
-          writebuff(buff, fmp->printfc, 1);
+          buff = QString().sprintf(fmp->printfc, 1);
         } else {
-          writebuff(buff, fmp->printfc, 0);
+          buff = QString().sprintf(fmp->printfc, 0);
         }
       }
       break;
     case XT_TRACK_NAME:
       if (csv_track) {
         QString r = csv_track->rte_name;
-        writebuff(buff, fmp->printfc, NONULL(r));
+        buff = QString().sprintf(fmp->printfc, NONULL(r));
       }
       break;
     case XT_ROUTE_NAME:
       if (csv_route) {
         QString r = csv_route->rte_name;
-        writebuff(buff, fmp->printfc, NONULL(r));
+        buff = QString().sprintf(fmp->printfc, NONULL(r));
       }
       break;
 
       /* GPS STUFF *******************************************************/
     case XT_GPS_HDOP:
-      writebuff(buff, fmp->printfc, wpt->hdop);
+      buff = QString().sprintf(fmp->printfc, wpt->hdop);
       field_is_unknown = !wpt->hdop;
       break;
     case XT_GPS_VDOP:
-      writebuff(buff, fmp->printfc, wpt->vdop);
+      buff = QString().sprintf(fmp->printfc, wpt->vdop);
       field_is_unknown = !wpt->vdop;
       break;
     case XT_GPS_PDOP:
-      writebuff(buff, fmp->printfc, wpt->pdop);
+      buff = QString().sprintf(fmp->printfc, wpt->pdop);
       field_is_unknown = !wpt->pdop;
       break;
     case XT_GPS_SAT:
-      writebuff(buff, fmp->printfc, wpt->sat);
+      buff = QString().sprintf(fmp->printfc, wpt->sat);
       field_is_unknown = !wpt->sat;
       break;
     case XT_GPS_FIX: {
@@ -2106,64 +2101,64 @@ xcsv_waypt_pr(const Waypoint* wpt)
         fix = "pps";
         break;
       }
-      writebuff(buff, fmp->printfc, fix);
+      buff = QString().sprintf(fmp->printfc, fix);
     }
     break;
     /* GMSD ************************************************************/
     case XT_COUNTRY: {
       garmin_fs_t* gmsd = GMSD_FIND(wpt);
-      writebuff(buff, fmp->printfc, GMSD_GET(country, ""));
+      buff = QString().sprintf(fmp->printfc, GMSD_GET(country, ""));
     }
     break;
     case XT_STATE: {
       garmin_fs_t* gmsd = GMSD_FIND(wpt);
-      writebuff(buff, fmp->printfc, GMSD_GET(state, ""));
+      buff = QString().sprintf(fmp->printfc, GMSD_GET(state, ""));
     }
     break;
     case XT_CITY: {
       garmin_fs_t* gmsd = GMSD_FIND(wpt);
-      writebuff(buff, fmp->printfc, GMSD_GET(city, ""));
+      buff = QString().sprintf(fmp->printfc, GMSD_GET(city, ""));
     }
     break;
     case XT_POSTAL_CODE: {
       garmin_fs_t* gmsd = GMSD_FIND(wpt);
-      writebuff(buff, fmp->printfc, GMSD_GET(postal_code, ""));
+      buff = QString().sprintf(fmp->printfc, GMSD_GET(postal_code, ""));
     }
     break;
     case XT_STREET_ADDR: {
       garmin_fs_t* gmsd = GMSD_FIND(wpt);
-      writebuff(buff, fmp->printfc, GMSD_GET(addr, ""));
+      buff = QString().sprintf(fmp->printfc, GMSD_GET(addr, ""));
     }
     break;
     case XT_PHONE_NR: {
       garmin_fs_t* gmsd = GMSD_FIND(wpt);
-      writebuff(buff, fmp->printfc, GMSD_GET(phone_nr, ""));
+      buff = QString().sprintf(fmp->printfc, GMSD_GET(phone_nr, ""));
     }
     break;
     case XT_FACILITY: {
       garmin_fs_t* gmsd = GMSD_FIND(wpt);
-      writebuff(buff, fmp->printfc, GMSD_GET(facility, ""));
+      buff = QString().sprintf(fmp->printfc, GMSD_GET(facility, ""));
     }
     break;
     /* specials */
     case XT_FILENAME:
-      writebuff(buff, fmp->printfc, wpt->session->filename);
+      buff = QString().sprintf(fmp->printfc, wpt->session->filename);
       break;
     case XT_FORMAT:
-      writebuff(buff, fmp->printfc, wpt->session->name);
+      buff = QString().sprintf(fmp->printfc, wpt->session->name);
       break;
     case -1:
       if (strncmp(fmp->key, "LON_10E", 7) == 0) {
-        writebuff(buff, fmp->printfc, lon * pow((double)10, atof(fmp->key+7)));
+        buff = QString().sprintf(fmp->printfc, lon * pow((double)10, atof(fmp->key+7)));
       } else if (strncmp(fmp->key, "LAT_10E", 7) == 0) {
-        writebuff(buff, fmp->printfc, lat * pow((double)10, atof(fmp->key+7)));
+        buff = QString().sprintf(fmp->printfc, lat * pow((double)10, atof(fmp->key+7)));
       }
       break;
     default:
       warning(MYNAME ": Unknown style directive: %s\n", fmp->key);
       break;
     }
-    obuff = csv_stringclean(buff, xcsv_file.badchars);
+    obuff = csv_stringclean(CSTR(buff), xcsv_file.badchars);
 
     if (field_is_unknown && fmp->options & OPTIONS_OPTIONAL) {
       goto next;
