@@ -1213,8 +1213,8 @@ static char tomtom_itn[] =
   "#\n"
   "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
   "#\n"
-  "IFIELD	LON_10E5, \"\", \"%.f\"\n"
-  "IFIELD	LAT_10E5, \"\", \"%.f\"\n"
+  "IFIELD	LON_10E5, \"\", \"%.0f\"\n"
+  "IFIELD	LAT_10E5, \"\", \"%.0f\"\n"
   "IFIELD	SHORTNAME, \"\", \"%s\"\n"
   "IFIELD	CONSTANT, \"0\", \"%s\"\n"
   ;
