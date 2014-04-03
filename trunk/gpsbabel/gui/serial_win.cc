@@ -41,7 +41,7 @@ void MainWindow::osLoadDeviceNameCombos(QComboBox *box)
 #else // This code assumes Windows 2000 or later
 
 // Uses QueryDosDevice(), Minimum supported: Windows 2000 Professional/Server
-#include <Windows.h> 
+#include <windows.h> 
 #include <stdio.h>
 
 void MainWindow::osLoadDeviceNameCombos(QComboBox *box)
