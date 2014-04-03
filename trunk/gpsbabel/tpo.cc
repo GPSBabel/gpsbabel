@@ -1307,7 +1307,7 @@ void tpo_process_routes(void)
     //
     for (jj = 0; jj < waypoint_cnt; jj++) {
       Waypoint* waypoint_temp;
-      unsigned char val;
+      unsigned int val;
 
 
 //UNKNOWN DATA LENGTH
