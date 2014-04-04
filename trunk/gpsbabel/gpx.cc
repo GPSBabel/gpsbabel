@@ -1421,13 +1421,22 @@ gpx_write_common_acc(const Waypoint* waypointp)
 
 
 static void
-gpx_write_common_position(const Waypoint* waypointp)
+gpx_write_common_position(const Waypoint* waypointp, const gpx_point_type point_type)
 {
   if (waypointp->altitude != unknown_alt) {
     writer->writeTextElement("ele", QString::number(waypointp->altitude, 'f', 6));
   }
   QString t = waypointp->CreationTimeXML();
   writer->writeOptionalTextElement("time", t);
+  if (gpxpt_track==point_type && 10==gpx_wversion_num) {
+    /* These were accidentally removed from 1.1, and were only a part of trkpts in 1.0 */
+    if WAYPT_HAS(waypointp, course) {
+      writer->writeTextElement("course", toString(waypointp->course));
+    }
+    if WAYPT_HAS(waypointp, speed) {
+      writer->writeTextElement("speed", toString(waypointp->speed));
+    }
+  }
 }
 
 static void
@@ -1532,7 +1541,7 @@ gpx_waypt_pr(const Waypoint* waypointp)
   oname = global_opts.synthesize_shortnames ?
           mkshort_from_wpt(mkshort_handle, waypointp) :
           waypointp->shortname;
-  gpx_write_common_position(waypointp);
+  gpx_write_common_position(waypointp, gpxpt_waypoint);
   gpx_write_common_description(waypointp, oname);
   gpx_write_common_acc(waypointp);
 
@@ -1600,17 +1609,7 @@ gpx_track_disp(const Waypoint* waypointp)
   writer->writeAttribute("lat", toString(waypointp->latitude));
   writer->writeAttribute("lon", toString(waypointp->longitude));
 
-  gpx_write_common_position(waypointp);
-
-  /* These were accidentally removed from 1.1 */
-  if (gpx_wversion_num == 10) {
-    if WAYPT_HAS(waypointp, course) {
-      writer->writeTextElement("course", toString(waypointp->course));
-    }
-    if WAYPT_HAS(waypointp, speed) {
-      writer->writeTextElement("speed", toString(waypointp->speed));
-    }
-  }
+  gpx_write_common_position(waypointp, gpxpt_track);
 
   /* GPX doesn't require a name on output, so if we made one up
    * on input, we might as well say nothing.
@@ -1695,7 +1694,7 @@ gpx_route_disp(const Waypoint* waypointp)
   oname = global_opts.synthesize_shortnames ?
           mkshort_from_wpt(mkshort_handle, waypointp) :
           waypointp->shortname;
-  gpx_write_common_position(waypointp);
+  gpx_write_common_position(waypointp, gpxpt_route);
   gpx_write_common_description(waypointp, oname);
   gpx_write_common_acc(waypointp);
 
