@@ -559,6 +559,7 @@ Waypoint::Waypoint() :
   latitude(0),  // These should probably use some invalid data, but
   longitude(0), // it looks like we have code that relies on them being zero.
   altitude(unknown_alt),
+  geoidheight(0),
   depth(0),
   proximity(0),
   route_priority(0),
@@ -595,6 +596,7 @@ Waypoint::Waypoint(const Waypoint& other) :
   latitude(other.latitude),
   longitude(other.longitude),
   altitude(other.altitude),
+  geoidheight(other.geoidheight),
   depth(other.depth),
   proximity(other.proximity),
   shortname(other.shortname),

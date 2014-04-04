@@ -12,4 +12,4 @@ compare ${REFERENCE}/track/nmea+ms.gpx ${TMPDIR}/nmea+ms.gpx
 #
 gpsbabel -i nmea -f ${REFERENCE}/track/amod-nmea -o gpx -F ${TMPDIR}/amod-out.gpx -o nmea -F ${TMPDIR}/amod-pure
 compare ${REFERENCE}/track/amod.gpx ${TMPDIR}/amod-out.gpx
-compare ${TMPDIR}/amod-pure ${REFERENCE}/track/amod-cleansed
+compare ${REFERENCE}/track/amod-cleansed ${TMPDIR}/amod-pure
