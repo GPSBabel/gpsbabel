@@ -99,6 +99,7 @@ typedef enum  {
   tt_wpt,
   tt_wpttype_ele,
   tt_wpttype_time,
+  tt_wpttype_geoidheight,
   tt_wpttype_name,
   tt_wpttype_cmt,
   tt_wpttype_desc,
@@ -381,6 +382,7 @@ tag_mapping tag_path_map[] = {
 
   GPXWPTTYPETAG(tt_wpttype_ele, 0, "ele"),
   GPXWPTTYPETAG(tt_wpttype_time, 0, "time"),
+  GPXWPTTYPETAG(tt_wpttype_geoidheight, 0, "geoidheight"),
   GPXWPTTYPETAG(tt_wpttype_name, 0, "name"),
   GPXWPTTYPETAG(tt_wpttype_cmt, 0, "cmt"),
   GPXWPTTYPETAG(tt_wpttype_desc, 0, "desc"),
@@ -1069,6 +1071,9 @@ gpx_end(const QString& el)
   case tt_wpttype_time:
     wpt_tmp->SetCreationTime(xml_parse_time(cdatastr));
     break;
+  case tt_wpttype_geoidheight:
+    WAYPT_SET(wpt_tmp, geoidheight, cdatastr.toDouble());
+    break;
   case tt_wpttype_cmt:
     wpt_tmp->description = cdatastr;
     break;
@@ -1417,6 +1422,8 @@ gpx_write_common_acc(const Waypoint* waypointp)
   if (waypointp->pdop) {
     writer->writeTextElement("pdop", toString(waypointp->pdop));
   }
+  /* TODO: ageofdgpsdata should go here */
+  /* TODO: dgpsid should go here */
 }
 
 
@@ -1436,6 +1443,10 @@ gpx_write_common_position(const Waypoint* waypointp, const gpx_point_type point_
     if WAYPT_HAS(waypointp, speed) {
       writer->writeTextElement("speed", toString(waypointp->speed));
     }
+  }
+  /* TODO:  magvar should go here */
+  if (WAYPT_HAS(waypointp, geoidheight)) {
+    writer->writeOptionalTextElement("geoidheight",QString::number(waypointp->geoidheight, 'f', 1));
   }
 }
 
@@ -1522,9 +1533,10 @@ gpx_write_common_description(const Waypoint* waypointp, QString oname)
   } else {
     writer->writeOptionalTextElement("desc", waypointp->description);
   }
-
+  /* TODO: src should go here */
   write_gpx_url(waypointp);
   writer->writeOptionalTextElement("sym", waypointp->icon_descr);
+  /* TODO: type should go here */
 }
 
 static void

@@ -434,6 +434,8 @@ gpgga_parse(char* ibuf)
   int nsats = 0;
   double hdop;
   char altunits;
+  double geoidheight;
+  char geoidheightunits;
   Waypoint* waypt;
   double fsec;
 
@@ -442,10 +444,10 @@ gpgga_parse(char* ibuf)
     track_add_head(trk_head);
   }
 
-  sscanf(ibuf,"$%*2cGGA,%lf,%lf,%c,%lf,%c,%d,%d,%lf,%lf,%c",
+  sscanf(ibuf,"$%*2cGGA,%lf,%lf,%c,%lf,%c,%d,%d,%lf,%lf,%c,%lf,%c",
          &hms, &latdeg,&latdir,
          &lngdeg,&lngdir,
-         &fix,&nsats,&hdop,&alt,&altunits);
+         &fix,&nsats,&hdop,&alt,&altunits,&geoidheight,&geoidheightunits);
 
   /*
    * In serial mode, allow the fix with an invalid position through
@@ -481,6 +483,8 @@ gpgga_parse(char* ibuf)
   waypt->longitude = ddmm2degrees(lngdeg);
 
   waypt->altitude = alt;
+
+  WAYPT_SET(waypt, geoidheight, geoidheight);
 
   waypt->sat 	= nsats;
 
@@ -1325,14 +1329,15 @@ nmea_trackpt_pr(const Waypoint* wpt)
     gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
   }
   if (opt_gpgga) {
-    snprintf(obuf, sizeof(obuf), "GPGGA,%010.3f,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,0.0,M,,",
+    snprintf(obuf, sizeof(obuf), "GPGGA,%010.3f,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,%.1f,M,,",
              (double) hms + (wpt->GetCreationTime().time().msec() / 1000.0),
              fabs(lat), lat < 0 ? 'S' : 'N',
              fabs(lon), lon < 0 ? 'W' : 'E',
              fix,
              (wpt->sat>0)?(wpt->sat):(0),
              (wpt->hdop>0)?(wpt->hdop):(0.0),
-             wpt->altitude == unknown_alt ? 0 : wpt->altitude);
+             wpt->altitude == unknown_alt ? 0 : wpt->altitude,
+             WAYPT_HAS(wpt, geoidheight)? (wpt->geoidheight) : (0)); /* TODO: we could look up the geoidheight if needed */
     cksum = nmea_cksum(obuf);
     gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
   }

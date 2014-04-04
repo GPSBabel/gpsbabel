@@ -9,6 +9,7 @@
         <time>2007-08-17T09:31:56.500Z</time>
         <course>171.410004</course>
         <speed>0.111111</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -20,6 +21,7 @@
         <time>2007-08-17T09:31:56.750Z</time>
         <course>169.850006</course>
         <speed>0.055556</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -31,6 +33,7 @@
         <time>2007-08-17T09:31:57Z</time>
         <course>167.320007</course>
         <speed>0.111111</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -42,6 +45,7 @@
         <time>2007-08-17T09:31:57.250Z</time>
         <course>165.429993</course>
         <speed>0.111111</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -53,6 +57,7 @@
         <time>2007-08-17T09:31:57.500Z</time>
         <course>164.399994</course>
         <speed>0.027778</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -64,6 +69,7 @@
         <time>2007-08-17T09:31:57.750Z</time>
         <course>168.419998</course>
         <speed>0.083333</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -75,6 +81,7 @@
         <time>2007-08-17T09:31:58.250Z</time>
         <course>181.889999</course>
         <speed>0.111111</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -84,6 +91,7 @@
         <time>2007-08-17T09:31:58Z</time>
         <course>175.830002</course>
         <speed>0.138889</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -93,6 +101,7 @@
         <time>2007-08-17T09:31:58.750Z</time>
         <course>179.449997</course>
         <speed>0.083333</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -104,6 +113,7 @@
         <time>2007-08-17T09:31:59Z</time>
         <course>176.820007</course>
         <speed>0.083333</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -115,6 +125,7 @@
         <time>2007-08-17T09:32:00.500Z</time>
         <course>202.580002</course>
         <speed>0.138889</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -126,6 +137,7 @@
         <time>2007-08-17T09:31:59.250Z</time>
         <course>174.279999</course>
         <speed>0.055556</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -137,6 +149,7 @@
         <time>2007-08-17T09:31:59.500Z</time>
         <course>177.330002</course>
         <speed>0.111111</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -146,6 +159,7 @@
         <time>2007-08-17T09:32:00Z</time>
         <course>185.009995</course>
         <speed>0.027778</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -157,6 +171,7 @@
         <time>2007-08-17T09:32:00.250Z</time>
         <course>189.289993</course>
         <speed>0.083333</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -168,6 +183,7 @@
         <time>2007-08-17T09:32:01Z</time>
         <course>207.460007</course>
         <speed>0.222222</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -179,6 +195,7 @@
         <time>2007-08-17T09:32:01.250Z</time>
         <course>213.190002</course>
         <speed>0.138889</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -190,6 +207,7 @@
         <time>2007-08-17T09:32:01.500Z</time>
         <course>218.089996</course>
         <speed>0.277778</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -201,6 +219,7 @@
         <time>2007-08-17T09:32:01.750Z</time>
         <course>221.759995</course>
         <speed>0.250000</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -212,6 +231,7 @@
         <time>2007-08-17T09:32:02Z</time>
         <course>226.210007</course>
         <speed>0.222222</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -223,6 +243,7 @@
         <time>2007-08-17T09:32:02.500Z</time>
         <course>233.130005</course>
         <speed>0.138889</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -234,6 +255,7 @@
         <time>2007-08-17T09:32:02.750Z</time>
         <course>233.779999</course>
         <speed>0.055556</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -245,6 +267,7 @@
         <time>2007-08-17T09:32:03Z</time>
         <course>231.729996</course>
         <speed>0.055556</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -256,6 +279,7 @@
         <time>2007-08-17T09:32:03.250Z</time>
         <course>227.869995</course>
         <speed>0.055556</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -267,6 +291,7 @@
         <time>2007-08-17T09:32:03.500Z</time>
         <course>224.449997</course>
         <speed>0.083333</speed>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>
@@ -276,6 +301,7 @@
       <trkpt lat="53.556728333" lon="9.865575000">
         <ele>49.900000</ele>
         <time>2007-08-17T09:32:05.750Z</time>
+        <geoidheight>46.0</geoidheight>
         <fix>3d</fix>
         <sat>6</sat>
         <hdop>1.700000</hdop>

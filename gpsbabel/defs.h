@@ -385,6 +385,7 @@ public:
     proximity(0),
     course(0),
     speed(0),
+    geoidheight(0),
     depth(0),
     is_split(0),
     new_trkseg(0) {}
@@ -396,6 +397,7 @@ public:
   unsigned int proximity:1;		/* proximity field is set */
   unsigned int course:1;			/* course field is set */
   unsigned int speed:1;			/* speed field is set */
+  unsigned int geoidheight:1;	/* geoidheight field is set */
   unsigned int depth:1;			/* depth field is set */
   /* !ToDo!
   unsigned int altitude:1;		/+ altitude field is set +/
@@ -461,6 +463,7 @@ public:
   double latitude;		/* Degrees */
   double longitude; 		/* Degrees */
   double altitude; 		/* Meters. */
+  double geoidheight;	/* Height (in meters) of geoid (mean sea level) above WGS84 earth ellipsoid. */
 
   /*
    * The "thickness" of a waypoint; adds an element of 3D.  Can be
