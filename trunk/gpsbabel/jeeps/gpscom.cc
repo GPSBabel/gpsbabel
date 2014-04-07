@@ -1190,6 +1190,7 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
     crs = (struct GPS_SCourse**)xrealloc(crs, (n_crs+1) * sizeof(GPS_PCourse));
     crs[n_crs] = GPS_Course_New();
     if (!crs[n_crs]) {
+      if (clp) xfree(clp);
       return MEMORY_ERROR;
     }
 
@@ -1203,6 +1204,7 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
     clp = (struct GPS_SCourse_Lap**) xrealloc(clp, (n_clp+1) * sizeof(GPS_PCourse_Lap));
     clp[n_clp] = GPS_Course_Lap_New();
     if (!clp[n_clp]) {
+      if (clp) xfree(clp);
       return MEMORY_ERROR;
     }
 
@@ -1223,6 +1225,7 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
 
     ctk[n_ctk] = GPS_Track_New();
     if (!ctk[n_ctk]) {
+      if (clp) xfree(clp);
       return MEMORY_ERROR;
     }
     *ctk[n_ctk] = *trk[i];
