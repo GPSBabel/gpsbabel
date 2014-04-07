@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="56.165644444" minlon="8.333863889" maxlat="56.187324722" maxlon="8.465153611"/>
+  <wpt lat="56.173450278" lon="8.373843056">
+    <name>Hoverdal F1 Sørup sande</name>
+    <cmt>Hoverdal F1 Sørup sande</cmt>
+    <desc>Hoverdal F1 Sørup sande</desc>
+  </wpt>
+  <wpt lat="56.186029722" lon="8.362465278">
+    <name>Hoverdal F2 Hulmose</name>
+    <cmt>Hoverdal F2 Hulmose</cmt>
+    <desc>Hoverdal F2 Hulmose</desc>
+  </wpt>
+  <wpt lat="56.181988333" lon="8.363135278">
+    <name>Hoverdal F2-1</name>
+    <cmt>Hoverdal F2-1</cmt>
+    <desc>Hoverdal F2-1</desc>
+  </wpt>
+  <wpt lat="56.187324722" lon="8.333863889">
+    <name>Hoverdal F3 Oldtidsagre</name>
+    <cmt>Hoverdal F3 Oldtidsagre</cmt>
+    <desc>Hoverdal F3 Oldtidsagre</desc>
+  </wpt>
+  <wpt lat="56.165644444" lon="8.465153611">
+    <name>Hoverdal I1</name>
+    <cmt>Hoverdal I1</cmt>
+    <desc>Hoverdal I1</desc>
+  </wpt>
+  <wpt lat="56.181651944" lon="8.351084722">
+    <name>Hoverdal I2</name>
+    <cmt>Hoverdal I2</cmt>
+    <desc>Hoverdal I2</desc>
+  </wpt>
+  <wpt lat="56.169592778" lon="8.401574444">
+    <name>Hoverdal I3</name>
+    <cmt>Hoverdal I3</cmt>
+    <desc>Hoverdal I3</desc>
+  </wpt>
+  <wpt lat="56.178795278" lon="8.356516111">
+    <name>Hoverdal I4 Sø</name>
+    <cmt>Hoverdal I4 Sø</cmt>
+    <desc>Hoverdal I4 Sø</desc>
+  </wpt>
+  <wpt lat="56.168653889" lon="8.415248333">
+    <name>Hoverdal P1</name>
+    <cmt>Hoverdal P1</cmt>
+    <desc>Hoverdal P1</desc>
+  </wpt>
+</gpx>

@@ -1,0 +1,7 @@
+#
+# Mapfactor Navigator
+#
+
+gpsbabel -i mapfactor -f ${REFERENCE}/mapfactor.xml -o gpx -F ${TMPDIR}/mapfactor.gpx -o mapfactor -F ${TMPDIR}/mapfactor.xml
+compare ${REFERENCE}/mapfactor~gpx.gpx ${TMPDIR}/mapfactor.gpx
+compare ${REFERENCE}/mapfactor.xml ${TMPDIR}/mapfactor.xml
