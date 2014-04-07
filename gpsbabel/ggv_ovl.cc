@@ -137,11 +137,11 @@ ggv_ovl_read(void)
         if (group > 1) {
           route_add_head(rte);
           route_ct++;
-          xasprintf(&rte->rte_name, "Route %d", route_ct);
+            trk->rte_name = QString("Route %1").arg(route_ct);
         } else {
           track_add_head(trk);
           track_ct++;
-          xasprintf(&trk->rte_name, "Track %d", track_ct);
+            trk->rte_name = QString("Track %1").arg(track_ct);
         }
 
         for (j = 0; j < points; j++) {

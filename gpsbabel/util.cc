@@ -277,7 +277,7 @@ xasprintf(char** strp, const char* fmt, ...)
 
   return res;
 }
-#if NEW_STRINGS
+
 int
 xasprintf(QString* strp, const char* fmt, ...)
 {
@@ -292,7 +292,6 @@ xasprintf(QString* strp, const char* fmt, ...)
 
   return res;
 }
-#endif
 
 int
 xvasprintf(char** strp, const char* fmt, va_list ap)

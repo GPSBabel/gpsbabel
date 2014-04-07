@@ -1176,12 +1176,10 @@ void kml_gc_make_balloonstyle(void)
 }
 
 static
-char*
+QString
 kml_lookup_gc_icon(const Waypoint* waypointp)
 {
   const char* icon;
-  char* rb;
-
   /* This could be done so much better in C99 with designated
    * initializers...
    */
@@ -1230,8 +1228,7 @@ kml_lookup_gc_icon(const Waypoint* waypointp)
     break;
   }
 
-  xasprintf(&rb, "http://www.geocaching.com/images/kml/%s", icon);
-  return rb;
+  return QString("http://www.geocaching.com/images/kml/%1").arg(icon);
 }
 
 static const
@@ -1394,7 +1391,6 @@ static void kml_write_cdata_element(const QString& name, const QString& value)
 
 static void kml_geocache_pr(const Waypoint* waypointp)
 {
-  char* is;
   const char* issues = "";
 
   writer->writeStartElement("Placemark");
@@ -1416,10 +1412,10 @@ static void kml_geocache_pr(const Waypoint* waypointp)
   }
 
   writer->writeTextElement("styleUrl", "#geocache");
-  is = kml_lookup_gc_icon(waypointp);
   writer->writeStartElement("Style");
   writer->writeStartElement("IconStyle");
   writer->writeStartElement("Icon");
+  QString is = kml_lookup_gc_icon(waypointp);
   writer->writeTextElement("href", is);
   writer->writeEndElement(); // Close Icon tag
   writer->writeEndElement(); // Close IconStyle tag
@@ -1474,8 +1470,6 @@ static void kml_geocache_pr(const Waypoint* waypointp)
 
   writer->writeEndElement(); // Close Point tag
   writer->writeEndElement(); // Close Placemark tag
-
-  xfree(is);
 }
 
 /*

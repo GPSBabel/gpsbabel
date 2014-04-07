@@ -213,8 +213,7 @@ tiger_disp(const Waypoint* wpt)
   gbfprintf(file_out, "%f,%f:%s", lon, lat, pin.toUtf8().data());
   if (!nolabels) {
     QString temp;
-// NEW_STRINGS - eliminate extr ctor below.
-    QString desc = csv_stringclean(QString(wpt->description), ":");
+    QString desc = csv_stringclean(wpt->description, ":");
     if (global_opts.synthesize_shortnames) {
       temp = desc;
       desc = mkshort(mkshort_whandle, desc);

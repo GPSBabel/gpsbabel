@@ -1524,11 +1524,7 @@ gpx_write_common_description(const Waypoint* waypointp, QString oname)
   writer->writeOptionalTextElement("name", oname);
 
   writer->writeOptionalTextElement("cmt", waypointp->description);
-#if NEW_STRINGS
   if (!waypointp->notes.isEmpty()) {
-#else
-  if (waypointp->notes && waypointp->notes[0]) {
-#endif
     writer->writeTextElement("desc", waypointp->notes);
   } else {
     writer->writeOptionalTextElement("desc", waypointp->description);
@@ -1582,13 +1578,9 @@ gpx_track_hdr(const route_head* rte)
   current_trk_head = rte;
 
   writer->writeStartElement("trk");
-#if NEW_STRINGS 
   writer->writeOptionalTextElement("name", rte->rte_name);
   writer->writeOptionalTextElement("desc", rte->rte_desc);
-#else
-  writer->writeOptionalTextElement("name", QString::fromUtf8(rte->rte_name));
-  writer->writeOptionalTextElement("desc", QString::fromUtf8(rte->rte_desc));
-#endif
+
   if (rte->rte_num) {
     writer->writeTextElement("number", QString::number(rte->rte_num));
   }
@@ -1626,11 +1618,7 @@ gpx_track_disp(const Waypoint* waypointp)
   /* GPX doesn't require a name on output, so if we made one up
    * on input, we might as well say nothing.
    */
-#if NEW_STRINGS 
   QString oname;
-#else
-  const char* oname;
-#endif
   oname = global_opts.synthesize_shortnames ?
           mkshort_from_wpt(mkshort_handle, waypointp) :
           waypointp->shortname;
@@ -1693,11 +1681,7 @@ gpx_route_hdr(const route_head* rte)
 static void
 gpx_route_disp(const Waypoint* waypointp)
 {
-#if NEW_STRINGS 
   QString oname;
-#else
-  const char* oname;
-#endif
   fs_xml* fs_gpx;
   writer->writeStartElement("rtept");
   writer->writeAttribute("lat", toString(waypointp->latitude));

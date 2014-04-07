@@ -416,16 +416,10 @@ gtc_crs_hdr(const route_head* rte)
   gtc_lap_start(NULL);
   gtc_new_study_lap(rte);
   route_disp(rte, gtc_study_lap);
-#if NEW_STRINGS 
+
   if (!rte->rte_name.isEmpty()) {
     QString name = rte->rte_name.left(GTC_MAX_NAME_LEN);
     gtc_write_xml(0, QString("<Name>%1</Name>\n").arg(name));
-#else
-  if (rte->rte_name) {
-    char* name = xstrndup(rte->rte_name, GTC_MAX_NAME_LEN);
-    gtc_write_xml(0, "<Name>%s</Name>\n", name);
-    xfree(name);
-#endif
   } else {
     gtc_write_xml(0, "<Name>New Course</Name>\n");
   }
@@ -528,38 +522,21 @@ gtc_trk_utc(xg_string args, const QXmlStreamAttributes*)
 void
 gtc_trk_lat(xg_string args, const QXmlStreamAttributes*)
 {
-#if NEW_STRINGS
   wpt_tmp->latitude = args.toDouble();
-#else
-  wpt_tmp->latitude = atof(args);
-#endif
 }
 
 void
 gtc_trk_long(xg_string args, const QXmlStreamAttributes*)
 {
-#if NEW_STRINGS
   wpt_tmp->longitude = args.toDouble();
-#else
-  wpt_tmp->longitude = atof(args);
-#endif
 }
 
-#if NEW_STRINGS
 void
 gtc_trk_alt(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp->altitude = args.toDouble();
 }
-#else
-void
-gtc_trk_alt(xg_string args, const QXmlStreamAttributes*)
-{
-  wpt_tmp->altitude = atof(args);
-}
-#endif
 
-#if NEW_STRINGS
 void gtc_trk_dist(const QString& args, const QXmlStreamAttributes*)
 {
   wpt_tmp->odometer_distance = args.toDouble();
@@ -572,59 +549,21 @@ void gtc_trk_cad(const QString& args, const QXmlStreamAttributes*)
 {
   wpt_tmp->cadence = args.toDouble();
 }
-#else
-void
-gtc_trk_dist(xg_string args, const QXmlStreamAttributes*)
-{
-  wpt_tmp->odometer_distance = atof(args);
-}
 
-void
-gtc_trk_hr(xg_string args, const QXmlStreamAttributes*)
-{
-  wpt_tmp->heartrate = atoi(args);
-}
-
-void
-gtc_trk_cad(xg_string args, const QXmlStreamAttributes*)
-{
-  wpt_tmp->cadence = atoi(args);
-}
-#endif
-
-#if NEW_STRINGS
 void
 gtc_trk_pwr(xg_string args, const QXmlStreamAttributes*)
 {
   wpt_tmp->power = args.toDouble();
 }
-#else
-void
-gtc_trk_pwr(xg_string args, const QXmlStreamAttributes*)
-{
-  wpt_tmp->power = atof(args);
-}
-#endif
 
 void
-#if NEW_STRINGS
 gtc_trk_spd(xg_string args, const QXmlStreamAttributes*)
 {
   WAYPT_SET(wpt_tmp, speed, args.toDouble());
 }
-#else
-gtc_trk_spd(xg_string args, const QXmlStreamAttributes*)
-{
-  WAYPT_SET(wpt_tmp, speed, atof(args));
-}
-#endif
 
 void
-#if NEW_STRINGS
 gtc_wpt_crs_s(const QString& args, const QXmlStreamAttributes*)
-#else
-gtc_wpt_crs_s(const char*, const QXmlStreamAttributes* unusedattrs)
-#endif
 {
   wpt_tmp = new Waypoint;
 }
@@ -663,7 +602,6 @@ gtc_wpt_pnt_e(xg_string args, const QXmlStreamAttributes*)
   wpt_tmp = NULL;
 }
 
-#if NEW_STRINGS
 void gtc_wpt_ident(const QString& args, const QXmlStreamAttributes*)
 {
   wpt_tmp->shortname = (args);
@@ -686,39 +624,6 @@ void gtc_wpt_notes(const QString& args, const QXmlStreamAttributes*)
 {
   wpt_tmp->description = args;
 }
-#else
-void
-gtc_wpt_ident(xg_string args, const QXmlStreamAttributes*)
-{
-  wpt_tmp->shortname = args;
-  /* Set also as notes for compatibility with garmin usb format */
-  wpt_tmp->notes = args;
-}
-
-void
-gtc_wpt_lat(xg_string args, const QXmlStreamAttributes*)
-{
-  wpt_tmp->latitude = atof(args);
-}
-
-void
-gtc_wpt_long(xg_string args, const QXmlStreamAttributes*)
-{
-  wpt_tmp->longitude = atof(args);
-}
-
-void
-gtc_wpt_icon(xg_string args, const QXmlStreamAttributes*)
-{
-  wpt_tmp->icon_descr = args;
-}
-
-void
-gtc_wpt_notes(xg_string args, const QXmlStreamAttributes*)
-{
-  wpt_tmp->description = args;
-}
-#endif
 
 ff_vecs_t gtc_vecs = {
   ff_type_file,

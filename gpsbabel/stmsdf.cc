@@ -216,7 +216,7 @@ finalize_tracks(void)
       trackno++;
       if (rte_name != NULL) {
         if (trackno > 1) {
-          xasprintf(&track->rte_name, "%s (%d)", CSTR(rte_name), trackno);
+          track->rte_name = QString("%1 (%2)").arg(rte_name).arg(trackno);
         } else {
           track->rte_name = rte_name;
         }
@@ -302,7 +302,7 @@ parse_point(char* line)
         break;
       case 3:
         WAYPT_SET(wpt, proximity, atof(str));
-        xasprintf(&wpt->notes, "Alarm point: radius=%s", str);
+        wpt->notes = QString().sprintf("Alarm point: radius=%s", str);
         break;
       }
       break;
@@ -658,8 +658,7 @@ route_disp_wpt_cb(const Waypoint* wpt)
     if (global_opts.synthesize_shortnames) {
       sn = mkshort_from_wpt(short_h, wpt);
     } else {
-// NEW_STRINGS: eliminate extra ctor below.
-      sn = mkshort(short_h, QString(wpt->shortname));
+      sn = mkshort(short_h, wpt->shortname);
     }
     gbfprintf(fout, "\"WP\",\"%s\",%.8lf,%.8lf,%.f\n",
               CSTR(sn), wpt->latitude, wpt->longitude, ALT(wpt));
