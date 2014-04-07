@@ -752,13 +752,13 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
   if (global_opts.masked_objective& TRKDATAMASK && (trk_head == NULL || (mtk_info.track_event & MTK_EVT_START))) {
     char spds[50];
     trk_head = route_head_alloc();
-    xasprintf(&trk_head->rte_name, "track-%d", 1+track_count());
+    trk_head->rte_name = QString("track-%1").arg(1 + track_count());
 
     spds[0] = '\0';
     if (mtk_info.speed > 0) {
       sprintf(spds, " when moving above %.0f km/h", mtk_info.speed/10.);
     }
-    xasprintf(&trk_head->rte_desc, "Log every %.0f sec, %.0f m%s"
+    trk_head->rte_desc = QString().sprintf("Log every %.0f sec, %.0f m%s"
               , mtk_info.period/10., mtk_info.distance/10., spds);
     track_add_head(trk_head);
   }

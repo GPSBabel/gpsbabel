@@ -492,7 +492,6 @@ bcr_route_header(const route_head* route)
 
   bcr_write_line(fout, "[ROUTE]", NULL, NULL);		/* route section */
 
-//  xasprintf(&sout, "%d,%d,%d,%d", emin, nmax, emax, nmin);
   sout = QString::number(emin) + "," +
          QString::number(nmax) + "," +
          QString::number(emax) + "," +

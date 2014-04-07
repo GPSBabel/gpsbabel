@@ -1025,10 +1025,8 @@ gt_lookup_datum_index(const char* datum_str, const char* module)
   result = GPS_Lookup_Datum_Index(name);
 
   if (result < 0) {
-    char* tmp;
-    xasprintf(&tmp, "%s mean", datum_str);
-    result = GPS_Lookup_Datum_Index(tmp);
-    xfree(tmp);
+    QString tmp = QString(datum_str) + " mean";
+    result = GPS_Lookup_Datum_Index(CSTR(tmp));
   }
 
   is_fatal(result < 0,

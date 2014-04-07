@@ -433,10 +433,9 @@ osm_feature_ikey(const char* key)
 }
 
 
-static char*
+static QString
 osm_feature_symbol(const int ikey, const char* value)
 {
-  char* result;
   char buff[128];
   QString key;
 
@@ -444,12 +443,13 @@ osm_feature_symbol(const int ikey, const char* value)
   strncpy(&buff[1], value, sizeof(buff) - 1);
 
   key = QString::fromUtf8(buff);
-  if (values.contains(key)) {
-    result = xstrdup(values.value(key)->icon);
-  } else {
-    xasprintf(&result, "%s:%s", osm_features[ikey], value);
-  }
 
+  QString result;
+  if (values.contains(key)) {
+    result = values.value(key)->icon;
+  } else {
+    result = QString("%1:%2").arg(osm_features[ikey]).arg(value);
+  }
   return result;
 }
 
@@ -538,11 +538,7 @@ osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
   } else if (strcmp(key, "name:en") == 0) {
     wpt->shortname = str;
   } else if ((ikey = osm_feature_ikey(key)) >= 0) {
-    char* id = osm_feature_symbol(ikey, value);
-    wpt->icon_descr = id;
-    if (id) {
-      xfree(id);
-    }
+    wpt->icon_descr = osm_feature_symbol(ikey, value);
   } else if (strcmp(key, "note") == 0) {
     if (wpt->notes.isEmpty()) {
       wpt->notes = str;
@@ -827,11 +823,7 @@ osm_waypt_disp(const Waypoint* wpt)
   }
 
   osm_write_tag("name", wpt->shortname);
-#if NEW_STRINGS
   osm_write_tag("note", (wpt->notes.isEmpty()) ? wpt->description : wpt->notes);
-#else
-  osm_write_tag("note", (wpt->notes) ? wpt->notes : wpt->description);
-#endif
   if (!wpt->icon_descr.isNull()) {
     osm_disp_feature(wpt);
   }

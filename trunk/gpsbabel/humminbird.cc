@@ -735,10 +735,9 @@ humminbird_write_waypoint(const Waypoint* wpt)
   be_write32(&hum.north, si_round(north));
 
   QString name;
-// NEW_STRING - remove extra ctor below.
   name = (global_opts.synthesize_shortnames)
          ? mkshort_from_wpt(wptname_sh, wpt)
-         : mkshort(wptname_sh, QString(wpt->shortname));
+         : mkshort(wptname_sh, wpt->shortname);
   memset(&hum.name, 0, sizeof(hum.name));
   memcpy(&hum.name, CSTR(name), name.length());
 
@@ -765,8 +764,7 @@ humminbird_track_head(const route_head* trk)
     trk_head = (humminbird_trk_header_t*) xcalloc(1, sizeof(humminbird_trk_header_t));
     trk_points = (humminbird_trk_point_t*) xcalloc(max_points, sizeof(humminbird_trk_point_t));
 
-// NEW_STRING: remove speare ctor below.
-    name = mkshort(trkname_sh, QString(trk->rte_name));
+    name = mkshort(trkname_sh, trk->rte_name);
     strncpy(trk_head->name, CSTR(name), sizeof(trk_head->name)-1);
     be_write16(&trk_head->trk_num, trk->rte_num);
   }

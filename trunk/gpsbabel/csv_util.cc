@@ -175,45 +175,6 @@ static UrlLink* link_;
 /*     usage: p = csv_stringclean(stringtoclean, "&,\"")             */
 /*            (strip out ampersands, commas, and quotes.             */
 /*********************************************************************/
-#if 0
-char*
-#ifdef DEBUG_MEM
-CSV_STRINGCLEAN(const char* string, const char* chararray, DEBUG_PARAMS)
-#else
-csv_stringclean(const char* string, const char* chararray)
-#endif
-{
-  char* p1;
-  char* p2;
-  const char* cp;
-  char* tmp = xxstrdup(string,file,line);
-
-  if ((! string) || (! chararray)) {
-    return (tmp);
-  }
-
-  /* p2 - end of the original string */
-  p2 = tmp + strlen(tmp);
-
-  cp = chararray;
-
-  while (*cp) {
-    p1 = tmp;
-    while (*p1) {
-      if (*cp == *p1) {
-        /* we don't want this character! */
-        memmove(p1, p1 + 1, (p2 - p1));
-        p1[p2 - p1] = '\0';
-        p2--;
-      } else {
-        p1++;
-      }
-    }
-    cp++;
-  }
-  return (tmp);
-}
-#else
 // Implement the C version via Qt - the reverse of most of our shims.
 char*
 csv_stringclean(const char* source, const char* chararray)
@@ -222,7 +183,6 @@ csv_stringclean(const char* source, const char* chararray)
   QString cleansed(csv_stringclean(QString(source), chararray));
   return xstrdup(cleansed);
 }
-#endif
 
 QString
 csv_stringclean(const QString& source, const QString& to_nuke)
@@ -232,17 +192,12 @@ csv_stringclean(const QString& source, const QString& to_nuke)
   return r.remove(QRegExp(regex));
 }
 
-/***********************************************************************************/
-/* csv_stringtrim() - trim whitespace and leading and trailing enclosures (quotes) */
-/*                    returns a copy of the modified string                        */
-/*    usage: p = csv_stringtrim(string, "\"", 0)                                   */
-/***********************************************************************************/
+// csv_stringtrim() - trim whitespace and leading and trailing 
+//                    enclosures (quotes) 
+//                    returns a copy of the modified string
+//    usage: p = csv_stringtrim(string, "\"", 0)
 char*
-#ifdef DEBUG_MEM
-CSV_STRINGTRIM(const char* string, const char* enclosure, int strip_max, DEBUG_PARAMS)
-#else
 csv_stringtrim(const char* string, const char* enclosure, int strip_max)
-#endif
 {
   static const char* p1 = NULL;
   char* p2 = NULL;
@@ -1724,7 +1679,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
         UrlLink l = wpt->GetUrlLink();
         buff += QString().sprintf(fmp->printfc, CSTR(l.url_));
       } else {
-        buff += QString().sprintf(fmp->val && *fmp->val ? fmp->val : "\"\"");
+        buff += QString().sprintf(fmp->printfc, fmp->val && *fmp->val ? fmp->val : "\"\"");
       }
     }
     break;

@@ -212,19 +212,19 @@ exif_type_size(const uint16_t type)
   return size;
 }
 
-static char*
+// TODO: If this were actually ever used (!?!?!) it could probably be 
+// replaced by return QDateTime(time).toString("yyyy/MM/dd, hh:mm:ss);
+static QString
 exif_time_str(const time_t time)
 {
   struct tm tm;
-  char* res;
 
   tm = *localtime(&time);
   tm.tm_year += 1900;
   tm.tm_mon += 1;
-  xasprintf(&res, "%04d/%02d/%02d, %02d:%02d:%02d",
-            tm.tm_year, tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
-  return res;
+  return QString().sprintf("%04d/%02d/%02d, %02d:%02d:%02d",
+         tm.tm_year, tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 }
 
 static char*
@@ -1396,7 +1396,7 @@ exif_wr_init(const char* fname)
   if (exif_time_ref == 0) {
     fatal(MYNAME ": No valid timestamp found in picture!\n");
   }
-
+abort();
   xasprintf(&tmpname, "%s.jpg", fname);
   fout = gbfopen_be(tmpname, "wb", MYNAME);
   xfree(tmpname);
@@ -1443,7 +1443,7 @@ exif_write(void)
       warning(MYNAME ": No matching point with name \"%s\" found.\n", opt_name);
     }
   } else {
-    char* str = exif_time_str(exif_time_ref);
+    QString str = exif_time_str(exif_time_ref);
 
     track_disp_all(NULL, NULL, exif_find_wpt_by_time);
     route_disp_all(NULL, NULL, exif_find_wpt_by_time);
@@ -1454,16 +1454,14 @@ exif_write(void)
     if (exif_wpt_ref == NULL) {
       warning(MYNAME ": No point with a valid timestamp found.\n");
     } else if (abs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t()) > frame) {
-      warning(MYNAME ": No matching point found for image date %s!\n", str);
+      warning(MYNAME ": No matching point found for image date %s!\n", CSTR(str));
       if (exif_wpt_ref != NULL) {
-        char* str = exif_time_str(exif_wpt_ref->creation_time.toTime_t());
+        QString str = exif_time_str(exif_wpt_ref->creation_time.toTime_t());
         warning(MYNAME ": Best is from %s, %d second(s) away.\n",
-                str, abs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t()));
-        xfree(str);
+                CSTR(str), abs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t()));
       }
       exif_wpt_ref = NULL;
     }
-    xfree(str);
   }
 
   if (exif_wpt_ref != NULL) {

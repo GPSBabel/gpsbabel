@@ -462,7 +462,7 @@ data_read(void)
       wpt = new Waypoint;
       cdata += parse_coordinates(cdata, datum, grid,
                                  &wpt->latitude, &wpt->longitude, MYNAME);
-      xasprintf(&wpt->shortname, "Event%d", ++event_ct);
+      wpt->shortname = QString("Event%1").arg(++event_ct);
       while (isspace(*cdata)) {
         cdata++;
       }

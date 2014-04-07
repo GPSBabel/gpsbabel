@@ -298,27 +298,14 @@ mapsend_waypt_pr(const Waypoint* waypointp)
   QString tmp1 = mkshort(wpt_handle, sn);
   gbfputpstr(tmp1, mapsend_file_out);
 
-#if NEW_STRINGS
+  // This is funny looking to ensure that no more than 30 bytes
+  // get written to the file.
   c = waypointp->description.length();
   if (c > 30) {
     c = 30;
   }
   gbfputc(c, mapsend_file_out);
   gbfwrite(CSTR(waypointp->description), 1, c, mapsend_file_out);
-#else
-  char* tmp = waypointp->description;
-  if (tmp) {
-    c = strlen(tmp);
-  } else {
-    c = 0;
-  }
-
-  if (c > 30) {
-    c = 30;
-  }
-  gbfputc(c, mapsend_file_out);
-  gbfwrite(tmp, 1, c, mapsend_file_out);
-#endif
 
   /* #, icon, status */
   gbfputint32(++cnt, mapsend_file_out);
@@ -393,13 +380,7 @@ mapsend_route_disp(const Waypoint* waypointp)
   route_wp_count++;
 
   /* waypoint name */
-#if NEW_STRINGS
-  c = waypointp->shortname.length();
-#else
-  c = waypointp->shortname ? strlen(waypointp->shortname) : 0;
-#endif
-  gbfwrite(&c, 1, 1, mapsend_file_out);
-  gbfwrite(CSTRc(waypointp->shortname), 1, c, mapsend_file_out);
+  gbfputpstr(waypointp->shortname, mapsend_file_out);
 
   /* waypoint number */
   gbfputint32(route_wp_count, mapsend_file_out);
@@ -457,21 +438,8 @@ void mapsend_track_hdr(const route_head* trk)
   hdr.ms_version[1] = verstring[1];
 
   gbfwrite(&hdr, sizeof(hdr), 1, mapsend_file_out);
-#if NEW_STRINGS
   QString tname = trk->rte_name.isEmpty() ? "Track" : trk->rte_name;
   gbfputpstr(tname, mapsend_file_out);
-#else
-  /* track name */
-  char* tname;
-  if (!trk->rte_name) {
-    tname = xstrdup("Track");
-  } else {
-    tname = xstrdup(trk->rte_name);
-  }
-  gbfputpstr(tname, mapsend_file_out);
-
-  xfree(tname);
-#endif
 
   /* total nodes (waypoints) this track */
   i = 0;

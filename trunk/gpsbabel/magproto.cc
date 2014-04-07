@@ -1382,17 +1382,11 @@ mag_waypt_pr(const Waypoint* waypointp)
   if (get_cache_icon(waypointp)) {
     icon_token = mag_find_token_from_descr(get_cache_icon(waypointp));
   }
-#if NEW_STRINGS
+
   QString isrc = waypointp->notes.isEmpty() ? waypointp->description : waypointp->notes;
   QString owpt = global_opts.synthesize_shortnames ?
          mkshort_from_wpt(mkshort_handle, waypointp) : waypointp->shortname;
   QString odesc = isrc;
-#else
-  String isrc = waypointp->notes ? waypointp->notes : waypointp->description;
-  char* owpt = global_opts.synthesize_shortnames ?
-         mkshort_from_wpt(mkshort_handle, waypointp) : waypointp->shortname;
-  char* odesc = isrc ? isrc : (char*)"";
-#endif
   owpt = mag_cleanse(CSTRc(owpt));
 
   if (global_opts.smart_icons &&
@@ -1409,11 +1403,7 @@ mag_waypt_pr(const Waypoint* waypointp)
    * to deliver turn-by-turn popups for street routing) allow a
    * cap on the comments delivered so we leave space for it to route.
    */
-#if NEW_STRINGS
   if (!odesc.isEmpty() && (wptcmtcnt++ >= wptcmtcnt_max)) {
-#else
-  if (odesc && /* !is_file && */ (wptcmtcnt++ >= wptcmtcnt_max)) {
-#endif
     odesc[0] = 0;
   }
 
@@ -1427,11 +1417,6 @@ mag_waypt_pr(const Waypoint* waypointp)
           CSTRc(odesc),
           icon_token.toUtf8().data());
   mag_writemsg(obuf);
-#if NEW_STRINGS
-#else
-  xfree(owpt);
-  xfree(odesc);
-#endif
 
   if (!is_file) {
     if (mag_error) {
@@ -1553,20 +1538,8 @@ mag_route_trl(const route_head* rte)
     } else {
       pbuff = buff2;
     }
-#if NEW_STRINGS
-// TODO: figure out what this code is trying to do.
-    sprintf(pbuff, "%s,%s", CSTR(waypointp->shortname), icon_token.toUtf8().data());
-#else
-    owpt = waypointp->shortname;
-    if (strlen(owpt) > sizeof(buff1) - 3) {
-      owpt[sizeof(buff1) - 3] = 0;
-    }
-    owpt = mag_cleanse(owpt);
-
-    sprintf(pbuff, "%s,%s", owpt, icon_token.toUtf8().data());
-
-    xfree(owpt);
-#endif
+    // Write name, icon tuple into alternating buff1/buff2 buffer.
+    sprintf(pbuff, "%s,%s", CSTR(waypointp->shortname), CSTR(icon_token));
 
     if ((tmp == &rte->waypoint_list) || ((i % 2) == 0)) {
       char expbuf[1024];
@@ -1574,11 +1547,7 @@ mag_route_trl(const route_head* rte)
       expbuf[0] = 0;
       if (explorist) {
         snprintf(expbuf, sizeof(expbuf), "%s,",
-#if NEW_STRINGS
                  CSTRc(rte->rte_name));
-#else
-                 rte->rte_name ? CSTRc(rte->rte_name) : "");
-#endif
       }
 
       sprintf(obuff, "PMGNRTE,%d,%d,c,%d,%s%s,%s",
