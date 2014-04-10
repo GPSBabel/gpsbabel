@@ -649,7 +649,7 @@ ozi_parse_routepoint(int field, char* str, Waypoint* wpt_tmp)
     break;
   case 4:
     /* waypoint name */
-    wpt_tmp->shortname = csv_stringclean(str, ",");
+    wpt_tmp->shortname = csv_stringclean(str, QString(","));
     break;
   case 5:
     /* latitude */
@@ -680,7 +680,7 @@ ozi_parse_routepoint(int field, char* str, Waypoint* wpt_tmp)
     break;
   case 13:
     /* description */
-    wpt_tmp->description = csv_stringclean(str, ",");
+    wpt_tmp->description = csv_stringclean(str, QString(","));
     break;
   default:
     break;
