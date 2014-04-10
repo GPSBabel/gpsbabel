@@ -2,7 +2,7 @@
     Communicate Thales/Magellan serial protocol.
 
     Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007,
-      2008, 2010  Robert Lipe, robertlipe@usa.net
+      2008, 2010  Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

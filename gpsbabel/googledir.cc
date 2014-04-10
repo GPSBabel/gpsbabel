@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2002 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002 Robert Lipe, robertlipe+source@gpsbabel.org
     Copyright (C) 2012 Guilhem Bonnefille, guilhem.bonnefille@gmail.com
 
     This program is free software; you can redistribute it and/or modify

@@ -18,7 +18,7 @@
        OSes and hardware to exercise your module.
 
     Copyright (C) YYYY John Doe, anybody@wherever.com
-    Copyright (C) 2001-YYYY Robert Lipe, robertlipe@gpsbabel.org
+    Copyright (C) 2001-YYYY Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

@@ -1,7 +1,7 @@
 /*
     Read Netstumbler data files.
 
-    Copyright (C) 2004, 2005 Robert Lipe, robertlipe@usa.net and
+    Copyright (C) 2004, 2005 Robert Lipe, robertlipe+source@gpsbabel.org and
     John Temples; gpsns@xargs.com
 
     This program is free software; you can redistribute it and/or modify

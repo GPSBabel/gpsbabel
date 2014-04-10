@@ -1,7 +1,7 @@
 /*
 	Support for Google Earth & Keyhole "kml" format.
 
-	Copyright (C) 2005-2013 Robert Lipe, robertlipe@gpsbabel.org
+	Copyright (C) 2005-2013 Robert Lipe, robertlipe+source@gpsbabel.org
 	Updates by Andrew Kirmse, akirmse at google.com
 
 	This program is free software; you can redistribute it and/or modify

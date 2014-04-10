@@ -2,7 +2,7 @@
     Read and write TomTom .ov2 files.
 
     Copyright (C) 2005  Ronald Parker (babeltomtom@parkrrrr.com) and
-                        Robert Lipe (robertlipe@usa.net)
+                        Robert Lipe (robertlipe+source@gpsbabel.org)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

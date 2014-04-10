@@ -2,7 +2,7 @@
     Add route points before and after a bend.
 
     Copyright (C) 2011 Fernando Arbeiza, fernando.arbeiza@gmail.com
-    Copyright (C) 2011 Robert Lipe, robertlipe@gpsbabel.org
+    Copyright (C) 2011 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

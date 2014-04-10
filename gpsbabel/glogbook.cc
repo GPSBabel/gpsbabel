@@ -1,7 +1,7 @@
 /*
     Access Garmin Logbook (Forerunner/Foretracker) data files.
 
-    Copyright (C) 2004, 2005, 2006, 2007  Robert Lipe, robertlipe@gpsbabel.org
+    Copyright (C) 2004, 2005, 2006, 2007  Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
