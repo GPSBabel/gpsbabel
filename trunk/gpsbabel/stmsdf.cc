@@ -272,7 +272,7 @@ parse_point(char* line)
       break;
 
     case 1:
-      wpt->shortname = csv_stringclean(str, "\"");
+      wpt->shortname = csv_stringclean(str, QString("\""));
       if ((what == 2) || (what == 3)) {
         column += 2;  /* doesn't have date and time */
       }
