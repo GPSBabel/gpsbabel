@@ -1082,20 +1082,12 @@ route_waypt_pr(const Waypoint* wpt)
   }
 
   rte->ident[sizeof(rte->ident)-1] = 0;
-#if NEW_STRINGS
   if (wpt->description.isEmpty()) {
+    rte->cmnt[0] = 0;
+  } else {
     strncpy(rte->cmnt, CSTR(wpt->description), sizeof(rte->cmnt));
     rte->cmnt[sizeof(rte->cmnt)-1] = 0;
-  } else {
   }
-#else
-  if (wpt->description) {
-    strncpy(rte->cmnt, wpt->description, sizeof(rte->cmnt));
-    rte->cmnt[sizeof(rte->cmnt)-1] = 0;
-  } else  {
-    rte->cmnt[0] = 0;
-  }
-#endif
   cur_tx_routelist_entry++;
 }
 
