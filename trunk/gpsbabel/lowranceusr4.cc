@@ -2,7 +2,7 @@
 	Access to Lowrance USR version 4 files.
 	Contributed to gpsbabel by Kris Beevers (beevek at gmail.com)
 
-	Copyright (C) 2011 Robert Lipe, robertlipe@usa.net
+	Copyright (C) 2011 Robert Lipe, robertlipe+source@gpsbabel.org
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by

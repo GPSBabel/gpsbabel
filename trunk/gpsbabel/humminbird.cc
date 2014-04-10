@@ -1,7 +1,7 @@
 /*
     Copyright (C) 2008  Björn Augustsson, oggust@gmail.com
     Copyright (C) 2008  Olaf Klein, o.b.klein@gpsbabel.org
-    Copyright (C) 2005-2013 Robert Lipe, robertlipe@gpsbabel.org
+    Copyright (C) 2005-2013 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

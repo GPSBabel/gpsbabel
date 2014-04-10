@@ -2,7 +2,7 @@
 
 
 	Copyright (C) 2008  Dr. J�rgen Neumann, Juergen.Neumann@online.de
-	Copyright (C) 2005  Robert Lipe, robertlipe@usa.net (based on nmea.c)
+	Copyright (C) 2005  Robert Lipe, robertlipe+source@gpsbabel.org (based on nmea.c)
 	Copyright (C) 20XX  probably many others from the gpsbabel development team ;-)
 
 	This program is free software; you can redistribute it and/or modify

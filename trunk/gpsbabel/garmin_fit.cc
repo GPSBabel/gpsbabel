@@ -3,7 +3,7 @@
     Support for FIT track files.
 
     Copyright (C) 2011 Paul Brook, paul@nowt.org
-    Copyright (C) 2003-2011  Robert Lipe, robertlipe@gpsbabel.org
+    Copyright (C) 2003-2011  Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

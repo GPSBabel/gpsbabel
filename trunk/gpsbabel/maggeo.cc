@@ -1,7 +1,7 @@
 /*
     Magellan ".gs" files as they appear on USB of Explorist 400,500,600.
 
-    Copyright (C) 2005, 2006, 2008 robertlipe@usa.net
+    Copyright (C) 2005, 2006, 2008 robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

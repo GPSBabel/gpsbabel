@@ -3,7 +3,7 @@
 
 	Copyright (C) 2005-2008 Olaf Klein, o.b.klein@gpsbabel.org
 	Mainly based on mapsource.c,
-	Copyright (C) 2005 Robert Lipe, robertlipe@usa.net
+	Copyright (C) 2005 Robert Lipe, robertlipe+source@gpsbabel.org
 
 
 	This program is free software; you can redistribute it and/or modify

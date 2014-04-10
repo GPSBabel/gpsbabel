@@ -2,7 +2,7 @@
     Parse 'GarminDevice.xml' on a Garmin mass storage device (e.g. Zumo,
       Nuvi, Colorado, etc. and return key device info.
 
-    Copyright (C) 2008 Robert Lipe, robertlipe@gpsbabel.org
+    Copyright (C) 2008 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

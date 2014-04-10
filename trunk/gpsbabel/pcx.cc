@@ -2,7 +2,7 @@
     Access to Garmin PCX5 files.
     Format described in: http://www.garmin.com/manuals/PCX5_OwnersManual.pdf
 
-    Copyright (C) 2002-2006 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2002-2006 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

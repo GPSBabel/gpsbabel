@@ -2,7 +2,7 @@
 
     validate internal data structures.
 
-    Copyright (C) 2013 Robert Lipe   robertlipe@usa.net
+    Copyright (C) 2013 Robert Lipe   robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

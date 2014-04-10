@@ -2,7 +2,7 @@
     Locosys NaviGPS GT-31/BGT-31 binary datalog format (SBP)
 
     Copyright (C) 2008  Rodney Lorrimar <rodney@rodney.id.au>
-    Copyright (C) 2005  Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2005  Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

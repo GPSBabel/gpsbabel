@@ -3,7 +3,7 @@
     Based on information provided by Ian Cowley, Sigurd Humerfelt,
 	and Garmin MapSource
 
-    Copyright (C) 2003 Robert Lipe, robertlipe@usa.net
+    Copyright (C) 2003-2014 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

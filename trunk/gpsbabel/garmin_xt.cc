@@ -5,7 +5,7 @@
    GMXT2GPX ( http://www.geocaching.hu/users.geo?id=9508 ; http://sites.google.com/site/jekaeff/eng-1 )
    The original code written in Pascal and does not include specific License, however on the project
    webpage it is said to be OpenSource/Libre software
-   Copyright (C) 2005  Robert Lipe, robertlipe@usa.net
+   Copyright (C) 2005  Robert Lipe, robertlipe+source@gpsbabel.org
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

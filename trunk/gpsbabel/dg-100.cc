@@ -3,7 +3,7 @@
     GlobalSat DG-100 GPS data logger download.
 
     Copyright (C) 2007  Mirko Parthey, mirko.parthey@informatik.tu-chemnitz.de
-    Copyright (C) 2005-2008  Robert Lipe, robertlipe@gpsbabel.org
+    Copyright (C) 2005-2008  Robert Lipe, robertlipe+source@gpsbabel.org
     Copyright (C) 2012  Nicolas Boullis, nboullis@debian.org
 
     This program is free software; you can redistribute it and/or modify
