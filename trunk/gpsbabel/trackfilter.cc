@@ -472,7 +472,9 @@ trackfilter_pack(void)
   for (i = 1, j = 0; i < track_ct; i++, j++) {
     prev = track_list[j];
     if (prev.last_time >= track_list[i].first_time) {
-      fatal(MYNAME "-pack: Tracks overlap in time!\n");
+      fatal(MYNAME "-pack: Tracks overlap in time! %s >= %s at %d\n",
+        CSTR(prev.last_time.toString()), 
+        CSTR(track_list[i].first_time.toString()), i);
     }
   }
 
