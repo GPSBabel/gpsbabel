@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "garmin_fs.h"
+#include "garmin_tables.h"
 #include <math.h>
 #include <QtCore/QXmlStreamReader>
 static QXmlStreamReader* reader;
@@ -152,12 +153,14 @@ typedef enum  {
   tt_rte_desc,
   tt_rte_cmt,
   tt_rte_number,
+  tt_garmin_rte_display_color,
   tt_rte_rtept,
   tt_trk,
   tt_trk_desc,
   tt_trk_name,
   tt_trk_trkseg,
   tt_trk_number,
+  tt_garmin_trk_display_color,
   tt_trk_trkseg_trkpt,
   tt_trk_trkseg_trkpt_course,	/* Not in GPX 1.1 */
   tt_trk_trkseg_trkpt_speed,	/* Not in GPX 1.1 */
@@ -307,6 +310,8 @@ tag_mapping tag_path_map[] = {
   {type, 1, "/gpx/wpt/extensions/cache/" name }, \
   {type, 1, "/gpx/wpt/geocache/" name }  /* opencaching.de */
 
+#define GARMIN_RTE_EXT "/gpx/rte/extensions/gpxx:RouteExtension"
+#define GARMIN_TRK_EXT "/gpx/trk/extensions/gpxx:TrackExtension"
 #define GARMIN_WPT_EXT "/gpx/wpt/extensions/gpxx:WaypointExtension"
 #define GARMIN_TRKPT_EXT "/gpx/trk/trkseg/trkpt/extensions/gpxtpx:TrackPointExtension"
 #define GARMIN_RTEPT_EXT "/gpx/rte/rtept/extensions/gpxxx:RoutePointExtension"
@@ -361,6 +366,8 @@ tag_mapping tag_path_map[] = {
   { tt_rte_name, 0, "/gpx/rte/name" },
   { tt_rte_desc, 0, "/gpx/rte/desc" },
   { tt_rte_number, 0, "/gpx/rte/number" },
+  { tt_garmin_rte_display_color, 1, GARMIN_RTE_EXT "/gpxx:DisplayColor"},
+
   { tt_rte_rtept, 0, "/gpx/rte/rtept" },
 
   { tt_trk, 0, "/gpx/trk" },
@@ -368,6 +375,8 @@ tag_mapping tag_path_map[] = {
   { tt_trk_desc, 0, "/gpx/trk/desc" },
   { tt_trk_trkseg, 0, "/gpx/trk/trkseg" },
   { tt_trk_number, 0, "/gpx/trk/number" },
+  { tt_garmin_trk_display_color, 1, GARMIN_TRK_EXT "/gpxx:DisplayColor"},
+
   { tt_trk_trkseg_trkpt, 0, "/gpx/trk/trkseg/trkpt" },
   { tt_trk_trkseg_trkpt_course, 0, "/gpx/trk/trkseg/trkpt/course" },
   { tt_trk_trkseg_trkpt_speed, 0, "/gpx/trk/trkseg/trkpt/speed" },
@@ -1012,6 +1021,9 @@ gpx_end(const QString& el)
   case tt_rte_desc:
     rte_head->rte_desc = cdatastr;
     break;
+  case tt_garmin_rte_display_color:
+    rte_head->line_color.bbggrr = gt_color_value_by_name(CSTR(cdatastr));
+    break;
   case tt_rte_number:
     rte_head->rte_num = cdatastr.toInt();
     break;
@@ -1039,6 +1051,9 @@ gpx_end(const QString& el)
     break;
   case tt_trk_desc:
     trk_head->rte_desc = cdatastr;
+    break;
+  case tt_garmin_trk_display_color:
+    trk_head->line_color.bbggrr = gt_color_value_by_name(CSTR(cdatastr));
     break;
   case tt_trk_number:
     trk_head->rte_num = cdatastr.toInt();
@@ -1591,6 +1606,18 @@ gpx_track_hdr(const route_head* rte)
       if (fs_gpx) {
         fprint_xml_chain(fs_gpx->tag, NULL);
       }
+    } else if (opt_garminext) {
+      if (rte->line_color.bbggrr > unknown_color) {
+        int ci = gt_color_index_by_rgb(rte->line_color.bbggrr);
+        if (ci > 0) {
+          writer->writeStartElement("extensions");
+          writer->writeStartElement("gpxx:TrackExtension");
+          writer->writeTextElement("gpxx:DisplayColor", QString("%1")
+                                   .arg(gt_color_name(ci)));
+          writer->writeEndElement(); // Close gpxx:TrackExtension tag
+          writer->writeEndElement(); // Close extensions tag
+        }
+      }
     }
   }
 }
@@ -1660,6 +1687,7 @@ static void
 gpx_route_hdr(const route_head* rte)
 {
   fs_xml* fs_gpx;
+
   writer->writeStartElement("rte");
   writer->writeOptionalTextElement("name", rte->rte_name);
   writer->writeOptionalTextElement("desc", rte->rte_desc);
@@ -1673,6 +1701,20 @@ gpx_route_hdr(const route_head* rte)
       fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
       if (fs_gpx) {
         fprint_xml_chain(fs_gpx->tag, NULL);
+      }
+    } else if (opt_garminext) {
+      if (rte->line_color.bbggrr > unknown_color) {
+        int ci = gt_color_index_by_rgb(rte->line_color.bbggrr);
+        if (ci > 0) {
+          writer->writeStartElement("extensions");
+          writer->writeStartElement("gpxx:RouteExtension");
+          // FIXME: the value to use for IsAutoNamed is questionable.
+          writer->writeTextElement("gpxx:IsAutoNamed", rte->rte_name.isEmpty()? "true" : "false"); // Required element
+          writer->writeTextElement("gpxx:DisplayColor", QString("%1")
+                                   .arg(gt_color_name(ci)));
+          writer->writeEndElement(); // Close gpxx:RouteExtension tag
+          writer->writeEndElement(); // Close extensions tag
+        }
       }
     }
   }
