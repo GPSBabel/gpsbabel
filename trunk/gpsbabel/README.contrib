@@ -5,19 +5,16 @@ consideration and integration.
 Rules to Live By
 ----------------
 
-Standards are good.   ISO C and POSIX are greatly preferred.
-
-Reuse is good, if doing so is not onerous.  For example, using the expat
-libraries vastly simplifies the XML parsers while increasing their
-robustness plus those libraries are ubiquitous.  So I consider it OK to
-require expat.
+Standards are good.   ISO C++, Qt, and POSIX are greatly preferred to
+adding more libraries or implementing your own hash maps or other common
+functions.
 
 You may find format_skeleton.c and filter_skeleton.c in the source tree
 to be helpful examples. Just add meat!
 
 Compilers complain for a reason.   Code shouldn't emit warnings.
 
-The entire world doesn't run <your OS here>.  I've tested this code on
+The entire world doesn't run <your OS here>.  We regularly test this code on
 at least five different OSes.  If you find yourself wanting to insert
 compiler or OS specific magic, please resist.
 
