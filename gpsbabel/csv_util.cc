@@ -868,13 +868,13 @@ addhms(const char* s, const char* format)
   int ac;
 
   ampm = (char*) xmalloc(strlen(s) + 1);
-  ac = sscanf(s, format, &hour, &min, &sec, &ampm);
+  ac = sscanf(s, format, &hour, &min, &sec, ampm);
   /* If no time format in arg string, assume AM */
   if (ac < 4) {
     ampm[0] = 0;
   }
   if (ac) {
-    tt = ((tolower(ampm[0])=='P')?43200:0)+3600*hour+60*min+sec;
+    tt = ((tolower(ampm[0])=='p')?43200:0)+3600*hour+60*min+sec;
   }
   xfree(ampm);
 
