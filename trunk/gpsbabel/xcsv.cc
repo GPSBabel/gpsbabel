@@ -515,7 +515,9 @@ xcsv_parse_style_line(char* sbuff)
 static void
 xcsv_parse_style_buff(const char* sbuff)
 {
-  char ibuf[256];
+  // FIXME: should not be a static buf.  Should not be a raw character
+  // buffer at all!
+  char ibuf[4096];
   char* ibufp;
   size_t i;
 
