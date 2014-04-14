@@ -1,0 +1,12 @@
+
+# Cetus GPS for PalmOS
+# This test is also similar to the NAV Companion test.
+rm -f ${TMPDIR}/cetus.pdb ${TMPDIR}/cetus.gpu ${TMPDIR}/cetust.gpu
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o cetus -F ${TMPDIR}/cetus.pdb
+gpsbabel -i cetus -f ${TMPDIR}/cetus.pdb -o gpsutil -F ${TMPDIR}/cetus.gpu
+gpsbabel -i cetus -f ${REFERENCE}/cetus.pdb -o gpsutil -F ${TMPDIR}/cetust.gpu
+compare ${TMPDIR}/cetust.gpu ${TMPDIR}/cetus.gpu
+compare ${REFERENCE}/cetus.gpu ${TMPDIR}/cetus.gpu
+
+gpsbabel -i cetus -f ${REFERENCE}/track/cetus-track.pdb -o gpx -F ${TMPDIR}/cetus-track~gpx.gpx
+compare ${REFERENCE}/track/cetus-track~gpx.gpx ${TMPDIR}/cetus-track~gpx.gpx

@@ -1,0 +1,40 @@
+# gpsbabel XCSV style file
+#
+# Format: MOTOACTV CSV
+# Author: Dan Brown
+# Date: 07/21/2012
+#
+# example usage:
+# gpsbabel -i xcsv,style=motoactv.style -f infile.csv -x transform,trk=wpt -o gtrnctr,course=0 -F outfile.tcx
+# gpsbabel -i xcsv,style=motoactv.style -f infile.csv -x transform,trk=wpt -o gpx,garminextensions -F outfile.gpx
+
+DESCRIPTION Motoactiv CSV
+EXTENSION csv
+
+ENCODING US-ASCII
+FIELD_DELIMITER COMMA
+RECORD_DELIMITER NEWLINE
+FIELD_ENCLOSER DOUBLEQUOTE
+
+PROLOGUE "DISTANCE","activity_id","HEARTRATE","SPEED","STEPS_PER_MINUTE","LATITUDE","repetitions","temperature","INSTANT_TORQUE_CRANK","timestamp_epoch","ELEVATION","POWER","STRIDES","wheel_torque","CALORIEBURN","LONGITUDE","CADENCE","heading","STEP_RATE"
+
+# Data fields, in order of appearance
+IFIELD PATH_DISTANCE_METERS,"","%.1f" # used for writing files (not for reading)
+IFIELD IGNORE,"","%s" # activity id
+IFIELD HEART_RATE,"","%d"
+IFIELD PATH_SPEED,"","%.1f"
+IFIELD IGNORE,"","%s" # steps per minute
+IFIELD LAT_DECIMAL,"","%.6f"
+IFIELD IGNORE,"","%s" # repetitions
+IFIELD TEMPERATURE,"","%.1f"
+IFIELD IGNORE,"","%s" # instant torque crank
+IFIELD TIMET_TIME_MS,"","%ld"
+IFIELD ALT_METERS,"","%.1f"
+IFIELD POWER,"","%.0f"
+IFIELD IGNORE,"","%s" # strides
+IFIELD IGNORE,"","%s" # wheel_torque
+IFIELD IGNORE,"","%s" # calories
+IFIELD LON_DECIMAL,"","%.6f"
+IFIELD CADENCE,"","%d"
+IFIELD PATH_COURSE,"","%.1f"
+IFIELD IGNORE,"","%s" # step rate

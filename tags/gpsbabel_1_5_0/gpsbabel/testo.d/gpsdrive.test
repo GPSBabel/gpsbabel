@@ -1,0 +1,7 @@
+# GpsDrive
+rm -f ${TMPDIR}/gpsdrive.txt
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpsdrive -F ${TMPDIR}/gpsdrive.txt
+compare ${TMPDIR}/gpsdrive.txt ${REFERENCE}
+gpsbabel -i gpsdrive -f ${REFERENCE}/gpsdrive.txt -o gpsdrive -F ${TMPDIR}/gpsdrive2.txt
+compare ${REFERENCE}/gpsdrive.txt ${TMPDIR}/gpsdrive2.txt
+

@@ -1,0 +1,376 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{588699A5-B1C9-4343-B765-23B4C0837435}</ProjectGuid>
+    <RootNamespace>GPSBabel</RootNamespace>
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.60610.1</_ProjectFileVersion>
+    <LibraryPath>C:\Qt\5.1.0\msvc2012\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Qt\5.1.0\msvc2012\include;$(IncludePath)</IncludePath>
+    <OutDir>.\$(Configuration)\</OutDir>
+    <IntDir>.\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Midl>
+      <TypeLibraryName>.\$(Configuration)/GPSBabel.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>expat;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
+      <WarningLevel>Level3</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <CompileAs>Default</CompileAs>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PrecompiledHeader />
+      <PrecompiledHeaderOutputFile>.\$(Configuration)/GPSBabel.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\$(Configuration)/</AssemblerListingLocation>
+      <ObjectFileName>.\$(Configuration)/</ObjectFileName>
+      <ProgramDataBaseFileName>.\$(Configuration)/</ProgramDataBaseFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>setupapi.lib;hid.lib;qt5cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+      <DataExecutionPrevention>true</DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+      <OutputFile>.\$(Configuration)/GPSBabel.exe</OutputFile>
+      <ProgramDatabaseFile>.\$(Configuration)/GPSBabel.pdb</ProgramDatabaseFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;__WIN32__;_DEBUG;_CONSOLE;HAVE_LIBEXPAT;MAXIMAL_ENABLED;FILTERS_ENABLED;PDBFMTS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;CET_WANTED;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>Full</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;__WIN32__;NDEBUG;_CONSOLE;HAVE_LIBEXPAT;MAXIMAL_ENABLED;FILTERS_ENABLED;PDBFMTS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;CET_WANTED;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\alan.cc" />
+    <ClCompile Include="..\an1.cc" />
+    <ClCompile Include="..\arcdist.cc" />
+    <ClCompile Include="..\axim_gpb.cc" />
+    <ClCompile Include="..\bcr.cc" />
+    <ClCompile Include="..\bend.cc" />
+    <ClCompile Include="..\brauniger_iq.cc" />
+    <ClCompile Include="..\bushnell.cc" />
+    <ClCompile Include="..\bushnell_trl.cc" />
+    <ClCompile Include="..\cet.cc" />
+    <ClCompile Include="..\cet_util.cc" />
+    <ClCompile Include="..\cetus.cc" />
+    <ClCompile Include="..\coastexp.cc" />
+    <ClCompile Include="..\compegps.cc" />
+    <ClCompile Include="..\copilot.cc" />
+    <ClCompile Include="..\coto.cc" />
+    <ClCompile Include="..\cst.cc" />
+    <ClCompile Include="..\csv_util.cc" />
+    <ClCompile Include="..\delbin.cc" />
+    <ClCompile Include="..\delgpl.cc" />
+    <ClCompile Include="..\destinator.cc" />
+    <ClCompile Include="..\dg-100.cc" />
+    <ClCompile Include="..\discard.cc" />
+    <ClCompile Include="..\dmtlog.cc" />
+    <ClCompile Include="..\duplicate.cc" />
+    <ClCompile Include="..\easygps.cc" />
+    <ClCompile Include="..\enigma.cc" />
+    <ClCompile Include="..\exif.cc" />
+    <ClCompile Include="..\explorist_ini.cc" />
+    <ClCompile Include="..\fatal.cc" />
+    <ClCompile Include="..\filter_vecs.cc" />
+    <ClCompile Include="..\formspec.cc" />
+    <ClCompile Include="..\g7towin.cc" />
+    <ClCompile Include="..\garmin.cc" />
+    <ClCompile Include="..\garmin_fit.cc" />
+    <ClCompile Include="..\garmin_device_xml.cc" />
+    <ClCompile Include="..\garmin_fs.cc" />
+    <ClCompile Include="..\garmin_gpi.cc" />
+    <ClCompile Include="..\garmin_tables.cc" />
+    <ClCompile Include="..\garmin_txt.cc" />
+    <ClCompile Include="..\garmin_xt.cc" />
+    <ClCompile Include="..\gbfile.cc" />
+    <ClCompile Include="..\gbser.cc" />
+    <ClCompile Include="..\gbser_win.cc" />
+    <ClCompile Include="..\gbsleep.cc" />
+    <ClCompile Include="..\gcdb.cc" />
+    <ClCompile Include="..\gdb.cc" />
+    <ClCompile Include="..\geo.cc" />
+    <ClCompile Include="..\geoniche.cc" />
+    <ClCompile Include="..\ggv_log.cc" />
+    <ClCompile Include="..\ggv_ovl.cc" />
+    <ClCompile Include="..\globals.cc" />
+    <ClCompile Include="..\glogbook.cc" />
+    <ClCompile Include="..\gnav_trl.cc" />
+    <ClCompile Include="..\google.cc" />
+    <ClCompile Include="..\googledir.cc" />
+    <ClCompile Include="..\gopal.cc" />
+    <ClCompile Include="..\gpilots.cc" />
+    <ClCompile Include="..\gpspilot.cc" />
+    <ClCompile Include="..\gpssim.cc" />
+    <ClCompile Include="..\gpsutil.cc" />
+    <ClCompile Include="..\gpx.cc" />
+    <ClCompile Include="..\grtcirc.cc" />
+    <ClCompile Include="..\gtm.cc" />
+    <ClCompile Include="..\gtrnctr.cc" />
+    <ClCompile Include="..\height.cc" />
+    <ClCompile Include="..\hiketech.cc" />
+    <ClCompile Include="..\holux.cc" />
+    <ClCompile Include="..\hsa_ndv.cc" />
+    <ClCompile Include="..\html.cc" />
+    <ClCompile Include="..\humminbird.cc" />
+    <ClCompile Include="..\igc.cc" />
+    <ClCompile Include="..\ignrando.cc" />
+    <ClCompile Include="..\igo8.cc" />
+    <ClCompile Include="..\ik3d.cc" />
+    <ClCompile Include="..\inifile.cc" />
+    <ClCompile Include="..\internal_styles.cc" />
+    <ClCompile Include="..\interpolate.cc" />
+    <ClCompile Include="..\itracku.cc" />
+    <ClCompile Include="..\jogmap.cc" />
+    <ClCompile Include="..\jtr.cc" />
+    <ClCompile Include="..\kml.cc" />
+    <ClCompile Include="..\lmx.cc" />
+    <ClCompile Include="..\lowranceusr.cc" />
+    <ClCompile Include="..\lowranceusr4.cc" />
+    <ClCompile Include="..\mag_pdb.cc" />
+    <ClCompile Include="..\maggeo.cc" />
+    <ClCompile Include="..\magnav.cc" />
+    <ClCompile Include="..\magproto.cc" />
+    <ClCompile Include="..\main.cc" />
+    <ClCompile Include="..\mapasia.cc" />
+    <ClCompile Include="..\mapbar_track.cc" />
+    <ClCompile Include="..\mapopolis.cc" />
+    <ClCompile Include="..\mapsend.cc" />
+    <ClCompile Include="..\mapsource.cc" />
+    <ClCompile Include="..\mkshort.cc" />
+    <ClCompile Include="..\mmo.cc" />
+    <ClCompile Include="..\msroute.cc" />
+    <ClCompile Include="..\mtk_locus.cc" />
+    <ClCompile Include="..\mtk_logger.cc" />
+    <ClCompile Include="..\navicache.cc" />
+    <ClCompile Include="..\naviguide.cc" />
+    <ClCompile Include="..\navilink.cc" />
+    <ClCompile Include="..\navitel.cc" />
+    <ClCompile Include="..\netstumbler.cc" />
+    <ClCompile Include="..\nmea.cc" />
+    <ClCompile Include="..\nmn4.cc" />
+    <ClCompile Include="..\nukedata.cc" />
+    <ClCompile Include="..\osm.cc" />
+    <ClCompile Include="..\overlay.cc" />
+    <ClCompile Include="..\ozi.cc" />
+    <ClCompile Include="..\palmdoc.cc" />
+    <ClCompile Include="..\parse.cc" />
+    <ClCompile Include="..\pathaway.cc" />
+    <ClCompile Include="..\pcx.cc" />
+    <ClCompile Include="..\pdbfile.cc" />
+    <ClCompile Include="..\pocketfms_bc.cc" />
+    <ClCompile Include="..\pocketfms_fp.cc" />
+    <ClCompile Include="..\pocketfms_wp.cc" />
+    <ClCompile Include="..\polygon.cc" />
+    <ClCompile Include="..\position.cc" />
+    <ClCompile Include="..\psitrex.cc" />
+    <ClCompile Include="..\psp.cc" />
+    <ClCompile Include="..\queue.cc" />
+    <ClCompile Include="..\quovadis.cc" />
+    <ClCompile Include="..\radius.cc" />
+    <ClCompile Include="..\random.cc" />
+    <ClCompile Include="..\raymarine.cc" />
+    <ClCompile Include="..\reverse_route.cc" />
+    <ClCompile Include="..\rgbcolors.cc" />
+    <ClCompile Include="..\route.cc" />
+    <ClCompile Include="..\saroute.cc" />
+    <ClCompile Include="..\sbn.cc" />
+    <ClCompile Include="..\sbp.cc" />
+    <ClCompile Include="..\session.cc" />
+    <ClCompile Include="..\shape.cc" />
+    <ClCompile Include="..\skyforce.cc" />
+    <ClCompile Include="..\skytraq.cc" />
+    <ClCompile Include="..\smplrout.cc" />
+    <ClCompile Include="..\sort.cc" />
+    <ClCompile Include="..\stackfilter.cc" />
+    <ClCompile Include="..\stmsdf.cc" />
+    <ClCompile Include="..\stmwpp.cc" />
+    <ClCompile Include="..\strptime.c" />
+    <ClCompile Include="..\subrip.cc" />
+    <ClCompile Include="..\swapdata.cc" />
+    <ClCompile Include="..\tef_xml.cc" />
+    <ClCompile Include="..\teletype.cc" />
+    <ClCompile Include="..\text.cc" />
+    <ClCompile Include="..\tiger.cc" />
+    <ClCompile Include="..\tmpro.cc" />
+    <ClCompile Include="..\tomtom.cc" />
+    <ClCompile Include="..\tpg.cc" />
+    <ClCompile Include="..\tpo.cc" />
+    <ClCompile Include="..\trackfilter.cc" />
+    <ClCompile Include="..\transform.cc" />
+    <ClCompile Include="..\unicsv.cc" />
+    <ClCompile Include="..\units.cc" />
+    <ClCompile Include="..\util.cc" />
+    <ClCompile Include="..\util_crc.cc" />
+    <ClCompile Include="..\uuid.cc" />
+    <ClCompile Include="..\v900.cc" />
+    <ClCompile Include="..\vcf.cc" />
+    <ClCompile Include="..\vecs.cc" />
+    <ClCompile Include="..\vidaone.cc" />
+    <ClCompile Include="..\vitosmt.cc" />
+    <ClCompile Include="..\vitovtt.cc" />
+    <ClCompile Include="..\vmem.cc" />
+    <ClCompile Include="..\vpl.cc" />
+    <ClCompile Include="..\waypt.cc" />
+    <ClCompile Include="..\wbt-200.cc" />
+    <ClCompile Include="..\wfff_xml.cc" />
+    <ClCompile Include="..\wintec_tes.cc" />
+    <ClCompile Include="..\xcsv.cc" />
+    <ClCompile Include="..\xhtmlent.cc" />
+    <ClCompile Include="..\xmlgeneric.cc" />
+    <ClCompile Include="..\xmltag.cc" />
+    <ClCompile Include="..\xol.cc" />
+    <ClCompile Include="..\yahoo.cc" />
+    <ClCompile Include="..\jeeps\gpsapp.cc" />
+    <ClCompile Include="..\jeeps\gpscom.cc" />
+    <ClCompile Include="..\jeeps\gpsdevice.cc" />
+    <ClCompile Include="..\jeeps\gpsdevice_ser.cc" />
+    <ClCompile Include="..\jeeps\gpsdevice_usb.cc" />
+    <ClCompile Include="..\jeeps\gpsmath.cc" />
+    <ClCompile Include="..\jeeps\gpsmem.cc" />
+    <ClCompile Include="..\jeeps\gpsprot.cc" />
+    <ClCompile Include="..\jeeps\gpsread.cc" />
+    <ClCompile Include="..\jeeps\gpsrqst.cc" />
+    <ClCompile Include="..\jeeps\gpssend.cc" />
+    <ClCompile Include="..\jeeps\gpsserial.cc" />
+    <ClCompile Include="..\jeeps\gpsusbcommon.cc" />
+    <ClCompile Include="..\jeeps\gpsusbread.cc" />
+    <ClCompile Include="..\jeeps\gpsusbsend.cc" />
+    <ClCompile Include="..\jeeps\gpsusbwin.cc" />
+    <ClCompile Include="..\jeeps\jgpsutil.cc" />
+    <ClCompile Include="..\shapelib\dbfopen.c" />
+    <ClCompile Include="..\shapelib\shpopen.c" />
+    <ClCompile Include="..\zlib\adler32.c" />
+    <ClCompile Include="..\zlib\compress.c" />
+    <ClCompile Include="..\zlib\crc32.c" />
+    <ClCompile Include="..\zlib\deflate.c" />
+    <ClCompile Include="..\zlib\gzio.c" />
+    <ClCompile Include="..\zlib\infback.c" />
+    <ClCompile Include="..\zlib\inffast.c" />
+    <ClCompile Include="..\zlib\inflate.c" />
+    <ClCompile Include="..\zlib\inftrees.c" />
+    <ClCompile Include="..\zlib\trees.c" />
+    <ClCompile Include="..\zlib\uncompr.c" />
+    <ClCompile Include="..\zlib\zutil.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Expat\libexpat.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\cet.h" />
+    <ClInclude Include="..\cet_util.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="..\csv_util.h" />
+    <ClInclude Include="..\defs.h" />
+    <ClInclude Include="..\explorist_ini.h" />
+    <ClInclude Include="..\filterdefs.h" />
+    <ClInclude Include="..\garmin_device_xml.h" />
+    <ClInclude Include="..\garmin_fs.h" />
+    <ClInclude Include="..\garmin_gpi.h" />
+    <ClInclude Include="..\garmin_tables.h" />
+    <ClInclude Include="..\gbfile.h" />
+    <ClInclude Include="..\gbser.h" />
+    <ClInclude Include="..\gbser_private.h" />
+    <ClInclude Include="..\grtcirc.h" />
+    <ClInclude Include="..\inifile.h" />
+    <ClInclude Include="..\magellan.h" />
+    <ClInclude Include="..\mapsend.h" />
+    <ClInclude Include="..\pdbfile.h" />
+    <ClInclude Include="..\queue.h" />
+    <ClInclude Include="..\quovadis.h" />
+    <ClInclude Include="..\session.h" />
+    <ClInclude Include="..\strptime.h" />
+    <ClInclude Include="..\uuid.h" />
+    <ClInclude Include="..\jeeps\gps.h" />
+    <ClInclude Include="..\jeeps\gpsapp.h" />
+    <ClInclude Include="..\jeeps\gpscom.h" />
+    <ClInclude Include="..\jeeps\gpsdatum.h" />
+    <ClInclude Include="..\jeeps\gpsdevice.h" />
+    <ClInclude Include="..\jeeps\gpsfmt.h" />
+    <ClInclude Include="..\jeeps\gpsinput.h" />
+    <ClInclude Include="..\jeeps\gpsmath.h" />
+    <ClInclude Include="..\jeeps\gpsmem.h" />
+    <ClInclude Include="..\jeeps\gpsnmea.h" />
+    <ClInclude Include="..\jeeps\gpsnmeafmt.h" />
+    <ClInclude Include="..\jeeps\gpsnmeaget.h" />
+    <ClInclude Include="..\jeeps\gpsport.h" />
+    <ClInclude Include="..\jeeps\gpsproj.h" />
+    <ClInclude Include="..\jeeps\gpsprot.h" />
+    <ClInclude Include="..\jeeps\gpsread.h" />
+    <ClInclude Include="..\jeeps\gpsrqst.h" />
+    <ClInclude Include="..\jeeps\gpssend.h" />
+    <ClInclude Include="..\jeeps\gpsserial.h" />
+    <ClInclude Include="..\jeeps\gpsusbcommon.h" />
+    <ClInclude Include="..\jeeps\gpsusbint.h" />
+    <ClInclude Include="..\jeeps\jgpsutil.h" />
+    <ClInclude Include="..\zlib\crc32.h" />
+    <ClInclude Include="..\zlib\deflate.h" />
+    <ClInclude Include="..\zlib\inffast.h" />
+    <ClInclude Include="..\zlib\inffixed.h" />
+    <ClInclude Include="..\zlib\inflate.h" />
+    <ClInclude Include="..\zlib\inftrees.h" />
+    <ClInclude Include="..\zlib\trees.h" />
+    <ClInclude Include="..\zlib\zconf.h" />
+    <ClInclude Include="..\zlib\zlib.h" />
+    <ClInclude Include="..\zlib\zutil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="README.msvc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

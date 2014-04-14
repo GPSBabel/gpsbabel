@@ -1,0 +1,7 @@
+<para>This option overrides the internal logic to figure out how many
+characters an addressed Garmin GPS will support when using the '-s' smartname
+option.   This should be necessary only if you have a receiver type that
+GPSBabel doesn't know about or if you want to "dumb down" one unit to match
+another, such as wanting waypoint names in a StreetPilot 2720 (which supports
+20 character names) to exactly match those in a 60CS (which supports 10).
+</para>

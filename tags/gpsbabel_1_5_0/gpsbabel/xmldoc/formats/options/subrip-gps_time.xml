@@ -1,0 +1,13 @@
+<para>
+	The time part of the GPS timestamp which corresponds to a known position 
+	in the video.
+</para>
+<para>
+	Format is hhmmss. This option must be used together with 
+	<option>gps_date</option>; if one or both are missing, the timestamp of the
+	first GPS trackpoint is used.
+</para>
+<para>
+	The video position to which the timestamp corresponds can be set with the 
+	<option>video_time</option> option.
+</para>

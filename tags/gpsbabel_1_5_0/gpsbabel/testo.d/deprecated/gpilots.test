@@ -1,0 +1,12 @@
+
+#
+# GPilotS.   A Palm format.  Another binary format that
+#
+# rm -f ${TMPDIR/gpilots.l
+#gpsbabel -i easygps -f ${REFERENCE}/gpilots.pdb -o gpx -F ${TMPDIR}/gp.gpx
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpilots -F ${TMPDIR}/blah.pdb
+gpsbabel -i gpilots -f ${TMPDIR}/blah.pdb -o gpx -F ${TMPDIR}/1.gpx
+gpsbabel -i gpilots -f ${REFERENCE}/gpilots.pdb -o gpx -F ${TMPDIR}/2.gpx
+compare ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
+#gpsbabel -i easygps -f ${REFERENCE}/gpilots.pdb -o gpx -F ${TMPDIR}/gp.gpx
+

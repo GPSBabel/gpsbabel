@@ -1,0 +1,10 @@
+
+# OZI (OziExplorer 1.1) file format
+rm -f ${TMPDIR}/oz.wpt ${TMPDIR}/ozi.wpt
+gpsbabel -i ozi -f ${REFERENCE}/ozi.wpt -o ozi -F ${TMPDIR}/oz.wpt
+gpsbabel -i ozi -f ${TMPDIR}/oz.wpt -o ozi -F ${TMPDIR}/ozi.wpt
+compare ${TMPDIR}/ozi.wpt ${REFERENCE}
+
+# Test Ozi routes.
+gpsbabel -i ozi -f ${REFERENCE}/route/ozi.rte -o gpx -F ${TMPDIR}/ozi~gpx.gpx
+compare ${TMPDIR}/ozi~gpx.gpx ${REFERENCE}/route/

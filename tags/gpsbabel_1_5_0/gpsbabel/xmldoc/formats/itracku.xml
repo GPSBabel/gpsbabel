@@ -1,0 +1,10 @@
+<para>Serial download protocol for the <productname><ulink url="http://www.xaiox.com/itracku_sirf3.htm">XAiOX iTrackU BLUETOOTH GPS-RECEIVER SiRF III</ulink></productname> data logger.</para>
+<example id="itracku-download">
+  <title>Command showing a download from itracku connected to com14.</title>
+  <para><userinput>gpsbabel -i itracku -f com14 -o gpx -F out.gpx</userinput></para>
+</example>
+<para>Use auto: as input filename to let gpsbabel detect the serial port to which the logger is connected.</para>
+<example id="itracku-download-auto">
+  <title>Command showing a download from itracku with automatic port detection.</title>
+  <para><userinput>gpsbabel -i itracku -f auto: -o gpx -F out.gpx</userinput></para>
+</example>

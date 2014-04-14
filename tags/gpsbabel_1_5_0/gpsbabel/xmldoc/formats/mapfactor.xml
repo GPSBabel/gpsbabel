@@ -1,0 +1,23 @@
+<para>
+This format can write a favourites.xml file that stores the waypoints in the Mapfactor Navigator street navigation program for Windows and Android OS. The waypoints are listed in the My places menu option. The favourites.xml file are stored in the Navigator directory.
+</para>
+
+<para>
+This format can read waypoints from the favourites.xml file to use in other programs.
+</para>
+
+
+<para>
+The format has been tested with Windows 8, Navigator version 12.3 and Android OS, v4.2.2, Navigator version 1.1.5.
+</para>
+
+<para>
+The format has been tested with Windows 8, Navigator version 12.3 and Android OS, v4.2.2, Navigator version 1.1.5.
+</para>
+
+<para>
+Groups are not supported, as they don't map well to other more common
+file formats.
+</para>
+
+

@@ -1,0 +1,37 @@
+#
+# tracks filter tests
+#
+
+rm -f ${TMPDIR}/trackfilter*
+
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,title="LOG-%Y%m%d" -o gpx -F ${TMPDIR}/trackfilter.gpx
+compare ${REFERENCE}/track/trackfilter.gpx ${TMPDIR}/trackfilter.gpx
+
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,sdistance=0.1k  -o gpx -F ${TMPDIR}/trackfilter2.gpx
+compare ${REFERENCE}/track/trackfilter-sdistance.gpx ${TMPDIR}/trackfilter2.gpx
+
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,sdistance=0.1k,split=5m,title=%Y%m%d  -o gpx -F ${TMPDIR}/trackfilter-sdistance2.gpx
+compare ${REFERENCE}/track/trackfilter-sdistance2.gpx ${TMPDIR}/trackfilter-sdistance2.gpx
+
+# Exercise the 'faketime' filter.  The middle of the three points has
+# time so we can exercise the 'forced' option, too.
+gpsbabel -t -i unicsv -f ${REFERENCE}/track/trackfilter_faketime.txt -x track,faketime=20100506060000+5 -o gpx -F ${TMPDIR}/ft.gpx 
+compare ${REFERENCE}/track/trackfilter_faketime.gpx ${TMPDIR}/ft.gpx
+gpsbabel -t -i unicsv -f ${REFERENCE}/track/trackfilter_faketime.txt -x track,faketime=f20100506060000+5 -o gpx -F ${TMPDIR}/ftf.gpx
+compare ${REFERENCE}/track/trackfilter_faketime_forced.gpx ${TMPDIR}/ftf.gpx
+
+# reverse the track
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trk_reverse_test-fwd.gpx -x reverse -o gpx -F ${TMPDIR}/trk_reverse_test-rev.gpx
+compare ${REFERENCE}/track/trk_reverse_test-rev.gpx ${TMPDIR}/trk_reverse_test-rev.gpx
+
+# seg2trk filter test
+gpsbabel -i gpx -f ${REFERENCE}/track/seg2trk_test.gpx -x track,seg2trk -o gpx -F ${TMPDIR}/seg2trk_test-seg.gpx
+compare ${REFERENCE}/track/seg2trk_test-seg.gpx ${TMPDIR}/seg2trk_test-seg.gpx
+
+# Verify that the merge/split code is numerically stable on subsecond input.
+# This would fail on GPSBabel <= 1.4.4 which didn't handle subsecond times
+# correctly in this filter.  Observe that the times in split-split are
+# always ascending and the order of the input track names is preserved.
+
+gpsbabel -i gpx -f ${REFERENCE}/track/split-raw.gpx -x track,merge,split=1m -o gpx -F ${TMPDIR}/split-raw-split.gpx
+compare ${REFERENCE}/track/split-split.gpx ${TMPDIR}/split-raw-split.gpx

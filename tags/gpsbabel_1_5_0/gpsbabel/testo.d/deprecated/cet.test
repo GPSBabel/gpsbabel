@@ -1,0 +1,15 @@
+#
+# cet - Character encoding transformation tests
+#
+rm -f ${TMPDIR}/cet-sample*
+gpsbabel -w -i gdb -f ${REFERENCE}/cet/cet-sample.gdb -o gpx -F ${TMPDIR}/cet-sample.gpx
+compare ${REFERENCE}/cet/cet-sample.gpx ${TMPDIR}/cet-sample.gpx
+gpsbabel -w -i gpx -f ${TMPDIR}/cet-sample.gpx -o tmpro -c Latin1 -F ${TMPDIR}/cet-sample.latin1.txt
+compare ${REFERENCE}/cet/cet-sample.latin1.txt ${TMPDIR}/cet-sample.latin1.txt
+gpsbabel -w -i gdb -f ${REFERENCE}/cet/cet-sample.gdb -o tmpro -c Latin2 -F ${TMPDIR}/cet-sample.latin2.txt
+compare ${REFERENCE}/cet/cet-sample.latin2.txt ${TMPDIR}/cet-sample.latin2.txt
+gpsbabel -w -i gdb -f ${REFERENCE}/cet/cet-sample.gdb -o tmpro -c cp1250 -F ${TMPDIR}/cet-sample.cp1250.txt
+compare ${REFERENCE}/cet/cet-sample.cp1250.txt ${TMPDIR}/cet-sample.cp1250.txt
+gpsbabel -w -i gdb -f ${REFERENCE}/cet/cet-sample.gdb -o tmpro -c macroman -F ${TMPDIR}/cet-sample.macroman.txt
+compare ${REFERENCE}/cet/cet-sample.macroman.txt ${TMPDIR}/cet-sample.macroman.txt
+

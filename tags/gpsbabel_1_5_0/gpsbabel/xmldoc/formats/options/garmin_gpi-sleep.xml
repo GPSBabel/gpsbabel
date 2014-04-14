@@ -1,0 +1,16 @@
+<para>
+  The Garmin units seem to use the creation timestamp of GPI files for internal purposes. 
+  In other words,  if you load GPI files with same creation timestamp on your device, 
+  strange things will happen,  such as having missing or repeated POIs. With the sleep option, GPSBabel waits a given
+  number of seconds after the GPI file was written.
+</para>
+<para>
+  In the normal case of using GPSBabel from the command line or from the GUI, the chance of creating files
+  with the same timestamp is in the nearly ZERO. In scripts or batch files where you are writing multiple files - even from different GPSBabel instances - the odds of this happening is rather good.
+  The sleep option forces GPSBabel to wait after creating a file to ensure the timestamps are unique. Values are specified in seconds and can be 1 or more.
+</para>
+<para>
+  <userinput>
+    gpsbabel -i gpx -f "SpeedCameras.gpx" -o garmin_gpi,sleep=1 -F "SpeedCameras.gpi"
+  </userinput>
+</para>

@@ -1,0 +1,51 @@
+#
+#   Support for MainNav CSV format
+#
+#   Copyright (C) 2012 Robert Lipe, gpsbabel.org
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
+#
+# gpsbabel XCSV style file
+# Format: Mainnav MG-950d data logger and possibly others
+# Author: tsteven4
+# Date: December 13, 2012
+#
+# 
+DESCRIPTION	Mainnav
+EXTENSION	nav
+DATATYPE	TRACK
+#
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER		COMMA
+RECORD_DELIMITER	NEWLINE
+BADCHARS	COMMA
+
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	LOCAL_TIME, "", "%Y/%m/%d %H:%M:%S"
+IFIELD	LON_DECIMAL,"","%.9f"
+IFIELD	LON_DIR,"","%c"
+IFIELD	LAT_DECIMAL,"","%.9f"
+IFIELD	LAT_DIR,"","%c"
+IFIELD	IGNORE, "", "%s"	# ALT?
+IFIELD	IGNORE, "", "%s"	# SPD?
+IFIELD	IGNORE, "", "%s"	# PATH?
+IFIELD	IGNORE, "", "%s"	# FILENAME?
+IFIELD	IGNORE, "", "%s"	# MODE?
+IFIELD	IGNORE, "", "%s"	# JOURNEY_INDEX?
+IFIELD	IGNORE, "", "%s"	# ?

@@ -1,0 +1,25 @@
+#
+# MTK logger tests
+#
+rm -f ${TMPDIR}/mtk_logger.*
+gpsbabel -t -w -i mtk-bin,csv=${TMPDIR}/mtk_logger.csv -f ${REFERENCE}/track/mtk_logger.bin -o gpx -F ${TMPDIR}/mtk_logger.gpx
+compare ${REFERENCE}/track/mtk_logger.gpx ${TMPDIR}/mtk_logger.gpx
+## CSV compare needs to be done with '-w' - ignore whitespace.
+compare ${REFERENCE}/track/mtk_logger.csv ${TMPDIR}/mtk_logger.csv
+
+#
+# MTK logger tests (Holux M-241)
+#
+rm -f ${TMPDIR}/mtk_logger_m241.*
+gpsbabel -t -w -i m241-bin,csv=${TMPDIR}/mtk_logger_m241.csv -f ${REFERENCE}/track/mtk_logger_m241.bin -o gpx -F ${TMPDIR}/mtk_logger_m241.gpx
+compare ${REFERENCE}/track/mtk_logger_m241.gpx ${TMPDIR}/mtk_logger_m241.gpx
+## CSV compare needs to be done with '-w' - ignore whitespace.
+compare ${REFERENCE}/track/mtk_logger_m241.csv ${TMPDIR}/mtk_logger_m241.csv
+
+#
+# MTK logger tests (Holux GPsport-245 - using m241 module)
+#
+rm -f ${TMPDIR}/mtk_logger_gp245.*
+gpsbabel -t -w -i m241-bin -f ${REFERENCE}/track/mtk_logger_gp245.bin -o gpx -F ${TMPDIR}/mtk_logger_gp245.gpx
+compare ${REFERENCE}/track/mtk_logger_gp245.gpx ${TMPDIR}/mtk_logger_gp245.gpx
+

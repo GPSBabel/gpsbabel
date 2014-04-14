@@ -1,0 +1,7 @@
+# GPSUtil
+rm -f ${TMPDIR}/gu.wpt ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpsutil -F ${TMPDIR}/gu.wpt
+compare ${TMPDIR}/gu.wpt ${REFERENCE}
+gpsbabel -i gpsutil -f ${TMPDIR}/gu.wpt -o gpx -F ${TMPDIR}/1.gpx
+gpsbabel -i gpsutil -f ${REFERENCE}/gu.wpt -o gpx -F ${TMPDIR}/2.gpx
+compare ${TMPDIR}/1.gpx ${TMPDIR}/2.gpx

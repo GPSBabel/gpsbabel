@@ -1,0 +1,5 @@
+# TODO: add test for reader.  Use smaller reference files.
+
+rm -f ${TMPDIR}/lowrance.*
+gpsbabel -i lowranceusr4 -f ${REFERENCE}/lowranceusr4.usr -o gpx -F ${TMPDIR}/lowranceusr4.gpx
+compare ${REFERENCE}/lowranceusr4.gpx ${TMPDIR}/lowranceusr4.gpx

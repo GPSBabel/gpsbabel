@@ -1,0 +1,9 @@
+#
+# Duplicate filter - Since filters have no format of their own, we use csv
+# as an intermediate format for testing the filter.
+#
+rm -f ${TMPDIR}/filterdupe.csv1 ${TMPDIR}/filterdupe.csv2
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o csv -F ${TMPDIR}/filterdupe.csv1
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -f ${REFERENCE}/../geocaching.loc -x duplicate,shortname \
+		-o csv -F ${TMPDIR}/filterdupe.csv2
+sort_and_compare ${TMPDIR}/filterdupe.csv1 ${TMPDIR}/filterdupe.csv2

@@ -1,0 +1,9 @@
+
+#
+# stack filter tests
+# These don't actually test for proper behavior, for now, but they do
+# exercise all of the currently-extant filter code.
+#
+
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -x stack,push,copy,nowarn -x stack,push,copy -x stack,push -x stack,pop,replace -x stack,pop,append -x stack,push,copy -x stack,pop,discard -x stack,swap,depth=1 -o arc -F ${TMPDIR}/stackfilt.txt
+

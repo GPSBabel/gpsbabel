@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<gpx
+ version="1.1"
+ creator="tsteven4"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns="http://www.topografix.com/GPX/1/1"
+ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+<!-- These points walk around 0 Easting 0 Northing to find sign problems. -->
+<wpt lat="22.556257" lon="32.568393">
+<name>1</name>
+</wpt>
+<wpt lat="22.556257" lon="34.568393">
+<name>2</name>
+</wpt>
+<wpt lat="20.556257" lon="34.568393">
+<name>3</name>
+</wpt>
+<wpt lat="20.556257" lon="32.568393">
+<name>4</name>
+</wpt>
+</gpx>

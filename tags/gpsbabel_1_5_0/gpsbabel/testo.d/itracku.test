@@ -1,0 +1,7 @@
+#
+# XAiOX iTrackU Logger
+#
+rm -f ${TMPDIR}/itracku.unicsv
+gpsbabel -w -i itracku-bin -f ${REFERENCE}/itracku.dat -o unicsv,utc=0 -F ${TMPDIR}/itracku.unicsv
+compare ${REFERENCE}/itracku.unicsv ${TMPDIR}/itracku.unicsv
+

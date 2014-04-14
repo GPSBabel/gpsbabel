@@ -1,0 +1,9 @@
+#
+# Vito Navigator II .smt tests
+#
+rm -f ${TMPDIR}/vitosmt*
+gpsbabel    -i vitosmt -f ${REFERENCE}/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt.gpx
+compare ${REFERENCE}/vitosmt.gpx ${TMPDIR}/vitosmt.gpx
+gpsbabel -t -i vitosmt -f ${REFERENCE}/vitosmt.smt -o gpx -F ${TMPDIR}/vitosmt_t.gpx
+compare ${REFERENCE}/track/vitosmt_t.gpx ${TMPDIR}/vitosmt_t.gpx
+

@@ -1,0 +1,2 @@
+<para>The default is to autodetect the baudrate, but that can take a few seconds.  If you know the baudrate of the device it is faster to specify it explicitly.</para>
+<para>Only valid when using a USB device as input.</para>

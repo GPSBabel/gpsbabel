@@ -1,0 +1,9 @@
+<para>
+This option specifies if you want to write the compressed binary format (WBXML)
+instead of the XML format. However, most current Nokia phones do only support
+the XML format (confirmed with N82 and N95).
+</para>
+<para>
+This option has no effect when used for input, only reading the traditional XML
+format is supported.
+</para>

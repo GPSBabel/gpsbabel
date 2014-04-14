@@ -1,0 +1,12 @@
+<para> 
+This option is used in conjunction with the merge option to discard track points with missing
+timestamps instead of aborting with the "Found track point at lat,lon without time!" error.
+</para>
+<example id="ex_track_discard">
+<title>Merging tracks with missing timestamps with the track filter</title>
+<para> 
+Suppose you want to merge tracks that may have missing timestamps.  To do that, use this command line:
+</para>
+<para><userinput>gpsbabel -t -i gpx -f john.gpx -f doe.gpx -x track,merge,discard -o gpx -F john_doe.gpx</userinput></para>
+</example>
+

@@ -1,0 +1,4 @@
+
+# Navitrak DNA marker format
+gpsbabel -i dna -f ${REFERENCE}/dnatest.txt -o dna -F ${TMPDIR}/dnatest.txt
+compare ${REFERENCE}/dnatest.txt ${TMPDIR}/dnatest.txt

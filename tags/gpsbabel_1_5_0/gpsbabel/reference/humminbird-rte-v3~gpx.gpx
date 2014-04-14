@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1" xmlns:h="http://humminbird.com">
+  <metadata>
+    <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="46.250304116" minlon="-93.734441604" maxlat="46.276782900" maxlon="-93.713062542"/>
+  </metadata>
+  <wpt lat="46.250304116" lon="-93.713062542">
+    <ele>0.000000</ele>
+    <time>2008-06-14T16:53:40Z</time>
+    <name>WP001</name>
+    <cmt>WP001</cmt>
+    <desc>WP001</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="46.256467034" lon="-93.726159464">
+    <ele>0.000000</ele>
+    <time>2008-06-14T16:53:45Z</time>
+    <name>WP002</name>
+    <cmt>WP002</cmt>
+    <desc>WP002</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="46.261850448" lon="-93.719503209">
+    <ele>0.000000</ele>
+    <time>2008-06-14T16:53:52Z</time>
+    <name>WP003</name>
+    <cmt>WP003</cmt>
+    <desc>WP003</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="46.272229465" lon="-93.721641116">
+    <ele>0.000000</ele>
+    <time>2008-06-14T16:54:00Z</time>
+    <name>WP004</name>
+    <cmt>WP004</cmt>
+    <desc>WP004</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="46.269638011" lon="-93.734441604">
+    <ele>0.000000</ele>
+    <time>2008-06-14T16:54:10Z</time>
+    <name>WP005</name>
+    <cmt>WP005</cmt>
+    <desc>WP005</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="46.276782900" lon="-93.724317990">
+    <ele>0.000000</ele>
+    <time>2008-06-14T16:54:18Z</time>
+    <name>WP006</name>
+    <cmt>WP006</cmt>
+    <desc>WP006</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="46.266143091" lon="-93.723958678">
+    <ele>0.000000</ele>
+    <time>2008-06-14T16:54:26Z</time>
+    <name>WP007</name>
+    <cmt>WP007</cmt>
+    <desc>WP007</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="46.262834858" lon="-93.732932494">
+    <ele>0.000000</ele>
+    <time>2008-06-14T16:54:34Z</time>
+    <name>WP008</name>
+    <cmt>WP008</cmt>
+    <desc>WP008</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="46.254392034" lon="-93.716574817">
+    <ele>0.000000</ele>
+    <time>2008-06-14T16:54:49Z</time>
+    <name>WP009</name>
+    <cmt>WP009</cmt>
+    <desc>WP009</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="46.270541297" lon="-93.726770294">
+    <ele>0.000000</ele>
+    <time>2008-06-14T16:54:57Z</time>
+    <name>WP010</name>
+    <cmt>WP010</cmt>
+    <desc>WP010</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <wpt lat="46.266080791" lon="-93.718991190">
+    <ele>0.000000</ele>
+    <time>2008-06-14T16:55:06Z</time>
+    <name>WP011</name>
+    <cmt>WP011</cmt>
+    <desc>WP011</desc>
+    <sym>Normal</sym>
+  </wpt>
+  <rte>
+    <name>RT001</name>
+    <rtept lat="46.250304116" lon="-93.713062542">
+      <ele>0.000000</ele>
+      <time>2008-06-14T16:53:40Z</time>
+      <name>WP001</name>
+      <cmt>WP001</cmt>
+      <desc>WP001</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="46.256467034" lon="-93.726159464">
+      <ele>0.000000</ele>
+      <time>2008-06-14T16:53:45Z</time>
+      <name>WP002</name>
+      <cmt>WP002</cmt>
+      <desc>WP002</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="46.261850448" lon="-93.719503209">
+      <ele>0.000000</ele>
+      <time>2008-06-14T16:53:52Z</time>
+      <name>WP003</name>
+      <cmt>WP003</cmt>
+      <desc>WP003</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="46.272229465" lon="-93.721641116">
+      <ele>0.000000</ele>
+      <time>2008-06-14T16:54:00Z</time>
+      <name>WP004</name>
+      <cmt>WP004</cmt>
+      <desc>WP004</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="46.269638011" lon="-93.734441604">
+      <ele>0.000000</ele>
+      <time>2008-06-14T16:54:10Z</time>
+      <name>WP005</name>
+      <cmt>WP005</cmt>
+      <desc>WP005</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="46.276782900" lon="-93.724317990">
+      <ele>0.000000</ele>
+      <time>2008-06-14T16:54:18Z</time>
+      <name>WP006</name>
+      <cmt>WP006</cmt>
+      <desc>WP006</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="46.266143091" lon="-93.723958678">
+      <ele>0.000000</ele>
+      <time>2008-06-14T16:54:26Z</time>
+      <name>WP007</name>
+      <cmt>WP007</cmt>
+      <desc>WP007</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="46.262834858" lon="-93.732932494">
+      <ele>0.000000</ele>
+      <time>2008-06-14T16:54:34Z</time>
+      <name>WP008</name>
+      <cmt>WP008</cmt>
+      <desc>WP008</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="46.254392034" lon="-93.716574817">
+      <ele>0.000000</ele>
+      <time>2008-06-14T16:54:49Z</time>
+      <name>WP009</name>
+      <cmt>WP009</cmt>
+      <desc>WP009</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="46.270541297" lon="-93.726770294">
+      <ele>0.000000</ele>
+      <time>2008-06-14T16:54:57Z</time>
+      <name>WP010</name>
+      <cmt>WP010</cmt>
+      <desc>WP010</desc>
+      <sym>Normal</sym>
+    </rtept>
+    <rtept lat="46.266080791" lon="-93.718991190">
+      <ele>0.000000</ele>
+      <time>2008-06-14T16:55:06Z</time>
+      <name>WP011</name>
+      <cmt>WP011</cmt>
+      <desc>WP011</desc>
+      <sym>Normal</sym>
+    </rtept>
+  </rte>
+</gpx>

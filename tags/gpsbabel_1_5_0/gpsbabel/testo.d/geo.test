@@ -1,0 +1,10 @@
+
+# Geocaching .loc
+rm -f ${TMPDIR}/gl.loc
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o geo -F ${TMPDIR}/gl.loc
+compare ${TMPDIR}/gl.loc ${REFERENCE}
+
+# we have a one off reader in geo, make sure it can read stdin.
+rm -f ${TMPDIR}/gl_si.loc
+cat ${REFERENCE}/../geocaching.loc | gpsbabel -i geo -f - -o geo -F ${TMPDIR}/gl_si.loc
+compare ${TMPDIR}/gl_si.loc ${REFERENCE}/gl.loc

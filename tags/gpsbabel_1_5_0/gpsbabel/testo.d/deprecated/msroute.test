@@ -1,0 +1,6 @@
+#
+# Microsoft AutoRoute 2002 test (read-only)
+#
+gpsbabel -i msroute -f ${REFERENCE}/route/msroute-sample.axe -o gpx -F ${TMPDIR}/msroute-sample.gpx
+compare ${REFERENCE}/route/msroute-sample.gpx ${TMPDIR}/msroute-sample.gpx
+
