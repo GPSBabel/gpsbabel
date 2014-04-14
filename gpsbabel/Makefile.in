@@ -374,13 +374,6 @@ release: release-sourcecheck  release-tarball release-winbuild release-rpm relea
 rpm: changes.html
 	tools/mkrpm $(WEB) $(VERSD) $(RELEASE)
 
-mac-release:
-	mkdir -p usr/bin usr/share/gpsbabel/doc
-	cp gpsbabel usr/bin/
-	cp README* COPYING usr/share/gpsbabel/doc
-	tar cvzf gpsbabel-osx.tgz usr/bin/gpsbabel
-	curl -u anonymous:anonymous --upload-file gpsbabel-osx.tgz ftp://upload.sf.net/incoming/
-
 gui: gpsbabel$(EXEEXT)
 	cd gui ; $(QMAKE) app.pro && make
 	cd gui ; $(LUPDATE) app.pro
