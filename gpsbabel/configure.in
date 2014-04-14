@@ -3,16 +3,16 @@
 
 AC_PREREQ(2.59)
 
-#AC_INIT(GPSBabel, 1.4.4, BUG-REPORT-ADDRESS)
-#DOCVERSION=1.4.4
 #PACKAGE_RELEASE=
-AC_INIT(GPSBabel, 1.5.0-beta20140302, BUG-REPORT-ADDRESS)
+AC_INIT(GPSBabel, 1.5.0, BUG-REPORT-ADDRESS)
+DOCVERSION=1.5.0
+
 # YYYYMMDD, please, if beta, i.e. "-beta20060413"
-DOCVERSION=development
+#DOCVERSION=development
 
 
 # Increase GBBUILD for a new release (why? Where is this ever used?)
-GBBUILD=25
+GBBUILD=26
 # PACKAGE_RELEASE="-beta20140216"
 AC_DEFINE_UNQUOTED(PACKAGE_RELEASE, "$PACKAGE_RELEASE", [Define to the release name of this package.])
 AC_SUBST(PACKAGE_RELEASE)

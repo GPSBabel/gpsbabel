@@ -770,28 +770,28 @@ This program cannot continue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1070"/>
+        <location filename="mainwindow.cc" line="1071"/>
         <source>Error running gpsbabel: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1183"/>
+        <location filename="mainwindow.cc" line="1184"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1207"/>
+        <location filename="mainwindow.cc" line="1208"/>
         <source>About %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1250"/>
+        <location filename="mainwindow.cc" line="1251"/>
         <source>One or more data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1252"/>
+        <location filename="mainwindow.cc" line="1253"/>
         <source>No data filters are active</source>
         <translation type="unfinished"></translation>
     </message>
