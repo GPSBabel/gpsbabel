@@ -41,9 +41,9 @@ That can be done easily with the single command:
   <para><ulink url="http://qt-project.org">Qt</ulink> 
 is required for all builds.  Mac and Windows users can download
 binaries from <ulink url="http://qt-project.org/downloads">Qt Downloads</ulink>
-CentOS users may need to 'yum install libqt4-core libqt4-dev'.
-Fedora users may need to 'yum install qt4-devel'.
+Fedora or CentOS users may need to 'yum install qt-devel'.  Optionally, use qt5-base.  When in doubt, 'yum search qt' or 'yum search qt5' can help you find the correct package name
 Ubuntu users may need to 'apt-get install libqt4-core libqt4-dev'.
+Qt versions 4.6 and newer are supported.
 </para>
   <para><ulink url="http://libusb.sourceforge.net">libusb</ulink> 
 is recommended for OS/X and Linux if you want to use a USB Garmin or 
