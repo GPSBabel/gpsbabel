@@ -275,7 +275,7 @@ ozi_track_disp(const Waypoint* waypointp)
 }
 
 static void
-ozi_track_tlr(const route_head* rte)
+ozi_track_tlr(const route_head*)
 {
 }
 
@@ -370,7 +370,7 @@ ozi_route_disp(const Waypoint* waypointp)
 }
 
 static void
-ozi_route_tlr(const route_head* rte)
+ozi_route_tlr(const route_head*)
 {
 }
 
@@ -688,7 +688,7 @@ ozi_parse_routepoint(int field, char* str, Waypoint* wpt_tmp)
 }
 
 static void
-ozi_parse_routeheader(int field, const QString& str, Waypoint* wpt_tmp)
+ozi_parse_routeheader(int field, const QString& str, Waypoint*)
 {
 
   switch (field) {
