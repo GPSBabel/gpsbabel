@@ -179,7 +179,6 @@ HEADERS =  \
 	cet/viscii.h \
 	cet/vps.h \
 	cet_util.h \
-	config.h \
 	csv_util.h \
 	defs.h \
 	explorist_ini.h \
@@ -218,7 +217,6 @@ HEADERS =  \
 	jeeps/gpsutil.h \
 	magellan.h \
 	mapsend.h \
-	msvc/config.h \
 	navilink.h \
 	pdbfile.h \
 	queue.h \
