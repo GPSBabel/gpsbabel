@@ -242,7 +242,7 @@ gtc_write_xml(int indent, const QString s)
 }
 
 static void
-gtc_lap_start(const route_head* rte)
+gtc_lap_start(const route_head*)
 {
   gtc_least_time = gpsbabel::DateTime();
   gtc_most_time = gpsbabel::DateTime();
@@ -401,7 +401,7 @@ gtc_act_hdr(const route_head* rte)
 }
 
 static void
-gtc_act_ftr(const route_head* rte)
+gtc_act_ftr(const route_head*)
 {
   gtc_write_xml(-1, "</Track>\n");
   gtc_write_xml(-1, "</Lap>\n");
@@ -432,7 +432,7 @@ gtc_crs_hdr(const route_head* rte)
 }
 
 static void
-gtc_crs_ftr(const route_head* rte)
+gtc_crs_ftr(const route_head*)
 {
   gtc_write_xml(-1,"</Track>\n");
   gtc_write_xml(-1, "</Course>\n");
@@ -459,7 +459,7 @@ gtc_write(void)
 }
 
 void
-gtc_trk_s(const xg_string unused, const QXmlStreamAttributes*attrs)
+gtc_trk_s(const xg_string , const QXmlStreamAttributes*)
 {
   trk_head = route_head_alloc();
   track_add_head(trk_head);
@@ -472,26 +472,26 @@ gtc_trk_ident(xg_string args, const QXmlStreamAttributes*)
 }
 
 void
-gtc_trk_lap_s(xg_string unused, const QXmlStreamAttributes*attrs)
+gtc_trk_lap_s(xg_string, const QXmlStreamAttributes*)
 {
   lap_ct++;
   lap_s = 1;
 }
 
 void
-gtc_trk_lap_e(xg_string unused, const QXmlStreamAttributes*attrs)
+gtc_trk_lap_e(xg_string, const QXmlStreamAttributes*)
 {
   lap_s = 0;
 }
 
 void
-gtc_trk_pnt_s(xg_string unused, const QXmlStreamAttributes*attrs)
+gtc_trk_pnt_s(xg_string, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
 }
 
 void
-gtc_trk_pnt_e(xg_string args, const QXmlStreamAttributes*)
+gtc_trk_pnt_e(xg_string, const QXmlStreamAttributes*)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     if (lap_s) {
@@ -563,13 +563,13 @@ gtc_trk_spd(xg_string args, const QXmlStreamAttributes*)
 }
 
 void
-gtc_wpt_crs_s(const QString& args, const QXmlStreamAttributes*)
+gtc_wpt_crs_s(const QString&, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
 }
 
 void
-gtc_wpt_crs_e(xg_string args, const QXmlStreamAttributes*)
+gtc_wpt_crs_e(xg_string, const QXmlStreamAttributes*)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     waypt_add(wpt_tmp);
@@ -581,14 +581,14 @@ gtc_wpt_crs_e(xg_string args, const QXmlStreamAttributes*)
 }
 
 void
-gtc_wpt_pnt_s(xg_string unused, const QXmlStreamAttributes*attrs)
+gtc_wpt_pnt_s(xg_string, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
   lap_ct++;
 }
 
 void
-gtc_wpt_pnt_e(xg_string args, const QXmlStreamAttributes*)
+gtc_wpt_pnt_e(xg_string, const QXmlStreamAttributes*)
 {
   if (wpt_tmp->longitude != 0. && wpt_tmp->latitude != 0.) {
     /* Add the begin position of a CourseLap as
