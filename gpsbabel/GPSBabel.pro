@@ -242,7 +242,6 @@ SUBDIRS += jeeps
 
 macx|linux {
   DEFINES += HAVE_NANOSLEEP HAVE_LIBUSB HAVE_GLOB
-  DEFINES += HAVE_VA_COPY HAVE_VA_LIST_AS_ARRAY
   SOURCES += gbser_posix.cc
   JEEPS += jeeps/gpslibusb.cc
   INCLUDEPATH += jeeps
@@ -280,7 +279,6 @@ macx {
 }
 
 SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$SHAPE $$ZLIB $$JEEPS
-
 DEFINES += NEW_STRINGS
 
 # We don't care about stripping things out of the build.  Full monty, baby.
@@ -290,3 +288,11 @@ DEFINES += PDBFMTS_ENABLED
 DEFINES += SHAPELIB_ENABLED
 DEFINES += CSVFMTS_ENABLED
 DEFINES += CET_WANTED
+
+# Creator insists on adding -W to -Wall which results in a completely
+# absurd amount of jibber-jabber on perfectly legally formed code.
+# Rather than wade through a thousand lines of yammer, let's just nuke -W
+# but leave -Wall, which actually has useful stuff.
+# Citation: http://stackoverflow.com/questions/18667291/disable-wall-compiler-warnings-in-a-qt-project
+QMAKE_CFLAGS_WARN_ON -= -W
+QMAKE_CXXFLAGS_WARN_ON -= -W
