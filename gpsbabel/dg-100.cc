@@ -1,10 +1,11 @@
 /*
 
-    GlobalSat DG-100 GPS data logger download.
+    GlobalSat DG-100/DG-200 GPS data logger download.
 
     Copyright (C) 2007  Mirko Parthey, mirko.parthey@informatik.tu-chemnitz.de
     Copyright (C) 2005-2008  Robert Lipe, robertlipe+source@gpsbabel.org
     Copyright (C) 2012  Nicolas Boullis, nboullis@debian.org
+    Copyright (C) 2014  Jean-Claude Repetto, gpsbabel@repetto.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,8 +24,8 @@
  */
 
 /*
-    DG-100 communication protocol specification:
-    http://www.usglobalsat.com/forum/topic.asp?TOPIC_ID=607#1375
+    DG-100 / DG-200 communication protocol specification:
+    http://www.usglobalsat.com/s-176-developer-information.aspx
  */
 
 #include "defs.h"
@@ -37,9 +38,12 @@
 #define MYNAME "DG-100"
 
 typedef struct {
+  const char *name;
   unsigned speed;
   int has_trailing_bytes;
   int has_payload_end_seq;
+  struct dg100_command *commands;
+  unsigned int numcommands;
 } model_t;
 
 static const model_t* model;
@@ -60,7 +64,8 @@ enum dg100_command_id {
   dg100cmd_erase         = 0xBA,
   dg100cmd_getid         = 0xBF,
   dg100cmd_setid         = 0xC0,
-  dg100cmd_gpsmouse      = 0xBC
+  dg100cmd_gpsmouse      = 0xBC,
+  dg200cmd_reset         = 0x80
 };
 
 struct dg100_command {
@@ -72,17 +77,29 @@ struct dg100_command {
 };
 
 struct dg100_command dg100_commands[] = {
-  { dg100cmd_getconfig,      0,   44,    2, "getconfig" },
-  { dg100cmd_setconfig,     41,    4,    2, "setconfig"  },
+  { dg100cmd_getfile,        2, 1024,    2, "getfile" },
   /* the getfileheader answer has variable length, -1 is a dummy value */
   { dg100cmd_getfileheader,  2,   -1,    2, "getfileheader"  },
-  { dg100cmd_getfile,        2, 1024,    2, "getfile" },
   { dg100cmd_erase,          2,    4,    2, "erase" },
+  { dg100cmd_getconfig,      0,   44,    2, "getconfig" },
+  { dg100cmd_setconfig,     41,    4,    2, "setconfig"  },
   { dg100cmd_getid,          0,    8,    2, "getid" },
   { dg100cmd_setid,          8,    4,    2, "setid" },
   { dg100cmd_gpsmouse,       1,    0,    0, "gpsmouse" }
 };
-const unsigned dg100_numcommands = sizeof(dg100_commands) / sizeof(dg100_commands[0]);
+
+struct dg100_command dg200_commands[] = {
+  { dg100cmd_getfile,        2, 1024,    2, "getfile" },
+  /* the getfileheader answer has variable length, -1 is a dummy value */
+  { dg100cmd_getfileheader,  2,   -1,    2, "getfileheader"  },
+  { dg100cmd_erase,          2,    4,    2, "erase" },
+  { dg100cmd_getconfig,      0,   45,    2, "getconfig" },
+  { dg100cmd_setconfig,     42,    4,    2, "setconfig"  },
+  { dg100cmd_getid,          0,    8,    2, "getid" },
+  { dg100cmd_setid,          8,    4,    2, "setid" },
+  { dg100cmd_gpsmouse,       1,    0,    0, "gpsmouse" },
+  { dg200cmd_reset   ,       24,   0,    0, "reset" }
+};
 
 struct dynarray16 {
   unsigned count; /* number of elements used */
@@ -96,9 +113,9 @@ dg100_findcmd(int id) {
   unsigned int i;
 
   /* linear search should be OK as long as dg100_numcommands is small */
-  for (i = 0; i < dg100_numcommands; i++) {
-    if (dg100_commands[i].id == id) {
-      return(&dg100_commands[i]);
+  for (i = 0; i < model->numcommands; i++) {
+    if (model->commands[i].id == id) {
+      return(&model->commands[i]);
     }
   }
 
@@ -256,11 +273,12 @@ process_gpsfile(uint8_t data[], route_head** track)
       bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
       bindate = be_read32(data + i + 12);
       creation_time = bintime2utc(bindate, bintime);
-      strftime(buf, sizeof(buf), "DG-100 tracklog (%Y/%m/%d %H:%M:%S)",
+      strncpy(buf, model->name, sizeof(buf));
+      strftime(&buf[strlen(model->name)], sizeof(buf)-strlen(model->name), " tracklog (%Y/%m/%d %H:%M:%S)",
                gmtime(&creation_time));
       *track = route_head_alloc();
       (*track)->rte_name = buf;
-      (*track)->rte_desc = "DG-100 GPS tracklog data";
+      (*track)->rte_desc = "GPS tracklog data";
       track_add_head(*track);
     }
 
@@ -316,20 +334,19 @@ dg100_checksum(uint8_t buf[], int count)
 
 /* communication functions */
 static size_t
-dg100_send(uint8_t cmd, const void* payload, size_t count)
+dg100_send(uint8_t cmd, const void* payload, size_t param_len)
 {
   uint8_t frame[FRAME_MAXLEN];
   uint16_t checksum, payload_len;
-  size_t framelen, param_len;
+  size_t framelen;
   int n;
 
-  param_len = count;
-  payload_len = 1 + count;
+  payload_len = 1 + param_len;
   /* Frame length calculation:
    * frame start sequence(2), payload length field(2), command id(1),
    * param(variable length),
    * checksum(2), frame end sequence(2) */
-  framelen = 2 + 2 + 1 + count + 2 + 2;
+  framelen = 2 + 2 + 1 + param_len + 2 + 2;
   assert(framelen <= FRAME_MAXLEN);
 
   /* create frame head + command */
@@ -338,7 +355,7 @@ dg100_send(uint8_t cmd, const void* payload, size_t count)
   frame[4] = cmd;
 
   /* copy payload */
-  memcpy(frame + 5, payload, count);
+  memcpy(frame + 5, payload, param_len);
 
   /* create frame tail */
   checksum = dg100_checksum(frame + 4, framelen - 8);
@@ -469,7 +486,7 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
   /* Frame length calculation:
    * frame start sequence(2), payload length field(2), command id(1),
    * param(variable length),
-   * payload end seqence(2 or 0), checksum(2), frame end sequence(2) */
+   * payload end sequence(2 or 0), checksum(2), frame end sequence(2) */
   frame_len = 2 + 2 + 1 + param_len + ((model->has_payload_end_seq) ? 2 : 0) + 2 + 2;
 
   if (frame_len > FRAME_MAXLEN) {
@@ -614,6 +631,14 @@ dg100_getfileheaders(struct dynarray16* headers)
 }
 
 static void
+dg100_getconfig()
+{
+  uint8_t answer[45];
+
+  dg100_request(dg100cmd_getconfig, NULL, answer, sizeof(answer));
+}
+
+static void
 dg100_getfile(int16_t num, route_head** track)
 {
   uint8_t request[2];
@@ -642,6 +667,7 @@ dg100_getfiles()
     filenum = headers.data[i];
     dg100_getfile(filenum, &track);
   }
+  dg100_getconfig();       // To light on the green LED on the DG-200
 }
 
 static int
@@ -697,7 +723,7 @@ common_rd_init(const char* fname)
 static void
 dg100_rd_init(const char* fname)
 {
-  static const model_t dg100_model = { 115200, 1, 1 };
+  static const model_t dg100_model = { "DG-100", 115200, 1, 1, dg100_commands, sizeof(dg100_commands) / sizeof(struct dg100_command) };
   model = &dg100_model;
   common_rd_init(fname);
 }
@@ -705,7 +731,7 @@ dg100_rd_init(const char* fname)
 static void
 dg200_rd_init(const char* fname)
 {
-  static const model_t dg200_model = { 230400, 0, 0 };
+  static const model_t dg200_model = { "DG-200", 230400, 0, 0, dg200_commands, sizeof(dg200_commands) / sizeof(struct dg100_command) };
   model = &dg200_model;
   common_rd_init(fname);
 }
@@ -732,12 +758,12 @@ dg100_read(void)
 
 /**************************************************************************/
 
-// capabilities below means: we can only read tracks
+// capabilities below means: we can read tracks and waypoints
 
 ff_vecs_t dg100_vecs = {
   ff_type_serial,
   {
-    ff_cap_none			/* waypoints */,
+    ff_cap_read			/* waypoints */,
     ff_cap_read 			/* tracks */,
     ff_cap_none 			/* routes */
   },
@@ -756,7 +782,7 @@ ff_vecs_t dg100_vecs = {
 ff_vecs_t dg200_vecs = {
   ff_type_serial,
   {
-    ff_cap_none			/* waypoints */,
+    ff_cap_read			/* waypoints */,
     ff_cap_read 			/* tracks */,
     ff_cap_none 			/* routes */
   },
