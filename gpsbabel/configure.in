@@ -308,6 +308,8 @@ AC_SUBST(DOCDIR)
 # AC_HEADER_STDC
 
 # AC_CHECK_HEADERS([fcntl.h inttypes.h libintl.h limits.h malloc.h stddef.h stdint.h stdlib.h string.h strings.h sys/ioctl.h sys/time.h termios.h unistd.h])
+# set up HAVE_STDARG_H for zlib.
+AC_CHECK_HEADERS([stdarg.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 # AC_C_CONST

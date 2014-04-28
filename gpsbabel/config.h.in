@@ -39,6 +39,9 @@
 /* Define to 1 if you have the `sleep' function. */
 #undef HAVE_SLEEP
 
+/* Define to 1 if you have the <stdarg.h> header file. */
+#undef HAVE_STDARG_H
+
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
 
@@ -63,17 +66,8 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define if we have va_copy */
-#undef HAVE_VA_COPY
-
-/* Define as 1 if your va_list type is an array */
-#undef HAVE_VA_LIST_AS_ARRAY
-
 /* Defined if you have Windows DDK */
 #undef HAVE_WDK
-
-/* Define if we have __va_copy */
-#undef HAVE___VA_COPY
 
 /* 1 to enable as many formats as possible */
 #undef MAXIMAL_ENABLED
