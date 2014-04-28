@@ -393,7 +393,10 @@ z_off64_t ZEXPORT gzseek64(file, offset, whence)
     /* if within raw area while reading, just go there */
     if (state->mode == GZ_READ && state->how == COPY &&
             state->x.pos + offset >= 0) {
-        ret = LSEEK(state->fd, offset - state->x.have, SEEK_CUR);
+/* Start GPSBabel local */
+/*      ret = LSEEK(state->fd, offset - state->x.have, SEEK_CUR); */
+        ret = LSEEK(state->fd, offset - (z_off64_t)state->x.have, SEEK_CUR);
+/* end GPSBabel local */
         if (ret == -1)
             return -1;
         state->x.have = 0;

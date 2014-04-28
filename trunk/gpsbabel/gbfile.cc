@@ -21,7 +21,6 @@
  */
 
 #include "defs.h"
-#include "zlib/zconf.h"
 #include "gbfile.h"
 
 #include <assert.h>
@@ -29,7 +28,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <QtCore/QDebug>
 
 
 #if __WIN32__

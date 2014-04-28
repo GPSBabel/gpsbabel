@@ -1,0 +1,14 @@
+--- gzlib.c	2014-04-28 16:19:19.839086477 -0600
++++ gzlib.patch.c	2014-04-28 16:18:31.220835104 -0600
+@@ -393,7 +393,10 @@
+     /* if within raw area while reading, just go there */
+     if (state->mode == GZ_READ && state->how == COPY &&
+             state->x.pos + offset >= 0) {
+-        ret = LSEEK(state->fd, offset - state->x.have, SEEK_CUR);
++/* Start GPSBabel local */
++/*      ret = LSEEK(state->fd, offset - state->x.have, SEEK_CUR); */
++        ret = LSEEK(state->fd, offset - (z_off64_t)state->x.have, SEEK_CUR);
++/* end GPSBabel local */
+         if (ret == -1)
+             return -1;
+         state->x.have = 0;

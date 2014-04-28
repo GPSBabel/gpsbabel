@@ -1,1 +1,5 @@
-Unmodified wubset of zlib-1.2.8 from zlib.net.
+modified subset of zlib-1.2.8 from zlib.net.
+1.  zconf.h is modified to include our config.h
+2.  gzlib.c is modified to resolve a seek problem with uncompressed files on windows platforms build with mingw32 gcc.
+see gzlib.patch
+
