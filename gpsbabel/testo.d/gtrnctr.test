@@ -30,3 +30,8 @@ compare ${REFERENCE}/track/bike~gpx.gpx ${TMPDIR}/bike~gpx.gpx
 
 # Whack this for now.  Unicsv writes local time. 
 # compare ${REFERENCE}/track/bike~unicsv.csv ${TMPDIR}/bike~unicsv.csv
+
+# prove we recover power and speed from http://www.garmin.com/xmlschemas/ActivityExtension/v2
+gpsbabel -t -i gtrnctr,sport=Biking -f ${REFERENCE}/track/kona2013.tcx -o unicsv -F ${TMPDIR}/kona2013~tcx.csv
+compare ${REFERENCE}/track/kona2013~tcx.csv ${TMPDIR}/kona2013~tcx.csv
+
