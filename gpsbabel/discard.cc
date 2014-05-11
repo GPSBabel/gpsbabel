@@ -239,6 +239,18 @@ fix_init(const char* args)
     name_regex.setCaseSensitivity(Qt::CaseInsensitive);
     name_regex.setPattern(nameopt);
   }
+  if (descopt) {
+    desc_regex.setCaseSensitivity(Qt::CaseInsensitive);
+    desc_regex.setPattern(nameopt);
+  }
+  if (nameopt) {
+    name_regex.setCaseSensitivity(Qt::CaseInsensitive);
+    name_regex.setPattern(nameopt);
+  }
+  if (iconopt) {
+    icon_regex.setCaseSensitivity(Qt::CaseInsensitive);
+    icon_regex.setPattern(nameopt);
+  }
 }
 
 filter_vecs_t discard_vecs = {
