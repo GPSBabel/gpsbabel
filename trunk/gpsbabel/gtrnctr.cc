@@ -342,6 +342,10 @@ gtc_waypt_pr(const Waypoint* wpt)
 static void
 gtc_fake_hdr(void)
 {
+  /* handle the CourseLap_t or the ActivityLap_t types. */
+  /* note that the elements must appear in the order required by the schema. */
+  /* also note some of the elements are required. */
+
   long secs = 0;
   if (gtc_least_time.isValid() && gtc_most_time.isValid()) {
     secs = gtc_most_time.toTime_t() - gtc_least_time.toTime_t();
@@ -349,25 +353,7 @@ gtc_fake_hdr(void)
 
   /* write these in either case, course or activity format */
   gtc_write_xml(0, "<TotalTimeSeconds>%d</TotalTimeSeconds>\n", secs);
-  if (tdata->distance_meters) {
-    gtc_write_xml(0, "<DistanceMeters>%.2f</DistanceMeters>\n",
-                  tdata->distance_meters);
-  }
-  if (tdata->avg_hrt) {
-    gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0, "<Value>%d</Value>\n", (int)(tdata->avg_hrt + 0.5));
-    gtc_write_xml(-1,"</AverageHeartRateBpm>\n");
-  }
-  if (tdata->max_hrt) {
-    gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0, "<Value>%d</Value>\n", (int)(tdata->max_hrt + 0.5));
-    gtc_write_xml(-1,"</MaximumHeartRateBpm>\n");
-  }
-  if (tdata->avg_cad) {
-    gtc_write_xml(0, "<Cadence>%d</Cadence>\n", tdata->avg_cad);
-  }
-  gtc_write_xml(0, "<Intensity>Active</Intensity>\n");
-
+  gtc_write_xml(0, "<DistanceMeters>%.2f</DistanceMeters>\n", tdata->distance_meters);
   if (gtc_course_flag) { /* course format */
     gtc_write_xml(1, "<BeginPosition>\n");
     gtc_write_xml(0, "<LatitudeDegrees>%lf</LatitudeDegrees>\n", gtc_start_lat);
@@ -382,7 +368,24 @@ gtc_fake_hdr(void)
     if (tdata->max_spd) {
       gtc_write_xml(0, "<MaximumSpeed>%.3f</MaximumSpeed>\n", tdata->max_spd);
     }
-    //gtc_write_xml(0, "<Calories>0</Calories>\n");
+    gtc_write_xml(0, "<Calories>0</Calories>\n"); /* element is required */
+  }
+  if (tdata->avg_hrt) {
+    gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
+    gtc_write_xml(0, "<Value>%d</Value>\n", (int)(tdata->avg_hrt + 0.5));
+    gtc_write_xml(-1,"</AverageHeartRateBpm>\n");
+  }
+  if (tdata->max_hrt) {
+    gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
+    gtc_write_xml(0, "<Value>%d</Value>\n", (int)(tdata->max_hrt + 0.5));
+    gtc_write_xml(-1,"</MaximumHeartRateBpm>\n");
+  }
+  gtc_write_xml(0, "<Intensity>Active</Intensity>\n");
+  if (tdata->avg_cad) {
+    gtc_write_xml(0, "<Cadence>%d</Cadence>\n", tdata->avg_cad);
+  }
+
+  if (!gtc_course_flag) { /* activity (history) format */
     gtc_write_xml(0, "<TriggerMethod>Manual</TriggerMethod>\n");
   }
 

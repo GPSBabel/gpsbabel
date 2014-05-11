@@ -6,8 +6,9 @@
       <Lap StartTime="2008-08-21T13:08:52Z">
         <TotalTimeSeconds>6554</TotalTimeSeconds>
         <DistanceMeters>56826.54</DistanceMeters>
-        <Intensity>Active</Intensity>
         <MaximumSpeed>19.194</MaximumSpeed>
+        <Calories>0</Calories>
+        <Intensity>Active</Intensity>
         <TriggerMethod>Manual</TriggerMethod>
         <Track>
           <Trackpoint>
