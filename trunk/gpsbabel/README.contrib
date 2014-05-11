@@ -56,8 +56,8 @@ If you are creating a new target you should submit patches (use
 * Documentation - see below.
 
 Please ensure that you are building and testing against the latest code
-from the top of the CVS tree and that any code you modify is the latest
-version from the CVS - Note: code changes sometimes occur frequently!
+from the top of the SVN tree and that any code you modify is the latest
+version from the SVN - Note: code changes sometimes occur frequently!
 
 Documentation
 -------------
