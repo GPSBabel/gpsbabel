@@ -6,7 +6,6 @@
       <Lap>
         <TotalTimeSeconds>6554</TotalTimeSeconds>
         <DistanceMeters>56826.54</DistanceMeters>
-        <Intensity>Active</Intensity>
         <BeginPosition>
           <LatitudeDegrees>34.173898</LatitudeDegrees>
           <LongitudeDegrees>-118.758792</LongitudeDegrees>
@@ -15,6 +14,7 @@
           <LatitudeDegrees>34.155590</LatitudeDegrees>
           <LongitudeDegrees>-118.757063</LongitudeDegrees>
         </EndPosition>
+        <Intensity>Active</Intensity>
       </Lap>
       <Track>
         <Trackpoint>
