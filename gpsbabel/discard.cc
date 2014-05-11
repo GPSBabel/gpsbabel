@@ -1,7 +1,7 @@
 /*
     Discard points based on high Degree of Precision (DOP) values.
 
-    Copyright (C) 2005 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2005-2014 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,6 +21,8 @@
 
 #include "defs.h"
 #include "filterdefs.h"
+// Can't use QRegularExpression because Linux won't get Qt 5 for years. 
+#include <QtCore/QRegExp>
 
 #if FILTERS_ENABLED
 static char* hdopopt = NULL;
@@ -31,6 +33,15 @@ static char* fixnoneopt = NULL;
 static char* fixunknownopt = NULL;
 static char* eleminopt = NULL;
 static char* elemaxopt = NULL;
+static char* nameopt = NULL;
+static QRegExp name_regex;
+static char* descopt = NULL;
+static QRegExp desc_regex;
+static char* cmtopt = NULL;
+static QRegExp cmt_regex;
+static char* iconopt = NULL;
+static QRegExp icon_regex;
+
 static double hdopf;
 static double vdopf;
 static int satpf;
@@ -42,11 +53,11 @@ static route_head* head;
 static
 arglist_t fix_args[] = {
   {
-    "hdop", &hdopopt, "Suppress waypoints with higher hdop",
+    "hdop", &hdopopt, "Suppress points with higher hdop",
     "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX
   },
   {
-    "vdop", &vdopopt, "Suppress waypoints with higher vdop",
+    "vdop", &vdopopt, "Suppress points with higher vdop",
     "-1.0", ARGTYPE_END_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX
   },
   {
@@ -54,24 +65,44 @@ arglist_t fix_args[] = {
     NULL, ARGTYPE_BOOL, ARG_NOMINMAX
   },
   {
-    "sat", &satopt, "Minimium sats to keep waypoints",
+    "sat", &satopt, "Minimium sats to keep points",
     "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX
   },
   {
-    "fixnone", &fixnoneopt, "Suppress waypoints without fix",
+    "fixnone", &fixnoneopt, "Suppress points without fix",
     NULL, ARGTYPE_BOOL, ARG_NOMINMAX
   },
   {
-    "fixunknown", &fixunknownopt, "Suppress waypoints with unknown fix",
+    "fixunknown", &fixunknownopt, "Suppress points with unknown fix",
     NULL, ARGTYPE_BOOL, ARG_NOMINMAX
   },
   {
-    "elemin", &eleminopt, "Suppress waypoints below given elevation in meters",
+    "elemin", &eleminopt, "Suppress points below given elevation in meters",
     NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX
   },
   {
-    "elemax", &elemaxopt, "Suppress waypoints above given elevation in meters",
+    "elemax", &elemaxopt, "Suppress points above given elevation in meters",
     NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX
+  },
+  {
+    "matchname", &nameopt,
+    "Suppress points where name matches given name", NULL, ARGTYPE_STRING,
+    ARG_NOMINMAX, NULL
+  },
+  {
+    "matchdesc", &descopt,
+    "Suppress points where description matches given name", NULL, ARGTYPE_STRING,
+    ARG_NOMINMAX, NULL
+  },
+  {
+    "matchcmt", &cmtopt,
+    "Suppress points where comment matches given name", NULL, ARGTYPE_STRING,
+    ARG_NOMINMAX, NULL
+  },
+  {
+    "matchicon", &iconopt,
+    "Suppress points where type matches given name", NULL, ARGTYPE_STRING,
+    ARG_NOMINMAX, NULL
   },
   ARG_TERMINATOR
 };
@@ -118,6 +149,19 @@ fix_process_wpt(const Waypoint* wpt)
   }
 
   if ((elemaxopt) && (waypointp->altitude > elemaxpf)) {
+    del = 1;
+  }
+
+  if (nameopt && name_regex.indexIn(waypointp->shortname) >= 0) {
+    del = 1;
+  }
+  if (descopt && desc_regex.indexIn(waypointp->description) >= 0) {
+    del = 1;
+  }
+  if (cmtopt && cmt_regex.indexIn(waypointp->notes) >= 0) {
+    del = 1;
+  }
+  if (iconopt && icon_regex.indexIn(waypointp->icon_descr) >= 0) {
     del = 1;
   }
 
@@ -189,6 +233,11 @@ fix_init(const char* args)
 
   if (elemaxopt) {
     elemaxpf = atoi(elemaxopt);
+  }
+
+  if (nameopt) {
+    name_regex.setCaseSensitivity(Qt::CaseInsensitive);
+    name_regex.setPattern(nameopt);
   }
 }
 

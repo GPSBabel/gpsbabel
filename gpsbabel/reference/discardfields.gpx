@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- hand-crafted GPX file for exercising our discard filter -->
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="35.972033333" minlon="-87.134700000" maxlat="36.090683333" maxlon="-86.679550000"/>
+  <wpt lat="35.972033333" lon="-87.134700000">
+    <name>1 One</name>
+    <cmt>1 One</cmt>
+    <desc>1 One</desc>
+  </wpt>
+  <wpt lat="36.090683333" lon="-86.679550000">
+    <name>name 2 Two</name>
+    <cmt>cmt 2 Two</cmt>
+    <desc>desc 2 Two</desc>
+  </wpt>
+  <wpt lat="36.090683333" lon="-86.679550000">
+    <name>name</name>
+    <cmt>cmt</cmt>
+    <desc>desc</desc>
+  </wpt>
+</gpx>
