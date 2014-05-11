@@ -18,6 +18,11 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+/*
+ * Relevant schema definitions can be found at
+ * http://www8.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd
+ * http://www8.garmin.com/xmlschemas/ActivityExtensionv2.xsd
+ */
 
 #include <QtCore/QXmlStreamAttributes>
 
@@ -123,8 +128,6 @@ static xg_tag_mapping gtc_map[] = {
   { gtc_trk_pwr,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/ns3:TPX/ns3:Watts" },
   // Sample from Marcelo Kittlein 5/2014 declares a default namespace with the start tag of the TPX element,
   // and thus doesn't use prefixes.
-  // Furthermore, garmin doesnt seem to publish the relevant schema http://www.garmin.com/xmlschemas/ActivityExtension/v2,
-  // although v1 is available.
   { gtc_trk_pwr,  cb_cdata, "/Activities/Activity/Lap/Track/Trackpoint/Extensions/TPX/Watts" },
   // It looks like Speed and Watts should be siblings, but Garmin can't get
   // their namespace act very consistent.  This works for a sample provided
