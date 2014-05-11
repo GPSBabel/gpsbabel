@@ -1149,6 +1149,9 @@ assign_option(const char* module, arglist_t* ap, const char* val)
     return;
   }
 
+  // Fixme - this is probably somewhere between wrong and less than great.  If you have an option "foo" 
+  // and want to set it to the value "foo", this code will prevent that from happening, but we seem to have
+  // code all over the place that relies on this. :-/
   if (case_ignore_strcmp(val, ap->argstring) == 0) {
     c = "";
   } else {
