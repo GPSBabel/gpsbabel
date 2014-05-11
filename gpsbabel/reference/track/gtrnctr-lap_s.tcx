@@ -1228,7 +1228,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>1.811</AvgSpeed>
@@ -2842,7 +2842,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>2.774</AvgSpeed>
@@ -4430,7 +4430,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>2.687</AvgSpeed>
@@ -5844,7 +5844,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>2.787</AvgSpeed>
@@ -7054,7 +7054,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>2.753</AvgSpeed>
@@ -8944,7 +8944,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>2.499</AvgSpeed>
@@ -9351,7 +9351,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>2.466</AvgSpeed>
@@ -9643,7 +9643,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>2.832</AvgSpeed>
@@ -11112,7 +11112,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>3.056</AvgSpeed>
@@ -12152,7 +12152,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>2.881</AvgSpeed>
@@ -13451,7 +13451,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>2.995</AvgSpeed>
@@ -14797,7 +14797,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>3.257</AvgSpeed>
@@ -16262,7 +16262,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>2.868</AvgSpeed>
@@ -16303,7 +16303,7 @@
         </Track>
         <Extensions>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
-            <MaxRunningCadence>255</MaxRunningCadence>
+            <MaxRunCadence>254</MaxRunCadence>
           </LX>
           <LX xmlns="http://www.garmin.com/xmlschemas/ActivityExtension/v2">
             <AvgSpeed>2.864</AvgSpeed>
