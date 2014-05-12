@@ -110,5 +110,6 @@
   const char* Get_Pkt_Type(US p, US d0, const char** xinfo);
 
   void GPS_Prepare_Track_For_Device(GPS_PTrack** trk, int32* n);
+  int32 GPS_Set_Baud_Rate(const char* port, int br);
 
 #endif
