@@ -48,7 +48,7 @@ static gbser_handle* gbser__get_handle(void* p)
   return h;
 }
 
-static DWORD mkspeed(unsigned br)
+DWORD mkspeed(unsigned br)
 {
   switch (br) {
   case   1200:
