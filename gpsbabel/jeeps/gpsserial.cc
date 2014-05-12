@@ -228,7 +228,7 @@ int32 GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
 
 #else
 
-#include "../gbser_posix.h"
+#include "gbser_posix.h"
 #include <sys/ioctl.h>
 #include <sys/time.h>
 #include <termios.h>
