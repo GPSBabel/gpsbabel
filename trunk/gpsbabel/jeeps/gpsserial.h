@@ -5,6 +5,7 @@
 #include "gps.h"
 
 #define usecDELAY 180000	/* Microseconds before GPS sends A001 */
+#define DEFAULT_BAUD 9600
 
   int32  GPS_Serial_Chars_Ready(gpsdevh* fd);
 // int32  GPS_Serial_Close(int32 fd, const char *port);
@@ -22,6 +23,6 @@
   int32  GPS_Serial_Write_Packet(gpsdevh* fd, GPS_PPacket& packet);
   int32  GPS_Serial_Send_Ack(gpsdevh* fd, GPS_PPacket* tra, GPS_PPacket* rec);
   void   GPS_Serial_Error(const char* hdr, ...);
-
+  int32  GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br);
 
 #endif
