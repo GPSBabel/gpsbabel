@@ -60,6 +60,7 @@ char* rxdata[] = {
 #if defined (__WIN32__) || defined (__CYGWIN__)
 
 #include <windows.h>
+#include "gbser_win.h"
 
 typedef struct {
   HANDLE comport;
@@ -226,6 +227,86 @@ int32 GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)
   return cnt;
 }
 
+// Based on information by Kolesár András from
+// http://www.manualslib.com/manual/413938/Garmin-Gps-18x.html?page=32
+int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
+{
+  static UC data[4];
+  GPS_PPacket tra;
+  GPS_PPacket rec;
+  win_serial_data* wsd = (win_serial_data*)fd;
+  
+  DWORD speed = mkspeed(br);
+
+  // Turn off all requests by transmitting packet
+  GPS_Util_Put_Short(data, 0);
+  GPS_Make_Packet(&tra, 0x1c, data, 2);
+  if (!GPS_Write_Packet(fd,tra)) {
+    return gps_errno;
+  }
+  if (!GPS_Get_Ack(fd, &tra, &rec)) {
+    return gps_errno;
+  }
+  
+  GPS_Util_Put_Int(data, br);
+  GPS_Make_Packet(&tra, 0x30, data, 4);
+  if (!GPS_Write_Packet(fd,tra)) {
+    return gps_errno;
+  }
+  if (!GPS_Get_Ack(fd, &tra, &rec)) {
+    return gps_errno;
+  }
+
+  // Receive IOP_BAUD_ACPT_DATA
+  if (!GPS_Packet_Read(fd, &rec)) {
+    return gps_errno;
+  }
+
+  // Acnowledge new speed
+  if (!GPS_Send_Ack(fd, &tra, &rec)) {
+    return gps_errno;
+  }
+  GPS_Device_Flush(fd);
+  GPS_Device_Wait(fd);
+  
+  // Sleep for a small amount of time, about 100 milliseconds,
+  // to make sure the packet was successfully transmitted to the GPS unit.
+  gb_sleep(100000); 
+  
+  // Change port speed
+  DCB tio;
+  tio.DCBlength = sizeof(DCB);
+
+  GetCommState(wsd->comport, &tio);
+  tio.BaudRate = speed;;
+  if (!SetCommState(wsd->comport, &tio)) {
+    GPS_Serial_Error("SetCommState on port for alternate bit rate failed");
+    CloseHandle(wsd->comport);
+    return 0;
+  }
+
+  GPS_Util_Put_Short(data, 0x3a);
+  GPS_Make_Packet(&tra, 0x0a, data, 2);
+  if (!GPS_Write_Packet(fd,tra)) {
+    return gps_errno;
+  }
+  if (!GPS_Get_Ack(fd, &tra, &rec)) {
+    return gps_errno;
+  }
+
+  GPS_Util_Put_Short(data, 0x3a);
+  GPS_Make_Packet(&tra, 0x0a, data, 2);
+  if (!GPS_Write_Packet(fd,tra)) {
+    return gps_errno;
+  }
+  if (!GPS_Get_Ack(fd, &tra, &rec)) {
+    return gps_errno;
+  }
+  
+  if (global_opts.debug_level >= 1) fprintf(stderr, "Serial port speed set to %d\n", br);
+  return 0;
+  
+}
 #else
 
 #include "gbser_posix.h"
@@ -541,9 +622,8 @@ int32 GPS_Serial_Set_Baud_Rate(gpsdevh* fd, int br)
   static UC data[4];
   GPS_PPacket tra;
   GPS_PPacket rec;
-  speed_t speed;
   
-  speed = mkspeed(br);
+  speed_t speed = mkspeed(br);
 
   // Turn off all requests by transmitting packet
   GPS_Util_Put_Short(data, 0);
