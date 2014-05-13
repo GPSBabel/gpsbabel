@@ -30,7 +30,6 @@ class AdvDlg: public QDialog {
 public:
   AdvDlg(QWidget* parent, 
    bool &synthShortNames_,
-   bool &enableCharSetXform_,
    bool &previewGmap_,
    int   &debugLevel_);
   QPushButton* formatButton() { return ui_.formatButton; };
@@ -38,7 +37,6 @@ public:
 private:
   Ui_AdvUi ui_;
   bool &synthShortNames_;
-  bool &enableCharSetXform_;
   bool &previewGmap_;
   int  &debugLevel_;
 
