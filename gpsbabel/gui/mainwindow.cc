@@ -406,10 +406,6 @@ void MainWindow::loadCharSetCombos()
 //------------------------------------------------------------------------
 void MainWindow::checkCharSetCombos()
 {
-  ui_.inputCharSetCombo->setEnabled(babelData_.enableCharSetXform_);
-  ui_.outputCharSetCombo->setEnabled(babelData_.enableCharSetXform_);
-  ui_.inputCharSetCombo->setVisible(babelData_.enableCharSetXform_);
-  ui_.outputCharSetCombo->setVisible(babelData_.enableCharSetXform_);
 }
 //------------------------------------------------------------------------
 void MainWindow::inputFileOptBtnClicked()
@@ -967,10 +963,6 @@ void MainWindow::applyActionX()
   if (babelData_.debugLevel_ >=0)     args << QString("-D%1").arg(babelData_.debugLevel_);
   if (babelData_.synthShortNames_)    args << "-s";
 
-  // Input char set if specified
-  if (babelData_.enableCharSetXform_ && babelData_.inputCharSet_ != QString())
-    args << "-c" << babelData_.inputCharSet_;
-
   Format ifmt = formatList_[currentComboFormatIndex(ui_.inputFormatCombo)];
   Format ofmt = formatList_[currentComboFormatIndex(ui_.outputFormatCombo)];
 
@@ -1004,10 +996,6 @@ void MainWindow::applyActionX()
 
   // --- Filters!
   args << filterData_.getAllFilterStrings();
-
-  // Output char set if specified
-  if (babelData_.enableCharSetXform_ && babelData_.outputCharSet_ != QString())
-    args << "-c" << babelData_.outputCharSet_;
 
   // Output type, with options
   if (babelData_.outputType_ != BabelData::noType_) {
@@ -1195,7 +1183,7 @@ void MainWindow::resetFormatDefaults()
 void MainWindow::moreOptionButtonClicked()
 {
   AdvDlg advDlg(0, babelData_.synthShortNames_,
-        babelData_.enableCharSetXform_, babelData_.previewGmap_, babelData_.debugLevel_);
+                babelData_.previewGmap_, babelData_.debugLevel_);
   connect(advDlg.formatButton(), SIGNAL(clicked()),
 	  this, SLOT(resetFormatDefaults()));
   advDlg.exec();

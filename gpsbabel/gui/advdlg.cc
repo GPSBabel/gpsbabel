@@ -28,18 +28,15 @@
 //------------------------------------------------------------------------
 AdvDlg::AdvDlg(QWidget* parent,
 	       bool &synthShortNames,
-	       bool &enableCharSetXform,
 	       bool &previewGmap,
 	       int  &debugLevel):
   QDialog(parent),
   synthShortNames_(synthShortNames),
-  enableCharSetXform_(enableCharSetXform),
   previewGmap_(previewGmap),
   debugLevel_(debugLevel)
 {
   ui_.setupUi(this);
   ui_.synthShortNames->setChecked(synthShortNames);
-  ui_.enableCharSetXform->setChecked(enableCharSetXform);
   ui_.previewGmap->setChecked(previewGmap);
   ui_.debugCombo->setCurrentIndex(debugLevel+1);
   ui_.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":images/ok"));
@@ -51,7 +48,6 @@ AdvDlg::AdvDlg(QWidget* parent,
 void AdvDlg::acceptClicked()
 {
   synthShortNames_ = ui_.synthShortNames->isChecked();
-  enableCharSetXform_ = ui_.enableCharSetXform->isChecked();
   previewGmap_ = ui_.previewGmap->isChecked();
   debugLevel_ = ui_.debugCombo->currentIndex()-1;
   accept();
