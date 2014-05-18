@@ -1,0 +1,100 @@
+# gpsbabel XCSV style file
+#
+# Format: Garmin G1000 Datalog Format (Cessna 182T and others)
+# Author: Matt Johnson
+# Date: 04/09/2014
+#
+
+DESCRIPTION		Garmin G1000 datalog input filter file
+EXTENSION 		csv
+
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER 	COMMA
+RECORD_DELIMITER 	NEWLINE
+BADCHARS 		COMMA
+
+# INTERNAL CONSTANTS
+#
+DATATYPE TRACK
+
+#
+# HEADER
+#
+PROLOGUE airframe_info, log_version="1.00", airframe_name="Cessna 182T", unit_software_part_number="", unit_software_version="12.03", system_software_part_number="", system_id="", mode=NORMAL, 
+PROLOGUE yyyy-mm-dd, hh:mm:ss,   hh:mm,  ident,      degrees,      degrees, ft Baro,  inch,  ft msl, deg C,     kt,     kt,     fpm,    deg,    deg,      G,      G,   deg,   deg, volts, volts,  amps,  amps,   gals,   gals,      gph,   deg F,     psi,     Hg,    rpm,   deg F,   deg F,   deg F,   deg F,   deg F,   deg F,   deg F,   deg F,   deg F,   deg F,   deg F,   deg F,  ft wgs,  kt, enum,    deg,    MHz,    MHz,     MHz,     MHz,    fsd,    fsd,     kt,   deg,     nm,    deg,    deg,   bool,  enum,   enum,   deg,   deg,   fpm,   enum,   mt,    mt,     mt,    mt,     mt
+PROLOGUE Lcl Date, Lcl Time, UTCOfst, AtvWpt,     Latitude,    Longitude,    AltB, BaroA,  AltMSL,   OAT,    IAS, GndSpd,    VSpd,  Pitch,   Roll,  LatAc, NormAc,   HDG,   TRK, volt1, volt2,  amp1,  amp2,  FQtyL,  FQtyR, E1 FFlow, E1 OilT, E1 OilP, E1 MAP, E1 RPM, E1 CHT1, E1 CHT2, E1 CHT3, E1 CHT4, E1 CHT5, E1 CHT6, E1 EGT1, E1 EGT2, E1 EGT3, E1 EGT4, E1 EGT5, E1 EGT6,  AltGPS, TAS, HSIS,    CRS,   NAV1,   NAV2,    COM1,    COM2,   HCDI,   VCDI, WndSpd, WndDr, WptDst, WptBrg, MagVar, AfcsOn, RollM, PitchM, RollC, PichC, VSpdG, GPSfix,  HAL,   VAL, HPLwas, HPLfd, VPLwas
+
+#
+# INDIVIDUAL DATA FIELDS:
+#
+IFIELD GMT_TIME,"","%Y-%m-%d" 		#Lcl Date, 
+IFIELD HMSG_TIME,"","%d:%d:%d %s"  	#Lcl Time, 
+IFIELD IGNORE,"","%s"  				#UTCOfst, 
+IFIELD IGNORE,"","%s"  				#AtvWpt,     
+IFIELD LAT_DECIMAL, "", "%f"  		#Latitude,    
+IFIELD LON_DECIMAL, "", "%f"  		#Longitude,    
+IFIELD ALT_FEET,"","%.0f"  			#AltB, 
+IFIELD IGNORE,"","%s"  				#BaroA,  
+IFIELD IGNORE,"","%s"  				#AltMSL,   
+IFIELD IGNORE,"","%s"  				#OAT,    
+IFIELD IGNORE,"","%s"  				#IAS, 
+IFIELD IGNORE,"","%s"  				#GndSpd,    
+IFIELD IGNORE,"","%s"  				#VSpd,  
+IFIELD IGNORE,"","%s"  				#Pitch,   
+IFIELD IGNORE,"","%s"  				#Roll,  
+IFIELD IGNORE,"","%s"  				#LatAc, 
+IFIELD IGNORE,"","%s"  				#NormAc,   
+IFIELD IGNORE,"","%s"  				#HDG,   
+IFIELD IGNORE,"","%s"  				#TRK, 
+IFIELD IGNORE,"","%s"  				#volt1, 
+IFIELD IGNORE,"","%s"  				#volt2,  
+IFIELD IGNORE,"","%s"  				#amp1,  
+IFIELD IGNORE,"","%s"  				#amp2,  
+IFIELD IGNORE,"","%s"  				#FQtyL,  
+IFIELD IGNORE,"","%s"  				#FQtyR, 
+IFIELD IGNORE,"","%s"  				#E1 FFlow, 
+IFIELD IGNORE,"","%s"  				#E1 OilT, 
+IFIELD IGNORE,"","%s"  				#E1 OilP, 
+IFIELD IGNORE,"","%s"  				#E1 MAP, 
+IFIELD IGNORE,"","%s"  				#E1 RPM, 
+IFIELD IGNORE,"","%s"  				#E1 CHT1, 
+IFIELD IGNORE,"","%s"  				#E1 CHT2, 
+IFIELD IGNORE,"","%s"  				#E1 CHT3, 
+IFIELD IGNORE,"","%s"  				#E1 CHT4, 
+IFIELD IGNORE,"","%s"  				#E1 CHT5, 
+IFIELD IGNORE,"","%s"  				#E1 CHT6, 
+IFIELD IGNORE,"","%s"  				#E1 EGT1, 
+IFIELD IGNORE,"","%s"  				#E1 EGT2, 
+IFIELD IGNORE,"","%s" 			 	#E1 EGT3, 
+IFIELD IGNORE,"","%s"  				#E1 EGT4, 
+IFIELD IGNORE,"","%s"  				#E1 EGT5, 
+IFIELD IGNORE,"","%s"  				#E1 EGT6,  
+IFIELD IGNORE,"","%s"  				#E1 TIT1,  
+IFIELD IGNORE,"","%s"  				#AltGPS, 
+IFIELD IGNORE,"","%s"  				#TAS, 
+IFIELD IGNORE,"","%s"  				#HSIS,    
+IFIELD IGNORE,"","%s"  				#CRS,   
+IFIELD IGNORE,"","%s"  				#NAV1,   
+IFIELD IGNORE,"","%s"  				#NAV2,    
+IFIELD IGNORE,"","%s"  				#COM1,    
+IFIELD IGNORE,"","%s"  				#COM2,   
+IFIELD IGNORE,"","%s"  				#HCDI,   
+IFIELD IGNORE,"","%s"  				#VCDI, 
+IFIELD IGNORE,"","%s" 				#WndSpd, 
+IFIELD IGNORE,"","%s"  				#WndDr, 
+IFIELD IGNORE,"","%s"  				#WptDst, 
+IFIELD IGNORE,"","%s"  				#WptBrg, 
+IFIELD IGNORE,"","%s"  				#MagVar, 
+IFIELD IGNORE,"","%s"  				#AfcsOn, 
+IFIELD IGNORE,"","%s"  				#RollM, 
+IFIELD IGNORE,"","%s"  				#PitchM, 
+IFIELD IGNORE,"","%s"  				#RollC, 
+IFIELD IGNORE,"","%s"  				#PichC, 
+IFIELD IGNORE,"","%s"  				#VSpdG, 
+IFIELD IGNORE,"","%s"  				#GPSfix,  
+IFIELD IGNORE,"","%s"  				#HAL,   
+IFIELD IGNORE,"","%s"  				#VAL, 
+IFIELD IGNORE,"","%s"  				#HPLwas, 
+IFIELD IGNORE,"","%s"  				#HPLfd, 
+IFIELD IGNORE,"","%s"  				#VPLwas

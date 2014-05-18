@@ -1,0 +1,8 @@
+
+#
+# MGL Enigma route file (.ert)
+#
+gpsbabel -i gpx -f ${REFERENCE}/enigma.gpx -o enigma -F ${TMPDIR}/enigma.ert
+compare ${REFERENCE}/enigma-gpsb.ert ${TMPDIR}/enigma.ert
+gpsbabel -i enigma -f ${REFERENCE}/enigma-pfms.ert -o gpx -F ${TMPDIR}/enigma.gpx
+compare ${REFERENCE}/enigma.gpx ${TMPDIR}/enigma.gpx

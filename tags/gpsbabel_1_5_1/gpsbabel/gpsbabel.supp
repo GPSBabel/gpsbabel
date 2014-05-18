@@ -1,0 +1,41 @@
+{
+   <Fedora18: Qt's use of libuuc leaks.>
+   Memcheck:Leak
+   ...
+   obj:*libicuuc*
+}
+{
+   <Fedora18: XmlStreamAttributes has an internal leak.>
+   Memcheck:Leak
+   ...
+   fun:_ZL7tag_wptRK20QXmlStreamAttributes
+}
+
+{
+   <F18 internal leak for locales called from toDouble>
+   Memcheck:Leak
+   ...
+   fun:_ZN14QLocalePrivate19updateSystemPrivateEv
+}
+
+{
+   <F18 many errors from dlopened objects.
+   Memcheck:Leak
+   ...
+   fun:dlopen_doit
+}
+
+{
+   <F18 leak in QIODevice::QIODevice ctor>
+   Memcheck:Leak
+   ...
+   fun:_ZN9QIODeviceC1ER16QIODevicePrivateP7QObject
+}
+
+
+{
+   <F18 leak in QTextStream::QTextStream(QIODevice*) in google.cc >
+   Memcheck:Leak
+   ...
+   fun:_ZN11QTextStreamC1EP9QIODevice
+}

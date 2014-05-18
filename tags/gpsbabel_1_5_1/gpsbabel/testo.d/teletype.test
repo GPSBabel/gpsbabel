@@ -1,0 +1,7 @@
+#
+# Teletype tests
+#
+rm -f ${TMPDIR}/teletype.*
+gpsbabel -i teletype -f ${REFERENCE}/track/teletype.way -o gpx -F ${TMPDIR}/teletype.gpx
+compare ${REFERENCE}/track/teletype.gpx ${TMPDIR}/teletype.gpx 
+

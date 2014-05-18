@@ -1,0 +1,4 @@
+# Exif format test (read only)
+gpsbabel -i exif -f ${REFERENCE}/IMG_2065.JPG -o unicsv,utc=0 -F ${TMPDIR}/exif-dat.csv
+compare ${REFERENCE}/exif-dat.csv ${TMPDIR}/exif-dat.csv
+

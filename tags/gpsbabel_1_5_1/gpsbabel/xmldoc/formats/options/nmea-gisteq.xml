@@ -1,0 +1,17 @@
+<para>
+  This option writes the Gisteq format - which has the extension of .GPS - 
+  to allow third-party GPS hardware with the Gisteq PhotoTrackr software.  
+</para>
+<para>
+  The Gisteq PhotoTrackr is a GPS data logger hardware and software package
+  that allows one to easily record the locations of where the user has taken
+  photos.  The PhotoTrackr software works by comparing EXIF timestamps in
+  digital photos with the timestamps in the tracking data.  In doing so, the
+  software plots the locations of the photos using Google Maps.  The logging
+  format used by the Gisteq hardware is very close to NMEA format, but with a
+  few small quirks.  
+</para>
+<para>
+More information can be found at the 
+<ulink url="http://www.gisteq.com/">Gisteq</ulink> site.
+</para>

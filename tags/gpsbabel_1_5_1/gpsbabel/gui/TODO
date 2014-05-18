@@ -1,0 +1,12 @@
+#1 Improve device names
+  a) switch format
+      delbin: device_name == "usb:"
+      garmin: device_name = "usb:" + available serial ports.
+  b) list only available serial ports (horribly OS specific)
+
+#2 A 'help' button to the right  of formats that opens the online man page.
+
+#3 Upgrade needs dialog checkboxes for "never check again", "include beta" 
+    and a button for "check now".
+
+

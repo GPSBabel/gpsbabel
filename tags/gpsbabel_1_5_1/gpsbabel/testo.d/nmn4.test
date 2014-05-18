@@ -1,0 +1,9 @@
+
+#
+# Navigon Mobile Navigator .rte tests
+#
+rm -f ${TMPDIR}/nmn4-sample*
+gpsbabel -i nmn4 -f ${REFERENCE}/route/nmn4-sample.rte -o gpx -F ${TMPDIR}/nmn4-sample.gpx
+compare ${REFERENCE}/route/nmn4-sample.gpx ${TMPDIR}/nmn4-sample.gpx
+gpsbabel -i gpx -f ${REFERENCE}/route/nmn4-sample.gpx -o nmn4 -F ${TMPDIR}/nmn4-sample-out.rte
+compare ${REFERENCE}/route/nmn4-sample-out.rte ${TMPDIR}/nmn4-sample-out.rte

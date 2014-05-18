@@ -1,0 +1,370 @@
+<?xml version="1.0"?>
+<NavObjectCollection created="20041105T170900Z">
+	<Name>Navigation Objects</Name>
+	<Visible>true</Visible>
+	<ViewSettings created="20041105T171914Z">
+		<Position>34.867273 N 120.589158 W</Position>
+		<Scale>98208.414698</Scale>
+		<Quilting>true</Quilting>
+		<ShowVectorCharts>true</ShowVectorCharts>
+	</ViewSettings>
+	<Route created="20041105T170906Z" id="{58384b15-2ed7-4cee-a827-368917b2c743}">
+		<Marks>
+			{76e5356a-d5fc-4437-8649-026416c2b185}
+			{d5dbd16f-eeba-4f61-b38f-582b584e5db3}
+			{9816402a-51a6-4fd5-8c08-b680d23d7911}
+			{427ed2ff-bdbb-4d77-b859-1f1eff10c961}
+			{0ead9569-64f0-4fb8-9545-4fa3191bbab0}
+			{fbe5b26d-b111-4208-ac70-f22b169d9c3e}
+			{68cfe23d-2ebf-4075-9726-f743659c7df5}
+			{50740d73-e743-4197-a6a0-29ad3114107a}
+			{26ae0ba0-a73e-4600-b51a-546d7099c809}
+			{b7266cd5-817b-4674-862e-490230a2f925}
+		</Marks>
+		<RouteLeg created="20041105T170909Z" id="{0699ae10-6257-4d1d-b6e7-37fe694dac26}">
+			<PlannedSpeed>5.0 kn</PlannedSpeed>
+		</RouteLeg>
+		<RouteLeg created="20041105T170910Z" id="{03dd3451-7040-4e6f-aeb7-6ed6b87612b8}">
+			<PlannedSpeed>5.0 kn</PlannedSpeed>
+		</RouteLeg>
+		<RouteLeg created="20041105T170913Z" id="{87a407a6-11a5-4b5e-a55e-8484e47da0ee}">
+			<PlannedSpeed>5.0 kn</PlannedSpeed>
+		</RouteLeg>
+		<RouteLeg created="20041105T170916Z" id="{421115ff-a94a-48f4-acd1-36cf3387e79b}">
+			<PlannedSpeed>5.0 kn</PlannedSpeed>
+		</RouteLeg>
+		<RouteLeg created="20041105T170920Z" id="{2c587ebf-4e0c-43ad-ae89-4da44819b093}">
+			<PlannedSpeed>5.0 kn</PlannedSpeed>
+		</RouteLeg>
+		<RouteLeg created="20041105T170926Z" id="{a653ca32-e125-4377-8b86-b254f414ca86}">
+			<PlannedSpeed>5.0 kn</PlannedSpeed>
+		</RouteLeg>
+		<RouteLeg created="20041105T170927Z" id="{4d32d150-2a89-46d6-993f-1fe54a8f62dc}">
+			<PlannedSpeed>5.0 kn</PlannedSpeed>
+		</RouteLeg>
+		<RouteLeg created="20041105T211624Z" id="{3bf50ccf-2d8a-46dc-9574-3fe7ca55f8fc}">
+			<PlannedSpeed>5.0 kn</PlannedSpeed>
+		</RouteLeg>
+		<RouteLeg created="20041105T170929Z" id="{eb96f93d-6367-4ccf-9850-d84bb5227022}">
+			<PlannedSpeed>5.0 kn</PlannedSpeed>
+		</RouteLeg>
+		<RouteLeg created="20041105T170930Z" id="{74f699b8-8b59-4d9a-9656-11877a0a0dcc}">
+			<PlannedSpeed>5.0 kn</PlannedSpeed>
+		</RouteLeg>
+		<DisplayLegRangeBearing>true</DisplayLegRangeBearing>
+		<TotalLength>39.06 NM</TotalLength>
+		<StartTime>20050516T070000</StartTime>
+		<StartAt>first-waypoint</StartAt>
+		<Name>Into The Bay</Name>
+	</Route>
+	<Mark created="20041105T170909Z" id="{76e5356a-d5fc-4437-8649-026416c2b185}">
+		<Position>37.763290 N 122.282580 W</Position>
+		<Icon>Home</Icon>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-51,-21</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SFBALBAY</Name>
+	</Mark>
+	<Mark created="20041105T170910Z" id="{d5dbd16f-eeba-4f61-b38f-582b584e5db3}">
+		<Position>37.751613 N 122.339028 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-58,4</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SFBAY001</Name>
+	</Mark>
+	<Mark created="20041105T170913Z" id="{9816402a-51a6-4fd5-8c08-b680d23d7911}">
+		<Position>37.817420 N 122.394305 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-9,-19</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SFBAY002</Name>
+	</Mark>
+	<Mark created="20041105T170916Z" id="{427ed2ff-bdbb-4d77-b859-1f1eff10c961}">
+		<Position>37.819339 N 122.478302 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-53,-21</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SFGGBRDG</Name>
+	</Mark>
+	<Mark created="20041105T170920Z" id="{0ead9569-64f0-4fb8-9545-4fa3191bbab0}">
+		<Position>37.773033 N 122.605838 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-92,-13</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SFCHNL01</Name>
+	</Mark>
+	<Mark created="20041105T170926Z" id="{fbe5b26d-b111-4208-ac70-f22b169d9c3e}">
+		<Position>37.518860 N 122.529914 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-98,-4</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>HMCOLREF</Name>
+	</Mark>
+	<Mark created="20041105T170927Z" id="{68cfe23d-2ebf-4075-9726-f743659c7df5}">
+		<Position>37.482348 N 122.507704 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-77,1</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>HMPILL01</Name>
+	</Mark>
+	<Mark created="20041105T170929Z" id="{26ae0ba0-a73e-4600-b51a-546d7099c809}">
+		<Position>37.476448 N 122.475800 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>13,-1</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>HMPILL02</Name>
+	</Mark>
+	<Mark created="20041105T170930Z" id="{b7266cd5-817b-4674-862e-490230a2f925}">
+		<Position>37.495102 N 122.483927 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-91,-4</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>HMPILL03</Name>
+	</Mark>
+	<Mark created="20041105T211300Z" id="{5bf0873d-5c50-4ad4-8c36-e8d90b068908}">
+		<Position>37.229349 N 122.441589 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-95,-4</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PESCDR01</Name>
+	</Mark>
+	<Mark created="20041105T211324Z" id="{625fb518-f83b-4e24-add2-852544d6fc52}">
+		<Position>37.183397 N 122.411904 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-90,-2</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PIGEON01</Name>
+	</Mark>
+	<Mark created="20041105T211341Z" id="{1677d889-5a9e-463e-b398-03da7165d31d}">
+		<Position>37.090736 N 122.348775 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-89,0</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>ANONUV01</Name>
+	</Mark>
+	<Mark created="20041105T211409Z" id="{aac62a78-9a10-4c98-b057-3bd05cb667c2}">
+		<Position>36.929502 N 122.113725 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-51,4</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SCRUZ01</Name>
+	</Mark>
+	<Mark created="20041105T211416Z" id="{2972124d-66f4-48a7-932d-2100eb3f5f6d}">
+		<Position>36.934235 N 122.022130 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>22,-8</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SCRUZ02</Name>
+	</Mark>
+	<Mark created="20041105T211420Z" id="{aabdee59-c849-4eaf-8005-b1e814650244}">
+		<Position>36.960666 N 122.024734 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>22,-9</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SCRUZENT</Name>
+	</Mark>
+	<Mark created="20041105T211624Z" id="{50740d73-e743-4197-a6a0-29ad3114107a}">
+		<Position>37.475062 N 122.488531 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-44,5</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>HMPILLPT</Name>
+	</Mark>
+	<Mark created="20041105T212422Z" id="{83540001-9f5d-4cb5-8218-51bfaeb7b3e8}">
+		<Position>36.581344 N 121.995411 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-95,-7</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>CYPRSSPT</Name>
+	</Mark>
+	<Mark created="20041105T212438Z" id="{311a8303-dc05-497d-aaa6-d4cba53e3464}">
+		<Position>36.301110 N 121.919097 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-67,-3</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PTSUR</Name>
+	</Mark>
+	<Mark created="20041105T212515Z" id="{2a7de189-ea1b-46d5-a168-d9ada708f50b}">
+		<Position>36.238177 N 121.855209 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-72,3</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>COOPERPT</Name>
+	</Mark>
+	<Mark created="20041105T212526Z" id="{3d6f3fe8-bc77-4d0b-9b4d-7fe1e41c5691}">
+		<Position>36.225175 N 121.801314 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-91,-8</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PFEIFENT</Name>
+	</Mark>
+	<Mark created="20041105T212531Z" id="{12481c1c-7f84-48d7-a7ad-ac613a036cea}">
+		<Position>36.230449 N 121.797444 W</Position>
+		<Icon>Anchor</Icon>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-85,-14</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PFEIFANC</Name>
+	</Mark>
+	<Mark created="20041105T212826Z" id="{d04c1156-4ca6-4b79-8177-929796c0c330}">
+		<Position>35.879801 N 121.498947 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>10,-15</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SANMRT01</Name>
+	</Mark>
+	<Mark created="20041105T212833Z" id="{724553f0-6d4a-48c7-9813-c61d1b9e64f3}">
+		<Position>35.652801 N 121.308485 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-75,2</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PDRSBLNC</Name>
+	</Mark>
+	<Mark created="20041105T212850Z" id="{3f52e80e-0c8d-4e8f-ba57-0b99ff5a1b41}">
+		<Position>35.623297 N 121.185920 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-102,-6</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SNSMNENT</Name>
+	</Mark>
+	<Mark created="20041105T212853Z" id="{409cc119-ed3f-4d02-8ccc-c738dcbdd96b}">
+		<Position>35.640478 N 121.183772 W</Position>
+		<Icon>Anchor</Icon>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-105,-9</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SNSMNANC</Name>
+	</Mark>
+	<Mark created="20041105T213618Z" id="{6d0a144a-6ce0-466c-9af4-478bc375580c}">
+		<Position>35.572353 N 121.152797 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-80,-1</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>CAMBRIA</Name>
+	</Mark>
+	<Mark created="20041105T213626Z" id="{3d9062c5-e059-457d-859c-549dea0c101f}">
+		<Position>35.449214 N 121.020825 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>14,-14</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PTESTERO</Name>
+	</Mark>
+	<Mark created="20041105T213635Z" id="{8f66e2de-fa62-43d5-af69-44724867429b}">
+		<Position>35.216602 N 120.928391 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-96,-3</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PTBUCHON</Name>
+	</Mark>
+	<Mark created="20041105T213642Z" id="{15b56103-0d91-446a-9e0f-0d5817581f9b}">
+		<Position>34.883361 N 120.684631 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-57,3</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PTSAL01</Name>
+	</Mark>
+	<Mark created="20041105T213647Z" id="{361b3cd3-1e77-4867-b956-d01b152ed22d}">
+		<Position>34.884641 N 120.652026 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-96,-8</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PTSALENT</Name>
+		<Description>A description of the Point Sal Entrance mark</Description>
+	</Mark>
+	<Mark created="20041105T213704Z" id="{4d6b54b8-b3e5-42f0-ab33-f90b60752bcd}">
+		<Position>34.896555 N 120.649124 W</Position>
+		<Icon>Anchor</Icon>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-96,-10</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PTSALANC</Name>
+	</Mark>
+	<Mark created="20041105T213949Z" id="{d5bfc894-670e-47c7-9a0f-74e406fdf3ca}">
+		<Position>34.758180 N 120.642516 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>22,-8</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PURSMAPT</Name>
+	</Mark>
+	<Mark created="20041105T213954Z" id="{682a9c6d-a632-4e8b-acd8-42d156a2fe3e}">
+		<Position>34.572579 N 120.663636 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-97,-7</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>PTARGLLO</Name>
+	</Mark>
+	<Mark created="20041105T214005Z" id="{8787e521-19cb-400a-9efc-1b8863b70132}">
+		<Position>34.113844 N 120.492630 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>20,-11</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SANMGL01</Name>
+	</Mark>
+	<Mark created="20041105T214044Z" id="{33aa93e4-da08-42c6-a42c-49cf71eff499}">
+		<Position>34.029483 N 120.471409 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-88,0</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SANMGL02</Name>
+	</Mark>
+	<Mark created="20041105T214048Z" id="{61fe867b-1b99-49b1-8188-adda5069cccf}">
+		<Position>34.019184 N 120.444197 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-32,5</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>SANMGL03</Name>
+	</Mark>
+	<Mark created="20041105T214057Z" id="{b3dc7ee2-ffe1-458d-be60-b3a92f089ae4}">
+		<Position>34.023478 N 120.438209 W</Position>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>19,-4</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>ADCOVENT</Name>
+	</Mark>
+	<Mark created="20041105T214059Z" id="{d2e24f39-796a-4853-8d3a-32106be5e2b7}">
+		<Position>34.028615 N 120.439696 W</Position>
+		<Icon>Anchor</Icon>
+		<ArrivalCircleRadius>0.05 NM</ArrivalCircleRadius>
+		<RangeCircleRadius>0 NM</RangeCircleRadius>
+		<NameOffset>-102,-5</NameOffset>
+		<DescriptionOffset>0,24</DescriptionOffset>
+		<Name>ADCOVANC</Name>
+	</Mark>
+</NavObjectCollection>

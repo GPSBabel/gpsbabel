@@ -1,0 +1,14 @@
+<para>
+  iGo8 is the successor to the "iGo My way" software package that is reasonably
+  prolific for GPS devices manufactured by Mio, Sony, LG, as well as many other
+  small manufacturers.  iGo8 is notable in that it has full 3D rendering of
+  terrain as well as buildings and landmarks for most large cities.  The
+  software can also be bought pre-loaded on a mico-SD card for use in many PPC
+  phones that are GPS enabled.
+</para>
+
+<para>
+  The track format used by iGo8 is rather rudimentary, consisting of a list of
+  coordinates and a time resolution of 1 second.  While iGo8 supports exporting
+  tracks to GPX format, importing tracks is not natively supported.
+</para>

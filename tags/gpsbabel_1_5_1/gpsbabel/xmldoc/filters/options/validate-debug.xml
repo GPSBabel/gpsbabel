@@ -1,0 +1,3 @@
+<para>
+This option will output verbose messages reporting the state of the internal data structures holding waypoints, routes and tracks.  Detected problems will normally produce a fatal error, but with this option in effect no error will be thrown allowing continued processing. 
+</para>

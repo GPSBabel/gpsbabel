@@ -1,0 +1,3 @@
+<para>
+  If this option is present, retired (archived) caches will be suppressed on write.
+</para>

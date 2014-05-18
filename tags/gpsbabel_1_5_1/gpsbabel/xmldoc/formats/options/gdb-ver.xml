@@ -1,0 +1,5 @@
+<para>
+This option specifies the data format version for the output file.  Version
+2 is the default.  Currently, the only other valid values for this option are
+1 and 3.
+</para>

@@ -1,0 +1,7 @@
+#
+# NetStumbler Summary File (read-only)
+#
+rm -f ${TMPDIR}/netstumbler.mps
+gpsbabel -i netstumbler -f ${REFERENCE}/netstumbler.txt -o mapsource -F ${TMPDIR}/netstumbler.mps
+bincompare ${TMPDIR}/netstumbler.mps ${REFERENCE}/netstumbler.mps
+

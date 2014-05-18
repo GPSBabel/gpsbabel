@@ -1,0 +1,10 @@
+#
+# PathAway Palm Database .pdb tests
+#
+rm -f ${TMPDIR}/pathaway*
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o pathaway,dbname="pathaway-geo" -F ${TMPDIR}/pathaway-geo.pdb
+gpsbabel -i pathaway -f ${TMPDIR}/pathaway-geo.pdb -o geo -F ${TMPDIR}/pathaway-geo.loc
+compare ${REFERENCE}/pathaway-geo.loc ${TMPDIR}/pathaway-geo.loc
+rm -f ${TMPDIR}/pathaway*
+gpsbabel -t -i pathaway -f ${REFERENCE}/track/pathaway.pdb -o gpx -F ${TMPDIR}/pathaway.gpx
+compare ${REFERENCE}/track/pathaway.gpx ${TMPDIR}/pathaway.gpx

@@ -1,0 +1,10 @@
+
+#
+# EasyGPS.   Another binary format.
+#
+rm -f ${TMPDIR}/easy.loc
+gpsbabel -i easygps -f ${REFERENCE}/easygps.loc -o easygps -F ${TMPDIR}/ez.loc
+gpsbabel -i easygps -f ${REFERENCE}/easygps.loc -o gpx -F ${TMPDIR}/ez1.gpx
+gpsbabel -i easygps -f ${TMPDIR}/ez.loc -o gpx -F ${TMPDIR}/ez2.gpx
+compare ${TMPDIR}/ez1.gpx ${TMPDIR}/ez2.gpx
+

@@ -1,0 +1,10 @@
+<para>
+   In normal case GPSBabel creates for each track a separate file (track.plt, track-1.plt, ...). 
+   With this option all tracks will be written into one file. A '1' in the third field of the
+   trackpoint record signals the beginning of a new track.
+</para>
+<para>
+  <userinput>
+    gpsbabel -i gpx -f tracks.gpx -o ozi,pack -F track
+  </userinput>
+</para>

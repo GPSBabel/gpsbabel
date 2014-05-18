@@ -1,0 +1,8 @@
+#
+# Digital Mapping Tracklogs
+#
+rm -f ${TMPDIR}/dmtlog*
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o dmtlog -F ${TMPDIR}/dmtlog-sample.trl
+gpsbabel -i dmtlog -f ${TMPDIR}/dmtlog-sample.trl -o gpx -F ${TMPDIR}/dmtlog-sample.gpx
+compare ${REFERENCE}/track/dmtlog-sample.gpx ${TMPDIR}/dmtlog-sample.gpx
+

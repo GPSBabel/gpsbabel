@@ -1,0 +1,12 @@
+<para> 
+This option causes all tracks to be appended to one another to form a single
+track.  This option does not work if any two tracks overlap in time; in that
+case, consider using the <option>merge</option> option. 
+</para>
+<para>
+This option is most useful for rejoining tracks that might have
+been interrupted by an equipment malfunction or an overnight stop.
+</para>
+<para>
+If no other option is given to the track filter, this option is assumed.
+</para>

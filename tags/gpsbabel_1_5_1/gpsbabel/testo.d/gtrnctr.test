@@ -1,0 +1,37 @@
+#
+# Garmin Tranining Center .tcx (gtrnctr)
+#
+# reading
+rm -f ${TMPDIR}/history~tcx.csv ${TMPDIR}/course~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/history.tcx -t -o unicsv,utc=0,prec=7 -F ${TMPDIR}/history~tcx.csv
+compare ${REFERENCE}/track/history~tcx.csv ${TMPDIR}/history~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/history.tcx -t -o gpx -F ${TMPDIR}/history~tcx.gpx
+compare ${REFERENCE}/track/history~tcx.gpx ${TMPDIR}/history~tcx.gpx
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/course.tcx -t -o unicsv,utc=0,prec=7 -F ${TMPDIR}/course~tcx.csv
+compare ${REFERENCE}/track/course~tcx.csv ${TMPDIR}/course~tcx.csv
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/course.tcx -t -o gpx -F ${TMPDIR}/course~tcx.gpx
+compare ${REFERENCE}/track/course~tcx.gpx ${TMPDIR}/course~tcx.gpx
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr-lap_s.tcx -t -o gpx -F ${TMPDIR}/gtrnctr-lap_s.tcx.gpx
+compare ${REFERENCE}/track/gtrnctr-lap_s.tcx.gpx ${TMPDIR}/gtrnctr-lap_s.tcx.gpx
+# writing
+rm -f ${TMPDIR}tcxtest~gpx-course.tcx ${TMPDIR}tcxtest~gpx-history.tcx
+gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=1 -F ${TMPDIR}/tcxtest~gpx-course.tcx
+compare ${REFERENCE}/track/tcxtest~gpx-course.tcx ${TMPDIR}/tcxtest~gpx-course.tcx
+gpsbabel -i gpx -f ${REFERENCE}/track/tcxtest.gpx -o gtrnctr,course=0 -F ${TMPDIR}/tcxtest~gpx-history.tcx
+compare ${REFERENCE}/track/tcxtest~gpx-history.tcx ${TMPDIR}/tcxtest~gpx-history.tcx
+
+# Reading coursepoints
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr-readcp.tcx -o gpx -F ${TMPDIR}/tcxtest-readcp.gpx
+compare ${REFERENCE}/track/gtrnctr-readcp.gpx  ${TMPDIR}/tcxtest-readcp.gpx
+
+# Reading bike tracks, specifically to check distance and speed
+gpsbabel -t -i gtrnctr -f ${REFERENCE}/track/bike.tcx -o gpx -F ${TMPDIR}/bike~gpx.gpx -o unicsv,prec=7 -F ${TMPDIR}/bike~unicsv.csv
+compare ${REFERENCE}/track/bike~gpx.gpx ${TMPDIR}/bike~gpx.gpx
+
+# Whack this for now.  Unicsv writes local time. 
+# compare ${REFERENCE}/track/bike~unicsv.csv ${TMPDIR}/bike~unicsv.csv
+
+# prove we recover power and speed from http://www.garmin.com/xmlschemas/ActivityExtension/v2
+gpsbabel -t -i gtrnctr,sport=Biking -f ${REFERENCE}/track/kona2013.tcx -o unicsv,utc=-6  -F ${TMPDIR}/kona2013~tcx.csv
+compare ${REFERENCE}/track/kona2013~tcx.csv ${TMPDIR}/kona2013~tcx.csv
+

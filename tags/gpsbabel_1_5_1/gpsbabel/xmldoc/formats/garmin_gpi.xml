@@ -1,0 +1,44 @@
+<para>
+   The format garmin_gpi supports the binary POI (.gpi) files that are useable
+   on newer Garmin GPS receivers.  See <link linkend="fmt_garmin_poi">garmin_poi</link> for additional information about Garmin's own Poiloader program.
+   <ulink url="http://www.garmin.com/support/agree.jsp?id=927">Garmin POI-Loader</ulink> is the standard application that creates GPI files
+   with all possible features.
+</para>
+<para>
+  Some of the third party and commercial GPI files are using some kind of
+  encryption or compression that makes the file contents completely unreadable
+  to us. If you get an error "Unsupported code page NNN. File is likely
+   encrypted." means we could basically recognize it as a Garmin GPI file,
+   but it's mangled beyond what we're likely to successfully read.
+</para>
+<para>
+   The layout of GPI files isn't documented and our module was created
+   via reverse engineering. If you get a problem on reading or writing 
+   a GPI file, please provide that file (mailto:gpsbabel-misc@lists.sourceforge.net).
+</para>
+<para>
+   At this time we don't support special features as "Tour-Guide" or links
+   to sounds and pictures.
+</para>
+<important>
+<para>
+   Creation timestamp issue: See the option <link linkend="fmt_garmin_gpi">sleep</link> !!!
+</para>
+<para>
+	This module does not support direct transfer of .GPI files to
+	receivers in Garmin protocol mode.  For units like Nuvi, Zumo, or 
+	Streetpilot, just choose a file that's on the drive where your
+	GPS is mounted.   For units like the X series (GPSMap 60CSx, GPSMap 60Cx, Legend Hcx, etc.) 
+	you must explictly put the unit in mass storage mode or mount
+	the memory chip in an external reader and transfer the file 
+	directly.
+</para>
+</important>
+<example id="all_garmin_gpi_options">
+  <title>Command showing garmin_gpi output example</title>
+  <para>
+    <userinput>
+      gpsbabel -i gpx -f "My Points.gpx" -o garmin_gpi,category="Nice Restaurants",bitmap=restaurant.bmp,notes -F "My Points.gpi"
+    </userinput>
+  </para>
+</example>

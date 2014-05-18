@@ -1,0 +1,8 @@
+# Test KML reader.
+# Coverage here is lower than in our writer, but this is somewhat OK
+# as real world usage shows our writer is more frequently used than our
+# reader.
+
+# gpsbabel -i geo -f geocaching.loc -o unicsv -F ${TMPDIR}/geocaching.txt
+gpsbabel -i kml -f ${REFERENCE}/kml-points.kml -o unicsv -F ${TMPDIR}/geo~unicsv.txt
+compare ${REFERENCE}/kml-points.txt ${TMPDIR}/geo~unicsv.txt

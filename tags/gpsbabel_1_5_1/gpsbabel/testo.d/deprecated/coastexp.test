@@ -1,0 +1,12 @@
+
+#
+# CoastalExplorer..
+gpsbabel -r -i coastexp -f ${REFERENCE}/coastexp.nob -o gpx -F ${TMPDIR}/coastexp.gpx
+compare ${REFERENCE}/coastexp.ref ${TMPDIR}/coastexp.gpx
+gpsbabel -r -i gpx -f ${TMPDIR}/coastexp.gpx -o coastexp -F ${TMPDIR}/coastexp.nob
+compare ${REFERENCE}/coastexp.ref2 ${TMPDIR}/coastexp.nob
+gpsbabel -w -i coastexp -f ${REFERENCE}/coastexp.nob -o gpx -F ${TMPDIR}/coastexp.gpx
+compare ${REFERENCE}/coastexp.ref3 ${TMPDIR}/coastexp.gpx
+gpsbabel -w -i gpx -f ${TMPDIR}/coastexp.gpx -o coastexp -F ${TMPDIR}/coastexp.nob
+compare ${REFERENCE}/coastexp.ref4 ${TMPDIR}/coastexp.nob
+#

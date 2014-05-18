@@ -1,0 +1,17 @@
+<para>
+This option discards points that have shortnames that match the 
+provided regular expresision.
+</para>
+<example id="discarding_points_with_names">
+<title>Discarding specific point by regular expression</title>
+<para>
+For example geocaches typically have names starting with GC followed
+by an alphanumeric sequence of variable length.  To remove all six character
+long IDs that between (and including) GC1000 and GC2FFF, you could use
+</para>
+<para><userinput>
+gpsbabel -i geo -f geocaching.loc -x discard,matchname=GC[1-2]...
+</userinput>
+to discard all GCs followed by exactly three characters.
+</para>
+</example>

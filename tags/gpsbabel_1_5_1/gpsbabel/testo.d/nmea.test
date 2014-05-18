@@ -1,0 +1,15 @@
+#
+# Basic NMEA tests
+#
+gpsbabel -i nmea -f ${REFERENCE}/track/nmea -o gpx -F ${TMPDIR}/nmea.gpx
+compare ${REFERENCE}/track/nmea.gpx ${TMPDIR}/nmea.gpx
+gpsbabel -i nmea -f ${REFERENCE}/track/nmea+ms.txt -o gpx -F ${TMPDIR}/nmea+ms.gpx
+compare ${REFERENCE}/track/nmea+ms.gpx ${TMPDIR}/nmea+ms.gpx
+
+#
+# Read an NMEA file  with AMOD 3808 waypoints.  Be sure we read the points.
+# Also write as a "normal" NMEA to be sure AMOD extensions don't leak.
+#
+gpsbabel -i nmea -f ${REFERENCE}/track/amod-nmea -o gpx -F ${TMPDIR}/amod-out.gpx -o nmea -F ${TMPDIR}/amod-pure
+compare ${REFERENCE}/track/amod.gpx ${TMPDIR}/amod-out.gpx
+compare ${REFERENCE}/track/amod-cleansed ${TMPDIR}/amod-pure

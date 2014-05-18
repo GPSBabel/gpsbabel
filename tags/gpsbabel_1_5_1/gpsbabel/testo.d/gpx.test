@@ -1,0 +1,37 @@
+
+# GPX
+rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpsman -F ${TMPDIR}/gm.gm -o gpsutil -F ${TMPDIR}/gu.wpt
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpx -F ${TMPDIR}/gl.gpx
+gpsbabel -i gpx -f ${TMPDIR}/gl.gpx -o gpsutil -F ${TMPDIR}/gpx.gpx
+compare ${TMPDIR}/gpx.gpx ${TMPDIR}/gu.wpt
+
+rm -f ${TMPDIR}/gtrnctr_power.gpx
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr_power.tcx -o gpx,garminextensions=1 -F ${TMPDIR}/gtrnctr_power.gpx
+compare  ${REFERENCE}/track/gtrnctr_power.gpx ${TMPDIR}/gtrnctr_power.gpx 
+
+rm -f ${TMPDIR}/tpx-sample.gpx
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_garmin_extensions.gpx -o gpx,garminextensions -F ${TMPDIR}/tpx-sample.gpx
+compare ${REFERENCE}/track/gpx_garmin_extensions.gpx ${TMPDIR}/tpx-sample.gpx 
+
+rm -f ${TMPDIR}/basecampe~gpx.gpx
+gpsbabel -i gpx -f ${REFERENCE}/basecamp.gpx -o gpx -F ${TMPDIR}/basecamp~gpx.gpx
+compare ${REFERENCE}/basecamp~gpx.gpx ${TMPDIR}/basecamp~gpx.gpx 
+
+rm -f ${TMPDIR}/extensiondata.gpx
+gpsbabel -i unicsv -f ${REFERENCE}/extensiondata.unicsv -x transform,trk=wpt -o gpx,garminextensions -F ${TMPDIR}/extensiondata.gpx
+compare ${REFERENCE}/extensiondata~unicsv.gpx ${TMPDIR}/extensiondata.gpx
+
+# Read, write GPX file with times that don't fit in time_t, subsecond.
+gpsbabel -i gpx -f ${REFERENCE}/bigtime.gpx -o gpx -F ${TMPDIR}/bigtime.gpx
+compare ${REFERENCE}/bigtime.gpx ${TMPDIR}/bigtime.gpx 
+
+# test standard output
+rm -f ${TMPDIR}/basecamp~gpx_so.gpx
+gpsbabel -i gpx -f ${REFERENCE}/basecamp.gpx -o gpx -F - 1> ${TMPDIR}/basecamp~gpx_so.gpx
+compare ${REFERENCE}/basecamp~gpx.gpx ${TMPDIR}/basecamp~gpx_so.gpx 
+
+# test standard input
+rm -f ${TMPDIR}/basecamp~gpx_si.gpx
+gpsbabel -i gpx -f - -o gpx -F ${TMPDIR}/basecamp~gpx_si.gpx 0< ${REFERENCE}/basecamp.gpx
+compare ${REFERENCE}/basecamp~gpx.gpx ${TMPDIR}/basecamp~gpx_si.gpx 

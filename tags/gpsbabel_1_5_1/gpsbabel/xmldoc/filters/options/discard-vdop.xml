@@ -1,0 +1,7 @@
+<para>
+This option specifies the maximum allowable Vertical Dilution of 
+Precision (VDOP).  By default, any point with an VDOP in excess of 
+this value will be discarded regardless of its HDOP, but see 
+<option>hdopandvdop</option>.
+</para>
+

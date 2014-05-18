@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1" xmlns:wptx1="http://www.garmin.com/xmlschemas/WaypointExtension/v1" xmlns:gpxtrx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:trp="http://www.garmin.com/xmlschemas/TripExtensions/v1" xmlns:adv="http://www.garmin.com/xmlschemas/AdventuresExtensions/v1" xmlns:prs="http://www.garmin.com/xmlschemas/PressureExtension/v1">
+  <metadata>
+    <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="39.973869715" minlon="-105.498962402" maxlat="40.003967285" maxlon="-105.465850364"/>
+  </metadata>
+  <wpt lat="39.973869715" lon="-105.465850364">
+    <time>2013-03-09T20:45:12Z</time>
+    <name>Hwy 119</name>
+    <cmt>Hwy 119</cmt>
+    <desc>Hwy 119</desc>
+    <sym>Flag, Blue</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <wpt lat="40.003967285" lon="-105.498962402">
+    <time>2013-03-09T20:45:02Z</time>
+    <name>Hwy 72</name>
+    <cmt>Hwy 72</cmt>
+    <desc>Hwy 72</desc>
+    <sym>Flag, Blue</sym>
+    <extensions>
+      <gpxx:WaypointExtension xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+        <gpxx:DisplayMode>SymbolAndName</gpxx:DisplayMode>
+      </gpxx:WaypointExtension>
+    </extensions>
+  </wpt>
+  <rte>
+    <name>Hwy 119 to Hwy 72</name>
+    <extensions>
+      <gpxx:RouteExtension>
+        <gpxx:IsAutoNamed>true</gpxx:IsAutoNamed>
+        <gpxx:DisplayColor>Magenta</gpxx:DisplayColor>
+      </gpxx:RouteExtension>
+    </extensions>
+    <rtept lat="39.973869715" lon="-105.465850364">
+      <time>2013-03-09T20:45:12Z</time>
+      <name>Hwy 119</name>
+      <sym>Flag, Blue</sym>
+      <extensions>
+        <trp:ViaPoint>
+          <trp:CalculationMode>FasterTime</trp:CalculationMode>
+          <trp:ElevationMode>Standard</trp:ElevationMode>
+        </trp:ViaPoint>
+        <gpxx:RoutePointExtension>
+          <gpxx:Subclass>000000000000FFFFFFFFFFFFFFFFFFFFFFFF</gpxx:Subclass>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+    <rtept lat="40.003967285" lon="-105.498962402">
+      <time>2013-03-09T20:45:02Z</time>
+      <name>Hwy 72</name>
+      <sym>Flag, Blue</sym>
+      <extensions>
+        <trp:ViaPoint>
+          <trp:CalculationMode>FasterTime</trp:CalculationMode>
+          <trp:ElevationMode>Standard</trp:ElevationMode>
+        </trp:ViaPoint>
+        <gpxx:RoutePointExtension>
+          <gpxx:Subclass>000000000000FFFFFFFFFFFFFFFFFFFFFFFF</gpxx:Subclass>
+        </gpxx:RoutePointExtension>
+      </extensions>
+    </rtept>
+  </rte>
+  <trk>
+    <name>Hwy 119 to Hwy 72</name>
+    <extensions>
+      <gpxx:TrackExtension>
+        <gpxx:DisplayColor>DarkGray</gpxx:DisplayColor>
+      </gpxx:TrackExtension>
+    </extensions>
+    <trkseg>
+      <trkpt lat="39.973869715" lon="-105.465850364"/>
+      <trkpt lat="40.003967285" lon="-105.498962402"/>
+    </trkseg>
+  </trk>
+</gpx>

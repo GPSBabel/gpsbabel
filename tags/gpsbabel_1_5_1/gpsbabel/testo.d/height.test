@@ -1,0 +1,14 @@
+#
+# Height filter
+#
+rm -f ${TMPDIR}/height_out.gpx
+gpsbabel -i gpx -f ${REFERENCE}/track/height.gpx \
+		-x height,wgs84tomsl,add=100m  \
+		-o gpx -F ${TMPDIR}/height_out.gpx
+compare ${REFERENCE}/track/height_out.gpx ${TMPDIR}/height_out.gpx 
+rm -f ${TMPDIR}/height_out.csv
+
+gpsbabel -i unicsv -f ${REFERENCE}/heightcheck.csv \
+		-x height,wgs84tomsl  \
+		-o xcsv,style=${REFERENCE}/heightcheck.style -F ${TMPDIR}/height_out.csv
+compare ${REFERENCE}/heightcheck_out.csv ${TMPDIR}/height_out.csv 

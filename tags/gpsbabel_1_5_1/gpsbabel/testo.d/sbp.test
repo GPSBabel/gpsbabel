@@ -1,0 +1,6 @@
+#
+# SBP tracks (Locosys NaviGPS)
+#
+gpsbabel -t -i sbp -f ${REFERENCE}/track/datalog.sbp -o gpx -F ${TMPDIR}/datalog.gpx
+compare ${REFERENCE}/track/datalog.gpx ${TMPDIR}/datalog.gpx
+

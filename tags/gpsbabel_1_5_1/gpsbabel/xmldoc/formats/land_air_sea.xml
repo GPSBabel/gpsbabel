@@ -1,0 +1,18 @@
+<para>
+Read-only support for the text format exported by Land Air Sea's (Windows only) Past-Track software. This may also work for importing text formatted files from Victoria GPS Tracking, GPS Tracking Key and Land Air Sea's other devices.
+</para>
+
+<para>
+Implementation
+</para>
+
+<para>
+The text format of the GPS Tracking Key Pro contains one route coordinate per line and is of the format:
+</para>
+
+<para>
+01-24-2011,09:12:30,N 48°51'57.9738",W 123°11'48.1354",20.5mph,83.8°,357ft
+</para>
+<para>
+GPS Babel style file correctly imports all data except for bearing (which is un-needed). Since there is no way to create waypoints or routes on the device itself, the text file is read in as one large track.
+</para>

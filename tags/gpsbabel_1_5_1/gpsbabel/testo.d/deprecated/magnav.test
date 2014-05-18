@@ -1,0 +1,21 @@
+# Magellan NAV Companion for PalmOS
+# This format is hard to test, because each record and the database itself
+# contains the time of creation, so two otherwise identical files won't
+# compare accurately.  In any case, the files are binary so compare wouldn't
+# like them.  So, we convert the reference file to gpsutil and the converted
+# file to gpsutil and make sure they're the same, and that they're the same
+# as one converted on a known-working installation.  Unfortunately, this does
+# not verify that the appinfo block was written correctly.  However, it does
+# successfully test for some endianness errors that might otherwise go 
+# unnoticed.
+rm -f ${TMPDIR}/magnav.pdb ${TMPDIR}/magnav.gpu ${TMPDIR}/magnavt.gpu
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o magnav -F ${TMPDIR}/magnav.pdb
+gpsbabel -i magnav -f ${TMPDIR}/magnav.pdb -o gpsutil -F ${TMPDIR}/magnav.gpu
+gpsbabel -i magnav -f ${REFERENCE}/magnav.pdb -o gpsutil -F ${TMPDIR}/magnavt.gpu
+compare ${TMPDIR}/magnavt.gpu ${TMPDIR}/magnav.gpu
+compare ${REFERENCE}/gu.wpt ${TMPDIR}/magnav.gpu
+
+rm -f ${TMPDIR}/magnav.pdb
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o magnav -F ${TMPDIR}/magnav.pdb
+bincompare ${TMPDIR}/magnav.pdb ${REFERENCE}/magnav.pdb
+

@@ -1,0 +1,8 @@
+<para>
+This option is required.
+</para>
+<para>
+This option specifies the latitude of the central point in decimal degrees.
+South latitudes should be expressed as a negative number.  Valid values for
+this option are from -90 to 90.
+</para>

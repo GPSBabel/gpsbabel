@@ -1,0 +1,10 @@
+<para>
+  Use long waypoint notes, overriding the built-in version check (which is 
+  reverse engineered) that tests if the unit can handle the waypoint comments
+  longer than 800 bytes.
+</para>
+<para>
+  This option will probably go away in time as most units get upgraded to
+  the capabilities of the 2.5 version of the PN-40 and PN-30 or version 1.6 
+  for the PN-20.
+</para>

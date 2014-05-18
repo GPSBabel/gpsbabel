@@ -1,0 +1,9 @@
+#
+# Geogrid Viewer tracklogs
+#
+rm -f ${TMPDIR}/ggv_log*
+gpsbabel -i gdb -f ${REFERENCE}/gdb-sample.gdb -x track,pack -o ggv_log -F ${TMPDIR}/ggv_log-sample.log
+bincompare ${REFERENCE}/track/ggv_log-sample.log ${TMPDIR}/ggv_log-sample.log
+gpsbabel -i ggv_log -f ${REFERENCE}/track/ggv_log-sample.log -o ggv_log -F ${TMPDIR}/ggv_log-sample2.log
+bincompare ${REFERENCE}/track/ggv_log-sample.log ${TMPDIR}/ggv_log-sample2.log
+

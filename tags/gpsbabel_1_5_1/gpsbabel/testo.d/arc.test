@@ -1,0 +1,9 @@
+#
+# Arc Distance filter
+#
+rm -f ${TMPDIR}/arcdist.txt
+gpsbabel -i xmap -f ${REFERENCE}/arcdist_input.txt \
+         -x arc,file=${REFERENCE}/arcdist_arc.txt,distance=1 \
+         -o xmap -F ${TMPDIR}/arcdist.txt
+compare ${REFERENCE}/arcdist_output.txt ${TMPDIR}/arcdist.txt
+

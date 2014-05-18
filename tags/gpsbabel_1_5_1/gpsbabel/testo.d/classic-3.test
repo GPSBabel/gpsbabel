@@ -1,0 +1,54 @@
+#!/bin/sh
+
+#
+# IGN Rando tests
+#
+gpsbabel -i ignrando -f ${REFERENCE}/track/ignrando-sample.rdn -o ignrando -F ${TMPDIR}/ignrando-sample.rdn
+gpsbabel -i ignrando -f ${TMPDIR}/ignrando-sample.rdn -o gpx -F ${TMPDIR}/ignrando-sample.gpx
+compare ${REFERENCE}/track/ignrando-sample.gpx ${TMPDIR}/ignrando-sample.gpx
+
+#
+# Testing the 'nuketypes' filter is funky.
+# Convert a GPX file to GPX to eliminate jitter.
+# Then nuke the all but the three individual types, merge the result together
+# and verify we got the original back.
+#
+gpsbabel -i gpx -f ${REFERENCE}/gdb-sample.gpx -o gpx -F ${TMPDIR}/alltypes.gpx
+gpsbabel -i gpx -f ${TMPDIR}/alltypes.gpx -x nuketypes,tracks,routes -o gpx -F ${TMPDIR}/wpts.gpx
+gpsbabel -i gpx -f ${TMPDIR}/alltypes.gpx -x nuketypes,waypoints,routes -o gpx -F ${TMPDIR}/trks.gpx
+gpsbabel -i gpx -f ${TMPDIR}/alltypes.gpx -x nuketypes,waypoints,tracks -o gpx -F ${TMPDIR}/rtes.gpx
+gpsbabel -i gpx -f ${TMPDIR}/wpts.gpx -f ${TMPDIR}/trks.gpx -f ${TMPDIR}/rtes.gpx -o gpx -F ${TMPDIR}/merged.gpx
+compare ${TMPDIR}/alltypes.gpx ${TMPDIR}/merged.gpx
+
+#
+# WBT-200 tests
+#
+rm -f ${TMPDIR}/wbt-200.*
+gpsbabel -i wbt-bin -f ${REFERENCE}/wbt-200.bin -o gpx -F ${TMPDIR}/wbt-200.gpx
+# Remove the timestamp
+grep -v time <${TMPDIR}/wbt-200.gpx >${TMPDIR}/wbt-200.gpx2
+compare ${REFERENCE}/wbt-200.gpx ${TMPDIR}/wbt-200.gpx2
+
+#
+# WBT-201 tests
+#
+rm -f ${TMPDIR}/wbt-201.*
+gpsbabel -t -w -i wbt-bin -f ${REFERENCE}/wbt-201.tk1 -o gpx -F ${TMPDIR}/wbt-201.gpx
+# Remove the timestamp
+grep -v time <${TMPDIR}/wbt-201.gpx >${TMPDIR}/wbt-201.gpx2
+compare ${REFERENCE}/wbt-201.gpx ${TMPDIR}/wbt-201.gpx2
+
+#
+# gzipped file i/o
+#
+gpsbabel -i compegps -f ${REFERENCE}/compegps.wpt.gz -o gpx -F ${TMPDIR}/compegps-wpt.gpx
+compare ${REFERENCE}/compegps-wpt.gpx ${TMPDIR}/compegps-wpt.gpx
+gpsbabel -i cst -f ${REFERENCE}/route/cst-sample.cst.gz -o gpx -F ${TMPDIR}/cst-sample.gpx
+compare ${REFERENCE}/route/cst-sample.gpx ${TMPDIR}/cst-sample.gpx
+
+#
+# GPX version detection
+#
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -x nuketypes,routes,tracks -x transform,rte=wpt,del=y -o gpx -F ${TMPDIR}/transform-ver.gpx
+compare ${REFERENCE}/transform-rte.gpx ${TMPDIR}/transform-ver.gpx
+

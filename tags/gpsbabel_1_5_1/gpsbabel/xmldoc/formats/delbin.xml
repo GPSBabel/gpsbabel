@@ -1,0 +1,52 @@
+<para>
+  The 'delbin' module supports 
+<productname>DeLorme PN-20</productname>, 
+<productname>DeLorme PN-30</productname>, 
+<productname>DeLorme PN-40</productname>, 
+<productname>DeLorme PN-40 SE</productname>, and 
+<productname>DeLorme PN 60 </productname>receivers.
+  <important>
+    <para>
+      Not all strains of Linux are supported.   Fedora 7 is known not to work, for example.
+    </para>
+  </important>
+</para>
+<para>
+  Only the 'usb:' device is supported.  If you're on Windows, do not attempt to
+  run this through the serial driver.
+</para>
+<para>
+  On Linux, a name of the form 'hid:path-to-hidraw,path-to-hiddev' is also supported.
+  You will need to use this only if the HID device nodes on your system are not named
+  /dev/hidrawN and /dev/hiddevN or /dev/usb/hiddevN.
+</para>
+
+<para>
+  This module implements the (undocumented) waypoint extensions introduced
+  for enhanced geocaching mode in 2.5 for PN-40 and 1.6 for PN-20.  As 
+  these are reverse engineered, there may be issues with those modes 
+  in particular.
+</para>
+
+<example id="pn-40-send">
+  <title>Command to send a pocket query (GPX) to a Delorme PN device </title>
+  <para>
+    <userinput>
+      gpsbabel -i gpx -f "My Caches.gpx" -o delbin -F usb:
+    </userinput>
+  </para>
+</example>
+
+<para>
+  If you receive a message that the device is busy, especially on Windows,
+  that could be because another program, likely Delorme's own, has the 
+  device open even though it's not actively interacting with the GPS.   In 
+  Topo 8, on the GPS tab, look for GPS Options.  Uncheck "Start GPS" and 
+  "Automatically detect GPS".   Then just click the Exchange button when
+  you're ready for Topo to interact with the GPS.  Other Delorme software may
+  be similar.
+</para>
+<para>
+  The GPS should not be in 'map exchange' mode.   When in that mode, it appears
+  as a disk to the USB system, thus GPSBabel will be unable to find the GPS.
+</para>

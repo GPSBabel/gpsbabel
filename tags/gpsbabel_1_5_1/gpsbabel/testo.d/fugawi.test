@@ -1,0 +1,13 @@
+#
+# Fugawi test cases
+rm -f ${TMPDIR}/fugawi*
+gpsbabel -i fugawi -f ${REFERENCE}/fugawi.notime.txt -o fugawi -F ${TMPDIR}/fugawi1.txt
+compare ${REFERENCE}/fugawi.ref.txt ${TMPDIR}/fugawi1.txt
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o fugawi -F ${TMPDIR}/fugawi2.txt
+compare ${REFERENCE}/fugawi.ref.txt ${TMPDIR}/fugawi2.txt
+gpsbabel -i fugawi -f ${TMPDIR}/fugawi2.txt -o fugawi -F ${TMPDIR}/fugawi3.txt
+compare ${TMPDIR}/fugawi2.txt ${TMPDIR}/fugawi3.txt
+gpsbabel -i fugawi -f ${REFERENCE}/fugawi.time.txt  -o fugawi -F ${TMPDIR}/fugawi4.txt
+compare ${REFERENCE}/fugawi.time.ref.txt ${TMPDIR}/fugawi4.txt
+gpsbabel -i gpx -f ${REFERENCE}/track/tracks.gpx  -o fugawi -F ${TMPDIR}/fugawi5.txt
+compare ${REFERENCE}/track/fugawi.txt ${TMPDIR}/fugawi5.txt
