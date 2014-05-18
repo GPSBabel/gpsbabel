@@ -97,13 +97,6 @@
            </property>
           </widget>
          </item>
-         <item>
-          <widget class="QComboBox" name="inputCharSetCombo">
-           <property name="toolTip">
-            <string>Character encoding of input</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
        <item>
@@ -488,13 +481,6 @@
           <widget class="QComboBox" name="outputFormatCombo">
            <property name="toolTip">
             <string>Output data format.</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="outputCharSetCombo">
-           <property name="toolTip">
-            <string>Character encoding of output</string>
            </property>
           </widget>
          </item>
