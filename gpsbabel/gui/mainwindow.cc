@@ -155,7 +155,6 @@ MainWindow::MainWindow(QWidget* parent): QMainWindow(parent)
   babelVersion_ = findBabelVersion();
   fmtChgInterlock_ = false;
   loadDeviceNameCombos();
-  loadCharSetCombos();
 
   connect(ui_.inputFileOptBtn,        SIGNAL(clicked()), this, SLOT(inputFileOptBtnClicked()));
   connect(ui_.inputDeviceOptBtn,      SIGNAL(clicked()), this, SLOT(inputDeviceOptBtnClicked()));
@@ -388,24 +387,6 @@ void MainWindow::loadDeviceNameCombos()
 {
   loadInputDeviceNameCombo("");
   loadOutputDeviceNameCombo("");
-}
-//------------------------------------------------------------------------
-void MainWindow::loadCharSetCombos()
-{
-  charSets_ = getCharSets();
-
-  ui_.inputCharSetCombo->clear();
-  ui_.outputCharSetCombo->clear();
-  ui_.inputCharSetCombo->addItem(tr("default"), QVariant(-1));
-  ui_.outputCharSetCombo->addItem(tr("default"), QVariant(-1));
-  for (int i=0; i<charSets_.size(); i++) {
-    ui_.inputCharSetCombo->addItem(charSets_[i], QVariant(i));
-    ui_.outputCharSetCombo->addItem(charSets_[i], QVariant(i));
-  }
-}
-//------------------------------------------------------------------------
-void MainWindow::checkCharSetCombos()
-{
 }
 //------------------------------------------------------------------------
 void MainWindow::inputFileOptBtnClicked()
@@ -1187,7 +1168,6 @@ void MainWindow::moreOptionButtonClicked()
   connect(advDlg.formatButton(), SIGNAL(clicked()),
 	  this, SLOT(resetFormatDefaults()));
   advDlg.exec();
-  checkCharSetCombos();
 }
 //------------------------------------------------------------------------
 void MainWindow::aboutActionX()
@@ -1258,7 +1238,6 @@ void MainWindow::setWidgetValues()
     ui_.inputStackedWidget->setCurrentWidget(ui_.inputDevicePage);
   }
   setComboToDevice(ui_.inputDeviceNameCombo, babelData_.inputDeviceName_);
-  setComboToCharSet(ui_.inputCharSetCombo, babelData_.inputCharSet_);
 
   if (babelData_.outputType_ == BabelData::fileType_) {
     ui_.outputFileOptBtn->setChecked(true);
@@ -1282,7 +1261,6 @@ void MainWindow::setWidgetValues()
   }
 
   setComboToDevice(ui_.outputDeviceNameCombo, babelData_.outputDeviceName_);
-  setComboToCharSet(ui_.outputCharSetCombo, babelData_.outputCharSet_);
 
   ui_.xlateWayPtsCk->setChecked(babelData_.xlateWayPts_);
   ui_.xlateTracksCk->setChecked(babelData_.xlateTracks_);
@@ -1291,7 +1269,6 @@ void MainWindow::setWidgetValues()
   crossCheckInOutFormats();
   displayOptionsText(ui_.inputOptionsText,  ui_.inputFormatCombo, true);
   displayOptionsText(ui_.outputOptionsText,  ui_.outputFormatCombo, false);
-  checkCharSetCombos();
   updateFilterStatus();
 }
 
@@ -1309,7 +1286,6 @@ void MainWindow::getWidgetValues()
     babelData_.inputDeviceFormat_ =formatList_[fidx].getName();
   }
   babelData_.inputDeviceName_ = ui_.inputDeviceNameCombo->currentText();
-  babelData_.inputCharSet_ = charSetFromCombo(ui_.inputCharSetCombo);
 
   comboIdx = ui_.outputFormatCombo->currentIndex();
   fidx = ui_.outputFormatCombo->itemData(comboIdx).toInt();
@@ -1325,7 +1301,6 @@ void MainWindow::getWidgetValues()
     babelData_.outputType_ = BabelData::noType_;
   }
   babelData_.outputDeviceName_ = ui_.outputDeviceNameCombo->currentText();
-  babelData_.outputCharSet_ = charSetFromCombo(ui_.outputCharSetCombo);
 
   babelData_.xlateWayPts_ = ui_.xlateWayPtsCk->isChecked();
   babelData_.xlateTracks_ = ui_.xlateTracksCk->isChecked();
