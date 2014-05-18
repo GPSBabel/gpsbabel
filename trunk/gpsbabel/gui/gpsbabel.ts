@@ -1016,10 +1016,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Character encoding of input</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Browse for one or more input files. </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1108,10 +1104,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Character encoding of output</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Browse for an output file name. </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1149,10 +1141,6 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <source>Preferences...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
