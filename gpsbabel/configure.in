@@ -55,6 +55,7 @@ AC_ARG_WITH(cet,[  --with-cet=(default,all,minimal)],
 
 if test $GCC = yes; then
  CFLAGS="$CFLAGS -Wall"
+ CXXFLAGS="$CXXFLAGS -Wall"
 fi
 
 if test "$cet" = "all"; then
@@ -156,15 +157,21 @@ AC_SUBST(RC)
 # On RHEL/OEL/SL/CENTOS/FEDORA qmake is from Qt3, and qmake-qt4 is from Qt4.
 # If qmake-qt4 isn't found look for the standard name qmake and assume it is
 # from a useful version Qt.
-AC_CHECK_TOOLS(QMAKE, [qmake-qt4 qmake], "no")
-AC_CHECK_PROGS(LUPDATE, [lupdate-qt4 lupdate])
-AC_CHECK_PROGS(LRELEASE, [lrelease-qt4 lrelease])
+AC_CHECK_TOOLS(QMAKE, [qmake-qt5 qmake-qt4 qmake], "no")
+AC_CHECK_PROGS(LUPDATE, [lupdate-qt5 lupdate-qt4 lupdate])
+AC_CHECK_PROGS(LRELEASE, [lrelease-qt5 lrelease-qt4 lrelease])
 
 if test "$QMAKE" = no ; then
-  AC_MSG_ERROR([Qt4 is required, but not found]);
+  AC_MSG_ERROR([Qt4 or Qt5 is required, but neither was found]);
 fi
 
-QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -l QtCore"
+# guess the name of the Qt Core library.
+QT_LIBVER=$($QMAKE -query -query QT_VERSION | sed -e 's/\..*//')
+if test "$QT_LIBVER" -ge 5 ; then
+	QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -l Qt${QT_LIBVER}Core"
+else
+	QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -l QtCore"
+fi
 QT_INC=$($QMAKE -query QT_INSTALL_HEADERS)
 QT_INC_OPT="-I"
 QT_SYSINC_OPT="-isystem"
@@ -280,6 +287,34 @@ case "$target" in
 		AC_MSG_RESULT(yes)
 		AC_DEFINE(HAVE_LINUX_HID, 1, [Defined if you have Linux HID]),
 		AC_MSG_RESULT(no))
+	;;
+esac
+
+case "$target" in
+	*-*-darwin*)
+	;;
+	*)
+	AC_MSG_CHECKING(for reduce relocations)
+	OCPPFLAGS="$CPPFLAGS"
+	CPPFLAGS="$CPPFLAGS -I$QT_INC"
+	AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+		#include <QtCore/QString>
+		void f(void) {
+		}])],
+		[AC_MSG_RESULT(no)],
+		[OCXXFLAGS="$CXXFLAGS"
+		CXXFLAGS="$CXXFLAGS -fPIE"
+		AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+			#include <QtCore/QString>
+			void f(void) {
+			}])],
+			[AC_MSG_RESULT(yes)
+			CFLAGS="$CFLAGS -fPIE"],
+			[AC_MSG_RESULT(unknown)
+			CXXFLAGS="$OCXXFLAGS"]
+			)]
+		)
+	CPPFLAGS="$OCPPFLAGS"
 	;;
 esac
 
