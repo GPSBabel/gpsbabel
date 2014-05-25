@@ -52,7 +52,7 @@ LRELEASE=@LRELEASE@
 #DEBUGGING=-g $(EXTRA_DEBUGGING)
 # add -DDEBUG_MEM to turn on memory allocation logging
 GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I$(srcdir) @QT_INC_OPT@$(QT_INC) \
-	$(OPTIMIZATION) -DHAVE_CONFIG_H -DNEW_STRINGS @CFLAGS@
+	$(OPTIMIZATION) -DHAVE_CONFIG_H -DNEW_STRINGS
 LDFLAGS=$(EXTRA_LDFLAGS) @LDFLAGS@
 PREFIX=@prefix@
 INSTALL_DIR=$(DESTDIR)/$(PREFIX)
@@ -117,9 +117,9 @@ OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 DEPFILES = $(OBJS:.o=.d)
 
 .cc.o:
-	$(CXX)  @CPPFLAGS@ @CXXFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
+	$(CXX) @CPPFLAGS@ @CXXFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
 .c.o:
-	$(CC)  @CPPFLAGS@ @CFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
+	$(CC) @CPPFLAGS@ @CFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
 
 
 
@@ -139,10 +139,10 @@ gui linux-gui mac-gui mac-gui-dmg msvc-build test-release
 all: gpsbabel$(EXEEXT)
 
 gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@ 
-	$(CXX)  $(CXXFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
 gpsbabel-debug: $(OBJS)
-	$(CXX)  $(CFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
 Makefile gbversion.h: Makefile.in config.status xmldoc/makedoc.in \
 	  gbversion.h.in gui/setup.iss.in
@@ -155,7 +155,7 @@ config.status: configure
 	$(SHELL) config.status --recheck
 
 jeeps/gpslibusb.o: 
-	$(CXX)  @CPPFLAGS@ -c $(GBCFLAGS) @USB_CFLAGS@ @srcdir@/jeeps/gpslibusb.cc $(OUTPUT_SWITCH)$@
+	$(CXX) @CPPFLAGS@ @CXXFLAGS@ -c $(GBCFLAGS) @USB_CFLAGS@ @srcdir@/jeeps/gpslibusb.cc $(OUTPUT_SWITCH)$@
 
 fileinfo.o: win32/gpsbabel.rc
 	$(RC) -o fileinfo.o win32/gpsbabel.rc

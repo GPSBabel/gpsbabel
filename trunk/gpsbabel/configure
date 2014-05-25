@@ -4233,6 +4233,7 @@ fi
 
 if test $GCC = yes; then
  CFLAGS="$CFLAGS -Wall"
+ CXXFLAGS="$CXXFLAGS -Wall"
 fi
 
 if test "$cet" = "all"; then
@@ -4438,7 +4439,7 @@ esac
 # If qmake-qt4 isn't found look for the standard name qmake and assume it is
 # from a useful version Qt.
 if test -n "$ac_tool_prefix"; then
-  for ac_prog in qmake-qt4 qmake
+  for ac_prog in qmake-qt5 qmake-qt4 qmake
   do
     # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
 set dummy $ac_tool_prefix$ac_prog; ac_word=$2
@@ -4482,7 +4483,7 @@ fi
 fi
 if test -z "$QMAKE"; then
   ac_ct_QMAKE=$QMAKE
-  for ac_prog in qmake-qt4 qmake
+  for ac_prog in qmake-qt5 qmake-qt4 qmake
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -4537,7 +4538,7 @@ esac
   fi
 fi
 
-for ac_prog in lupdate-qt4 lupdate
+for ac_prog in lupdate-qt5 lupdate-qt4 lupdate
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -4579,7 +4580,7 @@ fi
   test -n "$LUPDATE" && break
 done
 
-for ac_prog in lrelease-qt4 lrelease
+for ac_prog in lrelease-qt5 lrelease-qt4 lrelease
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -4623,10 +4624,16 @@ done
 
 
 if test "$QMAKE" = no ; then
-  as_fn_error $? "Qt4 is required, but not found" "$LINENO" 5;
+  as_fn_error $? "Qt4 or Qt5 is required, but neither was found" "$LINENO" 5;
 fi
 
-QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -l QtCore"
+# guess the name of the Qt Core library.
+QT_LIBVER=$($QMAKE -query -query QT_VERSION | sed -e 's/\..*//')
+if test "$QT_LIBVER" -ge 5 ; then
+	QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -l Qt${QT_LIBVER}Core"
+else
+	QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -l QtCore"
+fi
 QT_INC=$($QMAKE -query QT_INSTALL_HEADERS)
 QT_INC_OPT="-I"
 QT_SYSINC_OPT="-isystem"
@@ -4853,6 +4860,52 @@ else
 $as_echo "no" >&6; }
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+	;;
+esac
+
+case "$target" in
+	*-*-darwin*)
+	;;
+	*)
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for reduce relocations" >&5
+$as_echo_n "checking for reduce relocations... " >&6; }
+	OCPPFLAGS="$CPPFLAGS"
+	CPPFLAGS="$CPPFLAGS -I$QT_INC"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+		#include <QtCore/QString>
+		void f(void) {
+		}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+else
+  OCXXFLAGS="$CXXFLAGS"
+		CXXFLAGS="$CXXFLAGS -fPIE"
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+			#include <QtCore/QString>
+			void f(void) {
+			}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+			CFLAGS="$CFLAGS -fPIE"
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: unknown" >&5
+$as_echo "unknown" >&6; }
+			CXXFLAGS="$OCXXFLAGS"
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+	CPPFLAGS="$OCPPFLAGS"
 	;;
 esac
 
