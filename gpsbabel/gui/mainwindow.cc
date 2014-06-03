@@ -435,7 +435,8 @@ void MainWindow:: outputFileOptBtnClicked()
     ui_.outputFormatCombo->clear();
     for (int i=0; i<indices.size(); i++) {
       int k = indices[i];
-      ui_.outputFormatCombo->addItem(formatList_[k].getDescription(), QVariant(k));
+      if (!formatList_[k].isHidden())
+        ui_.outputFormatCombo->addItem(formatList_[k].getDescription(), QVariant(k));
     }
     setComboToFormat(ui_.outputFormatCombo, fmt, true);
   }
@@ -459,7 +460,8 @@ void MainWindow:: outputDeviceOptBtnClicked()
     ui_.outputFormatCombo->clear();
     for (int i=0; i<indices.size(); i++) {
       int k = indices[i];
-      ui_.outputFormatCombo->addItem(formatList_[k].getDescription(), QVariant(k));
+      if (!formatList_[k].isHidden())
+        ui_.outputFormatCombo->addItem(formatList_[k].getDescription(), QVariant(k));
     }
     setComboToFormat(ui_.outputFormatCombo, fmt, false);
   }
