@@ -23,6 +23,7 @@
 #include "cet_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
+#include "logging.h"
 #include <math.h>
 #include <QtCore/QXmlStreamReader>
 static QXmlStreamReader* reader;
@@ -1284,11 +1285,10 @@ gpx_read(void)
   }
 
   if (reader->hasError())  {
-    fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
-          CSTR(reader->errorString()),
-          CSTR(iqfile->fileName()),
-          (long) reader->lineNumber(),
-          (long) reader->columnNumber());
+    Fatal() << MYNAME << "Read error:" << reader->errorString() 
+            << "File:" << iqfile->fileName()  
+            << "Line:" << reader->lineNumber()
+            << "Column:" << reader->columnNumber();
   }
 }
 
@@ -1807,7 +1807,8 @@ gpx_write(void)
   gpx_wversion_num = strtod(gpx_wversion, NULL) * 10;
 
   if (gpx_wversion_num <= 0) {
-    fatal(MYNAME ": gpx version number of '%s' not valid.\n", gpx_wversion);
+    Fatal() << MYNAME << ": gpx version number of " 
+            << gpx_wversion << "not valid.";
   }
 
   // FIXME: This write of a blank line is needed for Qt 4.6 (as on Centos 6.3)
