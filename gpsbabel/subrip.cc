@@ -62,9 +62,14 @@ gps_to_video_time(QDateTime arg_gpstime)
   return result;
 }
 
+// This appears to be only for subtitles so it's OK if we "wrap"
+// times across a midnight boundary.
 static void
-subrip_write_duration(QTime starttime, QTime endtime)
+subrip_write_duration(QDateTime startdtime, QDateTime enddtime)
 {
+  QTime starttime = startdtime.time();
+  QTime endtime = enddtime.time();
+
   /* Writes start and end time for subtitle display to file. */
   gbfprintf(fout, "%02d:%02d:%02d,%03d --> ", starttime.hour(), starttime.minute(), starttime.second(), starttime.msec());
 
@@ -77,16 +82,17 @@ subrip_prevwp_pr(const Waypoint* waypointp)
   /* Now that we have the next waypoint, we can write out the subtitle for
    * the previous one.
    */
-  QDateTime starttime;
-  QDateTime endtime;
-  char *c;
 
   /* If this condition is not true, the waypoint is before the beginning of
    * the video and will be ignored
    */
-  if (prevwpp->GetCreationTime().toTime_t() < time_offset)
-       return;
-  starttime = gps_to_video_time(prevwpp->GetCreationTime());
+  if (prevwpp->GetCreationTime().toTime_t() < time_offset) {
+    return;
+  }
+
+  QDateTime starttime = gps_to_video_time(prevwpp->GetCreationTime());
+  QDateTime endtime;
+
   if (!waypointp) {
     endtime = starttime.addSecs(1);
   } else {
@@ -94,9 +100,9 @@ subrip_prevwp_pr(const Waypoint* waypointp)
   }
   gbfprintf(fout, "%d\n", stnum);
   stnum++;
-  subrip_write_duration(starttime.time(), endtime.time());
+  subrip_write_duration(starttime, endtime);
 
-  for (c = opt_format; *c != '\0' ; c++) {
+  for (char* c = opt_format; *c != '\0' ; c++) {
     char fmt;
 
     switch (*c) {
@@ -119,7 +125,7 @@ subrip_prevwp_pr(const Waypoint* waypointp)
         break;
       case 't':
         {
-	 QTime t = prevwpp->GetCreationTime().time();
+          QTime t = prevwpp->GetCreationTime().time();
           gbfprintf(fout, "%02d:%02d:%02d", t.hour(), t.minute(), t.second());
           break;
         }

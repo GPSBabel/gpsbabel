@@ -427,9 +427,9 @@ osm_features_init(void)
 
 
 static char
-osm_feature_ikey(const char* key)
+osm_feature_ikey(const QString& key)
 {
-  return keys.value(QString::fromUtf8(key), -1);
+  return keys.value(key, -1);
 }
 
 
@@ -464,6 +464,12 @@ osm_strip_html(const char* str)
   return strip_html(&utf);	// util.cc
 }
 
+static char*
+osm_strip_html(const QString& str)
+{
+  return osm_strip_html(CSTR(str));
+}
+
 
 static void
 osm_node_end(xg_string args, const QXmlStreamAttributes*)
@@ -486,8 +492,7 @@ osm_node(xg_string args, const QXmlStreamAttributes* attrv)
 
   if (attrv->hasAttribute("id")) {
     QString atstr = attrv->value("id").toString();
-
-    xasprintf(&wpt->description, "osm-id %s", CSTR(atstr));
+    wpt->description =  "osm-id " + atstr;
     if (waypoints.contains(atstr)) {
       warning(MYNAME ": Duplicate osm-id %s!\n", CSTR(atstr));
     } else {
@@ -506,8 +511,8 @@ osm_node(xg_string args, const QXmlStreamAttributes* attrv)
   }
 
   if (attrv->hasAttribute("timestamp")) {
-    QByteArray tsutf8 = attrv->value("timestamp").toString().toUtf8();
-    wpt->creation_time = xml_parse_time(tsutf8.constData());
+    QString ts = attrv->value("timestamp").toString();
+    wpt->creation_time = xml_parse_time(ts);
   }
 }
 
@@ -515,46 +520,43 @@ osm_node(xg_string args, const QXmlStreamAttributes* attrv)
 static void
 osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
 {
-  QByteArray qkey, qvalue;
-  const char* key = "", *value = "";
+  QString key, value;
   char* str;
   signed char ikey;
 
   if (attrv->hasAttribute("k")) {
-    qkey = attrv->value("k").toString().toUtf8();
-    key = qkey.constData();
+    key = attrv->value("k").toString();
   }
   if (attrv->hasAttribute("v")) {
-    qvalue = attrv->value("v").toString().toUtf8();
-    value = qvalue.constData();
+    value = attrv->value("v").toString();
   }
 
   str = osm_strip_html(value);
 
-  if (strcmp(key, "name") == 0) {
+  if (key == QLatin1String("name")) {
     if (wpt->shortname.isEmpty()) {
       wpt->shortname = str;
     }
-  } else if (strcmp(key, "name:en") == 0) {
+  } else if (key == QLatin1String("name:en")) {
     wpt->shortname = str;
   } else if ((ikey = osm_feature_ikey(key)) >= 0) {
-    wpt->icon_descr = osm_feature_symbol(ikey, value);
-  } else if (strcmp(key, "note") == 0) {
+    wpt->icon_descr = osm_feature_symbol(ikey, CSTR(value));
+  } else if (key == QLatin1String("note")) {
     if (wpt->notes.isEmpty()) {
       wpt->notes = str;
     } else {
       wpt->notes += "; ";
       wpt->notes += str;
     }
-  } else if (strcmp(key, "gps:hdop") == 0) {
+  } else if (key == QLatin1String("gps:hdop")) {
     wpt->hdop = atof(str);
-  } else if (strcmp(key, "gps:vdop") == 0) {
+  } else if (key == QLatin1String("gps:vdop")) {
     wpt->vdop = atof(str);
-  } else if (strcmp(key, "gps:pdop") == 0) {
+  } else if (key == QLatin1String("gps:pdop")) {
     wpt->pdop = atof(str);
-  } else if (strcmp(key, "gps:sat") == 0) {
+  } else if (key == QLatin1String("gps:sat")) {
     wpt->sat = atoi(str);
-  } else if (strcmp(key, "gps:fix") == 0) {
+  } else if (key == QLatin1String("gps:fix")) {
     if (strcmp(str, "2d") == 0) {
       wpt->fix = fix_2d;
     } else if (strcmp(str, "3d") == 0) {
@@ -567,8 +569,6 @@ osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
       wpt->fix = fix_none;
     }
   }
-
-  xfree(str);
 }
 
 
@@ -576,10 +576,8 @@ static void
 osm_way(xg_string args, const QXmlStreamAttributes* attrv)
 {
   rte = route_head_alloc();
-
   if (attrv->hasAttribute("id")) {
-    xasprintf(&rte->rte_desc, "osm-id %s",
-              attrv->value("id").toString().toUtf8().constData());
+    rte->rte_desc =  "osm-id " + attrv->value("id").toString();
   }
 }
 
@@ -604,30 +602,25 @@ osm_way_nd(xg_string args, const QXmlStreamAttributes* attrv)
 static void
 osm_way_tag(xg_string args, const QXmlStreamAttributes* attrv)
 {
-  QByteArray qkey, qvalue;
-  const char* key = "", *value = "";
-  char* str;
+  QString key, value;
+  QString str;
 
   if (attrv->hasAttribute("k")) {
-    qkey = attrv->value("k").toString().toUtf8();
-    key = qkey.constData();
+    key = attrv->value("k").toString();
   }
   if (attrv->hasAttribute("v")) {
-    qvalue = attrv->value("v").toString().toUtf8();
-    value = qvalue.constData();
+    value = attrv->value("v").toString();
   }
 
   str = osm_strip_html(value);
 
-  if (strcmp(key, "name") == 0) {
+  if (key == QLatin1String("name")) {
     if (rte->rte_name.isEmpty()) {
       rte->rte_name = str;
     }
-  } else if (strcmp(key, "name:en") == 0) {
+  } else if (key == QLatin1String("name:en")) {
     rte->rte_name = str;
   }
-
-  xfree(str);
 }
 
 static void
