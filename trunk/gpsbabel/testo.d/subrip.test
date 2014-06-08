@@ -1,4 +1,4 @@
 rm -f ${TMPDIR}/subrip.srt
 gpsbabel -i gpx -f ${REFERENCE}/track/gpx_subsecond-sample.gpx -o subrip -F ${TMPDIR}/subrip.srt
 # FIXME: This can't work right until we move to "real" subsecond support.
-# compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip.srt
+compare  ${REFERENCE}/track/gpx_subsecond-sample~subrip.srt ${TMPDIR}/subrip.srt

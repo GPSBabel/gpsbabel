@@ -2,6 +2,7 @@
     Write points to SubRip subtitle file (for video geotagging)
 
     Copyright (C) 2010 Michael von Glasow, michael @t vonglasow d.t com
+    Copyright (C) 2014 Gleb Smirnoff, glebius @t FreeBSD d.t org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,6 +28,7 @@
 static char* opt_videotime;
 static char* opt_gpstime;
 static char* opt_gpsdate;
+static char* opt_format;
 static time_t time_offset;
 static int stnum;
 static gbfile* fout;
@@ -51,36 +53,22 @@ sync_time(time_t arg_gpstime, char* arg_videotime)
   return result;
 }
 
-static time_t
-gps_to_video_time(time_t arg_gpstime)
+static QDateTime
+gps_to_video_time(QDateTime arg_gpstime)
 {
-  static time_t result;
+  QDateTime result = arg_gpstime;
   /* Converts a GPS timestamp to relative time in the video stream. */
-  result = arg_gpstime - time_offset;
+  result.addSecs(time_offset);
   return result;
 }
 
 static void
-subrip_write_duration(time_t starttime, time_t endtime)
+subrip_write_duration(QTime starttime, QTime endtime)
 {
   /* Writes start and end time for subtitle display to file. */
-  struct tm* tmptime;
+  gbfprintf(fout, "%02d:%02d:%02d,%03d --> ", starttime.hour(), starttime.minute(), starttime.second(), starttime.msec());
 
-  tmptime = gmtime(&starttime);
-  gbfprintf(fout, "%02d:%02d:%02d,000 --> ", tmptime->tm_hour, tmptime->tm_min, tmptime->tm_sec);
-
-  tmptime = gmtime(&endtime);
-  gbfprintf(fout, "%02d:%02d:%02d,000\n", tmptime->tm_hour, tmptime->tm_min, tmptime->tm_sec);
-}
-
-static void
-subrip_write_time(time_t arg_time)
-{
-  /* Writes a timestamp to file. */
-  struct tm* tmptime;
-
-  tmptime = gmtime(&arg_time);
-  gbfprintf(fout, "%02d:%02d:%02d", tmptime->tm_hour, tmptime->tm_min, tmptime->tm_sec);
+  gbfprintf(fout, "%02d:%02d:%02d,%03d --> ", endtime.hour(), endtime.minute(), endtime.second(), endtime.msec());
 }
 
 static void
@@ -89,43 +77,87 @@ subrip_prevwp_pr(const Waypoint* waypointp)
   /* Now that we have the next waypoint, we can write out the subtitle for
    * the previous one.
    */
-  time_t starttime;
-  time_t endtime;
+  QDateTime starttime;
+  QDateTime endtime;
+  char *c;
 
-  if (prevwpp->GetCreationTime().toTime_t() >= time_offset)
-    /* if this condition is not true, the waypoint is before the beginning of
-     * the video and will be ignored
-     */
-  {
-
-    starttime = gps_to_video_time(prevwpp->GetCreationTime().toTime_t());
-    if (!waypointp) {
-      endtime = starttime + 1;
-    } else {
-      endtime = gps_to_video_time(waypointp->GetCreationTime().toTime_t());
-    }
-    gbfprintf(fout, "%d\n", stnum);
-    stnum++;
-    subrip_write_duration(starttime, endtime);
-    if WAYPT_HAS(prevwpp, speed) {
-      gbfprintf(fout, "%d km/h",
-                (int)(MPS_TO_KPH(prevwpp->speed) + 0.5));
-    }
-    if (prevwpp->altitude != unknown_alt) {
-      if WAYPT_HAS(prevwpp, speed) {
-        gbfprintf(fout, ", ");
-      }
-      gbfprintf(fout, "%d m\n",
-                (int)(prevwpp->altitude + 0.5));
-    } else if WAYPT_HAS(prevwpp, speed) {
-      gbfprintf(fout, "\n");
-    }
-    subrip_write_time(prevwpp->GetCreationTime().toTime_t());
-    gbfprintf(fout, " Lat=%0.5lf Lon=%0.5lf\n",
-              prevwpp->latitude + .000005,
-              prevwpp->longitude + .000005);
-    gbfprintf(fout, "\n");
+  /* If this condition is not true, the waypoint is before the beginning of
+   * the video and will be ignored
+   */
+  if (prevwpp->GetCreationTime().toTime_t() < time_offset)
+       return;
+  starttime = gps_to_video_time(prevwpp->GetCreationTime());
+  if (!waypointp) {
+    endtime = starttime.addSecs(1);
+  } else {
+    endtime = gps_to_video_time(waypointp->GetCreationTime());
   }
+  gbfprintf(fout, "%d\n", stnum);
+  stnum++;
+  subrip_write_duration(starttime.time(), endtime.time());
+
+  for (c = opt_format; *c != '\0' ; c++) {
+    char fmt;
+
+    switch (*c) {
+    case '%':
+      fmt = *++c;   
+      is_fatal(fmt == '\0', "No character after %% in subrip format");
+      
+      switch (fmt) {
+      case 's':
+        if WAYPT_HAS(prevwpp, speed)
+           gbfprintf(fout, "%2.1f", MPS_TO_KPH(prevwpp->speed));
+        else  
+           gbfprintf(fout, "--.-");
+        break;
+      case 'e':
+        if (prevwpp->altitude != unknown_alt)  
+          gbfprintf(fout, "%4d", (int)prevwpp->altitude);
+        else
+          gbfprintf(fout, "   -");
+        break;
+      case 't':
+        {
+	 QTime t = prevwpp->GetCreationTime().time();
+          gbfprintf(fout, "%02d:%02d:%02d", t.hour(), t.minute(), t.second());
+          break;
+        }
+      case 'l':
+        // The +.00005 is for rounding.
+        gbfprintf(fout, "Lat=%0.5lf Lon=%0.5lf",
+          prevwpp->latitude+.000005, prevwpp->longitude+.000005);
+        break;
+      case 'c':
+        if (prevwpp->cadence != 0)
+          gbfprintf(fout, "%3u", prevwpp->cadence);
+        else
+          gbfprintf(fout, "  -");
+        break;
+      case 'h':
+        if (prevwpp->heartrate != 0)
+          gbfprintf(fout, "%3u", prevwpp->heartrate);
+        else
+          gbfprintf(fout, "  -");
+        break;
+      }
+
+      break;
+
+    case '\\':
+      fmt = *++c;
+      is_fatal(fmt == '\0', "No character after \\ in subrip format");
+      switch (fmt) {
+      case 'n':
+        gbfprintf(fout, "\n");
+        break;
+      }
+      break;
+    default:
+      gbfwrite(c, 1, 1, fout);
+    }
+  }
+  gbfprintf(fout, "\n\n");
 }
 
 /* callback functions */
@@ -230,6 +262,7 @@ arglist_t subrip_args[] = {
   {"video_time", &opt_videotime, "Video position for which exact GPS time is known (hhmmss, default is 0:00:00)", 0, ARGTYPE_STRING, ARG_NOMINMAX },
   {"gps_time", &opt_gpstime, "GPS time at position video_time (hhmmss, default is first timestamp of track)", 0, ARGTYPE_STRING, ARG_NOMINMAX },
   {"gps_date", &opt_gpsdate, "GPS date at position video_time (hhmmss, default is first timestamp of track)", 0, ARGTYPE_STRING, ARG_NOMINMAX },
+  {"format", &opt_format, "Format for subtitles", "%s km/h %e m\n%t %l", ARGTYPE_STRING, ARG_NOMINMAX },
   ARG_TERMINATOR
 };
 
