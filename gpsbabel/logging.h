@@ -22,8 +22,8 @@
 // A wrapper for QTextStream that provides a sensible Warning() and Fatal()
 // with convenient stream operators.
 
-#include <QtCore/QTextStream.h>
-#include <QtCore/QFile.h>
+#include <QtCore/QTextStream>
+#include <QtCore/QFile>
 
 class Warning {
  public:
