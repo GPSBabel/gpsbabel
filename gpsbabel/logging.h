@@ -46,6 +46,8 @@ class Warning {
   inline Warning& operator << (unsigned int d) { fileStream_ << d; return optionalSpace(); }
   inline Warning& operator << (signed long d) { fileStream_ << d; return optionalSpace(); }
   inline Warning& operator << (unsigned long d) { fileStream_ << d; return optionalSpace(); }
+  inline Warning& operator << (qint64 d) { fileStream_ << d; return optionalSpace(); }
+  inline Warning& operator << (quint64 d) { fileStream_ << d; return optionalSpace(); }
   inline Warning& operator << (float d) { fileStream_ << d; return optionalSpace(); }
   inline Warning& operator << (double d) { fileStream_ << d; return optionalSpace(); }
   inline Warning& operator << (const char* d) { fileStream_ << QString::fromUtf8(d); return optionalSpace(); }
