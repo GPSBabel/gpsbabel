@@ -679,7 +679,6 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
 {
   int text_len, Lat, Lon, Time, SymbolId;
   short int WayptType;
-  char* comment;
   int alt = METERS_TO_FEET(wpt->altitude);
 
   if (wpt->altitude == unknown_alt) {
@@ -739,14 +738,13 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
    * Comments are now used by the iFinder (Expedition C supports them)
    */
   if (wpt->description != wpt->shortname) {
-    comment = xstrdup(wpt->description);
-    text_len = strlen(comment);
+    QString comment = xstrdup(wpt->description);
+    text_len = comment.length();
     if (text_len > MAXUSRSTRINGSIZE) {
       text_len = MAXUSRSTRINGSIZE;
     }
     gbfputint32(text_len, file_out);
-    gbfwrite(comment, 1, text_len, file_out);
-    xfree(comment);
+    gbfwrite(CSTR(comment), 1, text_len, file_out);
   } else {
     text_len = 0;
     gbfputint32(text_len, file_out);
@@ -842,23 +840,21 @@ static void
 lowranceusr_track_hdr(const route_head* trk)
 {
   int text_len;
-  char* name, tmp_name[20];
+  QString name;
   short num_trail_points, max_trail_size;
   char visible=1;
 
   ++trail_count;
 //TODO: This whole function needs to be replaced...
   if (!trk->rte_name.isEmpty()) {
-    name = xstrdup(trk->rte_name);
+    name = trk->rte_name;
   } else if (!trk->rte_desc.isEmpty()) {
-    name = xstrdup(trk->rte_desc);
+    name = trk->rte_desc;
   } else {
-    tmp_name[0]='\0';
-    snprintf(tmp_name, sizeof(tmp_name), "Babel %d", trail_count);
-    name = xstrdup(tmp_name);
+    name = name + QString("Babel %1").arg(trail_count);
   }
 
-  text_len = strlen(name);
+  text_len = name.length();
   if (text_len > MAXUSRSTRINGSIZE) {
     text_len = MAXUSRSTRINGSIZE;
   }
@@ -868,10 +864,9 @@ lowranceusr_track_hdr(const route_head* trk)
   gbfputint32(text_len, file_out);
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " track_hdr: trail name = %s\n", name);
+    qDebug() << MYNAME << " track_hdr: trail name" << name;
   }
-
-  gbfwrite(name, 1, text_len, file_out);
+  gbfwrite(CSTR(name), 1, text_len, file_out);
 
   num_trail_points = (short) trk->rte_waypt_ct;
   max_trail_size = MAX_TRAIL_POINTS;
@@ -888,7 +883,6 @@ lowranceusr_track_hdr(const route_head* trk)
   gbfputint16(num_trail_points, file_out);
   gbfputint16(max_trail_size, file_out);
   gbfputint16(num_section_points, file_out);
-  xfree(name);
   trail_point_count=1;
 }
 

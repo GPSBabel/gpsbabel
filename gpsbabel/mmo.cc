@@ -968,10 +968,12 @@ mmo_finalize_rtept_cb(const Waypoint* wptref)
   if ((wpt->shortname[0] == 1) && (wpt->latitude == 0) && (wpt->longitude == 0)) {
     mmo_data_t* data;
     Waypoint* wpt2;
-#if NEW_STRINGS
-#warning this code is on drugs.
+
+// This code path isn't tested in anything we have and I have  No Idea 
+// what it was trying to do.  Throw a hard error to force the hand of
+// getting a sample file.
     abort();
-#else
+#if OLD
     sscanf(wpt->shortname + 1, "%p", &data);
 #endif
     wpt2 = (Waypoint*)data->data;
@@ -1143,6 +1145,12 @@ mmo_writestr(const char* str)
   }
 }
 
+static void
+mmo_writestr(const QString& str) {
+  // If UTF-8 is used instgead of Latin1, we fail in weird ways.
+  mmo_writestr(str.toLatin1().constData());
+}
+
 
 static void
 mmo_enum_waypt_cb(const Waypoint* wpt)
@@ -1230,7 +1238,7 @@ mmo_write_obj_head(const char* sobj, const char* name, const time_t ctime,
 static void
 mmo_write_wpt_cb(const Waypoint* wpt)
 {
-  char* str; 
+  QString str; 
   QString cx;
   int objid;
   time_t time;
@@ -1257,13 +1265,8 @@ mmo_write_wpt_cb(const Waypoint* wpt)
   }
 
   DBG(("write", "waypoint \"%s\"\n", wpt->shortname ? wpt->shortname : "Mark"));
-#if NEW_STRINGS
   objid = mmo_write_obj_head("CObjWaypoint",
                              wpt->shortname.isEmpty() ? "Mark" : CSTRc(wpt->shortname), time, obj_type_wpt);
-#else
-  objid = mmo_write_obj_head("CObjWaypoint",
-                             (wpt->shortname && *wpt->shortname) ? CSTRc(wpt->shortname) : "Mark", time, obj_type_wpt);
-#endif
   data = mmo_register_object(objid, wpt, wptdata);
   data->refct = 1;
   mmo_write_category("CCategory", (mmo_datatype == rtedata) ? "Waypoints" : "Marks");
@@ -1280,12 +1283,10 @@ mmo_write_wpt_cb(const Waypoint* wpt)
   }
 
   if (wpt->HasUrlLink()) {
-    str = xstrdup("_FILE_ ");
+    str = "_FILE_ ";
     UrlLink l = wpt->GetUrlLink();
-    str = xstrappend(str, l.url_.toUtf8().data());
-    str = xstrappend(str, "\n");
-  } else {
-    str = xstrdup("");
+    str += l.url_;
+    str += "\n";
   }
 
   cx = wpt->notes;
@@ -1302,13 +1303,12 @@ mmo_write_wpt_cb(const Waypoint* wpt)
       tmp.is_html = 1;
       cx = kml = strip_html(&tmp);
     }
-    str = xstrappend(str, CSTRc(cx));
+    str += cx;
     if (kml) {
       xfree(kml);
     }
   }
   mmo_writestr(str);
-  xfree(str);
 
   gbfputuint32(0x01, fout);
   if WAYPT_HAS(wpt, proximity) {
@@ -1358,13 +1358,8 @@ mmo_write_rte_head_cb(const route_head* rte)
   if (time == 0x7FFFFFFF) {
     time = gpsbabel_time;
   }
-#if NEW_STRINGS
   objid = mmo_write_obj_head("CObjRoute",
                              rte->rte_name.isEmpty() ? "Route" : CSTRc(rte->rte_name), time, obj_type_rte);
-#else
-  objid = mmo_write_obj_head("CObjRoute",
-                             (rte->rte_name && *rte->rte_name) ? CSTRc(rte->rte_name) : "Route", time, obj_type_rte);
-#endif
   mmo_register_object(objid, rte, rtedata);
   mmo_write_category("CCategory", "Route");
   gbfputc(0, fout); /* unknown */
@@ -1413,13 +1408,9 @@ mmo_write_trk_head_cb(const route_head* trk)
   if (trk->rte_waypt_ct <= 0) {
     return;
   }
-#if NEW_STRINGS
   objid = mmo_write_obj_head("CObjTrack",
                              trk->rte_name.isEmpty() ? "Track" : CSTRc(trk->rte_name), gpsbabel_time, obj_type_trk);
-#else
-  objid = mmo_write_obj_head("CObjTrack",
-                             (trk->rte_name && *trk->rte_name) ? CSTRc(trk->rte_name) : "Track", gpsbabel_time, obj_type_trk);
-#endif
+
   mmo_write_category("CCategory", "Track");
   gbfputuint16(trk->rte_waypt_ct, fout);
 
