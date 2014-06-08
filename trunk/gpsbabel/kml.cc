@@ -1316,14 +1316,11 @@ QString kml_geocache_get_logs(const Waypoint* wpt)
     if (logpart) {
       gpsbabel::DateTime t = xml_parse_time(logpart->cdata);
       if (t.isValid()) {
-        char* temp;
-        xasprintf(&temp,
+        r += QString().sprintf(
                   " %04d-%02d-%02d",
                   t.date().year(),
                   t.date().month(),
                   t.date().day());
-        r += temp;
-        xfree(temp);
       }
     }
 
