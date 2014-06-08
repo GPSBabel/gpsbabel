@@ -215,6 +215,7 @@ HEADERS =  \
 	jeeps/gpsusbcommon.h \
 	jeeps/gpsusbint.h \
 	jeeps/gpsutil.h \
+	logging.h \
 	magellan.h \
 	mapsend.h \
 	navilink.h \
