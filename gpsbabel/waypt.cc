@@ -30,6 +30,8 @@
 #include "garmin_fs.h"
 #include "session.h"
 
+#include <logging.h>
+
 #if NEWQ
 QList<Waypoint*> waypt_list;
 queue waypt_head; // This is here solely to freak out the formats that are
@@ -100,12 +102,12 @@ waypt_add(Waypoint* wpt)
   }
 
   if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-    fatal("%s: Invalid latitude %f in waypoint '%s'.\n",
-          wpt->session->name,
-          lat_orig, CSTRc(wpt->shortname));
+    Fatal() << wpt->session->name 
+            << "Invalid latitude" << lat_orig << "in waypoint" 
+            << wpt->shortname;
   if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
-    fatal("Invalid longitude %f in waypoint '%s'.\n",
-          lon_orig, CSTRc(wpt->shortname));
+    Fatal() << "Invalid longitude" << lon_orig << "in waypoint" 
+            << wpt->shortname;
 
   /*
    * Some input may not have one or more of these types so we
