@@ -29,8 +29,7 @@
 #include "grtcirc.h"
 #include "garmin_fs.h"
 #include "session.h"
-
-#include <logging.h>
+#include "src/core/logging.h"
 
 #if NEWQ
 QList<Waypoint*> waypt_list;
