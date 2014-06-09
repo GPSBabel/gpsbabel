@@ -900,7 +900,7 @@ static void
 osm_write(void)
 {
   gbfprintf(fout, "<?xml version='1.0' encoding='UTF-8'?>\n");
-  gbfprintf(fout, "<osm version='0.5' generator='GPSBabel");
+  gbfprintf(fout, "<osm version='0.6' generator='GPSBabel");
   if (gpsbabel_time != 0) {
     gbfprintf(fout, "-%s", gpsbabel_version);
   }
