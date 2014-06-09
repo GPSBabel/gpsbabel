@@ -1096,7 +1096,7 @@ void MainWindow::dropEvent(QDropEvent *event)
       QList<QUrl> urlList = event->mimeData()->urls();
       babelData_.inputFileNames_.clear();
       for (int i = 0; i < urlList.size(); ++i) {
-        QFileInfo file_info(urlList.at(i).path());
+        QFileInfo file_info(urlList.at(i).toLocalFile());
         QString name = file_info.filePath();
         QString ext = file_info.suffix();
 
