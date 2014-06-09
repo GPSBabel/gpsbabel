@@ -53,32 +53,12 @@ sync_time(time_t arg_gpstime, char* arg_videotime)
   return result;
 }
 
-static QDateTime
-gps_to_video_time(QDateTime arg_gpstime)
-{
-  QDateTime result = arg_gpstime;
-  /* Converts a GPS timestamp to relative time in the video stream. */
-  result.addSecs(time_offset);
-  return result;
-}
-
-// This appears to be only for subtitles so it's OK if we "wrap"
-// times across a midnight boundary.
-static void
-subrip_write_duration(QDateTime startdtime, QDateTime enddtime)
-{
-  QTime starttime = startdtime.time();
-  QTime endtime = enddtime.time();
-
-  /* Writes start and end time for subtitle display to file. */
-  gbfprintf(fout, "%02d:%02d:%02d,%03d --> ", starttime.hour(), starttime.minute(), starttime.second(), starttime.msec());
-
-  gbfprintf(fout, "%02d:%02d:%02d,%03d --> ", endtime.hour(), endtime.minute(), endtime.second(), endtime.msec());
-}
-
 static void
 subrip_prevwp_pr(const Waypoint* waypointp)
 {
+  QDateTime startdtime, enddtime;
+  QTime starttime, endtime;
+
   /* Now that we have the next waypoint, we can write out the subtitle for
    * the previous one.
    */
@@ -90,17 +70,20 @@ subrip_prevwp_pr(const Waypoint* waypointp)
     return;
   }
 
-  QDateTime starttime = gps_to_video_time(prevwpp->GetCreationTime());
-  QDateTime endtime;
+  gbfprintf(fout, "%d\n", stnum++);
 
+  /* Writes start and end time for subtitle display to file. */
+  startdtime = prevwpp->GetCreationTime().addSecs(-time_offset);
   if (!waypointp) {
-    endtime = starttime.addSecs(1);
+    enddtime = startdtime.addSecs(1);
   } else {
-    endtime = gps_to_video_time(waypointp->GetCreationTime());
+    enddtime = waypointp->GetCreationTime().addSecs(-time_offset);
   }
-  gbfprintf(fout, "%d\n", stnum);
-  stnum++;
-  subrip_write_duration(starttime, endtime);
+  starttime = startdtime.toUTC().time();
+  endtime = enddtime.toUTC().time();
+  gbfprintf(fout, "%02d:%02d:%02d,%03d --> %02d:%02d:%02d,%03d\n",
+    starttime.hour(), starttime.minute(), starttime.second(), starttime.msec(),
+    endtime.hour(), endtime.minute(), endtime.second(), endtime.msec());
 
   for (char* c = opt_format; *c != '\0' ; c++) {
     char fmt;
@@ -125,7 +108,7 @@ subrip_prevwp_pr(const Waypoint* waypointp)
         break;
       case 't':
         {
-          QTime t = prevwpp->GetCreationTime().time();
+          QTime t = prevwpp->GetCreationTime().toUTC().time();
           gbfprintf(fout, "%02d:%02d:%02d", t.hour(), t.minute(), t.second());
           break;
         }
