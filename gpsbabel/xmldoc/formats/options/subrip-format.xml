@@ -1,0 +1,144 @@
+<para>
+	Format for output subtitles.
+</para>
+<table id="subrip_format">
+<title>Supported format characters for subrip</title>
+<tgroup cols="2">
+<thead>
+<row>
+ <entry>format char</entry>
+ <entry>description</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>%s</entry>
+  <entry>speed in km/h</entry>
+</row>
+<row>
+  <entry>%e</entry>
+  <entry>elevation in meters</entry>
+</row>
+<row>
+  <entry>%t</entry>
+  <entry>tiomestamp</entry>
+</row>
+<row>
+  <entry>%l</entry>
+  <entry>coordinates</entry>
+</row>
+<row>
+  <entry>%c</entry>
+  <entry>pedal cadence</entry>
+</row>
+<row>
+  <entry>%h</entry>
+  <entry>heart rate</entry>
+</row>
+<row>
+  <entry>\n</entry>
+  <entry>newline</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<para>
+	Default format (used when option isn't specified) is "%s km/h %e m\n%t %l".
+	Suggested format for bicycle video is "'%s km/h   %h ❤\n      %e m  %c rpm".
+</para>
+<para>
+	Format for output subtitles.
+</para>
+<table id="subrip_format">
+<title>Supported format characters for subrip</title>
+<tgroup cols="2">
+<thead>
+<row>
+ <entry>format char</entry>
+ <entry>description</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>%s</entry>
+  <entry>speed in km/h</entry>
+</row>
+<row>
+  <entry>%e</entry>
+  <entry>elevation in meters</entry>
+</row>
+<row>
+  <entry>%t</entry>
+  <entry>tiomestamp</entry>
+</row>
+<row>
+  <entry>%l</entry>
+  <entry>coordinates</entry>
+</row>
+<row>
+  <entry>%c</entry>
+  <entry>pedal cadence</entry>
+</row>
+<row>
+  <entry>%h</entry>
+  <entry>heart rate</entry>
+</row>
+<row>
+  <entry>\n</entry>
+  <entry>newline</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<para>
+	Default format (used when option isn't specified) is "%s km/h %e m\n%t %l".
+	Suggested format for bicycle video is "'%s km/h   %h ❤\n      %e m  %c rpm".
+</para>
+<para>
+	Format for output subtitles.
+</para>
+<table id="subrip_format">
+<title>Supported format characters for subrip</title>
+<tgroup cols="2">
+<thead>
+<row>
+ <entry>format char</entry>
+ <entry>description</entry>
+</row>
+</thead>
+<tbody>
+<row>
+  <entry>%s</entry>
+  <entry>speed in km/h</entry>
+</row>
+<row>
+  <entry>%e</entry>
+  <entry>elevation in meters</entry>
+</row>
+<row>
+  <entry>%t</entry>
+  <entry>tiomestamp</entry>
+</row>
+<row>
+  <entry>%l</entry>
+  <entry>coordinates</entry>
+</row>
+<row>
+  <entry>%c</entry>
+  <entry>pedal cadence</entry>
+</row>
+<row>
+  <entry>%h</entry>
+  <entry>heart rate</entry>
+</row>
+<row>
+  <entry>\n</entry>
+  <entry>newline</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<para>
+	Default format (used when option isn't specified) is "%s km/h %e m\n%t %l".
+	Suggested format for bicycle video is "'%s km/h   %h ❤\n      %e m  %c rpm".
+</para>
