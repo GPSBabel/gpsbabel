@@ -464,10 +464,13 @@ osm_strip_html(const char* str)
   return strip_html(&utf);	// util.cc
 }
 
-static char*
+static QString
 osm_strip_html(const QString& str)
 {
-  return osm_strip_html(CSTR(str));
+  char* r = osm_strip_html(CSTR(str));
+  QString rv(r);
+  xfree(r);
+  return rv;
 }
 
 
@@ -521,7 +524,7 @@ static void
 osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
 {
   QString key, value;
-  char* str;
+  QString str;
   signed char ikey;
 
   if (attrv->hasAttribute("k")) {
@@ -549,23 +552,23 @@ osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
       wpt->notes += str;
     }
   } else if (key == QLatin1String("gps:hdop")) {
-    wpt->hdop = atof(str);
+    wpt->hdop = str.toDouble();
   } else if (key == QLatin1String("gps:vdop")) {
-    wpt->vdop = atof(str);
+    wpt->vdop = str.toDouble();
   } else if (key == QLatin1String("gps:pdop")) {
-    wpt->pdop = atof(str);
+    wpt->pdop = str.toDouble();
   } else if (key == QLatin1String("gps:sat")) {
-    wpt->sat = atoi(str);
+    wpt->sat = str.toDouble();
   } else if (key == QLatin1String("gps:fix")) {
-    if (strcmp(str, "2d") == 0) {
+    if (str == QLatin1String("2d")) {
       wpt->fix = fix_2d;
-    } else if (strcmp(str, "3d") == 0) {
+    } else if (str == QLatin1String("3d")) {
       wpt->fix = fix_3d;
-    } else if (strcmp(str, "dgps") == 0) {
+    } else if (str == QLatin1String("dgps")) {
       wpt->fix = fix_dgps;
-    } else if (strcmp(str, "pps") == 0) {
+    } else if (str == QLatin1String("pps")) {
       wpt->fix = fix_pps;
-    } else if (strcmp(str, "none") == 0) {
+    } else if (str == QLatin1String("none")) {
       wpt->fix = fix_none;
     }
   }

@@ -738,7 +738,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
    * Comments are now used by the iFinder (Expedition C supports them)
    */
   if (wpt->description != wpt->shortname) {
-    QString comment = xstrdup(wpt->description);
+    QString comment = wpt->description;
     text_len = comment.length();
     if (text_len > MAXUSRSTRINGSIZE) {
       text_len = MAXUSRSTRINGSIZE;
