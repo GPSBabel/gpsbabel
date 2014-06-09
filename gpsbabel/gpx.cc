@@ -23,7 +23,7 @@
 #include "cet_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
-#include "logging.h"
+#include "src/core/logging.h"
 #include <math.h>
 #include <QtCore/QXmlStreamReader>
 static QXmlStreamReader* reader;
@@ -860,17 +860,10 @@ xml_parse_time(const QString& dateTimeString)
 static void
 gpx_end(const QString& el)
 {
-  int pos = current_tag.lastIndexOf('/');
-  QString s = current_tag.mid(pos + 1);
   float x;
   int passthrough;
   static QDateTime gc_log_date;
   tag_type tag;
-
-  if (s.compare(el)) {
-//   TODO: I don't think this is necesary with QXmlStreamReader
-    fprintf(stderr, "Mismatched tag %s.  Expected %s\n", CSTR(el), qPrintable(s));
-  }
 
   tag = get_tag(current_tag, &passthrough);
   switch (tag) {

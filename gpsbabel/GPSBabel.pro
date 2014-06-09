@@ -215,7 +215,6 @@ HEADERS =  \
 	jeeps/gpsusbcommon.h \
 	jeeps/gpsusbint.h \
 	jeeps/gpsutil.h \
-	logging.h \
 	magellan.h \
 	mapsend.h \
 	navilink.h \
@@ -237,7 +236,8 @@ HEADERS =  \
 	zlib/zconf.in.h \
 	zlib/zlib.h \
 	zlib/zutil.h \
-	src/core/xmlstreamwriter.h
+	src/core/xmlstreamwriter.h \
+	src/core/logging.h
 
 SUBDIRS += jeeps
 

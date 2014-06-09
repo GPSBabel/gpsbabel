@@ -382,8 +382,6 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp)
 {
   char buff[MAXUSRSTRINGSIZE + 1];
   int text_len;
-  time_t waypt_time;
-  short waypt_type;
 
   wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
   wpt_tmp->longitude = lon_mm_to_deg(gbfgetint32(file_in));
@@ -408,7 +406,7 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp)
     wpt_tmp->description = buff;
   }
   /* Time is number of seconds since Jan. 1, 2000 */
-  waypt_time = gbfgetint32(file_in);
+  time_t waypt_time = gbfgetint32(file_in);
   if (waypt_time) {
     wpt_tmp->SetCreationTime(base_time_secs + waypt_time);
   }
@@ -429,7 +427,7 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp)
   }
 
   /* Waypoint Type (USER, TEMPORARY, POINT_OF_INTEREST) */
-  waypt_type = gbfgetint16(file_in);
+  short waypt_type = gbfgetint16(file_in);
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " parse_waypt: waypt_type = %d\n",waypt_type);
   }
