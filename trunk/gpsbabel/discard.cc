@@ -237,19 +237,23 @@ fix_init(const char* args)
 
   if (nameopt) {
     name_regex.setCaseSensitivity(Qt::CaseInsensitive);
+    name_regex.setPatternSyntax(QRegExp::WildcardUnix);
     name_regex.setPattern(nameopt);
   }
   if (descopt) {
     desc_regex.setCaseSensitivity(Qt::CaseInsensitive);
-    desc_regex.setPattern(nameopt);
+    desc_regex.setPatternSyntax(QRegExp::WildcardUnix);
+    desc_regex.setPattern(descopt);
   }
-  if (nameopt) {
-    name_regex.setCaseSensitivity(Qt::CaseInsensitive);
-    name_regex.setPattern(nameopt);
+  if (cmtopt) {
+    cmt_regex.setCaseSensitivity(Qt::CaseInsensitive);
+    cmt_regex.setPatternSyntax(QRegExp::WildcardUnix);
+    cmt_regex.setPattern(cmtopt);
   }
   if (iconopt) {
     icon_regex.setCaseSensitivity(Qt::CaseInsensitive);
-    icon_regex.setPattern(nameopt);
+    icon_regex.setPatternSyntax(QRegExp::WildcardUnix);
+    icon_regex.setPattern(iconopt);
   }
 }
 
