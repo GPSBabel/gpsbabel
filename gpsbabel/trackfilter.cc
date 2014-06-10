@@ -40,6 +40,7 @@
 #include <ctype.h>
 #include <math.h>
 
+#include <QtCore/QRegExp>
 #include <QtCore/QXmlStreamAttributes>
 
 #include "defs.h"
@@ -333,8 +334,7 @@ trackfilter_fill_track_list_cb(const route_head* track) 	/* callback for track_d
   }
 
   if (opt_name != NULL) {
-    if ((track->rte_name == NULL) ||
-        (case_ignore_str_match(CSTRc(track->rte_name), opt_name) == 0)) {
+    if (!QRegExp(opt_name, Qt::CaseInsensitive, QRegExp::WildcardUnix).exactMatch(track->rte_name)) {
       QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
         Waypoint* wpt = (Waypoint*)elem;
         track_del_wpt((route_head*)track, wpt);
