@@ -15,3 +15,16 @@ compare ${REFERENCE}/track/trackfilter_discard_err.gpx ${TMPDIR}/discard.err
 # ... but should get through if we discard the points.
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter_discard.gpx -x track,merge,discard -o gpx -F ${TMPDIR}/discard.gpx
 compare ${REFERENCE}/track/trackfilter_discard_out.gpx ${TMPDIR}/discard.gpx
+
+# This file has ONLY names starting with GC; verify we toss all.
+./gpsbabel -i geo -f geocaching.loc  -x discard,matchname=GC* -o csv -F ${TMPDIR}/discardgc.geo
+compare ${TMPDIR}/discardgc.geo /dev/null
+
+# Throw out all caches from Joe
+gpsbabel -i geo -f geocaching.loc  -x discard,matchdesc=JoGPS -o csv -F ${TMPDIR}/discardjoe.csv
+nlines=$(wc -l ${TMPDIR}/discardjoe.csv | awk '{print $1}')
+if [ $nlines -ne 4 ];
+then
+  echo matchdesc failed.
+  exit 1
+fi
