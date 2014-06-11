@@ -68,6 +68,9 @@ static int wpt_tmp_queued;
 static const char* posnfilename;
 static char* posnfilenametmp;
 
+static route_head* gx_trk_head;
+static QList<gpsbabel::DateTime>* gx_trk_times;
+
 static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
 
@@ -243,6 +246,8 @@ static void kml_step_color(void)
 
 static xg_callback wpt_s, wpt_e;
 static xg_callback wpt_name, wpt_desc, wpt_coord, wpt_icon, trk_coord, wpt_time;
+static xg_callback gx_trk_s, gx_trk_e;
+static xg_callback gx_trk_when, gx_trk_coord;
 
 static
 xg_tag_mapping kml_map[] = {
@@ -257,8 +262,12 @@ xg_tag_mapping kml_map[] = {
   { wpt_icon, 	cb_cdata, 	"/Placemark/Style/Icon/href" },
   { trk_coord, 	cb_cdata, 	"/Placemark/MultiGeometry/LineString/coordinates" },
   { trk_coord, 	cb_cdata, 	"/Placemark/GeometryCollection/LineString/coordinates" },
-  { trk_coord, 	cb_cdata,	"/Placemark/Polygon/outerBoundaryIs/LinearRing/coordinates" },
+  { trk_coord, 	cb_cdata, 	"/Placemark/Polygon/outerBoundaryIs/LinearRing/coordinates" },
   { trk_coord, 	cb_cdata, 	"/Placemark/LineString/coordinates" },
+  { gx_trk_s,  	cb_start, 	"/Placemark/*gx:Track" },
+  { gx_trk_e,  	cb_end, 	"/Placemark/*gx:Track" },
+  { gx_trk_when,  cb_cdata, "/Placemark/*gx:Track/when" },
+  { gx_trk_coord, cb_cdata, "/Placemark/*gx:Track/gx:coord" },
   { NULL,	(xg_cb_type) 0, 		NULL }
 };
 
@@ -353,6 +362,63 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
 
     track_add_wpt(trk_head, trkpt);
     iargs = iargs.mid(consumed);
+  }
+}
+
+void gx_trk_s(xg_string, const QXmlStreamAttributes*)
+{
+  gx_trk_head = route_head_alloc();
+  if (!wpt_tmp->shortname.isEmpty()) {
+    gx_trk_head->rte_name  = wpt_tmp->shortname;
+  }
+  if (!wpt_tmp->description.isEmpty()) {
+    gx_trk_head->rte_desc  = wpt_tmp->description;
+  }
+  track_add_head(gx_trk_head);
+  gx_trk_times = new QList<gpsbabel::DateTime>;
+}
+
+void gx_trk_e(xg_string, const QXmlStreamAttributes*)
+{
+  if (!gx_trk_head->rte_waypt_ct) {
+    track_del_head(gx_trk_head);
+  }
+  delete gx_trk_times;
+}
+
+void gx_trk_when(xg_string args, const QXmlStreamAttributes*)
+{
+  gx_trk_times->append(xml_parse_time(args));
+}
+
+void gx_trk_coord(xg_string args, const QXmlStreamAttributes*)
+{
+  Waypoint* trkpt;
+  double lat, lon, alt;
+  int n;
+
+  if (gx_trk_times->isEmpty()) {
+    fatal(MYNAME ": There were more gx:coord elements than the number of when elements.\n");
+  }
+  trkpt = new Waypoint;
+  trkpt->SetCreationTime(gx_trk_times->takeFirst());
+  n = sscanf(CSTR(args), "%lf %lf %lf", &lon, &lat, &alt);
+  // Empty gx_coord elements are allowed to balance the number of when elements,
+  // but if we get one we will throw away the time as we don't have a location.
+  // It is not clear that coord elements without altitude are allowed, but our
+  // writer produces them.
+  if (0 != n && 2 != n && 3 != n) {
+    fatal(MYNAME ": gx:coord field decode failure on \"%s\".\n", CSTR(args));
+  }
+  if (n >= 2) {
+    trkpt->latitude = lat;
+    trkpt->longitude = lon;
+    if (n >= 3) {
+      trkpt->altitude = alt;
+    }
+    track_add_wpt(gx_trk_head, trkpt);
+  } else {
+    delete trkpt;
   }
 }
 
@@ -1888,7 +1954,7 @@ void kml_write(void)
   }
 
   if (current_time().isValid()) {
-    writer->writeTextElement("snippet", QString("Created ") + 
+    writer->writeTextElement("snippet", QString("Created ") +
                              current_time().toString());
   }
 
