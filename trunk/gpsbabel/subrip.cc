@@ -251,7 +251,7 @@ arglist_t subrip_args[] = {
   {"video_time", &opt_videotime, "Video position for which exact GPS time is known (hhmmss, default is 0:00:00)", 0, ARGTYPE_STRING, ARG_NOMINMAX },
   {"gps_time", &opt_gpstime, "GPS time at position video_time (hhmmss, default is first timestamp of track)", 0, ARGTYPE_STRING, ARG_NOMINMAX },
   {"gps_date", &opt_gpsdate, "GPS date at position video_time (hhmmss, default is first timestamp of track)", 0, ARGTYPE_STRING, ARG_NOMINMAX },
-  {"format", &opt_format, "Format for subtitles", "%s km/h %e m\n%t %l", ARGTYPE_STRING, ARG_NOMINMAX },
+  {"format", &opt_format, "Format for subtitles", "%s km/h %e m\\n%t %l", ARGTYPE_STRING, ARG_NOMINMAX },
   ARG_TERMINATOR
 };
 
