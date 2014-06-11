@@ -955,8 +955,6 @@ void MainWindow::applyActionX()
     args << "-r";
   if (babelData_.xlateTracks_ && ifmt.isReadTracks()    && ofmt.isWriteTracks())
     args << "-t";
- 
-  args << "-vs";
 
   // Input type, with options
   bool iisFile = (babelData_.inputType_ == BabelData::fileType_);

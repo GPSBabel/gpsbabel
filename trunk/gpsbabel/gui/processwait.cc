@@ -26,7 +26,6 @@
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 #include <QDialog>
-#include <QDebug>
 #include <QProgressBar>
 #include <QPushButton>
 #include <QTimer>
@@ -99,7 +98,6 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget *parent, QProcess *process):
   bufferedOut_ = "";
 
   //
-#if 0
   for (int i=0; i<=100; i+=2)
     progressVals_.push_back(i);
   for (int i=98; i>0; i-=2)
@@ -114,7 +112,7 @@ ProcessWaitDialog::ProcessWaitDialog(QWidget *parent, QProcess *process):
   ecode_ = 0;
   timer_->start();
   errorString_ = "";
-#endif
+
 }
 
 //------------------------------------------------------------------------
@@ -145,7 +143,6 @@ void ProcessWaitDialog::stopClickedX()
   process_->terminate();
 };
 //------------------------------------------------------------------------
-
 void ProcessWaitDialog::timeoutX()
 {
   progressIndex_++;
@@ -175,9 +172,7 @@ void ProcessWaitDialog::finishedX(int exitCode, QProcess::ExitStatus es)
   ecode_ = exitCode;
   if (es == QProcess::CrashExit)
     errorString_ = QString(tr("Process crashed whle running"));
-  if (timer_ != NULL) {
-//    timer_->stop();
-  }
+  timer_->stop();
   accept();
 };
 
@@ -206,30 +201,14 @@ void ProcessWaitDialog::appendToText(const char *ptr)
 void ProcessWaitDialog::readyReadStandardErrorX()
 {
   QByteArray d = process_->readAllStandardError();
-qDebug() << d;
-//  appendToText(d.data());
+  appendToText(d.data());
 };
 
 //------------------------------------------------------------------------
 void ProcessWaitDialog::readyReadStandardOutputX()
-{
+ {
   QByteArray d = process_->readAllStandardOutput();
-  QString status(d);
-  QStringList completion = QString(d).split("/");
-
-  // We'll sometimes get > 1.  This will also consume anything to stdout
-  // that isn't a vs output.  We'll see if that's OK.
-  if (completion.size() == 0) {
-    appendToText(d.data());
-    return;
-  }
-  if (completion.size() >= 3 && 
-      completion[2].toInt() > progressBar_->maximum()) {
-    progressBar_->setRange(0, completion[2].toInt());
-  } 
-  if (completion.size() >= 2) {
-    progressBar_->setValue(completion[1].toInt());
-  }
+  appendToText(d.data());
 };
 
 void ProcessWaitDialog::closeEvent(QCloseEvent *event)
