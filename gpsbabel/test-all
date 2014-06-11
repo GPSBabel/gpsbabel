@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 ### cross format read/(write) test ###
 
