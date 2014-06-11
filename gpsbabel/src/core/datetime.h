@@ -94,6 +94,14 @@ public:
     return -msecsTo(epoch);
   }
 
+  // This was added in Qt 4.7, but it's easy enough to knock out here.
+  void setMSecsSinceEpoch(qint64 msecs) {
+    int ddays = msecs / 86400000;
+    msecs %= 86400000;
+    setDate(QDate(1970, 1, 1).addDays(ddays));
+    setTime(QTime(0,0).addMSecs(msecs));
+  }
+
   // Like toString, but with subsecond time that's included only when
   // the trailing digits aren't .000.  Always UTC.
   QString toPrettyString() const {
