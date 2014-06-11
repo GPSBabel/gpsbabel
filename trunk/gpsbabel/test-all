@@ -27,7 +27,7 @@ function tally_log()
     local fatals=`grep '^cmd([0-9]*)\*\*\*:' $LOGFILE | wc -l`
     local totals=`grep '^cmd([0-9]*)[*]*:' $LOGFILE | wc -l`
     echo "Fatal Error Cases:"
-    grep '^cmd([0-9]*)\*\*\*:' $LOGFILE
+    grep '^cmd([0-9]*)\*\*\*:' $LOGFILE || true
     echo ""
     echo Error Summary:
     echo "tests with errors and/or unexpected output: $exceptions"
