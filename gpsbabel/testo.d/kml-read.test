@@ -6,3 +6,7 @@
 # gpsbabel -i geo -f geocaching.loc -o unicsv -F ${TMPDIR}/geocaching.txt
 gpsbabel -i kml -f ${REFERENCE}/kml-points.kml -o unicsv -F ${TMPDIR}/geo~unicsv.txt
 compare ${REFERENCE}/kml-points.txt ${TMPDIR}/geo~unicsv.txt
+
+gpsbabel -i kml -f ${REFERENCE}/track/google_ext.kml -o gpx -F ${TMPDIR}/google_ext~kml.gpx
+compare ${REFERENCE}/track/google_ext~kml.gpx ${TMPDIR}/google_ext~kml.gpx
+
