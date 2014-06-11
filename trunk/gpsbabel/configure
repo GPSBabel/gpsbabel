@@ -4712,6 +4712,70 @@ rm -f core conftest.err conftest.$ac_objext \
       QT_INC_OPT="-F"
       QT_SYSINC_OPT="-iframework"
       ;;
+    *-*-freebsd*)
+	GBSER=gbser_posix.o
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libusb" >&5
+$as_echo_n "checking for libusb... " >&6; }
+	if test "$with_libusb" = no ; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: check not done" >&5
+$as_echo "check not done" >&6; }
+		OSJEEPS=jeeps/gpsusbstub.o
+	else
+		OLDFLAGS=$LDFLAGS
+		OCFLAGS=$CFLAGS
+		LDFLAGS="$LDFLAGS -lusb"
+		CFLAGS="$OCFLAGS"
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for usb_interrupt_read in -lusb" >&5
+$as_echo_n "checking for usb_interrupt_read in -lusb... " >&6; }
+if ${ac_cv_lib_usb_usb_interrupt_read+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lusb  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char usb_interrupt_read ();
+int
+main ()
+{
+return usb_interrupt_read ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_lib_usb_usb_interrupt_read=yes
+else
+  ac_cv_lib_usb_usb_interrupt_read=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_usb_usb_interrupt_read" >&5
+$as_echo "$ac_cv_lib_usb_usb_interrupt_read" >&6; }
+if test "x$ac_cv_lib_usb_usb_interrupt_read" = xyes; then :
+
+$as_echo "#define HAVE_LIBUSB 1" >>confdefs.h
+
+			USB_CFLAGS=""
+			USB_LIBS="-lusb"
+#			,[AC_MSG_ERROR([libusb is needed])]
+
+fi
+
+		OSJEEPS=jeeps/gpslibusb.o
+		CFLAGS="$OCFLAGS"
+	fi
+	;;
     *)
 	GBSER=gbser_posix.o
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for libusb" >&5
