@@ -47,6 +47,7 @@ extern ff_vecs_t delbin_vecs;
 extern ff_vecs_t dg100_vecs;
 extern ff_vecs_t dg200_vecs;
 extern ff_vecs_t easygps_vecs;
+extern ff_vecs_t energympro_vecs;
 extern ff_vecs_t garmin_vecs;
 extern ff_vecs_t garmin_txt_vecs;
 extern ff_vecs_t gcdb_vecs;
@@ -1066,6 +1067,13 @@ vecs_t vec_list[] = {
     "mapfactor",
     "Mapfactor Navigator",
     "xml",
+    NULL,
+  },
+  {
+    &energympro_vecs,
+    "energympro",
+    "Energympro GPS training watch",
+    "cpo",
     NULL,
   },
 #endif // MAXIMAL_ENABLED

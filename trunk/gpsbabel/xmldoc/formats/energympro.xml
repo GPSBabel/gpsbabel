@@ -1,0 +1,16 @@
+<para>
+  Input support for the <productname>Energympro</productname> training watches
+  file structure.
+</para>
+<para>
+The <ulink url="http://www.energympro.com/product/dsw-gps-sport-watch/">
+Energympro GPS sport watches</ulink> present themselves as USB mass storage
+ devices. To get the training just connect the device using the supplied 
+USB cable to your computer and the device will show up as a removable device. 
+Your training data is in the Workout folder.   
+</para>
+<para>
+  <userinput>
+    gpsbabel -i energympro -f infile.cpo -o gpx,garminextensions -F outfile.gpx
+  </userinput>
+</para>

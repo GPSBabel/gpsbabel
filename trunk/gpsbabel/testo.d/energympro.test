@@ -1,0 +1,6 @@
+#
+# Basic energympro tests (readonly)
+#
+rm -f ${TMPDIR}/energympro*
+gpsbabel -i energympro -f ${REFERENCE}/track/energympro.cpo -o gpx,garminextensions -F ${TMPDIR}/energympro.gpx
+compare ${REFERENCE}/track/energympro.gpx ${TMPDIR}/energympro.gpx

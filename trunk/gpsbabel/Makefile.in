@@ -80,7 +80,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o  \
 	pocketfms_bc.o pocketfms_fp.o pocketfms_wp.o naviguide.o enigma.o \
 	vpl.o teletype.o jogmap.o bushnell.o bushnell_trl.o wintec_tes.o \
 	subrip.o garmin_xt.o garmin_fit.o lowranceusr4.o \
-        mtk_locus.o googledir.o mapbar_track.o mapfactor.o
+        mtk_locus.o googledir.o mapbar_track.o mapfactor.o energympro.o
 
 FMTS=@FMTS@
 
@@ -492,6 +492,7 @@ duplicate.o: duplicate.cc defs.h config.h queue.h zlib/zlib.h \
   src/core/datetime.h filterdefs.h
 easygps.o: easygps.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h
+energympro.o: energympro.cc defs.h config.h gbfile.h 
 enigma.o: enigma.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h
 exif.o: exif.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
