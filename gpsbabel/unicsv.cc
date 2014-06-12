@@ -521,6 +521,7 @@ unicsv_compare_fields(const QString& s, const field_t* f)
 static void
 unicsv_fondle_header(char* ibuf)
 {
+  // TODO: clean up this back and forth between QString and char*.
   QString s;
   char* buf = NULL;
   int column;
@@ -530,6 +531,7 @@ unicsv_fondle_header(char* ibuf)
    * If we see a tab in that header, we decree it to be tabsep.
    */
   unicsv_fieldsep = ",";
+  s = QString(ibuf); // main has set the codec to UTF-8.
   if (s.contains('\t')) {
     unicsv_fieldsep = "\t";
   } else if (s.contains(';')) {
@@ -541,7 +543,7 @@ unicsv_fondle_header(char* ibuf)
 
   /* convert the header line into native ascii */
   if (global_opts.charset != ascii) {
-    buf = cet_str_any_to_any(ibuf, global_opts.charset, ascii);
+    buf = cet_str_any_to_any(CSTR(s), global_opts.charset, ascii); // CSTR goes back to UTF-8.
     ibuf = buf;
   }
 
@@ -762,7 +764,7 @@ unicsv_parse_one_line(char* ibuf)
       break;
 
     case fld_bng_zone:
-      strncpy(bng_zone, s, sizeof(bng_zone) -1 );
+      strncpy(bng_zone, s, sizeof(bng_zone) -1);
       strupper(bng_zone);
       break;
 
@@ -1255,8 +1257,8 @@ unicsv_print_str(const QString& s)
   QString t;
   if (!s.isEmpty()) {
     t = strenquote(s, UNICSV_QUOT_CHAR);
-    // I'm not sure these three replacements are necessary; they're just a 
-    // slavish re-implementation of (what I think) the original C code 
+    // I'm not sure these three replacements are necessary; they're just a
+    // slavish re-implementation of (what I think) the original C code
     // was doing.
     t.replace("\r\n", ",");
     t.replace("\r", ",");
@@ -1272,11 +1274,11 @@ unicsv_print_data_time(const QDateTime& idt)
     return;
   }
   QDateTime dt = idt;
-    if (opt_utc) {
-      //time += atoi(opt_utc) * SECONDS_PER_HOUR;
-      dt = dt.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
-      dt = dt.toUTC();
-    }
+  if (opt_utc) {
+    //time += atoi(opt_utc) * SECONDS_PER_HOUR;
+    dt = dt.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
+    dt = dt.toUTC();
+  }
 
   unicsv_print_str(dt.toString("yyyy/MM/dd hh:mm:ss"));
 }
