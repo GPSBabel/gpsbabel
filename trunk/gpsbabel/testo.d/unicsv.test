@@ -14,3 +14,7 @@ compare ${REFERENCE}/garmin_txt-uni.csv ${TMPDIR}/garmin_txt-uni.csv
 gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx -o unicsv,utc=0 -F ${TMPDIR}/gcunicsv-1.csv
 gpsbabel -i unicsv,utc=0 -f ${REFERENCE}/gc/GC7FA4~unicsv.csv -o unicsv,utc=0 -F  ${TMPDIR}/gcunicsv-2.csv
 compare ${TMPDIR}/gcunicsv-1.csv ${TMPDIR}/gcunicsv-2.csv
+
+# check header detection features
+gpsbabel -i unicsv,utc=0 -f ${REFERENCE}/headerdetection.unicsv -x transform,trk=wpt -o gpx,garminextensions -F ${TMPDIR}/headerdetection~unicsv.gpx
+compare ${TMPDIR}/headerdetection~unicsv.gpx ${REFERENCE}/extensiondata~unicsv.gpx
