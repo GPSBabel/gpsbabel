@@ -519,11 +519,12 @@ unicsv_compare_fields(const QString& s, const field_t* f)
 
 
 static void
-unicsv_fondle_header(char* ibuf)
+unicsv_fondle_header(const char* ibuf)
 {
   // TODO: clean up this back and forth between QString and char*.
-  QString s;
+  QString s = QString(ibuf);
   char* buf = NULL;
+  char* cbuf_start = NULL;
   int column;
   const cet_cs_vec_t* ascii = &cet_cs_vec_ansi_x3_4_1968;	/* us-ascii */
 
@@ -531,7 +532,6 @@ unicsv_fondle_header(char* ibuf)
    * If we see a tab in that header, we decree it to be tabsep.
    */
   unicsv_fieldsep = ",";
-  s = QString(ibuf); // main has set the codec to UTF-8.
   if (s.contains('\t')) {
     unicsv_fieldsep = "\t";
   } else if (s.contains(';')) {
@@ -539,21 +539,22 @@ unicsv_fondle_header(char* ibuf)
   } else if (s.contains('|')) {
     unicsv_fieldsep = "|";
   }
-  s = s.toLower();
+  cbuf_start = xstrdup(CSTR(s.toLower()));
+  const char* cbuf = cbuf_start;
 
   /* convert the header line into native ascii */
   if (global_opts.charset != ascii) {
-    buf = cet_str_any_to_any(CSTR(s), global_opts.charset, ascii); // CSTR goes back to UTF-8.
-    ibuf = buf;
+    buf = cet_str_any_to_any(cbuf, global_opts.charset, ascii);
+    cbuf = buf;
   }
 
   column = -1;
-  while ((s = csv_lineparse(ibuf, unicsv_fieldsep, "\"", 0)) , !s.isEmpty()) {
+  while ((s = csv_lineparse(cbuf, unicsv_fieldsep, "\"", 0)) , !s.isEmpty()) {
     s = s.trimmed();
 
     field_t* f = &fields_def[0];
 
-    ibuf = NULL;
+    cbuf = NULL;
     column++;
     unicsv_fields_tab_ct++;
 
@@ -593,6 +594,9 @@ unicsv_fondle_header(char* ibuf)
   }
   if (buf) {
     xfree(buf);
+  }
+  if (cbuf_start) {
+    xfree(cbuf_start);
   }
 }
 
