@@ -11,7 +11,7 @@
       <latitude>41.027500</latitude>
       <range>2109328.437865</range>
     </LookAt>
-<!-- Normal waypoint style -->
+    <!-- Normal waypoint style -->
     <Style id="waypoint_n">
       <IconStyle>
         <Icon>
@@ -19,7 +19,7 @@
         </Icon>
       </IconStyle>
     </Style>
-<!-- Highlighted waypoint style -->
+    <!-- Highlighted waypoint style -->
     <Style id="waypoint_h">
       <IconStyle>
         <scale>1.2</scale>
@@ -48,81 +48,81 @@
       <BalloonStyle>
         <text><![CDATA[
 <!DOCTYPE html>
-        <html>
-        <head>
-        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-        <script>
-        $(document).ready(function() {
-          $("#tabs").tabs();
-        });
-        </script>
-        </head>
-        <body>
-        <div id="tabs">
-        <ul>
-          <li><a href="#fragment-1"><span>Description</span></a></li>
-          <li><a href="#fragment-2"><span>Logs</span></a></li>
-          <li><a href="#fragment-3"><span>Extras</span></a></li>
-        </ul>
-        
-        <div id="fragment-1">
-          <img align="right" src="$[gc_icon]" />
-          <a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
-          a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
-          Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
-          &nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
-          Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
-          <p />$[gc_issues]
-          $[gc_short_desc]
-          $[gc_long_desc]
-        </div>
-        <div id="fragment-2">
-          <img align="right" src="$[gc_icon]" />
-          <a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
-          a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
-          Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
-          &nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
-          Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
-          $[gc_logs]
-        </div>
-        <div id="fragment-3">
-          <img align="right" src="$[gc_icon]" />
-          <a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
-          a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
-          Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
-          &nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
-          Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
-          <h1>Extra Maps</h1>
-          <ul>
-            <li>
-            <a href="http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Maps</a>            </li>
-            <li>
-            <a href="http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Street View</a>            </li>
-            <li>
-            <a href="http://www.geocaching.com/map/default.aspx?lat=$[gc_lat]&lng=$[gc_lon]" target="_blank">Geocaching.com Google Map</a>            </li>
-            <li>
-            <a href="http://www.mytopo.com/maps.cfm?lat=$[gc_lat]&lon=$[gc_lon]&pid=groundspeak" target="_blank">MyTopo Maps</a>            </li>
-            <li>
-            <a href="http://www.mapquest.com/maps/map.adp?searchtype=address&formtype=latlong&latlongtype=decimal&latitude=$[gc_lat]&longitude=$[gc_lon]&zoom=10" target="_blank">MapQuest</a>            </li>
-            <li>
-            <a href="http://www.bing.com/maps/default.aspx?v=2&sp=point.$[gc_lat]$[gc_lon]" target="_blank">Bing Maps</a>            </li>
-            <li>
-            <a href="http://maps.yahoo.com/maps_result?lat=$[gc_lat]&lon=$[gc_lon]" target="_blank">Yahoo Maps</a>            </li>
-            <li>
-            <a href="http://maps.randmcnally.com/#s=screen&lat=$[gc_lat]&lon=$[gc_lon]&zoom=13&loc1=$[gc_lat],$[gc_lon]" target="_blank">Rand McNally</a>            </li>
-            <li>
-            <a href="http://msrmaps.com/image.aspx?Lon=$[gc_lon]&Lat=$[gc_lat]&w=1&ref=G|$[gc_lon],$[gc_lat]" target="_blank">MSR Maps (Formerly Terraserver)</a>            </li>
-            <li>
-            <a href="http://www.opencyclemap.org/?zoom=12&lat=$[gc_lat]&lon=$[gc_lon]" target="_blank">Open Cycle Maps</a>            </li>
-            <li>
-            <a href="http://www.openstreetmap.org/?mlat=$[gc_lat]&mlon=$[gc_lon]&zoom=12" target="_blank">Open Street Maps</a>            </li>
-          <ul>
-        </div>
-        </div>
-        </body>
-        </html>
+<html>
+<head>
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+<script>
+$(document).ready(function() {
+  $("#tabs").tabs();
+});
+</script>
+</head>
+<body>
+<div id="tabs">
+<ul>
+  <li><a href="#fragment-1"><span>Description</span></a></li>
+  <li><a href="#fragment-2"><span>Logs</span></a></li>
+  <li><a href="#fragment-3"><span>Extras</span></a></li>
+</ul>
+
+<div id="fragment-1">
+<img align="right" src="$[gc_icon]" />
+<a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
+Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
+&nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
+Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
+  <p />$[gc_issues]
+  $[gc_short_desc]
+  $[gc_long_desc]
+</div>
+<div id="fragment-2">
+<img align="right" src="$[gc_icon]" />
+<a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
+Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
+&nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
+Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
+  $[gc_logs]
+</div>
+<div id="fragment-3">
+<img align="right" src="$[gc_icon]" />
+<a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
+Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
+&nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
+Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
+  <h1>Extra Maps</h1>
+  <ul>
+    <li>
+    <a href="http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Maps</a></li>
+    <li>
+    <a href="http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Street View</a></li>
+    <li>
+    <a href="http://www.geocaching.com/map/default.aspx?lat=$[gc_lat]&lng=$[gc_lon]" target="_blank">Geocaching.com Google Map</a></li>
+    <li>
+    <a href="http://www.mytopo.com/maps.cfm?lat=$[gc_lat]&lon=$[gc_lon]&pid=groundspeak" target="_blank">MyTopo Maps</a></li>
+    <li>
+    <a href="http://www.mapquest.com/maps/map.adp?searchtype=address&formtype=latlong&latlongtype=decimal&latitude=$[gc_lat]&longitude=$[gc_lon]&zoom=10" target="_blank">MapQuest</a></li>
+    <li>
+    <a href="http://www.bing.com/maps/default.aspx?v=2&sp=point.$[gc_lat]$[gc_lon]" target="_blank">Bing Maps</a></li>
+    <li>
+    <a href="http://maps.yahoo.com/maps_result?lat=$[gc_lat]&lon=$[gc_lon]" target="_blank">Yahoo Maps</a></li>
+    <li>
+    <a href="http://maps.randmcnally.com/#s=screen&lat=$[gc_lat]&lon=$[gc_lon]&zoom=13&loc1=$[gc_lat],$[gc_lon]" target="_blank">Rand McNally</a></li>
+    <li>
+    <a href="http://msrmaps.com/image.aspx?Lon=$[gc_lon]&Lat=$[gc_lat]&w=1&ref=G|$[gc_lon],$[gc_lat]" target="_blank">MSR Maps (Formerly Terraserver)</a></li>
+    <li>
+    <a href="http://www.opencyclemap.org/?zoom=12&lat=$[gc_lat]&lon=$[gc_lon]" target="_blank">Open Cycle Maps</a></li>
+    <li>
+    <a href="http://www.openstreetmap.org/?mlat=$[gc_lat]&mlon=$[gc_lon]&zoom=12" target="_blank">Open Street Maps</a></li>
+  <ul>
+</div>
+</div>
+</body>
+</html>
 ]]></text>
       </BalloonStyle>
     </Style>
@@ -136,81 +136,81 @@
       <BalloonStyle>
         <text><![CDATA[
 <!DOCTYPE html>
-        <html>
-        <head>
-        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-        <script>
-        $(document).ready(function() {
-          $("#tabs").tabs();
-        });
-        </script>
-        </head>
-        <body>
-        <div id="tabs">
-        <ul>
-          <li><a href="#fragment-1"><span>Description</span></a></li>
-          <li><a href="#fragment-2"><span>Logs</span></a></li>
-          <li><a href="#fragment-3"><span>Extras</span></a></li>
-        </ul>
-        
-        <div id="fragment-1">
-          <img align="right" src="$[gc_icon]" />
-          <a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
-          a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
-          Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
-          &nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
-          Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
-          <p />$[gc_issues]
-          $[gc_short_desc]
-          $[gc_long_desc]
-        </div>
-        <div id="fragment-2">
-          <img align="right" src="$[gc_icon]" />
-          <a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
-          a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
-          Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
-          &nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
-          Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
-          $[gc_logs]
-        </div>
-        <div id="fragment-3">
-          <img align="right" src="$[gc_icon]" />
-          <a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
-          a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
-          Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
-          &nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
-          Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
-          <h1>Extra Maps</h1>
-          <ul>
-            <li>
-            <a href="http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Maps</a>            </li>
-            <li>
-            <a href="http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Street View</a>            </li>
-            <li>
-            <a href="http://www.geocaching.com/map/default.aspx?lat=$[gc_lat]&lng=$[gc_lon]" target="_blank">Geocaching.com Google Map</a>            </li>
-            <li>
-            <a href="http://www.mytopo.com/maps.cfm?lat=$[gc_lat]&lon=$[gc_lon]&pid=groundspeak" target="_blank">MyTopo Maps</a>            </li>
-            <li>
-            <a href="http://www.mapquest.com/maps/map.adp?searchtype=address&formtype=latlong&latlongtype=decimal&latitude=$[gc_lat]&longitude=$[gc_lon]&zoom=10" target="_blank">MapQuest</a>            </li>
-            <li>
-            <a href="http://www.bing.com/maps/default.aspx?v=2&sp=point.$[gc_lat]$[gc_lon]" target="_blank">Bing Maps</a>            </li>
-            <li>
-            <a href="http://maps.yahoo.com/maps_result?lat=$[gc_lat]&lon=$[gc_lon]" target="_blank">Yahoo Maps</a>            </li>
-            <li>
-            <a href="http://maps.randmcnally.com/#s=screen&lat=$[gc_lat]&lon=$[gc_lon]&zoom=13&loc1=$[gc_lat],$[gc_lon]" target="_blank">Rand McNally</a>            </li>
-            <li>
-            <a href="http://msrmaps.com/image.aspx?Lon=$[gc_lon]&Lat=$[gc_lat]&w=1&ref=G|$[gc_lon],$[gc_lat]" target="_blank">MSR Maps (Formerly Terraserver)</a>            </li>
-            <li>
-            <a href="http://www.opencyclemap.org/?zoom=12&lat=$[gc_lat]&lon=$[gc_lon]" target="_blank">Open Cycle Maps</a>            </li>
-            <li>
-            <a href="http://www.openstreetmap.org/?mlat=$[gc_lat]&mlon=$[gc_lon]&zoom=12" target="_blank">Open Street Maps</a>            </li>
-          <ul>
-        </div>
-        </div>
-        </body>
-        </html>
+<html>
+<head>
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+<script>
+$(document).ready(function() {
+  $("#tabs").tabs();
+});
+</script>
+</head>
+<body>
+<div id="tabs">
+<ul>
+  <li><a href="#fragment-1"><span>Description</span></a></li>
+  <li><a href="#fragment-2"><span>Logs</span></a></li>
+  <li><a href="#fragment-3"><span>Extras</span></a></li>
+</ul>
+
+<div id="fragment-1">
+<img align="right" src="$[gc_icon]" />
+<a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
+Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
+&nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
+Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
+  <p />$[gc_issues]
+  $[gc_short_desc]
+  $[gc_long_desc]
+</div>
+<div id="fragment-2">
+<img align="right" src="$[gc_icon]" />
+<a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
+Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
+&nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
+Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
+  $[gc_logs]
+</div>
+<div id="fragment-3">
+<img align="right" src="$[gc_icon]" />
+<a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
+Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
+&nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
+Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
+  <h1>Extra Maps</h1>
+  <ul>
+    <li>
+    <a href="http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Maps</a></li>
+    <li>
+    <a href="http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Street View</a></li>
+    <li>
+    <a href="http://www.geocaching.com/map/default.aspx?lat=$[gc_lat]&lng=$[gc_lon]" target="_blank">Geocaching.com Google Map</a></li>
+    <li>
+    <a href="http://www.mytopo.com/maps.cfm?lat=$[gc_lat]&lon=$[gc_lon]&pid=groundspeak" target="_blank">MyTopo Maps</a></li>
+    <li>
+    <a href="http://www.mapquest.com/maps/map.adp?searchtype=address&formtype=latlong&latlongtype=decimal&latitude=$[gc_lat]&longitude=$[gc_lon]&zoom=10" target="_blank">MapQuest</a></li>
+    <li>
+    <a href="http://www.bing.com/maps/default.aspx?v=2&sp=point.$[gc_lat]$[gc_lon]" target="_blank">Bing Maps</a></li>
+    <li>
+    <a href="http://maps.yahoo.com/maps_result?lat=$[gc_lat]&lon=$[gc_lon]" target="_blank">Yahoo Maps</a></li>
+    <li>
+    <a href="http://maps.randmcnally.com/#s=screen&lat=$[gc_lat]&lon=$[gc_lon]&zoom=13&loc1=$[gc_lat],$[gc_lon]" target="_blank">Rand McNally</a></li>
+    <li>
+    <a href="http://msrmaps.com/image.aspx?Lon=$[gc_lon]&Lat=$[gc_lat]&w=1&ref=G|$[gc_lon],$[gc_lat]" target="_blank">MSR Maps (Formerly Terraserver)</a></li>
+    <li>
+    <a href="http://www.opencyclemap.org/?zoom=12&lat=$[gc_lat]&lon=$[gc_lon]" target="_blank">Open Cycle Maps</a></li>
+    <li>
+    <a href="http://www.openstreetmap.org/?mlat=$[gc_lat]&mlon=$[gc_lon]&zoom=12" target="_blank">Open Street Maps</a></li>
+  <ul>
+</div>
+</div>
+</body>
+</html>
 ]]></text>
       </BalloonStyle>
     </Style>
@@ -229,7 +229,7 @@
       <Placemark>
         <name>
 <![CDATA[Points géodésiques du Québec]]>
-        </name>
+</name>
         <TimeStamp><when>2002-08-15T07:00:00Z</when></TimeStamp>
         <styleUrl>#geocache</styleUrl>
         <Style>
@@ -331,10 +331,7 @@ Smiles Pooh Bear
 
 Ce marqueur n'est pas au Québec mais c'est un marqueur géodésique dans Clarenville, Terre-Neuve, Canada!  
 
-A trouvé celui-ci tandis que chasse une cachette traditionnelle et pensé à cette cachette tout de suite!  Elle est située sur la montagne nue dans Clarenville - il y a aactually deux marqueurs à moins de 15 pieds d'un des autres sur la montagne nue...  Ours De Pooh De Sourires
-
-
-</p><p><b>Found it</b> by TravelBen 2005-06-26<br />[:D] 14h22
+A trouvé celui-ci tandis que chasse une cachette traditionnelle et pensé à cette cachette tout de suite!  Elle est située sur la montagne nue dans Clarenville - il y a aactually deux marqueurs à moins de 15 pieds d'un des autres sur la montagne nue...  Ours De Pooh De Sourires</p><p><b>Found it</b> by TravelBen 2005-06-26<br />[:D] 14h22
 
 Marqueur du Service de la Géodégie (c'est bien un &quot;g&quot; pas un &quot;s&quot;) du Québec.
 
@@ -356,11 +353,7 @@ UTM 18T 0443996 5037868
 
 This pole has everything:  An underground cable warning, a geodesic mark, a bus stop and a garage sale sign.
 
-Judging by the coordinates it looks like the coords should be 45°29'31.5&quot; -75°43'0&quot;  I placed the GPS antenna right against the marker, to no avail.
-
-</p><p><b>Found it</b> by Katou 2005-06-03<br />Un bo point géodésique a Lotbinière..en allant faire une nouvelle cache a l'île richelieu ;-)
-
-</p><p><b>Found it</b> by Gps_Gulliver&DauphinBleu 2005-05-29<br />Point Geodesique situe near Port de Plaisance de Longueuil
+Judging by the coordinates it looks like the coords should be 45°29'31.5&quot; -75°43'0&quot;  I placed the GPS antenna right against the marker, to no avail.</p><p><b>Found it</b> by Katou 2005-06-03<br />Un bo point géodésique a Lotbinière..en allant faire une nouvelle cache a l'île richelieu ;-)</p><p><b>Found it</b> by Gps_Gulliver&DauphinBleu 2005-05-29<br />Point Geodesique situe near Port de Plaisance de Longueuil
 sur le bord du fleuve st-laurent.
 Il y a des sentiers et une grande piste cyclable
 Enjoy !</p>]]></value>
@@ -373,7 +366,7 @@ Enjoy !</p>]]></value>
       <Placemark>
         <name>
 <![CDATA[Oozy rat in a sanitary zoo]]>
-        </name>
+</name>
         <TimeStamp><when>2003-06-29T07:00:00Z</when></TimeStamp>
         <styleUrl>#geocache</styleUrl>
         <Style>
@@ -445,8 +438,7 @@ Now that it's intuitively obvious to even the most casual observer where the cac
 <img SRC="http://www.mtgc.org/mtgc_member-banner.gif" WIDTH="500" HEIGHT="40" ALT="Member of Middle Tennessee GeoCachers Club [www.mtgc.org]" BORDER="0"></a></p>]]></value>
           </Data>
           <Data name="gc_logs">
-            <value><![CDATA[<p><b>Found it</b> by littlepod 2005-07-03<br />Enjoyed the puzzle. We seemed to be about 50ft off though. TFTC.</p><p><b>Write note</b> by robertlipe 2005-04-29<br />TB Drop to show he's hanging out in Nashville until we blast off for Geowoodstock in a few weeks.</p><p><b>Found it</b> by Big Bumblebee 2005-04-18<br />Found it a while ago.  Thanks.</p><p><b>Write note</b> by robertlipe 2005-03-27<br />I had to renew my permit with the CDC and in doing so, I trolled out here verified that the infectious ooze is fully within specification and industry accepted tolerance.   Ooze On!</p><p><b>Found it</b> by Virtual Babe 2004-12-27<br />This was a great cache, however on this day I considered it a FIFM cache (Fun, Invigorating, Frustrating and Maddening), especially when the cache was not replaced in the proper spot by the previous cacher!  Thanks anyway!!
-</p><p><b>Write note</b> by robertlipe 2004-01-12<br />I got a complaint from the CDC about oozy rat this weekend.     I went out tonight in the dark and verified that the infectious ooze is fully within specification and industry accepted tolerance. (Although I realize now I did misstate the cache container to the reporting officer when confronted.   It's, uuuuh, smaller than I said.)</p><p><b>Write note</b> by robertlipe 2003-10-04<br />In the expectation that this cache will get some traffic in the next 48 hours, Ryan and I checked it earlier today.   The Rat is Oozing just as we planned it.</p><p><b>Write note</b> by robertlipe 2003-07-03<br />It won't earn him a smiley face, but I've confirmed that rickrich would have indeed sunk the battleship!      Thanx for playing. You get a copy of the home game and some rice-a-roni...</p>]]></value>
+            <value><![CDATA[<p><b>Found it</b> by littlepod 2005-07-03<br />Enjoyed the puzzle. We seemed to be about 50ft off though. TFTC.</p><p><b>Write note</b> by robertlipe 2005-04-29<br />TB Drop to show he's hanging out in Nashville until we blast off for Geowoodstock in a few weeks.</p><p><b>Found it</b> by Big Bumblebee 2005-04-18<br />Found it a while ago.  Thanks.</p><p><b>Write note</b> by robertlipe 2005-03-27<br />I had to renew my permit with the CDC and in doing so, I trolled out here verified that the infectious ooze is fully within specification and industry accepted tolerance.   Ooze On!</p><p><b>Found it</b> by Virtual Babe 2004-12-27<br />This was a great cache, however on this day I considered it a FIFM cache (Fun, Invigorating, Frustrating and Maddening), especially when the cache was not replaced in the proper spot by the previous cacher!  Thanks anyway!!</p><p><b>Write note</b> by robertlipe 2004-01-12<br />I got a complaint from the CDC about oozy rat this weekend.     I went out tonight in the dark and verified that the infectious ooze is fully within specification and industry accepted tolerance. (Although I realize now I did misstate the cache container to the reporting officer when confronted.   It's, uuuuh, smaller than I said.)</p><p><b>Write note</b> by robertlipe 2003-10-04<br />In the expectation that this cache will get some traffic in the next 48 hours, Ryan and I checked it earlier today.   The Rat is Oozing just as we planned it.</p><p><b>Write note</b> by robertlipe 2003-07-03<br />It won't earn him a smiley face, but I've confirmed that rickrich would have indeed sunk the battleship!      Thanx for playing. You get a copy of the home game and some rice-a-roni...</p>]]></value>
           </Data>
         </ExtendedData>
         <Point>

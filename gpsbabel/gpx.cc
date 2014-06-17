@@ -865,7 +865,11 @@ gpx_end(const QString& el)
   static QDateTime gc_log_date;
   tag_type tag;
 
+  // Remove leading, trailing whitespace.
+  cdatastr = cdatastr.trimmed();
+
   tag = get_tag(current_tag, &passthrough);
+
   switch (tag) {
     /*
      * First, the tags that are file-global.
@@ -922,7 +926,7 @@ gpx_end(const QString& el)
     wpt_tmp->AllocGCData()->diff = x * 10;
     break;
   case tt_cache_hint:
-   wpt_tmp->AllocGCData()->hint = cdatastr.trimmed();
+   wpt_tmp->AllocGCData()->hint = cdatastr;
     break;
   case tt_cache_desc_long: {
     geocache_data* gc_data = wpt_tmp->AllocGCData();
@@ -930,7 +934,7 @@ gpx_end(const QString& el)
 // FIXME: Forcing a premature conversion here saves 4% on GPX read times
 // on large PQs.  Once cdatastrp becomes  real QString this is just (minimal)
 // overhead.
-    gc_data->desc_long.utfstring = QString(cdatastr).trimmed();
+    gc_data->desc_long.utfstring = QString(cdatastr);
   }
   break;
   case tt_cache_desc_short:
@@ -1132,10 +1136,10 @@ gpx_end(const QString& el)
     link_url = QString();
     break;
   case tt_wpttype_link_text:
-      link_text = cdatastr.trimmed();
+      link_text = cdatastr;
     break;
   case tt_wpttype_link_type:
-      link_type = cdatastr.trimmed();
+      link_type = cdatastr;
     break;
   case tt_unknown:
     end_something_else();
@@ -1156,7 +1160,7 @@ gpx_cdata(const QString& s)
 {
   QString* cdata;
   xml_tag* tmp_tag;
-  cdatastr = s;
+  cdatastr += s;
 
   if (!cur_tag) {
     return;
@@ -1171,7 +1175,7 @@ gpx_cdata(const QString& s)
   } else {
     cdata = &(cur_tag->cdata);
   }
-  *cdata = cdatastr;
+  *cdata = cdatastr.trimmed();
 }
 
 static void
@@ -1259,6 +1263,7 @@ gpx_read(void)
     case QXmlStreamReader::EndElement:
       gpx_end(reader->qualifiedName().toString());
       current_tag.chop(reader->qualifiedName().length() + 1);
+      cdatastr.clear();
       break;
 
     case QXmlStreamReader::Characters:
