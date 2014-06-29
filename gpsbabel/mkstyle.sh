@@ -16,6 +16,9 @@ if gsed v /dev/null 1>/dev/null 2>&1; then
 elif sed v /dev/null 1>/dev/null 2>&1; then
 	# sed is gnu sed
     SED=sed
+elif [ `uname -s` = "FreeBSD" ]; then
+       # BSD sed is fine
+    SED=/usr/bin/sed
 else
 	echo "Error: can't find gnu sed" 1>&2
 	exit 1
