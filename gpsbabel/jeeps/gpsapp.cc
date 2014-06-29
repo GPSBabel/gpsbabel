@@ -325,7 +325,10 @@ static int32 GPS_A000(const char* port)
           goto carry_on;
         }
 
-        if (GPS_Packet_Read(fd, &rec) <= 0) {
+        // Garmin 276C serial - not USB - sees a zero here, so we changed
+        // <= 0 to <0 on 2014-06-29 per Pierre Brial.
+         
+        if (GPS_Packet_Read(fd, &rec) < 0) {
           goto carry_on;
         }
 
