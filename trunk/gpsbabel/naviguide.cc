@@ -432,6 +432,5 @@ ff_vecs_t ng_vecs = {
   data_write,
   NULL,
   ng_args,
-  //CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-  CET_CHARSET_HEBREW, 0
+  CET_CHARSET_ASCII, 0 // Hebrew, but explictly encoded.
 };

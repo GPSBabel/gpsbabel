@@ -861,19 +861,16 @@ exif_waypt_from_exif_app(exif_app_t* app)
 
   tag = exif_find_tag(app, EXIF_IFD, EXIF_IFD_TAG_USER_CMT); /* UserComment */
   if (tag && (tag->size > 8)) {
-    char* str = NULL;
+    QString str;
     if (memcmp(tag->data, "ASCII\0\0\0", 8) == 0) {
-      str = xstrndup((char*)tag->data + 8, tag->size - 8);
+      wpt->notes = QString::fromLatin1((char*) tag->data + 8, tag->size - 8);
     } else if (memcmp(tag->data, "UNICODE\0", 8) == 0) {
-      int i, len = (tag->size - 8) / 2;
-      int16_t* s = (int16_t*)((char*)tag->data + 8);
-      for (i = 0; i < len; i++) {
-        s[i] = be_read16(&s[i]);  /* always BE ? */
-      }
-      str = cet_str_uni_to_any(s, len, global_opts.charset);
-    }
-    if (str != NULL) {
-      wpt->notes = str;
+      // I'm not at all sure that casting alignment away like this is a good
+      // idea in light of arches that don't allow unaligned loads, but in the
+      // absence of test data that captures it and the grubbiness of the code
+      // that was here before, I'm going to do this and then come back to it
+      // if it's a problem.
+      wpt->notes = QString::fromUtf16((const uint16_t*)((char*) tag->data + 8), tag->size - 8);
     }
   }
 

@@ -550,9 +550,6 @@ main(int argc, char* argv[])
     case '?':
       usage(argv[0],0);
       exit(0);
-    case 'l':
-      cet_disp_character_set_names(stdout);
-      exit(0);
     case 'p':
       optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
       inifile_done(global_opts.inifile);
