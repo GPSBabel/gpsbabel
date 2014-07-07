@@ -789,7 +789,7 @@ static char land_air_sea[] =
 
   "DESCRIPTION GPS Tracking Key Pro text\n"
   "EXTENSION txt\n"
-  "ENCODING LATIN1\n"
+  "# ENCODING ISO-8859-1\n"
 
   "DATUM WGS 84\n"
   "DATATYPE TRACK\n"
