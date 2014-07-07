@@ -49,49 +49,9 @@ static int cet_output = 0;
 /* %%% fixed inbuild character sets %%% */
 
 #include "cet/ansi_x3_4_1968.h"
-#include "cet/iso_8859_1.h"
-#include "cet/iso_8859_8.h"
-#include "cet/iso_8859_15.h"
 #include "cet/cp1252.h"
-#include "cet/cp1255.h"
 
 /* %%% short hand strings transmission for main character sets %%% */
-
-char*
-cet_str_utf8_to_iso8859_1(const char* src)
-{
-  return cet_str_utf8_to_any(src, &cet_cs_vec_iso_8859_1);
-}
-
-char*
-cet_str_iso8859_1_to_utf8(const char* src)
-{
-  return cet_str_any_to_utf8(src, &cet_cs_vec_iso_8859_1);
-}
-
-char*
-cet_str_utf8_to_iso8859_8(const char* src)
-{
-  return cet_str_utf8_to_any(src, &cet_cs_vec_iso_8859_8);
-}
-
-char*
-cet_str_iso8859_8_to_utf8(const char* src)
-{
-  return cet_str_any_to_utf8(src, &cet_cs_vec_iso_8859_8);
-}
-
-char*
-cet_str_utf8_to_iso8859_15(const char* src)
-{
-  return cet_str_utf8_to_any(src, &cet_cs_vec_iso_8859_15);
-}
-
-char*
-cet_str_iso8859_15_to_utf8(const char* src)
-{
-  return cet_str_any_to_utf8(src, &cet_cs_vec_iso_8859_15);
-}
 
 char*
 cet_str_utf8_to_us_ascii(const char* src)
@@ -110,47 +70,16 @@ cet_str_utf8_to_cp1252(const char* src)
 {
   return cet_str_utf8_to_any(src, &cet_cs_vec_cp1252);
 }
-
 char*
 cet_str_cp1252_to_utf8(const char* src)
 {
   return cet_str_any_to_utf8(src, &cet_cs_vec_cp1252);
 }
 
-char*
-cet_str_utf8_to_cp1255(const char* src)
-{
-  return cet_str_utf8_to_any(src, &cet_cs_vec_cp1255);
-}
-
-char*
-cet_str_cp1255_to_utf8(const char* src)
-{
-  return cet_str_any_to_utf8(src, &cet_cs_vec_cp1255);
-}
 short*
 cet_str_utf8_to_uni(const char* src, int* length)
 {
   return cet_str_any_to_uni(src, &cet_cs_vec_utf8, length);
-}
-
-
-
-/* helpers */
-
-char*
-cet_str_uni_to_any(const short* src, int length, const cet_cs_vec_t* dest_vec)
-{
-  char* res, *c;
-  const cet_cs_vec_t* cs = (dest_vec != NULL) ? dest_vec : &cet_cs_vec_ansi_x3_4_1968;
-
-  res = cet_str_uni_to_utf8(src, length);
-  if (cs != &cet_cs_vec_utf8) {
-    c = cet_str_utf8_to_any(res, cs);
-    xfree(res);
-    res = c;
-  }
-  return res;
 }
 
 /* %%% cet_str_any_to_any %%%
@@ -192,128 +121,6 @@ cet_valid_char(const char* src, const cet_cs_vec_t* vec)
   return cet_char_to_ucs4(*src, v, &value);
 }
 
-/* %%% include character set headers %%% */
-#if defined (CET_WANTED)
-#include "cet/iso_8859_2.h"
-#include "cet/cp1250.h"
-#include "cet/latin_greek_1.h"
-#include "cet/macintosh.h"
-#include "cet/cp1250.h"
-#include "cet/cp1251.h"
-#include "cet/cp1252.h"
-#include "cet/cp1253.h"
-#include "cet/cp1254.h"
-#include "cet/cp1255.h"
-#include "cet/cp1256.h"
-#include "cet/cp1257.h"
-#include "cet/ibm437.h"
-#include "cet/ibm850.h"
-#include "cet/ibm851.h"
-#include "cet/ibm852.h"
-#include "cet/ibm855.h"
-#include "cet/ibm857.h"
-#include "cet/ibm860.h"
-#include "cet/ibm861.h"
-#include "cet/ibm862.h"
-#include "cet/ibm863.h"
-#include "cet/ibm864.h"
-#include "cet/ibm865.h"
-#include "cet/ibm868.h"
-#include "cet/ibm869.h"
-#include "cet/iso_8859_1.h"
-#include "cet/iso_8859_10.h"
-#include "cet/iso_8859_13.h"
-#include "cet/iso_8859_14.h"
-#include "cet/iso_8859_15.h"
-#include "cet/iso_8859_2.h"
-#include "cet/iso_8859_3.h"
-#include "cet/iso_8859_4.h"
-#include "cet/iso_8859_5.h"
-#include "cet/iso_8859_6.h"
-#include "cet/iso_8859_7.h"
-#include "cet/iso_8859_8.h"
-#include "cet/iso_8859_9.h"
-#include "cet/koi8_r.h"
-#include "cet/koi8_ru.h"
-#include "cet/koi_8.h"
-#endif
-
-#if CET_WANTED
-#include "cet/ansi_x3_4_1968.h"
-#include "cet/atarist.h"
-#include "cet/baltic.h"
-#include "cet/bs_4730.h"
-#include "cet/bs_viewdata.h"
-#include "cet/csa_z243_4_1985_1.h"
-#include "cet/csa_z243_4_1985_2.h"
-#include "cet/csa_z243_4_1985_gr.h"
-#include "cet/csn_369103.h"
-#include "cet/cwi.h"
-#include "cet/dec_mcs.h"
-#include "cet/din_66003.h"
-#include "cet/ds_2089.h"
-#include "cet/ecma_cyrillic.h"
-#include "cet/es.h"
-#include "cet/es2.h"
-#include "cet/gb_1988_80.h"
-#include "cet/gost_19768_87.h"
-#include "cet/hp_roman8.h"
-#include "cet/ibm037.h"
-#include "cet/ibm1004.h"
-#include "cet/ibm1026.h"
-#include "cet/ibm1047.h"
-#include "cet/ibm256.h"
-#include "cet/ibm273.h"
-#include "cet/ibm277.h"
-#include "cet/ibm278.h"
-#include "cet/ibm280.h"
-#include "cet/ibm284.h"
-#include "cet/ibm285.h"
-#include "cet/ibm297.h"
-#include "cet/ibm500.h"
-#include "cet/ibm871.h"
-#include "cet/ibm891.h"
-#include "cet/ibm903.h"
-#include "cet/ibm904.h"
-#include "cet/iec_p27_1.h"
-#include "cet/iso_10367_box.h"
-#include "cet/iso_5427.h"
-#include "cet/iso_646_irv.h"
-#include "cet/iso_6937_2_25.h"
-#include "cet/iso_8859_supp.h"
-#include "cet/it.h"
-#include "cet/jis_c6220_1969_ro.h"
-#include "cet/jis_x0201.h"
-#include "cet/jus_i_b1_002.h"
-#include "cet/jus_i_b1_003_mac.h"
-#include "cet/jus_i_b1_003_serb.h"
-#include "cet/keybcs2.h"
-#include "cet/koi8_u.h"
-#include "cet/koi_7.h"
-#include "cet/koi_8_cs2.h"
-#include "cet/ksc5636.h"
-#include "cet/latin_greek_1.h"
-#include "cet/mac_is.h"
-#include "cet/macintosh.h"
-#include "cet/macintosh_ce.h"
-#include "cet/msz_7795_3.h"
-#include "cet/nats_dano.h"
-#include "cet/nats_sefi.h"
-#include "cet/nc_nc00_10.h"
-#include "cet/nextstep.h"
-#include "cet/nf_z_62_010.h"
-#include "cet/nf_z_62_010__1973_.h"
-#include "cet/ns_4551_1.h"
-#include "cet/ns_4551_2.h"
-#include "cet/pt.h"
-#include "cet/pt2.h"
-#include "cet/sami.h"
-#include "cet/sen_850200_b.h"
-#include "cet/sen_850200_c.h"
-#include "cet/tcvn.h"
-#include "cet/viscii.h"
-#include "cet/vps.h"
-#endif
 
 #ifdef DEBUG_MEM
 
@@ -409,342 +216,27 @@ cet_register(void)
 
   cet_cs_vec_ct = 0;
   cet_register_cs(&cet_cs_vec_utf8);			/* internal place holder */
-
+ // Alias for "US-ASCII".
 #ifdef cet_cs_name_ansi_x3_4_1968
   cet_register_cs(&cet_cs_vec_ansi_x3_4_1968);
-#endif
-#ifdef cet_cs_name_atarist
-  cet_register_cs(&cet_cs_vec_atarist);
-#endif
-#ifdef cet_cs_name_baltic
-  cet_register_cs(&cet_cs_vec_baltic);
-#endif
-#ifdef cet_cs_name_bs_4730
-  cet_register_cs(&cet_cs_vec_bs_4730);
-#endif
-#ifdef cet_cs_name_bs_viewdata
-  cet_register_cs(&cet_cs_vec_bs_viewdata);
 #endif
 #ifdef cet_cs_name_cp1250
   cet_register_cs(&cet_cs_vec_cp1250);
 #endif
-#ifdef cet_cs_name_cp1251
-  cet_register_cs(&cet_cs_vec_cp1251);
-#endif
 #ifdef cet_cs_name_cp1252
   cet_register_cs(&cet_cs_vec_cp1252);
-#endif
-#ifdef cet_cs_name_cp1253
-  cet_register_cs(&cet_cs_vec_cp1253);
-#endif
-#ifdef cet_cs_name_cp1254
-  cet_register_cs(&cet_cs_vec_cp1254);
 #endif
 #ifdef cet_cs_name_cp1255
   cet_register_cs(&cet_cs_vec_cp1255);
 #endif
-#ifdef cet_cs_name_cp1256
-  cet_register_cs(&cet_cs_vec_cp1256);
-#endif
-#ifdef cet_cs_name_cp1257
-  cet_register_cs(&cet_cs_vec_cp1257);
-#endif
-#ifdef cet_cs_name_csa_z243_4_1985_1
-  cet_register_cs(&cet_cs_vec_csa_z243_4_1985_1);
-#endif
-#ifdef cet_cs_name_csa_z243_4_1985_2
-  cet_register_cs(&cet_cs_vec_csa_z243_4_1985_2);
-#endif
-#ifdef cet_cs_name_csa_z243_4_1985_gr
-  cet_register_cs(&cet_cs_vec_csa_z243_4_1985_gr);
-#endif
-#ifdef cet_cs_name_csn_369103
-  cet_register_cs(&cet_cs_vec_csn_369103);
-#endif
-#ifdef cet_cs_name_cwi
-  cet_register_cs(&cet_cs_vec_cwi);
-#endif
-#ifdef cet_cs_name_dec_mcs
-  cet_register_cs(&cet_cs_vec_dec_mcs);
-#endif
-#ifdef cet_cs_name_din_66003
-  cet_register_cs(&cet_cs_vec_din_66003);
-#endif
-#ifdef cet_cs_name_ds_2089
-  cet_register_cs(&cet_cs_vec_ds_2089);
-#endif
-#ifdef cet_cs_name_ecma_cyrillic
-  cet_register_cs(&cet_cs_vec_ecma_cyrillic);
-#endif
-#ifdef cet_cs_name_es
-  cet_register_cs(&cet_cs_vec_es);
-#endif
-#ifdef cet_cs_name_es2
-  cet_register_cs(&cet_cs_vec_es2);
-#endif
-#ifdef cet_cs_name_gb_1988_80
-  cet_register_cs(&cet_cs_vec_gb_1988_80);
-#endif
-#ifdef cet_cs_name_gost_19768_87
-  cet_register_cs(&cet_cs_vec_gost_19768_87);
-#endif
-#ifdef cet_cs_name_hp_roman8
-  cet_register_cs(&cet_cs_vec_hp_roman8);
-#endif
-#ifdef cet_cs_name_ibm037
-  cet_register_cs(&cet_cs_vec_ibm037);
-#endif
-#ifdef cet_cs_name_ibm1004
-  cet_register_cs(&cet_cs_vec_ibm1004);
-#endif
-#ifdef cet_cs_name_ibm1026
-  cet_register_cs(&cet_cs_vec_ibm1026);
-#endif
-#ifdef cet_cs_name_ibm1047
-  cet_register_cs(&cet_cs_vec_ibm1047);
-#endif
-#ifdef cet_cs_name_ibm256
-  cet_register_cs(&cet_cs_vec_ibm256);
-#endif
-#ifdef cet_cs_name_ibm273
-  cet_register_cs(&cet_cs_vec_ibm273);
-#endif
-#ifdef cet_cs_name_ibm277
-  cet_register_cs(&cet_cs_vec_ibm277);
-#endif
-#ifdef cet_cs_name_ibm278
-  cet_register_cs(&cet_cs_vec_ibm278);
-#endif
-#ifdef cet_cs_name_ibm280
-  cet_register_cs(&cet_cs_vec_ibm280);
-#endif
-#ifdef cet_cs_name_ibm284
-  cet_register_cs(&cet_cs_vec_ibm284);
-#endif
-#ifdef cet_cs_name_ibm285
-  cet_register_cs(&cet_cs_vec_ibm285);
-#endif
-#ifdef cet_cs_name_ibm297
-  cet_register_cs(&cet_cs_vec_ibm297);
-#endif
-#ifdef cet_cs_name_ibm437
-  cet_register_cs(&cet_cs_vec_ibm437);
-#endif
-#ifdef cet_cs_name_ibm500
-  cet_register_cs(&cet_cs_vec_ibm500);
-#endif
-#ifdef cet_cs_name_ibm850
-  cet_register_cs(&cet_cs_vec_ibm850);
-#endif
-#ifdef cet_cs_name_ibm851
-  cet_register_cs(&cet_cs_vec_ibm851);
-#endif
-#ifdef cet_cs_name_ibm852
-  cet_register_cs(&cet_cs_vec_ibm852);
-#endif
-#ifdef cet_cs_name_ibm855
-  cet_register_cs(&cet_cs_vec_ibm855);
-#endif
-#ifdef cet_cs_name_ibm857
-  cet_register_cs(&cet_cs_vec_ibm857);
-#endif
-#ifdef cet_cs_name_ibm860
-  cet_register_cs(&cet_cs_vec_ibm860);
-#endif
-#ifdef cet_cs_name_ibm861
-  cet_register_cs(&cet_cs_vec_ibm861);
-#endif
-#ifdef cet_cs_name_ibm862
-  cet_register_cs(&cet_cs_vec_ibm862);
-#endif
-#ifdef cet_cs_name_ibm863
-  cet_register_cs(&cet_cs_vec_ibm863);
-#endif
-#ifdef cet_cs_name_ibm864
-  cet_register_cs(&cet_cs_vec_ibm864);
-#endif
-#ifdef cet_cs_name_ibm865
-  cet_register_cs(&cet_cs_vec_ibm865);
-#endif
-#ifdef cet_cs_name_ibm868
-  cet_register_cs(&cet_cs_vec_ibm868);
-#endif
-#ifdef cet_cs_name_ibm869
-  cet_register_cs(&cet_cs_vec_ibm869);
-#endif
-#ifdef cet_cs_name_ibm871
-  cet_register_cs(&cet_cs_vec_ibm871);
-#endif
-#ifdef cet_cs_name_ibm891
-  cet_register_cs(&cet_cs_vec_ibm891);
-#endif
-#ifdef cet_cs_name_ibm903
-  cet_register_cs(&cet_cs_vec_ibm903);
-#endif
-#ifdef cet_cs_name_ibm904
-  cet_register_cs(&cet_cs_vec_ibm904);
-#endif
-#ifdef cet_cs_name_iec_p27_1
-  cet_register_cs(&cet_cs_vec_iec_p27_1);
-#endif
-#ifdef cet_cs_name_iso_10367_box
-  cet_register_cs(&cet_cs_vec_iso_10367_box);
-#endif
-#ifdef cet_cs_name_iso_5427
-  cet_register_cs(&cet_cs_vec_iso_5427);
-#endif
-#ifdef cet_cs_name_iso_646_irv
-  cet_register_cs(&cet_cs_vec_iso_646_irv);
-#endif
-#ifdef cet_cs_name_iso_6937_2_25
-  cet_register_cs(&cet_cs_vec_iso_6937_2_25);
-#endif
 #ifdef cet_cs_name_iso_8859_1
   cet_register_cs(&cet_cs_vec_iso_8859_1);
-#endif
-#ifdef cet_cs_name_iso_8859_10
-  cet_register_cs(&cet_cs_vec_iso_8859_10);
-#endif
-#ifdef cet_cs_name_iso_8859_13
-  cet_register_cs(&cet_cs_vec_iso_8859_13);
-#endif
-#ifdef cet_cs_name_iso_8859_14
-  cet_register_cs(&cet_cs_vec_iso_8859_14);
 #endif
 #ifdef cet_cs_name_iso_8859_15
   cet_register_cs(&cet_cs_vec_iso_8859_15);
 #endif
-#ifdef cet_cs_name_iso_8859_2
-  cet_register_cs(&cet_cs_vec_iso_8859_2);
-#endif
-#ifdef cet_cs_name_iso_8859_3
-  cet_register_cs(&cet_cs_vec_iso_8859_3);
-#endif
-#ifdef cet_cs_name_iso_8859_4
-  cet_register_cs(&cet_cs_vec_iso_8859_4);
-#endif
-#ifdef cet_cs_name_iso_8859_5
-  cet_register_cs(&cet_cs_vec_iso_8859_5);
-#endif
-#ifdef cet_cs_name_iso_8859_6
-  cet_register_cs(&cet_cs_vec_iso_8859_6);
-#endif
-#ifdef cet_cs_name_iso_8859_7
-  cet_register_cs(&cet_cs_vec_iso_8859_7);
-#endif
 #ifdef cet_cs_name_iso_8859_8
   cet_register_cs(&cet_cs_vec_iso_8859_8);
-#endif
-#ifdef cet_cs_name_iso_8859_9
-  cet_register_cs(&cet_cs_vec_iso_8859_9);
-#endif
-#ifdef cet_cs_name_iso_8859_supp
-  cet_register_cs(&cet_cs_vec_iso_8859_supp);
-#endif
-#ifdef cet_cs_name_it
-  cet_register_cs(&cet_cs_vec_it);
-#endif
-#ifdef cet_cs_name_jis_c6220_1969_ro
-  cet_register_cs(&cet_cs_vec_jis_c6220_1969_ro);
-#endif
-#ifdef cet_cs_name_jis_x0201
-  cet_register_cs(&cet_cs_vec_jis_x0201);
-#endif
-#ifdef cet_cs_name_jus_i_b1_002
-  cet_register_cs(&cet_cs_vec_jus_i_b1_002);
-#endif
-#ifdef cet_cs_name_jus_i_b1_003_mac
-  cet_register_cs(&cet_cs_vec_jus_i_b1_003_mac);
-#endif
-#ifdef cet_cs_name_jus_i_b1_003_serb
-  cet_register_cs(&cet_cs_vec_jus_i_b1_003_serb);
-#endif
-#ifdef cet_cs_name_keybcs2
-  cet_register_cs(&cet_cs_vec_keybcs2);
-#endif
-#ifdef cet_cs_name_koi8_r
-  cet_register_cs(&cet_cs_vec_koi8_r);
-#endif
-#ifdef cet_cs_name_koi8_ru
-  cet_register_cs(&cet_cs_vec_koi8_ru);
-#endif
-#ifdef cet_cs_name_koi8_u
-  cet_register_cs(&cet_cs_vec_koi8_u);
-#endif
-#ifdef cet_cs_name_koi_7
-  cet_register_cs(&cet_cs_vec_koi_7);
-#endif
-#ifdef cet_cs_name_koi_8
-  cet_register_cs(&cet_cs_vec_koi_8);
-#endif
-#ifdef cet_cs_name_koi_8_cs2
-  cet_register_cs(&cet_cs_vec_koi_8_cs2);
-#endif
-#ifdef cet_cs_name_ksc5636
-  cet_register_cs(&cet_cs_vec_ksc5636);
-#endif
-#ifdef cet_cs_name_latin_greek_1
-  cet_register_cs(&cet_cs_vec_latin_greek_1);
-#endif
-#ifdef cet_cs_name_mac_is
-  cet_register_cs(&cet_cs_vec_mac_is);
-#endif
-#ifdef cet_cs_name_macintosh
-  cet_register_cs(&cet_cs_vec_macintosh);
-#endif
-#ifdef cet_cs_name_macintosh_ce
-  cet_register_cs(&cet_cs_vec_macintosh_ce);
-#endif
-#ifdef cet_cs_name_msz_7795_3
-  cet_register_cs(&cet_cs_vec_msz_7795_3);
-#endif
-#ifdef cet_cs_name_nats_dano
-  cet_register_cs(&cet_cs_vec_nats_dano);
-#endif
-#ifdef cet_cs_name_nats_sefi
-  cet_register_cs(&cet_cs_vec_nats_sefi);
-#endif
-#ifdef cet_cs_name_nc_nc00_10
-  cet_register_cs(&cet_cs_vec_nc_nc00_10);
-#endif
-#ifdef cet_cs_name_nextstep
-  cet_register_cs(&cet_cs_vec_nextstep);
-#endif
-#ifdef cet_cs_name_nf_z_62_010
-  cet_register_cs(&cet_cs_vec_nf_z_62_010);
-#endif
-#ifdef cet_cs_name_nf_z_62_010__1973_
-  cet_register_cs(&cet_cs_vec_nf_z_62_010__1973_);
-#endif
-#ifdef cet_cs_name_ns_4551_1
-  cet_register_cs(&cet_cs_vec_ns_4551_1);
-#endif
-#ifdef cet_cs_name_ns_4551_2
-  cet_register_cs(&cet_cs_vec_ns_4551_2);
-#endif
-#ifdef cet_cs_name_pt
-  cet_register_cs(&cet_cs_vec_pt);
-#endif
-#ifdef cet_cs_name_pt2
-  cet_register_cs(&cet_cs_vec_pt2);
-#endif
-#ifdef cet_cs_name_sami
-  cet_register_cs(&cet_cs_vec_sami);
-#endif
-#ifdef cet_cs_name_sen_850200_b
-  cet_register_cs(&cet_cs_vec_sen_850200_b);
-#endif
-#ifdef cet_cs_name_sen_850200_c
-  cet_register_cs(&cet_cs_vec_sen_850200_c);
-#endif
-#ifdef cet_cs_name_tcvn
-  cet_register_cs(&cet_cs_vec_tcvn);
-#endif
-#ifdef cet_cs_name_viscii
-  cet_register_cs(&cet_cs_vec_viscii);
-#endif
-#ifdef cet_cs_name_vps
-  cet_register_cs(&cet_cs_vec_vps);
 #endif
 
   if (cet_cs_vec_ct > 0) {
@@ -1034,7 +526,6 @@ void
 cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, const char* format)
 {
   char* cs_name_from, *cs_name_to;
-
   (void)format;
 
   converter = NULL;
@@ -1077,68 +568,6 @@ cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, cons
   }
 }
 
-/* %%% cet_disp_character_set_names %%%
- *
- * - Put all character set names and aliases to "FILE" - */
-
-void
-cet_disp_character_set_names(FILE* fout)
-{
-  int i, c, ac;
-  cet_cs_vec_t* vec;
-  cet_cs_vec_t** list;
-
-  if (cet_cs_alias_ct == 0) {
-    return;
-  }
-
-  c = 0;
-  for (vec = cet_cs_vec_root; vec != NULL; vec = vec->next) {
-    c++;
-  }
-
-  if (cet_cs_vec_ct != c) {
-    fatal(MYNAME ": internal error \"%s\"!\n", "cet_disp_character_set_names");
-  }
-
-  list = (cet_cs_vec_t**)xcalloc(c, sizeof(*list));
-
-  i = 0;								/* fill the list */
-  for (vec = cet_cs_vec_root; vec != NULL; vec = vec->next) {
-    list[i++] = vec;
-  }
-  qsort(list, c, sizeof(*list), cet_cs_vec_qsort_cb);		/* sort list by name */
-
-  ac = 0;
-
-  fprintf(fout, "GPSBabel builtin character sets: (-c option)\n");
-  for (i = 0; i < c; i++) {
-    char** a;
-
-    vec = list[i];
-    fprintf(fout, "\n* %s", vec->name);
-
-    a = (char**)vec->alias;
-    if (a != NULL) {
-      int column = 0;
-      int alias = 0;
-
-      while (*a != NULL) {
-        if (case_ignore_strcmp(*a, vec->name) != 0) {
-          ac++;
-          fprintf(fout, "%s%s%s",
-                  (alias++ > 0) ? ", " : "",
-                  (column++ % 6 == 0) ? "\n\t" : "",
-                  *a);
-        }
-        a++;
-      }
-    }
-  }
-  fprintf(fout, "\n\n");
-  fprintf(fout, "We have %d builtin character sets with %d aliases!\n", c, ac);
-  xfree(list);
-}
 
 /* %%% cet_fprintf / cet_vfprintf %%%
  *

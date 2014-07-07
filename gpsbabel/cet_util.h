@@ -59,7 +59,6 @@ extern cet_cs_vec_t cet_cs_vec_utf8;
 
 /* helpers */
 
-char* cet_str_uni_to_any(const short* src, int length, const cet_cs_vec_t* dest_vec);
 char* cet_str_any_to_any(const char* src, const cet_cs_vec_t* src_vec, const cet_cs_vec_t* dest_vec);
 int cet_valid_char(const char* src, const cet_cs_vec_t* vec);
 
