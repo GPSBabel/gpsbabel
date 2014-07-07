@@ -51,18 +51,8 @@ static int cet_output = 0;
 #include "cet/ansi_x3_4_1968.h"
 #include "cet/cp1252.h"
 
-/* %%% short hand strings transmission for main character sets %%% */
 
-char*
-cet_str_utf8_to_cp1252(const char* src)
-{
-  return cet_str_utf8_to_any(src, &cet_cs_vec_cp1252);
-}
-char*
-cet_str_cp1252_to_utf8(const char* src)
-{
-  return cet_str_any_to_utf8(src, &cet_cs_vec_cp1252);
-}
+/* %%% short hand strings transmission for main character sets %%% */
 
 short*
 cet_str_utf8_to_uni(const char* src, int* length)
@@ -151,14 +141,6 @@ cet_cs_alias_qsort_cb(const void* a, const void* b)
   return case_ignore_strcmp(va->name, vb->name);
 }
 
-static signed int
-cet_cs_vec_qsort_cb(const void* a, const void* b)
-{
-  const cet_cs_vec_t* va = *(cet_cs_vec_t**)a;
-  const cet_cs_vec_t* vb = *(cet_cs_vec_t**)b;
-  return case_ignore_strcmp(va->name, vb->name);
-}
-
 void
 cet_register_cs(cet_cs_vec_t* vec)
 {
@@ -208,23 +190,8 @@ cet_register(void)
 #ifdef cet_cs_name_ansi_x3_4_1968
   cet_register_cs(&cet_cs_vec_ansi_x3_4_1968);
 #endif
-#ifdef cet_cs_name_cp1250
-  cet_register_cs(&cet_cs_vec_cp1250);
-#endif
 #ifdef cet_cs_name_cp1252
   cet_register_cs(&cet_cs_vec_cp1252);
-#endif
-#ifdef cet_cs_name_cp1255
-  cet_register_cs(&cet_cs_vec_cp1255);
-#endif
-#ifdef cet_cs_name_iso_8859_1
-  cet_register_cs(&cet_cs_vec_iso_8859_1);
-#endif
-#ifdef cet_cs_name_iso_8859_15
-  cet_register_cs(&cet_cs_vec_iso_8859_15);
-#endif
-#ifdef cet_cs_name_iso_8859_8
-  cet_register_cs(&cet_cs_vec_iso_8859_8);
 #endif
 
   if (cet_cs_vec_ct > 0) {

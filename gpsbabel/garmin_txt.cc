@@ -61,6 +61,10 @@ static int current_line;
 static char* date_time_format = NULL;
 static int precision = 3;
 static time_t utc_offs = 0;
+// Having a Windows background, this software encodes degree marks in
+// Windows CP-1252.  We don't attempt to handle all the subtleties of that,
+// but since we write degree marks and we know how they're encoded, use this.
+static const int kDegreeSymbol = 0xB0;
 
 static gtxt_flags_t gtxt_flags;
 
@@ -424,7 +428,7 @@ print_course(const Waypoint* A, const Waypoint* B)		/* seems to be okay */
   if ((A != NULL) && (B != NULL) && (A != B)) {
     int course;
     course = si_round(waypt_course(A, B));
-    cet_gbfprintf(fout, &cet_cs_vec_cp1252, "%d%c true", course, 0xB0);
+    gbfprintf(fout, "%d%c true", course, kDegreeSymbol);
   }
 }
 
@@ -827,9 +831,9 @@ garmin_txt_write(void)
 
   grid_str = xstrdup(gt_get_mps_grid_longname(grid_index, MYNAME));
   while ((c = strchr(grid_str, '*'))) {
-    *c = 0xB0;  /* degree sign */
+    *c = kDegreeSymbol;  /* degree sign */
   }
-  cet_gbfprintf(fout, &cet_cs_vec_cp1252, "Grid\t%s\r\n", grid_str);
+  gbfprintf(fout, "Grid\t%s\r\n", grid_str);
   xfree(grid_str);
 
   datum_str = gt_get_mps_datum_name(datum_index);
