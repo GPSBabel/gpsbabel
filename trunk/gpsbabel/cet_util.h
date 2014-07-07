@@ -44,12 +44,6 @@ char* cet_str_iso8859_1_to_utf8(const char* src);
 char* cet_str_utf8_to_iso8859_1(const char* src);
 extern cet_cs_vec_t cet_cs_vec_iso8859_1;
 
-char* cet_str_iso8859_15_to_utf8(const char* src);
-char* cet_str_utf8_to_iso8859_15(const char* src);
-extern const cet_cs_vec_t cet_cs_vec_iso8859_15;
-
-char* cet_str_utf8_to_us_ascii(const char* src);
-char* cet_str_us_ascii_to_utf8(const char* src);
 extern cet_cs_vec_t cet_cs_vec_ansi_x3_4_1968;
 
 short* cet_str_utf8_to_uni(const char* src, int* length);
