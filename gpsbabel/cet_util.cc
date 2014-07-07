@@ -54,18 +54,6 @@ static int cet_output = 0;
 /* %%% short hand strings transmission for main character sets %%% */
 
 char*
-cet_str_utf8_to_us_ascii(const char* src)
-{
-  return cet_str_utf8_to_any(src, &cet_cs_vec_ansi_x3_4_1968);
-}
-
-char*
-cet_str_us_ascii_to_utf8(const char* src)
-{
-  return cet_str_any_to_utf8(src, &cet_cs_vec_ansi_x3_4_1968);
-}
-
-char*
 cet_str_utf8_to_cp1252(const char* src)
 {
   return cet_str_utf8_to_any(src, &cet_cs_vec_cp1252);
