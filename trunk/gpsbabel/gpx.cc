@@ -532,7 +532,9 @@ start_something_else(const QString el, const QXmlStreamAttributes& attr)
   new_tag->tagname = el;
 
   attr_count = attr.size();
-  new_tag->attributes = (char**)xcalloc(sizeof(char*),2*attr_count+1);
+  const QXmlStreamNamespaceDeclarations nsdecl = reader->namespaceDeclarations();
+  const int ns_count = nsdecl.size();
+  new_tag->attributes = (char**)xcalloc(sizeof(char*),2*(attr_count+ns_count)+1);
   avcp = new_tag->attributes;
   for (int i = 0; i < attr_count; i++)  {
     *avcp = xstrdup(attr[i].name().toString());
@@ -540,6 +542,13 @@ start_something_else(const QString el, const QXmlStreamAttributes& attr)
     *avcp = xstrdup(attr[i].value().toString());
     avcp++;
   }
+  for (int i = 0; i < ns_count; i++)  {
+    *avcp = xstrdup(nsdecl[i].prefix().toString().prepend("xmlns:"));
+    avcp++;
+    *avcp = xstrdup(nsdecl[i].namespaceUri().toString());
+    avcp++;
+  }
+
   *avcp = NULL; // this indicates the end of the attribute name value pairs.
 
   if (cur_tag) {
@@ -926,7 +935,7 @@ gpx_end(const QString& el)
     wpt_tmp->AllocGCData()->diff = x * 10;
     break;
   case tt_cache_hint:
-   wpt_tmp->AllocGCData()->hint = cdatastr;
+    wpt_tmp->AllocGCData()->hint = cdatastr;
     break;
   case tt_cache_desc_long: {
     geocache_data* gc_data = wpt_tmp->AllocGCData();
@@ -937,13 +946,12 @@ gpx_end(const QString& el)
     gc_data->desc_long.utfstring = QString(cdatastr);
   }
   break;
-  case tt_cache_desc_short:
-    {
-      geocache_data* gc_data = wpt_tmp->AllocGCData();
-      gc_data->desc_short.is_html = cache_descr_is_html;
-      gc_data->desc_short.utfstring = cdatastr;
-    }
-    break;
+  case tt_cache_desc_short: {
+    geocache_data* gc_data = wpt_tmp->AllocGCData();
+    gc_data->desc_short.is_html = cache_descr_is_html;
+    gc_data->desc_short.utfstring = cdatastr;
+  }
+  break;
   case tt_cache_terrain:
     x = cdatastr.toDouble();
     wpt_tmp->AllocGCData()->terr = x * 10;
@@ -1110,19 +1118,19 @@ gpx_end(const QString& el)
     // which toInt() doesn't do.
     //wpt_tmp->fix = (fix_type)(cdatastr.toInt() - 1);
     wpt_tmp->fix = (fix_type)(atoi(CSTR(cdatastr)) - 1);
+  }
+  if (wpt_tmp->fix < fix_2d) {
+    if ((cdatastr.compare("none", Qt::CaseInsensitive)) == 0) {
+      wpt_tmp->fix = fix_none;
+    } else if ((cdatastr.compare("dgps", Qt::CaseInsensitive)) == 0) {
+      wpt_tmp->fix = fix_dgps;
+    } else if ((cdatastr.compare("pps", Qt::CaseInsensitive)) == 0) {
+      wpt_tmp->fix = fix_pps;
+    } else {
+      wpt_tmp->fix = fix_unknown;
     }
-    if (wpt_tmp->fix < fix_2d) {
-      if ((cdatastr.compare("none", Qt::CaseInsensitive)) == 0) {
-        wpt_tmp->fix = fix_none;
-      } else if ((cdatastr.compare("dgps", Qt::CaseInsensitive)) == 0) {
-        wpt_tmp->fix = fix_dgps;
-      } else if ((cdatastr.compare("pps", Qt::CaseInsensitive)) == 0) {
-        wpt_tmp->fix = fix_pps;
-      } else {
-        wpt_tmp->fix = fix_unknown;
-      }
-    }
-    break;
+  }
+  break;
   case tt_wpttype_url:
     link_->url_ = cdatastr;
     break;
@@ -1136,10 +1144,10 @@ gpx_end(const QString& el)
     link_url = QString();
     break;
   case tt_wpttype_link_text:
-      link_text = cdatastr;
+    link_text = cdatastr;
     break;
   case tt_wpttype_link_type:
-      link_type = cdatastr;
+    link_type = cdatastr;
     break;
   case tt_unknown:
     end_something_else();
@@ -1246,7 +1254,7 @@ gpx_wr_deinit(void)
 void
 gpx_read(void)
 {
-    for (bool atEnd = false; !reader->atEnd() && !atEnd;)  {
+  for (bool atEnd = false; !reader->atEnd() && !atEnd;)  {
     reader->readNext();
     // do processing
     switch (reader->tokenType()) {
@@ -1283,8 +1291,8 @@ gpx_read(void)
   }
 
   if (reader->hasError())  {
-    Fatal() << MYNAME << "Read error:" << reader->errorString() 
-            << "File:" << iqfile->fileName()  
+    Fatal() << MYNAME << "Read error:" << reader->errorString()
+            << "File:" << iqfile->fileName()
             << "Line:" << reader->lineNumber()
             << "Column:" << reader->columnNumber();
   }
@@ -1805,7 +1813,7 @@ gpx_write(void)
   gpx_wversion_num = strtod(gpx_wversion, NULL) * 10;
 
   if (gpx_wversion_num <= 0) {
-    Fatal() << MYNAME << ": gpx version number of " 
+    Fatal() << MYNAME << ": gpx version number of "
             << gpx_wversion << "not valid.";
   }
 
