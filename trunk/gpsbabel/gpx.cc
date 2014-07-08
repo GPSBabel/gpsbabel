@@ -543,7 +543,7 @@ start_something_else(const QString el, const QXmlStreamAttributes& attr)
     avcp++;
   }
   for (int i = 0; i < ns_count; i++)  {
-    *avcp = xstrdup(nsdecl[i].prefix().toString().prepend("xmlns:"));
+    *avcp = xstrdup(nsdecl[i].prefix().toString().prepend(nsdecl[i].prefix().isEmpty()? "xmlns" : "xmlns:"));
     avcp++;
     *avcp = xstrdup(nsdecl[i].namespaceUri().toString());
     avcp++;
