@@ -66,7 +66,7 @@ If you can confirm success with others, please share with us.
   these devices typically look like Prolific, FTDI, or Silab usb/serial 
   devices to the host OS.  You'll need drivers for that whatever chip 
   your product uses for your operating system.  For the "A+ GPS Recorder",
-  the <link linkend="http://www.silabs.com/products/mcu/pages/usbtouartbridgevcpdrivers.aspx">Silicon Labs CP210x chip</link> is used.  On OS/X, you'll get
+  the <ulink url="http://www.silabs.com/products/mcu/pages/usbtouartbridgevcpdrivers.aspx">Silicon Labs CP210x chip</ulink> is used.  On OS/X, you'll get
   awesome device names like /dev/cu.usbmodem1d13410 - fortunately, our GUI
   makes that multiple choice so you don't have to guess.
 </para>
