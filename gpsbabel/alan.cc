@@ -539,7 +539,7 @@ static void wpr_read(void)
   route_head* RT;
 
   if (gbfread(&wprdata, sizeof(struct wprdata), 1, fin) != 1) {
-    fatal(MYNAME ": Read error on %s\n", fin->name);
+    fatal(MYNAME ": Read error on '%s'. Perhaps this isn't an alan file\n", fin->name);
   }
   wpr_swap(&wprdata);
   if (wprdata.wpthdr.id != WPT_HDR_ID ||
@@ -603,12 +603,12 @@ static void trl_read(void)
   for (i=0; i<MAXTRK; i+=2) {
     gbfseek(fin, 0x10000 * (i/2), SEEK_SET);
     if (gbfread(&(trldata.trklog[i]), sizeof(struct trklog), 2, fin) != 2) {
-      fatal(MYNAME ": Read error on %s\n", fin->name);
+      fatal(MYNAME ": Read error on '%s'. Perhaps this isn't an alan file.\n", fin->name);
     }
   }
   gbfseek(fin, 0x10000 * MAXTRK/2, SEEK_SET);
   if (gbfread(&(trldata.loghdr), sizeof(struct loghdr), 1, fin) != 1) {
-    fatal(MYNAME ": Read error on %s\n", fin->name);
+    fatal(MYNAME ": Read error on '%s'. Perhaps this isn't an alan file.\n", fin->name);
   }
   trl_swap(&trldata);
   if (trldata.loghdr.id != TRL_HDR_ID) {
