@@ -137,10 +137,15 @@ ng_fwrite_wp_data(const QString& s, const QString& d, ng_wp_data_t* wp_data, gbf
   int i;
   char z[50];
 
+  QTextCodec* codec = QTextCodec::codecForName("Hebrew");
+  if (!codec) {
+    fatal(MYNAME ": Unable to locate codec for Hebrew");
+  }
+
   memset(z, 0, 50);
   i = s.length();
   gbfwrite(&i, 1, 1, f);
-  gbfwrite(CSTR(s), 1, i, f);
+  gbfwrite(codec->fromUnicode(s).constData(), 1, i, f);
 
   gbfwrite(&wp_data->pad1[0], 8, 1, f);
   gbfputint32(wp_data->East, f);
@@ -150,7 +155,7 @@ ng_fwrite_wp_data(const QString& s, const QString& d, ng_wp_data_t* wp_data, gbf
 
   i = d.length();
   gbfwrite(&i, 1, 1, f);
-  gbfwrite(CSTR(d), 1, i, f);
+  gbfwrite(codec->fromUnicode(d).constData(), 1, i, f);
   gbfwrite(z, 44, 1, f);
 }
 
