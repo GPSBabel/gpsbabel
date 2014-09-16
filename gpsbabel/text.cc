@@ -132,7 +132,7 @@ text_disp(const Waypoint* wpt)
   if (wpt->description != wpt->shortname) {
     gbfprintf(file_out, "%s", CSTRc(wpt->description));
     if (!wpt->gc_data->placer.isEmpty()) {
-      gbfprintf(file_out, " by %s", wpt->gc_data->placer.toUtf8().data());
+      gbfprintf(file_out, " by %s", CSTR(wpt->gc_data->placer));
     }
   }
   if (wpt->gc_data->terr) {

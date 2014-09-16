@@ -1205,7 +1205,7 @@ get_gc_notes(const Waypoint* wp, int* symbol, char** notes, unsigned* notes_size
   if (!wp->description.isEmpty()) {
     gbfputs(wp->description, fd);
     if (!wp->gc_data->placer.isEmpty()) {
-      gbfprintf(fd, " by %s", wp->gc_data->placer.toUtf8().data());
+      gbfprintf(fd, " by %s", CSTR(wp->gc_data->placer));
     }
     gbfputc('\n', fd);
   }
@@ -1215,7 +1215,7 @@ get_gc_notes(const Waypoint* wp, int* symbol, char** notes, unsigned* notes_size
     gbfprintf(fd, "%s\n", waypoint_symbol(gc_sym));
     *symbol = gc_sym;
   } else if (!wp->icon_descr.isNull()) {
-    gbfprintf(fd, "%s\n", wp->icon_descr.toUtf8().data());
+    gbfprintf(fd, "%s\n", CSTR(wp->icon_descr));
   }
   switch (wp->gc_data->container) {
   case gc_micro:
@@ -1257,7 +1257,7 @@ get_gc_notes(const Waypoint* wp, int* symbol, char** notes, unsigned* notes_size
     gbfprintf(fd, "/T%u\n", wp->gc_data->terr / 10);
   }
   if (!wp->gc_data->hint.isEmpty() && !opt_hint_at_end) {
-    gbfprintf(fd, "HINT: %s\n", wp->gc_data->hint.toUtf8().data());
+    gbfprintf(fd, "HINT: %s\n", CSTR(wp->gc_data->hint));
   }
   if (!wp->gc_data->desc_short.utfstring.isEmpty() || !wp->gc_data->desc_long.utfstring.isEmpty()) {
     gbfputs("DESC: ", fd);
@@ -1312,7 +1312,7 @@ get_gc_notes(const Waypoint* wp, int* symbol, char** notes, unsigned* notes_size
     }
   }
   if (!wp->gc_data->hint.isEmpty() && opt_hint_at_end) {
-    gbfprintf(fd, "\nHINT: %s\n", wp->gc_data->hint.toUtf8().data());
+    gbfprintf(fd, "\nHINT: %s\n", CSTR(wp->gc_data->hint));
   }
   gbfputc(0, fd);
   *notes_size = fd->memlen;
