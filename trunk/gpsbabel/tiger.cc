@@ -210,7 +210,7 @@ tiger_disp(const Waypoint* wpt)
     }
   }
 
-  gbfprintf(file_out, "%f,%f:%s", lon, lat, pin.toUtf8().data());
+  gbfprintf(file_out, "%f,%f:%s", lon, lat, CSTR(pin));
   if (!nolabels) {
     QString temp;
     QString desc = csv_stringclean(wpt->description, ":");

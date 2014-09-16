@@ -104,13 +104,13 @@ html_disp(const Waypoint* wpt)
     if (wpt->HasUrlLink()) {
       char* d = html_entitize(CSTRc(wpt->description));
       UrlLink link = wpt->GetUrlLink();
-      gbfprintf(file_out, "<a href=\"%s\">%s</a>", link.url_.toUtf8().data(), d);
+      gbfprintf(file_out, "<a href=\"%s\">%s</a>", CSTR(link.url_), d);
       xfree(d);
     } else {
       gbfprintf(file_out, "%s", CSTRc(wpt->description));
     }
     if (!wpt->gc_data->placer.isEmpty()) {
-      gbfprintf(file_out, " by %s", wpt->gc_data->placer.toUtf8().data());
+      gbfprintf(file_out, " by %s", CSTR(wpt->gc_data->placer));
     }
   }
   gbfprintf(file_out, "</p></td>\n");

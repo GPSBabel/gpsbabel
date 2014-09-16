@@ -108,7 +108,7 @@ vcf_disp(const Waypoint* wpt)
 
   if (wpt->HasUrlLink()) {
     UrlLink link = wpt->GetUrlLink();
-    gbfprintf(file_out, "URL:%s\n", link.url_.toUtf8().data());
+    gbfprintf(file_out, "URL:%s\n", CSTR(link.url_));
   }
 
   gbfprintf(file_out, "NOTE:");
