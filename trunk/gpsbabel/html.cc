@@ -143,7 +143,7 @@ html_disp(const Waypoint* wpt)
     if (html_encrypt) {
       hint = rot13(wpt->gc_data->hint);
     } else {
-      hint = xstrdup(wpt->gc_data->hint.toUtf8().data());
+      hint = xstrdup(CSTR(wpt->gc_data->hint));
     }
     gbfprintf(file_out, "<p class=\"gpsbabelhint\"><strong>Hint:</strong> %s</p>\n", hint);
     xfree(hint);

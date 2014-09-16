@@ -814,14 +814,14 @@ Write_One_AN1_Waypoint(const Waypoint* wpt)
 
   if (rec->type == 0x12) {    /* image */
     if (wpt->icon_descr.contains(":\\")) {
-      rec->image_name = xstrdup(wpt->icon_descr.toUtf8().data());
+      rec->image_name = xstrdup(CSTR(wpt->icon_descr));
       rec->height = -244;
       rec->width = -1;
     }
   }
   if (!rec->image_name && !wpt->icon_descr.isNull()) {
 // FIXME: WTH?
-    char* t = xstrdup(wpt->icon_descr.toUtf8().data());
+    char* t = xstrdup(CSTR(wpt->icon_descr));
     FindIconByName(t, &rec->guid);
     xfree(t);
   }
