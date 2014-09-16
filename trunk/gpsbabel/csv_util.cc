@@ -36,7 +36,7 @@
 /* macros */
 #define LAT_DIR(a) a < 0.0 ? 'S' : 'N'
 #define LON_DIR(a) a < 0.0 ? 'W' : 'E'
-#define NONULL(a) a.isNull() ? "" : a.toLatin1().data()
+#define NONULL(a) a.isNull() ? "" : CSTRc(a)
 #define ISWHITESPACE(a) ((a == ' ') || (a == '\t'))
 
 /* convert excel time (days since 1900) to time_t and back again */
@@ -1687,13 +1687,13 @@ xcsv_waypt_pr(const Waypoint* wpt)
       if (wpt->HasUrlLink()) {
         UrlLink l = wpt->GetUrlLink();
         buff = QString().sprintf(fmp->printfc,
-                 !l.url_link_text_.isEmpty() ? l.url_link_text_.toUtf8().data() : fmp->val);
+                 !l.url_link_text_.isEmpty() ? CSTR(l.url_link_text_) : fmp->val);
       }
       break;
     case XT_ICON_DESCR:
       buff = QString().sprintf(fmp->printfc,
                 (!wpt->icon_descr.isNull()) ?
-                wpt->icon_descr.toUtf8().data() : fmp->val);
+                CSTR(wpt->icon_descr) : fmp->val);
       break;
 
       /* LATITUDE CONVERSION***********************************************/
@@ -1968,11 +1968,11 @@ xcsv_waypt_pr(const Waypoint* wpt)
       field_is_unknown = wpt->gc_data->type == gt_unknown;
       break;
     case XT_GEOCACHE_HINT:
-      buff = QString().sprintf(fmp->printfc, wpt->gc_data->hint.toUtf8().data());
+      buff = QString().sprintf(fmp->printfc, CSTR(wpt->gc_data->hint));
       field_is_unknown = !wpt->gc_data->hint.isEmpty();
       break;
     case XT_GEOCACHE_PLACER:
-      buff = QString().sprintf(fmp->printfc, wpt->gc_data->placer.toUtf8().data());
+      buff = QString().sprintf(fmp->printfc, CSTR(wpt->gc_data->placer));
       field_is_unknown = !wpt->gc_data->placer.isEmpty();
       break;
     case XT_GEOCACHE_ISAVAILABLE:

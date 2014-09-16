@@ -295,8 +295,8 @@ maggeo_waypt_pr(const Waypoint* waypointp)
            0 : waypointp->altitude);
   append(obuf, CSTRc(waypointp->shortname));
   append(obuf, CSTR(cname));
-  append(obuf, placer.toUtf8().data());
-  append(obuf, waypointp->gc_data->hint.toUtf8().data());
+  append(obuf, CSTR(placer));
+  append(obuf, CSTR(waypointp->gc_data->hint));
   append(obuf, ctype);
   append(obuf, placeddate.toUtf8());
   append(obuf, lfounddate.toUtf8());

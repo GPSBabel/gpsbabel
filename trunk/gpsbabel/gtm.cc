@@ -151,7 +151,7 @@ fwrite_string(gbfile* fd, const QString& str)
     fwrite_integer(fd, 0);
   } else {
     fwrite_integer(fd, str.length());
-    gbfwrite(str.toLatin1().data(), 1, str.length(), fd);
+    gbfwrite(CSTRc(str), 1, str.length(), fd);
   }
 }
 
