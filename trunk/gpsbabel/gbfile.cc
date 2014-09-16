@@ -787,13 +787,8 @@ gbfputs(const char* s, gbfile* file)
 int
 gbfputs(const QString& s, gbfile* file)
 {
-  // Why is this Latin1() and not toUtf8()?  Becuase our string data is
-  // already utf8 in most of the "C" places and calling toUtf8() here would
-  // double encode them.
-  const char* qs = xstrdup(s.toLatin1().data());
-  unsigned int l = strlen(qs);
-  int rv =  gbfwrite(qs, 1, l, file);
-  xfree(qs);
+  QByteArray qs = s.toUtf8();
+  int rv =  gbfwrite(qs.constData(), 1, qs.size(), file);
   return rv;
 }
 

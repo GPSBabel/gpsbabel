@@ -18,3 +18,7 @@ compare ${TMPDIR}/gcunicsv-1.csv ${TMPDIR}/gcunicsv-2.csv
 # check header detection features
 gpsbabel -i unicsv,utc=0 -f ${REFERENCE}/headerdetection.unicsv -x transform,trk=wpt -o gpx,garminextensions -F ${TMPDIR}/headerdetection~unicsv.gpx
 compare ${TMPDIR}/headerdetection~unicsv.gpx ${REFERENCE}/extensiondata~unicsv.gpx
+
+# check default encoding, i.e. utf-8 in and out.
+gpsbabel -i gpx -f ${REFERENCE}/unicsv_encoding.gpx -o unicsv -F ${TMPDIR}/unicsv_encoding.csv
+compare ${TMPDIR}/unicsv_encoding.csv ${REFERENCE}/unicsv_encoding.csv
