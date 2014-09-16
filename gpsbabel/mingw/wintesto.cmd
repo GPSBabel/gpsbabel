@@ -138,7 +138,7 @@ REM Magellan serial
 REM TODO
 
 REM Tiger
-REM This one is a little tacky, becuase it's a very lossy format.
+REM This one is a little tacky, because it's a very lossy format.
 REM so we simply test we can write it, and then read it and write it and
 REM get an identical file back.
 DEL %TMPDIR%\tiger

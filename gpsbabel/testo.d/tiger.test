@@ -1,5 +1,5 @@
 # Tiger
-# This one is a little tacky, becuase it's a very lossy format.
+# This one is a little tacky, because it's a very lossy format.
 # so we simply test we can write it, and then read it and write it and
 # get an identical file back.
 rm -f ${TMPDIR}/tiger

@@ -293,7 +293,7 @@ setshort_repeating_whitespace_ok(short_handle h, int l)
 
 /*
  * Set default name given to a waypoint if no valid is possible
- * becuase it was filtered by charsets or null or whatever.
+ * because it was filtered by charsets or null or whatever.
  */
 void
 setshort_defname(short_handle h, const char* s)

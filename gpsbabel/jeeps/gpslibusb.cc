@@ -43,9 +43,9 @@
  * sloppy about not obeying packet boundries.  If this is too high, the
  * multiple packets responding to the device inquriy will be glommed into
  * one packet and we'll misparse them.  If it's too low, we'll get partially
- * satisfied reads.  It turns out this isn't terrible becuase we still end
+ * satisfied reads.  It turns out this isn't terrible because we still end
  * up with DLE boundings and the upper layers (which are used to doing frame
- * coalescion into packets anyway becuase of their serial background) will
+ * coalescion into packets anyway because of their serial background) will
  * compensate.
  */
 #define TMOUT_I 5000 /*  Milliseconds to timeout intr pipe access. */
@@ -199,9 +199,9 @@ gusb_atexit_teardown(void)
  * after the RET2INTR that immediately follows the REQBLK (and why is it
  * telling us to go into bulk mode followed by an immeidate EOF, anyway?)
  * that follows the request for product ID.   100% reproducible on Mac and
- * Linux.    Of course, we don't see this on the Windows system becuase
+ * Linux.    Of course, we don't see this on the Windows system because
  * we don't have to jump through hooops to clear the spec-violating out
- * of state toggles there becuase those systems see only one configuration
+ * of state toggles there because those systems see only one configuration
  * set ever.
  *
  * Grrrr!
@@ -371,7 +371,7 @@ garmin_usb_start(struct usb_device* dev, libusb_unit_data* lud)
     lud->product_id = gusb_reset_toggles();
     switch (lud->product_id) {
       // Search for "Venture HC" for more on this siliness..
-      // It's a case instead of an 'if' becuase I have a
+      // It's a case instead of an 'if' because I have a
       // feeling there are more affected models either
       // on the market or on the way.
     case 695:
