@@ -185,7 +185,7 @@ lmx_write_xml(int tag, const QString& data, int indent)
     gbfputc(0x03, ofd); // inline string follows
     gbfputcstr(data, ofd);
   } else {
-    char* tmp_ent = xml_entitize(data.toUtf8().data());
+    char* tmp_ent = xml_entitize(CSTR(data));
     gbfputs(tmp_ent, ofd);
     xfree(tmp_ent);
   }

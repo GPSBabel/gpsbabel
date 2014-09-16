@@ -240,7 +240,7 @@ xol_waypt_disp_cb(const Waypoint* wpt)
   gbfprintf(fout, "%*s<shape type=\"waypoint\"", space++*2, "");
   xol_write_string("name", name);
   xol_write_string("comment", wpt->notes);
-  xol_write_string("icon", wpt->icon_descr.toUtf8().data());
+  xol_write_string("icon", wpt->icon_descr);
   if (wpt->creation_time.isValid()) {
     xol_write_time(wpt);
   }

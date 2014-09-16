@@ -1437,7 +1437,7 @@ write_waypoint(const Waypoint* wp)
   if (symbol < 0) {
     symbol = 0;
     if (!wp->icon_descr.isNull()) {
-      symbol = waypoint_symbol_index(wp->icon_descr.toUtf8().data());
+      symbol = waypoint_symbol_index(CSTR(wp->icon_descr));
     }
   }
   p->symbol = symbol;

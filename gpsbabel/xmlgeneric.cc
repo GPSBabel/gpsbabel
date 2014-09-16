@@ -62,7 +62,7 @@ xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 {
   xg_tag_mapping* tm;
   for (tm = xg_tag_tbl; tm->tag_cb != NULL; tm++) {
-    if (str_match(tag.toUtf8().data(), tm->tag_name) && (cb_type == tm->cb_type)) {
+    if (str_match(CSTR(tag), tm->tag_name) && (cb_type == tm->cb_type)) {
       return tm->tag_cb;
     }
   }

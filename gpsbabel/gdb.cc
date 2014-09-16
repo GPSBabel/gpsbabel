@@ -443,7 +443,7 @@ gdb_write_cstr_list(const char* str)
 static void
 gdb_write_cstr_list(const QString& str)
 {
-  return gdb_write_cstr_list(str.toLatin1().data());
+  return gdb_write_cstr_list(CSTRc(str));
 }
 
 static void
@@ -1438,7 +1438,7 @@ write_waypoint(
     cnt += wpt->url_link_list_.size();
     FWRITE_i32(cnt);
     foreach(UrlLink l, wpt->GetUrlLinks()) {
-      FWRITE_CSTR(l.url_.toUtf8().data());
+      FWRITE_CSTR(l.url_);
     }
   }
 

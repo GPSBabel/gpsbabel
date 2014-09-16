@@ -777,10 +777,10 @@ Write_One_AN1_Waypoint(const Waypoint* wpt)
 #if NEW_STRINGS
     char* extra = (char*) xmalloc(25 + wpt->gc_data->placer.length() + wpt->shortname.length());
 #else
-    char* extra = (char*) xmalloc(25 + strlen(wpt->gc_data->placer.toUtf8().data()) + strlen(wpt->shortname));
+    char* extra = (char*) xmalloc(25 + strlen(CSTR(wpt->gc_data->placer)) + strlen(wpt->shortname));
 #endif
     sprintf(extra, "\r\nBy %s\r\n%s (%1.1f/%1.1f)",
-            wpt->gc_data->placer.toUtf8().data(),
+            CSTR(wpt->gc_data->placer),
             CSTRc(wpt->shortname), wpt->gc_data->diff/10.0,
             wpt->gc_data->terr/10.0);
     rec->name = xstrappend(rec->name, extra);
@@ -791,7 +791,7 @@ Write_One_AN1_Waypoint(const Waypoint* wpt)
     UrlLink l = wpt->GetUrlLink();
     int len = 7 + l.url_.length();
     char* extra = (char*)xmalloc(len);
-    sprintf(extra, "{URL=%s}", l.url_.toUtf8().data());
+    sprintf(extra, "{URL=%s}", CSTR(l.url_));
     rec->name = xstrappend(rec->name, extra);
     xfree(extra);
     if(rec->url) {

@@ -159,7 +159,7 @@ gpsutil_disp(const Waypoint* wpt)
              (wpt->altitude < 0.0)) ? 0 : wpt->altitude,
             'm',
             CSTRc(wpt->description) ? tdesc : "",
-            icon_token.toUtf8().data());
+            CSTR(icon_token));
 
   xfree(tdesc);
 }

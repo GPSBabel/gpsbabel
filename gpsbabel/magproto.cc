@@ -1415,7 +1415,7 @@ mag_waypt_pr(const Waypoint* waypointp)
           wpt_len,
           CSTRc(owpt),
           CSTRc(odesc),
-          icon_token.toUtf8().data());
+          CSTR(icon_token));
   mag_writemsg(obuf);
 
   if (!is_file) {
