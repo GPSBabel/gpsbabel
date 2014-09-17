@@ -397,7 +397,7 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp)
   }
 
   if (global_opts.debug_level >= 1)
-    printf(MYNAME " parse_waypt: Waypt name = %s Lat = %f Lon = %f alt = %f\n",CSTRc(wpt_tmp->shortname), wpt_tmp->latitude,
+    printf(MYNAME " parse_waypt: Waypt name = %s Lat = %f Lon = %f alt = %f\n",qPrintable(wpt_tmp->shortname), wpt_tmp->latitude,
            wpt_tmp->longitude, wpt_tmp->altitude);
 
   text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
@@ -562,7 +562,7 @@ lowranceusr_parse_trails(void)
     }
 
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " parse_trails: trail name = %s\n", CSTRc(trk_head->rte_name));
+      printf(MYNAME " parse_trails: trail name = %s\n", qPrintable(trk_head->rte_name));
     }
 
     /* visible */
@@ -729,7 +729,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
   gbfwrite(CSTRc(name), 1, text_len, file_out);
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " waypt_disp: Waypt name = %s\n", CSTRc(name));
+    printf(MYNAME " waypt_disp: Waypt name = %s\n", qPrintable(name));
   }
 
   /**
