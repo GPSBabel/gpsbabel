@@ -497,7 +497,7 @@ osm_node(xg_string args, const QXmlStreamAttributes* attrv)
     QString atstr = attrv->value("id").toString();
     wpt->description =  "osm-id " + atstr;
     if (waypoints.contains(atstr)) {
-      warning(MYNAME ": Duplicate osm-id %s!\n", CSTR(atstr));
+      warning(MYNAME ": Duplicate osm-id %s!\n", qPrintable(atstr));
     } else {
       waypoints.insert(atstr, wpt);
       wpt->wpt_flags.fmt_use = 1;
@@ -597,7 +597,7 @@ osm_way_nd(xg_string args, const QXmlStreamAttributes* attrv)
       tmp = new Waypoint(*ctmp);
       route_add_wpt(rte, tmp);
     } else {
-      warning(MYNAME ": Way reference id \"%s\" wasn't listed under nodes!\n", CSTR(atstr));
+      warning(MYNAME ": Way reference id \"%s\" wasn't listed under nodes!\n", qPrintable(atstr));
     }
   }
 }

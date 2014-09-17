@@ -1451,7 +1451,7 @@ exif_write(void)
     if (exif_wpt_ref == NULL) {
       warning(MYNAME ": No point with a valid timestamp found.\n");
     } else if (abs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t()) > frame) {
-      warning(MYNAME ": No matching point found for image date %s!\n", CSTR(str));
+      warning(MYNAME ": No matching point found for image date %s!\n", qPrintable(str));
       if (exif_wpt_ref != NULL) {
         QString str = exif_time_str(exif_wpt_ref->creation_time.toTime_t());
         warning(MYNAME ": Best is from %s, %d second(s) away.\n",

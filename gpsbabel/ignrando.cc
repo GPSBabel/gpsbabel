@@ -125,7 +125,7 @@ ignr_etape_pos(xg_string args, const QXmlStreamAttributes* attrv)
   ignr_xml_error((wpt == NULL) || (args.isEmpty()));
 
   if (2 != sscanf(CSTRc(args), "%lf,%lf", &wpt->latitude, &wpt->longitude)) {
-    fatal(MYNAME ": Invalid coordinates \"%s\"!\n", CSTRc(args));
+    fatal(MYNAME ": Invalid coordinates \"%s\"!\n", qPrintable(args));
   }
 }
 
@@ -138,7 +138,7 @@ ignr_etape_alt(xg_string args, const QXmlStreamAttributes* attrv)
   }
 
   if (1 != sscanf(CSTRc(args), "%lf", &wpt->altitude)) {
-    fatal(MYNAME ": Invalid altitude \"%s\"!\n", CSTRc(args));
+    fatal(MYNAME ": Invalid altitude \"%s\"!\n", qPrintable(args));
   }
 }
 

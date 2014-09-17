@@ -92,7 +92,7 @@ void dir_s(xg_string args, const QXmlStreamAttributes*)
     my_gdx_info->to_device.basename = xstrdup(base);
     my_gdx_info->to_device.extension = xstrdup(ext);
   } else {
-    fatal(MYNAME ":Unknown direction '%s'\n", CSTRc(args));
+    fatal(MYNAME ":Unknown direction '%s'\n", qPrintable(args));
   }
 
   if (base) {

@@ -751,7 +751,7 @@ serial_write_route_end(const route_head* route)
     rte_name = "NO NAME";
   }
   if (route_id_ptr > MAX_ROUTE_LENGTH) {
-    fatal(MYNAME ": Route %s too long\n", CSTRc(route->rte_name));
+    fatal(MYNAME ": Route %s too long\n", qPrintable(route->rte_name));
   }
 
   src = (route_id_ptr + MAX_SUBROUTE_LENGTH) / MAX_SUBROUTE_LENGTH;

@@ -749,7 +749,7 @@ data_read(void)
       datum = GPS_Lookup_Datum_Index(buff);
 
       if (datum < 0) {
-        fatal(MYNAME ": Unsupported datum '%s'.\n", CSTR(buff));
+        fatal(MYNAME ": Unsupported datum '%s'.\n", qPrintable(buff));
       }
     } else if (linecount == 3) {
       if (buff.startsWith( "Altitude is in ", Qt::CaseInsensitive)) {
@@ -761,7 +761,7 @@ data_read(void)
           altunit = 'm';
           alt_scale = 1.0;
         } else {
-          fatal(MYNAME ": Unknown unit (%s) used by altitude values!\n", CSTR(unit));
+          fatal(MYNAME ": Unknown unit (%s) used by altitude values!\n", qPrintable(unit));
         }
       }
     } else if ((linecount == 5) && (ozi_objective == trkdata)) {
