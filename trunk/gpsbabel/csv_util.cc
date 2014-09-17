@@ -24,12 +24,14 @@
 #include <math.h>
 #include <stdlib.h>
 #include <QtCore/QRegExp>
+
 #include "defs.h"
 #include "csv_util.h"
-#include "grtcirc.h"
-#include "strptime.h"
-#include "jeeps/gpsmath.h"
 #include "garmin_fs.h"
+#include "grtcirc.h"
+#include "jeeps/gpsmath.h"
+#include "src/core/logging.h"
+#include "strptime.h"
 
 #define MYNAME "CSV_UTIL"
 
@@ -175,15 +177,6 @@ static UrlLink* link_;
 /*     usage: p = csv_stringclean(stringtoclean, "&,\"")             */
 /*            (strip out ampersands, commas, and quotes.             */
 /*********************************************************************/
-// Implement the C version via Qt - the reverse of most of our shims.
-char*
-csv_stringclean(const char* source, const char* chararray)
-{
-  /* Make a copy of the source... */
-  QString cleansed(csv_stringclean(QString(source), chararray));
-  return xstrdup(cleansed);
-}
-
 QString
 csv_stringclean(const QString& source, const QString& to_nuke)
 {
@@ -749,6 +742,23 @@ xcsv_file_init(void)
   xcsv_file.gps_datum = GPS_DATUM_WGS84;
 }
 
+void validate_fieldmap(field_map_t* fmp, bool is_output) {
+  QString qkey = fmp->key;
+  QString qval = fmp->val;
+  QString qprintfc = fmp->printfc;
+
+  if (qkey.isEmpty()) {
+    Fatal() << MYNAME << ": xcsv style is missing" << 
+            (is_output ? "output" : "input") << "field type.";
+  }
+  if (!fmp->val) {
+    Fatal() << MYNAME << ": xcsv style" << qkey << "is missing default.";
+  }
+  if (is_output && !fmp->printfc) {
+    Fatal() << MYNAME << ": xcsv style" << qkey << "output is missing format specifier.";
+  }
+}
+
 /*****************************************************************************/
 /* xcsv_ifield_add() - add input field to ifield queue.                      */
 /* usage: xcsv_ifield_add("DESCRIPTION", "", "%s")                           */
@@ -763,6 +773,7 @@ xcsv_ifield_add(char* key, char* val, char* pfc)
   fmp->hashed_key = xm ? xm->xt_token : -1;
   fmp->val = val;
   fmp->printfc = pfc;
+  validate_fieldmap(fmp, false);
 
   ENQUEUE_TAIL(&xcsv_file.ifield, &fmp->Q);
   xcsv_file.ifield_ct++;
@@ -783,6 +794,7 @@ xcsv_ofield_add(char* key, char* val, char* pfc, int options)
   fmp->val = val;
   fmp->printfc = pfc;
   fmp->options = options;
+  validate_fieldmap(fmp, true);
 
   ENQUEUE_TAIL(xcsv_file.ofield, &fmp->Q);
   xcsv_file.ofield_ct++;
@@ -1598,7 +1610,6 @@ xcsv_waypt_pr(const Waypoint* wpt)
 
   i = 0;
   QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
-    char* obuff;
     double lat = latitude;
     double lon = longitude;
     /*
@@ -1657,7 +1668,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
         anyname = wpt->notes;
       }
       if (anyname.isEmpty()) {
-        anyname = xstrdup(fmp->val);
+        anyname = fmp->val;
       }
       buff = QString().sprintf(fmp->printfc, CSTR(anyname));
       }
@@ -2113,10 +2124,10 @@ xcsv_waypt_pr(const Waypoint* wpt)
       warning(MYNAME ": Unknown style directive: %s\n", fmp->key);
       break;
     }
-    obuff = csv_stringclean(CSTR(buff), xcsv_file.badchars);
+    QString obuff = csv_stringclean(buff, xcsv_file.badchars);
 
     if (field_is_unknown && fmp->options & OPTIONS_OPTIONAL) {
-      goto next;
+      continue;
     }
 
     if (xcsv_file.field_encloser) {
@@ -2128,18 +2139,14 @@ xcsv_waypt_pr(const Waypoint* wpt)
      * ""%s"" to smuggle bad characters through.
      */
     if (0 == strcmp(fmp->printfc, "\"%s\"")) {
-      gbfprintf(xcsv_file.xcsvfp, "\"%s\"", obuff);
-    } else {
-      gbfprintf(xcsv_file.xcsvfp, "%s", obuff);
+      obuff = '"' + obuff + '"';
     }
+    gbfputs(obuff, xcsv_file.xcsvfp);
 
     if (xcsv_file.field_encloser) {
       /* print the enclosing character(s) */
       gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.field_encloser);
     }
-
-next:
-    xfree(obuff);
   }
 
   gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);

@@ -100,7 +100,6 @@ QString gbfgets(char* buf, int len, gbfile* file);
 int gbvfprintf(gbfile* file, const char* format, va_list ap);
 int gbfprintf(gbfile* file, const char* format, ...);
 int gbfputc(int c, gbfile* file);
-int gbfputs(const char* s, gbfile* file);
 int gbfputs(const QString& s, gbfile* file);
 int gbfwrite(const void* buf, const gbsize_t size, const gbsize_t members, gbfile* file);
 int gbfflush(gbfile* file);
@@ -132,10 +131,8 @@ int gbfputint32(const int32_t i, gbfile* file);
 int gbfputdbl(const double d, gbfile* file);	// write a double value
 int gbfputflt(const float f, gbfile* file);	// write a float value
 
-int gbfputcstr(const char* s, gbfile* file);	// write string including '\0'
 int gbfputcstr(const QString& s, gbfile* file);	// write string including '\0'
 
-int gbfputpstr(const char* s, gbfile* file);	// write as pascal string
 int gbfputpstr(const QString& s, gbfile* file);	// write as pascal string
 
 gbsize_t gbfcopyfrom(gbfile* file, gbfile* src, gbsize_t count);
