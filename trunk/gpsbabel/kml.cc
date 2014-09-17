@@ -408,7 +408,7 @@ void gx_trk_coord(xg_string args, const QXmlStreamAttributes*)
   // It is not clear that coord elements without altitude are allowed, but our
   // writer produces them.
   if (0 != n && 2 != n && 3 != n) {
-    fatal(MYNAME ": gx:coord field decode failure on \"%s\".\n", CSTR(args));
+    fatal(MYNAME ": gx:coord field decode failure on \"%s\".\n", qPrintable(args));
   }
   if (n >= 2) {
     trkpt->latitude = lat;

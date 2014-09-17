@@ -842,9 +842,9 @@ read_route(void)
 
       warnings++;
       if (warnings > 3) {
-        fatal(MYNAME "-rte_pt \"%s\": too many warnings!\n", CSTRc(wpt->shortname));
+        fatal(MYNAME "-rte_pt \"%s\": too many warnings!\n", qPrintable(wpt->shortname));
       }
-      warning(MYNAME "-rte_pt \"%s\" (class %d): possible error in route.\n", CSTRc(wpt->shortname), wpt_class);
+      warning(MYNAME "-rte_pt \"%s\" (class %d): possible error in route.\n", qPrintable(wpt->shortname), wpt_class);
       warning(MYNAME "-rte_pt (dump):");
       for (i = 0; i < 18; i++) {
         warning(" %02x", (unsigned char)buf[i]);

@@ -115,7 +115,7 @@ iktobj_type(xg_string args, const QXmlStreamAttributes*)
     track = route_head_alloc();
     break;
   default:
-    fatal(MYNAME ": Unknown object type %s!\n", CSTRc(args));
+    fatal(MYNAME ": Unknown object type %s!\n", qPrintable(args));
   }
 }
 

@@ -567,7 +567,7 @@ unicsv_fondle_header(const char* ibuf)
       f++;
     }
     if ((! f->name) && global_opts.debug_level) {
-      warning(MYNAME ": Unhandled column \"%s\".\n", CSTR(s));
+      warning(MYNAME ": Unhandled column \"%s\".\n", qPrintable(s));
     }
 
     /* handle some special items */

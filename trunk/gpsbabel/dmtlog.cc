@@ -151,7 +151,7 @@ static void
 tlog3a_xgcb_version(xg_string args, const QXmlStreamAttributes*)
 {
   if (args != "1") {
-    fatal(MYNAME ": Unsupported file version '%s'!\n", CSTRc(args));
+    fatal(MYNAME ": Unsupported file version '%s'!\n", qPrintable(args));
   }
 }
 
