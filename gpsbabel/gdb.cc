@@ -1319,10 +1319,10 @@ gdb_check_waypt(Waypoint* wpt)
 
   if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
     fatal("Invalid latitude %f in waypoint %s.\n",
-          lat_orig, !wpt->shortname.isEmpty() ? CSTRc(wpt->shortname) : "<no name>");
+          lat_orig, !wpt->shortname.isEmpty() ? qPrintable(wpt->shortname) : "<no name>");
   if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
     fatal("Invalid longitude %f in waypoint %s.\n",
-          lon_orig, !wpt->shortname.isEmpty() ? CSTRc(wpt->shortname) : "<no name>");
+          lon_orig, !wpt->shortname.isEmpty() ? qPrintable(wpt->shortname) : "<no name>");
 }
 
 /*-----------------------------------------------------------------------------*/

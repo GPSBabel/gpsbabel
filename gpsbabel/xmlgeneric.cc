@@ -184,8 +184,8 @@ void xml_read(void)
   xml_run_parser(reader, current_tag);
   if (reader.hasError())  {
     fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
-          CSTR(reader.errorString()),
-          CSTR(file.fileName()),
+          qPrintable(reader.errorString()),
+          qPrintable(file.fileName()),
           (long) reader.lineNumber(),
           (long) reader.columnNumber());
   }
@@ -218,7 +218,7 @@ void xml_readstring(const char* str)
   xml_run_parser(reader, current_tag);
   if (reader.hasError())  {
     fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
-          CSTR(reader.errorString()),
+          qPrintable(reader.errorString()),
           "unknown",
           (long) reader.lineNumber(),
           (long) reader.columnNumber());

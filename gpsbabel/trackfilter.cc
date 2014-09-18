@@ -473,8 +473,8 @@ trackfilter_pack(void)
     prev = track_list[j];
     if (prev.last_time >= track_list[i].first_time) {
       fatal(MYNAME "-pack: Tracks overlap in time! %s >= %s at %d\n",
-        CSTR(prev.last_time.toString()), 
-        CSTR(track_list[i].first_time.toString()), i);
+        qPrintable(prev.last_time.toString()), 
+        qPrintable(track_list[i].first_time.toString()), i);
     }
   }
 

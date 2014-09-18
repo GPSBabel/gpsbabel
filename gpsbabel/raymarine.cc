@@ -261,7 +261,7 @@ raymarine_read(void)
       wpt = find_waypt_by_name(str);
       if (wpt == NULL)
         fatal(MYNAME ": No associated waypoint for route point %s (Route %s)!\n",
-              str, CSTRc(rte->rte_name));
+              str, qPrintable(rte->rte_name));
 
       route_add_wpt(rte, new Waypoint(*wpt));
     }

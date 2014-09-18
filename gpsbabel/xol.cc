@@ -60,7 +60,7 @@ xol_overlay(xg_string args, const QXmlStreamAttributes* attrv)
   if (attrv->hasAttribute("version")) {
     if (attrv->value("version") != "1.0") {
       fatal(MYNAME ": Unsupported version %s.\n",
-            attrv->value("version").toString().toUtf8().constData());
+            qPrintable(attrv->value("version").toString()));
     }
   }
 }
@@ -166,7 +166,7 @@ xol_fatal_outside(const Waypoint* wpt)
 {
   gbfprintf(fout, "#####\n");
   fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
-        wpt->shortname.isEmpty() ? "Waypoint" : CSTRc(wpt->shortname),
+        wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
         pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
         gt_get_mps_grid_longname(grid_swiss, MYNAME));
 }

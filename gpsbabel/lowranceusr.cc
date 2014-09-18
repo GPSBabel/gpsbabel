@@ -918,7 +918,7 @@ lowranceusr_route_hdr(const route_head* rte)
 
   if (global_opts.debug_level >= 1)
     printf(MYNAME " route_hdr: route name \"%s\" num_legs = %d\n",
-           CSTRc(rte->rte_name), num_legs);
+           qPrintable(rte->rte_name), num_legs);
 
 }
 
