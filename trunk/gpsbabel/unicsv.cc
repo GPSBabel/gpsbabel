@@ -1249,7 +1249,7 @@ unicsv_fatal_outside(const Waypoint* wpt)
 {
   gbfprintf(fout, "#####\n");
   fatal(MYNAME ": %s (%s) is outside of convertable area of grid \"%s\"!\n",
-        wpt->shortname.isEmpty() ? "Waypoint" : CSTR(wpt->shortname),
+        wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
         pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
         gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME));
 }

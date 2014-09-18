@@ -354,7 +354,7 @@ print_position(const Waypoint* wpt)
   if (! valid) {
     gbfprintf(fout, "#####\n");
     fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
-          wpt->shortname.isEmpty() ? "Waypoint" : CSTR(wpt->shortname),
+          wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
           pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
           gt_get_mps_grid_longname(grid_index, MYNAME));
   }

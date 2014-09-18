@@ -85,8 +85,8 @@ mapfactor_read(void)
   MapfactorRead();
   if (reader.hasError())  {
     fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
-          CSTR(reader.errorString()),
-          CSTR(file.fileName()),
+          qPrintable(reader.errorString()),
+          qPrintable(file.fileName()),
           (long) reader.lineNumber(),
           (long) reader.columnNumber());
   }

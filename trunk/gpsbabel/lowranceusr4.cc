@@ -319,7 +319,7 @@ register_waypt(const Waypoint* ref)
 
   if (global_opts.debug_level >= 2) {
     printf(MYNAME " adding waypt %s (%s) to table at index %d\n",
-           CSTRc(wpt->shortname), CSTRc(wpt->description), waypt_table_ct);
+           qPrintable(wpt->shortname), qPrintable(wpt->description), waypt_table_ct);
   }
 
   waypt_table[waypt_table_ct] = (Waypoint*)wpt;
@@ -461,7 +461,7 @@ lowranceusr4_parse_waypoints(void)
     if (global_opts.debug_level >= 1) {
       printf(MYNAME " parse_waypoints: name = %s, uid_unit = %u, "
              "uid_seq_low = %d, uid_seq_high = %d, lat = %f, lon = %f, depth = %f\n",
-             CSTRc(wpt_tmp->shortname), fsdata->uid_unit,
+             qPrintable(wpt_tmp->shortname), fsdata->uid_unit,
              fsdata->uid_seq_low, fsdata->uid_seq_high,
              wpt_tmp->latitude, wpt_tmp->longitude, wpt_tmp->depth);
     }
@@ -557,7 +557,7 @@ lowranceusr4_parse_routes(void)
 
     if (global_opts.debug_level >= 1) {
       printf(MYNAME " parse_routes: route name=%s has %d waypoints\n",
-             CSTRc(rte_head->rte_name), num_legs);
+             qPrintable(rte_head->rte_name), num_legs);
     }
 
     for (j = 0; j < num_legs; ++j) {
@@ -568,7 +568,7 @@ lowranceusr4_parse_routes(void)
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
           printf(MYNAME " parse_routes: added wpt %s to route %s\n",
-                 CSTRc(wpt_tmp->shortname), CSTRc(rte_head->rte_name));
+                 qPrintable(wpt_tmp->shortname), qPrintable(rte_head->rte_name));
         }
         route_add_wpt(rte_head, new Waypoint(*wpt_tmp));
       }
@@ -685,7 +685,7 @@ lowranceusr4_parse_trails(void)
 
     if (global_opts.debug_level >= 1) {
       printf(MYNAME " parse_trails: trail %d name=%s has %d trackpoints\n",
-             trk_num, CSTRc(trk_head->rte_name), num_trail_pts);
+             trk_num, qPrintable(trk_head->rte_name), num_trail_pts);
     }
 
     for (j = 0; j < num_trail_pts; ++j) {
@@ -713,7 +713,7 @@ lowranceusr4_parse_trails(void)
 
       if (global_opts.debug_level >= 2) {
         printf(MYNAME " parse_routes: added trackpoint %f,%f to route %s\n",
-               wpt_tmp->latitude, wpt_tmp->longitude, CSTRc(trk_head->rte_name));
+               wpt_tmp->latitude, wpt_tmp->longitude, qPrintable(trk_head->rte_name));
       }
     }
   }
@@ -854,7 +854,7 @@ lowranceusr4_write_waypoints(void)
   for (i = 0; i < waypt_table_ct; ++i) {
     if (global_opts.debug_level >= 2) {
       printf(MYNAME " writing out waypt %d (%s - %s)\n",
-             i, CSTRc(waypt_table[i]->shortname), CSTRc(waypt_table[i]->description));
+             i, qPrintable(waypt_table[i]->shortname), qPrintable(waypt_table[i]->description));
     }
     lowranceusr4_waypt_disp((const Waypoint*)waypt_table[i]);
   }
@@ -865,7 +865,7 @@ lowranceusr4_write_route_hdr(const route_head* rte)
 {
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " writing route #%d (%s) with %d waypts\n",
-           route_uid, CSTRc(rte->rte_name), rte->rte_waypt_ct);
+           route_uid, qPrintable(rte->rte_name), rte->rte_waypt_ct);
   }
 
   /* UID unit number */
@@ -895,10 +895,10 @@ lowranceusr4_write_wpt_uids(const Waypoint* wpt)
   if (global_opts.debug_level >= 2) {
     if (waypt_idx > waypt_table_ct) {
       printf(MYNAME " WARNING: failed finding waypoint %s in waypoint table\n",
-             CSTRc(wpt->shortname));
+             qPrintable(wpt->shortname));
     } else {
       printf(MYNAME " adding waypt %d (%s) to route\n",
-             waypt_idx, CSTRc(waypt_table[waypt_idx]->shortname));
+             waypt_idx, qPrintable(waypt_table[waypt_idx]->shortname));
     }
   }
 
@@ -932,7 +932,7 @@ lowranceusr4_write_track_hdr(const route_head* trk)
 {
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " writing track %d (%s) with %d trackpoints\n",
-           track_uid, CSTRc(trk->rte_name), trk->rte_waypt_ct);
+           track_uid, qPrintable(trk->rte_name), trk->rte_waypt_ct);
   }
 
   /* UID unit number */
