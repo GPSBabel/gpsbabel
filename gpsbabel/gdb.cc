@@ -389,7 +389,7 @@ gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
     if (fabs(dist) > 100) {
       warning(MYNAME ": Route point mismatch!\n");
       warning(MYNAME ": \"%s\" from waypoints differs to \"%s\"\n",
-              CSTRc(tmp->shortname), CSTRc(ref->shortname));
+              qPrintable(tmp->shortname), qPrintable(ref->shortname));
       fatal(MYNAME ": from route table by more than %0.1f meters!\n",
             dist);
 

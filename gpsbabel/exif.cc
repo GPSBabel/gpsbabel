@@ -1455,7 +1455,7 @@ exif_write(void)
       if (exif_wpt_ref != NULL) {
         QString str = exif_time_str(exif_wpt_ref->creation_time.toTime_t());
         warning(MYNAME ": Best is from %s, %d second(s) away.\n",
-                CSTR(str), abs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t()));
+                qPrintable(str), abs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t()));
       }
       exif_wpt_ref = NULL;
     }
