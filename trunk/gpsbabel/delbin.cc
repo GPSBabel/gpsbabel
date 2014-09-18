@@ -1982,7 +1982,7 @@ read_route(route_head* route)
   wp_array = (Waypoint**) xcalloc(total, sizeof(*wp_array));
   if (global_opts.debug_level >= DBGLVL_L) {
     warning(MYNAME ": route '%s' %u points, %u shape points\n",
-            CSTRc(route->rte_name), route_total, shape_total);
+            qPrintable(route->rte_name), route_total, shape_total);
   }
   message_free(&msg_array[0]);
   for (i = 1; i < msg_array_n; i++) {
