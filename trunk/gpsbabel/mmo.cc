@@ -540,7 +540,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
   if (i != -1) {
     if (icons.contains(i)) {
       wpt->icon_descr = icons.value(i);
-      DBG((sobj, "icon = \"%s\"\n", CSTR(wpt->icon_descr)));
+      DBG((sobj, "icon = \"%s\"\n", qPrintable(wpt->icon_descr)));
     }
 #ifdef MMO_DBG
     else {

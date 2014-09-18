@@ -688,7 +688,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 #if GDB_DEBUG
         DBG(GDB_DBG_WPTe, 1)
         printf(MYNAME "-wpt \"%s\" (%d): url(%d) = %s\n",
-               sn, wpt_class, url_ct - i, CSTR(str));
+               sn, wpt_class, url_ct - i, qPrintable(str));
 #endif
       }
     }
