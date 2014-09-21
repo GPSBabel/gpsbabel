@@ -788,7 +788,7 @@ examples:
 </para>
 <para>example: </para>
 <screen format="linespecific">
-IFIELD UTM, "%s" # writes 6S 519045 3984035  -the easting is first by convention.</screen>
+IFIELD UTM, "", "%s" # writes 6S 519045 3984035  -the easting is first by convention.</screen>
 </section>
 
 <section id="style_def_utm_easting">
@@ -797,7 +797,7 @@ IFIELD UTM, "%s" # writes 6S 519045 3984035  -the easting is first by convention
 </para>
 <para>example: </para>
 <screen format="linespecific">
-IFIELD UTM_EASTING, "", "%d"  # outputs 519045
+IFIELD UTM_EASTING, "", "%.0ff"  # outputs 519045
 </screen>
 </section>
 
@@ -808,7 +808,7 @@ This is the decimal component representing the northing
 </para>
 <para>example: </para>
 <screen format="linespecific">
-IFIELD UTM_NORTHING "", "%d"  # outputs 3984035
+IFIELD UTM_NORTHING "", "%.0f"  # outputs 3984035
 </screen>
 </section>
 
@@ -829,7 +829,7 @@ The UTM Zone character.
 </para>
 <para>example: </para>
 <screen format="linespecific">
-IFIELD UTM_ZONEC "", "%d"  # outputs S
+IFIELD UTM_ZONEC "", "%c"  # outputs S
 </screen>
 </section>
 
