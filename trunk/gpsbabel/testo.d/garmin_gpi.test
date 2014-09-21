@@ -20,3 +20,9 @@ compare ${REFERENCE}/gpi_ext-sample.csv ${TMPDIR}/gpi_ext-sample.csv
 gpsbabel -i garmin_gpi -f ${REFERENCE}/umsonstdraussen.gpi -o gpx,gpxver=1.1 -F ${TMPDIR}/umsonstdraussen.gpx
 compare ${REFERENCE}/umsonstdraussen.gpx ${TMPDIR}/umsonstdraussen.gpx
 
+# look for differnces between latin1 and windows-1252
+gpsbabel -i garmin_gpi -f ${REFERENCE}/garmin_gpi_encoding.gpi -o gpx,gpxver=1.1 -F ${TMPDIR}/garmin_gpi_encoding.gpx
+compare ${REFERENCE}/garmin_gpi_encoding.gpx ${TMPDIR}/garmin_gpi_encoding.gpx
+gpsbabel -i gpx -f ${REFERENCE}/garmin_gpi_encoding.gpx  -o garmin_gpi -F ${TMPDIR}/garmin_gpi_encoding.gpi
+gpsbabel -i garmin_gpi -f ${TMPDIR}/garmin_gpi_encoding.gpi -o gpx,gpxver=1.1 -F ${TMPDIR}/garmin_gpi_encoding2.gpi.gpx
+compare ${REFERENCE}/garmin_gpi_encoding2.gpi.gpx ${TMPDIR}/garmin_gpi_encoding2.gpi.gpx
