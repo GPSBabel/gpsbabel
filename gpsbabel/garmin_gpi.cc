@@ -71,6 +71,7 @@
 
 static char* opt_cat, *opt_pos, *opt_notes, *opt_hide_bitmap, *opt_descr, *opt_bitmap;
 static char* opt_unique, *opt_alerts, *opt_units, *opt_speed, *opt_proximity, *opt_sleep;
+static char* opt_writecodec;
 static double defspeed, defproximity;
 static int alerts;
 
@@ -122,6 +123,10 @@ static arglist_t garmin_gpi_args[] = {
   {
     "units", &opt_units, "Units used for names with @speed ('s'tatute or 'm'etric)",
     "m", ARGTYPE_STRING, ARG_NOMINMAX
+  },
+  {
+    "writecodec", &opt_writecodec, "codec to use for writing strings",
+    "windows-1252", ARGTYPE_STRING, ARG_NOMINMAX
   },
   ARG_TERMINATOR
 };
@@ -290,7 +295,7 @@ static QString
 gpi_read_string(const char* field)
 {
   char*s = gpi_read_string_old(field);
-  QString rv = QString::fromLatin1(s);
+  QString rv = STRTOUNICODE(s);
   xfree(s);
   return rv;
 }
@@ -731,7 +736,7 @@ write_string(const char* str, const char long_format)
 static void
 write_string(const QString& str, const char long_format)
 {
-  write_string(CSTR(str), long_format);
+  write_string(STRFROMUNICODE(str), long_format);
 }
 
 
@@ -1424,16 +1429,14 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
 static void
 garmin_gpi_rd_init(const char* fname)
 {
-  char cp[8];
-
   fin = gbfopen_le(fname, "rb", MYNAME);
   rdata = new reader_data_t;
 
   read_header();
 
   if ((codepage >= 1250) && (codepage <= 1257)) {
-    snprintf(cp, sizeof(cp), "CP%d", codepage);
-    cet_convert_init(cp, 1);
+    QString qCodecName = QString("windows-%1").arg(codepage);
+    cet_convert_init(CSTR(qCodecName), 1);
   } else {
     fatal(MYNAME ": Unsupported code page (%d). File is likely encrypted.\n", codepage);
   }
@@ -1448,8 +1451,6 @@ garmin_gpi_rd_init(const char* fname)
 static void
 garmin_gpi_wr_init(const char* fname)
 {
-  char cp[8];
-  cet_cs_vec_t* vec;
   int i;
 
   if (gpi_timestamp != 0) {			/* not the first gpi output session */
@@ -1478,18 +1479,18 @@ garmin_gpi_wr_init(const char* fname)
   codepage = 0;
 
   for (i = 1250; i <= 1257; i++) {
-    snprintf(cp, sizeof(cp), "CP%d", i);
-    vec = cet_find_cs_by_name(cp);
-    if (vec == global_opts.charset) {
+    if (QString("windows-%1").arg(i).compare(QString(opt_writecodec), Qt::CaseInsensitive) == 0) {
       codepage = i;
       break;
     }
   }
 
   if (! codepage) {
-    warning(MYNAME ": Unsupported character set (%s)!\n", global_opts.charset_name);
-    fatal(MYNAME ": Valid values are CP1250 to CP1257.\n");
+    warning(MYNAME ": Unsupported character set (%s)!\n", opt_writecodec);
+    fatal(MYNAME ": Valid values are windows-1250 to windows-1257.\n");
   }
+
+  cet_convert_init(opt_writecodec,1);
 
   units = tolower(opt_units[0]);
   if ((units != 'm') && (units != 's')) {

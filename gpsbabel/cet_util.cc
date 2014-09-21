@@ -31,6 +31,7 @@
 #include "cet_util.h"
 
 #include <QtCore/QDebug>
+#include <QtCore/QTextCodec>
 
 #define MYNAME "cet_util"
 
@@ -50,6 +51,7 @@ static int cet_output = 0;
 
 #include "cet/ansi_x3_4_1968.h"
 #include "cet/cp1252.h"
+#include "cet/iso_8859_8.h"
 
 
 /* %%% short hand strings transmission for main character sets %%% */
@@ -193,6 +195,10 @@ cet_register(void)
 #ifdef cet_cs_name_cp1252
   cet_register_cs(&cet_cs_vec_cp1252);
 #endif
+#ifdef cet_cs_name_iso_8859_8
+  cet_register_cs(&cet_cs_vec_iso_8859_8);
+#endif
+
 
   if (cet_cs_vec_ct > 0) {
     cet_cs_vec_t* p;
@@ -344,6 +350,7 @@ cet_convert_deinit(void)
   }
   global_opts.charset = NULL;
   global_opts.charset_name = NULL;
+  global_opts.codec = NULL;
 }
 
 void
@@ -352,6 +359,14 @@ cet_convert_init(const char* cs_name, const int force)
   if ((force != 0) || (global_opts.charset == NULL)) {
     cet_convert_deinit();
     if (0 == cet_validate_cs(cs_name, &global_opts.charset, &global_opts.charset_name)) {
+      fatal("Unsupported character set \"%s\"!\n", cs_name);
+    }
+    if ((cs_name == NULL) || (strlen(cs_name) == 0)) {	/* set default us-ascii */
+      global_opts.codec = QTextCodec::codecForName(CET_CHARSET_ASCII);
+    } else {
+      global_opts.codec = QTextCodec::codecForName(cs_name);
+    }
+    if (!global_opts.codec) {
       fatal("Unsupported character set \"%s\"!\n", cs_name);
     }
   }

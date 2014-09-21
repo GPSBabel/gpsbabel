@@ -26,7 +26,6 @@
 #include <ctype.h>
 #include <math.h>
 #include <QtCore/QDebug>
-#include <QtCore/QTextCodec>
 
 #define MYNAME        "Naviguide"
 
@@ -137,15 +136,10 @@ ng_fwrite_wp_data(const QString& s, const QString& d, ng_wp_data_t* wp_data, gbf
   int i;
   char z[50];
 
-  QTextCodec* codec = QTextCodec::codecForName("Hebrew");
-  if (!codec) {
-    fatal(MYNAME ": Unable to locate codec for Hebrew");
-  }
-
   memset(z, 0, 50);
   i = s.length();
   gbfwrite(&i, 1, 1, f);
-  gbfwrite(codec->fromUnicode(s).constData(), 1, i, f);
+  gbfwrite(STRFROMUNICODE(s), 1, i, f);
 
   gbfwrite(&wp_data->pad1[0], 8, 1, f);
   gbfputint32(wp_data->East, f);
@@ -155,7 +149,7 @@ ng_fwrite_wp_data(const QString& s, const QString& d, ng_wp_data_t* wp_data, gbf
 
   i = d.length();
   gbfwrite(&i, 1, 1, f);
-  gbfwrite(codec->fromUnicode(d).constData(), 1, i, f);
+  gbfwrite(STRFROMUNICODE(d), 1, i, f);
   gbfwrite(z, 44, 1, f);
 }
 
@@ -381,11 +375,6 @@ data_read(void)
     route_add_head(rte_head);
   }
 
-  QTextCodec* codec = QTextCodec::codecForName("Hebrew");
-  if (!codec) {
-    fatal(MYNAME ": Unable to locate codec for Hebrew");
-  }
-
   for (int n = 0; n < nof_wp; ++n) {
 
     Waypoint* wpt_tmp = new Waypoint;
@@ -413,8 +402,8 @@ data_read(void)
 
     /* put the data in the waypoint structure */
     ng_convert_datum(wpt_tmp);
-    wpt_tmp->shortname = codec->toUnicode(WPNC.strName);
-    wpt_tmp->description = codec->toUnicode(strComment);
+    wpt_tmp->shortname = STRTOUNICODE(WPNC.strName);
+    wpt_tmp->description = STRTOUNICODE(strComment);
 
     if (process_rte) {
       route_add_wpt(rte_head, wpt_tmp);
@@ -437,5 +426,5 @@ ff_vecs_t ng_vecs = {
   data_write,
   NULL,
   ng_args,
-  CET_CHARSET_ASCII, 0 // Hebrew, but explictly encoded.
+  CET_CHARSET_HEBREW, 0
 };
