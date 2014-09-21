@@ -1608,11 +1608,12 @@ static void file_read(void)
 
 /**************************************************************************/
 // GPS logger will only handle tracks - neither waypoints or tracks...
+// Actually, some of the Holux devices will read waypoints.
 
 ff_vecs_t mtk_vecs = {
   ff_type_serial,
   {
-    ff_cap_none 	/* waypoints */,
+    ff_cap_read 	/* waypoints */,
     ff_cap_read 	/* tracks */,
     ff_cap_none 	/* routes */
   },
