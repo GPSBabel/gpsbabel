@@ -319,6 +319,15 @@ routesimple_tail(const route_head* rte)
   for (i = 0; i < xte_count; i++) {
     xte_recs[i].intermed->xte_rec = xte_recs+i;
   }
+  // Ensure totalerror starts with the distance between first and second points
+  // and not the zero-init.  From a June 25, 2014  thread titled "Simplify 
+  // Filter: GPSBabel removes one trackpoint..."  I never could repro it it
+  // with the sample data, so there is no automated test case, but Steve's 
+  // fix is "obviously" right here.
+  if (xte_count >= 1) {
+    totalerror = xte_recs[xte_count-1].distance;
+  }
+
   /* while we still have too many records... */
   while ((xte_count) && ((countopt && count < xte_count) || (erroropt && totalerror < error))) {
     i = xte_count - 1;
