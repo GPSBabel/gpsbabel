@@ -26,6 +26,7 @@
 #include "csv_util.h"
 #include "inifile.h"
 #include "session.h"
+#include "src/core/usasciicodec.h"
 #include <ctype.h>
 #include <signal.h>
 
@@ -41,7 +42,7 @@ typedef struct arg_stack_s {
 } arg_stack_t;
 
 static arg_stack_t
-*push_args(arg_stack_t* stack, const int argn, const int argc, char* argv[])
+* push_args(arg_stack_t* stack, const int argn, const int argc, char* argv[])
 {
   arg_stack_t* res = (arg_stack_t*) xmalloc(sizeof(*res));
 
@@ -54,7 +55,7 @@ static arg_stack_t
 }
 
 static arg_stack_t
-*pop_args(arg_stack_t* stack, int* argn, int* argc, char** argv[])
+* pop_args(arg_stack_t* stack, int* argn, int* argc, char** argv[])
 {
   arg_stack_t* res;
   char** argv2 = *argv;
@@ -238,10 +239,11 @@ main(int argc, char* argv[])
   queue* wpt_head_bak, *rte_head_bak, *trk_head_bak;	/* #ifdef UTF8_SUPPORT */
   signed int wpt_ct_bak, rte_ct_bak, trk_ct_bak;	/* #ifdef UTF8_SUPPORT */
   arg_stack_t* arg_stack = NULL;
+  (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-  // Qt 5.0 uses QString::fromUtf8 to convert from character pointers 
-  // and QBytreArrays to QStrings while previous version of Qt used 
+  // Qt 5.0 uses QString::fromUtf8 to convert from character pointers
+  // and QBytreArrays to QStrings while previous version of Qt used
   // QString::fromAscii.  QString::fromAscii used the codec set
   // by QTextCode::setCodecForCStrings.
   // This makes the converstion consistent between Qt4 and Qt5.
@@ -320,10 +322,10 @@ main(int argc, char* argv[])
     }
 
     switch (c) {
-    //case 'c':
-    //  optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
-    //  cet_convert_init(optarg, 1);
-    //  break;
+      //case 'c':
+      //  optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
+      //  cet_convert_init(optarg, 1);
+      //  break;
     case 'i':
       optarg = argv[argn][2]
                ? argv[argn]+2 : argv[++argn];

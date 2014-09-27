@@ -111,6 +111,7 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
           formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
 	  inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ gbser.o \
 	  gbfile.o parse.o session.o src/core/xmlstreamwriter.o \
+	  src/core/usasciicodec.o \
 	$(PALM_DB) $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
@@ -444,7 +445,7 @@ cet.o: cet.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h
 cet_util.o: cet_util.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
-  cet/ansi_x3_4_1968.h cet/cp1252.h
+  cet/ansi_x3_4_1968.h cet/cp1252.h cet/iso_8859_8.h
 compegps.o: compegps.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
   csv_util.h jeeps/gpsmath.h jeeps/gpsport.h
@@ -452,11 +453,11 @@ cst.o: cst.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h strptime.h
 csv_util.o: csv_util.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
-  csv_util.h grtcirc.h strptime.h jeeps/gpsmath.h jeeps/gpsport.h \
-  garmin_fs.h jeeps/gps.h jeeps/gpsdevice.h jeeps/gpssend.h \
-  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
-  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmem.h jeeps/gpsrqst.h \
-  jeeps/gpsinput.h jeeps/gpsproj.h xcsv_tokens.gperf
+  csv_util.h garmin_fs.h jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  grtcirc.h src/core/logging.h strptime.h xcsv_tokens.gperf
 delbin.o: delbin.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h \
   src/core/xmltag.h
@@ -795,7 +796,7 @@ magproto.o: magproto.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   magellan.h gbser.h explorist_ini.h
 main.o: main.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h filterdefs.h \
-  csv_util.h
+  csv_util.h src/core/usasciicodec.h
 mapasia.o: mapasia.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h cet_util.h inifile.h session.h src/core/datetime.h
 mapbar_track.o: mapbar_track.cc defs.h config.h queue.h zlib/zlib.h \
@@ -919,6 +920,7 @@ smplrout.o: smplrout.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   filterdefs.h grtcirc.h
 sort.o: sort.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h cet_util.h inifile.h session.h src/core/datetime.h filterdefs.h
+src/core/usasciicodec.o: src/core/usasciicodec.cc src/core/usasciicodec.h
 src/core/xmlstreamwriter.o: src/core/xmlstreamwriter.cc \
   src/core/xmlstreamwriter.h
 stackfilter.o: stackfilter.cc defs.h config.h queue.h zlib/zlib.h \
