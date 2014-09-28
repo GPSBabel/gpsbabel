@@ -408,6 +408,10 @@ humminbird_read_track(gbfile* fin)
 
   max_points = (131080 - sizeof(uint32_t) - sizeof(th)) / sizeof(humminbird_trk_point_t);
 
+  if (th.num_points == max_points + 1) {
+    th.num_points--;
+  }
+
   if (th.num_points > max_points) {
     fatal(MYNAME ": Too many track points! (%d)\n", th.num_points);
   }
