@@ -84,11 +84,15 @@ typedef enum {
 /*
  *   An individual element of a route.
  */
-typedef struct mag_rte_elem {
+class mag_rte_elem {
+ public:
+  mag_rte_elem() {
+    QUEUE_INIT(&Q);
+  }
   queue Q;	 		/* My link pointers */
-  char* wpt_name;
-  char* wpt_icon;
-} mag_rte_elem;
+  QString wpt_name;
+  QString wpt_icon;
+};
 
 /*
  *  A header of a route.  Related elements of a route belong to this.
@@ -1038,7 +1042,6 @@ mag_rteparse(char* rtemsg)
   char xbuf[100],next_stop[100],abuf[100];
   char* currtemsg;
   static mag_rte_head* mag_rte_head;
-  mag_rte_elem* rte_elem;
   char* p;
   char* rte_name = NULL;
 
@@ -1096,11 +1099,10 @@ mag_rteparse(char* rtemsg)
       *p = '\0';
     }
 
-    rte_elem = (mag_rte_elem*) xcalloc(sizeof(*rte_elem),1);
-    QUEUE_INIT(&rte_elem->Q);
+    mag_rte_elem* rte_elem = new mag_rte_elem;
 
-    rte_elem->wpt_name = xstrdup(next_stop);
-    rte_elem->wpt_icon = xstrdup(abuf);
+    rte_elem->wpt_name = next_stop;
+    rte_elem->wpt_icon = abuf;
 
     ENQUEUE_TAIL(&mag_rte_head->Q, &rte_elem->Q);
 
@@ -1110,9 +1112,8 @@ mag_rteparse(char* rtemsg)
      * routepoint.
      */
     if (broken_sportrak && abuf[0]) {
-      rte_elem = (mag_rte_elem*) xcalloc(sizeof(*rte_elem),1);
-      QUEUE_INIT(&rte_elem->Q);
-      rte_elem->wpt_name = (abuf);
+      rte_elem = new mag_rte_elem;
+      rte_elem->wpt_name = abuf;
 
       ENQUEUE_TAIL(&mag_rte_head->Q, &rte_elem->Q);
     }
@@ -1158,8 +1159,6 @@ mag_rteparse(char* rtemsg)
       }
 
       dequeue(&re->Q);
-      xfree(re->wpt_name);
-      xfree(re->wpt_icon);
       xfree(re);
     }
     xfree(mag_rte_head);
