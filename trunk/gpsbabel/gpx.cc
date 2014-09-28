@@ -293,15 +293,20 @@ typedef struct tag_mapping {
  * If it's not a tag we explictly handle, it doesn't go here.
  */
 
+/* /gpx/<name> for GPX 1.0, /gpx/metadata/<name> for GPX 1.1 */
+#define METATAG(type,name) \
+  {type, 0, "/gpx/" name}, \
+  {type, 0, "/gpx/metadata/" name}
+
 tag_mapping tag_path_map[] = {
   { tt_gpx, 0, "/gpx" },
-  { tt_name, 0, "/gpx/name" },
-  { tt_desc, 0, "/gpx/desc" },
+  METATAG(tt_name, "name"),
+  METATAG(tt_desc, "desc"),
   { tt_author, 0, "/gpx/author" },
   { tt_email, 0, "/gpx/email" },
   { tt_url, 0, "/gpx/url" },
   { tt_urlname, 0, "/gpx/urlname" },
-  { tt_keywords, 0, "/gpx/keywords" },
+  METATAG(tt_keywords, "keywords"),
 
   { tt_wpt, 0, "/gpx/wpt" },
 

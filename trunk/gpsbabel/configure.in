@@ -168,9 +168,9 @@ fi
 # guess the name of the Qt Core library.
 QT_LIBVER=$($QMAKE -query -query QT_VERSION | sed -e 's/\..*//')
 if test "$QT_LIBVER" -ge 5 ; then
-	QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -l Qt${QT_LIBVER}Core"
+	QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -lQt${QT_LIBVER}Core"
 else
-	QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -l QtCore"
+	QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -lQtCore"
 fi
 QT_INC=$($QMAKE -query QT_INSTALL_HEADERS)
 QT_INC_OPT="-I"
