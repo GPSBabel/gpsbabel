@@ -15,6 +15,6 @@ specification expects to work with this ordered set of fields:
 "CALORIEBURN","LONGITUDE","CADENCE","heading","STEP_RATE"
 </para>
 <para><userinput>
-gpsbabel -i xcsv,style=motoactv.style -f rawDataCsv.csv
+gpsbabel -i motoactv -f rawDataCsv.csv
 -x transform,trk=wpt -o gtrnctr,course=0 -F outfile.tcx
 </userinput></para>
