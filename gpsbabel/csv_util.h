@@ -124,7 +124,7 @@ class XcsvFile {
   QString field_encloser; 	/* doublequote, etc... */
   QString record_delimiter;	/* newline, c/r, etc... */
 
-  char*  badchars;		/* characters we never write to output */
+  QString badchars;		/* characters we never write to output */
 
   queue ifield;		/* input field mapping */
   queue* ofield;    		/* output field mapping */

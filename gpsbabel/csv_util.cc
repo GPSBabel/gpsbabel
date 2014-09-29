@@ -727,7 +727,7 @@ void xcsv_file_init(void)
   xcsv_file.field_delimiter = QString();
   xcsv_file.field_encloser = QString();
   xcsv_file.record_delimiter = QString();
-  xcsv_file.badchars = NULL;
+  xcsv_file.badchars = QString();
   xcsv_file.ifield_ct = 0;
   xcsv_file.ofield_ct = 0;
   xcsv_file.xcsvfp = NULL;
