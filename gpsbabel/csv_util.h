@@ -88,12 +88,6 @@ typedef struct field_map {
   int options;
 } field_map_t;
 
-/* a queuing struct for prologues / epilogues */
-typedef struct ogue {
-  queue Q;
-  char* val;
-} ogue_t;
-
 /* something to map config file constants to chars */
 typedef struct char_map {
   const char* key;
@@ -111,14 +105,11 @@ class XcsvFile {
 
   bool is_internal;		/* bool - is internal (1) or parsed (0) */
 
-  int prologue_lines;		/* # of lines to ignore at top of the file */
-  int epilogue_lines;		/* # of lines to ignore at bottom of file */
-
   /* header lines for writing at the top of the file. */
-  queue prologue;
+  QStringList prologue;
 
   /* footer lines for writing at the bottom of the file. */
-  queue epilogue;
+  QStringList epilogue;
 
   QString field_delimiter; 	/* comma, quote, etc... */
   QString field_encloser; 	/* doublequote, etc... */

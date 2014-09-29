@@ -722,8 +722,6 @@ dec_to_human(const char* format, const char* dirs, double val)
 void xcsv_file_init(void)
 {
   xcsv_file.is_internal = false;
-  xcsv_file.prologue_lines = 0;
-  xcsv_file.epilogue_lines = 0;
   xcsv_file.field_delimiter = QString();
   xcsv_file.field_encloser = QString();
   xcsv_file.record_delimiter = QString();
@@ -735,8 +733,8 @@ void xcsv_file_init(void)
   xcsv_file.description = NULL;
   xcsv_file.extension = NULL;
 
-  QUEUE_INIT(&xcsv_file.prologue);
-  QUEUE_INIT(&xcsv_file.epilogue);
+  xcsv_file.prologue.clear();
+  xcsv_file.epilogue.clear();
 
   QUEUE_INIT(&xcsv_file.ifield);
   /* ofield is alloced to allow pointing back at ifields
@@ -822,11 +820,7 @@ xcsv_ofield_add(char* key, char* val, char* pfc, int options)
 void
 xcsv_prologue_add(char* prologue)
 {
-  ogue_t* ogp = (ogue_t*) xcalloc(sizeof(*ogp), 1);
-
-  ogp->val = prologue;
-  ENQUEUE_TAIL(&xcsv_file.prologue, &ogp->Q);
-  xcsv_file.prologue_lines++;
+  xcsv_file.prologue.append(prologue);
 }
 
 /*****************************************************************************/
@@ -836,11 +830,7 @@ xcsv_prologue_add(char* prologue)
 void
 xcsv_epilogue_add(char* epilogue)
 {
-  ogue_t* ogp = (ogue_t*) xcalloc(sizeof(*ogp), 1);
-
-  ogp->val = epilogue;
-  ENQUEUE_TAIL(&xcsv_file.epilogue, &ogp->Q);
-  xcsv_file.epilogue_lines++;
+  xcsv_file.epilogue.append(epilogue);
 }
 
 static
@@ -1407,9 +1397,8 @@ xcsv_data_read(void)
   char* s;
   Waypoint* wpt_tmp;
   int linecount = 0;
-  queue* elem, *tmp;
+  queue* elem;
   field_map_t* fmp;
-  ogue_t* ogp;
   route_head* rte = NULL;
   route_head* trk = NULL;
   utm_northing = 0;
@@ -1436,8 +1425,7 @@ xcsv_data_read(void)
     rtrim(buff);
 
     /* skip over x many lines on the top for the prologue... */
-    if ((xcsv_file.prologue_lines) && ((linecount - 1) <
-                                       xcsv_file.prologue_lines)) {
+    if ((linecount - 1) < xcsv_file.prologue.count()) {
       continue;
     }
 
@@ -1445,15 +1433,12 @@ xcsv_data_read(void)
      * pre-read the file to know how many data lines we should be seeing,
      * we take this cheap shot at the data and cross our fingers.
      */
-
-    QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {
-      ogp = (ogue_t*) elem;
-      if (strncmp(buff, ogp->val, strlen(ogp->val)) == 0) {
-        buff[0] = '\0';
-        break;
-      }
+    foreach(const QString& ogp, xcsv_file.epilogue) {
+       if (ogp.startsWith(buff)) {
+         buff[0] = '\0';
+         break;
+       }
     }
-
     if (strlen(buff)) {
       wpt_tmp = new Waypoint;
 
@@ -2184,11 +2169,8 @@ xcsv_noop(const route_head* wp)
 void
 xcsv_data_write(void)
 {
-  queue* elem, *tmp;
-  ogue_t* ogp;
   time_t time;
   struct tm tm;
-//  char tbuf[32];
 
   /* reset the index counter */
   waypt_out_count = 0;
@@ -2201,11 +2183,10 @@ xcsv_data_write(void)
   }
 
   /* output prologue lines, if any. */
-  QUEUE_FOR_EACH(&xcsv_file.prologue, elem, tmp) {
-    ogp = (ogue_t*) elem;
+  foreach(const QString& line, xcsv_file.prologue) {
     // If the XCSV description contains weird characters (like sportsim)
     // this is where they get lost.
-    QString cout = ogp->val;
+   QString cout = line;
 
     // Don't do potentially expensive replacements if token prefix 
     // isn't present;
@@ -2240,9 +2221,8 @@ xcsv_data_write(void)
   }
 
   /* output epilogue lines, if any. */
-  QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {
-    ogp = (ogue_t*) elem;
-    gbfputs(ogp->val, xcsv_file.xcsvfp);
+  foreach(const QString& ogp, xcsv_file.epilogue) {
+    gbfputs(ogp, xcsv_file.xcsvfp);
     gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
   }
 }
