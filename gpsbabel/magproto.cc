@@ -1159,7 +1159,7 @@ mag_rteparse(char* rtemsg)
       }
 
       dequeue(&re->Q);
-      xfree(re);
+      delete re;
     }
     xfree(mag_rte_head);
   }
