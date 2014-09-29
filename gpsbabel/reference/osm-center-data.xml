@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="Handmade Test">
+  <node id="1" lat="50.9" lon="0.1"/>
+  <node id="2" lat="50.9" lon="-0.1"/>
+  <node id="3" lat="51.1" lon="-0.1"/>
+  <node id="4" lat="51.1" lon="0.1"/>
+  <node id="5" lat="50.8" lon="0"/>
+  <node id="6" lat="50.8" lon="-0.2"/>
+  <node id="7" lat="51" lon="-0.2"/>
+  <node id="8" lat="51" lon="0"/>
+  <node id="9" lat="50.7" lon="-0.1"/>
+  <node id="10" lat="50.7" lon="-0.3"/>
+  <node id="11" lat="50.9" lon="-0.3"/>
+  <node id="12" lat="50.9" lon="-0.1"/>
+  <node id="13" lat="50.6" lon="-0.2"/>
+  <node id="14" lat="50.6" lon="-0.4"/>
+  <node id="15" lat="50.8" lon="-0.4"/>
+  <node id="16" lat="50.8" lon="-0.2"/>
+
+  <way id="1">
+    <center lat="51" lon="0"/>
+    <nd ref="1"/>
+    <nd ref="2"/>
+    <nd ref="3"/>
+    <nd ref="4"/>
+    <tag k="addr:city" v="My Town"/>
+    <tag k="addr:housenumber" v="1"/>
+    <tag k="addr:street" v="My Street"/>
+    <tag k="building" v="yes"/>
+    <tag k="amenity" v="restaurant"/>
+    <tag k="name" v="My Restuarant"/>
+  </way>
+
+  <way id="2">
+    <nd ref="5"/>
+    <nd ref="6"/>
+    <nd ref="7"/>
+    <nd ref="8"/>
+    <tag k="addr:city" v="My Town"/>
+    <tag k="addr:housenumber" v="2"/>
+    <tag k="addr:street" v="My Street"/>
+    <tag k="building" v="yes"/>
+    <tag k="amenity" v="pub"/>
+    <tag k="name" v="My Pub"/>
+  </way>
+
+  <way id="3">
+    <nd ref="9"/>
+    <nd ref="10"/>
+    <nd ref="11"/>
+    <nd ref="12"/>
+    <center lat="50.8" lon="-0.2"/>
+    <tag k="addr:city" v="My Town"/>
+    <tag k="addr:housenumber" v="3"/>
+    <tag k="addr:street" v="My Street"/>
+    <tag k="building" v="yes"/>
+    <tag k="amenity" v="pub"/>
+    <tag k="name" v="My Pub"/>
+    <tag k="note" v="My Local Pub"/>
+  </way>
+
+  <way id="3">
+    <center lat="50.7" lon="-0.3"/>
+    <nd ref="13"/>
+    <nd ref="14"/>
+    <nd ref="15"/>
+    <nd ref="16"/>
+    <tag k="addr:city" v="My Town"/>
+    <tag k="addr:housenumber" v="4"/>
+    <tag k="addr:street" v="My Street"/>
+    <tag k="shop" v="convenience"/>
+    <tag k="name" v="My Store"/>
+    <tag k="note" v="My Local Store"/>
+    <tag k="note" v="Sells Food"/>
+  </way>
+
+</osm>

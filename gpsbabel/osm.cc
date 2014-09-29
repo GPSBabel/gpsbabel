@@ -50,7 +50,7 @@ static route_head* rte;
 static Waypoint* wpt;
 
 static xg_callback	osm_node, osm_node_tag, osm_node_end;
-static xg_callback	osm_way, osm_way_nd, osm_way_tag, osm_way_end;
+static xg_callback	osm_way, osm_way_nd, osm_way_tag, osm_way_center, osm_way_end;
 
 static
 xg_tag_mapping osm_map[] = {
@@ -60,6 +60,7 @@ xg_tag_mapping osm_map[] = {
   { osm_way,	cb_start,	"/osm/way" },
   { osm_way_nd,	cb_start,	"/osm/way/nd" },
   { osm_way_tag,	cb_start,	"/osm/way/tag" },
+  { osm_way_center,	cb_start,	"/osm/way/center" },
   { osm_way_end,	cb_end,		"/osm/way" },
   { NULL,	(xg_cb_type)0,		NULL }
 };
@@ -579,6 +580,8 @@ static void
 osm_way(xg_string args, const QXmlStreamAttributes* attrv)
 {
   rte = route_head_alloc();
+  // create a wpt to represent the route center if it has a center tag
+  wpt = new Waypoint;
   if (attrv->hasAttribute("id")) {
     rte->rte_desc =  "osm-id " + attrv->value("id").toString();
   }
@@ -607,6 +610,7 @@ osm_way_tag(xg_string args, const QXmlStreamAttributes* attrv)
 {
   QString key, value;
   QString str;
+  signed char ikey;
 
   if (attrv->hasAttribute("k")) {
     key = attrv->value("k").toString();
@@ -620,9 +624,35 @@ osm_way_tag(xg_string args, const QXmlStreamAttributes* attrv)
   if (key == QLatin1String("name")) {
     if (rte->rte_name.isEmpty()) {
       rte->rte_name = str;
+      wpt->shortname = str;
     }
   } else if (key == QLatin1String("name:en")) {
     rte->rte_name = str;
+
+    wpt->shortname = str;
+   // The remaining cases only apply to the center node
+  } else if ((ikey = osm_feature_ikey(key)) >= 0) {
+    wpt->icon_descr = osm_feature_symbol(ikey, CSTR(value));
+  } else if (key == "note") {
+    if (wpt->notes.isEmpty()) {
+      wpt->notes = str;
+    } else {
+      wpt->notes += "; ";
+      wpt->notes += str;
+    }
+  }
+}
+
+static void
+osm_way_center(xg_string args, const QXmlStreamAttributes* attrv)
+{
+  wpt->wpt_flags.fmt_use = 1;
+
+  if (attrv->hasAttribute("lat")) {
+    wpt->latitude = attrv->value("lat").toString().toDouble();
+  }
+  if (attrv->hasAttribute("lon")) {
+    wpt->longitude = attrv->value("lon").toString().toDouble();
   }
 }
 
@@ -632,6 +662,14 @@ osm_way_end(xg_string args, const QXmlStreamAttributes*)
   if (rte) {
     route_add_head(rte);
     rte = NULL;
+  }
+
+  if (wpt) {
+    if (wpt->wpt_flags.fmt_use) {
+      waypt_add(wpt);
+    } else {
+      wpt = NULL;
+    }
   }
 }
 

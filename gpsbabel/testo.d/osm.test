@@ -4,5 +4,8 @@ rm -f ${TMPDIR}/osm-*
 gpsbabel -i osm -f ${REFERENCE}/osm-data.xml -o gpx -F ${TMPDIR}/osm-data.gpx  -o osm -F ${TMPDIR}/osm-out.xml
 compare ${REFERENCE}/osm-data.gpx ${TMPDIR}/osm-data.gpx 
 
+gpsbabel -i osm -f ${REFERENCE}/osm-center-data.xml -o gpx -F ${TMPDIR}/osm-center-data.gpx  -o osm -F ${TMPDIR}/osm-center-out.xml
+compare ${REFERENCE}/osm-center-data.gpx ${TMPDIR}/osm-center-data.gpx 
+
 # FIXME: implement a test for OSM writer, if possible.
 # compare ${REFERENCE}/osm-data.xml ${TMPDIR}/osm-out.xml 
