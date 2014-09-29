@@ -177,17 +177,9 @@ xcsv_destroy_style(void)
   }
 
   /* other alloc'd glory */
-  if (xcsv_file.field_delimiter) {
-    xfree(xcsv_file.field_delimiter);
-  }
-
-  if (xcsv_file.field_encloser) {
-    xfree(xcsv_file.field_encloser);
-  }
-
-  if (xcsv_file.record_delimiter) {
-    xfree(xcsv_file.record_delimiter);
-  }
+  xcsv_file.field_delimiter = QString();
+  xcsv_file.field_encloser = QString();
+  xcsv_file.record_delimiter = QString();
 
   if (xcsv_file.badchars) {
     xfree(xcsv_file.badchars);
@@ -207,7 +199,6 @@ xcsv_destroy_style(void)
 
   /* return everything to zeros */
   internal = xcsv_file.is_internal;
-  memset(&xcsv_file, '\0', sizeof(xcsv_file));
   xcsv_file.is_internal = internal;
 }
 
@@ -259,7 +250,7 @@ xcsv_parse_style_line(char* sbuff)
         xcsv_file.field_delimiter = sp;
       }
 
-      p = csv_stringtrim(xcsv_file.field_delimiter, " ", 0);
+      p = csv_stringtrim(CSTR(xcsv_file.field_delimiter), " ", 0);
 
       /* field delimiters are always bad characters */
       if (0 == strcmp(p, "\\w")) {
@@ -286,7 +277,7 @@ xcsv_parse_style_line(char* sbuff)
           xcsv_file.field_encloser = sp;
         }
 
-        p = csv_stringtrim(xcsv_file.field_encloser, " ", 0);
+        p = csv_stringtrim(CSTR(xcsv_file.field_encloser), " ", 0);
 
         /* field_enclosers are always bad characters */
         if (xcsv_file.badchars) {
@@ -313,7 +304,7 @@ xcsv_parse_style_line(char* sbuff)
             xcsv_file.record_delimiter = sp;
           }
 
-          p = csv_stringtrim(xcsv_file.record_delimiter, " ", 0);
+          p = csv_stringtrim(CSTR(xcsv_file.record_delimiter), " ", 0);
 
           /* record delimiters are always bad characters */
           if (xcsv_file.badchars) {

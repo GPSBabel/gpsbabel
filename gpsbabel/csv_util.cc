@@ -153,7 +153,7 @@ in_word_set(register const char* str, register unsigned int len);
 /****************************************************************************/
 /* obligatory global struct                                                 */
 /****************************************************************************/
-xcsv_file_t xcsv_file;
+XcsvFile xcsv_file;
 
 extern char* xcsv_urlbase;
 extern char* prefer_shortnames;
@@ -719,10 +719,21 @@ dec_to_human(const char* format, const char* dirs, double val)
 /*****************************************************************************/
 /* xcsv_file_init() - prepare xcsv_file for first use.                       */
 /*****************************************************************************/
-void
-xcsv_file_init(void)
+void xcsv_file_init(void)
 {
-  memset(&xcsv_file, '\0', sizeof(xcsv_file_t));
+  xcsv_file.is_internal = false;
+  xcsv_file.prologue_lines = 0;
+  xcsv_file.epilogue_lines = 0;
+  xcsv_file.field_delimiter = QString();
+  xcsv_file.field_encloser = QString();
+  xcsv_file.record_delimiter = QString();
+  xcsv_file.badchars = NULL;
+  xcsv_file.ifield_ct = 0;
+  xcsv_file.ofield_ct = 0;
+  xcsv_file.xcsvfp = NULL;
+  xcsv_file.fname = QString();
+  xcsv_file.description = NULL;
+  xcsv_file.extension = NULL;
 
   QUEUE_INIT(&xcsv_file.prologue);
   QUEUE_INIT(&xcsv_file.epilogue);
@@ -740,6 +751,10 @@ xcsv_file_init(void)
 
   xcsv_file.mkshort_handle = mkshort_new_handle();
   xcsv_file.gps_datum = GPS_DATUM_WGS84;
+}
+
+XcsvFile::XcsvFile() {
+   xcsv_file_init(); 
 }
 
 void validate_fieldmap(field_map_t* fmp, bool is_output) {
@@ -1443,8 +1458,8 @@ xcsv_data_read(void)
       wpt_tmp = new Waypoint;
 
       s = buff;
-      s = csv_lineparse(s, xcsv_file.field_delimiter,
-                        xcsv_file.field_encloser, linecount);
+      s = csv_lineparse(s, CSTR(xcsv_file.field_delimiter),
+                        CSTR(xcsv_file.field_encloser), linecount);
 
       if (QUEUE_EMPTY(&xcsv_file.ifield)) {
         fatal(MYNAME ": attempt to read, but style '%s' has no IFIELDs in it.\n", xcsv_file.description? xcsv_file.description : "unknown");
@@ -1470,8 +1485,8 @@ xcsv_data_read(void)
           break;
         }
 
-        s = csv_lineparse(NULL, xcsv_file.field_delimiter,
-                          xcsv_file.field_encloser, linecount);
+        s = csv_lineparse(NULL, CSTR(xcsv_file.field_delimiter),
+                          CSTR(xcsv_file.field_encloser), linecount);
       }
 
       if ((xcsv_file.gps_datum > -1) && (xcsv_file.gps_datum != GPS_DATUM_WGS84)) {
@@ -1549,7 +1564,6 @@ static void
 xcsv_waypt_pr(const Waypoint* wpt)
 {
   QString buff;
-  const char* write_delimiter;
   int i;
   field_map_t* fmp;
   queue* elem, *tmp;
@@ -1567,7 +1581,8 @@ xcsv_waypt_pr(const Waypoint* wpt)
   longitude = oldlon = wpt->longitude;
   latitude = oldlat = wpt->latitude;
 
-  if (xcsv_file.field_delimiter && strcmp(xcsv_file.field_delimiter, "\\w") == 0) {
+  QString write_delimiter;
+  if (xcsv_file.field_delimiter == "\\w") {
     write_delimiter = " ";
   } else {
     write_delimiter = xcsv_file.field_delimiter;
@@ -1623,7 +1638,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
     fmp = (field_map_t*) elem;
 
     if ((i != 0) && !(fmp->options & OPTIONS_NODELIM)) {
-      gbfprintf(xcsv_file.xcsvfp, write_delimiter);
+      gbfputs(write_delimiter, xcsv_file.xcsvfp);
     }
 
     if (fmp->options & OPTIONS_ABSOLUTE) {
@@ -2130,9 +2145,9 @@ xcsv_waypt_pr(const Waypoint* wpt)
       continue;
     }
 
-    if (xcsv_file.field_encloser) {
+    if (!xcsv_file.field_encloser.isEmpty()) {
       /* print the enclosing character(s) */
-      gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.field_encloser);
+      gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
     }
 
     /* As a special case (pronounced "horrible hack") we allow
@@ -2143,13 +2158,13 @@ xcsv_waypt_pr(const Waypoint* wpt)
     }
     gbfputs(obuff, xcsv_file.xcsvfp);
 
-    if (xcsv_file.field_encloser) {
+    if (!xcsv_file.field_encloser.isEmpty()) {
       /* print the enclosing character(s) */
-      gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.field_encloser);
+      gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
     }
   }
 
-  gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
+  gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
 
   /* increment the index counter */
   waypt_out_count++;
@@ -2210,8 +2225,8 @@ xcsv_data_write(void)
       QString t = dt.toString("hh:mm:ss");
       cout.replace("__TIME__", t);
     }
-    gbfprintf(xcsv_file.xcsvfp, "%s", CSTR(cout));
-    gbfprintf(xcsv_file.xcsvfp, "%s", xcsv_file.record_delimiter);
+    gbfputs(cout, xcsv_file.xcsvfp);
+    gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
   }
 
   if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == wptdata)) {
@@ -2227,7 +2242,8 @@ xcsv_data_write(void)
   /* output epilogue lines, if any. */
   QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {
     ogp = (ogue_t*) elem;
-    gbfprintf(xcsv_file.xcsvfp, "%s%s", ogp->val, xcsv_file.record_delimiter);
+    gbfputs(ogp->val, xcsv_file.xcsvfp);
+    gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
   }
 }
 #endif

@@ -101,11 +101,15 @@ typedef struct char_map {
 } char_map_t;
 
 /*
- * a type describing all the wonderful elements of xcsv files, in a
+ * a Class describing all the wonderful elements of xcsv files, in a
  * nutshell.
+ * It completely shows that this began life as a C struct...baby steps.
  */
-typedef struct {
-  int is_internal;		/* bool - is internal (1) or parsed (0) */
+class XcsvFile {
+ public:
+  XcsvFile();
+
+  bool is_internal;		/* bool - is internal (1) or parsed (0) */
 
   int prologue_lines;		/* # of lines to ignore at top of the file */
   int epilogue_lines;		/* # of lines to ignore at bottom of file */
@@ -116,11 +120,11 @@ typedef struct {
   /* footer lines for writing at the bottom of the file. */
   queue epilogue;
 
-  char* field_delimiter; 	/* comma, quote, etc... */
-  char* field_encloser; 	/* doublequote, etc... */
-  char* record_delimiter;	/* newline, c/r, etc... */
+  QString field_delimiter; 	/* comma, quote, etc... */
+  QString field_encloser; 	/* doublequote, etc... */
+  QString record_delimiter;	/* newline, c/r, etc... */
 
-  char* badchars;		/* characters we never write to output */
+  char*  badchars;		/* characters we never write to output */
 
   queue ifield;		/* input field mapping */
   queue* ofield;    		/* output field mapping */
@@ -129,7 +133,7 @@ typedef struct {
   int ofield_ct;		/* actual # of ofields */
 
   gbfile* xcsvfp;		/* ptr to current *open* data file */
-  char* fname;                 /* ptr to filename of above. */
+  QString fname;                 /* ptr to filename of above. */
 
   char* description;		/* Description for help text */
   char* extension;		/* preferred filename extension (for wrappers)*/
@@ -141,10 +145,10 @@ typedef struct {
   gpsdata_type datatype;	/* can be wptdata, rtedata or trkdata */
   /* ... or ZERO to keep the old behaviour */
 
-} xcsv_file_t;
+};
 
 
 /****************************************************************************/
 /* obligatory global struct                                                 */
 /****************************************************************************/
-extern xcsv_file_t xcsv_file;
+extern XcsvFile xcsv_file;
