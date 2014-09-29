@@ -180,10 +180,7 @@ xcsv_destroy_style(void)
   xcsv_file.field_delimiter = QString();
   xcsv_file.field_encloser = QString();
   xcsv_file.record_delimiter = QString();
-
-  if (xcsv_file.badchars) {
-    xfree(xcsv_file.badchars);
-  }
+  xcsv_file.badchars = QString();
 
   if (xcsv_file.description) {
     xfree(xcsv_file.description);
@@ -244,7 +241,7 @@ xcsv_parse_style_line(char* sbuff)
       sp = csv_stringtrim(&sbuff[16], "\"", 1);
       cp = xcsv_get_char_from_constant_table(sp);
       if (cp) {
-        xcsv_file.field_delimiter = xstrdup(cp);
+        xcsv_file.field_delimiter = cp;
         xfree(sp);
       } else {
         xcsv_file.field_delimiter = sp;
@@ -254,15 +251,10 @@ xcsv_parse_style_line(char* sbuff)
 
       /* field delimiters are always bad characters */
       if (0 == strcmp(p, "\\w")) {
-        char* s = xstrappend(xcsv_file.badchars, " \n\r");
-        if (xcsv_file.badchars) {
-          xfree(xcsv_file.badchars);
-        }
-        xcsv_file.badchars = s;
+        xcsv_file.badchars = " \n\r";
       } else {
-        xcsv_file.badchars = xstrappend(xcsv_file.badchars, p);
+        xcsv_file.badchars += p;
       }
-
       xfree(p);
 
     } else
@@ -271,52 +263,30 @@ xcsv_parse_style_line(char* sbuff)
         sp = csv_stringtrim(&sbuff[15], "\"", 1);
         cp = xcsv_get_char_from_constant_table(sp);
         if (cp) {
-          xcsv_file.field_encloser = xstrdup(cp);
+          xcsv_file.field_encloser = cp;
           xfree(sp);
         } else {
           xcsv_file.field_encloser = sp;
         }
 
         p = csv_stringtrim(CSTR(xcsv_file.field_encloser), " ", 0);
-
-        /* field_enclosers are always bad characters */
-        if (xcsv_file.badchars) {
-          xcsv_file.badchars = (char*) xrealloc(xcsv_file.badchars,
-                                                strlen(xcsv_file.badchars) +
-                                                strlen(p) + 1);
-        } else {
-          xcsv_file.badchars = (char*) xcalloc(strlen(p) + 1, 1);
-        }
-
-        strcat(xcsv_file.badchars, p);
-
+        xcsv_file.badchars += p;
         xfree(p);
-
       } else
 
         if (ISSTOKEN(sbuff, "RECORD_DELIMITER")) {
           sp = csv_stringtrim(&sbuff[17], "\"", 1);
           cp = xcsv_get_char_from_constant_table(sp);
           if (cp) {
-            xcsv_file.record_delimiter = xstrdup(cp);
+            xcsv_file.record_delimiter = cp;
             xfree(sp);
           } else {
             xcsv_file.record_delimiter = sp;
           }
 
-          p = csv_stringtrim(CSTR(xcsv_file.record_delimiter), " ", 0);
-
           /* record delimiters are always bad characters */
-          if (xcsv_file.badchars) {
-            xcsv_file.badchars = (char*) xrealloc(xcsv_file.badchars,
-                                                  strlen(xcsv_file.badchars) +
-                                                  strlen(p) + 1);
-          } else {
-            xcsv_file.badchars = (char*) xcalloc(strlen(p) + 1, 1);
-          }
-
-          strcat(xcsv_file.badchars, p);
-
+          p = csv_stringtrim(CSTR(xcsv_file.record_delimiter), " ", 0);
+          xcsv_file.badchars += p;
           xfree(p);
 
         } else
@@ -365,17 +335,7 @@ xcsv_parse_style_line(char* sbuff)
                       } else {
                         p = sp;
                       }
-
-                      if (xcsv_file.badchars) {
-                        xcsv_file.badchars = (char*) xrealloc(xcsv_file.badchars,
-                                                              strlen(xcsv_file.badchars) +
-                                                              strlen(p) + 1);
-                      } else {
-                        xcsv_file.badchars = (char*) xcalloc(strlen(p) + 1, 1);
-                      }
-
-                      strcat(xcsv_file.badchars, p);
-
+                      xcsv_file.badchars += p;
                       xfree(p);
 
                     } else
@@ -663,7 +623,7 @@ xcsv_wr_init(const char* fname)
       setshort_mustuniq(xcsv_file.mkshort_handle, atoi(snuniqueopt));
     }
 
-    setshort_badchars(xcsv_file.mkshort_handle, xcsv_file.badchars);
+    setshort_badchars(xcsv_file.mkshort_handle, CSTR(xcsv_file.badchars));
 
   }
   xcsv_file.gps_datum = GPS_Lookup_Datum_Index(opt_datum);
