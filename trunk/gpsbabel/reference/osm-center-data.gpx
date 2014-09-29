@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="50.600000000" minlon="-0.400000000" maxlat="51.100000000" maxlon="0.100000000"/>
+  <wpt lat="50.900000000" lon="0.100000000">
+    <name>osm-id 1</name>
+    <cmt>osm-id 1</cmt>
+    <desc>osm-id 1</desc>
+  </wpt>
+  <wpt lat="50.900000000" lon="-0.100000000">
+    <name>osm-id 2</name>
+    <cmt>osm-id 2</cmt>
+    <desc>osm-id 2</desc>
+  </wpt>
+  <wpt lat="51.100000000" lon="-0.100000000">
+    <name>osm-id 3</name>
+    <cmt>osm-id 3</cmt>
+    <desc>osm-id 3</desc>
+  </wpt>
+  <wpt lat="51.100000000" lon="0.100000000">
+    <name>osm-id 4</name>
+    <cmt>osm-id 4</cmt>
+    <desc>osm-id 4</desc>
+  </wpt>
+  <wpt lat="50.800000000" lon="0.000000000">
+    <name>osm-id 5</name>
+    <cmt>osm-id 5</cmt>
+    <desc>osm-id 5</desc>
+  </wpt>
+  <wpt lat="50.800000000" lon="-0.200000000">
+    <name>osm-id 6</name>
+    <cmt>osm-id 6</cmt>
+    <desc>osm-id 6</desc>
+  </wpt>
+  <wpt lat="51.000000000" lon="-0.200000000">
+    <name>osm-id 7</name>
+    <cmt>osm-id 7</cmt>
+    <desc>osm-id 7</desc>
+  </wpt>
+  <wpt lat="51.000000000" lon="0.000000000">
+    <name>osm-id 8</name>
+    <cmt>osm-id 8</cmt>
+    <desc>osm-id 8</desc>
+  </wpt>
+  <wpt lat="50.700000000" lon="-0.100000000">
+    <name>osm-id 9</name>
+    <cmt>osm-id 9</cmt>
+    <desc>osm-id 9</desc>
+  </wpt>
+  <wpt lat="50.700000000" lon="-0.300000000">
+    <name>osm-id 10</name>
+    <cmt>osm-id 10</cmt>
+    <desc>osm-id 10</desc>
+  </wpt>
+  <wpt lat="50.900000000" lon="-0.300000000">
+    <name>osm-id 11</name>
+    <cmt>osm-id 11</cmt>
+    <desc>osm-id 11</desc>
+  </wpt>
+  <wpt lat="50.900000000" lon="-0.100000000">
+    <name>osm-id 12</name>
+    <cmt>osm-id 12</cmt>
+    <desc>osm-id 12</desc>
+  </wpt>
+  <wpt lat="50.600000000" lon="-0.200000000">
+    <name>osm-id 13</name>
+    <cmt>osm-id 13</cmt>
+    <desc>osm-id 13</desc>
+  </wpt>
+  <wpt lat="50.600000000" lon="-0.400000000">
+    <name>osm-id 14</name>
+    <cmt>osm-id 14</cmt>
+    <desc>osm-id 14</desc>
+  </wpt>
+  <wpt lat="50.800000000" lon="-0.400000000">
+    <name>osm-id 15</name>
+    <cmt>osm-id 15</cmt>
+    <desc>osm-id 15</desc>
+  </wpt>
+  <wpt lat="50.800000000" lon="-0.200000000">
+    <name>osm-id 16</name>
+    <cmt>osm-id 16</cmt>
+    <desc>osm-id 16</desc>
+  </wpt>
+  <wpt lat="51.000000000" lon="0.000000000">
+    <name>My Restuarant</name>
+    <cmt>My Restuarant</cmt>
+    <desc>My Restuarant</desc>
+    <sym>Restaurant</sym>
+  </wpt>
+  <wpt lat="50.800000000" lon="-0.200000000">
+    <name>My Pub</name>
+    <cmt>My Local Pub</cmt>
+    <desc>My Local Pub</desc>
+    <sym>Bar</sym>
+  </wpt>
+  <wpt lat="50.700000000" lon="-0.300000000">
+    <name>My Store</name>
+    <cmt>My Local Store; Sells Food</cmt>
+    <desc>My Local Store; Sells Food</desc>
+    <sym>Convenience Store</sym>
+  </wpt>
+  <rte>
+    <name>My Restuarant</name>
+    <desc>osm-id 1</desc>
+    <rtept lat="50.900000000" lon="0.100000000">
+      <name>osm-id 1</name>
+      <cmt>osm-id 1</cmt>
+      <desc>osm-id 1</desc>
+    </rtept>
+    <rtept lat="50.900000000" lon="-0.100000000">
+      <name>osm-id 2</name>
+      <cmt>osm-id 2</cmt>
+      <desc>osm-id 2</desc>
+    </rtept>
+    <rtept lat="51.100000000" lon="-0.100000000">
+      <name>osm-id 3</name>
+      <cmt>osm-id 3</cmt>
+      <desc>osm-id 3</desc>
+    </rtept>
+    <rtept lat="51.100000000" lon="0.100000000">
+      <name>osm-id 4</name>
+      <cmt>osm-id 4</cmt>
+      <desc>osm-id 4</desc>
+    </rtept>
+  </rte>
+  <rte>
+    <name>My Pub</name>
+    <desc>osm-id 2</desc>
+    <rtept lat="50.800000000" lon="0.000000000">
+      <name>osm-id 5</name>
+      <cmt>osm-id 5</cmt>
+      <desc>osm-id 5</desc>
+    </rtept>
+    <rtept lat="50.800000000" lon="-0.200000000">
+      <name>osm-id 6</name>
+      <cmt>osm-id 6</cmt>
+      <desc>osm-id 6</desc>
+    </rtept>
+    <rtept lat="51.000000000" lon="-0.200000000">
+      <name>osm-id 7</name>
+      <cmt>osm-id 7</cmt>
+      <desc>osm-id 7</desc>
+    </rtept>
+    <rtept lat="51.000000000" lon="0.000000000">
+      <name>osm-id 8</name>
+      <cmt>osm-id 8</cmt>
+      <desc>osm-id 8</desc>
+    </rtept>
+  </rte>
+  <rte>
+    <name>My Pub</name>
+    <desc>osm-id 3</desc>
+    <rtept lat="50.700000000" lon="-0.100000000">
+      <name>osm-id 9</name>
+      <cmt>osm-id 9</cmt>
+      <desc>osm-id 9</desc>
+    </rtept>
+    <rtept lat="50.700000000" lon="-0.300000000">
+      <name>osm-id 10</name>
+      <cmt>osm-id 10</cmt>
+      <desc>osm-id 10</desc>
+    </rtept>
+    <rtept lat="50.900000000" lon="-0.300000000">
+      <name>osm-id 11</name>
+      <cmt>osm-id 11</cmt>
+      <desc>osm-id 11</desc>
+    </rtept>
+    <rtept lat="50.900000000" lon="-0.100000000">
+      <name>osm-id 12</name>
+      <cmt>osm-id 12</cmt>
+      <desc>osm-id 12</desc>
+    </rtept>
+  </rte>
+  <rte>
+    <name>My Store</name>
+    <desc>osm-id 3</desc>
+    <rtept lat="50.600000000" lon="-0.200000000">
+      <name>osm-id 13</name>
+      <cmt>osm-id 13</cmt>
+      <desc>osm-id 13</desc>
+    </rtept>
+    <rtept lat="50.600000000" lon="-0.400000000">
+      <name>osm-id 14</name>
+      <cmt>osm-id 14</cmt>
+      <desc>osm-id 14</desc>
+    </rtept>
+    <rtept lat="50.800000000" lon="-0.400000000">
+      <name>osm-id 15</name>
+      <cmt>osm-id 15</cmt>
+      <desc>osm-id 15</desc>
+    </rtept>
+    <rtept lat="50.800000000" lon="-0.200000000">
+      <name>osm-id 16</name>
+      <cmt>osm-id 16</cmt>
+      <desc>osm-id 16</desc>
+    </rtept>
+  </rte>
+</gpx>
