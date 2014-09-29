@@ -18,6 +18,8 @@
 
  */
 
+#include <QtCore/QStringList>
+
 /* function prototypes */
 
 char*
