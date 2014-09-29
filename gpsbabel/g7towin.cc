@@ -410,7 +410,6 @@ data_read(void)
   char* buff;
   int line = 0;
   Waypoint* wpt = NULL;
-  Waypoint* prev = NULL;
   route_head* head = NULL;
 
   while ((buff = gbfgetstr(fin))) {
@@ -483,7 +482,6 @@ data_read(void)
     case 'P': /* proximity waypoint */
     case 'W': /* normal waypoint */
       wpt = parse_waypt(cin + 3);
-      prev = wpt;
       if (wpt) {
         if (mode == rtedata) {
           route_add_wpt(head, wpt);

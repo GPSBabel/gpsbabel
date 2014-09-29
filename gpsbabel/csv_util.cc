@@ -754,7 +754,7 @@ void xcsv_file_init(void)
 }
 
 XcsvFile::XcsvFile() {
-   xcsv_file_init(); 
+//   xcsv_file_init(); 
 }
 
 void validate_fieldmap(field_map_t* fmp, bool is_output) {
