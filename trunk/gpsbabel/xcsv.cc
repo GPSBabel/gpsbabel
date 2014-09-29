@@ -106,7 +106,6 @@ xcsv_destroy_style(void)
 {
   queue* elem, *tmp;
   field_map_t* fmp;
-  ogue_t* ogp;
   int internal = 0;
 
   /*
@@ -115,26 +114,10 @@ xcsv_destroy_style(void)
    */
 
   /* destroy the prologue */
-  QUEUE_FOR_EACH(&xcsv_file.prologue, elem, tmp) {
-    ogp = (ogue_t*)elem;
-    if (ogp->val) {
-      xfree(ogp->val);
-    }
-    if (elem) {
-      xfree(elem);
-    }
-  }
+  xcsv_file.epilogue.clear();
 
   /* destroy the epilogue */
-  QUEUE_FOR_EACH(&xcsv_file.epilogue, elem, tmp) {
-    ogp = (ogue_t*)elem;
-    if (ogp->val) {
-      xfree(ogp->val);
-    }
-    if (elem) {
-      xfree(elem);
-    }
-  }
+  xcsv_file.epilogue.clear();
 
   /* destroy the ifields */
   QUEUE_FOR_EACH(&xcsv_file.ifield, elem, tmp) {
@@ -341,11 +324,11 @@ xcsv_parse_style_line(char* sbuff)
                     } else
 
                       if (ISSTOKEN(sbuff, "PROLOGUE")) {
-                        xcsv_prologue_add(xstrdup(&sbuff[9]));
+                        xcsv_prologue_add(sbuff + 9);
                       } else
 
                         if (ISSTOKEN(sbuff, "EPILOGUE")) {
-                          xcsv_epilogue_add(xstrdup(&sbuff[9]));
+                          xcsv_epilogue_add(sbuff + 9);
                         } else
 
                           if (ISSTOKEN(sbuff, "ENCODING")) {
