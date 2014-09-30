@@ -176,6 +176,7 @@ extern ff_vecs_t subrip_vecs;
 extern ff_vecs_t format_garmin_xt_vecs;
 extern ff_vecs_t format_fit_vecs;
 extern ff_vecs_t mapbar_track_vecs;
+extern ff_vecs_t f90g_track_vecs;
 extern ff_vecs_t mapfactor_vecs;
 
 static
@@ -1060,6 +1061,13 @@ vecs_t vec_list[] = {
     "mapbar",
     "Mapbar (China) navigation track for Sonim Xp3300",
     "trk",
+    NULL,
+  },
+  {
+    &f90g_track_vecs,
+    "f90g",
+    "F90G Automobile DVR GPS log file",
+    "map",
     NULL,
   },
   {
