@@ -108,7 +108,7 @@ f90g_track_read(void)
     // Pick the TT record apart and if it is good, fill in a new Waypoint
     year = mon = mday = hour = min = sec = latitudeDeg = latitudeMin = longitudeDeg = longitudeMin = velocity= 0;
     // Get the time stamp
-    sscanf(ttRec,"%4d%2d%2d%2d%2d%2d" ,&year, &mon, &mday, &hour, &min, &sec);
+    sscanf(&ttRec[15],"%4d%2d%2d%2d%2d%2d" ,&year, &mon, &mday, &hour, &min, &sec);
     // Get latitude and longitude
     sscanf(&ttRec[30],"%1c%2d%6d%1c%3d%6d", &northSouth, &latitudeDeg, &latitudeMin,
            &eastWest, &longitudeDeg, &longitudeMin);
@@ -121,7 +121,7 @@ f90g_track_read(void)
 
       // create the Waypoint and fill it in
       readWaypoint = new Waypoint;
-      dt = QDateTime(QDate(year, mon, mday), QTime(hour, min, sec));
+      dt = QDateTime(QDate(year, mon, mday), QTime(hour, min, sec), Qt::UTC);
 
       readWaypoint->SetCreationTime(dt);
       readWaypoint->latitude = (double(latitudeDeg) + double(latitudeMin)/MIN_PER_DEGREE)
@@ -131,7 +131,7 @@ f90g_track_read(void)
 //       qDebug() << dt.toString() << latitudeDeg << latitudeMin << readWaypoint->latitude;
       readWaypoint->speed = float(velocity) * SPEED_CONVERSION;
       // Name the Waypoint
-      snprintf(tempBuf, sizeof(tempBuf), "T%2.2d%2.2d-%3.3dKPH", min, sec, velocity);
+      snprintf(tempBuf, sizeof(tempBuf), "%2.2dM%2.2dS-%3.3dKPH", min, sec, velocity);
       readWaypoint->shortname = QString(tempBuf);
 
       // Add the Waypoint to the current track
