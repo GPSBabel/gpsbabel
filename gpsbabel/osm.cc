@@ -668,6 +668,7 @@ osm_way_end(xg_string args, const QXmlStreamAttributes*)
     if (wpt->wpt_flags.fmt_use) {
       waypt_add(wpt);
     } else {
+      delete(wpt);
       wpt = NULL;
     }
   }
