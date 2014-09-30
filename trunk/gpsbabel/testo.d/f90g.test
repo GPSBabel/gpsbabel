@@ -1,4 +1,4 @@
 # F90G Automobile DVR GPS logging
 rm -f ${TMPDIR}/f90g.gpx
 gpsbabel -i f90g -f ${REFERENCE}/track/f90g-sample.map -o gpx -F ${TMPDIR}/f90g.gpx
-# compare ${REFERENCE}/track/f90g-sample.gpx ${TMPDIR}/f90g.gpx 
+compare ${REFERENCE}/track/f90g-sample.gpx ${TMPDIR}/f90g.gpx 
