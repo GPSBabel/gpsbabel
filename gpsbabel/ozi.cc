@@ -501,7 +501,7 @@ ozi_parse_waypt(int field, const QString& str, Waypoint* wpt_tmp, ozi_fsdata* fs
     break;
   case 1:
     /* waypoint name */
-    wpt_tmp->shortname = csv_stringtrim(str, "");
+    wpt_tmp->shortname = str.trimmed();
     break;
   case 2:
     /* degrees latitude */
@@ -541,7 +541,7 @@ ozi_parse_waypt(int field, const QString& str, Waypoint* wpt_tmp, ozi_fsdata* fs
     break;
   case 10:
     /* Description */
-    wpt_tmp->description = csv_stringtrim(str, "");
+    wpt_tmp->description = str.trimmed();
     break;
   case 11:
     /* pointer direction 0,1,2,3 bottom,top,left,right */

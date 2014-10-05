@@ -185,8 +185,8 @@ static void
 xol_write_string(const QString& name, const QString& str)
 {
   if (!str.isEmpty()) {
-    QString temp = strenquote(str, '"');
-    gbfprintf(fout, " %s=%s", CSTR(name), CSTR(temp));
+    QString out = name + "=" + strenquote(str, '"');
+    gbfputs(out, fout);
   }
 }
 
