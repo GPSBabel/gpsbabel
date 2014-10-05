@@ -318,7 +318,8 @@ unicsv_parse_gc_id(const char* str)
     } else {
       base = (*str < 'G') ? 16 : 31;
     }
-
+    // FIXME: this is wrong. 0123456789ABCDEFGHJKMNPQRTVWXYZ  ILOSU are omitted.
+    // That nobody has noticed is a good hint nobody cares...
     while ((cx = *str++)) {
       int num;
 
@@ -338,8 +339,6 @@ unicsv_parse_gc_id(const char* str)
   }
   return res;
 }
-
-// static int unicsv_parse_time(const char *str, int *msec, time_t *date);
 
 static time_t
 unicsv_parse_date(const char* str, int* consumed)
@@ -416,7 +415,6 @@ unicsv_parse_time(const char* str, int* msec, time_t* date)
       *date = ldate;
     }
   }
-
   ct = sscanf(str, "%d%1[.://]%d%1[.://]%d%lf", &hour, sep, &min, sep, &sec, &ms);
   is_fatal(ct < 5, MYNAME ": Could not parse time string (%s).\n", str);
   if (ct == 6) {
@@ -1670,52 +1668,38 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
   }
   if FIELD_USED(fld_date) {
     if (wpt->creation_time.toTime_t() >= SECONDS_PER_DAY) {
-      struct tm tm;
-      char buf[32];
-      time_t time = wpt->GetCreationTime().toTime_t();
-
+      QDateTime dt;
       if (opt_utc) {
-        time += atoi(opt_utc) * SECONDS_PER_HOUR;
-        tm = *gmtime(&time);
+        dt = wpt->GetCreationTime().toUTC();
+        // We might wrap to a different day by overriding the TZ offset.
+        dt = dt.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
       } else {
-        const time_t tt = wpt->GetCreationTime().toTime_t();
-        tm = *localtime(&tt);
+        dt = wpt->GetCreationTime();
       }
-      tm.tm_year += 1900;
-      tm.tm_mon += 1;
-      snprintf(buf, sizeof(buf), "%04d/%02d/%02d", tm.tm_year, tm.tm_mon, tm.tm_mday);
-      gbfprintf(fout, "%s%s", unicsv_fieldsep, buf);
+      QString date = dt.toString("yyyy/MM/dd");
+      gbfputs(unicsv_fieldsep, fout);
+      gbfputs(date, fout);
     } else {
       gbfputs(unicsv_fieldsep, fout);
     }
   }
   if FIELD_USED(fld_time) {
     if (wpt->creation_time.isValid()) {
-      struct tm tm;
-      char buf[32], msec[12];
-      time_t time = wpt->GetCreationTime().toTime_t();
-
+      QTime t;
       if (opt_utc) {
-        time += atoi(opt_utc) * SECONDS_PER_HOUR;
-        tm = *gmtime(&time);
+        t = wpt->GetCreationTime().toUTC().time();
+        t = t.addSecs(atoi(opt_utc) * SECONDS_PER_HOUR);
       } else {
-        const time_t tt = wpt->GetCreationTime().toTime_t();
-        tm = *localtime(&tt);
+        t = wpt->GetCreationTime().time();
       }
-      snprintf(buf, sizeof(buf), "%02d:%02d:%02d", tm.tm_hour, tm.tm_min, tm.tm_sec);
-
-      int millisecs = wpt->GetCreationTime().time().msec();
-      if (millisecs > 0) {
-        int len = 3;
-
-        while (len && (millisecs % 10 == 0)) {
-          millisecs /= 10;
-          len--;
-        }
-        snprintf(msec, sizeof(msec), ".%0*d", len, millisecs);
-        strcat(buf, msec);
+      QString out;
+      if (t.msec() > 0) {
+        out = t.toString("hh:mm:ss.z");
+      } else {
+        out = t.toString("hh:mm:ss");
       }
-      gbfprintf(fout, "%s%s", unicsv_fieldsep, buf);
+      gbfputs(unicsv_fieldsep, fout);
+      gbfputs(out, fout);
     } else {
       gbfputs(unicsv_fieldsep, fout);
     }

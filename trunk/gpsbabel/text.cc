@@ -130,9 +130,10 @@ text_disp(const Waypoint* wpt)
   }
 
   if (wpt->description != wpt->shortname) {
-    gbfprintf(file_out, "%s", CSTRc(wpt->description));
+    gbfputs(wpt->description, file_out);
     if (!wpt->gc_data->placer.isEmpty()) {
-      gbfprintf(file_out, " by %s", CSTR(wpt->gc_data->placer));
+      gbfputs(" by ", file_out);
+      gbfputs(wpt->gc_data->placer, file_out);
     }
   }
   if (wpt->gc_data->terr) {
@@ -161,7 +162,9 @@ text_disp(const Waypoint* wpt)
       xfree(hint);
     }
   } else if (!wpt->notes.isEmpty() && (wpt->description.isEmpty() || wpt->notes != wpt->description)) {
-    gbfprintf(file_out, "\n%s\n", CSTRc(wpt->notes));
+    gbfputs("\n", file_out);
+    gbfputs(wpt->notes, file_out);
+    gbfputs("\n", file_out);
   }
 
   fs_gpx = NULL;
@@ -181,12 +184,14 @@ text_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:type");
       if (logpart) {
-        gbfprintf(file_out, "%s by ", CSTR(logpart->cdata));
+        gbfputs(logpart->cdata, file_out);
+        gbfputs(" by ", file_out);
       }
 
       logpart = xml_findfirst(curlog, "groundspeak:finder");
       if (logpart) {
-        gbfprintf(file_out, "%s on ", CSTR(logpart->cdata));
+        gbfputs(logpart->cdata, file_out);
+        gbfputs(" on ", file_out);
       }
 
       logpart = xml_findfirst(curlog, "groundspeak:date");

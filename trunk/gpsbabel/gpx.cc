@@ -1033,7 +1033,7 @@ gpx_end(const QString& el)
     rte_head->rte_desc = cdatastr;
     break;
   case tt_garmin_rte_display_color:
-    rte_head->line_color.bbggrr = gt_color_value_by_name(CSTR(cdatastr));
+    rte_head->line_color.bbggrr = gt_color_value_by_name(cdatastr);
     break;
   case tt_rte_number:
     rte_head->rte_num = cdatastr.toInt();
@@ -1064,7 +1064,7 @@ gpx_end(const QString& el)
     trk_head->rte_desc = cdatastr;
     break;
   case tt_garmin_trk_display_color:
-    trk_head->line_color.bbggrr = gt_color_value_by_name(CSTR(cdatastr));
+    trk_head->line_color.bbggrr = gt_color_value_by_name(cdatastr);
     break;
   case tt_trk_number:
     trk_head->rte_num = cdatastr.toInt();
