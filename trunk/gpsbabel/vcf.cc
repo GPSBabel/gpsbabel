@@ -95,6 +95,12 @@ vcf_print(const char* s)
 }
 
 static void
+vcf_print(const QString& s)
+{
+  vcf_print(CSTR(s));
+}
+
+static void
 vcf_disp(const Waypoint* wpt)
 {
   int latint, lonint;
@@ -117,9 +123,8 @@ vcf_disp(const Waypoint* wpt)
   vcf_print_utf(&wpt->gc_data->desc_long);
   gbfprintf(file_out, "\\n\\nHINT:\\n");
   if (vcf_encrypt) {
-    char* s = rot13(wpt->gc_data->hint);
+    QString s = rot13(wpt->gc_data->hint);
     vcf_print(s);
-    xfree(s);
   } else {
     vcf_print(CSTR(wpt->gc_data->hint));
   }

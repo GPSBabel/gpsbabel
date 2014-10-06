@@ -209,7 +209,7 @@ tmpro_waypt_pr(const Waypoint* wpt)
   if (wpt->HasUrlLink()) {
     // Yes, it's lame to allocate/copy here.
     UrlLink link = wpt->GetUrlLink();
-    l = xstrdup(CSTR(link.url_));
+    l = xstrdup(link.url_);
   }
   gbfprintf(file_out, "new\t%.6s\t%.80s\t%08.6f\t%08.6f\t\t\t%.2f\t%d\t%d\t%.128s\n",
             CSTRc(shortname),

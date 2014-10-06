@@ -139,14 +139,13 @@ html_disp(const Waypoint* wpt)
     xfree(tmpstr);
   }
   if (!wpt->gc_data->hint.isEmpty()) {
-    char* hint = NULL;
+    QString hint;
     if (html_encrypt) {
       hint = rot13(wpt->gc_data->hint);
     } else {
-      hint = xstrdup(CSTR(wpt->gc_data->hint));
+      hint = wpt->gc_data->hint;
     }
-    gbfprintf(file_out, "<p class=\"gpsbabelhint\"><strong>Hint:</strong> %s</p>\n", hint);
-    xfree(hint);
+    gbfprintf(file_out, "<p class=\"gpsbabelhint\"><strong>Hint:</strong> %s</p>\n", CSTR(hint));
   } else if (!wpt->notes.isEmpty() && (wpt->description.isEmpty() || wpt->notes != wpt->description)) {
     gbfprintf(file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", CSTRc(wpt->notes));
   }
@@ -214,22 +213,19 @@ html_disp(const Waypoint* wpt)
       logpart = xml_findfirst(curlog, "groundspeak:text");
       if (logpart) {
         char* encstr = NULL;
-        char* s = NULL;
-        char* t = NULL;
         int encoded = 0;
         encstr = xml_attribute(logpart, "encoded");
         encoded = (toupper(encstr[0]) != 'F');
 
+        QString s;
         if (html_encrypt && encoded) {
           s = rot13(logpart->cdata);
         } else {
           s = xstrdup(logpart->cdata);
         }
 
-        t = html_entitize(s);
-        gbfprintf(file_out, "%s", t);
-        xfree(t);
-        xfree(s);
+        QString t = html_entitize(s);
+        gbfputs(t, file_out);
       }
 
       gbfprintf(file_out, "</p>\n");

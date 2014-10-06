@@ -808,7 +808,7 @@ xml_parse_time(const QString& dateTimeString)
   int off_sign = 1;
   char* offsetstr = NULL;
   char* pointstr = NULL;
-  char* timestr = xstrdup(CSTR(dateTimeString));
+  char* timestr = xstrdup(dateTimeString);
 
   offsetstr = strchr(timestr, 'Z');
   if (offsetstr) {

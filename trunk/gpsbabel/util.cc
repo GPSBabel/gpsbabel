@@ -1165,10 +1165,10 @@ strlower(char* src)
   return src;
 }
 
-char*
+QString
 rot13(const QString& s)
 {
-  char* result = xstrdup(CSTR(s));
+  char* result = xstrdup(s);
   char* cur = result;
   int flip = 1;
   while (cur && *cur) {
@@ -1185,7 +1185,9 @@ rot13(const QString& s)
     }
     cur++;
   }
-  return result;
+  QString r(result);
+  xfree(result);
+  return r;
 }
 
 /*
@@ -1406,8 +1408,8 @@ strip_nastyhtml(const QString& in)
   char* returnstr, *sp;
   char* lcstr, *lcp;
 
-  sp = returnstr = xstrdup(CSTR(in));
-  lcp = lcstr = strlower(xstrdup(CSTR(in)));
+  sp = returnstr = xstrdup(in);
+  lcp = lcstr = strlower(xstrdup(in));
 
   while (lcp = strstr(lcstr, "<body>"), NULL != lcp) {
     sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */
