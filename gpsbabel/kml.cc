@@ -1398,7 +1398,7 @@ QString kml_geocache_get_logs(const Waypoint* wpt)
       if (html_encrypt && encoded) {
         s = rot13(logpart->cdata);
       } else {
-        s = xstrdup(logpart->cdata);
+        s = logpart->cdata;
       }
 
       r = r + "<br />";
