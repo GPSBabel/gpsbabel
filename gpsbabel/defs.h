@@ -1005,7 +1005,7 @@ const char* get_filename(const char* fname);			/* extract the filename portion *
 /* this lives in gpx.c */
 gpsbabel::DateTime xml_parse_time(const QString& cdatastr);
 
-char* rot13(const QString& str);
+QString rot13(const QString& str);
 
 /*
  * PalmOS records like fixed-point numbers, which should be rounded
@@ -1113,9 +1113,14 @@ int gb_ptr2int(const void* p);
  */
 int parse_coordinates(const char* str, int datum, const grid_type grid,
                       double* latitude, double* longitude, const char* module);
+int parse_coordinates(const QString& str, int datum, const grid_type grid,
+                      double* latitude, double* longitude, const char* module);
 int parse_distance(const char* str, double* val, double scale, const char* module);
+int parse_distance(const QString& str, double* val, double scale, const char* module);
 int parse_speed(const char* str, double* val, const double scale, const char* module);
+int parse_speed(const QString& str, double* val, const double scale, const char* module);
 time_t parse_date(const char* str, const char* format, const char* module);
+time_t parse_date(const QString& str, const char* format, const char* module);
 
 /*
  *  From util_crc.c

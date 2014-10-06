@@ -1389,12 +1389,12 @@ QString kml_geocache_get_logs(const Waypoint* wpt)
     logpart = xml_findfirst(curlog, "groundspeak:text");
     if (logpart) {
       char* encstr = NULL;
-      char* s = NULL;
       char* t = NULL;
       int encoded = 0;
       encstr = xml_attribute(logpart, "encoded");
       encoded = (toupper(encstr[0]) != 'F');
 
+      QString s;
       if (html_encrypt && encoded) {
         s = rot13(logpart->cdata);
       } else {
@@ -1405,7 +1405,6 @@ QString kml_geocache_get_logs(const Waypoint* wpt)
       t = html_entitize(s);
       r = r + t;
       xfree(t);
-      xfree(s);
     }
 
     r += "</p>";

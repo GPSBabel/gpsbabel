@@ -963,7 +963,7 @@ wdata_compute_size(writer_data_t* data)
 
     if (!str.isEmpty()) {
       dt->addr_is_dynamic = 1;
-      dt->addr = xstrdup(CSTR(str));
+      dt->addr = xstrdup(str);
       dt->mask |= GPI_ADDR_ADDR;
       dt->sz += (8 + strlen(dt->addr));
     }
@@ -1058,14 +1058,9 @@ wdata_write(const writer_data_t* data)
     if (str.isEmpty()) {
       str = wpt->notes;
     }
-//		if (str && (strcmp(str, wpt->shortname) == 0)) str = NULL;
 
     gbfputint32(0x80002, fout);
-#if NEW_STRINGS
     s0 = s1 = 19 + wpt->shortname.length();
-#else
-    s0 = s1 = 19 + strlen(wpt->shortname);
-#endif
     if (! opt_hide_bitmap) {
       s0 += 10;  /* tag(4) */
     }

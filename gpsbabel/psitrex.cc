@@ -357,7 +357,7 @@ psit_waypoint_w(gbfile* psit_file, const Waypoint* wpt)
 
   ident = global_opts.synthesize_shortnames ?
           mkshort(mkshort_handle, src) :
-          xstrdup(CSTRc(wpt->shortname));
+          xstrdup(wpt->shortname);
 
   gbfprintf(psit_file, " %-6s, ", ident);
   xfree(ident);

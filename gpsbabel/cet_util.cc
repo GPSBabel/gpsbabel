@@ -438,7 +438,7 @@ cet_convert_string(const QString& str)
   // FIXME: this is really weird.  Since cet_convert_string wants to free
   // its argument (!) we make a duplicate just to satisfy that kind of goofy
   // requirement.
-  return cet_convert_string(xstrdup(CSTR(str)));
+  return cet_convert_string(xstrdup(str));
 }
 
 /* cet_convert_waypt: internal used within cet_convert_strings process */

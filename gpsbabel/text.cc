@@ -152,14 +152,13 @@ text_disp(const Waypoint* wpt)
       xfree(stripped_html);
     }
     if (!wpt->gc_data->hint.isEmpty()) {
-      char* hint = NULL;
+      QString hint;
       if (txt_encrypt) {
         hint = rot13(wpt->gc_data->hint);
       } else {
         hint = xstrdup(wpt->gc_data->hint);
       }
-      gbfprintf(file_out, "\nHint: %s\n", hint);
-      xfree(hint);
+      gbfprintf(file_out, "\nHint: %s\n", CSTR(hint));
     }
   } else if (!wpt->notes.isEmpty() && (wpt->description.isEmpty() || wpt->notes != wpt->description)) {
     gbfputs("\n", file_out);
@@ -228,19 +227,18 @@ text_disp(const Waypoint* wpt)
       logpart = xml_findfirst(curlog, "groundspeak:text");
       if (logpart) {
         char* encstr = NULL;
-        char* s = NULL;
         int encoded = 0;
         encstr = xml_attribute(logpart, "encoded");
         encoded = (toupper(encstr[0]) != 'F');
 
+        QString s;
         if (txt_encrypt && encoded) {
           s = rot13(logpart->cdata);
         } else {
-          s = xstrdup(logpart->cdata);
+          s = logpart->cdata;
         }
 
-        gbfprintf(file_out, "%s", s);
-        xfree(s);
+        gbfputs(s, file_out);
       }
 
       gbfprintf(file_out, "\n");
