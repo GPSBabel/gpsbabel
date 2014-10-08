@@ -289,6 +289,6 @@ int
 parse_coordinates(const QString& str, int datum, const grid_type grid,
                   double* latitude, double* longitude, const char* module)
 {
-  return parse_coordinates(str, datum, grid,
+  return parse_coordinates(CSTR(str), datum, grid,
                            latitude, longitude, module);
 }
