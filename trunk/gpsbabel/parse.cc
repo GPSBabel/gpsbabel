@@ -151,7 +151,7 @@ parse_speed(const char* str, double* val, const double scale, const char* module
 int
 parse_speed(const QString& str, double* val, const double scale, const char* module)
 {
-  return parse_speed(str, val, scale, module);
+  return parse_speed(CSTR(str), val, scale, module);
 }
 
 /*
