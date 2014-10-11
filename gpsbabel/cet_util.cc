@@ -86,55 +86,6 @@ cet_str_any_to_any(const char* src, const cet_cs_vec_t* src_vec, const cet_cs_ve
   return c1;
 }
 
-/* %%% cet_valid_char %%%
- *
- * returnes 1 if convertable otherwise 0
- *
- */
-
-int
-cet_valid_char(const char* src, const cet_cs_vec_t* vec)
-{
-  int value;
-
-  const cet_cs_vec_t* v = (vec != NULL) ? vec : &cet_cs_vec_ansi_x3_4_1968;
-  return cet_char_to_ucs4(*src, v, &value);
-}
-
-
-#ifdef DEBUG_MEM
-
-void
-cet_check_cs(cet_cs_vec_t* vec)	/* test well sorted link & extra tables */
-{
-  cet_ucs4_link_t* link;
-
-  if ((link = (cet_ucs4_link_t*)vec->ucs4_link)) {
-    int i, j;
-
-    for (i = 0, j = 1; j < vec->ucs4_links; i++, j++) {
-      if (link[i].value >= link[j].value) {
-        printf(MYNAME ": checked 0x%04x with 0x%04x\n", link[i].value, link[j].value);
-        fatal(MYNAME ": \"%s\"-link-table unsorted !!!\n", vec->name);
-      }
-
-    }
-  }
-  if ((link = (cet_ucs4_link_t*)vec->ucs4_extra)) {
-    int i, j;
-
-    for (i = 0, j = 1; j < vec->ucs4_extras; i++, j++) {
-      if (link[i].value >= link[j].value) {
-        printf(MYNAME ": check 0x%04x with 0x%04x\n", link[i].value, link[j].value);
-        fatal(MYNAME ": \"%s\"-extra-table unsorted !!!\n", vec->name);
-      }
-
-    }
-  }
-}
-
-#endif
-
 static signed int
 cet_cs_alias_qsort_cb(const void* a, const void* b)
 {
@@ -536,38 +487,4 @@ cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, cons
   if (global_opts.debug_level > 0) {
     printf(", done.\n");
   }
-}
-
-
-/* %%% cet_fprintf / cet_vfprintf %%%
- *
- * - print any special hard-coded characters from inside a module - */
-
-int cet_gbfprintf(gbfile* stream, const cet_cs_vec_t* src_vec, const char* fmt, ...)
-{
-  int res;
-  char* cout;
-  va_list args;
-
-  va_start(args, fmt);
-  xvasprintf(&cout, fmt, args);
-  va_end(args);
-
-  if (global_opts.charset != src_vec) {
-    if (src_vec != &cet_cs_vec_utf8) {
-      char* ctemp = cet_str_any_to_utf8(cout, src_vec);
-      xfree(cout);
-      cout = ctemp;
-    }
-    if (global_opts.charset != &cet_cs_vec_utf8) {
-      char* ctemp = cet_str_utf8_to_any(cout, global_opts.charset);
-      xfree(cout);
-      cout = ctemp;
-    }
-  }
-
-  res = gbfprintf(stream, "%s", cout);
-  xfree(cout);
-
-  return res;
 }
