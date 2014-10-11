@@ -258,7 +258,6 @@ void tpo_read_2_x(void)
   char buff[16];
   short track_count, waypoint_count;
   double first_lat, first_lon, lat_scale, lon_scale, amt;
-  short* lon_delta, *lat_delta;
   int i, j;
   route_head* track_temp;
   Waypoint* waypoint_temp;
@@ -312,10 +311,10 @@ void tpo_read_2_x(void)
     waypoint_count = gbfgetint16(tpo_file_in);
 
     /* allocate temporary memory for the waypoint deltas */
-    lon_delta = (short*) xmalloc(waypoint_count * sizeof(short));
-    lat_delta = (short*) xmalloc(waypoint_count * sizeof(short));
+    std::vector<short> lat_delta(waypoint_count);
+    std::vector<short> lon_delta(waypoint_count);
 
-    for (j=0; j<waypoint_count; j++) {
+    for (j = 0; j < waypoint_count; j++) {
 
       /* get this point's longitude delta from the first waypoint */
       lon_delta[j] = gbfgetint16(tpo_file_in);
@@ -340,7 +339,7 @@ void tpo_read_2_x(void)
     gbfread(&buff[0], 1, 2, tpo_file_in);
 
     /* multiply all the deltas by the scaling factors to determine the waypoint positions */
-    for (j=0; j<waypoint_count; j++) {
+    for (j = 0; j < waypoint_count; j++) {
 
       waypoint_temp = new Waypoint;
 
@@ -359,10 +358,6 @@ void tpo_read_2_x(void)
 
       track_add_wpt(track_temp, waypoint_temp);
     }
-
-    /* free temporary memory */
-    xfree(lon_delta);
-    xfree(lat_delta);
   }
 }
 
@@ -852,7 +847,6 @@ void tpo_process_waypoints(void)
     int lat;
     int lon;
     unsigned int altitude;
-
 
 //UNKNOWN DATA LENGTH
     (void)tpo_read_int(); // 0x00
