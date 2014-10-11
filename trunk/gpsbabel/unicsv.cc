@@ -380,11 +380,11 @@ unicsv_parse_date(const char* str, int* consumed)
 }
 
 static time_t
-unicsv_parse_time(const char* str, int* msec, time_t* date)
+unicsv_parse_time(const char* str, int* usec, time_t* date)
 {
   int hour, min, ct, sec;
   int consumed = 0;
-  double ms;
+  double us;
   char sep[2];
   time_t ldate;
 
@@ -398,16 +398,16 @@ unicsv_parse_time(const char* str, int* msec, time_t* date)
       *date = ldate;
     }
   }
-  ct = sscanf(str, "%d%1[.://]%d%1[.://]%d%lf", &hour, sep, &min, sep, &sec, &ms);
+  ct = sscanf(str, "%d%1[.://]%d%1[.://]%d%lf", &hour, sep, &min, sep, &sec, &us);
   is_fatal(ct < 5, MYNAME ": Could not parse time string (%s).\n", str);
   if (ct == 6) {
-    *msec = lround((ms * 1000000));
-    if (*msec > 999999) {
-      *msec = 0;
+    *usec = lround((us * 1000000));
+    if (*usec > 999999) {
+      *usec = 0;
       sec++;
     }
   } else {
-    *msec = 0;
+    *usec = 0;
   }
 
   return ((hour * SECONDS_PER_HOUR) + (min * 60) + (int)sec);
@@ -503,7 +503,6 @@ unicsv_compare_fields(const QString& s, const field_t* f)
 {
   return unicsv_compare_fields(CSTR(s), f);
 }
-
 
 static void
 unicsv_fondle_header(QString s)
@@ -639,7 +638,7 @@ unicsv_parse_one_line(char* ibuf)
   int checked = 0;
   time_t date = -1; 
   time_t time = -1;
-  int msec = -1;
+  int usec = -1;
   char is_localtime = 0;
   garmin_fs_t* gmsd;
   double d;
@@ -837,7 +836,7 @@ unicsv_parse_one_line(char* ibuf)
 
     case fld_utc_time:
       if ((is_localtime < 2) && (time < 0)) {
-        time = unicsv_parse_time(CSTR(s), &msec, &date);
+        time = unicsv_parse_time(s, &usec, &date);
         is_localtime = 0;
       }
       break;
@@ -916,7 +915,7 @@ unicsv_parse_one_line(char* ibuf)
 
     case fld_time:
       if ((is_localtime < 2) && (time < 0)) {
-        time = unicsv_parse_time(CSTR(s), &msec, &date);
+        time = unicsv_parse_time(s, &usec, &date);
         is_localtime = 1;
       }
       break;
@@ -954,7 +953,7 @@ unicsv_parse_one_line(char* ibuf)
 
     case fld_datetime:
       if ((is_localtime < 2) && (date < 0) && (time < 0)) {
-        time = unicsv_parse_time(CSTR(s), &msec, &date);
+        time = unicsv_parse_time(s, &usec, &date);
         is_localtime = 1;
       }
       break;
@@ -1062,8 +1061,8 @@ unicsv_parse_one_line(char* ibuf)
         break;
       case fld_gc_exported: {
         time_t time, date;
-        int msec;
-        time = unicsv_parse_time(s, &msec, &date);
+        int usec;
+        time = unicsv_parse_time(s, &usec, &date);
         if (date || time) {
           gc_data->exported = unicsv_adjust_time(time, &date);
         }
@@ -1071,8 +1070,8 @@ unicsv_parse_one_line(char* ibuf)
       break;
       case fld_gc_last_found: {
         time_t time, date;
-        int msec;
-        time = unicsv_parse_time(s, &msec, &date);
+        int usec;
+        time = unicsv_parse_time(s, &usec, &date);
         if (date || time) {
           gc_data->last_found = unicsv_adjust_time(time, &date);
         }
@@ -1153,8 +1152,8 @@ unicsv_parse_one_line(char* ibuf)
       }
     }
 
-    if (msec >= 0) {
-      wpt->creation_time = wpt->creation_time.addMSecs(msec);
+    if (usec >= 0) {
+      wpt->creation_time = wpt->creation_time.addMSecs(MICRO_TO_MILLI(usec));
     }
 
     if (opt_utc) {

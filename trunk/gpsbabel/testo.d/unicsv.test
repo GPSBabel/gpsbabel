@@ -22,3 +22,7 @@ compare ${TMPDIR}/headerdetection~unicsv.gpx ${REFERENCE}/extensiondata~unicsv.g
 # check default encoding, i.e. utf-8 in and out.
 gpsbabel -i gpx -f ${REFERENCE}/unicsv_encoding.gpx -o unicsv -F ${TMPDIR}/unicsv_encoding.csv
 compare ${TMPDIR}/unicsv_encoding.csv ${REFERENCE}/unicsv_encoding.csv
+
+# verify fractional second read and writes.
+gpsbabel -i unicsv -f ${REFERENCE}/unicsv_subsec.csv -o unicsv -F ${TMPDIR}/unicsv_subsec.csv
+compare ${TMPDIR}/unicsv_subsec.csv ${REFERENCE}/unicsv_subsec.csv
