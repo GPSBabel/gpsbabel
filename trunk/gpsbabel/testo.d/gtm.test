@@ -1,6 +1,5 @@
 
 # GTM
-rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
 gpsbabel -i gtm -f ${REFERENCE}/sample.gtm -o gpx -F ${TMPDIR}/gtm1.gpx
 gpsbabel -i gpx -f ${TMPDIR}/gtm1.gpx -o gtm -F ${TMPDIR}/gtm.gtm
 gpsbabel -i gtm -f ${TMPDIR}/gtm.gtm -o gpx -F ${TMPDIR}/gtm2.gpx
@@ -10,7 +9,6 @@ bincompare ${TMPDIR}/gtm.gtm ${REFERENCE}/sample.gtm
 # GTM compressed files
 # ... do the same as above but with gzipped gtm files
 #
-rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
 gpsbabel -i gtm -f ${REFERENCE}/sample.gtm.gz -o gpx -F ${TMPDIR}/gtm1.gpx
 gpsbabel -i gpx -f ${TMPDIR}/gtm1.gpx -o gtm -F ${TMPDIR}/gtm.gtm.gz
 gpsbabel -i gtm -f ${TMPDIR}/gtm.gtm.gz -o gpx -F ${TMPDIR}/gtm2.gpx
