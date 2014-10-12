@@ -1,10 +1,10 @@
 
 # GPX
-rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.gpx
+rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.wpt
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpsman -F ${TMPDIR}/gm.gm -o gpsutil -F ${TMPDIR}/gu.wpt
 gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpx -F ${TMPDIR}/gl.gpx
-gpsbabel -i gpx -f ${TMPDIR}/gl.gpx -o gpsutil -F ${TMPDIR}/gpx.gpx
-compare ${TMPDIR}/gpx.gpx ${TMPDIR}/gu.wpt
+gpsbabel -i gpx -f ${TMPDIR}/gl.gpx -o gpsutil -F ${TMPDIR}/gpx.wpt
+compare ${TMPDIR}/gpx.wpt ${TMPDIR}/gu.wpt
 
 rm -f ${TMPDIR}/gtrnctr_power.gpx
 gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr_power.tcx -o gpx,garminextensions=1 -F ${TMPDIR}/gtrnctr_power.gpx

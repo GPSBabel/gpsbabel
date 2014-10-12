@@ -1118,24 +1118,21 @@ gpx_end(const QString& el)
   case tt_wpttype_sat:
     wpt_tmp->sat = cdatastr.toDouble();
     break;
-  case tt_wpttype_fix: {
-    // FIXME: this code seems to rely on atoi() parsing 3d and 2d as 3 and 2
-    // which toInt() doesn't do.
-    //wpt_tmp->fix = (fix_type)(cdatastr.toInt() - 1);
-    wpt_tmp->fix = (fix_type)(atoi(CSTR(cdatastr)) - 1);
-  }
-  if (wpt_tmp->fix < fix_2d) {
-    if ((cdatastr.compare("none", Qt::CaseInsensitive)) == 0) {
+  case tt_wpttype_fix:
+    if (cdatastr == QLatin1String("none")) {
       wpt_tmp->fix = fix_none;
-    } else if ((cdatastr.compare("dgps", Qt::CaseInsensitive)) == 0) {
+    } else if (cdatastr == QLatin1String("2d")) {
+      wpt_tmp->fix = fix_2d;
+    } else if (cdatastr == QLatin1String("3d")) {
+      wpt_tmp->fix = fix_3d;
+    } else if (cdatastr == QLatin1String("dgps")) {
       wpt_tmp->fix = fix_dgps;
-    } else if ((cdatastr.compare("pps", Qt::CaseInsensitive)) == 0) {
+    } else if (cdatastr == QLatin1String("pps")) {
       wpt_tmp->fix = fix_pps;
     } else {
       wpt_tmp->fix = fix_unknown;
     }
-  }
-  break;
+    break;
   case tt_wpttype_url:
     link_->url_ = cdatastr;
     break;
@@ -1905,7 +1902,6 @@ gpx_exit(void)
     gpx_version = NULL;
   }
 
-  /* FIXME: is clear necessary or desirable? */
   gpx_namespace_attribute.clear();
 
   if (gpx_global) {
