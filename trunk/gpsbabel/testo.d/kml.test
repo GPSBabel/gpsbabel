@@ -57,6 +57,10 @@ rm -f ${TMPDIR}/bnds_so.kml
 gpsbabel -i gpx -f ${REFERENCE}/bounds-test.gpx -o kml -F - 1> ${TMPDIR}/bnds_so.kml
 compare ${REFERENCE}/bounds-test.kml ${TMPDIR}/bnds_so.kml
 
+# test direction icons
+gpsbabel -i gpx -f ${REFERENCE}/track/tracks.gpx -o kml,track=1,trackdirection=1,units='m' -F ${TMPDIR}/tracks~gpx.kml
+compare ${REFERENCE}/track/tracks~gpx.kml ${TMPDIR}/tracks~gpx.kml
+
 set -e
 if which xmllint > /dev/null;
 then

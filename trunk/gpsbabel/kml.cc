@@ -188,7 +188,7 @@ struct {
 #define ICON_TRK ICON_BASE "track-directional/track-none.png"
 #define ICON_RTE ICON_BASE "track-directional/track-none.png"
 #define ICON_MULTI_TRK ICON_BASE "track-directional/track-0.png"
-#define ICON_DIR ICON_BASE "track-directional/track-%d.png" // format string where next arg is rotational degrees.
+#define ICON_DIR ICON_BASE "track-directional/track-%1.png" // format string where next arg is rotational degrees.
 
 static struct {
   float seq;
@@ -221,9 +221,9 @@ static void kml_step_color(void)
   // Map kml_color_sequencer.seq to an integer in the range [0, KML_COLOR_LIMIT*6).
   // Note that color_seq may be outside this range if the cast from float to int fails.
   color_seq = ((int) kml_color_sequencer.seq) % (KML_COLOR_LIMIT * 6);
-#ifdef KML_COLOR_DEBUG
-  printf("kml_color_sequencer seq %f %d, step %f\n",kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
-#endif
+  if (global_opts.debug_level >= 1) {
+    printf(MYNAME ": kml_color_sequencer seq %f %d, step %f\n",kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
+  }
   if ((color_seq >= (0*KML_COLOR_LIMIT)) && (color_seq < (1*KML_COLOR_LIMIT))) {
     kml_color_sequencer.color.bbggrr = (0)<<16 | (color_seq)<<8 | (KML_COLOR_LIMIT);
   } else if ((color_seq >= (1*KML_COLOR_LIMIT)) && (color_seq < (2*KML_COLOR_LIMIT))) {
@@ -237,7 +237,7 @@ static void kml_step_color(void)
   } else if ((color_seq >= (5*KML_COLOR_LIMIT)) && (color_seq < (6*KML_COLOR_LIMIT))) {
     kml_color_sequencer.color.bbggrr = (6*KML_COLOR_LIMIT-color_seq)<<16 | (0)<<8 | (KML_COLOR_LIMIT);
   } else { // should not occur, but to be safe generate a legal color.
-    fprintf(stderr, "Error in color conversion - using default color.\n");
+    warning(MYNAME ": Error in color conversion - using default color.\n");
     kml_color_sequencer.color.bbggrr = (102)<<16 | (102)<<8 | (102);
   }
   // compute next color.
@@ -544,15 +544,15 @@ kml_output_linestyle(char* /*color*/, int width)
 
 
 #define hovertag(h) h ? 'h' : 'n'
-static void kml_write_bitmap_style_(const char* style, const char* bitmap,
+static void kml_write_bitmap_style_(const QString& style, const QString& bitmap,
                                     int highlighted, int force_heading)
 {
-  int is_track = !strncmp(style, "track", 5);
-  int is_multitrack = !strncmp(style, "multiTrack", 5);
+  int is_track = style.startsWith("track");
+  int is_multitrack = style.startsWith("multiTrack");
 
-  writer->writeComment(QString(" ") + QString(highlighted ? "Highlighted" : "Normal") + QString(" ") + QString(style) + QString(" style "));
+  writer->writeComment(QString(" ") + QString(highlighted ? "Highlighted" : "Normal") + QString(" ") + style + QString(" style "));
   writer->writeStartElement("Style");
-  writer->writeAttribute("id", QString(style) + QString("_") + QString(hovertag(highlighted)));
+  writer->writeAttribute("id", style + QString("_") + QString(hovertag(highlighted)));
 
   writer->writeStartElement("IconStyle");
   if (highlighted) {
@@ -590,11 +590,11 @@ static void kml_write_bitmap_style_(const char* style, const char* bitmap,
  * and non-highlighted version of the style to allow the icons
  * to magnify slightly on a rollover.
  */
-static void kml_write_bitmap_style(kml_point_type pt_type, const char* bitmap,
-                                   const char* customstyle)
+static void kml_write_bitmap_style(kml_point_type pt_type, const QString& bitmap,
+                                   const QString& customstyle)
 {
   int force_heading = 0;
-  const char* style;
+  QString style;
   switch (pt_type) {
   case kmlpt_track:
     style = "track";
@@ -624,11 +624,11 @@ static void kml_write_bitmap_style(kml_point_type pt_type, const char* bitmap,
   writer->writeAttribute("id", style);
   writer->writeStartElement("Pair");
   writer->writeTextElement("key", "normal");
-  writer->writeTextElement("styleUrl", QString("#") + QString(style) + QString("_") + QString(hovertag(0)));
+  writer->writeTextElement("styleUrl", QString("#") + style + QString("_") + QString(hovertag(0)));
   writer->writeEndElement(); // Close Pair tag
   writer->writeStartElement("Pair");
   writer->writeTextElement("key", "highlight");
-  writer->writeTextElement("styleUrl", QString("#") + QString(style) + QString("_") + QString(hovertag(1)));
+  writer->writeTextElement("styleUrl", QString("#") + style + QString("_") + QString(hovertag(1)));
   writer->writeEndElement(); // Close Pair tag
   writer->writeEndElement(); // Close StyleMap tag
 }
@@ -939,7 +939,7 @@ static void kml_add_to_bounds(const Waypoint* waypointp)
 
 static void kml_output_point(const Waypoint* waypointp, kml_point_type pt_type)
 {
-  const char* style;
+  QString style;
 
   switch (pt_type) {
   case kmlpt_track:
@@ -974,13 +974,14 @@ static void kml_output_point(const Waypoint* waypointp, kml_point_type pt_type)
       writer->writeEndElement(); // Close Style tag
     } else {
       if (trackdirection && (pt_type == kmlpt_track)) {
-        char buf[100];
+        QString value;
         if (waypointp->speed < 1) {
-          snprintf(buf, sizeof(buf), "%s-none", style);
-        } else
-          snprintf(buf, sizeof(buf), "%s-%d", style,
-                   (int)(waypointp->course / 22.5 + .5) % 16);
-        writer->writeTextElement("styleUrl", buf);
+          value = QString("%1-none").arg(style);
+        } else {
+          value = QString("%1-%2").arg(style)
+                  .arg((int)(waypointp->course / 22.5 + .5) % 16);
+        }
+        writer->writeTextElement("styleUrl", value);
       } else {
         writer->writeTextElement("styleUrl", style);
       }
@@ -1104,7 +1105,7 @@ void kml_gc_all_tabs_text(QString& cdataStr)
 
 }
 
-const char* map_templates[] = {
+static const QString map_templates[] = {
   "<a href=\"http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]\" target=\"_blank\">Google Maps</a>",
   "<a href=\"http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]\" target=\"_blank\">Google Street View</a>",
   "<a href=\"http://www.geocaching.com/map/default.aspx?lat=$[gc_lat]&lng=$[gc_lon]\" target=\"_blank\">Geocaching.com Google Map</a>",
@@ -1123,7 +1124,6 @@ const char* map_templates[] = {
 static
 void kml_gc_make_balloonstyletext(void)
 {
-  const char** tp;
   QString cdataStr;
 
   writer->writeStartElement("BalloonStyle");
@@ -1174,10 +1174,10 @@ void kml_gc_make_balloonstyletext(void)
   cdataStr.append("  <ul>\n");
   // Fortunately, all the mappy map URLs take lat/longs in the URLs, so
   // the substition is easy.
-  for (tp = map_templates; *tp; tp++) {
+  for (int tp = 0; !map_templates[tp].isEmpty(); tp++) {
     cdataStr.append("    <li>\n");
     cdataStr.append("    ");
-    cdataStr.append(*tp);
+    cdataStr.append(map_templates[tp]);
     cdataStr.append("</li>\n");
   }
   cdataStr.append("  <ul>\n");
@@ -1330,27 +1330,25 @@ kml_lookup_gc_container(const Waypoint* waypointp)
   return cont;
 }
 
-// Not thread safe.  Return strings are small and it's silly to xasprintf/free
-// them so we use a static buffer.
-
-char* kml_gc_mkstar(int rating)
+static QString kml_gc_mkstar(int rating)
 {
-  static char tmp[40];
+  QString star_content;
 
   if (rating < 0 || rating > 50 || rating % 5 != 0) {
     fatal("Bogus difficulty or terrain rating.");
   }
 
   if (0 == rating % 10) {
-    snprintf(tmp, sizeof(tmp), "stars%d", rating / 10);
+    star_content = QString("stars%1").arg(rating / 10);
   } else {
-    snprintf(tmp, sizeof(tmp), "stars%d_%d", rating / 10, rating % 10);
+    star_content = QString("stars%1_%2").arg(rating / 10).arg(rating % 10);
   }
 
-  return tmp;
+  return star_content;
+
 }
 
-QString kml_geocache_get_logs(const Waypoint* wpt)
+static QString kml_geocache_get_logs(const Waypoint* wpt)
 {
   QString r;
 
@@ -1962,15 +1960,9 @@ void kml_write(void)
 
   if (track_waypt_count()) {
     if (trackdirection) {
-      int i;
       kml_write_bitmap_style(kmlpt_other, ICON_TRK, "track-none");
-      for (i = 0; i < 16; i++) {
-        char buf1[100];
-        char buf2[100];
-
-        sprintf(buf1, "track-%d", i);
-        sprintf(buf2, ICON_DIR, i);
-        kml_write_bitmap_style(kmlpt_other, buf2, buf1);
+      for (int i = 0; i < 16; i++) {
+        kml_write_bitmap_style(kmlpt_other, QString(ICON_DIR).arg(i), QString("track-%1").arg(i));
       }
     } else {
       kml_write_bitmap_style(kmlpt_track, ICON_TRK, NULL);
@@ -2076,10 +2068,9 @@ static const
 char*
 kml_get_posn_icon(int freshness)
 {
-  int i;
   int n_stations = sizeof(kml_tracking_icons) / sizeof(kml_tracking_icons[0]);
 
-  for (i = 0; i < n_stations ; i++) {
+  for (int i = 0; i < n_stations ; i++) {
     if (freshness >= kml_tracking_icons[i].freshness) {
       return kml_tracking_icons[i].icon;
     }
