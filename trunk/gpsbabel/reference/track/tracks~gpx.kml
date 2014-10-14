@@ -1,0 +1,2359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <name>GPS device</name>
+    <LookAt>
+      <gx:TimeSpan>
+        <begin>2002-05-25T17:06:21.250Z</begin>
+        <end>2002-05-25T19:05:57.980Z</end>
+      </gx:TimeSpan>
+      <longitude>-91.600158</longitude>
+      <latitude>30.054150</latitude>
+      <range>3611.461364</range>
+    </LookAt>
+    <!-- Normal track-none style -->
+    <Style id="track-none_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-none style -->
+    <Style id="track-none_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-none">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-none_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-none_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-0 style -->
+    <Style id="track-0_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-0 style -->
+    <Style id="track-0_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-0">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-0_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-0_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-1 style -->
+    <Style id="track-1_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-1.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-1 style -->
+    <Style id="track-1_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-1.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-1">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-1_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-1_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-2 style -->
+    <Style id="track-2_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-2.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-2 style -->
+    <Style id="track-2_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-2.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-2">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-2_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-2_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-3 style -->
+    <Style id="track-3_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-3.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-3 style -->
+    <Style id="track-3_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-3.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-3">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-3_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-3_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-4 style -->
+    <Style id="track-4_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-4.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-4 style -->
+    <Style id="track-4_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-4.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-4">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-4_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-4_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-5 style -->
+    <Style id="track-5_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-5.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-5 style -->
+    <Style id="track-5_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-5.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-5">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-5_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-5_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-6 style -->
+    <Style id="track-6_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-6.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-6 style -->
+    <Style id="track-6_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-6.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-6">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-6_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-6_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-7 style -->
+    <Style id="track-7_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-7.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-7 style -->
+    <Style id="track-7_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-7.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-7">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-7_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-7_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-8 style -->
+    <Style id="track-8_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-8.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-8 style -->
+    <Style id="track-8_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-8.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-8">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-8_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-8_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-9 style -->
+    <Style id="track-9_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-9.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-9 style -->
+    <Style id="track-9_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-9.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-9">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-9_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-9_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-10 style -->
+    <Style id="track-10_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-10.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-10 style -->
+    <Style id="track-10_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-10.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-10">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-10_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-10_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-11 style -->
+    <Style id="track-11_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-11.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-11 style -->
+    <Style id="track-11_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-11.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-11">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-11_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-11_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-12 style -->
+    <Style id="track-12_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-12.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-12 style -->
+    <Style id="track-12_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-12.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-12">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-12_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-12_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-13 style -->
+    <Style id="track-13_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-13.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-13 style -->
+    <Style id="track-13_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-13.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-13">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-13_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-13_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-14 style -->
+    <Style id="track-14_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-14.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-14 style -->
+    <Style id="track-14_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-14.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-14">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-14_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-14_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal track-15 style -->
+    <Style id="track-15_n">
+      <IconStyle>
+        <scale>.5</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-15.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <!-- Highlighted track-15 style -->
+    <Style id="track-15_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <heading>0</heading>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-15.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="track-15">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#track-15_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#track-15_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal multiTrack style -->
+    <Style id="multiTrack_n">
+      <IconStyle>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
+        </Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>99ffac59</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <!-- Highlighted multiTrack style -->
+    <Style id="multiTrack_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://earth.google.com/images/kml-icons/track-directional/track-0.png</href>
+        </Icon>
+      </IconStyle>
+      <LineStyle>
+        <color>99ffac59</color>
+        <width>8</width>
+      </LineStyle>
+    </Style>
+    <StyleMap id="multiTrack">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#multiTrack_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#multiTrack_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <!-- Normal waypoint style -->
+    <Style id="waypoint_n">
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <!-- Highlighted waypoint style -->
+    <Style id="waypoint_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="waypoint">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#waypoint_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#waypoint_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="lineStyle">
+      <LineStyle>
+        <color>99ffac59</color>
+        <width>6</width>
+      </LineStyle>
+    </Style>
+    <Folder>
+      <name>Tracks</name>
+      <Placemark>
+        <name>meridian</name>
+        <styleUrl>#multiTrack</styleUrl>
+        <gx:Track>
+          <when>2002-05-25T17:06:21.250Z</when>
+          <when>2002-05-25T17:09:55.190Z</when>
+          <when>2002-05-25T17:12:00.200Z</when>
+          <when>2002-05-25T17:12:48.750Z</when>
+          <when>2002-05-25T17:14:41.200Z</when>
+          <when>2002-05-25T17:17:16.200Z</when>
+          <when>2002-05-25T17:17:46.200Z</when>
+          <when>2002-05-25T17:18:20.810Z</when>
+          <when>2002-05-25T17:19:01.200Z</when>
+          <when>2002-05-25T17:20:46.250Z</when>
+          <when>2002-05-25T17:21:10.250Z</when>
+          <when>2002-05-25T17:21:51.370Z</when>
+          <when>2002-05-25T17:22:35.200Z</when>
+          <when>2002-05-25T17:23:08.560Z</when>
+          <when>2002-05-25T18:04:23.930Z</when>
+          <when>2002-05-25T18:06:04.920Z</when>
+          <when>2002-05-25T18:07:06.920Z</when>
+          <when>2002-05-25T18:08:18.920Z</when>
+          <when>2002-05-25T18:10:20.920Z</when>
+          <when>2002-05-25T18:11:09.930Z</when>
+          <when>2002-05-25T18:12:18.920Z</when>
+          <when>2002-05-25T18:14:22.930Z</when>
+          <when>2002-05-25T18:15:04.930Z</when>
+          <when>2002-05-25T18:16:14.930Z</when>
+          <when>2002-05-25T18:17:01.930Z</when>
+          <when>2002-05-25T18:18:07.940Z</when>
+          <when>2002-05-25T18:19:51.940Z</when>
+          <when>2002-05-25T18:20:39.940Z</when>
+          <when>2002-05-25T18:21:24.930Z</when>
+          <when>2002-05-25T18:22:17.940Z</when>
+          <when>2002-05-25T18:23:18.930Z</when>
+          <when>2002-05-25T18:24:37.940Z</when>
+          <when>2002-05-25T18:28:13.950Z</when>
+          <when>2002-05-25T18:31:36.940Z</when>
+          <when>2002-05-25T18:32:56.950Z</when>
+          <when>2002-05-25T18:34:02.950Z</when>
+          <when>2002-05-25T18:36:03.950Z</when>
+          <when>2002-05-25T18:36:48.960Z</when>
+          <when>2002-05-25T18:37:52.960Z</when>
+          <when>2002-05-25T18:39:18.950Z</when>
+          <when>2002-05-25T18:40:15.960Z</when>
+          <when>2002-05-25T18:41:25.960Z</when>
+          <when>2002-05-25T18:42:37.960Z</when>
+          <when>2002-05-25T18:44:01.960Z</when>
+          <when>2002-05-25T18:45:53.960Z</when>
+          <when>2002-05-25T18:46:54.960Z</when>
+          <when>2002-05-25T18:47:42.970Z</when>
+          <when>2002-05-25T18:48:41.960Z</when>
+          <when>2002-05-25T18:49:52.970Z</when>
+          <when>2002-05-25T18:50:49.970Z</when>
+          <when>2002-05-25T18:52:14.970Z</when>
+          <when>2002-05-25T18:52:56.980Z</when>
+          <when>2002-05-25T18:53:38.980Z</when>
+          <when>2002-05-25T18:55:11.970Z</when>
+          <when>2002-05-25T18:56:32.980Z</when>
+          <when>2002-05-25T18:57:24.970Z</when>
+          <when>2002-05-25T18:58:40.980Z</when>
+          <when>2002-05-25T18:59:28.980Z</when>
+          <when>2002-05-25T19:00:22.980Z</when>
+          <when>2002-05-25T19:01:41.980Z</when>
+          <when>2002-05-25T19:02:48.990Z</when>
+          <when>2002-05-25T19:03:43.980Z</when>
+          <when>2002-05-25T19:04:49.990Z</when>
+          <when>2002-05-25T19:05:57.980Z</when>
+          <gx:coord>-91.610350 30.062183 1.00</gx:coord>
+          <gx:coord>-91.610567 30.062783</gx:coord>
+          <gx:coord>-91.608267 30.062700</gx:coord>
+          <gx:coord>-91.607383 30.062333</gx:coord>
+          <gx:coord>-91.605283 30.061533</gx:coord>
+          <gx:coord>-91.599400 30.059783</gx:coord>
+          <gx:coord>-91.596683 30.057800</gx:coord>
+          <gx:coord>-91.594900 30.055383</gx:coord>
+          <gx:coord>-91.592617 30.053883</gx:coord>
+          <gx:coord>-91.589750 30.049733</gx:coord>
+          <gx:coord>-91.589883 30.049017</gx:coord>
+          <gx:coord>-91.592933 30.048800</gx:coord>
+          <gx:coord>-91.596450 30.046233</gx:coord>
+          <gx:coord>-91.598717 30.045517</gx:coord>
+          <gx:coord>-91.600267 30.047300</gx:coord>
+          <gx:coord>-91.599633 30.047000 2.00</gx:coord>
+          <gx:coord>-91.599467 30.046433</gx:coord>
+          <gx:coord>-91.598950 30.046200 1.00</gx:coord>
+          <gx:coord>-91.597733 30.046367</gx:coord>
+          <gx:coord>-91.597167 30.046350</gx:coord>
+          <gx:coord>-91.596333 30.046783</gx:coord>
+          <gx:coord>-91.595200 30.047450</gx:coord>
+          <gx:coord>-91.594767 30.047800 2.00</gx:coord>
+          <gx:coord>-91.594083 30.048250 1.00</gx:coord>
+          <gx:coord>-91.593800 30.048683 1.00</gx:coord>
+          <gx:coord>-91.593850 30.049350</gx:coord>
+          <gx:coord>-91.593983 30.050317 2.00</gx:coord>
+          <gx:coord>-91.594117 30.050783</gx:coord>
+          <gx:coord>-91.594367 30.051233</gx:coord>
+          <gx:coord>-91.594367 30.051800</gx:coord>
+          <gx:coord>-91.594667 30.052217</gx:coord>
+          <gx:coord>-91.594683 30.053017</gx:coord>
+          <gx:coord>-91.595200 30.054867 6.00</gx:coord>
+          <gx:coord>-91.594933 30.053733 2.00</gx:coord>
+          <gx:coord>-91.594783 30.053183</gx:coord>
+          <gx:coord>-91.594833 30.052633</gx:coord>
+          <gx:coord>-91.595433 30.052450</gx:coord>
+          <gx:coord>-91.595967 30.052483</gx:coord>
+          <gx:coord>-91.596783 30.052650 1.00</gx:coord>
+          <gx:coord>-91.597850 30.053133</gx:coord>
+          <gx:coord>-91.597967 30.053617</gx:coord>
+          <gx:coord>-91.597767 30.053967 6.00</gx:coord>
+          <gx:coord>-91.598083 30.053617</gx:coord>
+          <gx:coord>-91.597917 30.053200</gx:coord>
+          <gx:coord>-91.597517 30.052817</gx:coord>
+          <gx:coord>-91.596933 30.052567</gx:coord>
+          <gx:coord>-91.596433 30.052333</gx:coord>
+          <gx:coord>-91.595683 30.052250</gx:coord>
+          <gx:coord>-91.595017 30.052217</gx:coord>
+          <gx:coord>-91.594700 30.051883</gx:coord>
+          <gx:coord>-91.594400 30.051050</gx:coord>
+          <gx:coord>-91.594233 30.050567</gx:coord>
+          <gx:coord>-91.594100 30.050183</gx:coord>
+          <gx:coord>-91.593717 30.049100</gx:coord>
+          <gx:coord>-91.594250 30.048450</gx:coord>
+          <gx:coord>-91.594750 30.048083</gx:coord>
+          <gx:coord>-91.595450 30.047500 7.00</gx:coord>
+          <gx:coord>-91.596000 30.047067</gx:coord>
+          <gx:coord>-91.596600 30.046633</gx:coord>
+          <gx:coord>-91.597650 30.046400</gx:coord>
+          <gx:coord>-91.598467 30.046233</gx:coord>
+          <gx:coord>-91.598967 30.046317</gx:coord>
+          <gx:coord>-91.599283 30.046783</gx:coord>
+          <gx:coord>-91.599667 30.047133</gx:coord>
+        </gx:Track>
+      </Placemark>
+      <Folder>
+        <name>meridian</name>
+        <snippet/>
+        <description>
+<![CDATA[<table>
+<tr><td><b>Distance</b> 7.7 km </td></tr>
+<tr><td><b>Min Alt</b> 0.000 meters </td></tr>
+<tr><td><b>Max Alt</b> 7.000 meters </td></tr>
+<tr><td><b>Max Speed</b> 41.1 km/hour </td></tr>
+<tr><td><b>Avg Speed</b> 3.8 km/hour </td></tr>
+<tr><td><b>Start Time</b>2002-05-25T17:06:21Z</td></tr>
+<tr><td><b>End Time</b>2002-05-25T19:05:57Z</td></tr>
+</table>]]>
+</description>
+        <TimeSpan>
+          <begin>2002-05-25T17:06:21Z</begin>
+          <end>2002-05-25T19:05:57Z</end>
+        </TimeSpan>
+        <Folder>
+          <name>Points</name>
+          <Placemark>
+            <name>meridian-0</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.610350 </td></tr>
+<tr><td>Latitude: 30.062183 </td></tr>
+<tr><td>Altitude: 1.000 meters </td></tr>
+<tr><td>Heading: 300.1 </td></tr>
+<tr><td>Time: 2002-05-25T17:06:21.250Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.610350</longitude>
+              <latitude>30.062183</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:06:21.250Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.610350,30.062183,1.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-1</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.610567 </td></tr>
+<tr><td>Latitude: 30.062783 </td></tr>
+<tr><td>Speed: 1.2 km/hour </td></tr>
+<tr><td>Heading: 342.6 </td></tr>
+<tr><td>Time: 2002-05-25T17:09:55.190Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.610567</longitude>
+              <latitude>30.062783</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:09:55.190Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.610567,30.062783</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-2</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.608267 </td></tr>
+<tr><td>Latitude: 30.062700 </td></tr>
+<tr><td>Speed: 6.4 km/hour </td></tr>
+<tr><td>Heading: 92.4 </td></tr>
+<tr><td>Time: 2002-05-25T17:12:00.200Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.608267</longitude>
+              <latitude>30.062700</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:12:00.200Z</when></TimeStamp>
+            <styleUrl>#track-4</styleUrl>
+            <Point>
+              <coordinates>-91.608267,30.062700</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-3</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.607383 </td></tr>
+<tr><td>Latitude: 30.062333 </td></tr>
+<tr><td>Speed: 7.0 km/hour </td></tr>
+<tr><td>Heading: 115.6 </td></tr>
+<tr><td>Time: 2002-05-25T17:12:48.750Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.607383</longitude>
+              <latitude>30.062333</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:12:48.750Z</when></TimeStamp>
+            <styleUrl>#track-5</styleUrl>
+            <Point>
+              <coordinates>-91.607383,30.062333</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-4</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.605283 </td></tr>
+<tr><td>Latitude: 30.061533 </td></tr>
+<tr><td>Speed: 7.1 km/hour </td></tr>
+<tr><td>Heading: 113.8 </td></tr>
+<tr><td>Time: 2002-05-25T17:14:41.200Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.605283</longitude>
+              <latitude>30.061533</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:14:41.200Z</when></TimeStamp>
+            <styleUrl>#track-5</styleUrl>
+            <Point>
+              <coordinates>-91.605283,30.061533</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-5</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.599400 </td></tr>
+<tr><td>Latitude: 30.059783 </td></tr>
+<tr><td>Speed: 13.9 km/hour </td></tr>
+<tr><td>Heading: 109.0 </td></tr>
+<tr><td>Time: 2002-05-25T17:17:16.200Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.599400</longitude>
+              <latitude>30.059783</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:17:16.200Z</when></TimeStamp>
+            <styleUrl>#track-5</styleUrl>
+            <Point>
+              <coordinates>-91.599400,30.059783</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-6</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.596683 </td></tr>
+<tr><td>Latitude: 30.057800 </td></tr>
+<tr><td>Speed: 41.1 km/hour </td></tr>
+<tr><td>Heading: 130.1 </td></tr>
+<tr><td>Time: 2002-05-25T17:17:46.200Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.596683</longitude>
+              <latitude>30.057800</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:17:46.200Z</when></TimeStamp>
+            <styleUrl>#track-6</styleUrl>
+            <Point>
+              <coordinates>-91.596683,30.057800</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-7</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594900 </td></tr>
+<tr><td>Latitude: 30.055383 </td></tr>
+<tr><td>Speed: 33.2 km/hour </td></tr>
+<tr><td>Heading: 147.4 </td></tr>
+<tr><td>Time: 2002-05-25T17:18:20.810Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594900</longitude>
+              <latitude>30.055383</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:18:20.810Z</when></TimeStamp>
+            <styleUrl>#track-7</styleUrl>
+            <Point>
+              <coordinates>-91.594900,30.055383</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-8</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.592617 </td></tr>
+<tr><td>Latitude: 30.053883 </td></tr>
+<tr><td>Speed: 24.6 km/hour </td></tr>
+<tr><td>Heading: 127.2 </td></tr>
+<tr><td>Time: 2002-05-25T17:19:01.200Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.592617</longitude>
+              <latitude>30.053883</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:19:01.200Z</when></TimeStamp>
+            <styleUrl>#track-6</styleUrl>
+            <Point>
+              <coordinates>-91.592617,30.053883</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-9</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.589750 </td></tr>
+<tr><td>Latitude: 30.049733 </td></tr>
+<tr><td>Speed: 18.4 km/hour </td></tr>
+<tr><td>Heading: 149.1 </td></tr>
+<tr><td>Time: 2002-05-25T17:20:46.250Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.589750</longitude>
+              <latitude>30.049733</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:20:46.250Z</when></TimeStamp>
+            <styleUrl>#track-7</styleUrl>
+            <Point>
+              <coordinates>-91.589750,30.049733</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-10</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.589883 </td></tr>
+<tr><td>Latitude: 30.049017 </td></tr>
+<tr><td>Speed: 12.1 km/hour </td></tr>
+<tr><td>Heading: 189.1 </td></tr>
+<tr><td>Time: 2002-05-25T17:21:10.250Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.589883</longitude>
+              <latitude>30.049017</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:21:10.250Z</when></TimeStamp>
+            <styleUrl>#track-8</styleUrl>
+            <Point>
+              <coordinates>-91.589883,30.049017</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-11</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.592933 </td></tr>
+<tr><td>Latitude: 30.048800 </td></tr>
+<tr><td>Speed: 25.8 km/hour </td></tr>
+<tr><td>Heading: 265.3 </td></tr>
+<tr><td>Time: 2002-05-25T17:21:51.370Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.592933</longitude>
+              <latitude>30.048800</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:21:51.370Z</when></TimeStamp>
+            <styleUrl>#track-12</styleUrl>
+            <Point>
+              <coordinates>-91.592933,30.048800</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-12</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.596450 </td></tr>
+<tr><td>Latitude: 30.046233 </td></tr>
+<tr><td>Speed: 36.4 km/hour </td></tr>
+<tr><td>Heading: 229.9 </td></tr>
+<tr><td>Time: 2002-05-25T17:22:35.200Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.596450</longitude>
+              <latitude>30.046233</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:22:35.200Z</when></TimeStamp>
+            <styleUrl>#track-10</styleUrl>
+            <Point>
+              <coordinates>-91.596450,30.046233</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-13</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.598717 </td></tr>
+<tr><td>Latitude: 30.045517 </td></tr>
+<tr><td>Speed: 25.1 km/hour </td></tr>
+<tr><td>Heading: 249.9 </td></tr>
+<tr><td>Time: 2002-05-25T17:23:08.560Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.598717</longitude>
+              <latitude>30.045517</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T17:23:08.560Z</when></TimeStamp>
+            <styleUrl>#track-11</styleUrl>
+            <Point>
+              <coordinates>-91.598717,30.045517</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-14</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.600267 </td></tr>
+<tr><td>Latitude: 30.047300 </td></tr>
+<tr><td>Speed: 361.3 meters/hour </td></tr>
+<tr><td>Heading: 323.0 </td></tr>
+<tr><td>Time: 2002-05-25T18:04:23.930Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.600267</longitude>
+              <latitude>30.047300</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:04:23.930Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.600267,30.047300</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-15</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.599633 </td></tr>
+<tr><td>Latitude: 30.047000 </td></tr>
+<tr><td>Altitude: 2.000 meters </td></tr>
+<tr><td>Speed: 2.5 km/hour </td></tr>
+<tr><td>Heading: 118.7 </td></tr>
+<tr><td>Time: 2002-05-25T18:06:04.920Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.599633</longitude>
+              <latitude>30.047000</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:06:04.920Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.599633,30.047000,2.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-16</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.599467 </td></tr>
+<tr><td>Latitude: 30.046433 </td></tr>
+<tr><td>Speed: 3.8 km/hour </td></tr>
+<tr><td>Heading: 165.7 </td></tr>
+<tr><td>Time: 2002-05-25T18:07:06.920Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.599467</longitude>
+              <latitude>30.046433</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:07:06.920Z</when></TimeStamp>
+            <styleUrl>#track-7</styleUrl>
+            <Point>
+              <coordinates>-91.599467,30.046433</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-17</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.598950 </td></tr>
+<tr><td>Latitude: 30.046200 </td></tr>
+<tr><td>Altitude: 1.000 meters </td></tr>
+<tr><td>Speed: 2.8 km/hour </td></tr>
+<tr><td>Heading: 117.6 </td></tr>
+<tr><td>Time: 2002-05-25T18:08:18.920Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.598950</longitude>
+              <latitude>30.046200</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:08:18.920Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.598950,30.046200,1.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-18</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.597733 </td></tr>
+<tr><td>Latitude: 30.046367 </td></tr>
+<tr><td>Speed: 3.5 km/hour </td></tr>
+<tr><td>Heading: 81.0 </td></tr>
+<tr><td>Time: 2002-05-25T18:10:20.920Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.597733</longitude>
+              <latitude>30.046367</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:10:20.920Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.597733,30.046367</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-19</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.597167 </td></tr>
+<tr><td>Latitude: 30.046350 </td></tr>
+<tr><td>Speed: 4.0 km/hour </td></tr>
+<tr><td>Heading: 91.9 </td></tr>
+<tr><td>Time: 2002-05-25T18:11:09.930Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.597167</longitude>
+              <latitude>30.046350</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:11:09.930Z</when></TimeStamp>
+            <styleUrl>#track-4</styleUrl>
+            <Point>
+              <coordinates>-91.597167,30.046350</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-20</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.596333 </td></tr>
+<tr><td>Latitude: 30.046783 </td></tr>
+<tr><td>Speed: 4.9 km/hour </td></tr>
+<tr><td>Heading: 59.0 </td></tr>
+<tr><td>Time: 2002-05-25T18:12:18.920Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.596333</longitude>
+              <latitude>30.046783</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:12:18.920Z</when></TimeStamp>
+            <styleUrl>#track-3</styleUrl>
+            <Point>
+              <coordinates>-91.596333,30.046783</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-21</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.595200 </td></tr>
+<tr><td>Latitude: 30.047450 </td></tr>
+<tr><td>Speed: 3.8 km/hour </td></tr>
+<tr><td>Heading: 55.8 </td></tr>
+<tr><td>Time: 2002-05-25T18:14:22.930Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.595200</longitude>
+              <latitude>30.047450</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:14:22.930Z</when></TimeStamp>
+            <styleUrl>#track-2</styleUrl>
+            <Point>
+              <coordinates>-91.595200,30.047450</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-22</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594767 </td></tr>
+<tr><td>Latitude: 30.047800 </td></tr>
+<tr><td>Altitude: 2.000 meters </td></tr>
+<tr><td>Speed: 4.9 km/hour </td></tr>
+<tr><td>Heading: 47.0 </td></tr>
+<tr><td>Time: 2002-05-25T18:15:04.930Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594767</longitude>
+              <latitude>30.047800</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:15:04.930Z</when></TimeStamp>
+            <styleUrl>#track-2</styleUrl>
+            <Point>
+              <coordinates>-91.594767,30.047800,2.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-23</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594083 </td></tr>
+<tr><td>Latitude: 30.048250 </td></tr>
+<tr><td>Altitude: 1.000 meters </td></tr>
+<tr><td>Speed: 4.3 km/hour </td></tr>
+<tr><td>Heading: 52.7 </td></tr>
+<tr><td>Time: 2002-05-25T18:16:14.930Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594083</longitude>
+              <latitude>30.048250</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:16:14.930Z</when></TimeStamp>
+            <styleUrl>#track-2</styleUrl>
+            <Point>
+              <coordinates>-91.594083,30.048250,1.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-24</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.593800 </td></tr>
+<tr><td>Latitude: 30.048683 </td></tr>
+<tr><td>Altitude: 1.000 meters </td></tr>
+<tr><td>Speed: 4.2 km/hour </td></tr>
+<tr><td>Heading: 29.5 </td></tr>
+<tr><td>Time: 2002-05-25T18:17:01.930Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.593800</longitude>
+              <latitude>30.048683</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:17:01.930Z</when></TimeStamp>
+            <styleUrl>#track-1</styleUrl>
+            <Point>
+              <coordinates>-91.593800,30.048683,1.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-25</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.593850 </td></tr>
+<tr><td>Latitude: 30.049350 </td></tr>
+<tr><td>Speed: 4.1 km/hour </td></tr>
+<tr><td>Heading: 356.3 </td></tr>
+<tr><td>Time: 2002-05-25T18:18:07.940Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.593850</longitude>
+              <latitude>30.049350</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:18:07.940Z</when></TimeStamp>
+            <styleUrl>#track-0</styleUrl>
+            <Point>
+              <coordinates>-91.593850,30.049350</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-26</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.593983 </td></tr>
+<tr><td>Latitude: 30.050317 </td></tr>
+<tr><td>Altitude: 2.000 meters </td></tr>
+<tr><td>Speed: 3.8 km/hour </td></tr>
+<tr><td>Heading: 353.2 </td></tr>
+<tr><td>Time: 2002-05-25T18:19:51.940Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.593983</longitude>
+              <latitude>30.050317</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:19:51.940Z</when></TimeStamp>
+            <styleUrl>#track-0</styleUrl>
+            <Point>
+              <coordinates>-91.593983,30.050317,2.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-27</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594117 </td></tr>
+<tr><td>Latitude: 30.050783 </td></tr>
+<tr><td>Speed: 4.0 km/hour </td></tr>
+<tr><td>Heading: 346.1 </td></tr>
+<tr><td>Time: 2002-05-25T18:20:39.940Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594117</longitude>
+              <latitude>30.050783</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:20:39.940Z</when></TimeStamp>
+            <styleUrl>#track-15</styleUrl>
+            <Point>
+              <coordinates>-91.594117,30.050783</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-28</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594367 </td></tr>
+<tr><td>Latitude: 30.051233 </td></tr>
+<tr><td>Speed: 4.4 km/hour </td></tr>
+<tr><td>Heading: 334.3 </td></tr>
+<tr><td>Time: 2002-05-25T18:21:24.930Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594367</longitude>
+              <latitude>30.051233</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:21:24.930Z</when></TimeStamp>
+            <styleUrl>#track-15</styleUrl>
+            <Point>
+              <coordinates>-91.594367,30.051233</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-29</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594367 </td></tr>
+<tr><td>Latitude: 30.051800 </td></tr>
+<tr><td>Speed: 4.3 km/hour </td></tr>
+<tr><td>Heading: 0.0 </td></tr>
+<tr><td>Time: 2002-05-25T18:22:17.940Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594367</longitude>
+              <latitude>30.051800</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:22:17.940Z</when></TimeStamp>
+            <styleUrl>#track-0</styleUrl>
+            <Point>
+              <coordinates>-91.594367,30.051800</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-30</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594667 </td></tr>
+<tr><td>Latitude: 30.052217 </td></tr>
+<tr><td>Speed: 3.2 km/hour </td></tr>
+<tr><td>Heading: 328.1 </td></tr>
+<tr><td>Time: 2002-05-25T18:23:18.930Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594667</longitude>
+              <latitude>30.052217</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:23:18.930Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.594667,30.052217</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-31</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594683 </td></tr>
+<tr><td>Latitude: 30.053017 </td></tr>
+<tr><td>Speed: 4.1 km/hour </td></tr>
+<tr><td>Heading: 359.0 </td></tr>
+<tr><td>Time: 2002-05-25T18:24:37.940Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594683</longitude>
+              <latitude>30.053017</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:24:37.940Z</when></TimeStamp>
+            <styleUrl>#track-0</styleUrl>
+            <Point>
+              <coordinates>-91.594683,30.053017</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-32</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.595200 </td></tr>
+<tr><td>Latitude: 30.054867 </td></tr>
+<tr><td>Altitude: 6.000 meters </td></tr>
+<tr><td>Speed: 3.5 km/hour </td></tr>
+<tr><td>Heading: 346.4 </td></tr>
+<tr><td>Time: 2002-05-25T18:28:13.950Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.595200</longitude>
+              <latitude>30.054867</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:28:13.950Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.595200,30.054867,6.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-33</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594933 </td></tr>
+<tr><td>Latitude: 30.053733 </td></tr>
+<tr><td>Altitude: 2.000 meters </td></tr>
+<tr><td>Speed: 2.3 km/hour </td></tr>
+<tr><td>Heading: 168.5 </td></tr>
+<tr><td>Time: 2002-05-25T18:31:36.940Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594933</longitude>
+              <latitude>30.053733</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:31:36.940Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.594933,30.053733,2.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-34</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594783 </td></tr>
+<tr><td>Latitude: 30.053183 </td></tr>
+<tr><td>Speed: 2.8 km/hour </td></tr>
+<tr><td>Heading: 166.7 </td></tr>
+<tr><td>Time: 2002-05-25T18:32:56.950Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594783</longitude>
+              <latitude>30.053183</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:32:56.950Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.594783,30.053183</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-35</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594833 </td></tr>
+<tr><td>Latitude: 30.052633 </td></tr>
+<tr><td>Speed: 3.3 km/hour </td></tr>
+<tr><td>Heading: 184.5 </td></tr>
+<tr><td>Time: 2002-05-25T18:34:02.950Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594833</longitude>
+              <latitude>30.052633</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:34:02.950Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.594833,30.052633</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-36</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.595433 </td></tr>
+<tr><td>Latitude: 30.052450 </td></tr>
+<tr><td>Speed: 1.8 km/hour </td></tr>
+<tr><td>Heading: 250.6 </td></tr>
+<tr><td>Time: 2002-05-25T18:36:03.950Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.595433</longitude>
+              <latitude>30.052450</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:36:03.950Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.595433,30.052450</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-37</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.595967 </td></tr>
+<tr><td>Latitude: 30.052483 </td></tr>
+<tr><td>Speed: 4.1 km/hour </td></tr>
+<tr><td>Heading: 274.1 </td></tr>
+<tr><td>Time: 2002-05-25T18:36:48.960Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.595967</longitude>
+              <latitude>30.052483</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:36:48.960Z</when></TimeStamp>
+            <styleUrl>#track-12</styleUrl>
+            <Point>
+              <coordinates>-91.595967,30.052483</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-38</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.596783 </td></tr>
+<tr><td>Latitude: 30.052650 </td></tr>
+<tr><td>Altitude: 1.000 meters </td></tr>
+<tr><td>Speed: 4.5 km/hour </td></tr>
+<tr><td>Heading: 283.3 </td></tr>
+<tr><td>Time: 2002-05-25T18:37:52.960Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.596783</longitude>
+              <latitude>30.052650</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:37:52.960Z</when></TimeStamp>
+            <styleUrl>#track-13</styleUrl>
+            <Point>
+              <coordinates>-91.596783,30.052650,1.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-39</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.597850 </td></tr>
+<tr><td>Latitude: 30.053133 </td></tr>
+<tr><td>Speed: 4.9 km/hour </td></tr>
+<tr><td>Heading: 297.6 </td></tr>
+<tr><td>Time: 2002-05-25T18:39:18.950Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.597850</longitude>
+              <latitude>30.053133</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:39:18.950Z</when></TimeStamp>
+            <styleUrl>#track-13</styleUrl>
+            <Point>
+              <coordinates>-91.597850,30.053133</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-40</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.597967 </td></tr>
+<tr><td>Latitude: 30.053617 </td></tr>
+<tr><td>Speed: 3.5 km/hour </td></tr>
+<tr><td>Heading: 348.2 </td></tr>
+<tr><td>Time: 2002-05-25T18:40:15.960Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.597967</longitude>
+              <latitude>30.053617</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:40:15.960Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.597967,30.053617</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-41</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.597767 </td></tr>
+<tr><td>Latitude: 30.053967 </td></tr>
+<tr><td>Altitude: 6.000 meters </td></tr>
+<tr><td>Speed: 2.2 km/hour </td></tr>
+<tr><td>Heading: 26.3 </td></tr>
+<tr><td>Time: 2002-05-25T18:41:25.960Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.597767</longitude>
+              <latitude>30.053967</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:41:25.960Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.597767,30.053967,6.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-42</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.598083 </td></tr>
+<tr><td>Latitude: 30.053617 </td></tr>
+<tr><td>Speed: 2.5 km/hour </td></tr>
+<tr><td>Heading: 218.1 </td></tr>
+<tr><td>Time: 2002-05-25T18:42:37.960Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.598083</longitude>
+              <latitude>30.053617</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:42:37.960Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.598083,30.053617</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-43</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.597917 </td></tr>
+<tr><td>Latitude: 30.053200 </td></tr>
+<tr><td>Speed: 2.1 km/hour </td></tr>
+<tr><td>Heading: 160.9 </td></tr>
+<tr><td>Time: 2002-05-25T18:44:01.960Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.597917</longitude>
+              <latitude>30.053200</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:44:01.960Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.597917,30.053200</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-44</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.597517 </td></tr>
+<tr><td>Latitude: 30.052817 </td></tr>
+<tr><td>Speed: 1.8 km/hour </td></tr>
+<tr><td>Heading: 137.9 </td></tr>
+<tr><td>Time: 2002-05-25T18:45:53.960Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.597517</longitude>
+              <latitude>30.052817</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:45:53.960Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.597517,30.052817</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-45</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.596933 </td></tr>
+<tr><td>Latitude: 30.052567 </td></tr>
+<tr><td>Speed: 3.7 km/hour </td></tr>
+<tr><td>Heading: 116.3 </td></tr>
+<tr><td>Time: 2002-05-25T18:46:54.960Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.596933</longitude>
+              <latitude>30.052567</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:46:54.960Z</when></TimeStamp>
+            <styleUrl>#track-5</styleUrl>
+            <Point>
+              <coordinates>-91.596933,30.052567</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-46</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.596433 </td></tr>
+<tr><td>Latitude: 30.052333 </td></tr>
+<tr><td>Speed: 4.1 km/hour </td></tr>
+<tr><td>Heading: 118.3 </td></tr>
+<tr><td>Time: 2002-05-25T18:47:42.970Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.596433</longitude>
+              <latitude>30.052333</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:47:42.970Z</when></TimeStamp>
+            <styleUrl>#track-5</styleUrl>
+            <Point>
+              <coordinates>-91.596433,30.052333</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-47</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.595683 </td></tr>
+<tr><td>Latitude: 30.052250 </td></tr>
+<tr><td>Speed: 4.4 km/hour </td></tr>
+<tr><td>Heading: 97.3 </td></tr>
+<tr><td>Time: 2002-05-25T18:48:41.960Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.595683</longitude>
+              <latitude>30.052250</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:48:41.960Z</when></TimeStamp>
+            <styleUrl>#track-4</styleUrl>
+            <Point>
+              <coordinates>-91.595683,30.052250</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-48</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.595017 </td></tr>
+<tr><td>Latitude: 30.052217 </td></tr>
+<tr><td>Speed: 3.3 km/hour </td></tr>
+<tr><td>Heading: 93.3 </td></tr>
+<tr><td>Time: 2002-05-25T18:49:52.970Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.595017</longitude>
+              <latitude>30.052217</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:49:52.970Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.595017,30.052217</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-49</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594700 </td></tr>
+<tr><td>Latitude: 30.051883 </td></tr>
+<tr><td>Speed: 3.0 km/hour </td></tr>
+<tr><td>Heading: 140.6 </td></tr>
+<tr><td>Time: 2002-05-25T18:50:49.970Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594700</longitude>
+              <latitude>30.051883</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:50:49.970Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.594700,30.051883</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-50</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594400 </td></tr>
+<tr><td>Latitude: 30.051050 </td></tr>
+<tr><td>Speed: 4.1 km/hour </td></tr>
+<tr><td>Heading: 162.7 </td></tr>
+<tr><td>Time: 2002-05-25T18:52:14.970Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594400</longitude>
+              <latitude>30.051050</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:52:14.970Z</when></TimeStamp>
+            <styleUrl>#track-7</styleUrl>
+            <Point>
+              <coordinates>-91.594400,30.051050</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-51</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594233 </td></tr>
+<tr><td>Latitude: 30.050567 </td></tr>
+<tr><td>Speed: 4.8 km/hour </td></tr>
+<tr><td>Heading: 163.4 </td></tr>
+<tr><td>Time: 2002-05-25T18:52:56.980Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594233</longitude>
+              <latitude>30.050567</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:52:56.980Z</when></TimeStamp>
+            <styleUrl>#track-7</styleUrl>
+            <Point>
+              <coordinates>-91.594233,30.050567</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-52</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594100 </td></tr>
+<tr><td>Latitude: 30.050183 </td></tr>
+<tr><td>Speed: 3.8 km/hour </td></tr>
+<tr><td>Heading: 163.2 </td></tr>
+<tr><td>Time: 2002-05-25T18:53:38.980Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594100</longitude>
+              <latitude>30.050183</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:53:38.980Z</when></TimeStamp>
+            <styleUrl>#track-7</styleUrl>
+            <Point>
+              <coordinates>-91.594100,30.050183</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-53</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.593717 </td></tr>
+<tr><td>Latitude: 30.049100 </td></tr>
+<tr><td>Speed: 4.9 km/hour </td></tr>
+<tr><td>Heading: 163.0 </td></tr>
+<tr><td>Time: 2002-05-25T18:55:11.970Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.593717</longitude>
+              <latitude>30.049100</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:55:11.970Z</when></TimeStamp>
+            <styleUrl>#track-7</styleUrl>
+            <Point>
+              <coordinates>-91.593717,30.049100</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-54</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594250 </td></tr>
+<tr><td>Latitude: 30.048450 </td></tr>
+<tr><td>Speed: 3.9 km/hour </td></tr>
+<tr><td>Heading: 215.4 </td></tr>
+<tr><td>Time: 2002-05-25T18:56:32.980Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594250</longitude>
+              <latitude>30.048450</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:56:32.980Z</when></TimeStamp>
+            <styleUrl>#track-10</styleUrl>
+            <Point>
+              <coordinates>-91.594250,30.048450</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-55</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.594750 </td></tr>
+<tr><td>Latitude: 30.048083 </td></tr>
+<tr><td>Speed: 4.4 km/hour </td></tr>
+<tr><td>Heading: 229.7 </td></tr>
+<tr><td>Time: 2002-05-25T18:57:24.970Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.594750</longitude>
+              <latitude>30.048083</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:57:24.970Z</when></TimeStamp>
+            <styleUrl>#track-10</styleUrl>
+            <Point>
+              <coordinates>-91.594750,30.048083</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-56</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.595450 </td></tr>
+<tr><td>Latitude: 30.047500 </td></tr>
+<tr><td>Altitude: 7.000 meters </td></tr>
+<tr><td>Speed: 4.4 km/hour </td></tr>
+<tr><td>Heading: 226.1 </td></tr>
+<tr><td>Time: 2002-05-25T18:58:40.980Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.595450</longitude>
+              <latitude>30.047500</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:58:40.980Z</when></TimeStamp>
+            <styleUrl>#track-10</styleUrl>
+            <Point>
+              <coordinates>-91.595450,30.047500,7.00</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-57</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.596000 </td></tr>
+<tr><td>Latitude: 30.047067 </td></tr>
+<tr><td>Speed: 5.4 km/hour </td></tr>
+<tr><td>Heading: 227.7 </td></tr>
+<tr><td>Time: 2002-05-25T18:59:28.980Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.596000</longitude>
+              <latitude>30.047067</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T18:59:28.980Z</when></TimeStamp>
+            <styleUrl>#track-10</styleUrl>
+            <Point>
+              <coordinates>-91.596000,30.047067</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-58</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.596600 </td></tr>
+<tr><td>Latitude: 30.046633 </td></tr>
+<tr><td>Speed: 5.0 km/hour </td></tr>
+<tr><td>Heading: 230.2 </td></tr>
+<tr><td>Time: 2002-05-25T19:00:22.980Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.596600</longitude>
+              <latitude>30.046633</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T19:00:22.980Z</when></TimeStamp>
+            <styleUrl>#track-10</styleUrl>
+            <Point>
+              <coordinates>-91.596600,30.046633</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-59</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.597650 </td></tr>
+<tr><td>Latitude: 30.046400 </td></tr>
+<tr><td>Speed: 4.8 km/hour </td></tr>
+<tr><td>Heading: 255.6 </td></tr>
+<tr><td>Time: 2002-05-25T19:01:41.980Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.597650</longitude>
+              <latitude>30.046400</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T19:01:41.980Z</when></TimeStamp>
+            <styleUrl>#track-11</styleUrl>
+            <Point>
+              <coordinates>-91.597650,30.046400</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-60</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.598467 </td></tr>
+<tr><td>Latitude: 30.046233 </td></tr>
+<tr><td>Speed: 4.3 km/hour </td></tr>
+<tr><td>Heading: 256.7 </td></tr>
+<tr><td>Time: 2002-05-25T19:02:48.990Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.598467</longitude>
+              <latitude>30.046233</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T19:02:48.990Z</when></TimeStamp>
+            <styleUrl>#track-11</styleUrl>
+            <Point>
+              <coordinates>-91.598467,30.046233</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-61</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.598967 </td></tr>
+<tr><td>Latitude: 30.046317 </td></tr>
+<tr><td>Speed: 3.2 km/hour </td></tr>
+<tr><td>Heading: 280.9 </td></tr>
+<tr><td>Time: 2002-05-25T19:03:43.980Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.598967</longitude>
+              <latitude>30.046317</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T19:03:43.980Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.598967,30.046317</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-62</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.599283 </td></tr>
+<tr><td>Latitude: 30.046783 </td></tr>
+<tr><td>Speed: 3.3 km/hour </td></tr>
+<tr><td>Heading: 329.6 </td></tr>
+<tr><td>Time: 2002-05-25T19:04:49.990Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.599283</longitude>
+              <latitude>30.046783</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T19:04:49.990Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.599283,30.046783</coordinates>
+            </Point>
+          </Placemark>
+          <Placemark>
+            <name>meridian-63</name>
+            <snippet/>
+            <description><![CDATA[
+<table>
+<tr><td>Longitude: -91.599667 </td></tr>
+<tr><td>Latitude: 30.047133 </td></tr>
+<tr><td>Speed: 2.8 km/hour </td></tr>
+<tr><td>Heading: 316.5 </td></tr>
+<tr><td>Time: 2002-05-25T19:05:57.980Z </td></tr>
+</table>
+]]></description>
+            <LookAt>
+              <longitude>-91.599667</longitude>
+              <latitude>30.047133</latitude>
+              <tilt>66</tilt>
+            </LookAt>
+            <TimeStamp><when>2002-05-25T19:05:57.980Z</when></TimeStamp>
+            <styleUrl>#track-none</styleUrl>
+            <Point>
+              <coordinates>-91.599667,30.047133</coordinates>
+            </Point>
+          </Placemark>
+        </Folder>
+        <Placemark>
+          <name>Path</name>
+          <styleUrl>#lineStyle</styleUrl>
+          <LineString>
+            <tessellate>1</tessellate>
+            <coordinates>
+-91.610350,30.062183,1.00
+-91.610567,30.062783
+-91.608267,30.062700
+-91.607383,30.062333
+-91.605283,30.061533
+-91.599400,30.059783
+-91.596683,30.057800
+-91.594900,30.055383
+-91.592617,30.053883
+-91.589750,30.049733
+-91.589883,30.049017
+-91.592933,30.048800
+-91.596450,30.046233
+-91.598717,30.045517
+-91.600267,30.047300
+-91.599633,30.047000,2.00
+-91.599467,30.046433
+-91.598950,30.046200,1.00
+-91.597733,30.046367
+-91.597167,30.046350
+-91.596333,30.046783
+-91.595200,30.047450
+-91.594767,30.047800,2.00
+-91.594083,30.048250,1.00
+-91.593800,30.048683,1.00
+-91.593850,30.049350
+-91.593983,30.050317,2.00
+-91.594117,30.050783
+-91.594367,30.051233
+-91.594367,30.051800
+-91.594667,30.052217
+-91.594683,30.053017
+-91.595200,30.054867,6.00
+-91.594933,30.053733,2.00
+-91.594783,30.053183
+-91.594833,30.052633
+-91.595433,30.052450
+-91.595967,30.052483
+-91.596783,30.052650,1.00
+-91.597850,30.053133
+-91.597967,30.053617
+-91.597767,30.053967,6.00
+-91.598083,30.053617
+-91.597917,30.053200
+-91.597517,30.052817
+-91.596933,30.052567
+-91.596433,30.052333
+-91.595683,30.052250
+-91.595017,30.052217
+-91.594700,30.051883
+-91.594400,30.051050
+-91.594233,30.050567
+-91.594100,30.050183
+-91.593717,30.049100
+-91.594250,30.048450
+-91.594750,30.048083
+-91.595450,30.047500,7.00
+-91.596000,30.047067
+-91.596600,30.046633
+-91.597650,30.046400
+-91.598467,30.046233
+-91.598967,30.046317
+-91.599283,30.046783
+-91.599667,30.047133
+</coordinates>
+          </LineString>
+        </Placemark>
+      </Folder>
+    </Folder>
+  </Document>
+</kml>
