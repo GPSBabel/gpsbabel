@@ -42,7 +42,7 @@ IFIELD	LON_DECIMAL,"","%.9f"
 IFIELD	LON_DIR,"","%c"
 IFIELD	LAT_DECIMAL,"","%.9f"
 IFIELD	LAT_DIR,"","%c"
-IFIELD	IGNORE, "", "%s"	# ALT?
+IFIELD	ALT_FEET, "", "%f"
 IFIELD	IGNORE, "", "%s"	# SPD?
 IFIELD	IGNORE, "", "%s"	# PATH?
 IFIELD	IGNORE, "", "%s"	# FILENAME?

@@ -853,7 +853,7 @@ static char mainnav[] =
   "IFIELD	LON_DIR,\"\",\"%c\"\n"
   "IFIELD	LAT_DECIMAL,\"\",\"%.9f\"\n"
   "IFIELD	LAT_DIR,\"\",\"%c\"\n"
-  "IFIELD	IGNORE, \"\", \"%s\"	# ALT?\n"
+  "IFIELD	ALT_FEET, \"\", \"%f\"\n"
   "IFIELD	IGNORE, \"\", \"%s\"	# SPD?\n"
   "IFIELD	IGNORE, \"\", \"%s\"	# PATH?\n"
   "IFIELD	IGNORE, \"\", \"%s\"	# FILENAME?\n"
