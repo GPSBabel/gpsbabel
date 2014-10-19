@@ -163,7 +163,7 @@ data_read(void)
       if (*cp != '\0') {
         wpt_tmp->description = cp;
       }
-      wpt_tmp->icon_descr = gt_find_desc_from_icon_number(symnum, PCX, NULL);
+      wpt_tmp->icon_descr = gt_find_desc_from_icon_number(symnum, PCX);
 
       if (read_as_degrees || read_gpsu) {
         human_to_dec(tbuf, &lat, &lon, 1);

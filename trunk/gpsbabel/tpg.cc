@@ -195,11 +195,11 @@ tpg_waypt_pr(const Waypoint* wpt)
       if (global_opts.synthesize_shortnames) {
         shortname = mkshort_from_wpt(mkshort_handle, wpt);
       } else {
-        shortname = xstrdup(wpt->description);
+        shortname = wpt->description;
       }
     } else {
       /* no description available */
-      shortname = xstrdup("");
+      shortname = "";
     }
   } else {
     shortname = wpt->shortname;

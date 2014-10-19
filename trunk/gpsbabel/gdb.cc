@@ -525,7 +525,7 @@ static Waypoint*
 read_waypoint(gt_waypt_classes_e* waypt_class_out)
 {
   char buf[128];		/* used for temporary stuff */
-  int display, icon, dynamic;
+  int display, icon;
   gt_waypt_classes_e wpt_class;
   int i;
   Waypoint* res;
@@ -744,7 +744,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     GMSD_SETSTR(postal_code, bufp);
   }
 
-  res->icon_descr = gt_find_desc_from_icon_number(icon, GDB, &dynamic);
+  res->icon_descr = gt_find_desc_from_icon_number(icon, GDB);
 
 #if GDB_DEBUG
   DBG(GDB_DBG_WPTe, icon != GDB_DEF_ICON)

@@ -544,8 +544,7 @@ write_waypt(const Waypoint* wpt)
   const char* dspl_mode;
   const char* country;
   double x;
-  int i, icon, dynamic;
-  const char* icon_descr;
+  int i, icon;
 
   gmsd = GMSD_FIND(wpt);
 
@@ -609,12 +608,7 @@ write_waypt(const Waypoint* wpt)
   if (icon == -1) {
     icon = gt_find_icon_number_from_desc(wpt->icon_descr, GDB);
   }
-  icon_descr = gt_find_desc_from_icon_number(icon, GDB, &dynamic);
-  print_string("%s\t", icon_descr);
-  if (dynamic) {
-    // sleaze alert: cast away constness.
-    xfree((char*) icon_descr);
-  }
+  print_string("%s\t", gt_find_desc_from_icon_number(icon, GDB));
 
   print_string("%s\t", GMSD_GET(facility, ""));
   print_string("%s\t", GMSD_GET(city, ""));
@@ -1126,7 +1120,7 @@ parse_waypoint(void)
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
   while ((str = csv_lineparse(NULL, "\t", "", column++))) {
-    int i, dynamic;
+    int i;
     double d;
     int field_no = header_fields[waypt_header][column];
 
@@ -1179,7 +1173,7 @@ parse_waypoint(void)
     case 11:
       i = gt_find_icon_number_from_desc(str, GDB);
       GMSD_SET(icon, i);
-      wpt->icon_descr = gt_find_desc_from_icon_number(i, GDB, &dynamic);
+      wpt->icon_descr = gt_find_desc_from_icon_number(i, GDB);
       break;
     case 12:
       GMSD_SETSTR(facility, str);

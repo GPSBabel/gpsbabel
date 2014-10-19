@@ -399,9 +399,8 @@ waypt_read(void)
       wpt_tmp->icon_descr = d103_symbol_from_icon_number(
                               way[i]->smbl);
     } else {
-      int dyn = 0;
       wpt_tmp->icon_descr = gt_find_desc_from_icon_number(
-                              way[i]->smbl, PCX, &dyn);
+                              way[i]->smbl, PCX);
     }
     /*
      * If a unit doesn't store altitude info (i.e. a D103)

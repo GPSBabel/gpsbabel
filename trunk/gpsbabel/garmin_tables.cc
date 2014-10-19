@@ -731,29 +731,18 @@ gt_switch_display_mode_value(const unsigned char display_mode, const int protoid
   }
 }
 
-const char*
-gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, int* dynamic)
+const QString 
+gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format)
 {
-  icon_mapping_t* i;
-  char custom[] = "Custom 63 ";
-
   if ((garmin_format == GDB) && (icon >= 500) && (icon <= 563)) {
-    snprintf(custom, sizeof(custom), "Custom %d", icon - 500);
-    *dynamic = 1;
-    return xstrdup(custom);
+    return QString("Custom %d").arg(icon - 500);
   }
 
   if ((garmin_format == PCX) && (icon >= 7680) && (icon <= 8191)) {
-    snprintf(custom, sizeof(custom), "Custom %d", icon - 7680);
-    *dynamic = 1;
-    return xstrdup(custom);
+    return QString("Custom %d").arg(icon - 7680);
   }
 
-  if (dynamic) {
-    *dynamic = 0;
-  }
-
-  for (i = garmin_icon_table; i->icon; i++) {
+  for (icon_mapping_t* i = garmin_icon_table; i->icon; i++) {
     switch (garmin_format) {
     case MAPSOURCE:
     case GDB:

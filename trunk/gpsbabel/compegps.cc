@@ -500,7 +500,7 @@ write_waypt_cb(const Waypoint* wpt)
   }
   gbfprintf(fout, "\n");
 
-  if ((wpt->icon_descr != NULL) || (wpt->wpt_flags.proximity) || \
+  if ((!wpt->icon_descr.isNull()) || (wpt->wpt_flags.proximity) || \
       (option_icon != NULL)) {
     gbfprintf(fout, "w  %s,0,0.0,16777215,255,1,7,,%.1f\n",
               wpt->icon_descr.isNull() ? "Waypoint" : CSTR(wpt->icon_descr),
