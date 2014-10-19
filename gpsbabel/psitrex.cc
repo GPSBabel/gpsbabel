@@ -326,7 +326,7 @@ psit_waypoint_r(gbfile* psit_file, Waypoint** wpt)
     /* since PsiTrex only deals with Garmins, let's use the "proper" Garmin icon name */
     /* convert the PsiTrex name to the number, which is the PCX one; from there to Garmin desc */
     garmin_icon_num = psit_find_icon_number_from_desc(psit_current_token);
-    thisWaypoint->icon_descr = gt_find_desc_from_icon_number(garmin_icon_num, PCX, NULL);
+    thisWaypoint->icon_descr = gt_find_desc_from_icon_number(garmin_icon_num, PCX);
 
     waypt_add(thisWaypoint);
 
@@ -448,7 +448,7 @@ psit_route_r(gbfile* psit_file, route_head** rte)
       /* since PsiTrex only deals with Garmins, let's use the "proper" Garmin icon name */
       /* convert the PsiTrex name to the number, which is the PCX one; from there to Garmin desc */
       garmin_icon_num = psit_find_icon_number_from_desc(psit_current_token);
-      thisWaypoint->icon_descr = gt_find_desc_from_icon_number(garmin_icon_num, PCX, NULL);
+      thisWaypoint->icon_descr = gt_find_desc_from_icon_number(garmin_icon_num, PCX);
 
       route_add_wpt(rte_head, thisWaypoint);
 
@@ -472,7 +472,7 @@ psit_routehdr_w(gbfile* psit_file, const route_head* rte)
 {
   char		hdr[20];
   unsigned int rte_datapoints;
-  char*		rname;
+  QString	rname;
 
   Waypoint*	testwpt;
   time_t		uniqueValue = 0;
@@ -501,18 +501,14 @@ psit_routehdr_w(gbfile* psit_file, const route_head* rte)
 
     /* route name */
     if (rte->rte_name.isEmpty()) {
-      sprintf(hdr, "Route%04x", (unsigned) uniqueValue);
-      rname = xstrdup(hdr);
+      rname = QString("Route%1").arg((uint) uniqueValue, 4, 16, QChar('0'));
     } else {
-      rname = xstrdup(rte->rte_name);
+      rname = rte->rte_name;
     }
     /* check for psitrex comment sign; replace with '$' */
-    while ((c = strchr(rname, '#'))) {
-      *c = '$';
-    }
+    rname = rname.replace(QChar('#'), QChar('$'));
 
-    gbfprintf(psit_file, "Route:  %s\n", rname);
-    xfree(rname);
+    gbfputs(QString("Route:  %1\n").arg(rname), psit_file);
   }
 }
 
@@ -633,7 +629,7 @@ psit_trackhdr_w(gbfile* psit_file, const route_head* trk)
 {
   char		hdr[30];
   unsigned int trk_datapoints;
-  char*		tname;
+  QString	tname;
   Waypoint*	testwpt;
   time_t		uniqueValue = 0;
 
@@ -659,20 +655,15 @@ psit_trackhdr_w(gbfile* psit_file, const route_head* trk)
 
       /* track name */
       if (trk->rte_name.isEmpty()) {
-        sprintf(hdr, "Track%04x", (unsigned) uniqueValue);
-        tname = xstrdup(hdr);
+        tname = QString("Track%1").arg((uint) uniqueValue, 4, 16, QChar('0'));
       } else {
-        tname = xstrdup(trk->rte_name);
+        tname = trk->rte_name;
       }
 
       /* check for psitrex comment sign; replace with '$' */
-      while ((c = strchr(tname, '#'))) {
-        *c = '$';
-      }
+      tname = tname.replace(QChar('#'), QChar('$'));
 
-      gbfprintf(psit_file, "Track:  %s\n", tname);
-
-      xfree(tname);
+      gbfputs(QString("Track:  %1\n").arg(tname), psit_file);
     }
   }
   psit_track_state = 1;

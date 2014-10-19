@@ -36,7 +36,7 @@ typedef struct icon_mapping {
 
 typedef enum {MAPSOURCE, PCX, GARMIN_SERIAL, GDB} garmin_formats_e;
 
-const char* gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format, int* dynamic);
+const QString gt_find_desc_from_icon_number(const int icon, garmin_formats_e garmin_format);
 int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_format);
 
 extern icon_mapping_t garmin_icon_table[];

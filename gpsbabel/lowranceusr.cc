@@ -253,7 +253,7 @@ lowranceusr_readstr(char* buf, const int maxlen, gbfile* file)
   return len;
 }
 
-const char*
+const QString
 lowranceusr_find_desc_from_icon_number(const int icon)
 {
   const lowranceusr_icon_mapping_t* i;

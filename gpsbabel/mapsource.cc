@@ -520,7 +520,6 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, Waypoint** wpt, unsigned int* mpsc
   int lat;
   int lon;
   int	icon;
-  int dynamic;
 
   Waypoint*	thisWaypoint = NULL;
   double	mps_altitude = unknown_alt;
@@ -597,7 +596,7 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, Waypoint** wpt, unsigned int* mpsc
   }
 
   /* might need to change this to handle version dependent icon handling */
-  thisWaypoint->icon_descr = gt_find_desc_from_icon_number(icon, MAPSOURCE, &dynamic);
+  thisWaypoint->icon_descr = gt_find_desc_from_icon_number(icon, MAPSOURCE);
 
   /* The following Now done elsewhere since it can be useful to read in and
     perhaps not add to the list */

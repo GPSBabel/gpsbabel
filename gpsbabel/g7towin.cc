@@ -89,7 +89,7 @@ parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
 
     switch (index) {
 
-      int categories, dyn;
+      int categories;
       struct tm tm;
       char* cerr;
 
@@ -114,7 +114,7 @@ parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
 
     case WAYPT__OFS + 2:
       wpt->icon_descr = gt_find_desc_from_icon_number(
-                          atoi(cin), PCX, &dyn);
+                          atoi(cin), PCX);
       break;
 
     case WAYPT__OFS + 4:
@@ -466,11 +466,9 @@ data_read(void)
         cdata++;
       }
       if (*cdata == ';') {
-        int dyn;
-
         cdata++;
         wpt->icon_descr = gt_find_desc_from_icon_number(
-                            atoi(cdata), PCX, &dyn);
+                            atoi(cdata), PCX);
       }
       waypt_add(wpt);
       break;
