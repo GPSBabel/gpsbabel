@@ -346,14 +346,14 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
     trk_head->rte_name  = wpt_tmp->shortname;
   }
   track_add_head(trk_head);
-  while ((n = sscanf(CSTR(iargs), "%lf,%lf,%lf%n", &lon, &lat, &alt, &consumed)) > 0) {
+  while ((n = sscanf(CSTRc(iargs), "%lf,%lf,%lf%n", &lon, &lat, &alt, &consumed)) > 0) {
     trkpt = new Waypoint;
     trkpt->latitude = lat;
     trkpt->longitude = lon;
 
     // Line malformed or two-arg format without alt .  Rescan.
     if (2 == n) {
-      sscanf(CSTRc(args), "%lf,%lf%n", &lon, &lat, &consumed);
+      sscanf(CSTRc(iargs), "%lf,%lf%n", &lon, &lat, &consumed);
     }
 
     if (3 == n) {
