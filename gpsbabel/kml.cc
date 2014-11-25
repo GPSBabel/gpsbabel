@@ -1452,11 +1452,9 @@ static void kml_geocache_pr(const Waypoint* waypointp)
   writer->writeStartElement("Placemark");
 
   writer->writeStartElement("name");
-  writer->writeCharacters("\n"); // FIXME  forced formatting to match old references
   if (waypointp->HasUrlLink()) {
     UrlLink link = waypointp->GetUrlLink();
     writer->writeCDATA(link.url_link_text_);
-    writer->writeCharacters("\n"); // FIXME  forced formatting to match old references
   }
   writer->writeEndElement(); // Close name tag
 
