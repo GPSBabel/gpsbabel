@@ -470,7 +470,6 @@ psit_route_r(gbfile* psit_file, route_head** rte)
 static void
 psit_routehdr_w(gbfile* psit_file, const route_head* rte)
 {
-  char		hdr[20];
   unsigned int rte_datapoints;
   QString	rname;
 
@@ -485,7 +484,6 @@ psit_routehdr_w(gbfile* psit_file, const route_head* rte)
   allWptNameLengths = 0;
 
   if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
-    char* c;
 
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
       testwpt = (Waypoint*)elem;
@@ -627,7 +625,6 @@ psit_track_r(gbfile* psit_file, route_head** trk)
 static void
 psit_trackhdr_w(gbfile* psit_file, const route_head* trk)
 {
-  char		hdr[30];
   unsigned int trk_datapoints;
   QString	tname;
   Waypoint*	testwpt;
@@ -639,7 +636,6 @@ psit_trackhdr_w(gbfile* psit_file, const route_head* trk)
     /* total nodes (waypoints) this track */
     trk_datapoints = 0;
     if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
-      char* c;
 
       QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
         if (trk_datapoints == 0) {
