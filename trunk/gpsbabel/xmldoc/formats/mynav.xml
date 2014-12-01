@@ -1,0 +1,15 @@
+<para>
+  Input support for the TRC file format used by <productname>MyNav Map
+  Manager</productname> and <productname>VDO GP7</productname> GPS
+  devices.
+</para>
+<para>
+  For information on the data format see <ulink
+  url="http://www.mynav.it/hwdoc/dev/TRC_Format_Spec.pdf">track format
+  specification</ulink>.
+</para>
+<para>
+  <userinput>
+    gpsbabel -i mynav -f infile.trc -o gpx,garminextensions -F outfile.gpx
+  </userinput>
+</para>

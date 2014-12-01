@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1">
+  <metadata>
+    <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="51.276660000" minlon="8.868263333" maxlat="51.277118333" maxlon="8.868886667"/>
+  </metadata>
+  <trk>
+    <trkseg>
+      <trkpt lat="51.277118333" lon="8.868833333">
+        <ele>460.000000</ele>
+        <time>2014-08-03T07:16:37Z</time>
+      </trkpt>
+      <trkpt lat="51.277080000" lon="8.868886667">
+        <ele>460.000000</ele>
+        <time>2014-08-03T07:16:38Z</time>
+      </trkpt>
+      <trkpt lat="51.277108333" lon="8.868810000">
+        <ele>461.000000</ele>
+        <time>2014-08-03T07:16:39Z</time>
+      </trkpt>
+      <trkpt lat="51.277041667" lon="8.868796667">
+        <ele>461.000000</ele>
+        <time>2014-08-03T07:16:40Z</time>
+      </trkpt>
+      <trkpt lat="51.276966667" lon="8.868676667">
+        <ele>461.000000</ele>
+        <time>2014-08-03T07:16:41Z</time>
+      </trkpt>
+      <trkpt lat="51.276981667" lon="8.868748333">
+        <ele>461.000000</ele>
+        <time>2014-08-03T07:16:42Z</time>
+      </trkpt>
+      <trkpt lat="51.276991667" lon="8.868668333">
+        <ele>462.000000</ele>
+        <time>2014-08-03T07:16:43Z</time>
+      </trkpt>
+      <trkpt lat="51.276963333" lon="8.868621667">
+        <ele>463.000000</ele>
+        <time>2014-08-03T07:16:44Z</time>
+      </trkpt>
+      <trkpt lat="51.276930000" lon="8.868561667">
+        <ele>463.000000</ele>
+        <time>2014-08-03T07:16:45Z</time>
+      </trkpt>
+      <trkpt lat="51.276890000" lon="8.868511667">
+        <ele>462.000000</ele>
+        <time>2014-08-03T07:16:46Z</time>
+      </trkpt>
+      <trkpt lat="51.276851667" lon="8.868465000">
+        <ele>462.000000</ele>
+        <time>2014-08-03T07:16:47Z</time>
+      </trkpt>
+      <trkpt lat="51.276813333" lon="8.868420000">
+        <ele>462.000000</ele>
+        <time>2014-08-03T07:16:48Z</time>
+      </trkpt>
+      <trkpt lat="51.276776667" lon="8.868375000">
+        <ele>463.000000</ele>
+        <time>2014-08-03T07:16:49Z</time>
+      </trkpt>
+      <trkpt lat="51.276740000" lon="8.868336667">
+        <ele>465.000000</ele>
+        <time>2014-08-03T07:16:50Z</time>
+      </trkpt>
+      <trkpt lat="51.276700000" lon="8.868300000">
+        <ele>464.000000</ele>
+        <time>2014-08-03T07:16:51Z</time>
+      </trkpt>
+      <trkpt lat="51.276660000" lon="8.868263333">
+        <ele>464.000000</ele>
+        <time>2014-08-03T07:16:52Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
