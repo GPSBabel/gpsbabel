@@ -80,7 +80,8 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o  \
 	pocketfms_bc.o pocketfms_fp.o pocketfms_wp.o naviguide.o enigma.o \
 	vpl.o teletype.o jogmap.o bushnell.o bushnell_trl.o wintec_tes.o \
 	subrip.o garmin_xt.o garmin_fit.o lowranceusr4.o \
-        mtk_locus.o googledir.o mapbar_track.o f90g_track.o mapfactor.o energympro.o
+	mtk_locus.o googledir.o mapbar_track.o f90g_track.o mapfactor.o energympro.o \
+	mynav.o
 
 FMTS=@FMTS@
 
@@ -821,6 +822,7 @@ mtk_locus.o: mtk_locus.cc defs.h config.h queue.h zlib/zlib.h \
 mtk_logger.o: mtk_logger.cc defs.h config.h queue.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h \
   src/core/datetime.h gbser.h
+mynav.o: mynav.cc defs.h config.h gbfile.h
 navicache.o: navicache.cc defs.h config.h queue.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h cet_util.h inifile.h session.h \
   src/core/datetime.h src/core/file.h

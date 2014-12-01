@@ -87,6 +87,7 @@ extern ff_vecs_t mtk_fvecs;
 extern ff_vecs_t mtk_m241_vecs;
 extern ff_vecs_t mtk_m241_fvecs;
 extern ff_vecs_t mtk_locus_vecs;
+extern ff_vecs_t mynav_vecs;
 extern ff_vecs_t navicache_vecs;
 extern ff_vecs_t netstumbler_vecs;
 extern ff_vecs_t nmea_vecs;
@@ -1082,6 +1083,13 @@ vecs_t vec_list[] = {
     "energympro",
     "Energympro GPS training watch",
     "cpo",
+    NULL,
+  },
+  {
+    &mynav_vecs,
+    "mynav",
+    "MyNav TRC format",
+    "trc",
     NULL,
   },
 #endif // MAXIMAL_ENABLED

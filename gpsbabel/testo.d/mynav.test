@@ -1,0 +1,8 @@
+#
+# Basic mynav tests (readonly)
+#
+rm -f ${TMPDIR}/mynav*
+gpsbabel -i mynav -f ${REFERENCE}/track/mynav.trc -o gpx,garminextensions -F ${TMPDIR}/mynav1.gpx
+compare ${REFERENCE}/track/mynav1.gpx ${TMPDIR}/mynav1.gpx
+gpsbabel -i mynav -f ${REFERENCE}/track/mynav.ftn -o gpx,garminextensions -F ${TMPDIR}/mynav2.gpx
+compare ${REFERENCE}/track/mynav2.gpx ${TMPDIR}/mynav2.gpx
