@@ -20,10 +20,10 @@
 
 */
 
-#include <QtCore/QXmlStreamAttributes>
 
 #include "defs.h"
 #include "xmlgeneric.h"
+#include <QtCore/QXmlStreamAttributes>
 
 static arglist_t ikt_args[] = {
   ARG_TERMINATOR

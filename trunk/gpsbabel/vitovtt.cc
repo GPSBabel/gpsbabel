@@ -22,14 +22,10 @@
 
  */
 
-#include <stddef.h>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <math.h>
+#include "defs.h"
+#include <cmath>
 
 #define MYNAME "vitovtt"
-#include "defs.h"
 
 #define TM_YEAR_ZERO	1900
 #define TM_MONTH_ZERO	1

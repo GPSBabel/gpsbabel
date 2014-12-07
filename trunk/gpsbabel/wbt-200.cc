@@ -21,7 +21,6 @@
 #include "defs.h"
 #include "gbser.h"
 #include "grtcirc.h"
-#include <errno.h>
 
 #define MYNAME      "WBT-100/200"
 #define NL          "\x0D\x0A"

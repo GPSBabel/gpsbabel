@@ -21,63 +21,15 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 */
 
-/*
-	History:
-
-	    2005/06/27: initial release (reader only)
-	    2005/07/26: added write support
-	    2005/07/27: replaced "tricky code" in route reader
-	    2005/07/28: fixed handling of single point routes
-			new option "via"
-			new option "ver"
-			fixed compiler warnings
-	    2005/07/29: fixed compiler warnings
-	    2005/08/04: Read/write URL (reference data changed)
-	    2005/08/11: Display sym and name in GDB
-	    2005/08/12: Neuter proximity and depth for now
-	    2005/08/29: big CET merge
-	    2005/09/13: Make sure routes have unique wpt names
-	    2005/10/10: MSVC fixes from Andrew
-	    2005/10/17: RJL: Tighten up types of a short handle.  It's now a "real" type and not a void *
-	    2005/10/31: RJL: Add v3 format, min/max, provide defaults, data types, etc
-	    2005/11/09: RJL: Clarify help text for dropping via points
-	    2005/12/01: changed waypt's URL to descr for hidden waypoints (-> reference data changed)
-	                removed unused procedure gdb_add_to_hidden
-	    2005/12/04: additional testo sequences
-	    2006/02/24: last field of a route is rte url
-	    2006/02/25: rte_read_loop: zero check replaced with a dummy read (8 unknown bytes)
-	    2006/03/05: first implementation of Garmin special data (garmin_fs)
-	    2006/04/04: Use track_add_wpt for all tracks
-	    2006/04/19: add url i/o to tracks and routes
-	    2006/04/19: check for empty waypoint shortnames (paranioa)
-	    2006/11/01: Use version of GPSBabel and date/time of gdb.c (managed by CVS) for watermark
-	    2007/01/23: add support for GDB version 3
-	    2007/02/07: Add special code for unknown bytes in waypoints with class GE 8 (calculated points)
-	    2007/02/15: Nearly full rewrite. Full support for GDB V3. New option roadbook.
-	    2007/05/03: Add code for tricky V3 descriptions
-	    2007/06/18: Tweak some forgotten "flagged" fields
-	    2007/07/07: Better support for new fields since V3 (postal code/street address/instruction)
-	    2008/01/09: Fix handling of option category (cat)
-	    2008/04/27: Add zero to checklist of "unknown bytes"
-	    2008/08/17: Add concept of route/track line colors
-	    2008/09/11: Make format 'pipeable' (cached writes using gbfile memapi)
-*/
-
-#include <ctype.h>
-#include <math.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-
 #include "defs.h"
 
 #include "cet.h"
-#include "cet_util.h"
 #include "csv_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
 #include "grtcirc.h"
 #include "jeeps/gpsmath.h"
+#include <cmath>
 
 #define MYNAME "gdb"
 

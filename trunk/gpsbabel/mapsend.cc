@@ -18,13 +18,10 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
  */
 
-#include <math.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "defs.h"
 #include "mapsend.h"
 #include "magellan.h"
+#include <cmath>
 
 static gbfile* mapsend_file_in;
 static gbfile* mapsend_file_out;

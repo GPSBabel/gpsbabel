@@ -19,10 +19,6 @@
 
  */
 
-#include <stddef.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "defs.h"
 
 format_specific_data* fs_chain_copy(format_specific_data* source)

@@ -19,10 +19,9 @@
 
  */
 
-#include <QtCore/QXmlStreamAttributes>
-
 #include "defs.h"
 #include "xmlgeneric.h"
+#include <QtCore/QXmlStreamAttributes>
 
 static Waypoint* wpt_tmp;
 static char* as;

@@ -19,15 +19,12 @@
 
  */
 
-#include <errno.h>
-#include <math.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <string.h>
-
-#define MYNAME "vitosmt"
 #include "defs.h"
 #include "grtcirc.h"
+#include <cmath>
+#include <errno.h>
+
+#define MYNAME "vitosmt"
 
 static gbfile*				infile	=NULL;
 static gbfile*				ofs	=NULL;

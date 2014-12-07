@@ -19,12 +19,12 @@
 
  */
 
+#include "defs.h"
+#include "grtcirc.h"
+
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
-
-#include "defs.h"
-#include "grtcirc.h"
 
 static const double EARTH_RAD = 6378137.0;
 

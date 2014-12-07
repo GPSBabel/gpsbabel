@@ -20,9 +20,6 @@
 
  */
 
-#include <ctype.h>
-#include <math.h>
-#include <stdlib.h>
 #include <QtCore/QRegExp>
 
 #include "defs.h"
@@ -32,6 +29,8 @@
 #include "jeeps/gpsmath.h"
 #include "src/core/logging.h"
 #include "strptime.h"
+
+#include <math.h>
 
 #define MYNAME "CSV_UTIL"
 

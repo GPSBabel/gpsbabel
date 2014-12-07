@@ -17,18 +17,14 @@
 
  */
 #include "defs.h"
-
-static char* deficon = NULL;
-static char* nuke_placer;
-
-
-static gbfile* ofd;
-
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
 #include <QtCore/QDebug>
 #include "src/core/file.h"
 
+static char* deficon = NULL;
+static char* nuke_placer;
+static gbfile* ofd;
 static QString ostring;
 static QXmlStreamWriter writer(&ostring);
 

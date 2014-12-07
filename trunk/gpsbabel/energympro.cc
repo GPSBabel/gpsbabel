@@ -21,7 +21,7 @@
  */
 
 #include "defs.h"
-#include <ctype.h>
+#include <QtCore/QDebug>
 #include <limits.h>
 
 #define MYNAME "energympro"

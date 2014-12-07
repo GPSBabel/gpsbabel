@@ -26,10 +26,9 @@
  * we don't implement that at this time in GPSBabel.
  */
 
-#include <QtCore/QXmlStreamAttributes>
-
 #include "defs.h"
 #include "xmlgeneric.h"
+#include <QtCore/QXmlStreamAttributes>
 
 static gbfile* ofd;
 static Waypoint* wpt_tmp;

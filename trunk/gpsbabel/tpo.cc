@@ -70,12 +70,10 @@
     3.x     "recreation"
 */
 
-#include <ctype.h>
-#include <math.h>
-#include <string.h>
 
 #include "defs.h"
 #include "jeeps/gpsmath.h" /* for datum conversions */
+#include <cmath>
 
 #define MYNAME	"TPO"
 

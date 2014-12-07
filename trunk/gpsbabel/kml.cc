@@ -19,9 +19,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-#include <math.h>
-#include <QtCore/QRegExp>
-#include <QtCore/QXmlStreamAttributes>
 
 #ifdef __WIN32__
 # include <windows.h>
@@ -30,10 +27,12 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 #include "grtcirc.h"
-
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
 #include "src/core/xmltag.h"
+#include <QtCore/QRegExp>
+#include <QtCore/QXmlStreamAttributes>
+#include <math.h>
 
 // options
 static char* opt_deficon = NULL;

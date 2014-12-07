@@ -19,15 +19,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 */
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-
-#include <QtCore/QXmlStreamAttributes>
-
 #include "defs.h"
 #include "xmlgeneric.h"
+#include <QtCore/QXmlStreamAttributes>
 
 #define MYNAME "IGNRando"
 

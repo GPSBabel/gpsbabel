@@ -23,15 +23,11 @@
 #include "defs.h"
 #include "csv_util.h"
 #include "jeeps/gpsmath.h"
-#include <ctype.h>
-#include <math.h>
 #include <QtCore/QDebug>
+#include <QtCore/QTextCodec>
+#include <math.h>
 
 #define MYNAME        "Naviguide"
-
-
-
-
 
 
 /************* Specific Naviguide data formats ****************/

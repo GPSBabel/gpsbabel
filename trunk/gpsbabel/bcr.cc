@@ -29,12 +29,9 @@
 #include "defs.h"
 #include "csv_util.h"
 #include "garmin_tables.h"
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 #include "cet_util.h"
 #include "inifile.h"
+#include <math.h>
 
 #define MYNAME "bcr"
 

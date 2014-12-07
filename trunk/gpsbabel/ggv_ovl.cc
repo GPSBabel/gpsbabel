@@ -20,14 +20,11 @@
 
  */
 
-#include <ctype.h>
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-
 #include "defs.h"
 #include "inifile.h"
 #include "grtcirc.h"
+
+#include <cmath>
 
 #define MYNAME "ggv_ovl"
 

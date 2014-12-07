@@ -26,7 +26,6 @@
 
 
 #include "defs.h"
-#include <string.h>
 #include <math.h> /* for lat/lon conversion */
 #include <time.h> /* for gmtime */
 

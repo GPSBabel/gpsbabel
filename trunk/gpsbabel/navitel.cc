@@ -19,7 +19,6 @@
 
  */
 
-#include <ctype.h>
 #include "defs.h"
 #include "gbfile.h"
 #include "jeeps/gpsmath.h"

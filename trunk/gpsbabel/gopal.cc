@@ -49,13 +49,11 @@
 */
 
 #include "defs.h"
-#include <ctype.h>
 #include "csv_util.h"
-#include <time.h>
-#include <math.h>
 #include "strptime.h"
 #include "jeeps/gpsmath.h"
 #include "grtcirc.h"
+#include <cmath>
 #define MYNAME "gopal"
 
 static gbfile* fin, *fout;
@@ -317,7 +315,7 @@ gopal_read(void)
     }
     /* Error handling: in the tracklog of my device sometimes "jump" waypoints ;-) */
     if	((optclean) &&
-         (((wpt->longitude==0.0)|| (wpt->latitude==0.0)||(abs(wpt->latitude)>90)||(abs(wpt->longitude)>180))||
+         (((wpt->longitude==0.0)|| (wpt->latitude==0.0)||(std::abs(wpt->latitude)>90)||(std::abs(wpt->longitude)>180))||
           ((speed>maxspeed)||(speed<minspeed)))
        ) {
       if (global_opts.debug_level > 1) {

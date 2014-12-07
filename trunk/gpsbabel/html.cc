@@ -23,7 +23,6 @@
 #include "defs.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/xmltag.h"
-#include <ctype.h>
 
 static gbfile* file_out;
 static short_handle mkshort_handle;

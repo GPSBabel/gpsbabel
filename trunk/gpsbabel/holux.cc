@@ -25,12 +25,8 @@ History:
 */
 /* This module is for the holux (gm-100) .wpo format */
 
-
-
-#include <ctype.h>
 #include "defs.h"
 #include "holux.h"
-
 
 static  gbfile* file_in, *file_out;
 static 	unsigned char* HxWFile;

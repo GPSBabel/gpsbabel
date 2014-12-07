@@ -24,7 +24,6 @@
 #ifndef GARMIN_FS_H
 #define GARMIN_FS_H
 
-#include <ctype.h>
 #include "defs.h"
 #include "jeeps/gps.h"
 

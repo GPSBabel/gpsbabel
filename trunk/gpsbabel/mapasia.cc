@@ -25,7 +25,7 @@
 #include <string.h>
 #include <time.h>
 #include "defs.h"
-#include "session.h"
+//#include "session.h"
 
 #define MYNAME "mapasia"
 

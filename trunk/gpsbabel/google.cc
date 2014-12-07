@@ -17,11 +17,12 @@
 
  */
 
-#include <QtCore/QFile>
-#include <QtCore/QXmlStreamAttributes>
 
 #include "defs.h"
 #include "xmlgeneric.h"
+#include <QtCore/QFile>
+#include <QtCore/QTextStream>
+#include <QtCore/QXmlStreamAttributes>
 
 static char* encoded_points = NULL;
 static char* encoded_levels = NULL;

@@ -18,11 +18,11 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-#include <math.h>
 
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
+#include <math.h>
 
 #if FILTERS_ENABLED
 

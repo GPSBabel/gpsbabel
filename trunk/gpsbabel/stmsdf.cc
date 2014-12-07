@@ -31,11 +31,6 @@
 
 #if CSVFMTS_ENABLED
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "csv_util.h"
 #include "strptime.h"
 #include "jeeps/gpsmath.h"

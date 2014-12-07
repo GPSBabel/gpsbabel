@@ -17,13 +17,11 @@
 
  */
 #include "defs.h"
-
+#include "src/core/file.h"
+#include "src/core/xmlstreamwriter.h"
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
 #include <QtCore/QDebug>
-#include "src/core/file.h"
-#include "src/core/xmlstreamwriter.h"
-
 
 static gpsbabel::File* oqfile;
 static QXmlStreamWriter* writer;

@@ -26,10 +26,6 @@
 #include "jeeps/gpsmath.h"
 #include "xmlgeneric.h"
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #define MYNAME "dmtlog"
 
 #define DEFLATE_BUFF_SIZE 16384

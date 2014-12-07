@@ -34,7 +34,6 @@
 
 #include "defs.h"
 #include "csv_util.h"
-#include <ctype.h>
 
 #define MYNAME	"TMPro"
 
