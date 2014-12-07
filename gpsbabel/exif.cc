@@ -28,14 +28,11 @@
  * 1998, version 2.1: http://www.exif.org/Exif2-1.PDF
  */
 
-#include <ctype.h>
-#include <math.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "defs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
+
+#include <math.h>
 
 #define MYNAME "exif"
 

@@ -19,16 +19,16 @@
 
  */
 
+#include "defs.h"
+#include "xmlgeneric.h"
+#include "cet_util.h"
+#include "src/core/file.h"
+
 #include <QtCore/QByteArray>
 #include <QtCore/QDebug>
 #include <QtCore/QTextCodec>
 #include <QtCore/QXmlStreamAttributes>
 #include <QtCore/QXmlStreamReader>
-
-#include "defs.h"
-#include "xmlgeneric.h"
-#include "cet_util.h"
-#include "src/core/file.h"
 
 #define DEBUG_TAG 0
 #if DEBUG_TAG

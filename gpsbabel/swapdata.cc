@@ -22,7 +22,6 @@
 
 #include "defs.h"
 #include "filterdefs.h"
-#include <ctype.h>
 
 #define MYNAME "swapdata"
 

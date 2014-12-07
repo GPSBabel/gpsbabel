@@ -19,13 +19,9 @@
 
  */
 
-#include <stddef.h>
-#include <stdio.h>
-#include <string.h>
-#include <limits.h>
+#include "defs.h"
 
 #define MYNAME "an1"
-#include "defs.h"
 
 static gbfile* infile;
 static gbfile* outfile;

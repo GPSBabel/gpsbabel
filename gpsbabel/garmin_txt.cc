@@ -23,12 +23,6 @@
 #include "defs.h"
 
 #if CSVFMTS_ENABLED
-#include <math.h>
-#include <time.h>
-#include <ctype.h>
-#include <errno.h>
-#include <stdarg.h>
-#include "cet_util.h"
 #include "csv_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
@@ -36,6 +30,8 @@
 #include "inifile.h"
 #include "jeeps/gpsmath.h"
 #include "strptime.h"
+
+#include <cmath>
 
 #define MYNAME "garmin_txt"
 

@@ -19,10 +19,9 @@
 
  */
 
-#include <math.h>
-
 #include "defs.h"
 #include "csv_util.h"
+#include <math.h>
 
 static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;

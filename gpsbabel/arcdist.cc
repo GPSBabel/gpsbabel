@@ -19,11 +19,12 @@
 
  */
 
-#include <math.h>
 
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
+
+#include <math.h>
 
 #if FILTERS_ENABLED
 #define MYNAME "Arc filter"

@@ -20,7 +20,6 @@
 
 
 #include "defs.h"
-#include <ctype.h>
 
 static gbfile* file_in;
 static gbfile* file_out;

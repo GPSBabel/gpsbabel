@@ -24,18 +24,19 @@
 #include "garmin_fs.h"
 #include "garmin_tables.h"
 #include "src/core/logging.h"
-#include <math.h>
-#include <QtCore/QXmlStreamReader>
-static QXmlStreamReader* reader;
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
 #include "src/core/xmltag.h"
 
+#include <QtCore/QXmlStreamReader>
 #include <QtCore/QRegExp>
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
 
+#include <math.h>
 
+
+static QXmlStreamReader* reader;
 static xml_tag* cur_tag;
 static QString cdatastr;
 static char* opt_logpoint = NULL;

@@ -20,9 +20,9 @@
 
  */
 
-#include <QtCore/QStringList>
-
 #include "defs.h"
+#include <QtCore/QDebug>
+#include <QtCore/QStringList>
 
 #define MYNAME "mynav"
 
@@ -48,25 +48,13 @@ typedef enum {
 static route_head* mynav_track;
 static gbfile* fin;
 
-//*******************************************************************************
+//***************************************************************************
 //           local helper functions
-//*******************************************************************************
+//***************************************************************************
 static void
-mynav_rd_line(char *buf)
+mynav_rd_line(QString line)
 {
-  Waypoint* wpt = NULL;
-  QStringList fields;
-  QString line;
-  bool ok;
-  int val_type;
-  int val_gps_valid;
-  double val_lat;
-  double val_lon;
-  double val_alt;
-  int val_time;
-  
-  line = buf;
-  fields = line.split("|");
+  QStringList fields = line.split("|");
 
   if (global_opts.debug_level > 1) {
     qDebug() << "line: " << line;
@@ -79,7 +67,8 @@ mynav_rd_line(char *buf)
     return;
 
   // only type 1 and type 5 lines contain coordinates
-  val_type = fields.at(fld_type).trimmed().toInt(&ok);  
+  bool ok = false;
+  int val_type = fields.at(fld_type).trimmed().toInt(&ok);  
   if (!ok)
     return;
   if (val_type != 1 && val_type != 5)
@@ -88,30 +77,30 @@ mynav_rd_line(char *buf)
   // This field is not present in .trc files, only in .ftn, so
   // ignore line if present and != 1
   if (fields.size() >= fld_gps_valid) {
-    val_gps_valid = fields.at(fld_gps_valid).trimmed().toInt(&ok);
+    int val_gps_valid = fields.at(fld_gps_valid).trimmed().toInt(&ok);
     if (!ok || val_gps_valid != 1)
       return;
   }
 
-  val_lon = fields.at(fld_lon).trimmed().toDouble(&ok) / 3600000.0;
+  double val_lon = fields.at(fld_lon).trimmed().toDouble(&ok) / 3600000.0;
   if (!ok)
     return;
-  val_lat = fields.at(fld_lat).trimmed().toDouble(&ok) / 3600000.0;
+  double val_lat = fields.at(fld_lat).trimmed().toDouble(&ok) / 3600000.0;
   if (!ok)
     return;
 
-  wpt = new Waypoint;
+  Waypoint* wpt = new Waypoint;
   wpt->latitude = val_lat;
   wpt->longitude = val_lon;
 
   if (fields.size() >= fld_altitude) {
-    val_alt = fields.at(fld_altitude).trimmed().toDouble(&ok);
+    double val_alt = fields.at(fld_altitude).trimmed().toDouble(&ok);
     if (ok)
       wpt->altitude = val_alt;
   }
 
   if (fields.size() >= fld_timestamp) {
-    val_time = fields.at(fld_timestamp).trimmed().toInt(&ok);
+    int val_time = fields.at(fld_timestamp).trimmed().toInt(&ok);
     if (ok)
       wpt->SetCreationTime(val_time);
   }
@@ -120,9 +109,9 @@ mynav_rd_line(char *buf)
 }
 
 
-//*******************************************************************************
+//***************************************************************************
 //           global callbacks called by gpsbabel main process
-//*******************************************************************************
+//***************************************************************************
 
 static void
 mynav_rd_init(const char* fname)
@@ -141,11 +130,11 @@ mynav_rd_deinit(void)
 static void 
 mynav_rd(void)
 {
-  char * buff;
-    
-  while ((buff = gbfgetstr(fin))) {
-    buff = lrtrim(buff);
-    if ((*buff == '\0') || (*buff == '#')) {
+  QString buff;
+
+  while ((buff = gbfgetstr(fin)), !buff.isNull()) {
+    buff = buff.trimmed();
+    if ((buff.isEmpty()) || (buff[0] == '#')) {
       continue;
     }
     mynav_rd_line(buff);

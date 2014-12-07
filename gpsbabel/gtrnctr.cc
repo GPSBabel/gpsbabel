@@ -470,7 +470,7 @@ gtc_write(void)
 }
 
 void
-gtc_trk_s(const xg_string , const QXmlStreamAttributes*)
+gtc_trk_s(xg_string, const QXmlStreamAttributes*)
 {
   trk_head = route_head_alloc();
   track_add_head(trk_head);

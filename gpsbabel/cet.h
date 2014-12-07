@@ -22,9 +22,6 @@
 #ifndef CET_H
 #define CET_H
 
-#include <ctype.h>
-#include <stdio.h>
-
 #define CET_ERROR	1
 #define CET_SUCCESS	0
 

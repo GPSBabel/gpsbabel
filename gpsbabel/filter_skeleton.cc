@@ -29,7 +29,6 @@
 
 #include "defs.h"
 #include "filterdefs.h"
-#include <ctype.h>
 
 #define MYNAME "filter_skeleton"
 

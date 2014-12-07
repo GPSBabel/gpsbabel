@@ -19,11 +19,11 @@
 
  */
 
-#include <stdio.h>
 #include "defs.h"
 #include "csv_util.h"
 #include "inifile.h"
 #include "gbversion.h"
+#include <stdio.h>
 
 #define MYNAME "vecs.c"
 

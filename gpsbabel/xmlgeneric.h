@@ -27,6 +27,7 @@ typedef enum {
   cb_end,
 } xg_cb_type;
 
+class QXmlStreamAttributes;
 typedef void (xg_callback)(xg_string, const QXmlStreamAttributes*);
 
 typedef struct xg_tag_mapping {

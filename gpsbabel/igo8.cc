@@ -61,8 +61,6 @@
 
 */
 
-#include <ctype.h>
-#include <time.h>
 #include "defs.h"
 #include "cet.h"
 #include "cet_util.h"

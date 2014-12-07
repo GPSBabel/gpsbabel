@@ -20,7 +20,7 @@
  */
 
 #include "queue.h"
-#include "stddef.h"
+#include <stddef.h>
 
 void
 enqueue(queue* new_el, queue* old)

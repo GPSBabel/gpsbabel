@@ -22,8 +22,6 @@
 #ifndef CET_UTIL_H
 #define CET_UTIL_H
 
-#include <ctype.h>
-#include <stdio.h>
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif

@@ -19,13 +19,11 @@
 
  */
 
-#include <stddef.h>
-#include <stdio.h>
-#include <string.h>
 
 #define MYNAME "saroute"
 #include "defs.h"
 #include "grtcirc.h"
+#include <stddef.h>
 
 gbfile* infile;
 

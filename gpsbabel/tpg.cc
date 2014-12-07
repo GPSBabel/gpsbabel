@@ -23,8 +23,6 @@
  */
 
 #include "defs.h"
-#include <string.h>
-#include <ctype.h>
 #include "jeeps/gpsmath.h" /* for datum conversions */
 
 #define MYNAME	"TPG"

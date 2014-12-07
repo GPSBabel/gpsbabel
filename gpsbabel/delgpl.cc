@@ -19,9 +19,6 @@
 
  */
 
-#include <ctype.h>
-#include <time.h>
-
 #include "defs.h"
 
 #define MYNAME "GPL"

@@ -25,10 +25,10 @@
  * https://developers.google.com/maps/documentation/directions/
  */
 
-#include <QtCore/QXmlStreamAttributes>
 
 #include "defs.h"
 #include "xmlgeneric.h"
+#include <QtCore/QXmlStreamAttributes>
 
 static QString encoded_points;
 static QString instructions;

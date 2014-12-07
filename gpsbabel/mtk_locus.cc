@@ -36,12 +36,10 @@ Example usage::
 
 */
 
-#include <ctype.h>
-#include <time.h>
-#include <errno.h>
 
 #include "defs.h"
 #include "gbser.h"
+#include <errno.h>
 
 static route_head* track;
 

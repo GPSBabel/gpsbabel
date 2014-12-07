@@ -22,15 +22,12 @@
 
  */
 
-#include <ctype.h>
-#include <math.h>
-#include <time.h>
-
 #include "defs.h"
 #include "cet.h"
 #include "cet_util.h"
 #include "garmin_fs.h"
 #include "strptime.h"
+#include <cmath>
 
 #define MYNAME 		"destinator"
 #define DST_DYN_POI 	"Dynamic POI"

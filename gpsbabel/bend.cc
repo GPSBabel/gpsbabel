@@ -22,10 +22,9 @@
 
 #include "defs.h"
 #include "filterdefs.h"
-
 #include "grtcirc.h"
 
-#include <ctype.h>
+#include <cmath>
 
 #define MYNAME "bend"
 
@@ -109,9 +108,9 @@ is_small_angle(double lat_orig, double long_orig, double lat_orig_prev,
 
   double heading_diff = heading_next - heading_prev;
 
-  return ((abs(heading_diff - 0.0) < minAngle)
-          || (abs(heading_diff - 180.0) < minAngle)
-          || (abs(heading_diff - 360.0) < minAngle));
+  return ((std::abs(heading_diff - 0.0) < minAngle)
+          || (std::abs(heading_diff - 180.0) < minAngle)
+          || (std::abs(heading_diff - 360.0) < minAngle));
 }
 
 static void

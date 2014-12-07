@@ -52,15 +52,14 @@
 
  */
 
-#include <ctype.h>
-#include <errno.h>
-#include <math.h>
 
-#include <QtCore/QDir>
 
 #include "defs.h"
 #include "gbser.h"
 #include "gbfile.h" /* used for csv output */
+#include <QtCore/QDir>
+#include <errno.h>
+#include <math.h>
 
 #define MYNAME "mtk_logger"
 

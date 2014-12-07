@@ -19,10 +19,10 @@
 
  */
 
-#include <QtCore/QXmlStreamAttributes>
 
 #include "defs.h"
 #include "xmlgeneric.h"
+#include <QtCore/QXmlStreamAttributes>
 
 static int isFirst = 1;
 static route_head* route = NULL;

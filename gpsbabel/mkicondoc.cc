@@ -2,14 +2,14 @@
 // into our doc, http://www.gpsbabel.org/htmldoc-development/GarminIcons.html
 
 
-#include <stdarg.h>
-#include <stdio.h>
 #include "fatal.cc"
 #include "util.cc"
 #include "cet.cc"
 // #define VERSION "1"
 #include "globals.cc"
 #include "jeeps/gpsmath.cc"
+//#include <stdarg.h>
+//#include <stdio.h>
 
 
 

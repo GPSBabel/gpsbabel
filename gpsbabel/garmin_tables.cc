@@ -24,9 +24,6 @@
 #include "src/core/logging.h"
 #include "jeeps/gpsmath.h"
 
-#include <stdio.h>
-#include <string.h>
-
 #define MYNAME "garmin_tables"
 
 /* MapSource 4.13 */

@@ -21,7 +21,6 @@
 
 #include "defs.h"
 #include "navilink.h"
-#include <ctype.h>
 
 #define MYNAME "sbn"
 

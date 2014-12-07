@@ -22,10 +22,8 @@
  */
 
 #include "defs.h"
-#include <ctype.h>
 
 #define MYNAME "fit"
-
 
 static
 arglist_t fit_args[] = {

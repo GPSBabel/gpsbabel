@@ -347,19 +347,12 @@ read_packet(unsigned type, void* payload,
   return TRUE;
 }
 
-static time_t
+static QDateTime
 decode_datetime(const unsigned char* buffer)
 {
-  struct tm tm;
-
-  tm.tm_sec = buffer[5];
-  tm.tm_min = buffer[4];
-  tm.tm_hour = buffer[3];
-  tm.tm_mday = buffer[2];
-  tm.tm_mon = buffer[1] - 1;
-  tm.tm_year = buffer[0] + 100;
-
-  return mkgmtime(&tm);
+  QTime tm(buffer[3], buffer[4], buffer[5]);
+  QDate dt(2000 + buffer[0], buffer[1], buffer[2]);
+  return QDateTime(dt, tm, Qt::UTC);
 }
 
 static void

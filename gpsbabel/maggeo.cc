@@ -19,15 +19,12 @@
 
  */
 
-#include <ctype.h>
-#include <math.h>
-
-#include <QtCore/QXmlStreamAttributes>
-
 #include "defs.h"
 #include "csv_util.h"
 #include "xmlgeneric.h"
 #include "magellan.h"
+#include <QtCore/QXmlStreamAttributes>
+#include <cmath>
 
 #define MYNAME "maggeo"
 

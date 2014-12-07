@@ -33,8 +33,8 @@
 
 
 #include "defs.h"
-#include <string.h>
-#include <math.h> /* for lat/lon conversion */
+#include <QtCore/QDebug>
+#include <cmath> /* for lat/lon conversion */
 
 typedef struct lowranceusr_icon_mapping {
   const int	value;
@@ -435,7 +435,7 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp)
   // Version 3 has a depth field here.
   if (reading_version >= 3) {
     float depth_feet = gbfgetflt(file_in);
-    if (abs(depth_feet - 99999.0)  > .1) {
+    if (std::abs(depth_feet - 99999.0)  > .1) {
       WAYPT_SET(wpt_tmp, depth, FEET_TO_METERS(depth_feet));
     }
   }

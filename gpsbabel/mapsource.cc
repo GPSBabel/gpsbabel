@@ -21,13 +21,9 @@
 
 /* #define	MPS_DEBUG	0 */
 
-#include <stdio.h>
-#include <string.h>
-
 #include "defs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
-#include <ctype.h>
 
 static	gbfile*	mps_file_in;
 static	gbfile*	mps_file_out;

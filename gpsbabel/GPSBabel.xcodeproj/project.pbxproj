@@ -1394,7 +1394,7 @@
 		6DB9C3763D02B1415CD9D565 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0610;
 			};
 			buildConfigurationList = DAC4C1AA5EDEA1C85E9CA5E6 /* Build configuration list for PBXProject "GPSBabel" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1664,10 +1664,12 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1.0;
 				DYLIB_CURRENT_VERSION = 1.0.0;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					/Users/robertlipe/Qt5.2.1/5.2.1/clang_64/lib,
 					/Users/robertlipe/Qt5.2.1/5.2.1/clang_64/lib,
@@ -1755,10 +1757,12 @@
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DYLIB_COMPATIBILITY_VERSION = 1.0;
 				DYLIB_CURRENT_VERSION = 1.0.0;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					/Users/robertlipe/Qt5.2.1/5.2.1/clang_64/lib,
 					/Users/robertlipe/Qt5.2.1/5.2.1/clang_64/lib,

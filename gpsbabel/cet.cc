@@ -22,11 +22,6 @@
 #include "defs.h"
 #include "cet.h"
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 /* ! ALL vec PARAMETERS HAVE TO BE A VALID POINTER TO A cet_cs_vec_t RECORD  ! */
 
 /* =========================================================================== */

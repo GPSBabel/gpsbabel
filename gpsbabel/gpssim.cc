@@ -19,9 +19,9 @@
 
  */
 
-#include <math.h>
 
 #include "defs.h"
+#include <math.h>
 
 #define MYNAME "gpssim"
 

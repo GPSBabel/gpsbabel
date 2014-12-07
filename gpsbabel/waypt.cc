@@ -19,17 +19,16 @@
 
  */
 
-#include <stdio.h>
-#include <math.h>
-#include <QtCore/QDebug>
-#include <QtCore/QList>
-
 #include "defs.h"
 #include "cet_util.h"
 #include "grtcirc.h"
 #include "garmin_fs.h"
 #include "session.h"
 #include "src/core/logging.h"
+#include <QtCore/QDebug>
+#include <QtCore/QList>
+#include <stdio.h>
+#include <math.h>
 
 #if NEWQ
 QList<Waypoint*> waypt_list;

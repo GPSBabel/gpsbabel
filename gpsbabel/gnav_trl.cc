@@ -20,7 +20,6 @@
 
  */
 
-#include <ctype.h>
 #include "defs.h"
 
 #define MYNAME "gnav_trl"

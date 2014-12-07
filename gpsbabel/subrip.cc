@@ -21,7 +21,6 @@
  */
 
 #include "defs.h"
-#include <time.h>
 
 #define MYNAME "subrip"
 

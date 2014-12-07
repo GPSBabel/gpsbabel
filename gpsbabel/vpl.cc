@@ -107,10 +107,8 @@ C - Checksum
  */
 
 #include "defs.h"
-#include <ctype.h>
 
 #define MYNAME "vpl"
-
 
 void vpl_parse_75_sentence(const char*);
 

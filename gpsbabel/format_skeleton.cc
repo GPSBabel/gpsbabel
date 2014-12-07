@@ -7,8 +7,8 @@
     1) Copy this file to <your_format_name>.c
     2) Rename all format_skeleton tokens to <your_format_name>.
     3) Replace the fictional name and address in the Copyright section below.
-       As your work is likely built on the work of others, please retain
-       the original line.
+       ** As your work is likely built on the work of others, please retain
+       the original line. **
     4) Create a new section in vecs.c.
     5) Add compilation instructions to Makefile.
     6) Add sample files (it's better when they're created by the "real"
@@ -37,7 +37,6 @@
  */
 
 #include "defs.h"
-#include <ctype.h>
 
 #define MYNAME "format_skeleton"
 

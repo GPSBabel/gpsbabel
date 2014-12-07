@@ -20,35 +20,8 @@
 
  */
 
-/*
-    History:
-
-	2008/10/18: Initial release
-	2008/10/19: Don't write empty names
-		    Add options 'locked' and 'visible'
-	2008/11/06: Fix enumeration of objects for empty routes or tracks
-		    Add option "ver" (internal version) to writer
-		    We support write of version:
-		    * 0x11 - reported as " "Memory Map OS Edition 2004, Version 4.2.3 Build 432"
-		    * 0x12 - most files in my test pool :-)
-	2008/11/19: Fix routes with a loop but different start and end point
-	2008/12/12: Fix object release error
-	2010/09/10: Added read support for version 0x18
-		    (test file created by Memory-Map European Edition, Version 5.4.2, Build 1089).
-	2011/10/05: Fixed read support: Track, CurrentPosition, UTF-16 strings
-		    (test file is version 0x18 as written by GPS units running 5.4.4 build 1114).
-		    Strings now written in UTF-16 if necessary.
-*/
-
-#include <ctype.h>
-#include <errno.h>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-
 #include "defs.h"
+#include <errno.h>
 
 #define MYNAME "mmo"
 

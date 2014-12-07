@@ -23,13 +23,11 @@
 #ifndef GBFILE_H
 #define GBFILE_H
 
-#include <ctype.h>
-#include <stdarg.h>
-#include <string.h>
-#include <QtCore/QString>
 
 #include "defs.h"
 #include "cet.h"
+
+#include <QtCore/QString>
 
 struct gbfile_s;
 typedef struct gbfile_s gbfile;

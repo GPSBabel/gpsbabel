@@ -37,9 +37,6 @@
 #include "session.h"
 
 #include <QtCore/QString>
-#include <QtCore/QDebug>
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
 
 # include "src/core/datetime.h"
 
@@ -208,6 +205,7 @@ extern const char gpsbabel_version[];
 extern time_t gpsbabel_now;	/* gpsbabel startup-time; initialized in main.c with time() */
 extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
 extern int geocaches_present;
+class QTextStream;
 extern QTextStream cerr;
 
 #define MILLI_TO_MICRO(t) (t * 1000)  /* Milliseconds to Microseconds */

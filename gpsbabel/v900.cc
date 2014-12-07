@@ -180,30 +180,25 @@ v900_rd_deinit(void)
   }
 }
 
-
 /* copied from dg-100.c - slight (incompatible) modification to how the date parameter is used */
-static time_t
-bintime2utc(int date, int time)
-{
-  struct tm gpstime;
-
-  gpstime.tm_sec   = time % 100;
+QDateTime
+bintime2utc(int date, int time) {
+  int secs = time % 100;
   time /= 100;
-  gpstime.tm_min   = time % 100;
+  int mins = time % 100;
   time /= 100;
-  gpstime.tm_hour  = time;
+  // What's left in 'time' is hours, ranged 0-23.
+  QTime tm(time, mins, secs);
 
-  /*
-   * GPS year: 2000+; struct tm year: 1900+
-   * GPS month: 1-12, struct tm month: 0-11
-   */
-  gpstime.tm_mday  = date % 100;
+  // 'date' starts at 2000 and is YYMMDD
+  int day = date % 100;
   date /= 100;
-  gpstime.tm_mon   = date % 100 - 1;
-  date /= 100;
-  gpstime.tm_year  = date + 100;
-
-  return(mkgmtime(&gpstime));
+  int month = date % 100;
+  date /= 100; 
+  // What's left in 'date' is year.
+  QDate dt(date + 2000, month, day);
+  
+  return QDateTime(dt, tm, Qt::UTC);
 }
 
 static void

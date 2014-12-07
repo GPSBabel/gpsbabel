@@ -21,11 +21,9 @@
  */
 
 
-#include <ctype.h>
-#include <math.h>
-#include <time.h>
 
 #include "defs.h"
+#include <math.h>
 
 #define MYNAME "skyforce"
 

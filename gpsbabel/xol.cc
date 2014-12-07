@@ -20,12 +20,11 @@
 
 */
 
-#include <QtCore/QXmlStreamAttributes>
-
 #include "defs.h"
 #include "xmlgeneric.h"
 #include "jeeps/gpsmath.h"
 #include "garmin_tables.h"
+#include <QtCore/QXmlStreamAttributes>
 
 static Waypoint* wpt;
 static route_head* trk;
