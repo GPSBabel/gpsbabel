@@ -24,6 +24,7 @@
 #include "inifile.h"
 #include "gbversion.h"
 #include <stdio.h>
+#include <stdlib.h> // qsort
 
 #define MYNAME "vecs.c"
 

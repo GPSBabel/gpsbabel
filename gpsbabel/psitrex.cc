@@ -22,6 +22,8 @@
 #include "defs.h"
 #include "garmin_tables.h"
 #include <ctype.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define MYNAME "PSITREX"
 

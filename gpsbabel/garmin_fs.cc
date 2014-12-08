@@ -26,6 +26,8 @@
 #include "inifile.h"
 
 #include <QtCore/QXmlStreamWriter>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define MYNAME "garmin_fs"
 

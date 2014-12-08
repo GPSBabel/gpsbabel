@@ -20,14 +20,17 @@
 
  */
 
-#include <ctype.h>
-#include <math.h>
-#include <time.h>
 
 #include "defs.h"
 #include "gbser.h"
 #include "strptime.h"
 #include "jeeps/gpsmath.h"
+
+#include <ctype.h>
+#include <math.h>
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 /**********************************************************
 

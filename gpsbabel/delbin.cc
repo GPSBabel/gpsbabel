@@ -23,6 +23,7 @@
 #include "defs.h"
 #include "src/core/xmltag.h"
 #include <assert.h>
+#include <stdio.h> /* for atoi, sprintf */
 
 #define MYNAME "delbin"
 static short_handle mkshort_handle;

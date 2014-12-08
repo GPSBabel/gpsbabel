@@ -24,6 +24,7 @@
 #include "filterdefs.h"
 #include "grtcirc.h"
 
+#include <stdlib.h>
 #include <cmath>
 
 #define MYNAME "bend"

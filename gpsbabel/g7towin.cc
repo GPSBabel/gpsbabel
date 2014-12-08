@@ -32,6 +32,8 @@
 #include "strptime.h"
 
 #include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #if CSVFMTS_ENABLED
 

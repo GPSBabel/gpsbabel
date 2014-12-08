@@ -25,6 +25,8 @@
 #include "magellan.h"
 #include <QtCore/QXmlStreamAttributes>
 #include <cmath>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define MYNAME "maggeo"
 

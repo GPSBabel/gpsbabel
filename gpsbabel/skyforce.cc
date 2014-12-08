@@ -24,6 +24,8 @@
 
 #include "defs.h"
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define MYNAME "skyforce"
 

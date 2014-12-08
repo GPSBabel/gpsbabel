@@ -24,6 +24,7 @@
 #include "jeeps/gpsmath.h"
 #include "strptime.h"
 #include <math.h>
+#include <stdio.h>
 
 /*
  * parse_distance:

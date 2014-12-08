@@ -5,11 +5,9 @@
 #include "fatal.cc"
 #include "util.cc"
 #include "cet.cc"
-// #define VERSION "1"
 #include "globals.cc"
 #include "jeeps/gpsmath.cc"
-//#include <stdarg.h>
-//#include <stdio.h>
+#include <stdlib.h> // qsort
 
 
 

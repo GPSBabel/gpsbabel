@@ -25,6 +25,8 @@
 #include "grtcirc.h"
 
 #include <cmath>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define MYNAME "ggv_ovl"
 

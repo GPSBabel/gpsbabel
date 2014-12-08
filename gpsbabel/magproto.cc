@@ -31,6 +31,8 @@
 #if HAVE_GLOB
 #include <glob.h>
 #endif
+#include <stdlib.h>
+#include <stdio.h>
 
 static int bitrate = 4800;
 static int wptcmtcnt;

@@ -25,6 +25,7 @@
 
 #include <assert.h>
 #include <stdarg.h>
+#include <stdio.h>
 
 void gbser__db(int l, const char* msg, ...)
 {

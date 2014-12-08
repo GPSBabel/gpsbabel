@@ -33,6 +33,7 @@
 #include "gbser.h"
 #include <ctype.h>
 #include <math.h>
+#include <stdio.h>
 
 #define MYNAME "itracku"
 

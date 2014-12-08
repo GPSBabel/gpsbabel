@@ -32,6 +32,8 @@
 #include "cet_util.h"
 #include "inifile.h"
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define MYNAME "bcr"
 
