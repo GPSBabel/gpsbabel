@@ -20,10 +20,11 @@
 
 */
 
-#include <QtCore/QXmlStreamAttributes>
 
 #include "defs.h"
 #include "xmlgeneric.h"
+#include <QtCore/QHash>
+#include <QtCore/QXmlStreamAttributes>
 
 static char* opt_tag, *opt_tagnd, *created_by;
 

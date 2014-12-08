@@ -21,6 +21,7 @@
 
 #include "defs.h"
 #include <stdlib.h> // atof
+#include <stdio.h> // sprintf
 
 #define MYNAME "an1"
 

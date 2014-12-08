@@ -21,6 +21,7 @@
 
 #include <ctype.h>
 #include <limits.h>
+#include <stdlib.h>
 #include <math.h>
 
 #include "defs.h"

@@ -23,6 +23,7 @@
 #include "magellan.h"
 #include <cmath>
 #include <stdio.h>
+#include <stdlib.h>
 
 static gbfile* mapsend_file_in;
 static gbfile* mapsend_file_out;

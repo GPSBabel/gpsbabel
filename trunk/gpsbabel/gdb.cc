@@ -30,6 +30,7 @@
 #include "grtcirc.h"
 #include "jeeps/gpsmath.h"
 #include <cmath>
+#include <stdlib.h>
 
 #define MYNAME "gdb"
 

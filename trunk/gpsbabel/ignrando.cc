@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 #include <QtCore/QXmlStreamAttributes>
+#include <stdio.h>
 
 #define MYNAME "IGNRando"
 

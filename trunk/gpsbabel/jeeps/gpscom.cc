@@ -25,8 +25,9 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
-#include <stdio.h>
 #include <float.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 /* @func GPS_Command_Off ***********************************************

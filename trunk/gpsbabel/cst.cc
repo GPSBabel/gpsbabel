@@ -22,6 +22,8 @@
 
 #include "defs.h"
 #include "strptime.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #define MYNAME "cst"
 

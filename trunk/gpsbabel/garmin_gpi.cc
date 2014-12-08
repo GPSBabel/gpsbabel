@@ -49,6 +49,7 @@
 #include "jeeps/gpsmath.h"
 #include "garmin_fs.h"
 #include "garmin_gpi.h"
+#include <stdlib.h>
 #include <QtCore/QTextCodec>
 
 #define MYNAME "garmin_gpi"

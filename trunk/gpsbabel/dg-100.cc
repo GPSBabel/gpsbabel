@@ -33,7 +33,8 @@
 
 #include "gbser.h"
 #include <assert.h>
-#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define MYNAME "DG-100"
 
