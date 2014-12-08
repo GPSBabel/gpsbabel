@@ -23,7 +23,7 @@
 
 #include "defs.h"
 #include <math.h>
-#include <stdlibath.h>
+#include <stdlib.h>
 
 #define MYNAME "Enigma binary route and waypoint file format"
 

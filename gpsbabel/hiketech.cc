@@ -19,12 +19,11 @@
 
  */
 
-#include <QtCore/QXmlStreamAttributes>
-#include "src/core/xmlstreamwriter.h"
-
-
 #include "defs.h"
 #include "xmlgeneric.h"
+#include "src/core/xmlstreamwriter.h"
+#include <QtCore/QXmlStreamAttributes>
+#include <stdio.h>
 
 static gbfile* ofd;
 static QString ostring;

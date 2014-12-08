@@ -24,6 +24,7 @@
 #include "src/core/xmltag.h"
 #include <assert.h>
 #include <stdio.h> /* for atoi, sprintf */
+#include <stdlib.h> // atoi
 
 #define MYNAME "delbin"
 static short_handle mkshort_handle;

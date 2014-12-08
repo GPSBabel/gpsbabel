@@ -20,6 +20,7 @@
  */
 
 #include "defs.h"
+#include <stdlib.h>
 
 /*
  * Colors derived from http://www.w3.org/TR/SVG/types.html#ColorKeywords

@@ -72,8 +72,9 @@ for a little more info, see structures:
 ******************************************************************************/
 
 #include "defs.h"
-#include <stdio.h>
 #include <assert.h>
+#include <stdio.h>
+#include <stdlib.h> // atoi
 
 #if _MSC_VER
 #define __func__ __FUNCTION__

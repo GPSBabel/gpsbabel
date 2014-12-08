@@ -21,6 +21,9 @@
  */
 
 #include "defs.h"
+#include <QtCore/QHash>
+#include <stdio.h>
+#include <stdlib.h>
 #include <errno.h>
 
 #define MYNAME "mmo"

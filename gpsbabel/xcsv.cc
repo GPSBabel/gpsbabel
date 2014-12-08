@@ -23,10 +23,11 @@
 
  */
 
-#include <ctype.h>
 #include "defs.h"
 #include "csv_util.h"
 #include "jeeps/gpsmath.h"
+#include <ctype.h>
+#include <stdlib.h>
 
 #if CSVFMTS_ENABLED
 #define MYNAME	"XCSV"

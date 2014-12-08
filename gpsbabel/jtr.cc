@@ -21,6 +21,7 @@
  */
 #include "defs.h"
 #include "csv_util.h"
+#include <QtCore/QHash>
 #include <cmath>
 #include <stdlib.h>
 #include <stdio.h>

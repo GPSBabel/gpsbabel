@@ -26,6 +26,8 @@
 #include "defs.h"
 #include <errno.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 static gbfile* file_in, *file_out;
 static char manufacturer[4];

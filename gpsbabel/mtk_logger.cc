@@ -60,6 +60,7 @@
 #include <QtCore/QDir>
 #include <errno.h>
 #include <math.h>
+#include <stdlib.h>
 
 #define MYNAME "mtk_logger"
 

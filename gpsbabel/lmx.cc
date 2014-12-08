@@ -28,6 +28,7 @@
 
 #include "defs.h"
 #include "xmlgeneric.h"
+#include <stdio.h>
 #include <QtCore/QXmlStreamAttributes>
 
 static gbfile* ofd;

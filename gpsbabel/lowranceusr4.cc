@@ -29,6 +29,7 @@
 #include <math.h> /* for lat/lon conversion */
 #include <time.h> /* for gmtime */
 #include <stdio.h> /* for gmtime */
+#include <stdlib.h> // atoi
 
 /* from waypt.c, we need to iterate over waypoints when extracting
    routes */

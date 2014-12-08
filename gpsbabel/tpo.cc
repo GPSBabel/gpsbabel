@@ -74,6 +74,9 @@
 #include "defs.h"
 #include "jeeps/gpsmath.h" /* for datum conversions */
 #include <cmath>
+#include <stdio.h>
+#include <stdlib.h>
+#include <vector>
 
 #define MYNAME	"TPO"
 

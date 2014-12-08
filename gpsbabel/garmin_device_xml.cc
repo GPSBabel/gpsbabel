@@ -24,11 +24,12 @@
 // http://developer.garmin.com/web-device/garmin-mass-storage-mode-devices/
 // http://developer.garmin.com/schemas/device/v2/
 
-#include <QtCore/QXmlStreamAttributes>
 
 #include "defs.h"
 #include "xmlgeneric.h"
 #include "garmin_device_xml.h"
+#include <QtCore/QXmlStreamAttributes>
+#include <stdio.h>
 
 #define MYNAME "whatever"
 

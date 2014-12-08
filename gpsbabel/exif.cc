@@ -31,7 +31,8 @@
 #include "defs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
-
+#include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 
 #define MYNAME "exif"

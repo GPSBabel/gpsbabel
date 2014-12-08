@@ -20,6 +20,7 @@
 
 #include "defs.h"
 #include "gbser.h"
+#include <stdio.h>
 
 static void* serial_handle;
 

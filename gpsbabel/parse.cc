@@ -25,6 +25,7 @@
 #include "strptime.h"
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h> //strtod
 
 /*
  * parse_distance:

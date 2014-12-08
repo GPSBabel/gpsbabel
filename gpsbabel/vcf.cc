@@ -18,12 +18,11 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 */
 
-
-#include <ctype.h>
-#include <math.h>
-
 #include "defs.h"
 #include "jeeps/gpsmath.h"
+#include <ctype.h>
+#include <math.h>
+#include <stdlib.h>
 
 static gbfile* file_out;
 static short_handle mkshort_handle;

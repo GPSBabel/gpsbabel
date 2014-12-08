@@ -37,6 +37,7 @@
 #include "grtcirc.h"
 
 #include <time.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #define MYNAME "stmsdf"
