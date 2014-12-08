@@ -28,6 +28,8 @@
 #include "session.h"
 #include "src/core/usasciicodec.h"
 #include <ctype.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include <signal.h>
 
 #define MYNAME "main"

@@ -19,13 +19,15 @@
 
  */
 
-#include <string.h>
-#include <ctype.h>
-#include <stdlib.h>
-
 #include "defs.h"
 #include "cet.h"
 #include "cet_util.h"
+
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 
 #define MYNAME	"mkshort"
 

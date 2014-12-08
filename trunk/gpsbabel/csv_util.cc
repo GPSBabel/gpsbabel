@@ -31,6 +31,8 @@
 #include "strptime.h"
 
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define MYNAME "CSV_UTIL"
 

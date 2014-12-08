@@ -23,6 +23,8 @@
 #include "defs.h"
 #include "csv_util.h"
 #include <ctype.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 static gbfile* file_in;
 static char* nseicon = NULL;

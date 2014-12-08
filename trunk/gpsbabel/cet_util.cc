@@ -22,7 +22,7 @@
 #include "defs.h"
 #include "cet.h"
 #include "cet_util.h"
-
+#include <stdlib.h> // qsort
 #include <QtCore/QDebug>
 #include <QtCore/QTextCodec>
 

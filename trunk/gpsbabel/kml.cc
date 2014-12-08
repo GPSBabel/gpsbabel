@@ -33,6 +33,8 @@
 #include <QtCore/QRegExp>
 #include <QtCore/QXmlStreamAttributes>
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 // options
 static char* opt_deficon = NULL;

@@ -23,6 +23,7 @@
 #include "filterdefs.h"
 #include "grtcirc.h"
 #include <math.h>
+#include <stdlib.h>
 
 #if FILTERS_ENABLED
 

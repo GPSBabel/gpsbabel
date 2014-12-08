@@ -23,8 +23,10 @@
 #include "filterdefs.h"
 #include "inifile.h"
 #include "gbversion.h"
-
 #include <QtCore/QStringList>
+#include <stdlib.h> // qsort
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct {
   filter_vecs_t* vec;

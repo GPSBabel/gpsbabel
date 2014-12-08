@@ -20,6 +20,7 @@
  */
 
 #include "defs.h"
+#include <stdlib.h> // atof
 
 #define MYNAME "an1"
 

@@ -24,6 +24,8 @@
 #include "garmin_tables.h"
 #include "csv_util.h"
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;

@@ -34,7 +34,9 @@
 
 #include "defs.h"
 #include <QtCore/QDebug>
+#include <stdio.h>
 #include <cmath> /* for lat/lon conversion */
+#include <stdlib.h> // atoi
 
 typedef struct lowranceusr_icon_mapping {
   const int	value;

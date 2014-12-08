@@ -62,6 +62,8 @@
 #if CSVFMTS_ENABLED
 #include <math.h>
 #include "jeeps/gpsmath.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 #define MYNAME "CompeGPS"
 

@@ -21,6 +21,7 @@
  */
 
 #include "defs.h"
+#include <stdio.h> /* for gmtime */
 
 #define MYNAME "subrip"
 

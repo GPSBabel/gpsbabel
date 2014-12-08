@@ -24,6 +24,7 @@
 #include "gbfile.h"
 
 #include <assert.h>
+#include <stdio.h>
 
 #if __WIN32__
 /* taken from minigzip.c (part of the zlib project) */

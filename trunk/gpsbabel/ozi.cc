@@ -27,6 +27,8 @@
 #include "jeeps/gpsmath.h"
 #include <ctype.h>
 #include <math.h>                /* for floor */
+#include <stdlib.h>
+#include <stdio.h>
 
 #define MYNAME        "OZI"
 #define BADCHARS	",\r\n"

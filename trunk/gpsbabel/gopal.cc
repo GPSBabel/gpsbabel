@@ -53,6 +53,8 @@
 #include "strptime.h"
 #include "jeeps/gpsmath.h"
 #include "grtcirc.h"
+#include <stdlib.h>
+#include <stdio.h>
 #include <cmath>
 #define MYNAME "gopal"
 

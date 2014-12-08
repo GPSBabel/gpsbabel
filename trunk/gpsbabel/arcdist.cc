@@ -25,6 +25,8 @@
 #include "grtcirc.h"
 
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h> // strtod
 
 #if FILTERS_ENABLED
 #define MYNAME "Arc filter"

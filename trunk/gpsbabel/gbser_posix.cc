@@ -23,14 +23,14 @@
 #include "gbser.h"
 #include "gbser_private.h"
 
+#include <assert.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stdarg.h>
+#include <stdio.h>
 #include <sys/time.h>
 #include <termios.h>
 #include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-
-#include <assert.h>
-#include <stdarg.h>
 
 typedef struct {
   struct termios  old_tio;

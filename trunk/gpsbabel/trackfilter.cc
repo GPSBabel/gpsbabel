@@ -29,6 +29,8 @@
 #include <QtCore/QRegExp>
 #include <QtCore/QXmlStreamAttributes>
 #include <cmath>
+#include <stdio.h> /* for snprintf */
+#include <stdlib.h> /* for qsort */
 
 #if FILTERS_ENABLED || MINIMAL_FILTERS
 #define MYNAME "trackfilter"
