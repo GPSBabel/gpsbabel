@@ -23,6 +23,7 @@
 #include "defs.h"
 
 #if CSVFMTS_ENABLED
+#include "cet_util.h"
 #include "csv_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"

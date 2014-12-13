@@ -57,6 +57,7 @@
 */
 
 #include "defs.h"
+#include "cet_util.h"
 #include "csv_util.h"
 
 #if CSVFMTS_ENABLED

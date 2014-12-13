@@ -31,8 +31,6 @@
 #include "zlib/zlib.h"
 #endif
 #include "gbfile.h"
-#include "cet.h"
-#include "cet_util.h"
 #include "inifile.h"
 #include "session.h"
 

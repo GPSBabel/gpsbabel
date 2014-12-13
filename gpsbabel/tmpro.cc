@@ -33,6 +33,7 @@
  */
 
 #include "defs.h"
+#include "cet_util.h"
 #include "csv_util.h"
 #include <stdlib.h>
 

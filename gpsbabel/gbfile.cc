@@ -492,7 +492,7 @@ memapi_error(gbfile* self)
  */
 
 gbfile*
-gbfopen(const char* filename, const char* mode, const char* module)
+gbfopen(const QString filename, const char* mode, const char* module)
 {
   gbfile* file;
   const char* m;
@@ -537,7 +537,7 @@ gbfopen(const char* filename, const char* mode, const char* module)
     file->filewrite = memapi_write;
   } else {
     file->name = xstrdup(filename);
-    file->is_pipe = (strcmp(filename, "-") == 0);
+    file->is_pipe = (filename == "-");
 
     /* Do we have a '.gz' extension in the filename ? */
     len = strlen(file->name);
@@ -600,7 +600,7 @@ gbfopen(const char* filename, const char* mode, const char* module)
  */
 
 gbfile*
-gbfopen_be(const char* filename, const char* mode, const char* module)
+gbfopen_be(const QString filename, const char* mode, const char* module)
 {
   gbfile* result;
 

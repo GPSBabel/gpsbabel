@@ -20,6 +20,7 @@
  */
 
 #include "defs.h"
+#include "cet_util.h"
 #include "csv_util.h"
 #include <math.h>
 #include <stdio.h>

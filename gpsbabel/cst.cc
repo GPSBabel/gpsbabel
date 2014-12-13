@@ -21,6 +21,7 @@
 
 
 #include "defs.h"
+#include "cet_util.h"
 #include "strptime.h"
 #include <stdio.h>
 #include <stdlib.h>

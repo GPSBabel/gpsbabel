@@ -21,6 +21,7 @@
  */
 
 #include "defs.h"
+#include "cet_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
 #include "inifile.h"

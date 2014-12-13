@@ -24,6 +24,7 @@
  */
 
 #include "defs.h"
+#include "cet_util.h"
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
