@@ -22,6 +22,7 @@
 
 
 #include "defs.h"
+#include "cet_util.h"
 #include "gbser.h"
 #include "strptime.h"
 #include "jeeps/gpsmath.h"

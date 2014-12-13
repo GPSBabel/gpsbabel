@@ -86,8 +86,8 @@ typedef struct gbfile_s {
 } gbfile_t;
 
 
-gbfile* gbfopen(const char* filename, const char* mode, const char* module);
-gbfile* gbfopen_be(const char* filename, const char* mode, const char* module);
+gbfile* gbfopen(const QString filename, const char* mode, const char* module);
+gbfile* gbfopen_be(const QString filename, const char* mode, const char* module);
 #define gbfopen_le gbfopen
 void gbfclose(gbfile* file);
 

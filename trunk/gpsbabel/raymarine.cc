@@ -44,8 +44,9 @@
 */
 
 #include "defs.h"
-#include "inifile.h"
+#include "cet_util.h"
 #include "csv_util.h"
+#include "inifile.h"
 
 #include <ctype.h>
 #include <stdio.h>

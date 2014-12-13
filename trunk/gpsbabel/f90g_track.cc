@@ -27,6 +27,7 @@
  */
 
 #include "defs.h"
+#include "gbfile.h"
 #include <QtCore/QDebug>
 
 #define MYNAME "f90g_track"

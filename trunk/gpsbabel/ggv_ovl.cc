@@ -21,6 +21,7 @@
  */
 
 #include "defs.h"
+#include "cet_util.h"
 #include "inifile.h"
 #include "grtcirc.h"
 

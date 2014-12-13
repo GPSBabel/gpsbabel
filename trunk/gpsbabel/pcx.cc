@@ -22,6 +22,7 @@
 
 #include "defs.h"
 #include "garmin_tables.h"
+#include "cet_util.h"
 #include "csv_util.h"
 #include <math.h>
 #include <stdlib.h>

@@ -26,6 +26,7 @@
 #if CSVFMTS_ENABLED
 
 #include "csv_util.h"
+#include "cet_util.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
