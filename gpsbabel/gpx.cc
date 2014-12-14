@@ -1,7 +1,7 @@
 /*
     Access GPX data files.
 
-    Copyright (C) 2002-2013 Robert Lipe, gpsbabel.org
+    Copyright (C) 2002-2014 Robert Lipe, gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -44,7 +44,8 @@ static char* opt_humminbirdext = NULL;
 static char* opt_garminext = NULL;
 static int logpoint_ct = 0;
 
-static char* gpx_version = NULL;
+// static char* gpx_version = NULL;
+QString gpx_version;
 static char* gpx_wversion;
 static int gpx_wversion_num;
 static QXmlStreamAttributes gpx_namespace_attribute;
@@ -449,11 +450,10 @@ tag_gpx(const QXmlStreamAttributes& attr)
     /* Set the default output version to the highest input
      * version.
      */
-    if (! gpx_version) {
-      gpx_version = xstrdup(attr.value("version").toString());
-    } else if ((strtod(gpx_version, NULL) * 10) < (attr.value("version").toString().toDouble() * 10)) {
-      xfree(gpx_version);
-      gpx_version = xstrdup(attr.value("version").toString());
+    if (gpx_version.isEmpty()) {
+      gpx_version = attr.value("version").toString();
+    } else if ((gpx_version.toInt() * 10) < (attr.value("version").toString().toDouble() * 10)) {
+      gpx_version = attr.value("version").toString();
     }
   }
   /* save namespace declarations in case we pass through elements
@@ -1456,7 +1456,7 @@ gpx_write_common_position(const Waypoint* waypointp, const gpx_point_type point_
   }
   QString t = waypointp->CreationTimeXML();
   writer->writeOptionalTextElement("time", t);
-  if (gpxpt_track==point_type && 10==gpx_wversion_num) {
+  if (gpxpt_track==point_type && 10 == gpx_wversion_num) {
     /* These were accidentally removed from 1.1, and were only a part of trkpts in 1.0 */
     if WAYPT_HAS(waypointp, course) {
       writer->writeTextElement("course", toString(waypointp->course));
@@ -1798,12 +1798,10 @@ gpx_write(void)
    * available use it, otherwise use the default.
    */
 
-  if (! gpx_wversion) {
-    if (! gpx_version) {
-      gpx_wversion = (char*)"1.0";
-    } else {
-      gpx_wversion = (char*)gpx_version;
-    }
+  if (gpx_version.isEmpty()) {
+    gpx_wversion = (char*)"1.0";
+  } else {
+    gpx_wversion = xstrdup(gpx_version);
   }
 
   if (opt_humminbirdext || opt_garminext) {
@@ -1895,10 +1893,7 @@ gpx_free_gpx_global(void)
 static void
 gpx_exit(void)
 {
-  if (gpx_version) {
-    xfree(gpx_version);
-    gpx_version = NULL;
-  }
+  gpx_version.clear();
 
   gpx_namespace_attribute.clear();
 
