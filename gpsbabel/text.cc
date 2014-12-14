@@ -107,8 +107,8 @@ text_disp(const Waypoint* wpt)
   waypoint_count++;
 
   if (split_output) {
-    char* thisfname;
-    xasprintf(&thisfname, "%s%d", output_name, waypoint_count);
+    QString thisfname(output_name);
+    thisfname += QString::number(waypoint_count);
     file_out = gbfopen(thisfname, "w", MYNAME);
   }
 

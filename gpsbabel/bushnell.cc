@@ -231,8 +231,10 @@ bushnell_write_one(const Waypoint* wpt)
   char padding[2] = {0, 0};
   gbfile* file_out;
   static int wpt_count;
-  char* fname;
-  xasprintf(&fname, "%s-%d.wpt", ofname, wpt_count++);
+  QString fname(ofname);
+  fname += "-";
+  fname += QString::number(wpt_count++);
+  fname += ".wpt";
 
   file_out = gbfopen_le(fname, "wb", MYNAME);
   gbfputint32(round(wpt->latitude  * 10000000), file_out);
@@ -247,7 +249,6 @@ bushnell_write_one(const Waypoint* wpt)
   // two padding bytes follow name.
   gbfwrite(padding, sizeof(padding), 1, file_out);
 
-  xfree(fname);
   gbfclose(file_out);
 }
 

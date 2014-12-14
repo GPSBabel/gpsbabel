@@ -1370,7 +1370,6 @@ static void
 exif_wr_init(const char* fname)
 {
   uint16_t soi;
-  char* tmpname;
 
   exif_success = 0;
   exif_fout_name = xstrdup(fname);
@@ -1392,9 +1391,9 @@ exif_wr_init(const char* fname)
     fatal(MYNAME ": No valid timestamp found in picture!\n");
   }
 abort();
-  xasprintf(&tmpname, "%s.jpg", fname);
-  fout = gbfopen_be(tmpname, "wb", MYNAME);
-  xfree(tmpname);
+  QString filename(fname);
+  filename += ".jpg";
+  fout = gbfopen_be(filename, "wb", MYNAME);
 }
 
 static void

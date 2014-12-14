@@ -695,6 +695,19 @@ gbfread(void* buf, const gbsize_t size, const gbsize_t members, gbfile* file)
   return file->fileread(buf, size, members, file);
 }
 
+// This probably makes an unnecessary alloc/copy, but keeps the above (kinda
+// goofy) calling signature.
+gbsize_t
+gbfread(QString& buf, const gbsize_t size, 
+        const gbsize_t members, gbfile* file) 
+{
+  // xcalloc() ensures the buf is zero terminated, so it's a proper c string.
+  char* tmp = static_cast<char*>(xcalloc(members, size));
+  gbsize_t retval = gbfread(tmp, size, members, file);
+  buf = QString(tmp);
+  return retval;
+}
+
 /*
  * gbvfprintf: (as vfprintf)
  */
