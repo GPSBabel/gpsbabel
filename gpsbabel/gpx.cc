@@ -1798,10 +1798,12 @@ gpx_write(void)
    * available use it, otherwise use the default.
    */
 
-  if (gpx_version.isEmpty()) {
-    gpx_wversion = (char*)"1.0";
-  } else {
-    gpx_wversion = xstrdup(gpx_version);
+  if (!gpx_wversion) {
+    if (gpx_version.isEmpty()) {
+      gpx_wversion = (char*)"1.0";
+    } else {
+      gpx_wversion = xstrdup(gpx_version);
+    }
   }
 
   if (opt_humminbirdext || opt_garminext) {
