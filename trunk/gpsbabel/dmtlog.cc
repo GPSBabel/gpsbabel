@@ -407,7 +407,7 @@ static void
 read_CTrackFile(const int version)
 {
   char buf[128];
-  uint32_t ver;
+  int32_t ver;
   int32_t tcount, wcount;
   int16_t u1;
   int32_t ux;
