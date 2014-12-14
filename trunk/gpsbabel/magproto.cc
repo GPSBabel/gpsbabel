@@ -1044,7 +1044,6 @@ mag_rteparse(char* rtemsg)
   char* currtemsg;
   static mag_rte_head* mag_rte_head;
   char* p;
-  char* rte_name = NULL;
 
 #if 0
   sscanf(rtemsg,"$PMGNRTE,%d,%d,%c,%d%n",
@@ -1054,6 +1053,7 @@ mag_rteparse(char* rtemsg)
          &frags,&frag,xbuf,&rtenum,&n);
 
   /* Explorist has a route name here */
+  QString rte_name;
   if (explorist) {
     char* ca, *ce;
 
@@ -1064,7 +1064,8 @@ mag_rteparse(char* rtemsg)
     is_fatal(ce == NULL, MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
 
     if (ca == ce) {
-      xasprintf(&rte_name, "Route%d", rtenum);
+      rte_name = "Route";
+      rte_name += QString::number(rtenum);
     } else {
       rte_name = xstrndup(ca, ce - ca);
     }
@@ -1163,9 +1164,6 @@ mag_rteparse(char* rtemsg)
       delete re;
     }
     xfree(mag_rte_head);
-  }
-  if (rte_name) {
-    xfree(rte_name);
   }
 }
 

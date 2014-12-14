@@ -12,6 +12,18 @@ functions.
 You may find format_skeleton.c and filter_skeleton.c in the source tree
 to be helpful examples. Just add meat!
 
+Prefer Qt objects/classes to ISO C/POSIX services.  QStrings are reference
+counted, implicitly shared, and have a robust supporting library.  QDateTime
+supports sub-second time and a range of dates far beyond 1970->2038 and are
+much more pleasant to work with than ctime/mktime/struct tm.  "But I see
+strcpy, sprintf, and struct tm and such in the code!"  It's true; GPSBabel 
+is a tenured project of well over ten years.  We have code that predates
+our move to C++/Qt that isn't well tested or has a low payoff to modernize
+and uses old constructs.  Our actively maintained/strategic formats like
+GPX and KML tend to be better examples of modern programming, using things
+like XmlStreamWriter instead of fprintf and are generally better models to
+follow.
+
 Compilers complain for a reason.   Code shouldn't emit warnings.
 
 The entire world doesn't run <your OS here>.  We regularly test this code on

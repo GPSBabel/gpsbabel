@@ -92,6 +92,7 @@ gbfile* gbfopen_be(const QString filename, const char* mode, const char* module)
 void gbfclose(gbfile* file);
 
 gbsize_t gbfread(void* buf, const gbsize_t size, const gbsize_t members, gbfile* file);
+gbsize_t gbfread(QString& buf, const gbsize_t size, const gbsize_t members, gbfile* file);
 int gbfgetc(gbfile* file);
 QString gbfgets(char* buf, int len, gbfile* file);
 
