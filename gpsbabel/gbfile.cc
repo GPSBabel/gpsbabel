@@ -701,9 +701,9 @@ gbsize_t
 gbfread(QString& buf, const gbsize_t size, 
         const gbsize_t members, gbfile* file) 
 {
-  // xcalloc() ensures the buf is zero terminated, so it's a proper c string.
-  char* tmp = static_cast<char*>(xcalloc(members, size));
-  gbsize_t retval = gbfread(tmp, size, members, file);
+  QByteArray tmp;
+  tmp.resize(members * size);
+  gbsize_t retval = gbfread(tmp.data(), size, members, file);
   buf = QString(tmp);
   return retval;
 }
@@ -1024,19 +1024,12 @@ gbfgetcstr(gbfile* file)
 QString
 gbfgetpstr(gbfile* file)
 {
-  int len;
-  char* result;
+  int len = gbfgetc(file);
+  QByteArray ba;
+  ba.resize(len);
+  gbfread(ba.data(), 1, len, file);
 
-  len = gbfgetc(file);
-  result = (char*) xmalloc(len + 1);
-  if (len > 0) {
-    gbfread(result, 1, len, file);
-  }
-  result[len] = '\0';
-
-  QString r(result);
-  xfree(result);
-  return r;
+  return QString(ba);
 }
 
 static char*

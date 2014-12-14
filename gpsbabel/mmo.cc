@@ -164,15 +164,15 @@ mmo_readstr(void)
       // length is number of "characters" not number of bytes
       len = (unsigned)gbfgetc(fin);
       if (len > 0) {
-        unsigned int ii, jj, ch, resbytes=0;
+        unsigned int ch, resbytes=0;
         res = (char*) xmalloc(len*2 + 1);  // bigger to allow for utf-8 expansion
-        for (ii=0; ii<len; ii++) {
+        for (signed int ii = 0; ii<len; ii++) {
           char utf8buf[8];
           int utf8len;
           ch = gbfgetint16(fin);
           // convert to utf-8, possibly multiple bytes
           utf8len = cet_ucs4_to_utf8(utf8buf, sizeof(utf8buf), ch);
-          for (jj=0; jj < utf8len; jj++) {
+          for (signed int jj = 0; jj < utf8len; jj++) {
             res[resbytes++] = utf8buf[jj];
           }
         }
@@ -190,7 +190,7 @@ mmo_readstr(void)
   res[len] = '\0';
   if (len) {
     gbfread(res, len, 1, fin);
-    if (len != strlen(res)) {
+    if (static_cast<size_t>(len) != strlen(res)) {
       // strlen requires a size_t, but Microsoft's stupid compiler doesn't
       // do C99 %zd.  Thanx, Microsoft.
       fprintf(stdout, "got len %d but str is '%s' (strlen %d)\n", len, res, (int) strlen(res));
