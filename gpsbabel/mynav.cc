@@ -63,7 +63,7 @@ mynav_rd_line(QString line)
   }
 
   // don't consider lines without latitude/longitude
-  if (fields.size() < fld_lat)
+  if (fields.size() <= fld_lat)
     return;
 
   // only type 1 and type 5 lines contain coordinates
@@ -76,7 +76,7 @@ mynav_rd_line(QString line)
 
   // This field is not present in .trc files, only in .ftn, so
   // ignore line if present and != 1
-  if (fields.size() >= fld_gps_valid) {
+  if (fields.size() > fld_gps_valid) {
     int val_gps_valid = fields.at(fld_gps_valid).trimmed().toInt(&ok);
     if (!ok || val_gps_valid != 1)
       return;
@@ -93,13 +93,13 @@ mynav_rd_line(QString line)
   wpt->latitude = val_lat;
   wpt->longitude = val_lon;
 
-  if (fields.size() >= fld_altitude) {
+  if (fields.size() > fld_altitude) {
     double val_alt = fields.at(fld_altitude).trimmed().toDouble(&ok);
     if (ok)
       wpt->altitude = val_alt;
   }
 
-  if (fields.size() >= fld_timestamp) {
+  if (fields.size() > fld_timestamp) {
     int val_time = fields.at(fld_timestamp).trimmed().toInt(&ok);
     if (ok)
       wpt->SetCreationTime(val_time);
