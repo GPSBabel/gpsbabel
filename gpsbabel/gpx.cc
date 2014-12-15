@@ -1802,7 +1802,14 @@ gpx_write(void)
     if (gpx_version.isEmpty()) {
       gpx_wversion = (char*)"1.0";
     } else {
-      gpx_wversion = xstrdup(gpx_version);
+      // FIXME: this is gross.  The surrounding code is badly tortured by
+      // there being three concepts of "output version", each with a different
+      // data type (QString, int, char*).  This section needs a rethink. For
+      // now, we stuff over the QString gpx_version into the global char *
+      // gpx_wversion without making a malloc'ed copy.
+      static char tmp[16];
+      strncpy(tmp, CSTR(gpx_version), sizeof(tmp));
+      gpx_wversion = tmp;
     }
   }
 

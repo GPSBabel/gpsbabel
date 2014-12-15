@@ -20,9 +20,6 @@
 
  */
 
-#include <math.h>
-#include <time.h>
-
 #include "defs.h"
 #include "magellan.h"
 #include "gbser.h"
@@ -33,6 +30,8 @@
 #endif
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
+#include <time.h>
 
 static int bitrate = 4800;
 static int wptcmtcnt;
@@ -1067,7 +1066,8 @@ mag_rteparse(char* rtemsg)
       rte_name = "Route";
       rte_name += QString::number(rtenum);
     } else {
-      rte_name = xstrndup(ca, ce - ca);
+      rte_name = ca;
+      rte_name.truncate(ce-ca);
     }
 
     n += ((ce - ca) + 1);
