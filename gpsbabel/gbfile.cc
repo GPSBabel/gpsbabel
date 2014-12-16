@@ -22,6 +22,7 @@
 
 #include "defs.h"
 #include "gbfile.h"
+#include "src/core/logging.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -1083,6 +1084,10 @@ gbfgetucs2str(gbfile* file)
     }
 
     clen = cet_ucs4_to_utf8(buff, sizeof(buff), c0);
+    if (clen < 1) {
+      Warning() << "Malformed UCS character" << c0 << "found.";
+      return NULL;
+    }
 
     if (len+clen >= file->buffsz) {
       file->buffsz += 64;
