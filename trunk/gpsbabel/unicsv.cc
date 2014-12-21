@@ -240,7 +240,6 @@ static field_t fields_def[] = {
 };
 
 static QVector<field_e> unicsv_fields_tab;
-static int unicsv_fields_tab_ct;
 static double unicsv_altscale, unicsv_depthscale, unicsv_proximityscale
 ;
 static const char* unicsv_fieldsep;
@@ -508,7 +507,6 @@ unicsv_fondle_header(QString s)
   // TODO: clean up this back and forth between QString and char*.
   char* buf = NULL;
   char* cbuf_start = NULL;
-  int column;
   const cet_cs_vec_t* ascii = &cet_cs_vec_ansi_x3_4_1968;	/* us-ascii */
 
   /* Convert the entire header to lower case for convenience.
@@ -531,20 +529,17 @@ unicsv_fondle_header(QString s)
     cbuf = buf;
   }
 
-  column = -1;
   while ((s = csv_lineparse(cbuf, unicsv_fieldsep, "\"", 0)) , !s.isEmpty()) {
     s = s.trimmed();
 
     field_t* f = &fields_def[0];
 
     cbuf = NULL;
-    column++;
-    unicsv_fields_tab_ct++;
 
     unicsv_fields_tab.append(fld_terminator);
     while (f->name) {
       if (unicsv_compare_fields(s, f)) {
-        unicsv_fields_tab[column] = f->type;
+        unicsv_fields_tab.last() = f->type;
         break;
       }
       f++;
@@ -592,7 +587,6 @@ unicsv_rd_init(const char* fname)
   unicsv_proximityscale = 1.0;
 
   unicsv_fields_tab.clear();
-  unicsv_fields_tab_ct = 0;
   unicsv_data_type = global_opts.objective;
   unicsv_detect = (!(global_opts.masked_objective & (WPTDATAMASK | TRKDATAMASK | RTEDATAMASK | POSNDATAMASK)));
 
@@ -653,13 +647,12 @@ unicsv_parse_one_line(char* ibuf)
   column = -1;
   QString s;
   while ((s = csv_lineparse(ibuf, unicsv_fieldsep, "\"", 0)), !s.isNull()) {
-    if (column > unicsv_fields_tab_ct) {
+    if (++column >= unicsv_fields_tab.size()) {
       break;  /* ignore extra fields on line */
     }
 
     ibuf = NULL;
 
-    column++;
     checked++;
     s = s.trimmed();
     if (s.isEmpty()) {
