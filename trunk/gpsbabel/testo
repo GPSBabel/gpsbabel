@@ -72,7 +72,7 @@ gpsbabel()
 utf8bomcheck()
 {
   if [ ${RUNNINGVALGRIND} -ne  0 ]; then
-    if [ "$(head -c3 $1)" == $'\xef\xbb\xbf' ]; then
+    if [ "$(dd if=$1 bs=1 count=3 2>/dev/null)" == $'\xef\xbb\xbf' ]; then
       echo "ERROR: UTF-8 BOM found in $1"
       let errorcount=errorcount+1
     fi
