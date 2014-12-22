@@ -176,7 +176,7 @@ static long decode_goog64(char** str)
     c = (unsigned char)(*(*str)++)-'?';
     result |= (c & 31)<<shift;
     shift += 5;
-  } while (c & ~31);
+  } while (c & ~31 && **str);
 
   if (result & 1) {
     result = ~result;
