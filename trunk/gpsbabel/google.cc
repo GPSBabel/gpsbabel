@@ -103,10 +103,12 @@ void goog_segment(xg_string args, const QXmlStreamAttributes*)
 {
   Waypoint* wpt_tmp;
 
-  wpt_tmp = route_find_waypt_by_name(routehead[goog_segroute], goog_segname);
-  if (wpt_tmp) {
-    wpt_tmp->shortname = mkshort(desc_handle, args);
-    wpt_tmp->description = args;
+  if (routehead[goog_segroute]) {
+    wpt_tmp = route_find_waypt_by_name(routehead[goog_segroute], goog_segname);
+    if (wpt_tmp) {
+      wpt_tmp->shortname = mkshort(desc_handle, args);
+      wpt_tmp->description = args;
+    }
   }
 }
 
@@ -285,6 +287,7 @@ google_read(void)
   routehead = (route_head**)xmalloc(sizeof(route_head*));
   routecount = (int*)xmalloc(sizeof(int));
   goog_segroute = 0;
+  routehead[goog_segroute] = NULL;
 
   goog_read_file();
 
