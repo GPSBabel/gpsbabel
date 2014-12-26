@@ -631,7 +631,7 @@ gpwpl_parse(char* ibuf)
   char latdir, lngdir;
   char sname[99];
 
-  sscanf(ibuf,"$%*2cWPL,%lf,%c,%lf,%c,%[^*]",
+  sscanf(ibuf,"$%*2cWPL,%lf,%c,%lf,%c,%98[^*]",
          &latdeg,&latdir,
          &lngdeg,&lngdir,
          sname);
@@ -781,7 +781,7 @@ pcmpt_parse(char* ibuf)
 
   dmy = hms = 0;
 
-  sscanf(ibuf,"$PCMPT,%d,%d,%d,%c,%f,%d,%[^,],%d,%f,%d,%f,%c,%d,%c,%d",
+  sscanf(ibuf,"$PCMPT,%d,%d,%d,%c,%f,%d,%19[^,],%d,%f,%d,%f,%c,%d,%c,%d",
          &j1, &j2, &j3, &altflag, &alt, &j4, (char*) &coords,
          &j5, &f1, &j6, &f2, &u1, &dmy, &u2, &hms);
 
