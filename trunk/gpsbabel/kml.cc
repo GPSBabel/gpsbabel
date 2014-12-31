@@ -282,38 +282,58 @@ const char* kml_tags_to_ignore[] = {
 
 void wpt_s(xg_string, const QXmlStreamAttributes*)
 {
+  if (wpt_tmp) {
+    fatal(MYNAME ": wpt_s: invalid kml file\n");
+  }
   wpt_tmp = new Waypoint;
   wpt_tmp_queued = 0;
 }
 
 void wpt_e(xg_string, const QXmlStreamAttributes*)
 {
+  if (!wpt_tmp) {
+    fatal(MYNAME ": wpt_e: invalid kml file\n");
+  }
   if (wpt_tmp_queued) {
     waypt_add(wpt_tmp);
+    wpt_tmp = NULL;
   } else {
     delete wpt_tmp;
+    wpt_tmp = NULL;
   }
   wpt_tmp_queued = 0;
 }
 
 void wpt_name(xg_string args, const QXmlStreamAttributes*)
 {
+  if (!wpt_tmp) {
+    fatal(MYNAME ": wpt_name: invalid kml file\n");
+  }
   wpt_tmp->shortname = args;
 }
 
 void wpt_desc(const QString& args, const QXmlStreamAttributes*)
 {
+  if (!wpt_tmp) {
+    fatal(MYNAME ": wpt_desc: invalid kml file\n");
+  }
   wpt_tmp->description += args.trimmed();
 }
 
 void wpt_time(xg_string args, const QXmlStreamAttributes*)
 {
+  if (!wpt_tmp) {
+    fatal(MYNAME ": wpt_time: invalid kml file\n");
+  }
   wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
 void wpt_coord(const QString& args, const QXmlStreamAttributes*)
 {
   int n = 0;
   double lat, lon, alt;
+  if (! wpt_tmp) {
+    return;
+  }
   // Alt is actually optional.
   n = sscanf(CSTRc(args), "%lf,%lf,%lf", &lon, &lat, &alt);
   if (n >= 2) {
@@ -343,7 +363,7 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
   route_head* trk_head = route_head_alloc();
 
   QString iargs = args;
-  if (!wpt_tmp->shortname.isEmpty()) {
+  if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
     trk_head->rte_name  = wpt_tmp->shortname;
   }
   track_add_head(trk_head);
@@ -369,13 +389,16 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
 void gx_trk_s(xg_string, const QXmlStreamAttributes*)
 {
   gx_trk_head = route_head_alloc();
-  if (!wpt_tmp->shortname.isEmpty()) {
+  if (wpt_tmp && !wpt_tmp->shortname.isEmpty()) {
     gx_trk_head->rte_name  = wpt_tmp->shortname;
   }
-  if (!wpt_tmp->description.isEmpty()) {
+  if (wpt_tmp && !wpt_tmp->description.isEmpty()) {
     gx_trk_head->rte_desc  = wpt_tmp->description;
   }
   track_add_head(gx_trk_head);
+  if (gx_trk_times) {
+    delete gx_trk_times;
+  }
   gx_trk_times = new QList<gpsbabel::DateTime>;
 }
 
@@ -385,10 +408,14 @@ void gx_trk_e(xg_string, const QXmlStreamAttributes*)
     track_del_head(gx_trk_head);
   }
   delete gx_trk_times;
+  gx_trk_times = NULL;
 }
 
 void gx_trk_when(xg_string args, const QXmlStreamAttributes*)
 {
+  if (! gx_trk_times) {
+    fatal(MYNAME ": gx_trk_when: invalid kml file\n");
+  }
   gx_trk_times->append(xml_parse_time(args));
 }
 
@@ -398,7 +425,7 @@ void gx_trk_coord(xg_string args, const QXmlStreamAttributes*)
   double lat, lon, alt;
   int n;
 
-  if (gx_trk_times->isEmpty()) {
+  if (! gx_trk_times || gx_trk_times->isEmpty()) {
     fatal(MYNAME ": There were more gx:coord elements than the number of when elements.\n");
   }
   trkpt = new Waypoint;
