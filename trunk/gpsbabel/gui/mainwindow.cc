@@ -84,30 +84,6 @@ bool MainWindow::allowBetaUpgrades()
 }
 
 //------------------------------------------------------------------------
-static QStringList getCharSets()
-{
-  QProcess babel;
-  babel.start("gpsbabel", QStringList() << "-l");
-  if (!babel.waitForStarted())
-    return QStringList();
-  babel.closeWriteChannel();
-  if (!babel.waitForFinished())
-    return QStringList();
-
-  QStringList strList;
-  QTextStream tstream(babel.readAll());
-  while(!tstream.atEnd()) {
-    QString l = tstream.readLine();
-    if (QRegExp("^\\*").indexIn(l) == 0) {
-      l.replace(QRegExp("^[\\*\\s]*"),  "");
-      l.replace(QRegExp("[\\s]+$"),  "");
-      strList << l;
-    }
-  }
-  return strList;
-}
-
-//------------------------------------------------------------------------
 static QString MakeOptions(const QList<FormatOption>& options)
 {
   QString str;
