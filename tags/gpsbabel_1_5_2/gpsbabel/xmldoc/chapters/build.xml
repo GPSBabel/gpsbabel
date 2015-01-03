@@ -1,0 +1,81 @@
+<chapter id="Getting_and_Building">
+  <title>Getting or Building GPSBabel</title>
+<sect1 id="Download">
+<title>Downloading - the easy way.</title>
+  <para> 
+GPSBabel is distributed "ready to run" on most common 
+operating systems via the 
+<ulink url="http://www.gpsbabel.org/download.html">download page</ulink>.
+</para>
+  <para> As GPSBabel runs on a wide variety of operating systems,
+be sure to visit the 
+<ulink url="http://www.gpsbabel.org/osnotes.html">OS-Specific notes</ulink> for
+additional information.
+</para>
+</sect1>
+<sect1 id="Source">
+<title>Building from source.</title>
+  <para> 
+ For operating systems where no binary is provided or if 
+you want the latest development version, you will have to build it from
+source.  The code should be compilable on any system with
+ISO C++. It's tested on Linux, Mac OS/X, and Windows cross compilers.
+Less frequently, someone will build on MSVC, FreeBSD, OpenBSD, Solaris, 
+etc.   Both Clang/LLVM and GNU C++ are regularly exercised.
+</para>
+<para>
+You can grab a release from the <ulink url="http://www.gpsbabel.org/download.html">GPSBabel download page</ulink>, but if you're going to be doing any development, you'll find that working from the <ulink url="http://code.google.com/p/gpsbabel/source/checkout">GPSBabel SVN tree</ulink> is easier.
+</para>
+<para>
+For most cases, an anonymous checkout of the trunk is really all you need.
+That can be done easily with the single command:
+</para>
+<para><userinput>
+  svn checkout http://gpsbabel.googlecode.com/svn/trunk/gpsbabel 
+</userinput></para>
+
+<para>
+  In most cases, the code is as simple to build as running:
+</para>
+<para><userinput> ./configure &amp;&amp; make</userinput></para>
+  <para><ulink url="http://qt-project.org">Qt</ulink> 
+is required for all builds.  Mac and Windows users can download
+binaries from <ulink url="http://qt-project.org/downloads">Qt Downloads</ulink>
+Fedora or CentOS users may need to 'yum install qt-devel'.  Optionally, use qt5-base.  When in doubt, 'yum search qt' or 'yum search qt5' can help you find the correct package name
+Ubuntu users may need to 'apt-get install libqt4-core libqt4-dev'.
+Qt versions 4.6 and newer are supported.
+</para>
+  <para><ulink url="http://libusb.sourceforge.net">libusb</ulink> 
+is recommended for OS/X and Linux if you want to use a USB Garmin or 
+Delorme device.
+Fedora users may need to 'yum install libusb-devel'.  Ubuntu users may
+need to 'yum install libusb-dev'.
+</para>
+<para>There are additional flags that can be passed to configure to
+ customize your build of GPSBabel.   
+</para>
+<para><userinput>./configure --help</userinput></para> 
+<para>
+lists all the supported options, but of interest we have:</para><para>
+ <option>--disable-shapefile</option> Excludes the shapefile support.
+</para>
+<para>
+  <option>--disable-csv</option> Excludes all support for our something-separated formats.
+</para>
+<para>
+  <option>--disable-filters</option> Excludes all filter support.
+</para>
+<para>
+  <option>--enable-efence</option> Activate debugging mode for gpsbabel-debug.
+</para>
+<para>
+  <option>--with-doc=</option><filename class="directory">dir</filename> Specifies that the doc should be created and installed in <filename class="directory">dir</filename>.
+</para>
+<para>
+  <option>--without-libusb</option> Disables use of libusb, even it's it's available.
+</para>
+<para>
+ <option>--with-zlib=(included)|system|no</option> By default, we use our own version of zlib. If you specify <option>system</option> the system zlib is used.  A value of <option>no</option> (or --without-zlib) disables zlib.
+</para>
+</sect1>
+</chapter>

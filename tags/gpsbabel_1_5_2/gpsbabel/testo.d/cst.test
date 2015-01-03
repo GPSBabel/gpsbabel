@@ -1,0 +1,6 @@
+#
+# CarteSurTable read test
+#
+rm -f ${TMPDIR}/cst-*
+gpsbabel -i cst -f ${REFERENCE}/route/cst-sample.cst -o gpx -F ${TMPDIR}/cst-sample.gpx
+compare ${REFERENCE}/route/cst-sample.gpx ${TMPDIR}/cst-sample.gpx

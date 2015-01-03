@@ -1,0 +1,8 @@
+# Garmin 1000 from Matt Johnson.
+# Really only test read because the huge majority of the fields in these files aren't something
+# that is represented in other formats we service, so the majority are effectively read-only.
+
+gpsbabel -i garmin_g1000 -f ${REFERENCE}/track/garmin_g1000.csv -o gpx -F ${TMPDIR}/garmin_g1000.gpx
+compare ${REFERENCE}/track/garmin_g1000~gpx.gpx ${TMPDIR}/garmin_g1000.gpx
+
+

@@ -1,0 +1,30 @@
+#
+# mkcapabilities.in is used to create mkcapabilities.  
+#
+./gpsbabel -^2 | sed 's/\&/\&amp;/' | awk  -F'\t' '
+function getcap(type, cap, sname, lname) {
+	if (type == "internal") return
+	print "<tr>"
+	print "<td class=\"fmtline\">" lname "<br />"
+
+	print "<a href=\"htmldoc-development/fmt_" sname ".html\">" sname "</a></td>"
+	
+	for (i = 1; i <= 6; i++) {
+		c = substr(cap, i, 1)
+		printf "<td class=\"cap\">"
+		if (c != ("-")) printf "yes"
+		printf "</td>\n"
+	}
+	print "</tr>"
+}
+
+getcap($1, $2, $3, $5)
+' > @DOCDIR@capabilities.inc > @DOCDIR@capabilities.inc
+
+FMTS=`./gpsbabel -^2 | grep -v '^internal' | sed 's/\&/\&amp;/' | awk  -F'\t' '{print $3}'`
+for f in $FMTS
+do
+	[ ! -f @DOCDIR@/htmldoc-@DOCVERSION@/fmt_${f}.html ] && echo Missing doc for $f
+done
+
+exit 0

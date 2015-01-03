@@ -1,0 +1,1029 @@
+#
+# Build file  for GPSBabel.
+# Makefile is generated from Makefile.in by autoconf which does several
+# text substitutions such version numbers and object paths for us.
+#
+# GPSBabel requires a reasonably recent version of GNU Make.
+# We rely on very few fancy features of make so the exact version
+# probably doesn't much matter.  GNU Make 3.81 seems a reasonable target.
+#
+
+srcdir = @srcdir@
+VPATH = @srcdir@
+
+# version and release are defined in the head of configure.in 
+# don't forget 'autoconf' if you change them 
+VERSD=@GBMAJOR@.@GBMINOR@.@GBMICRO@
+VERSU=@GBMAJOR@_@GBMINOR@_@GBMICRO@
+RELEASE=@PACKAGE_RELEASE@
+
+VERSIOND=$(VERSD)$(RELEASE)
+VERSIONU=$(VERSU)$(RELEASE)
+
+DOCVERSION=@DOCVERSION@
+DOCVERSION=development
+
+CC=@CC@
+CXX=@CXX@
+EXEEXT=@EXEEXT@
+
+# Resource compiler, currently used under MinGW
+RC=@RC@
+
+#EXTRA_LIBS -lefence
+
+# Space is significant, because MSVC wants no space between switch and arg (-Fofoo.o)
+# but cc/gcc does:
+#  $(OUTPUT_SWITCH)main.o
+#  becomes -o main.o (gcc)
+#   or     -Fomain.o (cl.exe) (currently unused)
+OUTPUT_SWITCH=-o #
+
+QT_INC=@QT_INC@
+QT_LIBS=@QT_LIBS@
+QMAKE=@QMAKE@
+LUPDATE=@LUPDATE@
+LRELEASE=@LRELEASE@
+
+#
+# Enable either or both of these as you wish.
+#
+#OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
+#DEBUGGING=-g $(EXTRA_DEBUGGING)
+# add -DDEBUG_MEM to turn on memory allocation logging
+GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I$(srcdir) @QT_INC_OPT@$(QT_INC) \
+	$(OPTIMIZATION) -DHAVE_CONFIG_H -DNEW_STRINGS
+LDFLAGS=$(EXTRA_LDFLAGS) @LDFLAGS@
+PREFIX=@prefix@
+INSTALL_DIR=$(DESTDIR)/$(PREFIX)
+
+MINIMAL_FMTS=magproto.o gpx.o geo.o mapsend.o mapsource.o garmin.o \
+	garmin_device_xml.o garmin_tables.o internal_styles.o nmea.o kml.o \
+	wbt-200.o ozi.o pcx.o gdb.o gtrnctr.o xcsv.o explorist_ini.o
+
+ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o  \
+	skytraq.o \
+	holux.o tmpro.o tpg.o tpo.o \
+	tiger.o easygps.o  \
+	saroute.o navicache.o psitrex.o delgpl.o \
+	text.o html.o netstumbler.o \
+	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o  \
+	vcf.o google.o xhtmlent.o lowranceusr.o an1.o tomtom.o \
+	tef_xml.o maggeo.o vitosmt.o bcr.o \
+	ignrando.o stmwpp.o cst.o nmn4.o compegps.o \
+	yahoo.o unicsv.o wfff_xml.o garmin_txt.o gpssim.o \
+	stmsdf.o dmtlog.o raymarine.o alan.o vitovtt.o \
+	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
+	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o vidaone.o \
+	igo8.o gopal.o humminbird.o mapasia.o gnav_trl.o navitel.o ggv_ovl.o \
+	jtr.o sbp.o sbn.o mmo.o skyforce.o itracku.o v900.o delbin.o \
+	pocketfms_bc.o pocketfms_fp.o pocketfms_wp.o naviguide.o enigma.o \
+	vpl.o teletype.o jogmap.o bushnell.o bushnell_trl.o wintec_tes.o \
+	subrip.o garmin_xt.o garmin_fit.o lowranceusr4.o \
+	mtk_locus.o googledir.o mapbar_track.o f90g_track.o mapfactor.o energympro.o \
+	mynav.o
+
+FMTS=@FMTS@
+
+FILTERS=bend.o position.o radius.o duplicate.o arcdist.o polygon.o smplrout.o \
+	reverse_route.o sort.o stackfilter.o trackfilter.o discard.o \
+	nukedata.o interpolate.o transform.o height.o swapdata.o validate.o
+
+JEEPS=jeeps/gpsapp.o jeeps/gpscom.o \
+	jeeps/gpsmath.o jeeps/gpsmem.o  \
+	jeeps/gpsprot.o jeeps/gpsread.o \
+	jeeps/gpsdevice.o jeeps/gpsdevice_ser.o jeeps/gpsdevice_usb.o \
+	jeeps/gpsrqst.o jeeps/gpssend.o jeeps/gpsserial.o jeeps/jgpsutil.o \
+	jeeps/gpsusbread.o jeeps/gpsusbsend.o \
+	jeeps/gpsusbcommon.o @OSJEEPS@
+
+# Extra modules in Jeeps that we don't use
+# 	jeeps/gpsfmt.o jeeps/gpsinput.o jeeps/gpsproj.o
+
+SHAPE=shapelib/shpopen.o shapelib/dbfopen.o shapelib/safileio.o
+
+ZLIB=zlib/adler32.o zlib/compress.o zlib/crc32.o zlib/deflate.o zlib/inffast.o \
+	zlib/inflate.o zlib/infback.o zlib/inftrees.o zlib/trees.o \
+	zlib/uncompr.o zlib/gzlib.o zlib/gzclose.o zlib/gzread.o \
+        zlib/gzwrite.o zlib/zutil.o
+
+LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
+          csv_util.o strptime.o grtcirc.o util_crc.o xmlgeneric.o \
+          formspec.o xmltag.o cet.o cet_util.o fatal.o rgbcolors.o \
+	  inifile.o garmin_fs.o gbsleep.o units.o @GBSER@ gbser.o \
+	  gbfile.o parse.o session.o src/core/xmlstreamwriter.o \
+	  src/core/usasciicodec.o \
+	$(PALM_DB) $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
+OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
+
+DEPFILES = $(OBJS:.o=.d)
+
+.cc.o:
+	$(CXX) @CPPFLAGS@ @CXXFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
+.c.o:
+	$(CC) @CPPFLAGS@ @CFLAGS@ -c $(GBCFLAGS) $< $(OUTPUT_SWITCH)$@
+
+
+
+# Directory of local web doc.  Traditionally a sibling to the GPSBabel tree.
+WEB=@DOCDIR@
+
+# Declaring a target PHONY whose names matches a subdirectory can be
+# particularly important, e.g. gui.
+.PHONY: all clean tag more-clean check torture \
+install install-debug leaktest \
+dep doc \
+release-sourcecheck release-tarball release-rpm \
+cross-configure \
+release-winbuild release-upload mac-upload release rpm mac-release \
+gui linux-gui mac-gui mac-gui-dmg msvc-build test-release
+
+all: gpsbabel$(EXEEXT)
+
+gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@ 
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
+
+gpsbabel-debug: $(OBJS)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
+
+Makefile gbversion.h: Makefile.in config.status xmldoc/makedoc.in \
+	  gbversion.h.in gui/setup.iss.in
+	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status 
+
+xcsv_tokens.gperf: xcsv_tokens.in
+	gperf --output-file=$@ -L ANSI-C -D -t $? 
+
+config.status: configure 
+	$(SHELL) config.status --recheck
+
+jeeps/gpslibusb.o: 
+	$(CXX) @CPPFLAGS@ @CXXFLAGS@ -c $(GBCFLAGS) @USB_CFLAGS@ @srcdir@/jeeps/gpslibusb.cc $(OUTPUT_SWITCH)$@
+
+fileinfo.o: win32/gpsbabel.rc
+	$(RC) -o fileinfo.o win32/gpsbabel.rc
+
+clean:
+	rm -f $(OBJS) gpsbabel gpsbabel.exe
+	if [ -f gui/Makefile ]; then $(MAKE) -C gui clean; fi
+	$(srcdir)/test-all -W
+
+configure: configure.in
+	autoconf
+
+tag:
+	svn commit
+	svn copy https://gpsbabel.googlecode.com/svn/trunk/ https://gpsbabel.googlecode.com/svn/tags/gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@
+
+more-clean: clean
+	$(srcdir)/tools/mkmoreclean
+
+check: gpsbabel$(EXEEXT)
+	$(srcdir)/testo
+
+torture: gpsbabel$(EXEEXT)
+	@echo "testo in progress... (basic data integrity test)"
+	@$(srcdir)/testo
+	@echo "vtesto in progress... (valgrind is watching testo)"
+	@$(srcdir)/vtesto
+	@echo "torture_test in progress... (shortname reduction)"
+	@$(srcdir)/torture_test
+#
+# 	Because there are some "non-real" errors like "IGC: bad date" 
+# 	test-all does not stop on errors.
+# 	Please inspect the log file (/tmp/gb-test-all.log) for segmentation
+# 	faults, math overflows and other hard errors
+#
+	@echo "test-all in progress... (read/write test between all possible formats)"
+	@$(srcdir)/test-all -s -r $(srcdir)/reference/expertgps.gpx -t
+
+#
+# This will only work on UNIX-like substances.
+#
+install: @INSTALL_DEBUG@ gpsbabel$(EXEEXT)
+	@mkdir -p $(INSTALL_DIR)/bin
+	install gpsbabel  $(INSTALL_DIR)/bin/
+
+install-debug:
+	@mkdir -p $(INSTALL_DIR)/bin
+	install gpsbabel-debug  $(INSTALL_DIR)/bin/
+
+# Nerdy release stuff that needs to work only on Linux.
+
+leaktest:
+	make EXTRA_CFLAGS=-DDEBUG_MEM
+	tools/cleardebug
+	./testo
+	tools/memdebug | grep -v '^command line:'
+
+dep:
+	make clean && make -j8 EXTRA_CFLAGS="-isystem /sw/include @QT_SYSINC_OPT@ $(QT_INC) -MMD"  && cat $(sort $(DEPFILES)) > /tmp/dep && rm $(DEPFILES)
+	echo 'internal_styles.cc: mkstyle.sh $$(srcdir)/style/*.style' >> /tmp/dep
+	echo '	$$(srcdir)/mkstyle.sh > internal_styles.cc || (rm -f internal_styles.cc ; exit 1)'  >> /tmp/dep
+	echo Edit Makefile.in and bring in /tmp/dep
+
+$(WEB)/htmldoc-$(DOCVERSION)/index.html: FORCE
+	mkdir -p $(WEB)/htmldoc-$(DOCVERSION)
+	perl xmldoc/makedoc
+	xmlwf xmldoc/readme.xml		#check for well-formedness
+	xmllint --noout --valid xmldoc/readme.xml    	#validate
+	xsltproc \
+	 --stringparam base.dir "$(WEB)/htmldoc-$(DOCVERSION)/" \
+	 --stringparam root.filename "index" \
+	 xmldoc/babelmain.xsl \
+	 xmldoc/readme.xml
+	tools/fixdoc $(WEB)/htmldoc-$(DOCVERSION) "GPSBabel $(DOCVERSION):"
+	chmod 755 tools/mkcapabilities
+	tools/mkcapabilities
+
+#
+# The .fo and PDF versions depend on additional tools.
+# 'fop' must be obtained from http://xmlgraphics.apache.org/fop/
+#   0.92beta seems to work OK, BUT.
+#   * If you have a package called 'docbook-xml-website' it's reported
+#     to prevent the build from working.   Remove it. (Suse)
+#   * Sun Java seems to be required.   GCJ 1.4.2 doesn't work.   You can
+#     force Sun Java to be used by creating ~/.foprc with 'rpm_mode=' (Fedora)
+#     Get it from http://www.java.com
+# The Hypnenation package must be installed from 
+#   http://offo.sourceforge.net/hyphenation/index.html - be sure to get the
+#   version that corresponds to the version of FOP that you used above.
+# The docbook XSL must be 1.71.1 or higher.  
+#   * Remember to update /etc/xml/catalogs if you manually update this.
+#
+gpsbabel.fo:  FORCE
+	perl xmldoc/makedoc
+	xmlwf xmldoc/readme.xml		#check for well-formedness
+	xmllint --noout --valid xmldoc/readme.xml    	#validate
+	xsltproc -o $@ xmldoc/babelpdf.xsl xmldoc/readme.xml
+
+gpsbabel.pdf: gpsbabel.fo
+	fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf 
+	cp gpsbabel.pdf $(WEB)/htmldoc-$(DOCVERSION)/gpsbabel-$(DOCVERSION).pdf
+
+
+gpsbabel.html: FORCE # gpsbabel
+	# perl xmldoc/makedoc
+	xsltproc \
+	  --output $@ \
+	  --stringparam toc.section.depth "1" \
+	  --stringparam html.cleanup "1" \
+	  --stringparam make.clean.html "1" \
+	  --stringparam html.valid.html "1" \
+	  --stringparam html.stylesheet \
+	  "http://www.gpsbabel.org/style3.css" \
+	  http://docbook.sourceforge.net/release/xsl/current/xhtml/docbook.xsl \
+	xmldoc/readme.xml
+
+readme.txt: gpsbabel.html
+	lynx -nolist -dump gpsbabel.html  > $@
+
+changes.html: FORCE
+	wget -O $(WEB)/changes.html http://www.gpsbabel.org/changes.html || exit 1
+	rm -f $(WEB)/changes.html.1 > /dev/null
+
+doc: gpsbabel $(WEB)/htmldoc-$(DOCVERSION)/index.html gpsbabel.pdf # readme.txt
+
+FORCE:
+
+# file list for windows package
+WINFILES = gpsbabel.exe win32/GPSBabelGUI.exe win32/gui-2/README.gui \
+           README.contrib AUTHORS COPYING gpsbabel.html
+
+#
+# Do administrative-y things to the tree.  Verify that everything is checked
+# in and tagged.
+#
+release-sourcecheck: changes.html
+	svn commit
+	# ./chkdoc
+	# make clean
+	rm -fr gpsbabel-$(VERSIOND)
+	# make gpsbabel doc gpsbabel.html
+	@(. tools/functions && ask "Enter 'y' to tag the tree as gpsbabel_$(VERSIONU)." "y") && svn copy https://gpsbabel.googlecode.com/svn/trunk/ https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU) ; exit 0
+	svn export https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU)/gpsbabel gpsbabel-$(VERSIOND) 
+	touch gpsbabel-$(VERSIOND)/internal_styles.cc
+	touch gpsbabel-$(VERSIOND)/configure
+	touch gpsbabel-$(VERSIOND)/xcsv_tokens.gperf
+
+#
+# Build the release tarball from the exported CVS tree, tweaking 
+# timestamps and including generated filess as needed.
+#
+release-tarball: release-sourcecheck
+#	rm -fr gpsbabel-$(VERSIOND)
+	cp -ap internal_styles.cc gpsbabel-$(VERSIOND)/
+	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
+	gb_upload /tmp/gpsbabel-$(VERSIOND).tar.gz
+#	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
+
+release-rpm:
+	test -f gpsbabel.html
+	mkdir -p /tmp/dist/BUILD \
+	  /tmp/dist/RPMS /tmp/dist/SPECS \
+	  /tmp/dist/SOURCES /tmp/dist/SRPMS \
+	  /tmp/dist/TMP /tmp/dist/install 
+	tools/mkspec $(WEB) $(VERSD) $(RELEASE) > /tmp/dist/SPECS/gpsbabel.spec
+	cp -ap gpsbabel.html gpsbabel-$(VERSIOND)/
+	cp -ap CHANGELOG gpsbabel-$(VERSIOND)/
+	rm -rf /tmp/dist/TMP/gpsbabel-$(VERSD)
+	rm -rf /tmp/dist/SOURCES/gpsbabel-$(VERSD).tgz
+	cp -apr gpsbabel-$(VERSIOND) /tmp/dist/TMP/gpsbabel-$(VERSD)
+	cd /tmp/dist/TMP ; tar --owner=0 --group=0 -czf ../SOURCES/gpsbabel-$(VERSD).tgz gpsbabel-$(VERSD)
+	rpmbuild -ba \
+	  --define "_topdir /tmp/dist" \
+	  --define "buildroot /tmp/dist/install" \
+	  /tmp/dist/SPECS/gpsbabel.spec
+
+
+#
+# The Windows executables are cross compiled from the exported CVS image.
+# Do the build of that here  and make a zip file for distribution.
+# Do this build in a temporary tree that was a copy of the tagged one
+# to avoid scribbling in the "real" one.
+#
+# The cross builds are built with mingw.   http://mirzam.it.vu.nl/mingw
+# and http://mingw.sourceforge.net are convenient sources for that.
+# binutils, runtime, w32api, and gcc-core seem to be required.
+#
+
+cross-configure:
+	  CXX=i386-mingw32-gcc LDFLAGS="-s" @srcdir@/configure --host=i386-pc-mingw32 --with-cet=all
+
+release-winbuild:
+	rm -fr /tmp/gpsbabel-$(VERSIOND)-cross
+	cp -a gpsbabel-$(VERSIOND) /tmp/gpsbabel-$(VERSIOND)-cross
+	cd /tmp/gpsbabel-$(VERSIOND)-cross ; \
+	  CXX=i386-mingw32-gcc LDFLAGS="-s" ./configure --host=i386-pc-mingw32 --with-cet=all && make && \
+	  zip -j /tmp/gpsbabel-$(VERSIOND).zip $(WINFILES)
+	rm -fr /tmp/gpsbabel-$(VERSIOND)-cross
+
+# gb_upload is an external script to do the copy to the server.
+release-upload:  /tmp/gpsbabel-$(VERSIOND).tar.gz  /tmp/gpsbabel-$(VERSIOND).zip /tmp/dist/SRPMS/gpsbabel-$(VERSIOND)-0.src.rpm  /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND)-0.i386.rpm
+	@(. tools/functions && ask "Type 'yes' if you want to do the upload now" "yes" )
+	gb_upload /tmp/gpsbabel-$(VERSIOND).tar.gz 
+	gb_upload /tmp/gpsbabel-$(VERSIOND).zip 
+	gb_upload /tmp/dist/SRPMS/gpsbabel-$(VERSIOND)-0.src.rpm  
+	gb_upload /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND)-0.i386.rpm  
+	gb_upload /tmp/dist/RPMS/i386/gpsbabel-debuginfo-$(VERSIOND)-0.i386.rpm  
+
+mac-upload:
+	# gb_upload GPSBabel+-$(VERSIOND).dmg  
+	gb_upload gui/objects/GPSBabel-$(VERSIOND).dmg
+
+
+release: release-sourcecheck  release-tarball release-winbuild release-rpm release-upload
+
+rpm: changes.html
+	tools/mkrpm $(WEB) $(VERSD) $(RELEASE)
+
+gui: gpsbabel$(EXEEXT)
+	cd gui ; $(QMAKE) app.pro && make
+	cd gui ; $(LUPDATE) app.pro
+	cd gui ; $(LRELEASE) app.pro
+
+linux-gui: gui
+	cd gui; ./makelinuxdist.sh
+
+mac-gui: gui
+	# file gpsbabel | grep '2 architectures' || exit 1
+	# file gui/objects/GPSBabelFE.app/Contents/MacOS/GPSBabelFE | grep '2 architectures' || exit 1
+	mkdir -p gui/objects/GPSBabelFE.app/Contents/MacOS/translations
+	cp gui/*.qm  gui/objects/gpsbabelFE.app/Contents/MacOS/translations
+	cp gpsbabel gui/objects/GPSBabelFE.app/Contents/MacOS
+	cp -r gui/help/*.html  gui/objects/GPSBabelFE.app/Contents/MacOS
+	cp gui/gmapbase.html gui/objects/GPSBabelFE.app/Contents/MacOS
+	tools/mac-localize
+
+# Build the Qt front end, place GPSBabel in the right place, deploy all 
+# the libs.
+
+mac-gui-dmg: mac-gui
+	rm -f gui/objects/GPSBabelFE.dmg
+	cd gui/objects ; macdeployqt GPSBabelFE.app  -executable=GPSBabelFE.app/Contents/MacOS/gpsbabel -dmg
+	mv gui/objects/GPSBabelFE.dmg  gui/objects/GPSBabel-$(VERSIOND).dmg
+
+msvc-build:
+	@#Intended for development. Assume .NET 4 is used - may require tweaks
+	"$(word 1, $(wildcard $(SYSTEMROOT)/Microsoft.NET/Framework/v4*/msbuild.exe))" msvc/GPSBabel.vcxproj /nologo /maxcpucount
+
+# release check using CVS tree
+test-release: doc gpsbabel.html changes.html
+	cvs export -r HEAD -d gpsbabel-$(VERSIOND) gpsbabel
+	rm -f gpsbabel-$(VERSIOND)/internal_styles.cc
+	make release-tarball release-winbuild release-rpm
+
+# Build entire tree, upload to Coverity.
+cov-upload: FORCE
+	make clean
+	cov-build --dir cov-int make
+	echo If that says 100%, press enter. Otherwise interrupt.
+	read junk
+	cov-upload
+
+# Machine generated from here down. 
+alan.o: alan.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h
+an1.o: an1.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h an1sym.h
+arcdist.o: arcdist.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h filterdefs.h \
+  grtcirc.h
+bcr.o: bcr.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h csv_util.h \
+  garmin_tables.h cet_util.h
+bend.o: bend.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h filterdefs.h grtcirc.h
+brauniger_iq.o: brauniger_iq.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  gbser.h
+bushnell.o: bushnell.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+bushnell_trl.o: bushnell_trl.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+cet.o: cet.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h
+cet_util.o: cet_util.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  cet/ansi_x3_4_1968.h cet/cp1252.h cet/iso_8859_8.h
+compegps.o: compegps.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  csv_util.h jeeps/gpsmath.h jeeps/gpsport.h
+cst.o: cst.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h cet_util.h strptime.h
+csv_util.o: csv_util.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  csv_util.h garmin_fs.h jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  grtcirc.h src/core/logging.h strptime.h xcsv_tokens.gperf
+delbin.o: delbin.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  src/core/xmltag.h
+delgpl.o: delgpl.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+destinator.o: destinator.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  cet_util.h garmin_fs.h jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  strptime.h
+dg-100.o: dg-100.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h gbser.h
+discard.o: discard.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h filterdefs.h
+dmtlog.o: dmtlog.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h jeeps/gpsmath.h \
+  jeeps/gpsport.h xmlgeneric.h
+duplicate.o: duplicate.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  filterdefs.h
+easygps.o: easygps.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+energympro.o: energympro.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+enigma.o: enigma.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+exif.o: exif.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h garmin_tables.h \
+  jeeps/gpsmath.h jeeps/gpsport.h
+explorist_ini.o: explorist_ini.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  explorist_ini.h
+f90g_track.o: f90g_track.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+fatal.o: fatal.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+filter_vecs.o: filter_vecs.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  filterdefs.h gbversion.h
+formspec.o: formspec.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+g7towin.o: g7towin.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h csv_util.h \
+  cet_util.h garmin_fs.h jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  garmin_tables.h strptime.h
+garmin.o: garmin.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  grtcirc.h jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  jeeps/gpsserial.h garmin_tables.h garmin_fs.h garmin_device_xml.h
+garmin_device_xml.o: garmin_device_xml.cc defs.h config.h queue.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h session.h \
+  src/core/datetime.h xmlgeneric.h garmin_device_xml.h
+garmin_fit.o: garmin_fit.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+garmin_fs.o: garmin_fs.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  cet_util.h garmin_fs.h jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  garmin_tables.h
+garmin_gpi.o: garmin_gpi.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  cet_util.h jeeps/gpsmath.h jeeps/gpsport.h garmin_fs.h jeeps/gps.h \
+  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  garmin_gpi.h
+garmin_tables.o: garmin_tables.cc garmin_tables.h defs.h config.h queue.h \
+  zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h session.h \
+  src/core/datetime.h src/core/logging.h jeeps/gpsmath.h jeeps/gpsport.h
+garmin_txt.o: garmin_txt.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  cet_util.h csv_util.h garmin_fs.h jeeps/gps.h jeeps/gpsport.h \
+  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h garmin_tables.h grtcirc.h strptime.h
+garmin_xt.o: garmin_xt.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+gbfile.o: gbfile.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  src/core/logging.h
+gbser.o: gbser.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h gbser.h \
+  gbser_private.h
+gbser_posix.o: gbser_posix.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  gbser.h gbser_private.h
+gbsleep.o: gbsleep.cc config.h
+gdb.o: gdb.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h cet_util.h csv_util.h \
+  garmin_fs.h jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  garmin_tables.h grtcirc.h
+geo.o: geo.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h src/core/file.h
+ggv_log.o: ggv_log.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h grtcirc.h \
+  jeeps/gpsmath.h jeeps/gpsport.h
+ggv_ovl.o: ggv_ovl.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  grtcirc.h
+globals.o: globals.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h gbversion.h
+glogbook.o: glogbook.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h \
+  src/core/file.h
+gnav_trl.o: gnav_trl.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+google.o: google.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h
+googledir.o: googledir.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  xmlgeneric.h
+gopal.o: gopal.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  csv_util.h strptime.h jeeps/gpsmath.h jeeps/gpsport.h grtcirc.h
+gpssim.o: gpssim.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+gpsutil.o: gpsutil.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  magellan.h
+gpx.o: gpx.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h cet_util.h garmin_fs.h \
+  jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h garmin_tables.h \
+  src/core/logging.h src/core/file.h src/core/xmlstreamwriter.h \
+  src/core/xmltag.h
+grtcirc.o: grtcirc.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h grtcirc.h
+gtm.o: gtm.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h jeeps/gpsmath.h \
+  jeeps/gpsport.h
+gtrnctr.o: gtrnctr.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h
+height.o: height.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h filterdefs.h \
+  height.h
+hiketech.o: hiketech.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h \
+  src/core/xmlstreamwriter.h
+holux.o: holux.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h holux.h
+html.o: html.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h jeeps/gpsmath.h \
+  jeeps/gpsport.h src/core/xmltag.h
+humminbird.o: humminbird.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+igc.o: igc.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h cet_util.h
+ignrando.o: ignrando.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h
+igo8.o: igo8.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h cet_util.h
+ik3d.o: ik3d.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h
+inifile.o: inifile.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+internal_styles.o: internal_styles.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+interpolate.o: interpolate.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  filterdefs.h grtcirc.h
+itracku.o: itracku.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h gbser.h
+jeeps/gpsapp.o: jeeps/gpsapp.cc jeeps/gps.h jeeps/../defs.h config.h \
+  queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h session.h \
+  src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h jeeps/garminusb.h \
+  jeeps/gpsusbint.h jeeps/gpsserial.h
+jeeps/gpscom.o: jeeps/gpscom.cc jeeps/gps.h jeeps/../defs.h config.h \
+  queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h session.h \
+  src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+jeeps/gpsdevice.o: jeeps/gpsdevice.cc jeeps/gps.h jeeps/../defs.h \
+  config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h \
+  session.h src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  jeeps/gpsserial.h
+jeeps/gpsdevice_ser.o: jeeps/gpsdevice_ser.cc jeeps/gps.h jeeps/../defs.h \
+  config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h \
+  session.h src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  jeeps/gpsserial.h
+jeeps/gpsdevice_usb.o: jeeps/gpsdevice_usb.cc jeeps/gps.h jeeps/../defs.h \
+  config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h \
+  session.h src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  jeeps/garminusb.h jeeps/gpsusbint.h jeeps/gpsusbcommon.h
+jeeps/gpslibusb.o: jeeps/gpslibusb.cc config.h mac/libusb/usb.h \
+  jeeps/gps.h jeeps/../defs.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h jeeps/gpsport.h \
+  jeeps/gpsdevice.h jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h \
+  jeeps/gpsapp.h jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h \
+  jeeps/gpsmath.h jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h \
+  jeeps/gpsproj.h jeeps/garminusb.h jeeps/gpsusbcommon.h \
+  jeeps/../garmin_device_xml.h
+jeeps/gpsmath.o: jeeps/gpsmath.cc jeeps/gps.h jeeps/../defs.h config.h \
+  queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h session.h \
+  src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsdatum.h
+jeeps/gpsmem.o: jeeps/gpsmem.cc jeeps/gps.h jeeps/../defs.h config.h \
+  queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h session.h \
+  src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+jeeps/gpsprot.o: jeeps/gpsprot.cc jeeps/gps.h jeeps/../defs.h config.h \
+  queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h session.h \
+  src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+jeeps/gpsread.o: jeeps/gpsread.cc jeeps/gps.h jeeps/../defs.h config.h \
+  queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h session.h \
+  src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsserial.h
+jeeps/gpsrqst.o: jeeps/gpsrqst.cc jeeps/gps.h jeeps/../defs.h config.h \
+  queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h session.h \
+  src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+jeeps/gpssend.o: jeeps/gpssend.cc jeeps/gps.h jeeps/../defs.h config.h \
+  queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h session.h \
+  src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h jeeps/gpsserial.h
+jeeps/gpsserial.o: jeeps/gpsserial.cc jeeps/gps.h jeeps/../defs.h \
+  config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h \
+  session.h src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  jeeps/gpsserial.h jeeps/../gbser.h gbser_posix.h
+jeeps/gpsusbcommon.o: jeeps/gpsusbcommon.cc jeeps/gps.h jeeps/../defs.h \
+  config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h \
+  session.h src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  jeeps/garminusb.h jeeps/gpsusbcommon.h
+jeeps/gpsusbread.o: jeeps/gpsusbread.cc jeeps/gps.h jeeps/../defs.h \
+  config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h \
+  session.h src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  jeeps/garminusb.h jeeps/gpsusbint.h
+jeeps/gpsusbsend.o: jeeps/gpsusbsend.cc jeeps/gps.h jeeps/../defs.h \
+  config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h \
+  session.h src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  jeeps/garminusb.h jeeps/gpsusbint.h
+jeeps/jgpsutil.o: jeeps/jgpsutil.cc jeeps/gps.h jeeps/../defs.h config.h \
+  queue.h zlib/zlib.h zlib/zconf.h gbfile.h cet.h inifile.h session.h \
+  src/core/datetime.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+jogmap.o: jogmap.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h garmin_tables.h \
+  jeeps/gpsmath.h jeeps/gpsport.h xmlgeneric.h
+jtr.o: jtr.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h csv_util.h
+kml.o: kml.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h grtcirc.h \
+  src/core/file.h src/core/xmlstreamwriter.h src/core/xmltag.h
+lmx.o: lmx.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h
+lowranceusr.o: lowranceusr.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+lowranceusr4.o: lowranceusr4.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+mac/libusb/darwin.o: mac/libusb/darwin.c config.h mac/libusb/usbi.h \
+  mac/libusb/usb.h mac/libusb/error.h
+mac/libusb/descriptors.o: mac/libusb/descriptors.c mac/libusb/usbi.h \
+  mac/libusb/usb.h mac/libusb/error.h
+mac/libusb/error.o: mac/libusb/error.c mac/libusb/usb.h \
+  mac/libusb/error.h
+mac/libusb/usb.o: mac/libusb/usb.c mac/libusb/usbi.h mac/libusb/usb.h \
+  mac/libusb/error.h
+maggeo.o: maggeo.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h csv_util.h \
+  xmlgeneric.h magellan.h
+magproto.o: magproto.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h magellan.h \
+  gbser.h explorist_ini.h
+main.o: main.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h filterdefs.h cet_util.h \
+  csv_util.h src/core/usasciicodec.h
+mapasia.o: mapasia.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+mapbar_track.o: mapbar_track.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+mapfactor.o: mapfactor.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  src/core/file.h src/core/xmlstreamwriter.h
+mapsend.o: mapsend.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h mapsend.h \
+  magellan.h
+mapsource.o: mapsource.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  garmin_tables.h jeeps/gpsmath.h jeeps/gpsport.h
+mkshort.o: mkshort.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h
+mmo.o: mmo.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h
+mtk_locus.o: mtk_locus.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  gbser.h
+mtk_logger.o: mtk_logger.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  gbser.h
+mynav.o: mynav.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+navicache.o: navicache.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  cet_util.h src/core/file.h
+naviguide.o: naviguide.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  csv_util.h jeeps/gpsmath.h jeeps/gpsport.h
+navilink.o: navilink.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h gbser.h \
+  jeeps/gpsmath.h jeeps/gpsport.h navilink.h
+navitel.o: navitel.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h jeeps/gpsmath.h \
+  jeeps/gpsport.h
+netstumbler.o: netstumbler.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  cet_util.h csv_util.h
+nmea.o: nmea.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h cet_util.h gbser.h \
+  strptime.h jeeps/gpsmath.h jeeps/gpsport.h
+nmn4.o: nmn4.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h cet_util.h csv_util.h
+nukedata.o: nukedata.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h filterdefs.h
+osm.o: osm.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h
+ozi.o: ozi.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h cet_util.h csv_util.h \
+  jeeps/gpsmath.h jeeps/gpsport.h
+parse.o: parse.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h jeeps/gpsmath.h \
+  jeeps/gpsport.h strptime.h
+pcx.o: pcx.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h garmin_tables.h \
+  cet_util.h csv_util.h
+pocketfms_bc.o: pocketfms_bc.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+pocketfms_fp.o: pocketfms_fp.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  xmlgeneric.h
+pocketfms_wp.o: pocketfms_wp.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  csv_util.h
+polygon.o: polygon.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h filterdefs.h
+position.o: position.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h filterdefs.h \
+  grtcirc.h
+psitrex.o: psitrex.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h garmin_tables.h
+queue.o: queue.cc queue.h
+radius.o: radius.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h filterdefs.h \
+  grtcirc.h
+random.o: random.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h garmin_fs.h \
+  jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h jeeps/gpssend.h \
+  jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h jeeps/gpsprot.h \
+  jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h jeeps/gpsmem.h \
+  jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h
+raymarine.o: raymarine.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  cet_util.h csv_util.h
+reverse_route.o: reverse_route.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  filterdefs.h
+rgbcolors.o: rgbcolors.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+route.o: route.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h grtcirc.h
+saroute.o: saroute.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h grtcirc.h
+sbn.o: sbn.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h navilink.h
+sbp.o: sbp.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h navilink.h
+session.o: session.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+shape.o: shape.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  shapelib/shapefil.h
+shapelib/dbfopen.o: shapelib/dbfopen.c shapelib/shapefil.h
+shapelib/safileio.o: shapelib/safileio.c shapelib/shapefil.h
+shapelib/shpopen.o: shapelib/shpopen.c shapelib/shapefil.h
+skyforce.o: skyforce.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+skytraq.o: skytraq.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h gbser.h
+smplrout.o: smplrout.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h filterdefs.h \
+  grtcirc.h
+sort.o: sort.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h filterdefs.h
+src/core/usasciicodec.o: src/core/usasciicodec.cc src/core/usasciicodec.h
+src/core/xmlstreamwriter.o: src/core/xmlstreamwriter.cc \
+  src/core/xmlstreamwriter.h
+stackfilter.o: stackfilter.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  filterdefs.h
+stmsdf.o: stmsdf.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  csv_util.h strptime.h jeeps/gpsmath.h jeeps/gpsport.h grtcirc.h
+stmwpp.o: stmwpp.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h csv_util.h \
+  cet_util.h
+strptime.o: strptime.c config.h strptime.h
+subrip.o: subrip.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+swapdata.o: swapdata.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h filterdefs.h
+tef_xml.o: tef_xml.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h
+teletype.o: teletype.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+text.o: text.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h jeeps/gpsmath.h \
+  jeeps/gpsport.h src/core/xmltag.h
+tiger.o: tiger.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  csv_util.h
+tmpro.o: tmpro.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  csv_util.h
+tomtom.o: tomtom.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+tpg.o: tpg.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h jeeps/gpsmath.h \
+  jeeps/gpsport.h
+tpo.o: tpo.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h jeeps/gpsmath.h \
+  jeeps/gpsport.h
+trackfilter.o: trackfilter.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  filterdefs.h grtcirc.h strptime.h xmlgeneric.h
+transform.o: transform.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  filterdefs.h
+unicsv.o: unicsv.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  csv_util.h garmin_fs.h jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  garmin_tables.h
+units.o: units.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+util.o: util.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h src/core/xmltag.h \
+  jeeps/gpsmath.h jeeps/gpsport.h
+util_crc.o: util_crc.cc
+v900.o: v900.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h
+validate.o: validate.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h filterdefs.h
+vcf.o: vcf.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h jeeps/gpsmath.h \
+  jeeps/gpsport.h
+vecs.o: vecs.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h csv_util.h gbversion.h
+vidaone.o: vidaone.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+vitosmt.o: vitosmt.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h grtcirc.h
+vitovtt.o: vitovtt.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
+vpl.o: vpl.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h
+waypt.o: waypt.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  grtcirc.h garmin_fs.h jeeps/gps.h jeeps/gpsport.h jeeps/gpsdevice.h \
+  jeeps/gpssend.h jeeps/gpsread.h jeeps/gpsutil.h jeeps/gpsapp.h \
+  jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
+  jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
+  src/core/logging.h
+wbt-200.o: wbt-200.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h gbser.h \
+  grtcirc.h
+wfff_xml.o: wfff_xml.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h
+wintec_tes.o: wintec_tes.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h
+xcsv.o: xcsv.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h cet_util.h csv_util.h \
+  jeeps/gpsmath.h jeeps/gpsport.h
+xhtmlent.o: xhtmlent.cc
+xmlgeneric.o: xmlgeneric.cc defs.h config.h queue.h zlib/zlib.h \
+  zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
+  xmlgeneric.h cet_util.h src/core/file.h
+xmltag.o: xmltag.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h cet_util.h \
+  src/core/xmltag.h
+xol.o: xol.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
+  cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h \
+  jeeps/gpsmath.h jeeps/gpsport.h garmin_tables.h
+yahoo.o: yahoo.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h
+zlib/adler32.o: zlib/adler32.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
+  config.h
+zlib/compress.o: zlib/compress.c zlib/zlib.h zlib/zconf.h config.h
+zlib/crc32.o: zlib/crc32.c zlib/zutil.h zlib/zlib.h zlib/zconf.h config.h \
+  zlib/crc32.h
+zlib/deflate.o: zlib/deflate.c zlib/deflate.h zlib/zutil.h zlib/zlib.h \
+  zlib/zconf.h config.h
+zlib/gzclose.o: zlib/gzclose.c zlib/gzguts.h zlib/zlib.h zlib/zconf.h \
+  config.h
+zlib/gzlib.o: zlib/gzlib.c zlib/gzguts.h zlib/zlib.h zlib/zconf.h \
+  config.h
+zlib/gzread.o: zlib/gzread.c zlib/gzguts.h zlib/zlib.h zlib/zconf.h \
+  config.h
+zlib/gzwrite.o: zlib/gzwrite.c zlib/gzguts.h zlib/zlib.h zlib/zconf.h \
+  config.h
+zlib/infback.o: zlib/infback.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
+  config.h zlib/inftrees.h zlib/inflate.h zlib/inffast.h zlib/inffixed.h
+zlib/inffast.o: zlib/inffast.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
+  config.h zlib/inftrees.h zlib/inflate.h zlib/inffast.h
+zlib/inflate.o: zlib/inflate.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
+  config.h zlib/inftrees.h zlib/inflate.h zlib/inffast.h zlib/inffixed.h
+zlib/inftrees.o: zlib/inftrees.c zlib/zutil.h zlib/zlib.h zlib/zconf.h \
+  config.h zlib/inftrees.h
+zlib/trees.o: zlib/trees.c zlib/deflate.h zlib/zutil.h zlib/zlib.h \
+  zlib/zconf.h config.h zlib/trees.h
+zlib/uncompr.o: zlib/uncompr.c zlib/zlib.h zlib/zconf.h config.h
+zlib/zutil.o: zlib/zutil.c zlib/zutil.h zlib/zlib.h zlib/zconf.h config.h \
+  zlib/gzguts.h
+internal_styles.cc: mkstyle.sh $(srcdir)/style/*.style
+	$(srcdir)/mkstyle.sh > internal_styles.cc || (rm -f internal_styles.cc ; exit 1)

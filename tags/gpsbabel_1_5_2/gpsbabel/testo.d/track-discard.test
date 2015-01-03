@@ -1,0 +1,30 @@
+#
+# tracks filter merge,discard option tests
+#
+
+rm -f ${TMPDIR}/discard*
+
+# gpx file with points with missing timestamps (has 4 trkpts, 2 duplicate times, 1 missing time, expect merge to output 2 valid trkpts)
+# expecting this to fail during a standard -x track,merge so call directly rather than via gpsbabel function
+${PNAME} -t -i gpx -f ${REFERENCE}/track/trackfilter_discard.gpx -x track,merge -o csv -F - 2> ${TMPDIR}/discard.err && {
+         echo "$PNAME succeeded! (it shouldn't have with this input...)"
+}
+# check error message is what we expected
+compare ${REFERENCE}/track/trackfilter_discard_err.gpx ${TMPDIR}/discard.err
+
+# ... but should get through if we discard the points.
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter_discard.gpx -x track,merge,discard -o gpx -F ${TMPDIR}/discard.gpx
+compare ${REFERENCE}/track/trackfilter_discard_out.gpx ${TMPDIR}/discard.gpx
+
+# This file has ONLY names starting with GC; verify we toss all.
+./gpsbabel -i geo -f geocaching.loc  -x discard,matchname=GC* -o csv -F ${TMPDIR}/discardgc.geo
+compare ${TMPDIR}/discardgc.geo /dev/null
+
+# Throw out all caches from Joe
+gpsbabel -i geo -f geocaching.loc  -x discard,matchdesc=JoGPS -o csv -F ${TMPDIR}/discardjoe.csv
+nlines=$(wc -l ${TMPDIR}/discardjoe.csv | awk '{print $1}')
+if [ $nlines -ne 4 ];
+then
+  echo matchdesc failed.
+  exit 1
+fi

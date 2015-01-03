@@ -1,0 +1,2 @@
+<para>This option displays the status of the device after the download is complete.  Status includes firmware version, number of log records in memory, interval between fixes, etc.</para>
+<para>Only valid when using a USB device as input.</para>

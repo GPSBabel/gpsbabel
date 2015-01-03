@@ -1,0 +1,8 @@
+#!/bin/bash
+find reference -type f -perm +0111 -exec svn propdel svn:executable {} \;
+find . -name "*.ico" -perm +0111 -exec svn propdel svn:executable {} \;
+find . -name "*.png" -perm +0111 -exec svn propdel svn:executable {} \;
+find . -name "*.cpp" -perm +0111 -exec svn propdel svn:executable {} \;
+find . -name "*.xml" -perm +0111 -exec svn propdel svn:executable {} \;
+find . -name "*.[ch]" -perm +0111 -exec svn propdel svn:executable {} \;
+find . -name "*.cc" -perm +0111 -exec svn propdel svn:executable {} \;

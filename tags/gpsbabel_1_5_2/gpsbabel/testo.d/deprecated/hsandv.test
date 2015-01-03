@@ -1,0 +1,12 @@
+# hsandv
+rm -f ${TMPDIR}/hsandv.exp ${TMPDIR}/1.exp ${TMPDIR}/1.exp ${TMPDIR}/Glad_5.exp
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o hsandv -F ${TMPDIR}/hsandv.exp
+compare ${TMPDIR}/hsandv.exp ${REFERENCE}
+#the hsandv format is too lossy to do this test :(
+#gpsbabel -i hsandv -f ${TMPDIR}/hsandv.exp -o geo -F ${TMPDIR}/1.exp
+#gpsbabel -i hsandv -f ${REFERENCE}/hsandv.exp -o geo -F ${TMPDIR}/2.exp
+#compare ${TMPDIR}/1.exp ${TMPDIR}/2.exp
+#test conversion from v4 to v5 files
+gpsbabel -i hsandv -f ${REFERENCE}/Glad_4.exp -o hsandv -F ${TMPDIR}/Glad_5.exp
+# FIXME: Can't compare directly because of potential FP rounding.
+# FIXME: compare ${TMPDIR}/Glad_5.exp reference

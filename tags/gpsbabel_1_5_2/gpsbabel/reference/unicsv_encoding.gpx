@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>2014-09-15T13:42:34.269Z</time>
+  <bounds minlat="40.000000000" minlon="-105.000000000" maxlat="40.000000000" maxlon="-105.000000000"/>
+  <wpt lat="40.000000000" lon="-105.000000000">
+    <name>α</name>
+    <cmt>β</cmt>
+    <desc>ξ</desc>
+  </wpt>
+</gpx>

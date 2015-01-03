@@ -1,0 +1,19 @@
+<para> 
+
+This format is for the .map files produced by the F90G automobile
+Digital Video Recorder (DVR) when recording videos.  The files are
+found on the sd card in /DCIM/DCIMA/NORMAL/ and are named with a time
+stamp and the .map extension.  This format records each track point's
+latitude, longitude, local time, GMT time and velocity in Kilometers
+Per Hour.  The local time is used in the gpsbabel translation.
+Minutes, seconds and the velocity are combined to form each track point's
+name in the converted trace.
+</para>
+<para>
+This was implemented by analyzing data from a F90G DVR supplied from China.
+Firmware F20-2013121217-E
+</para>
+<para>
+The format was tested only using .map samples collected in the USA.  We are
+interested in samples or test results from other hemispheres.
+</para>

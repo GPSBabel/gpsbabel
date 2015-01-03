@@ -1,0 +1,121 @@
+If you're interested in contributing to this program, here are some
+guidelines.  Mail patches to gpsbabel-code@lists.sourceforge.net for
+consideration and integration.
+
+Rules to Live By
+----------------
+
+Standards are good.   ISO C++, Qt, and POSIX are greatly preferred to
+adding more libraries or implementing your own hash maps or other common
+functions.
+
+You may find format_skeleton.c and filter_skeleton.c in the source tree
+to be helpful examples. Just add meat!
+
+Prefer Qt objects/classes to ISO C/POSIX services.  QStrings are reference
+counted, implicitly shared, and have a robust supporting library.  QDateTime
+supports sub-second time and a range of dates far beyond 1970->2038 and are
+much more pleasant to work with than ctime/mktime/struct tm.  "But I see
+strcpy, sprintf, and struct tm and such in the code!"  It's true; GPSBabel 
+is a tenured project of well over ten years.  We have code that predates
+our move to C++/Qt that isn't well tested or has a low payoff to modernize
+and uses old constructs.  Our actively maintained/strategic formats like
+GPX and KML tend to be better examples of modern programming, using things
+like XmlStreamWriter instead of fprintf and are generally better models to
+follow.
+
+Compilers complain for a reason.   Code shouldn't emit warnings.
+
+The entire world doesn't run <your OS here>.  We regularly test this code on
+at least five different OSes.  If you find yourself wanting to insert
+compiler or OS specific magic, please resist.
+
+We try to keep a consistent convention in code that's "ours".  We aren't
+interested in trying to convert zlib or jeeps to it, but in general we
+prefer:
+
+	int
+	mumble(int whatever)
+	{
+	<2spaces>if (whatevever) {
+	<4spaces>return blah;
+	<2spaces>}
+	}
+
+Formatting can be done with astyle using the included style file
+astylerc with the command "astyle --options=astylerc {source files}".
+astyle is available at http://astyle.sourceforge.net/
+
+The corresponding astyle settings for this are provided in our source
+tree in the file named 'astylerc'
+
+
+Submitting Patches
+------------------
+
+If you are creating a new target you should submit patches (use 
+"svn diff" to create patches) to the following files:
+* Yourcode.c and/or Yourcode.h - this is the code required to do your
+  conversions and any support files that your code requires.
+* vecs.c - an updated vecs.c file implementing your conversion code into
+  GPSBabel.
+* Makefile.in - an updated Makefile telling the compiler how to build and link
+  your conversion into GPSBabel
+* testo.d/$TARGET - an updated script that tests your conversion (this should 
+  produce no output if all is good, see the current testo script for examples)
+* YourOutput - a sample file of code produced by your function (used in testo
+  and lives in a directory called "reference").
+* Documentation - see below.
+
+Please ensure that you are building and testing against the latest code
+from the top of the SVN tree and that any code you modify is the latest
+version from the SVN - Note: code changes sometimes occur frequently!
+
+Documentation
+-------------
+
+HTML and text documentation are generated automatically from DocBook 
+source located in the "xmldoc" directory.  That directory contains 
+two subdirectories of interest: "formats" and "filters".  If your
+contribution adds or affects a format, you'll want to be in the "formats"
+directory.  Otherwise, you'll want to be in the "filters" directory.
+
+You should contribute a file called "yourname.xml", where "yourname" is the
+name you would give on the command-line to invoke your new format or filter.  
+For example, the arc filter is documented in "filters/arc.xml".
+
+This file contains a general description of your format or filter, any 
+limitations in your support for it, and anything else the end user should 
+know.  For file formats, links to manufacturers' websites are encouraged.  
+The contents of this file are not valid or even well-formed XML on their own; 
+they are included into a larger framework.  If you know DocBook, you should 
+ensure that the contents of this file will validate if included in a <section>.
+If you do not know DocBook, see the other files in this directory for examples 
+or see http://docbook.org/tdg/en/html/docbook.html for the gory details.  Tags 
+of interest will almost certainly include <para> for paragraphs, 
+<ulink url="..."> for web links, and <screen format="linespecific"> for 
+example command lines.
+
+For each option supported by your format or filter, you should also contribute
+a file in the "options" subdirectory called "yourname-youroption.xml", again
+using the names you would use on the command line to invoke your format or 
+filter with that particular option.  For example, the "distance" option to the
+"arc" filter is documented in "filters/options/arc-distance.xml".  These 
+files are similar to the general description above, and should meet the same
+validation requirements.
+
+As of this writing, there are two formats that violate this rule: Magellan 
+serial and Microsoft Streets & Trips.  Because those formats have the same
+names as other formats, their descriptions are located in "magellan1.xml" and
+"msroute1.xml" respectively.  These are special cases, and you should do your
+best to ensure that they remain the only special cases.
+
+Note that the automated framework already includes the name and description of
+your format and its options as described in vecs.c and yourcode.c, so there is
+no need to repeat that information in your documentation.
+
+
+Enjoy!
+
+Robert Lipe,
+robertlipe@gpsbabel.org

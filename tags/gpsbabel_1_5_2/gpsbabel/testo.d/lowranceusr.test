@@ -1,0 +1,36 @@
+
+#
+# Lowrance USR.  Binary, and also slightly lossy because of the math to
+# convert lat/long.  It also doesn't support description, which makes it
+# awkward  to test.
+#
+rm -f ${TMPDIR}/lowrance1.usr
+rm -f ${TMPDIR}/enchilada1.usr
+rm -f ${TMPDIR}/enchilada.gpx
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o lowranceusr -F ${TMPDIR}/lowrance1.usr
+bincompare ${TMPDIR}/lowrance1.usr ${REFERENCE}/lowrance.usr
+
+gpsbabel -i lowranceusr -f ${TMPDIR}/lowrance1.usr -o lowranceusr -F ${TMPDIR}/lowrance1.usr
+# And because of the FP rounding, we can't even read our file, write it back
+# and get the same data.  Sigh. 
+# bincompare ${REFERENCE}/lowrance.usr  ${TMPDIR}/lowrance1.usr
+
+gpsbabel -i lowranceusr -f ${REFERENCE}/all.usr -o gpx -F ${TMPDIR}/enchilada.gpx
+gpsbabel -i gpx -f ${TMPDIR}/enchilada.gpx -o lowranceusr -F ${TMPDIR}/enchilada1.usr
+bincompare ${TMPDIR}/enchilada1.usr ${REFERENCE}/enchilada.usr
+
+# Don't convert icons as waypts
+gpsbabel -i lowranceusr,ignoreicons -f ${REFERENCE}/all.usr -o gpx -F ${TMPDIR}/enchilada.gpx
+gpsbabel -i gpx -f ${TMPDIR}/enchilada.gpx -o lowranceusr -F ${TMPDIR}/enchilada1.usr
+bincompare ${TMPDIR}/enchilada1.usr ${REFERENCE}/ignoreicons.usr
+#
+# Another variation of Lowrance.  Compare v2 and v3.  These original
+# files were saved on the same units as v2 and v3.
+#
+${PNAME} -i lowranceusr -f ${REFERENCE}/lowrance-v2.usr -o unicsv,utc=0 -F ${TMPDIR}/lowrance-v2-unicsv.txt
+${PNAME} -i lowranceusr -f ${REFERENCE}/lowrance-v3.usr -o unicsv,utc=0 -F ${TMPDIR}/lowrance-v3-unicsv.txt
+compare ${REFERENCE}/lowrance-v2-unicsv.txt ${TMPDIR}/lowrance-v2-unicsv.txt
+compare ${REFERENCE}/lowrance-v3-unicsv.txt ${TMPDIR}/lowrance-v3-unicsv.txt
+# Ideally, there'd be a test for v2 vs. v3 writes, but their numeric
+# instability makes this icky.
+

@@ -1,0 +1,10 @@
+
+#
+# Delorme TopoUSA 4 is a CSV strain.  
+#
+rm -f ${TMPDIR}/xmap-1.gpx ${TMPDIR}/xmap-2.gpx ${TMPDIR}/xmap
+gpsbabel -i xmap -f ${REFERENCE}/xmap -o xmap -F ${TMPDIR}/xmap
+gpsbabel -i xmap -f ${REFERENCE}/xmap -o gpx -F ${TMPDIR}/xmap-1.gpx
+gpsbabel -i xmap -f ${TMPDIR}/xmap -o gpx -F ${TMPDIR}/xmap-2.gpx
+compare ${TMPDIR}/xmap-1.gpx ${TMPDIR}/xmap-2.gpx
+compare ${REFERENCE}/xmap ${TMPDIR}/xmap

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx
+  version="1.0"
+  creator="GPSBabel - http://www.gpsbabel.org"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.topografix.com/GPX/1/0"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+<time>2010-03-26T00:48:12Z</time>
+<bounds minlat="53.556432500" minlon="9.865178669" maxlat="53.556793494" maxlon="9.865555237"/>
+<trk>
+<trkseg>
+<trkpt lat="53.556633430" lon="9.865449271">
+  <ele>77.800034</ele>
+  <time>2010-03-26T00:48:08Z</time>
+  <speed>0.023166</speed>
+  <name>TP000224</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633441" lon="9.865449188">
+  <ele>77.799362</ele>
+  <time>2010-03-26T00:48:08.200Z</time>
+  <speed>0.031641</speed>
+  <name>TP000225</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633435" lon="9.865449054">
+  <ele>77.798965</ele>
+  <time>2010-03-26T00:48:08.400Z</time>
+  <speed>0.051357</speed>
+  <name>TP000226</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633447" lon="9.865448859">
+  <ele>77.798965</ele>
+  <time>2010-03-26T00:48:08.600Z</time>
+  <speed>0.054567</speed>
+  <name>TP000227</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633445" lon="9.865448672">
+  <ele>77.798462</ele>
+  <time>2010-03-26T00:48:08.800Z</time>
+  <speed>0.056182</speed>
+  <name>TP000228</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633459" lon="9.865448482">
+  <ele>77.798309</ele>
+  <time>2010-03-26T00:48:09Z</time>
+  <speed>0.066637</speed>
+  <name>TP000229</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633498" lon="9.865448276">
+  <ele>77.797417</ele>
+  <time>2010-03-26T00:48:09.200Z</time>
+  <speed>0.071383</speed>
+  <name>TP000230</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633546" lon="9.865448057">
+  <ele>77.795921</ele>
+  <time>2010-03-26T00:48:09.400Z</time>
+  <speed>0.081816</speed>
+  <name>TP000231</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633571" lon="9.865447824">
+  <ele>77.794380</ele>
+  <time>2010-03-26T00:48:09.600Z</time>
+  <speed>0.072754</speed>
+  <name>TP000232</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633547" lon="9.865447614">
+  <ele>77.792450</ele>
+  <time>2010-03-26T00:48:09.800Z</time>
+  <speed>0.078225</speed>
+  <name>TP000233</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633489" lon="9.865447399">
+  <ele>77.791138</ele>
+  <time>2010-03-26T00:48:10Z</time>
+  <speed>0.076833</speed>
+  <name>TP000234</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633408" lon="9.865447214">
+  <ele>77.790253</ele>
+  <time>2010-03-26T00:48:10.200Z</time>
+  <speed>0.088488</speed>
+  <name>TP000235</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633317" lon="9.865446987">
+  <ele>77.786873</ele>
+  <time>2010-03-26T00:48:10.400Z</time>
+  <speed>0.103797</speed>
+  <name>TP000236</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633191" lon="9.865446765">
+  <ele>77.784561</ele>
+  <time>2010-03-26T00:48:10.600Z</time>
+  <speed>0.103352</speed>
+  <name>TP000237</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633088" lon="9.865446533">
+  <ele>77.782021</ele>
+  <time>2010-03-26T00:48:10.800Z</time>
+  <speed>0.087818</speed>
+  <name>TP000238</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633048" lon="9.865446282">
+  <ele>77.780220</ele>
+  <time>2010-03-26T00:48:11Z</time>
+  <speed>0.081600</speed>
+  <name>TP000239</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633049" lon="9.865446021">
+  <ele>77.780632</ele>
+  <time>2010-03-26T00:48:11.200Z</time>
+  <speed>0.078945</speed>
+  <name>TP000240</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633074" lon="9.865445763">
+  <ele>77.780319</ele>
+  <time>2010-03-26T00:48:11.400Z</time>
+  <speed>0.083918</speed>
+  <name>TP000241</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633143" lon="9.865445484">
+  <ele>77.779068</ele>
+  <time>2010-03-26T00:48:11.600Z</time>
+  <speed>0.100007</speed>
+  <name>TP000242</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633252" lon="9.865445205">
+  <ele>77.778175</ele>
+  <time>2010-03-26T00:48:11.800Z</time>
+  <speed>0.099195</speed>
+  <name>TP000243</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633370" lon="9.865444927">
+  <ele>77.777702</ele>
+  <time>2010-03-26T00:48:12Z</time>
+  <speed>0.096335</speed>
+  <name>TP000244</name>
+  <fix>3d</fix>
+</trkpt>
+<trkpt lat="53.556633474" lon="9.865444640">
+  <ele>77.777336</ele>
+  <time>2010-03-26T00:48:12.200Z</time>
+  <speed>0.097903</speed>
+  <name>TP000245</name>
+  <fix>3d</fix>
+</trkpt>
+</trkseg>
+</trk>
+</gpx>

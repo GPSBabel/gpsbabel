@@ -1,0 +1,20 @@
+#
+#
+
+DESCRIPTION      emulate unicsv "lat,lon,ele" on write.
+SHORTLEN  8
+EXTENSION csv
+#
+#
+# FILE LAYOUT DEFINITIIONS:
+#
+FIELD_DELIMITER         COMMA
+RECORD_DELIMITER        NEWLINE
+BADCHARS                ,"
+PROLOGUE lat,lon,ele
+
+
+IFIELD LAT_DECIMAL, "", "%f"
+IFIELD LON_DECIMAL, "", "%f"
+IFIELD ALT_METERS, "", "%f"
+

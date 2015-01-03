@@ -1,0 +1,17 @@
+<para>
+When this option is specified, each non deleted waypoint is moved over the
+closest segment, or over the nearest point if <option>points</option> option
+is used.
+</para>
+<para>
+With the <option>rte</option> and <option>trk</option> options, if
+is possible, altitude, creation_time and microsecond fields of waypoints
+are updated by interpolation.
+</para>
+<para>
+This is most useful if you are trying to obtain the closest points in
+a road to some places. Or if you want to know the step times on some
+places over the tracks. Also to transform waypoints in Garmin course points
+(see <link linkend="fmt_gtrnctr">gtrnctr</link> and
+<link linkend="fmt_garmin">garmin</link> format).
+</para>

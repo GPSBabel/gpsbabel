@@ -1,0 +1,9 @@
+
+#
+# Nokia  LMX
+#
+gpsbabel -i lmx -f ${REFERENCE}/nokia.lmx -o lmx -F ${TMPDIR}/nokia.lmx
+compare ${REFERENCE}/nokia.lmx ${TMPDIR}/nokia.lmx
+gpsbabel -i lmx -f ${REFERENCE}/nokia.lmx -o lmx,binary -F ${TMPDIR}/binary.lmx
+bincompare ${REFERENCE}/binary.lmx ${TMPDIR}/binary.lmx
+

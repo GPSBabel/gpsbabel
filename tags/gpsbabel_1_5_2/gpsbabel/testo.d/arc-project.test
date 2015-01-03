@@ -1,0 +1,22 @@
+#
+# arc-project filter tests
+#
+
+rm -f ${TMPDIR}/arc-project*
+
+# Test 1: rte & trk options
+gpsbabel -i gpx -f ${REFERENCE}/arc-project.gpx -x arc,rte,exclude,distance=0.1K -x arc,trk,exclude,distance=0.1K -o gpx -F ${TMPDIR}/arc-project1.gpx
+compare ${REFERENCE}/arc-project1.gpx ${TMPDIR}/arc-project1.gpx 
+
+# Test 2: rte, project & points options
+gpsbabel -i gpx -f ${REFERENCE}/arc-project.gpx -x arc,rte,project,points,distance=0.1K -o gpx -F ${TMPDIR}/arc-project2.gpx
+compare ${REFERENCE}/arc-project2.gpx ${TMPDIR}/arc-project2.gpx 
+
+# Test 3: trk & project options
+gpsbabel -i gpx -f ${REFERENCE}/arc-project.gpx -x arc,trk,project,distance=0.1K -o gpx -F ${TMPDIR}/arc-project3.gpx
+compare ${REFERENCE}/arc-project3.gpx ${TMPDIR}/arc-project3.gpx 
+
+# Test 4: Verify that filter names aren't case sensistive.  (Actually has
+# nothing specific to arc...) 
+gpsbabel -i gpx -f ${REFERENCE}/arc-project.gpx -x ArC,trk,project,distance=0.1K -o gpx -F ${TMPDIR}/arc-project3.gpx
+compare ${REFERENCE}/arc-project3.gpx ${TMPDIR}/arc-project3.gpx 

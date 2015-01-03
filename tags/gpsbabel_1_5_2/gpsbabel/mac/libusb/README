@@ -1,0 +1,13 @@
+This is libusb-0.1.12  with an updated darwin.c that lets USB Garmins
+work with 10.4.10 and later.  Since we have such problems with people
+getting libusb successfully built - between the Universal Build issues
+and the fact that we have to work hard to go find where it's installed
+and unravel the shared library thing -it's easier to just include it 
+here.
+
+This code is covered under GPL.
+
+This is meant to be a stop-gap until we can get rid of libusb and use
+the IoKit framework natively.
+
+08-11-08 robertlipe

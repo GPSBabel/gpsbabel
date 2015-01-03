@@ -1,0 +1,29 @@
+#!/bin/sh
+
+
+# Magellan serial
+# TODO
+
+
+#
+# GPX routes -- since GPX contains a date stamp, tests will always
+# fail, so we use magellan as an interim format...
+#
+rm -f ${TMPDIR}/gpxroute.gpx ${TMPDIR}/maggpx.rte
+gpsbabel -r -i gpx -f ${REFERENCE}/route/route.gpx -o gpx \
+         -F ${TMPDIR}/gpxroute.gpx
+gpsbabel -r -i gpx -f ${TMPDIR}/gpxroute.gpx -o magellan \
+         -F ${TMPDIR}/maggpx.rte
+compare ${REFERENCE}/route/magellan.rte ${TMPDIR}/maggpx.rte
+
+#
+# GPX tracks -- since GPX contains a date stamp, tests will always
+# fail, so we use magellan as an interim format...
+#
+rm -f ${TMPDIR}/gpxtrack.gpx ${TMPDIR}/maggpx.trk
+gpsbabel -t -i gpx -f ${REFERENCE}/track/tracks.gpx -o gpx \
+         -F ${TMPDIR}/gpxtrack.gpx
+gpsbabel -t -i magellan -f ${REFERENCE}/track/meridian.trk -o gpx \
+         -F ${TMPDIR}/maggpx.trk
+compare ${TMPDIR}/maggpx.trk ${TMPDIR}/gpxtrack.gpx
+

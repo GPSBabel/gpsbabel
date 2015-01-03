@@ -1,0 +1,7 @@
+#
+# Franson GPSGate simulation
+#
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o gpssim -F ${TMPDIR}/waypoints.gpssim
+compare ${TMPDIR}/waypoints.gpssim ${REFERENCE}
+gpsbabel -i gpx -f ${REFERENCE}/track/tracks.gpx -o gpssim -F ${TMPDIR}/tracks.gpssim
+compare ${TMPDIR}/tracks.gpssim ${REFERENCE}/track

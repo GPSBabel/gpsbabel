@@ -1,0 +1,158 @@
+#!/bin/bash
+
+GPSBABEL_FREEZE_TIME=y
+export GPSBABEL_FREEZE_TIME
+
+# Turn on GNU libc instrumentation.
+MALLOC_CHECK_=2
+export MALLOC_CHECK_
+
+# Testcases are written for English/US locale (by default)
+LC_ALL=en_US.UTF-8
+export LC_ALL
+
+BASEPATH=`dirname $0`
+PNAME=${PNAME:-${BASEPATH}/gpsbabel}
+DIFF=${DIFF:-diff}
+REFERENCE=${BASEPATH}/reference
+# OD=${OD:-od -Ax -txC -v}
+if [ -x /usr/bin/hexdump ] ; then
+	OD=${OD:-hexdump -v -C}
+else
+	OD=${OD:-od -Ax -txC -v}
+fi
+XMLWF=xmlwf
+# set up a variable so we can skip extra tests when running valgrind
+echo "${PNAME}" | grep -q valgrind
+RUNNINGVALGRIND=$?
+
+TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
+mkdir -p $TMPDIR
+trap "rm -fr $TMPDIR" 0 1 2 3 15
+
+bincompare()
+{
+	rm -f ${TMPDIR}/bc1
+		rm -f ${TMPDIR}/bc2
+		${OD} $1 >${TMPDIR}/bc1 
+		${OD} $2 >${TMPDIR}/bc2
+		${DIFF} ${TMPDIR}/bc1 ${TMPDIR}/bc2 || {
+		echo ERROR binary comparing $*
+		let errorcount=errorcount+1
+		#exit 1
+	}
+}
+
+compare()
+{
+	${DIFF} -u -b -w $* ||  {
+		echo ERROR comparing $*
+		let errorcount=errorcount+1
+		#exit 1
+	} 
+}
+
+sort_and_compare()
+{
+	sort $1 > $TMPDIR/s1
+	sort $2 > $TMPDIR/s2
+	compare $TMPDIR/s1 $TMPDIR/s2
+}
+
+gpsbabel()
+{
+	${PNAME} $* || {
+		echo "$PNAME returned error $?"
+		echo "($PNAME $*)"
+		let errorcount=errorcount+1
+		#exit 1
+	}
+}
+
+utf8bomcheck()
+{
+  if [ ${RUNNINGVALGRIND} -ne  0 ]; then
+    if [ "$(dd if=$1 bs=1 count=3 2>/dev/null)" == $'\xef\xbb\xbf' ]; then
+      echo "ERROR: UTF-8 BOM found in $1"
+      let errorcount=errorcount+1
+    fi
+  fi
+}
+
+xmlwfcheck()
+{
+  if [ ${RUNNINGVALGRIND} -ne 0 ]; then
+    if which ${XMLWF} >& /dev/null; then
+      # xmlwf is a bit lame, exit status is always 0
+      rm -f ${TMPDIR}/xmlwf.out
+      ${XMLWF} $1 2>&1 | tee ${TMPDIR}/xmlwf.out
+      if [ -s ${TMPDIR}/xmlwf.out ]; then
+        echo "ERROR: xml is not well-formed in $1"
+        let errorcount=errorcount+1
+      fi
+    fi
+  fi
+}
+
+# Some formats are just too boring to test.   The ones that
+# are xcsv include 
+# garmin301 
+# garmin_poi 
+# gpsdrivetrack
+# nima 
+# mapconverter
+# geonet
+# saplus
+# s_and_t
+# xmap2006
+# cambridge
+# cup
+
+let errorcount=0;
+
+if [ $# -ge 1 ]; then
+  while [ $# -ge 1 ];
+  do
+    t=${BASEPATH}/testo.d/$1.test
+    echo Running $t
+    . $t
+    shift;
+  done
+else
+  for i in ${BASEPATH}/testo.d/*.test
+  do
+    echo Running $i
+    . $i
+  done
+fi
+
+# Multiple tests produce these files in addition to gpx.test and kml.test,
+# e.g. tpo.test has produced problematic gpx and kml files.
+# For this reason this check isn't incorporated into each test.
+
+# reference/basecamp.gpx has a UTF-8 BOM which is useful for verifying this test.
+#cp reference/basecamp.gpx ${TMPDIR}
+#cp LineStyles.gpx.badchar ${TMPDIR}/bad.gpx
+XMLS=$(find ${TMPDIR} -name "*.gpx" -o -name "*.kml")
+
+if [ ${RUNNINGVALGRIND} -ne  0 ]; then
+  echo "Running UTF-8 BOM test"
+  for i in ${XMLS}
+  do
+    utf8bomcheck $i
+  done
+fi
+
+if [ ${RUNNINGVALGRIND} -ne  0 ]; then
+  if which ${XMLWF} >& /dev/null; then
+    echo "Running well-formed XML test"
+    for i in ${XMLS}
+    do
+      xmlwfcheck $i
+    done
+  else
+    echo "Skipping well-formed XML test"
+  fi
+fi
+
+exit $errorcount

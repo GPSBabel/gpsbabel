@@ -1,0 +1,9 @@
+<para>
+  Like GPSBabel, <ulink url="http://www.gpsinformation.org/ronh/g7towin.htm">G7ToWin</ulink> is a program which allows uploading and
+  downloading information from several GPS devices (Garmin, Lowrance/Eagle, Magellan).
+  G7ToWin has its own data format, which is an enhanced format used in Gardown.
+</para>
+
+<para>
+  This format can read both file types, G7ToWin (.g7t) and Gardown (.gdn).
+</para>

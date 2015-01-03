@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <time>1970-01-01T00:00:00Z</time>
+    <bounds minlat="50.849999953" minlon="4.349999959" maxlat="50.849999953" maxlon="4.349999959"/>
+  </metadata>
+  <wpt lat="50.849999953" lon="4.349999959">
+    <name>€</name>
+    <cmt>™</cmt>
+    <desc>™</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+</gpx>

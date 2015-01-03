@@ -1,0 +1,82 @@
+#
+# Quick tests for Google Earth/KML format
+# Note: Reference files are from GPSBabel's own output.
+#
+gpsbabel -i gpx -f ${REFERENCE}/gc/GC7FA4.gpx -f ${REFERENCE}/gc/GCGCA8.gpx -o kml -F ${TMPDIR}/ge-gc.kml
+compare  ${REFERENCE}/earth-gc.kml ${TMPDIR}/ge-gc.kml
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml -F ${TMPDIR}/ge-eg.kml
+compare ${REFERENCE}/earth-expertgps.kml ${TMPDIR}/ge-eg.kml 
+
+# And again, but with tracks.
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml,track=1 \
+  -F ${TMPDIR}/ge-eg-track.kml
+compare ${REFERENCE}/earth-expertgps-track.kml ${TMPDIR}/ge-eg-track.kml
+
+# Segmented input, with and without <Track>.
+gpsbabel -i gpx -f ${REFERENCE}/track/segmented_tracks.gpx -o kml,track=0 \
+  -F ${TMPDIR}/ge-seg.kml
+compare ${REFERENCE}/track/segmented_tracks.kml ${TMPDIR}/ge-seg.kml
+
+gpsbabel -i gpx -f ${REFERENCE}/track/segmented_tracks.gpx  -o kml,track=1 \
+  -F ${TMPDIR}/ge-seg-track.kml
+compare ${REFERENCE}/track/segmented_tracks-track.kml ${TMPDIR}/ge-seg-track.kml
+
+# Fitness data.
+gpsbabel -i gpx -f ${REFERENCE}/track/gpx_garmin_extensions.gpx  \
+  -o kml,track=1 -F ${TMPDIR}/ge-fitness-track.kml
+compare ${REFERENCE}/track/gpx_garmin_extensions-kml_track.kml ${TMPDIR}/ge-fitness-track.kml
+# Fitness data with more extended data, specifically power.
+gpsbabel -i gtrnctr -f ${REFERENCE}/track/gtrnctr_power.tcx \
+  -o kml,track=1,points=0,lines=0 -F ${TMPDIR}/ge-power.kml
+compare ${REFERENCE}/track/gtrnctr_power-kml.kml ${TMPDIR}/ge-power.kml
+
+# test searches for route and waypoint min and max altitudes
+gpsbabel -i gpx -f ${REFERENCE}/bounds-test.gpx -o kml -F ${TMPDIR}/bnds.kml
+compare ${REFERENCE}/bounds-test.kml ${TMPDIR}/bnds.kml
+gpsbabel -i gpx -f ${REFERENCE}/track/bounds-test-track.gpx -o kml -F ${TMPDIR}/bnds-track.kml
+compare ${REFERENCE}/track/bounds-test-track.kml ${TMPDIR}/bnds-track.kml
+
+# Write the same file multiple times...File should always be identical.
+# This exercises two bugs discovered on 2013-06-02 in the QXmlWriter code.
+# 1) ostring wasn't cleared, so writing two KML files would accumulate them.
+# 2) There is, IMO, a bug when reinitializing the QXmlWriter that results
+#    in a blank line at the beginning of the output, which makes Google Earth
+#    grumpy.  This totally tanks the realtime tracking mode which relies on 
+#    this heavily.
+gpsbabel -i gpx -f ${REFERENCE}/expertgps.gpx -o kml,track=1 \
+  -F ${TMPDIR}/ge-eg-track1.kml \
+  -F ${TMPDIR}/ge-eg-track2.kml \
+  -F ${TMPDIR}/ge-eg-track3.kml
+
+# 1 should be == 2. 2 should be == 3. 
+compare ${TMPDIR}/ge-eg-track1.kml ${TMPDIR}/ge-eg-track2.kml
+compare ${TMPDIR}/ge-eg-track2.kml ${TMPDIR}/ge-eg-track3.kml
+
+# test std output
+rm -f ${TMPDIR}/bnds_so.kml
+gpsbabel -i gpx -f ${REFERENCE}/bounds-test.gpx -o kml -F - 1> ${TMPDIR}/bnds_so.kml
+compare ${REFERENCE}/bounds-test.kml ${TMPDIR}/bnds_so.kml
+
+# test direction icons
+gpsbabel -i gpx -f ${REFERENCE}/track/tracks.gpx -o kml,track=1,trackdirection=1,units='m' -F ${TMPDIR}/tracks~gpx.kml
+compare ${REFERENCE}/track/tracks~gpx.kml ${TMPDIR}/tracks~gpx.kml
+
+set -e
+if which xmllint > /dev/null;
+then
+  KMLS=$(find ${REFERENCE} -name \*.kml)
+  for f in $KMLS
+  do
+    case $f in 
+      # Argue with the KML wizards about this.  It was the intent for that
+      # to be legal in Earth GX 2.2.
+      ${REFERENCE}/track/segmented_tracks-track.kml) continue;;
+    *)
+      tmpf=${TMPDIR}/$(basename $f)
+      gpsbabel -i kml -f $f -o kml -F $tmpf
+      xmllint --schema ${BASEPATH}/tools/kml22-schema/kml22gx.xsd --noout $tmpf
+    esac;
+  done
+else
+  echo "SKipping KML validation phase."
+fi

@@ -1,0 +1,4 @@
+# VidaOne track logs
+gpsbabel -i vidaone -f ${REFERENCE}/track/vidaone.gpb -t -o unicsv -F ${TMPDIR}/vidaone.csv
+compare ${REFERENCE}/track/vidaone.csv ${TMPDIR}/vidaone.csv
+

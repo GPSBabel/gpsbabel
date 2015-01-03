@@ -1,0 +1,7 @@
+#
+# Jelbert GeoTagger JTR data files
+#
+gpsbabel -i jtr -f ${REFERENCE}/track/expertgps.jtr -o gpx -F ${TMPDIR}/expertgps~jtr.gpx -o jtr -F ${TMPDIR}/expertgps~jtr.jtr
+compare ${REFERENCE}/track/expertgps~jtr.gpx ${TMPDIR}/expertgps~jtr.gpx
+compare ${REFERENCE}/track/expertgps.jtr ${TMPDIR}/expertgps~jtr.jtr
+

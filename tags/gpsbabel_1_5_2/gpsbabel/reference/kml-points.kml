@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+  <Document>
+    <name>GPS device</name>
+    <snippet>Created Thu Aug 22 22:03:14 2013</snippet>
+    <LookAt>
+      <longitude>-86.877408</longitude>
+      <latitude>36.042108</latitude>
+      <range>63537.698405</range>
+    </LookAt>
+    <!-- Normal waypoint style -->
+    <Style id="waypoint_n">
+      <IconStyle>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <!-- Highlighted waypoint style -->
+    <Style id="waypoint_h">
+      <IconStyle>
+        <scale>1.2</scale>
+        <Icon>
+          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+        </Icon>
+      </IconStyle>
+    </Style>
+    <StyleMap id="waypoint">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#waypoint_n</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#waypoint_h</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Waypoints</name>
+      <Placemark>
+        <name>GCEBB</name>
+        <snippet/>
+        <description><![CDATA[<a href="http://www.geocaching.com/seek/cache_details.asp?ID=3771">Cache Details</a>]]></description>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>-87.134700,35.972033</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>GC1A37</name>
+        <snippet/>
+        <description><![CDATA[<a href="http://www.geocaching.com/seek/cache_details.asp?ID=6711">Cache Details</a>]]></description>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>-86.679550,36.090683</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>GC1C2B</name>
+        <snippet/>
+        <description><![CDATA[<a href="http://www.geocaching.com/seek/cache_details.asp?ID=7211">Cache Details</a>]]></description>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>-86.620117,35.996267</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>GC25A9</name>
+        <snippet/>
+        <description><![CDATA[<a href="http://www.geocaching.com/seek/cache_details.asp?ID=9641">Cache Details</a>]]></description>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>-86.648617,36.038483</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>GC2723</name>
+        <snippet/>
+        <description><![CDATA[<a href="http://www.geocaching.com/seek/cache_details.asp?ID=10019">Cache Details</a>]]></description>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>-86.741767,36.112183</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>GC2B71</name>
+        <snippet/>
+        <description><![CDATA[<a href="http://www.geocaching.com/seek/cache_details.asp?ID=11121">Cache Details</a>]]></description>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>-86.790517,36.064083</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>GC309F</name>
+        <snippet/>
+        <description><![CDATA[<a href="http://www.geocaching.com/seek/cache_details.asp?ID=12447">Cache Details</a>]]></description>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>-86.809733,36.087767</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>GC317A</name>
+        <snippet/>
+        <description><![CDATA[<a href="http://www.geocaching.com/seek/cache_details.asp?ID=12666">Cache Details</a>]]></description>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>-86.892000,36.057500</coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>GC317D</name>
+        <snippet/>
+        <description><![CDATA[<a href="http://www.geocaching.com/seek/cache_details.asp?ID=12669">Cache Details</a>]]></description>
+        <styleUrl>#waypoint</styleUrl>
+        <Point>
+          <coordinates>-86.867283,36.082800</coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

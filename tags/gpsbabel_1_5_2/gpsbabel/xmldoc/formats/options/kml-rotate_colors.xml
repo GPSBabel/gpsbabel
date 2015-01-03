@@ -1,0 +1,8 @@
+<para>
+With this option GPSBabel uses different colors for each track or route.
+If this option is used without a value then the colors are automatically selected such
+that the spectrum will be rotated through once for all the tracks and once for all the routes.
+If this option is used with a positive value then the value is interpreted as the number of degrees
+in the color circle between adjacent tracks or routes. 
+This option takes precedence over line_color.
+</para>

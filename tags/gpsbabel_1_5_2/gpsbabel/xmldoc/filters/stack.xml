@@ -1,0 +1,49 @@
+<para> 
+This filter is designed to solve advanced problems that involve shuffling 
+multiple lists of waypoints, tracks, or routes.  
+</para>
+<para>
+The stack filter can be used to save the current state of the entire
+collection of data.  That state is placed on top of a stack of collections,
+so you can simultaneously have as many stored collections of data as you
+can fit in your computer's memory.
+</para>
+<para> 
+ The stack filter can be used in conjunction with other
+ filters to implement a "union" or "logical or" functionality.
+ The basic idea is to use the stack to store copies of the
+ original list of waypoints, then use the 'swap' function to
+ replace each copy with a filtered list.  Finally, append all
+ of the filtered lists to create one big list, which is then
+ output.  The following example finds a list of all points
+ that are either inside county A or inside county B.  Any
+ points that are inside both counties are duplicated (but the
+ duplicates can be removed with the DUPLICATE filter; see
+ above.)
+</para>
+         <para><userinput>           
+gpsbabel -i gpx -f in.gpx 
+         -x stack,push,copy 
+         -x polygon,file=county_a.txt 
+         -x stack,swap 
+         -x polygon,file=county_b.txt 
+         -x stack,pop,append 
+         -o gpx -F out.gpx
+</userinput></para>
+         <para> This example reads a large list of waypoints and
+         extracts the points within 20 miles of each of two cities,
+         writing the waypoint descriptions into two different PalmDoc
+         files and exporting all of the points to the GPS receiver:
+</para>
+         <para><userinput>           
+gpsbabel -i gpx -f indiana.gpx 
+         -x stack,push,copy 
+         -x radius,lat=41.0765,lon=-85.1365,distance=20m 
+         -o palmdoc,dbname=Fort\ Wayne -F fortwayne.pdb 
+         -x stack,swap 
+         -x radius,lat=39.7733,lon=-86.1433,distance=20m 
+         -o palmdoc,dbname=Indianapolis -F indianapolis.pdb 
+         -x stack,pop,append 
+         -o magellan -F fwaind.wpt
+</userinput></para>
+      
