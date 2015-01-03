@@ -28,7 +28,8 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc \
         vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc \
         subrip.cc garmin_xt.cc garmin_fit.cc lowranceusr4.cc \
-        mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc
+        mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
+        energympro.cc mynav.cc
 
 DEPRECIATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc
 
@@ -61,7 +62,9 @@ SUPPORT = queue.cc route.cc waypt.cc filter_vecs.cc util.cc vecs.cc mkshort.cc \
           csv_util.cc strptime.c grtcirc.cc util_crc.cc xmlgeneric.cc \
           formspec.cc xmltag.cc cet.cc cet_util.cc fatal.cc rgbcolors.cc \
           inifile.cc garmin_fs.cc gbsleep.cc units.cc gbser.cc \
-          gbfile.cc parse.cc session.cc main.cc globals.cc src/core/xmlstreamwriter.cc
+          gbfile.cc parse.cc session.cc main.cc globals.cc \
+          src/core/usasciicodec.cc \
+          src/core/xmlstreamwriter.cc 
 
 HEADERS =  \
 	an1sym.h \
