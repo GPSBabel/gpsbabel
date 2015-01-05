@@ -97,18 +97,16 @@ read_logpoint(void)
 static void
 sbp_read(void)
 {
-  if (global_opts.masked_objective & TRKDATAMASK) {
-    Waypoint* logpoint;
-    route_head*     track;
+  Waypoint* logpoint;
+  route_head*     track;
 
-    track = route_head_alloc();
-    track_add_head(track);
+  track = route_head_alloc();
+  track_add_head(track);
 
-    read_sbp_header(track);
+  read_sbp_header(track);
 
-    while ((logpoint = read_logpoint())) {
-      track_add_wpt(track, logpoint);
-    }
+  while ((logpoint = read_logpoint())) {
+    track_add_wpt(track, logpoint);
   }
 }
 
