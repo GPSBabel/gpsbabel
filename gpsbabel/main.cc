@@ -28,6 +28,7 @@
 #include "session.h"
 #include "src/core/usasciicodec.h"
 #include <ctype.h>
+#include <locale.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
@@ -252,6 +253,30 @@ main(int argc, char* argv[])
   QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 #endif
 
+  // The first invocation of QTextCodec::codecForLocale() may result in LC_ALL being set to the native environment
+  // as opposed to the initial default "C" locale.
+  // This was demonstrated with Qt5 on Mac OS X.
+#ifdef DEBUG_LOCALE
+  printf("%s\n",setlocale(LC_ALL, NULL));
+#endif
+  (void) QTextCodec::codecForLocale();
+#ifdef DEBUG_LOCALE
+  printf("%s\n",setlocale(LC_ALL, NULL));
+#endif
+  // As recommended in QCoreApplication reset the locale to the default.
+  // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
+  // actually sets LC_ALL.
+  // Perhaps we should restore LC_ALL instead of only LC_NUMERIC.
+  if (strcmp(setlocale(LC_NUMERIC,0), "C") != 0) {
+#ifdef DEBUG_LOCALE
+    printf("Resetting LC_NUMERIC\n");
+#endif
+    setlocale(LC_NUMERIC,"C");
+#ifdef DEBUG_LOCALE
+    printf("%s\n",setlocale(LC_ALL, NULL));
+#endif
+  }
+
   global_opts.objective = wptdata;
   global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
   global_opts.charset = NULL;
@@ -324,10 +349,10 @@ main(int argc, char* argv[])
     }
 
     switch (c) {
-      //case 'c':
-      //  optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
-      //  cet_convert_init(optarg, 1);
-      //  break;
+    //case 'c':
+    //  optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
+    //  cet_convert_init(optarg, 1);
+    //  break;
     case 'i':
       optarg = argv[argn][2]
                ? argv[argn]+2 : argv[++argn];
@@ -526,9 +551,9 @@ main(int argc, char* argv[])
       }
 
       break;
-      /*
-       * Undocumented '-vs' option for GUI wrappers.
-       */
+    /*
+     * Undocumented '-vs' option for GUI wrappers.
+     */
     case 'v':
       switch (argv[argn][2]) {
       case 's':
@@ -540,10 +565,10 @@ main(int argc, char* argv[])
       }
       break;
 
-      /*
-       * DOS-derived systems will need to escape
-       * this as -^^.
-       */
+    /*
+     * DOS-derived systems will need to escape
+     * this as -^^.
+     */
     case '^':
       disp_formats(opt_version);
       exit(0);
