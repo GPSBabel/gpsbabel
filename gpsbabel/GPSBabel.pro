@@ -226,7 +226,6 @@ HEADERS =  \
 	session.h \
 	shapelib/shapefil.h \
 	strptime.h \
-	uuid.h \
 	xmlgeneric.h \
 	zlib/crc32.h \
 	zlib/deflate.h \

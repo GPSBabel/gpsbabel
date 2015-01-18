@@ -255,7 +255,6 @@
     <ClCompile Include="..\units.cc" />
     <ClCompile Include="..\util.cc" />
     <ClCompile Include="..\util_crc.cc" />
-    <ClCompile Include="..\uuid.cc" />
     <ClCompile Include="..\v900.cc" />
     <ClCompile Include="..\vcf.cc" />
     <ClCompile Include="..\vecs.cc" />
@@ -333,7 +332,6 @@
     <ClInclude Include="..\quovadis.h" />
     <ClInclude Include="..\session.h" />
     <ClInclude Include="..\strptime.h" />
-    <ClInclude Include="..\uuid.h" />
     <ClInclude Include="..\jeeps\gps.h" />
     <ClInclude Include="..\jeeps\gpsapp.h" />
     <ClInclude Include="..\jeeps\gpscom.h" />
