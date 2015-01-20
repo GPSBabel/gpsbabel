@@ -22,7 +22,6 @@
 
 #include "defs.h"
 #include "cet_util.h"
-#include "strptime.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -248,7 +247,6 @@ cst_data_read(void)
       } else {
         int interp, i;
         char name[256];
-        char* pow;
 
         if (data_lines < 0) {
           if ((2 != sscanf(cin, "%d %128s", &i, name)) ||
@@ -284,14 +282,13 @@ cst_data_read(void)
           wpt->shortname = QString::fromLatin1(((char*)&name) + 5);
         }
 
-        pow = strrchr(cin, '^');
-        if (pow != NULL) {
-          struct tm tm;
-
-          pow = lrtrim(++pow);
-          strptime(pow, "%Y %m %d %H:%M:%S", &tm);
-
-          wpt->SetCreationTime(mkgmtime(&tm));
+        QString time_string(cin);
+        int caret = time_string.indexOf('^');
+        if (caret > -1) {
+          QString dts = time_string.mid(caret + 1).trimmed();
+          QDateTime dt = QDateTime::fromString(dts, "yyyy MM dd hh:mm:ss");
+          dt.setTimeSpec(Qt::UTC);
+          wpt->SetCreationTime(dt);
         }
         wpt->latitude /= 100000.0;
         wpt->longitude /= 100000.0;
