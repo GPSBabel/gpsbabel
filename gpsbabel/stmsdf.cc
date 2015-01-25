@@ -33,7 +33,6 @@
 
 #include "cet_util.h"
 #include "csv_util.h"
-#include "strptime.h"
 #include "jeeps/gpsmath.h"
 #include "grtcirc.h"
 
