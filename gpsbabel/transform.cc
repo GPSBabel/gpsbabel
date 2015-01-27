@@ -114,7 +114,7 @@ transform_rte_disp_hdr_cb(const route_head* rte)
   if (current_target == 'T') {
     current_trk = route_head_alloc();
     track_add_head(current_trk);
-     if (!rte->rte_name.isEmpty()) {
+    if (!rte->rte_name.isEmpty()) {
       current_trk->rte_desc = QString("Generated from route %1").arg(rte->rte_name);
       current_trk->rte_name = rte->rte_name; /* name the new trk */
     }

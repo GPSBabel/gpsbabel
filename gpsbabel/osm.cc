@@ -631,7 +631,7 @@ osm_way_tag(xg_string args, const QXmlStreamAttributes* attrv)
     rte->rte_name = str;
 
     wpt->shortname = str;
-   // The remaining cases only apply to the center node
+    // The remaining cases only apply to the center node
   } else if ((ikey = osm_feature_ikey(key)) >= 0) {
     wpt->icon_descr = osm_feature_symbol(ikey, CSTR(value));
   } else if (key == "note") {

@@ -284,7 +284,7 @@ xasprintf(QString* strp, const char* fmt, ...)
   va_list args;
   int res;
   va_start(args, fmt);
-  char *cstrp;
+  char* cstrp;
   res = xvasprintf(&cstrp, fmt, args);
   *strp = cstrp;
   xfree(cstrp);
@@ -533,7 +533,7 @@ str_match(const char* str, const char* match)
       if (*m == '\0') {
         return 0;  /* incomplete escape sequence */
       }
-      /* pass-through next character */
+    /* pass-through next character */
 
     default:
       if (*m != *s) {
@@ -783,7 +783,7 @@ mkgmtime(struct tm* t)
   result += t->tm_min;
   result *= 60;
   result += t->tm_sec;
-  return(result);
+  return (result);
 }
 
 /*
@@ -1174,7 +1174,7 @@ rot13(const QString& s)
   static const QChar Z('Z');
   QString r = s;
   int i = r.length();
-  while(i--) {
+  while (i--) {
     QChar letter = r[i].toUpper();
     if (letter >= A && letter <= M) {
       r[i] = QChar(r[i].toLatin1() + 13);
@@ -1493,10 +1493,10 @@ strip_html(const utf_string* in)
 {
 #if 0
   // If we were willing to link core against QtGui (not out of the question)
-  // we could just do...and either decide whether to add handling for [IMG] 
+  // we could just do...and either decide whether to add handling for [IMG]
   // or just say we don't do that any more.
   QTextDocument doc;
-  doc.setHtml( in->utfstring );
+  doc.setHtml(in->utfstring);
   return xstrdup(CSTR(doc.toPlainText().simplified()));
 #else
   char* outstring, *out;

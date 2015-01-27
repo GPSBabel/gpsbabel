@@ -313,7 +313,7 @@ mmo_free_object(mmo_data_t* data)
     xfree(data->name);
   }
   if ((data->type == wptdata) && (data->refct == 0)) {
-    delete (Waypoint*)data->data;
+    delete(Waypoint*)data->data;
   }
   xfree(data);
 }
@@ -945,7 +945,7 @@ mmo_finalize_rtept_cb(const Waypoint* wptref)
     mmo_data_t* data;
     Waypoint* wpt2;
 
-// This code path isn't tested in anything we have and I have  No Idea 
+// This code path isn't tested in anything we have and I have  No Idea
 // what it was trying to do.  Throw a hard error to force the hand of
 // getting a sample file.
     abort();
@@ -1122,7 +1122,8 @@ mmo_writestr(const char* str)
 }
 
 static void
-mmo_writestr(const QString& str) {
+mmo_writestr(const QString& str)
+{
   // If UTF-8 is used instgead of Latin1, we fail in weird ways.
   mmo_writestr(str.toLatin1().constData());
 }
@@ -1214,7 +1215,7 @@ mmo_write_obj_head(const char* sobj, const char* name, const time_t ctime,
 static void
 mmo_write_wpt_cb(const Waypoint* wpt)
 {
-  QString str; 
+  QString str;
   QString cx;
   int objid;
   time_t time;

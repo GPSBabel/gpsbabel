@@ -3,7 +3,7 @@
 
     Copyright (c) 2014 Ralf Horstmann <ralf@ackstorm.de>
     Copyright (C) 2014 Robert Lipe, robertlipe+source@gpsbabel.org
- 
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -58,36 +58,43 @@ mynav_rd_line(QString line)
 
   if (global_opts.debug_level > 1) {
     qDebug() << "line: " << line;
-    for (int i = 0; i < fields.size(); i++)
+    for (int i = 0; i < fields.size(); i++) {
       qDebug() << "field" << i << fields.at(i);
+    }
   }
 
   // don't consider lines without latitude/longitude
-  if (fields.size() <= fld_lat)
+  if (fields.size() <= fld_lat) {
     return;
+  }
 
   // only type 1 and type 5 lines contain coordinates
   bool ok = false;
-  int val_type = fields.at(fld_type).trimmed().toInt(&ok);  
-  if (!ok)
+  int val_type = fields.at(fld_type).trimmed().toInt(&ok);
+  if (!ok) {
     return;
-  if (val_type != 1 && val_type != 5)
+  }
+  if (val_type != 1 && val_type != 5) {
     return;
+  }
 
   // This field is not present in .trc files, only in .ftn, so
   // ignore line if present and != 1
   if (fields.size() > fld_gps_valid) {
     int val_gps_valid = fields.at(fld_gps_valid).trimmed().toInt(&ok);
-    if (!ok || val_gps_valid != 1)
+    if (!ok || val_gps_valid != 1) {
       return;
+    }
   }
 
   double val_lon = fields.at(fld_lon).trimmed().toDouble(&ok) / 3600000.0;
-  if (!ok)
+  if (!ok) {
     return;
+  }
   double val_lat = fields.at(fld_lat).trimmed().toDouble(&ok) / 3600000.0;
-  if (!ok)
+  if (!ok) {
     return;
+  }
 
   Waypoint* wpt = new Waypoint;
   wpt->latitude = val_lat;
@@ -95,16 +102,18 @@ mynav_rd_line(QString line)
 
   if (fields.size() > fld_altitude) {
     double val_alt = fields.at(fld_altitude).trimmed().toDouble(&ok);
-    if (ok)
+    if (ok) {
       wpt->altitude = val_alt;
+    }
   }
 
   if (fields.size() > fld_timestamp) {
     int val_time = fields.at(fld_timestamp).trimmed().toInt(&ok);
-    if (ok)
+    if (ok) {
       wpt->SetCreationTime(val_time);
+    }
   }
-  
+
   track_add_wpt(mynav_track, wpt);
 }
 
@@ -127,7 +136,7 @@ mynav_rd_deinit(void)
   gbfclose(fin);
 }
 
-static void 
+static void
 mynav_rd(void)
 {
   QString buff;
