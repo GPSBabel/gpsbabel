@@ -193,7 +193,7 @@ typedef struct {
   int smart_icons;
   int smart_names;
   cet_cs_vec_t* charset;
-  char* charset_name;
+  QString charset_name;
   inifile_t* inifile;
   QTextCodec* codec;
 } global_options;
