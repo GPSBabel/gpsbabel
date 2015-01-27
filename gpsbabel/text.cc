@@ -157,7 +157,7 @@ text_disp(const Waypoint* wpt)
       if (txt_encrypt) {
         hint = rot13(wpt->gc_data->hint);
       } else {
-        hint = xstrdup(wpt->gc_data->hint);
+        hint = wpt->gc_data->hint;
       }
       gbfprintf(file_out, "\nHint: %s\n", CSTR(hint));
     }
