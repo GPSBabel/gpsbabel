@@ -286,7 +286,7 @@ humminbird_read_wpt(gbfile* fin)
   wpt = new Waypoint;
 
   // Could probably find a way to eliminate the alloc/copy.
-  char *s = xstrndup(w.name, sizeof(w.name));
+  char* s = xstrndup(w.name, sizeof(w.name));
   wpt->shortname = s;
   xfree(s);
 
@@ -361,7 +361,7 @@ humminbird_read_route(gbfile* fin)
           rte = route_head_alloc();
           route_add_head(rte);
           // TODO: find a way to eliminate the copy.
-          char *s = xstrndup(hrte.name, sizeof(hrte.name));
+          char* s = xstrndup(hrte.name, sizeof(hrte.name));
           rte->rte_name = s;
           xfree(s);
           /* rte->rte_num = hrte.num + 1; only internal number */
@@ -429,7 +429,7 @@ humminbird_read_track(gbfile* fin)
   track_add_head(trk);
 
   // TODO: find a way to eliminate the copy.
-  char *s = xstrndup(th.name, sizeof(th.name));
+  char* s = xstrndup(th.name, sizeof(th.name));
   trk->rte_name = s;
   xfree(s);
   trk->rte_num  = th.trk_num;

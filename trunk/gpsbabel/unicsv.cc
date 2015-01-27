@@ -307,7 +307,7 @@ unicsv_parse_gc_id(const QString& str)
   int res = 0;
   const QString kBase35 = "0123456789ABCDEFGHJKMNPQRTVWXYZ"; //  ILOSU are omitted.
   if (str.startsWith("GC")) {
-    int base35 = str.size() > 6; // above GCFFFF? 
+    int base35 = str.size() > 6; // above GCFFFF?
     QString s = str.mid(2);
     while (!s.isEmpty()) {
       res = res * 16 + kBase35.indexOf(s[0]);
@@ -429,7 +429,7 @@ unicsv_parse_status(const QString& str)
       str == "0") {
     return status_false;
   }
-return status_unknown;
+  return status_unknown;
 }
 
 static QDateTime
@@ -628,7 +628,7 @@ unicsv_parse_one_line(char* ibuf)
   double swiss_easting = unicsv_unknown;
   double swiss_northing = unicsv_unknown;
   int checked = 0;
-  time_t date = -1; 
+  time_t date = -1;
   time_t time = -1;
   int usec = -1;
   char is_localtime = 0;

@@ -356,7 +356,8 @@ write_blocks(gbfile* f, struct blockheader* blocks)
 
 static struct blockheader*
 compute_blocks(struct hdr* start, int count,
-               double minlon, double maxlon, double minlat, double maxlat) {
+               double minlon, double maxlon, double minlat, double maxlat)
+{
   struct blockheader* newblock;
 
   newblock = (struct blockheader*)xcalloc(sizeof(*newblock), 1);

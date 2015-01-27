@@ -100,11 +100,11 @@ waypt_add(Waypoint* wpt)
   }
 
   if ((wpt->latitude < -90) || (wpt->latitude > 90.0))
-    Fatal() << wpt->session->name 
-            << "Invalid latitude" << lat_orig << "in waypoint" 
+    Fatal() << wpt->session->name
+            << "Invalid latitude" << lat_orig << "in waypoint"
             << wpt->shortname;
   if ((wpt->longitude < -180) || (wpt->longitude > 180.0))
-    Fatal() << "Invalid longitude" << lon_orig << "in waypoint" 
+    Fatal() << "Invalid longitude" << lon_orig << "in waypoint"
             << wpt->shortname;
 
   /*
