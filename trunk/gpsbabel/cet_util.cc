@@ -23,6 +23,7 @@
 #include "cet.h"
 #include "cet_util.h"
 #include <stdlib.h> // qsort
+#include "src/core/logging.h"
 #include <QtCore/QDebug>
 #include <QtCore/QTextCodec>
 
@@ -210,7 +211,7 @@ cet_register(void)
 }
 
 cet_cs_vec_t*
-cet_find_cs_by_name(const char* name)
+cet_find_cs_by_name(const QString& name)
 {
   int i, j;
 
@@ -264,13 +265,13 @@ cet_deregister(void)
 /* gpsbabel additions */
 
 int
-cet_validate_cs(const char* cs, cet_cs_vec_t** vec, char** cs_name)
+cet_validate_cs(const QString& cs, cet_cs_vec_t** vec, QString* cs_name)
 {
   cet_cs_vec_t* v;
 
-  if ((cs == NULL) || (strlen(cs) == 0)) {	/* set default us-ascii */
+  if (cs.isEmpty()) { /* set default us-ascii */
     *vec = &cet_cs_vec_ansi_x3_4_1968;
-    *cs_name = xstrdup(CET_CHARSET_ASCII);
+    *cs_name = CET_CHARSET_ASCII;
     return 1;
   }
 
@@ -280,7 +281,7 @@ cet_validate_cs(const char* cs, cet_cs_vec_t** vec, char** cs_name)
     *vec = v;
     return 1;
   } else {
-    *cs_name = NULL;
+    cs_name->clear();
     *vec = NULL;
     return 0;
   }
@@ -289,29 +290,26 @@ cet_validate_cs(const char* cs, cet_cs_vec_t** vec, char** cs_name)
 void
 cet_convert_deinit(void)
 {
-  if (global_opts.charset_name != NULL) {
-    xfree(global_opts.charset_name);
-  }
   global_opts.charset = NULL;
-  global_opts.charset_name = NULL;
   global_opts.codec = NULL;
 }
 
 void
-cet_convert_init(const char* cs_name, const int force)
+cet_convert_init(const QString& cs_name, const int force)
 {
   if ((force != 0) || (global_opts.charset == NULL)) {
     cet_convert_deinit();
     if (0 == cet_validate_cs(cs_name, &global_opts.charset, &global_opts.charset_name)) {
-      fatal("Unsupported character set \"%s\"!\n", cs_name);
+      Fatal() << "Unsupported character set \"" << cs_name << ".";
     }
-    if ((cs_name == NULL) || (strlen(cs_name) == 0)) {	/* set default us-ascii */
+    if (cs_name.isEmpty()) {	/* set default us-ascii */
       global_opts.codec = QTextCodec::codecForName(CET_CHARSET_ASCII);
     } else {
-      global_opts.codec = QTextCodec::codecForName(cs_name);
+      QByteArray ba = CSTR(cs_name);
+      global_opts.codec = QTextCodec::codecForName(ba);
     }
     if (!global_opts.codec) {
-      fatal("Unsupported character set \"%s\"!\n", cs_name);
+      Fatal() << "Unsupported character set \"" << cs_name << ".";
     }
   }
 }

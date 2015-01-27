@@ -28,7 +28,7 @@
 
 #include "cet.h"
 
-cet_cs_vec_t* cet_find_cs_by_name(const char* name);
+cet_cs_vec_t* cet_find_cs_by_name(const QString& name);
 void cet_register(void);
 void cet_deregister(void);
 
@@ -61,7 +61,7 @@ const char* cet_convert_string(const QString& str);
 
 /* gpsbabel extensions */
 
-void cet_convert_init(const char* cs_name, const int force);
+void cet_convert_init(const QString& cs_name, const int force);
 void cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, const char* format);
 void cet_convert_deinit(void);
 

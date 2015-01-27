@@ -279,8 +279,7 @@ main(int argc, char* argv[])
 
   global_opts.objective = wptdata;
   global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
-  global_opts.charset = NULL;
-  global_opts.charset_name = NULL;
+  global_opts.charset_name.clear();
   global_opts.inifile = NULL;
 
   gpsbabel_now = time(NULL);			/* gpsbabel startup-time */

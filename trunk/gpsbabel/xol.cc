@@ -313,7 +313,7 @@ xol_write(void)
           gt_get_mps_grid_longname(grid_swiss, MYNAME));
   }
 
-  gbfprintf(fout, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", global_opts.charset_name);
+  gbfprintf(fout, "<?xml version=\"1.0\" encoding=\"%s\"?>\n", CSTR(global_opts.charset_name));
   gbfprintf(fout, "<overlays>\n");
   gbfprintf(fout, "%*s<overlay version=\"1.0\">\n", space++*2, "");
   gbfprintf(fout, "%*s<center x=\"%.f\" y=\"%.f\"/>\n", space*2, "", x, y);
