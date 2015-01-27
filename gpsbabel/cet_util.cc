@@ -277,7 +277,10 @@ cet_validate_cs(const QString& cs, cet_cs_vec_t** vec, QString* cs_name)
 
   v = cet_find_cs_by_name(cs);
   if (v != NULL) {
-    *cs_name = strupper(xstrdup(v->name));
+    // TODO: make v->name into q QString and replace this...
+    char* tmp = xstrdup(v->name);
+    *cs_name = strupper(tmp);
+    xfree(tmp);
     *vec = v;
     return 1;
   } else {
