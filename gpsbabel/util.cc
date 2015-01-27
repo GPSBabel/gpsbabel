@@ -1168,25 +1168,20 @@ strlower(char* src)
 QString
 rot13(const QString& s)
 {
-  char* result = xstrdup(s);
-  char* cur = result;
-  int flip = 1;
-  while (cur && *cur) {
-    if (flip) {
-      if (*cur == '[') {
-        flip = 0;
-      } else if (*cur >= 'A' && *cur <= 'Z') {
-        *cur = 'A' + ((*cur-'A')+13)%26;
-      } else if (*cur >= 'a' && *cur <= 'z') {
-        *cur = 'a' + ((*cur-'a')+13)%26;
-      }
-    } else if (*cur == ']') {
-      flip = 1;
+  static const QChar A('A');
+  static const QChar M('M');
+  static const QChar N('N');
+  static const QChar Z('Z');
+  QString r = s;
+  int i = r.length();
+  while(i--) {
+    QChar letter = r[i].toUpper();
+    if (letter >= A && letter <= M) {
+      r[i] = QChar(r[i].toLatin1() + 13);
+    } else if (letter >= N && letter <= Z) {
+      r[i] = QChar(r[i].toLatin1() - 13);
     }
-    cur++;
   }
-  QString r(result);
-  xfree(result);
   return r;
 }
 
