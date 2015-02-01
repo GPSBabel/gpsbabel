@@ -1,3 +1,10 @@
 <para>
+  Write Garmin-specific extensions, when such data is available, to the GPX.
+  Notably, depth, temperature, proximity, display color, ambient temperature,
+  heart rate, and cadence are read when they are available in the source data.
+  This data can, of course, only be read by GPX readers that know about the 
+  Garmin gpxtpx and gpxx extended namespaces.
+</para>
+<para>
 Implies <option>gpxver=1.1</option>
 </para>
