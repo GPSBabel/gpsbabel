@@ -67,6 +67,18 @@ DWORD mkspeed(unsigned br)
     return CBR_57600;
   case 115200:
     return CBR_115200;
+  case 230400:
+  // Per https://msdn.microsoft.com/en-us/library/windows/desktop/aa363214
+  // "This member can be an actual baud rate value, or one of the 
+  // following indexes."
+  // They provide a CBR_25600, which would be programmable on a 16450 only
+  // with a bizarre oscillator crystal, but don't provide a 230400, such
+  // as is used as the default in skytraq.
+#if defined CBR_230400
+    return CBR_230400;
+#else
+    return 230400
+#endif
   default:
     fatal("Unsupported serial speed: %d\n", br);
     return 0;   /* keep compiler happy */
