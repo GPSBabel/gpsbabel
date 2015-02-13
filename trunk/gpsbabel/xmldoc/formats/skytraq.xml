@@ -49,6 +49,12 @@ use this format to read its memory.</para>
   <entry>untested</entry>
 </row>
 <row>
+  <entry>Gisteq</entry>
+  <entry>DPL900</entry>
+  <entry>up to 230400</entry>
+  <entry>untested</entry>
+</row>
+<row>
   <entry>Adapt Mobile</entry>
   <entry>Keychain Pro</entry>
   <entry>untested</entry>
@@ -63,6 +69,7 @@ use this format to read its memory.</para>
 </tbody>
 </tgroup>
 </table>
+<para>Windows users of GPSBabel version 1.5.2 or less may have to explicitly specifiy a bit rate of 115200 or lower.</para>
 
 <example id="skytraq-on-linux">
   <title>Command showing skytraq download of tracks and erasing the logger on Linux</title>
