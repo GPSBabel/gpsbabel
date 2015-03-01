@@ -211,10 +211,6 @@ extern QTextStream cerr;
 #define CENTI_TO_MICRO(t) (t * 10000) /* Centiseconds to Microseconds */
 #define MICRO_TO_CENTI(t) (t / 10000) /* Centiseconds to Microseconds */
 
-/* Short or Long XML Times */
-#define XML_SHORT_TIME 1
-#define XML_LONG_TIME 2
-
 /*
  * Extended data if waypoint happens to represent a geocache.  This is
  * totally voluntary data...
