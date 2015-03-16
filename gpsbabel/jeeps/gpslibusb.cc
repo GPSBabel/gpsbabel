@@ -21,6 +21,7 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #if HAVE_CONFIG_H
 #include "config.h"
