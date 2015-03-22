@@ -250,18 +250,28 @@ fit_read_field(fit_field_t* f)
   switch (f->type) {
   case 1: // sint8
   case 2: // uint8
-    is_fatal(f->size != 1,
-             MYNAME ": Bad field size in data message\n");
+  if (f->size == 4) {
+    return fit_getuint32();
+  } else if (f->size == 2) {
+    return fit_getuint16();
+  } else if (f->size == 1) {
     return fit_getuint8();
+  } else {
+    fatal(MYNAME ": Bad field size %d in 1-byte data message\n", f->size);
+  }
   case 0x83: // sint16
   case 0x84: // uint16
-    is_fatal(f->size != 2,
-             MYNAME ": Bad field size in data message\n");
+  if (f->size == 4) {
+    return fit_getuint32();
+  } else if (f->size == 2) {
     return fit_getuint16();
+  } else {
+    fatal(MYNAME ": Bad field size %d in 2-byte data message\n", f->size);
+  }
   case 0x85: // sint32
   case 0x86: // uint32
     is_fatal(f->size != 4,
-             MYNAME ": Bad field size in data message\n");
+             MYNAME ": Bad field size %d in 4-byte data message\n", f->size);
     return fit_getuint32();
   default: // Ignore everything else for now.
     for (i = 0; i < f->size; i++) {
