@@ -542,6 +542,29 @@ waypt_speed(const Waypoint* A, const Waypoint* B)
 }
 
 /*
+ * Calculates the vertical speed between points "A" and "B"
+ * the result comes in meters per second and can be negative.
+ */
+
+double
+waypt_vertical_speed(const Waypoint* A, const Waypoint* B)
+{
+  double altitude, time;
+
+  altitude = A->altitude - B->altitude;
+  if (altitude == 0) {
+    return 0;
+  }
+
+  time = fabs((double)A->creation_time.msecsTo(B->creation_time)) / 1000.0;
+  if (time > 0) {
+    return (altitude / time);
+  } else {
+    return 0;
+  }
+}
+
+/*
  * Calculates "Course True" from A to B
  */
 double

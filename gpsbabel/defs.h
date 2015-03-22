@@ -866,6 +866,7 @@ void waypt_status_disp(int total_ct, int myct);
 double waypt_time(const Waypoint* wpt);
 double waypt_speed(const Waypoint* A, const Waypoint* B);
 double waypt_speed_ex(const Waypoint* A, const Waypoint* B);
+double waypt_vertical_speed(const Waypoint* A, const Waypoint* B);
 double waypt_course(const Waypoint* A, const Waypoint* B);
 double waypt_distance(const Waypoint* A, const Waypoint* B);
 double waypt_distance_ex(const Waypoint* A, const Waypoint* B);
