@@ -33,6 +33,7 @@ static time_t time_offset;
 static int stnum;
 static gbfile* fout;
 static const Waypoint* prevwpp;
+static double vspeed;
 
 /* internal helper functions */
 
@@ -106,6 +107,9 @@ subrip_prevwp_pr(const Waypoint* waypointp)
         else
           gbfprintf(fout, "   -");
         break;
+      case 'v':
+        gbfprintf(fout, "%2.2f", vspeed);
+        break;
       case 't':
         {
           QTime t = prevwpp->GetCreationTime().toUTC().time();
@@ -159,6 +163,10 @@ subrip_trkpt_pr(const Waypoint* waypointp)
    * associated waypoint plus that of the following one.
    * Since we get waypoints one at a time, the only way is to store one and
    * defer processing until we get the next one.
+   *
+   * To determine vertical speed we need to have not only previous waypoint,
+   * but also pre-previous, so we calculate vspeed right before forgetting
+   * the previous.
    */
   if ((stnum == 1) && (time_offset == 0))
     /*
@@ -174,6 +182,7 @@ subrip_trkpt_pr(const Waypoint* waypointp)
 
   if (prevwpp) {
     subrip_prevwp_pr(waypointp);
+    vspeed = waypt_vertical_speed(waypointp, prevwpp);
   }
   prevwpp = waypointp;
 }
@@ -191,6 +200,7 @@ subrip_wr_init(const char* fname)
   time_offset = 0;
 
   prevwpp = NULL;
+  vspeed = 0;
 
   if ((opt_gpstime != NULL) && (opt_gpsdate != NULL)) {
     time(&gpstime_t);

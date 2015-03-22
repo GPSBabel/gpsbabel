@@ -20,8 +20,12 @@
   <entry>elevation in meters</entry>
 </row>
 <row>
+  <entry>%v</entry>
+  <entry>vertical speed in m/s</entry>
+</row>
+<row>
   <entry>%t</entry>
-  <entry>tiomestamp</entry>
+  <entry>timestamp</entry>
 </row>
 <row>
   <entry>%l</entry>
