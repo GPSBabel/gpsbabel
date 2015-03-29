@@ -754,6 +754,9 @@ void xcsv_file_init(void)
 }
 
 XcsvFile::XcsvFile() {
+  is_internal = false;
+  ifield_ct = ofield_ct = 0;
+  extension = description = NULL;
 //   xcsv_file_init(); 
 }
 

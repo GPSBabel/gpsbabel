@@ -505,7 +505,7 @@ lowranceusr_parse_icons(void)
     printf(MYNAME " parse_icons: num Icons = %d\n", num_icons);
   }
 
-  for (i=0; i < num_icons; i++) {
+  for (i=0; i < num_icons && !gbfeof(file_in); i++) {
     if (ignoreicons) {
       /* position coord lat & long */
       (void) gbfread(&buff[0], 4, 2, file_in);
@@ -546,7 +546,7 @@ lowranceusr_parse_trails(void)
     printf(MYNAME " parse_trails: num trails = %d\n", num_trails);
   }
 
-  for (i=trk_num=0; i < num_trails; i++) {
+  for (i=trk_num=0; i < num_trails && !gbfeof(file_in); i++) {
     trk_head = route_head_alloc();
     trk_head->rte_num = ++trk_num;
     track_add_head(trk_head);
@@ -585,7 +585,7 @@ lowranceusr_parse_trails(void)
 
     if (num_trail_points) {
 
-      while (num_trail_points) {
+      while (num_trail_points && !gbfeof(file_in)) {
         /* num section points */
         num_section_points = gbfgetint16(file_in);
 
@@ -593,7 +593,8 @@ lowranceusr_parse_trails(void)
           printf(MYNAME " parse_trails: num section points = %d\n", num_section_points);
         }
 
-        for (j=0; j < num_section_points; j++, num_trail_points--) {
+        for (j=0; j < num_section_points && !gbfeof(file_in);
+             j++, num_trail_points--) {
           wpt_tmp = new Waypoint;
           wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
           wpt_tmp->longitude = lon_mm_to_deg(gbfgetint32(file_in));
@@ -652,7 +653,7 @@ data_read(void)
     printf(MYNAME " data_read: Num waypoints %d\n", NumWaypoints);
   }
 
-  for (i = 0; i < NumWaypoints; i++) {
+  for (i = 0; i < NumWaypoints && !gbfeof(file_in); i++) {
     Waypoint* wpt_tmp;
 
     wpt_tmp = new Waypoint;
