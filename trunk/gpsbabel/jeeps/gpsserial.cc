@@ -396,6 +396,7 @@ void GPS_Serial_Error(const char* mb, ...)
 //			GetLastError(), 0, s, sizeof(msg) - b - 2, 0 );
   strcat(msg, strerror(errno));
   GPS_Error(msg);
+  va_end(ap);
 }
 
 int32 GPS_Serial_Read(gpsdevh* dh, void* ibuf, int size)

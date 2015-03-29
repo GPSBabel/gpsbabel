@@ -77,6 +77,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <vector>
+#include <QtCore/QScopedArrayPointer> // Wish we could use c++11...
 
 #define MYNAME	"TPO"
 
@@ -491,7 +492,15 @@ Waypoint* tpo_convert_ll(int lat, int lon)
 }
 
 #define TRACKNAMELENGTH 256
-struct style_info {
+class StyleInfo {
+public:
+  StyleInfo() {
+    name[0] = 0;
+    color[0] = 0;
+    color[1] = 0;
+    color[2] = 0;
+    wide = dash = 0;
+  }
   char name[TRACKNAMELENGTH]; // some huge value
   uint8_t color[3];  // keep R/G/B values separate because line_color needs BGR
   uint8_t wide;
@@ -506,7 +515,7 @@ void tpo_process_tracks(void)
   unsigned int track_count, track_style_count;
   unsigned int xx,ii,tmp;
 
-  int DEBUG=0;
+  const int DEBUG = 0;
 
   if (DEBUG) {
     printf("Processing Track Styles... (added in 2012 by SRE)\n");
@@ -523,7 +532,7 @@ void tpo_process_tracks(void)
     printf("Unpacking %d track styles...\n",track_style_count);
   }
 
-  style_info* styles = (style_info*)xcalloc(track_style_count, sizeof(style_info));
+  QScopedArrayPointer<StyleInfo> styles(new StyleInfo[track_style_count]);
 
   for (ii = 0; ii < track_style_count; ii++) {
 
@@ -787,8 +796,6 @@ void tpo_process_tracks(void)
 
     xfree(buf);
   }
-  xfree(styles);
-//printf("\n");
 }
 
 
