@@ -41,6 +41,7 @@
 #include "defs.h"
 #include <stdio.h> // sprintf
 #include <stdlib.h> // qsort
+#include <QtCore/QTextCodec>
 
 #define MYNAME "TomTom"
 
@@ -197,7 +198,7 @@ data_read(void)
 
       wpt_tmp->longitude = x/100000.0;
       wpt_tmp->latitude = y/100000.0;
-      wpt_tmp->description = desc;
+      wpt_tmp->description = STRTOUNICODE(desc);
       xfree(desc);
       desc = NULL;
       // TODO:: description in rectype 3 contains two zero-terminated strings
@@ -298,7 +299,7 @@ write_float_as_long(gbfile* file, double value)
 }
 
 #define write_char(f,c) gbfputc((c),f)
-#define write_string(f,s) gbfputcstr((s),f)
+#define write_string(f,s) gbfwrite((s),1,strlen(s)+1,f)
 
 struct blockheader {
   struct hdr* start;
@@ -335,16 +336,16 @@ write_blocks(gbfile* f, struct blockheader* blocks)
       if (global_opts.smart_names &&
           blocks->start[i].wpt->gc_data->diff &&
           blocks->start[i].wpt->gc_data->terr) {
-        snprintf(desc_field,sizeof(desc_field),"%s(t%ud%u)%s(type%dcont%d)",CSTRc(blocks->start[i].wpt->description),
+        snprintf(desc_field,sizeof(desc_field),"%s(t%ud%u)%s(type%dcont%d)",STRFROMUNICODE(blocks->start[i].wpt->description),
                  blocks->start[i].wpt->gc_data->terr/10,
                  blocks->start[i].wpt->gc_data->diff/10,
-                 CSTRc(blocks->start[i].wpt->shortname),
+                 STRFROMUNICODE(blocks->start[i].wpt->shortname),
                  (int) blocks->start[i].wpt->gc_data->type,
                  (int) blocks->start[i].wpt->gc_data->container);
         //Unfortunately enums mean we get numbers for cache type and container.
       } else {
         snprintf(desc_field, sizeof(desc_field), "%s",
-                 CSTRc(blocks->start[i].wpt->description));
+                 STRFROMUNICODE(blocks->start[i].wpt->description));
       }
       write_long(f, strlen(desc_field) + 14);
       write_float_as_long(f, blocks->start[i].wpt->longitude*100000);
