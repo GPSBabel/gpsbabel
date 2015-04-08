@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="46.354380000" minlon="6.170210000" maxlat="47.544970000" maxlon="8.261100000"/>
+  <wpt lat="46.354380000" lon="6.170210000">
+    <name>Aebi Frères, Bogis-Bossey</name>
+    <cmt>Aebi Frères, Bogis-Bossey</cmt>
+    <desc>Aebi Frères, Bogis-Bossey</desc>
+  </wpt>
+  <wpt lat="46.476570000" lon="6.428500000">
+    <name>Eco Energy Etoy</name>
+    <cmt>Eco Energy Etoy</cmt>
+    <desc>Eco Energy Etoy</desc>
+  </wpt>
+  <wpt lat="46.568200000" lon="6.449520000">
+    <name>Mühle Severy</name>
+    <cmt>Mühle Severy</cmt>
+    <desc>Mühle Severy</desc>
+  </wpt>
+  <wpt lat="46.696180000" lon="6.477960000">
+    <name>Centre Silo Croy</name>
+    <cmt>Centre Silo Croy</cmt>
+    <desc>Centre Silo Croy</desc>
+  </wpt>
+  <wpt lat="46.824320000" lon="6.655290000">
+    <name>Michel Forestier Champagne</name>
+    <cmt>Michel Forestier Champagne</cmt>
+    <desc>Michel Forestier Champagne</desc>
+  </wpt>
+  <wpt lat="46.667660000" lon="6.805070000">
+    <name>A S S Moudon</name>
+    <cmt>A S S Moudon</cmt>
+    <desc>A S S Moudon</desc>
+  </wpt>
+  <wpt lat="46.570380000" lon="6.818150000">
+    <name>Caro Oron</name>
+    <cmt>Caro Oron</cmt>
+    <desc>Caro Oron</desc>
+  </wpt>
+  <wpt lat="46.710910000" lon="6.848600000">
+    <name>Protector Lucens</name>
+    <cmt>Protector Lucens</cmt>
+    <desc>Protector Lucens</desc>
+  </wpt>
+  <wpt lat="47.047700000" lon="6.874040000">
+    <name>Landi Hauts Geneveys</name>
+    <cmt>Landi Hauts Geneveys</cmt>
+    <desc>Landi Hauts Geneveys</desc>
+  </wpt>
+  <wpt lat="46.828550000" lon="6.940470000">
+    <name>Von Bergen Payern</name>
+    <cmt>Von Bergen Payern</cmt>
+    <desc>Von Bergen Payern</desc>
+  </wpt>
+  <wpt lat="46.916580000" lon="6.968530000">
+    <name>DSP Delley-Portalban</name>
+    <cmt>DSP Delley-Portalban</cmt>
+    <desc>DSP Delley-Portalban</desc>
+  </wpt>
+  <wpt lat="46.851650000" lon="7.189880000">
+    <name>SGD Düdingen</name>
+    <cmt>SGD Düdingen</cmt>
+    <desc>SGD Düdingen</desc>
+  </wpt>
+  <wpt lat="46.939730000" lon="7.207620000">
+    <name>Mühle Rytz Biberen</name>
+    <cmt>Mühle Rytz Biberen</cmt>
+    <desc>Mühle Rytz Biberen</desc>
+  </wpt>
+  <wpt lat="46.928570000" lon="7.235100000">
+    <name>Trocknungsanlage Laupen</name>
+    <cmt>Trocknungsanlage Laupen</cmt>
+    <desc>Trocknungsanlage Laupen</desc>
+  </wpt>
+  <wpt lat="47.041610000" lon="7.255410000">
+    <name>TR BARGEN</name>
+    <cmt>TR BARGEN</cmt>
+    <desc>TR BARGEN</desc>
+  </wpt>
+  <wpt lat="47.069610000" lon="7.292770000">
+    <name>Gygi AG</name>
+    <cmt>Gygi AG</cmt>
+    <desc>Gygi AG</desc>
+  </wpt>
+  <wpt lat="46.825990000" lon="7.301480000">
+    <name>Landi Heitenried</name>
+    <cmt>Landi Heitenried</cmt>
+    <desc>Landi Heitenried</desc>
+  </wpt>
+  <wpt lat="46.889680000" lon="7.309920000">
+    <name>Flamatt</name>
+    <cmt>Flamatt</cmt>
+    <desc>Flamatt</desc>
+  </wpt>
+  <wpt lat="47.063340000" lon="7.334350000">
+    <name>TR Suberg</name>
+    <cmt>TR Suberg</cmt>
+    <desc>TR Suberg</desc>
+  </wpt>
+  <wpt lat="46.995210000" lon="7.351090000">
+    <name>Trocknung Säriswi</name>
+    <cmt>Trocknung Säriswi</cmt>
+    <desc>Trocknung Säriswi</desc>
+  </wpt>
+  <wpt lat="47.044490000" lon="7.362040000">
+    <name>Mühle Affolter</name>
+    <cmt>Mühle Affolter</cmt>
+    <desc>Mühle Affolter</desc>
+  </wpt>
+  <wpt lat="47.385370000" lon="7.362470000">
+    <name>Silo Soyhieres</name>
+    <cmt>Silo Soyhieres</cmt>
+    <desc>Silo Soyhieres</desc>
+  </wpt>
+  <wpt lat="46.962100000" lon="7.382150000">
+    <name>Mühle Augsburger</name>
+    <cmt>Mühle Augsburger</cmt>
+    <desc>Mühle Augsburger</desc>
+  </wpt>
+  <wpt lat="46.935950000" lon="7.392360000">
+    <name>Schenk AG Bümpliz</name>
+    <cmt>Schenk AG Bümpliz</cmt>
+    <desc>Schenk AG Bümpliz</desc>
+  </wpt>
+  <wpt lat="47.041160000" lon="7.392460000">
+    <name>Meier Motoren</name>
+    <cmt>Meier Motoren</cmt>
+    <desc>Meier Motoren</desc>
+  </wpt>
+  <wpt lat="46.902400000" lon="7.399590000">
+    <name>Mühle Gasel</name>
+    <cmt>Mühle Gasel</cmt>
+    <desc>Mühle Gasel</desc>
+  </wpt>
+  <wpt lat="46.953150000" lon="7.481750000">
+    <name>Schenk AG</name>
+    <cmt>Schenk AG</cmt>
+    <desc>Schenk AG</desc>
+  </wpt>
+  <wpt lat="46.650370000" lon="7.704080000">
+    <name>11347 Däpp Lama</name>
+    <cmt>11347 Däpp Lama</cmt>
+    <desc>11347 Däpp Lama</desc>
+  </wpt>
+  <wpt lat="46.791390000" lon="7.518490000">
+    <name>Grastrocknungsanlage Burgistein</name>
+    <cmt>Grastrocknungsanlage Burgistein</cmt>
+    <desc>Grastrocknungsanlage Burgistein</desc>
+  </wpt>
+  <wpt lat="46.878240000" lon="7.572920000">
+    <name>20254 Strahm Mühle AG</name>
+    <cmt>20254 Strahm Mühle AG</cmt>
+    <desc>20254 Strahm Mühle AG</desc>
+  </wpt>
+  <wpt lat="46.904890000" lon="7.718770000">
+    <name>Jordi Mühle</name>
+    <cmt>Jordi Mühle</cmt>
+    <desc>Jordi Mühle</desc>
+  </wpt>
+  <wpt lat="46.948640000" lon="7.747870000">
+    <name>Saatzucht Emmenmat</name>
+    <cmt>Saatzucht Emmenmat</cmt>
+    <desc>Saatzucht Emmenmat</desc>
+  </wpt>
+  <wpt lat="46.957660000" lon="7.751280000">
+    <name>Steiner Zollbr</name>
+    <cmt>Steiner Zollbr</cmt>
+    <desc>Steiner Zollbr</desc>
+  </wpt>
+  <wpt lat="46.969090000" lon="7.496190000">
+    <name>Walther Mühle</name>
+    <cmt>Walther Mühle</cmt>
+    <desc>Walther Mühle</desc>
+  </wpt>
+  <wpt lat="46.986490000" lon="7.692880000">
+    <name>Hess Mühle Schwanden</name>
+    <cmt>Hess Mühle Schwanden</cmt>
+    <desc>Hess Mühle Schwanden</desc>
+  </wpt>
+  <wpt lat="47.065800000" lon="7.610240000">
+    <name>Papiersäcke Sommer Rindlis</name>
+    <cmt>Papiersäcke Sommer Rindlis</cmt>
+    <desc>Papiersäcke Sommer Rindlis</desc>
+  </wpt>
+  <wpt lat="47.073150000" lon="7.591840000">
+    <name>Saatgutzent Lyssach</name>
+    <cmt>Saatgutzent Lyssach</cmt>
+    <desc>Saatgutzent Lyssach</desc>
+  </wpt>
+  <wpt lat="47.116820000" lon="7.617750000">
+    <name>Krähenbühl Walter</name>
+    <cmt>Krähenbühl Walter</cmt>
+    <desc>Krähenbühl Walter</desc>
+  </wpt>
+  <wpt lat="47.163740000" lon="7.527390000">
+    <name>Lagerhaus Lohn</name>
+    <cmt>Lagerhaus Lohn</cmt>
+    <desc>Lagerhaus Lohn</desc>
+  </wpt>
+  <wpt lat="47.208170000" lon="7.617250000">
+    <name>Kofmehl Mühle</name>
+    <cmt>Kofmehl Mühle</cmt>
+    <desc>Kofmehl Mühle</desc>
+  </wpt>
+  <wpt lat="47.213900000" lon="7.756060000">
+    <name>Erbo Agro</name>
+    <cmt>Erbo Agro</cmt>
+    <desc>Erbo Agro</desc>
+  </wpt>
+  <wpt lat="47.217370000" lon="7.783760000">
+    <name>Geiser Agro Langenthal</name>
+    <cmt>Geiser Agro Langenthal</cmt>
+    <desc>Geiser Agro Langenthal</desc>
+  </wpt>
+  <wpt lat="47.218190000" lon="7.782420000">
+    <name>Samen Steffen  (Geiser)</name>
+    <cmt>Samen Steffen  (Geiser)</cmt>
+    <desc>Samen Steffen  (Geiser)</desc>
+  </wpt>
+  <wpt lat="47.252420000" lon="7.819840000">
+    <name>Lorze AG Roggwil</name>
+    <cmt>Lorze AG Roggwil</cmt>
+    <desc>Lorze AG Roggwil</desc>
+  </wpt>
+  <wpt lat="47.258940000" lon="7.658650000">
+    <name>Marstall</name>
+    <cmt>Marstall</cmt>
+    <desc>Marstall</desc>
+  </wpt>
+  <wpt lat="47.347490000" lon="7.900000000">
+    <name>Hammermühle Olten</name>
+    <cmt>Hammermühle Olten</cmt>
+    <desc>Hammermühle Olten</desc>
+  </wpt>
+  <wpt lat="47.362560000" lon="7.915580000">
+    <name>Silo Olten</name>
+    <cmt>Silo Olten</cmt>
+    <desc>Silo Olten</desc>
+  </wpt>
+  <wpt lat="47.480320000" lon="7.576790000">
+    <name>Merian Schlatthof</name>
+    <cmt>Merian Schlatthof</cmt>
+    <desc>Merian Schlatthof</desc>
+  </wpt>
+  <wpt lat="47.503910000" lon="7.540760000">
+    <name>12231 Genossensch Agrico</name>
+    <cmt>12231 Genossensch Agrico</cmt>
+    <desc>12231 Genossensch Agrico</desc>
+  </wpt>
+  <wpt lat="47.528660000" lon="8.261100000">
+    <name>Muehle Muehlebach Wuerenlingen</name>
+    <cmt>Muehle Muehlebach Wuerenlingen</cmt>
+    <desc>Muehle Muehlebach Wuerenlingen</desc>
+  </wpt>
+  <wpt lat="47.536380000" lon="7.637640000">
+    <name>Florin AG Muttenz</name>
+    <cmt>Florin AG Muttenz</cmt>
+    <desc>Florin AG Muttenz</desc>
+  </wpt>
+  <wpt lat="47.540680000" lon="7.737540000">
+    <name>Provimi Kaiseraugst</name>
+    <cmt>Provimi Kaiseraugst</cmt>
+    <desc>Provimi Kaiseraugst</desc>
+  </wpt>
+  <wpt lat="47.540740000" lon="7.659770000">
+    <name>Ultra Brag Auhafenstr 4</name>
+    <cmt>Ultra Brag Auhafenstr 4</cmt>
+    <desc>Ultra Brag Auhafenstr 4</desc>
+  </wpt>
+  <wpt lat="47.544970000" lon="7.991540000">
+    <name>Trocknungsge.Eiken</name>
+    <cmt>Trocknungsge.Eiken</cmt>
+    <desc>Trocknungsge.Eiken</desc>
+  </wpt>
+</gpx>
