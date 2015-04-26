@@ -1307,12 +1307,12 @@ skytraq_read(void)
 {
   int dlbaud;
 
-  if (*opt_set_location) {
+  if (opt_set_location) {
     skytraq_set_location();
     return;
   }
 
-  if (*opt_configure_logging) {
+  if (opt_configure_logging) {
     skytraq_configure_logging();
     return;
   }
