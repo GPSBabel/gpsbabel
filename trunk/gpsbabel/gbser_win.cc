@@ -77,7 +77,7 @@ DWORD mkspeed(unsigned br)
 #if defined CBR_230400
     return CBR_230400;
 #else
-    return 230400
+    return 230400;
 #endif
   default:
     fatal("Unsupported serial speed: %d\n", br);
