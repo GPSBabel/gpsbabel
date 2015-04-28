@@ -243,7 +243,7 @@ arcdist_process(void)
             (ptsopt || (ed->arcpt1->GetCreationTime().isValid()))) {
           /* Interpolate time */
           if (ptsopt) {
-            wp->SetCreationTime(ed->arcpt2->GetCreationTime());;
+            wp->SetCreationTime(ed->arcpt2->GetCreationTime());
           } else {
             // Apply the multiplier to the difference between the times
             // of the two points.   Add that to the first for the

@@ -548,7 +548,7 @@ static Waypoint* make_point(double lat, double lon, double alt, time_t tim, cons
 
   sprintf(wp_name, fmt, index);
 
-  wpt->latitude       = lat;;
+  wpt->latitude       = lat;
   wpt->longitude      = lon;
   wpt->altitude       = alt;
   wpt->SetCreationTime(tim);
