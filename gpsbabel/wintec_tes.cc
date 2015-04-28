@@ -50,7 +50,7 @@ wintec_date_to_time(uint32_t w)
   tm.tm_mon  = ((w & 0x03c00000) >> 22) - 1;
   tm.tm_year = ((w & 0xfc000000) >> 26) + 100;
 
-  return mkgmtime(&tm);;
+  return mkgmtime(&tm);
 }
 
 static void

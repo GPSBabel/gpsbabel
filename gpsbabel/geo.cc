@@ -135,7 +135,7 @@ geocache_container wpt_container(const QString& args)
     v = gc_large;
     break;
   case 5:
-    v = gc_virtual;;
+    v = gc_virtual;
     break;
   case 6:
     v = gc_other;

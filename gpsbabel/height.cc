@@ -81,7 +81,7 @@ static double wgs84_separation(double lat, double lon)
     fatal(MYNAME ": Invalid latitude value (%f)\n", lat);
   }
   if ((lon > 180.0) || (lon < -180.0)) {
-    fatal(MYNAME ": Invalid longitude value (%f)\n", lon);;
+    fatal(MYNAME ": Invalid longitude value (%f)\n", lon);
   }
 
   ilat=(int)floor((90.0+lat)/GEOID_GRID_DEG);

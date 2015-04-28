@@ -337,7 +337,7 @@ main()
 //  X("two 2", "two two");
 //  X("one 1 throne", " one one throne ");
 
-  X("dori", "do-ri");;
+  X("dori", "do-ri");
   X("dora", "do$ra");
   sn.badchars("or");
   X("d-i", "do-ri");

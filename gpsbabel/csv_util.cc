@@ -1115,7 +1115,7 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
     break;
   case XT_UTM: {
     char* ss;
-    int i = 0;;
+    int i = 0;
 
     utm_zone = strtod(s, &ss);
     utm_zonec = ss[i];
