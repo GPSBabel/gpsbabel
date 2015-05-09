@@ -1850,25 +1850,33 @@ gpx_write(void)
   if (gpx_wversion_num > 10) {
     writer->writeStartElement("metadata");
   }
-  gpx_write_gdata(&gpx_global->name, "name");
-  gpx_write_gdata(&gpx_global->desc, "desc");
+  if (gpx_global) {
+    gpx_write_gdata(&gpx_global->name, "name");
+    gpx_write_gdata(&gpx_global->desc, "desc");
+  }
   /* In GPX 1.1, author changed from a string to a PersonType.
    * since it's optional, we just drop it instead of rewriting it.
    */
   if (gpx_wversion_num < 11) {
-    gpx_write_gdata(&gpx_global->author, "author");
+    if (gpx_global) {
+      gpx_write_gdata(&gpx_global->author, "author");
+    }
   }
   /* In GPX 1.1 email, url, urlname aren't allowed. */
   if (gpx_wversion_num < 11) {
-    gpx_write_gdata(&gpx_global->email, "email");
-    gpx_write_gdata(&gpx_global->url, "url");
-    gpx_write_gdata(&gpx_global->urlname, "urlname");
+    if (gpx_global) {
+      gpx_write_gdata(&gpx_global->email, "email");
+      gpx_write_gdata(&gpx_global->url, "url");
+      gpx_write_gdata(&gpx_global->urlname, "urlname");
+    }
   }
 
   gpsbabel::DateTime now = current_time();
   writer->writeTextElement("time", now.toPrettyString());
 
-  gpx_write_gdata(&gpx_global->keywords, "keywords");
+  if (gpx_global) {
+    gpx_write_gdata(&gpx_global->keywords, "keywords");
+  }
 
   gpx_write_bounds();
 
