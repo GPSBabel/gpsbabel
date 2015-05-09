@@ -676,12 +676,12 @@ unicsv_parse_one_line(char* ibuf)
     switch (unicsv_fields_tab[column]) {
 
     case fld_latitude:
-      human_to_dec(CSTR(s), &wpt->latitude, &wpt->longitude, 1);
+      human_to_dec(CSTR(s), &wpt->latitude, NULL, 1);
       wpt->latitude = wpt->latitude * ns;
       break;
 
     case fld_longitude:
-      human_to_dec(CSTR(s), &wpt->latitude, &wpt->longitude, 2);
+      human_to_dec(CSTR(s), NULL, &wpt->longitude, 2);
       wpt->longitude = wpt->longitude * ew;
       break;
 

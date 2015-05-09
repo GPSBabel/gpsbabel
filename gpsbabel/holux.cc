@@ -240,8 +240,12 @@ static void holux_disp(const Waypoint* wpt)
   }
 
 
-  le_write32(&pWptHxTmp->pt.iLatitude,(unsigned int) lat);
-  le_write32(&pWptHxTmp->pt.iLongitude,(unsigned int) lon);
+  // Note that conversions from double values to unsigned int
+  // yield undefined results for negative values.
+  // We intentionally convert to int, then do an implicit
+  // conversion to unsigned in the call.
+  le_write32(&pWptHxTmp->pt.iLatitude,(signed int) lat);
+  le_write32(&pWptHxTmp->pt.iLongitude,(signed int) lon);
   pWptHxTmp->checked = 01;
   pWptHxTmp->vocidx = (short)0xffff;
   le_write16(&((WPTHDR*)HxWFile)->num, ++sIndex);

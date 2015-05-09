@@ -127,6 +127,7 @@ my_read(void)
     int32_t lat;
     int32_t lon;
   } *latlon;
+  struct ll mylatlon;
   uint16_t coordcount;
   route_head* track_head = NULL;
   route_head* old_track_head = NULL;
@@ -363,11 +364,13 @@ my_read(void)
 
         wpt_tmp = new Waypoint;
 
+        // copy to make sure we don't violate alignment restrictions.
+        memcpy(&mylatlon,latlon,sizeof(mylatlon));
         lat = (0x80000000UL -
-               le_read32(&latlon->lat)) /
+               le_read32(&mylatlon.lat)) /
               (double)(0x800000);
         lon = (0x80000000UL -
-               le_read32(&latlon->lon)) /
+               le_read32(&mylatlon.lon)) /
               (double)(0x800000);
 
         wpt_tmp->latitude = lat;
