@@ -75,6 +75,7 @@ static bounds all_bounds;
 static int next_trkpt_is_new_seg;
 
 static format_specific_data** fs_ptr;
+static void gpx_write_bounds();
 
 
 #define MYNAME "GPX"
@@ -1236,6 +1237,97 @@ gpx_wr_init(const char* fname)
   writer = new gpsbabel::XmlStreamWriter(oqfile);
   writer->setAutoFormattingIndent(2);
   writer->writeStartDocument();
+
+   /* if an output version is not specified and an input version is
+   * available use it, otherwise use the default.
+   */
+
+  if (!gpx_wversion) {
+    if (gpx_version.isEmpty()) {
+      gpx_wversion = (char*)"1.0";
+    } else {
+      // FIXME: this is gross.  The surrounding code is badly tortured by
+      // there being three concepts of "output version", each with a different
+      // data type (QString, int, char*).  This section needs a rethink. For
+      // now, we stuff over the QString gpx_version into the global char *
+      // gpx_wversion without making a malloc'ed copy.
+      static char tmp[16];
+      strncpy(tmp, CSTR(gpx_version), sizeof(tmp));
+      gpx_wversion = tmp;
+    }
+  }
+
+  if (opt_humminbirdext || opt_garminext) {
+    gpx_wversion = (char*)"1.1";
+  }
+
+  gpx_wversion_num = strtod(gpx_wversion, NULL) * 10;
+
+  if (gpx_wversion_num <= 0) {
+    Fatal() << MYNAME << ": gpx version number of "
+            << gpx_wversion << "not valid.";
+  }
+
+  // FIXME: This write of a blank line is needed for Qt 4.6 (as on Centos 6.3)
+  // to include just enough whitespace between <xml/> and <gpx...> to pass
+  // diff -w.  It's here for now to shim compatibility with our zillion
+  // reference files, but this blank link can go away some day.
+  writer->writeCharacters("\n");
+
+  writer->setAutoFormatting(true);
+  writer->writeStartElement("gpx");
+  writer->writeAttribute("version", gpx_wversion);
+  writer->writeAttribute("creator", CREATOR_NAME_URL);
+  writer->writeAttribute("xmlns", QString("http://www.topografix.com/GPX/%1/%2").arg(gpx_wversion[0]).arg(gpx_wversion[2]));
+  if (opt_humminbirdext || opt_garminext) {
+    if (opt_humminbirdext) {
+      writer->writeAttribute("xmlns:h","http://humminbird.com");
+    }
+    if (opt_garminext) {
+      writer->writeAttribute("xmlns:gpxx", "http://www.garmin.com/xmlschemas/GpxExtensions/v3");
+      writer->writeAttribute("xmlns:gpxtpx", "http://www.garmin.com/xmlschemas/TrackPointExtension/v1");
+    }
+  } else {
+    writer->writeAttributes(gpx_namespace_attribute);
+  }
+
+  if (gpx_wversion_num > 10) {
+    writer->writeStartElement("metadata");
+  }
+  if (gpx_global) {
+    gpx_write_gdata(&gpx_global->name, "name");
+    gpx_write_gdata(&gpx_global->desc, "desc");
+  }
+  /* In GPX 1.1, author changed from a string to a PersonType.
+   * since it's optional, we just drop it instead of rewriting it.
+   */
+  if (gpx_wversion_num < 11) {
+    if (gpx_global) {
+      gpx_write_gdata(&gpx_global->author, "author");
+    }
+  }
+  /* In GPX 1.1 email, url, urlname aren't allowed. */
+  if (gpx_wversion_num < 11) {
+    if (gpx_global) {
+      gpx_write_gdata(&gpx_global->email, "email");
+      gpx_write_gdata(&gpx_global->url, "url");
+      gpx_write_gdata(&gpx_global->urlname, "urlname");
+    }
+  }
+
+  gpsbabel::DateTime now = current_time();
+  writer->writeTextElement("time", now.toPrettyString());
+
+  if (gpx_global) {
+    gpx_write_gdata(&gpx_global->keywords, "keywords");
+  }
+
+  gpx_write_bounds();
+
+  if (gpx_wversion_num > 10) {
+    writer->writeEndElement();
+  }
+
 }
 
 static void
@@ -1794,96 +1886,7 @@ gpx_write_bounds(void)
 static void
 gpx_write(void)
 {
-  /* if an output version is not specified and an input version is
-   * available use it, otherwise use the default.
-   */
-
-  if (!gpx_wversion) {
-    if (gpx_version.isEmpty()) {
-      gpx_wversion = (char*)"1.0";
-    } else {
-      // FIXME: this is gross.  The surrounding code is badly tortured by
-      // there being three concepts of "output version", each with a different
-      // data type (QString, int, char*).  This section needs a rethink. For
-      // now, we stuff over the QString gpx_version into the global char *
-      // gpx_wversion without making a malloc'ed copy.
-      static char tmp[16];
-      strncpy(tmp, CSTR(gpx_version), sizeof(tmp));
-      gpx_wversion = tmp;
-    }
-  }
-
-  if (opt_humminbirdext || opt_garminext) {
-    gpx_wversion = (char*)"1.1";
-  }
-
-  gpx_wversion_num = strtod(gpx_wversion, NULL) * 10;
-
-  if (gpx_wversion_num <= 0) {
-    Fatal() << MYNAME << ": gpx version number of "
-            << gpx_wversion << "not valid.";
-  }
-
-  // FIXME: This write of a blank line is needed for Qt 4.6 (as on Centos 6.3)
-  // to include just enough whitespace between <xml/> and <gpx...> to pass
-  // diff -w.  It's here for now to shim compatibility with our zillion
-  // reference files, but this blank link can go away some day.
-  writer->writeCharacters("\n");
-
-  writer->setAutoFormatting(true);
-  writer->writeStartElement("gpx");
-  writer->writeAttribute("version", gpx_wversion);
-  writer->writeAttribute("creator", CREATOR_NAME_URL);
-  writer->writeAttribute("xmlns", QString("http://www.topografix.com/GPX/%1/%2").arg(gpx_wversion[0]).arg(gpx_wversion[2]));
-  if (opt_humminbirdext || opt_garminext) {
-    if (opt_humminbirdext) {
-      writer->writeAttribute("xmlns:h","http://humminbird.com");
-    }
-    if (opt_garminext) {
-      writer->writeAttribute("xmlns:gpxx", "http://www.garmin.com/xmlschemas/GpxExtensions/v3");
-      writer->writeAttribute("xmlns:gpxtpx", "http://www.garmin.com/xmlschemas/TrackPointExtension/v1");
-    }
-  } else {
-    writer->writeAttributes(gpx_namespace_attribute);
-  }
-
-  if (gpx_wversion_num > 10) {
-    writer->writeStartElement("metadata");
-  }
-  if (gpx_global) {
-    gpx_write_gdata(&gpx_global->name, "name");
-    gpx_write_gdata(&gpx_global->desc, "desc");
-  }
-  /* In GPX 1.1, author changed from a string to a PersonType.
-   * since it's optional, we just drop it instead of rewriting it.
-   */
-  if (gpx_wversion_num < 11) {
-    if (gpx_global) {
-      gpx_write_gdata(&gpx_global->author, "author");
-    }
-  }
-  /* In GPX 1.1 email, url, urlname aren't allowed. */
-  if (gpx_wversion_num < 11) {
-    if (gpx_global) {
-      gpx_write_gdata(&gpx_global->email, "email");
-      gpx_write_gdata(&gpx_global->url, "url");
-      gpx_write_gdata(&gpx_global->urlname, "urlname");
-    }
-  }
-
-  gpsbabel::DateTime now = current_time();
-  writer->writeTextElement("time", now.toPrettyString());
-
-  if (gpx_global) {
-    gpx_write_gdata(&gpx_global->keywords, "keywords");
-  }
-
-  gpx_write_bounds();
-
-  if (gpx_wversion_num > 10) {
-    writer->writeEndElement();
-  }
-
+ 
   gpx_reset_short_handle();
   waypt_disp_all(gpx_waypt_pr);
   gpx_reset_short_handle();
