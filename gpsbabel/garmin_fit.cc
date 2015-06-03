@@ -265,7 +265,9 @@ fit_read_field(fit_field_t* f)
       for (i = 0; i < f->size; i++) {
         fit_getuint8();
       }
-      debug_print(8, "%s: fit_read_field: skipping 1-byte array data\n", MYNAME);
+      if (global_opts.debug_level >= 8) {
+        debug_print(8, "%s: fit_read_field: skipping 1-byte array data\n", MYNAME);
+      }
       return -1;
     }
   case 0x83: // sint16
@@ -276,7 +278,9 @@ fit_read_field(fit_field_t* f)
       for (i = 0; i < f->size; i++) {
         fit_getuint8();
       }
-      debug_print(8, "%s: fit_read_field: skipping 2-byte array data\n", MYNAME);
+      if (global_opts.debug_level >= 8) {
+        debug_print(8, "%s: fit_read_field: skipping 2-byte array data\n", MYNAME);
+      }
       return -1;
     }
   case 0x85: // sint32
@@ -287,14 +291,18 @@ fit_read_field(fit_field_t* f)
       for (i = 0; i < f->size; i++) {
         fit_getuint8();
       }
-      debug_print(8, "%s: fit_read_field: skipping 4-byte array data\n", MYNAME);
+      if (global_opts.debug_level >= 8) {
+        debug_print(8, "%s: fit_read_field: skipping 4-byte array data\n", MYNAME);
+      }
       return -1;
     }
   default: // Ignore everything else for now.
     for (i = 0; i < f->size; i++) {
       fit_getuint8();
     }
-    debug_print(8, "%s: fit_read_field: skipping unrecognized data type\n", MYNAME);
+    if (global_opts.debug_level >= 8) {
+      debug_print(8, "%s: fit_read_field: skipping unrecognized data type\n", MYNAME);
+    }
     return -1;
   }
 }
