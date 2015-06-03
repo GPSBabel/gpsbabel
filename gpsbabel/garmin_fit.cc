@@ -241,6 +241,15 @@ fit_parse_definition_message(uint8_t header)
 static uint32_t
 fit_read_field(fit_field_t* f)
 {
+  /* https://forums.garmin.com/showthread.php?223645-Vivoactive-problems-plus-suggestions-for-future-firmwares&p=610929#post610929
+   * Per section 4.2.1.4.2 of the FIT Protocol the size of a field may be a
+   * multiple of the size of the underlying type, indicating the field
+   * contains multiple elements represented as an array.
+   *
+   * Garmin Product Support
+   */
+  // In the case that the field contains one value of the indicated type we return that value,
+  // otherwise we just skip over the data.
   int i;
 
   if (global_opts.debug_level >= 8) {
@@ -250,33 +259,42 @@ fit_read_field(fit_field_t* f)
   switch (f->type) {
   case 1: // sint8
   case 2: // uint8
-  if (f->size == 4) {
-    return fit_getuint32();
-  } else if (f->size == 2) {
-    return fit_getuint16();
-  } else if (f->size == 1) {
-    return fit_getuint8();
-  } else {
-    fatal(MYNAME ": Bad field size %d in 1-byte data message\n", f->size);
-  }
+    if (f->size == 1) {
+      return fit_getuint8();
+    } else { // ignore array data
+      for (i = 0; i < f->size; i++) {
+        fit_getuint8();
+      }
+      debug_print(8, "%s: fit_read_field: skipping 1-byte array data\n", MYNAME);
+      return -1;
+    }
   case 0x83: // sint16
   case 0x84: // uint16
-  if (f->size == 4) {
-    return fit_getuint32();
-  } else if (f->size == 2) {
-    return fit_getuint16();
-  } else {
-    fatal(MYNAME ": Bad field size %d in 2-byte data message\n", f->size);
-  }
+    if (f->size == 2) {
+      return fit_getuint16();
+    } else { // ignore array data
+      for (i = 0; i < f->size; i++) {
+        fit_getuint8();
+      }
+      debug_print(8, "%s: fit_read_field: skipping 2-byte array data\n", MYNAME);
+      return -1;
+    }
   case 0x85: // sint32
   case 0x86: // uint32
-    is_fatal(f->size != 4,
-             MYNAME ": Bad field size %d in 4-byte data message\n", f->size);
-    return fit_getuint32();
+    if (f->size == 4) {
+      return fit_getuint32();
+    } else { // ignore array data
+      for (i = 0; i < f->size; i++) {
+        fit_getuint8();
+      }
+      debug_print(8, "%s: fit_read_field: skipping 4-byte array data\n", MYNAME);
+      return -1;
+    }
   default: // Ignore everything else for now.
     for (i = 0; i < f->size; i++) {
       fit_getuint8();
     }
+    debug_print(8, "%s: fit_read_field: skipping unrecognized data type\n", MYNAME);
     return -1;
   }
 }
