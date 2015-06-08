@@ -38,7 +38,7 @@ bincompare()
 		${OD} $2 >${TMPDIR}/bc2
 		${DIFF} ${TMPDIR}/bc1 ${TMPDIR}/bc2 || {
 		echo ERROR binary comparing $*
-		let errorcount=errorcount+1
+		errorcount=`expr $errorcount + 1`
 		#exit 1
 	}
 }
@@ -47,7 +47,7 @@ compare()
 {
 	${DIFF} -u -b -w $* ||  {
 		echo ERROR comparing $*
-		let errorcount=errorcount+1
+		errorcount=`expr $errorcount + 1`
 		#exit 1
 	} 
 }
@@ -64,7 +64,7 @@ gpsbabel()
 	${PNAME} $* || {
 		echo "$PNAME returned error $?"
 		echo "($PNAME $*)"
-		let errorcount=errorcount+1
+		errorcount=`expr $errorcount + 1`
 		#exit 1
 	}
 }
@@ -72,9 +72,9 @@ gpsbabel()
 utf8bomcheck()
 {
   if [ ${RUNNINGVALGRIND} -ne  0 ]; then
-    if [ "$(dd if=$1 bs=1 count=3 2>/dev/null)" == $'\xef\xbb\xbf' ]; then
+    if [ "$(dd if=$1 bs=1 count=3 2>/dev/null)" = $'\xef\xbb\xbf' ]; then
       echo "ERROR: UTF-8 BOM found in $1"
-      let errorcount=errorcount+1
+      errorcount=`expr $errorcount + 1`
     fi
   fi
 }
@@ -82,13 +82,13 @@ utf8bomcheck()
 xmlwfcheck()
 {
   if [ ${RUNNINGVALGRIND} -ne 0 ]; then
-    if which ${XMLWF} >& /dev/null; then
+    if which ${XMLWF} 2>&1 /dev/null; then
       # xmlwf is a bit lame, exit status is always 0
       rm -f ${TMPDIR}/xmlwf.out
       ${XMLWF} $1 2>&1 | tee ${TMPDIR}/xmlwf.out
       if [ -s ${TMPDIR}/xmlwf.out ]; then
         echo "ERROR: xml is not well-formed in $1"
-        let errorcount=errorcount+1
+        errorcount=`expr $errorcount + 1`
       fi
     fi
   fi
@@ -108,7 +108,7 @@ xmlwfcheck()
 # cambridge
 # cup
 
-let errorcount=0;
+errorcount=0
 
 if [ $# -ge 1 ]; then
   while [ $# -ge 1 ];
@@ -144,7 +144,7 @@ if [ ${RUNNINGVALGRIND} -ne  0 ]; then
 fi
 
 if [ ${RUNNINGVALGRIND} -ne  0 ]; then
-  if which ${XMLWF} >& /dev/null; then
+  if which ${XMLWF} 2>&1 /dev/null; then
     echo "Running well-formed XML test"
     for i in ${XMLS}
     do
