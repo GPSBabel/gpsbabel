@@ -40,6 +40,10 @@
   <entry>heart rate</entry>
 </row>
 <row>
+  <entry>%g</entry>
+  <entry>road gradient</entry>
+</row>
+<row>
   <entry>\n</entry>
   <entry>newline</entry>
 </row>
