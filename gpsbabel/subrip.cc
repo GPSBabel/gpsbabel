@@ -34,6 +34,7 @@ static int stnum;
 static gbfile* fout;
 static const Waypoint* prevwpp;
 static double vspeed;
+static double gradient;
 
 /* internal helper functions */
 
@@ -110,6 +111,9 @@ subrip_prevwp_pr(const Waypoint* waypointp)
       case 'v':
         gbfprintf(fout, "%2.2f", vspeed);
         break;
+      case 'g':
+          gbfprintf(fout, "%2.1f%%", gradient);
+          break;
       case 't':
         {
           QTime t = prevwpp->GetCreationTime().toUTC().time();
@@ -183,6 +187,7 @@ subrip_trkpt_pr(const Waypoint* waypointp)
   if (prevwpp) {
     subrip_prevwp_pr(waypointp);
     vspeed = waypt_vertical_speed(waypointp, prevwpp);
+    gradient = waypt_gradient(waypointp, prevwpp);
   }
   prevwpp = waypointp;
 }
@@ -201,6 +206,7 @@ subrip_wr_init(const char* fname)
 
   prevwpp = NULL;
   vspeed = 0;
+  gradient = 0;
 
   if ((opt_gpstime != NULL) && (opt_gpsdate != NULL)) {
     time(&gpstime_t);

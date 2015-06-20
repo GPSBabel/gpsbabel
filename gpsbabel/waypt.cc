@@ -565,6 +565,29 @@ waypt_vertical_speed(const Waypoint* A, const Waypoint* B)
 }
 
 /*
+ * Returns "Road Gradient" between A and B as a percentage of slope.
+ * If there is no distance or either A or B have unknown altitude, return 0.
+ */
+double
+waypt_gradient(const Waypoint* A, const Waypoint* B)
+{
+  double dist, altitude, gradient;
+  dist = waypt_distance(A, B);
+  if (dist == 0) {
+    return 0;
+  }
+
+  altitude = A->altitude - B->altitude;
+  if (altitude == 0 || 
+      A->altitude == unknown _alt || B->altitude == unknown_alt) {
+    return 0;
+  }
+
+  gradient = (altitude / dist) * 100;
+  return (gradient);
+}
+
+/*
  * Calculates "Course True" from A to B
  */
 double
