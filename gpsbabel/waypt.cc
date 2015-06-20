@@ -579,7 +579,7 @@ waypt_gradient(const Waypoint* A, const Waypoint* B)
 
   altitude = A->altitude - B->altitude;
   if (altitude == 0 || 
-      A->altitude == unknown _alt || B->altitude == unknown_alt) {
+      A->altitude == unknown_alt || B->altitude == unknown_alt) {
     return 0;
   }
 
