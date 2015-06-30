@@ -17,7 +17,7 @@ BADCHARS		COMMA
 #
 # HEADER STUFF:
 #
-PROLOGUE	Garmin 301 data __FILE__ 
+PROLOGUE	Garmin 301 data __FILE__
 PROLOGUE	Timestamp,Latitude, Longitude, Altitude(ft), heart rate
 #
 # INDIVIDUAL DATA FIELDS:
@@ -29,6 +29,6 @@ IFIELD	ALT_FEET, "", "%fF"
 IFIELD  HEART_RATE,""," %d"	# beats per minute
 
 
-# EPILOGUE: 
+# EPILOGUE:
 #EPILOGUE	Epilogue Line 1
 #EPILOGUE	Epilogue Line 2
