@@ -47,6 +47,6 @@ IFIELD	LON_INT32DEG, "", "%ld"
 IFIELD	TIMET_TIME, "", "%ld"
 IFIELD	EXCEL_TIME, "", "%f"
 
-# EPILOGUE: 
+# EPILOGUE:
 EPILOGUE	Epilogue Line 1
 EPILOGUE	Epilogue Line 2

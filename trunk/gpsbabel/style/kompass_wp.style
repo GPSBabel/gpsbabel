@@ -4,7 +4,7 @@
 # Author: Olaf Klein
 #   Date: 01/10/2007
 #
-# 
+#
 DESCRIPTION		Kompass (DAV) Waypoints (.wp)
 DATATYPE		WAYPOINT
 EXTENSION		wp

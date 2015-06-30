@@ -2151,6 +2151,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
       /* print the enclosing character(s) */
       gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
     }
+    buff.clear();
   }
 
   gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
