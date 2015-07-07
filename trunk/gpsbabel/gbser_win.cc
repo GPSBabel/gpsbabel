@@ -28,6 +28,7 @@
 
 #include <assert.h>
 #include <stdarg.h>
+#include <stdio.h>
 
 typedef struct {
   HANDLE          comport;
