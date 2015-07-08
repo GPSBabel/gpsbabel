@@ -674,7 +674,7 @@ gpgsa_parse(char* ibuf)
 {
   char fixauto;
   char fix;
-  int  prn[12];
+  int  prn[12] = {0};
   int  scn,cnt;
   float pdop=0,hdop=0,vdop=0;
   char*	tok=0;
@@ -685,7 +685,9 @@ gpgsa_parse(char* ibuf)
                &fixauto, &fix,
                &prn[0],&prn[1],&prn[2],&prn[3],&prn[4],&prn[5],
                &prn[6],&prn[7],&prn[8],&prn[9],&prn[10],&prn[11]);
-
+  if (scn < 4) {
+    warning(MYNAME ": Short GSA sentence.");
+  }
   /*
   	sscanf has scanned all the leftmost elements
   	we'll rescan by skipping 15 commas to the dops

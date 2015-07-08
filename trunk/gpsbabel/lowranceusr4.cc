@@ -419,6 +419,7 @@ lowranceusr4_parse_waypoints(void)
        used in usr4 match those from usr{2,3} so we need a new
        mapping. */
     icon_num = gbfgetint16(file_in);
+    (void) icon_num; // Hush warning for now.
     /* wpt_tmp->icon_descr = lowranceusr_find_desc_from_icon_number(icon_num); */
 
     /* Color ID, discard for now */
@@ -759,8 +760,11 @@ data_read(void)
 
   /* for now we won't use these for anything */
   create_date = gbfgetint32(file_in);
+  (void) create_date;
   create_time = gbfgetint32(file_in);
+  (void) create_time;
   byte = gbfgetc(file_in); /* unused, apparently */
+  (void) byte;
 
   serial_num = gbfgetint32(file_in);
   if (global_opts.debug_level >= 1) {

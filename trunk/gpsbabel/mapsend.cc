@@ -126,8 +126,10 @@ mapsend_wpt_read(void)
     wpt_tmp->description = gbfgetpstr(mapsend_file_in);
 
     wpt_number = gbfgetint32(mapsend_file_in);
+    (void) wpt_number; // hush warning.
     wpt_icon = gbfgetc(mapsend_file_in);
     wpt_status = gbfgetc(mapsend_file_in);
+    (void) wpt_status; // hush warning.
 
     wpt_tmp->altitude = gbfgetdbl(mapsend_file_in);
     wpt_tmp->longitude = gbfgetdbl(mapsend_file_in);

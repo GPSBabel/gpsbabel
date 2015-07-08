@@ -390,14 +390,9 @@ static void
 psit_route_r(gbfile* psit_file, route_head** rte)
 {
   char rtename[256];
-  unsigned int rte_num;
-
-  int		garmin_icon_num;
-
+  int garmin_icon_num;
   route_head* rte_head;
-  unsigned int rte_count;
-
-  Waypoint*	thisWaypoint;
+  Waypoint* thisWaypoint;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
 
@@ -413,10 +408,6 @@ psit_route_r(gbfile* psit_file, route_head** rte)
   rte_head->rte_name = rtename;
   route_add_head(rte_head);
   *rte = rte_head;
-
-  rte_num = 0;
-
-  rte_count = 0;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), wscomma);
 
@@ -470,17 +461,14 @@ static void
 psit_routehdr_w(gbfile* psit_file, const route_head* rte)
 {
   unsigned int rte_datapoints;
-  QString	rname;
+  QString rname;
 
-  Waypoint*	testwpt;
-  time_t		uniqueValue = 0;
-  int			allWptNameLengths;
-
+  Waypoint* testwpt;
+  time_t uniqueValue = 0;
   queue* elem, *tmp;
 
   /* total nodes (waypoints) this route */
   rte_datapoints = 0;
-  allWptNameLengths = 0;
 
   if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
 
@@ -527,11 +515,9 @@ psit_track_r(gbfile* psit_file, route_head** trk)
   unsigned int trk_num;
 
   struct tm tmTime;
-  time_t	dateTime = 0;
+  time_t dateTime = 0;
   route_head* track_head = NULL;
-  unsigned int trk_count;
-
-  Waypoint*	thisWaypoint;
+  Waypoint* thisWaypoint;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
   if (strlen(psit_current_token) == 0) {
@@ -543,9 +529,6 @@ psit_track_r(gbfile* psit_file, route_head** trk)
   rtrim(trkname);
 
   trk_num = 0;
-
-  trk_count = 0;
-
   track_head = NULL;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), wscomma);

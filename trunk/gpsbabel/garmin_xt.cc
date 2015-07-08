@@ -107,6 +107,7 @@ format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_color)
 
   trackbytes = gbfgetuint16(fin);
   TrackPoints = gbfgetuint16(fin);
+  (void) TrackPoints;
 
   switch (method) {
   case 1:
@@ -239,7 +240,7 @@ format_garmin_xt_proc_strk(void)
   uint8_t 	ii; // temp variable
   double		Lat = 0, Lon = 0; // wpt data
   double		PrevLat = 0, PrevLon = 0, PrevEle = 0; // wpt data
-  uint32_t	Time = 0, PrevTime =0; // wpt data
+  uint32_t	Time = 0; // wpt data
   int		FirstCoo;
   uint8_t	trk_color = 0xff;
 
@@ -308,7 +309,6 @@ format_garmin_xt_proc_strk(void)
         }
         PrevLat = Lat;
         PrevLon = Lon;
-        PrevTime = Time;
       }
     }
 
