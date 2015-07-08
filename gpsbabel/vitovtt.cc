@@ -111,6 +111,9 @@ vitovtt_read(void)
     /*
      * TODO: interpret speed, course, status
      */
+    (void) speed;
+    (void) course;
+    (void) status;
 
     track_add_wpt(route_head, wpt_tmp);
 

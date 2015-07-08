@@ -224,7 +224,10 @@ my_read(void)
 
         addrlen = le_read16(&record[obase]);
         cmtlen = le_read16(&record[obase+2+addrlen]);
+        (void) cmtlen;
 #if NEW_STRINGS
+        // That we've had no bugreports on this strongly indicates this code
+        // is never used... 
         wpt_tmp->shortname = "booger";
         wpt_tmp->notes = "goober";
 #else

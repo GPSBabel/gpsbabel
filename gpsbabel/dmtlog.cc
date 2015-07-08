@@ -433,6 +433,7 @@ read_CTrackFile(const int version)
   ux = gbfgetint32(fin); // Unknown 2
   ux = gbfgetint32(fin); // Unknown 3
   ux = gbfgetint32(fin); // Unknown 4
+  (void) ux; // Silence warning.
 
   track = route_head_alloc();
   track_add_head(track);

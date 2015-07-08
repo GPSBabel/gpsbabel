@@ -639,6 +639,7 @@ static void Read_AN1_Header(gbfile* f)
   unsigned short type;
 
   magic = ReadShort(f);
+  (void) magic; // hush warning.
   type = ReadShort(f);
 
   last_read_type = type;

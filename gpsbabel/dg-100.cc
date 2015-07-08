@@ -509,6 +509,8 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
   }
   payload_checksum  = be_read16(buf + frame_len - 4);
   frame_end_seq     = be_read16(buf + frame_len - 2);
+  (void) payload_end_seq;
+  (void) frame_end_seq;
 
   dg100_log("RX: Start %04x Len %04x Cmd: %s\n",
             frame_start_seq, payload_len_field, cmdinfo->text);

@@ -99,6 +99,7 @@ vitosmt_read(void)
   count		= gbfgetint32(infile);	/* n	*/
   check1		= gbfgetint32(infile);	/* 0	*/
   check2		= gbfgetint32(infile);	/* not sure */
+  (void) check2; // silence warning.
   check3		= gbfgetint32(infile);	/* n	*/
 
   if (version!=vitosmt_version) {

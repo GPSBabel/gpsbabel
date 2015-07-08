@@ -4484,10 +4484,7 @@ void GPS_D310_Get(GPS_PTrack* trk, UC* s)
 ************************************************************************/
 void GPS_D311_Get(GPS_PTrack* trk, UC* s)
 {
-  UC* p;
   short identifier;
-
-  p=s;
 
   /* Forerunner */
   identifier = GPS_Util_Get_Short(s);

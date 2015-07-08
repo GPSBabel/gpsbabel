@@ -83,10 +83,8 @@ gusb_cmd_get(garmin_usb_packet* ibuf, size_t sz)
 {
   int rv;
   unsigned char* buf = (unsigned char*) &ibuf->dbuf;
-  int orig_receive_state;
   unsigned short pkt_id;
 top:
-  orig_receive_state = receive_state;
   switch (receive_state) {
   case rs_fromintr:
     rv = gusb_llops->llop_get_intr(ibuf, sz);

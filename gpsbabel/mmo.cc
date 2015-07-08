@@ -399,6 +399,7 @@ mmo_read_CObjIcons(mmo_data_t* data)
     DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
   }
   u16 = gbfgetuint16(fin);
+  (void) u16;
   DBG((sobj, "unknown value = 0x%04X\n", u16));
   u16 = gbfgetuint16(fin);
   DBG((sobj, "unknown value = 0x%04X\n", u16));
@@ -459,6 +460,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
     DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
     u16 = gbfgetuint16(fin);
     DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+    (void) u16;
   }
 
   wpt->latitude = gbfgetdbl(fin);
@@ -542,6 +544,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
 
   ux = gbfgetuint32(fin);
   DBG((sobj, "proximity type = %d\n", ux));
+  (void) ux;
 
   data->loaded = 1;
 
@@ -582,10 +585,12 @@ mmo_read_CObjRoute(mmo_data_t* data)
     DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
     u16 = gbfgetuint16(fin);
     DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+    (void) u16;
   }
 
   ux = gbfgetc(fin);		/* line label */
   DBG((sobj, "line label = %d\n", ux));
+  (void) ux;
 
   data->left = rtept = gbfgetint16(fin);
   DBG((sobj, "route has %d point(s)\n", rtept));
@@ -657,6 +662,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
     DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
     u16 = gbfgetuint16(fin);
     DBG((sobj, "unknown value = 0x%04X (since 0x18)\n", u16));
+    (void) u16;
   }
 
   tp = gbfgetint16(fin);
@@ -681,10 +687,12 @@ mmo_read_CObjTrack(mmo_data_t* data)
       uint16_t ux;
       ux = gbfgetuint16(fin);
       DBG((sobj, "unknown value = 0x%04X (%d)\n", ux, ux));
+      (void) ux;
       if (unk > 1) {
         uint16_t ux;
         ux = gbfgetuint16(fin);
         DBG((sobj, "unknown value = 0x%04X (%d)\n", ux, ux));
+        (void) ux;
       }
     }
     track_add_wpt(trk, wpt);
@@ -710,6 +718,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
     trk->line_color.bbggrr = gbfgetuint32(fin); 	/* rgb color */
     trk->line_color.opacity = 255;
     DBG((sobj, "color = 0x%06X\n", trk->line_color.bbggrr));
+    (void) u32;
   }
 
   if (mmo_version >= 0x12) {
@@ -735,6 +744,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
       DBG((sobj, "unknown value = 0x%04X (since 0x16)\n", u16));
       u16 = gbfgetuint16(fin);
       DBG((sobj, "unknown value = 0x%04X (since 0x16)\n", u16));
+      (void) u16;
     }
   }
 
@@ -762,6 +772,8 @@ mmo_read_CObjText(mmo_data_t* data)
   lat = gbfgetdbl(fin);
   lon = gbfgetdbl(fin);
   DBG((sobj, "coordinates = %f / %f\n", lat, lon));
+  (void) lat;
+  (void) lon;
 
   text = mmo_readstr();
   DBG((sobj, "text = \"%s\"\n", text));
@@ -793,6 +805,8 @@ mmo_read_CObjCurrentPosition(mmo_data_t* data)
   lat = gbfgetdbl(fin);
   lon = gbfgetdbl(fin);
   DBG((sobj, "coordinates = %f / %f\n", lat, lon));
+  (void) lat;
+  (void) lon;
 
   mmo_fillbuf(buf, 24, 1);
   if (mmo_version >= 0x18) {
@@ -881,6 +895,7 @@ mmo_read_object(void)
       data->visible = gbfgetc(fin);
 
       obj_type = gbfgetuint32(fin);
+      (void) obj_type;
 #ifdef MMO_DBG
       uint32_t expected_type = 0xFFFFFFFF;
       if (objid == ico_object_id) {
