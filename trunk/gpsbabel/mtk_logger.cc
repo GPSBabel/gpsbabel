@@ -787,6 +787,7 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
     trk->latitude       = itm->lat;
     trk->longitude      = itm->lon;
   } else {
+    delete trk;
     return -1; // GPX requires lat/lon...
   }
 
@@ -876,6 +877,8 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
     trk->shortname = QString().sprintf("TP%06d", idx);
 
     track_add_wpt(trk_head, trk);
+  } else {
+    delete trk;
   }
   return 0;
 }
