@@ -23,3 +23,10 @@ rm -f ${TMPDIR}/mtk_logger_gp245.*
 gpsbabel -t -w -i m241-bin -f ${REFERENCE}/track/mtk_logger_gp245.bin -o gpx -F ${TMPDIR}/mtk_logger_gp245.gpx
 compare ${REFERENCE}/track/mtk_logger_gp245.gpx ${TMPDIR}/mtk_logger_gp245.gpx
 
+#
+# BT-Q1000XT GPS made by Qstarz
+# This has SNR data but no ELE or AZI data.
+#
+rm -f ${TMPDIR}/mtk_logger_bt-qt1000xt.csv
+gpsbabel -i mtk-bin,csv=${TMPDIR}/mtk_logger_bt-qt1000xt.csv -f ${REFERENCE}/track/mtk_logger_bt-qt1000xt.bin
+compare ${REFERENCE}/track/mtk_logger_bt-qt1000xt.csv ${TMPDIR}/mtk_logger_bt-qt1000xt.csv

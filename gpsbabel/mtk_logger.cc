@@ -1170,6 +1170,7 @@ int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
       break;
     case 1<<SID: {
       int sat_count, sat_idx, sid_size, l;
+      int azoffset, snroffset;
 
       sat_count = le_read16(data + i + 2);
       if (sat_count > 32) {
@@ -1178,12 +1179,17 @@ int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
 
       itm.sat_count = sat_count;
       sid_size = log_type[SID].size;
+      azoffset = 0;
+      snroffset = 0;
       if (sat_count > 0) {  // handle 'Zero satellites in view issue'
         if (bmask & (1<<ELEVATION)) {
           sid_size += log_type[ELEVATION].size;
+          azoffset += log_type[ELEVATION].size;
+          snroffset += log_type[ELEVATION].size;
         }
         if (bmask & (1<<AZIMUTH)) {
           sid_size += log_type[AZIMUTH].size;
+          snroffset += log_type[AZIMUTH].size;
         }
         if (bmask & (1<<SNR)) {
           sid_size += log_type[SNR].size;
@@ -1202,10 +1208,10 @@ int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
             itm.sat_data[sat_idx].elevation = le_read16(data + i + 4);
           }
           if (bmask & (1<<AZIMUTH)) {
-            itm.sat_data[sat_idx].azimut = le_read16(data + i + 6);
+            itm.sat_data[sat_idx].azimut = le_read16(data + i + 4 + azoffset);
           }
           if (bmask & (1<<SNR)) {
-            itm.sat_data[sat_idx].snr    = le_read16(data + i + 8);
+            itm.sat_data[sat_idx].snr    = le_read16(data + i + 4 + snroffset);
           }
         }
         sat_idx++;
