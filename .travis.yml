@@ -4,7 +4,7 @@ compiler:
   - clang
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y valgrind
+  - sudo apt-get install -y valgrind expat
 script:
  - cd gpsbabel ; ./configure && make -j3 all doc && bash ./testo  && bash ./vtesto
 # TODO: build doc, GUI, mac
