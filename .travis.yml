@@ -4,7 +4,7 @@ compiler:
   - clang
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -y valgrind expat fop xsltproc
+  - sudo apt-get install -y valgrind expat fop xsltproc libqt4-opengl-dev libqtwebkit-dev
 script:
- - cd gpsbabel ; ./configure && make -j3 all && make doc && bash ./testo  && bash ./vtesto
-# TODO: build GUI, mac, test-all
+ - cd gpsbabel ; ./configure && make -j3 all && make gui &&  make doc && bash ./testo  && bash ./vtesto
+# TODO: build mac, test-all
