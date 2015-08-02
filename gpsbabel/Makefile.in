@@ -229,7 +229,6 @@ dep:
 
 $(WEB)/htmldoc-$(DOCVERSION)/index.html: FORCE
 	mkdir -p $(WEB)/htmldoc-$(DOCVERSION)
-	mkdir -p xmldoc/autogen
 	perl xmldoc/makedoc
 	xmlwf xmldoc/readme.xml		#check for well-formedness
 	xmllint --noout --valid xmldoc/readme.xml    	#validate
