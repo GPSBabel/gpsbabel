@@ -142,7 +142,8 @@ dep doc \
 release-sourcecheck release-tarball release-rpm \
 cross-configure \
 release-winbuild release-upload mac-upload release rpm mac-release \
-gui linux-gui mac-gui mac-gui-dmg msvc-build test-release
+gui linux-gui mac-gui mac-gui-dmg msvc-build test-release \
+toolinfo
 
 all: gpsbabel$(EXEEXT)
 
@@ -425,6 +426,10 @@ cov-upload: FORCE
 	echo If that says 100%, press enter. Otherwise interrupt.
 	read junk
 	cov-upload
+
+toolinfo:
+	-$(CC) --version
+	-$(QMAKE) -v
 
 # Machine generated from here down. 
 alan.o: alan.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
