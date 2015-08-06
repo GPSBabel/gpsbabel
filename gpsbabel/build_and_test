@@ -5,9 +5,6 @@
 #
 # echo some system info to log
 uname -a
-if [ -e /etc/system-release ]; then
-	cat /etc/system-release
-fi
 if [ -e /etc/os-release ]; then
 	cat /etc/os-release
 fi
