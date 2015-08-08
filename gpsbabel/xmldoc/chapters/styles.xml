@@ -797,7 +797,7 @@ IFIELD UTM, "", "%s" # writes 6S 519045 3984035  -the easting is first by conven
 </para>
 <para>example: </para>
 <screen format="linespecific">
-IFIELD UTM_EASTING, "", "%.0ff"  # outputs 519045
+IFIELD UTM_EASTING, "", "%.0f"  # outputs 519045
 </screen>
 </section>
 
