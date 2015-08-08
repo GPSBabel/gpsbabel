@@ -1101,7 +1101,7 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
     utm_zone = atoi(s);
     break;
   case XT_UTM_ZONEC:
-    utm_zonec = atoi(s);
+    utm_zonec = s[0];
     break;
   case XT_UTM_ZONEF:
     utm_zone = atoi(s);
@@ -1128,20 +1128,36 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
   }
   break;
   /* ALTITUDE CONVERSIONS ************************************************/
-  case XT_ALT_FEET:
+  case XT_ALT_FEET: {
     /* altitude in feet as a decimal value */
-    wpt->altitude = FEET_TO_METERS(atof(s));
-    if (wpt->altitude < unknown_alt + 1) {
+    double val;
+    char *endptr;
+    val = strtod(s, &endptr);
+    if ((val == 0 && s==endptr)) {
       wpt->altitude = unknown_alt;
+    } else {
+      wpt->altitude = FEET_TO_METERS(val);
+      if (wpt->altitude < unknown_alt + 1) {
+        wpt->altitude = unknown_alt;
+      }
     }
-    break;
-  case XT_ALT_METERS:
+  }
+  break;
+  case XT_ALT_METERS: {
     /* altitude in meters as a decimal value */
-    wpt->altitude = atof(s);
-    if (wpt->altitude < unknown_alt + 1) {
+    double val;
+    char *endptr;
+    val = strtod(s, &endptr);
+    if ((val == 0 && s==endptr)) {
       wpt->altitude = unknown_alt;
+    } else {
+      wpt->altitude = val;
+      if (wpt->altitude < unknown_alt + 1) {
+        wpt->altitude = unknown_alt;
+      }
     }
-    break;
+  }
+  break;
 
     /* PATH CONVERSIONS ************************************************/
   case XT_PATH_SPEED:
