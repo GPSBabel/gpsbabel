@@ -36,6 +36,10 @@
 #  define SET_BINARY_MODE(file)
 #endif
 
+#if _MSC_VER
+#  define va_copy(dest, src) (dest = src)
+#endif // _MSC_VER
+
 #define MYNAME "gbfile"
 #define NO_ZLIB MYNAME ": No zlib support.\n"
 
