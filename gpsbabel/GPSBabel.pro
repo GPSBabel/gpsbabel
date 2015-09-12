@@ -1,4 +1,4 @@
-QT -= gui
+6QT -= gui
 
 TARGET = GPSBabel
 CONFIG += console
@@ -258,7 +258,7 @@ win32 {
   }
   SOURCES += gbser_win.cc
   JEEPS += jeeps/gpsusbwin.cc
-  LIBS += "C:/Program Files/Windows Kits/8.0/Lib/win8/um/x86/setupapi.lib" "C:/Program Files/Windows Kits/8.0/Lib/win8/um/x86/hid.lib"
+  LIBS += "setupapi.lib"
 }
 
 win32-msvc*{
