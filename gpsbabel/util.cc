@@ -43,6 +43,10 @@
 #endif
 #endif
 
+#if _MSC_VER
+#  define va_copy(dest, src) (dest = src)
+#endif // _MSC_VER
+
 #ifdef DEBUG_MEM
 #define DEBUG_FILENAME "/tmp/gpsbabel.debug"
 

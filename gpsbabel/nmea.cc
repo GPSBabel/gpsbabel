@@ -976,7 +976,7 @@ nmea_parse_one_line(char* ibuf)
      for that field.  Rather than change all the parse routines, we first
      substitute a default value of zero for any missing field.
   */
-  if (strstr(tbuf, ",,")) {
+  while(strstr(tbuf, ",,")) {
     tbuf = gstrsub(tbuf, ",,", ",0,");
   }
 
