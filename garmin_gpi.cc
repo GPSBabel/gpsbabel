@@ -883,7 +883,10 @@ static int
 wdata_compute_size(writer_data_t* data)
 {
   queue* elem, *tmp;
-  int res;
+  int res = 0;
+
+  if (QUEUE_EMPTY(&data->Q))
+    goto skip_empty_block; /* do not issue an empty block */
 
   res = 23;	/* bounds, ... of tag 0x80008 */
 
@@ -1009,6 +1012,8 @@ wdata_compute_size(writer_data_t* data)
     }
   }
 
+skip_empty_block:
+
   if (data->top_left) {
     res += wdata_compute_size(data->top_left);
   }
@@ -1024,6 +1029,9 @@ wdata_compute_size(writer_data_t* data)
 
   data->sz = res;
 
+  if (QUEUE_EMPTY(&data->Q))
+    return res;
+
   return res + 12;	/* + 12 = caller needs info about tag header size */
 }
 
@@ -1032,6 +1040,9 @@ static void
 wdata_write(const writer_data_t* data)
 {
   queue* elem, *tmp;
+
+  if (QUEUE_EMPTY(&data->Q))
+    goto skip_empty_block; /* do not issue an empty block */
 
   gbfputint32(0x80008, fout);
   gbfputint32(data->sz, fout);
@@ -1154,6 +1165,8 @@ wdata_write(const writer_data_t* data)
       write_string(dt->phone_nr, 0);
     }
   }
+
+skip_empty_block:
 
   if (data->top_left) {
     wdata_write(data->top_left);

@@ -33,6 +33,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <QtCore/QStringList>
+  
 /**********************************************************
 
    ' 1      2      3        4 5         6 7 8  9   10   11 12  13 14 15
@@ -377,31 +379,33 @@ nmea_set_waypoint_time(Waypoint* wpt, struct tm* time, double fsec)
 static void
 gpgll_parse(char* ibuf)
 {
-  double latdeg, lngdeg;
-  double fsec;
-  char lngdir, latdir;
-  double hmsd;
-  int hms;
-  char valid = 0;
-  Waypoint* waypt;
-
   if (trk_head == NULL) {
     trk_head = route_head_alloc();
     track_add_head(trk_head);
   }
 
-  sscanf(ibuf,"$%*2cGLL,%lf,%c,%lf,%c,%lf,%c,",
-         &latdeg,&latdir,
-         &lngdeg,&lngdir,
-         &hmsd,&valid);
+  QStringList fields = QString(ibuf).split(",", QString::KeepEmptyParts);
 
-  if (valid != 'A') {
+  double latdeg = 0;
+  if (fields.size() > 1) fields[1].toDouble();
+  QChar latdir = 'N';
+  if (fields.size() > 2) latdir = fields[2][0];
+  double lngdeg = 0;
+  if (fields.size() > 3) lngdeg = fields[3].toDouble();
+  QChar lngdir = 'E';
+  if (fields.size() > 4) lngdir = fields[4][0];
+  double hmsd = 0;
+  if (fields.size() > 5) hmsd = fields[5].toDouble();
+  bool valid = false;
+  if (fields.size() > 6) valid = fields[6].startsWith('A');
+
+  if (!valid) {
     return;
   }
 
-  hms = (int) hmsd;
+  int hms = (int) hmsd;
   last_read_time = hms;
-  fsec = hmsd - hms;
+  double fsec = hmsd - hms;
 
   tm.tm_sec = hms % 100;
   hms = hms / 100;
@@ -409,7 +413,7 @@ gpgll_parse(char* ibuf)
   hms = hms / 100;
   tm.tm_hour = hms % 100;
 
-  waypt = new Waypoint;
+  Waypoint* waypt = new Waypoint;
 
   nmea_set_waypoint_time(waypt, &tm, fsec);
 
@@ -430,28 +434,36 @@ gpgll_parse(char* ibuf)
 static void
 gpgga_parse(char* ibuf)
 {
-  double latdeg, lngdeg;
-  char lngdir, latdir;
-  double hms;
-  double alt;
-  int fix = fix_unknown;
-  int nsats = 0;
-  double hdop;
-  char altunits;
-  double geoidheight;
-  char geoidheightunits;
-  Waypoint* waypt;
-  double fsec;
-
   if (trk_head == NULL) {
     trk_head = route_head_alloc();
     track_add_head(trk_head);
   }
 
-  sscanf(ibuf,"$%*2cGGA,%lf,%lf,%c,%lf,%c,%d,%d,%lf,%lf,%c,%lf,%c",
-         &hms, &latdeg,&latdir,
-         &lngdeg,&lngdir,
-         &fix,&nsats,&hdop,&alt,&altunits,&geoidheight,&geoidheightunits);
+  QStringList fields = QString(ibuf).split(",", QString::KeepEmptyParts);
+  double hms = 0;
+  if (fields.size() > 1) hms = fields[1].toDouble();
+  double latdeg = 0;
+  if (fields.size() > 2) latdeg = fields[2].toDouble();
+  QChar latdir = 'N';
+  if (fields.size() > 3) latdir = fields[3][0];
+  double lngdeg = 0;
+  if (fields.size() > 4) lngdeg = fields[4].toDouble();
+  QChar lngdir = 'W';
+  if (fields.size() > 5) lngdir = fields[5][0];
+  int fix = fix_unknown;
+  if (fields.size() > 6) fix = fields[6].toInt();
+  int nsats = 0;
+  if (fields.size() > 7) nsats = fields[7].toInt();
+  double hdop = 0;
+  if (fields.size() > 8) hdop = fields[8].toDouble();
+  double alt = unknown_alt;
+  if (fields.size() > 9) alt = fields[9].toDouble();
+  QChar altunits;
+  if (fields.size() > 10) altunits = fields[10][0];
+  double geoidheight = unknown_alt;
+  if (fields.size() > 11) geoidheight = fields[11].toDouble();
+  QChar geoidheightunits = 'M';
+  if (fields.size() > 12) geoidheightunits = fields[12][0];
 
   /*
    * In serial mode, allow the fix with an invalid position through
@@ -464,7 +476,7 @@ gpgga_parse(char* ibuf)
   }
 
   last_read_time = hms;
-  fsec = hms - (int)hms;
+  double fsec = hms - (int)hms;
 
   tm.tm_sec = (long) hms % 100;
   hms = hms / 100;
@@ -472,7 +484,7 @@ gpgga_parse(char* ibuf)
   hms = hms / 100;
   tm.tm_hour = (long) hms % 100;
 
-  waypt  = new Waypoint;
+  Waypoint* waypt = new Waypoint;
 
   nmea_set_waypoint_time(waypt, &tm, fsec);
 
@@ -516,51 +528,38 @@ gpgga_parse(char* ibuf)
 static void
 gprmc_parse(char* ibuf)
 {
-  double latdeg, lngdeg;
-  char lngdir, latdir;
-  double hms;
-  char fix;
-  unsigned int dmy;
-  double speed,course;
-  Waypoint* waypt;
-  double fsec;
-  char* dmybuf;
-  int i;
-
   if (trk_head == NULL) {
     trk_head = route_head_alloc();
     track_add_head(trk_head);
   }
 
-  /*
-   * Read everything except the dmy, in case lngdeg
-   * and lngdir are missing.
-   */
-  sscanf(ibuf,"$%*2cRMC,%lf,%c,%lf,%c,%lf,%c,%lf,%lf",
-         &hms, &fix, &latdeg, &latdir,
-         &lngdeg, &lngdir,
-         &speed, &course);
+  QStringList fields = QString(ibuf).split(",", QString::KeepEmptyParts);
+  double hms = 0;
+  if (fields.size() > 1) hms = fields[1].toDouble();
+  QChar fix = 'V'; // V == "Invalid"
+  if (fields.size() > 2) fix = fields[2][0];
+  double latdeg = 0;
+  if (fields.size() > 3) latdeg = fields[3].toDouble();
+  QChar latdir = 'N';
+  if (fields.size() > 4) latdir = fields[4][0];
+  double lngdeg = 0;
+  if (fields.size() > 5) lngdeg = fields[5].toDouble();
+  QChar lngdir = 'W';
+  if (fields.size() > 6) lngdir = fields[6][0];
+  double speed = 0;
+  if (fields.size() > 7) speed = fields[7].toDouble();
+  double course = 0;
+  if (fields.size() > 8) course = fields[8].toDouble();
+  int dmy = 0;
+  if (fields.size() > 9) dmy = fields[9].toDouble();
 
   if (fix != 'A') {
     /* ignore this fix - it is invalid */
     return;
   }
 
-  /* Skip past nine commas in ibuf to reach the dmy value */
-  for (dmybuf=ibuf,i=0; i<9; i++) {
-    dmybuf= strchr(dmybuf, ',');
-    if (dmybuf==NULL) {
-      /* If we run out of commas, the sentence is invalid. */
-      return;
-    }
-    dmybuf++;
-  }
-
-  /* Now read dmy from the correct position */
-  sscanf(dmybuf,"%u", &dmy);
-
   last_read_time = hms;
-  fsec = hms - (int)hms;
+  double fsec = hms - (int)hms;
 
   tm.tm_sec = (long) hms % 100;
   hms = hms / 100;
@@ -595,10 +594,9 @@ gprmc_parse(char* ibuf)
     return;
   }
 
-  waypt  = new Waypoint;
+  Waypoint* waypt = new Waypoint;
 
   WAYPT_SET(waypt, speed, KNOTS_TO_MPS(speed));
-
   WAYPT_SET(waypt, course, course);
 
   nmea_set_waypoint_time(waypt, &tm, fsec);
@@ -626,7 +624,6 @@ gprmc_parse(char* ibuf)
 static void
 gpwpl_parse(char* ibuf)
 {
-  Waypoint* waypt;
   double latdeg, lngdeg;
   char latdir, lngdir;
   char sname[99];
@@ -636,7 +633,7 @@ gpwpl_parse(char* ibuf)
          &lngdeg,&lngdir,
          sname);
 
-  waypt  = new Waypoint;
+  Waypoint* waypt = new Waypoint;
 
   if (latdir == 'S') {
     latdeg = -latdeg;
@@ -667,6 +664,8 @@ gpzda_parse(char* ibuf)
   tm.tm_mday = dd;
   tm.tm_mon  = mm - 1;
   tm.tm_year = yy - 1900;
+  // FIXME: why do we do all this and then do nothing with the result?
+  // This can't have worked.
 }
 
 static void
@@ -731,27 +730,21 @@ gpgsa_parse(char* ibuf)
 static void
 gpvtg_parse(char* ibuf)
 {
-  float 	course;
-  char	ct;
-  float	magcourse;
-  char	cm;
-  double	speed_n;
-  char	cn;
-  double	speed_k;
-  char	ck;
-
-  sscanf(ibuf,"$%*2cVTG,%f,%c,%f,%c,%lf,%c,%lf,%c",
-         &course,&ct,&magcourse,&cm,&speed_n,&cn,&speed_k,&ck);
+  QStringList fields = QString(ibuf).split(",", QString::KeepEmptyParts);
+  double course = 0;
+  if (fields.size() > 1) course = fields[1].toDouble();
+  double speed_n = 0;
+  if (fields.size() > 5) speed_n = fields[5].toDouble();
+  double speed_k = 0;
+  if (fields.size() > 7) speed_k = fields[7].toDouble();
 
   if (curr_waypt) {
     WAYPT_SET(curr_waypt, course, course);
-
-    if (speed_k>0)
+    if (speed_k > 0) {
       WAYPT_SET(curr_waypt, speed, KPH_TO_MPS(speed_k))
-      else {
-        WAYPT_SET(curr_waypt, speed, KNOTS_TO_MPS(speed_n));
-      }
-
+    } else {
+      WAYPT_SET(curr_waypt, speed, KNOTS_TO_MPS(speed_n));
+    }
   }
 
 }
@@ -763,11 +756,8 @@ gpvtg_parse(char* ibuf)
 static
 double pcmpt_deg(int d)
 {
-  int deg;
-  double minutes;
-
-  deg = d  / 100000;
-  minutes = (((d / 100000.0) - deg) * 100) / 60.0;
+  int deg = d  / 100000;
+  double minutes = (((d / 100000.0) - deg) * 100) / 60.0;
   return (double) deg + minutes;
 }
 

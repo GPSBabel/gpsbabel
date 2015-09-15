@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="-69.883348956" minlon="-172.920053269" maxlat="65.469335178" maxlon="158.537464649"/>
+  <wpt lat="25.400181298" lon="80.144525617">
+    <time>2008-08-23T18:14:04Z</time>
+    <name>&quot;Wpt_12E7vrv&quot;</name>
+    <cmt>&quot;Wpt_12E7vrv&quot;</cmt>
+    <desc>&quot;Wpt_12E7vrv&quot;</desc>
+  </wpt>
+  <wpt lat="19.833722147" lon="-9.999591821">
+    <ele>57.000000</ele>
+    <time>2008-08-23T18:13:50Z</time>
+    <name>&quot;Wpt_1NAeS&quot;</name>
+    <cmt>&quot;Wpt_1NAeS&quot;</cmt>
+    <desc>&quot;Wpt_1NAeS&quot;</desc>
+  </wpt>
+  <wpt lat="-64.157551032" lon="-123.394005805">
+    <time>2008-08-23T18:16:06Z</time>
+    <name>&quot;Wpt_2BYa1&quot;</name>
+    <cmt>&quot;Wpt_2BYa1&quot;</cmt>
+    <desc>&quot;Wpt_2BYa1&quot;</desc>
+  </wpt>
+  <wpt lat="-50.326325852" lon="-53.445037114">
+    <ele>83.000000</ele>
+    <time>2008-08-23T18:15:34Z</time>
+    <name>&quot;Wpt_32sd&quot;</name>
+    <cmt>&quot;Wpt_32sd&quot;</cmt>
+    <desc>&quot;Wpt_32sd&quot;</desc>
+  </wpt>
+  <wpt lat="54.656949880" lon="26.271428796">
+    <ele>36.000000</ele>
+    <time>2008-08-23T18:15:26Z</time>
+    <name>&quot;Wpt_39vH4Z&quot;</name>
+    <cmt>&quot;Wpt_39vH4Z&quot;</cmt>
+    <desc>&quot;Wpt_39vH4Z&quot;</desc>
+  </wpt>
+  <wpt lat="1.214748037" lon="-77.640620374">
+    <time>2008-08-23T18:15:50Z</time>
+    <name>&quot;Wpt_5tD1wEB&quot;</name>
+    <cmt>&quot;Wpt_5tD1wEB&quot;</cmt>
+    <desc>&quot;Wpt_5tD1wEB&quot;</desc>
+  </wpt>
+  <wpt lat="49.513892606" lon="-41.033316096">
+    <time>2008-08-23T18:16:11Z</time>
+    <name>&quot;Wpt_5Zhkd&quot;</name>
+    <cmt>&quot;Wpt_5Zhkd&quot;</cmt>
+    <desc>&quot;Wpt_5Zhkd&quot;</desc>
+  </wpt>
+  <wpt lat="-1.061273741" lon="-1.600494198">
+    <ele>23.000000</ele>
+    <time>2008-08-23T18:13:55Z</time>
+    <name>&quot;Wpt_6irYN&quot;</name>
+    <cmt>&quot;Wpt_6irYN&quot;</cmt>
+    <desc>&quot;Wpt_6irYN&quot;</desc>
+  </wpt>
+  <wpt lat="27.333272563" lon="53.177856239">
+    <ele>83.000000</ele>
+    <time>2008-08-23T18:14:53Z</time>
+    <name>&quot;Wpt_A1ss&quot;</name>
+    <cmt>&quot;Wpt_A1ss&quot;</cmt>
+    <desc>&quot;Wpt_A1ss&quot;</desc>
+  </wpt>
+  <wpt lat="-7.474622110" lon="23.530583997">
+    <time>2008-08-23T18:14:13Z</time>
+    <name>&quot;Wpt_APJU5&quot;</name>
+    <cmt>&quot;Wpt_APJU5&quot;</cmt>
+    <desc>&quot;Wpt_APJU5&quot;</desc>
+  </wpt>
+  <wpt lat="9.693757157" lon="-68.238456918">
+    <time>2008-08-23T18:14:45Z</time>
+    <name>&quot;Wpt_ASbe&quot;</name>
+    <cmt>&quot;Wpt_ASbe&quot;</cmt>
+    <desc>&quot;Wpt_ASbe&quot;</desc>
+  </wpt>
+  <wpt lat="50.324712675" lon="45.985367566">
+    <ele>67.000000</ele>
+    <time>2008-08-23T18:14:59Z</time>
+    <name>&quot;Wpt_eT3d&quot;</name>
+    <cmt>&quot;Wpt_eT3d&quot;</cmt>
+    <desc>&quot;Wpt_eT3d&quot;</desc>
+  </wpt>
+  <wpt lat="54.977727916" lon="-168.238415725">
+    <ele>37.000000</ele>
+    <time>2008-08-23T18:16:19Z</time>
+    <name>&quot;Wpt_HbL58&quot;</name>
+    <cmt>&quot;Wpt_HbL58&quot;</cmt>
+    <desc>&quot;Wpt_HbL58&quot;</desc>
+  </wpt>
+  <wpt lat="14.924401003" lon="-89.101059642">
+    <ele>15.000000</ele>
+    <time>2008-08-23T18:13:26Z</time>
+    <name>&quot;Wpt_Hupm&quot;</name>
+    <cmt>&quot;Wpt_Hupm&quot;</cmt>
+    <desc>&quot;Wpt_Hupm&quot;</desc>
+  </wpt>
+  <wpt lat="-63.627623890" lon="-157.423027639">
+    <ele>55.000000</ele>
+    <time>2008-08-23T18:14:27Z</time>
+    <name>&quot;Wpt_i61vHHf&quot;</name>
+    <cmt>&quot;Wpt_i61vHHf&quot;</cmt>
+    <desc>&quot;Wpt_i61vHHf&quot;</desc>
+  </wpt>
+  <wpt lat="27.181559990" lon="-12.569988431">
+    <ele>42.000000</ele>
+    <time>2008-08-23T18:13:46Z</time>
+    <name>&quot;Wpt_IKcJ&quot;</name>
+    <cmt>&quot;Wpt_IKcJ&quot;</cmt>
+    <desc>&quot;Wpt_IKcJ&quot;</desc>
+  </wpt>
+  <wpt lat="65.469335178" lon="-67.062060936">
+    <ele>23.000000</ele>
+    <time>2008-08-23T18:13:39Z</time>
+    <name>&quot;Wpt_j0344&quot;</name>
+    <cmt>&quot;Wpt_j0344&quot;</cmt>
+    <desc>&quot;Wpt_j0344&quot;</desc>
+  </wpt>
+  <wpt lat="4.767008117" lon="-164.267265881">
+    <ele>92.000000</ele>
+    <time>2008-08-23T18:13:30Z</time>
+    <name>&quot;Wpt_MedoTEJ&quot;</name>
+    <cmt>&quot;Wpt_MedoTEJ&quot;</cmt>
+    <desc>&quot;Wpt_MedoTEJ&quot;</desc>
+  </wpt>
+  <wpt lat="-48.270035243" lon="-130.031050004">
+    <ele>47.000000</ele>
+    <time>2008-08-23T18:16:05Z</time>
+    <name>&quot;Wpt_Q6qCFNf3&quot;</name>
+    <cmt>&quot;Wpt_Q6qCFNf3&quot;</cmt>
+    <desc>&quot;Wpt_Q6qCFNf3&quot;</desc>
+  </wpt>
+  <wpt lat="-69.883348956" lon="-166.001379639">
+    <ele>2.000000</ele>
+    <time>2008-08-23T18:14:38Z</time>
+    <name>&quot;Wpt_Qkfl&quot;</name>
+    <cmt>&quot;Wpt_Qkfl&quot;</cmt>
+    <desc>&quot;Wpt_Qkfl&quot;</desc>
+  </wpt>
+  <wpt lat="-25.741283291" lon="-172.920053269">
+    <ele>6.000000</ele>
+    <time>2008-08-23T18:15:58Z</time>
+    <name>&quot;Wpt_qzkKBpz&quot;</name>
+    <cmt>&quot;Wpt_qzkKBpz&quot;</cmt>
+    <desc>&quot;Wpt_qzkKBpz&quot;</desc>
+  </wpt>
+  <wpt lat="-20.769476381" lon="10.476844951">
+    <ele>51.000000</ele>
+    <time>2008-08-23T18:15:18Z</time>
+    <name>&quot;Wpt_r81J0Qr&quot;</name>
+    <cmt>&quot;Wpt_r81J0Qr&quot;</cmt>
+    <desc>&quot;Wpt_r81J0Qr&quot;</desc>
+  </wpt>
+  <wpt lat="-21.500701082" lon="-11.232986608">
+    <ele>13.000000</ele>
+    <time>2008-08-23T18:15:08Z</time>
+    <name>&quot;Wpt_tzplq3SA&quot;</name>
+    <cmt>&quot;Wpt_tzplq3SA&quot;</cmt>
+    <desc>&quot;Wpt_tzplq3SA&quot;</desc>
+  </wpt>
+  <wpt lat="33.278612131" lon="158.537464649">
+    <ele>10.000000</ele>
+    <time>2008-08-23T18:14:24Z</time>
+    <name>&quot;Wpt_vhagfqH&quot;</name>
+    <cmt>&quot;Wpt_vhagfqH&quot;</cmt>
+    <desc>&quot;Wpt_vhagfqH&quot;</desc>
+  </wpt>
+  <wpt lat="57.043775060" lon="58.496628212">
+    <ele>51.000000</ele>
+    <time>2008-08-23T18:15:42Z</time>
+    <name>&quot;Wpt_ZHNuvzhQ&quot;</name>
+    <cmt>&quot;Wpt_ZHNuvzhQ&quot;</cmt>
+    <desc>&quot;Wpt_ZHNuvzhQ&quot;</desc>
+  </wpt>
+</gpx>

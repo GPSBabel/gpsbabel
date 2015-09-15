@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #
-# makedoc.in is used to generate makedoc.   Editing makedoc is a bad ide.
+# makedoc.in is used to generate makedoc.   Editing makedoc is a bad idea.
 #
 
 @options;
@@ -93,7 +93,7 @@ sub includef {
 $dir = $0;
 $dir =~ s:/.*$::;
 
-
+@agdir=`mkdir -p $dir/autogen`;
 open PARTS, ">$dir/autogen/_parts.xml";
 print PARTS qq(<!-- This document is automatically generated. -->\n);
 print PARTS qq(<!ENTITY formats SYSTEM "_formats.xml">\n);

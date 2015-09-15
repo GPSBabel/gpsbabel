@@ -78,17 +78,18 @@ static int
 lowranceusr4_readstr(char* buf, const int maxlen, gbfile* file, int bytes_per_char)
 {
   int org, len;
+  int bytesread = 0;
 
-  org = len = gbfgetint32(file);
+  org = len = gbfgetint32(file); /* bytes */
   if (len < 0) {
     buf[0] = '\0'; /* seems len=-1 means no string */
     return 0;
   } else if (len) {
-    if (len/bytes_per_char > maxlen) {
+    if (len > maxlen*bytes_per_char) {
       len = maxlen*bytes_per_char;
     }
     if (bytes_per_char == 1) {
-      (void) gbfread(buf, 1, len, file);
+      bytesread += gbfread(buf, 1, len, file);
     } else {
       /* simple adjustment to read strings where characters are 16
          bits (or more).  for now let's just project the characters
@@ -97,15 +98,15 @@ lowranceusr4_readstr(char* buf, const int maxlen, gbfile* file, int bytes_per_ch
       int i, j;
       char discard;
       for (i = 0; i < len/bytes_per_char; ++i) {
-        gbfread(&buf[i], 1, 1, file);
+        bytesread += gbfread(&buf[i], 1, 1, file);
         for (j = 1; j < bytes_per_char; ++j) {
-          gbfread(&discard, 1, 1, file);
+          bytesread +=gbfread(&discard, 1, 1, file);
         }
       }
       buf[len/bytes_per_char] = '\0';
     }
-    if (org > maxlen) {
-      (void) gbfseek(file, bytes_per_char * (org - maxlen), SEEK_CUR);
+    if (org > bytesread) {
+      (void) gbfseek(file, (org - bytesread), SEEK_CUR);
     }
   }
 
