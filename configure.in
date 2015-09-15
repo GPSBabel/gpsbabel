@@ -325,13 +325,13 @@ case "$target" in
 		}])],
 		[AC_MSG_RESULT(no)],
 		[OCXXFLAGS="$CXXFLAGS"
-		CXXFLAGS="$CXXFLAGS -fPIE"
+		CXXFLAGS="$CXXFLAGS -fPIC"
 		AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 			#include <QtCore/QString>
 			void f(void) {
 			}])],
 			[AC_MSG_RESULT(yes)
-			CFLAGS="$CFLAGS -fPIE"],
+			CFLAGS="$CFLAGS -fPIC"],
 			[AC_MSG_RESULT(unknown)
 			CXXFLAGS="$OCXXFLAGS"]
 			)]

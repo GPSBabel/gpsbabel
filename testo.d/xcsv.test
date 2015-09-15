@@ -1,0 +1,34 @@
+
+# XCSV
+# Test that we can parse a style file, and read and write data in the 
+# same xcsv format (a complete test is virtually impossible).
+echo "RECORD_DELIMITER NEWLINE" > ${TMPDIR}/testo.style
+echo "FIELD_DELIMITER COMMA" >> ${TMPDIR}/testo.style
+echo "BADCHARS COMMA" >> ${TMPDIR}/testo.style
+echo "PROLOGUE Header" >> ${TMPDIR}/testo.style
+echo "EPILOGUE Footer" >> ${TMPDIR}/testo.style
+echo "IFIELD SHORTNAME,,%s" >> ${TMPDIR}/testo.style
+echo "IFIELD LAT_DIRDECIMAL,,%c%lf" >> ${TMPDIR}/testo.style
+echo "IFIELD LON_DECIMALDIR,,%lf%c" >> ${TMPDIR}/testo.style
+rm -f ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
+gpsbabel -i geo -f ${REFERENCE}/../geocaching.loc -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.geo
+gpsbabel -i xcsv,style=${TMPDIR}/testo.style -f ${TMPDIR}/xcsv.geo -o xcsv,style=${TMPDIR}/testo.style -F ${TMPDIR}/xcsv.xcsv
+compare ${TMPDIR}/xcsv.geo ${TMPDIR}/xcsv.xcsv
+
+echo "FIELD_DELIMITER COMMA" > ${TMPDIR}/testo2.style
+echo "RECORD_DELIMITER NEWLINE" >> ${TMPDIR}/testo2.style
+echo "BADCHARS COMMA" >> ${TMPDIR}/testo2.style
+echo "PROLOGUE No,UTM-Zone,UTM-Ch,UTM-East,UTM-North,Name,Altitude,Symbol,Date,Time" >> ${TMPDIR}/testo2.style
+echo "IFIELD IGNORE, , %s" >> ${TMPDIR}/testo2.style
+echo "IFIELD UTM_ZONE, , %d" >> ${TMPDIR}/testo2.style
+echo "IFIELD UTM_ZONEC, , %c" >> ${TMPDIR}/testo2.style
+echo "IFIELD UTM_EASTING, , %.0f" >> ${TMPDIR}/testo2.style
+echo "IFIELD UTM_NORTHING, , %.0f" >> ${TMPDIR}/testo2.style
+echo "IFIELD SHORTNAME, , %s" >> ${TMPDIR}/testo2.style
+echo "IFIELD ALT_METERS, -99999999.0, %.0f" >> ${TMPDIR}/testo2.style
+echo "IFIELD IGNORE, , %s"  >> ${TMPDIR}/testo2.style
+echo "IFIELD GMT_TIME, , %Y/%m/%d" >> ${TMPDIR}/testo2.style
+echo "IFIELD HMSG_TIME,  , %d:%d:%d" >> ${TMPDIR}/testo2.style
+rm -f ${TMPDIR}/grid-utm~xscv.gpx
+gpsbabel -i xcsv,style=${TMPDIR}/testo2.style -f ${REFERENCE}/grid-utm.csv -o gpx -F ${TMPDIR}/grid-utm~xscv.gpx
+compare ${TMPDIR}/grid-utm~xscv.gpx ${REFERENCE}/grid-utm~xscv.gpx

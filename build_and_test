@@ -1,0 +1,43 @@
+#!/bin/bash -ex
+#
+# this script is triggered by SCM changes and is run on the build server.
+# output is conditionally mailed to gpsbabel-code.
+#
+# echo some system info to log
+uname -a
+if [ -e /etc/system-release ]; then
+	cat /etc/system-release
+fi
+if [ -e /etc/os-release ]; then
+	cat /etc/os-release
+fi
+git log -n 1
+# the timestamps from a svn co are unpredicatble.
+# this can cause problems if targets are checked into svn.
+# some of our targets are part of the svn repository to allow a
+# minimal set of build tools to be used.
+# touch these targets to make sure they aren't considered out of date.
+touch configure
+touch xcsv_tokens.gperf
+touch internal_styles.cc
+# build and test keeping output within the pwd.
+export GBTEMP=$(pwd)/gbtemp
+mkdir -p $GBTEMP
+./configure --with-doc=$(pwd)/gpsbabel_docdir
+make toolinfo
+make clean
+make
+make linux-gui
+make doc
+make gpsbabel.html
+make check
+#make torture
+rm -f vg.log
+./vtesto -l -j vg.log
+# eat the verbose output from test-all, including crash.output
+# this is a bit risky, if test-all generates an error we won't see what happened.
+echo "test-all in progress... (read/write test between all possible formats)"
+(LIBC_FATAL_STDERR_=1; export LIBC_FATAL_STDERR_; ./test-all -s -r reference/expertgps.gpx >/dev/null 2>&1)
+# summarize the test-all results, and generate an error if a fatal error was
+# detected by test-all.
+./test-all -J
