@@ -387,7 +387,7 @@ gpgll_parse(char* ibuf)
   QStringList fields = QString(ibuf).split(",", QString::KeepEmptyParts);
 
   double latdeg = 0;
-  if (fields.size() > 1) fields[1].toDouble();
+  if (fields.size() > 1) latdeg = fields[1].toDouble();
   QChar latdir = 'N';
   if (fields.size() > 2) latdir = fields[2][0];
   double lngdeg = 0;
