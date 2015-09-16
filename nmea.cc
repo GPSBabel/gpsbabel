@@ -624,7 +624,11 @@ gprmc_parse(char* ibuf)
 static void
 gpwpl_parse(char* ibuf)
 {
-  QStringList fields = QString(ibuf).split(",", QString::KeepEmptyParts);
+  // The last field isn't actually separated by a field separator and
+  // is a string, so we brutally whack the checksum (trailing *NN).
+  QString qibuf = QString(ibuf);
+  qibuf.truncate(qibuf.lastIndexOf('*'));
+  QStringList fields = qibuf.split(",", QString::KeepEmptyParts);
 
   double latdeg = 0;
   if (fields.size() > 1) latdeg = fields[1].toDouble();
@@ -1238,7 +1242,6 @@ nmea_wayptpr(const Waypoint* wpt)
   snprintf(obuf, sizeof(obuf),  "GPWPL,%08.3f,%c,%09.3f,%c,%s",
            fabs(lat), lat < 0 ? 'S' : 'N',
            fabs(lon), lon < 0 ? 'W' : 'E', CSTRc(s)
-
           );
   cksum = nmea_cksum(obuf);
   gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
@@ -1246,8 +1249,7 @@ nmea_wayptpr(const Waypoint* wpt)
     gbfflush(file_out);
     gb_sleep(sleepus);
   }
-}
-
+} 
 void
 nmea_track_init(const route_head*)
 {
