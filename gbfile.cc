@@ -25,6 +25,7 @@
 #include "src/core/logging.h"
 
 #include <assert.h>
+#include <stdarg.h> // for va_copy
 #include <stdio.h>
 
 #if __WIN32__
