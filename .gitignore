@@ -17,6 +17,7 @@
 /Makefile
 /makelinuxdist.sh
 /objects/
+*.swp
 /tmp/
 /Makefile
 /Makefile
