@@ -2,7 +2,7 @@
 	Read files containing selected NMEA 0183 sentences.
 	Based on information by Eino Uikkanenj
 
-	Copyright (C) 2004-2006 Robert Lipe, robertlipe+source@gpsbabel.org
+	Copyright (C) 2004-2015 Robert Lipe, robertlipe+source@gpsbabel.org
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -387,7 +387,7 @@ gpgll_parse(char* ibuf)
   QStringList fields = QString(ibuf).split(",", QString::KeepEmptyParts);
 
   double latdeg = 0;
-  if (fields.size() > 1) fields[1].toDouble();
+  if (fields.size() > 1) latdeg = fields[1].toDouble();
   QChar latdir = 'N';
   if (fields.size() > 2) latdir = fields[2][0];
   double lngdeg = 0;
@@ -624,26 +624,33 @@ gprmc_parse(char* ibuf)
 static void
 gpwpl_parse(char* ibuf)
 {
-  double latdeg, lngdeg;
-  char latdir, lngdir;
-  char sname[99];
+  // The last field isn't actually separated by a field separator and
+  // is a string, so we brutally whack the checksum (trailing *NN).
+  QString qibuf = QString(ibuf);
+  qibuf.truncate(qibuf.lastIndexOf('*'));
+  QStringList fields = qibuf.split(",", QString::KeepEmptyParts);
 
-  sscanf(ibuf,"$%*2cWPL,%lf,%c,%lf,%c,%98[^*]",
-         &latdeg,&latdir,
-         &lngdeg,&lngdir,
-         sname);
-
-  Waypoint* waypt = new Waypoint;
+  double latdeg = 0;
+  if (fields.size() > 1) latdeg = fields[1].toDouble();
+  QChar latdir = 'N';
+  if (fields.size() > 2) latdir = fields[2][0];
+  double lngdeg = 0;
+  if (fields.size() > 3) lngdeg = fields[3].toDouble();
+  QChar lngdir = 'E';
+  if (fields.size() > 4) lngdir = fields[4][0];
+  QString sname;
+  if (fields.size() > 5) sname = fields[5];
 
   if (latdir == 'S') {
     latdeg = -latdeg;
   }
-  waypt->latitude = ddmm2degrees(latdeg);
   if (lngdir == 'W') {
     lngdeg = -lngdeg;
   }
-  waypt->longitude = ddmm2degrees(lngdeg);
 
+  Waypoint* waypt = new Waypoint;
+  waypt->latitude = ddmm2degrees(latdeg);
+  waypt->longitude = ddmm2degrees(lngdeg);
   waypt->shortname = sname;
 
   curr_waypt = NULL; /* waypoints won't be updated with GPS fixes */
@@ -1235,7 +1242,6 @@ nmea_wayptpr(const Waypoint* wpt)
   snprintf(obuf, sizeof(obuf),  "GPWPL,%08.3f,%c,%09.3f,%c,%s",
            fabs(lat), lat < 0 ? 'S' : 'N',
            fabs(lon), lon < 0 ? 'W' : 'E', CSTRc(s)
-
           );
   cksum = nmea_cksum(obuf);
   gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
@@ -1243,8 +1249,7 @@ nmea_wayptpr(const Waypoint* wpt)
     gbfflush(file_out);
     gb_sleep(sleepus);
   }
-}
-
+} 
 void
 nmea_track_init(const route_head*)
 {
