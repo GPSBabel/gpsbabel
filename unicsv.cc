@@ -249,7 +249,13 @@ static route_head* unicsv_track, *unicsv_route;
 static char unicsv_outp_flags[(fld_terminator + 8) / 8];
 static grid_type unicsv_grid_idx;
 static int unicsv_datum_idx;
-static char* opt_datum, *opt_grid, *opt_utc, *opt_filename, *opt_format, *opt_prec;
+static char* opt_datum;
+static char* opt_grid;
+static char* opt_utc;
+static char* opt_filename;
+static char* opt_format;
+static char* opt_prec;
+static char* opt_fields;
 static int unicsv_waypt_ct;
 static char unicsv_detect;
 static int llprec;
@@ -278,6 +284,10 @@ static arglist_t unicsv_args[] = {
   {
     "prec", &opt_prec,   "Precision of numerical coordinates (no grid set)",
     "6", ARGTYPE_INT | ARGTYPE_HIDDEN, "0", "15"
+  },
+  {
+    "fields",  &opt_fields,  "Name and order of input fields, separated by '+'",
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX
   },
   ARG_TERMINATOR
 };
@@ -594,8 +604,10 @@ unicsv_rd_init(const char* fname)
   unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
 
   fin = gbfopen(fname, "rb", MYNAME);
-
-  if ((c = gbfgetstr(fin))) {
+  if (opt_fields) {
+    QString fields = QString(opt_fields).replace("+", ",");
+    unicsv_fondle_header(fields);
+  } else if ((c = gbfgetstr(fin))) {
     unicsv_fondle_header(c);
   } else {
     unicsv_fieldsep = NULL;

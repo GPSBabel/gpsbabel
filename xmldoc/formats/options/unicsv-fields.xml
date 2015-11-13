@@ -1,0 +1,20 @@
+<para>
+This option lets you specify the field names of your input file from
+the command line instead of relying on the first line of your input
+file describing the file. Field names are separated by a '+' character.
+The list of field names is exactly that allowed in the first line of a
+unicsv file without this option.
+</para>  
+
+<example id="unicsv_fields">
+  <title>Example for unicsv fields option to describe input file.</title>
+  <para>
+    For example ...
+    <userinput>
+      gpsbabel -i unicsv,fields=lat+lon+description -f file.csv -o gpx -F file.gpx
+    </userinput>
+    declares that file.csv has three fields, latitude, longitude, 
+    and description, in that order.
+  </para>
+
+</example>
