@@ -38,7 +38,6 @@
       <HeaderFileName />
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>expat;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <WarningLevel>Level3</WarningLevel>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -304,9 +303,6 @@
     <ClCompile Include="..\zlib\trees.c" />
     <ClCompile Include="..\zlib\uncompr.c" />
     <ClCompile Include="..\zlib\zutil.c" />
-  </ItemGroup>
-  <ItemGroup>
-    <Library Include="Expat\libexpat.lib" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\cet.h" />

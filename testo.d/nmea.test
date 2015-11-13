@@ -13,3 +13,10 @@ compare ${REFERENCE}/track/nmea+ms.gpx ${TMPDIR}/nmea+ms.gpx
 gpsbabel -i nmea -f ${REFERENCE}/track/amod-nmea -o gpx -F ${TMPDIR}/amod-out.gpx -o nmea -F ${TMPDIR}/amod-pure
 compare ${REFERENCE}/track/amod.gpx ${TMPDIR}/amod-out.gpx
 compare ${REFERENCE}/track/amod-cleansed ${TMPDIR}/amod-pure
+
+# Test GPWPL waypoints.  Verify we can write first.
+gpsbabel -i geo -f geocaching.loc -o nmea -F ${TMPDIR}/waypoints.nmea
+compare ${REFERENCE}/waypoints.nmea ${TMPDIR}/waypoints.nmea 
+# Now read our reference file and prove that our writer will make one to match.
+gpsbabel -i nmea -f ${REFERENCE}/waypoints.nmea -o nmea -F ${TMPDIR}/wayout.nmea
+compare ${REFERENCE}/waypoints.nmea ${TMPDIR}/wayout.nmea 

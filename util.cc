@@ -29,6 +29,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h> // for va_copy
 #include <time.h>
 
 // First test Apple's clever macro that's really a runtime test so
