@@ -73,8 +73,12 @@ do_over:
    * valid packets. Note: We can't detect corrupted packets with an ID
    * or length that's a multiple of 256, but such corrupted packets
    * haven't been observed so far.
+   * 484 = Forerunner 305
+   * 450 = Forerunner 205, confirmed with Ian Dent on 2015/11/16.
+   * Edge 205 and 305 are probably similarly affected, but we don't know
+   * the device ID.
    */
-  if (gps_save_id == 484
+  if ((gps_save_id == 484 || gps_save_id == 450)
       && pkt.gusb_pkt.type == 0 && pkt.gusb_pkt.reserved1 == 0
       && pkt.gusb_pkt.reserved2 == 0 && pkt.gusb_pkt.reserved3 != 0
       && pkt.gusb_pkt.pkt_id[0] <= 4 && pkt.gusb_pkt.pkt_id[1] == 0
