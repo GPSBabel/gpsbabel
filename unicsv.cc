@@ -26,6 +26,7 @@
 #include "garmin_fs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
+#include "src/core/logging.h"
 #include <QtCore/QVector>
 #include <cmath>
 
@@ -348,7 +349,7 @@ unicsv_parse_date(const char* str, int* consumed)
       *consumed = 0;	/* for a possible date */
       return 0;
     }
-    fatal(MYNAME ": Could not parse date string (%s).\n", str);
+    Fatal() << MYNAME << ": Could not parse date string (" << str << ").\n";
   }
 
   if ((p1 > 99) || (sep[0] == '-')) { /* Y-M-D (iso like) */
@@ -377,7 +378,7 @@ unicsv_parse_date(const char* str, int* consumed)
       *consumed = 0;
       return 0;	/* don't stop here */
     }
-    fatal(MYNAME ": Could not parse date string (%s).\n", str);
+    Fatal() << MYNAME << ": Could not parse date string (" << str << ").\n";
   }
 
   tm.tm_year -= 1900;
@@ -1878,22 +1879,39 @@ unicsv_wr_deinit(void)
   gbfclose(fout);
 }
 
+// Waypoints are default-on and there's no way to turn them off. This is
+// used to see if a user specified (-t OR -r) in addition to the default
+// of -w.  It's pretty weak, but it's better than letting the last flag
+// 'win' which can result in no data silently being displayed.
+
+static void
+unicsv_check_modes(bool test) {
+  if (test) {
+    Fatal() << MYNAME <<
+      " : Invalid combination of -w, -t, -r selected. Use only one.";
+  }
+}
+
+
 static void
 unicsv_wr(void)
 {
   switch (global_opts.objective) {
   case wptdata:
   case unknown_gpsdata:
+    unicsv_check_modes (doing_rtes || doing_trks);
     waypt_disp_all(unicsv_waypt_enum_cb);
     break;
   case trkdata:
+    unicsv_check_modes (doing_rtes);
     track_disp_all(NULL, NULL, unicsv_waypt_enum_cb);
     break;
   case rtedata:
+    unicsv_check_modes (doing_trks);
     route_disp_all(NULL, NULL, unicsv_waypt_enum_cb);
     break;
   case posndata:
-    fatal(MYNAME ": Realtime positioning not supported.\n");
+    Fatal() << MYNAME << ": Realtime positioning not supported.";
   }
 
   gbfprintf(fout, "No%s", unicsv_fieldsep);
