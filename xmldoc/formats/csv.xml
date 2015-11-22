@@ -1,9 +1,10 @@
       
-      
       <para> There are a billion variants of Comma Separated Value
 data.  This is the one specifically that makes <ulink url="http://www.delorme.com">Delorme</ulink> <productname>S&amp;A Deluxe 9</productname> happy. It's
 also a very simple program and useful for many other programs like
-spreadsheets.</para>
+spreadsheets, but contains only a very minimal information. For general
+purpos use, you'll probably be happer with our 
+<link linkend="fmt_unicsv">universal csv (unicsv)</link> format.</para>
       <para> CSV is also the correct format for 
 	<productname>Lowrance MapCreate</productname>,
 their commercial mapping program, or GDM6 (their free waypoint
@@ -23,5 +24,15 @@ on read it  will read anything supported by our <link linkend="style_def_lathuma
 36.09068, -86.67955, The Troll by a182pilot &amp; Family
 35.99627, -86.62012, Dive Bomber by JoGPS &amp; family
 36.03848, -86.64862, FOSTER by JoGPS &amp; Family
+</programlisting>
+<para>
+that same data written in unicsv format would appear as:
+</para>
+<programlisting>
+No,Latitude,Longitude,Name,Altitude,Description,Symbol,URL
+1,35.972033,-87.134700,"GCEBB",0.0,"Mountain Bike Heaven by susy1313","geocache","http://www.geocaching.com/seek/cache_details.asp?ID=3771"
+2,36.090683,-86.679550,"GC1A37",0.0,"The Troll by a182pilot &amp; Family","geocache","http://www.geocaching.com/seek/cache_details.asp?ID=6711"
+3,35.996267,-86.620117,"GC1C2B",0.0,"Dive Bomber by JoGPS &amp; family","geocache","http://www.geocaching.com/seek/cache_details.asp?ID=7211"
+4,36.038483,-86.648617,"GC25A9",0.0,"FOSTER by JoGPS &amp; Family","geocache","http://www.geocaching.com/seek/cache_details.asp?ID=9641"
 </programlisting>
 </example>
