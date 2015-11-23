@@ -24,15 +24,8 @@ Less frequently, someone will build on MSVC, FreeBSD, OpenBSD, Solaris,
 etc.   Both Clang/LLVM and GNU C++ are regularly exercised.
 </para>
 <para>
-You can grab a release from the <ulink url="http://www.gpsbabel.org/download.html">GPSBabel download page</ulink>, but if you're going to be doing any development, you'll find that working from the <ulink url="http://code.google.com/p/gpsbabel/source/checkout">GPSBabel SVN tree</ulink> is easier.
+You can grab a release from the <ulink url="http://www.gpsbabel.org/download.html">GPSBabel download page</ulink>, but if you're going to be doing any development, you'll find that working from the <ulink url="https://github.com/gpsbabel/gpsbabel">GPSBabel Github repo</ulink> is easier. Checkouts vis Git, HTTPS, SSH, and Subversion are supported.
 </para>
-<para>
-For most cases, an anonymous checkout of the trunk is really all you need.
-That can be done easily with the single command:
-</para>
-<para><userinput>
-  svn checkout http://gpsbabel.googlecode.com/svn/trunk/gpsbabel 
-</userinput></para>
 
 <para>
   In most cases, the code is as simple to build as running:
