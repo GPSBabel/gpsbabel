@@ -549,7 +549,7 @@ start_something_else(const QString el, const QXmlStreamAttributes& attr)
   new_tag->attributes = (char**)xcalloc(sizeof(char*),2*(attr_count+ns_count)+1);
   avcp = new_tag->attributes;
   for (int i = 0; i < attr_count; i++)  {
-    *avcp = xstrdup(attr[i].name().toString());
+    *avcp = xstrdup(attr[i].qualifiedName().toString());
     avcp++;
     *avcp = xstrdup(attr[i].value().toString());
     avcp++;

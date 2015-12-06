@@ -35,3 +35,8 @@ compare ${REFERENCE}/basecamp~gpx.gpx ${TMPDIR}/basecamp~gpx_so.gpx
 rm -f ${TMPDIR}/basecamp~gpx_si.gpx
 gpsbabel -i gpx -f - -o gpx -F ${TMPDIR}/basecamp~gpx_si.gpx 0< ${REFERENCE}/basecamp.gpx
 compare ${REFERENCE}/basecamp~gpx.gpx ${TMPDIR}/basecamp~gpx_si.gpx 
+
+# test unknown tags
+rm -f ${TMPDIR}/unknowntag.gpx
+gpsbabel -i gpx -f ${REFERENCE}/unknowntag.gpx -o gpx -F ${TMPDIR}/unknowntag.gpx
+compare ${REFERENCE}/unknowntag~gpx.gpx ${TMPDIR}/unknowntag.gpx
