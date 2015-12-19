@@ -7,7 +7,7 @@
   <rte>
     <name>B02222</name>
     <extensions>
-      <gpxx:RouteExtension xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <gpxx:RouteExtension xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
         <gpxx:IsAutoNamed>false</gpxx:IsAutoNamed>
       </gpxx:RouteExtension>
     </extensions>
@@ -16,7 +16,7 @@
       <desc>A St/B St</desc>
       <sym>Waypoint</sym>
       <extensions>
-        <gpxx:RoutePointExtension xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <gpxx:RoutePointExtension xsi:schemaLocation="http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensions/v3/GpxExtensionsv3.xsd" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
           <gpxx:Subclass>000000000000ffffffffffffffffffffffff</gpxx:Subclass>
         </gpxx:RoutePointExtension>
       </extensions>

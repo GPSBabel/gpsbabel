@@ -2,9 +2,7 @@
 <gpx
   version="1.0"
   creator="GPSBabel - http://www.gpsbabel.org"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  xmlns="http://www.topografix.com/GPX/1/0">
 <time>2011-11-15T17:50:48Z</time>
 <bounds minlat="43.439962900" minlon="-3.966600900" maxlat="43.493778700" maxlon="-3.790626500"/>
 <rte>
