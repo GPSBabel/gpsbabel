@@ -2,9 +2,7 @@
 <gpx
   version="1.0"
 creator="GPSBabel - http://gpsbabel.sourceforge.net"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="http://www.topografix.com/GPX/1/0"
-  xsi:schemaLocation="http://www.topografix.com/GPX/1/0 http://www.topografix.com/GPX/1/0/gpx.xsd">
+  xmlns="http://www.topografix.com/GPX/1/0">
 <time>2004-01-08T20:11:32Z</time>
 <trk>
 <trkseg>
