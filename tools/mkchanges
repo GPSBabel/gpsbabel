@@ -1,6 +1,10 @@
-# cvsps -u
+# GitHub version lets it render something prewtty close to HTML. (Still have to manually fix <, >, and other entities...)
+git log --date=short --pretty=format:"<tr>%n  <td class=\"date\">%cd</td>%n  <td>%s %b</td>%n</tr>"
 
-svn log | awk '
+exit 0
+
+# Subversion version.
+git log | awk '
 skip = 0;
 /^r[0-9].*lines?$/ {
   if (count > 0) printf "  </td>\n</tr>\n"
@@ -24,6 +28,7 @@ skip = 0;
 
 exit 0
 
+# CVS version.
 cvsps $* |  awk '
 /^Date:/ { 
 	logt = "";
