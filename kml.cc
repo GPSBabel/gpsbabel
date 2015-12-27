@@ -51,6 +51,7 @@ static char* opt_units = NULL;
 static char* opt_labels = NULL;
 static char* opt_max_position_points = NULL;
 static char* opt_rotate_colors = NULL;
+static char* opt_precision = NULL;
 
 static int export_lines;
 static int export_points;
@@ -63,6 +64,7 @@ static int max_position_points;
 static int rotate_colors;
 static int line_width;
 static int html_encrypt;
+static int precision;
 
 static Waypoint* wpt_tmp;
 static int wpt_tmp_queued;
@@ -91,6 +93,7 @@ static gpsbabel::DateTime kml_time_max;
 
 #define AUTOFORMATTING_OFF(AF) bool AF=writer->autoFormatting(); writer->setAutoFormatting(false);
 #define AUTOFORMATTING_RESTORE(AF) writer->setAutoFormatting(af);
+#define DEFAULT_PRECISION "6"
 
 //  Icons provided and hosted by Google.  Used with permission.
 #define ICON_BASE "http://earth.google.com/images/kml-icons/"
@@ -170,6 +173,11 @@ arglist_t kml_args[] = {
     "rotate_colors", &opt_rotate_colors,
     "Rotate colors for tracks and routes (default automatic)",
     NULL, ARGTYPE_FLOAT, "0", "360"
+  },
+  {
+    "prec", &opt_precision,
+    "Precision of coordinates, number of decimals",
+    DEFAULT_PRECISION, ARGTYPE_INT, ARG_NOMINMAX
   },
   ARG_TERMINATOR
 };
@@ -838,14 +846,14 @@ void kml_write_coordinates(const Waypoint* waypointp)
 {
   if (kml_altitude_known(waypointp)) {
     writer->writeTextElement("coordinates",
-                             QString::number(waypointp->longitude, 'f', 6) + QString(",") +
-                             QString::number(waypointp->latitude, 'f', 6) + QString(",") +
+                             QString::number(waypointp->longitude, 'f', precision) + QString(",") +
+                             QString::number(waypointp->latitude, 'f', precision) + QString(",") +
                              QString::number(waypointp->altitude, 'f', 2)
                             );
   } else {
     writer->writeTextElement("coordinates",
-                             QString::number(waypointp->longitude, 'f', 6) + QString(",") +
-                             QString::number(waypointp->latitude, 'f', 6)
+                             QString::number(waypointp->longitude, 'f', precision) + QString(",") +
+                             QString::number(waypointp->latitude, 'f', precision)
                             );
   }
 }
@@ -856,8 +864,8 @@ void kml_write_coordinates(const Waypoint* waypointp)
 static void kml_output_lookat(const Waypoint* waypointp)
 {
   writer->writeStartElement("LookAt");
-  writer->writeTextElement("longitude", QString::number(waypointp->longitude, 'f', 6));
-  writer->writeTextElement("latitude", QString::number(waypointp->latitude, 'f', 6));
+  writer->writeTextElement("longitude", QString::number(waypointp->longitude, 'f', precision));
+  writer->writeTextElement("latitude", QString::number(waypointp->latitude, 'f', precision));
   writer->writeTextElement("tilt","66");
   writer->writeEndElement(); // Close LookAt tag
 }
@@ -892,8 +900,8 @@ static void kml_output_description(const Waypoint* pt)
   hwriter.writeCharacters("\n");
   hwriter.writeStartElement("table");
 
-  kml_td(hwriter, QString("Longitude: %1 ").arg(QString::number(pt->longitude, 'f', 6)));
-  kml_td(hwriter, QString("Latitude: %1 ").arg(QString::number(pt->latitude, 'f', 6)));
+  kml_td(hwriter, QString("Longitude: %1 ").arg(QString::number(pt->longitude, 'f', precision)));
+  kml_td(hwriter, QString("Latitude: %1 ").arg(QString::number(pt->latitude, 'f', precision)));
 
   if (kml_altitude_known(pt)) {
     kml_td(hwriter, QString("Altitude: %1 %2 ").arg(QString::number(alt, 'f', 3)).arg(alt_units));
@@ -1092,13 +1100,13 @@ static void kml_output_tailer(const route_head* header)
         writer->writeCharacters("\n");
       }
       if (kml_altitude_known(tpt)) {
-        writer->writeCharacters(QString::number(tpt->longitude, 'f', 6) + QString(",") +
-                                QString::number(tpt->latitude, 'f', 6) + QString(",") +
+        writer->writeCharacters(QString::number(tpt->longitude, 'f', precision) + QString(",") +
+                                QString::number(tpt->latitude, 'f', precision) + QString(",") +
                                 QString::number(tpt->altitude, 'f', 2) + QString("\n")
                                );
       } else {
-        writer->writeCharacters(QString::number(tpt->longitude, 'f', 6) + QString(",") +
-                                QString::number(tpt->latitude, 'f', 6) + QString("\n")
+        writer->writeCharacters(QString::number(tpt->longitude, 'f', precision) + QString(",") +
+                                QString::number(tpt->latitude, 'f', precision) + QString("\n")
                                );
       }
     }
@@ -1565,8 +1573,8 @@ static void kml_waypt_pr(const Waypoint* waypointp)
 #if 0 // Experimental
   if (realtime_positioning) {
     writer->wrteStartTag("LookAt");
-    writer->writeTextElement("longitude", QString::number(waypointp->longitude, 'f', 6);
-                             writer->writeTextElement("latitude", QString::number(waypointp->latitude, 'f', 6);
+    writer->writeTextElement("longitude", QString::number(waypointp->longitude, 'f', precision);
+                             writer->writeTextElement("latitude", QString::number(waypointp->latitude, 'f', precision);
                                  writer->writeTextElement("altitude", "1000");
                                  writer->writeEndElement(); // Close LookAt tag
   }
@@ -1774,14 +1782,14 @@ static void kml_mt_hdr(const route_head* header)
 
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement("gx:coord",
-                               QString::number(tpt->longitude, 'f', 6) + QString(" ") +
-                               QString::number(tpt->latitude, 'f', 6) + QString(" ") +
+                               QString::number(tpt->longitude, 'f', precision) + QString(" ") +
+                               QString::number(tpt->latitude, 'f', precision) + QString(" ") +
                                QString::number(tpt->altitude, 'f', 2)
                               );
     } else {
       writer->writeTextElement("gx:coord",
-                               QString::number(tpt->longitude, 'f', 6) + QString(" ") +
-                               QString::number(tpt->latitude, 'f', 6)
+                               QString::number(tpt->longitude, 'f', precision) + QString(" ") +
+                               QString::number(tpt->latitude, 'f', precision)
                               );
     }
 
@@ -1909,8 +1917,8 @@ void kml_write_AbstractView(void)
     kml_bounds.min_lon = -kml_bounds.max_lon;
   }
 
-  writer->writeTextElement("longitude", QString::number((kml_bounds.min_lon + kml_bounds.max_lon) / 2, 'f', 6));
-  writer->writeTextElement("latitude", QString::number((kml_bounds.min_lat + kml_bounds.max_lat) / 2, 'f', 6));
+  writer->writeTextElement("longitude", QString::number((kml_bounds.min_lon + kml_bounds.max_lon) / 2, 'f', precision));
+  writer->writeTextElement("latitude", QString::number((kml_bounds.min_lat + kml_bounds.max_lat) / 2, 'f', precision));
 
   // It turns out the length of the diagonal of the bounding box gives us a
   // reasonable guess for setting the camera altitude.
@@ -1950,6 +1958,7 @@ void kml_write(void)
   trackdata = (!! strcmp("0", opt_trackdata));
   trackdirection = (!! strcmp("0", opt_trackdirection));
   line_width = atol(opt_line_width);
+  precision = atol(opt_precision);
 
   writer->writeStartDocument();
   // FIXME: This write of a blank line is needed for Qt 4.6 (as on Centos 6.3)
