@@ -902,6 +902,7 @@ char* xstrappend(char* src, const char* addon);
 #define xxrealloc(p, s, file, line) xrealloc(p,s)
 #define xxfree(mem, file, line) xfree(mem)
 #define xxstrdup(s, file, line) xstrdup(s)
+char *xstrdup(const char* s);
 #define xxstrappend(src, addon, file, line) xstrappend(src, addon)
 #else /* DEBUG_MEM */
 void* XCALLOC(size_t nmemb, size_t size, DEBUG_PARAMS);
