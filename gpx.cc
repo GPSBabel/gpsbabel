@@ -862,16 +862,15 @@ xml_parse_time(const QString& dateTimeString)
   if (res > 0) {
     QDate date(year, mon, mday);
     QTime time(hour, min, sec);
+    dt = QDateTime(date, time, Qt::UTC);
 
     // Fractional part of time.
     if (fsec) {
-      time = time.addMSecs(lround(fsec * 1000));
+      dt = dt.addMSecs(lround(fsec * 1000));
     }
 
     // Any offsets that were stuck at the end.
-    time = time.addSecs(-off_sign * off_hr * 3600 - off_sign * off_min * 60);
-
-    dt = QDateTime(date, time, Qt::UTC);
+    dt = dt.addSecs(-off_sign * off_hr * 3600 - off_sign * off_min * 60);
   } else {
     dt = QDateTime();
   }
