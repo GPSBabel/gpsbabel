@@ -1,0 +1,19 @@
+<para>
+This option specifies the number of digits to be used when
+writing coordinate values.
+Precision is the number of digits after the decimal point.  The default
+precision is 6.  We limit the number of places we write to improve the
+fidelity when round-tripping thata, reduce file size, and reduce 
+silliness in files caused by repeating decimals in insignificant 
+digits.
+</para>
+<para>
+As a guideline, at the equator, five decimal places is about 1.1 m, 
+placing it below the accuracy of commodity consumer GPS gear. Six places
+is 0.11 m, achievable via surveyor grade and differential corrected GPS.
+Seven is 11 millimeters.
+</para>
+<para>
+This value is ignored on read and has no impact on the internal 
+representation of data.
+</para>
