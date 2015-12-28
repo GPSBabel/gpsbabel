@@ -103,16 +103,14 @@ QString UpgradeCheck::getOsVersion()
   case QSysInfo::MV_10_3: return "10.3"; break;
   case QSysInfo::MV_10_4: return "10.4"; break;
   case QSysInfo::MV_10_5: return "10.5"; break;
-  case QSysInfo::MV_10_6: return "10.6"; break;
-  case QSysInfo::MV_10_7: return "10.7"; break;
-  case QSysInfo::MV_10_8: return "10.8"; break;
-  case QSysInfo::MV_10_9: return "10.9"; break;
+  case QSysInfo::MV_10_6: return "10.6"; break;  // Snow Leopard.
+  case QSysInfo::MV_10_7: return "10.7"; break;  // Lion.
+  case QSysInfo::MV_10_8: return "10.8"; break;  // Mountain Lion
+  case QSysInfo::MV_10_9: return "10.9"; break;  // Mavericks
+  case QSysInfo::MV_10_10: return "10.10"; break;  // Yosemite
   default:
-    if (QSysInfo::MacintoshVersion == 10) {
-      return "10.10";
-      break;
-    }
-    if (QSysInfo::MacintoshVersion == 11) {
+    // This probably doesn't work...
+    if (QSysInfo::MacintoshVersion == 0x000D) {
       return "10.11";
       break;
     }
@@ -135,6 +133,7 @@ QString UpgradeCheck::getOsVersion()
   default:
        if (QSysInfo::WindowsVersion == 0x00a0) return "8";
        if (QSysInfo::WindowsVersion == 0x00b0) return "8.1";
+       if (QSysInfo::WindowsVersion == 0x00c0) return "10.0";
       return "Windows/Unknown";
   }
 #endif
