@@ -1390,7 +1390,7 @@ exif_wr_init(const char* fname)
   if (exif_time_ref == 0) {
     fatal(MYNAME ": No valid timestamp found in picture!\n");
   }
-abort();
+
   QString filename(fname);
   filename += ".jpg";
   fout = gbfopen_be(filename, "wb", MYNAME);
