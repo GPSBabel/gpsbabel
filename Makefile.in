@@ -181,7 +181,7 @@ tag:
 	# svn commit
 	# svn copy https://gpsbabel.googlecode.com/svn/trunk/ https://gpsbabel.googlecode.com/svn/tags/gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@
 	git tag -fa gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@ -m "gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@"
-	
+	git push origin master --tags
 
 more-clean: clean
 	$(srcdir)/tools/mkmoreclean
