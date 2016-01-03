@@ -17,7 +17,7 @@ mkdir qtdir\mingw
 rem Basic Qt runtime DLLs
 rem  if "%QTDIR%"=="" call \QtSDK\Desktop\Qt\4.7.4\mingw\bin\qtenv2.bat
 rem  if "%QTDIR%"=="" call \Qt\Qt5.2.1\5.2.1\mingw48_32\bin\qtenv2.bat
-if "%QTDIR%"=="" set QTDIR=\Qt\Qt5.2.1\5.2.1\mingw48_32
+if "%QTDIR%"=="" set QTDIR=c:\Qt\Qt5.2.1\5.2.1\mingw48_32
 copy %QTDIR%\bin\icu*.dll qtdir\bin
 copy %QTDIR%\bin\libgcc_s_dw2-1.dll qtdir\bin
 copy %QTDIR%\bin\libstdc*.dll qtdir\bin

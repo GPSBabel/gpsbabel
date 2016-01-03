@@ -6,6 +6,7 @@ case `uname -r` in
 esac 
 SRC=.
 CFLAGS="$XFLAGS  -O " \
+CXXFLAGS="$XFLAGS  -O " \
   LDFLAGS="$XFLAGS "   ${SRC}/configure 
 
 # CFLAGS="$XFLAGS  -O  -arch i386 " \
