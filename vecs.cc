@@ -55,6 +55,7 @@ extern ff_vecs_t gcdb_vecs;
 extern ff_vecs_t gdb_vecs;
 extern ff_vecs_t geoniche_vecs;
 extern ff_vecs_t geo_vecs;
+extern ff_vecs_t globalsat_sport_vecs;
 extern ff_vecs_t glogbook_vecs;
 extern ff_vecs_t google_vecs;
 extern ff_vecs_t google_dir_vecs;
@@ -1091,6 +1092,13 @@ vecs_t vec_list[] = {
     "mynav",
     "MyNav TRC format",
     "trc",
+    NULL,
+  },
+  {
+    &globalsat_sport_vecs,
+    "globalsat",
+    "Globalsat gh625xt GPS training watch",
+    NULL,
     NULL,
   },
 #endif // MAXIMAL_ENABLED
