@@ -108,7 +108,7 @@ MINIZIP=zlib/contrib/minizip/zip.o \
 ZLIB=zlib/adler32.o zlib/compress.o zlib/crc32.o zlib/deflate.o zlib/inffast.o \
 	zlib/inflate.o zlib/infback.o zlib/inftrees.o zlib/trees.o \
 	zlib/uncompr.o zlib/gzlib.o zlib/gzclose.o zlib/gzread.o \
-        zlib/gzwrite.o zlib/zutil.o $(MINIZIP)
+	zlib/gzwrite.o zlib/zutil.o $(MINIZIP)
 
 
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
@@ -178,8 +178,10 @@ configure: configure.in
 	autoconf
 
 tag:
-	svn commit
-	svn copy https://gpsbabel.googlecode.com/svn/trunk/ https://gpsbabel.googlecode.com/svn/tags/gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@
+	# svn commit
+	# svn copy https://gpsbabel.googlecode.com/svn/trunk/ https://gpsbabel.googlecode.com/svn/tags/gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@
+	git tag -fa gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@ -m "gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@"
+	
 
 more-clean: clean
 	$(srcdir)/tools/mkmoreclean
@@ -301,16 +303,16 @@ WINFILES = gpsbabel.exe win32/GPSBabelGUI.exe win32/gui-2/README.gui \
 # in and tagged.
 #
 release-sourcecheck: changes.html
-	svn commit
 	# ./chkdoc
 	# make clean
 	rm -fr gpsbabel-$(VERSIOND)
 	# make gpsbabel doc gpsbabel.html
-	@(. tools/functions && ask "Enter 'y' to tag the tree as gpsbabel_$(VERSIONU)." "y") && svn copy https://gpsbabel.googlecode.com/svn/trunk/ https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU) ; exit 0
-	svn export https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU)/gpsbabel gpsbabel-$(VERSIOND) 
-	touch gpsbabel-$(VERSIOND)/internal_styles.cc
-	touch gpsbabel-$(VERSIOND)/configure
-	touch gpsbabel-$(VERSIOND)/xcsv_tokens.gperf
+	@(. tools/functions && ask "Enter 'y' to tag the tree as gpsbabel_$(VERSIONU)." "y") && git tag -fa gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@ -m "gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@"
+	# svn export https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU)/gpsbabel gpsbabel-$(VERSIOND) 
+	# May have to rethink this in a Git world.
+	# touch gpsbabel-$(VERSIOND)/internal_styles.cc
+	# touch gpsbabel-$(VERSIOND)/configure
+	# touch gpsbabel-$(VERSIOND)/xcsv_tokens.gperf
 
 #
 # Build the release tarball from the exported CVS tree, tweaking 
@@ -318,8 +320,9 @@ release-sourcecheck: changes.html
 #
 release-tarball: release-sourcecheck
 #	rm -fr gpsbabel-$(VERSIOND)
-	cp -ap internal_styles.cc gpsbabel-$(VERSIOND)/
-	tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
+	# cp -ap internal_styles.cc gpsbabel-$(VERSIOND)/
+	# tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
+	git archive HEAD | gzip > /tmp/gpsbabel-$(VERSIOND).tar.gz
 	gb_upload /tmp/gpsbabel-$(VERSIOND).tar.gz
 #	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
 
