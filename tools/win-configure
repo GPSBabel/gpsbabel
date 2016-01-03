@@ -1,0 +1,3 @@
+PATH=/Users/robertlipe/mxe/mxe/usr/bin:$PATH
+
+./configure --host=i686-pc-mingw32
