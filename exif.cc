@@ -382,7 +382,7 @@ exif_load_apps(void)
     app->marker = gbfgetuint16(fin);
     app->len = gbfgetuint16(fin);
 #ifdef EXIF_DBG
-    printf(MYNAME ": api = %02X, len = %d, offs = %04X\n", app->marker & 0xFF, app->len, gbftell(fin));
+    printf(MYNAME ": api = %02X, len = %d (0x%04x), offs = 0x%08X\n", app->marker & 0xFF, app->len, app->len, gbftell(fin));
 #endif
     if (exif_app || (app->marker == 0xFFDA)) /* compressed data */ {
       gbfcopyfrom(app->fcache, fin, 0x7FFFFFFF);
@@ -419,7 +419,7 @@ exif_read_ifd(exif_app_t* app, const uint16_t ifd_nr, gbsize_t offs,
 
 #ifdef EXIF_DBG
   {
-    char* name;
+    const char* name;
     switch (ifd_nr) {
     case IFD0:
       name = "IFD0";
@@ -440,7 +440,7 @@ exif_read_ifd(exif_app_t* app, const uint16_t ifd_nr, gbsize_t offs,
       name = "private";
       break;
     }
-    printf(MYNAME "-offs 0x%04X: Number of items in IFD%d \"%s\" = %d (0x%2x)\n",
+    printf(MYNAME "-offs 0x%08X: Number of items in IFD%d \"%s\" = %d (0x%04x)\n",
            offs, ifd_nr, name, ifd->count, ifd->count);
   }
 #endif
@@ -453,8 +453,8 @@ exif_read_ifd(exif_app_t* app, const uint16_t ifd_nr, gbsize_t offs,
 
     tag = (exif_tag_t*) xcalloc(sizeof(*tag), 1);
 #ifdef EXIF_DBG
-    tag->offs = offs;
     offs = gbftell(fin);
+    tag->offs = offs;
 #endif
 
     ENQUEUE_TAIL(&ifd->tags, &tag->Q);
@@ -531,7 +531,7 @@ exif_read_ifd(exif_app_t* app, const uint16_t ifd_nr, gbsize_t offs,
         }
     }
 #ifdef EXIF_DBG
-    printf(MYNAME "-offs 0x%04X: ifd=%d id=0x%04X t=0x%04X c=%4d s=%4d v=0x%08X",
+    printf(MYNAME "-offs 0x%08X: ifd=%d id=0x%04X t=0x%04X c=%4d s=%4d v=0x%08X",
            tag->offs, ifd->nr, tag->id, tag->type, tag->count, tag->size, tag->value);
     if (tag->type == EXIF_TYPE_ASCII) {
       printf(" \"%s\"", exif_read_str(tag));
@@ -553,7 +553,7 @@ exif_read_app(exif_app_t* app)
 
 #ifdef EXIF_DBG
   printf(MYNAME ": read_app...\n");
-  print_buff((const char*)fin->handle.mem, 16, MYNAME);
+  print_buff((const char*)fin->handle.mem, 8, MYNAME "-offs 0x00000000: Image File Header");
   printf("\n");
 #endif
   exif_ifd_ofs = gps_ifd_ofs = inter_ifd_ofs = 0;
@@ -848,9 +848,8 @@ exif_waypt_from_exif_app(exif_app_t* app)
 
   if (timestamp != UNKNOWN_TIMESTAMP) {
 #ifdef EXIF_DBG
-    char* str = exif_time_str(timestamp);
-    printf(MYNAME "-GPSTimeStamp =   %s\n", str);
-    xfree(str);
+    QString str =  QDateTime::fromTime_t(timestamp).toUTC().toString(Qt::ISODate);
+    printf(MYNAME "-GPSTimeStamp =   %s\n", qPrintable(str));
 #endif
     wpt->SetCreationTime(timestamp);
   } else {
