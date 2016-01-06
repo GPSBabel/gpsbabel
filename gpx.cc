@@ -23,12 +23,10 @@
 #include "cet_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
-#include "gpx.h"
 #include "src/core/logging.h"
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
 #include "src/core/xmltag.h"
-#include "src/core/ziparchive.h"
 
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QRegExp>
@@ -64,12 +62,9 @@ static short_handle mkshort_handle;
 static QString link_url;
 static QString link_text;
 static QString link_type;
-static QString output_file_name;
-static QList<QString> gpx_files_written_;
 
 
 static char* snlen = NULL;
-static char* split = NULL;
 static char* suppresswhite = NULL;
 static char* urlbase = NULL;
 static route_head* trk_head;
@@ -1232,33 +1227,9 @@ gpx_rd_deinit(void)
   cur_tag = NULL;
 }
 
-// Secret accessor to return an array of file names that we have written.
-QList<QString> GetGpxFilesWritten() {
-  return gpx_files_written_;
-}
-
-// When we're writing multiple GPX files, get the output filename (which may
-// have a path component) in the current sequence.
-static QString GetOutFname(int seq) {
-  static const char* kNameToken = "__NUM__";
-
-  QString sequence = QString("%1").arg(seq);
-  QString s = output_file_name;
-  s.replace(kNameToken, sequence);
-  return s;
-}
-
 static void
-gpx_wr_init(const char* ifname)
+gpx_wr_init(const char* fname)
 {
-  QString fname = ifname;
-  if (output_file_name.isEmpty()) {
-    output_file_name = fname;
-    // Our first name is "one".
-    fname = GetOutFname(1);
-  }
-  gpx_files_written_.append(fname);
-
   mkshort_handle = NULL;
   oqfile = new gpsbabel::File(fname);
   oqfile->open(QIODevice::WriteOnly | QIODevice::Text);
@@ -1684,17 +1655,6 @@ gpx_waypt_pr(const Waypoint* waypointp)
   fs_xml* fs_gpx;
   garmin_fs_t* gmsd;	/* gARmIN sPECIAL dATA */
 
-  // If we're splitting files and the output buffer is approaching
-  // our split we close the file we were last writing and open a new
-  // one.
-  static const double kSplitPercent = 0.99;
-  if (oqfile->size() > atoi(split) * kSplitPercent) {
-    static int x = 2; // The first one is "one" automatically.
-    gpx_wr_deinit();
-    QString fn = GetOutFname(x++);
-    gpx_wr_init(CSTR(fn));
-  }
-
   writer->writeStartElement("wpt");
   writer->writeAttribute("lat", toString(waypointp->latitude));
   writer->writeAttribute("lon", toString(waypointp->longitude));
@@ -1968,10 +1928,6 @@ arglist_t gpx_args[] = {
   {
     "snlen", &snlen, "Length of generated shortnames",
     "32", ARGTYPE_INT, "1", NULL, NULL
-  },
-  {
-    "split", &split, "split wpts after this many bytes ",
-    "500000", ARGTYPE_INT, "1", NULL, NULL
   },
   {
     "suppresswhite", &suppresswhite,
