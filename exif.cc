@@ -485,7 +485,10 @@ exif_read_ifd(exif_app_t* app, const uint16_t ifd_nr, gbsize_t offs,
     }
   }
 
-  ifd->next_ifd = gbfgetuint16(fin);
+#ifdef EXIF_DBG
+  gbsize_t next_ifd_offs = gbftell(fin);
+#endif
+  ifd->next_ifd = gbfgetuint32(fin);
 
   QUEUE_FOR_EACH(&ifd->tags, elem, tmp) {
     exif_tag_t* tag = (exif_tag_t*)elem;
@@ -539,6 +542,10 @@ exif_read_ifd(exif_app_t* app, const uint16_t ifd_nr, gbsize_t offs,
     printf("\n");
 #endif
   }
+
+#ifdef EXIF_DBG
+  printf(MYNAME "-offs 0x%08X: Next IFD=0x%08X\n", next_ifd_offs,  ifd->next_ifd);
+#endif
 
   return ifd;
 }
