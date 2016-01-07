@@ -691,7 +691,7 @@ gpgsa_parse(char* ibuf)
                &fixauto, &fix,
                &prn[0],&prn[1],&prn[2],&prn[3],&prn[4],&prn[5],
                &prn[6],&prn[7],&prn[8],&prn[9],&prn[10],&prn[11]);
-  if (scn < 4) {
+  if (scn < 2) {
     warning(MYNAME ": Short GSA sentence.\n");
   }
   /*
