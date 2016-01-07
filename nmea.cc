@@ -34,7 +34,7 @@
 #include <stdio.h>
 
 #include <QtCore/QStringList>
-  
+
 /**********************************************************
 
    ' 1      2      3        4 5         6 7 8  9   10   11 12  13 14 15
@@ -692,7 +692,7 @@ gpgsa_parse(char* ibuf)
                &prn[0],&prn[1],&prn[2],&prn[3],&prn[4],&prn[5],
                &prn[6],&prn[7],&prn[8],&prn[9],&prn[10],&prn[11]);
   if (scn < 4) {
-    warning(MYNAME ": Short GSA sentence.");
+    warning(MYNAME ": Short GSA sentence.\n");
   }
   /*
   	sscanf has scanned all the leftmost elements
@@ -1249,7 +1249,7 @@ nmea_wayptpr(const Waypoint* wpt)
     gbfflush(file_out);
     gb_sleep(sleepus);
   }
-} 
+}
 void
 nmea_track_init(const route_head*)
 {
