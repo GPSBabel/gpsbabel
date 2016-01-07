@@ -1,0 +1,22 @@
+<para>
+   Binary overlay files (.ovl) used by
+   <productname>Geogrid</productname>-Viewer.
+</para>
+<para>
+   Geogrid-Viewer is part of several
+   <ulink url="https://de.wikipedia.org/wiki/Top50">Top50</ulink>
+   map products available in Germany and Austria.
+</para>
+<para>
+   This module supports binary overlay file format version 2.0, 3.0
+   and 4.0. Those files can be identified by looking at the first
+   bytes:
+</para>
+<programlisting>
+hexdump -C example.ovl | head -n 2
+00000000  44 4f 4d 47 56 43 52 44  20 4f 76 6c 66 69 6c 65  |DOMGVCRD Ovlfile|
+00000010  20 56 33 2e 30 3a 00 00  00 08 00 00 00 1e 00 00  | V3.0:..........|
+</programlisting>
+<para>
+   The current file version 5.0 is not supported.
+</para>

@@ -132,6 +132,7 @@ extern ff_vecs_t raymarine_vecs;
 extern ff_vecs_t alanwpr_vecs;
 extern ff_vecs_t alantrl_vecs;
 extern ff_vecs_t vitovtt_vecs;
+extern ff_vecs_t ggv_bin_vecs;
 extern ff_vecs_t ggv_log_vecs;
 extern ff_vecs_t g7towin_vecs;
 extern ff_vecs_t garmin_gpi_vecs;
@@ -1091,6 +1092,13 @@ vecs_t vec_list[] = {
     "mynav",
     "MyNav TRC format",
     "trc",
+    NULL,
+  },
+  {
+    &ggv_bin_vecs,
+    "ggv_bin",
+    "Geogrid-Viewer binary overlay file (.ovl)",
+    "ovl",
     NULL,
   },
 #endif // MAXIMAL_ENABLED

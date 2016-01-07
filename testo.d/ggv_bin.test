@@ -1,0 +1,6 @@
+#
+# Geogrid-Viewer binary overlay files
+#
+rm -f ${TMPDIR}/ggv_bin*
+gpsbabel -i ggv_bin -f ${REFERENCE}/ggv_bin-sample-v3.ovl -o gpx -F ${TMPDIR}/ggv_bin-sample-v3.gpx
+bincompare ${REFERENCE}/ggv_bin-sample-v3.gpx ${TMPDIR}/ggv_bin-sample-v3.gpx
