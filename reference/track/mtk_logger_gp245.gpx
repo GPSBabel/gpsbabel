@@ -2274,6 +2274,12 @@
         <speed>0.980000</speed>
         <name>TP000378</name>
       </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>track-2</name>
+    <desc>Log every 5 sec, 0 m</desc>
+    <trkseg>
       <trkpt lat="49.881809235" lon="8.080225945">
         <ele>165.863281</ele>
         <time>2009-03-28T10:43:05Z</time>
@@ -2298,6 +2304,12 @@
         <speed>0.130000</speed>
         <name>TP000382</name>
       </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>track-3</name>
+    <desc>Log every 5 sec, 0 m</desc>
+    <trkseg>
       <trkpt lat="49.881752014" lon="8.080050468">
         <ele>212.136719</ele>
         <time>2009-03-28T10:44:03Z</time>
@@ -2328,6 +2340,12 @@
         <speed>0.090000</speed>
         <name>TP000387</name>
       </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>track-4</name>
+    <desc>Log every 5 sec, 0 m</desc>
+    <trkseg>
       <trkpt lat="49.881694794" lon="8.080091476">
         <ele>216.351562</ele>
         <time>2009-03-28T19:27:24Z</time>

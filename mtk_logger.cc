@@ -1327,11 +1327,19 @@ static int mtk_parse_info(const unsigned char* data, int dataLen)
     case 0x03:
       dbg(1, "# Log period change %.0f sec\n", cmd/10.);
       mtk_info.track_event |= MTK_EVT_PERIOD;
+      if (mtk_device != MTK_LOGGER)
+      {
+        mtk_info.track_event |= MTK_EVT_START;
+      }
       mtk_info.period = cmd;
       break;
     case 0x04:
       dbg(1, "# Log distance change %.1f m\n", cmd/10.);
       mtk_info.track_event |= MTK_EVT_DISTANCE;
+      if (mtk_device != MTK_LOGGER)
+      {
+        mtk_info.track_event |= MTK_EVT_START;
+      }
       mtk_info.distance = cmd;
       break;
     case 0x05:
@@ -1350,8 +1358,11 @@ static int mtk_parse_info(const unsigned char* data, int dataLen)
       break;
     case 0x07:
       if (cmd == 0x0106) {
-        dbg(5, "# GPS Logger# Turned On\n"); // Fixme - start new trk
-        mtk_info.track_event |= MTK_EVT_START;
+        dbg(5, "# GPS Logger# Turned On\n");
+        if (mtk_device == MTK_LOGGER)
+        {
+          mtk_info.track_event |= MTK_EVT_START;
+        }
       }
       if (cmd == 0x0104) {
         dbg(5, "# GPS Logger# Log disabled\n");

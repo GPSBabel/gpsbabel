@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="50.825431824" minlon="12.918069839" maxlat="50.826679230" maxlon="12.920095444"/>
+  <trk>
+    <name>track-1</name>
+    <desc>Log every 0 sec, 4 m</desc>
+    <trkseg>
+      <trkpt lat="50.826572418" lon="12.918104172">
+        <ele>292.218750</ele>
+        <time>2016-01-10T16:03:15Z</time>
+        <speed>0.040000</speed>
+        <name>TP000001</name>
+      </trkpt>
+      <trkpt lat="50.826599121" lon="12.918069839">
+        <ele>290.320312</ele>
+        <time>2016-01-10T16:03:19Z</time>
+        <speed>1.280000</speed>
+        <name>TP000002</name>
+      </trkpt>
+      <trkpt lat="50.826622009" lon="12.918094635">
+        <ele>287.500000</ele>
+        <time>2016-01-10T16:03:21Z</time>
+        <speed>1.110000</speed>
+        <name>TP000003</name>
+      </trkpt>
+      <trkpt lat="50.826641083" lon="12.918134689">
+        <ele>285.226562</ele>
+        <time>2016-01-10T16:03:24Z</time>
+        <speed>1.200000</speed>
+        <name>TP000004</name>
+      </trkpt>
+      <trkpt lat="50.826656342" lon="12.918189049">
+        <ele>285.109375</ele>
+        <time>2016-01-10T16:03:28Z</time>
+        <speed>1.220000</speed>
+        <name>TP000005</name>
+      </trkpt>
+      <trkpt lat="50.826679230" lon="12.918233871">
+        <ele>285.250000</ele>
+        <time>2016-01-10T16:03:33Z</time>
+        <speed>0.690000</speed>
+        <name>TP000006</name>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>track-2</name>
+    <desc>Log every 0 sec, 4 m</desc>
+    <trkseg>
+      <trkpt lat="50.826084137" lon="12.919301033">
+        <ele>283.500000</ele>
+        <time>2016-01-10T16:06:15Z</time>
+        <speed>0.830000</speed>
+        <name>TP000007</name>
+      </trkpt>
+      <trkpt lat="50.826057434" lon="12.919328690">
+        <ele>284.554688</ele>
+        <time>2016-01-10T16:06:19Z</time>
+        <speed>0.730000</speed>
+        <name>TP000008</name>
+      </trkpt>
+      <trkpt lat="50.826026917" lon="12.919361115">
+        <ele>284.312500</ele>
+        <time>2016-01-10T16:06:22Z</time>
+        <speed>1.080000</speed>
+        <name>TP000009</name>
+      </trkpt>
+      <trkpt lat="50.826000214" lon="12.919401169">
+        <ele>283.343750</ele>
+        <time>2016-01-10T16:06:24Z</time>
+        <speed>0.770000</speed>
+        <name>TP000010</name>
+      </trkpt>
+      <trkpt lat="50.825962067" lon="12.919408798">
+        <ele>282.445312</ele>
+        <time>2016-01-10T16:06:30Z</time>
+        <speed>0.430000</speed>
+        <name>TP000011</name>
+      </trkpt>
+      <trkpt lat="50.825927734" lon="12.919426918">
+        <ele>281.507812</ele>
+        <time>2016-01-10T16:06:34Z</time>
+        <speed>1.430000</speed>
+        <name>TP000012</name>
+      </trkpt>
+      <trkpt lat="50.825893402" lon="12.919404984">
+        <ele>281.492188</ele>
+        <time>2016-01-10T16:06:38Z</time>
+        <speed>0.950000</speed>
+        <name>TP000013</name>
+      </trkpt>
+      <trkpt lat="50.825874329" lon="12.919352531">
+        <ele>282.000000</ele>
+        <time>2016-01-10T16:06:43Z</time>
+        <speed>0.650000</speed>
+        <name>TP000014</name>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>track-3</name>
+    <desc>Log every 0 sec, 4 m</desc>
+    <trkseg>
+      <trkpt lat="50.825641632" lon="12.918842316">
+        <ele>342.109375</ele>
+        <time>2016-01-10T16:08:35Z</time>
+        <speed>0.410000</speed>
+        <name>TP000015</name>
+      </trkpt>
+      <trkpt lat="50.825664520" lon="12.918872833">
+        <ele>339.867188</ele>
+        <time>2016-01-10T16:08:35Z</time>
+        <speed>0.430000</speed>
+        <name>TP000016</name>
+      </trkpt>
+      <trkpt lat="50.825675964" lon="12.918874741">
+        <ele>335.929688</ele>
+        <time>2016-01-10T16:08:36Z</time>
+        <speed>0.430000</speed>
+        <name>TP000017</name>
+      </trkpt>
+      <trkpt lat="50.825687408" lon="12.918915749">
+        <ele>332.585938</ele>
+        <time>2016-01-10T16:08:37Z</time>
+        <speed>0.700000</speed>
+        <name>TP000018</name>
+      </trkpt>
+      <trkpt lat="50.825679779" lon="12.918941498">
+        <ele>329.132812</ele>
+        <time>2016-01-10T16:08:39Z</time>
+        <speed>0.490000</speed>
+        <name>TP000019</name>
+      </trkpt>
+      <trkpt lat="50.825675964" lon="12.918978691">
+        <ele>325.742188</ele>
+        <time>2016-01-10T16:08:40Z</time>
+        <speed>0.390000</speed>
+        <name>TP000020</name>
+      </trkpt>
+      <trkpt lat="50.825672150" lon="12.918988228">
+        <ele>321.734375</ele>
+        <time>2016-01-10T16:08:41Z</time>
+        <speed>0.420000</speed>
+        <name>TP000021</name>
+      </trkpt>
+      <trkpt lat="50.825664520" lon="12.919011116">
+        <ele>318.007812</ele>
+        <time>2016-01-10T16:08:42Z</time>
+        <speed>0.570000</speed>
+        <name>TP000022</name>
+      </trkpt>
+      <trkpt lat="50.825653076" lon="12.919046402">
+        <ele>314.453125</ele>
+        <time>2016-01-10T16:08:44Z</time>
+        <speed>0.730000</speed>
+        <name>TP000023</name>
+      </trkpt>
+      <trkpt lat="50.825630188" lon="12.919108391">
+        <ele>311.773438</ele>
+        <time>2016-01-10T16:08:47Z</time>
+        <speed>1.040000</speed>
+        <name>TP000024</name>
+      </trkpt>
+      <trkpt lat="50.825614929" lon="12.919157028">
+        <ele>310.062500</ele>
+        <time>2016-01-10T16:08:51Z</time>
+        <speed>1.200000</speed>
+        <name>TP000025</name>
+      </trkpt>
+      <trkpt lat="50.825599670" lon="12.919209480">
+        <ele>308.765625</ele>
+        <time>2016-01-10T16:08:55Z</time>
+        <speed>0.870000</speed>
+        <name>TP000026</name>
+      </trkpt>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>track-4</name>
+    <desc>Log every 0 sec, 4 m</desc>
+    <trkseg>
+      <trkpt lat="50.825466156" lon="12.919836044">
+        <ele>293.843750</ele>
+        <time>2016-01-10T16:10:13Z</time>
+        <speed>0.100000</speed>
+        <name>TP000027</name>
+      </trkpt>
+      <trkpt lat="50.825447083" lon="12.919887543">
+        <ele>293.843750</ele>
+        <time>2016-01-10T16:10:16Z</time>
+        <speed>1.230000</speed>
+        <name>TP000028</name>
+      </trkpt>
+      <trkpt lat="50.825450897" lon="12.919939041">
+        <ele>291.710938</ele>
+        <time>2016-01-10T16:10:19Z</time>
+        <speed>1.240000</speed>
+        <name>TP000029</name>
+      </trkpt>
+      <trkpt lat="50.825443268" lon="12.919986725">
+        <ele>289.078125</ele>
+        <time>2016-01-10T16:10:22Z</time>
+        <speed>1.120000</speed>
+        <name>TP000030</name>
+      </trkpt>
+      <trkpt lat="50.825431824" lon="12.920049667">
+        <ele>288.179688</ele>
+        <time>2016-01-10T16:10:26Z</time>
+        <speed>1.060000</speed>
+        <name>TP000031</name>
+      </trkpt>
+      <trkpt lat="50.825454712" lon="12.920094490">
+        <ele>287.937500</ele>
+        <time>2016-01-10T16:10:34Z</time>
+        <speed>0.420000</speed>
+        <name>TP000032</name>
+      </trkpt>
+      <trkpt lat="50.825489044" lon="12.920095444">
+        <ele>289.804688</ele>
+        <time>2016-01-10T16:10:38Z</time>
+        <speed>0.970000</speed>
+        <name>TP000033</name>
+      </trkpt>
+      <trkpt lat="50.825527191" lon="12.920075417">
+        <ele>290.710938</ele>
+        <time>2016-01-10T16:10:41Z</time>
+        <speed>1.130000</speed>
+        <name>TP000034</name>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
