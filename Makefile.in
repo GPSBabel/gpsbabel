@@ -322,7 +322,7 @@ release-tarball: release-sourcecheck
 #	rm -fr gpsbabel-$(VERSIOND)
 	# cp -ap internal_styles.cc gpsbabel-$(VERSIOND)/
 	# tar czf /tmp/gpsbabel-$(VERSIOND).tar.gz gpsbabel-$(VERSIOND)
-	git archive HEAD | gzip > /tmp/gpsbabel-$(VERSIOND).tar.gz
+	git archive --prefix=gpsbabel-$(VERSIOND)/ HEAD | gzip > /tmp/gpsbabel-$(VERSIOND).tar.gz
 	gb_upload /tmp/gpsbabel-$(VERSIOND).tar.gz
 #	cd /tmp ; tar xzf gpsbabel-$(VERSIOND).tar.gz
 
