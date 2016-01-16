@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="51.390787309" minlon="7.634582135" maxlat="51.416622730" maxlon="7.670407825"/>
+  <wpt lat="51.400591976" lon="7.655250113">
+    <name>Beispiel-Text</name>
+    <cmt>Beispiel-Text</cmt>
+    <desc>Beispiel-Text</desc>
+  </wpt>
+  <trk>
+    <name>Linie</name>
+    <trkseg>
+      <trkpt lat="51.416622730" lon="7.634582135"/>
+      <trkpt lat="51.413106821" lon="7.637561773"/>
+      <trkpt lat="51.409758874" lon="7.639529832"/>
+      <trkpt lat="51.407628129" lon="7.641820840"/>
+      <trkpt lat="51.406255307" lon="7.643586185"/>
+      <trkpt lat="51.403222581" lon="7.645616042"/>
+      <trkpt lat="51.399781311" lon="7.647298422"/>
+      <trkpt lat="51.398632218" lon="7.648984855"/>
+      <trkpt lat="51.397982280" lon="7.651087602"/>
+      <trkpt lat="51.398325694" lon="7.653592205"/>
+      <trkpt lat="51.398944395" lon="7.656591723"/>
+      <trkpt lat="51.398664437" lon="7.659617592"/>
+      <trkpt lat="51.396813518" lon="7.662832934"/>
+      <trkpt lat="51.393519865" lon="7.665658933"/>
+      <trkpt lat="51.390787309" lon="7.670407825"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <name>Fläche</name>
+    <trkseg>
+      <trkpt lat="51.402506568" lon="7.653684988"/>
+      <trkpt lat="51.403988399" lon="7.653569612"/>
+      <trkpt lat="51.406267829" lon="7.656377105"/>
+      <trkpt lat="51.404428210" lon="7.656646600"/>
+      <trkpt lat="51.403620311" lon="7.656742131"/>
+      <trkpt lat="51.402285607" lon="7.657930916"/>
+      <trkpt lat="51.401834671" lon="7.657800408"/>
+      <trkpt lat="51.402486377" lon="7.655841237"/>
+      <trkpt lat="51.402417535" lon="7.653759457"/>
+      <trkpt lat="51.402506568" lon="7.653684988"/>
+    </trkseg>
+  </trk>
+</gpx>

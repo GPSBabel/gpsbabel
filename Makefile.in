@@ -81,7 +81,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o  \
 	vpl.o teletype.o jogmap.o bushnell.o bushnell_trl.o wintec_tes.o \
 	subrip.o garmin_xt.o garmin_fit.o lowranceusr4.o \
 	mtk_locus.o googledir.o mapbar_track.o f90g_track.o mapfactor.o energympro.o \
-	mynav.o
+	mynav.o ggv_bin.o
 
 FMTS=@FMTS@
 
@@ -578,6 +578,8 @@ gdb.o: gdb.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   garmin_tables.h grtcirc.h
 geo.o: geo.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h inifile.h session.h src/core/datetime.h src/core/file.h
+ggv_bin.o: ggv_bin.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
+  gbfile.h cet.h inifile.h session.h src/core/datetime.h
 ggv_log.o: ggv_log.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h inifile.h session.h src/core/datetime.h grtcirc.h \
   jeeps/gpsmath.h jeeps/gpsport.h
