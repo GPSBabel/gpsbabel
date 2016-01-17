@@ -1,0 +1,11 @@
+#
+# Basic globalsat sport tests (readonly)
+#
+# Test files generated with
+# sudo ./gpsbabel -i globalsat,dump-file=reference/track/globalsat_gh625XT.bin -f /dev/ttyUSB0 -o gpx,garminextensions -F globalsat_demo.gpx
+# sudo ./gpsbabel -i globalsat,input-is-dump-file=1 -f reference/track/globalsat_gh625XT.bin -o gpx,garminextensions -F reference/track/globalsat_gh625XT.gpx
+# 
+rm -f ${TMPDIR}/globalsat_*
+gpsbabel -i globalsat,input-is-dump-file=1,dump-file=${TMPDIR}/globalsat_gh625XT.bin -f ${REFERENCE}/track/globalsat_gh625XT.bin -o gpx,garminextensions -F ${TMPDIR}/globalsat_gh625XT.gpx
+compare ${REFERENCE}/track/globalsat_gh625XT.bin ${TMPDIR}/globalsat_gh625XT.bin
+compare ${REFERENCE}/track/globalsat_gh625XT.gpx ${TMPDIR}/globalsat_gh625XT.gpx
