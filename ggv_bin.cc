@@ -22,10 +22,11 @@
 */
 
 #include "defs.h"
-#include <QtCore/QtEndian>
 #include <QtCore/QByteArray>
+#include <QtCore/QDataStream>
 #include <QtCore/QDebug>
 #include <QtCore/QFile>
+#include <QtCore/QtEndian>
 
 #define MYNAME "ggv_bin"
 
