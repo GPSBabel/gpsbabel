@@ -4825,7 +4825,7 @@ rm -f core conftest.err conftest.$ac_objext \
       if test $QT_FW_OR_LIBS = "**Unknown**" ; then
          QT_FW_OR_LIBS=$($QMAKE -query QT_INSTALL_LIBS)
       fi
-      QT_LIBS="-F$QT_FW_OR_LIBS -framework QtCore"
+      QT_LIBS="-Wl,-rpath, $QT_FW_OR_LIBS -F$QT_FW_OR_LIBS -framework QtCore"
       QT_INC="$QT_FW_OR_LIBS"
       QT_INC_OPT="-F"
       QT_SYSINC_OPT="-iframework"
