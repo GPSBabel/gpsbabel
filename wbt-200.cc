@@ -392,9 +392,9 @@ static wintec_gps_types guess_device()
 
 }
 
-static void rd_init(const char* fname)
+static void rd_init(const QString& fname)
 {
-  port = xstrdup(fname);
+  port = xstrdup(qPrintable(fname));
 
   db(1, "Opening port...\n");
   if ((fd = gbser_init(port)) == NULL) {
@@ -427,11 +427,11 @@ static int rd_buf(void* buf, int len)
   return 1;
 }
 
-static void file_init(const char* fname)
+static void file_init(const QString& fname)
 {
   db(1, "Opening file...\n");
-  if ((fl = fopen(fname, "rb")) == NULL) {
-    fatal(MYNAME ": Can't open file '%s'\n", fname);
+  if ((fl = fopen(qPrintable(fname), "rb")) == NULL) {
+    fatal(MYNAME ": Can't open file '%s'\n", qPrintable(fname));
   }
 }
 

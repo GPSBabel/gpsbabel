@@ -50,7 +50,6 @@
 */
 
 static gbfile* fout;
-static char* filename;
 static int curr_rte_num, target_rte_num;
 static double radius;
 static inifile_t* ini;
@@ -191,10 +190,9 @@ bcr_init_radius(void)
 }
 
 static void
-bcr_rd_init(const char* fname)
+bcr_rd_init(const QString& fname)
 {
-  filename = xstrdup(fname);
-  ini = inifile_init(fname, MYNAME);
+  ini = inifile_init(qPrintable(fname), MYNAME);
   if (ini->unicode) {
     cet_convert_init(CET_CHARSET_UTF8, 1);
   }
@@ -205,7 +203,6 @@ static void
 bcr_rd_deinit(void)
 {
   inifile_done(ini);
-  xfree(filename);
 }
 
 /* ------------------------------------------------------------*/
@@ -337,9 +334,8 @@ bcr_data_read(void)
 /* %%% bcr write support %%% ----------------------------------- */
 
 static void
-bcr_wr_init(const char* fname)
+bcr_wr_init(const QString& fname)
 {
-  filename = xstrdup(fname);
   fout = gbfopen(fname, "wb", MYNAME);
   bcr_init_radius();
 }
@@ -348,7 +344,6 @@ static void
 bcr_wr_deinit(void)
 {
   gbfclose(fout);
-  xfree(filename);
 }
 
 static void

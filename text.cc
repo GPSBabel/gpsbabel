@@ -36,7 +36,7 @@ static char* degformat = NULL;
 static char* altunits = NULL;
 static char* split_output = NULL;
 static int waypoint_count;
-static char* output_name;
+static QString output_name;
 
 #define MYNAME "TEXT"
 
@@ -74,10 +74,10 @@ arglist_t text_args[] = {
 
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   waypoint_count = 0;
-  output_name = xstrdup(fname);
+  output_name = fname;
   if (!split_output) {
     file_out = gbfopen(fname, "w", MYNAME);
   }
@@ -91,7 +91,7 @@ wr_deinit(void)
     gbfclose(file_out);
   }
   mkshort_del_handle(&mkshort_handle);
-  xfree(output_name);
+  output_name.clear();
 }
 
 static void

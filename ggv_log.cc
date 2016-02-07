@@ -44,7 +44,7 @@ arglist_t ggv_log_args[] = {
 *******************************************************************************/
 
 static void
-ggv_log_rd_init(const char* fname)
+ggv_log_rd_init(const QString& fname)
 {
   static char magic[32];
   int len = 0;
@@ -190,7 +190,7 @@ ggv_log_read(void)
 }
 
 static void
-ggv_log_wr_init(const char* fname)
+ggv_log_wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
 

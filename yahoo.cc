@@ -55,7 +55,7 @@ static xg_tag_mapping gl_map[] = {
 };
 
 static void
-yahoo_rd_init(const char* fname)
+yahoo_rd_init(const QString& fname)
 {
   xml_init(fname, gl_map, NULL);
 }
@@ -73,7 +73,7 @@ yahoo_rd_deinit(void)
 }
 
 static void
-yahoo_wr_init(const char* fname)
+yahoo_wr_init(const QString& fname)
 {
   fatal("Writing file of type %s is not supported\n", MYNAME);
 }

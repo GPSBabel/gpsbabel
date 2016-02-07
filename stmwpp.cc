@@ -60,7 +60,7 @@ arglist_t stmwpp_args[] = {
 
 
 static void
-stmwpp_rd_init(const char* fname)
+stmwpp_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
   track = NULL;
@@ -194,7 +194,7 @@ stmwpp_data_read(void)
 }
 
 static void
-stmwpp_rw_init(const char* fname)
+stmwpp_rw_init(const QString& fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
   short_h = mkshort_new_handle();

@@ -33,7 +33,7 @@ static short_handle mkshort_handle;
 #define MYNAME "GPSUTIL"
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   file_in = gbfopen(fname, "rb", MYNAME);
 }
@@ -45,7 +45,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   file_out = gbfopen(fname, "w", MYNAME);
   mkshort_handle = mkshort_new_handle();

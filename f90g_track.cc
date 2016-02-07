@@ -51,7 +51,7 @@ arglist_t f90g_track_args[] = {
 *******************************************************************************/
 #define VALIDHEADER "MEDIA 1."
 static void
-f90g_track_rd_init(const char* fname)
+f90g_track_rd_init(const QString& fname)
 {
   char header[HEADERRECORDSIZE];
 
@@ -70,7 +70,7 @@ f90g_track_rd_init(const char* fname)
     // start the track list
     track = route_head_alloc();
     is_fatal((track == NULL), MYNAME ": memory non-enough");
-    track->rte_name = QString::fromLatin1(fname);
+    track->rte_name = fname;
     track_add_head(track);
   }
 }

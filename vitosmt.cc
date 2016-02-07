@@ -54,7 +54,7 @@ WriteDouble(void* ptr, double d)
 
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   infile = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -220,7 +220,7 @@ vitosmt_read(void)
 }
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   warning(MYNAME " write: format is experimental and may crash Vito Navigator II.\n");
   ofs = gbfopen_le(fname, "wb", MYNAME);

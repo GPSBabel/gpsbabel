@@ -994,7 +994,7 @@ mmo_finalize_rtept_cb(const Waypoint* wptref)
 *******************************************************************************/
 
 static void
-mmo_rd_init(const char* fname)
+mmo_rd_init(const QString& fname)
 {
   int i;
 
@@ -1445,7 +1445,7 @@ mmo_write_trk_tail_cb(const route_head* trk)
 /**************************************************************************/
 
 static void
-mmo_wr_init(const char* fname)
+mmo_wr_init(const QString& fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
 

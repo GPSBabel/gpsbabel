@@ -38,7 +38,7 @@ arglist_t mapbar_track_args[] = {
 *******************************************************************************/
 
 static void
-mapbar_track_rd_init(const char* fname)
+mapbar_track_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
 }

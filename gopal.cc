@@ -100,11 +100,9 @@ int gopal_check_line(char* line)
 *******************************************************************************/
 
 static void
-gopal_rd_init(const char* fname)
+gopal_rd_init(const QString& fname)
 {
-  char buff[32];
   char* ck;
-  const char* filename;
   CHECK_BOOL(optclean);
   if (optminspeed) {
     minspeed=atof(optminspeed);
@@ -128,7 +126,6 @@ gopal_rd_init(const char* fname)
 
   fin = gbfopen(fname, "r", MYNAME);
 
-  memset(buff,0,sizeof(buff));
   if (optdate) {
     memset(&opt_tm, 0, sizeof(opt_tm));
 
@@ -142,15 +139,16 @@ gopal_rd_init(const char* fname)
 
   } else {
     /* remove path */
-    filename = get_filename(fname);
+    QString filename = get_filename(fname);
+	QString datestr;
 
-    if ((strncmp(filename,"track",5)==0)&&(strlen(filename)>13)) { // we need at least 13 letters: trackYYYYMMDD...
-      strncpy(&buff[0],&filename[5],8);
-    } else if ((strncmp(filename,"A_",2)==0)&&(strlen(filename)>10)) { // here we expect at least 10 letters: A_YYYYMMDD...
-      strncpy(&buff[0],&filename[2],8);
+    if (filename.startsWith("track")&&(filename.length()>13)) { // we need at least 13 letters: trackYYYYMMDD...
+      datestr = filename.mid(5,8);
+    } else if (filename.startsWith("A_")&&(filename.length()>10)) { // here we expect at least 10 letters: A_YYYYMMDD...
+      datestr = filename.mid(2,8);
     }
     // in buff we should now have something wich looks like a valid date starting with YYYYMMDD
-    /*ck = (char*)*/strptime(buff, "%Y%m%d", &filenamedate);
+    /*ck = (char*)*/strptime(qPrintable(datestr), "%Y%m%d", &filenamedate);
     // if (((ck == NULL) || (*ck != '\0') )&&!(optdate))
     // fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"date\" switch!\n", buff);
     // /* else */ if (filenamedate.tm_year < 70)
@@ -377,7 +375,7 @@ gopal_write_waypt(const Waypoint* wpt)
 
 
 static void
-gopal_wr_init(const char* fname)
+gopal_wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 }

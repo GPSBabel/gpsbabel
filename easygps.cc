@@ -37,7 +37,7 @@ arglist_t easygps_args[] = {
 };
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   int sz;
   char ibuf[100] = {'0'} ;
@@ -50,7 +50,7 @@ rd_init(const char* fname)
   if ((sz < 52) ||
       strncmp(ibuf, ezsig, sizeof(ezsig)-1) ||
       (ibuf[51] != 'W')) {
-    fatal(MYNAME ": %s is not an EasyGPS file.\n", fname);
+    fatal(MYNAME ": %s is not an EasyGPS file.\n", qPrintable(fname));
   }
 }
 
@@ -61,7 +61,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   file_out = gbfopen_le(fname, "wb", MYNAME);
   mkshort_handle = mkshort_new_handle();

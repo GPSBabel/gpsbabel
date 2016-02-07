@@ -56,13 +56,13 @@ inline state_t operator++(state_t& rs, int)
 
 static const int reqd_bytes[num_states] = { 6, 1, 2, 2, 25, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1 };
 
-static void rd_init(const char* fname)
+static void rd_init(const QString& fname)
 {
-  if (serial_handle = gbser_init(fname), NULL == serial_handle) {
-    fatal(MYNAME ": Can't open port '%s'\n", fname);
+  if (serial_handle = gbser_init(qPrintable(fname)), NULL == serial_handle) {
+    fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
   }
   if (gbser_set_port(serial_handle, 9600, 8, 0, 1) != gbser_OK) {
-    fatal(MYNAME ": Can't configure port '%s'\n", fname);
+    fatal(MYNAME ": Can't configure port '%s'\n", qPrintable(fname));
   }
 }
 

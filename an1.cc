@@ -1190,7 +1190,7 @@ Init_Road_Changes(void)
 }
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   infile = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -1211,7 +1211,7 @@ my_read(void)
 }
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   outfile = gbfopen_le(fname, "wb", MYNAME);
   Init_Output_Type();

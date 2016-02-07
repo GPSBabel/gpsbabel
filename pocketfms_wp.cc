@@ -28,7 +28,7 @@
 static gbfile* file_in, *file_out;
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   file_in = gbfopen_le(fname, "r", MYNAME);
 }
@@ -96,7 +96,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   file_out = gbfopen_le(fname, "w", MYNAME);
 }

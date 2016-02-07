@@ -278,7 +278,7 @@ add_logpoints(route_head* track)
 /**********************************************************************/
 
 static void
-sbn_rd_init(const char* fname)
+sbn_rd_init(const QString& fname)
 {
   file_handle = gbfopen(fname, "r", MYNAME);
 }

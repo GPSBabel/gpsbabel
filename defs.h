@@ -605,7 +605,7 @@ typedef struct {
 
 extern posn_status tracking_status;
 
-typedef void (*ff_init)(char const*);
+typedef void (*ff_init)(const QString&);
 typedef void (*ff_deinit)(void);
 typedef void (*ff_read)(void);
 typedef void (*ff_write)(void);
@@ -978,7 +978,7 @@ char* convert_human_date_format(const char* human_datef);	/* "MM,YYYY,DD" -> "%m
 char* convert_human_time_format(const char* human_timef);	/* "HH+mm+ss"   -> "%H+%M+%S" */
 char* pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html);    /* decimal ->  dd.dddd or dd mm.mmm or dd mm ss */
 
-const char* get_filename(const char* fname);			/* extract the filename portion */
+const QString get_filename(const QString& fname);			/* extract the filename portion */
 
 /*
  * Character encoding transformations.

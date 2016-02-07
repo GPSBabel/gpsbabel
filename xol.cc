@@ -131,7 +131,7 @@ static void xol_waypt(xg_string args, const QXmlStreamAttributes* attrv) {
   GPS_Math_Swiss_EN_To_WGS84(x, y, &wpt->latitude, &wpt->longitude);
 }
 
-static void xol_rd_init(const char* fname) {
+static void xol_rd_init(const QString& fname) {
   trk = NULL;
   wpt = NULL;
 
@@ -155,7 +155,7 @@ static void xol_waypt_bound_calc(const Waypoint* wpt) {
   waypt_add_to_bounds(&all_bounds, wpt);
 }
 
-static void xol_wr_init(const char* fname) {
+static void xol_wr_init(const QString& fname) {
   oqfile = new gpsbabel::File(fname);
   oqfile->open(QIODevice::WriteOnly | QIODevice::Text);
 

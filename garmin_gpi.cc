@@ -1433,7 +1433,7 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
 *******************************************************************************/
 
 static void
-garmin_gpi_rd_init(const char* fname)
+garmin_gpi_rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
   rdata = new reader_data_t;
@@ -1455,7 +1455,7 @@ garmin_gpi_rd_init(const char* fname)
 
 
 static void
-garmin_gpi_wr_init(const char* fname)
+garmin_gpi_wr_init(const QString& fname)
 {
   int i;
 

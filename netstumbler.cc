@@ -65,7 +65,7 @@ arglist_t netstumbler_args[] = {
 };
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   file_in = gbfopen(fname, "rb", MYNAME);
   macstumbler = 0;

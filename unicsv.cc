@@ -590,7 +590,7 @@ unicsv_fondle_header(QString s)
 }
 
 static void
-unicsv_rd_init(const char* fname)
+unicsv_rd_init(const QString& fname)
 {
   char* c;
   unicsv_altscale = 1.0;
@@ -1834,7 +1834,7 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
 
 
 static void
-unicsv_wr_init(const char* filename)
+unicsv_wr_init(const QString& filename)
 {
   fout = gbfopen(filename, "wb", MYNAME);
 

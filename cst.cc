@@ -136,7 +136,7 @@ cst_make_url(char* str)
 /* --------------------------------------------------------------------------- */
 
 static void
-cst_rd_init(const char* fname)
+cst_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
   temp_route = NULL;

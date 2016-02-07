@@ -43,13 +43,13 @@ static gbfile* fin, *fout;
 *******************************************************************************/
 
 static void
-gnav_trl_rd_init(const char* fname)
+gnav_trl_rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
 }
 
 static void
-gnav_trl_rw_init(const char* fname)
+gnav_trl_rw_init(const QString& fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
 }

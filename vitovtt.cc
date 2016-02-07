@@ -43,7 +43,7 @@ static const int			vitovtt_secondscale			= 30000000;
 static const int			vitovtt_microsecondscale	= 30;
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   infile = gbfopen_le(fname, "rb", MYNAME);
 }

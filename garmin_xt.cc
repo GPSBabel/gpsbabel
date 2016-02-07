@@ -72,7 +72,7 @@ arglist_t format_garmin_xt_args[] = {
  * %%%        Reader callbacks                                              %%% *
  *******************************************************************************/
 static void
-format_garmin_xt_rd_init(const char* fname)
+format_garmin_xt_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 }

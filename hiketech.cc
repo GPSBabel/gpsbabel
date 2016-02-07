@@ -79,7 +79,7 @@ static xg_tag_mapping ht_map[] = {
 };
 
 static void
-hiketech_rd_init(const char* fname)
+hiketech_rd_init(const QString& fname)
 {
   xml_init(fname, ht_map, NULL);
 }
@@ -97,7 +97,7 @@ hiketech_rd_deinit(void)
 }
 
 static void
-hiketech_wr_init(const char* fname)
+hiketech_wr_init(const QString& fname)
 {
   ofd = gbfopen(fname, "w", MYNAME);
 

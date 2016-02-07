@@ -68,7 +68,7 @@ void MapfactorRead()
 }
 
 static void
-mapfactor_rd_init(const char* fname)
+mapfactor_rd_init(const QString& fname)
 {
   mapfactor_read_fname = fname;
 }
@@ -98,7 +98,7 @@ mapfactor_rd_deinit(void)
 }
 
 static void
-mapfactor_wr_init(const char* fname)
+mapfactor_wr_init(const QString& fname)
 {
   oqfile = new gpsbabel::File(fname);
   oqfile->open(QIODevice::WriteOnly | QIODevice::Text);

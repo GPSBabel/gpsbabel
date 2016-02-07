@@ -195,7 +195,7 @@ subrip_trkpt_pr(const Waypoint* waypointp)
 /* global callback (exported) functions */
 
 static void
-subrip_wr_init(const char* fname)
+subrip_wr_init(const QString& fname)
 {
   time_t gpstime_t;
   struct tm* ptm_gps;

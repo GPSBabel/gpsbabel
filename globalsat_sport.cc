@@ -406,7 +406,7 @@ globalsat_probe_device()
 }
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME " rd_init()\n");
@@ -422,23 +422,23 @@ rd_init(const char* fname)
     }
   }
   if (!opt_input_dump_file) {
-    serial_init(fname);
+    serial_init(qPrintable(fname));
   } else {
     // read from dump-file instead of serial
     in_file = gbfopen(fname, "r", MYNAME);
-    is_fatal(!in_file, "Could not open dumpfile for input: %s", fname);
+    is_fatal(!in_file, "Could not open dumpfile for input: %s", qPrintable(fname));
 
   }
   globalsat_probe_device();
 }
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME " wr_init()\n");
   }
-  serial_init(fname);
+  serial_init(qPrintable(fname));
 }
 
 

@@ -110,7 +110,7 @@ static int d103_icon_number_from_symbol(const QString& s);
 
 
 static void
-rw_init(const char* fname)
+rw_init(const QString& fname)
 {
   int receiver_short_length;
   int receiver_must_upper = 1;
@@ -130,7 +130,7 @@ rw_init(const char* fname)
   GPS_Enable_Error();
 
   if (poweroff) {
-    GPS_Command_Off(fname);
+    GPS_Command_Off(qPrintable(fname));
     return;
   }
 
@@ -140,7 +140,7 @@ rw_init(const char* fname)
    * an affected unit.
    */
   if (resettime) {
-    GPS_Command_Send_Time(fname, current_time().toTime_t());
+    GPS_Command_Send_Time(qPrintable(fname), current_time().toTime_t());
     return;
   }
 
@@ -162,10 +162,10 @@ rw_init(const char* fname)
     }
   }
 
-  if (GPS_Init(fname) < 0) {
-    fatal(MYNAME ":Can't init %s\n", fname);
+  if (GPS_Init(qPrintable(fname)) < 0) {
+    fatal(MYNAME ":Can't init %s\n", qPrintable(fname));
   }
-  portname = fname;
+  portname = xstrdup(qPrintable(fname));
 
   if (baud && baud != DEFAULT_BAUD) {
     if (0 == GPS_Set_Baud_Rate(portname, baud)) {
@@ -327,7 +327,7 @@ rw_init(const char* fname)
 }
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   if (setjmp(gdx_jmp_buf)) {
     const char* vec_opts = NULL;
@@ -352,6 +352,9 @@ rw_deinit(void)
   if (mkshort_handle) {
     mkshort_del_handle(&mkshort_handle);
   }
+
+  xfree(portname);
+  portname = NULL;
 }
 
 static int
@@ -774,10 +777,10 @@ pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
 static gpsdevh* pvt_fd;
 
 static void
-pvt_init(const char* fname)
+pvt_init(const QString& fname)
 {
   rw_init(fname);
-  GPS_Command_Pvt_On(fname, &pvt_fd);
+  GPS_Command_Pvt_On(qPrintable(fname), &pvt_fd);
 }
 
 static Waypoint*

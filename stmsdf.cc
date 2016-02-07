@@ -359,7 +359,7 @@ parse_point(char* line)
 /* ----------------------------------------------------------- */
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
 
@@ -671,7 +671,7 @@ track_disp_custom_cb(const Waypoint* wpt)
 }
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
   short_h = mkshort_new_handle();

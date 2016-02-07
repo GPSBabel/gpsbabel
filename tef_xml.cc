@@ -299,7 +299,7 @@ tef_point(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-tef_xml_rd_init(const char* fname)
+tef_xml_rd_init(const QString& fname)
 {
   wpt_tmp = NULL;
   waypoints = 0;

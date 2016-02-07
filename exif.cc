@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <QtCore/QFile>
 
 #define MYNAME "exif"
 
@@ -135,7 +136,7 @@ static exif_app_t* exif_app;
 const Waypoint* exif_wpt_ref;
 time_t exif_time_ref;
 static char exif_success;
-static char* exif_fout_name;
+static QString exif_fout_name;
 
 static char* opt_filename, *opt_overwrite, *opt_frame, *opt_name;
 
@@ -1340,7 +1341,7 @@ exif_write_apps(void)
 *******************************************************************************/
 
 static void
-exif_rd_init(const char* fname)
+exif_rd_init(const QString& fname)
 {
   fin = gbfopen_be(fname, "rb", MYNAME);
   QUEUE_INIT(&exif_apps);
@@ -1373,12 +1374,12 @@ exif_read(void)
 }
 
 static void
-exif_wr_init(const char* fname)
+exif_wr_init(const QString& fname)
 {
   uint16_t soi;
 
   exif_success = 0;
-  exif_fout_name = xstrdup(fname);
+  exif_fout_name = fname;
 
   QUEUE_INIT(&exif_apps);
 
@@ -1405,23 +1406,21 @@ exif_wr_init(const char* fname)
 static void
 exif_wr_deinit(void)
 {
-  char* tmpname;
 
   exif_release_apps();
-  tmpname = xstrdup(fout->name);
+  QString tmpname = QString::fromLocal8Bit(fout->name);
   gbfclose(fout);
 
   if (exif_success) {
     if (*opt_overwrite == '1') {
-      remove(exif_fout_name);
-      rename(tmpname, exif_fout_name);
+      QFile::remove(exif_fout_name);
+      QFile::rename(tmpname, exif_fout_name);
     }
   } else {
-    remove(tmpname);
+    QFile::remove(tmpname);
   }
 
-  xfree(exif_fout_name);
-  xfree(tmpname);
+  exif_fout_name.clear();
 }
 
 static void

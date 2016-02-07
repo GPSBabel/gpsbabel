@@ -200,7 +200,7 @@ void wfff_e(xg_string args, const QXmlStreamAttributes*)
 }
 
 void
-wfff_xml_rd_init(const char* fname)
+wfff_xml_rd_init(const QString& fname)
 {
   tosscount = 0;
 

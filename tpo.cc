@@ -1392,7 +1392,7 @@ void tpo_read_3_x(void)
 
 
 static void
-tpo_rd_init(const char* fname)
+tpo_rd_init(const QString& fname)
 {
 
   // preprare for an attempt to deallocate memory that may or may not get allocated
@@ -1879,7 +1879,7 @@ tpo_track_tlr(const route_head* rte)
 }
 
 static void
-tpo_wr_init(const char* fname)
+tpo_wr_init(const QString& fname)
 {
   if (doing_wpts || doing_rtes) {
     fatal(MYNAME ": this file format only supports tracks, not waypoints or routes.\n");

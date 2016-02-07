@@ -162,7 +162,7 @@ static struct tm tm;
 static Waypoint* curr_waypt;
 static Waypoint* last_waypt;
 static void* gbser_handle;
-static const char* posn_fname;
+static QString posn_fname;
 static queue pcmpt_head;
 
 static int without_date;	/* number of created trackpoints without a valid date */
@@ -194,7 +194,7 @@ static int datum;
 static int had_checksum;
 
 static Waypoint* nmea_rd_posn(posn_status*);
-static void nmea_rd_posn_init(const char* fname);
+static void nmea_rd_posn_init(const QString& fname);
 
 arglist_t nmea_args[] = {
   {"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64" },
@@ -262,7 +262,7 @@ nmea_release_wpt(Waypoint* wpt)
 }
 
 static void
-nmea_rd_init(const char* fname)
+nmea_rd_init(const QString& fname)
 {
   curr_waypt = NULL;
   last_waypt = NULL;
@@ -317,10 +317,13 @@ nmea_rd_deinit(void)
     fatal("nmea_rd_deinit: illegal read_mode.\n");
     break;
   }
+
+  posn_fname.clear();
+
 }
 
 static void
-nmea_wr_init(const char* portname)
+nmea_wr_init(const QString& portname)
 {
   CHECK_BOOL(opt_gprmc);
   CHECK_BOOL(opt_gpgga);
@@ -1096,13 +1099,13 @@ nmea_read(void)
 }
 
 void
-nmea_rd_posn_init(const char* fname)
+nmea_rd_posn_init(const QString& fname)
 {
-  if ((gbser_handle = gbser_init(fname)) != NULL) {
+  if ((gbser_handle = gbser_init(qPrintable(fname))) != NULL) {
     read_mode = rm_serial;
     gbser_set_speed(gbser_handle, 4800);
   } else {
-    fatal(MYNAME ": Could not open '%s' for position tracking.\n", fname);
+    fatal(MYNAME ": Could not open '%s' for position tracking.\n", qPrintable(fname));
   }
 
   gbser_flush(gbser_handle);
@@ -1206,7 +1209,7 @@ nmea_rd_posn(posn_status* posn_status)
           continue;
         }
       }
-      fatal(MYNAME ": No data received on %s.\n", posn_fname);
+      fatal(MYNAME ": No data received on %s.\n", qPrintable(posn_fname));
     }
     nmea_parse_one_line(ibuf);
     if (lt != last_read_time) {
@@ -1385,7 +1388,7 @@ nmea_write(void)
 }
 
 static void
-nmea_wr_posn_init(const char* fname)
+nmea_wr_posn_init(const QString& fname)
 {
   nmea_wr_init(fname);
 }

@@ -68,8 +68,8 @@ static int precision;
 
 static Waypoint* wpt_tmp;
 static int wpt_tmp_queued;
-static const char* posnfilename;
-static char* posnfilenametmp;
+static QString posnfilename;
+static QString posnfilenametmp;
 
 static route_head* gx_trk_head;
 static QList<gpsbabel::DateTime>* gx_trk_times;
@@ -460,7 +460,7 @@ void gx_trk_coord(xg_string args, const QXmlStreamAttributes*)
 
 static
 void
-kml_rd_init(const char* fname)
+kml_rd_init(const QString& fname)
 {
   xml_init(fname, kml_map, NULL);
   xml_ignore_tags(kml_tags_to_ignore);
@@ -480,7 +480,7 @@ kml_rd_deinit(void)
 }
 
 static void
-kml_wr_init(const char* fname)
+kml_wr_init(const QString& fname)
 {
   char u = 's';
   waypt_init_bounds(&kml_bounds);
@@ -523,10 +523,10 @@ kml_wr_init(const char* fname)
  * updated.
  */
 static void
-kml_wr_position_init(const char* fname)
+kml_wr_position_init(const QString& fname)
 {
   posnfilename = fname;
-  posnfilenametmp = xstrappend(xstrdup(fname), "-");
+  posnfilenametmp = QString("%1-").arg(fname);
   realtime_positioning = 1;
 
   /*
@@ -548,12 +548,12 @@ kml_wr_deinit(void)
   delete oqfile;
   oqfile = NULL;
 
-  if (posnfilenametmp) {
+  if (!posnfilenametmp.isEmpty()) {
 #if __WIN32__
-    MoveFileExA(posnfilenametmp, posnfilename,
+    MoveFileExA(qPrintable(posnfilenametmp), qPrintable(posnfilename),
                 MOVEFILE_REPLACE_EXISTING);
 #endif
-    rename(posnfilenametmp, posnfilename);
+    QFile::rename(posnfilenametmp, posnfilename);
   }
 }
 
@@ -561,10 +561,8 @@ static void
 kml_wr_position_deinit(void)
 {
 //	kml_wr_deinit();
-  if (posnfilenametmp) {
-    xfree(posnfilenametmp);
-    posnfilenametmp = NULL;
-  }
+  posnfilename.clear();
+  posnfilenametmp.clear();
 }
 
 

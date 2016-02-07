@@ -39,7 +39,7 @@ typedef struct xg_tag_mapping {
 extern const char* xhtml_entities;
 void xml_ignore_tags(const char** taglist);
 
-void xml_init(const char* fname, xg_tag_mapping* tbl,const char* encoding);
+void xml_init(const QString& fname, xg_tag_mapping* tbl,const char* encoding);
 void xml_init_offset(const char* fname, xg_tag_mapping* tbl,
                      const char* encoding, gbsize_t offset);
 void xml_read(void);

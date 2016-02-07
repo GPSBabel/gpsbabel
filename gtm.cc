@@ -392,7 +392,7 @@ void convert_datum(double* lat, double* lon)
 /* Callbacks */
 
 static void
-gtm_rd_init(const char* fname)
+gtm_rd_init(const QString& fname)
 {
   int version;
   file_in = gbfopen_le(fname, "rb", MYNAME);
@@ -446,7 +446,7 @@ static void count_track_waypts(const Waypoint* wpt)
 }
 
 static void
-gtm_wr_init(const char* fname)
+gtm_wr_init(const QString& fname)
 {
   rt_count = tr_count = 0;
   track_disp_all(NULL, NULL, count_track_waypts);

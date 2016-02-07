@@ -39,7 +39,7 @@ static QString current_tag;
 static xg_tag_mapping* xg_tag_tbl;
 static QSet<QString> xg_ignore_taglist;
 
-static const char* rd_fname;
+static QString rd_fname;
 static QByteArray reader_data;
 static const char* xg_encoding;
 static QTextCodec* utf8_codec = QTextCodec::codecForName("UTF-8");
@@ -70,7 +70,7 @@ xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 }
 
 void
-xml_init(const char* fname, xg_tag_mapping* tbl, const char* encoding)
+xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding)
 {
   rd_fname = fname;
   xg_tag_tbl = tbl;
@@ -87,7 +87,7 @@ void
 xml_deinit(void)
 {
   reader_data.clear();
-  rd_fname = NULL;
+  rd_fname.clear();
   xg_tag_tbl = NULL;
   xg_encoding = NULL;
   codec = utf8_codec;
