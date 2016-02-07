@@ -3,7 +3,7 @@
 data.  This is the one specifically that makes <ulink url="http://www.delorme.com">Delorme</ulink> <productname>S&amp;A Deluxe 9</productname> happy. It's
 also a very simple program and useful for many other programs like
 spreadsheets, but contains only a very minimal information. For general
-purpos use, you'll probably be happer with our 
+purpose use, you'll probably be more happy with our 
 <link linkend="fmt_unicsv">universal csv (unicsv)</link> format.</para>
       <para> CSV is also the correct format for 
 	<productname>Lowrance MapCreate</productname>,
