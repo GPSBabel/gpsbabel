@@ -28,7 +28,14 @@
 <para>
 	To access the device using the serial protocol over USB the
 	device needs to be in Navilink mode, which can be activated
-	from the main menu of the device.
+	from the main menu of the device. This device uses a Prolific 
+	PL2303 USB/Serial adapter internally and that's how it will 
+	present itself to the host operating system. You thus need
+	USB drivers for the PL2303, such as those from the 'Download'
+	section of
+	<ulink url="http://www.locosystech.com/product.php?zln=en&id=30#">
+	Locosys USB Genie GT-31/BGT-31 drivers
+	</ulink>.
 </para>
 <para>
 	Details of the Navilink serial protocol can be found
