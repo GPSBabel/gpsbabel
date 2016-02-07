@@ -11,7 +11,9 @@ macx:DEFINES += HAVE_CONFIG_H
 
 ICON = images/appicon.icns
 
-QT += network \
+QT += core \
+      gui \
+      network \
       xml \
       webkit
 
