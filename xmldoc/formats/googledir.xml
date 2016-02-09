@@ -13,8 +13,9 @@ operating system, this shell script might be useful:
 #!/bin/sh 
 FROM="233 S. Upper Wacker Dr, Chicago, IL" 
 TO="1060 W. Addison St, Chicago, IL" 
-wget -O - "http://maps.googleapis.com/maps/api/directions/xml?origin=$FROM&destination=$TO&sensor=false" \
-2&amp;&gt;/dev/null &gt;google_map.js
-gpsbabel -i google -f google_map.js -o gpx -F google_map.gpx
+URL="http://maps.googleapis.com/maps/api/directions/xml"
+wget -O - "$URL?origin=$FROM&destination=$TO&sensor=false" \
+2>/dev/null >google_map.xml
+gpsbabel -i googledir -f google_map.xml -o gpx -F google_map.gpx
 ]]></programlisting>
     
