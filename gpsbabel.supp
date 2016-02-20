@@ -39,3 +39,23 @@
    ...
    fun:_ZN11QTextStreamC1EP9QIODevice
 }
+
+{
+   <ubuntu precise with qt 4.8.1 on travis>
+   Memcheck:Leak
+   fun:memalign
+   fun:posix_memalign
+   obj:/lib/x86_64-linux-gnu/libglib-2.0.so.0.3200.4
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_thread_self
+   fun:g_main_context_acquire
+   fun:g_main_context_push_thread_default
+   fun:_ZN27QEventDispatcherGlibPrivateC1EP13_GMainContext
+   fun:_ZN20QEventDispatcherGlibC1EP7QObject
+   fun:_ZN23QCoreApplicationPrivate21createEventDispatcherEv
+   fun:_ZN16QCoreApplication4initEv
+   fun:_ZN16QCoreApplicationC1ERiPPci
+   fun:main
+}
+

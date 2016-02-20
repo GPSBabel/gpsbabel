@@ -126,7 +126,7 @@ static route_head* track_head;
 *******************************************************************************/
 
 static void
-vpl_rd_init(const char* fname)
+vpl_rd_init(const QString& fname)
 {
   vpl_file_in = gbfopen(fname, "r", MYNAME);
 }
@@ -156,7 +156,7 @@ vpl_read(void)
 }
 
 static void
-vpl_wr_init(const char* fname)
+vpl_wr_init(const QString& fname)
 {
   fatal("Writing file of type %s is not support\n", MYNAME);
 }

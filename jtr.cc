@@ -82,7 +82,7 @@ jtr_parse_date(const char* str, struct tm* tm)
 *******************************************************************************/
 
 static void
-jtr_rd_init(const char* fname)
+jtr_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
 }
@@ -250,7 +250,7 @@ jtr_read(void)
 }
 
 static void
-jtr_wr_init(const char* fname)
+jtr_wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
 }

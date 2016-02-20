@@ -61,7 +61,7 @@ static xg_tag_mapping gl_map[] = {
 };
 
 static void
-glogbook_rd_init(const char* fname)
+glogbook_rd_init(const QString& fname)
 {
   xml_init(fname, gl_map, NULL);
 }
@@ -79,7 +79,7 @@ glogbook_rd_deinit(void)
 }
 
 static void
-glogbook_wr_init(const char* fname)
+glogbook_wr_init(const QString& fname)
 {
   ofd = gbfopen(fname, "w", MYNAME);
   writer.setAutoFormatting(true);

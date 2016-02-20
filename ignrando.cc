@@ -140,7 +140,7 @@ ignr_etape_alt(xg_string args, const QXmlStreamAttributes* attrv)
 /* callbacks registered in ignr_vecs */
 
 static void
-ignr_rd_init(const char* fname)
+ignr_rd_init(const QString& fname)
 {
   xml_init(fname, ignr_xml_map, NULL);
   wpt = NULL;
@@ -164,7 +164,7 @@ ignr_read(void)
 /* callbacks registered in ignr_vecs */
 
 static void
-ignr_rw_init(const char* fname)
+ignr_rw_init(const QString& fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 }

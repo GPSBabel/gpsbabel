@@ -37,7 +37,7 @@ arglist_t sbp_args[] = {
 *******************************************************************************/
 
 static void
-sbp_rd_init(const char* fname)
+sbp_rd_init(const QString& fname)
 {
   file_handle = gbfopen(fname, "r", MYNAME);
 }

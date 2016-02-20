@@ -481,7 +481,7 @@ destinator_rtept_disp(const Waypoint* wpt)
 *******************************************************************************/
 
 static void
-destinator_rd_init(const char* fname)
+destinator_rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -514,7 +514,7 @@ destinator_read_trk_wrapper(void)
 }
 
 static void
-destinator_wr_init(const char* fname)
+destinator_wr_init(const QString& fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
 }

@@ -1087,11 +1087,11 @@ nuke(void)
 }
 
 static void
-navilink_common_init(const char* name)
+navilink_common_init(const QString& name)
 {
-  if (gbser_is_serial(name)) {
-    if ((serial_handle = gbser_init(name)) == NULL) {
-      fatal(MYNAME ": Could not open serial port %s\n", name);
+  if (gbser_is_serial(qPrintable(name))) {
+    if ((serial_handle = gbser_init(qPrintable(name))) == NULL) {
+      fatal(MYNAME ": Could not open serial port %s\n", qPrintable(name));
     }
 
     if (gbser_set_port(serial_handle, 115200, 8, 0, 1) != gbser_OK) {
@@ -1130,14 +1130,14 @@ navilink_common_init(const char* name)
 }
 
 static void
-navilink_rd_init(const char* name)
+navilink_rd_init(const QString& name)
 {
   operation = READING;
   navilink_common_init(name);
 }
 
 static void
-navilink_wr_init(const char* name)
+navilink_wr_init(const QString& name)
 {
   operation = WRITING;
   navilink_common_init(name);

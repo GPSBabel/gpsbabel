@@ -538,7 +538,8 @@ gbfopen(const QString filename, const char* mode, const char* module)
     file->fileungetc = memapi_ungetc;
     file->filewrite = memapi_write;
   } else {
-    file->name = xstrdup(filename);
+    /* Be careful to convert back to local8Bit for these c based APIS */
+    file->name = xstrdup(qPrintable(filename));
     file->is_pipe = (filename == "-");
 
     /* Do we have a '.gz' extension in the filename ? */

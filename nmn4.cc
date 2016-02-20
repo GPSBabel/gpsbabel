@@ -243,7 +243,7 @@ nmn4_write_data(void)
 /* %%% global callbacks %%% */
 
 static void
-nmn4_rd_init(const char* fname)
+nmn4_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 }
@@ -261,7 +261,7 @@ nmn4_read(void)
 }
 
 static void
-nmn4_wr_init(const char* fname)
+nmn4_wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
 }

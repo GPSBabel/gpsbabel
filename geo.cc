@@ -95,7 +95,7 @@ void GeoReadLoc()
 }
 
 static void
-geo_rd_init(const char* fname)
+geo_rd_init(const QString& fname)
 {
   geo_read_fname = fname;
 }
@@ -157,7 +157,7 @@ geo_rd_deinit(void)
 }
 
 static void
-geo_wr_init(const char* fname)
+geo_wr_init(const QString& fname)
 {
   ofd = gbfopen(fname, "w", MYNAME);
 

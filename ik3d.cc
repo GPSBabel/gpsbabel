@@ -120,7 +120,7 @@ iktobj_type(xg_string args, const QXmlStreamAttributes*)
 }
 
 static void
-ikt_rd_init(const char* fname)
+ikt_rd_init(const QString& fname)
 {
   xml_init(fname, ikt_map, NULL);
 

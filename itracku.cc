@@ -362,7 +362,7 @@ arglist_t itracku_args[] = {
 *******************************************************************************/
 
 static void
-itracku_rd_init_common(const char* fname)
+itracku_rd_init_common(const QString& fname)
 {
   new_waypoint_count = 0;
 
@@ -377,11 +377,11 @@ itracku_rd_init_common(const char* fname)
 }
 
 static void
-itracku_rd_ser_init(const char* fname)
+itracku_rd_ser_init(const QString& fname)
 {
 #if LATER
   int i;
-  if (0 == strcmp(fname, port_auto_detect_filename)) {
+  if (0 == strcmp(qPrintable(fname), port_auto_detect_filename)) {
     dbg(1, "auto detecting port for iTrackU device");
     for (i=1; !fd && i<port_auto_detect_max_port; ++i) {
       xasprintf(&port, "com%d", i);
@@ -428,10 +428,10 @@ itracku_rd_ser_init(const char* fname)
 #endif
   {
 
-    if (gbser_is_serial(fname)) {
-      port = xstrdup(fname);
+    if (gbser_is_serial(qPrintable(fname))) {
+      port = xstrdup(qPrintable(fname));
 
-      dbg(1, "opening port %s", fname);
+      dbg(1, "opening port %s", qPrintable(fname));
       if ((fd = gbser_init(port)) == NULL) {
         fatal(MYNAME ": can't initialise port \"%s\"", port);
       }
@@ -440,7 +440,7 @@ itracku_rd_ser_init(const char* fname)
         fatal(MYNAME ": can't initialise device on port \"%s\"", port);
       }
     } else {
-      fatal(MYNAME ": \"%s\" is not a valid serial port", fname);
+      fatal(MYNAME ": \"%s\" is not a valid serial port", qPrintable(fname));
     }
   }
 
@@ -448,7 +448,7 @@ itracku_rd_ser_init(const char* fname)
 }
 
 static void
-itracku_rd_init(const char* fname)
+itracku_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
   itracku_rd_init_common(fname);
@@ -624,7 +624,7 @@ itracku_read(void)
 }
 
 static void
-itracku_wr_init(const char* fname)
+itracku_wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 }
@@ -653,7 +653,7 @@ itracku_exit(void)		/* optional */
 }
 
 static void
-itracku_rt_init(const char* fname)
+itracku_rt_init(const QString& fname)
 {
   itracku_rd_ser_init(fname);
   itracku_device_write_string("WP AP-Exit");

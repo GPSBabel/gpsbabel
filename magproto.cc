@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
+#include <QtCore/QFileInfo>
 
 static int bitrate = 4800;
 static int wptcmtcnt;
@@ -57,7 +58,7 @@ static char* nukewpt = NULL;
 static int route_out_count;
 static int waypoint_read_count;
 static int wpt_len = 8;
-static const char* curfname;
+static QString curfname;
 static int extension_hint;
 // For Explorist GC/510/610/710 familes, bludgeon in GPX support.
 // (This has nothing to do with the Explorist 100...600 products.)
@@ -569,10 +570,10 @@ retry:
 static void* serial_handle = NULL;
 
 static int
-terminit(const char* portname, int create_ok)
+terminit(const QString& portname, int create_ok)
 {
-  if (gbser_is_serial(portname)) {
-    if (serial_handle = gbser_init(portname), NULL != serial_handle) {
+  if (gbser_is_serial(qPrintable(portname))) {
+    if (serial_handle = gbser_init(qPrintable(portname)), NULL != serial_handle) {
       int rc;
       if (rc = gbser_set_port(serial_handle, bitrate, 8, 0, 1), gbser_OK != rc) {
         fatal(MYNAME ": Can't configure port\n");
@@ -580,7 +581,7 @@ terminit(const char* portname, int create_ok)
     }
     is_file = 0;
     if (serial_handle == NULL) {
-      fatal(MYNAME ": Could not open serial port %s\n", portname);
+      fatal(MYNAME ": Could not open serial port %s\n", qPrintable(portname));
     }
     return 1;
   } else {
@@ -723,7 +724,7 @@ arglist_t mag_fargs[] = {
  * The part of the serial init that's common to read and write.
  */
 static void
-mag_serial_init_common(const char* portname)
+mag_serial_init_common(const QString& portname)
 {
   time_t now, later;
 
@@ -749,7 +750,7 @@ mag_serial_init_common(const char* portname)
     mag_readmsg(trkdata);
     if (current_time().toTime_t() > later) {
       fatal(MYNAME ": No acknowledgment from GPS on %s\n",
-            portname);
+            qPrintable(portname));
     }
   }
 
@@ -775,14 +776,13 @@ mag_serial_init_common(const char* portname)
 
 }
 static void
-mag_rd_init_common(const char* portname)
+mag_rd_init_common(const QString& portname)
 {
-  const char* ext;
   waypoint_read_count = 0;
   // For Explorist GC, intercept the device access and redirect to GPX.
   // We actually do the rd_init() inside read as we may have multiple
   // files that we have to read.
-  if (0 == strcmp(portname, "usb:")) {
+  if (portname == "usb:") {
     const char** dlist = os_get_magellan_mountpoints();
     explorist_info = explorist_ini_get(dlist);
     if (explorist_info) {
@@ -817,14 +817,13 @@ mag_rd_init_common(const char* portname)
    * queue or the WPT queue in the presence of (-w -r -t) we
    * divine a hint from the filename extension when we can.
    */
-  ext = strrchr(curfname, '.');
-  if (ext) {
-    ext++;
-    if (0 == case_ignore_strcmp(ext, "upt")) {
+  QString exten = QFileInfo(curfname).suffix();
+  if (exten.length() > 0) {
+    if (0 == exten.compare("upt", Qt::CaseInsensitive)) {
       extension_hint = WPTDATAMASK;
-    } else if (0 == case_ignore_strcmp(ext, "log")) {
+    } else if (0 == exten.compare("log", Qt::CaseInsensitive)) {
       extension_hint = TRKDATAMASK;
-    } else if (0 == case_ignore_strcmp(ext, "rte")) {
+    } else if (0 == exten.compare("rte", Qt::CaseInsensitive)) {
       extension_hint = RTEDATAMASK;
     }
   }
@@ -833,7 +832,7 @@ mag_rd_init_common(const char* portname)
 }
 
 static void
-mag_rd_init(const char* portname)
+mag_rd_init(const QString& portname)
 {
   explorist = 0;
   suppress_ack = 1;
@@ -841,14 +840,14 @@ mag_rd_init(const char* portname)
 }
 
 static void
-magX_rd_init(const char* portname)
+magX_rd_init(const QString& portname)
 {
   explorist = 1;
   mag_rd_init_common(portname);
 }
 
 static void
-mag_wr_init_common(const char* portname)
+mag_wr_init_common(const QString& portname)
 {
   suppress_ack = 0;
   if (bs) {
@@ -879,7 +878,7 @@ mag_wr_init_common(const char* portname)
  * Entry point for extended (explorist) points.
  */
 static void
-magX_wr_init(const char* portname)
+magX_wr_init(const QString& portname)
 {
   wpt_len = 20;
   explorist = 1;
@@ -889,7 +888,7 @@ magX_wr_init(const char* portname)
 }
 
 static void
-mag_wr_init(const char* portname)
+mag_wr_init(const QString& portname)
 {
   explorist = 0;
   wpt_len = 8;
@@ -918,6 +917,8 @@ mag_deinit(void)
   waypt_flush(&rte_wpt_tmp);
 
   trk_head = NULL;
+
+  curfname.clear();
 }
 
 static void

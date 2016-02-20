@@ -240,8 +240,8 @@ const char CMD_LOG_ERASE[]  = "$PMTK182,6,1*3E\r\n";
 const char CMD_LOG_STATUS[] = "$PMTK182,2,7*3C\r\n";
 
 static int  mtk_log_len(unsigned int bitmask);
-static void mtk_rd_init(const char* fname);
-static void file_init(const char* fname);
+static void mtk_rd_init(const QString& fname);
+static void file_init(const QString& fname);
 static void file_deinit(void) ;
 static void holux245_init(void);
 static void file_read(void);
@@ -417,21 +417,21 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
-static void mtk_rd_init_m241(const char* fname)
+static void mtk_rd_init_m241(const QString& fname)
 {
   mtk_device = HOLUX_M241;
   mtk_rd_init(fname);
 }
 
-static void mtk_rd_init(const char* fname)
+static void mtk_rd_init(const QString& fname)
 {
   int rc;
   char* model;
 
-  port = xstrdup(fname);
+  port = xstrdup(qPrintable(fname));
 
   errno = 0;
-  dbg(1, "Opening port %s...\n", fname);
+  dbg(1, "Opening port %s...\n", port);
   if ((fd = gbser_init(port)) == NULL) {
     fatal(MYNAME ": Can't initialise port \"%s\" (%s)\n", port, strerror(errno));
   }
@@ -1418,17 +1418,17 @@ static int mtk_log_len(unsigned int bitmask)
 
 /********************** File-in interface ********************************/
 
-static void file_init_m241(const char* fname)
+static void file_init_m241(const QString& fname)
 {
   mtk_device = HOLUX_M241;
   file_init(fname);
 }
 
-static void file_init(const char* fname)
+static void file_init(const QString& fname)
 {
-  dbg(4, "Opening file %s...\n", fname);
-  if (fl = fopen(fname, "rb"), NULL == fl) {
-    fatal(MYNAME ": Can't open file '%s'\n", fname);
+  dbg(4, "Opening file %s...\n", qPrintable(fname));
+  if (fl = fopen(qPrintable(fname), "rb"), NULL == fl) {
+    fatal(MYNAME ": Can't open file '%s'\n", qPrintable(fname));
   }
   switch (mtk_device) {
   case HOLUX_M241:

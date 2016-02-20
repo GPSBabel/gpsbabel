@@ -75,7 +75,7 @@ xg_tag_mapping jogmap_map[] = {
 };
 
 static void
-jogmap_rd_init(const char* fname)
+jogmap_rd_init(const QString& fname)
 {
   trk = NULL;
   xml_init(fname, jogmap_map, NULL);

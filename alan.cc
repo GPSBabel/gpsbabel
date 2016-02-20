@@ -959,7 +959,7 @@ static void trl_write(void)
 
 /**************************************************************************/
 
-static void alan_rd_init(const char* fname)
+static void alan_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 }
@@ -971,7 +971,7 @@ static void alan_rd_deinit(void)
 }
 
 
-static void alan_wr_init(const char* fname)
+static void alan_wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
 }

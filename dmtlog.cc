@@ -672,7 +672,7 @@ read_XML(void)
 *******************************************************************************/
 
 static void
-dmtlog_rd_init(const char* fname)
+dmtlog_rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
 
@@ -718,7 +718,7 @@ dmtlog_read(void)
 }
 
 static void
-dmtlog_wr_init(const char* fname)
+dmtlog_wr_init(const QString& fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
 }

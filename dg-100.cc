@@ -710,13 +710,13 @@ arglist_t dg100_args[] = {
 *******************************************************************************/
 
 static void
-common_rd_init(const char* fname)
+common_rd_init(const QString& fname)
 {
-  if (serial_handle = gbser_init(fname), NULL == serial_handle) {
-    fatal(MYNAME ": Can't open port '%s'\n", fname);
+  if (serial_handle = gbser_init(qPrintable(fname)), NULL == serial_handle) {
+    fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
   }
   if (gbser_set_speed(serial_handle, model->speed) != gbser_OK) {
-    fatal(MYNAME ": Can't configure port '%s'\n", fname);
+    fatal(MYNAME ": Can't configure port '%s'\n", qPrintable(fname));
   }
   // Toss anything that came in before our speed was set, particularly
   // for the bluetooth BT-335 product.
@@ -724,7 +724,7 @@ common_rd_init(const char* fname)
 }
 
 static void
-dg100_rd_init(const char* fname)
+dg100_rd_init(const QString& fname)
 {
   static const model_t dg100_model = { "DG-100", 115200, 1, 1, dg100_commands, sizeof(dg100_commands) / sizeof(struct dg100_command) };
   model = &dg100_model;
@@ -732,7 +732,7 @@ dg100_rd_init(const char* fname)
 }
 
 static void
-dg200_rd_init(const char* fname)
+dg200_rd_init(const QString& fname)
 {
   static const model_t dg200_model = { "DG-200", 230400, 0, 0, dg200_commands, sizeof(dg200_commands) / sizeof(struct dg100_command) };
   model = &dg200_model;

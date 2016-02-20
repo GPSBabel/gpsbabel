@@ -250,7 +250,7 @@ inverse_gudermannian_i1924(const double x)
 *******************************************************************************/
 
 static void
-humminbird_rd_init(const char* fname)
+humminbird_rd_init(const QString& fname)
 {
   fin = gbfopen_be(fname, "rb", MYNAME);
 }
@@ -642,7 +642,7 @@ humminbird_read(void)
 /************************************************************************************************/
 
 static void
-humminbird_wr_init(const char* fname)
+humminbird_wr_init(const QString& fname)
 {
   fout = gbfopen_be(fname, "wb", MYNAME);
 

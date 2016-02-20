@@ -61,7 +61,7 @@ arglist_t tr7_args[] = {
 *******************************************************************************/
 
 static void
-tr7_rd_init(const char* fname)
+tr7_rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -263,7 +263,7 @@ tr7_disp_waypt_cb(const Waypoint* wpt)
 }
 
 static void
-tr7_wr_init(const char* fname)
+tr7_wr_init(const QString& fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
   gbfputint32(TR7_TRACK_MAGIC, fout);

@@ -389,7 +389,7 @@ parse_categories(char* buff)
 /* main functions */
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 

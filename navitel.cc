@@ -34,7 +34,7 @@ static int trkpts;
 *******************************************************************************/
 
 static void
-navitel_rd_init(const char* fname)
+navitel_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
 }
@@ -74,7 +74,7 @@ navitel_read_track(void)
 }
 
 static void
-navitel_wr_init(const char* fname)
+navitel_wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
 }

@@ -130,7 +130,7 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes*)
 }
 
 static void
-google_rd_init(const char* fname)
+google_rd_init(const QString& fname)
 {
   desc_handle = mkshort_new_handle();
   setshort_length(desc_handle, 12);

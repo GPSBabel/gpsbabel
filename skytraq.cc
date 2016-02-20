@@ -54,7 +54,6 @@
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
 
-static char* port;			/* port name */
 static void* serial_handle = 0;		/* IO file descriptor */
 static int skytraq_baud = 0;		/* detected baud rate */
 static gbfile* file_handle = 0;		/* file descriptor (used by skytraq-bin format) */
@@ -1283,14 +1282,13 @@ skytraq_set_location(void)
 *******************************************************************************/
 
 static void
-skytraq_rd_init(const char* fname)
+skytraq_rd_init(const QString& fname)
 {
-  port = xstrdup(fname);
-  if ((serial_handle = gbser_init(fname)) == NULL) {
-    fatal(MYNAME ": Can't open port '%s'\n", fname);
+  if ((serial_handle = gbser_init(qPrintable(fname))) == NULL) {
+    fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
   }
   if ((skytraq_baud = skytraq_probe()) <= 0) {
-    fatal(MYNAME ": Can't find skytraq device on '%s'\n", fname);
+    fatal(MYNAME ": Can't find skytraq device on '%s'\n", qPrintable(fname));
   }
 }
 
@@ -1299,7 +1297,6 @@ skytraq_rd_deinit(void)
 {
   gbser_deinit(serial_handle);
   serial_handle = NULL;
-  xfree(port);
 }
 
 static void
@@ -1338,11 +1335,11 @@ skytraq_read(void)
 }
 
 static void
-file_init(const char* fname)
+file_init(const QString& fname)
 {
   db(1, "Opening file...\n");
   if ((file_handle = gbfopen(fname, "rb", MYNAME)) == NULL) {
-    fatal(MYNAME ": Can't open file '%s'\n", fname);
+    fatal(MYNAME ": Can't open file '%s'\n", qPrintable(fname));
   }
 }
 
@@ -1594,9 +1591,9 @@ static int miniHomer_set_poi(uint16_t poinum, const char* opt_poi)
   }
   return result;
 }
-static const char* mhport;
+static QString mhport;
 static void
-miniHomer_rd_init(const char* fname)
+miniHomer_rd_init(const QString& fname)
 {
   opt_set_location=NULL;	// otherwise it will lead to bus error
   skytraq_rd_init(fname);	// sets global var serial_handle
@@ -1606,6 +1603,7 @@ static void
 miniHomer_rd_deinit(void)
 {
   skytraq_rd_deinit();
+  mhport.clear();
 }
 #define SETPOI(poinum, poiname) if (opt_set_poi_##poiname )  {miniHomer_set_poi(poinum, opt_set_poi_##poiname);}
 static void

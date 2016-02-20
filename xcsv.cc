@@ -531,7 +531,7 @@ xcsv_setup_internal_style(const char* style_buf)
 
 
 static void
-xcsv_rd_init(const char* fname)
+xcsv_rd_init(const QString& fname)
 {
 
   /*
@@ -550,7 +550,7 @@ xcsv_rd_init(const char* fname)
 
   if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == wptdata)) {
     if (global_opts.masked_objective & (TRKDATAMASK|RTEDATAMASK)) {
-      warning(MYNAME " attempt to read %s as a track or route, but this format only supports waypoints on read.  Reading as waypoints instead.\n", fname);
+      warning(MYNAME " attempt to read %s as a track or route, but this format only supports waypoints on read.  Reading as waypoints instead.\n", qPrintable(fname));
     }
   }
 
@@ -568,7 +568,7 @@ xcsv_rd_deinit(void)
 }
 
 static void
-xcsv_wr_init(const char* fname)
+xcsv_wr_init(const QString& fname)
 {
   /* if we don't have an internal style defined, we need to
    * read it from a user-supplied style file, or die trying.
@@ -587,7 +587,7 @@ xcsv_wr_init(const char* fname)
   }
 
   xcsv_file.xcsvfp = gbfopen(fname, "w", MYNAME);
-  xcsv_file.fname = (char*)fname;
+  xcsv_file.fname = fname;
 
   /* set mkshort options from the command line */
   if (global_opts.synthesize_shortnames) {
@@ -616,7 +616,7 @@ xcsv_wr_init(const char* fname)
 }
 
 static void
-xcsv_wr_position_init(const char* fname)
+xcsv_wr_position_init(const QString& fname)
 {
   xcsv_wr_init(fname);
 }

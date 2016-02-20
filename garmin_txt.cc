@@ -753,7 +753,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
 *******************************************************************************/
 
 static void
-garmin_txt_wr_init(const char* fname)
+garmin_txt_wr_init(const QString& fname)
 {
   const char* grid_str;
 
@@ -1343,7 +1343,7 @@ parse_track_waypoint(void)
 /***************************************************************/
 
 static void
-garmin_txt_rd_init(const char* fname)
+garmin_txt_rd_init(const QString& fname)
 {
   memset(&gtxt_flags, 0, sizeof(gtxt_flags));
 

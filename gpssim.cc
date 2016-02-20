@@ -31,7 +31,7 @@ static gbfile* fout;
 static char* wayptspd;
 static char* splitfiles_opt;
 static int splitfiles;
-static char* fnamestr;
+static QString fnamestr;
 static int trk_count;
 static int doing_tracks;
 
@@ -56,9 +56,9 @@ arglist_t gpssim_args[] = {
  */
 
 static void
-gpssim_wr_init(const char* fname)
+gpssim_wr_init(const QString& fname)
 {
-  fnamestr =  xstrdup(fname);
+  fnamestr =  fname;
   trk_count = 0;
   splitfiles = splitfiles_opt ? atoi(splitfiles_opt) : 0;
 
@@ -80,7 +80,7 @@ gpssim_wr_deinit(void)
     fout = NULL;
   }
 
-  xfree(fnamestr);
+  fnamestr.clear();
 }
 
 
@@ -144,19 +144,13 @@ static void
 gpssim_trk_hdr(const route_head* rh)
 {
   if (splitfiles) {
-    char c[1024];
-    char* ofname = xstrdup(fnamestr);
 
     if (fout) {
       fatal(MYNAME ": output file already open.\n");
     }
 
-    snprintf(c, sizeof(c), "%s%04d.gpssim",
-             doing_tracks ? "-track" : "-route",
-             trk_count++);
-    ofname = xstrappend(ofname, c);
+    QString ofname = QString("%1%2%3.gpssim").arg(fnamestr).arg(doing_tracks ? "-track" : "-route").arg(trk_count++, 4, 10, QChar('0'));
     fout = gbfopen(ofname, "wb", MYNAME);
-    xfree(ofname);
   }
   track_recompute(rh, NULL);
 }
@@ -175,10 +169,8 @@ gpssim_write(void)
 {
   if (waypt_count()) {
     if (splitfiles) {
-      char* ofname = xstrdup(fnamestr);
-      ofname = xstrappend(ofname, "-waypoints.gpssim");
+      QString ofname = fnamestr + "-waypoints.gpssim";
       fout = gbfopen(ofname, "wb", MYNAME);
-      xfree(ofname);
     }
     if (wayptspd && wayptspd[0]) {
       gpssim_write_spd(atof(wayptspd));

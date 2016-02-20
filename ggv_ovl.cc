@@ -80,9 +80,9 @@ static OVL_COLOR_TYP color;
 *******************************************************************************/
 
 static void
-ggv_ovl_rd_init(const char* fname)
+ggv_ovl_rd_init(const QString& fname)
 {
-  inifile = inifile_init(fname, MYNAME);
+  inifile = inifile_init(qPrintable(fname), MYNAME);
   if (inifile->unicode) {
     cet_convert_init(CET_CHARSET_UTF8, 1);
   }
@@ -214,7 +214,7 @@ static int get_direction(const Waypoint* A, const Waypoint* B);
 /* -----------------------------------------------------------------------*/
 
 static void
-ggv_ovl_wr_init(const char* fname)
+ggv_ovl_wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 

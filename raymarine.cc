@@ -167,9 +167,9 @@ find_symbol_num(const QString& descr)
 /* ============================================= */
 
 static void
-raymarine_rd_init(const char* fname)
+raymarine_rd_init(const QString& fname)
 {
-  fin = inifile_init(fname, MYNAME);
+  fin = inifile_init(qPrintable(fname), MYNAME);
   if (fin->unicode) {
     cet_convert_init(CET_CHARSET_UTF8, 1);
   }
@@ -452,7 +452,7 @@ raymarine_new_short_handle(void)
 }
 
 static void
-raymarine_wr_init(const char* fname)
+raymarine_wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "wb", MYNAME);
 

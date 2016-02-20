@@ -30,7 +30,7 @@ static QString script;
 static route_head** routehead;
 static int* routecount;
 static short_handle desc_handle;
-static const char* rd_fname;
+static QString rd_fname;
 
 static int serial = 0;
 
@@ -231,7 +231,7 @@ void goog_poly_e(xg_string args, const QXmlStreamAttributes*)
 }
 
 static void
-google_rd_init(const char* fname)
+google_rd_init(const QString& fname)
 {
   rd_fname = fname;
 
@@ -244,7 +244,7 @@ google_rd_init(const char* fname)
 static void
 goog_read_file(void)
 {
-  QFile src(QString::fromUtf8(rd_fname));
+  QFile src(rd_fname);
 
   src.open(QIODevice::ReadOnly);
 
@@ -538,6 +538,7 @@ google_rd_deinit(void)
 {
   xml_deinit();
   mkshort_del_handle(&desc_handle);
+  rd_fname.clear();
 }
 
 ff_vecs_t google_vecs = {

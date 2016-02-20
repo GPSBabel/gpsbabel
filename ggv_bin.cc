@@ -481,14 +481,15 @@ ggv_bin_read_file(QDataStream& stream)
 }
 
 static void
-ggv_bin_read_init(const char* fname)
+ggv_bin_read_init(const QString& fname)
 {
-  read_fname = QString::fromUtf8(fname);
+  read_fname = fname;
 }
 
 static void
 ggv_bin_read_deinit(void)
 {
+  read_fname.clear();
 }
 
 static void
@@ -497,7 +498,7 @@ ggv_bin_read(void)
   QFile file(read_fname);
 
   if (!file.open(QIODevice::ReadOnly)) {
-    fatal(MYNAME ": Error opening file %s\n", read_fname.toStdString().c_str());
+    fatal(MYNAME ": Error opening file %s\n", qPrintable(read_fname));
   }
 
   QDataStream stream(&file);

@@ -47,7 +47,7 @@ maggeo_writemsg(const char* const buf)
 }
 
 static void
-maggeo_rd_init(const char* fname)
+maggeo_rd_init(const QString& fname)
 {
   maggeofile_in = gbfopen(fname, "rb", MYNAME);
 }
@@ -59,7 +59,7 @@ maggeo_rd_deinit(void)
 }
 
 static void
-maggeo_wr_init(const char* fname)
+maggeo_wr_init(const QString& fname)
 {
   if (waypt_count() > 200) {
     fatal(MYNAME ": eXplorist does not support more than 200 waypoints in one .gs file.\nDecrease the number of waypoints sent.\n");

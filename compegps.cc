@@ -377,7 +377,7 @@ parse_rte_info(const char* buff, route_head* route)	/* "R" */
 /* main functions */
 
 static void
-compegps_rd_init(const char* fname)
+compegps_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
   input_datum = DATUM_WGS84;
@@ -612,7 +612,7 @@ write_waypoints(void)
 /* --------------------------------------------------------------------------- */
 
 static void
-compegps_wr_init(const char* fname)
+compegps_wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
   sh = mkshort_new_handle();

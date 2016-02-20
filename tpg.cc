@@ -69,7 +69,7 @@ tpg_common_init(void)
 }
 
 static void
-tpg_rd_init(const char* fname)
+tpg_rd_init(const QString& fname)
 {
   tpg_common_init();
   tpg_file_in = gbfopen_le(fname, "rb", MYNAME);
@@ -82,7 +82,7 @@ tpg_rd_deinit(void)
 }
 
 static void
-tpg_wr_init(const char* fname)
+tpg_wr_init(const QString& fname)
 {
   tpg_common_init();
   tpg_file_out = gbfopen_le(fname, "wb", MYNAME);

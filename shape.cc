@@ -33,7 +33,7 @@ static unsigned poly_count;
 static double* polybufx;
 static double* polybufy;
 static double* polybufz;
-static const char* ofname;
+static QString ofname;
 static int nameidx;
 static int urlidx;
 
@@ -54,16 +54,16 @@ arglist_t shp_args[] = {
 };
 
 static void
-my_rd_init(const char* fname)
+my_rd_init(const QString& fname)
 {
-  ihandle = SHPOpen(fname, "rb");
+  ihandle = SHPOpen(qPrintable(fname), "rb");
   if (ihandle == NULL) {
-    fatal(MYNAME ":Cannot open shp file %s for reading\n", fname);
+    fatal(MYNAME ":Cannot open shp file %s for reading\n", qPrintable(fname));
   }
 
-  ihandledb = DBFOpen(fname, "rb");
+  ihandledb = DBFOpen(qPrintable(fname), "rb");
   if (ihandledb == NULL) {
-    fatal(MYNAME ":Cannot open dbf file %s for reading\n", fname);
+    fatal(MYNAME ":Cannot open dbf file %s for reading\n", qPrintable(fname));
   }
 
   if (opt_name) {
@@ -89,13 +89,13 @@ my_rd_init(const char* fname)
     } else {
       nameidx = DBFGetFieldIndex(ihandledb, opt_name);
       if (nameidx == -1) {
-        fatal(MYNAME ":dbf file for %s doesn't have '%s' field.\n", fname, opt_name);
+        fatal(MYNAME ":dbf file for %s doesn't have '%s' field.\n", qPrintable(fname), opt_name);
       }
     }
   } else {
     nameidx = DBFGetFieldIndex(ihandledb, "NAME");
     if (nameidx == -1) {
-//			fatal(MYNAME ":dbf file for %s doesn't have 'NAME' field.\n  Please specify the name index with the 'name' option.\n", fname);
+//			fatal(MYNAME ":dbf file for %s doesn't have 'NAME' field.\n  Please specify the name index with the 'name' option.\n", qPrintable(fname));
     }
   }
   if (opt_url) {
@@ -251,7 +251,7 @@ my_rd_deinit(void)
 }
 
 void
-my_wr_init(const char* fname)
+my_wr_init(const QString& fname)
 {
   ofname = fname;
 }
@@ -260,6 +260,7 @@ void
 my_wr_deinit(void)
 {
   SHPClose(ohandle);
+  ofname.clear();
 }
 
 void
@@ -316,20 +317,20 @@ my_write(void)
   switch (global_opts.objective) {
   case wptdata:
   case unknown_gpsdata:
-    ohandle = SHPCreate(ofname, SHPT_POINT);
+    ohandle = SHPCreate(qPrintable(ofname), SHPT_POINT);
 
     if (ohandle == NULL) {
       fatal(MYNAME ":Cannot open %s for writing\n",
-            ofname);
+            qPrintable(ofname));
     }
     waypt_disp_all(my_write_wpt);
     break;
   case trkdata:
-    ohandle = SHPCreate(ofname, SHPT_ARC);
+    ohandle = SHPCreate(qPrintable(ofname), SHPT_ARC);
 
     if (ohandle == NULL) {
       fatal(MYNAME ":Cannot open %s for writing\n",
-            ofname);
+            qPrintable(ofname));
     }
     route_disp_all(poly_init, poly_deinit, poly_point);
     break;
