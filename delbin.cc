@@ -137,7 +137,7 @@ static arglist_t delbin_args[] = {
     ARG_NOMINMAX
   },
   {"hint_at_end", &opt_hint_at_end, "If true, geocache hint at end of text", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"gcsym", &opt_gcsym, "If set to 0, prefer user-provided symbols over Groundspeaks ones for geocaches", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, (char*) "1" },
+  {"gcsym", &opt_gcsym, "If set to 0, prefer user-provided symbols over Groundspeaks ones for geocaches", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
   ARG_TERMINATOR
 };
 
