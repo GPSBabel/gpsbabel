@@ -7,6 +7,9 @@ rm -f ${TMPDIR}/trackfilter*
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,title="LOG-%Y%m%d" -o gpx -F ${TMPDIR}/trackfilter.gpx
 compare ${REFERENCE}/track/trackfilter.gpx ${TMPDIR}/trackfilter.gpx
 
+gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,title="LOG" -o gpx -F ${TMPDIR}/trackfilter1.gpx
+compare ${REFERENCE}/track/trackfilter.gpx ${TMPDIR}/trackfilter1.gpx
+
 gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter.gpx -x track,pack,split,sdistance=0.1k  -o gpx -F ${TMPDIR}/trackfilter2.gpx
 compare ${REFERENCE}/track/trackfilter-sdistance.gpx ${TMPDIR}/trackfilter2.gpx
 
