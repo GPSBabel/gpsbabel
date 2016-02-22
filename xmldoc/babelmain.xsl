@@ -51,7 +51,7 @@
       <xsl:with-param name="next" select="$next"/>
     </xsl:call-template>
       <xsl:call-template name="body.attributes"/>
-  {block name=body}
+  {block name=body}{literal}
                       <xsl:call-template name="user.header.navigation"/>
                
                       <xsl:call-template name="header.navigation">
@@ -73,7 +73,7 @@
                       </xsl:call-template>
                
                       <xsl:call-template name="user.footer.navigation"/>
-      {/block}
+      {/literal}{/block}
   <xsl:value-of select="$chunk.append"/>
 </xsl:template>
 
