@@ -63,7 +63,7 @@ added in the PN-40 2.5 firmware.
 //-----------------------------------------------------------------------------
 // interface to platform-specific device I/O
 typedef struct {
-  void (*init)(const char* name);
+  void (*init)(const QString& name);
   void (*deinit)(void);
   unsigned(*packet_read)(void*);
   unsigned(*packet_write)(const void*, unsigned);
@@ -137,7 +137,7 @@ static arglist_t delbin_args[] = {
     ARG_NOMINMAX
   },
   {"hint_at_end", &opt_hint_at_end, "If true, geocache hint at end of text", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"gcsym", &opt_gcsym, "If set to 0, prefer user-provided symbols over Groundspeaks ones for geocaches", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, (char*) "1" },
+  {"gcsym", &opt_gcsym, "If set to 0, prefer user-provided symbols over Groundspeaks ones for geocaches", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
   ARG_TERMINATOR
 };
 
@@ -2298,7 +2298,7 @@ delbin_list_units()
 }
 
 static void
-delbin_rw_init(const char* fname)
+delbin_rw_init(const QString& fname)
 {
   message_t m;
   char buf[256];
@@ -2350,8 +2350,8 @@ delbin_rw_init(const char* fname)
   }
   message_free(&m);
 
-  if (strlen(fname) > 4) {
-    if (0 == strcmp(fname+4, "list")) {
+  if (fname.length() > 4) {
+    if (fname.mid(4,4) == "list") {
       delbin_list_units();
       exit(1);
     }
@@ -2465,7 +2465,7 @@ ff_vecs_t delbin_vecs = {
 static HANDLE hid_handle;
 
 static void
-win_os_init(const char* fname)
+win_os_init(const QString& fname)
 {
   GUID hid_guid;
   HDEVINFO dev_info;
@@ -2630,7 +2630,7 @@ interrupt_report_cb(void* target, IOReturn result, void* refcon, void* sender, U
 }
 
 static void
-mac_os_init(const char* fname)
+mac_os_init(const QString& fname)
 {
   CFMutableDictionaryRef dict = IOServiceMatching(kIOHIDDeviceKey);
   io_service_t service;
@@ -2749,7 +2749,7 @@ static int endpoint_in;
 static int endpoint_out;
 
 static void
-libusb_os_init(const char* fname)
+libusb_os_init(const QString& fname)
 {
   struct usb_bus* bus;
   const struct usb_endpoint_descriptor* endpoint_desc;
@@ -2861,7 +2861,7 @@ static int fd_hiddev;
 static int linuxhid_os_init_status;
 
 static void
-linuxhid_os_init(const char* fname)
+linuxhid_os_init(const QString& fname)
 {
   struct hidraw_devinfo info;
   struct hiddev_field_info finfo;
@@ -2869,8 +2869,8 @@ linuxhid_os_init(const char* fname)
   struct dirent* d;
 
   fd_hidraw = fd_hiddev = -1;
-  if (fname && memcmp(fname, "hid:", 4) == 0) {
-    char* raw_name = xstrdup(fname + 4);
+  if (fname.startsWith("hid:")) {
+    char* raw_name = xstrdup(qPrintable(fname.mid(4)));
     char* dev_name = strchr(raw_name, ',');
     if (dev_name == NULL) {
       fatal(MYNAME ": missing hiddev path\n");
@@ -2997,7 +2997,7 @@ static const delbin_os_ops_t linuxhid_os_ops = {
 };
 
 static void
-linux_os_init(const char* fname)
+linux_os_init(const QString& fname)
 {
   // tell linuxhid_os_init not to exit
   linuxhid_os_init_status = 1;
@@ -3030,7 +3030,7 @@ delbin_os_ops_t delbin_os_ops = {
 // stubs
 #if !(HAVE_WDK || __APPLE__ || HAVE_LIBUSB || HAVE_LINUX_HID)
 static void
-stub_os_init(const char* fname)
+stub_os_init(const QString& fname)
 {
   fatal(MYNAME ": OS not supported\n");
 }

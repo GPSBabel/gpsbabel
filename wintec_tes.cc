@@ -27,7 +27,7 @@
 static gbfile* fin;
 
 static void
-wintec_tes_rd_init(const char* fname)
+wintec_tes_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
 }

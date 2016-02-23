@@ -1004,7 +1004,7 @@ read_track(void)
 /*******************************************************************************/
 
 static void
-gdb_rd_init(const char* fname)
+gdb_rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
   ftmp = gbfopen_le(NULL, "wb", MYNAME);
@@ -1773,7 +1773,7 @@ write_track_cb(const route_head* trk)
 /*-----------------------------------------------------------------------------*/
 
 static void
-gdb_wr_init(const char* fname)
+gdb_wr_init(const QString& fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
   ftmp = gbfopen_le(NULL, "wb", MYNAME);

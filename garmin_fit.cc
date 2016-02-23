@@ -59,7 +59,7 @@ static	gbfile* fin;
 *******************************************************************************/
 
 static void
-fit_rd_init(const char* fname)
+fit_rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
 }

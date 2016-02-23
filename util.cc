@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <stdarg.h> // for va_copy
 #include <time.h>
+#include <QtCore/QFileInfo>
 
 // First test Apple's clever macro that's really a runtime test so
 // that our universal binaries work right.
@@ -1792,24 +1793,9 @@ char* xml_attribute(xml_tag* tag, const char* attrname)
   return result;
 }
 
-const char* get_filename(const char* fname)
+const QString get_filename(const QString& fname)
 {
-  const char* res;
-  const char* cb;
-  const char* cs;
-
-  cb = strrchr(fname, '\\');
-  cs = strrchr(fname, '/');
-
-  if (cb == NULL) {
-    res = cs;
-  } else if (cs == NULL) {
-    res = cb;
-  } else {
-    res = (cs > cb) ? cs : cb;
-  }
-
-  return (res == NULL) ? (char*) fname : ++res;
+  return  QFileInfo(fname).fileName();
 }
 
 /* bit manipulation functions */

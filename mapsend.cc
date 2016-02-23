@@ -72,7 +72,7 @@ mapsend_init_opts(const char isReading)  	/* 1=read, 2=write */
 }
 
 static void
-mapsend_rd_init(const char* fname)
+mapsend_rd_init(const QString& fname)
 {
   mapsend_init_opts(1);
   mapsend_file_in = gbfopen_le(fname, "rb", MYNAME);
@@ -85,7 +85,7 @@ mapsend_rd_deinit(void)
 }
 
 static void
-mapsend_wr_init(const char* fname)
+mapsend_wr_init(const QString& fname)
 {
   mapsend_init_opts(0);
   mapsend_file_out = gbfopen(fname, "wb", MYNAME);

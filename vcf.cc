@@ -41,7 +41,7 @@ arglist_t vcf_args[] = {
 };
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   file_out = gbfopen(fname, "w", MYNAME);
   mkshort_handle = mkshort_new_handle();

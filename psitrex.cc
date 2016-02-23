@@ -179,7 +179,7 @@ psit_find_icon_number_from_desc(const char* desc)
 }
 
 static void
-psit_rd_init(const char* fname)
+psit_rd_init(const QString& fname)
 {
   psit_file_in = gbfopen(fname, "r", MYNAME);
 }
@@ -191,7 +191,7 @@ psit_rd_deinit(void)
 }
 
 static void
-psit_wr_init(const char* fname)
+psit_wr_init(const QString& fname)
 {
   psit_file_out = gbfopen(fname, "w", MYNAME);
 }

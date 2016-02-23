@@ -206,7 +206,7 @@ read_lap(void)
 //*******************************************************************************
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   if (global_opts.debug_level > 1) {
     printf (MYNAME " rd_deinit()\n");

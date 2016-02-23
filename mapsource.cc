@@ -26,6 +26,7 @@
 #include "jeeps/gpsmath.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <QtCore/QFile>
 
 static	gbfile*	mps_file_in;
 static	gbfile*	mps_file_out;
@@ -37,8 +38,8 @@ static	int		mps_ver_out = 0;
 static	int		mps_ver_temp = 0;
 
 /* Temporary pathname used when merging gpsbabel output with an existing file */
-static char* tempname;
-static char* fin_name;
+static QString tempname;
+static QString fin_name;
 
 static	const Waypoint*	prevRouteWpt;
 /* Private queues of written out waypoints */
@@ -225,7 +226,7 @@ mps_converted_icon_number(const int icon_num, const int mpsver, garmin_formats_e
 }
 
 static void
-mps_rd_init(const char* fname)
+mps_rd_init(const QString& fname)
 {
   mps_file_in = gbfopen_le(fname, "rb", MYNAME);
 
@@ -246,9 +247,9 @@ mps_rd_deinit(void)
 }
 
 static void
-mps_wr_init(const char* fname)
+mps_wr_init(const QString& fname)
 {
-  fin_name = xstrdup(fname);
+  fin_name = fname;
   if (mpsmergeouts) {
     mpsmergeout = atoi(mpsmergeouts);
   }
@@ -265,14 +266,14 @@ mps_wr_init(const char* fname)
         /* create a temporary name  based on a random char and the existing name */
         /* then test if it already exists, if so try again with another rand num */
         /* yeah, yeah, so there's probably a library function for this           */
-        xasprintf(&tempname, "%s.%08x", fname, rand());
+        tempname = QString("%1.%2").arg(fname).arg(rand(), 8, 16, QChar('0'));
         mps_file_temp = gbfopen_le(tempname, "rb", MYNAME);
         if (mps_file_temp == NULL) {
           break;
         }
         gbfclose(mps_file_temp);
       }
-      rename(fname, tempname);
+      QFile::rename(fname, tempname);
       mps_file_temp = gbfopen_le(tempname, "rb", MYNAME);
     }
   }
@@ -292,8 +293,8 @@ mps_wr_deinit(void)
 
   if (mpsmergeout) {
     gbfclose(mps_file_temp);
-    remove(tempname);
-    xfree(tempname);
+    QFile::remove(tempname);
+    tempname.clear();
   }
 
   if (written_wpt_mkshort_handle) {
@@ -302,7 +303,7 @@ mps_wr_deinit(void)
   /* flush the "private" queue of waypoints written */
   mps_wpt_q_deinit(&written_wpt_head);
   mps_wpt_q_deinit(&written_route_wpt_head);
-  xfree(fin_name);
+  fin_name.clear();
 }
 
 /*
@@ -1844,8 +1845,8 @@ mps_write(void)
         /* then delete the "real" file and rename the temporarily renamed file back */
         gbfclose(mps_file_temp);
         gbfclose(mps_file_out);
-        remove(fin_name);
-        rename(tempname, fin_name);
+        QFile::remove(fin_name);
+        QFile::rename(tempname, fin_name);
         fatal(MYNAME ": merge source version is %d, requested out version is %d\n", mps_ver_temp, atoi(mpsverout));
       }
     } else {

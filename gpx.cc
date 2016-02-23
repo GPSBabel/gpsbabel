@@ -1188,7 +1188,7 @@ gpx_cdata(const QString& s)
 }
 
 static void
-gpx_rd_init(const char* fname)
+gpx_rd_init(const QString& fname)
 {
   iqfile = new gpsbabel::File(fname);
   iqfile->open(QIODevice::ReadOnly);
@@ -1228,7 +1228,7 @@ gpx_rd_deinit(void)
 }
 
 static void
-gpx_wr_init(const char* fname)
+gpx_wr_init(const QString& fname)
 {
   mkshort_handle = NULL;
   oqfile = new gpsbabel::File(fname);

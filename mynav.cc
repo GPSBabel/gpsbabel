@@ -123,7 +123,7 @@ mynav_rd_line(QString line)
 //***************************************************************************
 
 static void
-mynav_rd_init(const char* fname)
+mynav_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
   mynav_track = route_head_alloc();

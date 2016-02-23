@@ -119,7 +119,7 @@ retry:
   return (igc_rec_type_t) c[0];
 }
 
-static void rd_init(const char* fname)
+static void rd_init(const QString& fname)
 {
   char* ibuf;
 
@@ -127,7 +127,7 @@ static void rd_init(const char* fname)
   lineno = 0;
   // File must begin with a manufacturer/ID record
   if (get_record(&ibuf) != rec_manuf_id || sscanf(ibuf, "A%3[A-Z]", manufacturer) != 1) {
-    fatal(MYNAME ": %s is not an IGC file\n", fname);
+    fatal(MYNAME ": %s is not an IGC file\n", qPrintable(fname));
   }
 }
 
@@ -911,7 +911,7 @@ static void wr_track(void)
   }
 }
 
-static void wr_init(const char* fname)
+static void wr_init(const QString& fname)
 {
   file_out = gbfopen(fname, "wb", MYNAME);
 }

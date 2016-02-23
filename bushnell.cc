@@ -22,10 +22,11 @@
 
 #include "defs.h"
 #include <math.h>
+#include <QtCore/QFileInfo>
 #define MYNAME "Bushnell"
 
 static gbfile* file_in;
-static char* ofname;
+static QString ofname;
 static short_handle mkshort_handle = NULL;
 
 static
@@ -156,7 +157,7 @@ bushnell_get_name_from_symbol(signed int s)
 }
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   file_in = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -168,20 +169,18 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
-  char* dot, *slash;
   static char valid_chars [] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"
                                ".-/\\~@#$%^&*()_+=<>"
                                "abcdefghijklmnopqrstuvwxyz";
 
-  ofname = xstrdup(fname);
-
   // If user provided an extension in the pathname, whack it.
-  dot = strrchr(ofname, '.');
-  slash = strrchr(ofname, GB_PATHSEP);
-  if (dot > slash) {
-    *dot = 0;
+  ofname = fname;
+  int suffix_len = QFileInfo(fname).suffix().length();
+  if (suffix_len > 0) {
+    /* drop the suffix and the period */
+    ofname.chop(suffix_len + 1);
   }
 
   mkshort_handle = mkshort_new_handle();
@@ -193,7 +192,7 @@ static void
 wr_deinit(void)
 {
   mkshort_del_handle(&mkshort_handle);
-  xfree(ofname);
+  ofname.clear();
 }
 
 /*

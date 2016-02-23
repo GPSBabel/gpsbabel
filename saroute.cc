@@ -80,7 +80,7 @@ Skip(gbfile* f, gbsize_t distance)
 }
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   infile = gbfopen(fname, "rb", MYNAME);
   if (split && (turns_important || turns_only)) {
@@ -464,7 +464,7 @@ my_read(void)
 }
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   fatal(MYNAME ":Not enough information is known about this format to write it.\n");
 }

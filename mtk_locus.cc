@@ -60,7 +60,7 @@ arglist_t mtk_locus_args[] = {
   ARG_TERMINATOR
 };
 
-static void mtk_locus_rd_init(const char* fname);
+static void mtk_locus_rd_init(const QString& fname);
 static void mtk_locus_rd_deinit(void);
 static void mtk_locus_read(void);
 
@@ -118,16 +118,16 @@ static int calculate_checksum(const char* s, int length);
 static void dbg(int l, const char* msg, ...);
 
 static void
-mtk_locus_rd_init(const char* fname)
+mtk_locus_rd_init(const QString& fname)
 {
-  dbg(1, "Opening file: %s\n", fname);
+  dbg(1, "Opening file: %s\n", qPrintable(fname));
 
-  if (gbser_is_serial(fname)) {
+  if (gbser_is_serial(qPrintable(fname))) {
 
     dbg(1, "Input is a serial port\n");
     read_mode = rm_serial;
-    if ((sfd = gbser_init(fname)) == NULL) {
-      fatal(MYNAME ": Can't initialise port \"%s\" (%s)\n", fname, strerror(errno));
+    if ((sfd = gbser_init(qPrintable(fname))) == NULL) {
+      fatal(MYNAME ": Can't initialise port \"%s\" (%s)\n", qPrintable(fname), strerror(errno));
     }
     set_baudrate();
     gbser_flush(sfd);
@@ -137,7 +137,7 @@ mtk_locus_rd_init(const char* fname)
     dbg(1, "Input is a normal file\n");
     read_mode = rm_file;
     if ((ffd = gbfopen(fname, "rb", MYNAME)) == NULL) {
-      fatal(MYNAME ": Can't initialise port \"%s\" (%s)\n", fname, strerror(errno));
+      fatal(MYNAME ": Can't initialise port \"%s\" (%s)\n", qPrintable(fname), strerror(errno));
     }
   }
 

@@ -22,7 +22,7 @@
 #include "src/core/file.h"
 
 static char* noretired = NULL;
-static const char* read_fname = NULL;
+static QString read_fname;
 
 static
 arglist_t nav_args[] = {
@@ -91,7 +91,7 @@ nc_mkcont(const QString& t)
 }
 
 static void
-nav_rd_init(const char* fname)
+nav_rd_init(const QString& fname)
 {
   read_fname = fname;
 }
@@ -208,7 +208,7 @@ nav_rd_deinit(void)
 }
 
 static void
-nav_wr_init(const char* fname)
+nav_wr_init(const QString& fname)
 {
   fatal(MYNAME ": Does not support writing Navicache files.\n");
 }

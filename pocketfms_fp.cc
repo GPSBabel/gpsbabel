@@ -50,7 +50,7 @@ static xg_tag_mapping gl_map[] = {
 };
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   xml_init(fname, gl_map, NULL);
 }
@@ -80,7 +80,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   fatal("Writing file of type %s is not supported\n", MYNAME);
 }

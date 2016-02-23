@@ -159,16 +159,16 @@ v900_log(const char* fmt, ...)
 }
 
 static void
-v900_rd_init(const char* fname)
+v900_rd_init(const QString& fname)
 {
-  v900_log("%s(%s)\n",__func__,fname);
+  v900_log("%s(%s)\n",__func__,qPrintable(fname));
   /* note: file is opened in binary mode, since lines end with \r\n, and in windows text mode
      that will be translated to a single \n, making the line len one character shorter than
      on linux machines.
    */
-  fin = fopen(fname,"rb");
+  fin = fopen(qPrintable(fname),"rb");
   if (!fin) {
-    fatal("v900: could not open '%s'.\n", fname);
+    fatal("v900: could not open '%s'.\n", qPrintable(fname));
   }
 }
 

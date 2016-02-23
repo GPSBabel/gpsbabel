@@ -30,6 +30,7 @@
 #include <math.h>                /* for floor */
 #include <stdlib.h>
 #include <stdio.h>
+#include <QtCore/QFileInfo>
 
 #define MYNAME        "OZI"
 #define BADCHARS	",\r\n"
@@ -116,7 +117,7 @@ arglist_t ozi_args[] = {
 
 static gpsdata_type ozi_objective;
 
-static char* ozi_ofname = NULL;
+static QString ozi_ofname;
 
 static void
 ozi_copy_fsdata(ozi_fsdata** dest, ozi_fsdata* src)
@@ -185,41 +186,37 @@ ozi_convert_datum(Waypoint* wpt)
 }
 
 static void
-ozi_openfile(char* fname)
+ozi_openfile(const QString& fname)
 {
-  char* c, *cx, *tmpname;
   const char* ozi_extensions[] = {0, "plt", "wpt", "rte"};
-  char buff[32];
 
   /* if we're doing multi-track output, sequence the filenames like:
    * mytrack.plt, mytrack-1.plt...unless we're writing to stdout.
    */
 
-  if (0 == strcmp(fname, "-")) {
+  if (fname == "-") {
     if (! file_out) {
       file_out = gbfopen(fname, "wb", MYNAME);
     }
     return;
   }
 
+  QString buff;
   if ((track_out_count) && (ozi_objective == trkdata)) {
-    sprintf(buff, "-%d", track_out_count);
+    buff = QString("-%d").arg(track_out_count);
   } else {
-    buff[0] = '\0';
+    buff = QString("");
   }
 
   /* remove extension and add buff + ozi's extension */
-  c = strrchr(fname, '.');
-  if (c && (cx = strrchr(fname, '/')) && (cx > c)) {
-    c = NULL;
+  QString sname(fname);
+  int suffix_len = QFileInfo(fname).suffix().length();
+  if (suffix_len > 0) {
+    /* drop the suffix and the period */
+    sname.chop(suffix_len + 1);
   }
-  if (c && (cx = strrchr(fname, '\\')) && (cx > c)) {
-    c = NULL;
-  }
-  if (c == NULL) {
-    c = fname + strlen(fname);
-  }
-  xasprintf(&tmpname, "%*.*s%s.%s", (int)(c - fname),(int)(c - fname), fname, buff, ozi_extensions[ozi_objective]);
+
+  QString tmpname = QString("%1%2.%3").arg(sname).arg(buff).arg(ozi_extensions[ozi_objective]);
 
   /* re-open file_out with the new filename */
   if (file_out) {
@@ -228,8 +225,6 @@ ozi_openfile(char* fname)
   }
 
   file_out = gbfopen(tmpname, "wb", MYNAME);
-
-  xfree(tmpname);
 
   return;
 }
@@ -421,7 +416,7 @@ ozi_init_units(const int direction)	/* 0 = in; 1 = out */
 }
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   file_in = gbfopen(fname, "rb", MYNAME);
 
@@ -438,7 +433,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
 
   /* At this point, we have no idea whether we'll be writing waypoint,
@@ -446,7 +441,7 @@ wr_init(const char* fname)
    * we're actually ready to write.
    */
 
-  ozi_ofname = (char*)fname;
+  ozi_ofname = fname;
 
   mkshort_handle = mkshort_new_handle();
 
@@ -484,7 +479,7 @@ wr_deinit(void)
     gbfclose(file_out);
     file_out = NULL;
   }
-  ozi_ofname = NULL;
+  ozi_ofname.clear();
 
   mkshort_del_handle(&mkshort_handle);
 }

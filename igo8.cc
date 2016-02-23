@@ -132,7 +132,7 @@ static void igo8_check_type_sizes()
 }
 
 // Reader initialization callback
-static void igo8_read_init(const char* fname)
+static void igo8_read_init(const QString& fname)
 {
   igo8_file_in = gbfopen_le(fname, "rb", MYNAME);
 
@@ -177,7 +177,7 @@ static void igo8_read_deinit(void)
 }
 
 // Writer initialize callback
-static void igo8_write_init(const char* fname)
+static void igo8_write_init(const QString& fname)
 {
   igo8_file_out = gbfopen_le(fname, "wb", MYNAME);
 

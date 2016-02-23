@@ -159,7 +159,7 @@ arglist_t lowranceusr4_args[] = {
 };
 
 static void
-rd_init(const char* fname)
+rd_init(const QString& fname)
 {
   file_in = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -171,7 +171,7 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   file_out = gbfopen_le(fname, "wb", MYNAME);
   mkshort_handle = mkshort_new_handle();

@@ -38,7 +38,7 @@ static uint32_t tty_wpt_count;
 static gbfile* fin;
 
 static void
-teletype_rd_init(const char* fname)
+teletype_rd_init(const QString& fname)
 {
   char header[64];
 

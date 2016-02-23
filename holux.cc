@@ -38,7 +38,7 @@ static  short_handle mkshort_handle;
 #define MYNAME "Holux"
 
 
-static void rd_init(const char* fname)
+static void rd_init(const QString& fname)
 {
   file_in = gbfopen_le(fname, "rb", MYNAME);
 }
@@ -54,7 +54,7 @@ static void rd_deinit(void)
 
 
 static void
-wr_init(const char* fname)
+wr_init(const QString& fname)
 {
   mkshort_handle = mkshort_new_handle();
 

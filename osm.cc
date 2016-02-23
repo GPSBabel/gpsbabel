@@ -676,7 +676,7 @@ osm_way_end(xg_string args, const QXmlStreamAttributes*)
 }
 
 static void
-osm_rd_init(const char* fname)
+osm_rd_init(const QString& fname)
 {
   wpt = NULL;
   rte = NULL;
@@ -927,7 +927,7 @@ osm_rte_disp_trail(const route_head* rte)
 /*-----------------------------------------------------------------------------*/
 
 static void
-osm_wr_init(const char* fname)
+osm_wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 

@@ -59,7 +59,7 @@ static gbfile* fin, *fout;
 *******************************************************************************/
 
 static void
-vidaone_rd_init(const char* fname)
+vidaone_rd_init(const QString& fname)
 {
   vidaone_ver = atoi(vidaone_opt_ver);
   fin = gbfopen(fname, "rb", MYNAME);
@@ -101,7 +101,7 @@ vidaone_read(void)
 }
 
 static void
-vidaone_wr_init(const char* fname)
+vidaone_wr_init(const QString& fname)
 {
   vidaone_ver = atoi(vidaone_opt_ver);
   fout = gbfopen(fname, "wb", MYNAME);

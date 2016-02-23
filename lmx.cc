@@ -55,7 +55,7 @@ arglist_t lmx_args[] = {
 
 
 static void
-lmx_wr_init(const char* fname)
+lmx_wr_init(const QString& fname)
 {
   ofd = gbfopen(fname, "w", MYNAME);
 }
@@ -316,7 +316,7 @@ static xg_tag_mapping gl_map[] = {
 };
 
 static void
-lmx_rd_init(const char* fname)
+lmx_rd_init(const QString& fname)
 {
   xml_init(fname, gl_map, NULL);
 }

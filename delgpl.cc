@@ -39,7 +39,7 @@ static gbfile* gplfile_in;
 static gbfile* gplfile_out;
 
 static void
-gpl_rd_init(const char* fname)
+gpl_rd_init(const QString& fname)
 {
   gplfile_in = gbfopen_le(fname, "rb", MYNAME);
   if (sizeof(struct gpl_point) != 56) {
@@ -107,7 +107,7 @@ gpl_rd_deinit(void)
 }
 
 static void
-gpl_wr_init(const char* fname)
+gpl_wr_init(const QString& fname)
 {
   gplfile_out = gbfopen_le(fname, "wb", MYNAME);
 }

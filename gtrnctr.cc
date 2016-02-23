@@ -170,7 +170,7 @@ gtc_tags_to_ignore[] = {
 };
 
 static void
-gtc_rd_init(const char* fname)
+gtc_rd_init(const QString& fname)
 {
   xml_init(fname, gtc_map, NULL);
   xml_ignore_tags(gtc_tags_to_ignore);
@@ -189,7 +189,7 @@ gtc_rd_deinit(void)
 }
 
 static void
-gtc_wr_init(const char* fname)
+gtc_wr_init(const QString& fname)
 {
   int i;
 

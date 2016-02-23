@@ -236,7 +236,7 @@ skyforce_waypt_disp_cb(const Waypoint* wpt)
 *******************************************************************************/
 
 static void
-skyforce_rd_init(const char* fname)
+skyforce_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "r", MYNAME);
 }
@@ -318,7 +318,7 @@ skyforce_read(void)
 
 
 static void
-skyforce_wr_init(const char* fname)
+skyforce_wr_init(const QString& fname)
 {
   fout = gbfopen(fname, "w", MYNAME);
 
