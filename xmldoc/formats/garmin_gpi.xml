@@ -12,6 +12,16 @@
    but it's mangled beyond what we're likely to successfully read.
 </para>
 <para>
+  If a waypoint name is annotated with a trailing '@'NNN where NNN is 
+  a number, that number will be used as the speed for POI alerts, just
+  as with Garmin's POI Loader program. The units default to metric kilometers
+  per hour, but this cn be changed to statute via the units argument.
+  A speed associated with a specific POI will get precdence over any
+  'speed' argument provided. For example, a waypoint named "Point@30" will
+  associate a speed of 30 km/h with that specific point even if 'speed=40m'
+  is present in the output arguments.
+</para>
+<para>
    The layout of GPI files isn't documented and our module was created
    via reverse engineering. If you get a problem on reading or writing 
    a GPI file, please provide that file (mailto:gpsbabel-misc@lists.sourceforge.net).
