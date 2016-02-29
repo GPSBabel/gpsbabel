@@ -44,7 +44,6 @@ extern ff_vecs_t compegps_vecs;
 extern ff_vecs_t copilot_vecs;
 extern ff_vecs_t coto_vecs;
 extern ff_vecs_t cst_vecs;
-extern ff_vecs_t delbin_vecs;
 extern ff_vecs_t dg100_vecs;
 extern ff_vecs_t dg200_vecs;
 extern ff_vecs_t easygps_vecs;
@@ -57,7 +56,6 @@ extern ff_vecs_t geoniche_vecs;
 extern ff_vecs_t geo_vecs;
 extern ff_vecs_t globalsat_sport_vecs;
 extern ff_vecs_t glogbook_vecs;
-extern ff_vecs_t google_vecs;
 extern ff_vecs_t google_dir_vecs;
 extern ff_vecs_t gpilots_vecs;
 extern ff_vecs_t gpl_vecs;
@@ -79,7 +77,6 @@ extern ff_vecs_t lowranceusr4_vecs;
 extern ff_vecs_t mag_fvecs;
 extern ff_vecs_t maggeo_vecs;
 extern ff_vecs_t magnav_vec;
-extern ff_vecs_t magpdb_vecs;
 extern ff_vecs_t mag_svecs;
 extern ff_vecs_t magX_fvecs;
 extern ff_vecs_t mapsend_vecs;
@@ -97,7 +94,6 @@ extern ff_vecs_t nmn4_vecs;
 extern ff_vecs_t ozi_vecs;
 extern ff_vecs_t palmdoc_vecs;
 extern ff_vecs_t pcx_vecs;
-extern ff_vecs_t ppdb_vecs;
 extern ff_vecs_t psit_vecs;             /* MRCB */
 extern ff_vecs_t quovadis_vecs;
 extern ff_vecs_t saroute_vecs;
@@ -520,13 +516,6 @@ vecs_t vec_list[] = {
     "vcard",
     "Vcard Output (for iPod)",
     "vcf",
-    NULL,
-  },
-  {
-    &google_vecs,
-    "google",
-    "Google Maps XML",
-    "xml",
     NULL,
   },
   {
@@ -988,13 +977,6 @@ vecs_t vec_list[] = {
     "enigma",
     "Enigma binary waypoint file (.ert)",
     "ert",
-    NULL,
-  },
-  {
-    &delbin_vecs,
-    "delbin",
-    "DeLorme PN-20/PN-30/PN-40 USB protocol",
-    NULL,
     NULL,
   },
   {

@@ -14,7 +14,7 @@ rm -f ${TMPDIR}/an1.out
 gpsbabel -i xmap -f ${REFERENCE}/xmap -o an1 -F ${TMPDIR}/an1.out
 bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-out.ref
 
-rm -f ${TMPDIR}/an1.out
-gpsbabel -i google -f ${REFERENCE}/google.js -o an1 -F ${TMPDIR}/an1.out
-bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-line-out.ref
+#rm -f ${TMPDIR}/an1.out
+#gpsbabel -i gpx -f ${REFERENCE}/an1-in.gpx -o an1 -F ${TMPDIR}/an1.out
+#bincompare ${TMPDIR}/an1.out ${REFERENCE}/an1-line-out.ref
 

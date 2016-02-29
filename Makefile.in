@@ -471,9 +471,6 @@ csv_util.o: csv_util.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   jeeps/gpsprot.h jeeps/gpscom.h jeeps/gpsfmt.h jeeps/gpsmath.h \
   jeeps/gpsmem.h jeeps/gpsrqst.h jeeps/gpsinput.h jeeps/gpsproj.h \
   grtcirc.h src/core/logging.h strptime.h xcsv_tokens.gperf
-delbin.o: delbin.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
-  gbfile.h cet.h inifile.h session.h src/core/datetime.h \
-  src/core/xmltag.h
 delgpl.o: delgpl.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h inifile.h session.h src/core/datetime.h
 destinator.o: destinator.cc defs.h config.h queue.h zlib/zlib.h \
