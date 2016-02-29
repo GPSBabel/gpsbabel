@@ -16,7 +16,7 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         saroute.cc navicache.cc psitrex.cc delgpl.cc \
         ozi.cc text.cc html.cc netstumbler.cc \
         igc.cc brauniger_iq.cc shape.cc hiketech.cc glogbook.cc \
-        vcf.cc google.cc xhtmlent.cc lowranceusr.cc an1.cc tomtom.cc \
+        vcf.cc xhtmlent.cc lowranceusr.cc an1.cc tomtom.cc \
         tef_xml.cc maggeo.cc vitosmt.cc gdb.cc bcr.cc \
         ignrando.cc stmwpp.cc cst.cc nmn4.cc compegps.cc \
         yahoo.cc unicsv.cc wfff_xml.cc garmin_txt.cc gpssim.cc \
@@ -24,14 +24,14 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         ggv_log.cc g7towin.cc garmin_gpi.cc lmx.cc random.cc xol.cc dg-100.cc \
         navilink.cc mtk_logger.cc ik3d.cc osm.cc destinator.cc exif.cc vidaone.cc \
         igo8.cc gopal.cc humminbird.cc mapasia.cc gnav_trl.cc navitel.cc ggv_ovl.cc \
-        jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc delbin.cc \
+        jtr.cc sbp.cc sbn.cc mmo.cc skyforce.cc itracku.cc v900.cc \
         pocketfms_bc.cc pocketfms_fp.cc pocketfms_wp.cc naviguide.cc enigma.cc \
         vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc \
         subrip.cc garmin_xt.cc garmin_fit.cc lowranceusr4.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
         energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc
 
-DEPRECIATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc
+DEPRECIATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc delbin.cc google.cc
 
 DEPRECIATED_HEADERS=geo.h quovadis.h
 DEPRECIATED_SHAPE=pdbfile.cc

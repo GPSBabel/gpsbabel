@@ -68,7 +68,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o  \
 	saroute.o navicache.o psitrex.o delgpl.o \
 	text.o html.o netstumbler.o \
 	igc.o brauniger_iq.o shape.o hiketech.o glogbook.o  \
-	vcf.o google.o xhtmlent.o lowranceusr.o an1.o tomtom.o \
+	vcf.o xhtmlent.o lowranceusr.o an1.o tomtom.o \
 	tef_xml.o maggeo.o vitosmt.o bcr.o \
 	ignrando.o stmwpp.o cst.o nmn4.o compegps.o \
 	yahoo.o unicsv.o wfff_xml.o garmin_txt.o gpssim.o \
@@ -76,7 +76,7 @@ ALL_FMTS=$(MINIMAL_FMTS) gtm.o gpsutil.o  \
 	ggv_log.o g7towin.o garmin_gpi.o lmx.o random.o xol.o dg-100.o \
 	navilink.o mtk_logger.o ik3d.o osm.o destinator.o exif.o vidaone.o \
 	igo8.o gopal.o humminbird.o mapasia.o gnav_trl.o navitel.o ggv_ovl.o \
-	jtr.o sbp.o sbn.o mmo.o skyforce.o itracku.o v900.o delbin.o \
+	jtr.o sbp.o sbn.o mmo.o skyforce.o itracku.o v900.o  \
 	pocketfms_bc.o pocketfms_fp.o pocketfms_wp.o naviguide.o enigma.o \
 	vpl.o teletype.o jogmap.o bushnell.o bushnell_trl.o wintec_tes.o \
 	subrip.o garmin_xt.o garmin_fit.o lowranceusr4.o \
@@ -596,8 +596,6 @@ glogbook.o: glogbook.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   src/core/file.h
 gnav_trl.o: gnav_trl.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
   gbfile.h cet.h inifile.h session.h src/core/datetime.h
-google.o: google.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h \
-  gbfile.h cet.h inifile.h session.h src/core/datetime.h xmlgeneric.h
 googledir.o: googledir.cc defs.h config.h queue.h zlib/zlib.h \
   zlib/zconf.h gbfile.h cet.h inifile.h session.h src/core/datetime.h \
   xmlgeneric.h
