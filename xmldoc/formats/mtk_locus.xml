@@ -1,0 +1,12 @@
+<para>
+This format is a protocol supports the MediaTek MT3339, a GPS 
+chipset that shipped around 2011 that has internal logging capability.  
+It is the 
+core of at least two GPS modules, including the 
+GlobalTop PA6H and the Fastrax IT530.  The GlobalTop PA6H module is in
+turn the heart of the Adafruit "Ultimate" GPS breakout board, popular
+in the Arduino "maker" world.
+</para>
+<para>
+It is similar to the mtk and mtk-bin formats for earlier Mediatek parts.
+</para>

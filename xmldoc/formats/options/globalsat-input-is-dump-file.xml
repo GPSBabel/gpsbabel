@@ -1,0 +1,4 @@
+<para>
+This is the companion to dump-file and is used to tell the reader that
+the code is talking to a stored file and not physical hardware.
+</para>

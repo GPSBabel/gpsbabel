@@ -1,0 +1,19 @@
+<para>
+The dump-file option is primarly for debugging is module. It lets you
+provide a file which contains the raw stream of bytes coming from the
+device. This is useful for capturing device state to describe to a 
+developer that can't actually access hte physical device as well as mocking
+the entire device for automated regression testing.
+</para>
+<para>
+<screen>
+<command>gpsbabel</command> 
+-i glboalsat,dump-file=<replaceable>gh625xt.bin</replaceable> -f <replaceable>/dev/ttyUSB0</replaceable>
+</screen>
+can be used to read the device and store its state in the file <filename>gh625xt.bin</filename>.  That file can then be distributed and someone else can
+read it with a command line:
+<screen>
+<command> gpsbabel</command> 
+-i globalsat,input-is-dump-file=1 -f <replaceable>gh625xt.bin</replaceable> -o gpx -F <replaceable>test.gpx</replaceable>
+</screen>
+</para>

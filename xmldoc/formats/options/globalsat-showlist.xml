@@ -1,0 +1,9 @@
+<para>
+The showlist argment displays the list of tracks stored on the device.
+</para>
+<example id="globalsat-option-showlist">
+  <title>Command showing list of tracks on device</title>
+  <para>
+    <userinput>gpsbabel -i globalsat,showlist=1 -f /dev/ttyUSB0</userinput>
+  </para>
+</example>
