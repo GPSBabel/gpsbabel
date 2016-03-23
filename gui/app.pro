@@ -28,6 +28,13 @@ unix:OBJECTS_DIR = objects
 unix:RCC_DIR = objects
 
 mac:LIBS += -framework IOKit -framework CoreFoundation
+unix {
+    CONFIG += link_pkgconfig
+    packagesExist(libudev) {
+        DEFINES += HAVE_UDEV
+        PKGCONFIG += libudev
+    }
+}
 
 UI_DIR = tmp
 
