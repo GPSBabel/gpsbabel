@@ -153,6 +153,7 @@ tpo_check_version_string()
   string_buffer[string_size] = 0;
 
   /* check for the presence of a 3.0-style id string */
+  /* Note this check also finds version 4 id strings, e.g. "TOPO! Ver. 4.5.0" */
   if (strncmp(v3_id_string, string_buffer, strlen(v3_id_string)) == 0) {
     /*		fatal(MYNAME ": gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer); */
 //fprintf(stderr,"gpsbabel can only read TPO version 2.7.7 or below; this file is %s\n", string_buffer);
@@ -356,7 +357,8 @@ void tpo_read_2_x(void)
         78);
 
       /* there is no elevation data for the waypoints */
-      waypoint_temp->altitude = 0;
+      /* this is unecessary, the constructor will do this anyway. */
+      waypoint_temp->altitude = unknown_alt;
 
       track_add_wpt(track_temp, waypoint_temp);
     }
@@ -846,7 +848,7 @@ void tpo_process_waypoints(void)
     unsigned int name_length;
     int lat;
     int lon;
-    unsigned int altitude;
+    int altitude;
 
 //UNKNOWN DATA LENGTH
     (void)tpo_read_int(); // 0x00
@@ -877,13 +879,17 @@ void tpo_process_waypoints(void)
     // Assign the waypoint name
     waypoint_temp->shortname = waypoint_name;
 
-    // Grab the altitude in meters
+    // Grab the altitude in centimeters
     altitude = gbfgetint32(tpo_file_in);
-    if (altitude == 0xfffd000c) { // Unknown altitude
-      altitude = 0;
+    // The original untested check for unknown altitude was for 0xfffd000c (-196596 cm),
+    // but a test case submitted later used 0xffce0000 (-3276800 cm).
+    if (altitude == -3276800) { // Unknown altitude
+      /* this is unecessary, the constructor will do this anyway. */
+      waypoint_temp->altitude = unknown_alt;
+    } else {
+      waypoint_temp->altitude = (double) altitude / 100.0;   // Meters
     }
-    waypoint_temp->altitude = altitude / 100;   // Meters
-//printf("\tAltitude: %1.0f meters\n", waypoint_temp->altitude);
+//printf("\tAltitude: %1.2f meters\n", waypoint_temp->altitude);
 
 //UNKNOWN DATA LENGTH
     // Fetch comment length

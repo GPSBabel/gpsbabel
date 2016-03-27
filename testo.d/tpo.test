@@ -23,3 +23,7 @@ compare ${REFERENCE}/tpo-sample3.gpx ${TMPDIR}/tpo-sample3.gpx2
 gpsbabel -t -w -r -i tpo3 -f ${REFERENCE}/LineStyles.tpo -o gpx -F ${TMPDIR}/LineStyles.gpx -o kml -F ${TMPDIR}/LineStyles.kml
 compare ${REFERENCE}/LineStyles.gpx ${TMPDIR}/LineStyles.gpx
 compare ${REFERENCE}/LineStyles.kml ${TMPDIR}/LineStyles.kml
+# check negative and unknown altitudes
+rm -f ${TMPDIR}/NegElev.~tpo.gpx
+gpsbabel -i tpo3 -f ${REFERENCE}/NegElev.tpo -o gpx -F ${TMPDIR}/NegElev.~tpo.gpx
+compare ${REFERENCE}/NegElev.~tpo.gpx ${TMPDIR}/NegElev.~tpo.gpx
