@@ -1,0 +1,8 @@
+#
+# igoprimo_poi
+#
+gpsbabel -i igoprimo_poi -f ${REFERENCE}/igoprimo_poi.upoi -o gpx -F ${TMPDIR}/igoprimo_poi~upoi.gpx
+compare ${REFERENCE}/igoprimo_poi~upoi.gpx ${TMPDIR}/igoprimo_poi~upoi.gpx
+gpsbabel -i igoprimo_poi -f ${REFERENCE}/igoprimo_poi.upoi -o unicsv -F ${TMPDIR}/igoprimo_poi~upoi.csv
+compare ${REFERENCE}/igoprimo_poi~upoi.csv ${TMPDIR}/igoprimo_poi~upoi.csv
+
