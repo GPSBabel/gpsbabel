@@ -3,3 +3,9 @@
    navigation' devices. iGo Primo is GPS Navigation Software that runs on Windows embedded
    platforms, and is used in some OEM and aftermarket automotive head units.
 </para>
+<para>
+   NOTE: GPSBabel should seamlessly read and convert .upoi files from your device. However, 
+   when converting to .upoi format, GPSBabel will encode as UTF-8, which the device won't read
+   correctly. You will need to manually convert the output file to UTF-16 LE (UCS-2 LE BOM)
+   encoding using a text editor, and then it will work as expected.
+</para>
