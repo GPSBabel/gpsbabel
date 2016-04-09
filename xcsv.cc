@@ -23,10 +23,14 @@
 
  */
 
+#include <QtCore/QTextCodec>
+#include <QtCore/QTextStream>
+
 #include "defs.h"
-#include "cet_util.h"
 #include "csv_util.h"
 #include "jeeps/gpsmath.h"
+#include "src/core/file.h"
+#include "src/core/logging.h"
 #include <ctype.h>
 #include <stdlib.h>
 
@@ -335,7 +339,10 @@ xcsv_parse_style_line(char* sbuff)
 
                           if (ISSTOKEN(sbuff, "ENCODING")) {
                             p = csv_stringtrim(&sbuff[8], "\"", 1);
-                            cet_convert_init(p, 1);
+                            xcsv_file.codec = QTextCodec::codecForName(p);
+                            if (!xcsv_file.codec) {
+                              Fatal() << "Unsupported character set '" << p << "'.";
+                            }
                             xfree(p);
                           } else
 
@@ -554,7 +561,16 @@ xcsv_rd_init(const QString& fname)
     }
   }
 
-  xcsv_file.xcsvfp = gbfopen(fname, "r", MYNAME);
+  xcsv_file.file = new gpsbabel::File(fname);
+  xcsv_file.file->open(QFile::ReadOnly);
+  xcsv_file.stream = new QTextStream(xcsv_file.file);
+  if (xcsv_file.codec) {
+    xcsv_file.stream->setCodec(xcsv_file.codec);
+  } else {
+    // default to UTF-8.
+    xcsv_file.stream->setCodec("UTF-8");
+    xcsv_file.stream->setAutoDetectUnicode(true);
+  }
   xcsv_file.gps_datum = GPS_Lookup_Datum_Index(opt_datum);
   is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", opt_datum);
 }
@@ -562,7 +578,12 @@ xcsv_rd_init(const QString& fname)
 static void
 xcsv_rd_deinit(void)
 {
-  gbfclose(xcsv_file.xcsvfp);
+  xcsv_file.file->close();
+  delete xcsv_file.file;
+  xcsv_file.file = NULL;
+  delete xcsv_file.stream;
+  xcsv_file.stream = NULL;
+  xcsv_file.codec = NULL;
 
   xcsv_destroy_style();
 }
@@ -586,7 +607,19 @@ xcsv_wr_init(const QString& fname)
     xcsv_read_style(styleopt);
   }
 
-  xcsv_file.xcsvfp = gbfopen(fname, "w", MYNAME);
+  xcsv_file.file = new gpsbabel::File(fname);
+  xcsv_file.file->open(QFile::WriteOnly | QFile::Text);
+  xcsv_file.stream = new QTextStream(xcsv_file.file);
+  if (xcsv_file.codec) {
+    xcsv_file.stream->setCodec(xcsv_file.codec);
+    // enable bom for all UTF codecs except UTF-8
+    if (xcsv_file.codec->mibEnum() != 106) {
+      xcsv_file.stream->setGenerateByteOrderMark(true);
+    }
+  } else {
+    // emulate gbfputs which assumes UTF-8.
+    xcsv_file.stream->setCodec("UTF-8");
+  }
   xcsv_file.fname = fname;
 
   /* set mkshort options from the command line */
@@ -624,7 +657,13 @@ xcsv_wr_position_init(const QString& fname)
 static void
 xcsv_wr_deinit(void)
 {
-  gbfclose(xcsv_file.xcsvfp);
+  xcsv_file.stream->flush();
+  xcsv_file.file->close();
+  delete xcsv_file.file;
+  xcsv_file.file = NULL;
+  delete xcsv_file.stream;
+  xcsv_file.stream = NULL;
+  xcsv_file.codec = NULL;
 
   xcsv_destroy_style();
 }
@@ -652,7 +691,7 @@ xcsv_wr_position(Waypoint* wpt)
   xcsv_data_write();
   waypt_del(wpt);
 
-  gbfflush(xcsv_file.xcsvfp);
+  xcsv_file.stream->flush();
 }
 
 ff_vecs_t xcsv_vecs = {
