@@ -21,9 +21,9 @@
  */
 
 #include <QtCore/QRegExp>
+#include <QtCore/QTextStream>
 
 #include "defs.h"
-#include "cet_util.h"
 #include "csv_util.h"
 #include "garmin_fs.h"
 #include "grtcirc.h"
@@ -730,7 +730,9 @@ void xcsv_file_init(void)
   xcsv_file.badchars = QString();
   xcsv_file.ifield_ct = 0;
   xcsv_file.ofield_ct = 0;
-  xcsv_file.xcsvfp = NULL;
+  xcsv_file.file = NULL;
+  xcsv_file.stream = NULL;
+  xcsv_file.codec = NULL;
   xcsv_file.fname = QString();
   xcsv_file.description = NULL;
   xcsv_file.extension = NULL;
@@ -1406,6 +1408,26 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
   }
 }
 
+// TODO: eliminate this routine which is modeled
+// after gbfgetstr for legacy compatibility.
+static char*
+xcsv_readline(char* buff)
+{
+  if (buff) {
+    xfree(buff);
+  }
+  QString line = xcsv_file.stream->readLine();
+  if (line.isNull()) {
+    return NULL;
+  } else {
+    // TODO: move csv processing to Qt, eliminating the need to go
+    // back to 8 bit encoding, which is shaky for encoding like utf8
+    // that have multibyte characters.
+    char* newbuff = xstrdup(CSTR(line));
+    return newbuff;
+  }
+}
+
 /*****************************************************************************/
 /* xcsv_data_read() - read input file, parsing lines, fields and handling    */
 /*                   any data conversion (the input meat)                    */
@@ -1413,7 +1435,7 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
 void
 xcsv_data_read(void)
 {
-  char* buff;
+  char* buff = NULL;
   char* s;
   Waypoint* wpt_tmp;
   int linecount = 0;
@@ -1433,11 +1455,8 @@ xcsv_data_read(void)
     csv_route = rte;
   }
 
-  while ((buff = gbfgetstr(xcsv_file.xcsvfp))) {
-    if ((linecount == 0) && xcsv_file.xcsvfp->unicode) {
-      cet_convert_init(CET_CHARSET_UTF8, 1);
-    }
-
+  // TODO: stop the back and forth between QString and char strings,
+  while ((buff = xcsv_readline(buff))) {
     linecount++;
     /* Whack trailing space; leading space may matter if our field sep
      * is whitespace and we have leading whitespace.
@@ -1643,7 +1662,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
     fmp = (field_map_t*) elem;
 
     if ((i != 0) && !(fmp->options & OPTIONS_NODELIM)) {
-      gbfputs(write_delimiter, xcsv_file.xcsvfp);
+      *xcsv_file.stream << write_delimiter;
     }
 
     if (fmp->options & OPTIONS_ABSOLUTE) {
@@ -2152,7 +2171,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
 
     if (!xcsv_file.field_encloser.isEmpty()) {
       /* print the enclosing character(s) */
-      gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
+      *xcsv_file.stream << xcsv_file.record_delimiter;
     }
 
     /* As a special case (pronounced "horrible hack") we allow
@@ -2161,16 +2180,16 @@ xcsv_waypt_pr(const Waypoint* wpt)
     if (0 == strcmp(fmp->printfc, "\"%s\"")) {
       obuff = '"' + obuff + '"';
     }
-    gbfputs(obuff, xcsv_file.xcsvfp);
+    *xcsv_file.stream << obuff;
 
     if (!xcsv_file.field_encloser.isEmpty()) {
       /* print the enclosing character(s) */
-      gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
+      *xcsv_file.stream << xcsv_file.record_delimiter;
     }
     buff.clear();
   }
 
-  gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
+  *xcsv_file.stream << xcsv_file.record_delimiter;
 
   /* increment the index counter */
   waypt_out_count++;
@@ -2227,8 +2246,7 @@ xcsv_data_write(void)
       QString t = dt.toString("hh:mm:ss");
       cout.replace("__TIME__", t);
     }
-    gbfputs(cout, xcsv_file.xcsvfp);
-    gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
+    *xcsv_file.stream << cout <<  xcsv_file.record_delimiter;
   }
 
   if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == wptdata)) {
@@ -2243,8 +2261,7 @@ xcsv_data_write(void)
 
   /* output epilogue lines, if any. */
   foreach(const QString& ogp, xcsv_file.epilogue) {
-    gbfputs(ogp, xcsv_file.xcsvfp);
-    gbfputs(xcsv_file.record_delimiter, xcsv_file.xcsvfp);
+    *xcsv_file.stream << ogp << xcsv_file.record_delimiter;
   }
 }
 #endif

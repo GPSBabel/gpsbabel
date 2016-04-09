@@ -96,6 +96,10 @@ typedef struct char_map {
   const char* chars;
 } char_map_t;
 
+namespace gpsbabel
+{
+    class File;
+}
 /*
  * a Class describing all the wonderful elements of xcsv files, in a
  * nutshell.
@@ -125,7 +129,9 @@ class XcsvFile {
   int ifield_ct;		/* actual # of ifields */
   int ofield_ct;		/* actual # of ofields */
 
-  gbfile* xcsvfp;		/* ptr to current *open* data file */
+  gpsbabel::File* file;
+  QTextStream* stream;
+  QTextCodec* codec;
   QString fname;                 /* ptr to filename of above. */
 
   char* description;		/* Description for help text */
