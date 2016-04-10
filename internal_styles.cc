@@ -750,7 +750,7 @@ static char igoprimo_poi[] =
   "FIELD_DELIMITER		PIPE\n"
   "RECORD_DELIMITER	CR\n"
   "BADCHARS		\"|\n"
-  "ENCODING		UTF-8\n"
+  "ENCODING		UTF-16LE\n"
   "#\n"
   "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
   "#\n"
