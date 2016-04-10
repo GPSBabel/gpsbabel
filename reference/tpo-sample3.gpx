@@ -2,79 +2,79 @@
 <gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <bounds minlat="39.047567844" minlon="-119.913288116" maxlat="39.068486691" maxlon="-119.875101328"/>
   <wpt lat="39.050695896" lon="-119.911156178">
-    <ele>2428.000000</ele>
+    <ele>2428.350000</ele>
     <name>001</name>
     <cmt>001</cmt>
     <desc>001</desc>
   </wpt>
   <wpt lat="39.050353765" lon="-119.908585310">
-    <ele>2439.000000</ele>
+    <ele>2439.930000</ele>
     <name>002</name>
     <cmt>002</cmt>
     <desc>002</desc>
   </wpt>
   <wpt lat="39.049960017" lon="-119.905889988">
-    <ele>2462.000000</ele>
+    <ele>2462.180000</ele>
     <name>003</name>
     <cmt>WITH MESSAGE</cmt>
     <desc>WITH MESSAGE</desc>
   </wpt>
   <wpt lat="39.048154354" lon="-119.897549391">
-    <ele>2559.000000</ele>
+    <ele>2559.110000</ele>
     <name>GPSRTE0</name>
     <cmt>GPSRTE0</cmt>
     <desc>GPSRTE0</desc>
   </wpt>
   <wpt lat="39.049571753" lon="-119.896608829">
-    <ele>2582.000000</ele>
+    <ele>2582.580000</ele>
     <name>GPSRTE1</name>
     <cmt>GPSRTE1</cmt>
     <desc>GPSRTE1</desc>
   </wpt>
   <wpt lat="39.048447609" lon="-119.895542860">
-    <ele>2586.000000</ele>
+    <ele>2586.840000</ele>
     <name>GPSRTE2</name>
     <cmt>GPSRTE2</cmt>
     <desc>GPSRTE2</desc>
   </wpt>
   <wpt lat="39.049474001" lon="-119.893724442">
-    <ele>2612.000000</ele>
+    <ele>2612.140000</ele>
     <name>GPSRTE3</name>
     <cmt>GPSRTE3</cmt>
     <desc>GPSRTE3</desc>
   </wpt>
   <wpt lat="39.048398733" lon="-119.892971992">
-    <ele>2606.000000</ele>
+    <ele>2606.350000</ele>
     <name>GPSRTE4</name>
     <cmt>GPSRTE4</cmt>
     <desc>GPSRTE4</desc>
   </wpt>
   <wpt lat="39.049180746" lon="-119.891341686">
-    <ele>2632.000000</ele>
+    <ele>2632.560000</ele>
     <name>GPSRTE5</name>
     <cmt>GPSRTE5</cmt>
     <desc>GPSRTE5</desc>
   </wpt>
   <wpt lat="39.047763348" lon="-119.889899492">
-    <ele>2627.000000</ele>
+    <ele>2627.080000</ele>
     <name>GPSRTE6</name>
     <cmt>GPSRTE6</cmt>
     <desc>GPSRTE6</desc>
   </wpt>
   <wpt lat="39.048936367" lon="-119.888206482">
-    <ele>2622.000000</ele>
+    <ele>2622.200000</ele>
     <name>GPSRTE7</name>
     <cmt>GPSRTE7</cmt>
     <desc>GPSRTE7</desc>
   </wpt>
   <wpt lat="39.047567844" lon="-119.886074543">
-    <ele>2639.000000</ele>
+    <ele>2639.880000</ele>
     <name>GPSRTE8</name>
     <cmt>GPSRTE8</cmt>
     <desc>GPSRTE8</desc>
   </wpt>
   <wpt lat="39.048887491" lon="-119.885071278">
-    <ele>2599.000000</ele>
+    <ele>2599.030000</ele>
     <name>GPSRTE9</name>
     <cmt>GPSRTE9</cmt>
     <desc>GPSRTE9</desc>
@@ -136,43 +136,43 @@
     <name>RTE 1</name>
     <number>1</number>
     <rtept lat="39.048154354" lon="-119.897549391">
-      <ele>2559.000000</ele>
+      <ele>2559.110000</ele>
       <name>GPSRTE0</name>
     </rtept>
     <rtept lat="39.049571753" lon="-119.896608829">
-      <ele>2582.000000</ele>
+      <ele>2582.580000</ele>
       <name>GPSRTE1</name>
     </rtept>
     <rtept lat="39.048447609" lon="-119.895542860">
-      <ele>2586.000000</ele>
+      <ele>2586.840000</ele>
       <name>GPSRTE2</name>
     </rtept>
     <rtept lat="39.049474001" lon="-119.893724442">
-      <ele>2612.000000</ele>
+      <ele>2612.140000</ele>
       <name>GPSRTE3</name>
     </rtept>
     <rtept lat="39.048398733" lon="-119.892971992">
-      <ele>2606.000000</ele>
+      <ele>2606.350000</ele>
       <name>GPSRTE4</name>
     </rtept>
     <rtept lat="39.049180746" lon="-119.891341686">
-      <ele>2632.000000</ele>
+      <ele>2632.560000</ele>
       <name>GPSRTE5</name>
     </rtept>
     <rtept lat="39.047763348" lon="-119.889899492">
-      <ele>2627.000000</ele>
+      <ele>2627.080000</ele>
       <name>GPSRTE6</name>
     </rtept>
     <rtept lat="39.048936367" lon="-119.888206482">
-      <ele>2622.000000</ele>
+      <ele>2622.200000</ele>
       <name>GPSRTE7</name>
     </rtept>
     <rtept lat="39.047567844" lon="-119.886074543">
-      <ele>2639.000000</ele>
+      <ele>2639.880000</ele>
       <name>GPSRTE8</name>
     </rtept>
     <rtept lat="39.048887491" lon="-119.885071278">
-      <ele>2599.000000</ele>
+      <ele>2599.030000</ele>
       <name>GPSRTE9</name>
     </rtept>
   </rte>

@@ -77,84 +77,84 @@
         <name>HairDash0</name>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-122.291541,37.538136,2.00</coordinates>
+          <coordinates>-122.291541,37.538136,2.13</coordinates>
         </Point>
       </Placemark>
       <Placemark>
         <name>ThinDash0</name>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-122.291663,37.535986,3.00</coordinates>
+          <coordinates>-122.291663,37.535986,3.35</coordinates>
         </Point>
       </Placemark>
       <Placemark>
         <name>RedHair0</name>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-122.292032,37.533444,4.00</coordinates>
+          <coordinates>-122.292032,37.533444,4.57</coordinates>
         </Point>
       </Placemark>
       <Placemark>
         <name>RedThin0</name>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-122.292277,37.530854,8.00</coordinates>
+          <coordinates>-122.292277,37.530854,8.84</coordinates>
         </Point>
       </Placemark>
       <Placemark>
         <name>RedMed0</name>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-122.292584,37.528654,21.00</coordinates>
+          <coordinates>-122.292584,37.528654,21.03</coordinates>
         </Point>
       </Placemark>
       <Placemark>
         <name>RedThick0</name>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-122.292646,37.524989,64.00</coordinates>
+          <coordinates>-122.292646,37.524989,64.92</coordinates>
         </Point>
       </Placemark>
       <Placemark>
         <name>YellowMed0</name>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-122.292093,37.520199,125.00</coordinates>
+          <coordinates>-122.292093,37.520199,125.58</coordinates>
         </Point>
       </Placemark>
       <Placemark>
         <name>GreenMed0</name>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-122.291847,37.517951,61.00</coordinates>
+          <coordinates>-122.291847,37.517951,61.26</coordinates>
         </Point>
       </Placemark>
       <Placemark>
         <name>BlueMed0</name>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-122.291970,37.515653,39.00</coordinates>
+          <coordinates>-122.291970,37.515653,39.32</coordinates>
         </Point>
       </Placemark>
       <Placemark>
         <name>PurpleMed0</name>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-122.291111,37.513161,37.00</coordinates>
+          <coordinates>-122.291111,37.513161,37.49</coordinates>
         </Point>
       </Placemark>
       <Placemark>
         <name>BlackMed0</name>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-122.291356,37.510277,59.00</coordinates>
+          <coordinates>-122.291356,37.510277,59.44</coordinates>
         </Point>
       </Placemark>
       <Placemark>
         <name>WhiteMed0</name>
         <styleUrl>#waypoint</styleUrl>
         <Point>
-          <coordinates>-122.291725,37.508029,49.00</coordinates>
+          <coordinates>-122.291725,37.508029,49.68</coordinates>
         </Point>
       </Placemark>
       <Placemark>
