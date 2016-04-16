@@ -3,6 +3,7 @@
 #
 gpsbabel -i igoprimo_poi -f ${REFERENCE}/igoprimo_poi.upoi -o gpx -F ${TMPDIR}/igoprimo_poi~upoi.gpx
 compare ${REFERENCE}/igoprimo_poi~upoi.gpx ${TMPDIR}/igoprimo_poi~upoi.gpx
-gpsbabel -i igoprimo_poi -f ${REFERENCE}/igoprimo_poi.upoi -o unicsv -F ${TMPDIR}/igoprimo_poi~upoi.csv
-compare ${REFERENCE}/igoprimo_poi~upoi.csv ${TMPDIR}/igoprimo_poi~upoi.csv
-
+gpsbabel -i igoprimo_poi -f ${REFERENCE}/igoprimo_poi.upoi -o unicsv -F ${TMPDIR}/igoprimo_poi~upoi.ucsv
+compare ${REFERENCE}/igoprimo_poi~upoi.ucsv ${TMPDIR}/igoprimo_poi~upoi.ucsv
+gpsbabel -i unicsv -f ${TMPDIR}/igoprimo_poi~upoi.ucsv -o igoprimo_poi -F ${TMPDIR}/igoprimo_poi~upoi~ucsv.upoi
+compare ${REFERENCE}/igoprimo_poi.upoi ${TMPDIR}/igoprimo_poi~upoi~ucsv.upoi
