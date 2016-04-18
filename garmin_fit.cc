@@ -26,8 +26,15 @@
 
 #define MYNAME "fit"
 
+static char* opt_allpoints = NULL;
+
 static
 arglist_t fit_args[] = {
+  {
+    "allpoints", &opt_allpoints,
+    "Read all points even if latitude or longitude is missing",
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
+  },
   ARG_TERMINATOR
 };
 
@@ -411,13 +418,17 @@ fit_parse_data(fit_message_def* def, int time_offset)
   }
   switch (def->global_id) {
   case 20: // record message
-    if (lat == 0x7fffffff || lon == 0x7fffffff) {
+    if ((lat == 0x7fffffff || lon == 0x7fffffff) && !opt_allpoints) {
       break;
     }
 
     waypt = new Waypoint;
-    waypt->latitude = (lat / (double)0x7fffffff) * 180;
-    waypt->longitude = (lon / (double)0x7fffffff) * 180;
+    if (lat != 0x7fffffff) {
+      waypt->latitude = (lat / (double)0x7fffffff) * 180;
+    }
+    if (lon != 0x7fffffff) {
+      waypt->longitude = (lon / (double)0x7fffffff) * 180;
+    }
     if (alt != 0xffff) {
       waypt->altitude = (alt / 5.0) - 500;
     }
