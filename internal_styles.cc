@@ -748,7 +748,7 @@ static char igoprimo_poi[] =
   "# FILE LAYOUT DEFINITIONS:\n"
   "#\n"
   "FIELD_DELIMITER		PIPE\n"
-  "RECORD_DELIMITER    CRNEWLINE\n"
+  "RECORD_DELIMITER    NEWLINE\n"
   "BADCHARS		\"|\n"
   "ENCODING		UTF-16LE\n"
   "#\n"
