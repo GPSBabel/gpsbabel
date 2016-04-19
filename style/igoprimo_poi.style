@@ -1,0 +1,37 @@
+# gpsbabel XCSV style file
+#
+# Format: iGo Primo points of interest
+# Author: Scott Bradford
+#   Date: 03/26/2016
+#
+DESCRIPTION		iGo Primo points of interest (.upoi)
+EXTENSION		upoi
+DATATYPE		WAYPOINT
+#
+# FILE LAYOUT DEFINITIONS:
+#
+FIELD_DELIMITER		PIPE
+RECORD_DELIMITER	NEWLINE
+BADCHARS		"|
+ENCODING		UTF-16LE
+#
+# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:
+#
+IFIELD	INDEX, "1", "%d"
+IFIELD  CONSTANT, "@Favourites", "%s"	# always @Favourites?
+IFIELD	SHORTNAME, "", "%s"
+IFIELD	IGNORE, "", "%s"				# always empty?
+IFIELD	LAT_DECIMAL, "", "%.6f"
+IFIELD	LON_DECIMAL, "", "%.6f"
+IFIELD  CONSTANT, "_u**", "%s"			# always _u**?
+IFIELD	IGNORE, "", "%s"				# always empty?
+IFIELD  CONSTANT, "_uva", "%s"			# always _uva?
+IFIELD	IGNORE, "", "%s"				# always empty?
+IFIELD	POSTAL_CODE, "", "%s"
+IFIELD	CITY, "", "%s"
+IFIELD	STREET_ADDR, "", "%s"			# should be street name (no number)
+IFIELD	IGNORE, "", "%s"				# should be street number
+IFIELD	IGNORE, "", "%s"				# always empty?
+IFIELD	PHONE_NR, "", "%s"
+IFIELD	IGNORE, "", "%s"				# always empty?
+IFIELD	IGNORE, "", "%s"				# seems to be extra lat/lon values?

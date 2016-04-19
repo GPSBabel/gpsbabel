@@ -1,0 +1,12 @@
+#
+# igoprimo_poi
+#
+gpsbabel -i igoprimo_poi -f ${REFERENCE}/igoprimo_poi.upoi -o gpx -F ${TMPDIR}/igoprimo_poi~upoi.gpx
+compare ${REFERENCE}/igoprimo_poi~upoi.gpx ${TMPDIR}/igoprimo_poi~upoi.gpx
+gpsbabel -i igoprimo_poi -f ${REFERENCE}/igoprimo_poi.upoi -o unicsv -F ${TMPDIR}/igoprimo_poi~upoi.ucsv
+compare ${REFERENCE}/igoprimo_poi~upoi.ucsv ${TMPDIR}/igoprimo_poi~upoi.ucsv
+
+gpsbabel -i igoprimo_poi -f ${REFERENCE}/igoprimo_poi.upoi -o igoprimo_poi -F ${TMPDIR}/igoprimo_poi~upoi.upoi
+iconv -f UTF-16LE -t UTF-8 ${REFERENCE}/igoprimo_poi.upoi >${TMPDIR}/igoprimo_poi.upoi.utf8
+iconv -f UTF-16LE -t UTF-8 ${TMPDIR}/igoprimo_poi~upoi.upoi >${TMPDIR}/igoprimo_poi~upoi.upoi.utf8
+compare ${TMPDIR}/igoprimo_poi~upoi.upoi.utf8 ${TMPDIR}/igoprimo_poi~upoi.upoi.utf8

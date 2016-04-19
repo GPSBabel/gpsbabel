@@ -734,6 +734,45 @@ static char igo2008_poi[] =
   "IFIELD	NOTES, \"\", \"%s\"\n"
   "IFIELD	PHONE_NR, \"\", \"%s\"\n"
   ;
+static char igoprimo_poi[] =
+  "# gpsbabel XCSV style file\n"
+  "#\n"
+  "# Format: iGo Primo points of interest\n"
+  "# Author: Scott Bradford\n"
+  "#   Date: 03/26/2016\n"
+  "#\n"
+  "DESCRIPTION		iGo Primo points of interest (.upoi)\n"
+  "EXTENSION		upoi\n"
+  "DATATYPE		WAYPOINT\n"
+  "#\n"
+  "# FILE LAYOUT DEFINITIONS:\n"
+  "#\n"
+  "FIELD_DELIMITER		PIPE\n"
+  "RECORD_DELIMITER    NEWLINE\n"
+  "BADCHARS		\"|\n"
+  "ENCODING		UTF-16LE\n"
+  "#\n"
+  "# INDIVIDUAL DATA FIELDS, IN ORDER OF APPEARANCE:\n"
+  "#\n"
+  "IFIELD	INDEX, \"1\", \"%d\"\n"
+  "IFIELD  CONSTANT, \"@Favourites\", \"%s\"	# always @Favourites?\n"
+  "IFIELD	SHORTNAME, \"\", \"%s\"\n"
+  "IFIELD	IGNORE, \"\", \"%s\"				# always empty?\n"
+  "IFIELD	LAT_DECIMAL, \"\", \"%.6f\"\n"
+  "IFIELD	LON_DECIMAL, \"\", \"%.6f\"\n"
+  "IFIELD  CONSTANT, \"_u**\", \"%s\"			# always _u**?\n"
+  "IFIELD	IGNORE, \"\", \"%s\"				# always empty?\n"
+  "IFIELD  CONSTANT, \"_uva\", \"%s\"			# always _uva?\n"
+  "IFIELD	IGNORE, \"\", \"%s\"				# always empty?\n"
+  "IFIELD	POSTAL_CODE, \"\", \"%s\"\n"
+  "IFIELD	CITY, \"\", \"%s\"\n"
+  "IFIELD	STREET_ADDR, \"\", \"%s\"			# should be street name (no number)\n"
+  "IFIELD	IGNORE, \"\", \"%s\"				# should be street number\n"
+  "IFIELD	IGNORE, \"\", \"%s\"				# always empty?\n"
+  "IFIELD	PHONE_NR, \"\", \"%s\"\n"
+  "IFIELD	IGNORE, \"\", \"%s\"				# always empty?\n"
+  "IFIELD	IGNORE, \"\", \"%s\"				# seems to be extra lat/lon values?\n"
+  ;
 static char kompass_tk[] =
   "# gpsbabel XCSV style file\n"
   "#\n"
@@ -1450,8 +1489,8 @@ static char xmapwpt[] =
   "IFIELD	IGNORE, \"\", \"%-.31s\"\n"
   "IFIELD	DESCRIPTION, \"\", \"%-.78s\"\n"
   ;
-style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn_places", tomtom_itn_places } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "ricoh", ricoh } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "motoactv", motoactv } , { "mapconverter", mapconverter } , { "mainnav", mainnav } , { "land_air_sea", land_air_sea } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "igo2008_poi", igo2008_poi } , { "iblue757", iblue757 } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin_g1000", garmin_g1000 } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "flysight", flysight } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
-size_t nstyles = 38;
+style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn_places", tomtom_itn_places } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "ricoh", ricoh } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "motoactv", motoactv } , { "mapconverter", mapconverter } , { "mainnav", mainnav } , { "land_air_sea", land_air_sea } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "igo2008_poi", igo2008_poi } , { "igoprimo_poi", igoprimo_poi } , { "iblue757", iblue757 } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin_g1000", garmin_g1000 } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "flysight", flysight } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {0,0}};
+size_t nstyles = 39;
 #else /* CSVFMTS_ENABLED */
 style_vecs_t style_list[] = {{0,0}};
 size_t nstyles = 0;

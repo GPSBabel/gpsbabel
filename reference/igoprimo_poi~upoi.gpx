@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="38.857596000" minlon="-77.447755000" maxlat="38.952749000" maxlon="-77.008025000"/>
+  <wpt lat="38.870741000" lon="-77.103000000">
+    <name>Cathedral of St Thomas More</name>
+    <cmt>Cathedral of St Thomas More</cmt>
+    <desc>Cathedral of St Thomas More</desc>
+  </wpt>
+  <wpt lat="38.889742000" lon="-77.013587000">
+    <name>Capitol Reflecting Pool</name>
+    <cmt>Capitol Reflecting Pool</cmt>
+    <desc>Capitol Reflecting Pool</desc>
+  </wpt>
+  <wpt lat="38.884787000" lon="-77.439315000">
+    <name>McDonald's</name>
+    <cmt>McDonald's</cmt>
+    <desc>McDonald's</desc>
+  </wpt>
+  <wpt lat="38.952749000" lon="-77.447755000">
+    <name>Washington Dulles International Airport</name>
+    <cmt>Washington Dulles International Airport</cmt>
+    <desc>Washington Dulles International Airport</desc>
+  </wpt>
+  <wpt lat="38.857596000" lon="-77.226819000">
+    <name>Inova Fairfax Medical Campus</name>
+    <cmt>Inova Fairfax Medical Campus</cmt>
+    <desc>Inova Fairfax Medical Campus</desc>
+  </wpt>
+  <wpt lat="38.871771000" lon="-77.008025000">
+    <name>Nationals Park</name>
+    <cmt>Nationals Park</cmt>
+    <desc>Nationals Park</desc>
+  </wpt>
+</gpx>
