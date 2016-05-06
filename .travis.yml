@@ -1,8 +1,12 @@
-sudo: false
+sudo: true
+dist: trusty
 language: cpp
 compiler:
   - gcc
   - clang
+before_install:
+#   as a bit of a kludge remove qt4 so our configure finds qt5.
+  - sudo apt-get -y --purge remove qt4-qmake qt4-linguist-tools
 addons:
   apt:
     packages:
@@ -10,6 +14,13 @@ addons:
     - fop
     - valgrind
     - xsltproc
+    - libxml2-utils
+    - qt5-default
+    - qtbase5-dev
+    - libqt5webkit5-dev
+    - qttools5-dev-tools
+    - qttranslations5-l10n
+    - libusb-dev
 script:
  - ./build_and_test
 # TODO: build mac
