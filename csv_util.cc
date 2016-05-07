@@ -150,7 +150,9 @@ typedef enum {
 static struct xt_mapping*
 in_word_set(register const char* str, register unsigned int len);
 
+#define register
 #include "xcsv_tokens.gperf"
+#undef register
 
 /****************************************************************************/
 /* obligatory global struct                                                 */
