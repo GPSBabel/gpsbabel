@@ -5061,7 +5061,7 @@ fi
 
 
 if test "$QMAKE" = no ; then
-  as_fn_error $? "Qt5 is required, but neither was found" "$LINENO" 5;
+  as_fn_error $? "Qt5.2 or higher is required, but was not found" "$LINENO" 5;
 fi
 
 # guess the name of the Qt Core library.
