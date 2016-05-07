@@ -4,9 +4,6 @@ language: cpp
 compiler:
   - gcc
   - clang
-before_install:
-#   as a bit of a kludge remove qt4 so our configure finds qt5.
-  - sudo apt-get -y --purge remove qt4-qmake qt4-linguist-tools
 addons:
   apt:
     packages:
