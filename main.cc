@@ -252,13 +252,8 @@ main(int argc, char* argv[])
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-  // Qt 5.0 uses QString::fromUtf8 to convert from character pointers
-  // and QBytreArrays to QStrings while previous version of Qt used
-  // QString::fromAscii.  QString::fromAscii used the codec set
-  // by QTextCode::setCodecForCStrings.
-  // This makes the converstion consistent between Qt4 and Qt5.
-  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+#if (QT_VERSION < QT_VERSION_CHECK(5, 2, 0))
+  #error This version of Qt is not supported.
 #endif
 
   // The first invocation of QTextCodec::codecForLocale() may result in LC_ALL being set to the native environment

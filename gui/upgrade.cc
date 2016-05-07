@@ -304,11 +304,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
   QUrl downloadUrl;
   updateStatus_ = updateCurrent;  // Current until proven guilty.
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-  for (int i = 0; i < (int) upgrades.length(); i++) {
-#else
   for (int i = 0; i < upgrades.length(); i++) {
-#endif
     QDomNode upgradeNode = upgrades.item(i);
     QDomElement upgrade = upgradeNode.toElement();
 
