@@ -5,5 +5,5 @@ speed information or for trackoints synthesized by the
 <link linkend="filter_interpolate">interpolate</link>
 filter.  The speed at each trackpoint is the average speed from the
 previous trackpoint (distance divided by time).  The first trackpoint 
-in each track is assigned a speed of "unknown."
+in each track is assigned a speed of "unknown." The output unit of the speed is meter per second.
 </para>
