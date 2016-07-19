@@ -74,6 +74,11 @@ interpfilt_process(void)
     track_backup(&count, &backuproute);
     route_flush_all_tracks();
   }
+
+  if (count == 0) {
+    fatal(MYNAME ": Found no routes or tracks to operate on.\n");
+  }
+
   QUEUE_FOR_EACH(backuproute, elem, tmp) {
     route_head* rte_old = (route_head*)elem;
 
