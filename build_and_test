@@ -11,7 +11,7 @@ fi
 if [ -e /etc/os-release ]; then
 	cat /etc/os-release
 fi
-git log -n 1
+git --no-pager log -n 1
 # the timestamps from a svn co are unpredicatble.
 # this can cause problems if targets are checked into svn.
 # some of our targets are part of the svn repository to allow a
