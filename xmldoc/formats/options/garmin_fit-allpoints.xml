@@ -1,0 +1,6 @@
+<para>
+  This option specifies that all points in the input .fit-file should
+  be read.  The default behavior is otherwise to skip points without
+  gps coordinates.  This is especially useful for devices that do not
+  contain a gps, e.g., Garmin Vivosmart HR.
+</para>
