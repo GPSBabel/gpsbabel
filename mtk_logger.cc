@@ -227,7 +227,7 @@ static char* OPT_erase;  /* erase ? command option */
 static char* OPT_erase_only;  /* erase_only ? command option */
 static char* OPT_log_enable;  /* enable ? command option */
 static char* csv_file; /* csv ? command option */
-static char* OPT_block_size; /* block_size ? command option */
+static char* OPT_block_size_kb; /* block_size_kb ? command option */
 static enum MTK_DEVICE_TYPE mtk_device = MTK_LOGGER;
 
 struct mtk_loginfo mtk_info;
@@ -269,8 +269,8 @@ static arglist_t mtk_sargs[] = {
     NULL, ARGTYPE_STRING, ARG_NOMINMAX
   },
   {
-    "block_size", &OPT_block_size, "Size of blocks to request from device",
-    "1024", ARGTYPE_INT, "1024", "65536"
+    "block_size_kb", &OPT_block_size_kb, "Size of blocks in KB to request from device",
+    "1", ARGTYPE_INT, "1", "64"
   },
   ARG_TERMINATOR
 };
@@ -537,7 +537,7 @@ static void mtk_read(void)
   char* line = NULL;
   unsigned char crc, *data = NULL;
   int cmdLen, i, len, rc, init_scan, retry_cnt, log_enabled;
-  unsigned int j, bsize, scan_bsize, read_bsize, scan_step, ff_len, null_len, chunk_size;
+  unsigned int j, bsize, scan_bsize, read_bsize_kb, read_bsize, scan_step, ff_len, null_len, chunk_size;
   unsigned int line_size, data_size, data_addr, addr, addr_max, rcvd_addr, rcvd_bsize;
   unsigned long dsize, dpos = 0;
   FILE* dout;
@@ -616,10 +616,13 @@ static void mtk_read(void)
 
   scan_step = 0x10000;
   scan_bsize = 0x0400;
-  read_bsize = strtol(OPT_block_size, NULL, 0);
-  if (errno == ERANGE || read_bsize < 0x0400) {
-    read_bsize = 0x0400;
+  read_bsize_kb = strtol(OPT_block_size_kb, NULL, 10);
+  if (errno == ERANGE || read_bsize_kb < 1) {
+    read_bsize_kb = 1;
+  } else if (read_bsize_kb > 64) {
+    read_bsize_kb = 64;
   }
+  read_bsize = read_bsize_kb * 1024;
   dbg(2, "Download block size is %d bytes\n", read_bsize);
   if (init_scan) {
     bsize = scan_bsize;
