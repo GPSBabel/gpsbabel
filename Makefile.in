@@ -235,7 +235,7 @@ $(WEB)/htmldoc-$(DOCVERSION)/index.html: FORCE
 	perl xmldoc/makedoc
 	xmlwf xmldoc/readme.xml		#check for well-formedness
 	xmllint --noout --valid xmldoc/readme.xml    	#validate
-	xsltproc \
+	xsltproc --load-trace \
 	 --stringparam base.dir "$(WEB)/htmldoc-$(DOCVERSION)/" \
 	 --stringparam root.filename "index" \
 	 xmldoc/babelmain.xsl \
@@ -263,7 +263,7 @@ gpsbabel.fo:  FORCE
 	perl xmldoc/makedoc
 	xmlwf xmldoc/readme.xml		#check for well-formedness
 	xmllint --noout --valid xmldoc/readme.xml    	#validate
-	xsltproc -o $@ xmldoc/babelpdf.xsl xmldoc/readme.xml
+	xsltproc --load-trace -o $@ xmldoc/babelpdf.xsl xmldoc/readme.xml
 
 gpsbabel.pdf: gpsbabel.fo
 	fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf 
@@ -272,7 +272,7 @@ gpsbabel.pdf: gpsbabel.fo
 
 gpsbabel.html: FORCE # gpsbabel
 	# perl xmldoc/makedoc
-	xsltproc \
+	xsltproc --load-trace \
 	  --output $@ \
 	  --stringparam toc.section.depth "1" \
 	  --stringparam html.cleanup "1" \

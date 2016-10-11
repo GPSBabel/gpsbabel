@@ -18,6 +18,7 @@ addons:
     - qttools5-dev-tools
     - qttranslations5-l10n
     - libusb-dev
+    - docbook-xsl
 script:
  - ./build_and_test
 # TODO: build mac
