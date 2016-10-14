@@ -132,6 +132,7 @@ AC_ARG_WITH(zlib, [  --with-zlib=[(included)|system|no]])
   case $with_zlib in 
     "system") 
 	AC_CHECK_LIB([z], [gzopen])
+	AC_CHECK_LIB([minizip], [zipOpen64])
 	;;
     "no") 
         AC_DEFINE(ZLIB_INHIBITED, 1, [1 to inhibit our use of zlib.])
