@@ -22,6 +22,7 @@
 #if !defined (Q_OS_MAC) // FIXME: find a better way to hide this on Mac.
 
 static const char *deviceNames[] = {
+  "/dev/ttyACM0",
   "/dev/ttyS0",
   "/dev/ttyS1",
   "/dev/ttyS2",
