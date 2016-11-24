@@ -484,7 +484,12 @@ write_waypt_cb(const Waypoint* wpt)
   if (curr_index != target_index) {
     return;
   }
-  name = (snlen > 0) ? mkshort_from_wpt(sh, wpt) : csv_stringclean(wpt->shortname, " ");
+
+  // Our only output cleansing is to replace
+  QString cleaned_name(wpt->shortname);
+  cleaned_name.replace(' ', '_');
+
+  name = (snlen > 0) ? mkshort(sh, cleaned_name) : cleaned_name;
 
   gbfprintf(fout, "W  %s A ", CSTR(name));
   gbfprintf(fout, "%.10f%c%c ",

@@ -13,3 +13,6 @@ compare ${REFERENCE}/track/garmin-edge-800-output.gpx ${TMPDIR}/fit-sample-800.g
 
 gpsbabel -i garmin_fit -f ${REFERENCE}/track/garmin-forerunner-10.fit -o gpx -F ${TMPDIR}/fit-sample-10.gpx
 compare ${REFERENCE}/track/garmin-forerunner-10-output.gpx ${TMPDIR}/fit-sample-10.gpx
+
+gpsbabel -i garmin_fit,allpoints -f ${REFERENCE}/track/garmin-vivosmart-hr.fit -o gpx,garminextensions -F ${TMPDIR}/fit-sample-vivosmart-hr.gpx
+compare ${REFERENCE}/track/garmin-vivosmart-hr.gpx ${TMPDIR}/fit-sample-vivosmart-hr.gpx
