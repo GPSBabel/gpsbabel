@@ -1,6 +1,7 @@
 <para>
 This option specifies the version of the GPX specification to use for 
-output.  The default version is 1.0.  The only other valid value for this
+output.  The default version is 1.0 unless one or more of the input files
+is GPX 1.1, then it's 1.1.  The only other valid value for this
 option is 1.1.
 </para>
 <para>
