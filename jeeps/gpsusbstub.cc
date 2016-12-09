@@ -25,6 +25,7 @@
 #endif
 
 #include "../defs.h"
+#include "src/core/logging.h"
 
 #if !HAVE_LIBUSB
 
@@ -33,7 +34,7 @@ typedef struct gpsdevh gpsdevh;
 int
 gusb_init(const char* portname, gpsdevh** dh)
 {
-  fatal(no_usb);
+  Fatal() << no_usb;
   return 0;
 }
 
