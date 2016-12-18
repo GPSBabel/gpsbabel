@@ -109,12 +109,14 @@ correct_height(const Waypoint* wpt)
 {
   Waypoint* waypointp = (Waypoint*) wpt;
 
-  if (addopt) {
-    waypointp->altitude += addf;
-  }
-
-  if (wgs84tomslopt) {
-    waypointp->altitude -= wgs84_separation(waypointp->latitude, waypointp->longitude);
+  if (waypointp->altitude != unknown_alt) {
+    if (addopt) {
+      waypointp->altitude += addf;
+    }
+  
+    if (wgs84tomslopt) {
+        waypointp->altitude -= wgs84_separation(waypointp->latitude, waypointp->longitude);
+    }
   }
 }
 
