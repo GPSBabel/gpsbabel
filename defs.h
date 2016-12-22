@@ -105,6 +105,15 @@
 #  define strdup _strdup
 #endif
 
+/* Workaround for lack of va_copy in Visual Studio 2012 and earlier */
+#if __WIN32__
+#  if _MSC_VER
+#    if _MSC_VER < 1700
+#      define va_copy(dest, src) ((dest) = (src))
+#    endif
+#  endif
+#endif
+
 /* Turn off numeric conversion warning */
 #if __WIN32__
 #  if _MSC_VER
