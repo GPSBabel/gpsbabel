@@ -1,0 +1,10 @@
+#
+# As this format is initially write-only, we're comparing our own "golden"
+# output to what the newly built writer creates. 
+#
+
+gpsbabel -i gpx -f ${REFERENCE}/geocaching.gpx -o geojson -F ${TMPDIR}/geo.json
+compare ${REFERENCE}/geocaching~json.json ${TMPDIR}/geo.json
+
+gpsbabel -i gpx -f ${REFERENCE}/track/segmented_tracks.gpx -o geojson -F ${TMPDIR}/track.json
+compare ${REFERENCE}/track/segmented_tracks~geojson.json ${TMPDIR}/track.json
