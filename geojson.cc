@@ -74,12 +74,14 @@ geojson_waypt_pr(const Waypoint* waypoint) {
   if (!waypoint->description.isEmpty()) {
     properties["description"] = waypoint->description;
   }
-  UrlLink link = waypoint->GetUrlLink();
-  if (!link.url_.isEmpty()) {
-    properties["url"] = link.url_;
-  }
-  if (!link.url_link_text_.isEmpty()) {
-    properties["urlname"] = link.url_link_text_;
+  if (waypoint->HasUrlLink()) {
+    UrlLink link = waypoint->GetUrlLink();
+    if (!link.url_.isEmpty()) {
+      properties["url"] = link.url_;
+    }
+    if (!link.url_link_text_.isEmpty()) {
+      properties["urlname"] = link.url_link_text_;
+    }
   }
   if (!properties.empty()) {
     object["properties"] = properties;
