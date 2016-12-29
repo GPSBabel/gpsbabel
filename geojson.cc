@@ -50,10 +50,10 @@ static void
 geojson_waypt_pr(const Waypoint* waypoint) {
   QJsonObject object;
   static const QString kType = QStringLiteral("type");
-  object[kType]  = "Feature";
+  object[kType] = QStringLiteral("Feature");
   
   QJsonObject geometry;
-  geometry[kType] = "Point";
+  geometry[kType] = QStringLiteral("Point");
 
   QJsonArray coords;
   coords.append(waypoint->longitude);
@@ -62,7 +62,7 @@ geojson_waypt_pr(const Waypoint* waypoint) {
     coords.append(waypoint->altitude);
   }
 
-  geometry[kType] = "Point";
+  geometry[kType] = QStringLiteral("Point");
   geometry[QStringLiteral("coordinates")] = coords;
   object[QStringLiteral("geometry")] = geometry;
 
@@ -95,7 +95,7 @@ geojson_rd_deinit() {
 static void
 geojson_wr_deinit(void) {
   QJsonObject object;
-  object[QStringLiteral("type")] = "FeatureCollection";
+  object[QStringLiteral("type")] = QStringLiteral("FeatureCollection");
   object[QStringLiteral("features")]  = *feature_collection;
 
   QJsonDocument save(object);
@@ -116,7 +116,7 @@ geojson_read(void) {
 static void geojson_track_hdr(const route_head* track) {
   track_object = new QJsonObject();
 
-  (*track_object)[QStringLiteral("type")] = "Feature";
+  (*track_object)[QStringLiteral("type")] = QStringLiteral("Feature");
   track_coords = new QJsonArray();
 
   QJsonObject properties;
@@ -139,7 +139,7 @@ static void geojson_track_disp(const Waypoint* trackpoint) {
 
 static void geojson_track_tlr(const route_head* track) {
   QJsonObject geometry;
-  geometry[QStringLiteral("type")] = "LineString";
+  geometry[QStringLiteral("type")] = QStringLiteral("LineString");
   geometry[QStringLiteral("coordinates")] = *track_coords;
   (*track_object)[QStringLiteral("geometry")] = geometry;
   feature_collection->append(*track_object);
