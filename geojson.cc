@@ -49,10 +49,11 @@ geojson_wr_init(const QString& fname) {
 static void
 geojson_waypt_pr(const Waypoint* waypoint) {
   QJsonObject object;
-  object["type"]  = "Feature";
+  static const QString kType = QStringLiteral("type");
+  object[kType]  = "Feature";
   
   QJsonObject geometry;
-  geometry["type"] = "Point";
+  geometry[kType] = "Point";
 
   QJsonArray coords;
   coords.append(waypoint->longitude);
@@ -61,9 +62,9 @@ geojson_waypt_pr(const Waypoint* waypoint) {
     coords.append(waypoint->altitude);
   }
 
-  geometry["type"] = "Point";
-  geometry["coordinates"] = coords;
-  object["geometry"] = geometry;
+  geometry[kType] = "Point";
+  geometry[QStringLiteral("coordinates")] = coords;
+  object[QStringLiteral("geometry")] = geometry;
 
   // Build up the properties.
   QJsonObject properties;
@@ -94,8 +95,8 @@ geojson_rd_deinit() {
 static void
 geojson_wr_deinit(void) {
   QJsonObject object;
-  object["type"] = "FeatureCollection";
-  object["features"]  = *feature_collection;
+  object[QStringLiteral("type")] = "FeatureCollection";
+  object[QStringLiteral("features")]  = *feature_collection;
 
   QJsonDocument save(object);
   QJsonDocument::JsonFormat style;
@@ -115,7 +116,7 @@ geojson_read(void) {
 static void geojson_track_hdr(const route_head* track) {
   track_object = new QJsonObject();
 
-  (*track_object)["type"] = "Feature";
+  (*track_object)[QStringLiteral("type")] = "Feature";
   track_coords = new QJsonArray();
 
   QJsonObject properties;
@@ -138,9 +139,9 @@ static void geojson_track_disp(const Waypoint* trackpoint) {
 
 static void geojson_track_tlr(const route_head* track) {
   QJsonObject geometry;
-  geometry["type"] = "LineString";
-  geometry["coordinates"] = *track_coords;
-  (*track_object)["geometry"] = geometry;
+  geometry[QStringLiteral("type")] = "LineString";
+  geometry[QStringLiteral("coordinates")] = *track_coords;
+  (*track_object)[QStringLiteral("geometry")] = geometry;
   feature_collection->append(*track_object);
   delete track_object;
   track_object = NULL;
