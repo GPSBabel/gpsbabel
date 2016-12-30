@@ -137,7 +137,7 @@ parse_speed(const char* str, double* val, const double scale, const char* module
   } else if (case_ignore_strcmp(unit, "mih") == 0) {
     *val = MPH_TO_MPS(*val);
   } else {
-    fatal("%s: Unsupported speed unit '%s' in item '%s'!\n", module, unit, str);
+    warning("%s: Unsupported speed unit '%s' in item '%s'!\n", module, unit, str);
   }
 
   return 2;
