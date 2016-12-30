@@ -57,7 +57,7 @@ UpgradeCheck::UpgradeCheck(QWidget *parent, QList<Format> &formatList,
   QObject(parent),
   manager_(0), 
   replyId_(0),
-  upgradeUrl_(QUrl("http://www.gpsbabel.org/upgrade_check.html")),
+  upgradeUrl_(QUrl("https://www.gpsbabel.org/upgrade_check.html")),
   formatList_(formatList), 
   updateStatus_(updateUnknown),
   babelData_(bd)
@@ -108,10 +108,12 @@ QString UpgradeCheck::getOsVersion()
   case QSysInfo::MV_10_8: return "10.8"; break;  // Mountain Lion
   case QSysInfo::MV_10_9: return "10.9"; break;  // Mavericks
   case QSysInfo::MV_10_10: return "10.10"; break;  // Yosemite
+  case QSysInfo::MV_10_11: return "10.11"; break;  // El Capitan
+  case QSysInfo::MV_10_12: return "10.12"; break;  // Sierra
   default:
     // This probably doesn't work...
-    if (QSysInfo::MacintoshVersion == 0x000D) {
-      return "10.11";
+    if (QSysInfo::MacintoshVersion == 0x000E) {
+      return "10.13";
       break;
     }
     return QString("Unknown Mac %1").arg(QSysInfo::MacintoshVersion);
@@ -130,6 +132,9 @@ QString UpgradeCheck::getOsVersion()
   case QSysInfo::WV_5_2: return "2003"; break;
   case QSysInfo::WV_6_0: return "Vista"; break;
   case QSysInfo::WV_6_1: return "7"; break;
+  case QSysInfo::WV_6_2: return "8"; break;
+  case QSysInfo::WV_6_3: return "8.1"; break;
+  case QSysInfo::WV_10_0: return "10"; break;
   default:
        if (QSysInfo::WindowsVersion == 0x00a0) return "8";
        if (QSysInfo::WindowsVersion == 0x00b0) return "8.1";
@@ -307,10 +312,9 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
   for (int i = 0; i < upgrades.length(); i++) {
     QDomNode upgradeNode = upgrades.item(i);
     QDomElement upgrade = upgradeNode.toElement();
-
     QString updateVersion = upgrade.attribute("version");
     if (upgrade.attribute("downloadURL").isEmpty()) {
-      downloadUrl = "http://www.gpsbabel.org/download.html";
+      downloadUrl = "https://www.gpsbabel.org/download.html";
     } else {
       downloadUrl = upgrade.attribute("downloadURL");
     }
@@ -344,6 +348,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
     information.setText(response);
     
     information.setInformativeText(tr("Do you wish to download an upgrade?"));
+    // The text field can be RichText, but DetailedText can't be. Odd.
     information.setDetailedText(upgradeText);
 
     switch (information.exec()) {

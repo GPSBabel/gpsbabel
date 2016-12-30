@@ -32,6 +32,6 @@ Donate::Donate(QWidget *parent) : QDialog(parent)
 
 void Donate::contributeClicked()
 {
-  QDesktopServices::openUrl(QUrl("http://www.gpsbabel.org/contribute.html"));
+  QDesktopServices::openUrl(QUrl("https://www.gpsbabel.org/contribute.html"));
   close();
 }

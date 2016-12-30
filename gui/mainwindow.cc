@@ -1028,7 +1028,8 @@ void MainWindow::closeActionX()
   babelData_.runCount_++;
 
   QDateTime now = QDateTime::currentDateTime();
-  if ((babelData_.runCount_ > 5) && (babelData_.donateSplashed_.daysTo(now) > 30)) {
+  if ((babelData_.runCount_ == 1) ||
+      (babelData_.runCount_ > 5) && (babelData_.donateSplashed_.daysTo(now) > 30)) {
     Donate donate(0);
     if (babelData_.donateSplashed_.date() == QDate(2010,1,1))
       donate.showNever(false);
@@ -1050,7 +1051,7 @@ void MainWindow::closeEvent(QCloseEvent*)
 //------------------------------------------------------------------------
 void MainWindow::donateActionX()
 {
-  QDesktopServices::openUrl(QString("http://www.gpsbabel.org/contribute.html?gbversion=" VERSION));
+  QDesktopServices::openUrl(QString("https://www.gpsbabel.org/contribute.html?gbversion=" VERSION));
 }
 
 //------------------------------------------------------------------------
