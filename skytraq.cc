@@ -77,11 +77,11 @@ arglist_t skytraq_args[] = {
   },
   {
     "targetlocation", &opt_set_location, "Set location finder target location as lat,lng",
-    "", ARGTYPE_STRING, "", ""
+    NULL, ARGTYPE_STRING, "", ""
   },
   {
     "configlog", &opt_configure_logging, "Configure logging parameter as tmin:tmax:dmin:dmax",
-    "", ARGTYPE_STRING, "", ""
+    NULL, ARGTYPE_STRING, "", ""
   },
   {
     "baud", &opt_dlbaud, "Baud rate used for download",

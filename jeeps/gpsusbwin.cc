@@ -189,7 +189,7 @@ HANDLE garmin_usb_start(HDEVINFO hdevinfo, SP_DEVICE_INTERFACE_DATA* infodata)
 static char** get_garmin_mountpoints(void)
 {
 #define BUFSIZE 512
-  TCHAR szTemp[MAX_PATH];
+  char szTemp[MAX_PATH];
   char* p = szTemp;
   char** dlist = (char **) xmalloc(sizeof(*dlist));
 
