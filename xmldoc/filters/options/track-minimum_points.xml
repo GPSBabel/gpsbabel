@@ -1,0 +1,8 @@
+<para>
+Eliminates any remaining tracks with fewer than this number of trackpoints.
+</para>
+<para>
+This step is performed last by this filter and is used to clean up earlier
+simplifications that may have left tracks with so few points as to be 
+useless, such as a track taken while stationary but with GPS wander.
+</para>
