@@ -20,17 +20,23 @@
 //  USA
 //
 //------------------------------------------------------------------------
+#include "map.h"
+
 #include <QNetworkRequest>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
+#if HAVE_WEBENGINE
+#include <QWebEngineView>
+#include <QWebChannel>
+#else
 #include <QWebFrame>
 #include <QWebPage>
+#endif
 #include <QApplication>
 #include <QCursor>
 #include <QFile>
 
 #include <math.h>
-#include "map.h"
 #include "appname.h"
 #include "dpencode.h"
 
@@ -47,7 +53,11 @@ static QString stripDoubleQuotes(const QString s) {
 //------------------------------------------------------------------------
 Map::Map(QWidget *parent,
 	 const Gpx  &gpx, QPlainTextEdit *te):
+#if HAVE_WEBENGINE
+    QWebEngineView(parent),
+#else
     QWebView(parent),
+#endif
     gpx_(gpx),
     mapPresent_(false),
     busyCursor_(false),
@@ -125,7 +135,14 @@ static QString fmtLatLng(const LatLng &l) {
 void Map::showGpxData()
 {
   MarkerClicker *mclicker = new MarkerClicker(this);
+#if HAVE_WEBENGINE
+  QWebChannel* channel = new QWebChannel(this);
+  this->page()->setWebChannel(channel);
+  channel->registerObject(QStringLiteral("mclicker"), mclicker);
+//  this->addToJavaScriptWindowObject("mclicker", mclicker);
+#else
   this->page()->mainFrame()->addToJavaScriptWindowObject("mclicker", mclicker);
+#endif
   connect(mclicker, SIGNAL(markerClicked(int, int )), this, SLOT(markerClicked(int, int)));
   connect(mclicker, SIGNAL(logTime(const QString &)), this, SLOT(logTimeX(const QString &)));
 
@@ -385,7 +402,11 @@ void Map::panTo(const LatLng &loc)
 //------------------------------------------------------------------------
 void Map::resizeEvent ( QResizeEvent * ev)
 {
+#if HAVE_WEBENGINE
+  QWebEngineView::resizeEvent(ev);
+#else
   QWebView::resizeEvent(ev);
+#endif
   if (mapPresent_)
     evaluateJS(QString("map.checkResize();"));
 }
@@ -429,7 +450,11 @@ void Map::frameRoute(int i)
 //------------------------------------------------------------------------
 void Map::evaluateJS(const QString &s, bool upd)
 {
+#if HAVE_WEBENGINE
+  this->page()->runJavaScript(s);
+#else
   this->page()->mainFrame()->evaluateJavaScript(s);
+#endif
   if (upd) {
     this->update();
   }

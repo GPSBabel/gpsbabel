@@ -22,8 +22,11 @@
 //------------------------------------------------------------------------
 #ifndef MAP_H
 #define MAP_H
-
+#if HAVE_WEBENGINE
+#include <QWebEngineView>
+#else
 #include <QWebView>
+#endif
 #include <QPlainTextEdit>
 #include <QTime>
 #include "gpx.h"
@@ -49,7 +52,11 @@ signals:
 
 
 
+#if HAVE_WEBENGINE
+class Map : public QWebEngineView
+#else
 class Map : public QWebView
+#endif
 {
   Q_OBJECT
     public:

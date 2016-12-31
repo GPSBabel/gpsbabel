@@ -15,11 +15,12 @@ QT += core \
       gui \
       network \
       xml \
-      webkit
 
-greaterThan(QT_MAJOR_VERSION, 4) {
-  QT += widgets \
-        webkitwidgets
+greaterThan(QT_MINOR_VERSION, 5) {
+  QT += webenginewidgets
+  DEFINES += HAVE_WEBENGINE
+} else {
+  QT += webkit webkitwidgets 
 }
 
 unix:DESTDIR = objects
