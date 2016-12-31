@@ -51,7 +51,7 @@
       power =    Cycling power (in Watts)
       prox =     Proximity (in meters).  Add "ft" or "feet" for feet.
       sat =      Number of sats used for fix
-      speed =    Speed, in meters per second.
+      speed =    Speed, in meters per second. (See below)
       symb =     Symbol (icon) name
       tempf =    Temperature (degrees Fahrenheit)
       temp =     Temperature (degrees Celsius)
@@ -115,4 +115,16 @@
      1,"GCEBB",35.972033,-87.134700,"Mountain Bike Heaven by susy1313",2003/06/29,09:00:00
      2,"GC1A37",36.090683,-86.679550,"The Troll by a182pilot &amp; Family",,
    </screen>
+</para>
+
+<para>
+For speed, a units specifier can be added to override the default. Here
+are some values, but check parse_speed() in parse.cc for the authoritative
+list.
+<itemizedlist>
+<listitem><para>m/s, mps: meters per second</para></listitem>
+<listitem><para>km/h, kmh: kilometers per hour</para></listitem>
+<listitem><para>kt, knots: knots</para></listitem>
+<listitem><para>mph, mi/h, mih: miles per hour</para></listitem>
+</itemizedlist>
 </para>
