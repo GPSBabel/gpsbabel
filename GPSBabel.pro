@@ -3,6 +3,7 @@ QT -= gui
 TARGET = GPSBabel
 CONFIG += console
 CONFIG -= app_bundle
+CONFIG += c++11
 
 TEMPLATE = app
 
@@ -29,7 +30,7 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc \
         subrip.cc garmin_xt.cc garmin_fit.cc lowranceusr4.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
-        energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc
+        energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc
 
 DEPRECIATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc delbin.cc google.cc
 

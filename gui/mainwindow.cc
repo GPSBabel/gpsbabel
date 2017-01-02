@@ -1029,7 +1029,7 @@ void MainWindow::closeActionX()
 
   QDateTime now = QDateTime::currentDateTime();
   if ((babelData_.runCount_ == 1) ||
-      (babelData_.runCount_ > 5) && (babelData_.donateSplashed_.daysTo(now) > 30)) {
+      ((babelData_.runCount_ > 5) && (babelData_.donateSplashed_.daysTo(now) > 30))) {
     Donate donate(0);
     if (babelData_.donateSplashed_.date() == QDate(2010,1,1))
       donate.showNever(false);
