@@ -14,9 +14,9 @@ ICON = images/appicon.icns
 QT += core \
       gui \
       network \
-      xml \
+      xml
 
-greaterThan(QT_MINOR_VERSION, 5) {
+qtHaveModule(webenginewidgets) {
   QT += webenginewidgets
   DEFINES += HAVE_WEBENGINE
 } else {
