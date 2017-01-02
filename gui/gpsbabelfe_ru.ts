@@ -194,7 +194,12 @@ Higher number provides more deitaled diagnostics.</source>
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;http://www.gpsbabel.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed) or Google Checkout.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;https://www.gpsbabel.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed).&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <oldsource>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Lucida Grande&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;GPSBabel is free software built and supported by volunteers. It consumes vast amounts of time to create and support the software as well as money for mapping programs, GPS receivers, and development fixtures. Please see how you can &lt;a href=&quot;http://www.gpsbabel.org&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;contribute time or via PayPal (no account needed) or Google Checkout.&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</oldsource>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -801,22 +806,22 @@ This program cannot continue.</source>
         <translation>Ошибка запуска gpsbabel: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1131"/>
+        <location filename="mainwindow.cc" line="1132"/>
         <source>Are you sure you want to reset all format options to default values?</source>
         <translation>Вы действительно желаете сбросить все параметры формата в значения по умолчанию?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1154"/>
+        <location filename="mainwindow.cc" line="1155"/>
         <source>About %1</source>
         <translation>О %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1197"/>
+        <location filename="mainwindow.cc" line="1198"/>
         <source>One or more data filters are active</source>
         <translation>Один или более фильтров данных активны</translation>
     </message>
     <message>
-        <location filename="mainwindow.cc" line="1199"/>
+        <location filename="mainwindow.cc" line="1200"/>
         <source>No data filters are active</source>
         <translation>Фильтры данных не активны</translation>
     </message>
@@ -824,12 +829,12 @@ This program cannot continue.</source>
 <context>
     <name>Map</name>
     <message>
-        <location filename="map.cc" line="66"/>
+        <location filename="map.cc" line="76"/>
         <source>Missing &quot;gmapbase.html&quot; file.  Check installation</source>
         <translation>Отсутствует файл &quot;gmapbase.html&quot;. Попробуйте переустановить программу</translation>
     </message>
     <message>
-        <location filename="map.cc" line="86"/>
+        <location filename="map.cc" line="96"/>
         <source>Failed to load Google maps base page</source>
         <translation>Не удалось загрузить базовую страницу Google Maps</translation>
     </message>
@@ -1445,49 +1450,49 @@ This option computes (or recomputes) a value for the GPS heading at each trackpo
 <context>
     <name>UpgradeCheck</name>
     <message>
-        <location filename="upgrade.cc" line="230"/>
         <location filename="upgrade.cc" line="234"/>
-        <location filename="upgrade.cc" line="268"/>
+        <location filename="upgrade.cc" line="238"/>
+        <location filename="upgrade.cc" line="272"/>
         <source>HTTP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="231"/>
+        <location filename="upgrade.cc" line="235"/>
         <source>Unexpected reply.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="235"/>
+        <location filename="upgrade.cc" line="239"/>
         <source>Download failed: %1.</source>
         <translation>Загрузка завершилась неудачей: %1.</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="269"/>
+        <location filename="upgrade.cc" line="273"/>
         <source>Download failed: %1: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="285"/>
+        <location filename="upgrade.cc" line="289"/>
         <source>Error</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="286"/>
+        <location filename="upgrade.cc" line="290"/>
         <source>Invalid return data at line %1: %2.</source>
         <translation>Некорректные данные возвращены в строке %1: %2.</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="332"/>
+        <location filename="upgrade.cc" line="331"/>
         <source>A new version of GPSBabel is available.&lt;br /&gt;Your version is %1 &lt;br /&gt;The latest version is %2</source>
         <translation>Доступна новая версия GPSBabel.&lt;br /&gt;Используемая версия %1 &lt;br /&gt;Последняя доступная версия %2</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="343"/>
+        <location filename="upgrade.cc" line="342"/>
         <source>Upgrade</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="upgrade.cc" line="350"/>
+        <location filename="upgrade.cc" line="349"/>
         <source>Do you wish to download an upgrade?</source>
         <translation>Загрузить обновление?</translation>
     </message>
