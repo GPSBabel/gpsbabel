@@ -7,6 +7,8 @@
 #
 
 LANG='POSIX'; export LANG > /dev/null
+# Prefer GNU sed.
+PATH=/opt/local/libexec/gnubin:$PATH
 
 sed -e 's/^[ \t]*//;s/[ \t]*$//' | # trim leading and trailing spaces
 sed -e 's/ < / \&lt; /g' -e 's/ > /\&gt; /g' | # try replace some unhandled html operators
