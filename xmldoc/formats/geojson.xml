@@ -10,15 +10,14 @@ that GPSBabel supports well to something like Leaflet, you should not expect
 high fidelity transfers through this format.
 </para>
 <para>
-Initially, only write support for waypoints and tracks is available.  
-Waypoints are converted to a FeatureCollection of Points.  
+Waypoints are mapped to a FeatureCollection of Points.  
 The properties for name and description are written, where available.
 Tracks are converted to a LineString.
+MultiPoint are converted to Waypoints.
+LineString, Polygon and MultiPolygon are converted to routes.
+MultiLineString are conveted to tracks.
 </para>
 <para>
-Potential future work includes the ability to read Point Features and/or
-LineStrings as these would map into our concept of waypoints and 
-routes/tracks.
 The potentially nested/recursive nature of GeoJSON in general would be 
 an awkward implementation.
 </para>

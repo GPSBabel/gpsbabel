@@ -29,7 +29,7 @@ ALL_FMTS=$$MINIMAL_FMTS gtm.cc gpsutil.cc pcx.cc \
         vpl.cc teletype.cc jogmap.cc bushnell.cc bushnell_trl.cc wintec_tes.cc \
         subrip.cc garmin_xt.cc garmin_fit.cc lowranceusr4.cc \
         mtk_locus.cc googledir.cc mapbar_track.cc mapfactor.cc f90g_track.cc \
-        energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc
+        energympro.cc mynav.cc ggv_bin.cc globalsat_sport.cc geojson.cc
 
 DEPRECIATED_FMTS=cetus.cc copilot.cc gpspilot.cc magnav.cc psp.cc gcdb.cc quovadis.cc gpilots.cc geoniche.cc palmdoc.cc hsa_ndv.cc coastexp.cc pathaway.cc coto.cc msroute.cc mag_pdb.cc axim_gpb.cc delbin.cc google.cc
 
@@ -148,7 +148,7 @@ win32 {
   }
   SOURCES += gbser_win.cc
   JEEPS += jeeps/gpsusbwin.cc
-  LIBS += "C:/Program Files/Windows Kits/8.0/Lib/win8/um/x86/setupapi.lib" "C:/Program Files/Windows Kits/8.0/Lib/win8/um/x86/hid.lib"
+  LIBS += "C:/Program Files (x86)/Windows Kits/8.1/lib/winv6.3/um/x64/setupapi.lib" "C:/Program Files (x86)/Windows Kits/8.1/lib/winv6.3/um/x64/hid.lib"
 }
 
 win32-msvc*{
