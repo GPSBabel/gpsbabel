@@ -61,6 +61,11 @@
 #include <errno.h>
 #include <math.h>
 #include <stdlib.h>
+#if __WIN32__
+#include <io.h>
+#else
+#include <unistd.h>
+#endif
 
 #define MYNAME "mtk_logger"
 
@@ -770,7 +775,11 @@ mtk_retry:
     }
   }
   if (dout != NULL) {
+#if __WIN32__
+    _chsize(fileno(dout), addr_max);
+#else
     ftruncate(fileno(dout), addr_max);
+#endif
     fclose(dout);
   }
   if (global_opts.verbose_status || (global_opts.debug_level >= 2 && global_opts.debug_level < 5)) {

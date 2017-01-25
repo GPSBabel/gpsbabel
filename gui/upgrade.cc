@@ -57,7 +57,7 @@ UpgradeCheck::UpgradeCheck(QWidget *parent, QList<Format> &formatList,
   QObject(parent),
   manager_(0), 
   replyId_(0),
-  upgradeUrl_(QUrl("https://www.gpsbabel.org/upgrade_check.html")),
+  upgradeUrl_(QUrl("http://www.gpsbabel.org/upgrade_check.html")),
   formatList_(formatList), 
   updateStatus_(updateUnknown),
   babelData_(bd)
@@ -134,7 +134,7 @@ QString UpgradeCheck::getOsVersion()
   case QSysInfo::WV_6_1: return "7"; break;
   case QSysInfo::WV_6_2: return "8"; break;
   case QSysInfo::WV_6_3: return "8.1"; break;
-  case QSysInfo::WV_10_0: return "10"; break;
+//  case QSysInfo::WV_10_0: return "10"; break;
   default:
        if (QSysInfo::WindowsVersion == 0x00a0) return "8";
        if (QSysInfo::WindowsVersion == 0x00b0) return "8.1";
@@ -212,7 +212,6 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
   }
 
   replyId_ = manager_->post(request, args.toUtf8());
-  
 
   return UpgradeCheck::updateUnknown;
 }
@@ -314,7 +313,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
     QDomElement upgrade = upgradeNode.toElement();
     QString updateVersion = upgrade.attribute("version");
     if (upgrade.attribute("downloadURL").isEmpty()) {
-      downloadUrl = "https://www.gpsbabel.org/download.html";
+      downloadUrl = "http://www.gpsbabel.org/download.html";
     } else {
       downloadUrl = upgrade.attribute("downloadURL");
     }
