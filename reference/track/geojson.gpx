@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="1.000000000" minlon="1.000000000" maxlat="15.000000000" maxlon="15.000000000"/>
+  <wpt lat="1.000000000" lon="1.000000000">
+    <name>WPT001</name>
+    <cmt>WPT001</cmt>
+    <desc>WPT001</desc>
+  </wpt>
+  <wpt lat="2.000000000" lon="2.000000000">
+    <name>WPT002</name>
+    <cmt>WPT002</cmt>
+    <desc>WPT002</desc>
+  </wpt>
+  <rte>
+    <rtept lat="3.000000000" lon="3.000000000">
+      <name>RPT001</name>
+    </rtept>
+    <rtept lat="4.000000000" lon="4.000000000">
+      <name>RPT002</name>
+    </rtept>
+    <rtept lat="5.000000000" lon="5.000000000">
+      <name>RPT003</name>
+    </rtept>
+    <rtept lat="3.000000000" lon="3.000000000">
+      <name>RPT004</name>
+    </rtept>
+  </rte>
+  <rte>
+    <rtept lat="6.000000000" lon="6.000000000">
+      <name>RPT005</name>
+    </rtept>
+    <rtept lat="7.000000000" lon="7.000000000">
+      <name>RPT006</name>
+    </rtept>
+  </rte>
+  <rte>
+    <rtept lat="8.000000000" lon="8.000000000">
+      <name>RPT007</name>
+    </rtept>
+    <rtept lat="9.000000000" lon="9.000000000">
+      <name>RPT008</name>
+    </rtept>
+    <rtept lat="10.000000000" lon="10.000000000">
+      <name>RPT009</name>
+    </rtept>
+    <rtept lat="8.000000000" lon="8.000000000">
+      <name>RPT010</name>
+    </rtept>
+  </rte>
+  <trk>
+    <trkseg>
+      <trkpt lat="11.000000000" lon="11.000000000"/>
+      <trkpt lat="12.000000000" lon="12.000000000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="12.000000000" lon="12.000000000"/>
+      <trkpt lat="13.000000000" lon="13.000000000"/>
+    </trkseg>
+  </trk>
+  <trk>
+    <trkseg>
+      <trkpt lat="14.000000000" lon="14.000000000"/>
+      <trkpt lat="15.000000000" lon="15.000000000"/>
+    </trkseg>
+  </trk>
+</gpx>
