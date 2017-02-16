@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="48.270182777" minlon="11.123582605" maxlat="48.272877253" maxlon="11.131655554"/>
+  <trk>
+    <trkseg>
+      <trkpt lat="48.270464676" lon="11.126680138"/>
+      <trkpt lat="48.270388035" lon="11.128432438"/>
+      <trkpt lat="48.270399219" lon="11.129913865"/>
+      <trkpt lat="48.270588124" lon="11.131122911"/>
+      <trkpt lat="48.270951717" lon="11.131655554"/>
+      <trkpt lat="48.271741381" lon="11.129083025"/>
+      <trkpt lat="48.271821089" lon="11.127734716"/>
+      <trkpt lat="48.272355299" lon="11.127052185"/>
+      <trkpt lat="48.272707696" lon="11.126103325"/>
+      <trkpt lat="48.272877253" lon="11.124753460"/>
+      <trkpt lat="48.272425789" lon="11.124491733"/>
+      <trkpt lat="48.271704673" lon="11.124234594"/>
+      <trkpt lat="48.271163324" lon="11.123974406"/>
+      <trkpt lat="48.270441183" lon="11.123582605"/>
+      <trkpt lat="48.270182777" lon="11.125068613"/>
+      <trkpt lat="48.270464676" lon="11.126680138"/>
+    </trkseg>
+  </trk>
+</gpx>

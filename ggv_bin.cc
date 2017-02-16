@@ -143,17 +143,9 @@ ggv_bin_read_v2(QDataStream& stream)
     ggv_bin_read16(stream, "entry zoom");
     entry_subtype = ggv_bin_read16(stream, "entry subtype");
 
-    switch (entry_subtype) {
-    case 0x01:
-      // no data following
-      break;
-    case 0x10:
-      // text with 32 bit length field follows
+    if (entry_subtype != 1) {
       ggv_bin_read_text32(stream, buf, "text len");
       track_name = QString::fromLatin1(buf.constData()).simplified();
-      break;
-    default:
-      fatal(MYNAME ": Unknown subtype (%hu)\n", entry_subtype);
     }
 
     switch (entry_type) {
