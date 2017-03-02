@@ -178,10 +178,8 @@ DEFINES += NEW_STRINGS
 # We don't care about stripping things out of the build.  Full monty, baby.
 DEFINES += MAXIMAL_ENABLED
 DEFINES += FILTERS_ENABLED
-DEFINES += PDBFMTS_ENABLED
 DEFINES += SHAPELIB_ENABLED
 DEFINES += CSVFMTS_ENABLED
-DEFINES += CET_WANTED
 
 # Creator insists on adding -W to -Wall which results in a completely
 # absurd amount of jibber-jabber on perfectly legally formed code.

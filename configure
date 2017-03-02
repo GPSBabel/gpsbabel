@@ -646,7 +646,6 @@ QMAKE
 RC
 FILEINFO
 FMTS
-PALM_DB_CMT
 EGREP
 GREP
 CXXCPP
@@ -724,9 +723,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
-with_cet
 enable_shapefile
-enable_pdb
 enable_csv
 enable_most
 enable_filters
@@ -1361,7 +1358,6 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-shapefile=(yes)|no
-  --enable-pdb=(yes)|no
   --enable-csv=(yes)|no
   --enable-most=(yes)|no
   --enable-filters=(yes)|no
@@ -1370,7 +1366,6 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-cet=(default,all,minimal)
   --with-zlib=(included)|system|no
   --with-doc=DIR        Path where the documentation will be stored.
 
@@ -4540,29 +4535,9 @@ _ACEOF
 fi
 
 
-
-# Check whether --with-cet was given.
-if test "${with_cet+set}" = set; then :
-  withval=$with_cet; cet="$withval"
-else
-  cet="default"
-fi
-
-
 if test $GCC = yes; then
  CFLAGS="$CFLAGS -Wall"
  CXXFLAGS="$CXXFLAGS -Wall"
-fi
-
-if test "$cet" = "all"; then
-
-$as_echo "#define CET_WANTED 1" >>confdefs.h
-
-fi
-if test "$cet" = "default"; then
-
-$as_echo "#define CET_WANTED 0" >>confdefs.h
-
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to support shapefiles" >&5
@@ -4584,28 +4559,6 @@ $as_echo "yes" >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
     fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to support Palm/OS pdb formats" >&5
-$as_echo_n "checking whether to support Palm/OS pdb formats... " >&6; }
-# Check whether --enable-pdb was given.
-if test "${enable_pdb+set}" = set; then :
-  enableval=$enable_pdb;  enable_pdb="$enableval"
-else
-  enable_pdb="yes"
-fi
-
-    if test "$enable_pdb" != "no" ; then
-
-$as_echo "#define PDBFMTS_ENABLED 1" >>confdefs.h
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-    else
-	PALM_DB_CMT=#
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-    fi
-
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to support csv formats" >&5
 $as_echo_n "checking whether to support csv formats... " >&6; }

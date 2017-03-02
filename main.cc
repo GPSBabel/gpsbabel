@@ -208,17 +208,10 @@ print_extended_info(void)
     "CSVFMTS_ENABLED "
 #endif
 
-#if PDBFMTS_ENABLED
-    "PDBFMTS_ENABLED "
-#endif
-
 #if SHAPELIB_ENABLED
     "SHAPELIB_ENABLED "
 #endif
 
-#if defined CET_WANTED
-    "CET_ENABLED "
-#endif
     "\n");
 }
 

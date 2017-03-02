@@ -157,12 +157,12 @@ in_word_set(register const char* str, register unsigned int len);
 /****************************************************************************/
 /* obligatory global struct                                                 */
 /****************************************************************************/
-XcsvFile xcsv_file;
 
 extern char* xcsv_urlbase;
 extern char* prefer_shortnames;
 
 #if CSVFMTS_ENABLED
+XcsvFile xcsv_file;
 static double pathdist = 0;
 static double oldlon = 999;
 static double oldlat = 999;

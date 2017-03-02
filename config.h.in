@@ -3,9 +3,6 @@
 /* Define if building universal (internal helper macro) */
 #undef AC_APPLE_UNIVERSAL_BUILD
 
-/* 0 for most-used character sets */
-#undef CET_WANTED
-
 /* 1 to enable the CSV formats support */
 #undef CSVFMTS_ENABLED
 
@@ -92,9 +89,6 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
-
-/* 1 to enable Palm PDB support */
-#undef PDBFMTS_ENABLED
 
 /* 1 to enable shapefile support */
 #undef SHAPELIB_ENABLED

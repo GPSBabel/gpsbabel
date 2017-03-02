@@ -74,7 +74,7 @@
       <Optimization>Disabled</Optimization>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;__WIN32__;_DEBUG;_CONSOLE;HAVE_LIBEXPAT;MAXIMAL_ENABLED;FILTERS_ENABLED;PDBFMTS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;CET_WANTED;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;__WIN32__;_DEBUG;_CONSOLE;HAVE_LIBEXPAT;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -87,7 +87,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;__WIN32__;NDEBUG;_CONSOLE;HAVE_LIBEXPAT;MAXIMAL_ENABLED;FILTERS_ENABLED;PDBFMTS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;CET_WANTED;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;__WIN32__;NDEBUG;_CONSOLE;HAVE_LIBEXPAT;MAXIMAL_ENABLED;FILTERS_ENABLED;SHAPELIB_ENABLED;CSVFMTS_ENABLED;QT_CORE_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
