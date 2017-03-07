@@ -61,11 +61,13 @@ interpfilt_process(void)
   int count = 0;
   int first = 0;
   double lat1 = 0, lon1 = 0;
+  double altitude1 = unknown_alt;
   unsigned int time1 = 0;
   unsigned int timen;
   double distn;
   double curdist;
   double rt1, rn1, rt2, rn2;
+  double frac;
 
   if (opt_route) {
     route_backup(&count, &backuproute);
@@ -108,12 +110,14 @@ interpfilt_process(void)
             wpt_new->shortname = QString();
             wpt_new->description = QString();
 
+            frac = (double)(timen - time1) / (double)(wpt->creation_time.toTime_t() - time1);
             linepart(lat1, lon1,
                      wpt->latitude, wpt->longitude,
-                     (double)(timen-time1)/
-                     (double)(wpt->creation_time.toTime_t() - time1),
+                     frac,
                      &wpt_new->latitude,
                      &wpt_new->longitude);
+            if (altitude1 != unknown_alt && wpt->altitude != unknown_alt)
+              wpt_new->altitude = altitude1 + frac * (wpt->altitude - altitude1);
             if (opt_route) {
               route_add_wpt(rte_new, wpt_new);
             } else {
@@ -132,15 +136,17 @@ interpfilt_process(void)
                  distn < curdist;
                  distn += dist) {
               Waypoint* wpt_new = new Waypoint(*wpt);
-              wpt_new->SetCreationTime(distn/curdist*
-                                       (wpt->creation_time.toTime_t() - time1) + time1);
+              frac = distn / curdist;
+              wpt_new->SetCreationTime(frac * (wpt->creation_time.toTime_t() - time1) + time1);
               wpt_new->shortname = QString();
               wpt_new->description = QString();
               linepart(lat1, lon1,
                        wpt->latitude, wpt->longitude,
-                       distn/curdist,
+                       frac,
                        &wpt_new->latitude,
                        &wpt_new->longitude);
+              if (altitude1 != unknown_alt && wpt->altitude != unknown_alt)
+                wpt_new->altitude = altitude1 + frac * (wpt->altitude - altitude1);
               if (opt_route) {
                 route_add_wpt(rte_new, wpt_new);
               } else {
@@ -158,6 +164,7 @@ interpfilt_process(void)
 
       lat1 = wpt->latitude;
       lon1 = wpt->longitude;
+      altitude1 = wpt->altitude;
       time1 = wpt->creation_time.toTime_t();
     }
   }
