@@ -62,8 +62,8 @@ interpfilt_process(void)
   int first = 0;
   double lat1 = 0, lon1 = 0;
   double altitude1 = unknown_alt;
-  qint64 time1 = 0;
-  qint64 timen;
+  unsigned int time1 = 0;
+  unsigned int timen;
   double distn;
   double curdist;
   double rt1, rn1, rt2, rn2;
@@ -101,16 +101,16 @@ interpfilt_process(void)
         first = 0;
       } else {
         if (opt_interval &&
-            wpt->creation_time.toSecsSinceEpoch() - time1 > interval) {
+            wpt->creation_time.toTime_t() - time1 > interval) {
           for (timen = time1+interval;
-               timen < wpt->creation_time.toSecsSinceEpoch();
+               timen < wpt->creation_time.toTime_t();
                timen += interval) {
             Waypoint* wpt_new = new Waypoint(*wpt);
             wpt_new->SetCreationTime(timen);
             wpt_new->shortname = QString();
             wpt_new->description = QString();
 
-            frac = (double)(timen - time1) / (double)(wpt->creation_time.toSecsSinceEpoch() - time1);
+            frac = (double)(timen - time1) / (double)(wpt->creation_time.toTime_t() - time1);
             linepart(lat1, lon1,
                      wpt->latitude, wpt->longitude,
                      frac,
@@ -137,7 +137,7 @@ interpfilt_process(void)
                  distn += dist) {
               Waypoint* wpt_new = new Waypoint(*wpt);
               frac = distn / curdist;
-              wpt_new->SetCreationTime(frac * (wpt->creation_time.toSecsSinceEpoch() - time1) + time1);
+              wpt_new->SetCreationTime(frac * (wpt->creation_time.toTime_t() - time1) + time1);
               wpt_new->shortname = QString();
               wpt_new->description = QString();
               linepart(lat1, lon1,
@@ -165,7 +165,7 @@ interpfilt_process(void)
       lat1 = wpt->latitude;
       lon1 = wpt->longitude;
       altitude1 = wpt->altitude;
-      time1 = wpt->creation_time.toSecsSinceEpoch();
+      time1 = wpt->creation_time.toTime_t();
     }
   }
   route_flush(backuproute);
