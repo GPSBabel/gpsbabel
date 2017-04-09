@@ -96,7 +96,7 @@ static gpsbabel::DateTime kml_time_max;
 #define DEFAULT_PRECISION "6"
 
 //  Icons provided and hosted by Google.  Used with permission.
-#define ICON_BASE "http://earth.google.com/images/kml-icons/"
+#define ICON_BASE "https://earth.google.com/images/kml-icons/"
 
 // Multitrack ids to correlate Schema to SchemaData
 static const char kmt_heartrate[] = "heartrate";
@@ -193,7 +193,7 @@ struct {
 };
 
 #define ICON_NOSAT ICON_BASE "youarehere-warning.png";
-#define ICON_WPT "http://maps.google.com/mapfiles/kml/pal4/icon61.png"
+#define ICON_WPT "https://maps.google.com/mapfiles/kml/pal4/icon61.png"
 #define ICON_TRK ICON_BASE "track-directional/track-none.png"
 #define ICON_RTE ICON_BASE "track-directional/track-none.png"
 #define ICON_MULTI_TRK ICON_BASE "track-directional/track-0.png"
@@ -1132,24 +1132,21 @@ void kml_gc_all_tabs_text(QString& cdataStr)
 {
   // cdataStr.append("<a href=\"http://www.geocaching.com\"><img style=\"float: left; padding: 10px\" src=\"http://www.geocaching.com/images/nav/logo_sub.gif\" /> </a>\n");
   cdataStr.append("<img align=\"right\" src=\"$[gc_icon]\" />\n");
-  cdataStr.append("<a href=\"http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]\"><b>$[gc_num]</b></a> <b>$[gc_name]</b> \n");
-  cdataStr.append("a $[gc_type],<br />on $[gc_placed] by <a href=\"http://www.geocaching.com/profile?id=$[gc_placer_id\">$[gc_placer]</a><br/>\n");
-  cdataStr.append("Difficulty: <img src=\"http://www.geocaching.com/images/stars/$[gc_diff_stars].gif\" alt=\"$[gc_diff]\" width=\"61\" height=\"13\" />\n");
-  cdataStr.append("&nbsp;Terrain: <img src=\"http://www.geocaching.com/images/stars/$[gc_terr_stars].gif\" alt=\"$[gc_terr]\" width=\"61\" height=\"13\" /><br />\n");
-  cdataStr.append("Size: <img src=\"http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif\" width=\"45\" height=\"12\" alt=\"$[gc_cont_icon]\"/>&nbsp;($[gc_cont_icon])<br />\n");
+  cdataStr.append("<a href=\"https://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]\"><b>$[gc_num]</b></a> <b>$[gc_name]</b> \n");
+  cdataStr.append("a $[gc_type],<br />on $[gc_placed] by <a href=\"https://www.geocaching.com/profile?id=$[gc_placer_id\">$[gc_placer]</a><br/>\n");
+  cdataStr.append("Difficulty: <img src=\"https://www.geocaching.com/images/stars/$[gc_diff_stars].gif\" alt=\"$[gc_diff]\" width=\"61\" height=\"13\" />\n");
+  cdataStr.append("&nbsp;Terrain: <img src=\"https://www.geocaching.com/images/stars/$[gc_terr_stars].gif\" alt=\"$[gc_terr]\" width=\"61\" height=\"13\" /><br />\n");
+  cdataStr.append("Size: <img src=\"https://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif\" width=\"45\" height=\"12\" alt=\"$[gc_cont_icon]\"/>&nbsp;($[gc_cont_icon])<br />\n");
 
 }
 
 static const QString map_templates[] = {
-  "<a href=\"http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]\" target=\"_blank\">Google Maps</a>",
-  "<a href=\"http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]\" target=\"_blank\">Google Street View</a>",
+  "<a href=\"https://www.google.com/maps?q=$[gc_lat],$[gc_lon]\" target=\"_blank\">Google Maps</a>",
   "<a href=\"http://www.geocaching.com/map/default.aspx?lat=$[gc_lat]&lng=$[gc_lon]\" target=\"_blank\">Geocaching.com Google Map</a>",
   "<a href=\"http://www.mytopo.com/maps.cfm?lat=$[gc_lat]&lon=$[gc_lon]&pid=groundspeak\" target=\"_blank\">MyTopo Maps</a>",
   "<a href=\"http://www.mapquest.com/maps/map.adp?searchtype=address&formtype=latlong&latlongtype=decimal&latitude=$[gc_lat]&longitude=$[gc_lon]&zoom=10\" target=\"_blank\">MapQuest</a>",
   "<a href=\"http://www.bing.com/maps/default.aspx?v=2&sp=point.$[gc_lat]$[gc_lon]\" target=\"_blank\">Bing Maps</a>",
-  "<a href=\"http://maps.yahoo.com/maps_result?lat=$[gc_lat]&lon=$[gc_lon]\" target=\"_blank\">Yahoo Maps</a>",
   "<a href=\"http://maps.randmcnally.com/#s=screen&lat=$[gc_lat]&lon=$[gc_lon]&zoom=13&loc1=$[gc_lat],$[gc_lon]\" target=\"_blank\">Rand McNally</a>",
-  "<a href=\"http://msrmaps.com/image.aspx?Lon=$[gc_lon]&Lat=$[gc_lat]&w=1&ref=G|$[gc_lon],$[gc_lat]\" target=\"_blank\">MSR Maps (Formerly Terraserver)</a>",
   "<a href=\"http://www.opencyclemap.org/?zoom=12&lat=$[gc_lat]&lon=$[gc_lon]\" target=\"_blank\">Open Cycle Maps</a>",
   "<a href=\"http://www.openstreetmap.org/?mlat=$[gc_lat]&mlon=$[gc_lon]&zoom=12\" target=\"_blank\">Open Street Maps</a>",
   NULL
@@ -1168,9 +1165,9 @@ void kml_gc_make_balloonstyletext(void)
   cdataStr.append("<!DOCTYPE html>\n");
   cdataStr.append("<html>\n");
   cdataStr.append("<head>\n");
-  cdataStr.append("<link href=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css\" rel=\"stylesheet\" type=\"text/css\"/>\n");
-  cdataStr.append("<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js\"></script>\n");
-  cdataStr.append("<script src=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js\"></script>\n");
+  cdataStr.append("<link href=\"https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css\" rel=\"stylesheet\" type=\"text/css\"/>\n");
+  cdataStr.append("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js\"></script>\n");
+  cdataStr.append("<script src=\"https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js\"></script>\n");
   cdataStr.append("<script>\n");
   cdataStr.append("$(document).ready(function() {\n");
   cdataStr.append("  $(\"#tabs\").tabs();\n");
@@ -1329,7 +1326,7 @@ kml_lookup_gc_icon(const Waypoint* waypointp)
     break;
   }
 
-  return QString("http://www.geocaching.com/images/kml/%1").arg(icon);
+  return QString("https://www.geocaching.com/images/kml/%1").arg(icon);
 }
 
 static const

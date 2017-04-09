@@ -11,7 +11,7 @@
     <Style id="route_n">
       <IconStyle>
         <Icon>
-          <href>http://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+          <href>https://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -20,7 +20,7 @@
       <IconStyle>
         <scale>1.2</scale>
         <Icon>
-          <href>http://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
+          <href>https://earth.google.com/images/kml-icons/track-directional/track-none.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -38,7 +38,7 @@
     <Style id="waypoint_n">
       <IconStyle>
         <Icon>
-          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+          <href>https://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -47,7 +47,7 @@
       <IconStyle>
         <scale>1.2</scale>
         <Icon>
-          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+          <href>https://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
         </Icon>
       </IconStyle>
     </Style>

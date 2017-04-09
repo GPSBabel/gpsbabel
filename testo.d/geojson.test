@@ -1,5 +1,5 @@
 #
-# As this format is initially write-only, we're comparing our own "golden"
+# As this format was initially write-only, we're comparing our own "golden"
 # output to what the newly built writer creates. 
 #
 
@@ -8,3 +8,6 @@ compare ${REFERENCE}/geocaching~json.json ${TMPDIR}/geo.json
 
 gpsbabel -i gpx -f ${REFERENCE}/track/segmented_tracks.gpx -o geojson -F ${TMPDIR}/track.json
 compare ${REFERENCE}/track/segmented_tracks~geojson.json ${TMPDIR}/track.json
+
+gpsbabel -i geojson -f ${REFERENCE}/track/geojson.geojson -o gpx -F ${TMPDIR}/geojson.gpx
+compare ${REFERENCE}/track/geojson.gpx  ${TMPDIR}/geojson.gpx

@@ -15,7 +15,7 @@
     <Style id="waypoint_n">
       <IconStyle>
         <Icon>
-          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+          <href>https://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -24,7 +24,7 @@
       <IconStyle>
         <scale>1.2</scale>
         <Icon>
-          <href>http://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
+          <href>https://maps.google.com/mapfiles/kml/pal4/icon61.png</href>
         </Icon>
       </IconStyle>
     </Style>
@@ -50,9 +50,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
 $(document).ready(function() {
   $("#tabs").tabs();
@@ -69,37 +69,35 @@ $(document).ready(function() {
 
 <div id="fragment-1">
 <img align="right" src="$[gc_icon]" />
-<a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
-a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
-Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
-&nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
-Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
+<a href="https://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+a $[gc_type],<br />on $[gc_placed] by <a href="https://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
+Difficulty: <img src="https://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
+&nbsp;Terrain: <img src="https://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
+Size: <img src="https://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
   <p />$[gc_issues]
   $[gc_short_desc]
   $[gc_long_desc]
 </div>
 <div id="fragment-2">
 <img align="right" src="$[gc_icon]" />
-<a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
-a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
-Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
-&nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
-Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
+<a href="https://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+a $[gc_type],<br />on $[gc_placed] by <a href="https://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
+Difficulty: <img src="https://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
+&nbsp;Terrain: <img src="https://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
+Size: <img src="https://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
   $[gc_logs]
 </div>
 <div id="fragment-3">
 <img align="right" src="$[gc_icon]" />
-<a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
-a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
-Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
-&nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
-Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
+<a href="https://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+a $[gc_type],<br />on $[gc_placed] by <a href="https://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
+Difficulty: <img src="https://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
+&nbsp;Terrain: <img src="https://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
+Size: <img src="https://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
   <h1>Extra Maps</h1>
   <ul>
     <li>
-    <a href="http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Maps</a></li>
-    <li>
-    <a href="http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Street View</a></li>
+    <a href="https://www.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Maps</a></li>
     <li>
     <a href="http://www.geocaching.com/map/default.aspx?lat=$[gc_lat]&lng=$[gc_lon]" target="_blank">Geocaching.com Google Map</a></li>
     <li>
@@ -109,11 +107,7 @@ Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon]
     <li>
     <a href="http://www.bing.com/maps/default.aspx?v=2&sp=point.$[gc_lat]$[gc_lon]" target="_blank">Bing Maps</a></li>
     <li>
-    <a href="http://maps.yahoo.com/maps_result?lat=$[gc_lat]&lon=$[gc_lon]" target="_blank">Yahoo Maps</a></li>
-    <li>
     <a href="http://maps.randmcnally.com/#s=screen&lat=$[gc_lat]&lon=$[gc_lon]&zoom=13&loc1=$[gc_lat],$[gc_lon]" target="_blank">Rand McNally</a></li>
-    <li>
-    <a href="http://msrmaps.com/image.aspx?Lon=$[gc_lon]&Lat=$[gc_lat]&w=1&ref=G|$[gc_lon],$[gc_lat]" target="_blank">MSR Maps (Formerly Terraserver)</a></li>
     <li>
     <a href="http://www.opencyclemap.org/?zoom=12&lat=$[gc_lat]&lon=$[gc_lon]" target="_blank">Open Cycle Maps</a></li>
     <li>
@@ -138,9 +132,9 @@ Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon]
 <!DOCTYPE html>
 <html>
 <head>
-<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
 $(document).ready(function() {
   $("#tabs").tabs();
@@ -157,37 +151,35 @@ $(document).ready(function() {
 
 <div id="fragment-1">
 <img align="right" src="$[gc_icon]" />
-<a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
-a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
-Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
-&nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
-Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
+<a href="https://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+a $[gc_type],<br />on $[gc_placed] by <a href="https://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
+Difficulty: <img src="https://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
+&nbsp;Terrain: <img src="https://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
+Size: <img src="https://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
   <p />$[gc_issues]
   $[gc_short_desc]
   $[gc_long_desc]
 </div>
 <div id="fragment-2">
 <img align="right" src="$[gc_icon]" />
-<a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
-a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
-Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
-&nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
-Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
+<a href="https://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+a $[gc_type],<br />on $[gc_placed] by <a href="https://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
+Difficulty: <img src="https://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
+&nbsp;Terrain: <img src="https://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
+Size: <img src="https://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
   $[gc_logs]
 </div>
 <div id="fragment-3">
 <img align="right" src="$[gc_icon]" />
-<a href="http://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
-a $[gc_type],<br />on $[gc_placed] by <a href="http://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
-Difficulty: <img src="http://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
-&nbsp;Terrain: <img src="http://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
-Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
+<a href="https://www.geocaching.com/seek/cache_details.aspx?wp=$[gc_num]"><b>$[gc_num]</b></a> <b>$[gc_name]</b> 
+a $[gc_type],<br />on $[gc_placed] by <a href="https://www.geocaching.com/profile?id=$[gc_placer_id">$[gc_placer]</a><br/>
+Difficulty: <img src="https://www.geocaching.com/images/stars/$[gc_diff_stars].gif" alt="$[gc_diff]" width="61" height="13" />
+&nbsp;Terrain: <img src="https://www.geocaching.com/images/stars/$[gc_terr_stars].gif" alt="$[gc_terr]" width="61" height="13" /><br />
+Size: <img src="https://www.geocaching.com/images/icons/container/$[gc_cont_icon].gif" width="45" height="12" alt="$[gc_cont_icon]"/>&nbsp;($[gc_cont_icon])<br />
   <h1>Extra Maps</h1>
   <ul>
     <li>
-    <a href="http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Maps</a></li>
-    <li>
-    <a href="http://maps.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Street View</a></li>
+    <a href="https://www.google.com/maps?q=$[gc_lat],$[gc_lon]" target="_blank">Google Maps</a></li>
     <li>
     <a href="http://www.geocaching.com/map/default.aspx?lat=$[gc_lat]&lng=$[gc_lon]" target="_blank">Geocaching.com Google Map</a></li>
     <li>
@@ -197,11 +189,7 @@ Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon]
     <li>
     <a href="http://www.bing.com/maps/default.aspx?v=2&sp=point.$[gc_lat]$[gc_lon]" target="_blank">Bing Maps</a></li>
     <li>
-    <a href="http://maps.yahoo.com/maps_result?lat=$[gc_lat]&lon=$[gc_lon]" target="_blank">Yahoo Maps</a></li>
-    <li>
     <a href="http://maps.randmcnally.com/#s=screen&lat=$[gc_lat]&lon=$[gc_lon]&zoom=13&loc1=$[gc_lat],$[gc_lon]" target="_blank">Rand McNally</a></li>
-    <li>
-    <a href="http://msrmaps.com/image.aspx?Lon=$[gc_lon]&Lat=$[gc_lat]&w=1&ref=G|$[gc_lon],$[gc_lat]" target="_blank">MSR Maps (Formerly Terraserver)</a></li>
     <li>
     <a href="http://www.opencyclemap.org/?zoom=12&lat=$[gc_lat]&lon=$[gc_lon]" target="_blank">Open Cycle Maps</a></li>
     <li>
@@ -233,7 +221,7 @@ Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon]
         <Style>
           <IconStyle>
             <Icon>
-              <href>http://www.geocaching.com/images/kml/8.png</href>
+              <href>https://www.geocaching.com/images/kml/8.png</href>
             </Icon>
           </IconStyle>
         </Style>
@@ -275,7 +263,7 @@ Size: <img src="http://www.geocaching.com/images/icons/container/$[gc_cont_icon]
             <value>Locationless (Reverse) Cache</value>
           </Data>
           <Data name="gc_icon">
-            <value>http://www.geocaching.com/images/kml/8.png</value>
+            <value>https://www.geocaching.com/images/kml/8.png</value>
           </Data>
           <Data name="gc_short_desc">
             <value><![CDATA[LES COORDONÉES PUBLIÉES NE REPRÉSENTENT PAS LA LOCALISATION D'UNE CACHE
@@ -368,7 +356,7 @@ Enjoy !</p>]]></value>
         <Style>
           <IconStyle>
             <Icon>
-              <href>http://www.geocaching.com/images/kml/8.png</href>
+              <href>https://www.geocaching.com/images/kml/8.png</href>
             </Icon>
           </IconStyle>
         </Style>
@@ -410,7 +398,7 @@ Enjoy !</p>]]></value>
             <value>Unknown Cache</value>
           </Data>
           <Data name="gc_icon">
-            <value>http://www.geocaching.com/images/kml/8.png</value>
+            <value>https://www.geocaching.com/images/kml/8.png</value>
           </Data>
           <Data name="gc_short_desc">
             <value><![CDATA[The cache is not at the coordinates above.   These coords will get you to the correct park and within 1/2 mile of the cache.  The cache is within 35 feet of the trail.   It is not handicapped accessible.   It is a nice walk in the woods that is practical for all ages.  There is no space in the container for trading items.   You should bring a writing stick and bug spray is recommended.]]></value>
