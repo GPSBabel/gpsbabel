@@ -968,7 +968,7 @@ unicsv_parse_one_line(char* ibuf)
       break;
 
     case fld_ew:
-      ns = s.startsWith('e', Qt::CaseInsensitive) ? 1 : -1;
+      ew = s.startsWith('e', Qt::CaseInsensitive) ? 1 : -1;
       wpt->longitude *= ew;
       break;
 
