@@ -701,9 +701,10 @@ gpgsa_parse(char* ibuf)
   if (nfields > 1) {
     fix = fields[2][0];
   }
+
   // 12 fields, index 3 through 14. 
   for (int cnt = 0; cnt <= 11; cnt++) {
-    if (nfields >= cnt + 2) prn[cnt] = fields[cnt + 3].toInt();
+    if (nfields > cnt + 3) prn[cnt] = fields[cnt + 3].toInt();
   }
 
   float pdop = 0, hdop = 0, vdop = 0;
