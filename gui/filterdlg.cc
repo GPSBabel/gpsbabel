@@ -59,9 +59,10 @@ FilterDialog::FilterDialog(QWidget*parent, AllFiltersData &fd): QDialog(parent),
   connect(ui_.helpButton, SIGNAL(clicked()), this, SLOT(helpX()));
   connect(ui_.resetButton, SIGNAL(clicked()), this, SLOT(resetX()));
 
-
+#if defined (Q_OS_WIN)
   ui_.buttonBox->button(QDialogButtonBox::Ok)->setIcon(QIcon(":images/ok"));
   ui_.buttonBox->button(QDialogButtonBox::Cancel)->setIcon(QIcon(":images/cancel"));
+#endif
 
   ui_.filterList->setCurrentRow(lastPage_);
 
