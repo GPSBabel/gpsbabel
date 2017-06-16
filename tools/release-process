@@ -1,7 +1,7 @@
 0) Ensure 'changes' file is up to date.   
    Regenerate capabilties. (done by 'make doc')
    Refresh public web version.
-1) Bump version in configure.in.   Commit that.
+1) Bump version in configure.ac.   Commit that.
 2) Go to empty directory.  Check out tree.
 3) 'make release'
 4) Visit https://sourceforge.net/project/admin/editpackages.php?group_id=58972
