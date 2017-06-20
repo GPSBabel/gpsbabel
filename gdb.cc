@@ -1204,7 +1204,7 @@ write_header(void)
   "A].GPSBabel-1.3.2*Nov 01 2006*22:23:39" -      gpsbabel 1.3.2
 
   New since 11/01/2006:
-  version:   version and release of gpsbabel (defined in configure.in)
+  version:   version and release of gpsbabel (defined in configure.ac)
   timestamp: date and time of gdb.c (handled by CVS)
 
   "A].GPSBabel-1.3.2*Nov 01 2006*22:23:39" -      gpsbabel 1.3.2

@@ -11,7 +11,7 @@
 srcdir = @srcdir@
 VPATH = @srcdir@
 
-# version and release are defined in the head of configure.in 
+# version and release are defined in the head of configure.ac
 # don't forget 'autoconf' if you change them 
 VERSD=@GBMAJOR@.@GBMINOR@.@GBMICRO@
 VERSU=@GBMAJOR@_@GBMINOR@_@GBMICRO@
@@ -174,7 +174,7 @@ clean:
 	if [ -f gui/Makefile ]; then $(MAKE) -C gui clean; fi
 	$(srcdir)/test-all -W
 
-configure: configure.in
+configure: configure.ac
 	autoconf
 
 tag:
