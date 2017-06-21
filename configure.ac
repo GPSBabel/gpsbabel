@@ -30,7 +30,8 @@ AC_SUBST(GBMINOR)
 AC_SUBST(GBMICRO)
 AC_SUBST(GBBUILD)
 
-# AC_CONFIG_SRCDIR([nmea.c])
+AC_CONFIG_SRCDIR([nmea.cc])
+AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_HEADER([config.h])
 
 dnl Detect the canonical host and target build environment
