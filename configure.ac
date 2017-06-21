@@ -32,7 +32,8 @@ AC_SUBST(GBBUILD)
 
 AC_CONFIG_SRCDIR([nmea.cc])
 AC_CONFIG_AUX_DIR([build-aux])
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_HEADERS([config.h])
 
 dnl Detect the canonical host and target build environment
 AC_CANONICAL_HOST
@@ -41,8 +42,7 @@ AC_CANONICAL_TARGET
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
-m4_include([m4/ax_cxx_compile_stdcxx_11.m4])
-AX_CXX_COMPILE_STDCXX_11(, mandatory)
+AX_CXX_COMPILE_STDCXX([11])
 AC_LANG(C++)
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
