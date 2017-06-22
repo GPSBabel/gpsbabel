@@ -57,6 +57,7 @@ static struct {
   int endian;
   route_head* track;
   uint32_t last_timestamp;
+  uint32_t global_utc_offset;
   fit_message_def message_def[16];
 } fit_data;
 
@@ -135,6 +136,8 @@ fit_parse_header(void)
     // Unused according to Ingo Arndt
     gbfgetuint16(fin);
   }
+
+  fit_data.global_utc_offset = 0;
 }
 
 static uint8_t
@@ -352,9 +355,31 @@ fit_parse_data(fit_message_def* def, int time_offset)
       if (global_opts.debug_level >= 7) {
         debug_print(7,"%s: parsing fit data: timestamp=%d\n", MYNAME, val);
       }
-      fit_data.last_timestamp = timestamp = val;
+      timestamp = val;
+      // if the timestamp is < 0x10000000, this value represents
+      // system time; to convert it to UTC, add the global utc offset to it
+      if (timestamp < 0x10000000)
+        timestamp += fit_data.global_utc_offset;
+      fit_data.last_timestamp = timestamp;
     } else {
       switch (def->global_id) {
+      case 0: // device settings message
+        switch (f->id) {
+        case 4:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: global utc_offset=%d\n", MYNAME, val);
+          }
+          fit_data.global_utc_offset = val;
+          break;
+        default:
+          if (global_opts.debug_level >= 1) {
+            debug_print(1, "%s: unrecognized data type in GARMIN FIT device settings: f->id=%d\n", MYNAME, f->id);
+          }
+          break;
+        } // switch (f->id)
+        // end of case def->global_id = 0
+        break;
+
       case 20: // record message - trkType is a track
         switch (f->id) {
         case 0:
