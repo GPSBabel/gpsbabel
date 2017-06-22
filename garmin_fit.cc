@@ -411,6 +411,18 @@ fit_parse_data(fit_message_def* def, int time_offset)
           }
           temperature = val;
           break;
+        case 73:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: enhanced_speed=%d\n", MYNAME, val);
+          }
+          speed = val;
+          break;
+        case 78:
+          if (global_opts.debug_level >= 7) {
+            debug_print(7,"%s: parsing fit data: enhanced_altitude=%d\n", MYNAME, val);
+          }
+          alt = val;
+          break;
         default:
           if (global_opts.debug_level >= 1) {
             debug_print(1, "%s: unrecognized data type in GARMIN FIT record: f->id=%d\n", MYNAME, f->id);
