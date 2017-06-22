@@ -411,6 +411,15 @@ fit_parse_data(fit_message_def* def, int time_offset)
           }
           temperature = val;
           break;
+        default:
+          if (global_opts.debug_level >= 1) {
+            debug_print(1, "%s: unrecognized data type in GARMIN FIT record: f->id=%d\n", MYNAME, f->id);
+          }
+          break;
+        } // switch (f->id)
+        // end of case def->global_id = 20
+        break;
+
       case 19: // lap wptType , endlat+lon is wpt
         switch (f->id) {
         case 2:
@@ -461,14 +470,15 @@ fit_parse_data(fit_message_def* def, int time_offset)
           }
           break;
         } // switch (f->id)
+        // end of case def->global_id = 19
         break;
-        default:
-          if (global_opts.debug_level >= 1) {
-            debug_print(1, "%s: unrecognized data type in GARMIN FIT record: f->id=%d\n", MYNAME, f->id);
-          }
-          break;
+
+      default:
+        if (global_opts.debug_level >= 1) {
+          debug_print(1, "%s: unrecognized/unhandled global ID for GARMIN FIT: %d\n", MYNAME, def->global_id);
         }
-      }
+        break;
+      } // switch (def->global_id)
     }
   }
 
