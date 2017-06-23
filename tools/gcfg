@@ -6,10 +6,6 @@ CC=/usr/local/cross-tools/bin/i386-mingw32msvc-gcc  \
 $S/configure --host=i386-pc-mingw32 \
         --without-zlib \
   --disable-shapefile \
-  --disable-pdb \
   --disable-csv \
-  --disable-filters \
-        --without-cet \
-        --without-pdb \
-        --without-filters
+  --disable-filters
 

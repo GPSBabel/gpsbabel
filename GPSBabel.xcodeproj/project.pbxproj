@@ -1709,10 +1709,8 @@
 					"-DNEW_STRINGS",
 					"-DMAXIMAL_ENABLED",
 					"-DFILTERS_ENABLED",
-					"-DPDBFMTS_ENABLED",
 					"-DSHAPELIB_ENABLED",
 					"-DCSVFMTS_ENABLED",
-					"-DCET_WANTED",
 					"-DQT_NO_DEBUG",
 					"-DQT_CORE_LIB",
 				);
@@ -1730,10 +1728,8 @@
 					"-DNEW_STRINGS",
 					"-DMAXIMAL_ENABLED",
 					"-DFILTERS_ENABLED",
-					"-DPDBFMTS_ENABLED",
 					"-DSHAPELIB_ENABLED",
 					"-DCSVFMTS_ENABLED",
-					"-DCET_WANTED",
 					"-DQT_NO_DEBUG",
 					"-DQT_CORE_LIB",
 				);
@@ -1804,10 +1800,8 @@
 					"-DNEW_STRINGS",
 					"-DMAXIMAL_ENABLED",
 					"-DFILTERS_ENABLED",
-					"-DPDBFMTS_ENABLED",
 					"-DSHAPELIB_ENABLED",
 					"-DCSVFMTS_ENABLED",
-					"-DCET_WANTED",
 					"-DQT_NO_DEBUG",
 					"-DQT_CORE_LIB",
 				);
@@ -1825,10 +1819,8 @@
 					"-DNEW_STRINGS",
 					"-DMAXIMAL_ENABLED",
 					"-DFILTERS_ENABLED",
-					"-DPDBFMTS_ENABLED",
 					"-DSHAPELIB_ENABLED",
 					"-DCSVFMTS_ENABLED",
-					"-DCET_WANTED",
 					"-DQT_NO_DEBUG",
 					"-DQT_CORE_LIB",
 				);
