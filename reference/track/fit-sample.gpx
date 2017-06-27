@@ -1,7 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
   <time>1970-01-01T00:00:00Z</time>
-  <bounds minlat="53.726060537" minlon="-1.449245141" maxlat="53.744836335" maxlon="-1.411503945"/>
+  <bounds minlat="53.726060537" minlon="-1.449245141" maxlat="53.744839017" maxlon="-1.411503945"/>
+  <wpt lat="53.741919600" lon="-1.425495605">
+    <name>LAP001</name>
+    <cmt>LAP001</cmt>
+    <desc>LAP001</desc>
+  </wpt>
+  <wpt lat="53.734134070" lon="-1.417237418">
+    <name>LAP002</name>
+    <cmt>LAP002</cmt>
+    <desc>LAP002</desc>
+  </wpt>
+  <wpt lat="53.726707200" lon="-1.434524591">
+    <name>LAP003</name>
+    <cmt>LAP003</cmt>
+    <desc>LAP003</desc>
+  </wpt>
+  <wpt lat="53.731990901" lon="-1.420505522">
+    <name>LAP004</name>
+    <cmt>LAP004</cmt>
+    <desc>LAP004</desc>
+  </wpt>
+  <wpt lat="53.740844873" lon="-1.420731247">
+    <name>LAP005</name>
+    <cmt>LAP005</cmt>
+    <desc>LAP005</desc>
+  </wpt>
+  <wpt lat="53.744306263" lon="-1.444196469">
+    <name>LAP006</name>
+    <cmt>LAP006</cmt>
+    <desc>LAP006</desc>
+  </wpt>
+  <wpt lat="53.744839017" lon="-1.449086890">
+    <name>LAP007</name>
+    <cmt>LAP007</cmt>
+    <desc>LAP007</desc>
+  </wpt>
   <trk>
     <trkseg>
       <trkpt lat="53.744833401" lon="-1.449245141">
