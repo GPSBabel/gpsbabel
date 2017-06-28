@@ -68,6 +68,7 @@ static char* opt_dump_file = 0;		/* dump raw data to this file (optional) */
 static char* opt_no_output = 0;		/* disable output? (0/1) */
 static char* opt_set_location = 0;	/* set if the "targetlocation" options was used */
 static char* opt_configure_logging = 0;
+static char* opt_gps_utc_offset = 0;
 
 static
 arglist_t skytraq_args[] = {
@@ -111,6 +112,10 @@ arglist_t skytraq_args[] = {
     "no-output", &opt_no_output, "Disable output (useful with erase)",
     "0", ARGTYPE_BOOL, ARG_NOMINMAX
   },
+  {
+    "gps_utc_offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
+    "0", ARGTYPE_INT, ARG_NOMINMAX
+  },
   ARG_TERMINATOR
 };
 
@@ -123,6 +128,10 @@ arglist_t skytraq_fargs[] = {
   {
     "last-sector", &opt_last_sector, "Last sector to be read from the file (-1: read till empty sector)",
     "-1", ARGTYPE_INT, "-1", "65535"
+  },
+  {
+    "gps_utc_offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
+    "0", ARGTYPE_INT, ARG_NOMINMAX
   },
   ARG_TERMINATOR
 };
@@ -587,6 +596,12 @@ gpstime_to_timet(int week, int sec)
   time_t gps_timet = 315964800;     /* Jan 06 1980 0:00 UTC */
   gps_timet += (week+1024)*7*SECONDS_PER_DAY + sec;
 
+  int override = atoi(opt_gps_utc_offset);
+  if (override) {
+    gps_timet -= override;
+    return gps_timet;
+  }
+
   /* leap second compensation: */
   gps_timet -= 13;  /* diff GPS-UTC=13s (valid from Jan 01 1999 on) */
   if (gps_timet >= 1136073600) {    /* Jan 01 2006 0:00 UTC */
@@ -598,6 +613,14 @@ gpstime_to_timet(int week, int sec)
   if (gps_timet >= 1341100800) {    /* Jul 01 2012 0:00 UTC */
     gps_timet--;  /*   GPS-UTC = 16s      */
   }
+  if (gps_timet >= 1435708800) {    /* Jul 01 2015 0:00 UTC */
+    gps_timet--;  /*   GPS-UTC = 17s      */
+  }
+  if (gps_timet >= 1483228800) {    /* Jan 01 2017 0:00 UTC */
+    gps_timet--;  /*   GPS-UTC = 18s      */
+  }
+  // Future: Consult http://maia.usno.navy.mil/ser7/tai-utc.dat
+  // use http://www.stevegs.com/utils/jd_calc/ for Julian to UNIX sec
 
   return gps_timet;     /* returns UTC time */
 }

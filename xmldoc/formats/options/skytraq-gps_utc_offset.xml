@@ -1,0 +1,18 @@
+<para>
+gps_utc_offset is used to override the built-in table of offsets of
+the offset between GPS time and UTC time. This chipset reports only 
+GPS time to the host and relies on software to know every time an adjustment
+is made. Since GPS time offsets can change without a new version of GPSBabel
+is released, those that care about total accuracy can override it.
+
+<screen>
+<command>gpsbabel</command>
+-i skytraq.bin,gps_utc_offset=15 -f <replaceable>filename.bin</replaceable>
+</screen>
+
+Indicates that GPS is ahead of UTC by fifteen seconds, as was the case in 2009.
+</para>
+
+<para>
+Consult formal eplanation of <ulink url="http://tycho.usno.navy.mil/leapsec.html">GPS time vs. UTC time</ulink> if you're into that.
+</para>
