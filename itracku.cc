@@ -257,17 +257,20 @@ deg_to_deg_min(double x)
 /*
 	Convert the itracku time format to time_t.
 */
-static time_t
+static QDateTime
 decode_itracku_time(uint32_t date)
 {
-  struct tm t;
-  t.tm_sec = date & 63;
-  t.tm_min = (date >> 6) & 63;
-  t.tm_hour = (date >> 12) & 31;
-  t.tm_mday = (date >> 17) & 31;
-  t.tm_mon = ((date >> 22) & 15) - 1;
-  t.tm_year = ((date >> 26) & 63) + 100;
-  return mkgmtime(&t);
+  int seconds = date & 63;
+  int minutes = (date >> 6) & 63;
+  int hours = (date >> 12) & 31;
+  QTime qtime(hours, minutes, seconds);
+
+  int day = (date >> 17) & 31;
+  int month = ((date >> 22) & 15);
+  int year = ((date >> 26) & 63) + 2000;
+  QDate qdate(year, month, day); 
+
+  return QDateTime(qdate, qtime, Qt::UTC);
 }
 
 /*

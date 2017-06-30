@@ -282,8 +282,7 @@ void tpo_read_2_x(void)
     track_add_head(track_temp);
 
     /* generate a generic track name */
-    sprintf(buff, "Track %d", i+1);
-    track_temp->rte_name = buff;
+    track_temp->rte_name = QString("Track %1").arg(i+1);
 
     /* zoom level 1-5 visibility flags */
     gbfread(&buff[0], 1, 10, tpo_file_in);
@@ -497,13 +496,12 @@ Waypoint* tpo_convert_ll(int lat, int lon)
 class StyleInfo {
 public:
   StyleInfo() {
-    name[0] = 0;
     color[0] = 0;
     color[1] = 0;
     color[2] = 0;
     wide = dash = 0;
   }
-  char name[TRACKNAMELENGTH]; // some huge value
+  QString name;
   uint8_t color[3];  // keep R/G/B values separate because line_color needs BGR
   uint8_t wide;
   uint8_t dash;
@@ -570,7 +568,7 @@ void tpo_process_tracks(void)
       gbfread(styles[ii].name, 1, tmp, tpo_file_in);
       styles[ii].name[tmp] = '\0';  // Terminator
     } else { // Assign a generic style name
-      sprintf(styles[ii].name, "STYLE %d", ii);
+      styles[ii].name = QString("STYLE %1").arg(ii);
     }
     //TBD: Should this be TRACKNAMELENGTH?
     for (xx = 0; xx < 3; xx++) {
@@ -593,7 +591,7 @@ void tpo_process_tracks(void)
     }
 
     if (DEBUG) {
-      printf("Track style %d: color=#%02x%02x%02x, width=%d, dashed=%d, name=%s\n",ii,styles[ii].color[0],styles[ii].color[1],styles[ii].color[2],styles[ii].wide,styles[ii].dash,styles[ii].name);
+      printf("Track style %d: color=#%02x%02x%02x, width=%d, dashed=%d, name=%s\n",ii,styles[ii].color[0],styles[ii].color[1],styles[ii].color[2],styles[ii].wide,styles[ii].dash,qPrintable(styles[ii].name));
     }
   }
 
@@ -678,13 +676,18 @@ void tpo_process_tracks(void)
     track_temp->line_width = styles[track_style].wide;
 
     if (DEBUG) printf("Track Name: %s, ?Type?: %d, Style Name: %s, Width: %d, Dashed: %d, Color: #%s\n",
-                        qPrintable(track_name), line_type, styles[track_style].name, styles[track_style].wide, styles[track_style].dash,rgb);
+                        qPrintable(track_name), line_type, 
+                        qPrintable(styles[track_style].name),
+                        styles[track_style].wide,
+                        styles[track_style].dash,rgb);
 
     // Track description
     track_temp->rte_desc = 
-      QString().sprintf("Style=%s, Width=%d, Dashed=%d, Color=#%s",
-                         styles[track_style].name, styles[track_style].wide,
-                         styles[track_style].dash, rgb);
+      QString("Style=%1, Width=%2, Dashed=%3, Color=#%4")
+                         .arg(styles[track_style].name)
+                         .arg(styles[track_style].wide)
+                         .arg(styles[track_style].dash)
+                         .arg(rgb);
 
     // Route number
     track_temp->rte_num = ii + 1;
@@ -896,19 +899,10 @@ void tpo_process_waypoints(void)
     name_length = tpo_read_int();
 //printf("\tComment length: %d\n", name_length);
     if (name_length) {
-      char* comment;
-
-      comment = (char*) xmalloc(name_length+1);
-      comment[0] = '\0';
+      QString comment;
       gbfread(comment, 1, name_length, tpo_file_in);
-      comment[name_length] = '\0';  // Terminator
       waypoint_temp->description = comment;
-      xfree(comment);
     }
-
-//        waypoint_temp->notes = NULL;
-//        waypoint_temp->url = NULL;
-//        waypoint_temp->url_link_text = NULL;
 
     // For routes (later), we need a duplicate of each waypoint
     // indexed by the order we read them in.
@@ -986,7 +980,7 @@ void tpo_process_map_notes(void)
     waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
-    waypoint_temp->shortname = QString().sprintf("NOTE %d", ii + 1);
+    waypoint_temp->shortname = QString("NOTE %1").arg(ii + 1);
 
 //UNKNOWN DATA LENGTH
     (void)tpo_read_int();
@@ -1001,20 +995,11 @@ void tpo_process_map_notes(void)
     // Fetch comment length
     name_length = tpo_read_int();
     if (name_length) {
-      char* comment;
+      QString comment;
 
-      comment = (char*) xmalloc(name_length+1);
-      comment[0] = '\0';
       gbfread(comment, 1, name_length, tpo_file_in);
-      comment[name_length] = '\0';  // Terminator
       waypoint_temp->description = comment;
-      xfree(comment);
-//printf("Comment: %s\n", comment);
-    } else {
-//            waypoint_temp->description = NULL;
     }
-
-//        waypoint_temp->url_link_text = NULL;
 
     // Length of text for external path.  If non-zero, skip past
     // the text.
@@ -1022,15 +1007,10 @@ void tpo_process_map_notes(void)
     name_length = tpo_read_int();
 //printf("name_length: %x\n", name_length);
     if (name_length) {
-      char* notes;
+      QString notes;
 
-      notes = (char*) xmalloc(name_length+1);
-      notes[0] = '\0';
       gbfread(notes, 1, name_length, tpo_file_in);
-      notes[name_length] = '\0';  // Terminator
       waypoint_temp->AddUrlLink(notes);
-//printf("Notes: %s\n", notes);
-      xfree(notes);
     }
 
     // Length of text for image path.  If non-zero, skip past
@@ -1038,15 +1018,10 @@ void tpo_process_map_notes(void)
 //UNKNOWN DATA LENGTH
     name_length = tpo_read_int();
     if (name_length) {
-      char* notes;
+      QString notes;
 
-      notes = (char*) xmalloc(name_length+1);
-      notes[0] = '\0';
       gbfread(notes, 1, name_length, tpo_file_in);
-      notes[name_length] = '\0';  // Terminator
       waypoint_temp->AddUrlLink(notes);
-//printf("Notes: %s\n", notes);
-      xfree(notes);
     }
 
 //UNKNOWN DATA LENGTH
@@ -1122,12 +1097,7 @@ void tpo_process_symbols(void)
     waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
-    waypoint_temp->shortname = QString().sprintf("SYM %d", ii + 1);
-
-//        waypoint_temp->description = NULL;
-//        waypoint_temp->notes = NULL;
-//        waypoint_temp->url = NULL;
-//        waypoint_temp->url_link_text = NULL;
+    waypoint_temp->shortname = QString("SYM %1").arg(ii + 1);
 
     // Add the waypoint to the chain of waypoints
     waypt_add(waypoint_temp);
@@ -1184,7 +1154,7 @@ void tpo_process_text_labels(void)
     waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
-    waypoint_temp->shortname = QString().sprintf("TXT %d", ii + 1);
+    waypoint_temp->shortname = QString("TXT %1").arg(ii + 1);
 
     for (jj = 0; jj < 16; jj++) {
 //UNKNOWN DATA LENGTH
@@ -1195,22 +1165,10 @@ void tpo_process_text_labels(void)
 //UNKNOWN DATA LENGTH
     name_length = tpo_read_int();
     if (name_length) {
-      char* comment;
-
-      comment = (char*) xmalloc(name_length+1);
-      comment[0] = '\0';
+      QString comment;
       gbfread(comment, 1, name_length, tpo_file_in);
-      comment[name_length] = '\0';  // Terminator
       waypoint_temp->description = comment;
-      xfree(comment);
-//printf("Comment: %s\n", comment);
-    } else {
-//            waypoint_temp->description = NULL;
     }
-
-//        waypoint_temp->notes = NULL;
-//        waypoint_temp->url = NULL;
-//        waypoint_temp->url_link_text = NULL;
 
     // Add the waypoint to the chain of waypoints
     waypt_add(waypoint_temp);
@@ -1273,10 +1231,7 @@ void tpo_process_routes(void)
     name_length = tpo_read_int();
     QString route_name;
     if (name_length) {
-      //route_name = (char*) xmalloc(name_length+1);
-      //route_name[0] = '\0';
       gbfread(route_name, 1, name_length, tpo_file_in);
-      //route_name[name_length] = '\0';  // Terminator
     } else { // Assign a generic route name
       route_name = "RTE ";
       route_name += QString::number(ii + 1);
