@@ -123,15 +123,20 @@ data_read(void)
       time[0] = 0;
       date[0] = 0;
       desc[0] = 0;
-      alt = -9999;
-      sscanf(ibuf, "W  %6c %s %s %s %s %ld",
+      alt = 0;
+      n = sscanf(ibuf, "W  %6c %s %s %s %s %ld",
              name, tbuf, nbuf, date, time, &alt);
-      if (alt == -9999) {
+      if (n < 5) {
+        fatal(MYNAME ":Unable to parse waypoint, not all required columns contained\n");
+      }
+      if (n != 6) {
         alt = unknown_alt;
       }
 
       if (comment_col) {
-        strncpy(desc, &ibuf[comment_col], sizeof(desc)-1);
+        if (snprintf(desc, sizeof(desc), "%s", &ibuf[comment_col]) < 0) {
+          fatal(MYNAME ":Unable to extract comment\n");
+        }
       } else {
         desc[0] = 0;
       }
@@ -146,10 +151,14 @@ data_read(void)
       // copy those entire words (warning: no spaces)
       // into the respective coord buffers.
       if (lat_col) {
-        sscanf(tbuf, "%s", ibuf + lat_col);
+        if (sscanf(tbuf, "%s", ibuf + lat_col) != 1) {
+          fatal(MYNAME ":Unable to parse latitude column\n");
+        }
       }
       if (lon_col) {
-        sscanf(nbuf, "%s", ibuf + lon_col);
+        if (sscanf(nbuf, "%s", ibuf + lon_col) != 1) {
+          fatal(MYNAME ":Unable to parse longitude column\n");
+        }
       }
 
       name[sizeof(name)-1] = '\0';
@@ -223,24 +232,23 @@ data_read(void)
       route_add_head(route);
       break;
     case 'T':
-      n = sscanf(ibuf, "T %lf %lf %s %s %ld",
-                 &lat, &lon, date, time, &alt);
-
-      if (n == 0) {
+      if (sscanf(ibuf, "T %lf %lf %s %s %ld",
+                 &lat, &lon, date, time, &alt) != 5) {
         /* Attempt alternate PCX format used by
          * www.radroutenplaner.nrw.de */
-        n = sscanf(ibuf, "T %c%lf %c%lf %s %s %ld",
+        if (sscanf(ibuf, "T %c%lf %c%lf %s %s %ld",
                    &lathemi, &lat, &lonhemi, &lon, date,
-                   time, &alt);
-        if (lathemi == 'S') {
-          lat = -lat;
+                   time, &alt) == 7) {
+          if (lathemi == 'S') {
+            lat = -lat;
+          }
+          if (lonhemi == 'W') {
+            lon = -lon;
+          }
+        } else {
+          fatal(MYNAME ":Unrecognized track line '%s'\n",
+                ibuf);
         }
-        if (lonhemi == 'W') {
-          lon = -lon;
-        }
-      } else if (n == 0) {
-        fatal(MYNAME ":Unrecognized track line '%s'\n",
-              ibuf);
       }
 
       memset(&tm, 0, sizeof(tm));
