@@ -19,7 +19,6 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 */
 
-
 #include "defs.h"
 #include "garmin_tables.h"
 #include "cet_util.h"
@@ -32,56 +31,39 @@
 
 static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;
-static short_handle mkshort_handle2;	/* for track and route names */
+static short_handle mkshort_handle2; /* for track and route names */
 static char* deficon = NULL;
 static char* cartoexploreur;
 static int read_as_degrees;
 static int read_gpsu;
 static int route_ctr;
-static int comment_col = 60;  /* This has a default */
+static int comment_col = 60; /* This has a default */
 static int sym_col;
 static int lat_col;
 static int lon_col;
 
 #define MYNAME "PCX"
 
-static
-arglist_t pcx_args[] = {
-  {
-    "deficon", &deficon, "Default icon name", "Waypoint",
-    ARGTYPE_STRING, ARG_NOMINMAX
-  },
-  {
-    "cartoexploreur", &cartoexploreur,
-    "Write tracks compatible with Carto Exploreur", NULL,
-    ARGTYPE_BOOL, ARG_NOMINMAX
-  },
-  ARG_TERMINATOR
-};
+static arglist_t pcx_args[] = {{"deficon", &deficon, "Default icon name",
+                                "Waypoint", ARGTYPE_STRING, ARG_NOMINMAX},
+                               {"cartoexploreur", &cartoexploreur,
+                                "Write tracks compatible with Carto Exploreur",
+                                NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+                               ARG_TERMINATOR};
 
-static void
-rd_init(const QString& fname)
-{
+static void rd_init(const QString& fname) {
   file_in = gbfopen(fname, "rb", MYNAME);
 }
 
-static void
-rd_deinit(void)
-{
-  gbfclose(file_in);
-}
+static void rd_deinit(void) { gbfclose(file_in); }
 
-static void
-wr_init(const QString& fname)
-{
+static void wr_init(const QString& fname) {
   file_out = gbfopen(fname, "w", MYNAME);
   mkshort_handle = mkshort_new_handle();
   mkshort_handle2 = mkshort_new_handle();
 }
 
-static void
-wr_deinit(void)
-{
+static void wr_deinit(void) {
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
   mkshort_del_handle(&mkshort_handle2);
@@ -89,8 +71,7 @@ wr_deinit(void)
 
 // Find the first token in string |in| when there may be leading whitespace.
 // These files have weird mixtures of spaces and tabs.
-static
-QString FirstTokenAt(QString in, int index) {
+static QString FirstTokenAt(QString in, int index) {
   static const QRegExp sep("\\s+");
   return in.mid(index, -1).section(sep, 0, 0, QString::SectionSkipEmpty);
 }
@@ -105,9 +86,7 @@ QString FirstTokenAt(QString in, int index) {
 // to allow fields in any order and length, based on their position in
 // these header lines. Oddly, we've seen only 'W' records take this form.
 
-static void
-data_read(void)
-{
+static void data_read(void) {
   int symnum;
   Waypoint* wpt_tmp;
   char* buff;
@@ -117,7 +96,7 @@ data_read(void)
   int points;
   int line_number = 0;
 
-  read_as_degrees  = 0;
+  read_as_degrees = 0;
   points = 0;
 
   while ((buff = gbfgetstr(file_in))) {
@@ -128,204 +107,204 @@ data_read(void)
     }
 
     switch (ibuf[0]) {
-    case 'W': {
-     QStringList tokens = line.split(QRegExp("\\s+"), QString::KeepEmptyParts);
-     if (tokens.size() < 5) {
-        fatal(MYNAME ": Unable to parse waypoint, not all required columns contained\n");
-      }
-     // tokens[0] = "W".
-     QString name = tokens[1];
-     QString tbuf = tokens[2];
-     QString nbuf = tokens[3];
-     QString date = tokens[4];
-     QString time = tokens[5];
-     long alt = unknown_alt;
-     if (tokens.size() == 7) {
-       alt = tokens[6].toDouble();
-     }
-
-      QString desc;
-      if (comment_col) {
-        desc = line.mid(comment_col, -1);
-      }
-
-      symnum = 18;
-      if (sym_col) {
-        symnum = atoi(&ibuf[sym_col]);
-      }
-
-      // If we have explicit columns for lat and lon,
-      // copy those entire words (warning: no spaces)
-      // into the respective coord buffers.
-      if (lat_col) {
-        tbuf = FirstTokenAt(line, lat_col);
-      }
-      if (lon_col) {
-        nbuf = FirstTokenAt(line, lon_col);
-      }
-
-      wpt_tmp = new Waypoint;
-      wpt_tmp->altitude = alt;
-      wpt_tmp->shortname = name.trimmed();
-      wpt_tmp->description = desc.trimmed();
-      wpt_tmp->icon_descr = gt_find_desc_from_icon_number(symnum, PCX);
-
-      double lat, lon;
-      if (read_as_degrees || read_gpsu) {
-        human_to_dec(tbuf, &lat, &lon, 1);
-        human_to_dec(nbuf, &lat, &lon, 2);
-        wpt_tmp->longitude = lon;
-        wpt_tmp->latitude = lat;
-      } else {
-        lat = tbuf.mid(1,-1).toDouble();
-        lon = nbuf.mid(1,-1).toDouble();
-        if (tbuf[0] == 'S') {
-          lat = -lat;
+      case 'W': {
+        QStringList tokens =
+            line.split(QRegExp("\\s+"), QString::KeepEmptyParts);
+        if (tokens.size() < 5) {
+          fatal(MYNAME
+                ": Unable to parse waypoint, not all required columns "
+                "contained\n");
         }
-        if (nbuf[0] == 'W') {
-          lon = -lon;
+        // tokens[0] = "W".
+        QString name = tokens[1];
+        QString tbuf = tokens[2];
+        QString nbuf = tokens[3];
+        QString date = tokens[4];
+        QString time = tokens[5];
+        long alt = unknown_alt;
+        if (tokens.size() == 7) {
+          alt = tokens[6].toDouble();
         }
-        wpt_tmp->longitude = ddmm2degrees(lon);
-        wpt_tmp->latitude = ddmm2degrees(lat);
-      }
 
-      if (route != NULL) {
-        route_add_wpt(route, new Waypoint(*wpt_tmp));
-      }
-      waypt_add(wpt_tmp);
-      points++;
-      break;
-    }
-    case 'H':
-      /* Garmap2 has headers
-      "H(2 spaces)LATITUDE(some spaces)LONGTITUDE(etc... followed by);track
-      	everything else is
-        H(2 chars)TN(tracknane\0)
-      	*/
-      if (points > 0) {
-        track = NULL;
-        points = 0;
-      }
-      if (track == NULL) {
-        if (ibuf[3] == 'L' && ibuf[4] == 'A') {
-          track = route_head_alloc();
-          track->rte_name = "track";
-          track_add_head(track);
-        } else if (ibuf[3] == 'T' && ibuf[4] == 'N') {
-          track = route_head_alloc();
-          track->rte_name = &ibuf[6];
-          track_add_head(track);
+        QString desc;
+        if (comment_col) {
+          desc = line.mid(comment_col, -1);
         }
-      }
-      break;
-    case 'R':
-      n = 1;
-      while (ibuf[n] == ' ') {
-        n++;
-      }
-      route = route_head_alloc();
-      route->rte_name = &ibuf[n];
-      route_add_head(route);
-      break;
-    case 'T': {
-    QStringList tokens = line.split(QRegExp("\\s+"), QString::KeepEmptyParts);
-     if (tokens.size() < 5) {
-        fatal(MYNAME ": Unable to parse trackpoint, not all required columns contained\n");
-      }
 
-     // tokens[0] = "W".
-     QString tbuf = tokens[1];
-     QString nbuf = tokens[2];
-     QString date = tokens[3];
-     QString time = tokens[4];
-     double alt = tokens[5].toDouble();
+        symnum = 18;
+        if (sym_col) {
+          symnum = atoi(&ibuf[sym_col]);
+        }
 
+        // If we have explicit columns for lat and lon,
+        // copy those entire words (warning: no spaces)
+        // into the respective coord buffers.
+        if (lat_col) {
+          tbuf = FirstTokenAt(line, lat_col);
+        }
+        if (lon_col) {
+          nbuf = FirstTokenAt(line, lon_col);
+        }
 
-      wpt_tmp = new Waypoint;
+        wpt_tmp = new Waypoint;
+        wpt_tmp->altitude = alt;
+        wpt_tmp->shortname = name.trimmed();
+        wpt_tmp->description = desc.trimmed();
+        wpt_tmp->icon_descr = gt_find_desc_from_icon_number(symnum, PCX);
+
+        double lat, lon;
+        if (read_as_degrees || read_gpsu) {
+          human_to_dec(tbuf, &lat, &lon, 1);
+          human_to_dec(nbuf, &lat, &lon, 2);
+          wpt_tmp->longitude = lon;
+          wpt_tmp->latitude = lat;
+        } else {
+          lat = tbuf.mid(1, -1).toDouble();
+          lon = nbuf.mid(1, -1).toDouble();
+          if (tbuf[0] == 'S') {
+            lat = -lat;
+          }
+          if (nbuf[0] == 'W') {
+            lon = -lon;
+          }
+          wpt_tmp->longitude = ddmm2degrees(lon);
+          wpt_tmp->latitude = ddmm2degrees(lat);
+        }
+
+        if (route != NULL) {
+          route_add_wpt(route, new Waypoint(*wpt_tmp));
+        }
+        waypt_add(wpt_tmp);
+        points++;
+        break;
+      }
+      case 'H':
+        /* Garmap2 has headers
+        "H(2 spaces)LATITUDE(some spaces)LONGTITUDE(etc... followed by);track
+          everything else is
+          H(2 chars)TN(tracknane\0)
+          */
+        if (points > 0) {
+          track = NULL;
+          points = 0;
+        }
+        if (track == NULL) {
+          if (ibuf[3] == 'L' && ibuf[4] == 'A') {
+            track = route_head_alloc();
+            track->rte_name = "track";
+            track_add_head(track);
+          } else if (ibuf[3] == 'T' && ibuf[4] == 'N') {
+            track = route_head_alloc();
+            track->rte_name = &ibuf[6];
+            track_add_head(track);
+          }
+        }
+        break;
+      case 'R':
+        n = 1;
+        while (ibuf[n] == ' ') {
+          n++;
+        }
+        route = route_head_alloc();
+        route->rte_name = &ibuf[n];
+        route_add_head(route);
+        break;
+      case 'T': {
+        QStringList tokens =
+            line.split(QRegExp("\\s+"), QString::KeepEmptyParts);
+        if (tokens.size() < 5) {
+          fatal(MYNAME
+                ": Unable to parse trackpoint, not all required columns "
+                "contained\n");
+        }
+
+        // tokens[0] = "W".
+        QString tbuf = tokens[1];
+        QString nbuf = tokens[2];
+        QString date = tokens[3];
+        QString time = tokens[4];
+        double alt = tokens[5].toDouble();
+
+        wpt_tmp = new Waypoint;
 
         QDate qdate = QDate::fromString(date, "dd-MMM-yy");
         QTime qtime = QTime::fromString(time, "hh:mm:ss");
         wpt_tmp->SetCreationTime(QDateTime(qdate, qtime, Qt::UTC));
 
+        double lat, lon;
+        if (read_as_degrees) {
+          human_to_dec(tbuf, &lat, &lon, 1);
+          human_to_dec(nbuf, &lat, &lon, 2);
 
-      double lat, lon;
-      if (read_as_degrees) {
-        human_to_dec(tbuf, &lat, &lon, 1);
-        human_to_dec(nbuf, &lat, &lon, 2);
-
-        wpt_tmp->longitude = lon;
-        wpt_tmp->latitude = lat;
-      } else {
-        lat = tbuf.mid(1,-1).toDouble();
-        lon = nbuf.mid(1,-1).toDouble();
-        if (tbuf[0] == 'S') {
-          lat = -lat;
+          wpt_tmp->longitude = lon;
+          wpt_tmp->latitude = lat;
+        } else {
+          lat = tbuf.mid(1, -1).toDouble();
+          lon = nbuf.mid(1, -1).toDouble();
+          if (tbuf[0] == 'S') {
+            lat = -lat;
+          }
+          if (nbuf[0] == 'W') {
+            lon = -lon;
+          }
+          wpt_tmp->longitude = ddmm2degrees(lon);
+          wpt_tmp->latitude = ddmm2degrees(lat);
         }
-        if (nbuf[0] == 'W') {
-          lon = -lon;
-        }
-        wpt_tmp->longitude = ddmm2degrees(lon);
-        wpt_tmp->latitude = ddmm2degrees(lat);
-      }
-      wpt_tmp->altitude = alt;
+        wpt_tmp->altitude = alt;
 
-      /* Did we get a track point before a track header? */
-      if (track == NULL) {
-        track = route_head_alloc();
-        track->rte_name = "Default";
-        track_add_head(track);
+        /* Did we get a track point before a track header? */
+        if (track == NULL) {
+          track = route_head_alloc();
+          track->rte_name = "Default";
+          track_add_head(track);
+        }
+        track_add_wpt(track, wpt_tmp);
+        points++;
+        break;
       }
-      track_add_wpt(track, wpt_tmp);
-      points++;
-      break;
-    }
-    case 'U':
-      read_as_degrees = ! strncmp("LAT LON DEG", ibuf + 3, 11);
-      if (strstr(ibuf, "UTM")) {
-        fatal(MYNAME ": UTM is not supported.\n");
-      }
-      break;
+      case 'U':
+        read_as_degrees = !strncmp("LAT LON DEG", ibuf + 3, 11);
+        if (strstr(ibuf, "UTM")) {
+          fatal(MYNAME ": UTM is not supported.\n");
+        }
+        break;
       // GPSU is apparently PCX but with a different definition
       // of "LAT LON DM" - unlike the other, it actually IS decimal
       // minutes.
-    case 'I':
-      read_gpsu = !(strstr(ibuf, "GPSU") == NULL) ;
-      break;
+      case 'I':
+        read_gpsu = !(strstr(ibuf, "GPSU") == NULL);
+        break;
       // This is a format specifier.  Use this line to figure out
       // where our other columns start.
-    case 'F': {
-      int col;
-      char* i = ibuf;
-      sym_col = 0;
+      case 'F': {
+        int col;
+        char* i = ibuf;
+        sym_col = 0;
 
-      for (col = 0; *i; col++, i++) {
-        if (0 == case_ignore_strncmp(i, "comment", 7)) {
-          comment_col = col;
+        for (col = 0; *i; col++, i++) {
+          if (0 == case_ignore_strncmp(i, "comment", 7)) {
+            comment_col = col;
+          }
+          if (0 == case_ignore_strncmp(i, "symbol", 6)) {
+            sym_col = col;
+          }
+          if (0 == case_ignore_strncmp(i, "latitude", 8)) {
+            lat_col = col;
+          }
+          if (0 == case_ignore_strncmp(i, "longitude", 9)) {
+            lon_col = col;
+          }
         }
-        if (0 == case_ignore_strncmp(i, "symbol", 6)) {
-          sym_col = col;
-        }
-        if (0 == case_ignore_strncmp(i, "latitude", 8)) {
-          lat_col = col;
-        }
-        if (0 == case_ignore_strncmp(i, "longitude", 9)) {
-          lon_col = col;
-        }
-      }
-    }
-    break;
-    default:
-      break;
-      ;
-
+      } break;
+      default:
+        break;
+        ;
     }
   }
 }
 
-static void
-gpsutil_disp(const Waypoint* wpt)
-{
-  double lon,lat;
+static void gpsutil_disp(const Waypoint* wpt) {
+  double lon, lat;
   int icon_token = 0;
 
   lon = degrees2ddmm(wpt->longitude);
@@ -344,56 +323,52 @@ gpsutil_disp(const Waypoint* wpt)
   }
 
   gbfprintf(file_out, "W  %-6.6s %c%08.5f %c%011.5f %s %5.f %-40.40s %5e  %d\n",
-            global_opts.synthesize_shortnames ?
-            CSTRc(mkshort_from_wpt(mkshort_handle, wpt)) :
-            CSTRc(wpt->shortname),
-            lat < 0.0 ? 'S' : 'N',
-            fabs(lat),
-            lon < 0.0 ? 'W' : 'E',
-            fabs(lon),
-            CSTR(ds),
-            (wpt->altitude == unknown_alt) ? -9999 : wpt->altitude,
-            (wpt->description != NULL) ? CSTRc(wpt->description) : "",
-            0.0,
+            global_opts.synthesize_shortnames
+                ? CSTRc(mkshort_from_wpt(mkshort_handle, wpt))
+                : CSTRc(wpt->shortname),
+            lat < 0.0 ? 'S' : 'N', fabs(lat), lon < 0.0 ? 'W' : 'E', fabs(lon),
+            CSTR(ds), (wpt->altitude == unknown_alt) ? -9999 : wpt->altitude,
+            (wpt->description != NULL) ? CSTRc(wpt->description) : "", 0.0,
             icon_token);
 }
 
-static void
-pcx_track_hdr(const route_head* trk)
-{
+static void pcx_track_hdr(const route_head* trk) {
   route_ctr++;
 
   QString default_name = QString().sprintf("Trk%03d", route_ctr);
-  QString name = mkshort(mkshort_handle2, trk->rte_name.isEmpty() ?  CSTR(default_name) : trk->rte_name);
+  QString name =
+      mkshort(mkshort_handle2,
+              trk->rte_name.isEmpty() ? CSTR(default_name) : trk->rte_name);
   /* Carto Exploreur (popular in France) chokes on trackname headers,
    * so provide option to supppress these.
    */
   if (!cartoexploreur) {
     gbfprintf(file_out, "\n\nH  TN %s\n", CSTR(name));
   }
-  gbfprintf(file_out, "H  LATITUDE    LONGITUDE    DATE      TIME     ALT  ;track\n");
+  gbfprintf(file_out,
+            "H  LATITUDE    LONGITUDE    DATE      TIME     ALT  ;track\n");
 }
 
-static void
-pcx_route_hdr(const route_head* rte)
-{
+static void pcx_route_hdr(const route_head* rte) {
   route_ctr++;
   QString default_name = QString().sprintf("Rte%03d", route_ctr);
 
-  QString name = mkshort(mkshort_handle2, rte->rte_name.isEmpty() ? default_name : rte->rte_name);
+  QString name = mkshort(
+      mkshort_handle2, rte->rte_name.isEmpty() ? default_name : rte->rte_name);
 
   /* see pcx_track_hdr */
   if (!cartoexploreur) {
     gbfprintf(file_out, "\n\nR  %s\n", CSTR(name));
   }
-  gbfprintf(file_out, "\n"
-            "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
+  gbfprintf(file_out,
+            "\n"
+            "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   "
+            "DESCRIPTION                              PROXIMITY     SYMBOL "
+            ";waypts\n");
 }
 
-void
-pcx_track_disp(const Waypoint* wpt)
-{
-  double lon,lat;
+void pcx_track_disp(const Waypoint* wpt) {
+  double lon, lat;
 
   lon = degrees2ddmm(wpt->longitude);
   lat = degrees2ddmm(wpt->latitude);
@@ -401,39 +376,36 @@ pcx_track_disp(const Waypoint* wpt)
   QDateTime dt = wpt->GetCreationTime().toUTC();
   const QString ds = dt.toString("dd-MMM-yy hh:mm:ss").toUpper();
 
-  gbfprintf(file_out, "T  %c%08.5f %c%011.5f %s %.f\n",
-            lat < 0.0 ? 'S' : 'N',
-            fabs(lat),
-            lon < 0.0 ? 'W' : 'E',
-            fabs(lon),
-            CSTR(ds),
+  gbfprintf(file_out, "T  %c%08.5f %c%011.5f %s %.f\n", lat < 0.0 ? 'S' : 'N',
+            fabs(lat), lon < 0.0 ? 'W' : 'E', fabs(lon), CSTR(ds),
             wpt->altitude);
 }
 
-
-static void
-data_write(void)
-{
+static void data_write(void) {
   gbfprintf(file_out,
             "H  SOFTWARE NAME & VERSION\n"
             "I  PCX5 2.09\n"
             "\n"
-            "H  R DATUM                IDX DA            DF            DX            DY            DZ\n"
-            "M  G WGS 84               121 +0.000000e+00 +0.000000e+00 +0.000000e+00 +0.000000e+00 +0.000000e+00\n"
+            "H  R DATUM                IDX DA            DF            DX      "
+            "      DY            DZ\n"
+            "M  G WGS 84               121 +0.000000e+00 +0.000000e+00 "
+            "+0.000000e+00 +0.000000e+00 +0.000000e+00\n"
             "\n"
             "H  COORDINATE SYSTEM\n"
             "U  LAT LON DM\n");
 
   setshort_length(mkshort_handle, 6);
 
-  setshort_length(mkshort_handle2, 20);	/* for track and route names */
+  setshort_length(mkshort_handle2, 20); /* for track and route names */
   setshort_whitespace_ok(mkshort_handle2, 0);
   setshort_mustuniq(mkshort_handle2, 0);
 
   if (global_opts.objective == wptdata) {
     gbfprintf(file_out,
               "\n"
-              "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   DESCRIPTION                              PROXIMITY     SYMBOL ;waypts\n");
+              "H  IDNT   LATITUDE    LONGITUDE    DATE      TIME     ALT   "
+              "DESCRIPTION                              PROXIMITY     SYMBOL "
+              ";waypts\n");
 
     waypt_disp_all(gpsutil_disp);
   } else if (global_opts.objective == trkdata) {
@@ -445,17 +417,8 @@ data_write(void)
   }
 }
 
-
 ff_vecs_t pcx_vecs = {
-  ff_type_file,
-  FF_CAP_RW_ALL,
-  rd_init,
-  wr_init,
-  rd_deinit,
-  wr_deinit,
-  data_read,
-  data_write,
-  NULL,
-  pcx_args,
-  CET_CHARSET_ASCII, 1	/* CET-REVIEW */
+    ff_type_file,      FF_CAP_RW_ALL, rd_init,    wr_init, rd_deinit,
+    wr_deinit,         data_read,     data_write, NULL,    pcx_args,
+    CET_CHARSET_ASCII, 1 /* CET-REVIEW */
 };
