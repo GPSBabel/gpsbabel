@@ -161,7 +161,8 @@ static void data_read(void) {
         wpt_tmp->description = desc.trimmed();
         wpt_tmp->icon_descr = gt_find_desc_from_icon_number(symnum, PCX);
 
-        double lat, lon;
+        double lat = 0;
+        double lon = 0;
         if (read_as_degrees || read_gpsu) {
           human_to_dec(tbuf, &lat, &lon, 1);
           human_to_dec(nbuf, &lat, &lon, 2);
