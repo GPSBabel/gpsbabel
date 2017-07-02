@@ -2,7 +2,7 @@
     Access to Garmin PCX5 files.
     Format described in: http://www.garmin.com/manuals/PCX5_OwnersManual.pdf
 
-    Copyright (C) 2002-2006 Robert Lipe, robertlipe+source@gpsbabel.org
+    Copyright (C) 2002-2017 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <iostream>
 #include <QtCore/QDebug>
 
 static gbfile* file_in, *file_out;
@@ -76,6 +75,15 @@ static QString FirstTokenAt(QString in, int index) {
   return in.mid(index, -1).section(sep, 0, 0, QString::SectionSkipEmpty);
 }
 
+// Centralize Date/Time parsing between Waypoint and Trackpoint readers.
+static void  SetWaypointTime(Waypoint* wpt, QString date, QString time) {
+  QDate qdate = QDate::fromString(date, "dd-MMM-yy");
+  QTime qtime = QTime::fromString(time, "hh:mm:ss");
+  if (qdate.isValid() && qtime.isValid()) {
+    wpt->SetCreationTime(QDateTime(qdate, qtime, Qt::UTC));
+  }
+}
+
 // Loop and parse all the lines of the file. This is complicated by the
 // variety of programs in the wild that loosely use this format and that
 // there are two distinct versions of PCX.
@@ -92,15 +100,15 @@ static void data_read(void) {
   char* buff;
   route_head* track = NULL;
   route_head* route = NULL;
-  int n;
   int points;
   int line_number = 0;
 
   read_as_degrees = 0;
   points = 0;
 
+  // Each line is both |buff| as a C string and |line| as a QString.
   while ((buff = gbfgetstr(file_in))) {
-    QString line = QString(buff).trimmed();
+    const QString line = QString(buff).trimmed();
     char* ibuf = lrtrim(buff);
     if ((line_number++ == 0) && file_in->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
@@ -127,27 +135,28 @@ static void data_read(void) {
         }
 
         QString desc;
-        if (comment_col) {
+        if (comment_col > 0) {
           desc = line.mid(comment_col, -1);
         }
 
         symnum = 18;
-        if (sym_col) {
+        if (sym_col > 0) {
           symnum = atoi(&ibuf[sym_col]);
         }
 
         // If we have explicit columns for lat and lon,
         // copy those entire words (warning: no spaces)
         // into the respective coord buffers.
-        if (lat_col) {
+        if (lat_col > 0) {
           tbuf = FirstTokenAt(line, lat_col);
         }
-        if (lon_col) {
+        if (lon_col > 0) {
           nbuf = FirstTokenAt(line, lon_col);
         }
 
         wpt_tmp = new Waypoint;
         wpt_tmp->altitude = alt;
+        SetWaypointTime(wpt_tmp, date, time);
         wpt_tmp->shortname = name.trimmed();
         wpt_tmp->description = desc.trimmed();
         wpt_tmp->icon_descr = gt_find_desc_from_icon_number(symnum, PCX);
@@ -201,12 +210,8 @@ static void data_read(void) {
         }
         break;
       case 'R':
-        n = 1;
-        while (ibuf[n] == ' ') {
-          n++;
-        }
         route = route_head_alloc();
-        route->rte_name = &ibuf[n];
+        route->rte_name = QString(&ibuf[1]).trimmed();
         route_add_head(route);
         break;
       case 'T': {
@@ -226,10 +231,7 @@ static void data_read(void) {
         double alt = tokens[5].toDouble();
 
         wpt_tmp = new Waypoint;
-
-        QDate qdate = QDate::fromString(date, "dd-MMM-yy");
-        QTime qtime = QTime::fromString(time, "hh:mm:ss");
-        wpt_tmp->SetCreationTime(QDateTime(qdate, qtime, Qt::UTC));
+        SetWaypointTime(wpt_tmp, date, time);
 
         double lat, lon;
         if (read_as_degrees) {
@@ -277,24 +279,10 @@ static void data_read(void) {
       // This is a format specifier.  Use this line to figure out
       // where our other columns start.
       case 'F': {
-        int col;
-        char* i = ibuf;
-        sym_col = 0;
-
-        for (col = 0; *i; col++, i++) {
-          if (0 == case_ignore_strncmp(i, "comment", 7)) {
-            comment_col = col;
-          }
-          if (0 == case_ignore_strncmp(i, "symbol", 6)) {
-            sym_col = col;
-          }
-          if (0 == case_ignore_strncmp(i, "latitude", 8)) {
-            lat_col = col;
-          }
-          if (0 == case_ignore_strncmp(i, "longitude", 9)) {
-            lon_col = col;
-          }
-        }
+        comment_col = line.indexOf("comment", 0, Qt::CaseInsensitive);
+        sym_col = line.indexOf("symbol", 0, Qt::CaseInsensitive);
+        lat_col = line.indexOf("latitude", 0, Qt::CaseInsensitive);
+        lon_col = line.indexOf("longitude", 0, Qt::CaseInsensitive);
       } break;
       default:
         break;

@@ -36,6 +36,10 @@ csv_lineparse(const char* stringstart, const char* delimited_by, const char* enc
 
 void
 human_to_dec(const char* instr, double* outlat, double* outlon, int which);
+inline void
+human_to_dec(const QString instr, double* outlat, double* outlon, int which) {
+  human_to_dec(CSTR(instr), outlat, outlon, which);
+}
 
 char*
 #ifndef DEBUG_MEM
