@@ -7,24 +7,24 @@
 <!--  S/N: 3458323137330C13000500 -->
 <!--  HW: drop_1506 -->
 <!--  SW: build 3802 -->
-<kml xmlns="http://earth.google.com/kml/2.0">
+<kml xmlns="http://www.opengis.net/kml/2.2">
 <Document>
 <name>Flight log from 21.08.2017 @ 17:00</name>
 <Placemark>
 <name>Flight</name>
 <visibility>1</visibility>
 <open>1</open>
+<TimeSpan>
+<begin>2017-08-21T17:00:05Z</begin>
+<end>2017-08-21T17:22:32Z</end>
+</TimeSpan>
 <Style>
 <LineStyle><color>ff00ffff</color></LineStyle>
 <PolyStyle><color>7f0000ff</color></PolyStyle>
 </Style>
 <LineString>
-<altitudeMode>absolute</altitudeMode>
 <extrude>1</extrude>
-<TimeSpan>
-<begin>2017-08-21T17:00:05Z</begin>
-<end>2017-08-21T17:22:32Z</end>
-</TimeSpan>
+<altitudeMode>absolute</altitudeMode>
 <coordinates>
 +008.5155383,+48.2662716,768
 <!-- bat: 89% (3473) -->
