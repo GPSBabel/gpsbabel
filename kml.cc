@@ -264,8 +264,8 @@ xg_tag_mapping kml_map[] = {
   { wpt_e, 	cb_end, 	"/Placemark" },
   { wpt_name, 	cb_cdata, 	"/Placemark/name" },
   { wpt_desc, 	cb_cdata, 	"/Placemark/description" },
-  { wpt_ts_begin, cb_cdata,	"/Placemark/LineString/TimeSpan/begin" },
-  { wpt_ts_end, cb_cdata, 	"/Placemark/LineString/TimeSpan/end" },
+  { wpt_ts_begin, cb_cdata,	"/Placemark/TimeSpan/begin" },
+  { wpt_ts_end, cb_cdata, 	"/Placemark/TimeSpan/end" },
   { wpt_time, 	cb_cdata, 	"/Placemark/TimeStamp/when" },
   // Alias for above used in KML 2.0
   { wpt_time, 	cb_cdata, 	"/Placemark/TimeInstant/timePosition" },
@@ -300,6 +300,11 @@ void wpt_s(xg_string, const QXmlStreamAttributes*)
   }
   wpt_tmp = new Waypoint;
   wpt_tmp_queued = 0;
+
+  /* Invalidate timespan elements for a beginning Placemark,
+   * so that each Placemark has its own (or no) TimeSpan. */
+  wpt_timespan_begin.setTime_t(0);
+  wpt_timespan_end.setTime_t(0);
 }
 
 void wpt_e(xg_string, const QXmlStreamAttributes*)
