@@ -154,6 +154,7 @@ in_word_set(register const char* str, register unsigned int len);
 #include "xcsv_tokens.gperf"
 #undef register
 
+#if CSVFMTS_ENABLED
 /****************************************************************************/
 /* obligatory global struct                                                 */
 /****************************************************************************/
@@ -161,7 +162,6 @@ in_word_set(register const char* str, register unsigned int len);
 extern char* xcsv_urlbase;
 extern char* prefer_shortnames;
 
-#if CSVFMTS_ENABLED
 XcsvFile xcsv_file;
 static double pathdist = 0;
 static double oldlon = 999;
