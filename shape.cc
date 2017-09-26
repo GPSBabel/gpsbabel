@@ -56,12 +56,12 @@ arglist_t shp_args[] = {
 static void
 my_rd_init(const QString& fname)
 {
-  ihandle = SHPOpen(qPrintable(fname), "rb");
+  ihandle = SHPOpen(fname.toUtf8(), "rb");
   if (ihandle == NULL) {
     fatal(MYNAME ":Cannot open shp file %s for reading\n", qPrintable(fname));
   }
 
-  ihandledb = DBFOpen(qPrintable(fname), "rb");
+  ihandledb = DBFOpen(fname.toUtf8(), "rb");
   if (ihandledb == NULL) {
     fatal(MYNAME ":Cannot open dbf file %s for reading\n", qPrintable(fname));
   }
@@ -317,7 +317,7 @@ my_write(void)
   switch (global_opts.objective) {
   case wptdata:
   case unknown_gpsdata:
-    ohandle = SHPCreate(qPrintable(ofname), SHPT_POINT);
+    ohandle = SHPCreate(ofname.toUtf8(), SHPT_POINT);
 
     if (ohandle == NULL) {
       fatal(MYNAME ":Cannot open %s for writing\n",
@@ -326,7 +326,7 @@ my_write(void)
     waypt_disp_all(my_write_wpt);
     break;
   case trkdata:
-    ohandle = SHPCreate(qPrintable(ofname), SHPT_ARC);
+    ohandle = SHPCreate(ofname.toUtf8(), SHPT_ARC);
 
     if (ohandle == NULL) {
       fatal(MYNAME ":Cannot open %s for writing\n",

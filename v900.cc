@@ -166,7 +166,7 @@ v900_rd_init(const QString& fname)
      that will be translated to a single \n, making the line len one character shorter than
      on linux machines.
    */
-  fin = fopen(qPrintable(fname),"rb");
+  fin = ufopen(fname.toUtf8(), "rb");
   if (!fin) {
     fatal("v900: could not open '%s'.\n", qPrintable(fname));
   }

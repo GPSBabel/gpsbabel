@@ -248,7 +248,7 @@ xfopen(const char* fname, const char* type, const char* errtxt)
   if (0 == strcmp(fname, "-")) {
     return am_writing ? stdout : stdin;
   }
-  f = fopen(fname, type);
+  f = ufopen(fname, type);
   if (NULL == f) {
     fatal("%s cannot open '%s' for %s.  Error was '%s'.\n",
           errtxt, fname,
@@ -256,6 +256,23 @@ xfopen(const char* fname, const char* type, const char* errtxt)
           strerror(errno));
   }
   return f;
+}
+
+/*
+ * Thin wrapper around fopen() that supports UTF-8 fname on all platforms.
+ */
+FILE*
+ufopen(const char* fname, const char* mode)
+{
+#if __WIN32__
+  // On Windows standard fopen() doesn't support UTF-8, so we have to convert
+  // to wchar_t* (UTF-16) and use the wide-char version of fopen(), _wfopen().
+  return _wfopen((const wchar_t*) QString(fname).utf16(),
+                 (const wchar_t*) QString(mode).utf16());
+#else
+  // On other platforms, UTF-8 Just Works (TM).
+  return fopen(fname, mode);
+#endif
 }
 
 /*

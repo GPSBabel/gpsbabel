@@ -127,7 +127,7 @@ const gdx_info*
 gdx_read(const char* fname)
 {
   // Test file open-able before gb_open gets a chance to fatal().
-  FILE* fin = fopen(fname, "r");
+  FILE* fin = ufopen(fname, "r");
 
   if (fin) {
     fclose(fin);
