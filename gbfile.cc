@@ -538,7 +538,7 @@ gbfopen(const QString filename, const char* mode, const char* module)
     file->fileungetc = memapi_ungetc;
     file->filewrite = memapi_write;
   } else {
-    file->name = qstrdup(filename.toUtf8());
+    file->name = xstrdup(filename);
     file->is_pipe = (filename == "-");
 
     /* Do we have a '.gz' extension in the filename ? */
