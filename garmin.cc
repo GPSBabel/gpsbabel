@@ -394,8 +394,8 @@ waypt_read(void)
   for (i = 0; i < n; i++) {
     Waypoint* wpt_tmp = new Waypoint;
 
-    wpt_tmp->shortname = way[i]->ident;
-    wpt_tmp->description = QString(way[i]->cmnt).simplified();
+    wpt_tmp->shortname = QString::fromLatin1(way[i]->ident);
+    wpt_tmp->description = QString::fromLatin1(way[i]->cmnt);
     wpt_tmp->shortname = wpt_tmp->shortname.simplified();
     wpt_tmp->description = wpt_tmp->description.simplified();
     wpt_tmp->longitude = way[i]->lon;
