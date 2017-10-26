@@ -790,7 +790,7 @@ garmin_txt_wr_init(const QString& fname)
   case grid_bng: /* force datum to "Ord Srvy Grt Britn" */
     datum_index = DATUM_OSGB36;
     break;
-  case grid_swiss: /* force datum to "Ord Srvy Grt Britn" */
+  case grid_swiss: /* force datum to WGS84 */
     datum_index = DATUM_WGS84;
     break;
   default:
