@@ -88,9 +88,9 @@ double gcdist(double lat1, double lon1, double lat2, double lon2)
   if (
 #if defined isnan
     /* This is a C99-ism. */
-    (isnan(res)) ||
+    isnan(res) ||
 #endif
-    (errno == EDOM)) { /* this should never happen: */
+    errno == EDOM) { /* this should never happen: */
     errno = 0;         /* Math argument out of domain of
 		function, */
     return 0;          /* or value returned is not a number */
