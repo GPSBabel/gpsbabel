@@ -19,6 +19,7 @@
 
 #include <QtCore/QTextCodec>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QVector>
 
 #include "defs.h"
 #include "filterdefs.h"
@@ -241,7 +242,20 @@ main(int argc, char* argv[])
   // For example, this will get the QTextCodec::codecForLocale set
   // correctly.
   QCoreApplication app(argc, argv);
-  // TODO: use QCoreApplication::arguments() to process command line.
+#ifdef __WIN32__
+  // Use QCoreApplication::arguments() to process the command line and replace
+  // argv[] strings with UTF-8 versions; this is needed on Windows only.
+  QVector<QByteArray> qargv;
+  {
+    QStringList qargs = QCoreApplication::arguments();
+    argc = qargs.size();
+    qargv.resize(argc);
+    for (int i = 0; i < argc; ++i) {
+      qargv[i] = qargs[i].toUtf8();
+      argv[i] = qargv[i].data();
+    }
+  }
+#endif
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
 
@@ -404,7 +418,7 @@ main(int argc, char* argv[])
       cet_convert_init(ivecs->encode, ivecs->fixed_encode);	/* init by module vec */
 
       start_session(ivecs->name, fname);
-      ivecs->rd_init(QString::fromLocal8Bit(fname));
+      ivecs->rd_init(QString(fname));
       ivecs->read();
       ivecs->rd_deinit();
 
@@ -436,7 +450,7 @@ main(int argc, char* argv[])
         trk_ct_bak = -1;
         rte_head_bak = trk_head_bak = NULL;
 
-        ovecs->wr_init(QString::fromLocal8Bit(ofname));
+        ovecs->wr_init(QString(ofname));
 
         if (global_opts.charset != &cet_cs_vec_utf8) {
           /*
@@ -638,7 +652,7 @@ main(int argc, char* argv[])
     if (ivecs->rd_init == NULL) {
       fatal("Format does not support reading.\n");
     }
-    ivecs->rd_init(QString::fromLocal8Bit(argv[0]));
+    ivecs->rd_init(QString(argv[0]));
     ivecs->read();
     ivecs->rd_deinit();
 
@@ -653,7 +667,7 @@ main(int argc, char* argv[])
         fatal("Format does not support writing.\n");
       }
 
-      ovecs->wr_init(QString::fromLocal8Bit(argv[1]));
+      ovecs->wr_init(QString(argv[1]));
       ovecs->write();
       ovecs->wr_deinit();
 
@@ -699,7 +713,7 @@ main(int argc, char* argv[])
         fatal("An input file (-f) must be specified.\n");
       }
       start_session(ivecs->name, fname);
-      ivecs->position_ops.rd_init(QString::fromLocal8Bit(fname));
+      ivecs->position_ops.rd_init(QString(fname));
     }
 
     if (global_opts.masked_objective & ~POSNDATAMASK) {
@@ -717,7 +731,7 @@ main(int argc, char* argv[])
     }
 
     if (ovecs && ovecs->position_ops.wr_init) {
-      ovecs->position_ops.wr_init(QString::fromLocal8Bit(ofname));
+      ovecs->position_ops.wr_init(QString(ofname));
     }
 
     tracking_status.request_terminate = 0;
@@ -734,7 +748,7 @@ main(int argc, char* argv[])
       }
       if (wpt) {
         if (ovecs) {
-//					ovecs->position_ops.wr_init(QString::fromLocal8Bit(ofname));
+//					ovecs->position_ops.wr_init(QString(ofname));
           ovecs->position_ops.wr_position(wpt);
 //					ovecs->position_ops.wr_deinit();
         } else {
