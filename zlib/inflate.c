@@ -1504,7 +1504,7 @@ z_streamp strm;
 {
     struct inflate_state FAR *state;
 // Begin GPSBabel
-//Orig
+// Orig
 //  if (strm == Z_NULL || strm->state == Z_NULL) return -1L << 16;
 // Fix
     if (strm == Z_NULL || strm->state == Z_NULL) return -(1L << 16);
