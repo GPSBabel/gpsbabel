@@ -19,8 +19,10 @@
 
 */
 
-#ifndef SESSION_H
-#define SESSION_H
+#ifndef SESSION_H_INCLUDED_
+#define SESSION_H_INCLUDED_
+
+#include "queue.h"
 
 typedef struct {
   queue Q;
@@ -48,4 +50,4 @@ session_t* curr_session(void);
 int session_add_category(const char *name, const int id);
 */
 
-#endif
+#endif  // SESSION_H_INCLUDED_

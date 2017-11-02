@@ -18,6 +18,8 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
+#ifndef QUEUE_H_INCLUDED_
+#define QUEUE_H_INCLUDED_
 
 typedef struct queue {
   struct queue* next;
@@ -58,3 +60,4 @@ void sortqueue(queue* qh, int (*cmp)(const queue*, const queue*));
 		(tmp) = QUEUE_NEXT(element), \
 		(element) != (listhead); \
 		(element) = (tmp))
+#endif  // QUEUE_H_INCLUDED_

@@ -16,8 +16,8 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-#ifndef gpsbabel_defs_h_included
-#define gpsbabel_defs_h_included
+#ifndef DEFS_H_INCLUDED_
+#define DEFS_H_INCLUDED_
 
 #include <stdint.h>
 
@@ -433,12 +433,6 @@ const global_trait* get_traits();
 #define WAYPT_HAS(wpt,member) (wpt->wpt_flags.member)
 
 #define CSTRc(qstr) (qstr.toLatin1().constData())
-// Maybe the XmlGeneric string callback really shouldn't have a type
-// of its own; this was a crutch during the move from char* to QString.
-// It's "just" a search and replace to make it go away, but it might
-// be convenient to overload some day.
-typedef const QString& xg_string;
-
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
  * cater to any specific model or protocol.  Anything that needs to
@@ -629,11 +623,6 @@ char* get_option(const char* iarglist, const char* argname);
 char* GET_OPTION(const char* iarglist, const char* argname, DEBUG_PARAMS);
 #define get_option(iarglist, argname) GET_OPTION(iarglist, argname, __FILE__, __LINE__)
 #endif
-
-typedef void (*filter_init)(char const*);
-typedef void (*filter_process)(void);
-typedef void (*filter_deinit)(void);
-typedef void (*filter_exit)(void);
 
 typedef void (*waypt_cb)(const Waypoint*);
 typedef void (*route_hdr)(const route_head*);
@@ -1174,4 +1163,4 @@ int color_to_bbggrr(const char* cname);
 // It's here instead of gps to avoid C/C++ linkage issues.
 int32_t GPS_Lookup_Datum_Index(const QString& n);
 
-#endif /* gpsbabel_defs_h_included */
+#endif // DEFS_H_INCLUDED_
