@@ -548,25 +548,6 @@ str_match(const char* str, const char* match)
   return ((*s == '\0') && (*m == '\0'));
 }
 
-/*
- * as str_match, but case insensitive
- */
-
-int
-case_ignore_str_match(const char* str, const char* match)
-{
-  char* s1, *s2;
-  int res;
-
-  s1 = strupper(xstrdup(str));
-  s2 = strupper(xstrdup(match));
-  res = str_match(s1, s2);
-  xfree(s1);
-  xfree(s2);
-
-  return res;
-}
-
 // for ruote_char = "
 // make str = blank into nothing
 // make str = foo into "foo"
