@@ -19,6 +19,16 @@
 
  */
 
+#ifndef XMLGENERIC_H_INCLUDED_
+#define XMLGENERIC_H_INCLUDED_
+
+#include <QtCore/QString>
+
+// Maybe the XmlGeneric string callback really shouldn't have a type
+// of its own; this was a crutch during the move from char* to QString.
+// It's "just" a search and replace to make it go away, but it might
+// be convenient to overload some day.
+typedef const QString& xg_string;
 
 
 typedef enum {
@@ -40,10 +50,10 @@ extern const char* xhtml_entities;
 void xml_ignore_tags(const char** taglist);
 
 void xml_init(const QString& fname, xg_tag_mapping* tbl,const char* encoding);
-void xml_init_offset(const char* fname, xg_tag_mapping* tbl,
-                     const char* encoding, gbsize_t offset);
 void xml_read(void);
 void xml_readstring(const char* str);
 void xml_readprefixstring(const char* str);
 void xml_readunicode(const QString& str);
 void xml_deinit(void);
+
+#endif  // XMLGENERIC_H_INCLUDED_
