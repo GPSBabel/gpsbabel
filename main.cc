@@ -242,9 +242,8 @@ main(int argc, char* argv[])
   // For example, this will get the QTextCodec::codecForLocale set
   // correctly.
   QCoreApplication app(argc, argv);
-#ifdef __WIN32__
   // Use QCoreApplication::arguments() to process the command line and replace
-  // argv[] strings with UTF-8 versions; this is needed on Windows only.
+  // argv[] strings with UTF-8 versions.
   QVector<QByteArray> qargv;
   {
     QStringList qargs = QCoreApplication::arguments();
@@ -255,7 +254,6 @@ main(int argc, char* argv[])
       argv[i] = qargv[i].data();
     }
   }
-#endif
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
 
