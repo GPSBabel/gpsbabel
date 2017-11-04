@@ -1,0 +1,37 @@
+#!/bin/bash
+# this file should be encoded in latin1
+
+BASEPATH=`dirname $0`
+PNAME=${PNAME:-${BASEPATH}/gpsbabel}
+REFERENCE=${BASEPATH}/reference
+
+TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
+mkdir -p $TMPDIR
+trap "rm -fr $TMPDIR" 0 1 2 3 15
+
+errorcount=0
+
+if  locale -a | grep -q en_US.iso88591 ; then
+  export LC_ALL=en_US.iso88591
+  rm -f ${TMPDIR}/file*.kml
+  rm -f ${TMPDIR}/file*.gpx
+
+# test input file name mangling
+  cp ${REFERENCE}/bounds-test.gpx ${TMPDIR}/file¢.gpx
+  ${PNAME} -i gpx -f ${TMPDIR}/file¢.gpx -o kml -F ${TMPDIR}/fileo.kml || {
+    echo "ERROR: The input file name was mangled."
+    errorcount=`expr $errorcount + 1`
+  }
+
+# test output file name mangling
+  ${PNAME} -i gpx -f ${REFERENCE}/bounds-test.gpx -o kml -F ${TMPDIR}/file¢.kml
+  count=$(ls -1 -l ${TMPDIR}/file¢.kml | wc -l)
+  if [ $count -lt 1 ]; then
+    echo "ERROR: The output file name was mangled."
+    errorcount=`expr $errorcount + 1`
+  fi
+else
+  echo "$0 cannot run without the en_US.iso88591 locale."
+fi
+
+exit $errorcount
