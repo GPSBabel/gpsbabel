@@ -212,8 +212,6 @@ extern const char gpsbabel_version[];
 extern time_t gpsbabel_now;	/* gpsbabel startup-time; initialized in main.c with time() */
 extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
 extern int geocaches_present;
-class QTextStream;
-extern QTextStream cerr;
 
 #define MILLI_TO_MICRO(t) (t * 1000)  /* Milliseconds to Microseconds */
 #define MICRO_TO_MILLI(t) (t / 1000)  /* Microseconds to Milliseconds*/
@@ -1013,24 +1011,6 @@ signed int si_round(double d);
 #define lround si_round
 #endif
 
-/*
- * Data types for Palm/OS files.
- */
-typedef struct {
-  unsigned char data[4];
-} pdb_32;
-
-typedef struct {
-  unsigned char data[2];
-} pdb_16;
-
-typedef struct {
-  unsigned char data[8];
-} pdb_double;
-
-typedef struct {
-  unsigned char data[4];
-} pdb_float;
 
 /*
  * Protypes for Endianness helpers.
@@ -1063,11 +1043,6 @@ float  le_read_float(const void* p);
 double le_read_double(const void* p);
 void   le_write_float(void* ptr, float f);
 void   le_write_double(void* p, double d);
-
-#define pdb_write_float be_write_float
-#define pdb_read_float be_read_float
-#define pdb_write_double be_write_double
-#define pdb_read_double be_read_double
 
 /*
  * Prototypes for generic conversion routines (util.c).

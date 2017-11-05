@@ -19,6 +19,7 @@
  */
 
 #include <QtCore/QStringList>
+class QTextStream;
 
 /* function prototypes */
 
