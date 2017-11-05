@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "grtcirc.h"
 
+#include <cmath>
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
@@ -85,7 +86,7 @@ double gcdist(double lat1, double lon1, double lat2, double lon2)
 
   res = asin(res);
 
-  if (isnan(res) || (errno == EDOM)) { /* this should never happen: */
+  if (std::isnan(res) || (errno == EDOM)) { /* this should never happen: */
     errno = 0; /* Math argument out of domain of function, */
     return 0;  /* or value returned is not a number */
   }
