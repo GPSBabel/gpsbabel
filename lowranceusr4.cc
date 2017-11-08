@@ -85,8 +85,8 @@ lowranceusr4_readstr(char* buf, const int maxlen, gbfile* file, int bytes_per_ch
     buf[0] = '\0'; /* seems len=-1 means no string */
     return 0;
   } else if (len) {
-    if (len > maxlen*bytes_per_char) {
-      len = maxlen*bytes_per_char;
+    if (len > maxlen) {
+      len = maxlen;
     }
     if (bytes_per_char == 1) {
       bytesread += gbfread(buf, 1, len, file);
