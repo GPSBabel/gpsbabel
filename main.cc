@@ -623,7 +623,7 @@ main(int argc, char* argv[])
       break;
     }
 
-    if ((argn+1 >= argc) && (arg_stack != NULL)) {
+    while ((argn+1 >= argc) && (arg_stack != NULL)) {
       arg_stack = pop_args(arg_stack, &argn, &argc, &argv);
     }
     argn++;

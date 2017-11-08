@@ -1,0 +1,24 @@
+
+# batch files
+
+rm -f ${TMPDIR}/batch0
+touch ${TMPDIR}/batch0
+echo "-b ${TMPDIR}/batch1" >> ${TMPDIR}/batch0
+
+rm -f ${TMPDIR}/batch1
+touch ${TMPDIR}/batch1
+echo "-i gpx" >> ${TMPDIR}/batch1
+echo "-f ${REFERENCE}/bounds-test.gpx" >> ${TMPDIR}/batch1
+echo "-o kml" >> ${TMPDIR}/batch1
+echo "-F ${TMPDIR}/batch-bnds.kml" >> ${TMPDIR}/batch1
+
+rm -f ${TMPDIR}/expected_version
+gpsbabel -V 1>${TMPDIR}/expected_version
+
+rm -f ${TMPDIR}/batch-bnds.kml
+gpsbabel -b ${TMPDIR}/batch0 -V 1>${TMPDIR}/batch_version
+# if we don't pop all the way back to the original arugments we won't execute the -V
+compare ${TMPDIR}/expected_version ${TMPDIR}/batch_version
+# make sure we ran the innermosts batch file
+compare ${REFERENCE}/bounds-test.kml ${TMPDIR}/batch-bnds.kml
+
