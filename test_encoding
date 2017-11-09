@@ -15,11 +15,12 @@ if  locale -a | grep -q en_US.iso88591 ; then
   export LC_ALL=en_US.iso88591
   rm -f ${TMPDIR}/file*.kml
   rm -f ${TMPDIR}/file*.gpx
+  rm -f ${TMPDIR}/file*.csv
 
 # test input file name mangling
   cp ${REFERENCE}/bounds-test.gpx ${TMPDIR}/file¢.gpx
   ${PNAME} -i gpx -f ${TMPDIR}/file¢.gpx -o kml -F ${TMPDIR}/fileo.kml || {
-    echo "ERROR: The input file name was mangled."
+    echo "ERROR: The GPX input file name was mangled."
     errorcount=`expr $errorcount + 1`
   }
 
@@ -27,7 +28,7 @@ if  locale -a | grep -q en_US.iso88591 ; then
   ${PNAME} -i gpx -f ${REFERENCE}/bounds-test.gpx -o kml -F ${TMPDIR}/file¢.kml
   count=$(ls -1 -l ${TMPDIR}/file¢.kml | wc -l)
   if [ $count -lt 1 ]; then
-    echo "ERROR: The output file name was mangled."
+    echo "ERROR: The KML output file name was mangled."
     errorcount=`expr $errorcount + 1`
   fi
 
@@ -35,7 +36,7 @@ if  locale -a | grep -q en_US.iso88591 ; then
   ${PNAME} -i gpx -f ${REFERENCE}/bounds-test.gpx -o unicsv -F ${TMPDIR}/file¢.csv
   count=$(ls -1 -l ${TMPDIR}/file¢.csv | wc -l)
   if [ $count -lt 1 ]; then
-    echo "ERROR: The output file name was mangled."
+    echo "ERROR: The CSV output file name was mangled."
     errorcount=`expr $errorcount + 1`
   fi
 else
