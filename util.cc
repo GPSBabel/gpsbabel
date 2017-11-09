@@ -270,8 +270,8 @@ ufopen(const char* fname, const char* mode)
   return _wfopen((const wchar_t*) QString(fname).utf16(),
                  (const wchar_t*) QString(mode).utf16());
 #else
-  // On other platforms, UTF-8 Just Works (TM).
-  return fopen(fname, mode);
+  // On other platforms, convert to native locale (UTF-8 or other 8-bit).
+  return fopen(qPrintable(QString(fname)), mode);
 #endif
 }
 
