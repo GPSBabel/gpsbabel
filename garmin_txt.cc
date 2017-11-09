@@ -62,7 +62,7 @@ static time_t utc_offs = 0;
 // Having a Windows background, this software encodes degree marks in
 // Windows CP-1252.  We don't attempt to handle all the subtleties of that,
 // but since we write degree marks and we know how they're encoded, use this.
-static const int kDegreeSymbol = 0xB0;
+static const char kDegreeSymbol = 0xB0;
 
 static gtxt_flags_t gtxt_flags;
 
@@ -790,7 +790,7 @@ garmin_txt_wr_init(const QString& fname)
   case grid_bng: /* force datum to "Ord Srvy Grt Britn" */
     datum_index = DATUM_OSGB36;
     break;
-  case grid_swiss: /* force datum to "Ord Srvy Grt Britn" */
+  case grid_swiss: /* force datum to WGS84 */
     datum_index = DATUM_WGS84;
     break;
   default:
