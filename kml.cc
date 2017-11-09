@@ -550,7 +550,8 @@ kml_wr_deinit(void)
 
   if (!posnfilenametmp.isEmpty()) {
 #if __WIN32__
-    MoveFileExA(qPrintable(posnfilenametmp), qPrintable(posnfilename),
+    MoveFileExW((const wchar_t*) posnfilenametmp.utf16(),
+                (const wchar_t*) posnfilename.utf16(),
                 MOVEFILE_REPLACE_EXISTING);
 #endif
     QFile::rename(posnfilenametmp, posnfilename);

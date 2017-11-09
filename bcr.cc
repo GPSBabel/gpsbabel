@@ -192,7 +192,7 @@ bcr_init_radius(void)
 static void
 bcr_rd_init(const QString& fname)
 {
-  ini = inifile_init(qPrintable(fname), MYNAME);
+  ini = inifile_init(fname, MYNAME);
   if (ini->unicode) {
     cet_convert_init(CET_CHARSET_UTF8, 1);
   }
