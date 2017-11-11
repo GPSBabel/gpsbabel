@@ -168,7 +168,6 @@
     <ClCompile Include="..\lowranceusr.cc" />
     <ClCompile Include="..\lowranceusr4.cc" />
     <ClCompile Include="..\maggeo.cc" />
-    <ClCompile Include="..\magnav.cc" />
     <ClCompile Include="..\magproto.cc" />
     <ClCompile Include="..\main.cc" />
     <ClCompile Include="..\mapasia.cc" />
