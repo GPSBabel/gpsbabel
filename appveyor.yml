@@ -19,6 +19,5 @@ init:
 
 # Flesh out with amd64/msvc cases later.
 build_script:
-  - cd gpsbabel
-  - qmake app.pro
+  - qmake gpsbabel/app.pro
   - mingw32-make
