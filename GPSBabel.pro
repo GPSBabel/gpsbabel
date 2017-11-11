@@ -149,7 +149,7 @@ win32 {
   }
   SOURCES += gbser_win.cc
   JEEPS += jeeps/gpsusbwin.cc
-  LIBS += "SetupApi" 
+  LIBS += "-lsetupapi" 
 }
 
 win32-msvc*{
