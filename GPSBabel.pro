@@ -149,7 +149,7 @@ win32 {
   }
   SOURCES += gbser_win.cc
   JEEPS += jeeps/gpsusbwin.cc
-  LIBS += "C:/Program Files (x86)/Windows Kits/8.1/lib/winv6.3/um/x64/setupapi.lib" "C:/Program Files (x86)/Windows Kits/8.1/lib/winv6.3/um/x64/hid.lib"
+  LIBS += "setupapi.lib" 
 }
 
 win32-msvc*{
