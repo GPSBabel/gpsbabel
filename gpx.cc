@@ -246,7 +246,7 @@ static inline QString toString(float f)
  * this allows gpx:wpt names to overlap gpx:rtept names, etc.
  */
 static void
-gpx_reset_short_handle(void)
+gpx_reset_short_handle()
 {
   if (mkshort_handle != NULL) {
     mkshort_del_handle(&mkshort_handle);
@@ -436,7 +436,7 @@ get_tag(const QString& t, int* passthrough)
 }
 
 static void
-prescan_tags(void)
+prescan_tags()
 {
   tag_mapping* tm;
   for (tm = tag_path_map; tm->tag_type_ != 0; tm++) {
@@ -874,7 +874,7 @@ xml_parse_time(const QString& dateTimeString)
 }
 
 static void
-gpx_end(const QString& el)
+gpx_end(const QString&) 
 {
   float x;
   int passthrough;
@@ -1216,7 +1216,7 @@ gpx_rd_init(const QString& fname)
 
 static
 void
-gpx_rd_deinit(void)
+gpx_rd_deinit()
 {
   delete reader;
   reader = NULL;
@@ -1331,7 +1331,7 @@ gpx_wr_init(const QString& fname)
 }
 
 static void
-gpx_wr_deinit(void)
+gpx_wr_deinit()
 {
   writer->writeEndDocument();
   delete writer;
@@ -1344,7 +1344,7 @@ gpx_wr_deinit(void)
 }
 
 void
-gpx_read(void)
+gpx_read()
 {
   for (bool atEnd = false; !reader->atEnd() && !atEnd;)  {
     reader->readNext();
@@ -1865,7 +1865,7 @@ gpx_waypt_bound_calc(const Waypoint* waypointp)
 }
 
 static void
-gpx_write_bounds(void)
+gpx_write_bounds()
 {
   waypt_init_bounds(&all_bounds);
 
@@ -1884,7 +1884,7 @@ gpx_write_bounds(void)
 }
 
 static void
-gpx_write(void)
+gpx_write()
 {
  
   gpx_reset_short_handle();
@@ -1898,7 +1898,7 @@ gpx_write(void)
 
 
 static void
-gpx_free_gpx_global(void)
+gpx_free_gpx_global()
 {
   gpx_rm_from_global(&gpx_global->name);
   gpx_rm_from_global(&gpx_global->desc);
@@ -1911,7 +1911,7 @@ gpx_free_gpx_global(void)
 }
 
 static void
-gpx_exit(void)
+gpx_exit()
 {
   gpx_version.clear();
 

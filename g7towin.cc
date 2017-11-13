@@ -595,6 +595,8 @@ ff_vecs_t g7towin_vecs = {
   NULL,
   g7towin_args,
   CET_CHARSET_MS_ANSI, 0
+  , NULL_POS_OPS,
+  nullptr
 };
 
 #endif /* CSVFMTS_ENABLED */

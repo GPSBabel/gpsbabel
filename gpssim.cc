@@ -39,11 +39,11 @@ static
 arglist_t gpssim_args[] = {
   {
     "wayptspd", &wayptspd, "Default speed for waypoints (knots/hr)",
-    NULL, ARGTYPE_FLOAT, ARG_NOMINMAX
+    NULL, ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
   },
   {
     "split", &splitfiles_opt, "Split input into separate files",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -156,7 +156,7 @@ gpssim_trk_hdr(const route_head* rh)
 }
 
 static void
-gpssim_trk_ftr(const route_head* rh)
+gpssim_trk_ftr(const route_head*)
 {
   if (splitfiles) {
     gbfclose(fout);
@@ -203,4 +203,6 @@ ff_vecs_t gpssim_vecs = {
   NULL,
   gpssim_args,
   CET_CHARSET_ASCII, 0
+  , NULL_POS_OPS,
+  nullptr
 };

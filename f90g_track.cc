@@ -156,4 +156,6 @@ ff_vecs_t f90g_track_vecs = {
   f90g_track_args,
   CET_CHARSET_UTF8, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };

@@ -57,10 +57,10 @@ static gbfile* in_file = NULL;              // used for reading from bin/RAW dat
 
 static
 arglist_t globalsat_args[] = {
-  {"showlist", &showlist, "list tracks", NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
-  {"track", &track, "get track", "0", ARGTYPE_INT, ARG_NOMINMAX},
-  {"dump-file", &opt_dump_file, "Dump raw data to this file", NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX},
-  {"input-is-dump-file", &opt_input_dump_file, "Dump raw data to this file", NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+  {"showlist", &showlist, "list tracks", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
+  {"track", &track, "get track", "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
+  {"dump-file", &opt_dump_file, "Dump raw data to this file", NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr},
+  {"input-is-dump-file", &opt_input_dump_file, "Dump raw data to this file", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
   ARG_TERMINATOR
 };
 
@@ -857,6 +857,8 @@ ff_vecs_t globalsat_sport_vecs = {
   globalsat_args,		//args
   CET_CHARSET_ASCII, 0		//encode,fixed_encode
   //NULL                   //name dynamic/internal?
+  , NULL_POS_OPS,
+  nullptr
 };
 
 // This reads from a RAW dump bile from a watch
@@ -876,4 +878,6 @@ ff_vecs_t globalsat_sport_fvecs = {
   globalsat_args,		//args
   CET_CHARSET_ASCII, 0		//encode,fixed_encode
   //NULL                   //name dynamic/internal?
+  , NULL_POS_OPS,
+  nullptr
 };

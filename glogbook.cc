@@ -112,13 +112,13 @@ glogbook_waypt_pr(const Waypoint* wpt)
 }
 
 static void
-glogbook_hdr(const route_head* rte)
+glogbook_hdr(const route_head*)
 {
   writer.writeStartElement("Track");
 }
 
 static void
-glogbook_ftr(const route_head* rte)
+glogbook_ftr(const route_head*)
 {
   writer.writeEndElement();
 }
@@ -139,18 +139,18 @@ glogbook_write(void)
   writer.writeEndElement(); // History
 }
 
-void	gl_trk_s(xg_string args, const QXmlStreamAttributes*)
+void	gl_trk_s(xg_string, const QXmlStreamAttributes*)
 {
   trk_head = route_head_alloc();
   track_add_head(trk_head);
 }
 
-void	gl_trk_pnt_s(xg_string args, const QXmlStreamAttributes*)
+void	gl_trk_pnt_s(xg_string, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
 }
 
-void	gl_trk_pnt_e(xg_string args, const QXmlStreamAttributes*)
+void	gl_trk_pnt_e(xg_string, const QXmlStreamAttributes*)
 {
   track_add_wpt(trk_head, wpt_tmp);
 }
@@ -189,4 +189,6 @@ ff_vecs_t glogbook_vecs = {
   NULL,
   glogbook_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

@@ -76,55 +76,55 @@ static int alerts;
 static arglist_t garmin_gpi_args[] = {
   {
     "alerts", &opt_alerts, "Enable alerts on speed or proximity distance",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "bitmap", &opt_bitmap, "Use specified bitmap on output",
-    NULL, ARGTYPE_FILE, ARG_NOMINMAX
+    NULL, ARGTYPE_FILE, ARG_NOMINMAX, nullptr
   },
   {
     "category", &opt_cat, "Default category on output",
-    "My points", ARGTYPE_STRING, ARG_NOMINMAX
+    "My points", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "hide", &opt_hide_bitmap, "Don't show gpi bitmap on device",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "descr", &opt_descr, "Write description to address field",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "notes", &opt_notes, "Write notes to address field",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "position", &opt_pos, "Write position to address field",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "proximity", &opt_proximity, "Default proximity",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "sleep", &opt_sleep, "After output job done sleep n second(s)",
-    NULL, ARGTYPE_INT, "1", NULL
+    NULL, ARGTYPE_INT, "1", NULL, nullptr
   },
   {
     "speed", &opt_speed, "Default speed",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "unique", &opt_unique, "Create unique waypoint names (default = yes)",
-    "Y", ARGTYPE_BOOL, ARG_NOMINMAX
+    "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "units", &opt_units, "Units used for names with @speed ('s'tatute or 'm'etric)",
-    "m", ARGTYPE_STRING, ARG_NOMINMAX
+    "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "writecodec", &opt_writecodec, "codec to use for writing strings",
-    "windows-1252", ARGTYPE_STRING, ARG_NOMINMAX
+    "windows-1252", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -299,7 +299,7 @@ gpi_read_string(const char* field)
 }
 
 static void
-read_header(void)
+read_header()
 {
   int len, i;
 #ifdef GPI_DBG
@@ -511,6 +511,7 @@ read_poi_group(const int sz, const int tag)
 static int
 read_tag(const char* caller, const int tag, Waypoint* wpt)
 {
+  Q_UNUSED(caller);
   int pos, sz, dist;
   double speed;
   short mask;
@@ -1184,7 +1185,7 @@ skip_empty_block:
 
 
 static void
-write_category(const char* category, const unsigned char* image, const int image_sz)
+write_category(const char*, const unsigned char* image, const int image_sz)
 {
   int sz;
 
@@ -1212,7 +1213,7 @@ write_category(const char* category, const unsigned char* image, const int image
 
 
 static void
-write_header(void)
+write_header()
 {
   time_t time = gpi_timestamp;
 
@@ -1531,7 +1532,7 @@ garmin_gpi_wr_init(const QString& fname)
 
 
 static void
-garmin_gpi_rd_deinit(void)
+garmin_gpi_rd_deinit()
 {
   delete rdata;
   gbfclose(fin);
@@ -1539,7 +1540,7 @@ garmin_gpi_rd_deinit(void)
 
 
 static void
-garmin_gpi_wr_deinit(void)
+garmin_gpi_wr_deinit()
 {
   wdata_free(wdata);
   mkshort_del_handle(&short_h);
@@ -1559,7 +1560,7 @@ garmin_gpi_wr_deinit(void)
 
 
 static void
-garmin_gpi_read(void)
+garmin_gpi_read()
 {
   while (1) {
     int tag = gbfgetint32(fin);
@@ -1574,7 +1575,7 @@ garmin_gpi_read(void)
 
 
 static void
-garmin_gpi_write(void)
+garmin_gpi_write()
 {
   unsigned char* image;
   int image_sz;
@@ -1624,6 +1625,8 @@ ff_vecs_t garmin_gpi_vecs = {
   NULL,
   garmin_gpi_args,
   CET_CHARSET_MS_ANSI, 0		/* WIN-CP1252 */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /**************************************************************************/

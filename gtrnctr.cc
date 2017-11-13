@@ -653,4 +653,6 @@ ff_vecs_t gtc_vecs = {
   NULL,
   gtc_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

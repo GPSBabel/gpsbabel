@@ -30,8 +30,8 @@ static QXmlStreamWriter writer(&ostring);
 
 static
 arglist_t geo_args[] = {
-  {"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-  {"nuke_placer", &nuke_placer, "Omit Placer name", NULL, ARGTYPE_BOOL, ARG_NOMINMAX },
+  {"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  {"nuke_placer", &nuke_placer, "Omit Placer name", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
 
@@ -267,5 +267,7 @@ ff_vecs_t geo_vecs = {
   geo_write,
   NULL,
   geo_args,
-  CET_CHARSET_UTF8, 0	/* CET-REVIEW */
+  CET_CHARSET_UTF8, 0,	/* CET-REVIEW */
+  NULL_POS_OPS,
+  nullptr
 };
