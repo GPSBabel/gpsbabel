@@ -74,64 +74,64 @@ static
 arglist_t skytraq_args[] = {
   {
     "erase", &opt_erase, "Erase device data after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "targetlocation", &opt_set_location, "Set location finder target location as lat,lng",
-    NULL, ARGTYPE_STRING, "", ""
+    NULL, ARGTYPE_STRING, "", "", nullptr
   },
   {
     "configlog", &opt_configure_logging, "Configure logging parameter as tmin:tmax:dmin:dmax",
-    NULL, ARGTYPE_STRING, "", ""
+    NULL, ARGTYPE_STRING, "", "", nullptr
   },
   {
     "baud", &opt_dlbaud, "Baud rate used for download",
-    "230400", ARGTYPE_INT, "0", "230400"
+    "230400", ARGTYPE_INT, "0", "230400", nullptr
   },
   {
     "initbaud", &opt_initbaud, "Baud rate used to init device (0=autodetect)",
-    "0", ARGTYPE_INT, "4800", "230400"
+    "0", ARGTYPE_INT, "4800", "230400", nullptr
   },
   {
     "read-at-once", &opt_read_at_once, "Number of sectors to read at once (0=use single sector mode)",
-    "255", ARGTYPE_INT, "0", "255"
+    "255", ARGTYPE_INT, "0", "255", nullptr
   },
   {
     "first-sector", &opt_first_sector, "First sector to be read from the device",
-    "0", ARGTYPE_INT, "0", "65535"
+    "0", ARGTYPE_INT, "0", "65535", nullptr
   },
   {
     "last-sector", &opt_last_sector, "Last sector to be read from the device (-1: smart read everything)",
-    "-1", ARGTYPE_INT, "-1", "65535"
+    "-1", ARGTYPE_INT, "-1", "65535", nullptr
   },
   {
     "dump-file", &opt_dump_file, "Dump raw data to this file",
-    NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX
+    NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr
   },
   {
     "no-output", &opt_no_output, "Disable output (useful with erase)",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "gps_utc_offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
-    "0", ARGTYPE_INT, ARG_NOMINMAX
+    "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
-  ARG_TERMINATOR
+  ARG_TERMINATOR,
 };
 
 static
 arglist_t skytraq_fargs[] = {
   {
     "first-sector", &opt_first_sector, "First sector to be read from the file",
-    "0", ARGTYPE_INT, "0", "65535"
+    "0", ARGTYPE_INT, "0", "65535", nullptr
   },
   {
     "last-sector", &opt_last_sector, "Last sector to be read from the file (-1: read till empty sector)",
-    "-1", ARGTYPE_INT, "-1", "65535"
+    "-1", ARGTYPE_INT, "-1", "65535", nullptr
   },
   {
     "gps_utc_offset", &opt_gps_utc_offset, "Seconds that GPS time tracks UTC (0: best guess)",
-    "0", ARGTYPE_INT, ARG_NOMINMAX
+    "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -148,7 +148,7 @@ db(int l, const char* msg, ...)
 }
 
 static void
-rd_drain(void)
+rd_drain()
 {
   if (gbser_flush(serial_handle)) {
     db(1, MYNAME ": rd_drain(): Comm error\n");
@@ -218,7 +218,7 @@ rd_buf(const uint8_t* buf, int len)
 }
 
 static unsigned int
-rd_word(void)
+rd_word()
 {
   int errors = 5;		/* allow this many errors */
   uint8_t buffer[2];
@@ -420,7 +420,7 @@ skytraq_wr_msg_verify(const uint8_t* payload, int len)
 }
 
 static int
-skytraq_system_restart(void)
+skytraq_system_restart()
 {
   uint8_t MSG_SYSTEM_RESTART[15] =
   { 0x01, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -486,7 +486,7 @@ skytraq_set_baud(int baud)
 }
 
 static int
-skytraq_configure_logging(void)
+skytraq_configure_logging()
 {
   // an0008-1.4.14: logs if
   // (dt > tmin & dd >= dmin & v >= vmin) | dt > tmax | dd > dmax | v > vmax
@@ -1054,7 +1054,7 @@ skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8
 }
 
 static void
-skytraq_read_tracks(void)
+skytraq_read_tracks()
 {
   struct read_state st;
   uint32_t log_wr_ptr;
@@ -1185,7 +1185,7 @@ skytraq_read_tracks(void)
 }
 
 static int
-skytraq_probe(void)
+skytraq_probe()
 {
   int baud_rates[] = { 9600, 230400, 115200, 57600, 4800, 19200, 38400 };
   int baud_rates_count = sizeof(baud_rates)/sizeof(baud_rates[0]);
@@ -1274,7 +1274,7 @@ skytraq_erase()
 }
 
 static void
-skytraq_set_location(void)
+skytraq_set_location()
 {
   double lat, lng;
   unsigned int i;
@@ -1316,14 +1316,14 @@ skytraq_rd_init(const QString& fname)
 }
 
 static void
-skytraq_rd_deinit(void)
+skytraq_rd_deinit()
 {
   gbser_deinit(serial_handle);
   serial_handle = NULL;
 }
 
 static void
-skytraq_read(void)
+skytraq_read()
 {
   int dlbaud;
 
@@ -1367,7 +1367,7 @@ file_init(const QString& fname)
 }
 
 static void
-file_deinit(void)
+file_deinit()
 {
   db(1, "Closing file...\n");
   gbfclose(file_handle);
@@ -1375,7 +1375,7 @@ file_deinit(void)
 }
 
 static void
-file_read(void)
+file_read()
 {
   struct read_state st;
   int rc, got_bytes;
@@ -1431,6 +1431,8 @@ ff_vecs_t skytraq_vecs = {
   NULL,
   skytraq_args,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
+ , NULL_POS_OPS,
+ nullptr
 };
 
 ff_vecs_t skytraq_fvecs = {
@@ -1449,6 +1451,8 @@ ff_vecs_t skytraq_fvecs = {
   NULL,
   skytraq_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
+ , NULL_POS_OPS,
+ nullptr
 };
 /**************************************************************************/
 /*
@@ -1466,19 +1470,19 @@ static char* opt_set_poi_boat = NULL;	/* set if a "poi" option was used */
 static char* opt_set_poi_heart = NULL;	/* set if a "poi" option was used */
 static char* opt_set_poi_bar = NULL;	/* set if a "poi" option was used */
 arglist_t miniHomer_args[] = {
-  { "baud",         &opt_dlbaud,        "Baud rate used for download", "115200", ARGTYPE_INT, "0", "115200" },
-  { "dump-file",    &opt_dump_file,     "Dump raw data to this file", NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX },
-  { "erase",        &opt_erase,         "Erase device data after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
-  { "first-sector", &opt_first_sector,  "First sector to be read from the device", "0", ARGTYPE_INT, "0", "65535" },
-  { "initbaud",     &opt_initbaud,      "Baud rate used to init device (0=autodetect)", "38400", ARGTYPE_INT, "38400", "38400" },
-  { "last-sector",  &opt_last_sector,   "Last sector to be read from the device (-1: smart read everything)", "-1", ARGTYPE_INT, "-1", "65535" },
-  { "no-output",    &opt_no_output,     "Disable output (useful with erase)", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
-  { "read-at-once", &opt_read_at_once,  "Number of sectors to read at once (0=use single sector mode)", "255", ARGTYPE_INT, "0", "255" },
-  { "Home",         &opt_set_poi_home,  "POI for Home Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "" },
-  { "Car",          &opt_set_poi_car,   "POI for Car Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "" },
-  { "Boat",         &opt_set_poi_boat,  "POI for Boat Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "" },
-  { "Heart",        &opt_set_poi_heart, "POI for Heart Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "" },
-  { "Bar",          &opt_set_poi_bar,   "POI for Bar Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "" },
+  { "baud",         &opt_dlbaud,        "Baud rate used for download", "115200", ARGTYPE_INT, "0", "115200", nullptr },
+  { "dump-file",    &opt_dump_file,     "Dump raw data to this file", NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr },
+  { "erase",        &opt_erase,         "Erase device data after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  { "first-sector", &opt_first_sector,  "First sector to be read from the device", "0", ARGTYPE_INT, "0", "65535", nullptr },
+  { "initbaud",     &opt_initbaud,      "Baud rate used to init device (0=autodetect)", "38400", ARGTYPE_INT, "38400", "38400", nullptr },
+  { "last-sector",  &opt_last_sector,   "Last sector to be read from the device (-1: smart read everything)", "-1", ARGTYPE_INT, "-1", "65535", nullptr },
+  { "no-output",    &opt_no_output,     "Disable output (useful with erase)", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  { "read-at-once", &opt_read_at_once,  "Number of sectors to read at once (0=use single sector mode)", "255", ARGTYPE_INT, "0", "255", nullptr },
+  { "Home",         &opt_set_poi_home,  "POI for Home Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "", nullptr },
+  { "Car",          &opt_set_poi_car,   "POI for Car Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "", nullptr },
+  { "Boat",         &opt_set_poi_boat,  "POI for Boat Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "", nullptr },
+  { "Heart",        &opt_set_poi_heart, "POI for Heart Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "", nullptr },
+  { "Bar",          &opt_set_poi_bar,   "POI for Bar Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "", nullptr },
   ARG_TERMINATOR
 };
 /*
@@ -1623,14 +1627,14 @@ miniHomer_rd_init(const QString& fname)
   mhport=fname;
 }
 static void
-miniHomer_rd_deinit(void)
+miniHomer_rd_deinit()
 {
   skytraq_rd_deinit();
   mhport.clear();
 }
 #define SETPOI(poinum, poiname) if (opt_set_poi_##poiname )  {miniHomer_set_poi(poinum, opt_set_poi_##poiname);}
 static void
-miniHomer_read(void)
+miniHomer_read()
 {
   int npoi=0;
   /*
@@ -1676,6 +1680,7 @@ ff_vecs_t miniHomer_vecs = {
   NULL,
   NULL,
   miniHomer_args,
-  CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
-
+  CET_CHARSET_UTF8, 1,         /* master process: don't convert anything */
+  NULL_POS_OPS,
+  nullptr
 };
