@@ -73,7 +73,7 @@
     <hdop>0.766000</hdop>
   </wpt>
   <rte>
-    <name>Tracklog Thu Jan  1 00:00:00 1970</name>
+    <name>Tracklog 1970-01-01T00:00:00Z</name>
     <rtept lat="50.307048000" lon="8.232662000">
       <ele>341.950000</ele>
       <time>2009-11-06T21:32:32.529Z</time>
