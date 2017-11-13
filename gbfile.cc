@@ -88,7 +88,7 @@ gzapi_open(gbfile* self, const char* mode)
     // On Windows, convert UTF-8 to wchar_t[] and use gzopen_w().
     QString name(self->name);
     wchar_t* wname = new wchar_t [name.size() + 1];
-    wname[name.toWCharArray(wname)] = 0;
+    wname[name.toWCharArray(wname)] = 0;  // Convert and null-terminate.
     self->handle.gz = gzopen_w(wname, openmode);
     delete [] wname;
 #else
