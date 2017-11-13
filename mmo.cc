@@ -36,15 +36,15 @@ static
 arglist_t mmo_args[] = {
   {
     "locked", &opt_locked, "Write items 'locked' [default no]", "0",
-    ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "visible", &opt_visible, "Write items 'visible' [default yes]", "1",
-    ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "ver", &opt_version, "Write files with internal version [n]", NULL,
-    ARGTYPE_INT, "17", "18"
+    ARGTYPE_INT, "17", "18", nullptr
   },
   ARG_TERMINATOR
 };
@@ -221,10 +221,10 @@ mmo_fillbuf2(void* buf, const gbsize_t bufsz, const gbsize_t count, const int ne
 }
 #define mmo_fillbuf(a,b,c) mmo_fillbuf2((a),sizeof((a)),(b),(c))
 
+#ifdef MMO_DBG
 static void
 mmo_printbuf(const char* buf, int count, const char* comment)
 {
-#ifdef MMO_DBG
   int i;
   printf("%s", comment);
   for (i = 0; i < count; i++) {
@@ -239,8 +239,8 @@ mmo_printbuf(const char* buf, int count, const char* comment)
     }
   printf("\n");
   fflush(stdout);
-#endif
 }
+#endif
 
 /******************************************************************************/
 
@@ -341,8 +341,9 @@ mmo_end_of_route(mmo_data_t* data)
   if (mmo_version >= 0x12) {
     mmo_fillbuf(buf, 7, 1);
     DBG((sobj, "route data (since 0x12): "));
+#ifdef MMO_DBG
     mmo_printbuf(buf, 7, "");
-
+#endif
     rte->line_color.bbggrr = le_read32(&buf[0]);
     rte->line_color.opacity = 255 - (buf[6] * 51);
     DBG((sobj, "color = 0x%06X\n", rte->line_color.bbggrr));
@@ -378,6 +379,7 @@ mmo_read_category(mmo_data_t* data)
 static void
 mmo_read_CObjIcons(mmo_data_t* data)
 {
+  Q_UNUSED(data);
 #ifdef MMO_DBG
   const char* sobj = "CObjIcons";
 #endif
@@ -756,7 +758,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
 
 
 static void
-mmo_read_CObjText(mmo_data_t* data)
+mmo_read_CObjText(mmo_data_t*)
 {
 #ifdef MMO_DBG
   const char* sobj = "CObjText";
@@ -790,7 +792,7 @@ mmo_read_CObjText(mmo_data_t* data)
 
 
 static void
-mmo_read_CObjCurrentPosition(mmo_data_t* data)
+mmo_read_CObjCurrentPosition(mmo_data_t*)
 {
 #ifdef MMO_DBG
   const char* sobj = "CObjCurrentPosition";
@@ -1145,7 +1147,7 @@ mmo_writestr(const QString& str)
 
 
 static void
-mmo_enum_waypt_cb(const Waypoint* wpt)
+mmo_enum_waypt_cb(const Waypoint*)
 {
   mmo_obj_ct++;
 }
@@ -1521,6 +1523,8 @@ ff_vecs_t mmo_vecs = {
   NULL,
   mmo_args,
   CET_CHARSET_MS_ANSI, 0
+  , NULL_POS_OPS,
+  nullptr
 
 };
 

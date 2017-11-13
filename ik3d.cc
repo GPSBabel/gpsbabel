@@ -72,7 +72,7 @@ ikt_object_end(void)
 }
 
 static void
-iktobj_waypt(xg_string args, const QXmlStreamAttributes* attrv)
+iktobj_waypt(xg_string, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("X")) {
     waypt->longitude = attrv->value("X").toString().toDouble();
@@ -159,4 +159,6 @@ ff_vecs_t ik3d_vecs = {
   NULL,
   ikt_args,
   CET_CHARSET_UTF8, 1
+  , NULL_POS_OPS,
+  nullptr
 };

@@ -26,7 +26,6 @@
 #include "gbser.h"
 #include "strptime.h"
 #include "jeeps/gpsmath.h"
-#include "src/core/logging.h"
 
 #include <ctype.h>
 #include <math.h>
@@ -70,12 +69,12 @@
    ' $GPRMC - Recommended minimum specific GNSS Data
    ' $GPRMC,085721.194,A,5917.7210,N,01103.9227,E,21.42,50.33,300504,,*07
    '  2    085721       Fix taken at 08:57:21 UTC
-   '  3    A		Fix valid (this field reads V if fix is not valid)
+   '  3    A				Fix valid (this field reads V if fix is not valid)
    '  4,5  5917.7210,N   Latitude 59 deg 17.7210' N
    '  6,7  01103.9227,E  Longitude 11 deg 03.9227' E
-   '  8    21.42	Speed over ground (knots)
-   '  9    50.33	Course over ground (true)
-   ' 10   300504	Date 30/05-2004
+   '  8    21.42			Speed over ground (knots)
+   '  9    50.33			Course over ground (true)
+   '	10   300504			Date 30/05-2004
    '  11   Empty field	Magnetic variation
 
 	  GSA - GPS DOP and active satellites
@@ -198,28 +197,22 @@ static Waypoint* nmea_rd_posn(posn_status*);
 static void nmea_rd_posn_init(const QString& fname);
 
 arglist_t nmea_args[] = {
-  #if 1
-  {"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64", nullptr },
-  {"gprmc", &opt_gprmc, "Read/write GPRMC sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
-  {"gpgga", &opt_gpgga, "Read/write GPGGA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
-  {"gpvtg", &opt_gpvtg, "Read/write GPVTG sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
-  {"gpgsa", &opt_gpgsa, "Read/write GPGSA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
-  {"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX , nullptr },
-  #endif
-  #if 0
+  {"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64" },
+  {"gprmc", &opt_gprmc, "Read/write GPRMC sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+  {"gpgga", &opt_gpgga, "Read/write GPGGA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+  {"gpvtg", &opt_gpvtg, "Read/write GPVTG sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+  {"gpgsa", &opt_gpgsa, "Read/write GPGSA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+  {"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX },
   {
     "get_posn", &getposnarg, "Return current position as a waypoint",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
   },
-  {"pause", &opt_sleep, "Decimal seconds to pause between groups of strings", NULL, ARGTYPE_INT, ARG_NOMINMAX , nullptr},
-  {"append_positioning", &opt_append, "Append realtime positioning data to the output file instead of truncating", "0", ARGTYPE_BOOL, ARG_NOMINMAX , nullptr},
-  {"baud", &opt_baud, "Speed in bits per second of serial port (baud=4800)", NULL, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
-  {"gisteq", &opt_gisteq, "Write tracks for Gisteq Phototracker", "0", ARGTYPE_BOOL, ARG_NOMINMAX , nullptr},
-  #endif
-  #if 0
-  {"ignore_fix", &opt_ignorefix, "Accept position fixes in gpgga marked invalid", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
+  {"pause", &opt_sleep, "Decimal seconds to pause between groups of strings", NULL, ARGTYPE_INT, ARG_NOMINMAX },
+  {"append_positioning", &opt_append, "Append realtime positioning data to the output file instead of truncating", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
+  {"baud", &opt_baud, "Speed in bits per second of serial port (baud=4800)", NULL, ARGTYPE_INT, ARG_NOMINMAX },
+  {"gisteq", &opt_gisteq, "Write tracks for Gisteq Phototracker", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
+  {"ignore_fix", &opt_ignorefix, "Accept position fixes in gpgga marked invalid", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
   ARG_TERMINATOR
-  #endif
 };
 
 #define CHECK_BOOL(a) if (a && (*a == '0')) a = NULL
@@ -310,7 +303,7 @@ nmea_rd_init(const QString& fname)
 }
 
 static  void
-nmea_rd_deinit()
+nmea_rd_deinit(void)
 {
   switch (read_mode) {
   case rm_serial:
@@ -362,7 +355,7 @@ nmea_wr_init(const QString& portname)
 }
 
 static  void
-nmea_wr_deinit()
+nmea_wr_deinit(void)
 {
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
@@ -512,9 +505,9 @@ gpgga_parse(char* ibuf)
 
   WAYPT_SET(waypt, geoidheight, geoidheight);
 
-  waypt->sat = nsats;
+  waypt->sat 	= nsats;
 
-  waypt->hdop = hdop;
+  waypt->hdop 	= hdop;
 
   switch (fix) {
   case 0:
@@ -685,49 +678,60 @@ gpzda_parse(char* ibuf)
   // This can't have worked.
 }
 
-// This function has had a hard life. It began as a moderately terrifying
-// bunch of nested sscanfs. In 2017, robertl replaced the scanf stuff with
-// a QString::split() to make it more tolerant of really empty fields from
-// certain GPS implementations, but didn't replace the (somewhat funky) back
-// half to match the parse. There are definitely some readibility issues
-// here.
-// The numbering as per http://aprs.gids.nl/nmea/#gsa was the reference as
-// the field numbers conveniently match our index.
 static void
 gpgsa_parse(char* ibuf)
 {
+  char fixauto;
+  char fix;
   int  prn[12] = {0};
+  int  scn,cnt;
+  float pdop=0,hdop=0,vdop=0;
+  char*	tok=0;
+
   memset(prn,0xff,sizeof(prn));
-
+#if 0
+  scn = sscanf(ibuf,"$%*2cGSA,%c,%c,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d",
+               &fixauto, &fix,
+               &prn[0],&prn[1],&prn[2],&prn[3],&prn[4],&prn[5],
+               &prn[6],&prn[7],&prn[8],&prn[9],&prn[10],&prn[11]);
+  if (scn < 2) {
+    warning(MYNAME ": Short GSA sentence.\n");
+  }
+  /*
+  	sscanf has scanned all the leftmost elements
+  	we'll rescan by skipping 15 commas to the dops
+  */
+  tok = ibuf;
+  for (cnt=0; (tok)&&(cnt<15); cnt++) {
+    tok = strchr(tok,',');
+    if (!tok) {
+      break;
+    }
+    tok++;
+  }
+  if (tok) {
+    sscanf(tok,"%f,%f,%f",&pdop,&hdop,&vdop);
+  }
+#else
   QStringList fields = QString(ibuf).split(",", QString::KeepEmptyParts);
-  int nfields = fields.size();
-  // 0 = "GPGSA"
-  // 1 = Mode. Ignored
-  QChar fix;
-  if (nfields > 1) {
-    fix = fields[2][0];
-  }
-
-  // 12 fields, index 3 through 14. 
-  for (int cnt = 0; cnt <= 11; cnt++) {
-    if (nfields > cnt + 3) prn[cnt] = fields[cnt + 3].toInt();
-  }
-
-  float pdop = 0, hdop = 0, vdop = 0;
-  if (nfields > 14) pdop = fields[15].toDouble();
-  if (nfields > 15) hdop = fields[16].toDouble();
-  if (nfields > 16) {
-     // Last one is special. The checksum isn't split out above.
-    fields[17].chop(3);
-    vdop = fields[17].toDouble();
-  }
-
+  if (fields.size() > 1)
+    if (fields[1] == 3) {
+      curr_waypt->fix = fix_3d;
+    } else {
+      curr_waypt->fix = fix_2d;
+    }
+    curr_waypt->pdop = pdop;
+    curr_waypt->hdop = hdop;
+    curr_waypt->vdop = vdop;
+#endif
+#if 0
   if (curr_waypt) {
+
     if (curr_waypt->fix!=fix_dgps) {
-      if (fix=='3') {
-        curr_waypt->fix = fix_3d;
-      } else if (fix=='2') {
-        curr_waypt->fix = fix_2d;
+      if	(fix=='3')	{
+        curr_waypt->fix=fix_3d;
+      } else if (fix=='2')	{
+        curr_waypt->fix=fix_2d;
       }
     }
 
@@ -735,13 +739,13 @@ gpgsa_parse(char* ibuf)
     curr_waypt->hdop = hdop;
     curr_waypt->vdop = vdop;
 
-    if (curr_waypt->sat <= 0) {
-      for (int cnt = 0; cnt <= 11; cnt++) {
-        curr_waypt->sat += (prn[cnt] > 0) ? 1 : 0;
+    if (curr_waypt->sat  <= 0)	{
+      for (cnt=0; cnt<12; cnt++) {
+        curr_waypt->sat += (prn[cnt]>0)?(1):(0);
       }
     }
   }
-
+#endif
 }
 
 static void
@@ -845,7 +849,7 @@ pcmpt_parse(char* ibuf)
     /*
      * Since we oh-so-cleverly inserted points at the head,
      * we can rip through the queue forward now to get our
-     * handy-dandy reversing effect.
+    `		 * handy-dandy reversing effect.
      */
     trk_head = route_head_alloc();
     track_add_head(trk_head);
@@ -880,8 +884,7 @@ nmea_fix_timestamps(route_head* track)
       Waypoint* wpt = (Waypoint*)elem;
 
       wpt->creation_time += delta_tm;
-      if ((prev != NULL) && (prev->creation_time > wpt->creation_time)) {
-        /* go over midnight ? */
+      if ((prev != NULL) && (prev->creation_time > wpt->creation_time)) {	/* go over midnight ? */
         delta_tm += SECONDS_PER_DAY;
         wpt->creation_time += SECONDS_PER_DAY;
       }
@@ -891,7 +894,7 @@ nmea_fix_timestamps(route_head* track)
     time_t prev;
     queue* elem;
 
-    tm.tm_hour = 23; /* last date found */
+    tm.tm_hour = 23;	/* last date found */
     tm.tm_min = 59;
     tm.tm_sec = 59;
 
@@ -905,7 +908,7 @@ nmea_fix_timestamps(route_head* track)
       if (wpt->wpt_flags.fmt_use != 0) {
         time_t dt;
 
-        wpt->wpt_flags.fmt_use = 0; /* reset flag */
+        wpt->wpt_flags.fmt_use = 0;	/* reset flag */
 
         dt = (prev / SECONDS_PER_DAY) * SECONDS_PER_DAY;
         wpt->creation_time += dt;
@@ -959,7 +962,10 @@ nmea_parse_one_line(char* ibuf)
     ck++;
     sscanf(ck, "%2X", &ckcmp);
     if (ckval != ckcmp) {
-      Warning() << "Invalid NMEA checksum. Computed " << ckval << " but found " << ckcmp << ". Ignoring sentence";
+#if 0
+      printf("ckval %X, %X, %s\n", ckval, ckcmp, ck);
+      printf("NMEA %s\n", tbuf);
+#endif
       return;
     }
 
@@ -1022,7 +1028,7 @@ nmea_parse_one_line(char* ibuf)
 }
 
 static void
-nmea_read()
+nmea_read(void)
 {
   char* ibuf;
   char* ck;
@@ -1136,7 +1142,7 @@ safe_print(int cnt, const char* b)
 static void reset_sirf_to_nmea(int br);
 
 static
-int hunt_sirf()
+int hunt_sirf(void)
 {
   /* Try to place the common BR's first to speed searching */
   static int br[] = {38400, 9600, 57600, 115200, 19200, 4800, -1};
@@ -1178,7 +1184,7 @@ int hunt_sirf()
 }
 
 static Waypoint*
-nmea_rd_posn(posn_status*)
+nmea_rd_posn(posn_status* posn_status)
 {
   char ibuf[1024];
   static double lt = -1;
@@ -1331,7 +1337,7 @@ nmea_trackpt_pr(const Waypoint* wpt)
 
     /* GISTeq doesn't care about the checksum, but wants this prefixed, so
      * we can write it with abandon.
-     */
+    	 */
     if (opt_gisteq) {
       gbfprintf(file_out, "---,");
     }
@@ -1386,7 +1392,7 @@ nmea_trackpt_pr(const Waypoint* wpt)
 }
 
 static void
-nmea_write()
+nmea_write(void)
 {
   waypt_disp_all(nmea_wayptpr);
   track_disp_all(nmea_track_init, NULL, nmea_trackpt_pr);
@@ -1405,9 +1411,9 @@ nmea_wr_posn(Waypoint* wpt)
 }
 
 static void
-nmea_wr_posn_deinit()
+nmea_wr_posn_deinit(void)
 {
-// nmea_wr_deinit();
+//	nmea_wr_deinit();
 }
 
 
@@ -1426,7 +1432,7 @@ ff_vecs_t nmea_vecs = {
   nmea_write,
   NULL,
   nmea_args,
-  CET_CHARSET_ASCII, 0, /* CET-REVIEW */
+  CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
   {
     nmea_rd_posn_init, nmea_rd_posn, nmea_rd_deinit,
     nmea_wr_posn_init, nmea_wr_posn, nmea_wr_posn_deinit

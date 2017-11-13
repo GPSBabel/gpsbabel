@@ -158,4 +158,6 @@ ff_vecs_t mapfactor_vecs = {
   NULL,
   mapfactor_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

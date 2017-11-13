@@ -339,4 +339,6 @@ ff_vecs_t maggeo_vecs = {
 #else
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 #endif
+  , NULL_POS_OPS,
+  nullptr
 };

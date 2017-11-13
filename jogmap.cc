@@ -43,14 +43,14 @@ static arglist_t jogmap_args[] = {
 
 
 static void
-jogmap_markers(xg_string args, const QXmlStreamAttributes* attrv)
+jogmap_markers(xg_string, const QXmlStreamAttributes*)
 {
   trk = route_head_alloc();
   track_add_head(trk);
 }
 
 static void
-jogmap_marker(xg_string args, const QXmlStreamAttributes* attrv)
+jogmap_marker(xg_string, const QXmlStreamAttributes* attrv)
 {
   Waypoint* wpt = new Waypoint;
 
@@ -82,13 +82,13 @@ jogmap_rd_init(const QString& fname)
 }
 
 static void
-jogmap_read(void)
+jogmap_read()
 {
   xml_read();
 }
 
 static void
-jogmap_rd_deinit(void)
+jogmap_rd_deinit()
 {
   xml_deinit();
 }
@@ -109,4 +109,6 @@ ff_vecs_t jogmap_vecs = {
   NULL,
   jogmap_args,
   CET_CHARSET_UTF8, 0
+  , NULL_POS_OPS,
+  nullptr
 };

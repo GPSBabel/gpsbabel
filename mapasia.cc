@@ -67,7 +67,7 @@ tr7_rd_init(const QString& fname)
 }
 
 static void
-tr7_read(void)
+tr7_read()
 {
   route_head* trk = NULL;
   unsigned int magic;
@@ -185,7 +185,7 @@ tr7_check_after_read_trailer_cb(const route_head* trk)
 }
 
 static void
-tr7_rd_deinit(void)
+tr7_rd_deinit()
 {
   track_disp_session(curr_session(),
                      tr7_check_after_read_head_cb,
@@ -199,7 +199,7 @@ tr7_rd_deinit(void)
 *******************************************************************************/
 
 static void
-tr7_disp_track_head_cb(const route_head* trk)
+tr7_disp_track_head_cb(const route_head*)
 {
   wpt_tmp = NULL;
 }
@@ -270,13 +270,13 @@ tr7_wr_init(const QString& fname)
 }
 
 static void
-tr7_wr_deinit(void)
+tr7_wr_deinit()
 {
   gbfclose(fout);
 }
 
 static void
-tr7_write(void)
+tr7_write()
 {
   track_disp_all(tr7_disp_track_head_cb, NULL, tr7_disp_waypt_cb);
 }
@@ -299,6 +299,8 @@ ff_vecs_t mapasia_tr7_vecs = {		/* we can read and write tracks */
   NULL,
   tr7_args,
   CET_CHARSET_UTF8, 1	/* FIXED - CET-REVIEW - */
+  , NULL_POS_OPS,
+  nullptr
 
 };
 

@@ -167,4 +167,6 @@ ff_vecs_t mynav_vecs = {
   NULL,           //args
   CET_CHARSET_ASCII, 0  //encode,fixed_encode
   //NULL                //name dynamic/internal?
+  , NULL_POS_OPS,
+  nullptr
 };
