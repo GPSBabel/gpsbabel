@@ -162,8 +162,8 @@ arglist_t trackfilter_args[] = {
     TRACKFILTER_MINPOINTS_OPTION, &opt_minpoints,
     "Discard tracks with fewer than these points",
     NULL, ARGTYPE_INT, "0", "50", nullptr
-  }//,
-  //ARG_TERMINATOR
+  },
+  ARG_TERMINATOR
 };
 
 
