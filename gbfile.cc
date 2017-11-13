@@ -93,7 +93,7 @@ gzapi_open(gbfile* self, const char* mode)
     delete [] wname;
 #else
     // On other platforms, convert to native locale (UTF-8 or other 8-bit).
-    self->handle.gz = gzopen(qPrintable(self->name), openmode);
+    self->handle.gz = gzopen(qPrintable(QString(self->name)), openmode);
 #endif
   }
 
