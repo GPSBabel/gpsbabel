@@ -29,7 +29,6 @@
 #include <stdio.h>
 
 #if __WIN32__
-#  include <string> // for std::wstring
 /* taken from minigzip.c (part of the zlib project) */
 #  include <fcntl.h>
 #  include <io.h>
@@ -86,11 +85,15 @@ gzapi_open(gbfile* self, const char* mode)
     self->handle.gz = gzdopen(fileno(fd), openmode);
   } else {
 #if __WIN32__
-    // On Windows, use gzopen_w() to handle Unicode paths.
-    std::wstring wname = QString(self->name).toStdWString();
-    self->handle.gz = gzopen_w(wname.c_str(), openmode);
+    // On Windows, convert UTF-8 to wchar_t[] and use gzopen_w().
+    QString name(self->name);
+    wchar_t* wname = new wchar_t [name.size() + 1];
+    wname[name.toWCharArray(wname)] = 0;
+    self->handle.gz = gzopen_w(wname, openmode);
+    delete [] wname;
 #else
-    self->handle.gz = gzopen(self->name, openmode);
+    // On other platforms, convert to native locale (UTF-8 or other 8-bit).
+    self->handle.gz = gzopen(qPrintable(self->name), openmode);
 #endif
   }
 
