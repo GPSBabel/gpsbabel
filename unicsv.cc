@@ -1684,7 +1684,7 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
       }
       QString out;
       if (t.msec() > 0) {
-        out = t.toString("hh:mm:ss.z");
+        out = t.toString("hh:mm:ss.zzz");
       } else {
         out = t.toString("hh:mm:ss");
       }
