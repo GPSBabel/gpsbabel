@@ -195,7 +195,7 @@ static arglist_t trl_args[] = {
 
 /**************************************************************************/
 // FIXME: Why is this code doing its own byte order conversion?
-static unsigned int byte_order(void)
+static unsigned int byte_order()
 {
   unsigned long test = BYTEORDER_TEST;
   unsigned char* ptr;
@@ -527,7 +527,7 @@ static Waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
   return WP;
 }
 
-static void wpr_read(void)
+static void wpr_read()
 {
   struct wprdata wprdata;
   struct rtehdr* rtehdr;
@@ -589,7 +589,7 @@ static void wpr_read(void)
   }
 }
 
-static void trl_read(void)
+static void trl_read()
 {
   struct trldata trldata;
   struct trkhdr* trkhdr;
@@ -785,12 +785,12 @@ static void wpr_route_wpt(const Waypoint* WP)
   rte->wptnum ++;
 }
 
-static void wpr_route_trl(const route_head* RT)
+static void wpr_route_trl(const route_head*)
 {
   /* should we do some final sanity checks? */
 }
 
-static void wpr_write(void)
+static void wpr_write()
 {
   int i;
 
@@ -886,7 +886,7 @@ static void trl_track_wpt(const Waypoint* WP)
   trkhdr->next = trkhdr->totalpt;
 }
 
-static void trl_track_tlr(const route_head* TL)
+static void trl_track_tlr(const route_head*)
 {
   struct trkhdr* trkhdr;
   int trk_idx;
@@ -901,7 +901,7 @@ static void trl_track_tlr(const route_head* TL)
   TRL.loghdr.num = -1;
 }
 
-static void trl_write(void)
+static void trl_write()
 {
   struct trkhdr* trkhdr;
   void* buf;
@@ -964,7 +964,7 @@ static void alan_rd_init(const QString& fname)
   fin = gbfopen(fname, "rb", MYNAME);
 }
 
-static void alan_rd_deinit(void)
+static void alan_rd_deinit()
 {
   gbfclose(fin);
   fin = NULL;
@@ -976,14 +976,14 @@ static void alan_wr_init(const QString& fname)
   fout = gbfopen(fname, "wb", MYNAME);
 }
 
-static void alan_wr_deinit(void)
+static void alan_wr_deinit()
 {
   gbfclose(fout);
   fout = NULL;
 }
 
 
-static void alan_exit(void)
+static void alan_exit()
 {
   return;
 }

@@ -224,4 +224,6 @@ ff_vecs_t easygps_vecs = {
   NULL,
   easygps_args,
   CET_CHARSET_ASCII, 0	/* CET REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

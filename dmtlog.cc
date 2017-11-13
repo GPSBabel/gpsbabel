@@ -152,7 +152,7 @@ tlog3a_xgcb_version(xg_string args, const QXmlStreamAttributes*)
 }
 
 static void
-tlog3a_xgcb_length(xg_string args, const QXmlStreamAttributes*)
+tlog3a_xgcb_length(xg_string, const QXmlStreamAttributes*)
 {
 }
 
@@ -235,7 +235,7 @@ tlog3b_xgcb_tfdes(xg_string args, const QXmlStreamAttributes*)
 
 
 static void
-tlog3b_xgcb_wptst(xg_string args, const QXmlStreamAttributes*)
+tlog3b_xgcb_wptst(xg_string, const QXmlStreamAttributes*)
 {
   xmlwpt = new Waypoint;
   xmldatum = DATUM_WGS84;
@@ -243,7 +243,7 @@ tlog3b_xgcb_wptst(xg_string args, const QXmlStreamAttributes*)
 
 
 static void
-tlog3b_xgcb_tptst(xg_string args, const QXmlStreamAttributes*)
+tlog3b_xgcb_tptst(xg_string, const QXmlStreamAttributes*)
 {
   xmlwpt = new Waypoint;
   xmldatum = DATUM_WGS84;
@@ -251,7 +251,7 @@ tlog3b_xgcb_tptst(xg_string args, const QXmlStreamAttributes*)
 
 
 static void
-tlog3b_xgcb_tpten(xg_string args, const QXmlStreamAttributes*)
+tlog3b_xgcb_tpten(xg_string, const QXmlStreamAttributes*)
 {
   finalize_pt(xmlwpt);
 
@@ -322,7 +322,7 @@ tlog3b_xgcb_tptdt(xg_string args, const QXmlStreamAttributes*)
 
 
 static void
-tlog3b_xgcb_wpten(xg_string args, const QXmlStreamAttributes*)
+tlog3b_xgcb_wpten(xg_string, const QXmlStreamAttributes*)
 {
   finalize_pt(xmlwpt);
   waypt_add(xmlwpt);
@@ -777,7 +777,7 @@ track_hdr_cb(const route_head* trk)
 }
 
 static void
-track_tlr_cb(const route_head* trk)
+track_tlr_cb(const route_head*)
 {
 }
 
@@ -859,6 +859,8 @@ ff_vecs_t dmtlog_vecs = {
   NULL,
   dmtlog_args,
   CET_CHARSET_ASCII, 0
+  , NULL_POS_OPS,
+  nullptr
 
 };
 

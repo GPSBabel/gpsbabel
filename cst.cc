@@ -334,4 +334,6 @@ ff_vecs_t cst_vecs = {
   NULL,
   cst_args,
   CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

@@ -44,17 +44,17 @@ static
 arglist_t bend_args[] = {
   {
     "distance", &distopt, "Distance to the bend in meters where the new points will be added",
-    "25", ARGTYPE_FLOAT, ARG_NOMINMAX
+    "25", ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
   },
   {
     "minangle", &minangleopt, "Minimum bend angle in degrees", "5",
-    ARGTYPE_FLOAT, ARG_NOMINMAX
+    ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
 
 static void
-bend_init(const char* args)
+bend_init(const char*)
 {
   maxDist = 0.0;
   if (distopt) {
@@ -186,7 +186,7 @@ process_route_orig(const route_head* route_orig)
 }
 
 static void
-bend_process(void)
+bend_process()
 {
   queue* elem, *tmp;
   QUEUE_FOR_EACH(routes_orig, elem, tmp) {
@@ -196,14 +196,14 @@ bend_process(void)
 }
 
 static void
-bend_deinit(void)
+bend_deinit()
 {
   route_flush(routes_orig);
   xfree(routes_orig);
 }
 
 static void
-bend_exit(void)
+bend_exit()
 {
 }
 

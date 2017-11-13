@@ -1262,4 +1262,6 @@ ff_vecs_t an1_vecs = {
   NULL,
   an1_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
