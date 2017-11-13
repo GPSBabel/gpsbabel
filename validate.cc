@@ -40,17 +40,17 @@ static
 arglist_t validate_args[] = {
   {
     "checkempty", &opt_checkempty, "Check for empty input",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   } ,
   {
     "debug", &opt_debug, "Output debug messages instead of possibly issuing a fatal error",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   } ,
   ARG_TERMINATOR
 };
 
 
-static void validate_head(const route_head* header)
+static void validate_head(const route_head*)
 {
   head_ct += 1;
   segment_ct_start = point_ct;
@@ -67,13 +67,13 @@ static void validate_head_trl(const route_head* header)
   }
 }
 
-static void validate_point(const Waypoint* waypointp)
+static void validate_point(const Waypoint*)
 {
   point_ct += 1;
 }
 
 static void
-validate_process(void)
+validate_process()
 {
 
   debug = *opt_debug == '1';

@@ -54,7 +54,7 @@ static void rd_init(const QString& fname) {
   file_in = gbfopen(fname, "rb", MYNAME);
 }
 
-static void rd_deinit(void) { gbfclose(file_in); }
+static void rd_deinit() { gbfclose(file_in); }
 
 static void wr_init(const QString& fname) {
   file_out = gbfopen(fname, "w", MYNAME);
@@ -62,7 +62,7 @@ static void wr_init(const QString& fname) {
   mkshort_handle2 = mkshort_new_handle();
 }
 
-static void wr_deinit(void) {
+static void wr_deinit() {
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
   mkshort_del_handle(&mkshort_handle2);
@@ -94,7 +94,7 @@ static void  SetWaypointTime(Waypoint* wpt, QString date, QString time) {
 // to allow fields in any order and length, based on their position in
 // these header lines. Oddly, we've seen only 'W' records take this form.
 
-static void data_read(void) {
+static void data_read() {
   int symnum;
   Waypoint* wpt_tmp;
   char* buff;
@@ -370,7 +370,7 @@ void pcx_track_disp(const Waypoint* wpt) {
             wpt->altitude);
 }
 
-static void data_write(void) {
+static void data_write() {
   gbfprintf(file_out,
             "H  SOFTWARE NAME & VERSION\n"
             "I  PCX5 2.09\n"
@@ -410,4 +410,6 @@ ff_vecs_t pcx_vecs = {
     ff_type_file,      FF_CAP_RW_ALL, rd_init,    wr_init, rd_deinit,
     wr_deinit,         data_read,     data_write, NULL,    pcx_args,
     CET_CHARSET_ASCII, 1 /* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

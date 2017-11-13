@@ -40,7 +40,7 @@ static unsigned int waypt_out_count;
 
 static
 arglist_t tpg_args[] = {
-  {"datum", &tpg_datum_opt, "Datum (default=NAD27)", "N. America 1927 mean", ARGTYPE_STRING, ARG_NOMINMAX },
+  {"datum", &tpg_datum_opt, "Datum (default=NAD27)", "N. America 1927 mean", ARGTYPE_STRING, ARG_NOMINMAX , nullptr},
   ARG_TERMINATOR
 };
 
@@ -322,4 +322,5 @@ ff_vecs_t tpg_vecs = {
   NULL,
   tpg_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-};
+  , NULL_POS_OPS,
+  nullptr};

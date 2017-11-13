@@ -56,14 +56,14 @@ reverse_route_head(const route_head* rte)
 }
 
 void
-reverse_route_process(void)
+reverse_route_process()
 {
   track_disp_all(reverse_route_head, NULL, reverse_route_wpt);
   route_disp_all(reverse_route_head, NULL, NULL);
 }
 
 void
-reverse_route_init(const char* args)
+reverse_route_init(const char*)
 {
   switch (global_opts.objective) {
   case rtedata:
@@ -77,7 +77,7 @@ reverse_route_init(const char* args)
 }
 
 void
-reverse_route_deinit(void)
+reverse_route_deinit()
 {
   /* do nothing */
 }

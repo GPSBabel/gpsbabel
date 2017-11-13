@@ -293,7 +293,7 @@ psit_isKnownToken(char* buf)
  * MRCB
  */
 static void
-psit_waypoint_r(gbfile* psit_file, Waypoint** wpt)
+psit_waypoint_r(gbfile* psit_file, Waypoint**)
 {
   int		garmin_icon_num;
 
@@ -509,7 +509,7 @@ psit_routehdr_w_wrapper(const route_head* rte)
  * MRCB
  */
 static void
-psit_track_r(gbfile* psit_file, route_head** trk)
+psit_track_r(gbfile* psit_file, route_head**)
 {
   char trkname[256];
   unsigned int trk_num;
@@ -748,7 +748,7 @@ psit_read(void)
 }
 
 static void
-psit_noop(const route_head* wp)
+psit_noop(const route_head*)
 {
   /* no-op */
 }
@@ -798,4 +798,6 @@ ff_vecs_t psit_vecs = {
   NULL,
   psit_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

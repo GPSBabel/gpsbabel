@@ -1813,7 +1813,7 @@ tpo_track_disp(const Waypoint* waypointp)
 }
 
 static void
-tpo_track_tlr(const route_head* rte)
+tpo_track_tlr(const route_head*)
 {
   unsigned char unknown1[] = { 0x06, 0x00 };
 
@@ -1897,6 +1897,8 @@ ff_vecs_t tpo2_vecs = {
   NULL,
   tpo2_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /* TPO 3.x format can read waypoints/tracks/routes */
@@ -1912,4 +1914,6 @@ ff_vecs_t tpo3_vecs = {
   NULL,
   tpo3_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

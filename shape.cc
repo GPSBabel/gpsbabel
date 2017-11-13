@@ -44,11 +44,11 @@ static
 arglist_t shp_args[] = {
   {
     "name", &opt_name, "Index of name field in .dbf",
-    NULL, ARGTYPE_STRING, "0", NULL
+    NULL, ARGTYPE_STRING, "0", NULL, nullptr
   },
   {
     "url", &opt_url, "Index of URL field in .dbf",
-    NULL, ARGTYPE_INT, "0", NULL
+    NULL, ARGTYPE_INT, "0", NULL, nullptr
   },
   ARG_TERMINATOR
 };
@@ -277,7 +277,7 @@ my_write_wpt(const Waypoint* wpt)
 }
 
 void
-poly_init(const route_head* h)
+poly_init(const route_head*)
 {
   int ct = track_waypt_count();
   polybufx = (double*) xcalloc(ct, sizeof(double));
@@ -296,7 +296,7 @@ poly_point(const Waypoint* wpt)
 }
 
 void
-poly_deinit(const route_head* h)
+poly_deinit(const route_head*)
 {
   SHPObject* shpobject;
   shpobject = SHPCreateSimpleObject(SHPT_ARC, track_waypt_count(),
@@ -355,5 +355,7 @@ ff_vecs_t shape_vecs = {
   NULL,
   shp_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
 #endif /* SHAPELIB_ENABLED */

@@ -39,7 +39,7 @@ static char* routevia = NULL;
 static arglist_t tef_xml_args[] = {
   {
     "routevia", &routevia, "Include only via stations in route",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -67,7 +67,7 @@ xg_tag_mapping tef_xml_map[] = {
  */
 
 void
-tef_start(xg_string args, const QXmlStreamAttributes* attrv)
+tef_start(xg_string, const QXmlStreamAttributes* attrv)
 {
   bool valid = false;
 
@@ -91,7 +91,7 @@ tef_start(xg_string args, const QXmlStreamAttributes* attrv)
  */
 
 static void
-tef_header(xg_string args, const QXmlStreamAttributes* attrv)
+tef_header(xg_string, const QXmlStreamAttributes* attrv)
 {
   route = route_head_alloc();
   foreach(QXmlStreamAttribute attr, *attrv) {
@@ -105,7 +105,7 @@ tef_header(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-tef_list_start(xg_string args, const QXmlStreamAttributes* attrv)
+tef_list_start(xg_string, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("ItemCount")) {
     item_count = attrv->value("ItemCount").toString().toUInt();
@@ -178,7 +178,7 @@ Xfix_notes(const QString& name, const QString& notes)
 }
 #else
 static QString 
-fix_notes(const QString& name, const QString& notes){
+fix_notes(const QString&, const QString& notes){
     return notes;
 }
 #endif
@@ -220,13 +220,13 @@ waypoint_final()
 }
 
 static void
-tef_item_end(xg_string args, const QXmlStreamAttributes*)
+tef_item_end(xg_string, const QXmlStreamAttributes*)
 {
   waypoint_final();
 }
 
 static void
-tef_list_end(xg_string args, const QXmlStreamAttributes*)
+tef_list_end(xg_string, const QXmlStreamAttributes*)
 {
   waypoint_final();
   if (waypoints != item_count)
@@ -235,7 +235,7 @@ tef_list_end(xg_string args, const QXmlStreamAttributes*)
 }
 
 static void
-tef_item_start(xg_string args, const QXmlStreamAttributes* attrv)
+tef_item_start(xg_string, const QXmlStreamAttributes* attrv)
 {
   waypoints++;
 
@@ -283,7 +283,7 @@ tef_read_comma_float(const QStringRef& value)
 }
 
 static void
-tef_point(xg_string args, const QXmlStreamAttributes* attrv)
+tef_point(xg_string, const QXmlStreamAttributes* attrv)
 {
   if (!wpt_tmp) {
     return;
@@ -333,4 +333,6 @@ ff_vecs_t tef_xml_vecs = {
   NULL,
   tef_xml_args,
   CET_CHARSET_UTF8, 1
+  , NULL_POS_OPS,
+  nullptr
 };

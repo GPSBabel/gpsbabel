@@ -66,7 +66,7 @@ static char* opt_location;
 
 static
 arglist_t raymarine_args[] = {
-  { "location", &opt_location, "Default location", "My Waypoints", ARGTYPE_STRING, ARG_NOMINMAX },
+  { "location", &opt_location, "Default location", "My Waypoints", ARGTYPE_STRING, ARG_NOMINMAX , nullptr},
   ARG_TERMINATOR
 };
 
@@ -85,54 +85,54 @@ typedef struct {
 } raymarine_symbol_mapping_t;
 
 static raymarine_symbol_mapping_t raymarine_symbols[] = {
-  { /* 0 */  "Unknown Symbol 0" },
-  { /* 1 */  "Unknown Symbol 1" },
-  { /* 2 */  "Unknown Symbol 2" },
-  { /* 3 */  "Red Square" },
-  { /* 4 */  "Big Fish" },
-  { /* 5 */  "Anchor" },
+  { /* 0 */  "Unknown Symbol 0", nullptr },
+  { /* 1 */  "Unknown Symbol 1", nullptr },
+  { /* 2 */  "Unknown Symbol 2", nullptr },
+  { /* 3 */  "Red Square", nullptr },
+  { /* 4 */  "Big Fish", nullptr },
+  { /* 5 */  "Anchor", nullptr },
   { /* 6 */  "Smiley", "Contact, Smiley" },
-  { /* 7 */  "Sad" },
+  { /* 7 */  "Sad", nullptr },
   { /* 8 */  "Red Button", "Navaid, Red" },
-  { /* 9 */  "Sailfish" },
+  { /* 9 */  "Sailfish", nullptr },
   { /* 10 */ "Danger", "Skull and Crossbones" },
-  { /* 11 */ "Attention" },
-  { /* 12 */ "Black Square" },
+  { /* 11 */ "Attention", nullptr },
+  { /* 12 */ "Black Square", nullptr },
   { /* 13 */ "Intl. Dive Flag", "Diver Down Flag 2" },
   { /* 14 */ "Vessel", "Marina" },
-  { /* 15 */ "Lobster" },
+  { /* 15 */ "Lobster", nullptr },
   { /* 16 */ "Buoy", "Buoy, White" },
-  { /* 17 */ "Exclamation" },
-  { /* 18 */ "Red X" },
-  { /* 19 */ "Check Mark" },
-  { /* 20 */ "Black Plus" },
-  { /* 21 */ "Black Cross" },
-  { /* 22 */ "MOB" },
-  { /* 23 */ "Billfish" },
-  { /* 24 */ "Bottom Mark" },
+  { /* 17 */ "Exclamation", nullptr },
+  { /* 18 */ "Red X", nullptr },
+  { /* 19 */ "Check Mark", nullptr },
+  { /* 20 */ "Black Plus", nullptr },
+  { /* 21 */ "Black Cross", nullptr },
+  { /* 22 */ "MOB", nullptr },
+  { /* 23 */ "Billfish", nullptr },
+  { /* 24 */ "Bottom Mark", nullptr },
   { /* 25 */ "Circle", "Circle, Red" },
   { /* 26 */ "Diamond", "Block, Red" },
   { /* 27 */ "Diamond Quarters", "Diamond, Red" },
   { /* 28 */ "U.S. Dive Flag", "Diver Down Flag 1" },
-  { /* 29 */ "Dolphin" },
-  { /* 30 */ "Few Fish" },
-  { /* 31 */ "Multiple Fish" },
-  { /* 32 */ "Many Fish" },
-  { /* 33 */ "Single Fish" },
-  { /* 34 */ "Small Fish" },
-  { /* 35 */ "Marker" },
+  { /* 29 */ "Dolphin", nullptr },
+  { /* 30 */ "Few Fish", nullptr },
+  { /* 31 */ "Multiple Fish", nullptr },
+  { /* 32 */ "Many Fish", nullptr },
+  { /* 33 */ "Single Fish", nullptr },
+  { /* 34 */ "Small Fish", nullptr },
+  { /* 35 */ "Marker", nullptr },
   { /* 36 */ "Cocktails", "Bar" },
-  { /* 37 */ "Red Box Marker" },
-  { /* 38 */ "Reef" },
-  { /* 39 */ "Rocks" },
-  { /* 40 */ "Fish School" },
+  { /* 37 */ "Red Box Marker", nullptr },
+  { /* 38 */ "Reef", nullptr },
+  { /* 39 */ "Rocks", nullptr },
+  { /* 40 */ "Fish School", nullptr },
   { /* 41 */ "Seaweed", "Weed Bed" },
-  { /* 42 */ "Shark" },
-  { /* 43 */ "Sportfisher" },
+  { /* 42 */ "Shark", nullptr },
+  { /* 43 */ "Sportfisher", nullptr },
   { /* 44 */ "Swimmer", "Swimming Area" },
-  { /* 45 */ "Top Mark" },
-  { /* 46 */ "Trawler" },
-  { /* 47 */ "Tree" },
+  { /* 45 */ "Top Mark", nullptr },
+  { /* 46 */ "Trawler", nullptr },
+  { /* 47 */ "Tree", nullptr },
   { /* 48 */ "Triangle", "Triangle, Red" },
   { /* 49 */ "Wreck", "Shipwreck" }
 };
@@ -285,7 +285,7 @@ same_points(const Waypoint* A, const Waypoint* B)
 }
 
 static void
-register_waypt(const Waypoint* ref, const char is_rtept)
+register_waypt(const Waypoint* ref, const char)
 {
   int i;
   Waypoint* wpt = (Waypoint*) ref;
@@ -528,4 +528,6 @@ ff_vecs_t raymarine_vecs = {
   NULL,
   raymarine_args,
   CET_CHARSET_ASCII, 0	/* should we force this to 1 ? */
+  , NULL_POS_OPS,
+  nullptr
 };

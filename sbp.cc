@@ -43,13 +43,13 @@ sbp_rd_init(const QString& fname)
 }
 
 static void
-sbp_rd_deinit(void)
+sbp_rd_deinit()
 {
   gbfclose(file_handle);
 }
 
 static void
-read_sbp_header(route_head* track)
+read_sbp_header(route_head*)
 {
   /*
    * A complete SBP file contains 64 bytes header,
@@ -83,7 +83,7 @@ read_sbp_header(route_head* track)
 }
 
 static Waypoint*
-read_logpoint(void)
+read_logpoint()
 {
   unsigned char buffer[SBP_RECORD_LEN];
 
@@ -95,7 +95,7 @@ read_logpoint(void)
 }
 
 static void
-sbp_read(void)
+sbp_read()
 {
   Waypoint* logpoint;
   route_head*     track;
@@ -111,7 +111,7 @@ sbp_read(void)
 }
 
 static void
-sbp_exit(void)
+sbp_exit()
 {
 }
 
@@ -134,5 +134,7 @@ ff_vecs_t sbp_vecs = {
   sbp_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/

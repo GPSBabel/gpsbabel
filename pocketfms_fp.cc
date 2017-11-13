@@ -80,12 +80,12 @@ rd_deinit(void)
 }
 
 static void
-wr_init(const QString& fname)
+wr_init(const QString&)
 {
   fatal("Writing file of type %s is not supported\n", MYNAME);
 }
 
-void	wpt_s(xg_string args, const QXmlStreamAttributes*)
+void	wpt_s(xg_string, const QXmlStreamAttributes*)
 {
   if (isFirst == 1) {
     wpt_from = new Waypoint;
@@ -96,7 +96,7 @@ void	wpt_s(xg_string args, const QXmlStreamAttributes*)
   wpt_to = new Waypoint;
 }
 
-void	wpt_e(xg_string args, const QXmlStreamAttributes*)
+void	wpt_e(xg_string, const QXmlStreamAttributes*)
 {
   if (isFirst == 1) {
     route_add_wpt(route, wpt_from);
@@ -161,7 +161,7 @@ void	wpt_to_elev(xg_string args, const QXmlStreamAttributes*)
   dest_altitude = FEET_TO_METERS(args.toDouble());
 }
 
-void	wpt_altitude(xg_string args, const QXmlStreamAttributes* attrv)
+void	wpt_altitude(xg_string, const QXmlStreamAttributes* attrv)
 {
   int isFeet = 0;
 
@@ -192,4 +192,6 @@ ff_vecs_t pocketfms_fp_vecs = {
   NULL,
   NULL,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

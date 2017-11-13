@@ -151,4 +151,6 @@ ff_vecs_t pocketfms_wp_vecs = {
   NULL,
   NULL,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
