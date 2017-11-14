@@ -3,7 +3,7 @@
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="51.759301600" minlon="-0.008520000" maxlat="51.775566600" maxlon="0.004690000"/>
   <wpt lat="51.768668300" lon="0.003845000">
-    <ele>67.970400</ele>
+    <ele>67.970</ele>
     <time>2007-09-27T13:37:38Z</time>
     <name>M000</name>
     <cmt>M000</cmt>
@@ -11,7 +11,7 @@
     <sym>Star</sym>
   </wpt>
   <wpt lat="51.768668300" lon="0.003845000">
-    <ele>67.970400</ele>
+    <ele>67.970</ele>
     <time>2007-10-03T17:04:53Z</time>
     <name>M000</name>
     <cmt>M000</cmt>
@@ -19,7 +19,7 @@
     <sym>Star</sym>
   </wpt>
   <wpt lat="51.775566600" lon="0.004690000">
-    <ele>0.000000</ele>
+    <ele>0.000</ele>
     <time>2007-09-29T14:45:02Z</time>
     <name>M001</name>
     <cmt>M001</cmt>
@@ -27,7 +27,7 @@
     <sym>Star</sym>
   </wpt>
   <wpt lat="51.775566600" lon="0.004690000">
-    <ele>0.000000</ele>
+    <ele>0.000</ele>
     <time>2007-10-03T17:04:53Z</time>
     <name>M001</name>
     <cmt>M001</cmt>
@@ -35,7 +35,7 @@
     <sym>Star</sym>
   </wpt>
   <wpt lat="51.759301600" lon="-0.008520000">
-    <ele>36.271200</ele>
+    <ele>36.271</ele>
     <time>2007-10-03T16:04:48Z</time>
     <name>M002</name>
     <cmt>M002</cmt>
@@ -43,7 +43,7 @@
     <sym>Star</sym>
   </wpt>
   <wpt lat="51.759301600" lon="-0.008520000">
-    <ele>36.271200</ele>
+    <ele>36.271</ele>
     <time>2007-10-03T17:04:53Z</time>
     <name>M002</name>
     <cmt>M002</cmt>
@@ -51,7 +51,7 @@
     <sym>Star</sym>
   </wpt>
   <wpt lat="51.759565000" lon="-0.008035000">
-    <ele>35.356800</ele>
+    <ele>35.357</ele>
     <time>2007-10-03T16:07:12Z</time>
     <name>SUBWAY</name>
     <cmt>SUBWAY</cmt>
@@ -59,7 +59,7 @@
     <sym>Star</sym>
   </wpt>
   <wpt lat="51.759565000" lon="-0.008035000">
-    <ele>35.356800</ele>
+    <ele>35.357</ele>
     <time>2007-10-03T17:04:53Z</time>
     <name>SUBWAY</name>
     <cmt>SUBWAY</cmt>

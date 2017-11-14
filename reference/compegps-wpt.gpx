@@ -3,168 +3,168 @@
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="45.988538473" minlon="11.609659845" maxlat="46.159847646" maxlon="12.121156748"/>
   <wpt lat="46.029489931" lon="11.825879086">
-    <ele>1400.000000</ele>
+    <ele>1400.000</ele>
     <name>F01140</name>
     <cmt>DECOLLO MONTE AVENA</cmt>
     <desc>DECOLLO MONTE AVENA</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.008626612" lon="11.860931698">
-    <ele>300.000000</ele>
+    <ele>300.000</ele>
     <name>F02030</name>
     <cmt>AVIOSUPERFICE FELTRE</cmt>
     <desc>AVIOSUPERFICE FELTRE</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.021150004" lon="11.885480080">
-    <ele>230.000000</ele>
+    <ele>230.000</ele>
     <name>F03023</name>
     <cmt>ATTERRAGGIO VALENTINE</cmt>
     <desc>ATTERRAGGIO VALENTINE</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.033586576" lon="11.882367229">
-    <ele>320.000000</ele>
+    <ele>320.000</ele>
     <name>F04032</name>
     <cmt>ATTERRAG. BIRRERIA PEDAVENA</cmt>
     <desc>ATTERRAG. BIRRERIA PEDAVENA</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.159847646" lon="12.083258100">
-    <ele>420.000000</ele>
+    <ele>420.000</ele>
     <name>F06042</name>
     <cmt>DIGA DEL MIS</cmt>
     <desc>DIGA DEL MIS</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.144176666" lon="12.075475551">
-    <ele>460.000000</ele>
+    <ele>460.000</ele>
     <name>F07046</name>
     <cmt>SOSPIROLO CHIESA</cmt>
     <desc>SOSPIROLO CHIESA</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.081281529" lon="11.985699010">
-    <ele>450.000000</ele>
+    <ele>450.000</ele>
     <name>F08045</name>
     <cmt>CESIOMAGGIORE FABBRICA</cmt>
     <desc>CESIOMAGGIORE FABBRICA</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.075557491" lon="12.033310749">
-    <ele>290.000000</ele>
+    <ele>290.000</ele>
     <name>F09029</name>
     <cmt>CARTIERA SGIUSTINA</cmt>
     <desc>CARTIERA SGIUSTINA</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="45.988538473" lon="11.845020688">
-    <ele>380.000000</ele>
+    <ele>380.000</ele>
     <name>F10038</name>
     <cmt>SEREN DEL GRAPPA CHIESA</cmt>
     <desc>SEREN DEL GRAPPA CHIESA</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.010513118" lon="11.830375818">
-    <ele>346.900000</ele>
+    <ele>346.900</ele>
     <name>F11031</name>
     <cmt>ARTEN FELTRE</cmt>
     <desc>ARTEN FELTRE</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.047897102" lon="11.873818128">
-    <ele>450.000000</ele>
+    <ele>450.000</ele>
     <name>F12045</name>
     <cmt>NORCEN CAMPI DA TENNIS</cmt>
     <desc>NORCEN CAMPI DA TENNIS</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.152906683" lon="12.121156748">
-    <ele>380.000000</ele>
+    <ele>380.000</ele>
     <name>F13038</name>
     <cmt>SOSPIROLO CAVA</cmt>
     <desc>SOSPIROLO CAVA</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.042745832" lon="11.852392523">
-    <ele>1010.000000</ele>
+    <ele>1010.000</ele>
     <name>F14101</name>
     <cmt>COL MELON RIF BELVEDERE</cmt>
     <desc>COL MELON RIF BELVEDERE</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.010879760" lon="11.813717946">
-    <ele>310.000000</ele>
+    <ele>310.000</ele>
     <name>F15031</name>
     <cmt>FONZASO SPORTFUL</cmt>
     <desc>FONZASO SPORTFUL</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.040623535" lon="11.984049113">
-    <ele>252.300000</ele>
+    <ele>252.300</ele>
     <name>F16025</name>
     <cmt>BUSCHE LATTERIA</cmt>
     <desc>BUSCHE LATTERIA</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.046930843" lon="11.748528051">
-    <ele>605.000000</ele>
+    <ele>605.000</ele>
     <name>F17063</name>
     <cmt>LAMON</cmt>
     <desc>LAMON</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="45.991673928" lon="11.746357624">
-    <ele>509.400000</ele>
+    <ele>509.400</ele>
     <name>F18051</name>
     <cmt>ARSIE'</cmt>
     <desc>ARSIE'</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.018978905" lon="11.911089765">
-    <ele>271.200000</ele>
+    <ele>271.200</ele>
     <name>F19027</name>
     <cmt>CASTELLO DI FELTRE</cmt>
     <desc>CASTELLO DI FELTRE</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.011490645" lon="11.833422633">
-    <ele>300.000000</ele>
+    <ele>300.000</ele>
     <name>F20030</name>
     <cmt>SANTA LUCIA CHIESETTA</cmt>
     <desc>SANTA LUCIA CHIESETTA</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.039976504" lon="11.825483515">
-    <ele>1430.000000</ele>
+    <ele>1430.000</ele>
     <name>F21143</name>
     <cmt>MALGA CAMPON</cmt>
     <desc>MALGA CAMPON</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.050825348" lon="12.061925180">
-    <ele>300.000000</ele>
+    <ele>300.000</ele>
     <name>F22030</name>
     <cmt>ZANUSSI MEL</cmt>
     <desc>ZANUSSI MEL</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.022014968" lon="11.907799546">
-    <ele>270.000000</ele>
+    <ele>270.000</ele>
     <name>F23027</name>
     <cmt>FELTRE OSPEDALE</cmt>
     <desc>FELTRE OSPEDALE</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.063284117" lon="11.609659845">
-    <ele>860.000000</ele>
+    <ele>860.000</ele>
     <name>F24086</name>
     <cmt>BAILO CASTEL TESINO</cmt>
     <desc>BAILO CASTEL TESINO</desc>
     <sym>Waypoint</sym>
   </wpt>
   <wpt lat="46.057193356" lon="11.888858143">
-    <ele>450.000000</ele>
+    <ele>450.000</ele>
     <name>F25045</name>
     <cmt>CASA SCEICCO</cmt>
     <desc>CASA SCEICCO</desc>
