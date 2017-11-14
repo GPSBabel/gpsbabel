@@ -42,7 +42,9 @@ static QString cdatastr;
 static char* opt_logpoint = NULL;
 static char* opt_humminbirdext = NULL;
 static char* opt_garminext = NULL;
+static char* opt_elevation_precision = NULL;
 static int logpoint_ct = 0;
+static int elevation_precision;
 
 // static char* gpx_version = NULL;
 QString gpx_version;
@@ -1544,7 +1546,7 @@ static void
 gpx_write_common_position(const Waypoint* waypointp, const gpx_point_type point_type)
 {
   if (waypointp->altitude != unknown_alt) {
-    writer->writeTextElement("ele", QString::number(waypointp->altitude, 'f', 6));
+    writer->writeTextElement("ele", QString::number(waypointp->altitude, 'f', elevation_precision));
   }
   QString t = waypointp->CreationTimeXML();
   writer->writeOptionalTextElement("time", t);
@@ -1887,6 +1889,8 @@ static void
 gpx_write()
 {
  
+  elevation_precision = atoi(opt_elevation_precision);
+
   gpx_reset_short_handle();
   waypt_disp_all(gpx_waypt_pr);
   gpx_reset_short_handle();
@@ -1956,6 +1960,11 @@ arglist_t gpx_args[] = {
     "garminextensions", &opt_garminext,
     "Add info (depth) as Garmin extension",
     NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
+  },
+  {
+    "elevprec", &opt_elevation_precision,
+    "Precision of elevations, number of decimals",
+    "3", ARGTYPE_INT, ARG_NOMINMAX, NULL
   },
   ARG_TERMINATOR
 };

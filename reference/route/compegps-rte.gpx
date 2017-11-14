@@ -5,37 +5,37 @@
   <rte>
     <name>test</name>
     <rtept lat="45.789383000" lon="11.553583000">
-      <ele>0.000000</ele>
+      <ele>0.000</ele>
       <name>V03087</name>
       <sym>Waypoint</sym>
     </rtept>
     <rtept lat="45.775800000" lon="11.449967000">
-      <ele>0.000000</ele>
+      <ele>0.000</ele>
       <name>V05027</name>
       <sym>Waypoint</sym>
     </rtept>
     <rtept lat="45.784883000" lon="11.544417000">
-      <ele>0.000000</ele>
+      <ele>0.000</ele>
       <name>V06080</name>
       <sym>Waypoint</sym>
     </rtept>
     <rtept lat="45.754467000" lon="11.493950000">
-      <ele>0.000000</ele>
+      <ele>0.000</ele>
       <name>V04041</name>
       <sym>Waypoint</sym>
     </rtept>
     <rtept lat="45.783083000" lon="11.459083000">
-      <ele>0.000000</ele>
+      <ele>0.000</ele>
       <name>V09058</name>
       <sym>Waypoint</sym>
     </rtept>
     <rtept lat="45.760583000" lon="11.449617000">
-      <ele>0.000000</ele>
+      <ele>0.000</ele>
       <name>V10025</name>
       <sym>Waypoint</sym>
     </rtept>
     <rtept lat="45.765950000" lon="11.480617000">
-      <ele>0.000000</ele>
+      <ele>0.000</ele>
       <name>V02023</name>
       <sym>Waypoint</sym>
     </rtept>

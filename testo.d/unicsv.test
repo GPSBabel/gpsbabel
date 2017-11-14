@@ -17,7 +17,7 @@ compare ${TMPDIR}/gcunicsv-1.csv ${TMPDIR}/gcunicsv-2.csv
 
 # check header detection features
 gpsbabel -i unicsv,utc=0 -f ${REFERENCE}/headerdetection.unicsv -x transform,trk=wpt -o gpx,garminextensions -F ${TMPDIR}/headerdetection~unicsv.gpx
-compare ${TMPDIR}/headerdetection~unicsv.gpx ${REFERENCE}/extensiondata~unicsv.gpx
+compare ${REFERENCE}/extensiondata~unicsv.gpx ${TMPDIR}/headerdetection~unicsv.gpx
 
 # check default encoding, i.e. utf-8 in and out.
 gpsbabel -i gpx -f ${REFERENCE}/unicsv_encoding.gpx -o unicsv -F ${TMPDIR}/unicsv_encoding.csv
@@ -25,7 +25,7 @@ compare ${TMPDIR}/unicsv_encoding.csv ${REFERENCE}/unicsv_encoding.csv
 
 # verify fractional second read and writes.
 gpsbabel -i unicsv -f ${REFERENCE}/unicsv_subsec.csv -o unicsv -F ${TMPDIR}/unicsv_subsec.csv
-compare ${TMPDIR}/unicsv_subsec.csv ${REFERENCE}/unicsv_subsec.csv
+compare ${REFERENCE}/unicsv_subsec.csv ${TMPDIR}/unicsv_subsec.csv
 
 # Verify 'fields' option
 gpsbabel -i unicsv,fields=lat+lon+description -f ${REFERENCE}/radius.csv -o csv -F ${TMPDIR}/unicsv_fields.out

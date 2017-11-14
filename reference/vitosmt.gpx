@@ -3,7 +3,7 @@
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="45.458204984" minlon="-75.770526640" maxlat="45.497519984" maxlon="-75.684934974"/>
   <wpt lat="45.460366651" lon="-75.767939974">
-    <ele>33.700000</ele>
+    <ele>33.700</ele>
     <time>2005-05-09T19:02:01.517Z</time>
     <name>WP0001</name>
     <cmt>WP0001</cmt>
@@ -13,7 +13,7 @@
     <pdop>30.600000</pdop>
   </wpt>
   <wpt lat="45.460339984" lon="-75.767591640">
-    <ele>33.700000</ele>
+    <ele>33.700</ele>
     <time>2005-05-09T19:02:03.517Z</time>
     <name>WP0002</name>
     <cmt>WP0002</cmt>
@@ -23,7 +23,7 @@
     <pdop>30.600000</pdop>
   </wpt>
   <wpt lat="45.458376651" lon="-75.768483307">
-    <ele>105.400000</ele>
+    <ele>105.400</ele>
     <time>2005-05-09T20:09:13.594Z</time>
     <name>WP0003</name>
     <cmt>WP0003</cmt>
@@ -33,7 +33,7 @@
     <pdop>1.400000</pdop>
   </wpt>
   <wpt lat="45.458293318" lon="-75.768566640">
-    <ele>104.600000</ele>
+    <ele>104.600</ele>
     <time>2005-05-09T20:09:23.593Z</time>
     <name>WP0004</name>
     <cmt>WP0004</cmt>
@@ -43,7 +43,7 @@
     <pdop>2.400000</pdop>
   </wpt>
   <wpt lat="45.458298318" lon="-75.768701640">
-    <ele>102.500000</ele>
+    <ele>102.500</ele>
     <time>2005-05-09T20:09:44.592Z</time>
     <name>WP0005</name>
     <cmt>WP0005</cmt>
@@ -53,7 +53,7 @@
     <pdop>2.400000</pdop>
   </wpt>
   <wpt lat="45.458266651" lon="-75.769021640">
-    <ele>108.900000</ele>
+    <ele>108.900</ele>
     <time>2005-05-09T20:10:04.590Z</time>
     <name>WP0006</name>
     <cmt>WP0006</cmt>
@@ -63,7 +63,7 @@
     <pdop>2.200000</pdop>
   </wpt>
   <wpt lat="45.458204984" lon="-75.770038307">
-    <ele>108.400000</ele>
+    <ele>108.400</ele>
     <time>2005-05-09T20:11:22.585Z</time>
     <name>WP0007</name>
     <cmt>WP0007</cmt>
@@ -73,7 +73,7 @@
     <pdop>1.000000</pdop>
   </wpt>
   <wpt lat="45.458274984" lon="-75.770526640">
-    <ele>110.600000</ele>
+    <ele>110.600</ele>
     <time>2005-05-09T20:11:50.583Z</time>
     <name>WP0008</name>
     <cmt>WP0008</cmt>
@@ -83,7 +83,7 @@
     <pdop>1.400000</pdop>
   </wpt>
   <wpt lat="45.458353318" lon="-75.770481640">
-    <ele>106.200000</ele>
+    <ele>106.200</ele>
     <time>2005-05-09T20:14:00.575Z</time>
     <name>WP0009</name>
     <cmt>WP0009</cmt>
@@ -93,7 +93,7 @@
     <pdop>1.000000</pdop>
   </wpt>
   <wpt lat="45.492471651" lon="-75.717699974">
-    <ele>34.100000</ele>
+    <ele>34.100</ele>
     <time>2005-05-09T21:36:00.758Z</time>
     <name>WP0010</name>
     <cmt>WP0010</cmt>
@@ -103,7 +103,7 @@
     <pdop>7.000000</pdop>
   </wpt>
   <wpt lat="45.492506651" lon="-75.717636640">
-    <ele>-22.300000</ele>
+    <ele>-22.300</ele>
     <time>2005-06-03T21:36:06.757Z</time>
     <name>WP0011</name>
     <cmt>WP0011</cmt>
@@ -113,7 +113,7 @@
     <pdop>2.600000</pdop>
   </wpt>
   <wpt lat="45.492283318" lon="-75.717694974">
-    <ele>-34.800000</ele>
+    <ele>-34.800</ele>
     <time>2005-06-03T21:36:08.757Z</time>
     <name>WP0012</name>
     <cmt>WP0012</cmt>
@@ -123,7 +123,7 @@
     <pdop>3.400000</pdop>
   </wpt>
   <wpt lat="45.492396651" lon="-75.717684974">
-    <ele>-28.700000</ele>
+    <ele>-28.700</ele>
     <time>2005-06-03T21:36:09.757Z</time>
     <name>WP0013</name>
     <cmt>WP0013</cmt>
@@ -133,7 +133,7 @@
     <pdop>2.600000</pdop>
   </wpt>
   <wpt lat="45.492381651" lon="-75.717586640">
-    <ele>-21.000000</ele>
+    <ele>-21.000</ele>
     <time>2005-06-03T21:36:17.757Z</time>
     <name>WP0014</name>
     <cmt>WP0014</cmt>
@@ -143,7 +143,7 @@
     <pdop>3.800000</pdop>
   </wpt>
   <wpt lat="45.492294984" lon="-75.717593307">
-    <ele>-25.300000</ele>
+    <ele>-25.300</ele>
     <time>2005-06-03T21:36:31.756Z</time>
     <name>WP0015</name>
     <cmt>WP0015</cmt>
@@ -151,7 +151,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.491944984" lon="-75.717474974">
-    <ele>43.400000</ele>
+    <ele>43.400</ele>
     <time>2005-06-03T21:36:45.755Z</time>
     <name>WP0016</name>
     <cmt>WP0016</cmt>
@@ -161,7 +161,7 @@
     <pdop>3.800000</pdop>
   </wpt>
   <wpt lat="45.491938318" lon="-75.717353307">
-    <ele>39.300000</ele>
+    <ele>39.300</ele>
     <time>2005-06-03T21:36:51.754Z</time>
     <name>WP0017</name>
     <cmt>WP0017</cmt>
@@ -171,7 +171,7 @@
     <pdop>1.600000</pdop>
   </wpt>
   <wpt lat="45.491969984" lon="-75.717238307">
-    <ele>48.300000</ele>
+    <ele>48.300</ele>
     <time>2005-06-03T21:36:58.754Z</time>
     <name>WP0018</name>
     <cmt>WP0018</cmt>
@@ -181,7 +181,7 @@
     <pdop>1.600000</pdop>
   </wpt>
   <wpt lat="45.491994984" lon="-75.717094974">
-    <ele>44.500000</ele>
+    <ele>44.500</ele>
     <time>2005-06-03T21:37:07.753Z</time>
     <name>WP0019</name>
     <cmt>WP0019</cmt>
@@ -191,7 +191,7 @@
     <pdop>1.600000</pdop>
   </wpt>
   <wpt lat="45.491996651" lon="-75.716914974">
-    <ele>39.900000</ele>
+    <ele>39.900</ele>
     <time>2005-06-03T21:37:18.753Z</time>
     <name>WP0020</name>
     <cmt>WP0020</cmt>
@@ -201,7 +201,7 @@
     <pdop>2.600000</pdop>
   </wpt>
   <wpt lat="45.492019984" lon="-75.716781640">
-    <ele>23.600000</ele>
+    <ele>23.600</ele>
     <time>2005-06-03T21:37:26.752Z</time>
     <name>WP0021</name>
     <cmt>WP0021</cmt>
@@ -211,7 +211,7 @@
     <pdop>2.600000</pdop>
   </wpt>
   <wpt lat="45.492071651" lon="-75.716738307">
-    <ele>46.700000</ele>
+    <ele>46.700</ele>
     <time>2005-06-03T21:37:46.751Z</time>
     <name>WP0022</name>
     <cmt>WP0022</cmt>
@@ -221,7 +221,7 @@
     <pdop>4.000000</pdop>
   </wpt>
   <wpt lat="45.492071651" lon="-75.716736640">
-    <ele>61.300000</ele>
+    <ele>61.300</ele>
     <time>2005-06-03T21:37:52.750Z</time>
     <name>WP0023</name>
     <cmt>WP0023</cmt>
@@ -231,7 +231,7 @@
     <pdop>1.600000</pdop>
   </wpt>
   <wpt lat="45.492096651" lon="-75.716736640">
-    <ele>74.600000</ele>
+    <ele>74.600</ele>
     <time>2005-06-03T21:38:16.749Z</time>
     <name>WP0024</name>
     <cmt>WP0024</cmt>
@@ -241,7 +241,7 @@
     <pdop>4.000000</pdop>
   </wpt>
   <wpt lat="45.492099984" lon="-75.716729974">
-    <ele>63.600000</ele>
+    <ele>63.600</ele>
     <time>2005-06-03T21:38:50.747Z</time>
     <name>WP0025</name>
     <cmt>WP0025</cmt>
@@ -251,7 +251,7 @@
     <pdop>2.200000</pdop>
   </wpt>
   <wpt lat="45.492721651" lon="-75.718441640">
-    <ele>83.600000</ele>
+    <ele>83.600</ele>
     <time>2005-06-03T21:55:06.472Z</time>
     <name>WP0026</name>
     <cmt>WP0026</cmt>
@@ -261,7 +261,7 @@
     <pdop>5.200000</pdop>
   </wpt>
   <wpt lat="45.492656651" lon="-75.718409974">
-    <ele>76.200000</ele>
+    <ele>76.200</ele>
     <time>2005-06-03T21:55:14.472Z</time>
     <name>WP0027</name>
     <cmt>WP0027</cmt>
@@ -271,7 +271,7 @@
     <pdop>5.200000</pdop>
   </wpt>
   <wpt lat="45.492591651" lon="-75.718313307">
-    <ele>76.300000</ele>
+    <ele>76.300</ele>
     <time>2005-06-03T21:57:31.463Z</time>
     <name>WP0028</name>
     <cmt>WP0028</cmt>
@@ -281,7 +281,7 @@
     <pdop>10.600000</pdop>
   </wpt>
   <wpt lat="45.492568318" lon="-75.718309974">
-    <ele>59.800000</ele>
+    <ele>59.800</ele>
     <time>2005-06-03T21:57:54.461Z</time>
     <name>WP0029</name>
     <cmt>WP0029</cmt>
@@ -291,7 +291,7 @@
     <pdop>5.200000</pdop>
   </wpt>
   <wpt lat="45.492314984" lon="-75.718339974">
-    <ele>34.300000</ele>
+    <ele>34.300</ele>
     <time>2005-06-04T23:06:26.359Z</time>
     <name>WP0030</name>
     <cmt>WP0030</cmt>
@@ -301,7 +301,7 @@
     <pdop>25.400000</pdop>
   </wpt>
   <wpt lat="45.491909984" lon="-75.718324974">
-    <ele>34.300000</ele>
+    <ele>34.300</ele>
     <time>2005-06-04T23:14:32.327Z</time>
     <name>WP0031</name>
     <cmt>WP0031</cmt>
@@ -311,7 +311,7 @@
     <pdop>28.200001</pdop>
   </wpt>
   <wpt lat="45.492206651" lon="-75.718414974">
-    <ele>34.300000</ele>
+    <ele>34.300</ele>
     <time>2005-06-04T23:14:43.327Z</time>
     <name>WP0032</name>
     <cmt>WP0032</cmt>
@@ -321,7 +321,7 @@
     <pdop>28.200001</pdop>
   </wpt>
   <wpt lat="45.492689984" lon="-75.718359974">
-    <ele>70.800000</ele>
+    <ele>70.800</ele>
     <time>2005-06-04T23:15:39.323Z</time>
     <name>WP0033</name>
     <cmt>WP0033</cmt>
@@ -331,7 +331,7 @@
     <pdop>1.800000</pdop>
   </wpt>
   <wpt lat="45.492691651" lon="-75.718408307">
-    <ele>61.200000</ele>
+    <ele>61.200</ele>
     <time>2005-06-04T23:16:38.319Z</time>
     <name>WP0034</name>
     <cmt>WP0034</cmt>
@@ -341,7 +341,7 @@
     <pdop>2.000000</pdop>
   </wpt>
   <wpt lat="45.492601651" lon="-75.718438307">
-    <ele>62.400000</ele>
+    <ele>62.400</ele>
     <time>2005-06-04T23:17:21.316Z</time>
     <name>WP0035</name>
     <cmt>WP0035</cmt>
@@ -349,7 +349,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.492479984" lon="-75.718403307">
-    <ele>54.200000</ele>
+    <ele>54.200</ele>
     <time>2005-06-04T23:22:58.294Z</time>
     <name>WP0036</name>
     <cmt>WP0036</cmt>
@@ -359,7 +359,7 @@
     <pdop>6.800000</pdop>
   </wpt>
   <wpt lat="45.492566651" lon="-75.718339974">
-    <ele>57.000000</ele>
+    <ele>57.000</ele>
     <time>2005-06-04T23:25:52.283Z</time>
     <name>WP0037</name>
     <cmt>WP0037</cmt>
@@ -369,7 +369,7 @@
     <pdop>19.400000</pdop>
   </wpt>
   <wpt lat="45.492343318" lon="-75.722331640">
-    <ele>0.000000</ele>
+    <ele>0.000</ele>
     <time>2005-06-04T23:39:14.663Z</time>
     <name>WP0038</name>
     <cmt>WP0038</cmt>
@@ -377,7 +377,7 @@
     <pdop>24.700001</pdop>
   </wpt>
   <wpt lat="45.492314984" lon="-75.722923307">
-    <ele>57.600000</ele>
+    <ele>57.600</ele>
     <time>2005-06-04T23:39:18.662Z</time>
     <name>WP0039</name>
     <cmt>WP0039</cmt>
@@ -387,7 +387,7 @@
     <pdop>17.799999</pdop>
   </wpt>
   <wpt lat="45.492369984" lon="-75.722586640">
-    <ele>74.800000</ele>
+    <ele>74.800</ele>
     <time>2005-06-04T23:39:19.662Z</time>
     <name>WP0040</name>
     <cmt>WP0040</cmt>
@@ -397,7 +397,7 @@
     <pdop>1.000000</pdop>
   </wpt>
   <wpt lat="45.493596651" lon="-75.728018307">
-    <ele>95.100000</ele>
+    <ele>95.100</ele>
     <time>2005-06-04T23:44:29.868Z</time>
     <name>WP0041</name>
     <cmt>WP0041</cmt>
@@ -407,7 +407,7 @@
     <pdop>1.600000</pdop>
   </wpt>
   <wpt lat="45.492388318" lon="-75.731491640">
-    <ele>69.100000</ele>
+    <ele>69.100</ele>
     <time>2005-06-04T23:50:38.425Z</time>
     <name>WP0042</name>
     <cmt>WP0042</cmt>
@@ -417,7 +417,7 @@
     <pdop>1.000000</pdop>
   </wpt>
   <wpt lat="45.492379984" lon="-75.731639974">
-    <ele>71.300000</ele>
+    <ele>71.300</ele>
     <time>2005-06-04T23:52:35.417Z</time>
     <name>WP0043</name>
     <cmt>WP0043</cmt>
@@ -427,7 +427,7 @@
     <pdop>1.000000</pdop>
   </wpt>
   <wpt lat="45.492419984" lon="-75.731754974">
-    <ele>71.300000</ele>
+    <ele>71.300</ele>
     <time>2005-06-04T23:52:43.417Z</time>
     <name>WP0044</name>
     <cmt>WP0044</cmt>
@@ -437,7 +437,7 @@
     <pdop>1.400000</pdop>
   </wpt>
   <wpt lat="45.492678318" lon="-75.732136640">
-    <ele>71.300000</ele>
+    <ele>71.300</ele>
     <time>2005-06-04T23:53:15.415Z</time>
     <name>WP0045</name>
     <cmt>WP0045</cmt>
@@ -447,7 +447,7 @@
     <pdop>1.400000</pdop>
   </wpt>
   <wpt lat="45.492764984" lon="-75.732181640">
-    <ele>70.700000</ele>
+    <ele>70.700</ele>
     <time>2005-06-04T23:53:25.414Z</time>
     <name>WP0046</name>
     <cmt>WP0046</cmt>
@@ -457,7 +457,7 @@
     <pdop>1.400000</pdop>
   </wpt>
   <wpt lat="45.493056651" lon="-75.734448307">
-    <ele>68.400000</ele>
+    <ele>68.400</ele>
     <time>2005-06-04T23:56:24.496Z</time>
     <name>WP0047</name>
     <cmt>WP0047</cmt>
@@ -467,7 +467,7 @@
     <pdop>1.200000</pdop>
   </wpt>
   <wpt lat="45.492984984" lon="-75.734376640">
-    <ele>72.900000</ele>
+    <ele>72.900</ele>
     <time>2005-06-04T23:56:54.494Z</time>
     <name>WP0048</name>
     <cmt>WP0048</cmt>
@@ -477,7 +477,7 @@
     <pdop>1.200000</pdop>
   </wpt>
   <wpt lat="45.493048318" lon="-75.734484974">
-    <ele>71.400000</ele>
+    <ele>71.400</ele>
     <time>2005-06-04T23:57:12.493Z</time>
     <name>WP0049</name>
     <cmt>WP0049</cmt>
@@ -487,7 +487,7 @@
     <pdop>1.000000</pdop>
   </wpt>
   <wpt lat="45.493248318" lon="-75.734873307">
-    <ele>71.200000</ele>
+    <ele>71.200</ele>
     <time>2005-06-04T23:57:43.491Z</time>
     <name>WP0050</name>
     <cmt>WP0050</cmt>
@@ -497,7 +497,7 @@
     <pdop>1.000000</pdop>
   </wpt>
   <wpt lat="45.493511651" lon="-75.735343307">
-    <ele>71.600000</ele>
+    <ele>71.600</ele>
     <time>2005-06-04T23:58:26.488Z</time>
     <name>WP0051</name>
     <cmt>WP0051</cmt>
@@ -507,7 +507,7 @@
     <pdop>1.400000</pdop>
   </wpt>
   <wpt lat="45.494089984" lon="-75.736121640">
-    <ele>71.000000</ele>
+    <ele>71.000</ele>
     <time>2005-06-04T00:00:00.482Z</time>
     <name>WP0052</name>
     <cmt>WP0052</cmt>
@@ -515,7 +515,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.494091651" lon="-75.736254974">
-    <ele>72.100000</ele>
+    <ele>72.100</ele>
     <time>2005-06-05T00:00:11.482Z</time>
     <name>WP0053</name>
     <cmt>WP0053</cmt>
@@ -523,7 +523,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.494156651" lon="-75.736351640">
-    <ele>72.700000</ele>
+    <ele>72.700</ele>
     <time>2005-06-05T00:00:20.481Z</time>
     <name>WP0054</name>
     <cmt>WP0054</cmt>
@@ -533,7 +533,7 @@
     <pdop>6.200000</pdop>
   </wpt>
   <wpt lat="45.494316651" lon="-75.736706640">
-    <ele>72.200000</ele>
+    <ele>72.200</ele>
     <time>2005-06-05T00:00:48.479Z</time>
     <name>WP0055</name>
     <cmt>WP0055</cmt>
@@ -541,7 +541,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.494326651" lon="-75.736839974">
-    <ele>72.500000</ele>
+    <ele>72.500</ele>
     <time>2005-06-05T00:00:59.478Z</time>
     <name>WP0056</name>
     <cmt>WP0056</cmt>
@@ -549,7 +549,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.494348318" lon="-75.737104974">
-    <ele>73.000000</ele>
+    <ele>73.000</ele>
     <time>2005-06-05T00:01:09.478Z</time>
     <name>WP0057</name>
     <cmt>WP0057</cmt>
@@ -557,7 +557,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.494411651" lon="-75.737268307">
-    <ele>73.300000</ele>
+    <ele>73.300</ele>
     <time>2005-06-05T00:01:44.475Z</time>
     <name>WP0058</name>
     <cmt>WP0058</cmt>
@@ -567,7 +567,7 @@
     <pdop>19.400000</pdop>
   </wpt>
   <wpt lat="45.494488318" lon="-75.737228307">
-    <ele>78.100000</ele>
+    <ele>78.100</ele>
     <time>2005-06-05T00:01:58.474Z</time>
     <name>WP0059</name>
     <cmt>WP0059</cmt>
@@ -577,7 +577,7 @@
     <pdop>6.000000</pdop>
   </wpt>
   <wpt lat="45.494713318" lon="-75.737163307">
-    <ele>77.000000</ele>
+    <ele>77.000</ele>
     <time>2005-06-05T00:02:16.473Z</time>
     <name>WP0060</name>
     <cmt>WP0060</cmt>
@@ -587,7 +587,7 @@
     <pdop>4.200000</pdop>
   </wpt>
   <wpt lat="45.494818318" lon="-75.737188307">
-    <ele>75.500000</ele>
+    <ele>75.500</ele>
     <time>2005-06-05T00:02:25.473Z</time>
     <name>WP0061</name>
     <cmt>WP0061</cmt>
@@ -597,7 +597,7 @@
     <pdop>4.200000</pdop>
   </wpt>
   <wpt lat="45.495011651" lon="-75.737183307">
-    <ele>71.000000</ele>
+    <ele>71.000</ele>
     <time>2005-06-05T00:02:42.472Z</time>
     <name>WP0062</name>
     <cmt>WP0062</cmt>
@@ -607,7 +607,7 @@
     <pdop>12.400000</pdop>
   </wpt>
   <wpt lat="45.495254984" lon="-75.737171640">
-    <ele>75.800000</ele>
+    <ele>75.800</ele>
     <time>2005-06-05T00:03:21.469Z</time>
     <name>WP0063</name>
     <cmt>WP0063</cmt>
@@ -617,7 +617,7 @@
     <pdop>4.200000</pdop>
   </wpt>
   <wpt lat="45.495354984" lon="-75.737114974">
-    <ele>72.600000</ele>
+    <ele>72.600</ele>
     <time>2005-06-05T00:03:31.468Z</time>
     <name>WP0064</name>
     <cmt>WP0064</cmt>
@@ -627,7 +627,7 @@
     <pdop>1.600000</pdop>
   </wpt>
   <wpt lat="45.495581651" lon="-75.736874974">
-    <ele>70.300000</ele>
+    <ele>70.300</ele>
     <time>2005-06-05T00:03:53.467Z</time>
     <name>WP0065</name>
     <cmt>WP0065</cmt>
@@ -637,7 +637,7 @@
     <pdop>2.800000</pdop>
   </wpt>
   <wpt lat="45.495921651" lon="-75.736509974">
-    <ele>74.600000</ele>
+    <ele>74.600</ele>
     <time>2005-06-05T00:04:31.464Z</time>
     <name>WP0066</name>
     <cmt>WP0066</cmt>
@@ -647,7 +647,7 @@
     <pdop>1.800000</pdop>
   </wpt>
   <wpt lat="45.495844984" lon="-75.736588307">
-    <ele>76.300000</ele>
+    <ele>76.300</ele>
     <time>2005-06-05T00:05:05.462Z</time>
     <name>WP0067</name>
     <cmt>WP0067</cmt>
@@ -657,7 +657,7 @@
     <pdop>1.600000</pdop>
   </wpt>
   <wpt lat="45.495876651" lon="-75.736471640">
-    <ele>72.100000</ele>
+    <ele>72.100</ele>
     <time>2005-06-05T00:05:45.459Z</time>
     <name>WP0068</name>
     <cmt>WP0068</cmt>
@@ -667,7 +667,7 @@
     <pdop>5.200000</pdop>
   </wpt>
   <wpt lat="45.495916651" lon="-75.736536640">
-    <ele>80.900000</ele>
+    <ele>80.900</ele>
     <time>2005-06-05T00:06:19.457Z</time>
     <name>WP0069</name>
     <cmt>WP0069</cmt>
@@ -677,7 +677,7 @@
     <pdop>4.000000</pdop>
   </wpt>
   <wpt lat="45.495866651" lon="-75.736521640">
-    <ele>89.500000</ele>
+    <ele>89.500</ele>
     <time>2005-06-05T00:06:25.457Z</time>
     <name>WP0070</name>
     <cmt>WP0070</cmt>
@@ -687,7 +687,7 @@
     <pdop>4.000000</pdop>
   </wpt>
   <wpt lat="45.496203318" lon="-75.734848307">
-    <ele>102.100000</ele>
+    <ele>102.100</ele>
     <time>2005-06-05T00:37:53.913Z</time>
     <name>WP0071</name>
     <cmt>WP0071</cmt>
@@ -697,7 +697,7 @@
     <pdop>2.200000</pdop>
   </wpt>
   <wpt lat="45.496083318" lon="-75.734841640">
-    <ele>102.800000</ele>
+    <ele>102.800</ele>
     <time>2005-06-11T00:38:21.912Z</time>
     <name>WP0072</name>
     <cmt>WP0072</cmt>
@@ -707,7 +707,7 @@
     <pdop>13.400000</pdop>
   </wpt>
   <wpt lat="45.496109984" lon="-75.734754974">
-    <ele>94.100000</ele>
+    <ele>94.100</ele>
     <time>2005-06-11T00:38:55.909Z</time>
     <name>WP0073</name>
     <cmt>WP0073</cmt>
@@ -717,7 +717,7 @@
     <pdop>1.600000</pdop>
   </wpt>
   <wpt lat="45.496299984" lon="-75.734379974">
-    <ele>93.300000</ele>
+    <ele>93.300</ele>
     <time>2005-06-11T00:39:44.906Z</time>
     <name>WP0074</name>
     <cmt>WP0074</cmt>
@@ -727,7 +727,7 @@
     <pdop>1.600000</pdop>
   </wpt>
   <wpt lat="45.496259984" lon="-75.734368307">
-    <ele>83.800000</ele>
+    <ele>83.800</ele>
     <time>2005-06-11T00:40:44.902Z</time>
     <name>WP0075</name>
     <cmt>WP0075</cmt>
@@ -735,7 +735,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.496204984" lon="-75.734474974">
-    <ele>85.100000</ele>
+    <ele>85.100</ele>
     <time>2005-06-11T00:41:04.901Z</time>
     <name>WP0076</name>
     <cmt>WP0076</cmt>
@@ -743,7 +743,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.496191651" lon="-75.734614974">
-    <ele>85.600000</ele>
+    <ele>85.600</ele>
     <time>2005-06-11T00:41:11.900Z</time>
     <name>WP0077</name>
     <cmt>WP0077</cmt>
@@ -753,7 +753,7 @@
     <pdop>16.000000</pdop>
   </wpt>
   <wpt lat="45.496134984" lon="-75.734768307">
-    <ele>85.900000</ele>
+    <ele>85.900</ele>
     <time>2005-06-11T00:41:19.900Z</time>
     <name>WP0078</name>
     <cmt>WP0078</cmt>
@@ -761,7 +761,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.496108318" lon="-75.734911640">
-    <ele>85.200000</ele>
+    <ele>85.200</ele>
     <time>2005-06-11T00:41:27.899Z</time>
     <name>WP0079</name>
     <cmt>WP0079</cmt>
@@ -771,7 +771,7 @@
     <pdop>2.400000</pdop>
   </wpt>
   <wpt lat="45.496044984" lon="-75.735079974">
-    <ele>87.100000</ele>
+    <ele>87.100</ele>
     <time>2005-06-11T00:41:43.898Z</time>
     <name>WP0080</name>
     <cmt>WP0080</cmt>
@@ -781,7 +781,7 @@
     <pdop>3.200000</pdop>
   </wpt>
   <wpt lat="45.495993318" lon="-75.735166640">
-    <ele>82.300000</ele>
+    <ele>82.300</ele>
     <time>2005-06-11T00:41:51.898Z</time>
     <name>WP0081</name>
     <cmt>WP0081</cmt>
@@ -791,7 +791,7 @@
     <pdop>1.200000</pdop>
   </wpt>
   <wpt lat="45.495931651" lon="-75.735276640">
-    <ele>78.800000</ele>
+    <ele>78.800</ele>
     <time>2005-06-11T00:42:00.897Z</time>
     <name>WP0082</name>
     <cmt>WP0082</cmt>
@@ -801,7 +801,7 @@
     <pdop>2.400000</pdop>
   </wpt>
   <wpt lat="45.495874984" lon="-75.735439974">
-    <ele>75.500000</ele>
+    <ele>75.500</ele>
     <time>2005-06-11T00:42:14.896Z</time>
     <name>WP0083</name>
     <cmt>WP0083</cmt>
@@ -811,7 +811,7 @@
     <pdop>1.400000</pdop>
   </wpt>
   <wpt lat="45.495826651" lon="-75.735561640">
-    <ele>74.100000</ele>
+    <ele>74.100</ele>
     <time>2005-06-11T00:42:25.895Z</time>
     <name>WP0084</name>
     <cmt>WP0084</cmt>
@@ -821,7 +821,7 @@
     <pdop>2.000000</pdop>
   </wpt>
   <wpt lat="45.495858318" lon="-75.735689974">
-    <ele>72.500000</ele>
+    <ele>72.500</ele>
     <time>2005-06-11T00:42:50.894Z</time>
     <name>WP0085</name>
     <cmt>WP0085</cmt>
@@ -829,7 +829,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.495931651" lon="-75.735779974">
-    <ele>74.000000</ele>
+    <ele>74.000</ele>
     <time>2005-06-11T00:43:01.893Z</time>
     <name>WP0086</name>
     <cmt>WP0086</cmt>
@@ -839,7 +839,7 @@
     <pdop>40.599998</pdop>
   </wpt>
   <wpt lat="45.495899984" lon="-75.735658307">
-    <ele>74.700000</ele>
+    <ele>74.700</ele>
     <time>2005-06-11T00:43:09.893Z</time>
     <name>WP0087</name>
     <cmt>WP0087</cmt>
@@ -849,21 +849,21 @@
     <pdop>2.000000</pdop>
   </wpt>
   <wpt lat="45.495808318" lon="-75.735613307">
-    <ele>72.300000</ele>
+    <ele>72.300</ele>
     <time>2005-06-11T00:43:38.891Z</time>
     <name>WP0088</name>
     <cmt>WP0088</cmt>
     <desc>WP0088</desc>
   </wpt>
   <wpt lat="45.495711651" lon="-75.735599974">
-    <ele>72.200000</ele>
+    <ele>72.200</ele>
     <time>2005-06-11T00:44:05.889Z</time>
     <name>WP0089</name>
     <cmt>WP0089</cmt>
     <desc>WP0089</desc>
   </wpt>
   <wpt lat="45.495679984" lon="-75.735724974">
-    <ele>73.000000</ele>
+    <ele>73.000</ele>
     <time>2005-06-11T00:44:11.888Z</time>
     <name>WP0090</name>
     <cmt>WP0090</cmt>
@@ -873,7 +873,7 @@
     <pdop>38.200001</pdop>
   </wpt>
   <wpt lat="45.495651651" lon="-75.735859974">
-    <ele>74.400000</ele>
+    <ele>74.400</ele>
     <time>2005-06-11T00:44:23.888Z</time>
     <name>WP0091</name>
     <cmt>WP0091</cmt>
@@ -881,7 +881,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.495756651" lon="-75.735824974">
-    <ele>81.200000</ele>
+    <ele>81.200</ele>
     <time>2005-06-11T00:44:43.886Z</time>
     <name>WP0092</name>
     <cmt>WP0092</cmt>
@@ -891,7 +891,7 @@
     <pdop>37.200001</pdop>
   </wpt>
   <wpt lat="45.495728318" lon="-75.735801640">
-    <ele>70.100000</ele>
+    <ele>70.100</ele>
     <time>2005-06-11T00:44:47.886Z</time>
     <name>WP0093</name>
     <cmt>WP0093</cmt>
@@ -901,7 +901,7 @@
     <pdop>9.400000</pdop>
   </wpt>
   <wpt lat="45.495708318" lon="-75.735911640">
-    <ele>64.400000</ele>
+    <ele>64.400</ele>
     <time>2005-06-11T00:45:02.885Z</time>
     <name>WP0094</name>
     <cmt>WP0094</cmt>
@@ -909,7 +909,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.495683318" lon="-75.736064974">
-    <ele>64.000000</ele>
+    <ele>64.000</ele>
     <time>2005-06-11T00:45:35.883Z</time>
     <name>WP0095</name>
     <cmt>WP0095</cmt>
@@ -917,7 +917,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.495584984" lon="-75.736138307">
-    <ele>64.600000</ele>
+    <ele>64.600</ele>
     <time>2005-06-11T00:46:07.881Z</time>
     <name>WP0096</name>
     <cmt>WP0096</cmt>
@@ -927,7 +927,7 @@
     <pdop>23.000000</pdop>
   </wpt>
   <wpt lat="45.495651651" lon="-75.736043307">
-    <ele>67.300000</ele>
+    <ele>67.300</ele>
     <time>2005-06-11T00:46:36.879Z</time>
     <name>WP0097</name>
     <cmt>WP0097</cmt>
@@ -937,7 +937,7 @@
     <pdop>5.200000</pdop>
   </wpt>
   <wpt lat="45.495691651" lon="-75.735939974">
-    <ele>71.400000</ele>
+    <ele>71.400</ele>
     <time>2005-06-11T00:48:44.870Z</time>
     <name>WP0098</name>
     <cmt>WP0098</cmt>
@@ -947,7 +947,7 @@
     <pdop>43.599998</pdop>
   </wpt>
   <wpt lat="45.495706651" lon="-75.736066640">
-    <ele>71.700000</ele>
+    <ele>71.700</ele>
     <time>2005-06-11T00:49:14.868Z</time>
     <name>WP0099</name>
     <cmt>WP0099</cmt>
@@ -957,7 +957,7 @@
     <pdop>24.200001</pdop>
   </wpt>
   <wpt lat="45.495733318" lon="-75.735924974">
-    <ele>72.300000</ele>
+    <ele>72.300</ele>
     <time>2005-06-11T00:51:19.860Z</time>
     <name>WP0100</name>
     <cmt>WP0100</cmt>
@@ -967,7 +967,7 @@
     <pdop>2.200000</pdop>
   </wpt>
   <wpt lat="45.495666651" lon="-75.735996640">
-    <ele>81.200000</ele>
+    <ele>81.200</ele>
     <time>2005-06-11T00:51:31.859Z</time>
     <name>WP0101</name>
     <cmt>WP0101</cmt>
@@ -977,7 +977,7 @@
     <pdop>36.400002</pdop>
   </wpt>
   <wpt lat="45.495646651" lon="-75.735903307">
-    <ele>74.500000</ele>
+    <ele>74.500</ele>
     <time>2005-06-11T00:51:43.858Z</time>
     <name>WP0102</name>
     <cmt>WP0102</cmt>
@@ -985,7 +985,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.495689984" lon="-75.735704974">
-    <ele>74.700000</ele>
+    <ele>74.700</ele>
     <time>2005-06-11T00:51:53.858Z</time>
     <name>WP0103</name>
     <cmt>WP0103</cmt>
@@ -995,7 +995,7 @@
     <pdop>13.600000</pdop>
   </wpt>
   <wpt lat="45.495769984" lon="-75.735519974">
-    <ele>76.200000</ele>
+    <ele>76.200</ele>
     <time>2005-06-11T00:52:08.857Z</time>
     <name>WP0104</name>
     <cmt>WP0104</cmt>
@@ -1005,7 +1005,7 @@
     <pdop>50.000000</pdop>
   </wpt>
   <wpt lat="45.495858318" lon="-75.735479974">
-    <ele>77.900000</ele>
+    <ele>77.900</ele>
     <time>2005-06-11T00:52:19.856Z</time>
     <name>WP0105</name>
     <cmt>WP0105</cmt>
@@ -1015,7 +1015,7 @@
     <pdop>26.400000</pdop>
   </wpt>
   <wpt lat="45.495914984" lon="-75.735378307">
-    <ele>78.600000</ele>
+    <ele>78.600</ele>
     <time>2005-06-11T00:52:27.856Z</time>
     <name>WP0106</name>
     <cmt>WP0106</cmt>
@@ -1025,7 +1025,7 @@
     <pdop>50.000000</pdop>
   </wpt>
   <wpt lat="45.495991651" lon="-75.735234974">
-    <ele>80.700000</ele>
+    <ele>80.700</ele>
     <time>2005-06-11T00:52:37.855Z</time>
     <name>WP0107</name>
     <cmt>WP0107</cmt>
@@ -1035,7 +1035,7 @@
     <pdop>1.600000</pdop>
   </wpt>
   <wpt lat="45.496076651" lon="-75.735043307">
-    <ele>84.400000</ele>
+    <ele>84.400</ele>
     <time>2005-06-11T00:52:54.854Z</time>
     <name>WP0108</name>
     <cmt>WP0108</cmt>
@@ -1043,7 +1043,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.496214984" lon="-75.734634974">
-    <ele>92.600000</ele>
+    <ele>92.600</ele>
     <time>2005-06-11T00:53:33.851Z</time>
     <name>WP0109</name>
     <cmt>WP0109</cmt>
@@ -1053,7 +1053,7 @@
     <pdop>2.000000</pdop>
   </wpt>
   <wpt lat="45.496243318" lon="-75.734476640">
-    <ele>95.800000</ele>
+    <ele>95.800</ele>
     <time>2005-06-11T00:53:43.850Z</time>
     <name>WP0110</name>
     <cmt>WP0110</cmt>
@@ -1063,7 +1063,7 @@
     <pdop>5.000000</pdop>
   </wpt>
   <wpt lat="45.496326651" lon="-75.734336640">
-    <ele>94.700000</ele>
+    <ele>94.700</ele>
     <time>2005-06-11T00:53:53.850Z</time>
     <name>WP0111</name>
     <cmt>WP0111</cmt>
@@ -1073,7 +1073,7 @@
     <pdop>0.800000</pdop>
   </wpt>
   <wpt lat="45.496198318" lon="-75.734216640">
-    <ele>59.200000</ele>
+    <ele>59.200</ele>
     <time>2005-06-11T14:39:26.882Z</time>
     <name>WP0112</name>
     <cmt>WP0112</cmt>
@@ -1083,7 +1083,7 @@
     <pdop>9.400000</pdop>
   </wpt>
   <wpt lat="45.496179984" lon="-75.734338307">
-    <ele>55.200000</ele>
+    <ele>55.200</ele>
     <time>2005-06-12T14:39:42.881Z</time>
     <name>WP0113</name>
     <cmt>WP0113</cmt>
@@ -1093,7 +1093,7 @@
     <pdop>6.000000</pdop>
   </wpt>
   <wpt lat="45.496081651" lon="-75.734656640">
-    <ele>56.100000</ele>
+    <ele>56.100</ele>
     <time>2005-06-12T14:40:08.879Z</time>
     <name>WP0114</name>
     <cmt>WP0114</cmt>
@@ -1103,7 +1103,7 @@
     <pdop>7.600000</pdop>
   </wpt>
   <wpt lat="45.495996651" lon="-75.734781640">
-    <ele>54.500000</ele>
+    <ele>54.500</ele>
     <time>2005-06-12T14:40:16.878Z</time>
     <name>WP0115</name>
     <cmt>WP0115</cmt>
@@ -1113,7 +1113,7 @@
     <pdop>11.800000</pdop>
   </wpt>
   <wpt lat="45.495906651" lon="-75.734983307">
-    <ele>48.700000</ele>
+    <ele>48.700</ele>
     <time>2005-06-12T14:40:33.877Z</time>
     <name>WP0116</name>
     <cmt>WP0116</cmt>
@@ -1121,7 +1121,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.495801651" lon="-75.735363307">
-    <ele>43.700000</ele>
+    <ele>43.700</ele>
     <time>2005-06-12T14:41:02.875Z</time>
     <name>WP0117</name>
     <cmt>WP0117</cmt>
@@ -1131,7 +1131,7 @@
     <pdop>7.200000</pdop>
   </wpt>
   <wpt lat="45.495801651" lon="-75.735514974">
-    <ele>45.100000</ele>
+    <ele>45.100</ele>
     <time>2005-06-12T14:41:16.874Z</time>
     <name>WP0118</name>
     <cmt>WP0118</cmt>
@@ -1139,7 +1139,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.495833318" lon="-75.735654974">
-    <ele>44.600000</ele>
+    <ele>44.600</ele>
     <time>2005-06-12T14:41:24.874Z</time>
     <name>WP0119</name>
     <cmt>WP0119</cmt>
@@ -1149,7 +1149,7 @@
     <pdop>16.600000</pdop>
   </wpt>
   <wpt lat="45.495914984" lon="-75.735726640">
-    <ele>44.100000</ele>
+    <ele>44.100</ele>
     <time>2005-06-12T14:41:31.873Z</time>
     <name>WP0120</name>
     <cmt>WP0120</cmt>
@@ -1157,7 +1157,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.495956651" lon="-75.735839974">
-    <ele>43.000000</ele>
+    <ele>43.000</ele>
     <time>2005-06-12T14:41:40.873Z</time>
     <name>WP0121</name>
     <cmt>WP0121</cmt>
@@ -1165,7 +1165,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.496036651" lon="-75.735908307">
-    <ele>42.000000</ele>
+    <ele>42.000</ele>
     <time>2005-06-12T14:41:48.872Z</time>
     <name>WP0122</name>
     <cmt>WP0122</cmt>
@@ -1175,7 +1175,7 @@
     <pdop>7.200000</pdop>
   </wpt>
   <wpt lat="45.496151651" lon="-75.735971640">
-    <ele>41.400000</ele>
+    <ele>41.400</ele>
     <time>2005-06-12T14:41:55.872Z</time>
     <name>WP0123</name>
     <cmt>WP0123</cmt>
@@ -1185,7 +1185,7 @@
     <pdop>6.800000</pdop>
   </wpt>
   <wpt lat="45.496328318" lon="-75.735998307">
-    <ele>41.600000</ele>
+    <ele>41.600</ele>
     <time>2005-06-12T14:42:05.871Z</time>
     <name>WP0124</name>
     <cmt>WP0124</cmt>
@@ -1195,7 +1195,7 @@
     <pdop>6.800000</pdop>
   </wpt>
   <wpt lat="45.496431651" lon="-75.735963307">
-    <ele>41.600000</ele>
+    <ele>41.600</ele>
     <time>2005-06-12T14:42:14.871Z</time>
     <name>WP0125</name>
     <cmt>WP0125</cmt>
@@ -1203,7 +1203,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.496608318" lon="-75.735874974">
-    <ele>41.600000</ele>
+    <ele>41.600</ele>
     <time>2005-06-12T14:42:31.870Z</time>
     <name>WP0126</name>
     <cmt>WP0126</cmt>
@@ -1213,7 +1213,7 @@
     <pdop>7.000000</pdop>
   </wpt>
   <wpt lat="45.496763318" lon="-75.735828307">
-    <ele>41.600000</ele>
+    <ele>41.600</ele>
     <time>2005-06-12T14:42:44.869Z</time>
     <name>WP0127</name>
     <cmt>WP0127</cmt>
@@ -1221,7 +1221,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.496854984" lon="-75.735886640">
-    <ele>41.600000</ele>
+    <ele>41.600</ele>
     <time>2005-06-12T14:42:50.868Z</time>
     <name>WP0128</name>
     <cmt>WP0128</cmt>
@@ -1229,7 +1229,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.496996651" lon="-75.735931640">
-    <ele>41.600000</ele>
+    <ele>41.600</ele>
     <time>2005-06-12T14:43:03.867Z</time>
     <name>WP0129</name>
     <cmt>WP0129</cmt>
@@ -1237,7 +1237,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.497081651" lon="-75.735889974">
-    <ele>41.600000</ele>
+    <ele>41.600</ele>
     <time>2005-06-12T14:43:06.867Z</time>
     <name>WP0130</name>
     <cmt>WP0130</cmt>
@@ -1245,7 +1245,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.497164984" lon="-75.735838307">
-    <ele>41.600000</ele>
+    <ele>41.600</ele>
     <time>2005-06-12T14:43:15.867Z</time>
     <name>WP0131</name>
     <cmt>WP0131</cmt>
@@ -1253,7 +1253,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.497229984" lon="-75.735719974">
-    <ele>41.600000</ele>
+    <ele>41.600</ele>
     <time>2005-06-12T14:43:24.866Z</time>
     <name>WP0132</name>
     <cmt>WP0132</cmt>
@@ -1263,7 +1263,7 @@
     <pdop>7.400000</pdop>
   </wpt>
   <wpt lat="45.497303318" lon="-75.735568307">
-    <ele>41.700000</ele>
+    <ele>41.700</ele>
     <time>2005-06-12T14:43:34.865Z</time>
     <name>WP0133</name>
     <cmt>WP0133</cmt>
@@ -1273,7 +1273,7 @@
     <pdop>33.799999</pdop>
   </wpt>
   <wpt lat="45.497301651" lon="-75.735439974">
-    <ele>41.700000</ele>
+    <ele>41.700</ele>
     <time>2005-06-12T14:43:41.865Z</time>
     <name>WP0134</name>
     <cmt>WP0134</cmt>
@@ -1283,7 +1283,7 @@
     <pdop>6.800000</pdop>
   </wpt>
   <wpt lat="45.497318318" lon="-75.735193307">
-    <ele>41.800000</ele>
+    <ele>41.800</ele>
     <time>2005-06-12T14:43:54.864Z</time>
     <name>WP0135</name>
     <cmt>WP0135</cmt>
@@ -1291,7 +1291,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.497329984" lon="-75.734973307">
-    <ele>42.300000</ele>
+    <ele>42.300</ele>
     <time>2005-06-12T14:44:06.863Z</time>
     <name>WP0136</name>
     <cmt>WP0136</cmt>
@@ -1301,7 +1301,7 @@
     <pdop>21.799999</pdop>
   </wpt>
   <wpt lat="45.497464984" lon="-75.733798307">
-    <ele>45.200000</ele>
+    <ele>45.200</ele>
     <time>2005-06-12T14:44:53.860Z</time>
     <name>WP0137</name>
     <cmt>WP0137</cmt>
@@ -1311,7 +1311,7 @@
     <pdop>7.000000</pdop>
   </wpt>
   <wpt lat="45.497519984" lon="-75.733038307">
-    <ele>46.700000</ele>
+    <ele>46.700</ele>
     <time>2005-06-12T14:45:30.858Z</time>
     <name>WP0138</name>
     <cmt>WP0138</cmt>
@@ -1321,7 +1321,7 @@
     <pdop>8.400000</pdop>
   </wpt>
   <wpt lat="45.497474984" lon="-75.732808307">
-    <ele>47.400000</ele>
+    <ele>47.400</ele>
     <time>2005-06-12T14:45:44.857Z</time>
     <name>WP0139</name>
     <cmt>WP0139</cmt>
@@ -1331,7 +1331,7 @@
     <pdop>8.600000</pdop>
   </wpt>
   <wpt lat="45.497466651" lon="-75.732938307">
-    <ele>48.300000</ele>
+    <ele>48.300</ele>
     <time>2005-06-12T14:45:55.856Z</time>
     <name>WP0140</name>
     <cmt>WP0140</cmt>
@@ -1339,14 +1339,14 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.497506651" lon="-75.733146640">
-    <ele>49.000000</ele>
+    <ele>49.000</ele>
     <time>2005-06-12T14:46:07.855Z</time>
     <name>WP0141</name>
     <cmt>WP0141</cmt>
     <desc>WP0141</desc>
   </wpt>
   <wpt lat="45.497499984" lon="-75.733361640">
-    <ele>49.400000</ele>
+    <ele>49.400</ele>
     <time>2005-06-12T14:46:22.854Z</time>
     <name>WP0142</name>
     <cmt>WP0142</cmt>
@@ -1354,7 +1354,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.497463318" lon="-75.733511640">
-    <ele>49.900000</ele>
+    <ele>49.900</ele>
     <time>2005-06-12T14:46:37.853Z</time>
     <name>WP0143</name>
     <cmt>WP0143</cmt>
@@ -1364,7 +1364,7 @@
     <pdop>8.200000</pdop>
   </wpt>
   <wpt lat="45.497483318" lon="-75.733636640">
-    <ele>49.500000</ele>
+    <ele>49.500</ele>
     <time>2005-06-12T14:47:06.852Z</time>
     <name>WP0144</name>
     <cmt>WP0144</cmt>
@@ -1374,7 +1374,7 @@
     <pdop>6.400000</pdop>
   </wpt>
   <wpt lat="45.497466651" lon="-75.733898307">
-    <ele>55.000000</ele>
+    <ele>55.000</ele>
     <time>2005-06-12T14:47:31.850Z</time>
     <name>WP0145</name>
     <cmt>WP0145</cmt>
@@ -1384,7 +1384,7 @@
     <pdop>9.400000</pdop>
   </wpt>
   <wpt lat="45.497471651" lon="-75.734046640">
-    <ele>56.600000</ele>
+    <ele>56.600</ele>
     <time>2005-06-12T14:47:40.849Z</time>
     <name>WP0146</name>
     <cmt>WP0146</cmt>
@@ -1394,7 +1394,7 @@
     <pdop>5.400000</pdop>
   </wpt>
   <wpt lat="45.497383318" lon="-75.734076640">
-    <ele>56.100000</ele>
+    <ele>56.100</ele>
     <time>2005-06-12T14:48:17.847Z</time>
     <name>WP0147</name>
     <cmt>WP0147</cmt>
@@ -1404,7 +1404,7 @@
     <pdop>10.000000</pdop>
   </wpt>
   <wpt lat="45.497269984" lon="-75.734148307">
-    <ele>56.700000</ele>
+    <ele>56.700</ele>
     <time>2005-06-12T14:48:37.846Z</time>
     <name>WP0148</name>
     <cmt>WP0148</cmt>
@@ -1412,7 +1412,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.497241651" lon="-75.734263307">
-    <ele>70.600000</ele>
+    <ele>70.600</ele>
     <time>2005-06-12T14:49:04.844Z</time>
     <name>WP0149</name>
     <cmt>WP0149</cmt>
@@ -1422,7 +1422,7 @@
     <pdop>5.200000</pdop>
   </wpt>
   <wpt lat="45.497159984" lon="-75.734243307">
-    <ele>75.600000</ele>
+    <ele>75.600</ele>
     <time>2005-06-12T14:49:14.843Z</time>
     <name>WP0150</name>
     <cmt>WP0150</cmt>
@@ -1432,7 +1432,7 @@
     <pdop>5.000000</pdop>
   </wpt>
   <wpt lat="45.497066651" lon="-75.734216640">
-    <ele>76.100000</ele>
+    <ele>76.100</ele>
     <time>2005-06-12T14:49:29.842Z</time>
     <name>WP0151</name>
     <cmt>WP0151</cmt>
@@ -1442,7 +1442,7 @@
     <pdop>10.600000</pdop>
   </wpt>
   <wpt lat="45.496981651" lon="-75.734176640">
-    <ele>77.400000</ele>
+    <ele>77.400</ele>
     <time>2005-06-12T14:49:49.841Z</time>
     <name>WP0152</name>
     <cmt>WP0152</cmt>
@@ -1452,7 +1452,7 @@
     <pdop>6.400000</pdop>
   </wpt>
   <wpt lat="45.497001651" lon="-75.734269974">
-    <ele>84.500000</ele>
+    <ele>84.500</ele>
     <time>2005-06-12T14:50:10.839Z</time>
     <name>WP0153</name>
     <cmt>WP0153</cmt>
@@ -1460,7 +1460,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.497056651" lon="-75.734181640">
-    <ele>90.200000</ele>
+    <ele>90.200</ele>
     <time>2005-06-12T14:50:25.839Z</time>
     <name>WP0154</name>
     <cmt>WP0154</cmt>
@@ -1468,7 +1468,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.497098318" lon="-75.734301640">
-    <ele>93.200000</ele>
+    <ele>93.200</ele>
     <time>2005-06-12T14:50:45.837Z</time>
     <name>WP0155</name>
     <cmt>WP0155</cmt>
@@ -1476,7 +1476,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.497131651" lon="-75.734461640">
-    <ele>94.400000</ele>
+    <ele>94.400</ele>
     <time>2005-06-12T14:50:55.837Z</time>
     <name>WP0156</name>
     <cmt>WP0156</cmt>
@@ -1486,7 +1486,7 @@
     <pdop>6.400000</pdop>
   </wpt>
   <wpt lat="45.497083318" lon="-75.734576640">
-    <ele>95.400000</ele>
+    <ele>95.400</ele>
     <time>2005-06-12T14:51:04.836Z</time>
     <name>WP0157</name>
     <cmt>WP0157</cmt>
@@ -1494,7 +1494,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.497011651" lon="-75.734718307">
-    <ele>96.500000</ele>
+    <ele>96.500</ele>
     <time>2005-06-12T14:51:16.835Z</time>
     <name>WP0158</name>
     <cmt>WP0158</cmt>
@@ -1504,7 +1504,7 @@
     <pdop>6.200000</pdop>
   </wpt>
   <wpt lat="45.497041651" lon="-75.734841640">
-    <ele>96.300000</ele>
+    <ele>96.300</ele>
     <time>2005-06-12T14:51:38.834Z</time>
     <name>WP0159</name>
     <cmt>WP0159</cmt>
@@ -1512,7 +1512,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.496978318" lon="-75.734936640">
-    <ele>97.000000</ele>
+    <ele>97.000</ele>
     <time>2005-06-12T14:51:47.833Z</time>
     <name>WP0160</name>
     <cmt>WP0160</cmt>
@@ -1522,7 +1522,7 @@
     <pdop>6.200000</pdop>
   </wpt>
   <wpt lat="45.496954984" lon="-75.735069974">
-    <ele>96.900000</ele>
+    <ele>96.900</ele>
     <time>2005-06-12T14:51:57.832Z</time>
     <name>WP0161</name>
     <cmt>WP0161</cmt>
@@ -1530,7 +1530,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.496956651" lon="-75.735244974">
-    <ele>98.200000</ele>
+    <ele>98.200</ele>
     <time>2005-06-12T14:52:10.832Z</time>
     <name>WP0162</name>
     <cmt>WP0162</cmt>
@@ -1540,7 +1540,7 @@
     <pdop>6.200000</pdop>
   </wpt>
   <wpt lat="45.496894984" lon="-75.735343307">
-    <ele>98.600000</ele>
+    <ele>98.600</ele>
     <time>2005-06-12T14:52:24.831Z</time>
     <name>WP0163</name>
     <cmt>WP0163</cmt>
@@ -1550,7 +1550,7 @@
     <pdop>6.200000</pdop>
   </wpt>
   <wpt lat="45.496828318" lon="-75.735484974">
-    <ele>98.400000</ele>
+    <ele>98.400</ele>
     <time>2005-06-12T14:52:38.830Z</time>
     <name>WP0164</name>
     <cmt>WP0164</cmt>
@@ -1558,7 +1558,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.496764984" lon="-75.735634974">
-    <ele>98.200000</ele>
+    <ele>98.200</ele>
     <time>2005-06-12T14:52:51.829Z</time>
     <name>WP0165</name>
     <cmt>WP0165</cmt>
@@ -1568,7 +1568,7 @@
     <pdop>6.200000</pdop>
   </wpt>
   <wpt lat="45.496698318" lon="-75.735818307">
-    <ele>97.000000</ele>
+    <ele>97.000</ele>
     <time>2005-06-12T14:53:04.828Z</time>
     <name>WP0166</name>
     <cmt>WP0166</cmt>
@@ -1578,7 +1578,7 @@
     <pdop>6.200000</pdop>
   </wpt>
   <wpt lat="45.496658318" lon="-75.735986640">
-    <ele>96.600000</ele>
+    <ele>96.600</ele>
     <time>2005-06-12T14:53:12.828Z</time>
     <name>WP0167</name>
     <cmt>WP0167</cmt>
@@ -1588,7 +1588,7 @@
     <pdop>13.400000</pdop>
   </wpt>
   <wpt lat="45.496573318" lon="-75.736061640">
-    <ele>96.100000</ele>
+    <ele>96.100</ele>
     <time>2005-06-12T14:53:17.827Z</time>
     <name>WP0168</name>
     <cmt>WP0168</cmt>
@@ -1598,7 +1598,7 @@
     <pdop>3.200000</pdop>
   </wpt>
   <wpt lat="45.496441651" lon="-75.736114974">
-    <ele>94.800000</ele>
+    <ele>94.800</ele>
     <time>2005-06-12T14:53:25.827Z</time>
     <name>WP0169</name>
     <cmt>WP0169</cmt>
@@ -1608,7 +1608,7 @@
     <pdop>13.400000</pdop>
   </wpt>
   <wpt lat="45.496343318" lon="-75.736063307">
-    <ele>95.200000</ele>
+    <ele>95.200</ele>
     <time>2005-06-12T14:53:30.826Z</time>
     <name>WP0170</name>
     <cmt>WP0170</cmt>
@@ -1618,7 +1618,7 @@
     <pdop>13.600000</pdop>
   </wpt>
   <wpt lat="45.495934984" lon="-75.735669974">
-    <ele>93.600000</ele>
+    <ele>93.600</ele>
     <time>2005-06-12T14:53:51.825Z</time>
     <name>WP0171</name>
     <cmt>WP0171</cmt>
@@ -1628,7 +1628,7 @@
     <pdop>8.800000</pdop>
   </wpt>
   <wpt lat="45.495949984" lon="-75.735524974">
-    <ele>92.400000</ele>
+    <ele>92.400</ele>
     <time>2005-06-12T14:53:56.825Z</time>
     <name>WP0172</name>
     <cmt>WP0172</cmt>
@@ -1638,7 +1638,7 @@
     <pdop>3.000000</pdop>
   </wpt>
   <wpt lat="45.495986651" lon="-75.735344974">
-    <ele>91.200000</ele>
+    <ele>91.200</ele>
     <time>2005-06-12T14:54:07.824Z</time>
     <name>WP0173</name>
     <cmt>WP0173</cmt>
@@ -1648,7 +1648,7 @@
     <pdop>3.000000</pdop>
   </wpt>
   <wpt lat="45.496024984" lon="-75.735221640">
-    <ele>92.400000</ele>
+    <ele>92.400</ele>
     <time>2005-06-12T14:54:19.823Z</time>
     <name>WP0174</name>
     <cmt>WP0174</cmt>
@@ -1658,7 +1658,7 @@
     <pdop>6.200000</pdop>
   </wpt>
   <wpt lat="45.496096651" lon="-75.734986640">
-    <ele>94.400000</ele>
+    <ele>94.400</ele>
     <time>2005-06-12T14:54:46.821Z</time>
     <name>WP0175</name>
     <cmt>WP0175</cmt>
@@ -1668,7 +1668,7 @@
     <pdop>2.800000</pdop>
   </wpt>
   <wpt lat="45.496131651" lon="-75.734836640">
-    <ele>92.800000</ele>
+    <ele>92.800</ele>
     <time>2005-06-12T14:55:02.820Z</time>
     <name>WP0176</name>
     <cmt>WP0176</cmt>
@@ -1678,7 +1678,7 @@
     <pdop>2.800000</pdop>
   </wpt>
   <wpt lat="45.496186651" lon="-75.734716640">
-    <ele>94.900000</ele>
+    <ele>94.900</ele>
     <time>2005-06-12T14:55:11.820Z</time>
     <name>WP0177</name>
     <cmt>WP0177</cmt>
@@ -1688,7 +1688,7 @@
     <pdop>9.000000</pdop>
   </wpt>
   <wpt lat="45.496241651" lon="-75.734586640">
-    <ele>95.600000</ele>
+    <ele>95.600</ele>
     <time>2005-06-12T14:55:21.819Z</time>
     <name>WP0178</name>
     <cmt>WP0178</cmt>
@@ -1698,7 +1698,7 @@
     <pdop>2.800000</pdop>
   </wpt>
   <wpt lat="45.496301651" lon="-75.734363307">
-    <ele>96.300000</ele>
+    <ele>96.300</ele>
     <time>2005-06-12T14:55:43.818Z</time>
     <name>WP0179</name>
     <cmt>WP0179</cmt>
@@ -1708,7 +1708,7 @@
     <pdop>9.200000</pdop>
   </wpt>
   <wpt lat="45.496216651" lon="-75.734409974">
-    <ele>96.300000</ele>
+    <ele>96.300</ele>
     <time>2005-06-12T14:56:17.815Z</time>
     <name>WP0180</name>
     <cmt>WP0180</cmt>
@@ -1716,7 +1716,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.496306651" lon="-75.734371640">
-    <ele>98.800000</ele>
+    <ele>98.800</ele>
     <time>2005-06-12T14:56:27.815Z</time>
     <name>WP0181</name>
     <cmt>WP0181</cmt>
@@ -1726,7 +1726,7 @@
     <pdop>2.600000</pdop>
   </wpt>
   <wpt lat="45.496194984" lon="-75.734224974">
-    <ele>97.900000</ele>
+    <ele>97.900</ele>
     <time>2005-06-12T14:57:10.812Z</time>
     <name>WP0182</name>
     <cmt>WP0182</cmt>
@@ -1736,7 +1736,7 @@
     <pdop>9.600000</pdop>
   </wpt>
   <wpt lat="45.495998318" lon="-75.734101640">
-    <ele>97.600000</ele>
+    <ele>97.600</ele>
     <time>2005-06-12T14:57:13.812Z</time>
     <name>WP0183</name>
     <cmt>WP0183</cmt>
@@ -1744,14 +1744,14 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.494281651" lon="-75.733509974">
-    <ele>97.300000</ele>
+    <ele>97.300</ele>
     <time>2005-06-12T14:57:44.810Z</time>
     <name>WP0184</name>
     <cmt>WP0184</cmt>
     <desc>WP0184</desc>
   </wpt>
   <wpt lat="45.491526651" lon="-75.730496640">
-    <ele>97.500000</ele>
+    <ele>97.500</ele>
     <time>2005-06-12T14:58:20.807Z</time>
     <name>WP0185</name>
     <cmt>WP0185</cmt>
@@ -1759,7 +1759,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.490809984" lon="-75.728584974">
-    <ele>97.700000</ele>
+    <ele>97.700</ele>
     <time>2005-06-12T14:58:21.807Z</time>
     <name>WP0186</name>
     <cmt>WP0186</cmt>
@@ -1767,7 +1767,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.489388318" lon="-75.725018307">
-    <ele>98.100000</ele>
+    <ele>98.100</ele>
     <time>2005-06-12T14:58:24.807Z</time>
     <name>WP0187</name>
     <cmt>WP0187</cmt>
@@ -1775,7 +1775,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.488314984" lon="-75.722894974">
-    <ele>98.200000</ele>
+    <ele>98.200</ele>
     <time>2005-06-12T14:58:28.807Z</time>
     <name>WP0188</name>
     <cmt>WP0188</cmt>
@@ -1783,14 +1783,14 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.487204984" lon="-75.721489974">
-    <ele>98.200000</ele>
+    <ele>98.200</ele>
     <time>2005-06-12T14:58:34.807Z</time>
     <name>WP0189</name>
     <cmt>WP0189</cmt>
     <desc>WP0189</desc>
   </wpt>
   <wpt lat="45.487416651" lon="-75.720791640">
-    <ele>97.900000</ele>
+    <ele>97.900</ele>
     <time>2005-06-12T14:58:42.806Z</time>
     <name>WP0190</name>
     <cmt>WP0190</cmt>
@@ -1798,7 +1798,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.488398318" lon="-75.721109974">
-    <ele>97.800000</ele>
+    <ele>97.800</ele>
     <time>2005-06-12T14:58:43.806Z</time>
     <name>WP0191</name>
     <cmt>WP0191</cmt>
@@ -1806,7 +1806,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.490408318" lon="-75.722254974">
-    <ele>101.300000</ele>
+    <ele>101.300</ele>
     <time>2005-06-12T14:58:46.806Z</time>
     <name>WP0192</name>
     <cmt>WP0192</cmt>
@@ -1814,7 +1814,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.491743318" lon="-75.723359974">
-    <ele>105.300000</ele>
+    <ele>105.300</ele>
     <time>2005-06-12T14:58:52.805Z</time>
     <name>WP0193</name>
     <cmt>WP0193</cmt>
@@ -1824,7 +1824,7 @@
     <pdop>10.000000</pdop>
   </wpt>
   <wpt lat="45.491659984" lon="-75.723431640">
-    <ele>105.600000</ele>
+    <ele>105.600</ele>
     <time>2005-06-12T14:58:54.805Z</time>
     <name>WP0194</name>
     <cmt>WP0194</cmt>
@@ -1832,7 +1832,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.491213318" lon="-75.723554974">
-    <ele>105.700000</ele>
+    <ele>105.700</ele>
     <time>2005-06-12T14:59:01.805Z</time>
     <name>WP0195</name>
     <cmt>WP0195</cmt>
@@ -1840,7 +1840,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.490278318" lon="-75.723608307">
-    <ele>104.700000</ele>
+    <ele>104.700</ele>
     <time>2005-06-12T14:59:15.804Z</time>
     <name>WP0196</name>
     <cmt>WP0196</cmt>
@@ -1848,7 +1848,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.490369984" lon="-75.723388307">
-    <ele>103.600000</ele>
+    <ele>103.600</ele>
     <time>2005-06-12T14:59:17.804Z</time>
     <name>WP0197</name>
     <cmt>WP0197</cmt>
@@ -1856,7 +1856,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.490526651" lon="-75.721809974">
-    <ele>101.300000</ele>
+    <ele>101.300</ele>
     <time>2005-06-12T14:59:24.803Z</time>
     <name>WP0198</name>
     <cmt>WP0198</cmt>
@@ -1864,7 +1864,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.490071651" lon="-75.720394974">
-    <ele>99.900000</ele>
+    <ele>99.900</ele>
     <time>2005-06-12T14:59:29.803Z</time>
     <name>WP0199</name>
     <cmt>WP0199</cmt>
@@ -1874,7 +1874,7 @@
     <pdop>2.600000</pdop>
   </wpt>
   <wpt lat="45.488781651" lon="-75.717853307">
-    <ele>98.100000</ele>
+    <ele>98.100</ele>
     <time>2005-06-12T14:59:40.802Z</time>
     <name>WP0200</name>
     <cmt>WP0200</cmt>
@@ -1882,7 +1882,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.488024984" lon="-75.715301640">
-    <ele>97.900000</ele>
+    <ele>97.900</ele>
     <time>2005-06-12T14:59:54.801Z</time>
     <name>WP0201</name>
     <cmt>WP0201</cmt>
@@ -1890,7 +1890,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.487381651" lon="-75.712531640">
-    <ele>97.700000</ele>
+    <ele>97.700</ele>
     <time>2005-06-12T15:00:08.800Z</time>
     <name>WP0202</name>
     <cmt>WP0202</cmt>
@@ -1898,7 +1898,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.487396651" lon="-75.711828307">
-    <ele>97.700000</ele>
+    <ele>97.700</ele>
     <time>2005-06-12T15:00:12.800Z</time>
     <name>WP0203</name>
     <cmt>WP0203</cmt>
@@ -1906,7 +1906,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.487534984" lon="-75.711744974">
-    <ele>97.700000</ele>
+    <ele>97.700</ele>
     <time>2005-06-12T15:00:13.800Z</time>
     <name>WP0204</name>
     <cmt>WP0204</cmt>
@@ -1914,7 +1914,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.487728318" lon="-75.711471640">
-    <ele>97.500000</ele>
+    <ele>97.500</ele>
     <time>2005-06-12T15:00:15.800Z</time>
     <name>WP0205</name>
     <cmt>WP0205</cmt>
@@ -1922,7 +1922,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.487859984" lon="-75.710994974">
-    <ele>97.300000</ele>
+    <ele>97.300</ele>
     <time>2005-06-12T15:00:17.800Z</time>
     <name>WP0206</name>
     <cmt>WP0206</cmt>
@@ -1930,7 +1930,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.488128318" lon="-75.708784974">
-    <ele>97.100000</ele>
+    <ele>97.100</ele>
     <time>2005-06-12T15:00:26.799Z</time>
     <name>WP0207</name>
     <cmt>WP0207</cmt>
@@ -1938,7 +1938,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.488351651" lon="-75.705628307">
-    <ele>97.000000</ele>
+    <ele>97.000</ele>
     <time>2005-06-12T15:00:39.798Z</time>
     <name>WP0208</name>
     <cmt>WP0208</cmt>
@@ -1946,7 +1946,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.488748318" lon="-75.704488307">
-    <ele>97.100000</ele>
+    <ele>97.100</ele>
     <time>2005-06-12T15:00:43.798Z</time>
     <name>WP0209</name>
     <cmt>WP0209</cmt>
@@ -1956,7 +1956,7 @@
     <pdop>6.400000</pdop>
   </wpt>
   <wpt lat="45.489294984" lon="-75.703023307">
-    <ele>97.200000</ele>
+    <ele>97.200</ele>
     <time>2005-06-12T15:00:52.798Z</time>
     <name>WP0210</name>
     <cmt>WP0210</cmt>
@@ -1966,7 +1966,7 @@
     <pdop>6.400000</pdop>
   </wpt>
   <wpt lat="45.489278318" lon="-75.703171640">
-    <ele>97.100000</ele>
+    <ele>97.100</ele>
     <time>2005-06-12T15:00:56.797Z</time>
     <name>WP0211</name>
     <cmt>WP0211</cmt>
@@ -1976,7 +1976,7 @@
     <pdop>6.400000</pdop>
   </wpt>
   <wpt lat="45.489263318" lon="-75.703306640">
-    <ele>96.900000</ele>
+    <ele>96.900</ele>
     <time>2005-06-12T15:01:14.796Z</time>
     <name>WP0212</name>
     <cmt>WP0212</cmt>
@@ -1984,7 +1984,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.489364984" lon="-75.702803307">
-    <ele>96.900000</ele>
+    <ele>96.900</ele>
     <time>2005-06-12T15:01:37.795Z</time>
     <name>WP0213</name>
     <cmt>WP0213</cmt>
@@ -1992,14 +1992,14 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.489553318" lon="-75.700098307">
-    <ele>97.300000</ele>
+    <ele>97.300</ele>
     <time>2005-06-12T15:01:45.794Z</time>
     <name>WP0214</name>
     <cmt>WP0214</cmt>
     <desc>WP0214</desc>
   </wpt>
   <wpt lat="45.489698318" lon="-75.698621640">
-    <ele>97.200000</ele>
+    <ele>97.200</ele>
     <time>2005-06-12T15:01:59.793Z</time>
     <name>WP0215</name>
     <cmt>WP0215</cmt>
@@ -2009,7 +2009,7 @@
     <pdop>6.400000</pdop>
   </wpt>
   <wpt lat="45.489766651" lon="-75.698538307">
-    <ele>97.200000</ele>
+    <ele>97.200</ele>
     <time>2005-06-12T15:02:04.793Z</time>
     <name>WP0216</name>
     <cmt>WP0216</cmt>
@@ -2017,7 +2017,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.489761651" lon="-75.698398307">
-    <ele>97.100000</ele>
+    <ele>97.100</ele>
     <time>2005-06-12T15:02:12.792Z</time>
     <name>WP0217</name>
     <cmt>WP0217</cmt>
@@ -2025,14 +2025,14 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.489583318" lon="-75.695093307">
-    <ele>97.400000</ele>
+    <ele>97.400</ele>
     <time>2005-06-12T15:02:28.791Z</time>
     <name>WP0218</name>
     <cmt>WP0218</cmt>
     <desc>WP0218</desc>
   </wpt>
   <wpt lat="45.489726651" lon="-75.693488307">
-    <ele>97.500000</ele>
+    <ele>97.500</ele>
     <time>2005-06-12T15:02:36.791Z</time>
     <name>WP0219</name>
     <cmt>WP0219</cmt>
@@ -2040,7 +2040,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.489909984" lon="-75.693386640">
-    <ele>97.500000</ele>
+    <ele>97.500</ele>
     <time>2005-06-12T15:02:37.791Z</time>
     <name>WP0220</name>
     <cmt>WP0220</cmt>
@@ -2048,7 +2048,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.490408318" lon="-75.692841640">
-    <ele>97.500000</ele>
+    <ele>97.500</ele>
     <time>2005-06-12T15:02:41.791Z</time>
     <name>WP0221</name>
     <cmt>WP0221</cmt>
@@ -2056,7 +2056,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.490608318" lon="-75.692348307">
-    <ele>97.400000</ele>
+    <ele>97.400</ele>
     <time>2005-06-12T15:02:44.790Z</time>
     <name>WP0222</name>
     <cmt>WP0222</cmt>
@@ -2064,14 +2064,14 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.491079984" lon="-75.690218307">
-    <ele>97.400000</ele>
+    <ele>97.400</ele>
     <time>2005-06-12T15:02:56.790Z</time>
     <name>WP0223</name>
     <cmt>WP0223</cmt>
     <desc>WP0223</desc>
   </wpt>
   <wpt lat="45.491288318" lon="-75.688778307">
-    <ele>97.300000</ele>
+    <ele>97.300</ele>
     <time>2005-06-12T15:03:04.789Z</time>
     <name>WP0224</name>
     <cmt>WP0224</cmt>
@@ -2079,7 +2079,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.491183318" lon="-75.688611640">
-    <ele>97.300000</ele>
+    <ele>97.300</ele>
     <time>2005-06-12T15:03:05.789Z</time>
     <name>WP0225</name>
     <cmt>WP0225</cmt>
@@ -2087,7 +2087,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.490993318" lon="-75.688663307">
-    <ele>99.000000</ele>
+    <ele>99.000</ele>
     <time>2005-06-12T15:03:06.789Z</time>
     <name>WP0226</name>
     <cmt>WP0226</cmt>
@@ -2097,7 +2097,7 @@
     <pdop>2.000000</pdop>
   </wpt>
   <wpt lat="45.489688318" lon="-75.688748307">
-    <ele>99.300000</ele>
+    <ele>99.300</ele>
     <time>2005-06-12T15:03:16.788Z</time>
     <name>WP0227</name>
     <cmt>WP0227</cmt>
@@ -2105,7 +2105,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.489516651" lon="-75.688719974">
-    <ele>99.200000</ele>
+    <ele>99.200</ele>
     <time>2005-06-12T15:03:20.788Z</time>
     <name>WP0228</name>
     <cmt>WP0228</cmt>
@@ -2115,7 +2115,7 @@
     <pdop>2.000000</pdop>
   </wpt>
   <wpt lat="45.489606651" lon="-75.688778307">
-    <ele>99.000000</ele>
+    <ele>99.000</ele>
     <time>2005-06-12T15:03:26.788Z</time>
     <name>WP0229</name>
     <cmt>WP0229</cmt>
@@ -2125,7 +2125,7 @@
     <pdop>2.000000</pdop>
   </wpt>
   <wpt lat="45.489716651" lon="-75.688851640">
-    <ele>98.600000</ele>
+    <ele>98.600</ele>
     <time>2005-06-12T15:03:53.786Z</time>
     <name>WP0230</name>
     <cmt>WP0230</cmt>
@@ -2135,7 +2135,7 @@
     <pdop>2.000000</pdop>
   </wpt>
   <wpt lat="45.489636651" lon="-75.688773307">
-    <ele>98.300000</ele>
+    <ele>98.300</ele>
     <time>2005-06-12T15:04:12.785Z</time>
     <name>WP0231</name>
     <cmt>WP0231</cmt>
@@ -2143,7 +2143,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.489688318" lon="-75.688884974">
-    <ele>98.000000</ele>
+    <ele>98.000</ele>
     <time>2005-06-12T15:04:34.783Z</time>
     <name>WP0232</name>
     <cmt>WP0232</cmt>
@@ -2151,7 +2151,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.489699984" lon="-75.688648307">
-    <ele>98.200000</ele>
+    <ele>98.200</ele>
     <time>2005-06-12T15:04:37.783Z</time>
     <name>WP0233</name>
     <cmt>WP0233</cmt>
@@ -2159,7 +2159,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.489858318" lon="-75.688149974">
-    <ele>98.400000</ele>
+    <ele>98.400</ele>
     <time>2005-06-12T15:04:43.783Z</time>
     <name>WP0234</name>
     <cmt>WP0234</cmt>
@@ -2167,7 +2167,7 @@
     <sat>1</sat>
   </wpt>
   <wpt lat="45.489979984" lon="-75.687781640">
-    <ele>98.400000</ele>
+    <ele>98.400</ele>
     <time>2005-06-12T15:04:51.782Z</time>
     <name>WP0235</name>
     <cmt>WP0235</cmt>
@@ -2177,7 +2177,7 @@
     <pdop>2.000000</pdop>
   </wpt>
   <wpt lat="45.489979984" lon="-75.687646640">
-    <ele>98.100000</ele>
+    <ele>98.100</ele>
     <time>2005-06-12T15:05:11.781Z</time>
     <name>WP0236</name>
     <cmt>WP0236</cmt>
@@ -2185,7 +2185,7 @@
     <sat>2</sat>
   </wpt>
   <wpt lat="45.490004984" lon="-75.684934974">
-    <ele>97.400000</ele>
+    <ele>97.400</ele>
     <time>2005-06-12T15:05:30.780Z</time>
     <name>WP0237</name>
     <cmt>WP0237</cmt>

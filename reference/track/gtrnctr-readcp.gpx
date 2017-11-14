@@ -8,7 +8,7 @@
     <desc>LAP001</desc>
   </wpt>
   <wpt lat="28.389956000" lon="-16.581523000">
-    <ele>231.000000</ele>
+    <ele>231.000</ele>
     <time>2012-01-04T00:00:00Z</time>
     <name>Tp Gen</name>
     <cmt>Not Gen</cmt>
@@ -16,7 +16,7 @@
     <sym>Generic</sym>
   </wpt>
   <wpt lat="28.389919000" lon="-16.581369000">
-    <ele>232.000000</ele>
+    <ele>232.000</ele>
     <time>2012-01-04T00:00:42Z</time>
     <name>Tp Sum</name>
     <cmt>Not Sum</cmt>
@@ -24,7 +24,7 @@
     <sym>Summit</sym>
   </wpt>
   <wpt lat="28.390003000" lon="-16.581287000">
-    <ele>232.000000</ele>
+    <ele>232.000</ele>
     <time>2012-01-04T00:00:57Z</time>
     <name>Tp Val</name>
     <cmt>Not Val</cmt>
@@ -32,7 +32,7 @@
     <sym>Valley</sym>
   </wpt>
   <wpt lat="28.389985000" lon="-16.581202000">
-    <ele>232.000000</ele>
+    <ele>232.000</ele>
     <time>2012-01-04T00:01:07Z</time>
     <name>Tp Wat</name>
     <cmt>Not Wat</cmt>
@@ -40,7 +40,7 @@
     <sym>Water</sym>
   </wpt>
   <wpt lat="28.390003000" lon="-16.581105000">
-    <ele>232.000000</ele>
+    <ele>232.000</ele>
     <time>2012-01-04T00:01:19Z</time>
     <name>Tp Foo</name>
     <cmt>Not Foo</cmt>
@@ -48,7 +48,7 @@
     <sym>Food</sym>
   </wpt>
   <wpt lat="28.389994000" lon="-16.581019000">
-    <ele>232.000000</ele>
+    <ele>232.000</ele>
     <time>2012-01-04T00:01:29Z</time>
     <name>Tp Dan</name>
     <cmt>Not Dan</cmt>
@@ -56,7 +56,7 @@
     <sym>Danger</sym>
   </wpt>
   <wpt lat="28.389900000" lon="-16.581051000">
-    <ele>234.000000</ele>
+    <ele>234.000</ele>
     <time>2012-01-04T00:02:06Z</time>
     <name>Tp Lef</name>
     <cmt>Not Lef</cmt>
@@ -64,7 +64,7 @@
     <sym>Left</sym>
   </wpt>
   <wpt lat="28.389909000" lon="-16.581191000">
-    <ele>233.000000</ele>
+    <ele>233.000</ele>
     <time>2012-01-04T00:02:22Z</time>
     <name>Tp Rig</name>
     <cmt>Not Rig</cmt>
@@ -72,7 +72,7 @@
     <sym>Right</sym>
   </wpt>
   <wpt lat="28.389890000" lon="-16.581309000">
-    <ele>233.000000</ele>
+    <ele>233.000</ele>
     <time>2012-01-04T00:02:37Z</time>
     <name>Tp Str</name>
     <cmt>Not Str</cmt>
@@ -80,7 +80,7 @@
     <sym>Straight</sym>
   </wpt>
   <wpt lat="28.389871000" lon="-16.581438000">
-    <ele>233.000000</ele>
+    <ele>233.000</ele>
     <time>2012-01-04T00:02:52Z</time>
     <name>Tp Fir</name>
     <cmt>Not Fir</cmt>
@@ -88,7 +88,7 @@
     <sym>First Aid</sym>
   </wpt>
   <wpt lat="28.389881000" lon="-16.581663000">
-    <ele>230.000000</ele>
+    <ele>230.000</ele>
     <time>2012-01-04T00:03:18Z</time>
     <name>Tp 4th</name>
     <cmt>Not 4th</cmt>
@@ -96,7 +96,7 @@
     <sym>4th Category</sym>
   </wpt>
   <wpt lat="28.389852000" lon="-16.581813000">
-    <ele>228.000000</ele>
+    <ele>228.000</ele>
     <time>2012-01-04T00:03:36Z</time>
     <name>Tp 3th</name>
     <cmt>Not 3rd</cmt>
@@ -104,7 +104,7 @@
     <sym>3rd Category</sym>
   </wpt>
   <wpt lat="28.389815000" lon="-16.581985000">
-    <ele>224.000000</ele>
+    <ele>224.000</ele>
     <time>2012-01-04T00:03:57Z</time>
     <name>Tp 2nd</name>
     <cmt>Not 2nd</cmt>
@@ -112,7 +112,7 @@
     <sym>2nd Category</sym>
   </wpt>
   <wpt lat="28.389834000" lon="-16.582156000">
-    <ele>224.000000</ele>
+    <ele>224.000</ele>
     <time>2012-01-04T00:04:18Z</time>
     <name>Tp 1st</name>
     <cmt>Not 1st</cmt>
@@ -120,7 +120,7 @@
     <sym>1st Category</sym>
   </wpt>
   <wpt lat="28.389768000" lon="-16.582199000">
-    <ele>226.000000</ele>
+    <ele>226.000</ele>
     <time>2012-01-04T00:04:52Z</time>
     <name>Tp Hor</name>
     <cmt>Not Hor</cmt>
@@ -128,7 +128,7 @@
     <sym>Hors Category</sym>
   </wpt>
   <wpt lat="28.389777000" lon="-16.582049000">
-    <ele>225.000000</ele>
+    <ele>225.000</ele>
     <time>2012-01-04T00:05:09Z</time>
     <name>Tp Spr</name>
     <cmt>Not Spr</cmt>
@@ -139,75 +139,75 @@
     <name>Test CP Reading</name>
     <trkseg>
       <trkpt lat="28.389956000" lon="-16.581523000">
-        <ele>231.000000</ele>
+        <ele>231.000</ele>
         <time>2012-01-04T00:00:00Z</time>
       </trkpt>
       <trkpt lat="28.389950000" lon="-16.581551000">
-        <ele>231.000000</ele>
+        <ele>231.000</ele>
         <time>2012-01-04T00:00:04Z</time>
       </trkpt>
       <trkpt lat="28.389900000" lon="-16.581539000">
-        <ele>231.000000</ele>
+        <ele>231.000</ele>
         <time>2012-01-04T00:00:14Z</time>
       </trkpt>
       <trkpt lat="28.389919000" lon="-16.581369000">
-        <ele>232.000000</ele>
+        <ele>232.000</ele>
         <time>2012-01-04T00:00:42Z</time>
       </trkpt>
       <trkpt lat="28.390003000" lon="-16.581287000">
-        <ele>232.000000</ele>
+        <ele>232.000</ele>
         <time>2012-01-04T00:00:57Z</time>
       </trkpt>
       <trkpt lat="28.389985000" lon="-16.581202000">
-        <ele>232.000000</ele>
+        <ele>232.000</ele>
         <time>2012-01-04T00:01:07Z</time>
       </trkpt>
       <trkpt lat="28.390003000" lon="-16.581105000">
-        <ele>232.000000</ele>
+        <ele>232.000</ele>
         <time>2012-01-04T00:01:19Z</time>
       </trkpt>
       <trkpt lat="28.389994000" lon="-16.581019000">
-        <ele>232.000000</ele>
+        <ele>232.000</ele>
         <time>2012-01-04T00:01:29Z</time>
       </trkpt>
       <trkpt lat="28.389900000" lon="-16.581051000">
-        <ele>234.000000</ele>
+        <ele>234.000</ele>
         <time>2012-01-04T00:02:06Z</time>
       </trkpt>
       <trkpt lat="28.389909000" lon="-16.581191000">
-        <ele>233.000000</ele>
+        <ele>233.000</ele>
         <time>2012-01-04T00:02:22Z</time>
       </trkpt>
       <trkpt lat="28.389890000" lon="-16.581309000">
-        <ele>233.000000</ele>
+        <ele>233.000</ele>
         <time>2012-01-04T00:02:37Z</time>
       </trkpt>
       <trkpt lat="28.389871000" lon="-16.581438000">
-        <ele>233.000000</ele>
+        <ele>233.000</ele>
         <time>2012-01-04T00:02:52Z</time>
       </trkpt>
       <trkpt lat="28.389881000" lon="-16.581663000">
-        <ele>230.000000</ele>
+        <ele>230.000</ele>
         <time>2012-01-04T00:03:18Z</time>
       </trkpt>
       <trkpt lat="28.389852000" lon="-16.581813000">
-        <ele>228.000000</ele>
+        <ele>228.000</ele>
         <time>2012-01-04T00:03:36Z</time>
       </trkpt>
       <trkpt lat="28.389815000" lon="-16.581985000">
-        <ele>224.000000</ele>
+        <ele>224.000</ele>
         <time>2012-01-04T00:03:57Z</time>
       </trkpt>
       <trkpt lat="28.389834000" lon="-16.582156000">
-        <ele>224.000000</ele>
+        <ele>224.000</ele>
         <time>2012-01-04T00:04:18Z</time>
       </trkpt>
       <trkpt lat="28.389768000" lon="-16.582199000">
-        <ele>226.000000</ele>
+        <ele>226.000</ele>
         <time>2012-01-04T00:04:52Z</time>
       </trkpt>
       <trkpt lat="28.389777000" lon="-16.582049000">
-        <ele>225.000000</ele>
+        <ele>225.000</ele>
         <time>2012-01-04T00:05:09Z</time>
       </trkpt>
     </trkseg>
