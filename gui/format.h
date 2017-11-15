@@ -205,7 +205,7 @@ class Format
   void bumpWriteUseCount(int v) { writeUseCount_ += v; }
   int getReadUseCount()  const { return readUseCount_; }
   int getWriteUseCount() const { return writeUseCount_; }
-  void zeroUseCounts(void) {
+  void zeroUseCounts() {
     readUseCount_  = 0;
     writeUseCount_ = 0;
   }

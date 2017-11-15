@@ -7,11 +7,11 @@
     <desc>14/04/2012  3:54 pm</desc>
     <trkseg>
       <trkpt lat="-36.720798700" lon="142.177066800">
-        <ele>145.411000</ele>
+        <ele>145.411</ele>
         <time>2012-04-14T07:08:11.906Z</time>
       </trkpt>
       <trkpt lat="-36.720796000" lon="142.176806200">
-        <ele>145.736000</ele>
+        <ele>145.736</ele>
         <time>2012-04-14T07:09:35.906Z</time>
       </trkpt>
     </trkseg>

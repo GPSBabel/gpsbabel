@@ -198,15 +198,12 @@ static Waypoint* nmea_rd_posn(posn_status*);
 static void nmea_rd_posn_init(const QString& fname);
 
 arglist_t nmea_args[] = {
-  #if 1
   {"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64", nullptr },
   {"gprmc", &opt_gprmc, "Read/write GPRMC sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   {"gpgga", &opt_gpgga, "Read/write GPGGA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   {"gpvtg", &opt_gpvtg, "Read/write GPVTG sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   {"gpgsa", &opt_gpgsa, "Read/write GPGSA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   {"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX , nullptr },
-  #endif
-  #if 0
   {
     "get_posn", &getposnarg, "Return current position as a waypoint",
     NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
@@ -215,11 +212,8 @@ arglist_t nmea_args[] = {
   {"append_positioning", &opt_append, "Append realtime positioning data to the output file instead of truncating", "0", ARGTYPE_BOOL, ARG_NOMINMAX , nullptr},
   {"baud", &opt_baud, "Speed in bits per second of serial port (baud=4800)", NULL, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
   {"gisteq", &opt_gisteq, "Write tracks for Gisteq Phototracker", "0", ARGTYPE_BOOL, ARG_NOMINMAX , nullptr},
-  #endif
-  #if 0
   {"ignore_fix", &opt_ignorefix, "Accept position fixes in gpgga marked invalid", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
   ARG_TERMINATOR
-  #endif
 };
 
 #define CHECK_BOOL(a) if (a && (*a == '0')) a = NULL
@@ -1430,7 +1424,8 @@ ff_vecs_t nmea_vecs = {
   {
     nmea_rd_posn_init, nmea_rd_posn, nmea_rd_deinit,
     nmea_wr_posn_init, nmea_wr_posn, nmea_wr_posn_deinit
-  }
+  },
+  nullptr
 };
 
 /*

@@ -57,6 +57,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <cmath>
+#include <QtCore/QDateTime>
+#include <QtCore/QString>
 #define MYNAME "gopal"
 
 static gbfile* fin, *fout;
@@ -64,7 +66,6 @@ static gbfile* fin, *fout;
 static struct tm tm,filenamedate, trackdate;
 time_t		tx;
 char tmp[64];
-char routename[64];
 static char* optdate=NULL;
 static char* optmaxspeed=NULL;
 static char* optminspeed=NULL;
@@ -179,10 +180,15 @@ gopal_read()
   char tbuffer[64];
   struct tm tm2;
   lat_old=0;
-  strftime(routename,sizeof(routename),"Tracklog %c",gmtime(&tx));
+  
 
   route = route_head_alloc();
-  route->rte_name = routename;
+  QDateTime qtx;
+  qtx.setTimeSpec(Qt::UTC);
+  qtx.setTime_t(tx);
+  route->rte_name = "Tracklog ";
+  route->rte_name += qtx.toString(Qt::ISODate);
+
   route_add_head(route);
 
   line=0;

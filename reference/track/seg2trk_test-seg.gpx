@@ -5,7 +5,7 @@
   <trk>
     <trkseg>
       <trkpt lat="47.421186000" lon="19.220939000">
-        <ele>152.000000</ele>
+        <ele>152.000</ele>
         <time>2012-11-05T07:16:29Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -16,7 +16,7 @@
   <trk>
     <trkseg>
       <trkpt lat="47.421095000" lon="19.220695000">
-        <ele>138.300000</ele>
+        <ele>138.300</ele>
         <time>2012-11-05T07:17:37Z</time>
         <course>0.000000</course>
         <speed>0.305556</speed>
@@ -28,7 +28,7 @@
     <name>Name Track</name>
     <trkseg>
       <trkpt lat="47.421186000" lon="19.220939000">
-        <ele>152.000000</ele>
+        <ele>152.000</ele>
         <time>2012-11-05T07:16:29Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -40,7 +40,7 @@
     <name>Name Track #2</name>
     <trkseg>
       <trkpt lat="47.421095000" lon="19.220695000">
-        <ele>138.300000</ele>
+        <ele>138.300</ele>
         <time>2012-11-05T07:17:37Z</time>
         <course>0.000000</course>
         <speed>0.305556</speed>
