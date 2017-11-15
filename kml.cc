@@ -303,8 +303,8 @@ void wpt_s(xg_string, const QXmlStreamAttributes*)
 
   /* Invalidate timespan elements for a beginning Placemark,
    * so that each Placemark has its own (or no) TimeSpan. */
-  wpt_timespan_begin.setTime_t(0);
-  wpt_timespan_end.setTime_t(0);
+  wpt_timespan_begin = gpsbabel::DateTime();
+  wpt_timespan_end = gpsbabel::DateTime();
 }
 
 void wpt_e(xg_string, const QXmlStreamAttributes*)
@@ -427,16 +427,10 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
    */
   if ( wpt_timespan_begin.isValid() && wpt_timespan_end.isValid() ) {
 
-	  // Count the number of Waypoints
-	  n = 0;
-	  QUEUE_FOR_EACH(&trk_head->waypoint_list, curr_elem, tmp_elem) {
-		  n++;
-	  }
-
 	  // If there are some Waypoints, then distribute the TimeSpan to all Waypoints
-	  if ( n > 0 ) {
-		  qint64 timespan_ms = wpt_timespan_end.toMSecsSinceEpoch() - wpt_timespan_begin.toMSecsSinceEpoch();
-		  qint64 ms_per_waypoint = timespan_ms / n;
+	  if ( trk_head->rte_waypt_ct > 0 ) {
+		  qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
+		  qint64 ms_per_waypoint = timespan_ms / trk_head->rte_waypt_ct;
 		  QUEUE_FOR_EACH(&trk_head->waypoint_list, curr_elem, tmp_elem) {
 			  trkpt = (Waypoint*) curr_elem;
 			  trkpt->SetCreationTime(wpt_timespan_begin);
