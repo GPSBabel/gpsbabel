@@ -159,6 +159,7 @@ win32-msvc* {
 
 linux {
   DEFINES += HAVE_LINUX_HID
+  LIBS += "-lusb"
 }
 
 macx {
