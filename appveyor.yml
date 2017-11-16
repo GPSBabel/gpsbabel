@@ -7,9 +7,9 @@ environment:
     platform: mingw
     qt: 5.9\mingw53_32
   # MSVC x64
-  #- name: win64
-  #  platform: amd64
-  #  qt: 5.9\msvc2015_64
+  - name: win64
+    platform: amd64
+    qt: 5.9\msvc2015_64
 
 init:
   - if %platform%==mingw set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
@@ -20,4 +20,4 @@ init:
 # Flesh out with amd64/msvc cases later.
 build_script:
   - qmake GPSBabel.pro
-  - mingw32-make
+  - if not %platform%==mingw (nmake) else (mingw32-make)
