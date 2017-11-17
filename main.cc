@@ -18,6 +18,7 @@
  */
 
 #include <QtCore/QStack>
+#include <QtCore/QString>
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
 #include <QtCore/QCoreApplication>
@@ -72,10 +73,10 @@ load_args(const QString& filename, const QString& arg0)
 // Use a QTextStream to read the batch file.
 // By default that will use codecForLocale().
 // By default Automatic Unicode detection is enabled.
-  gpsbabel::File* file = new gpsbabel::File(filename);
-  file->open(QFile::ReadOnly);
-  QTextStream* stream = new QTextStream(file);
-  while (!(str = stream->readLine()).isNull()) {
+  gpsbabel::File file(filename);
+  file.open(QFile::ReadOnly);
+  QTextStream stream(&file);
+  while (!(str = stream.readLine()).isNull()) {
     str = str.trimmed();
     if ((str.isEmpty()) || (str.at(0).toLatin1() == '#')) {
       continue;
@@ -87,9 +88,7 @@ load_args(const QString& filename, const QString& arg0)
       line.append(str);
     }
   }
-  file->close();
-  delete file;
-  delete stream;
+  file.close();
 
   // We use csv_lineparse to protect quoted strings, otherwise
   // we could just split on blank and eliminate the round trip
@@ -206,8 +205,8 @@ main(int argc, char* argv[])
   ff_vecs_t* ivecs = NULL;
   ff_vecs_t* ovecs = NULL;
   filter_vecs_t* fvecs = NULL;
-  QString fname = NULL;
-  QString ofname = NULL;
+  QString fname;
+  QString ofname;
   const char* ivec_opts = NULL;
   const char* ovec_opts = NULL;
   const char* fvec_opts = NULL;
@@ -219,13 +218,13 @@ main(int argc, char* argv[])
   QStack<QargStackElement> qargs_stack = QStack<QargStackElement>();
 
   // Create a QCoreApplication object to handle application initialization.
-  // TODO: Someday we may actually use this, but for now we are just trying
-  // to get Qt initialized, especially locale related QTextCodec stuff.
+  // In addition to being useful for argument decoding, the creation of a
+  // QCoreApplication object gets Qt initialized, especially locale related
+  // QTextCodec stuff.
   // For example, this will get the QTextCodec::codecForLocale set
   // correctly.
   QCoreApplication app(argc, argv);
-  // Use QCoreApplication::arguments() to process the command line and replace
-  // argv[] strings with UTF-8 versions.
+  // Use QCoreApplication::arguments() to process the command line.
   QStringList qargs = QCoreApplication::arguments();
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
@@ -311,23 +310,23 @@ main(int argc, char* argv[])
     QString optarg;
 
 //  we must check the length for afl input fuzzing to work.
-//    if (qargs.at(argn)[0].toLatin1() != '-') {
-    if (qargs.at(argn).size() > 0 && qargs.at(argn)[0].toLatin1() != '-') {
+//    if (qargs.at(argn).at(0).toLatin1() != '-') {
+    if (qargs.at(argn).size() > 0 && qargs.at(argn).at(0).toLatin1() != '-') {
       break;
     }
-    if (qargs.at(argn).size() > 1 && qargs.at(argn)[1].toLatin1() == '-') {
+    if (qargs.at(argn).size() > 1 && qargs.at(argn).at(1).toLatin1() == '-') {
       break;
     }
 
-    if (qargs.at(argn).size() > 1 && qargs.at(argn)[1].toLatin1() == 'V') {
+    if (qargs.at(argn).size() > 1 && qargs.at(argn).at(1).toLatin1() == 'V') {
       printf("\nGPSBabel Version %s\n\n", gpsbabel_version);
-      if (qargs.at(argn).size() > 2 && qargs.at(argn)[2].toLatin1() == 'V') {
+      if (qargs.at(argn).size() > 2 && qargs.at(argn).at(2).toLatin1() == 'V') {
         print_extended_info();
       }
       exit(0);
     }
 
-    if (qargs.at(argn).size() > 1 && (qargs.at(argn)[1].toLatin1() == '?' || qargs.at(argn)[1].toLatin1() == 'h')) {
+    if (qargs.at(argn).size() > 1 && (qargs.at(argn).at(1).toLatin1() == '?' || qargs.at(argn).at(1).toLatin1() == 'h')) {
       if (argn < qargs.size()-1) {
         spec_usage(qPrintable(qargs.at(argn+1)));
       } else {
@@ -336,17 +335,13 @@ main(int argc, char* argv[])
       exit(0);
     }
 
-    c = qargs.at(argn).size() > 1 ? qargs.at(argn)[1].toLatin1() : '\0';
+    c = qargs.at(argn).size() > 1 ? qargs.at(argn).at(1).toLatin1() : '\0';
 
     if (qargs.at(argn).size() > 2) {
-      opt_version = qargs.at(argn)[2].digitValue();
+      opt_version = qargs.at(argn).at(2).digitValue();
     }
 
     switch (c) {
-    //case 'c':
-    //  optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
-    //  cet_convert_init(CSTR(optarg), 1);
-    //  break;
     case 'i':
       optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
       ivecs = find_vec(CSTR(optarg), &ivec_opts);
@@ -475,30 +470,8 @@ main(int argc, char* argv[])
       global_opts.objective = posndata;
       global_opts.masked_objective |= POSNDATAMASK;
       break;
-    case 'N':
-#if 0
-      /* This option is silently eaten for compatibilty.  -N is now the
-       * default.  If you want the old behaviour, -S allows you to individually
-       * turn them on.  The -N option will be removed in 2008.
-       */
-
-      switch (qargs.at(argn).size() > 2 ? qargs.at(argn)[2].toLatin1() : '\0') {
-      case 'i':
-        global_opts.no_smart_icons = 1;
-        break;
-      case 'n':
-        global_opts.no_smart_names = 1;
-        break;
-      default:
-        global_opts.no_smart_names = 1;
-        global_opts.no_smart_icons = 1;
-        break;
-      }
-#endif
-
-      break;
     case 'S':
-      switch (qargs.at(argn).size() > 2 ? qargs.at(argn)[2].toLatin1() : '\0') {
+      switch (qargs.at(argn).size() > 2 ? qargs.at(argn).at(2).toLatin1() : '\0') {
       case 'i':
         global_opts.smart_icons = 1;
         break;
@@ -543,7 +516,7 @@ main(int argc, char* argv[])
      * Undocumented '-vs' option for GUI wrappers.
      */
     case 'v':
-      switch (qargs.at(argn).size() > 2 ? qargs.at(argn)[2].toLatin1() : '\0') {
+      switch (qargs.at(argn).size() > 2 ? qargs.at(argn).at(2).toLatin1() : '\0') {
       case 's':
         global_opts.verbose_status = 1;
         break;
