@@ -412,7 +412,7 @@ rd_init(const QString& fname)
     printf(MYNAME " rd_init()\n");
   }
   if (opt_dump_file) {
-    dumpfile = gbfopen(opt_dump_file, "w", MYNAME);
+    dumpfile = gbfopen(opt_dump_file, "wb", MYNAME);
     if (!dumpfile) {
       printf(MYNAME " rd_init() creating dumpfile %s FAILED continue anyway\n",opt_dump_file);
     } else {
@@ -425,7 +425,7 @@ rd_init(const QString& fname)
     serial_init(qPrintable(fname));
   } else {
     // read from dump-file instead of serial
-    in_file = gbfopen(fname, "r", MYNAME);
+    in_file = gbfopen(fname, "rb", MYNAME);
     is_fatal(!in_file, "Could not open dumpfile for input: %s", qPrintable(fname));
 
   }
