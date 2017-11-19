@@ -1382,6 +1382,8 @@ gpx_read()
 //  sent to stdin has dos line endings.
 //  This does NOT occur with Qt 5.9.2 on windows when the file being
 //  sent to stdin has unix line endings.
+//  This does NOT occur with Qt 5.9.2 on windows with either line
+//  endings if the file is read directly, i.e. not sent through stdin.
 //  An example of a problematic file is reference/basecamp.gpx,
 //  which fails on windows with this invocation from a command prompt:
 //  .\GPSBabel.exe -i gpx -f - < reference\basecamp.gpx
