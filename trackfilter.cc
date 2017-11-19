@@ -276,7 +276,15 @@ trackfilter_merge_qsort_cb(const void* a, const void* b)
     return 1;
   }
   if (dta == dtb) {
-    return 0;
+    int seqno_a = gb_ptr2int(wa->extra_data);
+    int seqno_b = gb_ptr2int(wb->extra_data);
+    if (seqno_a > seqno_b) {
+      return 1;
+    } else if (seqno_a == seqno_b) {
+      return 0;
+    } else {
+      return -1;
+    }
   }
   return -1;
 }
@@ -318,7 +326,7 @@ trackfilter_fill_track_list_cb(const route_head* track) 	/* callback for track_d
   Waypoint* wpt, *prev;
   queue* elem, *tmp;
 
-  if (track->rte_waypt_ct == 0 ) {
+  if (track->rte_waypt_ct == 0) {
     track_del_head((route_head*)track);
     return;
   }
@@ -375,7 +383,7 @@ static void
 trackfilter_minpoint_list_cb(const route_head* track)
 {
   int minimum_points = atoi(opt_minpoints);
-  if (track->rte_waypt_ct < minimum_points ) {
+  if (track->rte_waypt_ct < minimum_points) {
     track_del_head((route_head*)track);
     return;
   }
@@ -475,8 +483,8 @@ trackfilter_pack()
     prev = track_list[j];
     if (prev.last_time >= track_list[i].first_time) {
       fatal(MYNAME "-pack: Tracks overlap in time! %s >= %s at %d\n",
-        qPrintable(prev.last_time.toString()),
-        qPrintable(track_list[i].first_time.toString()), i);
+            qPrintable(prev.last_time.toString()),
+            qPrintable(track_list[i].first_time.toString()), i);
     }
   }
 
@@ -525,7 +533,10 @@ trackfilter_merge()
     QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
       wpt = (Waypoint*)elem;
       if (wpt->creation_time.isValid()) {
-        buff[j++] = new Waypoint(*wpt);
+        buff[j] = new Waypoint(*wpt);
+        // augment sort key so a stable sort is possible.
+        buff[j]->extra_data = gb_int2ptr(j);
+        j++;
         // we will put the merged points in one track segment,
         // as it isn't clear how track segments in the original tracks
         // should relate to the merged track.
@@ -548,6 +559,7 @@ trackfilter_merge()
   prev = NULL;
 
   for (i = 0; i < track_pts-timeless_pts; i++) {
+    buff[i]->extra_data = NULL;
     wpt = buff[i];
     if ((prev == NULL) || (prev->GetCreationTime() != wpt->GetCreationTime())) {
       track_add_wpt(master, wpt);
