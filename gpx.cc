@@ -1375,6 +1375,24 @@ gpx_read()
       gpx_cdata(reader->text().toString());
       break;
 
+//  On windows with input redirection we can read an Invalid token
+//  after the EndDocument token.  This also will set an error
+//  "Premature end of document." that we will fatal on below.
+//  This occurs with Qt 5.9.2 on windows when the file being
+//  sent to stdin has dos line endings.
+//  This does NOT occur with Qt 5.9.2 on windows when the file being
+//  sent to stdin has unix line endings.
+//  This does NOT occur with Qt 5.9.2 on windows with either line
+//  endings if the file is read directly, i.e. not sent through stdin.
+//  An example of a problematic file is reference/basecamp.gpx,
+//  which fails on windows with this invocation from a command prompt:
+//  .\GPSBabel.exe -i gpx -f - < reference\basecamp.gpx
+//  This was demonstrated on 64 bit windows 10.  Other versions of
+//  windows and Qt likely fail as well.
+//  To avoid this we quit reading when we see the EndDocument.
+//  This does not prevent us from correctly detecting the error
+//  "Extra content at end of document."
+    case QXmlStreamReader::EndDocument:
     case QXmlStreamReader::Invalid:
       atEnd = true;
       break;
