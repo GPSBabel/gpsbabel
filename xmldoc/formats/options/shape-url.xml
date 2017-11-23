@@ -1,0 +1,7 @@
+<para>
+This option specifies where to get URL information for each shape. Without this option the URL data will be fetched from a field named "URL" if it exists in the .dbf file.
+</para>
+<para>
+It the value is a set of digits then the URL is fetched from a record with that field index in the .dbf file.
+Otherwise, the URL is fetched from record with that field name in the .dbf file.
+</para>
