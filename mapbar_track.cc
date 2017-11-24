@@ -44,13 +44,13 @@ mapbar_track_rd_init(const QString& fname)
 }
 
 static void
-mapbar_track_rd_deinit(void)
+mapbar_track_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static gpsbabel::DateTime
-read_datetime(void)
+read_datetime()
 {
   int hour = gbfgetint16(fin);
   int min = gbfgetint16(fin);
@@ -65,7 +65,7 @@ read_datetime(void)
 
 static const double DIV_RATE  = 100000.0f;
 static Waypoint*
-read_waypoint(void)
+read_waypoint()
 {
   int longitude = gbfgetint32(fin);
   int latitude = gbfgetint32(fin);
@@ -79,7 +79,7 @@ read_waypoint(void)
 }
 
 static void
-mapbar_track_read(void)
+mapbar_track_read()
 {
   route_head* track = route_head_alloc();
   is_fatal((track == NULL), MYNAME ": memory non-enough");

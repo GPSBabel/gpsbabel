@@ -35,7 +35,7 @@ static char* sneicon = NULL;
 static char* snmac = NULL;
 static int macstumbler;
 
-static void	fix_netstumbler_dupes(void);
+static void	fix_netstumbler_dupes();
 
 #define MYNAME "NETSTUMBLER"
 
@@ -72,13 +72,13 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
 
 static void
-data_read(void)
+data_read()
 {
   char* ibuf;
   char ssid[2 + 32 + 2 + 1];			/* "( " + SSID + " )" + null */
@@ -290,7 +290,7 @@ compare(const void* a, const void* b)
 
 static
 void
-fix_netstumbler_dupes(void)
+fix_netstumbler_dupes()
 {
   int i, ct = waypt_count(), serial = 0;
   htable_t* htable, *bh;

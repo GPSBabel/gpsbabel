@@ -101,7 +101,7 @@ geo_rd_init(const QString& fname)
 }
 
 static void
-geo_read(void)
+geo_read()
 {
   gpsbabel::File file(geo_read_fname);
   file.open(QIODevice::ReadOnly);
@@ -151,7 +151,7 @@ geocache_container wpt_container(const QString& args)
 }
 
 static void
-geo_rd_deinit(void)
+geo_rd_deinit()
 {
 
 }
@@ -168,7 +168,7 @@ geo_wr_init(const QString& fname)
 }
 
 static void
-geo_wr_deinit(void)
+geo_wr_deinit()
 {
   writer.writeEndDocument();
   gbfputs(ostring,ofd);
@@ -244,7 +244,7 @@ geo_waypt_pr(const Waypoint* waypointp)
 }
 
 static void
-geo_write(void)
+geo_write()
 {
   writer.writeStartElement("loc");
   writer.writeAttribute("version", "1.0");

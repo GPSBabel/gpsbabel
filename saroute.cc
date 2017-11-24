@@ -107,13 +107,13 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(infile);
 }
 
 static void
-my_read(void)
+my_read()
 {
 
   uint16_t version;

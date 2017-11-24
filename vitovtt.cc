@@ -49,13 +49,13 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(infile);
 }
 
 static void
-vitovtt_read(void)
+vitovtt_read()
 {
   int				version			= 0;
   route_head*		route_head		= 0;

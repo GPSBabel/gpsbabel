@@ -241,13 +241,13 @@ subrip_wr_init(const QString& fname)
 }
 
 static void
-subrip_wr_deinit(void)
+subrip_wr_deinit()
 {
   gbfclose(fout);
 }
 
 static void
-subrip_write(void)
+subrip_write()
 {
   track_disp_all(NULL, NULL, subrip_trkpt_pr);
 

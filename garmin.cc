@@ -341,7 +341,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rw_deinit(void)
+rw_deinit()
 {
   if (gps_baud_rate != DEFAULT_BAUD) {
     if (0 == GPS_Set_Baud_Rate(portname, DEFAULT_BAUD)) {
@@ -370,7 +370,7 @@ waypt_read_cb(int total_ct, GPS_PWay* )
 }
 
 static void
-waypt_read(void)
+waypt_read()
 {
   int i,n;
   GPS_PWay* way = NULL;
@@ -472,7 +472,7 @@ unsigned int checkWayPointIsAtSplit(Waypoint* wpt, GPS_PLap* laps, int nlaps)
 
 static
 void
-track_read(void)
+track_read()
 {
   int32 ntracks;
   GPS_PTrack* array;
@@ -560,7 +560,7 @@ track_read(void)
 
 static
 void
-route_read(void)
+route_read()
 {
   int32 nroutepts;
   int i;
@@ -817,7 +817,7 @@ pvt_read(posn_status* posn_status)
 }
 
 static void
-data_read(void)
+data_read()
 {
   if (gpx_vec) {
     gpx_vec->read();
@@ -844,7 +844,7 @@ data_read(void)
 }
 
 static GPS_PWay
-sane_GPS_Way_New(void)
+sane_GPS_Way_New()
 {
   GPS_PWay way;
   way = GPS_Way_New();
@@ -918,7 +918,7 @@ get_gc_info(Waypoint* wpt)
 }
 
 static int
-waypoint_prepare(void)
+waypoint_prepare()
 {
   int i;
   int n = waypt_count();
@@ -1039,7 +1039,7 @@ waypoint_prepare(void)
 }
 
 static void
-waypoint_write(void)
+waypoint_write()
 {
   int i, n;
   int32 ret;
@@ -1134,7 +1134,7 @@ route_noop(const route_head* )
 }
 
 static void
-route_write(void)
+route_write()
 {
   int i;
   int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
@@ -1180,7 +1180,7 @@ track_waypt_pr(const Waypoint* wpt)
 }
 
 static int
-track_prepare(void)
+track_prepare()
 {
   int i;
   int32 n = track_waypt_count() + track_count();
@@ -1199,7 +1199,7 @@ track_prepare(void)
 }
 
 static void
-track_write(void)
+track_write()
 {
   int i, n;
 
@@ -1213,7 +1213,7 @@ track_write(void)
 }
 
 static void
-course_write(void)
+course_write()
 {
   int i, n_trk, n_wpt;
 
@@ -1235,7 +1235,7 @@ course_write(void)
 }
 
 static void
-data_write(void)
+data_write()
 {
   if (poweroff) {
     return;

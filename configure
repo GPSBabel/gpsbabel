@@ -628,7 +628,6 @@ QT_INC
 DOCDIR
 INSTALL_DEBUG
 GPSBABEL_DEBUG
-EFENCE_LIB
 ZLIB
 GBSER
 OSJEEPS
@@ -726,7 +725,6 @@ enable_csv
 enable_most
 enable_filters
 with_zlib
-enable_efence
 with_doc
 '
       ac_precious_vars='build_alias
@@ -1359,7 +1357,6 @@ Optional Features:
   --disable-csv
   --disable-most
   --disable-filters
-  --enable-efence
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -6078,24 +6075,8 @@ $as_echo_n "checking for random stuff to make you feel better... " >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: failed" >&5
 $as_echo "failed" >&6; }
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for efence" >&5
-$as_echo_n "checking for efence... " >&6; }
-# Check whether --enable-efence was given.
-if test "${enable_efence+set}" = set; then :
-  enableval=$enable_efence; if test "$enable_efence" != "no"; then :
-
-		EFENCE_LIB=-lefence
-		GPSBABEL_DEBUG=gpsbabel-debug
-		INSTALL_DEBUG=install-debug
-
-fi
-fi
 
 
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $EFENCE_LIB" >&5
-$as_echo "$EFENCE_LIB" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for docdir" >&5
 $as_echo_n "checking for docdir... " >&6; }

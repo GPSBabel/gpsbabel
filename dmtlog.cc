@@ -632,7 +632,7 @@ inflate_buff(const char* buff, const size_t size, char** out_buff)
 
 
 static void
-read_CXMLSafe(void)
+read_CXMLSafe()
 {
   char* xmlstr = NULL;
 
@@ -658,7 +658,7 @@ read_CXMLSafe(void)
 #endif
 
 static void
-read_XML(void)
+read_XML()
 {
   xml_init(fin->name, tlog3b_xgcb_map, NULL);
   xml_read();
@@ -683,13 +683,13 @@ dmtlog_rd_init(const QString& fname)
 }
 
 static void
-dmtlog_rd_deinit(void)
+dmtlog_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-dmtlog_read(void)
+dmtlog_read()
 {
   switch (gbfgetuint32(fin)) {
 
@@ -724,7 +724,7 @@ dmtlog_wr_init(const QString& fname)
 }
 
 static void
-dmtlog_wr_deinit(void)
+dmtlog_wr_deinit()
 {
   gbfclose(fout);
 }
@@ -814,7 +814,7 @@ wpt_cb(const Waypoint* wpt)
 }
 
 static void
-dmtlog_write(void)
+dmtlog_write()
 {
   track_index = atoi(opt_index);
   /* ... validate index */

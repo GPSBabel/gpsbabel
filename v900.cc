@@ -173,7 +173,7 @@ v900_rd_init(const QString& fname)
 }
 
 static void
-v900_rd_deinit(void)
+v900_rd_deinit()
 {
   v900_log("%s\n",__func__);
   if (fin) {
@@ -203,7 +203,7 @@ bintime2utc(int date, int time) {
 }
 
 static void
-v900_read(void)
+v900_read()
 {
   /* use line buffer large enough to hold either basic or advanced mode lines. */
   union {

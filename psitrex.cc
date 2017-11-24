@@ -185,7 +185,7 @@ psit_rd_init(const QString& fname)
 }
 
 static void
-psit_rd_deinit(void)
+psit_rd_deinit()
 {
   gbfclose(psit_file_in);
 }
@@ -197,7 +197,7 @@ psit_wr_init(const QString& fname)
 }
 
 static void
-psit_wr_deinit(void)
+psit_wr_deinit()
 {
   gbfclose(psit_file_out);
 }
@@ -695,7 +695,7 @@ psit_trackdatapoint_w_wrapper(const Waypoint* wpt)
 
 
 static void
-psit_read(void)
+psit_read()
 {
   Waypoint*	wpt;
   route_head*	rte;
@@ -754,7 +754,7 @@ psit_noop(const route_head*)
 }
 
 void
-psit_write(void)
+psit_write()
 {
   int short_length;
 

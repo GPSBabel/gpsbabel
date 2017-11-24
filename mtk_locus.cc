@@ -61,8 +61,8 @@ arglist_t mtk_locus_args[] = {
 };
 
 static void mtk_locus_rd_init(const QString& fname);
-static void mtk_locus_rd_deinit(void);
-static void mtk_locus_read(void);
+static void mtk_locus_rd_deinit();
+static void mtk_locus_read();
 
 ff_vecs_t mtk_locus_vecs = {
   ff_type_file,
@@ -108,13 +108,13 @@ static int last_loxsequence;
 static char waiting_for[20];
 
 
-static void set_baudrate(void);
-static void read_line(void);
-static void process_packet(void);
-static void process_pmtklox(void);
-static void process_pmtklog(void);
-static void process_pmtk001(void);
-static void process_pmtk705(void);
+static void set_baudrate();
+static void read_line();
+static void process_packet();
+static void process_pmtklox();
+static void process_pmtklog();
+static void process_pmtk001();
+static void process_pmtk705();
 static void send_command(const char* s, const char* waitfor);
 static int calculate_checksum(const char* s, int length);
 static void dbg(int l, const char* msg, ...);
@@ -147,7 +147,7 @@ mtk_locus_rd_init(const QString& fname)
 }
 
 static void
-mtk_locus_rd_deinit(void)
+mtk_locus_rd_deinit()
 {
   if (read_mode == rm_serial) {
     gbser_deinit(sfd);
@@ -157,7 +157,7 @@ mtk_locus_rd_deinit(void)
 }
 
 static void
-mtk_locus_read(void)
+mtk_locus_read()
 {
   int i;
 
@@ -262,7 +262,7 @@ set_baudrate()
 }
 
 void
-read_line(void)
+read_line()
 {
   int rc;
   char* s;

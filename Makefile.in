@@ -12,7 +12,7 @@ srcdir = @srcdir@
 VPATH = @srcdir@
 
 # version and release are defined in the head of configure.ac
-# don't forget 'autoconf' if you change them 
+# don't forget 'autoconf' if you change them
 VERSD=@GBMAJOR@.@GBMINOR@.@GBMICRO@
 VERSU=@GBMAJOR@_@GBMINOR@_@GBMICRO@
 RELEASE=@PACKAGE_RELEASE@
@@ -29,8 +29,6 @@ EXEEXT=@EXEEXT@
 
 # Resource compiler, currently used under MinGW
 RC=@RC@
-
-#EXTRA_LIBS -lefence
 
 # Space is significant, because MSVC wants no space between switch and arg (-Fofoo.o)
 # but cc/gcc does:
@@ -147,23 +145,23 @@ toolinfo
 
 all: gpsbabel$(EXEEXT)
 
-gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@ 
+gpsbabel$(EXEEXT): configure Makefile $(OBJS) @GPSBABEL_DEBUG@
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
 gpsbabel-debug: $(OBJS)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ @EFENCE_LIB@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJS) @LIBS@ $(QT_LIBS) @USB_LIBS@ $(OUTPUT_SWITCH)$@
 
 Makefile gbversion.h: Makefile.in config.status xmldoc/makedoc.in \
 	  gbversion.h.in gui/setup.iss.in
-	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status 
+	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 xcsv_tokens.gperf: xcsv_tokens.in
-	gperf --output-file=$@ -L ANSI-C -D -t $? 
+	gperf --output-file=$@ -L ANSI-C -D -t $?
 
-config.status: configure 
+config.status: configure
 	$(SHELL) config.status --recheck
 
-jeeps/gpslibusb.o: 
+jeeps/gpslibusb.o:
 	$(CXX) @CPPFLAGS@ @CXXFLAGS@ -c $(GBCFLAGS) @USB_CFLAGS@ @srcdir@/jeeps/gpslibusb.cc $(OUTPUT_SWITCH)$@
 
 fileinfo.o: win32/gpsbabel.rc
@@ -197,7 +195,7 @@ torture: gpsbabel$(EXEEXT)
 	@echo "torture_test in progress... (shortname reduction)"
 	@$(srcdir)/torture_test
 #
-# 	Because there are some "non-real" errors like "IGC: bad date" 
+# 	Because there are some "non-real" errors like "IGC: bad date"
 # 	test-all does not stop on errors.
 # 	Please inspect the log file (/tmp/gb-test-all.log) for segmentation
 # 	faults, math overflows and other hard errors
@@ -256,7 +254,7 @@ $(WEB)/htmldoc-$(DOCVERSION)/index.html: FORCE
 # The Hyphenation package must be installed from
 #   http://offo.sourceforge.net/hyphenation/index.html - be sure to get the
 #   version that corresponds to the version of FOP that you used above.
-# The docbook XSL must be 1.71.1 or higher.  
+# The docbook XSL must be 1.71.1 or higher.
 #   * Remember to update /etc/xml/catalogs if you manually update this.
 #
 gpsbabel.fo:  FORCE
@@ -266,7 +264,7 @@ gpsbabel.fo:  FORCE
 	xsltproc --load-trace -o $@ xmldoc/babelpdf.xsl xmldoc/readme.xml
 
 gpsbabel.pdf: gpsbabel.fo
-	fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf 
+	fop -q -fo gpsbabel.fo -pdf gpsbabel.pdf
 	cp gpsbabel.pdf $(WEB)/htmldoc-$(DOCVERSION)/gpsbabel-$(DOCVERSION).pdf
 
 
@@ -308,14 +306,14 @@ release-sourcecheck: changes.html
 	rm -fr gpsbabel-$(VERSIOND)
 	# make gpsbabel doc gpsbabel.html
 	@(. tools/functions && ask "Enter 'y' to tag the tree as gpsbabel_$(VERSIONU)." "y") && git tag -fa gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@ -m "gpsbabel_@GBMAJOR@_@GBMINOR@_@GBMICRO@@PACKAGE_RELEASE@"
-	# svn export https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU)/gpsbabel gpsbabel-$(VERSIOND) 
+	# svn export https://gpsbabel.googlecode.com/svn/tags/gpsbabel_$(VERSIONU)/gpsbabel gpsbabel-$(VERSIOND)
 	# May have to rethink this in a Git world.
 	# touch gpsbabel-$(VERSIOND)/internal_styles.cc
 	# touch gpsbabel-$(VERSIOND)/configure
 	# touch gpsbabel-$(VERSIOND)/xcsv_tokens.gperf
 
 #
-# Build the release tarball from the exported CVS tree, tweaking 
+# Build the release tarball from the exported CVS tree, tweaking
 # timestamps and including generated filess as needed.
 #
 release-tarball: release-sourcecheck
@@ -331,7 +329,7 @@ release-rpm:
 	mkdir -p /tmp/dist/BUILD \
 	  /tmp/dist/RPMS /tmp/dist/SPECS \
 	  /tmp/dist/SOURCES /tmp/dist/SRPMS \
-	  /tmp/dist/TMP /tmp/dist/install 
+	  /tmp/dist/TMP /tmp/dist/install
 	tools/mkspec $(WEB) $(VERSD) $(RELEASE) > /tmp/dist/SPECS/gpsbabel.spec
 	cp -ap gpsbabel.html gpsbabel-$(VERSIOND)/
 	cp -ap CHANGELOG gpsbabel-$(VERSIOND)/
@@ -370,14 +368,14 @@ release-winbuild:
 # gb_upload is an external script to do the copy to the server.
 release-upload:  /tmp/gpsbabel-$(VERSIOND).tar.gz  /tmp/gpsbabel-$(VERSIOND).zip /tmp/dist/SRPMS/gpsbabel-$(VERSIOND)-0.src.rpm  /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND)-0.i386.rpm
 	@(. tools/functions && ask "Type 'yes' if you want to do the upload now" "yes" )
-	gb_upload /tmp/gpsbabel-$(VERSIOND).tar.gz 
-	gb_upload /tmp/gpsbabel-$(VERSIOND).zip 
-	gb_upload /tmp/dist/SRPMS/gpsbabel-$(VERSIOND)-0.src.rpm  
-	gb_upload /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND)-0.i386.rpm  
-	gb_upload /tmp/dist/RPMS/i386/gpsbabel-debuginfo-$(VERSIOND)-0.i386.rpm  
+	gb_upload /tmp/gpsbabel-$(VERSIOND).tar.gz
+	gb_upload /tmp/gpsbabel-$(VERSIOND).zip
+	gb_upload /tmp/dist/SRPMS/gpsbabel-$(VERSIOND)-0.src.rpm
+	gb_upload /tmp/dist/RPMS/i386/gpsbabel-$(VERSIOND)-0.i386.rpm
+	gb_upload /tmp/dist/RPMS/i386/gpsbabel-debuginfo-$(VERSIOND)-0.i386.rpm
 
 mac-upload:
-	# gb_upload GPSBabel+-$(VERSIOND).dmg  
+	# gb_upload GPSBabel+-$(VERSIOND).dmg
 	gb_upload gui/objects/GPSBabel-$(VERSIOND).dmg
 
 
@@ -404,7 +402,7 @@ mac-gui: gui
 	cp gui/gmapbase.html gui/objects/GPSBabelFE.app/Contents/MacOS
 	tools/mac-localize
 
-# Build the Qt front end, place GPSBabel in the right place, deploy all 
+# Build the Qt front end, place GPSBabel in the right place, deploy all
 # the libs.
 
 mac-gui-dmg: mac-gui
@@ -434,7 +432,7 @@ toolinfo:
 	-$(CC) --version
 	-$(QMAKE) -v
 
-# Machine generated from here down. 
+# Machine generated from here down.
 alan.o: alan.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \
   cet.h inifile.h session.h src/core/datetime.h
 an1.o: an1.cc defs.h config.h queue.h zlib/zlib.h zlib/zconf.h gbfile.h \

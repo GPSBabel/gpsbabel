@@ -85,13 +85,13 @@ hiketech_rd_init(const QString& fname)
 }
 
 static void
-hiketech_read(void)
+hiketech_read()
 {
   xml_read();
 }
 
 static void
-hiketech_rd_deinit(void)
+hiketech_rd_deinit()
 {
   xml_deinit();
 }
@@ -104,7 +104,7 @@ hiketech_wr_init(const QString& fname)
 }
 
 static void
-hiketech_wr_deinit(void)
+hiketech_wr_deinit()
 {
   writer.writeEndDocument();
   gbfputs(ostring, ofd);
@@ -176,7 +176,7 @@ hiketech_waypt_pr(const Waypoint* wpt)
 }
 
 static void
-hiketech_write(void)
+hiketech_write()
 {
   writer.writeStartElement("hiketech");
   writer.writeAttribute("version", "1.2");

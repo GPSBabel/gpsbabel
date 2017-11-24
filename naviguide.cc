@@ -89,7 +89,7 @@ static char temp_short_name[5];
 
 
 /* Forward declarations */
-static void ng_read_file_header(void);
+static void ng_read_file_header();
 
 static
 arglist_t ng_args[] = {
@@ -193,7 +193,7 @@ ng_fread_next_wp(ng_next_wp_t* nwp, gbfile* f)
 /* =================== Write data functions ====================================*/
 
 static void
-ng_fill_header_default(void)
+ng_fill_header_default()
 {
   ng_file_header_t default_header = {
     0x00,
@@ -208,7 +208,7 @@ ng_fill_header_default(void)
 
 
 static void
-ng_fill_waypoint_default(void)
+ng_fill_waypoint_default()
 {
   ng_wp_data_t default_wp  = {
     {0xfe, 0xff, 0xff, 0xff, 0x01, 0x00, 0x00, 0x00},
@@ -273,7 +273,7 @@ ng_waypt_rd(const Waypoint* wpt)
 }
 
 static void
-header_write(void)
+header_write()
 {
   ng_file_header.nof_wp = nof_wp;
   gbfputint16(nof_wp, file_out);
@@ -283,7 +283,7 @@ header_write(void)
 
 
 static void
-data_write(void)
+data_write()
 {
   nof_wp = waypt_count();
   if (nof_wp) {
@@ -312,7 +312,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
 }
@@ -339,7 +339,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
   file_in = NULL;
@@ -348,7 +348,7 @@ rd_deinit(void)
 
 
 static void
-ng_read_file_header(void)
+ng_read_file_header()
 {
 
   nof_wp = gbfgetint16(file_in);
@@ -364,7 +364,7 @@ ng_read_file_header(void)
 }
 
 static void
-data_read(void)
+data_read()
 {
   if (process_rte) {
     rte_head = route_head_alloc();

@@ -176,13 +176,13 @@ raymarine_rd_init(const QString& fname)
 }
 
 static void
-raymarine_rd_done(void)
+raymarine_rd_done()
 {
   inifile_done(fin);
 }
 
 static void
-raymarine_read(void)
+raymarine_read()
 {
   Waypoint* wpt;
   unsigned int ix;
@@ -435,7 +435,7 @@ enum_route_hdr_cb(const route_head* rte)
 }
 
 static short_handle
-raymarine_new_short_handle(void)
+raymarine_new_short_handle()
 {
   short_handle res;
 
@@ -461,7 +461,7 @@ raymarine_wr_init(const QString& fname)
 }
 
 static void
-raymarine_wr_done(void)
+raymarine_wr_done()
 {
   mkshort_del_handle(&hshort_wpt);
   mkshort_del_handle(&hshort_rte);
@@ -470,7 +470,7 @@ raymarine_wr_done(void)
 }
 
 static void
-raymarine_write(void)
+raymarine_write()
 {
   int i;
   Waypoint* wpt;

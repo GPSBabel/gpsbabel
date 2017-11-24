@@ -62,7 +62,7 @@ nmn4_check_line(char* line)
 }
 
 static void
-nmn4_read_data(void)
+nmn4_read_data()
 {
   char* buff;
   char* str;
@@ -224,7 +224,7 @@ nmn4_write_waypt(const Waypoint* wpt)
 }
 
 static void
-nmn4_write_data(void)
+nmn4_write_data()
 {
 
   target_rte_num = 1;
@@ -249,13 +249,13 @@ nmn4_rd_init(const QString& fname)
 }
 
 static void
-nmn4_rd_deinit(void)
+nmn4_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-nmn4_read(void)
+nmn4_read()
 {
   nmn4_read_data();
 }
@@ -267,13 +267,13 @@ nmn4_wr_init(const QString& fname)
 }
 
 static void
-nmn4_wr_deinit(void)
+nmn4_wr_deinit()
 {
   gbfclose(fout);
 }
 
 static void
-nmn4_write(void)
+nmn4_write()
 {
   nmn4_write_data();
 }

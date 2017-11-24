@@ -66,13 +66,13 @@ vidaone_rd_init(const QString& fname)
 }
 
 static void
-vidaone_rd_deinit(void)
+vidaone_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-vidaone_read(void)
+vidaone_read()
 {
   route_head* trk = NULL;
 
@@ -108,7 +108,7 @@ vidaone_wr_init(const QString& fname)
 }
 
 static void
-vidaone_wr_deinit(void)
+vidaone_wr_deinit()
 {
   gbfclose(fout);
 }
@@ -125,7 +125,7 @@ vidaone_trkpt(const Waypoint* wpt)
 }
 
 static void
-vidaone_write(void)
+vidaone_write()
 {
   track_disp_all(NULL, NULL, vidaone_trkpt);
 }

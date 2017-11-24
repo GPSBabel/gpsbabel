@@ -740,14 +740,14 @@ dg200_rd_init(const QString& fname)
 }
 
 static void
-dg100_rd_deinit(void)
+dg100_rd_deinit()
 {
   gbser_deinit(serial_handle);
   serial_handle = NULL;
 }
 
 static void
-dg100_read(void)
+dg100_read()
 {
   if (*erase_only == '1') {
     dg100_erase();

@@ -123,7 +123,7 @@ cet_cs_vec_t cet_cs_vec_utf8 = {
 };
 
 void
-cet_register(void)
+cet_register()
 {
   int i, c;
 
@@ -243,7 +243,7 @@ cet_find_cs_by_name(const QString& name)
 }
 
 void
-cet_deregister(void)
+cet_deregister()
 {
   int i;
   int j = cet_cs_alias_ct;
@@ -291,7 +291,7 @@ cet_validate_cs(const QString& cs, cet_cs_vec_t** vec, QString* cs_name)
 }
 
 void
-cet_convert_deinit(void)
+cet_convert_deinit()
 {
   global_opts.charset = NULL;
   global_opts.codec = NULL;
@@ -332,7 +332,7 @@ cet_flag_route(const route_head* rte)
 }
 
 static void
-cet_flag_all(void)
+cet_flag_all()
 {
   waypt_disp_all(cet_flag_waypt);
   route_disp_all(cet_flag_route, NULL, cet_flag_waypt);

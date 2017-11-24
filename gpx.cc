@@ -1744,8 +1744,7 @@ static void
 gpx_track_disp(const Waypoint* waypointp)
 {
   fs_xml* fs_gpx;
-  int first_in_trk;
-  first_in_trk = waypointp->Q.prev == &current_trk_head->waypoint_list;
+  bool first_in_trk = waypointp->Q.prev == &current_trk_head->waypoint_list;
 
   if (waypointp->wpt_flags.new_trkseg) {
     if (!first_in_trk) {

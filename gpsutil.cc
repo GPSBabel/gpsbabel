@@ -39,7 +39,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -52,14 +52,14 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
 }
 
 static void
-data_read(void)
+data_read()
 {
   char* ibuf;
   char desc[31];
@@ -168,7 +168,7 @@ gpsutil_disp(const Waypoint* wpt)
 }
 
 static void
-data_write(void)
+data_write()
 {
   waypt_disp_all(gpsutil_disp);
 }

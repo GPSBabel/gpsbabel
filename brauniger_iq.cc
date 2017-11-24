@@ -66,7 +66,7 @@ static void rd_init(const QString& fname)
   }
 }
 
-static void rd_deinit(void)
+static void rd_deinit()
 {
   gbser_deinit(serial_handle);
   serial_handle = NULL;
@@ -225,7 +225,7 @@ static int process_data(const unsigned char* data)
   return remaining;
 }
 
-static void data_read(void)
+static void data_read()
 {
   unsigned char ibuf[25];
   int rd_cnt;

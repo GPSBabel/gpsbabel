@@ -61,7 +61,7 @@ lmx_wr_init(const QString& fname)
 }
 
 static void
-lmx_wr_deinit(void)
+lmx_wr_deinit()
 {
   gbfclose(ofd);
 }
@@ -258,7 +258,7 @@ lmx_print(const Waypoint* wpt)
 
 
 static void
-lmx_write(void)
+lmx_write()
 {
   if (binary) {
     gbfputc(0x03, ofd); // WBXML version 1.3
@@ -322,13 +322,13 @@ lmx_rd_init(const QString& fname)
 }
 
 static void
-lmx_read(void)
+lmx_read()
 {
   xml_read();
 }
 
 static void
-lmx_rd_deinit(void)
+lmx_rd_deinit()
 {
   xml_deinit();
 }

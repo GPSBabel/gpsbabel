@@ -224,7 +224,7 @@ static void kml_init_color_sequencer(unsigned int steps_per_rev)
   }
 }
 
-static void kml_step_color(void)
+static void kml_step_color()
 {
   int color_seq;
   // Map kml_color_sequencer.seq to an integer in the range [0, KML_COLOR_LIMIT*6).
@@ -468,13 +468,13 @@ kml_rd_init(const QString& fname)
 
 static
 void
-kml_read(void)
+kml_read()
 {
   xml_read();
 }
 
 static void
-kml_rd_deinit(void)
+kml_rd_deinit()
 {
   xml_deinit();
 }
@@ -539,7 +539,7 @@ kml_wr_position_init(const QString& fname)
 }
 
 static void
-kml_wr_deinit(void)
+kml_wr_deinit()
 {
   writer->writeEndDocument();
   delete writer;
@@ -558,7 +558,7 @@ kml_wr_deinit(void)
 }
 
 static void
-kml_wr_position_deinit(void)
+kml_wr_position_deinit()
 {
 //	kml_wr_deinit();
   posnfilename.clear();
@@ -1154,7 +1154,7 @@ static const QString map_templates[] = {
 
 
 static
-void kml_gc_make_balloonstyletext(void)
+void kml_gc_make_balloonstyletext()
 {
   QString cdataStr;
 
@@ -1226,7 +1226,7 @@ void kml_gc_make_balloonstyletext(void)
 }
 
 static
-void kml_gc_make_balloonstyle(void)
+void kml_gc_make_balloonstyle()
 {
   // For Normal style of gecoaches, scale of label is set to zero
   // to make the label invisible.  On hover (highlight?) enlarge
@@ -1869,7 +1869,7 @@ static void kml_route_tlr(const route_head* header)
 // For Earth 5.0 and later, we write a LookAt that encompasses
 // the bounding box of our entire data set and set the event times
 // to include all our data.
-void kml_write_AbstractView(void)
+void kml_write_AbstractView()
 {
   double bb_size;
 
@@ -1940,7 +1940,7 @@ void kml_mt_array_schema(const char* field_name, const char* display_name,
   writer->writeEndElement(); // Close gx:SimpleArrayField tag
 }
 
-void kml_write(void)
+void kml_write()
 {
   const global_trait* traits = get_traits();
 

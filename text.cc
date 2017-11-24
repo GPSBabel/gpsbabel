@@ -85,7 +85,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   if (!split_output) {
     gbfclose(file_out);
@@ -259,7 +259,7 @@ text_disp(const Waypoint* wpt)
 }
 
 static void
-data_write(void)
+data_write()
 {
   if (! suppresssep && !split_output) {
     gbfprintf(file_out, "-----------------------------------------------------------------------------\n");

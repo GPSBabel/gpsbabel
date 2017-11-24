@@ -171,7 +171,7 @@ spec_usage(const char* vec)
 }
 
 static void
-print_extended_info(void)
+print_extended_info()
 {
   printf(
 

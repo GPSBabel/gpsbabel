@@ -236,7 +236,7 @@ mps_rd_init(const QString& fname)
 }
 
 static void
-mps_rd_deinit(void)
+mps_rd_deinit()
 {
   gbfclose(mps_file_in);
   if (read_route_wpt_mkshort_handle) {
@@ -287,7 +287,7 @@ mps_wr_init(const QString& fname)
 }
 
 static void
-mps_wr_deinit(void)
+mps_wr_deinit()
 {
   gbfclose(mps_file_out);
 
@@ -1689,7 +1689,7 @@ mps_trackdatapoint_w_wrapper(const Waypoint* wpt)
 
 
 static void
-mps_read(void)
+mps_read()
 {
   Waypoint*		wpt;
   route_head*		rte;
@@ -1813,7 +1813,7 @@ mps_read(void)
 }
 
 void
-mps_write(void)
+mps_write()
 {
   int				short_length;
   Waypoint*		wpt;

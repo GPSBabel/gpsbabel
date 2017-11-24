@@ -54,7 +54,7 @@ xg_tag_mapping ikt_map[] = {
 };
 
 static void
-ikt_object_end(void)
+ikt_object_end()
 {
   if (track) {
     track->rte_name = name;
@@ -131,13 +131,13 @@ ikt_rd_init(const QString& fname)
 }
 
 static void
-ikt_read(void)
+ikt_read()
 {
   xml_read();
 }
 
 static void
-ikt_rd_deinit(void)
+ikt_rd_deinit()
 {
   ikt_object_end();
   xml_deinit();

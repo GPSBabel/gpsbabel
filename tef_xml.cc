@@ -310,13 +310,13 @@ tef_xml_rd_init(const QString& fname)
 }
 
 static void
-tef_xml_read(void)
+tef_xml_read()
 {
   xml_read();
 }
 
 static void
-tef_xml_rd_deinit(void)
+tef_xml_rd_deinit()
 {
   xml_deinit();
 }

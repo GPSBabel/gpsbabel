@@ -131,13 +131,13 @@ mynav_rd_init(const QString& fname)
 }
 
 static void
-mynav_rd_deinit(void)
+mynav_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-mynav_rd(void)
+mynav_rd()
 {
   QString buff;
 

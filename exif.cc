@@ -325,7 +325,7 @@ exif_release_ifd(exif_ifd_t* ifd)
 }
 
 static void
-exif_release_apps(void)
+exif_release_apps()
 {
   queue* e0, *t0;
 
@@ -369,7 +369,7 @@ exif_ifd_size(exif_ifd_t* ifd)
 }
 
 static exif_app_t*
-exif_load_apps(void)
+exif_load_apps()
 {
   exif_app_t* exif_app = NULL;
 
@@ -1242,7 +1242,7 @@ exif_write_ifd(const exif_ifd_t* ifd, const char next, gbfile* fout)
 }
 
 static void
-exif_write_apps(void)
+exif_write_apps()
 {
   queue* e0, *t0;
 
@@ -1348,14 +1348,14 @@ exif_rd_init(const QString& fname)
 }
 
 static void
-exif_rd_deinit(void)
+exif_rd_deinit()
 {
   exif_release_apps();
   gbfclose(fin);
 }
 
 static void
-exif_read(void)
+exif_read()
 {
   uint16_t soi;
   Waypoint* wpt;
@@ -1404,7 +1404,7 @@ exif_wr_init(const QString& fname)
 }
 
 static void
-exif_wr_deinit(void)
+exif_wr_deinit()
 {
 
   exif_release_apps();
@@ -1424,7 +1424,7 @@ exif_wr_deinit(void)
 }
 
 static void
-exif_write(void)
+exif_write()
 {
   time_t frame;
 

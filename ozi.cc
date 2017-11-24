@@ -136,7 +136,7 @@ ozi_free_fsdata(void* fsdata)
 
 static
 ozi_fsdata*
-ozi_alloc_fsdata(void)
+ozi_alloc_fsdata()
 {
   ozi_fsdata* fsdata = (ozi_fsdata*) xcalloc(sizeof(*fsdata), 1);
   fsdata->fs.type = FS_OZI;
@@ -425,7 +425,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
   file_in = NULL;
@@ -472,7 +472,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   if (file_out != NULL) {
 
@@ -716,7 +716,7 @@ ozi_parse_routeheader(int field, const QString& str, Waypoint*)
 }
 
 static void
-data_read(void)
+data_read()
 {
   QString buff;
   char* trk_name = NULL;
@@ -936,7 +936,7 @@ ozi_waypt_pr(const Waypoint* wpt)
 }
 
 static void
-data_write(void)
+data_write()
 {
   static const char* ozi_wpt_header =
     "OziExplorer Waypoint File Version 1.1\r\n"

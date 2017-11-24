@@ -74,7 +74,7 @@ mapfactor_rd_init(const QString& fname)
 }
 
 static void
-mapfactor_read(void)
+mapfactor_read()
 {
   gpsbabel::File file(mapfactor_read_fname);
   file.open(QIODevice::ReadOnly);
@@ -92,7 +92,7 @@ mapfactor_read(void)
 
 
 static void
-mapfactor_rd_deinit(void)
+mapfactor_rd_deinit()
 {
 
 }
@@ -113,7 +113,7 @@ mapfactor_wr_init(const QString& fname)
 }
 
 static void
-mapfactor_wr_deinit(void)
+mapfactor_wr_deinit()
 {
   writer->writeEndDocument();
   delete writer;
@@ -135,7 +135,7 @@ mapfactor_waypt_pr(const Waypoint* waypointp)
 }
 
 static void
-mapfactor_write(void)
+mapfactor_write()
 {
   writer->writeStartElement("favourites");
   writer->writeAttribute("version", "1");

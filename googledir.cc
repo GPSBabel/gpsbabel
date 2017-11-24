@@ -140,7 +140,7 @@ google_rd_init(const QString& fname)
 }
 
 static void
-google_read(void)
+google_read()
 {
   xml_read();
 
@@ -149,7 +149,7 @@ google_read(void)
 }
 
 static void
-google_rd_deinit(void)
+google_rd_deinit()
 {
   xml_deinit();
   mkshort_del_handle(&desc_handle);
