@@ -458,7 +458,7 @@ itracku_rd_init(const QString& fname)
 }
 
 static void
-itracku_rd_deinit(void)
+itracku_rd_deinit()
 {
   dbg(1, "%d new waypoints", new_waypoint_count);
   if (fd) {
@@ -586,7 +586,7 @@ itracku_waypt_input(void (*waypt_add)(Waypoint* wpt))
 }
 
 static void
-itracku_read_waypt(void)
+itracku_read_waypt()
 {
   itracku_waypt_input(&waypt_add);
 }
@@ -600,7 +600,7 @@ itracku_read_trk_waypt_add(Waypoint* wpt)
 }
 
 static void
-itracku_read_trk(void)
+itracku_read_trk()
 {
   itracku_read_trk_track = route_head_alloc();
   track_add_head(itracku_read_trk_track);
@@ -608,7 +608,7 @@ itracku_read_trk(void)
 }
 
 static void
-itracku_read(void)
+itracku_read()
 {
   switch (global_opts.objective) {
   case wptdata:
@@ -633,7 +633,7 @@ itracku_wr_init(const QString& fname)
 }
 
 static void
-itracku_wr_deinit(void)
+itracku_wr_deinit()
 {
   gbfclose(fout);
 }
@@ -645,13 +645,13 @@ itracku_output_waypoint(const Waypoint* wp)
 }
 
 static void
-itracku_write(void)
+itracku_write()
 {
   waypt_disp_all(itracku_output_waypoint);
 }
 
 static void
-itracku_exit(void)		/* optional */
+itracku_exit()		/* optional */
 {
 }
 
@@ -758,7 +758,7 @@ itracku_rt_position(posn_status* posn_status)
 }
 
 static void
-itracku_rt_deinit(void)
+itracku_rt_deinit()
 {
   itracku_rd_deinit();
 }

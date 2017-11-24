@@ -61,13 +61,13 @@ yahoo_rd_init(const QString& fname)
 }
 
 static void
-yahoo_read(void)
+yahoo_read()
 {
   xml_read();
 }
 
 static void
-yahoo_rd_deinit(void)
+yahoo_rd_deinit()
 {
   xml_deinit();
 }

@@ -178,7 +178,7 @@ NaviReadCache(const QXmlStreamReader& reader)
 }
 
 static void
-nav_read(void)
+nav_read()
 {
   QXmlStreamReader reader;
   gpsbabel::File file(read_fname);
@@ -203,7 +203,7 @@ nav_read(void)
 }
 
 static void
-nav_rd_deinit(void)
+nav_rd_deinit()
 {
 }
 
@@ -214,12 +214,12 @@ nav_wr_init(const QString& fname)
 }
 
 static void
-nav_wr_deinit(void)
+nav_wr_deinit()
 {
 }
 
 static void
-nav_write(void)
+nav_write()
 {
 }
 

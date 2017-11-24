@@ -1110,7 +1110,7 @@ vecs_t vec_list[] = {
 };
 
 void
-init_vecs(void)
+init_vecs()
 {
   vecs_t* vec = vec_list;
   while (vec->vec) {
@@ -1134,7 +1134,7 @@ is_integer(const char* c)
 }
 
 void
-exit_vecs(void)
+exit_vecs()
 {
   vecs_t* vec = vec_list;
   while (vec->vec) {
@@ -1543,7 +1543,7 @@ sort_and_unify_vecs(int* ctp)
 #define VEC_FMT "	%-20.20s  %-.50s\n"
 
 void
-disp_vecs(void)
+disp_vecs()
 {
   vecs_t** svp;
   arglist_t* ap;

@@ -148,13 +148,13 @@ ignr_rd_init(const QString& fname)
 }
 
 static void
-ignr_rd_deinit(void)
+ignr_rd_deinit()
 {
   xml_deinit();
 }
 
 static void
-ignr_read(void)
+ignr_read()
 {
   xml_read();
 }
@@ -170,7 +170,7 @@ ignr_rw_init(const QString& fname)
 }
 
 static void
-ignr_rw_deinit(void)
+ignr_rw_deinit()
 {
   gbfclose(fout);
 }
@@ -213,7 +213,7 @@ ignr_write_waypt(const Waypoint* wpt)
 }
 
 static void
-ignr_write(void)
+ignr_write()
 {
   time_t now;
   struct tm tm;

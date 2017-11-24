@@ -408,7 +408,7 @@ static osm_icon_mapping_t osm_icon_mappings[] = {
 /*-----------------------------------------------------------------------------*/
 
 static void
-osm_features_init(void)
+osm_features_init()
 {
   int i;
 
@@ -690,13 +690,13 @@ osm_rd_init(const QString& fname)
 }
 
 static void
-osm_read(void)
+osm_read()
 {
   xml_read();
 }
 
 static void
-osm_rd_deinit(void)
+osm_rd_deinit()
 {
   xml_deinit();
   waypoints.clear();
@@ -707,7 +707,7 @@ osm_rd_deinit(void)
 /*-----------------------------------------------------------------------------*/
 
 static void
-osm_init_icons(void)
+osm_init_icons()
 {
   int i;
 
@@ -937,7 +937,7 @@ osm_wr_init(const QString& fname)
 }
 
 static void
-osm_write(void)
+osm_write()
 {
   gbfprintf(fout, "<?xml version='1.0' encoding='UTF-8'?>\n");
   gbfprintf(fout, "<osm version='0.6' generator='GPSBabel");
@@ -957,7 +957,7 @@ osm_write(void)
 }
 
 static void
-osm_wr_deinit(void)
+osm_wr_deinit()
 {
   gbfclose(fout);
 
@@ -969,7 +969,7 @@ osm_wr_deinit(void)
 }
 
 static void
-osm_exit(void)
+osm_exit()
 {
   keys.clear();
   values.clear();

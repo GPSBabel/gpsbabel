@@ -113,7 +113,7 @@ geojson_rd_deinit() {
 }
 
 static void
-geojson_wr_deinit(void) {
+geojson_wr_deinit() {
   QJsonObject object;
   object[TYPE] = FEATURE_COLLECTION;
   object[FEATURES]  = *feature_collection;
@@ -159,7 +159,7 @@ routes_from_polygon_coordinates(const QJsonArray& polygon)
 }
 
 static void
-geojson_read(void) {
+geojson_read() {
 	QFile file;
 	file.setFileName(input_file_name);
 	file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -306,7 +306,7 @@ static void geojson_track_tlr(const route_head* track) {
 }
 
 static void
-geojson_write(void) {
+geojson_write() {
   waypt_disp_all(geojson_waypt_pr);
   track_disp_all(geojson_track_hdr, geojson_track_tlr, geojson_track_disp);
 }

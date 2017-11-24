@@ -304,7 +304,7 @@ nmea_rd_init(const QString& fname)
 }
 
 static  void
-nmea_rd_deinit(void)
+nmea_rd_deinit()
 {
   switch (read_mode) {
   case rm_serial:
@@ -356,7 +356,7 @@ nmea_wr_init(const QString& portname)
 }
 
 static  void
-nmea_wr_deinit(void)
+nmea_wr_deinit()
 {
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
@@ -1016,7 +1016,7 @@ nmea_parse_one_line(char* ibuf)
 }
 
 static void
-nmea_read(void)
+nmea_read()
 {
   char* ibuf;
   char* ck;
@@ -1130,7 +1130,7 @@ safe_print(int cnt, const char* b)
 static void reset_sirf_to_nmea(int br);
 
 static
-int hunt_sirf(void)
+int hunt_sirf()
 {
   /* Try to place the common BR's first to speed searching */
   static int br[] = {38400, 9600, 57600, 115200, 19200, 4800, -1};
@@ -1380,7 +1380,7 @@ nmea_trackpt_pr(const Waypoint* wpt)
 }
 
 static void
-nmea_write(void)
+nmea_write()
 {
   waypt_disp_all(nmea_wayptpr);
   track_disp_all(nmea_track_init, NULL, nmea_trackpt_pr);
@@ -1399,7 +1399,7 @@ nmea_wr_posn(Waypoint* wpt)
 }
 
 static void
-nmea_wr_posn_deinit(void)
+nmea_wr_posn_deinit()
 {
 // nmea_wr_deinit();
 }

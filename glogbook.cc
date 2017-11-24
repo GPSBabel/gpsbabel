@@ -67,13 +67,13 @@ glogbook_rd_init(const QString& fname)
 }
 
 static void
-glogbook_read(void)
+glogbook_read()
 {
   xml_read();
 }
 
 static void
-glogbook_rd_deinit(void)
+glogbook_rd_deinit()
 {
   xml_deinit();
 }
@@ -88,7 +88,7 @@ glogbook_wr_init(const QString& fname)
 }
 
 static void
-glogbook_wr_deinit(void)
+glogbook_wr_deinit()
 {
   writer.writeEndDocument();
   gbfputs(ostring,ofd);
@@ -124,7 +124,7 @@ glogbook_ftr(const route_head* rte)
 }
 
 static void
-glogbook_write(void)
+glogbook_write()
 {
 #if 0
   gbfprintf(ofd, "<?xml version=\"1.0\" ?>\n");

@@ -82,13 +82,13 @@ jogmap_rd_init(const QString& fname)
 }
 
 static void
-jogmap_read(void)
+jogmap_read()
 {
   xml_read();
 }
 
 static void
-jogmap_rd_deinit(void)
+jogmap_rd_deinit()
 {
   xml_deinit();
 }

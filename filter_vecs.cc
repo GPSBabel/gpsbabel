@@ -246,7 +246,7 @@ free_filter_vec(filter_vecs_t* fvec)
 }
 
 void
-init_filter_vecs(void)
+init_filter_vecs()
 {
   fl_vecs_t* vec = filter_vec_list;
   while (vec->vec) {
@@ -261,7 +261,7 @@ init_filter_vecs(void)
 }
 
 void
-exit_filter_vecs(void)
+exit_filter_vecs()
 {
   fl_vecs_t* vec = filter_vec_list;
   while (vec->vec) {
@@ -277,7 +277,7 @@ exit_filter_vecs(void)
  *  parse for help on available command line options.
  */
 void
-disp_filter_vecs(void)
+disp_filter_vecs()
 {
   fl_vecs_t* vec;
   arglist_t* ap;

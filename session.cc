@@ -28,14 +28,14 @@ static int session_ct;
 static void session_free(session_t* s);
 
 void
-session_init(void)
+session_init()
 {
   QUEUE_INIT(&session_list);
   session_ct = 0;
 }
 
 void
-session_exit(void)
+session_exit()
 {
   queue* elem, *tmp;
 
@@ -65,7 +65,7 @@ start_session(const char* name, const char* filename)
 }
 
 session_t*
-curr_session(void)
+curr_session()
 {
   return (session_t*) session_list.prev;
 }

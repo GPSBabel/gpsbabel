@@ -148,7 +148,7 @@ db(int l, const char* msg, ...)
 }
 
 static void
-rd_drain(void)
+rd_drain()
 {
   if (gbser_flush(serial_handle)) {
     db(1, MYNAME ": rd_drain(): Comm error\n");
@@ -218,7 +218,7 @@ rd_buf(const uint8_t* buf, int len)
 }
 
 static unsigned int
-rd_word(void)
+rd_word()
 {
   int errors = 5;		/* allow this many errors */
   uint8_t buffer[2];
@@ -420,7 +420,7 @@ skytraq_wr_msg_verify(const uint8_t* payload, int len)
 }
 
 static int
-skytraq_system_restart(void)
+skytraq_system_restart()
 {
   uint8_t MSG_SYSTEM_RESTART[15] =
   { 0x01, 0x01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -486,7 +486,7 @@ skytraq_set_baud(int baud)
 }
 
 static int
-skytraq_configure_logging(void)
+skytraq_configure_logging()
 {
   // an0008-1.4.14: logs if
   // (dt > tmin & dd >= dmin & v >= vmin) | dt > tmax | dd > dmax | v > vmax
@@ -1054,7 +1054,7 @@ skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8
 }
 
 static void
-skytraq_read_tracks(void)
+skytraq_read_tracks()
 {
   struct read_state st;
   uint32_t log_wr_ptr;
@@ -1185,7 +1185,7 @@ skytraq_read_tracks(void)
 }
 
 static int
-skytraq_probe(void)
+skytraq_probe()
 {
   int baud_rates[] = { 9600, 230400, 115200, 57600, 4800, 19200, 38400 };
   int baud_rates_count = sizeof(baud_rates)/sizeof(baud_rates[0]);
@@ -1274,7 +1274,7 @@ skytraq_erase()
 }
 
 static void
-skytraq_set_location(void)
+skytraq_set_location()
 {
   double lat, lng;
   unsigned int i;
@@ -1316,14 +1316,14 @@ skytraq_rd_init(const QString& fname)
 }
 
 static void
-skytraq_rd_deinit(void)
+skytraq_rd_deinit()
 {
   gbser_deinit(serial_handle);
   serial_handle = NULL;
 }
 
 static void
-skytraq_read(void)
+skytraq_read()
 {
   int dlbaud;
 
@@ -1367,7 +1367,7 @@ file_init(const QString& fname)
 }
 
 static void
-file_deinit(void)
+file_deinit()
 {
   db(1, "Closing file...\n");
   gbfclose(file_handle);
@@ -1375,7 +1375,7 @@ file_deinit(void)
 }
 
 static void
-file_read(void)
+file_read()
 {
   struct read_state st;
   int rc, got_bytes;
@@ -1623,14 +1623,14 @@ miniHomer_rd_init(const QString& fname)
   mhport=fname;
 }
 static void
-miniHomer_rd_deinit(void)
+miniHomer_rd_deinit()
 {
   skytraq_rd_deinit();
   mhport.clear();
 }
 #define SETPOI(poinum, poiname) if (opt_set_poi_##poiname )  {miniHomer_set_poi(poinum, opt_set_poi_##poiname);}
 static void
-miniHomer_read(void)
+miniHomer_read()
 {
   int npoi=0;
   /*

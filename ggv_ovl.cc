@@ -92,13 +92,13 @@ ggv_ovl_rd_init(const QString& fname)
 }
 
 static void
-ggv_ovl_rd_deinit(void)
+ggv_ovl_rd_deinit()
 {
   inifile_done(inifile);
 }
 
 static void
-ggv_ovl_read(void)
+ggv_ovl_read()
 {
   int symbols;
   int i;
@@ -206,7 +206,7 @@ ggv_ovl_read(void)
 static void waypt_disp_cb(const Waypoint* wpt);
 static void track_disp_cb(const route_head* trk);
 static void route_disp_cb(const route_head* rte);
-static void write_bounds(void);
+static void write_bounds();
 static void draw_symbol_basics(const OVL_SYMBOL_TYP typ, const int art, const OVL_COLOR_TYP color, const Waypoint* wpt);
 static int get_direction(const Waypoint* A, const Waypoint* B);
 // static void draw_symbol_text(const char *text, const waypoint *reference);
@@ -222,13 +222,13 @@ ggv_ovl_wr_init(const QString& fname)
 }
 
 static void
-ggv_ovl_wr_deinit(void)
+ggv_ovl_wr_deinit()
 {
   gbfclose(fout);
 }
 
 static void
-ggv_ovl_write(void)
+ggv_ovl_write()
 {
   group_ct = 1;	/* tracks are not grouped */
   color = OVL_COLOR_FUCHSIA;
@@ -349,7 +349,7 @@ waypt_bound_calc(const Waypoint* waypointp)
 }
 
 static void
-write_bounds(void)
+write_bounds()
 {
   waypt_init_bounds(&all_bounds);
 

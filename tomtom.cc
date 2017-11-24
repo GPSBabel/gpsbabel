@@ -60,7 +60,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -72,7 +72,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
 }
@@ -148,7 +148,7 @@ check_recsize(int sz)
 }
 
 static void
-data_read(void)
+data_read()
 {
   int rectype;
   long recsize;
@@ -422,7 +422,7 @@ free_blocks(struct blockheader* block)
 }
 
 static void
-data_write(void)
+data_write()
 {
   int ct = waypt_count();
   struct hdr* htable, *bh;

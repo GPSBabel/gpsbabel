@@ -148,7 +148,7 @@ static void igo8_read_init(const QString& fname)
 }
 
 // Reader callback
-static void igo8_read(void)
+static void igo8_read()
 {
   Waypoint* wpt_tmp;
   route_head* track_head;
@@ -171,7 +171,7 @@ static void igo8_read(void)
 }
 
 // Reader close callback
-static void igo8_read_deinit(void)
+static void igo8_read_deinit()
 {
   gbfclose(igo8_file_in);
 }
@@ -188,7 +188,7 @@ static void igo8_write_init(const QString& fname)
 }
 
 // Writer close callback
-static void igo8_write_deinit(void)
+static void igo8_write_deinit()
 {
   uint32_t normalized_file_size;
 
@@ -347,7 +347,7 @@ void write_header()
 }
 
 // Writer callback
-static void igo8_write(void)
+static void igo8_write()
 {
   write_header();
   track_disp_all(NULL, NULL, write_igo8_track_point);

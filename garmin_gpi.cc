@@ -299,7 +299,7 @@ gpi_read_string(const char* field)
 }
 
 static void
-read_header(void)
+read_header()
 {
   int len, i;
 #ifdef GPI_DBG
@@ -1212,7 +1212,7 @@ write_category(const char* category, const unsigned char* image, const int image
 
 
 static void
-write_header(void)
+write_header()
 {
   time_t time = gpi_timestamp;
 
@@ -1531,7 +1531,7 @@ garmin_gpi_wr_init(const QString& fname)
 
 
 static void
-garmin_gpi_rd_deinit(void)
+garmin_gpi_rd_deinit()
 {
   delete rdata;
   gbfclose(fin);
@@ -1539,7 +1539,7 @@ garmin_gpi_rd_deinit(void)
 
 
 static void
-garmin_gpi_wr_deinit(void)
+garmin_gpi_wr_deinit()
 {
   wdata_free(wdata);
   mkshort_del_handle(&short_h);
@@ -1559,7 +1559,7 @@ garmin_gpi_wr_deinit(void)
 
 
 static void
-garmin_gpi_read(void)
+garmin_gpi_read()
 {
   while (1) {
     int tag = gbfgetint32(fin);
@@ -1574,7 +1574,7 @@ garmin_gpi_read(void)
 
 
 static void
-garmin_gpi_write(void)
+garmin_gpi_write()
 {
   unsigned char* image;
   int image_sz;

@@ -138,9 +138,9 @@ static void xol_rd_init(const QString& fname) {
   xml_init(fname, xol_map, NULL);
 }
 
-static void xol_read(void) { xml_read(); }
+static void xol_read() { xml_read(); }
 
-static void xol_rd_deinit(void) { xml_deinit(); }
+static void xol_rd_deinit() { xml_deinit(); }
 
 /* writer */
 
@@ -175,7 +175,7 @@ static void xol_wr_init(const QString& fname) {
   setshort_defname(short_h, "Waypoint");
 }
 
-static void xol_wr_deinit(void) {
+static void xol_wr_deinit() {
   mkshort_del_handle(&short_h);
   writer->writeEndDocument();
   delete writer;
@@ -259,7 +259,7 @@ static void xol_trkpt_disp_cb(const Waypoint* wpt) {
   writer->writeEndElement();  // shape
 }
 
-static void xol_write(void) {
+static void xol_write() {
   double x, y;
 
   waypt_disp_all(xol_waypt_bound_calc);

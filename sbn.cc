@@ -284,13 +284,13 @@ sbn_rd_init(const QString& fname)
 }
 
 static void
-sbn_rd_deinit(void)
+sbn_rd_deinit()
 {
   gbfclose(file_handle);
 }
 
 static void
-sbn_read(void)
+sbn_read()
 {
   if (global_opts.masked_objective & TRKDATAMASK) {
     route_head*     track;
@@ -305,7 +305,7 @@ sbn_read(void)
 }
 
 static void
-sbn_exit(void)
+sbn_exit()
 {
 }
 

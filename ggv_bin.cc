@@ -479,13 +479,13 @@ ggv_bin_read_init(const QString& fname)
 }
 
 static void
-ggv_bin_read_deinit(void)
+ggv_bin_read_deinit()
 {
   read_fname.clear();
 }
 
 static void
-ggv_bin_read(void)
+ggv_bin_read()
 {
   QFile file(read_fname);
 

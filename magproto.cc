@@ -47,8 +47,8 @@ static int broken_sportrak;
 static QString termread(char* ibuf, int size);
 static void termwrite(char* obuf, int size);
 static void mag_readmsg(gpsdata_type objective);
-static void mag_handon(void);
-static void mag_handoff(void);
+static void mag_handon();
+static void mag_handoff();
 static short_handle mkshort_handle = NULL;
 static char* deficon = NULL;
 static char* bs = NULL;
@@ -360,7 +360,7 @@ mag_writeack(int osum)
 }
 
 static void
-mag_handon(void)
+mag_handon()
 {
   if (!is_file) {
     mag_writemsg("PMGNCMD,HANDON");
@@ -370,7 +370,7 @@ mag_handon(void)
 }
 
 static void
-mag_handoff(void)
+mag_handoff()
 {
   if (!is_file) {
     mag_writemsg("PMGNCMD,HANDOFF");
@@ -902,7 +902,7 @@ mag_wr_init(const QString& portname)
 }
 
 static void
-mag_deinit(void)
+mag_deinit()
 {
   if (explorist_info) {
     explorist_ini_done(explorist_info);
@@ -922,7 +922,7 @@ mag_deinit(void)
 }
 
 static void
-mag_wr_deinit(void)
+mag_wr_deinit()
 {
   if (explorist) {
     mag_writemsg("PMGNCMD,END");
@@ -1263,7 +1263,7 @@ mag_wptparse(char* trkmsg)
 }
 
 static void
-mag_read(void)
+mag_read()
 {
   if (gpx_vec) {
     char** f = os_gpx_files(explorist_info->track_path);
@@ -1577,7 +1577,7 @@ mag_route_pr()
 }
 
 static void
-mag_write(void)
+mag_write()
 {
 
   wptcmtcnt = 0;

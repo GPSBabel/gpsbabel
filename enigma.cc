@@ -101,7 +101,7 @@ float enigmaPositionToDec(int32_t val)
 }
 
 static void
-data_read(void)
+data_read()
 {
   struct enigma_wpt ewpt;
   route_head* route = route_head_alloc();
@@ -148,7 +148,7 @@ data_read(void)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -191,13 +191,13 @@ enigma_waypt_disp(const Waypoint* wpt)
 }
 
 static void
-data_write(void)
+data_write()
 {
   route_disp_all(NULL, NULL, enigma_waypt_disp);
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
 }

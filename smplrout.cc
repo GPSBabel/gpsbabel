@@ -373,7 +373,7 @@ routesimple_tail(const route_head* rte)
 }
 
 void
-routesimple_process(void)
+routesimple_process()
 {
   waypt_del_fnp = route_del_wpt;
   route_disp_all(routesimple_head, routesimple_tail, routesimple_waypt_pr);
@@ -411,7 +411,7 @@ routesimple_init(const char* args)
 }
 
 void
-routesimple_deinit(void)
+routesimple_deinit()
 {
   /* do nothing */
 }

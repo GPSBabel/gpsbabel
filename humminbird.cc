@@ -256,7 +256,7 @@ humminbird_rd_init(const QString& fname)
 }
 
 static void
-humminbird_rd_deinit(void)
+humminbird_rd_deinit()
 {
   gbfclose(fin);
 }
@@ -611,7 +611,7 @@ humminbird_read_track_old(gbfile* fin)
 }
 
 static void
-humminbird_read(void)
+humminbird_read()
 {
   while (! gbfeof(fin)) {
     uint32_t signature;
@@ -679,7 +679,7 @@ humminbird_wr_init(const QString& fname)
 }
 
 static void
-humminbird_wr_deinit(void)
+humminbird_wr_deinit()
 {
   mkshort_del_handle(&wptname_sh);
   mkshort_del_handle(&rtename_sh);
@@ -879,7 +879,7 @@ humminbird_track_cb(const Waypoint* wpt)
 
 
 static void
-humminbird_track_write(void)
+humminbird_track_write()
 {
 
   track_disp_all(humminbird_track_head, humminbird_track_tail, humminbird_track_cb);
@@ -968,7 +968,7 @@ humminbird_write_waypoint_wrapper(const Waypoint* wpt)
 }
 
 static void
-humminbird_write(void)
+humminbird_write()
 {
   waypt_disp_all(humminbird_write_waypoint_wrapper);
   route_disp_all(NULL, NULL, humminbird_write_waypoint_wrapper);

@@ -208,7 +208,7 @@ serial_init(const char* fname)
 }
 
 static void
-serial_deinit(void)
+serial_deinit()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME " serial_deinit()\n");
@@ -443,7 +443,7 @@ wr_init(const QString& fname)
 
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME " rd_deinit()\n");
@@ -465,7 +465,7 @@ rd_deinit(void)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME " wr_deinit()\n");
@@ -473,11 +473,11 @@ wr_deinit(void)
   serial_deinit();
 }
 
-static void track_read(void);
+static void track_read();
 
 
 static void
-waypoint_read(void)
+waypoint_read()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME "   waypoint_read()\n");
@@ -501,7 +501,7 @@ waypoint_read(void)
 }
 
 static void
-track_read(void)
+track_read()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME "   track_read()\n");
@@ -814,7 +814,7 @@ track_read(void)
 }
 
 static void
-route_read(void)
+route_read()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME "   route_read() TODO\n");
@@ -822,7 +822,7 @@ route_read(void)
 }
 
 static void
-data_read(void)
+data_read()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME " data_read()\n");

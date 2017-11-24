@@ -165,7 +165,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -178,7 +178,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
@@ -268,7 +268,7 @@ lowranceusr4_free_fsdata(void* fsdata)
 
 static
 lowranceusr4_fsdata*
-lowranceusr4_alloc_fsdata(void)
+lowranceusr4_alloc_fsdata()
 {
   lowranceusr4_fsdata* fsdata = (lowranceusr4_fsdata*) xcalloc(sizeof(*fsdata), 1);
   fsdata->fs.type = FS_LOWRANCEUSR4;
@@ -345,7 +345,7 @@ lowranceusr4_find_waypt_index(const Waypoint* wpt)
 
 
 static void
-lowranceusr4_parse_waypoints(void)
+lowranceusr4_parse_waypoints()
 {
   short int icon_num;
   unsigned int i, num_waypts, create_date, create_time;
@@ -505,7 +505,7 @@ lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
 }
 
 static void
-lowranceusr4_parse_routes(void)
+lowranceusr4_parse_routes()
 {
   unsigned int num_routes, i, j, text_len;
   unsigned int num_legs;
@@ -583,7 +583,7 @@ lowranceusr4_parse_routes(void)
 }
 
 static void
-lowranceusr4_parse_trails(void)
+lowranceusr4_parse_trails()
 {
   int num_trails, num_trail_pts, M, i, j, k, trk_num, text_len;
   char buff[MAXUSRSTRINGSIZE + 1];
@@ -724,7 +724,7 @@ lowranceusr4_parse_trails(void)
 
 
 static void
-data_read(void)
+data_read()
 {
   short int MajorVersion, MinorVersion;
   int text_len, DataStreamVersion;
@@ -839,7 +839,7 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
 }
 
 static void
-lowranceusr4_write_waypoints(void)
+lowranceusr4_write_waypoints()
 {
   int i;
 
@@ -921,7 +921,7 @@ lowranceusr4_write_route_trl(const route_head* rte)
 }
 
 static void
-lowranceusr4_write_routes(void)
+lowranceusr4_write_routes()
 {
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " writing %d routes\n", route_count());
@@ -1007,7 +1007,7 @@ lowranceusr4_write_track_waypt(const Waypoint* wpt)
 }
 
 static void
-lowranceusr4_write_trails(void)
+lowranceusr4_write_trails()
 {
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " writing %d tracks\n", track_count());
@@ -1018,7 +1018,7 @@ lowranceusr4_write_trails(void)
 }
 
 static void
-data_write(void)
+data_write()
 {
   short int MajorVersion, MinorVersion;
   int DataStreamVersion;

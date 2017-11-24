@@ -72,7 +72,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
@@ -249,7 +249,7 @@ html_index(const Waypoint* wpt)
 }
 
 static void
-data_write(void)
+data_write()
 {
   setshort_length(mkshort_handle, 6);
 

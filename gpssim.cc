@@ -73,7 +73,7 @@ gpssim_wr_init(const QString& fname)
 }
 
 static void
-gpssim_wr_deinit(void)
+gpssim_wr_deinit()
 {
   if (fout) {
     gbfclose(fout);
@@ -165,7 +165,7 @@ gpssim_trk_ftr(const route_head* rh)
 }
 
 static void
-gpssim_write(void)
+gpssim_write()
 {
   if (waypt_count()) {
     if (splitfiles) {

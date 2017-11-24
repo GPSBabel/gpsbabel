@@ -1036,7 +1036,7 @@ static void Write_AN1_Lines(gbfile* f)
 }
 
 static void
-Init_Wpt_Type(void)
+Init_Wpt_Type()
 {
   if (!opt_wpt_type || !opt_wpt_type[0]) {
     wpt_type_num = 1; /* marker */
@@ -1066,7 +1066,7 @@ Init_Wpt_Type(void)
 }
 
 static void
-Init_Output_Type(void)
+Init_Output_Type()
 {
   if (!output_type || !output_type[0]) {
     output_type_num = last_read_type;
@@ -1127,7 +1127,7 @@ Parse_Change_Type(char* type)
 }
 
 static void
-Free_Road_Changes(void)
+Free_Road_Changes()
 {
   int i = 0;
   if (roadchanges) {
@@ -1141,7 +1141,7 @@ Free_Road_Changes(void)
 }
 
 static void
-Init_Road_Changes(void)
+Init_Road_Changes()
 {
   int count = 0;
   char* strType = NULL;
@@ -1196,13 +1196,13 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(infile);
 }
 
 static void
-my_read(void)
+my_read()
 {
   Read_AN1_Header(infile);
   Read_AN1_Bitmaps(infile);
@@ -1231,14 +1231,14 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   Free_Road_Changes();
   gbfclose(outfile);
 }
 
 static void
-my_write(void)
+my_write()
 {
   Write_AN1_Header(outfile);
   Write_AN1_Bitmaps(outfile);

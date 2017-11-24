@@ -253,9 +253,9 @@ const char CMD_LOG_STATUS[] = "$PMTK182,2,7*3C\r\n";
 static int  mtk_log_len(unsigned int bitmask);
 static void mtk_rd_init(const QString& fname);
 static void file_init(const QString& fname);
-static void file_deinit(void) ;
-static void holux245_init(void);
-static void file_read(void);
+static void file_deinit() ;
+static void holux245_init();
+static void file_read();
 static int mtk_parse_info(const unsigned char* data, int dataLen);
 
 
@@ -488,7 +488,7 @@ static void mtk_rd_init(const QString& fname)
   xfree(model);
 }
 
-static void mtk_rd_deinit(void)
+static void mtk_rd_deinit()
 {
   if (mtk_device == HOLUX_GR245) {
     int rc = do_cmd("$PHLX827*31\r\n", "PHLX860*32", NULL, 10);
@@ -503,7 +503,7 @@ static void mtk_rd_deinit(void)
   xfree(port);
 }
 
-static int mtk_erase(void)
+static int mtk_erase()
 {
   int log_status, log_mask, err;
   char* lstatus = NULL;
@@ -541,7 +541,7 @@ static int mtk_erase(void)
   return 0;
 }
 
-static void mtk_read(void)
+static void mtk_read()
 {
   char cmd[256];
   char* line = NULL;
@@ -987,7 +987,7 @@ static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
   gbfprintf(cd, "\n");
 }
 
-static void mtk_csv_deinit(void)
+static void mtk_csv_deinit()
 {
   if (cd != NULL) {
     gbfclose(cd);
@@ -1490,13 +1490,13 @@ static void file_init(const QString& fname)
   }
 }
 
-static void file_deinit(void)
+static void file_deinit()
 {
   dbg(4, "Closing file...\n");
   fclose(fl);
 }
 
-static void holux245_init(void)
+static void holux245_init()
 {
   mtk_device = HOLUX_GR245;
 
@@ -1522,7 +1522,7 @@ static int is_holux_string(const unsigned char* data, int dataLen)
   return 0;
 }
 
-static void file_read(void)
+static void file_read()
 {
   long fsize, pos;
   int i, j, k, bLen;

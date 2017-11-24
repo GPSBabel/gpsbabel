@@ -60,13 +60,13 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(infile);
 }
 
 static void
-vitosmt_read(void)
+vitosmt_read()
 {
   long			version			=0;
   long			subversion		=0;
@@ -227,7 +227,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(ofs);
 
@@ -313,7 +313,7 @@ vitosmt_waypt_pr(const Waypoint* waypointp)
 
 
 static void
-vitosmt_write(void)
+vitosmt_write()
 {
   unsigned char* 	workbuffer					=0;
   size_t			position					=0;

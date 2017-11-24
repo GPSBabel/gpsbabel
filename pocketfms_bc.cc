@@ -60,7 +60,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -72,13 +72,13 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
 }
 
 static void
-read_tracks(void)
+read_tracks()
 {
   struct breadcrumb bc;
   route_head* trk_head = route_head_alloc();
@@ -163,13 +163,13 @@ pocketfms_waypt_disp(const Waypoint* wpt)
 }
 
 static void
-data_read(void)
+data_read()
 {
   read_tracks();
 }
 
 static void
-data_write(void)
+data_write()
 {
   track_disp_all(route_head_noop, route_head_noop, pocketfms_waypt_disp);
 }

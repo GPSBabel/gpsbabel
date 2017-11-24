@@ -102,12 +102,12 @@ random_rd_init(const QString& fname)
 }
 
 static void
-random_rd_deinit(void)
+random_rd_deinit()
 {
 }
 
 static void
-random_read(void)
+random_read()
 {
 #define RND(a) (rand_int(a) > 0)
 

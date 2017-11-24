@@ -158,13 +158,13 @@ gopal_rd_init(const QString& fname)
 }
 
 static void
-gopal_rd_deinit(void)
+gopal_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-gopal_read(void)
+gopal_read()
 {
 
   char* buff;
@@ -381,19 +381,19 @@ gopal_wr_init(const QString& fname)
 }
 
 static void
-gopal_wr_deinit(void)
+gopal_wr_deinit()
 {
   gbfclose(fout);
 }
 
 static void
-gopal_write(void)
+gopal_write()
 {
   route_disp_all(gopal_route_hdr, gopal_route_tlr, gopal_write_waypt);
 }
 
 static void
-gopal_exit(void)		/* optional */
+gopal_exit()		/* optional */
 {
 }
 

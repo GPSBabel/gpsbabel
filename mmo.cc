@@ -149,7 +149,7 @@ dbgprintf(const char* sobj, const char* fmt, ...)
 #endif
 
 static char*
-mmo_readstr(void)
+mmo_readstr()
 {
   char* res;
   signed int len;
@@ -326,7 +326,7 @@ mmo_register_icon(const int id, const char* name)
 }
 
 
-static mmo_data_t* mmo_read_object(void);
+static mmo_data_t* mmo_read_object();
 
 
 static void
@@ -832,7 +832,7 @@ mmo_read_CObjCurrentPosition(mmo_data_t* data)
 
 
 static mmo_data_t*
-mmo_read_object(void)
+mmo_read_object()
 {
   int objid;
   mmo_data_t* data = NULL;
@@ -1014,7 +1014,7 @@ mmo_rd_init(const QString& fname)
 
 
 static void
-mmo_rd_deinit(void)
+mmo_rd_deinit()
 {
   route_disp_session(curr_session(), NULL, NULL, mmo_finalize_rtept_cb);
 
@@ -1030,7 +1030,7 @@ mmo_rd_deinit(void)
 
 
 static void
-mmo_read(void)
+mmo_read()
 {
 #ifdef MMO_DBG
   const char* sobj = "main";
@@ -1468,7 +1468,7 @@ mmo_wr_init(const QString& fname)
 
 
 static void
-mmo_wr_deinit(void)
+mmo_wr_deinit()
 {
   mmobjects.clear();
   category_names.clear();
@@ -1483,7 +1483,7 @@ mmo_wr_deinit(void)
 
 
 static void
-mmo_write(void)
+mmo_write()
 {
   int i;
 

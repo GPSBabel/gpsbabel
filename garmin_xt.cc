@@ -78,7 +78,7 @@ format_garmin_xt_rd_init(const QString& fname)
 }
 
 static void
-format_garmin_xt_rd_deinit(void)
+format_garmin_xt_rd_deinit()
 {
   gbfclose(fin);
 }
@@ -231,7 +231,7 @@ format_garmin_xt_decomp_last_ele(uint8_t ii, double* PrevEle, uint8_t TrackBlock
  * Main Function to process Saved tracks file
  */
 static void
-format_garmin_xt_proc_strk(void)
+format_garmin_xt_proc_strk()
 {
   int 		Count = 0; // Used to obtain number of read bytes
   int		NumberOfTracks = 0, TracksCompleted = 0; // Number of tracks in the file and number of processed tracks
@@ -336,7 +336,7 @@ format_garmin_xt_proc_strk(void)
 }
 
 static void
-format_garmin_xt_proc_atrk(void)
+format_garmin_xt_proc_atrk()
 {
   uint16_t	block=0, uu=0;
   uint32_t	Lat=0, Lon=0;
@@ -404,7 +404,7 @@ format_garmin_xt_proc_atrk(void)
 }
 
 static void
-format_garmin_xt_read(void)
+format_garmin_xt_read()
 {
   // Saved Tracks file
   if (strcmp(opt_xt_ftype, "STRK") == 0) {

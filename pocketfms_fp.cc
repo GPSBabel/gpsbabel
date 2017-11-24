@@ -56,13 +56,13 @@ rd_init(const QString& fname)
 }
 
 static void
-data_read(void)
+data_read()
 {
   xml_read();
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   if (route != NULL) {
     Waypoint* head = (Waypoint*) QUEUE_FIRST(&route->waypoint_list);

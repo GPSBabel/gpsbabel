@@ -43,13 +43,13 @@ static short_handle mkshort_handle;
 geocache_data Waypoint::empty_gc_data;
 static global_trait traits;
 
-const global_trait* get_traits(void)
+const global_trait* get_traits()
 {
   return &traits;
 }
 
 void
-waypt_init(void)
+waypt_init()
 {
   mkshort_handle = mkshort_new_handle();
 #if NEWQ
@@ -154,7 +154,7 @@ waypt_del(Waypoint* wpt)
 }
 
 unsigned int
-waypt_count(void)
+waypt_count()
 {
 #if NEWQ
   return waypt_list.size();

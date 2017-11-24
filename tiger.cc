@@ -133,7 +133,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
   mkshort_del_handle(&mkshort_handle);
@@ -147,13 +147,13 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
 }
 
 static void
-data_read(void)
+data_read()
 {
   double lat,lon;
   char desc[101];
@@ -261,7 +261,7 @@ dscale(double distance)
 }
 
 static void
-data_write(void)
+data_write()
 {
   double latsz,lonsz;
   maxlat = -9999.0;

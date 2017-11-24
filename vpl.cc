@@ -132,13 +132,13 @@ vpl_rd_init(const QString& fname)
 }
 
 static void
-vpl_rd_deinit(void)
+vpl_rd_deinit()
 {
   gbfclose(vpl_file_in);
 }
 
 static void
-vpl_read(void)
+vpl_read()
 {
   char* ibuf;
 

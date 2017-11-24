@@ -619,7 +619,7 @@ unicsv_rd_init(const QString& fname)
 }
 
 static void
-unicsv_rd_deinit(void)
+unicsv_rd_deinit()
 {
   gbfclose(fin);
   unicsv_fields_tab.clear();
@@ -1213,7 +1213,7 @@ unicsv_parse_one_line(char* ibuf)
 }
 
 static void
-unicsv_rd(void)
+unicsv_rd()
 {
   char* buff;
 
@@ -1874,7 +1874,7 @@ unicsv_wr_init(const QString& filename)
 }
 
 static void
-unicsv_wr_deinit(void)
+unicsv_wr_deinit()
 {
   gbfclose(fout);
 }
@@ -1894,7 +1894,7 @@ unicsv_check_modes(bool test) {
 
 
 static void
-unicsv_wr(void)
+unicsv_wr()
 {
   switch (global_opts.objective) {
   case wptdata:

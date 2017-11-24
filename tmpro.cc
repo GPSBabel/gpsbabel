@@ -49,7 +49,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -61,13 +61,13 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
 }
 
 static void
-data_read(void)
+data_read()
 {
   char* buff;
   char* s;
@@ -229,7 +229,7 @@ tmpro_waypt_pr(const Waypoint* wpt)
 }
 
 static void
-data_write(void)
+data_write()
 {
   /* Short names */
   if (global_opts.synthesize_shortnames) {

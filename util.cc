@@ -798,7 +798,7 @@ mklocaltime(struct tm* t)
  * reference files would be tedious, so we uphold that convention.
  */
 gpsbabel::DateTime
-current_time(void)
+current_time()
 {
   if (getenv("GPSBABEL_FREEZE_TIME")) {
     return QDateTime::fromTime_t(0);

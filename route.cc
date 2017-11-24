@@ -32,40 +32,40 @@ static int trk_waypts;
 extern void update_common_traits(const Waypoint* wpt);
 
 void
-route_init(void)
+route_init()
 {
   QUEUE_INIT(&my_route_head);
   QUEUE_INIT(&my_track_head);
 }
 
 unsigned int
-route_waypt_count(void)
+route_waypt_count()
 {
   /* total wapoint count -- all routes */
   return rte_waypts;
 }
 
 unsigned int
-route_count(void)
+route_count()
 {
   return rte_head_ct;	/* total # of routes */
 }
 
 unsigned int
-track_waypt_count(void)
+track_waypt_count()
 {
   /* totaly waypoint count -- all tracks */
   return trk_waypts;
 }
 
 unsigned int
-track_count(void)
+track_count()
 {
   return trk_head_ct;	/* total # of tracks */
 }
 
 route_head*
-route_head_alloc(void)
+route_head_alloc()
 {
   route_head* rte_head = new route_head;
   return rte_head;
@@ -352,7 +352,7 @@ route_flush_q(queue* head)
 }
 
 void
-route_flush_all_routes(void)
+route_flush_all_routes()
 {
   route_flush_q(&my_route_head);
   rte_head_ct = 0;
@@ -360,7 +360,7 @@ route_flush_all_routes(void)
 }
 
 void
-route_flush_all_tracks(void)
+route_flush_all_tracks()
 {
   route_flush_q(&my_track_head);
   trk_head_ct = 0;
@@ -475,7 +475,7 @@ track_restore_wpt(const Waypoint* wpt)
 }
 
 static void
-common_restore_finish(void)
+common_restore_finish()
 {
   rte_head_ct = 0;
   trk_head_ct = 0;
@@ -524,7 +524,7 @@ track_restore(queue* head_bak)
  * at all to "fix" anything in the process.
  */
 void
-routes_to_tracks(void)
+routes_to_tracks()
 {
   queue* elem, *tmp;
 
@@ -539,7 +539,7 @@ routes_to_tracks(void)
  * Same, but in opposite direction.
  */
 void
-tracks_to_routes(void)
+tracks_to_routes()
 {
   queue* elem, *tmp;
 

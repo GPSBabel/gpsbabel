@@ -208,13 +208,13 @@ wfff_xml_rd_init(const QString& fname)
 }
 
 void
-wfff_xml_read(void)
+wfff_xml_read()
 {
   xml_read();
 }
 
 void
-wfff_xml_rd_deinit(void)
+wfff_xml_rd_deinit()
 {
   xml_deinit();
 

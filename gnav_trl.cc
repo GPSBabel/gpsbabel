@@ -55,13 +55,13 @@ gnav_trl_rw_init(const QString& fname)
 }
 
 static void
-gnav_trl_rd_deinit(void)
+gnav_trl_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-gnav_trl_rw_deinit(void)
+gnav_trl_rw_deinit()
 {
   gbfclose(fout);
 }
@@ -85,7 +85,7 @@ write_altitude(void* ptr, const float alt)
 }
 
 static void
-gnav_trl_read(void)
+gnav_trl_read()
 {
   route_head* trk = NULL;
 
@@ -130,7 +130,7 @@ gnav_trl_write_trkpt(const Waypoint* wpt)
 }
 
 static void
-gnav_trl_write(void)
+gnav_trl_write()
 {
   track_disp_all(NULL, NULL, gnav_trl_write_trkpt);
 }

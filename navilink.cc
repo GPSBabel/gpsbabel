@@ -270,7 +270,7 @@ write_packet(unsigned type, const void* payload, unsigned length)
 }
 
 static unsigned
-read_word(void)
+read_word()
 {
   unsigned char buffer[2];
 
@@ -468,7 +468,7 @@ encode_trackpoint(const Waypoint* waypt, unsigned serial, unsigned char* buffer)
 }
 
 static Waypoint**
-serial_read_waypoints(void)
+serial_read_waypoints()
 {
   Waypoint**       waypts = NULL;
   unsigned char  information[32];
@@ -547,7 +547,7 @@ serial_write_waypoint(const Waypoint* waypt)
 }
 
 static void
-serial_read_track(void)
+serial_read_track()
 {
   unsigned char  information[32];
   unsigned int   address;
@@ -594,7 +594,7 @@ serial_read_track(void)
 }
 
 static void
-serial_write_track(void)
+serial_write_track()
 {
   unsigned char  information[32];
   unsigned int   address;
@@ -933,7 +933,7 @@ read_datalog_records(route_head* track,
 }
 
 static void
-serial_read_datalog(void)
+serial_read_datalog()
 {
   route_head* track;
   unsigned int seg1_addr;
@@ -956,7 +956,7 @@ serial_read_datalog(void)
 }
 
 static void
-file_read(void)
+file_read()
 {
   unsigned char data[32];
   route_head*    track = NULL;
@@ -1034,7 +1034,7 @@ file_write_route_end(const route_head* track)
 }
 
 static void
-nuke(void)
+nuke()
 {
   if (nuketrk) {
     unsigned char information[32];
@@ -1144,7 +1144,7 @@ navilink_wr_init(const QString& name)
 }
 
 static void
-navilink_deinit(void)
+navilink_deinit()
 {
   if (serial_handle) {
     /* nuke data after reading */
@@ -1167,7 +1167,7 @@ navilink_deinit(void)
 }
 
 static void
-navilink_read(void)
+navilink_read()
 {
   if (datalog) {
     if (global_opts.masked_objective & TRKDATAMASK) {
@@ -1203,7 +1203,7 @@ navilink_read(void)
 }
 
 static void
-navilink_write(void)
+navilink_write()
 {
   if (datalog)  {
     fatal(MYNAME ": Writing to datalog not supported.\n");

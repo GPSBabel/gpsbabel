@@ -173,7 +173,7 @@ get_bcr_icon_from_icon_descr(const QString& icon_descr)
 }
 
 static void
-bcr_init_radius(void)
+bcr_init_radius()
 {
   if (radius_opt != NULL) {			/* preinitialize the earth radius */
     radius = atof(radius_opt);
@@ -200,7 +200,7 @@ bcr_rd_init(const QString& fname)
 }
 
 static void
-bcr_rd_deinit(void)
+bcr_rd_deinit()
 {
   inifile_done(ini);
 }
@@ -252,7 +252,7 @@ bcr_mercator_to_wgs84(const int north, const int east, double* lat, double* lon)
 /* ------------------------------------------------------------- */
 
 static void
-bcr_data_read(void)
+bcr_data_read()
 {
   int index;
   char* str;
@@ -341,7 +341,7 @@ bcr_wr_init(const QString& fname)
 }
 
 static void
-bcr_wr_deinit(void)
+bcr_wr_deinit()
 {
   gbfclose(fout);
 }
@@ -494,7 +494,7 @@ bcr_route_header(const route_head* route)
 }
 
 static void
-bcr_data_write(void)
+bcr_data_write()
 {
   target_rte_num = 1;
 
