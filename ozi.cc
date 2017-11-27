@@ -27,10 +27,10 @@
 #include "csv_util.h"
 #include "jeeps/gpsmath.h"
 #include <QtCore/QFileInfo>
+#include <cctype>
 #include <cmath>                /* for floor */
 #include <cstdio>
 #include <cstdlib>
-#include <cctype>
 
 #define MYNAME        "OZI"
 #define BADCHARS	",\r\n"

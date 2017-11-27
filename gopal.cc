@@ -54,11 +54,11 @@
 #include "grtcirc.h"
 #include "jeeps/gpsmath.h"
 #include "strptime.h"
+#include <QtCore/QDateTime>
+#include <QtCore/QString>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
-#include <QtCore/QDateTime>
-#include <QtCore/QString>
 
 #define MYNAME "gopal"
 

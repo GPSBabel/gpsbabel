@@ -463,9 +463,9 @@ tag_gpx(const QXmlStreamAttributes& attr)
    * that use them to the writer.
    */
   const QXmlStreamNamespaceDeclarations ns = reader->namespaceDeclarations();
-  for (int i = 0; i < ns.size(); ++i) {
-    QString prefix = ns[i].prefix().toString();
-    QString namespaceUri = ns[i].namespaceUri().toString();
+  for (const auto & n : ns) {
+    QString prefix = n.prefix().toString();
+    QString namespaceUri = n.namespaceUri().toString();
     /* don't toss any xsi declaration, it might used for tt_unknown or passthrough. */
     if (!prefix.isEmpty()) {
       if (! gpx_namespace_attribute.hasAttribute(prefix.prepend("xmlns:"))) {

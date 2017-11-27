@@ -32,9 +32,9 @@
 #include "jeeps/gpsmath.h"
 #include "strptime.h"
 
+#include <cstdio>
 #include <cstdlib>
 #include <ctime>
-#include <cstdio>
 
 #if CSVFMTS_ENABLED
 
