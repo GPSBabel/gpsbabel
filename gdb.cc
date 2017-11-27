@@ -445,7 +445,9 @@ read_file_header()
   is_fatal(strcmp(buf, "MsRcf") != 0, MYNAME ": Invalid file \"%s\"!", fin->name);
 
   reclen = FREAD_i32;
+  Q_UNUSED(reclen);
   i = FREAD_STR(buf);
+  Q_UNUSED(i);
   is_fatal(buf[0] != 'D', MYNAME ": Invalid file \"%s\"!", fin->name);
 
   gdb_ver = buf[1] - 'k' + 1;
@@ -458,6 +460,7 @@ read_file_header()
 
   reclen = FREAD_i32;
   i = FREAD(buf, reclen + 1);
+  Q_UNUSED(i);
   if (global_opts.verbose_status > 0) {
     const char* name = buf+2;
     if (strstr(name, "SQA") == 0) {
@@ -756,7 +759,7 @@ read_route()
     }
   }
 
-  links = 0;
+  // links = 0;
   points = FREAD_i32;
 
 #if GDB_DEBUG
