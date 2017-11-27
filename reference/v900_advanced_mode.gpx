@@ -7,7 +7,7 @@
     <desc>V900 GPS tracklog data</desc>
     <trkseg>
       <trkpt lat="31.769598000" lon="35.208829000">
-        <ele>787.000000</ele>
+        <ele>787.000</ele>
         <time>2009-02-04T06:38:21Z</time>
         <course>318.000000</course>
         <speed>5.555555</speed>
@@ -17,7 +17,7 @@
         <pdop>1.400000</pdop>
       </trkpt>
       <trkpt lat="31.769621000" lon="35.208773000">
-        <ele>787.000000</ele>
+        <ele>787.000</ele>
         <time>2009-02-04T06:38:22Z</time>
         <course>295.000000</course>
         <speed>6.111111</speed>
@@ -27,7 +27,7 @@
         <pdop>1.300000</pdop>
       </trkpt>
       <trkpt lat="31.769616000" lon="35.208683000">
-        <ele>787.000000</ele>
+        <ele>787.000</ele>
         <time>2009-02-04T06:38:23Z</time>
         <course>266.000000</course>
         <speed>7.500000</speed>
@@ -37,7 +37,7 @@
         <pdop>1.300000</pdop>
       </trkpt>
       <trkpt lat="31.769610000" lon="35.208568000">
-        <ele>786.000000</ele>
+        <ele>786.000</ele>
         <time>2009-02-04T06:38:24Z</time>
         <course>266.000000</course>
         <speed>9.722222</speed>
@@ -47,7 +47,7 @@
         <pdop>1.300000</pdop>
       </trkpt>
       <trkpt lat="31.769596000" lon="35.208435000">
-        <ele>786.000000</ele>
+        <ele>786.000</ele>
         <time>2009-02-04T06:38:25Z</time>
         <course>264.000000</course>
         <speed>12.222222</speed>
@@ -57,7 +57,7 @@
         <pdop>1.300000</pdop>
       </trkpt>
       <trkpt lat="31.769574000" lon="35.208294000">
-        <ele>786.000000</ele>
+        <ele>786.000</ele>
         <time>2009-02-04T06:38:26Z</time>
         <course>261.000000</course>
         <speed>13.333333</speed>
@@ -67,7 +67,7 @@
         <pdop>1.300000</pdop>
       </trkpt>
       <trkpt lat="31.765536000" lon="35.207726000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:22Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -77,7 +77,7 @@
         <pdop>2.000000</pdop>
       </trkpt>
       <trkpt lat="31.765534000" lon="35.207726000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:23Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -87,7 +87,7 @@
         <pdop>2.000000</pdop>
       </trkpt>
       <trkpt lat="31.765534000" lon="35.207726000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:24Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -97,7 +97,7 @@
         <pdop>2.000000</pdop>
       </trkpt>
       <trkpt lat="31.765534000" lon="35.207728000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:25Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -107,7 +107,7 @@
         <pdop>2.000000</pdop>
       </trkpt>
       <trkpt lat="31.765533000" lon="35.207728000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:26Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -117,7 +117,7 @@
         <pdop>2.100000</pdop>
       </trkpt>
       <trkpt lat="31.765533000" lon="35.207728000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:27Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -127,7 +127,7 @@
         <pdop>2.100000</pdop>
       </trkpt>
       <trkpt lat="31.765533000" lon="35.207728000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:28Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -137,7 +137,7 @@
         <pdop>2.100000</pdop>
       </trkpt>
       <trkpt lat="31.765531000" lon="35.207730000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:29Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -147,7 +147,7 @@
         <pdop>2.100000</pdop>
       </trkpt>
       <trkpt lat="31.765531000" lon="35.207730000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:30Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -157,7 +157,7 @@
         <pdop>2.100000</pdop>
       </trkpt>
       <trkpt lat="31.765530000" lon="35.207730000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:31Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -167,7 +167,7 @@
         <pdop>2.100000</pdop>
       </trkpt>
       <trkpt lat="31.765530000" lon="35.207730000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:32Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -177,7 +177,7 @@
         <pdop>2.100000</pdop>
       </trkpt>
       <trkpt lat="31.765530000" lon="35.207730000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:33Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -187,7 +187,7 @@
         <pdop>2.100000</pdop>
       </trkpt>
       <trkpt lat="31.765528000" lon="35.207730000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:34Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -197,7 +197,7 @@
         <pdop>2.100000</pdop>
       </trkpt>
       <trkpt lat="31.765528000" lon="35.207731000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:35Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>
@@ -207,7 +207,7 @@
         <pdop>2.100000</pdop>
       </trkpt>
       <trkpt lat="31.765526000" lon="35.207731000">
-        <ele>772.000000</ele>
+        <ele>772.000</ele>
         <time>2009-02-04T06:26:36Z</time>
         <course>0.000000</course>
         <speed>0.000000</speed>

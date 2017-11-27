@@ -121,7 +121,7 @@ read_tracks()
 }
 
 static void
-route_head_noop(const route_head* wp)
+route_head_noop(const route_head*)
 {
 }
 
@@ -190,4 +190,6 @@ ff_vecs_t pocketfms_bc_vecs = {
   NULL,
   NULL,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

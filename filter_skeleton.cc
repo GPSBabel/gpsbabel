@@ -59,7 +59,7 @@ filter_skeleton_init(const char* args)
 }
 
 static void
-filter_skeleton_process(void)	/* this procedure must be present in vecs */
+filter_skeleton_process()	/* this procedure must be present in vecs */
 {
 // Here is how you register callbacks for all waypoints, routes, tracks.
 // waypt_disp_all(waypt)
@@ -68,7 +68,7 @@ filter_skeleton_process(void)	/* this procedure must be present in vecs */
 }
 
 static void
-filter_skeleton_deinit(void)
+filter_skeleton_deinit()
 {
   /* called after filter processing */
 
@@ -79,7 +79,7 @@ filter_skeleton_deinit(void)
 }
 
 static void
-filter_skeleton_exit(void)
+filter_skeleton_exit()
 {
   /* called on program exit */
 

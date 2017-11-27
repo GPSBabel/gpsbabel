@@ -40,23 +40,23 @@ arglist_t saroute_args[] = {
   {
     "turns_important", &turns_important,
     "Keep turns if simplify filter is used",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "turns_only", &turns_only, "Only read turns; skip all other points",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "split", &split, "Split into multiple routes at turns",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "controls", &controls, "Read control points as waypoint/route/none",
-    "none", ARGTYPE_STRING, ARG_NOMINMAX
+    "none", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "times", &timesynth, "Synthesize track times",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -464,7 +464,7 @@ my_read()
 }
 
 static void
-wr_init(const QString& fname)
+wr_init(const QString&)
 {
   fatal(MYNAME ":Not enough information is known about this format to write it.\n");
 }
@@ -481,4 +481,6 @@ ff_vecs_t saroute_vecs = {
   NULL,
   saroute_args,
   CET_CHARSET_UTF8, 1	/* do nothing | CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

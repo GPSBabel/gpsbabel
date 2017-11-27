@@ -49,7 +49,7 @@ sbp_rd_deinit()
 }
 
 static void
-read_sbp_header(route_head* track)
+read_sbp_header(route_head*)
 {
   /*
    * A complete SBP file contains 64 bytes header,
@@ -134,5 +134,7 @@ ff_vecs_t sbp_vecs = {
   sbp_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/

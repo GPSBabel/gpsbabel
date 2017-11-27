@@ -1,0 +1,134 @@
+#!/bin/bash -ex
+# This is a historical record of how we did the merge between our
+# fork of glib 1.2.8 and the vendor update to 1.2.11
+# It may be of use when we sync up with a future vendor update.
+# It should not be expected to work without being modified!
+rm -fr zlib
+rm -fr zlib.old
+rm -fr zlib.new
+git checkout -- zlib
+# I manually found all the files we modified after the zlib
+# 1.2.8 release with "diff -r".
+# I then did three way compares between zlib 1.2.8, our code,
+# and zlib 1.2.11.
+# We had modified 7 files.  For the 5 below I wanted to preserve
+# our changes so I generate patches to apply to zlib 1.2.11.
+# The other 2 were gzlib.c and inflate.c.
+# In the case of gzlib.c we had a patch to fix a seek issue.
+# This was reported to the zlib creators with a test case.
+# 1.2.11 did not incorporate our patch, but the issue was fixed
+# in another manner.  Therfore we accept 1.2.11 gzlib.c without
+# our changes.
+# Both the test case we submitted to zlib and our gpsbabel
+# testcase were recreated to verify the failure in 1.2.8 and
+# verify that it was fixed in 1.2.11.
+# The last case was inflate.c.  In that case both zlib 1.2.11
+# and ourselves had the same change.  Therefore we accept 1.2.11
+# inflate.c without our changes.
+#
+# generate patches between 1.2.8 and our current zlib
+diff -u ../zlib-1.2.8/contrib/minizip/ioapi.c zlib/contrib/minizip 1> ioapi.c.patch || true
+diff -u ../zlib-1.2.8/contrib/minizip/ioapi.h zlib/contrib/minizip 1> ioapi.h.patch || true
+diff -u ../zlib-1.2.8/contrib/minizip/zip.c zlib/contrib/minizip 1> zip.c.patch || true
+diff -u ../zlib-1.2.8/contrib/minizip/zip.h zlib/contrib/minizip 1> zip.h.patch || true
+diff -u ../zlib-1.2.8/zconf.h zlib 1> zconf.h.patch || true
+
+mv zlib zlib.old
+
+tar -xzvf ../../Downloads/zlib-1.2.11.tar.gz
+mv zlib-1.2.11 zlib
+cd zlib
+
+mv doc/algorithm.txt .
+
+rm -fr amiga
+rm -fr doc
+rm -fr examples
+rm -fr msdos
+rm -fr nintendods
+rm -fr old
+rm -fr os400
+rm -fr qnx
+rm -fr test
+rm -fr watcom
+rm -fr win32
+rm -f configure
+rm -f CMakeLists.txt
+rm -f INDEX
+rm -f Makefile
+rm -f make_vms.com
+rm -f treebuild.xml
+rm -f zlib2ansi
+rm -f zconf.h.cmakein
+rm -f zlib.3.pdf
+rm -f zlib.map
+rm -f zlib.pc.cmakein
+rm -f zlib.pc.in
+rm -fr contrib/ada
+rm -fr contrib/amd64
+rm -fr contrib/asm686
+rm -fr contrib/blast
+rm -fr contrib/delphi
+rm -fr contrib/dotzlib
+rm -fr contrib/gcc_gvmat64
+rm -fr contrib/infback9
+rm -fr contrib/inflate86
+rm -fr contrib/iostream
+rm -fr contrib/iostream2
+rm -fr contrib/iostream3
+rm -fr contrib/masmx64
+rm -fr contrib/masmx86
+rm -fr contrib/pascal
+rm -fr contrib/puff
+rm -fr contrib/README.contrib
+rm -fr contrib/testzlib
+rm -fr contrib/untgz
+rm -fr contrib/vstudio
+# rename .in files to protect them from auto tools.
+mv zconf.h.in  zconf.in.h
+mv -f Makefile.in Makefile.in.zlib
+
+# copy our unique files
+cp -p ../zlib.old/README.gpsbabel .
+cp -p ../zlib.old/.gitignore .
+cp -p ../zlib.old/empty.in .
+
+# we don't neet this anymore, but it makes the diff line up
+# it will be deleted below.
+cp -p ../zlib.old/gzlib.patch .
+cd ..
+find zlib | sort > zlib.new.list
+find zlib.old | sort > zlib.old.list
+
+# move patches
+mv ioapi.c.patch zlib/contrib/minizip
+mv ioapi.h.patch zlib/contrib/minizip
+mv zip.c.patch zlib/contrib/minizip
+mv zip.h.patch zlib/contrib/minizip
+mv zconf.h.patch zlib
+
+# apply patches
+cd zlib/contrib/minizip
+patch < ioapi.c.patch
+patch < ioapi.h.patch
+patch < zip.c.patch
+patch < zip.h.patch
+cd ../..
+patch < zconf.h.patch
+
+cd ..
+cp resync_zlib zlib
+
+echo "see $0 for git commands to run manually"
+# this patch is obsolete
+#git rm zlib/gzlib.patch
+# and these are new files
+#git add zlib/contrib/minizip/ioapi.c.patch
+#git add zlib/contrib/minizip/ioapi.h.patch
+#git add zlib/contrib/minizip/zip.c.patch
+#git add zlib/contrib/minizip/zip.h.patch
+#git add zlib/zconf.h.patch
+#git add zlib/resync_zlib
+
+echo "you must manually edit README.gpsbabel"
+echo "Done"

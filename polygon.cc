@@ -112,11 +112,11 @@ static
 arglist_t polygon_args[] = {
   {
     "file", &polyfileopt,  "File containing vertices of polygon",
-    NULL, ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX
+    NULL, ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "exclude", &exclopt, "Exclude points inside the polygon",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -234,7 +234,7 @@ static void polytest(double lat1, double lon1,
 #define BADVAL 999999
 
 void
-polygon_process(void)
+polygon_process()
 {
   queue* elem, * tmp;
   Waypoint* waypointp;
@@ -341,13 +341,13 @@ polygon_process(void)
 }
 
 void
-polygon_init(const char* args)
+polygon_init(const char*)
 {
   /* do nothing */
 }
 
 void
-polygon_deinit(void)
+polygon_deinit()
 {
   /* do nothing */
 }

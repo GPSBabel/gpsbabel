@@ -47,7 +47,7 @@ typedef struct filter_vecs {
   struct arglist* args;
 } filter_vecs_t;
 
-filter_vecs_t* find_filter_vec(char* const, char**);
+filter_vecs_t* find_filter_vec(const char* const, const char**);
 void free_filter_vec(filter_vecs_t*);
 void disp_filters(int version);
 void disp_filter(const char* vecname);

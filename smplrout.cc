@@ -80,23 +80,23 @@ static
 arglist_t routesimple_args[] = {
   {
     "count", &countopt,  "Maximum number of points in route",
-    NULL, ARGTYPE_INT | ARGTYPE_BEGIN_REQ | ARGTYPE_BEGIN_EXCL, "1", NULL
+    NULL, ARGTYPE_INT | ARGTYPE_BEGIN_REQ | ARGTYPE_BEGIN_EXCL, "1", NULL, nullptr
   },
   {
     "error", &erroropt, "Maximum error", NULL,
-    ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", NULL
+    ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", NULL, nullptr
   },
   {
     "crosstrack", &xteopt, "Use cross-track error (default)", NULL,
-    ARGTYPE_BOOL | ARGTYPE_BEGIN_EXCL, ARG_NOMINMAX
+    ARGTYPE_BOOL | ARGTYPE_BEGIN_EXCL, ARG_NOMINMAX, nullptr
   },
   {
     "length", &lenopt, "Use arclength error", NULL,
-    ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "relative", &relopt, "Use relative error", NULL,
-    ARGTYPE_BOOL | ARGTYPE_END_EXCL, ARG_NOMINMAX
+    ARGTYPE_BOOL | ARGTYPE_END_EXCL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -383,7 +383,7 @@ routesimple_process()
 }
 
 void
-routesimple_init(const char* args)
+routesimple_init(const char*)
 {
   count = 0;
 

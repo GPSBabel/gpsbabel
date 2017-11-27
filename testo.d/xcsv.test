@@ -31,4 +31,4 @@ echo "IFIELD GMT_TIME, , %Y/%m/%d" >> ${TMPDIR}/testo2.style
 echo "IFIELD HMSG_TIME,  , %d:%d:%d" >> ${TMPDIR}/testo2.style
 rm -f ${TMPDIR}/grid-utm~xscv.gpx
 gpsbabel -i xcsv,style=${TMPDIR}/testo2.style -f ${REFERENCE}/grid-utm.csv -o gpx -F ${TMPDIR}/grid-utm~xscv.gpx
-compare ${TMPDIR}/grid-utm~xscv.gpx ${REFERENCE}/grid-utm~xscv.gpx
+compare ${REFERENCE}/grid-utm~xscv.gpx ${TMPDIR}/grid-utm~xscv.gpx

@@ -43,7 +43,7 @@ static char* index_opt;
 
 static
 arglist_t nmn4_args[] = {
-  {"index", &index_opt, "Index of route to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL },
+  {"index", &index_opt, "Index of route to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL , nullptr},
   ARG_TERMINATOR
 };
 
@@ -183,13 +183,13 @@ nmn4_read_data()
 }
 
 static void
-nmn4_route_hdr(const route_head* route)
+nmn4_route_hdr(const route_head*)
 {
   curr_rte_num++;
 }
 
 static void
-nmn4_route_tlr(const route_head* rte)
+nmn4_route_tlr(const route_head*)
 {
 }
 
@@ -292,4 +292,6 @@ ff_vecs_t nmn4_vecs = {
   NULL,
   nmn4_args,
   CET_CHARSET_MS_ANSI, 1	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

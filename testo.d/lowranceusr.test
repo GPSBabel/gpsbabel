@@ -15,12 +15,12 @@ gpsbabel -i lowranceusr -f ${TMPDIR}/lowrance1.usr -o lowranceusr -F ${TMPDIR}/l
 # and get the same data.  Sigh. 
 # bincompare ${REFERENCE}/lowrance.usr  ${TMPDIR}/lowrance1.usr
 
-gpsbabel -i lowranceusr -f ${REFERENCE}/all.usr -o gpx -F ${TMPDIR}/enchilada.gpx
+gpsbabel -i lowranceusr -f ${REFERENCE}/all.usr -o gpx,elevprec=6 -F ${TMPDIR}/enchilada.gpx
 gpsbabel -i gpx -f ${TMPDIR}/enchilada.gpx -o lowranceusr -F ${TMPDIR}/enchilada1.usr
 bincompare ${TMPDIR}/enchilada1.usr ${REFERENCE}/enchilada.usr
 
 # Don't convert icons as waypts
-gpsbabel -i lowranceusr,ignoreicons -f ${REFERENCE}/all.usr -o gpx -F ${TMPDIR}/enchilada.gpx
+gpsbabel -i lowranceusr,ignoreicons -f ${REFERENCE}/all.usr -o gpx,elevprec=6 -F ${TMPDIR}/enchilada.gpx
 gpsbabel -i gpx -f ${TMPDIR}/enchilada.gpx -o lowranceusr -F ${TMPDIR}/enchilada1.usr
 bincompare ${TMPDIR}/enchilada1.usr ${REFERENCE}/ignoreicons.usr
 #

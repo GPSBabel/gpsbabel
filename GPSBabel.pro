@@ -152,15 +152,14 @@ win32 {
   LIBS += "-lsetupapi" 
 }
 
-win32-msvc*{
+win32-msvc* {
   DEFINES += _CRT_SECURE_NO_DEPRECATE
-  INCLUDEPATH += ../../src/core src/core
   QMAKE_CXXFLAGS += /MP -wd4100
-  TEMPLATE=vcapp
 }
 
 linux {
   DEFINES += HAVE_LINUX_HID
+  LIBS += "-lusb"
 }
 
 macx {

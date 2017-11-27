@@ -388,6 +388,8 @@ ff_vecs_t skyforce_vecs = {
   NULL,
   skyforce_args,
   CET_CHARSET_ASCII, 1
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /**************************************************************************/

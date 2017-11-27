@@ -49,7 +49,7 @@ static const QString URLNAME = QStringLiteral("urlname");
 
 static arglist_t geojson_args[] = {
   {"compact", &compact_opt, "Compact Output. Default is off.", 
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX } ,
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr } ,
   ARG_TERMINATOR
 };
 
@@ -293,7 +293,7 @@ static void geojson_track_disp(const Waypoint* trackpoint) {
   (*track_coords).append(coords);
 }
 
-static void geojson_track_tlr(const route_head* track) {
+static void geojson_track_tlr(const route_head*) {
   QJsonObject geometry;
   geometry[TYPE] = LINESTRING;
   geometry[COORDINATES] = *track_coords;
@@ -327,4 +327,6 @@ ff_vecs_t geojson_vecs = {
   NULL,
   geojson_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr  
 };

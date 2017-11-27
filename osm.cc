@@ -29,9 +29,9 @@
 static char* opt_tag, *opt_tagnd, *created_by;
 
 static arglist_t osm_args[] = {
-  { "tag", &opt_tag, 	"Write additional way tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-  { "tagnd", &opt_tagnd,	"Write additional node tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-  { "created_by", &created_by, "Use this value as custom created_by value","GPSBabel", ARGTYPE_STRING, ARG_NOMINMAX },
+  { "tag", &opt_tag, 	"Write additional way tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  { "tagnd", &opt_tagnd,	"Write additional node tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  { "created_by", &created_by, "Use this value as custom created_by value","GPSBabel", ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
 
@@ -477,7 +477,7 @@ osm_strip_html(const QString& str)
 
 
 static void
-osm_node_end(xg_string args, const QXmlStreamAttributes*)
+osm_node_end(xg_string, const QXmlStreamAttributes*)
 {
   if (wpt) {
     if (wpt->wpt_flags.fmt_use) {
@@ -491,7 +491,7 @@ osm_node_end(xg_string args, const QXmlStreamAttributes*)
 
 
 static void
-osm_node(xg_string args, const QXmlStreamAttributes* attrv)
+osm_node(xg_string, const QXmlStreamAttributes* attrv)
 {
   wpt = new Waypoint;
 
@@ -523,7 +523,7 @@ osm_node(xg_string args, const QXmlStreamAttributes* attrv)
 
 
 static void
-osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
+osm_node_tag(xg_string, const QXmlStreamAttributes* attrv)
 {
   QString key, value;
   QString str;
@@ -578,7 +578,7 @@ osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
 
 
 static void
-osm_way(xg_string args, const QXmlStreamAttributes* attrv)
+osm_way(xg_string, const QXmlStreamAttributes* attrv)
 {
   rte = route_head_alloc();
   // create a wpt to represent the route center if it has a center tag
@@ -589,7 +589,7 @@ osm_way(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-osm_way_nd(xg_string args, const QXmlStreamAttributes* attrv)
+osm_way_nd(xg_string, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("ref")) {
     QString atstr = attrv->value("ref").toString();
@@ -607,7 +607,7 @@ osm_way_nd(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-osm_way_tag(xg_string args, const QXmlStreamAttributes* attrv)
+osm_way_tag(xg_string, const QXmlStreamAttributes* attrv)
 {
   QString key, value;
   QString str;
@@ -645,7 +645,7 @@ osm_way_tag(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-osm_way_center(xg_string args, const QXmlStreamAttributes* attrv)
+osm_way_center(xg_string, const QXmlStreamAttributes* attrv)
 {
   wpt->wpt_flags.fmt_use = 1;
 
@@ -658,7 +658,7 @@ osm_way_center(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-osm_way_end(xg_string args, const QXmlStreamAttributes*)
+osm_way_end(xg_string, const QXmlStreamAttributes*)
 {
   if (rte) {
     route_add_head(rte);
@@ -994,4 +994,5 @@ ff_vecs_t osm_vecs = {
   osm_exit,
   osm_args,
   CET_CHARSET_UTF8, 0
-};
+  , NULL_POS_OPS,
+  nullptr};

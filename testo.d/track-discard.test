@@ -17,7 +17,7 @@ gpsbabel -t -i gpx -f ${REFERENCE}/track/trackfilter_discard.gpx -x track,merge,
 compare ${REFERENCE}/track/trackfilter_discard_out.gpx ${TMPDIR}/discard.gpx
 
 # This file has ONLY names starting with GC; verify we toss all.
-./gpsbabel -i geo -f geocaching.loc  -x discard,matchname=GC* -o csv -F ${TMPDIR}/discardgc.geo
+gpsbabel -i geo -f geocaching.loc  -x discard,matchname=GC* -o csv -F ${TMPDIR}/discardgc.geo
 compare ${TMPDIR}/discardgc.geo /dev/null
 
 # Throw out all caches from Joe

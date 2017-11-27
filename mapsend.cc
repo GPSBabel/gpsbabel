@@ -45,7 +45,7 @@ arglist_t mapsend_args[] = {
   {
     "trkver", &mapsend_opt_trkver,
     "MapSend version TRK file to generate (3,4)",
-    "4", ARGTYPE_INT, "3", "4"
+    "4", ARGTYPE_INT, "3", "4", nullptr
   },
   ARG_TERMINATOR
 };
@@ -367,7 +367,7 @@ mapsend_route_hdr(const route_head* rte)
 }
 
 static void
-mapsend_noop(const route_head* wp)
+mapsend_noop(const route_head*)
 {
   /* no-op */
 }
@@ -558,4 +558,6 @@ ff_vecs_t mapsend_vecs = {
   NULL,
   mapsend_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

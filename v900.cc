@@ -386,5 +386,6 @@ ff_vecs_t v900_vecs = {
   NULL,
   NULL,          /* args */
   CET_CHARSET_UTF8, 1,	/* Could be  US-ASCII, since we only read "0-9,A-Z\n\r" */
-  {NULL,NULL,NULL,NULL,NULL,NULL}
+  {NULL,NULL,NULL,NULL,NULL,NULL},
+  nullptr
 };

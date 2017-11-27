@@ -39,11 +39,11 @@ static
 arglist_t height_args[] = {
   {
     "add", &addopt, "Adds a constant value to every altitude (meter, append \"f\" (x.xxf) for feet)",
-    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX
+    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
   },
   {
     "wgs84tomsl", &wgs84tomslopt, "Converts WGS84 ellipsoidal height to orthometric height (MSL)",
-    NULL, ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -122,7 +122,7 @@ correct_height(const Waypoint* wpt)
 
 
 static void
-height_init(const char* args)
+height_init(const char*)
 {
   char* unit;
 
@@ -141,7 +141,7 @@ height_init(const char* args)
 
 
 static void
-height_process(void)	/* this procedure must be present in vecs */
+height_process()	/* this procedure must be present in vecs */
 {
   waypt_disp_all(correct_height);
   route_disp_all(NULL, NULL, correct_height);

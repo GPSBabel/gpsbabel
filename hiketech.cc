@@ -121,7 +121,7 @@ hiketech_trk_hdr(const route_head* rte)
 }
 
 static void
-hiketech_trk_tlr(const route_head* rte)
+hiketech_trk_tlr(const route_head*)
 {
   writer.writeEndElement(); // trk
 }
@@ -191,7 +191,7 @@ hiketech_write()
 }
 
 static
-void	 ht_wpt_s(xg_string args, const QXmlStreamAttributes*)
+void	 ht_wpt_s(xg_string, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
 }
@@ -227,21 +227,21 @@ void  	ht_alt(xg_string args, const QXmlStreamAttributes*)
 }
 
 static
-void  	ht_wpt_e(xg_string args, const QXmlStreamAttributes*)
+void  	ht_wpt_e(xg_string, const QXmlStreamAttributes*)
 {
   waypt_add(wpt_tmp);
   wpt_tmp = NULL;
 }
 
 static
-void	ht_trk_s(xg_string args, const QXmlStreamAttributes*)
+void	ht_trk_s(xg_string, const QXmlStreamAttributes*)
 {
   trk_head = route_head_alloc();
   track_add_head(trk_head);
 }
 
 static
-void	ht_trk_e(xg_string args, const QXmlStreamAttributes*)
+void	ht_trk_e(xg_string, const QXmlStreamAttributes*)
 {
 
 }
@@ -253,13 +253,13 @@ void	ht_trk_ident(xg_string args, const QXmlStreamAttributes*)
 }
 
 static
-void	ht_trk_pnt_s(xg_string args, const QXmlStreamAttributes*)
+void	ht_trk_pnt_s(xg_string, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
 }
 
 static
-void	ht_trk_pnt_e(xg_string args, const QXmlStreamAttributes*)
+void	ht_trk_pnt_e(xg_string, const QXmlStreamAttributes*)
 {
   track_add_wpt(trk_head, wpt_tmp);
 }
@@ -315,5 +315,7 @@ ff_vecs_t hiketech_vecs = {
   NULL,
   hiketech_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
 

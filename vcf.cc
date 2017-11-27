@@ -35,7 +35,7 @@ static
 arglist_t vcf_args[] = {
   {
     "encrypt", &vcf_encrypt,
-    "Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    "Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -151,4 +151,6 @@ ff_vecs_t vcf_vecs = {
   NULL,
   vcf_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

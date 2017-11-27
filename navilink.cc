@@ -140,27 +140,27 @@ static
 arglist_t navilink_args[] = {
   {
     "nuketrk", &nuketrk, "Delete all track points", NULL, ARGTYPE_BOOL,
-    ARG_NOMINMAX
+    ARG_NOMINMAX, nullptr
   },
   {
     "nukerte", &nukerte, "Delete all routes", NULL, ARGTYPE_BOOL,
-    ARG_NOMINMAX
+    ARG_NOMINMAX, nullptr
   },
   {
     "nukewpt", &nukewpt, "Delete all waypoints", NULL, ARGTYPE_BOOL,
-    ARG_NOMINMAX
+    ARG_NOMINMAX, nullptr
   },
   {
     "nukedlg", &nukedlg, "Clear the datalog", NULL, ARGTYPE_BOOL,
-    ARG_NOMINMAX
+    ARG_NOMINMAX, nullptr
   },
   {
     "datalog", &datalog, "Read from datalogger buffer",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "power_off", &poweroff, "Command unit to power itself down",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -622,7 +622,7 @@ serial_write_track()
 }
 
 static void
-serial_write_track_start(const route_head* track)
+serial_write_track_start(const route_head*)
 {
   track_data = (unsigned char*) xmalloc(MAX_WRITE_TRACKPOINTS * 32);
   track_data_ptr = track_data;
@@ -642,7 +642,7 @@ serial_write_track_point(const Waypoint* waypt)
 }
 
 static void
-serial_write_track_end(const route_head* track)
+serial_write_track_end(const route_head*)
 {
   if (track_data_ptr > track_data) {
     serial_write_track();
@@ -998,7 +998,7 @@ file_write_waypoint(const Waypoint* waypt)
 }
 
 static void
-file_write_track_start(const route_head* track)
+file_write_track_start(const route_head*)
 {
   track_serial = 1;
 }
@@ -1013,23 +1013,23 @@ file_write_track_point(const Waypoint* waypt)
 }
 
 static void
-file_write_track_end(const route_head* track)
+file_write_track_end(const route_head*)
 {
 }
 
 static void
-file_write_route_start(const route_head* track)
+file_write_route_start(const route_head*)
 {
   fatal(MYNAME ": Can't write routes to a file\n");
 }
 
 static void
-file_write_route_point(const Waypoint* waypt)
+file_write_route_point(const Waypoint*)
 {
 }
 
 static void
-file_write_route_end(const route_head* track)
+file_write_route_end(const route_head*)
 {
 }
 
@@ -1247,4 +1247,6 @@ ff_vecs_t navilink_vecs = {
   NULL,
   navilink_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
