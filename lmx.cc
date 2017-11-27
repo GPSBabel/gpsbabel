@@ -28,8 +28,8 @@
 
 #include "defs.h"
 #include "xmlgeneric.h"
-#include <stdio.h>
 #include <QtCore/QXmlStreamAttributes>
+#include <cstdio>
 
 static gbfile* ofd;
 static Waypoint* wpt_tmp;

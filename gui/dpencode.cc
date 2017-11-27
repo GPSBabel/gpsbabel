@@ -24,9 +24,9 @@
 //  USA
 //
 //------------------------------------------------------------------------
-#include <stack>
-#include <math.h>
 #include "dpencode.h"
+#include <cmath>
+#include <stack>
 
 using std::vector;
 using std::stack;

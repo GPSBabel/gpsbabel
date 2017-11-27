@@ -46,11 +46,11 @@
 
 #include "defs.h"
 #include "cet_util.h"
-#include "jeeps/gpsmath.h"
 #include "garmin_fs.h"
 #include "garmin_gpi.h"
-#include <stdlib.h>
+#include "jeeps/gpsmath.h"
 #include <QtCore/QTextCodec>
+#include <cstdlib>
 
 #define MYNAME "garmin_gpi"
 

@@ -24,9 +24,9 @@
 #include "gbfile.h"
 #include "src/core/logging.h"
 
-#include <assert.h>
-#include <stdarg.h> // for va_copy
-#include <stdio.h>
+#include <cassert>
+#include <cstdarg> // for va_copy
+#include <cstdio>
 
 #if __WIN32__
 /* taken from minigzip.c (part of the zlib project) */

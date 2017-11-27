@@ -20,10 +20,10 @@
  */
 
 #include "gps.h"
-#include <stdio.h>
-#include <errno.h>
 #include "garminusb.h"
 #include "gpsusbint.h"
+#include <cerrno>
+#include <cstdio>
 
 int32
 GPS_Write_Packet_usb(gpsdevh*, GPS_PPacket& packet)

@@ -17,10 +17,10 @@
 
  */
 #include "defs.h"
+#include "src/core/file.h"
+#include <QtCore/QJsonArray>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
-#include <QtCore/QJsonArray>
-#include "src/core/file.h"
 
 static gbfile* ofd;
 static QString input_file_name;

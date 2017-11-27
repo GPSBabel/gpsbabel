@@ -20,8 +20,8 @@
  */
 
 #include "defs.h"
-#include <stdlib.h> // atof
-#include <stdio.h> // sprintf
+#include <cstdio> // sprintf
+#include <cstdlib> // atof
 
 #define MYNAME "an1"
 

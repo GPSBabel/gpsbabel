@@ -21,8 +21,8 @@
 #include "defs.h"
 #include "garmin_fs.h"
 #include "jeeps/gpsmath.h"
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 
 #define MYNAME "random"
 

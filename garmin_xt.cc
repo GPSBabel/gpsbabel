@@ -24,7 +24,7 @@
 */
 
 #include "defs.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #define MYNAME "Garmin_XT"
 #define GARMIN_XT_ELE 31500/65536

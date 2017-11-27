@@ -20,11 +20,11 @@
 
  */
 
-#include <ctype.h>
-#include <math.h>
-#include <string.h>
-#include <time.h>
 #include "defs.h"
+#include <cctype>
+#include <cmath>
+#include <cstring>
+#include <ctime>
 //#include "session.h"
 
 #define MYNAME "mapasia"

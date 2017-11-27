@@ -48,9 +48,9 @@
 #include "csv_util.h"
 #include "inifile.h"
 
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 
 typedef unsigned long long guid_t;
 

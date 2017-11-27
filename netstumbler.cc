@@ -23,9 +23,9 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "csv_util.h"
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* file_in;
 static char* nseicon = NULL;

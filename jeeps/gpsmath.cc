@@ -22,10 +22,10 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
 #include "gpsdatum.h"
+#include <cmath>
+#include <cstdlib>
+#include <cstring>
 
 
 static int32 GPS_Math_LatLon_To_UTM_Param(double lat, double lon, int32* zone,

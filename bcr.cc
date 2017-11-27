@@ -27,13 +27,13 @@
 */
 
 #include "defs.h"
+#include "cet_util.h"
 #include "csv_util.h"
 #include "garmin_tables.h"
-#include "cet_util.h"
 #include "inifile.h"
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "bcr"
 

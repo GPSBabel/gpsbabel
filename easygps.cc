@@ -20,7 +20,7 @@
 
 
 #include "defs.h"
-#include <stdio.h>
+#include <cstdio>
 
 static gbfile* file_in;
 static gbfile* file_out;

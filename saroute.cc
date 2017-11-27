@@ -23,7 +23,7 @@
 #define MYNAME "saroute"
 #include "defs.h"
 #include "grtcirc.h"
-#include <stddef.h>
+#include <cstddef>
 
 gbfile* infile;
 

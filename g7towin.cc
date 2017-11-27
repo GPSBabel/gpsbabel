@@ -25,15 +25,15 @@
 */
 
 #include "defs.h"
-#include "csv_util.h"
 #include "cet_util.h"
+#include "csv_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
 #include "strptime.h"
 
-#include <time.h>
-#include <stdlib.h>
+#include <cstdlib>
+#include <ctime>
 #include <stdio.h>
 
 #if CSVFMTS_ENABLED

@@ -39,9 +39,9 @@
 
 
 #include "defs.h"
-#include <stdio.h> // sprintf
-#include <stdlib.h> // qsort
 #include <QtCore/QTextCodec>
+#include <cstdio> // sprintf
+#include <cstdlib> // qsort
 
 #define MYNAME "TomTom"
 

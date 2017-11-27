@@ -21,8 +21,8 @@
 
 #include "defs.h"
 #include <QtCore/QMap>
-#include <stdio.h>
-#include <math.h>
+#include <cmath>
+#include <cstdio>
 
 #define MYNAME "humminbird"
 

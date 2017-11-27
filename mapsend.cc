@@ -19,11 +19,11 @@
  */
 
 #include "defs.h"
-#include "mapsend.h"
 #include "magellan.h"
+#include "mapsend.h"
 #include <cmath>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* mapsend_file_in;
 static gbfile* mapsend_file_out;
