@@ -91,8 +91,6 @@ static bounds kml_bounds;
 static gpsbabel::DateTime kml_time_min;
 static gpsbabel::DateTime kml_time_max;
 
-#define AUTOFORMATTING_OFF(AF) bool AF=writer->autoFormatting(); writer->setAutoFormatting(false);
-#define AUTOFORMATTING_RESTORE(AF) writer->setAutoFormatting(af);
 #define DEFAULT_PRECISION "6"
 
 //  Icons provided and hosted by Google.  Used with permission.
@@ -528,13 +526,6 @@ kml_wr_position_init(const QString& fname)
   posnfilename = fname;
   posnfilenametmp = QString("%1-").arg(fname);
   realtime_positioning = 1;
-
-  /*
-   * 30% of our output file is whitespace.  Since parse time
-   * matters in this mode, turn the pretty formatting off.
-   */
-  writer->setAutoFormatting(false);
-
   max_position_points = atoi(opt_max_position_points);
 }
 
@@ -672,10 +663,8 @@ static void kml_output_timestamp(const Waypoint* waypointp)
   QString time_string = waypointp->CreationTimeXML();
   if (!time_string.isEmpty()) {
     writer->writeStartElement("TimeStamp");
-    AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
     writer->writeTextElement("when", time_string);
     writer->writeEndElement(); // Close TimeStamp tag
-    AUTOFORMATTING_RESTORE(af);
   }
 }
 
