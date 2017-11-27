@@ -290,7 +290,7 @@ main(int argc, char* argv[])
 #endif
 
   if (gpsbabel_time != 0) {	/* within testo ? */
-    global_opts.inifile = inifile_init(NULL, MYNAME);
+    global_opts.inifile = inifile_init(QString(), MYNAME);
   }
 
   init_vecs();
