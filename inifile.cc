@@ -75,7 +75,7 @@ find_gpsbabel_inifile(const char* path)		/* can be empty or NULL */
 #endif
   }
   strcat(buff, GPSBABEL_INIFILE);
-  test = fopen(buff, "rb");
+  test = ufopen(buff, "rb");
   if (test) {
     fclose(test);
     return buff;
@@ -95,7 +95,7 @@ open_gpsbabel_inifile()
   if (envstr != NULL) {
     FILE* test;
 
-    test = fopen(envstr, "r");
+    test = ufopen(envstr, "r");
     if (test != NULL) {
       fclose(test);
       return gbfopen(envstr, "r", "GPSBabel");
@@ -247,12 +247,12 @@ inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* k
 	  filename == NULL: try to open global gpsbabel.ini
  */
 inifile_t*
-inifile_init(const char* filename, const char* myname)
+inifile_init(const QString& filename, const char* myname)
 {
   inifile_t* result;
   gbfile* fin = NULL;
 
-  if (filename == NULL) {
+  if (filename.isEmpty()) {
     fin = open_gpsbabel_inifile();
     if (fin == NULL) {
       return NULL;
