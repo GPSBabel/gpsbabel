@@ -34,7 +34,7 @@
 
 #include <cstdlib>
 #include <ctime>
-#include <stdio.h>
+#include <cstdio>
 
 #if CSVFMTS_ENABLED
 
