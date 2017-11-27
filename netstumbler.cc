@@ -23,9 +23,9 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "csv_util.h"
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* file_in;
 static char* nseicon = NULL;
@@ -35,7 +35,7 @@ static char* sneicon = NULL;
 static char* snmac = NULL;
 static int macstumbler;
 
-static void	fix_netstumbler_dupes(void);
+static void	fix_netstumbler_dupes();
 
 #define MYNAME "NETSTUMBLER"
 
@@ -43,23 +43,23 @@ static
 arglist_t netstumbler_args[] = {
   {
     "nseicon", &nseicon, "Non-stealth encrypted icon name",
-    "Red Square", ARGTYPE_STRING, ARG_NOMINMAX
+    "Red Square", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "nsneicon", &nsneicon, "Non-stealth non-encrypted icon name",
-    "Green Square", ARGTYPE_STRING, ARG_NOMINMAX
+    "Green Square", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "seicon", &seicon, "Stealth encrypted icon name",
-    "Red Diamond", ARGTYPE_STRING, ARG_NOMINMAX
+    "Red Diamond", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "sneicon", &sneicon, "Stealth non-encrypted icon name",
-    "Green Diamond", ARGTYPE_STRING, ARG_NOMINMAX
+    "Green Diamond", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "snmac", &snmac, "Shortname is MAC address", NULL, ARGTYPE_BOOL,
-    ARG_NOMINMAX
+    ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -72,13 +72,13 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
 
 static void
-data_read(void)
+data_read()
 {
   char* ibuf;
   char ssid[2 + 32 + 2 + 1];			/* "( " + SSID + " )" + null */
@@ -290,7 +290,7 @@ compare(const void* a, const void* b)
 
 static
 void
-fix_netstumbler_dupes(void)
+fix_netstumbler_dupes()
 {
   int i, ct = waypt_count(), serial = 0;
   htable_t* htable, *bh;
@@ -346,4 +346,6 @@ ff_vecs_t netstumbler_vecs = {
   NULL,
   netstumbler_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

@@ -55,12 +55,12 @@
 
 
 #include "defs.h"
-#include "gbser.h"
 #include "gbfile.h" /* used for csv output */
+#include "gbser.h"
 #include <QtCore/QDir>
-#include <errno.h>
-#include <math.h>
-#include <stdlib.h>
+#include <cerrno>
+#include <cmath>
+#include <cstdlib>
 #if __WIN32__
 #include <io.h>
 #else
@@ -253,9 +253,9 @@ const char CMD_LOG_STATUS[] = "$PMTK182,2,7*3C\r\n";
 static int  mtk_log_len(unsigned int bitmask);
 static void mtk_rd_init(const QString& fname);
 static void file_init(const QString& fname);
-static void file_deinit(void) ;
-static void holux245_init(void);
-static void file_read(void);
+static void file_deinit() ;
+static void holux245_init();
+static void file_read();
 static int mtk_parse_info(const unsigned char* data, int dataLen);
 
 
@@ -264,23 +264,23 @@ static int mtk_parse_info(const unsigned char* data, int dataLen);
 static arglist_t mtk_sargs[] = {
   {
     "erase", &OPT_erase, "Erase device data after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "erase_only", &OPT_erase_only, "Only erase device data, do not download anything",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "log_enable", &OPT_log_enable, "Enable logging after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "csv",   &csv_file, "MTK compatible CSV output file",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "block_size_kb", &OPT_block_size_kb, "Size of blocks in KB to request from device",
-    "1", ARGTYPE_INT, "1", "64"
+    "1", ARGTYPE_INT, "1", "64", nullptr
   },
   ARG_TERMINATOR
 };
@@ -488,7 +488,7 @@ static void mtk_rd_init(const QString& fname)
   xfree(model);
 }
 
-static void mtk_rd_deinit(void)
+static void mtk_rd_deinit()
 {
   if (mtk_device == HOLUX_GR245) {
     int rc = do_cmd("$PHLX827*31\r\n", "PHLX860*32", NULL, 10);
@@ -503,7 +503,7 @@ static void mtk_rd_deinit(void)
   xfree(port);
 }
 
-static int mtk_erase(void)
+static int mtk_erase()
 {
   int log_status, log_mask, err;
   char* lstatus = NULL;
@@ -541,7 +541,7 @@ static int mtk_erase(void)
   return 0;
 }
 
-static void mtk_read(void)
+static void mtk_read()
 {
   char cmd[256];
   char* line = NULL;
@@ -987,7 +987,7 @@ static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
   gbfprintf(cd, "\n");
 }
 
-static void mtk_csv_deinit(void)
+static void mtk_csv_deinit()
 {
   if (cd != NULL) {
     gbfclose(cd);
@@ -1490,13 +1490,13 @@ static void file_init(const QString& fname)
   }
 }
 
-static void file_deinit(void)
+static void file_deinit()
 {
   dbg(4, "Closing file...\n");
   fclose(fl);
 }
 
-static void holux245_init(void)
+static void holux245_init()
 {
   mtk_device = HOLUX_GR245;
 
@@ -1522,7 +1522,7 @@ static int is_holux_string(const unsigned char* data, int dataLen)
   return 0;
 }
 
-static void file_read(void)
+static void file_read()
 {
   long fsize, pos;
   int i, j, k, bLen;
@@ -1696,6 +1696,8 @@ ff_vecs_t mtk_vecs = {
   mtk_sargs,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 ff_vecs_t mtk_m241_vecs = {
@@ -1715,6 +1717,8 @@ ff_vecs_t mtk_m241_vecs = {
   mtk_sargs,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /* used for mtk-bin */
@@ -1722,7 +1726,7 @@ ff_vecs_t mtk_m241_vecs = {
 static arglist_t mtk_fargs[] = {
   {
     "csv",   &csv_file, "MTK compatible CSV output file",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -1739,6 +1743,8 @@ ff_vecs_t mtk_fvecs = {
   NULL,
   mtk_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 ff_vecs_t mtk_m241_fvecs = {
@@ -1753,6 +1759,8 @@ ff_vecs_t mtk_m241_fvecs = {
   NULL,
   mtk_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
 /* End file: mtk_logger.c */
 /**************************************************************************/

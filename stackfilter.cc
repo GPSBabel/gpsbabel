@@ -21,7 +21,7 @@
 
 #include "defs.h"
 #include "filterdefs.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #if FILTERS_ENABLED
 
@@ -43,39 +43,39 @@ static
 arglist_t stackfilt_args[] = {
   {
     "push", &opt_push, "Push waypoint list onto stack", NULL,
-    ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "pop", &opt_pop, "Pop waypoint list from stack", NULL,
-    ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "swap", &opt_swap, "Swap waypoint list with <depth> item on stack",
-    NULL, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "copy", &opt_copy, "(push) Copy waypoint list", NULL,
-    ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "append", &opt_append, "(pop) Append list", NULL,
-    ARGTYPE_BEGIN_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BEGIN_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "discard", &opt_discard, "(pop) Discard top of stack",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "replace", &opt_replace, "(pop) Replace list (default)",
-    NULL, ARGTYPE_END_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_END_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "depth", &opt_depth, "(swap) Item to use (default=1)",
-    NULL, ARGTYPE_INT, "0", NULL
+    NULL, ARGTYPE_INT, "0", NULL, nullptr
   },
   {
     "nowarn", &nowarn, "Suppress cleanup warning", NULL,
-    ARGTYPE_BOOL | ARGTYPE_HIDDEN, ARG_NOMINMAX
+    ARGTYPE_BOOL | ARGTYPE_HIDDEN, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -92,7 +92,7 @@ struct stack_elt {
 
 
 void
-stackfilt_process(void)
+stackfilt_process()
 {
   struct stack_elt* tmp_elt = NULL;
   queue* elem = NULL;
@@ -192,7 +192,7 @@ stackfilt_process(void)
 }
 
 void
-stackfilt_init(const char* args)
+stackfilt_init(const char*)
 {
 
   int invalid = 0;
@@ -232,13 +232,13 @@ stackfilt_init(const char* args)
 }
 
 void
-stackfilt_deinit(void)
+stackfilt_deinit()
 {
   swapdepth = 0;
 }
 
 void
-stackfilt_exit(void)
+stackfilt_exit()
 {
   struct stack_elt* tmp_elt = NULL;
 

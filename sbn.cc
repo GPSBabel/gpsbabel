@@ -137,6 +137,8 @@ hdrcpy(char* dest, const char* src, size_t max_len)
 int
 locosys_decode_file_id(char* header, size_t len)
 {
+  Q_UNUSED(header);
+  Q_UNUSED(len);
 #ifdef LOCOSYS_PARSE_FILE_ID
   /*
    * MID_FILE_ID(0xfd) contains the following payload :
@@ -169,7 +171,7 @@ locosys_decode_file_id(char* header, size_t len)
 }
 
 static void
-read_sbn_header(route_head* track)
+read_sbn_header(route_head*)
 {
   char header[QRY_INFORMATION_LEN];
   size_t len;
@@ -284,13 +286,13 @@ sbn_rd_init(const QString& fname)
 }
 
 static void
-sbn_rd_deinit(void)
+sbn_rd_deinit()
 {
   gbfclose(file_handle);
 }
 
 static void
-sbn_read(void)
+sbn_read()
 {
   if (global_opts.masked_objective & TRKDATAMASK) {
     route_head*     track;
@@ -305,7 +307,7 @@ sbn_read(void)
 }
 
 static void
-sbn_exit(void)
+sbn_exit()
 {
 }
 
@@ -329,5 +331,7 @@ ff_vecs_t sbn_vecs = {
   /* Characters are always encoded in ASCII. Even if the unit is set
    * to Chinese language, only ASCII characters can be entered. */
   CET_CHARSET_ASCII, 0
+  , NULL_POS_OPS,
+  nullptr
 };
 /**********************************************************************/

@@ -21,8 +21,8 @@
 #include "defs.h"
 #include "gbser.h"
 #include "grtcirc.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME      "WBT-100/200"
 #define NL          "\x0D\x0A"
@@ -407,7 +407,7 @@ static void rd_init(const QString& fname)
   }
 }
 
-static void rd_deinit(void)
+static void rd_deinit()
 {
   db(1, "Closing port...\n");
   gbser_deinit(fd);
@@ -435,7 +435,7 @@ static void file_init(const QString& fname)
   }
 }
 
-static void file_deinit(void)
+static void file_deinit()
 {
   db(1, "Closing file...\n");
   fclose(fl);
@@ -705,7 +705,7 @@ static int want_bytes(struct buf_head* h, size_t len)
   return 1;
 }
 
-static void wbt200_data_read(void)
+static void wbt200_data_read()
 {
   /* Awooga! Awooga! Statically allocated buffer danger!
    * Actually, it's OK because rd_line can read arbitrarily
@@ -926,7 +926,7 @@ static int wbt201_read_chunk(struct read_state* st, unsigned pos, unsigned limit
 
 }
 
-static void wbt201_data_read(void)
+static void wbt201_data_read()
 {
   char                line_buf[100];
   struct read_state   st;
@@ -1011,7 +1011,7 @@ static void wbt201_data_read(void)
   do_simple("@AL,2,1", BUFSPEC(line_buf));
 }
 
-static void file_read(void)
+static void file_read()
 {
   char                buf[512];
   size_t              rc;
@@ -1069,7 +1069,7 @@ static void file_read(void)
   state_empty(&st);
 }
 
-static void data_read(void)
+static void data_read()
 {
   switch (dev_type) {
   case WBT200:
@@ -1093,7 +1093,7 @@ static void data_read(void)
 static arglist_t wbt_sargs[] = {
   {
     "erase", &erase, "Erase device data after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -1110,6 +1110,8 @@ ff_vecs_t wbt_svecs = {
   NULL,
   wbt_sargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /* used for wbt-bin /and/ wbt-tk1 */
@@ -1130,4 +1132,6 @@ ff_vecs_t wbt_fvecs = {
   NULL,
   wbt_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

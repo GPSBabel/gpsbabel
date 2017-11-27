@@ -21,8 +21,8 @@
 
 #include "defs.h"
 #include "grtcirc.h"
+#include <cerrno>
 #include <cmath>
-#include <errno.h>
 
 #define MYNAME "vitosmt"
 
@@ -60,13 +60,13 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(infile);
 }
 
 static void
-vitosmt_read(void)
+vitosmt_read()
 {
   long			version			=0;
   long			subversion		=0;
@@ -227,7 +227,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(ofs);
 
@@ -313,7 +313,7 @@ vitosmt_waypt_pr(const Waypoint* waypointp)
 
 
 static void
-vitosmt_write(void)
+vitosmt_write()
 {
   unsigned char* 	workbuffer					=0;
   size_t			position					=0;
@@ -368,4 +368,6 @@ ff_vecs_t vitosmt_vecs = {
   NULL,
   NULL,
   CET_CHARSET_UTF8, 1	/* do nothing | CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

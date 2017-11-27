@@ -1,7 +1,7 @@
 #
 # PocketFMS breadcrumb files
 #
-gpsbabel -i pocketfms_bc -f ${REFERENCE}/pocketfms_bc -o gpx -F ${TMPDIR}/pocketfms_bc.gpx
+gpsbabel -i pocketfms_bc -f ${REFERENCE}/pocketfms_bc -o gpx,elevprec=6 -F ${TMPDIR}/pocketfms_bc.gpx
 compare ${REFERENCE}/pocketfms_bc.gpx ${TMPDIR}/pocketfms_bc.gpx
 gpsbabel -i gpx -f ${REFERENCE}/pocketfms_bc.gpx -o pocketfms_bc -F ${TMPDIR}/pocketfms_bc
 bincompare ${REFERENCE}/pocketfms_bc.babel ${TMPDIR}/pocketfms_bc

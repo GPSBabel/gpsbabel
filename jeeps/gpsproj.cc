@@ -22,8 +22,8 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
-#include <math.h>
-#include <string.h>
+#include <cmath>
+#include <cstring>
 
 
 /* @func GPS_Math_Albers_LatLon_To_EN **********************************

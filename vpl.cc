@@ -107,7 +107,7 @@ C - Checksum
  */
 
 #include "defs.h"
-#include <stdio.h> /* for sscanf */
+#include <cstdio> /* for sscanf */
 
 #define MYNAME "vpl"
 
@@ -132,13 +132,13 @@ vpl_rd_init(const QString& fname)
 }
 
 static void
-vpl_rd_deinit(void)
+vpl_rd_deinit()
 {
   gbfclose(vpl_file_in);
 }
 
 static void
-vpl_read(void)
+vpl_read()
 {
   char* ibuf;
 
@@ -156,7 +156,7 @@ vpl_read(void)
 }
 
 static void
-vpl_wr_init(const QString& fname)
+vpl_wr_init(const QString&)
 {
   fatal("Writing file of type %s is not support\n", MYNAME);
 }
@@ -232,5 +232,7 @@ ff_vecs_t vpl_vecs = {
   vpl_args,
   CET_CHARSET_ASCII, /* ascii is the expected character set */
   1	               /* fixed, can't be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/

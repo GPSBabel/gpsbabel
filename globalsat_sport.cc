@@ -36,11 +36,11 @@
  */
 
 
-#include <ctype.h>
-#include <limits.h>
-#include <stdio.h>
 #include "defs.h"
 #include "gbser.h"
+#include <cctype>
+#include <climits>
+#include <cstdio>
 
 #define MYNAME "GlobalsatSport"
 
@@ -57,10 +57,10 @@ static gbfile* in_file = NULL;              // used for reading from bin/RAW dat
 
 static
 arglist_t globalsat_args[] = {
-  {"showlist", &showlist, "list tracks", NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
-  {"track", &track, "get track", "0", ARGTYPE_INT, ARG_NOMINMAX},
-  {"dump-file", &opt_dump_file, "Dump raw data to this file", NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX},
-  {"input-is-dump-file", &opt_input_dump_file, "Dump raw data to this file", NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+  {"showlist", &showlist, "list tracks", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
+  {"track", &track, "get track", "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
+  {"dump-file", &opt_dump_file, "Dump raw data to this file", NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr},
+  {"input-is-dump-file", &opt_input_dump_file, "Dump raw data to this file", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
   ARG_TERMINATOR
 };
 
@@ -208,7 +208,7 @@ serial_init(const char* fname)
 }
 
 static void
-serial_deinit(void)
+serial_deinit()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME " serial_deinit()\n");
@@ -412,7 +412,7 @@ rd_init(const QString& fname)
     printf(MYNAME " rd_init()\n");
   }
   if (opt_dump_file) {
-    dumpfile = gbfopen(opt_dump_file, "w", MYNAME);
+    dumpfile = gbfopen(opt_dump_file, "wb", MYNAME);
     if (!dumpfile) {
       printf(MYNAME " rd_init() creating dumpfile %s FAILED continue anyway\n",opt_dump_file);
     } else {
@@ -425,7 +425,7 @@ rd_init(const QString& fname)
     serial_init(qPrintable(fname));
   } else {
     // read from dump-file instead of serial
-    in_file = gbfopen(fname, "r", MYNAME);
+    in_file = gbfopen(fname, "rb", MYNAME);
     is_fatal(!in_file, "Could not open dumpfile for input: %s", qPrintable(fname));
 
   }
@@ -443,7 +443,7 @@ wr_init(const QString& fname)
 
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME " rd_deinit()\n");
@@ -465,7 +465,7 @@ rd_deinit(void)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME " wr_deinit()\n");
@@ -473,11 +473,11 @@ wr_deinit(void)
   serial_deinit();
 }
 
-static void track_read(void);
+static void track_read();
 
 
 static void
-waypoint_read(void)
+waypoint_read()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME "   waypoint_read()\n");
@@ -501,7 +501,7 @@ waypoint_read(void)
 }
 
 static void
-track_read(void)
+track_read()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME "   track_read()\n");
@@ -814,7 +814,7 @@ track_read(void)
 }
 
 static void
-route_read(void)
+route_read()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME "   route_read() TODO\n");
@@ -822,7 +822,7 @@ route_read(void)
 }
 
 static void
-data_read(void)
+data_read()
 {
   if (global_opts.debug_level > 1) {
     printf(MYNAME " data_read()\n");
@@ -857,6 +857,8 @@ ff_vecs_t globalsat_sport_vecs = {
   globalsat_args,		//args
   CET_CHARSET_ASCII, 0		//encode,fixed_encode
   //NULL                   //name dynamic/internal?
+  , NULL_POS_OPS,
+  nullptr
 };
 
 // This reads from a RAW dump bile from a watch
@@ -876,4 +878,6 @@ ff_vecs_t globalsat_sport_fvecs = {
   globalsat_args,		//args
   CET_CHARSET_ASCII, 0		//encode,fixed_encode
   //NULL                   //name dynamic/internal?
+  , NULL_POS_OPS,
+  nullptr
 };

@@ -73,11 +73,11 @@
 
 #include "defs.h"
 #include "jeeps/gpsmath.h" /* for datum conversions */
-#include <cmath>
-#include <stdio.h>
-#include <stdlib.h>
-#include <vector>
 #include <QtCore/QScopedArrayPointer> // Wish we could use c++11...
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
 
 #define MYNAME	"TPO"
 
@@ -256,7 +256,7 @@ tpo_read_until_section(const char* section_name, int seek_bytes)
 // that is the only type of data available in the version 2.x TPO
 // files.
 //
-void tpo_read_2_x(void)
+void tpo_read_2_x()
 {
   char buff[16];
   short track_count, waypoint_count;
@@ -510,7 +510,7 @@ public:
 // Track decoder for version 3.x files.  This block contains tracks
 // (called "freehand routes" or just "routes" in Topo).
 //
-void tpo_process_tracks(void)
+void tpo_process_tracks()
 {
   unsigned int track_count, track_style_count;
   unsigned int xx,ii,tmp;
@@ -817,7 +817,7 @@ unsigned int tpo_index_ptr;
 
 // Waypoint decoder for version 3.x files.
 //
-void tpo_process_waypoints(void)
+void tpo_process_waypoints()
 {
   unsigned int waypoint_count;
   unsigned int ii;
@@ -938,7 +938,7 @@ void tpo_process_waypoints(void)
 
 // Map Notes decoder for version 3.x files.
 //
-void tpo_process_map_notes(void)
+void tpo_process_map_notes()
 {
   unsigned int waypoint_count;
   unsigned int ii;
@@ -1055,7 +1055,7 @@ void tpo_process_map_notes(void)
 
 // Symbols decoder for version 3.x files.
 //
-void tpo_process_symbols(void)
+void tpo_process_symbols()
 {
   unsigned int waypoint_count;
   unsigned int ii;
@@ -1110,7 +1110,7 @@ void tpo_process_symbols(void)
 
 // Text Labels decoder for version 3.x files.
 //
-void tpo_process_text_labels(void)
+void tpo_process_text_labels()
 {
   unsigned int waypoint_count;
   unsigned int ii;
@@ -1185,7 +1185,7 @@ void tpo_process_text_labels(void)
 // with pointers to waypoint objects by tpo_process_waypoints()
 // function above.
 //
-void tpo_process_routes(void)
+void tpo_process_routes()
 {
   unsigned int route_count;
   unsigned int ii;
@@ -1282,7 +1282,7 @@ void tpo_process_routes(void)
 
 // Compass decoder for version 3.x files.
 //
-void tpo_process_compass(void)
+void tpo_process_compass()
 {
 
   // Not implemented yet
@@ -1296,7 +1296,7 @@ void tpo_process_compass(void)
 // (called "freehand routes" or just "routes" in Topo), "waypoints",
 // and "gps-routes".  We intend to read all three types.
 //
-void tpo_read_3_x(void)
+void tpo_read_3_x()
 {
 
   if (doing_trks) {
@@ -1383,7 +1383,7 @@ tpo_rd_init(const QString& fname)
 }
 
 static void
-tpo_rd_deinit(void)
+tpo_rd_deinit()
 {
   unsigned int i;
 
@@ -1403,7 +1403,7 @@ tpo_rd_deinit(void)
 }
 
 static void
-tpo_read(void)
+tpo_read()
 {
 
   if (tpo_version == 2.0) {
@@ -1813,7 +1813,7 @@ tpo_track_disp(const Waypoint* waypointp)
 }
 
 static void
-tpo_track_tlr(const route_head* rte)
+tpo_track_tlr(const route_head*)
 {
   unsigned char unknown1[] = { 0x06, 0x00 };
 
@@ -1851,7 +1851,7 @@ tpo_wr_init(const QString& fname)
 }
 
 static void
-tpo_wr_deinit(void)
+tpo_wr_deinit()
 {
   /* the file footer is six bytes of zeroes */
   unsigned char file_footer_bytes[6];
@@ -1862,7 +1862,7 @@ tpo_wr_deinit(void)
 }
 
 static void
-tpo_write(void)
+tpo_write()
 {
   unsigned char unknown1[] = { 0xFF, 0xFF, 0x01, 0x00 };
 
@@ -1897,6 +1897,8 @@ ff_vecs_t tpo2_vecs = {
   NULL,
   tpo2_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /* TPO 3.x format can read waypoints/tracks/routes */
@@ -1912,4 +1914,6 @@ ff_vecs_t tpo3_vecs = {
   NULL,
   tpo3_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

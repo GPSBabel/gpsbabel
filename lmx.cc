@@ -28,8 +28,8 @@
 
 #include "defs.h"
 #include "xmlgeneric.h"
-#include <stdio.h>
 #include <QtCore/QXmlStreamAttributes>
+#include <cstdio>
 
 static gbfile* ofd;
 static Waypoint* wpt_tmp;
@@ -44,7 +44,7 @@ arglist_t lmx_args[] = {
   {
     "binary", &binary,
     "Compact binary representation",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -61,7 +61,7 @@ lmx_wr_init(const QString& fname)
 }
 
 static void
-lmx_wr_deinit(void)
+lmx_wr_deinit()
 {
   gbfclose(ofd);
 }
@@ -258,7 +258,7 @@ lmx_print(const Waypoint* wpt)
 
 
 static void
-lmx_write(void)
+lmx_write()
 {
   if (binary) {
     gbfputc(0x03, ofd); // WBXML version 1.3
@@ -322,13 +322,13 @@ lmx_rd_init(const QString& fname)
 }
 
 static void
-lmx_read(void)
+lmx_read()
 {
   xml_read();
 }
 
 static void
-lmx_rd_deinit(void)
+lmx_rd_deinit()
 {
   xml_deinit();
 }
@@ -336,13 +336,13 @@ lmx_rd_deinit(void)
 
 
 static void
-lmx_lm_start(xg_string args, const QXmlStreamAttributes*)
+lmx_lm_start(xg_string, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
 }
 
 static void
-lmx_lm_end(xg_string args, const QXmlStreamAttributes*)
+lmx_lm_end(xg_string, const QXmlStreamAttributes*)
 {
   waypt_add(wpt_tmp);
 }
@@ -378,7 +378,7 @@ lmx_lm_desc(xg_string args, const QXmlStreamAttributes*)
 }
 
 static void
-lmx_lm_mlink_s(xg_string args, const QXmlStreamAttributes*)
+lmx_lm_mlink_s(xg_string, const QXmlStreamAttributes*)
 {
   urllink = urllinkt = QString();
 }
@@ -396,7 +396,7 @@ lmx_lm_linkt(xg_string args, const QXmlStreamAttributes*)
 }
 
 static void
-lmx_lm_mlink_e(xg_string args, const QXmlStreamAttributes*)
+lmx_lm_mlink_e(xg_string, const QXmlStreamAttributes*)
 {
   waypt_add_url(wpt_tmp, urllink, urllinkt);
 }
@@ -418,4 +418,6 @@ ff_vecs_t lmx_vecs = {
   NULL,
   lmx_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

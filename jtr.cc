@@ -23,8 +23,8 @@
 #include "csv_util.h"
 #include <QtCore/QHash>
 #include <cmath>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "jtr"
 
@@ -88,14 +88,14 @@ jtr_rd_init(const QString& fname)
 }
 
 static void
-jtr_rd_deinit(void)
+jtr_rd_deinit()
 {
   trkpts.clear();
   gbfclose(fin);
 }
 
 static void
-jtr_read(void)
+jtr_read()
 {
   char* str;
   int line = 0;
@@ -256,7 +256,7 @@ jtr_wr_init(const QString& fname)
 }
 
 static void
-jtr_wr_deinit(void)
+jtr_wr_deinit()
 {
   gbfclose(fout);
 }
@@ -318,7 +318,7 @@ jtr_trkpt_disp_cb(const Waypoint* wpt)
 }
 
 static void
-jtr_write(void)
+jtr_write()
 {
   track_disp_all(NULL, NULL, jtr_trkpt_disp_cb);
 }
@@ -342,6 +342,8 @@ ff_vecs_t jtr_vecs = {
   jtr_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /**************************************************************************/

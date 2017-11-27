@@ -72,9 +72,9 @@ for a little more info, see structures:
 ******************************************************************************/
 
 #include "defs.h"
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h> // atoi
+#include <cassert>
+#include <cstdio>
+#include <cstdlib> // atoi
 
 #if _MSC_VER
 #define __func__ __FUNCTION__
@@ -173,7 +173,7 @@ v900_rd_init(const QString& fname)
 }
 
 static void
-v900_rd_deinit(void)
+v900_rd_deinit()
 {
   v900_log("%s\n",__func__);
   if (fin) {
@@ -203,7 +203,7 @@ bintime2utc(int date, int time) {
 }
 
 static void
-v900_read(void)
+v900_read()
 {
   /* use line buffer large enough to hold either basic or advanced mode lines. */
   union {
@@ -386,5 +386,6 @@ ff_vecs_t v900_vecs = {
   NULL,
   NULL,          /* args */
   CET_CHARSET_UTF8, 1,	/* Could be  US-ASCII, since we only read "0-9,A-Z\n\r" */
-  {NULL,NULL,NULL,NULL,NULL,NULL}
+  {NULL,NULL,NULL,NULL,NULL,NULL},
+  nullptr
 };

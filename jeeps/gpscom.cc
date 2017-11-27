@@ -25,9 +25,9 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
-#include <float.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cfloat>
+#include <cstdio>
+#include <cstdlib>
 
 
 /* @func GPS_Command_Off ***********************************************
@@ -797,6 +797,7 @@ int32  GPS_Command_Send_Course
   switch (gps_course_limits_transfer) {
   case pA1009:
     ret = GPS_A1009_Get(port,&limits);
+    Q_UNUSED(ret);
     break;
   default:
     GPS_Error("Send_Course: Unknown course limitsprotocol");

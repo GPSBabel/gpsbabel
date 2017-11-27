@@ -140,7 +140,7 @@ google_rd_init(const QString& fname)
 }
 
 static void
-google_read(void)
+google_read()
 {
   xml_read();
 
@@ -149,7 +149,7 @@ google_read(void)
 }
 
 static void
-google_rd_deinit(void)
+google_rd_deinit()
 {
   xml_deinit();
   mkshort_del_handle(&desc_handle);
@@ -167,4 +167,6 @@ ff_vecs_t google_dir_vecs = {
   NULL,
   NULL,
   CET_CHARSET_UTF8, 1	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

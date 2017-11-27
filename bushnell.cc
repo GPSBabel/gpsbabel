@@ -21,8 +21,8 @@
 
 
 #include "defs.h"
-#include <math.h>
 #include <QtCore/QFileInfo>
+#include <cmath>
 #define MYNAME "Bushnell"
 
 static gbfile* file_in;
@@ -163,7 +163,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -189,7 +189,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   mkshort_del_handle(&mkshort_handle);
   ofname.clear();
@@ -199,7 +199,7 @@ wr_deinit(void)
  * Each file contains a single waypoint.
  */
 static void
-bushnell_read(void)
+bushnell_read()
 {
   int32_t lat_tmp,lon_tmp;
   unsigned int proximity;
@@ -252,7 +252,7 @@ bushnell_write_one(const Waypoint* wpt)
 }
 
 static void
-bushnell_write(void)
+bushnell_write()
 {
   waypt_disp_all(bushnell_write_one);
 }

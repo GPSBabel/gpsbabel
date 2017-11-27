@@ -21,8 +21,8 @@
 #include "defs.h"
 #include "garmin_fs.h"
 #include "jeeps/gpsmath.h"
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
+#include <ctime>
 
 #define MYNAME "random"
 
@@ -31,11 +31,11 @@ static char* opt_points, *opt_seed;
 static arglist_t random_args[] = {
   {
     "points", &opt_points, "Generate # points", NULL,
-    ARGTYPE_INT, "1", NULL
+    ARGTYPE_INT, "1", NULL, nullptr
   },
   {
     "seed", &opt_seed, "Starting seed of the internal number generator", NULL,
-    ARGTYPE_INT, "1", NULL
+    ARGTYPE_INT, "1", NULL, nullptr
   },
   ARG_TERMINATOR
 };
@@ -97,17 +97,17 @@ rand_qstr(const int maxlen, const char* fmt)
 }
 
 static void
-random_rd_init(const QString& fname)
+random_rd_init(const QString&)
 {
 }
 
 static void
-random_rd_deinit(void)
+random_rd_deinit()
 {
 }
 
 static void
-random_read(void)
+random_read()
 {
 #define RND(a) (rand_int(a) > 0)
 
@@ -268,4 +268,6 @@ ff_vecs_t random_vecs = {
   NULL,	/* exit */
   random_args,
   CET_CHARSET_ASCII, 1			/* fixed */
+  , NULL_POS_OPS,
+  nullptr
 };

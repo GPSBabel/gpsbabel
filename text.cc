@@ -23,8 +23,8 @@
 #include "defs.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/xmltag.h"
-#include <ctype.h>
-#include <stdlib.h>
+#include <cctype>
+#include <cstdlib>
 
 static gbfile* file_out;
 static short_handle mkshort_handle;
@@ -45,27 +45,27 @@ arglist_t text_args[] = {
   {
     "nosep", &suppresssep,
     "Suppress separator lines between waypoints",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "encrypt", &txt_encrypt,
-    "Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    "Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "logs", &includelogs,
-    "Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    "Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "degformat", &degformat,
-    "Degrees output as 'ddd', 'dmm'(default) or 'dms'", "dmm", ARGTYPE_STRING, ARG_NOMINMAX
+    "Degrees output as 'ddd', 'dmm'(default) or 'dms'", "dmm", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "altunits", &altunits,
-    "Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX
+    "Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "splitoutput", &split_output,
-    "Write each waypoint in a separate file", NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    "Write each waypoint in a separate file", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
 
   ARG_TERMINATOR
@@ -85,7 +85,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   if (!split_output) {
     gbfclose(file_out);
@@ -259,7 +259,7 @@ text_disp(const Waypoint* wpt)
 }
 
 static void
-data_write(void)
+data_write()
 {
   if (! suppresssep && !split_output) {
     gbfprintf(file_out, "-----------------------------------------------------------------------------\n");
@@ -281,5 +281,7 @@ ff_vecs_t text_vecs = {
   NULL,
   text_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 
 };

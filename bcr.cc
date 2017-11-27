@@ -27,13 +27,13 @@
 */
 
 #include "defs.h"
+#include "cet_util.h"
 #include "csv_util.h"
 #include "garmin_tables.h"
-#include "cet_util.h"
 #include "inifile.h"
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "bcr"
 
@@ -65,19 +65,19 @@ static
 arglist_t bcr_args[] = {
   {
     "index", &rtenum_opt, "Index of route to write (if more than one in source)",
-    NULL, ARGTYPE_INT, "1", NULL
+    NULL, ARGTYPE_INT, "1", NULL, nullptr
   },
   {
     "name", &rtename_opt, "New name for the route",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "radius", &radius_opt, "Radius of our big earth (default 6371000 meters)", "6371000",
-    ARGTYPE_FLOAT, ARG_NOMINMAX
+    ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
   },
   {
     "prefer_shortnames", &prefer_shortnames_opt, "Use shortname instead of description",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -86,41 +86,41 @@ typedef struct {
   const char* bcr_name;
   const char* mps_name;
   const char* symbol_DE;
-  int  warned;
+  bool  warned;
 } bcr_icon_mapping_t;
 
 static
 bcr_icon_mapping_t bcr_icon_mapping[] = {
-  { BCR_DEF_ICON,		BCR_DEF_MPS_ICON, 	BCR_DEF_ICON },
-  { "",			BCR_DEF_MPS_ICON, 	"Eigene Adressen" },
-  { "AdrMon alpen",	"Summit",		"Pass-Strassen" },
-  { "AdrMon bauern",	NULL,			"Bauern- und Biohoefe" },
-  { "AdrMon cmpngs",	"Campground",		"Campingplaetzte" },
-  { "AdrMon p_aeu",	"Scenic Area",		"Sehenswertes" },
-  { "AdrMon p_beu",	"Gas Station",		"Tanken" },
-  { "AdrMon p_deu",	"Parking Area",		"Parken" },
-  { "AdrMon p_feu",	"Restaurant",		"Gastro" },
-  { "AdrMon p_geu",	"Museum",		"Freizeit" },
-  { "AdrMon p_heu",	"Gas Station",		"Tankstellen" },
-  { "AdrMon p_keu",	NULL,			"Faehrverbindungen" },
-  { "AdrMon p_leu",	NULL,			"Grenzuebergaenge" },
-  { "AdrMon p_teu",	NULL,			"Wein- und Sektgueter" },
-  { "AdrMon RUINEN",	"Ghost Town",		"Burgen und Schloesser" },
-  { "AdrMon NFHAUS",	"Residence",		"Naturfreundehaeuser" },
-  { "AdrMon racing",	"Bike Trail",		"Rennstrecken" },
-  { "AdrMon TNKRST",	"Bar",			"Tankraststaetten" },
-  { "AdrMon tpclub",	"Contact, Biker",	"Motorrad-Clubs" },
-  { "AdrMon tpequ",	NULL,			"Motorrad-Equipment" },
-  { "AdrMon tphot",	"Hotel",		"Motorrad-Hotels" },
-  { "AdrMon tpmh",	NULL,			"Motorradhaendler" },
-  { "AdrMon tpss",	"Restricted Area",	"Sperrungen" },
-  { "AdrMon tpsw",	"Scenic Area",		"Sehenswertes" },
-  { "AdrMon tptref",	NULL,			"Treffpunkte" },
-  { "AdrMon VORTE",	"Information",		"Ortsinformationen" },
-  { "AdrMon WEBCAM",	NULL,			"WebCam-Standorte" },
-  { "AdrMon youthh",	NULL,			"Jugendherbergen" },
-  { "Town",		"City (Small)",		"Orte" },
-  { NULL,			NULL,			NULL, 0 }
+  { BCR_DEF_ICON,		BCR_DEF_MPS_ICON, 	BCR_DEF_ICON, false },
+  { "",			BCR_DEF_MPS_ICON, 	"Eigene Adressen", false },
+  { "AdrMon alpen",	"Summit",		"Pass-Strassen", false },
+  { "AdrMon bauern",	NULL,			"Bauern- und Biohoefe", false },
+  { "AdrMon cmpngs",	"Campground",		"Campingplaetzte", false },
+  { "AdrMon p_aeu",	"Scenic Area",		"Sehenswertes", false },
+  { "AdrMon p_beu",	"Gas Station",		"Tanken", false },
+  { "AdrMon p_deu",	"Parking Area",		"Parken", false },
+  { "AdrMon p_feu",	"Restaurant",		"Gastro", false },
+  { "AdrMon p_geu",	"Museum",		"Freizeit", false },
+  { "AdrMon p_heu",	"Gas Station",		"Tankstellen", false },
+  { "AdrMon p_keu",	NULL,			"Faehrverbindungen", false },
+  { "AdrMon p_leu",	NULL,			"Grenzuebergaenge", false },
+  { "AdrMon p_teu",	NULL,			"Wein- und Sektgueter", false },
+  { "AdrMon RUINEN",	"Ghost Town",		"Burgen und Schloesser", false },
+  { "AdrMon NFHAUS",	"Residence",		"Naturfreundehaeuser", false },
+  { "AdrMon racing",	"Bike Trail",		"Rennstrecken", false },
+  { "AdrMon TNKRST",	"Bar",			"Tankraststaetten", false },
+  { "AdrMon tpclub",	"Contact, Biker",	"Motorrad-Clubs", false },
+  { "AdrMon tpequ",	NULL,			"Motorrad-Equipment", false },
+  { "AdrMon tphot",	"Hotel",		"Motorrad-Hotels", false },
+  { "AdrMon tpmh",	NULL,			"Motorradhaendler", false },
+  { "AdrMon tpss",	"Restricted Area",	"Sperrungen", false },
+  { "AdrMon tpsw",	"Scenic Area",		"Sehenswertes", false },
+  { "AdrMon tptref",	NULL,			"Treffpunkte", false },
+  { "AdrMon VORTE",	"Information",		"Ortsinformationen", false },
+  { "AdrMon WEBCAM",	NULL,			"WebCam-Standorte", false },
+  { "AdrMon youthh",	NULL,			"Jugendherbergen", false },
+  { "Town",		"City (Small)",		"Orte", false },
+  { NULL,			NULL,			NULL, false }
 };
 
 static void
@@ -136,7 +136,7 @@ bcr_handle_icon_str(const char* str, Waypoint* wpt)
 
       if (m->symbol_DE == NULL) {
         if (! m->warned) {
-          m->warned = 1;
+          m->warned = true;
           warning(MYNAME ": Unknown icon \"%s\" found. Please report.\n", str);
         }
         return;
@@ -173,7 +173,7 @@ get_bcr_icon_from_icon_descr(const QString& icon_descr)
 }
 
 static void
-bcr_init_radius(void)
+bcr_init_radius()
 {
   if (radius_opt != NULL) {			/* preinitialize the earth radius */
     radius = atof(radius_opt);
@@ -200,7 +200,7 @@ bcr_rd_init(const QString& fname)
 }
 
 static void
-bcr_rd_deinit(void)
+bcr_rd_deinit()
 {
   inifile_done(ini);
 }
@@ -252,7 +252,7 @@ bcr_mercator_to_wgs84(const int north, const int east, double* lat, double* lon)
 /* ------------------------------------------------------------- */
 
 static void
-bcr_data_read(void)
+bcr_data_read()
 {
   int index;
   char* str;
@@ -341,18 +341,18 @@ bcr_wr_init(const QString& fname)
 }
 
 static void
-bcr_wr_deinit(void)
+bcr_wr_deinit()
 {
   gbfclose(fout);
 }
 
 static void
-bcr_route_trailer(const route_head* rte)
+bcr_route_trailer(const route_head*)
 {
 }
 
 static void
-bcr_write_wpt(const Waypoint* wpt)
+bcr_write_wpt(const Waypoint*)
 {
 }
 
@@ -494,7 +494,7 @@ bcr_route_header(const route_head* route)
 }
 
 static void
-bcr_data_write(void)
+bcr_data_write()
 {
   target_rte_num = 1;
 
@@ -519,5 +519,7 @@ ff_vecs_t bcr_vecs = {
   bcr_data_write,
   NULL,
   bcr_args,
-  CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
+  CET_CHARSET_MS_ANSI, 0,	/* CET-REVIEW */
+  NULL_POS_OPS,
+  nullptr
 };

@@ -54,7 +54,7 @@ xg_tag_mapping ikt_map[] = {
 };
 
 static void
-ikt_object_end(void)
+ikt_object_end()
 {
   if (track) {
     track->rte_name = name;
@@ -72,7 +72,7 @@ ikt_object_end(void)
 }
 
 static void
-iktobj_waypt(xg_string args, const QXmlStreamAttributes* attrv)
+iktobj_waypt(xg_string, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("X")) {
     waypt->longitude = attrv->value("X").toString().toDouble();
@@ -131,13 +131,13 @@ ikt_rd_init(const QString& fname)
 }
 
 static void
-ikt_read(void)
+ikt_read()
 {
   xml_read();
 }
 
 static void
-ikt_rd_deinit(void)
+ikt_rd_deinit()
 {
   ikt_object_end();
   xml_deinit();
@@ -159,4 +159,6 @@ ff_vecs_t ik3d_vecs = {
   NULL,
   ikt_args,
   CET_CHARSET_UTF8, 1
+  , NULL_POS_OPS,
+  nullptr
 };

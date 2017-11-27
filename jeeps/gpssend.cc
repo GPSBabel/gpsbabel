@@ -22,13 +22,13 @@
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
+
+#include <cctype>
+#include <cerrno>
+#include <cstdio>
+
 #include "gps.h"
 #include "gpsserial.h"
-
-#include <stdio.h>
-#include <errno.h>
-#include <ctype.h>
-
 
 /* @funcstatic Build_Serial_Packet *************************************
 **

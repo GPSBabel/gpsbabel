@@ -21,12 +21,12 @@
 
 #include "defs.h"
 #include "filterdefs.h"
-#include "inifile.h"
 #include "gbversion.h"
+#include "inifile.h"
 #include <QtCore/QStringList>
-#include <stdlib.h> // qsort
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cstdlib> // qsort
 
 typedef struct {
   filter_vecs_t* vec;
@@ -162,7 +162,7 @@ fl_vecs_t filter_vec_list[] = {
 };
 
 filter_vecs_t*
-find_filter_vec(char* const vecname, char** opts)
+find_filter_vec(const char* const vecname, const char** opts)
 {
   fl_vecs_t* vec = filter_vec_list;
   char* v = xstrdup(vecname);
@@ -171,7 +171,7 @@ find_filter_vec(char* const vecname, char** opts)
 
   while (vec->vec) {
     arglist_t* ap;
-    char* res;
+    const char* res;
 
     if (svecname.compare(vec->name, Qt::CaseInsensitive)) {
       vec++;
@@ -246,7 +246,7 @@ free_filter_vec(filter_vecs_t* fvec)
 }
 
 void
-init_filter_vecs(void)
+init_filter_vecs()
 {
   fl_vecs_t* vec = filter_vec_list;
   while (vec->vec) {
@@ -261,7 +261,7 @@ init_filter_vecs(void)
 }
 
 void
-exit_filter_vecs(void)
+exit_filter_vecs()
 {
   fl_vecs_t* vec = filter_vec_list;
   while (vec->vec) {
@@ -277,7 +277,7 @@ exit_filter_vecs(void)
  *  parse for help on available command line options.
  */
 void
-disp_filter_vecs(void)
+disp_filter_vecs()
 {
   fl_vecs_t* vec;
   arglist_t* ap;

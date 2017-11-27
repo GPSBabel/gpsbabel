@@ -152,7 +152,7 @@ tlog3a_xgcb_version(xg_string args, const QXmlStreamAttributes*)
 }
 
 static void
-tlog3a_xgcb_length(xg_string args, const QXmlStreamAttributes*)
+tlog3a_xgcb_length(xg_string, const QXmlStreamAttributes*)
 {
 }
 
@@ -235,7 +235,7 @@ tlog3b_xgcb_tfdes(xg_string args, const QXmlStreamAttributes*)
 
 
 static void
-tlog3b_xgcb_wptst(xg_string args, const QXmlStreamAttributes*)
+tlog3b_xgcb_wptst(xg_string, const QXmlStreamAttributes*)
 {
   xmlwpt = new Waypoint;
   xmldatum = DATUM_WGS84;
@@ -243,7 +243,7 @@ tlog3b_xgcb_wptst(xg_string args, const QXmlStreamAttributes*)
 
 
 static void
-tlog3b_xgcb_tptst(xg_string args, const QXmlStreamAttributes*)
+tlog3b_xgcb_tptst(xg_string, const QXmlStreamAttributes*)
 {
   xmlwpt = new Waypoint;
   xmldatum = DATUM_WGS84;
@@ -251,7 +251,7 @@ tlog3b_xgcb_tptst(xg_string args, const QXmlStreamAttributes*)
 
 
 static void
-tlog3b_xgcb_tpten(xg_string args, const QXmlStreamAttributes*)
+tlog3b_xgcb_tpten(xg_string, const QXmlStreamAttributes*)
 {
   finalize_pt(xmlwpt);
 
@@ -322,7 +322,7 @@ tlog3b_xgcb_tptdt(xg_string args, const QXmlStreamAttributes*)
 
 
 static void
-tlog3b_xgcb_wpten(xg_string args, const QXmlStreamAttributes*)
+tlog3b_xgcb_wpten(xg_string, const QXmlStreamAttributes*)
 {
   finalize_pt(xmlwpt);
   waypt_add(xmlwpt);
@@ -632,7 +632,7 @@ inflate_buff(const char* buff, const size_t size, char** out_buff)
 
 
 static void
-read_CXMLSafe(void)
+read_CXMLSafe()
 {
   char* xmlstr = NULL;
 
@@ -658,7 +658,7 @@ read_CXMLSafe(void)
 #endif
 
 static void
-read_XML(void)
+read_XML()
 {
   xml_init(fin->name, tlog3b_xgcb_map, NULL);
   xml_read();
@@ -683,13 +683,13 @@ dmtlog_rd_init(const QString& fname)
 }
 
 static void
-dmtlog_rd_deinit(void)
+dmtlog_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-dmtlog_read(void)
+dmtlog_read()
 {
   switch (gbfgetuint32(fin)) {
 
@@ -724,7 +724,7 @@ dmtlog_wr_init(const QString& fname)
 }
 
 static void
-dmtlog_wr_deinit(void)
+dmtlog_wr_deinit()
 {
   gbfclose(fout);
 }
@@ -777,7 +777,7 @@ track_hdr_cb(const route_head* trk)
 }
 
 static void
-track_tlr_cb(const route_head* trk)
+track_tlr_cb(const route_head*)
 {
 }
 
@@ -814,7 +814,7 @@ wpt_cb(const Waypoint* wpt)
 }
 
 static void
-dmtlog_write(void)
+dmtlog_write()
 {
   track_index = atoi(opt_index);
   /* ... validate index */
@@ -859,6 +859,8 @@ ff_vecs_t dmtlog_vecs = {
   NULL,
   dmtlog_args,
   CET_CHARSET_ASCII, 0
+  , NULL_POS_OPS,
+  nullptr
 
 };
 
