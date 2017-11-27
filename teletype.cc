@@ -63,14 +63,14 @@ teletype_read()
     wpt->shortname = (gbfgetcstr(fin));
     wpt->description = (gbfgetcstr(fin));
 
-    if (1) { // needs bit values of NEWFORMAT2
+    if (true) { // needs bit values of NEWFORMAT2
       uint32_t direction = gbfgetuint32(fin);
       uint32_t mins = gbfgetuint32(fin);
       (void) direction ;
       (void) mins ;
     }
 
-    if (1) {  // need bit value of NEWFORMAT
+    if (true) {  // need bit value of NEWFORMAT
       int len = gbfgetuint16(fin);
       // probably could treat as a pascal string
       char* junk = (char*) xmalloc(len);

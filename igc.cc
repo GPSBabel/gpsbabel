@@ -281,7 +281,7 @@ static void data_read()
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
-  while (1) {
+  while (true) {
     rec_type = get_record(&ibuf);
     switch (rec_type) {
     case rec_manuf_id:

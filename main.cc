@@ -33,7 +33,7 @@
 #include <clocale>
 #include <cstdio>
 #include <cstdlib>
-#include <signal.h>
+#include <csignal>
 
 #define MYNAME "main"
 
@@ -228,7 +228,7 @@ main(int argc, char* argv[])
   char* ofname = NULL;
   const char* ivec_opts = NULL;
   const char* ovec_opts = NULL;
-  char* fvec_opts = NULL;
+  const char* fvec_opts = NULL;
   int opt_version = 0;
   int did_something = 0;
   const char* prog_name = argv[0]; /* argv is modified during processing */

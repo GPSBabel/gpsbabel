@@ -1613,7 +1613,7 @@ entity_types stdentities[] =  {
 
 static
 char*
-entitize(const char* str, int is_html)
+entitize(const char* str, bool is_html)
 {
   int elen, ecount, nsecount;
   entity_types* ep;

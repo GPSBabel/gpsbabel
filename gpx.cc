@@ -56,7 +56,7 @@ static QString current_tag;
 
 static Waypoint* wpt_tmp;
 static UrlLink* link_;
-static int cache_descr_is_html;
+static bool cache_descr_is_html;
 static gpsbabel::File* iqfile;
 static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
@@ -494,10 +494,10 @@ tag_wpt(const QXmlStreamAttributes& attr)
 static void
 tag_cache_desc(const QXmlStreamAttributes& attr)
 {
-  cache_descr_is_html = 0;
+  cache_descr_is_html = false;
   if (attr.hasAttribute("html")) {
     if (attr.value("html").toString() == QStringLiteral("True")) {
-      cache_descr_is_html = 1;
+      cache_descr_is_html = true;
     }
   }
 }
