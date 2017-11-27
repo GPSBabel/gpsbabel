@@ -20,6 +20,14 @@ addons:
     - libusb-dev
     - docbook-xml
     - docbook-xsl
+before_script:
+# get locale needed for test_encoding.
+# these commands seem to work on xenial
+#  - sudo sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen
+#  - sudo dpkg-reconfigure --frontend=noninteractive locales
+# but on trusty it took something different, including eating an error from local-gen.
+  - sudo locale-gen en_US ISO-8859-1 || sudo locale-gen
+  - locale -a
 script:
  - ./build_and_test
 # TODO: build mac

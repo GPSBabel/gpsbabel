@@ -785,7 +785,7 @@ static void wpr_route_wpt(const Waypoint* WP)
   rte->wptnum ++;
 }
 
-static void wpr_route_trl(const route_head* RT)
+static void wpr_route_trl(const route_head*)
 {
   /* should we do some final sanity checks? */
 }
@@ -886,7 +886,7 @@ static void trl_track_wpt(const Waypoint* WP)
   trkhdr->next = trkhdr->totalpt;
 }
 
-static void trl_track_tlr(const route_head* TL)
+static void trl_track_tlr(const route_head*)
 {
   struct trkhdr* trkhdr;
   int trk_idx;

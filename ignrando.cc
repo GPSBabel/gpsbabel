@@ -39,7 +39,7 @@ static int xmlpoints;
 static char* index_opt = NULL;
 
 static arglist_t ignr_args[] = {
-  {"index", &index_opt, "Index of track to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL },
+  {"index", &index_opt, "Index of track to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL , nullptr},
   ARG_TERMINATOR
 };
 
@@ -76,7 +76,7 @@ static xg_callback	ignr_nb_etapes, ignr_descr;
 static xg_callback	ignr_etape_begin, ignr_etape_end;
 
 static void
-ignr_start(xg_string args, const QXmlStreamAttributes* attrv)
+ignr_start(xg_string, const QXmlStreamAttributes*)
 {
   ignr_xml_error((track != NULL));
 
@@ -85,20 +85,20 @@ ignr_start(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-ignr_nb_etapes(xg_string args, const QXmlStreamAttributes* attrv)
+ignr_nb_etapes(xg_string args, const QXmlStreamAttributes*)
 {
   xmlpoints = args.toInt();
 }
 
 static void
-ignr_descr(xg_string args, const QXmlStreamAttributes* attrv)
+ignr_descr(xg_string args, const QXmlStreamAttributes*)
 {
   ignr_xml_error((track == NULL));
   track->rte_desc = args;
 }
 
 static void
-ignr_etape_begin(xg_string args, const QXmlStreamAttributes* attrv)
+ignr_etape_begin(xg_string, const QXmlStreamAttributes*)
 {
   ignr_xml_error((wpt != NULL));
 
@@ -106,7 +106,7 @@ ignr_etape_begin(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-ignr_etape_end(xg_string args, const QXmlStreamAttributes* attrv)
+ignr_etape_end(xg_string, const QXmlStreamAttributes*)
 {
   ignr_xml_error((track == NULL) || (wpt == NULL));
 
@@ -115,7 +115,7 @@ ignr_etape_end(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-ignr_etape_pos(xg_string args, const QXmlStreamAttributes* attrv)
+ignr_etape_pos(xg_string args, const QXmlStreamAttributes*)
 {
   ignr_xml_error((wpt == NULL) || (args.isEmpty()));
 
@@ -125,7 +125,7 @@ ignr_etape_pos(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-ignr_etape_alt(xg_string args, const QXmlStreamAttributes* attrv)
+ignr_etape_alt(xg_string args, const QXmlStreamAttributes*)
 {
   ignr_xml_error((wpt == NULL));
   if (args == NULL) {
@@ -193,7 +193,7 @@ ignr_write_track_hdr(const route_head* track)
 }
 
 static void
-ignr_write_track_trl(const route_head* track)
+ignr_write_track_trl(const route_head*)
 {
 }
 
@@ -260,4 +260,6 @@ ff_vecs_t ignr_vecs = {
   NULL,
   ignr_args,
   CET_CHARSET_MS_ANSI, 1
+  , NULL_POS_OPS,
+  nullptr
 };

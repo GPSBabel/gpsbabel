@@ -45,33 +45,33 @@ static
 arglist_t transform_args[] = {
   {
     "wpt", &opt_waypts, "Transform track(s) or route(s) into waypoint(s) [R/T]", NULL,
-    ARGTYPE_STRING, ARG_NOMINMAX
+    ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "rte", &opt_routes, "Transform waypoint(s) or track(s) into route(s) [W/T]", NULL,
-    ARGTYPE_STRING, ARG_NOMINMAX
+    ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "trk", &opt_tracks, "Transform waypoint(s) or route(s) into tracks(s) [W/R]", NULL,
-    ARGTYPE_STRING, ARG_NOMINMAX
+    ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "rptdigits", &rpt_name_digits, "Number of digits in generated names", NULL,
-    ARGTYPE_INT, "2", NULL
+    ARGTYPE_INT, "2", NULL, nullptr
   },
   {
     "rptname", &opt_rpt_name, "Use source name for route point names", "N",
-    ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "del", &opt_delete, "Delete source data after transformation", "N",
-    ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
 
 static void
-transform_waypoints(void)
+transform_waypoints()
 {
   route_head* rte;
 
@@ -153,13 +153,13 @@ transform_any_disp_wpt_cb(const Waypoint* wpt)
 }
 
 static void
-transform_routes(void)
+transform_routes()
 {
   route_disp_all(transform_rte_disp_hdr_cb, NULL, transform_any_disp_wpt_cb);
 }
 
 static void
-transform_tracks(void)
+transform_tracks()
 {
   track_disp_all(transform_trk_disp_hdr_cb, NULL, transform_any_disp_wpt_cb);
 }
@@ -169,17 +169,17 @@ transform_tracks(void)
 *******************************************************************************/
 
 static void
-transform_init(const char* args)
+transform_init(const char*)
 {
 }
 
 static void
-transform_deinit(void)
+transform_deinit()
 {
 }
 
 static void
-transform_process(void)
+transform_process()
 {
   int delete_after = (opt_delete && (*opt_delete == '1')) ? 1 : 0;
 

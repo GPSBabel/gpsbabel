@@ -410,4 +410,6 @@ ff_vecs_t pcx_vecs = {
     ff_type_file,      FF_CAP_RW_ALL, rd_init,    wr_init, rd_deinit,
     wr_deinit,         data_read,     data_write, NULL,    pcx_args,
     CET_CHARSET_ASCII, 1 /* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

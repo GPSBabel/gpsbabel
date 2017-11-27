@@ -33,7 +33,7 @@ arglist_t yahoo_args[] = {
   {
     "addrsep", &as,
     "String to separate concatenated address fields (default=\", \")",
-    ", ", ARGTYPE_STRING, ARG_NOMINMAX
+    ", ", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -73,17 +73,17 @@ yahoo_rd_deinit()
 }
 
 static void
-yahoo_wr_init(const QString& fname)
+yahoo_wr_init(const QString&)
 {
   fatal("Writing file of type %s is not supported\n", MYNAME);
 }
 
-void	wpt_s(xg_string args, const QXmlStreamAttributes*)
+void	wpt_s(xg_string, const QXmlStreamAttributes*)
 {
   wpt_tmp = new Waypoint;
 }
 
-void	wpt_e(xg_string args, const QXmlStreamAttributes*)
+void	wpt_e(xg_string, const QXmlStreamAttributes*)
 {
   waypt_add(wpt_tmp);
   wpt_tmp = NULL;
@@ -119,4 +119,6 @@ ff_vecs_t yahoo_vecs = {
   NULL,
   yahoo_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

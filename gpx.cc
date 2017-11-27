@@ -42,7 +42,9 @@ static QString cdatastr;
 static char* opt_logpoint = NULL;
 static char* opt_humminbirdext = NULL;
 static char* opt_garminext = NULL;
+static char* opt_elevation_precision = NULL;
 static int logpoint_ct = 0;
+static int elevation_precision;
 
 // static char* gpx_version = NULL;
 QString gpx_version;
@@ -874,7 +876,7 @@ xml_parse_time(const QString& dateTimeString)
 }
 
 static void
-gpx_end(const QString& el)
+gpx_end(const QString&) 
 {
   float x;
   int passthrough;
@@ -1373,6 +1375,24 @@ gpx_read()
       gpx_cdata(reader->text().toString());
       break;
 
+//  On windows with input redirection we can read an Invalid token
+//  after the EndDocument token.  This also will set an error
+//  "Premature end of document." that we will fatal on below.
+//  This occurs with Qt 5.9.2 on windows when the file being
+//  sent to stdin has dos line endings.
+//  This does NOT occur with Qt 5.9.2 on windows when the file being
+//  sent to stdin has unix line endings.
+//  This does NOT occur with Qt 5.9.2 on windows with either line
+//  endings if the file is read directly, i.e. not sent through stdin.
+//  An example of a problematic file is reference/basecamp.gpx,
+//  which fails on windows with this invocation from a command prompt:
+//  .\GPSBabel.exe -i gpx -f - < reference\basecamp.gpx
+//  This was demonstrated on 64 bit windows 10.  Other versions of
+//  windows and Qt likely fail as well.
+//  To avoid this we quit reading when we see the EndDocument.
+//  This does not prevent us from correctly detecting the error
+//  "Extra content at end of document."
+    case QXmlStreamReader::EndDocument:
     case QXmlStreamReader::Invalid:
       atEnd = true;
       break;
@@ -1544,7 +1564,7 @@ static void
 gpx_write_common_position(const Waypoint* waypointp, const gpx_point_type point_type)
 {
   if (waypointp->altitude != unknown_alt) {
-    writer->writeTextElement("ele", QString::number(waypointp->altitude, 'f', 6));
+    writer->writeTextElement("ele", QString::number(waypointp->altitude, 'f', elevation_precision));
   }
   QString t = waypointp->CreationTimeXML();
   writer->writeOptionalTextElement("time", t);
@@ -1886,6 +1906,8 @@ static void
 gpx_write()
 {
  
+  elevation_precision = atoi(opt_elevation_precision);
+
   gpx_reset_short_handle();
   waypt_disp_all(gpx_waypt_pr);
   gpx_reset_short_handle();
@@ -1955,6 +1977,11 @@ arglist_t gpx_args[] = {
     "garminextensions", &opt_garminext,
     "Add info (depth) as Garmin extension",
     NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
+  },
+  {
+    "elevprec", &opt_elevation_precision,
+    "Precision of elevations, number of decimals",
+    "3", ARGTYPE_INT, ARG_NOMINMAX, NULL
   },
   ARG_TERMINATOR
 };

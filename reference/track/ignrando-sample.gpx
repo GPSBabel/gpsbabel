@@ -6,34 +6,34 @@
     <desc>20050719 Mar Tamié ind 2 VTT Sem Europ</desc>
     <trkseg>
       <trkpt lat="45.664261000" lon="6.372394000">
-        <ele>331.000000</ele>
+        <ele>331.000</ele>
       </trkpt>
       <trkpt lat="45.664452000" lon="6.372383000">
-        <ele>331.000000</ele>
+        <ele>331.000</ele>
       </trkpt>
       <trkpt lat="45.666973000" lon="6.371411000">
-        <ele>333.000000</ele>
+        <ele>333.000</ele>
       </trkpt>
       <trkpt lat="45.667198000" lon="6.371414000">
-        <ele>333.000000</ele>
+        <ele>333.000</ele>
       </trkpt>
       <trkpt lat="45.667271000" lon="6.371150000">
-        <ele>333.000000</ele>
+        <ele>333.000</ele>
       </trkpt>
       <trkpt lat="45.667030000" lon="6.371043000">
-        <ele>333.000000</ele>
+        <ele>333.000</ele>
       </trkpt>
       <trkpt lat="45.666859000" lon="6.370786000">
-        <ele>333.000000</ele>
+        <ele>333.000</ele>
       </trkpt>
       <trkpt lat="45.660805000" lon="6.367349000">
-        <ele>333.351990</ele>
+        <ele>333.352</ele>
       </trkpt>
       <trkpt lat="45.661282000" lon="6.366768000">
-        <ele>334.760010</ele>
+        <ele>334.760</ele>
       </trkpt>
       <trkpt lat="45.662376000" lon="6.365717000">
-        <ele>338.000000</ele>
+        <ele>338.000</ele>
       </trkpt>
     </trkseg>
   </trk>

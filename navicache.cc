@@ -28,7 +28,7 @@ static
 arglist_t nav_args[] = {
   {
     "noretired", &noretired, "Suppress retired geocaches",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -208,7 +208,7 @@ nav_rd_deinit()
 }
 
 static void
-nav_wr_init(const QString& fname)
+nav_wr_init(const QString&)
 {
   fatal(MYNAME ": Does not support writing Navicache files.\n");
 }
@@ -235,4 +235,6 @@ ff_vecs_t navicache_vecs = {
   NULL,
   nav_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

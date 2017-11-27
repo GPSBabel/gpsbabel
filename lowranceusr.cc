@@ -302,23 +302,23 @@ static
 arglist_t lowranceusr_args[] = {
   {
     "ignoreicons", &ignoreicons, "Ignore event marker icons on read",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "writeasicons", &writeasicons, "Treat waypoints as icons on write",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "merge", &merge, "(USR output) Merge into one segmented track",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "break", &seg_break, "(USR input) Break segments into separate tracks",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "wversion", &wversion_arg, "(USR output) Write version",
-    "2", ARGTYPE_INT, "2", "3"
+    "2", ARGTYPE_INT, "2", "3", nullptr
   },
   ARG_TERMINATOR
 };
@@ -980,7 +980,7 @@ lowranceusr_merge_track_hdr(const route_head* trk)
 }
 
 static void
-lowranceusr_merge_track_tlr(const route_head* trk)
+lowranceusr_merge_track_tlr(const route_head*)
 {
   short num_trail_points, max_trail_size;
   char visible=1;
@@ -1005,7 +1005,7 @@ lowranceusr_merge_track_tlr(const route_head* trk)
 }
 static void
 
-lowranceusr_merge_track_hdr_2(const route_head* trk)
+lowranceusr_merge_track_hdr_2(const route_head*)
 {
   continuous = 0;
 }
@@ -1098,4 +1098,6 @@ ff_vecs_t lowranceusr_vecs = {
   NULL,
   lowranceusr_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

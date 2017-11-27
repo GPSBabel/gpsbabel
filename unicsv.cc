@@ -264,31 +264,31 @@ static int llprec;
 static arglist_t unicsv_args[] = {
   {
     "datum", &opt_datum, "GPS datum (def. WGS 84)",
-    "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX
+    "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "grid",  &opt_grid,  "Write position using this grid.",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "utc",   &opt_utc,   "Write timestamps with offset x to UTC time",
-    NULL, ARGTYPE_INT, "-23", "+23"
+    NULL, ARGTYPE_INT, "-23", "+23", nullptr
   },
   {
     "format", &opt_format,   "Write name(s) of format(s) from input session(s)",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "filename", &opt_filename,   "Write filename(s) from input session(s)",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "prec", &opt_prec,   "Precision of numerical coordinates (no grid set)",
-    "6", ARGTYPE_INT | ARGTYPE_HIDDEN, "0", "15"
+    "6", ARGTYPE_INT | ARGTYPE_HIDDEN, "0", "15", nullptr
   },
   {
     "fields",  &opt_fields,  "Name and order of input fields, separated by '+'",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -1684,7 +1684,7 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
       }
       QString out;
       if (t.msec() > 0) {
-        out = t.toString("hh:mm:ss.z");
+        out = t.toString("hh:mm:ss.zzz");
       } else {
         out = t.toString("hh:mm:ss");
       }
@@ -2108,4 +2108,6 @@ ff_vecs_t unicsv_vecs = {
   NULL,
   unicsv_args,
   CET_CHARSET_ASCII, 0	/* can be changed with -c ... */
+  , NULL_POS_OPS,
+  nullptr
 };

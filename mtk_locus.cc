@@ -52,11 +52,11 @@ static char* opt_status;
 static char* opt_enable;
 
 arglist_t mtk_locus_args[] = {
-  {"baudrate", &opt_baudrate, "Speed in bits per second of serial port (autodetect=0)", "0", ARGTYPE_INT, ARG_NOMINMAX },
-  {"download", &opt_download, "Download logged fixes", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"erase", &opt_erase, "Erase device data after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"status", &opt_status, "Show device status", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"enable", &opt_enable, "Enable logging after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
+  {"baudrate", &opt_baudrate, "Speed in bits per second of serial port (autodetect=0)", "0", ARGTYPE_INT, ARG_NOMINMAX , nullptr},
+  {"download", &opt_download, "Download logged fixes", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  {"erase", &opt_erase, "Erase device data after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  {"status", &opt_status, "Show device status", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  {"enable", &opt_enable, "Enable logging after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
 
@@ -80,6 +80,8 @@ ff_vecs_t mtk_locus_vecs = {
   NULL, // exit
   mtk_locus_args,
   CET_CHARSET_ASCII, 0 /* ascii is the expected character set */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 #define MYNAME "mtk_locus"

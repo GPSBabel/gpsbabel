@@ -705,5 +705,7 @@ ff_vecs_t compegps_vecs = {
   NULL,
   compegps_args,
   CET_CHARSET_MS_ANSI, 1
+  , NULL_POS_OPS,
+  nullptr
 };
 #endif /* CSVFMTS_ENABLED */

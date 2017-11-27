@@ -38,22 +38,22 @@ arglist_t interpfilt_args[] = {
   {
     "time", &opt_interval, "Time interval in seconds", NULL,
     ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_INT,
-    "0", NULL
+    "0", NULL, nullptr
   },
   {
     "distance", &opt_dist, "Distance interval in miles or kilometers",
     NULL, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_STRING,
-    ARG_NOMINMAX
+    ARG_NOMINMAX, nullptr
   },
   {
     "route", &opt_route, "Interpolate routes instead", NULL,
-    ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
 
 void
-interpfilt_process(void)
+interpfilt_process()
 {
   queue* backuproute = NULL;
   queue* elem, *tmp, *elem2, *tmp2;
@@ -173,7 +173,7 @@ interpfilt_process(void)
 }
 
 void
-interpfilt_init(const char* args)
+interpfilt_init(const char*)
 {
 
   char* fm;

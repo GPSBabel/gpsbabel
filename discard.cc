@@ -57,35 +57,35 @@ static
 arglist_t fix_args[] = {
   {
     "hdop", &hdopopt, "Suppress points with higher hdop",
-    "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX
+    "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
   },
   {
     "vdop", &vdopopt, "Suppress points with higher vdop",
-    "-1.0", ARGTYPE_END_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX
+    "-1.0", ARGTYPE_END_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
   },
   {
     "hdopandvdop", &andopt, "Link hdop and vdop supression with AND",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "sat", &satopt, "Minimium sats to keep points",
-    "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX
+    "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "fixnone", &fixnoneopt, "Suppress points without fix",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "fixunknown", &fixunknownopt, "Suppress points with unknown fix",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "elemin", &eleminopt, "Suppress points below given elevation in meters",
-    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX
+    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "elemax", &elemaxopt, "Suppress points above given elevation in meters",
-    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX
+    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "matchname", &nameopt,
@@ -193,7 +193,7 @@ fix_process_head(const route_head* trk)
 }
 
 static void
-fix_process(void)
+fix_process()
 {
   // Filter waypoints.
   what = wptdata;
@@ -210,7 +210,7 @@ fix_process(void)
 }
 
 static void
-fix_init(const char* args)
+fix_init(const char*)
 {
   if (hdopopt) {
     hdopf = atof(hdopopt);

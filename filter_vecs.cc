@@ -162,7 +162,7 @@ fl_vecs_t filter_vec_list[] = {
 };
 
 filter_vecs_t*
-find_filter_vec(char* const vecname, char** opts)
+find_filter_vec(const char* const vecname, const char** opts)
 {
   fl_vecs_t* vec = filter_vec_list;
   char* v = xstrdup(vecname);
@@ -171,7 +171,7 @@ find_filter_vec(char* const vecname, char** opts)
 
   while (vec->vec) {
     arglist_t* ap;
-    char* res;
+    const char* res;
 
     if (svecname.compare(vec->name, Qt::CaseInsensitive)) {
       vec++;

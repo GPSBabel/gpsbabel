@@ -436,11 +436,11 @@ gtm_rd_deinit()
   gbfclose(file_in);
 }
 
-static void count_route_waypts(const Waypoint* wpt)
+static void count_route_waypts(const Waypoint*)
 {
   rt_count++;
 }
-static void count_track_waypts(const Waypoint* wpt)
+static void count_track_waypts(const Waypoint*)
 {
   tr_count++;
 }
@@ -735,4 +735,7 @@ ff_vecs_t gtm_vecs = {
   gtm_write,
   NULL,
   gtm_args,
+  CET_CHARSET_ASCII, 0, /* CET-REVIEW */
+  NULL_POS_OPS,
+  nullptr
 };

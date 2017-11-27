@@ -342,6 +342,8 @@ ff_vecs_t jtr_vecs = {
   jtr_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /**************************************************************************/

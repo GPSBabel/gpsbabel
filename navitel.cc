@@ -86,13 +86,13 @@ navitel_wr_deinit()
 }
 
 static void
-navitel_enum_trkpts(const Waypoint* wpt)
+navitel_enum_trkpts(const Waypoint*)
 {
   trkpts++;
 }
 
 static void
-navitel_disp_trk_head(const route_head* trk)
+navitel_disp_trk_head(const route_head*)
 {
   new_track = 1;
 }
@@ -147,6 +147,8 @@ ff_vecs_t navitel_trk_vecs = {
   NULL,
   NULL,
   CET_CHARSET_UTF8, 1			/* Nothing to convert */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /**************************************************************************/

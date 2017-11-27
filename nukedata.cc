@@ -32,15 +32,15 @@ static
 arglist_t nuke_args[] = {
   {
     "waypoints", &nukewpts, "Remove all waypoints from data stream",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   } ,
   {
     "tracks", &nuketrks, "Remove all tracks from data stream",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   } ,
   {
     "routes", &nukertes, "Remove all routes from data stream",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   } ,
   ARG_TERMINATOR
 };

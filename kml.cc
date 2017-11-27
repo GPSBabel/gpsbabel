@@ -108,76 +108,76 @@ static const char kmt_power[] = "power";
 
 static
 arglist_t kml_args[] = {
-  {"deficon", &opt_deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+  {"deficon", &opt_deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   {
     "lines", &opt_export_lines,
     "Export linestrings for tracks and routes",
-    "1", ARGTYPE_BOOL, ARG_NOMINMAX
+    "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr,
   },
   {
     "points", &opt_export_points,
     "Export placemarks for tracks and routes",
-    "1", ARGTYPE_BOOL, ARG_NOMINMAX
+    "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "line_width", &opt_line_width,
     "Width of lines, in pixels",
-    "6", ARGTYPE_INT, ARG_NOMINMAX
+    "6", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "line_color", &opt_line_color,
     "Line color, specified in hex AABBGGRR",
-    "99ffac59", ARGTYPE_STRING, ARG_NOMINMAX
+    "99ffac59", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "floating", &opt_floating,
     "Altitudes are absolute and not clamped to ground",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "extrude", &opt_extrude,
     "Draw extrusion line from trackpoint to ground",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "track", &opt_export_track,
     "Write KML track (default = 0)",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "trackdata", &opt_trackdata,
     "Include extended data for trackpoints (default = 1)",
-    "1", ARGTYPE_BOOL, ARG_NOMINMAX
+    "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "trackdirection", &opt_trackdirection,
     "Indicate direction of travel in track icons (default = 0)",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "units", &opt_units,
     "Units used when writing comments ('s'tatute, 'm'etric,' 'n'autical, 'a'viation)",
-    "s", ARGTYPE_STRING, ARG_NOMINMAX
+    "s", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "labels", &opt_labels,
     "Display labels on track and routepoints  (default = 1)",
-    "1", ARGTYPE_BOOL, ARG_NOMINMAX
+    "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "max_position_points", &opt_max_position_points,
     "Retain at most this number of position points  (0 = unlimited)",
-    "0", ARGTYPE_INT, ARG_NOMINMAX
+    "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "rotate_colors", &opt_rotate_colors,
     "Rotate colors for tracks and routes (default automatic)",
-    NULL, ARGTYPE_FLOAT, "0", "360"
+    NULL, ARGTYPE_FLOAT, "0", "360", nullptr
   },
   {
     "prec", &opt_precision,
     "Precision of coordinates, number of decimals",
-    DEFAULT_PRECISION, ARGTYPE_INT, ARG_NOMINMAX
+    DEFAULT_PRECISION, ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
