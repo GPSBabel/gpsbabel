@@ -21,10 +21,10 @@
 
 #include <cctype>
 #include <cstdio>
+#include <windows.h> // Boost this out of alpha order.
 #include <initguid.h>
 #include <malloc.h>
 #include <setupapi.h>
-#include <windows.h>
 #include <winioctl.h>
 
 #include "../garmin_device_xml.h"
