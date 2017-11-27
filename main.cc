@@ -31,9 +31,9 @@
 #include "src/core/usasciicodec.h"
 #include <cctype>
 #include <clocale>
+#include <csignal>
 #include <cstdio>
 #include <cstdlib>
-#include <signal.h>
 
 #define MYNAME "main"
 
