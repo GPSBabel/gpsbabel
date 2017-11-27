@@ -131,13 +131,13 @@ mynav_rd_init(const QString& fname)
 }
 
 static void
-mynav_rd_deinit(void)
+mynav_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-mynav_rd(void)
+mynav_rd()
 {
   QString buff;
 
@@ -167,4 +167,6 @@ ff_vecs_t mynav_vecs = {
   NULL,           //args
   CET_CHARSET_ASCII, 0  //encode,fixed_encode
   //NULL                //name dynamic/internal?
+  , NULL_POS_OPS,
+  nullptr
 };

@@ -17,6 +17,12 @@
 
  */
 
+#ifndef MAGELLAN_H_INCLUDED_
+#define MAGELLAN_H_INCLUDED_
+
+#include <QtCore/QString>
+#include "defs.h"
+
 /*
  * Table of "interesting" Magellan models.
  * Selfishly, if I haven't heard of it, it's not in the table.
@@ -52,3 +58,5 @@ QString m330_cleanse(const char* istring);
 
 Waypoint* mag_trkparse(char* trkmsg);
 void mag_rteparse(char* rtemsg);
+
+#endif  // MAGELLAN_H_INCLUDED_

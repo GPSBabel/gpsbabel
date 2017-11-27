@@ -1,0 +1,11 @@
+--- ../zlib-1.2.8/contrib/minizip/zip.c	2013-02-24 00:32:30.000000000 -0700
++++ zlib/contrib/minizip/zip.c	2017-11-11 09:05:50.662012999 -0700
+@@ -26,7 +26,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <time.h>
+-#include "zlib.h"
++#include "../../zlib.h" // GPSBabel-local to get the "right" one.
+ #include "zip.h"
+ 
+ #ifdef STDC

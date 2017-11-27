@@ -51,12 +51,15 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "csv_util.h"
-#include "strptime.h"
-#include "jeeps/gpsmath.h"
 #include "grtcirc.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include "jeeps/gpsmath.h"
+#include "strptime.h"
 #include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <QtCore/QDateTime>
+#include <QtCore/QString>
+
 #define MYNAME "gopal"
 
 static gbfile* fin, *fout;
@@ -64,7 +67,6 @@ static gbfile* fin, *fout;
 static struct tm tm,filenamedate, trackdate;
 time_t		tx;
 char tmp[64];
-char routename[64];
 static char* optdate=NULL;
 static char* optmaxspeed=NULL;
 static char* optminspeed=NULL;
@@ -73,10 +75,10 @@ static double minspeed,maxspeed;
 static struct tm opt_tm;	/* converted "date" parameter */
 static
 arglist_t gopal_args[] = {
-  {"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX },
-  {"maxspeed", &optmaxspeed, "The maximum speed (km/h) traveling from waypoint to waypoint.", "200", ARGTYPE_INT, "1", "1000" },
-  {"minspeed", &optminspeed, "The minimum speed (km/h) traveling from waypoint to waypoint. Set >0 to remove duplicate waypoints", "0", ARGTYPE_INT, "0", "999" },
-  {"clean", &optclean, "Cleanup common errors in trackdata", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
+  {"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
+  {"maxspeed", &optmaxspeed, "The maximum speed (km/h) traveling from waypoint to waypoint.", "200", ARGTYPE_INT, "1", "1000", nullptr },
+  {"minspeed", &optminspeed, "The minimum speed (km/h) traveling from waypoint to waypoint. Set >0 to remove duplicate waypoints", "0", ARGTYPE_INT, "0", "999", nullptr },
+  {"clean", &optclean, "Cleanup common errors in trackdata", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
 
@@ -158,13 +160,13 @@ gopal_rd_init(const QString& fname)
 }
 
 static void
-gopal_rd_deinit(void)
+gopal_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-gopal_read(void)
+gopal_read()
 {
 
   char* buff;
@@ -179,10 +181,15 @@ gopal_read(void)
   char tbuffer[64];
   struct tm tm2;
   lat_old=0;
-  strftime(routename,sizeof(routename),"Tracklog %c",gmtime(&tx));
+  
 
   route = route_head_alloc();
-  route->rte_name = routename;
+  QDateTime qtx;
+  qtx.setTimeSpec(Qt::UTC);
+  qtx.setTime_t(tx);
+  route->rte_name = "Tracklog ";
+  route->rte_name += qtx.toString(Qt::ISODate);
+
   route_add_head(route);
 
   line=0;
@@ -335,13 +342,13 @@ gopal_read(void)
 }
 
 static void
-gopal_route_hdr(const route_head* route)
+gopal_route_hdr(const route_head*)
 {
 
 }
 
 static void
-gopal_route_tlr(const route_head* rte)
+gopal_route_tlr(const route_head*)
 {
 }
 
@@ -381,19 +388,19 @@ gopal_wr_init(const QString& fname)
 }
 
 static void
-gopal_wr_deinit(void)
+gopal_wr_deinit()
 {
   gbfclose(fout);
 }
 
 static void
-gopal_write(void)
+gopal_write()
 {
   route_disp_all(gopal_route_hdr, gopal_route_tlr, gopal_write_waypt);
 }
 
 static void
-gopal_exit(void)		/* optional */
+gopal_exit()		/* optional */
 {
 }
 
@@ -419,5 +426,7 @@ ff_vecs_t gopal_vecs = {
   gopal_args,
   CET_CHARSET_ASCII, 0	/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/

@@ -64,7 +64,7 @@
 #include "defs.h"
 #include "cet.h"
 #include "cet_util.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #define FLOAT_TO_INT(x) ((int)((x) + ((x)<0?-0.5:0.5)))
 #define IGO8_HEADER_SIZE (sizeof(igo8_id_block) + 256)
@@ -106,9 +106,9 @@ static int in_point_count;
 
 // Exported options list
 static arglist_t igo8_options[] = {
-  { "tracknum", &igo8_option_tracknum, "Track identification number", NULL, ARGTYPE_INT, ARG_NOMINMAX },
-  { "title", &igo8_option_title, "Track title", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-  { "description", &igo8_option_description, "Track description", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+  { "tracknum", &igo8_option_tracknum, "Track identification number", NULL, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
+  { "title", &igo8_option_title, "Track title", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  { "description", &igo8_option_description, "Track description", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
 
@@ -148,7 +148,7 @@ static void igo8_read_init(const QString& fname)
 }
 
 // Reader callback
-static void igo8_read(void)
+static void igo8_read()
 {
   Waypoint* wpt_tmp;
   route_head* track_head;
@@ -171,7 +171,7 @@ static void igo8_read(void)
 }
 
 // Reader close callback
-static void igo8_read_deinit(void)
+static void igo8_read_deinit()
 {
   gbfclose(igo8_file_in);
 }
@@ -188,7 +188,7 @@ static void igo8_write_init(const QString& fname)
 }
 
 // Writer close callback
-static void igo8_write_deinit(void)
+static void igo8_write_deinit()
 {
   uint32_t normalized_file_size;
 
@@ -347,7 +347,7 @@ void write_header()
 }
 
 // Writer callback
-static void igo8_write(void)
+static void igo8_write()
 {
   write_header();
   track_disp_all(NULL, NULL, write_igo8_track_point);
@@ -367,4 +367,6 @@ ff_vecs_t igo8_vecs = {
   igo8_options,
   CET_CHARSET_UTF8,
   1
+  , NULL_POS_OPS,
+  nullptr
 };

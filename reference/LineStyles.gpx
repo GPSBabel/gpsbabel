@@ -3,73 +3,73 @@
   <time>1970-01-01T00:00:00Z</time>
   <bounds minlat="37.507930994" minlon="-122.292645574" maxlat="37.538625002" maxlon="-122.258695364"/>
   <wpt lat="37.538136244" lon="-122.291540504">
-    <ele>2.130000</ele>
+    <ele>2.130</ele>
     <name>HairDash0</name>
     <cmt>HairDash0</cmt>
     <desc>HairDash0</desc>
   </wpt>
   <wpt lat="37.535985708" lon="-122.291663289">
-    <ele>3.350000</ele>
+    <ele>3.350</ele>
     <name>ThinDash0</name>
     <cmt>ThinDash0</cmt>
     <desc>ThinDash0</desc>
   </wpt>
   <wpt lat="37.533444166" lon="-122.292031646">
-    <ele>4.570000</ele>
+    <ele>4.570</ele>
     <name>RedHair0</name>
     <cmt>RedHair0</cmt>
     <desc>RedHair0</desc>
   </wpt>
   <wpt lat="37.530853748" lon="-122.292277217">
-    <ele>8.840000</ele>
+    <ele>8.840</ele>
     <name>RedThin0</name>
     <cmt>RedThin0</cmt>
     <desc>RedThin0</desc>
   </wpt>
   <wpt lat="37.528654337" lon="-122.292584181">
-    <ele>21.030000</ele>
+    <ele>21.030</ele>
     <name>RedMed0</name>
     <cmt>RedMed0</cmt>
     <desc>RedMed0</desc>
   </wpt>
   <wpt lat="37.524988651" lon="-122.292645574">
-    <ele>64.920000</ele>
+    <ele>64.920</ele>
     <name>RedThick0</name>
     <cmt>RedThick0</cmt>
     <desc>RedThick0</desc>
   </wpt>
   <wpt lat="37.520198822" lon="-122.292093039">
-    <ele>125.580000</ele>
+    <ele>125.580</ele>
     <name>YellowMed0</name>
     <cmt>YellowMed0</cmt>
     <desc>YellowMed0</desc>
   </wpt>
   <wpt lat="37.517950535" lon="-122.291847467">
-    <ele>61.260000</ele>
+    <ele>61.260</ele>
     <name>GreenMed0</name>
     <cmt>GreenMed0</cmt>
     <desc>GreenMed0</desc>
   </wpt>
   <wpt lat="37.515653372" lon="-122.291970253">
-    <ele>39.320000</ele>
+    <ele>39.320</ele>
     <name>BlueMed0</name>
     <cmt>BlueMed0</cmt>
     <desc>BlueMed0</desc>
   </wpt>
   <wpt lat="37.513160706" lon="-122.291110754">
-    <ele>37.490000</ele>
+    <ele>37.490</ele>
     <name>PurpleMed0</name>
     <cmt>PurpleMed0</cmt>
     <desc>PurpleMed0</desc>
   </wpt>
   <wpt lat="37.510277033" lon="-122.291356325">
-    <ele>59.440000</ele>
+    <ele>59.440</ele>
     <name>BlackMed0</name>
     <cmt>BlackMed0</cmt>
     <desc>BlackMed0</desc>
   </wpt>
   <wpt lat="37.508028746" lon="-122.291724682">
-    <ele>49.680000</ele>
+    <ele>49.680</ele>
     <name>WhiteMed0</name>
     <cmt>WhiteMed0</cmt>
     <desc>WhiteMed0</desc>
@@ -96,7 +96,7 @@
   </wpt>
   <trk>
     <name>red thick</name>
-    <desc>Style=Red Thick, Width=4, Dashed=0, Color=#ff0000</desc>
+    <desc>Style=Red Thick , Width=4, Dashed=0, Color=#ff0000</desc>
     <number>1</number>
     <trkseg>
       <trkpt lat="37.524988651" lon="-122.292645574"/>
@@ -175,7 +175,7 @@
   </trk>
   <trk>
     <name>yellow med</name>
-    <desc>Style=Yellow Medium, Width=3, Dashed=0, Color=#ffff00</desc>
+    <desc>Style=Yellow Medium , Width=3, Dashed=0, Color=#ffff00</desc>
     <number>2</number>
     <trkseg>
       <trkpt lat="37.520198822" lon="-122.292093039"/>
@@ -251,7 +251,7 @@
   </trk>
   <trk>
     <name>blue med</name>
-    <desc>Style=Blue Medium, Width=3, Dashed=0, Color=#000080</desc>
+    <desc>Style=Blue Medium , Width=3, Dashed=0, Color=#000080</desc>
     <number>3</number>
     <trkseg>
       <trkpt lat="37.515653372" lon="-122.291970253"/>
@@ -331,7 +331,7 @@
   </trk>
   <trk>
     <name>black med</name>
-    <desc>Style=Black Medium, Width=3, Dashed=0, Color=#000000</desc>
+    <desc>Style=Black Medium , Width=3, Dashed=0, Color=#000000</desc>
     <number>4</number>
     <trkseg>
       <trkpt lat="37.510277033" lon="-122.291356325"/>
@@ -407,7 +407,7 @@
   </trk>
   <trk>
     <name>red med</name>
-    <desc>Style=Red Medium, Width=3, Dashed=0, Color=#ff0000</desc>
+    <desc>Style=Red Medium , Width=3, Dashed=0, Color=#ff0000</desc>
     <number>5</number>
     <trkseg>
       <trkpt lat="37.528654337" lon="-122.292584181"/>
@@ -482,7 +482,7 @@
   </trk>
   <trk>
     <name>red thin</name>
-    <desc>Style=Red Thin, Width=2, Dashed=0, Color=#ff0000</desc>
+    <desc>Style=Red Thin , Width=2, Dashed=0, Color=#ff0000</desc>
     <number>6</number>
     <trkseg>
       <trkpt lat="37.530853748" lon="-122.292277217"/>
@@ -567,7 +567,7 @@
   </trk>
   <trk>
     <name>red hair</name>
-    <desc>Style=Red Hairline, Width=1, Dashed=0, Color=#ff0000</desc>
+    <desc>Style=Red Hairline , Width=1, Dashed=0, Color=#ff0000</desc>
     <number>7</number>
     <trkseg>
       <trkpt lat="37.533444166" lon="-122.292031646"/>
@@ -657,7 +657,7 @@
   </trk>
   <trk>
     <name>thin dash</name>
-    <desc>Style=Red Thin Dashed, Width=2, Dashed=1, Color=#ff0000</desc>
+    <desc>Style=Red Thin Dashed , Width=2, Dashed=1, Color=#ff0000</desc>
     <number>8</number>
     <trkseg>
       <trkpt lat="37.535985708" lon="-122.291663289"/>
@@ -747,7 +747,7 @@
   </trk>
   <trk>
     <name>hair dash</name>
-    <desc>Style=Red Hairline Dashed, Width=1, Dashed=1, Color=#ff0000</desc>
+    <desc>Style=Red Hairline Dashed , Width=1, Dashed=1, Color=#ff0000</desc>
     <number>9</number>
     <trkseg>
       <trkpt lat="37.538136244" lon="-122.291540504"/>
@@ -831,7 +831,7 @@
   </trk>
   <trk>
     <name>green med</name>
-    <desc>Style=Green Medium, Width=3, Dashed=0, Color=#008000</desc>
+    <desc>Style=Green Medium , Width=3, Dashed=0, Color=#008000</desc>
     <number>10</number>
     <trkseg>
       <trkpt lat="37.517950535" lon="-122.291847467"/>
@@ -913,7 +913,7 @@
   </trk>
   <trk>
     <name>purple med</name>
-    <desc>Style=Purple Medium, Width=3, Dashed=0, Color=#800080</desc>
+    <desc>Style=Purple Medium , Width=3, Dashed=0, Color=#800080</desc>
     <number>11</number>
     <trkseg>
       <trkpt lat="37.513160706" lon="-122.291110754"/>
@@ -995,7 +995,7 @@
   </trk>
   <trk>
     <name>white med</name>
-    <desc>Style=White Medium, Width=3, Dashed=0, Color=#ffffff</desc>
+    <desc>Style=White Medium , Width=3, Dashed=0, Color=#ffffff</desc>
     <number>12</number>
     <trkseg>
       <trkpt lat="37.507930994" lon="-122.261028290"/>

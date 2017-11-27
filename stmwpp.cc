@@ -53,7 +53,7 @@ static
 arglist_t stmwpp_args[] = {
   {
     "index", &index_opt, "Index of route/track to write (if more than one in source)",
-    NULL, ARGTYPE_INT, "1", NULL
+    NULL, ARGTYPE_INT, "1", NULL, nullptr
   },
   ARG_TERMINATOR
 };
@@ -208,7 +208,7 @@ stmwpp_rw_deinit(void)
 }
 
 static void
-stmwpp_track_hdr(const route_head* track)
+stmwpp_track_hdr(const route_head*)
 {
   track_num++;
 }
@@ -333,6 +333,8 @@ ff_vecs_t stmwpp_vecs = {
   NULL,
   stmwpp_args,
   CET_CHARSET_MS_ANSI, 0
+  , NULL_POS_OPS,
+  nullptr
 };
 
 #endif /* CSVFMTS_ENABLED */

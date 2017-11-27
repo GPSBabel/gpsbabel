@@ -22,12 +22,14 @@
 ** Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
+
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
+
 #include "gps.h"
 #include "gpsserial.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <time.h>
-#include <errno.h>
 
 
 /* @func GPS_Time_Now ***********************************************

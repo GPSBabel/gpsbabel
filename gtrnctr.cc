@@ -28,7 +28,7 @@
 
 #include "defs.h"
 #include "xmlgeneric.h"
-#include <stdio.h>
+#include <cstdio>
 
 static gbfile* ofd;
 static int lap_ct = 0;
@@ -177,13 +177,13 @@ gtc_rd_init(const QString& fname)
 }
 
 static void
-gtc_read(void)
+gtc_read()
 {
   xml_read();
 }
 
 static void
-gtc_rd_deinit(void)
+gtc_rd_deinit()
 {
   xml_deinit();
 }
@@ -207,7 +207,7 @@ gtc_wr_init(const QString& fname)
 }
 
 static void
-gtc_wr_deinit(void)
+gtc_wr_deinit()
 {
   gbfclose(ofd);
 }
@@ -341,7 +341,7 @@ gtc_waypt_pr(const Waypoint* wpt)
 }
 
 static void
-gtc_fake_hdr(void)
+gtc_fake_hdr()
 {
   /* handle the CourseLap_t or the ActivityLap_t types. */
   /* note that the elements must appear in the order required by the schema. */
@@ -452,7 +452,7 @@ gtc_crs_ftr(const route_head*)
 }
 
 void
-gtc_write(void)
+gtc_write()
 {
   gtc_write_xml(0, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n");
   gtc_write_xml(1, "<TrainingCenterDatabase xmlns=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd\">\n");
@@ -653,4 +653,6 @@ ff_vecs_t gtc_vecs = {
   NULL,
   gtc_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

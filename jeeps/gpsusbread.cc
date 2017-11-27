@@ -18,10 +18,10 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-#include <ctype.h>
-#include "gps.h"
 #include "garminusb.h"
+#include "gps.h"
 #include "gpsusbint.h"
+#include <cctype>
 
 /*
  * Return values are:

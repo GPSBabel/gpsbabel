@@ -20,8 +20,8 @@
 
 #include "defs.h"
 #include "inifile.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "inifile"
 
@@ -85,7 +85,7 @@ find_gpsbabel_inifile(const char* path)		/* can be empty or NULL */
 }
 
 static gbfile*
-open_gpsbabel_inifile(void)
+open_gpsbabel_inifile()
 {
   char* name;
   char* envstr;

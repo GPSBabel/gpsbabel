@@ -20,8 +20,8 @@
  */
 #include "defs.h"
 #include "filterdefs.h"
-#include <stdio.h>
-#include <stdlib.h> // qsort
+#include <cstdio>
+#include <cstdlib> // qsort
 
 #if FILTERS_ENABLED
 static char* snopt = NULL;
@@ -33,19 +33,19 @@ static
 arglist_t dup_args[] = {
   {
     "shortname", &snopt, "Suppress duplicate waypoints based on name",
-    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "location", &lcopt, "Suppress duplicate waypoint based on coords",
-    NULL, ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "all", &purge_duplicates, "Suppress all instances of duplicates",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "correct", &correct_coords, "Use coords from duplicate points",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };

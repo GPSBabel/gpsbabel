@@ -40,7 +40,7 @@ static unsigned int waypt_out_count;
 
 static
 arglist_t tpg_args[] = {
-  {"datum", &tpg_datum_opt, "Datum (default=NAD27)", "N. America 1927 mean", ARGTYPE_STRING, ARG_NOMINMAX },
+  {"datum", &tpg_datum_opt, "Datum (default=NAD27)", "N. America 1927 mean", ARGTYPE_STRING, ARG_NOMINMAX , nullptr},
   ARG_TERMINATOR
 };
 
@@ -60,7 +60,7 @@ valid_tpg_header(char* header, int len)
 }
 
 static void
-tpg_common_init(void)
+tpg_common_init()
 {
   tpg_datum_idx = GPS_Lookup_Datum_Index(tpg_datum_opt);
   if (tpg_datum_idx < 0) {
@@ -76,7 +76,7 @@ tpg_rd_init(const QString& fname)
 }
 
 static void
-tpg_rd_deinit(void)
+tpg_rd_deinit()
 {
   gbfclose(tpg_file_in);
 }
@@ -91,14 +91,14 @@ tpg_wr_init(const QString& fname)
 }
 
 static void
-tpg_wr_deinit(void)
+tpg_wr_deinit()
 {
   mkshort_del_handle(&mkshort_handle);
   gbfclose(tpg_file_out);
 }
 
 static void
-tpg_read(void)
+tpg_read()
 {
   char buff[MAXTPGSTRINGSIZE + 1];
   Waypoint* wpt_tmp;
@@ -280,7 +280,7 @@ tpg_waypt_pr(const Waypoint* wpt)
 }
 
 static void
-tpg_write(void)
+tpg_write()
 {
   int s;
   unsigned char header_bytes[] = { 0xFF, 0xFF, 0x01, 0x00, 0x0D,
@@ -322,4 +322,5 @@ ff_vecs_t tpg_vecs = {
   NULL,
   tpg_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
-};
+  , NULL_POS_OPS,
+  nullptr};

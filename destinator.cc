@@ -146,7 +146,7 @@ read_until_wcstr(const char* str)
 }
 
 static void
-destinator_read_poi(void)
+destinator_read_poi()
 {
   Waypoint* wpt;
   int count = 0;
@@ -222,7 +222,7 @@ destinator_read_poi(void)
 }
 
 static void
-destinator_read_rte(void)
+destinator_read_rte()
 {
   int count = 0;
   route_head* rte = NULL;
@@ -274,7 +274,7 @@ destinator_read_rte(void)
 }
 
 static void
-destinator_read_trk(void)
+destinator_read_trk()
 {
   char TXT[4] = "TXT";
   int recno = -1;
@@ -341,7 +341,7 @@ destinator_read_trk(void)
 }
 
 static void
-destinator_read(void)
+destinator_read()
 {
   int i0, i1;
   double d0, d1;
@@ -487,27 +487,27 @@ destinator_rd_init(const QString& fname)
 }
 
 static void
-destinator_rd_deinit(void)
+destinator_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-destinator_read_poi_wrapper(void)
+destinator_read_poi_wrapper()
 {
   data_type = wptdata;
   destinator_read();
 }
 
 static void
-destinator_read_rte_wrapper(void)
+destinator_read_rte_wrapper()
 {
   data_type = rtedata;
   destinator_read();
 }
 
 static void
-destinator_read_trk_wrapper(void)
+destinator_read_trk_wrapper()
 {
   data_type = trkdata;
   destinator_read();
@@ -520,25 +520,25 @@ destinator_wr_init(const QString& fname)
 }
 
 static void
-destinator_wr_deinit(void)
+destinator_wr_deinit()
 {
   gbfclose(fout);
 }
 
 static void
-destinator_write_poi(void)
+destinator_write_poi()
 {
   waypt_disp_all(destinator_wpt_disp);
 }
 
 static void
-destinator_write_rte(void)
+destinator_write_rte()
 {
   route_disp_all(NULL, NULL, destinator_rtept_disp);
 }
 
 static void
-destinator_write_trk(void)
+destinator_write_trk()
 {
   track_disp_all(NULL, NULL, destinator_trkpt_disp);
 }
@@ -561,7 +561,8 @@ ff_vecs_t destinator_poi_vecs = {
   NULL,
   destinator_args,
   CET_CHARSET_UTF8, 1			/* fixed */
-};
+  , NULL_POS_OPS,
+  nullptr};
 
 ff_vecs_t destinator_itn_vecs = {
   ff_type_file,
@@ -579,7 +580,8 @@ ff_vecs_t destinator_itn_vecs = {
   NULL,
   destinator_args,
   CET_CHARSET_UTF8, 1			/* fixed */
-};
+  , NULL_POS_OPS,
+  nullptr};
 
 ff_vecs_t destinator_trl_vecs = {
   ff_type_file,
@@ -597,6 +599,7 @@ ff_vecs_t destinator_trl_vecs = {
   NULL,
   destinator_args,
   CET_CHARSET_UTF8, 1			/* fixed */
-};
+  , NULL_POS_OPS,
+  nullptr };
 
 /**************************************************************************/

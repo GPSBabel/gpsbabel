@@ -31,6 +31,8 @@ make linux-gui
 make doc
 make gpsbabel.html
 make check
+# test for mangled encoding of command line arguments
+./test_encoding
 #make torture
 rm -f vg.log
 ./vtesto -l -j vg.log

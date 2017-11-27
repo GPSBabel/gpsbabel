@@ -49,13 +49,13 @@ teletype_rd_init(const QString& fname)
 }
 
 static void
-teletype_rd_deinit(void)
+teletype_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-teletype_read(void)
+teletype_read()
 {
   uint32_t i;
   for (i = 0; i < tty_wpt_count; i++) {
@@ -91,7 +91,7 @@ teletype_read(void)
 }
 
 static void
-teletype_exit(void)		/* optional */
+teletype_exit()		/* optional */
 {
 }
 
@@ -117,5 +117,7 @@ ff_vecs_t teletype_vecs = {
   teletype_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/

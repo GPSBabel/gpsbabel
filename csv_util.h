@@ -18,7 +18,10 @@
 
  */
 
+#include "queue.h"
+#include "defs.h"
 #include <QtCore/QStringList>
+class QTextStream;
 
 /* function prototypes */
 

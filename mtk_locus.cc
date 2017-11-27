@@ -39,9 +39,9 @@ Example usage::
 
 #include "defs.h"
 #include "gbser.h"
-#include <errno.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
 
 static route_head* track;
 
@@ -52,17 +52,17 @@ static char* opt_status;
 static char* opt_enable;
 
 arglist_t mtk_locus_args[] = {
-  {"baudrate", &opt_baudrate, "Speed in bits per second of serial port (autodetect=0)", "0", ARGTYPE_INT, ARG_NOMINMAX },
-  {"download", &opt_download, "Download logged fixes", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"erase", &opt_erase, "Erase device data after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"status", &opt_status, "Show device status", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"enable", &opt_enable, "Enable logging after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
+  {"baudrate", &opt_baudrate, "Speed in bits per second of serial port (autodetect=0)", "0", ARGTYPE_INT, ARG_NOMINMAX , nullptr},
+  {"download", &opt_download, "Download logged fixes", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  {"erase", &opt_erase, "Erase device data after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  {"status", &opt_status, "Show device status", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  {"enable", &opt_enable, "Enable logging after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
 
 static void mtk_locus_rd_init(const QString& fname);
-static void mtk_locus_rd_deinit(void);
-static void mtk_locus_read(void);
+static void mtk_locus_rd_deinit();
+static void mtk_locus_read();
 
 ff_vecs_t mtk_locus_vecs = {
   ff_type_file,
@@ -80,6 +80,8 @@ ff_vecs_t mtk_locus_vecs = {
   NULL, // exit
   mtk_locus_args,
   CET_CHARSET_ASCII, 0 /* ascii is the expected character set */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 #define MYNAME "mtk_locus"
@@ -106,13 +108,13 @@ static int last_loxsequence;
 static char waiting_for[20];
 
 
-static void set_baudrate(void);
-static void read_line(void);
-static void process_packet(void);
-static void process_pmtklox(void);
-static void process_pmtklog(void);
-static void process_pmtk001(void);
-static void process_pmtk705(void);
+static void set_baudrate();
+static void read_line();
+static void process_packet();
+static void process_pmtklox();
+static void process_pmtklog();
+static void process_pmtk001();
+static void process_pmtk705();
 static void send_command(const char* s, const char* waitfor);
 static int calculate_checksum(const char* s, int length);
 static void dbg(int l, const char* msg, ...);
@@ -145,7 +147,7 @@ mtk_locus_rd_init(const QString& fname)
 }
 
 static void
-mtk_locus_rd_deinit(void)
+mtk_locus_rd_deinit()
 {
   if (read_mode == rm_serial) {
     gbser_deinit(sfd);
@@ -155,7 +157,7 @@ mtk_locus_rd_deinit(void)
 }
 
 static void
-mtk_locus_read(void)
+mtk_locus_read()
 {
   int i;
 
@@ -260,7 +262,7 @@ set_baudrate()
 }
 
 void
-read_line(void)
+read_line()
 {
   int rc;
   char* s;

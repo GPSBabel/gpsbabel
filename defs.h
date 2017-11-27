@@ -16,8 +16,8 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-#ifndef gpsbabel_defs_h_included
-#define gpsbabel_defs_h_included
+#ifndef DEFS_H_INCLUDED_
+#define DEFS_H_INCLUDED_
 
 #include <stdint.h>
 
@@ -212,8 +212,6 @@ extern const char gpsbabel_version[];
 extern time_t gpsbabel_now;	/* gpsbabel startup-time; initialized in main.c with time() */
 extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
 extern int geocaches_present;
-class QTextStream;
-extern QTextStream cerr;
 
 #define MILLI_TO_MICRO(t) (t * 1000)  /* Milliseconds to Microseconds */
 #define MICRO_TO_MILLI(t) (t / 1000)  /* Microseconds to Milliseconds*/
@@ -433,12 +431,6 @@ const global_trait* get_traits();
 #define WAYPT_HAS(wpt,member) (wpt->wpt_flags.member)
 
 #define CSTRc(qstr) (qstr.toLatin1().constData())
-// Maybe the XmlGeneric string callback really shouldn't have a type
-// of its own; this was a crutch during the move from char* to QString.
-// It's "just" a search and replace to make it go away, but it might
-// be convenient to overload some day.
-typedef const QString& xg_string;
-
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
  * cater to any specific model or protocol.  Anything that needs to
@@ -629,11 +621,6 @@ char* get_option(const char* iarglist, const char* argname);
 char* GET_OPTION(const char* iarglist, const char* argname, DEBUG_PARAMS);
 #define get_option(iarglist, argname) GET_OPTION(iarglist, argname, __FILE__, __LINE__)
 #endif
-
-typedef void (*filter_init)(char const*);
-typedef void (*filter_process)(void);
-typedef void (*filter_deinit)(void);
-typedef void (*filter_exit)(void);
 
 typedef void (*waypt_cb)(const Waypoint*);
 typedef void (*route_hdr)(const route_head*);
@@ -960,7 +947,6 @@ inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n) {
 }
 
 int str_match(const char* str, const char* match);
-int case_ignore_str_match(const char* str, const char* match);
 QString strenquote(const QString& str, const QChar quot_char);
 
 char* strsub(const char* s, const char* search, const char* replace);
@@ -1028,24 +1014,6 @@ signed int si_round(double d);
 #define lround si_round
 #endif
 
-/*
- * Data types for Palm/OS files.
- */
-typedef struct {
-  unsigned char data[4];
-} pdb_32;
-
-typedef struct {
-  unsigned char data[2];
-} pdb_16;
-
-typedef struct {
-  unsigned char data[8];
-} pdb_double;
-
-typedef struct {
-  unsigned char data[4];
-} pdb_float;
 
 /*
  * Protypes for Endianness helpers.
@@ -1078,11 +1046,6 @@ float  le_read_float(const void* p);
 double le_read_double(const void* p);
 void   le_write_float(void* ptr, float f);
 void   le_write_double(void* p, double d);
-
-#define pdb_write_float be_write_float
-#define pdb_read_float be_read_float
-#define pdb_write_double be_write_double
-#define pdb_read_double be_read_double
 
 /*
  * Prototypes for generic conversion routines (util.c).
@@ -1177,4 +1140,4 @@ int color_to_bbggrr(const char* cname);
 // It's here instead of gps to avoid C/C++ linkage issues.
 int32_t GPS_Lookup_Datum_Index(const QString& n);
 
-#endif /* gpsbabel_defs_h_included */
+#endif // DEFS_H_INCLUDED_

@@ -149,18 +149,17 @@ win32 {
   }
   SOURCES += gbser_win.cc
   JEEPS += jeeps/gpsusbwin.cc
-  LIBS += "C:/Program Files (x86)/Windows Kits/8.1/lib/winv6.3/um/x64/setupapi.lib" "C:/Program Files (x86)/Windows Kits/8.1/lib/winv6.3/um/x64/hid.lib"
+  LIBS += "-lsetupapi" 
 }
 
-win32-msvc*{
+win32-msvc* {
   DEFINES += _CRT_SECURE_NO_DEPRECATE
-  INCLUDEPATH += ../../src/core src/core
   QMAKE_CXXFLAGS += /MP -wd4100
-  TEMPLATE=vcapp
 }
 
 linux {
   DEFINES += HAVE_LINUX_HID
+  LIBS += "-lusb"
 }
 
 macx {

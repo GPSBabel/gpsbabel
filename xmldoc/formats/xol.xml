@@ -1,7 +1,7 @@
 <para>
-   This module reads and writes xml based (.xol) files used by
-   <ulink url="http://www.swisstopo.ch">Swiss Map</ulink> software.
+   This module reads and writes XML based (.xol) files used by
+   <ulink url="https://www.swisstopo.admin.ch">Swiss Map</ulink> software.
 </para>
 <para>
-   These files uses the "Swiss national grid" (CS-1903) to store coordinates.
+   These files use the "Swiss National Grid" (CH-1903) to store coordinates.
 </para>

@@ -40,13 +40,13 @@ navitel_rd_init(const QString& fname)
 }
 
 static void
-navitel_rd_deinit(void)
+navitel_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-navitel_read_track(void)
+navitel_read_track()
 {
   int points, i;
   route_head* trk = NULL;
@@ -80,19 +80,19 @@ navitel_wr_init(const QString& fname)
 }
 
 static void
-navitel_wr_deinit(void)
+navitel_wr_deinit()
 {
   gbfclose(fout);
 }
 
 static void
-navitel_enum_trkpts(const Waypoint* wpt)
+navitel_enum_trkpts(const Waypoint*)
 {
   trkpts++;
 }
 
 static void
-navitel_disp_trk_head(const route_head* trk)
+navitel_disp_trk_head(const route_head*)
 {
   new_track = 1;
 }
@@ -115,7 +115,7 @@ navitel_disp_trkpts(const Waypoint* wpt)
 }
 
 static void
-navitel_write_track(void)
+navitel_write_track()
 {
   trkpts = 0;
   track_disp_all(NULL, NULL, navitel_enum_trkpts);
@@ -147,6 +147,8 @@ ff_vecs_t navitel_trk_vecs = {
   NULL,
   NULL,
   CET_CHARSET_UTF8, 1			/* Nothing to convert */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /**************************************************************************/

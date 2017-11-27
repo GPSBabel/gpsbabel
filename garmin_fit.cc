@@ -22,7 +22,7 @@
  */
 
 #include "defs.h"
-#include <stdio.h>
+#include <cstdio>
 
 #define MYNAME "fit"
 
@@ -106,7 +106,7 @@ fit_rd_init(const QString& fname)
 }
 
 static void
-fit_rd_deinit(void)
+fit_rd_deinit()
 {
   int local_id;
 
@@ -126,7 +126,7 @@ fit_rd_deinit(void)
 * fit_parse_header- parse the global FIT header
 *******************************************************************************/
 static void
-fit_parse_header(void)
+fit_parse_header()
 {
   int len;
   int ver;
@@ -173,7 +173,7 @@ fit_parse_header(void)
 }
 
 static uint8_t
-fit_getuint8(void)
+fit_getuint8()
 {
   int val;
 
@@ -196,7 +196,7 @@ fit_getuint8(void)
 }
 
 static uint16_t
-fit_getuint16(void)
+fit_getuint16()
 {
   char buf[2];
 
@@ -215,7 +215,7 @@ fit_getuint16(void)
 }
 
 static uint32_t
-fit_getuint32(void)
+fit_getuint32()
 {
   char buf[4];
 
@@ -626,7 +626,7 @@ fit_parse_compressed_message(uint8_t header)
 * fit_parse_record- parse each record in the file
 *******************************************************************************/
 static void
-fit_parse_record(void)
+fit_parse_record()
 {
   uint8_t header;
 
@@ -662,7 +662,7 @@ fit_parse_record(void)
 * - parse all the records in the file
 *******************************************************************************/
 static void
-fit_read(void)
+fit_read()
 {
   fit_parse_header();
 
@@ -698,5 +698,7 @@ ff_vecs_t format_fit_vecs = {
   fit_args,
   CET_CHARSET_ASCII, 0		/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/

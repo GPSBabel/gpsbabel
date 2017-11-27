@@ -20,18 +20,18 @@
  */
 
 #include "defs.h"
-#include "src/core/xmltag.h"
 #include "jeeps/gpsmath.h"
+#include "src/core/xmltag.h"
 
-#include <ctype.h>
-#include <errno.h>
-#include <math.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h> // for va_copy
-#include <time.h>
 #include <QtCore/QFileInfo>
+#include <cctype>
+#include <cerrno>
+#include <cmath>
+#include <cstdarg>
+#include <cstdarg> // for va_copy
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 
 // First test Apple's clever macro that's really a runtime test so
 // that our universal binaries work right.
@@ -565,25 +565,6 @@ str_match(const char* str, const char* match)
   return ((*s == '\0') && (*m == '\0'));
 }
 
-/*
- * as str_match, but case insensitive
- */
-
-int
-case_ignore_str_match(const char* str, const char* match)
-{
-  char* s1, *s2;
-  int res;
-
-  s1 = strupper(xstrdup(str));
-  s2 = strupper(xstrdup(match));
-  res = str_match(s1, s2);
-  xfree(s1);
-  xfree(s2);
-
-  return res;
-}
-
 // for ruote_char = "
 // make str = blank into nothing
 // make str = foo into "foo"
@@ -834,7 +815,7 @@ mklocaltime(struct tm* t)
  * reference files would be tedious, so we uphold that convention.
  */
 gpsbabel::DateTime
-current_time(void)
+current_time()
 {
   if (getenv("GPSBABEL_FREEZE_TIME")) {
     return QDateTime::fromTime_t(0);

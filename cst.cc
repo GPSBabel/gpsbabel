@@ -22,8 +22,8 @@
 
 #include "defs.h"
 #include "cet_util.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "cst"
 
@@ -143,7 +143,7 @@ cst_rd_init(const QString& fname)
 }
 
 static void
-cst_rd_deinit(void)
+cst_rd_deinit()
 {
   gbfclose(fin);
 }
@@ -151,7 +151,7 @@ cst_rd_deinit(void)
 /* --------------------------------------------------------------------------- */
 
 static void
-cst_data_read(void)
+cst_data_read()
 {
   char* buff;
   int line = 0;
@@ -334,4 +334,6 @@ ff_vecs_t cst_vecs = {
   NULL,
   cst_args,
   CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

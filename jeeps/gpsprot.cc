@@ -24,7 +24,7 @@
 ********************************************************************/
 #define COMMON
 #include "gps.h"
-#include <stdio.h>
+#include <cstdio>
 
 #define GPS_TAGUNK  20
 

@@ -33,7 +33,7 @@ wintec_tes_rd_init(const QString& fname)
 }
 
 static void
-wintec_tes_rd_deinit(void)
+wintec_tes_rd_deinit()
 {
   gbfclose(fin);
 }
@@ -54,7 +54,7 @@ wintec_date_to_time(uint32_t w)
 }
 
 static void
-wintec_tes_read(void)
+wintec_tes_read()
 {
   route_head* trk = route_head_alloc();
   track_add_head(trk);
@@ -115,4 +115,6 @@ ff_vecs_t wintec_tes_vecs = {
   wintec_tes_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };

@@ -17,10 +17,10 @@
 
  */
 #include "defs.h"
+#include "src/core/file.h"
+#include <QtCore/QJsonArray>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
-#include <QtCore/QJsonArray>
-#include "src/core/file.h"
 
 static gbfile* ofd;
 static QString input_file_name;
@@ -49,7 +49,7 @@ static const QString URLNAME = QStringLiteral("urlname");
 
 static arglist_t geojson_args[] = {
   {"compact", &compact_opt, "Compact Output. Default is off.", 
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX } ,
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr } ,
   ARG_TERMINATOR
 };
 
@@ -113,7 +113,7 @@ geojson_rd_deinit() {
 }
 
 static void
-geojson_wr_deinit(void) {
+geojson_wr_deinit() {
   QJsonObject object;
   object[TYPE] = FEATURE_COLLECTION;
   object[FEATURES]  = *feature_collection;
@@ -159,7 +159,7 @@ routes_from_polygon_coordinates(const QJsonArray& polygon)
 }
 
 static void
-geojson_read(void) {
+geojson_read() {
 	QFile file;
 	file.setFileName(input_file_name);
 	file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -293,7 +293,7 @@ static void geojson_track_disp(const Waypoint* trackpoint) {
   (*track_coords).append(coords);
 }
 
-static void geojson_track_tlr(const route_head* track) {
+static void geojson_track_tlr(const route_head*) {
   QJsonObject geometry;
   geometry[TYPE] = LINESTRING;
   geometry[COORDINATES] = *track_coords;
@@ -306,7 +306,7 @@ static void geojson_track_tlr(const route_head* track) {
 }
 
 static void
-geojson_write(void) {
+geojson_write() {
   waypt_disp_all(geojson_waypt_pr);
   track_disp_all(geojson_track_hdr, geojson_track_tlr, geojson_track_disp);
 }
@@ -327,4 +327,6 @@ ff_vecs_t geojson_vecs = {
   NULL,
   geojson_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr  
 };

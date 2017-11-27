@@ -22,7 +22,7 @@
 
 #include "defs.h"
 #include <QtCore/QDebug>
-#include <limits.h>
+#include <climits>
 
 #define MYNAME "energympro"
 
@@ -186,7 +186,7 @@ read_point(route_head* gpsbabel_route,gpsbabel::DateTime& gpsDateTime)
 
 
 static void 
-read_lap(void)
+read_lap()
 {
   tw_lap lap;
   gbfread(&lap,sizeof(tw_lap),1,file_in);
@@ -224,7 +224,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   if (global_opts.debug_level > 1) {
     printf (MYNAME " rd_deinit()\n");
@@ -233,7 +233,7 @@ rd_deinit(void)
 }
 
 static void 
-track_read(void)
+track_read()
 {
   if(global_opts.debug_level > 1) {
     printf (MYNAME "  waypoint_read()\n");
@@ -287,7 +287,7 @@ track_read(void)
 }
 
 static void
-data_read(void)
+data_read()
 {
   if (global_opts.debug_level > 1) {
     printf (MYNAME " data_read()\n");

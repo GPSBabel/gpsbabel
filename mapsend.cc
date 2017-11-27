@@ -19,11 +19,11 @@
  */
 
 #include "defs.h"
-#include "mapsend.h"
 #include "magellan.h"
+#include "mapsend.h"
 #include <cmath>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* mapsend_file_in;
 static gbfile* mapsend_file_out;
@@ -45,7 +45,7 @@ arglist_t mapsend_args[] = {
   {
     "trkver", &mapsend_opt_trkver,
     "MapSend version TRK file to generate (3,4)",
-    "4", ARGTYPE_INT, "3", "4"
+    "4", ARGTYPE_INT, "3", "4", nullptr
   },
   ARG_TERMINATOR
 };
@@ -79,7 +79,7 @@ mapsend_rd_init(const QString& fname)
 }
 
 static void
-mapsend_rd_deinit(void)
+mapsend_rd_deinit()
 {
   gbfclose(mapsend_file_in);
 }
@@ -99,7 +99,7 @@ mapsend_wr_init(const QString& fname)
 }
 
 static void
-mapsend_wr_deinit(void)
+mapsend_wr_deinit()
 {
   gbfclose(mapsend_file_out);
   mkshort_del_handle(&mkshort_handle);
@@ -107,7 +107,7 @@ mapsend_wr_deinit(void)
 }
 
 static void
-mapsend_wpt_read(void)
+mapsend_wpt_read()
 {
   char tbuf[256];
   int wpt_count, rte_count, rte_num;
@@ -188,7 +188,7 @@ mapsend_wpt_read(void)
 }
 
 static void
-mapsend_track_read(void)
+mapsend_track_read()
 {
   unsigned int trk_count;
   int valid;
@@ -232,7 +232,7 @@ mapsend_track_read(void)
 }
 
 static void
-mapsend_read(void)
+mapsend_read()
 {
   mapsend_hdr hdr;
   int type;
@@ -367,7 +367,7 @@ mapsend_route_hdr(const route_head* rte)
 }
 
 static void
-mapsend_noop(const route_head* wp)
+mapsend_noop(const route_head*)
 {
   /* no-op */
 }
@@ -503,13 +503,13 @@ void mapsend_track_disp(const Waypoint* wpt)
 }
 
 void
-mapsend_track_write(void)
+mapsend_track_write()
 {
   track_disp_all(mapsend_track_hdr, mapsend_noop, mapsend_track_disp);
 }
 
 static void
-mapsend_wpt_write(void)
+mapsend_wpt_write()
 {
   mapsend_hdr hdr = {13, {'4','D','5','3','3','3','3','0',' ','M','S'},
     {'3', '0'}, ms_type_wpt, {0, 0, 0}
@@ -558,4 +558,6 @@ ff_vecs_t mapsend_vecs = {
   NULL,
   mapsend_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

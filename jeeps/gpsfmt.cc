@@ -22,8 +22,8 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
-#include <stdio.h>
-#include <time.h>
+#include <cstdio>
+#include <ctime>
 
 
 static void GPS_Fmt_Print_Way100(GPS_PWay way, FILE* outf);
@@ -49,7 +49,7 @@ static void GPS_Fmt_Print_D301(GPS_PTrack trk, FILE* outf);
 static int32 GPS_Fmt_Print_Route201(GPS_PWay* way, int32 n, FILE* outf);
 
 
-char* gps_marine_sym[]= {
+const char* gps_marine_sym[]= {
   "Anchor","Bell","Diamond-grn","Diamond_red","Dive1","Dive2","Dollar",
   "Fish","Fuel","Horn","House","Knife","Light","Mug","Skull",
   "Square_grn","Square_red","Wbuoy","Wpt_dot","Wreck","Null","Mob",
@@ -80,7 +80,7 @@ char* gps_marine_sym[]= {
 
 
 
-char* gps_land_sym[]= {
+const char* gps_land_sym[]= {
   "Is_hwy","Us_hwy","St_hwy","Mi_mrkr","Trcbck","Golf","Sml_cty",
   "Med_cty","Lrg_cty","Freeway","Ntl_hwy","Cap_cty","Amuse_pk",
   "Bowling","Car_rental","Car_repair","Fastfood","Fitness","Film",
@@ -95,14 +95,14 @@ char* gps_land_sym[]= {
 };
 
 
-char* gps_aviation_sym[]= {
+const char* gps_aviation_sym[]= {
   "Airport","Int","Ndb","Vor","Heliport","Private","Soft_fld",
   "Tall_tower","Short_tower","Glider","Ultralight","Parachute",
   "Vortac","Vordme","Faf","Lom","Map","Tacan","Seaplane"
 };
 
 
-char* gps_16_sym[]= {
+const char* gps_16_sym[]= {
   "Dot","House","Fuel","Car","Fish","Boat","Anchor","Wreck",
   "Exit","Skull","Flag","Camp","Circle-x","Deer","1st_aid","Back_track"
 };
@@ -680,7 +680,7 @@ static void GPS_Fmt_Print_Way101(GPS_PWay way, FILE* outf)
 
 static void GPS_Fmt_Print_Way102(GPS_PWay way, FILE* outf)
 {
-  char** p;
+  const char** p;
   int32  x;
 
   if (way->smbl < 8192) {
@@ -718,7 +718,7 @@ static void GPS_Fmt_Print_Way102(GPS_PWay way, FILE* outf)
 
 static void GPS_Fmt_Print_Way103(GPS_PWay way, FILE* outf)
 {
-  static char* dspl[]= {
+  static const char* dspl[]= {
     "SW","S","SC"
   };
 
@@ -747,10 +747,10 @@ static void GPS_Fmt_Print_Way103(GPS_PWay way, FILE* outf)
 
 static void GPS_Fmt_Print_Way104(GPS_PWay way, FILE* outf)
 {
-  static char* dspl[]= {
+  static const char* dspl[]= {
     "S","S","","SW","","SC"
   };
-  char** p;
+  const char** p;
   int32  x;
 
   if (way->smbl < 8192) {
@@ -789,7 +789,7 @@ static void GPS_Fmt_Print_Way104(GPS_PWay way, FILE* outf)
 
 static void GPS_Fmt_Print_Way105(GPS_PWay way, FILE* outf)
 {
-  char** p;
+  const char** p;
   int32  x;
 
   if (way->smbl < 8192) {
@@ -825,7 +825,7 @@ static void GPS_Fmt_Print_Way105(GPS_PWay way, FILE* outf)
 
 static void GPS_Fmt_Print_Way106(GPS_PWay way, FILE* outf)
 {
-  char** p;
+  const char** p;
   int32  x;
 
   if (way->smbl < 8192) {
@@ -874,10 +874,10 @@ static void GPS_Fmt_Print_Way106(GPS_PWay way, FILE* outf)
 
 static void GPS_Fmt_Print_Way107(GPS_PWay way, FILE* outf)
 {
-  static char* dspl[]= {
+  static const char* dspl[]= {
     "SW","S","SC"
   };
-  static char* col[]= {
+  static const char* col[]= {
     "Default","Red","Green","Blue"
   };
 
@@ -910,14 +910,14 @@ static void GPS_Fmt_Print_Way107(GPS_PWay way, FILE* outf)
 
 static void GPS_Fmt_Print_Way108(GPS_PWay way, FILE* outf)
 {
-  char** p;
+  const char** p;
   int32  x;
 
-  static char* dspl[]= {
+  static const char* dspl[]= {
     "SW","S","SC"
   };
 
-  static char* col[]= {
+  static const char* col[]= {
     "Black","Dark_Red","Dark_Green","Dark_Yellow","Dark_Blue",
     "Dark_Magenta","Dark_Cyan","Light_Grey","Dark_Grey","Red","Green",
     "Yellow","Blue","Magenta","Cyan","White"
@@ -985,14 +985,14 @@ static void GPS_Fmt_Print_Way108(GPS_PWay way, FILE* outf)
 
 static void GPS_Fmt_Print_Way109(GPS_PWay way, FILE* outf)
 {
-  char** p;
+  const char** p;
   int32  x;
 
-  static char* dspl[]= {
+  static const char* dspl[]= {
     "SW","S","SC"
   };
 
-  static char* col[]= {
+  static const char* col[]= {
     "Black","Dark_Red","Dark_Green","Dark_Yellow","Dark_Blue",
     "Dark_Magenta","Dark_Cyan","Light_Grey","Dark_Grey","Red","Green",
     "Yellow","Blue","Magenta","Cyan","White"
@@ -1160,7 +1160,7 @@ static void GPS_Fmt_Print_Way152(GPS_PWay way, FILE* outf)
 
 static void GPS_Fmt_Print_Way154(GPS_PWay way, FILE* outf)
 {
-  char** p;
+  const char** p;
   int32  x;
 
   if (way->smbl < 8192) {
@@ -1208,11 +1208,11 @@ static void GPS_Fmt_Print_Way154(GPS_PWay way, FILE* outf)
 
 static void GPS_Fmt_Print_Way155(GPS_PWay way, FILE* outf)
 {
-  static char* dspl[]= {
+  static const char* dspl[]= {
     "","S","","SW","","SC"
   };
 
-  char** p;
+  const char** p;
   int32  x;
 
   if (way->smbl < 8192) {

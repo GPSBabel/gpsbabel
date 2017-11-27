@@ -26,20 +26,28 @@
  * This is our (weak) attempt to make that distinction.
  */
 
-extern queue waypt_head;
 #if NEWQ
+#include <QtCore/QList>
 extern QList<Waypoint*> waypt_list;
+#else
+#include "queue.h"
+extern queue waypt_head;
 #endif
+
+typedef void (*filter_init)(char const*);
+typedef void (*filter_process)(void);
+typedef void (*filter_deinit)(void);
+typedef void (*filter_exit)(void);
 
 typedef struct filter_vecs {
   filter_init f_init;
   filter_process f_process;
   filter_deinit f_deinit;
   filter_exit f_exit;
-  arglist_t* args;
+  struct arglist* args;
 } filter_vecs_t;
 
-filter_vecs_t* find_filter_vec(char* const, char**);
+filter_vecs_t* find_filter_vec(const char* const, const char**);
 void free_filter_vec(filter_vecs_t*);
 void disp_filters(int version);
 void disp_filter(const char* vecname);

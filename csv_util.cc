@@ -23,17 +23,17 @@
 #include <QtCore/QRegExp>
 #include <QtCore/QTextStream>
 
-#include "defs.h"
 #include "csv_util.h"
+#include "defs.h"
 #include "garmin_fs.h"
 #include "grtcirc.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/logging.h"
 #include "strptime.h"
 
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "CSV_UTIL"
 
