@@ -24,15 +24,15 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "gbser.h"
-#include "strptime.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/logging.h"
+#include "strptime.h"
 
-#include <ctype.h>
-#include <math.h>
-#include <time.h>
-#include <stdlib.h>
+#include <cctype>
+#include <cmath>
+#include <cstdlib>
 #include <stdio.h>
+#include <ctime>
 
 #include <QtCore/QStringList>
 

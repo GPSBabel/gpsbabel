@@ -22,10 +22,10 @@
 #include "defs.h"
 #include "cet.h"
 #include "cet_util.h"
-#include <stdlib.h> // qsort
 #include "src/core/logging.h"
 #include <QtCore/QDebug>
 #include <QtCore/QTextCodec>
+#include <cstdlib> // qsort
 
 #define MYNAME "cet_util"
 

@@ -22,9 +22,9 @@
 
 #include "defs.h"
 #include <QtCore/QHash>
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
+#include <cerrno>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "mmo"
 

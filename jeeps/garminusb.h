@@ -19,6 +19,7 @@
 
  */
 #include <stdio.h>
+#include "gpsdevice.h"
 
 /* This structure is a bit funny looking to avoid variable length
  * arrays which aren't present in C89.   This contains the visible

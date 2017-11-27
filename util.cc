@@ -20,18 +20,18 @@
  */
 
 #include "defs.h"
-#include "src/core/xmltag.h"
 #include "jeeps/gpsmath.h"
+#include "src/core/xmltag.h"
 
-#include <ctype.h>
-#include <errno.h>
-#include <math.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h> // for va_copy
-#include <time.h>
 #include <QtCore/QFileInfo>
+#include <cctype>
+#include <cerrno>
+#include <cmath>
+#include <cstdarg>
+#include <cstdarg> // for va_copy
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 
 // First test Apple's clever macro that's really a runtime test so
 // that our universal binaries work right.

@@ -20,9 +20,9 @@
  */
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif

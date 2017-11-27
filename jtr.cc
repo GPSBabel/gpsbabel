@@ -23,8 +23,8 @@
 #include "csv_util.h"
 #include <QtCore/QHash>
 #include <cmath>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "jtr"
 

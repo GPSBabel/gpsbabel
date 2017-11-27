@@ -19,19 +19,19 @@
 
  */
 
-#include <stdio.h>
-#include <ctype.h>
+#include <cctype>
+#include <cstdio>
+#include <initguid.h>
 #include <malloc.h>
+#include <setupapi.h>
 #include <windows.h>
 #include <winioctl.h>
-#include <initguid.h>
-#include <setupapi.h>
 
+#include "../garmin_device_xml.h"
+#include "garminusb.h"
 #include "gps.h"
 #include "gpsapp.h"
-#include "garminusb.h"
 #include "gpsusbcommon.h"
-#include "../garmin_device_xml.h"
 
 /* Constants from Garmin doc. */
 

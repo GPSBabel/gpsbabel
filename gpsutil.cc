@@ -24,8 +24,8 @@
 #include "cet_util.h"
 #include "magellan.h"
 #include <cmath>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;

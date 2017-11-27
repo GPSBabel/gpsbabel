@@ -21,14 +21,14 @@
 
 #include "defs.h"
 #include "cet_util.h"
-#include "grtcirc.h"
 #include "garmin_fs.h"
+#include "grtcirc.h"
 #include "session.h"
 #include "src/core/logging.h"
 #include <QtCore/QDebug>
 #include <QtCore/QList>
-#include <stdio.h>
-#include <math.h>
+#include <cmath>
+#include <cstdio>
 
 #if NEWQ
 QList<Waypoint*> waypt_list;

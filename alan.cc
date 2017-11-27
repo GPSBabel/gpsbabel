@@ -25,7 +25,7 @@
  */
 
 #include "defs.h"
-#include <stdio.h>
+#include <cstdio>
 
 #define MYNAME "alan"
 

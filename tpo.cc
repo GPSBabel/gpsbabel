@@ -73,11 +73,11 @@
 
 #include "defs.h"
 #include "jeeps/gpsmath.h" /* for datum conversions */
-#include <cmath>
-#include <stdio.h>
-#include <stdlib.h>
-#include <vector>
 #include <QtCore/QScopedArrayPointer> // Wish we could use c++11...
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
 
 #define MYNAME	"TPO"
 

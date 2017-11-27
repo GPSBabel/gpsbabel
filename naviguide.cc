@@ -25,7 +25,7 @@
 #include "jeeps/gpsmath.h"
 #include <QtCore/QDebug>
 #include <QtCore/QTextCodec>
-#include <math.h>
+#include <cmath>
 
 #define MYNAME        "Naviguide"
 

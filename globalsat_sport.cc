@@ -36,11 +36,11 @@
  */
 
 
-#include <ctype.h>
-#include <limits.h>
-#include <stdio.h>
 #include "defs.h"
 #include "gbser.h"
+#include <cctype>
+#include <climits>
+#include <cstdio>
 
 #define MYNAME "GlobalsatSport"
 

@@ -23,11 +23,11 @@
 #include "gbser.h"
 #include "gbser_private.h"
 
-#include <assert.h>
-#include <errno.h>
+#include <cassert>
+#include <cerrno>
+#include <cstdarg>
+#include <cstdio>
 #include <fcntl.h>
-#include <stdarg.h>
-#include <stdio.h>
 #include <sys/time.h>
 #include <termios.h>
 #include <unistd.h>

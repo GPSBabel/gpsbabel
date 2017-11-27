@@ -31,10 +31,10 @@
 #include "defs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 #include <QtCore/QFile>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "exif"
 

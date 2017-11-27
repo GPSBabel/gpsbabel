@@ -21,8 +21,8 @@
 
 #include "defs.h"
 #include "grtcirc.h"
+#include <cerrno>
 #include <cmath>
-#include <errno.h>
 
 #define MYNAME "vitosmt"
 

@@ -22,12 +22,12 @@
 
 #include "defs.h"
 #include "cet_util.h"
-#include "inifile.h"
 #include "grtcirc.h"
+#include "inifile.h"
 
 #include <cmath>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "ggv_ovl"
 

@@ -21,11 +21,11 @@
 
 #include "defs.h"
 #include "filterdefs.h"
-#include <stdlib.h>
+#include <cstdlib>
 // Can't use QRegularExpression because Linux won't get Qt 5 for years. 
 #include <QtCore/QRegExp>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 #if FILTERS_ENABLED
 static char* hdopopt = NULL;

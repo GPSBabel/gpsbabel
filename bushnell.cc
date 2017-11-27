@@ -21,8 +21,8 @@
 
 
 #include "defs.h"
-#include <math.h>
 #include <QtCore/QFileInfo>
+#include <cmath>
 #define MYNAME "Bushnell"
 
 static gbfile* file_in;

@@ -17,22 +17,22 @@
 
  */
 
-#include <QtCore/QTextCodec>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QTextCodec>
 #include <QtCore/QVector>
 
-#include "defs.h"
-#include "filterdefs.h"
 #include "cet.h"
 #include "cet_util.h"
 #include "csv_util.h"
+#include "defs.h"
+#include "filterdefs.h"
 #include "inifile.h"
 #include "session.h"
 #include "src/core/usasciicodec.h"
-#include <ctype.h>
-#include <locale.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cctype>
+#include <clocale>
+#include <cstdio>
+#include <cstdlib>
 #include <signal.h>
 
 #define MYNAME "main"

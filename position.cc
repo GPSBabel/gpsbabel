@@ -22,8 +22,8 @@
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
-#include <math.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdlib>
 
 #if FILTERS_ENABLED
 

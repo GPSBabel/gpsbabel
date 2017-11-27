@@ -23,17 +23,17 @@
 #include "cet_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
-#include "src/core/logging.h"
 #include "src/core/file.h"
+#include "src/core/logging.h"
 #include "src/core/xmlstreamwriter.h"
 #include "src/core/xmltag.h"
 
-#include <QtCore/QXmlStreamReader>
-#include <QtCore/QRegExp>
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
+#include <QtCore/QRegExp>
+#include <QtCore/QXmlStreamReader>
 
-#include <math.h>
+#include <cmath>
 
 
 static QXmlStreamReader* reader;

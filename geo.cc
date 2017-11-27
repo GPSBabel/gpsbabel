@@ -17,10 +17,10 @@
 
  */
 #include "defs.h"
+#include "src/core/file.h"
+#include <QtCore/QDebug>
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
-#include <QtCore/QDebug>
-#include "src/core/file.h"
 
 static char* deficon = NULL;
 static char* nuke_placer;

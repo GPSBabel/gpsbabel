@@ -21,9 +21,9 @@
  */
 
 #include "garmin_tables.h"
-#include "src/core/logging.h"
 #include "jeeps/gpsmath.h"
-#include <stdlib.h> // qsort
+#include "src/core/logging.h"
+#include <cstdlib> // qsort
 
 #define MYNAME "garmin_tables"
 

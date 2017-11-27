@@ -22,9 +22,9 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "csv_util.h"
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;

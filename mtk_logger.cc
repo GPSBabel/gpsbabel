@@ -55,12 +55,12 @@
 
 
 #include "defs.h"
-#include "gbser.h"
 #include "gbfile.h" /* used for csv output */
+#include "gbser.h"
 #include <QtCore/QDir>
-#include <errno.h>
-#include <math.h>
-#include <stdlib.h>
+#include <cerrno>
+#include <cmath>
+#include <cstdlib>
 #if __WIN32__
 #include <io.h>
 #else

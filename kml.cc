@@ -25,16 +25,16 @@
 #endif
 
 #include "defs.h"
-#include "xmlgeneric.h"
 #include "grtcirc.h"
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
 #include "src/core/xmltag.h"
+#include "xmlgeneric.h"
 #include <QtCore/QRegExp>
 #include <QtCore/QXmlStreamAttributes>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 // options
 static char* opt_deficon = NULL;

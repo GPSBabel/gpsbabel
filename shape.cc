@@ -21,7 +21,7 @@
  */
 #include "defs.h"
 #include "shapelib/shapefil.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #if SHAPELIB_ENABLED
 static SHPHandle ihandle;

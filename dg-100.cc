@@ -29,12 +29,12 @@
  */
 
 #include "defs.h"
-#include <ctype.h>
+#include <cctype>
 
 #include "gbser.h"
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cassert>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "DG-100"
 

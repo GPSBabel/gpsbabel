@@ -19,19 +19,19 @@
 
  */
 
-#include <ctype.h>
-#include <limits.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cctype>
+#include <climits>
+#include <cmath>
+#include <cstdlib>
 
-#include "defs.h"
 #include "cet_util.h"
+#include "defs.h"
+#include "garmin_device_xml.h"
+#include "garmin_fs.h"
+#include "garmin_tables.h"
 #include "grtcirc.h"
 #include "jeeps/gps.h"
 #include "jeeps/gpsserial.h"
-#include "garmin_tables.h"
-#include "garmin_fs.h"
-#include "garmin_device_xml.h"
 
 #define MYNAME "GARMIN"
 static const char* portname;

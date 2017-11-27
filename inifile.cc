@@ -20,8 +20,8 @@
 
 #include "defs.h"
 #include "inifile.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "inifile"
 

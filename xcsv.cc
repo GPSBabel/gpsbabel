@@ -26,13 +26,13 @@
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
 
-#include "defs.h"
 #include "csv_util.h"
+#include "defs.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/file.h"
 #include "src/core/logging.h"
-#include <ctype.h>
-#include <stdlib.h>
+#include <cctype>
+#include <cstdlib>
 
 #if CSVFMTS_ENABLED
 #define MYNAME	"XCSV"

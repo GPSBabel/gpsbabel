@@ -20,8 +20,8 @@
  */
 
 #include "defs.h"
-#include "xmlgeneric.h"
 #include "src/core/file.h"
+#include "xmlgeneric.h"
 
 #include <QtCore/QXmlStreamAttributes>
 #include <QtCore/QXmlStreamWriter>

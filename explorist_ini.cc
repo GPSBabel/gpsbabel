@@ -1,6 +1,6 @@
 #include "defs.h"
-#include "inifile.h"
 #include "explorist_ini.h"
+#include "inifile.h"
 
 static inifile_t* inifile;
 static const char myname[] = "explorist";

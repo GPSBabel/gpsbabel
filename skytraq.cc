@@ -25,9 +25,9 @@
 
 #include "defs.h"
 #include "gbser.h"
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "skytraq"
 

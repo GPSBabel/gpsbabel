@@ -28,7 +28,7 @@
 
 #include "defs.h"
 #include "xmlgeneric.h"
-#include <stdio.h>
+#include <cstdio>
 
 static gbfile* ofd;
 static int lap_ct = 0;
