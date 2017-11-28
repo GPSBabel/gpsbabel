@@ -125,7 +125,9 @@
       <name>Waypoints</name>
       <Placemark>
         <name>LAP001</name>
-        <TimeStamp><when>2010-05-28T01:16:36Z</when></TimeStamp>
+        <TimeStamp>
+          <when>2010-05-28T01:16:36Z</when>
+        </TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
           <coordinates>-122.071174,37.341691,65.40</coordinates>

@@ -216,7 +216,9 @@ Size: <img src="https://www.geocaching.com/images/icons/container/$[gc_cont_icon
       <name>Waypoints</name>
       <Placemark>
         <name><![CDATA[Points géodésiques du Québec]]></name>
-        <TimeStamp><when>2002-08-15T07:00:00Z</when></TimeStamp>
+        <TimeStamp>
+          <when>2002-08-15T07:00:00Z</when>
+        </TimeStamp>
         <styleUrl>#geocache</styleUrl>
         <Style>
           <IconStyle>
@@ -351,7 +353,9 @@ Enjoy !</p>]]></value>
       </Placemark>
       <Placemark>
         <name><![CDATA[Oozy rat in a sanitary zoo]]></name>
-        <TimeStamp><when>2003-06-29T07:00:00Z</when></TimeStamp>
+        <TimeStamp>
+          <when>2003-06-29T07:00:00Z</when>
+        </TimeStamp>
         <styleUrl>#geocache</styleUrl>
         <Style>
           <IconStyle>
