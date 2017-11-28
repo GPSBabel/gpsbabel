@@ -104,7 +104,7 @@ my_rd_init(const QString& fname)
     fatal(MYNAME ": Cannot open shp file %s for reading\n", qPrintable(ifname));
   }
 
-  ihandledb = DBFOpen(fname.toUtf8(), "rb");
+  ihandledb = DBFOpen(qPrintable(fname), "rb");
   if (ihandledb == NULL) {
     fatal(MYNAME ": Cannot open dbf file %s for reading\n", qPrintable(ifname));
   }
@@ -376,7 +376,7 @@ my_write(void)
   switch (global_opts.objective) {
   case wptdata:
   case unknown_gpsdata:
-    ohandle = SHPCreate(ofname.toUtf8(), SHPT_POINT);
+    ohandle = SHPCreate(qPrintable(ofname), SHPT_POINT);
 
     if (ohandle == NULL) {
       fatal(MYNAME ": Cannot open shp file %s for writing\n",
@@ -392,7 +392,7 @@ my_write(void)
     break;
   case rtedata:
   case trkdata:
-    ohandle = SHPCreate(ofname.toUtf8(), SHPT_ARC);
+    ohandle = SHPCreate(qPrintable(ofname), SHPT_ARC);
 
     if (ohandle == NULL) {
       fatal(MYNAME ": Cannot open shp file %s for writing\n",
