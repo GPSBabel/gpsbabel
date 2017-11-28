@@ -87,10 +87,7 @@ gzapi_open(gbfile* self, const char* mode)
 #if __WIN32__
     // On Windows, convert UTF-8 to wchar_t[] and use gzopen_w().
     QString name(self->name);
-    wchar_t* wname = new wchar_t [name.size() + 1];
-    wname[name.toWCharArray(wname)] = 0;  // Convert and null-terminate.
-    self->handle.gz = gzopen_w(wname, openmode);
-    delete [] wname;
+    self->handle.gz = gzopen_w((const wchar_t*) name.utf16(), openmode);
 #else
     // On other platforms, convert to native locale (UTF-8 or other 8-bit).
     self->handle.gz = gzopen(qPrintable(QString(self->name)), openmode);
