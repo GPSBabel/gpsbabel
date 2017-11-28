@@ -1408,7 +1408,7 @@ exif_wr_deinit()
 {
 
   exif_release_apps();
-  QString tmpname = QString::fromLocal8Bit(fout->name);
+  QString tmpname = QString(fout->name);
   gbfclose(fout);
 
   if (exif_success) {

@@ -82,7 +82,7 @@ static OVL_COLOR_TYP color;
 static void
 ggv_ovl_rd_init(const QString& fname)
 {
-  inifile = inifile_init(qPrintable(fname), MYNAME);
+  inifile = inifile_init(fname, MYNAME);
   if (inifile->unicode) {
     cet_convert_init(CET_CHARSET_UTF8, 1);
   }
