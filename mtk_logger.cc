@@ -556,9 +556,9 @@ static void mtk_read()
 
   log_enabled = 0;
   init_scan = 0;
-  dout = ufopen((TEMP_DATA_BIN).toUtf8(), "r+b");
+  dout = ufopen(TEMP_DATA_BIN, "r+b");
   if (dout == NULL) {
-    dout = ufopen((TEMP_DATA_BIN).toUtf8(), "wb");
+    dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == NULL) {
       fatal(MYNAME ": Can't create temporary file %s",
             qPrintable(TEMP_DATA_BIN));
@@ -614,7 +614,7 @@ static void mtk_read()
     dsize = 0;
     init_scan = 0;
     QFile::rename(TEMP_DATA_BIN, TEMP_DATA_BIN_OLD);
-    dout = ufopen((TEMP_DATA_BIN).toUtf8(), "wb");
+    dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == NULL) {
       fatal(MYNAME ": Can't create temporary file %s",
             qPrintable(TEMP_DATA_BIN));
@@ -941,7 +941,7 @@ static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
   dbg(1, "Opening csv output file %s...\n", csv_fname);
 
   // can't use gbfopen here - it will fatal() if file doesn't exist
-  if ((cf = ufopen(csv_fname, "r")) != NULL) {
+  if ((cf = ufopen(QString::fromUtf8(csv_fname), "r")) != NULL) {
     fclose(cf);
     warning(MYNAME ": CSV file %s already exist ! Cowardly refusing to overwrite.\n", csv_fname);
     return;
@@ -1474,7 +1474,7 @@ static void file_init_m241(const QString& fname)
 static void file_init(const QString& fname)
 {
   dbg(4, "Opening file %s...\n", qPrintable(fname));
-  if (fl = ufopen(fname.toUtf8(), "rb"), NULL == fl) {
+  if (fl = ufopen(fname, "rb"), NULL == fl) {
     fatal(MYNAME ": Can't open file '%s'\n", qPrintable(fname));
   }
   switch (mtk_device) {

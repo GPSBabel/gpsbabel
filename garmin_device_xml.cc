@@ -127,7 +127,7 @@ const gdx_info*
 gdx_read(const char* fname)
 {
   // Test file open-able before gb_open gets a chance to fatal().
-  FILE* fin = ufopen(fname, "r");
+  FILE* fin = ufopen(QString::fromUtf8(fname), "r");
 
   if (fin) {
     fclose(fin);

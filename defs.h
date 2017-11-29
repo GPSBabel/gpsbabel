@@ -931,8 +931,8 @@ void debug_mem_close();
 
 FILE* xfopen(const char* fname, const char* type, const char* errtxt);
 
-// Thin wrapper around fopen() that supports UTF-8 fname on all platforms.
-FILE* ufopen(const char* fname, const char* mode);
+// Thin wrapper around fopen() that supports Unicode fname on all platforms.
+FILE* ufopen(const QString& fname, const char* mode);
 
 // FIXME: case_ignore_strcmp() and case_ignore_strncmp() should probably
 // just be replaced at the call sites.  These shims are just here to make

@@ -75,7 +75,7 @@ find_gpsbabel_inifile(const char* path)		/* can be empty or NULL */
 #endif
   }
   strcat(buff, GPSBABEL_INIFILE);
-  test = ufopen(buff, "rb");
+  test = ufopen(QString::fromUtf8(buff), "rb");
   if (test) {
     fclose(test);
     return buff;
@@ -91,11 +91,12 @@ open_gpsbabel_inifile()
   char* envstr;
   gbfile* res = NULL;
 
+  // TODO(viettaml): use _wgetenv() on Windows, convert to QString.
   envstr = getenv("GPSBABELINI");
   if (envstr != NULL) {
     FILE* test;
 
-    test = ufopen(envstr, "r");
+    test = ufopen(QString::fromLocal8Bit(envstr), "r");
     if (test != NULL) {
       fclose(test);
       return gbfopen(envstr, "r", "GPSBabel");
