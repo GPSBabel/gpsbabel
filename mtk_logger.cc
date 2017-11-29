@@ -58,6 +58,7 @@
 #include "gbfile.h" /* used for csv output */
 #include "gbser.h"
 #include <QtCore/QDir>
+#include <QtCore/QFile>
 #include <cerrno>
 #include <cmath>
 #include <cstdlib>
@@ -302,16 +303,10 @@ static void dbg(int l, const char* msg, ...)
 //
 // It returns a temporary C string - it's totally kludged in to replace
 // TEMP_DATA_BIN being string constants.
-static const char* GetTempName(bool backup) {
+static const QString GetTempName(bool backup) {
   const char kData[]= "data.bin";
   const char kDataBackup[]= "data_old.bin";
-
-  QString t = QDir::tempPath(); 
-  t += QDir::separator();
-  t += backup ? kDataBackup : kData;
-  // If your temp directory isn't representable in Latin1, you're going to 
-  // have a bad day.
-  return t.toLatin1();
+  return QDir::tempPath() + QDir::separator() + (backup ? kDataBackup : kData);
 }
 #define TEMP_DATA_BIN GetTempName(false)
 #define TEMP_DATA_BIN_OLD GetTempName(true)
@@ -561,22 +556,24 @@ static void mtk_read()
 
   log_enabled = 0;
   init_scan = 0;
-  dout = ufopen(TEMP_DATA_BIN, "r+b");
+  dout = ufopen((TEMP_DATA_BIN).toUtf8(), "r+b");
   if (dout == NULL) {
-    dout = ufopen(TEMP_DATA_BIN, "wb");
+    dout = ufopen((TEMP_DATA_BIN).toUtf8(), "wb");
     if (dout == NULL) {
-      fatal(MYNAME ": Can't create temporary file %s", TEMP_DATA_BIN);
+      fatal(MYNAME ": Can't create temporary file %s",
+            qPrintable(TEMP_DATA_BIN));
       return;
     }
   }
   fseek(dout, 0L,SEEK_END);
   dsize = ftell(dout);
   if (dsize > 1024) {
-    dbg(1, "Temp %s file exists. with size %d\n", TEMP_DATA_BIN, dsize);
+    dbg(1, "Temp %s file exists. with size %d\n", qPrintable(TEMP_DATA_BIN),
+        dsize);
     dpos = 0;
     init_scan = 1;
   }
-  dbg(1, "Download %s -> %s\n", port, TEMP_DATA_BIN);
+  dbg(1, "Download %s -> %s\n", port, qPrintable(TEMP_DATA_BIN));
 
   // check log status - is logging disabled ?
   do_cmd(CMD_LOG_STATUS, "PMTK182,3,7,", &fusage, 2);
@@ -612,14 +609,15 @@ static void mtk_read()
   dbg(1, "Download %dkB from device\n", (addr_max+1) >> 10);
 
   if (dsize > addr_max) {
-    dbg(1, "Temp %s file (%ld) is larger than data size %d. Data erased since last download !\n", TEMP_DATA_BIN, dsize, addr_max);
+    dbg(1, "Temp %s file (%ld) is larger than data size %d. Data erased since last download !\n", qPrintable(TEMP_DATA_BIN), dsize, addr_max);
     fclose(dout);
     dsize = 0;
     init_scan = 0;
-    rename(TEMP_DATA_BIN, TEMP_DATA_BIN_OLD);
-    dout = ufopen(TEMP_DATA_BIN, "wb");
+    QFile::rename(TEMP_DATA_BIN, TEMP_DATA_BIN_OLD);
+    dout = ufopen((TEMP_DATA_BIN).toUtf8(), "wb");
     if (dout == NULL) {
-      fatal(MYNAME ": Can't create temporary file %s", TEMP_DATA_BIN);
+      fatal(MYNAME ": Can't create temporary file %s",
+            qPrintable(TEMP_DATA_BIN));
       return;
     }
   }
@@ -742,9 +740,9 @@ mtk_retry:
         fseek(dout, addr, SEEK_SET);
         if (fread(line, 1, rcvd_bsize, dout) == rcvd_bsize && memcmp(line, data, rcvd_bsize) == 0) {
           dpos = addr;
-          dbg(2, "%s same at %d\n", TEMP_DATA_BIN, addr);
+          dbg(2, "%s same at %d\n", qPrintable(TEMP_DATA_BIN), addr);
         } else {
-          dbg(2, "%s differs at %d\n", TEMP_DATA_BIN, addr);
+          dbg(2, "%s differs at %d\n", qPrintable(TEMP_DATA_BIN), addr);
           init_scan = 0;
           addr = dpos;
           bsize = read_bsize;
