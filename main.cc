@@ -22,7 +22,6 @@
 #include <QtCore/QString>
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
-#include <QtCore/QVector>
 
 #include "cet.h"
 #include "cet_util.h"
