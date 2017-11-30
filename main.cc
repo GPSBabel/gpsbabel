@@ -18,13 +18,11 @@
  */
 
 #include <QtCore/QCoreApplication>
-#include <QtCore/QTextCodec>
-#include <QtCore/QVector>
 #include <QtCore/QStack>
 #include <QtCore/QString>
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
-#include <QtCore/QCoreApplication>
+#include <QtCore/QVector>
 
 #include "cet.h"
 #include "cet_util.h"

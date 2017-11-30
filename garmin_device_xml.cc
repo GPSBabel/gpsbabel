@@ -128,7 +128,7 @@ const gdx_info*
 gdx_read(const char* fname)
 {
   // Test file open-able before gb_open gets a chance to fatal().
-  if (QFile::exists(fname) && QFile(fname).open(QIODevice::ReadOnly)) {
+  if (QFile(fname).open(QIODevice::ReadOnly)) {
     xml_init(fname, gdx_map, NULL);
     xml_read();
     xml_deinit();
