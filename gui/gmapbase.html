@@ -7,7 +7,7 @@
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAN6d3-kz3XqyJq-W9n7IYzhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxT_28W9HdpKXQF8sGkCU0sQpcudOQ"
       type="text/javascript"></script>
     <script type="text/javascript" src="qrc:///qtwebchannel/qwebchannel.js">
-    </script>"
+    </script>
     <script type="text/javascript">
       var greenDotIcon = new GIcon();
       
@@ -398,12 +398,12 @@
 
 
       function load() {
-      if (GBrowserIsCompatible()) {
-        //var map = new GMap2(document.getElementById("map"));
-        //map.setCenter( new GLatLng(0,0), 2 );
-        //var mgr = new MarkerManager(map);
+         if (GBrowserIsCompatible()) {
+            if (typeof qt != 'undefined') {
+               new QWebChannel(qt.webChannelTransport, function(channel) { mclicker = channel.objects.mclicker; });
+            }
+         }
       }
-    }
 				  
 
     </script>

@@ -69,7 +69,17 @@ Map::Map(QWidget *parent,
   manager_ = new QNetworkAccessManager(this);
   connect(this,SIGNAL(loadFinished(bool)),
 	  this,SLOT(loadFinishedX(bool)));
-  this->logTimeX("Start map constuctor");
+  this->logTime("Start map constuctor");
+
+#if HAVE_WEBENGINE
+  MarkerClicker *mclicker = new MarkerClicker(this);
+  QWebChannel* channel = new QWebChannel(this);
+  this->page()->setWebChannel(channel);
+  channel->registerObject(QStringLiteral("mclicker"), mclicker);
+  connect(mclicker, SIGNAL(markerClicked(int, int )), this, SLOT(markerClicked(int, int)));
+  connect(mclicker, SIGNAL(logTime(const QString &)), this, SLOT(logTime(const QString &)));
+#endif
+
   QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
   if (!QFile(baseFile).exists()) {
     QMessageBox::critical(0, appName,
@@ -90,7 +100,7 @@ Map::~Map()
 //------------------------------------------------------------------------
 void Map::loadFinishedX(bool f)
 {
-  this->logTimeX("Done initial page load");
+  this->logTime("Done initial page load");
   if (!f)
     QMessageBox::critical(0, appName,
 			  tr("Failed to load Google maps base page"));
@@ -134,28 +144,23 @@ static QString fmtLatLng(const LatLng &l) {
 //------------------------------------------------------------------------
 void Map::showGpxData()
 {
-  MarkerClicker *mclicker = new MarkerClicker(this);
-#if HAVE_WEBENGINE
-  QWebChannel* channel = new QWebChannel(this);
-  this->page()->setWebChannel(channel);
-  channel->registerObject(QStringLiteral("mclicker"), mclicker);
-//  this->addToJavaScriptWindowObject("mclicker", mclicker);
-#else
-  this->page()->mainFrame()->addToJavaScriptWindowObject("mclicker", mclicker);
-#endif
-  connect(mclicker, SIGNAL(markerClicked(int, int )), this, SLOT(markerClicked(int, int)));
-  connect(mclicker, SIGNAL(logTime(const QString &)), this, SLOT(logTimeX(const QString &)));
 
+#if !defined(HAVE_WEBENGINE)
+  MarkerClicker *mclicker = new MarkerClicker(this);
+  this->page()->mainFrame()->addToJavaScriptWindowObject("mclicker", mclicker);
+  connect(mclicker, SIGNAL(markerClicked(int, int )), this, SLOT(markerClicked(int, int)));
+  connect(mclicker, SIGNAL(logTime(const QString &)), this, SLOT(logTime(const QString &)));
+#endif
   // It is appreciably faster to do the encoding on the C++ side.
   int numLevels = 18;
   double zoomFactor = 2;
   PolylineEncoder encoder(numLevels, zoomFactor, 0.00001);
 
 
-  this->logTimeX("Start defining JS string");
+  this->logTime("Start defining JS string");
   QStringList scriptStr;
   scriptStr
-    << "mclicker.logTime(\"Start JS execution\");"
+    << "mclicker.logTimeX(\"Start JS execution\");"
     << "var map = new GMap2(document.getElementById(\"map\"));"
     << "var bounds = new GLatLngBounds;"
     << "var waypts = [];"
@@ -169,7 +174,7 @@ void Map::showGpxData()
     << "var pn = map.getPane(G_MAP_MARKER_PANE);"
     << "pn.style.KhtmlUserSelect='none';"
     << "pn.style.KhtmlUserDrag='none';"
-    << "mclicker.logTime(\"Done prelim JS definition\");"
+    << "mclicker.logTimeX(\"Done prelim JS definition\");"
     << QString("var zoomFactor = %1;").arg(zoomFactor)
     << QString("var numLevels = %1;").arg(numLevels)
     ;
@@ -195,7 +200,7 @@ void Map::showGpxData()
     << "   GEvent.bind(waypts[i], \"click\", ftemp, ftemp.clicked);"
     << "   map.addOverlay(waypts[i]);"
     << "}"
-    << "mclicker.logTime(\"Done waypoints definition\");"
+    << "mclicker.logTimeX(\"Done waypoints definition\");"
     ;
 
   // Tracks
@@ -231,7 +236,7 @@ void Map::showGpxData()
     << "   bounds.extend(trkbound.getSouthWest());"
     << "   bounds.extend(trkbound.getNorthEast());"
     << "}"
-    << "mclicker.logTime(\"Done track definition\");"
+    << "mclicker.logTimeX(\"Done track definition\");"
     ;
 
   // Routes
@@ -263,17 +268,17 @@ void Map::showGpxData()
     << "   bounds.extend(rtebound.getSouthWest());"
     << "   bounds.extend(rtebound.getNorthEast());"
     << "}"
-    << "mclicker.logTime(\"Done route definition\");"
+    << "mclicker.logTimeX(\"Done route definition\");"
     ;
 
   scriptStr
     << "map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds));"
-    << "mclicker.logTime(\"done setCenter\");"
+    << "mclicker.logTimeX(\"Done setCenter\");"
     ;
 
-  this->logTimeX("Done defining JS string");
+  this->logTime("Done defining JS string");
   evaluateJS(scriptStr);
-  this->logTimeX("Done JS evaluation");
+  this->logTime("Done JS evaluation");
 }
 
 //------------------------------------------------------------------------
@@ -288,7 +293,7 @@ void Map::markerClicked(int t, int i){
 }
 
 //------------------------------------------------------------------------
-void Map::logTimeX(const QString &s)
+void Map::logTime(const QString &s)
 {
   //  fprintf(stderr, "Log: %s:  %d ms\n", s.toStdString().c_str(), stopWatch.elapsed());
   if (textEdit_) {

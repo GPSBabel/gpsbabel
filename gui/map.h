@@ -44,6 +44,9 @@ public slots:
   void clickedX(int t, int i) {
     emit markerClicked(t, i);
   }
+  void logTimeX(const QString &s) {
+    emit logTime(s);
+  }
 
 signals:
   void markerClicked(int t, int i);
@@ -87,7 +90,7 @@ class Map : public QWebView
   void frameTrack(int i);
   void frameRoute(int i);
 
-  void logTimeX(const QString &);
+  void logTime(const QString &);
   
  signals:
   void waypointClicked(int i);
