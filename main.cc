@@ -18,13 +18,10 @@
  */
 
 #include <QtCore/QCoreApplication>
-#include <QtCore/QTextCodec>
-#include <QtCore/QVector>
 #include <QtCore/QStack>
 #include <QtCore/QString>
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
-#include <QtCore/QCoreApplication>
 
 #include "cet.h"
 #include "cet_util.h"
@@ -290,7 +287,7 @@ main(int argc, char* argv[])
 #endif
 
   if (gpsbabel_time != 0) {	/* within testo ? */
-    global_opts.inifile = inifile_init(NULL, MYNAME);
+    global_opts.inifile = inifile_init(QString(), MYNAME);
   }
 
   init_vecs();
@@ -549,7 +546,7 @@ main(int argc, char* argv[])
       if (optarg.isEmpty()) {	/* from GUI to preserve inconsistent options */
         global_opts.inifile = NULL;
       } else {
-        global_opts.inifile = inifile_init(qPrintable(optarg), MYNAME);
+        global_opts.inifile = inifile_init(optarg, MYNAME);
       }
       break;
     case 'b':

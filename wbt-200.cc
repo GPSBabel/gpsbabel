@@ -430,7 +430,7 @@ static int rd_buf(void* buf, int len)
 static void file_init(const QString& fname)
 {
   db(1, "Opening file...\n");
-  if ((fl = fopen(qPrintable(fname), "rb")) == NULL) {
+  if ((fl = ufopen(fname, "rb")) == NULL) {
     fatal(MYNAME ": Can't open file '%s'\n", qPrintable(fname));
   }
 }
