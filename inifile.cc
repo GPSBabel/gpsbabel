@@ -335,3 +335,4 @@ inifile_readint_def(const inifile_t* inifile, const char* section, const char* k
     return result;
   }
 }
+
