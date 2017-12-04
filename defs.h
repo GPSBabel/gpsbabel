@@ -931,6 +931,9 @@ void debug_mem_close();
 
 FILE* xfopen(const char* fname, const char* type, const char* errtxt);
 
+// Thin wrapper around fopen() that supports Unicode fname on all platforms.
+FILE* ufopen(const QString& fname, const char* mode);
+
 // OS-abstracting wrapper for getting Unicode environment variables.
 QString ugetenv(const char* env_var);
 

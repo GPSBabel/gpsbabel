@@ -208,12 +208,12 @@ inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* k
 	  filename == NULL: try to open global gpsbabel.ini
  */
 inifile_t*
-inifile_init(const char* filename, const char* myname)
+inifile_init(const QString& filename, const char* myname)
 {
   inifile_t* result;
   gbfile* fin = NULL;
 
-  if (filename == NULL) {
+  if (filename.isEmpty()) {
     fin = open_gpsbabel_inifile();
     if (fin == NULL) {
       return NULL;
@@ -335,3 +335,4 @@ inifile_readint_def(const inifile_t* inifile, const char* section, const char* k
     return result;
   }
 }
+
