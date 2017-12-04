@@ -4,11 +4,9 @@
 ; synchronized.
 ;
 ; Script for generating installation setup program for GPSBabel
-; Uses the Inno setup compiler.  Typically used from the command
-; line "makesetup.bat" which copies QT system files which
-; the Innosetup compiler cannot handle.  
-;
-; So it is not a good idea to run this file from the Inno Setup GUI.
+; Uses the Inno setup compiler.
+; windeployqt should be run to prepare the necessary Qt files before
+; running Inno Setup.
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -25,6 +23,7 @@ DefaultDirName={pf}\GPSBabel
 DefaultGroupName=GPSBabel
 OutputDir=release
 OutputBaseFilename=GPSBabel-1.5.4-Setup
+OutputManifestFile=GPSBabel-1.5.4-Manifest.txt
 SetupIconFile=images\babel2.ico
 Compression=lzma
 SolidCompression=yes
@@ -37,29 +36,21 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-; This isn't as wreckless as it seems; these directories are populated on a
-; controlled way by the batch file.
-Source: qtdir\bin\*.dll;		DestDir: "{app}"; Flags: ignoreversion
-Source: qtdir\plugins\*; 		DestDir: "{app}\plugins"; Flags: ignoreversion recursesubdirs createallsubdirs
-
 Source: gmapbase.html; 			DestDir: "{app}"; Flags: ignoreversion
 Source: qt.conf;       			DestDir: "{app}"; Flags: ignoreversion
 
-Source: ..\build-app-Desktop_Qt_5_2_1_Mingw_32bit-Release\release\gpsbabelfe.exe; 	DestDir: "{app}"; Flags: ignoreversion
-Source: ..\..\build-GPSBabel-Desktop_Qt_5_2_1_Mingw_32bit-Release\release\gpsbabel.exe;   	DestDir: "{app}"; Flags: ignoreversion
+Source: ..\build-app-Desktop_Qt_5_5_1_Mingw_32bit-Release\release\*; Excludes: "*.cpp,*.o"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ..\..\build-GPSBabel-Desktop_Qt_5_5_1_Mingw_32bit-Release\release\gpsbabel.exe;   	DestDir: "{app}"; Flags: ignoreversion
 ; Source: release\help\*;           	DestDir: "{app}\help"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; Translation strings extracted from source code.  Include it in the dist
-; so that users can translate if they want to. 
-; Source: gpsbabel_*.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-; Source: gpsbabelfe_*.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion 
+; so that users can translate if they want to.
+; Source: gpsbabel_*.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion
+; Source: gpsbabelfe_*.ts;           	DestDir: "{app}\translations"; Flags: ignoreversion
 
 ; Compiled translation strings that are used at runtime.
-; Source: gpsbabel_*.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-Source: gpsbabelfe*.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion 
-
-; Now translations from Qt's own UI stuff.
-Source: qtdir\translations\*;  		DestDir: "{app}\translations"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Source: gpsbabel_*.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion
+Source: gpsbabelfe*.qm;           	DestDir: "{app}\translations"; Flags: ignoreversion
 
 ; Miscellaneous
 Source: COPYING.txt;			DestDir: {app}; Flags: ignoreversion
