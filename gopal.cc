@@ -66,8 +66,6 @@ static gbfile* fin, *fout;
 
 static struct tm tm,filenamedate, trackdate;
 time_t		tx;
-char tmp[64];
-char routename[64];
 static char* optdate=NULL;
 static char* optmaxspeed=NULL;
 static char* optminspeed=NULL;
