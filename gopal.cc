@@ -59,7 +59,7 @@
 #include <cmath>
 #include <QtCore/QDateTime>
 #include <QtCore/QString>
-#include <QtCore/Qdebug>
+#include <QtCore/QDebug>
 #define MYNAME "gopal"
 
 static gbfile* fin, *fout;
