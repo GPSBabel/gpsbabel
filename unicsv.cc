@@ -430,13 +430,13 @@ unicsv_parse_time(const QString& str, int* msec, time_t* date)
 static status_type
 unicsv_parse_status(const QString& str)
 {
-  if (str.compare(QStringLiteral("true"), Qt::CaseInsensitive) == 0 ||
-      str.compare(QStringLiteral("yes"), Qt::CaseInsensitive) == 0 ||
+  if (str.compare(QLatin1String("true"), Qt::CaseInsensitive) == 0 ||
+      str.compare(QLatin1String("yes"), Qt::CaseInsensitive) == 0 ||
       str == "1") {
     return status_true;
   }
-  if (str.compare(QStringLiteral("false"), Qt::CaseInsensitive) == 0 ||
-      str.compare(QStringLiteral("no"), Qt::CaseInsensitive) == 0 ||
+  if (str.compare(QLatin1String("false"), Qt::CaseInsensitive) == 0 ||
+      str.compare(QLatin1String("no"), Qt::CaseInsensitive) == 0 ||
       str == "0") {
     return status_false;
   }
