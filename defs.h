@@ -931,6 +931,9 @@ void debug_mem_close();
 
 FILE* xfopen(const char* fname, const char* type, const char* errtxt);
 
+// OS-abstracting wrapper for getting Unicode environment variables.
+QString ugetenv(const char* env_var);
+
 // FIXME: case_ignore_strcmp() and case_ignore_strncmp() should probably
 // just be replaced at the call sites.  These shims are just here to make
 // them more accomidating of QString input.
