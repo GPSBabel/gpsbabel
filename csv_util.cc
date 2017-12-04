@@ -1215,11 +1215,11 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
     wpt->SetCreationTime(sscanftime(s, fmp->printfc, 1));
     break;
   case XT_LOCAL_TIME:
-    if (getenv("GPSBABEL_FREEZE_TIME")) {
+    if (ugetenv("GPSBABEL_FREEZE_TIME").isNull()) {
+      wpt->creation_time += sscanftime(s, fmp->printfc, 0);
+    } else {
       /* Force constant time zone for test */
       wpt->creation_time += sscanftime(s, fmp->printfc, 1);
-    } else {
-      wpt->creation_time += sscanftime(s, fmp->printfc, 0);
     }
     break;
     /* Useful when time and date are in separate fields

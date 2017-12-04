@@ -276,6 +276,20 @@ ufopen(const QString& fname, const char* mode)
 }
 
 /*
+ * OS-abstracting wrapper for getting Unicode environment variables.
+ */
+QString ugetenv(const char* env_var) {
+#ifdef __WIN32__
+  // Use QString to convert 8-bit env_var argument to wchar_t* for _wgetenv().
+  return QString::fromWCharArray(
+      _wgetenv((const wchar_t*) QString(env_var).utf16()));
+#else
+  // Everyone else uses UTF-8 or some other locale-specific 8-bit encoding.
+  return QString::fromLocal8Bit(std::getenv(env_var));
+#endif
+}
+
+/*
  * Allocate a string using a format list with optional arguments
  * Returns -1 on error.
  * If return value is anything else, *strp will be populated with an

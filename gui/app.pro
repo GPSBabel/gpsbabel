@@ -117,7 +117,6 @@ TRANSLATIONS += gpsbabelfe_fr.ts
 TRANSLATIONS += gpsbabelfe_hu.ts
 TRANSLATIONS += gpsbabelfe_it.ts
 TRANSLATIONS += gpsbabelfe.ts
-TRANSLATIONS += gpsbabel.ts
 
 
 
