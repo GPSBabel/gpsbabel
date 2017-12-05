@@ -29,6 +29,7 @@
 #include "garmin_device_xml.h"
 #include "xmlgeneric.h"
 #include <QtCore/QXmlStreamAttributes>
+#include <QtCore/QFile>
 #include <cstdio>
 
 #define MYNAME "whatever"
@@ -127,10 +128,7 @@ const gdx_info*
 gdx_read(const char* fname)
 {
   // Test file open-able before gb_open gets a chance to fatal().
-  FILE* fin = fopen(fname, "r");
-
-  if (fin) {
-    fclose(fin);
+  if (QFile(fname).open(QIODevice::ReadOnly)) {
     xml_init(fname, gdx_map, NULL);
     xml_read();
     xml_deinit();
