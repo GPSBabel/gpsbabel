@@ -54,11 +54,11 @@
 #include "grtcirc.h"
 #include "jeeps/gpsmath.h"
 #include "strptime.h"
-#include <QtCore/QDateTime>
-#include <QtCore/QString>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include <QtCore/QDateTime>
+#include <QtCore/QString>
 
 #define MYNAME "gopal"
 
@@ -66,7 +66,6 @@ static gbfile* fin, *fout;
 
 static struct tm tm,filenamedate, trackdate;
 time_t		tx;
-char tmp[64];
 static char* optdate=NULL;
 static char* optmaxspeed=NULL;
 static char* optminspeed=NULL;
