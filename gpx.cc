@@ -620,11 +620,10 @@ tag_log_wpt(const QXmlStreamAttributes& attr)
     we need to keep track of log_wpt counts so we don't collide with
     dupe shortnames.
   */
-#if NEW_STRINGS
+#if !OLD_STRINGS
   if (wpt_tmp->shortname.size() > 2) {
 // FIXME: think harder about this later.
     lwp_tmp->shortname = wpt_tmp->shortname.mid(2, 4) + "-FIXME";
-
 #else
   if ((wpt_tmp->shortname) && (strlen(wpt_tmp->shortname) > 2)) {
     /* copy of the shortname */

@@ -225,12 +225,12 @@ my_read()
         addrlen = le_read16(&record[obase]);
         cmtlen = le_read16(&record[obase+2+addrlen]);
         (void) cmtlen;
-#if NEW_STRINGS
+#// replaced 'OLD_STRINGS' block below.  In a couple years, nobody's noticed.
         // That we've had no bugreports on this strongly indicates this code
         // is never used... 
         wpt_tmp->shortname = "booger";
         wpt_tmp->notes = "goober";
-#else
+#if OLD_STRINGS
         wpt_tmp->shortname = (char*) xmalloc(addrlen+1);
         wpt_tmp->shortname[addrlen]='\0';
         wpt_tmp->notes = (char*) xmalloc(cmtlen+1);
@@ -243,12 +243,7 @@ my_read()
                addrlen);
 #endif
       } else {
-#if NEW_STRINGS
         wpt_tmp->shortname = QString().sprintf("\\%5.5x", serial++);
-#else
-        wpt_tmp->shortname = (char*) xmalloc(7);
-        sprintf(wpt_tmp->shortname, "\\%5.5x", serial++);
-#endif
       }
       if (control == 2) {
         waypt_add(wpt_tmp);
@@ -326,7 +321,7 @@ my_read()
             route_add_head(track_head);
           }
         } // end if
-#if NEW_STRINGS
+#if 1 // NEW STRINGS
         if (track_head->rte_name.isEmpty()) {
           track_head->rte_name = "I made this up";
         }
@@ -379,7 +374,7 @@ my_read()
         wpt_tmp->latitude = lat;
         wpt_tmp->longitude = -lon;
         if (stringlen && ((coordcount>1) || count)) {
-#if NEW_STRINGS
+#if 1 // NEW_ TRINGS
           wpt_tmp->shortname = QString(((char*)record)+2);
 #else
           wpt_tmp->shortname = (char*) xmalloc(stringlen+1);
@@ -389,7 +384,7 @@ my_read()
                  stringlen);
 #endif
         } else {
-#if NEW_STRINGS
+#if 1 // NEW STRINGS
           wpt_tmp->shortname = QString().sprintf("\\%5.5x", serial++);
 #else
           wpt_tmp->shortname = (char*) xmalloc(7);

@@ -908,7 +908,7 @@ wdata_compute_size(writer_data_t* data)
     wpt->extra_data = dt;
 
     if (alerts) {
-#if NEW_STRINGS
+#if !OLD_STRINGS
 // examine closely.
       const char* pos;
       int pidx;

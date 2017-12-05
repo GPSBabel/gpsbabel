@@ -103,7 +103,7 @@ gdb_flush_waypt_queue(queue* Q)
     Waypoint* wpt = (Waypoint*)elem;
     dequeue(elem);
     if (wpt->extra_data) {
-#if NEW_STRINGS
+#if !OLD_STRINGS
       // FIXME
       // wpt->extra_data may be holding a pointer to a QString, courtesy
       // the grossness at the end of write_waypt_cb().  If that leaks,
@@ -1627,7 +1627,7 @@ write_waypoint_cb(const Waypoint* refpt)
   gbfile* fsave;
 
   /* do this when backup always happens in main */
-#if NEW_STRINGS
+#if !OLD_STRINGS
 // but, but, casting away the const here is wrong...
   ((Waypoint*)refpt)->shortname = refpt->shortname.trimmed();
 #else
@@ -1709,7 +1709,7 @@ write_waypoint_cb(const Waypoint* refpt)
     }
 
     name = mkshort(short_h, name);
-#if NEW_STRINGS
+#if !OLD_STRINGS
     // This is sooooo tacky.
     // Actually, it's not just tacky.  I can't figure out what this code
     // was trying to do, but it's wrong and it breaks things.  

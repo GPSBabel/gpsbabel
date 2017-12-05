@@ -591,7 +591,7 @@ static void wr_header()
   gbfprintf(file_out, "HFDTE%s\r\n", date2str(tm));
 
   // Other header data may have been stored in track description
-#if NEW_STRINGS
+#if !OLD_STRINGS
   if (track && track->rte_desc.startsWith(HDRMAGIC)) {
     char *rd = xstrdup(track->rte_desc);
     for (str = strtok(rd + strlen(HDRMAGIC) + strlen(HDRDELIM), HDRDELIM);
@@ -608,17 +608,12 @@ static void wr_header()
     }
 #endif
   } else {
-#if NEW_STRINGS
 // FIXME: This almost certainly introduces a memory leak because str
 // is a c string that's used for totally too many things.  Just let it
 // leak for now. 2013-12-31 robertl
     if (NULL != (wpt = find_waypt_by_name("PILOT")) && !wpt->description.isEmpty()) {
       xfree(str);
       str = xstrdup(CSTRc(wpt->description));
-#else
-    if (NULL != (wpt = find_waypt_by_name("PILOT")) && wpt->description) {
-      str = CSTRc(wpt->description);
-#endif
     } else {
       // IGC header info not found so synthesise it.
       // If a waypoint is supplied with a short name of "PILOT", use
