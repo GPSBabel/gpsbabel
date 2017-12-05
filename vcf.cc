@@ -20,9 +20,9 @@
 
 #include "defs.h"
 #include "jeeps/gpsmath.h"
-#include <ctype.h>
-#include <math.h>
-#include <stdlib.h>
+#include <cctype>
+#include <cmath>
+#include <cstdlib>
 
 static gbfile* file_out;
 static short_handle mkshort_handle;

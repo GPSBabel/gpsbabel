@@ -21,8 +21,8 @@
 
 #include "gps.h"
 #include "gpsdevice.h"
-#include "gpsserial.h"
 #include "gpsread.h"
+#include "gpsserial.h"
 
 gps_device_ops  gps_serial_ops = {
   GPS_Serial_On,

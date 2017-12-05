@@ -24,9 +24,9 @@
 #include "defs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
-#include <stdio.h>
-#include <stdlib.h>
 #include <QtCore/QFile>
+#include <cstdio>
+#include <cstdlib>
 
 static	gbfile*	mps_file_in;
 static	gbfile*	mps_file_out;

@@ -21,8 +21,8 @@
 #include "defs.h"
 #include "gbser.h"
 #include "grtcirc.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME      "WBT-100/200"
 #define NL          "\x0D\x0A"
@@ -430,7 +430,7 @@ static int rd_buf(void* buf, int len)
 static void file_init(const QString& fname)
 {
   db(1, "Opening file...\n");
-  if ((fl = fopen(qPrintable(fname), "rb")) == NULL) {
+  if ((fl = ufopen(fname, "rb")) == NULL) {
     fatal(MYNAME ": Can't open file '%s'\n", qPrintable(fname));
   }
 }

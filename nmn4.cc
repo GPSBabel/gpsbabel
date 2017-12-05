@@ -29,10 +29,10 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "csv_util.h"
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
+#include <cctype>
+#include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* fin, *fout;
 static int curr_rte_num, target_rte_num;

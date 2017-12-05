@@ -17,25 +17,25 @@
 
  */
 
+#include <QtCore/QCoreApplication>
 #include <QtCore/QStack>
 #include <QtCore/QString>
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
-#include <QtCore/QCoreApplication>
 
-#include "defs.h"
-#include "filterdefs.h"
 #include "cet.h"
 #include "cet_util.h"
 #include "csv_util.h"
+#include "defs.h"
+#include "filterdefs.h"
 #include "inifile.h"
 #include "session.h"
 #include "src/core/file.h"
 #include "src/core/usasciicodec.h"
-#include <ctype.h>
-#include <locale.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cctype>
+#include <clocale>
+#include <cstdio>
+#include <cstdlib>
 #include <signal.h>
 #ifdef AFL_INPUT_FUZZING
 #include "argv-fuzz-inl.h"
@@ -287,7 +287,7 @@ main(int argc, char* argv[])
 #endif
 
   if (gpsbabel_time != 0) {	/* within testo ? */
-    global_opts.inifile = inifile_init(NULL, MYNAME);
+    global_opts.inifile = inifile_init(QString(), MYNAME);
   }
 
   init_vecs();
@@ -546,7 +546,7 @@ main(int argc, char* argv[])
       if (optarg.isEmpty()) {	/* from GUI to preserve inconsistent options */
         global_opts.inifile = NULL;
       } else {
-        global_opts.inifile = inifile_init(qPrintable(optarg), MYNAME);
+        global_opts.inifile = inifile_init(optarg, MYNAME);
       }
       break;
     case 'b':

@@ -26,11 +26,11 @@
 #include "cet_util.h"
 #include "csv_util.h"
 #include "jeeps/gpsmath.h"
+#include <QtCore/QFileInfo>
+#include <cstdio>
 #include <ctype.h>
 #include <math.h>                /* for floor */
-#include <stdlib.h>
-#include <stdio.h>
-#include <QtCore/QFileInfo>
+#include <cstdlib>
 
 #define MYNAME        "OZI"
 #define BADCHARS	",\r\n"

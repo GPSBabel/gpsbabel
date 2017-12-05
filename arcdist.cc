@@ -24,9 +24,9 @@
 #include "filterdefs.h"
 #include "grtcirc.h"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h> // strtod
+#include <cmath>
+#include <cstdio>
+#include <cstdlib> // strtod
 
 #if FILTERS_ENABLED
 #define MYNAME "Arc filter"

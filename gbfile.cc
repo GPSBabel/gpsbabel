@@ -24,9 +24,9 @@
 #include "gbfile.h"
 #include "src/core/logging.h"
 
-#include <assert.h>
-#include <stdarg.h> // for va_copy
-#include <stdio.h>
+#include <cassert>
+#include <cstdarg> // for va_copy
+#include <cstdio>
 
 #if __WIN32__
 /* taken from minigzip.c (part of the zlib project) */
@@ -84,7 +84,14 @@ gzapi_open(gbfile* self, const char* mode)
     SET_BINARY_MODE(fd);
     self->handle.gz = gzdopen(fileno(fd), openmode);
   } else {
-    self->handle.gz = gzopen(self->name, openmode);
+#if __WIN32__
+    // On Windows, convert UTF-8 to wchar_t[] and use gzopen_w().
+    QString name(self->name);
+    self->handle.gz = gzopen_w((const wchar_t*) name.utf16(), openmode);
+#else
+    // On other platforms, convert to native locale (UTF-8 or other 8-bit).
+    self->handle.gz = gzopen(qPrintable(QString(self->name)), openmode);
+#endif
   }
 
   if (self->handle.gz == NULL) {
@@ -538,8 +545,7 @@ gbfopen(const QString filename, const char* mode, const char* module)
     file->fileungetc = memapi_ungetc;
     file->filewrite = memapi_write;
   } else {
-    /* Be careful to convert back to local8Bit for these c based APIS */
-    file->name = xstrdup(qPrintable(filename));
+    file->name = xstrdup(filename);
     file->is_pipe = (filename == "-");
 
     /* Do we have a '.gz' extension in the filename ? */

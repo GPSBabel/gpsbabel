@@ -25,10 +25,10 @@
 
 #include "defs.h"
 #include "cet_util.h"
-#include <errno.h>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cerrno>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* file_in, *file_out;
 static char manufacturer[4];

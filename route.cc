@@ -17,10 +17,10 @@
 
  */
 
-#include <stdio.h>
 #include "defs.h"
 #include "grtcirc.h"
 #include "session.h"
+#include <cstdio>
 
 static queue my_route_head;
 static queue my_track_head;

@@ -23,9 +23,9 @@
 #include "gbser.h"
 #include "gbser_private.h"
 
-#include <assert.h>
-#include <stdarg.h>
-#include <stdio.h>
+#include <cassert>
+#include <cstdarg>
+#include <cstdio>
 
 void gbser__db(int l, const char* msg, ...)
 {

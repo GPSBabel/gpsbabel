@@ -21,14 +21,14 @@
 */
 
 #include "defs.h"
-#include "xmlgeneric.h"
-#include "jeeps/gpsmath.h"
 #include "garmin_tables.h"
+#include "jeeps/gpsmath.h"
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
+#include "xmlgeneric.h"
 
-#include <QtCore/QXmlStreamWriter>
 #include <QtCore/QXmlStreamAttributes>
+#include <QtCore/QXmlStreamWriter>
 
 static Waypoint* wpt;
 static route_head* trk;

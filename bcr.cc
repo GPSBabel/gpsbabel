@@ -27,13 +27,13 @@
 */
 
 #include "defs.h"
+#include "cet_util.h"
 #include "csv_util.h"
 #include "garmin_tables.h"
-#include "cet_util.h"
 #include "inifile.h"
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "bcr"
 
@@ -192,7 +192,7 @@ bcr_init_radius()
 static void
 bcr_rd_init(const QString& fname)
 {
-  ini = inifile_init(qPrintable(fname), MYNAME);
+  ini = inifile_init(fname, MYNAME);
   if (ini->unicode) {
     cet_convert_init(CET_CHARSET_UTF8, 1);
   }
