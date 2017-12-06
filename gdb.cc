@@ -759,7 +759,7 @@ read_route()
     }
   }
 
-  // links = 0;
+  links = 0;
   points = FREAD_i32;
 
 #if GDB_DEBUG
