@@ -36,7 +36,7 @@
 #include <clocale>
 #include <cstdio>
 #include <cstdlib>
-#include <signal.h>
+#include <csignal>
 #ifdef AFL_INPUT_FUZZING
 #include "argv-fuzz-inl.h"
 #endif
@@ -53,8 +53,7 @@ public:
 
 public:
   QargStackElement()
-  {
-  }
+  = default;
 
   QargStackElement(int p_argn, QStringList p_qargs)
   {
