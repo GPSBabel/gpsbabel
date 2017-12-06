@@ -29,8 +29,8 @@
 #include <QtCore/QRegExp>
 #include <QtCore/QXmlStreamAttributes>
 #include <cmath>
-#include <stdio.h> /* for snprintf */
-#include <stdlib.h> /* for qsort */
+#include <cstdio> /* for snprintf */
+#include <cstdlib> /* for qsort */
 
 #if FILTERS_ENABLED || MINIMAL_FILTERS
 #define MYNAME "trackfilter"
@@ -203,15 +203,14 @@ trackfilter_opt_count(void)
 static int
 trackfilter_parse_time_opt(const char* arg)
 {
-  time_t t0, t1;
+  const char* cin = arg;
+  time_t t0 = 0;
+  time_t t1 = 0;
   int sign = 1;
-  char* cin = (char*)arg;
+
   char c;
-
-  t0 = t1 = 0;
-
   while ((c = *cin++)) {
-    time_t seconds;
+    time_t seconds = 0;
 
     if (c >= '0' && c <= '9') {
       t1 = (t1 * 10) + (c - '0');
@@ -417,7 +416,7 @@ trackfilter_split_init_rte_name(route_head* track, const QDateTime dt)
 }
 
 static void
-trackfilter_pack_init_rte_name(route_head* track, const time_t default_time)
+trackfilter_pack_init_rte_name(route_head* track, time_t default_time)
 {
   if (strchr(opt_title, '%') != NULL) {
     struct tm tm;
@@ -445,8 +444,6 @@ trackfilter_pack_init_rte_name(route_head* track, const time_t default_time)
 static void
 trackfilter_title(void)
 {
-  int i;
-
   if (opt_title == NULL) {
     return;
   }
@@ -454,7 +451,7 @@ trackfilter_title(void)
   if (strlen(opt_title) == 0) {
     fatal(MYNAME "-title: Missing your title!\n");
   }
-  for (i = 0; i < track_ct; i++) {
+  for (int i = 0; i < track_ct; i++) {
     route_head* track = track_list[i].track;
     trackfilter_pack_init_rte_name(track, 0);
   }
@@ -467,12 +464,10 @@ trackfilter_title(void)
 static void
 trackfilter_pack(void)
 {
-  int i, j;
-  trkflt_t prev;
   route_head* master;
 
-  for (i = 1, j = 0; i < track_ct; i++, j++) {
-    prev = track_list[j];
+  for (int i = 1, j = 0; i < track_ct; i++, j++) {
+    trkflt_t prev = track_list[j];
     if (prev.last_time >= track_list[i].first_time) {
       fatal(MYNAME "-pack: Tracks overlap in time! %s >= %s at %d\n",
         qPrintable(prev.last_time.toString()),
@@ -484,7 +479,7 @@ trackfilter_pack(void)
 
   master = track_list[0].track;
 
-  for (i = 1; i < track_ct; i++) {
+  for (int i = 1; i < track_ct; i++) {
     queue* elem, *tmp;
     route_head* curr = track_list[i].track;
 
@@ -506,7 +501,7 @@ trackfilter_pack(void)
 static void
 trackfilter_merge(void)
 {
-  int i, j, dropped;
+  int dropped;
 
   queue* elem, *tmp;
   Waypoint** buff;
@@ -519,8 +514,7 @@ trackfilter_merge(void)
 
   buff = (Waypoint**)xcalloc(track_pts-timeless_pts, sizeof(*buff));
 
-  j = 0;
-  for (i = 0; i < track_ct; i++) {	/* put all points into temp buffer */
+  for (int i = 0, j = 0; i < track_ct; i++) {	/* put all points into temp buffer */
     route_head* track = track_list[i].track;
     QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
       wpt = (Waypoint*)elem;
@@ -547,7 +541,7 @@ trackfilter_merge(void)
   dropped = timeless_pts;
   prev = NULL;
 
-  for (i = 0; i < track_pts-timeless_pts; i++) {
+  for (int i = 0; i < track_pts-timeless_pts; i++) {
     wpt = buff[i];
     if ((prev == NULL) || (prev->GetCreationTime() != wpt->GetCreationTime())) {
       track_add_wpt(master, wpt);
@@ -696,26 +690,19 @@ trackfilter_split(void)
   curr = NULL;	/* will be set by first new track */
 
   for (i=0, j=1; j<count; i++, j++) {
-    int new_track_flag;
+    bool new_track_flag;
 
     if ((opt_interval == 0) && (opt_distance == 0)) {
-      struct tm t1, t2;
-// FIXME: This whole function needs to be reconsidered for arbitrary time.
-      time_t tt1 = buff[i]->GetCreationTime().toTime_t();
-      time_t tt2 = buff[j]->GetCreationTime().toTime_t();
-
-      t1 = *localtime(&tt1);
-      t2 = *localtime(&tt2);
-
-      new_track_flag = ((t1.tm_year != t2.tm_year) || (t1.tm_mon != t2.tm_mon) ||
-                        (t1.tm_mday != t2.tm_mday));
+      auto tt1 = buff[i]->GetCreationTime().date();
+      auto tt2 = buff[j]->GetCreationTime().date();
+      new_track_flag = tt1 != tt2;
 #ifdef TRACKF_DBG
-      if (new_track_flag != 0) {
+      if (new_track_flag) {
         printf(MYNAME ": new day %02d.%02d.%04d\n", t2.tm_mday, t2.tm_mon+1, t2.tm_year+1900);
       }
 #endif
     } else {
-      new_track_flag = 1;
+      new_track_flag = true;
 
       if (distance > 0) {
         double rt1 = RAD(buff[i]->latitude);
@@ -866,16 +853,13 @@ trackfilter_synth(void)
 static time_t
 trackfilter_range_check(const char* timestr)
 {
-  int i;
   char fmt[20];
   char c;
-  char* cin;
+  const char* cin = timestr;
   struct tm time;
 
-
-  i = 0;
+  int i = 0;
   strncpy(fmt, "00000101000000", sizeof(fmt));
-  cin = (char*)timestr;
 
   while ((c = *cin++)) {
     if (fmt[i] == '\0') {
@@ -956,9 +940,7 @@ trackfilter_range(void)		/* returns number of track points left after filtering 
 static void
 trackfilter_seg2trk(void)
 {
-  int i;
-
-  for (i = 0; i < track_ct; i++) {
+  for (int i = 0; i < track_ct; i++) {
     queue* elem, *tmp;
     route_head* src = track_list[i].track;
     route_head* dest = NULL;
@@ -1006,19 +988,18 @@ trackfilter_seg2trk(void)
 static void
 trackfilter_trk2seg(void)
 {
-  int i, first;
   route_head* master;
 
   master = track_list[0].track;
 
-  for (i = 1; i < track_ct; i++) {
+  bool first = false;
+  for (int i = 1; i < track_ct; i++) {
     queue* elem, *tmp;
     route_head* curr = track_list[i].track;
 
-    first = 1;
+    first = true;
     QUEUE_FOR_EACH((queue*)&curr->waypoint_list, elem, tmp) {
       Waypoint* wpt = (Waypoint*)elem;
-
 
       int orig_new_trkseg = wpt->wpt_flags.new_trkseg;
       wpt->wpt_flags.new_trkseg = 0;
@@ -1027,7 +1008,7 @@ trackfilter_trk2seg(void)
       track_add_wpt(master, wpt);
       if (first) {
         wpt->wpt_flags.new_trkseg = 1;
-        first = 0;
+        first = false;
       }
     }
     track_del_head(curr);
@@ -1041,7 +1022,7 @@ trackfilter_trk2seg(void)
 *******************************************************************************/
 
 typedef struct faketime_s {
-  time_t start;
+  QDateTime start;
   int    step;
   int   force;
 } faketime_t;
@@ -1054,7 +1035,6 @@ trackfilter_faketime_check(const char* timestr)
   char fmtstep[20];
   char c;
   const char* cin;
-  struct tm time;
   int timeparse = 1;
   faketime_t result;
   result.force = 0;
@@ -1093,44 +1073,40 @@ trackfilter_faketime_check(const char* timestr)
   }
   fmtstep[j++] = '\0';
 
-  cin = strptime(fmtstart, "%Y%m%d%H%M%S", &time);
   result.step = atoi(fmtstep);
-  if ((cin != NULL) && (*cin != '\0')) {
-    fatal(MYNAME "-faketime-check: Invalid time stamp (stopped at %s of %s)!\n", cin, fmtstart);
+  result.start = QDateTime::fromString(fmtstart, "yyyyMMddhhmmss");
+  // The interaction of time zones and command line arguments isn't well
+  // defined. This matches the pre-QDateTime behavior.
+  result.start.setTimeSpec(Qt::UTC);
+  if (!result.start.isValid()) {
+    fatal(MYNAME "-faketime-check: Invalid time stamp %s\n", fmtstart);
   }
 
-  result.start = mkgmtime(&time);
   return result;
 }
 
-static int
-trackfilter_faketime(void)             /* returns number of track points left after filtering */
+static void
+trackfilter_faketime(void)
 {
   faketime_t faketime;
-
-  queue* elem, *tmp;
-  int i, dropped, inside = 0;
 
   if (opt_faketime != 0) {
     faketime = trackfilter_faketime_check(opt_faketime);
   }
 
-  dropped = inside = 0;
-
-  for (i = 0; i < track_ct; i++) {
+  for (int i = 0; i < track_ct; i++) {
     route_head* track = track_list[i].track;
 
+    queue* elem, *tmp;
     QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
       Waypoint* wpt = (Waypoint*)elem;
 
       if (opt_faketime != 0 && (!wpt->creation_time.isValid() || faketime.force)) {
-        wpt->creation_time = QDateTime::fromTime_t(faketime.start);
-        faketime.start += faketime.step;
+        wpt->creation_time = faketime.start;
+        faketime.start = faketime.start.addMSecs(faketime.step * 1000);
       }
     }
   }
-
-  return track_pts - dropped;
 }
 
 static int
