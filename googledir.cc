@@ -104,7 +104,7 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes*)
       routehead->rte_desc = QString("Step %1").arg(goog_step);
     } else {
       utf_string utf;
-      utf.is_html = 1;
+      utf.is_html = true;
       utf.utfstring = instructions;
       char *s = strip_html(&utf);
       routehead->rte_desc = s;

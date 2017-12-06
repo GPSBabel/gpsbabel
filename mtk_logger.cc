@@ -585,7 +585,7 @@ static void mtk_read()
   }
 
   gb_sleep(10*1000);
-  if (1 || log_enabled) {
+  if (true || log_enabled) {
     i = do_cmd(CMD_LOG_DISABLE, "PMTK001,182,5,3", NULL, 2);
     dbg(3, " ---- LOG DISABLE ---- %s\n", i==0?"Success":"Fail");
   }

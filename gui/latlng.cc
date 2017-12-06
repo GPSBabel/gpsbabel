@@ -21,7 +21,7 @@
 //
 //------------------------------------------------------------------------
 #include "latlng.h"
-#include <math.h>
+#include <cmath>
 
 
 // copied from the web somewhere.

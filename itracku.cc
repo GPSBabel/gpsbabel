@@ -747,7 +747,7 @@ itracku_rt_position(posn_status*)
 {
   char line[1024];
   Waypoint* wpt;
-  while (1) {
+  while (true) {
     gbser_read_line(fd, line, sizeof(line), 5000, 13, 10);
     dbg(1, line);
     wpt = gprmc_parse(line);

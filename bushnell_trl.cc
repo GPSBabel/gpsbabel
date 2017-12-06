@@ -98,7 +98,7 @@ bushnell_read()
 {
   int lat_tmp,lon_tmp;
 
-  while (1) {
+  while (true) {
     Waypoint* wpt_tmp;
 
     lat_tmp = gbfgetint32(file_in);

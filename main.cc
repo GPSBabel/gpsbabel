@@ -30,82 +30,106 @@
 #include "filterdefs.h"
 #include "inifile.h"
 #include "session.h"
-#include "src/core/file.h"
 #include "src/core/usasciicodec.h"
 #include <cctype>
 #include <clocale>
 #include <cstdio>
 #include <cstdlib>
-#include <signal.h>
-#ifdef AFL_INPUT_FUZZING
-#include "argv-fuzz-inl.h"
-#endif
+#include <csignal>
 
 #define MYNAME "main"
 
 void signal_handler(int sig);
 
-class QargStackElement
-{
-public:
+typedef struct arg_stack_s {
   int argn;
-  QStringList qargs;
+  int argc;
+  char** argv;
+  struct arg_stack_s* prev;
+} arg_stack_t;
 
-public:
-  QargStackElement()
-  {
-  }
-
-  QargStackElement(int p_argn, QStringList p_qargs)
-  {
-    argn = p_argn;
-    qargs = p_qargs;
-  }
-};
-
-static QStringList
-load_args(const QString& filename, const QString& arg0)
+static arg_stack_t
+* push_args(arg_stack_t* stack, const int argn, const int argc, char* argv[])
 {
-  QString line;
-  QString str;
-  QStringList qargs(arg0);
+  arg_stack_t* res = (arg_stack_t*) xmalloc(sizeof(*res));
 
-// Use a QTextStream to read the batch file.
-// By default that will use codecForLocale().
-// By default Automatic Unicode detection is enabled.
-  gpsbabel::File file(filename);
-  file.open(QFile::ReadOnly);
-  QTextStream stream(&file);
-  while (!(str = stream.readLine()).isNull()) {
-    str = str.trimmed();
-    if ((str.isEmpty()) || (str.at(0).toLatin1() == '#')) {
+  res->prev = stack;
+  res->argn = argn;
+  res->argc = argc;
+  res->argv = (char**)argv;
+
+  return res;
+}
+
+static arg_stack_t
+* pop_args(arg_stack_t* stack, int* argn, int* argc, char** argv[])
+{
+  arg_stack_t* res;
+  char** argv2 = *argv;
+  int i;
+
+  if (stack == NULL) {
+    fatal("main: Invalid point in time to call 'pop_args'\n");
+  }
+
+  for (i = 0; i < *argc; i++) {
+    xfree(argv2[i]);
+  }
+  xfree(*argv);
+
+  *argn = stack->argn;
+  *argc = stack->argc;
+  *argv = stack->argv;
+
+  res = stack->prev;
+  xfree(stack);
+
+  return res;
+}
+
+static void
+load_args(const char* filename, int* argc, char** argv[])
+{
+  gbfile* fin;
+  char* str, *line = NULL;
+  int argc2;
+  char** argv2;
+
+  fin = gbfopen(filename, "r", "main");
+  while ((str = gbfgetstr(fin))) {
+    str = lrtrim(str);
+    if ((*str == '\0') || (*str == '#')) {
       continue;
     }
-    if (line.isEmpty()) {
-      line = str;
+
+    if (line == NULL) {
+      line = xstrdup(str);
     } else {
-      line.append(' ');
-      line.append(str);
+      char* tmp;
+      xasprintf(&tmp, "%s %s", line, str);
+      xfree(line);
+      line = tmp;
     }
   }
-  file.close();
+  gbfclose(fin);
 
-  // We use csv_lineparse to protect quoted strings, otherwise
-  // we could just split on blank and eliminate the round trip
-  // to 8 bit characters and back.
-  // TODO: move csv processing to Qt, eliminating the need to go
-  // back to 8 bit encoding, which is shaky for encoding like utf8
-  // that have multibyte characters.
-  char* cbuff = xstrdup(CSTR(line));
+  argv2 = (char**) xmalloc(2 * sizeof(*argv2));
+  argv2[0] = xstrdup(*argv[0]);
+  argc2 = 1;
 
-  char* cstr = csv_lineparse(cbuff, " ", "\"", 0);
-  while (cstr != NULL) {
-    qargs.append(QString::fromUtf8(cstr));
-    cstr = csv_lineparse(NULL, " ", "\"", 0);
+  str = csv_lineparse(line, " ", "\"", 0);
+  while (str != NULL) {
+    argv2 = (char**) xrealloc(argv2, (argc2 + 2) * sizeof(*argv2));
+    argv2[argc2] = xstrdup(str);
+    argc2++;
+    str = csv_lineparse(NULL, " ", "\"", 0);
   }
+  xfree(line);
 
-  xfree(cbuff);
-  return (qargs);
+  argv2[argc2] = NULL;
+
+  *argc = argc2;
+  *argv = argv2;
 }
 
 static void
@@ -197,16 +221,13 @@ print_extended_info()
 int
 main(int argc, char* argv[])
 {
-#ifdef AFL_INPUT_FUZZING
-  AFL_INIT_ARGV();
-#endif
   int c;
   int argn;
   ff_vecs_t* ivecs = NULL;
   ff_vecs_t* ovecs = NULL;
   filter_vecs_t* fvecs = NULL;
-  QString fname;
-  QString ofname;
+  char* fname = NULL;
+  char* ofname = NULL;
   const char* ivec_opts = NULL;
   const char* ovec_opts = NULL;
   const char* fvec_opts = NULL;
@@ -215,22 +236,33 @@ main(int argc, char* argv[])
   const char* prog_name = argv[0]; /* argv is modified during processing */
   queue* wpt_head_bak, *rte_head_bak, *trk_head_bak;	/* #ifdef UTF8_SUPPORT */
   signed int wpt_ct_bak, rte_ct_bak, trk_ct_bak;	/* #ifdef UTF8_SUPPORT */
-  QStack<QargStackElement> qargs_stack = QStack<QargStackElement>();
+  arg_stack_t* arg_stack = NULL;
 
-  // Create a QCoreApplication object to handle application initialization.
-  // In addition to being useful for argument decoding, the creation of a
-  // QCoreApplication object gets Qt initialized, especially locale related
-  // QTextCodec stuff.
+  // Create a QCoreApplication object to handle application initialization. 
+  // TODO: Someday we may actually use this, but for now we are just trying
+  // to get Qt initialized, especially locale related QTextCodec stuff.
   // For example, this will get the QTextCodec::codecForLocale set
   // correctly.
   QCoreApplication app(argc, argv);
-  // Use QCoreApplication::arguments() to process the command line.
-  QStringList qargs = QCoreApplication::arguments();
+#ifdef __WIN32__
+  // Use QCoreApplication::arguments() to process the command line and replace
+  // argv[] strings with UTF-8 versions; this is needed on Windows only.
+  QVector<QByteArray> qargv;
+  {
+    QStringList qargs = QCoreApplication::arguments();
+    argc = qargs.size();
+    qargv.resize(argc);
+    for (int i = 0; i < argc; ++i) {
+      qargv[i] = qargs[i].toUtf8();
+      argv[i] = qargv[i].data();
+    }
+  }
+#endif
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 2, 0))
-#error This version of Qt is not supported.
+  #error This version of Qt is not supported.
 #endif
 
   // The first invocation of QTextCodec::codecForLocale() may result in LC_ALL being set to the native environment
@@ -280,8 +312,8 @@ main(int argc, char* argv[])
 #ifdef DEBUG_MEM
   debug_mem_open();
   debug_mem_output("command line: ");
-  for (int i = 1; i < qargs.size(); i++) {
-    debug_mem_output("%s ", qPrintable(qargs.at(i)));
+  for (argn = 1; argn < argc; argn++) {
+    debug_mem_output("%s ", argv[argn]);
   }
   debug_mem_output("\n");
 #endif
@@ -297,8 +329,8 @@ main(int argc, char* argv[])
   waypt_init();
   route_init();
 
-  if (qargs.size() < 2) {
-    usage(prog_name,1);
+  if (argc < 2) {
+    usage(argv[0],1);
     exit(0);
   }
 
@@ -306,63 +338,68 @@ main(int argc, char* argv[])
    * Open-code getopts since POSIX-impaired OSes don't have one.
    */
   argn = 1;
-  while (argn < qargs.size()) {
-    QString optarg;
+  while (argn < argc) {
+    char* optarg;
 
-//  we must check the length for afl input fuzzing to work.
-//    if (qargs.at(argn).at(0).toLatin1() != '-') {
-    if (qargs.at(argn).size() > 0 && qargs.at(argn).at(0).toLatin1() != '-') {
+    if (argv[argn][0] != '-') {
       break;
     }
-    if (qargs.at(argn).size() > 1 && qargs.at(argn).at(1).toLatin1() == '-') {
+    if (argv[argn][1] == '-') {
       break;
     }
 
-    if (qargs.at(argn).size() > 1 && qargs.at(argn).at(1).toLatin1() == 'V') {
+    if (argv[argn][1] == 'V') {
       printf("\nGPSBabel Version %s\n\n", gpsbabel_version);
-      if (qargs.at(argn).size() > 2 && qargs.at(argn).at(2).toLatin1() == 'V') {
+      if (argv[argn][2] == 'V') {
         print_extended_info();
       }
       exit(0);
     }
 
-    if (qargs.at(argn).size() > 1 && (qargs.at(argn).at(1).toLatin1() == '?' || qargs.at(argn).at(1).toLatin1() == 'h')) {
-      if (argn < qargs.size()-1) {
-        spec_usage(qPrintable(qargs.at(argn+1)));
+    if (argv[argn][1] == '?' || argv[argn][1] == 'h') {
+      if (argn < argc-1) {
+        spec_usage(argv[argn+1]);
       } else {
-        usage(prog_name,0);
+        usage(argv[0],0);
       }
       exit(0);
     }
 
-    c = qargs.at(argn).size() > 1 ? qargs.at(argn).at(1).toLatin1() : '\0';
+    c = argv[argn][1];
 
-    if (qargs.at(argn).size() > 2) {
-      opt_version = qargs.at(argn).at(2).digitValue();
+    if (argv[argn][2]) {
+      opt_version = atoi(&argv[argn][2]);
     }
 
     switch (c) {
+    //case 'c':
+    //  optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
+    //  cet_convert_init(optarg, 1);
+    //  break;
     case 'i':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
-      ivecs = find_vec(CSTR(optarg), &ivec_opts);
+      optarg = argv[argn][2]
+               ? argv[argn]+2 : argv[++argn];
+      ivecs = find_vec(optarg, &ivec_opts);
       if (ivecs == NULL) {
-        fatal("Input type '%s' not recognized\n", qPrintable(optarg));
+        fatal("Input type '%s' not recognized\n", optarg);
       }
       break;
     case 'o':
       if (ivecs == NULL) {
         warning("-o appeared before -i.   This is probably not what you want to do.\n");
       }
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
-      ovecs = find_vec(CSTR(optarg), &ovec_opts);
+      optarg = argv[argn][2]
+               ? argv[argn]+2 : argv[++argn];
+      ovecs = find_vec(optarg, &ovec_opts);
       if (ovecs == NULL) {
-        fatal("Output type '%s' not recognized\n", qPrintable(optarg));
+        fatal("Output type '%s' not recognized\n", optarg);
       }
       break;
     case 'f':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
+      optarg = argv[argn][2]
+               ? argv[argn]+2 : argv[++argn];
       fname = optarg;
-      if (fname.isEmpty()) {
+      if (fname == NULL) {
         fatal("No file or device name specified.\n");
       }
       if (ivecs == NULL) {
@@ -382,8 +419,8 @@ main(int argc, char* argv[])
 
       cet_convert_init(ivecs->encode, ivecs->fixed_encode);	/* init by module vec */
 
-      start_session(ivecs->name, CSTR(fname));
-      ivecs->rd_init(fname);
+      start_session(ivecs->name, fname);
+      ivecs->rd_init(QString(fname));
       ivecs->read();
       ivecs->rd_deinit();
 
@@ -393,9 +430,10 @@ main(int argc, char* argv[])
       did_something = 1;
       break;
     case 'F':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
+      optarg = argv[argn][2]
+               ? argv[argn]+2 : argv[++argn];
       ofname = optarg;
-      if (ofname.isEmpty()) {
+      if (ofname == NULL) {
         fatal("No output file or device name specified.\n");
       }
       if (ovecs && (!(global_opts.masked_objective & POSNDATAMASK))) {
@@ -414,7 +452,7 @@ main(int argc, char* argv[])
         trk_ct_bak = -1;
         rte_head_bak = trk_head_bak = NULL;
 
-        ovecs->wr_init(ofname);
+        ovecs->wr_init(QString(ofname));
 
         if (global_opts.charset != &cet_cs_vec_utf8) {
           /*
@@ -470,8 +508,30 @@ main(int argc, char* argv[])
       global_opts.objective = posndata;
       global_opts.masked_objective |= POSNDATAMASK;
       break;
+    case 'N':
+#if 0
+      /* This option is silently eaten for compatibilty.  -N is now the
+       * default.  If you want the old behaviour, -S allows you to individually
+       * turn them on.  The -N option will be removed in 2008.
+       */
+
+      switch (argv[argn][2]) {
+      case 'i':
+        global_opts.no_smart_icons = 1;
+        break;
+      case 'n':
+        global_opts.no_smart_names = 1;
+        break;
+      default:
+        global_opts.no_smart_names = 1;
+        global_opts.no_smart_icons = 1;
+        break;
+      }
+#endif
+
+      break;
     case 'S':
-      switch (qargs.at(argn).size() > 2 ? qargs.at(argn).at(2).toLatin1() : '\0') {
+      switch (argv[argn][2]) {
       case 'i':
         global_opts.smart_icons = 1;
         break;
@@ -485,8 +545,9 @@ main(int argc, char* argv[])
       }
       break;
     case 'x':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
-      fvecs = find_filter_vec(CSTR(optarg), &fvec_opts);
+      optarg = argv[argn][2]
+               ? argv[argn]+2 : argv[++argn];
+      fvecs = find_filter_vec(optarg, &fvec_opts);
 
       if (fvecs) {
         if (fvecs->f_init) {
@@ -498,12 +559,13 @@ main(int argc, char* argv[])
         }
         free_filter_vec(fvecs);
       }  else {
-        fatal("Unknown filter '%s'\n",qPrintable(optarg));
+        fatal("Unknown filter '%s'\n",optarg);
       }
       break;
     case 'D':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
-      global_opts.debug_level = optarg.toInt();
+      optarg = argv[argn][2]
+               ? argv[argn]+2 : argv[++argn];
+      global_opts.debug_level = atoi(optarg);
       /*
        * When debugging, announce version.
        */
@@ -516,7 +578,7 @@ main(int argc, char* argv[])
      * Undocumented '-vs' option for GUI wrappers.
      */
     case 'v':
-      switch (qargs.at(argn).size() > 2 ? qargs.at(argn).at(2).toLatin1() : '\0') {
+      switch (argv[argn][2]) {
       case 's':
         global_opts.verbose_status = 1;
         break;
@@ -538,39 +600,35 @@ main(int argc, char* argv[])
       exit(0);
     case 'h':
     case '?':
-      usage(prog_name,0);
+      usage(argv[0],0);
       exit(0);
     case 'p':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
+      optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
       inifile_done(global_opts.inifile);
-      if (optarg.isEmpty()) {	/* from GUI to preserve inconsistent options */
+      if (!optarg || strcmp(optarg, "") == 0) {	/* from GUI to preserve inconsistent options */
         global_opts.inifile = NULL;
       } else {
         global_opts.inifile = inifile_init(optarg, MYNAME);
       }
       break;
     case 'b':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
-      qargs_stack.push(QargStackElement(argn, qargs));
-      qargs = load_args(optarg, qargs.at(0));
-      if (qargs.size() == 0) {
-        QargStackElement ele = qargs_stack.pop();
-        argn = ele.argn;
-        qargs = ele.qargs;
+      optarg = argv[argn][2] ? argv[argn]+2 : argv[++argn];
+      arg_stack = push_args(arg_stack, argn, argc, argv);
+      load_args(optarg, &argc, &argv);
+      if (argc == 0) {
+        arg_stack = pop_args(arg_stack, &argn, &argc, &argv);
       } else {
         argn = 0;
       }
       break;
 
     default:
-      fatal("Unknown option '%s'.\n", qPrintable(qargs.at(argn)));
+      fatal("Unknown option '%s'.\n", argv[argn]);
       break;
     }
 
-    while ((argn+1 >= qargs.size()) && (!qargs_stack.isEmpty())) {
-      QargStackElement ele = qargs_stack.pop();
-      argn = ele.argn;
-      qargs = ele.qargs;
+    if ((argn+1 >= argc) && (arg_stack != NULL)) {
+      arg_stack = pop_args(arg_stack, &argn, &argc, &argv);
     }
     argn++;
   }
@@ -579,12 +637,11 @@ main(int argc, char* argv[])
    * Allow input and output files to be specified positionally
    * as well.  This is the typical command line format.
    */
-  for (int i = 0; i < argn; i++) {
-    qargs.removeFirst();
-  }
-  if (qargs.size() > 2) {
+  argc -= argn;
+  argv += argn;
+  if (argc > 2) {
     fatal("Extra arguments on command line\n");
-  } else if (qargs.size() && ivecs) {
+  } else if (argc && ivecs) {
     did_something = 1;
     /* simulates the default behaviour of waypoints */
     if (doing_nothing) {
@@ -593,18 +650,18 @@ main(int argc, char* argv[])
 
     cet_convert_init(ivecs->encode, 1);
 
-    start_session(ivecs->name, CSTR(qargs.at(0)));
+    start_session(ivecs->name, argv[0]);
     if (ivecs->rd_init == NULL) {
       fatal("Format does not support reading.\n");
     }
-    ivecs->rd_init(qargs.at(0));
+    ivecs->rd_init(QString(argv[0]));
     ivecs->read();
     ivecs->rd_deinit();
 
     cet_convert_strings(global_opts.charset, NULL, NULL);
     cet_convert_deinit();
 
-    if (qargs.size() == 2 && ovecs) {
+    if (argc == 2 && ovecs) {
       cet_convert_init(ovecs->encode, 1);
       cet_convert_strings(NULL, global_opts.charset, NULL);
 
@@ -612,13 +669,13 @@ main(int argc, char* argv[])
         fatal("Format does not support writing.\n");
       }
 
-      ovecs->wr_init(qargs.at(1));
+      ovecs->wr_init(QString(argv[1]));
       ovecs->write();
       ovecs->wr_deinit();
 
       cet_convert_deinit();
     }
-  } else if (qargs.size()) {
+  } else if (argc) {
     usage(prog_name,0);
     exit(0);
   }
@@ -654,11 +711,11 @@ main(int argc, char* argv[])
 
 
     if (ivecs->position_ops.rd_init) {
-      if (fname.isEmpty()) {
+      if (!fname) {
         fatal("An input file (-f) must be specified.\n");
       }
-      start_session(ivecs->name, CSTR(fname));
-      ivecs->position_ops.rd_init(fname);
+      start_session(ivecs->name, fname);
+      ivecs->position_ops.rd_init(QString(fname));
     }
 
     if (global_opts.masked_objective & ~POSNDATAMASK) {
@@ -676,7 +733,7 @@ main(int argc, char* argv[])
     }
 
     if (ovecs && ovecs->position_ops.wr_init) {
-      ovecs->position_ops.wr_init(ofname);
+      ovecs->position_ops.wr_init(QString(ofname));
     }
 
     tracking_status.request_terminate = 0;
@@ -693,7 +750,7 @@ main(int argc, char* argv[])
       }
       if (wpt) {
         if (ovecs) {
-//					ovecs->position_ops.wr_init(ofname);
+//					ovecs->position_ops.wr_init(QString(ofname));
           ovecs->position_ops.wr_position(wpt);
 //					ovecs->position_ops.wr_deinit();
         } else {

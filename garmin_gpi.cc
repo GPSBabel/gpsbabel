@@ -1562,7 +1562,7 @@ garmin_gpi_wr_deinit()
 static void
 garmin_gpi_read()
 {
-  while (1) {
+  while (true) {
     int tag = gbfgetint32(fin);
     if (tag == 0xffff) {
       return;

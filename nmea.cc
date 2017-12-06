@@ -30,8 +30,8 @@
 
 #include <cctype>
 #include <cmath>
+#include <cstdio>
 #include <cstdlib>
-#include <stdio.h>
 #include <ctime>
 
 #include <QtCore/QStringList>
