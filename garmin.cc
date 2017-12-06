@@ -19,19 +19,19 @@
 
  */
 
-#include <ctype.h>
-#include <limits.h>
-#include <stdlib.h>
-#include <math.h>
+#include <cctype>
+#include <climits>
+#include <cmath>
+#include <cstdlib>
 
-#include "defs.h"
 #include "cet_util.h"
+#include "defs.h"
+#include "garmin_device_xml.h"
+#include "garmin_fs.h"
+#include "garmin_tables.h"
 #include "grtcirc.h"
 #include "jeeps/gps.h"
 #include "jeeps/gpsserial.h"
-#include "garmin_tables.h"
-#include "garmin_fs.h"
-#include "garmin_device_xml.h"
 
 #define MYNAME "GARMIN"
 static const char* portname;
@@ -67,40 +67,40 @@ static
 arglist_t garmin_args[] = {
   {
     "snlen", &snlen, "Length of generated shortnames", NULL,
-    ARGTYPE_INT, "1", NULL
+    ARGTYPE_INT, "1", NULL, nullptr
   },
   {
     "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  { "deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+  { "deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   {
     "get_posn", &getposn, "Return current position as a waypoint",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "power_off", &poweroff, "Command unit to power itself down",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "erase_t", &eraset, "Erase existing courses when writing new ones",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "resettime", &resettime, "Sync GPS time to computer time",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "category", &category, "Category number to use for written waypoints",
-    NULL, ARGTYPE_INT, "1", "16"
+    NULL, ARGTYPE_INT, "1", "16", nullptr
   },
   {
     "bitscategory", &categorybitsopt, "Bitmap of categories",
-    NULL, ARGTYPE_INT, "1", "65535"
+    NULL, ARGTYPE_INT, "1", "65535", nullptr
   },
   {
     "baud", &baudopt, "Speed in bits per second of serial port (baud=9600)",
-    NULL, ARGTYPE_INT, ARG_NOMINMAX },
+    NULL, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
 
   ARG_TERMINATOR
 };
@@ -1108,8 +1108,8 @@ route_waypt_pr(const Waypoint* wpt)
   // This was strncpy(rte->ident, wpt->shortname, sizeof(rte->ident));
   char* d;
   d = rte->ident;
-  for (int idx = 0; idx < wpt->shortname.length(); idx++) {
-    int c = wpt->shortname[idx].toLatin1();
+  for (auto idx : wpt->shortname) {
+    int c = idx.toLatin1();
     if (receiver_must_upper && isalpha(c)) {
       c = toupper(c);
     }
@@ -1275,7 +1275,8 @@ ff_vecs_t garmin_vecs = {
   NULL,
   garmin_args,
   CET_CHARSET_ASCII, 0,
-  { pvt_init, pvt_read, rw_deinit, NULL, NULL, NULL }
+  { pvt_init, pvt_read, rw_deinit, NULL, NULL, NULL },
+  nullptr
 };
 
 static const char* d103_icons[16] = {

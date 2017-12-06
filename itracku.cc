@@ -31,9 +31,9 @@
  */
 #include "defs.h"
 #include "gbser.h"
-#include <ctype.h>
-#include <math.h>
-#include <stdio.h>
+#include <cctype>
+#include <cmath>
+#include <cstdio>
 
 #define MYNAME "itracku"
 
@@ -354,8 +354,8 @@ init_device()
 // select the type of option.
 static
 arglist_t itracku_args[] = {
-  { "backup", &backup_file_name, "Appends the input to a backup file", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-  { "new", &only_new, "Only waypoints that are not the backup file", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+  { "backup", &backup_file_name, "Appends the input to a backup file", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  { "new", &only_new, "Only waypoints that are not the backup file", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
 //   "default", ARGYTPE_STRING, ARG_NOMINMAX} ,
   ARG_TERMINATOR
 };
@@ -365,7 +365,7 @@ arglist_t itracku_args[] = {
 *******************************************************************************/
 
 static void
-itracku_rd_init_common(const QString& fname)
+itracku_rd_init_common(const QString&)
 {
   new_waypoint_count = 0;
 
@@ -743,11 +743,11 @@ gprmc_parse(char* ibuf)
 	andreas.grimme@gmx.net
 */
 static Waypoint*
-itracku_rt_position(posn_status* posn_status)
+itracku_rt_position(posn_status*)
 {
   char line[1024];
   Waypoint* wpt;
-  while (1) {
+  while (true) {
     gbser_read_line(fd, line, sizeof(line), 5000, 13, 10);
     dbg(1, line);
     wpt = gprmc_parse(line);
@@ -785,7 +785,8 @@ ff_vecs_t itracku_vecs = {
   itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
-  { itracku_rt_init, itracku_rt_position, itracku_rt_deinit, NULL, NULL, NULL }
+  { itracku_rt_init, itracku_rt_position, itracku_rt_deinit, NULL, NULL, NULL },
+  nullptr
 };
 
 ff_vecs_t itracku_fvecs = {
@@ -805,7 +806,8 @@ ff_vecs_t itracku_fvecs = {
   itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
-  { NULL, NULL, NULL, NULL, NULL, NULL }
+  { NULL, NULL, NULL, NULL, NULL, NULL },
+  nullptr
 };
 
 

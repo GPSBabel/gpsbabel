@@ -11,7 +11,8 @@ mkdir $DISTDIR/plugins
 mkdir $DISTDIR/translations
 mkdir $DISTDIR/help
 
-QT_LIBS=`ldd objects/gpsbabelfe-bin | grep libQt | awk '{print $3}'`
+QT_LIBS="`ldd objects/gpsbabelfe-bin | grep libQt | awk '{print $3}'`"
+QT_LIBS="$QT_LIBS `ldd $QT_INSTALL_PLUGINS/platforms/libqxcb.so | grep libQt | awk '{print $3}'`"
 for lib in $QT_LIBS
 do
 	cp $lib $DISTDIR

@@ -122,7 +122,9 @@
       <name>Waypoints</name>
       <Placemark>
         <name>LAP001</name>
-        <TimeStamp><when>2008-08-20T07:04:48Z</when></TimeStamp>
+        <TimeStamp>
+          <when>2008-08-20T07:04:48Z</when>
+        </TimeStamp>
         <styleUrl>#waypoint</styleUrl>
         <Point>
           <coordinates>-0.035187,51.506172,0.14</coordinates>
@@ -221,7 +223,9 @@
               <latitude>51.506172</latitude>
               <tilt>66</tilt>
             </LookAt>
-            <TimeStamp><when>2008-08-20T07:04:48Z</when></TimeStamp>
+            <TimeStamp>
+              <when>2008-08-20T07:04:48Z</when>
+            </TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
               <coordinates>-0.035187,51.506172,0.14</coordinates>
@@ -247,7 +251,9 @@
               <latitude>51.506196</latitude>
               <tilt>66</tilt>
             </LookAt>
-            <TimeStamp><when>2008-08-20T07:04:49Z</when></TimeStamp>
+            <TimeStamp>
+              <when>2008-08-20T07:04:49Z</when>
+            </TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
               <coordinates>-0.035242,51.506196,-0.82</coordinates>
@@ -273,7 +279,9 @@
               <latitude>51.506221</latitude>
               <tilt>66</tilt>
             </LookAt>
-            <TimeStamp><when>2008-08-20T07:04:50Z</when></TimeStamp>
+            <TimeStamp>
+              <when>2008-08-20T07:04:50Z</when>
+            </TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
               <coordinates>-0.035303,51.506221,-15.72</coordinates>
@@ -299,7 +307,9 @@
               <latitude>51.506246</latitude>
               <tilt>66</tilt>
             </LookAt>
-            <TimeStamp><when>2008-08-20T07:04:51Z</when></TimeStamp>
+            <TimeStamp>
+              <when>2008-08-20T07:04:51Z</when>
+            </TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
               <coordinates>-0.035354,51.506246,-15.72</coordinates>
@@ -324,7 +334,9 @@
               <latitude>51.506271</latitude>
               <tilt>66</tilt>
             </LookAt>
-            <TimeStamp><when>2008-08-20T07:04:52Z</when></TimeStamp>
+            <TimeStamp>
+              <when>2008-08-20T07:04:52Z</when>
+            </TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
               <coordinates>-0.035400,51.506271,-15.24</coordinates>
@@ -349,7 +361,9 @@
               <latitude>51.506297</latitude>
               <tilt>66</tilt>
             </LookAt>
-            <TimeStamp><when>2008-08-20T07:04:53Z</when></TimeStamp>
+            <TimeStamp>
+              <when>2008-08-20T07:04:53Z</when>
+            </TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
               <coordinates>-0.035438,51.506297,-15.24</coordinates>
@@ -375,7 +389,9 @@
               <latitude>51.506315</latitude>
               <tilt>66</tilt>
             </LookAt>
-            <TimeStamp><when>2008-08-20T07:04:54Z</when></TimeStamp>
+            <TimeStamp>
+              <when>2008-08-20T07:04:54Z</when>
+            </TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
               <coordinates>-0.035462,51.506315,-15.24</coordinates>
@@ -401,7 +417,9 @@
               <latitude>51.506324</latitude>
               <tilt>66</tilt>
             </LookAt>
-            <TimeStamp><when>2008-08-20T07:04:55Z</when></TimeStamp>
+            <TimeStamp>
+              <when>2008-08-20T07:04:55Z</when>
+            </TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
               <coordinates>-0.035472,51.506324,-15.24</coordinates>

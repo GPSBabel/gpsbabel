@@ -21,8 +21,8 @@
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 #if FILTERS_ENABLED
 
@@ -50,31 +50,31 @@ static
 arglist_t radius_args[] = {
   {
     "lat", &latopt,       "Latitude for center point (D.DDDDD)",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX
+    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "lon", &lonopt,       "Longitude for center point (D.DDDDD)",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX
+    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "distance", &distopt, "Maximum distance from center",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX
+    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "exclude", &exclopt,  "Exclude points close to center",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "nosort", &nosort,    "Inhibit sort by distance to center",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "maxcount", &maxctarg,"Output no more than this number of points",
-    NULL, ARGTYPE_INT, "1", NULL
+    NULL, ARGTYPE_INT, "1", NULL, nullptr
   },
   {
     "asroute", &routename,"Put resulting waypoints in route of this name",
-    NULL, ARGTYPE_STRING, NULL, NULL
+    NULL, ARGTYPE_STRING, NULL, NULL, nullptr
   },
   ARG_TERMINATOR
 };
@@ -109,7 +109,7 @@ dist_comp(const void* a, const void* b)
 }
 
 void
-radius_process(void)
+radius_process()
 {
 #if !NEWQ
   queue* elem, * tmp;
@@ -203,7 +203,7 @@ radius_process(void)
 }
 
 void
-radius_init(const char* args)
+radius_init(const char*)
 {
   char* fm;
 
@@ -235,7 +235,7 @@ radius_init(const char* args)
 }
 
 void
-radius_deinit(void)
+radius_deinit()
 {
   if (home_pos) {
     xfree(home_pos);

@@ -20,13 +20,13 @@
 */
 
 #include "defs.h"
-#include "garmin_tables.h"
 #include "cet_util.h"
 #include "csv_util.h"
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "garmin_tables.h"
 #include <QtCore/QDebug>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;
@@ -410,4 +410,6 @@ ff_vecs_t pcx_vecs = {
     ff_type_file,      FF_CAP_RW_ALL, rd_init,    wr_init, rd_deinit,
     wr_deinit,         data_read,     data_write, NULL,    pcx_args,
     CET_CHARSET_ASCII, 1 /* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

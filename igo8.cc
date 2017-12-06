@@ -64,7 +64,7 @@
 #include "defs.h"
 #include "cet.h"
 #include "cet_util.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #define FLOAT_TO_INT(x) ((int)((x) + ((x)<0?-0.5:0.5)))
 #define IGO8_HEADER_SIZE (sizeof(igo8_id_block) + 256)
@@ -106,9 +106,9 @@ static int in_point_count;
 
 // Exported options list
 static arglist_t igo8_options[] = {
-  { "tracknum", &igo8_option_tracknum, "Track identification number", NULL, ARGTYPE_INT, ARG_NOMINMAX },
-  { "title", &igo8_option_title, "Track title", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-  { "description", &igo8_option_description, "Track description", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+  { "tracknum", &igo8_option_tracknum, "Track identification number", NULL, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
+  { "title", &igo8_option_title, "Track title", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  { "description", &igo8_option_description, "Track description", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
 
@@ -367,4 +367,6 @@ ff_vecs_t igo8_vecs = {
   igo8_options,
   CET_CHARSET_UTF8,
   1
+  , NULL_POS_OPS,
+  nullptr
 };

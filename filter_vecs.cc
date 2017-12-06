@@ -21,12 +21,12 @@
 
 #include "defs.h"
 #include "filterdefs.h"
-#include "inifile.h"
 #include "gbversion.h"
+#include "inifile.h"
 #include <QtCore/QStringList>
-#include <stdlib.h> // qsort
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdlib> // qsort
 
 typedef struct {
   filter_vecs_t* vec;
@@ -162,7 +162,7 @@ fl_vecs_t filter_vec_list[] = {
 };
 
 filter_vecs_t*
-find_filter_vec(char* const vecname, char** opts)
+find_filter_vec(const char* const vecname, const char** opts)
 {
   fl_vecs_t* vec = filter_vec_list;
   char* v = xstrdup(vecname);
@@ -171,7 +171,7 @@ find_filter_vec(char* const vecname, char** opts)
 
   while (vec->vec) {
     arglist_t* ap;
-    char* res;
+    const char* res;
 
     if (svecname.compare(vec->name, Qt::CaseInsensitive)) {
       vec++;

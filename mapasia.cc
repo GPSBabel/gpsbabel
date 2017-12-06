@@ -20,11 +20,11 @@
 
  */
 
-#include <ctype.h>
-#include <math.h>
-#include <string.h>
-#include <time.h>
 #include "defs.h"
+#include <cctype>
+#include <cmath>
+#include <cstring>
+#include <ctime>
 //#include "session.h"
 
 #define MYNAME "mapasia"
@@ -199,7 +199,7 @@ tr7_rd_deinit()
 *******************************************************************************/
 
 static void
-tr7_disp_track_head_cb(const route_head* trk)
+tr7_disp_track_head_cb(const route_head*)
 {
   wpt_tmp = NULL;
 }
@@ -299,6 +299,8 @@ ff_vecs_t mapasia_tr7_vecs = {		/* we can read and write tracks */
   NULL,
   tr7_args,
   CET_CHARSET_UTF8, 1	/* FIXED - CET-REVIEW - */
+  , NULL_POS_OPS,
+  nullptr
 
 };
 

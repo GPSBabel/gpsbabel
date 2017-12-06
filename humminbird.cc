@@ -21,8 +21,8 @@
 
 #include "defs.h"
 #include <QtCore/QMap>
-#include <stdio.h>
-#include <math.h>
+#include <cmath>
+#include <cstdio>
 
 #define MYNAME "humminbird"
 
@@ -773,7 +773,7 @@ humminbird_track_head(const route_head* trk)
 }
 
 static void
-humminbird_track_tail(const route_head* rte)
+humminbird_track_tail(const route_head*)
 {
   int max_points = (131080 - sizeof(uint32_t)- sizeof(humminbird_trk_header_t)) / sizeof(humminbird_trk_point_t);
 
@@ -994,6 +994,8 @@ ff_vecs_t humminbird_vecs = {
   humminbird_args,
   CET_CHARSET_ASCII, 1			/* ascii is the expected character set */
   /* currently fixed !!! */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /**************************************************************************/
@@ -1017,6 +1019,8 @@ ff_vecs_t humminbird_ht_vecs = {
   humminbird_args,
   CET_CHARSET_ASCII, 1			/* ascii is the expected character set */
   /* currently fixed !!! */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /**************************************************************************/

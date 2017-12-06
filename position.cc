@@ -22,8 +22,8 @@
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
-#include <math.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdlib>
 
 #if FILTERS_ENABLED
 
@@ -48,16 +48,16 @@ static
 arglist_t position_args[] = {
   {
     "distance", &distopt, "Maximum positional distance",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX
+    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "all", &purge_duplicates,
     "Suppress all points close to other points",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "time", &timeopt, "Maximum time in seconds beetween two points",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX
+    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -179,16 +179,16 @@ position_process_route(const route_head* rh)
 }
 
 static void
-position_noop_w(const Waypoint* w)
+position_noop_w(const Waypoint*)
 {
 }
 
 static void
-position_noop_t(const route_head* h)
+position_noop_t(const route_head*)
 {
 }
 
-void position_process(void)
+void position_process()
 {
   int i = waypt_count();
 
@@ -201,7 +201,7 @@ void position_process(void)
 }
 
 void
-position_init(const char* args)
+position_init(const char*)
 {
   char* fm;
 
@@ -225,7 +225,7 @@ position_init(const char* args)
 }
 
 void
-position_deinit(void)
+position_deinit()
 {
 }
 

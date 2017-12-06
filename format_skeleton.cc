@@ -63,13 +63,13 @@ format_skeleton_rd_init(const char* fname)
 }
 
 static void
-format_skeleton_rd_deinit(void)
+format_skeleton_rd_deinit()
 {
 //	gbfclose(fin);
 }
 
 static void
-format_skeleton_read(void)
+format_skeleton_read()
 {
 //	your special code to extract waypoint, route and track
 //	information from gbfile "fin"
@@ -110,13 +110,13 @@ format_skeleton_wr_init(const char* fname)
 }
 
 static void
-format_skeleton_wr_deinit(void)
+format_skeleton_wr_deinit()
 {
 //	gbfclose(fout);
 }
 
 static void
-format_skeleton_write(void)
+format_skeleton_write()
 {
 // Here is how you register callbacks for all waypoints, routes, tracks.
 // waypt_disp_all(waypt)
@@ -149,7 +149,10 @@ ff_vecs_t format_skeleton_vecs = {
   format_skeleton_write,
   format_skeleton_exit,
   format_skeleton_args,
-  CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
+  CET_CHARSET_ASCII, 0,			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  NULL_POS_OPS, // Unless you do realtime positioning
+  nullptr // name. Not used by modules.
+
 };
 /**************************************************************************/

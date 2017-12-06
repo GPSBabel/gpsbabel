@@ -21,12 +21,12 @@
 
 #include "defs.h"
 #include "csv_util.h"
-#include "xmlgeneric.h"
 #include "magellan.h"
+#include "xmlgeneric.h"
 #include <QtCore/QXmlStreamAttributes>
 #include <cmath>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "maggeo"
 
@@ -339,4 +339,6 @@ ff_vecs_t maggeo_vecs = {
 #else
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 #endif
+  , NULL_POS_OPS,
+  nullptr
 };

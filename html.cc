@@ -23,8 +23,8 @@
 #include "defs.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/xmltag.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* file_out;
 static short_handle mkshort_handle;
@@ -41,23 +41,23 @@ static
 arglist_t html_args[] = {
   {
     "stylesheet", &stylesheet,
-    "Path to HTML style sheet", NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    "Path to HTML style sheet", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "encrypt", &html_encrypt,
-    "Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    "Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "logs", &includelogs,
-    "Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    "Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "degformat", &degformat,
-    "Degrees output as 'ddd', 'dmm'(default) or 'dms'", "dmm", ARGTYPE_STRING, ARG_NOMINMAX
+    "Degrees output as 'ddd', 'dmm'(default) or 'dms'", "dmm", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "altunits", &altunits,
-    "Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX
+    "Units for altitude (f)eet or (m)etres", "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -260,7 +260,7 @@ data_write()
 
   // Don't write this line when running test suite.  Actually, we should
   // probably not write this line at all...
-  if (!getenv("GPSBABEL_FREEZE_TIME")) {
+  if (ugetenv("GPSBABEL_FREEZE_TIME").isNull()) {
     gbfprintf(file_out, " <meta name=\"Generator\" content=\"GPSBabel %s\">\n", gpsbabel_version);
   }
   gbfprintf(file_out, " <title>GPSBabel HTML Output</title>\n");
@@ -298,4 +298,6 @@ ff_vecs_t html_vecs = {
   NULL,
   html_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

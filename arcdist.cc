@@ -24,9 +24,9 @@
 #include "filterdefs.h"
 #include "grtcirc.h"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h> // strtod
+#include <cmath>
+#include <cstdio>
+#include <cstdlib> // strtod
 
 #if FILTERS_ENABLED
 #define MYNAME "Arc filter"
@@ -51,31 +51,31 @@ static
 arglist_t arcdist_args[] = {
   {
     "file", &arcfileopt,  "File containing vertices of arc",
-    NULL, ARGTYPE_FILE, ARG_NOMINMAX
+    NULL, ARGTYPE_FILE, ARG_NOMINMAX, nullptr
   },
   {
     "rte", &rteopt, "Route(s) are vertices of arc",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "trk", &trkopt, "Track(s) are vertices of arc",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "distance", &distopt, "Maximum distance from arc",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX
+    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "exclude", &exclopt, "Exclude points close to the arc", NULL,
-    ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "points", &ptsopt, "Use distance from vertices not lines",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "project", &projectopt, "Move waypoints to its projection on lines or vertices",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -147,14 +147,14 @@ arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
 }
 
 static void
-arcdist_arc_disp_hdr_cb(const route_head* rte)
+arcdist_arc_disp_hdr_cb(const route_head*)
 {
   /* Set arcpt1 to NULL */
   arcdist_arc_disp_wpt_cb(NULL);
 }
 
 void
-arcdist_process(void)
+arcdist_process()
 {
   queue* elem, * tmp;
   unsigned removed;
@@ -268,7 +268,7 @@ arcdist_process(void)
 }
 
 void
-arcdist_init(const char* args)
+arcdist_init(const char*)
 {
   char* fm;
 
@@ -291,7 +291,7 @@ arcdist_init(const char* args)
 }
 
 void
-arcdist_deinit(void)
+arcdist_deinit()
 {
   /* do nothing */
 }

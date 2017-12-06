@@ -20,8 +20,8 @@
 
 #include "defs.h"
 #include "csv_util.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "PocketFMS waypoint text file format"
 
@@ -151,4 +151,6 @@ ff_vecs_t pocketfms_wp_vecs = {
   NULL,
   NULL,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

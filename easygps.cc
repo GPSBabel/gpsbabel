@@ -20,7 +20,7 @@
 
 
 #include "defs.h"
-#include <stdio.h>
+#include <cstdio>
 
 static gbfile* file_in;
 static gbfile* file_out;
@@ -224,4 +224,6 @@ ff_vecs_t easygps_vecs = {
   NULL,
   easygps_args,
   CET_CHARSET_ASCII, 0	/* CET REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

@@ -72,9 +72,9 @@ for a little more info, see structures:
 ******************************************************************************/
 
 #include "defs.h"
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h> // atoi
+#include <cassert>
+#include <cstdio>
+#include <cstdlib> // atoi
 
 #if _MSC_VER
 #define __func__ __FUNCTION__
@@ -166,7 +166,7 @@ v900_rd_init(const QString& fname)
      that will be translated to a single \n, making the line len one character shorter than
      on linux machines.
    */
-  fin = fopen(qPrintable(fname),"rb");
+  fin = ufopen(fname, "rb");
   if (!fin) {
     fatal("v900: could not open '%s'.\n", qPrintable(fname));
   }
@@ -236,7 +236,7 @@ v900_read()
   track->rte_desc = "V900 GPS tracklog data";
   track_add_head(track);
 
-  while (1) {
+  while (true) {
     Waypoint* wpt;
     char c;
     int bad = 0;
@@ -386,5 +386,6 @@ ff_vecs_t v900_vecs = {
   NULL,
   NULL,          /* args */
   CET_CHARSET_UTF8, 1,	/* Could be  US-ASCII, since we only read "0-9,A-Z\n\r" */
-  {NULL,NULL,NULL,NULL,NULL,NULL}
+  {NULL,NULL,NULL,NULL,NULL,NULL},
+  nullptr
 };

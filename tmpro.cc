@@ -35,7 +35,7 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "csv_util.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #define MYNAME	"TMPro"
 
@@ -258,5 +258,7 @@ ff_vecs_t tmpro_vecs = {
   NULL,
   NULL,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
 

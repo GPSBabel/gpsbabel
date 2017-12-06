@@ -21,14 +21,14 @@
 
 #include "defs.h"
 #include "cet_util.h"
-#include "grtcirc.h"
 #include "garmin_fs.h"
+#include "grtcirc.h"
 #include "session.h"
 #include "src/core/logging.h"
 #include <QtCore/QDebug>
 #include <QtCore/QList>
-#include <stdio.h>
-#include <math.h>
+#include <cmath>
+#include <cstdio>
 
 #if NEWQ
 QList<Waypoint*> waypt_list;
@@ -688,7 +688,7 @@ Waypoint::Waypoint(const Waypoint& other) :
   // note: extra_data is not deep copied.
 }
 
-Waypoint& Waypoint::operator=(const Waypoint& other)
+Waypoint& Waypoint::operator=(const Waypoint& /* other */)
 {
   // the default assignment operator is not appropriate as we do deep copy of some members,
   // and we haven't bothered to write an appropriate one.

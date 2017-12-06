@@ -21,8 +21,8 @@
 
 #include "defs.h"
 #include "grtcirc.h"
+#include <cerrno>
 #include <cmath>
-#include <errno.h>
 
 #define MYNAME "vitosmt"
 
@@ -368,4 +368,6 @@ ff_vecs_t vitosmt_vecs = {
   NULL,
   NULL,
   CET_CHARSET_UTF8, 1	/* do nothing | CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

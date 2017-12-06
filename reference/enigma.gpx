@@ -4,13 +4,13 @@
   <bounds minlat="51.305278778" minlon="-9.523783684" maxlat="53.423606873" maxlon="4.390666485"/>
   <rte>
     <rtept lat="52.180873871" lon="-9.523783684">
-      <ele>34.137600</ele>
+      <ele>34.138</ele>
       <name>EIKY</name>
       <cmt>KERRY</cmt>
       <desc>KERRY</desc>
     </rtept>
     <rtept lat="52.701972961" lon="-8.924821854">
-      <ele>14.020800</ele>
+      <ele>14.021</ele>
       <name>EINN</name>
       <cmt>SHANNON</cmt>
       <desc>SHANNON</desc>
@@ -21,7 +21,7 @@
       <desc>DUBLIN</desc>
     </rtept>
     <rtept lat="51.305278778" lon="4.390666485">
-      <ele>3.048000</ele>
+      <ele>3.048</ele>
       <name>EBHN</name>
       <cmt>Hoevenen</cmt>
       <desc>Hoevenen</desc>

@@ -73,11 +73,11 @@
 
 #include "defs.h"
 #include "jeeps/gpsmath.h" /* for datum conversions */
-#include <cmath>
-#include <stdio.h>
-#include <stdlib.h>
-#include <vector>
 #include <QtCore/QScopedArrayPointer> // Wish we could use c++11...
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
 
 #define MYNAME	"TPO"
 
@@ -215,7 +215,7 @@ tpo_read_until_section(const char* section_name, int seek_bytes)
   unsigned int match_index = 0;
   int header_size = 0;
 
-  while (1) {
+  while (true) {
     if (gbfread(&byte, 1, 1, tpo_file_in) < 1) {
       fatal(MYNAME ": malformed input file - attempt to read past end");
     }
@@ -1813,7 +1813,7 @@ tpo_track_disp(const Waypoint* waypointp)
 }
 
 static void
-tpo_track_tlr(const route_head* rte)
+tpo_track_tlr(const route_head*)
 {
   unsigned char unknown1[] = { 0x06, 0x00 };
 
@@ -1897,6 +1897,8 @@ ff_vecs_t tpo2_vecs = {
   NULL,
   tpo2_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /* TPO 3.x format can read waypoints/tracks/routes */
@@ -1912,4 +1914,6 @@ ff_vecs_t tpo3_vecs = {
   NULL,
   tpo3_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

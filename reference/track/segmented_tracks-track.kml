@@ -1254,7 +1254,9 @@
               <latitude>35.836146</latitude>
               <tilt>66</tilt>
             </LookAt>
-            <TimeStamp><when>2007-07-27T05:24:05Z</when></TimeStamp>
+            <TimeStamp>
+              <when>2007-07-27T05:24:05Z</when>
+            </TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
               <coordinates>-86.844140,35.836146</coordinates>
@@ -1356,7 +1358,9 @@
               <latitude>35.835023</latitude>
               <tilt>66</tilt>
             </LookAt>
-            <TimeStamp><when>2007-07-27T05:30:00Z</when></TimeStamp>
+            <TimeStamp>
+              <when>2007-07-27T05:30:00Z</when>
+            </TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
               <coordinates>-86.843137,35.835023</coordinates>
@@ -1418,7 +1422,9 @@
               <latitude>35.835410</latitude>
               <tilt>66</tilt>
             </LookAt>
-            <TimeStamp><when>2007-07-27T05:31:00Z</when></TimeStamp>
+            <TimeStamp>
+              <when>2007-07-27T05:31:00Z</when>
+            </TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
               <coordinates>-86.842084,35.835410</coordinates>
@@ -1700,7 +1706,9 @@
               <latitude>35.836744</latitude>
               <tilt>66</tilt>
             </LookAt>
-            <TimeStamp><when>2007-07-27T05:35:00Z</when></TimeStamp>
+            <TimeStamp>
+              <when>2007-07-27T05:35:00Z</when>
+            </TimeStamp>
             <styleUrl>#track</styleUrl>
             <Point>
               <coordinates>-86.838782,35.836744</coordinates>

@@ -26,11 +26,11 @@
 #include "cet_util.h"
 #include "csv_util.h"
 #include "jeeps/gpsmath.h"
-#include <ctype.h>
-#include <math.h>                /* for floor */
-#include <stdlib.h>
-#include <stdio.h>
 #include <QtCore/QFileInfo>
+#include <cctype>
+#include <cmath>                /* for floor */
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME        "OZI"
 #define BADCHARS	",\r\n"
@@ -978,4 +978,6 @@ ff_vecs_t ozi_vecs = {
   NULL,
   ozi_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

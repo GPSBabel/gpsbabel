@@ -25,7 +25,7 @@
 #include "jeeps/gpsmath.h"
 #include <QtCore/QDebug>
 #include <QtCore/QTextCodec>
-#include <math.h>
+#include <cmath>
 
 #define MYNAME        "Naviguide"
 
@@ -95,11 +95,11 @@ static
 arglist_t ng_args[] = {
   {
     "output", &process, "'wp' - Create waypoint file , 'rte' - Create route file",
-    "rte", ARGTYPE_STRING, ARG_NOMINMAX
+    "rte", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "reorder", &reorder, "'n' - Keep the existing wp name, 'y' - rename waypoints",
-    "n", ARGTYPE_STRING, ARG_NOMINMAX
+    "n", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
 
   ARG_TERMINATOR
@@ -423,4 +423,6 @@ ff_vecs_t ng_vecs = {
   NULL,
   ng_args,
   CET_CHARSET_HEBREW, 0
+  , NULL_POS_OPS,
+  nullptr
 };

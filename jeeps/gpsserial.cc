@@ -24,14 +24,14 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
-#include "gpsserial.h"
 #include "../gbser.h"
-#include <sys/types.h>
-#include <sys/stat.h>
+#include "gpsserial.h"
+#include <cerrno>
+#include <cstdio>
+#include <ctime>
 #include <fcntl.h>
-#include <errno.h>
-#include <stdio.h>
-#include <time.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 int gps_baud_rate = DEFAULT_BAUD;
 

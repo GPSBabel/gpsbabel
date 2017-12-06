@@ -29,12 +29,12 @@
  */
 
 #include "defs.h"
-#include <ctype.h>
+#include <cctype>
 
 #include "gbser.h"
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cassert>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "DG-100"
 
@@ -696,11 +696,11 @@ static
 arglist_t dg100_args[] = {
   {
     "erase", &erase, "Erase device data after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "erase_only", &erase_only, "Only erase device data, do not download anything",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -780,6 +780,8 @@ ff_vecs_t dg100_vecs = {
   dg100_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 ff_vecs_t dg200_vecs = {
@@ -799,5 +801,7 @@ ff_vecs_t dg200_vecs = {
   dg100_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/

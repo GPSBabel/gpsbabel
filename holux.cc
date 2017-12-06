@@ -28,8 +28,8 @@ History:
 #include "defs.h"
 #include "holux.h"
 //#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 static  gbfile* file_in, *file_out;
 static 	unsigned char* HxWFile;
@@ -313,4 +313,6 @@ ff_vecs_t holux_vecs = {
   NULL,
   NULL,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

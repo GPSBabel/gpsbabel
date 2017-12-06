@@ -22,7 +22,7 @@
 
 #include "defs.h"
 #include <QtCore/QDebug>
-#include <limits.h>
+#include <climits>
 
 #define MYNAME "energympro"
 

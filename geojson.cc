@@ -17,10 +17,10 @@
 
  */
 #include "defs.h"
+#include "src/core/file.h"
+#include <QtCore/QJsonArray>
 #include <QtCore/QJsonDocument>
 #include <QtCore/QJsonObject>
-#include <QtCore/QJsonArray>
-#include "src/core/file.h"
 
 static gbfile* ofd;
 static QString input_file_name;
@@ -49,7 +49,7 @@ static const QString URLNAME = QStringLiteral("urlname");
 
 static arglist_t geojson_args[] = {
   {"compact", &compact_opt, "Compact Output. Default is off.", 
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX } ,
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr } ,
   ARG_TERMINATOR
 };
 
@@ -145,14 +145,14 @@ waypoint_from_coordinates(const QJsonArray& coordinates)
 static void 
 routes_from_polygon_coordinates(const QJsonArray& polygon)
 {
-	for (auto lineStringIterator = polygon.begin(); lineStringIterator != polygon.end(); ++lineStringIterator)
+	for (auto && lineStringIterator : polygon)
 	{
-		QJsonArray coordinates = (*lineStringIterator).toArray();
+		QJsonArray coordinates = (lineStringIterator).toArray();
 		auto route = route_head_alloc();
 		route_add_head(route);
-		for (auto coordinates_iterator = coordinates.begin(); coordinates_iterator != coordinates.end(); ++coordinates_iterator)
+		for (auto && coordinate : coordinates)
 		{
-			auto waypoint = waypoint_from_coordinates((*coordinates_iterator).toArray());
+			auto waypoint = waypoint_from_coordinates(coordinate.toArray());
 			route_add_wpt(route, waypoint);
 		}
 	}
@@ -174,9 +174,9 @@ geojson_read() {
 		return;
 	}
 	QJsonArray features = rootObject.value(FEATURES).toArray();
-	for (auto iterator = features.begin(); iterator != features.end(); ++iterator)
+	for (auto && iterator : features)
 	{
-		QJsonObject feature = (*iterator).toObject();
+		QJsonObject feature = iterator.toObject();
 		QJsonObject properties = (feature.value(PROPERTIES)).toObject();
 		QString name;
 		QString description;
@@ -218,9 +218,9 @@ geojson_read() {
 		else if (geometry_type == MULTIPOINT)
 		{
 			QJsonArray coordinates = geometry.value(COORDINATES).toArray();
-			for (auto coordinates_iterator = coordinates.begin(); coordinates_iterator != coordinates.end(); ++coordinates_iterator)
+			for (auto && coordinate : coordinates)
 			{
-				auto waypoint = waypoint_from_coordinates((*coordinates_iterator).toArray());
+				auto waypoint = waypoint_from_coordinates(coordinate.toArray());
 				waypt_add(waypoint);
 			}
 		}
@@ -230,9 +230,9 @@ geojson_read() {
 			auto route = route_head_alloc();
 			route->rte_name = name;
 			route_add_head(route);
-			for (auto coordinates_iterator = coordinates.begin(); coordinates_iterator != coordinates.end(); ++coordinates_iterator)
+			for (auto && coordinate : coordinates)
 			{
-				auto waypoint = waypoint_from_coordinates((*coordinates_iterator).toArray());
+				auto waypoint = waypoint_from_coordinates(coordinate.toArray());
 				route_add_wpt(route, waypoint);
 			}
 		}
@@ -244,23 +244,23 @@ geojson_read() {
 		else if (geometry_type == MULTIPOLYGON)
 		{
 			QJsonArray polygons = geometry.value(COORDINATES).toArray();
-			for (auto polygons_iterator = polygons.begin(); polygons_iterator != polygons.end(); ++polygons_iterator)
+			for (auto && polygons_iterator : polygons)
 			{
-				QJsonArray polygon = (*polygons_iterator).toArray();
+				QJsonArray polygon = polygons_iterator.toArray();
 				routes_from_polygon_coordinates(polygon);
 			}
 		}
 		else if (geometry_type == MULTILINESTRING)
 		{
 			QJsonArray line_strings = geometry.value(COORDINATES).toArray();
-			for (auto lineStringIterator = line_strings.begin(); lineStringIterator != line_strings.end(); ++lineStringIterator)
+			for (auto && line_string : line_strings)
 			{
-				QJsonArray coordinates = (*lineStringIterator).toArray();
+				QJsonArray coordinates = line_string.toArray();
 				auto route = route_head_alloc();
 				track_add_head(route);
-				for (auto coordinates_iterator = coordinates.begin(); coordinates_iterator != coordinates.end(); ++coordinates_iterator)
+				for (auto && coordinate : coordinates)
 				{
-					auto waypoint = waypoint_from_coordinates((*coordinates_iterator).toArray());
+					auto waypoint = waypoint_from_coordinates(coordinate.toArray());
 					route_add_wpt(route, waypoint);
 				}
 			}
@@ -293,7 +293,7 @@ static void geojson_track_disp(const Waypoint* trackpoint) {
   (*track_coords).append(coords);
 }
 
-static void geojson_track_tlr(const route_head* track) {
+static void geojson_track_tlr(const route_head*) {
   QJsonObject geometry;
   geometry[TYPE] = LINESTRING;
   geometry[COORDINATES] = *track_coords;
@@ -327,4 +327,6 @@ ff_vecs_t geojson_vecs = {
   NULL,
   geojson_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr  
 };

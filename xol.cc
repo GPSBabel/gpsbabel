@@ -21,14 +21,14 @@
 */
 
 #include "defs.h"
-#include "xmlgeneric.h"
-#include "jeeps/gpsmath.h"
 #include "garmin_tables.h"
+#include "jeeps/gpsmath.h"
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
+#include "xmlgeneric.h"
 
-#include <QtCore/QXmlStreamWriter>
 #include <QtCore/QXmlStreamAttributes>
+#include <QtCore/QXmlStreamWriter>
 
 static Waypoint* wpt;
 static route_head* trk;
@@ -54,7 +54,7 @@ static xg_tag_mapping xol_map[] = {
     { xol_waypt, cb_start, XOL "/shapes/shape/*points/point" },
     { NULL, (xg_cb_type)0, NULL} };
 
-static void xol_overlay(xg_string args, const QXmlStreamAttributes* attrv) {
+static void xol_overlay(xg_string, const QXmlStreamAttributes* attrv) {
   if (attrv->hasAttribute("version")) {
     if (attrv->value("version") != "1.0") {
       fatal(MYNAME ": Unsupported version %s.\n",
@@ -63,7 +63,7 @@ static void xol_overlay(xg_string args, const QXmlStreamAttributes* attrv) {
   }
 }
 
-static void xol_shape(xg_string args, const QXmlStreamAttributes* attrv) {
+static void xol_shape(xg_string, const QXmlStreamAttributes* attrv) {
   if (attrv->hasAttribute("type")) {
     if (attrv->value("type") == "waypoint") {
       wpt = new Waypoint;
@@ -101,7 +101,7 @@ static void xol_shape(xg_string args, const QXmlStreamAttributes* attrv) {
   }
 }
 
-static void xol_shape_end(xg_string args, const QXmlStreamAttributes*) {
+static void xol_shape_end(xg_string, const QXmlStreamAttributes*) {
   if (wpt) {
     if (trk) {
       track_add_wpt(trk, wpt);
@@ -117,7 +117,7 @@ static void xol_shape_end(xg_string args, const QXmlStreamAttributes*) {
   }
 }
 
-static void xol_waypt(xg_string args, const QXmlStreamAttributes* attrv) {
+static void xol_waypt(xg_string, const QXmlStreamAttributes* attrv) {
   int x = 0, y = 0;
 
   if (attrv->hasAttribute("y")) {
@@ -220,7 +220,7 @@ static void xol_waypt_disp_cb(const Waypoint* wpt) {
   writer->writeEndElement();  // shape
 }
 
-static void xol_track_hdr_disp_cb(const route_head* trk) {
+static void xol_track_hdr_disp_cb(const route_head*) {
   writer->writeStartElement("shape");
   writer->writeAttribute("type", "polyline");
   writer->writeAttribute("lineSize", "3");
@@ -229,7 +229,7 @@ static void xol_track_hdr_disp_cb(const route_head* trk) {
   writer->writeStartElement("waypoints");
 }
 
-static void xol_track_tlr_disp_cb(const route_head* trk) {
+static void xol_track_tlr_disp_cb(const route_head*) {
   writer->writeEndElement();  // waypoints
   writer->writeEndElement();  // shape
 }
@@ -308,4 +308,6 @@ ff_vecs_t xol_vecs = {ff_type_file,
                       NULL,
                       xol_args,
                       CET_CHARSET_UTF8,
-                      0};
+                      0  , NULL_POS_OPS,
+  nullptr
+};

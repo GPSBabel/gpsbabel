@@ -22,8 +22,8 @@
 
 #include "defs.h"
 #include "cet_util.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "cst"
 
@@ -334,4 +334,6 @@ ff_vecs_t cst_vecs = {
   NULL,
   cst_args,
   CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

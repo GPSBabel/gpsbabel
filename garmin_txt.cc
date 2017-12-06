@@ -114,14 +114,14 @@ static char* opt_grid = NULL;
 
 static
 arglist_t garmin_txt_args[] = {
-  {"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
-  {"datum", &opt_datum, 	    "GPS datum (def. WGS 84)", "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX},
+  {"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  {"datum", &opt_datum, 	    "GPS datum (def. WGS 84)", "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"dist",  &opt_dist,        "Distance unit [m=metric, s=statute]", "m", ARGTYPE_STRING, ARG_NOMINMAX},
-  {"grid",  &opt_grid,        "Write position using this grid.", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
-  {"prec",  &opt_precision,   "Precision of coordinates", "3", ARGTYPE_INT, ARG_NOMINMAX},
-  {"temp",  &opt_temp,        "Temperature unit [c=Celsius, f=Fahrenheit]", "c", ARGTYPE_STRING, ARG_NOMINMAX},
-  {"time",  &opt_time_format, "Read/Write time format (i.e. HH:mm:ss xx)", NULL, ARGTYPE_STRING, ARG_NOMINMAX},
-  {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", NULL, ARGTYPE_INT, "-23", "+23"},
+  {"grid",  &opt_grid,        "Write position using this grid.", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  {"prec",  &opt_precision,   "Precision of coordinates", "3", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
+  {"temp",  &opt_temp,        "Temperature unit [c=Celsius, f=Fahrenheit]", "c", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  {"time",  &opt_time_format, "Read/Write time format (i.e. HH:mm:ss xx)", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", NULL, ARGTYPE_INT, "-23", "+23", nullptr},
   ARG_TERMINATOR
 };
 
@@ -162,7 +162,7 @@ get_option_val(const char* option, const char* def)
 }
 
 static void
-init_date_and_time_format(void)
+init_date_and_time_format()
 {
   const char* f;
   const char* c;
@@ -235,7 +235,7 @@ sort_waypt_cb(const void* a, const void* b)
 /* common route and track pre-work */
 
 static void
-prework_hdr_cb(const route_head* rte)
+prework_hdr_cb(const route_head*)
 {
   cur_info = &route_info[route_idx];
   cur_info->prev_wpt = NULL;
@@ -244,7 +244,7 @@ prework_hdr_cb(const route_head* rte)
 }
 
 static void
-prework_tlr_cb(const route_head* rte)
+prework_tlr_cb(const route_head*)
 {
   cur_info->last_wpt = cur_info->prev_wpt;
   route_idx++;
@@ -649,7 +649,7 @@ route_disp_hdr_cb(const route_head* rte)
 }
 
 static void
-route_disp_tlr_cb(const route_head* rte)
+route_disp_tlr_cb(const route_head*)
 {
   route_idx++;
 }
@@ -702,7 +702,7 @@ track_disp_hdr_cb(const route_head* track)
 }
 
 static void
-track_disp_tlr_cb(const route_head* track)
+track_disp_tlr_cb(const route_head*)
 {
   route_idx++;
 }
@@ -809,14 +809,14 @@ garmin_txt_wr_init(const QString& fname)
 }
 
 static void
-garmin_txt_wr_deinit(void)
+garmin_txt_wr_deinit()
 {
   gbfclose(fout);
   xfree(date_time_format);
 }
 
 static void
-garmin_txt_write(void)
+garmin_txt_write()
 {
   char* grid_str, *c;
   const char* datum_str;
@@ -988,7 +988,7 @@ parse_temperature(const char* str, double* temperature)
 }
 
 static void
-parse_header(void)
+parse_header()
 {
   char* str;
   int column = -1;
@@ -1072,7 +1072,7 @@ bind_fields(const header_type ht)
 }
 
 static void
-parse_grid(void)
+parse_grid()
 {
   char* str = csv_lineparse(NULL, "\t", "", 1);
 
@@ -1092,7 +1092,7 @@ parse_grid(void)
 }
 
 static void
-parse_datum(void)
+parse_datum()
 {
   char* str = csv_lineparse(NULL, "\t", "", 1);
 
@@ -1104,7 +1104,7 @@ parse_datum(void)
 }
 
 static void
-parse_waypoint(void)
+parse_waypoint()
 {
   char* str;
   int column = -1;
@@ -1208,7 +1208,7 @@ parse_waypoint(void)
 }
 
 static void
-parse_route_header(void)
+parse_route_header()
 {
   char* str;
   int column = -1;
@@ -1233,7 +1233,7 @@ parse_route_header(void)
 }
 
 static void
-parse_track_header(void)
+parse_track_header()
 {
   char* str;
   int column = -1;
@@ -1257,7 +1257,7 @@ parse_track_header(void)
 }
 
 static void
-parse_route_waypoint(void)
+parse_route_waypoint()
 {
   char* str;
   int column = -1;
@@ -1282,7 +1282,7 @@ parse_route_waypoint(void)
 }
 
 static void
-parse_track_waypoint(void)
+parse_track_waypoint()
 {
   char* str;
   int column = -1;
@@ -1357,7 +1357,7 @@ garmin_txt_rd_init(const QString& fname)
 }
 
 static void
-garmin_txt_rd_deinit(void)
+garmin_txt_rd_deinit()
 {
   header_type h;
 
@@ -1369,7 +1369,7 @@ garmin_txt_rd_deinit(void)
 }
 
 static void
-garmin_txt_read(void)
+garmin_txt_read()
 {
   char* buff;
 
@@ -1431,6 +1431,8 @@ ff_vecs_t garmin_txt_vecs = {
   NULL,
   garmin_txt_args,
   CET_CHARSET_MS_ANSI, 0
+  , NULL_POS_OPS,
+  nullptr
 };
 
 #endif // CSVFMTS_ENABLED

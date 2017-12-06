@@ -23,9 +23,9 @@
 
 
 #include "defs.h"
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "skyforce"
 
@@ -388,6 +388,8 @@ ff_vecs_t skyforce_vecs = {
   NULL,
   skyforce_args,
   CET_CHARSET_ASCII, 1
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /**************************************************************************/

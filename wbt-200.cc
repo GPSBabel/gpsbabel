@@ -21,8 +21,8 @@
 #include "defs.h"
 #include "gbser.h"
 #include "grtcirc.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME      "WBT-100/200"
 #define NL          "\x0D\x0A"
@@ -430,7 +430,7 @@ static int rd_buf(void* buf, int len)
 static void file_init(const QString& fname)
 {
   db(1, "Opening file...\n");
-  if ((fl = fopen(qPrintable(fname), "rb")) == NULL) {
+  if ((fl = ufopen(fname, "rb")) == NULL) {
     fatal(MYNAME ": Can't open file '%s'\n", qPrintable(fname));
   }
 }
@@ -1093,7 +1093,7 @@ static void data_read()
 static arglist_t wbt_sargs[] = {
   {
     "erase", &erase, "Erase device data after download",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -1110,6 +1110,8 @@ ff_vecs_t wbt_svecs = {
   NULL,
   wbt_sargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /* used for wbt-bin /and/ wbt-tk1 */
@@ -1130,4 +1132,6 @@ ff_vecs_t wbt_fvecs = {
   NULL,
   wbt_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

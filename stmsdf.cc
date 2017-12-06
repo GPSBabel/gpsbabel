@@ -95,7 +95,7 @@ static
 arglist_t stmsdf_args[] = {
   {
     "index", &opt_route_index,
-    "Index of route (if more than one in source)", "1", ARGTYPE_INT, "1", NULL
+    "Index of route (if more than one in source)", "1", ARGTYPE_INT, "1", NULL, nullptr
   },
   ARG_TERMINATOR
 };
@@ -548,7 +548,7 @@ any_waypt_calc_cb(const Waypoint* wpt)
 }
 
 static void
-any_tlr_calc_cb(const route_head* trk)
+any_tlr_calc_cb(const route_head*)
 {
   if (! this_valid) {
     return;
@@ -634,13 +634,13 @@ track_disp_wpt_cb(const Waypoint* wpt)
 }
 
 static void
-track_disp_tlr_cb(const route_head* rte)
+track_disp_tlr_cb(const route_head*)
 {
   trkpt_out = NULL;
 }
 
 static void
-route_disp_hdr_cb(const route_head* rte)
+route_disp_hdr_cb(const route_head*)
 {
   route_index++;
   this_route_valid = ((opt_route_index_value < 1) || (opt_route_index_value == track_index));
@@ -805,6 +805,8 @@ ff_vecs_t stmsdf_vecs = {
   NULL,
   stmsdf_args,
   CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /* ================================================================== */

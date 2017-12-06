@@ -22,9 +22,9 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "csv_util.h"
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;
@@ -66,59 +66,59 @@ static
 arglist_t tiger_args[] = {
   {
     "nolabels", &nolabels, "Suppress labels on generated pins",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "genurl", &genurl, "Generate file with lat/lon for centering map",
-    NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX
+    NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr
   },
   {
     "margin", &margin, "Margin for map.  Degrees or percentage",
-    "15%", ARGTYPE_FLOAT, ARG_NOMINMAX
+    "15%", ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
   },
   {
     "snlen", &snlen, "Max shortname length when used with -s",
-    "10", ARGTYPE_INT, "1", NULL
+    "10", ARGTYPE_INT, "1", NULL, nullptr
   },
   {
     "oldthresh", &oldthresh,
     "Days after which points are considered old",
-    "14", ARGTYPE_INT, ARG_NOMINMAX
+    "14", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "oldmarker", &oldmarker, "Marker type for old points",
-    "redpin", ARGTYPE_STRING, ARG_NOMINMAX
+    "redpin", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "newmarker", &newmarker, "Marker type for new points",
-    "greenpin", ARGTYPE_STRING, ARG_NOMINMAX
+    "greenpin", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "suppresswhite", &suppresswhite,
     "Suppress whitespace in generated shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "unfoundmarker", &unfoundmarker, "Marker type for unfound points",
-    "bluepin", ARGTYPE_STRING, ARG_NOMINMAX
+    "bluepin", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "xpixels", &xpixels, "Width in pixels of map",
-    "768", ARGTYPE_INT, ARG_NOMINMAX
+    "768", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "ypixels", &ypixels, "Height in pixels of map",
-    "768", ARGTYPE_INT, ARG_NOMINMAX
+    "768", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "iconismarker", &iconismarker,
     "The icon description is already the marker", NULL,
-    ARGTYPE_BOOL, ARG_NOMINMAX
+    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
 #if CLICKMAP
   {
     "clickmap", &clickmap, "Generate Clickable map web page",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
 #endif
   ARG_TERMINATOR
@@ -329,4 +329,6 @@ ff_vecs_t tiger_vecs = {
   NULL,
   tiger_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

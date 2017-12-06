@@ -1,6 +1,6 @@
 #include "defs.h"
-#include "inifile.h"
 #include "explorist_ini.h"
+#include "inifile.h"
 
 static inifile_t* inifile;
 static const char myname[] = "explorist";
@@ -19,7 +19,7 @@ explorist_ini_try(const char* path)
   char* s;
 
   xasprintf(&inipath, "%s/%s", path, "APP/Atlas.ini");
-  inifile = inifile_init(inipath, myname);
+  inifile = inifile_init(QString::fromUtf8(inipath), myname);
   if (!inifile) {
     xfree(inipath);
     return NULL;

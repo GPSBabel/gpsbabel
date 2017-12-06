@@ -1,20 +1,23 @@
 
 # GTM
-gpsbabel -i gtm -f ${REFERENCE}/sample.gtm -o gpx -F ${TMPDIR}/gtm1.gpx
+gpsbabel -i gtm -f ${REFERENCE}/sample.gtm -o gpx,elevprec=6 -F ${TMPDIR}/gtm1.gpx
 gpsbabel -i gpx -f ${TMPDIR}/gtm1.gpx -o gtm -F ${TMPDIR}/gtm.gtm
-gpsbabel -i gtm -f ${TMPDIR}/gtm.gtm -o gpx -F ${TMPDIR}/gtm2.gpx
+gpsbabel -i gtm -f ${TMPDIR}/gtm.gtm -o gpx,elevprec=6 -F ${TMPDIR}/gtm2.gpx
 compare ${TMPDIR}/gtm1.gpx ${TMPDIR}/gtm2.gpx
 bincompare ${TMPDIR}/gtm.gtm ${REFERENCE}/sample.gtm
 #
 # GTM compressed files
 # ... do the same as above but with gzipped gtm files
 #
-gpsbabel -i gtm -f ${REFERENCE}/sample.gtm.gz -o gpx -F ${TMPDIR}/gtm1.gpx
+gpsbabel -i gtm -f ${REFERENCE}/sample.gtm.gz -o gpx,elevprec=6 -F ${TMPDIR}/gtm1.gpx
 gpsbabel -i gpx -f ${TMPDIR}/gtm1.gpx -o gtm -F ${TMPDIR}/gtm.gtm.gz
-gpsbabel -i gtm -f ${TMPDIR}/gtm.gtm.gz -o gpx -F ${TMPDIR}/gtm2.gpx
+gpsbabel -i gtm -f ${TMPDIR}/gtm.gtm.gz -o gpx,elevprec=6 -F ${TMPDIR}/gtm2.gpx
 compare ${TMPDIR}/gtm1.gpx ${TMPDIR}/gtm2.gpx
-bincompare ${TMPDIR}/gtm.gtm.gz ${REFERENCE}/sample.gtm.gz
+# the gzip format encodes the compressing OS, so comparing
+# gz files that contain the same content but were compressed
+# on different OSs will fail.
+#bincompare ${TMPDIR}/gtm.gtm.gz ${REFERENCE}/sample.gtm.gz
 gunzip -c ${TMPDIR}/gtm.gtm.gz > ${TMPDIR}/gtm.gtm
 gunzip -c ${REFERENCE}/sample.gtm.gz > ${TMPDIR}/sample.gtm
-bincompare ${TMPDIR}/gtm.gtm ${REFERENCE}/sample.gtm
+bincompare ${TMPDIR}/gtm.gtm ${TMPDIR}/sample.gtm
 

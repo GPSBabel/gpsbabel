@@ -10,7 +10,7 @@
         <speed>0.000000</speed>
       </trkpt>
       <trkpt lat="35.824985000" lon="-86.847065000">
-        <ele>269.900000</ele>
+        <ele>269.900</ele>
         <time>2008-06-05T20:06:42Z</time>
         <course>224.449997</course>
         <speed>0.000000</speed>
@@ -22,7 +22,7 @@
         <pdop>2.100000</pdop>
       </trkpt>
       <trkpt lat="35.824985000" lon="-86.847065000">
-        <ele>269.900000</ele>
+        <ele>269.900</ele>
         <time>2008-06-05T20:06:43Z</time>
         <course>224.449997</course>
         <speed>0.000000</speed>
@@ -34,7 +34,7 @@
         <pdop>2.100000</pdop>
       </trkpt>
       <trkpt lat="35.824985000" lon="-86.847065000">
-        <ele>269.900000</ele>
+        <ele>269.900</ele>
         <time>2008-06-05T20:06:44Z</time>
         <course>224.449997</course>
         <speed>0.000000</speed>

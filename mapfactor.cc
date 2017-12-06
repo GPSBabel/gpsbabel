@@ -19,9 +19,9 @@
 #include "defs.h"
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
+#include <QtCore/QDebug>
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
-#include <QtCore/QDebug>
 
 static gpsbabel::File* oqfile;
 static QXmlStreamWriter* writer;
@@ -158,4 +158,6 @@ ff_vecs_t mapfactor_vecs = {
   NULL,
   mapfactor_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

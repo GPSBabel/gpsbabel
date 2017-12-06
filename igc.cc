@@ -25,10 +25,10 @@
 
 #include "defs.h"
 #include "cet_util.h"
-#include <errno.h>
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cerrno>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* file_in, *file_out;
 static char manufacturer[4];
@@ -281,7 +281,7 @@ static void data_read()
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
-  while (1) {
+  while (true) {
     rec_type = get_record(&ibuf);
     switch (rec_type) {
     case rec_manuf_id:
@@ -935,7 +935,7 @@ static arglist_t igc_args[] = {
   {
     "timeadj", &timeadj,
     "(integer sec or 'auto') Barograph to GPS time diff",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -952,4 +952,6 @@ ff_vecs_t igc_vecs = {
   NULL,
   igc_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

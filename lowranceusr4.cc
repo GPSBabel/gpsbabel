@@ -26,10 +26,10 @@
 
 
 #include "defs.h"
-#include <math.h> /* for lat/lon conversion */
-#include <time.h> /* for gmtime */
-#include <stdio.h> /* for gmtime */
-#include <stdlib.h> // atoi
+#include <cmath> /* for lat/lon conversion */
+#include <cstdio> /* for gmtime */
+#include <cstdlib> // atoi
+#include <ctime> /* for gmtime */
 
 /* from waypt.c, we need to iterate over waypoints when extracting
    routes */
@@ -85,8 +85,8 @@ lowranceusr4_readstr(char* buf, const int maxlen, gbfile* file, int bytes_per_ch
     buf[0] = '\0'; /* seems len=-1 means no string */
     return 0;
   } else if (len) {
-    if (len > maxlen*bytes_per_char) {
-      len = maxlen*bytes_per_char;
+    if (len > maxlen) {
+      len = maxlen;
     }
     if (bytes_per_char == 1) {
       bytesread += gbfread(buf, 1, len, file);
@@ -145,15 +145,15 @@ static
 arglist_t lowranceusr4_args[] = {
   {
     "title", &opt_title, "(output) Output title string",
-    "", ARGTYPE_STRING, ARG_NOMINMAX
+    "", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "serialnum", &opt_serialnum, "(output) Device serial number",
-    "0", ARGTYPE_INT, ARG_NOMINMAX
+    "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "description", &opt_content_descr, "(output) Content description",
-    "", ARGTYPE_STRING, ARG_NOMINMAX
+    "", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -914,7 +914,7 @@ lowranceusr4_write_wpt_uids(const Waypoint* wpt)
 }
 
 static void
-lowranceusr4_write_route_trl(const route_head* rte)
+lowranceusr4_write_route_trl(const route_head*)
 {
   /* Mystery byte */
   gbfputc(0, file_out);
@@ -1077,4 +1077,6 @@ ff_vecs_t lowranceusr4_vecs = {
   NULL,
   lowranceusr4_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

@@ -24,7 +24,7 @@
 */
 
 #include "defs.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #define MYNAME "Garmin_XT"
 #define GARMIN_XT_ELE 31500/65536
@@ -57,10 +57,10 @@ static char*	opt_trk_header = NULL;
 
 static
 arglist_t format_garmin_xt_args[] = {
-  {"ftype", &opt_xt_ftype, "Garmin Mobile XT ([ATRK]/STRK)", "ATRK", ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX},
+  {"ftype", &opt_xt_ftype, "Garmin Mobile XT ([ATRK]/STRK)", "ATRK", ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr},
   // TODO: SHIFT - can't test behaviour, do not have appropriate files
   //{"trk_header_opt", &opt_trk_header, "Track name processing option ([0]-nrm/1-ign/2-sht)", "0", ARGTYPE_INT, ARG_NOMINMAX},
-  {"trk_header", &opt_trk_header, "Track name processing option ([0]-nrm/1-ign)", "0", ARGTYPE_INT, ARG_NOMINMAX},
+  {"trk_header", &opt_trk_header, "Track name processing option ([0]-nrm/1-ign)", "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
   ARG_TERMINATOR
 };
 
@@ -433,5 +433,7 @@ ff_vecs_t format_garmin_xt_vecs = {
   format_garmin_xt_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/

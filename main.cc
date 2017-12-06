@@ -17,23 +17,25 @@
 
  */
 
-#include <QtCore/QTextCodec>
 #include <QtCore/QCoreApplication>
-#include <QtCore/QVector>
+#include <QtCore/QStack>
+#include <QtCore/QString>
+#include <QtCore/QTextCodec>
+#include <QtCore/QTextStream>
 
-#include "defs.h"
-#include "filterdefs.h"
 #include "cet.h"
 #include "cet_util.h"
 #include "csv_util.h"
+#include "defs.h"
+#include "filterdefs.h"
 #include "inifile.h"
 #include "session.h"
 #include "src/core/usasciicodec.h"
-#include <ctype.h>
-#include <locale.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <signal.h>
+#include <cctype>
+#include <clocale>
+#include <cstdio>
+#include <cstdlib>
+#include <csignal>
 
 #define MYNAME "main"
 
@@ -228,7 +230,7 @@ main(int argc, char* argv[])
   char* ofname = NULL;
   const char* ivec_opts = NULL;
   const char* ovec_opts = NULL;
-  char* fvec_opts = NULL;
+  const char* fvec_opts = NULL;
   int opt_version = 0;
   int did_something = 0;
   const char* prog_name = argv[0]; /* argv is modified during processing */
@@ -317,7 +319,7 @@ main(int argc, char* argv[])
 #endif
 
   if (gpsbabel_time != 0) {	/* within testo ? */
-    global_opts.inifile = inifile_init(NULL, MYNAME);
+    global_opts.inifile = inifile_init(QString(), MYNAME);
   }
 
   init_vecs();

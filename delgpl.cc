@@ -174,4 +174,6 @@ ff_vecs_t gpl_vecs = {
   NULL,
   NULL,
   CET_CHARSET_UTF8, 1	/* there is no need to convert anything | CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

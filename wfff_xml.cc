@@ -20,7 +20,7 @@
 #include "defs.h"
 #include "xmlgeneric.h"
 #include <QtCore/QXmlStreamAttributes>
-#include <stdio.h>
+#include <cstdio>
 
 /* argument storage */
 static char* 	aicicon	=0;
@@ -33,22 +33,22 @@ static
 arglist_t wfff_xml_args[] = {
   {
     "aicicon", &aicicon, "Infrastructure closed icon name",
-    "Red Square", ARGTYPE_STRING
+    "Red Square", ARGTYPE_STRING, ARG_NOMINMAX, NULL
   },
   {
     "aioicon", &aioicon, "Infrastructure open icon name",
-    "Green Square", ARGTYPE_STRING
+    "Green Square", ARGTYPE_STRING, ARG_NOMINMAX, NULL
   },
   {
     "ahcicon", &ahcicon, "Ad-hoc closed icon name",
-    "Red Diamond", ARGTYPE_STRING
+    "Red Diamond", ARGTYPE_STRING, ARG_NOMINMAX, NULL
   },
   {
     "ahoicon", &ahoicon, "Ad-hoc open icon name",
-    "Green Diamond", ARGTYPE_STRING
+    "Green Diamond", ARGTYPE_STRING, ARG_NOMINMAX, NULL
   },
-  {"snmac", &snmac, "Shortname is MAC address", NULL, ARGTYPE_BOOL },
-  {0, 0, 0, 0, 0}
+  {"snmac", &snmac, "Shortname is MAC address", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL },
+  ARG_TERMINATOR
 };
 
 #define xfreez(p) { if (p) xfree(p); p=0; }
@@ -148,7 +148,7 @@ void wfff_lon(const QString& args, const QXmlStreamAttributes*) {
 /*	End of AP Block, set waypoint and add */
 static long tosscount=0;
 
-void wfff_e(xg_string args, const QXmlStreamAttributes*)
+void wfff_e(xg_string, const QXmlStreamAttributes*)
 {
   Waypoint*	wpt_tmp		=0;
   char		desc[255]	="\0";
@@ -235,5 +235,8 @@ ff_vecs_t wfff_xml_vecs = {
   wfff_xml_read,
   0,
   0,
-  wfff_xml_args
+  wfff_xml_args,
+  CET_CHARSET_UTF8, 0,
+  NULL_POS_OPS,
+  nullptr
 };

@@ -20,7 +20,7 @@
 
 #include "defs.h"
 #include "gbser.h"
-#include <stdio.h>
+#include <cstdio>
 
 static void* serial_handle;
 
@@ -276,4 +276,6 @@ ff_vecs_t brauniger_iq_vecs = {
   NULL,
   brauniger_iq_args,
   CET_CHARSET_UTF8, 1		/* master process: don't convert anything | CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

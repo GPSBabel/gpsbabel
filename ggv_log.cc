@@ -20,10 +20,10 @@
 
  */
 
-#include <ctype.h>
-#include <math.h>
-#include <stdio.h>
-#include <time.h>
+#include <cctype>
+#include <cmath>
+#include <cstdio>
+#include <ctime>
 
 #include "defs.h"
 #include "grtcirc.h"
@@ -288,5 +288,7 @@ ff_vecs_t ggv_log_vecs = {
   NULL,
   ggv_log_args,
   CET_CHARSET_ASCII, 1
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/

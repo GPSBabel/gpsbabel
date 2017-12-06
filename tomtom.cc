@@ -39,9 +39,9 @@
 
 
 #include "defs.h"
-#include <stdio.h> // sprintf
-#include <stdlib.h> // qsort
 #include <QtCore/QTextCodec>
+#include <cstdio> // sprintf
+#include <cstdlib> // qsort
 
 #define MYNAME "TomTom"
 
@@ -483,4 +483,6 @@ ff_vecs_t tomtom_vecs = {
   NULL,
   tomtom_args,
   CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
