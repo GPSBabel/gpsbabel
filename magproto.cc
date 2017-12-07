@@ -21,18 +21,18 @@
  */
 
 #include "defs.h"
-#include "magellan.h"
-#include "gbser.h"
 #include "explorist_ini.h"
+#include "gbser.h"
+#include "magellan.h"
 
 #if HAVE_GLOB
 #include <glob.h>
 #endif
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <time.h>
 #include <QtCore/QFileInfo>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 
 static int bitrate = 4800;
 static int wptcmtcnt;

@@ -72,9 +72,9 @@ for a little more info, see structures:
 ******************************************************************************/
 
 #include "defs.h"
-#include <assert.h>
-#include <stdio.h>
-#include <stdlib.h> // atoi
+#include <cassert>
+#include <cstdio>
+#include <cstdlib> // atoi
 
 #if _MSC_VER
 #define __func__ __FUNCTION__
@@ -166,7 +166,7 @@ v900_rd_init(const QString& fname)
      that will be translated to a single \n, making the line len one character shorter than
      on linux machines.
    */
-  fin = fopen(qPrintable(fname),"rb");
+  fin = ufopen(fname, "rb");
   if (!fin) {
     fatal("v900: could not open '%s'.\n", qPrintable(fname));
   }

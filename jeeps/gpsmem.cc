@@ -25,10 +25,10 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
-#include <stdlib.h>
-#include <errno.h>
-#include <stdio.h>
-#include <limits.h>
+#include <cerrno>
+#include <climits>
+#include <cstdio>
+#include <cstdlib>
 
 /* @func GPS_Pvt_New ***********************************************
 **

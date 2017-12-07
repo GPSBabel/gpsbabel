@@ -23,8 +23,8 @@
 #include "defs.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/xmltag.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* file_out;
 static short_handle mkshort_handle;
@@ -260,7 +260,7 @@ data_write()
 
   // Don't write this line when running test suite.  Actually, we should
   // probably not write this line at all...
-  if (!getenv("GPSBABEL_FREEZE_TIME")) {
+  if (ugetenv("GPSBABEL_FREEZE_TIME").isNull()) {
     gbfprintf(file_out, " <meta name=\"Generator\" content=\"GPSBabel %s\">\n", gpsbabel_version);
   }
   gbfprintf(file_out, " <title>GPSBabel HTML Output</title>\n");

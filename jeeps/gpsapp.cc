@@ -24,19 +24,19 @@
 ** Boston, MA  02111-1307, USA.
 ********************************************************************/
 #include "gps.h"
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
 
 /*
  * This violates the layering design, but is needed for device discovery.
  * See the use of gps_is_usb and GPS_Packet_Read_usb below.
  */
 #include "garminusb.h"
-#include "gpsusbint.h"
 #include "gpsserial.h"
+#include "gpsusbint.h"
 
 time_t gps_save_time;
 double gps_save_lat;

@@ -59,7 +59,7 @@
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #define MYNAME "simplify"
 

@@ -20,9 +20,9 @@
  */
 
 #include "defs.h"
-#include "xmlgeneric.h"
 #include "cet_util.h"
 #include "src/core/file.h"
+#include "xmlgeneric.h"
 
 #include <QtCore/QByteArray>
 #include <QtCore/QDebug>

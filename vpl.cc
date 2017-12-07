@@ -107,7 +107,7 @@ C - Checksum
  */
 
 #include "defs.h"
-#include <stdio.h> /* for sscanf */
+#include <cstdio> /* for sscanf */
 
 #define MYNAME "vpl"
 

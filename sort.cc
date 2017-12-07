@@ -20,7 +20,7 @@
  */
 #include "defs.h"
 #include "filterdefs.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #if FILTERS_ENABLED
 

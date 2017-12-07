@@ -31,10 +31,10 @@
 #include "defs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 #include <QtCore/QFile>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "exif"
 
@@ -1408,7 +1408,7 @@ exif_wr_deinit()
 {
 
   exif_release_apps();
-  QString tmpname = QString::fromLocal8Bit(fout->name);
+  QString tmpname = QString(fout->name);
   gbfclose(fout);
 
   if (exif_success) {

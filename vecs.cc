@@ -21,10 +21,10 @@
 
 #include "defs.h"
 #include "csv_util.h"
-#include "inifile.h"
 #include "gbversion.h"
-#include <stdio.h>
-#include <stdlib.h> // qsort
+#include "inifile.h"
+#include <cstdio>
+#include <cstdlib> // qsort
 
 #define MYNAME "vecs.c"
 

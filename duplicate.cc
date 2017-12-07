@@ -20,8 +20,8 @@
  */
 #include "defs.h"
 #include "filterdefs.h"
-#include <stdio.h>
-#include <stdlib.h> // qsort
+#include <cstdio>
+#include <cstdlib> // qsort
 
 #if FILTERS_ENABLED
 static char* snopt = NULL;

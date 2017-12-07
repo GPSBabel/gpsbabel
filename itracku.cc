@@ -31,9 +31,9 @@
  */
 #include "defs.h"
 #include "gbser.h"
-#include <ctype.h>
-#include <math.h>
-#include <stdio.h>
+#include <cctype>
+#include <cmath>
+#include <cstdio>
 
 #define MYNAME "itracku"
 

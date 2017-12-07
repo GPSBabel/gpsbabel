@@ -20,10 +20,10 @@
 
  */
 
-#include <ctype.h>
-#include <math.h>
-#include <stdio.h>
-#include <time.h>
+#include <cctype>
+#include <cmath>
+#include <cstdio>
+#include <ctime>
 
 #include "defs.h"
 #include "grtcirc.h"

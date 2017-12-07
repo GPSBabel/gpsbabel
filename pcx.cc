@@ -20,13 +20,13 @@
 */
 
 #include "defs.h"
-#include "garmin_tables.h"
 #include "cet_util.h"
 #include "csv_util.h"
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "garmin_tables.h"
 #include <QtCore/QDebug>
+#include <cstdio>
+#include <math.h>
+#include <cstdlib>
 
 static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;

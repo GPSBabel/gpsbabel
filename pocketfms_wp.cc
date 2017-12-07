@@ -20,8 +20,8 @@
 
 #include "defs.h"
 #include "csv_util.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "PocketFMS waypoint text file format"
 
