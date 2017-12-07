@@ -152,7 +152,7 @@ QString UpgradeCheck::getOsVersion()
 
 QString UpgradeCheck::getCpuArchitecture()
 {
-#if HAVE_UNAME || defined (Q_OS_MAC)     +  args += "&cpu=" + QSysInfo::currentCpuArchitecture();
+#if HAVE_UNAME || defined (Q_OS_MAC)
   struct utsname utsname;
   if (0 == uname(&utsname)) {
     return utsname.machine;
