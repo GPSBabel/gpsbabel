@@ -37,10 +37,15 @@
 #include <QApplication>
 #include <QCursor>
 #include <QFile>
+#include <QTextStream>
 
 #include <math.h>
+#include <string>
+#include <vector>
 #include "appname.h"
-#include "dpencode.h"
+
+using std::string;
+using std::vector;
 
 //------------------------------------------------------------------------
 static QString stripDoubleQuotes(const QString s) {
@@ -92,6 +97,14 @@ Map::Map(QWidget *parent,
     QString urlStr = "file:///" + baseFile;
     this->load(QUrl(urlStr));
   }
+
+#ifdef DEBUG_JS_GENERATION
+  dbgdata_ = new QFile("mapdebug.js");
+  if (dbgdata_->open(QFile::WriteOnly | QIODevice::Truncate)) {
+    dbgout_ = new QTextStream(dbgdata_);
+  }
+#endif
+
 }
 
 //------------------------------------------------------------------------
@@ -99,6 +112,16 @@ Map::~Map()
 {
   if (busyCursor_)
     QApplication::restoreOverrideCursor();
+#ifdef DEBUG_JS_GENERATION
+  if (dbgout_) {
+    delete dbgout_;
+    dbgout_ = NULL;
+  }
+  if (dbgdata_) {
+    delete dbgdata_;
+    dbgdata_ = NULL;
+  }
+#endif
 }
 //------------------------------------------------------------------------
 void Map::loadFinishedX(bool f)
@@ -113,30 +136,6 @@ void Map::loadFinishedX(bool f)
   }
   QApplication::restoreOverrideCursor();
   busyCursor_ = false;
-}
-
-//------------------------------------------------------------------------
-
-static QStringList makeLiteralVar(const QString &name, const string &s)
-{
-  QStringList out;
-  out << QString("var %1 = ").arg(name);
-
-  QString ws = "\"";
-  for (unsigned int i=0; i<s.length(); i++) {
-    if (s[i] =='\\') {
-      ws += s[i];
-    }
-    ws += s[i];
-    if (ws.length() > 5120) {
-      ws += "\" + ";
-      out << ws;
-      ws = "\"";
-    }
-  }
-  ws += "\";";
-  out << ws;
-  return out;
 }
 
 //------------------------------------------------------------------------
@@ -155,11 +154,6 @@ void Map::showGpxData()
   connect(mclicker, SIGNAL(markerClicked(int, int )), this, SLOT(markerClicked(int, int)));
   connect(mclicker, SIGNAL(logTime(const QString &)), this, SLOT(logTime(const QString &)));
 #endif
-  // It is appreciably faster to do the encoding on the C++ side.
-  int numLevels = 18;
-  double zoomFactor = 2;
-  PolylineEncoder encoder(numLevels, zoomFactor, 0.00001);
-
 
   this->logTime("Start defining JS string");
   QStringList scriptStr;
@@ -171,17 +165,7 @@ void Map::showGpxData()
     << "var rtes = [];"
     << "var trks = [];"
     << "var idx;"
-    << "//map.enableScrollWheelZoom();"
-    << "//map.enableContinuousZoom();"
-    << "//map.addControl(new GLargeMapControl());"
-    << "//map.addControl(new GScaleControl());"
-    << "//map.addControl(new GMapTypeControl());"
-    << "//var pn = map.getPane(G_MAP_MARKER_PANE);"
-    << "//pn.style.KhtmlUserSelect='none';"
-    << "//pn.style.KhtmlUserDrag='none';"
     << "mclicker.logTimeX(\"Done prelim JS definition\");"
-    << QString("var zoomFactor = %1;").arg(zoomFactor)
-    << QString("var numLevels = %1;").arg(numLevels)
     ;
 
   mapPresent_ = true;
@@ -462,13 +446,11 @@ void Map::frameRoute(int i)
 //------------------------------------------------------------------------
 void Map::evaluateJS(const QString &s, bool upd)
 {
-QFile data("output.txt");
-if (data.open(QFile::WriteOnly | QIODevice::Append)) {
-    QTextStream out(&data);
-    out << s;
-    out << '\n';
-}
-data.close();
+#ifdef DEBUG_JS_GENERATION
+  *dbgout_ << s;
+  *dbgout_ << '\n';
+  dbgout_->flush();
+#endif
 #if HAVE_WEBENGINE
   this->page()->runJavaScript(s);
 #else

@@ -29,7 +29,11 @@
 #endif
 #include <QPlainTextEdit>
 #include <QTime>
+#include <QFile>
+#include <QTextStream>
 #include "gpx.h"
+
+//#define DEBUG_JS_GENERATION
 
 class QNetworkAccessManager;
 
@@ -98,6 +102,10 @@ class Map : public QWebView
   void routeClicked(int i);
   
  private:
+#ifdef DEBUG_JS_GENERATION
+  QFile *dbgdata_;
+  QTextStream *dbgout_;
+#endif
   QNetworkAccessManager *manager_;
   const Gpx &gpx_;
   bool mapPresent_;
