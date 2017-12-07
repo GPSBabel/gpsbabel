@@ -29,6 +29,9 @@
 #endif
 
 #include <cstdio>
+#if HAVE_UNAME
+#include <sys/utsname.h>
+#endif // HAVE_UNAME
 
 #include <QDebug>
 #include <QDesktopServices>
@@ -52,10 +55,10 @@ static const bool testing = false;
 UpgradeCheck::UpgradeCheck(QWidget *parent, QList<Format> &formatList,
                            BabelData& bd) :
   QObject(parent),
-  manager_(0), 
+  manager_(0),
   replyId_(0),
   upgradeUrl_(QUrl("http://www.gpsbabel.org/upgrade_check.html")),
-  formatList_(formatList), 
+  formatList_(formatList),
   updateStatus_(updateUnknown),
   babelData_(bd)
 {
@@ -78,6 +81,88 @@ bool UpgradeCheck::isTestMode()
   return testing;
 }
 
+// In Qt 5.4, QSysInfo got classes that do this better. Travis is stuck
+// on older version of Qt, so keep it building there for now.
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 4, 0))
+QString UpgradeCheck::getOsName()
+{
+  // Do not translate these strings.
+#if defined (Q_OS_LINUX)
+    return "Linux";
+#elif defined (Q_OS_MAC)
+  return "Mac";
+#elif defined (Q_OS_WIN)
+  return "Windows";
+#else
+  return "Unknown";
+#endif
+
+}
+// See http://doc.trolltech.com/4.5/qsysinfo.html to interpret results
+QString UpgradeCheck::getOsVersion()
+{
+#if defined (Q_OS_MAC)
+  switch (QSysInfo::MacintoshVersion) {
+  case QSysInfo::MV_10_3: return "10.3"; break;
+  case QSysInfo::MV_10_4: return "10.4"; break;
+  case QSysInfo::MV_10_5: return "10.5"; break;
+  case QSysInfo::MV_10_6: return "10.6"; break;
+  case QSysInfo::MV_10_7: return "10.7"; break;
+  case QSysInfo::MV_10_8: return "10.8"; break;
+  case QSysInfo::MV_10_9: return "10.9"; break;
+  case QSysInfo::MV_10_10: return "10.10"; break;
+  case QSysInfo::MV_10_11: return "10.11"; break;
+  case QSysInfo::MV_10_12: return "10.12"; break;
+  default:
+    if (QSysInfo::MacintoshVersion == 0x000E) {
+      return "10.13";
+      break;
+    }
+    if (QSysInfo::MacintoshVersion == 0x000F) {
+      return "10.14";
+      break;
+    }
+    return QString("Unknown Mac %1").arg(QSysInfo::MacintoshVersion);
+  };
+#elif defined (Q_OS_WIN)
+
+  switch (QSysInfo::WindowsVersion) {
+  // Wildly improbable...
+  case QSysInfo::WV_95: return "95"; break;
+  case QSysInfo::WV_98: return "98"; break;
+  case QSysInfo::WV_Me: return "Me"; break;
+
+  case QSysInfo::WV_4_0: return "NT 4"; break;
+  case QSysInfo::WV_5_0: return "2000"; break;
+  case QSysInfo::WV_5_1: return "XP"; break;
+  case QSysInfo::WV_5_2: return "2003"; break;
+  case QSysInfo::WV_6_0: return "Vista"; break;
+  case QSysInfo::WV_6_1: return "7"; break;
+  default:
+       if (QSysInfo::WindowsVersion == 0x00a0) return "8";
+       if (QSysInfo::WindowsVersion == 0x00b0) return "8.1";
+       if (QSysInfo::WindowsVersion == 0x00c0) return "10.0";
+      return "Windows/Unknown";
+  }
+#endif
+  // FIXME: find something appropriately clever to do for Linux, etc. here.
+  return "Unknown";
+}
+
+QString UpgradeCheck::getCpuArchitecture()
+{
+#if HAVE_UNAME || defined (Q_OS_MAC)     +  args += "&cpu=" + QSysInfo::currentCpuArchitecture();
+  struct utsname utsname;
+  if (0 == uname(&utsname)) {
+    return utsname.machine;
+  }
+  return QString();
+#endif
+}
+
+#else // #if (QT_VERSION < QT_VERSION_CHECK(5, 4, 0))
+
 QString UpgradeCheck::getOsName()
 {
   return QSysInfo::productType();
@@ -87,6 +172,13 @@ QString UpgradeCheck::getOsVersion()
 {
   return QSysInfo::productVersion();
 }
+
+QString UpgradeCheck::getCpuArchitecture()
+{
+  return QSysInfo::currentCpuArchitecture();
+}
+
+#endif // #if (QT_VERSION < QT_VERSION_CHECK(5, 4, 0))
 
 UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
                const QString &currentVersionIn,
@@ -117,17 +209,17 @@ UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
   args += "&current_gui_version=" VERSION;
   args += "&installation=" + babelData_.installationUuid_;
   args += "&os=" + getOsName();
-  args += "&cpu=" + QSysInfo::currentCpuArchitecture();
+  args += "&cpu=" + getCpuArchitecture();
   args += "&os_ver=" + getOsVersion();
-  args += QString("&beta_ok=%1").arg(allowBeta); 
+  args += QString("&beta_ok=%1").arg(allowBeta);
   args += "&lang=" + QLocale::languageToString(locale.language());
   args += "&last_checkin=" + lastCheckTime.toString(Qt::ISODate);
-  args += QString("&ugcb=%1").arg(babelData_.upgradeCallbacks_); 
-  args += QString("&ugdec=%1").arg(babelData_.upgradeDeclines_); 
-  args += QString("&ugacc=%1").arg(babelData_.upgradeAccept_); 
-  args += QString("&ugoff=%1").arg(babelData_.upgradeOffers_); 
-  args += QString("&ugerr=%1").arg(babelData_.upgradeErrors_); 
-  args += QString("&rc=%1").arg(babelData_.runCount_); 
+  args += QString("&ugcb=%1").arg(babelData_.upgradeCallbacks_);
+  args += QString("&ugdec=%1").arg(babelData_.upgradeDeclines_);
+  args += QString("&ugacc=%1").arg(babelData_.upgradeAccept_);
+  args += QString("&ugoff=%1").arg(babelData_.upgradeOffers_);
+  args += QString("&ugerr=%1").arg(babelData_.upgradeErrors_);
+  args += QString("&rc=%1").arg(babelData_.runCount_);
 
   int j = 0;
 
@@ -191,14 +283,14 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
         qDebug() << "redirect to " << redirectUrl.toString();
       }
       // Change the url for the next update check.
-      // TOODO: kick off another update check.  
+      // TOODO: kick off another update check.
       upgradeUrl_ = redirectUrl;
       replyId_ = 0;
       reply->deleteLater();
       return;
     }
   }
-  
+
   QVariant statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
   if (testing) {
     qDebug() << "http status code " << statusCode.toInt();
@@ -220,7 +312,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
   QDomDocument document;
   int line = -1;
   QString error_text;
-  // This shouldn't ever be seen by a user.  
+  // This shouldn't ever be seen by a user.
   if (!document.setContent(oresponse, &error_text, &line)) {
     QMessageBox::critical(0, tr("Error"),
            tr("Invalid return data at line %1: %2.")
@@ -281,7 +373,7 @@ void UpgradeCheck::httpRequestFinished(QNetworkReply* reply)
     information.setDefaultButton(QMessageBox::Yes);
     information.setTextFormat(Qt::RichText);
     information.setText(response);
-    
+
     information.setInformativeText(tr("Do you wish to download an upgrade?"));
     // The text field can be RichText, but DetailedText can't be. Odd.
     information.setDetailedText(upgradeText);
