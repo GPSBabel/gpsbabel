@@ -83,7 +83,7 @@ Map::Map(QWidget *parent,
   connect(mclicker, SIGNAL(logTime(const QString &)), this, SLOT(logTime(const QString &)));
 #endif
 
-  QString baseFile =  QApplication::applicationDirPath() + "/gmapbasev3.html";
+  QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
   if (!QFile(baseFile).exists()) {
     QMessageBox::critical(0, appName,
 			  tr("Missing \"gmapbase.html\" file.  Check installation"));
@@ -164,7 +164,7 @@ void Map::showGpxData()
   this->logTime("Start defining JS string");
   QStringList scriptStr;
   scriptStr
-    << "//mclicker.logTimeX(\"Start JS execution\");"
+    << "mclicker.logTimeX(\"Start JS execution\");"
     << "var map = new google.maps.Map(document.getElementById(\"map\"));"
     << "var bounds = new google.maps.LatLngBounds();"
     << "var waypts = [];"
@@ -179,7 +179,7 @@ void Map::showGpxData()
     << "//var pn = map.getPane(G_MAP_MARKER_PANE);"
     << "//pn.style.KhtmlUserSelect='none';"
     << "//pn.style.KhtmlUserDrag='none';"
-    << "//mclicker.logTimeX(\"Done prelim JS definition\");"
+    << "mclicker.logTimeX(\"Done prelim JS definition\");"
     << QString("var zoomFactor = %1;").arg(zoomFactor)
     << QString("var numLevels = %1;").arg(numLevels)
     ;
@@ -203,7 +203,7 @@ void Map::showGpxData()
     << "    bounds.extend(waypts[idx].getPosition());"
     << "    attachHandler(waypts[idx], new MarkerHandler(0, idx));"
     << "}"
-    << "//mclicker.logTimeX(\"Done waypoints definition\");"
+    << "mclicker.logTimeX(\"Done waypoints definition\");"
     ;
 
   // Tracks
@@ -238,7 +238,7 @@ void Map::showGpxData()
   }
 
   scriptStr
-    << "//mclicker.logTimeX(\"Done track definition\");"
+    << "mclicker.logTimeX(\"Done track definition\");"
     ;
 
   // Routes
@@ -277,7 +277,7 @@ void Map::showGpxData()
   scriptStr
     << "map.setCenter(bounds.getCenter());"
     << "map.fitBounds(bounds);"
-    << "//mclicker.logTimeX(\"Done setCenter\");"
+    << "mclicker.logTimeX(\"Done setCenter\");"
     ;
 
   this->logTime("Done defining JS string");
