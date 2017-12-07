@@ -18,6 +18,7 @@ QT += core \
 
 qtHaveModule(webenginewidgets) {
   QT += webenginewidgets
+  QT += webchannel
   DEFINES += HAVE_WEBENGINE
 } else {
   QT += webkit webkitwidgets 
