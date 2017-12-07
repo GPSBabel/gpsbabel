@@ -27,8 +27,10 @@
 #include <QNetworkAccessManager>
 #if HAVE_WEBENGINE
 #include <QWebEngineView>
+#include <QWebEnginePage>
 #include <QWebChannel>
 #else
+#include <QWebView>
 #include <QWebFrame>
 #include <QWebPage>
 #endif
@@ -73,21 +75,22 @@ Map::Map(QWidget *parent,
 
 #if HAVE_WEBENGINE
   MarkerClicker *mclicker = new MarkerClicker(this);
-  QWebChannel* channel = new QWebChannel(this);
+  QWebChannel* channel = new QWebChannel(this->page());
   this->page()->setWebChannel(channel);
+  // Note: A current limitation is that objects must be registered before any client is initialized.
   channel->registerObject(QStringLiteral("mclicker"), mclicker);
   connect(mclicker, SIGNAL(markerClicked(int, int )), this, SLOT(markerClicked(int, int)));
   connect(mclicker, SIGNAL(logTime(const QString &)), this, SLOT(logTime(const QString &)));
 #endif
 
-  QString baseFile =  QApplication::applicationDirPath() + "/gmapbase.html";
+  QString baseFile =  QApplication::applicationDirPath() + "/gmapbasev3.html";
   if (!QFile(baseFile).exists()) {
     QMessageBox::critical(0, appName,
 			  tr("Missing \"gmapbase.html\" file.  Check installation"));
   }
   else {
     QString urlStr = "file:///" + baseFile;
-    load(QUrl(urlStr));
+    this->load(QUrl(urlStr));
   }
 }
 
@@ -138,7 +141,7 @@ static QStringList makeLiteralVar(const QString &name, const string &s)
 
 //------------------------------------------------------------------------
 static QString fmtLatLng(const LatLng &l) {
-  return  QString("%1, %3").arg(l.lat(), 0, 'f', 5) .arg(l.lng(), 0, 'f', 5);
+  return  QString("{lat: %1, lng: %3}").arg(l.lat(), 0, 'f', 5) .arg(l.lng(), 0, 'f', 5);
 }
 
 //------------------------------------------------------------------------
@@ -146,6 +149,7 @@ void Map::showGpxData()
 {
 
 #if !defined(HAVE_WEBENGINE)
+  // Historically this was done here in showGpxData.
   MarkerClicker *mclicker = new MarkerClicker(this);
   this->page()->mainFrame()->addToJavaScriptWindowObject("mclicker", mclicker);
   connect(mclicker, SIGNAL(markerClicked(int, int )), this, SLOT(markerClicked(int, int)));
@@ -160,21 +164,22 @@ void Map::showGpxData()
   this->logTime("Start defining JS string");
   QStringList scriptStr;
   scriptStr
-    << "mclicker.logTimeX(\"Start JS execution\");"
-    << "var map = new GMap2(document.getElementById(\"map\"));"
-    << "var bounds = new GLatLngBounds;"
+    << "//mclicker.logTimeX(\"Start JS execution\");"
+    << "var map = new google.maps.Map(document.getElementById(\"map\"));"
+    << "var bounds = new google.maps.LatLngBounds();"
     << "var waypts = [];"
     << "var rtes = [];"
     << "var trks = [];"
-    << "map.enableScrollWheelZoom();"
-    << "map.enableContinuousZoom();"
-    << "map.addControl(new GLargeMapControl());"
-    << "map.addControl(new GScaleControl());"
-    << "map.addControl(new GMapTypeControl());"
-    << "var pn = map.getPane(G_MAP_MARKER_PANE);"
-    << "pn.style.KhtmlUserSelect='none';"
-    << "pn.style.KhtmlUserDrag='none';"
-    << "mclicker.logTimeX(\"Done prelim JS definition\");"
+    << "var idx;"
+    << "//map.enableScrollWheelZoom();"
+    << "//map.enableContinuousZoom();"
+    << "//map.addControl(new GLargeMapControl());"
+    << "//map.addControl(new GScaleControl());"
+    << "//map.addControl(new GMapTypeControl());"
+    << "//var pn = map.getPane(G_MAP_MARKER_PANE);"
+    << "//pn.style.KhtmlUserSelect='none';"
+    << "//pn.style.KhtmlUserDrag='none';"
+    << "//mclicker.logTimeX(\"Done prelim JS definition\");"
     << QString("var zoomFactor = %1;").arg(zoomFactor)
     << QString("var numLevels = %1;").arg(numLevels)
     ;
@@ -185,8 +190,8 @@ void Map::showGpxData()
   int num=0;
   foreach (const  GpxWaypoint &pt, gpx_.getWaypoints() ) {
     scriptStr
-      << QString("waypts[%1] = new GMarker(new GLatLng(%2), "
-		 "{title:\"%3\",icon:blueIcon});")
+      << QString("waypts[%1] = new google.maps.Marker({map: map, position: %2, "
+		 "title: \"%3\", icon: blueIcon});")
       .arg(num)
       .arg(fmtLatLng(pt.getLocation()))
       .arg(stripDoubleQuotes(pt.getName()));
@@ -194,86 +199,85 @@ void Map::showGpxData()
   }
 
   scriptStr
-    << "for( var i=0; i<waypts.length; ++i ) {"
-    << "   bounds.extend(waypts[i].getPoint());"
-    << "   var ftemp = new MarkerHandler(0, i);"
-    << "   GEvent.bind(waypts[i], \"click\", ftemp, ftemp.clicked);"
-    << "   map.addOverlay(waypts[i]);"
+    << "for (idx = 0; idx < waypts.length; idx += 1) {"
+    << "    bounds.extend(waypts[idx].getPosition());"
+    << "    attachHandler(waypts[idx], new MarkerHandler(0, idx));"
     << "}"
-    << "mclicker.logTimeX(\"Done waypoints definition\");"
+    << "//mclicker.logTimeX(\"Done waypoints definition\");"
     ;
 
   // Tracks
   num = 0;
   foreach (const GpxTrack &trk, gpx_.getTracks()) {
-    vector <LatLng> epts;
+    vector <LatLng> pts;
+    QString path;
     foreach (const GpxTrackSegment seg, trk.getTrackSegments()) {
       foreach (const GpxTrackPoint pt, seg.getTrackPoints()) {
-	epts.push_back(pt.getLocation());
+        pts.push_back(pt.getLocation());
       }
     }
-    string encPts, encLevels;
-    encoder.dpEncode(encPts, encLevels, epts);
+    // maps v3 Polylines do not use encoded paths.
+    foreach (const LatLng ll, pts) {
+      path.append(fmtLatLng(ll));
+      path.append(QLatin1String(", "));
+    }
+    path.chop(2);
 
     scriptStr
-      << QString("var startPt = new GLatLng(%1);").arg(fmtLatLng(epts[0]))
-      << QString("var endPt = new GLatLng(%1);").arg(fmtLatLng(epts[epts.size()-1]))
-      << QString("var idx = %1;").arg(num)
-      << QString("var nm = \"%1\";").arg(stripDoubleQuotes(trk.getName()))
-      << makeLiteralVar("encpts", encPts)
-      << makeLiteralVar("enclvs", encLevels)
-
-      << "var trk   = GPolyline.fromEncoded({color:\"#0000E0\", weight:2, opacity:0.6,"
-      <<                   "points:encpts, zoomFactor:zoomFactor, levels:enclvs, numLevels:numLevels});"
-      << "trks[idx] =  new RTPolyline(trk, startPt, endPt, new MarkerHandler(1, idx));"
+      << QString("trks[%1] = new RTPolyline(\n"
+                 "    map,\n"
+                 "    new google.maps.Polyline({map: map, strokeColor: \"#0000E0\", strokeWeight: 2, strokeOpacity: 0.6, path: [%2]}),\n"
+                 "    new google.maps.LatLng(%3),\n"
+                 "    new google.maps.LatLng(%4),\n"
+                 "    \"%5\",\n"
+                 "    new MarkerHandler(1, %1)\n);"
+                ).arg(num).arg(path).arg(fmtLatLng(pts.front())).arg(fmtLatLng(pts.back())).arg(stripDoubleQuotes(trk.getName()))
+      << QString("bounds.union(trks[%1].getBounds());").arg(num)
       ;
     num++;
   }
 
   scriptStr
-    << "for( var i=0; i<trks.length; ++i ) {"
-    << "   var trkbound = trks[i].getBounds();"
-    << "   bounds.extend(trkbound.getSouthWest());"
-    << "   bounds.extend(trkbound.getNorthEast());"
-    << "}"
-    << "mclicker.logTimeX(\"Done track definition\");"
+    << "//mclicker.logTimeX(\"Done track definition\");"
     ;
 
   // Routes
   num = 0;
   foreach (const GpxRoute &rte, gpx_.getRoutes()) {
-    vector <LatLng> epts;
+    vector <LatLng> pts;
+    QString path;
     foreach (const GpxRoutePoint &pt, rte.getRoutePoints()) {
-      epts.push_back(pt.getLocation());
+      pts.push_back(pt.getLocation());
     }
-    string encPts, encLevels;
-    encoder.dpEncode(encPts, encLevels, epts);
+    // maps v3 Polylines do not use encoded paths.
+    foreach (const LatLng ll, pts) {
+      path.append(fmtLatLng(ll));
+      path.append(QLatin1String(", "));
+    }
+    path.chop(2);
+
     scriptStr
-      << QString("var startPt = new GLatLng(%1);").arg(fmtLatLng(epts[0]))
-      << QString("var endPt = new GLatLng(%1);").arg(fmtLatLng(epts[epts.size()-1]))
-      << QString("var idx = %1;").arg(num)
-      << QString("var nm = \"%1\";").arg(stripDoubleQuotes(rte.getName()))
-      << makeLiteralVar("encpts", encPts)
-      << makeLiteralVar("enclvs", encLevels)
-      << "var rte = GPolyline.fromEncoded({color:\"#8000B0\", weight:2, opacity:0.6,"
-      << "                       points:encpts, zoomFactor:zoomFactor, levels:enclvs, numLevels:numLevels});"
-      << "rtes[idx] = new RTPolyline(rte, startPt, endPt, new MarkerHandler(2, idx));"
+      << QString("rtes[%1] = new RTPolyline(\n"
+                 "    map,\n"
+                 "    new google.maps.Polyline({map: map, strokeColor: \"#0000E0\", strokeWeight: 2, strokeOpacity: 0.6, path: [%2]}),\n"
+                 "    new google.maps.LatLng(%3),\n"
+                 "    new google.maps.LatLng(%4),\n"
+                 "    \"%5\",\n"
+                 "    new MarkerHandler(2, %1)\n);"
+                ).arg(num).arg(path).arg(fmtLatLng(pts.front())).arg(fmtLatLng(pts.back())).arg(stripDoubleQuotes(rte.getName()))
+      << QString("bounds.union(rtes[%1].getBounds());").arg(num)
       ;
     num++;
   }
 
   scriptStr
-    << "for( var i=0; i<rtes.length; ++i ) {"
-    << "   var rtebound = rtes[i].getBounds();"
-    << "   bounds.extend(rtebound.getSouthWest());"
-    << "   bounds.extend(rtebound.getNorthEast());"
-    << "}"
     << "mclicker.logTimeX(\"Done route definition\");"
     ;
 
   scriptStr
-    << "map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds));"
-    << "mclicker.logTimeX(\"Done setCenter\");"
+    << "map.setCenter(bounds.getCenter());"
+    << "map.fitBounds(bounds);"
+    << "//mclicker.logTimeX(\"Done setCenter\");"
     ;
 
   this->logTime("Done defining JS string");
@@ -326,12 +330,13 @@ void Map::hideAllTracks()
 }
 
 //------------------------------------------------------------------------
+// TACKY: we assume the waypoints list and JS waypts[] are parallel.
 void Map::showWaypoints(const QList<GpxWaypoint> &waypoints)
 {
   QStringList scriptStr;
   int i=0;
   foreach(const GpxWaypoint &pt, waypoints) {
-    scriptStr << QString("waypts[%1].%2();").arg(i++).arg(pt.getVisible()?"show":"hide");
+    scriptStr << QString("waypts[%1].setVisible(%2);").arg(i++).arg(pt.getVisible()?"true":"false");
   }
   evaluateJS(scriptStr);
 }
@@ -341,7 +346,7 @@ void Map::hideAllWaypoints()
   QStringList scriptStr;
   scriptStr
     << "for( var i=0; i<waypts.length; ++i ) {"
-    << "   waypts[i].hide();"
+    << "   waypts[i].setVisible(false);"
     << "}"
     ;
   evaluateJS(scriptStr);
@@ -372,8 +377,8 @@ void Map::hideAllRoutes()
 //------------------------------------------------------------------------
 void Map::setWaypointVisibility(int i, bool show)
 {
-  evaluateJS(QString("waypts[%1].%2();\n")
-	     .arg(i).arg(show?"show": "hide"));
+  evaluateJS(QString("waypts[%1].setVisible(%2);\n")
+	     .arg(i).arg(show?"true": "false"));
 }
 
 //------------------------------------------------------------------------
@@ -401,7 +406,7 @@ void Map::setRouteVisibility(int i, bool show)
 //------------------------------------------------------------------------
 void Map::panTo(const LatLng &loc)
 {
-  evaluateJS(QString("map.panTo(new GLatLng(%1));").arg(fmtLatLng(loc)));
+  evaluateJS(QString("map.panTo(new google.maps.LatLng(%1));").arg(fmtLatLng(loc)));
 }
 
 //------------------------------------------------------------------------
@@ -419,22 +424,24 @@ void Map::resizeEvent ( QResizeEvent * ev)
 //------------------------------------------------------------------------
 void Map::setWaypointColorRed(int i)
 {
-  evaluateJS(QString("waypts[%1].setImage(redIcon.image)").arg(i));
+  evaluateJS(QString("waypts[%1].setIcon(redIcon)").arg(i));
 }
 
 //------------------------------------------------------------------------
 void Map::setWaypointColorBlue(int i)
 {
-  evaluateJS(QString("waypts[%1].setImage(blueIcon.image)").arg(i));
+  evaluateJS(QString("waypts[%1].setIcon(blueIcon)").arg(i));
 }
 
 //------------------------------------------------------------------------
 void Map::frameTrack(int i)
 {
   QStringList scriptStr;
+
   scriptStr
-    << QString("var trkbound = trks[%1].getBounds();").arg(i)
-    << "map.setCenter(trkbound.getCenter(), map.getBoundsZoomLevel(trkbound));"
+    << QString("map.setCenter(trks[%1].getBounds().getCenter());").arg(i)
+    << QString("map.fitBounds(trks[%1].getBounds());").arg(i)
+    
     ;
   evaluateJS(scriptStr);
 }
@@ -445,8 +452,8 @@ void Map::frameRoute(int i)
 {
   QStringList scriptStr;
   scriptStr
-    << QString("var rtebound = rtes[%1].getBounds();").arg(i)
-    << "map.setCenter(rtebound.getCenter(), map.getBoundsZoomLevel(rtebound));"
+    << QString("map.setCenter(rtes[%1].getBounds().getCenter());").arg(i)
+    << QString("map.fitBounds(rtes[%1].getBounds());").arg(i)
     ;
   evaluateJS(scriptStr);
 }
@@ -455,6 +462,13 @@ void Map::frameRoute(int i)
 //------------------------------------------------------------------------
 void Map::evaluateJS(const QString &s, bool upd)
 {
+QFile data("output.txt");
+if (data.open(QFile::WriteOnly | QIODevice::Append)) {
+    QTextStream out(&data);
+    out << s;
+    out << '\n';
+}
+data.close();
 #if HAVE_WEBENGINE
   this->page()->runJavaScript(s);
 #else
