@@ -91,8 +91,6 @@ static bounds kml_bounds;
 static gpsbabel::DateTime kml_time_min;
 static gpsbabel::DateTime kml_time_max;
 
-#define AUTOFORMATTING_OFF(AF) bool AF=writer->autoFormatting(); writer->setAutoFormatting(false);
-#define AUTOFORMATTING_RESTORE(AF) writer->setAutoFormatting(af);
 #define DEFAULT_PRECISION "6"
 
 //  Icons provided and hosted by Google.  Used with permission.
@@ -254,7 +252,7 @@ static void kml_step_color()
 }
 
 static xg_callback wpt_s, wpt_e;
-static xg_callback wpt_name, wpt_desc, wpt_coord, wpt_icon, trk_coord, wpt_time;
+static xg_callback wpt_name, wpt_desc, wpt_coord, wpt_icon, trk_coord, wpt_time, wpt_ts_begin, wpt_ts_end;
 static xg_callback gx_trk_s, gx_trk_e;
 static xg_callback gx_trk_when, gx_trk_coord;
 
@@ -264,6 +262,8 @@ xg_tag_mapping kml_map[] = {
   { wpt_e, 	cb_end, 	"/Placemark" },
   { wpt_name, 	cb_cdata, 	"/Placemark/name" },
   { wpt_desc, 	cb_cdata, 	"/Placemark/description" },
+  { wpt_ts_begin, cb_cdata,	"/Placemark/TimeSpan/begin" },
+  { wpt_ts_end, cb_cdata, 	"/Placemark/TimeSpan/end" },
   { wpt_time, 	cb_cdata, 	"/Placemark/TimeStamp/when" },
   // Alias for above used in KML 2.0
   { wpt_time, 	cb_cdata, 	"/Placemark/TimeInstant/timePosition" },
@@ -288,6 +288,9 @@ const char* kml_tags_to_ignore[] = {
   NULL,
 };
 
+// The TimeSpan/begin and TimeSpan/end DateTimes:
+static gpsbabel::DateTime wpt_timespan_begin, wpt_timespan_end;
+
 void wpt_s(xg_string, const QXmlStreamAttributes*)
 {
   if (wpt_tmp) {
@@ -295,6 +298,11 @@ void wpt_s(xg_string, const QXmlStreamAttributes*)
   }
   wpt_tmp = new Waypoint;
   wpt_tmp_queued = 0;
+
+  /* Invalidate timespan elements for a beginning Placemark,
+   * so that each Placemark has its own (or no) TimeSpan. */
+  wpt_timespan_begin = gpsbabel::DateTime();
+  wpt_timespan_end = gpsbabel::DateTime();
 }
 
 void wpt_e(xg_string, const QXmlStreamAttributes*)
@@ -335,6 +343,17 @@ void wpt_time(xg_string args, const QXmlStreamAttributes*)
   }
   wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
+
+void wpt_ts_begin(xg_string args, const QXmlStreamAttributes*)
+{
+	wpt_timespan_begin = xml_parse_time(args);
+}
+
+void wpt_ts_end(xg_string args, const QXmlStreamAttributes*)
+{
+	wpt_timespan_end = xml_parse_time(args);
+}
+
 void wpt_coord(const QString& args, const QXmlStreamAttributes*)
 {
   int n = 0;
@@ -367,6 +386,8 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
   double lat, lon, alt;
   Waypoint* trkpt;
   int n = 0;
+  queue* curr_elem;
+  queue* tmp_elem;
 
   route_head* trk_head = route_head_alloc();
 
@@ -391,6 +412,29 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
 
     track_add_wpt(trk_head, trkpt);
     iargs = iargs.mid(consumed);
+  }
+
+  /* The track coordinates do not have a time associated with them. This is specified by using:
+   *
+   * <TimeSpan>
+   *   <begin>2017-08-21T17:00:05Z</begin>
+   *   <end>2017-08-21T17:22:32Z</end>
+   * </TimeSpan>
+   *
+   * If this is specified, then SetCreationDate
+   */
+  if ( wpt_timespan_begin.isValid() && wpt_timespan_end.isValid() ) {
+
+	  // If there are some Waypoints, then distribute the TimeSpan to all Waypoints
+	  if ( trk_head->rte_waypt_ct > 0 ) {
+		  qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
+		  qint64 ms_per_waypoint = timespan_ms / trk_head->rte_waypt_ct;
+		  QUEUE_FOR_EACH(&trk_head->waypoint_list, curr_elem, tmp_elem) {
+			  trkpt = (Waypoint*) curr_elem;
+			  trkpt->SetCreationTime(wpt_timespan_begin);
+			  wpt_timespan_begin = wpt_timespan_begin.addMSecs(ms_per_waypoint);
+		  }
+	  }
   }
 }
 
@@ -528,13 +572,6 @@ kml_wr_position_init(const QString& fname)
   posnfilename = fname;
   posnfilenametmp = QString("%1-").arg(fname);
   realtime_positioning = 1;
-
-  /*
-   * 30% of our output file is whitespace.  Since parse time
-   * matters in this mode, turn the pretty formatting off.
-   */
-  writer->setAutoFormatting(false);
-
   max_position_points = atoi(opt_max_position_points);
 }
 
@@ -550,7 +587,8 @@ kml_wr_deinit()
 
   if (!posnfilenametmp.isEmpty()) {
 #if __WIN32__
-    MoveFileExA(qPrintable(posnfilenametmp), qPrintable(posnfilename),
+    MoveFileExW((const wchar_t*) posnfilenametmp.utf16(),
+                (const wchar_t*) posnfilename.utf16(),
                 MOVEFILE_REPLACE_EXISTING);
 #endif
     QFile::rename(posnfilenametmp, posnfilename);
@@ -672,10 +710,8 @@ static void kml_output_timestamp(const Waypoint* waypointp)
   QString time_string = waypointp->CreationTimeXML();
   if (!time_string.isEmpty()) {
     writer->writeStartElement("TimeStamp");
-    AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
     writer->writeTextElement("when", time_string);
     writer->writeEndElement(); // Close TimeStamp tag
-    AUTOFORMATTING_RESTORE(af);
   }
 }
 
