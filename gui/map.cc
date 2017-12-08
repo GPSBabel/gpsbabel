@@ -144,6 +144,28 @@ static QString fmtLatLng(const LatLng &l) {
 }
 
 //------------------------------------------------------------------------
+static QString makePath(const vector <LatLng> &pts) {
+    // maps v3 Polylines do not use encoded paths.
+    QString path;
+    int lncount = 0;
+    bool someoutput = false;
+    foreach (const LatLng ll, pts) {
+      if (lncount == 0) {
+        if (someoutput) {
+          path.append(QChar(','));
+        }
+        path.append(QLatin1String("\n            "));
+      } else if (lncount == 1) {
+        path.append(QLatin1String(", "));
+      }
+      path.append(fmtLatLng(ll));
+      someoutput = true;
+      lncount = (lncount + 1) % 2;
+    }
+    return path;
+}
+
+//------------------------------------------------------------------------
 void Map::showGpxData()
 {
 
@@ -200,17 +222,12 @@ void Map::showGpxData()
         pts.push_back(pt.getLocation());
       }
     }
-    // maps v3 Polylines do not use encoded paths.
-    foreach (const LatLng ll, pts) {
-      path.append(fmtLatLng(ll));
-      path.append(QLatin1String(", "));
-    }
-    path.chop(2);
+    path = makePath(pts);
 
     scriptStr
       << QString("trks[%1] = new RTPolyline(\n"
                  "    map,\n"
-                 "    new google.maps.Polyline({map: map, strokeColor: \"#0000E0\", strokeWeight: 2, strokeOpacity: 0.6, path: [%2]}),\n"
+                 "    new google.maps.Polyline({\n        map: map,\n        strokeColor: \"#0000E0\",\n        strokeWeight: 2,\n        strokeOpacity: 0.6,\n        path: [%2\n        ]\n    }),\n"
                  "    new google.maps.LatLng(%3),\n"
                  "    new google.maps.LatLng(%4),\n"
                  "    \"%5\",\n"
@@ -233,17 +250,12 @@ void Map::showGpxData()
     foreach (const GpxRoutePoint &pt, rte.getRoutePoints()) {
       pts.push_back(pt.getLocation());
     }
-    // maps v3 Polylines do not use encoded paths.
-    foreach (const LatLng ll, pts) {
-      path.append(fmtLatLng(ll));
-      path.append(QLatin1String(", "));
-    }
-    path.chop(2);
+    path = makePath(pts);
 
     scriptStr
       << QString("rtes[%1] = new RTPolyline(\n"
                  "    map,\n"
-                 "    new google.maps.Polyline({map: map, strokeColor: \"#0000E0\", strokeWeight: 2, strokeOpacity: 0.6, path: [%2]}),\n"
+                 "    new google.maps.Polyline({\n        map: map,\n        strokeColor: \"#8000B0\",\n        strokeWeight: 2,\n        strokeOpacity: 0.6,\n        path: [%2\n        ]\n    }),\n"
                  "    new google.maps.LatLng(%3),\n"
                  "    new google.maps.LatLng(%4),\n"
                  "    \"%5\",\n"
@@ -306,8 +318,8 @@ void Map::hideAllTracks()
 {
   QStringList scriptStr;
   scriptStr
-    << "for( var i=0; i<trks.length; ++i ) {"
-    << "   trks[i].hide();"
+    << "for (idx = 0; idx < trks.length; idx += 1) {"
+    << "    trks[idx].hide();"
     << "}"
     ;
   evaluateJS(scriptStr);
@@ -329,8 +341,8 @@ void Map::hideAllWaypoints()
 {
   QStringList scriptStr;
   scriptStr
-    << "for( var i=0; i<waypts.length; ++i ) {"
-    << "   waypts[i].setVisible(false);"
+    << "for (idx = 0; idx < waypts.length; idx += 1) {"
+    << "    waypts[idx].setVisible(false);"
     << "}"
     ;
   evaluateJS(scriptStr);
@@ -352,8 +364,8 @@ void Map::hideAllRoutes()
 {
   QStringList scriptStr;
   scriptStr
-    << "for( var i=0; i<rtes.length; ++i ) {"
-    << "   rtes[i].hide();"
+    << "for (idx = 0; idx < rtes.length; idx += 1) {"
+    << "    rtes[idx].hide();"
     << "}"
     ;
   evaluateJS(scriptStr);
@@ -408,13 +420,13 @@ void Map::resizeEvent ( QResizeEvent * ev)
 //------------------------------------------------------------------------
 void Map::setWaypointColorRed(int i)
 {
-  evaluateJS(QString("waypts[%1].setIcon(redIcon)").arg(i));
+  evaluateJS(QString("waypts[%1].setIcon(redIcon);").arg(i));
 }
 
 //------------------------------------------------------------------------
 void Map::setWaypointColorBlue(int i)
 {
-  evaluateJS(QString("waypts[%1].setIcon(blueIcon)").arg(i));
+  evaluateJS(QString("waypts[%1].setIcon(blueIcon);").arg(i));
 }
 
 //------------------------------------------------------------------------
