@@ -27,9 +27,9 @@
 #include "csv_util.h"
 #include "jeeps/gpsmath.h"
 #include <QtCore/QFileInfo>
+#include <cctype>
+#include <cmath>                /* for floor */
 #include <cstdio>
-#include <ctype.h>
-#include <math.h>                /* for floor */
 #include <cstdlib>
 
 #define MYNAME        "OZI"

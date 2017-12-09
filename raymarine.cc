@@ -419,8 +419,8 @@ write_route_wpt_cb(const Waypoint* wpt)
   };
 
   gbfprintf(fout, "Mk%d=%s" LINE_FEED, rte_wpt_index, (char*)wpt->extra_data);
-  for (unsigned i = 0; i < sizeof(items) / sizeof(char*); i++) {
-    gbfprintf(fout, "%s%d=%.15f" LINE_FEED, items[i], rte_wpt_index, 0.0);
+  for (auto & item : items) {
+    gbfprintf(fout, "%s%d=%.15f" LINE_FEED, item, rte_wpt_index, 0.0);
   }
 
   rte_wpt_index++;

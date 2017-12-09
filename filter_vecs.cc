@@ -24,8 +24,8 @@
 #include "gbversion.h"
 #include "inifile.h"
 #include <QtCore/QStringList>
-#include <cstdlib>
 #include <cstdio>
+#include <cstdlib>
 #include <cstdlib> // qsort
 
 typedef struct {

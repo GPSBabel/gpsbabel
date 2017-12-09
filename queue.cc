@@ -113,7 +113,7 @@ sortqueue(queue* qh, int (*cmp)(const queue*, const queue*))
 
   insize = 1;
 
-  while (1) {
+  while (true) {
     p = list;
     oldhead = list;	 /* only used for circular linkage */
     list = NULL;

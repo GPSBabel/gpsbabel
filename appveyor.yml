@@ -68,5 +68,7 @@ test_script:
       # in this case making sure the last command succeeds is not sufficient.
       # see https://help.appveyor.com/discussions/problems/10014-false-build-fail-status
       C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; PNAME=./release/GPSBabel.exe GBTEMP=./gbtemp ./testo 2>&1"
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+      C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; PNAME=./release/GPSBabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1"
       Write-Host "Finished test_script with exit status $LastExitCode"
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }

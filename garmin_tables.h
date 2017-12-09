@@ -28,7 +28,7 @@
 #define DEFAULT_ICON_DESCR "Waypoint"
 #define DEFAULT_ICON_VALUE 18
 
-typedef struct icon_mapping {
+typedef const struct icon_mapping {
   const int mpssymnum;
   const int pcxsymnum;
   const char* icon;

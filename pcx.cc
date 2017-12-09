@@ -24,8 +24,8 @@
 #include "csv_util.h"
 #include "garmin_tables.h"
 #include <QtCore/QDebug>
+#include <cmath>
 #include <cstdio>
-#include <math.h>
 #include <cstdlib>
 
 static gbfile* file_in, *file_out;

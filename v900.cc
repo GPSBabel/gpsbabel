@@ -236,7 +236,7 @@ v900_read()
   track->rte_desc = "V900 GPS tracklog data";
   track_add_head(track);
 
-  while (1) {
+  while (true) {
     Waypoint* wpt;
     char c;
     int bad = 0;

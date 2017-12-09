@@ -281,7 +281,7 @@ static void data_read()
 
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
-  while (1) {
+  while (true) {
     rec_type = get_record(&ibuf);
     switch (rec_type) {
     case rec_manuf_id:
@@ -530,15 +530,23 @@ static void get_tracks(const route_head** pres_track, const route_head** gnss_tr
 static char* latlon2str(const Waypoint* wpt)
 {
   static char str[18] = "";
-  char lat_hemi = wpt->latitude < 0 ? 'S' : 'N';
-  char lon_hemi = wpt->longitude < 0 ? 'W' : 'E';
-  unsigned char lat_deg = fabs(wpt->latitude);
-  unsigned char lon_deg = fabs(wpt->longitude);
-  unsigned int lat_min = (fabs(wpt->latitude) - lat_deg) * 60000 + 0.500000000001;
-  unsigned int lon_min = (fabs(wpt->longitude) - lon_deg) * 60000 + 0.500000000001;
+  // We use lround here because it:
+  // "Returns the integral value that is nearest to x, with halfway cases rounded away from zero."
+  // The halfway rounding cases of *printf are not precisely defined, and can vary with implmentation.
+  // We don't really care which way the halfway cases go, but we want them to go that way consistenly
+  // across implementations.
+  // We also try to use a minimum of floating point arithmetic to minimize accumulated fp math errors.
+  long lat_milliminutes = lround(wpt->latitude * 60000.0);
+  long lon_milliminutes = lround(wpt->longitude * 60000.0);
+  char lat_hemi = lat_milliminutes < 0 ? 'S' : 'N';
+  char lon_hemi = lon_milliminutes < 0 ? 'W' : 'E';
+  ldiv_t lat_digits;
+  ldiv_t lon_digits;
+  lat_digits = ldiv(labs(lat_milliminutes), 60000L);
+  lon_digits = ldiv(labs(lon_milliminutes), 60000L);
 
-  if (snprintf(str, 18, "%02u%05u%c%03u%05u%c",
-               lat_deg, lat_min, lat_hemi, lon_deg, lon_min, lon_hemi) != 17) {
+  if (snprintf(str, 18, "%02ld%05ld%c%03ld%05ld%c",
+               lat_digits.quot, lat_digits.rem, lat_hemi, lon_digits.quot, lon_digits.rem, lon_hemi) != 17) {
     fatal(MYNAME ": Bad waypoint format '%s'\n", str);
   }
   return str;

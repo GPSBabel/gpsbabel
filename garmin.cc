@@ -1108,8 +1108,8 @@ route_waypt_pr(const Waypoint* wpt)
   // This was strncpy(rte->ident, wpt->shortname, sizeof(rte->ident));
   char* d;
   d = rte->ident;
-  for (int idx = 0; idx < wpt->shortname.length(); idx++) {
-    int c = wpt->shortname[idx].toLatin1();
+  for (auto idx : wpt->shortname) {
+    int c = idx.toLatin1();
     if (receiver_must_upper && isalpha(c)) {
       c = toupper(c);
     }
