@@ -532,13 +532,20 @@ static char* latlon2str(const Waypoint* wpt)
   static char str[18] = "";
   char lat_hemi = wpt->latitude < 0 ? 'S' : 'N';
   char lon_hemi = wpt->longitude < 0 ? 'W' : 'E';
-  unsigned char lat_deg = fabs(wpt->latitude);
-  unsigned char lon_deg = fabs(wpt->longitude);
-  unsigned int lat_min = (fabs(wpt->latitude) - lat_deg) * 60000 + 0.500000000001;
-  unsigned int lon_min = (fabs(wpt->longitude) - lon_deg) * 60000 + 0.500000000001;
+  double lat_deg;
+  double lon_deg;
+  double lat_frac_deg = modf(fabs(wpt->latitude), &lat_deg);
+  double lon_frac_deg = modf(fabs(wpt->longitude), &lon_deg);
+  // we use round here because it:
+  // "Returns the integral value that is nearest to x, with halfway cases rounded away from zero."
+  // The halfway rounding cases of *printf are not precisely defined, and can vary with implmentation.
+  // We don't care which way the halfway cases go, but we want them to go consistenly one way or the other
+  // so our test results don't depend on the implemenation.
+  double lat_scaled_min = round(lat_frac_deg * 60000.0);
+  double lon_scaled_min = round(lon_frac_deg * 60000.0);
 
-  if (snprintf(str, 18, "%02u%05u%c%03u%05u%c",
-               lat_deg, lat_min, lat_hemi, lon_deg, lon_min, lon_hemi) != 17) {
+  if (snprintf(str, 18, "%02.0f%05.0f%c%03.0f%05.0f%c",
+               lat_deg, lat_scaled_min, lat_hemi, lon_deg, lon_scaled_min, lon_hemi) != 17) {
     fatal(MYNAME ": Bad waypoint format '%s'\n", str);
   }
   return str;
