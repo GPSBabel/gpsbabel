@@ -530,7 +530,7 @@ static void get_tracks(const route_head** pres_track, const route_head** gnss_tr
 static char* latlon2str(const Waypoint* wpt)
 {
   static char str[18] = "";
-  // We use round here because it:
+  // We use lround here because it:
   // "Returns the integral value that is nearest to x, with halfway cases rounded away from zero."
   // The halfway rounding cases of *printf are not precisely defined, and can vary with implmentation.
   // We don't really care which way the halfway cases go, but we want them to go that way consistenly
@@ -542,8 +542,8 @@ static char* latlon2str(const Waypoint* wpt)
   char lon_hemi = lon_milliminutes < 0 ? 'W' : 'E';
   ldiv_t lat_digits;
   ldiv_t lon_digits;
-  lat_digits = ldiv(abs(lat_milliminutes), 60000l);
-  lon_digits = ldiv(abs(lon_milliminutes), 60000l);
+  lat_digits = ldiv(labs(lat_milliminutes), 60000L);
+  lon_digits = ldiv(labs(lon_milliminutes), 60000L);
 
   if (snprintf(str, 18, "%02ld%05ld%c%03ld%05ld%c",
                lat_digits.quot, lat_digits.rem, lat_hemi, lon_digits.quot, lon_digits.rem, lon_hemi) != 17) {
