@@ -1,8 +1,10 @@
 # $Id: app.pro,v 1.19 2010-11-01 03:30:42 robertl Exp $
 #
 
-CONFIG += qt release 
-#CONFIG += qt debug console
+CONFIG += qt
+CONFIG(debug, debug|release) {
+  CONFIG += console
+}
 
 # For Mac, x86 and x64, but not PPC binary.   Ignored on other OSes.
 # macx:CONFIG -= x86_64 
