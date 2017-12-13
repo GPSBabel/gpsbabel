@@ -59,6 +59,107 @@ arglist_t shp_args[] = {
   ARG_TERMINATOR
 };
 
+
+/************************************************************************/
+/*                              SHPOpenGpsbabel()                       */
+/************************************************************************/
+
+SHPHandle SHPAPI_CALL
+SHPOpenGpsbabel( const QString& pszLayer, const char * pszAccess )
+
+{
+    SAHooks sHooks;
+
+#ifdef SHPAPI_UTF8_HOOKS
+    SASetupUtf8Hooks( &sHooks );
+    return SHPOpenLL( pszLayer.toUtf8().constData(), pszAccess, &sHooks );
+#else
+    SASetupDefaultHooks( &sHooks );
+    return SHPOpenLL( qPrintable(pszLayer), pszAccess, &sHooks );
+#endif
+
+}
+
+/************************************************************************/
+/*                             SHPCreateGpsbabel()                      */
+/*                                                                      */
+/*      Create a new shape file and return a handle to the open         */
+/*      shape file with read/write access.                              */
+/************************************************************************/
+
+SHPHandle SHPAPI_CALL
+SHPCreateGpsbabel( const QString& pszLayer, int nShapeType )
+
+{
+    SAHooks sHooks;
+
+#ifdef SHPAPI_UTF8_HOOKS
+    SASetupUtf8Hooks( &sHooks );
+    return SHPCreateLL( pszLayer.toUtf8().constData(), nShapeType, &sHooks );
+#else
+    SASetupDefaultHooks( &sHooks );
+    return SHPCreateLL( qPrintable(pszLayer), nShapeType, &sHooks );
+#endif
+
+}
+
+/************************************************************************/
+/*                              DBFOpenGpsbabel()                       */
+/*                                                                      */
+/*      Open a .dbf file.                                               */
+/************************************************************************/
+   
+DBFHandle SHPAPI_CALL
+DBFOpenGpsbabel( const QString& pszFilename, const char * pszAccess )
+
+{
+    SAHooks sHooks;
+
+#ifdef SHPAPI_UTF8_HOOKS
+    SASetupUtf8Hooks( &sHooks );
+    return DBFOpenLL( pszFilename.toUtf8().constData(), pszAccess, &sHooks );
+#else
+    SASetupDefaultHooks( &sHooks );
+    return DBFOpenLL( qPrintable(pszFilename), pszAccess, &sHooks );
+#endif
+
+}
+
+/************************************************************************/
+/*                            DBFCreateExGpsbabel()                     */
+/*                                                                      */
+/*      Create a new .dbf file.                                         */
+/************************************************************************/
+
+DBFHandle SHPAPI_CALL
+DBFCreateExGpsbabel( const QString& pszFilename, const char* pszCodePage )
+
+{
+    SAHooks sHooks;
+
+#ifdef SHPAPI_UTF8_HOOKS
+    SASetupUtf8Hooks( &sHooks );
+    return DBFCreateLL( pszFilename.toUtf8().constData(), pszCodePage , &sHooks );
+#else
+    SASetupDefaultHooks( &sHooks );
+    return DBFCreateLL( qPrintable(pszFilename), pszCodePage , &sHooks );
+#endif
+
+}
+
+/************************************************************************/
+/*                             DBFCreateGpsbabel()                      */
+/*                                                                      */
+/* Create a new .dbf file with default code page LDID/87 (0x57)         */
+/************************************************************************/
+
+DBFHandle SHPAPI_CALL
+DBFCreateGpsbabel( const QString& pszFilename )
+
+{
+    return DBFCreateExGpsbabel( pszFilename, "LDID/87" ); // 0x57
+}
+
 static
 void dump_fields(void)
 {
@@ -99,12 +200,12 @@ my_rd_init(const QString& fname)
 {
   ifname = fname;
   // TODO: The .prj file can define the the coordinate system and projection information.
-  ihandle = SHPOpen(qPrintable(fname), "rb");
+  ihandle = SHPOpenGpsbabel(fname, "rb");
   if (ihandle == NULL) {
     fatal(MYNAME ": Cannot open shp file %s for reading\n", qPrintable(ifname));
   }
 
-  ihandledb = DBFOpen(qPrintable(fname), "rb");
+  ihandledb = DBFOpenGpsbabel(fname, "rb");
   if (ihandledb == NULL) {
     fatal(MYNAME ": Cannot open dbf file %s for reading\n", qPrintable(ifname));
   }
@@ -376,13 +477,13 @@ my_write(void)
   switch (global_opts.objective) {
   case wptdata:
   case unknown_gpsdata:
-    ohandle = SHPCreate(qPrintable(ofname), SHPT_POINT);
+    ohandle = SHPCreateGpsbabel(ofname, SHPT_POINT);
 
     if (ohandle == NULL) {
       fatal(MYNAME ": Cannot open shp file %s for writing\n",
             qPrintable(ofname));
     }
-    ohandledb = DBFCreateEx(qPrintable(ofname), "UTF-8\n");
+    ohandledb = DBFCreateExGpsbabel(ofname, "UTF-8\n");
     if (ohandledb == NULL) {
       fatal(MYNAME ": Cannot open dbf file %s for writing\n",
             qPrintable(ofname));
@@ -392,13 +493,13 @@ my_write(void)
     break;
   case rtedata:
   case trkdata:
-    ohandle = SHPCreate(qPrintable(ofname), SHPT_ARC);
+    ohandle = SHPCreateGpsbabel(ofname, SHPT_ARC);
 
     if (ohandle == NULL) {
       fatal(MYNAME ": Cannot open shp file %s for writing\n",
             qPrintable(ofname));
     }
-    ohandledb = DBFCreateEx(qPrintable(ofname), "UTF-8\n");
+    ohandledb = DBFCreateExGpsbabel(ofname, "UTF-8\n");
     if (ohandledb == NULL) {
       fatal(MYNAME ": Cannot open dbf file %s for writing\n",
             qPrintable(ofname));
