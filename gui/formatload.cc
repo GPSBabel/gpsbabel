@@ -108,7 +108,7 @@ bool FormatLoad::processFormat(Format &format)
 		  hfields[1][1] == QChar('w'),  hfields[1][3] == QChar('w'),  hfields[1][5] == QChar('w'),
 		  hfields[0] == "file",
 		  hfields[0] == "serial",
-		  QStringList() << hfields[3],
+		  QStringList() << hfields[3].split('/'),
 		  optionList,
 		  optionList2, htmlPage);
   if (htmlPage.length() > 0 && Format::getHtmlBase().length() == 0) {
