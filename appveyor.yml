@@ -12,11 +12,6 @@ environment:
     platform: mingw
     qt: 5.6\mingw49_32
     tools: mingw492_32
-  # MinGW
-  #  - name: win32
-  #    platform: mingw
-  #    qt: 5.9\mingw53_32
-  #    tools: mingw530_32
   # MSVC x32
   - name: win32
     platform: x86
@@ -35,8 +30,9 @@ init:
 # Flesh out with amd64/msvc cases later.
 build_script:
   - ps: |
-      echo $env:platform
-      echo $env:qt
+      # be aware that vcvarsall will reset platform amd64 to X64!
+      echo "platform: $env:platform"
+      echo "qt: $env:qt"
       qmake -query
       Get-Location
       if (($env:platform -eq "mingw") -and ($env:qt -eq "5.5\mingw492_32"))
@@ -51,8 +47,7 @@ build_script:
         Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
         Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Manifest.txt" }
       }
-      # vcvarsall resets platform!
-      elseif (($env:platform -eq "X64") -and ($env:qt -eq "5.6\msvc2015_64"))
+      elseif (($env:platform -eq "x86") -and ($env:qt -eq "5.6\msvc2015"))
       {
         & ".\tools\make_windows_release.ps1" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_6_MSVC2015_64bit-Release" -gui_build_dir_name "build-app-Desktop_Qt_5_6_MSVC2015_64bit-Release" -mkspec win32-msvc2015 -mkcmd nmake.exe
         $sha=(git rev-parse --short HEAD)
