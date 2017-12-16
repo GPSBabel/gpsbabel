@@ -49,7 +49,7 @@ build_script:
       }
       elseif (($env:platform -eq "x86") -and ($env:qt -eq "5.6\msvc2015"))
       {
-        & ".\tools\make_windows_release.ps1" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_6_MSVC2015_64bit-Release" -gui_build_dir_name "build-app-Desktop_Qt_5_6_MSVC2015_64bit-Release" -mkspec win32-msvc2015 -mkcmd nmake.exe
+        & ".\tools\make_windows_release.ps1" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_6_MSVC2015_32bit-Release" -gui_build_dir_name "build-app-Desktop_Qt_5_6_MSVC2015_32bit-Release" -mkspec win32-msvc2015 -mkcmd nmake.exe
         $sha=(git rev-parse --short HEAD)
         Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
         Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Manifest.txt" }
