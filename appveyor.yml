@@ -37,10 +37,10 @@ build_script:
   - ps: |
       echo $env:platform
       echo $env:qt
+      qmake -query
+      Get-Location
       if (($env:platform -eq "mingw") -and ($env:qt -eq "5.5\mingw492_32"))
       {
-        Get-Location
-        qmake -query
         # windeployqt in 5.5.1 suffers from bug
         # https://bugreports.qt.io/browser/QTBUG-48946
         # which trashes the translations.  Work around
@@ -51,10 +51,9 @@ build_script:
         Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
         Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Manifest.txt" }
       }
-      elseif (($env:platform -eq "amd64") -and ($env:qt -eq "5.6\msvc2015_64"))
+      # vcvarsall resets platform!
+      elseif (($env:platform -eq "X64") -and ($env:qt -eq "5.6\msvc2015_64"))
       {
-        Get-Location
-        qmake -query
         & ".\tools\make_windows_release.ps1" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_6_MSVC2015_64bit-Release" -gui_build_dir_name "build-app-Desktop_Qt_5_6_MSVC2015_64bit-Release" -mkspec win32-msvc2015 -mkcmd nmake.exe
         $sha=(git rev-parse --short HEAD)
         Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
