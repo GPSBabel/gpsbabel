@@ -35,6 +35,8 @@ init:
 # Flesh out with amd64/msvc cases later.
 build_script:
   - ps: |
+      echo $env:platform
+      echo $env:qt
       if (($env:platform -eq "mingw") -and ($env:qt -eq "5.5\mingw492_32"))
       {
         Get-Location
@@ -53,7 +55,7 @@ build_script:
       {
         Get-Location
         qmake -query
-        & ".\tools\make_windows_release.ps1" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_6_MSVC2015_64bit-Release" -gui_build_dir_name "build-app-Desktop_Qt_5_6_MSVC2015_64bit-Release" -mkspec win32-msvc -mkcmd nmake.exe
+        & ".\tools\make_windows_release.ps1" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_6_MSVC2015_64bit-Release" -gui_build_dir_name "build-app-Desktop_Qt_5_6_MSVC2015_64bit-Release" -mkspec win32-msvc2015 -mkcmd nmake.exe
         $sha=(git rev-parse --short HEAD)
         Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
         Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Manifest.txt" }

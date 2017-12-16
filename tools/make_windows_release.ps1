@@ -5,7 +5,7 @@
 # For example, to run overriding the default locations of windeployqt and ISSC:
 # powershell.exe -ExecutionPolicy Unrestricted -File tools\make_windows_release.ps1 -windeployqt "C:\Qt\5.6.3\mingw49_32\bin\windeployqt.exe" -iscc "C:\Program Files (x86)\Inno Setup 5\ISCC.exe"
 # Or to do a 64 bit MSVC build with a newer Qt:
-# powershell.exe -ExecutionPolicy Unrestricted -File tools\make_windows_release.ps1 -iscc "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_9_3_MSVC2015_64bit-Release" -gui_build_dir_name build-app-Desktop_Qt_5_9_3_MSVC2015_64bit-Release -mkspec win32-msvc -mkcmd nmake.exe
+# powershell.exe -ExecutionPolicy Unrestricted -File tools\make_windows_release.ps1 -iscc "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_9_3_MSVC2015_64bit-Release" -gui_build_dir_name "build-app-Desktop_Qt_5_9_3_MSVC2015_64bit-Release" -mkspec win32-msvc -mkcmd nmake.exe
 #
 # Be aware this script is used by appveyor.yml
 # 
