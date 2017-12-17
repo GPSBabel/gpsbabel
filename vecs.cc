@@ -32,7 +32,7 @@ typedef struct {
   ff_vecs_t* vec;
   const char* name;
   const char* desc;
-  const char* extensions; // list of possible extensions separated by '/'
+  const char* extensions; // list of possible extensions separated by '/', first is output default for GUI.
   const char* parent;
 } vecs_t;
 
@@ -612,7 +612,7 @@ vecs_t vec_list[] = {
     &compegps_vecs,
     "compegps",
     "CompeGPS data files (.wpt/.trk/.rte)",
-    "wpt/trk/rte",
+    NULL,
     NULL,
   },
 #endif //CSVFMTS_ENABLED
@@ -656,8 +656,8 @@ vecs_t vec_list[] = {
   {
     &gtc_vecs,
     "gtrnctr",
-    "Garmin Training Center (.crs/.hst/.tcx/.xml)",
-    "crs/hst/tcx/xml",
+    "Garmin Training Center (.tcx/.crs/.hst/.xml)",
+    "tcx/crs/hst/xml",
     NULL,
   },
   {
