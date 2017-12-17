@@ -7,6 +7,12 @@
 ; Uses the Inno setup compiler.
 ; windeployqt should be run to prepare the necessary Qt files before
 ; running Inno Setup.
+#ifndef gui_build_dir_name
+  #define gui_build_dir_name "build-app-Desktop_Qt_5_5_1_MinGW_32bit-Release"
+#endif
+#ifndef gpsbabel_build_dir_name
+  #define gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_5_1_MinGW_32bit-Release"
+#endif
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -39,8 +45,10 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: gmapbase.html; 			DestDir: "{app}"; Flags: ignoreversion
 Source: qt.conf;       			DestDir: "{app}"; Flags: ignoreversion
 
-Source: ..\build-app-Desktop_Qt_5_5_1_Mingw_32bit-Release\release\*; Excludes: "*.cpp,*.o"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: ..\..\build-GPSBabel-Desktop_Qt_5_5_1_Mingw_32bit-Release\release\gpsbabel.exe;   	DestDir: "{app}"; Flags: ignoreversion
+Source: "..\{#gui_build_dir_name}\release\*"; Excludes: "app.res,vcredist_*.exe,*.cpp,*.h,*.o,*.obj"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\{#gui_build_dir_name}\release\vcredist_x86.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
+Source: "..\{#gui_build_dir_name}\release\vcredist_x64.exe"; DestDir: "{app}"; Flags: ignoreversion skipifsourcedoesntexist deleteafterinstall
+Source: "..\..\{#gpsbabel_build_dir_name}\release\gpsbabel.exe";   	DestDir: "{app}"; Flags: ignoreversion
 ; Source: release\help\*;           	DestDir: "{app}\help"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; Translation strings extracted from source code.  Include it in the dist
@@ -66,6 +74,8 @@ Name: "{group}\GPSBabel"; Filename: "{app}\gpsbabelfe.exe"
 Name: "{commondesktop}\GPSBabel"; Filename: "{app}\gpsbabelfe.exe"; Tasks: desktopicon
 
 [Run]
+Filename: "{app}\vcredist_x86.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
+Filename: "{app}\vcredist_x64.exe"; Parameters: "/quiet"; Flags: skipifdoesntexist
 Filename: "{app}\gpsbabelfe.exe"; Description: "{cm:LaunchProgram,GPSBabelFE}"; Flags: nowait postinstall skipifsilent
 
 [Registry]
@@ -73,3 +83,5 @@ Root: HKCU; Subkey: "Software\GPSBabel"; Flags: uninsdeletekeyifempty
 Root: HKCU; Subkey: "Software\GPSBabel\GPSBabel"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "Software\GPSBabel\GPSBabelFE"; Flags: uninsdeletekey
 
+; ISPP preprocessor output can be useful for debug
+#expr SaveToFile("PreprocessedScript.iss")

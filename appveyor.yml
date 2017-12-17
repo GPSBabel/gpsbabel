@@ -12,11 +12,6 @@ environment:
     platform: mingw
     qt: 5.6\mingw49_32
     tools: mingw492_32
-  # MinGW
-  #  - name: win32
-  #    platform: mingw
-  #    qt: 5.9\mingw53_32
-  #    tools: mingw530_32
   # MSVC x32
   - name: win32
     platform: x86
@@ -35,11 +30,26 @@ init:
 # Flesh out with amd64/msvc cases later.
 build_script:
   - ps: |
+      # be aware that vcvarsall will reset platform amd64 to X64!
+      echo "platform: $env:platform"
+      echo "qt: $env:qt"
+      qmake -query
+      Get-Location
       if (($env:platform -eq "mingw") -and ($env:qt -eq "5.5\mingw492_32"))
       {
-        Get-Location
-        qmake -query
-        & ".\tools\make_windows_release.ps1"
+        # windeployqt in 5.5.1 suffers from bug
+        # https://bugreports.qt.io/browser/QTBUG-48946
+        # which trashes the translations.  Work around
+        # by using the next version of windeployqt which had this
+        # bug fixed.
+        & ".\tools\make_windows_release.ps1" -windeployqt "C:\Qt\5.6\mingw49_32\bin\windeployqt.exe"
+        $sha=(git rev-parse --short HEAD)
+        Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
+        Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Manifest.txt" }
+      }
+      elseif (($env:platform -eq "x86") -and ($env:qt -eq "5.6\msvc2015"))
+      {
+        & ".\tools\make_windows_release.ps1" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_6_MSVC2015_32bit-Release" -gui_build_dir_name "build-app-Desktop_Qt_5_6_MSVC2015_32bit-Release" -mkspec win32-msvc2015 -mkcmd nmake.exe
         $sha=(git rev-parse --short HEAD)
         Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
         Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Manifest.txt" }

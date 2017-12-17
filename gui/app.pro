@@ -46,6 +46,8 @@ RC_FILE = app.rc
 
 win32 { 
   TARGET=GPSBabelFE
+}
+win32-g++ {
   QMAKE_LFLAGS_RELEASE += -static-libgcc
 }
 unix:TARGET=gpsbabelfe-bin
