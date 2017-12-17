@@ -496,7 +496,7 @@ tag_cache_desc(const QXmlStreamAttributes& attr)
 {
   cache_descr_is_html = false;
   if (attr.hasAttribute("html")) {
-    if (attr.value("html").toString() == QStringLiteral("True")) {
+    if (attr.value("html").compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
       cache_descr_is_html = true;
     }
   }
@@ -511,16 +511,16 @@ tag_gs_cache(const QXmlStreamAttributes& attr)
     gc_data->id = attr.value("id").toString().toInt();
   }
   if (attr.hasAttribute("available")) {
-    if (attr.value("available").toString().compare(QStringLiteral("True"), Qt::CaseInsensitive) == 0) {
+    if (attr.value("available").compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
       gc_data->is_available = status_true;
-    } else if (attr.value("available").toString().compare(QStringLiteral("False"), Qt::CaseInsensitive) == 0) {
+    } else if (attr.value("available").compare(QLatin1String("False"), Qt::CaseInsensitive) == 0) {
       gc_data->is_available = status_false;
     }
   }
   if (attr.hasAttribute("archived")) {
-    if (attr.value("archived").toString().compare(QStringLiteral("True"), Qt::CaseInsensitive) == 0) {
+    if (attr.value("archived").compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
       gc_data->is_archived = status_true;
-    } else if (attr.value("archived").toString().compare(QStringLiteral("False"), Qt::CaseInsensitive) == 0) {
+    } else if (attr.value("archived").compare(QLatin1String("False"), Qt::CaseInsensitive) == 0) {
       gc_data->is_archived = status_false;
     }
   }
@@ -974,7 +974,7 @@ gpx_end(const QString&)
      * last date we saw in this log.
      */
   case tt_cache_log_type:
-    if ((cdatastr.compare(QStringLiteral("Found it")) == 0) &&
+    if ((cdatastr.compare(QLatin1String("Found it")) == 0) &&
         (0 == wpt_tmp->gc_data->last_found.toTime_t())) {
       wpt_tmp->AllocGCData()->last_found = gc_log_date;
     }
@@ -1443,7 +1443,7 @@ fprint_xml_chain(xml_tag* tag, const Waypoint* wpt)
         fprint_xml_chain(tag->child, wpt);
       }
       if (wpt && wpt->gc_data->exported.isValid() &&
-          tag->tagname.compare(QStringLiteral("groundspeak:cache")) == 0) {
+          tag->tagname.compare(QLatin1String("groundspeak:cache")) == 0) {
         writer->writeTextElement("time",
                                  wpt->gc_data->exported.toPrettyString());
       }

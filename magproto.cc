@@ -819,11 +819,11 @@ mag_rd_init_common(const QString& portname)
    */
   QString exten = QFileInfo(curfname).suffix();
   if (exten.length() > 0) {
-    if (0 == exten.compare(QStringLiteral("upt"), Qt::CaseInsensitive)) {
+    if (0 == exten.compare(QLatin1String("upt"), Qt::CaseInsensitive)) {
       extension_hint = WPTDATAMASK;
-    } else if (0 == exten.compare(QStringLiteral("log"), Qt::CaseInsensitive)) {
+    } else if (0 == exten.compare(QLatin1String("log"), Qt::CaseInsensitive)) {
       extension_hint = TRKDATAMASK;
-    } else if (0 == exten.compare(QStringLiteral("rte"), Qt::CaseInsensitive)) {
+    } else if (0 == exten.compare(QLatin1String("rte"), Qt::CaseInsensitive)) {
       extension_hint = RTEDATAMASK;
     }
   }
