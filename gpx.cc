@@ -1280,7 +1280,7 @@ gpx_wr_init(const QString& fname)
   writer->writeStartElement(QStringLiteral("gpx"));
   writer->writeAttribute(QStringLiteral("version"), gpx_wversion);
   writer->writeAttribute(QStringLiteral("creator"), CREATOR_NAME_URL);
-  writer->writeAttribute(QStringLiteral("xmlns"), QString("http://www.topografix.com/GPX/%1/%2").arg(gpx_wversion[0]).arg(gpx_wversion[2]));
+  writer->writeAttribute(QStringLiteral("xmlns"), QStringLiteral("http://www.topografix.com/GPX/%1/%2").arg(gpx_wversion[0]).arg(gpx_wversion[2]));
   if (opt_humminbirdext || opt_garminext) {
     if (opt_humminbirdext) {
       writer->writeAttribute(QStringLiteral("xmlns:h"), QStringLiteral("http://humminbird.com"));
@@ -1504,8 +1504,8 @@ write_gpx_url(const Waypoint* waypointp)
     return;
   }
   UrlLink l = waypointp->GetUrlLink();
-  writer->writeTextElement(QStringLiteral("url"), QString(urlbase) + QString(l.url_));
-  writer->writeOptionalTextElement(QStringLiteral("urlname"), QString(l.url_link_text_));
+  writer->writeTextElement(QStringLiteral("url"), QString(urlbase) + l.url_);
+  writer->writeOptionalTextElement(QStringLiteral("urlname"), l.url_link_text_);
 }
 
 /*
@@ -1730,7 +1730,7 @@ gpx_track_hdr(const route_head* rte)
         if (ci > 0) {
           writer->writeStartElement(QStringLiteral("extensions"));
           writer->writeStartElement(QStringLiteral("gpxx:TrackExtension"));
-          writer->writeTextElement(QStringLiteral("gpxx:DisplayColor"), QString("%1")
+          writer->writeTextElement(QStringLiteral("gpxx:DisplayColor"), QStringLiteral("%1")
                                    .arg(gt_color_name(ci)));
           writer->writeEndElement(); // Close gpxx:TrackExtension tag
           writer->writeEndElement(); // Close extensions tag
@@ -1826,8 +1826,8 @@ gpx_route_hdr(const route_head* rte)
           writer->writeStartElement(QStringLiteral("extensions"));
           writer->writeStartElement(QStringLiteral("gpxx:RouteExtension"));
           // FIXME: the value to use for IsAutoNamed is questionable.
-          writer->writeTextElement(QStringLiteral("gpxx:IsAutoNamed"), rte->rte_name.isEmpty()? "true" : "false"); // Required element
-          writer->writeTextElement(QStringLiteral("gpxx:DisplayColor"), QString("%1")
+          writer->writeTextElement(QStringLiteral("gpxx:IsAutoNamed"), rte->rte_name.isEmpty()? QStringLiteral("true") : QStringLiteral("false")); // Required element
+          writer->writeTextElement(QStringLiteral("gpxx:DisplayColor"), QStringLiteral("%1")
                                    .arg(gt_color_name(ci)));
           writer->writeEndElement(); // Close gpxx:RouteExtension tag
           writer->writeEndElement(); // Close extensions tag

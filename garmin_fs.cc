@@ -248,7 +248,7 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
       writer->writeStartElement(QStringLiteral("gpxx:Categories"));
       for (i = 0; i < 16; i++) {
         if (cx & 1) {
-          writer->writeTextElement(QStringLiteral("gpxx:Category"), QString("Category %1").arg(i+1));
+          writer->writeTextElement(QStringLiteral("gpxx:Category"), QStringLiteral("Category %1").arg(i+1));
         }
         cx = cx >> 1;
       }
