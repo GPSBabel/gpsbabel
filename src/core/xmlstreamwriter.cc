@@ -20,6 +20,7 @@
 #include "src/core/xmlstreamwriter.h"
 
 #include <QtCore/QFile>
+#include <QtCore/QString>
 #include <QtCore/QTextCodec>
 #include <QtCore/QXmlStreamWriter>
 
@@ -84,7 +85,7 @@ XmlStreamWriter::XmlStreamWriter(QFile* f) : QXmlStreamWriter(f)
 // We must overide the encoding, we don't want to use XmlTextCode::name().
 void XmlStreamWriter::writeStartDocument()
 {
-  writeProcessingInstruction("xml version=\"1.0\" encoding=\"UTF-8\"");
+  writeProcessingInstruction(QStringLiteral("xml version=\"1.0\" encoding=\"UTF-8\""));
 }
 
 // Dont emit the attribute if there's nothing interesting in it.
