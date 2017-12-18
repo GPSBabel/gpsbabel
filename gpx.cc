@@ -496,7 +496,7 @@ tag_cache_desc(const QXmlStreamAttributes& attr)
 {
   cache_descr_is_html = false;
   if (attr.hasAttribute("html")) {
-    if (attr.value("html").compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
+    if (attr.value("html").compare(QLatin1String("True")) == 0) {
       cache_descr_is_html = true;
     }
   }
