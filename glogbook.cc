@@ -99,22 +99,22 @@ glogbook_wr_deinit()
 static void
 glogbook_waypt_pr(const Waypoint* wpt)
 {
-  writer.writeStartElement("Trackpoint");
+  writer.writeStartElement(QStringLiteral("Trackpoint"));
 
-  writer.writeStartElement("Position");
-  writer.writeTextElement("Latitude", QString::number(wpt->latitude,'f', 5));
-  writer.writeTextElement("Longitude", QString::number(wpt->longitude,'f', 5));
-  writer.writeTextElement("Altitude", QString::number(wpt->altitude,'f', 3));
+  writer.writeStartElement(QStringLiteral("Position"));
+  writer.writeTextElement(QStringLiteral("Latitude"), QString::number(wpt->latitude,'f', 5));
+  writer.writeTextElement(QStringLiteral("Longitude"), QString::number(wpt->longitude,'f', 5));
+  writer.writeTextElement(QStringLiteral("Altitude"), QString::number(wpt->altitude,'f', 3));
   writer.writeEndElement(); // Position
 
-  writer.writeTextElement("Time", wpt->GetCreationTime().toPrettyString());
+  writer.writeTextElement(QStringLiteral("Time"), wpt->GetCreationTime().toPrettyString());
   writer.writeEndElement(); // Trackpoint
 }
 
 static void
 glogbook_hdr(const route_head*)
 {
-  writer.writeStartElement("Track");
+  writer.writeStartElement(QStringLiteral("Track"));
 }
 
 static void
@@ -131,8 +131,8 @@ glogbook_write()
   gbfprintf(ofd, "<History xmlns=\"http://www.garmin.com/xmlschemas/ForerunnerLogbook\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/ForerunnerLogbook http://www.garmin.com/xmlschemas/ForerunnerLogbookv1.xsd\" version=\"1\">\n");
   gbfprintf(ofd, "    <Run>\n");
 #else
-  writer.writeStartElement("History");
-  writer.writeStartElement("Run");
+  writer.writeStartElement(QStringLiteral("History"));
+  writer.writeStartElement(QStringLiteral("Run"));
 #endif
   track_disp_all(glogbook_hdr, glogbook_ftr, glogbook_waypt_pr);
   writer.writeEndElement(); // Run

@@ -126,19 +126,19 @@ mapfactor_wr_deinit()
 static void
 mapfactor_waypt_pr(const Waypoint* waypointp)
 {
-  writer->writeStartElement("item");
+  writer->writeStartElement(QStringLiteral("item"));
 
-  writer->writeAttribute("name", waypointp->shortname);
-  writer->writeAttribute("lat", QString::number(waypointp->latitude * milliarcseconds, 'f', 0));
-  writer->writeAttribute("lon", QString::number(waypointp->longitude * milliarcseconds, 'f', 0));
+  writer->writeAttribute(QStringLiteral("name"), waypointp->shortname);
+  writer->writeAttribute(QStringLiteral("lat"), QString::number(waypointp->latitude * milliarcseconds, 'f', 0));
+  writer->writeAttribute(QStringLiteral("lon"), QString::number(waypointp->longitude * milliarcseconds, 'f', 0));
   writer->writeEndElement();
 }
 
 static void
 mapfactor_write()
 {
-  writer->writeStartElement("favourites");
-  writer->writeAttribute("version", "1");
+  writer->writeStartElement(QStringLiteral("favourites"));
+  writer->writeAttribute(QStringLiteral("version"), QStringLiteral("1"));
   // TODO: This could be moved to wr_init, but the pre GPX version put the two
   // lines above this, so mimic that behaviour exactly.
   writer->setAutoFormatting(true);

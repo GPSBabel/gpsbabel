@@ -115,9 +115,9 @@ hiketech_wr_deinit()
 static void
 hiketech_trk_hdr(const route_head* rte)
 {
-  writer.writeStartElement("trk");
+  writer.writeStartElement(QStringLiteral("trk"));
   writer.setAutoFormattingIndent(1);
-  writer.writeOptionalTextElement("ident", rte->rte_name);
+  writer.writeOptionalTextElement(QStringLiteral("ident"), rte->rte_name);
 }
 
 static void
@@ -145,15 +145,15 @@ hiketech_format_time(const QDateTime& t)
 static void
 hiketech_trkpt_pr(const Waypoint* waypointp)
 {
-  writer.writeStartElement("pnt"); 
+  writer.writeStartElement(QStringLiteral("pnt")); 
   if (waypointp->creation_time.isValid()) {
-    writer.writeTextElement("utc", 
+    writer.writeTextElement(QStringLiteral("utc"), 
                             hiketech_format_time(waypointp->GetCreationTime()));
   }
-  writer.writeTextElement("lat", QString::number(waypointp->latitude,'f', 6));
-  writer.writeTextElement("long", QString::number(waypointp->longitude,'f', 6));
+  writer.writeTextElement(QStringLiteral("lat"), QString::number(waypointp->latitude,'f', 6));
+  writer.writeTextElement(QStringLiteral("long"), QString::number(waypointp->longitude,'f', 6));
   if (waypointp->altitude != unknown_alt) {
-    writer.writeTextElement("alt", QString::number(waypointp->altitude,'f', 6));
+    writer.writeTextElement(QStringLiteral("alt"), QString::number(waypointp->altitude,'f', 6));
   }
   writer.writeEndElement(); // png
 }
@@ -161,15 +161,15 @@ hiketech_trkpt_pr(const Waypoint* waypointp)
 static void
 hiketech_waypt_pr(const Waypoint* wpt)
 {
-  writer.writeStartElement("wpt"); 
+  writer.writeStartElement(QStringLiteral("wpt")); 
   writer.setAutoFormattingIndent(-1);
-  writer.writeTextElement("ident", wpt->shortname);
-  writer.writeTextElement("sym", wpt->icon_descr);
-  writer.writeTextElement("lat", QString::number(wpt->latitude, 'f', 6));
-  writer.writeTextElement("long", QString::number(wpt->longitude, 'f', 6));
-  writer.writeStartElement("color"); 
-  writer.writeTextElement("lbl", "FAFFB4");
-  writer.writeTextElement("obj", "FF8000");
+  writer.writeTextElement(QStringLiteral("ident"), wpt->shortname);
+  writer.writeTextElement(QStringLiteral("sym"), wpt->icon_descr);
+  writer.writeTextElement(QStringLiteral("lat"), QString::number(wpt->latitude, 'f', 6));
+  writer.writeTextElement(QStringLiteral("long"), QString::number(wpt->longitude, 'f', 6));
+  writer.writeStartElement(QStringLiteral("color")); 
+  writer.writeTextElement(QStringLiteral("lbl"), QStringLiteral("FAFFB4"));
+  writer.writeTextElement(QStringLiteral("obj"), QStringLiteral("FF8000"));
   writer.writeEndElement(); // color
 
   writer.writeEndElement(); // wpt
@@ -178,11 +178,11 @@ hiketech_waypt_pr(const Waypoint* wpt)
 static void
 hiketech_write()
 {
-  writer.writeStartElement("hiketech");
-  writer.writeAttribute("version", "1.2");
-  writer.writeAttribute("url", "http://www.hiketech.com");
+  writer.writeStartElement(QStringLiteral("hiketech"));
+  writer.writeAttribute(QStringLiteral("version"), QStringLiteral("1.2"));
+  writer.writeAttribute(QStringLiteral("url"), QStringLiteral("http://www.hiketech.com"));
   writer.setAutoFormatting(true);
-  writer.writeStartElement("gpsdata");
+  writer.writeStartElement(QStringLiteral("gpsdata"));
   track_disp_all(hiketech_trk_hdr, hiketech_trk_tlr, hiketech_trkpt_pr);
   track_disp_all(NULL, NULL, hiketech_trkpt_pr);
   waypt_disp_all(hiketech_waypt_pr);

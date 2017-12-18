@@ -214,18 +214,18 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
       WAYPT_HAS(waypt, proximity) ||
       WAYPT_HAS(waypt, temperature) ||
       gmsd->flags.display) {
-    writer->writeStartElement("extensions");
-    writer->writeStartElement("gpxx:WaypointExtension");
-    writer->writeNamespace("http://www.garmin.com/xmlschemas/GpxExtensions/v3",
+    writer->writeStartElement(QStringLiteral("extensions"));
+    writer->writeStartElement(QStringLiteral("gpxx:WaypointExtension"));
+    writer->writeNamespace(QStringLiteral("http://www.garmin.com/xmlschemas/GpxExtensions/v3"),
                            "gpxx");
     if WAYPT_HAS(waypt, proximity) {
-      writer->writeTextElement("gpxx:Proximity", QString::number(waypt->proximity, 'f', 6));
+      writer->writeTextElement(QStringLiteral("gpxx:Proximity"), QString::number(waypt->proximity, 'f', 6));
     }
     if WAYPT_HAS(waypt, temperature) {
-      writer->writeTextElement("gpxx:Temperature",  QString::number(waypt->temperature, 'f', 6));
+      writer->writeTextElement(QStringLiteral("gpxx:Temperature"),  QString::number(waypt->temperature, 'f', 6));
     }
     if WAYPT_HAS(waypt, depth) {
-      writer->writeTextElement("gpxx:Depth", QString::number(waypt->depth, 'f', 6));
+      writer->writeTextElement(QStringLiteral("gpxx:Depth"), QString::number(waypt->depth, 'f', 6));
     }
     if (gmsd->flags.display) {
       const char* cx;
@@ -240,15 +240,15 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
         cx = "SymbolAndName";
         break;
       }
-      writer->writeTextElement("gpxx:DisplayMode", cx);
+      writer->writeTextElement(QStringLiteral("gpxx:DisplayMode"), cx);
     }
     if (gmsd->flags.category && gmsd->category) {
       int i;
       uint16_t cx = gmsd->category;
-      writer->writeStartElement("gpxx:Categories");
+      writer->writeStartElement(QStringLiteral("gpxx:Categories"));
       for (i = 0; i < 16; i++) {
         if (cx & 1) {
-          writer->writeTextElement("gpxx:Category", QString("Category %1").arg(i+1));
+          writer->writeTextElement(QStringLiteral("gpxx:Category"), QString("Category %1").arg(i+1));
         }
         cx = cx >> 1;
       }
@@ -256,28 +256,28 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
     }
     if (*addr) {
       char* str;
-      writer->writeStartElement("gpxx:Address");
+      writer->writeStartElement(QStringLiteral("gpxx:Address"));
 
       if ((str = GMSD_GET(addr, NULL))) {
-        writer->writeTextElement("gpxx:StreetAddress", str);
+        writer->writeTextElement(QStringLiteral("gpxx:StreetAddress"), str);
       }
       if ((str = GMSD_GET(city, NULL))) {
-        writer->writeTextElement("gpxx:City", str);
+        writer->writeTextElement(QStringLiteral("gpxx:City"), str);
       }
       if ((str = GMSD_GET(state, NULL))) {
-        writer->writeTextElement("gpxx:State", str);
+        writer->writeTextElement(QStringLiteral("gpxx:State"), str);
       }
       if ((str = GMSD_GET(country, NULL))) {
-        writer->writeTextElement("gpxx:Country", str);
+        writer->writeTextElement(QStringLiteral("gpxx:Country"), str);
       }
       if ((str = GMSD_GET(postal_code, NULL))) {
-        writer->writeTextElement("gpxx:PostalCode", str);
+        writer->writeTextElement(QStringLiteral("gpxx:PostalCode"), str);
       }
       writer->writeEndElement(); // /gpxx::Address
     }
 
     if (*phone) {
-      writer->writeTextElement("gpxx:PhoneNumber", phone);
+      writer->writeTextElement(QStringLiteral("gpxx:PhoneNumber"), phone);
     }
 
     writer->writeEndElement(); // /gpxx::WaypointExtension
