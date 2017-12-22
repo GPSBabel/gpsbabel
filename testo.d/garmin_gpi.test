@@ -40,8 +40,8 @@ compare ${REFERENCE}/spb_metro_norm_en~gpi.gpx ${TMPDIR}/spb_metro_norm_en~gpi.g
 
 # check utf8 write
 gpsbabel -i gpx -f ${REFERENCE}/spb_metro_norm_ru~gpi.gpx -o garmin_gpi,writecodec=utf8,unique=0 -F ${TMPDIR}/spb_metro_norm_ru~gpi~gpx.gpi
-gpsbabel -i garmin_gpi -f ${TMPDIR}/spb_metro_norm_ru~gpi~gpx.gpi -x sort,shortname > ${TMPDIR}/spb_metro_norm_ru~gpi~gpx~gpi.log 
-gpsbabel -i garmin_gpi,countrycode=RU -f ${REFERENCE}/spb_metro_norm.gpi -x sort,shortname > ${TMPDIR}/spb_metro_norm_ru~gpi.log 
-compare ${REFERENCE}/spb_metro_norm_ru~gpi.log ${TMPDIR}/spb_metro_norm_ru~gpi~gpx~gpi.log
-compare ${REFERENCE}/spb_metro_norm_ru~gpi.log ${TMPDIR}/spb_metro_norm_ru~gpi.log
+gpsbabel -i garmin_gpi -f ${TMPDIR}/spb_metro_norm_ru~gpi~gpx.gpi -x sort,shortname -o unicsv -F ${TMPDIR}/spb_metro_norm_ru~gpi~gpx~gpi.csv
+gpsbabel -i garmin_gpi,countrycode=RU -f ${REFERENCE}/spb_metro_norm.gpi -x sort,shortname -o unicsv -F ${TMPDIR}/spb_metro_norm_ru~gpi.csv
+compare ${REFERENCE}/spb_metro_norm_ru~gpi.csv ${TMPDIR}/spb_metro_norm_ru~gpi~gpx~gpi.csv
+compare ${REFERENCE}/spb_metro_norm_ru~gpi.csv ${TMPDIR}/spb_metro_norm_ru~gpi.csv
 
