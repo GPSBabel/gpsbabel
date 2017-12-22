@@ -69,6 +69,7 @@
 
 static char* opt_cat, *opt_pos, *opt_notes, *opt_hide_bitmap, *opt_descr, *opt_bitmap;
 static char* opt_unique, *opt_alerts, *opt_units, *opt_speed, *opt_proximity, *opt_sleep;
+static char* opt_cc;
 static char* opt_writecodec;
 static double defspeed, defproximity;
 static int alerts;
@@ -125,6 +126,10 @@ static arglist_t garmin_gpi_args[] = {
   {
     "writecodec", &opt_writecodec, "codec to use for writing strings",
     "windows-1252", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+  },
+  {
+    "countrycode", &opt_cc, "country code to use for reading dual language files",
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -205,7 +210,7 @@ typedef struct {
 } gpi_waypt_t;
 
 static gbfile* fin, *fout;
-static int16_t codepage;	/* code-page, i.e. 1252 */
+static uint16_t codepage;	/* code-page, e.g. 1252, 65001 */
 static reader_data_t* rdata;
 static writer_data_t* wdata;
 static short_handle short_h;
@@ -238,53 +243,87 @@ gpi_gmsd_init(Waypoint* wpt)
   return gmsd;
 }
 
+static char*
+gpi_read_cc_string_old(const char* field, char* countrycode, short* length)
+{
+        char cc[3];
+        short len;
+
+        gbfread(cc, 1, 2, fin);
+        cc[2] = '\0';
+        len = gbfgetint16(fin);
+      
+        if ((cc[0] < 'A') || (cc[0] > 'Z') || (cc[1] < 'A') || (cc[1] > 'Z')) {
+          fatal(MYNAME ": Invalid country code %s!\n", cc);
+        }
+        char* res = (char*) xmalloc(len + 1);
+        res[len] = '\0';
+        PP;
+        if (len > 0) {
+          gbfread(res, 1, len, fin);
+        }
+
+        strncpy(countrycode, cc, sizeof(cc));
+        *length = len;
+        return res;
+}
+
 /* read a standard string with or without 'EN' (or whatever) header */
 static char*
 gpi_read_string_old(const char* field)
 {
-  int l1;
+  int l0;
   char* res = NULL;
 
-  l1 = gbfgetint16(fin);
-  if (l1 > 0) {
-    short l2;
+  l0 = gbfgetint16(fin);
+  if (l0 > 0) {
     char first;
 
     first = gbfgetc(fin);
     if (first == 0) {
-      char en[2];
+      short l1;
+      short l2;
+      char* res1 = NULL;
+      char* res2 = NULL;
+      char en1[3] = "";
+      char en2[3] = "";
 
       is_fatal((gbfgetc(fin) != 0),
                MYNAME ": Error reading field '%s'!", field);
 
-      gbfread(en, 1, sizeof(en), fin);
-      l2 = gbfgetint16(fin);
-      is_fatal((l2 + 4 != l1),
-               MYNAME ": Error out of sync (wrong size %d/%d) on field '%s'!", l1, l2, field);
-
-      if ((en[0] < 'A') || (en[0] > 'Z') || (en[1] < 'A') || (en[1] > 'Z')) {
-        fatal(MYNAME ": Invalid country code!\n");
-      }
-      res = (char*) xmalloc(l2 + 1);
-      res[l2] = '\0';
-      PP;
-      if (l2 > 0) {
-        gbfread(res, 1, l2, fin);
+      res1 = gpi_read_cc_string_old(field, en1,  &l1);
+      if ((l1 + 4) < l0) { // dual language?
+        res2 = gpi_read_cc_string_old(field, en2,  &l2);
+        is_fatal((l1 + 4 + l2 + 4 != l0),
+                  MYNAME ": Error out of sync (wrong size %d/%d/%d) on field '%s'!", l0, l1, l2, field);
+        if (opt_cc && (strcmp(opt_cc, en1) == 0)) {
+          res = res1;
+          xfree(res2);
+        } else if (opt_cc && (strcmp(opt_cc, en2) == 0)) {
+          res = res2;
+          xfree(res1);
+        } else {
+          fatal(MYNAME ": Must select country code, %s and %s found.\n", en1, en2);
+        }
+      } else { // normal case, single language
+        is_fatal((l1 + 4 != l0),
+                  MYNAME ": Error out of sync (wrong size %d/%d) on field '%s'!", l0, l1, field);
+        res = res1;
       }
     } else {
-      res = (char*) xmalloc(l1 + 1);
+      res = (char*) xmalloc(l0 + 1);
       *res = first;
-      *(res + l1) = '\0';
+      *(res + l0) = '\0';
       PP;
-      l1--;
-      if (l1 > 0) {
-        gbfread(res + 1, 1, l1, fin);
+      l0--;
+      if (l0 > 0) {
+        gbfread(res + 1, 1, l0, fin);
       }
 
     }
   }
 #ifdef GPI_DBG
-  dbginfo("%s: %s\n", field, (res == NULL) ? "<NULL>" : res);
+  dbginfo("%s: \"%s\"\n", field, (res == NULL) ? "<NULL>" : res);
 #endif
   return res;
 }
@@ -293,7 +332,7 @@ static QString
 gpi_read_string(const char* field)
 {
   char*s = gpi_read_string_old(field);
-  QString rv = STRTOUNICODE(s);
+  QString rv = STRTOUNICODE(s).trimmed();
   xfree(s);
   return rv;
 }
@@ -355,7 +394,11 @@ read_header()
   }
   gbfread(&rdata->S8, 1, sizeof(rdata->S8) - 1, fin);
 
-  codepage = gbfgetint16(fin);
+  codepage = gbfgetuint16(fin);
+#ifdef GPI_DBG
+  PP;
+  dbginfo("Code Page: %d\n",codepage);
+#endif
   (void) gbfgetint16(fin);   	/* typically 0, but  0x11 in
   					Garminonline.de files.  */
 
@@ -732,13 +775,6 @@ write_string(const char* str, const char long_format)
   gbfwrite(str, 1, len, fout);
 }
 
-static void
-write_string(const QString& str, const char long_format)
-{
-  write_string(STRFROMUNICODE(str), long_format);
-}
-
-
 static int
 compare_wpt_cb(const queue* a, const queue* b)
 {
@@ -899,7 +935,7 @@ wdata_compute_size(writer_data_t* data)
 
     res += 12;		/* tag/sz/sub-sz */
     res += 19;		/* poi fixed size */
-    res += wpt->shortname.length();
+    res += strlen(STRFROMUNICODE(wpt->shortname));
     if (! opt_hide_bitmap) {
       res += 10;  /* tag(4) */
     }
@@ -952,11 +988,11 @@ wdata_compute_size(writer_data_t* data)
     str = QString();
     if (opt_descr) {
       if (!wpt->description.isEmpty()) {
-        str = xstrdup(wpt->description);
+        str = wpt->description;
       }
     } else if (opt_notes) {
       if (!wpt->notes.isEmpty()) {
-        str = xstrdup(wpt->notes);
+        str = wpt->notes;
       }
     } else if (opt_pos) {
       str = pretty_deg_format(wpt->latitude, wpt->longitude, 's', " ", 0);
@@ -1009,7 +1045,7 @@ wdata_compute_size(writer_data_t* data)
     }
 //		if (str && (strcmp(str, wpt->shortname) == 0)) str = NULL;
     if (!str.isEmpty()) {
-      res += (12 + 4 + str.length());
+      res += (12 + 4 + strlen(STRFROMUNICODE(str)));
     }
   }
 
@@ -1070,12 +1106,12 @@ wdata_write(const writer_data_t* data)
     }
 
     gbfputint32(0x80002, fout);
-    s0 = s1 = 19 + wpt->shortname.length();
+    s0 = s1 = 19 + strlen(STRFROMUNICODE(wpt->shortname));
     if (! opt_hide_bitmap) {
       s0 += 10;  /* tag(4) */
     }
     if (!str.isEmpty()) {
-      s0 += (12 + 4 + str.length());  /* descr */
+      s0 += (12 + 4 + strlen(STRFROMUNICODE(str)));  /* descr */
     }
     if (dt->sz) {
       s0 += (12 + dt->sz);  /* address part */
@@ -1096,7 +1132,7 @@ wdata_write(const writer_data_t* data)
     gbfputint16(1, fout);	/* ? always 1 ? */
     gbfputc(alerts, fout);	/* seems to be 1 when extra options present */
 
-    write_string(wpt->shortname, 1);
+    write_string(STRFROMUNICODE(wpt->shortname), 1);
 
     if (dt->alerts) {
       char flag = 0;
@@ -1132,8 +1168,8 @@ wdata_write(const writer_data_t* data)
 
     if (!str.isEmpty()) {
       gbfputint32(0xa, fout);
-      gbfputint32(str.length() + 8, fout);	/* string + string header */
-      write_string(str, 1);
+      gbfputint32(strlen(STRFROMUNICODE(str)) + 8, fout);	/* string + string header */
+      write_string(STRFROMUNICODE(str), 1);
     }
 
     if (dt->sz) {					/* gpi address */
@@ -1191,7 +1227,7 @@ write_category(const char*, const unsigned char* image, const int image_sz)
 
   sz = wdata_compute_size(wdata);
   sz += 8;	/* string header */
-  sz += strlen(opt_cat);
+  sz += strlen(STRFROMUNICODE(QString::fromUtf8(opt_cat)));
 
   gbfputint32(0x80009, fout);
   if ((! opt_hide_bitmap) && image_sz) {
@@ -1200,7 +1236,7 @@ write_category(const char*, const unsigned char* image, const int image_sz)
     gbfputint32(sz, fout);
   }
   gbfputint32(sz, fout);
-  write_string(opt_cat, 1);
+  write_string(STRFROMUNICODE(QString::fromUtf8(opt_cat)), 1);
 
   wdata_write(wdata);
 
@@ -1444,6 +1480,8 @@ garmin_gpi_rd_init(const QString& fname)
   if ((codepage >= 1250) && (codepage <= 1257)) {
     QString qCodecName = QString("windows-%1").arg(codepage);
     cet_convert_init(CSTR(qCodecName), 1);
+  } else if (codepage == 65001) {
+    cet_convert_init("utf8", 1);
   } else {
     fatal(MYNAME ": Unsupported code page (%d). File is likely encrypted.\n", codepage);
   }
@@ -1491,10 +1529,15 @@ garmin_gpi_wr_init(const QString& fname)
       break;
     }
   }
+  if (! codepage) {
+    if (QString("utf8").compare(QString(opt_writecodec), Qt::CaseInsensitive) == 0) {
+      codepage = 65001;
+    }
+  }
 
   if (! codepage) {
     warning(MYNAME ": Unsupported character set (%s)!\n", opt_writecodec);
-    fatal(MYNAME ": Valid values are windows-1250 to windows-1257.\n");
+    fatal(MYNAME ": Valid values are windows-1250 to windows-1257 and utf8.\n");
   }
 
   cet_convert_init(opt_writecodec,1);
