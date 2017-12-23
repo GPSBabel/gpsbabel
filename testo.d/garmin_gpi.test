@@ -33,15 +33,15 @@ compare ${REFERENCE}/garmin_gpi_category~gpx.gpi ${TMPDIR}/garmin_gpi_category~g
 
 # check dual language read
 # spb_metro_norm.gpi from https://www.garmin.ru/download/extras/poi.php or  https://files.navicom.ru/spb_metro_norm.gpi
-gpsbabel -i garmin_gpi,countrycode=RU -f ${REFERENCE}/spb_metro_norm.gpi -o gpx -F ${TMPDIR}/spb_metro_norm_ru~gpi.gpx
+gpsbabel -i garmin_gpi,languagecode=RU -f ${REFERENCE}/spb_metro_norm.gpi -o gpx -F ${TMPDIR}/spb_metro_norm_ru~gpi.gpx
 compare ${REFERENCE}/spb_metro_norm_ru~gpi.gpx ${TMPDIR}/spb_metro_norm_ru~gpi.gpx
-gpsbabel -i garmin_gpi,countrycode=EN -f ${REFERENCE}/spb_metro_norm.gpi -o gpx -F ${TMPDIR}/spb_metro_norm_en~gpi.gpx
+gpsbabel -i garmin_gpi,languagecode=EN -f ${REFERENCE}/spb_metro_norm.gpi -o gpx -F ${TMPDIR}/spb_metro_norm_en~gpi.gpx
 compare ${REFERENCE}/spb_metro_norm_en~gpi.gpx ${TMPDIR}/spb_metro_norm_en~gpi.gpx
 
 # check utf8 write
 gpsbabel -i gpx -f ${REFERENCE}/spb_metro_norm_ru~gpi.gpx -o garmin_gpi,writecodec=utf8,unique=0 -F ${TMPDIR}/spb_metro_norm_ru~gpi~gpx.gpi
 gpsbabel -i garmin_gpi -f ${TMPDIR}/spb_metro_norm_ru~gpi~gpx.gpi -x sort,shortname -o unicsv -F ${TMPDIR}/spb_metro_norm_ru~gpi~gpx~gpi.csv
-gpsbabel -i garmin_gpi,countrycode=RU -f ${REFERENCE}/spb_metro_norm.gpi -x sort,shortname -o unicsv -F ${TMPDIR}/spb_metro_norm_ru~gpi.csv
+gpsbabel -i garmin_gpi,languagecode=RU -f ${REFERENCE}/spb_metro_norm.gpi -x sort,shortname -o unicsv -F ${TMPDIR}/spb_metro_norm_ru~gpi.csv
 compare ${REFERENCE}/spb_metro_norm_ru~gpi.csv ${TMPDIR}/spb_metro_norm_ru~gpi~gpx~gpi.csv
 compare ${REFERENCE}/spb_metro_norm_ru~gpi.csv ${TMPDIR}/spb_metro_norm_ru~gpi.csv
 

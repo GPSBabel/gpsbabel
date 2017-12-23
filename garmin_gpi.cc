@@ -69,7 +69,7 @@
 
 static char* opt_cat, *opt_pos, *opt_notes, *opt_hide_bitmap, *opt_descr, *opt_bitmap;
 static char* opt_unique, *opt_alerts, *opt_units, *opt_speed, *opt_proximity, *opt_sleep;
-static char* opt_cc;
+static char* opt_lang;
 static char* opt_writecodec;
 static double defspeed, defproximity;
 static int alerts;
@@ -128,14 +128,14 @@ static arglist_t garmin_gpi_args[] = {
     "windows-1252", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
-    "countrycode", &opt_cc, "country code to use for reading dual language files",
+    "languagecode", &opt_lang, "language code to use for reading dual language files",
     NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
 
 typedef struct {
- public:
+public:
   int D2;
   char S3[9];		/* "GRMRECnn" */
   time_t crdate;	/* creation date and time */
@@ -244,28 +244,28 @@ gpi_gmsd_init(Waypoint* wpt)
 }
 
 static char*
-gpi_read_cc_string_old(const char* field, char* countrycode, short* length)
+gpi_read_lc_string_old(const char* field, char* languagecode, short* length)
 {
-        char cc[3];
-        short len;
+  char lc[3];
+  short len;
 
-        gbfread(cc, 1, 2, fin);
-        cc[2] = '\0';
-        len = gbfgetint16(fin);
-      
-        if ((cc[0] < 'A') || (cc[0] > 'Z') || (cc[1] < 'A') || (cc[1] > 'Z')) {
-          fatal(MYNAME ": Invalid country code %s!\n", cc);
-        }
-        char* res = (char*) xmalloc(len + 1);
-        res[len] = '\0';
-        PP;
-        if (len > 0) {
-          gbfread(res, 1, len, fin);
-        }
+  gbfread(lc, 1, 2, fin);
+  lc[2] = '\0';
+  len = gbfgetint16(fin);
 
-        strncpy(countrycode, cc, sizeof(cc));
-        *length = len;
-        return res;
+  if ((lc[0] < 'A') || (lc[0] > 'Z') || (lc[1] < 'A') || (lc[1] > 'Z')) {
+    fatal(MYNAME ": Invalid language code %s!\n", lc);
+  }
+  char* res = (char*) xmalloc(len + 1);
+  res[len] = '\0';
+  PP;
+  if (len > 0) {
+    gbfread(res, 1, len, fin);
+  }
+
+  strncpy(languagecode, lc, sizeof(lc));
+  *length = len;
+  return res;
 }
 
 /* read a standard string with or without 'EN' (or whatever) header */
@@ -285,29 +285,29 @@ gpi_read_string_old(const char* field)
       short l2;
       char* res1 = NULL;
       char* res2 = NULL;
-      char en1[3] = "";
-      char en2[3] = "";
+      char lc1[3] = "";
+      char lc2[3] = "";
 
       is_fatal((gbfgetc(fin) != 0),
                MYNAME ": Error reading field '%s'!", field);
 
-      res1 = gpi_read_cc_string_old(field, en1,  &l1);
+      res1 = gpi_read_lc_string_old(field, lc1,  &l1);
       if ((l1 + 4) < l0) { // dual language?
-        res2 = gpi_read_cc_string_old(field, en2,  &l2);
+        res2 = gpi_read_lc_string_old(field, lc2,  &l2);
         is_fatal((l1 + 4 + l2 + 4 != l0),
-                  MYNAME ": Error out of sync (wrong size %d/%d/%d) on field '%s'!", l0, l1, l2, field);
-        if (opt_cc && (strcmp(opt_cc, en1) == 0)) {
+                 MYNAME ": Error out of sync (wrong size %d/%d/%d) on field '%s'!", l0, l1, l2, field);
+        if (opt_lang && (strcmp(opt_lang, lc1) == 0)) {
           res = res1;
           xfree(res2);
-        } else if (opt_cc && (strcmp(opt_cc, en2) == 0)) {
+        } else if (opt_lang && (strcmp(opt_lang, lc2) == 0)) {
           res = res2;
           xfree(res1);
         } else {
-          fatal(MYNAME ": Must select country code, %s and %s found.\n", en1, en2);
+          fatal(MYNAME ": Must select language code, %s and %s found.\n", lc1, lc2);
         }
       } else { // normal case, single language
         is_fatal((l1 + 4 != l0),
-                  MYNAME ": Error out of sync (wrong size %d/%d) on field '%s'!", l0, l1, field);
+                 MYNAME ": Error out of sync (wrong size %d/%d) on field '%s'!", l0, l1, field);
         res = res1;
       }
     } else {
@@ -331,7 +331,7 @@ gpi_read_string_old(const char* field)
 static QString
 gpi_read_string(const char* field)
 {
-  char*s = gpi_read_string_old(field);
+  char* s = gpi_read_string_old(field);
   QString rv = STRTOUNICODE(s).trimmed();
   xfree(s);
   return rv;
@@ -655,7 +655,7 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
 
   case 0x8000b:	/* address (street/city...) */
     (void) gbfgetint32(fin);
-    // FALLTHROUGH
+  // FALLTHROUGH
   case 0xb:	/* as seen in German POI files. */
     PP;
     mask = gbfgetint16(fin); /* address fields mask */
@@ -724,7 +724,7 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
   case 0x80012:	/* ? sounds / images ? */
     break;
 
-    /* Images? Seen in http://geepeeex.com/Stonepages.gpi */
+  /* Images? Seen in http://geepeeex.com/Stonepages.gpi */
   case 0xd:
     break;
 
@@ -922,8 +922,9 @@ wdata_compute_size(writer_data_t* data)
   queue* elem, *tmp;
   int res = 0;
 
-  if (QUEUE_EMPTY(&data->Q))
-    goto skip_empty_block; /* do not issue an empty block */
+  if (QUEUE_EMPTY(&data->Q)) {
+    goto skip_empty_block;  /* do not issue an empty block */
+  }
 
   res = 23;	/* bounds, ... of tag 0x80008 */
 
@@ -1066,8 +1067,9 @@ skip_empty_block:
 
   data->sz = res;
 
-  if (QUEUE_EMPTY(&data->Q))
+  if (QUEUE_EMPTY(&data->Q)) {
     return res;
+  }
 
   return res + 12;	/* + 12 = caller needs info about tag header size */
 }
@@ -1078,8 +1080,9 @@ wdata_write(const writer_data_t* data)
 {
   queue* elem, *tmp;
 
-  if (QUEUE_EMPTY(&data->Q))
-    goto skip_empty_block; /* do not issue an empty block */
+  if (QUEUE_EMPTY(&data->Q)) {
+    goto skip_empty_block;  /* do not issue an empty block */
+  }
 
   gbfputint32(0x80008, fout);
   gbfputint32(data->sz, fout);
