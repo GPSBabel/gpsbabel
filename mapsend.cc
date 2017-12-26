@@ -332,7 +332,7 @@ mapsend_waypt_pr(const Waypoint* waypointp)
     }
   }
 
-  gbfwrite(&c, 1, 1, mapsend_file_out);
+  gbfputc(c, mapsend_file_out);
   gbfputc(1, mapsend_file_out);
 
   falt = waypointp->altitude;
