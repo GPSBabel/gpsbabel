@@ -88,9 +88,14 @@ mapbar_track_read()
   (void) read_datetime(); // start_time currently unused
   (void) read_datetime(); // end_time currently unused
 
-  ushort name[200] = {0};
-  gbfread((void*)name, 1, 200, fin);
-  // At this point, name is a UCS-16 encoded, zero terminated string.
+  ushort name[101];
+  // read 100 UCS-2 characters that are each stored little endian.
+  // note gbfread wouldn't get this right on big endian machines.
+  for (int idx=0; idx<100; idx++) {
+    name[idx] = gbfgetint16(fin);
+  }
+  name[100] = 0;
+  // At this point, name is a UCS-2 encoded, zero terminated string.
   // All our internals use Qt encoding, so convert now.
   track->rte_name = QString().fromUtf16(name);
 
