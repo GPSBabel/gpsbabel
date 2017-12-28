@@ -28,7 +28,7 @@
 #if HAVE_LIBZ
 #include <zlib.h>
 #elif !ZLIB_INHIBITED
-#include "zlib/zlib.h"
+#include "zlib.h"
 #endif
 #include "gbfile.h"
 #include "inifile.h"

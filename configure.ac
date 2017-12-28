@@ -121,9 +121,28 @@ AS_CASE([$with_zlib], ["system"], [
 	AC_DEFINE(ZLIB_INHIBITED, 1, [1 to inhibit our use of zlib.])
 	AC_MSG_RESULT([no])
 ], [
+	ZLIB_CPP="-I\$(srcdir)/zlib"
 	ZLIB="\$(ZLIB)"
 	AC_MSG_RESULT([using included version])
 ])
+AC_SUBST(ZLIB_CPP)
+AC_SUBST(ZLIB)
+
+AC_MSG_CHECKING([whether to support zlib's minizip])
+AC_ARG_WITH([libminizip],
+	[AS_HELP_STRING(
+		[--with-libminizip=(included)|system|no],
+		[])])
+AS_CASE([$with_libminizip], ["system"], [
+	AC_CHECK_LIB([minizip], [zipOpen64])
+], ["no"], [
+	AC_DEFINE(MINIZIP_INHIBITED, 1, [1 to inhibit our use of libminizip.])
+	AC_MSG_RESULT([no])
+], [
+	MINIZIP="\$(MINIZIP)"
+	AC_MSG_RESULT([using included version])
+])
+AC_SUBST(MINIZIP)
 
 AS_CASE(["$target"], [*-*-mingw32*], [
 	FILEINFO=fileinfo.o
@@ -265,7 +284,6 @@ AC_SUBST(USB_LIBS)
 AC_SUBST(USB_CFLAGS)
 AC_SUBST(OSJEEPS)
 AC_SUBST(GBSER)
-AC_SUBST(ZLIB)
 
 dnl Linux HID support
 AS_CASE(["$target"], [*-linux-*], [
@@ -336,7 +354,7 @@ AC_MSG_RESULT([$DOCDIR])
 
 # AC_CHECK_HEADERS([fcntl.h inttypes.h libintl.h limits.h malloc.h stddef.h stdint.h stdlib.h string.h strings.h sys/ioctl.h sys/time.h termios.h unistd.h])
 # set up HAVE_STDARG_H for zlib.
-AC_CHECK_HEADERS([stdarg.h])
+AC_CHECK_HEADERS([unistd.h stdarg.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 # AC_C_CONST
@@ -367,6 +385,13 @@ AC_SUBST(QT_INC_OPT)
 AC_SUBST(QT_SYSINC_OPT)
 AC_SUBST(QT_LIBS)
 
-AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc jeeps/Makefile shapelib/Makefile zlib/empty])
+# make sure subdirectoires exist to receive object files.
+# they may not exist if we are compiling outside the src tree.
+AS_MKDIR_P([jeeps])
+AS_MKDIR_P([shapelib])
+AS_MKDIR_P([src/core])
+AS_MKDIR_P([zlib/contrib/minizip])
+
+AC_CONFIG_FILES([Makefile gbversion.h gui/setup.iss xmldoc/makedoc tools/mkcapabilities win32/gpsbabel.rc])
 AC_CONFIG_FILES([gui/makelinuxdist.sh], [chmod +x gui/makelinuxdist.sh])
 AC_OUTPUT

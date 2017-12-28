@@ -132,7 +132,7 @@ HEADERS =  \
 	src/core/xmlstreamwriter.h \
 	src/core/logging.h
 
-SUBDIRS += jeeps
+INCLUDEPATH += zlib
 
 macx|linux {
   DEFINES += HAVE_NANOSLEEP HAVE_LIBUSB HAVE_GLOB

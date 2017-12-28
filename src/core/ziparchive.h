@@ -21,7 +21,12 @@
 
 #include <QtCore/QString>
 #include <QtCore/QStringList>
+#include "defs.h"
+#ifdef HAVE_LIBMINIZIP
+#include <minizip/zip.h>
+#else
 #include "zlib/contrib/minizip/zip.h"
+#endif
 
 class  ZipArchive
 {
