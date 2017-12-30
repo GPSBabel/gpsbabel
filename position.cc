@@ -87,7 +87,7 @@ position_runqueue(queue* q, int nelems, int qtype)
   qlist = (int*) xcalloc(nelems, sizeof(*qlist));
 
 #if NEWQ
-  foreach(Waypoint* waypointp, waypt_list) {
+  foreach (Waypoint* waypointp, waypt_list) {
     comp[i] = waypointp;
 #else
   QUEUE_FOR_EACH(q, elem, tmp) {
@@ -166,16 +166,28 @@ position_runqueue(queue* q, int nelems, int qtype)
 }
 
 static void
-position_process_route(const route_head* rh)
+position_process_any_route(const route_head* rh, int type)
 {
   int i = rh->rte_waypt_ct;
 
   if (i) {
     cur_rte = (route_head*)rh;
-    position_runqueue((queue*)&rh->waypoint_list, i, rtedata);
+    position_runqueue((queue*)&rh->waypoint_list, i, type);
     cur_rte = NULL;
   }
 
+}
+
+static void
+position_process_rte(const route_head* rh)
+{
+  position_process_any_route(rh, rtedata);
+}
+
+static void
+position_process_trk(const route_head* rh)
+{
+  position_process_any_route(rh, trkdata);
 }
 
 static void
@@ -196,8 +208,8 @@ void position_process()
     position_runqueue(&waypt_head, i, wptdata);
   }
 
-  route_disp_all(position_process_route, position_noop_t, position_noop_w);
-  track_disp_all(position_process_route, position_noop_t, position_noop_w);
+  route_disp_all(position_process_rte, position_noop_t, position_noop_w);
+  track_disp_all(position_process_trk, position_noop_t, position_noop_w);
 }
 
 void

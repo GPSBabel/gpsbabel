@@ -817,10 +817,12 @@ trackfilter_synth()
   queue* elem, *tmp;
   Waypoint* wpt;
 
-  double oldlat = -999;
-  double oldlon = -999;
-  time_t oldtime = 0;
-  int first = 1;
+  double last_course_lat;
+  double last_course_lon;
+  double last_speed_lat;
+  double last_speed_lon;
+  time_t last_speed_time;
+  int first;
   fix_type fix;
   int nsats = 0;
 
@@ -839,33 +841,50 @@ trackfilter_synth()
       }
       if (first) {
         if (opt_course) {
+          // TODO: the course value 0 isn't valid, wouldn't it be better to UNSET course?
           WAYPT_SET(wpt, course, 0);
         }
         if (opt_speed) {
+          // TODO: the speed value 0 isn't valid, wouldn't it be better to UNSET speed?
           WAYPT_SET(wpt, speed, 0);
         }
         first = 0;
+        last_course_lat = wpt->latitude;
+        last_course_lon = wpt->longitude;
+        last_speed_lat = wpt->latitude;
+        last_speed_lon = wpt->longitude;
+        last_speed_time = wpt->GetCreationTime().toTime_t();
       } else {
         if (opt_course) {
-          WAYPT_SET(wpt, course, heading_true_degrees(RAD(oldlat),
-                    RAD(oldlon),RAD(wpt->latitude),
+          WAYPT_SET(wpt, course, heading_true_degrees(RAD(last_course_lat),
+                    RAD(last_course_lon),RAD(wpt->latitude),
                     RAD(wpt->longitude)));
+          last_course_lat = wpt->latitude;
+          last_course_lon = wpt->longitude;
         }
         if (opt_speed) {
-          if (oldtime != wpt->GetCreationTime().toTime_t()) {
+          if (last_speed_time != wpt->GetCreationTime().toTime_t()) {
+            // If we have mutliple points with the same time and
+            // we use the pair of points about which the time ticks then we will
+            // underestimate the distance and compute low speeds on average.
+            // Therefore, if we have multiple points with the same time use the
+            // first ones with the new times to compute speed.
+            // Note that points with the same time can occur because the input
+            // has truncated times, or because we are truncating times with
+            // toTime_t().
             WAYPT_SET(wpt, speed, radtometers(gcdist(
-                                                RAD(oldlat), RAD(oldlon),
+                                                RAD(last_speed_lat), RAD(last_speed_lon),
                                                 RAD(wpt->latitude),
                                                 RAD(wpt->longitude))) /
-                      labs(wpt->GetCreationTime().toTime_t()-oldtime));
+                      labs(wpt->GetCreationTime().toTime_t()-last_speed_time));
+            last_speed_lat = wpt->latitude;
+            last_speed_lon = wpt->longitude;
+            last_speed_time = wpt->GetCreationTime().toTime_t();
           } else {
             WAYPT_UNSET(wpt, speed);
           }
         }
       }
-      oldlat = wpt->latitude;
-      oldlon = wpt->longitude;
-      oldtime = wpt->GetCreationTime().toTime_t();
     }
   }
 }
