@@ -133,8 +133,8 @@ ng_fwrite_wp_data(const QString& s, const QString& d, ng_wp_data_t* wp_data, gbf
   char z[50];
 
   memset(z, 0, 50);
-  i = s.length();
-  gbfwrite(&i, 1, 1, f);
+  i = strlen(STRFROMUNICODE(s));
+  gbfputc(i, f);
   gbfwrite(STRFROMUNICODE(s), 1, i, f);
 
   gbfwrite(&wp_data->pad1[0], 8, 1, f);
@@ -143,8 +143,8 @@ ng_fwrite_wp_data(const QString& s, const QString& d, ng_wp_data_t* wp_data, gbf
   gbfwrite(&wp_data->pad2[0], 2, 1, f);
   gbfputint32(wp_data->Alt, f);
 
-  i = d.length();
-  gbfwrite(&i, 1, 1, f);
+  i = strlen(STRFROMUNICODE(d));
+  gbfputc(i, f);
   gbfwrite(STRFROMUNICODE(d), 1, i, f);
   gbfwrite(z, 44, 1, f);
 }
