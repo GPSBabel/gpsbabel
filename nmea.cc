@@ -1313,7 +1313,7 @@ nmea_trackpt_pr(const Waypoint* wpt)
   }
 
   if (opt_gprmc) {
-    snprintf(obuf, sizeof(obuf), "GPRMC,%010.3f,%c,%08.3f,%c,%09.3f,%c,%.2f,%.2f,%06d,,",
+    snprintf(obuf, sizeof(obuf), "GPRMC,%010.3f,%c,%12.7f,%c,%13.7f,%c,%.2f,%.2f,%06d,,",
              (double) hms + (wpt->GetCreationTime().time().msec() / 1000.0),
              fix=='0' ? 'V' : 'A',
              fabs(lat), lat < 0 ? 'S' : 'N',
@@ -1332,7 +1332,7 @@ nmea_trackpt_pr(const Waypoint* wpt)
     gbfprintf(file_out, "$%s*%02X\n", obuf, cksum);
   }
   if (opt_gpgga) {
-    snprintf(obuf, sizeof(obuf), "GPGGA,%010.3f,%08.3f,%c,%09.3f,%c,%c,%02d,%.1f,%.3f,M,%.1f,M,,",
+    snprintf(obuf, sizeof(obuf), "GPGGA,%010.3f,%12.7f,%c,%13.7f,%c,%c,%02d,%.1f,%.3f,M,%.1f,M,,",
              (double) hms + (wpt->GetCreationTime().time().msec() / 1000.0),
              fabs(lat), lat < 0 ? 'S' : 'N',
              fabs(lon), lon < 0 ? 'W' : 'E',
