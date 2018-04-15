@@ -19,3 +19,6 @@ compare ${REFERENCE}/track/garmin-virb-ultra-30-output.gpx ${TMPDIR}/fit-sample-
 
 gpsbabel -i garmin_fit,allpoints -f ${REFERENCE}/track/garmin-vivosmart-hr.fit -o gpx,garminextensions -F ${TMPDIR}/fit-sample-vivosmart-hr.gpx
 compare ${REFERENCE}/track/garmin-vivosmart-hr.gpx ${TMPDIR}/fit-sample-vivosmart-hr.gpx
+
+gpsbabel -i garmin_fit -f ${REFERENCE}/track/wahoo-element-bolt.fit -o gpx -F ${TMPDIR}/fit-sample-wahoo-element-bolt.gpx
+compare ${REFERENCE}/track/wahoo-element-bolt.gpx ${TMPDIR}/fit-sample-wahoo-element-bolt.gpx
