@@ -417,9 +417,9 @@ my_write_wpt(const Waypoint* wpt)
   // We could potentially write SHPT_POINTZ, but we would have
   // to address what to do when we don't have altitude data.
   shpobject = SHPCreateSimpleObject(SHPT_POINT, 1,
-                                    (double*)(void*)&wpt->longitude,
-                                    (double*)(void*)&wpt->latitude,
-                                    (double*)(void*)&wpt->altitude);
+                                    &wpt->longitude,
+                                    &wpt->latitude,
+                                    &wpt->altitude);
   int iShape = SHPWriteObject(ohandle, -1, shpobject);
   SHPDestroyObject(shpobject);
   DBFWriteStringAttribute(ohandledb, iShape, nameFieldIdx,

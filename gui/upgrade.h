@@ -59,8 +59,9 @@ private:
   updateStatus updateStatus_;
   BabelData& babelData_;
 
-  QString getOsName(void);
-  QString getOsVersion(void);
+  QString getOsName();
+  QString getOsVersion();
+  QString getCpuArchitecture();
 
 private slots:
   void httpRequestFinished(QNetworkReply* reply);

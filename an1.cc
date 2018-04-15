@@ -446,8 +446,6 @@ static void Read_AN1_Waypoint(gbfile* f, an1_waypoint_record* wpt)
 
 static void Write_AN1_Waypoint(gbfile* f, an1_waypoint_record* wpt)
 {
-  short len;
-
   WriteShort(f, wpt->magic);
   WriteLong(f, wpt->unk1);
   WriteLong(f, wpt->lon);
@@ -464,7 +462,7 @@ static void Write_AN1_Waypoint(gbfile* f, an1_waypoint_record* wpt)
   WriteShort(f, wpt->unk5);
   WriteDouble(f, wpt->radius);
 
-  len = strlen(wpt->name) + 1 + 2 + 2 +
+  short len = strlen(wpt->name) + 1 + 2 + 2 +
         (wpt->url ? strlen(wpt->url) : 0) + 2 +
         (wpt->comment ? strlen(wpt->comment) : 0) + 8 + 8;
   WriteShort(f, len);
