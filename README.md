@@ -3,12 +3,13 @@ This is the source code for [GPSBabel](https://www.gpsbabel.org), the free softw
 
 # Welcome newbie open source contributors!
 
+We have a [GPSBabel contributor guide](https://github.com/gpsbabel/gpsbabel/blob/master/README.contrib).
 [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
-We have a [GPSBabel contributor guide](https://github.com/gpsbabel/gpsbabel/blob/master/README.contrib).</br> 
+</br> 
 Current status of the trunk build is [![Build Status](https://travis-ci.org/gpsbabel/gpsbabel.svg?branch=master)]. Passing is good. We like passing. </br>
-The absolute[latest GPSBabel build](https://travis-ci.org/gpsbabel/gpsbabel) may not have made the front page yet.</br>
+The absolute [latest GPSBabel build](https://travis-ci.org/gpsbabel/gpsbabel) may not have made the front page yet. It takes about an hour to run our rigorous [presubmit testing](https://www.gpsbabel.org/quality.html) via [Appveyor for GPSBabel Windows](https://ci.appveyor.com/project/gpsbabel/gpsbabel) and [Travis for GPSBabel on Linux](https://travis-ci.org/gpsbabel/gpsbabel/).</br>
 
-If you aren't a programmer or a writer, we need help with gear, hosting costs, tool license prices, etc. Please [support GPSBabel](https://www.gpsbabel.org/contribute.html).
+If you aren't a programmer or a writer, we need help with gear, hosting costs, tool license prices, answering questions on the mailing lists, etc. Please [support GPSBabel](https://www.gpsbabel.org/contribute.html) any way you can.
 <!-- consider sites like forthebadge.com for others -->
 
 
