@@ -4,8 +4,8 @@ This is the source code for [GPSBabel](https://www.gpsbabel.org), the free softw
 # Welcome newbie open source contributors!
 
 [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
-We have an (https://github.com/gpsbabel/gpsbabel/edit/master)(GPSBabel internals guide).</br> 
-Current status of the trunk build is [![Build Status](https://travis-ci.org/gpsbabel/gpsbabel.svg?branch=master)]. Passing is good.</br>
+We have an [![GPSBabel internals guide](https://github.com/gpsbabel/gpsbabel/blob/master/README.contrib)].</br> 
+Current status of the trunk build is [![Build Status](https://travis-ci.org/gpsbabel/gpsbabel.svg?branch=master)]. Passing is good. We like passing.</br>
 
 If you aren't a programmer or a writer, we need help with gear, hosting costs, tool license prices, etc. (https://www.gpsbabel.org/contribute.html)(Please support GPSBabel).
 <!-- consider sites like forthebadge.com for others -->
