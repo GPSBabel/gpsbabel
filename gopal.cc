@@ -188,7 +188,6 @@ gopal_read()
   qtx.setTime_t(tx);
   route->rte_name = "Tracklog ";
   route->rte_name += qtx.toString(Qt::ISODate);
-
   route_add_head(route);
 
   line=0;
