@@ -25,16 +25,16 @@
 */
 
 #include "defs.h"
-#include "csv_util.h"
 #include "cet_util.h"
+#include "csv_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
 #include "strptime.h"
 
-#include <time.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 
 #if CSVFMTS_ENABLED
 
@@ -595,6 +595,8 @@ ff_vecs_t g7towin_vecs = {
   NULL,
   g7towin_args,
   CET_CHARSET_MS_ANSI, 0
+  , NULL_POS_OPS,
+  nullptr
 };
 
 #endif /* CSVFMTS_ENABLED */

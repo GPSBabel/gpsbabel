@@ -20,8 +20,8 @@
 
  */
 
-#ifndef gpsbabel_navilink_h_included
-#define gpsbabel_navilink_h_included
+#ifndef NAVILINK_H_INCLUDED_
+#define NAVILINK_H_INCLUDED_
 
 #include <time.h>
 #include "defs.h"
@@ -133,4 +133,4 @@ typedef struct __packed {
 
 #endif
 
-#endif /* gpsbabel_navilink_h_included */
+#endif  // NAVILINK_H_INCLUDED

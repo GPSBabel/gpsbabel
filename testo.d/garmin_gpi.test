@@ -20,9 +20,28 @@ compare ${REFERENCE}/gpi_ext-sample.csv ${TMPDIR}/gpi_ext-sample.csv
 gpsbabel -i garmin_gpi -f ${REFERENCE}/umsonstdraussen.gpi -o gpx,gpxver=1.1 -F ${TMPDIR}/umsonstdraussen.gpx
 compare ${REFERENCE}/umsonstdraussen.gpx ${TMPDIR}/umsonstdraussen.gpx
 
-# look for differnces between latin1 and windows-1252
+# look for differences between latin1 and windows-1252
 gpsbabel -i garmin_gpi -f ${REFERENCE}/garmin_gpi_encoding.gpi -o gpx,gpxver=1.1 -F ${TMPDIR}/garmin_gpi_encoding.gpx
 compare ${REFERENCE}/garmin_gpi_encoding.gpx ${TMPDIR}/garmin_gpi_encoding.gpx
 gpsbabel -i gpx -f ${REFERENCE}/garmin_gpi_encoding.gpx  -o garmin_gpi -F ${TMPDIR}/garmin_gpi_encoding.gpi
 gpsbabel -i garmin_gpi -f ${TMPDIR}/garmin_gpi_encoding.gpi -o gpx,gpxver=1.1 -F ${TMPDIR}/garmin_gpi_encoding2.gpi.gpx
 compare ${REFERENCE}/garmin_gpi_encoding2.gpi.gpx ${TMPDIR}/garmin_gpi_encoding2.gpi.gpx
+
+# check category encoding
+gpsbabel -i gpx -f ${REFERENCE}/garmin_gpi.gpx -o garmin_gpi,category="Vinícolas",hide -F ${TMPDIR}/garmin_gpi_category~gpx.gpi
+compare ${REFERENCE}/garmin_gpi_category~gpx.gpi ${TMPDIR}/garmin_gpi_category~gpx.gpi
+
+# check dual language read
+# spb_metro_norm.gpi from https://www.garmin.ru/download/extras/poi.php or  https://files.navicom.ru/spb_metro_norm.gpi
+gpsbabel -i garmin_gpi,languagecode=RU -f ${REFERENCE}/spb_metro_norm.gpi -o gpx -F ${TMPDIR}/spb_metro_norm_ru~gpi.gpx
+compare ${REFERENCE}/spb_metro_norm_ru~gpi.gpx ${TMPDIR}/spb_metro_norm_ru~gpi.gpx
+gpsbabel -i garmin_gpi,languagecode=EN -f ${REFERENCE}/spb_metro_norm.gpi -o gpx -F ${TMPDIR}/spb_metro_norm_en~gpi.gpx
+compare ${REFERENCE}/spb_metro_norm_en~gpi.gpx ${TMPDIR}/spb_metro_norm_en~gpi.gpx
+
+# check utf8 write
+gpsbabel -i gpx -f ${REFERENCE}/spb_metro_norm_ru~gpi.gpx -o garmin_gpi,writecodec=utf8,unique=0 -F ${TMPDIR}/spb_metro_norm_ru~gpi~gpx.gpi
+gpsbabel -i garmin_gpi -f ${TMPDIR}/spb_metro_norm_ru~gpi~gpx.gpi -x sort,shortname -o unicsv -F ${TMPDIR}/spb_metro_norm_ru~gpi~gpx~gpi.csv
+gpsbabel -i garmin_gpi,languagecode=RU -f ${REFERENCE}/spb_metro_norm.gpi -x sort,shortname -o unicsv -F ${TMPDIR}/spb_metro_norm_ru~gpi.csv
+compare ${REFERENCE}/spb_metro_norm_ru~gpi.csv ${TMPDIR}/spb_metro_norm_ru~gpi~gpx~gpi.csv
+compare ${REFERENCE}/spb_metro_norm_ru~gpi.csv ${TMPDIR}/spb_metro_norm_ru~gpi.csv
+

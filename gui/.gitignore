@@ -4,3 +4,5 @@
 /makelinuxdist.sh
 /objects/
 /tmp/
+/release/
+/debug/

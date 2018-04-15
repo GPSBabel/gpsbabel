@@ -28,8 +28,8 @@ History:
 #include "defs.h"
 #include "holux.h"
 //#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 static  gbfile* file_in, *file_out;
 static 	unsigned char* HxWFile;
@@ -44,7 +44,7 @@ static void rd_init(const QString& fname)
 }
 
 
-static void rd_deinit(void)
+static void rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -67,7 +67,7 @@ wr_init(const QString& fname)
 
 
 
-static void wr_deinit(void)
+static void wr_deinit()
 {
   mkshort_del_handle(&mkshort_handle);
   gbfclose(file_out);
@@ -75,7 +75,7 @@ static void wr_deinit(void)
 
 
 
-static void data_read(void)
+static void data_read()
 {
   char name[9], desc[90];
   double lat,lon;
@@ -257,7 +257,7 @@ static void holux_disp(const Waypoint* wpt)
 
 
 
-static void data_write(void)
+static void data_write()
 {
   int iWritten;
   short sCount;
@@ -313,4 +313,6 @@ ff_vecs_t holux_vecs = {
   NULL,
   NULL,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

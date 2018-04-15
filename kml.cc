@@ -25,16 +25,16 @@
 #endif
 
 #include "defs.h"
-#include "xmlgeneric.h"
 #include "grtcirc.h"
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
 #include "src/core/xmltag.h"
+#include "xmlgeneric.h"
 #include <QtCore/QRegExp>
 #include <QtCore/QXmlStreamAttributes>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 // options
 static char* opt_deficon = NULL;
@@ -91,8 +91,6 @@ static bounds kml_bounds;
 static gpsbabel::DateTime kml_time_min;
 static gpsbabel::DateTime kml_time_max;
 
-#define AUTOFORMATTING_OFF(AF) bool AF=writer->autoFormatting(); writer->setAutoFormatting(false);
-#define AUTOFORMATTING_RESTORE(AF) writer->setAutoFormatting(af);
 #define DEFAULT_PRECISION "6"
 
 //  Icons provided and hosted by Google.  Used with permission.
@@ -108,76 +106,76 @@ static const char kmt_power[] = "power";
 
 static
 arglist_t kml_args[] = {
-  {"deficon", &opt_deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+  {"deficon", &opt_deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   {
     "lines", &opt_export_lines,
     "Export linestrings for tracks and routes",
-    "1", ARGTYPE_BOOL, ARG_NOMINMAX
+    "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr,
   },
   {
     "points", &opt_export_points,
     "Export placemarks for tracks and routes",
-    "1", ARGTYPE_BOOL, ARG_NOMINMAX
+    "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "line_width", &opt_line_width,
     "Width of lines, in pixels",
-    "6", ARGTYPE_INT, ARG_NOMINMAX
+    "6", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "line_color", &opt_line_color,
     "Line color, specified in hex AABBGGRR",
-    "99ffac59", ARGTYPE_STRING, ARG_NOMINMAX
+    "99ffac59", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "floating", &opt_floating,
     "Altitudes are absolute and not clamped to ground",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "extrude", &opt_extrude,
     "Draw extrusion line from trackpoint to ground",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "track", &opt_export_track,
     "Write KML track (default = 0)",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "trackdata", &opt_trackdata,
     "Include extended data for trackpoints (default = 1)",
-    "1", ARGTYPE_BOOL, ARG_NOMINMAX
+    "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "trackdirection", &opt_trackdirection,
     "Indicate direction of travel in track icons (default = 0)",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX
+    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "units", &opt_units,
     "Units used when writing comments ('s'tatute, 'm'etric,' 'n'autical, 'a'viation)",
-    "s", ARGTYPE_STRING, ARG_NOMINMAX
+    "s", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "labels", &opt_labels,
     "Display labels on track and routepoints  (default = 1)",
-    "1", ARGTYPE_BOOL, ARG_NOMINMAX
+    "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "max_position_points", &opt_max_position_points,
     "Retain at most this number of position points  (0 = unlimited)",
-    "0", ARGTYPE_INT, ARG_NOMINMAX
+    "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "rotate_colors", &opt_rotate_colors,
     "Rotate colors for tracks and routes (default automatic)",
-    NULL, ARGTYPE_FLOAT, "0", "360"
+    NULL, ARGTYPE_FLOAT, "0", "360", nullptr
   },
   {
     "prec", &opt_precision,
     "Precision of coordinates, number of decimals",
-    DEFAULT_PRECISION, ARGTYPE_INT, ARG_NOMINMAX
+    DEFAULT_PRECISION, ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -224,7 +222,7 @@ static void kml_init_color_sequencer(unsigned int steps_per_rev)
   }
 }
 
-static void kml_step_color(void)
+static void kml_step_color()
 {
   int color_seq;
   // Map kml_color_sequencer.seq to an integer in the range [0, KML_COLOR_LIMIT*6).
@@ -254,7 +252,7 @@ static void kml_step_color(void)
 }
 
 static xg_callback wpt_s, wpt_e;
-static xg_callback wpt_name, wpt_desc, wpt_coord, wpt_icon, trk_coord, wpt_time;
+static xg_callback wpt_name, wpt_desc, wpt_coord, wpt_icon, trk_coord, wpt_time, wpt_ts_begin, wpt_ts_end;
 static xg_callback gx_trk_s, gx_trk_e;
 static xg_callback gx_trk_when, gx_trk_coord;
 
@@ -264,6 +262,8 @@ xg_tag_mapping kml_map[] = {
   { wpt_e, 	cb_end, 	"/Placemark" },
   { wpt_name, 	cb_cdata, 	"/Placemark/name" },
   { wpt_desc, 	cb_cdata, 	"/Placemark/description" },
+  { wpt_ts_begin, cb_cdata,	"/Placemark/TimeSpan/begin" },
+  { wpt_ts_end, cb_cdata, 	"/Placemark/TimeSpan/end" },
   { wpt_time, 	cb_cdata, 	"/Placemark/TimeStamp/when" },
   // Alias for above used in KML 2.0
   { wpt_time, 	cb_cdata, 	"/Placemark/TimeInstant/timePosition" },
@@ -288,6 +288,9 @@ const char* kml_tags_to_ignore[] = {
   NULL,
 };
 
+// The TimeSpan/begin and TimeSpan/end DateTimes:
+static gpsbabel::DateTime wpt_timespan_begin, wpt_timespan_end;
+
 void wpt_s(xg_string, const QXmlStreamAttributes*)
 {
   if (wpt_tmp) {
@@ -295,6 +298,11 @@ void wpt_s(xg_string, const QXmlStreamAttributes*)
   }
   wpt_tmp = new Waypoint;
   wpt_tmp_queued = 0;
+
+  /* Invalidate timespan elements for a beginning Placemark,
+   * so that each Placemark has its own (or no) TimeSpan. */
+  wpt_timespan_begin = gpsbabel::DateTime();
+  wpt_timespan_end = gpsbabel::DateTime();
 }
 
 void wpt_e(xg_string, const QXmlStreamAttributes*)
@@ -335,6 +343,17 @@ void wpt_time(xg_string args, const QXmlStreamAttributes*)
   }
   wpt_tmp->SetCreationTime(xml_parse_time(args));
 }
+
+void wpt_ts_begin(xg_string args, const QXmlStreamAttributes*)
+{
+	wpt_timespan_begin = xml_parse_time(args);
+}
+
+void wpt_ts_end(xg_string args, const QXmlStreamAttributes*)
+{
+	wpt_timespan_end = xml_parse_time(args);
+}
+
 void wpt_coord(const QString& args, const QXmlStreamAttributes*)
 {
   int n = 0;
@@ -367,6 +386,8 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
   double lat, lon, alt;
   Waypoint* trkpt;
   int n = 0;
+  queue* curr_elem;
+  queue* tmp_elem;
 
   route_head* trk_head = route_head_alloc();
 
@@ -391,6 +412,29 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
 
     track_add_wpt(trk_head, trkpt);
     iargs = iargs.mid(consumed);
+  }
+
+  /* The track coordinates do not have a time associated with them. This is specified by using:
+   *
+   * <TimeSpan>
+   *   <begin>2017-08-21T17:00:05Z</begin>
+   *   <end>2017-08-21T17:22:32Z</end>
+   * </TimeSpan>
+   *
+   * If this is specified, then SetCreationDate
+   */
+  if ( wpt_timespan_begin.isValid() && wpt_timespan_end.isValid() ) {
+
+	  // If there are some Waypoints, then distribute the TimeSpan to all Waypoints
+	  if ( trk_head->rte_waypt_ct > 0 ) {
+		  qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
+		  qint64 ms_per_waypoint = timespan_ms / trk_head->rte_waypt_ct;
+		  QUEUE_FOR_EACH(&trk_head->waypoint_list, curr_elem, tmp_elem) {
+			  trkpt = (Waypoint*) curr_elem;
+			  trkpt->SetCreationTime(wpt_timespan_begin);
+			  wpt_timespan_begin = wpt_timespan_begin.addMSecs(ms_per_waypoint);
+		  }
+	  }
   }
 }
 
@@ -468,13 +512,13 @@ kml_rd_init(const QString& fname)
 
 static
 void
-kml_read(void)
+kml_read()
 {
   xml_read();
 }
 
 static void
-kml_rd_deinit(void)
+kml_rd_deinit()
 {
   xml_deinit();
 }
@@ -528,18 +572,11 @@ kml_wr_position_init(const QString& fname)
   posnfilename = fname;
   posnfilenametmp = QString("%1-").arg(fname);
   realtime_positioning = 1;
-
-  /*
-   * 30% of our output file is whitespace.  Since parse time
-   * matters in this mode, turn the pretty formatting off.
-   */
-  writer->setAutoFormatting(false);
-
   max_position_points = atoi(opt_max_position_points);
 }
 
 static void
-kml_wr_deinit(void)
+kml_wr_deinit()
 {
   writer->writeEndDocument();
   delete writer;
@@ -550,7 +587,8 @@ kml_wr_deinit(void)
 
   if (!posnfilenametmp.isEmpty()) {
 #if __WIN32__
-    MoveFileExA(qPrintable(posnfilenametmp), qPrintable(posnfilename),
+    MoveFileExW((const wchar_t*) posnfilenametmp.utf16(),
+                (const wchar_t*) posnfilename.utf16(),
                 MOVEFILE_REPLACE_EXISTING);
 #endif
     QFile::rename(posnfilenametmp, posnfilename);
@@ -558,7 +596,7 @@ kml_wr_deinit(void)
 }
 
 static void
-kml_wr_position_deinit(void)
+kml_wr_position_deinit()
 {
 //	kml_wr_deinit();
   posnfilename.clear();
@@ -672,10 +710,8 @@ static void kml_output_timestamp(const Waypoint* waypointp)
   QString time_string = waypointp->CreationTimeXML();
   if (!time_string.isEmpty()) {
     writer->writeStartElement("TimeStamp");
-    AUTOFORMATTING_OFF(af); // FIXME: we turn off autoformatting just to match old writer test references.
     writer->writeTextElement("when", time_string);
     writer->writeEndElement(); // Close TimeStamp tag
-    AUTOFORMATTING_RESTORE(af);
   }
 }
 
@@ -1154,7 +1190,7 @@ static const QString map_templates[] = {
 
 
 static
-void kml_gc_make_balloonstyletext(void)
+void kml_gc_make_balloonstyletext()
 {
   QString cdataStr;
 
@@ -1226,7 +1262,7 @@ void kml_gc_make_balloonstyletext(void)
 }
 
 static
-void kml_gc_make_balloonstyle(void)
+void kml_gc_make_balloonstyle()
 {
   // For Normal style of gecoaches, scale of label is set to zero
   // to make the label invisible.  On hover (highlight?) enlarge
@@ -1869,7 +1905,7 @@ static void kml_route_tlr(const route_head* header)
 // For Earth 5.0 and later, we write a LookAt that encompasses
 // the bounding box of our entire data set and set the event times
 // to include all our data.
-void kml_write_AbstractView(void)
+void kml_write_AbstractView()
 {
   double bb_size;
 
@@ -1940,7 +1976,7 @@ void kml_mt_array_schema(const char* field_name, const char* display_name,
   writer->writeEndElement(); // Close gx:SimpleArrayField tag
 }
 
-void kml_write(void)
+void kml_write()
 {
   const global_trait* traits = get_traits();
 

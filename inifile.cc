@@ -20,8 +20,10 @@
 
 #include "defs.h"
 #include "inifile.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "inifile"
 
@@ -44,98 +46,55 @@ typedef struct inifile_section_s {
 #define DELTA_BUFSIZE 128
 
 #define GPSBABEL_INIFILE "gpsbabel.ini"
+#define GPSBABEL_SUBDIR ".gpsbabel"
 
 /* Remember the filename we used so we can include it in errors. */
-char* gbinipathname;
+QString gbinipathname;
 
-static char*
-find_gpsbabel_inifile(const char* path)		/* can be empty or NULL */
+static QString
+find_gpsbabel_inifile(const QString& path)  /* can be empty or NULL */
 {
-  FILE* test;
-  char* buff;
-  int len;
-
-  if (path == NULL) {
-    return NULL;
+  if (path.isNull()) {
+    return QString();
   }
-
-  len = strlen(path);
-  buff = (char*) xmalloc(len + 1 + strlen(GPSBABEL_INIFILE) + 1);
-  strcpy(buff, path);
-  if (len > 0) {
-    char test = buff[len - 1];
-#ifdef __WIN32__
-    if ((test != '\\') && (test != ':')) {
-      strcat(buff, "\\");
-    }
-#else
-    if (test != '/') {
-      strcat(buff, "/");
-    }
-#endif
-  }
-  strcat(buff, GPSBABEL_INIFILE);
-  test = fopen(buff, "rb");
-  if (test) {
-    fclose(test);
-    return buff;
-  }
-  xfree(buff);
-  return NULL;
+  QString inipath(QDir(path).filePath(GPSBABEL_INIFILE));
+  return QFile(inipath).open(QIODevice::ReadOnly) ? inipath : QString();
 }
 
 static gbfile*
-open_gpsbabel_inifile(void)
+open_gpsbabel_inifile()
 {
-  char* name;
-  char* envstr;
+  QString name;
+  QString envstr;
   gbfile* res = NULL;
 
-  envstr = getenv("GPSBABELINI");
-  if (envstr != NULL) {
-    FILE* test;
-
-    test = fopen(envstr, "r");
-    if (test != NULL) {
-      fclose(test);
+  envstr = ugetenv("GPSBABELINI");
+  if (!envstr.isNull()) {
+    if (QFile(envstr).open(QIODevice::ReadOnly)) {
       return gbfopen(envstr, "r", "GPSBabel");
     }
     warning("WARNING: GPSBabel-inifile, defined in environment, NOT found!\n");
     return NULL;
   }
-  name = find_gpsbabel_inifile("");	/* PWD */
-  if (name == NULL) {
+  name = find_gpsbabel_inifile("");  // Check in current directory first.
+  if (name.isNull()) {
 #ifdef __WIN32__
-    name = find_gpsbabel_inifile(getenv("APPDATA"));
-    if (name == NULL) {
-      name = find_gpsbabel_inifile(getenv("WINDIR"));
-    }
-    if (name == NULL) {
-      name = find_gpsbabel_inifile(getenv("SYSTEMROOT"));
-    }
+    // Use &&'s early-out behaviour to try successive file locations: first
+    // %APPDATA%, then %WINDIR%, then %SYSTEMROOT%.
+    (name = find_gpsbabel_inifile(ugetenv("APPDATA"))).isNull()
+        && (name = find_gpsbabel_inifile(ugetenv("WINDIR"))).isNull()
+        && (name = find_gpsbabel_inifile(ugetenv("SYSTEMROOT"))).isNull();
 #else
-    if ((envstr = getenv("HOME")) != NULL) {
-      char* path;
-
-      path = (char*) xmalloc(strlen(envstr) + 11);
-      strcpy(path, envstr);
-      strcat(path, "/.gpsbabel");
-      name = find_gpsbabel_inifile(path);
-      xfree(path);
-    }
-    if (name == NULL) {
-      name = find_gpsbabel_inifile("/usr/local/etc");
-    }
-    if (name == NULL) {
-      name = find_gpsbabel_inifile("/etc");
-    }
+    // Use &&'s early-out behaviour to try successive file locations: first
+    // ~/.gpsbabel, then /usr/local/etc, then /etc.
+    (name = find_gpsbabel_inifile(QDir::home().filePath(GPSBABEL_SUBDIR))).
+            isNull()
+        && (name = find_gpsbabel_inifile("/usr/local/etc")).isNull()
+        && (name = find_gpsbabel_inifile("/etc")).isNull();
 #endif
   }
-  if (name != NULL) {
+  if (!name.isNull()) {
     res = gbfopen(name, "r", "GPSBabel");
-    if (gbinipathname) {
-      xfree(gbinipathname);
-    }
     gbinipathname = name;
   }
   return res;
@@ -171,7 +130,8 @@ inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
         cin = lrtrim(cin);
       }
       if ((*cin == '\0') || (cend == NULL)) {
-        fatal("%s: invalid section header '%s' in '%s'.\n", myname, cin, gbinipathname);
+        fatal("%s: invalid section header '%s' in '%s'.\n", myname, cin,
+              qPrintable(gbinipathname));
       }
 
       sec = (inifile_section_t*) xcalloc(1, sizeof(*sec));
@@ -185,7 +145,8 @@ inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
       inifile_entry_t* entry;
 
       if (sec == NULL) {
-        fatal("%s: missing section header in '%s'.\n", myname,gbinipathname);
+        fatal("%s: missing section header in '%s'.\n", myname,
+              qPrintable(gbinipathname));
       }
 
       entry = (inifile_entry_t*) xcalloc(1, sizeof(*entry));
@@ -247,12 +208,12 @@ inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* k
 	  filename == NULL: try to open global gpsbabel.ini
  */
 inifile_t*
-inifile_init(const char* filename, const char* myname)
+inifile_init(const QString& filename, const char* myname)
 {
   inifile_t* result;
   gbfile* fin = NULL;
 
-  if (filename == NULL) {
+  if (filename.isEmpty()) {
     fin = open_gpsbabel_inifile();
     if (fin == NULL) {
       return NULL;
@@ -306,10 +267,7 @@ inifile_done(inifile_t* inifile)
     }
     xfree(inifile);
   }
-  if (gbinipathname) {
-    xfree(gbinipathname);
-    gbinipathname = NULL;
-  }
+  gbinipathname.clear();
 }
 
 int
@@ -377,3 +335,4 @@ inifile_readint_def(const inifile_t* inifile, const char* section, const char* k
     return result;
   }
 }
+

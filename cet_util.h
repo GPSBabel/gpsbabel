@@ -19,14 +19,16 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 */
 
-#ifndef CET_UTIL_H
-#define CET_UTIL_H
+#ifndef CET_UTIL_H_INCLUDED_
+#define CET_UTIL_H_INCLUDED_
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <QtCore/QString>
 #include "cet.h"
+#include "defs.h"
 
 cet_cs_vec_t* cet_find_cs_by_name(const QString& name);
 void cet_register(void);
@@ -67,4 +69,4 @@ void cet_convert_deinit(void);
 
 void cet_disp_character_set_names(FILE* fout);
 
-#endif
+#endif  // CET_UTIL_H_INCLUDED_

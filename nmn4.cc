@@ -29,10 +29,10 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "csv_util.h"
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
+#include <cctype>
+#include <cstdarg>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* fin, *fout;
 static int curr_rte_num, target_rte_num;
@@ -43,7 +43,7 @@ static char* index_opt;
 
 static
 arglist_t nmn4_args[] = {
-  {"index", &index_opt, "Index of route to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL },
+  {"index", &index_opt, "Index of route to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL , nullptr},
   ARG_TERMINATOR
 };
 
@@ -62,7 +62,7 @@ nmn4_check_line(char* line)
 }
 
 static void
-nmn4_read_data(void)
+nmn4_read_data()
 {
   char* buff;
   char* str;
@@ -183,13 +183,13 @@ nmn4_read_data(void)
 }
 
 static void
-nmn4_route_hdr(const route_head* route)
+nmn4_route_hdr(const route_head*)
 {
   curr_rte_num++;
 }
 
 static void
-nmn4_route_tlr(const route_head* rte)
+nmn4_route_tlr(const route_head*)
 {
 }
 
@@ -224,7 +224,7 @@ nmn4_write_waypt(const Waypoint* wpt)
 }
 
 static void
-nmn4_write_data(void)
+nmn4_write_data()
 {
 
   target_rte_num = 1;
@@ -249,13 +249,13 @@ nmn4_rd_init(const QString& fname)
 }
 
 static void
-nmn4_rd_deinit(void)
+nmn4_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-nmn4_read(void)
+nmn4_read()
 {
   nmn4_read_data();
 }
@@ -267,13 +267,13 @@ nmn4_wr_init(const QString& fname)
 }
 
 static void
-nmn4_wr_deinit(void)
+nmn4_wr_deinit()
 {
   gbfclose(fout);
 }
 
 static void
-nmn4_write(void)
+nmn4_write()
 {
   nmn4_write_data();
 }
@@ -292,4 +292,6 @@ ff_vecs_t nmn4_vecs = {
   NULL,
   nmn4_args,
   CET_CHARSET_MS_ANSI, 1	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

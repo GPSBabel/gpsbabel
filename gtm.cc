@@ -431,16 +431,16 @@ gtm_rd_init(const QString& fname)
 }
 
 static void
-gtm_rd_deinit(void)
+gtm_rd_deinit()
 {
   gbfclose(file_in);
 }
 
-static void count_route_waypts(const Waypoint* wpt)
+static void count_route_waypts(const Waypoint*)
 {
   rt_count++;
 }
-static void count_track_waypts(const Waypoint* wpt)
+static void count_track_waypts(const Waypoint*)
 {
   tr_count++;
 }
@@ -501,13 +501,13 @@ gtm_wr_init(const QString& fname)
 }
 
 static void
-gtm_wr_deinit(void)
+gtm_wr_deinit()
 {
   gbfclose(file_out);
 }
 
 static void
-gtm_read(void)
+gtm_read()
 {
   route_head* first_trk_head = NULL;
   route_head* trk_head = NULL;
@@ -708,7 +708,7 @@ static void write_rte_waypt(const Waypoint* wpt)
 }
 
 static void
-gtm_write(void)
+gtm_write()
 {
   waypt_disp_all(write_waypt);
   if (waypt_count()) {
@@ -735,4 +735,7 @@ ff_vecs_t gtm_vecs = {
   gtm_write,
   NULL,
   gtm_args,
+  CET_CHARSET_ASCII, 0, /* CET-REVIEW */
+  NULL_POS_OPS,
+  nullptr
 };

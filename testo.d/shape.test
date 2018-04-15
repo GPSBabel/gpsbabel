@@ -1,0 +1,25 @@
+
+gpsbabel -w -i shape -f ${REFERENCE}/gis.osm_places_free_1.shp -o gpx -F ${TMPDIR}/gis.osm_places_free_1.gpx
+gpsbabel -w -i gpx -f ${TMPDIR}/gis.osm_places_free_1.gpx -o shape -F ${TMPDIR}/gis.osm_places_free_1~gpx.shp
+gpsbabel -w -i shape -f ${TMPDIR}/gis.osm_places_free_1~gpx.shp -o gpx -F ${TMPDIR}/gis.osm_places_free_1~shp.gpx
+compare ${REFERENCE}/gis.osm_places_free_1.gpx ${TMPDIR}/gis.osm_places_free_1.gpx
+compare ${REFERENCE}/gis.osm_places_free_1~shp.gpx ${TMPDIR}/gis.osm_places_free_1~shp.gpx
+# The .shp, .shx, .dbf files must have been creted to succesufully read, but the .cpf file is optional. Make sure it got created.
+compare ${REFERENCE}/gis.osm_places_free_1~gpx.cpg ${TMPDIR}/gis.osm_places_free_1~gpx.cpg
+
+gpsbabel -r -i shape -f ${REFERENCE}/gis.osm_railways_free_1.shp -o gpx -F ${TMPDIR}/gis.osm_railways_free_1.gpx
+gpsbabel -r -i gpx -f ${TMPDIR}/gis.osm_railways_free_1.gpx -o shape -F ${TMPDIR}/gis.osm_railways_free_1~gpx.shp
+gpsbabel -r -i shape -f ${TMPDIR}/gis.osm_railways_free_1~gpx.shp -o gpx -F ${TMPDIR}/gis.osm_railways_free_1~shp.gpx
+compare ${REFERENCE}/gis.osm_railways_free_1.gpx ${TMPDIR}/gis.osm_railways_free_1.gpx
+compare ${REFERENCE}/gis.osm_railways_free_1~shp.gpx ${TMPDIR}/gis.osm_railways_free_1~shp.gpx
+# The .shp, .shx, .dbf files must have been creted to succesufully read, but the .cpf file is optional. Make sure it got created.
+compare ${REFERENCE}/gis.osm_railways_free_1~gpx.cpg ${TMPDIR}/gis.osm_railways_free_1~gpx.cpg
+
+# exercise name option
+gpsbabel -i shape,name=+name -f ${REFERENCE}/gis.osm_places_free_1.shp -o gpx -F ${TMPDIR}/gis.osm_places_free_1.gpx
+compare ${REFERENCE}/gis.osm_places_free_1.gpx ${TMPDIR}/gis.osm_places_free_1.gpx
+gpsbabel -i shape,name=+4 -f ${REFERENCE}/gis.osm_places_free_1.shp -o gpx -F ${TMPDIR}/gis.osm_places_free_1.gpx
+compare ${REFERENCE}/gis.osm_places_free_1.gpx ${TMPDIR}/gis.osm_places_free_1.gpx
+
+# this should error dumping dbf info
+#gpsbabel -i shape,name=notme -f ${REFERENCE}/gis.osm_places_free_1.shp

@@ -20,10 +20,10 @@
 
  */
 
-#include <ctype.h>
-#include <math.h>
-#include <stdio.h>
-#include <time.h>
+#include <cctype>
+#include <cmath>
+#include <cstdio>
+#include <ctime>
 
 #include "defs.h"
 #include "grtcirc.h"
@@ -84,13 +84,13 @@ ggv_log_rd_init(const QString& fname)
 }
 
 static void
-ggv_log_rd_deinit(void)
+ggv_log_rd_deinit()
 {
   gbfclose(fin);
 }
 
 static void
-ggv_log_read(void)
+ggv_log_read()
 {
   signed char* buf;
   int bufsz = 0, len;
@@ -198,7 +198,7 @@ ggv_log_wr_init(const QString& fname)
 }
 
 static void
-ggv_log_wr_deinit(void)
+ggv_log_wr_deinit()
 {
   gbfclose(fout);
 }
@@ -265,7 +265,7 @@ ggv_log_track_head_cb(const route_head* trk)
 }
 
 static void
-ggv_log_write(void)
+ggv_log_write()
 {
   track_disp_all(ggv_log_track_head_cb, NULL, NULL);
 }
@@ -288,5 +288,7 @@ ff_vecs_t ggv_log_vecs = {
   NULL,
   ggv_log_args,
   CET_CHARSET_ASCII, 1
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/

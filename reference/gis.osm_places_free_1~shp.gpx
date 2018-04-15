@@ -1,0 +1,2455 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="18.954175700" minlon="-178.334236800" maxlat="28.422645800" maxlon="-154.828369400"/>
+  <wpt lat="21.304547000" lon="-157.855676400">
+    <name>Honolulu</name>
+    <cmt>Honolulu</cmt>
+    <desc>Honolulu</desc>
+  </wpt>
+  <wpt lat="19.707243000" lon="-155.081635000">
+    <name>Hilo</name>
+    <cmt>Hilo</cmt>
+    <desc>Hilo</desc>
+  </wpt>
+  <wpt lat="20.872684000" lon="-156.676272900">
+    <name>Lahaina</name>
+    <cmt>Lahaina</cmt>
+    <desc>Lahaina</desc>
+  </wpt>
+  <wpt lat="19.728012400" lon="-156.035512000">
+    <name>Kēahole</name>
+    <cmt>Kēahole</cmt>
+    <desc>Kēahole</desc>
+  </wpt>
+  <wpt lat="20.708611100" lon="-156.358333300">
+    <name>Keokea</name>
+    <cmt>Keokea</cmt>
+    <desc>Keokea</desc>
+  </wpt>
+  <wpt lat="19.505847900" lon="-154.910614200">
+    <name>Nanawale Estates</name>
+    <cmt>Nanawale Estates</cmt>
+    <desc>Nanawale Estates</desc>
+  </wpt>
+  <wpt lat="21.293509400" lon="-157.724306600">
+    <name>Kuliouou</name>
+    <cmt>Kuliouou</cmt>
+    <desc>Kuliouou</desc>
+  </wpt>
+  <wpt lat="19.416361200" lon="-155.879144800">
+    <name>Kēōkea</name>
+    <cmt>Kēōkea</cmt>
+    <desc>Kēōkea</desc>
+  </wpt>
+  <wpt lat="21.918204000" lon="-159.618301000">
+    <name>Kaumakani</name>
+    <cmt>Kaumakani</cmt>
+    <desc>Kaumakani</desc>
+  </wpt>
+  <wpt lat="21.059766000" lon="-156.834640500">
+    <name>‘Ualapu‘e</name>
+    <cmt>‘Ualapu‘e</cmt>
+    <desc>‘Ualapu‘e</desc>
+  </wpt>
+  <wpt lat="21.555472000" lon="-157.854625000">
+    <name>Kaaawa</name>
+    <cmt>Kaaawa</cmt>
+    <desc>Kaaawa</desc>
+  </wpt>
+  <wpt lat="21.389786400" lon="-157.918252200">
+    <name>ʻAiea Heights</name>
+    <cmt>ʻAiea Heights</cmt>
+    <desc>ʻAiea Heights</desc>
+  </wpt>
+  <wpt lat="20.902632100" lon="-156.369330100">
+    <name>Nashiwa Village</name>
+    <cmt>Nashiwa Village</cmt>
+    <desc>Nashiwa Village</desc>
+  </wpt>
+  <wpt lat="21.354722200" lon="-157.927500000">
+    <name>Āliamanu</name>
+    <cmt>Āliamanu</cmt>
+    <desc>Āliamanu</desc>
+  </wpt>
+  <wpt lat="19.062767000" lon="-155.586319000">
+    <name>Naalehu</name>
+    <cmt>Naalehu</cmt>
+    <desc>Naalehu</desc>
+  </wpt>
+  <wpt lat="20.914300200" lon="-156.321801300">
+    <name>Haiku</name>
+    <cmt>Haiku</cmt>
+    <desc>Haiku</desc>
+  </wpt>
+  <wpt lat="20.836666700" lon="-156.336666700">
+    <name>Pukalani</name>
+    <cmt>Pukalani</cmt>
+    <desc>Pukalani</desc>
+  </wpt>
+  <wpt lat="21.002958000" lon="-156.662976400">
+    <name>Honokahua</name>
+    <cmt>Honokahua</cmt>
+    <desc>Honokahua</desc>
+  </wpt>
+  <wpt lat="20.648748000" lon="-156.398814100">
+    <name>Ulupalakua</name>
+    <cmt>Ulupalakua</cmt>
+    <desc>Ulupalakua</desc>
+  </wpt>
+  <wpt lat="20.924579400" lon="-156.674769900">
+    <name>Puukolii</name>
+    <cmt>Puukolii</cmt>
+    <desc>Puukolii</desc>
+  </wpt>
+  <wpt lat="21.414166700" lon="-157.778888900">
+    <name>Kokokahi</name>
+    <cmt>Kokokahi</cmt>
+    <desc>Kokokahi</desc>
+  </wpt>
+  <wpt lat="21.511469900" lon="-158.022494600">
+    <name>Whitmore Village</name>
+    <cmt>Whitmore Village</cmt>
+    <desc>Whitmore Village</desc>
+  </wpt>
+  <wpt lat="20.840833300" lon="-156.509166700">
+    <name>Hyashi Village</name>
+    <cmt>Hyashi Village</cmt>
+    <desc>Hyashi Village</desc>
+  </wpt>
+  <wpt lat="19.716944400" lon="-155.070833300">
+    <name>Waiākea</name>
+    <cmt>Waiākea</cmt>
+    <desc>Waiākea</desc>
+  </wpt>
+  <wpt lat="19.093333300" lon="-155.551111100">
+    <name>Honu‘apo</name>
+    <cmt>Honu‘apo</cmt>
+    <desc>Honu‘apo</desc>
+  </wpt>
+  <wpt lat="19.421388900" lon="-155.779722200">
+    <name>Kaunēnē</name>
+    <cmt>Kaunēnē</cmt>
+    <desc>Kaunēnē</desc>
+  </wpt>
+  <wpt lat="19.398458900" lon="-155.879456200">
+    <name>Keālia</name>
+    <cmt>Keālia</cmt>
+    <desc>Keālia</desc>
+  </wpt>
+  <wpt lat="21.325760300" lon="-157.979192900">
+    <name>Iroquois Point</name>
+    <cmt>Iroquois Point</cmt>
+    <desc>Iroquois Point</desc>
+  </wpt>
+  <wpt lat="20.240000000" lon="-155.820555600">
+    <name>Honomakau</name>
+    <cmt>Honomakau</cmt>
+    <desc>Honomakau</desc>
+  </wpt>
+  <wpt lat="19.137687500" lon="-155.504112300">
+    <name>Punalu‘u</name>
+    <cmt>Punalu‘u</cmt>
+    <desc>Punalu‘u</desc>
+  </wpt>
+  <wpt lat="20.105694900" lon="-155.530130800">
+    <name>Kapulena</name>
+    <cmt>Kapulena</cmt>
+    <desc>Kapulena</desc>
+  </wpt>
+  <wpt lat="22.222372000" lon="-159.548368000">
+    <name>Halehomaha</name>
+    <cmt>Halehomaha</cmt>
+    <desc>Halehomaha</desc>
+  </wpt>
+  <wpt lat="21.664166700" lon="-158.053611100">
+    <name>Pūpūkea</name>
+    <cmt>Pūpūkea</cmt>
+    <desc>Pūpūkea</desc>
+  </wpt>
+  <wpt lat="19.621245000" lon="-155.039749000">
+    <name>Keaau</name>
+    <cmt>Keaau</cmt>
+    <desc>Keaau</desc>
+  </wpt>
+  <wpt lat="20.857528000" lon="-156.313477000">
+    <name>Makawao</name>
+    <cmt>Makawao</cmt>
+    <desc>Makawao</desc>
+  </wpt>
+  <wpt lat="21.993333300" lon="-159.368888900">
+    <name>Kapaia</name>
+    <cmt>Kapaia</cmt>
+    <desc>Kapaia</desc>
+  </wpt>
+  <wpt lat="19.728963400" lon="-155.981609100">
+    <name>Kalaoa</name>
+    <cmt>Kalaoa</cmt>
+    <desc>Kalaoa</desc>
+  </wpt>
+  <wpt lat="21.955277800" lon="-159.365000000">
+    <name>Niumalu</name>
+    <cmt>Niumalu</cmt>
+    <desc>Niumalu</desc>
+  </wpt>
+  <wpt lat="19.629166700" lon="-155.870555600">
+    <name>Hale Pili</name>
+    <cmt>Hale Pili</cmt>
+    <desc>Hale Pili</desc>
+  </wpt>
+  <wpt lat="20.603055600" lon="-156.423333300">
+    <name>Keoneoio</name>
+    <cmt>Keoneoio</cmt>
+    <desc>Keoneoio</desc>
+  </wpt>
+  <wpt lat="21.671871500" lon="-158.040390200">
+    <name>Sunset Beach</name>
+    <cmt>Sunset Beach</cmt>
+    <desc>Sunset Beach</desc>
+  </wpt>
+  <wpt lat="20.091331200" lon="-155.467206700">
+    <name>Haina</name>
+    <cmt>Haina</cmt>
+    <desc>Haina</desc>
+  </wpt>
+  <wpt lat="21.576998000" lon="-158.155238100">
+    <name>Mokuleʻia</name>
+    <cmt>Mokuleʻia</cmt>
+    <desc>Mokuleʻia</desc>
+  </wpt>
+  <wpt lat="19.426449000" lon="-155.246429000">
+    <name>Volcano</name>
+    <cmt>Volcano</cmt>
+    <desc>Volcano</desc>
+  </wpt>
+  <wpt lat="22.103611100" lon="-159.349444400">
+    <name>Kawaihau</name>
+    <cmt>Kawaihau</cmt>
+    <desc>Kawaihau</desc>
+  </wpt>
+  <wpt lat="21.444722200" lon="-157.837777800">
+    <name>‘Āhuimanu</name>
+    <cmt>‘Āhuimanu</cmt>
+    <desc>‘Āhuimanu</desc>
+  </wpt>
+  <wpt lat="19.407838800" lon="-154.923603800">
+    <name>Kalapana Sea View Estates</name>
+    <cmt>Kalapana Sea View Estates</cmt>
+    <desc>Kalapana Sea View Estates</desc>
+  </wpt>
+  <wpt lat="21.390514500" lon="-157.715582600">
+    <name>Lanikai</name>
+    <cmt>Lanikai</cmt>
+    <desc>Lanikai</desc>
+  </wpt>
+  <wpt lat="20.785700400" lon="-156.019842000">
+    <name>Haʻeleku</name>
+    <cmt>Haʻeleku</cmt>
+    <desc>Haʻeleku</desc>
+  </wpt>
+  <wpt lat="19.830663000" lon="-155.104980000">
+    <name>Pepeekeo</name>
+    <cmt>Pepeekeo</cmt>
+    <desc>Pepeekeo</desc>
+  </wpt>
+  <wpt lat="20.899444400" lon="-156.511666700">
+    <name>Puuohala Village</name>
+    <cmt>Puuohala Village</cmt>
+    <desc>Puuohala Village</desc>
+  </wpt>
+  <wpt lat="19.496943700" lon="-154.950153600">
+    <name>Pāhoa</name>
+    <cmt>Pāhoa</cmt>
+    <desc>Pāhoa</desc>
+  </wpt>
+  <wpt lat="19.430131300" lon="-154.880839100">
+    <name>Opihikao</name>
+    <cmt>Opihikao</cmt>
+    <desc>Opihikao</desc>
+  </wpt>
+  <wpt lat="19.138611100" lon="-155.536666700">
+    <name>Hīlea</name>
+    <cmt>Hīlea</cmt>
+    <desc>Hīlea</desc>
+  </wpt>
+  <wpt lat="19.782314900" lon="-156.036403700">
+    <name>Mahaiula</name>
+    <cmt>Mahaiula</cmt>
+    <desc>Mahaiula</desc>
+  </wpt>
+  <wpt lat="19.970122000" lon="-155.839005000">
+    <name>Puako</name>
+    <cmt>Puako</cmt>
+    <desc>Puako</desc>
+  </wpt>
+  <wpt lat="19.918226000" lon="-155.339527900">
+    <name>Keanakolu</name>
+    <cmt>Keanakolu</cmt>
+    <desc>Keanakolu</desc>
+  </wpt>
+  <wpt lat="21.900071000" lon="-159.558929200">
+    <name>Numila</name>
+    <cmt>Numila</cmt>
+    <desc>Numila</desc>
+  </wpt>
+  <wpt lat="20.827777800" lon="-156.094444400">
+    <name>Nāhiku</name>
+    <cmt>Nāhiku</cmt>
+    <desc>Nāhiku</desc>
+  </wpt>
+  <wpt lat="20.902437000" lon="-156.372528000">
+    <name>Paia</name>
+    <cmt>Paia</cmt>
+    <desc>Paia</desc>
+  </wpt>
+  <wpt lat="20.621666700" lon="-156.441388900">
+    <name>Kanahena</name>
+    <cmt>Kanahena</cmt>
+    <desc>Kanahena</desc>
+  </wpt>
+  <wpt lat="21.906666700" lon="-159.469166700">
+    <name>Koloa</name>
+    <cmt>Koloa</cmt>
+    <desc>Koloa</desc>
+  </wpt>
+  <wpt lat="21.166978100" lon="-157.069201300">
+    <name>Ho‘olehua</name>
+    <cmt>Ho‘olehua</cmt>
+    <desc>Ho‘olehua</desc>
+  </wpt>
+  <wpt lat="20.796388900" lon="-156.514166700">
+    <name>Maalaea</name>
+    <cmt>Maalaea</cmt>
+    <desc>Maalaea</desc>
+  </wpt>
+  <wpt lat="21.425252000" lon="-157.954087000">
+    <name>Pacific Palisades</name>
+    <cmt>Pacific Palisades</cmt>
+    <desc>Pacific Palisades</desc>
+  </wpt>
+  <wpt lat="20.711772000" lon="-155.996082000">
+    <name>Kakiʻo</name>
+    <cmt>Kakiʻo</cmt>
+    <desc>Kakiʻo</desc>
+  </wpt>
+  <wpt lat="20.803333300" lon="-156.812500000">
+    <name>Lopa</name>
+    <cmt>Lopa</cmt>
+    <desc>Lopa</desc>
+  </wpt>
+  <wpt lat="20.017500000" lon="-155.287222200">
+    <name>‘Ō‘ōkala</name>
+    <cmt>‘Ō‘ōkala</cmt>
+    <desc>‘Ō‘ōkala</desc>
+  </wpt>
+  <wpt lat="20.826796900" lon="-156.913997200">
+    <name>Lalakoa</name>
+    <cmt>Lalakoa</cmt>
+    <desc>Lalakoa</desc>
+  </wpt>
+  <wpt lat="21.109083600" lon="-157.053766000">
+    <name>‘Umipa‘a</name>
+    <cmt>‘Umipa‘a</cmt>
+    <desc>‘Umipa‘a</desc>
+  </wpt>
+  <wpt lat="21.170833300" lon="-157.257500000">
+    <name>Wahīlauhue</name>
+    <cmt>Wahīlauhue</cmt>
+    <desc>Wahīlauhue</desc>
+  </wpt>
+  <wpt lat="21.501060900" lon="-158.021173500">
+    <name>Wahiawā</name>
+    <cmt>Wahiawā</cmt>
+    <desc>Wahiawā</desc>
+  </wpt>
+  <wpt lat="21.083888900" lon="-157.002222200">
+    <name>Kamiloloa</name>
+    <cmt>Kamiloloa</cmt>
+    <desc>Kamiloloa</desc>
+  </wpt>
+  <wpt lat="20.886390400" lon="-156.666386300">
+    <name>Lahainaluna</name>
+    <cmt>Lahainaluna</cmt>
+    <desc>Lahainaluna</desc>
+  </wpt>
+  <wpt lat="21.015259600" lon="-156.606902500">
+    <name>Honokohau</name>
+    <cmt>Honokohau</cmt>
+    <desc>Honokohau</desc>
+  </wpt>
+  <wpt lat="22.223611000" lon="-159.485278000">
+    <name>Princeville</name>
+    <cmt>Princeville</cmt>
+    <desc>Princeville</desc>
+  </wpt>
+  <wpt lat="21.903552000" lon="-159.588089000">
+    <name>Port Allen</name>
+    <cmt>Port Allen</cmt>
+    <desc>Port Allen</desc>
+  </wpt>
+  <wpt lat="21.340835300" lon="-157.956560000">
+    <name>Hickam</name>
+    <cmt>Hickam</cmt>
+    <desc>Hickam</desc>
+  </wpt>
+  <wpt lat="22.212175000" lon="-159.542190000">
+    <name>Wainiha</name>
+    <cmt>Wainiha</cmt>
+    <desc>Wainiha</desc>
+  </wpt>
+  <wpt lat="22.224685000" lon="-159.557903900">
+    <name>WPT080</name>
+    <cmt>WPT080</cmt>
+    <desc>WPT080</desc>
+  </wpt>
+  <wpt lat="21.386666700" lon="-158.009166700">
+    <name>Waipahu</name>
+    <cmt>Waipahu</cmt>
+    <desc>Waipahu</desc>
+  </wpt>
+  <wpt lat="21.958611100" lon="-159.670833300">
+    <name>Waimea</name>
+    <cmt>Waimea</cmt>
+    <desc>Waimea</desc>
+  </wpt>
+  <wpt lat="20.119732300" lon="-155.571768900">
+    <name>Kukuihaele</name>
+    <cmt>Kukuihaele</cmt>
+    <desc>Kukuihaele</desc>
+  </wpt>
+  <wpt lat="19.888115300" lon="-155.904803500">
+    <name>Keawaiki</name>
+    <cmt>Keawaiki</cmt>
+    <desc>Keawaiki</desc>
+  </wpt>
+  <wpt lat="20.026139300" lon="-155.705674600">
+    <name>Kawailiula</name>
+    <cmt>Kawailiula</cmt>
+    <desc>Kawailiula</desc>
+  </wpt>
+  <wpt lat="19.814011500" lon="-155.840325700">
+    <name>WPT086</name>
+    <cmt>WPT086</cmt>
+    <desc>WPT086</desc>
+  </wpt>
+  <wpt lat="21.500555600" lon="-157.855000000">
+    <name>Waikāne</name>
+    <cmt>Waikāne</cmt>
+    <desc>Waikāne</desc>
+  </wpt>
+  <wpt lat="20.787198000" lon="-156.989536200">
+    <name>Kaumalapau</name>
+    <cmt>Kaumalapau</cmt>
+    <desc>Kaumalapau</desc>
+  </wpt>
+  <wpt lat="21.166393900" lon="-157.008735700">
+    <name>Kala‘e</name>
+    <cmt>Kala‘e</cmt>
+    <desc>Kala‘e</desc>
+  </wpt>
+  <wpt lat="21.581793400" lon="-158.105014500">
+    <name>Haleiwa</name>
+    <cmt>Haleiwa</cmt>
+    <desc>Haleiwa</desc>
+  </wpt>
+  <wpt lat="22.056317600" lon="-159.339662100">
+    <name>Wailua House Lots</name>
+    <cmt>Wailua House Lots</cmt>
+    <desc>Wailua House Lots</desc>
+  </wpt>
+  <wpt lat="21.400123100" lon="-157.969428000">
+    <name>Pearl City</name>
+    <cmt>Pearl City</cmt>
+    <desc>Pearl City</desc>
+  </wpt>
+  <wpt lat="19.490277800" lon="-155.102777800">
+    <name>Eden Roc</name>
+    <cmt>Eden Roc</cmt>
+    <desc>Eden Roc</desc>
+  </wpt>
+  <wpt lat="20.875608900" lon="-156.517277700">
+    <name>Wailuku Heights</name>
+    <cmt>Wailuku Heights</cmt>
+    <desc>Wailuku Heights</desc>
+  </wpt>
+  <wpt lat="20.702606000" lon="-155.999687300">
+    <name>Puʻuiki</name>
+    <cmt>Puʻuiki</cmt>
+    <desc>Puʻuiki</desc>
+  </wpt>
+  <wpt lat="21.588489000" lon="-157.892075000">
+    <name>WPT096</name>
+    <cmt>WPT096</cmt>
+    <desc>WPT096</desc>
+  </wpt>
+  <wpt lat="21.458820000" lon="-158.061676000">
+    <name>Kunia Camp</name>
+    <cmt>Kunia Camp</cmt>
+    <desc>Kunia Camp</desc>
+  </wpt>
+  <wpt lat="20.802222200" lon="-156.072777800">
+    <name>Upper Nahiku</name>
+    <cmt>Upper Nahiku</cmt>
+    <desc>Upper Nahiku</desc>
+  </wpt>
+  <wpt lat="21.191111100" lon="-157.250277800">
+    <name>Kepuhi</name>
+    <cmt>Kepuhi</cmt>
+    <desc>Kepuhi</desc>
+  </wpt>
+  <wpt lat="20.722080000" lon="-155.986633000">
+    <name>Hamoa</name>
+    <cmt>Hamoa</cmt>
+    <desc>Hamoa</desc>
+  </wpt>
+  <wpt lat="20.995659700" lon="-156.549243100">
+    <name>WPT101</name>
+    <cmt>WPT101</cmt>
+    <desc>WPT101</desc>
+  </wpt>
+  <wpt lat="20.908333300" lon="-156.227500000">
+    <name>Huelo</name>
+    <cmt>Huelo</cmt>
+    <desc>Huelo</desc>
+  </wpt>
+  <wpt lat="21.399444400" lon="-158.103055600">
+    <name>Pālehua</name>
+    <cmt>Pālehua</cmt>
+    <desc>Pālehua</desc>
+  </wpt>
+  <wpt lat="21.087222200" lon="-157.016111100">
+    <name>Kōheo</name>
+    <cmt>Kōheo</cmt>
+    <desc>Kōheo</desc>
+  </wpt>
+  <wpt lat="20.958477100" lon="-156.661186000">
+    <name>Mahinahina Camp</name>
+    <cmt>Mahinahina Camp</cmt>
+    <desc>Mahinahina Camp</desc>
+  </wpt>
+  <wpt lat="20.933988900" lon="-156.316981900">
+    <name>Pauwela</name>
+    <cmt>Pauwela</cmt>
+    <desc>Pauwela</desc>
+  </wpt>
+  <wpt lat="22.038055600" lon="-159.772222200">
+    <name>Mānā (site)</name>
+    <cmt>Mānā (site)</cmt>
+    <desc>Mānā (site)</desc>
+  </wpt>
+  <wpt lat="22.185277800" lon="-159.466388900">
+    <name>Hanalei Homesteads</name>
+    <cmt>Hanalei Homesteads</cmt>
+    <desc>Hanalei Homesteads</desc>
+  </wpt>
+  <wpt lat="20.920397000" lon="-156.691132000">
+    <name>WPT109</name>
+    <cmt>WPT109</cmt>
+    <desc>WPT109</desc>
+  </wpt>
+  <wpt lat="22.101944400" lon="-159.308611100">
+    <name>Kealia</name>
+    <cmt>Kealia</cmt>
+    <desc>Kealia</desc>
+  </wpt>
+  <wpt lat="19.790000000" lon="-155.334722200">
+    <name>Pua‘ākala</name>
+    <cmt>Pua‘ākala</cmt>
+    <desc>Pua‘ākala</desc>
+  </wpt>
+  <wpt lat="21.394166700" lon="-158.103055600">
+    <name>Akupu</name>
+    <cmt>Akupu</cmt>
+    <desc>Akupu</desc>
+  </wpt>
+  <wpt lat="19.897825000" lon="-155.126953000">
+    <name>Hakalau</name>
+    <cmt>Hakalau</cmt>
+    <desc>Hakalau</desc>
+  </wpt>
+  <wpt lat="19.980428900" lon="-155.376851400">
+    <name>‘Umikoa</name>
+    <cmt>‘Umikoa</cmt>
+    <desc>‘Umikoa</desc>
+  </wpt>
+  <wpt lat="19.471766900" lon="-155.916853400">
+    <name>Napo‘opo‘o</name>
+    <cmt>Napo‘opo‘o</cmt>
+    <desc>Napo‘opo‘o</desc>
+  </wpt>
+  <wpt lat="19.577384100" lon="-155.094986400">
+    <name>Kukui</name>
+    <cmt>Kukui</cmt>
+    <desc>Kukui</desc>
+  </wpt>
+  <wpt lat="21.340173400" lon="-158.043273000">
+    <name>‘Ewa Villages</name>
+    <cmt>‘Ewa Villages</cmt>
+    <desc>‘Ewa Villages</desc>
+  </wpt>
+  <wpt lat="19.131618400" lon="-155.508573200">
+    <name>Nīnole</name>
+    <cmt>Nīnole</cmt>
+    <desc>Nīnole</desc>
+  </wpt>
+  <wpt lat="19.626666700" lon="-155.863055600">
+    <name>Kealapuali</name>
+    <cmt>Kealapuali</cmt>
+    <desc>Kealapuali</desc>
+  </wpt>
+  <wpt lat="21.341284800" lon="-158.035042100">
+    <name>‘Ewa</name>
+    <cmt>‘Ewa</cmt>
+    <desc>‘Ewa</desc>
+  </wpt>
+  <wpt lat="19.821388900" lon="-156.001944400">
+    <name>Kukio</name>
+    <cmt>Kukio</cmt>
+    <desc>Kukio</desc>
+  </wpt>
+  <wpt lat="19.494428000" lon="-155.917282000">
+    <name>Captain Cook</name>
+    <cmt>Captain Cook</cmt>
+    <desc>Captain Cook</desc>
+  </wpt>
+  <wpt lat="21.269666000" lon="-157.785855200">
+    <name>Kahala</name>
+    <cmt>Kahala</cmt>
+    <desc>Kahala</desc>
+  </wpt>
+  <wpt lat="19.359166700" lon="-155.424166700">
+    <name>‘Ainapō</name>
+    <cmt>‘Ainapō</cmt>
+    <desc>‘Ainapō</desc>
+  </wpt>
+  <wpt lat="21.278570000" lon="-157.802133100">
+    <name>Kaimuki</name>
+    <cmt>Kaimuki</cmt>
+    <desc>Kaimuki</desc>
+  </wpt>
+  <wpt lat="21.293482900" lon="-157.845308100">
+    <name>Ala Moana</name>
+    <cmt>Ala Moana</cmt>
+    <desc>Ala Moana</desc>
+  </wpt>
+  <wpt lat="19.204765400" lon="-155.867358100">
+    <name>Pāpā</name>
+    <cmt>Pāpā</cmt>
+    <desc>Pāpā</desc>
+  </wpt>
+  <wpt lat="19.937851000" lon="-155.168152000">
+    <name>Nīnole</name>
+    <cmt>Nīnole</cmt>
+    <desc>Nīnole</desc>
+  </wpt>
+  <wpt lat="20.900833300" lon="-156.665000000">
+    <name>Crater Village</name>
+    <cmt>Crater Village</cmt>
+    <desc>Crater Village</desc>
+  </wpt>
+  <wpt lat="19.562526200" lon="-155.960842800">
+    <name>Keauhou</name>
+    <cmt>Keauhou</cmt>
+    <desc>Keauhou</desc>
+  </wpt>
+  <wpt lat="21.996625500" lon="-159.355370900">
+    <name>Hanamaulu</name>
+    <cmt>Hanamaulu</cmt>
+    <desc>Hanamaulu</desc>
+  </wpt>
+  <wpt lat="21.153888900" lon="-157.148333300">
+    <name>Mahana</name>
+    <cmt>Mahana</cmt>
+    <desc>Mahana</desc>
+  </wpt>
+  <wpt lat="20.757398000" lon="-156.445999000">
+    <name>Kihei</name>
+    <cmt>Kihei</cmt>
+    <desc>Kihei</desc>
+  </wpt>
+  <wpt lat="19.213401500" lon="-155.878160100">
+    <name>Pāpā Bay Estates</name>
+    <cmt>Pāpā Bay Estates</cmt>
+    <desc>Pāpā Bay Estates</desc>
+  </wpt>
+  <wpt lat="21.967500000" lon="-159.363333300">
+    <name>Kupolo</name>
+    <cmt>Kupolo</cmt>
+    <desc>Kupolo</desc>
+  </wpt>
+  <wpt lat="20.866855000" lon="-156.453066700">
+    <name>Puunene</name>
+    <cmt>Puunene</cmt>
+    <desc>Puunene</desc>
+  </wpt>
+  <wpt lat="19.762960200" lon="-155.091638300">
+    <name>Paukaa</name>
+    <cmt>Paukaa</cmt>
+    <desc>Paukaa</desc>
+  </wpt>
+  <wpt lat="22.061981300" lon="-159.323131600">
+    <name>Waipouli</name>
+    <cmt>Waipouli</cmt>
+    <desc>Waipouli</desc>
+  </wpt>
+  <wpt lat="20.720833300" lon="-155.995833300">
+    <name>Mokae</name>
+    <cmt>Mokae</cmt>
+    <desc>Mokae</desc>
+  </wpt>
+  <wpt lat="19.828055600" lon="-155.097777800">
+    <name>Kawainui</name>
+    <cmt>Kawainui</cmt>
+    <desc>Kawainui</desc>
+  </wpt>
+  <wpt lat="20.855555600" lon="-156.649722200">
+    <name>Launiupoko</name>
+    <cmt>Launiupoko</cmt>
+    <desc>Launiupoko</desc>
+  </wpt>
+  <wpt lat="20.645555600" lon="-156.110555600">
+    <name>Mokulau</name>
+    <cmt>Mokulau</cmt>
+    <desc>Mokulau</desc>
+  </wpt>
+  <wpt lat="22.202993700" lon="-159.495694900">
+    <name>Hanalei</name>
+    <cmt>Hanalei</cmt>
+    <desc>Hanalei</desc>
+  </wpt>
+  <wpt lat="20.040207200" lon="-155.371556900">
+    <name>Pa‘auilo</name>
+    <cmt>Pa‘auilo</cmt>
+    <desc>Pa‘auilo</desc>
+  </wpt>
+  <wpt lat="19.606388900" lon="-155.075277800">
+    <name>Elevenmile Homestead</name>
+    <cmt>Elevenmile Homestead</cmt>
+    <desc>Elevenmile Homestead</desc>
+  </wpt>
+  <wpt lat="20.908611100" lon="-156.487777800">
+    <name>Paukukalo</name>
+    <cmt>Paukukalo</cmt>
+    <desc>Paukukalo</desc>
+  </wpt>
+  <wpt lat="20.225416400" lon="-155.752193400">
+    <name>Makapala</name>
+    <cmt>Makapala</cmt>
+    <desc>Makapala</desc>
+  </wpt>
+  <wpt lat="20.224898000" lon="-155.766182300">
+    <name>Halawa</name>
+    <cmt>Halawa</cmt>
+    <desc>Halawa</desc>
+  </wpt>
+  <wpt lat="20.012677700" lon="-155.272823900">
+    <name>Niu Village</name>
+    <cmt>Niu Village</cmt>
+    <desc>Niu Village</desc>
+  </wpt>
+  <wpt lat="20.697500000" lon="-156.006944400">
+    <name>Hā‘ō‘ū</name>
+    <cmt>Hā‘ō‘ū</cmt>
+    <desc>Hā‘ō‘ū</desc>
+  </wpt>
+  <wpt lat="19.906928700" lon="-155.897087400">
+    <name>Kapalaoa</name>
+    <cmt>Kapalaoa</cmt>
+    <desc>Kapalaoa</desc>
+  </wpt>
+  <wpt lat="21.199877000" lon="-157.157332000">
+    <name>Mo‘omomi</name>
+    <cmt>Mo‘omomi</cmt>
+    <desc>Mo‘omomi</desc>
+  </wpt>
+  <wpt lat="20.882222200" lon="-156.510833300">
+    <name>Hopoi Village</name>
+    <cmt>Hopoi Village</cmt>
+    <desc>Hopoi Village</desc>
+  </wpt>
+  <wpt lat="21.965833300" lon="-159.356388900">
+    <name>Nawiliwili</name>
+    <cmt>Nawiliwili</cmt>
+    <desc>Nawiliwili</desc>
+  </wpt>
+  <wpt lat="21.159722200" lon="-156.742222200">
+    <name>Hālawa</name>
+    <cmt>Hālawa</cmt>
+    <desc>Hālawa</desc>
+  </wpt>
+  <wpt lat="19.517728000" lon="-155.921402000">
+    <name>Kealakekua</name>
+    <cmt>Kealakekua</cmt>
+    <desc>Kealakekua</desc>
+  </wpt>
+  <wpt lat="19.535201000" lon="-155.928955000">
+    <name>Kainaliu</name>
+    <cmt>Kainaliu</cmt>
+    <desc>Kainaliu</desc>
+  </wpt>
+  <wpt lat="21.067501300" lon="-156.952593300">
+    <name>Kawela</name>
+    <cmt>Kawela</cmt>
+    <desc>Kawela</desc>
+  </wpt>
+  <wpt lat="21.948330900" lon="-159.655674400">
+    <name>Kapalawai</name>
+    <cmt>Kapalawai</cmt>
+    <desc>Kapalawai</desc>
+  </wpt>
+  <wpt lat="19.381169400" lon="-155.899455900">
+    <name>Ho‘okena</name>
+    <cmt>Ho‘okena</cmt>
+    <desc>Ho‘okena</desc>
+  </wpt>
+  <wpt lat="20.907348700" lon="-156.285002700">
+    <name>Ulumalu</name>
+    <cmt>Ulumalu</cmt>
+    <desc>Ulumalu</desc>
+  </wpt>
+  <wpt lat="20.757398800" lon="-155.987984600">
+    <name>Hana</name>
+    <cmt>Hana</cmt>
+    <desc>Hana</desc>
+  </wpt>
+  <wpt lat="19.845805700" lon="-155.089576000">
+    <name>Pepeekeo Mill</name>
+    <cmt>Pepeekeo Mill</cmt>
+    <desc>Pepeekeo Mill</desc>
+  </wpt>
+  <wpt lat="21.920798700" lon="-159.625641600">
+    <name>Olokele</name>
+    <cmt>Olokele</cmt>
+    <desc>Olokele</desc>
+  </wpt>
+  <wpt lat="20.082560300" lon="-155.437485000">
+    <name>Paauhau</name>
+    <cmt>Paauhau</cmt>
+    <desc>Paauhau</desc>
+  </wpt>
+  <wpt lat="20.886865300" lon="-156.677199600">
+    <name>Kelawea</name>
+    <cmt>Kelawea</cmt>
+    <desc>Kelawea</desc>
+  </wpt>
+  <wpt lat="22.110833300" lon="-159.310000000">
+    <name>Kumukumu</name>
+    <cmt>Kumukumu</cmt>
+    <desc>Kumukumu</desc>
+  </wpt>
+  <wpt lat="21.176946400" lon="-156.947248700">
+    <name>Kalawao</name>
+    <cmt>Kalawao</cmt>
+    <desc>Kalawao</desc>
+  </wpt>
+  <wpt lat="19.732622000" lon="-155.091518800">
+    <name>Pu‘u‘eo</name>
+    <cmt>Pu‘u‘eo</cmt>
+    <desc>Pu‘u‘eo</desc>
+  </wpt>
+  <wpt lat="19.522550000" lon="-154.992132600">
+    <name>Ainaloa</name>
+    <cmt>Ainaloa</cmt>
+    <desc>Ainaloa</desc>
+  </wpt>
+  <wpt lat="20.929444400" lon="-156.371111100">
+    <name>Kuau</name>
+    <cmt>Kuau</cmt>
+    <desc>Kuau</desc>
+  </wpt>
+  <wpt lat="21.336916100" lon="-157.699869100">
+    <name>Waimānalo Beach</name>
+    <cmt>Waimānalo Beach</cmt>
+    <desc>Waimānalo Beach</desc>
+  </wpt>
+  <wpt lat="19.580851000" lon="-155.962481700">
+    <name>Kahaluu</name>
+    <cmt>Kahaluu</cmt>
+    <desc>Kahaluu</desc>
+  </wpt>
+  <wpt lat="20.871644000" lon="-156.344376000">
+    <name>Haliimaile</name>
+    <cmt>Haliimaile</cmt>
+    <desc>Haliimaile</desc>
+  </wpt>
+  <wpt lat="19.693038700" lon="-155.978962300">
+    <name>Palani Junction</name>
+    <cmt>Palani Junction</cmt>
+    <desc>Palani Junction</desc>
+  </wpt>
+  <wpt lat="21.645941000" lon="-157.927094000">
+    <name>WPT176</name>
+    <cmt>WPT176</cmt>
+    <desc>WPT176</desc>
+  </wpt>
+  <wpt lat="20.017833400" lon="-155.683038600">
+    <name>Pu'u Opelu</name>
+    <cmt>Pu'u Opelu</cmt>
+    <desc>Pu'u Opelu</desc>
+  </wpt>
+  <wpt lat="19.531319000" lon="-155.090561000">
+    <name>Fern Acres</name>
+    <cmt>Fern Acres</cmt>
+    <desc>Fern Acres</desc>
+  </wpt>
+  <wpt lat="20.015271800" lon="-155.277794300">
+    <name>Kukui Village</name>
+    <cmt>Kukui Village</cmt>
+    <desc>Kukui Village</desc>
+  </wpt>
+  <wpt lat="19.686981700" lon="-155.139884800">
+    <name>Kaumana</name>
+    <cmt>Kaumana</cmt>
+    <desc>Kaumana</desc>
+  </wpt>
+  <wpt lat="21.703333300" lon="-157.977222200">
+    <name>Marconi</name>
+    <cmt>Marconi</cmt>
+    <desc>Marconi</desc>
+  </wpt>
+  <wpt lat="20.861711700" lon="-156.145808300">
+    <name>WPT182</name>
+    <cmt>WPT182</cmt>
+    <desc>WPT182</desc>
+  </wpt>
+  <wpt lat="20.930361600" lon="-156.510666700">
+    <name>Waihee</name>
+    <cmt>Waihee</cmt>
+    <desc>Waihee</desc>
+  </wpt>
+  <wpt lat="19.354166700" lon="-154.978611100">
+    <name>Kalapana</name>
+    <cmt>Kalapana</cmt>
+    <desc>Kalapana</desc>
+  </wpt>
+  <wpt lat="19.445000000" lon="-155.797777800">
+    <name>Keanapa‘akai</name>
+    <cmt>Keanapa‘akai</cmt>
+    <desc>Keanapa‘akai</desc>
+  </wpt>
+  <wpt lat="21.926485000" lon="-159.529724000">
+    <name>Kalaheo</name>
+    <cmt>Kalaheo</cmt>
+    <desc>Kalaheo</desc>
+  </wpt>
+  <wpt lat="20.991117400" lon="-156.649138500">
+    <name>Kapalua</name>
+    <cmt>Kapalua</cmt>
+    <desc>Kapalua</desc>
+  </wpt>
+  <wpt lat="21.336113100" lon="-157.871633900">
+    <name>Kalihi</name>
+    <cmt>Kalihi</cmt>
+    <desc>Kalihi</desc>
+  </wpt>
+  <wpt lat="19.471666700" lon="-154.836388900">
+    <name>Pualaa</name>
+    <cmt>Pualaa</cmt>
+    <desc>Pualaa</desc>
+  </wpt>
+  <wpt lat="19.734707400" lon="-155.025526700">
+    <name>Keaukaha</name>
+    <cmt>Keaukaha</cmt>
+    <desc>Keaukaha</desc>
+  </wpt>
+  <wpt lat="21.380049400" lon="-157.736950300">
+    <name>Enchanted Lake</name>
+    <cmt>Enchanted Lake</cmt>
+    <desc>Enchanted Lake</desc>
+  </wpt>
+  <wpt lat="20.656666700" lon="-156.058611100">
+    <name>Kīpahulu</name>
+    <cmt>Kīpahulu</cmt>
+    <desc>Kīpahulu</desc>
+  </wpt>
+  <wpt lat="21.954166700" lon="-159.426666700">
+    <name>Kipu</name>
+    <cmt>Kipu</cmt>
+    <desc>Kipu</desc>
+  </wpt>
+  <wpt lat="21.997814600" lon="-159.765743900">
+    <name>Waieli</name>
+    <cmt>Waieli</cmt>
+    <desc>Waieli</desc>
+  </wpt>
+  <wpt lat="19.585022000" lon="-154.973145000">
+    <name>Hawaiian Paradise Park</name>
+    <cmt>Hawaiian Paradise Park</cmt>
+    <desc>Hawaiian Paradise Park</desc>
+  </wpt>
+  <wpt lat="19.644397000" lon="-154.985667700">
+    <name>Hā‘ena</name>
+    <cmt>Hā‘ena</cmt>
+    <desc>Hā‘ena</desc>
+  </wpt>
+  <wpt lat="20.894516400" lon="-156.682187100">
+    <name>Kapunakea</name>
+    <cmt>Kapunakea</cmt>
+    <desc>Kapunakea</desc>
+  </wpt>
+  <wpt lat="19.834722200" lon="-155.989166700">
+    <name>Ka‘ūpūlehu</name>
+    <cmt>Ka‘ūpūlehu</cmt>
+    <desc>Ka‘ūpūlehu</desc>
+  </wpt>
+  <wpt lat="21.048499000" lon="-156.875281400">
+    <name>Kamalō</name>
+    <cmt>Kamalō</cmt>
+    <desc>Kamalō</desc>
+  </wpt>
+  <wpt lat="19.788864000" lon="-155.093124900">
+    <name>Pāpa‘ikou</name>
+    <cmt>Pāpa‘ikou</cmt>
+    <desc>Pāpa‘ikou</desc>
+  </wpt>
+  <wpt lat="20.688888900" lon="-156.023888900">
+    <name>Koali</name>
+    <cmt>Koali</cmt>
+    <desc>Koali</desc>
+  </wpt>
+  <wpt lat="21.133824000" lon="-157.212296000">
+    <name>Maunaloa</name>
+    <cmt>Maunaloa</cmt>
+    <desc>Maunaloa</desc>
+  </wpt>
+  <wpt lat="21.382222200" lon="-157.933611100">
+    <name>Aiea</name>
+    <cmt>Aiea</cmt>
+    <desc>Aiea</desc>
+  </wpt>
+  <wpt lat="19.743168200" lon="-155.092100100">
+    <name>Wainaku</name>
+    <cmt>Wainaku</cmt>
+    <desc>Wainaku</desc>
+  </wpt>
+  <wpt lat="21.981111000" lon="-159.371111000">
+    <name>Līhuʻe</name>
+    <cmt>Līhuʻe</cmt>
+    <desc>Līhuʻe</desc>
+  </wpt>
+  <wpt lat="21.384722200" lon="-157.754166700">
+    <name>Pōhākupu</name>
+    <cmt>Pōhākupu</cmt>
+    <desc>Pōhākupu</desc>
+  </wpt>
+  <wpt lat="19.437695600" lon="-154.912006100">
+    <name>Kaueleau</name>
+    <cmt>Kaueleau</cmt>
+    <desc>Kaueleau</desc>
+  </wpt>
+  <wpt lat="20.655082200" lon="-156.439834100">
+    <name>Makena</name>
+    <cmt>Makena</cmt>
+    <desc>Makena</desc>
+  </wpt>
+  <wpt lat="21.928396000" lon="-159.485779000">
+    <name>Omao</name>
+    <cmt>Omao</cmt>
+    <desc>Omao</desc>
+  </wpt>
+  <wpt lat="21.485833300" lon="-157.856666700">
+    <name>Waiāhole</name>
+    <cmt>Waiāhole</cmt>
+    <desc>Waiāhole</desc>
+  </wpt>
+  <wpt lat="21.925848000" lon="-159.507751000">
+    <name>Lawai</name>
+    <cmt>Lawai</cmt>
+    <desc>Lawai</desc>
+  </wpt>
+  <wpt lat="19.020805200" lon="-155.581134300">
+    <name>Waikapuna</name>
+    <cmt>Waikapuna</cmt>
+    <desc>Waikapuna</desc>
+  </wpt>
+  <wpt lat="22.057522200" lon="-159.330585700">
+    <name>Papaloa</name>
+    <cmt>Papaloa</cmt>
+    <desc>Papaloa</desc>
+  </wpt>
+  <wpt lat="21.678471700" lon="-158.035268500">
+    <name>Waiale‘e</name>
+    <cmt>Waiale‘e</cmt>
+    <desc>Waiale‘e</desc>
+  </wpt>
+  <wpt lat="19.872643000" lon="-155.111847000">
+    <name>Honomu</name>
+    <cmt>Honomu</cmt>
+    <desc>Honomu</desc>
+  </wpt>
+  <wpt lat="21.287808800" lon="-157.710379300">
+    <name>Hawaii Kai</name>
+    <cmt>Hawaii Kai</cmt>
+    <desc>Hawaii Kai</desc>
+  </wpt>
+  <wpt lat="19.509444400" lon="-155.798333300">
+    <name>Papaloa</name>
+    <cmt>Papaloa</cmt>
+    <desc>Papaloa</desc>
+  </wpt>
+  <wpt lat="20.039805000" lon="-155.828018000">
+    <name>Kawaihae</name>
+    <cmt>Kawaihae</cmt>
+    <desc>Kawaihae</desc>
+  </wpt>
+  <wpt lat="19.362931700" lon="-154.970533600">
+    <name>Kaimu</name>
+    <cmt>Kaimu</cmt>
+    <desc>Kaimu</desc>
+  </wpt>
+  <wpt lat="19.538437000" lon="-155.052795000">
+    <name>Hawaiian Acres</name>
+    <cmt>Hawaiian Acres</cmt>
+    <desc>Hawaiian Acres</desc>
+  </wpt>
+  <wpt lat="21.575719000" lon="-158.124847000">
+    <name>Waialua</name>
+    <cmt>Waialua</cmt>
+    <desc>Waialua</desc>
+  </wpt>
+  <wpt lat="21.086666700" lon="-157.013611100">
+    <name>Kapa‘akea Colony</name>
+    <cmt>Kapa‘akea Colony</cmt>
+    <desc>Kapa‘akea Colony</desc>
+  </wpt>
+  <wpt lat="21.092500000" lon="-157.234444400">
+    <name>Hālena</name>
+    <cmt>Hālena</cmt>
+    <desc>Hālena</desc>
+  </wpt>
+  <wpt lat="20.193411000" lon="-155.899316400">
+    <name>Māhukona</name>
+    <cmt>Māhukona</cmt>
+    <desc>Māhukona</desc>
+  </wpt>
+  <wpt lat="20.111111100" lon="-155.598611200">
+    <name>Waipio</name>
+    <cmt>Waipio</cmt>
+    <desc>Waipio</desc>
+  </wpt>
+  <wpt lat="19.540000000" lon="-155.903333300">
+    <name>Waihou</name>
+    <cmt>Waihou</cmt>
+    <desc>Waihou</desc>
+  </wpt>
+  <wpt lat="21.446678000" lon="-158.185272000">
+    <name>Waiʻanae</name>
+    <cmt>Waiʻanae</cmt>
+    <desc>Waiʻanae</desc>
+  </wpt>
+  <wpt lat="19.896559900" lon="-155.902902900">
+    <name>Weliweli</name>
+    <cmt>Weliweli</cmt>
+    <desc>Weliweli</desc>
+  </wpt>
+  <wpt lat="21.418555000" lon="-157.804184000">
+    <name>Kāneʻohe</name>
+    <cmt>Kāneʻohe</cmt>
+    <desc>Kāneʻohe</desc>
+  </wpt>
+  <wpt lat="21.382194200" lon="-157.911557000">
+    <name>Hālawa Heights</name>
+    <cmt>Hālawa Heights</cmt>
+    <desc>Hālawa Heights</desc>
+  </wpt>
+  <wpt lat="19.726897100" lon="-155.065125200">
+    <name>Mokaoku</name>
+    <cmt>Mokaoku</cmt>
+    <desc>Mokaoku</desc>
+  </wpt>
+  <wpt lat="19.975673400" lon="-155.219071700">
+    <name>Pāpa‘aloa</name>
+    <cmt>Pāpa‘aloa</cmt>
+    <desc>Pāpa‘aloa</desc>
+  </wpt>
+  <wpt lat="19.480665600" lon="-155.936257100">
+    <name>Ka‘awaloa</name>
+    <cmt>Ka‘awaloa</cmt>
+    <desc>Ka‘awaloa</desc>
+  </wpt>
+  <wpt lat="21.450830800" lon="-158.009578300">
+    <name>Mililani</name>
+    <cmt>Mililani</cmt>
+    <desc>Mililani</desc>
+  </wpt>
+  <wpt lat="20.028000800" lon="-155.700452500">
+    <name>Waiaka</name>
+    <cmt>Waiaka</cmt>
+    <desc>Waiaka</desc>
+  </wpt>
+  <wpt lat="20.776659000" lon="-156.328583000">
+    <name>Pulehu</name>
+    <cmt>Pulehu</cmt>
+    <desc>Pulehu</desc>
+  </wpt>
+  <wpt lat="21.315603000" lon="-158.008804000">
+    <name>Ewa Beach</name>
+    <cmt>Ewa Beach</cmt>
+    <desc>Ewa Beach</desc>
+  </wpt>
+  <wpt lat="21.632500000" lon="-158.074166700">
+    <name>Kapaeloa</name>
+    <cmt>Kapaeloa</cmt>
+    <desc>Kapaeloa</desc>
+  </wpt>
+  <wpt lat="21.073480000" lon="-156.795914300">
+    <name>Pūko‘o</name>
+    <cmt>Pūko‘o</cmt>
+    <desc>Pūko‘o</desc>
+  </wpt>
+  <wpt lat="19.959827600" lon="-155.203451900">
+    <name>Welokā</name>
+    <cmt>Welokā</cmt>
+    <desc>Welokā</desc>
+  </wpt>
+  <wpt lat="20.907291400" lon="-156.374879500">
+    <name>School Village</name>
+    <cmt>School Village</cmt>
+    <desc>School Village</desc>
+  </wpt>
+  <wpt lat="21.389147000" lon="-158.152313000">
+    <name>Nānākuli</name>
+    <cmt>Nānākuli</cmt>
+    <desc>Nānākuli</desc>
+  </wpt>
+  <wpt lat="19.885776400" lon="-155.123032700">
+    <name>Wailea</name>
+    <cmt>Wailea</cmt>
+    <desc>Wailea</desc>
+  </wpt>
+  <wpt lat="21.691798300" lon="-158.013215200">
+    <name>Kawela</name>
+    <cmt>Kawela</cmt>
+    <desc>Kawela</desc>
+  </wpt>
+  <wpt lat="21.417777800" lon="-157.768888900">
+    <name>Kea‘alu</name>
+    <cmt>Kea‘alu</cmt>
+    <desc>Kea‘alu</desc>
+  </wpt>
+  <wpt lat="20.020452000" lon="-155.663910000">
+    <name>Waimea</name>
+    <cmt>Waimea</cmt>
+    <desc>Waimea</desc>
+  </wpt>
+  <wpt lat="19.506111100" lon="-154.848611100">
+    <name>Kapoho</name>
+    <cmt>Kapoho</cmt>
+    <desc>Kapoho</desc>
+  </wpt>
+  <wpt lat="19.604166700" lon="-155.011111100">
+    <name>Waipāhoehoe</name>
+    <cmt>Waipāhoehoe</cmt>
+    <desc>Waipāhoehoe</desc>
+  </wpt>
+  <wpt lat="21.457129300" lon="-157.832377800">
+    <name>Kahalu‘u</name>
+    <cmt>Kahalu‘u</cmt>
+    <desc>Kahalu‘u</desc>
+  </wpt>
+  <wpt lat="21.269576300" lon="-157.706605300">
+    <name>Portlock</name>
+    <cmt>Portlock</cmt>
+    <desc>Portlock</desc>
+  </wpt>
+  <wpt lat="20.919166700" lon="-156.384444400">
+    <name>Lower Paia</name>
+    <cmt>Lower Paia</cmt>
+    <desc>Lower Paia</desc>
+  </wpt>
+  <wpt lat="20.826084000" lon="-156.919785000">
+    <name>Lanai City</name>
+    <cmt>Lanai City</cmt>
+    <desc>Lanai City</desc>
+  </wpt>
+  <wpt lat="21.098273900" lon="-156.759090800">
+    <name>Waialua</name>
+    <cmt>Waialua</cmt>
+    <desc>Waialua</desc>
+  </wpt>
+  <wpt lat="20.882231600" lon="-156.341725000">
+    <name>Paholoi</name>
+    <cmt>Paholoi</cmt>
+    <desc>Paholoi</desc>
+  </wpt>
+  <wpt lat="21.406111100" lon="-157.802500000">
+    <name>Pū‘ōhala Village</name>
+    <cmt>Pū‘ōhala Village</cmt>
+    <desc>Pū‘ōhala Village</desc>
+  </wpt>
+  <wpt lat="19.680921300" lon="-156.017218500">
+    <name>Honokōhau</name>
+    <cmt>Honokōhau</cmt>
+    <desc>Honokōhau</desc>
+  </wpt>
+  <wpt lat="20.860351000" lon="-156.382880600">
+    <name>Keahua</name>
+    <cmt>Keahua</cmt>
+    <desc>Keahua</desc>
+  </wpt>
+  <wpt lat="19.546849000" lon="-155.932388000">
+    <name>Honalo</name>
+    <cmt>Honalo</cmt>
+    <desc>Honalo</desc>
+  </wpt>
+  <wpt lat="21.414444400" lon="-157.773888900">
+    <name>Mahinui</name>
+    <cmt>Mahinui</cmt>
+    <desc>Mahinui</desc>
+  </wpt>
+  <wpt lat="19.459182000" lon="-155.925583600">
+    <name>Ke‘ei</name>
+    <cmt>Ke‘ei</cmt>
+    <desc>Ke‘ei</desc>
+  </wpt>
+  <wpt lat="22.100277800" lon="-159.360555600">
+    <name>Kapahi</name>
+    <cmt>Kapahi</cmt>
+    <desc>Kapahi</desc>
+  </wpt>
+  <wpt lat="21.285019900" lon="-157.737082600">
+    <name>Niu Valley</name>
+    <cmt>Niu Valley</cmt>
+    <desc>Niu Valley</desc>
+  </wpt>
+  <wpt lat="21.096944400" lon="-157.017777800">
+    <name>Ranch Camp</name>
+    <cmt>Ranch Camp</cmt>
+    <desc>Ranch Camp</desc>
+  </wpt>
+  <wpt lat="21.628055600" lon="-158.080000000">
+    <name>Kawailoa Beach</name>
+    <cmt>Kawailoa Beach</cmt>
+    <desc>Kawailoa Beach</desc>
+  </wpt>
+  <wpt lat="20.240371700" lon="-155.860242000">
+    <name>Hikapoloa</name>
+    <cmt>Hikapoloa</cmt>
+    <desc>Hikapoloa</desc>
+  </wpt>
+  <wpt lat="19.713555300" lon="-155.136113400">
+    <name>Pi‘ihonua</name>
+    <cmt>Pi‘ihonua</cmt>
+    <desc>Pi‘ihonua</desc>
+  </wpt>
+  <wpt lat="21.984372100" lon="-160.057938100">
+    <name>Ki‘i</name>
+    <cmt>Ki‘i</cmt>
+    <desc>Ki‘i</desc>
+  </wpt>
+  <wpt lat="21.291733700" lon="-157.789293400">
+    <name>Maunalani Heights</name>
+    <cmt>Maunalani Heights</cmt>
+    <desc>Maunalani Heights</desc>
+  </wpt>
+  <wpt lat="19.931111100" lon="-155.394444400">
+    <name>Halepiula</name>
+    <cmt>Halepiula</cmt>
+    <desc>Halepiula</desc>
+  </wpt>
+  <wpt lat="19.557849000" lon="-155.105667000">
+    <name>Mountain View</name>
+    <cmt>Mountain View</cmt>
+    <desc>Mountain View</desc>
+  </wpt>
+  <wpt lat="20.858055600" lon="-156.506944400">
+    <name>Waikapu</name>
+    <cmt>Waikapu</cmt>
+    <desc>Waikapu</desc>
+  </wpt>
+  <wpt lat="21.876792000" lon="-159.454193000">
+    <name>Poipu</name>
+    <cmt>Poipu</cmt>
+    <desc>Poipu</desc>
+  </wpt>
+  <wpt lat="22.053618000" lon="-159.337822000">
+    <name>Wailua</name>
+    <cmt>Wailua</cmt>
+    <desc>Wailua</desc>
+  </wpt>
+  <wpt lat="21.838460700" lon="-160.242231400">
+    <name>Kamalino</name>
+    <cmt>Kamalino</cmt>
+    <desc>Kamalino</desc>
+  </wpt>
+  <wpt lat="20.917780400" lon="-156.348448300">
+    <name>Hamakuapoko</name>
+    <cmt>Hamakuapoko</cmt>
+    <desc>Hamakuapoko</desc>
+  </wpt>
+  <wpt lat="19.623814900" lon="-155.953637900">
+    <name>Hōlualoa</name>
+    <cmt>Hōlualoa</cmt>
+    <desc>Hōlualoa</desc>
+  </wpt>
+  <wpt lat="21.393623000" lon="-157.743759000">
+    <name>Kailua</name>
+    <cmt>Kailua</cmt>
+    <desc>Kailua</desc>
+  </wpt>
+  <wpt lat="19.087673500" lon="-155.800406600">
+    <name>Kona South Estates</name>
+    <cmt>Kona South Estates</cmt>
+    <desc>Kona South Estates</desc>
+  </wpt>
+  <wpt lat="19.544198100" lon="-154.905684400">
+    <name>Hawaiian Beaches</name>
+    <cmt>Hawaiian Beaches</cmt>
+    <desc>Hawaiian Beaches</desc>
+  </wpt>
+  <wpt lat="21.472879000" lon="-158.210678000">
+    <name>Mākaha</name>
+    <cmt>Mākaha</cmt>
+    <desc>Mākaha</desc>
+  </wpt>
+  <wpt lat="21.609712000" lon="-157.912249000">
+    <name>WPT281</name>
+    <cmt>WPT281</cmt>
+    <desc>WPT281</desc>
+  </wpt>
+  <wpt lat="21.346304000" lon="-157.721100000">
+    <name>Waimanalo</name>
+    <cmt>Waimanalo</cmt>
+    <desc>Waimanalo</desc>
+  </wpt>
+  <wpt lat="20.916610600" lon="-156.283716300">
+    <name>Peahi</name>
+    <cmt>Peahi</cmt>
+    <desc>Peahi</desc>
+  </wpt>
+  <wpt lat="19.250833300" lon="-155.609166700">
+    <name>Punaluu Kahawai</name>
+    <cmt>Punaluu Kahawai</cmt>
+    <desc>Punaluu Kahawai</desc>
+  </wpt>
+  <wpt lat="20.218508300" lon="-155.740855300">
+    <name>Niuli‘i</name>
+    <cmt>Niuli‘i</cmt>
+    <desc>Niuli‘i</desc>
+  </wpt>
+  <wpt lat="20.706425400" lon="-156.442429900">
+    <name>Keawakapu</name>
+    <cmt>Keawakapu</cmt>
+    <desc>Keawakapu</desc>
+  </wpt>
+  <wpt lat="22.216666700" lon="-159.483333300">
+    <name>Puupehu</name>
+    <cmt>Puupehu</cmt>
+    <desc>Puupehu</desc>
+  </wpt>
+  <wpt lat="21.933492000" lon="-159.647827000">
+    <name>Pakala Village</name>
+    <cmt>Pakala Village</cmt>
+    <desc>Pakala Village</desc>
+  </wpt>
+  <wpt lat="21.949722200" lon="-159.645000000">
+    <name>Kekupua</name>
+    <cmt>Kekupua</cmt>
+    <desc>Kekupua</desc>
+  </wpt>
+  <wpt lat="21.327718100" lon="-157.883306800">
+    <name>Kalihi Kai</name>
+    <cmt>Kalihi Kai</cmt>
+    <desc>Kalihi Kai</desc>
+  </wpt>
+  <wpt lat="21.087102500" lon="-156.775784800">
+    <name>Pauwalu</name>
+    <cmt>Pauwalu</cmt>
+    <desc>Pauwalu</desc>
+  </wpt>
+  <wpt lat="21.346944400" lon="-158.085833300">
+    <name>Makakilo City</name>
+    <cmt>Makakilo City</cmt>
+    <desc>Makakilo City</desc>
+  </wpt>
+  <wpt lat="20.888532200" lon="-156.684478400">
+    <name>Mala</name>
+    <cmt>Mala</cmt>
+    <desc>Mala</desc>
+  </wpt>
+  <wpt lat="19.843055600" lon="-155.721111100">
+    <name>Ke‘āmuku</name>
+    <cmt>Ke‘āmuku</cmt>
+    <desc>Ke‘āmuku</desc>
+  </wpt>
+  <wpt lat="20.913657500" lon="-156.513611800">
+    <name>Waiehu Village</name>
+    <cmt>Waiehu Village</cmt>
+    <desc>Waiehu Village</desc>
+  </wpt>
+  <wpt lat="21.379048800" lon="-157.923443400">
+    <name>Hālawa</name>
+    <cmt>Hālawa</cmt>
+    <desc>Hālawa</desc>
+  </wpt>
+  <wpt lat="19.575833300" lon="-155.861944400">
+    <name>Kaukahōkū</name>
+    <cmt>Kaukahōkū</cmt>
+    <desc>Kaukahōkū</desc>
+  </wpt>
+  <wpt lat="19.495640200" lon="-155.161509700">
+    <name>Glenwood</name>
+    <cmt>Glenwood</cmt>
+    <desc>Glenwood</desc>
+  </wpt>
+  <wpt lat="20.078505000" lon="-155.468903000">
+    <name>Honoka'a</name>
+    <cmt>Honoka'a</cmt>
+    <desc>Honoka'a</desc>
+  </wpt>
+  <wpt lat="21.189111200" lon="-156.982743100">
+    <name>Kalaupapa</name>
+    <cmt>Kalaupapa</cmt>
+    <desc>Kalaupapa</desc>
+  </wpt>
+  <wpt lat="19.755555600" lon="-155.975000000">
+    <name>Huehue</name>
+    <cmt>Huehue</cmt>
+    <desc>Huehue</desc>
+  </wpt>
+  <wpt lat="22.145277800" lon="-159.315555600">
+    <name>Anahola</name>
+    <cmt>Anahola</cmt>
+    <desc>Anahola</desc>
+  </wpt>
+  <wpt lat="19.851352500" lon="-155.923538200">
+    <name>Kīholo</name>
+    <cmt>Kīholo</cmt>
+    <desc>Kīholo</desc>
+  </wpt>
+  <wpt lat="20.639444400" lon="-156.125277800">
+    <name>Kaupō</name>
+    <cmt>Kaupō</cmt>
+    <desc>Kaupō</desc>
+  </wpt>
+  <wpt lat="20.812339400" lon="-156.621440200">
+    <name>Olowalu</name>
+    <cmt>Olowalu</cmt>
+    <desc>Olowalu</desc>
+  </wpt>
+  <wpt lat="19.202241000" lon="-155.478516000">
+    <name>Pahala</name>
+    <cmt>Pahala</cmt>
+    <desc>Pahala</desc>
+  </wpt>
+  <wpt lat="19.698738100" lon="-155.134022900">
+    <name>Akolea Plantation Estates</name>
+    <cmt>Akolea Plantation Estates</cmt>
+    <desc>Akolea Plantation Estates</desc>
+  </wpt>
+  <wpt lat="19.117065800" lon="-155.760866900">
+    <name>Hawaiian Ocean View Estates</name>
+    <cmt>Hawaiian Ocean View Estates</cmt>
+    <desc>Hawaiian Ocean View Estates</desc>
+  </wpt>
+  <wpt lat="20.892239300" lon="-156.215496000">
+    <name>Kailua</name>
+    <cmt>Kailua</cmt>
+    <desc>Kailua</desc>
+  </wpt>
+  <wpt lat="20.239006000" lon="-155.831451000">
+    <name>Hawi</name>
+    <cmt>Hawi</cmt>
+    <desc>Hawi</desc>
+  </wpt>
+  <wpt lat="19.497165400" lon="-154.828369400">
+    <name>Vacationland Hawaii</name>
+    <cmt>Vacationland Hawaii</cmt>
+    <desc>Vacationland Hawaii</desc>
+  </wpt>
+  <wpt lat="19.859656000" lon="-155.652675300">
+    <name>WPT312</name>
+    <cmt>WPT312</cmt>
+    <desc>WPT312</desc>
+  </wpt>
+  <wpt lat="19.505277800" lon="-155.860000000">
+    <name>Pawaina</name>
+    <cmt>Pawaina</cmt>
+    <desc>Pawaina</desc>
+  </wpt>
+  <wpt lat="19.063476200" lon="-155.797610400">
+    <name>Country Garden Estates</name>
+    <cmt>Country Garden Estates</cmt>
+    <desc>Country Garden Estates</desc>
+  </wpt>
+  <wpt lat="19.641941000" lon="-155.996933000">
+    <name>Kailua-Kona</name>
+    <cmt>Kailua-Kona</cmt>
+    <desc>Kailua-Kona</desc>
+  </wpt>
+  <wpt lat="21.393055600" lon="-157.962500000">
+    <name>Waiau</name>
+    <cmt>Waiau</cmt>
+    <desc>Waiau</desc>
+  </wpt>
+  <wpt lat="21.334354000" lon="-157.846057700">
+    <name>Nuuanu</name>
+    <cmt>Nuuanu</cmt>
+    <desc>Nuuanu</desc>
+  </wpt>
+  <wpt lat="19.397777800" lon="-155.776111100">
+    <name>Komakawai</name>
+    <cmt>Komakawai</cmt>
+    <desc>Komakawai</desc>
+  </wpt>
+  <wpt lat="21.281944400" lon="-157.752500000">
+    <name>‘Āina Haina</name>
+    <cmt>‘Āina Haina</cmt>
+    <desc>‘Āina Haina</desc>
+  </wpt>
+  <wpt lat="19.465555600" lon="-155.135555600">
+    <name>Fern Forest</name>
+    <cmt>Fern Forest</cmt>
+    <desc>Fern Forest</desc>
+  </wpt>
+  <wpt lat="19.983947300" lon="-155.236146800">
+    <name>Laupāhoehoe</name>
+    <cmt>Laupāhoehoe</cmt>
+    <desc>Laupāhoehoe</desc>
+  </wpt>
+  <wpt lat="19.603782000" lon="-155.057602000">
+    <name>Kurtistown</name>
+    <cmt>Kurtistown</cmt>
+    <desc>Kurtistown</desc>
+  </wpt>
+  <wpt lat="20.954166700" lon="-156.689722200">
+    <name>Honokowai</name>
+    <cmt>Honokowai</cmt>
+    <desc>Honokowai</desc>
+  </wpt>
+  <wpt lat="21.483102000" lon="-158.201065000">
+    <name>Mākaha Valley</name>
+    <cmt>Mākaha Valley</cmt>
+    <desc>Mākaha Valley</desc>
+  </wpt>
+  <wpt lat="20.811362700" lon="-156.612081900">
+    <name>Mopua</name>
+    <cmt>Mopua</cmt>
+    <desc>Mopua</desc>
+  </wpt>
+  <wpt lat="20.625555600" lon="-156.442500000">
+    <name>Paako</name>
+    <cmt>Paako</cmt>
+    <desc>Paako</desc>
+  </wpt>
+  <wpt lat="20.231275000" lon="-155.797806000">
+    <name>Kapaau</name>
+    <cmt>Kapaau</cmt>
+    <desc>Kapaau</desc>
+  </wpt>
+  <wpt lat="19.395291000" lon="-154.934645900">
+    <name>Kehena</name>
+    <cmt>Kehena</cmt>
+    <desc>Kehena</desc>
+  </wpt>
+  <wpt lat="20.849829000" lon="-156.138382000">
+    <name>Wailua</name>
+    <cmt>Wailua</cmt>
+    <desc>Wailua</desc>
+  </wpt>
+  <wpt lat="22.217500000" lon="-159.432500000">
+    <name>Kalihiwai</name>
+    <cmt>Kalihiwai</cmt>
+    <desc>Kalihiwai</desc>
+  </wpt>
+  <wpt lat="21.065071400" lon="-156.824581900">
+    <name>Kalua‘aha</name>
+    <cmt>Kalua‘aha</cmt>
+    <desc>Kalua‘aha</desc>
+  </wpt>
+  <wpt lat="20.737370000" lon="-156.334160900">
+    <name>Kaonoulu</name>
+    <cmt>Kaonoulu</cmt>
+    <desc>Kaonoulu</desc>
+  </wpt>
+  <wpt lat="21.400654700" lon="-157.947431700">
+    <name>Waimalu</name>
+    <cmt>Waimalu</cmt>
+    <desc>Waimalu</desc>
+  </wpt>
+  <wpt lat="19.046368800" lon="-155.780592900">
+    <name>Hawaiian Ranchos</name>
+    <cmt>Hawaiian Ranchos</cmt>
+    <desc>Hawaiian Ranchos</desc>
+  </wpt>
+  <wpt lat="21.942781000" lon="-159.629530900">
+    <name>Kaawanui Village</name>
+    <cmt>Kaawanui Village</cmt>
+    <desc>Kaawanui Village</desc>
+  </wpt>
+  <wpt lat="21.679124000" lon="-157.948380000">
+    <name>Kahuku</name>
+    <cmt>Kahuku</cmt>
+    <desc>Kahuku</desc>
+  </wpt>
+  <wpt lat="20.800000000" lon="-156.328055600">
+    <name>WPT337</name>
+    <cmt>WPT337</cmt>
+    <desc>WPT337</desc>
+  </wpt>
+  <wpt lat="20.689722200" lon="-156.020277800">
+    <name>Mū‘olea</name>
+    <cmt>Mū‘olea</cmt>
+    <desc>Mū‘olea</desc>
+  </wpt>
+  <wpt lat="20.030714200" lon="-155.348550600">
+    <name>Kūka‘iau</name>
+    <cmt>Kūka‘iau</cmt>
+    <desc>Kūka‘iau</desc>
+  </wpt>
+  <wpt lat="19.070945800" lon="-155.763913100">
+    <name>Hawaiian Ocean View</name>
+    <cmt>Hawaiian Ocean View</cmt>
+    <desc>Hawaiian Ocean View</desc>
+  </wpt>
+  <wpt lat="20.887041000" lon="-156.505051000">
+    <name>Wailuku</name>
+    <cmt>Wailuku</cmt>
+    <desc>Wailuku</desc>
+  </wpt>
+  <wpt lat="19.633914300" lon="-155.982791500">
+    <name>Hillcrest</name>
+    <cmt>Hillcrest</cmt>
+    <desc>Hillcrest</desc>
+  </wpt>
+  <wpt lat="20.013490000" lon="-155.284274300">
+    <name>Milo Village</name>
+    <cmt>Milo Village</cmt>
+    <desc>Milo Village</desc>
+  </wpt>
+  <wpt lat="21.155497900" lon="-157.038842400">
+    <name>Kualapu‘u</name>
+    <cmt>Kualapu‘u</cmt>
+    <desc>Kualapu‘u</desc>
+  </wpt>
+  <wpt lat="20.895000000" lon="-156.509722200">
+    <name>Happy Valley</name>
+    <cmt>Happy Valley</cmt>
+    <desc>Happy Valley</desc>
+  </wpt>
+  <wpt lat="21.430833300" lon="-157.810555600">
+    <name>He‘eia</name>
+    <cmt>He‘eia</cmt>
+    <desc>He‘eia</desc>
+  </wpt>
+  <wpt lat="19.948333300" lon="-155.461666700">
+    <name>Hanaipoe</name>
+    <cmt>Hanaipoe</cmt>
+    <desc>Hanaipoe</desc>
+  </wpt>
+  <wpt lat="21.093469000" lon="-157.024155000">
+    <name>Kaunakakai</name>
+    <cmt>Kaunakakai</cmt>
+    <desc>Kaunakakai</desc>
+  </wpt>
+  <wpt lat="20.888905600" lon="-156.296096600">
+    <name>Kaupakulua</name>
+    <cmt>Kaupakulua</cmt>
+    <desc>Kaupakulua</desc>
+  </wpt>
+  <wpt lat="21.420192800" lon="-158.173767800">
+    <name>Mā‘ili</name>
+    <cmt>Mā‘ili</cmt>
+    <desc>Mā‘ili</desc>
+  </wpt>
+  <wpt lat="22.074286000" lon="-159.320748000">
+    <name>Kapaʻa</name>
+    <cmt>Kapaʻa</cmt>
+    <desc>Kapaʻa</desc>
+  </wpt>
+  <wpt lat="21.982777800" lon="-159.720833300">
+    <name>Pokii</name>
+    <cmt>Pokii</cmt>
+    <desc>Pokii</desc>
+  </wpt>
+  <wpt lat="21.346405100" lon="-158.029075900">
+    <name>ʻEwa Gentry</name>
+    <cmt>ʻEwa Gentry</cmt>
+    <desc>ʻEwa Gentry</desc>
+  </wpt>
+  <wpt lat="20.956666700" lon="-156.537777800">
+    <name>Camp Maluhia</name>
+    <cmt>Camp Maluhia</cmt>
+    <desc>Camp Maluhia</desc>
+  </wpt>
+  <wpt lat="21.312951200" lon="-157.846103600">
+    <name>Punchbowl</name>
+    <cmt>Punchbowl</cmt>
+    <desc>Punchbowl</desc>
+  </wpt>
+  <wpt lat="21.365289900" lon="-158.041505600">
+    <name>Ho'opili</name>
+    <cmt>Ho'opili</cmt>
+    <desc>Ho'opili</desc>
+  </wpt>
+  <wpt lat="19.507222200" lon="-155.826388900">
+    <name>Pauahi</name>
+    <cmt>Pauahi</cmt>
+    <desc>Pauahi</desc>
+  </wpt>
+  <wpt lat="19.460833300" lon="-154.846944400">
+    <name>Pohoiki</name>
+    <cmt>Pohoiki</cmt>
+    <desc>Pohoiki</desc>
+  </wpt>
+  <wpt lat="20.230660400" lon="-155.780227000">
+    <name>Halaula</name>
+    <cmt>Halaula</cmt>
+    <desc>Halaula</desc>
+  </wpt>
+  <wpt lat="21.333950400" lon="-158.077185300">
+    <name>Kapolei</name>
+    <cmt>Kapolei</cmt>
+    <desc>Kapolei</desc>
+  </wpt>
+  <wpt lat="20.618055600" lon="-156.436111100">
+    <name>Kanahena</name>
+    <cmt>Kanahena</cmt>
+    <desc>Kanahena</desc>
+  </wpt>
+  <wpt lat="19.935396300" lon="-155.687515700">
+    <name>Old Saddle Road Junction</name>
+    <cmt>Old Saddle Road Junction</cmt>
+    <desc>Old Saddle Road Junction</desc>
+  </wpt>
+  <wpt lat="21.428333300" lon="-157.766111100">
+    <name>Māla‘e</name>
+    <cmt>Māla‘e</cmt>
+    <desc>Māla‘e</desc>
+  </wpt>
+  <wpt lat="20.921388900" lon="-156.496944400">
+    <name>Waiehu</name>
+    <cmt>Waiehu</cmt>
+    <desc>Waiehu</desc>
+  </wpt>
+  <wpt lat="21.926682100" lon="-159.619345500">
+    <name>Kapaka</name>
+    <cmt>Kapaka</cmt>
+    <desc>Kapaka</desc>
+  </wpt>
+  <wpt lat="21.472667900" lon="-157.998437400">
+    <name>Mililani Mauka</name>
+    <cmt>Mililani Mauka</cmt>
+    <desc>Mililani Mauka</desc>
+  </wpt>
+  <wpt lat="19.552222200" lon="-155.858333300">
+    <name>Monohaa</name>
+    <cmt>Monohaa</cmt>
+    <desc>Monohaa</desc>
+  </wpt>
+  <wpt lat="21.970833000" lon="-159.715000000">
+    <name>Kekaha</name>
+    <cmt>Kekaha</cmt>
+    <desc>Kekaha</desc>
+  </wpt>
+  <wpt lat="20.635277800" lon="-156.150277800">
+    <name>Pukaauhuhu</name>
+    <cmt>Pukaauhuhu</cmt>
+    <desc>Pukaauhuhu</desc>
+  </wpt>
+  <wpt lat="19.070555000" lon="-155.614471000">
+    <name>Waiohinu</name>
+    <cmt>Waiohinu</cmt>
+    <desc>Waiohinu</desc>
+  </wpt>
+  <wpt lat="21.278181800" lon="-157.764977600">
+    <name>Wailupe</name>
+    <cmt>Wailupe</cmt>
+    <desc>Wailupe</desc>
+  </wpt>
+  <wpt lat="20.876944400" lon="-156.673611100">
+    <name>Lunaville</name>
+    <cmt>Lunaville</cmt>
+    <desc>Lunaville</desc>
+  </wpt>
+  <wpt lat="19.425801000" lon="-155.908356000">
+    <name>Hōnaunau</name>
+    <cmt>Hōnaunau</cmt>
+    <desc>Hōnaunau</desc>
+  </wpt>
+  <wpt lat="21.098055600" lon="-157.026388900">
+    <name>Manila Camp</name>
+    <cmt>Manila Camp</cmt>
+    <desc>Manila Camp</desc>
+  </wpt>
+  <wpt lat="19.795277800" lon="-156.029444400">
+    <name>Makalawena</name>
+    <cmt>Makalawena</cmt>
+    <desc>Makalawena</desc>
+  </wpt>
+  <wpt lat="21.298197600" lon="-157.803742800">
+    <name>St Louis Heights</name>
+    <cmt>St Louis Heights</cmt>
+    <desc>St Louis Heights</desc>
+  </wpt>
+  <wpt lat="20.759639800" lon="-156.328376200">
+    <name>Waiakoa</name>
+    <cmt>Waiakoa</cmt>
+    <desc>Waiakoa</desc>
+  </wpt>
+  <wpt lat="20.727222200" lon="-155.987222200">
+    <name>Hōkū‘ula</name>
+    <cmt>Hōkū‘ula</cmt>
+    <desc>Hōkū‘ula</desc>
+  </wpt>
+  <wpt lat="19.647349400" lon="-156.010226200">
+    <name>Laniākea</name>
+    <cmt>Laniākea</cmt>
+    <desc>Laniākea</desc>
+  </wpt>
+  <wpt lat="21.372777800" lon="-157.770555600">
+    <name>Maunawili</name>
+    <cmt>Maunawili</cmt>
+    <desc>Maunawili</desc>
+  </wpt>
+  <wpt lat="20.837520000" lon="-156.914852500">
+    <name>Keomuku</name>
+    <cmt>Keomuku</cmt>
+    <desc>Keomuku</desc>
+  </wpt>
+  <wpt lat="19.942369000" lon="-155.787506000">
+    <name>Waikoloa Village</name>
+    <cmt>Waikoloa Village</cmt>
+    <desc>Waikoloa Village</desc>
+  </wpt>
+  <wpt lat="21.971388900" lon="-159.638888900">
+    <name>Nonopahu Village</name>
+    <cmt>Nonopahu Village</cmt>
+    <desc>Nonopahu Village</desc>
+  </wpt>
+  <wpt lat="19.201643900" lon="-155.902898300">
+    <name>Hoopuloa</name>
+    <cmt>Hoopuloa</cmt>
+    <desc>Hoopuloa</desc>
+  </wpt>
+  <wpt lat="19.194425800" lon="-155.903487500">
+    <name>Miloli‘i</name>
+    <cmt>Miloli‘i</cmt>
+    <desc>Miloli‘i</desc>
+  </wpt>
+  <wpt lat="20.758058600" lon="-156.310523200">
+    <name>Maui</name>
+    <cmt>Maui</cmt>
+    <desc>Maui</desc>
+  </wpt>
+  <wpt lat="19.627332500" lon="-155.564561900">
+    <name>Hawaii</name>
+    <cmt>Hawaii</cmt>
+    <desc>Hawaii</desc>
+  </wpt>
+  <wpt lat="22.060334200" lon="-159.503094000">
+    <name>Kauai</name>
+    <cmt>Kauai</cmt>
+    <desc>Kauai</desc>
+  </wpt>
+  <wpt lat="21.196541300" lon="-156.966620800">
+    <name>Kalawao</name>
+    <cmt>Kalawao</cmt>
+    <desc>Kalawao</desc>
+  </wpt>
+  <wpt lat="28.422645800" lon="-178.325100700">
+    <name>Kure Atoll</name>
+    <cmt>Kure Atoll</cmt>
+    <desc>Kure Atoll</desc>
+  </wpt>
+  <wpt lat="28.241753600" lon="-177.375430800">
+    <name>Midway Atoll</name>
+    <cmt>Midway Atoll</cmt>
+    <desc>Midway Atoll</desc>
+  </wpt>
+  <wpt lat="23.806695200" lon="-166.260857700">
+    <name>French Frigate Shoals</name>
+    <cmt>French Frigate Shoals</cmt>
+    <desc>French Frigate Shoals</desc>
+  </wpt>
+  <wpt lat="25.001478000" lon="-167.998077400">
+    <name>Gardner Pinnacles</name>
+    <cmt>Gardner Pinnacles</cmt>
+    <desc>Gardner Pinnacles</desc>
+  </wpt>
+  <wpt lat="27.854042000" lon="-175.871928500">
+    <name>Pearl and Hermes Reef</name>
+    <cmt>Pearl and Hermes Reef</cmt>
+    <desc>Pearl and Hermes Reef</desc>
+  </wpt>
+  <wpt lat="28.392640700" lon="-178.334236800">
+    <name>Sand Island</name>
+    <cmt>Sand Island</cmt>
+    <desc>Sand Island</desc>
+  </wpt>
+  <wpt lat="21.312903100" lon="-157.862800300">
+    <name>Chinatown</name>
+    <cmt>Chinatown</cmt>
+    <desc>Chinatown</desc>
+  </wpt>
+  <wpt lat="21.305900500" lon="-157.858226600">
+    <name>Hawaii Capital Historic District</name>
+    <cmt>Hawaii Capital Historic District</cmt>
+    <desc>Hawaii Capital Historic District</desc>
+  </wpt>
+  <wpt lat="21.292631700" lon="-157.831343400">
+    <name>McCully</name>
+    <cmt>McCully</cmt>
+    <desc>McCully</desc>
+  </wpt>
+  <wpt lat="21.293231500" lon="-157.798427300">
+    <name>Palolo</name>
+    <cmt>Palolo</cmt>
+    <desc>Palolo</desc>
+  </wpt>
+  <wpt lat="21.279276800" lon="-157.812830800">
+    <name>Kapahulu</name>
+    <cmt>Kapahulu</cmt>
+    <desc>Kapahulu</desc>
+  </wpt>
+  <wpt lat="21.298629500" lon="-157.857950900">
+    <name>Kaka‘ako</name>
+    <cmt>Kaka‘ako</cmt>
+    <desc>Kaka‘ako</desc>
+  </wpt>
+  <wpt lat="21.309384800" lon="-157.811816900">
+    <name>Manoa</name>
+    <cmt>Manoa</cmt>
+    <desc>Manoa</desc>
+  </wpt>
+  <wpt lat="21.295964500" lon="-157.841486500">
+    <name>Pawaa</name>
+    <cmt>Pawaa</cmt>
+    <desc>Pawaa</desc>
+  </wpt>
+  <wpt lat="21.306192800" lon="-157.878667900">
+    <name>Sand Island</name>
+    <cmt>Sand Island</cmt>
+    <desc>Sand Island</desc>
+  </wpt>
+  <wpt lat="21.365246300" lon="-158.082784500">
+    <name>Upper Makakilo</name>
+    <cmt>Upper Makakilo</cmt>
+    <desc>Upper Makakilo</desc>
+  </wpt>
+  <wpt lat="21.337351000" lon="-158.122101000">
+    <name>WPT406</name>
+    <cmt>WPT406</cmt>
+    <desc>WPT406</desc>
+  </wpt>
+  <wpt lat="21.327080200" lon="-157.856440200">
+    <name>Liliha</name>
+    <cmt>Liliha</cmt>
+    <desc>Liliha</desc>
+  </wpt>
+  <wpt lat="21.310165200" lon="-157.830446300">
+    <name>Makiki</name>
+    <cmt>Makiki</cmt>
+    <desc>Makiki</desc>
+  </wpt>
+  <wpt lat="21.292883300" lon="-157.822766100">
+    <name>Moiliili</name>
+    <cmt>Moiliili</cmt>
+    <desc>Moiliili</desc>
+  </wpt>
+  <wpt lat="21.366683500" lon="-157.893883800">
+    <name>Moanalua Valley</name>
+    <cmt>Moanalua Valley</cmt>
+    <desc>Moanalua Valley</desc>
+  </wpt>
+  <wpt lat="21.283742300" lon="-157.781533000">
+    <name>Wai-Kahala</name>
+    <cmt>Wai-Kahala</cmt>
+    <desc>Wai-Kahala</desc>
+  </wpt>
+  <wpt lat="21.350728400" lon="-157.911041300">
+    <name>Salt Lake</name>
+    <cmt>Salt Lake</cmt>
+    <desc>Salt Lake</desc>
+  </wpt>
+  <wpt lat="21.341027300" lon="-157.897561600">
+    <name>Mapunapuna</name>
+    <cmt>Mapunapuna</cmt>
+    <desc>Mapunapuna</desc>
+  </wpt>
+  <wpt lat="21.366027400" lon="-157.912346100">
+    <name>Red Hill</name>
+    <cmt>Red Hill</cmt>
+    <desc>Red Hill</desc>
+  </wpt>
+  <wpt lat="21.279356800" lon="-157.828571300">
+    <name>Waikiki</name>
+    <cmt>Waikiki</cmt>
+    <desc>Waikiki</desc>
+  </wpt>
+  <wpt lat="21.303177600" lon="-157.672409000">
+    <name>Kalama Valley</name>
+    <cmt>Kalama Valley</cmt>
+    <desc>Kalama Valley</desc>
+  </wpt>
+  <wpt lat="21.316428300" lon="-158.069565900">
+    <name>Kalaeloa</name>
+    <cmt>Kalaeloa</cmt>
+    <desc>Kalaeloa</desc>
+  </wpt>
+  <wpt lat="21.319043600" lon="-157.870233900">
+    <name>Iwilei</name>
+    <cmt>Iwilei</cmt>
+    <desc>Iwilei</desc>
+  </wpt>
+  <wpt lat="21.398242800" lon="-158.023829400">
+    <name>Village Park</name>
+    <cmt>Village Park</cmt>
+    <desc>Village Park</desc>
+  </wpt>
+  <wpt lat="21.347664400" lon="-157.862056600">
+    <name>Kalihi Valley</name>
+    <cmt>Kalihi Valley</cmt>
+    <desc>Kalihi Valley</desc>
+  </wpt>
+  <wpt lat="21.393487800" lon="-157.882463900">
+    <name>Halawa Valley</name>
+    <cmt>Halawa Valley</cmt>
+    <desc>Halawa Valley</desc>
+  </wpt>
+  <wpt lat="21.334874100" lon="-157.862399900">
+    <name>Kapalama</name>
+    <cmt>Kapalama</cmt>
+    <desc>Kapalama</desc>
+  </wpt>
+  <wpt lat="21.295955200" lon="-157.709428300">
+    <name>Hahaione</name>
+    <cmt>Hahaione</cmt>
+    <desc>Hahaione</desc>
+  </wpt>
+  <wpt lat="21.290035900" lon="-157.745433100">
+    <name>Hawaii Loa Ridge</name>
+    <cmt>Hawaii Loa Ridge</cmt>
+    <desc>Hawaii Loa Ridge</desc>
+  </wpt>
+  <wpt lat="19.534320000" lon="-154.999023100">
+    <name>Aina Pua</name>
+    <cmt>Aina Pua</cmt>
+    <desc>Aina Pua</desc>
+  </wpt>
+  <wpt lat="19.529272800" lon="-154.994989800">
+    <name>TIki Gardens</name>
+    <cmt>TIki Gardens</cmt>
+    <desc>TIki Gardens</desc>
+  </wpt>
+  <wpt lat="19.466968400" lon="-154.916560400">
+    <name>Leilani Estates</name>
+    <cmt>Leilani Estates</cmt>
+    <desc>Leilani Estates</desc>
+  </wpt>
+  <wpt lat="19.555908000" lon="-155.015030000">
+    <name>Orchidlands Estates</name>
+    <cmt>Orchidlands Estates</cmt>
+    <desc>Orchidlands Estates</desc>
+  </wpt>
+  <wpt lat="21.363489300" lon="-158.091717800">
+    <name>Makakilo Heights</name>
+    <cmt>Makakilo Heights</cmt>
+    <desc>Makakilo Heights</desc>
+  </wpt>
+  <wpt lat="21.348698900" lon="-158.052666000">
+    <name>East Kapolei</name>
+    <cmt>East Kapolei</cmt>
+    <desc>East Kapolei</desc>
+  </wpt>
+  <wpt lat="21.359202800" lon="-158.128978000">
+    <name>Kahe</name>
+    <cmt>Kahe</cmt>
+    <desc>Kahe</desc>
+  </wpt>
+  <wpt lat="21.996325700" lon="-160.098405500">
+    <name>Lehua Landing</name>
+    <cmt>Lehua Landing</cmt>
+    <desc>Lehua Landing</desc>
+  </wpt>
+  <wpt lat="21.867343500" lon="-160.232151700">
+    <name>Nonopapa</name>
+    <cmt>Nonopapa</cmt>
+    <desc>Nonopapa</desc>
+  </wpt>
+  <wpt lat="21.300884200" lon="-157.848080900">
+    <name>Makiki Kai</name>
+    <cmt>Makiki Kai</cmt>
+    <desc>Makiki Kai</desc>
+  </wpt>
+  <wpt lat="21.554394200" lon="-157.873405100">
+    <name>Kahana</name>
+    <cmt>Kahana</cmt>
+    <desc>Kahana</desc>
+  </wpt>
+  <wpt lat="21.409006200" lon="-157.993376200">
+    <name>Crestview</name>
+    <cmt>Crestview</cmt>
+    <desc>Crestview</desc>
+  </wpt>
+  <wpt lat="21.386930900" lon="-157.947501300">
+    <name>Pearlridge</name>
+    <cmt>Pearlridge</cmt>
+    <desc>Pearlridge</desc>
+  </wpt>
+  <wpt lat="21.323519100" lon="-157.842058500">
+    <name>Pacific Heights</name>
+    <cmt>Pacific Heights</cmt>
+    <desc>Pacific Heights</desc>
+  </wpt>
+  <wpt lat="21.465424200" lon="-158.011819500">
+    <name>Waipio Acres</name>
+    <cmt>Waipio Acres</cmt>
+    <desc>Waipio Acres</desc>
+  </wpt>
+  <wpt lat="20.870379700" lon="-156.670307200">
+    <name>Wainee</name>
+    <cmt>Wainee</cmt>
+    <desc>Wainee</desc>
+  </wpt>
+  <wpt lat="19.511941600" lon="-155.099273900">
+    <name>Kopua Farm Lots</name>
+    <cmt>Kopua Farm Lots</cmt>
+    <desc>Kopua Farm Lots</desc>
+  </wpt>
+  <wpt lat="19.441270100" lon="-155.184012100">
+    <name>Royal Hawaiian Estates</name>
+    <cmt>Royal Hawaiian Estates</cmt>
+    <desc>Royal Hawaiian Estates</desc>
+  </wpt>
+  <wpt lat="19.429478500" lon="-155.218440800">
+    <name>Mauna Loa Estates</name>
+    <cmt>Mauna Loa Estates</cmt>
+    <desc>Mauna Loa Estates</desc>
+  </wpt>
+  <wpt lat="20.120404500" lon="-155.784962000">
+    <name>Kahua Ranch</name>
+    <cmt>Kahua Ranch</cmt>
+    <desc>Kahua Ranch</desc>
+  </wpt>
+  <wpt lat="20.090221000" lon="-155.831160400">
+    <name>Kohala Ranch</name>
+    <cmt>Kohala Ranch</cmt>
+    <desc>Kohala Ranch</desc>
+  </wpt>
+  <wpt lat="20.245092300" lon="-155.770570400">
+    <name>Kauhola Point</name>
+    <cmt>Kauhola Point</cmt>
+    <desc>Kauhola Point</desc>
+  </wpt>
+  <wpt lat="20.514670300" lon="-156.682569100">
+    <name>Honokanai'a Base Camp</name>
+    <cmt>Honokanai'a Base Camp</cmt>
+    <desc>Honokanai'a Base Camp</desc>
+  </wpt>
+  <wpt lat="19.941745800" lon="-155.865686200">
+    <name>Mauna Lani Resort</name>
+    <cmt>Mauna Lani Resort</cmt>
+    <desc>Mauna Lani Resort</desc>
+  </wpt>
+  <wpt lat="19.637018300" lon="-155.048760600">
+    <name>Shipman Business Park</name>
+    <cmt>Shipman Business Park</cmt>
+    <desc>Shipman Business Park</desc>
+  </wpt>
+  <wpt lat="21.406770000" lon="-158.164181800">
+    <name>Sea Country</name>
+    <cmt>Sea Country</cmt>
+    <desc>Sea Country</desc>
+  </wpt>
+  <wpt lat="20.061775100" lon="-155.496389900">
+    <name>Mauna Kea Tea Garden</name>
+    <cmt>Mauna Kea Tea Garden</cmt>
+    <desc>Mauna Kea Tea Garden</desc>
+  </wpt>
+  <wpt lat="19.725671200" lon="-155.041094600">
+    <name>Keaukaha Hawaiian Home Land</name>
+    <cmt>Keaukaha Hawaiian Home Land</cmt>
+    <desc>Keaukaha Hawaiian Home Land</desc>
+  </wpt>
+  <wpt lat="19.727701100" lon="-155.007201900">
+    <name>Keaukaha Hawaiian Home Land</name>
+    <cmt>Keaukaha Hawaiian Home Land</cmt>
+    <desc>Keaukaha Hawaiian Home Land</desc>
+  </wpt>
+  <wpt lat="19.704650100" lon="-155.032237300">
+    <name>Waiakea Hawaiian Home Land</name>
+    <cmt>Waiakea Hawaiian Home Land</cmt>
+    <desc>Waiakea Hawaiian Home Land</desc>
+  </wpt>
+  <wpt lat="19.709254200" lon="-155.049036100">
+    <name>Waiakea Hawaiian Home Land</name>
+    <cmt>Waiakea Hawaiian Home Land</cmt>
+    <desc>Waiakea Hawaiian Home Land</desc>
+  </wpt>
+  <wpt lat="19.686573600" lon="-155.049901100">
+    <name>Panaewa Hawaiian Home Land</name>
+    <cmt>Panaewa Hawaiian Home Land</cmt>
+    <desc>Panaewa Hawaiian Home Land</desc>
+  </wpt>
+  <wpt lat="19.920880600" lon="-155.881760900">
+    <name>Waikoloa Beach Resort</name>
+    <cmt>Waikoloa Beach Resort</cmt>
+    <desc>Waikoloa Beach Resort</desc>
+  </wpt>
+  <wpt lat="20.707674300" lon="-156.257584100">
+    <name>Haleakala Observatories</name>
+    <cmt>Haleakala Observatories</cmt>
+    <desc>Haleakala Observatories</desc>
+  </wpt>
+  <wpt lat="19.996579000" lon="-155.827332000">
+    <name>Hapuna Beach Prince Hotel Resort</name>
+    <cmt>Hapuna Beach Prince Hotel Resort</cmt>
+    <desc>Hapuna Beach Prince Hotel Resort</desc>
+  </wpt>
+  <wpt lat="20.023393300" lon="-155.813118200">
+    <name>Waikui</name>
+    <cmt>Waikui</cmt>
+    <desc>Waikui</desc>
+  </wpt>
+  <wpt lat="20.864538400" lon="-156.670908500">
+    <name>Puunoa</name>
+    <cmt>Puunoa</cmt>
+    <desc>Puunoa</desc>
+  </wpt>
+  <wpt lat="21.884695300" lon="-159.493440600">
+    <name>Spouting Horn</name>
+    <cmt>Spouting Horn</cmt>
+    <desc>Spouting Horn</desc>
+  </wpt>
+  <wpt lat="19.818831000" lon="-156.001188300">
+    <name>Kikaua Point</name>
+    <cmt>Kikaua Point</cmt>
+    <desc>Kikaua Point</desc>
+  </wpt>
+  <wpt lat="21.404137200" lon="-158.012629600">
+    <name>Waikele Business Center</name>
+    <cmt>Waikele Business Center</cmt>
+    <desc>Waikele Business Center</desc>
+  </wpt>
+  <wpt lat="20.806282400" lon="-156.364923700">
+    <name>Surfing Goat Dairy</name>
+    <cmt>Surfing Goat Dairy</cmt>
+    <desc>Surfing Goat Dairy</desc>
+  </wpt>
+  <wpt lat="22.220634800" lon="-159.565327300">
+    <name>Ha'ena Beach</name>
+    <cmt>Ha'ena Beach</cmt>
+    <desc>Ha'ena Beach</desc>
+  </wpt>
+  <wpt lat="22.223644400" lon="-159.579842000">
+    <name>WPT467</name>
+    <cmt>WPT467</cmt>
+    <desc>WPT467</desc>
+  </wpt>
+  <wpt lat="22.172568200" lon="-159.658983300">
+    <name>Kalalau Beach</name>
+    <cmt>Kalalau Beach</cmt>
+    <desc>Kalalau Beach</desc>
+  </wpt>
+  <wpt lat="22.206539200" lon="-159.339004800">
+    <name>Larsen's Beach</name>
+    <cmt>Larsen's Beach</cmt>
+    <desc>Larsen's Beach</desc>
+  </wpt>
+  <wpt lat="21.468151000" lon="-157.960511000">
+    <name>Honolulu</name>
+    <cmt>Honolulu</cmt>
+    <desc>Honolulu</desc>
+  </wpt>
+  <wpt lat="20.851246800" lon="-156.829223700">
+    <name>Keomoku Village</name>
+    <cmt>Keomoku Village</cmt>
+    <desc>Keomoku Village</desc>
+  </wpt>
+  <wpt lat="21.187847300" lon="-156.966173900">
+    <name>Kauhakō Crater</name>
+    <cmt>Kauhakō Crater</cmt>
+    <desc>Kauhakō Crater</desc>
+  </wpt>
+  <wpt lat="19.449468000" lon="-155.875168000">
+    <name>Honananu Farm &amp; Eco-Retreat</name>
+    <cmt>Honananu Farm &amp; Eco-Retreat</cmt>
+    <desc>Honananu Farm &amp; Eco-Retreat</desc>
+  </wpt>
+  <wpt lat="19.422842000" lon="-155.911457900">
+    <name>Two Step Beach</name>
+    <cmt>Two Step Beach</cmt>
+    <desc>Two Step Beach</desc>
+  </wpt>
+  <wpt lat="21.311006200" lon="-157.648950800">
+    <name>Makapuʻu Point</name>
+    <cmt>Makapuʻu Point</cmt>
+    <desc>Makapuʻu Point</desc>
+  </wpt>
+  <wpt lat="21.281604600" lon="-157.723602800">
+    <name>Paiko Peninsula</name>
+    <cmt>Paiko Peninsula</cmt>
+    <desc>Paiko Peninsula</desc>
+  </wpt>
+  <wpt lat="21.293069200" lon="-157.658110000">
+    <name>Kaloko</name>
+    <cmt>Kaloko</cmt>
+    <desc>Kaloko</desc>
+  </wpt>
+  <wpt lat="21.304028100" lon="-157.685671900">
+    <name>Kamiloiki Valley</name>
+    <cmt>Kamiloiki Valley</cmt>
+    <desc>Kamiloiki Valley</desc>
+  </wpt>
+  <wpt lat="21.305861600" lon="-157.696151500">
+    <name>Kamilonui Valley</name>
+    <cmt>Kamilonui Valley</cmt>
+    <desc>Kamilonui Valley</desc>
+  </wpt>
+  <wpt lat="21.901580500" lon="-160.202999100">
+    <name>Pu'uwai</name>
+    <cmt>Pu'uwai</cmt>
+    <desc>Pu'uwai</desc>
+  </wpt>
+  <wpt lat="20.889410100" lon="-156.472711800">
+    <name>Kahului</name>
+    <cmt>Kahului</cmt>
+    <desc>Kahului</desc>
+  </wpt>
+  <wpt lat="20.795458100" lon="-156.485256200">
+    <name>Keālia Boardwalk Entrance</name>
+    <cmt>Keālia Boardwalk Entrance</cmt>
+    <desc>Keālia Boardwalk Entrance</desc>
+  </wpt>
+  <wpt lat="20.702223700" lon="-156.445710000">
+    <name>Keawakapu I Beach</name>
+    <cmt>Keawakapu I Beach</cmt>
+    <desc>Keawakapu I Beach</desc>
+  </wpt>
+  <wpt lat="20.695956000" lon="-156.444433200">
+    <name>Keawakapu II Beach</name>
+    <cmt>Keawakapu II Beach</cmt>
+    <desc>Keawakapu II Beach</desc>
+  </wpt>
+  <wpt lat="20.892309400" lon="-156.477525300">
+    <name>Maui Swap Meet</name>
+    <cmt>Maui Swap Meet</cmt>
+    <desc>Maui Swap Meet</desc>
+  </wpt>
+  <wpt lat="21.353255600" lon="-157.891948500">
+    <name>Moanalua Gardens</name>
+    <cmt>Moanalua Gardens</cmt>
+    <desc>Moanalua Gardens</desc>
+  </wpt>
+  <wpt lat="19.020718800" lon="-155.663704800">
+    <name>Kama'oa Homesteads</name>
+    <cmt>Kama'oa Homesteads</cmt>
+    <desc>Kama'oa Homesteads</desc>
+  </wpt>
+  <wpt lat="18.954175700" lon="-155.706184500">
+    <name>Ka'ili'kii</name>
+    <cmt>Ka'ili'kii</cmt>
+    <desc>Ka'ili'kii</desc>
+  </wpt>
+  <wpt lat="20.711188400" lon="-156.233249600">
+    <name>Split Rock</name>
+    <cmt>Split Rock</cmt>
+    <desc>Split Rock</desc>
+  </wpt>
+  <wpt lat="21.403310800" lon="-158.029654000">
+    <name>Royal Kunia</name>
+    <cmt>Royal Kunia</cmt>
+    <desc>Royal Kunia</desc>
+  </wpt>
+</gpx>

@@ -31,10 +31,10 @@
 #include "defs.h"
 #include "garmin_tables.h"
 #include "jeeps/gpsmath.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
 #include <QtCore/QFile>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "exif"
 
@@ -143,10 +143,10 @@ static char* opt_filename, *opt_overwrite, *opt_frame, *opt_name;
 static uint8_t writer_gps_tag_version[4] = {2, 0, 0, 0};
 
 arglist_t exif_args[] = {
-  { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX },
-  { "frame", &opt_frame, "Time-frame (in seconds)", "10", ARGTYPE_INT, "0", NULL },
-  { "name", &opt_name, "Locate waypoint for tagging by this name", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-  { "overwrite", &opt_overwrite, "!OVERWRITE! the original file. Default=N", "N", ARGTYPE_BOOL, ARG_NOMINMAX },
+  { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  { "frame", &opt_frame, "Time-frame (in seconds)", "10", ARGTYPE_INT, "0", NULL, nullptr },
+  { "name", &opt_name, "Locate waypoint for tagging by this name", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  { "overwrite", &opt_overwrite, "!OVERWRITE! the original file. Default=N", "N", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
 
@@ -325,7 +325,7 @@ exif_release_ifd(exif_ifd_t* ifd)
 }
 
 static void
-exif_release_apps(void)
+exif_release_apps()
 {
   queue* e0, *t0;
 
@@ -369,7 +369,7 @@ exif_ifd_size(exif_ifd_t* ifd)
 }
 
 static exif_app_t*
-exif_load_apps(void)
+exif_load_apps()
 {
   exif_app_t* exif_app = NULL;
 
@@ -1242,7 +1242,7 @@ exif_write_ifd(const exif_ifd_t* ifd, const char next, gbfile* fout)
 }
 
 static void
-exif_write_apps(void)
+exif_write_apps()
 {
   queue* e0, *t0;
 
@@ -1348,14 +1348,14 @@ exif_rd_init(const QString& fname)
 }
 
 static void
-exif_rd_deinit(void)
+exif_rd_deinit()
 {
   exif_release_apps();
   gbfclose(fin);
 }
 
 static void
-exif_read(void)
+exif_read()
 {
   uint16_t soi;
   Waypoint* wpt;
@@ -1404,11 +1404,11 @@ exif_wr_init(const QString& fname)
 }
 
 static void
-exif_wr_deinit(void)
+exif_wr_deinit()
 {
 
   exif_release_apps();
-  QString tmpname = QString::fromLocal8Bit(fout->name);
+  QString tmpname = QString(fout->name);
   gbfclose(fout);
 
   if (exif_success) {
@@ -1424,7 +1424,7 @@ exif_wr_deinit(void)
 }
 
 static void
-exif_write(void)
+exif_write()
 {
   time_t frame;
 

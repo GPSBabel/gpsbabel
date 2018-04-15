@@ -20,8 +20,8 @@
 
 #include "defs.h"
 #include "csv_util.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "PocketFMS waypoint text file format"
 
@@ -55,7 +55,7 @@ double wppos_to_dec(char* value)
 }
 
 static void
-data_read(void)
+data_read()
 {
   char* buff;
   int linecount = 0;
@@ -90,7 +90,7 @@ data_read(void)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -124,13 +124,13 @@ enigma_waypt_disp(const Waypoint* wpt)
 }
 
 static void
-data_write(void)
+data_write()
 {
   waypt_disp_all(enigma_waypt_disp);
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
 }
@@ -151,4 +151,6 @@ ff_vecs_t pocketfms_wp_vecs = {
   NULL,
   NULL,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

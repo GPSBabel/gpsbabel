@@ -20,8 +20,8 @@
 //  USA
 //
 //------------------------------------------------------------------------
-#include <math.h>
 #include "latlng.h"
+#include <cmath>
 
 
 // copied from the web somewhere.

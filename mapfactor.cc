@@ -19,9 +19,9 @@
 #include "defs.h"
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
+#include <QtCore/QDebug>
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
-#include <QtCore/QDebug>
 
 static gpsbabel::File* oqfile;
 static QXmlStreamWriter* writer;
@@ -74,7 +74,7 @@ mapfactor_rd_init(const QString& fname)
 }
 
 static void
-mapfactor_read(void)
+mapfactor_read()
 {
   gpsbabel::File file(mapfactor_read_fname);
   file.open(QIODevice::ReadOnly);
@@ -92,7 +92,7 @@ mapfactor_read(void)
 
 
 static void
-mapfactor_rd_deinit(void)
+mapfactor_rd_deinit()
 {
 
 }
@@ -113,7 +113,7 @@ mapfactor_wr_init(const QString& fname)
 }
 
 static void
-mapfactor_wr_deinit(void)
+mapfactor_wr_deinit()
 {
   writer->writeEndDocument();
   delete writer;
@@ -135,7 +135,7 @@ mapfactor_waypt_pr(const Waypoint* waypointp)
 }
 
 static void
-mapfactor_write(void)
+mapfactor_write()
 {
   writer->writeStartElement("favourites");
   writer->writeAttribute("version", "1");
@@ -158,4 +158,6 @@ ff_vecs_t mapfactor_vecs = {
   NULL,
   mapfactor_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

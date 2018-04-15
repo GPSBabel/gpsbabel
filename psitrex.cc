@@ -21,9 +21,9 @@
 
 #include "defs.h"
 #include "garmin_tables.h"
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "PSITREX"
 
@@ -185,7 +185,7 @@ psit_rd_init(const QString& fname)
 }
 
 static void
-psit_rd_deinit(void)
+psit_rd_deinit()
 {
   gbfclose(psit_file_in);
 }
@@ -197,7 +197,7 @@ psit_wr_init(const QString& fname)
 }
 
 static void
-psit_wr_deinit(void)
+psit_wr_deinit()
 {
   gbfclose(psit_file_out);
 }
@@ -293,7 +293,7 @@ psit_isKnownToken(char* buf)
  * MRCB
  */
 static void
-psit_waypoint_r(gbfile* psit_file, Waypoint** wpt)
+psit_waypoint_r(gbfile* psit_file, Waypoint**)
 {
   int		garmin_icon_num;
 
@@ -363,7 +363,7 @@ psit_waypoint_w(gbfile* psit_file, const Waypoint* wpt)
 
   icon = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
 
-  if (get_cache_icon(wpt) && wpt->icon_descr.compare("Geocache Found") != 0) {
+  if (get_cache_icon(wpt) && wpt->icon_descr.compare(QLatin1String("Geocache Found")) != 0) {
     icon = gt_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
   }
 
@@ -509,7 +509,7 @@ psit_routehdr_w_wrapper(const route_head* rte)
  * MRCB
  */
 static void
-psit_track_r(gbfile* psit_file, route_head** trk)
+psit_track_r(gbfile* psit_file, route_head**)
 {
   char trkname[256];
   unsigned int trk_num;
@@ -695,7 +695,7 @@ psit_trackdatapoint_w_wrapper(const Waypoint* wpt)
 
 
 static void
-psit_read(void)
+psit_read()
 {
   Waypoint*	wpt;
   route_head*	rte;
@@ -748,13 +748,13 @@ psit_read(void)
 }
 
 static void
-psit_noop(const route_head* wp)
+psit_noop(const route_head*)
 {
   /* no-op */
 }
 
 void
-psit_write(void)
+psit_write()
 {
   int short_length;
 
@@ -798,4 +798,6 @@ ff_vecs_t psit_vecs = {
   NULL,
   psit_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

@@ -23,9 +23,9 @@
 
 
 #include "defs.h"
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "skyforce"
 
@@ -243,14 +243,14 @@ skyforce_rd_init(const QString& fname)
 
 
 static void
-skyforce_rd_deinit(void)
+skyforce_rd_deinit()
 {
   gbfclose(fin);
 }
 
 
 static void
-skyforce_read(void)
+skyforce_read()
 {
   char* str;
   route_head* rte, *trk;
@@ -337,7 +337,7 @@ skyforce_wr_init(const QString& fname)
 
 
 static void
-skyforce_wr_deinit(void)
+skyforce_wr_deinit()
 {
   mkshort_del_handle(&short_h);
   gbfclose(fout);
@@ -345,7 +345,7 @@ skyforce_wr_deinit(void)
 
 
 static void
-skyforce_write(void)
+skyforce_write()
 {
   switch (global_opts.objective) {	/* We can only write one data type at a time */
 
@@ -388,6 +388,8 @@ ff_vecs_t skyforce_vecs = {
   NULL,
   skyforce_args,
   CET_CHARSET_ASCII, 1
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /**************************************************************************/

@@ -51,15 +51,15 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "csv_util.h"
-#include "strptime.h"
-#include "jeeps/gpsmath.h"
 #include "grtcirc.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include "jeeps/gpsmath.h"
+#include "strptime.h"
 #include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <QtCore/QDateTime>
 #include <QtCore/QString>
-#include <QtCore/QDebug>
+
 #define MYNAME "gopal"
 
 static gbfile* fin, *fout;
@@ -187,8 +187,7 @@ gopal_read()
   qtx.setTimeSpec(Qt::UTC);
   qtx.setTime_t(tx);
   route->rte_name = "Tracklog ";
-  route->rte_name += qtx.toString("ddd MMM M hh:mm:ss yyyy");
-
+  route->rte_name += qtx.toString(Qt::ISODate);
   route_add_head(route);
 
   line=0;

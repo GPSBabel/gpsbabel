@@ -5,47 +5,47 @@
   <trk>
     <trkseg>
       <trkpt lat="41.000000000" lon="-85.000000000">
-        <ele>1.000000</ele>
+        <ele>1.000</ele>
         <time>2002-05-25T17:06:00Z</time>
       </trkpt>
       <trkpt lat="40.862257825" lon="-88.155776909">
-        <ele>0.900000</ele>
+        <ele>0.900</ele>
         <time>2002-05-25T17:06:01Z</time>
       </trkpt>
       <trkpt lat="40.638946146" lon="-91.294405923">
-        <ele>0.800000</ele>
+        <ele>0.800</ele>
         <time>2002-05-25T17:06:02Z</time>
       </trkpt>
       <trkpt lat="40.331303026" lon="-94.408182419">
-        <ele>0.700000</ele>
+        <ele>0.700</ele>
         <time>2002-05-25T17:06:03Z</time>
       </trkpt>
       <trkpt lat="39.940999029" lon="-97.489936759">
-        <ele>0.600000</ele>
+        <ele>0.600</ele>
         <time>2002-05-25T17:06:04Z</time>
       </trkpt>
       <trkpt lat="39.470096927" lon="-100.533164048">
-        <ele>0.500000</ele>
+        <ele>0.500</ele>
         <time>2002-05-25T17:06:05Z</time>
       </trkpt>
       <trkpt lat="38.921004360" lon="-103.532123101">
-        <ele>0.400000</ele>
+        <ele>0.400</ele>
         <time>2002-05-25T17:06:06Z</time>
       </trkpt>
       <trkpt lat="38.296421870" lon="-106.481902576">
-        <ele>0.300000</ele>
+        <ele>0.300</ele>
         <time>2002-05-25T17:06:07Z</time>
       </trkpt>
       <trkpt lat="37.599288785" lon="-109.378454698">
-        <ele>0.200000</ele>
+        <ele>0.200</ele>
         <time>2002-05-25T17:06:08Z</time>
       </trkpt>
       <trkpt lat="36.832729197" lon="-112.218598989">
-        <ele>0.100000</ele>
+        <ele>0.100</ele>
         <time>2002-05-25T17:06:09Z</time>
       </trkpt>
       <trkpt lat="36.000000000" lon="-115.000000000">
-        <ele>0.000000</ele>
+        <ele>0.000</ele>
         <time>2002-05-25T17:06:10Z</time>
       </trkpt>
     </trkseg>

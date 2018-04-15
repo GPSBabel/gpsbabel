@@ -23,17 +23,17 @@
 #include "cet_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
-#include "src/core/logging.h"
 #include "src/core/file.h"
+#include "src/core/logging.h"
 #include "src/core/xmlstreamwriter.h"
 #include "src/core/xmltag.h"
 
-#include <QtCore/QXmlStreamReader>
-#include <QtCore/QRegExp>
 #include <QtCore/QDateTime>
 #include <QtCore/QDebug>
+#include <QtCore/QRegExp>
+#include <QtCore/QXmlStreamReader>
 
-#include <math.h>
+#include <cmath>
 
 
 static QXmlStreamReader* reader;
@@ -42,7 +42,9 @@ static QString cdatastr;
 static char* opt_logpoint = NULL;
 static char* opt_humminbirdext = NULL;
 static char* opt_garminext = NULL;
+static char* opt_elevation_precision = NULL;
 static int logpoint_ct = 0;
+static int elevation_precision;
 
 // static char* gpx_version = NULL;
 QString gpx_version;
@@ -54,7 +56,7 @@ static QString current_tag;
 
 static Waypoint* wpt_tmp;
 static UrlLink* link_;
-static int cache_descr_is_html;
+static bool cache_descr_is_html;
 static gpsbabel::File* iqfile;
 static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
@@ -246,7 +248,7 @@ static inline QString toString(float f)
  * this allows gpx:wpt names to overlap gpx:rtept names, etc.
  */
 static void
-gpx_reset_short_handle(void)
+gpx_reset_short_handle()
 {
   if (mkshort_handle != NULL) {
     mkshort_del_handle(&mkshort_handle);
@@ -436,7 +438,7 @@ get_tag(const QString& t, int* passthrough)
 }
 
 static void
-prescan_tags(void)
+prescan_tags()
 {
   tag_mapping* tm;
   for (tm = tag_path_map; tm->tag_type_ != 0; tm++) {
@@ -461,9 +463,9 @@ tag_gpx(const QXmlStreamAttributes& attr)
    * that use them to the writer.
    */
   const QXmlStreamNamespaceDeclarations ns = reader->namespaceDeclarations();
-  for (int i = 0; i < ns.size(); ++i) {
-    QString prefix = ns[i].prefix().toString();
-    QString namespaceUri = ns[i].namespaceUri().toString();
+  for (const auto & n : ns) {
+    QString prefix = n.prefix().toString();
+    QString namespaceUri = n.namespaceUri().toString();
     /* don't toss any xsi declaration, it might used for tt_unknown or passthrough. */
     if (!prefix.isEmpty()) {
       if (! gpx_namespace_attribute.hasAttribute(prefix.prepend("xmlns:"))) {
@@ -492,10 +494,10 @@ tag_wpt(const QXmlStreamAttributes& attr)
 static void
 tag_cache_desc(const QXmlStreamAttributes& attr)
 {
-  cache_descr_is_html = 0;
+  cache_descr_is_html = false;
   if (attr.hasAttribute("html")) {
-    if (attr.value("html").toString() == QLatin1String("True")) {
-      cache_descr_is_html = 1;
+    if (attr.value("html").compare(QLatin1String("True")) == 0) {
+      cache_descr_is_html = true;
     }
   }
 }
@@ -509,16 +511,16 @@ tag_gs_cache(const QXmlStreamAttributes& attr)
     gc_data->id = attr.value("id").toString().toInt();
   }
   if (attr.hasAttribute("available")) {
-    if (attr.value("available").toString().compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
+    if (attr.value("available").compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
       gc_data->is_available = status_true;
-    } else if (attr.value("available").toString().compare(QLatin1String("False"), Qt::CaseInsensitive) == 0) {
+    } else if (attr.value("available").compare(QLatin1String("False"), Qt::CaseInsensitive) == 0) {
       gc_data->is_available = status_false;
     }
   }
   if (attr.hasAttribute("archived")) {
-    if (attr.value("archived").toString().compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
+    if (attr.value("archived").compare(QLatin1String("True"), Qt::CaseInsensitive) == 0) {
       gc_data->is_archived = status_true;
-    } else if (attr.value("archived").toString().compare(QLatin1String("False"), Qt::CaseInsensitive) == 0) {
+    } else if (attr.value("archived").compare(QLatin1String("False"), Qt::CaseInsensitive) == 0) {
       gc_data->is_archived = status_false;
     }
   }
@@ -874,7 +876,7 @@ xml_parse_time(const QString& dateTimeString)
 }
 
 static void
-gpx_end(const QString& el)
+gpx_end(const QString&) 
 {
   float x;
   int passthrough;
@@ -1216,7 +1218,7 @@ gpx_rd_init(const QString& fname)
 
 static
 void
-gpx_rd_deinit(void)
+gpx_rd_deinit()
 {
   delete reader;
   reader = NULL;
@@ -1331,7 +1333,7 @@ gpx_wr_init(const QString& fname)
 }
 
 static void
-gpx_wr_deinit(void)
+gpx_wr_deinit()
 {
   writer->writeEndDocument();
   delete writer;
@@ -1344,7 +1346,7 @@ gpx_wr_deinit(void)
 }
 
 void
-gpx_read(void)
+gpx_read()
 {
   for (bool atEnd = false; !reader->atEnd() && !atEnd;)  {
     reader->readNext();
@@ -1373,6 +1375,24 @@ gpx_read(void)
       gpx_cdata(reader->text().toString());
       break;
 
+//  On windows with input redirection we can read an Invalid token
+//  after the EndDocument token.  This also will set an error
+//  "Premature end of document." that we will fatal on below.
+//  This occurs with Qt 5.9.2 on windows when the file being
+//  sent to stdin has dos line endings.
+//  This does NOT occur with Qt 5.9.2 on windows when the file being
+//  sent to stdin has unix line endings.
+//  This does NOT occur with Qt 5.9.2 on windows with either line
+//  endings if the file is read directly, i.e. not sent through stdin.
+//  An example of a problematic file is reference/basecamp.gpx,
+//  which fails on windows with this invocation from a command prompt:
+//  .\GPSBabel.exe -i gpx -f - < reference\basecamp.gpx
+//  This was demonstrated on 64 bit windows 10.  Other versions of
+//  windows and Qt likely fail as well.
+//  To avoid this we quit reading when we see the EndDocument.
+//  This does not prevent us from correctly detecting the error
+//  "Extra content at end of document."
+    case QXmlStreamReader::EndDocument:
     case QXmlStreamReader::Invalid:
       atEnd = true;
       break;
@@ -1544,7 +1564,7 @@ static void
 gpx_write_common_position(const Waypoint* waypointp, const gpx_point_type point_type)
 {
   if (waypointp->altitude != unknown_alt) {
-    writer->writeTextElement("ele", QString::number(waypointp->altitude, 'f', 6));
+    writer->writeTextElement("ele", QString::number(waypointp->altitude, 'f', elevation_precision));
   }
   QString t = waypointp->CreationTimeXML();
   writer->writeOptionalTextElement("time", t);
@@ -1724,8 +1744,7 @@ static void
 gpx_track_disp(const Waypoint* waypointp)
 {
   fs_xml* fs_gpx;
-  int first_in_trk;
-  first_in_trk = waypointp->Q.prev == &current_trk_head->waypoint_list;
+  bool first_in_trk = waypointp->Q.prev == &current_trk_head->waypoint_list;
 
   if (waypointp->wpt_flags.new_trkseg) {
     if (!first_in_trk) {
@@ -1865,7 +1884,7 @@ gpx_waypt_bound_calc(const Waypoint* waypointp)
 }
 
 static void
-gpx_write_bounds(void)
+gpx_write_bounds()
 {
   waypt_init_bounds(&all_bounds);
 
@@ -1884,9 +1903,11 @@ gpx_write_bounds(void)
 }
 
 static void
-gpx_write(void)
+gpx_write()
 {
  
+  elevation_precision = atoi(opt_elevation_precision);
+
   gpx_reset_short_handle();
   waypt_disp_all(gpx_waypt_pr);
   gpx_reset_short_handle();
@@ -1898,7 +1919,7 @@ gpx_write(void)
 
 
 static void
-gpx_free_gpx_global(void)
+gpx_free_gpx_global()
 {
   gpx_rm_from_global(&gpx_global->name);
   gpx_rm_from_global(&gpx_global->desc);
@@ -1911,7 +1932,7 @@ gpx_free_gpx_global(void)
 }
 
 static void
-gpx_exit(void)
+gpx_exit()
 {
   gpx_version.clear();
 
@@ -1956,6 +1977,11 @@ arglist_t gpx_args[] = {
     "garminextensions", &opt_garminext,
     "Add info (depth) as Garmin extension",
     NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
+  },
+  {
+    "elevprec", &opt_elevation_precision,
+    "Precision of elevations, number of decimals",
+    "3", ARGTYPE_INT, ARG_NOMINMAX, NULL
   },
   ARG_TERMINATOR
 };

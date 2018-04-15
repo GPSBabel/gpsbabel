@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="59.829069972" minlon="30.234490000" maxlat="60.067550037" maxlon="30.500100022"/>
+  <wpt lat="59.944070019" lon="30.306679979">
+    <name>О справочнике Санкт-Петербург Метро - 2016.05</name>
+    <cmt>Этот файл содержит информацию о станциях метро Санкт-Петербурга. Адаптация для навигаторов GARMIN и публикация - Навиком, 2016. http://navicom.ru</cmt>
+    <desc>Этот файл содержит информацию о станциях метро Санкт-Петербурга. Адаптация для навигаторов GARMIN и публикация - Навиком, 2016. http://navicom.ru</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.830660019" lon="30.500100022">
+    <name>РЫБАЦКОЕ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.934429992" lon="30.329949986">
+    <name>НЕВСКИЙ ПРОСПЕКТ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.944460029" lon="30.359629970">
+    <name>ЧЕРНЫШЕВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.924250003" lon="30.385180023">
+    <name>ПЛОЩАДЬ АЛЕКСАНДРА НЕВСКОГО-1</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.923509965" lon="30.383310020">
+    <name>ПЛОЩАДЬ АЛЕКСАНДРА НЕВСКОГО-2</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.934940031" lon="30.330100022">
+    <name>НЕВСКИЙ ПРОСПЕКТ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.896519985" lon="30.423599984">
+    <name>ЕЛИЗАРОВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.879080011" lon="30.318629974">
+    <name>ЭЛЕКТРОСИЛА</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.922289979" lon="30.335769961">
+    <name>ЗВЕНИГОРОДСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.920589961" lon="30.329700038">
+    <name>ПУШКИНСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.849180002" lon="30.321059972">
+    <name>МОСКОВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.926299965" lon="30.317890020">
+    <name>САДОВАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.895710042" lon="30.357010039">
+    <name>ВОЛКОВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.935459960" lon="30.326920012">
+    <name>НЕВСКИЙ ПРОСПЕКТ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.931509988" lon="30.360439997">
+    <name>ПЛОЩАДЬ ВОССТАНИЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.929549964" lon="30.361009967">
+    <name>ПЛОЩАДЬ ВОССТАНИЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.931519963" lon="30.355010033">
+    <name>МАЯКОВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.920600019" lon="30.354880029">
+    <name>ЛИГОВСКИЙ ПРОСПЕКТ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.927569991" lon="30.347969988">
+    <name>ВЛАДИМИРСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.928220008" lon="30.346220015">
+    <name>ДОСТОЕВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.916309994" lon="30.318670040">
+    <name>ТЕХНОЛОГИЧЕСКИЙ ИНСТИТУТ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.907119991" lon="30.299419994">
+    <name>БАЛТИЙСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.906179961" lon="30.317830006">
+    <name>ФРУНЗЕНСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.927089959" lon="30.320629980">
+    <name>СЕННАЯ ПЛОЩАДЬ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.901079992" lon="30.274850037">
+    <name>НАРВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.879609998" lon="30.261939978">
+    <name>КИРОВСКИЙ ЗАВОД</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.867220037" lon="30.261330027">
+    <name>АВТОВО</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.842180023" lon="30.249950001">
+    <name>ПРОСПЕКТ ВЕТЕРАНОВ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.891529987" lon="30.318090012">
+    <name>МОСКОВСКИЕ ВОРОТА</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.866259973" lon="30.321779978">
+    <name>ПАРК ПОБЕДЫ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.853289984" lon="30.320870038">
+    <name>МОСКОВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.853199963" lon="30.321640000">
+    <name>МОСКОВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.833129998" lon="30.349370018">
+    <name>ЗВЕЗДНАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.848610032" lon="30.457699997">
+    <name>ОБУХОВО</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.865209972" lon="30.470139999">
+    <name>ПРОЛЕТАРСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.877270022" lon="30.441740016">
+    <name>ЛОМОНОСОВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.829069972" lon="30.375319971">
+    <name>КУПЧИНО</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.829949988" lon="30.374870030">
+    <name>КУПЧИНО</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.849370020" lon="30.322060017">
+    <name>МОСКОВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.914630009" lon="30.349509995">
+    <name>ОБВОДНЫЙ КАНАЛ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.926580004" lon="30.317119975">
+    <name>СПАССКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.935860028" lon="30.314989965">
+    <name>АДМИРАЛТЕЙСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.926719982" lon="30.319720041">
+    <name>СПАССКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.934000000" lon="30.333390003">
+    <name>ГОСТИНЫЙ ДВОР</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.841279974" lon="30.253230007">
+    <name>ПРОСПЕКТ ВЕТЕРАНОВ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.851890039" lon="30.269529959">
+    <name>ЛЕНИНСКИЙ ПРОСПЕКТ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.851909988" lon="30.267070038">
+    <name>ЛЕНИНСКИЙ ПРОСПЕКТ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.870150015" lon="30.379449986">
+    <name>МЕЖДУНАРОДНАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.884000020" lon="30.369130019">
+    <name>БУХАРЕСТСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.989210004" lon="30.255000014">
+    <name>СТАРАЯ ДЕРЕВНЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.955720026" lon="30.355719980">
+    <name>ПЛОЩАДЬ ЛЕНИНА</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.958540034" lon="30.354720019">
+    <name>ПЛОЩАДЬ ЛЕНИНА</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.970929995" lon="30.347470008">
+    <name>ВЫБОРГСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.928719988" lon="30.412690016">
+    <name>НОВОЧЕРКАССКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.929109998" lon="30.410880027">
+    <name>НОВОЧЕРКАССКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.929390037" lon="30.412190035">
+    <name>НОВОЧЕРКАССКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.928399967" lon="30.411389982">
+    <name>НОВОЧЕРКАССКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.984740019" lon="30.344269965">
+    <name>ЛЕСНАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.999510022" lon="30.366089987">
+    <name>ПЛОЩАДЬ МУЖЕСТВА</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="60.008819969" lon="30.370819978">
+    <name>ПОЛИТЕХНИЧЕСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="60.012640022" lon="30.395899974">
+    <name>АКАДЕМИЧЕСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="60.034860028" lon="30.418140013">
+    <name>ГРАЖДАНСКИЙ ПРОСПЕКТ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="60.051280009" lon="30.332319969">
+    <name>ПРОСПЕКТ ПРОСВЕЩЕНИЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="60.037030019" lon="30.321279997">
+    <name>ОЗЕРКИ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="60.016599968" lon="30.315549960">
+    <name>УДЕЛЬНАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.960880009" lon="30.291950041">
+    <name>ЧКАЛОВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.932350023" lon="30.439159982">
+    <name>ЛАДОЖСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="60.051329965" lon="30.443380019">
+    <name>ДЕВЯТКИНО</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.956059996" lon="30.318789985">
+    <name>ГОРЬКОВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.966239985" lon="30.311139990">
+    <name>ПЕТРОГРАДСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="60.008389978" lon="30.258299969">
+    <name>КОМЕНДАНТСКИЙ ПРОСПЕКТ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="60.008610003" lon="30.259049982">
+    <name>КОМЕНДАНТСКИЙ ПРОСПЕКТ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="60.067550037" lon="30.334619964">
+    <name>ПАРНАС</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.948359961" lon="30.234490000">
+    <name>ПРИМОРСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.951539971" lon="30.291969990">
+    <name>СПОРТИВНАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.985400010" lon="30.300780041">
+    <name>ЧЕРНАЯ РЕЧКА</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.907359965" lon="30.483409977">
+    <name>УЛИЦА ДЫБЕНКО</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.919889988" lon="30.466750022">
+    <name>ПРОСПЕКТ БОЛЬШЕВИКОВ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.971670033" lon="30.259390036">
+    <name>КРЕСТОВСКИЙ ОСТРОВ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="60.002440000" lon="30.296609960">
+    <name>ПИОНЕРСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.942549961" lon="30.278170025">
+    <name>ВАСИЛЕОСТРОВСКАЯ</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+  <wpt lat="59.947629981" lon="30.283499993">
+    <name>СПОРТИВНАЯ-2</name>
+    <cmt>Метро</cmt>
+    <desc>Метро</desc>
+    <sym>Waypoint</sym>
+  </wpt>
+</gpx>

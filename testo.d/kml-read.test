@@ -10,3 +10,9 @@ compare ${REFERENCE}/kml-points.txt ${TMPDIR}/geo~unicsv.txt
 gpsbabel -i kml -f ${REFERENCE}/track/google_ext.kml -o gpx -F ${TMPDIR}/google_ext~kml.gpx
 compare ${REFERENCE}/track/google_ext~kml.gpx ${TMPDIR}/google_ext~kml.gpx
 
+# All output lines starting with "L" are comments. Remove them,
+# because gpsbabel writes a comment containing its version number,
+# which will make this test fail, if the version changes.
+gpsbabel -i kml -f ${REFERENCE}/track/skydrop.kml -o igc -F - | grep -v "^L" > ${TMPDIR}/skydrop~kml.igc
+compare ${REFERENCE}/track/skydrop~kml.igc ${TMPDIR}/skydrop~kml.igc
+

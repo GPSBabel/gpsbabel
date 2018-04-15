@@ -47,7 +47,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -75,7 +75,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   int i = trkpt_count;
   while (i < 4502) {
@@ -94,11 +94,11 @@ wr_deinit(void)
  * Each file contains a single waypoint.
  */
 static void
-bushnell_read(void)
+bushnell_read()
 {
   int lat_tmp,lon_tmp;
 
-  while (1) {
+  while (true) {
     Waypoint* wpt_tmp;
 
     lat_tmp = gbfgetint32(file_in);
@@ -131,7 +131,7 @@ bushnell_write_one(const Waypoint* wpt)
 }
 
 static void
-bushnell_write(void)
+bushnell_write()
 {
   track_disp_all(NULL, NULL, bushnell_write_one);
 }

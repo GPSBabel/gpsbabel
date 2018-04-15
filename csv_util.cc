@@ -23,17 +23,17 @@
 #include <QtCore/QRegExp>
 #include <QtCore/QTextStream>
 
-#include "defs.h"
 #include "csv_util.h"
+#include "defs.h"
 #include "garmin_fs.h"
 #include "grtcirc.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/logging.h"
 #include "strptime.h"
 
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "CSV_UTIL"
 
@@ -154,6 +154,7 @@ in_word_set(register const char* str, register unsigned int len);
 #include "xcsv_tokens.gperf"
 #undef register
 
+#if CSVFMTS_ENABLED
 /****************************************************************************/
 /* obligatory global struct                                                 */
 /****************************************************************************/
@@ -161,7 +162,6 @@ in_word_set(register const char* str, register unsigned int len);
 extern char* xcsv_urlbase;
 extern char* prefer_shortnames;
 
-#if CSVFMTS_ENABLED
 XcsvFile xcsv_file;
 static double pathdist = 0;
 static double oldlon = 999;
@@ -1215,11 +1215,11 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
     wpt->SetCreationTime(sscanftime(s, fmp->printfc, 1));
     break;
   case XT_LOCAL_TIME:
-    if (getenv("GPSBABEL_FREEZE_TIME")) {
+    if (ugetenv("GPSBABEL_FREEZE_TIME").isNull()) {
+      wpt->creation_time += sscanftime(s, fmp->printfc, 0);
+    } else {
       /* Force constant time zone for test */
       wpt->creation_time += sscanftime(s, fmp->printfc, 1);
-    } else {
-      wpt->creation_time += sscanftime(s, fmp->printfc, 0);
     }
     break;
     /* Useful when time and date are in separate fields

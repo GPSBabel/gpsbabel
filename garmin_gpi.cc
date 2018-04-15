@@ -46,11 +46,11 @@
 
 #include "defs.h"
 #include "cet_util.h"
-#include "jeeps/gpsmath.h"
 #include "garmin_fs.h"
 #include "garmin_gpi.h"
-#include <stdlib.h>
+#include "jeeps/gpsmath.h"
 #include <QtCore/QTextCodec>
+#include <cstdlib>
 
 #define MYNAME "garmin_gpi"
 
@@ -69,6 +69,7 @@
 
 static char* opt_cat, *opt_pos, *opt_notes, *opt_hide_bitmap, *opt_descr, *opt_bitmap;
 static char* opt_unique, *opt_alerts, *opt_units, *opt_speed, *opt_proximity, *opt_sleep;
+static char* opt_lang;
 static char* opt_writecodec;
 static double defspeed, defproximity;
 static int alerts;
@@ -76,61 +77,65 @@ static int alerts;
 static arglist_t garmin_gpi_args[] = {
   {
     "alerts", &opt_alerts, "Enable alerts on speed or proximity distance",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "bitmap", &opt_bitmap, "Use specified bitmap on output",
-    NULL, ARGTYPE_FILE, ARG_NOMINMAX
+    NULL, ARGTYPE_FILE, ARG_NOMINMAX, nullptr
   },
   {
     "category", &opt_cat, "Default category on output",
-    "My points", ARGTYPE_STRING, ARG_NOMINMAX
+    "My points", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "hide", &opt_hide_bitmap, "Don't show gpi bitmap on device",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "descr", &opt_descr, "Write description to address field",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "notes", &opt_notes, "Write notes to address field",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "position", &opt_pos, "Write position to address field",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "proximity", &opt_proximity, "Default proximity",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "sleep", &opt_sleep, "After output job done sleep n second(s)",
-    NULL, ARGTYPE_INT, "1", NULL
+    NULL, ARGTYPE_INT, "1", NULL, nullptr
   },
   {
     "speed", &opt_speed, "Default speed",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "unique", &opt_unique, "Create unique waypoint names (default = yes)",
-    "Y", ARGTYPE_BOOL, ARG_NOMINMAX
+    "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "units", &opt_units, "Units used for names with @speed ('s'tatute or 'm'etric)",
-    "m", ARGTYPE_STRING, ARG_NOMINMAX
+    "m", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "writecodec", &opt_writecodec, "codec to use for writing strings",
-    "windows-1252", ARGTYPE_STRING, ARG_NOMINMAX
+    "windows-1252", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+  },
+  {
+    "languagecode", &opt_lang, "language code to use for reading dual language files",
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
 
 typedef struct {
- public:
+public:
   int D2;
   char S3[9];		/* "GRMRECnn" */
   time_t crdate;	/* creation date and time */
@@ -205,7 +210,7 @@ typedef struct {
 } gpi_waypt_t;
 
 static gbfile* fin, *fout;
-static int16_t codepage;	/* code-page, i.e. 1252 */
+static uint16_t codepage;	/* code-page, e.g. 1252, 65001 */
 static reader_data_t* rdata;
 static writer_data_t* wdata;
 static short_handle short_h;
@@ -238,53 +243,87 @@ gpi_gmsd_init(Waypoint* wpt)
   return gmsd;
 }
 
+static char*
+gpi_read_lc_string_old(const char* field, char* languagecode, short* length)
+{
+  char lc[3];
+  short len;
+
+  gbfread(lc, 1, 2, fin);
+  lc[2] = '\0';
+  len = gbfgetint16(fin);
+
+  if ((lc[0] < 'A') || (lc[0] > 'Z') || (lc[1] < 'A') || (lc[1] > 'Z')) {
+    fatal(MYNAME ": Invalid language code %s!\n", lc);
+  }
+  char* res = (char*) xmalloc(len + 1);
+  res[len] = '\0';
+  PP;
+  if (len > 0) {
+    gbfread(res, 1, len, fin);
+  }
+
+  strncpy(languagecode, lc, sizeof(lc));
+  *length = len;
+  return res;
+}
+
 /* read a standard string with or without 'EN' (or whatever) header */
 static char*
 gpi_read_string_old(const char* field)
 {
-  int l1;
+  int l0;
   char* res = NULL;
 
-  l1 = gbfgetint16(fin);
-  if (l1 > 0) {
-    short l2;
+  l0 = gbfgetint16(fin);
+  if (l0 > 0) {
     char first;
 
     first = gbfgetc(fin);
     if (first == 0) {
-      char en[2];
+      short l1;
+      short l2;
+      char* res1 = NULL;
+      char* res2 = NULL;
+      char lc1[3] = "";
+      char lc2[3] = "";
 
       is_fatal((gbfgetc(fin) != 0),
                MYNAME ": Error reading field '%s'!", field);
 
-      gbfread(en, 1, sizeof(en), fin);
-      l2 = gbfgetint16(fin);
-      is_fatal((l2 + 4 != l1),
-               MYNAME ": Error out of sync (wrong size %d/%d) on field '%s'!", l1, l2, field);
-
-      if ((en[0] < 'A') || (en[0] > 'Z') || (en[1] < 'A') || (en[1] > 'Z')) {
-        fatal(MYNAME ": Invalid country code!\n");
-      }
-      res = (char*) xmalloc(l2 + 1);
-      res[l2] = '\0';
-      PP;
-      if (l2 > 0) {
-        gbfread(res, 1, l2, fin);
+      res1 = gpi_read_lc_string_old(field, lc1,  &l1);
+      if ((l1 + 4) < l0) { // dual language?
+        res2 = gpi_read_lc_string_old(field, lc2,  &l2);
+        is_fatal((l1 + 4 + l2 + 4 != l0),
+                 MYNAME ": Error out of sync (wrong size %d/%d/%d) on field '%s'!", l0, l1, l2, field);
+        if (opt_lang && (strcmp(opt_lang, lc1) == 0)) {
+          res = res1;
+          xfree(res2);
+        } else if (opt_lang && (strcmp(opt_lang, lc2) == 0)) {
+          res = res2;
+          xfree(res1);
+        } else {
+          fatal(MYNAME ": Must select language code, %s and %s found.\n", lc1, lc2);
+        }
+      } else { // normal case, single language
+        is_fatal((l1 + 4 != l0),
+                 MYNAME ": Error out of sync (wrong size %d/%d) on field '%s'!", l0, l1, field);
+        res = res1;
       }
     } else {
-      res = (char*) xmalloc(l1 + 1);
+      res = (char*) xmalloc(l0 + 1);
       *res = first;
-      *(res + l1) = '\0';
+      *(res + l0) = '\0';
       PP;
-      l1--;
-      if (l1 > 0) {
-        gbfread(res + 1, 1, l1, fin);
+      l0--;
+      if (l0 > 0) {
+        gbfread(res + 1, 1, l0, fin);
       }
 
     }
   }
 #ifdef GPI_DBG
-  dbginfo("%s: %s\n", field, (res == NULL) ? "<NULL>" : res);
+  dbginfo("%s: \"%s\"\n", field, (res == NULL) ? "<NULL>" : res);
 #endif
   return res;
 }
@@ -292,14 +331,14 @@ gpi_read_string_old(const char* field)
 static QString
 gpi_read_string(const char* field)
 {
-  char*s = gpi_read_string_old(field);
-  QString rv = STRTOUNICODE(s);
+  char* s = gpi_read_string_old(field);
+  QString rv = STRTOUNICODE(s).trimmed();
   xfree(s);
   return rv;
 }
 
 static void
-read_header(void)
+read_header()
 {
   int len, i;
 #ifdef GPI_DBG
@@ -355,7 +394,11 @@ read_header(void)
   }
   gbfread(&rdata->S8, 1, sizeof(rdata->S8) - 1, fin);
 
-  codepage = gbfgetint16(fin);
+  codepage = gbfgetuint16(fin);
+#ifdef GPI_DBG
+  PP;
+  dbginfo("Code Page: %d\n",codepage);
+#endif
   (void) gbfgetint16(fin);   	/* typically 0, but  0x11 in
   					Garminonline.de files.  */
 
@@ -511,6 +554,7 @@ read_poi_group(const int sz, const int tag)
 static int
 read_tag(const char* caller, const int tag, Waypoint* wpt)
 {
+  Q_UNUSED(caller);
   int pos, sz, dist;
   double speed;
   short mask;
@@ -611,7 +655,7 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
 
   case 0x8000b:	/* address (street/city...) */
     (void) gbfgetint32(fin);
-    // FALLTHROUGH
+  // FALLTHROUGH
   case 0xb:	/* as seen in German POI files. */
     PP;
     mask = gbfgetint16(fin); /* address fields mask */
@@ -680,7 +724,7 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
   case 0x80012:	/* ? sounds / images ? */
     break;
 
-    /* Images? Seen in http://geepeeex.com/Stonepages.gpi */
+  /* Images? Seen in http://geepeeex.com/Stonepages.gpi */
   case 0xd:
     break;
 
@@ -730,13 +774,6 @@ write_string(const char* str, const char long_format)
   gbfputint16(len, fout);
   gbfwrite(str, 1, len, fout);
 }
-
-static void
-write_string(const QString& str, const char long_format)
-{
-  write_string(STRFROMUNICODE(str), long_format);
-}
-
 
 static int
 compare_wpt_cb(const queue* a, const queue* b)
@@ -885,8 +922,9 @@ wdata_compute_size(writer_data_t* data)
   queue* elem, *tmp;
   int res = 0;
 
-  if (QUEUE_EMPTY(&data->Q))
-    goto skip_empty_block; /* do not issue an empty block */
+  if (QUEUE_EMPTY(&data->Q)) {
+    goto skip_empty_block;  /* do not issue an empty block */
+  }
 
   res = 23;	/* bounds, ... of tag 0x80008 */
 
@@ -898,7 +936,7 @@ wdata_compute_size(writer_data_t* data)
 
     res += 12;		/* tag/sz/sub-sz */
     res += 19;		/* poi fixed size */
-    res += wpt->shortname.length();
+    res += strlen(STRFROMUNICODE(wpt->shortname));
     if (! opt_hide_bitmap) {
       res += 10;  /* tag(4) */
     }
@@ -951,11 +989,11 @@ wdata_compute_size(writer_data_t* data)
     str = QString();
     if (opt_descr) {
       if (!wpt->description.isEmpty()) {
-        str = xstrdup(wpt->description);
+        str = wpt->description;
       }
     } else if (opt_notes) {
       if (!wpt->notes.isEmpty()) {
-        str = xstrdup(wpt->notes);
+        str = wpt->notes;
       }
     } else if (opt_pos) {
       str = pretty_deg_format(wpt->latitude, wpt->longitude, 's', " ", 0);
@@ -1008,7 +1046,7 @@ wdata_compute_size(writer_data_t* data)
     }
 //		if (str && (strcmp(str, wpt->shortname) == 0)) str = NULL;
     if (!str.isEmpty()) {
-      res += (12 + 4 + str.length());
+      res += (12 + 4 + strlen(STRFROMUNICODE(str)));
     }
   }
 
@@ -1029,8 +1067,9 @@ skip_empty_block:
 
   data->sz = res;
 
-  if (QUEUE_EMPTY(&data->Q))
+  if (QUEUE_EMPTY(&data->Q)) {
     return res;
+  }
 
   return res + 12;	/* + 12 = caller needs info about tag header size */
 }
@@ -1041,8 +1080,9 @@ wdata_write(const writer_data_t* data)
 {
   queue* elem, *tmp;
 
-  if (QUEUE_EMPTY(&data->Q))
-    goto skip_empty_block; /* do not issue an empty block */
+  if (QUEUE_EMPTY(&data->Q)) {
+    goto skip_empty_block;  /* do not issue an empty block */
+  }
 
   gbfputint32(0x80008, fout);
   gbfputint32(data->sz, fout);
@@ -1069,12 +1109,12 @@ wdata_write(const writer_data_t* data)
     }
 
     gbfputint32(0x80002, fout);
-    s0 = s1 = 19 + wpt->shortname.length();
+    s0 = s1 = 19 + strlen(STRFROMUNICODE(wpt->shortname));
     if (! opt_hide_bitmap) {
       s0 += 10;  /* tag(4) */
     }
     if (!str.isEmpty()) {
-      s0 += (12 + 4 + str.length());  /* descr */
+      s0 += (12 + 4 + strlen(STRFROMUNICODE(str)));  /* descr */
     }
     if (dt->sz) {
       s0 += (12 + dt->sz);  /* address part */
@@ -1095,7 +1135,7 @@ wdata_write(const writer_data_t* data)
     gbfputint16(1, fout);	/* ? always 1 ? */
     gbfputc(alerts, fout);	/* seems to be 1 when extra options present */
 
-    write_string(wpt->shortname, 1);
+    write_string(STRFROMUNICODE(wpt->shortname), 1);
 
     if (dt->alerts) {
       char flag = 0;
@@ -1131,8 +1171,8 @@ wdata_write(const writer_data_t* data)
 
     if (!str.isEmpty()) {
       gbfputint32(0xa, fout);
-      gbfputint32(str.length() + 8, fout);	/* string + string header */
-      write_string(str, 1);
+      gbfputint32(strlen(STRFROMUNICODE(str)) + 8, fout);	/* string + string header */
+      write_string(STRFROMUNICODE(str), 1);
     }
 
     if (dt->sz) {					/* gpi address */
@@ -1184,13 +1224,13 @@ skip_empty_block:
 
 
 static void
-write_category(const char* category, const unsigned char* image, const int image_sz)
+write_category(const char*, const unsigned char* image, const int image_sz)
 {
   int sz;
 
   sz = wdata_compute_size(wdata);
   sz += 8;	/* string header */
-  sz += strlen(opt_cat);
+  sz += strlen(STRFROMUNICODE(QString::fromUtf8(opt_cat)));
 
   gbfputint32(0x80009, fout);
   if ((! opt_hide_bitmap) && image_sz) {
@@ -1199,7 +1239,7 @@ write_category(const char* category, const unsigned char* image, const int image
     gbfputint32(sz, fout);
   }
   gbfputint32(sz, fout);
-  write_string(opt_cat, 1);
+  write_string(STRFROMUNICODE(QString::fromUtf8(opt_cat)), 1);
 
   wdata_write(wdata);
 
@@ -1212,7 +1252,7 @@ write_category(const char* category, const unsigned char* image, const int image
 
 
 static void
-write_header(void)
+write_header()
 {
   time_t time = gpi_timestamp;
 
@@ -1443,6 +1483,8 @@ garmin_gpi_rd_init(const QString& fname)
   if ((codepage >= 1250) && (codepage <= 1257)) {
     QString qCodecName = QString("windows-%1").arg(codepage);
     cet_convert_init(CSTR(qCodecName), 1);
+  } else if (codepage == 65001) {
+    cet_convert_init("utf8", 1);
   } else {
     fatal(MYNAME ": Unsupported code page (%d). File is likely encrypted.\n", codepage);
   }
@@ -1490,10 +1532,15 @@ garmin_gpi_wr_init(const QString& fname)
       break;
     }
   }
+  if (! codepage) {
+    if (QString("utf8").compare(QString(opt_writecodec), Qt::CaseInsensitive) == 0) {
+      codepage = 65001;
+    }
+  }
 
   if (! codepage) {
     warning(MYNAME ": Unsupported character set (%s)!\n", opt_writecodec);
-    fatal(MYNAME ": Valid values are windows-1250 to windows-1257.\n");
+    fatal(MYNAME ": Valid values are windows-1250 to windows-1257 and utf8.\n");
   }
 
   cet_convert_init(opt_writecodec,1);
@@ -1531,7 +1578,7 @@ garmin_gpi_wr_init(const QString& fname)
 
 
 static void
-garmin_gpi_rd_deinit(void)
+garmin_gpi_rd_deinit()
 {
   delete rdata;
   gbfclose(fin);
@@ -1539,7 +1586,7 @@ garmin_gpi_rd_deinit(void)
 
 
 static void
-garmin_gpi_wr_deinit(void)
+garmin_gpi_wr_deinit()
 {
   wdata_free(wdata);
   mkshort_del_handle(&short_h);
@@ -1559,9 +1606,9 @@ garmin_gpi_wr_deinit(void)
 
 
 static void
-garmin_gpi_read(void)
+garmin_gpi_read()
 {
-  while (1) {
+  while (true) {
     int tag = gbfgetint32(fin);
     if (tag == 0xffff) {
       return;
@@ -1574,7 +1621,7 @@ garmin_gpi_read(void)
 
 
 static void
-garmin_gpi_write(void)
+garmin_gpi_write()
 {
   unsigned char* image;
   int image_sz;
@@ -1624,6 +1671,8 @@ ff_vecs_t garmin_gpi_vecs = {
   NULL,
   garmin_gpi_args,
   CET_CHARSET_MS_ANSI, 0		/* WIN-CP1252 */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /**************************************************************************/

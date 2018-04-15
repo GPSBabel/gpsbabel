@@ -1,0 +1,118 @@
+#!/bin/bash
+# this file should be encoded in latin1
+
+BASEPATH=`dirname $0`
+PNAME=${PNAME:-${BASEPATH}/gpsbabel}
+REFERENCE=${BASEPATH}/reference
+
+TMPDIR=${GBTEMP:-/tmp}/gpsbabel.$$
+mkdir -p $TMPDIR
+trap "rm -fr $TMPDIR" 0 1 2 3 15
+
+errorcount=0
+
+if locale -a | grep -q en_US.iso88591 ; then
+  export LC_ALL=en_US.iso88591
+
+echo "Running latin1 file name encoding test"
+filenamebase=test_encoding_file¢
+
+# test input file name mangling with gpsbabel::File
+  echo "testing input file name with gpsbabel::File"
+  rm -f ${TMPDIR}/test_encoding_file*
+  cp ${REFERENCE}/bounds-test.gpx ${TMPDIR}/${filenamebase}.gpx
+  ${PNAME} -i gpx -f ${TMPDIR}/${filenamebase}.gpx -o kml -F ${TMPDIR}/test_encoding_fileo.kml || {
+    echo "ERROR: The input file name was mangled."
+    errorcount=`expr $errorcount + 1`
+  }
+
+# test output file name mangling with gpsbabel::File
+  echo "testing output file name with gpsbabel::File"
+  rm -f ${TMPDIR}/test_encoding_file*
+  ${PNAME} -i gpx -f ${REFERENCE}/bounds-test.gpx -o kml -F ${TMPDIR}/${filenamebase}.kml
+  count=$(ls -1 -l ${TMPDIR}/${filenamebase}.kml 2>/dev/null | wc -l)
+  if [ $count -lt 1 ]; then
+    echo "ERROR: The output file name was mangled."
+    errorcount=`expr $errorcount + 1`
+  fi
+
+# test input file name mangling with gbfile stdapi
+  echo "testing input file name with gbfile stdapi"
+  rm -f ${TMPDIR}/test_encoding_file*
+  cp ${REFERENCE}/unicsv_subsec.csv ${TMPDIR}/${filenamebase}.csv
+  ${PNAME} -i unicsv -f ${TMPDIR}/${filenamebase}.csv -o kml -F ${TMPDIR}/test_encoding_fileo.kml || {
+    echo "ERROR: The input file name was mangled."
+    errorcount=`expr $errorcount + 1`
+  }
+
+# test output file name mangling with gbfile stdapi
+  echo "testing output file name with gbfile stdapi"
+  rm -f ${TMPDIR}/test_encoding_file*
+  ${PNAME} -i gpx -f ${REFERENCE}/bounds-test.gpx -o unicsv -F ${TMPDIR}/${filenamebase}.csv
+  count=$(ls -1 -l ${TMPDIR}/${filenamebase}.csv 2>/dev/null | wc -l)
+  if [ $count -lt 1 ]; then
+    echo "ERROR: The output file name was mangled."
+    errorcount=`expr $errorcount + 1`
+  fi
+
+# test input file name mangling with gbfile gzapi
+  echo "testing input file name with gbfile gzapi"
+  rm -f ${TMPDIR}/test_encoding_file*
+  cp ${REFERENCE}/sample.gtm.gz ${TMPDIR}/${filenamebase}.gtm.gz
+  ${PNAME} -i gtm -f ${TMPDIR}/${filenamebase}.gtm.gz -o kml -F ${TMPDIR}/test_encoding_fileo.kml || {
+    echo "ERROR: The input file name was mangled."
+    errorcount=`expr $errorcount + 1`
+  }
+
+# test output file name mangling with gbfile gzapi
+  echo "testing output file name with gbfile gzapi"
+  rm -f ${TMPDIR}/test_encoding_file*
+  ${PNAME} -i gpx -f ${REFERENCE}/bounds-test.gpx -o gtm -F ${TMPDIR}/${filenamebase}.gtm.gz
+  count=$(ls -1 -l ${TMPDIR}/${filenamebase}.gtm.gz 2>/dev/null | wc -l)
+  if [ $count -lt 1 ]; then
+    echo "ERROR: The output file name was mangled."
+    errorcount=`expr $errorcount + 1`
+  fi
+
+# test input file name mangling with shape files
+  echo "testing input file name with shape files"
+  rm -f ${TMPDIR}/test_encoding_file*
+  for ext in cpg dbf prj shp shx
+  do
+    cp ${REFERENCE}/gis.osm_railways_free_1.${ext} ${TMPDIR}/${filenamebase}.${ext}
+  done
+  ${PNAME} -r -i shape -f ${TMPDIR}/${filenamebase}.shp -o kml -F ${TMPDIR}/test_encoding_fileo.kml || {
+    echo "ERROR: The input file name was mangled."
+    errorcount=`expr $errorcount + 1`
+  }
+
+# test output file name mangling with shape files
+  echo "testing output file name with shape files"
+  rm -f ${TMPDIR}/test_encoding_file*
+  ${PNAME} -r -i gpx -f ${REFERENCE}/bounds-test.gpx -o shape -F ${TMPDIR}/${filenamebase}.shp
+  for ext in cpg dbf shp shx
+  do
+    count=$(ls -1 -l ${TMPDIR}/${filenamebase}.${ext} 2>/dev/null | wc -l)
+    if [ $count -lt 1 ]; then
+      echo "ERROR: The output file name was mangled."
+      errorcount=`expr $errorcount + 1`
+    fi
+  done
+  rm -f ${TMPDIR}/test_encoding_file*
+  ${PNAME} -w -i gpx -f ${REFERENCE}/bounds-test.gpx -o shape -F ${TMPDIR}/${filenamebase}.shp
+  for ext in cpg dbf shp shx
+  do
+    count=$(ls -1 -l ${TMPDIR}/${filenamebase}.${ext} 2>/dev/null | wc -l)
+    if [ $count -lt 1 ]; then
+      echo "ERROR: The output file name was mangled."
+      errorcount=`expr $errorcount + 1`
+    fi
+  done
+
+# TODO: add tests to cover formats that use other open methods.
+
+else
+  echo "$0 cannot run without the en_US.iso88591 locale."
+fi
+
+exit $errorcount

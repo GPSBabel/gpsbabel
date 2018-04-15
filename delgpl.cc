@@ -49,7 +49,7 @@ gpl_rd_init(const QString& fname)
 }
 
 static void
-gpl_read(void)
+gpl_read()
 {
   Waypoint* wpt_tmp;
   route_head* track_head;
@@ -101,7 +101,7 @@ gpl_read(void)
 
 
 static void
-gpl_rd_deinit(void)
+gpl_rd_deinit()
 {
   gbfclose(gplfile_in);
 }
@@ -113,7 +113,7 @@ gpl_wr_init(const QString& fname)
 }
 
 static void
-gpl_wr_deinit(void)
+gpl_wr_deinit()
 {
   gbfclose(gplfile_out);
 }
@@ -157,7 +157,7 @@ gpl_trackpt(const Waypoint* wpt)
 }
 
 static void
-gpl_write(void)
+gpl_write()
 {
   track_disp_all(NULL, NULL, gpl_trackpt);
 }
@@ -174,4 +174,6 @@ ff_vecs_t gpl_vecs = {
   NULL,
   NULL,
   CET_CHARSET_UTF8, 1	/* there is no need to convert anything | CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

@@ -7,13 +7,13 @@
     <desc>IGCDATE000000: </desc>
     <rtept lat="-30.675866667" lon="150.609033333">
       <name>TAKEOFF</name>
-      <cmt>BORAH </cmt>
-      <desc>BORAH </desc>
+      <cmt>BORAH</cmt>
+      <desc>BORAH</desc>
     </rtept>
     <rtept lat="-30.675866667" lon="150.609033333">
       <name>START</name>
-      <cmt>BORAH </cmt>
-      <desc>BORAH </desc>
+      <cmt>BORAH</cmt>
+      <desc>BORAH</desc>
     </rtept>
     <rtept lat="-30.729933333" lon="150.649200000">
       <name>TURN01</name>
@@ -179,7 +179,7 @@
       <trkpt lat="-30.678150000" lon="150.607616667">
         <time>2004-04-24T04:24:16Z</time>
       </trkpt>
-      <trkpt lat="-30.679216667" lon="150.608100000">
+      <trkpt lat="-30.679233333" lon="150.608100000">
         <time>2004-04-24T04:24:47Z</time>
       </trkpt>
       <trkpt lat="-30.679166667" lon="150.605483333">
@@ -191,7 +191,7 @@
       <trkpt lat="-30.678133333" lon="150.605883333">
         <time>2004-04-24T04:26:19Z</time>
       </trkpt>
-      <trkpt lat="-30.677983333" lon="150.606666667">
+      <trkpt lat="-30.677983333" lon="150.606683333">
         <time>2004-04-24T04:26:49Z</time>
       </trkpt>
       <trkpt lat="-30.679233333" lon="150.605533333">
@@ -302,7 +302,7 @@
       <trkpt lat="-30.732233333" lon="150.645933333">
         <time>2004-04-24T04:45:11Z</time>
       </trkpt>
-      <trkpt lat="-30.734866667" lon="150.646233333">
+      <trkpt lat="-30.734883333" lon="150.646233333">
         <time>2004-04-24T04:45:42Z</time>
       </trkpt>
       <trkpt lat="-30.735833333" lon="150.652400000">
@@ -329,7 +329,7 @@
       <trkpt lat="-30.752566667" lon="150.680133333">
         <time>2004-04-24T04:49:48Z</time>
       </trkpt>
-      <trkpt lat="-30.755700000" lon="150.684916667">
+      <trkpt lat="-30.755700000" lon="150.684933333">
         <time>2004-04-24T04:50:19Z</time>
       </trkpt>
       <trkpt lat="-30.758066667" lon="150.689716667">

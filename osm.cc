@@ -29,9 +29,9 @@
 static char* opt_tag, *opt_tagnd, *created_by;
 
 static arglist_t osm_args[] = {
-  { "tag", &opt_tag, 	"Write additional way tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-  { "tagnd", &opt_tagnd,	"Write additional node tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-  { "created_by", &created_by, "Use this value as custom created_by value","GPSBabel", ARGTYPE_STRING, ARG_NOMINMAX },
+  { "tag", &opt_tag, 	"Write additional way tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  { "tagnd", &opt_tagnd,	"Write additional node tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  { "created_by", &created_by, "Use this value as custom created_by value","GPSBabel", ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
 
@@ -408,7 +408,7 @@ static osm_icon_mapping_t osm_icon_mappings[] = {
 /*-----------------------------------------------------------------------------*/
 
 static void
-osm_features_init(void)
+osm_features_init()
 {
   int i;
 
@@ -460,7 +460,7 @@ static char*
 osm_strip_html(const char* str)
 {
   utf_string utf;
-  utf.is_html = 1;
+  utf.is_html = true;
   utf.utfstring = (char*)str;
 
   return strip_html(&utf);	// util.cc
@@ -477,7 +477,7 @@ osm_strip_html(const QString& str)
 
 
 static void
-osm_node_end(xg_string args, const QXmlStreamAttributes*)
+osm_node_end(xg_string, const QXmlStreamAttributes*)
 {
   if (wpt) {
     if (wpt->wpt_flags.fmt_use) {
@@ -491,7 +491,7 @@ osm_node_end(xg_string args, const QXmlStreamAttributes*)
 
 
 static void
-osm_node(xg_string args, const QXmlStreamAttributes* attrv)
+osm_node(xg_string, const QXmlStreamAttributes* attrv)
 {
   wpt = new Waypoint;
 
@@ -523,7 +523,7 @@ osm_node(xg_string args, const QXmlStreamAttributes* attrv)
 
 
 static void
-osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
+osm_node_tag(xg_string, const QXmlStreamAttributes* attrv)
 {
   QString key, value;
   QString str;
@@ -578,7 +578,7 @@ osm_node_tag(xg_string args, const QXmlStreamAttributes* attrv)
 
 
 static void
-osm_way(xg_string args, const QXmlStreamAttributes* attrv)
+osm_way(xg_string, const QXmlStreamAttributes* attrv)
 {
   rte = route_head_alloc();
   // create a wpt to represent the route center if it has a center tag
@@ -589,7 +589,7 @@ osm_way(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-osm_way_nd(xg_string args, const QXmlStreamAttributes* attrv)
+osm_way_nd(xg_string, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("ref")) {
     QString atstr = attrv->value("ref").toString();
@@ -607,7 +607,7 @@ osm_way_nd(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-osm_way_tag(xg_string args, const QXmlStreamAttributes* attrv)
+osm_way_tag(xg_string, const QXmlStreamAttributes* attrv)
 {
   QString key, value;
   QString str;
@@ -645,7 +645,7 @@ osm_way_tag(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-osm_way_center(xg_string args, const QXmlStreamAttributes* attrv)
+osm_way_center(xg_string, const QXmlStreamAttributes* attrv)
 {
   wpt->wpt_flags.fmt_use = 1;
 
@@ -658,7 +658,7 @@ osm_way_center(xg_string args, const QXmlStreamAttributes* attrv)
 }
 
 static void
-osm_way_end(xg_string args, const QXmlStreamAttributes*)
+osm_way_end(xg_string, const QXmlStreamAttributes*)
 {
   if (rte) {
     route_add_head(rte);
@@ -690,13 +690,13 @@ osm_rd_init(const QString& fname)
 }
 
 static void
-osm_read(void)
+osm_read()
 {
   xml_read();
 }
 
 static void
-osm_rd_deinit(void)
+osm_rd_deinit()
 {
   xml_deinit();
   waypoints.clear();
@@ -707,7 +707,7 @@ osm_rd_deinit(void)
 /*-----------------------------------------------------------------------------*/
 
 static void
-osm_init_icons(void)
+osm_init_icons()
 {
   int i;
 
@@ -937,7 +937,7 @@ osm_wr_init(const QString& fname)
 }
 
 static void
-osm_write(void)
+osm_write()
 {
   gbfprintf(fout, "<?xml version='1.0' encoding='UTF-8'?>\n");
   gbfprintf(fout, "<osm version='0.6' generator='GPSBabel");
@@ -957,7 +957,7 @@ osm_write(void)
 }
 
 static void
-osm_wr_deinit(void)
+osm_wr_deinit()
 {
   gbfclose(fout);
 
@@ -969,7 +969,7 @@ osm_wr_deinit(void)
 }
 
 static void
-osm_exit(void)
+osm_exit()
 {
   keys.clear();
   values.clear();
@@ -994,4 +994,5 @@ ff_vecs_t osm_vecs = {
   osm_exit,
   osm_args,
   CET_CHARSET_UTF8, 0
-};
+  , NULL_POS_OPS,
+  nullptr};

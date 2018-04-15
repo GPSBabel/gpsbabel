@@ -21,10 +21,10 @@
 
 #include "defs.h"
 #include "csv_util.h"
-#include "inifile.h"
 #include "gbversion.h"
-#include <stdio.h>
-#include <stdlib.h> // qsort
+#include "inifile.h"
+#include <cstdio>
+#include <cstdlib> // qsort
 
 #define MYNAME "vecs.c"
 
@@ -32,7 +32,7 @@ typedef struct {
   ff_vecs_t* vec;
   const char* name;
   const char* desc;
-  const char* extension;
+  const char* extensions; // list of possible extensions separated by '/', first is output default for GUI.
   const char* parent;
 } vecs_t;
 
@@ -239,13 +239,6 @@ vecs_t vec_list[] = {
     "gdb",
     "Garmin MapSource - gdb",
     "gdb",
-    NULL,
-  },
-  {
-    &gtc_vecs,
-    "gtrnctr",
-    "Garmin Training Center (.xml)",
-    "xml",
     NULL,
   },
   {
@@ -663,8 +656,8 @@ vecs_t vec_list[] = {
   {
     &gtc_vecs,
     "gtrnctr",
-    "Garmin Training Center (.tcx)",
-    "xml",
+    "Garmin Training Center (.tcx/.crs/.hst/.xml)",
+    "tcx/crs/hst/xml",
     NULL,
   },
   {
@@ -1110,7 +1103,7 @@ vecs_t vec_list[] = {
 };
 
 void
-init_vecs(void)
+init_vecs()
 {
   vecs_t* vec = vec_list;
   while (vec->vec) {
@@ -1134,7 +1127,7 @@ is_integer(const char* c)
 }
 
 void
-exit_vecs(void)
+exit_vecs()
 {
   vecs_t* vec = vec_list;
   while (vec->vec) {
@@ -1499,7 +1492,7 @@ sort_and_unify_vecs(int* ctp)
     svp[i] = (vecs_t*) xcalloc(1, sizeof** svp);
     svp[i]->name = svec->name;
     svp[i]->vec = (ff_vecs_t*) xmalloc(sizeof(*svp[i]->vec));
-    svp[i]->extension = xcsv_file.extension;
+    svp[i]->extensions = xcsv_file.extension;
     *svp[i]->vec = *vec_list[0].vec; /* Interits xcsv opts */
     /* Reset file type to inherit ff_type from xcsv for everything
      * except the xcsv format itself, which we leave as "internal"
@@ -1543,7 +1536,7 @@ sort_and_unify_vecs(int* ctp)
 #define VEC_FMT "	%-20.20s  %-.50s\n"
 
 void
-disp_vecs(void)
+disp_vecs()
 {
   vecs_t** svp;
   arglist_t* ap;
@@ -1722,7 +1715,7 @@ disp_formats(int version)
         disp_v2(vec->vec);
       }
       printf("%s\t%s\t%s%s%s\n", vec->name,
-             vec->extension? vec->extension : "",
+             vec->extensions? vec->extensions : "",
              vec->desc,
              version >= 3 ? "\t" : "",
              version >= 3 ? vec->parent : "");

@@ -1,0 +1,84 @@
+version: 1.0.{build}
+
+environment:
+  matrix:
+  # MinGW
+  - name: win32
+    platform: mingw
+    qt: 5.5\mingw492_32
+    tools: mingw492_32
+  # MinGW
+  - name: win32
+    platform: mingw
+    qt: 5.6\mingw49_32
+    tools: mingw492_32
+  # MSVC x32
+  - name: win32
+    platform: x86
+    qt: 5.6\msvc2015
+  # MSVC x64
+  - name: win64
+    platform: amd64
+    qt: 5.6\msvc2015_64
+
+init:
+  - if %platform%==mingw set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
+  - if %platform%==mingw set PATH=C:\Qt\Tools\%tools%\bin;%PATH%
+  - set PATH=C:\Qt\%qt%\bin;%PATH%
+  - if not %platform%==mingw call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %platform%
+
+# Flesh out with amd64/msvc cases later.
+build_script:
+  - ps: |
+      # be aware that vcvarsall will reset platform amd64 to X64!
+      echo "platform: $env:platform"
+      echo "qt: $env:qt"
+      qmake -query
+      Get-Location
+      if (($env:platform -eq "mingw") -and ($env:qt -eq "5.5\mingw492_32"))
+      {
+        # windeployqt in 5.5.1 suffers from bug
+        # https://bugreports.qt.io/browser/QTBUG-48946
+        # which trashes the translations.  Work around
+        # by using the next version of windeployqt which had this
+        # bug fixed.
+        & ".\tools\make_windows_release.ps1" -windeployqt "C:\Qt\5.6\mingw49_32\bin\windeployqt.exe"
+        $sha=(git rev-parse --short HEAD)
+        Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
+        Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Manifest.txt" }
+      }
+      elseif (($env:platform -eq "x86") -and ($env:qt -eq "5.6\msvc2015"))
+      {
+        & ".\tools\make_windows_release.ps1" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_6_MSVC2015_32bit-Release" -gui_build_dir_name "build-app-Desktop_Qt_5_6_MSVC2015_32bit-Release" -mkspec win32-msvc2015 -mkcmd nmake.exe
+        $sha=(git rev-parse --short HEAD)
+        Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
+        Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Manifest.txt" }
+      }
+      elseif ($env:platform -eq "mingw")
+      {
+        qmake GPSBabel.pro
+        mingw32-make
+        if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+      }
+      else
+      {
+        qmake GPSBabel.pro
+        nmake
+        if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+      }
+      # work around issue with standard error output causing a build failure by making sure last command succeeds.
+      # see https://help.appveyor.com/discussions/problems/10014-false-build-fail-status
+      Write-Host "Finished build_script"
+
+test_script:
+  - ps: |
+      $env:projdir=(C:\msys64\usr\bin\bash.exe -c "pwd")
+      C:\msys64\usr\bin\bash.exe -lc "echo $env:projdir"
+      # work around issue with standard error output from xmllint causing a build failure by redirecting stderr.
+      # in this case making sure the last command succeeds is not sufficient.
+      # see https://help.appveyor.com/discussions/problems/10014-false-build-fail-status
+      C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; PNAME=./release/GPSBabel.exe GBTEMP=./gbtemp ./testo 2>&1"
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+      C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; PNAME=./release/GPSBabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1"
+      Write-Host "Finished test_script with exit status $LastExitCode"
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }

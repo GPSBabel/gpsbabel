@@ -22,7 +22,7 @@
  */
 
 #include "defs.h"
-#include <stdio.h>
+#include <cstdio>
 
 #define MYNAME "fit"
 
@@ -57,6 +57,8 @@ const int kFieldTemperature = 13;
 const int kFieldEnhancedSpeed = 73;
 const int kFieldEnhancedAltitude = 78;
 
+// For developer fields as a non conflicting id
+const int kFieldInvalid = 255;
 
 static char* opt_allpoints = NULL;
 static int lap_ct = 0;
@@ -106,7 +108,7 @@ fit_rd_init(const QString& fname)
 }
 
 static void
-fit_rd_deinit(void)
+fit_rd_deinit()
 {
   int local_id;
 
@@ -126,7 +128,7 @@ fit_rd_deinit(void)
 * fit_parse_header- parse the global FIT header
 *******************************************************************************/
 static void
-fit_parse_header(void)
+fit_parse_header()
 {
   int len;
   int ver;
@@ -141,7 +143,7 @@ fit_parse_header(void)
   }
 
   ver = gbfgetc(fin);
-  if (ver == EOF || (ver >> 4) > 1)
+  if (ver == EOF || (ver >> 4) > 2)
     fatal(MYNAME ": Unsupported protocol version %d.%d\n",
           ver >> 4, ver & 0xf);
   if (global_opts.debug_level >= 1) {
@@ -173,7 +175,7 @@ fit_parse_header(void)
 }
 
 static uint8_t
-fit_getuint8(void)
+fit_getuint8()
 {
   int val;
 
@@ -196,7 +198,7 @@ fit_getuint8(void)
 }
 
 static uint16_t
-fit_getuint16(void)
+fit_getuint16()
 {
   char buf[2];
 
@@ -215,7 +217,7 @@ fit_getuint16(void)
 }
 
 static uint32_t
-fit_getuint32(void)
+fit_getuint32()
 {
   char buf[4];
 
@@ -265,20 +267,72 @@ fit_parse_definition_message(uint8_t header)
   }
   if (def->num_fields == 0) {
     def->fields = (fit_field_t*) xmalloc(sizeof(fit_field_t));
-    return;
   }
 
   // remainder of the definition message is data at one byte per field * 3 fields
-  def->fields = (fit_field_t*) xmalloc(def->num_fields * sizeof(fit_field_t));
-  for (i = 0; i < def->num_fields; i++) {
-    def->fields[i].id = fit_getuint8();
-    def->fields[i].size = fit_getuint8();
-    def->fields[i].type = fit_getuint8();
-    if (global_opts.debug_level >= 8) {
-      debug_print(8,"%s: record %d  ID: %d  SIZE: %d  TYPE: %d  fit_data.len=%d\n",
-                  MYNAME, i, def->fields[i].id, def->fields[i].size, def->fields[i].type,fit_data.len);
+  if (def->num_fields > 0) {
+    def->fields = (fit_field_t*) xmalloc(def->num_fields * sizeof(fit_field_t));
+    for (i = 0; i < def->num_fields; i++) {
+      def->fields[i].id   = fit_getuint8();
+      def->fields[i].size = fit_getuint8();
+      def->fields[i].type = fit_getuint8();
+      if (global_opts.debug_level >= 8) {
+        debug_print(8,"%s: record %d  ID: %d  SIZE: %d  TYPE: %d  fit_data.len=%d\n",
+                    MYNAME, i, def->fields[i].id, def->fields[i].size, def->fields[i].type,fit_data.len);
+      }
+
     }
   }
+
+  // If we have developer fields (since version 2.0) they must be read too
+  // These is one byte containing the number of fields and 3 bytes for every field.
+  // So this is identical to the normal fields but the meaning of the content is different.
+  //
+  // Currently we just want to ignore the developer fields because they are not meant 
+  // to hold relevant data we need (currently handle) for the conversion.
+
+  // For simplicity using the existing infrastructure we do it in the following way:
+  //   * We read it in as normal fields 
+  //   * We set the field id to kFieldInvalid so that it do not interfere with valid id's from 
+  //     the normal fields.    
+  //       -In our opinion in practice this will not happen, because we do not expect 
+  //        developer fields e.g. inside lap or record records. But we want to be safe here.
+  //   * We do not have to change the type as we did for the id above, because fit_read_field()
+  //     already uses the size information to read the data, if the type does not match the size. 
+  //   
+  // If we want to change this or if we want to avoid the xrealloc call, we can change
+  // it in the future by e.g. extending the fit_message_def struct.
+
+  // Bit 5 of the header specify if we have developer fields in the data message 
+  bool hasDevFields = static_cast<bool>(header & 0x20);
+
+  if (hasDevFields) {
+    int numOfDevFields = fit_getuint8();
+    if (global_opts.debug_level >= 8) {
+      debug_print(8,"%s: definition message contains %d developer records\n",MYNAME, numOfDevFields);
+    }
+    if (numOfDevFields == 0) {
+      return;
+    }
+
+    int numOfFields = def->num_fields+numOfDevFields;
+    def->fields = (fit_field_t*) xrealloc(def->fields, numOfFields * sizeof(fit_field_t));
+    for (i = def->num_fields; i < numOfFields; i++) {
+      def->fields[i].id   = fit_getuint8();
+      def->fields[i].size = fit_getuint8();
+      def->fields[i].type = fit_getuint8();
+      if (global_opts.debug_level >= 8) {
+        debug_print(8,"%s: developer record %d  ID: %d  SIZE: %d  TYPE: %d  fit_data.len=%d\n",
+                    MYNAME, i-def->num_fields, def->fields[i].id, def->fields[i].size, def->fields[i].type,fit_data.len);
+      }
+      // Because we parse developer fields like normal fields and we do not want 
+      // that the field id interfere which valid id's from the normal fields
+      def->fields[i].id = kFieldInvalid;
+
+    }
+    def->num_fields = numOfFields;
+  } 
+  return;
 }
 
 static uint32_t
@@ -626,14 +680,18 @@ fit_parse_compressed_message(uint8_t header)
 * fit_parse_record- parse each record in the file
 *******************************************************************************/
 static void
-fit_parse_record(void)
+fit_parse_record()
 {
   uint8_t header;
 
   header = fit_getuint8();
   // high bit 7 set -> compressed message (0 for normal)
   // second bit 6 set -> 0 for data message, 1 for definition message
-  // bits 5, 4 -> reserved
+  // bit 5 -> message type specific 
+  //    definition message: Bit set means that we have additional Developer Field definitions 
+  //                        behind the field definitions inside the record content
+  //    data message: currently not used 
+  // bit 4 -> reserved
   // bits 3..0 -> local message type
   if (header & 0x80) {
     if (global_opts.debug_level >= 6) {
@@ -662,7 +720,7 @@ fit_parse_record(void)
 * - parse all the records in the file
 *******************************************************************************/
 static void
-fit_read(void)
+fit_read()
 {
   fit_parse_header();
 
@@ -698,5 +756,7 @@ ff_vecs_t format_fit_vecs = {
   fit_args,
   CET_CHARSET_ASCII, 0		/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/

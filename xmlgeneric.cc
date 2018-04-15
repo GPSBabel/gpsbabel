@@ -20,9 +20,9 @@
  */
 
 #include "defs.h"
-#include "xmlgeneric.h"
 #include "cet_util.h"
 #include "src/core/file.h"
+#include "xmlgeneric.h"
 
 #include <QtCore/QByteArray>
 #include <QtCore/QDebug>
@@ -84,7 +84,7 @@ xml_init(const QString& fname, xg_tag_mapping* tbl, const char* encoding)
 }
 
 void
-xml_deinit(void)
+xml_deinit()
 {
   reader_data.clear();
   rd_fname.clear();
@@ -172,7 +172,7 @@ readnext:
   }
 }
 
-void xml_read(void)
+void xml_read()
 {
   gpsbabel::File file(rd_fname);
   QString current_tag;

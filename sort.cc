@@ -20,7 +20,7 @@
  */
 #include "defs.h"
 #include "filterdefs.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #if FILTERS_ENABLED
 
@@ -40,19 +40,19 @@ static
 arglist_t sort_args[] = {
   {
     "gcid", &opt_sm_gcid, "Sort by numeric geocache ID",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "shortname", &opt_sm_shortname, "Sort by waypoint short name",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "description", &opt_sm_description, "Sort by waypoint description",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "time", &opt_sm_time, "Sort by time",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -79,13 +79,13 @@ sort_comp(const queue* a, const queue* b)
 }
 
 void
-sort_process(void)
+sort_process()
 {
   sortqueue(&waypt_head, sort_comp);
 }
 
 void
-sort_init(const char* args)
+sort_init(const char*)
 {
   if (opt_sm_gcid) {
     sort_mode = sm_gcid;

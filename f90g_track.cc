@@ -76,7 +76,7 @@ f90g_track_rd_init(const QString& fname)
 }
 
 static void
-f90g_track_rd_deinit(void)
+f90g_track_rd_deinit()
 {
   gbfclose(fin);
 }
@@ -86,7 +86,7 @@ static const double MIN_PER_DEGREE  = 600000.0f;
 static const float  SPEED_CONVERSION = (10.0f)/(36.0f); // convert KPH to meters per second
 
 static void
-f90g_track_read(void)
+f90g_track_read()
 {
   Waypoint* readWaypoint;
   char northSouth, eastWest, velocityMark, ttRec[TTRECORDSIZE], tempBuf[20];
@@ -156,4 +156,6 @@ ff_vecs_t f90g_track_vecs = {
   f90g_track_args,
   CET_CHARSET_UTF8, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };

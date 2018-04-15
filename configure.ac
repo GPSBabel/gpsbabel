@@ -318,20 +318,8 @@ AS_CASE(["$target"], [*-*-darwin*], [
 AC_MSG_CHECKING([for random stuff to make you feel better])
 AC_MSG_RESULT([failed])
 
-AC_MSG_CHECKING([for efence])
-AC_ARG_ENABLE([efence],
-	[AS_HELP_STRING(
-		[--enable-efence],
-		[])],
-	[AS_IF([test "$enable_efence" != "no"], [
-		EFENCE_LIB=-lefence
-		GPSBABEL_DEBUG=gpsbabel-debug
-		INSTALL_DEBUG=install-debug
-	])])
-AC_SUBST(EFENCE_LIB)
 AC_SUBST(GPSBABEL_DEBUG)
 AC_SUBST(INSTALL_DEBUG)
-AC_MSG_RESULT([$EFENCE_LIB])
 
 AC_MSG_CHECKING([for docdir])
 AC_ARG_WITH([doc],

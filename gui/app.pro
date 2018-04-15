@@ -1,8 +1,10 @@
 # $Id: app.pro,v 1.19 2010-11-01 03:30:42 robertl Exp $
 #
 
-CONFIG += qt release 
-#CONFIG += qt debug console
+CONFIG += qt
+CONFIG(debug, debug|release) {
+  CONFIG += console
+}
 
 # For Mac, x86 and x64, but not PPC binary.   Ignored on other OSes.
 # macx:CONFIG -= x86_64 
@@ -44,6 +46,8 @@ RC_FILE = app.rc
 
 win32 { 
   TARGET=GPSBabelFE
+}
+win32-g++ {
   QMAKE_LFLAGS_RELEASE += -static-libgcc
 }
 unix:TARGET=gpsbabelfe-bin
@@ -117,7 +121,6 @@ TRANSLATIONS += gpsbabelfe_fr.ts
 TRANSLATIONS += gpsbabelfe_hu.ts
 TRANSLATIONS += gpsbabelfe_it.ts
 TRANSLATIONS += gpsbabelfe.ts
-TRANSLATIONS += gpsbabel.ts
 
 
 

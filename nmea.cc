@@ -24,15 +24,15 @@
 #include "defs.h"
 #include "cet_util.h"
 #include "gbser.h"
-#include "strptime.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/logging.h"
+#include "strptime.h"
 
-#include <ctype.h>
-#include <math.h>
-#include <time.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cctype>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 
 #include <QtCore/QStringList>
 
@@ -198,21 +198,21 @@ static Waypoint* nmea_rd_posn(posn_status*);
 static void nmea_rd_posn_init(const QString& fname);
 
 arglist_t nmea_args[] = {
-  {"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64" },
-  {"gprmc", &opt_gprmc, "Read/write GPRMC sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"gpgga", &opt_gpgga, "Read/write GPGGA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"gpvtg", &opt_gpvtg, "Read/write GPVTG sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"gpgsa", &opt_gpgsa, "Read/write GPGSA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX },
+  {"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64", nullptr },
+  {"gprmc", &opt_gprmc, "Read/write GPRMC sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  {"gpgga", &opt_gpgga, "Read/write GPGGA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  {"gpvtg", &opt_gpvtg, "Read/write GPVTG sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  {"gpgsa", &opt_gpgsa, "Read/write GPGSA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  {"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX , nullptr },
   {
     "get_posn", &getposnarg, "Return current position as a waypoint",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  {"pause", &opt_sleep, "Decimal seconds to pause between groups of strings", NULL, ARGTYPE_INT, ARG_NOMINMAX },
-  {"append_positioning", &opt_append, "Append realtime positioning data to the output file instead of truncating", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"baud", &opt_baud, "Speed in bits per second of serial port (baud=4800)", NULL, ARGTYPE_INT, ARG_NOMINMAX },
-  {"gisteq", &opt_gisteq, "Write tracks for Gisteq Phototracker", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
-  {"ignore_fix", &opt_ignorefix, "Accept position fixes in gpgga marked invalid", "0", ARGTYPE_BOOL, ARG_NOMINMAX },
+  {"pause", &opt_sleep, "Decimal seconds to pause between groups of strings", NULL, ARGTYPE_INT, ARG_NOMINMAX , nullptr},
+  {"append_positioning", &opt_append, "Append realtime positioning data to the output file instead of truncating", "0", ARGTYPE_BOOL, ARG_NOMINMAX , nullptr},
+  {"baud", &opt_baud, "Speed in bits per second of serial port (baud=4800)", NULL, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
+  {"gisteq", &opt_gisteq, "Write tracks for Gisteq Phototracker", "0", ARGTYPE_BOOL, ARG_NOMINMAX , nullptr},
+  {"ignore_fix", &opt_ignorefix, "Accept position fixes in gpgga marked invalid", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
   ARG_TERMINATOR
 };
 
@@ -304,7 +304,7 @@ nmea_rd_init(const QString& fname)
 }
 
 static  void
-nmea_rd_deinit(void)
+nmea_rd_deinit()
 {
   switch (read_mode) {
   case rm_serial:
@@ -356,7 +356,7 @@ nmea_wr_init(const QString& portname)
 }
 
 static  void
-nmea_wr_deinit(void)
+nmea_wr_deinit()
 {
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
@@ -1016,7 +1016,7 @@ nmea_parse_one_line(char* ibuf)
 }
 
 static void
-nmea_read(void)
+nmea_read()
 {
   char* ibuf;
   char* ck;
@@ -1130,7 +1130,7 @@ safe_print(int cnt, const char* b)
 static void reset_sirf_to_nmea(int br);
 
 static
-int hunt_sirf(void)
+int hunt_sirf()
 {
   /* Try to place the common BR's first to speed searching */
   static int br[] = {38400, 9600, 57600, 115200, 19200, 4800, -1};
@@ -1172,7 +1172,7 @@ int hunt_sirf(void)
 }
 
 static Waypoint*
-nmea_rd_posn(posn_status* posn_status)
+nmea_rd_posn(posn_status*)
 {
   char ibuf[1024];
   static double lt = -1;
@@ -1380,7 +1380,7 @@ nmea_trackpt_pr(const Waypoint* wpt)
 }
 
 static void
-nmea_write(void)
+nmea_write()
 {
   waypt_disp_all(nmea_wayptpr);
   track_disp_all(nmea_track_init, NULL, nmea_trackpt_pr);
@@ -1399,7 +1399,7 @@ nmea_wr_posn(Waypoint* wpt)
 }
 
 static void
-nmea_wr_posn_deinit(void)
+nmea_wr_posn_deinit()
 {
 // nmea_wr_deinit();
 }
@@ -1424,7 +1424,8 @@ ff_vecs_t nmea_vecs = {
   {
     nmea_rd_posn_init, nmea_rd_posn, nmea_rd_deinit,
     nmea_wr_posn_init, nmea_wr_posn, nmea_wr_posn_deinit
-  }
+  },
+  nullptr
 };
 
 /*

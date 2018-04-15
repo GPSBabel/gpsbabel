@@ -21,12 +21,12 @@
 
 #include "defs.h"
 #include "csv_util.h"
-#include "xmlgeneric.h"
 #include "magellan.h"
+#include "xmlgeneric.h"
 #include <QtCore/QXmlStreamAttributes>
 #include <cmath>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "maggeo"
 
@@ -53,7 +53,7 @@ maggeo_rd_init(const QString& fname)
 }
 
 static void
-maggeo_rd_deinit(void)
+maggeo_rd_deinit()
 {
   gbfclose(maggeofile_in);
 }
@@ -71,7 +71,7 @@ maggeo_wr_init(const QString& fname)
 }
 
 static void
-maggeo_wr_deinit(void)
+maggeo_wr_deinit()
 {
   maggeo_writemsg("PMGNCMD,END");
   mkshort_del_handle(&desc_handle);
@@ -79,7 +79,7 @@ maggeo_wr_deinit(void)
 }
 
 static void
-maggeo_read(void)
+maggeo_read()
 {
   char* buff;
 
@@ -318,7 +318,7 @@ maggeo_waypt_pr(const Waypoint* waypointp)
 }
 
 static void
-maggeo_write(void)
+maggeo_write()
 {
   waypt_disp_all(maggeo_waypt_pr);
 }
@@ -339,4 +339,6 @@ ff_vecs_t maggeo_vecs = {
 #else
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 #endif
+  , NULL_POS_OPS,
+  nullptr
 };

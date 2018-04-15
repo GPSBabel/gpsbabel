@@ -24,7 +24,7 @@
 */
 
 #include "defs.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 #define MYNAME "Garmin_XT"
 #define GARMIN_XT_ELE 31500/65536
@@ -57,10 +57,10 @@ static char*	opt_trk_header = NULL;
 
 static
 arglist_t format_garmin_xt_args[] = {
-  {"ftype", &opt_xt_ftype, "Garmin Mobile XT ([ATRK]/STRK)", "ATRK", ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX},
+  {"ftype", &opt_xt_ftype, "Garmin Mobile XT ([ATRK]/STRK)", "ATRK", ARGTYPE_STRING | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr},
   // TODO: SHIFT - can't test behaviour, do not have appropriate files
   //{"trk_header_opt", &opt_trk_header, "Track name processing option ([0]-nrm/1-ign/2-sht)", "0", ARGTYPE_INT, ARG_NOMINMAX},
-  {"trk_header", &opt_trk_header, "Track name processing option ([0]-nrm/1-ign)", "0", ARGTYPE_INT, ARG_NOMINMAX},
+  {"trk_header", &opt_trk_header, "Track name processing option ([0]-nrm/1-ign)", "0", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
   ARG_TERMINATOR
 };
 
@@ -78,7 +78,7 @@ format_garmin_xt_rd_init(const QString& fname)
 }
 
 static void
-format_garmin_xt_rd_deinit(void)
+format_garmin_xt_rd_deinit()
 {
   gbfclose(fin);
 }
@@ -231,7 +231,7 @@ format_garmin_xt_decomp_last_ele(uint8_t ii, double* PrevEle, uint8_t TrackBlock
  * Main Function to process Saved tracks file
  */
 static void
-format_garmin_xt_proc_strk(void)
+format_garmin_xt_proc_strk()
 {
   int 		Count = 0; // Used to obtain number of read bytes
   int		NumberOfTracks = 0, TracksCompleted = 0; // Number of tracks in the file and number of processed tracks
@@ -336,7 +336,7 @@ format_garmin_xt_proc_strk(void)
 }
 
 static void
-format_garmin_xt_proc_atrk(void)
+format_garmin_xt_proc_atrk()
 {
   uint16_t	block=0, uu=0;
   uint32_t	Lat=0, Lon=0;
@@ -404,7 +404,7 @@ format_garmin_xt_proc_atrk(void)
 }
 
 static void
-format_garmin_xt_read(void)
+format_garmin_xt_read()
 {
   // Saved Tracks file
   if (strcmp(opt_xt_ftype, "STRK") == 0) {
@@ -433,5 +433,7 @@ ff_vecs_t format_garmin_xt_vecs = {
   format_garmin_xt_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
+  , NULL_POS_OPS,
+  nullptr
 };
 /**************************************************************************/

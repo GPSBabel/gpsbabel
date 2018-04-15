@@ -15,7 +15,7 @@ The properties for name and description are written, where available.
 Tracks are converted to a LineString.
 MultiPoint are converted to Waypoints.
 LineString, Polygon and MultiPolygon are converted to routes.
-MultiLineString are conveted to tracks.
+MultiLineString are converted to tracks.
 </para>
 <para>
 The potentially nested/recursive nature of GeoJSON in general would be 

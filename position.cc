@@ -22,8 +22,8 @@
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
-#include <math.h>
-#include <stdlib.h>
+#include <cmath>
+#include <cstdlib>
 
 #if FILTERS_ENABLED
 
@@ -48,16 +48,16 @@ static
 arglist_t position_args[] = {
   {
     "distance", &distopt, "Maximum positional distance",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX
+    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "all", &purge_duplicates,
     "Suppress all points close to other points",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "time", &timeopt, "Maximum time in seconds beetween two points",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX
+    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -87,7 +87,7 @@ position_runqueue(queue* q, int nelems, int qtype)
   qlist = (int*) xcalloc(nelems, sizeof(*qlist));
 
 #if NEWQ
-  foreach(Waypoint* waypointp, waypt_list) {
+  foreach (Waypoint* waypointp, waypt_list) {
     comp[i] = waypointp;
 #else
   QUEUE_FOR_EACH(q, elem, tmp) {
@@ -166,29 +166,41 @@ position_runqueue(queue* q, int nelems, int qtype)
 }
 
 static void
-position_process_route(const route_head* rh)
+position_process_any_route(const route_head* rh, int type)
 {
   int i = rh->rte_waypt_ct;
 
   if (i) {
     cur_rte = (route_head*)rh;
-    position_runqueue((queue*)&rh->waypoint_list, i, rtedata);
+    position_runqueue((queue*)&rh->waypoint_list, i, type);
     cur_rte = NULL;
   }
 
 }
 
 static void
-position_noop_w(const Waypoint* w)
+position_process_rte(const route_head* rh)
+{
+  position_process_any_route(rh, rtedata);
+}
+
+static void
+position_process_trk(const route_head* rh)
+{
+  position_process_any_route(rh, trkdata);
+}
+
+static void
+position_noop_w(const Waypoint*)
 {
 }
 
 static void
-position_noop_t(const route_head* h)
+position_noop_t(const route_head*)
 {
 }
 
-void position_process(void)
+void position_process()
 {
   int i = waypt_count();
 
@@ -196,12 +208,12 @@ void position_process(void)
     position_runqueue(&waypt_head, i, wptdata);
   }
 
-  route_disp_all(position_process_route, position_noop_t, position_noop_w);
-  track_disp_all(position_process_route, position_noop_t, position_noop_w);
+  route_disp_all(position_process_rte, position_noop_t, position_noop_w);
+  track_disp_all(position_process_trk, position_noop_t, position_noop_w);
 }
 
 void
-position_init(const char* args)
+position_init(const char*)
 {
   char* fm;
 
@@ -225,7 +237,7 @@ position_init(const char* args)
 }
 
 void
-position_deinit(void)
+position_deinit()
 {
 }
 

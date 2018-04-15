@@ -24,8 +24,8 @@
 #include "cet_util.h"
 #include "magellan.h"
 #include <cmath>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;
@@ -39,7 +39,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -52,14 +52,14 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
 }
 
 static void
-data_read(void)
+data_read()
 {
   char* ibuf;
   char desc[31];
@@ -168,7 +168,7 @@ gpsutil_disp(const Waypoint* wpt)
 }
 
 static void
-data_write(void)
+data_write()
 {
   waypt_disp_all(gpsutil_disp);
 }
@@ -186,4 +186,6 @@ ff_vecs_t gpsutil_vecs = {
   NULL,
   NULL,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

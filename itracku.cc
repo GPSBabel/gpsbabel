@@ -31,9 +31,9 @@
  */
 #include "defs.h"
 #include "gbser.h"
-#include <ctype.h>
-#include <math.h>
-#include <stdio.h>
+#include <cctype>
+#include <cmath>
+#include <cstdio>
 
 #define MYNAME "itracku"
 
@@ -354,8 +354,8 @@ init_device()
 // select the type of option.
 static
 arglist_t itracku_args[] = {
-  { "backup", &backup_file_name, "Appends the input to a backup file", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
-  { "new", &only_new, "Only waypoints that are not the backup file", NULL, ARGTYPE_STRING, ARG_NOMINMAX },
+  { "backup", &backup_file_name, "Appends the input to a backup file", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  { "new", &only_new, "Only waypoints that are not the backup file", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
 //   "default", ARGYTPE_STRING, ARG_NOMINMAX} ,
   ARG_TERMINATOR
 };
@@ -365,7 +365,7 @@ arglist_t itracku_args[] = {
 *******************************************************************************/
 
 static void
-itracku_rd_init_common(const QString& fname)
+itracku_rd_init_common(const QString&)
 {
   new_waypoint_count = 0;
 
@@ -458,7 +458,7 @@ itracku_rd_init(const QString& fname)
 }
 
 static void
-itracku_rd_deinit(void)
+itracku_rd_deinit()
 {
   dbg(1, "%d new waypoints", new_waypoint_count);
   if (fd) {
@@ -586,7 +586,7 @@ itracku_waypt_input(void (*waypt_add)(Waypoint* wpt))
 }
 
 static void
-itracku_read_waypt(void)
+itracku_read_waypt()
 {
   itracku_waypt_input(&waypt_add);
 }
@@ -600,7 +600,7 @@ itracku_read_trk_waypt_add(Waypoint* wpt)
 }
 
 static void
-itracku_read_trk(void)
+itracku_read_trk()
 {
   itracku_read_trk_track = route_head_alloc();
   track_add_head(itracku_read_trk_track);
@@ -608,7 +608,7 @@ itracku_read_trk(void)
 }
 
 static void
-itracku_read(void)
+itracku_read()
 {
   switch (global_opts.objective) {
   case wptdata:
@@ -633,7 +633,7 @@ itracku_wr_init(const QString& fname)
 }
 
 static void
-itracku_wr_deinit(void)
+itracku_wr_deinit()
 {
   gbfclose(fout);
 }
@@ -645,13 +645,13 @@ itracku_output_waypoint(const Waypoint* wp)
 }
 
 static void
-itracku_write(void)
+itracku_write()
 {
   waypt_disp_all(itracku_output_waypoint);
 }
 
 static void
-itracku_exit(void)		/* optional */
+itracku_exit()		/* optional */
 {
 }
 
@@ -743,11 +743,11 @@ gprmc_parse(char* ibuf)
 	andreas.grimme@gmx.net
 */
 static Waypoint*
-itracku_rt_position(posn_status* posn_status)
+itracku_rt_position(posn_status*)
 {
   char line[1024];
   Waypoint* wpt;
-  while (1) {
+  while (true) {
     gbser_read_line(fd, line, sizeof(line), 5000, 13, 10);
     dbg(1, line);
     wpt = gprmc_parse(line);
@@ -758,7 +758,7 @@ itracku_rt_position(posn_status* posn_status)
 }
 
 static void
-itracku_rt_deinit(void)
+itracku_rt_deinit()
 {
   itracku_rd_deinit();
 }
@@ -785,7 +785,8 @@ ff_vecs_t itracku_vecs = {
   itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
-  { itracku_rt_init, itracku_rt_position, itracku_rt_deinit, NULL, NULL, NULL }
+  { itracku_rt_init, itracku_rt_position, itracku_rt_deinit, NULL, NULL, NULL },
+  nullptr
 };
 
 ff_vecs_t itracku_fvecs = {
@@ -805,7 +806,8 @@ ff_vecs_t itracku_fvecs = {
   itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
-  { NULL, NULL, NULL, NULL, NULL, NULL }
+  { NULL, NULL, NULL, NULL, NULL, NULL },
+  nullptr
 };
 
 

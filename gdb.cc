@@ -30,7 +30,7 @@
 #include "grtcirc.h"
 #include "jeeps/gpsmath.h"
 #include <cmath>
-#include <stdlib.h>
+#include <cstdlib>
 
 #define MYNAME "gdb"
 
@@ -262,7 +262,7 @@ gdb_fread_str(char* buf, int size, gbfile* fin)
 }
 
 static QString
-gdb_fread_strlist(void)
+gdb_fread_strlist()
 {
 //  char* res = NULL;
   QString res;
@@ -426,7 +426,7 @@ gdb_write_time(const int time)
 /*-----------------------------------------------------------------------------*/
 
 static void
-read_file_header(void)
+read_file_header()
 {
   char buf[128];
   int i, reclen;
@@ -445,7 +445,9 @@ read_file_header(void)
   is_fatal(strcmp(buf, "MsRcf") != 0, MYNAME ": Invalid file \"%s\"!", fin->name);
 
   reclen = FREAD_i32;
+  Q_UNUSED(reclen);
   i = FREAD_STR(buf);
+  Q_UNUSED(i);
   is_fatal(buf[0] != 'D', MYNAME ": Invalid file \"%s\"!", fin->name);
 
   gdb_ver = buf[1] - 'k' + 1;
@@ -458,6 +460,7 @@ read_file_header(void)
 
   reclen = FREAD_i32;
   i = FREAD(buf, reclen + 1);
+  Q_UNUSED(i);
   if (global_opts.verbose_status > 0) {
     const char* name = buf+2;
     if (strstr(name, "SQA") == 0) {
@@ -726,7 +729,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
 /*-----------------------------------------------------------------------------*/
 
 static route_head*
-read_route(void)
+read_route()
 {
   route_head* rte;
   int points, warnings, links, i;
@@ -942,7 +945,7 @@ read_route(void)
 /*-----------------------------------------------------------------------------*/
 
 static route_head*
-read_track(void)
+read_track()
 {
   route_head* res;
   int points, index;
@@ -1032,7 +1035,7 @@ gdb_rd_init(const QString& fname)
 }
 
 static void
-gdb_rd_deinit(void)
+gdb_rd_deinit()
 {
   disp_summary(fin);
   gdb_flush_waypt_queue(&wayptq_in);
@@ -1042,7 +1045,7 @@ gdb_rd_deinit(void)
 }
 
 static void
-read_data(void)
+read_data()
 {
   gbfile* fsave;
   int incomplete = 0;	/* number of incomplete reads */
@@ -1174,7 +1177,7 @@ reset_short_handle(const char* defname)
 /* ----------------------------------------------------------------------------*/
 
 static void
-write_header(void)
+write_header()
 {
   char buff[128], tbuff[32];
   char* c;
@@ -1807,7 +1810,7 @@ gdb_wr_init(const QString& fname)
 }
 
 static void
-gdb_wr_deinit(void)
+gdb_wr_deinit()
 {
   disp_summary(fout);
   gdb_flush_waypt_queue(&wayptq_out);
@@ -1817,7 +1820,7 @@ gdb_wr_deinit(void)
 }
 
 static void
-write_data(void)
+write_data()
 {
   if (gdb_opt_ver) {
     gdb_ver = atoi(gdb_opt_ver);
@@ -1891,6 +1894,8 @@ ff_vecs_t gdb_vecs = {
   gdb_args,
   CET_CHARSET_MS_ANSI, 0	/* O.K.: changed to NON-FIXED */
   /* because of utf8 strings since GDB V3 */
+  , NULL_POS_OPS,
+  nullptr
 };
 
 /*******************************************************************************/

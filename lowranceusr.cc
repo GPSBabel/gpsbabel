@@ -34,9 +34,9 @@
 
 #include "defs.h"
 #include <QtCore/QDebug>
-#include <stdio.h>
 #include <cmath> /* for lat/lon conversion */
-#include <stdlib.h> // atoi
+#include <cstdio>
+#include <cstdlib> // atoi
 
 typedef struct lowranceusr_icon_mapping {
   const int	value;
@@ -302,23 +302,23 @@ static
 arglist_t lowranceusr_args[] = {
   {
     "ignoreicons", &ignoreicons, "Ignore event marker icons on read",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "writeasicons", &writeasicons, "Treat waypoints as icons on write",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "merge", &merge, "(USR output) Merge into one segmented track",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "break", &seg_break, "(USR input) Break segments into separate tracks",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "wversion", &wversion_arg, "(USR output) Write version",
-    "2", ARGTYPE_INT, "2", "3"
+    "2", ARGTYPE_INT, "2", "3", nullptr
   },
   ARG_TERMINATOR
 };
@@ -330,7 +330,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -345,7 +345,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
   mkshort_del_handle(&mkshort_handle);
@@ -447,7 +447,7 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp)
 
 
 static void
-lowranceusr_parse_routes(void)
+lowranceusr_parse_routes()
 {
   char buff[MAXUSRSTRINGSIZE + 1];
   short int num_routes, num_legs;
@@ -493,7 +493,7 @@ lowranceusr_parse_routes(void)
  * option of ignoreicons is used
  */
 static void
-lowranceusr_parse_icons(void)
+lowranceusr_parse_icons()
 {
   char buff[MAXUSRSTRINGSIZE + 1];
   short int num_icons;
@@ -530,7 +530,7 @@ lowranceusr_parse_icons(void)
 }
 
 static void
-lowranceusr_parse_trails(void)
+lowranceusr_parse_trails()
 {
   char buff[MAXUSRSTRINGSIZE + 1];
   short int num_trails, num_trail_points, num_section_points;
@@ -623,7 +623,7 @@ lowranceusr_parse_trails(void)
 }
 
 static void
-data_read(void)
+data_read()
 {
   short int NumWaypoints, MajorVersion, MinorVersion, object_num;
   int i;
@@ -767,7 +767,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
 
   gbfputint32(Time, file_out);
 
-  if (get_cache_icon(wpt) && wpt->icon_descr.compare("Geocache Found") == 0) {
+  if (get_cache_icon(wpt) && wpt->icon_descr.compare(QLatin1String("Geocache Found")) == 0) {
     SymbolId = lowranceusr_find_icon_number_from_desc(get_cache_icon(wpt));
   } else {
     SymbolId = lowranceusr_find_icon_number_from_desc(wpt->icon_descr);
@@ -980,7 +980,7 @@ lowranceusr_merge_track_hdr(const route_head* trk)
 }
 
 static void
-lowranceusr_merge_track_tlr(const route_head* trk)
+lowranceusr_merge_track_tlr(const route_head*)
 {
   short num_trail_points, max_trail_size;
   char visible=1;
@@ -1005,13 +1005,13 @@ lowranceusr_merge_track_tlr(const route_head* trk)
 }
 static void
 
-lowranceusr_merge_track_hdr_2(const route_head* trk)
+lowranceusr_merge_track_hdr_2(const route_head*)
 {
   continuous = 0;
 }
 
 static void
-data_write(void)
+data_write()
 {
   short int NumWaypoints, MajorVersion, MinorVersion, NumRoutes, NumTrails, NumIcons;
   setshort_length(mkshort_handle, 15);
@@ -1098,4 +1098,6 @@ ff_vecs_t lowranceusr_vecs = {
   NULL,
   lowranceusr_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };

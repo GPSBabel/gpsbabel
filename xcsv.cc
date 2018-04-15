@@ -26,13 +26,13 @@
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
 
-#include "defs.h"
 #include "csv_util.h"
+#include "defs.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/file.h"
 #include "src/core/logging.h"
-#include <ctype.h>
-#include <stdlib.h>
+#include <cctype>
+#include <cstdlib>
 
 #if CSVFMTS_ENABLED
 #define MYNAME	"XCSV"
@@ -53,36 +53,36 @@ static
 arglist_t xcsv_args[] = {
   {
     "style", &styleopt, "Full path to XCSV style file", NULL,
-    ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX
+    ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "snlen", &snlenopt, "Max synthesized shortname length", NULL,
-    ARGTYPE_INT, "1", NULL
+    ARGTYPE_INT, "1", NULL, nullptr
   },
   {
     "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "snupper", &snupperopt, "UPPERCASE synth. shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "snunique", &snuniqueopt, "Make synth. shortnames unique",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "urlbase", &xcsv_urlbase, "Basename prepended to URL on output",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "prefer_shortnames", &prefer_shortnames,
     "Use shortname instead of description",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "datum", &opt_datum, "GPS datum (def. WGS 84)",
-    "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX
+    "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -706,7 +706,8 @@ ff_vecs_t xcsv_vecs = {
   NULL,
   xcsv_args,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
-  { NULL, NULL, NULL, xcsv_wr_position_init, xcsv_wr_position, xcsv_wr_position_deinit }
+  { NULL, NULL, NULL, xcsv_wr_position_init, xcsv_wr_position, xcsv_wr_position_deinit },
+  nullptr 
 
 };
 #else

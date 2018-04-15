@@ -39,9 +39,9 @@
 
 
 #include "defs.h"
-#include <stdio.h> // sprintf
-#include <stdlib.h> // qsort
 #include <QtCore/QTextCodec>
+#include <cstdio> // sprintf
+#include <cstdlib> // qsort
 
 #define MYNAME "TomTom"
 
@@ -60,7 +60,7 @@ rd_init(const QString& fname)
 }
 
 static void
-rd_deinit(void)
+rd_deinit()
 {
   gbfclose(file_in);
 }
@@ -72,7 +72,7 @@ wr_init(const QString& fname)
 }
 
 static void
-wr_deinit(void)
+wr_deinit()
 {
   gbfclose(file_out);
 }
@@ -148,7 +148,7 @@ check_recsize(int sz)
 }
 
 static void
-data_read(void)
+data_read()
 {
   int rectype;
   long recsize;
@@ -422,7 +422,7 @@ free_blocks(struct blockheader* block)
 }
 
 static void
-data_write(void)
+data_write()
 {
   int ct = waypt_count();
   struct hdr* htable, *bh;
@@ -483,4 +483,6 @@ ff_vecs_t tomtom_vecs = {
   NULL,
   tomtom_args,
   CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
+  , NULL_POS_OPS,
+  nullptr
 };
