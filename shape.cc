@@ -65,17 +65,17 @@ arglist_t shp_args[] = {
 /************************************************************************/
 
 SHPHandle SHPAPI_CALL
-SHPOpenGpsbabel( const QString& pszLayer, const char * pszAccess )
+SHPOpenGpsbabel(const QString& pszLayer, const char* pszAccess)
 
 {
-    SAHooks sHooks;
+  SAHooks sHooks;
 
 #ifdef SHPAPI_UTF8_HOOKS
-    SASetupUtf8Hooks( &sHooks );
-    return SHPOpenLL( pszLayer.toUtf8().constData(), pszAccess, &sHooks );
+  SASetupUtf8Hooks(&sHooks);
+  return SHPOpenLL(pszLayer.toUtf8().constData(), pszAccess, &sHooks);
 #else
-    SASetupDefaultHooks( &sHooks );
-    return SHPOpenLL( qPrintable(pszLayer), pszAccess, &sHooks );
+  SASetupDefaultHooks(&sHooks);
+  return SHPOpenLL(qPrintable(pszLayer), pszAccess, &sHooks);
 #endif
 
 }
@@ -88,17 +88,17 @@ SHPOpenGpsbabel( const QString& pszLayer, const char * pszAccess )
 /************************************************************************/
 
 SHPHandle SHPAPI_CALL
-SHPCreateGpsbabel( const QString& pszLayer, int nShapeType )
+SHPCreateGpsbabel(const QString& pszLayer, int nShapeType)
 
 {
-    SAHooks sHooks;
+  SAHooks sHooks;
 
 #ifdef SHPAPI_UTF8_HOOKS
-    SASetupUtf8Hooks( &sHooks );
-    return SHPCreateLL( pszLayer.toUtf8().constData(), nShapeType, &sHooks );
+  SASetupUtf8Hooks(&sHooks);
+  return SHPCreateLL(pszLayer.toUtf8().constData(), nShapeType, &sHooks);
 #else
-    SASetupDefaultHooks( &sHooks );
-    return SHPCreateLL( qPrintable(pszLayer), nShapeType, &sHooks );
+  SASetupDefaultHooks(&sHooks);
+  return SHPCreateLL(qPrintable(pszLayer), nShapeType, &sHooks);
 #endif
 
 }
@@ -108,19 +108,19 @@ SHPCreateGpsbabel( const QString& pszLayer, int nShapeType )
 /*                                                                      */
 /*      Open a .dbf file.                                               */
 /************************************************************************/
-   
+
 DBFHandle SHPAPI_CALL
-DBFOpenGpsbabel( const QString& pszFilename, const char * pszAccess )
+DBFOpenGpsbabel(const QString& pszFilename, const char* pszAccess)
 
 {
-    SAHooks sHooks;
+  SAHooks sHooks;
 
 #ifdef SHPAPI_UTF8_HOOKS
-    SASetupUtf8Hooks( &sHooks );
-    return DBFOpenLL( pszFilename.toUtf8().constData(), pszAccess, &sHooks );
+  SASetupUtf8Hooks(&sHooks);
+  return DBFOpenLL(pszFilename.toUtf8().constData(), pszAccess, &sHooks);
 #else
-    SASetupDefaultHooks( &sHooks );
-    return DBFOpenLL( qPrintable(pszFilename), pszAccess, &sHooks );
+  SASetupDefaultHooks(&sHooks);
+  return DBFOpenLL(qPrintable(pszFilename), pszAccess, &sHooks);
 #endif
 
 }
@@ -132,17 +132,17 @@ DBFOpenGpsbabel( const QString& pszFilename, const char * pszAccess )
 /************************************************************************/
 
 DBFHandle SHPAPI_CALL
-DBFCreateExGpsbabel( const QString& pszFilename, const char* pszCodePage )
+DBFCreateExGpsbabel(const QString& pszFilename, const char* pszCodePage)
 
 {
-    SAHooks sHooks;
+  SAHooks sHooks;
 
 #ifdef SHPAPI_UTF8_HOOKS
-    SASetupUtf8Hooks( &sHooks );
-    return DBFCreateLL( pszFilename.toUtf8().constData(), pszCodePage , &sHooks );
+  SASetupUtf8Hooks(&sHooks);
+  return DBFCreateLL(pszFilename.toUtf8().constData(), pszCodePage , &sHooks);
 #else
-    SASetupDefaultHooks( &sHooks );
-    return DBFCreateLL( qPrintable(pszFilename), pszCodePage , &sHooks );
+  SASetupDefaultHooks(&sHooks);
+  return DBFCreateLL(qPrintable(pszFilename), pszCodePage , &sHooks);
 #endif
 
 }
@@ -154,10 +154,10 @@ DBFCreateExGpsbabel( const QString& pszFilename, const char* pszCodePage )
 /************************************************************************/
 
 DBFHandle SHPAPI_CALL
-DBFCreateGpsbabel( const QString& pszFilename )
+DBFCreateGpsbabel(const QString& pszFilename)
 
 {
-    return DBFCreateExGpsbabel( pszFilename, "LDID/87" ); // 0x57
+  return DBFCreateExGpsbabel(pszFilename, "LDID/87");   // 0x57
 }
 
 static
@@ -321,17 +321,28 @@ my_read(void)
     case SHPT_ARC:
     case SHPT_ARCZ:
     case SHPT_ARCM: {
-      route_head* routehead = route_head_alloc();
-      routehead->rte_name = name;
-      route_add_head(routehead);
-      for (int j = 0; j < shp->nVertices; j++) {
-        wpt = new Waypoint;
-        wpt->latitude = shp->padfY[j];
-        wpt->longitude = shp->padfX[j];
-        if (hasZ) {
-          wpt->altitude = shp->padfZ[j];
+// A part is a connected sequence of two or more points.
+// Parts may or may not be connected to one another.
+// Parts may or may not intersect one another.
+      for (int part=0; part < shp->nParts; part++) {
+        route_head* routehead = route_head_alloc();
+        routehead->rte_name = name;
+        route_add_head(routehead);
+        int endVertex;
+        if (part < (shp->nParts - 1)) {
+          endVertex = shp->panPartStart[part+1];
+        } else {
+          endVertex = shp->nVertices;
         }
-        route_add_wpt(routehead, wpt);
+        for (int j = shp->panPartStart[part]; j < endVertex; j++) {
+          wpt = new Waypoint;
+          wpt->latitude = shp->padfY[j];
+          wpt->longitude = shp->padfX[j];
+          if (hasZ) {
+            wpt->altitude = shp->padfZ[j];
+          }
+          route_add_wpt(routehead, wpt);
+        }
       }
       break;
     }
