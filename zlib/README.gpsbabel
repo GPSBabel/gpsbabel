@@ -4,6 +4,4 @@ other changes after zlib 1.2.8 may be required as well.
 1. zconf.h is modified to include our config.h
 2. contrib/minizip/ioapi.c modifies a conditional adding __CYGWIN__
 3. contrib/minizip/ioapi.h modifies a conditional adding __FreeBSD__
-4. contrib/minizip/zip.c changes the path to find our zlib.h
-5. contrib/minizip/zip.h changes the path to find our zlib.h
 See the corresponding .patch files.

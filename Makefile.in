@@ -10,6 +10,14 @@
 
 srcdir = @srcdir@
 VPATH = @srcdir@
+builddir = @builddir@
+
+# when srcdir and builddir are different we need to get config.h from builddir.
+ifeq ($(srcdir), $(builddir))
+BUILD_CPP = -I$(srcdir)
+else
+BUILD_CPP = -I$(builddir) -I$(srcdir)
+endif
 
 # version and release are defined in the head of configure.ac
 # don't forget 'autoconf' if you change them
@@ -49,7 +57,7 @@ LRELEASE=@LRELEASE@
 #OPTIMIZATION=-O $(EXTRA_OPTIMIZATION)
 #DEBUGGING=-g $(EXTRA_DEBUGGING)
 # add -DDEBUG_MEM to turn on memory allocation logging
-GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) -I$(srcdir) @QT_INC_OPT@$(QT_INC) \
+GBCFLAGS=$(EXTRA_CFLAGS) $(DEBUGGING) $(BUILD_CPP) @ZLIB_CPP@ @QT_INC_OPT@$(QT_INC) \
 	$(OPTIMIZATION) -DHAVE_CONFIG_H -DNEW_STRINGS
 LDFLAGS=$(EXTRA_LDFLAGS) @LDFLAGS@
 PREFIX=@prefix@
@@ -106,7 +114,7 @@ MINIZIP=zlib/contrib/minizip/zip.o \
 ZLIB=zlib/adler32.o zlib/compress.o zlib/crc32.o zlib/deflate.o zlib/inffast.o \
 	zlib/inflate.o zlib/infback.o zlib/inftrees.o zlib/trees.o \
 	zlib/uncompr.o zlib/gzlib.o zlib/gzclose.o zlib/gzread.o \
-	zlib/gzwrite.o zlib/zutil.o $(MINIZIP)
+	zlib/gzwrite.o zlib/zutil.o
 
 
 LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
@@ -117,7 +125,7 @@ LIBOBJS = queue.o route.o waypt.o filter_vecs.o util.o vecs.o mkshort.o \
 	  src/core/xmlstreamwriter.o \
 	  src/core/usasciicodec.o\
 	  src/core/ziparchive.o \
-	  $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ $(FMTS) $(FILTERS)
+	  $(GARMIN) $(JEEPS) $(SHAPE) @ZLIB@ @MINIZIP@ $(FMTS) $(FILTERS)
 OBJS = main.o globals.o $(LIBOBJS) @FILEINFO@
 
 DEPFILES = $(OBJS:.o=.d)

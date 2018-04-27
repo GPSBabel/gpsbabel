@@ -23,7 +23,11 @@
 
 #include "defs.h"
 #include "src/core/logging.h"
+#ifdef HAVE_LIBMINIZIP
+#include <minizip/zip.h>
+#else
 #include "zlib/contrib/minizip/zip.h"
+#endif
 
 #include <QtCore/QFile>
 #include <QtCore/QDebug>
@@ -90,3 +94,4 @@ bool ZipArchive::Add(QStringList items_to_add) {
   }
   return false;
 }
+
