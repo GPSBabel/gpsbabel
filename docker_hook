@@ -1,0 +1,8 @@
+#!/bin/bash -ex
+#
+# setup up and run a docker build.
+# this is used by travis.
+#
+cnt=$(docker create  -v `pwd`:/app -e CC=$CC -e CXX=$CXX tsteven4/gpsbabel_build_environment bash -c "./build_and_test")
+docker cp . $cnt:/app
+docker start -a $cnt

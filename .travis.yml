@@ -1,33 +1,7 @@
-sudo: true
-dist: trusty
-language: cpp
-compiler:
-  - gcc
-  - clang
-addons:
-  apt:
-    packages:
-    - expat
-    - fop
-    - valgrind
-    - xsltproc
-    - libxml2-utils
-    - qt5-default
-    - qtbase5-dev
-    - libqt5webkit5-dev
-    - qttools5-dev-tools
-    - qttranslations5-l10n
-    - libusb-dev
-    - docbook-xml
-    - docbook-xsl
-before_script:
-# get locale needed for test_encoding.
-# these commands seem to work on xenial
-#  - sudo sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen
-#  - sudo dpkg-reconfigure --frontend=noninteractive locales
-# but on trusty it took something different, including eating an error from local-gen.
-  - sudo locale-gen en_US ISO-8859-1 || sudo locale-gen
-  - locale -a
+sudo: required
+services: docker
+env:
+  - CC=gcc CXX=g++
+  - CC=clang CXX=clang++
 script:
- - ./build_and_test
-# TODO: build mac
+  - ./docker_hook
