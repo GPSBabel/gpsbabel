@@ -61,7 +61,7 @@
         <name>TP000008</name>
       </trkpt>
       <trkpt lat="50.826026917" lon="12.919361115">
-        <ele>284.312</ele>
+        <ele>284.313</ele>
         <time>2016-01-10T16:06:22Z</time>
         <speed>1.080000</speed>
         <name>TP000009</name>
@@ -163,7 +163,7 @@
         <name>TP000024</name>
       </trkpt>
       <trkpt lat="50.825614929" lon="12.919157028">
-        <ele>310.062</ele>
+        <ele>310.063</ele>
         <time>2016-01-10T16:08:51Z</time>
         <speed>1.200000</speed>
         <name>TP000025</name>

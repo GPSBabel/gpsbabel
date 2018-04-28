@@ -433,7 +433,7 @@
         <name>TP000071</name>
       </trkpt>
       <trkpt lat="49.880825043" lon="8.083807945">
-        <ele>208.562</ele>
+        <ele>208.563</ele>
         <time>2009-03-28T09:19:27Z</time>
         <speed>1.100000</speed>
         <name>TP000072</name>
@@ -469,7 +469,7 @@
         <name>TP000077</name>
       </trkpt>
       <trkpt lat="49.880794525" lon="8.084388733">
-        <ele>203.812</ele>
+        <ele>203.813</ele>
         <time>2009-03-28T09:19:57Z</time>
         <speed>1.090000</speed>
         <name>TP000078</name>
@@ -1099,7 +1099,7 @@
         <name>TP000182</name>
       </trkpt>
       <trkpt lat="49.879871368" lon="8.089026451">
-        <ele>184.562</ele>
+        <ele>184.563</ele>
         <time>2009-03-28T09:28:42Z</time>
         <speed>1.430000</speed>
         <name>TP000183</name>
@@ -1135,7 +1135,7 @@
         <name>TP000188</name>
       </trkpt>
       <trkpt lat="49.879795074" lon="8.088508606">
-        <ele>189.312</ele>
+        <ele>189.313</ele>
         <time>2009-03-28T09:29:12Z</time>
         <speed>0.990000</speed>
         <name>TP000189</name>
@@ -1885,7 +1885,7 @@
         <name>TP000313</name>
       </trkpt>
       <trkpt lat="49.881587982" lon="8.080384254">
-        <ele>204.812</ele>
+        <ele>204.813</ele>
         <time>2009-03-28T09:39:37Z</time>
         <speed>1.720000</speed>
         <name>TP000314</name>
@@ -1957,7 +1957,7 @@
         <name>TP000325</name>
       </trkpt>
       <trkpt lat="49.881702423" lon="8.079612732">
-        <ele>200.562</ele>
+        <ele>200.563</ele>
         <time>2009-03-28T09:40:37Z</time>
         <speed>0.450000</speed>
         <name>TP000326</name>
@@ -1981,7 +1981,7 @@
         <name>TP000329</name>
       </trkpt>
       <trkpt lat="49.881752014" lon="8.079653740">
-        <ele>199.812</ele>
+        <ele>199.813</ele>
         <time>2009-03-28T09:40:57Z</time>
         <speed>0.330000</speed>
         <name>TP000330</name>
@@ -2359,7 +2359,7 @@
         <name>TP000389</name>
       </trkpt>
       <trkpt lat="49.881687164" lon="8.080088615">
-        <ele>214.312</ele>
+        <ele>214.313</ele>
         <time>2009-03-28T19:27:34Z</time>
         <speed>0.080000</speed>
         <name>TP000390</name>
