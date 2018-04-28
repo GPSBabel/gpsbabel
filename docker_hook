@@ -3,6 +3,11 @@
 # setup up and run a docker build.
 # this is used by travis.
 #
-cnt=$(docker create  -v `pwd`:/app -e CC=$CC -e CXX=$CXX tsteven4/gpsbabel_build_environment bash -c "./build_and_test")
+# create the container to run the build and regression.
+# pass the compiler from the travis matrix through CC, CXX.
+# we need the default charmap to be UTF-8 for test_encoding_utf8, explicit set it here through LC_ALL.
+cnt=$(docker create  -v `pwd`:/app -e CC=$CC -e CXX=$CXX -e LC_ALL=C.UTF-8 tsteven4/gpsbabel_build_environment bash -c "./build_and_test")
+# copy the pwd to the container.  travis has got the code user test in the pwd.
 docker cp . $cnt:/app
+# run the container to execute the build and the regression.
 docker start -a $cnt
