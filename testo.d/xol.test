@@ -18,7 +18,8 @@ ${PNAME} -i xol -f ${REFERENCE}/doesnotexist -o gpx -F ${TMPDIR}/xol-sample_si.g
 # check error message is what we expected
 # Note that the reference file nonexistent.err includes the file path,
 # so this will fail when starting from a directory other than gpsbabel.
-compare ${REFERENCE}/nonexistent.err ${TMPDIR}/nonexistent.err
+# the message can vary depending on the c runtime, .i.e. msvc and gcc are slightly different.
+compare_with_alternate ${REFERENCE}/nonexistent.err ${REFERENCE}/nonexistent_alternate.err ${TMPDIR}/nonexistent.err
 
 
 gpsbabel -i gpx -f ${REFERENCE}/xol-sample.gpx -o xol -F ${TMPDIR}/xol-sample-gpx.xol

@@ -1295,7 +1295,7 @@
         <name>TP0210</name>
       </trkpt>
       <trkpt lat="51.740074136" lon="8.709892269">
-        <ele>101.062</ele>
+        <ele>101.063</ele>
         <time>2013-08-15T05:19:45Z</time>
         <speed>0.000000</speed>
         <name>TP0211</name>
@@ -1973,7 +1973,7 @@
         <name>TP0323</name>
       </trkpt>
       <trkpt lat="51.740085580" lon="8.710035320">
-        <ele>108.812</ele>
+        <ele>108.813</ele>
         <time>2013-08-15T05:20:33Z</time>
         <speed>0.000000</speed>
         <name>TP0324</name>
@@ -2153,7 +2153,7 @@
         <name>TP0353</name>
       </trkpt>
       <trkpt lat="51.740085580" lon="8.710035320">
-        <ele>109.312</ele>
+        <ele>109.313</ele>
         <time>2013-08-15T05:20:36Z</time>
         <speed>0.000000</speed>
         <name>TP0354</name>
@@ -2423,7 +2423,7 @@
         <name>TP0398</name>
       </trkpt>
       <trkpt lat="51.740085580" lon="8.710035320">
-        <ele>110.062</ele>
+        <ele>110.063</ele>
         <time>2013-08-15T05:20:40Z</time>
         <speed>0.000000</speed>
         <name>TP0399</name>
@@ -2675,19 +2675,19 @@
         <name>TP0440</name>
       </trkpt>
       <trkpt lat="51.740062692" lon="8.710018154">
-        <ele>110.062</ele>
+        <ele>110.063</ele>
         <time>2013-08-15T05:20:44Z</time>
         <speed>64.444443</speed>
         <name>TP0441</name>
       </trkpt>
       <trkpt lat="51.740062692" lon="8.710018154">
-        <ele>110.062</ele>
+        <ele>110.063</ele>
         <time>2013-08-15T05:20:44Z</time>
         <speed>65.555557</speed>
         <name>TP0442</name>
       </trkpt>
       <trkpt lat="51.740062692" lon="8.710019108">
-        <ele>110.062</ele>
+        <ele>110.063</ele>
         <time>2013-08-15T05:20:44Z</time>
         <speed>66.666664</speed>
         <name>TP0443</name>
@@ -2963,7 +2963,7 @@
         <name>TP0488</name>
       </trkpt>
       <trkpt lat="51.739986398" lon="8.710112568">
-        <ele>108.812</ele>
+        <ele>108.813</ele>
         <time>2013-08-15T05:20:49Z</time>
         <speed>286.111115</speed>
         <name>TP0489</name>
@@ -3329,7 +3329,7 @@
         <name>TP0549</name>
       </trkpt>
       <trkpt lat="51.739719369" lon="8.710412975">
-        <ele>103.562</ele>
+        <ele>103.563</ele>
         <time>2013-08-15T05:20:55Z</time>
         <speed>620.000000</speed>
         <name>TP0550</name>
@@ -3755,7 +3755,7 @@
         <name>TP0620</name>
       </trkpt>
       <trkpt lat="51.739402749" lon="8.710768696">
-        <ele>105.812</ele>
+        <ele>105.813</ele>
         <time>2013-08-15T05:21:02Z</time>
         <speed>479.722229</speed>
         <name>TP0621</name>
@@ -3887,7 +3887,7 @@
         <name>TP0642</name>
       </trkpt>
       <trkpt lat="51.739349343" lon="8.710876461">
-        <ele>106.812</ele>
+        <ele>106.813</ele>
         <time>2013-08-15T05:21:04Z</time>
         <speed>441.111115</speed>
         <name>TP0643</name>
@@ -3971,7 +3971,7 @@
         <name>TP0656</name>
       </trkpt>
       <trkpt lat="51.739318826" lon="8.710966107">
-        <ele>104.812</ele>
+        <ele>104.813</ele>
         <time>2013-08-15T05:21:06Z</time>
         <speed>425.277771</speed>
         <name>TP0657</name>
@@ -4025,7 +4025,7 @@
         <name>TP0665</name>
       </trkpt>
       <trkpt lat="51.739299752" lon="8.711005207">
-        <ele>105.312</ele>
+        <ele>105.313</ele>
         <time>2013-08-15T05:21:07Z</time>
         <speed>401.388885</speed>
         <name>TP0666</name>
@@ -4253,7 +4253,7 @@
         <name>TP0703</name>
       </trkpt>
       <trkpt lat="51.739234902" lon="8.711233135">
-        <ele>102.062</ele>
+        <ele>102.063</ele>
         <time>2013-08-15T05:21:11Z</time>
         <speed>468.888885</speed>
         <name>TP0704</name>
@@ -4361,7 +4361,7 @@
         <name>TP0721</name>
       </trkpt>
       <trkpt lat="51.739200570" lon="8.711330410">
-        <ele>104.562</ele>
+        <ele>104.563</ele>
         <time>2013-08-15T05:21:12Z</time>
         <speed>437.222229</speed>
         <name>TP0722</name>
@@ -4379,7 +4379,7 @@
         <name>TP0724</name>
       </trkpt>
       <trkpt lat="51.739192941" lon="8.711338040">
-        <ele>105.062</ele>
+        <ele>105.063</ele>
         <time>2013-08-15T05:21:13Z</time>
         <speed>424.444458</speed>
         <name>TP0725</name>
@@ -4517,7 +4517,7 @@
         <name>TP0747</name>
       </trkpt>
       <trkpt lat="51.739105203" lon="8.711356159">
-        <ele>102.812</ele>
+        <ele>102.813</ele>
         <time>2013-08-15T05:21:15Z</time>
         <speed>357.222229</speed>
         <name>TP0748</name>
@@ -5423,7 +5423,7 @@
         <name>TP0898</name>
       </trkpt>
       <trkpt lat="51.738647439" lon="8.711910244">
-        <ele>106.312</ele>
+        <ele>106.313</ele>
         <time>2013-08-15T05:21:30Z</time>
         <speed>491.666656</speed>
         <name>TP0899</name>
@@ -5435,7 +5435,7 @@
         <name>TP0900</name>
       </trkpt>
       <trkpt lat="51.738639810" lon="8.711920735">
-        <ele>106.062</ele>
+        <ele>106.063</ele>
         <time>2013-08-15T05:21:30Z</time>
         <speed>498.055542</speed>
         <name>TP0901</name>
@@ -5483,7 +5483,7 @@
         <name>TP0908</name>
       </trkpt>
       <trkpt lat="51.738616921" lon="8.711977001">
-        <ele>104.562</ele>
+        <ele>104.563</ele>
         <time>2013-08-15T05:21:31Z</time>
         <speed>492.222229</speed>
         <name>TP0909</name>
@@ -5537,7 +5537,7 @@
         <name>TP0917</name>
       </trkpt>
       <trkpt lat="51.738601663" lon="8.712034222">
-        <ele>102.312</ele>
+        <ele>102.313</ele>
         <time>2013-08-15T05:21:32Z</time>
         <speed>466.666656</speed>
         <name>TP0918</name>
@@ -5549,7 +5549,7 @@
         <name>TP0919</name>
       </trkpt>
       <trkpt lat="51.738597848" lon="8.712047573">
-        <ele>102.062</ele>
+        <ele>102.063</ele>
         <time>2013-08-15T05:21:32Z</time>
         <speed>465.555542</speed>
         <name>TP0920</name>
@@ -5585,7 +5585,7 @@
         <name>TP0925</name>
       </trkpt>
       <trkpt lat="51.738586404" lon="8.712081905">
-        <ele>102.062</ele>
+        <ele>102.063</ele>
         <time>2013-08-15T05:21:33Z</time>
         <speed>441.666656</speed>
         <name>TP0926</name>
@@ -5801,7 +5801,7 @@
         <name>TP0961</name>
       </trkpt>
       <trkpt lat="51.738479592" lon="8.712306973">
-        <ele>106.062</ele>
+        <ele>106.063</ele>
         <time>2013-08-15T05:21:36Z</time>
         <speed>472.500000</speed>
         <name>TP0962</name>
@@ -6281,7 +6281,7 @@
         <name>TP1041</name>
       </trkpt>
       <trkpt lat="51.738189675" lon="8.712718960">
-        <ele>104.062</ele>
+        <ele>104.063</ele>
         <time>2013-08-15T05:21:44Z</time>
         <speed>498.888885</speed>
         <name>TP1042</name>
@@ -6401,7 +6401,7 @@
         <name>TP1061</name>
       </trkpt>
       <trkpt lat="51.738132455" lon="8.712848660">
-        <ele>104.562</ele>
+        <ele>104.563</ele>
         <time>2013-08-15T05:21:46Z</time>
         <speed>497.500000</speed>
         <name>TP1062</name>
@@ -6473,7 +6473,7 @@
         <name>TP1073</name>
       </trkpt>
       <trkpt lat="51.738098122" lon="8.712916370">
-        <ele>103.812</ele>
+        <ele>103.813</ele>
         <time>2013-08-15T05:21:48Z</time>
         <speed>468.611115</speed>
         <name>TP1074</name>
@@ -6521,7 +6521,7 @@
         <name>TP1081</name>
       </trkpt>
       <trkpt lat="51.738063790" lon="8.712966915">
-        <ele>103.312</ele>
+        <ele>103.313</ele>
         <time>2013-08-15T05:21:48Z</time>
         <speed>504.722229</speed>
         <name>TP1082</name>
@@ -7049,7 +7049,7 @@
         <name>TP1169</name>
       </trkpt>
       <trkpt lat="51.737792947" lon="8.713481899">
-        <ele>104.562</ele>
+        <ele>104.563</ele>
         <time>2013-08-15T05:21:57Z</time>
         <speed>464.444458</speed>
         <name>TP1170</name>
@@ -7451,7 +7451,7 @@
         <name>TP1236</name>
       </trkpt>
       <trkpt lat="51.737636544" lon="8.713923451">
-        <ele>103.062</ele>
+        <ele>103.063</ele>
         <time>2013-08-15T05:22:04Z</time>
         <speed>479.444458</speed>
         <name>TP1237</name>
@@ -7649,7 +7649,7 @@
         <name>TP1269</name>
       </trkpt>
       <trkpt lat="51.737556435" lon="8.714136120">
-        <ele>103.062</ele>
+        <ele>103.063</ele>
         <time>2013-08-15T05:22:07Z</time>
         <speed>473.055542</speed>
         <name>TP1270</name>
@@ -7691,7 +7691,7 @@
         <name>TP1276</name>
       </trkpt>
       <trkpt lat="51.737556435" lon="8.714165684">
-        <ele>102.562</ele>
+        <ele>102.563</ele>
         <time>2013-08-15T05:22:08Z</time>
         <speed>455.555542</speed>
         <name>TP1277</name>
@@ -7805,7 +7805,7 @@
         <name>TP1295</name>
       </trkpt>
       <trkpt lat="51.737525918" lon="8.714299198">
-        <ele>106.812</ele>
+        <ele>106.813</ele>
         <time>2013-08-15T05:22:10Z</time>
         <speed>454.444458</speed>
         <name>TP1296</name>
@@ -8099,7 +8099,7 @@
         <name>TP1344</name>
       </trkpt>
       <trkpt lat="51.737457253" lon="8.714639660">
-        <ele>108.062</ele>
+        <ele>108.063</ele>
         <time>2013-08-15T05:22:15Z</time>
         <speed>486.388885</speed>
         <name>TP1345</name>
@@ -8279,7 +8279,7 @@
         <name>TP1374</name>
       </trkpt>
       <trkpt lat="51.737388589" lon="8.714891430">
-        <ele>112.062</ele>
+        <ele>112.063</ele>
         <time>2013-08-15T05:22:18Z</time>
         <speed>497.777771</speed>
         <name>TP1375</name>
@@ -8351,7 +8351,7 @@
         <name>TP1386</name>
       </trkpt>
       <trkpt lat="51.737377145" lon="8.714999195">
-        <ele>111.562</ele>
+        <ele>111.563</ele>
         <time>2013-08-15T05:22:19Z</time>
         <speed>482.500000</speed>
         <name>TP1387</name>
@@ -8417,7 +8417,7 @@
         <name>TP1397</name>
       </trkpt>
       <trkpt lat="51.737373330" lon="8.715070721">
-        <ele>114.312</ele>
+        <ele>114.313</ele>
         <time>2013-08-15T05:22:20Z</time>
         <speed>469.444458</speed>
         <name>TP1398</name>
@@ -8651,7 +8651,7 @@
         <name>TP1436</name>
       </trkpt>
       <trkpt lat="51.737323739" lon="8.715353962">
-        <ele>116.312</ele>
+        <ele>116.313</ele>
         <time>2013-08-15T05:22:24Z</time>
         <speed>482.777771</speed>
         <name>TP1437</name>
@@ -8693,7 +8693,7 @@
         <name>TP1443</name>
       </trkpt>
       <trkpt lat="51.737316110" lon="8.715416905">
-        <ele>118.062</ele>
+        <ele>118.063</ele>
         <time>2013-08-15T05:22:25Z</time>
         <speed>498.055542</speed>
         <name>TP1444</name>
@@ -8723,7 +8723,7 @@
         <name>TP1448</name>
       </trkpt>
       <trkpt lat="51.737304665" lon="8.715456959">
-        <ele>119.062</ele>
+        <ele>119.063</ele>
         <time>2013-08-15T05:22:25Z</time>
         <speed>485.833344</speed>
         <name>TP1449</name>
@@ -9125,7 +9125,7 @@
         <name>TP1515</name>
       </trkpt>
       <trkpt lat="51.737205483" lon="8.715966221">
-        <ele>113.562</ele>
+        <ele>113.563</ele>
         <time>2013-08-15T05:22:32Z</time>
         <speed>521.111084</speed>
         <name>TP1516</name>
@@ -9287,7 +9287,7 @@
         <name>TP1542</name>
       </trkpt>
       <trkpt lat="51.737140633" lon="8.716161724">
-        <ele>110.312</ele>
+        <ele>110.313</ele>
         <time>2013-08-15T05:22:34Z</time>
         <speed>473.055542</speed>
         <name>TP1543</name>
@@ -9353,7 +9353,7 @@
         <name>TP1553</name>
       </trkpt>
       <trkpt lat="51.737113931" lon="8.716248509">
-        <ele>108.062</ele>
+        <ele>108.063</ele>
         <time>2013-08-15T05:22:36Z</time>
         <speed>482.500000</speed>
         <name>TP1554</name>
@@ -9377,7 +9377,7 @@
         <name>TP1557</name>
       </trkpt>
       <trkpt lat="51.737113931" lon="8.716285702">
-        <ele>107.562</ele>
+        <ele>107.563</ele>
         <time>2013-08-15T05:22:36Z</time>
         <speed>473.055542</speed>
         <name>TP1558</name>
@@ -9437,7 +9437,7 @@
         <name>TP1567</name>
       </trkpt>
       <trkpt lat="51.737125375" lon="8.716365810">
-        <ele>107.812</ele>
+        <ele>107.813</ele>
         <time>2013-08-15T05:22:37Z</time>
         <speed>460.555542</speed>
         <name>TP1568</name>
@@ -9461,7 +9461,7 @@
         <name>TP1571</name>
       </trkpt>
       <trkpt lat="51.737133004" lon="8.716401096">
-        <ele>107.812</ele>
+        <ele>107.813</ele>
         <time>2013-08-15T05:22:37Z</time>
         <speed>471.111115</speed>
         <name>TP1572</name>
@@ -9893,7 +9893,7 @@
         <name>TP1643</name>
       </trkpt>
       <trkpt lat="51.737083413" lon="8.716940876">
-        <ele>111.562</ele>
+        <ele>111.563</ele>
         <time>2013-08-15T05:22:45Z</time>
         <speed>516.666687</speed>
         <name>TP1644</name>
@@ -10169,7 +10169,7 @@
         <name>TP1689</name>
       </trkpt>
       <trkpt lat="51.737007119" lon="8.717265125">
-        <ele>112.312</ele>
+        <ele>112.313</ele>
         <time>2013-08-15T05:22:49Z</time>
         <speed>476.388885</speed>
         <name>TP1690</name>
@@ -10211,7 +10211,7 @@
         <name>TP1696</name>
       </trkpt>
       <trkpt lat="51.737010934" lon="8.717320438">
-        <ele>112.562</ele>
+        <ele>112.563</ele>
         <time>2013-08-15T05:22:50Z</time>
         <speed>477.500000</speed>
         <name>TP1697</name>
@@ -10319,7 +10319,7 @@
         <name>TP1714</name>
       </trkpt>
       <trkpt lat="51.736999490" lon="8.717455860">
-        <ele>112.562</ele>
+        <ele>112.563</ele>
         <time>2013-08-15T05:22:52Z</time>
         <speed>480.555542</speed>
         <name>TP1715</name>
@@ -10343,7 +10343,7 @@
         <name>TP1718</name>
       </trkpt>
       <trkpt lat="51.736991860" lon="8.717485424">
-        <ele>112.312</ele>
+        <ele>112.313</ele>
         <time>2013-08-15T05:22:52Z</time>
         <speed>482.500000</speed>
         <name>TP1719</name>
@@ -10505,7 +10505,7 @@
         <name>TP1745</name>
       </trkpt>
       <trkpt lat="51.736961343" lon="8.717703816">
-        <ele>110.312</ele>
+        <ele>110.313</ele>
         <time>2013-08-15T05:22:55Z</time>
         <speed>511.666656</speed>
         <name>TP1746</name>
@@ -10817,7 +10817,7 @@
         <name>TP1797</name>
       </trkpt>
       <trkpt lat="51.736938455" lon="8.718131062">
-        <ele>108.312</ele>
+        <ele>108.313</ele>
         <time>2013-08-15T05:23:00Z</time>
         <speed>479.166656</speed>
         <name>TP1798</name>
@@ -10865,7 +10865,7 @@
         <name>TP1805</name>
       </trkpt>
       <trkpt lat="51.736934640" lon="8.718183514">
-        <ele>109.312</ele>
+        <ele>109.313</ele>
         <time>2013-08-15T05:23:01Z</time>
         <speed>458.888885</speed>
         <name>TP1806</name>
@@ -11381,7 +11381,7 @@
         <name>TP1891</name>
       </trkpt>
       <trkpt lat="51.736885049" lon="8.718804356">
-        <ele>109.562</ele>
+        <ele>109.563</ele>
         <time>2013-08-15T05:23:09Z</time>
         <speed>407.500000</speed>
         <name>TP1892</name>
@@ -12161,7 +12161,7 @@
         <name>TP2021</name>
       </trkpt>
       <trkpt lat="51.736431100" lon="8.719621655">
-        <ele>110.062</ele>
+        <ele>110.063</ele>
         <time>2013-08-15T05:23:22Z</time>
         <speed>541.666687</speed>
         <name>TP2022</name>
@@ -12371,7 +12371,7 @@
         <name>TP2056</name>
       </trkpt>
       <trkpt lat="51.736301400" lon="8.719870564">
-        <ele>111.812</ele>
+        <ele>111.813</ele>
         <time>2013-08-15T05:23:26Z</time>
         <speed>565.833313</speed>
         <name>TP2057</name>
@@ -12479,7 +12479,7 @@
         <name>TP2074</name>
       </trkpt>
       <trkpt lat="51.736225106" lon="8.719952580">
-        <ele>112.562</ele>
+        <ele>112.563</ele>
         <time>2013-08-15T05:23:28Z</time>
         <speed>533.888916</speed>
         <name>TP2075</name>
@@ -12569,7 +12569,7 @@
         <name>TP2089</name>
       </trkpt>
       <trkpt lat="51.736160256" lon="8.720032688">
-        <ele>111.562</ele>
+        <ele>111.563</ele>
         <time>2013-08-15T05:23:29Z</time>
         <speed>560.000000</speed>
         <name>TP2090</name>
@@ -12893,7 +12893,7 @@
         <name>TP2143</name>
       </trkpt>
       <trkpt lat="51.735977151" lon="8.720389362">
-        <ele>105.812</ele>
+        <ele>105.813</ele>
         <time>2013-08-15T05:23:35Z</time>
         <speed>529.722229</speed>
         <name>TP2144</name>
@@ -13025,7 +13025,7 @@
         <name>TP2165</name>
       </trkpt>
       <trkpt lat="51.735862710" lon="8.720527645">
-        <ele>106.062</ele>
+        <ele>106.063</ele>
         <time>2013-08-15T05:23:37Z</time>
         <speed>586.944458</speed>
         <name>TP2166</name>
@@ -13037,7 +13037,7 @@
         <name>TP2167</name>
       </trkpt>
       <trkpt lat="51.735862710" lon="8.720542904">
-        <ele>105.812</ele>
+        <ele>105.813</ele>
         <time>2013-08-15T05:23:37Z</time>
         <speed>574.722229</speed>
         <name>TP2168</name>
@@ -13235,7 +13235,7 @@
         <name>TP2200</name>
       </trkpt>
       <trkpt lat="51.735790231" lon="8.720773693">
-        <ele>108.812</ele>
+        <ele>108.813</ele>
         <time>2013-08-15T05:23:40Z</time>
         <speed>474.166656</speed>
         <name>TP2201</name>
@@ -13265,7 +13265,7 @@
         <name>TP2205</name>
       </trkpt>
       <trkpt lat="51.735782601" lon="8.720808979">
-        <ele>108.562</ele>
+        <ele>108.563</ele>
         <time>2013-08-15T05:23:41Z</time>
         <speed>456.388885</speed>
         <name>TP2206</name>
@@ -13277,7 +13277,7 @@
         <name>TP2207</name>
       </trkpt>
       <trkpt lat="51.735782601" lon="8.720827099">
-        <ele>108.312</ele>
+        <ele>108.313</ele>
         <time>2013-08-15T05:23:41Z</time>
         <speed>445.000000</speed>
         <name>TP2208</name>
@@ -13463,7 +13463,7 @@
         <name>TP2238</name>
       </trkpt>
       <trkpt lat="51.735767342" lon="8.720981594">
-        <ele>108.062</ele>
+        <ele>108.063</ele>
         <time>2013-08-15T05:23:44Z</time>
         <speed>301.388885</speed>
         <name>TP2239</name>
@@ -13511,7 +13511,7 @@
         <name>TP2246</name>
       </trkpt>
       <trkpt lat="51.735782601" lon="8.721027371">
-        <ele>107.562</ele>
+        <ele>107.563</ele>
         <time>2013-08-15T05:23:45Z</time>
         <speed>324.722229</speed>
         <name>TP2247</name>
@@ -13631,7 +13631,7 @@
         <name>TP2266</name>
       </trkpt>
       <trkpt lat="51.735805489" lon="8.721112248">
-        <ele>107.562</ele>
+        <ele>107.563</ele>
         <time>2013-08-15T05:23:47Z</time>
         <speed>321.666656</speed>
         <name>TP2267</name>
@@ -13703,7 +13703,7 @@
         <name>TP2278</name>
       </trkpt>
       <trkpt lat="51.735828378" lon="8.721165653">
-        <ele>108.812</ele>
+        <ele>108.813</ele>
         <time>2013-08-15T05:23:48Z</time>
         <speed>314.166656</speed>
         <name>TP2279</name>
@@ -13943,7 +13943,7 @@
         <name>TP2318</name>
       </trkpt>
       <trkpt lat="51.735904672" lon="8.721383091">
-        <ele>107.312</ele>
+        <ele>107.313</ele>
         <time>2013-08-15T05:23:52Z</time>
         <speed>418.333344</speed>
         <name>TP2319</name>
@@ -14279,7 +14279,7 @@
         <name>TP2374</name>
       </trkpt>
       <trkpt lat="51.735832192" lon="8.721683498">
-        <ele>106.312</ele>
+        <ele>106.313</ele>
         <time>2013-08-15T05:23:58Z</time>
         <speed>358.055542</speed>
         <name>TP2375</name>
@@ -14471,7 +14471,7 @@
         <name>TP2406</name>
       </trkpt>
       <trkpt lat="51.735801675" lon="8.721887585">
-        <ele>104.562</ele>
+        <ele>104.563</ele>
         <time>2013-08-15T05:24:01Z</time>
         <speed>381.666656</speed>
         <name>TP2407</name>
@@ -14783,7 +14783,7 @@
         <name>TP2458</name>
       </trkpt>
       <trkpt lat="51.735767342" lon="8.722197529">
-        <ele>110.312</ele>
+        <ele>110.313</ele>
         <time>2013-08-15T05:24:06Z</time>
         <speed>340.555542</speed>
         <name>TP2459</name>
@@ -14987,7 +14987,7 @@
         <name>TP2492</name>
       </trkpt>
       <trkpt lat="51.735843636" lon="8.722412106">
-        <ele>109.562</ele>
+        <ele>109.563</ele>
         <time>2013-08-15T05:24:09Z</time>
         <speed>478.055542</speed>
         <name>TP2493</name>
@@ -15239,7 +15239,7 @@
         <name>TP2534</name>
       </trkpt>
       <trkpt lat="51.735984780" lon="8.722738262">
-        <ele>106.312</ele>
+        <ele>106.313</ele>
         <time>2013-08-15T05:24:14Z</time>
         <speed>670.555542</speed>
         <name>TP2535</name>
@@ -15473,7 +15473,7 @@
         <name>TP2573</name>
       </trkpt>
       <trkpt lat="51.735996224" lon="8.723056789">
-        <ele>108.812</ele>
+        <ele>108.813</ele>
         <time>2013-08-15T05:24:18Z</time>
         <speed>383.888885</speed>
         <name>TP2574</name>
@@ -15809,7 +15809,7 @@
         <name>TP2629</name>
       </trkpt>
       <trkpt lat="51.735996224" lon="8.723346706">
-        <ele>114.312</ele>
+        <ele>114.313</ele>
         <time>2013-08-15T05:24:23Z</time>
         <speed>386.111115</speed>
         <name>TP2630</name>
@@ -16205,13 +16205,13 @@
         <name>TP2695</name>
       </trkpt>
       <trkpt lat="51.736057259" lon="8.723763462">
-        <ele>110.812</ele>
+        <ele>110.813</ele>
         <time>2013-08-15T05:24:30Z</time>
         <speed>333.055542</speed>
         <name>TP2696</name>
       </trkpt>
       <trkpt lat="51.736057259" lon="8.723767277">
-        <ele>110.812</ele>
+        <ele>110.813</ele>
         <time>2013-08-15T05:24:30Z</time>
         <speed>338.333344</speed>
         <name>TP2697</name>
@@ -16355,7 +16355,7 @@
         <name>TP2720</name>
       </trkpt>
       <trkpt lat="51.736144997" lon="8.723868366">
-        <ele>108.562</ele>
+        <ele>108.563</ele>
         <time>2013-08-15T05:24:32Z</time>
         <speed>360.833344</speed>
         <name>TP2721</name>
@@ -16649,7 +16649,7 @@
         <name>TP2769</name>
       </trkpt>
       <trkpt lat="51.736225106" lon="8.724109646">
-        <ele>108.312</ele>
+        <ele>108.313</ele>
         <time>2013-08-15T05:24:37Z</time>
         <speed>265.000000</speed>
         <name>TP2770</name>
@@ -16763,7 +16763,7 @@
         <name>TP2788</name>
       </trkpt>
       <trkpt lat="51.736244180" lon="8.724213596">
-        <ele>108.062</ele>
+        <ele>108.063</ele>
         <time>2013-08-15T05:24:39Z</time>
         <speed>309.722229</speed>
         <name>TP2789</name>
@@ -16805,7 +16805,7 @@
         <name>TP2795</name>
       </trkpt>
       <trkpt lat="51.736228921" lon="8.724239346">
-        <ele>109.312</ele>
+        <ele>109.313</ele>
         <time>2013-08-15T05:24:40Z</time>
         <speed>263.333344</speed>
         <name>TP2796</name>
@@ -16841,7 +16841,7 @@
         <name>TP2801</name>
       </trkpt>
       <trkpt lat="51.736225106" lon="8.724267002">
-        <ele>109.812</ele>
+        <ele>109.813</ele>
         <time>2013-08-15T05:24:40Z</time>
         <speed>247.222229</speed>
         <name>TP2802</name>
@@ -16985,7 +16985,7 @@
         <name>TP2825</name>
       </trkpt>
       <trkpt lat="51.736144997" lon="8.724379536">
-        <ele>109.562</ele>
+        <ele>109.563</ele>
         <time>2013-08-15T05:24:43Z</time>
         <speed>345.000000</speed>
         <name>TP2826</name>
@@ -17057,7 +17057,7 @@
         <name>TP2837</name>
       </trkpt>
       <trkpt lat="51.736099221" lon="8.724430081">
-        <ele>107.312</ele>
+        <ele>107.313</ele>
         <time>2013-08-15T05:24:44Z</time>
         <speed>343.611115</speed>
         <name>TP2838</name>
@@ -17393,7 +17393,7 @@
         <name>TP2893</name>
       </trkpt>
       <trkpt lat="51.736038186" lon="8.724641796">
-        <ele>107.062</ele>
+        <ele>107.063</ele>
         <time>2013-08-15T05:24:50Z</time>
         <speed>161.388885</speed>
         <name>TP2894</name>
@@ -17423,7 +17423,7 @@
         <name>TP2898</name>
       </trkpt>
       <trkpt lat="51.736019112" lon="8.724660870">
-        <ele>106.062</ele>
+        <ele>106.063</ele>
         <time>2013-08-15T05:24:50Z</time>
         <speed>193.055557</speed>
         <name>TP2899</name>
@@ -17459,7 +17459,7 @@
         <name>TP2904</name>
       </trkpt>
       <trkpt lat="51.735992410" lon="8.724692341">
-        <ele>104.312</ele>
+        <ele>104.313</ele>
         <time>2013-08-15T05:24:51Z</time>
         <speed>261.944458</speed>
         <name>TP2905</name>
@@ -17579,7 +17579,7 @@
         <name>TP2924</name>
       </trkpt>
       <trkpt lat="51.735897042" lon="8.724792477">
-        <ele>102.062</ele>
+        <ele>102.063</ele>
         <time>2013-08-15T05:24:53Z</time>
         <speed>403.611115</speed>
         <name>TP2925</name>
@@ -17813,7 +17813,7 @@
         <name>TP2963</name>
       </trkpt>
       <trkpt lat="51.735717751" lon="8.724947926">
-        <ele>111.562</ele>
+        <ele>111.563</ele>
         <time>2013-08-15T05:24:57Z</time>
         <speed>323.611115</speed>
         <name>TP2964</name>
@@ -18245,7 +18245,7 @@
         <name>TP3035</name>
       </trkpt>
       <trkpt lat="51.735347726" lon="8.725164410">
-        <ele>121.062</ele>
+        <ele>121.063</ele>
         <time>2013-08-15T05:25:04Z</time>
         <speed>333.888885</speed>
         <name>TP3036</name>
@@ -18323,7 +18323,7 @@
         <name>TP3048</name>
       </trkpt>
       <trkpt lat="51.735301949" lon="8.725200649">
-        <ele>123.812</ele>
+        <ele>123.813</ele>
         <time>2013-08-15T05:25:05Z</time>
         <speed>286.111115</speed>
         <name>TP3049</name>
@@ -18689,7 +18689,7 @@
         <name>TP3109</name>
       </trkpt>
       <trkpt lat="51.734989144" lon="8.725443836">
-        <ele>123.312</ele>
+        <ele>123.313</ele>
         <time>2013-08-15T05:25:11Z</time>
         <speed>394.444458</speed>
         <name>TP3110</name>
@@ -18803,7 +18803,7 @@
         <name>TP3128</name>
       </trkpt>
       <trkpt lat="51.734943368" lon="8.725531574">
-        <ele>121.562</ele>
+        <ele>121.563</ele>
         <time>2013-08-15T05:25:13Z</time>
         <speed>329.166656</speed>
         <name>TP3129</name>
@@ -19229,7 +19229,7 @@
         <name>TP3199</name>
       </trkpt>
       <trkpt lat="51.734760262" lon="8.725966450">
-        <ele>112.812</ele>
+        <ele>112.813</ele>
         <time>2013-08-15T05:25:20Z</time>
         <speed>406.944458</speed>
         <name>TP3200</name>
@@ -19277,7 +19277,7 @@
         <name>TP3207</name>
       </trkpt>
       <trkpt lat="51.734699227" lon="8.726008412">
-        <ele>108.812</ele>
+        <ele>108.813</ele>
         <time>2013-08-15T05:25:21Z</time>
         <speed>498.888885</speed>
         <name>TP3208</name>
@@ -19445,7 +19445,7 @@
         <name>TP3235</name>
       </trkpt>
       <trkpt lat="51.734600045" lon="8.726255413">
-        <ele>95.812</ele>
+        <ele>95.813</ele>
         <time>2013-08-15T05:25:24Z</time>
         <speed>531.666687</speed>
         <name>TP3236</name>
@@ -19481,7 +19481,7 @@
         <name>TP3241</name>
       </trkpt>
       <trkpt lat="51.734573342" lon="8.726273533">
-        <ele>96.562</ele>
+        <ele>96.563</ele>
         <time>2013-08-15T05:25:24Z</time>
         <speed>461.944458</speed>
         <name>TP3242</name>
@@ -19859,7 +19859,7 @@
         <name>TP3304</name>
       </trkpt>
       <trkpt lat="51.734325387" lon="8.726396557">
-        <ele>107.562</ele>
+        <ele>107.563</ele>
         <time>2013-08-15T05:25:31Z</time>
         <speed>284.166656</speed>
         <name>TP3305</name>
@@ -20069,7 +20069,7 @@
         <name>TP3339</name>
       </trkpt>
       <trkpt lat="51.734256722" lon="8.726562496">
-        <ele>112.062</ele>
+        <ele>112.063</ele>
         <time>2013-08-15T05:25:34Z</time>
         <speed>359.166656</speed>
         <name>TP3340</name>
@@ -20399,7 +20399,7 @@
         <name>TP3394</name>
       </trkpt>
       <trkpt lat="51.734050729" lon="8.726692196">
-        <ele>115.562</ele>
+        <ele>115.563</ele>
         <time>2013-08-15T05:25:40Z</time>
         <speed>363.888885</speed>
         <name>TP3395</name>
@@ -20723,7 +20723,7 @@
         <name>TP3448</name>
       </trkpt>
       <trkpt lat="51.733772256" lon="8.726614948">
-        <ele>115.812</ele>
+        <ele>115.813</ele>
         <time>2013-08-15T05:25:45Z</time>
         <speed>453.888885</speed>
         <name>TP3449</name>
@@ -21011,7 +21011,7 @@
         <name>TP3496</name>
       </trkpt>
       <trkpt lat="51.733489968" lon="8.726618763">
-        <ele>111.062</ele>
+        <ele>111.063</ele>
         <time>2013-08-15T05:25:50Z</time>
         <speed>492.777771</speed>
         <name>TP3497</name>
@@ -21065,7 +21065,7 @@
         <name>TP3505</name>
       </trkpt>
       <trkpt lat="51.733448007" lon="8.726623531">
-        <ele>111.812</ele>
+        <ele>111.813</ele>
         <time>2013-08-15T05:25:51Z</time>
         <speed>475.277771</speed>
         <name>TP3506</name>
@@ -21419,7 +21419,7 @@
         <name>TP3564</name>
       </trkpt>
       <trkpt lat="51.733226754" lon="8.726713177">
-        <ele>116.812</ele>
+        <ele>116.813</ele>
         <time>2013-08-15T05:25:57Z</time>
         <speed>335.277771</speed>
         <name>TP3565</name>
@@ -21827,7 +21827,7 @@
         <name>TP3632</name>
       </trkpt>
       <trkpt lat="51.732982613" lon="8.726941105">
-        <ele>114.062</ele>
+        <ele>114.063</ele>
         <time>2013-08-15T05:26:03Z</time>
         <speed>442.222229</speed>
         <name>TP3633</name>
@@ -21875,7 +21875,7 @@
         <name>TP3640</name>
       </trkpt>
       <trkpt lat="51.732936837" lon="8.726970669">
-        <ele>113.062</ele>
+        <ele>113.063</ele>
         <time>2013-08-15T05:26:04Z</time>
         <speed>456.388885</speed>
         <name>TP3641</name>
@@ -21893,7 +21893,7 @@
         <name>TP3643</name>
       </trkpt>
       <trkpt lat="51.732925393" lon="8.726986881">
-        <ele>112.812</ele>
+        <ele>112.813</ele>
         <time>2013-08-15T05:26:05Z</time>
         <speed>267.222229</speed>
         <name>TP3644</name>
@@ -21983,7 +21983,7 @@
         <name>TP3658</name>
       </trkpt>
       <trkpt lat="51.732852914" lon="8.727081295">
-        <ele>112.812</ele>
+        <ele>112.813</ele>
         <time>2013-08-15T05:26:06Z</time>
         <speed>397.777771</speed>
         <name>TP3659</name>
@@ -22187,13 +22187,13 @@
         <name>TP3692</name>
       </trkpt>
       <trkpt lat="51.732749917" lon="8.727252003">
-        <ele>109.812</ele>
+        <ele>109.813</ele>
         <time>2013-08-15T05:26:09Z</time>
         <speed>433.888885</speed>
         <name>TP3693</name>
       </trkpt>
       <trkpt lat="51.732749917" lon="8.727257725">
-        <ele>109.812</ele>
+        <ele>109.813</ele>
         <time>2013-08-15T05:26:10Z</time>
         <speed>434.444458</speed>
         <name>TP3694</name>
@@ -22319,7 +22319,7 @@
         <name>TP3714</name>
       </trkpt>
       <trkpt lat="51.732643105" lon="8.727398869">
-        <ele>108.812</ele>
+        <ele>108.813</ele>
         <time>2013-08-15T05:26:12Z</time>
         <speed>524.444458</speed>
         <name>TP3715</name>
@@ -22511,7 +22511,7 @@
         <name>TP3746</name>
       </trkpt>
       <trkpt lat="51.732513406" lon="8.727565762">
-        <ele>105.562</ele>
+        <ele>105.563</ele>
         <time>2013-08-15T05:26:15Z</time>
         <speed>511.944458</speed>
         <name>TP3747</name>
@@ -22985,7 +22985,7 @@
         <name>TP3825</name>
       </trkpt>
       <trkpt lat="51.732227303" lon="8.728036877">
-        <ele>99.812</ele>
+        <ele>99.813</ele>
         <time>2013-08-15T05:26:23Z</time>
         <speed>470.277771</speed>
         <name>TP3826</name>
@@ -23213,7 +23213,7 @@
         <name>TP3863</name>
       </trkpt>
       <trkpt lat="51.732173898" lon="8.728301998">
-        <ele>104.562</ele>
+        <ele>104.563</ele>
         <time>2013-08-15T05:26:27Z</time>
         <speed>444.444458</speed>
         <name>TP3864</name>
@@ -23477,7 +23477,7 @@
         <name>TP3907</name>
       </trkpt>
       <trkpt lat="51.732078530" lon="8.728556629">
-        <ele>107.062</ele>
+        <ele>107.063</ele>
         <time>2013-08-15T05:26:31Z</time>
         <speed>340.000000</speed>
         <name>TP3908</name>
@@ -23897,7 +23897,7 @@
         <name>TP3977</name>
       </trkpt>
       <trkpt lat="51.731891610" lon="8.728824612">
-        <ele>119.062</ele>
+        <ele>119.063</ele>
         <time>2013-08-15T05:26:38Z</time>
         <speed>442.500000</speed>
         <name>TP3978</name>
@@ -24101,7 +24101,7 @@
         <name>TP4011</name>
       </trkpt>
       <trkpt lat="51.731838204" lon="8.729079243">
-        <ele>117.562</ele>
+        <ele>117.563</ele>
         <time>2013-08-15T05:26:41Z</time>
         <speed>465.833344</speed>
         <name>TP4012</name>
@@ -24515,7 +24515,7 @@
         <name>TP4080</name>
       </trkpt>
       <trkpt lat="51.731704690" lon="8.729512211">
-        <ele>112.562</ele>
+        <ele>112.563</ele>
         <time>2013-08-15T05:26:48Z</time>
         <speed>419.444458</speed>
         <name>TP4081</name>
@@ -24581,7 +24581,7 @@
         <name>TP4091</name>
       </trkpt>
       <trkpt lat="51.731685616" lon="8.729595181">
-        <ele>112.312</ele>
+        <ele>112.313</ele>
         <time>2013-08-15T05:26:49Z</time>
         <speed>448.888885</speed>
         <name>TP4092</name>
@@ -24911,7 +24911,7 @@
         <name>TP4146</name>
       </trkpt>
       <trkpt lat="51.731517770" lon="8.730072971">
-        <ele>112.812</ele>
+        <ele>112.813</ele>
         <time>2013-08-15T05:26:55Z</time>
         <speed>481.388885</speed>
         <name>TP4147</name>
@@ -25133,7 +25133,7 @@
         <name>TP4183</name>
       </trkpt>
       <trkpt lat="51.731471993" lon="8.730342861">
-        <ele>114.562</ele>
+        <ele>114.563</ele>
         <time>2013-08-15T05:26:59Z</time>
         <speed>431.388885</speed>
         <name>TP4184</name>
@@ -25385,7 +25385,7 @@
         <name>TP4225</name>
       </trkpt>
       <trkpt lat="51.731338479" lon="8.730304714">
-        <ele>116.062</ele>
+        <ele>116.063</ele>
         <time>2013-08-15T05:27:03Z</time>
         <speed>290.555542</speed>
         <name>TP4226</name>
@@ -25511,7 +25511,7 @@
         <name>TP4246</name>
       </trkpt>
       <trkpt lat="51.731266000" lon="8.730356213">
-        <ele>115.812</ele>
+        <ele>115.813</ele>
         <time>2013-08-15T05:27:05Z</time>
         <speed>281.666656</speed>
         <name>TP4247</name>
@@ -25535,7 +25535,7 @@
         <name>TP4250</name>
       </trkpt>
       <trkpt lat="51.731254556" lon="8.730372425">
-        <ele>116.062</ele>
+        <ele>116.063</ele>
         <time>2013-08-15T05:27:05Z</time>
         <speed>279.166656</speed>
         <name>TP4251</name>
@@ -25853,7 +25853,7 @@
         <name>TP4303</name>
       </trkpt>
       <trkpt lat="51.731212594" lon="8.730599400">
-        <ele>117.562</ele>
+        <ele>117.563</ele>
         <time>2013-08-15T05:27:11Z</time>
         <speed>290.833344</speed>
         <name>TP4304</name>
@@ -25925,7 +25925,7 @@
         <name>TP4315</name>
       </trkpt>
       <trkpt lat="51.731189706" lon="8.730654713">
-        <ele>119.812</ele>
+        <ele>119.813</ele>
         <time>2013-08-15T05:27:12Z</time>
         <speed>357.500000</speed>
         <name>TP4316</name>
@@ -26051,7 +26051,7 @@
         <name>TP4336</name>
       </trkpt>
       <trkpt lat="51.731151559" lon="8.730760571">
-        <ele>118.062</ele>
+        <ele>118.063</ele>
         <time>2013-08-15T05:27:14Z</time>
         <speed>324.444458</speed>
         <name>TP4337</name>
@@ -26075,7 +26075,7 @@
         <name>TP4340</name>
       </trkpt>
       <trkpt lat="51.731147744" lon="8.730775829">
-        <ele>117.812</ele>
+        <ele>117.813</ele>
         <time>2013-08-15T05:27:14Z</time>
         <speed>307.500000</speed>
         <name>TP4341</name>
@@ -26249,7 +26249,7 @@
         <name>TP4369</name>
       </trkpt>
       <trkpt lat="51.731094338" lon="8.730922695">
-        <ele>119.062</ele>
+        <ele>119.063</ele>
         <time>2013-08-15T05:27:17Z</time>
         <speed>268.333344</speed>
         <name>TP4370</name>
@@ -26405,7 +26405,7 @@
         <name>TP4395</name>
       </trkpt>
       <trkpt lat="51.731021859" lon="8.731086727">
-        <ele>118.312</ele>
+        <ele>118.313</ele>
         <time>2013-08-15T05:27:20Z</time>
         <speed>335.555542</speed>
         <name>TP4396</name>
@@ -26453,7 +26453,7 @@
         <name>TP4403</name>
       </trkpt>
       <trkpt lat="51.730991341" lon="8.731140133">
-        <ele>117.562</ele>
+        <ele>117.563</ele>
         <time>2013-08-15T05:27:21Z</time>
         <speed>394.166656</speed>
         <name>TP4404</name>
@@ -26645,7 +26645,7 @@
         <name>TP4435</name>
       </trkpt>
       <trkpt lat="51.730842568" lon="8.731357571">
-        <ele>107.062</ele>
+        <ele>107.063</ele>
         <time>2013-08-15T05:27:24Z</time>
         <speed>480.833344</speed>
         <name>TP4436</name>
@@ -26705,7 +26705,7 @@
         <name>TP4445</name>
       </trkpt>
       <trkpt lat="51.730785348" lon="8.731416699">
-        <ele>104.812</ele>
+        <ele>104.813</ele>
         <time>2013-08-15T05:27:25Z</time>
         <speed>485.000000</speed>
         <name>TP4446</name>
@@ -27389,7 +27389,7 @@
         <name>TP4559</name>
       </trkpt>
       <trkpt lat="51.730400063" lon="8.732113834">
-        <ele>110.062</ele>
+        <ele>110.063</ele>
         <time>2013-08-15T05:27:36Z</time>
         <speed>428.055542</speed>
         <name>TP4560</name>
@@ -27473,7 +27473,7 @@
         <name>TP4573</name>
       </trkpt>
       <trkpt lat="51.730373361" lon="8.732202526">
-        <ele>110.812</ele>
+        <ele>110.813</ele>
         <time>2013-08-15T05:27:38Z</time>
         <speed>411.388885</speed>
         <name>TP4574</name>
@@ -27593,7 +27593,7 @@
         <name>TP4593</name>
       </trkpt>
       <trkpt lat="51.730316140" lon="8.732348438">
-        <ele>113.562</ele>
+        <ele>113.563</ele>
         <time>2013-08-15T05:27:40Z</time>
         <speed>429.444458</speed>
         <name>TP4594</name>
@@ -27623,7 +27623,7 @@
         <name>TP4598</name>
       </trkpt>
       <trkpt lat="51.730300881" lon="8.732396122">
-        <ele>113.562</ele>
+        <ele>113.563</ele>
         <time>2013-08-15T05:27:40Z</time>
         <speed>452.500000</speed>
         <name>TP4599</name>
@@ -27749,7 +27749,7 @@
         <name>TP4619</name>
       </trkpt>
       <trkpt lat="51.730236031" lon="8.732519146">
-        <ele>111.312</ele>
+        <ele>111.313</ele>
         <time>2013-08-15T05:27:42Z</time>
         <speed>401.944458</speed>
         <name>TP4620</name>
@@ -27839,7 +27839,7 @@
         <name>TP4634</name>
       </trkpt>
       <trkpt lat="51.730144479" lon="8.732616421">
-        <ele>109.312</ele>
+        <ele>109.313</ele>
         <time>2013-08-15T05:27:44Z</time>
         <speed>463.055542</speed>
         <name>TP4635</name>
@@ -28313,7 +28313,7 @@
         <name>TP4713</name>
       </trkpt>
       <trkpt lat="51.729976632" lon="8.733085629">
-        <ele>111.562</ele>
+        <ele>111.563</ele>
         <time>2013-08-15T05:27:52Z</time>
         <speed>440.555542</speed>
         <name>TP4714</name>
@@ -28373,7 +28373,7 @@
         <name>TP4723</name>
       </trkpt>
       <trkpt lat="51.729946114" lon="8.733147617">
-        <ele>109.062</ele>
+        <ele>109.063</ele>
         <time>2013-08-15T05:27:53Z</time>
         <speed>405.277771</speed>
         <name>TP4724</name>
@@ -28499,7 +28499,7 @@
         <name>TP4744</name>
       </trkpt>
       <trkpt lat="51.729885079" lon="8.733255383">
-        <ele>108.062</ele>
+        <ele>108.063</ele>
         <time>2013-08-15T05:27:55Z</time>
         <speed>299.166656</speed>
         <name>TP4745</name>
@@ -28523,7 +28523,7 @@
         <name>TP4748</name>
       </trkpt>
       <trkpt lat="51.729869820" lon="8.733268734">
-        <ele>108.312</ele>
+        <ele>108.313</ele>
         <time>2013-08-15T05:27:55Z</time>
         <speed>293.888885</speed>
         <name>TP4749</name>
@@ -28961,7 +28961,7 @@
         <name>TP4821</name>
       </trkpt>
       <trkpt lat="51.729782082" lon="8.733855244">
-        <ele>111.812</ele>
+        <ele>111.813</ele>
         <time>2013-08-15T05:28:02Z</time>
         <speed>437.500000</speed>
         <name>TP4822</name>
@@ -29387,7 +29387,7 @@
         <name>TP4892</name>
       </trkpt>
       <trkpt lat="51.729576089" lon="8.734315868">
-        <ele>112.562</ele>
+        <ele>112.563</ele>
         <time>2013-08-15T05:28:09Z</time>
         <speed>380.833344</speed>
         <name>TP4893</name>
@@ -29939,7 +29939,7 @@
         <name>TP4984</name>
       </trkpt>
       <trkpt lat="51.729297616" lon="8.734972950">
-        <ele>110.062</ele>
+        <ele>110.063</ele>
         <time>2013-08-15T05:28:19Z</time>
         <speed>434.444458</speed>
         <name>TP4985</name>
@@ -29963,7 +29963,7 @@
         <name>TP4988</name>
       </trkpt>
       <trkpt lat="51.729297616" lon="8.734990116">
-        <ele>109.812</ele>
+        <ele>109.813</ele>
         <time>2013-08-15T05:28:19Z</time>
         <speed>407.222229</speed>
         <name>TP4989</name>
@@ -29993,7 +29993,7 @@
         <name>TP4993</name>
       </trkpt>
       <trkpt lat="51.729297616" lon="8.735013958">
-        <ele>109.562</ele>
+        <ele>109.563</ele>
         <time>2013-08-15T05:28:20Z</time>
         <speed>391.388885</speed>
         <name>TP4994</name>
@@ -30623,7 +30623,7 @@
         <name>TP5098</name>
       </trkpt>
       <trkpt lat="51.728805520" lon="8.735630985">
-        <ele>111.062</ele>
+        <ele>111.063</ele>
         <time>2013-08-15T05:28:30Z</time>
         <speed>468.611115</speed>
         <name>TP5099</name>
@@ -30767,7 +30767,7 @@
         <name>TP5122</name>
       </trkpt>
       <trkpt lat="51.728706338" lon="8.735739704">
-        <ele>112.562</ele>
+        <ele>112.563</ele>
         <time>2013-08-15T05:28:32Z</time>
         <speed>470.555542</speed>
         <name>TP5123</name>
@@ -30899,7 +30899,7 @@
         <name>TP5144</name>
       </trkpt>
       <trkpt lat="51.728591897" lon="8.735798832">
-        <ele>113.062</ele>
+        <ele>113.063</ele>
         <time>2013-08-15T05:28:35Z</time>
         <speed>494.166656</speed>
         <name>TP5145</name>
@@ -31841,7 +31841,7 @@
         <name>TP5301</name>
       </trkpt>
       <trkpt lat="51.727832772" lon="8.736548420">
-        <ele>111.312</ele>
+        <ele>111.313</ele>
         <time>2013-08-15T05:28:50Z</time>
         <speed>550.555542</speed>
         <name>TP5302</name>
@@ -31877,13 +31877,13 @@
         <name>TP5307</name>
       </trkpt>
       <trkpt lat="51.727802255" lon="8.736570355">
-        <ele>110.812</ele>
+        <ele>110.813</ele>
         <time>2013-08-15T05:28:51Z</time>
         <speed>540.555542</speed>
         <name>TP5308</name>
       </trkpt>
       <trkpt lat="51.727798440" lon="8.736573216">
-        <ele>110.812</ele>
+        <ele>110.813</ele>
         <time>2013-08-15T05:28:51Z</time>
         <speed>541.666687</speed>
         <name>TP5309</name>
@@ -32255,7 +32255,7 @@
         <name>TP5370</name>
       </trkpt>
       <trkpt lat="51.727539040" lon="8.736883160">
-        <ele>112.062</ele>
+        <ele>112.063</ele>
         <time>2013-08-15T05:28:57Z</time>
         <speed>565.000000</speed>
         <name>TP5371</name>
@@ -32351,7 +32351,7 @@
         <name>TP5386</name>
       </trkpt>
       <trkpt lat="51.727504708" lon="8.736944195">
-        <ele>110.312</ele>
+        <ele>110.313</ele>
         <time>2013-08-15T05:28:59Z</time>
         <speed>518.611084</speed>
         <name>TP5387</name>
@@ -32447,7 +32447,7 @@
         <name>TP5402</name>
       </trkpt>
       <trkpt lat="51.727447488" lon="8.737100597">
-        <ele>111.312</ele>
+        <ele>111.313</ele>
         <time>2013-08-15T05:29:00Z</time>
         <speed>560.833313</speed>
         <name>TP5403</name>
@@ -32471,7 +32471,7 @@
         <name>TP5406</name>
       </trkpt>
       <trkpt lat="51.727436044" lon="8.737140652">
-        <ele>111.812</ele>
+        <ele>111.813</ele>
         <time>2013-08-15T05:29:01Z</time>
         <speed>585.555542</speed>
         <name>TP5407</name>
@@ -32651,7 +32651,7 @@
         <name>TP5436</name>
       </trkpt>
       <trkpt lat="51.727371194" lon="8.737382885">
-        <ele>110.312</ele>
+        <ele>110.313</ele>
         <time>2013-08-15T05:29:04Z</time>
         <speed>584.166687</speed>
         <name>TP5437</name>
@@ -33149,7 +33149,7 @@
         <name>TP5519</name>
       </trkpt>
       <trkpt lat="51.727199532" lon="8.738016125">
-        <ele>104.562</ele>
+        <ele>104.563</ele>
         <time>2013-08-15T05:29:12Z</time>
         <speed>513.055542</speed>
         <name>TP5520</name>
@@ -33491,7 +33491,7 @@
         <name>TP5576</name>
       </trkpt>
       <trkpt lat="51.727062203" lon="8.738370892">
-        <ele>110.062</ele>
+        <ele>110.063</ele>
         <time>2013-08-15T05:29:18Z</time>
         <speed>460.000000</speed>
         <name>TP5577</name>
@@ -33527,7 +33527,7 @@
         <name>TP5582</name>
       </trkpt>
       <trkpt lat="51.727043130" lon="8.738396641">
-        <ele>110.312</ele>
+        <ele>110.313</ele>
         <time>2013-08-15T05:29:18Z</time>
         <speed>459.722229</speed>
         <name>TP5583</name>
@@ -33737,7 +33737,7 @@
         <name>TP5617</name>
       </trkpt>
       <trkpt lat="51.726932504" lon="8.738527294">
-        <ele>110.062</ele>
+        <ele>110.063</ele>
         <time>2013-08-15T05:29:22Z</time>
         <speed>451.944458</speed>
         <name>TP5618</name>
@@ -34079,7 +34079,7 @@
         <name>TP5674</name>
       </trkpt>
       <trkpt lat="51.726806619" lon="8.738762852">
-        <ele>114.312</ele>
+        <ele>114.313</ele>
         <time>2013-08-15T05:29:28Z</time>
         <speed>247.777771</speed>
         <name>TP5675</name>
@@ -34391,7 +34391,7 @@
         <name>TP5726</name>
       </trkpt>
       <trkpt lat="51.726703622" lon="8.738697048">
-        <ele>113.812</ele>
+        <ele>113.813</ele>
         <time>2013-08-15T05:29:33Z</time>
         <speed>166.388885</speed>
         <name>TP5727</name>
@@ -34517,7 +34517,7 @@
         <name>TP5747</name>
       </trkpt>
       <trkpt lat="51.726711251" lon="8.738607403">
-        <ele>116.062</ele>
+        <ele>116.063</ele>
         <time>2013-08-15T05:29:35Z</time>
         <speed>142.777771</speed>
         <name>TP5748</name>
@@ -35099,7 +35099,7 @@
         <name>TP5844</name>
       </trkpt>
       <trkpt lat="51.726505258" lon="8.738351818">
-        <ele>111.312</ele>
+        <ele>111.313</ele>
         <time>2013-08-15T05:29:45Z</time>
         <speed>295.277771</speed>
         <name>TP5845</name>
@@ -35597,7 +35597,7 @@
         <name>TP5927</name>
       </trkpt>
       <trkpt lat="51.726303079" lon="8.738152500">
-        <ele>111.812</ele>
+        <ele>111.813</ele>
         <time>2013-08-15T05:29:53Z</time>
         <speed>311.388885</speed>
         <name>TP5928</name>
@@ -35669,7 +35669,7 @@
         <name>TP5939</name>
       </trkpt>
       <trkpt lat="51.726264932" lon="8.738118168">
-        <ele>112.562</ele>
+        <ele>112.563</ele>
         <time>2013-08-15T05:29:54Z</time>
         <speed>319.722229</speed>
         <name>TP5940</name>
@@ -35945,7 +35945,7 @@
         <name>TP5985</name>
       </trkpt>
       <trkpt lat="51.726142861" lon="8.737994190">
-        <ele>112.062</ele>
+        <ele>112.063</ele>
         <time>2013-08-15T05:29:59Z</time>
         <speed>324.166656</speed>
         <name>TP5986</name>
@@ -36083,7 +36083,7 @@
         <name>TP6008</name>
       </trkpt>
       <trkpt lat="51.726078011" lon="8.737942692">
-        <ele>112.562</ele>
+        <ele>112.563</ele>
         <time>2013-08-15T05:30:01Z</time>
         <speed>324.166656</speed>
         <name>TP6009</name>
@@ -36239,7 +36239,7 @@
         <name>TP6034</name>
       </trkpt>
       <trkpt lat="51.726020791" lon="8.737882610">
-        <ele>115.312</ele>
+        <ele>115.313</ele>
         <time>2013-08-15T05:30:04Z</time>
         <speed>313.888885</speed>
         <name>TP6035</name>
@@ -36263,7 +36263,7 @@
         <name>TP6038</name>
       </trkpt>
       <trkpt lat="51.726009347" lon="8.737875935">
-        <ele>115.312</ele>
+        <ele>115.313</ele>
         <time>2013-08-15T05:30:04Z</time>
         <speed>313.333344</speed>
         <name>TP6039</name>
@@ -36341,7 +36341,7 @@
         <name>TP6051</name>
       </trkpt>
       <trkpt lat="51.725967385" lon="8.737855908">
-        <ele>115.562</ele>
+        <ele>115.563</ele>
         <time>2013-08-15T05:30:05Z</time>
         <speed>320.000000</speed>
         <name>TP6052</name>
@@ -37205,7 +37205,7 @@
         <name>TP6195</name>
       </trkpt>
       <trkpt lat="51.725810983" lon="8.737818714">
-        <ele>119.562</ele>
+        <ele>119.563</ele>
         <time>2013-08-15T05:30:20Z</time>
         <speed>0.000000</speed>
         <name>TP6196</name>
@@ -38393,7 +38393,7 @@
         <name>TP6393</name>
       </trkpt>
       <trkpt lat="51.722671487" lon="8.738293644">
-        <ele>140.562</ele>
+        <ele>140.563</ele>
         <time>2013-08-15T15:15:35Z</time>
         <speed>408.888885</speed>
         <name>TP6394</name>
@@ -38861,7 +38861,7 @@
         <name>TP6471</name>
       </trkpt>
       <trkpt lat="51.723133065" lon="8.738472935">
-        <ele>140.062</ele>
+        <ele>140.063</ele>
         <time>2013-08-15T15:15:43Z</time>
         <speed>313.888885</speed>
         <name>TP6472</name>
@@ -39785,7 +39785,7 @@
         <name>TP6625</name>
       </trkpt>
       <trkpt lat="51.723239877" lon="8.738430973">
-        <ele>142.812</ele>
+        <ele>142.813</ele>
         <time>2013-08-15T15:15:58Z</time>
         <speed>0.000000</speed>
         <name>TP6626</name>
@@ -39827,13 +39827,13 @@
         <name>TP6632</name>
       </trkpt>
       <trkpt lat="51.723251321" lon="8.738430973">
-        <ele>142.562</ele>
+        <ele>142.563</ele>
         <time>2013-08-15T15:15:59Z</time>
         <speed>0.000000</speed>
         <name>TP6633</name>
       </trkpt>
       <trkpt lat="51.723251321" lon="8.738430973">
-        <ele>142.562</ele>
+        <ele>142.563</ele>
         <time>2013-08-15T15:15:59Z</time>
         <speed>0.000000</speed>
         <name>TP6634</name>
@@ -39911,7 +39911,7 @@
         <name>TP6646</name>
       </trkpt>
       <trkpt lat="51.723251321" lon="8.738430973">
-        <ele>143.062</ele>
+        <ele>143.063</ele>
         <time>2013-08-15T15:16:00Z</time>
         <speed>0.000000</speed>
         <name>TP6647</name>
@@ -40121,7 +40121,7 @@
         <name>TP6681</name>
       </trkpt>
       <trkpt lat="51.723251321" lon="8.738430973">
-        <ele>143.812</ele>
+        <ele>143.813</ele>
         <time>2013-08-15T15:16:04Z</time>
         <speed>0.000000</speed>
         <name>TP6682</name>
@@ -40247,7 +40247,7 @@
         <name>TP6702</name>
       </trkpt>
       <trkpt lat="51.723251321" lon="8.738430973">
-        <ele>144.062</ele>
+        <ele>144.063</ele>
         <time>2013-08-15T15:16:06Z</time>
         <speed>0.000000</speed>
         <name>TP6703</name>
@@ -40547,7 +40547,7 @@
         <name>TP6752</name>
       </trkpt>
       <trkpt lat="51.723197915" lon="8.738411900">
-        <ele>144.062</ele>
+        <ele>144.063</ele>
         <time>2013-08-15T15:16:11Z</time>
         <speed>0.000000</speed>
         <name>TP6753</name>
@@ -40817,7 +40817,7 @@
         <name>TP6797</name>
       </trkpt>
       <trkpt lat="51.723197915" lon="8.738411900">
-        <ele>143.062</ele>
+        <ele>143.063</ele>
         <time>2013-08-15T15:16:15Z</time>
         <speed>0.000000</speed>
         <name>TP6798</name>
@@ -40979,7 +40979,7 @@
         <name>TP6824</name>
       </trkpt>
       <trkpt lat="51.723197915" lon="8.738411900">
-        <ele>142.562</ele>
+        <ele>142.563</ele>
         <time>2013-08-15T15:16:18Z</time>
         <speed>0.000000</speed>
         <name>TP6825</name>
@@ -41045,7 +41045,7 @@
         <name>TP6835</name>
       </trkpt>
       <trkpt lat="51.723197915" lon="8.738411900">
-        <ele>142.312</ele>
+        <ele>142.313</ele>
         <time>2013-08-15T15:16:19Z</time>
         <speed>0.000000</speed>
         <name>TP6836</name>
@@ -41111,7 +41111,7 @@
         <name>TP6846</name>
       </trkpt>
       <trkpt lat="51.723224618" lon="8.738446232">
-        <ele>142.062</ele>
+        <ele>142.063</ele>
         <time>2013-08-15T15:16:20Z</time>
         <speed>0.000000</speed>
         <name>TP6847</name>
@@ -41171,7 +41171,7 @@
         <name>TP6856</name>
       </trkpt>
       <trkpt lat="51.723224618" lon="8.738446232">
-        <ele>141.562</ele>
+        <ele>141.563</ele>
         <time>2013-08-15T15:16:21Z</time>
         <speed>0.000000</speed>
         <name>TP6857</name>
@@ -41231,7 +41231,7 @@
         <name>TP6866</name>
       </trkpt>
       <trkpt lat="51.723224618" lon="8.738446232">
-        <ele>140.812</ele>
+        <ele>140.813</ele>
         <time>2013-08-15T15:16:22Z</time>
         <speed>0.000000</speed>
         <name>TP6867</name>
@@ -41285,7 +41285,7 @@
         <name>TP6875</name>
       </trkpt>
       <trkpt lat="51.723224618" lon="8.738446232">
-        <ele>140.062</ele>
+        <ele>140.063</ele>
         <time>2013-08-15T15:16:23Z</time>
         <speed>0.000000</speed>
         <name>TP6876</name>
@@ -41363,7 +41363,7 @@
         <name>TP6888</name>
       </trkpt>
       <trkpt lat="51.723224618" lon="8.738446232">
-        <ele>139.312</ele>
+        <ele>139.313</ele>
         <time>2013-08-15T15:16:25Z</time>
         <speed>0.000000</speed>
         <name>TP6889</name>
@@ -41429,7 +41429,7 @@
         <name>TP6899</name>
       </trkpt>
       <trkpt lat="51.723224618" lon="8.738446232">
-        <ele>138.812</ele>
+        <ele>138.813</ele>
         <time>2013-08-15T15:16:26Z</time>
         <speed>0.000000</speed>
         <name>TP6900</name>
@@ -41495,7 +41495,7 @@
         <name>TP6910</name>
       </trkpt>
       <trkpt lat="51.723224618" lon="8.738446232">
-        <ele>138.062</ele>
+        <ele>138.063</ele>
         <time>2013-08-15T15:16:27Z</time>
         <speed>0.000000</speed>
         <name>TP6911</name>
@@ -41849,7 +41849,7 @@
         <name>TP6969</name>
       </trkpt>
       <trkpt lat="51.723209359" lon="8.738506313">
-        <ele>132.062</ele>
+        <ele>132.063</ele>
         <time>2013-08-15T15:16:33Z</time>
         <speed>0.000000</speed>
         <name>TP6970</name>
@@ -41987,7 +41987,7 @@
         <name>TP6992</name>
       </trkpt>
       <trkpt lat="51.723209359" lon="8.738506313">
-        <ele>131.062</ele>
+        <ele>131.063</ele>
         <time>2013-08-15T15:16:35Z</time>
         <speed>0.000000</speed>
         <name>TP6993</name>
@@ -42185,7 +42185,7 @@
         <name>TP7025</name>
       </trkpt>
       <trkpt lat="51.723209359" lon="8.738506313">
-        <ele>129.812</ele>
+        <ele>129.813</ele>
         <time>2013-08-15T15:16:38Z</time>
         <speed>0.000000</speed>
         <name>TP7026</name>
@@ -42233,7 +42233,7 @@
         <name>TP7033</name>
       </trkpt>
       <trkpt lat="51.723209359" lon="8.738506313">
-        <ele>129.562</ele>
+        <ele>129.563</ele>
         <time>2013-08-15T15:16:39Z</time>
         <speed>0.000000</speed>
         <name>TP7034</name>
@@ -42293,7 +42293,7 @@
         <name>TP7043</name>
       </trkpt>
       <trkpt lat="51.723209359" lon="8.738506313">
-        <ele>129.312</ele>
+        <ele>129.313</ele>
         <time>2013-08-15T15:16:40Z</time>
         <speed>0.000000</speed>
         <name>TP7044</name>
@@ -42497,7 +42497,7 @@
         <name>TP7077</name>
       </trkpt>
       <trkpt lat="51.723236062" lon="8.738479611">
-        <ele>129.062</ele>
+        <ele>129.063</ele>
         <time>2013-08-15T15:16:43Z</time>
         <speed>0.000000</speed>
         <name>TP7078</name>
@@ -42527,7 +42527,7 @@
         <name>TP7082</name>
       </trkpt>
       <trkpt lat="51.723243691" lon="8.738478657">
-        <ele>126.812</ele>
+        <ele>126.813</ele>
         <time>2013-08-15T15:16:44Z</time>
         <speed>44.722221</speed>
         <name>TP7083</name>
@@ -42713,7 +42713,7 @@
         <name>TP7113</name>
       </trkpt>
       <trkpt lat="51.723297097" lon="8.738492962">
-        <ele>126.562</ele>
+        <ele>126.563</ele>
         <time>2013-08-15T15:16:47Z</time>
         <speed>186.388885</speed>
         <name>TP7114</name>
@@ -43019,7 +43019,7 @@
         <name>TP7164</name>
       </trkpt>
       <trkpt lat="51.723548867" lon="8.738398548">
-        <ele>122.812</ele>
+        <ele>122.813</ele>
         <time>2013-08-15T15:16:52Z</time>
         <speed>475.277771</speed>
         <name>TP7165</name>
@@ -43085,7 +43085,7 @@
         <name>TP7175</name>
       </trkpt>
       <trkpt lat="51.723602273" lon="8.738333698">
-        <ele>118.062</ele>
+        <ele>118.063</ele>
         <time>2013-08-15T15:16:53Z</time>
         <speed>533.611084</speed>
         <name>TP7176</name>
@@ -43187,7 +43187,7 @@
         <name>TP7192</name>
       </trkpt>
       <trkpt lat="51.723655679" lon="8.738195416">
-        <ele>115.312</ele>
+        <ele>115.313</ele>
         <time>2013-08-15T15:16:55Z</time>
         <speed>579.444458</speed>
         <name>TP7193</name>
@@ -43559,7 +43559,7 @@
         <name>TP7254</name>
       </trkpt>
       <trkpt lat="51.723865487" lon="8.737740513">
-        <ele>111.562</ele>
+        <ele>111.563</ele>
         <time>2013-08-15T15:17:01Z</time>
         <speed>581.944458</speed>
         <name>TP7255</name>
@@ -43577,7 +43577,7 @@
         <name>TP7257</name>
       </trkpt>
       <trkpt lat="51.723876931" lon="8.737723347">
-        <ele>111.562</ele>
+        <ele>111.563</ele>
         <time>2013-08-15T15:17:01Z</time>
         <speed>578.611084</speed>
         <name>TP7258</name>
@@ -43607,7 +43607,7 @@
         <name>TP7262</name>
       </trkpt>
       <trkpt lat="51.723892190" lon="8.737700459">
-        <ele>112.562</ele>
+        <ele>112.563</ele>
         <time>2013-08-15T15:17:02Z</time>
         <speed>564.722229</speed>
         <name>TP7263</name>
@@ -43643,7 +43643,7 @@
         <name>TP7268</name>
       </trkpt>
       <trkpt lat="51.723918893" lon="8.737688061">
-        <ele>113.812</ele>
+        <ele>113.813</ele>
         <time>2013-08-15T15:17:03Z</time>
         <speed>542.777771</speed>
         <name>TP7269</name>
@@ -43925,7 +43925,7 @@
         <name>TP7315</name>
       </trkpt>
       <trkpt lat="51.724124886" lon="8.737786289">
-        <ele>115.062</ele>
+        <ele>115.063</ele>
         <time>2013-08-15T15:17:07Z</time>
         <speed>346.944458</speed>
         <name>TP7316</name>
@@ -44177,7 +44177,7 @@
         <name>TP7357</name>
       </trkpt>
       <trkpt lat="51.724235513" lon="8.737912174">
-        <ele>110.312</ele>
+        <ele>110.313</ele>
         <time>2013-08-15T15:17:11Z</time>
         <speed>333.055542</speed>
         <name>TP7358</name>
@@ -44603,7 +44603,7 @@
         <name>TP7428</name>
       </trkpt>
       <trkpt lat="51.724647500" lon="8.738252636">
-        <ele>118.312</ele>
+        <ele>118.313</ele>
         <time>2013-08-15T15:17:19Z</time>
         <speed>486.388885</speed>
         <name>TP7429</name>
@@ -44639,7 +44639,7 @@
         <name>TP7434</name>
       </trkpt>
       <trkpt lat="51.724678018" lon="8.738275524">
-        <ele>117.312</ele>
+        <ele>117.313</ele>
         <time>2013-08-15T15:17:19Z</time>
         <speed>490.555542</speed>
         <name>TP7435</name>
@@ -44789,7 +44789,7 @@
         <name>TP7459</name>
       </trkpt>
       <trkpt lat="51.724815347" lon="8.738398548">
-        <ele>115.562</ele>
+        <ele>115.563</ele>
         <time>2013-08-15T15:17:22Z</time>
         <speed>537.500000</speed>
         <name>TP7460</name>
@@ -44885,7 +44885,7 @@
         <name>TP7475</name>
       </trkpt>
       <trkpt lat="51.724884011" lon="8.738467213">
-        <ele>114.312</ele>
+        <ele>114.313</ele>
         <time>2013-08-15T15:17:23Z</time>
         <speed>526.944458</speed>
         <name>TP7476</name>
@@ -45017,7 +45017,7 @@
         <name>TP7497</name>
       </trkpt>
       <trkpt lat="51.724967935" lon="8.738562580">
-        <ele>109.812</ele>
+        <ele>109.813</ele>
         <time>2013-08-15T15:17:25Z</time>
         <speed>505.277771</speed>
         <name>TP7498</name>
@@ -45203,7 +45203,7 @@
         <name>TP7528</name>
       </trkpt>
       <trkpt lat="51.725093820" lon="8.738678928">
-        <ele>106.062</ele>
+        <ele>106.063</ele>
         <time>2013-08-15T15:17:29Z</time>
         <speed>474.166656</speed>
         <name>TP7529</name>
@@ -45275,7 +45275,7 @@
         <name>TP7540</name>
       </trkpt>
       <trkpt lat="51.725154855" lon="8.738727566">
-        <ele>105.312</ele>
+        <ele>105.313</ele>
         <time>2013-08-15T15:17:30Z</time>
         <speed>528.611084</speed>
         <name>TP7541</name>
@@ -45503,7 +45503,7 @@
         <name>TP7578</name>
       </trkpt>
       <trkpt lat="51.725326516" lon="8.738857266">
-        <ele>106.562</ele>
+        <ele>106.563</ele>
         <time>2013-08-15T15:17:34Z</time>
         <speed>542.222229</speed>
         <name>TP7579</name>
@@ -45773,7 +45773,7 @@
         <name>TP7623</name>
       </trkpt>
       <trkpt lat="51.725486733" lon="8.739021298">
-        <ele>108.312</ele>
+        <ele>108.313</ele>
         <time>2013-08-15T15:17:38Z</time>
         <speed>514.166687</speed>
         <name>TP7624</name>
@@ -45917,7 +45917,7 @@
         <name>TP7647</name>
       </trkpt>
       <trkpt lat="51.725555398" lon="8.739125248">
-        <ele>110.562</ele>
+        <ele>110.563</ele>
         <time>2013-08-15T15:17:40Z</time>
         <speed>471.666656</speed>
         <name>TP7648</name>
@@ -46091,7 +46091,7 @@
         <name>TP7676</name>
       </trkpt>
       <trkpt lat="51.725711800" lon="8.739270207">
-        <ele>107.812</ele>
+        <ele>107.813</ele>
         <time>2013-08-15T15:17:43Z</time>
         <speed>507.777771</speed>
         <name>TP7677</name>
@@ -46301,7 +46301,7 @@
         <name>TP7711</name>
       </trkpt>
       <trkpt lat="51.725856759" lon="8.739416119">
-        <ele>104.812</ele>
+        <ele>104.813</ele>
         <time>2013-08-15T15:17:47Z</time>
         <speed>490.833344</speed>
         <name>TP7712</name>
@@ -46331,7 +46331,7 @@
         <name>TP7716</name>
       </trkpt>
       <trkpt lat="51.725864388" lon="8.739421841">
-        <ele>104.312</ele>
+        <ele>104.313</ele>
         <time>2013-08-15T15:17:47Z</time>
         <speed>470.277771</speed>
         <name>TP7717</name>
@@ -46367,7 +46367,7 @@
         <name>TP7722</name>
       </trkpt>
       <trkpt lat="51.725875832" lon="8.739437100">
-        <ele>103.562</ele>
+        <ele>103.563</ele>
         <time>2013-08-15T15:17:48Z</time>
         <speed>455.833344</speed>
         <name>TP7723</name>
@@ -46427,7 +46427,7 @@
         <name>TP7732</name>
       </trkpt>
       <trkpt lat="51.725906350" lon="8.739458080">
-        <ele>102.812</ele>
+        <ele>102.813</ele>
         <time>2013-08-15T15:17:49Z</time>
         <speed>425.833344</speed>
         <name>TP7733</name>
@@ -46547,7 +46547,7 @@
         <name>TP7752</name>
       </trkpt>
       <trkpt lat="51.725997903" lon="8.739473339">
-        <ele>106.062</ele>
+        <ele>106.063</ele>
         <time>2013-08-15T15:17:51Z</time>
         <speed>250.000000</speed>
         <name>TP7753</name>
@@ -46565,7 +46565,7 @@
         <name>TP7755</name>
       </trkpt>
       <trkpt lat="51.726005532" lon="8.739476200">
-        <ele>106.812</ele>
+        <ele>106.813</ele>
         <time>2013-08-15T15:17:51Z</time>
         <speed>229.444443</speed>
         <name>TP7756</name>
@@ -46619,7 +46619,7 @@
         <name>TP7764</name>
       </trkpt>
       <trkpt lat="51.726028420" lon="8.739485737">
-        <ele>110.062</ele>
+        <ele>110.063</ele>
         <time>2013-08-15T15:17:52Z</time>
         <speed>205.000000</speed>
         <name>TP7765</name>
@@ -46649,7 +46649,7 @@
         <name>TP7769</name>
       </trkpt>
       <trkpt lat="51.726043679" lon="8.739495274">
-        <ele>110.812</ele>
+        <ele>110.813</ele>
         <time>2013-08-15T15:17:53Z</time>
         <speed>208.055557</speed>
         <name>TP7770</name>
@@ -46721,7 +46721,7 @@
         <name>TP7781</name>
       </trkpt>
       <trkpt lat="51.726089456" lon="8.739585873">
-        <ele>107.812</ele>
+        <ele>107.813</ele>
         <time>2013-08-15T15:17:54Z</time>
         <speed>236.944443</speed>
         <name>TP7782</name>
@@ -46733,7 +46733,7 @@
         <name>TP7783</name>
       </trkpt>
       <trkpt lat="51.726093270" lon="8.739588734">
-        <ele>107.312</ele>
+        <ele>107.313</ele>
         <time>2013-08-15T15:17:54Z</time>
         <speed>229.444443</speed>
         <name>TP7784</name>
@@ -46883,19 +46883,19 @@
         <name>TP7808</name>
       </trkpt>
       <trkpt lat="51.726131417" lon="8.739602085">
-        <ele>111.312</ele>
+        <ele>111.313</ele>
         <time>2013-08-15T15:17:57Z</time>
         <speed>181.388885</speed>
         <name>TP7809</name>
       </trkpt>
       <trkpt lat="51.726135232" lon="8.739601132">
-        <ele>111.312</ele>
+        <ele>111.313</ele>
         <time>2013-08-15T15:17:57Z</time>
         <speed>188.611115</speed>
         <name>TP7810</name>
       </trkpt>
       <trkpt lat="51.726135232" lon="8.739600178">
-        <ele>111.312</ele>
+        <ele>111.313</ele>
         <time>2013-08-15T15:17:57Z</time>
         <speed>195.000000</speed>
         <name>TP7811</name>
@@ -47207,7 +47207,7 @@
         <name>TP7862</name>
       </trkpt>
       <trkpt lat="51.726318337" lon="8.739397999">
-        <ele>106.312</ele>
+        <ele>106.313</ele>
         <time>2013-08-15T15:18:02Z</time>
         <speed>440.277771</speed>
         <name>TP7863</name>
@@ -47291,7 +47291,7 @@
         <name>TP7876</name>
       </trkpt>
       <trkpt lat="51.726371743" lon="8.739338871">
-        <ele>107.062</ele>
+        <ele>107.063</ele>
         <time>2013-08-15T15:18:03Z</time>
         <speed>448.333344</speed>
         <name>TP7877</name>
@@ -47777,7 +47777,7 @@
         <name>TP7957</name>
       </trkpt>
       <trkpt lat="51.726692178" lon="8.738936421">
-        <ele>101.812</ele>
+        <ele>101.813</ele>
         <time>2013-08-15T15:18:11Z</time>
         <speed>459.722229</speed>
         <name>TP7958</name>
@@ -47855,7 +47855,7 @@
         <name>TP7970</name>
       </trkpt>
       <trkpt lat="51.726726510" lon="8.738862988">
-        <ele>102.062</ele>
+        <ele>102.063</ele>
         <time>2013-08-15T15:18:13Z</time>
         <speed>388.611115</speed>
         <name>TP7971</name>
@@ -48383,7 +48383,7 @@
         <name>TP8058</name>
       </trkpt>
       <trkpt lat="51.726989724" lon="8.738393780">
-        <ele>95.562</ele>
+        <ele>95.563</ele>
         <time>2013-08-15T15:18:22Z</time>
         <speed>346.666656</speed>
         <name>TP8059</name>
@@ -48461,7 +48461,7 @@
         <name>TP8071</name>
       </trkpt>
       <trkpt lat="51.727050759" lon="8.738322254">
-        <ele>98.062</ele>
+        <ele>98.063</ele>
         <time>2013-08-15T15:18:23Z</time>
         <speed>366.388885</speed>
         <name>TP8072</name>
@@ -48473,7 +48473,7 @@
         <name>TP8073</name>
       </trkpt>
       <trkpt lat="51.727058389" lon="8.738309857">
-        <ele>98.062</ele>
+        <ele>98.063</ele>
         <time>2013-08-15T15:18:23Z</time>
         <speed>368.888885</speed>
         <name>TP8074</name>
@@ -48917,7 +48917,7 @@
         <name>TP8147</name>
       </trkpt>
       <trkpt lat="51.727321603" lon="8.737812992">
-        <ele>90.312</ele>
+        <ele>90.313</ele>
         <time>2013-08-15T15:18:30Z</time>
         <speed>467.222229</speed>
         <name>TP8148</name>
@@ -49175,7 +49175,7 @@
         <name>TP8190</name>
       </trkpt>
       <trkpt lat="51.727386453" lon="8.737458225">
-        <ele>86.812</ele>
+        <ele>86.813</ele>
         <time>2013-08-15T15:18:35Z</time>
         <speed>540.277771</speed>
         <name>TP8191</name>
@@ -49331,7 +49331,7 @@
         <name>TP8216</name>
       </trkpt>
       <trkpt lat="51.727436044" lon="8.737277981">
-        <ele>88.812</ele>
+        <ele>88.813</ele>
         <time>2013-08-15T15:18:37Z</time>
         <speed>477.777771</speed>
         <name>TP8217</name>
@@ -49547,7 +49547,7 @@
         <name>TP8252</name>
       </trkpt>
       <trkpt lat="51.727535226" lon="8.737053867">
-        <ele>87.812</ele>
+        <ele>87.813</ele>
         <time>2013-08-15T15:18:41Z</time>
         <speed>503.333344</speed>
         <name>TP8253</name>
@@ -49697,7 +49697,7 @@
         <name>TP8277</name>
       </trkpt>
       <trkpt lat="51.727596261" lon="8.736880299">
-        <ele>92.562</ele>
+        <ele>92.563</ele>
         <time>2013-08-15T15:18:43Z</time>
         <speed>485.000000</speed>
         <name>TP8278</name>
@@ -49757,7 +49757,7 @@
         <name>TP8287</name>
       </trkpt>
       <trkpt lat="51.727611520" lon="8.736814495">
-        <ele>93.562</ele>
+        <ele>93.563</ele>
         <time>2013-08-15T15:18:44Z</time>
         <speed>476.111115</speed>
         <name>TP8288</name>
@@ -49865,7 +49865,7 @@
         <name>TP8305</name>
       </trkpt>
       <trkpt lat="51.727664925" lon="8.736716267">
-        <ele>93.812</ele>
+        <ele>93.813</ele>
         <time>2013-08-15T15:18:46Z</time>
         <speed>485.555542</speed>
         <name>TP8306</name>
@@ -49961,7 +49961,7 @@
         <name>TP8321</name>
       </trkpt>
       <trkpt lat="51.727703072" lon="8.736618038">
-        <ele>95.812</ele>
+        <ele>95.813</ele>
         <time>2013-08-15T15:18:48Z</time>
         <speed>506.666656</speed>
         <name>TP8322</name>
@@ -49985,7 +49985,7 @@
         <name>TP8325</name>
       </trkpt>
       <trkpt lat="51.727722146" lon="8.736597057">
-        <ele>96.062</ele>
+        <ele>96.063</ele>
         <time>2013-08-15T15:18:48Z</time>
         <speed>501.111115</speed>
         <name>TP8326</name>
@@ -50099,7 +50099,7 @@
         <name>TP8344</name>
       </trkpt>
       <trkpt lat="51.727817513" lon="8.736503597">
-        <ele>97.812</ele>
+        <ele>97.813</ele>
         <time>2013-08-15T15:18:50Z</time>
         <speed>501.388885</speed>
         <name>TP8345</name>
@@ -50159,7 +50159,7 @@
         <name>TP8354</name>
       </trkpt>
       <trkpt lat="51.727851846" lon="8.736457821">
-        <ele>97.062</ele>
+        <ele>97.063</ele>
         <time>2013-08-15T15:18:51Z</time>
         <speed>491.944458</speed>
         <name>TP8355</name>
@@ -50219,7 +50219,7 @@
         <name>TP8364</name>
       </trkpt>
       <trkpt lat="51.727905251" lon="8.736431118">
-        <ele>96.812</ele>
+        <ele>96.813</ele>
         <time>2013-08-15T15:18:52Z</time>
         <speed>502.777771</speed>
         <name>TP8365</name>
@@ -50285,7 +50285,7 @@
         <name>TP8375</name>
       </trkpt>
       <trkpt lat="51.727951028" lon="8.736404415">
-        <ele>97.812</ele>
+        <ele>97.813</ele>
         <time>2013-08-15T15:18:53Z</time>
         <speed>504.166656</speed>
         <name>TP8376</name>
@@ -50357,7 +50357,7 @@
         <name>TP8387</name>
       </trkpt>
       <trkpt lat="51.728000619" lon="8.736369129">
-        <ele>97.562</ele>
+        <ele>97.563</ele>
         <time>2013-08-15T15:18:54Z</time>
         <speed>491.944458</speed>
         <name>TP8388</name>
@@ -50501,7 +50501,7 @@
         <name>TP8411</name>
       </trkpt>
       <trkpt lat="51.728126504" lon="8.736246105">
-        <ele>95.812</ele>
+        <ele>95.813</ele>
         <time>2013-08-15T15:18:58Z</time>
         <speed>477.777771</speed>
         <name>TP8412</name>

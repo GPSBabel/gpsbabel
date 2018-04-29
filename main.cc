@@ -228,7 +228,8 @@ main(int argc, char* argv[])
 
   (void) new gpsbabel::UsAsciiCodec(); /* make sure a US-ASCII codec is available */
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 2, 0))
+// MIN_QT_VERSION in configure.ac should correspond to the QT_VERSION_CHECK arguments in main.cc and gui/main.cc
+#if (QT_VERSION < QT_VERSION_CHECK(5, 7, 0))
 #error This version of Qt is not supported.
 #endif
 

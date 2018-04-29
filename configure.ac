@@ -166,12 +166,27 @@ AC_CHECK_TOOLS(QMAKE, [qmake-qt5 qmake], "no")
 AC_CHECK_TOOLS(LUPDATE, [lupdate-qt5 lupdate])
 AC_CHECK_TOOLS(LRELEASE, [lrelease-qt5 lrelease])
 
+# MIN_QT_VERSION in configure.ac should correspond to the QT_VERSION_CHECK arguments in main.cc and gui/main.cc
+MIN_QT_VERSION=5.7
 AS_IF([test "$QMAKE" = "no"], [
-	AC_MSG_ERROR([Qt5.2 or higher is required, but was not found]);
+	AC_MSG_ERROR([Qt qmake (with QT_VERSION >= $MIN_QT_VERSION) is required but was not found.])
+])
+
+# enforce minimum version of Qt.
+QT_VERSION=$($QMAKE -query QT_VERSION)
+# AC_PROG_AWK is required by AX_COMPARE_VERSIONS, but
+# if we haven't called if first it outputs noise in the
+# middle of our AC_MSG_CHECKING AC_MSG_RESULT dialog.
+AC_PROG_AWK
+AC_MSG_CHECKING([if Qt version >= $MIN_QT_VERSION])
+AX_COMPARE_VERSION([$QT_VERSION],[ge],[$MIN_QT_VERSION],
+	[AC_MSG_RESULT([yes])],[
+	AC_MSG_RESULT([no])
+	AC_MSG_ERROR([Qt $MIN_QT_VERSION or higher is required, but Qt $QT_VERSION found.])
 ])
 
 # guess the name of the Qt Core library.
-QT_LIBVER=$($QMAKE -query -query QT_VERSION | sed -e 's/\..*//')
+QT_LIBVER=$($QMAKE -query QT_VERSION | sed -e 's/\..*//')
 AS_IF([test "$QT_LIBVER" -ge 5], [
 	QT_LIBS="-L$($QMAKE -query QT_INSTALL_LIBS) -lQt${QT_LIBVER}Core"
 ], [
