@@ -166,6 +166,7 @@ AC_CHECK_TOOLS(QMAKE, [qmake-qt5 qmake], "no")
 AC_CHECK_TOOLS(LUPDATE, [lupdate-qt5 lupdate])
 AC_CHECK_TOOLS(LRELEASE, [lrelease-qt5 lrelease])
 
+# MIN_QT_VERSION in configure.ac should correspond to the QT_VERSION_CHECK arguments in main.cc and gui/main.cc
 MIN_QT_VERSION=5.7
 AS_IF([test "$QMAKE" = "no"], [
 	AC_MSG_ERROR([Qt qmake (with QT_VERSION >= $MIN_QT_VERSION) is required but was not found.])
