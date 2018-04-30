@@ -1,8 +1,8 @@
 /*
     Naviguide Routes
 
-
     Copyright (C) 2009 Erez Zuler
+    Copyright (C) 2018 Zeev Stadler
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -40,10 +40,10 @@ typedef struct {
   unsigned char pad2[4];      /* 0x01, 0x00, 0x00, 0x00 */
 } ng_file_header_t;
 
-/* Naviguide waypoint/rout data  */
+/* Naviguide waypoint/routepoint data  */
 typedef struct {
   unsigned char pad1[8];   /*  0xfe, 0xff, 0xff, 0xff, 0x01, 0x00, 0x00, 0x00 */
-  /* coordination are in old israeli grid */
+  /* coordinates are in old israeli grid */
   int32_t East;
   int32_t North;
   unsigned char pad2[2];  /* 0x01, 0x01 */
@@ -67,26 +67,38 @@ typedef struct {
 /* Global variables */
 
 static gbfile* file_in, *file_out;
-static uint16_t nof_wp;
+static uint16_t nof_wp = 0;
 static route_head* rte_head;
 static ng_file_header_t ng_file_header;
 static ng_wp_no_comment_t WPNC;
 static ng_next_wp_t ng_next_wp;
 static char strComment[101];
 
-/* Process options */
-/* wp - process only waypoints */
-/* rte - process as route */
-/* wprte - Process waypoints and route */
-static char* process = NULL;
+/*
+    File reading options
+    wp - read file as waypoints
+    rte - read file as route
+    trk - read file as track
+
+ */
+static char* read_as = NULL;
+gpsdata_type read_type = unknown_gpsdata;
+
+/*
+    File writing options:
+    First non-empty data type, as a string with the letters:
+    w - write waypoints to the file, if any.
+    r - write routes to the file, if any.
+    t - write tracks to the file, if any.
+
+ */
+static char* write_as = NULL;
+gpsdata_type write_type = unknown_gpsdata;
+
 static char* reorder = NULL;
-static int process_rte = 1;
 static int reorder_wp = 0;
 
 static char temp_short_name[5];
-
-
-
 
 /* Forward declarations */
 static void ng_read_file_header();
@@ -94,8 +106,12 @@ static void ng_read_file_header();
 static
 arglist_t ng_args[] = {
   {
-    "output", &process, "'wp' - Create waypoint file , 'rte' - Create route file",
+    "output", &read_as, "'wp' - Read file as waypoints, 'rte' - Read file as route, 'trk' - Read file as track",
     "rte", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+  },
+  {
+    "input", &write_as, "Select the source type for writing, with optional priority.",
+    "wrt", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "reorder", &reorder, "'n' - Keep the existing wp name, 'y' - rename waypoints",
@@ -232,7 +248,7 @@ ng_fill_waypoint_default()
 
 
 static void
-ng_waypt_rd(const Waypoint* wpt)
+ng_waypt_wr(const Waypoint* wpt)
 {
   char z[50];
   double lat, lon;
@@ -285,16 +301,23 @@ header_write()
 static void
 data_write()
 {
-  nof_wp = waypt_count();
-  if (nof_wp) {
-    header_write();
-    waypt_disp_all(ng_waypt_rd);
-  } else {
-    nof_wp = route_waypt_count();
-    if (nof_wp) {
-      header_write();
-      route_disp_all(NULL, NULL, ng_waypt_rd);
-    }
+
+  switch (write_type) {
+    case wptdata:
+      waypt_disp_all(ng_waypt_wr);
+      break;
+    case rtedata:
+      rte_head = route_head_alloc();
+      route_add_head(rte_head);
+      route_disp_all(NULL, NULL, ng_waypt_wr);
+      break;
+    case trkdata:
+      rte_head = route_head_alloc();
+      track_add_head(rte_head);
+      track_disp_all(NULL, NULL, ng_waypt_wr);
+      break;
+    default:
+      break;
   }
 }
 
@@ -302,13 +325,43 @@ data_write()
 static void
 wr_init(const QString& fname)
 {
-  file_out = gbfopen_le(fname, "wb", MYNAME);
-  ng_fill_header_default();
-  if (NULL != reorder)
-    if (!case_ignore_strcmp(reorder, "y")) {
-      reorder_wp = 1;
-    }
+  int i;
 
+  for (i=0; write_as[i] && !nof_wp && i<3; i++) {
+    switch (write_as[i]) {
+      case 'w':
+	nof_wp = waypt_count();
+	if (nof_wp) {
+	  write_type = wptdata;
+	}
+	break;
+      case 'r':
+	nof_wp = route_waypt_count();
+	if (nof_wp) {
+	  write_type = rtedata;
+	}
+	break;
+      case 't':
+	nof_wp = track_waypt_count();
+	if (nof_wp) {
+	  write_type = trkdata;
+	}
+	break;
+      default:
+	fatal(MYNAME ": '%c' is is not a valid value for the input option", write_as[i]);
+	break;
+    }
+  }
+
+  file_out = gbfopen_le(fname, "wb", MYNAME);
+  if (nof_wp) {
+    ng_fill_header_default();
+    header_write();
+    if (NULL != reorder)
+      if (!case_ignore_strcmp(reorder, "y")) {
+	reorder_wp = 1;
+      }
+  }
 }
 
 static void
@@ -326,16 +379,19 @@ rd_init(const QString& fname)
 
   ng_read_file_header();
 
-  if (NULL != process) {
-    if (!case_ignore_strcmp(process, "wp")) {
-      process_rte = 0;
-    }
-    if (!case_ignore_strcmp(process, "rte")) {
-      process_rte = 1;
-    }
+  if (!case_ignore_strcmp(read_as, "wp")) {
+    read_type = wptdata;
   }
-
-
+  if (!case_ignore_strcmp(read_as, "rte")) {
+    read_type = rtedata;
+    rte_head = route_head_alloc();
+    route_add_head(rte_head);
+  }
+  if (!case_ignore_strcmp(read_as, "trk")) {
+    read_type = trkdata;
+    rte_head = route_head_alloc();
+    track_add_head(rte_head);
+  }
 }
 
 static void
@@ -350,44 +406,27 @@ rd_deinit()
 static void
 ng_read_file_header()
 {
-
   nof_wp = gbfgetint16(file_in);
   gbfread(&ng_file_header.pad1[0], 19, 1, file_in);
   ng_file_header.nof_wp = nof_wp;
 
-
   if (strncmp("CWayPoint", ng_file_header.signature, 9)) {
     fatal("\nInvalid Naviguide file format\n");
   }
-
-
 }
 
 static void
 data_read()
 {
-  if (process_rte) {
-    rte_head = route_head_alloc();
-    route_add_head(rte_head);
-  }
-
   for (int n = 0; n < nof_wp; ++n) {
 
     Waypoint* wpt_tmp = new Waypoint;
 
     /* Read waypoint data */
-
     ng_fread_wp_data(strComment, &WPNC, file_in);
 
-
     if (n < nof_wp - 1) {
-      /*
-      	gbfread (&ng_next_wp.pad1[0], 2, 1, file_in);
-      	ng_next_wp.next_wp = gbfgetint16 (file_in);
-      	gbfread (&ng_next_wp.pad2[0], 2, 1, file_in);
-      	*/
       ng_fread_next_wp(&ng_next_wp, file_in);
-
     }
     /* Clear commas form the comment for CSV file commonality */
     for (unsigned i = 0; i <strlen(strComment); ++i) {
@@ -401,19 +440,23 @@ data_read()
     wpt_tmp->shortname = STRTOUNICODE(WPNC.strName);
     wpt_tmp->description = STRTOUNICODE(strComment);
 
-    if (process_rte) {
-      route_add_wpt(rte_head, wpt_tmp);
-    } else {
-      waypt_add(wpt_tmp);
+    switch (read_type) {
+      case wptdata:
+        waypt_add(wpt_tmp);
+        break;
+      case trkdata:
+        track_add_wpt(rte_head, wpt_tmp);
+        break;
+      default:
+        route_add_wpt(rte_head, wpt_tmp);
+        break;
     }
   }
 } /* data_read */
 
-
-
 ff_vecs_t ng_vecs = {
   ff_type_file,
-  FF_CAP_RW_WPT,
+  FF_CAP_RW_ALL,
   rd_init,
   wr_init,
   rd_deinit,

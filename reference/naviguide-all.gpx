@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="1.1" creator="IsraelHikingMap" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <bounds minlat="31.050407" minlon="34.536147415638" maxlat="31.059652" maxlon="34.5476514101028" />
+  </metadata>
+  <wpt lat="31.0504109408402" lon="34.5476514101028">
+    <name>Green-Black</name>
+    <type>star</type>
+  </wpt>
+  <wpt lat="31.0596456946548" lon="34.536147415638">
+    <name>Green-Blue</name>
+    <type>star</type>
+  </wpt>
+  <rte>
+    <name>rte</name>
+    <desc />
+    <rtept lat="31.0504108581458" lon="34.5476438242842">
+    </rtept>
+    <rtept lat="31.0550847252302" lon="34.5426034927368">
+    </rtept>
+    <rtept lat="31.0596426686766" lon="34.5361294701414">
+    </rtept>
+  </rte>
+  <trk>
+    <name>wpt+trk</name>
+    <desc />
+    <extensions>
+      <Color xmlns="">#0000FF</Color>
+      <Opacity xmlns="">0.8</Opacity>
+      <Weight xmlns="">4</Weight>
+    </extensions>
+    <trkseg>
+      <trkpt lat="31.050407" lon="34.547649">
+        <ele>327.400344000001</ele>
+      </trkpt>
+      <trkpt lat="31.050624" lon="34.547021">
+        <ele>322.23929</ele>
+      </trkpt>
+      <trkpt lat="31.050872" lon="34.546184">
+        <ele>316.762976000011</ele>
+      </trkpt>
+      <trkpt lat="31.051222" lon="34.545562">
+        <ele>317.763320000018</ele>
+      </trkpt>
+      <trkpt lat="31.051543" lon="34.545369">
+        <ele>317.732573999993</ele>
+      </trkpt>
+      <trkpt lat="31.052297" lon="34.545444">
+        <ele>306.78332999999</ele>
+      </trkpt>
+      <trkpt lat="31.0526" lon="34.545369">
+        <ele>298.854523999961</ele>
+      </trkpt>
+      <trkpt lat="31.053023" lon="34.54509">
+        <ele>295.325996999988</ele>
+      </trkpt>
+      <trkpt lat="31.053428" lon="34.544735">
+        <ele>292.439338999967</ele>
+      </trkpt>
+      <trkpt lat="31.053942" lon="34.544156">
+        <ele>291.253062000001</ele>
+      </trkpt>
+      <trkpt lat="31.054393" lon="34.543577">
+        <ele>284.944004999982</ele>
+      </trkpt>
+      <trkpt lat="31.056323" lon="34.540841">
+        <ele>267</ele>
+      </trkpt>
+      <trkpt lat="31.057297" lon="34.539521">
+        <ele>263.184878999998</ele>
+      </trkpt>
+      <trkpt lat="31.057986" lon="34.538642">
+        <ele>261.192414000001</ele>
+      </trkpt>
+      <trkpt lat="31.059652" lon="34.536153">
+        <ele>256</ele>
+      </trkpt>
+      <extensions>
+        <RoutingType xmlns="">Hike</RoutingType>
+      </extensions>
+    </trkseg>
+  </trk>
+</gpx>

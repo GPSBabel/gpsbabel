@@ -1,9 +1,33 @@
 #
-# Naivguide 
+# Naviguide 
 #
+# Reading Naviguide files
 gpsbabel -i naviguide -f ${REFERENCE}/route/naviguide-route.twl -o gpx -F ${TMPDIR}/naviguide.gpx
 compare ${REFERENCE}/route/naviguide.gpx ${TMPDIR}/naviguide.gpx
+gpsbabel -i naviguide,output=rte -f ${REFERENCE}/route/naviguide-route.twl -o gpx -F ${TMPDIR}/naviguide-route.gpx
+compare ${REFERENCE}/route/naviguide.gpx ${TMPDIR}/naviguide-route.gpx
+gpsbabel -i naviguide,output=wp -f ${REFERENCE}/route/naviguide-route.twl -o gpx -F ${TMPDIR}/naviguide-waypoints.gpx
+compare ${REFERENCE}/naviguide-waypoints.gpx ${TMPDIR}/naviguide-waypoints.gpx
+gpsbabel -i naviguide,output=trk -f ${REFERENCE}/route/naviguide-route.twl -o gpx -F ${TMPDIR}/naviguide-track.gpx
+compare ${REFERENCE}/track/naviguide.gpx ${TMPDIR}/naviguide-track.gpx
+# Writing Naviguide files
+gpsbabel -i gpx -f ${REFERENCE}/naviguide-all.gpx -o naviguide -F ${TMPDIR}/gpx~naviguide.twl
+bincompare ${REFERENCE}/route/gpx-wp~naviguide.twl ${TMPDIR}/gpx~naviguide.twl
+gpsbabel -i gpx -f ${REFERENCE}/naviguide-all.gpx -o naviguide,input=w -F ${TMPDIR}/gpx-w~naviguide.twl
+bincompare ${REFERENCE}/route/gpx-wp~naviguide.twl ${TMPDIR}/gpx-w~naviguide.twl
+gpsbabel -i gpx -f ${REFERENCE}/naviguide-all.gpx -o naviguide,input=r -F ${TMPDIR}/gpx-r~naviguide.twl
+bincompare ${REFERENCE}/route/gpx-rte~naviguide.twl ${TMPDIR}/gpx-r~naviguide.twl
+gpsbabel -i gpx -f ${REFERENCE}/naviguide-all.gpx -o naviguide,input=t -F ${TMPDIR}/gpx-t~naviguide.twl
+bincompare ${REFERENCE}/route/gpx-trk~naviguide.twl ${TMPDIR}/gpx-t~naviguide.twl
+# Write priority checks
+gpsbabel -i gpx -f ${REFERENCE}/naviguide-waypoints.gpx -o naviguide,input=trw -F ${TMPDIR}/gpx-trw~naviguide.twl
+bincompare ${REFERENCE}/route/gpx-trw~naviguide.twl ${TMPDIR}/gpx-trw~naviguide.twl
+gpsbabel -i gpx -f ${REFERENCE}/route/naviguide.gpx -o naviguide,input=wtr -F ${TMPDIR}/gpx-wtr~naviguide.twl
+bincompare ${REFERENCE}/route/gpx-wtr~naviguide.twl ${TMPDIR}/gpx-wtr~naviguide.twl
+gpsbabel -i gpx -f ${REFERENCE}/track/naviguide.gpx -o naviguide,input=rwt -F ${TMPDIR}/gpx-rwt~naviguide.twl
+bincompare ${REFERENCE}/route/gpx-rwt~naviguide.twl ${TMPDIR}/gpx-rwt~naviguide.twl
+
 # Make sure ICS negative eastings and northings work.
-gpsbabel -i gpx -f ${REFERENCE}/ics.gpx -o naviguide -F ${TMPDIR}/ics.gpx.naviguide
-gpsbabel -i naviguide -f ${TMPDIR}/ics.gpx.naviguide -o gpx -F ${TMPDIR}/ics.gpx.naviguide.gpx
+gpsbabel -i gpx -f ${REFERENCE}/ics.gpx -o naviguide -F ${TMPDIR}/ics.gpx.twl
+gpsbabel -i naviguide -f ${TMPDIR}/ics.gpx.twl -o gpx -F ${TMPDIR}/ics.gpx.naviguide.gpx
 compare ${REFERENCE}/ics.gpx.naviguide.gpx ${TMPDIR}/ics.gpx.naviguide.gpx

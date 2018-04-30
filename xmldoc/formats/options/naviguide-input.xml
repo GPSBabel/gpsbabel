@@ -1,0 +1,5 @@
+<para>
+	When writing a Naviguide file, only one source type can be used: (w)aypoints, (r)outes, or (t)racks. The <option>input</option> option defines the order by which a non-empty source is searched. Any of 'w', 'r', and 't' letters may be used it most one time in any order.
+</para>
+<para>
+	For example, <option>input=r</option> will write the routes, if any. The default value <option>input=wrt</option> will write the waypoints, if any. Otherwise, the routes, if any. And lastely, the tracks, if any. </para>
