@@ -146,13 +146,7 @@ typedef enum {
   XT_YYYYMMDD_TIME
 } xcsv_token;
 
-// Static definition of in_word_set to meet C99 rules as used by Clang.
-static struct xt_mapping*
-in_word_set(register const char* str, register unsigned int len);
-
-#define register
 #include "xcsv_tokens.gperf"
-#undef register
 
 #if CSVFMTS_ENABLED
 /****************************************************************************/
@@ -789,7 +783,7 @@ void
 xcsv_ifield_add(char* key, char* val, char* pfc)
 {
   field_map_t* fmp = (field_map_t*) xcalloc(sizeof(*fmp), 1);
-  struct xt_mapping* xm = in_word_set(key, strlen(key));
+  struct xt_mapping* xm = Perfect_Hash::in_word_set(key, strlen(key));
 
   fmp->key = key;
   fmp->hashed_key = xm ? xm->xt_token : -1;
@@ -809,7 +803,7 @@ void
 xcsv_ofield_add(char* key, char* val, char* pfc, int options)
 {
   field_map_t* fmp = (field_map_t*) xcalloc(sizeof(*fmp), 1);
-  struct xt_mapping* xm = in_word_set(key, strlen(key));
+  struct xt_mapping* xm = Perfect_Hash::in_word_set(key, strlen(key));
 
   fmp->key = key;
   fmp->hashed_key = xm ? xm->xt_token : -1;
