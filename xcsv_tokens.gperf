@@ -1,5 +1,5 @@
-/* ANSI-C code produced by gperf version 3.0.4 */
-/* Command-line: gperf --output-file=xcsv_tokens.gperf -L ANSI-C -D -t xcsv_tokens.in  */
+/* C++ code produced by gperf version 3.1 */
+/* Command-line: gperf --output-file=xcsv_tokens.gperf -L C++ -D -t xcsv_tokens.in  */
 /* Computed positions: -k'2,4-5,12,$' */
 
 #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
@@ -26,7 +26,7 @@
       && ('w' == 119) && ('x' == 120) && ('y' == 121) && ('z' == 122) \
       && ('{' == 123) && ('|' == 124) && ('}' == 125) && ('~' == 126))
 /* The character set is not based on ISO-646.  */
-#error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gnu-gperf@gnu.org>."
+#error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gperf@gnu.org>."
 #endif
 
 #line 1 "xcsv_tokens.in"
@@ -39,15 +39,16 @@ struct xt_mapping {const char *name; int xt_token; };
 #define MAX_HASH_VALUE 248
 /* maximum key range = 242, duplicates = 0 */
 
-#ifdef __GNUC__
-__inline
-#else
-#ifdef __cplusplus
-inline
-#endif
-#endif
-static unsigned int
-hash (register const char *str, register unsigned int len)
+class Perfect_Hash
+{
+private:
+  static inline unsigned int hash (const char *str, size_t len);
+public:
+  static struct xt_mapping *in_word_set (const char *str, size_t len);
+};
+
+inline unsigned int
+Perfect_Hash::hash (const char *str, size_t len)
 {
   static unsigned char asso_values[] =
     {
@@ -78,12 +79,12 @@ hash (register const char *str, register unsigned int len)
       249, 249, 249, 249, 249, 249, 249, 249, 249, 249,
       249, 249, 249, 249, 249, 249
     };
-  register int hval = len;
+  unsigned int hval = len;
 
   switch (hval)
     {
       default:
-        hval += asso_values[(unsigned char)str[11]];
+        hval += asso_values[static_cast<unsigned char>(str[11])];
       /*FALLTHROUGH*/
       case 11:
       case 10:
@@ -92,27 +93,21 @@ hash (register const char *str, register unsigned int len)
       case 7:
       case 6:
       case 5:
-        hval += asso_values[(unsigned char)str[4]];
+        hval += asso_values[static_cast<unsigned char>(str[4])];
       /*FALLTHROUGH*/
       case 4:
-        hval += asso_values[(unsigned char)str[3]];
+        hval += asso_values[static_cast<unsigned char>(str[3])];
       /*FALLTHROUGH*/
       case 3:
       case 2:
-        hval += asso_values[(unsigned char)str[1]];
+        hval += asso_values[static_cast<unsigned char>(str[1])];
         break;
     }
-  return hval + asso_values[(unsigned char)str[len - 1]];
+  return hval + asso_values[static_cast<unsigned char>(str[len - 1])];
 }
 
-#ifdef __GNUC__
-__inline
-#if defined __GNUC_STDC_INLINE__ || defined __GNUC_GNU_INLINE__
-__attribute__ ((__gnu_inline__))
-#endif
-#endif
 struct xt_mapping *
-in_word_set (register const char *str, register unsigned int len)
+Perfect_Hash::in_word_set (const char *str, size_t len)
 {
   static struct xt_mapping wordlist[] =
     {
@@ -314,15 +309,15 @@ in_word_set (register const char *str, register unsigned int len)
 
   if (len <= MAX_WORD_LENGTH && len >= MIN_WORD_LENGTH)
     {
-      register int key = hash (str, len);
+      unsigned int key = hash (str, len);
 
-      if (key <= MAX_HASH_VALUE && key >= 0)
+      if (key <= MAX_HASH_VALUE)
         {
-          register int index = lookup[key];
+          int index = lookup[key];
 
           if (index >= 0)
             {
-              register const char *s = wordlist[index].name;
+              const char *s = wordlist[index].name;
 
               if (*str == *s && !strcmp (str + 1, s + 1))
                 return &wordlist[index];
