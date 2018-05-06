@@ -42,6 +42,8 @@
 #endif
 
 #define MYNAME "main"
+// be careful not to advance argn passed the end of the list, i.e. ensure argn < qargs.size()
+#define FETCH_OPTARG qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(argn+1) ? qargs.at(++argn) : QString()
 
 void signal_handler(int sig);
 
@@ -53,7 +55,7 @@ public:
 
 public:
   QargStackElement()
-  = default;
+    = default;
 
   QargStackElement(int p_argn, QStringList p_qargs)
   {
@@ -342,7 +344,7 @@ main(int argc, char* argv[])
 
     switch (c) {
     case 'i':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
+      optarg = FETCH_OPTARG;
       ivecs = find_vec(CSTR(optarg), &ivec_opts);
       if (ivecs == NULL) {
         fatal("Input type '%s' not recognized\n", qPrintable(optarg));
@@ -352,14 +354,14 @@ main(int argc, char* argv[])
       if (ivecs == NULL) {
         warning("-o appeared before -i.   This is probably not what you want to do.\n");
       }
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
+      optarg = FETCH_OPTARG;
       ovecs = find_vec(CSTR(optarg), &ovec_opts);
       if (ovecs == NULL) {
         fatal("Output type '%s' not recognized\n", qPrintable(optarg));
       }
       break;
     case 'f':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
+      optarg = FETCH_OPTARG;
       fname = optarg;
       if (fname.isEmpty()) {
         fatal("No file or device name specified.\n");
@@ -392,7 +394,7 @@ main(int argc, char* argv[])
       did_something = 1;
       break;
     case 'F':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
+      optarg = FETCH_OPTARG;
       ofname = optarg;
       if (ofname.isEmpty()) {
         fatal("No output file or device name specified.\n");
@@ -484,7 +486,7 @@ main(int argc, char* argv[])
       }
       break;
     case 'x':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
+      optarg = FETCH_OPTARG;
       fvecs = find_filter_vec(CSTR(optarg), &fvec_opts);
 
       if (fvecs) {
@@ -501,13 +503,30 @@ main(int argc, char* argv[])
       }
       break;
     case 'D':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
-      global_opts.debug_level = optarg.toInt();
+      optarg = FETCH_OPTARG;
+      {
+        bool ok;
+        global_opts.debug_level = optarg.toInt(&ok);
+        if (!ok) {
+          fatal("the -D option requires an integer value to specify the debug level, i.e. -D level\n");
+        }
+      }
       /*
        * When debugging, announce version.
        */
       if (global_opts.debug_level > 0)  {
         warning("GPSBabel Version: %s \n", gpsbabel_version);
+        warning(MYNAME ": Compiled with Qt %s for architecture %s\n",
+                QT_VERSION_STR,
+                qPrintable(QSysInfo::buildAbi()));
+        warning(MYNAME ": Running with Qt %s on %s, %s\n", qVersion(),
+                qPrintable(QSysInfo::prettyProductName()),
+                qPrintable(QSysInfo::currentCpuArchitecture()));
+        warning(MYNAME ": QLocale::system() is %s\n", qPrintable(QLocale::system().name()));
+        warning(MYNAME ": QLocale() is %s\n", qPrintable(QLocale().name()));
+        QTextCodec* defaultcodec = QTextCodec::codecForLocale();
+        warning(MYNAME ": QTextCodec::codecForLocale() is %s, mib %d\n",
+                defaultcodec->name().constData(),defaultcodec->mibEnum());
       }
 
       break;
@@ -540,7 +559,7 @@ main(int argc, char* argv[])
       usage(prog_name,0);
       exit(0);
     case 'p':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
+      optarg = FETCH_OPTARG;
       inifile_done(global_opts.inifile);
       if (optarg.isEmpty()) {	/* from GUI to preserve inconsistent options */
         global_opts.inifile = NULL;
@@ -549,7 +568,7 @@ main(int argc, char* argv[])
       }
       break;
     case 'b':
-      optarg = qargs.at(argn).size() > 2 ? QString(qargs.at(argn)).remove(0,2) : qargs.size()>(++argn) ? qargs.at(argn) : QString();
+      optarg = FETCH_OPTARG;
       qargs_stack.push(QargStackElement(argn, qargs));
       qargs = load_args(optarg, qargs.at(0));
       if (qargs.size() == 0) {
