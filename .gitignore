@@ -11,6 +11,9 @@
 /gpsbabel.html
 /gpsbabel.pdf
 /Makefile
+/.qmake.cache
+/.qmake.stash
+/GPSBabel
 *.o
 /GPSBabel[0-9]*.[0-9]*.[0-9]*/
 /GPSBabel[0-9]*.[0-9]*.[0-9]*.tar.bz2

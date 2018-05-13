@@ -134,8 +134,18 @@ HEADERS =  \
 
 INCLUDEPATH += zlib
 
+load(configure)
+
 macx|linux {
-  DEFINES += HAVE_NANOSLEEP HAVE_LIBUSB HAVE_GLOB HAVE_UNISTD_H
+  qtCompileTest(unistd) {
+    # this is used by zlib
+    DEFINES += HAVE_UNISTD_H
+  }
+  qtCompileTest(stdarg) {
+    # this is used by zlib
+    DEFINES += HAVE_STDARG_H
+  }
+  DEFINES += HAVE_NANOSLEEP HAVE_LIBUSB HAVE_GLOB
   SOURCES += gbser_posix.cc
   JEEPS += jeeps/gpslibusb.cc
   INCLUDEPATH += jeeps
