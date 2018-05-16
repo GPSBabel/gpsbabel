@@ -55,7 +55,7 @@ install:
 
 script:
   - if [ "${USE_DOCKER}" = "true" ]; then ./docker_hook; fi
-  - if [ "${USE_DOCKER}" = "false" ]; then  LDFLAGS=-Wl,-rpath,/opt/qt${QT_VERSION}/lib ./build_and_test; fi
-  - ./gpsbabel -D 1
+  - if [ "${USE_DOCKER}" = "false" ]; then LDFLAGS=-Wl,-rpath,/opt/qt${QT_VERSION}/lib ./build_and_test; fi
+  - unset QTDIR; unset LD_LIBRARY_PATH; unset PKG_CONFIG_PATH; # partially undo qt${QT_VERSION}-env.sh for linuxdeployqt based on https://github.com/probonopd/linuxdeployqt
   - if [ "${USE_DOCKER}" = "false" ]; then export VERSION=$(git rev-parse --short HEAD); fi # linuxdeployqt uses this for naming the file
   - if [ "${USE_DOCKER}" = "false" ]; then cd gui; QMAKE=/opt/qt${QT_VERSION}/bin/qmake LINUXDEPLOYQT=../linuxdeployqt ./makeappimage.sh; fi
