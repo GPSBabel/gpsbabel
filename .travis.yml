@@ -56,7 +56,7 @@ install:
 
 script:
   - if [ "${USE_DOCKER}" = "true" ]; then ./docker_hook; fi
-  - if [ "${USE_DOCKER}" = "false" ]; then QMAKE=/opt/qt${QT_VERSION}/bin/qmake LUPDATE=/opt/qt${QT_VERSION}/bin/lupdate LRELEASE=/opt/qt${QT_VERSION}/bin/lrelease LDFLAGS=-Wl,-rpath,/opt/qt${QT_VERSION}/lib ./build_and_test; fi
+  - if [ "${USE_DOCKER}" = "false" ]; then QMAKE=/opt/qt${QT_VERSION}/bin/qmake LUPDATE=/opt/qt${QT_VERSION}/bin/lupdate LRELEASE=/opt/qt${QT_VERSION}/bin/lrelease LDFLAGS="-Wl,-rpath,/opt/qt${QT_VERSION}/lib -L/opt/qt${QT_VERSION}/lib" ./build_and_test; fi
 #   partially undo qt${QT_VERSION}-env.sh for linuxdeployqt based on https://github.com/probonopd/linuxd
 #  - unset QTDIR; unset LD_LIBRARY_PATH; unset PKG_CONFIG_PATH;
   - if [ "${USE_DOCKER}" = "false" ]; then export VERSION=$(git rev-parse --short HEAD); fi # linuxdeployqt uses this for naming the file
