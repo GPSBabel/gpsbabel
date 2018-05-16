@@ -30,25 +30,22 @@ matrix:
       apt:
         packages:
         - *trusty-packages
+        - qt59base
+        - qt59webengine
+        - qt59translations
+        - qt59tools
   - compiler: gcc
     env:
     - USE_DOCKER=true
     addons:
       apt:
         sources: *add-sources
-        packages: &qt59-packages
-          - qt59base
-          - qt59webengine
-          - qt59translations
-          - qt59tools
   - compiler: clang
     env:
     - USE_DOCKER=true
     addons:
       apt:
         sources: *add-sources
-        packages:
-        - *qt59-packages
 
 before_install:
   - if [ "${USE_DOCKER}" = "false" ]; then source "/opt/qt${QT_VERSION}/bin/qt${QT_VERSION}-env.sh"; fi
