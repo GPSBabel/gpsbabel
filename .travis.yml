@@ -45,8 +45,9 @@ matrix:
         sources:
         packages:
 
-before_install:
-  - if [ "${USE_DOCKER}" = "false" ]; then source "/opt/qt${QT_VERSION}/bin/qt${QT_VERSION}-env.sh"; fi
+#before_install:
+#   skip Stephan Binner's environment script.  we will pass the bits we need along to our build.
+#  - if [ "${USE_DOCKER}" = "false" ]; then source "/opt/qt${QT_VERSION}/bin/qt${QT_VERSION}-env.sh"; fi
 
 install:
   - if [ "${USE_DOCKER}" = "false" ]; then wget 'https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage'; fi
@@ -55,7 +56,8 @@ install:
 
 script:
   - if [ "${USE_DOCKER}" = "true" ]; then ./docker_hook; fi
-  - if [ "${USE_DOCKER}" = "false" ]; then LDFLAGS=-Wl,-rpath,/opt/qt${QT_VERSION}/lib ./build_and_test; fi
-  - unset QTDIR; unset LD_LIBRARY_PATH; unset PKG_CONFIG_PATH; # partially undo qt${QT_VERSION}-env.sh for linuxdeployqt based on https://github.com/probonopd/linuxdeployqt
+  - if [ "${USE_DOCKER}" = "false" ]; then QMAKE=/opt/qt${QT_VERSION}/bin/qmake LUPDATE=/opt/qt${QT_VERSION}/bin/lupdate LRELEASE=/opt/qt${QT_VERSION}/bin/lrelease LDFLAGS=-Wl,-rpath,/opt/qt${QT_VERSION}/lib ./build_and_test; fi
+#   partially undo qt${QT_VERSION}-env.sh for linuxdeployqt based on https://github.com/probonopd/linuxd
+#  - unset QTDIR; unset LD_LIBRARY_PATH; unset PKG_CONFIG_PATH;
   - if [ "${USE_DOCKER}" = "false" ]; then export VERSION=$(git rev-parse --short HEAD); fi # linuxdeployqt uses this for naming the file
   - if [ "${USE_DOCKER}" = "false" ]; then cd gui; QMAKE=/opt/qt${QT_VERSION}/bin/qmake LINUXDEPLOYQT=../linuxdeployqt ./makeappimage.sh; fi
