@@ -27,7 +27,6 @@ mkdir -p $GBTEMP
 make toolinfo
 make clean
 make
-./gpsbabel -D 1 || true
 make linux-gui
 make doc
 make gpsbabel.html
