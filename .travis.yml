@@ -12,6 +12,11 @@ addons:
     - valgrind
     - xsltproc
     - libxml2-utils
+    - qt5-default
+    - qtbase5-dev
+    - libqt5webkit5-dev
+    - qttools5-dev-tools
+    - qttranslations5-l10n
     - libusb-dev
     - docbook-xml
     - docbook-xsl
@@ -33,17 +38,9 @@ matrix:
   - compiler: gcc
     env:
     - USE_DOCKER=true
-    addons:
-      apt:
-        sources:
-        packages:
   - compiler: clang
     env:
     - USE_DOCKER=true
-    addons:
-      apt:
-        sources:
-        packages:
 
 before_install:
   - if [ "${USE_DOCKER}" = "false" ]; then source "/opt/qt${QT_VERSION}/bin/qt${QT_VERSION}-env.sh"; fi
@@ -55,7 +52,6 @@ install:
 
 script:
   - if [ "${USE_DOCKER}" = "true" ]; then ./docker_hook; fi
-  - if [ "${USE_DOCKER}" = "false" ]; then  LDFLAGS=-Wl,-rpath,/opt/qt${QT_VERSION}/lib ./build_and_test; fi
-  - ./gpsbabel -D 1
+  - if [ "${USE_DOCKER}" = "false" ]; then ./build_and_test; fi
   - if [ "${USE_DOCKER}" = "false" ]; then export VERSION=$(git rev-parse --short HEAD); fi # linuxdeployqt uses this for naming the file
   - if [ "${USE_DOCKER}" = "false" ]; then cd gui; QMAKE=/opt/qt${QT_VERSION}/bin/qmake LINUXDEPLOYQT=../linuxdeployqt ./makeappimage.sh; fi
