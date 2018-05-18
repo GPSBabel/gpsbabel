@@ -14,10 +14,11 @@ environment:
   #    qt: 5.6\mingw49_32
   #    tools: mingw492_32
   # do a build with the minimum level of Qt we support.
+  # appveyor dropped Qt 5.7 with msvc2015.
   # MSVC x32
-  - name: win32
-    platform: x86
-    qt: 5.7\msvc2015
+  # - name: win32
+  #   platform: x86
+  #   qt: 5.7\msvc2015
   # MSVC x32
   - name: win32
     platform: x86
