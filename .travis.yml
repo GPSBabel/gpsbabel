@@ -1,7 +1,63 @@
 sudo: required
+dist: trusty
 services: docker
-env:
-  - CC=gcc CXX=g++
-  - CC=clang CXX=clang++
+language: cpp
+addons:
+  apt:
+    sources: &add-sources
+    - sourceline: 'ppa:beineri/opt-qt595-trusty'
+    packages: &trusty-packages
+    - expat
+    - fop
+    - valgrind
+    - xsltproc
+    - libxml2-utils
+    - libusb-dev
+    - docbook-xml
+    - docbook-xsl
+matrix:
+  include:
+  - compiler: gcc
+    env:
+    - USE_DOCKER=false
+    - QT_VERSION=59
+    addons:
+      apt:
+        sources: *add-sources
+        packages:
+        - *trusty-packages
+        - qt59base
+        - qt59webengine
+        - qt59translations
+        - qt59tools
+  - compiler: gcc
+    env:
+    - USE_DOCKER=true
+    addons:
+      apt:
+        sources:
+        packages:
+  - compiler: clang
+    env:
+    - USE_DOCKER=true
+    addons:
+      apt:
+        sources:
+        packages:
+
+#before_install:
+#   skip Stephan Binner's environment script.  we will pass the bits we need along to our build.
+#  - if [ "${USE_DOCKER}" = "false" ]; then source "/opt/qt${QT_VERSION}/bin/qt${QT_VERSION}-env.sh"; fi
+
+install:
+  - if [ "${USE_DOCKER}" = "false" ]; then wget 'https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage'; fi
+  - if [ "${USE_DOCKER}" = "false" ]; then chmod +x linuxdeployqt-continuous-x86_64.AppImage; fi
+  - if [ "${USE_DOCKER}" = "false" ]; then mv linuxdeployqt-continuous-x86_64.AppImage linuxdeployqt; fi
+
 script:
-  - ./docker_hook
+  - if [ "${USE_DOCKER}" = "true" ]; then ./docker_hook; fi
+  - if [ "${USE_DOCKER}" = "false" ]; then QMAKE=/opt/qt${QT_VERSION}/bin/qmake LUPDATE=/opt/qt${QT_VERSION}/bin/lupdate LRELEASE=/opt/qt${QT_VERSION}/bin/lrelease LDFLAGS="-Wl,-rpath,/opt/qt${QT_VERSION}/lib -L/opt/qt${QT_VERSION}/lib" ./build_and_test; fi
+#   partially undo qt${QT_VERSION}-env.sh for linuxdeployqt based on https://github.com/probonopd/linuxd
+#  - unset QTDIR; unset LD_LIBRARY_PATH; unset PKG_CONFIG_PATH;
+  - if [ "${USE_DOCKER}" = "false" ]; then export VERSION=$(git rev-parse --short HEAD); fi # linuxdeployqt uses this for naming the file
+  - if [ "${USE_DOCKER}" = "false" ]; then cd gui; QMAKE=/opt/qt${QT_VERSION}/bin/qmake LINUXDEPLOYQT=../linuxdeployqt ./makeappimage.sh; fi
