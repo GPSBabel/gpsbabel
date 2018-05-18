@@ -1,65 +1,7 @@
 sudo: required
-dist: trusty
 services: docker
-language: cpp
-addons:
-  apt:
-    sources: &add-sources
-    - sourceline: 'ppa:beineri/opt-qt595-trusty'
-    packages: &trusty-packages
-    - expat
-    - fop
-    - valgrind
-    - xsltproc
-    - libxml2-utils
-    - qt5-default
-    - qtbase5-dev
-    - libqt5webkit5-dev
-    - qttools5-dev-tools
-    - qttranslations5-l10n
-    - libusb-dev
-    - docbook-xml
-    - docbook-xsl
-matrix:
-  include:
-  - compiler: gcc
-    env:
-    - USE_DOCKER=false
-    - QT_VERSION=59
-    addons:
-      apt:
-        packages:
-        - *trusty-packages
-  - compiler: gcc
-    env:
-    - USE_DOCKER=true
-    addons:
-      apt:
-        sources: *add-sources
-        packages: &qt59-packages
-          - qt59base
-          - qt59webengine
-          - qt59translations
-          - qt59tools
-  - compiler: clang
-    env:
-    - USE_DOCKER=true
-    addons:
-      apt:
-        sources: *add-sources
-        packages:
-        - *qt59-packages
-
-before_install:
-  - if [ "${USE_DOCKER}" = "false" ]; then source "/opt/qt${QT_VERSION}/bin/qt${QT_VERSION}-env.sh"; fi
-
-install:
-  - if [ "${USE_DOCKER}" = "false" ]; then wget 'https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage'; fi
-  - if [ "${USE_DOCKER}" = "false" ]; then chmod +x linuxdeployqt-continuous-x86_64.AppImage; fi
-  - if [ "${USE_DOCKER}" = "false" ]; mv linuxdeployqt-continuous-x86_64.AppImage linuxdeployqt; fi
-
+env:
+  - CC=gcc CXX=g++
+  - CC=clang CXX=clang++
 script:
-  - if [ "${USE_DOCKER}" = "true" ] ; then ./docker_hook; fi
-  - if [ "${USE_DOCKER}" = "false" ] ; then ./build_and_test; fi
-  - if [ "${USE_DOCKER}" = "false" ] ; then export VERSION=$(git rev-parse --short HEAD); fi # linuxdeployqt uses this for naming the file
-  - if [ "${USE_DOCKER}" = "false" ] ; then cd gui; QMAKE=/opt/qt${QT_VERSION}/bin/qmake LINUXDEPLOYQT=../linuxdeployqt ./makeappimage.sh; fi
+  - ./docker_hook

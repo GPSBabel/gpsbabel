@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=GPSBabelFE
-Comment=Qt GUI interface for GPSBabel
-GenericName=GPSBabel
-Icon=gpsbabelfe
-Exec=AppRun
-Terminal=false
-Categories=Utility;
