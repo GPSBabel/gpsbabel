@@ -28,7 +28,6 @@ matrix:
     - QT_VERSION=59
     addons:
       apt:
-        sources: *add-sources
         packages:
         - *trusty-packages
         - qt59base
@@ -38,9 +37,15 @@ matrix:
   - compiler: gcc
     env:
     - USE_DOCKER=true
+    addons:
+      apt:
+        sources: *add-sources
   - compiler: clang
     env:
     - USE_DOCKER=true
+    addons:
+      apt:
+        sources: *add-sources
 
 before_install:
   - if [ "${USE_DOCKER}" = "false" ]; then source "/opt/qt${QT_VERSION}/bin/qt${QT_VERSION}-env.sh"; fi
@@ -48,10 +53,10 @@ before_install:
 install:
   - if [ "${USE_DOCKER}" = "false" ]; then wget 'https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage'; fi
   - if [ "${USE_DOCKER}" = "false" ]; then chmod +x linuxdeployqt-continuous-x86_64.AppImage; fi
-  - if [ "${USE_DOCKER}" = "false" ]; then mv linuxdeployqt-continuous-x86_64.AppImage linuxdeployqt; fi
+  - if [ "${USE_DOCKER}" = "false" ]; mv linuxdeployqt-continuous-x86_64.AppImage linuxdeployqt; fi
 
 script:
-  - if [ "${USE_DOCKER}" = "true" ]; then ./docker_hook; fi
-  - if [ "${USE_DOCKER}" = "false" ]; then ./build_and_test; fi
-  - if [ "${USE_DOCKER}" = "false" ]; then export VERSION=$(git rev-parse --short HEAD); fi # linuxdeployqt uses this for naming the file
-  - if [ "${USE_DOCKER}" = "false" ]; then cd gui; QMAKE=/opt/qt${QT_VERSION}/bin/qmake LINUXDEPLOYQT=../linuxdeployqt ./makeappimage.sh; fi
+  - if [ "${USE_DOCKER}" = "true" ] ; then ./docker_hook; fi
+  - if [ "${USE_DOCKER}" = "false" ] ; then ./build_and_test; fi
+  - if [ "${USE_DOCKER}" = "false" ] ; then export VERSION=$(git rev-parse --short HEAD); fi # linuxdeployqt uses this for naming the file
+  - if [ "${USE_DOCKER}" = "false" ] ; then cd gui; QMAKE=/opt/qt${QT_VERSION}/bin/qmake LINUXDEPLOYQT=../linuxdeployqt ./makeappimage.sh; fi
