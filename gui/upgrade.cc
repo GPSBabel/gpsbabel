@@ -24,14 +24,8 @@
 #include "format.h"
 #include "upgrade.h"
 #include "../gbversion.h"
-#if HAVE_CONFIG_H
-#include "../config.h"
-#endif
 
 #include <cstdio>
-#if HAVE_UNAME
-#include <sys/utsname.h>
-#endif // HAVE_UNAME
 
 #include <QDebug>
 #include <QDesktopServices>
@@ -81,86 +75,10 @@ bool UpgradeCheck::isTestMode()
   return testing;
 }
 
-// In Qt 5.4, QSysInfo got classes that do this better. Travis is stuck
-// on older version of Qt, so keep it building there for now.
+// In Qt 5.4, QSysInfo got classes that do this better.
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 4, 0))
-QString UpgradeCheck::getOsName()
-{
-  // Do not translate these strings.
-#if defined (Q_OS_LINUX)
-    return "Linux";
-#elif defined (Q_OS_MAC)
-  return "Mac";
-#elif defined (Q_OS_WIN)
-  return "Windows";
-#else
-  return "Unknown";
-#endif
-
-}
-// See http://doc.trolltech.com/4.5/qsysinfo.html to interpret results
-QString UpgradeCheck::getOsVersion()
-{
-#if defined (Q_OS_MAC)
-  switch (QSysInfo::MacintoshVersion) {
-  case QSysInfo::MV_10_3: return "10.3"; break;
-  case QSysInfo::MV_10_4: return "10.4"; break;
-  case QSysInfo::MV_10_5: return "10.5"; break;
-  case QSysInfo::MV_10_6: return "10.6"; break;
-  case QSysInfo::MV_10_7: return "10.7"; break;
-  case QSysInfo::MV_10_8: return "10.8"; break;
-  case QSysInfo::MV_10_9: return "10.9"; break;
-  case QSysInfo::MV_10_10: return "10.10"; break;
-  case QSysInfo::MV_10_11: return "10.11"; break;
-  case QSysInfo::MV_10_12: return "10.12"; break;
-  default:
-    if (QSysInfo::MacintoshVersion == 0x000E) {
-      return "10.13";
-      break;
-    }
-    if (QSysInfo::MacintoshVersion == 0x000F) {
-      return "10.14";
-      break;
-    }
-    return QString("Unknown Mac %1").arg(QSysInfo::MacintoshVersion);
-  };
-#elif defined (Q_OS_WIN)
-
-  switch (QSysInfo::WindowsVersion) {
-  // Wildly improbable...
-  case QSysInfo::WV_95: return "95"; break;
-  case QSysInfo::WV_98: return "98"; break;
-  case QSysInfo::WV_Me: return "Me"; break;
-
-  case QSysInfo::WV_4_0: return "NT 4"; break;
-  case QSysInfo::WV_5_0: return "2000"; break;
-  case QSysInfo::WV_5_1: return "XP"; break;
-  case QSysInfo::WV_5_2: return "2003"; break;
-  case QSysInfo::WV_6_0: return "Vista"; break;
-  case QSysInfo::WV_6_1: return "7"; break;
-  default:
-       if (QSysInfo::WindowsVersion == 0x00a0) return "8";
-       if (QSysInfo::WindowsVersion == 0x00b0) return "8.1";
-       if (QSysInfo::WindowsVersion == 0x00c0) return "10.0";
-      return "Windows/Unknown";
-  }
-#endif
-  // FIXME: find something appropriately clever to do for Linux, etc. here.
-  return "Unknown";
-}
-
-QString UpgradeCheck::getCpuArchitecture()
-{
-#if HAVE_UNAME || defined (Q_OS_MAC)
-  struct utsname utsname;
-  if (0 == uname(&utsname)) {
-    return utsname.machine;
-  }
-  return QString();
-#endif
-}
-
+#error This version of Qt is not supported.
 #else // #if (QT_VERSION < QT_VERSION_CHECK(5, 4, 0))
 
 QString UpgradeCheck::getOsName()
