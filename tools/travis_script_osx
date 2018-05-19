@@ -39,6 +39,6 @@ hdiutil attach -noverify gui/objects/GPSBabelFE.dmg
 find /Volumes/GPSBabelFE -ls
 hdiutil detach /Volumes/GPSBabelFE
 
-mv gui/objects/GPSBabelFE.dmg  gui/objects/GPSBabel-${VERSIONID}.dmg
+mv gui/objects/GPSBabelFE.dmg gui/objects/GPSBabel-${VERSIONID}.dmg
 
 
