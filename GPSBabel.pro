@@ -197,3 +197,7 @@ DEFINES += CSVFMTS_ENABLED
 # Citation: http://stackoverflow.com/questions/18667291/disable-wall-compiler-warnings-in-a-qt-project
 QMAKE_CFLAGS_WARN_ON -= -W
 QMAKE_CXXFLAGS_WARN_ON -= -W
+
+check.commands = PNAME=./$(TARGET) ./testo
+check.depends = $(TARGET)
+QMAKE_EXTRA_TARGETS += check

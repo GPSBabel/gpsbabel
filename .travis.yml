@@ -1,7 +1,28 @@
-sudo: required
-services: docker
-env:
-  - CC=gcc CXX=g++
-  - CC=clang CXX=clang++
+language: cpp
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      services: docker
+      compiler: gcc
+      env:
+        - USE_DOCKER=true
+    - os: linux
+      dist: trusty
+      sudo: required
+      services: docker
+      compiler: clang
+      env:
+        - USE_DOCKER=true
+    - os: osx
+
+install:
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then QT_CI_PACKAGES=qt.595.clang_64,qt.595.qtwebengine PATH=$PATH:$PWD/tools ./tools/qt-5.9.5-osx; fi
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then export QMAKE=$PWD/Qt/5.9.5/clang_64/bin/qmake; fi
+
 script:
-  - ./docker_hook
+  - if [ "${USE_DOCKER}" = "true" ]; then ./docker_hook; fi 
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then $QMAKE GPSBabel.pro && make && make check; fi 
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then cd gui; $QMAKE app.pro && make; fi 
