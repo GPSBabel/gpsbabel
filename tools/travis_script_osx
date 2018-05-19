@@ -1,0 +1,35 @@
+#!/bin/bash -ex
+#
+# this script is run on travis for the script stage of mac builds
+#
+
+QMAKE=${QMAKE:-qmake}
+LUPDATE=${LUPDATE:-lupdate}
+LRELEASE=${LRELEASE:-lrelease}
+VERSIONID=${VERSIONID:-$(git rev-parse --short HEAD)}
+
+# build and test the CLI
+$QMAKE GPSBabel.pro && make && make check
+
+# build the GUI
+pushd gui
+$QMAKE app.pro && make
+$LUPDATE app.pro
+$LRELEASE app.pro
+popd
+
+# package the app
+mkdir -p gui/objects/GPSBabelFE.app/Contents/MacOS/translations
+cp gui/*.qm  gui/objects/gpsbabelFE.app/Contents/MacOS/translations
+cp gpsbabel gui/objects/GPSBabelFE.app/Contents/MacOS
+# this help seems usless, why bother?
+cp -r gui/help/*.html  gui/objects/GPSBabelFE.app/Contents/MacOS
+cp gui/gmapbase.html gui/objects/GPSBabelFE.app/Contents/MacOS
+# what about the COPYING.txt file?
+tools/mac-localize
+
+rm -f gui/objects/GPSBabelFE.dmg
+pushd gui/objects
+macdeployqt GPSBabelFE.app -executable=GPSBabelFE.app/Contents/MacOS/gpsbabel -dmg
+popd
+mv gui/objects/GPSBabelFE.dmg  gui/objects/GPSBabel-$(VERSIONID).dmg
