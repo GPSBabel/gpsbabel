@@ -6,6 +6,7 @@
 QMAKE=${QMAKE:-qmake}
 LUPDATE=${LUPDATE:-lupdate}
 LRELEASE=${LRELEASE:-lrelease}
+MACDEPLOYQT=${MACDEPLOYQT:-macdeployqt}
 VERSIONID=${VERSIONID:-$(git rev-parse --short HEAD)}
 
 # build and test the CLI
@@ -21,7 +22,7 @@ popd
 # package the app
 mkdir -p gui/objects/GPSBabelFE.app/Contents/MacOS/translations
 cp gui/*.qm  gui/objects/gpsbabelFE.app/Contents/MacOS/translations
-cp gpsbabel gui/objects/GPSBabelFE.app/Contents/MacOS
+cp GPSBabel gui/objects/GPSBabelFE.app/Contents/MacOS/gpsbabel
 # this help seems usless, why bother?
 cp -r gui/help/*.html  gui/objects/GPSBabelFE.app/Contents/MacOS
 cp gui/gmapbase.html gui/objects/GPSBabelFE.app/Contents/MacOS
@@ -30,6 +31,8 @@ tools/mac-localize
 
 rm -f gui/objects/GPSBabelFE.dmg
 pushd gui/objects
-macdeployqt GPSBabelFE.app -executable=GPSBabelFE.app/Contents/MacOS/gpsbabel -dmg
+$MACDEPLOYQT GPSBabelFE.app -executable=GPSBabelFE.app/Contents/MacOS/gpsbabel -dmg -verbose=2
 popd
+
+find gui/objects/GPSBabelFE.app
 mv gui/objects/GPSBabelFE.dmg  gui/objects/GPSBabel-$(VERSIONID).dmg

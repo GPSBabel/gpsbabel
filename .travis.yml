@@ -17,9 +17,7 @@ matrix:
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then QT_CI_PACKAGES=qt.595.clang_64,qt.595.qtwebengine PATH=$PATH:$PWD/tools ./tools/qt-5.9.5-osx; fi
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then export QMAKE=$PWD/Qt/5.9.5/clang_64/bin/qmake; fi
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then export LRELEASE=$PWD/Qt/5.9.5/clang_64/bin/qmake; fi
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then export LUPDATE=$PWD/Qt/5.9.5/clang_64/bin/lupdate; fi
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then export PATH=$PWD/Qt/5.9.5/clang_64/bin:$PATH; fi
 
 script:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then ./tools/travis_script_linux_docker; fi 
