@@ -35,10 +35,10 @@ $MACDEPLOYQT GPSBabelFE.app -executable=GPSBabelFE.app/Contents/MacOS/gpsbabel -
 popd
 
 # what is in there?
-hdiutil attach -noverify gui/objects/GPSBabel-$(VERSIONID).dmg
+hdiutil attach -noverify gui/objects/GPSBabelFE.dmg
 find /Volumes/GPSBabelFE -ls
 hdiutil detach /Volumes/GPSBabelFE
 
-mv gui/objects/GPSBabelFE.dmg  gui/objects/GPSBabel-$(VERSIONID).dmg
+mv gui/objects/GPSBabelFE.dmg  gui/objects/GPSBabel-${VERSIONID}.dmg
 
 
