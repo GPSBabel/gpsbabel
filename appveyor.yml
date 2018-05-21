@@ -89,3 +89,20 @@ test_script:
       C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; PNAME=./release/GPSBabel.exe GBTEMP=./gbtemp ./test_encoding_utf8 2>&1"
       Write-Host "Finished test_script with exit status $LastExitCode"
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
+
+deploy:
+  tag: 'continuous'
+  release: 'continuous'
+  description: 'Continuous build'
+  provider: GitHub
+  auth_token:
+    secure: gOkGevzhckv5gwFMhnyRk9JZqn6eaZ4vdVFkRdjL6p6NNZu7mwf8aTfMhWSnhaS2 # your encrypted token from GitHub
+  artifact: GPSBabelTest-*-Setup.exe      # upload installer to release assets
+  draft: false
+  prerelease: true
+  on:
+    branch: travis_mac                 # release from master branch only
+    appveyor_repo_tag: false       # deploy on tag push only
+
+skip_tags: true
+

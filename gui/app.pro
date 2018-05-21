@@ -6,10 +6,6 @@ CONFIG(debug, debug|release) {
   CONFIG += console
 }
 
-# For Mac, x86 and x64, but not PPC binary.   Ignored on other OSes.
-# macx:CONFIG -= x86_64 
-# macx:CONFIG += x86
-
 ICON = images/appicon.icns
 
 QT += core \
