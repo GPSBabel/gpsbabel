@@ -19,7 +19,7 @@ matrix:
           - $HOME/Qt
 
 install:
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./tools/travis_install_osx; fi
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then . ./tools/travis_install_osx; fi
 
 script:
   - echo $PWD
