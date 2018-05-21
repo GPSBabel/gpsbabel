@@ -7,7 +7,13 @@ QMAKE=${QMAKE:-qmake}
 LUPDATE=${LUPDATE:-lupdate}
 LRELEASE=${LRELEASE:-lrelease}
 MACDEPLOYQT=${MACDEPLOYQT:-macdeployqt}
-VERSIONID=${VERSIONID:-$(git rev-parse --short HEAD)}
+if [ ! -v VERSIONID ]; then
+  if [ -v TRAVIS_BUILD_NUMBER ]; then
+    VERSIONID=${TRAVIS_BUILD_NUMBER}-$(git rev-parse --short HEAD)
+  else
+    VERSIONID=$(git rev-parse --short HEAD)
+  fi
+fi
 
 # build and test the CLI
 $QMAKE GPSBabel.pro && make && make check
