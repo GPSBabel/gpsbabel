@@ -93,6 +93,7 @@ test_script:
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
 deploy_script:
+  - ps: |
       if (($env:platform -eq "x86") -and ($env:qt -eq "5.9\msvc2015"))
       {
         $env:projdir=(C:\msys64\usr\bin\bash.exe -c "pwd")
