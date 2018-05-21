@@ -198,6 +198,8 @@ DEFINES += CSVFMTS_ENABLED
 QMAKE_CFLAGS_WARN_ON -= -W
 QMAKE_CXXFLAGS_WARN_ON -= -W
 
-check.commands = PNAME=./$(TARGET) ./testo
-check.depends = $(TARGET)
-QMAKE_EXTRA_TARGETS += check
+macx|linux{
+  check.commands = PNAME=./$(TARGET) ./testo
+  check.depends = $(TARGET)
+  QMAKE_EXTRA_TARGETS += check
+}

@@ -1,0 +1,20 @@
+#!/bin/bash -ex
+#
+# this script is run on travis for the install stage of mac builds
+#
+
+QTDIR=${HOME}/Qt/5.9.5/clang_64
+
+# The install goes to ${PWD}/Qt.
+if [ -d ${QTDIR} ]; then
+do
+  echo "Using cached Qt."
+  echo "If you need to clear the cache see"
+  echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
+else
+  pushd ${HOME};
+  rm -fr Qt
+  QT_CI_PACKAGES=qt.595.clang_64,qt.595.qtwebengine PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} qt-5.9.5-osx;
+  popd;
+done
+export PATH=${QTDIR}/bin:${PATH};
