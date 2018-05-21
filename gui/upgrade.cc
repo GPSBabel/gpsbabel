@@ -75,12 +75,8 @@ bool UpgradeCheck::isTestMode()
   return testing;
 }
 
-// In Qt 5.4, QSysInfo got classes that do this better.
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 4, 0))
-#error This version of Qt is not supported.
-#else // #if (QT_VERSION < QT_VERSION_CHECK(5, 4, 0))
-
+// Since Qt 5.4 QSysInfo makes it easy to get the OsName,
+// OsVersion and CpuArchitecture.
 QString UpgradeCheck::getOsName()
 {
   return QSysInfo::productType();
@@ -95,8 +91,6 @@ QString UpgradeCheck::getCpuArchitecture()
 {
   return QSysInfo::currentCpuArchitecture();
 }
-
-#endif // #if (QT_VERSION < QT_VERSION_CHECK(5, 4, 0))
 
 UpgradeCheck::updateStatus UpgradeCheck::checkForUpgrade(
                const QString &currentVersionIn,
