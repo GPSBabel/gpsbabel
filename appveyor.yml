@@ -98,7 +98,8 @@ deploy_script:
       {
         $env:projdir=(C:\msys64\usr\bin\bash.exe -c "pwd")
         $env:sha=(C:\msys64\usr\bin\bash.exe -c "git rev-parse --short HEAD")
-        #C:\msys64\usr\bin\bash.exe -lc "cd $env:APPVEYOR_BUILD_FOLDER; cp ./gui/release/GPSBabel-*-Setup.exe GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe"
+        C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; ls ./gui/release/*.exe"
+        C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; cp -p ./gui/release/GPSBabel-*-Setup.exe GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe"
         C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; ./tools/uploadtool/upload_appveyor.sh GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe"
       }
 
