@@ -91,8 +91,8 @@ test_script:
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
 deploy:
-  tag: 'continuous'
-  release: 'continuous'
+  tag: 'continuous - windows'
+  release: 'continuous - windows'
   description: 'Continuous build'
   provider: GitHub
   auth_token:
