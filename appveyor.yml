@@ -49,7 +49,7 @@ build_script:
         # by using the next version of windeployqt which had this
         # bug fixed.
         & ".\tools\make_windows_release.ps1" -windeployqt "C:\Qt\5.6\mingw49_32\bin\windeployqt.exe"
-        $sha=(git rev-parse --short HEAD)
+        $sha=(git rev-parse --short=7 HEAD)
         Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
         Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Manifest.txt" }
       }
@@ -57,7 +57,7 @@ build_script:
       {
         # full build and deploy of our release configuration
         & ".\tools\make_windows_release.ps1" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_9_MSVC2015_32bit-Release" -gui_build_dir_name "build-app-Desktop_Qt_5_9_MSVC2015_32bit-Release" -mkspec win32-msvc -mkcmd nmake.exe
-        $sha=(git rev-parse --short HEAD)
+        $sha=(git rev-parse --short=7 HEAD)
         Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
         Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Manifest.txt" }
       }
@@ -100,7 +100,6 @@ deploy:
   artifact: /GPSBabel.*Setup.exe/      # upload installer to release assets
   draft: false
   prerelease: true
-  force_update: true
   on:
     branch: travis_mac                 # release from master branch only
     appveyor_repo_tag: false       # deploy on tag push only
