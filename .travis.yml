@@ -1,7 +1,37 @@
-sudo: required
-services: docker
-env:
-  - CC=gcc CXX=g++
-  - CC=clang CXX=clang++
+language: cpp
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      services: docker
+      compiler: gcc
+    - os: linux
+      dist: trusty
+      sudo: required
+      services: docker
+      compiler: clang
+    - os: osx
+      compiler: clang
+      cache:
+        directories:
+          - $HOME/Qt
+
+install:
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then source ./tools/travis_install_osx; fi
+
 script:
-  - ./docker_hook
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then ./tools/travis_script_linux_docker; fi 
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./tools/travis_script_osx; fi
+
+after_success:
+  - cd ${TRAVIS_BUILD_DIR}
+  # only deploy pushes to master or prs that target master.  the prs will go to transfr.sh, the pushes go to github.
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ] && [ "$TRAVIS_BRANCH" = "master" ]; then bash ./tools/uploadtool/upload.sh  gui/objects/GPSBabel-*.dmg; fi
+
+branches:
+  except:
+    - /^(?i:continuous)$/  # Do not build tags that we create when we upload to GitHub Releases
+    - /^(?i:continuous.*windows)$/  # Do not build tags that we create when we upload to GitHub Releases
+

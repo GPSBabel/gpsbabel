@@ -9,7 +9,6 @@ rm -rf $DISTDIR
 mkdir $DISTDIR
 mkdir $DISTDIR/plugins
 mkdir $DISTDIR/translations
-mkdir $DISTDIR/help
 
 QT_LIBS="`ldd objects/gpsbabelfe-bin | grep libQt | awk '{print $3}'`"
 QT_LIBS="$QT_LIBS `ldd $QT_INSTALL_PLUGINS/platforms/libqxcb.so | grep libQt | awk '{print $3}'`"
@@ -46,8 +45,6 @@ chmod +x $DISTDIR/gpsbabelfe
 cp objects/gpsbabelfe-bin $DISTDIR
 cp qt.conf $DISTDIR/
 cp ../gpsbabel $DISTDIR/
-#
-cp -r help/*.html $DISTDIR/help
 
 cp ../COPYING $DISTDIR/
 #cp AUTHORS $DISTDIR/
