@@ -101,6 +101,7 @@ deploy_script:
         C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; ls ./gui/release/*.exe"
         C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; cp -p ./gui/release/GPSBabel-*-Setup.exe GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe"
         C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; ./tools/uploadtool/upload_appveyor.sh GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe"
+        Write-Host "Finished deploy_script"
       }
 
 #deploy:

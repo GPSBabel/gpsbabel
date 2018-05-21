@@ -52,7 +52,7 @@ if [ -v APPVEYOR_PULL_REQUEST_NUMBER ]; then
   rm -f ./uploaded-to
   for FILE in "$@" ; do
     BASENAME="$(basename "${FILE}")"
-    curl --upload-file $FILE "https://transfer.sh/$BASENAME" > ./one-upload
+    curl -# --upload-file $FILE "https://transfer.sh/$BASENAME" > ./one-upload
     echo "$(cat ./one-upload)" # this way we get a newline
     echo -n "$(cat ./one-upload)\\n" >> ./uploaded-to # this way we get a \n but no newline
   done
@@ -63,7 +63,7 @@ if [ -v APPVEYOR_PULL_REQUEST_NUMBER ]; then
 #    body="$UPLOADTOOL_PR_BODY"
 #  fi
 #  body="$body\n$(cat ./uploaded-to)\nThe link(s) will expire 14 days from now."
-#  review_comment=$(curl -X POST \
+#  review_comment=$(curl -# -X POST \
 #    --header "Authorization: token ${GITHUB_TOKEN}" \
 #    --data '{"commit_id": "'"$APPVEYOR_REPO_COMMIT"'","body": "'"$body"'","event": "COMMENT"}' \
 #    $review_url)
@@ -96,7 +96,7 @@ else
 fi
 
 tag_url="https://api.github.com/repos/$REPO_SLUG/git/refs/tags/$RELEASE_NAME"
-tag_infos=$(curl -XGET --header "Authorization: token ${GITHUB_TOKEN}" "${tag_url}")
+tag_infos=$(curl -# -XGET --header "Authorization: token ${GITHUB_TOKEN}" "${tag_url}")
 echo "tag_infos: $tag_infos"
 tag_sha=$(echo "$tag_infos" | grep '"sha":' | head -n 1 | cut -d '"' -f 4 | cut -d '{' -f 1)
 echo "tag_sha: $tag_sha"
@@ -104,7 +104,7 @@ echo "tag_sha: $tag_sha"
 release_url="https://api.github.com/repos/$REPO_SLUG/releases/tags/$RELEASE_NAME"
 echo "Getting the release ID..."
 echo "release_url: $release_url"
-release_infos=$(curl -XGET --header "Authorization: token ${GITHUB_TOKEN}" "${release_url}")
+release_infos=$(curl -# -XGET --header "Authorization: token ${GITHUB_TOKEN}" "${release_url}")
 echo "release_infos: $release_infos"
 release_id=$(echo "$release_infos" | grep "\"id\":" | head -n 1 | tr -s " " | cut -f 3 -d" " | cut -f 1 -d ",")
 echo "release ID: $release_id"
@@ -123,14 +123,14 @@ if [ "$APPVEYOR_REPO_COMMIT" != "$target_commit_sha" ] ; then
     delete_url="https://api.github.com/repos/$REPO_SLUG/releases/$release_id"
     echo "Delete the release..."
     echo "delete_url: $delete_url"
-    curl -XDELETE \
+    curl -# -XDELETE \
         --header "Authorization: token ${GITHUB_TOKEN}" \
         "${delete_url}"
   fi
 
   # echo "Checking if release with the same name is still there..."
   # echo "release_url: $release_url"
-  # curl -XGET --header "Authorization: token ${GITHUB_TOKEN}" \
+  # curl -# -XGET --header "Authorization: token ${GITHUB_TOKEN}" \
   #     "$release_url"
 
   if [ "$is_prerelease" = "true" ] ; then
@@ -139,7 +139,7 @@ if [ "$APPVEYOR_REPO_COMMIT" != "$target_commit_sha" ] ; then
     echo "Delete the tag..."
     delete_url="https://api.github.com/repos/$REPO_SLUG/git/refs/tags/$RELEASE_NAME"
     echo "delete_url: $delete_url"
-    curl -XDELETE \
+    curl -# -XDELETE \
         --header "Authorization: token ${GITHUB_TOKEN}" \
         "${delete_url}"
   fi
@@ -160,7 +160,7 @@ if [ "$APPVEYOR_REPO_COMMIT" != "$target_commit_sha" ] ; then
     BODY=""
   fi
 
-  release_infos=$(curl -H "Authorization: token ${GITHUB_TOKEN}" \
+  release_infos=$(curl -# -H "Authorization: token ${GITHUB_TOKEN}" \
        --data '{"tag_name": "'"$RELEASE_NAME"'","target_commitish": "'"$APPVEYOR_REPO_COMMIT"'","name": "'"$RELEASE_TITLE"'","body": "'"$BODY"'","draft": false,"prerelease": '$is_prerelease'}' "https://api.github.com/repos/$REPO_SLUG/releases")
 
   echo "$release_infos"
@@ -185,7 +185,7 @@ echo "Upload binaries to the release..."
 for FILE in "$@" ; do
   FULLNAME="${FILE}"
   BASENAME="$(basename "${FILE}")"
-  curl -H "Authorization: token ${GITHUB_TOKEN}" \
+  curl -# -H "Authorization: token ${GITHUB_TOKEN}" \
        -H "Accept: application/vnd.github.manifold-preview" \
        -H "Content-Type: application/octet-stream" \
        --data-binary @$FULLNAME \
@@ -198,7 +198,7 @@ $shatool "$@"
 if [ "$APPVEYOR_REPO_COMMIT" != "$tag_sha" ] ; then
   echo "Publish the release..."
 
-  release_infos=$(curl -H "Authorization: token ${GITHUB_TOKEN}" \
+  release_infos=$(curl -# -H "Authorization: token ${GITHUB_TOKEN}" \
        --data '{"draft": false}' "$release_url")
 
   echo "$release_infos"
