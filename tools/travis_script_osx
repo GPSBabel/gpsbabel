@@ -23,10 +23,8 @@ popd
 mkdir -p gui/objects/GPSBabelFE.app/Contents/MacOS/translations
 cp gui/*.qm  gui/objects/gpsbabelFE.app/Contents/MacOS/translations
 cp GPSBabel gui/objects/GPSBabelFE.app/Contents/MacOS/gpsbabel
-# this help seems usless, why bother?
-cp -r gui/help/*.html  gui/objects/GPSBabelFE.app/Contents/MacOS
 cp gui/gmapbase.html gui/objects/GPSBabelFE.app/Contents/MacOS
-# what about the COPYING.txt file?
+cp gui/COPYING.txt gui/objects/GPSBabelFE.app/Contents/MacOS
 tools/mac-localize
 
 rm -f gui/objects/GPSBabelFE.dmg

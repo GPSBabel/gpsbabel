@@ -19,12 +19,9 @@ matrix:
           - $HOME/Qt
 
 install:
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then . ./tools/travis_install_osx; fi
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then source ./tools/travis_install_osx; fi
 
 script:
-  - echo $PWD
-  - echo $PATH
-  - ls $HOME/Qt
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then ./tools/travis_script_linux_docker; fi 
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./tools/travis_script_osx; fi
 
