@@ -32,4 +32,5 @@ after_success:
 branches:
   except:
     - /^(?i:continuous)$/  # Do not build tags that we create when we upload to GitHub Releases
+    - /^(?i:continuous windows)$/  # Do not build tags that we create when we upload to GitHub Releases
 
