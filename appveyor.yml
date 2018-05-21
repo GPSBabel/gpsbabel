@@ -100,9 +100,12 @@ deploy:
   artifact: GPSBabelTest-*-Setup.exe      # upload installer to release assets
   draft: false
   prerelease: true
+  force_update: true
   on:
     branch: travis_mac                 # release from master branch only
     appveyor_repo_tag: false       # deploy on tag push only
+    platform: x86
+    qt: 5.9\msvc2015
 
 skip_tags: true
 
