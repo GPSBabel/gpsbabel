@@ -7,11 +7,11 @@ QMAKE=${QMAKE:-qmake}
 LUPDATE=${LUPDATE:-lupdate}
 LRELEASE=${LRELEASE:-lrelease}
 MACDEPLOYQT=${MACDEPLOYQT:-macdeployqt}
-if [ ! -v VERSIONID ]; then
-  if [ -v TRAVIS_BUILD_NUMBER ]; then
-    VERSIONID=${TRAVIS_BUILD_NUMBER}-$(git rev-parse --short HEAD)
+if [ -z ${VERSIONID+x} ]; then
+  if [ -z "$TRAVIS_BUILD_NUMBER" ]; then
+    VERSIONID=$(git rev-parse --short=7 HEAD)
   else
-    VERSIONID=$(git rev-parse --short HEAD)
+    VERSIONID=${TRAVIS_BUILD_NUMBER}-$(git rev-parse --short=7 HEAD)
   fi
 fi
 
