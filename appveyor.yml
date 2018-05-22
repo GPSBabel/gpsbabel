@@ -1,8 +1,6 @@
 version: 1.0.{build}
 
 environment:
-  GITHUB_TOKEN:
-    secure: gOkGevzhckv5gwFMhnyRk9JZqn6eaZ4vdVFkRdjL6p6NNZu7mwf8aTfMhWSnhaS2 # your encrypted token from GitHub
   matrix:
   # MinGW gui builds fail with Qt newer than 5.6 as webkit and webengine are missing.
   # MinGW
