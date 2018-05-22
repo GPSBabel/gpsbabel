@@ -49,17 +49,19 @@ build_script:
         # by using the next version of windeployqt which had this
         # bug fixed.
         & ".\tools\make_windows_release.ps1" -windeployqt "C:\Qt\5.6\mingw49_32\bin\windeployqt.exe"
-        $sha=(git rev-parse --short=7 HEAD)
-        Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
-        Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Manifest.txt" }
+        $verid=(Get-Date -UFormat "%Y%m%dT%H%MZ" -Date (Get-Date -Date (git show -s --format="%aI" HEAD)).toUniversalTime()) `
+               + '-' + (git rev-parse --short=7 HEAD)
+        Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabel-$($verid)-Setup.exe" }
+        Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabel-$($verid)-Manifest.txt" }
       }
       elseif (($env:platform -eq "x86") -and ($env:qt -eq "5.9\msvc2015"))
       {
         # full build and deploy of our release configuration
         & ".\tools\make_windows_release.ps1" -gpsbabel_build_dir_name "build-GPSBabel-Desktop_Qt_5_9_MSVC2015_32bit-Release" -gui_build_dir_name "build-app-Desktop_Qt_5_9_MSVC2015_32bit-Release" -mkspec win32-msvc -mkcmd nmake.exe
-        $sha=(git rev-parse --short=7 HEAD)
-        Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe" }
-        Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Manifest.txt" }
+        $verid=(Get-Date -UFormat "%Y%m%dT%H%MZ" -Date (Get-Date -Date (git show -s --format="%aI" HEAD)).toUniversalTime()) `
+               + '-' + (git rev-parse --short=7 HEAD)
+        Get-ChildItem .\gui\release\GPSBabel-*-Setup.exe | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabel-$($verid)-Setup.exe" }
+        Get-ChildItem .\gui\release\GPSBabel-*-Manifest.txt | % { Push-AppveyorArtifact $_.FullName -FileName "GPSBabel-$($verid)-Manifest.txt" }
       }
       elseif ($env:platform -eq "mingw")
       {
@@ -92,13 +94,14 @@ test_script:
 
 deploy_script:
   - ps: |
-      if (($env:platform -eq "x86") -and ($env:qt -eq "5.9\msvc2015") -and ($env:APPVEYOR_REPO_BRANCH -eq "master"))
+      if (($env:platform -eq "x86") -and ($env:qt -eq "5.9\msvc2015") -and ($env:APPVEYOR_REPO_BRANCH -ne "master"))
       {
         $env:projdir=(C:\msys64\usr\bin\bash.exe -c "pwd")
-        $env:sha=(C:\msys64\usr\bin\bash.exe -c "git rev-parse --short=7 HEAD")
+        $verid=(Get-Date -UFormat "%Y%m%dT%H%MZ" -Date (Get-Date -Date (git show -s --format="%aI" HEAD)).toUniversalTime()) `
+               + '-' + (git rev-parse --short=7 HEAD)
         C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; ls ./gui/release/*.exe"
-        C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; cp -p ./gui/release/GPSBabel-*-Setup.exe GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe"
-        C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; ./tools/uploadtool/upload_appveyor.sh GPSBabelTest-$($env:APPVEYOR_BUILD_VERSION)-$($sha)-Setup.exe"
+        C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; cp -p ./gui/release/GPSBabel-*-Setup.exe GPSBabel-$($verid)-Setup.exe"
+        C:\msys64\usr\bin\bash.exe -lc "cd $env:projdir; ./tools/uploadtool/upload_appveyor.sh GPSBabel-$($verid)-Setup.exe"
         Write-Host "Finished deploy_script"
       }
 
