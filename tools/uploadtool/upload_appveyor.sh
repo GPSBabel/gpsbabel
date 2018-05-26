@@ -151,13 +151,13 @@ if [ "$APPVEYOR_REPO_COMMIT" != "$target_commit_sha" ] ; then
   fi
 
   if [ ! -z "$APPVEYOR_JOB_ID" ] ; then
-    if [ ! -z "$UPLOADTOOL_BODY" ] ; then
-      BODY="Appveyor CI build log: https://ci.appveyor.com/project/$REPO_SLUG/build/$APPVEYOR_BUILD_VERSION/"
+    if [ -z "${UPLOADTOOL_BODY+x}" ] ; then
+      BODY="Appveyor CI build log: https://ci.appveyor.com/project/$APPVEYOR_ACCOUNT_NAME/$APPVEYOR_PROJECT_SLUG/build/$APPVEYOR_BUILD_VERSION/"
     else
       BODY="$UPLOADTOOL_BODY"
     fi
   else
-    BODY=""
+    BODY="$UPLOADTOOL_BODY"
   fi
 
   release_infos=$(curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" \
