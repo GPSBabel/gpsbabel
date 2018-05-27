@@ -150,13 +150,14 @@ if [ "$TRAVIS_COMMIT" != "$target_commit_sha" ] ; then
   fi
 
   if [ ! -z "$TRAVIS_JOB_ID" ] ; then
-    if [ ! -z "$UPLOADTOOL_BODY" ] ; then
+    if [ -z "${UPLOADTOOL_BODY+x}" ] ; then
+      # TODO: The host could be travis-ci.org (legacy open source) or travis-ci.com (subscription or latest open source).
       BODY="Travis CI build log: https://travis-ci.org/$REPO_SLUG/builds/$TRAVIS_BUILD_ID/"
     else
       BODY="$UPLOADTOOL_BODY"
     fi
   else
-    BODY=""
+    BODY="$UPLOADTOOL_BODY"
   fi
 
   release_infos=$(curl -H "Authorization: token ${GITHUB_TOKEN}" \
