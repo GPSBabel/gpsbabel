@@ -94,7 +94,7 @@ test_script:
 
 deploy_script:
   - ps: |
-      if (($env:platform -eq "x86") -and ($env:qt -eq "5.9\msvc2015") -and ($env:APPVEYOR_REPO_BRANCH -ne "master"))
+      if (($env:platform -eq "x86") -and ($env:qt -eq "5.9\msvc2015") -and ($env:APPVEYOR_REPO_BRANCH -eq "master"))
       {
         $env:projdir=(C:\msys64\usr\bin\bash.exe -c "pwd")
         $verid=(Get-Date -UFormat "%Y%m%dT%H%MZ" -Date (Get-Date -Date (git show -s --format="%aI" HEAD)).toUniversalTime()) `
