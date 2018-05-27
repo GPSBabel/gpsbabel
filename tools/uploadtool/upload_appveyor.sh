@@ -80,8 +80,11 @@ if [ ! -z "$APPVEYOR_REPO_NAME" ] ; then
   echo "APPVEYOR_REPO_COMMIT: $APPVEYOR_REPO_COMMIT"
   REPO_SLUG="$APPVEYOR_REPO_NAME"
   if [ -z "$GITHUB_TOKEN" ] ; then
-    echo "\$GITHUB_TOKEN missing, please set it in the Appveyor CI settings of this project"
-    echo "You can get one from https://github.com/settings/tokens"
+    echo "\$GITHUB_TOKEN missing."
+    echo "You can get one from https://github.com/settings/tokens."
+    echo "Encrypt it at https://ci.appveyor.com/tools/encrypt when logged into Appveyor account $APPVEYOR_ACCOUNT_NAME,"
+    echo "then set it at https://ci.appveyor.com/project/$APPVEYOR_ACCOUNT_NAME/$APPVEYOR_PROJECT_SLUG/settings/environment or"
+    echo "put it in appveyor.yml as described at https://www.appveyor.com/docs/build-configuration/#secure-variables"
     exit 1
   fi
 else
@@ -151,13 +154,13 @@ if [ "$APPVEYOR_REPO_COMMIT" != "$target_commit_sha" ] ; then
   fi
 
   if [ ! -z "$APPVEYOR_JOB_ID" ] ; then
-    if [ ! -z "$UPLOADTOOL_BODY" ] ; then
-      BODY="Appveyor CI build log: https://ci.appveyor.com/project/$REPO_SLUG/build/$APPVEYOR_BUILD_VERSION/"
+    if [ -z "${UPLOADTOOL_BODY+x}" ] ; then
+      BODY="Appveyor CI build log: https://ci.appveyor.com/project/$APPVEYOR_ACCOUNT_NAME/$APPVEYOR_PROJECT_SLUG/build/$APPVEYOR_BUILD_VERSION/"
     else
       BODY="$UPLOADTOOL_BODY"
     fi
   else
-    BODY=""
+    BODY="$UPLOADTOOL_BODY"
   fi
 
   release_infos=$(curl -s -S -H "Authorization: token ${GITHUB_TOKEN}" \
