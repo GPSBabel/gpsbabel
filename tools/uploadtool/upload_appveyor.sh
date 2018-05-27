@@ -163,7 +163,7 @@ if [ "$APPVEYOR_REPO_COMMIT" != "$target_commit_sha" ] ; then
 
   if [ ! -z "$APPVEYOR_JOB_ID" ] ; then
     if [ -z "${UPLOADTOOL_BODY+x}" ] ; then
-      BODY="Appveyor CI build log: https://ci.appveyor.com/project/$APPVEYOR_ACCOUNT_NAME/$APPVEYOR_PROJECT_SLUG/build/$APPVEYOR_BUILD_VERSION/"
+      BODY="Appveyor CI build log: https://ci.appveyor.com/project/$APPVEYOR_ACCOUNT_NAME/$APPVEYOR_PROJECT_SLUG/build/$APPVEYOR_BUILD_VERSION"
     else
       BODY="$UPLOADTOOL_BODY"
     fi
