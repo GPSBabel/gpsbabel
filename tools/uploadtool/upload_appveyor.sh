@@ -82,9 +82,17 @@ if [ ! -z "$APPVEYOR_REPO_NAME" ] ; then
   if [ -z "$GITHUB_TOKEN" ] ; then
     echo "\$GITHUB_TOKEN missing."
     echo "You can get one from https://github.com/settings/tokens."
-    echo "Encrypt it at https://ci.appveyor.com/tools/encrypt when logged into Appveyor account $APPVEYOR_ACCOUNT_NAME,"
-    echo "then set it at https://ci.appveyor.com/project/$APPVEYOR_ACCOUNT_NAME/$APPVEYOR_PROJECT_SLUG/settings/environment or"
-    echo "put it in appveyor.yml as described at https://www.appveyor.com/docs/build-configuration/#secure-variables"
+    echo "Minimal token scope is repo or public_repo to release on private or public repositories respectively."
+    echo "Then, either:"
+    echo "1. Encrypt it at https://ci.appveyor.com/tools/encrypt when logged into Appveyor account $APPVEYOR_ACCOUNT_NAME,"
+    echo "   then add a secure variable as described at https://www.appveyor.com/docs/build-configuration/#secure-variables"
+    echo "   to appveyor.yml."
+    echo "   The name of the variable should be GITHUB_TOKEN, and the value should be the encrypted value."
+    echo "OR"
+    echo "2. At https://ci.appveyor.com/project/$APPVEYOR_ACCOUNT_NAME/$APPVEYOR_PROJECT_SLUG/settings/environment"
+    echo "   add a new environmental variable with name GITHUB_TOKEN and the value of the unencrypted token from github."
+    echo "   Then hit the lock icon just to the right of the value so the token displays as a series of circles."
+    echo "   Only after the value shows as a series of circles hit the SAVE button at the bottom."
     exit 1
   fi
 else
