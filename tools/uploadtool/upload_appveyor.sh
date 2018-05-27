@@ -80,11 +80,11 @@ if [ ! -z "$APPVEYOR_REPO_NAME" ] ; then
   echo "APPVEYOR_REPO_COMMIT: $APPVEYOR_REPO_COMMIT"
   REPO_SLUG="$APPVEYOR_REPO_NAME"
   if [ -z "$GITHUB_TOKEN" ] ; then
-    echo "\$GITHUB_TOKEN missing.
-    echo "You can get one from https://github.com/settings/tokens"
-    echo "You can encrypt it at https://ci.appveyor.com/tools/encrypt when logged into Appveyor account $APPVEYOR_ACCOUNT_NAME"
-    echo "Then set it at https://ci.appveyor.com/project/$APPVEYOR_ACCOUNT_NAME/$APPVEYOR_PROJECT_SLUG/settings/environment or"
-    echo "put it in appveyor.yml as described in https://www.appveyor.com/docs/build-configuration/#secure-variables"
+    echo "\$GITHUB_TOKEN missing."
+    echo "You can get one from https://github.com/settings/tokens."
+    echo "Encrypt it at https://ci.appveyor.com/tools/encrypt when logged into Appveyor account $APPVEYOR_ACCOUNT_NAME,"
+    echo "then set it at https://ci.appveyor.com/project/$APPVEYOR_ACCOUNT_NAME/$APPVEYOR_PROJECT_SLUG/settings/environment or"
+    echo "put it in appveyor.yml as described at https://www.appveyor.com/docs/build-configuration/#secure-variables"
     exit 1
   fi
 else
