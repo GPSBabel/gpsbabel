@@ -1,9 +1,9 @@
 
       
       
-      <para>Delorme TopoUSA/XMap Conduit is one of the bazillion 
+      <para>DeLorme TopoUSA/XMap Conduit is one of the bazillion 
 <link linkend="fmt_csv">CSV variants</link> 
-variants mentioned above.  It's just like Delorme Streets &amp; Atlas with the addition of
+variants mentioned above.  It's just like DeLorme Streets &amp; Atlas with the addition of
 a completely pointless line at the beginning and end of the file. This
 is the format used to hot-sync to XMap from withing TopoUSA. Done with
 help of Dan Edwards.</para>

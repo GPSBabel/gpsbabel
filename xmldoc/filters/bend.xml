@@ -22,7 +22,7 @@ Because of that, it is usually a good idea to use the simplify filter
 before this one.</para>
 
 <para>This command line reads route.gpx and replaces each point with other two
-points: one 25 metres before and another 25 metres after the original
+points: one 25 meters before and another 25 meters after the original
 point. It replaces a point only if there is a change of direction
 larger than 5 degrees.</para>
 

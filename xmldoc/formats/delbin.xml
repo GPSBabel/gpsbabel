@@ -29,7 +29,7 @@
 </para>
 
 <example id="pn-40-send">
-  <title>Command to send a pocket query (GPX) to a Delorme PN device </title>
+  <title>Command to send a pocket query (GPX) to a DeLorme PN device </title>
   <para>
     <userinput>
       gpsbabel -i gpx -f "My Caches.gpx" -o delbin -F usb:
@@ -39,11 +39,11 @@
 
 <para>
   If you receive a message that the device is busy, especially on Windows,
-  that could be because another program, likely Delorme's own, has the 
+  that could be because another program, likely DeLorme's own, has the 
   device open even though it's not actively interacting with the GPS.   In 
   Topo 8, on the GPS tab, look for GPS Options.  Uncheck "Start GPS" and 
   "Automatically detect GPS".   Then just click the Exchange button when
-  you're ready for Topo to interact with the GPS.  Other Delorme software may
+  you're ready for Topo to interact with the GPS.  Other DeLorme software may
   be similar.
 </para>
 <para>

@@ -20,7 +20,7 @@ coordinates in the wpo file format.  In a .wpo file the resolution is
 1/10"; in gpx for example it is 1/100".  A a practical matter, this
 loss is only about 1.7 meters (5 feet).
 </para>
-      <para> The generated waypoint failes can also be used by MapShow
+      <para> The generated waypoint files can also be used by MapShow
 version 1.14.  This program is free of charge from the Holux web site.
 </para>
       <para> This format was contributed by Jochen Becker.

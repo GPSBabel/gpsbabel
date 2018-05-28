@@ -1,5 +1,5 @@
 <para>
  This option, when set, reduces the amount of whitespace in the 
  generated GeoJSON. This reduces the size, especially when uncompressed,
- but reduces the readibility to humans.
+ but reduces the readability to humans.
 </para>

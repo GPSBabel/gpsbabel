@@ -40,7 +40,7 @@ Qt versions 5.2 and newer are supported.
 </para>
   <para><ulink url="http://libusb.sourceforge.net">libusb</ulink> 
 is recommended for OS/X and Linux if you want to use a USB Garmin or 
-Delorme device.
+DeLorme device.
 Fedora users may need to 'yum install libusb-devel'.  Ubuntu users may
 need to 'yum install libusb-dev'.
 </para>

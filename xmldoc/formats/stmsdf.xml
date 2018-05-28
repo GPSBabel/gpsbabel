@@ -2,7 +2,7 @@
 	This format supports the .sdf files from the Suunto product family
 	'Suunto Trek Manager', 'Suunto Ski Manager' and 'Suunto Sail Manager'.
 	The contents of the sdf file depends on the used product and can
-	be one route or one track. Thats why when you want to use sdf on the
+	be one route or one track. That's why when you want to use sdf on the
 	output side you have to use the
 	<link linkend="Route_And_Track_Modes">-r OR the -t</link> option. This will tell
 	GPSBabel which type of data should be written.

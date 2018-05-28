@@ -1,5 +1,5 @@
 <para>
-This lets you overwride the default codec of 'windows-1252' when writing
+This lets you override the default codec of 'windows-1252' when writing
 strings in Garmin GPI files. This option may be removed in future versions
 of GPSBabel as it's not known which Garmin devices support which character
 sets.

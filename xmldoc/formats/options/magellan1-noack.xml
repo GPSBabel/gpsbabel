@@ -1,6 +1,6 @@
 <para>
 Magellan's protocol specification strongly encourages the use of software
-acknowledgements on every packets.   This is a simple "this is what I think
+acknowledgments on every packets.   This is a simple "this is what I think
 I heard.  If you agree that I heard it correctly, let's go to the next packet"
 handshake that is used to ensure the integrity of the data transfer.
 </para>

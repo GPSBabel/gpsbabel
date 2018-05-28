@@ -4,7 +4,7 @@ This option specifies where to get name information for each shape. Without this
 <para>
 It the value is a set of digits then the name is fetched from a record with that field index in the .dbf file.
 Otherwise, if the value does not start with a '+' character, the name is fetched from record with that field name in the .dbf file.
-When the value starts with a '+' character then multilpe records from the .dbf file can be combined to create the name.
+When the value starts with a '+' character then multiple records from the .dbf file can be combined to create the name.
 The plus character should be followed by a set of digit(s) representing a field index, or a field name as above.
 This may be followed by an additional '+' character, and another set of digits or a field name.
 As many records as desired can be selected in this fashion.

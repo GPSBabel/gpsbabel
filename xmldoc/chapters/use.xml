@@ -67,7 +67,7 @@ name of a file to be read or written.
          format and create a new file <filename>/tmp/geocaching.gpx</filename> in GPX format.   It's important to note that the names have nothing to do with the formats actually used.</para>
          <para> This command will read from a Magellan unit attached
          to the first serial port on a Linux system (device names will
-         vary on other OSes; typically COMx: on WIndows) and write them as a geocaching loc file.</para>
+         vary on other OSes; typically COMx: on Windows) and write them as a geocaching loc file.</para>
 <example id="linux_download_from_magellan">
   <title>Command showing Linux download from Magellan serial and writing to .loc file</title>
          <para><userinput>gpsbabel -i magellan -f /dev/ttyS0 -o geo -F mag.loc</userinput></para>
@@ -187,7 +187,7 @@ merged data to multiple destinations.
          always result in a list of waypoints, not the original track.
 </para>
          <para> The presence of <parameter moreinfo="none">-s</parameter> on the command line tends to
-         creats havoc on tracks and routes since many of these formats
+         create havoc on tracks and routes since many of these formats
          rely on internal linkages between such points and renaming
          them may break those linkages.  In general, don't use
          <parameter moreinfo="none">-s</parameter> when tracks or
@@ -268,7 +268,7 @@ merged data to multiple destinations.
       Only the filename specified by that option will be used.
 	</para>
     <para>
-      There may be situations where predefined values are not useable 
+      There may be situations where predefined values are not usable 
       (i.e. wrapper applications using GPSBabel in the background). 
        The inifile mechanism can be disabled with an empty filename.
     </para>

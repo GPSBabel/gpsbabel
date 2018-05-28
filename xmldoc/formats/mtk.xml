@@ -72,7 +72,7 @@ If you can confirm success with others, please share with us.
 </para>
 <para>
   Downloaded data will be stored in data.bin file in the current 
-  directory together with the choosen output format.  This is a rather
+  directory together with the chosen output format.  This is a rather
   uncommon feature in GPSBabel's formats and is likely to change in future
   versions.
 </para>

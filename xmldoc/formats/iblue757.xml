@@ -63,7 +63,7 @@ East (E) or West (W) of Greenwich
 </para><para>example: E
 </para></section>
 <section id="ib_height"><title>HEIGHT</title><para>
-Height above sea level in metres
+Height above sea level in meters
 </para><para>example: 99.859 m
 </para></section>
 
@@ -73,7 +73,7 @@ Speed in km/h
 </para></section>
 
 <section id="ib_dist"><title>DISTANCE</title><para>
-Distance covered since last point in metres
+Distance covered since last point in meters
 </para><para>example: 0.30 m
 </para></section>
 
