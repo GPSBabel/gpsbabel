@@ -1,5 +1,5 @@
 <para> 
-This format reads route files from many Delorme mapping products.
+This format reads route files from many DeLorme mapping products.
 It supports the anr, rte, and rtd formats as either tracks or
 routes.</para>
       <para> All options only apply to route files from newer (anr)

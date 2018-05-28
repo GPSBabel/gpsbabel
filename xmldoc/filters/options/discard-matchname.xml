@@ -1,6 +1,6 @@
 <para>
 This option discards points that have shortnames that match the 
-provided regular expresision.
+provided regular expression.
 </para>
 <example id="discarding_points_with_names">
 <title>Discarding specific point by regular expression</title>

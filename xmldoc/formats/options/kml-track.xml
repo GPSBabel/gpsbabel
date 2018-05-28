@@ -6,5 +6,5 @@
 </para>
 <para>
   Routes and tracks without sufficient time data are always drawn as
-  Linestrings and never Tracsks.
+  Linestrings and never Tracks.
 </para>

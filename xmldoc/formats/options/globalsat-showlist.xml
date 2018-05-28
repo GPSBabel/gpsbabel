@@ -1,5 +1,5 @@
 <para>
-The showlist argment displays the list of tracks stored on the device.
+The showlist argument displays the list of tracks stored on the device.
 </para>
 <example id="globalsat-option-showlist">
   <title>Command showing list of tracks on device</title>

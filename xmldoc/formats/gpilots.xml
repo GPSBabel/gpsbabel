@@ -3,7 +3,7 @@
       
       <para> This is a Palm/OS file format for 
             <ulink url="http://www.cru.fr/perso/cc/GPilotS/">GPilotS</ulink>.
-	It was tested against version 6.2 of GPilotsS
+	It was tested against version 6.2 of GPilotS
 </para>
       <para> Neither tracks nor routes are supported at this
 time.</para>

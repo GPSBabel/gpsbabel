@@ -4,7 +4,7 @@ GPRMC sentences.  The default is to read or write GPRMC sentences.  To
 disable GPRMC sentences, specify <option>gprmc=0</option>.
 </para>
 <para>
-GPRMC sentences contain the "recommended mimimum" positional information, 
+GPRMC sentences contain the "recommended minimum" positional information, 
 including date and time, heading, and velocity.  Note that they do not 
 include altitude.  For altitude, you will have to include GPGGA sentences.
 </para>

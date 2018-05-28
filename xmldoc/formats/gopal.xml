@@ -27,7 +27,7 @@ date given in the filename. To handle files without a parsable date in the
 name, the command line option 'date' is provided.
 </para>
 <para>
-Conversions from gopal into any other format are a bit lossy concerning the first field of each line wich looks like an useless time tick value
+Conversions from gopal into any other format are a bit lossy concerning the first field of each line which looks like an useless time tick value
 and is simply discarded while reading. If written, there will be a time_t value from the current (computed) timestamp.
 </para>
 <para>

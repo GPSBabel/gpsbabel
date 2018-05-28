@@ -4,6 +4,6 @@ learned about via the 'showlist' option from a previous invocation, instead
 of fetching all the tracks, which is our default.
 </para>
 <example id="globalsat-option-track">
-  <title>Command track can be used to fetch a single track, defult is all tracks</title>
+  <title>Command track can be used to fetch a single track, default is all tracks</title>
   <para><userinput>gpsbabel -i globalsat,track=number -f /dev/ttyUSB0 -o gpx,garminextensions -F outfile.gpx</userinput></para>
 </example>

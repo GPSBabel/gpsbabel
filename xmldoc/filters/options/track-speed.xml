@@ -1,7 +1,7 @@
 <para>
 This option computes a value for the GPS speed at each trackpoint.
 This is most useful with trackpoints from formats that don't support
-speed information or for trackoints synthesized by the 
+speed information or for trackpoints synthesized by the 
 <link linkend="filter_interpolate">interpolate</link>
 filter.</para>
 <para>

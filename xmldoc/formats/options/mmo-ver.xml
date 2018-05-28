@@ -7,6 +7,6 @@ If you have a particularly old Mobile Mapper installation, it may complain "This
 <example id="mmo_ver">
 <title>Forcing creation of old Mobile Mapper files</title>
 <para>
-  gpsbabel -i gpx -f whaetever.gpx -o mmo,ver=17 -F whatever.mmo
+  gpsbabel -i gpx -f whatever.gpx -o mmo,ver=17 -F whatever.mmo
 </para>
 </example>

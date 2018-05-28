@@ -1,5 +1,5 @@
 <para>
-The dump-file option is primarly for debugging is module. It lets you
+The dump-file option is primarily for debugging is module. It lets you
 provide a file which contains the raw stream of bytes coming from the
 device. This is useful for capturing device state to describe to a 
 developer that can't actually access hte physical device as well as mocking

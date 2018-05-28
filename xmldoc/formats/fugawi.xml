@@ -15,7 +15,7 @@ Fugawi):</para>
 	<member> - Description</member>
 	<member> - Latidude</member>
 	<member> - Longitude</member>
-	<member> - Altitude (metres)</member>
+	<member> - Altitude (meters)</member>
 	<member> - Date (yyyymmdd/yymmdd)</member>
 	<member> - Time of day (hhmmss)</member>
       </simplelist>

@@ -15,7 +15,7 @@ USB cable to your computer and the device will show up as a serial device.
   <para><userinput>gpsbabel -i globalsat,showlist=1 -f /dev/ttyUSB0</userinput></para>
 </example>
 <example id="globalsat-track">
-  <title>Command track can be used to fetch a single track, defult is all tracks</title>
+  <title>Command track can be used to fetch a single track, default is all tracks</title>
   <para><userinput>gpsbabel -i globalsat,track=number -f /dev/ttyUSB0 -o gpx,garminextensions -F outfile.gpx</userinput></para>
 </example>
 

@@ -21,7 +21,7 @@ In general, GPSBabel's KML writer is relatively strong.  GPSBabel handles simple
 <para>
   Google Earth 4.0 and later have a feature that can surprise users of this 
   format.   Earth's "time slider" feature controls what timestamped data
-  gets displayed.  If you're using data that has timestampes (e.g. GPX 
+  gets displayed.  If you're using data that has timestamps (e.g. GPX 
   points that contain time or almost any track data) this will be important
   to you.  The time slider defaults to the far left position and fully closed.
   This means that only the first data point will be displayed.  You can

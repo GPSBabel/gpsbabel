@@ -5,5 +5,5 @@
 	delimiter because it is a) supported by both OpenOffice and Ploticus
 	and b) is not ',', so you can use <userinput moreinfo="none">sed -i
 	"s/./,/g" &lt;x&gt;.csv'</userinput> to adapt it to locales where ',' is
-	used as decimal seperator.  Contributed by Tobias Minich.
+	used as decimal separator.  Contributed by Tobias Minich.
 </para>

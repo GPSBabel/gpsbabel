@@ -4,8 +4,8 @@
 </para>
 <para>
   If you're starting from images in another format, you may need to
-  use another tool like Gimp or ImageMagick's convert to get the imaga
-  into oen of the above formats to avoid errors about "Unsupported color 
+  use another tool like Gimp or ImageMagick's convert to get the image
+  into one of the above formats to avoid errors about "Unsupported color 
   depth".
 </para>
 <para>
