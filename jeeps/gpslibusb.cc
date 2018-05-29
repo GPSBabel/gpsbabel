@@ -231,7 +231,7 @@ gusb_reset_toggles(void)
   gusb_cmd_send((const garmin_usb_packet*) oinit, sizeof(oinit));
 
   t = 10;
-  while (1) {
+  while (true) {
     le_write16(&iresp.gusb_pkt.pkt_id, 0);
     le_write32(&iresp.gusb_pkt.datasz, 0);
     le_write32(&iresp.gusb_pkt.databuf, 0);
@@ -256,7 +256,7 @@ gusb_reset_toggles(void)
 
   t = 10;
   gusb_cmd_send((const garmin_usb_packet*) oid, sizeof(oid));
-  while (1) {
+  while (true) {
     le_write16(&iresp.gusb_pkt.pkt_id, 0);
     le_write32(&iresp.gusb_pkt.datasz, 0);
     le_write32(&iresp.gusb_pkt.databuf, 0);

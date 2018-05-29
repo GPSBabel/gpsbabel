@@ -1741,16 +1741,16 @@ entitize(const char* str, bool is_html)
 
 char* xml_entitize(const char* str)
 {
-  return entitize(str, 0);
+  return entitize(str, false);
 }
 
 char* html_entitize(const char* str)
 {
-  return entitize(str, 1);
+  return entitize(str, true);
 }
 char* html_entitize(const QString& str)
 {
-  return entitize(CSTR(str), 1);
+  return entitize(CSTR(str), true);
 }
 
 /*
