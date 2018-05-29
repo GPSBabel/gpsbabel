@@ -179,34 +179,34 @@ geo_wr_deinit()
 static void
 geo_waypt_pr(const Waypoint* waypointp)
 {
-  writer.writeStartElement("waypoint");
+  writer.writeStartElement(QStringLiteral("waypoint"));
 
-  writer.writeStartElement("name");
-  writer.writeAttribute("id", waypointp->shortname);
+  writer.writeStartElement(QStringLiteral("name"));
+  writer.writeAttribute(QStringLiteral("id"), waypointp->shortname);
   // TODO: this could be writeCharacters, but it's here for compat with pre
   // Qt writer.
   writer.writeCDATA(waypointp->description);
   writer.writeEndElement();
 
-  writer.writeStartElement("coord");
-  writer.writeAttribute("lat", QString::number(waypointp->latitude, 'f'));
-  writer.writeAttribute("lon", QString::number(waypointp->longitude, 'f'));
+  writer.writeStartElement(QStringLiteral("coord"));
+  writer.writeAttribute(QStringLiteral("lat"), QString::number(waypointp->latitude, 'f'));
+  writer.writeAttribute(QStringLiteral("lon"), QString::number(waypointp->longitude, 'f'));
   writer.writeEndElement();
 
-  writer.writeTextElement("type", deficon ? deficon : waypointp->icon_descr);
+  writer.writeTextElement(QStringLiteral("type"), deficon ? deficon : waypointp->icon_descr);
 
   if (waypointp->HasUrlLink()) {
-    writer.writeStartElement("link");
-    writer.writeAttribute("text ", "Cache Details");
+    writer.writeStartElement(QStringLiteral("link"));
+    writer.writeAttribute(QStringLiteral("text "), QStringLiteral("Cache Details"));
     UrlLink link = waypointp->GetUrlLink();
     writer.writeCharacters(link.url_);
     writer.writeEndElement();
   }
 
   if (waypointp->gc_data && waypointp->gc_data->diff) {
-    writer.writeTextElement("difficulty",
+    writer.writeTextElement(QStringLiteral("difficulty"),
                             QString::number(waypointp->gc_data->diff/10));
-    writer.writeTextElement("terrain",
+    writer.writeTextElement(QStringLiteral("terrain"),
                             QString::number(waypointp->gc_data->terr/10));
 
     int v = 1;
@@ -236,7 +236,7 @@ geo_waypt_pr(const Waypoint* waypointp)
       v = 1;
       break;
     }
-    writer.writeTextElement("container",
+    writer.writeTextElement(QStringLiteral("container"),
                             QString::number(v));
   }
 
@@ -246,12 +246,12 @@ geo_waypt_pr(const Waypoint* waypointp)
 static void
 geo_write()
 {
-  writer.writeStartElement("loc");
-  writer.writeAttribute("version", "1.0");
+  writer.writeStartElement(QStringLiteral("loc"));
+  writer.writeAttribute(QStringLiteral("version"), QStringLiteral("1.0"));
   // TODO: This could be moved to wr_init, but the pre GPX version put the two
   // lines above this, so mimic that behaviour exactly.
   writer.setAutoFormatting(true);
-  writer.writeAttribute("src", "EasyGPS");
+  writer.writeAttribute(QStringLiteral("src"), QStringLiteral("EasyGPS"));
   waypt_disp_all(geo_waypt_pr);
   writer.writeEndElement();
 }

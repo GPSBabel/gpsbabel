@@ -199,34 +199,34 @@ static void xol_waypt_disp_cb(const Waypoint* wpt) {
   if (!GPS_Math_WGS84_To_Swiss_EN(wpt->latitude, wpt->longitude, &x, &y)) {
     xol_fatal_outside(wpt);
   }
-  writer->writeStartElement("shape");
-  writer->writeAttribute("type", "waypoint");
-  writer->writeAttribute("name", name);
-  writer->writeAttribute("comment", wpt->notes);
-  writer->writeAttribute("icon", wpt->icon_descr);
+  writer->writeStartElement(QStringLiteral("shape"));
+  writer->writeAttribute(QStringLiteral("type"), QStringLiteral("waypoint"));
+  writer->writeAttribute(QStringLiteral("name"), name);
+  writer->writeAttribute(QStringLiteral("comment"), wpt->notes);
+  writer->writeAttribute(QStringLiteral("icon"), wpt->icon_descr);
 
   if (wpt->creation_time.isValid()) {
-    writer->writeAttribute("timestamp", wpt->CreationTimeXML());
+    writer->writeAttribute(QStringLiteral("timestamp"), wpt->CreationTimeXML());
   }
   if (wpt->altitude != unknown_alt) {
-    writer->writeAttribute("alt", QString::number(wpt->altitude, 'f', 6));
+    writer->writeAttribute(QStringLiteral("alt"), QString::number(wpt->altitude, 'f', 6));
   }
-  writer->writeStartElement("points");
-  writer->writeStartElement("point");
-  writer->writeAttribute("x", QString::number(x));
-  writer->writeAttribute("y", QString::number(y));
+  writer->writeStartElement(QStringLiteral("points"));
+  writer->writeStartElement(QStringLiteral("point"));
+  writer->writeAttribute(QStringLiteral("x"), QString::number(x));
+  writer->writeAttribute(QStringLiteral("y"), QString::number(y));
   writer->writeEndElement();  // point
   writer->writeEndElement();  // points
   writer->writeEndElement();  // shape
 }
 
 static void xol_track_hdr_disp_cb(const route_head*) {
-  writer->writeStartElement("shape");
-  writer->writeAttribute("type", "polyline");
-  writer->writeAttribute("lineSize", "3");
-  writer->writeAttribute("lineColor", "#e60000");
-  writer->writeAttribute("lineStyle", "solid");
-  writer->writeStartElement("waypoints");
+  writer->writeStartElement(QStringLiteral("shape"));
+  writer->writeAttribute(QStringLiteral("type"), QStringLiteral("polyline"));
+  writer->writeAttribute(QStringLiteral("lineSize"), QStringLiteral("3"));
+  writer->writeAttribute(QStringLiteral("lineColor"), QStringLiteral("#e60000"));
+  writer->writeAttribute(QStringLiteral("lineStyle"), QStringLiteral("solid"));
+  writer->writeStartElement(QStringLiteral("waypoints"));
 }
 
 static void xol_track_tlr_disp_cb(const route_head*) {
@@ -241,19 +241,19 @@ static void xol_trkpt_disp_cb(const Waypoint* wpt) {
     xol_fatal_outside(wpt);
   }
 
-  writer->writeStartElement("shape");
-  writer->writeAttribute("type", "waypoint");
+  writer->writeStartElement(QStringLiteral("shape"));
+  writer->writeAttribute(QStringLiteral("type"), QStringLiteral("waypoint"));
   if (wpt->creation_time.isValid()) {
-    writer->writeAttribute("timestamp", wpt->CreationTimeXML());
+    writer->writeAttribute(QStringLiteral("timestamp"), wpt->CreationTimeXML());
   }
   if (wpt->altitude != unknown_alt) {
-    writer->writeAttribute("alt", QString::number(wpt->altitude, 'f'));
+    writer->writeAttribute(QStringLiteral("alt"), QString::number(wpt->altitude, 'f'));
   }
 
-  writer->writeStartElement("points");
-  writer->writeStartElement("point");
-  writer->writeAttribute("x", QString::number(x));
-  writer->writeAttribute("y", QString::number(y));
+  writer->writeStartElement(QStringLiteral("points"));
+  writer->writeStartElement(QStringLiteral("point"));
+  writer->writeAttribute(QStringLiteral("x"), QString::number(x));
+  writer->writeAttribute(QStringLiteral("y"), QString::number(y));
   writer->writeEndElement();  // point
   writer->writeEndElement();  // points
   writer->writeEndElement();  // shape
@@ -278,14 +278,14 @@ static void xol_write() {
   }
 
   writer->setAutoFormatting(true);
-  writer->writeStartElement("overlays");
-  writer->writeStartElement("overlay");
-  writer->writeAttribute("version", "1.0");
-  writer->writeStartElement("center");
-  writer->writeAttribute("x", QString::number(x));
-  writer->writeAttribute("y", QString::number(y));
+  writer->writeStartElement(QStringLiteral("overlays"));
+  writer->writeStartElement(QStringLiteral("overlay"));
+  writer->writeAttribute(QStringLiteral("version"), QStringLiteral("1.0"));
+  writer->writeStartElement(QStringLiteral("center"));
+  writer->writeAttribute(QStringLiteral("x"), QString::number(x));
+  writer->writeAttribute(QStringLiteral("y"), QString::number(y));
   writer->writeEndElement();  // center
-  writer->writeStartElement("shapes");
+  writer->writeStartElement(QStringLiteral("shapes"));
 
   waypt_disp_all(xol_waypt_disp_cb);
   track_disp_all(xol_track_hdr_disp_cb, xol_track_tlr_disp_cb,
