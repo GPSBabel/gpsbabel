@@ -22,7 +22,7 @@
 #ifndef CET_H
 #define CET_H
 
-#include <stddef.h> // for size_t
+#include <cstddef> // for size_t
 
 #define CET_ERROR	1
 #define CET_SUCCESS	0

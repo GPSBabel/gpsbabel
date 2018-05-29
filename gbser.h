@@ -22,7 +22,7 @@
 #ifndef __GBSER_H
 #define __GBSER_H
 
-#include <stddef.h> // for size_t
+#include <cstddef>// for size_t
 
 #define gbser_OK         0
 #define gbser_NOTHING   -1

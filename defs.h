@@ -19,8 +19,7 @@
 #ifndef DEFS_H_INCLUDED_
 #define DEFS_H_INCLUDED_
 
-#include <stdint.h>
-
+#include <cstdint>
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif

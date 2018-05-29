@@ -33,7 +33,7 @@ gb_sleep(unsigned long microseconds)
 
 #elif defined HAVE_NANOSLEEP
 
-#include <time.h>
+#include <ctime>
 void
 gb_sleep(unsigned long microseconds)
 {

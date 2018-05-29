@@ -36,9 +36,9 @@
 #include "jeeps/gpsmath.h"
 #include "grtcirc.h"
 
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <ctime>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "stmsdf"
 

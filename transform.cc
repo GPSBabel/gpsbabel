@@ -26,7 +26,7 @@
 
 #if FILTERS_ENABLED
 
-#include <ctype.h>
+#include <cctype>
 
 #define MYNAME "transform"
 

@@ -61,10 +61,10 @@
 #include "csv_util.h"
 
 #if CSVFMTS_ENABLED
-#include <math.h>
+#include <cmath>
 #include "jeeps/gpsmath.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 
 #define MYNAME "CompeGPS"
 

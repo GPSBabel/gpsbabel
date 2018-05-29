@@ -33,7 +33,7 @@
 #include "strptime.h"
 
 #include <cmath>
-#include <stdlib.h> // qsort
+#include <cstdlib> // qsort
 
 #define MYNAME "garmin_txt"
 
