@@ -135,10 +135,10 @@ validate_process()
 }
 
 filter_vecs_t validate_vecs = {
-  NULL,
+  nullptr,
   validate_process,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   validate_args
 };
 

@@ -266,13 +266,13 @@ int32 GPS_Command_Send_Track(const char* port, GPS_PTrack* trk, int32 n, int era
     ret = GPS_A300_Send(port, trk, n);
     break;
   case pA301:
-    ret = GPS_A301_Send(port, trk, n, 301, NULL);
+    ret = GPS_A301_Send(port, trk, n, 301, nullptr);
     break;
   case pA302:
     /* Units with A302 don't support track upload, so we convert the
      * track to a course on the fly and send that instead
      */
-    ret = GPS_Command_Send_Track_As_Course(port, trk, n, NULL, 0, eraset);
+    ret = GPS_Command_Send_Track_As_Course(port, trk, n, nullptr, 0, eraset);
     break;
   default:
     GPS_Error("Send_Track: Unknown track protocol %d.", gps_trk_transfer);
@@ -716,7 +716,7 @@ int32  GPS_Command_Get_Course
 
   switch (gps_course_lap_transfer) {
   case pA1007:
-    *n_clp = GPS_A1007_Get(port,clp, 0);
+    *n_clp = GPS_A1007_Get(port,clp, nullptr);
     break;
   default:
     GPS_Error("Get_Course: Unknown course lap protocol");
@@ -739,7 +739,7 @@ int32  GPS_Command_Get_Course
 
   switch (gps_course_point_transfer) {
   case pA1008:
-    *n_cpt = GPS_A1008_Get(port,cpt, 0);
+    *n_cpt = GPS_A1008_Get(port,cpt, nullptr);
     break;
   default:
     GPS_Error("Get_Course: Unknown course point protocol");
@@ -1087,7 +1087,7 @@ restart_tracks:
     if (!ctk[i]->ishdr) {
       continue;
     }
-    trk_idx = strtoul(ctk[i]->trk_ident, NULL, 0);
+    trk_idx = strtoul(ctk[i]->trk_ident, nullptr, 0);
     for (j=0; j<*n_crs; j++)
       if (crs[j]->track_index == trk_idx) {
         break;
@@ -1153,10 +1153,10 @@ restart_course_points:
 int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 n_trk,
                                        GPS_PWay* wpt, int32 n_wpt, int eraset)
 {
-  GPS_PCourse* crs = NULL;
-  GPS_PCourse_Lap* clp = NULL;
-  GPS_PTrack* ctk = NULL;
-  GPS_PCourse_Point* cpt = NULL;
+  GPS_PCourse* crs = nullptr;
+  GPS_PCourse_Lap* clp = nullptr;
+  GPS_PTrack* ctk = nullptr;
+  GPS_PCourse_Point* cpt = nullptr;
   int n_crs, n_clp=0, n_ctk=0, n_cpt=0;
   int i, j, trk_end, new_crs, first_new_ctk;
   int32 ret;
@@ -1165,7 +1165,7 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
   if (eraset) {
     n_crs = 0;
   } else {
-    n_crs = GPS_Command_Get_Course(port, &crs, &clp, &ctk, &cpt, &n_clp, &n_ctk, &n_cpt, NULL);
+    n_crs = GPS_Command_Get_Course(port, &crs, &clp, &ctk, &cpt, &n_clp, &n_ctk, &n_cpt, nullptr);
     if (n_crs < 0) {
       return n_crs;
     }
@@ -1252,7 +1252,7 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
     /* Find closest track point */
     for (j=first_new_ctk; j<n_ctk; j++) {
       if (ctk[j]->ishdr) {
-        trk_idx = strtoul(ctk[j]->trk_ident, NULL, 0);
+        trk_idx = strtoul(ctk[j]->trk_ident, nullptr, 0);
         continue;
       }
 

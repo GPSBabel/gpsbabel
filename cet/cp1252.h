@@ -29,7 +29,7 @@
 const char *cet_cs_alias_cp1252[] = 
 {
 	"CP1252", "1252", "ms-ansi", "windows-1252", "WIN-CP1252",
-	NULL
+	nullptr
 };
 
 #define cet_ucs4_ofs_cp1252 128
@@ -152,8 +152,8 @@ cet_cs_vec_t cet_cs_vec_cp1252 =	/* defined in cet.h */
 	cet_cs_name_cp1252,		/* name of character set	*/
 	cet_cs_alias_cp1252,		/* alias table			*/
 
-	NULL,				/* ... to UCS-4 converter (multi-byte) */
-	NULL,				/* UCS-4 to ... converter (multi-byte) */
+	nullptr,				/* ... to UCS-4 converter (multi-byte) */
+	nullptr,				/* UCS-4 to ... converter (multi-byte) */
 
 	cet_ucs4_map_cp1252,		/* char to UCS-4 value table	*/
 	cet_ucs4_ofs_cp1252,		/* first non standard character	*/
@@ -165,7 +165,7 @@ cet_cs_vec_t cet_cs_vec_cp1252 =	/* defined in cet.h */
 	cet_ucs4_to_cp1252_extra,	/* hand made UCS-4 links	*/
 	cet_ucs4_to_cp1252_extra_ct,	/* number of extra links	*/
 
-	NULL	/* for internal use */
+	nullptr	/* for internal use */
 };
 
 

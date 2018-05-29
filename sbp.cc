@@ -25,7 +25,7 @@
 
 #define MYNAME "sbp"
 
-static gbfile* file_handle = NULL;
+static gbfile* file_handle = nullptr;
 
 static
 arglist_t sbp_args[] = {
@@ -91,7 +91,7 @@ read_logpoint()
     return navilink_decode_logpoint(buffer);
   }
 
-  return NULL;
+  return nullptr;
 }
 
 static void
@@ -125,11 +125,11 @@ ff_vecs_t sbp_vecs = {
     ff_cap_none					/* routes */
   },
   sbp_rd_init,
-  NULL,
+  nullptr,
   sbp_rd_deinit,
-  NULL,
+  nullptr,
   sbp_read,
-  NULL,
+  nullptr,
   sbp_exit,
   sbp_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */

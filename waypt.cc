@@ -201,7 +201,7 @@ waypt_status_disp(int total_ct, int myct)
 void
 waypt_disp_all(waypt_cb cb)
 {
-  waypt_disp_session(NULL, cb);
+  waypt_disp_session(nullptr, cb);
 }
 
 void
@@ -216,7 +216,7 @@ waypt_disp_session(const session_t* se, waypt_cb cb)
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     waypointp = (Waypoint*) elem;
 #endif
-    if ((se == NULL) || (waypointp->session == se)) {
+    if ((se == nullptr) || (waypointp->session == se)) {
       if (global_opts.verbose_status) {
         i++;
         waypt_status_disp(waypt_count(), i);
@@ -315,7 +315,7 @@ find_waypt_by_name(const QString& name)
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 #if NEWQ
@@ -396,7 +396,7 @@ waypt_backup(signed int* count, queue** head_bak)
 void
 waypt_restore(signed int count, queue* head_bak)
 {
-  if (head_bak == NULL) {
+  if (head_bak == nullptr) {
     return;
   }
 
@@ -463,15 +463,15 @@ waypt_distance_ex(const Waypoint* A, const Waypoint* B)
   double res = 0;
   garmin_fs_p gmsd;
 
-  if ((A == NULL) || (B == NULL)) {
+  if ((A == nullptr) || (B == nullptr)) {
     return 0;
   }
 
-  if ((gmsd = GMSD_FIND(A)) && (gmsd->ilinks != NULL)) {
+  if ((gmsd = GMSD_FIND(A)) && (gmsd->ilinks != nullptr)) {
     garmin_ilink_t* link = gmsd->ilinks;
 
     res = gcgeodist(A->latitude, A->longitude, link->lat, link->lon);
-    while (link->next != NULL) {
+    while (link->next != nullptr) {
       garmin_ilink_t* prev = link;
       link = link->next;
       res += gcgeodist(prev->lat, prev->lon, link->lat, link->lon);
@@ -487,7 +487,7 @@ waypt_distance_ex(const Waypoint* A, const Waypoint* B)
 double
 waypt_distance(const Waypoint* A, const Waypoint* B)
 {
-  if ((A == NULL) || (B == NULL)) {
+  if ((A == nullptr) || (B == nullptr)) {
     return 0;
   } else {
     return gcgeodist(A->latitude, A->longitude, B->latitude, B->longitude);
@@ -622,9 +622,9 @@ Waypoint::Waypoint() :
   temperature(0),
   odometer_distance(0),
   gc_data(&Waypoint::empty_gc_data),
-  fs(NULL),
+  fs(nullptr),
   session(curr_session()),
-  extra_data(NULL)
+  extra_data(nullptr)
 {
   QUEUE_INIT(&Q);
 }
@@ -724,7 +724,7 @@ QString
 Waypoint::CreationTimeXML() const
 {
   if (!creation_time.isValid()) {
-    return NULL;
+    return nullptr;
   }
 
   QDateTime dt = GetCreationTime().toUTC();

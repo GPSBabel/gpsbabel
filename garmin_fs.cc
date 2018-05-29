@@ -35,14 +35,14 @@
 garmin_fs_t*
 garmin_fs_alloc(const int protocol)
 {
-  garmin_fs_t* result = NULL;
+  garmin_fs_t* result = nullptr;
 
   result = (garmin_fs_t*)xcalloc(1, sizeof(*result));
   result->fs.type = FS_GMSD;
   result->fs.copy = (fs_copy) garmin_fs_copy;
   result->fs.destroy = garmin_fs_destroy;
   result->fs.convert = garmin_fs_convert;
-  result->fs.next = NULL;
+  result->fs.next = nullptr;
 
   result->protocol = protocol;
 
@@ -53,50 +53,50 @@ void
 garmin_fs_destroy(void* fs)
 {
   garmin_fs_t* data = (garmin_fs_t*) fs;
-  if (data != NULL) {
+  if (data != nullptr) {
     garmin_ilink_t* ilinks;
 
-    if (data->addr != NULL) {
+    if (data->addr != nullptr) {
       xfree(data->addr);
     }
-    if (data->cc != NULL) {
+    if (data->cc != nullptr) {
       xfree(data->cc);
     }
-    if (data->city != NULL) {
+    if (data->city != nullptr) {
       xfree(data->city);
     }
-    if (data->country != NULL) {
+    if (data->country != nullptr) {
       xfree(data->country);
     }
-    if (data->cross_road != NULL) {
+    if (data->cross_road != nullptr) {
       xfree(data->cross_road);
     }
-    if (data->facility != NULL) {
+    if (data->facility != nullptr) {
       xfree(data->facility);
     }
-    if (data->phone_nr != NULL) {
+    if (data->phone_nr != nullptr) {
       xfree(data->phone_nr);
     }
-    if (data->phone_nr2 != NULL) {
+    if (data->phone_nr2 != nullptr) {
       xfree(data->phone_nr2);
     }
-    if (data->fax_nr != NULL) {
+    if (data->fax_nr != nullptr) {
       xfree(data->fax_nr);
     }
-    if (data->email != NULL) {
+    if (data->email != nullptr) {
       xfree(data->email);
     }
-    if (data->postal_code != NULL) {
+    if (data->postal_code != nullptr) {
       xfree(data->postal_code);
     }
-    if (data->state != NULL) {
+    if (data->state != nullptr) {
       xfree(data->state);
     }
 
-    if ((ilinks = data->ilinks) != NULL) {
+    if ((ilinks = data->ilinks) != nullptr) {
       ilinks->ref_count--;
       if (ilinks->ref_count <= 0) {
-        while (ilinks != NULL) {
+        while (ilinks != nullptr) {
           garmin_ilink_t* tmp = ilinks;
           ilinks = ilinks->next;
           xfree(tmp);
@@ -109,31 +109,31 @@ garmin_fs_destroy(void* fs)
 
 void garmin_fs_copy(garmin_fs_t** dest, garmin_fs_t* src)
 {
-  if (src == NULL) {
-    *dest = NULL;
+  if (src == nullptr) {
+    *dest = nullptr;
     return;
   }
   *dest = (garmin_fs_t*) xmalloc(sizeof(*src));
 
   /* do not copy interlinks, only increment the refrence counter */
-  if (src->ilinks != NULL) {
+  if (src->ilinks != nullptr) {
     src->ilinks->ref_count++;
   }
 
   memcpy(*dest, src, sizeof(*src));
 
-  (*dest)->addr = (src->addr != NULL) ? xstrdup(src->addr) : NULL;
-  (*dest)->cc = (src->cc != NULL) ? xstrdup(src->cc) : NULL;
-  (*dest)->city = (src->city != NULL) ? xstrdup(src->city) : NULL;
-  (*dest)->country = (src->country != NULL) ? xstrdup(src->country) : NULL;
-  (*dest)->cross_road = (src->cross_road != NULL) ? xstrdup(src->cross_road) : NULL;
-  (*dest)->facility = (src->facility != NULL) ? xstrdup(src->facility) : NULL;
-  (*dest)->phone_nr = (src->phone_nr != NULL) ? xstrdup(src->phone_nr) : NULL;
-  (*dest)->phone_nr2 = (src->phone_nr2 != NULL) ? xstrdup(src->phone_nr2) : NULL;
-  (*dest)->fax_nr = (src->fax_nr != NULL) ? xstrdup(src->fax_nr) : NULL;
-  (*dest)->email = (src->email != NULL) ? xstrdup(src->email) : NULL;
-  (*dest)->postal_code = (src->postal_code != NULL) ? xstrdup(src->postal_code) : NULL;
-  (*dest)->state = (src->state != NULL) ? xstrdup(src->state) : NULL;
+  (*dest)->addr = (src->addr != nullptr) ? xstrdup(src->addr) : nullptr;
+  (*dest)->cc = (src->cc != nullptr) ? xstrdup(src->cc) : nullptr;
+  (*dest)->city = (src->city != nullptr) ? xstrdup(src->city) : nullptr;
+  (*dest)->country = (src->country != nullptr) ? xstrdup(src->country) : nullptr;
+  (*dest)->cross_road = (src->cross_road != nullptr) ? xstrdup(src->cross_road) : nullptr;
+  (*dest)->facility = (src->facility != nullptr) ? xstrdup(src->facility) : nullptr;
+  (*dest)->phone_nr = (src->phone_nr != nullptr) ? xstrdup(src->phone_nr) : nullptr;
+  (*dest)->phone_nr2 = (src->phone_nr2 != nullptr) ? xstrdup(src->phone_nr2) : nullptr;
+  (*dest)->fax_nr = (src->fax_nr != nullptr) ? xstrdup(src->fax_nr) : nullptr;
+  (*dest)->email = (src->email != nullptr) ? xstrdup(src->email) : nullptr;
+  (*dest)->postal_code = (src->postal_code != nullptr) ? xstrdup(src->postal_code) : nullptr;
+  (*dest)->state = (src->state != nullptr) ? xstrdup(src->state) : nullptr;
 }
 
 void garmin_fs_convert(void* fs)
@@ -187,7 +187,7 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
   const char* phone, *addr;
   garmin_fs_t* gmsd = GMSD_FIND(waypt);
 
-  if (gmsd == NULL) {
+  if (gmsd == nullptr) {
     return;
   }
 
@@ -293,7 +293,7 @@ garmin_fs_xml_convert(const int base_tag, int tag, const QString& Qcdatastr, Way
 // FIXME: eliminate C string copy/use here:
   const char *cdatastr = xstrdup(Qcdatastr);
   gmsd = GMSD_FIND(waypt);
-  if (gmsd == NULL) {
+  if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
     fs_chain_add(&waypt->fs, (format_specific_data*) gmsd);
   }
@@ -382,7 +382,7 @@ garmin_fs_convert_category(const char* category_name, uint16_t* category)
       (1 == sscanf(category_name + 9, "%d", &i)) &&
       (i >= 1) && (i <= 16)) {
     cat = (1 << --i);
-  } else if (global_opts.inifile != NULL) {
+  } else if (global_opts.inifile != nullptr) {
     // Do we have a gpsbabel.ini that maps category names to category #'s?
     for (i = 0; i < 16; i++) {
       char* c;
@@ -390,7 +390,7 @@ garmin_fs_convert_category(const char* category_name, uint16_t* category)
 
       snprintf(key, sizeof(key), "%d", i + 1);
       c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
-      if ((c != NULL) && (case_ignore_strcmp(c, category_name) == 0)) {
+      if ((c != nullptr) && (case_ignore_strcmp(c, category_name) == 0)) {
         cat = (1 << i);
         break;
       }
@@ -418,7 +418,7 @@ garmin_fs_merge_category(const char* category_name, Waypoint* waypt)
   gmsd = GMSD_FIND(waypt);
   cat = cat | (GMSD_GET(category, 0));
 
-  if (gmsd == NULL) {
+  if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
     fs_chain_add(&waypt->fs, (format_specific_data*) gmsd);
   }
@@ -429,7 +429,7 @@ garmin_fs_merge_category(const char* category_name, Waypoint* waypt)
 void
 garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid)
 {
-  garmin_fs_t* gmsd = NULL;
+  garmin_fs_t* gmsd = nullptr;
 
   gmsd = garmin_fs_alloc(protoid);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
@@ -468,7 +468,7 @@ garmin_fs_garmin_before_write(const Waypoint* wpt, GPS_PWay way, const int proto
 
   (void)protoid; // unused for now.
 
-  if (gmsd == NULL) {
+  if (gmsd == nullptr) {
     return;
   }
 

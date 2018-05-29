@@ -78,8 +78,8 @@ static char strComment[101];
 /* wp - process only waypoints */
 /* rte - process as route */
 /* wprte - Process waypoints and route */
-static char* process = NULL;
-static char* reorder = NULL;
+static char* process = nullptr;
+static char* reorder = nullptr;
 static int process_rte = 1;
 static int reorder_wp = 0;
 
@@ -293,7 +293,7 @@ data_write()
     nof_wp = route_waypt_count();
     if (nof_wp) {
       header_write();
-      route_disp_all(NULL, NULL, ng_waypt_rd);
+      route_disp_all(nullptr, nullptr, ng_waypt_rd);
     }
   }
 }
@@ -304,7 +304,7 @@ wr_init(const QString& fname)
 {
   file_out = gbfopen_le(fname, "wb", MYNAME);
   ng_fill_header_default();
-  if (NULL != reorder)
+  if (nullptr != reorder)
     if (!case_ignore_strcmp(reorder, "y")) {
       reorder_wp = 1;
     }
@@ -326,7 +326,7 @@ rd_init(const QString& fname)
 
   ng_read_file_header();
 
-  if (NULL != process) {
+  if (nullptr != process) {
     if (!case_ignore_strcmp(process, "wp")) {
       process_rte = 0;
     }
@@ -342,7 +342,7 @@ static void
 rd_deinit()
 {
   gbfclose(file_in);
-  file_in = NULL;
+  file_in = nullptr;
 }
 
 
@@ -420,7 +420,7 @@ ff_vecs_t ng_vecs = {
   wr_deinit,
   data_read,
   data_write,
-  NULL,
+  nullptr,
   ng_args,
   CET_CHARSET_HEBREW, 0
   , NULL_POS_OPS,

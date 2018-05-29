@@ -35,7 +35,7 @@
 
 static gbfile* maggeofile_in;
 static gbfile* maggeofile_out;
-static short_handle desc_handle = NULL;
+static short_handle desc_handle = nullptr;
 
 static QDateTime maggeo_parsedate(char* dmy);
 
@@ -86,7 +86,7 @@ maggeo_read()
   while ((buff = gbfgetstr(maggeofile_in))) {
     Waypoint* wpt_tmp;
     geocache_data* gcdata;
-    char* s = NULL;
+    char* s = nullptr;
     int fld;
 
     buff = lrtrim(buff);
@@ -104,7 +104,7 @@ maggeo_read()
     gcdata = wpt_tmp->AllocGCData();
 
     while ((s = csv_lineparse(buff, ",", "", fld++))) {
-      buff = NULL;
+      buff = nullptr;
 
       s = lrtrim(s);
       if (*s == '\0') {
@@ -241,7 +241,7 @@ maggeo_waypt_pr(const Waypoint* waypointp)
   double ilon, ilat;
   double lon, lat;
   int lon_deg, lat_deg;
-  const char* ctype = NULL;
+  const char* ctype = nullptr;
   QString placer;
 
   ilat = waypointp->latitude;
@@ -332,8 +332,8 @@ ff_vecs_t maggeo_vecs = {
   maggeo_wr_deinit,
   maggeo_read,
   maggeo_write,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
 #if FIRMWARE_DOES_88591
   CET_CHARSET_LATIN1, 0	/* CET-REVIEW */
 #else

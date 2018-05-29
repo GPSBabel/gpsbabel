@@ -14,7 +14,7 @@ explorist_read_value(const char* section, const char* key)
 static mag_info*
 explorist_ini_try(const char* path)
 {
-  mag_info* info = NULL;
+  mag_info* info = nullptr;
   char* inipath;
   char* s;
 
@@ -22,13 +22,13 @@ explorist_ini_try(const char* path)
   inifile = inifile_init(QString::fromUtf8(inipath), myname);
   if (!inifile) {
     xfree(inipath);
-    return NULL;
+    return nullptr;
   }
 
   info = (mag_info*) xmalloc(sizeof(mag_info));
-  info->geo_path = NULL;
-  info->track_path = NULL;
-  info->waypoint_path = NULL;
+  info->geo_path = nullptr;
+  info->track_path = nullptr;
+  info->waypoint_path = nullptr;
 
   s = xstrdup(inifile_readstr(inifile,  "UGDS", "WpFolder"));
   if (s) {
@@ -54,7 +54,7 @@ explorist_ini_try(const char* path)
 mag_info*
 explorist_ini_get(const char** dirlist)
 {
-  mag_info* r = NULL;
+  mag_info* r = nullptr;
   while (dirlist && *dirlist) {
     r = explorist_ini_try(*dirlist);
     if (r) {

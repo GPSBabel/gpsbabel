@@ -108,11 +108,11 @@ ff_vecs_t teletype_vecs = {
     ff_cap_none 			/* routes */
   },
   teletype_rd_init,
-  NULL,
+  nullptr,
   teletype_rd_deinit,
-  NULL,
+  nullptr,
   teletype_read,
-  NULL,
+  nullptr,
   teletype_exit,
   teletype_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */

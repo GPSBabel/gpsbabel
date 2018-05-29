@@ -65,11 +65,11 @@ static
 arglist_t bcr_args[] = {
   {
     "index", &rtenum_opt, "Index of route to write (if more than one in source)",
-    NULL, ARGTYPE_INT, "1", NULL, nullptr
+    nullptr, ARGTYPE_INT, "1", nullptr, nullptr
   },
   {
     "name", &rtename_opt, "New name for the route",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "radius", &radius_opt, "Radius of our big earth (default 6371000 meters)", "6371000",
@@ -77,7 +77,7 @@ arglist_t bcr_args[] = {
   },
   {
     "prefer_shortnames", &prefer_shortnames_opt, "Use shortname instead of description",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -94,7 +94,7 @@ bcr_icon_mapping_t bcr_icon_mapping[] = {
   { BCR_DEF_ICON,		BCR_DEF_MPS_ICON, 	BCR_DEF_ICON, false },
   { "",			BCR_DEF_MPS_ICON, 	"Eigene Adressen", false },
   { "AdrMon alpen",	"Summit",		"Pass-Strassen", false },
-  { "AdrMon bauern",	NULL,			"Bauern- und Biohoefe", false },
+  { "AdrMon bauern",	nullptr,			"Bauern- und Biohoefe", false },
   { "AdrMon cmpngs",	"Campground",		"Campingplaetzte", false },
   { "AdrMon p_aeu",	"Scenic Area",		"Sehenswertes", false },
   { "AdrMon p_beu",	"Gas Station",		"Tanken", false },
@@ -102,25 +102,25 @@ bcr_icon_mapping_t bcr_icon_mapping[] = {
   { "AdrMon p_feu",	"Restaurant",		"Gastro", false },
   { "AdrMon p_geu",	"Museum",		"Freizeit", false },
   { "AdrMon p_heu",	"Gas Station",		"Tankstellen", false },
-  { "AdrMon p_keu",	NULL,			"Faehrverbindungen", false },
-  { "AdrMon p_leu",	NULL,			"Grenzuebergaenge", false },
-  { "AdrMon p_teu",	NULL,			"Wein- und Sektgueter", false },
+  { "AdrMon p_keu",	nullptr,			"Faehrverbindungen", false },
+  { "AdrMon p_leu",	nullptr,			"Grenzuebergaenge", false },
+  { "AdrMon p_teu",	nullptr,			"Wein- und Sektgueter", false },
   { "AdrMon RUINEN",	"Ghost Town",		"Burgen und Schloesser", false },
   { "AdrMon NFHAUS",	"Residence",		"Naturfreundehaeuser", false },
   { "AdrMon racing",	"Bike Trail",		"Rennstrecken", false },
   { "AdrMon TNKRST",	"Bar",			"Tankraststaetten", false },
   { "AdrMon tpclub",	"Contact, Biker",	"Motorrad-Clubs", false },
-  { "AdrMon tpequ",	NULL,			"Motorrad-Equipment", false },
+  { "AdrMon tpequ",	nullptr,			"Motorrad-Equipment", false },
   { "AdrMon tphot",	"Hotel",		"Motorrad-Hotels", false },
-  { "AdrMon tpmh",	NULL,			"Motorradhaendler", false },
+  { "AdrMon tpmh",	nullptr,			"Motorradhaendler", false },
   { "AdrMon tpss",	"Restricted Area",	"Sperrungen", false },
   { "AdrMon tpsw",	"Scenic Area",		"Sehenswertes", false },
-  { "AdrMon tptref",	NULL,			"Treffpunkte", false },
+  { "AdrMon tptref",	nullptr,			"Treffpunkte", false },
   { "AdrMon VORTE",	"Information",		"Ortsinformationen", false },
-  { "AdrMon WEBCAM",	NULL,			"WebCam-Standorte", false },
-  { "AdrMon youthh",	NULL,			"Jugendherbergen", false },
+  { "AdrMon WEBCAM",	nullptr,			"WebCam-Standorte", false },
+  { "AdrMon youthh",	nullptr,			"Jugendherbergen", false },
   { "Town",		"City (Small)",		"Orte", false },
-  { NULL,			NULL,			NULL, false }
+  { nullptr,			nullptr,			nullptr, false }
 };
 
 static void
@@ -134,7 +134,7 @@ bcr_handle_icon_str(const char* str, Waypoint* wpt)
     if (case_ignore_strcmp(str, m->bcr_name) == 0) {
       int nr;
 
-      if (m->symbol_DE == NULL) {
+      if (m->symbol_DE == nullptr) {
         if (! m->warned) {
           m->warned = true;
           warning(MYNAME ": Unknown icon \"%s\" found. Please report.\n", str);
@@ -142,7 +142,7 @@ bcr_handle_icon_str(const char* str, Waypoint* wpt)
         return;
       }
       wpt->description = m->symbol_DE;
-      if (m->mps_name != NULL) {
+      if (m->mps_name != nullptr) {
         nr = gt_find_icon_number_from_desc(m->mps_name, MAPSOURCE);
         wpt->icon_descr = gt_find_desc_from_icon_number(nr, MAPSOURCE);
       }
@@ -175,7 +175,7 @@ get_bcr_icon_from_icon_descr(const QString& icon_descr)
 static void
 bcr_init_radius()
 {
-  if (radius_opt != NULL) {			/* preinitialize the earth radius */
+  if (radius_opt != nullptr) {			/* preinitialize the earth radius */
     radius = atof(radius_opt);
     if (radius <= 0) {
       fatal(MYNAME ": Sorry, the radius should be greater than zero!\n");
@@ -274,7 +274,7 @@ bcr_data_read()
     Waypoint* wpt;
 
     snprintf(station, sizeof(station), "STATION%d", index);
-    if (NULL == (str = inifile_readstr(ini, "coordinates", station))) {
+    if (nullptr == (str = inifile_readstr(ini, "coordinates", station))) {
       break;
     }
 
@@ -287,22 +287,22 @@ bcr_data_read()
     wpt->shortname = station;
     bcr_mercator_to_wgs84(mlat, mlon, &wpt->latitude, &wpt->longitude);
 
-    if (NULL != (str = inifile_readstr(ini, "client", station))) {
+    if (nullptr != (str = inifile_readstr(ini, "client", station))) {
       char* cx;
 
       cx = strchr(str, ',');
-      if (cx == NULL) {
+      if (cx == nullptr) {
         fatal(MYNAME ": structure error at %s (Client)!\n", station);
       }
       *cx++ = '\0';
       bcr_handle_icon_str(str, wpt);
     }
 
-    if (NULL != (str = inifile_readstr(ini, "description", station))) {
+    if (nullptr != (str = inifile_readstr(ini, "description", station))) {
       char* c;
 
       c = strchr(str, ',');
-      if (c != NULL) {
+      if (c != nullptr) {
         *c = '\0';
       }
       if (*str) {
@@ -311,7 +311,7 @@ bcr_data_read()
       if ((str = c)) {
         str++;
         c = strchr(str, ',');
-        if (c != NULL) {
+        if (c != nullptr) {
           *c = '\0';
         }
         if (*str) {
@@ -364,8 +364,8 @@ void bcr_write_line(gbfile* fout, const QString& key, int* index, const QString&
   } else {
     char* tmp;
 
-    tmp = (value != NULL) ? xstrdup(value) : xstrdup("");
-    if (index != NULL) {
+    tmp = (value != nullptr) ? xstrdup(value) : xstrdup("");
+    if (index != nullptr) {
       gbfprintf(fout, "%s%d=%s\r\n", CSTR(key), *index, tmp);
     } else {
       gbfprintf(fout, "%s=%s\r\n", CSTR(key), tmp);
@@ -387,20 +387,20 @@ bcr_route_header(const route_head* route)
     return;
   }
 
-  bcr_write_line(fout, "[CLIENT]", NULL, NULL);			/* client section */
-  bcr_write_line(fout, "REQUEST", NULL, "TRUE");
+  bcr_write_line(fout, "[CLIENT]", nullptr, nullptr);			/* client section */
+  bcr_write_line(fout, "REQUEST", nullptr, "TRUE");
 
   sout = route->rte_name;
-  if (rtename_opt != 0) {
+  if (rtename_opt != nullptr) {
     sout = rtename_opt;
   }
-  if (sout != NULL) {
-    bcr_write_line(fout, "ROUTENAME", NULL, sout);
+  if (sout != nullptr) {
+    bcr_write_line(fout, "ROUTENAME", nullptr, sout);
   } else {
-    bcr_write_line(fout, "ROUTENAME", NULL, "Route");
+    bcr_write_line(fout, "ROUTENAME", nullptr, "Route");
   }
 
-  bcr_write_line(fout, "DESCRIPTIONLINES", NULL, "0");
+  bcr_write_line(fout, "DESCRIPTIONLINES", nullptr, "0");
 
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
@@ -415,7 +415,7 @@ bcr_route_header(const route_head* route)
     bcr_write_line(fout, "STATION", &i, sout);
   }
 
-  bcr_write_line(fout, "[COORDINATES]", NULL, NULL);		/* coords section */
+  bcr_write_line(fout, "[COORDINATES]", nullptr, nullptr);		/* coords section */
 
   nmin = emin = (1<<30);
   emax = nmax = -nmin;
@@ -444,7 +444,7 @@ bcr_route_header(const route_head* route)
     bcr_write_line(fout, "STATION", &i, sout);
   }
 
-  bcr_write_line(fout, "[DESCRIPTION]", NULL, NULL);		/* descr. section */
+  bcr_write_line(fout, "[DESCRIPTION]", nullptr, nullptr);		/* descr. section */
 
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
@@ -484,13 +484,13 @@ bcr_route_header(const route_head* route)
     bcr_write_line(fout, "STATION", &i, sout);
   }
 
-  bcr_write_line(fout, "[ROUTE]", NULL, NULL);		/* route section */
+  bcr_write_line(fout, "[ROUTE]", nullptr, nullptr);		/* route section */
 
   sout = QString::number(emin) + "," +
          QString::number(nmax) + "," +
          QString::number(emax) + "," +
          QString::number(nmin);
-  bcr_write_line(fout, "ROUTERECT", NULL, sout);
+  bcr_write_line(fout, "ROUTERECT", nullptr, sout);
 }
 
 static void
@@ -498,7 +498,7 @@ bcr_data_write()
 {
   target_rte_num = 1;
 
-  if (rtenum_opt != NULL) {
+  if (rtenum_opt != nullptr) {
     target_rte_num = atoi(rtenum_opt);
     if (((unsigned)target_rte_num > route_count()) || (target_rte_num < 1))
       fatal(MYNAME ": invalid route number %d (1..%d))!\n",
@@ -517,7 +517,7 @@ ff_vecs_t bcr_vecs = {
   bcr_wr_deinit,
   bcr_data_read,
   bcr_data_write,
-  NULL,
+  nullptr,
   bcr_args,
   CET_CHARSET_MS_ANSI, 0,	/* CET-REVIEW */
   NULL_POS_OPS,

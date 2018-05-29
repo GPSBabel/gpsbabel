@@ -39,7 +39,7 @@ static
 arglist_t gpssim_args[] = {
   {
     "wayptspd", &wayptspd, "Default speed for waypoints (knots/hr)",
-    NULL, ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
   },
   {
     "split", &splitfiles_opt, "Split input into separate files",
@@ -77,7 +77,7 @@ gpssim_wr_deinit()
 {
   if (fout) {
     gbfclose(fout);
-    fout = NULL;
+    fout = nullptr;
   }
 
   fnamestr.clear();
@@ -152,7 +152,7 @@ gpssim_trk_hdr(const route_head* rh)
     QString ofname = QString("%1%2%3.gpssim").arg(fnamestr).arg(doing_tracks ? "-track" : "-route").arg(trk_count++, 4, 10, QChar('0'));
     fout = gbfopen(ofname, "wb", MYNAME);
   }
-  track_recompute(rh, NULL);
+  track_recompute(rh, nullptr);
 }
 
 static void
@@ -160,7 +160,7 @@ gpssim_trk_ftr(const route_head*)
 {
   if (splitfiles) {
     gbfclose(fout);
-    fout = NULL;
+    fout = nullptr;
   }
 }
 
@@ -178,7 +178,7 @@ gpssim_write()
     waypt_disp_all(gpssim_write_pt);
     if (splitfiles) {
       gbfclose(fout);
-      fout = NULL;
+      fout = nullptr;
     }
   }
 
@@ -194,13 +194,13 @@ gpssim_write()
 ff_vecs_t gpssim_vecs = {
   ff_type_file,
   { ff_cap_write, ff_cap_write, ff_cap_write },
-  NULL,
+  nullptr,
   gpssim_wr_init,
-  NULL,
+  nullptr,
   gpssim_wr_deinit,
-  NULL,
+  nullptr,
   gpssim_write,
-  NULL,
+  nullptr,
   gpssim_args,
   CET_CHARSET_ASCII, 0
   , NULL_POS_OPS,

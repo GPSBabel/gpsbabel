@@ -100,9 +100,9 @@ load_args(const QString& filename, const QString& arg0)
   char* cbuff = xstrdup(CSTR(line));
 
   char* cstr = csv_lineparse(cbuff, " ", "\"", 0);
-  while (cstr != NULL) {
+  while (cstr != nullptr) {
     qargs.append(QString::fromUtf8(cstr));
-    cstr = csv_lineparse(NULL, " ", "\"", 0);
+    cstr = csv_lineparse(nullptr, " ", "\"", 0);
   }
 
   xfree(cbuff);
@@ -202,14 +202,14 @@ main(int argc, char* argv[])
 #endif
   int c;
   int argn;
-  ff_vecs_t* ivecs = NULL;
-  ff_vecs_t* ovecs = NULL;
-  filter_vecs_t* fvecs = NULL;
+  ff_vecs_t* ivecs = nullptr;
+  ff_vecs_t* ovecs = nullptr;
+  filter_vecs_t* fvecs = nullptr;
   QString fname;
   QString ofname;
-  const char* ivec_opts = NULL;
-  const char* ovec_opts = NULL;
-  const char* fvec_opts = NULL;
+  const char* ivec_opts = nullptr;
+  const char* ovec_opts = nullptr;
+  const char* fvec_opts = nullptr;
   int opt_version = 0;
   int did_something = 0;
   const char* prog_name = argv[0]; /* argv is modified during processing */
@@ -250,7 +250,7 @@ main(int argc, char* argv[])
   // Note the documentation says to set LC_NUMERIC, but QCoreApplicationPrivate::initLocale()
   // actually sets LC_ALL.
   // Perhaps we should restore LC_ALL instead of only LC_NUMERIC.
-  if (strcmp(setlocale(LC_NUMERIC,0), "C") != 0) {
+  if (strcmp(setlocale(LC_NUMERIC,nullptr), "C") != 0) {
 #ifdef DEBUG_LOCALE
     printf("Resetting LC_NUMERIC\n");
 #endif
@@ -260,7 +260,7 @@ main(int argc, char* argv[])
 #endif
   }
   /* reset LC_TIME for strftime */
-  if (strcmp(setlocale(LC_TIME,0), "C") != 0) {
+  if (strcmp(setlocale(LC_TIME,nullptr), "C") != 0) {
 #ifdef DEBUG_LOCALE
     printf("Resetting LC_TIME\n");
 #endif
@@ -273,9 +273,9 @@ main(int argc, char* argv[])
   global_opts.objective = wptdata;
   global_opts.masked_objective = NOTHINGMASK;	/* this makes the default mask behaviour slightly different */
   global_opts.charset_name.clear();
-  global_opts.inifile = NULL;
+  global_opts.inifile = nullptr;
 
-  gpsbabel_now = time(NULL);			/* gpsbabel startup-time */
+  gpsbabel_now = time(nullptr);			/* gpsbabel startup-time */
   gpsbabel_time = current_time().toTime_t();			/* same like gpsbabel_now, but freezed to zero during testo */
 
 #ifdef DEBUG_MEM
@@ -346,17 +346,17 @@ main(int argc, char* argv[])
     case 'i':
       optarg = FETCH_OPTARG;
       ivecs = find_vec(CSTR(optarg), &ivec_opts);
-      if (ivecs == NULL) {
+      if (ivecs == nullptr) {
         fatal("Input type '%s' not recognized\n", qPrintable(optarg));
       }
       break;
     case 'o':
-      if (ivecs == NULL) {
+      if (ivecs == nullptr) {
         warning("-o appeared before -i.   This is probably not what you want to do.\n");
       }
       optarg = FETCH_OPTARG;
       ovecs = find_vec(CSTR(optarg), &ovec_opts);
-      if (ovecs == NULL) {
+      if (ovecs == nullptr) {
         fatal("Output type '%s' not recognized\n", qPrintable(optarg));
       }
       break;
@@ -366,10 +366,10 @@ main(int argc, char* argv[])
       if (fname.isEmpty()) {
         fatal("No file or device name specified.\n");
       }
-      if (ivecs == NULL) {
+      if (ivecs == nullptr) {
         fatal("No valid input type specified\n");
       }
-      if (ivecs->rd_init == NULL) {
+      if (ivecs->rd_init == nullptr) {
         fatal("Format does not support reading.\n");
       }
       if (global_opts.masked_objective & POSNDATAMASK) {
@@ -388,7 +388,7 @@ main(int argc, char* argv[])
       ivecs->read();
       ivecs->rd_deinit();
 
-      cet_convert_strings(global_opts.charset, NULL, NULL);
+      cet_convert_strings(global_opts.charset, nullptr, nullptr);
       cet_convert_deinit();
 
       did_something = 1;
@@ -404,7 +404,7 @@ main(int argc, char* argv[])
         if (doing_nothing) {
           global_opts.masked_objective |= WPTDATAMASK;
         }
-        if (ovecs->wr_init == NULL) {
+        if (ovecs->wr_init == nullptr) {
           fatal("Format does not support writing.\n");
         }
 
@@ -413,7 +413,7 @@ main(int argc, char* argv[])
         wpt_ct_bak = -1;
         rte_ct_bak = -1;
         trk_ct_bak = -1;
-        rte_head_bak = trk_head_bak = NULL;
+        rte_head_bak = trk_head_bak = nullptr;
 
         ovecs->wr_init(ofname);
 
@@ -430,7 +430,7 @@ main(int argc, char* argv[])
           route_backup(&rte_ct_bak, &rte_head_bak);
           track_backup(&trk_ct_bak, &trk_head_bak);
 
-          cet_convert_strings(NULL, global_opts.charset, NULL);
+          cet_convert_strings(nullptr, global_opts.charset, nullptr);
           global_opts.verbose_status = saved_status;
         }
 
@@ -562,7 +562,7 @@ main(int argc, char* argv[])
       optarg = FETCH_OPTARG;
       inifile_done(global_opts.inifile);
       if (optarg.isEmpty()) {	/* from GUI to preserve inconsistent options */
-        global_opts.inifile = NULL;
+        global_opts.inifile = nullptr;
       } else {
         global_opts.inifile = inifile_init(optarg, MYNAME);
       }
@@ -612,21 +612,21 @@ main(int argc, char* argv[])
     cet_convert_init(ivecs->encode, 1);
 
     start_session(ivecs->name, CSTR(qargs.at(0)));
-    if (ivecs->rd_init == NULL) {
+    if (ivecs->rd_init == nullptr) {
       fatal("Format does not support reading.\n");
     }
     ivecs->rd_init(qargs.at(0));
     ivecs->read();
     ivecs->rd_deinit();
 
-    cet_convert_strings(global_opts.charset, NULL, NULL);
+    cet_convert_strings(global_opts.charset, nullptr, nullptr);
     cet_convert_deinit();
 
     if (qargs.size() == 2 && ovecs) {
       cet_convert_init(ovecs->encode, 1);
-      cet_convert_strings(NULL, global_opts.charset, NULL);
+      cet_convert_strings(nullptr, global_opts.charset, nullptr);
 
-      if (ovecs->wr_init == NULL) {
+      if (ovecs->wr_init == nullptr) {
         fatal("Format does not support writing.\n");
       }
 
@@ -640,7 +640,7 @@ main(int argc, char* argv[])
     usage(prog_name,0);
     exit(0);
   }
-  if (ovecs == NULL) {
+  if (ovecs == nullptr) {
     /*
      * Push and pop verbose_status so we don't get dual
      * progress bars when doing characterset transformation.
@@ -648,7 +648,7 @@ main(int argc, char* argv[])
     int saved_status = global_opts.verbose_status;
     global_opts.verbose_status = 0;
     cet_convert_init(CET_CHARSET_ASCII, 1);
-    cet_convert_strings(NULL, global_opts.charset, NULL);
+    cet_convert_strings(nullptr, global_opts.charset, nullptr);
     waypt_disp_all(waypt_disp);
     global_opts.verbose_status = saved_status;
   }

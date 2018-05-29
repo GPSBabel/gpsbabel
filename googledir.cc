@@ -46,7 +46,7 @@ xg_tag_mapping google_map[] = {
   { goog_points,  cb_cdata,       "/DirectionsResponse/route/leg/step/polyline/points" },
   { goog_poly_e,  cb_end,         "/DirectionsResponse/route/leg/step" },
   { goog_instr,   cb_cdata,       "/DirectionsResponse/route/leg/step/html_instructions" },
-  { NULL, (xg_cb_type)0,              NULL }
+  { nullptr, (xg_cb_type)0,              nullptr }
 };
 
 void
@@ -100,7 +100,7 @@ goog_poly_e(xg_string args, const QXmlStreamAttributes*)
   } else {
     goog_step++;
     routehead->rte_name = QString("step%1").arg(goog_step, 3, 10, QChar('0'));
-    if (instructions == NULL) {
+    if (instructions == nullptr) {
       routehead->rte_desc = QString("Step %1").arg(goog_step);
     } else {
       utf_string utf;
@@ -136,7 +136,7 @@ google_rd_init(const QString& fname)
   setshort_length(desc_handle, 12);
 
   // leave default of UTF-8 unless xml file overrides with encoding=
-  xml_init(fname, google_map, NULL);
+  xml_init(fname, google_map, nullptr);
 }
 
 static void
@@ -159,13 +159,13 @@ ff_vecs_t google_dir_vecs = {
   ff_type_file,
   { ff_cap_none, ff_cap_read, ff_cap_none},
   google_rd_init,
-  NULL,
+  nullptr,
   google_rd_deinit,
-  NULL,
+  nullptr,
   google_read,
-  NULL,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
+  nullptr,
   CET_CHARSET_UTF8, 1	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

@@ -23,31 +23,31 @@
 #include <cstdio>
 
 /* argument storage */
-static char* 	aicicon	=0;
-static char* 	aioicon =0;
-static char* 	ahcicon =0;
-static char* 	ahoicon =0;
-static char* 	snmac	=0;
+static char* 	aicicon	=nullptr;
+static char* 	aioicon =nullptr;
+static char* 	ahcicon =nullptr;
+static char* 	ahoicon =nullptr;
+static char* 	snmac	=nullptr;
 
 static
 arglist_t wfff_xml_args[] = {
   {
     "aicicon", &aicicon, "Infrastructure closed icon name",
-    "Red Square", ARGTYPE_STRING, ARG_NOMINMAX, NULL
+    "Red Square", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "aioicon", &aioicon, "Infrastructure open icon name",
-    "Green Square", ARGTYPE_STRING, ARG_NOMINMAX, NULL
+    "Green Square", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "ahcicon", &ahcicon, "Ad-hoc closed icon name",
-    "Red Diamond", ARGTYPE_STRING, ARG_NOMINMAX, NULL
+    "Red Diamond", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "ahoicon", &ahoicon, "Ad-hoc open icon name",
-    "Green Diamond", ARGTYPE_STRING, ARG_NOMINMAX, NULL
+    "Green Diamond", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
-  {"snmac", &snmac, "Shortname is MAC address", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL },
+  {"snmac", &snmac, "Shortname is MAC address", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
 
@@ -78,7 +78,7 @@ xg_tag_mapping loc_map[] = {
   { wfff_hdop, 	cb_cdata, 	"/DocumentElement/AP/HDOP"		},
   { wfff_lat, 	cb_cdata, 	"/DocumentElement/AP/Lat"		},
   { wfff_lon, 	cb_cdata, 	"/DocumentElement/AP/Lon"		},
-  { 0,(xg_cb_type)0,0 }
+  { nullptr,(xg_cb_type)0,nullptr }
 };
 
 /* work variables for wfff_xxx */
@@ -150,7 +150,7 @@ static long tosscount=0;
 
 void wfff_e(xg_string, const QXmlStreamAttributes*)
 {
-  Waypoint*	wpt_tmp		=0;
+  Waypoint*	wpt_tmp		=nullptr;
   char		desc[255]	="\0";
 
   if ((ap_hdop>=1)&&(ap_hdop<50)) { // Discard invalid GPS fix
@@ -204,7 +204,7 @@ wfff_xml_rd_init(const QString& fname)
 {
   tosscount = 0;
 
-  xml_init(fname, loc_map, NULL);
+  xml_init(fname, loc_map, nullptr);
 }
 
 void
@@ -229,12 +229,12 @@ ff_vecs_t wfff_xml_vecs = {
   ff_type_file,
   {ff_cap_read, ff_cap_none, ff_cap_none},
   wfff_xml_rd_init,
-  0,
+  nullptr,
   wfff_xml_rd_deinit,
-  0,
+  nullptr,
   wfff_xml_read,
-  0,
-  0,
+  nullptr,
+  nullptr,
   wfff_xml_args,
   CET_CHARSET_UTF8, 0,
   NULL_POS_OPS,

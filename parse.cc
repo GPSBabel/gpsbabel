@@ -40,11 +40,11 @@ parse_distance(const char* str, double* val, double scale, const char* module)
 {
   char* unit;
 
-  if ((str == NULL) || (*str == '\0')) {
+  if ((str == nullptr) || (*str == '\0')) {
     return 0;
   }
   *val = strtod(str, &unit);
-  if (unit == NULL) {
+  if (unit == nullptr) {
     fatal("%s: Unconvertable numeric value (%s)!\n", module, str);
   }
 
@@ -100,12 +100,12 @@ parse_speed(const char* str, double* val, const double scale, const char* module
 {
   char* unit;
 
-  if ((str == NULL) || (*str == '\0')) {
+  if ((str == nullptr) || (*str == '\0')) {
     return 0;
   }
 
   *val = strtod(str, &unit);
-  if (unit == NULL) {
+  if (unit == nullptr) {
     fatal("%s: Unconvertable numeric value (%s)!\n", module, str);
   }
 

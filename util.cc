@@ -238,9 +238,9 @@ FILE*
 xfopen(const char* fname, const char* type, const char* errtxt)
 {
   FILE* f;
-  int am_writing = strchr(type, 'w') != NULL;
+  int am_writing = strchr(type, 'w') != nullptr;
 
-  if (fname == NULL) {
+  if (fname == nullptr) {
     fatal("%s must have a filename specified for %s.\n",
           errtxt, am_writing ? "write" : "read");
   }
@@ -249,7 +249,7 @@ xfopen(const char* fname, const char* type, const char* errtxt)
     return am_writing ? stdout : stdin;
   }
   f = ufopen(QString::fromUtf8(fname), type);
-  if (NULL == f) {
+  if (nullptr == f) {
     fatal("%s cannot open '%s' for %s.  Error was '%s'.\n",
           errtxt, fname,
           am_writing ? "write" : "read",
@@ -336,7 +336,7 @@ xvasprintf(char** strp, const char* fmt, va_list ap)
 #else
 # define	FIRSTSIZE	1
 #endif
-  char* buf = NULL;
+  char* buf = nullptr;
   int bufsize;
   char* newbuf;
   size_t nextsize = 0;
@@ -346,17 +346,17 @@ xvasprintf(char** strp, const char* fmt, va_list ap)
   bufsize = 0;
   for (;;) {
     if (bufsize == 0) {
-      if ((buf = (char*) xmalloc(FIRSTSIZE)) == NULL) {
-        *strp = NULL;
+      if ((buf = (char*) xmalloc(FIRSTSIZE)) == nullptr) {
+        *strp = nullptr;
         return -1;
       }
       bufsize = FIRSTSIZE;
-    } else if ((newbuf = (char*) xrealloc(buf, nextsize)) != NULL) {
+    } else if ((newbuf = (char*) xrealloc(buf, nextsize)) != nullptr) {
       buf = newbuf;
       bufsize = nextsize;
     } else {
       xfree(buf);
-      *strp = NULL;
+      *strp = nullptr;
       return -1;
     }
 
@@ -846,7 +846,7 @@ month_lookup(const char* m)
 {
   static const char* months[] = {
     "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
-    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", NULL
+    "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", nullptr
   };
   const char** mp;
 
@@ -891,7 +891,7 @@ const char*
 get_cache_icon(const Waypoint* waypointp)
 {
   if (!global_opts.smart_icons) {
-    return NULL;
+    return nullptr;
   }
 
   /*
@@ -925,7 +925,7 @@ get_cache_icon(const Waypoint* waypointp)
     return "Geocache";
   }
 
-  return NULL;
+  return nullptr;
 }
 
 double
@@ -1099,7 +1099,7 @@ strsub(const char* s, const char* search, const char* replace)
 
   p = strstr(s, search);
   if (!slen || !p) {
-    return NULL;
+    return nullptr;
   }
 
   d = (char*) xmalloc(len + rlen + 1);
@@ -1383,7 +1383,7 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html)
   lonmin = 60.0 * (fabs(lon) - lonint);
   latsec = 60.0 * (latmin - floor(latmin));
   lonsec = 60.0 * (lonmin - floor(lonmin));
-  if (sep == NULL) {
+  if (sep == nullptr) {
     sep = " ";  /* default " " */
   }
   if (fmt == 'd') { /* ddd */
@@ -1420,7 +1420,7 @@ strip_nastyhtml(const QString& in)
   sp = returnstr = xstrdup(in);
   lcp = lcstr = strlower(xstrdup(in));
 
-  while (lcp = strstr(lcstr, "<body>"), NULL != lcp) {
+  while (lcp = strstr(lcstr, "<body>"), nullptr != lcp) {
     sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */
     sp++;
     *sp++ = '!';
@@ -1429,7 +1429,7 @@ strip_nastyhtml(const QString& in)
     *sp++ = ' ';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "<body"), lcp != NULL) {   /* becomes <!--        --> */
+  while (lcp = strstr(lcstr, "<body"), lcp != nullptr) {   /* becomes <!--        --> */
     sp = returnstr + (lcp - lcstr) ;
     sp++;
     *sp++ = '!';
@@ -1442,7 +1442,7 @@ strip_nastyhtml(const QString& in)
     *--sp = '-';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "</body>"), NULL != lcp) {
+  while (lcp = strstr(lcstr, "</body>"), nullptr != lcp) {
     sp = returnstr + (lcp - lcstr) ; /* becomes <!---- */
     sp++;
     *sp++ = '!';
@@ -1452,7 +1452,7 @@ strip_nastyhtml(const QString& in)
     *sp++ = '-';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "</html>"), NULL != lcp) {
+  while (lcp = strstr(lcstr, "</html>"), nullptr != lcp) {
     sp = returnstr + (lcp - lcstr) ; /* becomes </---- */
     sp++;
     *sp++ = '!';
@@ -1462,7 +1462,7 @@ strip_nastyhtml(const QString& in)
     *sp++ = '-';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "<style"), NULL != lcp) {
+  while (lcp = strstr(lcstr, "<style"), nullptr != lcp) {
     sp = returnstr + (lcp - lcstr) ; /* becomes <!--   */
     sp++;
     *sp++ = '!';
@@ -1473,7 +1473,7 @@ strip_nastyhtml(const QString& in)
     *sp = ' ';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "</style>"), NULL != lcp) {
+  while (lcp = strstr(lcstr, "</style>"), nullptr != lcp) {
     sp = returnstr + (lcp - lcstr) ; /* becomes    --> */
     *sp++ = ' ';
     *sp++ = ' ';
@@ -1484,7 +1484,7 @@ strip_nastyhtml(const QString& in)
     *sp++ = '-';
     *lcp = '*';         /* so we wont find it again */
   }
-  while (lcp = strstr(lcstr, "<image"), NULL != lcp) {
+  while (lcp = strstr(lcstr, "<image"), nullptr != lcp) {
     sp = returnstr + (lcp - lcstr) ; /* becomes <img */
     sp+=3;
     *sp++ = 'g';
@@ -1639,7 +1639,7 @@ entity_types stdentities[] =  {
   { "\x1d",	" ", 1 }, //illegal xml 1.0 character
   { "\x1e",	" ", 1 }, //illegal xml 1.0 character
   { "\x1f",	" ", 1 }, //illegal xml 1.0 character
-  { NULL,	NULL, 0 }
+  { nullptr,	nullptr, 0 }
 };
 
 static
@@ -1659,7 +1659,7 @@ entitize(const char* str, bool is_html)
   /* figure # of entity replacements and additional size. */
   while (ep->text) {
     cp = str;
-    while ((cp = strstr(cp, ep->text)) != NULL) {
+    while ((cp = strstr(cp, ep->text)) != nullptr) {
       elen += strlen(ep->entity) - strlen(ep->text);
       ecount++;
       cp += strlen(ep->text);
@@ -1696,7 +1696,7 @@ entitize(const char* str, bool is_html)
       if (is_html && ep->not_html)  {
         continue;
       }
-      while ((p = strstr(p, ep->text)) != NULL) {
+      while ((p = strstr(p, ep->text)) != nullptr) {
         elen = strlen(ep->entity);
 
         xstr = xstrdup(p + strlen(ep->text));
@@ -1719,7 +1719,7 @@ entitize(const char* str, bool is_html)
         if (p[bytes]) {
           xstr = xstrdup(p + bytes);
         } else {
-          xstr = NULL;
+          xstr = nullptr;
         }
         sprintf(p, "&#x%x;", value);
         p = p+strlen(p);
@@ -1766,7 +1766,7 @@ xml_tag* xml_next(xml_tag* root, xml_tag* cur)
   } else {
     cur = cur->parent;
     if (cur == root) {
-      cur = NULL;
+      cur = nullptr;
     }
     if (cur) {
       cur = cur->sibling;
@@ -1791,7 +1791,7 @@ xml_tag* xml_findfirst(xml_tag* root, const char* tagname)
 
 char* xml_attribute(xml_tag* tag, const char* attrname)
 {
-  char* result = NULL;
+  char* result = nullptr;
   if (tag->attributes) {
     char** attr = tag->attributes;
     while (attr && *attr) {
@@ -1839,7 +1839,7 @@ void* gb_int2ptr(const int i)
   union {
     void* p;
     int i;
-  } x = { NULL };
+  } x = { nullptr };
 
   x.i = i;
   return x.p;

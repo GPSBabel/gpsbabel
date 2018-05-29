@@ -159,7 +159,7 @@ gpl_trackpt(const Waypoint* wpt)
 static void
 gpl_write()
 {
-  track_disp_all(NULL, NULL, gpl_trackpt);
+  track_disp_all(nullptr, nullptr, gpl_trackpt);
 }
 
 ff_vecs_t gpl_vecs = {
@@ -171,8 +171,8 @@ ff_vecs_t gpl_vecs = {
   gpl_wr_deinit,
   gpl_read,
   gpl_write,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   CET_CHARSET_UTF8, 1	/* there is no need to convert anything | CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

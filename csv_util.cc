@@ -190,8 +190,8 @@ csv_stringclean(const QString& source, const QString& to_nuke)
 char*
 csv_stringtrim(const char* string, const char* enclosure, int strip_max)
 {
-  static const char* p1 = NULL;
-  char* p2 = NULL;
+  static const char* p1 = nullptr;
+  char* p2 = nullptr;
   char* tmp = xxstrdup(string,file,line);
   size_t elen;
   int stripped = 0;
@@ -265,8 +265,8 @@ csv_lineparse(const char* stringstart, const char* delimited_by,
               const char* enclosed_in, const int line_no)
 {
   const char* sp;
-  static const char* p = NULL;
-  static char* tmp = NULL;
+  static const char* p = nullptr;
+  static char* tmp = nullptr;
   size_t dlen = 0, elen = 0, efound = 0;
   int enclosedepth = 0;
   short int dfound;
@@ -274,7 +274,7 @@ csv_lineparse(const char* stringstart, const char* delimited_by,
 
   if (tmp) {
     xfree(tmp);
-    tmp = NULL;
+    tmp = nullptr;
   }
 
   if (strcmp(delimited_by, "\\w") == 0) {
@@ -298,7 +298,7 @@ csv_lineparse(const char* stringstart, const char* delimited_by,
 
     if (!p) {
       /* last pass out */
-      return (NULL);
+      return (nullptr);
     }
   }
 
@@ -359,7 +359,7 @@ csv_lineparse(const char* stringstart, const char* delimited_by,
     p += dlen;
   } else {
     /* end of the line */
-    p = NULL;
+    p = nullptr;
   }
 
   if (enclosedepth != 0) {
@@ -482,7 +482,7 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
   int numind = 0;
   char* buff;
 
-  if (strchr(instr, ',') != NULL) {
+  if (strchr(instr, ',') != nullptr) {
     char* c;
     buff = xstrdup(instr);
     while ((c = strchr(buff, ','))) {
@@ -639,10 +639,10 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
 QString
 dec_to_human(const char* format, const char* dirs, double val)
 {
-  char* subformat = NULL;
-  const char* formatptr = NULL;
-  char* percent = NULL;
-  char* type = NULL;
+  char* subformat = nullptr;
+  const char* formatptr = nullptr;
+  char* percent = nullptr;
+  char* type = nullptr;
 
   int  index = 0;
   int  intvals[3] = {0,0,0};
@@ -726,12 +726,12 @@ void xcsv_file_init(void)
   xcsv_file.badchars = QString();
   xcsv_file.ifield_ct = 0;
   xcsv_file.ofield_ct = 0;
-  xcsv_file.file = NULL;
-  xcsv_file.stream = NULL;
-  xcsv_file.codec = NULL;
+  xcsv_file.file = nullptr;
+  xcsv_file.stream = nullptr;
+  xcsv_file.codec = nullptr;
   xcsv_file.fname = QString();
-  xcsv_file.description = NULL;
-  xcsv_file.extension = NULL;
+  xcsv_file.description = nullptr;
+  xcsv_file.extension = nullptr;
 
   xcsv_file.prologue.clear();
   xcsv_file.epilogue.clear();
@@ -754,7 +754,7 @@ void xcsv_file_init(void)
 XcsvFile::XcsvFile() {
   is_internal = false;
   ifield_ct = ofield_ct = 0;
-  extension = description = NULL;
+  extension = description = nullptr;
 //   xcsv_file_init(); 
 }
 
@@ -941,7 +941,7 @@ writehms(const char* format, time_t t, int gmt)
     stmp = localtime(&t);
   }
 
-  if (stmp == NULL) {
+  if (stmp == nullptr) {
     stmp = &no_time;
   }
 
@@ -968,7 +968,7 @@ static garmin_fs_t*
 gmsd_init(Waypoint* wpt)
 {
   garmin_fs_t* gmsd = GMSD_FIND(wpt);
-  if (gmsd == NULL) {
+  if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
     fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
   }
@@ -984,7 +984,7 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
                route_head** trk)
 {
   const char* enclosure = "";
-  geocache_data* gc_data = NULL;
+  geocache_data* gc_data = nullptr;
 
   if (!fmp->printfc) {
     fatal(MYNAME ": xcsv style '%s' is missing format specifier", fmp->key);
@@ -1122,7 +1122,7 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
     while (*ss && !isdigit(*ss)) {
       ss++;
     }
-    utm_northing = strtod(ss, NULL);
+    utm_northing = strtod(ss, nullptr);
   }
   break;
   /* ALTITUDE CONVERSIONS ************************************************/
@@ -1414,7 +1414,7 @@ xcsv_readline(char* buff)
   }
   QString line = xcsv_file.stream->readLine();
   if (line.isNull()) {
-    return NULL;
+    return nullptr;
   } else {
     // TODO: move csv processing to Qt, eliminating the need to go
     // back to 8 bit encoding, which is shaky for encoding like utf8
@@ -1431,20 +1431,20 @@ xcsv_readline(char* buff)
 void
 xcsv_data_read(void)
 {
-  char* buff = NULL;
+  char* buff = nullptr;
   char* s;
   Waypoint* wpt_tmp;
   int linecount = 0;
   queue* elem;
   field_map_t* fmp;
-  route_head* rte = NULL;
-  route_head* trk = NULL;
+  route_head* rte = nullptr;
+  route_head* trk = nullptr;
   utm_northing = 0;
   utm_easting = 0;
   utm_zone = 0;
   utm_zonec = 'N';
 
-  csv_route = csv_track = NULL;
+  csv_route = csv_track = nullptr;
   if (xcsv_file.datatype == trkdata) {
     csv_track = trk;
   } else if (xcsv_file.datatype == rtedata) {
@@ -1500,12 +1500,12 @@ xcsv_data_read(void)
         if (elem == &xcsv_file.ifield) {
           /* we've wrapped the queue. so stop parsing! */
           while (s) {
-            s=csv_lineparse(NULL, "\xff","",linecount);
+            s=csv_lineparse(nullptr, "\xff","",linecount);
           }
           break;
         }
 
-        s = csv_lineparse(NULL, CSTR(xcsv_file.field_delimiter),
+        s = csv_lineparse(nullptr, CSTR(xcsv_file.field_delimiter),
                           CSTR(xcsv_file.field_encloser), linecount);
       }
 
@@ -1526,7 +1526,7 @@ xcsv_data_read(void)
       if (link_) {
         wpt_tmp->AddUrlLink(*link_);
         delete link_;
-        link_ = NULL;
+        link_ = nullptr;
       }
 
       switch (xcsv_file.datatype) {
@@ -1535,7 +1535,7 @@ xcsv_data_read(void)
         waypt_add(wpt_tmp);
         break;
       case trkdata:
-        if (trk == NULL) {
+        if (trk == nullptr) {
           trk = route_head_alloc();
           csv_track = trk;
           track_add_head(trk);
@@ -1543,7 +1543,7 @@ xcsv_data_read(void)
         track_add_wpt(trk, wpt_tmp);
         break;
       case rtedata:
-        if (rte == NULL) {
+        if (rte == nullptr) {
           rte = route_head_alloc();
           csv_route = rte;
           route_add_head(rte);
@@ -1563,7 +1563,7 @@ xcsv_resetpathlen(const route_head* head)
   pathdist = 0;
   oldlat = 999;
   oldlon = 999;
-  csv_route = csv_track = NULL;
+  csv_route = csv_track = nullptr;
   switch (xcsv_file.datatype) {
   case trkdata:
     csv_track = (route_head*) head;
@@ -2080,7 +2080,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
       field_is_unknown = !wpt->sat;
       break;
     case XT_GPS_FIX: {
-      const char* fix = NULL;
+      const char* fix = nullptr;
       switch (wpt->fix) {
       case fix_unknown:
         field_is_unknown = 1;

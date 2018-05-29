@@ -45,7 +45,7 @@ GPS_PPvt_Data GPS_Pvt_New(void)
     perror("malloc");
     fprintf(stderr,"GPS_Pvt_New: Insufficient memory");
     fflush(stderr);
-    return NULL;
+    return nullptr;
   }
 
   return ret;
@@ -86,7 +86,7 @@ GPS_PAlmanac GPS_Almanac_New(void)
     perror("malloc");
     fprintf(stderr,"GPS_Almanac_New: Insufficient memory");
     fflush(stderr);
-    return NULL;
+    return nullptr;
   }
 
   ret->svid=0xff;
@@ -131,7 +131,7 @@ GPS_PTrack GPS_Track_New(void)
     perror("malloc");
     fprintf(stderr,"GPS_Track_New: Insufficient memory");
     fflush(stderr);
-    return NULL;
+    return nullptr;
   }
 
   return ret;
@@ -173,7 +173,7 @@ GPS_PWay GPS_Way_New(void)
     perror("malloc");
     fprintf(stderr,"GPS_Way_New: Insufficient memory");
     fflush(stderr);
-    return NULL;
+    return nullptr;
   }
 
   /*
@@ -260,7 +260,7 @@ GPS_PLap GPS_Lap_New(void)
     perror("malloc");
     fprintf(stderr,"GPS_Lap_New: Insufficient memory");
     fflush(stderr);
-    return NULL;
+    return nullptr;
   }
 
   return ret;
@@ -299,7 +299,7 @@ GPS_PCourse GPS_Course_New(void)
     perror("malloc");
     fprintf(stderr,"GPS_Course_New: Insufficient memory");
     fflush(stderr);
-    return NULL;
+    return nullptr;
   }
 
   return ret;
@@ -337,7 +337,7 @@ GPS_PCourse_Lap GPS_Course_Lap_New(void)
     perror("malloc");
     fprintf(stderr,"GPS_Course_Lap_New: Insufficient memory");
     fflush(stderr);
-    return NULL;
+    return nullptr;
   }
 
   return ret;
@@ -376,7 +376,7 @@ GPS_PCourse_Point GPS_Course_Point_New(void)
     perror("malloc");
     fprintf(stderr,"GPS_Course_Point_New: Insufficient memory");
     fflush(stderr);
-    return NULL;
+    return nullptr;
   }
 
   return ret;

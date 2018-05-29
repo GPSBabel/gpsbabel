@@ -29,7 +29,7 @@
 const char *cet_cs_alias_iso_8859_8[] = 
 {
 	"ISO-8859-8", "csISOLatinHebrew", "hebrew", "ISO8859-8", 
-	"iso-ir-138", "ISO_8859-8", "ISO_8859-8:1988", NULL
+	"iso-ir-138", "ISO_8859-8", "ISO_8859-8:1988", nullptr
 };
 
 #define cet_ucs4_ofs_iso_8859_8 161
@@ -98,8 +98,8 @@ cet_cs_vec_t cet_cs_vec_iso_8859_8 =	/* defined in cet.h */
 	cet_cs_name_iso_8859_8,		/* name of character set	*/
 	cet_cs_alias_iso_8859_8,		/* alias table			*/
 
-	NULL,				/* ... to UCS-4 converter (multi-byte) */
-	NULL,				/* UCS-4 to ... converter (multi-byte) */
+	nullptr,				/* ... to UCS-4 converter (multi-byte) */
+	nullptr,				/* UCS-4 to ... converter (multi-byte) */
 
 	cet_ucs4_map_iso_8859_8,		/* char to UCS-4 value table	*/
 	cet_ucs4_ofs_iso_8859_8,		/* first non standard character	*/
@@ -108,10 +108,10 @@ cet_cs_vec_t cet_cs_vec_iso_8859_8 =	/* defined in cet.h */
 	cet_ucs4_to_iso_8859_8_links,	/* UCS-4 to char links		*/
 	cet_ucs4_to_iso_8859_8_ct,		/* number of links		*/
 
-	NULL,				/* hand made UCS-4 links	*/
+	nullptr,				/* hand made UCS-4 links	*/
 	0,				/* number of extra links	*/
 
-	NULL	/* for internal use */
+	nullptr	/* for internal use */
 };
 
 

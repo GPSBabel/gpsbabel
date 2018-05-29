@@ -31,13 +31,13 @@
 #  define M_PI 3.14159265358979323846
 #endif
 
-static route_head* cur_rte = NULL;
+static route_head* cur_rte = nullptr;
 
 static double pos_dist;
 static double max_diff_time;
-static char* distopt = NULL;
-static char* timeopt = NULL;
-static char* purge_duplicates = NULL;
+static char* distopt = nullptr;
+static char* timeopt = nullptr;
+static char* purge_duplicates = nullptr;
 static int check_time;
 
 typedef struct {
@@ -48,16 +48,16 @@ static
 arglist_t position_args[] = {
   {
     "distance", &distopt, "Maximum positional distance",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "all", &purge_duplicates,
     "Suppress all points close to other points",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "time", &timeopt, "Maximum time in seconds beetween two points",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -173,7 +173,7 @@ position_process_any_route(const route_head* rh, int type)
   if (i) {
     cur_rte = (route_head*)rh;
     position_runqueue((queue*)&rh->waypoint_list, i, type);
-    cur_rte = NULL;
+    cur_rte = nullptr;
   }
 
 }
@@ -245,7 +245,7 @@ filter_vecs_t position_vecs = {
   position_init,
   position_process,
   position_deinit,
-  NULL,
+  nullptr,
   position_args
 };
 

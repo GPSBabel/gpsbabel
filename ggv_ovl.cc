@@ -232,11 +232,11 @@ ggv_ovl_write()
 {
   group_ct = 1;	/* tracks are not grouped */
   color = OVL_COLOR_FUCHSIA;
-  track_disp_all(track_disp_cb, NULL, NULL);
+  track_disp_all(track_disp_cb, nullptr, nullptr);
 
   group_ct++;
   color = OVL_COLOR_AQUA;
-  route_disp_all(route_disp_cb, NULL, NULL);
+  route_disp_all(route_disp_cb, nullptr, nullptr);
 
   group_ct++;
   color = OVL_COLOR_LIME;
@@ -280,7 +280,7 @@ track_disp_cb(const route_head* trk)
     return;
   }
 
-  draw_symbol_basics(OVL_SYMBOL_LINE, 1, color, NULL);
+  draw_symbol_basics(OVL_SYMBOL_LINE, 1, color, nullptr);
 
   gbfprintf(fout, "Zoom=1\n");
   gbfprintf(fout, "Size=105\n");
@@ -318,13 +318,13 @@ route_disp_cb(const route_head* rte)
   color = OVL_COLOR_RED;
 
   i = 0;
-  prev = NULL;
+  prev = nullptr;
 
   QUEUE_FOR_EACH(&(rte->waypoint_list), elem, tmp) {
 
     Waypoint* wpt = (Waypoint*) elem;
 
-    if (prev != NULL) {
+    if (prev != nullptr) {
       draw_symbol_basics(OVL_SYMBOL_TRIANGLE, 1, (OVL_COLOR_TYP)9 /* color */, prev);
 
       gbfprintf(fout, "Width=12\n");
@@ -354,8 +354,8 @@ write_bounds()
   waypt_init_bounds(&all_bounds);
 
   waypt_disp_all(waypt_bound_calc);
-  route_disp_all(NULL, NULL, waypt_bound_calc);
-  track_disp_all(NULL, NULL, waypt_bound_calc);
+  route_disp_all(nullptr, nullptr, waypt_bound_calc);
+  track_disp_all(nullptr, nullptr, waypt_bound_calc);
 
   if (waypt_bounds_valid(&all_bounds)) {
 
@@ -458,7 +458,7 @@ ff_vecs_t ggv_ovl_vecs = {
   ggv_ovl_wr_deinit,
   ggv_ovl_read,
   ggv_ovl_write,
-  NULL,
+  nullptr,
   ggv_ovl_args,
   CET_CHARSET_MS_ANSI, 0
   , NULL_POS_OPS,

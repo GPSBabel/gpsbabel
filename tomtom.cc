@@ -200,7 +200,7 @@ data_read()
       wpt_tmp->latitude = y/100000.0;
       wpt_tmp->description = STRTOUNICODE(desc);
       xfree(desc);
-      desc = NULL;
+      desc = nullptr;
       // TODO:: description in rectype 3 contains two zero-terminated strings
       // First is same as rectype 2, second apparently contains the unique ID of the waypoint
       // See http://www.tomtom.com/lib/doc/PRO/TTN6_SDK_documentation.zip
@@ -371,7 +371,7 @@ compute_blocks(struct hdr* start, int count,
   newblock->size = 4 * 5 + 1;   /* hdr is 5 longs, 1 char */
   if (count < 20) {
     int i;
-    Waypoint* wpt = NULL;
+    Waypoint* wpt = nullptr;
 
     for (i = 0; i < count; i++) {
       newblock->size += 4 * 3 + 1;
@@ -436,7 +436,7 @@ data_write()
   double maxlon = -200;
   double minlat = 200;
   double maxlat = -200;
-  struct blockheader* blocks = NULL;
+  struct blockheader* blocks = nullptr;
 
   htable = (struct hdr*) xmalloc(ct * sizeof(*htable));
   bh = htable;
@@ -480,7 +480,7 @@ ff_vecs_t tomtom_vecs = {
   wr_deinit,
   data_read,
   data_write,
-  NULL,
+  nullptr,
   tomtom_args,
   CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

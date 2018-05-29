@@ -66,42 +66,42 @@ static short_handle read_route_wpt_mkshort_handle;
 #define MPSDESCBUFFERLEN	4096
 
 
-static char* snlen = NULL;
-static char* snwhiteopt = NULL;
-static char* mpsverout = NULL;
-static char* mpsmergeouts = NULL;
+static char* snlen = nullptr;
+static char* snwhiteopt = nullptr;
+static char* mpsverout = nullptr;
+static char* mpsmergeouts = nullptr;
 static int   mpsmergeout;
-static char* mpsusedepth = NULL;
-static char* mpsuseprox = NULL;
+static char* mpsusedepth = nullptr;
+static char* mpsuseprox = nullptr;
 
 static
 arglist_t mps_args[] = {
   {
     "snlen", &snlen, "Length of generated shortnames", "10", ARGTYPE_INT, "1",
-    NULL, NULL
+    nullptr, nullptr
   },
   {
     "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "mpsverout", &mpsverout,
-    "Version of mapsource file to generate (3,4,5)", NULL,
-    ARGTYPE_INT, ARG_NOMINMAX, NULL
+    "Version of mapsource file to generate (3,4,5)", nullptr,
+    ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "mpsmergeout", &mpsmergeouts, "Merge output with existing file",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "mpsusedepth", &mpsusedepth,
-    "Use depth values on output (default is ignore)", NULL,
-    ARGTYPE_BOOL, ARG_NOMINMAX, NULL
+    "Use depth values on output (default is ignore)", nullptr,
+    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "mpsuseprox", &mpsuseprox,
     "Use proximity values on output (default is ignore)",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -145,7 +145,7 @@ mps_find_wpt_q_by_name(const queue* whichQueue, const QString& name)
       return waypointp;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 /*
@@ -256,7 +256,7 @@ mps_wr_init(const QString& fname)
 
   if (mpsmergeout) {
     mps_file_out = gbfopen_le(fname, "rb", MYNAME);
-    if (mps_file_out == NULL) {
+    if (mps_file_out == nullptr) {
       mpsmergeout = 0;
     } else {
       gbfclose(mps_file_out);
@@ -268,7 +268,7 @@ mps_wr_init(const QString& fname)
         /* yeah, yeah, so there's probably a library function for this           */
         tempname = QString("%1.%2").arg(fname).arg(rand(), 8, 16, QChar('0'));
         mps_file_temp = gbfopen_le(tempname, "rb", MYNAME);
-        if (mps_file_temp == NULL) {
+        if (mps_file_temp == nullptr) {
           break;
         }
         gbfclose(mps_file_temp);
@@ -520,7 +520,7 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, Waypoint** wpt, unsigned int* mpsc
   int lon;
   int	icon;
 
-  Waypoint*	thisWaypoint = NULL;
+  Waypoint*	thisWaypoint = nullptr;
   double	mps_altitude = unknown_alt;
   double	mps_proximity = unknown_alt;
   double	mps_depth = unknown_alt;
@@ -714,7 +714,7 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const Waypoint* wpt, const int isR
   }
   gbfwrite(zbuf, 1, 1, mps_file);	/* NULL termination */
   xfree(ascii_description);
-  ascii_description = NULL;
+  ascii_description = nullptr;
 
   if (mps_proximity == unknown_alt) {
     gbfwrite(zbuf, 9, 1, mps_file);
@@ -757,17 +757,17 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const Waypoint* wpt, const int isR
 static void
 mps_waypoint_w_unique_wrapper(const Waypoint* wpt)
 {
-  Waypoint* wptfound = NULL;
+  Waypoint* wptfound = nullptr;
 
   /* Search for this waypoint in the ones already written */
   wptfound = mps_find_wpt_q_by_name(&written_wpt_head, CSTRc(wpt->shortname));
   /* is the next line necessary? Assumes we know who's called us and in what order */
-  if (wptfound == NULL) {
+  if (wptfound == nullptr) {
     wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, CSTRc(wpt->shortname));
   }
 
   /* if this waypoint hasn't been written then it is okay to do so */
-  if (wptfound == NULL) {
+  if (wptfound == nullptr) {
     mps_waypoint_w(mps_file_out, mps_ver_out, wpt, (1==0));
 
     /* ensure we record in our "private" queue what has been
@@ -787,11 +787,11 @@ mps_waypoint_w_unique_wrapper(const Waypoint* wpt)
 static void
 mps_route_wpt_w_unique_wrapper(const Waypoint* wpt)
 {
-  Waypoint* wptfound = NULL;
+  Waypoint* wptfound = nullptr;
 
   /* Search for this waypoint in the ones already written */
   wptfound = mps_find_wpt_q_by_name(&written_wpt_head, CSTRc(wpt->shortname));
-  if (wptfound == NULL)
+  if (wptfound == nullptr)
     /* so, not a real wpt, so must check route wpts already written as reals */
   {
     wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, CSTRc(wpt->shortname));
@@ -800,12 +800,12 @@ mps_route_wpt_w_unique_wrapper(const Waypoint* wpt)
   /* if this waypoint hasn't been written then it is okay to do so
      but assume it is only required for the route
     */
-  if (wptfound == NULL) {
+  if (wptfound == nullptr) {
     /* Although we haven't written one out, this might still be a "real" waypoint
        If so, we need to write it out now accordingly */
     wptfound = find_waypt_by_name(wpt->shortname);
 
-    if (wptfound == NULL) {
+    if (wptfound == nullptr) {
       /* well, we tried to find: it wasn't written and isn't a real waypoint */
       mps_waypoint_w(mps_file_out, mps_ver_out, wpt, (1==1));
       mps_wpt_q_add(&written_route_wpt_head, wpt);
@@ -997,12 +997,12 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
        if found. With MapSource, one should consider the real waypoint list as definitive */
     tempWpt = find_waypt_by_name(wptname);
 
-    if (tempWpt != NULL) {
+    if (tempWpt != nullptr) {
       thisWaypoint = new Waypoint(*tempWpt);
     } else {
       tempWpt = mps_find_wpt_q_by_name(&read_route_wpt_head, wptname);
 
-      if (tempWpt != NULL) {
+      if (tempWpt != nullptr) {
         thisWaypoint = new Waypoint(*tempWpt);
       } else {
         /* should never reach here, but we do need a fallback position */
@@ -1084,12 +1084,12 @@ mps_route_r(gbfile* mps_file, int mps_ver, route_head** rte)
   */
   tempWpt = find_waypt_by_name(wptname);
 
-  if (tempWpt != NULL) {
+  if (tempWpt != nullptr) {
     thisWaypoint = new Waypoint(*tempWpt);
   } else {
     tempWpt = mps_find_wpt_q_by_name(&read_route_wpt_head, wptname);
 
-    if (tempWpt != NULL) {
+    if (tempWpt != nullptr) {
       thisWaypoint = new Waypoint(*tempWpt);
     } else {
       /* should never reach here, but we do need a fallback position */
@@ -1136,7 +1136,7 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
 
   queue* elem, *tmp;
 
-  prevRouteWpt = NULL;		/* clear the stateful flag used to know when the start of route wpts happens */
+  prevRouteWpt = nullptr;		/* clear the stateful flag used to know when the start of route wpts happens */
 
   memset(zbuf, 0, sizeof(zbuf));
 
@@ -1297,7 +1297,7 @@ mps_routedatapoint_w(gbfile* mps_file, int mps_ver, const Waypoint* rtewpt)
   memset(zbuf, 0, sizeof(zbuf));
   memset(ffbuf, 0xff, sizeof(ffbuf));
 
-  if (prevRouteWpt != NULL) {
+  if (prevRouteWpt != nullptr) {
     /* output the route link details */
     reclen = 2;
     gbfputint32(reclen, mps_file);
@@ -1406,7 +1406,7 @@ mps_routedatapoint_w(gbfile* mps_file, int mps_ver, const Waypoint* rtewpt)
   gbfwrite(zbuf, 1, 1, mps_file);	/* NULL termination to ident */
 
   wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, ident);
-  if (wptfound != NULL)	{
+  if (wptfound != nullptr)	{
     zbuf[0] = (char)MPSHIDDENROUTEWPTCLASS;
   } else {
     zbuf[0] = (char)MPSDEFAULTWPTCLASS;
@@ -2097,9 +2097,9 @@ ff_vecs_t mps_vecs = {
   mps_wr_deinit,
   mps_read,
   mps_write,
-  NULL,
+  nullptr,
   mps_args,
   CET_CHARSET_MS_ANSI, 0,	/* CET-REVIEW */
   NULL_POS_OPS,
-  NULL,
+  nullptr,
 };

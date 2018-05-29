@@ -34,19 +34,19 @@ static short_handle mkshort_whandle;
 
 static double maxlat, maxlon, minlat, minlon;
 static int rec_cnt;
-static char* nolabels = NULL;
-static char* genurl = NULL;
-static char* suppresswhite = NULL;
-static char* iconismarker = NULL;
-static char* snlen = NULL;
+static char* nolabels = nullptr;
+static char* genurl = nullptr;
+static char* suppresswhite = nullptr;
+static char* iconismarker = nullptr;
+static char* snlen = nullptr;
 
-static char* margin  = NULL;
-static char* xpixels = NULL;
-static char* ypixels = NULL;
-static char* oldthresh = NULL;
-static char* oldmarker  = NULL;
-static char* newmarker  = NULL;
-static char* unfoundmarker  = NULL;
+static char* margin  = nullptr;
+static char* xpixels = nullptr;
+static char* ypixels = nullptr;
+static char* oldthresh = nullptr;
+static char* oldmarker  = nullptr;
+static char* newmarker  = nullptr;
+static char* unfoundmarker  = nullptr;
 
 static int short_length;
 static double thresh_days;
@@ -66,11 +66,11 @@ static
 arglist_t tiger_args[] = {
   {
     "nolabels", &nolabels, "Suppress labels on generated pins",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "genurl", &genurl, "Generate file with lat/lon for centering map",
-    NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr
   },
   {
     "margin", &margin, "Margin for map.  Degrees or percentage",
@@ -78,7 +78,7 @@ arglist_t tiger_args[] = {
   },
   {
     "snlen", &snlen, "Max shortname length when used with -s",
-    "10", ARGTYPE_INT, "1", NULL, nullptr
+    "10", ARGTYPE_INT, "1", nullptr, nullptr
   },
   {
     "oldthresh", &oldthresh,
@@ -96,7 +96,7 @@ arglist_t tiger_args[] = {
   {
     "suppresswhite", &suppresswhite,
     "Suppress whitespace in generated shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "unfoundmarker", &unfoundmarker, "Marker type for unfound points",
@@ -112,7 +112,7 @@ arglist_t tiger_args[] = {
   },
   {
     "iconismarker", &iconismarker,
-    "The icon description is already the marker", NULL,
+    "The icon description is already the marker", nullptr,
     ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
 #if CLICKMAP
@@ -143,7 +143,7 @@ static void
 wr_init(const QString& fname)
 {
   file_out = gbfopen(fname, "w", MYNAME);
-  thresh_days = strtod(oldthresh, NULL);
+  thresh_days = strtod(oldthresh, nullptr);
 }
 
 static void
@@ -221,7 +221,7 @@ tiger_disp(const Waypoint* wpt)
       desc = mkshort(mkshort_whandle, desc);
     }
     gbfprintf(file_out, ":%s", CSTR(desc));
-    if (temp != NULL) {
+    if (temp != nullptr) {
       desc = temp;
     }
   }
@@ -254,9 +254,9 @@ dscale(double distance)
    */
 
   if (strchr(margin, '%')) {
-    return distance + strtod(margin, NULL) / 100.0 * distance;
+    return distance + strtod(margin, nullptr) / 100.0 * distance;
   } else {
-    return strtod(margin, NULL) + distance;
+    return strtod(margin, nullptr) + distance;
   }
 }
 
@@ -326,7 +326,7 @@ ff_vecs_t tiger_vecs = {
   wr_deinit,
   data_read,
   data_write,
-  NULL,
+  nullptr,
   tiger_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

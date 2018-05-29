@@ -51,13 +51,13 @@ static xg_tag_mapping gl_map[] = {
   { wpt_addr,	cb_cdata, "/ResultSet/Result/Zip" },
   { wpt_addr,	cb_cdata, "/ResultSet/Result/Country" },
   { wpt_e,	cb_end,   "/ResultSet/Result" },
-  { NULL,	(xg_cb_type)0,         NULL}
+  { nullptr,	(xg_cb_type)0,         nullptr}
 };
 
 static void
 yahoo_rd_init(const QString& fname)
 {
-  xml_init(fname, gl_map, NULL);
+  xml_init(fname, gl_map, nullptr);
 }
 
 static void
@@ -86,7 +86,7 @@ void	wpt_s(xg_string, const QXmlStreamAttributes*)
 void	wpt_e(xg_string, const QXmlStreamAttributes*)
 {
   waypt_add(wpt_tmp);
-  wpt_tmp = NULL;
+  wpt_tmp = nullptr;
 }
 
 void	wpt_lat(xg_string args, const QXmlStreamAttributes*)
@@ -113,10 +113,10 @@ ff_vecs_t yahoo_vecs = {
   yahoo_rd_init,
   yahoo_wr_init,
   yahoo_rd_deinit,
-  NULL,
+  nullptr,
   yahoo_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   yahoo_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

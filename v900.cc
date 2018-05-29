@@ -141,7 +141,7 @@ struct one_line_basic_mode {
 };
 
 
-static FILE* fin = NULL;
+static FILE* fin = nullptr;
 
 /* copied from dg-100.cpp */
 static void
@@ -226,7 +226,7 @@ v900_read()
   if (!fgets(line.text, sizeof(line), fin)) {
     fatal("v900: error reading header (first) line from input file\n");
   }
-  is_advanced_mode = (NULL != strstr(line.text,"PDOP")); /* PDOP field appears only in advanced mode */
+  is_advanced_mode = (nullptr != strstr(line.text,"PDOP")); /* PDOP field appears only in advanced mode */
 
   v900_log("header line: %s",line.text);
   v900_log("is_advance_mode=%d\n",is_advanced_mode);
@@ -378,14 +378,14 @@ ff_vecs_t v900_vecs = {
   ff_type_file,
   {ff_cap_read, ff_cap_read, ff_cap_none}, /* Read only format. May only read trackpoints and waypoints. */
   v900_rd_init,
-  NULL,          /* wr_init */
+  nullptr,          /* wr_init */
   v900_rd_deinit,
-  NULL,          /* wr_deinit */
+  nullptr,          /* wr_deinit */
   v900_read,
-  NULL,          /* write */
-  NULL,
-  NULL,          /* args */
+  nullptr,          /* write */
+  nullptr,
+  nullptr,          /* args */
   CET_CHARSET_UTF8, 1,	/* Could be  US-ASCII, since we only read "0-9,A-Z\n\r" */
-  {NULL,NULL,NULL,NULL,NULL,NULL},
+  {nullptr,nullptr,nullptr,nullptr,nullptr,nullptr},
   nullptr
 };

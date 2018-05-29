@@ -147,8 +147,8 @@ static void db(int l, const char* msg, ...)
 
 static void buf_init(struct buf_head* h, size_t alloc)
 {
-  h->head     = NULL;
-  h->tail     = NULL;
+  h->head     = nullptr;
+  h->tail     = nullptr;
   h->alloc    = alloc;
   h->used     = 0;
   h->checksum = 0;
@@ -162,8 +162,8 @@ static void buf_empty(struct buf_head* h)
     next = chunk->next;
     xfree(chunk);
   }
-  h->head     = NULL;
-  h->tail     = NULL;
+  h->head     = nullptr;
+  h->tail     = nullptr;
   h->used     = 0;
   h->checksum = 0;
 }
@@ -179,14 +179,14 @@ static size_t buf_read(struct buf_head* h, void* data, size_t len)
   char*    bp = (char*) data;
   size_t  got = 0;
 
-  while (len != 0 && h->current != NULL) {
+  while (len != 0 && h->current != nullptr) {
     size_t avail = h->current->used - h->offset;
     if (avail > len) {
       avail = len;
     }
 
     /* Allow NULL buffer pointer to skip bytes */
-    if (NULL != bp) {
+    if (nullptr != bp) {
       memcpy(bp, buf_CHUNK_PTR(h->current, h->offset), avail);
       bp          += avail;
     }
@@ -210,11 +210,11 @@ static void buf_extend(struct buf_head* h, size_t amt)
   size_t sz = amt + sizeof(struct buf_chunk);
 
   c = (struct buf_chunk*) xmalloc(sz);
-  c->next = NULL;
+  c->next = nullptr;
   c->size = amt;
   c->used = 0;
 
-  if (NULL == h->head) {
+  if (nullptr == h->head) {
     h->head = c;
   } else {
     h->tail->next = c;
@@ -245,7 +245,7 @@ static void buf_write(struct buf_head* h, const void* data, size_t len)
 
   h->used += len;
 
-  if (NULL == h->tail) {
+  if (nullptr == h->tail) {
     buf_extend(h, h->alloc);
   }
 
@@ -397,7 +397,7 @@ static void rd_init(const QString& fname)
   port = xstrdup(qPrintable(fname));
 
   db(1, "Opening port...\n");
-  if ((fd = gbser_init(port)) == NULL) {
+  if ((fd = gbser_init(port)) == nullptr) {
     fatal(MYNAME ": Can't initialise port \"%s\"\n", port);
   }
 
@@ -411,7 +411,7 @@ static void rd_deinit()
 {
   db(1, "Closing port...\n");
   gbser_deinit(fd);
-  fd = NULL;
+  fd = nullptr;
   xfree(port);
 }
 
@@ -430,7 +430,7 @@ static int rd_buf(void* buf, int len)
 static void file_init(const QString& fname)
 {
   db(1, "Opening file...\n");
-  if ((fl = ufopen(fname, "rb")) == NULL) {
+  if ((fl = ufopen(fname, "rb")) == nullptr) {
     fatal(MYNAME ": Can't open file '%s'\n", qPrintable(fname));
   }
 }
@@ -572,7 +572,7 @@ static int wbt200_data_chunk(struct read_state* st, const void* buf, int fmt)
   uint32_t   tim;
   double     lat, lon, alt;
   time_t     rtim;
-  Waypoint*   tpt     = NULL;
+  Waypoint*   tpt     = nullptr;
   const char* bp      = (const char*) buf;
   size_t     buf_used = fmt_version[fmt].reclen;
 
@@ -593,17 +593,17 @@ static int wbt200_data_chunk(struct read_state* st, const void* buf, int fmt)
   if (lat >= 100) {
     /* Start new track in the northern hemisphere */
     lat -= 100;
-    st->route_head_ = NULL;
+    st->route_head_ = nullptr;
   } else if (lat <= -100) {
     /* Start new track in the southern hemisphere */
     /* This fix courtesy of Anton Frolich */
     lat += 100;
-    st->route_head_ = NULL;
+    st->route_head_ = nullptr;
   }
 
   tpt = make_trackpoint(st, lat, lon, alt, rtim);
 
-  if (NULL == st->route_head_) {
+  if (nullptr == st->route_head_) {
     db(1, "New Track\n");
     st->route_head_ = route_head_alloc();
     track_add_head(st->route_head_);
@@ -672,7 +672,7 @@ static void wbt200_process_data(struct read_state* pst, int fmt)
 
 static void state_init(struct read_state* pst)
 {
-  pst->route_head_ = NULL;
+  pst->route_head_ = nullptr;
   pst->wpn        = 0;
   pst->tpn        = 0;
 
@@ -809,7 +809,7 @@ static int wbt201_data_chunk(struct read_state* st, const void* buf)
   uint16_t    flags;
   double      lat, lon, alt;
   time_t      rtim;
-  Waypoint*    tpt     = NULL;
+  Waypoint*    tpt     = nullptr;
   const char*  bp      = (const char*) buf;
 
   /* Zero records are skipped */
@@ -838,12 +838,12 @@ static int wbt201_data_chunk(struct read_state* st, const void* buf)
 
   if (global_opts.masked_objective & TRKDATAMASK) {
     if (flags & WBT201_TRACK_START) {
-      st->route_head_ = NULL;
+      st->route_head_ = nullptr;
     }
 
     tpt = make_trackpoint(st, lat, lon, alt, rtim);
 
-    if (NULL == st->route_head_) {
+    if (nullptr == st->route_head_) {
       db(1, "New Track\n");
       st->route_head_ = route_head_alloc();
       track_add_head(st->route_head_);
@@ -1046,7 +1046,7 @@ static void file_read()
     db(1, "Got TK1 file\n");
     buf_rewind(&st.data);
     /* Seek */
-    buf_read(&st.data, NULL, TK1_DATA_OFFSET);
+    buf_read(&st.data, nullptr, TK1_DATA_OFFSET);
     wbt201_process_chunk(&st);
   } else {
     db(1, "Got bin file\n");
@@ -1102,12 +1102,12 @@ ff_vecs_t wbt_svecs = {
   ff_type_serial,
   { ff_cap_read, ff_cap_read, ff_cap_none },
   rd_init,
-  NULL,
+  nullptr,
   rd_deinit,
-  NULL,
+  nullptr,
   data_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   wbt_sargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
   , NULL_POS_OPS,
@@ -1124,12 +1124,12 @@ ff_vecs_t wbt_fvecs = {
   ff_type_file,
   { ff_cap_none, ff_cap_read, ff_cap_none },
   file_init,
-  NULL,
+  nullptr,
   file_deinit,
-  NULL,
+  nullptr,
   file_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   wbt_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
   , NULL_POS_OPS,

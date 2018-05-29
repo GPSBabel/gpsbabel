@@ -143,7 +143,7 @@ vpl_read()
   char* ibuf;
 
   // Set up a track
-  if (track_head == NULL) {
+  if (track_head == nullptr) {
     track_head = route_head_alloc();
     track_add_head(track_head);
   }
@@ -225,10 +225,10 @@ ff_vecs_t vpl_vecs = {
   vpl_rd_init,
   vpl_wr_init,
   vpl_rd_deinit,
-  NULL,
+  nullptr,
   vpl_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   vpl_args,
   CET_CHARSET_ASCII, /* ascii is the expected character set */
   1	               /* fixed, can't be changed through command line parameter */

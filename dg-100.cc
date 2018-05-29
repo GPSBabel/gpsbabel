@@ -120,7 +120,7 @@ dg100_findcmd(int id) {
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 static void
@@ -265,10 +265,10 @@ process_gpsfile(uint8_t data[], route_head** track)
 
     if ((i == 0) && (be_read32(data + i + 8) & 0x80000000)) {
       /* This is the first point recorded after power-on; start a new track */
-      *track = NULL;
+      *track = nullptr;
     }
 
-    if (*track == NULL) {
+    if (*track == nullptr) {
       time_t creation_time;
       char buf[1024];
       bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
@@ -413,7 +413,7 @@ dg100_recv_frame(struct dg100_command** cmdinfo_result, uint8_t** payload)
 
   /* consume input until frame head sequence 0xA0A2 was received */
   frame_head = 0;
-  dg100_debug("Receiving ", 0, 0, NULL);
+  dg100_debug("Receiving ", 0, 0, nullptr);
   do {
     c = dg100_recv_byte();
     dg100_debug("", 0, 1, &c);
@@ -573,7 +573,7 @@ dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count)
   uint8_t* buf;
 
   cmdinfo = dg100_findcmd(cmd);
-  assert(cmdinfo != NULL);
+  assert(cmdinfo != nullptr);
   dg100_send(cmd, sendbuf, cmdinfo->sendsize);
 
   /* the number of frames the answer will comprise */
@@ -638,7 +638,7 @@ dg100_getconfig()
 {
   uint8_t answer[45];
 
-  dg100_request(dg100cmd_getconfig, NULL, answer, sizeof(answer));
+  dg100_request(dg100cmd_getconfig, nullptr, answer, sizeof(answer));
 }
 
 static void
@@ -658,7 +658,7 @@ dg100_getfiles()
   unsigned int i;
   int filenum;
   struct dynarray16 headers;
-  route_head* track = NULL;
+  route_head* track = nullptr;
 
   /* maximum number of headers observed so far: 672
    * if necessary, the dynarray will grow even further */
@@ -712,7 +712,7 @@ arglist_t dg100_args[] = {
 static void
 common_rd_init(const QString& fname)
 {
-  if (serial_handle = gbser_init(qPrintable(fname)), NULL == serial_handle) {
+  if (serial_handle = gbser_init(qPrintable(fname)), nullptr == serial_handle) {
     fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
   }
   if (gbser_set_speed(serial_handle, model->speed) != gbser_OK) {
@@ -743,7 +743,7 @@ static void
 dg100_rd_deinit()
 {
   gbser_deinit(serial_handle);
-  serial_handle = NULL;
+  serial_handle = nullptr;
 }
 
 static void
@@ -771,12 +771,12 @@ ff_vecs_t dg100_vecs = {
     ff_cap_none 			/* routes */
   },
   dg100_rd_init,
-  NULL,
+  nullptr,
   dg100_rd_deinit,
-  NULL,
+  nullptr,
   dg100_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   dg100_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
@@ -792,12 +792,12 @@ ff_vecs_t dg200_vecs = {
     ff_cap_none 			/* routes */
   },
   dg200_rd_init,
-  NULL,
+  nullptr,
   dg100_rd_deinit,
-  NULL,
+  nullptr,
   dg100_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   dg100_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */

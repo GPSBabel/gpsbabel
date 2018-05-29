@@ -80,7 +80,7 @@ parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
 
   while ((cin = csv_lineparse(buff, delimiter, "", index++))) {
 
-    buff = NULL;
+    buff = nullptr;
     cin = lrtrim(cin);
 
     if ((*cin == '\0') ||
@@ -105,7 +105,7 @@ parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
 
       memset(&tm, 0, sizeof(tm));
       cerr = strptime(cin, "%a %b %d %H:%M:%S %Y", &tm);
-      if (cerr == NULL) {
+      if (cerr == nullptr) {
         fatal(MYNAME ": Unable to convert date (%s)!\n", cin);
       }
       wpt->SetCreationTime(mkgmtime(&tm));
@@ -316,7 +316,7 @@ parse_waypt(char* buff)
 
   memset(&tm, 0, sizeof(tm));
   cerr = strptime(buff, "%a %b %d %H:%M:%S %Y", &tm);
-  if (cerr == NULL) {
+  if (cerr == nullptr) {
     fatal(MYNAME ": Unable to convert date (%s)!\n", buff);
   }
   wpt->SetCreationTime(mkgmtime(&tm));
@@ -330,10 +330,10 @@ parse_waypt(char* buff)
       buff++;
     }
   }
-  if (gardown && (buff == NULL)) {
+  if (gardown && (buff == nullptr)) {
     return wpt;
   }
-  is_fatal((buff == NULL), MYNAME ": Incomplete waypoint line!");
+  is_fatal((buff == nullptr), MYNAME ": Incomplete waypoint line!");
 
   while (isspace(*buff)) {
     buff++;
@@ -374,7 +374,7 @@ parse_categories(char* buff)
   while ((cin = csv_lineparse(buff, ",", "", cat++))) {
     uint16_t cx;
 
-    buff = NULL;
+    buff = nullptr;
 
     cin = lrtrim(cin);
     if (*cin == 0) {
@@ -412,8 +412,8 @@ data_read(void)
 {
   char* buff;
   int line = 0;
-  Waypoint* wpt = NULL;
-  route_head* head = NULL;
+  Waypoint* wpt = nullptr;
+  route_head* head = nullptr;
 
   while ((buff = gbfgetstr(fin))) {
     char* cin = buff;
@@ -519,7 +519,7 @@ data_read(void)
         break;
 
       case 'L':
-        waypt_add_url(wpt, xstrdup(cdata), NULL);
+        waypt_add_url(wpt, xstrdup(cdata), nullptr);
         break;
 
       default:
@@ -587,12 +587,12 @@ ff_vecs_t g7towin_vecs = {
   ff_type_file,
   { ff_cap_read, ff_cap_read, ff_cap_read },
   rd_init,
-  NULL,
+  nullptr,
   rd_deinit,
-  NULL,
+  nullptr,
   data_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   g7towin_args,
   CET_CHARSET_MS_ANSI, 0
   , NULL_POS_OPS,

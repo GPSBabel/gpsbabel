@@ -49,12 +49,12 @@ static void termwrite(char* obuf, int size);
 static void mag_readmsg(gpsdata_type objective);
 static void mag_handon();
 static void mag_handoff();
-static short_handle mkshort_handle = NULL;
-static char* deficon = NULL;
-static char* bs = NULL;
-static char* cmts = NULL;
-static char* noack = NULL;
-static char* nukewpt = NULL;
+static short_handle mkshort_handle = nullptr;
+static char* deficon = nullptr;
+static char* bs = nullptr;
+static char* cmts = nullptr;
+static char* noack = nullptr;
+static char* nukewpt = nullptr;
 static int route_out_count;
 static int waypoint_read_count;
 static int wpt_len = 8;
@@ -142,7 +142,7 @@ static icon_mapping_t gps315_icon_table[] = {
   { "r", "food" },
   { "s", "fuel" },
   { "t", "tree" },
-  { NULL, NULL }
+  { nullptr, nullptr }
 };
 
 static icon_mapping_t map330_icon_table[] = {
@@ -194,7 +194,7 @@ static icon_mapping_t map330_icon_table[] = {
   { "an", "Multi-Cache"}, 	/* Winery: grapes 'coz they "bunch" */
   { "s",  "Unknown Cache"}, 	/* 'Suprise' cache: use a target. */
   { "ac",  "Event Cache"}, 	/* Event caches.  May be food. */
-  { NULL, NULL }
+  { nullptr, nullptr }
 };
 
 pid_to_model_t pid_to_model[] = {
@@ -218,7 +218,7 @@ pid_to_model_t pid_to_model[] = {
   { mm_meridian, 46, "MobileMapper" },
   { mm_meridian, 110, "Explorist 100" },
   { mm_meridian, 111, "Explorist 200" },
-  { mm_unknown, 0, NULL }
+  { mm_unknown, 0, nullptr }
 };
 
 static icon_mapping_t* icon_mapping = map330_icon_table;
@@ -473,7 +473,7 @@ retry:
     isz--;
   }
   isump = &ibuf[isz-1];
-  isum  = strtoul(isump, NULL,16);
+  isum  = strtoul(isump, nullptr,16);
   if (isum != mag_pchecksum(&ibuf[1], isz-3)) {
     if (debug_serial) {
       warning("RXERR %02x/%02x: '%s'\n", isum, mag_pchecksum(&ibuf[1],isz-5), ibuf);
@@ -487,7 +487,7 @@ retry:
     warning("READ: %s\n", ibuf);
   }
   if (IS_TKN("$PMGNCSM,")) {
-    last_rx_csum = strtoul(&ibuf[9], NULL, 16);
+    last_rx_csum = strtoul(&ibuf[9], nullptr, 16);
     magrxstate = mrs_handon;
     return;
   }
@@ -523,7 +523,7 @@ retry:
     /*
      * Allow lazy allocation of track head.
      */
-    if (trk_head == NULL) {
+    if (trk_head == nullptr) {
       /* These tracks don't have names, so derive one
        * from input filename.
        */
@@ -567,20 +567,20 @@ retry:
   }
 }
 
-static void* serial_handle = NULL;
+static void* serial_handle = nullptr;
 
 static int
 terminit(const QString& portname, int create_ok)
 {
   if (gbser_is_serial(qPrintable(portname))) {
-    if (serial_handle = gbser_init(qPrintable(portname)), NULL != serial_handle) {
+    if (serial_handle = gbser_init(qPrintable(portname)), nullptr != serial_handle) {
       int rc;
       if (rc = gbser_set_port(serial_handle, bitrate, 8, 0, 1), gbser_OK != rc) {
         fatal(MYNAME ": Can't configure port\n");
       }
     }
     is_file = 0;
-    if (serial_handle == NULL) {
+    if (serial_handle == nullptr) {
       fatal(MYNAME ": Could not open serial port %s\n", qPrintable(portname));
     }
     return 1;
@@ -623,7 +623,7 @@ static
 void
 mag_dequote(char* ibuf)
 {
-  char* esc = NULL;
+  char* esc = nullptr;
 
   while ((esc = strchr(ibuf, 0x1b))) {
     int nremains = strlen(esc);
@@ -672,10 +672,10 @@ static void termdeinit()
 {
   if (is_file) {
     gbfclose(magfile_h);
-    magfile_h = NULL;
+    magfile_h = nullptr;
   } else {
     gbser_deinit(serial_handle);
-    serial_handle = NULL;
+    serial_handle = nullptr;
   }
 }
 
@@ -685,24 +685,24 @@ static void termdeinit()
 static
 arglist_t mag_sargs[] = {
   {
-    "deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING,
-    ARG_NOMINMAX, NULL
+    "deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING,
+    ARG_NOMINMAX, nullptr
   },
   {
     "maxcmts", &cmts, "Max number of comments to write (maxcmts=200)",
-    "200", ARGTYPE_INT, ARG_NOMINMAX, NULL
+    "200", ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "baud", &bs, "Numeric value of bitrate (baud=4800)", "4800",
-    ARGTYPE_INT, ARG_NOMINMAX, NULL
+    ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "noack", &noack, "Suppress use of handshaking in name of speed",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
-    "nukewpt", &nukewpt, "Delete all waypoints", NULL, ARGTYPE_BOOL,
-    ARG_NOMINMAX, NULL
+    "nukewpt", &nukewpt, "Delete all waypoints", nullptr, ARGTYPE_BOOL,
+    ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -710,12 +710,12 @@ arglist_t mag_sargs[] = {
 static
 arglist_t mag_fargs[] = {
   {
-    "deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING,
-    ARG_NOMINMAX, NULL
+    "deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING,
+    ARG_NOMINMAX, nullptr
   },
   {
     "maxcmts", &cmts, "Max number of comments to write (maxcmts=200)",
-    NULL, ARGTYPE_INT, ARG_NOMINMAX, NULL
+    nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -786,7 +786,7 @@ mag_rd_init_common(const QString& portname)
     const char** dlist = os_get_magellan_mountpoints();
     explorist_info = explorist_ini_get(dlist);
     if (explorist_info) {
-      const char* vec_opts = NULL;
+      const char* vec_opts = nullptr;
       gpx_vec = find_vec("gpx", &vec_opts);
     }
     return;
@@ -916,7 +916,7 @@ mag_deinit()
 
   waypt_flush(&rte_wpt_tmp);
 
-  trk_head = NULL;
+  trk_head = nullptr;
 
   curfname.clear();
 }
@@ -1061,7 +1061,7 @@ mag_rteparse(char* rtemsg)
     is_fatal(*ca++ != ',', MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
 
     ce = strchr(ca, ',');
-    is_fatal(ce == NULL, MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
+    is_fatal(ce == nullptr, MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
 
     if (ca == ce) {
       rte_name = "Route";
@@ -1098,7 +1098,7 @@ mag_rteparse(char* rtemsg)
     }
 
     /* trim CRC from waypoint icon string */
-    if ((p = strchr(abuf, '*')) != NULL) {
+    if ((p = strchr(abuf, '*')) != nullptr) {
       *p = '\0';
     }
 
@@ -1171,7 +1171,7 @@ mag_rteparse(char* rtemsg)
 QString
 mag_find_descr_from_token(const char* token)
 {
-  if (icon_mapping == NULL) {
+  if (icon_mapping == nullptr) {
     return "unknown";
   }
 
@@ -1191,7 +1191,7 @@ mag_find_token_from_descr(const QString& icon)
 {
   icon_mapping_t* i = icon_mapping;
 
-  if (i == NULL || icon == NULL) {
+  if (i == nullptr || icon == nullptr) {
     return "a";
   }
 
@@ -1440,11 +1440,11 @@ void mag_track_disp(const Waypoint* waypointp)
   int hms=0;
   int fracsec=0;
   int date=0;
-  struct tm* tm = NULL;
+  struct tm* tm = nullptr;
 
   ilat = waypointp->latitude;
   ilon = waypointp->longitude;
-  tm = NULL;
+  tm = nullptr;
   if (waypointp->creation_time.isValid()) {
     const time_t ct = waypointp->GetCreationTime().toTime_t();
     tm = gmtime(&ct);
@@ -1606,7 +1606,7 @@ const char** os_get_magellan_mountpoints()
   return dlist;
 #else
   fatal("Not implemented");
-  return NULL;
+  return nullptr;
 #endif
 }
 
@@ -1619,7 +1619,7 @@ os_gpx_files(const char* dirname)
   static glob_t g;
   char* path;
   xasprintf(&path, "%s/*.gpx", dirname);
-  glob(path, 0, NULL, &g);
+  glob(path, 0, nullptr, &g);
   xfree(path);
   return g.gl_pathv;
 #else
@@ -1641,11 +1641,11 @@ ff_vecs_t mag_svecs = {
   mag_deinit,
   mag_read,
   mag_write,
-  NULL,
+  nullptr,
   mag_sargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
   NULL_POS_OPS,
-  NULL,
+  nullptr,
 };
 
 ff_vecs_t mag_fvecs = {
@@ -1657,11 +1657,11 @@ ff_vecs_t mag_fvecs = {
   mag_deinit,
   mag_read,
   mag_write,
-  NULL,
+  nullptr,
   mag_fargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
   NULL_POS_OPS,
-  NULL,
+  nullptr,
 };
 
 /*
@@ -1676,9 +1676,9 @@ ff_vecs_t magX_fvecs = {
   mag_wr_deinit,
   mag_read,
   mag_write,
-  NULL,
+  nullptr,
   mag_fargs,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
   NULL_POS_OPS,
-  NULL,
+  nullptr,
 };

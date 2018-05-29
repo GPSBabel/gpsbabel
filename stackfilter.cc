@@ -27,54 +27,54 @@
 
 #define MYNAME "Stack filter"
 
-static char* opt_push = NULL;
-static char* opt_copy = NULL;
-static char* opt_pop = NULL;
-static char* opt_append = NULL;
-static char* opt_discard = NULL;
-static char* opt_replace = NULL;
-static char* opt_swap = NULL;
-static char* opt_depth = NULL;
-static char* nowarn = NULL;
+static char* opt_push = nullptr;
+static char* opt_copy = nullptr;
+static char* opt_pop = nullptr;
+static char* opt_append = nullptr;
+static char* opt_discard = nullptr;
+static char* opt_replace = nullptr;
+static char* opt_swap = nullptr;
+static char* opt_depth = nullptr;
+static char* nowarn = nullptr;
 static int  warnings_enabled = 1;
 static int  swapdepth = 0;
 
 static
 arglist_t stackfilt_args[] = {
   {
-    "push", &opt_push, "Push waypoint list onto stack", NULL,
+    "push", &opt_push, "Push waypoint list onto stack", nullptr,
     ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
-    "pop", &opt_pop, "Pop waypoint list from stack", NULL,
+    "pop", &opt_pop, "Pop waypoint list from stack", nullptr,
     ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "swap", &opt_swap, "Swap waypoint list with <depth> item on stack",
-    NULL, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
-    "copy", &opt_copy, "(push) Copy waypoint list", NULL,
+    "copy", &opt_copy, "(push) Copy waypoint list", nullptr,
     ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
-    "append", &opt_append, "(pop) Append list", NULL,
+    "append", &opt_append, "(pop) Append list", nullptr,
     ARGTYPE_BEGIN_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "discard", &opt_discard, "(pop) Discard top of stack",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "replace", &opt_replace, "(pop) Replace list (default)",
-    NULL, ARGTYPE_END_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_END_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "depth", &opt_depth, "(swap) Item to use (default=1)",
-    NULL, ARGTYPE_INT, "0", NULL, nullptr
+    nullptr, ARGTYPE_INT, "0", nullptr, nullptr
   },
   {
-    "nowarn", &nowarn, "Suppress cleanup warning", NULL,
+    "nowarn", &nowarn, "Suppress cleanup warning", nullptr,
     ARGTYPE_BOOL | ARGTYPE_HIDDEN, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
@@ -88,15 +88,15 @@ struct stack_elt {
   int route_count;
   int track_count;
   struct stack_elt* next;
-}* stack = NULL;
+}* stack = nullptr;
 
 
 void
 stackfilt_process()
 {
-  struct stack_elt* tmp_elt = NULL;
-  queue* elem = NULL;
-  queue* tmp = NULL;
+  struct stack_elt* tmp_elt = nullptr;
+  queue* elem = nullptr;
+  queue* tmp = nullptr;
   queue tmp_queue;
   unsigned int tmp_count;
 
@@ -114,7 +114,7 @@ stackfilt_process()
       }
     }
 
-    tmp = NULL;
+    tmp = nullptr;
     route_backup(&(tmp_elt->route_count), &tmp);
     QUEUE_MOVE(&(tmp_elt->routes), tmp);
     xfree(tmp);
@@ -122,7 +122,7 @@ stackfilt_process()
       route_flush_all_routes();
     }
 
-    tmp = NULL;
+    tmp = nullptr;
     track_backup(&(tmp_elt->track_count), &tmp);
     QUEUE_MOVE(&(tmp_elt->tracks), tmp);
     xfree(tmp);
@@ -172,14 +172,14 @@ stackfilt_process()
     QUEUE_MOVE(&waypt_head, &tmp_queue);
 
     QUEUE_MOVE(&tmp_queue, &(tmp_elt->routes));
-    tmp = NULL;
+    tmp = nullptr;
     route_backup(&(tmp_elt->route_count), &tmp);
     QUEUE_MOVE(&(tmp_elt->routes), tmp);
     xfree(tmp);
     route_restore(&tmp_queue);
 
     QUEUE_MOVE(&tmp_queue, &(tmp_elt->tracks));
-    tmp = NULL;
+    tmp = nullptr;
     track_backup(&(tmp_elt->track_count), &tmp);
     QUEUE_MOVE(&(tmp_elt->tracks), tmp);
     xfree(tmp);
@@ -240,7 +240,7 @@ stackfilt_deinit()
 void
 stackfilt_exit()
 {
-  struct stack_elt* tmp_elt = NULL;
+  struct stack_elt* tmp_elt = nullptr;
 
   if (warnings_enabled && stack) {
     warning(MYNAME " Warning: leftover stack entries; "

@@ -35,7 +35,7 @@ static gbfile* ofd;
 static Waypoint* wpt_tmp;
 QString urllink;
 QString urllinkt;
-static char* binary = NULL;
+static char* binary = nullptr;
 
 #define MYNAME "lmx"
 
@@ -44,7 +44,7 @@ arglist_t lmx_args[] = {
   {
     "binary", &binary,
     "Compact binary representation",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -141,7 +141,7 @@ lmx_stag(int tag)
   case 0x67:
     return "url";
   default:
-    return 0;
+    return nullptr;
   }
 }
 
@@ -312,13 +312,13 @@ static xg_tag_mapping gl_map[] = {
   { lmx_lm_link,  	cb_cdata, 	LM "/lm:mediaLink/lm:url" },
   { lmx_lm_linkt, 	cb_cdata, 	LM "/lm:mediaLink/lm:name" },
   { lmx_lm_mlink_e,	cb_end, 	LM "/lm:mediaLink" },
-  { NULL,	(xg_cb_type)0,         NULL}
+  { nullptr,	(xg_cb_type)0,         nullptr}
 };
 
 static void
 lmx_rd_init(const QString& fname)
 {
-  xml_init(fname, gl_map, NULL);
+  xml_init(fname, gl_map, nullptr);
 }
 
 static void
@@ -415,7 +415,7 @@ ff_vecs_t lmx_vecs = {
   lmx_wr_deinit,
   lmx_read,
   lmx_write,
-  NULL,
+  nullptr,
   lmx_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

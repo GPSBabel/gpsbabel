@@ -133,7 +133,7 @@ bushnell_write_one(const Waypoint* wpt)
 static void
 bushnell_write()
 {
-  track_disp_all(NULL, NULL, bushnell_write_one);
+  track_disp_all(nullptr, nullptr, bushnell_write_one);
 }
 
 ff_vecs_t bushnell_trl_vecs = {
@@ -145,7 +145,7 @@ ff_vecs_t bushnell_trl_vecs = {
   wr_deinit,
   bushnell_read,
   bushnell_write,
-  NULL,
+  nullptr,
   bushnell_args,
   CET_CHARSET_MS_ANSI, 0  /* Not really sure... */
 };

@@ -188,8 +188,8 @@ vecs_t vec_list[] = {
     &xcsv_vecs,
     "xcsv",
     "? Character Separated Values",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
 #endif
   {
@@ -197,183 +197,183 @@ vecs_t vec_list[] = {
     "geo",
     "Geocaching.com .loc",
     "loc",
-    NULL,
+    nullptr,
   },
   {
     &gpx_vecs,
     "gpx",
     "GPX XML",
     "gpx",
-    NULL,
+    nullptr,
   },
   {
     &mag_svecs,
     "magellan",
     "Magellan serial protocol",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &mag_fvecs,
     "magellan",
     "Magellan SD files (as for Meridian)",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &magX_fvecs,
     "magellanx",
     "Magellan SD files (as for eXplorist)",
     "upt",
-    NULL,
+    nullptr,
   },
   {
     &garmin_vecs,
     "garmin",
     "Garmin serial/USB protocol",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &gdb_vecs,
     "gdb",
     "Garmin MapSource - gdb",
     "gdb",
-    NULL,
+    nullptr,
   },
   {
     &mapsend_vecs,
     "mapsend",
     "Magellan Mapsend",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &mps_vecs,
     "mapsource",
     "Garmin MapSource - mps",
     "mps",
-    NULL,
+    nullptr,
   },
   {
     &nmea_vecs,
     "nmea",
     "NMEA 0183 sentences",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &ozi_vecs,
     "ozi",
     "OziExplorer",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &pcx_vecs,
     "pcx",
     "Garmin PCX5",
     "pcx",
-    NULL,
+    nullptr,
   },
   {
     &kml_vecs,
     "kml",
     "Google Earth (Keyhole) Markup Language",
     "kml",
-    NULL,
+    nullptr,
   },
 #if MAXIMAL_ENABLED
   {
     &gpsutil_vecs,
     "gpsutil",
     "gpsutil",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &lowranceusr_vecs,
     "lowranceusr",
     "Lowrance USR",
     "usr",
-    NULL,
+    nullptr,
   },
   {
     &lowranceusr4_vecs,
     "lowranceusr4",
     "Lowrance USR version 4",
     "usr",
-    NULL,
+    nullptr,
   },
   {
     &holux_vecs,
     "holux",
     "Holux (gm-100) .wpo Format",
     "wpo",
-    NULL,
+    nullptr,
   },
   {
     &tpg_vecs,
     "tpg",
     "National Geographic Topo .tpg (waypoints)",
     "tpg",
-    NULL,
+    nullptr,
   },
   {
     &tpo2_vecs,
     "tpo2",
     "National Geographic Topo 2.x .tpo",
     "tpo",
-    NULL,
+    nullptr,
   },
   {
     &tpo3_vecs,
     "tpo3",
     "National Geographic Topo 3.x/4.x .tpo",
     "tpo",
-    NULL,
+    nullptr,
   },
   {
     &tmpro_vecs,
     "tmpro",
     "TopoMapPro Places File",
     "tmpro",
-    NULL,
+    nullptr,
   },
   {
     &tiger_vecs,
     "tiger",
     "U.S. Census Bureau Tiger Mapping Service",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &easygps_vecs,
     "easygps",
     "EasyGPS binary format",
     "loc",
-    NULL,
+    nullptr,
   },
   {
     &saroute_vecs,
     "saroute",
     "DeLorme Street Atlas Route",
     "anr",
-    NULL,
+    nullptr,
   },
   {
     &navicache_vecs,
     "navicache",
     "Navicache.com XML",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {	/* MRCB */
     &psit_vecs,
     "psitrex",
     "KuDaTa PsiTrex text",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
 #if SHAPELIB_ENABLED
   {
@@ -381,7 +381,7 @@ vecs_t vec_list[] = {
     "shape",
     "ESRI shapefile",
     "shp",
-    NULL,
+    nullptr,
   },
 #endif
   {
@@ -389,191 +389,191 @@ vecs_t vec_list[] = {
     "gpl",
     "DeLorme GPL",
     "gpl",
-    NULL,
+    nullptr,
   },
   {
     &text_vecs,
     "text",
     "Textual Output",
     "txt",
-    NULL,
+    nullptr,
   },
   {
     &html_vecs,
     "html",
     "HTML Output",
     "html",
-    NULL,
+    nullptr,
   },
   {
     &netstumbler_vecs,
     "netstumbler",
     "NetStumbler Summary File (text)",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &igc_vecs,
     "igc",
     "FAI/IGC Flight Recorder Data Format",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &brauniger_iq_vecs,
     "baroiq",
     "Brauniger IQ Series Barograph Download",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &mtk_vecs,
     "mtk",
     "MTK Logger (iBlue 747,Qstarz BT-1000,...) download",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &mtk_fvecs,
     "mtk-bin",
     "MTK Logger (iBlue 747,...) Binary File Format",
     "bin",
-    NULL,
+    nullptr,
   },
   {
     &mtk_m241_vecs,
     "m241",
     "Holux M-241 (MTK based) download",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &mtk_m241_fvecs,
     "m241-bin",
     "Holux M-241 (MTK based) Binary File Format",
     "bin",
-    NULL,
+    nullptr,
   },
   {
     &mtk_locus_vecs,
     "mtk_locus",
     "MediaTek Locus",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
 #endif // MAXIMAL_ENABLED
   {
     &wbt_svecs,
     "wbt",
     "Wintec WBT-100/200 GPS Download",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
 #if MAXIMAL_ENABLED
   {
     &vpl_vecs,
     "vpl",
     "Honda/Acura Navigation System VP Log File Format",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &wbt_fvecs,
     "wbt-bin",
     "Wintec WBT-100/200 Binary File Format",
     "bin",
-    NULL,
+    nullptr,
   },
   {
     &wbt_fvecs,
     "wbt-tk1",
     "Wintec WBT-201/G-Rays 2 Binary File Format",
     "tk1",
-    NULL,
+    nullptr,
   },
   {
     &hiketech_vecs,
     "hiketech",
     "HikeTech",
     "gps",
-    NULL,
+    nullptr,
   },
   {
     &glogbook_vecs,
     "glogbook",
     "Garmin Logbook XML",
     "xml",
-    NULL,
+    nullptr,
   },
   {
     &vcf_vecs,
     "vcard",
     "Vcard Output (for iPod)",
     "vcf",
-    NULL,
+    nullptr,
   },
   {
     &google_dir_vecs,
     "googledir",
     "Google Directions XML",
     "xml",
-    NULL,
+    nullptr,
   },
   {
     &maggeo_vecs,
     "maggeo",
     "Magellan Explorist Geocaching",
     "gs",
-    NULL,
+    nullptr,
   },
   {
     &an1_vecs,
     "an1",
     "DeLorme .an1 (drawing) file",
     "an1",
-    NULL,
+    nullptr,
   },
   {
     &tomtom_vecs,
     "tomtom",
     "TomTom POI file (.ov2)",
     "ov2",
-    NULL,
+    nullptr,
   },
   {
     &tef_xml_vecs,
     "tef",
     "Map&Guide 'TourExchangeFormat' XML",
     "xml",
-    NULL,
+    nullptr,
   },
   {
     &vitosmt_vecs,
     "vitosmt",
     "Vito Navigator II tracks",
     "smt",
-    NULL,
+    nullptr,
   },
   {
     &wfff_xml_vecs,
     "wfff",
     "WiFiFoFum 2.0 for PocketPC XML",
     "xml",
-    NULL,
+    nullptr,
   },
   {
     &bcr_vecs,
     "bcr",
     "Motorrad Routenplaner (Map&Guide) .bcr files",
     "bcr",
-    NULL,
+    nullptr,
   },
   {
     &ignr_vecs,
     "ignrando",
     "IGN Rando track files",
     "rdn",
-    NULL,
+    nullptr,
   },
 #if CSVFMTS_ENABLED
   {
@@ -581,7 +581,7 @@ vecs_t vec_list[] = {
     "stmsdf",
     "Suunto Trek Manager (STM) .sdf files",
     "sdf",
-    NULL,
+    nullptr,
   },
 #endif
 #if CSVFMTS_ENABLED
@@ -590,7 +590,7 @@ vecs_t vec_list[] = {
     "stmwpp",
     "Suunto Trek Manager (STM) WaypointPlus files",
     "txt",
-    NULL,
+    nullptr,
   },
 #endif //  CSVFMTS_ENABLED
   {
@@ -598,51 +598,51 @@ vecs_t vec_list[] = {
     "cst",
     "CarteSurTable data file",
     "cst",
-    NULL,
+    nullptr,
   },
   {
     &nmn4_vecs,
     "nmn4",
     "Navigon Mobile Navigator .rte files",
     "rte",
-    NULL,
+    nullptr,
   },
 #if CSVFMTS_ENABLED
   {
     &compegps_vecs,
     "compegps",
     "CompeGPS data files (.wpt/.trk/.rte)",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
 #endif //CSVFMTS_ENABLED
   {
     &yahoo_vecs,
     "yahoo",
     "Yahoo Geocode API data",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &unicsv_vecs,
     "unicsv",
     "Universal csv with field structure in first line",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &gtm_vecs,
     "gtm",
     "GPS TrackMaker",
     "gtm",
-    NULL,
+    nullptr,
   },
   {
     &gpssim_vecs,
     "gpssim",
     "Franson GPSGate Simulation",
     "gpssim",
-    NULL,
+    nullptr,
   },
 #if CSVFMTS_ENABLED
   {
@@ -650,7 +650,7 @@ vecs_t vec_list[] = {
     "garmin_txt",
     "Garmin MapSource - txt (tab delimited)",
     "txt",
-    NULL,
+    nullptr,
   },
 #endif // CSVFMTS_ENABLED
   {
@@ -658,49 +658,49 @@ vecs_t vec_list[] = {
     "gtrnctr",
     "Garmin Training Center (.tcx/.crs/.hst/.xml)",
     "tcx/crs/hst/xml",
-    NULL,
+    nullptr,
   },
   {
     &dmtlog_vecs,
     "dmtlog",
     "TrackLogs digital mapping (.trl)",
     "trl",
-    NULL,
+    nullptr,
   },
   {
     &raymarine_vecs,
     "raymarine",
     "Raymarine Waypoint File (.rwf)",
     "rwf",
-    NULL,
+    nullptr,
   },
   {
     &alanwpr_vecs,
     "alanwpr",
     "Alan Map500 waypoints and routes (.wpr)",
     "wpr",
-    NULL,
+    nullptr,
   },
   {
     &alantrl_vecs,
     "alantrl",
     "Alan Map500 tracklogs (.trl)",
     "trl",
-    NULL,
+    nullptr,
   },
   {
     &vitovtt_vecs,
     "vitovtt",
     "Vito SmartMap tracks (.vtt)",
     "vtt",
-    NULL,
+    nullptr,
   },
   {
     &ggv_log_vecs,
     "ggv_log",
     "Geogrid-Viewer tracklogs (.log)",
     "log",
-    NULL,
+    nullptr,
   },
 #if CSVFMTS_ENABLED
   {
@@ -708,7 +708,7 @@ vecs_t vec_list[] = {
     "g7towin",
     "G7ToWin data files (.g7t)",
     "g7t",
-    NULL,
+    nullptr,
   },
 #endif
   {
@@ -716,154 +716,154 @@ vecs_t vec_list[] = {
     "garmin_gpi",
     "Garmin Points of Interest (.gpi)",
     "gpi",
-    NULL,
+    nullptr,
   },
   {
     &lmx_vecs,
     "lmx",
     "Nokia Landmark Exchange",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &random_vecs,
     "random",
     "Internal GPS data generator",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &xol_vecs,
     "xol",
     "Swiss Map 25/50/100 (.xol)",
     "xol",
-    NULL,
+    nullptr,
   },
   {
     &dg100_vecs,
     "dg-100",
     "GlobalSat DG-100/BT-335 Download",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &dg200_vecs,
     "dg-200",
     "GlobalSat DG-200 Download",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &navilink_vecs,
     "navilink",
     "NaviGPS GT-11/BGT-11 Download",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &ik3d_vecs,
     "ik3d",
     "MagicMaps IK3D project file (.ikt)",
     "ikt",
-    NULL,
+    nullptr,
   },
   {
     &osm_vecs,
     "osm",
     "OpenStreetMap data files",
     "osm",
-    NULL,
+    nullptr,
   },
   {
     &destinator_poi_vecs,
     "destinator_poi",
     "Destinator Points of Interest (.dat)",
     "dat",
-    NULL,
+    nullptr,
   },
   {
     &destinator_itn_vecs,
     "destinator_itn",
     "Destinator Itineraries (.dat)",
     "dat",
-    NULL,
+    nullptr,
   },
   {
     &destinator_trl_vecs,
     "destinator_trl",
     "Destinator TrackLogs (.dat)",
     "dat",
-    NULL,
+    nullptr,
   },
   {
     &exif_vecs,
     "exif",
     "Embedded Exif-GPS data (.jpg)",
     "jpg",
-    NULL,
+    nullptr,
   },
   {
     &vidaone_vecs,
     "vidaone",
     "VidaOne GPS for Pocket PC (.gpb)",
     "gpb",
-    NULL,
+    nullptr,
   },
   {
     &igo8_vecs,
     "igo8",
     "IGO8 .trk",
     "trk",
-    NULL,
+    nullptr,
   },
   {
     &gopal_vecs,
     "gopal",
     "GoPal GPS track log (.trk)",
     "trk",
-    NULL,
+    nullptr,
   },
   {
     &humminbird_vecs,
     "humminbird",
     "Humminbird waypoints and routes (.hwr)",
     "hwr",
-    NULL,
+    nullptr,
   },
   {
     &humminbird_ht_vecs,
     "humminbird_ht",
     "Humminbird tracks (.ht)",
     "ht",
-    NULL,
+    nullptr,
   },
   {
     &mapasia_tr7_vecs,
     "mapasia_tr7",
     "MapAsia track file (.tr7)",
     "tr7",
-    NULL,
+    nullptr,
   },
   {
     &gnav_trl_vecs,
     "gnav_trl",
     "Google Navigator Tracklines (.trl)",
     "trl",
-    NULL,
+    nullptr,
   },
   {
     &navitel_trk_vecs,
     "navitel_trk",
     "Navitel binary track (.bin)",
     "bin",
-    NULL,
+    nullptr,
   },
   {
     &ggv_ovl_vecs,
     "ggv_ovl",
     "Geogrid-Viewer ascii overlay file (.ovl)",
     "ovl",
-    NULL,
+    nullptr,
   },
 #if CSVFMTS_ENABLED
   {
@@ -871,15 +871,15 @@ vecs_t vec_list[] = {
     "jtr",
     "Jelbert GeoTagger data file",
     "jtr",
-    NULL,
+    nullptr,
   },
 #endif
   {
     &itracku_vecs,
     "itracku",
     "XAiOX iTrackU Logger",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
 
   {
@@ -887,218 +887,218 @@ vecs_t vec_list[] = {
     "itracku-bin",
     "XAiOX iTrackU Logger Binary File Format",
     "bin",
-    NULL,
+    nullptr,
   },
   {
     &sbp_vecs,
     "sbp",
     "NaviGPS GT-31/BGT-31 datalogger (.sbp)",
     "sbp",
-    NULL,
+    nullptr,
   },
   {
     &sbn_vecs,
     "sbn",
     "NaviGPS GT-31/BGT-31 SiRF binary logfile (.sbn)",
     "sbn",
-    NULL,
+    nullptr,
   },
   {
     &mmo_vecs,
     "mmo",
     "Memory-Map Navigator overlay files (.mmo)",
     "mmo",
-    NULL,
+    nullptr,
   },
   {
     &bushnell_vecs,
     "bushnell",
     "Bushnell GPS Waypoint file",
     "wpt",
-    NULL,
+    nullptr,
   },
   {
     &bushnell_trl_vecs,
     "bushnell_trl",
     "Bushnell GPS Trail file",
     "trl",
-    NULL,
+    nullptr,
   },
   {
     &skyforce_vecs,
     "skyforce",
     "Skymap / KMD150 ascii files",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &pocketfms_bc_vecs,
     "pocketfms_bc",
     "PocketFMS breadcrumbs",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &pocketfms_fp_vecs,
     "pocketfms_fp",
     "PocketFMS flightplan (.xml)",
     "xml",
-    NULL,
+    nullptr,
   },
   {
     &pocketfms_wp_vecs,
     "pocketfms_wp",
     "PocketFMS waypoints (.txt)",
     "txt",
-    NULL,
+    nullptr,
   },
   {
     &v900_vecs,
     "v900",
     "Columbus/Visiontac V900 files (.csv)",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &ng_vecs,
     "naviguide",
     "Naviguide binary route file (.twl)",
     "twl",
-    NULL,
+    nullptr,
   },
   {
     &enigma_vecs,
     "enigma",
     "Enigma binary waypoint file (.ert)",
     "ert",
-    NULL,
+    nullptr,
   },
   {
     &skytraq_vecs,
     "skytraq",
     "SkyTraq Venus based loggers (download)",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &teletype_vecs,
     "teletype",
     "Teletype [ Get Jonathon Johnson to describe",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &skytraq_fvecs,
     "skytraq-bin",
     "SkyTraq Venus based loggers Binary File Format",
     "bin",
-    NULL,
+    nullptr,
   },
   {
     &miniHomer_vecs,
     "miniHomer",
     "MiniHomer, a skyTraq Venus 6 based logger (download tracks, waypoints and get/set POI)",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &jogmap_vecs,
     "jogmap",
     "Jogmap.de XML format",
     "xml",
-    NULL,
+    nullptr,
   },
   {
     &wintec_tes_vecs,
     "wintec_tes",
     "Wintec TES file",
     "tes",
-    NULL,
+    nullptr,
   },
   {
     &subrip_vecs,
     "subrip",
     "SubRip subtitles for video mapping (.srt)",
     "srt",
-    NULL,
+    nullptr,
   },
   {
     &format_garmin_xt_vecs,
     "garmin_xt",
     "Mobile Garmin XT Track files",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
   {
     &format_fit_vecs,
     "garmin_fit",
     "Flexible and Interoperable Data Transfer (FIT) Activity file",
     "fit",
-    NULL,
+    nullptr,
   },
   {
     &mapbar_track_vecs,
     "mapbar",
     "Mapbar (China) navigation track for Sonim Xp3300",
     "trk",
-    NULL,
+    nullptr,
   },
   {
     &f90g_track_vecs,
     "f90g",
     "F90G Automobile DVR GPS log file",
     "map",
-    NULL,
+    nullptr,
   },
   {
     &mapfactor_vecs,
     "mapfactor",
     "Mapfactor Navigator",
     "xml",
-    NULL,
+    nullptr,
   },
   {
     &energympro_vecs,
     "energympro",
     "Energympro GPS training watch",
     "cpo",
-    NULL,
+    nullptr,
   },
   {
     &mynav_vecs,
     "mynav",
     "MyNav TRC format",
     "trc",
-    NULL,
+    nullptr,
   },
   {
     &geojson_vecs,
     "geojson",
     "GeoJson",
     "json",
-    NULL,
+    nullptr,
   },
   {
     &ggv_bin_vecs,
     "ggv_bin",
     "Geogrid-Viewer binary overlay file (.ovl)",
     "ovl",
-    NULL,
+    nullptr,
   },
   {
     &globalsat_sport_vecs,
     "globalsat",
     "GlobalSat GH625XT GPS training watch",
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
   },
 #endif // MAXIMAL_ENABLED
   {
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
+    nullptr,
   }
 };
 
@@ -1110,9 +1110,9 @@ init_vecs()
     arglist_t* ap;
     if (vec->vec->args) {
       for (ap = vec->vec->args; ap->argstring; ap++) {
-        ap->argvalptr = NULL;
+        ap->argvalptr = nullptr;
         if (ap->argval) {
-          *ap->argval = NULL;
+          *ap->argval = nullptr;
         }
       }
     }
@@ -1144,7 +1144,7 @@ exit_vecs()
         }
         if (ap->argvalptr) {
           xfree(ap->argvalptr);
-          *ap->argval = ap->argvalptr = NULL;
+          *ap->argval = ap->argvalptr = nullptr;
         }
       }
     }
@@ -1157,19 +1157,19 @@ assign_option(const char* module, arglist_t* ap, const char* val)
 {
   const char* c;
 
-  if (ap->argval == NULL) {
+  if (ap->argval == nullptr) {
     fatal("%s: No local variable defined for option \"%s\"!", module, ap->argstring);
   }
 
-  if (ap->argvalptr != NULL) {
+  if (ap->argvalptr != nullptr) {
     xfree(ap->argvalptr);
-    ap->argvalptr = NULL;
+    ap->argvalptr = nullptr;
   }
   if (ap->argval) {
-    *ap->argval = NULL;
+    *ap->argval = nullptr;
   }
 
-  if (val == NULL) {
+  if (val == nullptr) {
     return;
   }
 
@@ -1234,7 +1234,7 @@ assign_option(const char* module, arglist_t* ap, const char* val)
   /* for bool options without default: don't set argval if "FALSE" */
 
   if (((ap->argtype & ARGTYPE_TYPEMASK) == ARGTYPE_BOOL) &&
-      (*c == '0') && (ap->defaultvalue == NULL)) {
+      (*c == '0') && (ap->defaultvalue == nullptr)) {
     return;
   }
   *ap->argval = ap->argvalptr = xstrdup(c);
@@ -1264,7 +1264,7 @@ find_vec(const char* vecname, const char** opts)
   char* svecname = strtok(v, ",");
   int found = 0;
 
-  if (vecname == NULL) {
+  if (vecname == nullptr) {
     fatal("A format name is required.\n");
   }
 
@@ -1278,7 +1278,7 @@ find_vec(const char* vecname, const char** opts)
     if (res) {
       *opts = strchr(vecname, ',')+1;
     } else {
-      *opts = NULL;
+      *opts = nullptr;
     }
 
     if (vec->vec->args) {
@@ -1295,10 +1295,10 @@ find_vec(const char* vecname, const char** opts)
           }
         }
         opt = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
-        if (opt == NULL) {
+        if (opt == nullptr) {
           opt = inifile_readstr(global_opts.inifile, "Common format settings", ap->argstring);
         }
-        if (opt == NULL) {
+        if (opt == nullptr) {
           opt = ap->defaultvalue;
         }
         assign_option(vec->name, ap, opt);
@@ -1335,7 +1335,7 @@ find_vec(const char* vecname, const char** opts)
     if (res) {
       *opts = strchr(vecname, ',') + 1;
     } else {
-      *opts = NULL;
+      *opts = nullptr;
     }
 
     if (vec_list[0].vec->args) {
@@ -1352,10 +1352,10 @@ find_vec(const char* vecname, const char** opts)
           }
         }
         opt = inifile_readstr(global_opts.inifile, svec->name, ap->argstring);
-        if (opt == NULL) {
+        if (opt == nullptr) {
           opt = inifile_readstr(global_opts.inifile, "Common format settings", ap->argstring);
         }
-        if (opt == NULL) {
+        if (opt == nullptr) {
           opt = ap->defaultvalue;
         }
         assign_option(svec->name, ap, opt);
@@ -1382,7 +1382,7 @@ find_vec(const char* vecname, const char** opts)
    * Not found.
    */
   xfree(v);
-  return NULL;
+  return nullptr;
 }
 
 /*
@@ -1398,17 +1398,17 @@ get_option(const char* iarglist, const char* argname)
 {
   const size_t arglen = strlen(argname);
   char* arglist;
-  char* rval = NULL;
+  char* rval = nullptr;
   char* arg;
   char* argp;
 
   if (!iarglist) {
-    return NULL;
+    return nullptr;
   }
 
   arglist = xstrdup(iarglist);
 
-  for (arg = arglist; argp = strtok(arg, ","), NULL != argp; arg = NULL) {
+  for (arg = arglist; argp = strtok(arg, ","), nullptr != argp; arg = nullptr) {
     if (0 == case_ignore_strncmp(argp, argname, arglen)) {
       /*
        * If we have something of the form "foo=bar"
@@ -1480,7 +1480,7 @@ sort_and_unify_vecs(int* ctp)
   /* Normal vecs are easy; populate the first part of the array. */
   for (vec = vec_list; vec->vec; vec++, i++) {
     svp[i] = vec;
-    if (svp[i]->parent == NULL) {
+    if (svp[i]->parent == nullptr) {
       svp[i]->parent = svp[i]->name;
     }
   }
@@ -1663,7 +1663,7 @@ disp_v3(const vecs_t* vec)
 {
   arglist_t* ap;
 
-  disp_help_url(vec, NULL);
+  disp_help_url(vec, nullptr);
   for (ap = vec->vec->args; ap && ap->argstring; ap++) {
     if (!(ap->argtype & ARGTYPE_HIDDEN)) {
       printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",

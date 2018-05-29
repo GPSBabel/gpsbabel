@@ -183,7 +183,7 @@ struct log_type {
   { 17, 2, "RCR"},
   { 18, 2, "MILLISECOND"},
   { 19, 8, "DISTANCE" },
-  { 20, 0, NULL},
+  { 20, 0, nullptr},
 };
 
 struct sat_info {
@@ -277,7 +277,7 @@ static arglist_t mtk_sargs[] = {
   },
   {
     "csv",   &csv_file, "MTK compatible CSV output file",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "block_size_kb", &OPT_block_size_kb, "Size of blocks in KB to request from device",
@@ -363,7 +363,7 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
     int rc;
     rc = gbser_read_line(fd, line, sizeof(line)-1, TIMEOUT, 0x0A, 0x0D);
     if (rc != gbser_OK) {
-      if (rc == gbser_TIMEOUT && time(NULL) > tout) {
+      if (rc == gbser_TIMEOUT && time(nullptr) > tout) {
         dbg(2, "NMEA command '%s' timeout !\n", cmd);
         return -1;
         // fatal(MYNAME "do_cmd(): Read error (%d)\n", rc);
@@ -403,7 +403,7 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
           int pAck;
           pType = &line[9];
           pRslt = strchr(&line[9], ',') + 1;
-          if (memcmp(&cmd[5], pType, 3) == 0 && pRslt != NULL && *pRslt != '\0') {
+          if (memcmp(&cmd[5], pType, 3) == 0 && pRslt != nullptr && *pRslt != '\0') {
             pAck = *pRslt - '0';
             if (pAck != 3 && pAck >= 0 && pAck < 4) {  // Erase will return '2'
               dbg(1, "NMEA command '%s' failed - %s\n", cmd, MTK_ACK[pAck]);
@@ -416,7 +416,7 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
       }
 
     }
-    if (!done && time(NULL) > tout) {
+    if (!done && time(nullptr) > tout) {
       dbg(1, "NMEA command '%s' timeout !\n", cmd);
       return -1;
     }
@@ -442,7 +442,7 @@ static void mtk_rd_init(const QString& fname)
 
   errno = 0;
   dbg(1, "Opening port %s...\n", port);
-  if ((fd = gbser_init(port)) == NULL) {
+  if ((fd = gbser_init(port)) == nullptr) {
     fatal(MYNAME ": Can't initialise port \"%s\" (%s)\n", port, strerror(errno));
   }
 
@@ -474,8 +474,8 @@ static void mtk_rd_init(const QString& fname)
   // say hello to GR245 to make it display "USB PROCESSING"
   if (strstr(model, "GR-245")) {
     holux245_init();	// remember we have a GR245 for mtk_rd_deinit()
-    rc |= do_cmd("$PHLX810*35\r\n", "PHLX852,", NULL, 10);
-    rc |= do_cmd("$PHLX826*30\r\n", "PHLX859*38", NULL, 10);
+    rc |= do_cmd("$PHLX810*35\r\n", "PHLX852,", nullptr, 10);
+    rc |= do_cmd("$PHLX826*30\r\n", "PHLX859*38", nullptr, 10);
     if (rc != 0) {
       dbg(2, "Greeting not successfull.\n");
     }
@@ -486,7 +486,7 @@ static void mtk_rd_init(const QString& fname)
 static void mtk_rd_deinit()
 {
   if (mtk_device == HOLUX_GR245) {
-    int rc = do_cmd("$PHLX827*31\r\n", "PHLX860*32", NULL, 10);
+    int rc = do_cmd("$PHLX827*31\r\n", "PHLX860*32", nullptr, 10);
     if (rc != 0) {
       dbg(2, "Goodbye not successfull.\n");
     }
@@ -494,14 +494,14 @@ static void mtk_rd_deinit()
 
   dbg(3, "Closing port...\n");
   gbser_deinit(fd);
-  fd = NULL;
+  fd = nullptr;
   xfree(port);
 }
 
 static int mtk_erase()
 {
   int log_status, log_mask, err;
-  char* lstatus = NULL;
+  char* lstatus = nullptr;
 
   log_status = 0;
   // check log status - is logging disabled ?
@@ -510,27 +510,27 @@ static int mtk_erase()
     log_status = atoi(lstatus);
     dbg(3, "LOG Status '%s'\n", lstatus);
     xfree(lstatus);
-    lstatus = NULL;
+    lstatus = nullptr;
   }
 
   do_cmd(CMD_LOG_FORMAT, "PMTK182,3,2,", &lstatus, 2);
   if (lstatus) {
-    log_mask = strtoul(lstatus, NULL, 16);
+    log_mask = strtoul(lstatus, nullptr, 16);
     dbg(3, "LOG Mask '%s' - 0x%.8x \n", lstatus, log_mask);
     xfree(lstatus);
-    lstatus = NULL;
+    lstatus = nullptr;
   }
 
   dbg(1, "Start flash erase..\n");
-  do_cmd(CMD_LOG_DISABLE, "PMTK001,182,5,3", NULL, 1);
+  do_cmd(CMD_LOG_DISABLE, "PMTK001,182,5,3", nullptr, 1);
   gb_sleep(10*1000);
 
   // Erase log....
-  do_cmd(CMD_LOG_ERASE, "PMTK001,182,6", NULL, 30);
+  do_cmd(CMD_LOG_ERASE, "PMTK001,182,6", nullptr, 30);
   gb_sleep(100*1000);
 
   if ((log_status & 2)) {  // auto-log were enabled before..re-enable log.
-    err = do_cmd(CMD_LOG_ENABLE, "PMTK001,182,4,3", NULL, 2);
+    err = do_cmd(CMD_LOG_ENABLE, "PMTK001,182,4,3", nullptr, 2);
     dbg(3, "re-enable log %s\n", err==0?"Success":"Fail");
   }
   return 0;
@@ -539,14 +539,14 @@ static int mtk_erase()
 static void mtk_read()
 {
   char cmd[256];
-  char* line = NULL;
-  unsigned char crc, *data = NULL;
+  char* line = nullptr;
+  unsigned char crc, *data = nullptr;
   int cmdLen, i, len, rc, init_scan, retry_cnt, log_enabled;
   unsigned int j, bsize, scan_bsize, read_bsize_kb, read_bsize, scan_step, ff_len, null_len, chunk_size;
   unsigned int line_size, data_size, data_addr, addr, addr_max, rcvd_addr, rcvd_bsize;
   unsigned long dsize, dpos = 0;
   FILE* dout;
-  char* fusage = NULL;
+  char* fusage = nullptr;
 
 
   if (*OPT_erase_only != '0') {
@@ -557,9 +557,9 @@ static void mtk_read()
   log_enabled = 0;
   init_scan = 0;
   dout = ufopen(TEMP_DATA_BIN, "r+b");
-  if (dout == NULL) {
+  if (dout == nullptr) {
     dout = ufopen(TEMP_DATA_BIN, "wb");
-    if (dout == NULL) {
+    if (dout == nullptr) {
       fatal(MYNAME ": Can't create temporary file %s",
             qPrintable(TEMP_DATA_BIN));
       return;
@@ -581,12 +581,12 @@ static void mtk_read()
     log_enabled = (atoi(fusage) & 2)?1:0;
     dbg(3, "LOG Status '%s' -- log %s \n", fusage, log_enabled?"enabled":"disabled");
     xfree(fusage);
-    fusage = NULL;
+    fusage = nullptr;
   }
 
   gb_sleep(10*1000);
   if (true || log_enabled) {
-    i = do_cmd(CMD_LOG_DISABLE, "PMTK001,182,5,3", NULL, 2);
+    i = do_cmd(CMD_LOG_DISABLE, "PMTK001,182,5,3", nullptr, 2);
     dbg(3, " ---- LOG DISABLE ---- %s\n", i==0?"Success":"Fail");
   }
   gb_sleep(100*1000);
@@ -595,7 +595,7 @@ static void mtk_read()
   // get flash usage, current log address..cmd only works if log disabled.
   do_cmd("$PMTK182,2,8*33\r\n", "PMTK182,3,8,", &fusage, 2);
   if (fusage) {
-    addr_max = strtoul(fusage, NULL, 16);
+    addr_max = strtoul(fusage, nullptr, 16);
     if (addr_max > 0) {
       addr_max =  addr_max - addr_max%65536 + 65535;
     }
@@ -615,7 +615,7 @@ static void mtk_read()
     init_scan = 0;
     QFile::rename(TEMP_DATA_BIN, TEMP_DATA_BIN_OLD);
     dout = ufopen(TEMP_DATA_BIN, "wb");
-    if (dout == NULL) {
+    if (dout == nullptr) {
       fatal(MYNAME ": Can't create temporary file %s",
             qPrintable(TEMP_DATA_BIN));
       return;
@@ -624,7 +624,7 @@ static void mtk_read()
 
   scan_step = 0x10000;
   scan_bsize = 0x0400;
-  read_bsize_kb = strtol(OPT_block_size_kb, NULL, 10);
+  read_bsize_kb = strtol(OPT_block_size_kb, nullptr, 10);
   if (errno == ERANGE || read_bsize_kb < 1) {
     read_bsize_kb = 1;
   } else if (read_bsize_kb > 64) {
@@ -641,10 +641,10 @@ static void mtk_read()
 
   line_size = 2*read_bsize + 32; // logdata as nmea/hex.
   data_size = read_bsize + 32;
-  if ((line = (char*) xmalloc(line_size)) == NULL) {
+  if ((line = (char*) xmalloc(line_size)) == nullptr) {
     fatal(MYNAME ": Can't allocate %u bytes for NMEA buffer\n",  line_size);
   }
-  if ((data = (unsigned char*) xmalloc(data_size)) ==  NULL) {
+  if ((data = (unsigned char*) xmalloc(data_size)) ==  nullptr) {
     fatal(MYNAME ": Can't allocate %u bytes for data buffer\n",  data_size);
   }
   memset(line, '\0', line_size);
@@ -682,7 +682,7 @@ mtk_retry:
         line[len] = '\0';
         if (strncmp(line, "$PMTK182,8", 10) == 0) { //  $PMTK182,8,00005000,FFFFFFF
           retry_cnt = 0;
-          data_addr = strtoul(&line[11], NULL, 16);
+          data_addr = strtoul(&line[11], nullptr, 16);
           // fixme - we should check if all data before data_addr is already received
           i = 20;
           j = data_addr - addr;
@@ -772,7 +772,7 @@ mtk_retry:
       }
     }
   }
-  if (dout != NULL) {
+  if (dout != nullptr) {
 #if __WIN32__
     _chsize(fileno(dout), addr_max);
 #else
@@ -786,15 +786,15 @@ mtk_retry:
 
   // Fixme - Order or. Enable - parse - erase ??
   if (log_enabled || *OPT_log_enable=='1') {
-    i = do_cmd(CMD_LOG_ENABLE, "PMTK001,182,4,3", NULL, 2);
+    i = do_cmd(CMD_LOG_ENABLE, "PMTK001,182,4,3", nullptr, 2);
     dbg(3, " ---- LOG ENABLE ----%s\n", i==0?"Success":"Fail");
   } else {
     dbg(1, "Note !!! -- Logging is DISABLED !\n");
   }
-  if (line != NULL) {
+  if (line != nullptr) {
     xfree(line);
   }
-  if (data != NULL) {
+  if (data != nullptr) {
     xfree(data);
   }
 
@@ -811,12 +811,12 @@ mtk_retry:
 }
 
 
-static route_head*  trk_head = NULL;
+static route_head*  trk_head = nullptr;
 static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
 {
   Waypoint* trk = new Waypoint;
 
-  if (global_opts.masked_objective& TRKDATAMASK && (trk_head == NULL || (mtk_info.track_event & MTK_EVT_START))) {
+  if (global_opts.masked_objective& TRKDATAMASK && (trk_head == nullptr || (mtk_info.track_event & MTK_EVT_START))) {
     char spds[50];
     trk_head = route_head_alloc();
     trk_head->rte_name = QString("track-%1").arg(1 + track_count());
@@ -941,13 +941,13 @@ static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
   dbg(1, "Opening csv output file %s...\n", csv_fname);
 
   // can't use gbfopen here - it will fatal() if file doesn't exist
-  if ((cf = ufopen(QString::fromUtf8(csv_fname), "r")) != NULL) {
+  if ((cf = ufopen(QString::fromUtf8(csv_fname), "r")) != nullptr) {
     fclose(cf);
     warning(MYNAME ": CSV file %s already exist ! Cowardly refusing to overwrite.\n", csv_fname);
     return;
   }
 
-  if ((cd = gbfopen(csv_fname, "w", MYNAME)) == NULL) {
+  if ((cd = gbfopen(csv_fname, "w", MYNAME)) == nullptr) {
     fatal(MYNAME ": Can't open csv file '%s'\n", csv_fname);
   }
 
@@ -987,9 +987,9 @@ static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
 
 static void mtk_csv_deinit()
 {
-  if (cd != NULL) {
+  if (cd != nullptr) {
     gbfclose(cd);
-    cd = NULL;
+    cd = nullptr;
   }
 }
 
@@ -1312,7 +1312,7 @@ int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
     } else {
       dbg(1,"Missing '*' !\n");
       if (data[i] == 0xff) {  // in some case star-crc hasn't been written on power off.
-        dbg(1, "Bad data point @0x%.6x - skip %d bytes\n", (fl!=NULL)?ftell(fl):-1, i+2);
+        dbg(1, "Bad data point @0x%.6x - skip %d bytes\n", (fl!=nullptr)?ftell(fl):-1, i+2);
         return i+2; // include '*' and crc
       }
     }
@@ -1325,12 +1325,12 @@ int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
   }
 
   if (data[i] != crc) {
-    dbg(0,"%2d: Bad CRC %.2x != %.2x (pos 0x%.6x)\n", count, data[i], crc, (fl!=NULL)?ftell(fl):-1);
+    dbg(0,"%2d: Bad CRC %.2x != %.2x (pos 0x%.6x)\n", count, data[i], crc, (fl!=nullptr)?ftell(fl):-1);
   }
   i++; // crc
   count++;
 
-  if (cd != NULL) {
+  if (cd != nullptr) {
     csv_line(cd, count, bmask, &itm);
   }
 
@@ -1474,7 +1474,7 @@ static void file_init_m241(const QString& fname)
 static void file_init(const QString& fname)
 {
   dbg(4, "Opening file %s...\n", qPrintable(fname));
-  if (fl = ufopen(fname, "rb"), NULL == fl) {
+  if (fl = ufopen(fname, "rb"), nullptr == fl) {
     fatal(MYNAME ": Can't open file '%s'\n", qPrintable(fname));
   }
   switch (mtk_device) {
@@ -1685,12 +1685,12 @@ ff_vecs_t mtk_vecs = {
     ff_cap_none 	/* routes */
   },
   mtk_rd_init,
-  NULL,
+  nullptr,
   mtk_rd_deinit,
-  NULL,
+  nullptr,
   mtk_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   mtk_sargs,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
@@ -1706,12 +1706,12 @@ ff_vecs_t mtk_m241_vecs = {
     ff_cap_none 	/* routes */
   },
   mtk_rd_init_m241,
-  NULL,
+  nullptr,
   mtk_rd_deinit,
-  NULL,
+  nullptr,
   mtk_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   mtk_sargs,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
@@ -1724,7 +1724,7 @@ ff_vecs_t mtk_m241_vecs = {
 static arglist_t mtk_fargs[] = {
   {
     "csv",   &csv_file, "MTK compatible CSV output file",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -1733,12 +1733,12 @@ ff_vecs_t mtk_fvecs = {
   ff_type_file,
   { ff_cap_read, ff_cap_read, ff_cap_none },
   file_init,
-  NULL,
+  nullptr,
   file_deinit,
-  NULL,
+  nullptr,
   file_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   mtk_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
   , NULL_POS_OPS,
@@ -1749,12 +1749,12 @@ ff_vecs_t mtk_m241_fvecs = {
   ff_type_file,
   { ff_cap_read, ff_cap_read, ff_cap_none },
   file_init_m241,
-  NULL,
+  nullptr,
   file_deinit,
-  NULL,
+  nullptr,
   file_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   mtk_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything | CET-REVIEW */
   , NULL_POS_OPS,

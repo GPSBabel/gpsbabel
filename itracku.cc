@@ -354,8 +354,8 @@ init_device()
 // select the type of option.
 static
 arglist_t itracku_args[] = {
-  { "backup", &backup_file_name, "Appends the input to a backup file", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-  { "new", &only_new, "Only waypoints that are not the backup file", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  { "backup", &backup_file_name, "Appends the input to a backup file", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  { "new", &only_new, "Only waypoints that are not the backup file", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
 //   "default", ARGYTPE_STRING, ARG_NOMINMAX} ,
   ARG_TERMINATOR
 };
@@ -369,12 +369,12 @@ itracku_rd_init_common(const QString&)
 {
   new_waypoint_count = 0;
 
-  if (backup_file_name != NULL) {
+  if (backup_file_name != nullptr) {
     fbackup = gbfopen(backup_file_name, "a+", MYNAME);
     backup_last_creation_time = itracku_file_read_last_time(fbackup);
     gbfseek(fbackup, 0, SEEK_END);
   } else {
-    fbackup = NULL;
+    fbackup = nullptr;
     backup_last_creation_time = 0;
   }
 }
@@ -435,7 +435,7 @@ itracku_rd_ser_init(const QString& fname)
       port = xstrdup(qPrintable(fname));
 
       dbg(1, "opening port %s", qPrintable(fname));
-      if ((fd = gbser_init(port)) == NULL) {
+      if ((fd = gbser_init(port)) == nullptr) {
         fatal(MYNAME ": can't initialise port \"%s\"", port);
       }
 
@@ -464,17 +464,17 @@ itracku_rd_deinit()
   if (fd) {
     dbg(3, "closing port %s", port);
     gbser_deinit(fd);
-    fd = NULL;
+    fd = nullptr;
     xfree(port);
-    port = NULL;
+    port = nullptr;
   }
   if (fin) {
     gbfclose(fin);
-    fin = NULL;
+    fin = nullptr;
   }
   if (fbackup) {
     gbfclose(fbackup);
-    fbackup = NULL;
+    fbackup = nullptr;
   }
 }
 
@@ -494,7 +494,7 @@ import_data_record(itracku_data_record* d)
         gbfwrite(d, sizeof(*d), 1, fbackup);
         result = -1;
       } else {
-        result = (only_new == NULL);
+        result = (only_new == nullptr);
       }
     } else {
       result = -1;
@@ -697,7 +697,7 @@ gprmc_parse(char* ibuf)
                   &speed, &course, &dmy);
 
   if (rc == 0) {
-    return NULL;
+    return nullptr;
   }
 
   fsec = hms - (int)hms;
@@ -776,16 +776,16 @@ ff_vecs_t itracku_vecs = {
     ff_cap_none /* routes */
   },
   itracku_rd_ser_init,
-  NULL,
+  nullptr,
   itracku_rd_deinit,
-  NULL,
+  nullptr,
   itracku_read,
   itracku_write,
   itracku_exit,
   itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
-  { itracku_rt_init, itracku_rt_position, itracku_rt_deinit, NULL, NULL, NULL },
+  { itracku_rt_init, itracku_rt_position, itracku_rt_deinit, nullptr, nullptr, nullptr },
   nullptr
 };
 
@@ -806,7 +806,7 @@ ff_vecs_t itracku_fvecs = {
   itracku_args,
   CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */
-  { NULL, NULL, NULL, NULL, NULL, NULL },
+  { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr },
   nullptr
 };
 

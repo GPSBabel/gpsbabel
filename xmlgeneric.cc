@@ -61,12 +61,12 @@ xg_callback*
 xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 {
   xg_tag_mapping* tm;
-  for (tm = xg_tag_tbl; tm->tag_cb != NULL; tm++) {
+  for (tm = xg_tag_tbl; tm->tag_cb != nullptr; tm++) {
     if (str_match(CSTR(tag), tm->tag_name) && (cb_type == tm->cb_type)) {
       return tm->tag_cb;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 void
@@ -88,8 +88,8 @@ xml_deinit()
 {
   reader_data.clear();
   rd_fname.clear();
-  xg_tag_tbl = NULL;
-  xg_encoding = NULL;
+  xg_tag_tbl = nullptr;
+  xg_encoding = nullptr;
   codec = utf8_codec;
 }
 
@@ -110,7 +110,7 @@ xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
       if (!reader.documentEncoding().isEmpty()) {
         codec = QTextCodec::codecForName(CSTR(reader.documentEncoding().toString()));
       }
-      if (codec == NULL) {
+      if (codec == nullptr) {
         // According to http://www.opentag.com/xfaq_enc.htm#enc_default , we
         // should assume UTF-8 in absense of other informations. Users can
         // EASILY override this with xml_init().
@@ -129,7 +129,7 @@ xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
       cb = xml_tbl_lookup(current_tag, cb_start);
       if (cb) {
         const QXmlStreamAttributes attrs = reader.attributes();
-        cb(NULL, &attrs);
+        cb(nullptr, &attrs);
       }
 
       cb = xml_tbl_lookup(current_tag, cb_cdata);
@@ -139,7 +139,7 @@ xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
         // thus we will not process the EndElement case as we will issue a readNext first.
         // does a caller ever expect to be able to use both a cb_cdata and a
         // cb_end callback?
-        cb(c, NULL);
+        cb(c, nullptr);
         current_tag.chop(reader.qualifiedName().length() + 1);
       }
       break;
@@ -151,7 +151,7 @@ xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
 
       cb = xml_tbl_lookup(current_tag, cb_end);
       if (cb) {
-        cb(reader.name().toString(), NULL);
+        cb(reader.name().toString(), nullptr);
       }
       current_tag.chop(reader.qualifiedName().length() + 1);
       break;
