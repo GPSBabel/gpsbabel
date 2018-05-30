@@ -77,11 +77,11 @@ static int alerts;
 static arglist_t garmin_gpi_args[] = {
   {
     "alerts", &opt_alerts, "Enable alerts on speed or proximity distance",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "bitmap", &opt_bitmap, "Use specified bitmap on output",
-    NULL, ARGTYPE_FILE, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_FILE, ARG_NOMINMAX, nullptr
   },
   {
     "category", &opt_cat, "Default category on output",
@@ -89,31 +89,31 @@ static arglist_t garmin_gpi_args[] = {
   },
   {
     "hide", &opt_hide_bitmap, "Don't show gpi bitmap on device",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "descr", &opt_descr, "Write description to address field",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "notes", &opt_notes, "Write notes to address field",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "position", &opt_pos, "Write position to address field",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "proximity", &opt_proximity, "Default proximity",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "sleep", &opt_sleep, "After output job done sleep n second(s)",
-    NULL, ARGTYPE_INT, "1", NULL, nullptr
+    nullptr, ARGTYPE_INT, "1", nullptr, nullptr
   },
   {
     "speed", &opt_speed, "Default speed",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "unique", &opt_unique, "Create unique waypoint names (default = yes)",
@@ -129,7 +129,7 @@ static arglist_t garmin_gpi_args[] = {
   },
   {
     "languagecode", &opt_lang, "language code to use for reading dual language files",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -233,10 +233,10 @@ static garmin_fs_t*
 gpi_gmsd_init(Waypoint* wpt)
 {
   garmin_fs_t* gmsd = GMSD_FIND(wpt);
-  if (wpt == NULL) {
+  if (wpt == nullptr) {
     fatal(MYNAME ": Error in file structure.\n");
   }
-  if (gmsd == NULL) {
+  if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
     fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
   }
@@ -273,7 +273,7 @@ static char*
 gpi_read_string_old(const char* field)
 {
   int l0;
-  char* res = NULL;
+  char* res = nullptr;
 
   l0 = gbfgetint16(fin);
   if (l0 > 0) {
@@ -283,8 +283,8 @@ gpi_read_string_old(const char* field)
     if (first == 0) {
       short l1;
       short l2;
-      char* res1 = NULL;
-      char* res2 = NULL;
+      char* res1 = nullptr;
+      char* res2 = nullptr;
       char lc1[3] = "";
       char lc2[3] = "";
 
@@ -497,7 +497,7 @@ read_poi_list(const int sz)
 
   while (gbftell(fin) < (gbsize_t)(pos + sz - 4)) {
     int tag = gbfgetint32(fin);
-    if (! read_tag("read_poi_list", tag, NULL)) {
+    if (! read_tag("read_poi_list", tag, nullptr)) {
       return;
     }
   }
@@ -533,7 +533,7 @@ read_poi_group(const int sz, const int tag)
 
   while (gbftell(fin) < (gbsize_t)(pos + sz)) {
     int subtag = gbfgetint32(fin);
-    if (! read_tag("read_poi_group", subtag, NULL)) {
+    if (! read_tag("read_poi_group", subtag, nullptr)) {
       break;
     }
   }
@@ -891,7 +891,7 @@ wdata_check(writer_data_t* data)
       }
     }
 
-    if (*ref == NULL) {
+    if (*ref == nullptr) {
       *ref = wdata_alloc();
     }
 
@@ -1320,7 +1320,7 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
   int dest_bpp;
   int src_line_sz, dest_line_sz;
   bmp_header_t src_h;
-  int* color_table = NULL;
+  int* color_table = nullptr;
   gpi_bitmap_header_t* dest_h;
   unsigned char* ptr;
 
@@ -1502,7 +1502,7 @@ garmin_gpi_wr_init(const QString& fname)
   int i;
 
   if (gpi_timestamp != 0) {			/* not the first gpi output session */
-    time_t t = time(NULL);
+    time_t t = time(nullptr);
     if (t <= gpi_timestamp) {
       gpi_timestamp++;  /* don't create files with same timestamp */
     } else {
@@ -1598,7 +1598,7 @@ garmin_gpi_wr_deinit()
       sleep = 1;
     }
     gpi_timestamp += sleep;
-    while (gpi_timestamp > time(NULL)) {
+    while (gpi_timestamp > time(nullptr)) {
       gb_sleep(100);
     }
   }
@@ -1613,7 +1613,7 @@ garmin_gpi_read()
     if (tag == 0xffff) {
       return;
     }
-    if (! read_tag("garmin_gpi_read", tag, NULL)) {
+    if (! read_tag("garmin_gpi_read", tag, nullptr)) {
       return;
     }
   };
@@ -1631,7 +1631,7 @@ garmin_gpi_write()
   }
 
   if (opt_hide_bitmap) {
-    image = NULL;
+    image = nullptr;
     image_sz = 0;
   } else if (opt_bitmap && *opt_bitmap) {
     load_bitmap_from_file(opt_bitmap, &image, &image_sz);
@@ -1668,7 +1668,7 @@ ff_vecs_t garmin_gpi_vecs = {
   garmin_gpi_wr_deinit,
   garmin_gpi_read,
   garmin_gpi_write,
-  NULL,
+  nullptr,
   garmin_gpi_args,
   CET_CHARSET_MS_ANSI, 0		/* WIN-CP1252 */
   , NULL_POS_OPS,

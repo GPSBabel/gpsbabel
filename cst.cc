@@ -52,18 +52,18 @@ arglist_t cst_args[] = {
 static void
 cst_add_wpt(const route_head* track, Waypoint* wpt)
 {
-  if ((wpt == NULL) || (track == NULL)) {
+  if ((wpt == nullptr) || (track == nullptr)) {
     return;
   }
 
-  if (wpt->shortname != NULL) {
+  if (wpt->shortname != nullptr) {
     waypt_add(new Waypoint(*wpt));
     // Rather than creating a new waypt on each read, tis format bizarrely
     // recycles the same one, relying on new waypoint(*) above and then manually
     // resetting fields.  Weird.
     wpt->url_link_list_.clear();
 
-    if (temp_route == NULL) {
+    if (temp_route == nullptr) {
       temp_route = route_head_alloc();
       route_add_head(temp_route);
     }
@@ -79,7 +79,7 @@ cst_make_url(char* str)
   char* res;
 
   if (len < 3) {
-    return NULL;
+    return nullptr;
   }
 
   if (strstr(str, "://") > str) {
@@ -128,7 +128,7 @@ cst_make_url(char* str)
     return res;
 
   } else {
-    return NULL;
+    return nullptr;
   }
 
 }
@@ -139,7 +139,7 @@ static void
 cst_rd_init(const QString& fname)
 {
   fin = gbfopen(fname, "rb", MYNAME);
-  temp_route = NULL;
+  temp_route = nullptr;
 }
 
 static void
@@ -161,8 +161,8 @@ cst_data_read()
   int section = CST_UNKNOWN;
   int cst_version;
   int cst_points = -1;
-  route_head* track = NULL;
-  Waypoint* wpt = NULL;
+  route_head* track = nullptr;
+  Waypoint* wpt = nullptr;
 
   while ((buff = gbfgetstr(fin))) {
     char* cin = buff;
@@ -228,7 +228,7 @@ cst_data_read()
 
           if (strcmp(cin + 2, "note") == 0) {
             buff = gbfgetstr(fin);
-            if (buff == NULL) {
+            if (buff == nullptr) {
               buff = (char*) "";
             }
             line++;
@@ -260,7 +260,7 @@ cst_data_read()
         }
 
         cst_add_wpt(track, wpt);
-        wpt = NULL;
+        wpt = nullptr;
 
 
         wpt = new Waypoint;
@@ -304,7 +304,7 @@ cst_data_read()
       break;
 
     case CST_REFERENCE:
-      if ((strncmp(cin, "DATUM ", 6) == 0) && (strstr(cin, "WGS 84") == NULL)) {
+      if ((strncmp(cin, "DATUM ", 6) == 0) && (strstr(cin, "WGS 84") == nullptr)) {
         fatal(MYNAME ": Unsupported datum (%s)!\n", cin);
       }
       break;
@@ -315,7 +315,7 @@ cst_data_read()
     }
   }
   cst_add_wpt(track, wpt);
-  wpt = NULL;
+  wpt = nullptr;
 
   if ((cst_points >= 0) && (data_lines != cst_points)) {
     warning(MYNAME ": Loaded %d point(s), but line %d says %d!\n", data_lines, line_of_count, cst_points);
@@ -326,12 +326,12 @@ ff_vecs_t cst_vecs = {
   ff_type_file,
   { ff_cap_read, ff_cap_read, ff_cap_read },
   cst_rd_init,
-  NULL, 		/* cst_wr_init, */
+  nullptr, 		/* cst_wr_init, */
   cst_rd_deinit,
-  NULL,		/* cst_wr_deinit, */
+  nullptr,		/* cst_wr_deinit, */
   cst_data_read,
-  NULL,		/* cst_data_write, */
-  NULL,
+  nullptr,		/* cst_data_write, */
+  nullptr,
   cst_args,
   CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

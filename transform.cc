@@ -26,7 +26,7 @@
 
 #if FILTERS_ENABLED
 
-#include <ctype.h>
+#include <cctype>
 
 #define MYNAME "transform"
 
@@ -44,20 +44,20 @@ static char RPT[] = "RPT";
 static
 arglist_t transform_args[] = {
   {
-    "wpt", &opt_waypts, "Transform track(s) or route(s) into waypoint(s) [R/T]", NULL,
+    "wpt", &opt_waypts, "Transform track(s) or route(s) into waypoint(s) [R/T]", nullptr,
     ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
-    "rte", &opt_routes, "Transform waypoint(s) or track(s) into route(s) [W/T]", NULL,
+    "rte", &opt_routes, "Transform waypoint(s) or track(s) into route(s) [W/T]", nullptr,
     ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
-    "trk", &opt_tracks, "Transform waypoint(s) or route(s) into tracks(s) [W/R]", NULL,
+    "trk", &opt_tracks, "Transform waypoint(s) or route(s) into tracks(s) [W/R]", nullptr,
     ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
-    "rptdigits", &rpt_name_digits, "Number of digits in generated names", NULL,
-    ARGTYPE_INT, "2", NULL, nullptr
+    "rptdigits", &rpt_name_digits, "Number of digits in generated names", nullptr,
+    ARGTYPE_INT, "2", nullptr, nullptr
   },
   {
     "rptname", &opt_rpt_name, "Use source name for route point names", "N",
@@ -155,13 +155,13 @@ transform_any_disp_wpt_cb(const Waypoint* wpt)
 static void
 transform_routes()
 {
-  route_disp_all(transform_rte_disp_hdr_cb, NULL, transform_any_disp_wpt_cb);
+  route_disp_all(transform_rte_disp_hdr_cb, nullptr, transform_any_disp_wpt_cb);
 }
 
 static void
 transform_tracks()
 {
-  track_disp_all(transform_trk_disp_hdr_cb, NULL, transform_any_disp_wpt_cb);
+  track_disp_all(transform_trk_disp_hdr_cb, nullptr, transform_any_disp_wpt_cb);
 }
 
 /*******************************************************************************
@@ -190,7 +190,7 @@ transform_process()
     name_digits = atoi(rpt_name_digits);
   }
 
-  if (opt_waypts != NULL) {
+  if (opt_waypts != nullptr) {
     current_target = 'W';
     switch (toupper(*opt_waypts)) {
     case 'R':
@@ -209,7 +209,7 @@ transform_process()
       fatal(MYNAME ": Invalid option value (%s)!\n", opt_waypts);
     }
   }
-  if (opt_routes != NULL) {
+  if (opt_routes != nullptr) {
     current_target = 'R';
     switch (toupper(*opt_routes)) {
     case 'W':
@@ -228,7 +228,7 @@ transform_process()
       fatal(MYNAME ": Invalid option value (%s)!\n", opt_routes);
     }
   }
-  if (opt_tracks != NULL) {
+  if (opt_tracks != nullptr) {
     current_target = 'T';
     switch (toupper(*opt_tracks)) {
     case 'W':
@@ -255,7 +255,7 @@ filter_vecs_t transform_vecs = {
   transform_init,
   transform_process,
   transform_deinit,
-  NULL,
+  nullptr,
   transform_args
 };
 

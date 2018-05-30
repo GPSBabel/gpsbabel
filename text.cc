@@ -29,12 +29,12 @@
 static gbfile* file_out;
 static short_handle mkshort_handle;
 
-static char* suppresssep = NULL;
-static char* txt_encrypt = NULL;
-static char* includelogs = NULL;
-static char* degformat = NULL;
-static char* altunits = NULL;
-static char* split_output = NULL;
+static char* suppresssep = nullptr;
+static char* txt_encrypt = nullptr;
+static char* includelogs = nullptr;
+static char* degformat = nullptr;
+static char* altunits = nullptr;
+static char* split_output = nullptr;
 static int waypoint_count;
 static QString output_name;
 
@@ -45,15 +45,15 @@ arglist_t text_args[] = {
   {
     "nosep", &suppresssep,
     "Suppress separator lines between waypoints",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "encrypt", &txt_encrypt,
-    "Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    "Encrypt hints using ROT13", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "logs", &includelogs,
-    "Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    "Include groundspeak logs if present", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "degformat", &degformat,
@@ -65,7 +65,7 @@ arglist_t text_args[] = {
   },
   {
     "splitoutput", &split_output,
-    "Write each waypoint in a separate file", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    "Write each waypoint in a separate file", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
 
   ARG_TERMINATOR
@@ -167,19 +167,19 @@ text_disp(const Waypoint* wpt)
     gbfputs("\n", file_out);
   }
 
-  fs_gpx = NULL;
+  fs_gpx = nullptr;
   if (includelogs) {
     fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
   }
 
   if (fs_gpx && fs_gpx->tag) {
     xml_tag* root = fs_gpx->tag;
-    xml_tag* curlog = NULL;
-    xml_tag* logpart = NULL;
+    xml_tag* curlog = nullptr;
+    xml_tag* logpart = nullptr;
     curlog = xml_findfirst(root, "groundspeak:log");
     while (curlog) {
       time_t logtime = 0;
-      struct tm* logtm = NULL;
+      struct tm* logtm = nullptr;
       gbfprintf(file_out, "\n");
 
       logpart = xml_findfirst(curlog, "groundspeak:type");
@@ -209,7 +209,7 @@ text_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
       if (logpart) {
-        char* coordstr = NULL;
+        char* coordstr = nullptr;
         double lat = 0;
         double lon = 0;
         coordstr = xml_attribute(logpart, "lat");
@@ -227,7 +227,7 @@ text_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:text");
       if (logpart) {
-        char* encstr = NULL;
+        char* encstr = nullptr;
         int encoded = 0;
         encstr = xml_attribute(logpart, "encoded");
         encoded = (toupper(encstr[0]) != 'F');
@@ -254,7 +254,7 @@ text_disp(const Waypoint* wpt)
 
   if (split_output) {
     gbfclose(file_out);
-    file_out = NULL;
+    file_out = nullptr;
   }
 }
 
@@ -272,13 +272,13 @@ data_write()
 ff_vecs_t text_vecs = {
   ff_type_file,
   { ff_cap_write, ff_cap_none, ff_cap_none},
-  NULL,
+  nullptr,
   wr_init,
-  NULL,
+  nullptr,
   wr_deinit,
-  NULL,
+  nullptr,
   data_write,
-  NULL,
+  nullptr,
   text_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

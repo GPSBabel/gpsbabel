@@ -37,7 +37,7 @@ static QString read_fname;
  ***************************************************************************/
 
 static void
-ggv_bin_read_bytes(QDataStream& stream, QByteArray& buf, qint64 len, const char* descr = NULL)
+ggv_bin_read_bytes(QDataStream& stream, QByteArray& buf, qint64 len, const char* descr = nullptr)
 {
   buf.resize(len);
   if (stream.readRawData(buf.data(), len) != len || stream.status() != QDataStream::Ok)
@@ -45,7 +45,7 @@ ggv_bin_read_bytes(QDataStream& stream, QByteArray& buf, qint64 len, const char*
 }
 
 static quint16
-ggv_bin_read16(QDataStream& stream, const char* descr = NULL)
+ggv_bin_read16(QDataStream& stream, const char* descr = nullptr)
 {
   quint16 res;
   stream >> res;
@@ -57,7 +57,7 @@ ggv_bin_read16(QDataStream& stream, const char* descr = NULL)
 }
 
 static quint32
-ggv_bin_read32(QDataStream& stream, const char* descr = NULL)
+ggv_bin_read32(QDataStream& stream, const char* descr = nullptr)
 {
   quint32 res;
   stream >> res;
@@ -73,7 +73,7 @@ ggv_bin_read32(QDataStream& stream, const char* descr = NULL)
 }
 
 static void
-ggv_bin_read_text16(QDataStream& stream, QByteArray& buf, const char* descr = NULL)
+ggv_bin_read_text16(QDataStream& stream, QByteArray& buf, const char* descr = nullptr)
 {
   quint16 len = ggv_bin_read16(stream, descr);
   ggv_bin_read_bytes(stream, buf, len, descr);
@@ -83,7 +83,7 @@ ggv_bin_read_text16(QDataStream& stream, QByteArray& buf, const char* descr = NU
 }
 
 static void
-ggv_bin_read_text32(QDataStream& stream, QByteArray& buf, const char* descr = NULL)
+ggv_bin_read_text32(QDataStream& stream, QByteArray& buf, const char* descr = nullptr)
 {
   quint32 len = ggv_bin_read32(stream, descr);
   ggv_bin_read_bytes(stream, buf, len, descr);
@@ -93,7 +93,7 @@ ggv_bin_read_text32(QDataStream& stream, QByteArray& buf, const char* descr = NU
 }
 
 static double
-ggv_bin_read_double(QDataStream& stream, const char* descr = NULL)
+ggv_bin_read_double(QDataStream& stream, const char* descr = nullptr)
 {
   double res;
   stream >> res;
@@ -509,13 +509,13 @@ ff_vecs_t ggv_bin_vecs = {
     ff_cap_none   // routes
   },
   ggv_bin_read_init,    // rd_init
-  NULL,                 // wr_init
+  nullptr,                 // wr_init
   ggv_bin_read_deinit,  // rd_deinit
-  NULL,                 // wr_deinit
+  nullptr,                 // wr_deinit
   ggv_bin_read,         // read
-  NULL,                 // write
-  NULL,                 // exit
-  NULL,                 //args
+  nullptr,                 // write
+  nullptr,                 // exit
+  nullptr,                 //args
   CET_CHARSET_ASCII, 0  //encode,fixed_encode
   //NULL                //name dynamic/internal?
   , NULL_POS_OPS,

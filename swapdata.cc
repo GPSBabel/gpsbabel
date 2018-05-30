@@ -53,17 +53,17 @@ static void
 swapdata_process(void)	/* this procedure must be present in vecs */
 {
   waypt_disp_all(swapdata_cb);
-  route_disp_all(NULL, NULL, swapdata_cb);
-  track_disp_all(NULL, NULL, swapdata_cb);
+  route_disp_all(nullptr, nullptr, swapdata_cb);
+  track_disp_all(nullptr, nullptr, swapdata_cb);
 }
 
 /*******************************************************************************/
 
 filter_vecs_t swapdata_vecs = {
-  NULL,
+  nullptr,
   swapdata_process,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   swapdata_args
 };
 

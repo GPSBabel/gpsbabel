@@ -27,11 +27,11 @@
 
 gbfile* infile;
 
-char* turns_important = NULL;
-char* turns_only = NULL;
-char* controls = NULL;
-char* split = NULL;
-char* timesynth = NULL;
+char* turns_important = nullptr;
+char* turns_only = nullptr;
+char* controls = nullptr;
+char* split = nullptr;
+char* timesynth = nullptr;
 
 int control = 0;
 
@@ -40,15 +40,15 @@ arglist_t saroute_args[] = {
   {
     "turns_important", &turns_important,
     "Keep turns if simplify filter is used",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "turns_only", &turns_only, "Only read turns; skip all other points",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "split", &split, "Split into multiple routes at turns",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "controls", &controls, "Read control points as waypoint/route/none",
@@ -56,7 +56,7 @@ arglist_t saroute_args[] = {
   },
   {
     "times", &timesynth, "Synthesize track times",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -129,10 +129,10 @@ my_read()
   } *latlon;
   struct ll mylatlon;
   uint16_t coordcount;
-  route_head* track_head = NULL;
-  route_head* old_track_head = NULL;
+  route_head* track_head = nullptr;
+  route_head* old_track_head = nullptr;
   Waypoint* wpt_tmp;
-  char* routename = NULL;
+  char* routename = nullptr;
   double seglen = 0.0;
   int32_t  starttime = 0;
   int32_t  transittime = 0;
@@ -311,7 +311,7 @@ my_read()
       }
     }
     while (count) {
-      old_track_head = NULL;
+      old_track_head = nullptr;
       ReadShort(infile);
       recsize = ReadLong(infile);
       record = ReadRecord(infile, recsize);
@@ -434,7 +434,7 @@ my_read()
               route_add_wpt(old_track_head,
                             new Waypoint(*wpt_tmp));
             }
-            old_track_head = NULL;
+            old_track_head = nullptr;
           }
         }
 
@@ -475,10 +475,10 @@ ff_vecs_t saroute_vecs = {
   rd_init,
   wr_init,
   rd_deinit,
-  NULL,
+  nullptr,
   my_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   saroute_args,
   CET_CHARSET_UTF8, 1	/* do nothing | CET-REVIEW */
   , NULL_POS_OPS,

@@ -54,21 +54,21 @@
 #define MAX(X,Y) ((X) > (Y) ? (X) : (Y))
 
 
-static void* serial_handle = 0;		/* IO file descriptor */
+static void* serial_handle = nullptr;		/* IO file descriptor */
 static int skytraq_baud = 0;		/* detected baud rate */
-static gbfile* file_handle = 0;		/* file descriptor (used by skytraq-bin format) */
+static gbfile* file_handle = nullptr;		/* file descriptor (used by skytraq-bin format) */
 
-static char* opt_erase = 0;		/* erase after read? (0/1) */
-static char* opt_initbaud = 0;		/* baud rate used to init device */
-static char* opt_dlbaud = 0;		/* baud rate used for downloading tracks */
-static char* opt_read_at_once = 0;	/* number of sectors to read at once (Venus6 only) */
-static char* opt_first_sector = 0;	/* first sector to be read from the device (default: 0) */
-static char* opt_last_sector = 0;	/* last sector to be read from the device (default: smart read everything) */
-static char* opt_dump_file = 0;		/* dump raw data to this file (optional) */
-static char* opt_no_output = 0;		/* disable output? (0/1) */
-static char* opt_set_location = 0;	/* set if the "targetlocation" options was used */
-static char* opt_configure_logging = 0;
-static char* opt_gps_utc_offset = 0;
+static char* opt_erase = nullptr;		/* erase after read? (0/1) */
+static char* opt_initbaud = nullptr;		/* baud rate used to init device */
+static char* opt_dlbaud = nullptr;		/* baud rate used for downloading tracks */
+static char* opt_read_at_once = nullptr;	/* number of sectors to read at once (Venus6 only) */
+static char* opt_first_sector = nullptr;	/* first sector to be read from the device (default: 0) */
+static char* opt_last_sector = nullptr;	/* last sector to be read from the device (default: smart read everything) */
+static char* opt_dump_file = nullptr;		/* dump raw data to this file (optional) */
+static char* opt_no_output = nullptr;		/* disable output? (0/1) */
+static char* opt_set_location = nullptr;	/* set if the "targetlocation" options was used */
+static char* opt_configure_logging = nullptr;
+static char* opt_gps_utc_offset = nullptr;
 
 static
 arglist_t skytraq_args[] = {
@@ -78,11 +78,11 @@ arglist_t skytraq_args[] = {
   },
   {
     "targetlocation", &opt_set_location, "Set location finder target location as lat,lng",
-    NULL, ARGTYPE_STRING, "", "", nullptr
+    nullptr, ARGTYPE_STRING, "", "", nullptr
   },
   {
     "configlog", &opt_configure_logging, "Configure logging parameter as tmin:tmax:dmin:dmax",
-    NULL, ARGTYPE_STRING, "", "", nullptr
+    nullptr, ARGTYPE_STRING, "", "", nullptr
   },
   {
     "baud", &opt_dlbaud, "Baud rate used for download",
@@ -106,7 +106,7 @@ arglist_t skytraq_args[] = {
   },
   {
     "dump-file", &opt_dump_file, "Dump raw data to this file",
-    NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr
   },
   {
     "no-output", &opt_no_output, "Disable output (useful with erase)",
@@ -766,7 +766,7 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
   full_item f;
   compact_item c;
   multi_hz_item m;
-  Waypoint* tpt = NULL;
+  Waypoint* tpt = nullptr;
 
   switch (ITEM_TYPE(pitem)) {
 
@@ -884,7 +884,7 @@ process_data_item(struct read_state* pst, const item_frame* pitem, int len)
       waypt_add(new Waypoint(*tpt));
     }
 
-    if (0 == pst->route_head_) {
+    if (nullptr == pst->route_head_) {
       db(1, MYNAME ": New Track\n");
       pst->route_head_ = route_head_alloc();
       track_add_head(pst->route_head_);
@@ -1064,8 +1064,8 @@ skytraq_read_tracks()
   int opt_first_sector_val = atoi(opt_first_sector);
   int opt_last_sector_val = atoi(opt_last_sector);
   int multi_read_supported = 1;
-  uint8_t* buffer = NULL;
-  gbfile* dumpfile = NULL;
+  uint8_t* buffer = nullptr;
+  gbfile* dumpfile = nullptr;
 
   state_init(&st);
 
@@ -1307,7 +1307,7 @@ skytraq_set_location()
 static void
 skytraq_rd_init(const QString& fname)
 {
-  if ((serial_handle = gbser_init(qPrintable(fname))) == NULL) {
+  if ((serial_handle = gbser_init(qPrintable(fname))) == nullptr) {
     fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
   }
   if ((skytraq_baud = skytraq_probe()) <= 0) {
@@ -1319,7 +1319,7 @@ static void
 skytraq_rd_deinit()
 {
   gbser_deinit(serial_handle);
-  serial_handle = NULL;
+  serial_handle = nullptr;
 }
 
 static void
@@ -1343,7 +1343,7 @@ skytraq_read()
   }
 
   // read device unless no-output=1 and dump-file=0 (i.e. no data needed at all)
-  if (*opt_no_output == '0'  ||  opt_dump_file != NULL) {
+  if (*opt_no_output == '0'  ||  opt_dump_file != nullptr) {
     skytraq_read_tracks();
   }
 
@@ -1361,7 +1361,7 @@ static void
 file_init(const QString& fname)
 {
   db(1, "Opening file...\n");
-  if ((file_handle = gbfopen(fname, "rb", MYNAME)) == NULL) {
+  if ((file_handle = gbfopen(fname, "rb", MYNAME)) == nullptr) {
     fatal(MYNAME ": Can't open file '%s'\n", qPrintable(fname));
   }
 }
@@ -1371,7 +1371,7 @@ file_deinit()
 {
   db(1, "Closing file...\n");
   gbfclose(file_handle);
-  file_handle = NULL;
+  file_handle = nullptr;
 }
 
 static void
@@ -1423,12 +1423,12 @@ ff_vecs_t skytraq_vecs = {
     ff_cap_none 			/* routes */
   },
   skytraq_rd_init,
-  NULL,
+  nullptr,
   skytraq_rd_deinit,
-  NULL,
+  nullptr,
   skytraq_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   skytraq_args,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
  , NULL_POS_OPS,
@@ -1443,12 +1443,12 @@ ff_vecs_t skytraq_fvecs = {
     ff_cap_none 			/* routes */
   },
   file_init,
-  NULL,
+  nullptr,
   file_deinit,
-  NULL,
+  nullptr,
   file_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   skytraq_fargs,
   CET_CHARSET_UTF8, 1         /* master process: don't convert anything */
  , NULL_POS_OPS,
@@ -1464,25 +1464,25 @@ ff_vecs_t skytraq_fvecs = {
 #undef MYNAME
 #endif
 #define MYNAME "miniHomer"
-static char* opt_set_poi_home = NULL;	/* set if a "poi" option was used */
-static char* opt_set_poi_car = NULL;	/* set if a "poi" option was used */
-static char* opt_set_poi_boat = NULL;	/* set if a "poi" option was used */
-static char* opt_set_poi_heart = NULL;	/* set if a "poi" option was used */
-static char* opt_set_poi_bar = NULL;	/* set if a "poi" option was used */
+static char* opt_set_poi_home = nullptr;	/* set if a "poi" option was used */
+static char* opt_set_poi_car = nullptr;	/* set if a "poi" option was used */
+static char* opt_set_poi_boat = nullptr;	/* set if a "poi" option was used */
+static char* opt_set_poi_heart = nullptr;	/* set if a "poi" option was used */
+static char* opt_set_poi_bar = nullptr;	/* set if a "poi" option was used */
 arglist_t miniHomer_args[] = {
   { "baud",         &opt_dlbaud,        "Baud rate used for download", "115200", ARGTYPE_INT, "0", "115200", nullptr },
-  { "dump-file",    &opt_dump_file,     "Dump raw data to this file", NULL, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr },
+  { "dump-file",    &opt_dump_file,     "Dump raw data to this file", nullptr, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr },
   { "erase",        &opt_erase,         "Erase device data after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   { "first-sector", &opt_first_sector,  "First sector to be read from the device", "0", ARGTYPE_INT, "0", "65535", nullptr },
   { "initbaud",     &opt_initbaud,      "Baud rate used to init device (0=autodetect)", "38400", ARGTYPE_INT, "38400", "38400", nullptr },
   { "last-sector",  &opt_last_sector,   "Last sector to be read from the device (-1: smart read everything)", "-1", ARGTYPE_INT, "-1", "65535", nullptr },
   { "no-output",    &opt_no_output,     "Disable output (useful with erase)", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   { "read-at-once", &opt_read_at_once,  "Number of sectors to read at once (0=use single sector mode)", "255", ARGTYPE_INT, "0", "255", nullptr },
-  { "Home",         &opt_set_poi_home,  "POI for Home Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "", nullptr },
-  { "Car",          &opt_set_poi_car,   "POI for Car Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "", nullptr },
-  { "Boat",         &opt_set_poi_boat,  "POI for Boat Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "", nullptr },
-  { "Heart",        &opt_set_poi_heart, "POI for Heart Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "", nullptr },
-  { "Bar",          &opt_set_poi_bar,   "POI for Bar Symbol as lat:lng[:alt]", NULL, ARGTYPE_STRING, "", "", nullptr },
+  { "Home",         &opt_set_poi_home,  "POI for Home Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
+  { "Car",          &opt_set_poi_car,   "POI for Car Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
+  { "Boat",         &opt_set_poi_boat,  "POI for Boat Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
+  { "Heart",        &opt_set_poi_heart, "POI for Heart Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
+  { "Bar",          &opt_set_poi_bar,   "POI for Bar Symbol as lat:lng[:alt]", nullptr, ARGTYPE_STRING, "", "", nullptr },
   ARG_TERMINATOR
 };
 /*
@@ -1622,7 +1622,7 @@ static QString mhport;
 static void
 miniHomer_rd_init(const QString& fname)
 {
-  opt_set_location=NULL;	// otherwise it will lead to bus error
+  opt_set_location=nullptr;	// otherwise it will lead to bus error
   skytraq_rd_init(fname);	// sets global var serial_handle
   mhport=fname;
 }
@@ -1673,12 +1673,12 @@ ff_vecs_t miniHomer_vecs = {
     ff_cap_none 			/* routes */
   },
   miniHomer_rd_init,
-  NULL,
+  nullptr,
   miniHomer_rd_deinit,
-  NULL,
+  nullptr,
   miniHomer_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   miniHomer_args,
   CET_CHARSET_UTF8, 1,         /* master process: don't convert anything */
   NULL_POS_OPS,

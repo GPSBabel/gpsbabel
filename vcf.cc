@@ -27,7 +27,7 @@
 static gbfile* file_out;
 static short_handle mkshort_handle;
 
-static char* vcf_encrypt = NULL;
+static char* vcf_encrypt = nullptr;
 
 #define MYNAME "VCF"
 
@@ -35,7 +35,7 @@ static
 arglist_t vcf_args[] = {
   {
     "encrypt", &vcf_encrypt,
-    "Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    "Encrypt hints using ROT13", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -142,13 +142,13 @@ data_write()
 ff_vecs_t vcf_vecs = {
   ff_type_file,
   { ff_cap_write, ff_cap_none, ff_cap_none},
-  NULL,
+  nullptr,
   wr_init,
-  NULL,
+  nullptr,
   wr_deinit,
-  NULL,
+  nullptr,
   data_write,
-  NULL,
+  nullptr,
   vcf_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

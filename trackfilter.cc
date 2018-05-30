@@ -56,112 +56,112 @@
 
 #undef TRACKF_DBG
 
-static char* opt_merge = NULL;
-static char* opt_pack = NULL;
-static char* opt_split = NULL;
-static char* opt_sdistance = NULL;
-static char* opt_move = NULL;
-static char* opt_title = NULL;
-static char* opt_start = NULL;
-static char* opt_stop = NULL;
-static char* opt_fix = NULL;
-static char* opt_course = NULL;
-static char* opt_speed = NULL;
-static char* opt_name = NULL;
-static char* opt_seg2trk = NULL;
-static char* opt_trk2seg = NULL;
-static char* opt_segment = NULL;
-static char* opt_faketime = NULL;
-static char* opt_discard = NULL;
-static char* opt_minpoints = NULL;
+static char* opt_merge = nullptr;
+static char* opt_pack = nullptr;
+static char* opt_split = nullptr;
+static char* opt_sdistance = nullptr;
+static char* opt_move = nullptr;
+static char* opt_title = nullptr;
+static char* opt_start = nullptr;
+static char* opt_stop = nullptr;
+static char* opt_fix = nullptr;
+static char* opt_course = nullptr;
+static char* opt_speed = nullptr;
+static char* opt_name = nullptr;
+static char* opt_seg2trk = nullptr;
+static char* opt_trk2seg = nullptr;
+static char* opt_segment = nullptr;
+static char* opt_faketime = nullptr;
+static char* opt_discard = nullptr;
+static char* opt_minpoints = nullptr;
 
 static
 arglist_t trackfilter_args[] = {
   {
     TRACKFILTER_MOVE_OPTION, &opt_move,
-    "Correct trackpoint timestamps by a delta", NULL, ARGTYPE_STRING,
+    "Correct trackpoint timestamps by a delta", nullptr, ARGTYPE_STRING,
     ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_PACK_OPTION,  &opt_pack,
-    "Pack all tracks into one", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    "Pack all tracks into one", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_SPLIT_OPTION, &opt_split,
-    "Split by date or time interval (see README)", NULL,
+    "Split by date or time interval (see README)", nullptr,
     ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_SDIST_OPTION, &opt_sdistance,
-    "Split by distance", NULL,
+    "Split by distance", nullptr,
     ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_MERGE_OPTION, &opt_merge,
-    "Merge multiple tracks for the same way", NULL, ARGTYPE_STRING,
+    "Merge multiple tracks for the same way", nullptr, ARGTYPE_STRING,
     ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_NAME_OPTION, &opt_name,
-    "Use only track(s) where title matches given name", NULL, ARGTYPE_STRING,
+    "Use only track(s) where title matches given name", nullptr, ARGTYPE_STRING,
     ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_START_OPTION, &opt_start,
-    "Use only track points after this timestamp", NULL, ARGTYPE_INT,
+    "Use only track points after this timestamp", nullptr, ARGTYPE_INT,
     ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_STOP_OPTION, &opt_stop,
-    "Use only track points before this timestamp", NULL, ARGTYPE_INT,
+    "Use only track points before this timestamp", nullptr, ARGTYPE_INT,
     ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_TITLE_OPTION, &opt_title,
-    "Basic title for new track(s)", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    "Basic title for new track(s)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_FIX_OPTION, &opt_fix,
-    "Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE)", NULL,
+    "Synthesize GPS fixes (PPS, DGPS, 3D, 2D, NONE)", nullptr,
     ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_COURSE_OPTION, &opt_course, "Synthesize course",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_SPEED_OPTION, &opt_speed, "Synthesize speed",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_SEG2TRK_OPTION, &opt_seg2trk,
     "Split track at segment boundaries into multiple tracks",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_TRK2SEG_OPTION, &opt_trk2seg,
     "Merge tracks inserting segment separators at boundaries",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_SEGMENT_OPTION, &opt_segment,
     "segment tracks with abnormally long gaps",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_FAKETIME_OPTION, &opt_faketime,
     "Add specified timestamp to each trackpoint",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_DISCARD_OPTION,  &opt_discard,
     "Discard track points without timestamps during merge",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     TRACKFILTER_MINPOINTS_OPTION, &opt_minpoints,
     "Discard tracks with fewer than these points",
-    NULL, ARGTYPE_INT, "0", "50", nullptr
+    nullptr, ARGTYPE_INT, "0", "50", nullptr
   },
   ARG_TERMINATOR
 };
@@ -173,7 +173,7 @@ typedef struct trkflt_s {
   QDateTime last_time;
 } trkflt_t;
 
-static trkflt_t* track_list = NULL;
+static trkflt_t* track_list = nullptr;
 static int track_ct = 0;
 static int track_pts = 0;
 static int timeless_pts = 0;
@@ -192,7 +192,7 @@ trackfilter_opt_count()
   arglist_t* a = trackfilter_args;
 
   while (a->argstring) {
-    if (*a->argval != NULL) {
+    if (*a->argval != nullptr) {
       res++;
     }
     a++;
@@ -331,7 +331,7 @@ trackfilter_fill_track_list_cb(const route_head* track) 	/* callback for track_d
     return;
   }
 
-  if (opt_name != NULL) {
+  if (opt_name != nullptr) {
     if (!QRegExp(opt_name, Qt::CaseInsensitive, QRegExp::WildcardUnix).exactMatch(track->rte_name)) {
       QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
         Waypoint* wpt = (Waypoint*)elem;
@@ -346,7 +346,7 @@ trackfilter_fill_track_list_cb(const route_head* track) 	/* callback for track_d
   track_list[track_ct].track = (route_head*)track;
 
   i = 0;
-  prev = NULL;
+  prev = nullptr;
 
   QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
     track_pts++;
@@ -367,8 +367,8 @@ trackfilter_fill_track_list_cb(const route_head* track) 	/* callback for track_d
       track_list[track_ct].last_time = wpt->GetCreationTime();
     }
 
-    if ((need_time != 0) && (prev != NULL) && (prev->GetCreationTime() > wpt->GetCreationTime())) {
-      if (opt_merge == NULL) {
+    if ((need_time != 0) && (prev != nullptr) && (prev->GetCreationTime() > wpt->GetCreationTime())) {
+      if (opt_merge == nullptr) {
         QString t1 = prev->CreationTimeXML();
         QString t2 = wpt->CreationTimeXML();
         fatal(MYNAME "-init: Track points badly ordered (timestamp %s > %s)!\n", qPrintable(t1), qPrintable(t2));
@@ -404,8 +404,8 @@ trackfilter_split_init_rte_name(route_head* track, const QDateTime dt)
     datetimestring = dt.toUTC().toString("yyyyMMdd");
   }
 
-  if ((opt_title != NULL) && (strlen(opt_title) > 0)) {
-    if (strchr(opt_title, '%') != NULL) {
+  if ((opt_title != nullptr) && (strlen(opt_title) > 0)) {
+    if (strchr(opt_title, '%') != nullptr) {
       // Uggh.  strftime format exposed to user.
       char buff[128];
 
@@ -427,7 +427,7 @@ trackfilter_split_init_rte_name(route_head* track, const QDateTime dt)
 static void
 trackfilter_pack_init_rte_name(route_head* track, const time_t default_time)
 {
-  if (strchr(opt_title, '%') != NULL) {
+  if (strchr(opt_title, '%') != nullptr) {
     struct tm tm;
     Waypoint* wpt;
 
@@ -455,7 +455,7 @@ trackfilter_title()
 {
   int i;
 
-  if (opt_title == NULL) {
+  if (opt_title == nullptr) {
     return;
   }
 
@@ -502,7 +502,7 @@ trackfilter_pack()
       track_add_wpt(master, wpt);
     }
     track_del_head(curr);
-    track_list[i].track = NULL;
+    track_list[i].track = nullptr;
   }
   track_ct = 1;
 }
@@ -556,12 +556,12 @@ trackfilter_merge()
   qsort(buff, track_pts-timeless_pts, sizeof(*buff), trackfilter_merge_qsort_cb);
 
   dropped = timeless_pts;
-  prev = NULL;
+  prev = nullptr;
 
   for (i = 0; i < track_pts-timeless_pts; i++) {
-    buff[i]->extra_data = NULL;
+    buff[i]->extra_data = nullptr;
     wpt = buff[i];
-    if ((prev == NULL) || (prev->GetCreationTime() != wpt->GetCreationTime())) {
+    if ((prev == nullptr) || (prev->GetCreationTime() != wpt->GetCreationTime())) {
       track_add_wpt(master, wpt);
       prev = wpt;
     } else {
@@ -705,7 +705,7 @@ trackfilter_split()
     buff[i++] = wpt;
   }
 
-  curr = NULL;	/* will be set by first new track */
+  curr = nullptr;	/* will be set by first new track */
 
   for (i=0, j=1; j<count; i++, j++) {
     int new_track_flag;
@@ -767,7 +767,7 @@ trackfilter_split()
       trackfilter_split_init_rte_name(curr, buff[j]->GetCreationTime());
       track_add_head(curr);
     }
-    if (curr != NULL) {
+    if (curr != nullptr) {
       wpt = buff[j];
       track_del_wpt(master, wpt);
       track_add_wpt(curr, wpt);
@@ -918,7 +918,7 @@ trackfilter_range_check(const char* timestr)
     fmt[i++] = c;
   }
   cin = strptime(fmt, "%Y%m%d%H%M%S", &time);
-  if ((cin != NULL) && (*cin != '\0')) {
+  if ((cin != nullptr) && (*cin != '\0')) {
     fatal(MYNAME "-range-check: Invalid time stamp (stopped at %s of %s)!\n", cin, fmt);
   }
 
@@ -932,13 +932,13 @@ trackfilter_range()		/* returns number of track points left after filtering */
   queue* elem, *tmp;
   int i, dropped, inside = 0;
 
-  if (opt_start != 0) {
+  if (opt_start != nullptr) {
     start = trackfilter_range_check(opt_start);
   } else {
     start = 0;
   }
 
-  if (opt_stop != 0) {
+  if (opt_stop != nullptr) {
     stop = trackfilter_range_check(opt_stop);
   } else {
     stop = 0x7FFFFFFF;
@@ -969,7 +969,7 @@ trackfilter_range()		/* returns number of track points left after filtering */
 
     if (track->rte_waypt_ct == 0) {
       track_del_head(track);
-      track_list[i].track = NULL;
+      track_list[i].track = nullptr;
     }
   }
 
@@ -992,7 +992,7 @@ trackfilter_seg2trk()
   for (i = 0; i < track_ct; i++) {
     queue* elem, *tmp;
     route_head* src = track_list[i].track;
-    route_head* dest = NULL;
+    route_head* dest = nullptr;
     route_head* insert_point = src;
     int trk_seg_num = 1, first = 1;
 
@@ -1062,7 +1062,7 @@ trackfilter_trk2seg()
       }
     }
     track_del_head(curr);
-    track_list[i].track = NULL;
+    track_list[i].track = nullptr;
   }
   track_ct = 1;
 }
@@ -1126,7 +1126,7 @@ trackfilter_faketime_check(const char* timestr)
 
   cin = strptime(fmtstart, "%Y%m%d%H%M%S", &time);
   result.step = atoi(fmtstep);
-  if ((cin != NULL) && (*cin != '\0')) {
+  if ((cin != nullptr) && (*cin != '\0')) {
     fatal(MYNAME "-faketime-check: Invalid time stamp (stopped at %s of %s)!\n", cin, fmtstart);
   }
 
@@ -1142,7 +1142,7 @@ trackfilter_faketime()             /* returns number of track points left after 
   queue* elem, *tmp;
   int i, dropped, inside = 0;
 
-  if (opt_faketime != 0) {
+  if (opt_faketime != nullptr) {
     faketime = trackfilter_faketime_check(opt_faketime);
   }
 
@@ -1154,7 +1154,7 @@ trackfilter_faketime()             /* returns number of track points left after 
     QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
       Waypoint* wpt = (Waypoint*)elem;
 
-      if (opt_faketime != 0 && (!wpt->creation_time.isValid() || faketime.force)) {
+      if (opt_faketime != nullptr && (!wpt->creation_time.isValid() || faketime.force)) {
         wpt->creation_time = QDateTime::fromTime_t(faketime.start);
         faketime.start += faketime.step;
       }
@@ -1194,7 +1194,7 @@ trackfilter_segment_head(const route_head* rte)
   queue* elem, *tmp;
   double avg_dist = 0;
   int index = 0;
-  Waypoint* prev_wpt = NULL;
+  Waypoint* prev_wpt = nullptr;
   // Consider tossing trackpoints closer than this in radians.
   // (Empirically determined; It's a few dozen feet.)
   const double ktoo_close = 0.000005;
@@ -1256,7 +1256,7 @@ trackfilter_init(const char*)
                 (trackfilter_opt_count() == 0)	/* do pack by default */
               );
   /* in case of a formated title we also need valid timestamps */
-  if ((opt_title != NULL) && (strchr(opt_title, '%') != NULL)) {
+  if ((opt_title != nullptr) && (strchr(opt_title, '%') != nullptr)) {
     need_time = 1;
   }
 
@@ -1265,7 +1265,7 @@ trackfilter_init(const char*)
 
   // Perform segmenting first.
   if (opt_segment) {
-    track_disp_all(trackfilter_segment_head, NULL, NULL);
+    track_disp_all(trackfilter_segment_head, nullptr, nullptr);
   }
 
   if (count > 0) {
@@ -1273,7 +1273,7 @@ trackfilter_init(const char*)
 
     /* check all tracks for time and order (except merging) */
 
-    track_disp_all(trackfilter_fill_track_list_cb, NULL, NULL);
+    track_disp_all(trackfilter_fill_track_list_cb, nullptr, nullptr);
     if (need_time) {
       qsort(track_list, track_ct, sizeof(*track_list), trackfilter_init_qsort_cb);
     }
@@ -1306,13 +1306,13 @@ trackfilter_process()
     opts = -1;  /* flag for do "pack" by default */
   }
 
-  if (opt_name != NULL) {
+  if (opt_name != nullptr) {
     if (--opts == 0) {
       return;
     }
   }
 
-  if (opt_move != NULL) {		/* Correct timestamps before any other op */
+  if (opt_move != nullptr) {		/* Correct timestamps before any other op */
     trackfilter_move();
     if (--opts == 0) {
       return;
@@ -1335,7 +1335,7 @@ trackfilter_process()
     }
   }
 
-  if ((opt_faketime != NULL)) {
+  if ((opt_faketime != nullptr)) {
     opts--;
 
     trackfilter_faketime();
@@ -1345,18 +1345,18 @@ trackfilter_process()
     }
 
     trackfilter_deinit();       /* reinitialize */
-    trackfilter_init(NULL);
+    trackfilter_init(nullptr);
 
     if (track_ct == 0) {
       return;  /* no more track(s), no more fun */
     }
   }
 
-  if ((opt_stop != NULL) || (opt_start != NULL)) {
-    if (opt_start != NULL) {
+  if ((opt_stop != nullptr) || (opt_start != nullptr)) {
+    if (opt_start != nullptr) {
       opts--;
     }
-    if (opt_stop != NULL) {
+    if (opt_stop != nullptr) {
       opts--;
     }
 
@@ -1367,7 +1367,7 @@ trackfilter_process()
     }
 
     trackfilter_deinit();	/* reinitialize */
-    trackfilter_init(NULL);
+    trackfilter_init(nullptr);
 
     if (track_ct == 0) {
       return;  /* no more track(s), no more fun */
@@ -1375,24 +1375,24 @@ trackfilter_process()
 
   }
 
-  if (opt_seg2trk != NULL) {
+  if (opt_seg2trk != nullptr) {
     trackfilter_seg2trk();
     if (--opts == 0) {
       return;
     }
 
     trackfilter_deinit();	/* reinitialize */
-    trackfilter_init(NULL);
+    trackfilter_init(nullptr);
   }
 
-  if (opt_trk2seg != NULL) {
+  if (opt_trk2seg != nullptr) {
     trackfilter_trk2seg();
     if (--opts == 0) {
       return;
     }
   }
 
-  if (opt_title != NULL) {
+  if (opt_title != nullptr) {
     if (--opts == 0) {
       trackfilter_title();
       return;
@@ -1401,22 +1401,22 @@ trackfilter_process()
 
   something_done = 0;
 
-  if ((opt_pack != NULL) || (opts == -1)) {	/* call our default option */
+  if ((opt_pack != nullptr) || (opts == -1)) {	/* call our default option */
     trackfilter_pack();
     something_done = 1;
-  } else if (opt_merge != NULL) {
+  } else if (opt_merge != nullptr) {
     trackfilter_merge();
     something_done = 1;
   }
 
   if ((something_done == 1) && (--opts <= 0)) {
-    if (opt_title != NULL) {
+    if (opt_title != nullptr) {
       trackfilter_title();
     }
     return;
   }
 
-  if ((opt_split != NULL) || (opt_sdistance != NULL)) {
+  if ((opt_split != nullptr) || (opt_sdistance != nullptr)) {
     if (track_ct > 1) {
       fatal(MYNAME "-split: Cannot split more than one track, please pack (or merge) before!\n");
     }
@@ -1425,8 +1425,8 @@ trackfilter_process()
   }
 
   // Performed last as previous options may have created "small" tracks.
-  if ((opt_minpoints != NULL) && atoi(opt_minpoints) > 0) {
-    track_disp_all(trackfilter_minpoint_list_cb, NULL, NULL);
+  if ((opt_minpoints != nullptr) && atoi(opt_minpoints) > 0) {
+    track_disp_all(trackfilter_minpoint_list_cb, nullptr, nullptr);
   }
 }
 
@@ -1436,7 +1436,7 @@ filter_vecs_t trackfilter_vecs = {
   trackfilter_init,
   trackfilter_process,
   trackfilter_deinit,
-  NULL,
+  nullptr,
   trackfilter_args
 };
 

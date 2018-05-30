@@ -81,8 +81,8 @@
 
 #define MYNAME	"TPO"
 
-static char* dumpheader = NULL;
-static char* output_state = NULL;
+static char* dumpheader = nullptr;
+static char* output_state = nullptr;
 
 /*
 static
@@ -1359,7 +1359,7 @@ tpo_rd_init(const QString& fname)
   // preprare for an attempt to deallocate memory that may or may not get allocated
   // depending on the options used.
   tpo_index_ptr = 0;
-  tpo_wp_index = NULL;
+  tpo_wp_index = nullptr;
 
   tpo_file_in = gbfopen_le(fname, "rb", MYNAME);
   tpo_check_version_string();
@@ -1396,7 +1396,7 @@ tpo_rd_deinit()
   // Free the index array itself
   if (tpo_wp_index) {
     xfree(tpo_wp_index);
-    tpo_wp_index = NULL;
+    tpo_wp_index = nullptr;
   }
 
   gbfclose(tpo_file_in);
@@ -1894,7 +1894,7 @@ ff_vecs_t tpo2_vecs = {
   tpo_wr_deinit,
   tpo_read,
   tpo_write,
-  NULL,
+  nullptr,
   tpo2_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
@@ -1911,7 +1911,7 @@ ff_vecs_t tpo3_vecs = {
   tpo_wr_deinit,
   tpo_read,
   tpo_write,
-  NULL,
+  nullptr,
   tpo3_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

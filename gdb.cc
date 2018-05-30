@@ -237,7 +237,7 @@ gdb_fread_cstr(gbfile* fin)
 
   if (result && (*result == '\0')) {
     xfree(result);
-    result = NULL;
+    result = nullptr;
   }
 
   return result;
@@ -302,7 +302,7 @@ gdb_find_wayptq(const queue* Q, const Waypoint* wpt, const char exact)
       }
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 static Waypoint*
@@ -310,7 +310,7 @@ gdb_reader_find_waypt(const Waypoint* wpt, const char exact)
 {
   Waypoint* res;
   res = gdb_find_wayptq(&wayptq_in, wpt, exact);
-  if (res == NULL) {
+  if (res == nullptr) {
     res = gdb_find_wayptq(&wayptq_in_hidden, wpt, exact);
   }
   return res;
@@ -323,11 +323,11 @@ gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
   int turn_point;
 
   tmp = gdb_reader_find_waypt(ref, 1);
-  if (tmp == NULL) {
+  if (tmp == nullptr) {
     double dist;
 
     tmp = find_waypt_by_name(ref->shortname);
-    if (tmp == NULL) {
+    if (tmp == nullptr) {
       route_add_wpt(rte, ref);
       return ref;
     }
@@ -348,7 +348,7 @@ gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
 
     }
   }
-  res = NULL;
+  res = nullptr;
   turn_point = (gdb_roadbook && (wpt_class > gt_waypt_class_map_point) && !tmp->description.isEmpty());
   if (turn_point || (gdb_via == 0) || (wpt_class < gt_waypt_class_map_point)) {
     res = new Waypoint(*tmp);
@@ -463,9 +463,9 @@ read_file_header()
   Q_UNUSED(i);
   if (global_opts.verbose_status > 0) {
     const char* name = buf+2;
-    if (strstr(name, "SQA") == 0) {
+    if (strstr(name, "SQA") == nullptr) {
       name = "MapSource";
-    } else if (strstr(name, "neaderhi") == 0) {
+    } else if (strstr(name, "neaderhi") == nullptr) {
       name = "MapSource BETA";
     }
     warning(MYNAME ": File created with \"%s\"\n", name);
@@ -640,7 +640,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     for (i = url_ct; (i); i--) {
       QString str = FREAD_CSTR_AS_QSTR;
       if (!str.isEmpty()) {
-        waypt_add_url(res, str, NULL);
+        waypt_add_url(res, str, nullptr);
 #if GDB_DEBUG
         DBG(GDB_DBG_WPTe, 1)
         printf(MYNAME "-wpt \"%s\" (%d): url(%d) = %s\n",
@@ -809,8 +809,8 @@ read_route()
     }
 
     links = FREAD_i32;
-    il_anchor = NULL;
-    il_root = NULL;
+    il_anchor = nullptr;
+    il_root = nullptr;
 #if GDB_DEBUG
     DBG(GDB_DBG_RTE, links)
     printf(MYNAME "-rte_pt \"%s\" (%d): %d interlink step(s)\n",
@@ -835,8 +835,8 @@ read_route()
         wpt->altitude = il_step->alt;
       }
 
-      il_step->next = NULL;
-      if (il_anchor == NULL) {
+      il_step->next = nullptr;
+      if (il_anchor == nullptr) {
         il_root = il_step;
       } else {
         il_anchor->next = il_step;
@@ -871,7 +871,7 @@ read_route()
     if (links == 0) {
       /* Without links we need all informations from wpt */
       Waypoint* tmp = gdb_reader_find_waypt(wpt, 0);
-      if (tmp != NULL) {
+      if (tmp != nullptr) {
         delete wpt;
         wpt = new Waypoint(*tmp);
       } else {
@@ -899,15 +899,15 @@ read_route()
            wpt->longitude < 0 ? 'W' : 'E', wpt->longitude);
 #endif
     wpt = gdb_add_route_waypt(rte, wpt, wpt_class);
-    if (wpt != NULL) {
+    if (wpt != nullptr) {
       garmin_fs_t* gmsd = GMSD_FIND(wpt);
-      if (gmsd == NULL) {
+      if (gmsd == nullptr) {
         gmsd = garmin_fs_alloc(-1);
         fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
       }
       GMSD_SET(wpt_class, wpt_class);
       gmsd->ilinks = il_root;
-      il_root = NULL;
+      il_root = nullptr;
     }
 
     while (il_root) {
@@ -1010,7 +1010,7 @@ static void
 gdb_rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
-  ftmp = gbfopen_le(NULL, "wb", MYNAME);
+  ftmp = gbfopen_le(nullptr, "wb", MYNAME);
   read_file_header();
   /* VERSION DEPENDENT CODE */
   if (gdb_ver >= GDB_VER_UTF8) {
@@ -1066,7 +1066,7 @@ read_data()
     }
 
     gbfrewind(ftmp);
-    gbfwrite(NULL, 0, 0, ftmp);	/* truncate */
+    gbfwrite(nullptr, 0, 0, ftmp);	/* truncate */
     gbfcopyfrom(ftmp, fin, len);
     gbfrewind(ftmp);
 
@@ -1159,7 +1159,7 @@ read_data()
 static void
 reset_short_handle(const char* defname)
 {
-  if (short_h != NULL) {
+  if (short_h != nullptr) {
     mkshort_del_handle(&short_h);
   }
 
@@ -1349,7 +1349,7 @@ write_waypoint(
     }
     descr = (wpt_class < gt_waypt_class_map_point) ?
             ld : wpt->description;
-    if ((descr != NULL) && (wpt_class >= gt_waypt_class_map_point) && \
+    if ((descr != nullptr) && (wpt_class >= gt_waypt_class_map_point) && \
         descr == CSTRc(wpt->shortname)) {
       descr.clear();
     }
@@ -1472,7 +1472,7 @@ write_route(const route_head* rte, const QString& rte_name)
     Waypoint* wpt = (Waypoint*)elem;
     Waypoint* next = (Waypoint*)tmp;
     Waypoint* test;
-    garmin_fs_t* gmsd = NULL;
+    garmin_fs_t* gmsd = nullptr;
     int wpt_class;
 
     index++;
@@ -1486,7 +1486,7 @@ write_route(const route_head* rte, const QString& rte_name)
     }
 
     test = gdb_find_wayptq(&wayptq_out, wpt, 1);
-    if (test != NULL) {
+    if (test != nullptr) {
       wpt = test;
     } else {
       fatal(MYNAME ": Sorry, that should never happen!!!\n");
@@ -1614,7 +1614,7 @@ finalize_item(gbfile* origin, const char identifier)
   gbfcopyfrom(fout, ftmp, len);
 
   gbfseek(ftmp, 0, SEEK_SET);	/* Truncate memory stream */
-  gbfwrite(NULL, 0, 0, ftmp);
+  gbfwrite(nullptr, 0, 0, ftmp);
 }
 
 /*-----------------------------------------------------------------------------*/
@@ -1639,17 +1639,17 @@ write_waypoint_cb(const Waypoint* refpt)
     UrlLink orig_link = refpt->GetUrlLink();
     UrlLink test_link = test->GetUrlLink();
     if (orig_link.url_ != test_link.url_) {
-      test = NULL;
+      test = nullptr;
     }
   }
 
-  if ((test != NULL) && (route_flag == 0)) {
+  if ((test != nullptr) && (route_flag == 0)) {
     if (test->notes != refpt->notes) {
-      test = NULL;
+      test = nullptr;
     }
   }
 
-  if (test == NULL) {
+  if (test == nullptr) {
     int icon, display, wpt_class;
     Waypoint* wpt = new Waypoint(*refpt);
 
@@ -1779,7 +1779,7 @@ static void
 gdb_wr_init(const QString& fname)
 {
   fout = gbfopen_le(fname, "wb", MYNAME);
-  ftmp = gbfopen_le(NULL, "wb", MYNAME);
+  ftmp = gbfopen_le(nullptr, "wb", MYNAME);
 
   gdb_category = (gdb_opt_category) ? atoi(gdb_opt_category) : 0;
   gdb_ver = (gdb_opt_ver && *gdb_opt_ver) ? atoi(gdb_opt_ver) : 0;
@@ -1791,7 +1791,7 @@ gdb_wr_init(const QString& fname)
   }
 
   if (gdb_opt_bitcategory) {
-    gdb_category = strtol(gdb_opt_bitcategory, NULL, 0);
+    gdb_category = strtol(gdb_opt_bitcategory, nullptr, 0);
   }
 
   if (gdb_ver >= GDB_VER_UTF8) {
@@ -1799,7 +1799,7 @@ gdb_wr_init(const QString& fname)
   }
 
   QUEUE_INIT(&wayptq_out);
-  short_h = NULL;
+  short_h = nullptr;
 
   waypt_ct = 0;
   waypth_ct = 0;
@@ -1831,13 +1831,13 @@ write_data()
   route_flag = 0;
   waypt_disp_all(write_waypoint_cb);
   route_flag = 1;
-  route_disp_all(NULL, NULL, write_waypoint_cb);
+  route_disp_all(nullptr, nullptr, write_waypoint_cb);
 
   reset_short_handle("Route");
-  route_disp_all(write_route_cb, NULL, NULL);
+  route_disp_all(write_route_cb, nullptr, nullptr);
 
   reset_short_handle("Track");
-  track_disp_all(write_track_cb, NULL, NULL);
+  track_disp_all(write_track_cb, nullptr, nullptr);
 
   FWRITE_i32(2);			/* finalize gdb with empty map segment */
   FWRITE_CSTR("V");
@@ -1856,11 +1856,11 @@ static arglist_t gdb_args[] = {
   {
     GDB_OPT_CATEGORY, &gdb_opt_category,
     "Default category on output (1..16)",
-    NULL, ARGTYPE_INT, "1", "16"
+    nullptr, ARGTYPE_INT, "1", "16"
   },
   {
     GDB_OPT_BITCATEGORY, &gdb_opt_bitcategory, "Bitmap of categories",
-    NULL, ARGTYPE_INT, "1", "65535"
+    nullptr, ARGTYPE_INT, "1", "65535"
   },
   {
     GDB_OPT_VER, &gdb_opt_ver,
@@ -1870,12 +1870,12 @@ static arglist_t gdb_args[] = {
   {
     GDB_OPT_VIA, &gdb_opt_via,
     "Drop route points that do not have an equivalent waypoint (hidden points)",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
   },
   {
     GDB_OPT_ROADBOOK, &gdb_opt_roadbook,
     "Include major turn points (with description) from calculated route",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
   },
 
   ARG_TERMINATOR
@@ -1890,7 +1890,7 @@ ff_vecs_t gdb_vecs = {
   gdb_wr_deinit,
   read_data,
   write_data,
-  NULL,
+  nullptr,
   gdb_args,
   CET_CHARSET_MS_ANSI, 0	/* O.K.: changed to NON-FIXED */
   /* because of utf8 strings since GDB V3 */

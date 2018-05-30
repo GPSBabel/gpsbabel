@@ -23,7 +23,7 @@
 #ifndef NAVILINK_H_INCLUDED_
 #define NAVILINK_H_INCLUDED_
 
-#include <time.h>
+#include <ctime>
 #include "defs.h"
 
 #define SBP_RECORD_LEN 32

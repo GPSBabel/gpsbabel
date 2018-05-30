@@ -19,10 +19,10 @@
 class xml_tag {
  public:
   xml_tag() :
-    attributes(NULL),
-    parent(NULL),
-    sibling(NULL),
-    child(NULL) {}
+    attributes(nullptr),
+    parent(nullptr),
+    sibling(nullptr),
+    child(nullptr) {}
 
   QString tagname;
   QString cdata;

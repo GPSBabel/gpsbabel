@@ -141,7 +141,7 @@ const psit_icon_mapping_t psit_icon_value_table[] = {
   { 0x400a, "ultralight" },
   { 0x400b, "parachute" },
   { 0x4012, "seaplane" },
-  {     -1, NULL }
+  {     -1, nullptr }
 };
 
 static const char*
@@ -230,7 +230,7 @@ psit_getToken(gbfile* psit_file, char* buf, size_t sz, psit_tokenSep_type delimT
   }
 
   if (c == '#') {
-    if (gbfgets(buf, sz, psit_file) == NULL) {
+    if (gbfgets(buf, sz, psit_file) == nullptr) {
       *buf = 0;
       return;
     }
@@ -342,7 +342,7 @@ psit_waypoint_w(gbfile* psit_file, const Waypoint* wpt)
 {
   int	icon;
   const char* ident;
-  char* src = 0;  /* BUGBUG Passed to mkshort */
+  char* src = nullptr;  /* BUGBUG Passed to mkshort */
 
   gbfprintf(psit_file, "%11.6f,%11.6f,",
             wpt->latitude,
@@ -516,7 +516,7 @@ psit_track_r(gbfile* psit_file, route_head**)
 
   struct tm tmTime;
   time_t dateTime = 0;
-  route_head* track_head = NULL;
+  route_head* track_head = nullptr;
   Waypoint* thisWaypoint;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
@@ -529,7 +529,7 @@ psit_track_r(gbfile* psit_file, route_head**)
   rtrim(trkname);
 
   trk_num = 0;
-  track_head = NULL;
+  track_head = nullptr;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), wscomma);
 
@@ -572,7 +572,7 @@ psit_track_r(gbfile* psit_file, route_head**)
 
       psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), whitespace);
 
-      if ((strcmp(psit_current_token, "1") == 0) || (track_head == NULL)) {
+      if ((strcmp(psit_current_token, "1") == 0) || (track_head == nullptr)) {
         track_head = route_head_alloc();
         /* Add a number to the track name.  With Garmins, the "first"
          tracklog is usually ACTIVE LOG
@@ -795,7 +795,7 @@ ff_vecs_t psit_vecs = {
   psit_wr_deinit,
   psit_read,
   psit_write,
-  NULL,
+  nullptr,
   psit_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

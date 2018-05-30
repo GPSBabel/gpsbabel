@@ -33,7 +33,7 @@
 static gbfile* file_in, *file_out;
 static char manufacturer[4];
 static const route_head* head;
-static char* timeadj = NULL;
+static char* timeadj = nullptr;
 static int lineno;
 
 #define MYNAME "IGC"
@@ -101,7 +101,7 @@ retry:
   if ((lineno++ == 0) && file_in->unicode) {
     cet_convert_init(CET_CHARSET_UTF8, 1);
   }
-  if (c == NULL) {
+  if (c == nullptr) {
     return rec_none;
   }
 
@@ -263,13 +263,13 @@ static void data_read()
   unsigned int lon_deg, lon_min, lon_frac;
   char lat_hemi[2], lon_hemi[2];
   char validity;
-  route_head* pres_head = NULL;
-  route_head* gnss_head = NULL;
+  route_head* pres_head = nullptr;
+  route_head* gnss_head = nullptr;
   int pres_alt, gnss_alt;
   char pres_valid = 0;
   char gnss_valid = 0;
-  Waypoint* pres_wpt = NULL;
-  Waypoint* gnss_wpt = NULL;
+  Waypoint* pres_wpt = nullptr;
+  Waypoint* gnss_wpt = nullptr;
   time_t date = 0;
   time_t prev_tod = 0;
   time_t tod;
@@ -296,7 +296,7 @@ static void data_read()
       }
       // Optional long name of record sub type is followed by a
       // colon.  Actual header data follows that.
-      if (NULL == (hdr_data = strchr(ibuf, ':'))) {
+      if (nullptr == (hdr_data = strchr(ibuf, ':'))) {
         hdr_data = ibuf + 5;
       } else {
         hdr_data++;
@@ -438,7 +438,7 @@ static void data_read()
       // altitude data or if it is the only track available.
       if (pres_head && !pres_valid && gnss_head) {
         track_del_head(pres_head);
-        pres_head = NULL;
+        pres_head = nullptr;
       }
       // Include GNSS altitude track only if it has useful altitude
       // data or if it is the only track available.
@@ -503,16 +503,16 @@ static void detect_other_track(const route_head* rh)
  */
 static void get_tracks(const route_head** pres_track, const route_head** gnss_track)
 {
-  head = NULL;
-  track_disp_all(detect_pres_track, NULL, NULL);
+  head = nullptr;
+  track_disp_all(detect_pres_track, nullptr, nullptr);
   *pres_track = head;
 
-  head = NULL;
-  track_disp_all(detect_gnss_track, NULL, NULL);
+  head = nullptr;
+  track_disp_all(detect_gnss_track, nullptr, nullptr);
   *gnss_track = head;
 
-  head = NULL;
-  track_disp_all(detect_other_track, NULL, NULL);
+  head = nullptr;
+  track_disp_all(detect_other_track, nullptr, nullptr);
 
   if (!*pres_track && *gnss_track && head) {
     *pres_track = head;
@@ -582,7 +582,7 @@ static void wr_header()
   struct tm* tm;
   time_t date;
   static const char dflt_str[] = "Unknown";
-  const char* str = NULL;
+  const char* str = nullptr;
   Waypoint* wpt;
 
   get_tracks(&pres_track, &track);
@@ -593,7 +593,7 @@ static void wr_header()
   date = !track ? current_time().toTime_t() :
          ((Waypoint*) QUEUE_FIRST(&track->waypoint_list))->GetCreationTime().toTime_t();
 
-  if (NULL == (tm = gmtime(&date))) {
+  if (nullptr == (tm = gmtime(&date))) {
     fatal(MYNAME ": Bad track timestamp\n");
   }
   gbfprintf(file_out, "HFDTE%s\r\n", date2str(tm));
@@ -603,11 +603,11 @@ static void wr_header()
   if (track && track->rte_desc.startsWith(HDRMAGIC)) {
     char *rd = xstrdup(track->rte_desc);
     for (str = strtok(rd + strlen(HDRMAGIC) + strlen(HDRDELIM), HDRDELIM);
-         str; str = strtok(NULL, HDRDELIM)) {
+         str; str = strtok(nullptr, HDRDELIM)) {
       gbfprintf(file_out, "%s\r\n", str);
     }
     xfree(rd);
-    rd = NULL;
+    rd = nullptr;
 #else
   if (track && track->rte_desc && strncmp(track->rte_desc, HDRMAGIC, strlen(HDRMAGIC)) == 0) {
     for (str = strtok(CSTRc(track->rte_desc) + strlen(HDRMAGIC) + strlen(HDRDELIM), HDRDELIM);
@@ -620,7 +620,7 @@ static void wr_header()
 // FIXME: This almost certainly introduces a memory leak because str
 // is a c string that's used for totally too many things.  Just let it
 // leak for now. 2013-12-31 robertl
-    if (NULL != (wpt = find_waypt_by_name("PILOT")) && !wpt->description.isEmpty()) {
+    if (nullptr != (wpt = find_waypt_by_name("PILOT")) && !wpt->description.isEmpty()) {
       xfree(str);
       str = xstrdup(CSTRc(wpt->description));
 #else
@@ -680,7 +680,7 @@ static void wr_task_hdr(const route_head* rte)
   }
   // Gather data to write to the task identification (first) record
   rte_time = wpt->GetCreationTime().isValid() ? wpt->GetCreationTime().toTime_t() : current_time().toTime_t();
-  if (NULL == (tm = gmtime(&rte_time))) {
+  if (nullptr == (tm = gmtime(&rte_time))) {
     fatal(MYNAME ": Bad task route timestamp\n");
   }
 
@@ -729,7 +729,7 @@ static void wr_fix_record(const Waypoint* wpt, int pres_alt, int gnss_alt)
   const time_t tt = wpt->GetCreationTime().toTime_t();
   tm = gmtime(&tt);
 
-  if (NULL == tm) {
+  if (nullptr == tm) {
     fatal(MYNAME ": bad track timestamp\n");
   }
 
@@ -819,8 +819,8 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
  */
 static double interpolate_alt(const route_head* track, time_t time)
 {
-  static const queue* prev_elem = NULL;
-  static const queue* curr_elem = NULL;
+  static const queue* prev_elem = nullptr;
+  static const queue* curr_elem = nullptr;
   const Waypoint* prev_wpt;
   const Waypoint* curr_wpt;
   int time_diff;
@@ -943,7 +943,7 @@ static arglist_t igc_args[] = {
   {
     "timeadj", &timeadj,
     "(integer sec or 'auto') Barograph to GPS time diff",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -957,7 +957,7 @@ ff_vecs_t igc_vecs = {
   wr_deinit,
   data_read,
   data_write,
-  NULL,
+  nullptr,
   igc_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

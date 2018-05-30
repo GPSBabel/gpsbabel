@@ -30,8 +30,8 @@
 #define MYNAME "height"
 
 #if FILTERS_ENABLED
-static char* addopt        = NULL;
-static char* wgs84tomslopt = NULL;
+static char* addopt        = nullptr;
+static char* wgs84tomslopt = nullptr;
 static double addf;
 
 
@@ -39,11 +39,11 @@ static
 arglist_t height_args[] = {
   {
     "add", &addopt, "Adds a constant value to every altitude (meter, append \"f\" (x.xxf) for feet)",
-    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
   },
   {
     "wgs84tomsl", &wgs84tomslopt, "Converts WGS84 ellipsoidal height to orthometric height (MSL)",
-    NULL, ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -144,16 +144,16 @@ static void
 height_process()	/* this procedure must be present in vecs */
 {
   waypt_disp_all(correct_height);
-  route_disp_all(NULL, NULL, correct_height);
-  track_disp_all(NULL, NULL, correct_height);
+  route_disp_all(nullptr, nullptr, correct_height);
+  track_disp_all(nullptr, nullptr, correct_height);
 }
 
 
 filter_vecs_t height_vecs = {
   height_init,
   height_process,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   height_args
 };
 

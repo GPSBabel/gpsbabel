@@ -32,14 +32,14 @@ static Waypoint* wpt_tmp;
 static int item_count;
 static int waypoints;
 static double version;
-static route_head* route = NULL;
+static route_head* route = nullptr;
 
-static char* routevia = NULL;
+static char* routevia = nullptr;
 
 static arglist_t tef_xml_args[] = {
   {
     "routevia", &routevia, "Include only via stations in route",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -58,7 +58,7 @@ xg_tag_mapping tef_xml_map[] = {
   { tef_point,		cb_start,	"/TEF/WaypointList/Item/Point" },
   { tef_item_end,		cb_end,		"/TEF/WaypointList/Item" },
   { tef_list_end,		cb_end,		"/TEF/WaypointList" },
-  { NULL,	(xg_cb_type)0,		NULL }
+  { nullptr,	(xg_cb_type)0,		nullptr }
 };
 
 
@@ -187,7 +187,7 @@ static void
 waypoint_final()
 {
   int via;
-  if (wpt_tmp == NULL) {
+  if (wpt_tmp == nullptr) {
     return;
   }
 
@@ -205,8 +205,8 @@ waypoint_final()
     waypt_add(wpt_tmp);
   }
 
-  if (route != NULL) {
-    if ((via != 0) || (routevia == NULL)) {
+  if (route != nullptr) {
+    if ((via != 0) || (routevia == nullptr)) {
       Waypoint* wpt = new Waypoint(*wpt_tmp);
       route_add_wpt(route, wpt);
     }
@@ -216,7 +216,7 @@ waypoint_final()
     delete wpt_tmp;
   }
 
-  wpt_tmp = NULL;
+  wpt_tmp = nullptr;
 }
 
 static void
@@ -301,12 +301,12 @@ tef_point(xg_string, const QXmlStreamAttributes* attrv)
 static void
 tef_xml_rd_init(const QString& fname)
 {
-  wpt_tmp = NULL;
+  wpt_tmp = nullptr;
   waypoints = 0;
   item_count = -1;
   version = 1.5;
 
-  xml_init(fname, tef_xml_map, NULL);
+  xml_init(fname, tef_xml_map, nullptr);
 }
 
 static void
@@ -325,12 +325,12 @@ ff_vecs_t tef_xml_vecs = {
   ff_type_file,
   { ff_cap_none, ff_cap_none, ff_cap_read },
   tef_xml_rd_init,
-  NULL,
+  nullptr,
   tef_xml_rd_deinit,
-  NULL,
+  nullptr,
   tef_xml_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   tef_xml_args,
   CET_CHARSET_UTF8, 1
   , NULL_POS_OPS,

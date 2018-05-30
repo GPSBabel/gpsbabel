@@ -337,7 +337,7 @@ icon_mapping_t garmin_icon_table[] = {
   { 248, -1, "Water Source" },
 
 
-  {    -1,    -1, NULL },
+  {    -1,    -1, nullptr },
 };
 
 icon_mapping_t garmin_smart_icon_table[] = {
@@ -350,7 +350,7 @@ icon_mapping_t garmin_smart_icon_table[] = {
   {    83,  8214, "Post Office" },  	/* Icon for "Post Office" */
   {    47,   160, "Event Cache" }, 	/* Icon for "Event" */
   {    90,  8221, "Webcam Cache" }, 	/* Icon for "Live Theatre" */
-  {    -1,    -1, NULL }
+  {    -1,    -1, nullptr }
 };
 
 /* ICAO country code table */
@@ -581,7 +581,7 @@ gt_country_code_t gt_country_codes[] = {
   { "AY,", "Papua New Guinea" },
   { "AN,", "Nauru" },
   { "AG,", "Solomon Islands" },
-  { NULL, NULL }
+  { nullptr, nullptr }
 };
 
 /* gt_waypt_classes: gdb internal order */
@@ -599,7 +599,7 @@ const char* gt_waypt_class_names[] = {
   "Map Intersection",
   "Map Address",
   "Map Line",
-  NULL
+  nullptr
 };
 
 /* gt_display_mode_names: this order is used by most devices */
@@ -624,7 +624,7 @@ grid_mapping_t gt_mps_grid_names[] = {
   { "bng",	"British National Grid",	grid_bng },
   { "utm",	"UTM",				grid_utm },
   { "swiss",	"Swiss grid",			grid_swiss },
-  { NULL,	NULL,	(grid_type) 0 }
+  { nullptr,	nullptr,	(grid_type) 0 }
 };
 
 /* gt_mps_datum_names: */
@@ -648,7 +648,7 @@ static datum_mapping_t gt_mps_datum_names[] = {
   { "Mexico NAD27",	"NAD27 Mexico" },
   { "North America 83",	"NAD83" },
   { "OSGB36",		"Ord Srvy Grt Britn" },
-  { NULL,	NULL }
+  { nullptr,	nullptr }
 };
 
 typedef struct garmin_color_s {
@@ -675,7 +675,7 @@ static garmin_color_t gt_colors[] = {
   { "Cyan",		0xFFFF00 },
   { "White",		0xFFFFFF },
   { "Transparent",	unknown_color }, /* Currently not handled */
-  { NULL, 0 }
+  { nullptr, 0 }
 };
 
 #define GT_COLORS_CT ((sizeof(gt_colors) / sizeof(gt_colors[0])) - 1)
@@ -841,10 +841,10 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
   if (find_flag == 0) {
     const char** prefix;
     const char* prefixes[] = {
-      "White ", "Red ", "Green ", "Blue ", "Black ", NULL
+      "White ", "Red ", "Green ", "Blue ", "Black ", nullptr
     };
     // Rewrite "Green Square" to "Square, Green".
-    for (prefix = prefixes; *prefix != NULL; prefix++) {
+    for (prefix = prefixes; *prefix != nullptr; prefix++) {
       if (desc.startsWith(*prefix, Qt::CaseInsensitive)) {
         QString buff = desc;
         buff.replace(*prefix, "");
@@ -869,13 +869,13 @@ gt_get_icao_country(const QString& cc)
   gt_country_code_t* x = &gt_country_codes[0];
 
   if (cc.isEmpty()) {
-    return NULL;
+    return nullptr;
   }
 
   do {
     const char* ccx = x->cc;
     const QString qccx = x->cc;
-    while (ccx != NULL) {
+    while (ccx != nullptr) {
       if (qccx.left(2) == cc) {
         return x->country;
       }
@@ -883,14 +883,14 @@ gt_get_icao_country(const QString& cc)
         return x->country;
       }
       ccx = strchr(ccx, ',');
-      if (ccx == NULL) {
+      if (ccx == nullptr) {
         break;
       }
       ccx++;
     }
     x++;
-  } while (x->cc != NULL);
-  return NULL;
+  } while (x->cc != nullptr);
+  return nullptr;
 }
 
 const char*
@@ -901,8 +901,8 @@ gt_get_icao_cc(const QString& country, const QString& shortname)
 
   if (country.isEmpty()) {
     const char* test;
-    if (shortname == NULL) {
-      return NULL;
+    if (shortname == nullptr) {
+      return nullptr;
     }
     switch (shortname.length()) {
     case 3:
@@ -912,13 +912,13 @@ gt_get_icao_cc(const QString& country, const QString& shortname)
       strncpy(res, CSTR(shortname), 2);
       break;
     default:
-      return NULL;
+      return nullptr;
     }
     test = gt_get_icao_country(res);
-    if (test != NULL) {
+    if (test != nullptr) {
       return res;
     } else {
-      return NULL;
+      return nullptr;
     }
   }
 
@@ -942,7 +942,7 @@ gt_get_icao_cc(const QString& country, const QString& shortname)
 
       strncpy(res, CSTR(shortname), 2);
       res[2] = '\0';
-      while (ccx != NULL) {
+      while (ccx != nullptr) {
         if (strncmp(ccx, res, 2) == 0) {
           return res;
         }
@@ -950,15 +950,15 @@ gt_get_icao_cc(const QString& country, const QString& shortname)
           return res;
         }
         ccx = strchr(ccx, ',');
-        if (ccx == NULL) {
+        if (ccx == nullptr) {
           break;
         }
         ccx++;
       }
     }
-    return NULL;
-  } while (x->country != NULL);
-  return NULL;
+    return nullptr;
+  } while (x->country != nullptr);
+  return nullptr;
 }
 
 grid_type

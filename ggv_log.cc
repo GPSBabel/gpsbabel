@@ -94,7 +94,7 @@ ggv_log_read()
 {
   signed char* buf;
   int bufsz = 0, len;
-  route_head* trk = NULL;
+  route_head* trk = nullptr;
 
   switch (ggv_log_ver) {
   case 10:
@@ -118,7 +118,7 @@ ggv_log_read()
       break;
     }
 
-    if (trk == NULL) {
+    if (trk == nullptr) {
       trk = route_head_alloc();
       track_add_head(trk);
     }
@@ -207,7 +207,7 @@ static void
 ggv_log_track_head_cb(const route_head* trk)
 {
   queue* elem, *tmp;
-  Waypoint* prev = NULL;
+  Waypoint* prev = nullptr;
 
   QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
     double  latmin, lonmin, latsec, lonsec;
@@ -233,7 +233,7 @@ ggv_log_track_head_cb(const route_head* trk)
       memset(&tm, 0, sizeof(tm));
     }
 
-    if (prev != NULL) {
+    if (prev != nullptr) {
       course = heading_true_degrees(
                  prev->latitude, prev->longitude,
                  wpt->latitude, wpt->longitude);
@@ -267,7 +267,7 @@ ggv_log_track_head_cb(const route_head* trk)
 static void
 ggv_log_write()
 {
-  track_disp_all(ggv_log_track_head_cb, NULL, NULL);
+  track_disp_all(ggv_log_track_head_cb, nullptr, nullptr);
 }
 
 /**************************************************************************/
@@ -285,7 +285,7 @@ ff_vecs_t ggv_log_vecs = {
   ggv_log_wr_deinit,
   ggv_log_read,
   ggv_log_write,
-  NULL,
+  nullptr,
   ggv_log_args,
   CET_CHARSET_ASCII, 1
   , NULL_POS_OPS,

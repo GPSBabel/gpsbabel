@@ -30,12 +30,12 @@ static char* opt_points, *opt_seed;
 
 static arglist_t random_args[] = {
   {
-    "points", &opt_points, "Generate # points", NULL,
-    ARGTYPE_INT, "1", NULL, nullptr
+    "points", &opt_points, "Generate # points", nullptr,
+    ARGTYPE_INT, "1", nullptr, nullptr
   },
   {
-    "seed", &opt_seed, "Starting seed of the internal number generator", NULL,
-    ARGTYPE_INT, "1", NULL, nullptr
+    "seed", &opt_seed, "Starting seed of the internal number generator", nullptr,
+    ARGTYPE_INT, "1", nullptr, nullptr
   },
   ARG_TERMINATOR
 };
@@ -113,7 +113,7 @@ random_read()
 
   int i, points;
   route_head* head;
-  Waypoint* prev = NULL;
+  Waypoint* prev = nullptr;
   time_t time = gpsbabel_time;
 
   if (opt_seed) {
@@ -133,12 +133,12 @@ random_read()
       head->rte_name = rand_qstr(8, "Rte_%s");
       route_add_head(head);
     }
-    head->rte_desc = rand_qstr(16, NULL);
+    head->rte_desc = rand_qstr(16, nullptr);
 	if RND(3) {
       head->rte_url = rand_qstr(8, "http://rteurl.example.com/%s");
     }
   } else {
-    head = NULL;
+    head = nullptr;
   }
 
   for (i = 0; i < points; i++) {
@@ -152,7 +152,7 @@ random_read()
 
     do {
       wpt->shortname = rand_qstr(8, "Wpt_%s");
-    } while (wpt->shortname == NULL);
+    } while (wpt->shortname == nullptr);
 
     wpt->latitude = rand_dbl(180) - 90;
     wpt->longitude = rand_dbl(360) - 180;
@@ -260,12 +260,12 @@ ff_vecs_t random_vecs = {
     ff_cap_read /* routes */
   },
   random_rd_init,
-  NULL,	/* wr_init */
+  nullptr,	/* wr_init */
   random_rd_deinit,
-  NULL,	/* wr_deinit */
+  nullptr,	/* wr_deinit */
   random_read,
-  NULL,	/* write */
-  NULL,	/* exit */
+  nullptr,	/* write */
+  nullptr,	/* exit */
   random_args,
   CET_CHARSET_ASCII, 1			/* fixed */
   , NULL_POS_OPS,

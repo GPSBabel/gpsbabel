@@ -50,7 +50,7 @@ jtr_parse_time(const char* str, struct tm* tm, int* milli)
     hms = hms / 100;
     tm->tm_hour = hms % 100;
 
-    if ((*dot == '.') && (milli != NULL)) {
+    if ((*dot == '.') && (milli != nullptr)) {
       *milli = atoi(dot + 1) * 10;
     }
 
@@ -99,7 +99,7 @@ jtr_read()
 {
   char* str;
   int line = 0;
-  route_head* trk = NULL;
+  route_head* trk = nullptr;
 
   while ((str = gbfgetstr(fin))) {
     Waypoint* wpt;
@@ -133,7 +133,7 @@ jtr_read()
     column = -1;
     tmp = str;
     while ((str = csv_lineparse(tmp, ",", "", column++))) {
-      tmp = NULL;
+      tmp = nullptr;
 
       if (*str == '\0') {
         continue;
@@ -239,7 +239,7 @@ jtr_read()
       WAYPT_SET(wpt, course, course);
     }
 
-    if (trk == NULL) {
+    if (trk == nullptr) {
       trk = route_head_alloc();
       track_add_head(trk);
     }
@@ -320,7 +320,7 @@ jtr_trkpt_disp_cb(const Waypoint* wpt)
 static void
 jtr_write()
 {
-  track_disp_all(NULL, NULL, jtr_trkpt_disp_cb);
+  track_disp_all(nullptr, nullptr, jtr_trkpt_disp_cb);
 }
 
 /**************************************************************************/
@@ -338,7 +338,7 @@ ff_vecs_t jtr_vecs = {
   jtr_wr_deinit,
   jtr_read,
   jtr_write,
-  NULL,
+  nullptr,
   jtr_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */

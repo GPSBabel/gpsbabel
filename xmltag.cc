@@ -29,7 +29,7 @@
 static void
 free_xml_tag(xml_tag* tag)
 {
-  xml_tag* next = NULL;
+  xml_tag* next = nullptr;
   char** ap;
 
   while (tag) {
@@ -56,13 +56,13 @@ free_xml_tag(xml_tag* tag)
 static void
 copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
 {
-  xml_tag* res = NULL;
-  char** ap = NULL;
-  char** ap2 = NULL;
+  xml_tag* res = nullptr;
+  char** ap = nullptr;
+  char** ap2 = nullptr;
   int count = 0;
 
   if (!src) {
-    *copy = NULL;
+    *copy = nullptr;
     return;
   }
 
@@ -96,9 +96,9 @@ copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
 static void
 convert_xml_tag(xml_tag* tag)
 {
-  char** ap = NULL;
+  char** ap = nullptr;
 
-  if (tag == NULL) {
+  if (tag == nullptr) {
     return;
   }
 
@@ -133,12 +133,12 @@ fs_xml_copy(void** copy, void* source)
 {
   fs_xml* src = (fs_xml*)source;
   if (!source) {
-    *copy = NULL;
+    *copy = nullptr;
     return;
   }
   *copy = (void*)fs_xml_alloc(src->fs.type);
   memcpy(*copy, source, sizeof(fs_xml));
-  copy_xml_tag(&(((fs_xml*)(*copy))->tag), src->tag, NULL);
+  copy_xml_tag(&(((fs_xml*)(*copy))->tag), src->tag, nullptr);
 }
 
 static void
@@ -152,7 +152,7 @@ fs_xml_convert(void* fs)
 
 fs_xml* fs_xml_alloc(long type)
 {
-  fs_xml* result = NULL;
+  fs_xml* result = nullptr;
 
   result = (fs_xml*)xcalloc(1, sizeof(fs_xml));
   result->fs.type = type;

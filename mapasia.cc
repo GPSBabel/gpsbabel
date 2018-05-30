@@ -69,9 +69,9 @@ tr7_rd_init(const QString& fname)
 static void
 tr7_read()
 {
-  route_head* trk = NULL;
+  route_head* trk = nullptr;
   unsigned int magic;
-  Waypoint* prev = NULL;
+  Waypoint* prev = nullptr;
 
   magic = gbfgetint32(fin);
   if (magic != TR7_TRACK_MAGIC) {
@@ -90,7 +90,7 @@ tr7_read()
     lon = (double)le_read32(&buff[TR7_S_LON]) / 1000000.0;
 
     if ((fabs(lat) > 90) || (fabs(lon) > 180)) {	/* that really happens */
-      trk = NULL;
+      trk = nullptr;
       continue;
     }
 
@@ -134,9 +134,9 @@ tr7_read()
 
     if (prev) {	/* other track or bad timestamp */
       if (wpt->creation_time.isValid() && (prev->creation_time.toTime_t() > wpt->creation_time.toTime_t())) {
-        trk = NULL;
+        trk = nullptr;
       } else if (waypt_distance(prev, wpt) > 9999.9) {
-        trk = NULL;
+        trk = nullptr;
       }
     }
 
@@ -201,7 +201,7 @@ tr7_rd_deinit()
 static void
 tr7_disp_track_head_cb(const route_head*)
 {
-  wpt_tmp = NULL;
+  wpt_tmp = nullptr;
 }
 
 static void
@@ -217,7 +217,7 @@ tr7_disp_waypt_cb(const Waypoint* wpt)
 
   if WAYPT_HAS(wpt, course) {
     course = wpt->course;
-  } else if (wpt_tmp != NULL) {
+  } else if (wpt_tmp != nullptr) {
     course =  waypt_course(wpt_tmp, wpt);
   } else {
     course = -1;
@@ -241,7 +241,7 @@ tr7_disp_waypt_cb(const Waypoint* wpt)
 
     if WAYPT_HAS(wpt, speed) {
       speed = wpt->speed;
-    } else if (wpt_tmp != NULL) {
+    } else if (wpt_tmp != nullptr) {
       speed = waypt_speed(wpt_tmp, wpt);
     } else {
       speed = -1;
@@ -278,7 +278,7 @@ tr7_wr_deinit()
 static void
 tr7_write()
 {
-  track_disp_all(tr7_disp_track_head_cb, NULL, tr7_disp_waypt_cb);
+  track_disp_all(tr7_disp_track_head_cb, nullptr, tr7_disp_waypt_cb);
 }
 
 /**************************************************************************/
@@ -296,7 +296,7 @@ ff_vecs_t mapasia_tr7_vecs = {		/* we can read and write tracks */
   tr7_wr_deinit,
   tr7_read,
   tr7_write,
-  NULL,
+  nullptr,
   tr7_args,
   CET_CHARSET_UTF8, 1	/* FIXED - CET-REVIEW - */
   , NULL_POS_OPS,

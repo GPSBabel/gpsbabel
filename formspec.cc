@@ -23,13 +23,13 @@
 
 format_specific_data* fs_chain_copy(format_specific_data* source)
 {
-  format_specific_data* result = NULL;
+  format_specific_data* result = nullptr;
 
   format_specific_data** copy = &result;
   while (source) {
     source->copy((void**)copy, (void*)source);
     /* prevent segfaults from badly-behaved copy functions */
-    (*copy)->next = NULL;
+    (*copy)->next = nullptr;
     copy = &((*copy)->next);
     source = source->next;
   }
@@ -39,7 +39,7 @@ format_specific_data* fs_chain_copy(format_specific_data* source)
 void fs_chain_destroy(format_specific_data* chain)
 {
   format_specific_data* cur = chain;
-  format_specific_data* next = NULL;
+  format_specific_data* next = nullptr;
   while (cur) {
     next = cur->next;
     cur->destroy(cur);
@@ -56,7 +56,7 @@ format_specific_data* fs_chain_find(format_specific_data* chain, long type)
     }
     cur = cur->next;
   }
-  return NULL;
+  return nullptr;
 }
 
 void fs_chain_add(format_specific_data** chain, format_specific_data* data)

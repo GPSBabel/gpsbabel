@@ -58,8 +58,8 @@ reverse_route_head(const route_head* rte)
 void
 reverse_route_process()
 {
-  track_disp_all(reverse_route_head, NULL, reverse_route_wpt);
-  route_disp_all(reverse_route_head, NULL, NULL);
+  track_disp_all(reverse_route_head, nullptr, reverse_route_wpt);
+  route_disp_all(reverse_route_head, nullptr, nullptr);
 }
 
 void
@@ -86,7 +86,7 @@ filter_vecs_t reverse_route_vecs = {
   reverse_route_init,
   reverse_route_process,
   reverse_route_deinit,
-  NULL,
+  nullptr,
   reverse_route_args
 };
 #endif

@@ -3,8 +3,7 @@
 
 #include "../defs.h"
 #include "gpsport.h"
-#include <time.h>
-
+#include <ctime>
 #define FRAMING_ERROR  -1
 #define PROTOCOL_ERROR -2
 #define HARDWARE_ERROR -3

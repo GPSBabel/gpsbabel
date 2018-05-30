@@ -95,9 +95,9 @@ static gbfile* igo8_file_in;
 static gbfile* igo8_file_out;
 
 // Options
-static char* igo8_option_tracknum = NULL;
-static char* igo8_option_title = NULL;
-static char* igo8_option_description = NULL;
+static char* igo8_option_tracknum = nullptr;
+static char* igo8_option_title = nullptr;
+static char* igo8_option_description = nullptr;
 
 // Internal state
 static uint32_t invented_time;
@@ -106,9 +106,9 @@ static int in_point_count;
 
 // Exported options list
 static arglist_t igo8_options[] = {
-  { "tracknum", &igo8_option_tracknum, "Track identification number", NULL, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
-  { "title", &igo8_option_title, "Track title", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  { "description", &igo8_option_description, "Track description", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  { "tracknum", &igo8_option_tracknum, "Track identification number", nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
+  { "title", &igo8_option_title, "Track title", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  { "description", &igo8_option_description, "Track description", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
 
@@ -350,7 +350,7 @@ void write_header()
 static void igo8_write()
 {
   write_header();
-  track_disp_all(NULL, NULL, write_igo8_track_point);
+  track_disp_all(nullptr, nullptr, write_igo8_track_point);
 }
 
 // Callback definitions
@@ -363,7 +363,7 @@ ff_vecs_t igo8_vecs = {
   igo8_write_deinit,
   igo8_read,
   igo8_write,
-  NULL,
+  nullptr,
   igo8_options,
   CET_CHARSET_UTF8,
   1

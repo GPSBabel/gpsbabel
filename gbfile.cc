@@ -70,7 +70,7 @@ gzapi_open(gbfile* self, const char* mode)
   /* under non-posix systems files MUST be opened in binary mode */
 
   strcpy(openmode, mode);
-  if (strchr(mode, 'b') == NULL) {
+  if (strchr(mode, 'b') == nullptr) {
     strncat(openmode, "b", sizeof(openmode) - strlen(openmode) - 1);
   }
 
@@ -94,7 +94,7 @@ gzapi_open(gbfile* self, const char* mode)
 #endif
   }
 
-  if (self->handle.gz == NULL) {
+  if (self->handle.gz == nullptr) {
     fatal("%s: Cannot %s file '%s'!\n",
           self->module,
           (self->mode == 'r') ? "open" : "create",
@@ -367,7 +367,7 @@ memapi_open(gbfile* self, const char* mode)
 
   self->mempos = 0;
   self->memsz = 0;
-  self->handle.mem = NULL;
+  self->handle.mem = nullptr;
 
   return self;
 }
@@ -511,9 +511,9 @@ gbfopen(const QString filename, const char* mode, const char* module)
 
   file->module = xstrdup(module);
   file->mode = 'r'; // default
-  file->binary = (strchr(mode, 'b') != NULL);
+  file->binary = (strchr(mode, 'b') != nullptr);
   file->back = -1;
-  file->memapi = (filename == NULL);
+  file->memapi = (filename == nullptr);
 
   for (m = mode; *m; m++) {
     switch (tolower(*m)) {
@@ -1054,11 +1054,11 @@ gbfgetucs2str(gbfile* file)
 
     c0 = gbfgetc(file);
     if ((c0 == EOF) && (len == 0)) {
-      return NULL;
+      return nullptr;
     }
     c1 = gbfgetc(file);
     if ((c1 == EOF) && (len == 0)) {
-      return NULL;
+      return nullptr;
     }
 
     if (file->big_endian) {
@@ -1071,11 +1071,11 @@ gbfgetucs2str(gbfile* file)
 
       c0 = gbfgetc(file);
       if ((c0 == EOF) && (len == 0)) {
-        return NULL;
+        return nullptr;
       }
       c1 = gbfgetc(file);
       if ((c1 == EOF) && (len == 0)) {
-        return NULL;
+        return nullptr;
       }
 
       if (file->big_endian) {
@@ -1094,7 +1094,7 @@ gbfgetucs2str(gbfile* file)
     clen = cet_ucs4_to_utf8(buff, sizeof(buff), c0);
     if (clen < 1) {
       Warning() << "Malformed UCS character" << c0 << "found.";
-      return NULL;
+      return nullptr;
     }
 
     if (len+clen >= file->buffsz) {
@@ -1129,7 +1129,7 @@ gbfgetstr(gbfile* file)
 
     if ((c == EOF) || (c == 0x1A)) {
       if (len == 0) {
-        return NULL;
+        return nullptr;
       }
       break;
     } else if (c == '\r') {

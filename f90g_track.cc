@@ -37,8 +37,8 @@
 
 
 
-static gbfile* fin = NULL;
-static route_head* track = NULL;
+static gbfile* fin = nullptr;
+static route_head* track = nullptr;
 
 
 static
@@ -69,7 +69,7 @@ f90g_track_rd_init(const QString& fname)
     }
     // start the track list
     track = route_head_alloc();
-    is_fatal((track == NULL), MYNAME ": memory non-enough");
+    is_fatal((track == nullptr), MYNAME ": memory non-enough");
     track->rte_name = fname;
     track_add_head(track);
   }
@@ -93,7 +93,7 @@ f90g_track_read()
   int year, mon, mday, hour, min, sec, latitudeDeg, latitudeMin, longitudeDeg, longitudeMin, velocity;
   QDateTime dt;
 
-  is_fatal((track == NULL), MYNAME "Track setup error");
+  is_fatal((track == nullptr), MYNAME "Track setup error");
   for (;;) {
     if ((gbfread((void*)ttRec, 1, 2, fin) != 2)
         || (memcmp(ttRec,"TT",2))) {
@@ -147,12 +147,12 @@ ff_vecs_t f90g_track_vecs = {
   ff_type_file,
   { ff_cap_none, (ff_cap)(ff_cap_read), ff_cap_none },
   f90g_track_rd_init,
-  NULL,
+  nullptr,
   f90g_track_rd_deinit,
-  NULL,
+  nullptr,
   f90g_track_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   f90g_track_args,
   CET_CHARSET_UTF8, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */

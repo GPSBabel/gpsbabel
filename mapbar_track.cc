@@ -82,7 +82,7 @@ static void
 mapbar_track_read()
 {
   route_head* track = route_head_alloc();
-  is_fatal((track == NULL), MYNAME ": memory non-enough");
+  is_fatal((track == nullptr), MYNAME ": memory non-enough");
   track_add_head(track);
 
   (void) read_datetime(); // start_time currently unused
@@ -134,12 +134,12 @@ ff_vecs_t mapbar_track_vecs = {
   ff_type_file,
   { ff_cap_none, (ff_cap)(ff_cap_read), ff_cap_none },
   mapbar_track_rd_init,
-  NULL,
+  nullptr,
   mapbar_track_rd_deinit,
-  NULL,
+  nullptr,
   mapbar_track_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   mapbar_track_args,
   CET_CHARSET_UTF8, 0
   /* not fixed, can be changed through command line parameter */

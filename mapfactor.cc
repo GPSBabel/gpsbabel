@@ -42,7 +42,7 @@ geocache_container wpt_container(const QString&);
 
 void MapfactorRead()
 {
-  Waypoint* wpt = NULL;
+  Waypoint* wpt = nullptr;
 
   while (!reader.atEnd()) {
     QStringRef tag_name = reader.name();
@@ -117,10 +117,10 @@ mapfactor_wr_deinit()
 {
   writer->writeEndDocument();
   delete writer;
-  writer = NULL;
+  writer = nullptr;
   oqfile->close();
   delete oqfile;
-  oqfile = NULL;
+  oqfile = nullptr;
 }
 
 static void
@@ -155,7 +155,7 @@ ff_vecs_t mapfactor_vecs = {
   mapfactor_wr_deinit,
   mapfactor_read,
   mapfactor_write,
-  NULL,
+  nullptr,
   mapfactor_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

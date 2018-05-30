@@ -31,7 +31,7 @@
 static gbfile* file_in, *file_out;
 static short_handle mkshort_handle;
 static short_handle mkshort_handle2; /* for track and route names */
-static char* deficon = NULL;
+static char* deficon = nullptr;
 static char* cartoexploreur;
 static int read_as_degrees;
 static int read_gpsu;
@@ -47,7 +47,7 @@ static arglist_t pcx_args[] = {{"deficon", &deficon, "Default icon name",
                                 "Waypoint", ARGTYPE_STRING, ARG_NOMINMAX},
                                {"cartoexploreur", &cartoexploreur,
                                 "Write tracks compatible with Carto Exploreur",
-                                NULL, ARGTYPE_BOOL, ARG_NOMINMAX},
+                                nullptr, ARGTYPE_BOOL, ARG_NOMINMAX},
                                ARG_TERMINATOR};
 
 static void rd_init(const QString& fname) {
@@ -98,8 +98,8 @@ static void data_read() {
   int symnum;
   Waypoint* wpt_tmp;
   char* buff;
-  route_head* track = NULL;
-  route_head* route = NULL;
+  route_head* track = nullptr;
+  route_head* route = nullptr;
   int points;
   int line_number = 0;
 
@@ -181,7 +181,7 @@ static void data_read() {
           wpt_tmp->latitude = ddmm2degrees(lat);
         }
 
-        if (route != NULL) {
+        if (route != nullptr) {
           route_add_wpt(route, new Waypoint(*wpt_tmp));
         }
         waypt_add(wpt_tmp);
@@ -195,10 +195,10 @@ static void data_read() {
           H(2 chars)TN(tracknane\0)
           */
         if (points > 0) {
-          track = NULL;
+          track = nullptr;
           points = 0;
         }
-        if (track == NULL) {
+        if (track == nullptr) {
           if (ibuf[3] == 'L' && ibuf[4] == 'A') {
             track = route_head_alloc();
             track->rte_name = "track";
@@ -256,7 +256,7 @@ static void data_read() {
         wpt_tmp->altitude = alt;
 
         /* Did we get a track point before a track header? */
-        if (track == NULL) {
+        if (track == nullptr) {
           track = route_head_alloc();
           track->rte_name = "Default";
           track_add_head(track);
@@ -275,7 +275,7 @@ static void data_read() {
       // of "LAT LON DM" - unlike the other, it actually IS decimal
       // minutes.
       case 'I':
-        read_gpsu = !(strstr(ibuf, "GPSU") == NULL);
+        read_gpsu = !(strstr(ibuf, "GPSU") == nullptr);
         break;
       // This is a format specifier.  Use this line to figure out
       // where our other columns start.
@@ -317,7 +317,7 @@ static void gpsutil_disp(const Waypoint* wpt) {
                 : CSTRc(wpt->shortname),
             lat < 0.0 ? 'S' : 'N', fabs(lat), lon < 0.0 ? 'W' : 'E', fabs(lon),
             CSTR(ds), (wpt->altitude == unknown_alt) ? -9999 : wpt->altitude,
-            (wpt->description != NULL) ? CSTRc(wpt->description) : "", 0.0,
+            (wpt->description != nullptr) ? CSTRc(wpt->description) : "", 0.0,
             icon_token);
 }
 
@@ -399,16 +399,16 @@ static void data_write() {
     waypt_disp_all(gpsutil_disp);
   } else if (global_opts.objective == trkdata) {
     route_ctr = 0;
-    track_disp_all(pcx_track_hdr, NULL, pcx_track_disp);
+    track_disp_all(pcx_track_hdr, nullptr, pcx_track_disp);
   } else if (global_opts.objective == rtedata) {
     route_ctr = 0;
-    route_disp_all(pcx_route_hdr, NULL, gpsutil_disp);
+    route_disp_all(pcx_route_hdr, nullptr, gpsutil_disp);
   }
 }
 
 ff_vecs_t pcx_vecs = {
     ff_type_file,      FF_CAP_RW_ALL, rd_init,    wr_init, rd_deinit,
-    wr_deinit,         data_read,     data_write, NULL,    pcx_args,
+    wr_deinit,         data_read,     data_write, nullptr,    pcx_args,
     CET_CHARSET_ASCII, 1 /* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

@@ -58,7 +58,7 @@ static const int reqd_bytes[num_states] = { 6, 1, 2, 2, 25, 2, 2, 2, 2, 2, 2, 1,
 
 static void rd_init(const QString& fname)
 {
-  if (serial_handle = gbser_init(qPrintable(fname)), NULL == serial_handle) {
+  if (serial_handle = gbser_init(qPrintable(fname)), nullptr == serial_handle) {
     fatal(MYNAME ": Can't open port '%s'\n", qPrintable(fname));
   }
   if (gbser_set_port(serial_handle, 9600, 8, 0, 1) != gbser_OK) {
@@ -69,7 +69,7 @@ static void rd_init(const QString& fname)
 static void rd_deinit()
 {
   gbser_deinit(serial_handle);
-  serial_handle = NULL;
+  serial_handle = nullptr;
 }
 
 /**
@@ -84,7 +84,7 @@ static int process_data(const unsigned char* data)
   static route_head* track;
   static unsigned char interval;
   time_t finish;
-  Waypoint* wpt = NULL;
+  Waypoint* wpt = nullptr;
   int i;
 
   if (global_opts.debug_level >= 3) {
@@ -268,12 +268,12 @@ ff_vecs_t brauniger_iq_vecs = {
   ff_type_serial,
   { ff_cap_none, ff_cap_read, ff_cap_none},
   rd_init,
-  NULL,
+  nullptr,
   rd_deinit,
-  NULL,
+  nullptr,
   data_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   brauniger_iq_args,
   CET_CHARSET_UTF8, 1		/* master process: don't convert anything | CET-REVIEW */
   , NULL_POS_OPS,

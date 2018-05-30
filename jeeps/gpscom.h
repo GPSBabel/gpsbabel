@@ -3,7 +3,7 @@
 
 
 #include "gps.h"
-#include <time.h>
+#include <ctime>
 
   int32  GPS_Command_Off(const char* port);
 

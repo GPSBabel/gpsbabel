@@ -31,13 +31,13 @@
 #endif
 
 static double pos_dist;
-static char* distopt = NULL;
-static char* latopt = NULL;
-static char* lonopt = NULL;
-static char* exclopt = NULL;
-static char* nosort = NULL;
-static char* maxctarg = NULL;
-static char* routename = NULL;
+static char* distopt = nullptr;
+static char* latopt = nullptr;
+static char* lonopt = nullptr;
+static char* exclopt = nullptr;
+static char* nosort = nullptr;
+static char* maxctarg = nullptr;
+static char* routename = nullptr;
 static int maxct;
 
 static Waypoint* home_pos;
@@ -50,31 +50,31 @@ static
 arglist_t radius_args[] = {
   {
     "lat", &latopt,       "Latitude for center point (D.DDDDD)",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "lon", &lonopt,       "Longitude for center point (D.DDDDD)",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "distance", &distopt, "Maximum distance from center",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "exclude", &exclopt,  "Exclude points close to center",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "nosort", &nosort,    "Inhibit sort by distance to center",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "maxcount", &maxctarg,"Output no more than this number of points",
-    NULL, ARGTYPE_INT, "1", NULL, nullptr
+    nullptr, ARGTYPE_INT, "1", nullptr, nullptr
   },
   {
     "asroute", &routename,"Put resulting waypoints in route of this name",
-    NULL, ARGTYPE_STRING, NULL, NULL, nullptr
+    nullptr, ARGTYPE_STRING, nullptr, nullptr, nullptr
   },
   ARG_TERMINATOR
 };
@@ -118,7 +118,7 @@ radius_process()
   Waypoint** comp;
   int i, wc;
   queue temp_head;
-  route_head* rte_head = NULL;
+  route_head* rte_head = nullptr;
 #if NEWQ
   foreach(Waypoint* waypointp, waypt_list) {
 #else
@@ -133,7 +133,7 @@ radius_process()
     /* convert radians to float point statute miles */
     dist = radtomiles(dist);
 
-    if ((dist >= pos_dist) == (exclopt == NULL)) {
+    if ((dist >= pos_dist) == (exclopt == nullptr)) {
       waypt_del(waypointp);
       delete waypointp;
       continue;
@@ -187,7 +187,7 @@ radius_process()
     Waypoint* wp = comp[i];
 
     xfree(wp->extra_data);
-    wp->extra_data = NULL;
+    wp->extra_data = nullptr;
 
     if (maxctarg && i >= maxct) {
       continue;
@@ -246,7 +246,7 @@ filter_vecs_t radius_vecs = {
   radius_init,
   radius_process,
   radius_deinit,
-  NULL,
+  nullptr,
   radius_args
 };
 #endif // FILTERS_ENABLED

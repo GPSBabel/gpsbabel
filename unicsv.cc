@@ -237,7 +237,7 @@ static field_t fields_def[] = {
   { "placer_id",	fld_gc_placer_id, STR_ANY },
   { "placer",	fld_gc_placer, STR_ANY },
   { "hint",	fld_gc_hint, STR_ANY },
-  { NULL,		fld_terminator, 0 }
+  { nullptr,		fld_terminator, 0 }
 };
 
 static QVector<field_e> unicsv_fields_tab;
@@ -268,19 +268,19 @@ static arglist_t unicsv_args[] = {
   },
   {
     "grid",  &opt_grid,  "Write position using this grid.",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "utc",   &opt_utc,   "Write timestamps with offset x to UTC time",
-    NULL, ARGTYPE_INT, "-23", "+23", nullptr
+    nullptr, ARGTYPE_INT, "-23", "+23", nullptr
   },
   {
     "format", &opt_format,   "Write name(s) of format(s) from input session(s)",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "filename", &opt_filename,   "Write filename(s) from input session(s)",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "prec", &opt_prec,   "Precision of numerical coordinates (no grid set)",
@@ -288,7 +288,7 @@ static arglist_t unicsv_args[] = {
   },
   {
     "fields",  &opt_fields,  "Name and order of input fields, separated by '+'",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -474,7 +474,7 @@ unicsv_compare_fields(const char* s, const field_t* f)
   if (f->options & STR_EQUAL) {
     result = (strcmp(test, name) == 0);
   } else if (f->options & STR_ANY) {
-    result = (strstr(test, name) != NULL);
+    result = (strstr(test, name) != nullptr);
   } else {
     if (f->options & STR_LEFT) {
       result = (strncmp(test, name, strlen(name)) == 0);
@@ -485,13 +485,13 @@ unicsv_compare_fields(const char* s, const field_t* f)
     }
   }
 
-  if ((! result) && (strchr(test, ' ') != NULL)) {
+  if ((! result) && (strchr(test, ' ') != nullptr)) {
     /* replace  ' ' with '_' and try again */
     char* tmp = gstrsub(test, " ", "_");
     result = unicsv_compare_fields(tmp, f);
     xfree(tmp);
   }
-  if ((! result) && (strchr(test, '-') != NULL)) {
+  if ((! result) && (strchr(test, '-') != nullptr)) {
     /* replace  '-' with '_' and try again */
     char* tmp = gstrsub(test, "-", "_");
     result = unicsv_compare_fields(tmp, f);
@@ -516,8 +516,8 @@ static void
 unicsv_fondle_header(QString s)
 {
   // TODO: clean up this back and forth between QString and char*.
-  char* buf = NULL;
-  char* cbuf_start = NULL;
+  char* buf = nullptr;
+  char* cbuf_start = nullptr;
   const cet_cs_vec_t* ascii = &cet_cs_vec_ansi_x3_4_1968;	/* us-ascii */
 
   /* Convert the entire header to lower case for convenience.
@@ -545,7 +545,7 @@ unicsv_fondle_header(QString s)
 
     field_t* f = &fields_def[0];
 
-    cbuf = NULL;
+    cbuf = nullptr;
 
     unicsv_fields_tab.append(fld_terminator);
     while (f->name) {
@@ -601,7 +601,7 @@ unicsv_rd_init(const QString& fname)
   unicsv_data_type = global_opts.objective;
   unicsv_detect = (!(global_opts.masked_objective & (WPTDATAMASK | TRKDATAMASK | RTEDATAMASK | POSNDATAMASK)));
 
-  unicsv_track = unicsv_route = NULL;
+  unicsv_track = unicsv_route = nullptr;
   unicsv_datum_idx = gt_lookup_datum_index(opt_datum, MYNAME);
 
   fin = gbfopen(fname, "rb", MYNAME);
@@ -611,7 +611,7 @@ unicsv_rd_init(const QString& fname)
   } else if ((c = gbfgetstr(fin))) {
     unicsv_fondle_header(c);
   } else {
-    unicsv_fieldsep = NULL;
+    unicsv_fieldsep = nullptr;
   }
   if (fin->unicode) {
     cet_convert_init(CET_CHARSET_UTF8, 1);
@@ -628,7 +628,7 @@ unicsv_rd_deinit()
 static void
 unicsv_parse_one_line(char* ibuf)
 {
-  Waypoint* wpt = NULL;
+  Waypoint* wpt = nullptr;
   int column;
   int  utm_zone = -9999;
   double utm_easting = 0;
@@ -651,7 +651,7 @@ unicsv_parse_one_line(char* ibuf)
   int src_datum = unicsv_datum_idx;
   int ns = 1;
   int ew = 1;
-  geocache_data* gc_data = NULL;
+  geocache_data* gc_data = nullptr;
   wpt = new Waypoint;
   wpt->latitude = unicsv_unknown;
   wpt->longitude = unicsv_unknown;
@@ -664,7 +664,7 @@ unicsv_parse_one_line(char* ibuf)
       break;  /* ignore extra fields on line */
     }
 
-    ibuf = NULL;
+    ibuf = nullptr;
 
     checked++;
     s = s.trimmed();
@@ -689,12 +689,12 @@ unicsv_parse_one_line(char* ibuf)
     switch (unicsv_fields_tab[column]) {
 
     case fld_latitude:
-      human_to_dec(CSTR(s), &wpt->latitude, NULL, 1);
+      human_to_dec(CSTR(s), &wpt->latitude, nullptr, 1);
       wpt->latitude = wpt->latitude * ns;
       break;
 
     case fld_longitude:
-      human_to_dec(CSTR(s), NULL, &wpt->longitude, 2);
+      human_to_dec(CSTR(s), nullptr, &wpt->longitude, 2);
       wpt->longitude = wpt->longitude * ew;
       break;
 
@@ -833,7 +833,7 @@ unicsv_parse_one_line(char* ibuf)
 
     case fld_utc_date:
       if ((is_localtime < 2) && (date < 0)) {
-        date = unicsv_parse_date(CSTR(s), NULL);
+        date = unicsv_parse_date(CSTR(s), nullptr);
         is_localtime = 0;
       }
       break;
@@ -926,7 +926,7 @@ unicsv_parse_one_line(char* ibuf)
 
     case fld_date:
       if ((is_localtime < 2) && (date < 0)) {
-        date = unicsv_parse_date(CSTR(s), NULL);
+        date = unicsv_parse_date(CSTR(s), nullptr);
         is_localtime = 1;
       }
       break;
@@ -1217,7 +1217,7 @@ unicsv_rd()
 {
   char* buff;
 
-  if (unicsv_fieldsep == NULL) {
+  if (unicsv_fieldsep == nullptr) {
     return;
   }
 
@@ -1238,7 +1238,7 @@ unicsv_fatal_outside(const Waypoint* wpt)
   gbfprintf(fout, "#####\n");
   fatal(MYNAME ": %s (%s) is outside of convertable area of grid \"%s\"!\n",
         wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
-        pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
+        pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, 0),
         gt_get_mps_grid_longname(unicsv_grid_idx, MYNAME));
 }
 
@@ -1433,9 +1433,9 @@ static void
 unicsv_waypt_disp_cb(const Waypoint* wpt)
 {
   double lat, lon, alt;
-  char* cout = NULL;
+  char* cout = nullptr;
   garmin_fs_t* gmsd;
-  const geocache_data* gc_data = NULL;
+  const geocache_data* gc_data = nullptr;
   unicsv_waypt_ct++;
 
   QString shortname = wpt->shortname;
@@ -1599,7 +1599,7 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
       fix = "pps";
       break;
     default:
-      fix = NULL;
+      fix = nullptr;
     }
     if (fix) {
       unicsv_print_str(fix);
@@ -1735,7 +1735,7 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
   }
 
   if (wpt->EmptyGCData()) {
-    gc_data = NULL;
+    gc_data = nullptr;
   } else {
     gc_data = wpt->gc_data;
   }
@@ -1844,7 +1844,7 @@ unicsv_wr_init(const QString& filename)
   unicsv_fieldsep = UNICSV_FIELD_SEP;
   unicsv_waypt_ct = 0;
 
-  if (opt_grid != NULL) {
+  if (opt_grid != nullptr) {
     int i;
 
     if (sscanf(opt_grid, "%d", &i)) {
@@ -1904,11 +1904,11 @@ unicsv_wr()
     break;
   case trkdata:
     unicsv_check_modes (doing_rtes);
-    track_disp_all(NULL, NULL, unicsv_waypt_enum_cb);
+    track_disp_all(nullptr, nullptr, unicsv_waypt_enum_cb);
     break;
   case rtedata:
     unicsv_check_modes (doing_trks);
-    route_disp_all(NULL, NULL, unicsv_waypt_enum_cb);
+    route_disp_all(nullptr, nullptr, unicsv_waypt_enum_cb);
     break;
   case posndata:
     Fatal() << MYNAME << ": Realtime positioning not supported.";
@@ -2084,10 +2084,10 @@ unicsv_wr()
     waypt_disp_all(unicsv_waypt_disp_cb);
     break;
   case trkdata:
-    track_disp_all(NULL, NULL, unicsv_waypt_disp_cb);
+    track_disp_all(nullptr, nullptr, unicsv_waypt_disp_cb);
     break;
   case rtedata:
-    route_disp_all(NULL, NULL, unicsv_waypt_disp_cb);
+    route_disp_all(nullptr, nullptr, unicsv_waypt_disp_cb);
     break;
   default:
     break;
@@ -2105,7 +2105,7 @@ ff_vecs_t unicsv_vecs = {
   unicsv_wr_deinit,
   unicsv_rd,
   unicsv_wr,
-  NULL,
+  nullptr,
   unicsv_args,
   CET_CHARSET_ASCII, 0	/* can be changed with -c ... */
   , NULL_POS_OPS,

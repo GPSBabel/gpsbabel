@@ -49,7 +49,7 @@ static void
 navitel_read_track()
 {
   int points, i;
-  route_head* trk = NULL;
+  route_head* trk = nullptr;
 
   points = gbfgetint32(fin);
   (void) gbfgetint32(fin); /* unknown */
@@ -65,7 +65,7 @@ navitel_read_track()
     wpt->latitude = GPS_Math_Semi_To_Deg(lat & 0x7FFFFFFF);
     wpt->longitude = GPS_Math_Semi_To_Deg(lon);
 
-    if ((lat >> 31) || (trk == NULL)) {
+    if ((lat >> 31) || (trk == nullptr)) {
       trk = route_head_alloc();
       track_add_head(trk);
     }
@@ -118,7 +118,7 @@ static void
 navitel_write_track()
 {
   trkpts = 0;
-  track_disp_all(NULL, NULL, navitel_enum_trkpts);
+  track_disp_all(nullptr, nullptr, navitel_enum_trkpts);
   if (trkpts > 10000) {
     trkpts = 10000;
     warning(MYNAME ": Can store only 10000 points per file!\n");
@@ -126,7 +126,7 @@ navitel_write_track()
 
   gbfputint32(trkpts, fout);
   gbfputint32(1, fout);		/* ? */
-  track_disp_all(navitel_disp_trk_head, NULL, navitel_disp_trkpts);
+  track_disp_all(navitel_disp_trk_head, nullptr, navitel_disp_trkpts);
 }
 
 /**************************************************************************/
@@ -144,8 +144,8 @@ ff_vecs_t navitel_trk_vecs = {
   navitel_wr_deinit,
   navitel_read_track,
   navitel_write_track,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   CET_CHARSET_UTF8, 1			/* Nothing to convert */
   , NULL_POS_OPS,
   nullptr

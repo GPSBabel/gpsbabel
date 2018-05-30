@@ -74,8 +74,8 @@ skyforce_parse_wpt(const char* str, int* rte_num)
   Waypoint* wpt;
 
   wpt = skyforce_parse_coords(str);
-  if (wpt == NULL) {
-    return NULL;
+  if (wpt == nullptr) {
+    return nullptr;
   }
 
   // The line has fixed columns and starts like:
@@ -100,8 +100,8 @@ skyforce_parse_trk(const char* str)
   Waypoint* wpt;
 
   wpt = skyforce_parse_coords(str);
-  if (wpt == NULL) {
-    return NULL;
+  if (wpt == nullptr) {
+    return nullptr;
   }
   strncpy(buf, str + 2, sizeof(buf) - 1);
   buf[14] = 0;
@@ -130,7 +130,7 @@ skyforce_parse_trk(const char* str)
 static void
 skyforce_head_disp_cb(const route_head* head)
 {
-  prev_wpt = NULL;
+  prev_wpt = nullptr;
   if (head->rte_waypt_ct <= 0) {
     return;
   }
@@ -256,7 +256,7 @@ skyforce_read()
   route_head* rte, *trk;
 
   wpt_num = 0;
-  rte = trk = NULL;
+  rte = trk = nullptr;
   rte_num = -1;
 
   while ((str = gbfgetstr(fin))) {
@@ -272,8 +272,8 @@ skyforce_read()
     switch (*str) {
 
     case 'W':
-      wpt = skyforce_parse_wpt(str, NULL);
-      if (wpt == NULL) {
+      wpt = skyforce_parse_wpt(str, nullptr);
+      if (wpt == nullptr) {
         continue;
       }
       waypt_add(wpt);
@@ -281,16 +281,16 @@ skyforce_read()
 
     case 'R':
       wpt = skyforce_parse_wpt(str, &i);
-      if (wpt == NULL) {
+      if (wpt == nullptr) {
         continue;
       }
 
       if (i != rte_num) {
         rte_num = i;
-        rte = NULL;
+        rte = nullptr;
       }
 
-      if (rte == NULL) {
+      if (rte == nullptr) {
         rte = route_head_alloc();
         route_add_head(rte);
         rte->rte_num = rte_num;
@@ -300,10 +300,10 @@ skyforce_read()
 
     case 'L':
       wpt = skyforce_parse_trk(str);
-      if (wpt == NULL) {
+      if (wpt == nullptr) {
         continue;
       }
-      if (trk == NULL) {
+      if (trk == nullptr) {
         trk = route_head_alloc();
         track_add_head(trk);
       }
@@ -357,11 +357,11 @@ skyforce_write()
   case rtedata:
     setshort_defname(short_h, "RTE");
     setshort_mustuniq(short_h, 0);
-    route_disp_all(skyforce_head_disp_cb, NULL, skyforce_waypt_disp_cb);
+    route_disp_all(skyforce_head_disp_cb, nullptr, skyforce_waypt_disp_cb);
     break;
 
   case trkdata:
-    track_disp_all(skyforce_head_disp_cb, NULL, skyforce_waypt_disp_cb);
+    track_disp_all(skyforce_head_disp_cb, nullptr, skyforce_waypt_disp_cb);
     break;
 
   case posndata:
@@ -385,7 +385,7 @@ ff_vecs_t skyforce_vecs = {
   skyforce_wr_deinit,
   skyforce_read,
   skyforce_write,
-  NULL,
+  nullptr,
   skyforce_args,
   CET_CHARSET_ASCII, 1
   , NULL_POS_OPS,

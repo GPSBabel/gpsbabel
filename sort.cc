@@ -40,19 +40,19 @@ static
 arglist_t sort_args[] = {
   {
     "gcid", &opt_sm_gcid, "Sort by numeric geocache ID",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "shortname", &opt_sm_shortname, "Sort by waypoint short name",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "description", &opt_sm_description, "Sort by waypoint description",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "time", &opt_sm_time, "Sort by time",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -104,8 +104,8 @@ sort_init(const char*)
 filter_vecs_t sort_vecs = {
   sort_init,
   sort_process,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   sort_args
 };
 #endif // FILTERS_ENABLED

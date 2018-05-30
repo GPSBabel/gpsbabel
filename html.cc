@@ -29,11 +29,11 @@
 static gbfile* file_out;
 static short_handle mkshort_handle;
 
-static char* stylesheet = NULL;
-static char* html_encrypt = NULL;
-static char* includelogs = NULL;
-static char* degformat = NULL;
-static char* altunits = NULL;
+static char* stylesheet = nullptr;
+static char* html_encrypt = nullptr;
+static char* includelogs = nullptr;
+static char* degformat = nullptr;
+static char* altunits = nullptr;
 
 #define MYNAME "HTML"
 
@@ -41,15 +41,15 @@ static
 arglist_t html_args[] = {
   {
     "stylesheet", &stylesheet,
-    "Path to HTML style sheet", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    "Path to HTML style sheet", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "encrypt", &html_encrypt,
-    "Encrypt hints using ROT13", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    "Encrypt hints using ROT13", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "logs", &includelogs,
-    "Include groundspeak logs if present", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    "Include groundspeak logs if present", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "degformat", &degformat,
@@ -85,7 +85,7 @@ html_disp(const Waypoint* wpt)
   int32_t utmz;
   double utme, utmn;
   char utmzc;
-  fs_xml* fs_gpx = NULL;
+  fs_xml* fs_gpx = nullptr;
 
 
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
@@ -151,19 +151,19 @@ html_disp(const Waypoint* wpt)
     gbfprintf(file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", CSTRc(wpt->notes));
   }
 
-  fs_gpx = NULL;
+  fs_gpx = nullptr;
   if (includelogs) {
     fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
   }
 
   if (fs_gpx && fs_gpx->tag) {
     xml_tag* root = fs_gpx->tag;
-    xml_tag* curlog = NULL;
-    xml_tag* logpart = NULL;
+    xml_tag* curlog = nullptr;
+    xml_tag* logpart = nullptr;
     curlog = xml_findfirst(root, "groundspeak:log");
     while (curlog) {
       time_t logtime = 0;
-      struct tm* logtm = NULL;
+      struct tm* logtm = nullptr;
       gbfprintf(file_out, "<p class=\"gpsbabellog\">\n");
 
       logpart = xml_findfirst(curlog, "groundspeak:type");
@@ -193,7 +193,7 @@ html_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
       if (logpart) {
-        char* coordstr = NULL;
+        char* coordstr = nullptr;
         double lat = 0;
         double lon = 0;
         coordstr = xml_attribute(logpart, "lat");
@@ -213,7 +213,7 @@ html_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:text");
       if (logpart) {
-        char* encstr = NULL;
+        char* encstr = nullptr;
         int encoded = 0;
         encstr = xml_attribute(logpart, "encoded");
         encoded = (toupper(encstr[0]) != 'F');
@@ -289,13 +289,13 @@ data_write()
 ff_vecs_t html_vecs = {
   ff_type_file,
   { ff_cap_write, ff_cap_none, ff_cap_none },
-  NULL,
+  nullptr,
   wr_init,
-  NULL,
+  nullptr,
   wr_deinit,
-  NULL,
+  nullptr,
   data_write,
-  NULL,
+  nullptr,
   html_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
