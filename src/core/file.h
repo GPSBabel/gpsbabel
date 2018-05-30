@@ -33,7 +33,7 @@ public:
   File(const QString& s) : QFile(s) {}
 
   /* in the tradition of gbfile we assume WriteOnly or ReadOnly, not ReadWrite */
-  bool open(OpenMode mode) {
+  bool open(OpenMode mode) override {
     bool status;
 
     if (QFile::fileName() == "-") {
