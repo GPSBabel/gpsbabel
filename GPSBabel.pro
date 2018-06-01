@@ -203,3 +203,23 @@ macx|linux{
   check.depends = $(TARGET)
   QMAKE_EXTRA_TARGETS += check
 }
+
+# build the compilation data base used by clang tools including clang-tidy.
+# I am not sure how to do this on non-linux platforms, bear is linux specific.
+linux{
+  compile_command_database.target = compile_commands.json
+  compile_command_database.commands = make clean; bear make
+  QMAKE_EXTRA_TARGETS += compile_command_database
+}
+
+# run clang-tidy
+# example usage:
+# make clang-tidy RUN_CLANG_TIDY_FLAGS="-header-filter=.*\\\.h -checks=-*,modernize-use-nullptr -fix"
+# It seems to be better to use run-clang-tidy with the compilation database as opposed to
+# running clang-tidy directly and listing the 
+# compilation options on the clang-tidy line after --.
+# An example is modernize-use-override which inserts repeadted overrides when run directly,
+# but works as expected when run with run-clang-tidy.
+clang-tidy.commands = run-clang-tidy.py $(RUN_CLANG_TIDY_FLAGS)
+clang-tidy.depends = compile_commands.json
+QMAKE_EXTRA_TARGETS += clang-tidy
