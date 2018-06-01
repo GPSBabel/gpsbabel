@@ -513,7 +513,7 @@ void
 xcsv_read_internal_style(const char* style_buf)
 {
   xcsv_file_init();
-  xcsv_file.is_internal = 1;
+  xcsv_file.is_internal = true;
 
   xcsv_parse_style_buff(style_buf);
 
