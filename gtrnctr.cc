@@ -155,7 +155,7 @@ static xg_tag_mapping gtc_map[] = {
   { gtc_wpt_long, cb_cdata, "/Courses/Course/Lap/BeginPosition/LongitudeDegrees" },
   { gtc_trk_alt,  cb_cdata, "/Courses/Course/Lap/BeginAltitudeMeters" },
 
-  { NULL,	(xg_cb_type)0,         NULL}
+  { nullptr,	(xg_cb_type)0,         nullptr}
 };
 
 static const char*
@@ -166,13 +166,13 @@ gtc_tags_to_ignore[] = {
   "Biking",
   "Other",
   "Multisport",
-  NULL,
+  nullptr,
 };
 
 static void
 gtc_rd_init(const QString& fname)
 {
-  xml_init(fname, gtc_map, NULL);
+  xml_init(fname, gtc_map, nullptr);
   xml_ignore_tags(gtc_tags_to_ignore);
 }
 
@@ -396,7 +396,7 @@ static void
 gtc_act_hdr(const route_head* rte)
 {
   gtc_write_xml(1, "<Activity Sport=\"%s\">\n", gtc_sportlist[gtc_sport]);
-  gtc_lap_start(NULL);
+  gtc_lap_start(nullptr);
   gtc_new_study_lap(rte);
   route_disp(rte, gtc_study_lap);
   if (gtc_least_time.isValid()) {
@@ -425,7 +425,7 @@ gtc_crs_hdr(const route_head* rte)
 {
 
   gtc_write_xml(1, "<Course>\n");
-  gtc_lap_start(NULL);
+  gtc_lap_start(nullptr);
   gtc_new_study_lap(rte);
   route_disp(rte, gtc_study_lap);
 
@@ -522,7 +522,7 @@ gtc_trk_pnt_e(xg_string, const QXmlStreamAttributes*)
     delete wpt_tmp;
   }
 
-  wpt_tmp = NULL;
+  wpt_tmp = nullptr;
 }
 
 void
@@ -589,7 +589,7 @@ gtc_wpt_crs_e(xg_string, const QXmlStreamAttributes*)
     delete wpt_tmp;
   }
 
-  wpt_tmp = NULL;
+  wpt_tmp = nullptr;
 }
 
 void
@@ -611,7 +611,7 @@ gtc_wpt_pnt_e(xg_string, const QXmlStreamAttributes*)
     delete wpt_tmp;
   }
 
-  wpt_tmp = NULL;
+  wpt_tmp = nullptr;
 }
 
 void gtc_wpt_ident(const QString& args, const QXmlStreamAttributes*)
@@ -650,7 +650,7 @@ ff_vecs_t gtc_vecs = {
   gtc_wr_deinit,
   gtc_read,
   gtc_write,
-  NULL,
+  nullptr,
   gtc_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

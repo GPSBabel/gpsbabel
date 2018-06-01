@@ -56,7 +56,7 @@ static grid_type grid_index;
 static int datum_index;
 static const char* datum_str;
 static int current_line;
-static char* date_time_format = NULL;
+static char* date_time_format = nullptr;
 static int precision = 3;
 static time_t utc_offs = 0;
 // Having a Windows background, this software encodes degree marks in
@@ -103,25 +103,25 @@ static int header_ct[unknown_header + 1];
 #define IS_VALID_ALT(a) (((a) != unknown_alt) && ((a) < GARMIN_UNKNOWN_ALT))
 #define DUPSTR(a) (((a) != NULL) && ((a)[0] != 0)) ? ((a)) : NULL
 
-static char* opt_datum = NULL;
-static char* opt_dist = NULL;
-static char* opt_temp = NULL;
-static char* opt_date_format = NULL;
-static char* opt_time_format = NULL;
-static char* opt_precision = NULL;
-static char* opt_utc = NULL;
-static char* opt_grid = NULL;
+static char* opt_datum = nullptr;
+static char* opt_dist = nullptr;
+static char* opt_temp = nullptr;
+static char* opt_date_format = nullptr;
+static char* opt_time_format = nullptr;
+static char* opt_precision = nullptr;
+static char* opt_utc = nullptr;
+static char* opt_grid = nullptr;
 
 static
 arglist_t garmin_txt_args[] = {
-  {"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  {"date",  &opt_date_format, "Read/Write date format (i.e. yyyy/mm/dd)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"datum", &opt_datum, 	    "GPS datum (def. WGS 84)", "WGS 84", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"dist",  &opt_dist,        "Distance unit [m=metric, s=statute]", "m", ARGTYPE_STRING, ARG_NOMINMAX},
-  {"grid",  &opt_grid,        "Write position using this grid.", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  {"grid",  &opt_grid,        "Write position using this grid.", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
   {"prec",  &opt_precision,   "Precision of coordinates", "3", ARGTYPE_INT, ARG_NOMINMAX, nullptr},
   {"temp",  &opt_temp,        "Temperature unit [c=Celsius, f=Fahrenheit]", "c", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-  {"time",  &opt_time_format, "Read/Write time format (i.e. HH:mm:ss xx)", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-  {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", NULL, ARGTYPE_INT, "-23", "+23", nullptr},
+  {"time",  &opt_time_format, "Read/Write time format (i.e. HH:mm:ss xx)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  {"utc",   &opt_utc,         "Write timestamps with offset x to UTC time", nullptr, ARGTYPE_INT, "-23", "+23", nullptr},
   ARG_TERMINATOR
 };
 
@@ -149,7 +149,7 @@ static const char* headers[] = {
   "Position\tTime\tAltitude\tDepth\tTemperature\tLeg Length\tLeg Time\tLeg Speed\tLeg Course",
   "Name\tLength\tCourse\tWaypoints\tLink",
   "Name\tStart Time\tElapsed Time\tLength\tAverage Speed\tLink",
-  NULL
+  nullptr
 };
 
 /* helpers */
@@ -157,7 +157,7 @@ static const char* headers[] = {
 static const char*
 get_option_val(const char* option, const char* def)
 {
-  const char* c = (option != NULL) ? option : def;
+  const char* c = (option != nullptr) ? option : def;
   return c;
 }
 
@@ -238,7 +238,7 @@ static void
 prework_hdr_cb(const route_head*)
 {
   cur_info = &route_info[route_idx];
-  cur_info->prev_wpt = NULL;
+  cur_info->prev_wpt = nullptr;
   cur_info->length = 0;
   cur_info->time = 0;
 }
@@ -255,7 +255,7 @@ prework_wpt_cb(const Waypoint* wpt)
 {
   Waypoint* prev = cur_info->prev_wpt;
 
-  if (prev != NULL) {
+  if (prev != nullptr) {
     cur_info->time += (wpt->GetCreationTime().toTime_t() - prev->GetCreationTime().toTime_t());
     cur_info->length += waypt_distance_ex(prev, wpt);
   } else {
@@ -353,7 +353,7 @@ print_position(const Waypoint* wpt)
     gbfprintf(fout, "#####\n");
     fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
           wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
-          pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
+          pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, 0),
           gt_get_mps_grid_longname(grid_index, MYNAME));
   }
 }
@@ -398,16 +398,16 @@ print_categories(uint16_t categories)
   count = 0;
   for (i = 0; i < 16; i++) {
     if ((categories & 1) != 0) {
-      if (global_opts.inifile != NULL) {
+      if (global_opts.inifile != nullptr) {
         char key[3];
         snprintf(key, sizeof(key), "%d", i + 1);
         c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
       } else {
-        c = NULL;
+        c = nullptr;
       }
 
       gbfprintf(fout, "%s", (count++ > 0) ? "," : "");
-      if (c == NULL) {
+      if (c == nullptr) {
         gbfprintf(fout, "Category %d", i+1);
       }
 //				gbfprintf(fout, "%s", gps_categories[i]);
@@ -423,7 +423,7 @@ print_categories(uint16_t categories)
 static void
 print_course(const Waypoint* A, const Waypoint* B)		/* seems to be okay */
 {
-  if ((A != NULL) && (B != NULL) && (A != B)) {
+  if ((A != nullptr) && (B != nullptr) && (A != B)) {
     int course;
     course = si_round(waypt_course(A, B));
     gbfprintf(fout, "%d%c true", course, kDegreeSymbol);
@@ -612,7 +612,7 @@ write_waypt(const Waypoint* wpt)
   print_string("%s\t", GMSD_GET(city, ""));
   print_string("%s\t", GMSD_GET(state, ""));
   country = gt_get_icao_country(GMSD_GET(cc, ""));
-  print_string("%s\t", (country != NULL) ? country : "");
+  print_string("%s\t", (country != nullptr) ? country : "");
   print_date_and_time(wpt->GetCreationTime().toTime_t(), 0);
   if (wpt->HasUrlLink()) {
     UrlLink l = wpt->GetUrlLink();
@@ -630,7 +630,7 @@ route_disp_hdr_cb(const route_head* rte)
 {
   current_trk = (route_head*)rte;
   cur_info = &route_info[route_idx];
-  cur_info->prev_wpt = NULL;
+  cur_info->prev_wpt = nullptr;
   cur_info->total = 0;
   if (rte->rte_waypt_ct <= 0) {
     return;
@@ -662,7 +662,7 @@ route_disp_wpt_cb(const Waypoint* wpt)
   gbfprintf(fout, "Route Waypoint\t");
   gbfprintf(fout, "%s\t", CSTRc(wpt->shortname));
 
-  if (prev != NULL) {
+  if (prev != nullptr) {
     double dist = waypt_distance_ex(prev, wpt);
     cur_info->total += dist;
     print_distance(cur_info->total, 0, 1, 0);
@@ -681,7 +681,7 @@ static void
 track_disp_hdr_cb(const route_head* track)
 {
   cur_info = &route_info[route_idx];
-  cur_info->prev_wpt = NULL;
+  cur_info->prev_wpt = nullptr;
   cur_info->total = 0;
   current_trk = (route_head*)track;
   if (track->rte_waypt_ct <= 0) {
@@ -728,7 +728,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
     print_distance(depth, 1, 0, 1);
   }
 
-  if (prev != NULL) {
+  if (prev != nullptr) {
     float temp;
     gbfprintf(fout, "\t");
     delta = wpt->GetCreationTime().toTime_t() - prev->GetCreationTime().toTime_t();
@@ -769,11 +769,11 @@ garmin_txt_wr_init(const QString& fname)
     is_fatal(precision < 0, MYNAME ": Invalid precision (%s)!", opt_precision);
   }
 
-  datum_str = get_option_val(opt_datum, NULL);
-  grid_str = get_option_val(opt_grid, NULL);
+  datum_str = get_option_val(opt_datum, nullptr);
+  grid_str = get_option_val(opt_grid, nullptr);
 
   grid_index = grid_lat_lon_dmm;
-  if (grid_str != NULL) {
+  if (grid_str != nullptr) {
     int i;
 
     if (sscanf(grid_str, "%d", &i)) {
@@ -797,7 +797,7 @@ garmin_txt_wr_init(const QString& fname)
     datum_index = gt_lookup_datum_index(datum_str, MYNAME);
   }
 
-  if (opt_utc != NULL) {
+  if (opt_utc != nullptr) {
     if (case_ignore_strcmp(opt_utc, "utc") == 0) {
       utc_offs = 0;
     } else {
@@ -834,7 +834,7 @@ garmin_txt_write()
   waypoints = 0;
   gtxt_flags.enum_waypoints = 1;			/* enum all waypoints */
   waypt_disp_all(enum_waypt_cb);
-  route_disp_all(NULL, NULL, enum_waypt_cb);
+  route_disp_all(nullptr, nullptr, enum_waypt_cb);
   gtxt_flags.enum_waypoints = 0;
 
   if (waypoints > 0) {
@@ -843,7 +843,7 @@ garmin_txt_write()
     wpt_a_ct = 0;
     wpt_a = (Waypoint**)xcalloc(waypoints, sizeof(*wpt_a));
     waypt_disp_all(enum_waypt_cb);
-    route_disp_all(NULL, NULL, enum_waypt_cb);
+    route_disp_all(nullptr, nullptr, enum_waypt_cb);
     qsort(wpt_a, waypoints, sizeof(*wpt_a), sort_waypt_cb);
 
     gbfprintf(fout, "Header\t%s\r\n\r\n", headers[waypt_header]);
@@ -887,9 +887,9 @@ free_header(const header_type ht)
 
   for (i = 0; i < MAX_HEADER_FIELDS; i++) {
     char* c = header_lines[ht][i];
-    if (c != NULL) {
+    if (c != nullptr) {
       xfree(c);
-      header_lines[ht][i] = NULL;
+      header_lines[ht][i] = nullptr;
     }
   }
   header_ct[ht] = 0;
@@ -911,9 +911,9 @@ parse_date_and_time(char* str, time_t* value)
   }
 
   cerr = strptime(cin, date_time_format, &tm);
-  if (cerr == NULL) {
+  if (cerr == nullptr) {
     cerr = strptime(cin, "%m/%d/%Y %I:%M:%S %p", &tm);
-    is_fatal(cerr == NULL, MYNAME ": Invalid date or/and time \"%s\" at line %d!", cin, current_line);
+    is_fatal(cerr == nullptr, MYNAME ": Invalid date or/and time \"%s\" at line %d!", cin, current_line);
   }
 
 //	printf(MYNAME "_parse_date_and_time: %02d.%02d.%04d, %02d:%02d:%02d\n",
@@ -964,7 +964,7 @@ parse_temperature(const char* str, double* temperature)
   double value;
   unsigned char unit;
 
-  if ((str == NULL) || (*str == '\0')) {
+  if ((str == nullptr) || (*str == '\0')) {
     return 0;
   }
 
@@ -995,7 +995,7 @@ parse_header()
 
   free_header(unknown_header);
 
-  while ((str = csv_lineparse(NULL, "\t", "", column++))) {
+  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
     header_lines[unknown_header][column] = strupper(xstrdup(str));
     header_ct[unknown_header]++;
     if (header_ct[unknown_header] >= MAX_HEADER_FIELDS) {
@@ -1009,7 +1009,7 @@ parse_display(const char* str, int* val)
 {
   gt_display_modes_e i;
 
-  if ((str == NULL) || (*str == '\0')) {
+  if ((str == nullptr) || (*str == '\0')) {
     return 0;
   }
 
@@ -1051,7 +1051,7 @@ bind_fields(const header_type ht)
     char* name;
     int field_no;
     name = header_lines[ht][i] = header_lines[unknown_header][i];
-    header_lines[unknown_header][i] = NULL;
+    header_lines[unknown_header][i] = nullptr;
 
     c = fields;
     field_no = 1;
@@ -1074,14 +1074,14 @@ bind_fields(const header_type ht)
 static void
 parse_grid()
 {
-  char* str = csv_lineparse(NULL, "\t", "", 1);
+  char* str = csv_lineparse(nullptr, "\t", "", 1);
 
-  if (str != NULL) {
-    if (strstr(str, "dd.ddddd") != 0) {
+  if (str != nullptr) {
+    if (strstr(str, "dd.ddddd") != nullptr) {
       grid_index = grid_lat_lon_ddd;
-    } else if (strstr(str, "mm.mmm") != 0) {
+    } else if (strstr(str, "mm.mmm") != nullptr) {
       grid_index = grid_lat_lon_dmm;
-    } else if (strstr(str, "mm'ss.s") != 0) {
+    } else if (strstr(str, "mm'ss.s") != nullptr) {
       grid_index = grid_lat_lon_dms;
     } else {
       grid_index = gt_lookup_grid_type(str, MYNAME);
@@ -1094,9 +1094,9 @@ parse_grid()
 static void
 parse_datum()
 {
-  char* str = csv_lineparse(NULL, "\t", "", 1);
+  char* str = csv_lineparse(nullptr, "\t", "", 1);
 
-  if (str != NULL) {
+  if (str != nullptr) {
     datum_index = gt_lookup_datum_index(str, MYNAME);
   } else {
     fatal(MYNAME ": Missing GPS datum headline!\n");
@@ -1109,7 +1109,7 @@ parse_waypoint()
   char* str;
   int column = -1;
   Waypoint* wpt;
-  garmin_fs_p gmsd = NULL;
+  garmin_fs_p gmsd = nullptr;
 
   bind_fields(waypt_header);
 
@@ -1117,7 +1117,7 @@ parse_waypoint()
   gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
-  while ((str = csv_lineparse(NULL, "\t", "", column++))) {
+  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
     int i;
     double d;
     int field_no = header_fields[waypt_header][column];
@@ -1217,7 +1217,7 @@ parse_route_header()
   rte = route_head_alloc();
 
   bind_fields(route_header);
-  while ((str = csv_lineparse(NULL, "\t", "", column++))) {
+  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
     int field_no = header_fields[route_header][column];
     switch (field_no) {
     case 1:
@@ -1241,7 +1241,7 @@ parse_track_header()
 
   bind_fields(track_header);
   trk = route_head_alloc();
-  while ((str = csv_lineparse(NULL, "\t", "", column++))) {
+  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
     int field_no = header_fields[track_header][column];
     switch (field_no) {
     case 1:
@@ -1261,22 +1261,22 @@ parse_route_waypoint()
 {
   char* str;
   int column = -1;
-  Waypoint* wpt = NULL;
+  Waypoint* wpt = nullptr;
 
   bind_fields(rtept_header);
 
-  while ((str = csv_lineparse(NULL, "\t", "", column++))) {
+  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
     int field_no = header_fields[rtept_header][column];
     switch (field_no) {
     case 1:
       is_fatal((*str == '\0'), MYNAME ": Route waypoint without name at line %d!\n", current_line);
       wpt = find_waypt_by_name(str);
-      is_fatal((wpt == NULL), MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", str, current_line);
+      is_fatal((wpt == nullptr), MYNAME ": Route waypoint \"%s\" not in waypoint list (line %d)!\n", str, current_line);
       wpt = new Waypoint(*wpt);
       break;
     }
   }
-  if (wpt != NULL) {
+  if (wpt != nullptr) {
     route_add_wpt(current_rte, wpt);
   }
 }
@@ -1291,7 +1291,7 @@ parse_track_waypoint()
   bind_fields(trkpt_header);
   wpt = new Waypoint;
 
-  while ((str = csv_lineparse(NULL, "\t", "", column++))) {
+  while ((str = csv_lineparse(nullptr, "\t", "", column++))) {
     int field_no;
     double x;
 
@@ -1389,7 +1389,7 @@ garmin_txt_read()
 
     cin = csv_lineparse(cin, "\t", "", 0);
 
-    if (cin == NULL) {
+    if (cin == nullptr) {
       continue;
     }
 
@@ -1415,7 +1415,7 @@ garmin_txt_read()
     }
 
     /* flush pending data */
-    while (csv_lineparse(NULL, "\t", "", 0));
+    while (csv_lineparse(nullptr, "\t", "", 0));
   }
 }
 
@@ -1428,7 +1428,7 @@ ff_vecs_t garmin_txt_vecs = {
   garmin_txt_wr_deinit,
   garmin_txt_read,
   garmin_txt_write,
-  NULL,
+  nullptr,
   garmin_txt_args,
   CET_CHARSET_MS_ANSI, 0
   , NULL_POS_OPS,

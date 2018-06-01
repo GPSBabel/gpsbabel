@@ -144,8 +144,8 @@ static uint8_t writer_gps_tag_version[4] = {2, 0, 0, 0};
 
 arglist_t exif_args[] = {
   { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
-  { "frame", &opt_frame, "Time-frame (in seconds)", "10", ARGTYPE_INT, "0", NULL, nullptr },
-  { "name", &opt_name, "Locate waypoint for tagging by this name", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  { "frame", &opt_frame, "Time-frame (in seconds)", "10", ARGTYPE_INT, "0", nullptr, nullptr },
+  { "name", &opt_name, "Locate waypoint for tagging by this name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   { "overwrite", &opt_overwrite, "!OVERWRITE! the original file. Default=N", "N", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
@@ -314,7 +314,7 @@ exif_release_tag(exif_tag_t* tag)
 static void
 exif_release_ifd(exif_ifd_t* ifd)
 {
-  if (ifd != NULL) {
+  if (ifd != nullptr) {
     queue* elem, *tmp;
 
     QUEUE_FOR_EACH(&ifd->tags, elem, tmp) {
@@ -371,14 +371,14 @@ exif_ifd_size(exif_ifd_t* ifd)
 static exif_app_t*
 exif_load_apps()
 {
-  exif_app_t* exif_app = NULL;
+  exif_app_t* exif_app = nullptr;
 
   while (! gbfeof(fin)) {
     exif_app_t* app = (exif_app_t*) xcalloc(sizeof(*app), 1);
 
     ENQUEUE_TAIL(&exif_apps, &app->Q);
     QUEUE_INIT(&app->ifds);
-    app->fcache = gbfopen(NULL, "wb", MYNAME);
+    app->fcache = gbfopen(nullptr, "wb", MYNAME);
 
     app->marker = gbfgetuint16(fin);
     app->len = gbfgetuint16(fin);
@@ -570,20 +570,20 @@ exif_read_app(exif_app_t* app)
   offs = gbfgetuint32(fin);
 
   ifd = exif_read_ifd(app, IFD0, offs, &exif_ifd_ofs, &gps_ifd_ofs, &inter_ifd_ofs);
-  if (ifd == NULL) {
+  if (ifd == nullptr) {
     return;
   }
   if (ifd->next_ifd) {
     ifd = exif_read_ifd(app, IFD1, ifd->next_ifd, &exif_ifd_ofs, &gps_ifd_ofs, &inter_ifd_ofs);
   }
   if (exif_ifd_ofs) {
-    ifd = exif_read_ifd(app, EXIF_IFD, exif_ifd_ofs, NULL, NULL, &inter_ifd_ofs);
+    ifd = exif_read_ifd(app, EXIF_IFD, exif_ifd_ofs, nullptr, nullptr, &inter_ifd_ofs);
   }
   if (gps_ifd_ofs) {
-    ifd = exif_read_ifd(app, 3, gps_ifd_ofs, NULL, NULL, NULL);
+    ifd = exif_read_ifd(app, 3, gps_ifd_ofs, nullptr, nullptr, nullptr);
   }
   if (inter_ifd_ofs) {
-    ifd = exif_read_ifd(app, 4, inter_ifd_ofs, NULL, NULL, NULL);
+    ifd = exif_read_ifd(app, 4, inter_ifd_ofs, nullptr, nullptr, nullptr);
   }
   // The return values of exif_read_ifd above aren't actually used.  
   // Warning hush.
@@ -615,7 +615,7 @@ exif_examine_app(exif_app_t* app)
   }
 
   gbfseek(ftmp, 6, SEEK_SET);
-  app->fexif = gbfopen(NULL, "wb", MYNAME);
+  app->fexif = gbfopen(nullptr, "wb", MYNAME);
   app->fexif->big_endian = ftmp->big_endian;
   gbfcopyfrom(app->fexif, ftmp, 0x7FFFFFFF);
 
@@ -634,14 +634,14 @@ exif_find_ifd(exif_app_t* app, const uint16_t ifd_nr)
       return ifd;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 static exif_tag_t*
 exif_find_tag(exif_app_t* app, const uint16_t ifd_nr, const uint16_t tag_id)
 {
   exif_ifd_t* ifd = exif_find_ifd(app, ifd_nr);
-  if (ifd != NULL) {
+  if (ifd != nullptr) {
     queue* elem, *tmp;
     QUEUE_FOR_EACH(&ifd->tags, elem, tmp) {
       exif_tag_t* tag = (exif_tag_t*)elem;
@@ -650,7 +650,7 @@ exif_find_tag(exif_app_t* app, const uint16_t ifd_nr, const uint16_t tag_id)
       }
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 static time_t
@@ -689,7 +689,7 @@ exif_waypt_from_exif_app(exif_app_t* app)
   char lon_ref = '\0';
   char alt_ref = 0;
   char speed_ref = 'K';
-  char* datum = NULL;
+  char* datum = nullptr;
   char mode = '\0';
   double gpsdop = unknown_alt;
   double alt = unknown_alt;
@@ -697,8 +697,8 @@ exif_waypt_from_exif_app(exif_app_t* app)
   time_t datestamp = UNKNOWN_TIMESTAMP;
 
   ifd = exif_find_ifd(app, GPS_IFD);
-  if (ifd == NULL) {
-    return NULL;
+  if (ifd == nullptr) {
+    return nullptr;
   }
 
   wpt = new Waypoint;
@@ -969,12 +969,12 @@ exif_dec2frac(double val, int32_t* num, int32_t* den)
 static exif_tag_t*
 exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, const uint32_t count, const int index, const void* data)
 {
-  exif_tag_t* tag = NULL;
+  exif_tag_t* tag = nullptr;
   exif_ifd_t* ifd;
   uint16_t item_size, size;
 
   ifd = exif_find_ifd(exif_app, ifd_nr);
-  if (ifd == NULL) {
+  if (ifd == nullptr) {
     ifd = (exif_ifd_t*) xcalloc(sizeof(*ifd), 1);
     ifd->nr = ifd_nr;
     QUEUE_INIT(&ifd->tags);
@@ -985,15 +985,15 @@ exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, con
 
   item_size = exif_type_size(type);
 
-  if ((data == NULL) || (count < 1) || (index < 0)) {
+  if ((data == nullptr) || (count < 1) || (index < 0)) {
     size = 0;
   } else {
     size = (index + count) * item_size;
   }
 
-  if (tag == NULL) {
+  if (tag == nullptr) {
     if (size == 0) {
-      return NULL;
+      return nullptr;
     }
 
     tag = (exif_tag_t*) xcalloc(sizeof(*tag), 1);
@@ -1011,7 +1011,7 @@ exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, con
     if (size == 0) {	/* remove this element */
       ifd->count--;
       exif_release_tag(tag);
-      return NULL;
+      return nullptr;
     }
     if (tag->count < (index + count)) {
       if (! tag->data_is_dynamic) {
@@ -1095,7 +1095,7 @@ exif_put_long(const int ifd_nr, const int tag_id, const int index, const int32_t
 static void
 exif_remove_tag(const int ifd_nr, const int tag_id)
 {
-  exif_put_value(ifd_nr, tag_id, EXIF_TYPE_BYTE, 0, 0, NULL);
+  exif_put_value(ifd_nr, tag_id, EXIF_TYPE_BYTE, 0, 0, nullptr);
 }
 
 static void
@@ -1105,7 +1105,7 @@ exif_find_wpt_by_time(const Waypoint* wpt)
     return;
   }
 
-  if (exif_wpt_ref == NULL) {
+  if (exif_wpt_ref == nullptr) {
     exif_wpt_ref = wpt;
   } else if (labs(exif_time_ref - wpt->creation_time.toTime_t()) < labs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t())) {
     exif_wpt_ref = wpt;
@@ -1115,9 +1115,9 @@ exif_find_wpt_by_time(const Waypoint* wpt)
 static void
 exif_find_wpt_by_name(const Waypoint* wpt)
 {
-  if (exif_wpt_ref != NULL) {
+  if (exif_wpt_ref != nullptr) {
     return;
-  } else if ((wpt->shortname != NULL) && (case_ignore_strcmp(wpt->shortname, opt_name) == 0)) {
+  } else if ((wpt->shortname != nullptr) && (case_ignore_strcmp(wpt->shortname, opt_name) == 0)) {
     exif_wpt_ref = wpt;
   }
 }
@@ -1289,7 +1289,7 @@ exif_write_apps()
         sortqueue(&ifd->tags, exif_sort_tags_cb);
       }
 
-      ftmp = gbfopen_be(NULL, "wb", MYNAME);
+      ftmp = gbfopen_be(nullptr, "wb", MYNAME);
       ftmp->big_endian = app->fcache->big_endian;
 
       gbfwrite((ftmp->big_endian) ? "MM" : "II", 2, 1, ftmp);
@@ -1364,7 +1364,7 @@ exif_read()
   is_fatal(soi != 0xFFD8, MYNAME ": Unknown image file.");	/* only jpeg for now */
 
   exif_app = exif_load_apps();
-  is_fatal(exif_app == NULL, MYNAME ": No EXIF header in source file \"%s\".", fin->name);
+  is_fatal(exif_app == nullptr, MYNAME ": No EXIF header in source file \"%s\".", fin->name);
 
   exif_examine_app(exif_app);
   wpt = exif_waypt_from_exif_app(exif_app);
@@ -1389,7 +1389,7 @@ exif_wr_init(const QString& fname)
   soi = gbfgetuint16(fin);
   is_fatal(soi != 0xFFD8, MYNAME ": Unknown image file.");
   exif_app = exif_load_apps();
-  is_fatal(exif_app == NULL, MYNAME ": No EXIF header found in source file \"%s\".", fin->name);
+  is_fatal(exif_app == nullptr, MYNAME ": No EXIF header found in source file \"%s\".", fin->name);
   exif_examine_app(exif_app);
   gbfclose(fin);
 
@@ -1428,42 +1428,42 @@ exif_write()
 {
   time_t frame;
 
-  exif_wpt_ref = NULL;
+  exif_wpt_ref = nullptr;
 
   if (opt_name) {
     waypt_disp_all(exif_find_wpt_by_name);
-    if (exif_wpt_ref == NULL) {
-      route_disp_all(NULL, NULL, exif_find_wpt_by_name);
+    if (exif_wpt_ref == nullptr) {
+      route_disp_all(nullptr, nullptr, exif_find_wpt_by_name);
     }
-    if (exif_wpt_ref == NULL) {
-      track_disp_all(NULL, NULL, exif_find_wpt_by_name);
+    if (exif_wpt_ref == nullptr) {
+      track_disp_all(nullptr, nullptr, exif_find_wpt_by_name);
     }
-    if (exif_wpt_ref == NULL) {
+    if (exif_wpt_ref == nullptr) {
       warning(MYNAME ": No matching point with name \"%s\" found.\n", opt_name);
     }
   } else {
     QString str = exif_time_str(exif_time_ref);
 
-    track_disp_all(NULL, NULL, exif_find_wpt_by_time);
-    route_disp_all(NULL, NULL, exif_find_wpt_by_time);
+    track_disp_all(nullptr, nullptr, exif_find_wpt_by_time);
+    route_disp_all(nullptr, nullptr, exif_find_wpt_by_time);
     waypt_disp_all(exif_find_wpt_by_time);
 
     frame = atoi(opt_frame);
 
-    if (exif_wpt_ref == NULL) {
+    if (exif_wpt_ref == nullptr) {
       warning(MYNAME ": No point with a valid timestamp found.\n");
     } else if (labs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t()) > frame) {
       warning(MYNAME ": No matching point found for image date %s!\n", qPrintable(str));
-      if (exif_wpt_ref != NULL) {
+      if (exif_wpt_ref != nullptr) {
         QString str = exif_time_str(exif_wpt_ref->creation_time.toTime_t());
         warning(MYNAME ": Best is from %s, %ld second(s) away.\n",
                 qPrintable(str), labs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t()));
       }
-      exif_wpt_ref = NULL;
+      exif_wpt_ref = nullptr;
     }
   }
 
-  if (exif_wpt_ref != NULL) {
+  if (exif_wpt_ref != nullptr) {
     const Waypoint* wpt = exif_wpt_ref;
 
     exif_put_long(IFD0, IFD0_TAG_GPS_IFD_OFFS, 0, 0);
@@ -1562,7 +1562,7 @@ ff_vecs_t exif_vecs = {
   exif_wr_deinit,
   exif_read,
   exif_write,
-  NULL,
+  nullptr,
   exif_args,
   CET_CHARSET_UTF8, 0
 };

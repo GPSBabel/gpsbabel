@@ -53,7 +53,7 @@ static
 arglist_t dmtlog_args[] = {
   {
     "index", &opt_index,
-    "Index of track (if more than one in source)", "1", ARGTYPE_INT, "1", NULL
+    "Index of track (if more than one in source)", "1", ARGTYPE_INT, "1", nullptr
   },
   ARG_TERMINATOR
 };
@@ -66,7 +66,7 @@ static xg_tag_mapping tlog3a_xgcb_map[] = {
   { tlog3a_xgcb_version, 	cb_cdata, "/CXMLSafe/Version" },
   { tlog3a_xgcb_length, 	cb_cdata, "/CXMLSafe/Length" },
   { tlog3a_xgcb_data, 	cb_cdata, "/CXMLSafe/Data" },
-  { NULL,	(xg_cb_type)0,         NULL}
+  { nullptr,	(xg_cb_type)0,         nullptr}
 };
 #endif
 
@@ -97,7 +97,7 @@ static xg_tag_mapping tlog3b_xgcb_map[] = {
   { tlog3b_xgcb_wptno,	cb_cdata, "/CTrackFile/CTrackPoint/Northing" },
   { tlog3b_xgcb_wptal,	cb_cdata, "/CTrackFile/CTrackPoint/Altitude" },
   { tlog3b_xgcb_tpten,	cb_end,   "/CTrackFile/CTrackPoint" },
-  { NULL,	(xg_cb_type)0,         NULL}
+  { nullptr,	(xg_cb_type)0,         nullptr}
 };
 
 /* helpers */
@@ -215,7 +215,7 @@ tlog3a_xgcb_data(xg_string args, const QXmlStreamAttributes*)
 static void
 tlog3b_xgcb_tfna(xg_string args, const QXmlStreamAttributes*)
 {
-  if (xmltrk == NULL) {
+  if (xmltrk == nullptr) {
     xmltrk = route_head_alloc();
     track_add_head(xmltrk);
   }
@@ -226,7 +226,7 @@ tlog3b_xgcb_tfna(xg_string args, const QXmlStreamAttributes*)
 static void
 tlog3b_xgcb_tfdes(xg_string args, const QXmlStreamAttributes*)
 {
-  if (xmltrk == NULL) {
+  if (xmltrk == nullptr) {
     xmltrk = route_head_alloc();
     track_add_head(xmltrk);
   }
@@ -255,12 +255,12 @@ tlog3b_xgcb_tpten(xg_string, const QXmlStreamAttributes*)
 {
   finalize_pt(xmlwpt);
 
-  if (xmltrk == NULL) {
+  if (xmltrk == nullptr) {
     xmltrk = route_head_alloc();
     track_add_head(xmltrk);
   }
   track_add_wpt(xmltrk, xmlwpt);
-  xmlwpt = NULL;
+  xmlwpt = nullptr;
 }
 
 
@@ -326,7 +326,7 @@ tlog3b_xgcb_wpten(xg_string, const QXmlStreamAttributes*)
 {
   finalize_pt(xmlwpt);
   waypt_add(xmlwpt);
-  xmlwpt = NULL;
+  xmlwpt = nullptr;
 }
 
 
@@ -587,7 +587,7 @@ inflate_buff(const char* buff, const size_t size, char** out_buff)
   int res = Z_OK;
   z_stream strm;
   char out[DEFLATE_BUFF_SIZE];
-  char* cout = NULL;
+  char* cout = nullptr;
   uint32_t bytes = 0;
   uint32_t have;
 
@@ -634,20 +634,20 @@ inflate_buff(const char* buff, const size_t size, char** out_buff)
 static void
 read_CXMLSafe()
 {
-  char* xmlstr = NULL;
+  char* xmlstr = nullptr;
 
-  xmlbin = NULL;
+  xmlbin = nullptr;
   xmlbinsize = 0;
 
-  xml_init(fin->name, tlog3a_xgcb_map, NULL);
+  xml_init(fin->name, tlog3a_xgcb_map, nullptr);
   xml_read();
   xml_deinit();
 
-  if (xmlbin != NULL) {
+  if (xmlbin != nullptr) {
     inflate_buff(xmlbin, xmlbinsize, &xmlstr);
     xfree(xmlbin);
 
-    xml_init(NULL, tlog3b_xgcb_map, NULL);
+    xml_init(nullptr, tlog3b_xgcb_map, nullptr);
     xml_readstring(xmlstr);
     xml_deinit();
 
@@ -660,7 +660,7 @@ read_CXMLSafe()
 static void
 read_XML()
 {
-  xml_init(fin->name, tlog3b_xgcb_map, NULL);
+  xml_init(fin->name, tlog3b_xgcb_map, nullptr);
   xml_read();
   xml_deinit();
 
@@ -676,9 +676,9 @@ dmtlog_rd_init(const QString& fname)
 {
   fin = gbfopen_le(fname, "rb", MYNAME);
 
-  xmlbin = NULL;
-  xmltrk = NULL;
-  xmlwpt = NULL;
+  xmlbin = nullptr;
+  xmltrk = nullptr;
+  xmlwpt = nullptr;
   xmlgrid = QString();
 }
 
@@ -738,7 +738,7 @@ write_header(const route_head* trk)
   header_written = 1;
 
   count = 0;
-  if (trk != NULL) {
+  if (trk != nullptr) {
     queue* curr, *prev;
     QUEUE_FOR_EACH(&trk->waypoint_list, curr, prev) count++;
   }
@@ -831,7 +831,7 @@ dmtlog_write()
   this_index = 0;
   track_disp_all(track_hdr_cb, track_tlr_cb, track_wpt_cb);
   if (!header_written) {
-    write_header(NULL);
+    write_header(nullptr);
   }
   gbfputint32(waypt_count(), fout);
   if (waypt_count() > 0) {
@@ -856,7 +856,7 @@ ff_vecs_t dmtlog_vecs = {
   dmtlog_wr_deinit,
   dmtlog_read,
   dmtlog_write,
-  NULL,
+  nullptr,
   dmtlog_args,
   CET_CHARSET_ASCII, 0
   , NULL_POS_OPS,

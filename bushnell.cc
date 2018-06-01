@@ -27,7 +27,7 @@
 
 static gbfile* file_in;
 static QString ofname;
-static short_handle mkshort_handle = NULL;
+static short_handle mkshort_handle = nullptr;
 
 static
 arglist_t bushnell_args[] = {
@@ -124,7 +124,7 @@ icon_mapping_t bushnell_icons[] = {
   { 0x42, "Officer" }, // "see 3b: duplicate"
   { 0x43, "Railroad" },
   { 0x44, "Auto Ferry" },
-  {-1, NULL}
+  {-1, nullptr}
 };
 
 static unsigned int
@@ -266,7 +266,7 @@ ff_vecs_t bushnell_vecs = {
   wr_deinit,
   bushnell_read,
   bushnell_write,
-  NULL,
+  nullptr,
   bushnell_args,
   CET_CHARSET_MS_ANSI, 0  /* Not really sure... */
 };

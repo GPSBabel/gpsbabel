@@ -155,9 +155,9 @@ fl_vecs_t filter_vec_list[] = {
   },
 #endif
   {
-    NULL,
-    NULL,
-    NULL
+    nullptr,
+    nullptr,
+    nullptr
   }
 };
 
@@ -184,10 +184,10 @@ find_filter_vec(const char* const vecname, const char** opts)
         const char* temp;
 
         temp = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
-        if (temp == NULL) {
+        if (temp == nullptr) {
           temp = inifile_readstr(global_opts.inifile, "Common filter settings", ap->argstring);
         }
-        if (temp == NULL) {
+        if (temp == nullptr) {
           temp = ap->defaultvalue;
         }
         assign_option(vec->name, ap, temp);
@@ -212,7 +212,7 @@ find_filter_vec(const char* const vecname, const char** opts)
         }
       }
     } else {
-      *opts = NULL;
+      *opts = nullptr;
     }
     if (opts && opts[0] && !found) {
       warning("'%s' is an unknown option to %s.\n", *opts, vec->name);
@@ -227,7 +227,7 @@ find_filter_vec(const char* const vecname, const char** opts)
 
   }
   xfree(v);
-  return NULL;
+  return nullptr;
 }
 
 void
@@ -239,7 +239,7 @@ free_filter_vec(filter_vecs_t* fvec)
     for (ap = fvec->args; ap->argstring; ap++) {
       if (ap->argvalptr) {
         xfree(ap->argvalptr);
-        ap->argvalptr = *ap->argval = NULL;
+        ap->argvalptr = *ap->argval = nullptr;
       }
     }
   }
@@ -253,7 +253,7 @@ init_filter_vecs()
     arglist_t* ap;
     if (vec->vec->args) {
       for (ap = vec->vec->args; ap->argstring; ap++) {
-        ap->argvalptr = NULL;
+        ap->argvalptr = nullptr;
       }
     }
     vec++;
@@ -338,7 +338,7 @@ disp_v1(const fl_vecs_t* vec)
 {
   arglist_t* ap;
 
-  disp_help_url(vec, NULL);
+  disp_help_url(vec, nullptr);
   printf("\n");
   for (ap = vec->vec->args; ap && ap->argstring; ap++) {
     if (!(ap->argtype & ARGTYPE_HIDDEN)) {

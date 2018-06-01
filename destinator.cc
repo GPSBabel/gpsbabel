@@ -50,7 +50,7 @@ static garmin_fs_t*
 gmsd_init(Waypoint* wpt)
 {
   garmin_fs_t* gmsd = GMSD_FIND(wpt);
-  if (gmsd == NULL) {
+  if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
     fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
   }
@@ -60,7 +60,7 @@ gmsd_init(Waypoint* wpt)
 static QString
 read_wcstr(const int discard)
 {
-  int16_t* buff = NULL, c;
+  int16_t* buff = nullptr, c;
   int size = 0, pos = 0;
 
   while (gbfread(&c, sizeof(c), 1, fin) && (c != 0)) {
@@ -78,13 +78,13 @@ read_wcstr(const int discard)
   if (pos != 0) {
     char* res;
     if (discard) {
-      res = NULL;
+      res = nullptr;
     } else {
       res = cet_str_uni_to_utf8(buff, pos);
       res = lrtrim(res);
       if (*res == '\0') {
         xfree(res);
-        res = NULL;
+        res = nullptr;
       }
     }
     xfree(buff);
@@ -93,7 +93,7 @@ read_wcstr(const int discard)
     return rv;
     //return res;
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -225,7 +225,7 @@ static void
 destinator_read_rte()
 {
   int count = 0;
-  route_head* rte = NULL;
+  route_head* rte = nullptr;
 
   gbfrewind(fin);
 
@@ -278,7 +278,7 @@ destinator_read_trk()
 {
   char TXT[4] = "TXT";
   int recno = -1;
-  route_head* trk = NULL;
+  route_head* trk = nullptr;
 
   gbfrewind(fin);
 
@@ -391,12 +391,12 @@ destinator_wpt_disp(const Waypoint* wpt)
   write_wcstr((!wpt->shortname.isEmpty()) ? wpt->shortname : "WPT");
   write_wcstr((!wpt->notes.isEmpty()) ? wpt->notes : wpt->description);
 
-  write_wcstr(NULL);				/* house number */
+  write_wcstr(nullptr);				/* house number */
   write_wcstr(GMSD_GET(addr, NULL));		/* street */
   write_wcstr(GMSD_GET(city, NULL));		/* city */
-  write_wcstr(NULL);				/* unknown */
+  write_wcstr(nullptr);				/* unknown */
   write_wcstr(GMSD_GET(postal_code, NULL));	/* postcode */
-  write_wcstr(NULL);				/* unknown */
+  write_wcstr(nullptr);				/* unknown */
 
   gbfputint32(0, fout);
   gbfputint32(0, fout);
@@ -534,13 +534,13 @@ destinator_write_poi()
 static void
 destinator_write_rte()
 {
-  route_disp_all(NULL, NULL, destinator_rtept_disp);
+  route_disp_all(nullptr, nullptr, destinator_rtept_disp);
 }
 
 static void
 destinator_write_trk()
 {
-  track_disp_all(NULL, NULL, destinator_trkpt_disp);
+  track_disp_all(nullptr, nullptr, destinator_trkpt_disp);
 }
 
 /**************************************************************************/
@@ -558,7 +558,7 @@ ff_vecs_t destinator_poi_vecs = {
   destinator_wr_deinit,
   destinator_read_poi_wrapper,
   destinator_write_poi,
-  NULL,
+  nullptr,
   destinator_args,
   CET_CHARSET_UTF8, 1			/* fixed */
   , NULL_POS_OPS,
@@ -577,7 +577,7 @@ ff_vecs_t destinator_itn_vecs = {
   destinator_wr_deinit,
   destinator_read_rte_wrapper,
   destinator_write_rte,
-  NULL,
+  nullptr,
   destinator_args,
   CET_CHARSET_UTF8, 1			/* fixed */
   , NULL_POS_OPS,
@@ -596,7 +596,7 @@ ff_vecs_t destinator_trl_vecs = {
   destinator_wr_deinit,
   destinator_read_trk_wrapper,
   destinator_write_trk,
-  NULL,
+  nullptr,
   destinator_args,
   CET_CHARSET_UTF8, 1			/* fixed */
   , NULL_POS_OPS,

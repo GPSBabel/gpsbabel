@@ -29,7 +29,7 @@
 
 #define MYNAME "cet_util"
 
-static cet_cs_vec_t* cet_cs_vec_root = NULL;
+static cet_cs_vec_t* cet_cs_vec_root = nullptr;
 
 typedef struct cet_cs_alias_s {
   char* name;
@@ -64,11 +64,11 @@ char*
 cet_str_any_to_any(const char* src, const cet_cs_vec_t* src_vec, const cet_cs_vec_t* dest_vec)
 {
   char* c0, *c1;
-  const cet_cs_vec_t* v_in = (src_vec != NULL)  ? src_vec :  &cet_cs_vec_ansi_x3_4_1968;
-  const cet_cs_vec_t* v_out = (dest_vec != NULL) ? dest_vec : &cet_cs_vec_ansi_x3_4_1968;
+  const cet_cs_vec_t* v_in = (src_vec != nullptr)  ? src_vec :  &cet_cs_vec_ansi_x3_4_1968;
+  const cet_cs_vec_t* v_out = (dest_vec != nullptr) ? dest_vec : &cet_cs_vec_ansi_x3_4_1968;
 
-  if (src == NULL) {
-    return NULL;
+  if (src == nullptr) {
+    return nullptr;
   } else if ((*src == '\0') || (v_in == v_out)) {
     return xstrdup(src);
   }
@@ -91,7 +91,7 @@ cet_cs_alias_qsort_cb(const void* a, const void* b)
 void
 cet_register_cs(cet_cs_vec_t* vec)
 {
-  if (vec->next == NULL) {
+  if (vec->next == nullptr) {
     vec->next = cet_cs_vec_root;
     cet_cs_vec_root = vec;
     cet_cs_vec_ct++;
@@ -104,22 +104,22 @@ cet_register_cs(cet_cs_vec_t* vec)
 /* Dummy vector for our native character set */
 
 const char* cet_cs_utf8_alias[] = {
-  "utf8", NULL
+  "utf8", nullptr
 };
 
 cet_cs_vec_t cet_cs_vec_utf8 = {
   CET_CHARSET_UTF8,
   cet_cs_utf8_alias,
-  NULL,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
+  nullptr,
   0,
   0,
-  NULL,
+  nullptr,
   0,
-  NULL,
+  nullptr,
   0,
-  NULL,
+  nullptr,
 };
 
 void
@@ -127,7 +127,7 @@ cet_register()
 {
   int i, c;
 
-  if (cet_cs_vec_root != NULL) {
+  if (cet_cs_vec_root != nullptr) {
     return;
   }
 
@@ -152,11 +152,11 @@ cet_register()
 
     /* enumerate count of all names and aliases */
 
-    for (p = cet_cs_vec_root; p != NULL; p = p->next) {
+    for (p = cet_cs_vec_root; p != nullptr; p = p->next) {
       c++;
-      if (p->alias != NULL) {
+      if (p->alias != nullptr) {
         char** a = (char**)p->alias;
-        while ((*a) != NULL) {
+        while ((*a) != nullptr) {
           a++;
           c++;
         }
@@ -166,14 +166,14 @@ cet_register()
 
     list = (cet_cs_alias_t*) xcalloc(c, sizeof(*list));
     i = 0;
-    for (p = cet_cs_vec_root; p != NULL; p = p->next) {
-      if (p->alias != NULL) {
+    for (p = cet_cs_vec_root; p != nullptr; p = p->next) {
+      if (p->alias != nullptr) {
         char** a = (char**)p->alias;
 
         list[i].name = xstrdup(p->name);
         list[i].vec = p;
         i++;
-        while (*a != NULL) {
+        while (*a != nullptr) {
           list[i].name = xstrdup(*a);
           list[i].vec = p;
           i++;
@@ -217,8 +217,8 @@ cet_find_cs_by_name(const QString& name)
 
   cet_register();
 
-  if (cet_cs_alias == NULL) {
-    return NULL;
+  if (cet_cs_alias == nullptr) {
+    return nullptr;
   }
 
   i = 0;
@@ -239,7 +239,7 @@ cet_find_cs_by_name(const QString& name)
       i = a + 1;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 void
@@ -249,12 +249,12 @@ cet_deregister()
   int j = cet_cs_alias_ct;
   cet_cs_alias_t* p = cet_cs_alias;
 
-  if (p == NULL) {
+  if (p == nullptr) {
     return;
   }
 
   cet_cs_alias_ct = 0;
-  cet_cs_alias = NULL;
+  cet_cs_alias = nullptr;
 
   for (i = 0; i < j; i++) {
     xfree(p[i].name);
@@ -276,7 +276,7 @@ cet_validate_cs(const QString& cs, cet_cs_vec_t** vec, QString* cs_name)
   }
 
   v = cet_find_cs_by_name(cs);
-  if (v != NULL) {
+  if (v != nullptr) {
     // TODO: make v->name into q QString and replace this...
     char* tmp = xstrdup(v->name);
     *cs_name = strupper(tmp);
@@ -285,7 +285,7 @@ cet_validate_cs(const QString& cs, cet_cs_vec_t** vec, QString* cs_name)
     return 1;
   } else {
     cs_name->clear();
-    *vec = NULL;
+    *vec = nullptr;
     return 0;
   }
 }
@@ -293,14 +293,14 @@ cet_validate_cs(const QString& cs, cet_cs_vec_t** vec, QString* cs_name)
 void
 cet_convert_deinit()
 {
-  global_opts.charset = NULL;
-  global_opts.codec = NULL;
+  global_opts.charset = nullptr;
+  global_opts.codec = nullptr;
 }
 
 void
 cet_convert_init(const QString& cs_name, const int force)
 {
-  if ((force != 0) || (global_opts.charset == NULL)) {
+  if ((force != 0) || (global_opts.charset == nullptr)) {
     cet_convert_deinit();
     if (0 == cet_validate_cs(cs_name, &global_opts.charset, &global_opts.charset_name)) {
       Fatal() << "Unsupported character set \"" << cs_name << ".";
@@ -335,15 +335,15 @@ static void
 cet_flag_all()
 {
   waypt_disp_all(cet_flag_waypt);
-  route_disp_all(cet_flag_route, NULL, cet_flag_waypt);
-  track_disp_all(cet_flag_route, NULL, cet_flag_waypt);
+  route_disp_all(cet_flag_route, nullptr, cet_flag_waypt);
+  track_disp_all(cet_flag_route, nullptr, cet_flag_waypt);
 }
 
 /* -------------------------------------------------------------------- */
 /* %%%         complete data strings transformation                 %%% */
 /* -------------------------------------------------------------------- */
 
-static char* (*converter)(const char*) = NULL;
+static char* (*converter)(const char*) = nullptr;
 
 /* two converters */
 
@@ -366,8 +366,8 @@ cet_convert_string(char* str)
 {
   char* res;
 
-  if (str == NULL) {
-    return NULL;  /* return origin if empty or NULL */
+  if (str == nullptr) {
+    return nullptr;  /* return origin if empty or NULL */
   } else if (*str == '\0') {
     return str;
   }
@@ -401,8 +401,8 @@ cet_convert_waypt(const Waypoint* wpt)
   w->wpt_flags.cet_converted = 1;
 
   fs = wpt->fs;
-  while (fs != NULL) {
-    if (fs->convert != NULL) {
+  while (fs != nullptr) {
+    if (fs->convert != nullptr) {
       fs->convert(fs);
     }
     fs = fs->next;
@@ -443,10 +443,10 @@ cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, cons
   char* cs_name_from, *cs_name_to;
   (void)format;
 
-  converter = NULL;
+  converter = nullptr;
 
-  if ((source == NULL) || (source == &cet_cs_vec_utf8)) {
-    if ((target == NULL) || (target == &cet_cs_vec_utf8)) {
+  if ((source == nullptr) || (source == &cet_cs_vec_utf8)) {
+    if ((target == nullptr) || (target == &cet_cs_vec_utf8)) {
       cet_flag_all();
       return;
     }
@@ -457,7 +457,7 @@ cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, cons
     cs_name_from = (char*)cet_cs_vec_utf8.name;
     cs_name_to = (char*)target->name;
   } else {
-    if ((target != NULL) && (target != &cet_cs_vec_utf8)) {
+    if ((target != nullptr) && (target != &cet_cs_vec_utf8)) {
       fatal(MYNAME ": Internal error!\n");
     }
 

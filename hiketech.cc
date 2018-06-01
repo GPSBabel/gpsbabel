@@ -75,13 +75,13 @@ static xg_tag_mapping ht_map[] = {
   { ht_trk_lat, 	cb_cdata, "/hiketech/gpsdata/trk/pnt/lat" },
   { ht_trk_long, 	cb_cdata, "/hiketech/gpsdata/trk/pnt/long" },
   { ht_trk_alt, 	cb_cdata, "/hiketech/gpsdata/trk/pnt/alt" },
-  { NULL,	(xg_cb_type)0,         NULL}
+  { nullptr,	(xg_cb_type)0,         nullptr}
 };
 
 static void
 hiketech_rd_init(const QString& fname)
 {
-  xml_init(fname, ht_map, NULL);
+  xml_init(fname, ht_map, nullptr);
 }
 
 static void
@@ -109,7 +109,7 @@ hiketech_wr_deinit()
   writer.writeEndDocument();
   gbfputs(ostring, ofd);
   gbfclose(ofd);
-  ofd = NULL;
+  ofd = nullptr;
 }
 
 static void
@@ -184,7 +184,7 @@ hiketech_write()
   writer.setAutoFormatting(true);
   writer.writeStartElement(QStringLiteral("gpsdata"));
   track_disp_all(hiketech_trk_hdr, hiketech_trk_tlr, hiketech_trkpt_pr);
-  track_disp_all(NULL, NULL, hiketech_trkpt_pr);
+  track_disp_all(nullptr, nullptr, hiketech_trkpt_pr);
   waypt_disp_all(hiketech_waypt_pr);
   writer.writeEndElement(); // gpsdata
   writer.writeEndElement(); // hiketech
@@ -230,7 +230,7 @@ static
 void  	ht_wpt_e(xg_string, const QXmlStreamAttributes*)
 {
   waypt_add(wpt_tmp);
-  wpt_tmp = NULL;
+  wpt_tmp = nullptr;
 }
 
 static
@@ -312,7 +312,7 @@ ff_vecs_t hiketech_vecs = {
   hiketech_wr_deinit,
   hiketech_read,
   hiketech_write,
-  NULL,
+  nullptr,
   hiketech_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

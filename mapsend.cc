@@ -36,7 +36,7 @@ static int trk_version = 30;
 
 #define MYNAME "mapsend"
 
-static char* mapsend_opt_trkver = NULL;
+static char* mapsend_opt_trkver = nullptr;
 #define MAPSEND_TRKVER_MIN 3
 #define MAPSEND_TRKVER_MAX 4
 
@@ -555,7 +555,7 @@ ff_vecs_t mapsend_vecs = {
   mapsend_wr_deinit,
   mapsend_read,
   mapsend_wpt_write,
-  NULL,
+  nullptr,
   mapsend_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

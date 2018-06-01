@@ -191,7 +191,7 @@ const lowranceusr_icon_mapping_t lowranceusr_icon_value_table[] = {
   { 10070, "Webcam Cache" },                  // webcam
   { 10042, "Disabled Cache" },                // black box with red X
 
-  {	 -1, NULL }
+  {	 -1, nullptr }
 };
 
 static gbfile* file_in;
@@ -302,19 +302,19 @@ static
 arglist_t lowranceusr_args[] = {
   {
     "ignoreicons", &ignoreicons, "Ignore event marker icons on read",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "writeasicons", &writeasicons, "Treat waypoints as icons on write",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "merge", &merge, "(USR output) Merge into one segmented track",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "break", &seg_break, "(USR input) Break segments into separate tracks",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "wversion", &wversion_arg, "(USR output) Write version",
@@ -1045,7 +1045,7 @@ data_write()
 
   if (NumRoutes) {
     lowrance_route_count=0;
-    route_disp_all(lowranceusr_route_hdr, NULL, lowranceusr_waypt_disp);
+    route_disp_all(lowranceusr_route_hdr, nullptr, lowranceusr_waypt_disp);
   }
 
   if (NumWaypoints && writeasicons) {
@@ -1065,10 +1065,10 @@ data_write()
     trail_point_count = 0;
     trail_count = 0;
     /* count the number of total track points */
-    track_disp_all(lowranceusr_merge_track_hdr, lowranceusr_merge_track_tlr, NULL);
+    track_disp_all(lowranceusr_merge_track_hdr, lowranceusr_merge_track_tlr, nullptr);
     /* write out the new track header */
     trail_point_count = 0;
-    track_disp_all(lowranceusr_merge_track_hdr_2, NULL, lowranceusr_track_disp);
+    track_disp_all(lowranceusr_merge_track_hdr_2, nullptr, lowranceusr_track_disp);
 
   } else {
 
@@ -1080,7 +1080,7 @@ data_write()
 
     if (NumTrails) {
       trail_count=0;
-      track_disp_all(lowranceusr_track_hdr, NULL, lowranceusr_track_disp);
+      track_disp_all(lowranceusr_track_hdr, nullptr, lowranceusr_track_disp);
     }
   }
 }
@@ -1095,7 +1095,7 @@ ff_vecs_t lowranceusr_vecs = {
   wr_deinit,
   data_read,
   data_write,
-  NULL,
+  nullptr,
   lowranceusr_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

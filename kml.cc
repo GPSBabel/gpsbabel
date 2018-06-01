@@ -37,21 +37,21 @@
 #include <cstdlib>
 
 // options
-static char* opt_deficon = NULL;
-static char* opt_export_lines = NULL;
-static char* opt_export_points = NULL;
-static char* opt_export_track = NULL;
-static char* opt_line_width = NULL;
-static char* opt_line_color = NULL;
-static char* opt_floating = NULL;
-static char* opt_extrude = NULL;
-static char* opt_trackdata = NULL;
-static char* opt_trackdirection = NULL;
-static char* opt_units = NULL;
-static char* opt_labels = NULL;
-static char* opt_max_position_points = NULL;
-static char* opt_rotate_colors = NULL;
-static char* opt_precision = NULL;
+static char* opt_deficon = nullptr;
+static char* opt_export_lines = nullptr;
+static char* opt_export_points = nullptr;
+static char* opt_export_track = nullptr;
+static char* opt_line_width = nullptr;
+static char* opt_line_color = nullptr;
+static char* opt_floating = nullptr;
+static char* opt_extrude = nullptr;
+static char* opt_trackdata = nullptr;
+static char* opt_trackdirection = nullptr;
+static char* opt_units = nullptr;
+static char* opt_labels = nullptr;
+static char* opt_max_position_points = nullptr;
+static char* opt_rotate_colors = nullptr;
+static char* opt_precision = nullptr;
 
 static int export_lines;
 static int export_points;
@@ -106,7 +106,7 @@ static const char kmt_power[] = "power";
 
 static
 arglist_t kml_args[] = {
-  {"deficon", &opt_deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  {"deficon", &opt_deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   {
     "lines", &opt_export_lines,
     "Export linestrings for tracks and routes",
@@ -170,7 +170,7 @@ arglist_t kml_args[] = {
   {
     "rotate_colors", &opt_rotate_colors,
     "Rotate colors for tracks and routes (default automatic)",
-    NULL, ARGTYPE_FLOAT, "0", "360", nullptr
+    nullptr, ARGTYPE_FLOAT, "0", "360", nullptr
   },
   {
     "prec", &opt_precision,
@@ -277,7 +277,7 @@ xg_tag_mapping kml_map[] = {
   { gx_trk_e,  	cb_end, 	"/Placemark/*gx:Track" },
   { gx_trk_when,  cb_cdata, "/Placemark/*gx:Track/when" },
   { gx_trk_coord, cb_cdata, "/Placemark/*gx:Track/gx:coord" },
-  { NULL,	(xg_cb_type) 0, 		NULL }
+  { nullptr,	(xg_cb_type) 0, 		nullptr }
 };
 
 static
@@ -285,7 +285,7 @@ const char* kml_tags_to_ignore[] = {
   "kml",
   "Document",
   "Folder",
-  NULL,
+  nullptr,
 };
 
 // The TimeSpan/begin and TimeSpan/end DateTimes:
@@ -312,10 +312,10 @@ void wpt_e(xg_string, const QXmlStreamAttributes*)
   }
   if (wpt_tmp_queued) {
     waypt_add(wpt_tmp);
-    wpt_tmp = NULL;
+    wpt_tmp = nullptr;
   } else {
     delete wpt_tmp;
-    wpt_tmp = NULL;
+    wpt_tmp = nullptr;
   }
   wpt_tmp_queued = 0;
 }
@@ -460,7 +460,7 @@ void gx_trk_e(xg_string, const QXmlStreamAttributes*)
     track_del_head(gx_trk_head);
   }
   delete gx_trk_times;
-  gx_trk_times = NULL;
+  gx_trk_times = nullptr;
 }
 
 void gx_trk_when(xg_string args, const QXmlStreamAttributes*)
@@ -506,7 +506,7 @@ static
 void
 kml_rd_init(const QString& fname)
 {
-  xml_init(fname, kml_map, NULL);
+  xml_init(fname, kml_map, nullptr);
   xml_ignore_tags(kml_tags_to_ignore);
 }
 
@@ -580,10 +580,10 @@ kml_wr_deinit()
 {
   writer->writeEndDocument();
   delete writer;
-  writer = NULL;
+  writer = nullptr;
   oqfile->close();
   delete oqfile;
-  oqfile = NULL;
+  oqfile = nullptr;
 
   if (!posnfilenametmp.isEmpty()) {
 #if __WIN32__
@@ -1184,7 +1184,7 @@ static const QString map_templates[] = {
   "<a href=\"http://maps.randmcnally.com/#s=screen&lat=$[gc_lat]&lon=$[gc_lon]&zoom=13&loc1=$[gc_lat],$[gc_lon]\" target=\"_blank\">Rand McNally</a>",
   "<a href=\"http://www.opencyclemap.org/?zoom=12&lat=$[gc_lat]&lon=$[gc_lon]\" target=\"_blank\">Open Cycle Maps</a>",
   "<a href=\"http://www.openstreetmap.org/?mlat=$[gc_lat]&mlon=$[gc_lon]&zoom=12\" target=\"_blank\">Open Street Maps</a>",
-  NULL
+  nullptr
 };
 
 
@@ -1420,9 +1420,9 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
   QString r;
 
   fs_xml* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
-  xml_tag* root = NULL;
-  xml_tag* curlog = NULL;
-  xml_tag* logpart = NULL;
+  xml_tag* root = nullptr;
+  xml_tag* curlog = nullptr;
+  xml_tag* logpart = nullptr;
 
   if (!fs_gpx) {
     return r;
@@ -1453,8 +1453,8 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
 
     logpart = xml_findfirst(curlog, "groundspeak:text");
     if (logpart) {
-      char* encstr = NULL;
-      char* t = NULL;
+      char* encstr = nullptr;
+      char* t = nullptr;
       int encoded = 0;
       encstr = xml_attribute(logpart, "encoded");
       encoded = (toupper(encstr[0]) != 'F');
@@ -1888,7 +1888,7 @@ static void kml_mt_tlr(const route_head* header)
 
 static void kml_route_hdr(const route_head* header)
 {
-  kml_output_header(header, NULL);
+  kml_output_header(header, nullptr);
 }
 
 static void kml_route_disp(const Waypoint* waypointp)
@@ -1913,10 +1913,10 @@ void kml_write_AbstractView()
     waypt_disp_all(kml_add_to_bounds);
   }
   if (track_waypt_count())  {
-    track_disp_all(NULL, NULL, kml_add_to_bounds);
+    track_disp_all(nullptr, nullptr, kml_add_to_bounds);
   }
   if (route_waypt_count()) {
-    route_disp_all(NULL, NULL, kml_add_to_bounds);
+    route_disp_all(nullptr, nullptr, kml_add_to_bounds);
   }
 
   writer->writeStartElement(QStringLiteral("LookAt"));
@@ -2021,7 +2021,7 @@ void kml_write()
 
   // Style settings for bitmaps
   if (route_waypt_count()) {
-    kml_write_bitmap_style(kmlpt_route, ICON_RTE, NULL);
+    kml_write_bitmap_style(kmlpt_route, ICON_RTE, nullptr);
   }
 
   if (track_waypt_count()) {
@@ -2031,14 +2031,14 @@ void kml_write()
         kml_write_bitmap_style(kmlpt_other, QString(ICON_DIR).arg(i), QString("track-%1").arg(i));
       }
     } else {
-      kml_write_bitmap_style(kmlpt_track, ICON_TRK, NULL);
+      kml_write_bitmap_style(kmlpt_track, ICON_TRK, nullptr);
     }
     if (export_track)
       kml_write_bitmap_style(kmlpt_multitrack, ICON_MULTI_TRK,
                              "track-none");
   }
 
-  kml_write_bitmap_style(kmlpt_waypoint, ICON_WPT, NULL);
+  kml_write_bitmap_style(kmlpt_waypoint, ICON_WPT, nullptr);
 
   if (track_waypt_count() || route_waypt_count()) {
     writer->writeStartElement(QStringLiteral("Style"));
@@ -2099,7 +2099,7 @@ void kml_write()
 
     kml_init_color_sequencer(track_count());
     if (export_track) {
-      track_disp_all(kml_mt_hdr, kml_mt_tlr, NULL);
+      track_disp_all(kml_mt_hdr, kml_mt_tlr, nullptr);
     }
 
     track_disp_all(kml_track_hdr, kml_track_tlr,
@@ -2145,7 +2145,7 @@ kml_get_posn_icon(int freshness)
 }
 
 
-static route_head* posn_trk_head = NULL;
+static route_head* posn_trk_head = nullptr;
 
 static void
 kml_wr_position(Waypoint* wpt)
@@ -2230,8 +2230,8 @@ ff_vecs_t kml_vecs = {
   kml_wr_deinit,
   kml_read,
   kml_write,
-  NULL,
+  nullptr,
   kml_args,
   CET_CHARSET_UTF8, 1,	/* CET-REVIEW */
-  { NULL, NULL, NULL, kml_wr_position_init, kml_wr_position, kml_wr_position_deinit }
+  { nullptr, nullptr, nullptr, kml_wr_position_init, kml_wr_position, kml_wr_position_deinit }
 };

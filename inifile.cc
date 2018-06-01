@@ -66,7 +66,7 @@ open_gpsbabel_inifile()
 {
   QString name;
   QString envstr;
-  gbfile* res = NULL;
+  gbfile* res = nullptr;
 
   envstr = ugetenv("GPSBABELINI");
   if (!envstr.isNull()) {
@@ -74,7 +74,7 @@ open_gpsbabel_inifile()
       return gbfopen(envstr, "r", "GPSBabel");
     }
     warning("WARNING: GPSBabel-inifile, defined in environment, NOT found!\n");
-    return NULL;
+    return nullptr;
   }
   name = find_gpsbabel_inifile("");  // Check in current directory first.
   if (name.isNull()) {
@@ -104,7 +104,7 @@ static void
 inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
 {
   char* buf;
-  inifile_section_t* sec = NULL;
+  inifile_section_t* sec = nullptr;
   int line = 0;
 
   while ((buf = gbfgetstr(fin))) {
@@ -125,11 +125,11 @@ inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
 
       char* cend = strchr(++cin, ']');
 
-      if (cend != NULL) {
+      if (cend != nullptr) {
         *cend = '\0';
         cin = lrtrim(cin);
       }
-      if ((*cin == '\0') || (cend == NULL)) {
+      if ((*cin == '\0') || (cend == nullptr)) {
         fatal("%s: invalid section header '%s' in '%s'.\n", myname, cin,
               qPrintable(gbinipathname));
       }
@@ -144,7 +144,7 @@ inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
       char* cx;
       inifile_entry_t* entry;
 
-      if (sec == NULL) {
+      if (sec == nullptr) {
         fatal("%s: missing section header in '%s'.\n", myname,
               qPrintable(gbinipathname));
       }
@@ -154,14 +154,14 @@ inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
       sec->ientries++;
 
       cx = strchr(cin, '=');
-      if (cx != NULL) {
+      if (cx != nullptr) {
         *cx = '\0';
         cin = lrtrim(cin);
       }
 
       entry->key = xstrdup(cin);
 
-      if (cx != NULL) {
+      if (cx != nullptr) {
         cx = lrtrim(++cx);
         entry->val = xstrdup(cx);
       } else {
@@ -176,8 +176,8 @@ inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* k
 {
   queue* elem, *tmp;
 
-  if (inifile == NULL) {
-    return NULL;
+  if (inifile == nullptr) {
+    return nullptr;
   }
 
   QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
@@ -195,7 +195,7 @@ inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* k
       }
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 /* public procedures */
@@ -211,12 +211,12 @@ inifile_t*
 inifile_init(const QString& filename, const char* myname)
 {
   inifile_t* result;
-  gbfile* fin = NULL;
+  gbfile* fin = nullptr;
 
   if (filename.isEmpty()) {
     fin = open_gpsbabel_inifile();
-    if (fin == NULL) {
-      return NULL;
+    if (fin == nullptr) {
+      return nullptr;
     }
   } else {
     fin = gbfopen(filename, "rb", myname);
@@ -233,7 +233,7 @@ inifile_init(const QString& filename, const char* myname)
 void
 inifile_done(inifile_t* inifile)
 {
-  if (inifile == NULL) {
+  if (inifile == nullptr) {
     return;
   }
 
@@ -309,11 +309,11 @@ inifile_readint(const inifile_t* inifile, const char* section, const char* key, 
 
   str = inifile_find_value(inifile, section, key);
 
-  if (str == NULL) {
+  if (str == nullptr) {
     return 0;
   }
 
-  if (value != NULL) {
+  if (value != nullptr) {
     *value = atoi(str);
   }
   return 1;

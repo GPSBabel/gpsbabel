@@ -24,7 +24,7 @@
 
 #define MYNAME "sbn"
 
-static gbfile* file_handle = NULL;
+static gbfile* file_handle = nullptr;
 
 static
 arglist_t sbn_args[] = {
@@ -240,7 +240,7 @@ decode_sbn_position(const unsigned char* buffer, Waypoint* waypt)
 static Waypoint*
 decode_sbn_record(unsigned char* buffer)
 {
-  Waypoint* waypt = NULL;
+  Waypoint* waypt = nullptr;
   waypt = new Waypoint;
 
   if (is_sbn_valid(buffer)) {
@@ -321,11 +321,11 @@ ff_vecs_t sbn_vecs = {
     ff_cap_none					/* routes */
   },
   sbn_rd_init,
-  NULL,
+  nullptr,
   sbn_rd_deinit,
-  NULL,
+  nullptr,
   sbn_read,
-  NULL,
+  nullptr,
   sbn_exit,
   sbn_args,
   /* Characters are always encoded in ASCII. Even if the unit is set

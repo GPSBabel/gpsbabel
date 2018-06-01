@@ -25,7 +25,7 @@
 #include <QtCore/QXmlStreamAttributes>
 
 static int isFirst = 1;
-static route_head* route = NULL;
+static route_head* route = nullptr;
 static Waypoint* wpt_to, *wpt_from;
 static double dest_altitude;
 
@@ -46,13 +46,13 @@ static xg_tag_mapping gl_map[] = {
   { wpt_to_elev,		cb_cdata, "/PocketFMSFlightplan/LIB/ToPoint/Elevation" },
   { wpt_altitude,	cb_start, "/PocketFMSFlightplan/LIB/PlannedAltitude" },
   { wpt_e,			cb_end,   "/PocketFMSFlightplan/LIB" },
-  { NULL,	(xg_cb_type)0,		NULL}
+  { nullptr,	(xg_cb_type)0,		nullptr}
 };
 
 static void
 rd_init(const QString& fname)
 {
-  xml_init(fname, gl_map, NULL);
+  xml_init(fname, gl_map, nullptr);
 }
 
 static void
@@ -64,14 +64,14 @@ data_read()
 static void
 rd_deinit()
 {
-  if (route != NULL) {
+  if (route != nullptr) {
     Waypoint* head = (Waypoint*) QUEUE_FIRST(&route->waypoint_list);
     Waypoint* tail = (Waypoint*) QUEUE_LAST(&route->waypoint_list);
-    if (head != NULL) {
+    if (head != nullptr) {
       route->rte_name = head->shortname;
     }
     route->rte_name += " - ";
-    if (tail != NULL) {
+    if (tail != nullptr) {
       route->rte_name += tail->shortname;
       tail->altitude = dest_altitude;
     }
@@ -103,40 +103,40 @@ void	wpt_e(xg_string, const QXmlStreamAttributes*)
     if (doing_wpts) {
       waypt_add(new Waypoint(*wpt_from));
     }
-    wpt_from = NULL;
+    wpt_from = nullptr;
     isFirst = 0;
   }
   route_add_wpt(route, wpt_to);
   if (doing_wpts) {
     waypt_add(new Waypoint(*wpt_to));
   }
-  wpt_to = NULL;
+  wpt_to = nullptr;
 }
 
 void	wpt_from_lat(xg_string args, const QXmlStreamAttributes*)
 {
-  if (wpt_from != NULL) {
+  if (wpt_from != nullptr) {
     wpt_from->latitude = args.toDouble();
   }
 }
 
 void	wpt_from_lon(xg_string args, const QXmlStreamAttributes*)
 {
-  if (wpt_from != NULL) {
+  if (wpt_from != nullptr) {
     wpt_from->longitude = args.toDouble();
   }
 }
 
 void	wpt_from_name(xg_string args, const QXmlStreamAttributes*)
 {
-  if (wpt_from != NULL) {
+  if (wpt_from != nullptr) {
     wpt_from->shortname += args;
   }
 }
 
 void	wpt_from_elev(xg_string args, const QXmlStreamAttributes*)
 {
-  if (wpt_from != NULL) {
+  if (wpt_from != nullptr) {
     wpt_from->altitude = FEET_TO_METERS(args.toDouble());
   }
 }
@@ -186,11 +186,11 @@ ff_vecs_t pocketfms_fp_vecs = {
   rd_init,
   wr_init,
   rd_deinit,
-  NULL,
+  nullptr,
   data_read,
-  NULL,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
+  nullptr,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

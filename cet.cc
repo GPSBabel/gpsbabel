@@ -41,7 +41,7 @@ cet_char_to_ucs4(const char src, const cet_cs_vec_t* vec, int* value)
   int* dest;
 
   c = ((unsigned char)src & 0xFF);
-  dest = (value != NULL) ? value : &trash;
+  dest = (value != nullptr) ? value : &trash;
 
   *dest = c;
   c -= vec->ucs4_offset;
@@ -71,7 +71,7 @@ cet_ucs4_to_utf8(char* dest, size_t dest_size, int value)
   unsigned char trash[16];
   unsigned char* c;
 
-  c = (dest != NULL) ? (unsigned char*) dest : trash;
+  c = (dest != nullptr) ? (unsigned char*) dest : trash;
 
   if ((value & 0xffffff80) == 0) {		/* <= 7 bits */
     if (dest_size < 1) {
@@ -143,10 +143,10 @@ cet_utf8_to_ucs4(const char* str, int* bytes, int* value)
   unsigned char* cp = (unsigned char*)str;
 
   if (*cp < 0x80) {
-    if (bytes != NULL) {
+    if (bytes != nullptr) {
       *bytes = 1;
     }
-    if (value != NULL) {
+    if (value != nullptr) {
       *value = *cp;
     }
     return CET_SUCCESS;
@@ -170,10 +170,10 @@ cet_utf8_to_ucs4(const char* str, int* bytes, int* value)
               res = (res << 6) | (*c++ & 0x3f);
             }
 
-            if (bytes != NULL) {
+            if (bytes != nullptr) {
               *bytes = len + 1;
             }
-            if (value != NULL) {
+            if (value != nullptr) {
               *value = res;
             }
             return CET_SUCCESS;
@@ -184,10 +184,10 @@ cet_utf8_to_ucs4(const char* str, int* bytes, int* value)
       mask = (mask >> 1) | 0x80;
     }
   }
-  if (bytes != NULL) {
+  if (bytes != nullptr) {
     *bytes = 1;
   }
-  if (value != NULL) {
+  if (value != nullptr) {
     *value = *cp;
   }
   return CET_ERROR;						/* not valid */
@@ -263,10 +263,10 @@ cet_utf8_to_char(const char* str, const cet_cs_vec_t* vec, /* out */ int* bytes,
 
   cet_utf8_to_ucs4(str, &b, &v);			/* decode UTF-8 sequence */
 
-  if (bytes != NULL) {
+  if (bytes != nullptr) {
     *bytes = b;
   }
-  if (value != NULL) {
+  if (value != nullptr) {
     *value = v;
   }
 
@@ -311,7 +311,7 @@ cet_utf8_strdup(const char* str)
   if (str) {
     return cet_utf8_strndup(str, strlen(str));
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -347,7 +347,7 @@ cet_utf8_strndup(const char* str, const int maxlen)
 
     return res;
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -366,8 +366,8 @@ cet_str_utf8_to_any(const char* src, const cet_cs_vec_t* vec)
   int len;
   char* res, *dest, *cend;
 
-  if (c == NULL) {
-    return NULL;
+  if (c == nullptr) {
+    return nullptr;
   }
   if (vec->ucs4_count == 0) {
     return xstrdup(src);  /* UTF-8 -> UTF-8 */
@@ -380,7 +380,7 @@ cet_str_utf8_to_any(const char* src, const cet_cs_vec_t* vec)
 
   while (c < cend) {
     int bytes;
-    *dest++ = cet_utf8_to_char(c, vec, &bytes, NULL);
+    *dest++ = cet_utf8_to_char(c, vec, &bytes, nullptr);
     c += bytes;
   }
   *dest = '\0';
@@ -401,8 +401,8 @@ cet_str_any_to_utf8(const char* src, const cet_cs_vec_t* vec)
   char temp = CET_NOT_CONVERTABLE_DEFAULT;
 
   cin = (char*)src;
-  if (cin == NULL) {
-    return NULL;
+  if (cin == nullptr) {
+    return nullptr;
   }
   if (vec->ucs4_count == 0) {
     return xstrdup(src);  /* UTF-8 -> UTF-8 */
@@ -413,7 +413,7 @@ cet_str_any_to_utf8(const char* src, const cet_cs_vec_t* vec)
     if (CET_ERROR == cet_char_to_ucs4(*cin++, vec, &value)) {
       cet_char_to_ucs4(temp, vec, &value);
     }
-    len += cet_ucs4_to_utf8(NULL, 6, value);
+    len += cet_ucs4_to_utf8(nullptr, 6, value);
   }
 
   result = cout = (char*) xmalloc(len + 1);
@@ -440,8 +440,8 @@ cet_str_uni_to_utf8(const short* src, const int length)
   unsigned short* cin;
   char* res, *cout;
 
-  if (src == NULL) {
-    return NULL;
+  if (src == nullptr) {
+    return nullptr;
   }
 
   len = 0;
@@ -449,7 +449,7 @@ cet_str_uni_to_utf8(const short* src, const int length)
   cin = (unsigned short*)src;
 
   while (i-- > 0) {
-    len += cet_ucs4_to_utf8(NULL, 6, le_read16(cin++));
+    len += cet_ucs4_to_utf8(nullptr, 6, le_read16(cin++));
   }
 
   res = cout = (char*) xmalloc(len + 1);

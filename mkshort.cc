@@ -64,7 +64,7 @@ static struct replacements {
   {"seven", 	"7"},
   {"eight", 	"8"},
   {"nine", 	"9"},
-  {NULL, 		NULL}
+  {nullptr, 		nullptr}
 };
 
 /*
@@ -118,7 +118,7 @@ is_unique(mkshort_handle_imp* h, char* name)
       return z;
     }
   }
-  return (uniq_shortname*) NULL;
+  return (uniq_shortname*) nullptr;
 }
 
 static
@@ -184,16 +184,16 @@ mkshort_del_handle(short_handle* h)
     }
   }
   /* setshort_badchars(*h, NULL); ! currently setshort_badchars() always allocates something ! */
-  if (hdr->badchars != NULL) {
+  if (hdr->badchars != nullptr) {
     xfree(hdr->badchars);
   }
-  setshort_goodchars(*h, NULL);
+  setshort_goodchars(*h, nullptr);
   if (hdr->defname) {
     xfree(hdr->defname);
   }
 
   xfree(hdr);
-  *h = NULL;
+  *h = nullptr;
 }
 
 /*
@@ -301,10 +301,10 @@ void
 setshort_defname(short_handle h, const char* s)
 {
   mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
-  if (s == NULL) {
+  if (s == nullptr) {
     fatal("setshort_defname called without a valid name.");
   }
-  if (hdl->defname != NULL) {
+  if (hdl->defname != nullptr) {
     xfree(hdl->defname);
   }
   hdl->defname = xstrdup(s);
@@ -320,7 +320,7 @@ setshort_badchars(short_handle h, const char* s)
 {
   mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
 
-  if ((hdl->badchars != NULL)) {
+  if ((hdl->badchars != nullptr)) {
     xfree(hdl->badchars);
   }
   hdl->badchars = xstrdup(s ? s : DEFAULT_BADCHARS);
@@ -335,13 +335,13 @@ setshort_goodchars(short_handle h, const char* s)
 {
   mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
 
-  if (hdl->goodchars != NULL) {
+  if (hdl->goodchars != nullptr) {
     xfree(hdl->goodchars);
   }
-  if (s != NULL) {
+  if (s != nullptr) {
     hdl->goodchars = xstrdup(s);
   } else {
-    hdl->goodchars = NULL;
+    hdl->goodchars = nullptr;
   }
 }
 

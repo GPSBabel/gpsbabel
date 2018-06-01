@@ -40,7 +40,7 @@ gb_sleep(unsigned long microseconds)
   struct timespec req;
   req.tv_sec  = microseconds / 1000000;
   req.tv_nsec = (microseconds * 1000) % 1000000000;
-  nanosleep(&req, NULL);
+  nanosleep(&req, nullptr);
 }
 #elif defined HAVE_SLEEP
 /* Amazingly underachieving, but probably "good enough" */

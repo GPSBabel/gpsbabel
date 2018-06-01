@@ -75,7 +75,7 @@ static void
 any_route_free(route_head* rte)
 {
   delete rte;
-  rte = NULL;
+  rte = nullptr;
 }
 
 static void
@@ -142,7 +142,7 @@ common_route_by_name(queue* routes, const char* name)
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 route_head*
@@ -223,7 +223,7 @@ route_find_waypt_by_name(route_head* rh, const char* name)
       return waypointp;
     }
   }
-  return NULL;
+  return nullptr;
 }
 
 static void
@@ -437,7 +437,7 @@ track_append(queue* src)
 void
 route_backup(signed int* count, queue** head_bak)
 {
-  route_copy(count, NULL, head_bak, &my_route_head);
+  route_copy(count, nullptr, head_bak, &my_route_head);
 }
 
 static void
@@ -488,7 +488,7 @@ common_restore_finish()
 void
 route_restore(queue* head_bak)
 {
-  if (head_bak == NULL) {
+  if (head_bak == nullptr) {
     return;
   }
 
@@ -502,13 +502,13 @@ route_restore(queue* head_bak)
 void
 track_backup(signed int* count, queue** head_bak)
 {
-  route_copy(count, NULL, head_bak, &my_track_head);
+  route_copy(count, nullptr, head_bak, &my_track_head);
 }
 
 void
 track_restore(queue* head_bak)
 {
-  if (head_bak == NULL) {
+  if (head_bak == nullptr) {
     return;
   }
 
@@ -694,7 +694,7 @@ void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
 route_head::route_head() :
   rte_num(0),
   rte_waypt_ct(0),
-  fs(NULL),
+  fs(nullptr),
   cet_converted(0),
   // line_color(),
   line_width(-1),

@@ -60,7 +60,7 @@ const int kFieldEnhancedAltitude = 78;
 // For developer fields as a non conflicting id
 const int kFieldInvalid = 255;
 
-static char* opt_allpoints = NULL;
+static char* opt_allpoints = nullptr;
 static int lap_ct = 0;
 
 static
@@ -68,7 +68,7 @@ arglist_t fit_args[] = {
   {
     "allpoints", &opt_allpoints,
     "Read all points even if latitude or longitude is missing",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, NULL
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -116,7 +116,7 @@ fit_rd_deinit()
     fit_message_def* def = &fit_data.message_def[local_id];
     if (def->fields) {
       xfree(def->fields);
-      def->fields = NULL;
+      def->fields = nullptr;
     }
   }
 
@@ -747,12 +747,12 @@ ff_vecs_t format_fit_vecs = {
     ff_cap_none 		/* routes */
   },
   fit_rd_init,
-  NULL,
+  nullptr,
   fit_rd_deinit,
-  NULL,
+  nullptr,
   fit_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   fit_args,
   CET_CHARSET_ASCII, 0		/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */

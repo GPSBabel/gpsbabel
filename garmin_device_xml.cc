@@ -100,17 +100,17 @@ void dir_s(xg_string args, const QXmlStreamAttributes*)
   if (base) {
     xfree(base) ;
   }
-  base = NULL;
+  base = nullptr;
 
   if (ext) {
     xfree(ext) ;
   }
-  ext = NULL;
+  ext = nullptr;
 
   if (path) {
     xfree(path) ;
   }
-  path = NULL;
+  path = nullptr;
 }
 
 static xg_tag_mapping gdx_map[] = {
@@ -121,7 +121,7 @@ static xg_tag_mapping gdx_map[] = {
   { ext_s, cb_cdata, "/Device/MassStorageMode/DataType/File/Location/FileExtension" },
   { base_s, cb_cdata, "/Device/MassStorageMode/DataType/File/Location/BaseName" },
   { dir_s, cb_cdata, "/Device/MassStorageMode/DataType/File/TransferDirection" },
-  { 0, (xg_cb_type) 0, NULL }
+  { nullptr, (xg_cb_type) 0, nullptr }
 };
 
 const gdx_info*
@@ -129,7 +129,7 @@ gdx_read(const char* fname)
 {
   // Test file open-able before gb_open gets a chance to fatal().
   if (QFile(fname).open(QIODevice::ReadOnly)) {
-    xml_init(fname, gdx_map, NULL);
+    xml_init(fname, gdx_map, nullptr);
     xml_read();
     xml_deinit();
   }
@@ -154,7 +154,7 @@ gdx_find_file(char** dirlist)
     }
     dirlist++;
   }
-  return NULL;
+  return nullptr;
 }
 
 const gdx_info*

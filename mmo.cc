@@ -43,7 +43,7 @@ arglist_t mmo_args[] = {
     ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
-    "ver", &opt_version, "Write files with internal version [n]", NULL,
+    "ver", &opt_version, "Write files with internal version [n]", nullptr,
     ARGTYPE_INT, "17", "18", nullptr
   },
   ARG_TERMINATOR
@@ -118,7 +118,7 @@ static const mmo_icon_mapping_t mmo_icon_value_table[] = {
   { 0x16, "Yellow bouy" },
   { 0x17, "Geocache" },
 
-  { -1, NULL }
+  { -1, nullptr }
 };
 
 static const uint32_t obj_type_ico = 0x00;
@@ -353,7 +353,7 @@ mmo_end_of_route(mmo_data_t* data)
 
   if (rte->rte_waypt_ct == 0) {	/* don't keep empty routes */
     route_del_head(rte);
-    data->data = NULL;
+    data->data = nullptr;
   }
 }
 
@@ -432,7 +432,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
   Waypoint* wpt;
   time_t time;
   int rtelinks;
-  mmo_data_t** rtelink = NULL;
+  mmo_data_t** rtelink = nullptr;
   char* str;
   char buf[16];
   int i, ux;
@@ -489,7 +489,7 @@ mmo_read_CObjWaypoint(mmo_data_t* data)
 
     cx = lrtrim(str + 7);
     cend = strchr(cx, '\n');
-    if (cend == NULL) {
+    if (cend == nullptr) {
       cend = cx + strlen(cx);
     }
 
@@ -602,7 +602,7 @@ mmo_read_CObjRoute(mmo_data_t* data)
       mmo_fillbuf(buf, 7, 1);
     }
     route_del_head(rte);
-    data->data = NULL;
+    data->data = nullptr;
 
     return;
   }
@@ -752,7 +752,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
 
   if (trk->rte_waypt_ct == 0) {
     track_del_head(trk);
-    data->data = NULL;
+    data->data = nullptr;
   }
 }
 
@@ -837,7 +837,7 @@ static mmo_data_t*
 mmo_read_object()
 {
   int objid;
-  mmo_data_t* data = NULL;
+  mmo_data_t* data = nullptr;
 
   // There are three cases:
   // a new object of a type that has not occurred previously in this file;
@@ -886,7 +886,7 @@ mmo_read_object()
   DBG(("mmo_read_object", "objid = 0x%04X\n", objid));
 
   if (objid & 0x8000) {
-    data = mmo_register_object(mmo_object_id++, NULL, (gpsdata_type)0);
+    data = mmo_register_object(mmo_object_id++, nullptr, (gpsdata_type)0);
     data->name = mmo_readstr();
 
     if (objid != cat_object_id) {
@@ -1018,7 +1018,7 @@ mmo_rd_init(const QString& fname)
 static void
 mmo_rd_deinit()
 {
-  route_disp_session(curr_session(), NULL, NULL, mmo_finalize_rtept_cb);
+  route_disp_session(curr_session(), nullptr, nullptr, mmo_finalize_rtept_cb);
 
   icons.clear();
 
@@ -1044,7 +1044,7 @@ mmo_read()
 
   DBG(("main", "loading file \"%s\".\n", fin->name));
 
-  fx = gbfopen(NULL, "wb", MYNAME);
+  fx = gbfopen(nullptr, "wb", MYNAME);
   gbfcopyfrom(fx, fin, 0x7FFFFFFF);
   gbfrewind(fx);
   gbfclose(fin);
@@ -1284,11 +1284,11 @@ mmo_write_wpt_cb(const Waypoint* wpt)
   }
 
   cx = wpt->notes;
-  if (cx == NULL) {
+  if (cx == nullptr) {
     cx = wpt->description;
   }
-  if (cx != NULL) {
-    char* kml = NULL;
+  if (cx != nullptr) {
+    char* kml = nullptr;
 
     if (strcmp(wpt->session->name, "kml") == 0) {
       utf_string tmp;
@@ -1459,7 +1459,7 @@ mmo_wr_init(const QString& fname)
       opt_version++;
     }
     errno = 0;
-    mmo_version = strtol(opt_version, NULL, 0);
+    mmo_version = strtol(opt_version, nullptr, 0);
     if (errno || ((mmo_version != 0x11) && (mmo_version != 0x12))) {
       fatal(MYNAME ": Unsupported version identifier (%s)!\n", opt_version);
     }
@@ -1491,8 +1491,8 @@ mmo_write()
 
   /* find out number of objects we have to write */
   waypt_disp_all(mmo_enum_waypt_cb);
-  route_disp_all(mmo_enum_route_cb, NULL, mmo_enum_waypt_cb);
-  track_disp_all(mmo_enum_route_cb, NULL, NULL);
+  route_disp_all(mmo_enum_route_cb, nullptr, mmo_enum_waypt_cb);
+  track_disp_all(mmo_enum_route_cb, nullptr, nullptr);
 
   gbfputuint16(mmo_obj_ct, fout);
 
@@ -1520,7 +1520,7 @@ ff_vecs_t mmo_vecs = {
   mmo_wr_deinit,
   mmo_read,
   mmo_write,
-  NULL,
+  nullptr,
   mmo_args,
   CET_CHARSET_MS_ANSI, 0
   , NULL_POS_OPS,

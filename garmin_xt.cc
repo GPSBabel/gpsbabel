@@ -52,8 +52,8 @@ static int colors[] = {
 
 static	gbfile* fin;
 static	route_head* track;
-static char*	opt_xt_ftype = NULL;
-static char*	opt_trk_header = NULL;
+static char*	opt_xt_ftype = nullptr;
+static char*	opt_trk_header = nullptr;
 
 static
 arglist_t format_garmin_xt_args[] = {
@@ -424,12 +424,12 @@ ff_vecs_t format_garmin_xt_vecs = {
     ff_cap_none				/* routes */
   },
   format_garmin_xt_rd_init,
-  NULL,
+  nullptr,
   format_garmin_xt_rd_deinit,
-  NULL,
+  nullptr,
   format_garmin_xt_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   format_garmin_xt_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */

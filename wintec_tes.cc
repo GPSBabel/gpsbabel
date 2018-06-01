@@ -106,12 +106,12 @@ ff_vecs_t wintec_tes_vecs = {
     ff_cap_none 			/* routes */
   },
   wintec_tes_rd_init,
-  NULL,
+  nullptr,
   wintec_tes_rd_deinit,
-  NULL,
+  nullptr,
   wintec_tes_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   wintec_tes_args,
   CET_CHARSET_ASCII, 0			/* ascii is the expected character set */
   /* not fixed, can be changed through command line parameter */

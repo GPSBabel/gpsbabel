@@ -25,8 +25,8 @@
 #if FILTERS_ENABLED
 #define MYNAME "Polygon filter"
 
-static char* polyfileopt = NULL;
-static char* exclopt = NULL;
+static char* polyfileopt = nullptr;
+static char* exclopt = nullptr;
 
 /*
  * This test for insideness is essentially an odd/even test.  The
@@ -112,11 +112,11 @@ static
 arglist_t polygon_args[] = {
   {
     "file", &polyfileopt,  "File containing vertices of polygon",
-    NULL, ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
     "exclude", &exclopt, "Exclude points inside the polygon",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -251,7 +251,7 @@ polygon_process()
 
   olat = olon = lat1 = lon1 = lat2 = lon2 = BADVAL;
   while ((line = gbfgetstr(file_in))) {
-    char* pound = NULL;
+    char* pound = nullptr;
     int argsfound = 0;
 
     fileline++;
@@ -326,12 +326,12 @@ polygon_process()
     Waypoint* wp = (Waypoint*) elem;
 #endif
     ed = (extra_data*) wp->extra_data;
-    wp->extra_data = NULL;
+    wp->extra_data = nullptr;
     if (ed) {
       if (ed->override) {
         ed->state = INSIDE;
       }
-      if (((ed->state & INSIDE) == OUTSIDE) == (exclopt == NULL)) {
+      if (((ed->state & INSIDE) == OUTSIDE) == (exclopt == nullptr)) {
         waypt_del(wp);
         delete wp;
       }
@@ -356,7 +356,7 @@ filter_vecs_t polygon_vecs = {
   polygon_init,
   polygon_process,
   polygon_deinit,
-  NULL,
+  nullptr,
   polygon_args
 };
 #endif // FILTERS_ENABLED

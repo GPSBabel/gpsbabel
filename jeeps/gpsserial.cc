@@ -522,7 +522,7 @@ int32 GPS_Serial_Chars_Ready(gpsdevh* dh)
 
   t.tv_sec  = 0;
   t.tv_usec = 1000;
-  (void) select(fd+1,&rec,NULL,NULL,&t);
+  (void) select(fd+1,&rec,nullptr,nullptr,&t);
   if (FD_ISSET(fd,&rec)) {
     return 1;
   }
@@ -555,7 +555,7 @@ int32 GPS_Serial_Wait(gpsdevh* dh)
   t.tv_sec  = 0;
   t.tv_usec = 180000;	/* Microseconds before GPS sends A001 */
 
-  (void) select(psd->fd+1,&rec,NULL,NULL,&t);
+  (void) select(psd->fd+1,&rec,nullptr,nullptr,&t);
   if (FD_ISSET(psd->fd,&rec)) {
     return 1;
   }
@@ -609,7 +609,7 @@ int32 GPS_Serial_Off(gpsdevh* dh)
     gps_errno = HARDWARE_ERROR;
     return 0;
   }
-  dh = NULL;
+  dh = nullptr;
 
   return 1;
 }

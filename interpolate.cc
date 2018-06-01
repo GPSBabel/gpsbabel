@@ -27,26 +27,26 @@
 #if FILTERS_ENABLED
 #define MYNAME "Interpolate filter"
 
-static char* opt_interval = NULL;
+static char* opt_interval = nullptr;
 unsigned int interval = 0;
-static char* opt_dist = NULL;
+static char* opt_dist = nullptr;
 double dist = 0;
-static char* opt_route = NULL;
+static char* opt_route = nullptr;
 
 static
 arglist_t interpfilt_args[] = {
   {
-    "time", &opt_interval, "Time interval in seconds", NULL,
+    "time", &opt_interval, "Time interval in seconds", nullptr,
     ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_INT,
-    "0", NULL, nullptr
+    "0", nullptr, nullptr
   },
   {
     "distance", &opt_dist, "Distance interval in miles or kilometers",
-    NULL, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_STRING,
+    nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_STRING,
     ARG_NOMINMAX, nullptr
   },
   {
-    "route", &opt_route, "Interpolate routes instead", NULL,
+    "route", &opt_route, "Interpolate routes instead", nullptr,
     ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
@@ -55,7 +55,7 @@ arglist_t interpfilt_args[] = {
 void
 interpfilt_process()
 {
-  queue* backuproute = NULL;
+  queue* backuproute = nullptr;
   queue* elem, *tmp, *elem2, *tmp2;
   route_head* rte_new;
   int count = 0;
@@ -197,8 +197,8 @@ interpfilt_init(const char*)
 filter_vecs_t interpolatefilt_vecs = {
   interpfilt_init,
   interpfilt_process,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   interpfilt_args
 };
 #endif // FILTERS_ENABLED

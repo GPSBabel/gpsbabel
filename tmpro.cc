@@ -81,7 +81,7 @@ data_read()
     }
 
     /* skip the line if it contains "sHyperLink" as it is a header (I hope :) */
-    if ((strlen(buff)) && (strstr(buff, "sHyperLink") == NULL)) {
+    if ((strlen(buff)) && (strstr(buff, "sHyperLink") == nullptr)) {
 
       wpt_tmp = new Waypoint;
 
@@ -151,7 +151,7 @@ data_read()
         }
         i++;
 
-        s = csv_lineparse(NULL, "\t", "\"", linecount);
+        s = csv_lineparse(nullptr, "\t", "\"", linecount);
       }
 
       if (i != 11) {
@@ -206,7 +206,7 @@ tmpro_waypt_pr(const Waypoint* wpt)
   /* Number of characters */
   /*  25    6      80         8    8      8         8       8    4       4       128      */
 
-  const char* l = NULL;
+  const char* l = nullptr;
   if (wpt->HasUrlLink()) {
     // Yes, it's lame to allocate/copy here.
     UrlLink link = wpt->GetUrlLink();
@@ -255,8 +255,8 @@ ff_vecs_t tmpro_vecs = {
   wr_deinit,
   data_read,
   data_write,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

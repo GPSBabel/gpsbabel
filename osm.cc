@@ -29,8 +29,8 @@
 static char* opt_tag, *opt_tagnd, *created_by;
 
 static arglist_t osm_args[] = {
-  { "tag", &opt_tag, 	"Write additional way tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
-  { "tagnd", &opt_tagnd,	"Write additional node tag key/value pairs", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  { "tag", &opt_tag, 	"Write additional way tag key/value pairs", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
+  { "tagnd", &opt_tagnd,	"Write additional node tag key/value pairs", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   { "created_by", &created_by, "Use this value as custom created_by value","GPSBabel", ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
@@ -63,7 +63,7 @@ xg_tag_mapping osm_map[] = {
   { osm_way_tag,	cb_start,	"/osm/way/tag" },
   { osm_way_center,	cb_start,	"/osm/way/center" },
   { osm_way_end,	cb_end,		"/osm/way" },
-  { NULL,	(xg_cb_type)0,		NULL }
+  { nullptr,	(xg_cb_type)0,		nullptr }
 };
 
 static const char* osm_features[] = {
@@ -87,7 +87,7 @@ static const char* osm_features[] = {
   "tourism",	/* 17 */
   "waterway",	/* 18 */
   "aerialway",	/* 19 */
-  NULL
+  nullptr
 };
 
 typedef struct osm_icon_mapping_s {
@@ -399,7 +399,7 @@ static osm_icon_mapping_t osm_icon_mappings[] = {
 //	{ 13, "island",			"?" },
 //	{ 13, "User Defined",		"?" },
 
-  { -1, NULL, NULL }
+  { -1, nullptr, nullptr }
 };
 
 
@@ -485,7 +485,7 @@ osm_node_end(xg_string, const QXmlStreamAttributes*)
     } else {
       delete wpt;
     }
-    wpt = NULL;
+    wpt = nullptr;
   }
 }
 
@@ -662,7 +662,7 @@ osm_way_end(xg_string, const QXmlStreamAttributes*)
 {
   if (rte) {
     route_add_head(rte);
-    rte = NULL;
+    rte = nullptr;
   }
 
   if (wpt) {
@@ -670,7 +670,7 @@ osm_way_end(xg_string, const QXmlStreamAttributes*)
       waypt_add(wpt);
     } else {
       delete(wpt);
-      wpt = NULL;
+      wpt = nullptr;
     }
   }
 }
@@ -678,15 +678,15 @@ osm_way_end(xg_string, const QXmlStreamAttributes*)
 static void
 osm_rd_init(const QString& fname)
 {
-  wpt = NULL;
-  rte = NULL;
+  wpt = nullptr;
+  rte = nullptr;
 
   waypoints.clear();
   if (keys.isEmpty()) {
     osm_features_init();
   }
 
-  xml_init(fname, osm_map, NULL);
+  xml_init(fname, osm_map, nullptr);
 }
 
 static void
@@ -777,7 +777,7 @@ osm_release_ids(const Waypoint* wpt)
   if (wpt && wpt->extra_data) {
     Waypoint* tmp = (Waypoint*)wpt;
     xfree(tmp->extra_data);
-    tmp->extra_data = NULL;
+    tmp->extra_data = nullptr;
   }
 }
 
@@ -947,8 +947,8 @@ osm_write()
   gbfprintf(fout, "'>\n");
 
   waypt_disp_all(osm_waypt_disp);
-  route_disp_all(NULL, NULL, osm_waypt_disp);
-  track_disp_all(NULL, NULL, osm_waypt_disp);
+  route_disp_all(nullptr, nullptr, osm_waypt_disp);
+  track_disp_all(nullptr, nullptr, osm_waypt_disp);
 
   route_disp_all(osm_rte_disp_head, osm_rte_disp_trail, osm_rtept_disp);
   track_disp_all(osm_rte_disp_head, osm_rte_disp_trail, osm_rtept_disp);
@@ -962,8 +962,8 @@ osm_wr_deinit()
   gbfclose(fout);
 
   waypt_disp_all(osm_release_ids);
-  route_disp_all(NULL, NULL, osm_release_ids);
-  track_disp_all(NULL, NULL, osm_release_ids);
+  route_disp_all(nullptr, nullptr, osm_release_ids);
+  track_disp_all(nullptr, nullptr, osm_release_ids);
 
   waypoints.clear();
 }

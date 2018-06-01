@@ -43,18 +43,18 @@ static QString ifname;
 static QString ofname;
 static int nameFieldIdx;	// the field index of the field with fieldName "name" in the output DBF.
 
-static char* opt_name = NULL;
-static char* opt_url = NULL;
+static char* opt_name = nullptr;
+static char* opt_url = nullptr;
 
 static
 arglist_t shp_args[] = {
   {
     "name", &opt_name, "Source for name field in .dbf",
-    NULL, ARGTYPE_STRING, "0", NULL, nullptr
+    nullptr, ARGTYPE_STRING, "0", nullptr, nullptr
   },
   {
     "url", &opt_url, "Source for URL field in .dbf",
-    NULL, ARGTYPE_STRING, "0", NULL, nullptr
+    nullptr, ARGTYPE_STRING, "0", nullptr, nullptr
   },
   ARG_TERMINATOR
 };
@@ -167,7 +167,7 @@ void dump_fields(void)
   warning(MYNAME ": Database fields:\n");
   const int nFields = DBFGetFieldCount(ihandledb);
   for (int i = 0; i < nFields; i++) {
-    DBFFieldType type = DBFGetFieldInfo(ihandledb, i, name, NULL, NULL);
+    DBFFieldType type = DBFGetFieldInfo(ihandledb, i, name, nullptr, nullptr);
     warning(MYNAME ": Field Index: %2d, Field Name: %12s, Field Type %d\n", i, name, type);
   }
   fatal("\n");
@@ -201,12 +201,12 @@ my_rd_init(const QString& fname)
   ifname = fname;
   // TODO: The .prj file can define the the coordinate system and projection information.
   ihandle = SHPOpenGpsbabel(fname, "rb");
-  if (ihandle == NULL) {
+  if (ihandle == nullptr) {
     fatal(MYNAME ": Cannot open shp file %s for reading\n", qPrintable(ifname));
   }
 
   ihandledb = DBFOpenGpsbabel(fname, "rb");
-  if (ihandledb == NULL) {
+  if (ihandledb == nullptr) {
     fatal(MYNAME ": Cannot open dbf file %s for reading\n", qPrintable(ifname));
   }
   const char* codepage = DBFGetCodePage(ihandledb);
@@ -286,7 +286,7 @@ my_read(void)
   int npts;
   const char* etype = "unknown";
 
-  SHPGetInfo(ihandle, &npts, NULL, NULL, NULL);
+  SHPGetInfo(ihandle, &npts, nullptr, nullptr, nullptr);
   for (int iShape=0; iShape<npts; iShape++) {
     SHPObject* shp;
     Waypoint* wpt;
@@ -490,12 +490,12 @@ my_write(void)
   case unknown_gpsdata:
     ohandle = SHPCreateGpsbabel(ofname, SHPT_POINT);
 
-    if (ohandle == NULL) {
+    if (ohandle == nullptr) {
       fatal(MYNAME ": Cannot open shp file %s for writing\n",
             qPrintable(ofname));
     }
     ohandledb = DBFCreateExGpsbabel(ofname, "UTF-8\n");
-    if (ohandledb == NULL) {
+    if (ohandledb == nullptr) {
       fatal(MYNAME ": Cannot open dbf file %s for writing\n",
             qPrintable(ofname));
     }
@@ -506,12 +506,12 @@ my_write(void)
   case trkdata:
     ohandle = SHPCreateGpsbabel(ofname, SHPT_ARC);
 
-    if (ohandle == NULL) {
+    if (ohandle == nullptr) {
       fatal(MYNAME ": Cannot open shp file %s for writing\n",
             qPrintable(ofname));
     }
     ohandledb = DBFCreateExGpsbabel(ofname, "UTF-8\n");
-    if (ohandledb == NULL) {
+    if (ohandledb == nullptr) {
       fatal(MYNAME ": Cannot open dbf file %s for writing\n",
             qPrintable(ofname));
     }
@@ -537,7 +537,7 @@ ff_vecs_t shape_vecs = {
   my_wr_deinit,
   my_read,
   my_write,
-  NULL,
+  nullptr,
   shp_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

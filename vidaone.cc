@@ -74,7 +74,7 @@ vidaone_rd_deinit()
 static void
 vidaone_read()
 {
-  route_head* trk = NULL;
+  route_head* trk = nullptr;
 
   while (! gbfeof(fin)) {
     Waypoint* wpt = new Waypoint;
@@ -127,7 +127,7 @@ vidaone_trkpt(const Waypoint* wpt)
 static void
 vidaone_write()
 {
-  track_disp_all(NULL, NULL, vidaone_trkpt);
+  track_disp_all(nullptr, nullptr, vidaone_trkpt);
 }
 
 /**************************************************************************/
@@ -145,7 +145,7 @@ ff_vecs_t vidaone_vecs = {
   vidaone_wr_deinit,
   vidaone_read,
   vidaone_write,
-  NULL,
+  nullptr,
   vidaone_args,
   CET_CHARSET_UTF8, 1
   , NULL_POS_OPS,

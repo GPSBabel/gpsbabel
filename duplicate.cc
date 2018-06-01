@@ -24,28 +24,28 @@
 #include <cstdlib> // qsort
 
 #if FILTERS_ENABLED
-static char* snopt = NULL;
-static char* lcopt = NULL;
-static char* purge_duplicates = NULL;
-static char* correct_coords = NULL;
+static char* snopt = nullptr;
+static char* lcopt = nullptr;
+static char* purge_duplicates = nullptr;
+static char* correct_coords = nullptr;
 
 static
 arglist_t dup_args[] = {
   {
     "shortname", &snopt, "Suppress duplicate waypoints based on name",
-    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "location", &lcopt, "Suppress duplicate waypoint based on coords",
-    NULL, ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "all", &purge_duplicates, "Suppress all instances of duplicates",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "correct", &correct_coords, "Use coords from duplicate points",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -60,10 +60,10 @@ typedef struct btree_node {
 static btree_node*
 addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode)
 {
-  btree_node* tmp, * last = NULL;
+  btree_node* tmp, * last = nullptr;
 
   if (*oldnode) {
-    *oldnode = NULL;
+    *oldnode = nullptr;
   }
 
   if (!tree) {
@@ -82,7 +82,7 @@ addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode)
       if (oldnode) {
         *oldnode = tmp;
       }
-      return (NULL);
+      return (nullptr);
     }
   }
 
@@ -176,15 +176,15 @@ static void
 duplicate_process(void)
 {
   Waypoint* waypointp;
-  btree_node* newnode, * btmp, * sup_tree = NULL;
-  btree_node* oldnode = NULL;
+  btree_node* newnode, * btmp, * sup_tree = nullptr;
+  btree_node* oldnode = nullptr;
   unsigned long crc = 0;
   struct {
     char shortname[32];
     char lat[13];
     char lon[13];
   } dupe;
-  Waypoint* delwpt = NULL;
+  Waypoint* delwpt = nullptr;
 
   int i, ct = waypt_count();
   wpt_ptr* htable, *bh;
@@ -237,7 +237,7 @@ duplicate_process(void)
 
     btmp = addnode(sup_tree, newnode, &oldnode);
 
-    if (btmp == NULL) {
+    if (btmp == nullptr) {
       if (delwpt) {
         delete delwpt;
       }
@@ -252,7 +252,7 @@ duplicate_process(void)
         if (oldnode->wpt) {
           waypt_del(oldnode->wpt);
           delete oldnode->wpt;
-          oldnode->wpt = NULL;
+          oldnode->wpt = nullptr;
         }
       }
 
@@ -272,10 +272,10 @@ duplicate_process(void)
 }
 
 filter_vecs_t duplicate_vecs = {
-  NULL,
+  nullptr,
   duplicate_process,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   dup_args
 };
 #endif

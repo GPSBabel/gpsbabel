@@ -60,10 +60,10 @@ nuke_process(void)
 }
 
 filter_vecs_t nuke_vecs = {
-  NULL,
+  nullptr,
   nuke_process,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   nuke_args
 };
 

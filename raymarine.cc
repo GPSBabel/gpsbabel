@@ -198,13 +198,13 @@ raymarine_read()
     snprintf(sect, sizeof(sect), "Wp%d", ix);
 
     /* try to read our most expected values */
-    if (NULL == (name = inifile_readstr(fin, sect, "Name"))) {
+    if (nullptr == (name = inifile_readstr(fin, sect, "Name"))) {
       break;
     }
-    if (NULL == (lat = inifile_readstr(fin, sect, "Lat"))) {
+    if (nullptr == (lat = inifile_readstr(fin, sect, "Lat"))) {
       break;
     }
-    if (NULL == (lon = inifile_readstr(fin, sect, "Long"))) {
+    if (nullptr == (lon = inifile_readstr(fin, sect, "Long"))) {
       break;
     }
 
@@ -240,7 +240,7 @@ raymarine_read()
     int wx;
 
     snprintf(sect, sizeof(sect), "Rt%d", rx);
-    if (NULL == (name = inifile_readstr(fin, sect, "Name"))) {
+    if (nullptr == (name = inifile_readstr(fin, sect, "Name"))) {
       break;
     }
 
@@ -255,12 +255,12 @@ raymarine_read()
 
       snprintf(buff, sizeof(buff), "Mk%d", wx);
       str = inifile_readstr(fin, sect, buff);
-      if ((str == NULL) || (*str == '\0')) {
+      if ((str == nullptr) || (*str == '\0')) {
         break;
       }
 
       wpt = find_waypt_by_name(str);
-      if (wpt == NULL)
+      if (wpt == nullptr)
         fatal(MYNAME ": No associated waypoint for route point %s (Route %s)!\n",
               str, qPrintable(rte->rte_name));
 
@@ -342,9 +342,9 @@ write_waypoint(gbfile* fout, const Waypoint* wpt, const int waypt_no, const char
   double time;
 
   notes = wpt->notes;
-  if (notes == NULL) {
+  if (notes == nullptr) {
     notes = wpt->description;
-    if (notes == NULL) {
+    if (notes == nullptr) {
       notes = "";
     }
   }
@@ -477,11 +477,11 @@ raymarine_write()
 
   waypt_table_sz = 0;
   waypt_table_ct = 0;
-  waypt_table = NULL;
+  waypt_table = nullptr;
 
   /* enumerate all possible waypoints */
   waypt_disp_all(enum_waypt_cb);
-  route_disp_all(enum_route_hdr_cb, NULL, enum_rtept_cb);
+  route_disp_all(enum_route_hdr_cb, nullptr, enum_rtept_cb);
 
   if (waypt_table_ct == 0) {
     return;
@@ -497,13 +497,13 @@ raymarine_write()
 
   /* write out all routes with their waypoints */
   rte_index = 0;
-  route_disp_all(write_route_head_cb, NULL, write_route_wpt_cb);
+  route_disp_all(write_route_head_cb, nullptr, write_route_wpt_cb);
 
   /* release local used data */
   for (i = 0; i < waypt_table_ct; i++) {
     wpt = waypt_table[i];
     xfree(wpt->extra_data);
-    wpt->extra_data = NULL;
+    wpt->extra_data = nullptr;
   }
   xfree(waypt_table);
 }
@@ -525,7 +525,7 @@ ff_vecs_t raymarine_vecs = {
   raymarine_wr_done,
   raymarine_read,
   raymarine_write,
-  NULL,
+  nullptr,
   raymarine_args,
   CET_CHARSET_ASCII, 0	/* should we force this to 1 ? */
   , NULL_POS_OPS,

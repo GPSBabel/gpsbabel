@@ -31,7 +31,7 @@ const char *cet_cs_alias_ansi_x3_4_1968[] =
 	"ANSI_X3.4-1968", "367", "ANSI_X3.4-1986", "ASCII", 
 	"CP367", "csASCII", "IBM367", "ISO646-US", 
 	"ISO646.1991-IRV", "iso-ir-6", "ISO_646.irv:1991", "us", 
-	NULL
+	nullptr
 };
 
 #define cet_ucs4_ofs_ansi_x3_4_1968 128
@@ -447,8 +447,8 @@ cet_cs_vec_t cet_cs_vec_ansi_x3_4_1968 =	/* defined in cet.h */
 	cet_cs_name_ansi_x3_4_1968,		/* name of character set	*/
 	cet_cs_alias_ansi_x3_4_1968,		/* alias table			*/
 
-	NULL,					/* fallback character set */
-	NULL,					/* unused */
+	nullptr,					/* fallback character set */
+	nullptr,					/* unused */
 
 	cet_ucs4_map_ansi_x3_4_1968,		/* char to UCS-4 value table	*/
 	cet_ucs4_ofs_ansi_x3_4_1968,		/* first non standard character	*/
@@ -460,7 +460,7 @@ cet_cs_vec_t cet_cs_vec_ansi_x3_4_1968 =	/* defined in cet.h */
 	cet_ucs4_to_ansi_x3_4_1968_extra,	/* hand made UCS-4 links	*/
 	sizeof(cet_ucs4_to_ansi_x3_4_1968_extra) / sizeof(cet_ucs4_to_ansi_x3_4_1968_extra[0]), 				/* number of extra links */
 
-	NULL	/* for internal use */
+	nullptr	/* for internal use */
 };
 
 

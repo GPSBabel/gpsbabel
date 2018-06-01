@@ -346,7 +346,7 @@ humminbird_read_route(gbfile* fin)
 
   if (hrte.count > 0) {
     int i;
-    route_head* rte = NULL;
+    route_head* rte = nullptr;
 
     for (i = 0; i < hrte.count; i++) {
       const Waypoint* wpt;
@@ -357,7 +357,7 @@ humminbird_read_route(gbfile* fin)
       snprintf(buff, sizeof(buff), "%d", hrte.points[i]);
       if ((map.value(buff))) {
         wpt = map.value(buff);
-        if (rte == NULL) {
+        if (rte == nullptr) {
           rte = route_head_alloc();
           route_add_head(rte);
           // TODO: find a way to eliminate the copy.
@@ -759,7 +759,7 @@ humminbird_track_head(const route_head* trk)
 {
   int max_points = (131080 - sizeof(uint32_t)- sizeof(humminbird_trk_header_t)) / sizeof(humminbird_trk_point_t);
 
-  trk_head = NULL;
+  trk_head = nullptr;
   last_time = 0;
   if (trk->rte_waypt_ct > 0) {
     QString name;
@@ -777,7 +777,7 @@ humminbird_track_tail(const route_head*)
 {
   int max_points = (131080 - sizeof(uint32_t)- sizeof(humminbird_trk_header_t)) / sizeof(humminbird_trk_point_t);
 
-  if (trk_head == NULL) {
+  if (trk_head == nullptr) {
     return;
   }
 
@@ -805,8 +805,8 @@ humminbird_track_tail(const route_head*)
   xfree(trk_head);
   xfree(trk_points);
 
-  trk_head   = NULL;
-  trk_points = NULL;
+  trk_head   = nullptr;
+  trk_points = nullptr;
 }
 
 static void
@@ -816,7 +816,7 @@ humminbird_track_cb(const Waypoint* wpt)
   double lat;
   int i;
 
-  if (trk_head == NULL) {
+  if (trk_head == nullptr) {
     return;
   }
 
@@ -888,7 +888,7 @@ humminbird_track_write()
 static void
 humminbird_rte_head(const route_head* rte)
 {
-  humrte = NULL;
+  humrte = nullptr;
   if (rte->rte_waypt_ct > 0) {
     humrte = (humminbird_rte_t*) xcalloc(1, sizeof(*humrte));
   }
@@ -897,7 +897,7 @@ humminbird_rte_head(const route_head* rte)
 static void
 humminbird_rte_tail(const route_head* rte)
 {
-  if (humrte == NULL) {
+  if (humrte == nullptr) {
     return;
   }
 
@@ -921,7 +921,7 @@ humminbird_rte_tail(const route_head* rte)
   }
 
   xfree(humrte);
-  humrte = NULL;
+  humrte = nullptr;
 }
 
 static void
@@ -929,7 +929,7 @@ humminbird_write_rtept(const Waypoint* wpt)
 {
   int i;
 
-  if (humrte == NULL) {
+  if (humrte == nullptr) {
     return;
   }
   i = gb_ptr2int(wpt->extra_data);
@@ -971,7 +971,7 @@ static void
 humminbird_write()
 {
   waypt_disp_all(humminbird_write_waypoint_wrapper);
-  route_disp_all(NULL, NULL, humminbird_write_waypoint_wrapper);
+  route_disp_all(nullptr, nullptr, humminbird_write_waypoint_wrapper);
   route_disp_all(humminbird_rte_head, humminbird_rte_tail, humminbird_write_rtept);
 }
 
@@ -990,7 +990,7 @@ ff_vecs_t humminbird_vecs = {
   humminbird_wr_deinit,
   humminbird_read,
   humminbird_write,
-  NULL, // humminbird_exit,
+  nullptr, // humminbird_exit,
   humminbird_args,
   CET_CHARSET_ASCII, 1			/* ascii is the expected character set */
   /* currently fixed !!! */
@@ -1015,7 +1015,7 @@ ff_vecs_t humminbird_ht_vecs = {
   humminbird_wr_deinit,
   humminbird_read,
   humminbird_track_write,
-  NULL, // humminbird_exit,
+  nullptr, // humminbird_exit,
   humminbird_args,
   CET_CHARSET_ASCII, 1			/* ascii is the expected character set */
   /* currently fixed !!! */

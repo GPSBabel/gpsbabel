@@ -110,7 +110,7 @@ int gbser_setup(void* handle, const char* spec)
  */
 int gbser_avail(void* handle)
 {
-  return gbser__fill_buffer(handle, 1, NULL);
+  return gbser__fill_buffer(handle, 1, nullptr);
 }
 
 /* Read as many bytes as are available without blocking. At most |len|
@@ -122,7 +122,7 @@ int gbser_read(void* handle, void* buf, unsigned len)
   int got = 0;
 
   while (len > 0) {
-    int rc = gbser__fill_buffer(handle, len, NULL);
+    int rc = gbser__fill_buffer(handle, len, nullptr);
     if (rc < 0) {
       /* error */
       return rc;

@@ -57,13 +57,13 @@ static xg_tag_mapping gl_map[] = {
   { gl_trk_long, cb_cdata, "/History/Run/Track/Trackpoint/Position/Longitude" },
   { gl_trk_alt,  cb_cdata, "/History/Run/Track/Trackpoint/Position/Altitude" },
   { gl_trk_utc,  cb_cdata, "/History/Run/Track/Trackpoint/Time" },
-  { NULL,	(xg_cb_type)0,         NULL}
+  { nullptr,	(xg_cb_type)0,         nullptr}
 };
 
 static void
 glogbook_rd_init(const QString& fname)
 {
-  xml_init(fname, gl_map, NULL);
+  xml_init(fname, gl_map, nullptr);
 }
 
 static void
@@ -93,7 +93,7 @@ glogbook_wr_deinit()
   writer.writeEndDocument();
   gbfputs(ostring,ofd);
   gbfclose(ofd);
-  ofd = NULL;
+  ofd = nullptr;
 }
 
 static void
@@ -186,7 +186,7 @@ ff_vecs_t glogbook_vecs = {
   glogbook_wr_deinit,
   glogbook_read,
   glogbook_write,
-  NULL,
+  nullptr,
   glogbook_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
