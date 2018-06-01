@@ -21,7 +21,7 @@
  */
 
 
-#include <time.h>
+#include <ctime>
 
 #include <QtCore/QtGlobal>
 #include <QtCore/QDateTime>

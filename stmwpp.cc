@@ -27,9 +27,9 @@
 
 #include "csv_util.h"
 #include "cet_util.h"
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cctype>
+#include <cstdio>
+#include <cstdlib>
 
 static gbfile* fin, *fout;
 static route_head* track, *route;

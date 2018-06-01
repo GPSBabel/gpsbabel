@@ -19,7 +19,7 @@
 
 #include <QtCore/QFile>
 #include <QtCore/QIODevice>
-#include <stdio.h>
+#include <cstdio>
 #include "defs.h"
 
 // Mimic gbfile open services

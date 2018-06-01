@@ -21,7 +21,7 @@
 
 /* Created by "tools/createGeoidGrid 1.0 int8_t" using GeographicLib utility GeoidEval with egm96-5. */
 
-#include <stdint.h>
+#include <cstdint>
 
 #define GEOID_GRID_DEG 1.0
 #define GEOID_SCALE 1.0
