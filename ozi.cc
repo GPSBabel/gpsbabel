@@ -53,15 +53,15 @@ static int route_out_count;
 static int route_wpt_count;
 static int new_track;
 
-static char* snlenopt = NULL;
-static char* snwhiteopt = NULL;
-static char* snupperopt = NULL;
-static char* snuniqueopt = NULL;
-static char* wptfgcolor = NULL;
-static char* wptbgcolor = NULL;
-static char* pack_opt = NULL;
+static char* snlenopt = nullptr;
+static char* snwhiteopt = nullptr;
+static char* snupperopt = nullptr;
+static char* snuniqueopt = nullptr;
+static char* wptfgcolor = nullptr;
+static char* wptbgcolor = nullptr;
+static char* pack_opt = nullptr;
 static int datum;
-static char* proximityarg = NULL;
+static char* proximityarg = nullptr;
 static double proximity;
 static char* altunit_opt;
 static char* proxunit_opt;
@@ -74,23 +74,23 @@ static
 arglist_t ozi_args[] = {
   {
     "pack", &pack_opt, "Write all tracks into one file",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
   },
   {
     "snlen", &snlenopt, "Max synthesized shortname length",
-    "32", ARGTYPE_INT, "1", NULL
+    "32", ARGTYPE_INT, "1", nullptr
   },
   {
     "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
   },
   {
     "snupper", &snupperopt, "UPPERCASE synth. shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
   },
   {
     "snunique", &snuniqueopt, "Make synth. shortnames unique",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
   },
   {
     "wptfgcolor", &wptfgcolor, "Waypoint foreground color",
@@ -125,7 +125,7 @@ ozi_copy_fsdata(ozi_fsdata** dest, ozi_fsdata* src)
   /* No strings to mess with.  Straight forward copy. */
   *dest = (ozi_fsdata*)xmalloc(sizeof(*src));
   ** dest = *src;
-  (*dest)->fs.next = NULL;
+  (*dest)->fs.next = nullptr;
 }
 
 static void
@@ -142,7 +142,7 @@ ozi_alloc_fsdata()
   fsdata->fs.type = FS_OZI;
   fsdata->fs.copy = (fs_copy) ozi_copy_fsdata;
   fsdata->fs.destroy = ozi_free_fsdata;
-  fsdata->fs.convert = NULL;
+  fsdata->fs.convert = nullptr;
 
   /* Provide defaults via command line defaults */
   fsdata->fgcolor = color_to_bbggrr(wptfgcolor);
@@ -188,7 +188,7 @@ ozi_convert_datum(Waypoint* wpt)
 static void
 ozi_openfile(const QString& fname)
 {
-  const char* ozi_extensions[] = {0, "plt", "wpt", "rte"};
+  const char* ozi_extensions[] = {nullptr, "plt", "wpt", "rte"};
 
   /* if we're doing multi-track output, sequence the filenames like:
    * mytrack.plt, mytrack-1.plt...unless we're writing to stdout.
@@ -221,7 +221,7 @@ ozi_openfile(const QString& fname)
   /* re-open file_out with the new filename */
   if (file_out) {
     gbfclose(file_out);
-    file_out = NULL;
+    file_out = nullptr;
   }
 
   file_out = gbfopen(tmpname, "wb", MYNAME);
@@ -428,7 +428,7 @@ static void
 rd_deinit()
 {
   gbfclose(file_in);
-  file_in = NULL;
+  file_in = nullptr;
   mkshort_del_handle(&mkshort_handle);
 }
 
@@ -468,16 +468,16 @@ wr_init(const QString& fname)
   ozi_init_units(1);
   parse_distance(proximityarg, &proximity, 1 / prox_scale, MYNAME);
 
-  file_out = NULL;
+  file_out = nullptr;
 }
 
 static void
 wr_deinit()
 {
-  if (file_out != NULL) {
+  if (file_out != nullptr) {
 
     gbfclose(file_out);
-    file_out = NULL;
+    file_out = nullptr;
   }
   ozi_ofname.clear();
 
@@ -719,7 +719,7 @@ static void
 data_read()
 {
   QString buff;
-  char* trk_name = NULL;
+  char* trk_name = nullptr;
   Waypoint* wpt_tmp;
   int i;
   int linecount = 0;
@@ -770,7 +770,7 @@ data_read()
         if (field == 4) {
           trk_head->rte_name = QString(s).trimmed();
         }
-        s = csv_lineparse(NULL, ",", "", linecount);
+        s = csv_lineparse(nullptr, ",", "", linecount);
       }
     }
 
@@ -808,7 +808,7 @@ data_read()
           break;
         }
         i++;
-        s = csv_lineparse(NULL, ",", "", linecount);
+        s = csv_lineparse(nullptr, ",", "", linecount);
       }
       xfree(orig_s);
 
@@ -870,7 +870,7 @@ ozi_waypt_pr(const Waypoint* wpt)
   QString description;
   QString shortname;
   int faked_fsdata = 0;
-  ozi_fsdata* fs = NULL;
+  ozi_fsdata* fs = nullptr;
   int icon = 0;
 
   fs = (ozi_fsdata*) fs_chain_find(wpt->fs, FS_OZI);
@@ -975,7 +975,7 @@ ff_vecs_t ozi_vecs = {
   wr_deinit,
   data_read,
   data_write,
-  NULL,
+  nullptr,
   ozi_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

@@ -124,7 +124,7 @@ top:
     m1 = Get_Pkt_Type(pkt_id, pkttype, &m2);
     if ((rv == 0)  && (receive_state == rs_frombulk)) {
       m1= "RET2INTR";
-      m2=NULL;
+      m2=nullptr;
     };
     GPS_Diag("(%-8s%s)\n", m1, m2 ? m2 : "");
   }

@@ -87,7 +87,7 @@ static
 char** os_get_garmin_mountpoints()
 {
   // Hacked for testing.
-  return NULL;
+  return nullptr;
 }
 #elif __APPLE__
 // In fantasy land, we'd query iokit for enumerated devices of the Garmin
@@ -158,10 +158,10 @@ gusb_teardown(gpsdevh* dh)
      * when called via the atexit handler.  That's not too
      * terrible.
      */
-    if (NULL != dh) {
+    if (nullptr != dh) {
       xfree(dh);
     }
-    udev = NULL;
+    udev = nullptr;
   }
   return 0;
 }
@@ -169,7 +169,7 @@ gusb_teardown(gpsdevh* dh)
 static void
 gusb_atexit_teardown(void)
 {
-  gusb_teardown(NULL);
+  gusb_teardown(nullptr);
 }
 
 
@@ -231,7 +231,7 @@ gusb_reset_toggles(void)
   gusb_cmd_send((const garmin_usb_packet*) oinit, sizeof(oinit));
 
   t = 10;
-  while (1) {
+  while (true) {
     le_write16(&iresp.gusb_pkt.pkt_id, 0);
     le_write32(&iresp.gusb_pkt.datasz, 0);
     le_write32(&iresp.gusb_pkt.databuf, 0);
@@ -256,7 +256,7 @@ gusb_reset_toggles(void)
 
   t = 10;
   gusb_cmd_send((const garmin_usb_packet*) oid, sizeof(oid));
-  while (1) {
+  while (true) {
     le_write16(&iresp.gusb_pkt.pkt_id, 0);
     le_write32(&iresp.gusb_pkt.datasz, 0);
     le_write32(&iresp.gusb_pkt.databuf, 0);
@@ -427,7 +427,7 @@ int garmin_usb_scan(libusb_unit_data* lud, int req_unit_number)
           	 * may have a "dangling" packet that
            * needs to be drained.
            */
-          gusb_close(NULL);
+          gusb_close(nullptr);
         } else if (req_unit_number == found_devices) {
           garmin_usb_start(dev, lud);
         }

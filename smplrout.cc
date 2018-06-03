@@ -80,22 +80,22 @@ static
 arglist_t routesimple_args[] = {
   {
     "count", &countopt,  "Maximum number of points in route",
-    NULL, ARGTYPE_INT | ARGTYPE_BEGIN_REQ | ARGTYPE_BEGIN_EXCL, "1", NULL, nullptr
+    nullptr, ARGTYPE_INT | ARGTYPE_BEGIN_REQ | ARGTYPE_BEGIN_EXCL, "1", nullptr, nullptr
   },
   {
-    "error", &erroropt, "Maximum error", NULL,
-    ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", NULL, nullptr
+    "error", &erroropt, "Maximum error", nullptr,
+    ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", nullptr, nullptr
   },
   {
-    "crosstrack", &xteopt, "Use cross-track error (default)", NULL,
+    "crosstrack", &xteopt, "Use cross-track error (default)", nullptr,
     ARGTYPE_BOOL | ARGTYPE_BEGIN_EXCL, ARG_NOMINMAX, nullptr
   },
   {
-    "length", &lenopt, "Use arclength error", NULL,
+    "length", &lenopt, "Use arclength error", nullptr,
     ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
-    "relative", &relopt, "Use relative error", NULL,
+    "relative", &relopt, "Use relative error", nullptr,
     ARGTYPE_BOOL | ARGTYPE_END_EXCL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
@@ -124,10 +124,10 @@ free_xte(struct xte* xte_rec)
 
 #define HUGEVAL 2000000000
 
-static struct xte_intermed* tmpprev = NULL;
+static struct xte_intermed* tmpprev = nullptr;
 static int xte_count = 0;
-static const route_head* cur_rte = NULL;
-static struct xte* xte_recs = NULL;
+static const route_head* cur_rte = nullptr;
+static struct xte* xte_recs = nullptr;
 
 void
 routesimple_waypt_pr(const Waypoint* wpt)
@@ -139,7 +139,7 @@ routesimple_waypt_pr(const Waypoint* wpt)
   xte_recs[xte_count].intermed = (struct xte_intermed*) xmalloc(sizeof(struct xte_intermed));
   xte_recs[xte_count].intermed->wpt = wpt;
   xte_recs[xte_count].intermed->xte_rec = xte_recs+xte_count;
-  xte_recs[xte_count].intermed->next = NULL;
+  xte_recs[xte_count].intermed->next = nullptr;
   xte_recs[xte_count].intermed->prev = tmpprev;
   if (tmpprev) {
     tmpprev->next = xte_recs[xte_count].intermed;
@@ -152,8 +152,8 @@ void
 compute_xte(struct xte* xte_rec)
 {
   const Waypoint* wpt3 = xte_rec->intermed->wpt;
-  const Waypoint* wpt1 = NULL;
-  const Waypoint* wpt2 = NULL;
+  const Waypoint* wpt1 = nullptr;
+  const Waypoint* wpt2 = nullptr;
   double frac, reslat, reslon;
   /* if no previous, this is an endpoint and must be preserved. */
   if (!xte_rec->intermed->prev) {
@@ -244,10 +244,10 @@ compare_xte(const void* a, const void* b)
 void
 routesimple_head(const route_head* rte)
 {
-  cur_rte = NULL;
+  cur_rte = nullptr;
   /* build array of XTE/wpt xref records */
   xte_count = 0;
-  tmpprev = NULL;
+  tmpprev = nullptr;
   totalerror = 0;
 
   /* short-circuit if we already have fewer than the max points */
@@ -420,6 +420,6 @@ filter_vecs_t routesimple_vecs = {
   routesimple_init,
   routesimple_process,
   routesimple_deinit,
-  NULL,
+  nullptr,
   routesimple_args
 };

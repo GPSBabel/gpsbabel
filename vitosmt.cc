@@ -26,8 +26,8 @@
 
 #define MYNAME "vitosmt"
 
-static gbfile*				infile	=NULL;
-static gbfile*				ofs	=NULL;
+static gbfile*				infile	=nullptr;
+static gbfile*				ofs	=nullptr;
 static long				count	=0;
 
 const long				vitosmt_version			=2;
@@ -73,12 +73,12 @@ vitosmt_read()
   long			check1			=-1;
   long			check2			=-2;
   long			check3			=-3;
-  route_head*		route_head		=0;
-  Waypoint*		wpt_tmp		=0;
+  route_head*		route_head		=nullptr;
+  Waypoint*		wpt_tmp		=nullptr;
   double			latrad			=0;
   double			lonrad			=0;
   double			elev			=0;
-  unsigned char*	timestamp		=0;
+  unsigned char*	timestamp		=nullptr;
   struct tm		tmStruct;
   double			seconds			=0.0;
   double			speed			=0.0;
@@ -200,13 +200,13 @@ vitosmt_read()
     if (doing_wpts) {		/* process as waypoints */
       waypt_add(wpt_tmp);
     } else if (doing_rtes) {	/* process as route */
-      if (route_head == NULL)	{
+      if (route_head == nullptr)	{
         route_head = route_head_alloc();
         route_add_head(route_head);
       }
       route_add_wpt(route_head, wpt_tmp);
     } else {				/* default track mode */
-      if (route_head == NULL)	{
+      if (route_head == nullptr)	{
         route_head = route_head_alloc();
         track_add_head(route_head);
       }
@@ -236,7 +236,7 @@ wr_deinit()
 static void
 vitosmt_waypt_pr(const Waypoint* waypointp)
 {
-  unsigned char* 	workbuffer		=0;
+  unsigned char* 	workbuffer		=nullptr;
   size_t			position		=0;
   double			seconds			=0;
 
@@ -315,7 +315,7 @@ vitosmt_waypt_pr(const Waypoint* waypointp)
 static void
 vitosmt_write()
 {
-  unsigned char* 	workbuffer					=0;
+  unsigned char* 	workbuffer					=nullptr;
   size_t			position					=0;
 
   workbuffer = (unsigned char*) xcalloc(vitosmt_headersize,1);
@@ -330,9 +330,9 @@ vitosmt_write()
   if	(doing_wpts) {	/* process as waypoints */
     waypt_disp_all(vitosmt_waypt_pr);
   } else if (doing_rtes) {	/* process as route */
-    route_disp_all(NULL, NULL, vitosmt_waypt_pr);
+    route_disp_all(nullptr, nullptr, vitosmt_waypt_pr);
   } else {		/* default track mode */
-    track_disp_all(NULL, NULL, vitosmt_waypt_pr);
+    track_disp_all(nullptr, nullptr, vitosmt_waypt_pr);
   }
 
 
@@ -365,8 +365,8 @@ ff_vecs_t vitosmt_vecs = {
   wr_deinit,
   vitosmt_read,
   vitosmt_write,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   CET_CHARSET_UTF8, 1	/* do nothing | CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

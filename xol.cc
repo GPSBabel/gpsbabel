@@ -52,7 +52,7 @@ static xg_tag_mapping xol_map[] = {
     { xol_shape, cb_start, XOL "/shapes/*shape" },
     { xol_shape_end, cb_end, XOL "/shapes/*shape" },
     { xol_waypt, cb_start, XOL "/shapes/shape/*points/point" },
-    { NULL, (xg_cb_type)0, NULL} };
+    { nullptr, (xg_cb_type)0, nullptr} };
 
 static void xol_overlay(xg_string, const QXmlStreamAttributes* attrv) {
   if (attrv->hasAttribute("version")) {
@@ -108,12 +108,12 @@ static void xol_shape_end(xg_string, const QXmlStreamAttributes*) {
     } else {
       waypt_add(wpt);
     }
-    wpt = NULL;
+    wpt = nullptr;
   } else if (trk) {
     if (trk->rte_waypt_ct == 0) {
       track_del_head(trk);
     }
-    trk = NULL;
+    trk = nullptr;
   }
 }
 
@@ -132,10 +132,10 @@ static void xol_waypt(xg_string, const QXmlStreamAttributes* attrv) {
 }
 
 static void xol_rd_init(const QString& fname) {
-  trk = NULL;
-  wpt = NULL;
+  trk = nullptr;
+  wpt = nullptr;
 
-  xml_init(fname, xol_map, NULL);
+  xml_init(fname, xol_map, nullptr);
 }
 
 static void xol_read() { xml_read(); }
@@ -147,7 +147,7 @@ static void xol_rd_deinit() { xml_deinit(); }
 static void xol_fatal_outside(const Waypoint* wpt) {
   fatal(MYNAME ": %s (%s) is outside of convertable area \"%s\"!\n",
         wpt->shortname.isEmpty() ? "Waypoint" : qPrintable(wpt->shortname),
-        pretty_deg_format(wpt->latitude, wpt->longitude, 'd', NULL, 0),
+        pretty_deg_format(wpt->latitude, wpt->longitude, 'd', nullptr, 0),
         gt_get_mps_grid_longname(grid_swiss, MYNAME));
 }
 
@@ -179,11 +179,11 @@ static void xol_wr_deinit() {
   mkshort_del_handle(&short_h);
   writer->writeEndDocument();
   delete writer;
-  writer = NULL;
+  writer = nullptr;
 
   oqfile->close();
   delete oqfile;
-  oqfile = NULL;
+  oqfile = nullptr;
 }
 
 static void xol_waypt_disp_cb(const Waypoint* wpt) {
@@ -263,7 +263,7 @@ static void xol_write() {
   double x, y;
 
   waypt_disp_all(xol_waypt_bound_calc);
-  track_disp_all(NULL, NULL, xol_waypt_bound_calc);
+  track_disp_all(nullptr, nullptr, xol_waypt_bound_calc);
 
   if (!waypt_bounds_valid(&all_bounds)) {
     fatal(MYNAME ": No data available!\n");
@@ -305,7 +305,7 @@ ff_vecs_t xol_vecs = {ff_type_file,
                       xol_wr_deinit,
                       xol_read,
                       xol_write,
-                      NULL,
+                      nullptr,
                       xol_args,
                       CET_CHARSET_UTF8,
                       0  , NULL_POS_OPS,

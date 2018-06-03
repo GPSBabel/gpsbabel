@@ -28,11 +28,11 @@
 #include <cstdlib>
 
 static gbfile* file_in;
-static char* nseicon = NULL;
-static char* nsneicon = NULL;
-static char* seicon = NULL;
-static char* sneicon = NULL;
-static char* snmac = NULL;
+static char* nseicon = nullptr;
+static char* nsneicon = nullptr;
+static char* seicon = nullptr;
+static char* sneicon = nullptr;
+static char* snmac = nullptr;
 static int macstumbler;
 
 static void	fix_netstumbler_dupes();
@@ -58,7 +58,7 @@ arglist_t netstumbler_args[] = {
     "Green Diamond", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
-    "snmac", &snmac, "Shortname is MAC address", NULL, ARGTYPE_BOOL,
+    "snmac", &snmac, "Shortname is MAC address", nullptr, ARGTYPE_BOOL,
     ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
@@ -184,7 +184,7 @@ data_read()
         break;
 
       case 8:					/* flags */
-        flags = strtol(field, NULL, 16);
+        flags = strtol(field, nullptr, 16);
         break;
 
       case 11:				/* data rate */
@@ -205,7 +205,7 @@ data_read()
       }
 
       field_num++;
-      field = csv_lineparse(NULL, "\t", "", line_no);
+      field = csv_lineparse(nullptr, "\t", "", line_no);
     }
 
     if (lat == 0 && lon == 0) {	/* skip records with no GPS data */
@@ -338,12 +338,12 @@ ff_vecs_t netstumbler_vecs = {
   ff_type_file,
   { ff_cap_read, ff_cap_none, ff_cap_none },
   rd_init,
-  NULL,
+  nullptr,
   rd_deinit,
-  NULL,
+  nullptr,
   data_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   netstumbler_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

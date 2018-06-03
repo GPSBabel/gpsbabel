@@ -25,9 +25,9 @@
 static gbfile* ofd;
 static QString input_file_name;
 static const char MYNAME[] = "geojson";
-static char* compact_opt = NULL;
-static QJsonObject* track_object = NULL;
-static QJsonArray* track_coords = NULL;
+static char* compact_opt = nullptr;
+static QJsonObject* track_object = nullptr;
+static QJsonArray* track_coords = nullptr;
 
 static const QString FEATURE_COLLECTION = QStringLiteral("FeatureCollection");
 static const QString FEATURE = QStringLiteral("Feature");
@@ -49,7 +49,7 @@ static const QString URLNAME = QStringLiteral("urlname");
 
 static arglist_t geojson_args[] = {
   {"compact", &compact_opt, "Compact Output. Default is off.", 
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr } ,
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr } ,
   ARG_TERMINATOR
 };
 
@@ -109,7 +109,7 @@ geojson_waypt_pr(const Waypoint* waypoint) {
 static void
 geojson_rd_deinit() {
 	gbfclose(ofd);
-	ofd = NULL;
+	ofd = nullptr;
 }
 
 static void
@@ -124,7 +124,7 @@ geojson_wr_deinit() {
   gbfputs(save.toJson(style),ofd);
 
   gbfclose(ofd);
-  ofd = NULL;
+  ofd = nullptr;
   delete feature_collection;
   feature_collection = nullptr;
 }
@@ -300,9 +300,9 @@ static void geojson_track_tlr(const route_head*) {
   (*track_object)[GEOMETRY] = geometry;
   feature_collection->append(*track_object);
   delete track_object;
-  track_object = NULL;
+  track_object = nullptr;
   delete track_coords;
-  track_coords = NULL;
+  track_coords = nullptr;
 }
 
 static void
@@ -324,7 +324,7 @@ ff_vecs_t geojson_vecs = {
   geojson_wr_deinit,
   geojson_read,
   geojson_write,
-  NULL,
+  nullptr,
   geojson_args,
   CET_CHARSET_UTF8, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

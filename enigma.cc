@@ -179,11 +179,11 @@ enigma_waypt_disp(const Waypoint* wpt)
   if (wpt->altitude != unknown_alt) {
     le_write32(&ewpt.data.wp_altitude, METERS_TO_FEET(wpt->altitude) + 1000);
   }
-  if (wpt->shortname != NULL) {
+  if (wpt->shortname != nullptr) {
     ewpt.shortname_len = min(6, strlen(CSTRc(wpt->shortname)));
     strncpy(ewpt.shortname, CSTRc(wpt->shortname), 6);
   }
-  if (wpt->description != NULL) {
+  if (wpt->description != nullptr) {
     ewpt.longname_len = min(27, strlen(CSTRc(wpt->description)));
     strncpy(ewpt.longname, CSTRc(wpt->description), 27);
   }
@@ -193,7 +193,7 @@ enigma_waypt_disp(const Waypoint* wpt)
 static void
 data_write()
 {
-  route_disp_all(NULL, NULL, enigma_waypt_disp);
+  route_disp_all(nullptr, nullptr, enigma_waypt_disp);
 }
 
 static void
@@ -215,7 +215,7 @@ ff_vecs_t enigma_vecs = {
   wr_deinit,
   data_read,
   data_write,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
 };

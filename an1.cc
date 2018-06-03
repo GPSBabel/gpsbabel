@@ -28,15 +28,15 @@
 static gbfile* infile;
 static gbfile* outfile;
 
-static char* output_type = NULL;
-static char* road_changes = NULL;
-static char* nogc = NULL;
-static char* nourl = NULL;
-static char* opt_symbol = NULL;
-static char* opt_color = NULL;
-static char* opt_zoom  = NULL;
-static char* opt_wpt_type = NULL;
-static char* opt_radius = NULL;
+static char* output_type = nullptr;
+static char* road_changes = nullptr;
+static char* nogc = nullptr;
+static char* nourl = nullptr;
+static char* opt_symbol = nullptr;
+static char* opt_color = nullptr;
+static char* opt_zoom  = nullptr;
+static char* opt_wpt_type = nullptr;
+static char* opt_radius = nullptr;
 
 static short output_type_num = 0;
 static short opt_zoom_num = 0;
@@ -53,7 +53,7 @@ typedef struct roadchange {
   char* name;
 } roadchange;
 
-roadchange* roadchanges = NULL;
+roadchange* roadchanges = nullptr;
 
 static
 arglist_t an1_args[] = {
@@ -67,11 +67,11 @@ arglist_t an1_args[] = {
   },
   {
     "nogc", &nogc, "Do not add geocache data to description",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
   },
   {
     "nourl", &nourl, "Do not add URLs to description",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
   },
   {
     "deficon", &opt_symbol, "Symbol to use for point data",
@@ -83,7 +83,7 @@ arglist_t an1_args[] = {
   },
   {
     "zoom", &opt_zoom, "Zoom level to reduce points",
-    NULL, ARGTYPE_INT, ARG_NOMINMAX
+    nullptr, ARGTYPE_INT, ARG_NOMINMAX
   },
   {
     "wpt_type", &opt_wpt_type,
@@ -92,7 +92,7 @@ arglist_t an1_args[] = {
   },
   {
     "radius", &opt_radius, "Radius for circles",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX
   },
   ARG_TERMINATOR
 };
@@ -115,7 +115,7 @@ typedef struct guid {
 static char*
 ReadString(gbfile* f, short len)
 {
-  char* result = NULL;
+  char* result = nullptr;
   result = (char*)xcalloc(1, len + 1);
   if (len) {
     gbfread(result, 1, len, f);
@@ -284,12 +284,12 @@ void Copy_AN1_Waypoint(void** vdwpt, void* vwpt)
 
 static an1_waypoint_record* Alloc_AN1_Waypoint()
 {
-  an1_waypoint_record* result = NULL;
+  an1_waypoint_record* result = nullptr;
   result = (an1_waypoint_record*)xcalloc(sizeof(*result), 1);
   result->fs.type = FS_AN1W;
   result->fs.copy = Copy_AN1_Waypoint;
   result->fs.destroy = Destroy_AN1_Waypoint;
-  result->fs.convert = NULL;
+  result->fs.convert = nullptr;
   return result;
 }
 
@@ -310,12 +310,12 @@ void Copy_AN1_Vertex(void** vdvert, void* vvert)
 
 static an1_vertex_record* Alloc_AN1_Vertex()
 {
-  an1_vertex_record* result = NULL;
+  an1_vertex_record* result = nullptr;
   result = (an1_vertex_record*)xcalloc(sizeof(*result), 1);
   result->fs.type = FS_AN1V;
   result->fs.copy = Copy_AN1_Vertex;
   result->fs.destroy = Destroy_AN1_Vertex;
-  result->fs.convert = NULL;
+  result->fs.convert = nullptr;
   return result;
 }
 
@@ -340,12 +340,12 @@ void Copy_AN1_Line(void** vdline, void* vline)
 
 static an1_line_record* Alloc_AN1_Line()
 {
-  an1_line_record* result = NULL;
+  an1_line_record* result = nullptr;
   result = (an1_line_record*)xcalloc(sizeof(*result), 1);
   result->fs.type = FS_AN1L;
   result->fs.copy = Copy_AN1_Line;
   result->fs.destroy = Destroy_AN1_Line;
-  result->fs.convert = NULL;
+  result->fs.convert = nullptr;
   return result;
 }
 
@@ -430,7 +430,7 @@ static void Read_AN1_Waypoint(gbfile* f, an1_waypoint_record* wpt)
   } else {
     len = ReadShort(f);
     wpt->fontname = ReadString(f, len);
-    wpt->image_name = NULL;
+    wpt->image_name = nullptr;
   }
   ReadGuid(f, &wpt->guid);
   wpt->fontcolor = ReadLong(f);
@@ -688,9 +688,9 @@ static void Read_AN1_Waypoints(gbfile* f)
 {
   unsigned long count = 0;
   unsigned long i = 0;
-  an1_waypoint_record* rec = NULL;
+  an1_waypoint_record* rec = nullptr;
   Waypoint* wpt_tmp;
-  char* icon = NULL;
+  char* icon = nullptr;
   ReadShort(f);
   count = ReadLong(f);
   for (i = 0; i < count; i++) {
@@ -727,7 +727,7 @@ static void Read_AN1_Waypoints(gbfile* f)
     }
 
     fs_chain_add(&(wpt_tmp->fs), (format_specific_data*)rec);
-    rec = NULL;
+    rec = nullptr;
     waypt_add(wpt_tmp);
   }
 }
@@ -737,7 +737,7 @@ Write_One_AN1_Waypoint(const Waypoint* wpt)
 {
   an1_waypoint_record* rec;
   int local;
-  format_specific_data* fs = NULL;
+  format_specific_data* fs = nullptr;
 
   fs = fs_chain_find(wpt->fs, FS_AN1W);
   if (fs) {
@@ -838,8 +838,8 @@ static void Read_AN1_Lines(gbfile* f)
   unsigned long count = 0;
   unsigned long i = 0;
   unsigned long j = 0;
-  an1_line_record* rec = NULL;
-  an1_vertex_record* vert = NULL;
+  an1_line_record* rec = nullptr;
+  an1_vertex_record* vert = nullptr;
   route_head* rte_head;
   Waypoint* wpt_tmp;
 
@@ -906,7 +906,7 @@ Write_One_AN1_Line(const route_head* rte)
 {
   an1_line_record* rec;
   int local;
-  format_specific_data* fs = NULL;
+  format_specific_data* fs = nullptr;
 
   fs = fs_chain_find(rte->fs, FS_AN1L);
 
@@ -946,7 +946,7 @@ Write_One_AN1_Line(const route_head* rte)
   } else {
     rec = Alloc_AN1_Line();
     local = 1;
-    rec->name = NULL;
+    rec->name = nullptr;
     switch (output_type_num) {
       /*  drawing road trail waypoint track  */
     case 1: /* road */
@@ -1003,7 +1003,7 @@ Write_One_AN1_Vertex(const Waypoint* wpt)
 {
   an1_vertex_record* rec;
   int local;
-  format_specific_data* fs = NULL;
+  format_specific_data* fs = nullptr;
 
   fs = fs_chain_find(wpt->fs, FS_AN1V);
 
@@ -1029,8 +1029,8 @@ static void Write_AN1_Lines(gbfile* f)
   WriteShort(f, 2);
   WriteLong(f, route_count()+track_count());
 
-  route_disp_all(Write_One_AN1_Line, NULL, Write_One_AN1_Vertex);
-  track_disp_all(Write_One_AN1_Line, NULL, Write_One_AN1_Vertex);
+  route_disp_all(Write_One_AN1_Line, nullptr, Write_One_AN1_Vertex);
+  track_disp_all(Write_One_AN1_Line, nullptr, Write_One_AN1_Vertex);
 }
 
 static void
@@ -1135,17 +1135,17 @@ Free_Road_Changes()
     }
     xfree(roadchanges);
   }
-  roadchanges = NULL;
+  roadchanges = nullptr;
 }
 
 static void
 Init_Road_Changes()
 {
   int count = 0;
-  char* strType = NULL;
-  char* name = NULL;
-  char* bar = NULL;
-  char* copy = NULL;
+  char* strType = nullptr;
+  char* name = nullptr;
+  char* bar = nullptr;
+  char* copy = nullptr;
   Free_Road_Changes();
 
   if (!road_changes || !road_changes[0]) {
@@ -1163,7 +1163,7 @@ Init_Road_Changes()
   roadchanges = (roadchange*)xmalloc((count+1) * sizeof(roadchange));
 
   roadchanges[count].type = 0;
-  roadchanges[count].name = NULL;
+  roadchanges[count].name = nullptr;
 
   copy = xstrdup(road_changes);
   bar = copy;
@@ -1257,7 +1257,7 @@ ff_vecs_t an1_vecs = {
   wr_deinit,
   my_read,
   my_write,
-  NULL,
+  nullptr,
   an1_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

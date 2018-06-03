@@ -174,7 +174,7 @@ enum {
 
 /**************************************************************************/
 
-static gbfile* fin = NULL, *fout = NULL;
+static gbfile* fin = nullptr, *fout = nullptr;
 struct wprdata WPR;
 struct trldata TRL;
 
@@ -234,10 +234,10 @@ static void swap_wpthdr(struct wpthdr* wpthdr,
 {
   int i;
 
-  if (swap32_func != NULL) {
+  if (swap32_func != nullptr) {
     swap32_func(&wpthdr->id);
   }
-  if (swap16_func != NULL) {
+  if (swap16_func != nullptr) {
     swap16_func(&wpthdr->num);
     swap16_func(&wpthdr->next);
     for (i=0; i<MAXWPT; i++) {
@@ -249,10 +249,10 @@ static void swap_wpthdr(struct wpthdr* wpthdr,
 static void swap_wpt(struct wpt* wpt,
                      void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
-  if (swap16_func != NULL) {
+  if (swap16_func != nullptr) {
     swap16_func(&wpt->usecount);
   }
-  if (swap32_func != NULL) {
+  if (swap32_func != nullptr) {
     swap32_func(&wpt->pt.x);
     swap32_func(&wpt->pt.y);
     swap32_func(&wpt->date);
@@ -265,7 +265,7 @@ static void swap_rtehdr(struct rtehdr* rtehdr,
 {
   int i;
 
-  if (swap16_func != NULL) {
+  if (swap16_func != nullptr) {
     swap16_func(&rtehdr->num);
     swap16_func(&rtehdr->next);
     for (i=0; i<MAXRTE; i++) {
@@ -273,7 +273,7 @@ static void swap_rtehdr(struct rtehdr* rtehdr,
     }
     swap16_func(&rtehdr->rteno);
   }
-  if (swap32_func != NULL) {
+  if (swap32_func != nullptr) {
     swap32_func(&rtehdr->id);
   }
 }
@@ -283,14 +283,14 @@ static void swap_rte(struct rte* rte,
 {
   int i;
 
-  if (swap16_func != NULL) {
+  if (swap16_func != nullptr) {
     swap16_func(&rte->wptnum);
     for (i=0; i<MAXWPTINRTE; i++) {
       swap16_func(&rte->wptidx[i]);
     }
     swap16_func(&rte->reserved);
   }
-  if (swap32_func != NULL) {
+  if (swap32_func != nullptr) {
     swap32_func(&rte->date);
     swap32_func(&rte->time);
   }
@@ -311,12 +311,12 @@ static void wpr_swap(struct wprdata* wprdata)
     swap32_func = rev_bytes;
     break;
   case SWAP_WORDS:		   /* swap words, PDP_ENDIAN */
-    swap16_func = NULL;
+    swap16_func = nullptr;
     swap32_func = sw_words;
     break;
   case SWAP_BYTES:		   /* swap bytes */
     swap16_func = sw_bytes;
-    swap32_func = NULL;
+    swap32_func = nullptr;
     break;
   default:
     return;			   /* never reached */
@@ -335,11 +335,11 @@ static void wpr_swap(struct wprdata* wprdata)
 static void swap_trkhdr(struct trkhdr* trkhdr,
                         void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
-  if (swap16_func != NULL) {
+  if (swap16_func != nullptr) {
     swap16_func(&(trkhdr->totalpt));
     swap16_func(&(trkhdr->next));
   }
-  if (swap32_func != NULL) {
+  if (swap32_func != nullptr) {
     swap32_func(&(trkhdr->occupied));
     swap32_func(&(trkhdr->show));
     swap32_func(&(trkhdr->fill));
@@ -351,11 +351,11 @@ static void swap_loghdr(struct loghdr* loghdr,
 {
   int i;
 
-  if (swap16_func != NULL) {
+  if (swap16_func != nullptr) {
     swap16_func(&(loghdr->num));
     swap16_func(&(loghdr->next));
   }
-  if (swap32_func != NULL) {
+  if (swap32_func != nullptr) {
     swap32_func(&(loghdr->id));
     swap32_func(&(loghdr->date));
     swap32_func(&(loghdr->time));
@@ -370,13 +370,13 @@ static void swap_trklog(struct trklog* trklog,
 {
   int i;
 
-  if (swap16_func != NULL) {
+  if (swap16_func != nullptr) {
     for (i=0; i<MAXPTINTRK; i++) {
       swap16_func(&(trklog->sh[i].speed));
       swap16_func(&(trklog->sh[i].height));
     }
   }
-  if (swap32_func != NULL) {
+  if (swap32_func != nullptr) {
     for (i=0; i<MAXPTINTRK; i++) {
       swap32_func(&(trklog->pt[i].x));
       swap32_func(&(trklog->pt[i].y));
@@ -399,12 +399,12 @@ static void trl_swap(struct trldata* trldata)
     swap32_func = rev_bytes;
     break;
   case SWAP_WORDS:		   /* swap words, PDP_ENDIAN */
-    swap16_func = NULL;
+    swap16_func = nullptr;
     swap32_func = sw_words;
     break;
   case SWAP_BYTES:		   /* swap bytes */
     swap16_func = sw_bytes;
-    swap32_func = NULL;
+    swap32_func = nullptr;
     break;
   default:
     return;                        /* never reached */
@@ -425,14 +425,14 @@ static void str2lab(char* dest, const char* src, int len, const char* fmt,
   int i,j;
 
   j = 0;
-  if (src != NULL) {
+  if (src != nullptr) {
     for (i=0; i<len && src[i] != '\0'; i++) {
       if (isprint(src[i])) {
         dest[j++] = src[i];
       }
     }
   }
-  if (j == 0 && fmt != NULL) {
+  if (j == 0 && fmt != nullptr) {
     snprintf(dest, len, fmt, n);
     j = strlen(dest);
   }
@@ -502,7 +502,7 @@ static Waypoint* get_wpt(struct wprdata* wprdata, unsigned n)
   idx = wpthdr->idx[n];
 
   if (idx == WPT_IDX_NONE || wpthdr->used[idx] == WPT_UNUSED) {
-    return NULL;
+    return nullptr;
   }
   wpt = &(wprdata->wpt[idx]);
 
@@ -548,7 +548,7 @@ static void wpr_read()
   /* waypoints */
   for (i=0; i<MAXWPT; i++) {
     WP = get_wpt(&wprdata, i);
-    if (WP != NULL) {
+    if (WP != nullptr) {
       waypt_add(WP);
     }
   }
@@ -582,7 +582,7 @@ static void wpr_read()
     /* route points */
     for (j=0; j<rte->wptnum; j++) {
       WP = get_wpt(&wprdata, rte->wptidx[j]);
-      if (WP != NULL) {
+      if (WP != nullptr) {
         route_add_wpt(RT, WP);
       }
     }
@@ -662,7 +662,7 @@ static int find_wpt(struct wprdata* wprdata, const Waypoint* WP)
   struct wpt pattern, *wpt;
   int i, wpt_idx;
 
-  str2lab(pattern.name, WP->shortname, WPT_NAME_LEN, NULL, 0);
+  str2lab(pattern.name, WP->shortname, WPT_NAME_LEN, nullptr, 0);
   pattern.pt.x = deg2pt(WP->longitude);
   pattern.pt.y = deg2pt(-WP->latitude);
 
@@ -712,7 +712,7 @@ static int add_wpt(struct wprdata* wprdata, const Waypoint* WP,int isroute)
 
   wpt = &(wprdata->wpt[wpt_idx]);
   str2lab(wpt->name, WP->shortname, WPT_NAME_LEN, "W%05d", wpt_idx);
-  str2lab(wpt->comment, WP->description, WPT_COMMENT_LEN, NULL, 0);
+  str2lab(wpt->comment, WP->description, WPT_COMMENT_LEN, nullptr, 0);
   wpt->pt.x = deg2pt(WP->longitude);
   wpt->pt.y = deg2pt(-WP->latitude);
   wpt->usecount = isroute ? 1 : 0;
@@ -754,8 +754,8 @@ static void wpr_route_hdr(const route_head* RT)
 
   rte = &(WPR.rte[rte_idx]);
   str2lab(rte->name, RT->rte_name, RTE_NAME_LEN, "R%03d", rte_idx);
-  str2lab(rte->comment, RT->rte_desc, RTE_COMMENT_LEN, NULL, 0);
-  pack_time(time(NULL), &(rte->date), &(rte->time));
+  str2lab(rte->comment, RT->rte_desc, RTE_COMMENT_LEN, nullptr, 0);
+  pack_time(time(nullptr), &(rte->date), &(rte->time));
 
   rtehdr->idx[hdr_idx] = rte_idx;
   rtehdr->used[rte_idx] = RTE_USED;
@@ -833,7 +833,7 @@ static void trl_track_hdr(const route_head* TL)
     fatal(MYNAME ": Can't store more than %u tracklogs", MAXTRK);
   }
 
-  if (TL->rte_name != NULL) {
+  if (TL->rte_name != nullptr) {
     strncpy(trkhdr[idx].name, CSTRc(TL->rte_name), TRK_NAME_LEN);
   }
   if (*(trkhdr[idx].name) == '\0') {
@@ -841,7 +841,7 @@ static void trl_track_hdr(const route_head* TL)
   }
   trkhdr[idx].name[TRK_NAME_LEN-1] = '\0';
 
-  if (TL->rte_desc != NULL) {
+  if (TL->rte_desc != nullptr) {
     strncpy(trkhdr[idx].comment, CSTRc(TL->rte_desc), TRK_COMMENT_LEN);
     l = strlen(CSTRc(TL->rte_desc));
     if (l < TRK_COMMENT_LEN-1) {
@@ -930,7 +930,7 @@ static void trl_write()
 
   fill =  0x10000 - 2 * sizeof(struct trklog);
   buf = xmalloc(fill);
-  if (buf == NULL) {
+  if (buf == nullptr) {
     fatal(MYNAME ": Not enough memory\n");
   }
   memset(buf, 0xff, fill);
@@ -945,7 +945,7 @@ static void trl_write()
 
   fill = 0x1000 - sizeof(struct loghdr);
   buf = xmalloc(fill);
-  if (buf == NULL) {
+  if (buf == nullptr) {
     fatal(MYNAME ": Not enough memory\n");
   }
   memset(buf, 0xff, fill);
@@ -967,7 +967,7 @@ static void alan_rd_init(const QString& fname)
 static void alan_rd_deinit()
 {
   gbfclose(fin);
-  fin = NULL;
+  fin = nullptr;
 }
 
 
@@ -979,7 +979,7 @@ static void alan_wr_init(const QString& fname)
 static void alan_wr_deinit()
 {
   gbfclose(fout);
-  fout = NULL;
+  fout = nullptr;
 }
 
 

@@ -204,11 +204,11 @@ subrip_wr_init(const QString& fname)
 
   time_offset = 0;
 
-  prevwpp = NULL;
+  prevwpp = nullptr;
   vspeed = 0;
   gradient = 0;
 
-  if ((opt_gpstime != NULL) && (opt_gpsdate != NULL)) {
+  if ((opt_gpstime != nullptr) && (opt_gpsdate != nullptr)) {
     time(&gpstime_t);
     ptm_gps = gmtime(&gpstime_t);
     if (opt_gpstime) {
@@ -249,14 +249,14 @@ subrip_wr_deinit()
 static void
 subrip_write()
 {
-  track_disp_all(NULL, NULL, subrip_trkpt_pr);
+  track_disp_all(nullptr, nullptr, subrip_trkpt_pr);
 
   /*
    * Due to the necessary hack, one waypoint is still in memory (unless we
    * did not get any waypoints). Check if there is one and, if so, write it.
    */
   if (prevwpp) {
-    subrip_prevwp_pr(NULL);
+    subrip_prevwp_pr(nullptr);
   }
 }
 
@@ -264,9 +264,9 @@ subrip_write()
 
 arglist_t subrip_args[] = {
   // FIXME: document that gps_date and gps_time must be specified together or they will both be ignored and the timestamp of the first trackpoint will be used.
-  {"video_time", &opt_videotime, "Video position for which exact GPS time is known (hhmmss, default is 0:00:00)", 0, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  {"gps_time", &opt_gpstime, "GPS time at position video_time (hhmmss, default is first timestamp of track)", 0, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  {"gps_date", &opt_gpsdate, "GPS date at position video_time (hhmmss, default is first timestamp of track)", 0, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  {"video_time", &opt_videotime, "Video position for which exact GPS time is known (hhmmss, default is 0:00:00)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  {"gps_time", &opt_gpstime, "GPS time at position video_time (hhmmss, default is first timestamp of track)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  {"gps_date", &opt_gpsdate, "GPS date at position video_time (hhmmss, default is first timestamp of track)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   {"format", &opt_format, "Format for subtitles", "%s km/h %e m\\n%t %l", ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
@@ -276,13 +276,13 @@ arglist_t subrip_args[] = {
 ff_vecs_t subrip_vecs = {
   ff_type_file,
   { ff_cap_none, ff_cap_write, ff_cap_none }, // waypoints, track, route; for now, we just do tracks
-  NULL,
+  nullptr,
   subrip_wr_init,
-  NULL,
+  nullptr,
   subrip_wr_deinit,
-  NULL,
+  nullptr,
   subrip_write,
-  NULL,
+  nullptr,
   subrip_args,
   CET_CHARSET_ASCII, 0
   , NULL_POS_OPS,

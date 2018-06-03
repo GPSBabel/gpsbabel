@@ -35,7 +35,7 @@ rd_init(const QString& fname)
 
 double wppos_to_dec(char* value)
 {
-  if (strstr(value, "\xB0") == NULL) {
+  if (strstr(value, "\xB0") == nullptr) {
     return atof(value);
   } else {
     int degrees, minutes;
@@ -74,13 +74,13 @@ data_read()
       fatal(MYNAME "Invalid name");
     }
     wpt->shortname = s;
-    s = csv_lineparse(NULL, "\\w", "", linecount);
+    s = csv_lineparse(nullptr, "\\w", "", linecount);
     if (!s) {
       fatal(MYNAME "Invalid latitude %s", qPrintable(wpt->shortname));
     }
     wpt->latitude = wppos_to_dec(s);
 
-    s = csv_lineparse(NULL, "\\w", "", linecount);
+    s = csv_lineparse(nullptr, "\\w", "", linecount);
     if (!s) {
       fatal(MYNAME "Invalid longitude %s", qPrintable(wpt->shortname));
     }
@@ -148,8 +148,8 @@ ff_vecs_t pocketfms_wp_vecs = {
   wr_deinit,
   data_read,
   data_write,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

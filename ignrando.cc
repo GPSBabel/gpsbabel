@@ -36,10 +36,10 @@ static int track_num;		/* current index of track within track_disp_all */
 static int xmlpoints;
 
 /* options */
-static char* index_opt = NULL;
+static char* index_opt = nullptr;
 
 static arglist_t ignr_args[] = {
-  {"index", &index_opt, "Index of track to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL , nullptr},
+  {"index", &index_opt, "Index of track to write (if more than one in source)", nullptr, ARGTYPE_INT, "1", nullptr , nullptr},
   ARG_TERMINATOR
 };
 
@@ -58,7 +58,7 @@ xg_tag_mapping ignr_xml_map[] = {
   { ignr_etape_end, 	cb_end, 	"/RANDONNEE/ETAPE" },
   { ignr_etape_pos,	cb_cdata,	"/RANDONNEE/ETAPE/POSITION" },
   { ignr_etape_alt,	cb_cdata,	"/RANDONNEE/ETAPE/ALTITUDE" },
-  { NULL,	(xg_cb_type)0, 		NULL }
+  { nullptr,	(xg_cb_type)0, 		nullptr }
 };
 
 static void
@@ -78,7 +78,7 @@ static xg_callback	ignr_etape_begin, ignr_etape_end;
 static void
 ignr_start(xg_string, const QXmlStreamAttributes*)
 {
-  ignr_xml_error((track != NULL));
+  ignr_xml_error((track != nullptr));
 
   track = route_head_alloc();
   track_add_head(track);
@@ -93,14 +93,14 @@ ignr_nb_etapes(xg_string args, const QXmlStreamAttributes*)
 static void
 ignr_descr(xg_string args, const QXmlStreamAttributes*)
 {
-  ignr_xml_error((track == NULL));
+  ignr_xml_error((track == nullptr));
   track->rte_desc = args;
 }
 
 static void
 ignr_etape_begin(xg_string, const QXmlStreamAttributes*)
 {
-  ignr_xml_error((wpt != NULL));
+  ignr_xml_error((wpt != nullptr));
 
   wpt = new Waypoint;
 }
@@ -108,16 +108,16 @@ ignr_etape_begin(xg_string, const QXmlStreamAttributes*)
 static void
 ignr_etape_end(xg_string, const QXmlStreamAttributes*)
 {
-  ignr_xml_error((track == NULL) || (wpt == NULL));
+  ignr_xml_error((track == nullptr) || (wpt == nullptr));
 
   track_add_wpt(track, wpt);
-  wpt = NULL;
+  wpt = nullptr;
 }
 
 static void
 ignr_etape_pos(xg_string args, const QXmlStreamAttributes*)
 {
-  ignr_xml_error((wpt == NULL) || (args.isEmpty()));
+  ignr_xml_error((wpt == nullptr) || (args.isEmpty()));
 
   if (2 != sscanf(CSTRc(args), "%lf,%lf", &wpt->latitude, &wpt->longitude)) {
     fatal(MYNAME ": Invalid coordinates \"%s\"!\n", qPrintable(args));
@@ -127,8 +127,8 @@ ignr_etape_pos(xg_string args, const QXmlStreamAttributes*)
 static void
 ignr_etape_alt(xg_string args, const QXmlStreamAttributes*)
 {
-  ignr_xml_error((wpt == NULL));
-  if (args == NULL) {
+  ignr_xml_error((wpt == nullptr));
+  if (args == nullptr) {
     return;
   }
 
@@ -142,9 +142,9 @@ ignr_etape_alt(xg_string args, const QXmlStreamAttributes*)
 static void
 ignr_rd_init(const QString& fname)
 {
-  xml_init(fname, ignr_xml_map, NULL);
-  wpt = NULL;
-  track = NULL;
+  xml_init(fname, ignr_xml_map, nullptr);
+  wpt = nullptr;
+  track = nullptr;
 }
 
 static void
@@ -186,7 +186,7 @@ ignr_write_track_hdr(const route_head* track)
 
   gbfprintf(fout, "\t<INFORMATIONS>\n");
   gbfprintf(fout, "\t\t<NB_ETAPES>%d</NB_ETAPES>\n", track->rte_waypt_ct);
-  if (track->rte_desc != NULL) {
+  if (track->rte_desc != nullptr) {
     gbfprintf(fout, "\t\t<DESCRIPTION>%s</DESCRIPTION>\n", CSTRc(track->rte_desc));
   }
   gbfprintf(fout, "\t</INFORMATIONS>\n");
@@ -219,7 +219,7 @@ ignr_write()
   struct tm tm;
   char buff[32];
 
-  if (index_opt != NULL) {
+  if (index_opt != nullptr) {
     track_index = atoi(index_opt);
     if ((track_index < 1) || (track_index > (int) track_count()))
       fatal(MYNAME ": Invalid track index %d (we have currently %d track(s))!\n",
@@ -257,7 +257,7 @@ ff_vecs_t ignr_vecs = {
   ignr_rw_deinit,
   ignr_read,
   ignr_write,
-  NULL,
+  nullptr,
   ignr_args,
   CET_CHARSET_MS_ANSI, 1
   , NULL_POS_OPS,

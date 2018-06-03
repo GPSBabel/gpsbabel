@@ -39,11 +39,11 @@ private:
 public:
   XmlTextCodec();
   static XmlTextCodec *instance;
-  virtual QByteArray name() const;
-  virtual int mibEnum() const;
+  QByteArray name() const override;
+  int mibEnum() const override;
 protected:
-  virtual QByteArray convertFromUnicode(const QChar* chars, int len, QTextCodec::ConverterState* state) const;
-  virtual QString convertToUnicode(const char* chars, int len, QTextCodec::ConverterState* state) const;
+  QByteArray convertFromUnicode(const QChar* chars, int len, QTextCodec::ConverterState* state) const override;
+  QString convertToUnicode(const char* chars, int len, QTextCodec::ConverterState* state) const override;
 };
 
 class XmlStreamWriter : public QXmlStreamWriter

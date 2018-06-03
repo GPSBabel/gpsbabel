@@ -79,7 +79,7 @@ fread_string(gbfile* fd)
   int len = fread_integer(fd);
 
   if (len == 0) {
-    return NULL;
+    return nullptr;
   }
 
   val = (char*) xmalloc(len+1);
@@ -376,7 +376,7 @@ static const char* icon_descr[] = {
   "Deer Tracks", "Tree Stand", "Bridge", "Fence", "Intersection",
   "Non Direct Beacon", "VHF Omni Range", "Vor/Tacan", "Vor-Dme",
   "1st Approach Fix", "Localizer Outer", "Missed Appr. Pt", "Tacan",
-  "CheckPoint", NULL
+  "CheckPoint", nullptr
 };
 
 
@@ -449,8 +449,8 @@ static void
 gtm_wr_init(const QString& fname)
 {
   rt_count = tr_count = 0;
-  track_disp_all(NULL, NULL, count_track_waypts);
-  route_disp_all(NULL, NULL, count_route_waypts);
+  track_disp_all(nullptr, nullptr, count_track_waypts);
+  route_disp_all(nullptr, nullptr, count_route_waypts);
 
   file_out = gbfopen_le(fname, "wb", MYNAME);	/* little endian */
 
@@ -509,9 +509,9 @@ gtm_wr_deinit()
 static void
 gtm_read()
 {
-  route_head* first_trk_head = NULL;
-  route_head* trk_head = NULL;
-  route_head* rte_head = NULL;
+  route_head* first_trk_head = nullptr;
+  route_head* trk_head = nullptr;
+  route_head* rte_head = nullptr;
   Waypoint* wpt;
   int real_tr_count = 0;
   unsigned int icon;
@@ -714,9 +714,9 @@ gtm_write()
   if (waypt_count()) {
     gbfwrite(WAYPOINTSTYLES, 1, sizeof(WAYPOINTSTYLES)-1, file_out);
   }
-  track_disp_all(start_rte, NULL, write_trk_waypt);
-  track_disp_all(write_trk_style, NULL, NULL);
-  route_disp_all(start_rte, NULL, write_rte_waypt);
+  track_disp_all(start_rte, nullptr, write_trk_waypt);
+  track_disp_all(write_trk_style, nullptr, nullptr);
+  route_disp_all(start_rte, nullptr, write_rte_waypt);
 }
 
 static
@@ -733,7 +733,7 @@ ff_vecs_t gtm_vecs = {
   gtm_wr_deinit,
   gtm_read,
   gtm_write,
-  NULL,
+  nullptr,
   gtm_args,
   CET_CHARSET_ASCII, 0, /* CET-REVIEW */
   NULL_POS_OPS,

@@ -116,8 +116,8 @@ sortqueue(queue* qh, int (*cmp)(const queue*, const queue*))
   while (true) {
     p = list;
     oldhead = list;	 /* only used for circular linkage */
-    list = NULL;
-    tail = NULL;
+    list = nullptr;
+    tail = nullptr;
 
     nmerges = 0;  /* count number of merges we do in this pass */
 
@@ -128,7 +128,7 @@ sortqueue(queue* qh, int (*cmp)(const queue*, const queue*))
       psize = 0;
       for (i = 0; i < insize; i++) {
         psize++;
-        q = (q->next == oldhead ? NULL : q->next);
+        q = (q->next == oldhead ? nullptr : q->next);
         if (!q) {
           break;
         }
@@ -150,7 +150,7 @@ sortqueue(queue* qh, int (*cmp)(const queue*, const queue*))
           q = q->next;
           qsize--;
           if (q == oldhead) {
-            q = NULL;
+            q = nullptr;
           }
         } else if (qsize == 0 || !q) {
           /* q is empty; e must come from p. */
@@ -158,7 +158,7 @@ sortqueue(queue* qh, int (*cmp)(const queue*, const queue*))
           p = p->next;
           psize--;
           if (p == oldhead) {
-            p = NULL;
+            p = nullptr;
           }
         } else if (cmp(p,q) <= 0) {
           /* First element of p is
@@ -169,7 +169,7 @@ sortqueue(queue* qh, int (*cmp)(const queue*, const queue*))
           p = p->next;
           psize--;
           if (p == oldhead) {
-            p = NULL;
+            p = nullptr;
           }
         } else {
           /* First element of q is
@@ -180,7 +180,7 @@ sortqueue(queue* qh, int (*cmp)(const queue*, const queue*))
           q = q->next;
           qsize--;
           if (q == oldhead) {
-            q = NULL;
+            q = nullptr;
           }
         }
 

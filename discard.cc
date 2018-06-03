@@ -28,21 +28,21 @@
 #include <cstdlib>
 
 #if FILTERS_ENABLED
-static char* hdopopt = NULL;
-static char* vdopopt = NULL;
-static char* andopt = NULL;
-static char* satopt = NULL;
-static char* fixnoneopt = NULL;
-static char* fixunknownopt = NULL;
-static char* eleminopt = NULL;
-static char* elemaxopt = NULL;
-static char* nameopt = NULL;
+static char* hdopopt = nullptr;
+static char* vdopopt = nullptr;
+static char* andopt = nullptr;
+static char* satopt = nullptr;
+static char* fixnoneopt = nullptr;
+static char* fixunknownopt = nullptr;
+static char* eleminopt = nullptr;
+static char* elemaxopt = nullptr;
+static char* nameopt = nullptr;
 static QRegExp name_regex;
-static char* descopt = NULL;
+static char* descopt = nullptr;
 static QRegExp desc_regex;
-static char* cmtopt = NULL;
+static char* cmtopt = nullptr;
 static QRegExp cmt_regex;
-static char* iconopt = NULL;
+static char* iconopt = nullptr;
 static QRegExp icon_regex;
 
 static double hdopf;
@@ -65,7 +65,7 @@ arglist_t fix_args[] = {
   },
   {
     "hdopandvdop", &andopt, "Link hdop and vdop supression with AND",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "sat", &satopt, "Minimium sats to keep points",
@@ -73,39 +73,39 @@ arglist_t fix_args[] = {
   },
   {
     "fixnone", &fixnoneopt, "Suppress points without fix",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "fixunknown", &fixunknownopt, "Suppress points with unknown fix",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "elemin", &eleminopt, "Suppress points below given elevation in meters",
-    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "elemax", &elemaxopt, "Suppress points above given elevation in meters",
-    NULL, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "matchname", &nameopt,
-    "Suppress points where name matches given name", NULL, ARGTYPE_STRING,
-    ARG_NOMINMAX, NULL
+    "Suppress points where name matches given name", nullptr, ARGTYPE_STRING,
+    ARG_NOMINMAX, nullptr
   },
   {
     "matchdesc", &descopt,
-    "Suppress points where description matches given name", NULL, ARGTYPE_STRING,
-    ARG_NOMINMAX, NULL
+    "Suppress points where description matches given name", nullptr, ARGTYPE_STRING,
+    ARG_NOMINMAX, nullptr
   },
   {
     "matchcmt", &cmtopt,
-    "Suppress points where comment matches given name", NULL, ARGTYPE_STRING,
-    ARG_NOMINMAX, NULL
+    "Suppress points where comment matches given name", nullptr, ARGTYPE_STRING,
+    ARG_NOMINMAX, nullptr
   },
   {
     "matchicon", &iconopt,
-    "Suppress points where type matches given name", NULL, ARGTYPE_STRING,
-    ARG_NOMINMAX, NULL
+    "Suppress points where type matches given name", nullptr, ARGTYPE_STRING,
+    ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -201,11 +201,11 @@ fix_process()
 
   // Filter tracks
   what = trkdata;
-  track_disp_all(fix_process_head, NULL, fix_process_wpt);
+  track_disp_all(fix_process_head, nullptr, fix_process_wpt);
 
   // And routes
   what = rtedata;
-  route_disp_all(fix_process_head, NULL, fix_process_wpt);
+  route_disp_all(fix_process_head, nullptr, fix_process_wpt);
 
 }
 
@@ -263,8 +263,8 @@ fix_init(const char*)
 filter_vecs_t discard_vecs = {
   fix_init,
   fix_process,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   fix_args
 };
 #endif

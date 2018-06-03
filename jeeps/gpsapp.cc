@@ -212,7 +212,7 @@ static int32 GPS_A000(const char* port)
     return gps_errno;
   }
 
-  GPS_Make_Packet(&tra, LINK_ID[0].Pid_Product_Rqst,NULL,0);
+  GPS_Make_Packet(&tra, LINK_ID[0].Pid_Product_Rqst,nullptr,0);
   if (!GPS_Write_Packet(fd,tra)) {
     return SERIAL_ERROR;
   }
@@ -3935,7 +3935,7 @@ int32 GPS_A301_Get(const char* port, GPS_PTrack** trk, pcb_fn cb, int protoid)
     }
     /* Cheat and don't _really_ pass the trkpt back */
     if (cb) {
-      cb(n, NULL);
+      cb(n, nullptr);
     }
   }
 
@@ -4615,7 +4615,7 @@ void GPS_D311_Send(UC* data, GPS_PTrack trk, int32* len)
   UC* p;
 
   p = data;
-  GPS_Util_Put_Short(p,strtoul(trk->trk_ident, NULL, 0));
+  GPS_Util_Put_Short(p,strtoul(trk->trk_ident, nullptr, 0));
   p += 2;
   *len = p-data;
 
@@ -6380,7 +6380,7 @@ int32 GPS_A906_Get(const char* port, GPS_PLap** lap, pcb_fn cb)
     }
 
     /* Cheat and don't _really_ pass the trkpt back */
-    cb(n, NULL);
+    cb(n, nullptr);
   }
 
   if (!GPS_Packet_Read(fd, &recpkt)) {
@@ -6597,7 +6597,7 @@ int32  GPS_A1006_Get
 
     // Cheat and don't _really_ pass the crs back
     if (cb) {
-      cb(n, NULL);
+      cb(n, nullptr);
     }
   }
 
@@ -6834,7 +6834,7 @@ int32 GPS_A1007_Get(const char* port, GPS_PCourse_Lap** clp, pcb_fn cb)
 
     /* Cheat and don't _really_ pass the trkpt back */
     if (cb) {
-      cb(n, NULL);
+      cb(n, nullptr);
     }
   }
 
@@ -7108,7 +7108,7 @@ int32 GPS_A1008_Get(const char* port, GPS_PCourse_Point** cpt, pcb_fn cb)
 
     /* Cheat and don't _really_ pass the trkpt back */
     if (cb) {
-      cb(n, NULL);
+      cb(n, nullptr);
     }
   }
 
@@ -7374,7 +7374,7 @@ void GPS_D1013_Get(GPS_PCourse_Limits limits, UC* p)
 const char*
 Get_Pkt_Type(US p, US d0, const char** xinfo)
 {
-  *xinfo = NULL;
+  *xinfo = nullptr;
 #define LT LINK_ID[gps_link_type]
   if (p == LT.Pid_Ack_Byte) {
     return "ACK";

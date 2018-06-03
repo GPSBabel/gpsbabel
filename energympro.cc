@@ -214,7 +214,7 @@ rd_init(const QString& fname)
   gbfile* fileorg_in = gbfopen(fname, "rb", MYNAME);
 
   /* copy file to memory stream (needed for seek-ops and piped commands) */
-  file_in = gbfopen(NULL, "wb", MYNAME);
+  file_in = gbfopen(nullptr, "wb", MYNAME);
   gbsize_t size;
   size = gbfcopyfrom(file_in, fileorg_in, 0x7FFFFFFF);
   if(global_opts.debug_level > 1) {
@@ -305,13 +305,13 @@ ff_vecs_t energympro_vecs = {
     ff_cap_none   // routes
   },
 		rd_init,      // rd_init
-		NULL,         // wr_init
+		nullptr,         // wr_init
 		rd_deinit,    // rd_deinit
-		NULL,         // wr_deinit
+		nullptr,         // wr_deinit
 		data_read,    // read
-		NULL,         // write
-		NULL,         // exit
-		NULL,         //args
+		nullptr,         // write
+		nullptr,         // exit
+		nullptr,         //args
 		CET_CHARSET_ASCII, 0  //encode,fixed_encode
 		//NULL                //name dynamic/internal?
 };

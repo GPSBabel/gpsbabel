@@ -38,47 +38,47 @@
 #define MYNAME	"XCSV"
 #define ISSTOKEN(a,b) (strncmp(a,b, strlen(b)) == 0)
 
-static char* styleopt = NULL;
-static char* snlenopt = NULL;
-static char* snwhiteopt = NULL;
-static char* snupperopt = NULL;
-static char* snuniqueopt = NULL;
-char* prefer_shortnames = NULL;
-char* xcsv_urlbase = NULL;
+static char* styleopt = nullptr;
+static char* snlenopt = nullptr;
+static char* snwhiteopt = nullptr;
+static char* snupperopt = nullptr;
+static char* snuniqueopt = nullptr;
+char* prefer_shortnames = nullptr;
+char* xcsv_urlbase = nullptr;
 static char* opt_datum;
 
-static const char* intstylebuf = NULL;
+static const char* intstylebuf = nullptr;
 
 static
 arglist_t xcsv_args[] = {
   {
-    "style", &styleopt, "Full path to XCSV style file", NULL,
+    "style", &styleopt, "Full path to XCSV style file", nullptr,
     ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
-    "snlen", &snlenopt, "Max synthesized shortname length", NULL,
-    ARGTYPE_INT, "1", NULL, nullptr
+    "snlen", &snlenopt, "Max synthesized shortname length", nullptr,
+    ARGTYPE_INT, "1", nullptr, nullptr
   },
   {
     "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "snupper", &snupperopt, "UPPERCASE synth. shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "snunique", &snuniqueopt, "Make synth. shortnames unique",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "urlbase", &xcsv_urlbase, "Basename prepended to URL on output",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "prefer_shortnames", &prefer_shortnames,
     "Use shortname instead of description",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "datum", &opt_datum, "GPS datum (def. WGS 84)",
@@ -104,7 +104,7 @@ char_map_t xcsv_char_table[] = {
   { "HASH",  		"#"	},
   { "WHITESPACE",		"\\w"	},
   { "PIPE",		"|"	},
-  { NULL, 		NULL	}
+  { nullptr, 		nullptr	}
 };
 
 void
@@ -216,7 +216,7 @@ xcsv_parse_style_line(char* sbuff)
    */
 
   /* whack off any comments */
-  if ((p = strchr(sbuff, '#')) != NULL) {
+  if ((p = strchr(sbuff, '#')) != nullptr) {
     if ((p > sbuff) && p[-1] == '\\') {
       memmove(p-1, p, strlen(p));
       p[strlen(p)-1] = '\0';
@@ -369,7 +369,7 @@ xcsv_parse_style_line(char* sbuff)
                               } else
 
                                 if (ISSTOKEN(sbuff, "IFIELD")) {
-                                  key = val = pfc = NULL;
+                                  key = val = pfc = nullptr;
 
                                   s = csv_lineparse(&sbuff[6], ",", "", linecount);
 
@@ -393,7 +393,7 @@ xcsv_parse_style_line(char* sbuff)
                                     }
                                     i++;
 
-                                    s = csv_lineparse(NULL, ",", "", linecount);
+                                    s = csv_lineparse(nullptr, ",", "", linecount);
                                   }
 
                                   xcsv_ifield_add(key, val, pfc);
@@ -407,7 +407,7 @@ xcsv_parse_style_line(char* sbuff)
                                    */
                                   if (ISSTOKEN(sbuff, "OFIELD")) {
                                     int options = 0;
-                                    key = val = pfc = NULL;
+                                    key = val = pfc = nullptr;
 
                                     s = csv_lineparse(&sbuff[6], ",", "", linecount);
 
@@ -441,7 +441,7 @@ xcsv_parse_style_line(char* sbuff)
                                         break;
                                       }
                                       i++;
-                                      s = csv_lineparse(NULL, ",", "", linecount);
+                                      s = csv_lineparse(nullptr, ",", "", linecount);
                                     }
 
                                     xcsv_ofield_add(key, val, pfc, options);
@@ -513,7 +513,7 @@ void
 xcsv_read_internal_style(const char* style_buf)
 {
   xcsv_file_init();
-  xcsv_file.is_internal = 1;
+  xcsv_file.is_internal = true;
 
   xcsv_parse_style_buff(style_buf);
 
@@ -580,10 +580,10 @@ xcsv_rd_deinit(void)
 {
   xcsv_file.file->close();
   delete xcsv_file.file;
-  xcsv_file.file = NULL;
+  xcsv_file.file = nullptr;
   delete xcsv_file.stream;
-  xcsv_file.stream = NULL;
-  xcsv_file.codec = NULL;
+  xcsv_file.stream = nullptr;
+  xcsv_file.codec = nullptr;
 
   xcsv_destroy_style();
 }
@@ -660,10 +660,10 @@ xcsv_wr_deinit(void)
   xcsv_file.stream->flush();
   xcsv_file.file->close();
   delete xcsv_file.file;
-  xcsv_file.file = NULL;
+  xcsv_file.file = nullptr;
   delete xcsv_file.stream;
-  xcsv_file.stream = NULL;
-  xcsv_file.codec = NULL;
+  xcsv_file.stream = nullptr;
+  xcsv_file.codec = nullptr;
 
   xcsv_destroy_style();
 }
@@ -703,10 +703,10 @@ ff_vecs_t xcsv_vecs = {
   xcsv_wr_deinit,
   xcsv_data_read,
   xcsv_data_write,
-  NULL,
+  nullptr,
   xcsv_args,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
-  { NULL, NULL, NULL, xcsv_wr_position_init, xcsv_wr_position, xcsv_wr_position_deinit },
+  { nullptr, nullptr, nullptr, xcsv_wr_position_init, xcsv_wr_position, xcsv_wr_position_deinit },
   nullptr 
 
 };

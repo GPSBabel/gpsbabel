@@ -32,13 +32,13 @@
 #define MYNAME "Arc filter"
 
 static double pos_dist;
-static char* distopt = NULL;
-static char* arcfileopt = NULL;
-static char* rteopt = NULL;
-static char* trkopt = NULL;
-static char* exclopt = NULL;
-static char* ptsopt = NULL;
-static char* projectopt = NULL;
+static char* distopt = nullptr;
+static char* arcfileopt = nullptr;
+static char* rteopt = nullptr;
+static char* trkopt = nullptr;
+static char* exclopt = nullptr;
+static char* ptsopt = nullptr;
+static char* projectopt = nullptr;
 
 typedef struct {
   double distance;
@@ -51,31 +51,31 @@ static
 arglist_t arcdist_args[] = {
   {
     "file", &arcfileopt,  "File containing vertices of arc",
-    NULL, ARGTYPE_FILE, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_FILE, ARG_NOMINMAX, nullptr
   },
   {
     "rte", &rteopt, "Route(s) are vertices of arc",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "trk", &trkopt, "Track(s) are vertices of arc",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "distance", &distopt, "Maximum distance from arc",
-    NULL, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
   },
   {
-    "exclude", &exclopt, "Exclude points close to the arc", NULL,
+    "exclude", &exclopt, "Exclude points close to the arc", nullptr,
     ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "points", &ptsopt, "Use distance from vertices not lines",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "project", &projectopt, "Move waypoints to its projection on lines or vertices",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
@@ -90,7 +90,7 @@ arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
   extra_data* ed;
   double dist;
   double prjlat, prjlon, frac;
-  static Waypoint* arcpt1 = NULL;
+  static Waypoint* arcpt1 = nullptr;
 
   if (arcpt2 && arcpt2->latitude != BADVAL && arcpt2->longitude != BADVAL &&
       (ptsopt || (arcpt1 &&
@@ -150,7 +150,7 @@ static void
 arcdist_arc_disp_hdr_cb(const route_head*)
 {
   /* Set arcpt1 to NULL */
-  arcdist_arc_disp_wpt_cb(NULL);
+  arcdist_arc_disp_wpt_cb(nullptr);
 }
 
 void
@@ -169,11 +169,11 @@ arcdist_process()
 
     arcpt1 = new Waypoint;
     arcpt2 = new Waypoint;
-    arcdist_arc_disp_hdr_cb(NULL);
+    arcdist_arc_disp_hdr_cb(nullptr);
 
     arcpt2->latitude = arcpt2->longitude = BADVAL;
     while ((line = gbfgetstr(file_in))) {
-      char* pound = NULL;
+      char* pound = nullptr;
       int argsfound = 0;
 
       fileline++;
@@ -181,7 +181,7 @@ arcdist_process()
       pound = strchr(line, '#');
       if (pound) {
         if (0 == strncmp(pound, "#break", 6)) {
-          arcdist_arc_disp_hdr_cb(NULL);
+          arcdist_arc_disp_hdr_cb(nullptr);
         }
         *pound = '\0';
       }
@@ -203,9 +203,9 @@ arcdist_process()
 
     gbfclose(file_in);
   } else if (rteopt) {
-    route_disp_all(arcdist_arc_disp_hdr_cb, NULL, arcdist_arc_disp_wpt_cb);
+    route_disp_all(arcdist_arc_disp_hdr_cb, nullptr, arcdist_arc_disp_wpt_cb);
   } else if (trkopt) {
-    track_disp_all(arcdist_arc_disp_hdr_cb, NULL, arcdist_arc_disp_wpt_cb);
+    track_disp_all(arcdist_arc_disp_hdr_cb, nullptr, arcdist_arc_disp_wpt_cb);
   }
 
   removed = 0;
@@ -217,9 +217,9 @@ arcdist_process()
 #endif
     extra_data* ed;
     ed = (extra_data*) wp->extra_data;
-    wp->extra_data = NULL;
+    wp->extra_data = nullptr;
     if (ed) {
-      if ((ed->distance >= pos_dist) == (exclopt == NULL)) {
+      if ((ed->distance >= pos_dist) == (exclopt == nullptr)) {
         waypt_del(wp);
         delete wp;
         removed++;
@@ -300,7 +300,7 @@ filter_vecs_t arcdist_vecs = {
   arcdist_init,
   arcdist_process,
   arcdist_deinit,
-  NULL,
+  nullptr,
   arcdist_args
 };
 #endif // FILTERS_ENABLED

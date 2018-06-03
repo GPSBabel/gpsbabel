@@ -36,9 +36,9 @@
 #include "jeeps/gpsmath.h"
 #include "grtcirc.h"
 
-#include <time.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <ctime>
+#include <cstdio>
+#include <cstdlib>
 
 #define MYNAME "stmsdf"
 
@@ -95,7 +95,7 @@ static
 arglist_t stmsdf_args[] = {
   {
     "index", &opt_route_index,
-    "Index of route (if more than one in source)", "1", ARGTYPE_INT, "1", NULL, nullptr
+    "Index of route (if more than one in source)", "1", ARGTYPE_INT, "1", nullptr, nullptr
   },
   ARG_TERMINATOR
 };
@@ -107,12 +107,12 @@ static void
 parse_header(char* line)
 {
   char* str;
-  char* key = NULL;
-  const char* prod = NULL;
+  char* key = nullptr;
+  const char* prod = nullptr;
   int column = -1;
 
   while ((str = csv_lineparse(line, "=", "", lineno))) {
-    line = NULL;
+    line = nullptr;
     column++;
 
     switch (column) {
@@ -149,7 +149,7 @@ parse_header(char* line)
           break;
 
         default:
-          if (prod == NULL) {
+          if (prod == nullptr) {
             prod = "unknown";
           }
           fatal(MYNAME ": Unsupported file type (%s, type %d)!\n", prod, filetype);
@@ -180,7 +180,7 @@ finalize_tracks(void)
   int count = 0;
   queue* elem, *tmp;
   int index;
-  route_head* track = NULL;
+  route_head* track = nullptr;
   int trackno = 0;
 
   count = 0;
@@ -205,26 +205,26 @@ finalize_tracks(void)
   for (index = 0; index < count; index++) {
     Waypoint* wpt = list[index];
     if (wpt->wpt_flags.fmt_use == 2) {	/* log continued */
-      track = NULL;
+      track = nullptr;
     }
-    if (track == NULL) {
+    if (track == nullptr) {
       track = route_head_alloc();
       track_add_head(track);
       trackno++;
-      if (rte_name != NULL) {
+      if (rte_name != nullptr) {
         if (trackno > 1) {
           track->rte_name = QString("%1 (%2)").arg(rte_name).arg(trackno);
         } else {
           track->rte_name = rte_name;
         }
       }
-      if (rte_desc != NULL) {
+      if (rte_desc != nullptr) {
         track->rte_desc = rte_desc;
       }
     }
     track_add_wpt(track, wpt);
     if (wpt->wpt_flags.fmt_use == 1) { /* log pause */
-      track = NULL;
+      track = nullptr;
     }
     wpt->wpt_flags.fmt_use = 0;
   }
@@ -238,7 +238,7 @@ parse_point(char* line)
   char* str;
   int column = -1;
   int what = -1;		/* -1 = unknown, 0 = tp, 1 = mp, 2 = wp, 3 = ap  */
-  Waypoint* wpt = NULL;
+  Waypoint* wpt = nullptr;
   char* cx;
   int hour, min, sec, day, month, year;
 
@@ -246,7 +246,7 @@ parse_point(char* line)
 
   while ((str = csv_lineparse(line, ",", "", lineno))) {
 
-    line = NULL;
+    line = nullptr;
     column++;
 
     switch (column) {
@@ -347,7 +347,7 @@ parse_point(char* line)
     break;
   case 2:
   case 3:
-    if (route == NULL) {
+    if (route == nullptr) {
       route = route_head_alloc();
       route_add_head(route);
     }
@@ -364,7 +364,7 @@ rd_init(const QString& fname)
   fin = gbfopen(fname, "r", MYNAME);
 
   lineno = 0;
-  route = NULL;
+  route = nullptr;
   datum = DATUM_WGS84;
   filetype = 28;
   rte_name = rte_desc = QString();
@@ -399,11 +399,11 @@ data_read(void)
     if (*cin == '[') {
       char* cend = strchr(++cin, ']');
 
-      if (cend != NULL) {
+      if (cend != nullptr) {
         *cend = '\0';
         cin = lrtrim(cin);
       }
-      if ((*cin == '\0') || (cend == NULL)) {
+      if ((*cin == '\0') || (cend == nullptr)) {
         fatal(MYNAME ": Invalid section header!\n");
       }
 
@@ -437,7 +437,7 @@ static void
 calculate(const Waypoint* wpt, double* dist, double* speed, double* course,
           double* asc, double* desc)
 {
-  if (trkpt_out != NULL) {
+  if (trkpt_out != nullptr) {
 
     time_t time;
 
@@ -493,7 +493,7 @@ static void
 any_hdr_calc_cb(const route_head* trk)
 {
 
-  trkpt_out = NULL;
+  trkpt_out = nullptr;
   this_distance = 0;
   this_time = 0;
   this_points = 0;
@@ -540,7 +540,7 @@ any_waypt_calc_cb(const Waypoint* wpt)
   }
 
   this_distance = this_distance + dist;
-  if (trkpt_out != NULL) {
+  if (trkpt_out != nullptr) {
     this_time += (wpt->GetCreationTime().toTime_t() - trkpt_out->GetCreationTime().toTime_t());
   }
 
@@ -567,7 +567,7 @@ track_disp_hdr_cb(const route_head* trk)
   track_index++;
   track_points = 0;
   trk_out = (route_head*)trk;
-  trkpt_out = NULL;
+  trkpt_out = nullptr;
 }
 
 
@@ -586,7 +586,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
   tm = *localtime(&ct);
   strftime(tbuf, sizeof(tbuf), "%d.%m.%Y,%H:%M.%S", &tm);
 
-  calculate(wpt, &dist, &speed, &course, NULL, NULL);
+  calculate(wpt, &dist, &speed, &course, nullptr, nullptr);
   trkpt_dist = trkpt_dist + dist;
 
   if (track_points == trk_out->rte_waypt_ct) {	/* I'm the last in that list */
@@ -601,13 +601,13 @@ track_disp_wpt_cb(const Waypoint* wpt)
 
   if (flag == 1) {
     QString name = wpt->shortname;
-    if (name == NULL) {
+    if (name == nullptr) {
       name = "Log paused";
     }
     gbfprintf(fout, "\"MP\",\"%s\"", CSTR(name));
   } else if (flag == 2) {
     QString name = wpt->shortname;
-    if (name == NULL) {
+    if (name == nullptr) {
       name = "Log continued";
     }
     gbfprintf(fout, "\"MP\",\"%s\"", CSTR(name));
@@ -636,7 +636,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
 static void
 track_disp_tlr_cb(const route_head*)
 {
-  trkpt_out = NULL;
+  trkpt_out = nullptr;
 }
 
 static void
@@ -694,7 +694,7 @@ data_write(void)
 
   rte_name = QString();
   rte_desc = QString();
-  trkpt_out = NULL;
+  trkpt_out = nullptr;
   opt_route_index_value = -1;	/* take all tracks from data pool */
   track_index = 0;
   minalt = -unknown_alt;
@@ -731,7 +731,7 @@ data_write(void)
     gbfprintf(fout, "[POINTS]\n");
     if (route_points > 0) {
       track_index = 0;
-      route_disp_all(route_disp_hdr_cb, NULL, route_disp_wpt_cb);
+      route_disp_all(route_disp_hdr_cb, nullptr, route_disp_wpt_cb);
     }
     break;
 
@@ -777,7 +777,7 @@ data_write(void)
       if (start_time) {
         gbfprintf(fout, "[CUSTOM1]\n");
         track_index = 0;
-        track_disp_all(NULL, NULL, track_disp_custom_cb);
+        track_disp_all(nullptr, nullptr, track_disp_custom_cb);
       }
     }
     break;
@@ -802,7 +802,7 @@ ff_vecs_t stmsdf_vecs = {
   wr_deinit,
   data_read,
   data_write,
-  NULL,
+  nullptr,
   stmsdf_args,
   CET_CHARSET_MS_ANSI, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

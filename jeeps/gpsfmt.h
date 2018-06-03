@@ -3,8 +3,8 @@
 
 
 #include "gps.h"
-#include <stdio.h>
-#include <time.h>
+#include <cstdio>
+#include <ctime>
 
   void   GPS_Fmt_Print_Time(time_t Time, FILE* outf);
   void   GPS_Fmt_Print_Position(double lat, double lon, FILE* outf);

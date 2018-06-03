@@ -88,7 +88,7 @@ typedef struct timeval hp_time;
 
 static void get_time(hp_time* tv)
 {
-  gettimeofday(tv, NULL);
+  gettimeofday(tv, nullptr);
 }
 
 static double elapsed(hp_time* tv)
@@ -97,7 +97,7 @@ static double elapsed(hp_time* tv)
   double ot = (double) tv->tv_sec  * 1000 +
               (double) tv->tv_usec / 1000;
   double nt;
-  gettimeofday(&now, NULL);
+  gettimeofday(&now, nullptr);
   nt = (double) now.tv_sec  * 1000 +
        (double) now.tv_usec / 1000;
   /*printf("elapsed -> %f\n", nt - ot);*/
@@ -166,7 +166,7 @@ failed:
 
   xfree(h);
 
-  return NULL;
+  return nullptr;
 }
 
 /* Close a serial port
@@ -290,7 +290,7 @@ int gbser__fill_buffer(void* handle, unsigned want, unsigned* ms)
     return h->inbuf_used;
   }
 
-  if (NULL == ms || 0 == *ms) {
+  if (nullptr == ms || 0 == *ms) {
     if ((rc = set_rx_timeout(h, 0, 0), rc < 0) ||
         (rc = read(h->fd, h->inbuf + h->inbuf_used,
                    want - h->inbuf_used), rc < 0)) {
@@ -318,7 +318,7 @@ int gbser__fill_buffer(void* handle, unsigned want, unsigned* ms)
       t.tv_sec  = (time_t) time_left / 1000;
       t.tv_usec = ((unsigned) time_left % 1000) * 1000;
 
-      if (select(h->fd + 1, &rec, NULL, NULL, &t) < 0) {
+      if (select(h->fd + 1, &rec, nullptr, nullptr, &t) < 0) {
         return gbser_ERROR;
       }
 

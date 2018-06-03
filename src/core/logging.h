@@ -24,7 +24,7 @@
 
 #include <QtCore/QTextStream>
 #include <QtCore/QFile>
-#include <stdlib.h> //exit()
+#include <cstdlib> //exit()
 
 class Warning {
  public:

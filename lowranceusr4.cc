@@ -257,7 +257,7 @@ lowranceusr4_copy_fsdata(lowranceusr4_fsdata** dest, lowranceusr4_fsdata* src)
 {
   *dest = (lowranceusr4_fsdata*)xmalloc(sizeof(*src));
   ** dest = *src;
-  (*dest)->fs.next = NULL;
+  (*dest)->fs.next = nullptr;
 }
 
 static void
@@ -274,7 +274,7 @@ lowranceusr4_alloc_fsdata()
   fsdata->fs.type = FS_LOWRANCEUSR4;
   fsdata->fs.copy = (fs_copy) lowranceusr4_copy_fsdata;
   fsdata->fs.destroy = lowranceusr4_free_fsdata;
-  fsdata->fs.convert = NULL;
+  fsdata->fs.convert = nullptr;
 
   fsdata->uid_unit = 0;
   fsdata->uid_seq_low = 0;
@@ -479,7 +479,7 @@ lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
 #if !NEWQ
   queue* elem, *tmp;
 #endif
-  lowranceusr4_fsdata* fs = NULL;
+  lowranceusr4_fsdata* fs = nullptr;
 
 #if NEWQ
   // Iterate with waypt_disp_all?
@@ -501,7 +501,7 @@ lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
     printf(MYNAME " lowranceusr4_find_waypt: warning, failed finding waypoint with ids %d %d %d\n",
            uid_unit, uid_seq_low, uid_seq_high);
   }
-  return NULL;
+  return nullptr;
 }
 
 static void
@@ -847,9 +847,9 @@ lowranceusr4_write_waypoints()
      also all routes */
   waypt_table_sz = 0;
   waypt_table_ct = 0;
-  waypt_table = NULL;
+  waypt_table = nullptr;
   waypt_disp_all(register_waypt);
-  route_disp_all(NULL, NULL, register_waypt);
+  route_disp_all(nullptr, nullptr, register_waypt);
 
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " writing %d waypoints\n", waypt_table_ct);
@@ -1014,7 +1014,7 @@ lowranceusr4_write_trails()
   }
   gbfputint32(track_count(), file_out);
   track_uid = 0;
-  track_disp_all(lowranceusr4_write_track_hdr, NULL, lowranceusr4_write_track_waypt);
+  track_disp_all(lowranceusr4_write_track_hdr, nullptr, lowranceusr4_write_track_waypt);
 }
 
 static void
@@ -1040,7 +1040,7 @@ data_write()
   lowranceusr4_writestr(opt_title, file_out, 1);
 
   /* date string */
-  now = time(NULL);
+  now = time(nullptr);
   now_tm = gmtime(&now);
   sprintf(buf, "%d/%d/%d", now_tm->tm_mon+1, now_tm->tm_mday, now_tm->tm_year+1900);
   lowranceusr4_writestr(buf, file_out, 1);
@@ -1074,7 +1074,7 @@ ff_vecs_t lowranceusr4_vecs = {
   wr_deinit,
   data_read,
   data_write,
-  NULL,
+  nullptr,
   lowranceusr4_args,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,

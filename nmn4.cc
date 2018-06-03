@@ -43,7 +43,7 @@ static char* index_opt;
 
 static
 arglist_t nmn4_args[] = {
-  {"index", &index_opt, "Index of route to write (if more than one in source)", NULL, ARGTYPE_INT, "1", NULL , nullptr},
+  {"index", &index_opt, "Index of route to write (if more than one in source)", nullptr, ARGTYPE_INT, "1", nullptr , nullptr},
   ARG_TERMINATOR
 };
 
@@ -95,7 +95,7 @@ nmn4_read_data()
 
     column = -1;
     c = csv_lineparse(str, "|", "", column++);
-    while (c != NULL) {
+    while (c != nullptr) {
       switch (column) {
       case  0: /* "-" */	/* unknown fields for the moment */
       case  1: /* "-" */
@@ -176,7 +176,7 @@ nmn4_read_data()
         break;
 
       }
-      c = QString::fromLatin1(csv_lineparse(NULL, "|", "", column++));
+      c = QString::fromLatin1(csv_lineparse(nullptr, "|", "", column++));
     }
     route_add_wpt(route, wpt);
   }
@@ -229,7 +229,7 @@ nmn4_write_data()
 
   target_rte_num = 1;
 
-  if (index_opt != NULL) {
+  if (index_opt != nullptr) {
     target_rte_num = atoi(index_opt);
     is_fatal(((target_rte_num > (int) route_count()) || (target_rte_num < 1)),
              MYNAME ": invalid route number %d (1..%d))!\n", target_rte_num, route_count());
@@ -289,7 +289,7 @@ ff_vecs_t nmn4_vecs = {
   nmn4_wr_deinit,
   nmn4_read,
   nmn4_write,
-  NULL,
+  nullptr,
   nmn4_args,
   CET_CHARSET_MS_ANSI, 1	/* CET-REVIEW */
   , NULL_POS_OPS,

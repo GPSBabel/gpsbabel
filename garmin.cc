@@ -42,16 +42,16 @@ static GPS_PWay* cur_tx_routelist_entry;
 static GPS_PTrack* tx_tracklist;
 static GPS_PTrack* cur_tx_tracklist_entry;
 static int my_track_count = 0;
-static char* getposn = NULL;
-static char* poweroff = NULL;
-static char* eraset = NULL;
-static char* resettime = NULL;
-static char* snlen = NULL;
-static char* snwhiteopt = NULL;
-static char* deficon = NULL;
-static char* category = NULL;
-static char* categorybitsopt = NULL;
-static char* baudopt = NULL;
+static char* getposn = nullptr;
+static char* poweroff = nullptr;
+static char* eraset = nullptr;
+static char* resettime = nullptr;
+static char* snlen = nullptr;
+static char* snwhiteopt = nullptr;
+static char* deficon = nullptr;
+static char* category = nullptr;
+static char* categorybitsopt = nullptr;
+static char* baudopt = nullptr;
 static int baud = 0;
 static int categorybits;
 static int receiver_must_upper = 1;
@@ -66,41 +66,41 @@ static const char* valid_waypt_chars = MILITANT_VALID_WAYPT_CHARS " ";
 static
 arglist_t garmin_args[] = {
   {
-    "snlen", &snlen, "Length of generated shortnames", NULL,
-    ARGTYPE_INT, "1", NULL, nullptr
+    "snlen", &snlen, "Length of generated shortnames", nullptr,
+    ARGTYPE_INT, "1", nullptr, nullptr
   },
   {
     "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
-  { "deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  { "deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   {
     "get_posn", &getposn, "Return current position as a waypoint",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "power_off", &poweroff, "Command unit to power itself down",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "erase_t", &eraset, "Erase existing courses when writing new ones",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "resettime", &resettime, "Sync GPS time to computer time",
-    NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "category", &category, "Category number to use for written waypoints",
-    NULL, ARGTYPE_INT, "1", "16", nullptr
+    nullptr, ARGTYPE_INT, "1", "16", nullptr
   },
   {
     "bitscategory", &categorybitsopt, "Bitmap of categories",
-    NULL, ARGTYPE_INT, "1", "65535", nullptr
+    nullptr, ARGTYPE_INT, "1", "65535", nullptr
   },
   {
     "baud", &baudopt, "Speed in bits per second of serial port (baud=9600)",
-    NULL, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
+    nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
 
   ARG_TERMINATOR
 };
@@ -114,7 +114,7 @@ rw_init(const QString& fname)
 {
   int receiver_short_length;
   int receiver_must_upper = 1;
-  const char* receiver_charset = NULL;
+  const char* receiver_charset = nullptr;
 
   if (!mkshort_handle) {
     mkshort_handle = mkshort_new_handle();
@@ -145,11 +145,11 @@ rw_init(const QString& fname)
   }
 
   if (categorybitsopt) {
-    categorybits = strtol(categorybitsopt, NULL, 0);
+    categorybits = strtol(categorybitsopt, nullptr, 0);
   }
 
   if (baudopt) {
-    baud = strtol(baudopt, NULL, 0);
+    baud = strtol(baudopt, nullptr, 0);
     switch (baud) {
       case 9600:
       case 19200:
@@ -330,12 +330,12 @@ static void
 rd_init(const QString& fname)
 {
   if (setjmp(gdx_jmp_buf)) {
-    const char* vec_opts = NULL;
+    const char* vec_opts = nullptr;
     const gdx_info* gi = gdx_get_info();
     gpx_vec = find_vec("gpx", &vec_opts);
     gpx_vec->rd_init(gi->from_device.canon);
   } else {
-    gpx_vec = NULL;
+    gpx_vec = nullptr;
     rw_init(fname);
   }
 }
@@ -354,7 +354,7 @@ rw_deinit()
   }
 
   xfree(portname);
-  portname = NULL;
+  portname = nullptr;
 }
 
 static int
@@ -373,7 +373,7 @@ static void
 waypt_read()
 {
   int i,n;
-  GPS_PWay* way = NULL;
+  GPS_PWay* way = nullptr;
 
   if (getposn) {
     Waypoint* wpt = new Waypoint;
@@ -447,7 +447,7 @@ unsigned int checkWayPointIsAtSplit(Waypoint* wpt, GPS_PLap* laps, int nlaps)
 {
   int result = 0;
 
-  if ((laps != NULL) && (nlaps > 0)) {
+  if ((laps != nullptr) && (nlaps > 0)) {
     int i;
     for (i=(nlaps-1); i >= 0; i--) {
       GPS_PLap lap = laps[i];
@@ -476,11 +476,11 @@ track_read()
 {
   int32 ntracks;
   GPS_PTrack* array;
-  route_head* trk_head = NULL;
+  route_head* trk_head = nullptr;
   int trk_num = 0;
   int i;
   const char* trk_name = "";
-  GPS_PLap* laps = NULL;
+  GPS_PLap* laps = nullptr;
   int nlaps = 0;
   int next_is_new_trkseg = 0;
 
@@ -510,7 +510,7 @@ track_read()
       }
     }
 
-    if (trk_head == NULL || array[i]->ishdr) {
+    if (trk_head == nullptr || array[i]->ishdr) {
       trk_head = route_head_alloc();
       trk_head->rte_num = trk_num;
       trk_head->rte_name = trk_name;
@@ -569,7 +569,7 @@ route_read()
    * RJL:  No, the warning isn't right; GCC's flow analysis is broken.
    * still, it's good taste...
    */
-  route_head* rte_head = NULL;
+  route_head* rte_head = nullptr;
 
   nroutepts = GPS_Command_Get_Route(portname, &array);
 
@@ -577,7 +577,7 @@ route_read()
 #if 1
   for (i = 0; i < nroutepts; i++) {
     if (array[i]->isrte) {
-      char* csrc = NULL;
+      char* csrc = nullptr;
       /* What a horrible API has libjeeps for making this
        * my problem.
        */
@@ -813,7 +813,7 @@ pvt_read(posn_status* posn_status)
   delete wpt;
   GPS_Pvt_Del(&pvt);
 
-  return NULL;
+  return nullptr;
 }
 
 static void
@@ -1272,10 +1272,10 @@ ff_vecs_t garmin_vecs = {
   rw_deinit,
   data_read,
   data_write,
-  NULL,
+  nullptr,
   garmin_args,
   CET_CHARSET_ASCII, 0,
-  { pvt_init, pvt_read, rw_deinit, NULL, NULL, NULL },
+  { pvt_init, pvt_read, rw_deinit, nullptr, nullptr, nullptr },
   nullptr
 };
 

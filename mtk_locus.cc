@@ -72,12 +72,12 @@ ff_vecs_t mtk_locus_vecs = {
     ff_cap_none /* routes */
   },
   mtk_locus_rd_init,
-  NULL,  // write init
+  nullptr,  // write init
   mtk_locus_rd_deinit,
-  NULL,  // write deinit
+  nullptr,  // write deinit
   mtk_locus_read,
-  NULL,  // write
-  NULL, // exit
+  nullptr,  // write
+  nullptr, // exit
   mtk_locus_args,
   CET_CHARSET_ASCII, 0 /* ascii is the expected character set */
   , NULL_POS_OPS,
@@ -128,7 +128,7 @@ mtk_locus_rd_init(const QString& fname)
 
     dbg(1, "Input is a serial port\n");
     read_mode = rm_serial;
-    if ((sfd = gbser_init(qPrintable(fname))) == NULL) {
+    if ((sfd = gbser_init(qPrintable(fname))) == nullptr) {
       fatal(MYNAME ": Can't initialise port \"%s\" (%s)\n", qPrintable(fname), strerror(errno));
     }
     set_baudrate();
@@ -138,7 +138,7 @@ mtk_locus_rd_init(const QString& fname)
 
     dbg(1, "Input is a normal file\n");
     read_mode = rm_file;
-    if ((ffd = gbfopen(fname, "rb", MYNAME)) == NULL) {
+    if ((ffd = gbfopen(fname, "rb", MYNAME)) == nullptr) {
       fatal(MYNAME ": Can't initialise port \"%s\" (%s)\n", qPrintable(fname), strerror(errno));
     }
   }
@@ -187,7 +187,7 @@ mtk_locus_read()
   }
 
   if (strcmp(opt_download, "1") == 0) {
-    send_command(PMTK_Q_LOCUS_DATA ",1", NULL);
+    send_command(PMTK_Q_LOCUS_DATA ",1", nullptr);
 
     while (! download_complete) {
       process_packet();
@@ -271,7 +271,7 @@ read_line()
 
   if (read_mode == rm_file) {
     s = gbfgetstr(ffd);
-    if (s == NULL) {
+    if (s == nullptr) {
       dbg(1, "EOF reached\n");
       download_complete = 1;
       return;
@@ -354,19 +354,19 @@ process_pmtklox()
   static Waypoint* waypt;
 
   token = strtok(line, ",");
-  if ((token == NULL) || (strcmp(token, "$PMTKLOX") != 0)) {
+  if ((token == nullptr) || (strcmp(token, "$PMTKLOX") != 0)) {
     warning("Line %i: Invalid packet id\n", packetnum);
     return;
   }
 
-  loxtype = strtok(NULL, ",");
-  if (loxtype == NULL) {
+  loxtype = strtok(nullptr, ",");
+  if (loxtype == nullptr) {
     warning("Line %i: Missing lox type\n", packetnum);
     return;
   }
 
   if (strcmp(loxtype, "0") == 0) {
-    last_loxsequence = atoi(strtok(NULL, "*")) - 1;
+    last_loxsequence = atoi(strtok(nullptr, "*")) - 1;
     dbg(1, "Line %i: last sequence will be %i\n", packetnum, last_loxsequence);
     return;
   }
@@ -382,7 +382,7 @@ process_pmtklox()
     return;
   }
 
-  loxsequence = atoi(strtok(NULL, ","));
+  loxsequence = atoi(strtok(nullptr, ","));
 
   if (first_loxsequence == -1) {
     first_loxsequence = loxsequence;
@@ -395,14 +395,14 @@ process_pmtklox()
     printf("Downloading packet %i of %i\r", loxsequence, last_loxsequence);
   }
 
-  token = strtok(NULL, ",");
+  token = strtok(nullptr, ",");
   fixnum = 0;
-  while (token != NULL) {
+  while (token != nullptr) {
     fixnum++;
     bytenum = 0;
     calculated_checksum = 0;
     for (wordnum=0; wordnum<4; wordnum++) {  // 4 8-byte hex strings per fix
-      if (token == NULL) {
+      if (token == nullptr) {
         dbg(1, "Line %i: Fix %i incomplete data\n", packetnum, fixnum);
         return;
       }
@@ -411,7 +411,7 @@ process_pmtklox()
         fixbytes[bytenum++] = hexval;
         calculated_checksum ^= hexval;
       }
-      token = strtok(NULL, ",");
+      token = strtok(nullptr, ",");
     }
 
     if (calculated_checksum != 0) {
@@ -475,30 +475,30 @@ process_pmtklog()
 
   strtok(line, ",");
 
-  printf("Serial#:  %s\n", strtok(NULL, ","));
+  printf("Serial#:  %s\n", strtok(nullptr, ","));
 
-  type = atoi(strtok(NULL, ","));
+  type = atoi(strtok(nullptr, ","));
   if (type == 0) {
     printf("Type:     %i (wrap around when full)\n", type);
   } else {
     printf("Type:     %i (stop when full)\n", type);
   }
 
-  printf("Mode:     0x%02X\n", atoi(strtok(NULL, ",")));
-  printf("Content:  %s\n", strtok(NULL, ","));
-  printf("Interval: %s seconds\n", strtok(NULL, ","));
-  printf("Distance: %s\n", strtok(NULL, ","));
-  printf("Speed:    %s\n", strtok(NULL, ","));
+  printf("Mode:     0x%02X\n", atoi(strtok(nullptr, ",")));
+  printf("Content:  %s\n", strtok(nullptr, ","));
+  printf("Interval: %s seconds\n", strtok(nullptr, ","));
+  printf("Distance: %s\n", strtok(nullptr, ","));
+  printf("Speed:    %s\n", strtok(nullptr, ","));
 
-  status = atoi(strtok(NULL, ","));
+  status = atoi(strtok(nullptr, ","));
   if (status == 0) {
     printf("Status:   %i (enabled)\n", status);
   } else {
     printf("Status:   %i (disabled)\n", status);
   }
 
-  printf("Number:   %s fixes available\n", strtok(NULL, ","));
-  printf("Percent:  %s%% used\n", strtok(NULL, ","));
+  printf("Number:   %s fixes available\n", strtok(nullptr, ","));
+  printf("Percent:  %s%% used\n", strtok(nullptr, ","));
 }
 
 void
@@ -508,8 +508,8 @@ process_pmtk001()
   char* flag;
 
   strtok(line, ",");
-  cmd = strtok(NULL,",");
-  flag = strtok(NULL,",");
+  cmd = strtok(nullptr,",");
+  flag = strtok(nullptr,",");
 
   switch (atoi(flag)) {
   case 0:
@@ -536,7 +536,7 @@ process_pmtk705()
   char* token;
 
   token = strtok(line, ",");
-  token = strtok(NULL,",");
+  token = strtok(nullptr,",");
 
   printf("Firmware: %s\n", token);
 }
@@ -565,7 +565,7 @@ send_command(const char* s, const char* wait_for)
 
   dbg(1, "Sent command: %s\n", cmd);
 
-  if (wait_for == NULL) {
+  if (wait_for == nullptr) {
     waiting_for[0] = '\0';
     return;
   }

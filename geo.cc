@@ -22,7 +22,7 @@
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
 
-static char* deficon = NULL;
+static char* deficon = nullptr;
 static char* nuke_placer;
 static gbfile* ofd;
 static QString ostring;
@@ -30,8 +30,8 @@ static QXmlStreamWriter writer(&ostring);
 
 static
 arglist_t geo_args[] = {
-  {"deficon", &deficon, "Default icon name", NULL, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
-  {"nuke_placer", &nuke_placer, "Omit Placer name", NULL, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
+  {"deficon", &deficon, "Default icon name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
+  {"nuke_placer", &nuke_placer, "Omit Placer name", nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   ARG_TERMINATOR
 };
 
@@ -45,7 +45,7 @@ geocache_container wpt_container(const QString&);
 
 void GeoReadLoc()
 {
-  Waypoint* wpt = NULL;
+  Waypoint* wpt = nullptr;
   QString current_tag;
 
   while (!reader.atEnd()) {
@@ -173,7 +173,7 @@ geo_wr_deinit()
   writer.writeEndDocument();
   gbfputs(ostring,ofd);
   gbfclose(ofd);
-  ofd = NULL;
+  ofd = nullptr;
 }
 
 static void
@@ -265,7 +265,7 @@ ff_vecs_t geo_vecs = {
   geo_wr_deinit,
   geo_read,
   geo_write,
-  NULL,
+  nullptr,
   geo_args,
   CET_CHARSET_UTF8, 0,	/* CET-REVIEW */
   NULL_POS_OPS,

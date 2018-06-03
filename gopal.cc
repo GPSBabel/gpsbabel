@@ -66,15 +66,15 @@ static gbfile* fin, *fout;
 
 static struct tm tm,filenamedate, trackdate;
 time_t		tx;
-static char* optdate=NULL;
-static char* optmaxspeed=NULL;
-static char* optminspeed=NULL;
-static char* optclean= NULL;
+static char* optdate=nullptr;
+static char* optmaxspeed=nullptr;
+static char* optminspeed=nullptr;
+static char* optclean= nullptr;
 static double minspeed,maxspeed;
 static struct tm opt_tm;	/* converted "date" parameter */
 static
 arglist_t gopal_args[] = {
-  {"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", NULL, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
+  {"date", &optdate, "Complete date-free tracks with given date (YYYYMMDD).", nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr },
   {"maxspeed", &optmaxspeed, "The maximum speed (km/h) traveling from waypoint to waypoint.", "200", ARGTYPE_INT, "1", "1000", nullptr },
   {"minspeed", &optminspeed, "The minimum speed (km/h) traveling from waypoint to waypoint. Set >0 to remove duplicate waypoints", "0", ARGTYPE_INT, "0", "999", nullptr },
   {"clean", &optclean, "Cleanup common errors in trackdata", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
@@ -131,7 +131,7 @@ gopal_rd_init(const QString& fname)
     memset(&opt_tm, 0, sizeof(opt_tm));
 
     ck = (char*)strptime(optdate, "%Y%m%d", &opt_tm);
-    if ((ck == NULL) || (*ck != '\0') || (strlen(optdate) != 8)) {
+    if ((ck == nullptr) || (*ck != '\0') || (strlen(optdate) != 8)) {
       fatal(MYNAME ": Invalid date \"%s\"!\n", optdate);
     } else if (opt_tm.tm_year < 70) {
       fatal(MYNAME ": Date \"%s\" is out of range (have to be 19700101 or later)!\n", optdate);
@@ -175,7 +175,7 @@ gopal_read()
   double hmsd,speed;
   int fix, hms;
   route_head* route;
-  Waypoint* wpt, *lastwpt=NULL;
+  Waypoint* wpt, *lastwpt=nullptr;
   double lat_old;
   char tbuffer[64];
   struct tm tm2;
@@ -217,7 +217,7 @@ gopal_read()
     //3801444, 080558, 2.944362, 43.262117, 295.28, 0.12964, 2, 2.900000, 3
     c = csv_lineparse(str, ",", "", column++);
     int millisecs = 0;
-    while (c != NULL) {
+    while (c != nullptr) {
       switch (column) {
       case  0: /* "-" */	/* unknown fields for the moment */
         unsigned long microsecs;
@@ -303,7 +303,7 @@ gopal_read()
       case 11:  // Bearing.  Ignored.
         break;
       }
-      c = csv_lineparse(NULL, ",", "", column++);
+      c = csv_lineparse(nullptr, ",", "", column++);
     }
     line++;
 
@@ -314,7 +314,7 @@ gopal_read()
     }
     //calculate the speed to reach this waypoint from the last. This way I try to sort out invalid waypoints
     speed=0;
-    if (lastwpt !=NULL) {
+    if (lastwpt !=nullptr) {
       speed=3.6*radtometers(gcdist(RAD(lastwpt->latitude), RAD(lastwpt->longitude), RAD(wpt->latitude), RAD(wpt->longitude))) /
             abs((int)(wpt->creation_time.toTime_t() - lastwpt->GetCreationTime().toTime_t()));
       //printf("speed line %d %lf \n",line,speed);

@@ -30,7 +30,7 @@
 #define TM_YEAR_ZERO	1900
 #define TM_MONTH_ZERO	1
 
-static gbfile*			infile	= 0;
+static gbfile*			infile	= nullptr;
 static int				count	= 0;
 
 static const int			vitovtt_version				= 3;
@@ -58,8 +58,8 @@ static void
 vitovtt_read()
 {
   int				version			= 0;
-  route_head*		route_head		= 0;
-  Waypoint*		wpt_tmp		= 0;
+  route_head*		route_head		= nullptr;
+  Waypoint*		wpt_tmp		= nullptr;
   int				scaled_lat		= 0;
   int				scaled_lon		= 0;
   double			altitude		= 0;
@@ -125,13 +125,13 @@ ff_vecs_t vitovtt_vecs = {
   ff_type_file,
   { ff_cap_none, ff_cap_read, ff_cap_none },
   rd_init,
-  NULL,
+  nullptr,
   rd_deinit,
-  NULL,
+  nullptr,
   vitovtt_read,
-  NULL,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
+  nullptr,
   CET_CHARSET_UTF8, 1	/* do nothing | CET-REVIEW */
   , NULL_POS_OPS,
   nullptr

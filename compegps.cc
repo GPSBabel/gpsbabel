@@ -61,10 +61,10 @@
 #include "csv_util.h"
 
 #if CSVFMTS_ENABLED
-#include <math.h>
+#include <cmath>
 #include "jeeps/gpsmath.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstdlib>
+#include <cstdio>
 
 #define MYNAME "CompeGPS"
 
@@ -92,19 +92,19 @@ static
 arglist_t compegps_args[] = {
   {
     "deficon", &option_icon, "Default icon name",
-    NULL, ARGTYPE_STRING, ARG_NOMINMAX
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX
   },
   {
     "index", &option_index, "Index of route/track to write (if more than one in source)",
-    NULL, ARGTYPE_INT, "1", NULL
+    nullptr, ARGTYPE_INT, "1", nullptr
   },
   {
     "radius", &option_radius, "Give points (waypoints/route points) a default radius (proximity)",
-    NULL, ARGTYPE_FLOAT, "0", NULL
+    nullptr, ARGTYPE_FLOAT, "0", nullptr
   },
   {
     "snlen", &option_snlen, "Length of generated shortnames (default 16)",
-    "16", ARGTYPE_INT, "1", NULL
+    "16", ARGTYPE_INT, "1", nullptr
   },
   ARG_TERMINATOR
 };
@@ -169,7 +169,7 @@ parse_wpt(char* buff)
   }
 
   c = csv_lineparse(buff, " ", "", col++);
-  while (c != NULL) {
+  while (c != nullptr) {
     c = lrtrim(c);
     if (*c != '\0') {
 #if 0
@@ -187,10 +187,10 @@ parse_wpt(char* buff)
         }
         break;
       case 2:
-        human_to_dec(c, &wpt->latitude, NULL, 1);
+        human_to_dec(c, &wpt->latitude, nullptr, 1);
         break;
       case 3:
-        human_to_dec(c, NULL, &wpt->longitude, 2);
+        human_to_dec(c, nullptr, &wpt->longitude, 2);
         break;
         // Older compegps used a dumb constant.
         // Report are that 2010-era writes a sensible
@@ -221,7 +221,7 @@ parse_wpt(char* buff)
         }
       }
     }
-    c = csv_lineparse(NULL, " ", "", col++);
+    c = csv_lineparse(nullptr, " ", "", col++);
   }
   fix_datum(&wpt->latitude, &wpt->longitude);
   return wpt;
@@ -235,7 +235,7 @@ parse_wpt_info(const char* buff, Waypoint* wpt)		/* "w" */
   double fx;
 
   c = csv_lineparse(buff, ",", "", col++);
-  while (c != NULL) {
+  while (c != nullptr) {
     c = lrtrim(c);
     if (*c != '\0') {
 #if 0
@@ -267,7 +267,7 @@ parse_wpt_info(const char* buff, Waypoint* wpt)		/* "w" */
         break;
       }
     }
-    c = csv_lineparse(NULL, ",", "", col++);
+    c = csv_lineparse(nullptr, ",", "", col++);
   }
 }
 
@@ -286,7 +286,7 @@ parse_trkpt(char* buff)
 
   memset(&tm, 0, sizeof(tm));
   c = csv_lineparse(buff, " ", "", col++);
-  while (c != NULL) {
+  while (c != nullptr) {
     c = lrtrim(c);
     if (*c != '\0') {
 #if 0
@@ -294,10 +294,10 @@ parse_trkpt(char* buff)
 #endif
       switch (col) {
       case 2:
-        human_to_dec(c, &wpt->latitude, NULL, 1);
+        human_to_dec(c, &wpt->latitude, nullptr, 1);
         break;
       case 3:
-        human_to_dec(c, NULL, &wpt->longitude, 2);
+        human_to_dec(c, nullptr, &wpt->longitude, 2);
         break;
       case 4:
         compegps_parse_date(c, &tm);
@@ -311,7 +311,7 @@ parse_trkpt(char* buff)
         break;
       }
     }
-    c = csv_lineparse(NULL, " ", "", col++);
+    c = csv_lineparse(nullptr, " ", "", col++);
   }
   fix_datum(&wpt->latitude, &wpt->longitude);
   return wpt;
@@ -324,7 +324,7 @@ parse_track_info(const char* buff, route_head* track)	/* "t" */
   int col = -1;
 
   c = csv_lineparse(buff, "|", "", col++);
-  while (c != NULL) {
+  while (c != nullptr) {
     c = lrtrim(c);
     if (*c != '\0') {
 #if 0
@@ -342,7 +342,7 @@ parse_track_info(const char* buff, route_head* track)	/* "t" */
         break;	/* unknown field */
       }
     }
-    c = csv_lineparse(NULL, "|", "", col++);
+    c = csv_lineparse(nullptr, "|", "", col++);
   }
 }
 
@@ -353,7 +353,7 @@ parse_rte_info(const char* buff, route_head* route)	/* "R" */
   int col = -1;
 
   c = csv_lineparse(buff, ",", "", col++);
-  while (c != NULL) {
+  while (c != nullptr) {
     c = lrtrim(c);
     if (*c != '\0') {
 #if 0
@@ -370,7 +370,7 @@ parse_rte_info(const char* buff, route_head* route)	/* "R" */
 
       }
     }
-    c = csv_lineparse(NULL, ",", "", col++);
+    c = csv_lineparse(nullptr, ",", "", col++);
   }
 }
 
@@ -395,9 +395,9 @@ compegps_data_read(void)
   char* buff;
   int line = 0;
   int input_datum;
-  Waypoint* wpt = NULL;
-  route_head* route = NULL;
-  route_head* track = NULL;
+  Waypoint* wpt = nullptr;
+  route_head* route = nullptr;
+  route_head* track = nullptr;
 
   while ((buff = gbfgetstr(fin))) {
     char* cin = buff;
@@ -412,7 +412,7 @@ compegps_data_read(void)
     }
 
     ctail = strchr(cin, ' ');
-    if (ctail == NULL) {
+    if (ctail == nullptr) {
       continue;
     }
     ctail = lrtrim(ctail);
@@ -443,8 +443,8 @@ compegps_data_read(void)
       break;
     case 'W':
       wpt = parse_wpt(ctail);
-      if (wpt != NULL) {
-        if (route != NULL) {
+      if (wpt != nullptr) {
+        if (route != nullptr) {
           route_add_wpt(route, wpt);
         } else {
           waypt_add(wpt);
@@ -452,13 +452,13 @@ compegps_data_read(void)
       }
       break;
     case 'w':
-      is_fatal((wpt == NULL), MYNAME ": No waypoint data before \"%s\"!", cin);
+      is_fatal((wpt == nullptr), MYNAME ": No waypoint data before \"%s\"!", cin);
       parse_wpt_info(ctail, wpt);
       break;
     case 'T':
       wpt = parse_trkpt(ctail);
-      if (wpt != NULL) {
-        if (track == NULL) {
+      if (wpt != nullptr) {
+        if (track == nullptr) {
           track = route_head_alloc();
           track_add_head(track);
         }
@@ -466,7 +466,7 @@ compegps_data_read(void)
       }
       break;
     case 't':
-      if (track != NULL) {
+      if (track != nullptr) {
         parse_track_info(ctail, track);
       }
       break;
@@ -498,13 +498,13 @@ write_waypt_cb(const Waypoint* wpt)
             fabs(wpt->longitude), 0xBA, (wpt->longitude >= 0) ? 'E' : 'W');
   gbfprintf(fout, "27-MAR-62 00:00:00 %.6f",
             (wpt->altitude != unknown_alt) ? wpt->altitude : 0.0);
-  if (wpt->description != NULL) {
+  if (wpt->description != nullptr) {
     gbfprintf(fout, " %s", CSTRc(wpt->description));
   }
   gbfprintf(fout, "\n");
 
   if ((!wpt->icon_descr.isNull()) || (wpt->wpt_flags.proximity) || \
-      (option_icon != NULL)) {
+      (option_icon != nullptr)) {
     gbfprintf(fout, "w  %s,0,0.0,16777215,255,1,7,,%.1f\n",
               wpt->icon_descr.isNull() ? "Waypoint" : CSTR(wpt->icon_descr),
               WAYPT_GET(wpt, proximity, 0));
@@ -521,7 +521,7 @@ write_route_hdr_cb(const route_head* rte)
   }
 
   QString name = rte->rte_name;
-  if (name != NULL) {
+  if (name != nullptr) {
     name = csv_stringclean(name, ",");
   } else {
     name = " ";
@@ -533,7 +533,7 @@ static void
 write_route(void)
 {
   curr_index = 0;
-  route_disp_all(write_route_hdr_cb, NULL, write_waypt_cb);
+  route_disp_all(write_route_hdr_cb, nullptr, write_waypt_cb);
 }
 
 static void
@@ -555,7 +555,7 @@ write_trkpt_cb(const Waypoint* wpt)
 {
   char buff[128];
 
-  if ((curr_index != target_index) || (wpt == NULL)) {
+  if ((curr_index != target_index) || (wpt == nullptr)) {
     return;
   }
 
@@ -591,7 +591,7 @@ write_trkpt_cb(const Waypoint* wpt)
             -1.0);
   if (track_info_flag != 0) {
     track_info_flag = 0;
-    if (curr_track->rte_name != NULL) {
+    if (curr_track->rte_name != nullptr) {
       QString name = csv_stringclean(curr_track->rte_name, "|");
       gbfprintf(fout, "t 4294967295|%s|-1|-1\n", CSTR(name));
     }
@@ -604,7 +604,7 @@ write_track(void)
   curr_index = 0;
 
 //	gbfprintf(fout, "L  +02:00:00\n");
-  track_disp_all(write_track_hdr_cb, NULL, write_trkpt_cb);
+  track_disp_all(write_track_hdr_cb, nullptr, write_trkpt_cb);
   gbfprintf(fout, "F  1234\n");
 }
 
@@ -641,13 +641,13 @@ compegps_data_write(void)
   /* process options */
 
   target_index = 1;
-  if (option_index != NULL) {
+  if (option_index != nullptr) {
     target_index = atoi(option_index);
   }
 
   snlen = 0;
   if (global_opts.synthesize_shortnames != 0) {
-    if (option_snlen != NULL) {
+    if (option_snlen != nullptr) {
       snlen = atoi(option_snlen);
     } else {
       snlen = SHORT_NAME_LENGTH;
@@ -660,16 +660,16 @@ compegps_data_write(void)
   }
 
   radius = -1;
-  if (option_radius != 0) {
+  if (option_radius != nullptr) {
     radius = atof(option_radius);
     is_fatal((radius <= 0.0), MYNAME "Invalid value for radius!");
   }
 
-  if (option_icon != NULL) {
+  if (option_icon != nullptr) {
     if (*option_icon == '\0') {
-      option_icon = NULL;
+      option_icon = nullptr;
     } else if (case_ignore_strcmp(option_icon, "deficon") == 0) {
-      option_icon = NULL;
+      option_icon = nullptr;
     }
   }
 
@@ -702,7 +702,7 @@ ff_vecs_t compegps_vecs = {
   compegps_wr_deinit,
   compegps_data_read,
   compegps_data_write,
-  NULL,
+  nullptr,
   compegps_args,
   CET_CHARSET_MS_ANSI, 1
   , NULL_POS_OPS,

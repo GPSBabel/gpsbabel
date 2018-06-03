@@ -71,14 +71,14 @@ static
 xg_tag_mapping jogmap_map[] = {
   { jogmap_markers,	cb_start,	"/markers" },
   { jogmap_marker,	cb_start,	"/markers/marker" },
-  { NULL,	(xg_cb_type)0,		NULL }
+  { nullptr,	(xg_cb_type)0,		nullptr }
 };
 
 static void
 jogmap_rd_init(const QString& fname)
 {
-  trk = NULL;
-  xml_init(fname, jogmap_map, NULL);
+  trk = nullptr;
+  xml_init(fname, jogmap_map, nullptr);
 }
 
 static void
@@ -101,12 +101,12 @@ ff_vecs_t jogmap_vecs = {
     ff_cap_none
   },	/* routes */
   jogmap_rd_init,
-  NULL,
+  nullptr,
   jogmap_rd_deinit,
-  NULL,
+  nullptr,
   jogmap_read,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   jogmap_args,
   CET_CHARSET_UTF8, 0
   , NULL_POS_OPS,

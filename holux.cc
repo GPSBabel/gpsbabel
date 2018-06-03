@@ -159,14 +159,14 @@ const char* mknshort(const char* stIn,unsigned int sLen)
 #define MAX_STRINGLEN 255
   static char strOut[MAX_STRINGLEN];
   char strTmp[MAX_STRINGLEN];
-  char* shortstr = NULL;
+  char* shortstr = nullptr;
 
   if (sLen > MAX_STRINGLEN) {
     return (stIn);
   }
 
-  if (stIn == NULL) {
-    return NULL;
+  if (stIn == nullptr) {
+    return nullptr;
   }
 
   setshort_length(mkshort_handle, sLen);
@@ -212,14 +212,14 @@ static void holux_disp(const Waypoint* wpt)
   pWptHxTmp = (WPT*)&HxWFile[OFFS_WPT + (sizeof(WPT) * sIndex)];
 
   memset(pWptHxTmp->name,0x20,sizeof(pWptHxTmp->name));
-  if (wpt->shortname != NULL) {
+  if (wpt->shortname != nullptr) {
     strncpy(pWptHxTmp->name, mknshort(CSTRc(wpt->shortname),sizeof(pWptHxTmp->name)),sizeof(pWptHxTmp->name));
   } else {
     sprintf(pWptHxTmp->name,"W%d",sIndex);
   }
 
   memset(pWptHxTmp->comment,0x20,sizeof(pWptHxTmp->comment));
-  if (wpt->description != NULL) {
+  if (wpt->description != nullptr) {
     strncpy(pWptHxTmp->comment, mknshort(CSTRc(wpt->description),sizeof(pWptHxTmp->comment)),sizeof(pWptHxTmp->comment));
   }
 
@@ -310,8 +310,8 @@ ff_vecs_t holux_vecs = {
   wr_deinit,
   data_read,
   data_write,
-  NULL,
-  NULL,
+  nullptr,
+  nullptr,
   CET_CHARSET_ASCII, 0	/* CET-REVIEW */
   , NULL_POS_OPS,
   nullptr
