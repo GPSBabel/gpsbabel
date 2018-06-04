@@ -77,7 +77,7 @@ struct dg100_command {
   const char* text;	/* Textual description for debugging */
 };
 
-struct dg100_command dg100_commands[] = {
+static struct dg100_command dg100_commands[] = {
   { dg100cmd_getfile,        2, 1024,    2, "getfile" },
   /* the getfileheader answer has variable length, -1 is a dummy value */
   { dg100cmd_getfileheader,  2,   -1,    2, "getfileheader"  },
@@ -89,7 +89,7 @@ struct dg100_command dg100_commands[] = {
   { dg100cmd_gpsmouse,       1,    0,    0, "gpsmouse" }
 };
 
-struct dg100_command dg200_commands[] = {
+static struct dg100_command dg200_commands[] = {
   { dg100cmd_getfile,        2, 1024,    2, "getfile" },
   /* the getfileheader answer has variable length, -1 is a dummy value */
   { dg100cmd_getfileheader,  2,   -1,    2, "getfileheader"  },

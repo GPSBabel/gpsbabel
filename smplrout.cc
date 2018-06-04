@@ -74,7 +74,7 @@ static char* erroropt;
 static char* xteopt;
 static char* lenopt;
 static char* relopt;
-void (*waypt_del_fnp)(route_head* rte, Waypoint* wpt);
+static void (*waypt_del_fnp)(route_head* rte, Waypoint* wpt);
 
 static
 arglist_t routesimple_args[] = {
@@ -116,7 +116,7 @@ struct xte_intermed {
   const Waypoint* wpt;
 };
 
-void
+static void
 free_xte(struct xte* xte_rec)
 {
   xfree(xte_rec->intermed);
@@ -129,7 +129,7 @@ static int xte_count = 0;
 static const route_head* cur_rte = nullptr;
 static struct xte* xte_recs = nullptr;
 
-void
+static void
 routesimple_waypt_pr(const Waypoint* wpt)
 {
   if (!cur_rte) {
@@ -148,7 +148,7 @@ routesimple_waypt_pr(const Waypoint* wpt)
   xte_count++;
 }
 
-void
+static void
 compute_xte(struct xte* xte_rec)
 {
   const Waypoint* wpt3 = xte_rec->intermed->wpt;
@@ -210,7 +210,7 @@ compute_xte(struct xte* xte_rec)
 }
 
 
-int
+static int
 compare_xte(const void* a, const void* b)
 {
   double distdiff = ((struct xte*)a)->distance -
@@ -241,7 +241,7 @@ compare_xte(const void* a, const void* b)
   return 0;
 }
 
-void
+static void
 routesimple_head(const route_head* rte)
 {
   cur_rte = nullptr;
@@ -265,7 +265,7 @@ routesimple_head(const route_head* rte)
 
 }
 
-void
+static void
 shuffle_xte(struct xte* xte_rec)
 {
   struct xte tmp_xte;
@@ -300,7 +300,7 @@ shuffle_xte(struct xte* xte_rec)
   }
 }
 
-void
+static void
 routesimple_tail(const route_head* rte)
 {
   int i;
@@ -372,7 +372,7 @@ routesimple_tail(const route_head* rte)
   xfree(xte_recs);
 }
 
-void
+static void
 routesimple_process()
 {
   waypt_del_fnp = route_del_wpt;
@@ -382,7 +382,7 @@ routesimple_process()
   track_disp_all(routesimple_head, routesimple_tail, routesimple_waypt_pr);
 }
 
-void
+static void
 routesimple_init(const char*)
 {
   count = 0;
@@ -410,7 +410,7 @@ routesimple_init(const char*)
   }
 }
 
-void
+static void
 routesimple_deinit()
 {
   /* do nothing */

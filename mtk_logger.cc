@@ -158,7 +158,7 @@ enum {
   DISTANCE,
 } /* DATA_TYPES */;
 
-struct log_type {
+static struct log_type {
   int id;
   int size;
   const char* name;
@@ -189,7 +189,7 @@ struct log_type {
 struct sat_info {
   char id, used;
   short elevation, azimut, snr;
-} sat_info;
+};
 
 struct data_item {
   time_t timestamp;
@@ -207,14 +207,14 @@ struct data_item {
   unsigned short timestamp_ms;
   double distance;
   struct sat_info sat_data[32];
-} data_item;
+};
 
 struct mtk_loginfo {
   unsigned int bitmask;
   int logLen;
   int period, distance, speed; /* in 10:ths of sec, m, km/h */
   int track_event;
-} mtk_loginfo;
+};
 
 /* *************************************** */
 
@@ -241,7 +241,7 @@ static char* csv_file; /* csv ? command option */
 static char* OPT_block_size_kb; /* block_size_kb ? command option */
 static enum MTK_DEVICE_TYPE mtk_device = MTK_LOGGER;
 
-struct mtk_loginfo mtk_info;
+static struct mtk_loginfo mtk_info;
 
 const char LIVE_CHAR[4] = {'-', '\\','|','/'};
 
@@ -1123,7 +1123,7 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
 
 
 /********************* MTK Logger -- Parse functions *********************/
-int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
+static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
 {
   static int count = 0;
   int i, k, sat_id, hspd;

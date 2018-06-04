@@ -132,7 +132,7 @@ static double last_waypoint_z;
 /*******************************************************************************/
 
 /* Define a global here that we can query from multiple places */
-float tpo_version = 0.0;
+static float tpo_version = 0.0;
 
 /* tpo_check_version_string()
    Check the first bytes of the file for a version 3.0 header. */
@@ -256,7 +256,7 @@ tpo_read_until_section(const char* section_name, int seek_bytes)
 // that is the only type of data available in the version 2.x TPO
 // files.
 //
-void tpo_read_2_x()
+static void tpo_read_2_x()
 {
   char buff[16];
   short track_count, waypoint_count;
@@ -376,7 +376,7 @@ void tpo_read_2_x()
 //
 // For version 3.x files.
 //
-int tpo_read_int()
+static int tpo_read_int()
 {
   unsigned char val;
 
@@ -416,7 +416,7 @@ int tpo_read_int()
 //
 // For version 3.x files.
 //
-int tpo_find_block(unsigned int block_desired)
+static int tpo_find_block(unsigned int block_desired)
 {
   unsigned int block_type;
   unsigned int block_offset;
@@ -453,7 +453,7 @@ int tpo_find_block(unsigned int block_desired)
 //
 // For version 3.x files.
 //
-Waypoint* tpo_convert_ll(int lat, int lon)
+static Waypoint* tpo_convert_ll(int lat, int lon)
 {
   double latitude;
   double longitude;
@@ -510,7 +510,7 @@ public:
 // Track decoder for version 3.x files.  This block contains tracks
 // (called "freehand routes" or just "routes" in Topo).
 //
-void tpo_process_tracks()
+static void tpo_process_tracks()
 {
   unsigned int track_count, track_style_count;
   unsigned int xx,ii,tmp;
@@ -812,12 +812,12 @@ void tpo_process_tracks()
 //
 // For version 3.x files.
 //
-Waypoint** tpo_wp_index;
-unsigned int tpo_index_ptr;
+static Waypoint** tpo_wp_index;
+static unsigned int tpo_index_ptr;
 
 // Waypoint decoder for version 3.x files.
 //
-void tpo_process_waypoints()
+static void tpo_process_waypoints()
 {
   unsigned int waypoint_count;
   unsigned int ii;
@@ -938,7 +938,7 @@ void tpo_process_waypoints()
 
 // Map Notes decoder for version 3.x files.
 //
-void tpo_process_map_notes()
+static void tpo_process_map_notes()
 {
   unsigned int waypoint_count;
   unsigned int ii;
@@ -1055,7 +1055,7 @@ void tpo_process_map_notes()
 
 // Symbols decoder for version 3.x files.
 //
-void tpo_process_symbols()
+static void tpo_process_symbols()
 {
   unsigned int waypoint_count;
   unsigned int ii;
@@ -1110,7 +1110,7 @@ void tpo_process_symbols()
 
 // Text Labels decoder for version 3.x files.
 //
-void tpo_process_text_labels()
+static void tpo_process_text_labels()
 {
   unsigned int waypoint_count;
   unsigned int ii;
@@ -1185,7 +1185,7 @@ void tpo_process_text_labels()
 // with pointers to waypoint objects by tpo_process_waypoints()
 // function above.
 //
-void tpo_process_routes()
+static void tpo_process_routes()
 {
   unsigned int route_count;
   unsigned int ii;
@@ -1280,13 +1280,15 @@ void tpo_process_routes()
 
 
 
+#ifdef DEAD_CODE_IS_REBORN
 // Compass decoder for version 3.x files.
 //
-void tpo_process_compass()
+static void tpo_process_compass()
 {
 
   // Not implemented yet
 }
+#endif
 
 
 
@@ -1296,7 +1298,7 @@ void tpo_process_compass()
 // (called "freehand routes" or just "routes" in Topo), "waypoints",
 // and "gps-routes".  We intend to read all three types.
 //
-void tpo_read_3_x()
+static void tpo_read_3_x()
 {
 
   if (doing_trks) {

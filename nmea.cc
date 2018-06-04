@@ -197,7 +197,7 @@ static int had_checksum;
 static Waypoint* nmea_rd_posn(posn_status*);
 static void nmea_rd_posn_init(const QString& fname);
 
-arglist_t nmea_args[] = {
+static arglist_t nmea_args[] = {
   {"snlen", &snlenopt, "Max length of waypoint name to write", "6", ARGTYPE_INT, "1", "64", nullptr },
   {"gprmc", &opt_gprmc, "Read/write GPRMC sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   {"gpgga", &opt_gpgga, "Read/write GPGGA sentences", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
@@ -772,7 +772,7 @@ double pcmpt_deg(int d)
   return (double) deg + minutes;
 }
 
-void
+static void
 pcmpt_parse(char* ibuf)
 {
   int i, j1, j2, j3, j4, j5, j6;
@@ -926,7 +926,7 @@ notalkerid_strmatch(const char * s1, const char *sentenceFormatterMnemonicCode)
 return strncmp(s1,"$",1) || strncmp(s1+3,sentenceFormatterMnemonicCode,3) || strncmp(s1+6,",",1);
 }
 
-void
+static void
 nmea_parse_one_line(char* ibuf)
 {
   char* ck;
@@ -1252,13 +1252,13 @@ nmea_wayptpr(const Waypoint* wpt)
     gb_sleep(sleepus);
   }
 }
-void
+static void
 nmea_track_init(const route_head*)
 {
   last_time = -1;
 }
 
-void
+static void
 nmea_trackpt_pr(const Waypoint* wpt)
 {
   char obuf[200];

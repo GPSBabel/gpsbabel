@@ -153,7 +153,7 @@ arcdist_arc_disp_hdr_cb(const route_head*)
   arcdist_arc_disp_wpt_cb(nullptr);
 }
 
-void
+static void
 arcdist_process()
 {
   queue* elem, * tmp;
@@ -267,7 +267,7 @@ arcdist_process()
   }
 }
 
-void
+static void
 arcdist_init(const char*)
 {
   char* fm;
@@ -290,7 +290,7 @@ arcdist_init(const char*)
   }
 }
 
-void
+static void
 arcdist_deinit()
 {
   /* do nothing */

@@ -443,7 +443,7 @@ static int lap_read_nop_cb(int, struct GPS_SWay**)
 
 // returns 1 if the waypoint's start_time can be found
 // in the laps array, 0 otherwise
-unsigned int checkWayPointIsAtSplit(Waypoint* wpt, GPS_PLap* laps, int nlaps)
+static unsigned int checkWayPointIsAtSplit(Waypoint* wpt, GPS_PLap* laps, int nlaps)
 {
   int result = 0;
 
@@ -888,7 +888,7 @@ waypt_write_cb(GPS_PWay*)
  * If we're using smart names, try to put the cache info in the
  * description.
  */
-const char*
+static const char*
 get_gc_info(Waypoint* wpt)
 {
   if (global_opts.smart_names) {

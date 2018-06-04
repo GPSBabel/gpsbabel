@@ -46,7 +46,7 @@ typedef enum {
   st_sample_spd,
   num_states
 } state_t;
-state_t state;
+static state_t state;
 #if __cplusplus
 inline state_t operator++(state_t& rs, int)
 {

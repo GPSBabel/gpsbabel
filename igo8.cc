@@ -238,7 +238,7 @@ static void write_igo8_track_point(const Waypoint* wpt)
 
 // Write src unicode str to the dst cstring using unicode characters
 // All lengths are in bytes
-unsigned int print_unicode(char* dst, const unsigned int dst_max_length, short* src, unsigned int src_len)
+static unsigned int print_unicode(char* dst, const unsigned int dst_max_length, short* src, unsigned int src_len)
 {
   // Check to see what length we were passed, if the length doesn't include the null
   // then we make it include the null
@@ -277,7 +277,7 @@ unsigned int print_unicode(char* dst, const unsigned int dst_max_length, short* 
 //                     string, validate that the use of the CET library provides
 //                     conmforming output, remove my old junk converter code.
 
-unsigned int ascii_to_unicode_2(char* dst, const unsigned int dst_max_length, const char* src)
+static unsigned int ascii_to_unicode_2(char* dst, const unsigned int dst_max_length, const char* src)
 {
   short* unicode;
   int len;
@@ -292,7 +292,7 @@ unsigned int ascii_to_unicode_2(char* dst, const unsigned int dst_max_length, co
   return len;
 }
 
-void write_header()
+static void write_header()
 {
   char header[IGO8_HEADER_SIZE] = {'\0'};
   igo8_id_block tmp_id_block;

@@ -133,8 +133,8 @@ typedef struct exif_app_s {
 static gbfile* fin, *fout;
 static queue exif_apps;
 static exif_app_t* exif_app;
-const Waypoint* exif_wpt_ref;
-time_t exif_time_ref;
+static const Waypoint* exif_wpt_ref;
+static time_t exif_time_ref;
 static char exif_success;
 static QString exif_fout_name;
 
@@ -142,7 +142,7 @@ static char* opt_filename, *opt_overwrite, *opt_frame, *opt_name;
 
 static uint8_t writer_gps_tag_version[4] = {2, 0, 0, 0};
 
-arglist_t exif_args[] = {
+static arglist_t exif_args[] = {
   { "filename", &opt_filename, "Set waypoint name to source filename", "Y", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   { "frame", &opt_frame, "Time-frame (in seconds)", "10", ARGTYPE_INT, "0", nullptr, nullptr },
   { "name", &opt_name, "Locate waypoint for tagging by this name", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },

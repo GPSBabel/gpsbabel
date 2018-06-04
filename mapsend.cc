@@ -402,7 +402,7 @@ mapsend_route_disp(const Waypoint* waypointp)
   gbfwrite(&c, 1, 1, mapsend_file_out);
 }
 
-void mapsend_track_hdr(const route_head* trk)
+static void mapsend_track_hdr(const route_head* trk)
 {
   /*
    * we write mapsend v3.0 tracks as mapsend v2.0 tracks get
@@ -452,7 +452,7 @@ void mapsend_track_hdr(const route_head* trk)
 
 }
 
-void mapsend_track_disp(const Waypoint* wpt)
+static void mapsend_track_disp(const Waypoint* wpt)
 {
   unsigned char c;
   int32_t t;
@@ -502,7 +502,7 @@ void mapsend_track_disp(const Waypoint* wpt)
   }
 }
 
-void
+static void
 mapsend_track_write()
 {
   track_disp_all(mapsend_track_hdr, mapsend_noop, mapsend_track_disp);

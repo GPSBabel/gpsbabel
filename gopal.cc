@@ -65,7 +65,7 @@
 static gbfile* fin, *fout;
 
 static struct tm tm,filenamedate, trackdate;
-time_t		tx;
+static time_t		tx;
 static char* optdate=nullptr;
 static char* optmaxspeed=nullptr;
 static char* optminspeed=nullptr;
@@ -83,7 +83,7 @@ arglist_t gopal_args[] = {
 
 #define CHECK_BOOL(a) if (a && (*a == '0')) a = NULL
 
-int gopal_check_line(char* line)
+static int gopal_check_line(char* line)
 {
   char* c = line;
   int i = 0;

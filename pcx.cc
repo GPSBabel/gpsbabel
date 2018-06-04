@@ -356,7 +356,7 @@ static void pcx_route_hdr(const route_head* rte) {
             ";waypts\n");
 }
 
-void pcx_track_disp(const Waypoint* wpt) {
+static void pcx_track_disp(const Waypoint* wpt) {
   double lon, lat;
 
   lon = degrees2ddmm(wpt->longitude);

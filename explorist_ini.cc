@@ -5,11 +5,13 @@
 static inifile_t* inifile;
 static const char myname[] = "explorist";
 
-const char*
+#ifdef DEAD_CODE_IS_REBORN
+static const char*
 explorist_read_value(const char* section, const char* key)
 {
   return inifile_readstr(inifile, section, key);
 }
+#endif
 
 static mag_info*
 explorist_ini_try(const char* path)

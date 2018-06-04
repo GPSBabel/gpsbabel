@@ -256,9 +256,9 @@ wr_buf(const unsigned char* str, int len)
 * %%%        SkyTraq protocol implementation                               %%% *
 *******************************************************************************/
 
-uint8_t NL[2] = { 0x0D, 0x0A };
-uint8_t MSG_START[2] = { 0xA0, 0xA1 };
-uint8_t SECTOR_READ_END[13] = { 'E','N','D', 0, 'C','H','E','C','K','S','U','M','=' };
+static uint8_t NL[2] = { 0x0D, 0x0A };
+static uint8_t MSG_START[2] = { 0xA0, 0xA1 };
+static uint8_t SECTOR_READ_END[13] = { 'E','N','D', 0, 'C','H','E','C','K','S','U','M','=' };
 
 static int
 skytraq_calc_checksum(const unsigned char* buf, int len)
@@ -1469,7 +1469,7 @@ static char* opt_set_poi_car = nullptr;	/* set if a "poi" option was used */
 static char* opt_set_poi_boat = nullptr;	/* set if a "poi" option was used */
 static char* opt_set_poi_heart = nullptr;	/* set if a "poi" option was used */
 static char* opt_set_poi_bar = nullptr;	/* set if a "poi" option was used */
-arglist_t miniHomer_args[] = {
+static arglist_t miniHomer_args[] = {
   { "baud",         &opt_dlbaud,        "Baud rate used for download", "115200", ARGTYPE_INT, "0", "115200", nullptr },
   { "dump-file",    &opt_dump_file,     "Dump raw data to this file", nullptr, ARGTYPE_OUTFILE, ARG_NOMINMAX, nullptr },
   { "erase",        &opt_erase,         "Erase device data after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
@@ -1492,7 +1492,8 @@ static const char* poinames[] = {
   "Home", "Car", "Boat", "Heart", "Bar"
 };
 #define NUMPOI (sizeof poinames/sizeof poinames[0])
-int getPoiByName(char* name)
+#ifdef DEAD_CODE_IS_REBORN
+static int getPoiByName(char* name)
 {
   unsigned int i;
   for (i=0; i<NUMPOI; i++) {
@@ -1502,12 +1503,13 @@ int getPoiByName(char* name)
   }
   return -1;
 }
+#endif
 // Convert lla (lat, lng, alt) to ECEF
 // Algorith taken from these sources:
 // http://www.mathworks.com/matlabcentral/fileexchange/7942-covert-lat-lon-alt-to-ecef-cartesian
 // http://en.wikipedia.org/wiki/Geodetic_system#From_ECEF_to_geodetic
 // http://earth-info.nga.mil/GandG/publications/tr8350.2/wgs84fin.pdf
-void lla2ecef(double lat, double lng, double alt, double* ecef_x, double* ecef_y, double* ecef_z)
+static void lla2ecef(double lat, double lng, double alt, double* ecef_x, double* ecef_y, double* ecef_z)
 {
   long double n;
   long double a = 6378137.0;

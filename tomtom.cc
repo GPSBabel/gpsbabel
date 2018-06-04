@@ -80,10 +80,11 @@ wr_deinit()
 #define read_long(f) gbfgetint32((f))
 #define read_char(f) gbfgetc((f))
 
+#ifdef DEAD_CODE_IS_REBORN
 /*
  *  Decode a type 8 compressed record
  */
-char*
+static char*
 decode_8(int sz, const unsigned char* inbuf)
 {
   static const char encoding_8[] = "X. SaerionstldchumgpbkfzvACBMPG-";
@@ -122,8 +123,10 @@ decode_8(int sz, const unsigned char* inbuf)
   }
   return rval;
 }
+#endif
 
-void
+#ifdef DEAD_CODE_IS_REBORN
+static void
 decode_latlon(double* lat, double* lon)
 {
   unsigned char latbuf[3];
@@ -138,6 +141,7 @@ decode_latlon(double* lat, double* lon)
   *lon = rlon = 123.456;
 
 }
+#endif
 
 static void
 check_recsize(int sz)

@@ -81,7 +81,7 @@ rd_init(const QString& fname)
   file_in = gbfopen_le(fname, "rb", MYNAME);
 }
 
-int32_t decToEnigmaPosition(double val)
+static int32_t decToEnigmaPosition(double val)
 {
   int degrees = fabs(val);
   double frac = fabs(val) - degrees;
@@ -91,7 +91,7 @@ int32_t decToEnigmaPosition(double val)
   return sign * (enigmadeg + enigmafrac);
 }
 
-float enigmaPositionToDec(int32_t val)
+static float enigmaPositionToDec(int32_t val)
 {
   int deg = abs(val) / 180000;
   int enigmafrac = abs(val) % 180000;

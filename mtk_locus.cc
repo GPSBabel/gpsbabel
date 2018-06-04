@@ -51,7 +51,7 @@ static char* opt_erase;
 static char* opt_status;
 static char* opt_enable;
 
-arglist_t mtk_locus_args[] = {
+static arglist_t mtk_locus_args[] = {
   {"baudrate", &opt_baudrate, "Speed in bits per second of serial port (autodetect=0)", "0", ARGTYPE_INT, ARG_NOMINMAX , nullptr},
   {"download", &opt_download, "Download logged fixes", "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },
   {"erase", &opt_erase, "Erase device data after download", "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr },

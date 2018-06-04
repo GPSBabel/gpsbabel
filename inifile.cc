@@ -49,7 +49,7 @@ typedef struct inifile_section_s {
 #define GPSBABEL_SUBDIR ".gpsbabel"
 
 /* Remember the filename we used so we can include it in errors. */
-QString gbinipathname;
+static QString gbinipathname;
 
 static QString
 find_gpsbabel_inifile(const QString& path)  /* can be empty or NULL */

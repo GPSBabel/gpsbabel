@@ -72,7 +72,7 @@ fread_bool(gbfile* fd)
 #define fread_single(a) gbfgetflt(a)
 #define fread_double(a) gbfgetdbl(a)
 
-QString
+static QString
 fread_string(gbfile* fd)
 {
   char* val;
@@ -99,7 +99,7 @@ fread_string_discard(gbfile* fd)
   fread_string(fd);
 }
 
-QString
+static QString
 fread_fixedstring(gbfile* fd, int len)
 {
   char* val = (char*) xmalloc(len+1);
@@ -155,7 +155,7 @@ fwrite_string(gbfile* fd, const QString& str)
   }
 }
 
-void
+static void
 fwrite_fixedstring(gbfile* fd, const char* str, int fieldlen)
 {
   int len = str ? strlen(str) : 0;
@@ -171,7 +171,7 @@ fwrite_fixedstring(gbfile* fd, const char* str, int fieldlen)
   }
 }
 
-void
+static void
 fwrite_fixedstring(gbfile* fd, const QString& str, int fieldlen)
 {
   fwrite_fixedstring(fd, CSTR(str), fieldlen);
@@ -323,7 +323,7 @@ static const int indatum_array[MAX_INDATUM_INDEX] = {
   116 // < 263 : Wake Eniwetok 1960
 };
 
-void set_datum(int n)
+static void set_datum(int n)
 {
   indatum = -1;
   if (n > 0 && n < MAX_INDATUM_INDEX) {
@@ -380,7 +380,7 @@ static const char* icon_descr[] = {
 };
 
 
-void convert_datum(double* lat, double* lon)
+static void convert_datum(double* lat, double* lon)
 {
   double amt;
   if (indatum != -1 && indatum != 118) {

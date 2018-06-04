@@ -28,9 +28,9 @@
 #define MYNAME "validate"
 
 static char* opt_debug;
-bool debug;
+static bool debug;
 static char* opt_checkempty;
-bool checkempty;
+static bool checkempty;
 static unsigned int point_ct;
 static unsigned int head_ct;
 static unsigned int segment_ct_start;

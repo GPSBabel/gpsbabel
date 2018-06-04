@@ -60,7 +60,7 @@
 
  */
 
-struct defguid {
+static struct defguid {
   GUID guid;
   const char* name;
 } default_guids[] = {
@@ -708,7 +708,7 @@ struct defguid {
   },
 };
 
-int FindIconByName(const char* name, GUID* guid)
+static int FindIconByName(const char* name, GUID* guid)
 {
   unsigned int i = 0;
   for (i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++) {
@@ -720,7 +720,7 @@ int FindIconByName(const char* name, GUID* guid)
   return 0;
 }
 
-int FindIconByGuid(GUID* guid, char** name)
+static int FindIconByGuid(GUID* guid, char** name)
 {
   unsigned int i = 0;
   for (i = 0; i < (sizeof(default_guids)/sizeof(struct defguid)); i++) {

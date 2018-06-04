@@ -182,7 +182,7 @@ disp_summary(const gbfile* f)
 
 static char* gdb_fread_cstr(gbfile* fin);
 
-QString fread_cstr()
+static QString fread_cstr()
 {
   QString rv;
   char* s = gdb_fread_cstr(fin);
@@ -361,7 +361,7 @@ gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
 /*******************************************************************************/
 /* TOOLS AND MACROS FOR THE WRITER */
 /*-----------------------------------------------------------------------------*/
-void FWRITE_CSTR(QString a)  {
+static void FWRITE_CSTR(QString a)  {
   if (a.isEmpty()) {
     gbfputc(0, fout);
     return;

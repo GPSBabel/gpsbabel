@@ -242,7 +242,7 @@ bcr_wgs84_to_mercator(const double lat, const double lon, int* north, int* east)
   *east = E;
 }
 
-void
+static void
 bcr_mercator_to_wgs84(const int north, const int east, double* lat, double* lon)
 {
   *lat = 2 * (atan(exp(north / radius)) - M_PI / 4) / M_PI * (double)180;
@@ -356,7 +356,7 @@ bcr_write_wpt(const Waypoint*)
 {
 }
 
-void bcr_write_line(gbfile* fout, const QString& key, int* index, const QString& value)
+static void bcr_write_line(gbfile* fout, const QString& key, int* index, const QString& value)
 {
   if (value.isEmpty()) {			/* this is mostly used in the world of windows */
     /* so we respectfully add a CR/LF on each line */

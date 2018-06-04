@@ -53,7 +53,7 @@ typedef struct roadchange {
   char* name;
 } roadchange;
 
-roadchange* roadchanges = nullptr;
+static roadchange* roadchanges = nullptr;
 
 static
 arglist_t an1_args[] = {
@@ -250,7 +250,7 @@ typedef struct {
 
 static an1_waypoint_record* Alloc_AN1_Waypoint();
 
-void Destroy_AN1_Waypoint(void* vwpt)
+static void Destroy_AN1_Waypoint(void* vwpt)
 {
 
   an1_waypoint_record* wpt = (an1_waypoint_record*)vwpt;
@@ -269,7 +269,7 @@ void Destroy_AN1_Waypoint(void* vwpt)
   xfree(vwpt);
 }
 
-void Copy_AN1_Waypoint(void** vdwpt, void* vwpt)
+static void Copy_AN1_Waypoint(void** vdwpt, void* vwpt)
 {
   an1_waypoint_record* wpt = (an1_waypoint_record*)vwpt;
   an1_waypoint_record* dwpt = Alloc_AN1_Waypoint();
@@ -295,12 +295,12 @@ static an1_waypoint_record* Alloc_AN1_Waypoint()
 
 static an1_vertex_record* Alloc_AN1_Vertex();
 
-void Destroy_AN1_Vertex(void* vvertex)
+static void Destroy_AN1_Vertex(void* vvertex)
 {
   xfree(vvertex);
 }
 
-void Copy_AN1_Vertex(void** vdvert, void* vvert)
+static void Copy_AN1_Vertex(void** vdvert, void* vvert)
 {
   an1_vertex_record* vert = (an1_vertex_record*)vvert;
   an1_vertex_record* dvert = Alloc_AN1_Vertex();
@@ -322,14 +322,14 @@ static an1_vertex_record* Alloc_AN1_Vertex()
 
 static an1_line_record* Alloc_AN1_Line();
 
-void Destroy_AN1_Line(void* vline)
+static void Destroy_AN1_Line(void* vline)
 {
   an1_line_record* line = (an1_line_record*)vline;
   xfree(line->name);
   xfree(vline);
 }
 
-void Copy_AN1_Line(void** vdline, void* vline)
+static void Copy_AN1_Line(void** vdline, void* vline)
 {
   an1_line_record* line = (an1_line_record*)vline;
   an1_line_record* dline = Alloc_AN1_Line();
