@@ -1492,6 +1492,6 @@ static char xmapwpt[] =
 style_vecs_t style_list[] = {{ "xmapwpt", xmapwpt } , { "xmap2006", xmap2006 } , { "xmap", xmap } , { "tomtom_itn_places", tomtom_itn_places } , { "tomtom_itn", tomtom_itn } , { "tomtom_asc", tomtom_asc } , { "tabsep", tabsep } , { "saplus", saplus } , { "s_and_t", s_and_t } , { "ricoh", ricoh } , { "openoffice", openoffice } , { "nima", nima } , { "navigonwpt", navigonwpt } , { "mxf", mxf } , { "motoactv", motoactv } , { "mapconverter", mapconverter } , { "mainnav", mainnav } , { "land_air_sea", land_air_sea } , { "kompass_wp", kompass_wp } , { "kompass_tk", kompass_tk } , { "igoprimo_poi", igoprimo_poi } , { "igo2008_poi", igo2008_poi } , { "iblue757", iblue757 } , { "iblue747", iblue747 } , { "gpsman", gpsman } , { "gpsdrivetrack", gpsdrivetrack } , { "gpsdrive", gpsdrive } , { "geonet", geonet } , { "garmin_poi", garmin_poi } , { "garmin_g1000", garmin_g1000 } , { "garmin301", garmin301 } , { "fugawi", fugawi } , { "flysight", flysight } , { "dna", dna } , { "custom", custom } , { "cup", cup } , { "csv", csv } , { "cambridge", cambridge } , { "arc", arc } ,  {nullptr,nullptr}};
 size_t nstyles = 39;
 #else /* CSVFMTS_ENABLED */
-style_vecs_t style_list[] = {{0,0}};
+style_vecs_t style_list[] = {{nullptr,nullptr}};
 size_t nstyles = 0;
 #endif /* CSVFMTS_ENABLED */

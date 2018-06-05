@@ -38,10 +38,10 @@ do
 	echo "  ;"
 	nstyles=`expr $nstyles + 1`;
 done
-echo "style_vecs_t style_list[] = {$ALIST {0,0}};"
+echo "style_vecs_t style_list[] = {$ALIST {nullptr,nullptr}};"
 echo "size_t nstyles = $nstyles;"
 echo "#else /* CSVFMTS_ENABLED */"
-echo "style_vecs_t style_list[] = {{0,0}};"
+echo "style_vecs_t style_list[] = {{nullptr,nullptr}};"
 echo "size_t nstyles = 0;"
 echo "#endif /* CSVFMTS_ENABLED */"
 
