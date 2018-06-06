@@ -1,0 +1,66 @@
+/*
+    Route reversal filter.
+
+    Copyright (C) 2003 Robert Lipe, robertlipe+source@gpsbabel.org
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
+
+ */
+#include "defs.h"
+#include "filter.h"
+#include "filterdefs.h"
+
+#if FILTERS_ENABLED
+
+#define MYNAME "Route reversal filter"
+
+class ReverseRouteFilter:public Filter
+{
+public:
+  arglist_t* get_args() override
+  {
+    return args;
+  }
+
+private:
+  int prev_new_trkseg;
+  arglist_t args[1] = {
+    ARG_TERMINATOR
+  };
+
+private:
+  void reverse_route_wpt(const Waypoint* waypointp);
+  void reverse_route_head(const route_head* rte);
+
+  static void reverse_route_wpt_glue(const Waypoint* waypointp)
+  {
+    return fObj->reverse_route_wpt(waypointp);
+  }
+  static void reverse_route_head_glue(const route_head* rte)
+  {
+    return fObj->reverse_route_head(rte);
+  }
+  static void setObj(ReverseRouteFilter& obj)
+  {
+    fObj = &obj;
+  }
+  static ReverseRouteFilter* fObj;
+
+public:
+  void process() override;
+  void init(const char*) override;
+
+};
+#endif

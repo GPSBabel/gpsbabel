@@ -26,6 +26,9 @@
  * This is our (weak) attempt to make that distinction.
  */
 
+#ifndef FILTERDEFS_H_INCLUDED_
+#define FILTERDEFS_H_INCLUDED_
+
 #if NEWQ
 #include <QtCore/QList>
 extern QList<Waypoint*> waypt_list;
@@ -33,6 +36,7 @@ extern QList<Waypoint*> waypt_list;
 #include "queue.h"
 extern queue waypt_head;
 #endif
+#include "filter.h"
 
 typedef void (*filter_init)(char const*);
 typedef void (*filter_process)(void);
@@ -47,8 +51,8 @@ typedef struct filter_vecs {
   struct arglist* args;
 } filter_vecs_t;
 
-filter_vecs_t* find_filter_vec(const char* const, const char**);
-void free_filter_vec(filter_vecs_t*);
+Filter* find_filter_vec(const char* const, const char**);
+void free_filter_vec(Filter*);
 void disp_filters(int version);
 void disp_filter(const char* vecname);
 void disp_filter_vec(const char* vecname);
@@ -56,3 +60,4 @@ void disp_filter_vecs(void);
 void init_filter_vecs(void);
 void exit_filter_vecs(void);
 
+#endif // FILTERDEFS_H_INCLUDED_

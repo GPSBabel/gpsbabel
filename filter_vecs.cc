@@ -21,6 +21,10 @@
 
 #include "defs.h"
 #include "filterdefs.h"
+#include "filter.h"
+#include "reverse_route.h"
+#include "trackfilter.h"
+#include "validate.h"
 #include "gbversion.h"
 #include "inifile.h"
 #include <QtCore/QStringList>
@@ -29,11 +33,12 @@
 #include <cstdlib> // qsort
 
 typedef struct {
-  filter_vecs_t* vec;
+  Filter* vec;
   const char* name;
   const char* desc;
 } fl_vecs_t;
 
+/*
 extern filter_vecs_t bend_vecs;
 extern filter_vecs_t position_vecs;
 extern filter_vecs_t radius_vecs;
@@ -52,104 +57,114 @@ extern filter_vecs_t transform_vecs;
 extern filter_vecs_t height_vecs;
 extern filter_vecs_t swapdata_vecs;
 extern filter_vecs_t validate_vecs;
+*/
+
+ReverseRouteFilter reverse_route;
+TrackFilter trackfilter;
+ValidateFilter validate;
+
 
 static
 fl_vecs_t filter_vec_list[] = {
 #if FILTERS_ENABLED
+  /*
+    {
+      &arcdist_vecs,
+      "arc",
+      "Include Only Points Within Distance of Arc",
+    },
+    {
+      &bend_vecs,
+      "bend",
+      "Add points before and after bends in routes"
+    },
+    {
+      &discard_vecs,
+      "discard",
+      "Remove unreliable points with high hdop or vdop"
+    },
+    {
+      &duplicate_vecs,
+      "duplicate",
+      "Remove Duplicates",
+    },
+    {
+      &interpolatefilt_vecs,
+      "interpolate",
+      "Interpolate between trackpoints"
+    },
+    {
+      &nuke_vecs,
+      "nuketypes",
+      "Remove all waypoints, tracks, or routes"
+    },
+    {
+      &polygon_vecs,
+      "polygon",
+      "Include Only Points Inside Polygon",
+    },
+    {
+      &position_vecs,
+      "position",
+      "Remove Points Within Distance",
+    },
+    {
+      &radius_vecs,
+      "radius",
+      "Include Only Points Within Radius",
+    },
+    {
+      &routesimple_vecs,
+      "simplify",
+      "Simplify routes",
+    },
+    {
+      &sort_vecs,
+      "sort",
+      "Rearrange waypoints by resorting",
+    },
+    {
+      &stackfilt_vecs,
+      "stack",
+      "Save and restore waypoint lists"
+    },
+*/
+    {
+      &reverse_route,
+      "reverse",
+      "Reverse stops within routes",
+    },
+    {
+      &trackfilter,
+      "track",
+      "Manipulate track lists"
+    },
+/*
+    {
+      &transform_vecs,
+      "transform",
+      "Transform waypoints into a route, tracks into routes, ..."
+    },
+    {
+      &height_vecs,
+      "height",
+      "Manipulate altitudes"
+    },
+    {
+      &swapdata_vecs,
+      "swap",
+      "Swap latitude and longitude of all loaded points"
+    },
+  */
   {
-    &arcdist_vecs,
-    "arc",
-    "Include Only Points Within Distance of Arc",
-  },
-  {
-    &bend_vecs,
-    "bend",
-    "Add points before and after bends in routes"
-  },
-  {
-    &discard_vecs,
-    "discard",
-    "Remove unreliable points with high hdop or vdop"
-  },
-  {
-    &duplicate_vecs,
-    "duplicate",
-    "Remove Duplicates",
-  },
-  {
-    &interpolatefilt_vecs,
-    "interpolate",
-    "Interpolate between trackpoints"
-  },
-  {
-    &nuke_vecs,
-    "nuketypes",
-    "Remove all waypoints, tracks, or routes"
-  },
-  {
-    &polygon_vecs,
-    "polygon",
-    "Include Only Points Inside Polygon",
-  },
-  {
-    &position_vecs,
-    "position",
-    "Remove Points Within Distance",
-  },
-  {
-    &radius_vecs,
-    "radius",
-    "Include Only Points Within Radius",
-  },
-  {
-    &routesimple_vecs,
-    "simplify",
-    "Simplify routes",
-  },
-  {
-    &sort_vecs,
-    "sort",
-    "Rearrange waypoints by resorting",
-  },
-  {
-    &stackfilt_vecs,
-    "stack",
-    "Save and restore waypoint lists"
-  },
-  {
-    &reverse_route_vecs,
-    "reverse",
-    "Reverse stops within routes",
-  },
-  {
-    &trackfilter_vecs,
-    "track",
-    "Manipulate track lists"
-  },
-  {
-    &transform_vecs,
-    "transform",
-    "Transform waypoints into a route, tracks into routes, ..."
-  },
-  {
-    &height_vecs,
-    "height",
-    "Manipulate altitudes"
-  },
-  {
-    &swapdata_vecs,
-    "swap",
-    "Swap latitude and longitude of all loaded points"
-  },
-  {
-    &validate_vecs,
+    &validate,
     "validate",
     "Validate internal data structures"
   },
 
 #elif defined (MINIMAL_FILTERS)
   {
-    &trackfilter_vecs,
+    &trackfilter,
     "track",
     "Manipulate track lists"
   },
@@ -161,7 +176,7 @@ fl_vecs_t filter_vec_list[] = {
   }
 };
 
-filter_vecs_t*
+Filter*
 find_filter_vec(const char* const vecname, const char** opts)
 {
   fl_vecs_t* vec = filter_vec_list;
@@ -179,8 +194,9 @@ find_filter_vec(const char* const vecname, const char** opts)
     }
 
     /* step 1: initialize by inifile or default values */
-    if (vec->vec->args) {
-      for (ap = vec->vec->args; ap->argstring; ap++) {
+    struct arglist* args = vec->vec->get_args();
+    if (args) {
+      for (ap = args; ap->argstring; ap++) {
         const char* temp;
 
         temp = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
@@ -199,8 +215,8 @@ find_filter_vec(const char* const vecname, const char** opts)
     if (res) {
       *opts = res+1;
 
-      if (vec->vec->args) {
-        for (ap = vec->vec->args; ap->argstring; ap++) {
+      if (args) {
+        for (ap = args; ap->argstring; ap++) {
           char* opt;
 
           opt = get_option(*opts, ap->argstring);
@@ -219,7 +235,7 @@ find_filter_vec(const char* const vecname, const char** opts)
     }
 
     if (global_opts.debug_level >= 1) {
-      disp_vec_options(vec->name, vec->vec->args);
+      disp_vec_options(vec->name, args);
     }
 
     xfree(v);
@@ -231,12 +247,13 @@ find_filter_vec(const char* const vecname, const char** opts)
 }
 
 void
-free_filter_vec(filter_vecs_t* fvec)
+free_filter_vec(Filter* filter)
 {
   arglist_t* ap;
+  struct arglist* args = filter->get_args();
 
-  if (fvec->args) {
-    for (ap = fvec->args; ap->argstring; ap++) {
+  if (args) {
+    for (ap = args; ap->argstring; ap++) {
       if (ap->argvalptr) {
         xfree(ap->argvalptr);
         ap->argvalptr = *ap->argval = nullptr;
@@ -251,8 +268,9 @@ init_filter_vecs()
   fl_vecs_t* vec = filter_vec_list;
   while (vec->vec) {
     arglist_t* ap;
-    if (vec->vec->args) {
-      for (ap = vec->vec->args; ap->argstring; ap++) {
+    struct arglist* args = vec->vec->get_args();
+    if (args) {
+      for (ap = args; ap->argstring; ap++) {
         ap->argvalptr = nullptr;
       }
     }
@@ -265,9 +283,7 @@ exit_filter_vecs()
 {
   fl_vecs_t* vec = filter_vec_list;
   while (vec->vec) {
-    if (vec->vec->f_exit) {
-      (vec->vec->f_exit)();
-    }
+      (vec->vec->exit)();
     vec++;
   }
 }
@@ -285,7 +301,8 @@ disp_filter_vecs()
   for (vec = filter_vec_list; vec->vec; vec++) {
     printf("	%-20.20s  %-50.50s\n",
            vec->name, vec->desc);
-    for (ap = vec->vec->args; ap && ap->argstring; ap++) {
+    struct arglist* args = vec->vec->get_args();
+    for (ap = args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %-.50s %s\n",
                ap->argstring, ap->helpstring,
@@ -306,7 +323,8 @@ disp_filter_vec(const char* vecname)
     }
     printf("	%-20.20s  %-50.50s\n",
            vec->name, vec->desc);
-    for (ap = vec->vec->args; ap && ap->argstring; ap++) {
+    struct arglist* args = vec->vec->get_args();
+    for (ap = args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %-.50s %s\n",
                ap->argstring, ap->helpstring,
@@ -321,7 +339,7 @@ alpha(const void* a, const void* b)
   const fl_vecs_t* const ap = (const fl_vecs_t*) a;
   const fl_vecs_t* const bp = (const fl_vecs_t*) b;
 
-  return case_ignore_strcmp(ap->desc , bp->desc);
+  return case_ignore_strcmp(ap->desc, bp->desc);
 }
 
 static
@@ -340,7 +358,8 @@ disp_v1(const fl_vecs_t* vec)
 
   disp_help_url(vec, nullptr);
   printf("\n");
-  for (ap = vec->vec->args; ap && ap->argstring; ap++) {
+  struct arglist* args = vec->vec->get_args();
+  for (ap = args; ap && ap->argstring; ap++) {
     if (!(ap->argtype & ARGTYPE_HIDDEN)) {
       printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
              vec->name,
