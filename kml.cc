@@ -604,7 +604,7 @@ kml_wr_position_deinit()
 }
 
 
-void
+static void
 kml_output_linestyle(char* /*color*/, int width)
 {
   // Style settings for line strings
@@ -1904,7 +1904,7 @@ static void kml_route_tlr(const route_head* header)
 // For Earth 5.0 and later, we write a LookAt that encompasses
 // the bounding box of our entire data set and set the event times
 // to include all our data.
-void kml_write_AbstractView()
+static void kml_write_AbstractView()
 {
   double bb_size;
 
@@ -1975,7 +1975,7 @@ void kml_mt_array_schema(const char* field_name, const char* display_name,
   writer->writeEndElement(); // Close gx:SimpleArrayField tag
 }
 
-void kml_write()
+static void kml_write()
 {
   const global_trait* traits = get_traits();
 

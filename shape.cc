@@ -64,7 +64,7 @@ arglist_t shp_args[] = {
 /*                              SHPOpenGpsbabel()                       */
 /************************************************************************/
 
-SHPHandle SHPAPI_CALL
+static SHPHandle SHPAPI_CALL
 SHPOpenGpsbabel(const QString& pszLayer, const char* pszAccess)
 
 {
@@ -87,7 +87,7 @@ SHPOpenGpsbabel(const QString& pszLayer, const char* pszAccess)
 /*      shape file with read/write access.                              */
 /************************************************************************/
 
-SHPHandle SHPAPI_CALL
+static SHPHandle SHPAPI_CALL
 SHPCreateGpsbabel(const QString& pszLayer, int nShapeType)
 
 {
@@ -109,7 +109,7 @@ SHPCreateGpsbabel(const QString& pszLayer, int nShapeType)
 /*      Open a .dbf file.                                               */
 /************************************************************************/
 
-DBFHandle SHPAPI_CALL
+static DBFHandle SHPAPI_CALL
 DBFOpenGpsbabel(const QString& pszFilename, const char* pszAccess)
 
 {
@@ -131,7 +131,7 @@ DBFOpenGpsbabel(const QString& pszFilename, const char* pszAccess)
 /*      Create a new .dbf file.                                         */
 /************************************************************************/
 
-DBFHandle SHPAPI_CALL
+static DBFHandle SHPAPI_CALL
 DBFCreateExGpsbabel(const QString& pszFilename, const char* pszCodePage)
 
 {
@@ -147,18 +147,20 @@ DBFCreateExGpsbabel(const QString& pszFilename, const char* pszCodePage)
 
 }
 
+#ifdef DEAD_CODE_IS_REBORN
 /************************************************************************/
 /*                             DBFCreateGpsbabel()                      */
 /*                                                                      */
 /* Create a new .dbf file with default code page LDID/87 (0x57)         */
 /************************************************************************/
 
-DBFHandle SHPAPI_CALL
+static DBFHandle SHPAPI_CALL
 DBFCreateGpsbabel(const QString& pszFilename)
 
 {
   return DBFCreateExGpsbabel(pszFilename, "LDID/87");   // 0x57
 }
+#endif
 
 static
 void dump_fields(void)
@@ -220,7 +222,7 @@ my_rd_init(const QString& fname)
   }
 }
 
-void
+static void
 my_read(void)
 {
   // option processing here instead of in my_rd_init
@@ -396,7 +398,7 @@ err:
 
 }
 
-void
+static void
 my_rd_deinit(void)
 {
   SHPClose(ihandle);
@@ -404,13 +406,13 @@ my_rd_deinit(void)
   ifname.clear();
 }
 
-void
+static void
 my_wr_init(const QString& fname)
 {
   ofname = fname;
 }
 
-void
+static void
 my_wr_deinit(void)
 {
   SHPClose(ohandle);
@@ -418,7 +420,7 @@ my_wr_deinit(void)
   ofname.clear();
 }
 
-void
+static void
 my_write_wpt(const Waypoint* wpt)
 {
   SHPObject* shpobject;
@@ -437,7 +439,7 @@ my_write_wpt(const Waypoint* wpt)
                           CSTR(wpt->shortname));
 }
 
-void
+static void
 poly_init(const route_head* rte)
 {
   const int ct = rte->rte_waypt_ct;
@@ -448,7 +450,7 @@ poly_init(const route_head* rte)
 }
 
 
-void
+static void
 poly_point(const Waypoint* wpt)
 {
   polybufx[poly_count] = wpt->longitude;
@@ -457,7 +459,7 @@ poly_point(const Waypoint* wpt)
   poly_count++;
 }
 
-void
+static void
 poly_deinit(const route_head* rte)
 {
   SHPObject* shpobject;
@@ -478,7 +480,7 @@ poly_deinit(const route_head* rte)
 }
 
 
-void
+static void
 my_write(void)
 {
   // shape files can only contain one shape type in addition

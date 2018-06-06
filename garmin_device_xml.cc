@@ -40,7 +40,7 @@ static char* mountpoint, *base, *path, *ext;
 static xg_callback device_s, id_s, path_s, ext_s, base_s, dir_s;
 jmp_buf gdx_jmp_buf;
 
-void type_s(xg_string args, const QXmlStreamAttributes*)
+static void type_s(xg_string args, const QXmlStreamAttributes*)
 {
   type = args.compare(QLatin1String("GPSData"));
 }

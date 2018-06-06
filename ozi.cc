@@ -151,7 +151,7 @@ ozi_alloc_fsdata()
   return fsdata;
 }
 
-void
+static void
 ozi_get_time_str(const Waypoint* waypointp, char* buff, gbsize_t buffsz)
 {
   if (waypointp->creation_time.isValid()) {
@@ -162,7 +162,7 @@ ozi_get_time_str(const Waypoint* waypointp, char* buff, gbsize_t buffsz)
   }
 }
 
-void
+static void
 ozi_set_time_str(const QString& str, Waypoint* waypointp)
 {
   double ozi_time = str.toDouble();

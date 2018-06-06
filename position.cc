@@ -200,7 +200,7 @@ position_noop_t(const route_head*)
 {
 }
 
-void position_process()
+static void position_process()
 {
   int i = waypt_count();
 
@@ -212,7 +212,7 @@ void position_process()
   track_disp_all(position_process_trk, position_noop_t, position_noop_w);
 }
 
-void
+static void
 position_init(const char*)
 {
   char* fm;
@@ -236,7 +236,7 @@ position_init(const char*)
   }
 }
 
-void
+static void
 position_deinit()
 {
 }

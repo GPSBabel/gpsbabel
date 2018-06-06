@@ -33,7 +33,7 @@ rd_init(const QString& fname)
   file_in = gbfopen_le(fname, "r", MYNAME);
 }
 
-double wppos_to_dec(char* value)
+static double wppos_to_dec(char* value)
 {
   if (strstr(value, "\xB0") == nullptr) {
     return atof(value);

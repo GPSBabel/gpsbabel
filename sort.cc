@@ -32,7 +32,7 @@ typedef enum {
   sm_time
 } sort_mode_;
 
-sort_mode_ sort_mode = sm_shortname;	/* How are we sorting these? */
+static sort_mode_ sort_mode = sm_shortname;	/* How are we sorting these? */
 
 static char* opt_sm_gcid, *opt_sm_shortname, *opt_sm_description, *opt_sm_time;
 
@@ -78,13 +78,13 @@ sort_comp(const queue* a, const queue* b)
   }
 }
 
-void
+static void
 sort_process()
 {
   sortqueue(&waypt_head, sort_comp);
 }
 
-void
+static void
 sort_init(const char*)
 {
   if (opt_sm_gcid) {

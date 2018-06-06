@@ -182,7 +182,7 @@ v900_rd_deinit()
 }
 
 /* copied from dg-100.c - slight (incompatible) modification to how the date parameter is used */
-QDateTime
+static QDateTime
 bintime2utc(int date, int time) {
   int secs = time % 100;
   time /= 100;

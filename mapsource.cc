@@ -112,13 +112,13 @@ mps_noop(const route_head*)
   /* no-op */
 }
 
-void
+static void
 mps_wpt_q_init(queue* whichQueue)
 {
   QUEUE_INIT(whichQueue);
 }
 
-void
+static void
 mps_wpt_q_deinit(queue* whichQueue)
 {
   queue* elem, *tmp;
@@ -133,7 +133,7 @@ mps_wpt_q_deinit(queue* whichQueue)
  * Find a waypoint that we've already written out
  *
  */
-Waypoint*
+static Waypoint*
 mps_find_wpt_q_by_name(const queue* whichQueue, const QString& name)
 {
   queue* elem, *tmp;
@@ -152,7 +152,7 @@ mps_find_wpt_q_by_name(const queue* whichQueue, const QString& name)
  * Add a waypoint that we've already written out to our list
  *
  */
-void
+static void
 mps_wpt_q_add(const queue* whichQueue, const Waypoint* wpt)
 {
   Waypoint* written_wpt = new Waypoint(*wpt);
@@ -1812,7 +1812,7 @@ mps_read()
 
 }
 
-void
+static void
 mps_write()
 {
   int				short_length;

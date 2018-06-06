@@ -40,7 +40,7 @@ static  const double milliarcseconds = 60.0 * 60.0 * 1000.0;
 
 geocache_container wpt_container(const QString&);
 
-void MapfactorRead()
+static void MapfactorRead()
 {
   Waypoint* wpt = nullptr;
 

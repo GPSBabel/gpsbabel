@@ -80,7 +80,7 @@ arglist_t stackfilt_args[] = {
   ARG_TERMINATOR
 };
 
-struct stack_elt {
+static struct stack_elt {
   queue waypts;
   queue routes;
   queue tracks;
@@ -91,7 +91,7 @@ struct stack_elt {
 }* stack = nullptr;
 
 
-void
+static void
 stackfilt_process()
 {
   struct stack_elt* tmp_elt = nullptr;
@@ -191,7 +191,7 @@ stackfilt_process()
   }
 }
 
-void
+static void
 stackfilt_init(const char*)
 {
 
@@ -231,13 +231,13 @@ stackfilt_init(const char*)
 
 }
 
-void
+static void
 stackfilt_deinit()
 {
   swapdepth = 0;
 }
 
-void
+static void
 stackfilt_exit()
 {
   struct stack_elt* tmp_elt = nullptr;

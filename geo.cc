@@ -38,12 +38,12 @@ arglist_t geo_args[] = {
 #define MYNAME "geo"
 
 // This really should be class-local...
-QXmlStreamReader reader;
-QString geo_read_fname;
+static QXmlStreamReader reader;
+static QString geo_read_fname;
 
-geocache_container wpt_container(const QString&);
+static geocache_container wpt_container(const QString&);
 
-void GeoReadLoc()
+static void GeoReadLoc()
 {
   Waypoint* wpt = nullptr;
   QString current_tag;

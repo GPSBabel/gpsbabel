@@ -175,8 +175,8 @@ enum {
 /**************************************************************************/
 
 static gbfile* fin = nullptr, *fout = nullptr;
-struct wprdata WPR;
-struct trldata TRL;
+static struct wprdata WPR;
+static struct trldata TRL;
 
 static arglist_t wpr_args[] = {
   /*

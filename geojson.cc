@@ -58,7 +58,7 @@ geojson_rd_init(const QString& fname) {
 	input_file_name = fname;
 }
 
-QJsonArray* feature_collection = nullptr;
+static QJsonArray* feature_collection = nullptr;
 
 static void
 geojson_wr_init(const QString& fname) {

@@ -262,7 +262,7 @@ subrip_write()
 
 /* arguments: definitions of format-specific arguments */
 
-arglist_t subrip_args[] = {
+static arglist_t subrip_args[] = {
   // FIXME: document that gps_date and gps_time must be specified together or they will both be ignored and the timestamp of the first trackpoint will be used.
   {"video_time", &opt_videotime, "Video position for which exact GPS time is known (hhmmss, default is 0:00:00)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },
   {"gps_time", &opt_gpstime, "GPS time at position video_time (hhmmss, default is first timestamp of track)", nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr },

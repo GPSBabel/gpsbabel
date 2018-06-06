@@ -451,7 +451,7 @@ gtc_crs_ftr(const route_head*)
 
 }
 
-void
+static void
 gtc_write()
 {
   gtc_write_xml(0, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\" ?>\n");

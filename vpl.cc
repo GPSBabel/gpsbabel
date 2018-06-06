@@ -111,7 +111,7 @@ C - Checksum
 
 #define MYNAME "vpl"
 
-void vpl_parse_75_sentence(const char*);
+static void vpl_parse_75_sentence(const char*);
 
 static
 arglist_t vpl_args[] = {

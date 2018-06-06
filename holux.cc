@@ -154,7 +154,7 @@ static void data_read()
 
 
 
-const char* mknshort(const char* stIn,unsigned int sLen)
+static const char* mknshort(const char* stIn,unsigned int sLen)
 {
 #define MAX_STRINGLEN 255
   static char strOut[MAX_STRINGLEN];

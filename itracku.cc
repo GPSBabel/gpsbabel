@@ -198,7 +198,7 @@ itracku_device_update_data_read(void* buf, int len)
 // mysterious, but not worth tracking down at this time.   When xcode 4 comes
 // along (or anyone really cares about mega performance of this fairly obscure
 // target, we should revisit this.
-double
+static double
 deg_min_to_deg(volatile uint32_t x)
 {
   double sign;
@@ -227,7 +227,7 @@ deg_min_to_deg(volatile uint32_t x)
 /*
 	Convert degrees to the degrees format of itracku.
 */
-uint32_t
+static uint32_t
 deg_to_deg_min(double x)
 {
   int32_t sign;
@@ -324,7 +324,7 @@ to_itracku_data_record(const Waypoint* wp, itracku_data_record* d)
 	Returns gbser_OK if the initialization is sucessful, a
 	non-zero integer otherwise.
 */
-int
+static int
 init_device()
 {
   int rc;

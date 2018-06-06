@@ -108,7 +108,7 @@ dist_comp(const void* a, const void* b)
 
 }
 
-void
+static void
 radius_process()
 {
 #if !NEWQ
@@ -202,7 +202,7 @@ radius_process()
   xfree(comp);
 }
 
-void
+static void
 radius_init(const char*)
 {
   char* fm;
@@ -234,7 +234,7 @@ radius_init(const char*)
   }
 }
 
-void
+static void
 radius_deinit()
 {
   if (home_pos) {

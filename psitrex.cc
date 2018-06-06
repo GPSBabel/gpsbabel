@@ -51,7 +51,7 @@ static int	psit_track_state = 2;
 
 static char psit_current_token[256];
 
-char* snlen;
+static char* snlen;
 
 static
 arglist_t psit_args[] = {
@@ -753,7 +753,7 @@ psit_noop(const route_head*)
   /* no-op */
 }
 
-void
+static void
 psit_write()
 {
   int short_length;

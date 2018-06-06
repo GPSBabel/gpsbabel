@@ -48,21 +48,21 @@ static void reverse_route_wpt(const Waypoint* waypointp)
   prev_new_trkseg = curr_new_trkseg;
 }
 
-void
+static void
 reverse_route_head(const route_head* rte)
 {
   route_reverse(rte);
   prev_new_trkseg = 1;
 }
 
-void
+static void
 reverse_route_process()
 {
   track_disp_all(reverse_route_head, nullptr, reverse_route_wpt);
   route_disp_all(reverse_route_head, nullptr, nullptr);
 }
 
-void
+static void
 reverse_route_init(const char*)
 {
   switch (global_opts.objective) {
@@ -76,7 +76,7 @@ reverse_route_init(const char*)
   }
 }
 
-void
+static void
 reverse_route_deinit()
 {
   /* do nothing */

@@ -95,7 +95,7 @@ addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode)
   return (tree);
 }
 
-void
+static void
 free_tree(btree_node* tree)
 {
   if (tree->left) {

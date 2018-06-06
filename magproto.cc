@@ -378,7 +378,7 @@ mag_handoff()
   magrxstate = mrs_handoff;
 }
 
-void
+static void
 mag_verparse(char* ibuf)
 {
   int prodid = mm_unknown;

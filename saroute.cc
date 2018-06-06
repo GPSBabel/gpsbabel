@@ -25,15 +25,15 @@
 #include "grtcirc.h"
 #include <cstddef>
 
-gbfile* infile;
+static gbfile* infile;
 
-char* turns_important = nullptr;
-char* turns_only = nullptr;
-char* controls = nullptr;
-char* split = nullptr;
-char* timesynth = nullptr;
+static char* turns_important = nullptr;
+static char* turns_only = nullptr;
+static char* controls = nullptr;
+static char* split = nullptr;
+static char* timesynth = nullptr;
 
-int control = 0;
+static int control = 0;
 
 static
 arglist_t saroute_args[] = {
@@ -64,7 +64,7 @@ arglist_t saroute_args[] = {
 #define ReadShort(f) gbfgetint16(f)
 #define ReadLong(f) gbfgetint32(f)
 
-unsigned char*
+static unsigned char*
 ReadRecord(gbfile* f, gbsize_t size)
 {
   unsigned char* result = (unsigned char*) xmalloc(size);
@@ -73,7 +73,7 @@ ReadRecord(gbfile* f, gbsize_t size)
   return result;
 }
 
-void
+static void
 Skip(gbfile* f, gbsize_t distance)
 {
   gbfseek(f, distance, SEEK_CUR);

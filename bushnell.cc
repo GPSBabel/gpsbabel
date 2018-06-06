@@ -42,7 +42,7 @@ typedef struct  {
   const char* icon;
 } icon_mapping_t;
 
-icon_mapping_t bushnell_icons[] = {
+static icon_mapping_t bushnell_icons[] = {
   { 0x00, "Yellow Square"},
   { 0x01, "Blue Grey Circle" },
   { 0x02, "Yellow Diamond" },

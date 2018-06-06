@@ -47,7 +47,7 @@ static int logpoint_ct = 0;
 static int elevation_precision;
 
 // static char* gpx_version = NULL;
-QString gpx_version;
+static QString gpx_version;
 static char* gpx_wversion;
 static int gpx_wversion_num;
 static QXmlStreamAttributes gpx_namespace_attribute;
@@ -303,7 +303,7 @@ typedef struct tag_mapping {
   {type, 0, "/gpx/" name}, \
   {type, 0, "/gpx/metadata/" name}
 
-tag_mapping tag_path_map[] = {
+static tag_mapping tag_path_map[] = {
   { tt_gpx, 0, "/gpx" },
   METATAG(tt_name, "name"),
   METATAG(tt_desc, "desc"),
@@ -423,7 +423,7 @@ tag_mapping tag_path_map[] = {
 };
 
 // Maintain a fast mapping from full tag names to the struct above.
-QHash<QString, tag_mapping*> hash;
+static QHash<QString, tag_mapping*> hash;
 
 static tag_type
 get_tag(const QString& t, int* passthrough)
@@ -1345,7 +1345,7 @@ gpx_wr_deinit()
   mkshort_del_handle(&mkshort_handle);
 }
 
-void
+static void
 gpx_read()
 {
   for (bool atEnd = false; !reader->atEnd() && !atEnd;)  {

@@ -233,7 +233,7 @@ static void polytest(double lat1, double lon1,
 
 #define BADVAL 999999
 
-void
+static void
 polygon_process()
 {
   queue* elem, * tmp;
@@ -340,13 +340,13 @@ polygon_process()
   }
 }
 
-void
+static void
 polygon_init(const char*)
 {
   /* do nothing */
 }
 
-void
+static void
 polygon_deinit()
 {
   /* do nothing */

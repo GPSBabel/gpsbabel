@@ -28,9 +28,9 @@
 #define MYNAME "Interpolate filter"
 
 static char* opt_interval = nullptr;
-unsigned int interval = 0;
+static unsigned int interval = 0;
 static char* opt_dist = nullptr;
-double dist = 0;
+static double dist = 0;
 static char* opt_route = nullptr;
 
 static
@@ -52,7 +52,7 @@ arglist_t interpfilt_args[] = {
   ARG_TERMINATOR
 };
 
-void
+static void
 interpfilt_process()
 {
   queue* backuproute = nullptr;
@@ -172,7 +172,7 @@ interpfilt_process()
   xfree(backuproute);
 }
 
-void
+static void
 interpfilt_init(const char*)
 {
 

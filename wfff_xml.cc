@@ -199,7 +199,7 @@ void wfff_e(xg_string, const QXmlStreamAttributes*)
   }
 }
 
-void
+static void
 wfff_xml_rd_init(const QString& fname)
 {
   tosscount = 0;
@@ -208,13 +208,13 @@ wfff_xml_rd_init(const QString& fname)
 }
 
 void
-wfff_xml_read()
+static wfff_xml_read()
 {
   xml_read();
 }
 
 void
-wfff_xml_rd_deinit()
+static wfff_xml_rd_deinit()
 {
   xml_deinit();
 
