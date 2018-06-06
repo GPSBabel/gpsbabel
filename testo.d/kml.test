@@ -80,3 +80,4 @@ then
 else
   echo "Skipping KML validation phase."
 fi
+set +e
