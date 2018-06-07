@@ -51,7 +51,7 @@ private:
 
   int name_digits, use_src_name;
 
-  char RPT[4] = "RPT";
+  const QString RPT = "RPT";
 
   arglist_t args[7] = {
     {

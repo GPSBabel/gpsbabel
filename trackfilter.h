@@ -176,7 +176,6 @@ private:
     ARG_TERMINATOR
   };
 
-
   typedef struct trkflt_s {
     route_head* track;
     QDateTime first_time;
