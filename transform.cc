@@ -22,6 +22,7 @@
 
 #include "defs.h"
 #include "filterdefs.h"
+#include "transform.h"
 #include <cstdlib>
 
 #if FILTERS_ENABLED
@@ -30,48 +31,9 @@
 
 #define MYNAME "transform"
 
-static char current_target;
-static route_head* current_trk;
-static route_head* current_rte;
+TransformFilter* TransformFilter::fObj = nullptr; // definition required for odr-use.
 
-static char* opt_routes, *opt_tracks, *opt_waypts, *opt_delete, *rpt_name_digits, *opt_rpt_name;
-static QString current_namepart;
-
-static int name_digits, use_src_name;
-
-static char RPT[] = "RPT";
-
-static
-arglist_t transform_args[] = {
-  {
-    "wpt", &opt_waypts, "Transform track(s) or route(s) into waypoint(s) [R/T]", nullptr,
-    ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "rte", &opt_routes, "Transform waypoint(s) or track(s) into route(s) [W/T]", nullptr,
-    ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "trk", &opt_tracks, "Transform waypoint(s) or route(s) into tracks(s) [W/R]", nullptr,
-    ARGTYPE_STRING, ARG_NOMINMAX, nullptr
-  },
-  {
-    "rptdigits", &rpt_name_digits, "Number of digits in generated names", nullptr,
-    ARGTYPE_INT, "2", nullptr, nullptr
-  },
-  {
-    "rptname", &opt_rpt_name, "Use source name for route point names", "N",
-    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "del", &opt_delete, "Delete source data after transformation", "N",
-    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  ARG_TERMINATOR
-};
-
-static void
-transform_waypoints()
+void TransformFilter::transform_waypoints()
 {
   route_head* rte;
 
@@ -85,7 +47,7 @@ transform_waypoints()
     break;
   }
 #if NEWQ
-  foreach(Waypoint* wpt, waypt_list) {
+  foreach (Waypoint* wpt, waypt_list) {
 #else
   queue* elem, *tmp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
@@ -104,8 +66,7 @@ transform_waypoints()
   }
 }
 
-static void
-transform_rte_disp_hdr_cb(const route_head* rte)
+void TransformFilter::transform_rte_disp_hdr_cb(const route_head* rte)
 {
   current_namepart = RPT;
   if (!rte->rte_name.isEmpty() && use_src_name) {
@@ -121,8 +82,7 @@ transform_rte_disp_hdr_cb(const route_head* rte)
   }
 }
 
-static void
-transform_trk_disp_hdr_cb(const route_head* trk)
+void TransformFilter::transform_trk_disp_hdr_cb(const route_head* trk)
 {
   current_namepart = RPT;
   if (!trk->rte_name.isEmpty() && use_src_name) {
@@ -139,8 +99,7 @@ transform_trk_disp_hdr_cb(const route_head* trk)
   }
 }
 
-static void
-transform_any_disp_wpt_cb(const Waypoint* wpt)
+void TransformFilter::transform_any_disp_wpt_cb(const Waypoint* wpt)
 {
   Waypoint* temp = new Waypoint(*wpt);
   if (current_target == 'R') {
@@ -152,35 +111,24 @@ transform_any_disp_wpt_cb(const Waypoint* wpt)
   }
 }
 
-static void
-transform_routes()
+void TransformFilter::transform_routes()
 {
-  route_disp_all(transform_rte_disp_hdr_cb, nullptr, transform_any_disp_wpt_cb);
+  route_disp_all(&transform_rte_disp_hdr_cb_glue, nullptr, &transform_any_disp_wpt_cb_glue);
 }
 
-static void
-transform_tracks()
+void TransformFilter::transform_tracks()
 {
-  track_disp_all(transform_trk_disp_hdr_cb, nullptr, transform_any_disp_wpt_cb);
+  track_disp_all(&transform_trk_disp_hdr_cb_glue, nullptr, &transform_any_disp_wpt_cb_glue);
 }
 
 /*******************************************************************************
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static void
-transform_init(const char*)
+void TransformFilter::process()
 {
-}
+  setObj(*this);
 
-static void
-transform_deinit()
-{
-}
-
-static void
-transform_process()
-{
   int delete_after = (opt_delete && (*opt_delete == '1')) ? 1 : 0;
 
   use_src_name = (opt_rpt_name && (*opt_rpt_name == '1')) ? 1 : 0;
@@ -248,17 +196,5 @@ transform_process()
     }
   }
 }
-
-/*******************************************************************************/
-
-filter_vecs_t transform_vecs = {
-  transform_init,
-  transform_process,
-  transform_deinit,
-  nullptr,
-  transform_args
-};
-
-/*******************************************************************************/
 
 #endif // FILTERS_ENABLED

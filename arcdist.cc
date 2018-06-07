@@ -21,6 +21,7 @@
 
 
 #include "defs.h"
+#include "arcdist.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
 
@@ -31,59 +32,11 @@
 #if FILTERS_ENABLED
 #define MYNAME "Arc filter"
 
-static double pos_dist;
-static char* distopt = nullptr;
-static char* arcfileopt = nullptr;
-static char* rteopt = nullptr;
-static char* trkopt = nullptr;
-static char* exclopt = nullptr;
-static char* ptsopt = nullptr;
-static char* projectopt = nullptr;
-
-typedef struct {
-  double distance;
-  double prjlatitude, prjlongitude;
-  double frac;
-  Waypoint* arcpt1, * arcpt2;
-} extra_data;
-
-static
-arglist_t arcdist_args[] = {
-  {
-    "file", &arcfileopt,  "File containing vertices of arc",
-    nullptr, ARGTYPE_FILE, ARG_NOMINMAX, nullptr
-  },
-  {
-    "rte", &rteopt, "Route(s) are vertices of arc",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "trk", &trkopt, "Track(s) are vertices of arc",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "distance", &distopt, "Maximum distance from arc",
-    nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
-  },
-  {
-    "exclude", &exclopt, "Exclude points close to the arc", nullptr,
-    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "points", &ptsopt, "Use distance from vertices not lines",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "project", &projectopt, "Move waypoints to its projection on lines or vertices",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  ARG_TERMINATOR
-};
-
 #define BADVAL 999999
 
-static void
-arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
+ArcDistanceFilter* ArcDistanceFilter::fObj = nullptr; // definition required for odr-use.
+
+void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
 {
   queue* elem, * tmp;
   Waypoint* waypointp;
@@ -96,7 +49,7 @@ arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
       (ptsopt || (arcpt1 &&
                   (arcpt1->latitude != BADVAL && arcpt1->longitude != BADVAL)))) {
 #if NEWQ
-    foreach(Waypoint* waypointp, waypt_list) {
+    foreach (Waypoint* waypointp, waypt_list) {
 #else
     QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
       waypointp = (Waypoint*) elem;
@@ -146,16 +99,16 @@ arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
   arcpt1 = (Waypoint*) arcpt2;
 }
 
-static void
-arcdist_arc_disp_hdr_cb(const route_head*)
+void ArcDistanceFilter::arcdist_arc_disp_hdr_cb(const route_head*)
 {
   /* Set arcpt1 to NULL */
   arcdist_arc_disp_wpt_cb(nullptr);
 }
 
-static void
-arcdist_process()
+void ArcDistanceFilter::process()
 {
+  setObj(*this);
+
   queue* elem, * tmp;
   unsigned removed;
 
@@ -203,14 +156,14 @@ arcdist_process()
 
     gbfclose(file_in);
   } else if (rteopt) {
-    route_disp_all(arcdist_arc_disp_hdr_cb, nullptr, arcdist_arc_disp_wpt_cb);
+    route_disp_all(&arcdist_arc_disp_hdr_cb_glue, nullptr, &arcdist_arc_disp_wpt_cb_glue);
   } else if (trkopt) {
-    track_disp_all(arcdist_arc_disp_hdr_cb, nullptr, arcdist_arc_disp_wpt_cb);
+    track_disp_all(&arcdist_arc_disp_hdr_cb_glue, nullptr, &arcdist_arc_disp_wpt_cb_glue);
   }
 
   removed = 0;
 #if NEWQ
-  foreach(Waypoint* wp, waypt_list) {
+  foreach (Waypoint* wp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     Waypoint* wp = (Waypoint*) elem;
@@ -267,8 +220,7 @@ arcdist_process()
   }
 }
 
-static void
-arcdist_init(const char*)
+void ArcDistanceFilter::init(const char*)
 {
   char* fm;
 
@@ -290,17 +242,4 @@ arcdist_init(const char*)
   }
 }
 
-static void
-arcdist_deinit()
-{
-  /* do nothing */
-}
-
-filter_vecs_t arcdist_vecs = {
-  arcdist_init,
-  arcdist_process,
-  arcdist_deinit,
-  nullptr,
-  arcdist_args
-};
 #endif // FILTERS_ENABLED

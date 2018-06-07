@@ -42,6 +42,8 @@ FILTERS=position.cc radius.cc duplicate.cc arcdist.cc polygon.cc smplrout.cc \
         reverse_route.cc sort.cc stackfilter.cc trackfilter.cc discard.cc \
         nukedata.cc interpolate.cc transform.cc height.cc swapdata.cc bend.cc \
         validate.cc
+FILTER_HEADERS = $$FILTERS
+FILTER_HEADERS ~= s/\.cc/.h/g
 
 SHAPE=shapelib/shpopen.c shapelib/dbfopen.c shapelib/safileio.c
 
@@ -87,7 +89,7 @@ HEADERS =  \
 	gbser_private.h \
 	gbversion.h \
 	grtcirc.h \
-	height.h \
+	heightgrid.h \
 	holux.h \
 	inifile.h \
 	jeeps/garminusb.h \
@@ -131,6 +133,7 @@ HEADERS =  \
 	zlib/zutil.h \
 	src/core/xmlstreamwriter.h \
 	src/core/logging.h
+HEADERS += $$FILTER_HEADERS
 
 INCLUDEPATH += zlib
 

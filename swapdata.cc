@@ -22,18 +22,15 @@
 
 #include "defs.h"
 #include "filterdefs.h"
+#include "swapdata.h"
 
 #define MYNAME "swapdata"
 
 #if FILTERS_ENABLED
 
-static
-arglist_t swapdata_args[] = {
-  ARG_TERMINATOR
-};
+SwapDataFilter* SwapDataFilter::fObj = nullptr; // definition required for odr-use.
 
-static void
-swapdata_cb(const Waypoint* ref)
+void SwapDataFilter::swapdata_cb(const Waypoint* ref)
 {
   Waypoint* wpt = (Waypoint*)ref;
   double x;
@@ -49,23 +46,13 @@ swapdata_cb(const Waypoint* ref)
 * %%%        global callbacks called by gpsbabel main process              %%% *
 *******************************************************************************/
 
-static void
-swapdata_process(void)	/* this procedure must be present in vecs */
+void SwapDataFilter::process(void)	/* this procedure must be present in vecs */
 {
-  waypt_disp_all(swapdata_cb);
-  route_disp_all(nullptr, nullptr, swapdata_cb);
-  track_disp_all(nullptr, nullptr, swapdata_cb);
+  setObj(*this);
+
+  waypt_disp_all(&swapdata_cb_glue);
+  route_disp_all(nullptr, nullptr, &swapdata_cb_glue);
+  track_disp_all(nullptr, nullptr, &swapdata_cb_glue);
 }
 
-/*******************************************************************************/
-
-filter_vecs_t swapdata_vecs = {
-  nullptr,
-  swapdata_process,
-  nullptr,
-  nullptr,
-  swapdata_args
-};
-
-/*******************************************************************************/
 #endif // FILTERS_ENABLED

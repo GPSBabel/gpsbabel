@@ -1,8 +1,8 @@
 /*
 
-    nukedata: remove all (waypoint|tracks|routes) from the stream.
+    Swap data filter
 
-    Copyright (C) 2005 Robert Lipe   robertlipe+source@gpsbabel.org
+    Copyright (C) 2008 Olaf Klein, o.b.klein@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,24 +20,42 @@
 
  */
 
+#ifndef SWAPDATA_H_INCLUDED_
+#define SWAPDATA_H_INCLUDED_
+
 #include "defs.h"
+#include "filter.h"
 #include "filterdefs.h"
-#include "nukedata.h"
 
 #if FILTERS_ENABLED
-#define MYNAME "nukedata"
 
-void NukeDataFilter::process(void)
+class SwapDataFilter:public Filter
 {
-  if (*nukewpts != '0') {
-    waypt_flush_all();
+public:
+  arglist_t* get_args() override
+  {
+    return args;
   }
-  if (*nuketrks != '0') {
-    route_flush_all_tracks();
-  }
-  if (*nukertes != '0') {
-    route_flush_all_routes();
-  }
-}
+  void process() override;
 
-#endif
+private:
+  arglist_t args[1] = {
+    ARG_TERMINATOR
+  };
+
+  void swapdata_cb(const Waypoint* ref);
+
+  static void swapdata_cb_glue(const Waypoint* ref)
+  {
+    return fObj->swapdata_cb(ref);
+  }
+  static void setObj(SwapDataFilter& obj)
+  {
+    fObj = &obj;
+  }
+  static SwapDataFilter* fObj;
+
+};
+
+#endif // FILTERS_ENABLED
+#endif // SWAPDATA_H_INCLUDED_

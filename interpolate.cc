@@ -22,38 +22,13 @@
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
+#include "interpolate.h"
 #include <cstdlib>
 
 #if FILTERS_ENABLED
 #define MYNAME "Interpolate filter"
 
-static char* opt_interval = nullptr;
-static unsigned int interval = 0;
-static char* opt_dist = nullptr;
-static double dist = 0;
-static char* opt_route = nullptr;
-
-static
-arglist_t interpfilt_args[] = {
-  {
-    "time", &opt_interval, "Time interval in seconds", nullptr,
-    ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_INT,
-    "0", nullptr, nullptr
-  },
-  {
-    "distance", &opt_dist, "Distance interval in miles or kilometers",
-    nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_STRING,
-    ARG_NOMINMAX, nullptr
-  },
-  {
-    "route", &opt_route, "Interpolate routes instead", nullptr,
-    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  ARG_TERMINATOR
-};
-
-static void
-interpfilt_process()
+void InterpolateFilter::process()
 {
   queue* backuproute = nullptr;
   queue* elem, *tmp, *elem2, *tmp2;
@@ -116,8 +91,9 @@ interpfilt_process()
                      frac,
                      &wpt_new->latitude,
                      &wpt_new->longitude);
-            if (altitude1 != unknown_alt && wpt->altitude != unknown_alt)
+            if (altitude1 != unknown_alt && wpt->altitude != unknown_alt) {
               wpt_new->altitude = altitude1 + frac * (wpt->altitude - altitude1);
+            }
             if (opt_route) {
               route_add_wpt(rte_new, wpt_new);
             } else {
@@ -145,8 +121,9 @@ interpfilt_process()
                        frac,
                        &wpt_new->latitude,
                        &wpt_new->longitude);
-              if (altitude1 != unknown_alt && wpt->altitude != unknown_alt)
+              if (altitude1 != unknown_alt && wpt->altitude != unknown_alt) {
                 wpt_new->altitude = altitude1 + frac * (wpt->altitude - altitude1);
+              }
               if (opt_route) {
                 route_add_wpt(rte_new, wpt_new);
               } else {
@@ -172,8 +149,7 @@ interpfilt_process()
   xfree(backuproute);
 }
 
-static void
-interpfilt_init(const char*)
+void InterpolateFilter::init(const char*)
 {
 
   char* fm;
@@ -194,11 +170,4 @@ interpfilt_init(const char*)
   }
 }
 
-filter_vecs_t interpolatefilt_vecs = {
-  interpfilt_init,
-  interpfilt_process,
-  nullptr,
-  nullptr,
-  interpfilt_args
-};
 #endif // FILTERS_ENABLED

@@ -24,8 +24,6 @@
 
 #if FILTERS_ENABLED
 
-#define MYNAME "Route reversal filter"
-
 class ReverseRouteFilter:public Filter
 {
 public:

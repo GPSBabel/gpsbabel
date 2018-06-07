@@ -55,8 +55,6 @@
 #define TRACKFILTER_DISCARD_OPTION      "discard"
 #define TRACKFILTER_MINPOINTS_OPTION    "minimum_points"
 
-#undef TRACKF_DBG
-
 class TrackFilter:public Filter
 {
 public:
@@ -64,6 +62,9 @@ public:
   {
     return args;
   }
+  void process() override;
+  void init(const char*) override;
+  void deinit() override;
 
 private:
   char* opt_merge = nullptr;
@@ -190,11 +191,6 @@ private:
   int opt_distance = 0;
   char need_time;		/* initialized within trackfilter_init */
 
-
-  /*******************************************************************************
-  * helpers
-  *******************************************************************************/
-
   int trackfilter_opt_count();
   int trackfilter_parse_time_opt(const char* arg);
   int trackfilter_init_qsort_cb(const void* a, const void* b);
@@ -203,71 +199,27 @@ private:
   void trackfilter_fill_track_list_cb(const route_head* track); 	/* callback for track_disp_all */
   void trackfilter_minpoint_list_cb(const route_head* track);
 
-  /*******************************************************************************
-  * track title producers
-  *******************************************************************************/
-
   void trackfilter_split_init_rte_name(route_head* track, const QDateTime dt);
   void trackfilter_pack_init_rte_name(route_head* track, const time_t default_time);
 
-  /*******************************************************************************
-  * option "title"
-  *******************************************************************************/
-
   void trackfilter_title();
-
-  /*******************************************************************************
-  * option "pack" (default)
-  *******************************************************************************/
 
   void trackfilter_pack();
 
-  /*******************************************************************************
-  * option "merge"
-  *******************************************************************************/
-
   void trackfilter_merge();
-
-  /*******************************************************************************
-  * option "split"
-  *******************************************************************************/
 
   void trackfilter_split();
 
-  /*******************************************************************************
-  * option "move"
-  *******************************************************************************/
-
   void trackfilter_move();
 
-  /*******************************************************************************
-  * options "fix", "course", "speed"
-  *******************************************************************************/
-
   void trackfilter_synth();
-
-  /*******************************************************************************
-  * option: "start" / "stop"
-  *******************************************************************************/
 
   time_t trackfilter_range_check(const char* timestr);
   int trackfilter_range();		/* returns number of track points left after filtering */
 
-  /*******************************************************************************
-  * option "seg2trk"
-  *******************************************************************************/
-
   void trackfilter_seg2trk();
 
-  /*******************************************************************************
-  * option "trk2seg"
-  *******************************************************************************/
-
   void trackfilter_trk2seg();
-
-  /*******************************************************************************
-  * option: "faketime"
-  *******************************************************************************/
 
   typedef struct faketime_s {
     time_t start;
@@ -306,20 +258,6 @@ private:
     fObj = &obj;
   }
   static TrackFilter* fObj;
-
-public:
-  /*******************************************************************************
-  * global cb's
-  *******************************************************************************/
-
-  void init(const char*) override;
-  void deinit() override;
-
-  /*******************************************************************************
-  * trackfilter_process: called from gpsbabel central engine
-  *******************************************************************************/
-
-  void process() override;
 
 };
 

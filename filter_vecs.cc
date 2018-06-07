@@ -20,10 +20,25 @@
  */
 
 #include "defs.h"
+#include "arcdist.h"
+#include "bend.h"
+#include "discard.h"
+#include "duplicate.h"
 #include "filterdefs.h"
 #include "filter.h"
+#include "height.h"
+#include "interpolate.h"
+#include "nukedata.h"
+#include "polygon.h"
+#include "position.h"
+#include "radius.h"
 #include "reverse_route.h"
+#include "smplrout.h"
+#include "sort.h"
+#include "stackfilter.h"
+#include "swapdata.h"
 #include "trackfilter.h"
+#include "transform.h"
 #include "validate.h"
 #include "gbversion.h"
 #include "inifile.h"
@@ -38,97 +53,89 @@ typedef struct {
   const char* desc;
 } fl_vecs_t;
 
-/*
-extern filter_vecs_t bend_vecs;
-extern filter_vecs_t position_vecs;
-extern filter_vecs_t radius_vecs;
-extern filter_vecs_t duplicate_vecs;
-extern filter_vecs_t arcdist_vecs;
-extern filter_vecs_t polygon_vecs;
-extern filter_vecs_t routesimple_vecs;
-extern filter_vecs_t reverse_route_vecs;
-extern filter_vecs_t sort_vecs;
-extern filter_vecs_t stackfilt_vecs;
-extern filter_vecs_t trackfilter_vecs;
-extern filter_vecs_t discard_vecs;
-extern filter_vecs_t nuke_vecs;
-extern filter_vecs_t interpolatefilt_vecs;
-extern filter_vecs_t transform_vecs;
-extern filter_vecs_t height_vecs;
-extern filter_vecs_t swapdata_vecs;
-extern filter_vecs_t validate_vecs;
-*/
-
+ArcDistanceFilter arcdist;
+BendFilter bend;
+DiscardFilter discard;
+DuplicateFilter duplicate;
+HeightFilter height;
+InterpolateFilter interpolate;
+NukeDataFilter nukedata;
+PolygonFilter polygon;
+PositionFilter position;
+RadiusFilter radius;
 ReverseRouteFilter reverse_route;
+SimplifyRouteFilter routesimple;
+SortFilter sort;
+StackFilter stackfilt;
+SwapDataFilter swapdata;
 TrackFilter trackfilter;
+TransformFilter transform;
 ValidateFilter validate;
 
 
 static
 fl_vecs_t filter_vec_list[] = {
 #if FILTERS_ENABLED
-  /*
     {
-      &arcdist_vecs,
+      &arcdist,
       "arc",
       "Include Only Points Within Distance of Arc",
     },
     {
-      &bend_vecs,
+      &bend,
       "bend",
       "Add points before and after bends in routes"
     },
     {
-      &discard_vecs,
+      &discard,
       "discard",
       "Remove unreliable points with high hdop or vdop"
     },
     {
-      &duplicate_vecs,
+      &duplicate,
       "duplicate",
       "Remove Duplicates",
     },
     {
-      &interpolatefilt_vecs,
+      &interpolate,
       "interpolate",
       "Interpolate between trackpoints"
     },
     {
-      &nuke_vecs,
+      &nukedata,
       "nuketypes",
       "Remove all waypoints, tracks, or routes"
     },
     {
-      &polygon_vecs,
+      &polygon,
       "polygon",
       "Include Only Points Inside Polygon",
     },
     {
-      &position_vecs,
+      &position,
       "position",
       "Remove Points Within Distance",
     },
     {
-      &radius_vecs,
+      &radius,
       "radius",
       "Include Only Points Within Radius",
     },
     {
-      &routesimple_vecs,
+      &routesimple,
       "simplify",
       "Simplify routes",
     },
     {
-      &sort_vecs,
+      &sort,
       "sort",
       "Rearrange waypoints by resorting",
     },
     {
-      &stackfilt_vecs,
+      &stackfilt,
       "stack",
       "Save and restore waypoint lists"
     },
-*/
     {
       &reverse_route,
       "reverse",
@@ -139,23 +146,21 @@ fl_vecs_t filter_vec_list[] = {
       "track",
       "Manipulate track lists"
     },
-/*
     {
-      &transform_vecs,
+      &transform,
       "transform",
       "Transform waypoints into a route, tracks into routes, ..."
     },
     {
-      &height_vecs,
+      &height,
       "height",
       "Manipulate altitudes"
     },
     {
-      &swapdata_vecs,
+      &swapdata,
       "swap",
       "Swap latitude and longitude of all loaded points"
     },
-  */
   {
     &validate,
     "validate",

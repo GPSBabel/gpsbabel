@@ -20,13 +20,11 @@
  */
 #include "defs.h"
 #include "filterdefs.h"
+#include "polygon.h"
 #include <cstdio>
 
 #if FILTERS_ENABLED
 #define MYNAME "Polygon filter"
-
-static char* polyfileopt = nullptr;
-static char* exclopt = nullptr;
 
 /*
  * This test for insideness is essentially an odd/even test.  The
@@ -103,28 +101,10 @@ static char* exclopt = nullptr;
 #define BEGIN_HOR   32
 #define UP          64
 
-typedef struct {
-  unsigned short state;
-  unsigned short override;
-} extra_data;
-
-static
-arglist_t polygon_args[] = {
-  {
-    "file", &polyfileopt,  "File containing vertices of polygon",
-    nullptr, ARGTYPE_FILE | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
-  },
-  {
-    "exclude", &exclopt, "Exclude points inside the polygon",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  ARG_TERMINATOR
-};
-
-static void polytest(double lat1, double lon1,
-                     double lat2, double lon2,
-                     double wlat, double wlon,
-                     unsigned short* state, int first, int last)
+void PolygonFilter::polytest(double lat1, double lon1,
+                             double lat2, double lon2,
+                             double wlat, double wlon,
+                             unsigned short* state, int first, int last)
 {
 
   if (lat1 == wlat) {
@@ -233,8 +213,7 @@ static void polytest(double lat1, double lon1,
 
 #define BADVAL 999999
 
-static void
-polygon_process()
+void PolygonFilter::process()
 {
   queue* elem, * tmp;
   Waypoint* waypointp;
@@ -271,7 +250,7 @@ polygon_process()
     } else if (lat1 != BADVAL && lon1 != BADVAL &&
                lat2 != BADVAL && lon2 != BADVAL) {
 #if NEWQ
-      foreach(Waypoint* waypointp, waypt_list) {
+      foreach (Waypoint* waypointp, waypt_list) {
 #else
       QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
         waypointp = (Waypoint*)elem;
@@ -320,7 +299,7 @@ polygon_process()
   gbfclose(file_in);
 
 #if NEWQ
-  foreach(Waypoint* wp, waypt_list) {
+  foreach (Waypoint* wp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     Waypoint* wp = (Waypoint*) elem;
@@ -340,23 +319,4 @@ polygon_process()
   }
 }
 
-static void
-polygon_init(const char*)
-{
-  /* do nothing */
-}
-
-static void
-polygon_deinit()
-{
-  /* do nothing */
-}
-
-filter_vecs_t polygon_vecs = {
-  polygon_init,
-  polygon_process,
-  polygon_deinit,
-  nullptr,
-  polygon_args
-};
 #endif // FILTERS_ENABLED
