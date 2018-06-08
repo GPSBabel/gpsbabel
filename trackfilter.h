@@ -22,17 +22,10 @@
 #ifndef TRACKFILTER_H_INCLUDED_
 #define TRACKFILTER_H_INCLUDED_
 
-#include "defs.h"
-#include "filter.h"
-#include "filterdefs.h"
-#include "grtcirc.h"
-#include "strptime.h"
-#include "xmlgeneric.h"
-#include <QtCore/QRegExp>
-#include <QtCore/QXmlStreamAttributes>
-#include <cmath>
-#include <cstdio> /* for snprintf */
-#include <cstdlib> /* for qsort */
+#include <QtCore/QDateTime>  // for QDateTime
+#include <ctime>             // for time_t
+#include "defs.h"            // for ARG_NOMINMAX, route_head (ptr only), ARG...
+#include "filter.h"          // for Filter
 
 #if FILTERS_ENABLED || MINIMAL_FILTERS
 

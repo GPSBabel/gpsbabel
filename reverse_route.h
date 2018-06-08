@@ -18,9 +18,8 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-#include "defs.h"
-#include "filter.h"
-#include "filterdefs.h"
+#include "defs.h"    // for Waypoint (ptr only), arglist_t, route_head (ptr ...
+#include "filter.h"  // for Filter
 
 #if FILTERS_ENABLED
 

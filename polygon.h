@@ -22,10 +22,8 @@
 #ifndef POLYGON_H_INCLUDED_
 #define POLYGON_H_INCLUDED_
 
-#include "defs.h"
-#include "filter.h"
-#include "filterdefs.h"
-#include <cstdio>
+#include "defs.h"    // for ARG_NOMINMAX, arglist_t, ARGTYPE_BOOL, ARGTYPE_FILE
+#include "filter.h"  // for Filter
 
 #if FILTERS_ENABLED
 

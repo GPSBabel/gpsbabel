@@ -22,10 +22,9 @@
 #ifndef STACKFILTER_H_INCLUDED_
 #define STACKFILTER_H_INCLUDED_
 
-#include "defs.h"
-#include "filter.h"
-#include "filterdefs.h"
-#include <cstdlib>
+#include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, ARGTYPE_BEGIN_EXCL
+#include "filter.h"  // for Filter
+#include "queue.h"   // for queue
 
 #if FILTERS_ENABLED
 

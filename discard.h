@@ -22,14 +22,10 @@
 #ifndef DISCARD_H_INCLUDED_
 #define DISCARD_H_INCLUDED_
 
-#include "defs.h"
-#include "filter.h"
-#include "filterdefs.h"
-#include <cstdlib>
 // Can't use QRegularExpression because Linux won't get Qt 5 for years.
-#include <QtCore/QRegExp>
-#include <cstdio>
-#include <cstdlib>
+#include <QtCore/QRegExp>  // for QRegExp
+#include "defs.h"          // for ARG_NOMINMAX, ARGTYPE_BEGIN_REQ, ARGTYPE_S...
+#include "filter.h"        // for Filter
 
 #if FILTERS_ENABLED
 class DiscardFilter:public Filter

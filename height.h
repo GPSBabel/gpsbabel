@@ -24,11 +24,8 @@
 #ifndef HEIGHT_H_INCLUDED_
 #define HEIGHT_H_INCLUDED_
 
-#include "defs.h"
-#include "filter.h"
-#include "filterdefs.h"
-#include <cmath>
-#include <cstdlib>
+#include "defs.h"    // for ARG_NOMINMAX, Waypoint (ptr only), arglist_t
+#include "filter.h"  // for Filter
 
 #if FILTERS_ENABLED
 

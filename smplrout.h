@@ -59,11 +59,8 @@
 #ifndef SMPLROUT_H_INCLUDED_
 #define SMPLROUT_H_INCLUDED_
 
-#include "defs.h"
-#include "filter.h"
-#include "filterdefs.h"
-#include "grtcirc.h"
-#include <cstdlib>
+#include "defs.h"    // for route_head (ptr only), Waypoint (ptr only), ARGT...
+#include "filter.h"  // for Filter
 
 #if FILTERS_ENABLED
 

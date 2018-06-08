@@ -23,9 +23,8 @@
 #ifndef VALIDATE_H_INCLUDED_
 #define VALIDATE_H_INCLUDED_
 
-#include "defs.h"
-#include "filter.h"
-#include "filterdefs.h"
+#include "defs.h"    // for route_head (ptr only), ARGTYPE_BOOL, ARG_NOMINMAX
+#include "filter.h"  // for Filter
 
 #if FILTERS_ENABLED
 

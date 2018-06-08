@@ -22,14 +22,8 @@
 #ifndef ARCDIST_H_INCLUDED_
 #define ARCDIST_H_INCLUDED_
 
-#include "defs.h"
-#include "filter.h"
-#include "filterdefs.h"
-#include "grtcirc.h"
-
-#include <cmath>
-#include <cstdio>
-#include <cstdlib> // strtod
+#include "defs.h"    // for ARG_NOMINMAX, ARGTYPE_BOOL, Waypoint (ptr only)
+#include "filter.h"  // for Filter
 
 #if FILTERS_ENABLED
 

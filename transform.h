@@ -23,14 +23,11 @@
 #ifndef TRANSFORM_H_INCLUDED_
 #define TRANSFORM_H_INCLUDED_
 
-#include "defs.h"
-#include "filter.h"
-#include "filterdefs.h"
-#include <cstdlib>
+#include <QtCore/QString>  // for QString
+#include "defs.h"          // for route_head (ptr only), ARG_NOMINMAX, ARGTY...
+#include "filter.h"        // for Filter
 
 #if FILTERS_ENABLED
-
-#include <cctype>
 
 class TransformFilter:public Filter
 {

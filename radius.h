@@ -22,12 +22,8 @@
 #ifndef RADIUS_H_INCLUDED_
 #define RADIUS_H_INCLUDED_
 
-#include "defs.h"
-#include "filter.h"
-#include "filterdefs.h"
-#include "grtcirc.h"
-#include <cstdio>
-#include <cstdlib>
+#include "defs.h"    // for ARG_NOMINMAX, ARGTYPE_FLOAT, ARGTYPE_REQUIRED
+#include "filter.h"  // for Filter
 
 #if FILTERS_ENABLED
 

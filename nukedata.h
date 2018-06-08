@@ -23,9 +23,8 @@
 #ifndef NUKEDATA_H_INCLUDED_
 #define NUKEDATA_H_INCLUDED_
 
-#include "defs.h"
-#include "filter.h"
-#include "filterdefs.h"
+#include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, arglist_t, ARG_TERMI...
+#include "filter.h"  // for Filter
 
 #if FILTERS_ENABLED
 
