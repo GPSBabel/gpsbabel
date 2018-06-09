@@ -76,17 +76,7 @@ private:
     int index;
   } wpt_ptr;
 
-  int compare(const void* a, const void* b);
-
-  static int compare_glue(const void* a, const void* b)
-  {
-    return fObj->compare(a, b);
-  }
-  static void setObj(DuplicateFilter& obj)
-  {
-    fObj = &obj;
-  }
-  static DuplicateFilter* fObj;
+  static int compare(const void* a, const void* b);
 
 };
 #endif

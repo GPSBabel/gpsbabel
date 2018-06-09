@@ -255,7 +255,7 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
 
 
   /* sort XTE array, lowest XTE last */
-  qsort(xte_recs, xte_count, sizeof(struct xte), &compare_xte_glue);
+  qsort(xte_recs, xte_count, sizeof(struct xte), compare_xte);
 
   for (i = 0; i < xte_count; i++) {
     xte_recs[i].intermed->xte_rec = xte_recs+i;

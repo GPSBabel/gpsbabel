@@ -26,8 +26,6 @@
 
 #if FILTERS_ENABLED
 
-DuplicateFilter* DuplicateFilter::fObj = nullptr; // definition required for odr-use.
-
 DuplicateFilter::btree_node* DuplicateFilter::addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode)
 {
   btree_node* tmp, * last = nullptr;
@@ -135,8 +133,6 @@ int DuplicateFilter::compare(const void* a, const void* b)
 
 void DuplicateFilter::process(void)
 {
-  setObj(*this);
-
   Waypoint* waypointp;
   btree_node* newnode, * btmp, * sup_tree = nullptr;
   btree_node* oldnode = nullptr;
@@ -167,7 +163,7 @@ void DuplicateFilter::process(void)
     i ++;
     bh ++;
   }
-  qsort(htable, ct, sizeof(*htable), &compare_glue);
+  qsort(htable, ct, sizeof(*htable), compare);
 
   for (i=0; i<ct; i++) {
     waypointp = htable[i].wpt;

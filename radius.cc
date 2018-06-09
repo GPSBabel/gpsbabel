@@ -27,8 +27,6 @@
 
 #if FILTERS_ENABLED
 
-RadiusFilter* RadiusFilter::fObj = nullptr; // definition required for odr-use.
-
 double RadiusFilter::gc_distance(double lat1, double lon1, double lat2, double lon2)
 {
   return gcdist(
@@ -58,8 +56,6 @@ int RadiusFilter::dist_comp(const void* a, const void* b)
 
 void RadiusFilter::process()
 {
-  setObj(*this);
-
 #if !NEWQ
   queue* elem, * tmp;
 #endif
@@ -118,7 +114,7 @@ void RadiusFilter::process()
   }
 
   if (!nosort) {
-    qsort(comp, wc, sizeof(Waypoint*), &dist_comp_glue);
+    qsort(comp, wc, sizeof(Waypoint*), dist_comp);
   }
 
   if (routename) {

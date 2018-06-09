@@ -400,7 +400,7 @@ void TrackFilter::trackfilter_merge()
   }
   track_ct = 1;
 
-  qsort(buff, track_pts-timeless_pts, sizeof(*buff), &trackfilter_merge_qsort_cb_glue);
+  qsort(buff, track_pts-timeless_pts, sizeof(*buff), trackfilter_merge_qsort_cb);
 
   dropped = timeless_pts;
   prev = nullptr;
@@ -1105,7 +1105,7 @@ void TrackFilter::init(const char*)
 
     track_disp_all(&trackfilter_fill_track_list_cb_glue, nullptr, nullptr);
     if (need_time) {
-      qsort(track_list, track_ct, sizeof(*track_list), &trackfilter_init_qsort_cb_glue);
+      qsort(track_list, track_ct, sizeof(*track_list), trackfilter_init_qsort_cb);
     }
   }
 }

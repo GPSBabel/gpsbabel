@@ -88,17 +88,7 @@ private:
   };
 
   double gc_distance(double lat1, double lon1, double lat2, double lon2);
-  int dist_comp(const void* a, const void* b);
-
-  static int dist_comp_glue(const void* a, const void* b)
-  {
-    return fObj->dist_comp(a, b);
-  }
-  static void setObj(RadiusFilter& obj)
-  {
-    fObj = &obj;
-  }
-  static RadiusFilter* fObj;
+  static int dist_comp(const void* a, const void* b);
 
 };
 #endif // FILTERS_ENABLED

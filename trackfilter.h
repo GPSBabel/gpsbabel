@@ -185,8 +185,8 @@ private:
 
   int trackfilter_opt_count();
   int trackfilter_parse_time_opt(const char* arg);
-  int trackfilter_init_qsort_cb(const void* a, const void* b);
-  int trackfilter_merge_qsort_cb(const void* a, const void* b);
+  static int trackfilter_init_qsort_cb(const void* a, const void* b);
+  static int trackfilter_merge_qsort_cb(const void* a, const void* b);
   fix_type trackfilter_parse_fix(int* nsats);
   void trackfilter_fill_track_list_cb(const route_head* track); 	/* callback for track_disp_all */
   void trackfilter_minpoint_list_cb(const route_head* track);
@@ -225,14 +225,6 @@ private:
 
   void trackfilter_segment_head(const route_head* rte);
 
-  static int trackfilter_init_qsort_cb_glue(const void* a, const void* b)
-  {
-    return fObj->trackfilter_init_qsort_cb(a, b);
-  }
-  static int trackfilter_merge_qsort_cb_glue(const void* a, const void* b)
-  {
-    return fObj->trackfilter_merge_qsort_cb(a, b);
-  }
   static void trackfilter_fill_track_list_cb_glue(const route_head* track)
   {
     return fObj->trackfilter_fill_track_list_cb(track);

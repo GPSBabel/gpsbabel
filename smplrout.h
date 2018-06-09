@@ -135,7 +135,7 @@ private:
 
   void routesimple_waypt_pr(const Waypoint* wpt);
   void compute_xte(struct xte* xte_rec);
-  int compare_xte(const void* a, const void* b);
+  static int compare_xte(const void* a, const void* b);
   void routesimple_head(const route_head* rte);
   void shuffle_xte(struct xte* xte_rec);
   void routesimple_tail(const route_head* rte);
@@ -143,10 +143,6 @@ private:
   static void routesimple_waypt_pr_glue(const Waypoint* wpt)
   {
     return fObj->routesimple_waypt_pr(wpt);
-  }
-  static int compare_xte_glue(const void* a, const void* b)
-  {
-    return fObj->compare_xte(a, b);
   }
   static void routesimple_head_glue(const route_head* rte)
   {
