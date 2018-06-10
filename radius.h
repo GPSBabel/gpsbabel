@@ -34,8 +34,8 @@ public:
   {
     return args;
   }
+  void init() override;
   void process() override;
-  void init(const char*) override;
   void deinit() override;
 
 private:

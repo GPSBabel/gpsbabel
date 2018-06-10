@@ -220,7 +220,7 @@ void ArcDistanceFilter::process()
   }
 }
 
-void ArcDistanceFilter::init(const char*)
+void ArcDistanceFilter::init()
 {
   char* fm;
 

@@ -490,7 +490,7 @@ main(int argc, char* argv[])
       filter = find_filter_vec(CSTR(optarg), &fvec_opts);
 
       if (filter) {
-        filter->init(fvec_opts);
+        filter->init();
         filter->process();
         filter->deinit();
         free_filter_vec(filter);

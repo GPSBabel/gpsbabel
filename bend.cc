@@ -32,7 +32,7 @@
 
 #if FILTERS_ENABLED
 
-void BendFilter::init(const char*)
+void BendFilter::init()
 {
   maxDist = 0.0;
   if (distopt) {

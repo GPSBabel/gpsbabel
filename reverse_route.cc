@@ -58,7 +58,7 @@ void ReverseRouteFilter::process()
   route_disp_all(&reverse_route_head_glue, nullptr, nullptr);
 }
 
-void ReverseRouteFilter::init(const char*)
+void ReverseRouteFilter::init()
 {
   switch (global_opts.objective) {
   case rtedata:

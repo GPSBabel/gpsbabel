@@ -36,8 +36,8 @@ public:
   {
     return args;
   }
+  void init() override;
   void process() override;
-  void init(const char*) override;
 
 private:
   char* addopt        = nullptr;

@@ -127,7 +127,7 @@ void StackFilter::process()
   }
 }
 
-void StackFilter::init(const char*)
+void StackFilter::init()
 {
 
   int invalid = 0;

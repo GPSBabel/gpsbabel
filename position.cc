@@ -167,7 +167,7 @@ void PositionFilter::process()
   track_disp_all(&position_process_trk_glue, nullptr, nullptr);
 }
 
-void PositionFilter::init(const char*)
+void PositionFilter::init()
 {
   char* fm;
 

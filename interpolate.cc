@@ -149,7 +149,7 @@ void InterpolateFilter::process()
   xfree(backuproute);
 }
 
-void InterpolateFilter::init(const char*)
+void InterpolateFilter::init()
 {
 
   char* fm;

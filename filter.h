@@ -27,7 +27,7 @@ class Filter
 public:
   virtual arglist_t* get_args() = 0;
 
-  virtual void init(const char* args)
+  virtual void init()
   {
     /* Called before filter processing */
 

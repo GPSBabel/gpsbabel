@@ -130,7 +130,7 @@ void DiscardFilter::process()
 
 }
 
-void DiscardFilter::init(const char*)
+void DiscardFilter::init()
 {
   if (hdopopt) {
     hdopf = atof(hdopopt);

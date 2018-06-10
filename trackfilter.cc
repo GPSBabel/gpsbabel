@@ -1067,7 +1067,7 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
 * global cb's
 *******************************************************************************/
 
-void TrackFilter::init(const char*)
+void TrackFilter::init()
 {
   setObj(*this);
 
@@ -1175,7 +1175,7 @@ void TrackFilter::process()
     }
 
     deinit();       /* reinitialize */
-    init(nullptr);
+    init();
 
     if (track_ct == 0) {
       return;  /* no more track(s), no more fun */
@@ -1197,7 +1197,7 @@ void TrackFilter::process()
     }
 
     deinit();	/* reinitialize */
-    init(nullptr);
+    init();
 
     if (track_ct == 0) {
       return;  /* no more track(s), no more fun */
@@ -1212,7 +1212,7 @@ void TrackFilter::process()
     }
 
     deinit();	/* reinitialize */
-    init(nullptr);
+    init();
   }
 
   if (opt_trk2seg != nullptr) {

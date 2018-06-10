@@ -38,7 +38,7 @@ extern queue waypt_head;
 #endif
 #include "filter.h"
 
-typedef void (*filter_init)(char const*);
+typedef void (*filter_init)(void);
 typedef void (*filter_process)(void);
 typedef void (*filter_deinit)(void);
 typedef void (*filter_exit)(void);

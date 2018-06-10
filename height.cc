@@ -102,7 +102,7 @@ void HeightFilter::correct_height(const Waypoint* wpt)
   }
 }
 
-void HeightFilter::init(const char*)
+void HeightFilter::init()
 {
   char* unit;
 

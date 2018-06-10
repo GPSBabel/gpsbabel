@@ -54,7 +54,7 @@ void SortFilter::process()
   sortqueue(&waypt_head, &sort_comp_glue);
 }
 
-void SortFilter::init(const char*)
+void SortFilter::init()
 {
   if (opt_sm_gcid) {
     sort_mode = sm_gcid;

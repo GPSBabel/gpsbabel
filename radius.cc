@@ -147,7 +147,7 @@ void RadiusFilter::process()
   xfree(comp);
 }
 
-void RadiusFilter::init(const char*)
+void RadiusFilter::init()
 {
   char* fm;
 

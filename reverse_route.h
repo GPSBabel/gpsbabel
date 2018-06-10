@@ -30,6 +30,8 @@ public:
   {
     return args;
   }
+  void init() override;
+  void process() override;
 
 private:
   int prev_new_trkseg;
@@ -54,10 +56,6 @@ private:
     fObj = &obj;
   }
   static ReverseRouteFilter* fObj;
-
-public:
-  void process() override;
-  void init(const char*) override;
 
 };
 #endif

@@ -323,7 +323,7 @@ void SimplifyRouteFilter::process()
   track_disp_all(&routesimple_head_glue, &routesimple_tail_glue, &routesimple_waypt_pr_glue);
 }
 
-void SimplifyRouteFilter::init(const char*)
+void SimplifyRouteFilter::init()
 {
   count = 0;
 
