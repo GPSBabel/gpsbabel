@@ -1,0 +1,10 @@
+#!/bin/bash -e
+# you must be logged into docker for the push to succeed.
+tag=$(date -u +%Y%m%dT%H%M%SZ)
+docker build -t gpsbabel_build_environment:latest .
+docker tag gpsbabel_build_environment:latest gpsbabel_build_environment:$tag
+docker tag gpsbabel_build_environment:latest tsteven4/gpsbabel_build_environment:latest 
+docker tag gpsbabel_build_environment:latest tsteven4/gpsbabel_build_environment:$tag
+docker push tsteven4/gpsbabel_build_environment:$tag
+docker push tsteven4/gpsbabel_build_environment:latest
+docker image ls
