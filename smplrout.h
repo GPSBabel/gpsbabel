@@ -140,36 +140,6 @@ private:
   void shuffle_xte(struct xte* xte_rec);
   void routesimple_tail(const route_head* rte);
 
-  typedef void (SimplifyRouteFilter::*RteHdCb)(const route_head*);
-  class RteHdFunctor
-  {
-  public:
-    RteHdFunctor(SimplifyRouteFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
-    void operator()(const route_head* rh)
-    {
-      ((that)->*(_cb))(rh);
-    }
-
-  private:
-    SimplifyRouteFilter* that;
-    RteHdCb _cb;
-  };
-
-  typedef void (SimplifyRouteFilter::*WayptCb)(const Waypoint*);
-  class WayptFunctor
-  {
-  public:
-    WayptFunctor(SimplifyRouteFilter& obj, WayptCb cb) : that(&obj), _cb(cb) {}
-    void operator()(const Waypoint* wpt)
-    {
-      ((that)->*(_cb))(wpt);
-    }
-
-  private:
-    SimplifyRouteFilter* that;
-    WayptCb _cb;
-  };
-
 };
 
 #endif // FILTERS_ENABLED

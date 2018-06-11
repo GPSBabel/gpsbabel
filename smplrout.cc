@@ -312,9 +312,9 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
 
 void SimplifyRouteFilter::process()
 {
-  WayptFunctor routesimple_waypt_pr_f(*this, &SimplifyRouteFilter::routesimple_waypt_pr);
-  RteHdFunctor routesimple_head_f(*this, &SimplifyRouteFilter::routesimple_head);
-  RteHdFunctor routesimple_tail_f(*this, &SimplifyRouteFilter::routesimple_tail);
+  WayptFunctor<SimplifyRouteFilter> routesimple_waypt_pr_f(*this, &SimplifyRouteFilter::routesimple_waypt_pr);
+  RteHdFunctor<SimplifyRouteFilter> routesimple_head_f(*this, &SimplifyRouteFilter::routesimple_head);
+  RteHdFunctor<SimplifyRouteFilter> routesimple_tail_f(*this, &SimplifyRouteFilter::routesimple_tail);
 
   waypt_del_fnp = route_del_wpt;
   route_disp_all(routesimple_head_f, routesimple_tail_f, routesimple_waypt_pr_f);

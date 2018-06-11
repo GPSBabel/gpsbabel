@@ -75,21 +75,6 @@ private:
   void position_process_rte(const route_head* rh);
   void position_process_trk(const route_head* rh);
 
-  typedef void (PositionFilter::*RteHdCb)(const route_head*);
-  class RteHdFunctor
-  {
-  public:
-    RteHdFunctor(PositionFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
-    void operator()(const route_head* rh)
-    {
-      ((that)->*(_cb))(rh);
-    }
-
-  private:
-    PositionFilter* that;
-    RteHdCb _cb;
-  };
-
 };
 #endif // FILTERS_ENABLED
 #endif // POSITION_H_INCLUDED_

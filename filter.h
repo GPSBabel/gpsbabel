@@ -69,6 +69,38 @@ public:
      * previously. */
   }
 
-};
+protected:
+//typedef void (MyFilter::*RteHdCb)(const route_head*);
+  template <class MyFilter>
+  class RteHdFunctor
+  {
+  public:
+    RteHdFunctor(MyFilter& obj, void (MyFilter::*cb)(const route_head*)) : that(&obj), _cb(cb) {}
+    void operator()(const route_head* rh)
+    {
+      ((that)->*(_cb))(rh);
+    }
 
+  private:
+    MyFilter* that;
+    void (MyFilter::*_cb)(const route_head*);
+  };
+
+//typedef void (MyFilter::*WayptCb)(const Waypoint*);
+  template <class MyFilter>
+  class WayptFunctor
+  {
+  public:
+    WayptFunctor(MyFilter& obj, void (MyFilter::*cb)(const Waypoint*)) : that(&obj), _cb(cb) {}
+    void operator()(const Waypoint* wpt)
+    {
+      ((that)->*(_cb))(wpt);
+    }
+
+  private:
+    MyFilter* that;
+    void (MyFilter::*_cb)(const Waypoint*);
+  };
+
+};
 #endif // FILTER_H_INCLUDED_

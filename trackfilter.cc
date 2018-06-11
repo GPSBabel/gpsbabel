@@ -1067,8 +1067,8 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
 
 void TrackFilter::init()
 {
-  RteHdFunctor trackfilter_segment_head_f(*this, &TrackFilter::trackfilter_segment_head);
-  RteHdFunctor trackfilter_fill_track_list_cb_f(*this, &TrackFilter::trackfilter_fill_track_list_cb);
+  RteHdFunctor<TrackFilter> trackfilter_segment_head_f(*this, &TrackFilter::trackfilter_segment_head);
+  RteHdFunctor<TrackFilter> trackfilter_fill_track_list_cb_f(*this, &TrackFilter::trackfilter_fill_track_list_cb);
 
   int count = track_count();
 
@@ -1122,7 +1122,7 @@ void TrackFilter::deinit()
 
 void TrackFilter::process()
 {
-  RteHdFunctor trackfilter_minpoint_list_cb_f(*this, &TrackFilter::trackfilter_minpoint_list_cb);
+  RteHdFunctor<TrackFilter> trackfilter_minpoint_list_cb_f(*this, &TrackFilter::trackfilter_minpoint_list_cb);
 
   int opts, something_done;
 

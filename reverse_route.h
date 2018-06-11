@@ -39,39 +39,8 @@ private:
     ARG_TERMINATOR
   };
 
-private:
   void reverse_route_wpt(const Waypoint* waypointp);
   void reverse_route_head(const route_head* rte);
-
-  typedef void (ReverseRouteFilter::*RteHdCb)(const route_head*);
-  class RteHdFunctor
-  {
-  public:
-    RteHdFunctor(ReverseRouteFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
-    void operator()(const route_head* rh)
-    {
-      ((that)->*(_cb))(rh);
-    }
-
-  private:
-    ReverseRouteFilter* that;
-    RteHdCb _cb;
-  };
-
-  typedef void (ReverseRouteFilter::*WayptCb)(const Waypoint*);
-  class WayptFunctor
-  {
-  public:
-    WayptFunctor(ReverseRouteFilter& obj, WayptCb cb) : that(&obj), _cb(cb) {}
-    void operator()(const Waypoint* wpt)
-    {
-      ((that)->*(_cb))(wpt);
-    }
-
-  private:
-    ReverseRouteFilter* that;
-    WayptCb _cb;
-  };
 
 };
 #endif

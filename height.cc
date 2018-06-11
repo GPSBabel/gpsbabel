@@ -119,7 +119,7 @@ void HeightFilter::init()
 
 void HeightFilter::process()
 {
-  WayptFunctor correct_height_f(*this, &HeightFilter::correct_height);
+  WayptFunctor<HeightFilter> correct_height_f(*this, &HeightFilter::correct_height);
 
   waypt_disp_all(correct_height_f);
   route_disp_all(nullptr, nullptr, correct_height_f);

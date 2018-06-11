@@ -225,21 +225,6 @@ private:
 
   void trackfilter_segment_head(const route_head* rte);
 
-  typedef void (TrackFilter::*RteHdCb)(const route_head*);
-  class RteHdFunctor
-  {
-  public:
-    RteHdFunctor(TrackFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
-    void operator()(const route_head* rh)
-    {
-      ((that)->*(_cb))(rh);
-    }
-
-  private:
-    TrackFilter* that;
-    RteHdCb _cb;
-  };
-
 };
 
 #endif // FILTERS_ENABLED

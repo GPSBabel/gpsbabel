@@ -89,36 +89,6 @@ private:
   void arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2);
   void arcdist_arc_disp_hdr_cb(const route_head*);
 
-  typedef void (ArcDistanceFilter::*RteHdCb)(const route_head*);
-  class RteHdFunctor
-  {
-  public:
-    RteHdFunctor(ArcDistanceFilter& obj, RteHdCb cb) : _obj(&obj), _cb(cb) {}
-    void operator()(const route_head* rh)
-    {
-      ((_obj)->*(_cb))(rh);
-    }
-
-  private:
-    ArcDistanceFilter* _obj;
-    RteHdCb _cb;
-  };
-
-  typedef void (ArcDistanceFilter::*WayptCb)(const Waypoint*);
-  class WayptFunctor
-  {
-  public:
-    WayptFunctor(ArcDistanceFilter& obj, WayptCb cb) : _obj(&obj), _cb(cb) {}
-    void operator()(const Waypoint* wpt)
-    {
-      ((_obj)->*(_cb))(wpt);
-    }
-
-  private:
-    ArcDistanceFilter* _obj;
-    WayptCb _cb;
-  };
-
 };
 #endif // FILTERS_ENABLED
 #endif // ARCDIST_H_INCLUDED_

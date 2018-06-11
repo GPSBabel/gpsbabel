@@ -60,21 +60,6 @@ private:
   double wgs84_separation(double lat, double lon);
   void correct_height(const Waypoint* wpt);
 
-  typedef void (HeightFilter::*WayptCb)(const Waypoint*);
-  class WayptFunctor
-  {
-  public:
-    WayptFunctor(HeightFilter& obj, WayptCb cb) : that(&obj), _cb(cb) {}
-    void operator()(const Waypoint* wpt)
-    {
-      ((that)->*(_cb))(wpt);
-    }
-
-  private:
-    HeightFilter* that;
-    WayptCb _cb;
-  };
-
 };
 
 #endif // FILTERS_ENABLED

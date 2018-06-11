@@ -58,40 +58,9 @@ private:
     ARG_TERMINATOR
   };
 
-private:
   void validate_head(const route_head*);
   void validate_head_trl(const route_head* header);
   void validate_point(const Waypoint*);
-
-  typedef void (ValidateFilter::*RteHdCb)(const route_head*);
-  class RteHdFunctor
-  {
-  public:
-    RteHdFunctor(ValidateFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
-    void operator()(const route_head* rh)
-    {
-      ((that)->*(_cb))(rh);
-    }
-
-  private:
-    ValidateFilter* that;
-    RteHdCb _cb;
-  };
-
-  typedef void (ValidateFilter::*WayptCb)(const Waypoint*);
-  class WayptFunctor
-  {
-  public:
-    WayptFunctor(ValidateFilter& obj, WayptCb cb) : that(&obj), _cb(cb) {}
-    void operator()(const Waypoint* wpt)
-    {
-      ((that)->*(_cb))(wpt);
-    }
-
-  private:
-    ValidateFilter* that;
-    WayptCb _cb;
-  };
 
 };
 

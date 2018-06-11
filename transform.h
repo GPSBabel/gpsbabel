@@ -85,36 +85,6 @@ private:
   void transform_routes();
   void transform_tracks();
 
-  typedef void (TransformFilter::*RteHdCb)(const route_head*);
-  class RteHdFunctor
-  {
-  public:
-    RteHdFunctor(TransformFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
-    void operator()(const route_head* rh)
-    {
-      ((that)->*(_cb))(rh);
-    }
-
-  private:
-    TransformFilter* that;
-    RteHdCb _cb;
-  };
-
-  typedef void (TransformFilter::*WayptCb)(const Waypoint*);
-  class WayptFunctor
-  {
-  public:
-    WayptFunctor(TransformFilter& obj, WayptCb cb) : that(&obj), _cb(cb) {}
-    void operator()(const Waypoint* wpt)
-    {
-      ((that)->*(_cb))(wpt);
-    }
-
-  private:
-    TransformFilter* that;
-    WayptCb _cb;
-  };
-
 };
 
 #endif // FILTERS_ENABLED

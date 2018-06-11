@@ -105,8 +105,8 @@ void ArcDistanceFilter::arcdist_arc_disp_hdr_cb(const route_head*)
 
 void ArcDistanceFilter::process()
 {
-  WayptFunctor arcdist_arc_disp_wpt_cb_f(*this, &ArcDistanceFilter::arcdist_arc_disp_wpt_cb);
-  RteHdFunctor arcdist_arc_disp_hdr_cb_f(*this, &ArcDistanceFilter::arcdist_arc_disp_hdr_cb);
+  WayptFunctor<ArcDistanceFilter> arcdist_arc_disp_wpt_cb_f(*this, &ArcDistanceFilter::arcdist_arc_disp_wpt_cb);
+  RteHdFunctor<ArcDistanceFilter> arcdist_arc_disp_hdr_cb_f(*this, &ArcDistanceFilter::arcdist_arc_disp_hdr_cb);
 
   queue* elem, * tmp;
   unsigned removed;

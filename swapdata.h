@@ -44,21 +44,6 @@ private:
 
   void swapdata_cb(const Waypoint* ref);
 
-  typedef void (SwapDataFilter::*WayptCb)(const Waypoint*);
-  class WayptFunctor
-  {
-  public:
-    WayptFunctor(SwapDataFilter& obj, WayptCb cb) : that(&obj), _cb(cb) {}
-    void operator()(const Waypoint* wpt)
-    {
-      ((that)->*(_cb))(wpt);
-    }
-
-  private:
-    SwapDataFilter* that;
-    WayptCb _cb;
-  };
-
 };
 
 #endif // FILTERS_ENABLED
