@@ -63,23 +63,35 @@ private:
   void validate_head_trl(const route_head* header);
   void validate_point(const Waypoint*);
 
-  static void validate_head_glue(const route_head* rh)
+  typedef void (ValidateFilter::*RteHdCb)(const route_head*);
+  class RteHdFunctor
   {
-    return fObj->validate_head(rh);
-  }
-  static void validate_head_trl_glue(const route_head* rh)
+  public:
+    RteHdFunctor(ValidateFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const route_head* rh)
+    {
+      ((that)->*(_cb))(rh);
+    }
+
+  private:
+    ValidateFilter* that;
+    RteHdCb _cb;
+  };
+
+  typedef void (ValidateFilter::*WayptCb)(const Waypoint*);
+  class WayptFunctor
   {
-    return fObj->validate_head_trl(rh);
-  }
-  static void validate_point_glue(const Waypoint* wpt)
-  {
-    return fObj->validate_point(wpt);
-  }
-  static void setObj(ValidateFilter& obj)
-  {
-    fObj = &obj;
-  }
-  static ValidateFilter* fObj;
+  public:
+    WayptFunctor(ValidateFilter& obj, WayptCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const Waypoint* wpt)
+    {
+      ((that)->*(_cb))(wpt);
+    }
+
+  private:
+    ValidateFilter* that;
+    WayptCb _cb;
+  };
 
 };
 

@@ -225,23 +225,20 @@ private:
 
   void trackfilter_segment_head(const route_head* rte);
 
-  static void trackfilter_fill_track_list_cb_glue(const route_head* track)
+  typedef void (TrackFilter::*RteHdCb)(const route_head*);
+  class RteHdFunctor
   {
-    return fObj->trackfilter_fill_track_list_cb(track);
-  }
-  static void trackfilter_minpoint_list_cb_glue(const route_head* track)
-  {
-    return fObj->trackfilter_minpoint_list_cb(track);
-  }
-  static void trackfilter_segment_head_glue(const route_head* rte)
-  {
-    return fObj->trackfilter_segment_head(rte);
-  }
-  static void setObj(TrackFilter& obj)
-  {
-    fObj = &obj;
-  }
-  static TrackFilter* fObj;
+  public:
+    RteHdFunctor(TrackFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const route_head* rh)
+    {
+      ((that)->*(_cb))(rh);
+    }
+
+  private:
+    TrackFilter* that;
+    RteHdCb _cb;
+  };
 
 };
 

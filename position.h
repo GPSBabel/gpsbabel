@@ -75,19 +75,21 @@ private:
   void position_process_rte(const route_head* rh);
   void position_process_trk(const route_head* rh);
 
-  static void position_process_rte_glue(const route_head* rh)
+  typedef void (PositionFilter::*RteHdCb)(const route_head*);
+  class RteHdFunctor
   {
-    return fObj->position_process_rte(rh);
-  }
-  static void position_process_trk_glue(const route_head* rh)
-  {
-    return fObj->position_process_trk(rh);
-  }
-  static void setObj(PositionFilter& obj)
-  {
-    fObj = &obj;
-  }
-  static PositionFilter* fObj;
+  public:
+    RteHdFunctor(PositionFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const route_head* rh)
+    {
+      ((that)->*(_cb))(rh);
+    }
+
+  private:
+    PositionFilter* that;
+    RteHdCb _cb;
+  };
+
 };
 #endif // FILTERS_ENABLED
 #endif // POSITION_H_INCLUDED_

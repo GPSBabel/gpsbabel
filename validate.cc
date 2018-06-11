@@ -28,8 +28,6 @@
 #if FILTERS_ENABLED
 #define MYNAME "validate"
 
-ValidateFilter* ValidateFilter::fObj = nullptr; // definition required for odr-use.
-
 void ValidateFilter::validate_head(const route_head*)
 {
   head_ct += 1;
@@ -54,7 +52,9 @@ void ValidateFilter::validate_point(const Waypoint*)
 
 void ValidateFilter::process()
 {
-  setObj(*this);
+  WayptFunctor validate_point_f(*this, &ValidateFilter::validate_point);
+  RteHdFunctor validate_head_f(*this, &ValidateFilter::validate_head);
+  RteHdFunctor validate_head_trl_f(*this, &ValidateFilter::validate_head_trl);
 
   debug = *opt_debug == '1';
   checkempty = *opt_checkempty == '1';
@@ -63,7 +63,7 @@ void ValidateFilter::process()
   if (debug) {
     fprintf(stderr, "\nProcessing waypts\n");
   }
-  waypt_disp_all(&validate_point_glue);
+  waypt_disp_all(validate_point_f);
   if (debug) {
     fprintf(stderr, "point ct: %d, waypt_count: %d\n", point_ct, waypt_count());
   }
@@ -77,7 +77,7 @@ void ValidateFilter::process()
   if (debug) {
     fprintf(stderr, "\nProcessing routes\n");
   }
-  route_disp_all(&validate_head_glue, &validate_head_trl_glue, &validate_point_glue);
+  route_disp_all(validate_head_f, validate_head_trl_f, validate_point_f);
   if (debug) {
     fprintf(stderr, "route head ct: %d, route_count: %d\n", head_ct, route_count());
     fprintf(stderr, "total route point ct: %d, route_waypt_count: %d\n", point_ct, route_waypt_count());
@@ -95,7 +95,7 @@ void ValidateFilter::process()
   if (debug) {
     fprintf(stderr, "\nProcessing tracks\n");
   }
-  track_disp_all(&validate_head_glue, &validate_head_trl_glue, &validate_point_glue);
+  track_disp_all(validate_head_f, validate_head_trl_f, validate_point_f);
   if (debug) {
     fprintf(stderr, "track head ct: %d, track_count: %d\n", head_ct, track_count());
     fprintf(stderr, "total track point ct: %d, track_waypt_count: %d\n", point_ct, track_waypt_count());

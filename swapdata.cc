@@ -28,8 +28,6 @@
 
 #if FILTERS_ENABLED
 
-SwapDataFilter* SwapDataFilter::fObj = nullptr; // definition required for odr-use.
-
 void SwapDataFilter::swapdata_cb(const Waypoint* ref)
 {
   Waypoint* wpt = (Waypoint*)ref;
@@ -48,11 +46,11 @@ void SwapDataFilter::swapdata_cb(const Waypoint* ref)
 
 void SwapDataFilter::process(void)	/* this procedure must be present in vecs */
 {
-  setObj(*this);
+  WayptFunctor swapdata_cb_f(*this, &SwapDataFilter::swapdata_cb);
 
-  waypt_disp_all(&swapdata_cb_glue);
-  route_disp_all(nullptr, nullptr, &swapdata_cb_glue);
-  track_disp_all(nullptr, nullptr, &swapdata_cb_glue);
+  waypt_disp_all(swapdata_cb_f);
+  route_disp_all(nullptr, nullptr, swapdata_cb_f);
+  track_disp_all(nullptr, nullptr, swapdata_cb_f);
 }
 
 #endif // FILTERS_ENABLED

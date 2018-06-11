@@ -123,19 +123,36 @@ private:
   void fix_process_wpt(const Waypoint* wpt);
   void fix_process_head(const route_head* trk);
 
-  static void fix_process_wpt_glue(const Waypoint* wpt)
+  typedef void (DiscardFilter::*RteHdCb)(const route_head*);
+  class RteHdFunctor
   {
-    return fObj->fix_process_wpt(wpt);
-  }
-  static void fix_process_head_glue(const route_head* trk)
+  public:
+    RteHdFunctor(DiscardFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const route_head* rh)
+    {
+      ((that)->*(_cb))(rh);
+    }
+
+  private:
+    DiscardFilter* that;
+    RteHdCb _cb;
+  };
+
+  typedef void (DiscardFilter::*WayptCb)(const Waypoint*);
+  class WayptFunctor
   {
-    return fObj->fix_process_head(trk);
-  }
-  static void setObj(DiscardFilter& obj)
-  {
-    fObj = &obj;
-  }
-  static DiscardFilter* fObj;
+  public:
+    WayptFunctor(DiscardFilter& obj, WayptCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const Waypoint* wpt)
+    {
+      ((that)->*(_cb))(wpt);
+    }
+
+  private:
+    DiscardFilter* that;
+    WayptCb _cb;
+  };
+
 };
 
 #endif

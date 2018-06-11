@@ -28,8 +28,6 @@
 
 #if FILTERS_ENABLED
 
-PositionFilter* PositionFilter::fObj = nullptr; // definition required for odr-use.
-
 double PositionFilter::gc_distance(double lat1, double lon1, double lat2, double lon2)
 {
   return gcdist(
@@ -155,7 +153,8 @@ void PositionFilter::position_process_trk(const route_head* rh)
 
 void PositionFilter::process()
 {
-  setObj(*this);
+  RteHdFunctor position_process_rte_f(*this, &PositionFilter::position_process_rte);
+  RteHdFunctor position_process_trk_f(*this, &PositionFilter::position_process_trk);
 
   int i = waypt_count();
 
@@ -163,8 +162,8 @@ void PositionFilter::process()
     position_runqueue(&waypt_head, i, wptdata);
   }
 
-  route_disp_all(&position_process_rte_glue, nullptr, nullptr);
-  track_disp_all(&position_process_trk_glue, nullptr, nullptr);
+  route_disp_all(position_process_rte_f, nullptr, nullptr);
+  track_disp_all(position_process_trk_f, nullptr, nullptr);
 }
 
 void PositionFilter::init()

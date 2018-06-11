@@ -31,8 +31,6 @@
 
 #define MYNAME "transform"
 
-TransformFilter* TransformFilter::fObj = nullptr; // definition required for odr-use.
-
 void TransformFilter::transform_waypoints()
 {
   route_head* rte;
@@ -113,12 +111,18 @@ void TransformFilter::transform_any_disp_wpt_cb(const Waypoint* wpt)
 
 void TransformFilter::transform_routes()
 {
-  route_disp_all(&transform_rte_disp_hdr_cb_glue, nullptr, &transform_any_disp_wpt_cb_glue);
+  WayptFunctor transform_any_disp_wpt_cb_f(*this, &TransformFilter::transform_any_disp_wpt_cb);
+  RteHdFunctor transform_rte_disp_hdr_cb_f(*this, &TransformFilter::transform_rte_disp_hdr_cb);
+
+  route_disp_all(transform_rte_disp_hdr_cb_f, nullptr, transform_any_disp_wpt_cb_f);
 }
 
 void TransformFilter::transform_tracks()
 {
-  track_disp_all(&transform_trk_disp_hdr_cb_glue, nullptr, &transform_any_disp_wpt_cb_glue);
+  WayptFunctor transform_any_disp_wpt_cb_f(*this, &TransformFilter::transform_any_disp_wpt_cb);
+  RteHdFunctor transform_trk_disp_hdr_cb_f(*this, &TransformFilter::transform_trk_disp_hdr_cb);
+
+  track_disp_all(transform_trk_disp_hdr_cb_f, nullptr, transform_any_disp_wpt_cb_f);
 }
 
 /*******************************************************************************
@@ -127,8 +131,6 @@ void TransformFilter::transform_tracks()
 
 void TransformFilter::process()
 {
-  setObj(*this);
-
   int delete_after = (opt_delete && (*opt_delete == '1')) ? 1 : 0;
 
   use_src_name = (opt_rpt_name && (*opt_rpt_name == '1')) ? 1 : 0;

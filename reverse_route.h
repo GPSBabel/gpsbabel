@@ -43,19 +43,35 @@ private:
   void reverse_route_wpt(const Waypoint* waypointp);
   void reverse_route_head(const route_head* rte);
 
-  static void reverse_route_wpt_glue(const Waypoint* waypointp)
+  typedef void (ReverseRouteFilter::*RteHdCb)(const route_head*);
+  class RteHdFunctor
   {
-    return fObj->reverse_route_wpt(waypointp);
-  }
-  static void reverse_route_head_glue(const route_head* rte)
+  public:
+    RteHdFunctor(ReverseRouteFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const route_head* rh)
+    {
+      ((that)->*(_cb))(rh);
+    }
+
+  private:
+    ReverseRouteFilter* that;
+    RteHdCb _cb;
+  };
+
+  typedef void (ReverseRouteFilter::*WayptCb)(const Waypoint*);
+  class WayptFunctor
   {
-    return fObj->reverse_route_head(rte);
-  }
-  static void setObj(ReverseRouteFilter& obj)
-  {
-    fObj = &obj;
-  }
-  static ReverseRouteFilter* fObj;
+  public:
+    WayptFunctor(ReverseRouteFilter& obj, WayptCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const Waypoint* wpt)
+    {
+      ((that)->*(_cb))(wpt);
+    }
+
+  private:
+    ReverseRouteFilter* that;
+    WayptCb _cb;
+  };
 
 };
 #endif

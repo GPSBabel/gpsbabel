@@ -34,8 +34,6 @@
 
 #define BADVAL 999999
 
-ArcDistanceFilter* ArcDistanceFilter::fObj = nullptr; // definition required for odr-use.
-
 void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
 {
   queue* elem, * tmp;
@@ -107,7 +105,8 @@ void ArcDistanceFilter::arcdist_arc_disp_hdr_cb(const route_head*)
 
 void ArcDistanceFilter::process()
 {
-  setObj(*this);
+  WayptFunctor arcdist_arc_disp_wpt_cb_f(*this, &ArcDistanceFilter::arcdist_arc_disp_wpt_cb);
+  RteHdFunctor arcdist_arc_disp_hdr_cb_f(*this, &ArcDistanceFilter::arcdist_arc_disp_hdr_cb);
 
   queue* elem, * tmp;
   unsigned removed;
@@ -156,9 +155,9 @@ void ArcDistanceFilter::process()
 
     gbfclose(file_in);
   } else if (rteopt) {
-    route_disp_all(&arcdist_arc_disp_hdr_cb_glue, nullptr, &arcdist_arc_disp_wpt_cb_glue);
+    route_disp_all(arcdist_arc_disp_hdr_cb_f, nullptr, arcdist_arc_disp_wpt_cb_f);
   } else if (trkopt) {
-    track_disp_all(&arcdist_arc_disp_hdr_cb_glue, nullptr, &arcdist_arc_disp_wpt_cb_glue);
+    track_disp_all(arcdist_arc_disp_hdr_cb_f, nullptr, arcdist_arc_disp_wpt_cb_f);
   }
 
   removed = 0;

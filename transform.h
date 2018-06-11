@@ -85,23 +85,36 @@ private:
   void transform_routes();
   void transform_tracks();
 
-  static void transform_rte_disp_hdr_cb_glue(const route_head* rte)
+  typedef void (TransformFilter::*RteHdCb)(const route_head*);
+  class RteHdFunctor
   {
-    return fObj->transform_rte_disp_hdr_cb(rte);
-  }
-  static void transform_trk_disp_hdr_cb_glue(const route_head* trk)
+  public:
+    RteHdFunctor(TransformFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const route_head* rh)
+    {
+      ((that)->*(_cb))(rh);
+    }
+
+  private:
+    TransformFilter* that;
+    RteHdCb _cb;
+  };
+
+  typedef void (TransformFilter::*WayptCb)(const Waypoint*);
+  class WayptFunctor
   {
-    return fObj->transform_trk_disp_hdr_cb(trk);
-  }
-  static void transform_any_disp_wpt_cb_glue(const Waypoint* wpt)
-  {
-    return fObj->transform_any_disp_wpt_cb(wpt);
-  }
-  static void setObj(TransformFilter& obj)
-  {
-    fObj = &obj;
-  }
-  static TransformFilter* fObj;
+  public:
+    WayptFunctor(TransformFilter& obj, WayptCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const Waypoint* wpt)
+    {
+      ((that)->*(_cb))(wpt);
+    }
+
+  private:
+    TransformFilter* that;
+    WayptCb _cb;
+  };
+
 };
 
 #endif // FILTERS_ENABLED

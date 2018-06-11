@@ -89,19 +89,35 @@ private:
   void arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2);
   void arcdist_arc_disp_hdr_cb(const route_head*);
 
-  static void arcdist_arc_disp_wpt_cb_glue(const Waypoint* arcpt2)
+  typedef void (ArcDistanceFilter::*RteHdCb)(const route_head*);
+  class RteHdFunctor
   {
-    return fObj->arcdist_arc_disp_wpt_cb(arcpt2);
-  }
-  static void arcdist_arc_disp_hdr_cb_glue(const route_head* rh)
+  public:
+    RteHdFunctor(ArcDistanceFilter& obj, RteHdCb cb) : _obj(&obj), _cb(cb) {}
+    void operator()(const route_head* rh)
+    {
+      ((_obj)->*(_cb))(rh);
+    }
+
+  private:
+    ArcDistanceFilter* _obj;
+    RteHdCb _cb;
+  };
+
+  typedef void (ArcDistanceFilter::*WayptCb)(const Waypoint*);
+  class WayptFunctor
   {
-    return fObj->arcdist_arc_disp_hdr_cb(rh);
-  }
-  static void setObj(ArcDistanceFilter& obj)
-  {
-    fObj = &obj;
-  }
-  static ArcDistanceFilter* fObj;
+  public:
+    WayptFunctor(ArcDistanceFilter& obj, WayptCb cb) : _obj(&obj), _cb(cb) {}
+    void operator()(const Waypoint* wpt)
+    {
+      ((_obj)->*(_cb))(wpt);
+    }
+
+  private:
+    ArcDistanceFilter* _obj;
+    WayptCb _cb;
+  };
 
 };
 #endif // FILTERS_ENABLED

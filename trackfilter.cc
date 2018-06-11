@@ -38,8 +38,6 @@
 
 #undef TRACKF_DBG
 
-TrackFilter* TrackFilter::fObj = nullptr; // definition required for odr-use.
-
 /*******************************************************************************
 * helpers
 *******************************************************************************/
@@ -1069,7 +1067,8 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
 
 void TrackFilter::init()
 {
-  setObj(*this);
+  RteHdFunctor trackfilter_segment_head_f(*this, &TrackFilter::trackfilter_segment_head);
+  RteHdFunctor trackfilter_fill_track_list_cb_f(*this, &TrackFilter::trackfilter_fill_track_list_cb);
 
   int count = track_count();
 
@@ -1095,7 +1094,7 @@ void TrackFilter::init()
 
   // Perform segmenting first.
   if (opt_segment) {
-    track_disp_all(&trackfilter_segment_head_glue, nullptr, nullptr);
+    track_disp_all(trackfilter_segment_head_f, nullptr, nullptr);
   }
 
   if (count > 0) {
@@ -1103,7 +1102,7 @@ void TrackFilter::init()
 
     /* check all tracks for time and order (except merging) */
 
-    track_disp_all(&trackfilter_fill_track_list_cb_glue, nullptr, nullptr);
+    track_disp_all(trackfilter_fill_track_list_cb_f, nullptr, nullptr);
     if (need_time) {
       qsort(track_list, track_ct, sizeof(*track_list), trackfilter_init_qsort_cb);
     }
@@ -1123,7 +1122,7 @@ void TrackFilter::deinit()
 
 void TrackFilter::process()
 {
-  setObj(*this);
+  RteHdFunctor trackfilter_minpoint_list_cb_f(*this, &TrackFilter::trackfilter_minpoint_list_cb);
 
   int opts, something_done;
 
@@ -1256,7 +1255,7 @@ void TrackFilter::process()
 
   // Performed last as previous options may have created "small" tracks.
   if ((opt_minpoints != nullptr) && atoi(opt_minpoints) > 0) {
-    track_disp_all(&trackfilter_minpoint_list_cb_glue, nullptr, nullptr);
+    track_disp_all(trackfilter_minpoint_list_cb_f, nullptr, nullptr);
   }
 }
 

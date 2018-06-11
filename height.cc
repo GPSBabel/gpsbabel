@@ -32,8 +32,6 @@
 
 #if FILTERS_ENABLED
 
-HeightFilter* HeightFilter::fObj = nullptr; // definition required for odr-use.
-
 double HeightFilter::bilinear(double x1, double y1, double x2, double y2, double x, double y, double z11, double z12, double z21, double z22)
 {
   double delta;
@@ -121,11 +119,11 @@ void HeightFilter::init()
 
 void HeightFilter::process()
 {
-  setObj(*this);
+  WayptFunctor correct_height_f(*this, &HeightFilter::correct_height);
 
-  waypt_disp_all(&correct_height_glue);
-  route_disp_all(nullptr, nullptr, &correct_height_glue);
-  track_disp_all(nullptr, nullptr, &correct_height_glue);
+  waypt_disp_all(correct_height_f);
+  route_disp_all(nullptr, nullptr, correct_height_f);
+  track_disp_all(nullptr, nullptr, correct_height_f);
 }
 
 #endif // FILTERS_ENABLED

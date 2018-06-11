@@ -26,8 +26,6 @@
 
 #define MYNAME "Route reversal filter"
 
-ReverseRouteFilter* ReverseRouteFilter::fObj = nullptr; // definition required for odr-use.
-
 /*
  * reverse_route_wpt fixes up the waypoint flag new_trkseg
  */
@@ -52,10 +50,11 @@ void ReverseRouteFilter::reverse_route_head(const route_head* rte)
 
 void ReverseRouteFilter::process()
 {
-  setObj(*this);
+  WayptFunctor reverse_route_wpt_f(*this, &ReverseRouteFilter::reverse_route_wpt);
+  RteHdFunctor reverse_route_head_f(*this, &ReverseRouteFilter::reverse_route_head);
 
-  track_disp_all(&reverse_route_head_glue, nullptr, &reverse_route_wpt_glue);
-  route_disp_all(&reverse_route_head_glue, nullptr, nullptr);
+  track_disp_all(reverse_route_head_f, nullptr, reverse_route_wpt_f);
+  route_disp_all(reverse_route_head_f, nullptr, nullptr);
 }
 
 void ReverseRouteFilter::init()

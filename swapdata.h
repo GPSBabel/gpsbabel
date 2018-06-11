@@ -44,15 +44,20 @@ private:
 
   void swapdata_cb(const Waypoint* ref);
 
-  static void swapdata_cb_glue(const Waypoint* ref)
+  typedef void (SwapDataFilter::*WayptCb)(const Waypoint*);
+  class WayptFunctor
   {
-    return fObj->swapdata_cb(ref);
-  }
-  static void setObj(SwapDataFilter& obj)
-  {
-    fObj = &obj;
-  }
-  static SwapDataFilter* fObj;
+  public:
+    WayptFunctor(SwapDataFilter& obj, WayptCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const Waypoint* wpt)
+    {
+      ((that)->*(_cb))(wpt);
+    }
+
+  private:
+    SwapDataFilter* that;
+    WayptCb _cb;
+  };
 
 };
 

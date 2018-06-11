@@ -30,8 +30,6 @@
 
 #if FILTERS_ENABLED
 
-DiscardFilter* DiscardFilter::fObj = nullptr; // definition required for odr-use.
-
 /*
  * Decide whether to keep or toss this point.
  */
@@ -114,19 +112,20 @@ void DiscardFilter::fix_process_head(const route_head* trk)
 
 void DiscardFilter::process()
 {
-  setObj(*this);
+  WayptFunctor fix_process_wpt_f(*this, &DiscardFilter::fix_process_wpt);
+  RteHdFunctor fix_process_head_f(*this, &DiscardFilter::fix_process_head);
 
   // Filter waypoints.
   what = wptdata;
-  waypt_disp_all(&fix_process_wpt_glue);
+  waypt_disp_all(fix_process_wpt_f);
 
   // Filter tracks
   what = trkdata;
-  track_disp_all(&fix_process_head_glue, nullptr, &fix_process_wpt_glue);
+  track_disp_all(fix_process_head_f, nullptr, fix_process_wpt_f);
 
   // And routes
   what = rtedata;
-  route_disp_all(&fix_process_head_glue, nullptr, &fix_process_wpt_glue);
+  route_disp_all(fix_process_head_f, nullptr, fix_process_wpt_f);
 
 }
 

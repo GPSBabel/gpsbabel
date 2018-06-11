@@ -67,8 +67,6 @@
 
 #define sqr(a) ((a)*(a))
 
-SimplifyRouteFilter* SimplifyRouteFilter::fObj = nullptr; // definition required for odr-use.
-
 void SimplifyRouteFilter::free_xte(struct xte* xte_rec)
 {
   xfree(xte_rec->intermed);
@@ -314,13 +312,15 @@ void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
 
 void SimplifyRouteFilter::process()
 {
-  setObj(*this);
+  WayptFunctor routesimple_waypt_pr_f(*this, &SimplifyRouteFilter::routesimple_waypt_pr);
+  RteHdFunctor routesimple_head_f(*this, &SimplifyRouteFilter::routesimple_head);
+  RteHdFunctor routesimple_tail_f(*this, &SimplifyRouteFilter::routesimple_tail);
 
   waypt_del_fnp = route_del_wpt;
-  route_disp_all(&routesimple_head_glue, &routesimple_tail_glue, &routesimple_waypt_pr_glue);
+  route_disp_all(routesimple_head_f, routesimple_tail_f, routesimple_waypt_pr_f);
 
   waypt_del_fnp = track_del_wpt;
-  track_disp_all(&routesimple_head_glue, &routesimple_tail_glue, &routesimple_waypt_pr_glue);
+  track_disp_all(routesimple_head_f, routesimple_tail_f, routesimple_waypt_pr_f);
 }
 
 void SimplifyRouteFilter::init()

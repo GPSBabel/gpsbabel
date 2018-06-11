@@ -140,23 +140,35 @@ private:
   void shuffle_xte(struct xte* xte_rec);
   void routesimple_tail(const route_head* rte);
 
-  static void routesimple_waypt_pr_glue(const Waypoint* wpt)
+  typedef void (SimplifyRouteFilter::*RteHdCb)(const route_head*);
+  class RteHdFunctor
   {
-    return fObj->routesimple_waypt_pr(wpt);
-  }
-  static void routesimple_head_glue(const route_head* rte)
+  public:
+    RteHdFunctor(SimplifyRouteFilter& obj, RteHdCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const route_head* rh)
+    {
+      ((that)->*(_cb))(rh);
+    }
+
+  private:
+    SimplifyRouteFilter* that;
+    RteHdCb _cb;
+  };
+
+  typedef void (SimplifyRouteFilter::*WayptCb)(const Waypoint*);
+  class WayptFunctor
   {
-    return fObj->routesimple_head(rte);
-  }
-  static void routesimple_tail_glue(const route_head* rte)
-  {
-    return fObj->routesimple_tail(rte);
-  }
-  static void setObj(SimplifyRouteFilter& obj)
-  {
-    fObj = &obj;
-  }
-  static SimplifyRouteFilter* fObj;
+  public:
+    WayptFunctor(SimplifyRouteFilter& obj, WayptCb cb) : that(&obj), _cb(cb) {}
+    void operator()(const Waypoint* wpt)
+    {
+      ((that)->*(_cb))(wpt);
+    }
+
+  private:
+    SimplifyRouteFilter* that;
+    WayptCb _cb;
+  };
 
 };
 

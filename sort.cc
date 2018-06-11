@@ -25,8 +25,6 @@
 
 #if FILTERS_ENABLED
 
-SortFilter* SortFilter::fObj = nullptr; // definition required for odr-use.
-
 int SortFilter::sort_comp(const queue* a, const queue* b)
 {
   const Waypoint* x1 = (Waypoint*)a;
@@ -47,11 +45,16 @@ int SortFilter::sort_comp(const queue* a, const queue* b)
   }
 }
 
+int SortFilter::SortCompFunctor::operator()(const queue* a, const queue* b)
+{
+  return that->sort_comp(a, b);
+}
+
 void SortFilter::process()
 {
-  setObj(*this);
+  SortCompFunctor sort_comp(*this);
 
-  sortqueue(&waypt_head, &sort_comp_glue);
+  sortqueue(&waypt_head, sort_comp);
 }
 
 void SortFilter::init()

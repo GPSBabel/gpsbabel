@@ -73,15 +73,16 @@ private:
 
   int sort_comp(const queue* a, const queue* b);
 
-  static int sort_comp_glue(const queue* a, const queue* b)
+  class SortCompFunctor
   {
-    return fObj->sort_comp(a, b);
-  }
-  static void setObj(SortFilter& obj)
-  {
-    fObj = &obj;
-  }
-  static SortFilter* fObj;
+  public:
+    SortCompFunctor(SortFilter& obj) : that(&obj) {}
+    int operator()(const queue* a, const queue* b);
+
+  private:
+    SortFilter* that;
+  };
+
 };
 #endif // FILTERS_ENABLED
 #endif // SORT_H_INCLUDED_

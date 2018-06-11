@@ -22,8 +22,8 @@
 #include "session.h"
 #include <cstdio>
 
-static queue my_route_head;
-static queue my_track_head;
+queue my_route_head;
+queue my_track_head;
 static int rte_head_ct;
 static int rte_waypts;
 static int trk_head_ct;
@@ -254,18 +254,9 @@ track_del_wpt(route_head* rte, Waypoint* wpt)
 }
 
 void
-route_disp(const route_head* rh, waypt_cb cb)
+route_disp(const route_head* rh, std::nullptr_t /* wc */)
 {
-  queue* elem, *tmp;
-  if (!cb)  {
-    return;
-  }
-  QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
-    Waypoint* waypointp;
-    waypointp = (Waypoint*) elem;
-    (*cb)(waypointp);
-  }
-
+// wc == nullptr
 }
 
 void
@@ -276,23 +267,6 @@ route_reverse(const route_head* rte_hd)
   queue* elem, *tmp;
   QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
     ENQUEUE_HEAD(&rh->waypoint_list, dequeue(elem));
-  }
-}
-
-static void
-common_disp_all(queue* qh, route_hdr rh, route_trl rt, waypt_cb wc)
-{
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(qh, elem, tmp) {
-    const route_head* rhp;
-    rhp = (route_head*) elem;
-    if (rh) {
-      (*rh)(rhp);
-    }
-    route_disp(rhp, wc);
-    if (rt) {
-      (*rt)(rhp);
-    }
   }
 }
 
@@ -316,21 +290,9 @@ common_disp_session(const session_t* se, queue* qh, route_hdr rh, route_trl rt, 
 }
 
 void
-route_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
-{
-  common_disp_all(&my_route_head, rh, rt, wc);
-}
-
-void
 route_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc)
 {
   common_disp_session(se, &my_route_head, rh, rt, wc);
-}
-
-void
-track_disp_all(route_hdr rh, route_trl rt, waypt_cb wc)
-{
-  common_disp_all(&my_track_head, rh, rt, wc);
 }
 
 void
