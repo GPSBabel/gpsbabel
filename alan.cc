@@ -261,12 +261,10 @@ static void swap_wpt(struct wpt* wpt,
 static void swap_rtehdr(struct rtehdr* rtehdr,
                         void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
-  int i;
-
   if (swap16_func != nullptr) {
     swap16_func(&rtehdr->num);
     swap16_func(&rtehdr->next);
-    for (i=0; i<MAXRTE; i++) {
+    for (int i=0; i<MAXRTE; i++) {
       swap16_func(&rtehdr->idx[i]);
     }
     swap16_func(&rtehdr->rteno);
@@ -279,11 +277,9 @@ static void swap_rtehdr(struct rtehdr* rtehdr,
 static void swap_rte(struct rte* rte,
                      void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
-  int i;
-
   if (swap16_func != nullptr) {
     swap16_func(&rte->wptnum);
-    for (i=0; i<MAXWPTINRTE; i++) {
+    for (int i=0; i<MAXWPTINRTE; i++) {
       swap16_func(&rte->wptidx[i]);
     }
     swap16_func(&rte->reserved);
@@ -420,11 +416,11 @@ static void trl_swap(struct trldata* trldata)
 static void str2lab(char* dest, const char* src, int len, const char* fmt,
                     int n)
 {
-  int i,j;
+  int j;
 
   j = 0;
   if (src != nullptr) {
-    for (i=0; i<len && src[i] != '\0'; i++) {
+    for (int i=0; i<len && src[i] != '\0'; i++) {
       if (isprint(src[i])) {
         dest[j++] = src[i];
       }

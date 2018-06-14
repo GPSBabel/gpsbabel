@@ -1200,12 +1200,11 @@ exif_write_ifd(const exif_ifd_t* ifd, const char next, gbfile* fout)
     exif_tag_t* tag = (exif_tag_t*)elem;
 
     if (tag->size > 4) {
-      uint16_t i;
       char* ptr = (char*) tag->data;
 
       if BYTE_TYPE(tag->type) {
         gbfwrite(tag->data, tag->size, 1, fout);
-      } else for (i = 0; i < tag->count; i++) {
+      } else for (uint16_t i = 0; i < tag->count; i++) {
           switch (tag->type) {
           case EXIF_TYPE_SHORT:
           case EXIF_TYPE_SSHORT:
