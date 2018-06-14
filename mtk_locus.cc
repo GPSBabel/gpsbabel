@@ -220,7 +220,6 @@ mtk_locus_read()
 void
 set_baudrate()
 {
-  int i;
   int rc;
   int baudrates[] = { 4800, 9600, 14400, 19200, 38400, 57600, 115200, 0 };
   int baudrate;
@@ -236,7 +235,7 @@ set_baudrate()
   } else {
 
     dbg(1, "Probing for baudrate...\n");
-    for (i=0;; i++) {
+    for (int i=0;; i++) {
       baudrate = baudrates[i];
       if (baudrate == 0) {
         fatal(MYNAME ": Autobaud connection failed\n");

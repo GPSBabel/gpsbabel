@@ -292,8 +292,6 @@ globalsat_write_package(uint8_t* payload, uint32_t size)
   // gh561 (isSizeSwaped)
   //2 <len_l> <len_h> <payload...> <crc>
 
-  uint32_t i;
-
   uint8_t crc = 0;
   write_byte(2);
 
@@ -310,7 +308,7 @@ globalsat_write_package(uint8_t* payload, uint32_t size)
   }
 
   if (payload != nullptr) {
-    for (i = 0; i < size; i++) {
+    for (uint32_t i = 0; i < size; i++) {
       write_byte(payload[i]);
       crc ^= payload[i];
     }

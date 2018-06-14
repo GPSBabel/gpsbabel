@@ -191,12 +191,10 @@ gtc_rd_deinit()
 static void
 gtc_wr_init(const QString& fname)
 {
-  int i;
-
   ofd = gbfopen(fname, "w", MYNAME);
 
   if (opt_sport) {
-    for (i = 0; i < MAX_SPORTS; i++) {
+    for (int i = 0; i < MAX_SPORTS; i++) {
       if (0 == case_ignore_strncmp(opt_sport, gtc_sportlist[i], 2)) {
         gtc_sport = i;
         break;

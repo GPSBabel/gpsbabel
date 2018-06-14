@@ -692,7 +692,6 @@ humminbird_write_waypoint(const Waypoint* wpt)
 {
   humminbird_waypt_t hum;
   double lat, north, east;
-  int i;
   int num_icons = sizeof(humminbird_icons) / sizeof(humminbird_icons[0]);
 
   be_write16(&hum.num, waypoint_num++);
@@ -702,7 +701,7 @@ humminbird_write_waypoint(const Waypoint* wpt)
 
   // Icon....
   if (!wpt->icon_descr.isNull()) {
-    for (i = 0; i < num_icons; i++) {
+    for (int i = 0; i < num_icons; i++) {
       if (!wpt->icon_descr.compare(humminbird_icons[i], Qt::CaseInsensitive)) {
         hum.icon = i;
         break;
@@ -710,7 +709,7 @@ humminbird_write_waypoint(const Waypoint* wpt)
     }
     if (hum.icon == 255) {	/* no success, no try to find the item in a more comlex name */
       hum.icon = 0;	/* i.e. "Diamond" as part of "Diamond, Green" or "Green Diamond" */
-      for (i = 0; i < num_icons; i++) {
+      for (int i = 0; i < num_icons; i++) {
         char* match;
         int j;
         xasprintf(&match, "*%s*", humminbird_icons[i]);
