@@ -232,15 +232,13 @@ static void rev_bytes(void* dword)
 static void swap_wpthdr(struct wpthdr* wpthdr,
                         void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
-  int i;
-
   if (swap32_func != nullptr) {
     swap32_func(&wpthdr->id);
   }
   if (swap16_func != nullptr) {
     swap16_func(&wpthdr->num);
     swap16_func(&wpthdr->next);
-    for (i=0; i<MAXWPT; i++) {
+    for (int i=0; i<MAXWPT; i++) {
       swap16_func(&wpthdr->idx[i]);
     }
   }

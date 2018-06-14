@@ -320,7 +320,6 @@ struct blockheader {
 static void
 write_blocks(gbfile* f, struct blockheader* blocks)
 {
-  int i;
   write_char(f, 1);
   write_long(f, blocks->size);
   write_float_as_long(f, blocks->maxlon*100000);
@@ -334,7 +333,7 @@ write_blocks(gbfile* f, struct blockheader* blocks)
     write_blocks(f, blocks->ch2);
   }
   if (!blocks->ch1 && !blocks->ch2) {
-    for (i = 0; i < blocks->count; i++) {
+    for (int i = 0; i < blocks->count; i++) {
       char desc_field [256];
       write_char(f, 2);
       if (global_opts.smart_names &&

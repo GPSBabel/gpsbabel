@@ -383,10 +383,9 @@ static void
 itracku_rd_ser_init(const QString& fname)
 {
 #if LATER
-  int i;
   if (0 == strcmp(qPrintable(fname), port_auto_detect_filename)) {
     dbg(1, "auto detecting port for iTrackU device");
-    for (i=1; !fd && i<port_auto_detect_max_port; ++i) {
+    for (int i=1; !fd && i<port_auto_detect_max_port; ++i) {
       xasprintf(&port, "com%d", i);
       if (!gbser_is_serial(port)) {
         break;
@@ -405,7 +404,7 @@ itracku_rd_ser_init(const QString& fname)
       fd = NULL;
       xfree(port);
     }
-    for (i=0; !fd && i<port_auto_detect_max_port; ++i) {
+    for (int i=0; !fd && i<port_auto_detect_max_port; ++i) {
       xasprintf(&port, "/dev/ttyUSB%d", i);
       if (!gbser_is_serial(port)) {
         break;

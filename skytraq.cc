@@ -176,7 +176,7 @@ rd_char(int* errors)
 static int
 rd_buf(const uint8_t* buf, int len)
 {
-  int rc, timeout, i;
+  int rc, timeout;
   char dump[16*3+16+2];
 
   /* Allow TIMEOUT plus the time needed to actually receive the data bytes:
@@ -199,7 +199,7 @@ rd_buf(const uint8_t* buf, int len)
   if (global_opts.debug_level >= 4) {
     db(4, "rd_buf():  dump follows:\n");
     dump[sizeof(dump)-1] = 0;
-    for (i = 0; i < (len+15)/16*16; i++) {		// count to next 16-byte boundary
+    for (int i = 0; i < (len+15)/16*16; i++) {		// count to next 16-byte boundary
       if (i < len) {
         snprintf(&dump[(i%16)*3], 4, "%02x ", buf[i]);
         snprintf(&dump[3*16+1+(i%16)], 2, "%c", isprint(buf[i]) ? buf[i] : '.');

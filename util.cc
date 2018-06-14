@@ -934,12 +934,11 @@ endian_read_double(const void* ptr, int read_le)
   double ret;
   char r[8];
   const void* p;
-  int i;
 
   if (i_am_little_endian == read_le) {
     p = ptr;
   } else {
-    for (i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
       r[i] = ((char*)ptr)[7-i];
     }
     p = r;

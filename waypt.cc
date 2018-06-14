@@ -688,14 +688,6 @@ Waypoint::Waypoint(const Waypoint& other) :
   // note: extra_data is not deep copied.
 }
 
-Waypoint& Waypoint::operator=(const Waypoint& /* other */)
-{
-  // the default assignment operator is not appropriate as we do deep copy of some members,
-  // and we haven't bothered to write an appropriate one.
-  // this is a dummy so the compiler can catch attempts to use the assignment operator.
-  return *this;
-}
-
 bool
 Waypoint::HasUrlLink() const
 {
