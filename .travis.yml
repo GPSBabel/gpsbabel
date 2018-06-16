@@ -26,14 +26,12 @@ matrix:
       addons:
         apt:
           packages:
-            - qt5-default
-            - qtbase5-dev
-            - qttools5-dev-tools
             - libusb-dev
             - gcovr
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then source ./tools/travis_install_osx; fi
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${GEN_COVERAGE}" = "true" ]; then ./tools/travis_install_linux_coverage; fi 
 
 script:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${GEN_COVERAGE}" != "true" ]; then ./tools/travis_script_linux_docker; fi 

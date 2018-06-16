@@ -1,0 +1,24 @@
+#!/bin/bash -ex
+#
+# This script is run on travis for the install stage of mac builds.
+# Note the script must be sourced if you want the modified PATH to
+# be used outside this script.
+#
+
+# our expectation is that install_qt creates $QTDIR, $QTDIR/bin.
+QTDIR=${HOME}/Qt/5.7.1/gcc_64
+
+if [ -d "${QTDIR}/bin" ]; then
+  echo "Using cached Qt."
+  echo "If you need to clear the cache see"
+  echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
+else
+  pushd ${HOME};
+  rm -fr Qt
+  # install_qt creates the install at $PWD/Qt.
+  QT_CI_PACKAGES=qt.571.gcc_64 PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install_qt 5.7.1
+  popd;
+fi
+# note that qt-5.7.1.env created by install_qt is not cached!
+export PATH=${QTDIR}/bin:${PATH}
+unset -v QTDIR
