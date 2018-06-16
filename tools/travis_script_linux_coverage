@@ -1,6 +1,9 @@
 #!/bin/bash -ex
 #
 # generate coverage report and upload to codacy
+which qmake
+export PATH=${HOME}/Qt/5.7/gcc_64/bin:$PATH
+which qmake
 wget -nv -c https://oss.sonatype.org/service/local/repositories/releases/content/com/codacy/codacy-coverage-reporter/4.0.1/codacy-coverage-reporter-4.0.1-assembly.jar
 qmake
 make coverage
