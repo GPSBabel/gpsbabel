@@ -28,6 +28,9 @@ matrix:
           packages:
             - libusb-dev
             - gcovr
+      cache:
+        directories:
+          - $HOME/Qt
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then source ./tools/travis_install_osx; fi
