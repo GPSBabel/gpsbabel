@@ -6,7 +6,7 @@
 #
 
 # our expectation is that install-qt creates $QTDIR, $QTDIR/bin.
-QTDIR=${HOME}/Qt/5.7.1/gcc_64
+QTDIR=${HOME}/Qt/5.7/gcc_64
 
 if [ -d "${QTDIR}/bin" ]; then
   echo "Using cached Qt."
