@@ -16,7 +16,7 @@ else
   pushd ${HOME};
   rm -fr Qt
   # install_qt creates the install at $PWD/Qt.
-  QT_CI_PACKAGES=qt.571.gcc_64 PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt 5.7.1
+  QT_CI_PACKAGES=qt.57.gcc_64 PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt 5.7.1
   popd;
 fi
 # note that qt-5.7.1.env created by install-qt is not cached!
