@@ -223,3 +223,21 @@ linux{
 clang-tidy.commands = run-clang-tidy.py $(RUN_CLANG_TIDY_FLAGS)
 clang-tidy.depends = compile_commands.json
 QMAKE_EXTRA_TARGETS += clang-tidy
+
+# generate coverage report for codacy
+# must use gcc, g++
+# the upload requires CODACY_PROJECT_TOKEN be set.
+# dependencies:
+# wget https://oss.sonatype.org/service/local/repositories/releases/content/com/codacy/codacy-coverage-reporter/4.0.1/codacy-coverage-reporter-4.0.1-assembly.jar
+# extra ubuntu bionic packages: gcovr, openjdk-8-jre-headless, /usr/lib/jvm/java-8-openjdk-amd64/bin/java
+# as of 6/18/2018 you must use java 8, see issue #76, #83 at https://github.com/codacy/codacy-coverage-reporter/issues
+linux{
+  coverage.commands = make clean;
+  coverage.commands += ln -sf GPSBabel gpsbabel;
+  coverage.commands += $(MAKE) CFLAGS=\"$(CFLAGS) -fprofile-arcs -ftest-coverage\" CXXFLAGS=\"$(CXXFLAGS) -fprofile-arcs -ftest-coverage\" LFLAGS=\"$(LFLAGS) --coverage\" &&
+  coverage.commands += ./testo &&
+  coverage.commands += gcov -r $(SOURCES) &&
+  coverage.commands += gcovr -r . --xml --exclude='zlib/*' --exclude='shapelib/*' -o gpsbabel_coverage.xml &&
+  coverage.commands += java -jar codacy-coverage-reporter-4.0.1-assembly.jar report -l cpp -f -r gpsbabel_coverage.xml
+  QMAKE_EXTRA_TARGETS += coverage
+}
