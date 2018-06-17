@@ -1,0 +1,9 @@
+gpsbabel -i gpx -f ${REFERENCE}/basecamp.gpx -x validate,debug > /dev/null 2> ${TMPDIR}/validate_debug.log
+compare ${REFERENCE}/validate_debug.log ${TMPDIR}/validate_debug.log
+
+# expecting this to fail so call directly rather than via gpsbabel function
+${PNAME} -i gpx -f ${REFERENCE}/empty.gpx -x validate,checkempty > /dev/null 2> ${TMPDIR}/validate_empty.log && {
+  echo "${PNAME} succeeded! (it shouldn't have with this input...)"
+}
+compare ${REFERENCE}/validate_empty.log ${TMPDIR}/validate_empty.log
+
