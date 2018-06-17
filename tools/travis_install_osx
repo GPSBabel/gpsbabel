@@ -5,6 +5,8 @@
 # be used outside this script.
 #
 
+brew install coreutils
+
 # our expectation is that qt-5.9.5-osx creates $QTDIR, $QTDIR/bin.
 QTDIR=${HOME}/Qt/5.9.5/clang_64
 
