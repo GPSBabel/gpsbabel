@@ -205,8 +205,7 @@ macx|linux{
 }
 
 # build the compilation data base used by clang tools including clang-tidy.
-# I am not sure how to do this on non-linux platforms, bear is linux specific.
-linux{
+macx|linux{
   compile_command_database.target = compile_commands.json
   compile_command_database.commands = make clean; bear make
   QMAKE_EXTRA_TARGETS += compile_command_database
@@ -226,18 +225,15 @@ QMAKE_EXTRA_TARGETS += clang-tidy
 
 # generate coverage report for codacy
 # must use gcc, g++
-# the upload requires CODACY_PROJECT_TOKEN be set.
 # dependencies:
-# wget https://oss.sonatype.org/service/local/repositories/releases/content/com/codacy/codacy-coverage-reporter/4.0.1/codacy-coverage-reporter-4.0.1-assembly.jar
-# extra ubuntu bionic packages: gcovr, openjdk-8-jre-headless, /usr/lib/jvm/java-8-openjdk-amd64/bin/java
-# as of 6/18/2018 you must use java 8, see issue #76, #83 at https://github.com/codacy/codacy-coverage-reporter/issues
+# extra ubuntu bionic packages: gcovr
 linux{
   coverage.commands = make clean;
+  coverage.commands += rm -f gpsbabel_coverage.xml;
   coverage.commands += ln -sf GPSBabel gpsbabel;
   coverage.commands += $(MAKE) CFLAGS=\"$(CFLAGS) -fprofile-arcs -ftest-coverage\" CXXFLAGS=\"$(CXXFLAGS) -fprofile-arcs -ftest-coverage\" LFLAGS=\"$(LFLAGS) --coverage\" &&
   coverage.commands += ./testo &&
   coverage.commands += gcov -r $(SOURCES) &&
-  coverage.commands += gcovr -r . --xml --exclude='zlib/*' --exclude='shapelib/*' -o gpsbabel_coverage.xml &&
-  coverage.commands += java -jar codacy-coverage-reporter-4.0.1-assembly.jar report -l cpp -f -r gpsbabel_coverage.xml
+  coverage.commands += gcovr -r . --xml --exclude='zlib/*' --exclude='shapelib/*' -o gpsbabel_coverage.xml;
   QMAKE_EXTRA_TARGETS += coverage
 }

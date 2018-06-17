@@ -1,5 +1,6 @@
 exclude_paths:
   - 'deprecated/**'
+  - 'reference/**'
   - 'shapelib/**'
   - 'zlib/**'
   - coverity_model.cc
