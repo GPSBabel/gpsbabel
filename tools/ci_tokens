@@ -1,0 +1,23 @@
+#!/bin/bash -e
+
+# echo hashed tokens for debug.
+# this script is run by travis on linux and osx.
+# this script is run by appveyor on windows under bash.
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# don't leak unhashed tokens!
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+set +x
+if [ ! -z "${CODACY_PROJECT_TOKEN+x}" ] ; then
+  echo -n "CODACY_PROJECT_TOKEN hash: "
+  echo -n "$CODACY_PROJECT_TOKEN" | openssl dgst -sha512 | cut -d " " -f 2
+else
+  echo CODACY_PROJECT_TOKEN not set.
+fi
+if [ ! -z "${GITHUB_TOKEN+x}" ] ; then
+  echo -n "GITHUB_TOKEN hash: "
+  echo -n "$GITHUB_TOKEN" | openssl dgst -sha512 | cut -d " " -f 2
+else
+  echo GITHUB_TOKEN not set.
+fi
+set -x
