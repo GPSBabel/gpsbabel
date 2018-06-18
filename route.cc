@@ -519,6 +519,7 @@ track_restore(queue* head_bak)
   common_restore_finish();
 }
 
+#ifdef DEAD_CODE_IS_REBORN
 /*
  * Move the entire track queue onto the route queue making no attempt
  * at all to "fix" anything in the process.
@@ -534,7 +535,9 @@ routes_to_tracks()
     ENQUEUE_TAIL(&my_track_head, &trk->Q);
   }
 }
+#endif
 
+#ifdef DEAD_CODE_IS_REBORN
 /*
  * Same, but in opposite direction.
  */
@@ -549,6 +552,7 @@ tracks_to_routes()
     ENQUEUE_TAIL(&my_route_head, &trk->Q);
   }
 }
+#endif
 
 
 /*
