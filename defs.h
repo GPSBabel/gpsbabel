@@ -528,13 +528,14 @@ public:
   session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
 
-private:
-  Waypoint& operator=(const Waypoint& other);
-
 public:
   Waypoint();
   ~Waypoint();
   Waypoint(const Waypoint& other);
+  // the default assignment operator is not appropriate as we do deep copy of some members,
+  // and we haven't bothered to write an appropriate one.
+  // Catch attempts to use the default assignment operator.
+  Waypoint& operator=(const Waypoint& other) = delete;
 
   bool HasUrlLink() const;
   const UrlLink& GetUrlLink() const;

@@ -17,12 +17,28 @@ matrix:
       cache:
         directories:
           - $HOME/Qt
+    - os: linux
+      dist: trusty
+      sudo: required
+      compiler: gcc
+      env:
+        - GEN_COVERAGE="true"
+      addons:
+        apt:
+          packages:
+            - libusb-dev
+            - gcovr
+      cache:
+        directories:
+          - $HOME/Qt
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then source ./tools/travis_install_osx; fi
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${GEN_COVERAGE}" = "true" ]; then ./tools/travis_install_linux_coverage; fi 
 
 script:
-  - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then ./tools/travis_script_linux_docker; fi 
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${GEN_COVERAGE}" != "true" ]; then ./tools/travis_script_linux_docker; fi 
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "${GEN_COVERAGE}" = "true" ]; then ./tools/travis_script_linux_coverage; fi 
   - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ./tools/travis_script_osx; fi
 
 after_success:

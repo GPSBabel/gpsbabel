@@ -494,7 +494,6 @@ exif_read_ifd(exif_app_t* app, const uint16_t ifd_nr, gbsize_t offs,
   QUEUE_FOR_EACH(&ifd->tags, elem, tmp) {
     exif_tag_t* tag = (exif_tag_t*)elem;
     if ((tag->size > 4) && (tag->value)) {
-      uint16_t i;
       char* ptr;
 
       tag->data = xmalloc(tag->size);
@@ -505,7 +504,7 @@ exif_read_ifd(exif_app_t* app, const uint16_t ifd_nr, gbsize_t offs,
 
       if (BYTE_TYPE(tag->type)) {
         gbfread(ptr, tag->count, 1, fin);
-      } else for (i = 0; i < tag->count; i++) {
+      } else for (uint16_t i = 0; i < tag->count; i++) {
           switch (tag->type) {
           case EXIF_TYPE_SHORT:
           case EXIF_TYPE_SSHORT:
@@ -1201,12 +1200,11 @@ exif_write_ifd(const exif_ifd_t* ifd, const char next, gbfile* fout)
     exif_tag_t* tag = (exif_tag_t*)elem;
 
     if (tag->size > 4) {
-      uint16_t i;
       char* ptr = (char*) tag->data;
 
       if BYTE_TYPE(tag->type) {
         gbfwrite(tag->data, tag->size, 1, fout);
-      } else for (i = 0; i < tag->count; i++) {
+      } else for (uint16_t i = 0; i < tag->count; i++) {
           switch (tag->type) {
           case EXIF_TYPE_SHORT:
           case EXIF_TYPE_SSHORT:

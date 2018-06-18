@@ -934,12 +934,11 @@ endian_read_double(const void* ptr, int read_le)
   double ret;
   char r[8];
   const void* p;
-  int i;
 
   if (i_am_little_endian == read_le) {
     p = ptr;
   } else {
-    for (i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
       r[i] = ((char*)ptr)[7-i];
     }
     p = r;
@@ -962,12 +961,11 @@ endian_read_float(const void* ptr, int read_le)
   float ret;
   char r[4];
   const void* p;
-  int i;
 
   if (i_am_little_endian == read_le) {
     p = ptr;
   } else {
-    for (i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
       r[i] = ((char*)ptr)[3-i];
     }
     p = r;
@@ -980,7 +978,6 @@ endian_read_float(const void* ptr, int read_le)
 void
 endian_write_double(void* ptr, double d, int write_le)
 {
-  int i;
   char* optr = (char*) ptr;
 // Word order is different on arm, but not on arm-eabi.
 #if defined(__arm__) && !defined(__ARM_EABI__)
@@ -995,7 +992,7 @@ endian_write_double(void* ptr, double d, int write_le)
   if (i_am_little_endian == write_le) {
     memcpy(ptr, r, 8);
   } else {
-    for (i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
       *optr++ = r[7-i];
     }
   }
@@ -1005,13 +1002,12 @@ void
 endian_write_float(void* ptr, float f, int write_le)
 {
   char* r = (char*)(void*)&f;
-  int i;
   char* optr = (char*) ptr;
 
   if (i_am_little_endian == write_le) {
     memcpy(ptr, &f, 4);
   } else {
-    for (i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
       *optr++ = r[3-i];
     }
   }

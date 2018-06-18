@@ -2,22 +2,64 @@
 
 FROM ubuntu:bionic
 
+LABEL maintainer="https://github.com/tsteven4"
+
 WORKDIR /app
 
-# update environment, including held back packages that were found by hand.
+# update environment.
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils && apt-get install -y apt dpkg libapt-pkg5.0 && apt-get upgrade -y
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-utils \
+ && apt-get upgrade -y \
+ && rm -rf /var/lib/apt/lists/*
 
 # install packages needed for gpsbabel build
-RUN apt-get install -y g++ clang make autoconf gperf git expat fop valgrind xsltproc libxml2-utils qt5-default libqt5webkit5-dev qttools5-dev-tools libusb-dev docbook-xml docbook-xsl
+# split into multiple commands to limit layer size
+
+# basic build and test tools
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    g++ \
+    make \
+    autoconf \
+    gperf \
+    git \
+    valgrind \
+    expat \
+    libxml2-utils \
+ && rm -rf /var/lib/apt/lists/*
+# alternative compiler
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    clang \
+ && rm -rf /var/lib/apt/lists/*
+# pkgs needed to build document
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    fop \
+    xsltproc \
+    docbook-xml \
+    docbook-xsl \
+ && rm -rf /var/lib/apt/lists/*
+# pkgs with libraries needed by gpsbabel
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libusb-dev \
+ && rm -rf /var/lib/apt/lists/*
+# pkgs with qt used by gpsbabel
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    qt5-default \
+    libqt5webkit5-dev \
+    qttools5-dev-tools \
+    qttranslations5-l10n \
+ && rm -rf /var/lib/apt/lists/*
+# pkgs needed to generate coverage report:
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcovr \
+    openjdk-8-jre-headless \
+ && rm -rf /var/lib/apt/lists/*
 
 # install environment for locale test
-RUN apt-get install -y locales && sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen && locale-gen && locale -a
-
-
-
-
-
-
-
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    locales \
+ && rm -rf /var/lib/apt/lists/* \
+ && sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen \
+ && locale-gen \
+ && locale -a
 

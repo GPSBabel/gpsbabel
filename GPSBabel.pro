@@ -208,8 +208,7 @@ macx|linux{
 }
 
 # build the compilation data base used by clang tools including clang-tidy.
-# I am not sure how to do this on non-linux platforms, bear is linux specific.
-linux{
+macx|linux{
   compile_command_database.target = compile_commands.json
   compile_command_database.commands = make clean; bear make
   QMAKE_EXTRA_TARGETS += compile_command_database
@@ -226,3 +225,18 @@ linux{
 clang-tidy.commands = run-clang-tidy.py $(RUN_CLANG_TIDY_FLAGS)
 clang-tidy.depends = compile_commands.json
 QMAKE_EXTRA_TARGETS += clang-tidy
+
+# generate coverage report for codacy
+# must use gcc, g++
+# dependencies:
+# extra ubuntu bionic packages: gcovr
+linux{
+  coverage.commands = make clean;
+  coverage.commands += rm -f gpsbabel_coverage.xml;
+  coverage.commands += ln -sf GPSBabel gpsbabel;
+  coverage.commands += $(MAKE) CFLAGS=\"$(CFLAGS) -fprofile-arcs -ftest-coverage\" CXXFLAGS=\"$(CXXFLAGS) -fprofile-arcs -ftest-coverage\" LFLAGS=\"$(LFLAGS) --coverage\" &&
+  coverage.commands += ./testo &&
+  coverage.commands += gcov -r $(SOURCES) &&
+  coverage.commands += gcovr -r . --xml --exclude='zlib/*' --exclude='shapelib/*' -o gpsbabel_coverage.xml;
+  QMAKE_EXTRA_TARGETS += coverage
+}

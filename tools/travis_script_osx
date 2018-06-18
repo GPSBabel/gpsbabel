@@ -10,6 +10,9 @@ MACDEPLOYQT=${MACDEPLOYQT:-macdeployqt}
 # we assume we are on macOS, so date is not gnu date.
 VERSIONID=${VERSIONID:-$(date -ju -f %Y-%m-%dT%H:%M:%S%z $(git show -s --format="%aI" HEAD | sed 's/:\(..\)$/\1/') +%Y%m%dT%H%MZ)-$(git rev-parse --short=7 HEAD)}
 
+# debug tokens
+"$(cd "$(dirname "${BASH_SOURCE[0]}" )" && pwd)"/ci_tokens
+
 # build and test the CLI
 $QMAKE GPSBabel.pro && make && make check
 
