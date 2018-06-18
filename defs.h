@@ -39,6 +39,7 @@
 # include "src/core/datetime.h"
 
 #define CSTR(qstr) (qstr.toUtf8().constData())
+#define CSTRc(qstr) (qstr.toLatin1().constData())
 #define STRFROMUNICODE(qstr) (global_opts.codec->fromUnicode(qstr).constData())
 #define STRTOUNICODE(cstr) (global_opts.codec->toUnicode(cstr))
 
@@ -90,6 +91,11 @@
 
 /* knots to meters/second */
 #define KNOTS_TO_MPS(a) (KPH_TO_MPS((a)*1.852))
+
+#define MILLI_TO_MICRO(t) (t * 1000)  /* Milliseconds to Microseconds */
+#define MICRO_TO_MILLI(t) (t / 1000)  /* Microseconds to Milliseconds*/
+#define CENTI_TO_MICRO(t) (t * 10000) /* Centiseconds to Microseconds */
+#define MICRO_TO_CENTI(t) (t / 10000) /* Centiseconds to Microseconds */
 
 /*
  * Snprintf is in SUS (so it's in most UNIX-like substance) and it's in
@@ -152,21 +158,6 @@
 #define BASE_STRUCT(memberp, struct_type, member_name) \
    ((struct_type *)((char *)(memberp) - offsetof(struct_type, member_name)))
 
-typedef enum {
-  fix_unknown=-1,
-  fix_none=0,
-  fix_2d=1,
-  fix_3d,
-  fix_dgps,
-  fix_pps
-} fix_type;
-
-typedef enum {
-  status_unknown=0,
-  status_true,
-  status_false
-} status_type;
-
 /*
  * Define globally on which kind of data gpsbabel is working.
  * Important for "file types" that are essentially a communication
@@ -174,7 +165,7 @@ typedef enum {
  */
 typedef enum {
   unknown_gpsdata = 0,
-  trkdata = 1 ,
+  trkdata = 1,
   wptdata,
   rtedata,
   posndata
@@ -213,10 +204,20 @@ extern time_t gpsbabel_now;	/* gpsbabel startup-time; initialized in main.c with
 extern time_t gpsbabel_time;	/* gpsbabel startup-time; initialized in main.c with current_time(), ! ZERO within testo ! */
 extern int geocaches_present;
 
-#define MILLI_TO_MICRO(t) (t * 1000)  /* Milliseconds to Microseconds */
-#define MICRO_TO_MILLI(t) (t / 1000)  /* Microseconds to Milliseconds*/
-#define CENTI_TO_MICRO(t) (t * 10000) /* Centiseconds to Microseconds */
-#define MICRO_TO_CENTI(t) (t / 10000) /* Centiseconds to Microseconds */
+typedef enum {
+  fix_unknown=-1,
+  fix_none=0,
+  fix_2d=1,
+  fix_3d,
+  fix_dgps,
+  fix_pps
+} fix_type;
+
+typedef enum {
+  status_unknown=0,
+  status_true,
+  status_false
+} status_type;
 
 /*
  * Extended data if waypoint happens to represent a geocache.  This is
@@ -224,7 +225,7 @@ extern int geocaches_present;
  */
 
 typedef enum {
-  gt_unknown = 0 ,
+  gt_unknown = 0,
   gt_traditional,
   gt_multi,
   gt_virtual,
@@ -398,7 +399,6 @@ public:
   unsigned int is_split:1;		/* the waypoint represents a split */
   unsigned int new_trkseg:1;		/* True if first in new trkseg. */
 
-
 };
 
 // These are dicey as they're collected on read. Subsequent filters may change
@@ -423,14 +423,23 @@ public:
   unsigned int trait_temperature:1;
 };
 
-const global_trait* get_traits();
+/*
+ *  Bounding box information.
+ */
+typedef struct {
+  double max_lat;
+  double max_lon;
+  double max_alt;	/*  unknown_alt => invalid */
+  double min_lat;
+  double min_lon;
+  double min_alt;	/* -unknown_alt => invalid */
+} bounds;
 
 #define WAYPT_SET(wpt,member,val) { wpt->member = (val); wpt->wpt_flags.member = 1; }
 #define WAYPT_GET(wpt,member,def) ((wpt->wpt_flags.member) ? (wpt->member) : (def))
 #define WAYPT_UNSET(wpt,member) wpt->wpt_flags.member = 0
 #define WAYPT_HAS(wpt,member) (wpt->wpt_flags.member)
 
-#define CSTRc(qstr) (qstr.toLatin1().constData())
 /*
  * This is a waypoint, as stored in the GPSR.   It tries to not
  * cater to any specific model or protocol.  Anything that needs to
@@ -550,6 +559,62 @@ public:
   int EmptyGCData() const;
 };
 
+typedef void (*waypt_cb)(const Waypoint*);
+
+const global_trait* get_traits();
+void waypt_init(void);
+//void update_common_traits(const Waypoint* wpt);
+void waypt_add(Waypoint* wpt);
+void waypt_del(Waypoint* wpt);
+unsigned int waypt_count(void);
+void set_waypt_count(unsigned int nc);
+void waypt_disp(const Waypoint* wpt);
+void waypt_status_disp(int total_ct, int myct);
+void waypt_disp_all(waypt_cb);
+void waypt_disp_session(const session_t* se, waypt_cb cb);
+void waypt_init_bounds(bounds* bounds);
+int waypt_bounds_valid(bounds* bounds);
+void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
+void waypt_compute_bounds(bounds* bounds);
+Waypoint* find_waypt_by_name(const QString& name);
+void waypt_flush(queue* head);
+void waypt_flush_all(void);
+void waypt_backup(signed int* count, queue** head_bak);
+void waypt_restore(signed int count, queue* head_bak);
+void waypt_add_url(Waypoint* wpt, const QString& link,
+                   const QString& url_link_text);
+void waypt_add_url(Waypoint* wpt, const QString& link,
+                   const QString& url_link_text,
+                   const QString& url_link_type);
+double gcgeodist(const double lat1, const double lon1,
+                 const double lat2, const double lon2);
+double waypt_time(const Waypoint* wpt);
+double waypt_distance_ex(const Waypoint* A, const Waypoint* B);
+double waypt_distance(const Waypoint* A, const Waypoint* B);
+double waypt_speed_ex(const Waypoint* A, const Waypoint* B);
+double waypt_speed(const Waypoint* A, const Waypoint* B);
+double waypt_vertical_speed(const Waypoint* A, const Waypoint* B);
+double waypt_gradient(const Waypoint* A, const Waypoint* B);
+double waypt_course(const Waypoint* A, const Waypoint* B);
+
+/*
+ *  Structure of recomputed track/roue data.
+ */
+typedef struct {
+  double	distance_meters;
+  double	max_alt;	/*  unknown_alt => invalid */
+  double	min_alt;	/* -unknown_alt => invalid */
+  double	max_spd;	/* Meters/sec */
+  double	min_spd;	/* Meters/sec */
+  double	avg_hrt;	/* Avg Heartrate */
+  double	avg_cad;	/* Avg Cadence */
+  time_t	start;		/* Min time */
+  time_t	end;		/* Max time */
+  int	min_hrt;        /* Min Heartrate */
+  int	max_hrt;        /* Max Heartrate */
+  int	max_cad;        /* Max Cadence */
+} computed_trkdata;
+
 class route_head
 {
 public:
@@ -571,35 +636,47 @@ public:
   ~route_head();
 };
 
-/*
- *  Structure of recomputed track/roue data.
- */
-typedef struct {
-  double	distance_meters;
-  double	max_alt;	/*  unknown_alt => invalid */
-  double	min_alt;	/* -unknown_alt => invalid */
-  double	max_spd;	/* Meters/sec */
-  double	min_spd;	/* Meters/sec */
-  double	avg_hrt;	/* Avg Heartrate */
-  double	avg_cad;	/* Avg Cadence */
-  time_t	start;		/* Min time */
-  time_t	end;		/* Max time */
-  int	min_hrt;        /* Min Heartrate */
-  int	max_hrt;        /* Max Heartrate */
-  int	max_cad;        /* Max Cadence */
-} computed_trkdata;
+typedef void (*route_hdr)(const route_head*);
+typedef void (*route_trl)(const route_head*);
 
-/*
- *  Bounding box information.
- */
-typedef struct {
-  double max_lat;
-  double max_lon;
-  double max_alt;	/*  unknown_alt => invalid */
-  double min_lat;
-  double min_lon;
-  double min_alt;	/* -unknown_alt => invalid */
-} bounds;
+void route_init(void);
+unsigned int route_waypt_count(void);
+unsigned int route_count(void);
+unsigned int track_waypt_count(void);
+unsigned int track_count(void);
+route_head* route_head_alloc(void);
+void route_add_head(route_head* rte);
+void route_del_head(route_head* rte);
+void track_add_head(route_head* rte);
+void track_del_head(route_head* rte);
+void track_insert_head(route_head* rte, route_head* predecessor);
+route_head* route_find_route_by_name(const char* name);
+route_head* route_find_track_by_name(const char* name);
+void route_add_wpt_named(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits);
+void route_add_wpt(route_head* rte, Waypoint* wpt);
+void track_add_wpt_named(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits);
+void track_add_wpt(route_head* rte, Waypoint* wpt);
+Waypoint* route_find_waypt_by_name(route_head* rh, const char* name);
+void route_del_wpt(route_head* rte, Waypoint* wpt);
+void track_del_wpt(route_head* rte, Waypoint* wpt);
+void route_disp(const route_head* rte, waypt_cb);
+void route_disp_all(route_hdr, route_trl, waypt_cb);
+void track_disp_all(route_hdr, route_trl, waypt_cb);
+void route_reverse(const route_head* rte_hd);
+void route_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
+void track_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
+void route_flush_all_routes(void);
+void route_flush_all_tracks(void);
+void route_flush_all(void);
+void route_flush(queue* head);
+void route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src);
+void route_append(queue* src);
+void track_append(queue* src);
+void route_backup(signed int* count, queue** head_bak);
+void route_restore(queue* head_bak);
+void track_backup(signed int* count, queue** head_bak);
+void track_restore(queue* head_bak);
+void track_recompute(const route_head* trk, computed_trkdata**);
 
 typedef struct {
   volatile int request_terminate;
@@ -623,81 +700,11 @@ char* GET_OPTION(const char* iarglist, const char* argname, DEBUG_PARAMS);
 #define get_option(iarglist, argname) GET_OPTION(iarglist, argname, __FILE__, __LINE__)
 #endif
 
-typedef void (*waypt_cb)(const Waypoint*);
-typedef void (*route_hdr)(const route_head*);
-typedef void (*route_trl)(const route_head*);
-void waypt_add(Waypoint*);
-Waypoint* waypt_dupe(const Waypoint*);
-Waypoint* waypt_new(void);
-void waypt_del(Waypoint*);
-void waypt_free(Waypoint*);
-void waypt_disp_all(waypt_cb);
-void waypt_disp_session(const session_t* se, waypt_cb cb);
-void waypt_init_bounds(bounds* bounds);
-int waypt_bounds_valid(bounds* bounds);
-void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
-void waypt_compute_bounds(bounds*);
-double gcgeodist(const double lat1, const double lon1,
-                 const double lat2, const double lon2);
-void waypt_flush(queue*);
-void waypt_flush_all(void);
-unsigned int waypt_count(void);
-void set_waypt_count(unsigned int nc);
-void waypt_add_url(Waypoint* wpt, const QString& link,
-                   const QString& url_link_text);
-void waypt_add_url(Waypoint* wpt, const QString& link,
-                   const QString& url_link_text,
-                   const QString& url_link_type);
 void xcsv_setup_internal_style(const char* style_buf);
 void xcsv_read_internal_style(const char* style_buf);
-Waypoint* find_waypt_by_name(const QString& name);
-void waypt_backup(signed int* count, queue** head_bak);
-void waypt_restore(signed int count, queue* head_bak);
 
-geocache_data* waypt_alloc_gc_data(Waypoint* wpt);
-int waypt_empty_gc_data(const Waypoint* wpt);
 geocache_type gs_mktype(const QString& t);
 geocache_container gs_mkcont(const QString& t);
-
-route_head* route_head_alloc(void);
-void route_add(Waypoint*);
-void route_add_wpt(route_head* rte, Waypoint* wpt);
-void route_add_wpt_named(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits);
-void route_del_wpt(route_head* rte, Waypoint* wpt);
-void track_add_wpt(route_head* rte, Waypoint* wpt);
-void track_add_wpt_named(route_head* rte, Waypoint* wpt, const QString& namepart, int number_digits);
-void track_del_wpt(route_head* rte, Waypoint* wpt);
-void route_add_head(route_head* rte);
-void route_del_head(route_head* rte);
-void route_reverse(const route_head* rte_hd);
-Waypoint* route_find_waypt_by_name(route_head* rh, const char* name);
-void track_add_head(route_head* rte);
-void track_del_head(route_head* rte);
-void track_insert_head(route_head* rte, route_head* predecessor);
-void route_disp(const route_head* rte, waypt_cb);
-void route_disp_all(route_hdr, route_trl, waypt_cb);
-void track_disp_all(route_hdr, route_trl, waypt_cb);
-void route_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
-void track_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
-void route_flush(queue*);
-void route_flush_all(void);
-void route_flush_all_routes(void);
-void route_flush_all_tracks(void);
-route_head* route_find_route_by_name(const char* name);
-route_head* route_find_track_by_name(const char* name);
-unsigned int route_waypt_count(void);
-unsigned int route_count(void);
-unsigned int track_waypt_count(void);
-unsigned int track_count(void);
-void route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src);
-void route_backup(signed int* count, queue** head_bak);
-void route_restore(queue* head_bak);
-void route_append(queue* src);
-void track_backup(signed int* count, queue** head_bak);
-void track_restore(queue* head_bak);
-void track_append(queue* src);
-void route_flush(queue* head);
-void track_recompute(const route_head* trk, computed_trkdata**);
 
 /*
  * All shortname functions take a shortname handle as the first arg.
@@ -856,19 +863,6 @@ typedef struct style_vecs {
 } style_vecs_t;
 extern style_vecs_t style_list[];
 
-void waypt_init(void);
-void route_init(void);
-void waypt_disp(const Waypoint*);
-void waypt_status_disp(int total_ct, int myct);
-double waypt_time(const Waypoint* wpt);
-double waypt_speed(const Waypoint* A, const Waypoint* B);
-double waypt_speed_ex(const Waypoint* A, const Waypoint* B);
-double waypt_vertical_speed(const Waypoint* A, const Waypoint* B);
-double waypt_gradient(const Waypoint* A, const Waypoint* B);
-double waypt_course(const Waypoint* A, const Waypoint* B);
-double waypt_distance(const Waypoint* A, const Waypoint* B);
-double waypt_distance_ex(const Waypoint* A, const Waypoint* B);
-
 NORETURN fatal(const char*, ...) PRINTFLIKE(1, 2);
 void is_fatal(const int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
@@ -899,7 +893,7 @@ char* xstrappend(char* src, const char* addon);
 #define xxrealloc(p, s, file, line) xrealloc(p,s)
 #define xxfree(mem, file, line) xfree(mem)
 #define xxstrdup(s, file, line) xstrdup(s)
-char *xstrdup(const char* s);
+char* xstrdup(const char* s);
 #define xxstrappend(src, addon, file, line) xstrappend(src, addon)
 #else /* DEBUG_MEM */
 void* XCALLOC(size_t nmemb, size_t size, DEBUG_PARAMS);
@@ -942,11 +936,13 @@ QString ugetenv(const char* env_var);
 // just be replaced at the call sites.  These shims are just here to make
 // them more accomidating of QString input.
 inline int
-case_ignore_strcmp(const QString& s1, const QString& s2) {
+case_ignore_strcmp(const QString& s1, const QString& s2)
+{
   return QString::compare(s1, s2, Qt::CaseInsensitive);
 }
 // In 95% of the callers, this could be s1.startsWith(s2)...
-inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n) {
+inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
+{
   return s1.left(n).compare(s2.left(n), Qt::CaseInsensitive);
 }
 
