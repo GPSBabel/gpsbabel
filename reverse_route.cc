@@ -50,8 +50,8 @@ void ReverseRouteFilter::reverse_route_head(const route_head* rte)
 
 void ReverseRouteFilter::process()
 {
-  WayptFunctor<ReverseRouteFilter> reverse_route_wpt_f(*this, &ReverseRouteFilter::reverse_route_wpt);
-  RteHdFunctor<ReverseRouteFilter> reverse_route_head_f(*this, &ReverseRouteFilter::reverse_route_head);
+  WayptFunctor<ReverseRouteFilter> reverse_route_wpt_f(this, &ReverseRouteFilter::reverse_route_wpt);
+  RteHdFunctor<ReverseRouteFilter> reverse_route_head_f(this, &ReverseRouteFilter::reverse_route_head);
 
   track_disp_all(reverse_route_head_f, nullptr, reverse_route_wpt_f);
   route_disp_all(reverse_route_head_f, nullptr, nullptr);

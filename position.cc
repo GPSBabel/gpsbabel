@@ -153,8 +153,8 @@ void PositionFilter::position_process_trk(const route_head* rh)
 
 void PositionFilter::process()
 {
-  RteHdFunctor<PositionFilter> position_process_rte_f(*this, &PositionFilter::position_process_rte);
-  RteHdFunctor<PositionFilter> position_process_trk_f(*this, &PositionFilter::position_process_trk);
+  RteHdFunctor<PositionFilter> position_process_rte_f(this, &PositionFilter::position_process_rte);
+  RteHdFunctor<PositionFilter> position_process_trk_f(this, &PositionFilter::position_process_trk);
 
   int i = waypt_count();
 

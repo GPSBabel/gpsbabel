@@ -111,16 +111,16 @@ void TransformFilter::transform_any_disp_wpt_cb(const Waypoint* wpt)
 
 void TransformFilter::transform_routes()
 {
-  WayptFunctor<TransformFilter> transform_any_disp_wpt_cb_f(*this, &TransformFilter::transform_any_disp_wpt_cb);
-  RteHdFunctor<TransformFilter> transform_rte_disp_hdr_cb_f(*this, &TransformFilter::transform_rte_disp_hdr_cb);
+  WayptFunctor<TransformFilter> transform_any_disp_wpt_cb_f(this, &TransformFilter::transform_any_disp_wpt_cb);
+  RteHdFunctor<TransformFilter> transform_rte_disp_hdr_cb_f(this, &TransformFilter::transform_rte_disp_hdr_cb);
 
   route_disp_all(transform_rte_disp_hdr_cb_f, nullptr, transform_any_disp_wpt_cb_f);
 }
 
 void TransformFilter::transform_tracks()
 {
-  WayptFunctor<TransformFilter> transform_any_disp_wpt_cb_f(*this, &TransformFilter::transform_any_disp_wpt_cb);
-  RteHdFunctor<TransformFilter> transform_trk_disp_hdr_cb_f(*this, &TransformFilter::transform_trk_disp_hdr_cb);
+  WayptFunctor<TransformFilter> transform_any_disp_wpt_cb_f(this, &TransformFilter::transform_any_disp_wpt_cb);
+  RteHdFunctor<TransformFilter> transform_trk_disp_hdr_cb_f(this, &TransformFilter::transform_trk_disp_hdr_cb);
 
   track_disp_all(transform_trk_disp_hdr_cb_f, nullptr, transform_any_disp_wpt_cb_f);
 }

@@ -112,8 +112,8 @@ void DiscardFilter::fix_process_head(const route_head* trk)
 
 void DiscardFilter::process()
 {
-  WayptFunctor<DiscardFilter> fix_process_wpt_f(*this, &DiscardFilter::fix_process_wpt);
-  RteHdFunctor<DiscardFilter> fix_process_head_f(*this, &DiscardFilter::fix_process_head);
+  WayptFunctor<DiscardFilter> fix_process_wpt_f(this, &DiscardFilter::fix_process_wpt);
+  RteHdFunctor<DiscardFilter> fix_process_head_f(this, &DiscardFilter::fix_process_head);
 
   // Filter waypoints.
   what = wptdata;

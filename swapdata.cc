@@ -46,7 +46,7 @@ void SwapDataFilter::swapdata_cb(const Waypoint* ref)
 
 void SwapDataFilter::process(void)	/* this procedure must be present in vecs */
 {
-  WayptFunctor<SwapDataFilter> swapdata_cb_f(*this, &SwapDataFilter::swapdata_cb);
+  WayptFunctor<SwapDataFilter> swapdata_cb_f(this, &SwapDataFilter::swapdata_cb);
 
   waypt_disp_all(swapdata_cb_f);
   route_disp_all(nullptr, nullptr, swapdata_cb_f);

@@ -52,9 +52,9 @@ void ValidateFilter::validate_point(const Waypoint*)
 
 void ValidateFilter::process()
 {
-  WayptFunctor<ValidateFilter> validate_point_f(*this, &ValidateFilter::validate_point);
-  RteHdFunctor<ValidateFilter> validate_head_f(*this, &ValidateFilter::validate_head);
-  RteHdFunctor<ValidateFilter> validate_head_trl_f(*this, &ValidateFilter::validate_head_trl);
+  WayptFunctor<ValidateFilter> validate_point_f(this, &ValidateFilter::validate_point);
+  RteHdFunctor<ValidateFilter> validate_head_f(this, &ValidateFilter::validate_head);
+  RteHdFunctor<ValidateFilter> validate_head_trl_f(this, &ValidateFilter::validate_head_trl);
 
   debug = *opt_debug == '1';
   checkempty = *opt_checkempty == '1';
