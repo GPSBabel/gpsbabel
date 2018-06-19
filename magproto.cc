@@ -1612,21 +1612,25 @@ const char** os_get_magellan_mountpoints()
 
 // My kingdom for container classes and portable tree-walking...
 // Returns a pointer to a static vector that's valid until the next call.
+#if HAVE_GLOB
 static char**
 os_gpx_files(const char* dirname)
 {
-#if HAVE_GLOB
   static glob_t g;
   char* path;
   xasprintf(&path, "%s/*.gpx", dirname);
   glob(path, 0, nullptr, &g);
   xfree(path);
   return g.gl_pathv;
+}
 #else
+static char**
+os_gpx_files(const char* /* dirname */)
+{
   fatal("Not implemented");
   return NULL;
-#endif
 }
+#endif
 
 /*
  *  This is repeated just so it shows up as separate menu options
