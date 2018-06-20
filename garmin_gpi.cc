@@ -244,7 +244,7 @@ gpi_gmsd_init(Waypoint* wpt)
 }
 
 static char*
-gpi_read_lc_string_old(const char* field, char* languagecode, short* length)
+gpi_read_lc_string_old(char* languagecode, short* length)
 {
   char lc[3];
   short len;
@@ -291,9 +291,9 @@ gpi_read_string_old(const char* field)
       is_fatal((gbfgetc(fin) != 0),
                MYNAME ": Error reading field '%s'!", field);
 
-      res1 = gpi_read_lc_string_old(field, lc1,  &l1);
+      res1 = gpi_read_lc_string_old(lc1,  &l1);
       if ((l1 + 4) < l0) { // dual language?
-        res2 = gpi_read_lc_string_old(field, lc2,  &l2);
+        res2 = gpi_read_lc_string_old(lc2,  &l2);
         is_fatal((l1 + 4 + l2 + 4 != l0),
                  MYNAME ": Error out of sync (wrong size %d/%d/%d) on field '%s'!", l0, l1, l2, field);
         if (opt_lang && (strcmp(opt_lang, lc1) == 0)) {
