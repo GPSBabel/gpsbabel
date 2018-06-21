@@ -120,13 +120,13 @@ HEADERS =  \
 	xmlgeneric.h \
 	zlib/crc32.h \
 	zlib/deflate.h \
+	zlib/gzguts.h \
 	zlib/inffast.h \
 	zlib/inffixed.h \
 	zlib/inflate.h \
 	zlib/inftrees.h \
 	zlib/trees.h \
 	zlib/zconf.h \
-	zlib/zconf.in.h \
 	zlib/zlib.h \
 	zlib/zutil.h \
 	src/core/xmlstreamwriter.h \

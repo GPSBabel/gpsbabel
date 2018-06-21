@@ -240,7 +240,7 @@ track_read()
   }
 
   gbfseek(file_in, 0L, SEEK_END);
-  gbfseek(file_in, (int32_t) -(sizeof(tw_workout)), SEEK_CUR);
+  gbfseek(file_in, -(int32_t)(sizeof(tw_workout)), SEEK_CUR);
   tw_workout workout;
   workout.dateStart.Year = gbfgetc(file_in);
   workout.dateStart.Month = gbfgetc(file_in);
