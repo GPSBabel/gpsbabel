@@ -142,10 +142,8 @@
  */
 #if __GNUC__
 #  define PRINTFLIKE(x,y) __attribute__ ((__format__ (__printf__, (x), (y))))
-#  define NORETURN void __attribute__ ((__noreturn__))
 #else
 #  define PRINTFLIKE(x,y)
-#  define NORETURN void
 #endif
 
 
@@ -863,7 +861,7 @@ typedef struct style_vecs {
 } style_vecs_t;
 extern style_vecs_t style_list[];
 
-NORETURN fatal(const char*, ...) PRINTFLIKE(1, 2);
+[[noreturn]] void fatal(const char*, ...) PRINTFLIKE(1, 2);
 void is_fatal(const int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);

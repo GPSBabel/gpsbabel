@@ -22,7 +22,7 @@
 #include "defs.h"
 #include <cstdio>
 #include <cstdlib>
-void
+[[noreturn]] void
 fatal(const char* fmt, ...)
 {
   va_list ap;
