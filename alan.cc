@@ -999,9 +999,10 @@ ff_vecs_t alanwpr_vecs = {
   wpr_write,
   alan_exit,
   wpr_args,
-  CET_CHARSET_ASCII, 0 /* ascii is the expected character set */
-  /* not fixed, can be changed through command
-  line parameter */
+  CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
+  /* not fixed, can be changed through command line parameter */
+  NULL_POS_OPS,
+  nullptr
 };
 
 ff_vecs_t alantrl_vecs = {
@@ -1019,7 +1020,8 @@ ff_vecs_t alantrl_vecs = {
   trl_write,
   alan_exit,
   trl_args,
-  CET_CHARSET_ASCII, 0 /* ascii is the expected character set */
-  /* not fixed, can be changed through command
-  line parameter */
+  CET_CHARSET_ASCII, 0, /* ascii is the expected character set */
+  /* not fixed, can be changed through command line parameter */
+  NULL_POS_OPS,
+  nullptr
 };

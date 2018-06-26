@@ -217,5 +217,7 @@ ff_vecs_t enigma_vecs = {
   data_write,
   nullptr,
   nullptr,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
+  NULL_POS_OPS,
+  nullptr
 };

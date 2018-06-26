@@ -2233,5 +2233,6 @@ ff_vecs_t kml_vecs = {
   nullptr,
   kml_args,
   CET_CHARSET_UTF8, 1,	/* CET-REVIEW */
-  { nullptr, nullptr, nullptr, kml_wr_position_init, kml_wr_position, kml_wr_position_deinit }
+  { nullptr, nullptr, nullptr, kml_wr_position_init, kml_wr_position, kml_wr_position_deinit },
+  nullptr
 };

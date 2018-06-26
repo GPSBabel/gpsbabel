@@ -92,19 +92,19 @@ static
 arglist_t compegps_args[] = {
   {
     "deficon", &option_icon, "Default icon name",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "index", &option_index, "Index of route/track to write (if more than one in source)",
-    nullptr, ARGTYPE_INT, "1", nullptr
+    nullptr, ARGTYPE_INT, "1", nullptr, nullptr
   },
   {
     "radius", &option_radius, "Give points (waypoints/route points) a default radius (proximity)",
-    nullptr, ARGTYPE_FLOAT, "0", nullptr
+    nullptr, ARGTYPE_FLOAT, "0", nullptr, nullptr
   },
   {
     "snlen", &option_snlen, "Length of generated shortnames (default 16)",
-    "16", ARGTYPE_INT, "1", nullptr
+    "16", ARGTYPE_INT, "1", nullptr, nullptr
   },
   ARG_TERMINATOR
 };

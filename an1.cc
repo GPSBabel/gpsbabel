@@ -59,40 +59,40 @@ static
 arglist_t an1_args[] = {
   {
     "type", &output_type, "Type of .an1 file",
-    "", ARGTYPE_STRING, ARG_NOMINMAX
+    "", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "road", &road_changes, "Road type changes",
-    "", ARGTYPE_STRING, ARG_NOMINMAX
+    "", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "nogc", &nogc, "Do not add geocache data to description",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "nourl", &nourl, "Do not add URLs to description",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "deficon", &opt_symbol, "Symbol to use for point data",
-    "Red Flag", ARGTYPE_STRING, ARG_NOMINMAX
+    "Red Flag", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "color", &opt_color, "Color for lines or mapnotes",
-    "red", ARGTYPE_STRING, ARG_NOMINMAX
+    "red", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "zoom", &opt_zoom, "Zoom level to reduce points",
-    nullptr, ARGTYPE_INT, ARG_NOMINMAX
+    nullptr, ARGTYPE_INT, ARG_NOMINMAX, nullptr
   },
   {
     "wpt_type", &opt_wpt_type,
     "Waypoint type",
-    "", ARGTYPE_STRING, ARG_NOMINMAX
+    "", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "radius", &opt_radius, "Radius for circles",
-    nullptr, ARGTYPE_STRING, ARG_NOMINMAX
+    nullptr, ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };
