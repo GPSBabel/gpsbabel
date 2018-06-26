@@ -52,7 +52,7 @@ static gbfile* fin;
 //           local helper functions
 //***************************************************************************
 static void
-mynav_rd_line(QString line)
+mynav_rd_line(const QString& line)
 {
   QStringList fields = line.split("|");
 

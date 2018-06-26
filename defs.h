@@ -341,17 +341,17 @@ class UrlLink
 {
 public:
   UrlLink() { }
-  UrlLink(const QString url) :
+  UrlLink(const QString& url) :
     url_(url)
   { }
   UrlLink(const char* url) :
     url_(url)
   { }
-  UrlLink(const QString url, const QString url_link_text) :
+  UrlLink(const QString& url, const QString& url_link_text) :
     url_(url),
     url_link_text_(url_link_text)
   { }
-  UrlLink(const QString url, const QString url_link_text, const QString url_link_type) :
+  UrlLink(const QString& url, const QString& url_link_text, const QString& url_link_type) :
     url_(url),
     url_link_text_(url_link_text),
     url_link_type_(url_link_type)
@@ -547,7 +547,7 @@ public:
   bool HasUrlLink() const;
   const UrlLink& GetUrlLink() const;
   const QList<UrlLink> GetUrlLinks() const;
-  void AddUrlLink(const UrlLink l);
+  void AddUrlLink(const UrlLink& l);
   QString CreationTimeXML() const;
   gpsbabel::DateTime  GetCreationTime() const;
   void SetCreationTime(gpsbabel::DateTime t);

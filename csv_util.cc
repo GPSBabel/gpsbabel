@@ -958,7 +958,7 @@ writehms(const char* format, const gpsbabel::DateTime& t, int gmt)
 
 static
 long
-time_to_yyyymmdd(QDateTime t)
+time_to_yyyymmdd(const QDateTime& t)
 {
   QDate d = t.date();
   return d.year() * 10000 + d.month() * 100 + d.day();

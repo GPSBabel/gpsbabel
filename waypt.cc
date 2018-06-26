@@ -707,7 +707,7 @@ Waypoint::GetUrlLinks() const
 }
 
 void
-Waypoint::AddUrlLink(const UrlLink l)
+Waypoint::AddUrlLink(const UrlLink& l)
 {
   url_link_list_.push_back(l);
 }

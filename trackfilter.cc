@@ -394,7 +394,7 @@ trackfilter_minpoint_list_cb(const route_head* track)
 *******************************************************************************/
 
 static void
-trackfilter_split_init_rte_name(route_head* track, const QDateTime dt)
+trackfilter_split_init_rte_name(route_head* track, const QDateTime& dt)
 {
   QString datetimestring;
 
