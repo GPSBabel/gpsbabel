@@ -176,7 +176,7 @@ maggeo_read()
 
 static
 QString
-maggeo_fmtdate(QDateTime dt)
+maggeo_fmtdate(const QDateTime& dt)
 {
   QDate date = dt.date();
   int y = date.year() - 1900;

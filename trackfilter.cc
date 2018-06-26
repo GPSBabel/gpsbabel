@@ -243,7 +243,7 @@ void TrackFilter::trackfilter_minpoint_list_cb(const route_head* track)
 * track title producers
 *******************************************************************************/
 
-void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const QDateTime dt)
+void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const QDateTime& dt)
 {
   QString datetimestring;
 

@@ -58,7 +58,7 @@ static int usb_tx_packet_size ;
 static const gdx_info* gdx;
 
 static int
-gusb_win_close(gpsdevh* handle)
+gusb_win_close(gpsdevh* /* handle */)
 {
   if (usb_handle != INVALID_HANDLE_VALUE) {
     CloseHandle(usb_handle);

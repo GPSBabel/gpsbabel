@@ -74,43 +74,43 @@ static
 arglist_t ozi_args[] = {
   {
     "pack", &pack_opt, "Write all tracks into one file",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "snlen", &snlenopt, "Max synthesized shortname length",
-    "32", ARGTYPE_INT, "1", nullptr
+    "32", ARGTYPE_INT, "1", nullptr, nullptr
   },
   {
     "snwhite", &snwhiteopt, "Allow whitespace synth. shortnames",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "snupper", &snupperopt, "UPPERCASE synth. shortnames",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "snunique", &snuniqueopt, "Make synth. shortnames unique",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "wptfgcolor", &wptfgcolor, "Waypoint foreground color",
-    "black", ARGTYPE_STRING, ARG_NOMINMAX
+    "black", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "wptbgcolor", &wptbgcolor, "Waypoint background color",
-    "yellow", ARGTYPE_STRING, ARG_NOMINMAX
+    "yellow", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "proximity", &proximityarg, "Proximity distance",
-    "0", ARGTYPE_STRING, ARG_NOMINMAX
+    "0", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "altunit", &altunit_opt, "Unit used in altitude values",
-    "feet", ARGTYPE_STRING, ARG_NOMINMAX
+    "feet", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   {
     "proxunit", &proxunit_opt, "Unit used in proximity values",
-    "miles", ARGTYPE_STRING, ARG_NOMINMAX
+    "miles", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };

@@ -1562,7 +1562,9 @@ ff_vecs_t exif_vecs = {
   exif_write,
   nullptr,
   exif_args,
-  CET_CHARSET_UTF8, 0
+  CET_CHARSET_UTF8, 0,
+  NULL_POS_OPS,
+  nullptr
 };
 
 /**************************************************************************/

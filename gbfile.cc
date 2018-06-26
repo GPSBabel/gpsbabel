@@ -501,7 +501,7 @@ memapi_error(gbfile* self)
  */
 
 gbfile*
-gbfopen(const QString filename, const char* mode, const char* module)
+gbfopen(const QString& filename, const char* mode, const char* module)
 {
   gbfile* file;
   const char* m;
@@ -609,7 +609,7 @@ gbfopen(const QString filename, const char* mode, const char* module)
  */
 
 gbfile*
-gbfopen_be(const QString filename, const char* mode, const char* module)
+gbfopen_be(const QString& filename, const char* mode, const char* module)
 {
   gbfile* result;
 

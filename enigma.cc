@@ -160,10 +160,10 @@ wr_init(const QString& fname)
 }
 
 #ifndef min
-#define min(a,b) ((a) < (b)) ? (a) : (b)
+#define min(a,b) (((a) < (b)) ? (a) : (b))
 #endif
 #ifndef max
-#define max(a,b) ((a) > (b)) ? (a) : (b)
+#define max(a,b) (((a) > (b)) ? (a) : (b))
 #endif
 
 static void
@@ -180,11 +180,11 @@ enigma_waypt_disp(const Waypoint* wpt)
     le_write32(&ewpt.data.wp_altitude, METERS_TO_FEET(wpt->altitude) + 1000);
   }
   if (wpt->shortname != nullptr) {
-    ewpt.shortname_len = min(6, strlen(CSTRc(wpt->shortname)));
+    ewpt.shortname_len = (uint8_t) min(6, strlen(CSTRc(wpt->shortname)));
     strncpy(ewpt.shortname, CSTRc(wpt->shortname), 6);
   }
   if (wpt->description != nullptr) {
-    ewpt.longname_len = min(27, strlen(CSTRc(wpt->description)));
+    ewpt.longname_len = (uint8_t) min(27, strlen(CSTRc(wpt->description)));
     strncpy(ewpt.longname, CSTRc(wpt->description), 27);
   }
   gbfwrite(&ewpt, sizeof(ewpt), 1, file_out);
@@ -217,5 +217,7 @@ ff_vecs_t enigma_vecs = {
   data_write,
   nullptr,
   nullptr,
-  CET_CHARSET_ASCII, 0	/* CET-REVIEW */
+  CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
+  NULL_POS_OPS,
+  nullptr
 };

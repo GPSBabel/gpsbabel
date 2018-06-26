@@ -142,10 +142,8 @@
  */
 #if __GNUC__
 #  define PRINTFLIKE(x,y) __attribute__ ((__format__ (__printf__, (x), (y))))
-#  define NORETURN void __attribute__ ((__noreturn__))
 #else
 #  define PRINTFLIKE(x,y)
-#  define NORETURN void
 #endif
 
 
@@ -343,17 +341,17 @@ class UrlLink
 {
 public:
   UrlLink() { }
-  UrlLink(const QString url) :
+  UrlLink(const QString& url) :
     url_(url)
   { }
   UrlLink(const char* url) :
     url_(url)
   { }
-  UrlLink(const QString url, const QString url_link_text) :
+  UrlLink(const QString& url, const QString& url_link_text) :
     url_(url),
     url_link_text_(url_link_text)
   { }
-  UrlLink(const QString url, const QString url_link_text, const QString url_link_type) :
+  UrlLink(const QString& url, const QString& url_link_text, const QString& url_link_type) :
     url_(url),
     url_link_text_(url_link_text),
     url_link_type_(url_link_type)
@@ -549,7 +547,7 @@ public:
   bool HasUrlLink() const;
   const UrlLink& GetUrlLink() const;
   const QList<UrlLink> GetUrlLinks() const;
-  void AddUrlLink(const UrlLink l);
+  void AddUrlLink(const UrlLink& l);
   QString CreationTimeXML() const;
   gpsbabel::DateTime  GetCreationTime() const;
   void SetCreationTime(gpsbabel::DateTime t);
@@ -989,7 +987,7 @@ typedef struct style_vecs {
 } style_vecs_t;
 extern style_vecs_t style_list[];
 
-NORETURN fatal(const char*, ...) PRINTFLIKE(1, 2);
+[[noreturn]] void fatal(const char*, ...) PRINTFLIKE(1, 2);
 void is_fatal(const int condition, const char*, ...) PRINTFLIKE(2, 3);
 void warning(const char*, ...) PRINTFLIKE(1, 2);
 void debug_print(int level, const char* fmt, ...) PRINTFLIKE(2,3);

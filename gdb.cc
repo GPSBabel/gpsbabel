@@ -361,7 +361,7 @@ gdb_add_route_waypt(route_head* rte, Waypoint* ref, const int wpt_class)
 /*******************************************************************************/
 /* TOOLS AND MACROS FOR THE WRITER */
 /*-----------------------------------------------------------------------------*/
-static void FWRITE_CSTR(QString a)  {
+static void FWRITE_CSTR(const QString& a)  {
   if (a.isEmpty()) {
     gbfputc(0, fout);
     return;
@@ -1856,26 +1856,26 @@ static arglist_t gdb_args[] = {
   {
     GDB_OPT_CATEGORY, &gdb_opt_category,
     "Default category on output (1..16)",
-    nullptr, ARGTYPE_INT, "1", "16"
+    nullptr, ARGTYPE_INT, "1", "16", nullptr
   },
   {
     GDB_OPT_BITCATEGORY, &gdb_opt_bitcategory, "Bitmap of categories",
-    nullptr, ARGTYPE_INT, "1", "65535"
+    nullptr, ARGTYPE_INT, "1", "65535", nullptr
   },
   {
     GDB_OPT_VER, &gdb_opt_ver,
     "Version of gdb file to generate (1..3)",
-    "2", ARGTYPE_INT, "1", "3"
+    "2", ARGTYPE_INT, "1", "3", nullptr
   },
   {
     GDB_OPT_VIA, &gdb_opt_via,
     "Drop route points that do not have an equivalent waypoint (hidden points)",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     GDB_OPT_ROADBOOK, &gdb_opt_roadbook,
     "Include major turn points (with description) from calculated route",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX
+    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
 
   ARG_TERMINATOR

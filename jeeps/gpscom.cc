@@ -1308,22 +1308,22 @@ int32 GPS_Command_Send_Track_As_Course(const char* port, GPS_PTrack* trk, int32 
 }
 
 /*Stubs for unimplemented stuff*/
-int32  GPS_Command_Get_Workout(const char*, void**, int (*cb)(int, struct GPS_SWay**))
+int32  GPS_Command_Get_Workout(const char* /* port */, void** /* lap */, int (* /* cb */)(int, struct GPS_SWay**))
 {
   return 0;
 }
 
-int32  GPS_Command_Get_Fitness_User_Profile(const char* port, void** lap, int (*cb)(int, struct GPS_SWay**))
+int32  GPS_Command_Get_Fitness_User_Profile(const char* /* port */, void**  /* lap */, int (* /* cb */)(int, struct GPS_SWay**))
 {
   return 0;
 }
 
-int32  GPS_Command_Get_Workout_Limits(const char* port, void** lap, int (*cb)(int, struct GPS_SWay**))
+int32  GPS_Command_Get_Workout_Limits(const char* /* port */, void** /* lap */, int (* /* cb */)(int, struct GPS_SWay**))
 {
   return 0;
 }
 
-int32  GPS_Command_Get_Course_Limits(const char* port, void** lap, int (*cb)(int, struct GPS_SWay**))
+int32  GPS_Command_Get_Course_Limits(const char* /* port */, void** /* lap */, int (* /* cb */)(int, struct GPS_SWay**))
 {
   return 0;
 }

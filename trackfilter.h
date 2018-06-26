@@ -191,7 +191,7 @@ private:
   void trackfilter_fill_track_list_cb(const route_head* track); 	/* callback for track_disp_all */
   void trackfilter_minpoint_list_cb(const route_head* track);
 
-  void trackfilter_split_init_rte_name(route_head* track, const QDateTime dt);
+  void trackfilter_split_init_rte_name(route_head* track, const QDateTime& dt);
   void trackfilter_pack_init_rte_name(route_head* track, const time_t default_time);
 
   void trackfilter_title();

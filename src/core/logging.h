@@ -52,7 +52,7 @@ class Warning {
   inline Warning& operator << (float d) { fileStream_ << d; return optionalSpace(); }
   inline Warning& operator << (double d) { fileStream_ << d; return optionalSpace(); }
   inline Warning& operator << (const char* d) { fileStream_ << QString::fromUtf8(d); return optionalSpace(); }
-  inline Warning& operator << (QString d) { fileStream_ << '\"' << d << '\"'; return optionalSpace(); }
+  inline Warning& operator << (const QString& d) { fileStream_ << '\"' << d << '\"'; return optionalSpace(); }
   inline Warning& operator << (const void* d) { fileStream_ << '\"' << d << '\"'; return optionalSpace(); }
 
   inline Warning& optionalSpace() {

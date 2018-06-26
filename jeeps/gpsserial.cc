@@ -191,7 +191,7 @@ int32 GPS_Serial_Wait(gpsdevh* fd)
   return GPS_Serial_Chars_Ready(fd);
 }
 
-int32 GPS_Serial_Flush(gpsdevh* fd)
+int32 GPS_Serial_Flush(gpsdevh* /* fd */)
 {
   return 1;
 }

@@ -527,7 +527,7 @@ tag_gs_cache(const QXmlStreamAttributes& attr)
 }
 
 static void
-start_something_else(const QString el, const QXmlStreamAttributes& attr)
+start_something_else(const QString& el, const QXmlStreamAttributes& attr)
 {
   char** avcp;
   int attr_count;
@@ -1652,7 +1652,7 @@ gpx_write_common_extensions(const Waypoint* waypointp, const gpx_point_type poin
 }
 
 static void
-gpx_write_common_description(const Waypoint* waypointp, QString oname)
+gpx_write_common_description(const Waypoint* waypointp, const QString& oname)
 {
   writer->writeOptionalTextElement(QStringLiteral("name"), oname);
 

@@ -1,3 +1,18 @@
+# Enforce minimum Qt version.
+# versionAtLeast() was introduced in Qt 5.10, so we can't count on it being available.
+MIN_QT_VERSION = 5.7 # major[.minor[.patch]]
+MIN_QT_VERSION_COMPONENTS = $$split(MIN_QT_VERSION, .)
+MIN_QT_VERSION_MAJOR = $$member(MIN_QT_VERSION_COMPONENTS, 0)
+MIN_QT_VERSION_MINOR = $$member(MIN_QT_VERSION_COMPONENTS, 1)
+MIN_QT_VERSION_PATCH = $$member(MIN_QT_VERSION_COMPONENTS, 2)
+count(MIN_QT_VERSION_MINOR, 0): MIN_QT_VERSION_MINOR = 0
+count(MIN_QT_VERSION_PATCH, 0): MIN_QT_VERSION_PATCH = 0
+lessThan(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR) | \
+if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):lessThan(QT_MINOR_VERSION, $$MIN_QT_VERSION_MINOR)) | \
+if(equals(QT_MAJOR_VERSION, $$MIN_QT_VERSION_MAJOR):equals(QT_MINOR_VERSION, $$MIN_QT_VERSION_MINOR):lessThan(QT_PATCH_VERSION, $$MIN_QT_VERSION_PATCH)) {
+  error("$$QMAKE_QMAKE uses Qt version $$QT_VERSION but version $${MIN_QT_VERSION_MAJOR}.$${MIN_QT_VERSION_MINOR}.$${MIN_QT_VERSION_PATCH} or newer is required.")  
+}
+
 QT -= gui
 
 TARGET = GPSBabel
@@ -122,17 +137,22 @@ HEADERS =  \
 	xmlgeneric.h \
 	zlib/crc32.h \
 	zlib/deflate.h \
+	zlib/gzguts.h \
 	zlib/inffast.h \
 	zlib/inffixed.h \
 	zlib/inflate.h \
 	zlib/inftrees.h \
 	zlib/trees.h \
 	zlib/zconf.h \
-	zlib/zconf.in.h \
 	zlib/zlib.h \
 	zlib/zutil.h \
+	src/core/datetime.h \
+	src/core/file.h \
+	src/core/logging.h \
+	src/core/usasciicodec.h \
 	src/core/xmlstreamwriter.h \
-	src/core/logging.h
+	src/core/xmltag.h
+
 HEADERS += $$FILTER_HEADERS
 
 INCLUDEPATH += zlib
@@ -150,6 +170,7 @@ macx|linux {
   }
   DEFINES += HAVE_NANOSLEEP HAVE_LIBUSB HAVE_GLOB
   SOURCES += gbser_posix.cc
+  HEADERS += gbser_posix.h
   JEEPS += jeeps/gpslibusb.cc
   INCLUDEPATH += jeeps
 }
@@ -161,6 +182,7 @@ win32 {
     DEFINES += _DEBUG
   }
   SOURCES += gbser_win.cc
+  HEADERS += gbser_win.h
   JEEPS += jeeps/gpsusbwin.cc
   LIBS += "-lsetupapi" 
 }
@@ -182,6 +204,9 @@ macx {
              mac/libusb/descriptors.c \
              mac/libusb/error.c \
              mac/libusb/usb.c
+  HEADERS += mac/libusb/error.h \
+             mac/libusb/usb.h \
+             mac/libusb/usbi.h
 }
 
 SOURCES += $$ALL_FMTS $$FILTERS $$SUPPORT $$SHAPE $$ZLIB $$JEEPS
