@@ -304,14 +304,15 @@ ff_vecs_t energympro_vecs = {
     ff_cap_read,  // tracks
     ff_cap_none   // routes
   },
-		rd_init,      // rd_init
-		nullptr,         // wr_init
-		rd_deinit,    // rd_deinit
-		nullptr,         // wr_deinit
-		data_read,    // read
-		nullptr,         // write
-		nullptr,         // exit
-		nullptr,         //args
-		CET_CHARSET_ASCII, 0  //encode,fixed_encode
-		//NULL                //name dynamic/internal?
+  rd_init,      // rd_init
+  nullptr,      // wr_init
+  rd_deinit,    // rd_deinit
+  nullptr,      // wr_deinit
+  data_read,    // read
+  nullptr,      // write
+  nullptr,      // exit
+  nullptr,      // args
+  CET_CHARSET_ASCII, 0,  // encode, fixed_encode
+  NULL_POS_OPS,
+  nullptr
 };

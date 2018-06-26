@@ -59,11 +59,11 @@ static
 arglist_t gtc_args[] = {
   {
     "course", &opt_course, "Write course rather than history, default yes",
-    "1", ARGTYPE_BOOL, ARG_NOMINMAX
+    "1", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
   },
   {
     "sport", &opt_sport, "Sport: Biking (deflt), Running, MultiSport, Other",
-    "Biking", ARGTYPE_STRING, ARG_NOMINMAX
+    "Biking", ARGTYPE_STRING, ARG_NOMINMAX, nullptr
   },
   ARG_TERMINATOR
 };

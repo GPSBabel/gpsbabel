@@ -147,5 +147,7 @@ ff_vecs_t bushnell_trl_vecs = {
   bushnell_write,
   nullptr,
   bushnell_args,
-  CET_CHARSET_MS_ANSI, 0  /* Not really sure... */
+  CET_CHARSET_MS_ANSI, 0,  /* Not really sure... */
+  NULL_POS_OPS,
+  nullptr
 };

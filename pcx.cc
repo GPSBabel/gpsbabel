@@ -44,10 +44,10 @@ static int lon_col;
 #define MYNAME "PCX"
 
 static arglist_t pcx_args[] = {{"deficon", &deficon, "Default icon name",
-                                "Waypoint", ARGTYPE_STRING, ARG_NOMINMAX},
+                                "Waypoint", ARGTYPE_STRING, ARG_NOMINMAX, nullptr},
                                {"cartoexploreur", &cartoexploreur,
                                 "Write tracks compatible with Carto Exploreur",
-                                nullptr, ARGTYPE_BOOL, ARG_NOMINMAX},
+                                nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr},
                                ARG_TERMINATOR};
 
 static void rd_init(const QString& fname) {
