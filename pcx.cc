@@ -70,13 +70,13 @@ static void wr_deinit() {
 
 // Find the first token in string |in| when there may be leading whitespace.
 // These files have weird mixtures of spaces and tabs.
-static QString FirstTokenAt(QString in, int index) {
+static QString FirstTokenAt(const QString& in, int index) {
   static const QRegExp sep("\\s+");
   return in.mid(index, -1).section(sep, 0, 0, QString::SectionSkipEmpty);
 }
 
 // Centralize Date/Time parsing between Waypoint and Trackpoint readers.
-static void  SetWaypointTime(Waypoint* wpt, QString date, QString time) {
+static void  SetWaypointTime(Waypoint* wpt, const QString& date, const QString& time) {
   QDate qdate = QDate::fromString(date, "dd-MMM-yy");
   QTime qtime = QTime::fromString(time, "hh:mm:ss");
   if (qdate.isValid() && qtime.isValid()) {

@@ -234,7 +234,7 @@ gtc_write_xml(int indent, const char* fmt, ...)
 }
 
 static void
-gtc_write_xml(int indent, const QString s)
+gtc_write_xml(int indent, const QString& s)
 {
   if (indent < 0) {
     gtc_indent_level--;
