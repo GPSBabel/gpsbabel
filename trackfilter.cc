@@ -607,7 +607,7 @@ void TrackFilter::trackfilter_split()
 #ifdef TRACKF_DBG
       printf(MYNAME ": splitting new track\n");
 #endif
-      curr = (route_head*) route_head_alloc();
+      curr = route_head_alloc();
       trackfilter_split_init_rte_name(curr, buff[j]->GetCreationTime());
       track_add_head(curr);
     }

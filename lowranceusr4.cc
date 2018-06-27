@@ -324,7 +324,7 @@ register_waypt(const Waypoint* ref)
            qPrintable(wpt->shortname), qPrintable(wpt->description), waypt_table_ct);
   }
 
-  waypt_table[waypt_table_ct] = (Waypoint*)wpt;
+  waypt_table[waypt_table_ct] = wpt;
   waypt_table_ct++;
 }
 
@@ -769,7 +769,7 @@ data_read()
 
   serial_num = gbfgetint32(file_in);
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " device serial number %u\n", (unsigned int)serial_num);
+    printf(MYNAME " device serial number %u\n", serial_num);
   }
 
   text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 1);

@@ -130,13 +130,13 @@ ggv_log_read()
     deg = (int16_t) le_read16(&buf[0]);
     min = le_read16(&buf[2]);
     sec = le_read_float(&buf[4]);
-    xlat = (double)deg + ((double)min / (double)60) + (sec / (double)3600.0);
+    xlat = (double)deg + ((double)min / 60.0) + (sec / 3600.0);
     wpt->latitude = xlat;
 
     deg = (int16_t) le_read16(&buf[8]);
     min = le_read16(&buf[10]);
     sec = le_read_float(&buf[12]);
-    xlon = (double)deg + ((double)min / (double)60) + (sec / (double)3600.0);
+    xlon = (double)deg + ((double)min / 60.0) + (sec / 3600.0);
     wpt->longitude = xlon;
 
     WAYPT_SET(wpt, course, le_read16(&buf[16 + 0]));

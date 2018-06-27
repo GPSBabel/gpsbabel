@@ -190,8 +190,8 @@ static void holux_disp(const Waypoint* wpt)
   short sIndex;
   WPT* pWptHxTmp;
 
-  lon =(double)wpt->longitude * 36000;
-  lat =(double)wpt->latitude * -36000;
+  lon =wpt->longitude * 36000.0;
+  lat =wpt->latitude * -36000.0;
 
 
   /* round it to increase the accuracy */

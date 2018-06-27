@@ -418,7 +418,7 @@ unicsv_parse_time(const char* str, int* usec, time_t* date)
     *usec = 0;
   }
 
-  return ((hour * SECONDS_PER_HOUR) + (min * 60) + (int)sec);
+  return ((hour * SECONDS_PER_HOUR) + (min * 60) + sec);
 }
 
 static time_t
@@ -1188,7 +1188,7 @@ unicsv_parse_one_line(char* ibuf)
   if ((src_datum != DATUM_WGS84) &&
       (wpt->latitude != unicsv_unknown) && (wpt->longitude != unicsv_unknown)) {
     double alt;
-    GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, (double) 0.0,
+    GPS_Math_Known_Datum_To_WGS84_M(wpt->latitude, wpt->longitude, 0.0,
                                     &wpt->latitude, &wpt->longitude, &alt, src_datum);
   }
 
