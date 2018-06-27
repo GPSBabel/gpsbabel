@@ -21,66 +21,13 @@
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
+#include "radius.h"
 #include <cstdio>
 #include <cstdlib>
 
 #if FILTERS_ENABLED
 
-#ifndef M_PI
-#  define M_PI 3.14159265358979323846
-#endif
-
-static double pos_dist;
-static char* distopt = nullptr;
-static char* latopt = nullptr;
-static char* lonopt = nullptr;
-static char* exclopt = nullptr;
-static char* nosort = nullptr;
-static char* maxctarg = nullptr;
-static char* routename = nullptr;
-static int maxct;
-
-static Waypoint* home_pos;
-
-typedef struct {
-  double distance;
-} extra_data;
-
-static
-arglist_t radius_args[] = {
-  {
-    "lat", &latopt,       "Latitude for center point (D.DDDDD)",
-    nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
-  },
-  {
-    "lon", &lonopt,       "Longitude for center point (D.DDDDD)",
-    nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
-  },
-  {
-    "distance", &distopt, "Maximum distance from center",
-    nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
-  },
-  {
-    "exclude", &exclopt,  "Exclude points close to center",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "nosort", &nosort,    "Inhibit sort by distance to center",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "maxcount", &maxctarg,"Output no more than this number of points",
-    nullptr, ARGTYPE_INT, "1", nullptr, nullptr
-  },
-  {
-    "asroute", &routename,"Put resulting waypoints in route of this name",
-    nullptr, ARGTYPE_STRING, nullptr, nullptr, nullptr
-  },
-  ARG_TERMINATOR
-};
-
-static double
-gc_distance(double lat1, double lon1, double lat2, double lon2)
+double RadiusFilter::gc_distance(double lat1, double lon1, double lat2, double lon2)
 {
   return gcdist(
            RAD(lat1),
@@ -90,8 +37,7 @@ gc_distance(double lat1, double lon1, double lat2, double lon2)
          );
 }
 
-static int
-dist_comp(const void* a, const void* b)
+int RadiusFilter::dist_comp(const void* a, const void* b)
 {
   const Waypoint* x1 = *(Waypoint**)a;
   const Waypoint* x2 = *(Waypoint**)b;
@@ -108,8 +54,7 @@ dist_comp(const void* a, const void* b)
 
 }
 
-static void
-radius_process()
+void RadiusFilter::process()
 {
 #if !NEWQ
   queue* elem, * tmp;
@@ -120,7 +65,7 @@ radius_process()
   queue temp_head;
   route_head* rte_head = nullptr;
 #if NEWQ
-  foreach(Waypoint* waypointp, waypt_list) {
+  foreach (Waypoint* waypointp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     Waypoint* waypointp = (Waypoint*)elem;
@@ -158,7 +103,7 @@ radius_process()
    */
 
 #if NEWQ
-  foreach(Waypoint* wp, waypt_list) {
+  foreach (Waypoint* wp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     Waypoint* wp = (Waypoint*) elem;
@@ -202,8 +147,7 @@ radius_process()
   xfree(comp);
 }
 
-static void
-radius_init(const char*)
+void RadiusFilter::init()
 {
   char* fm;
 
@@ -234,19 +178,11 @@ radius_init(const char*)
   }
 }
 
-static void
-radius_deinit()
+void RadiusFilter::deinit()
 {
   if (home_pos) {
     xfree(home_pos);
   }
 }
 
-filter_vecs_t radius_vecs = {
-  radius_init,
-  radius_process,
-  radius_deinit,
-  nullptr,
-  radius_args
-};
 #endif // FILTERS_ENABLED

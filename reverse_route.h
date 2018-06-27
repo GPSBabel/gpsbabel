@@ -1,8 +1,7 @@
 /*
+    Route reversal filter.
 
-    nukedata: remove all (waypoint|tracks|routes) from the stream.
-
-    Copyright (C) 2005 Robert Lipe   robertlipe+source@gpsbabel.org
+    Copyright (C) 2003 Robert Lipe, robertlipe+source@gpsbabel.org
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,25 +18,29 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 
  */
-
-#include "defs.h"
-#include "filterdefs.h"
-#include "nukedata.h"
+#include "defs.h"    // for Waypoint (ptr only), arglist_t, route_head (ptr ...
+#include "filter.h"  // for Filter
 
 #if FILTERS_ENABLED
-#define MYNAME "nukedata"
 
-void NukeDataFilter::process(void)
+class ReverseRouteFilter:public Filter
 {
-  if (*nukewpts != '0') {
-    waypt_flush_all();
+public:
+  arglist_t* get_args() override
+  {
+    return args;
   }
-  if (*nuketrks != '0') {
-    route_flush_all_tracks();
-  }
-  if (*nukertes != '0') {
-    route_flush_all_routes();
-  }
-}
+  void init() override;
+  void process() override;
 
+private:
+  int prev_new_trkseg;
+  arglist_t args[1] = {
+    ARG_TERMINATOR
+  };
+
+  void reverse_route_wpt(const Waypoint* waypointp);
+  void reverse_route_head(const route_head* rte);
+
+};
 #endif

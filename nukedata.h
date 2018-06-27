@@ -20,24 +20,45 @@
 
  */
 
-#include "defs.h"
-#include "filterdefs.h"
-#include "nukedata.h"
+#ifndef NUKEDATA_H_INCLUDED_
+#define NUKEDATA_H_INCLUDED_
+
+#include "defs.h"    // for ARGTYPE_BOOL, ARG_NOMINMAX, arglist_t, ARG_TERMI...
+#include "filter.h"  // for Filter
 
 #if FILTERS_ENABLED
-#define MYNAME "nukedata"
 
-void NukeDataFilter::process(void)
+class NukeDataFilter:public Filter
 {
-  if (*nukewpts != '0') {
-    waypt_flush_all();
+public:
+  arglist_t* get_args() override
+  {
+    return args;
   }
-  if (*nuketrks != '0') {
-    route_flush_all_tracks();
-  }
-  if (*nukertes != '0') {
-    route_flush_all_routes();
-  }
-}
+  void process() override;
+
+private:
+  char* nukewpts;
+  char* nuketrks;
+  char* nukertes;
+
+  arglist_t args[4] = {
+    {
+      "waypoints", &nukewpts, "Remove all waypoints from data stream",
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "tracks", &nuketrks, "Remove all tracks from data stream",
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    {
+      "routes", &nukertes, "Remove all routes from data stream",
+      "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
+    },
+    ARG_TERMINATOR
+  };
+
+};
 
 #endif
+#endif // NUKEDATA_H_INCLUDED_

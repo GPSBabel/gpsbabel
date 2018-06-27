@@ -20,101 +20,20 @@
  */
 
 #include "defs.h"
+#include "discard.h"
 #include "filterdefs.h"
 #include <cstdlib>
-// Can't use QRegularExpression because Linux won't get Qt 5 for years. 
+// Can't use QRegularExpression because Linux won't get Qt 5 for years.
 #include <QtCore/QRegExp>
 #include <cstdio>
 #include <cstdlib>
 
 #if FILTERS_ENABLED
-static char* hdopopt = nullptr;
-static char* vdopopt = nullptr;
-static char* andopt = nullptr;
-static char* satopt = nullptr;
-static char* fixnoneopt = nullptr;
-static char* fixunknownopt = nullptr;
-static char* eleminopt = nullptr;
-static char* elemaxopt = nullptr;
-static char* nameopt = nullptr;
-static QRegExp name_regex;
-static char* descopt = nullptr;
-static QRegExp desc_regex;
-static char* cmtopt = nullptr;
-static QRegExp cmt_regex;
-static char* iconopt = nullptr;
-static QRegExp icon_regex;
-
-static double hdopf;
-static double vdopf;
-static int satpf;
-static int eleminpf;
-static int elemaxpf;
-static gpsdata_type what;
-static route_head* head;
-
-static
-arglist_t fix_args[] = {
-  {
-    "hdop", &hdopopt, "Suppress points with higher hdop",
-    "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
-  },
-  {
-    "vdop", &vdopopt, "Suppress points with higher vdop",
-    "-1.0", ARGTYPE_END_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
-  },
-  {
-    "hdopandvdop", &andopt, "Link hdop and vdop supression with AND",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "sat", &satopt, "Minimium sats to keep points",
-    "-1.0", ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
-  },
-  {
-    "fixnone", &fixnoneopt, "Suppress points without fix",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "fixunknown", &fixunknownopt, "Suppress points with unknown fix",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "elemin", &eleminopt, "Suppress points below given elevation in meters",
-    nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
-  },
-  {
-    "elemax", &elemaxopt, "Suppress points above given elevation in meters",
-    nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_INT, ARG_NOMINMAX, nullptr
-  },
-  {
-    "matchname", &nameopt,
-    "Suppress points where name matches given name", nullptr, ARGTYPE_STRING,
-    ARG_NOMINMAX, nullptr
-  },
-  {
-    "matchdesc", &descopt,
-    "Suppress points where description matches given name", nullptr, ARGTYPE_STRING,
-    ARG_NOMINMAX, nullptr
-  },
-  {
-    "matchcmt", &cmtopt,
-    "Suppress points where comment matches given name", nullptr, ARGTYPE_STRING,
-    ARG_NOMINMAX, nullptr
-  },
-  {
-    "matchicon", &iconopt,
-    "Suppress points where type matches given name", nullptr, ARGTYPE_STRING,
-    ARG_NOMINMAX, nullptr
-  },
-  ARG_TERMINATOR
-};
 
 /*
  * Decide whether to keep or toss this point.
  */
-static void
-fix_process_wpt(const Waypoint* wpt)
+void DiscardFilter::fix_process_wpt(const Waypoint* wpt)
 {
   int del = 0;
   int delh = 0;
@@ -186,31 +105,31 @@ fix_process_wpt(const Waypoint* wpt)
   }
 }
 
-static void
-fix_process_head(const route_head* trk)
+void DiscardFilter::fix_process_head(const route_head* trk)
 {
   head = (route_head*)trk;
 }
 
-static void
-fix_process()
+void DiscardFilter::process()
 {
+  WayptFunctor<DiscardFilter> fix_process_wpt_f(this, &DiscardFilter::fix_process_wpt);
+  RteHdFunctor<DiscardFilter> fix_process_head_f(this, &DiscardFilter::fix_process_head);
+
   // Filter waypoints.
   what = wptdata;
-  waypt_disp_all(fix_process_wpt);
+  waypt_disp_all(fix_process_wpt_f);
 
   // Filter tracks
   what = trkdata;
-  track_disp_all(fix_process_head, nullptr, fix_process_wpt);
+  track_disp_all(fix_process_head_f, nullptr, fix_process_wpt_f);
 
   // And routes
   what = rtedata;
-  route_disp_all(fix_process_head, nullptr, fix_process_wpt);
+  route_disp_all(fix_process_head_f, nullptr, fix_process_wpt_f);
 
 }
 
-static void
-fix_init(const char*)
+void DiscardFilter::init()
 {
   if (hdopopt) {
     hdopf = atof(hdopopt);
@@ -260,11 +179,4 @@ fix_init(const char*)
   }
 }
 
-filter_vecs_t discard_vecs = {
-  fix_init,
-  fix_process,
-  nullptr,
-  nullptr,
-  fix_args
-};
 #endif

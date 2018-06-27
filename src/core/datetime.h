@@ -20,6 +20,8 @@
 
  */
 
+#ifndef DATETIME_H_INCLUDED_
+#define DATETIME_H_INCLUDED_
 
 #include <ctime>
 
@@ -89,3 +91,5 @@ public:
 };
 
 } // namespace gpsbabel
+
+#endif // DATETIME_H_INCLUDED_

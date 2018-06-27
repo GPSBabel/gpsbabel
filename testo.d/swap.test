@@ -1,0 +1,6 @@
+
+# swapdata filter
+rm -f ${TMPDIR}/gl.gpx ${TMPDIR}/gpx.wpt
+gpsbabel -i gpx -f ${REFERENCE}/swapdata.gpx -x swap -o gpx -F ${TMPDIR}/swapdata~gpx.gpx
+compare ${REFERENCE}/swapdata~gpx.gpx ${TMPDIR}/swapdata~gpx.gpx
+

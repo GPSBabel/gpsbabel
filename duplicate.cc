@@ -19,46 +19,14 @@
 
  */
 #include "defs.h"
+#include "duplicate.h"
 #include "filterdefs.h"
 #include <cstdio>
 #include <cstdlib> // qsort
 
 #if FILTERS_ENABLED
-static char* snopt = nullptr;
-static char* lcopt = nullptr;
-static char* purge_duplicates = nullptr;
-static char* correct_coords = nullptr;
 
-static
-arglist_t dup_args[] = {
-  {
-    "shortname", &snopt, "Suppress duplicate waypoints based on name",
-    nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "location", &lcopt, "Suppress duplicate waypoint based on coords",
-    nullptr, ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "all", &purge_duplicates, "Suppress all instances of duplicates",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "correct", &correct_coords, "Use coords from duplicate points",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  ARG_TERMINATOR
-};
-
-
-typedef struct btree_node {
-  struct btree_node* left, *right;
-  unsigned long data;
-  Waypoint* wpt;
-} btree_node;
-
-static btree_node*
-addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode)
+DuplicateFilter::btree_node* DuplicateFilter::addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode)
 {
   btree_node* tmp, * last = nullptr;
 
@@ -95,8 +63,7 @@ addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode)
   return (tree);
 }
 
-static void
-free_tree(btree_node* tree)
+void DuplicateFilter::free_tree(btree_node* tree)
 {
   if (tree->left) {
     free_tree(tree->left);
@@ -106,11 +73,6 @@ free_tree(btree_node* tree)
   }
   xfree(tree);
 }
-
-typedef struct {
-  Waypoint* wpt;
-  int index;
-} wpt_ptr;
 
 /*
 
@@ -146,9 +108,7 @@ because, sadly, quicksort can be O(n^2) on presorted elements.)
 */
 
 
-static
-int
-compare(const void* a, const void* b)
+int DuplicateFilter::compare(const void* a, const void* b)
 {
   const wpt_ptr* wa = (wpt_ptr*)a;
   const wpt_ptr* wb = (wpt_ptr*)b;
@@ -171,9 +131,7 @@ compare(const void* a, const void* b)
 
 }
 
-
-static void
-duplicate_process(void)
+void DuplicateFilter::process(void)
 {
   Waypoint* waypointp;
   btree_node* newnode, * btmp, * sup_tree = nullptr;
@@ -195,7 +153,7 @@ duplicate_process(void)
 
   i = 0;
 #if NEWQ
-  foreach(Waypoint* waypointp, waypt_list) {
+  foreach (Waypoint* waypointp, waypt_list) {
     bh->wpt = waypointp;
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
@@ -271,11 +229,4 @@ duplicate_process(void)
   }
 }
 
-filter_vecs_t duplicate_vecs = {
-  nullptr,
-  duplicate_process,
-  nullptr,
-  nullptr,
-  dup_args
-};
 #endif

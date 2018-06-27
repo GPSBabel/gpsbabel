@@ -22,48 +22,13 @@
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
+#include "position.h"
 #include <cmath>
 #include <cstdlib>
 
 #if FILTERS_ENABLED
 
-#ifndef M_PI
-#  define M_PI 3.14159265358979323846
-#endif
-
-static route_head* cur_rte = nullptr;
-
-static double pos_dist;
-static double max_diff_time;
-static char* distopt = nullptr;
-static char* timeopt = nullptr;
-static char* purge_duplicates = nullptr;
-static int check_time;
-
-typedef struct {
-  double distance;
-} extra_data;
-
-static
-arglist_t position_args[] = {
-  {
-    "distance", &distopt, "Maximum positional distance",
-    nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
-  },
-  {
-    "all", &purge_duplicates,
-    "Suppress all points close to other points",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "time", &timeopt, "Maximum time in seconds beetween two points",
-    nullptr, ARGTYPE_FLOAT | ARGTYPE_REQUIRED, ARG_NOMINMAX, nullptr
-  },
-  ARG_TERMINATOR
-};
-
-static double
-gc_distance(double lat1, double lon1, double lat2, double lon2)
+double PositionFilter::gc_distance(double lat1, double lon1, double lat2, double lon2)
 {
   return gcdist(
            RAD(lat1),
@@ -74,8 +39,7 @@ gc_distance(double lat1, double lon1, double lat2, double lon2)
 }
 
 /* tear through a waypoint queue, processing points by distance */
-static void
-position_runqueue(queue* q, int nelems, int qtype)
+void PositionFilter::position_runqueue(queue* q, int nelems, int qtype)
 {
   queue* elem, * tmp;
   Waypoint** comp;
@@ -165,8 +129,7 @@ position_runqueue(queue* q, int nelems, int qtype)
   }
 }
 
-static void
-position_process_any_route(const route_head* rh, int type)
+void PositionFilter::position_process_any_route(const route_head* rh, int type)
 {
   int i = rh->rte_waypt_ct;
 
@@ -178,42 +141,32 @@ position_process_any_route(const route_head* rh, int type)
 
 }
 
-static void
-position_process_rte(const route_head* rh)
+void PositionFilter::position_process_rte(const route_head* rh)
 {
   position_process_any_route(rh, rtedata);
 }
 
-static void
-position_process_trk(const route_head* rh)
+void PositionFilter::position_process_trk(const route_head* rh)
 {
   position_process_any_route(rh, trkdata);
 }
 
-static void
-position_noop_w(const Waypoint*)
+void PositionFilter::process()
 {
-}
+  RteHdFunctor<PositionFilter> position_process_rte_f(this, &PositionFilter::position_process_rte);
+  RteHdFunctor<PositionFilter> position_process_trk_f(this, &PositionFilter::position_process_trk);
 
-static void
-position_noop_t(const route_head*)
-{
-}
-
-static void position_process()
-{
   int i = waypt_count();
 
   if (i) {
     position_runqueue(&waypt_head, i, wptdata);
   }
 
-  route_disp_all(position_process_rte, position_noop_t, position_noop_w);
-  track_disp_all(position_process_trk, position_noop_t, position_noop_w);
+  route_disp_all(position_process_rte_f, nullptr, nullptr);
+  track_disp_all(position_process_trk_f, nullptr, nullptr);
 }
 
-static void
-position_init(const char*)
+void PositionFilter::init()
 {
   char* fm;
 
@@ -235,18 +188,5 @@ position_init(const char*)
     max_diff_time = strtod(timeopt, &fm);
   }
 }
-
-static void
-position_deinit()
-{
-}
-
-filter_vecs_t position_vecs = {
-  position_init,
-  position_process,
-  position_deinit,
-  nullptr,
-  position_args
-};
 
 #endif // FILTERS_ENABLED

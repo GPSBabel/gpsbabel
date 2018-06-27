@@ -20,37 +20,31 @@
 
  */
 
-#include "defs.h"
-#include "filterdefs.h"
-#include "swapdata.h"
+#ifndef SWAPDATA_H_INCLUDED_
+#define SWAPDATA_H_INCLUDED_
 
-#define MYNAME "swapdata"
+#include "defs.h"    // for Waypoint (ptr only), arglist_t, ARG_TERMINATOR
+#include "filter.h"  // for Filter
 
 #if FILTERS_ENABLED
 
-void SwapDataFilter::swapdata_cb(const Waypoint* ref)
+class SwapDataFilter:public Filter
 {
-  Waypoint* wpt = (Waypoint*)ref;
-  double x;
+public:
+  arglist_t* get_args() override
+  {
+    return args;
+  }
+  void process() override;
 
-  x = wpt->latitude;
-  wpt->latitude = wpt->longitude;
-  wpt->longitude = x;
+private:
+  arglist_t args[1] = {
+    ARG_TERMINATOR
+  };
 
-  return;
-}
+  void swapdata_cb(const Waypoint* ref);
 
-/*******************************************************************************
-* %%%        global callbacks called by gpsbabel main process              %%% *
-*******************************************************************************/
-
-void SwapDataFilter::process(void)	/* this procedure must be present in vecs */
-{
-  WayptFunctor<SwapDataFilter> swapdata_cb_f(this, &SwapDataFilter::swapdata_cb);
-
-  waypt_disp_all(swapdata_cb_f);
-  route_disp_all(nullptr, nullptr, swapdata_cb_f);
-  track_disp_all(nullptr, nullptr, swapdata_cb_f);
-}
+};
 
 #endif // FILTERS_ENABLED
+#endif // SWAPDATA_H_INCLUDED_

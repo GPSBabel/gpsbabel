@@ -22,41 +22,19 @@
 
 #include "defs.h"
 #include "filterdefs.h"
+#include "validate.h"
 #include <cstdio>
 
 #if FILTERS_ENABLED
 #define MYNAME "validate"
 
-static char* opt_debug;
-static bool debug;
-static char* opt_checkempty;
-static bool checkempty;
-static unsigned int point_ct;
-static unsigned int head_ct;
-static unsigned int segment_ct_start;
-static const char* segment_type;
-
-static
-arglist_t validate_args[] = {
-  {
-    "checkempty", &opt_checkempty, "Check for empty input",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  } ,
-  {
-    "debug", &opt_debug, "Output debug messages instead of possibly issuing a fatal error",
-    "0", ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  } ,
-  ARG_TERMINATOR
-};
-
-
-static void validate_head(const route_head*)
+void ValidateFilter::validate_head(const route_head*)
 {
   head_ct += 1;
   segment_ct_start = point_ct;
 }
 
-static void validate_head_trl(const route_head* header)
+void ValidateFilter::validate_head_trl(const route_head* header)
 {
   int segment_waypt_ct = point_ct - segment_ct_start;
   if (debug) {
@@ -67,14 +45,16 @@ static void validate_head_trl(const route_head* header)
   }
 }
 
-static void validate_point(const Waypoint*)
+void ValidateFilter::validate_point(const Waypoint*)
 {
   point_ct += 1;
 }
 
-static void
-validate_process()
+void ValidateFilter::process()
 {
+  WayptFunctor<ValidateFilter> validate_point_f(this, &ValidateFilter::validate_point);
+  RteHdFunctor<ValidateFilter> validate_head_f(this, &ValidateFilter::validate_head);
+  RteHdFunctor<ValidateFilter> validate_head_trl_f(this, &ValidateFilter::validate_head_trl);
 
   debug = *opt_debug == '1';
   checkempty = *opt_checkempty == '1';
@@ -83,7 +63,7 @@ validate_process()
   if (debug) {
     fprintf(stderr, "\nProcessing waypts\n");
   }
-  waypt_disp_all(validate_point);
+  waypt_disp_all(validate_point_f);
   if (debug) {
     fprintf(stderr, "point ct: %u, waypt_count: %u\n", point_ct, waypt_count());
   }
@@ -97,7 +77,7 @@ validate_process()
   if (debug) {
     fprintf(stderr, "\nProcessing routes\n");
   }
-  route_disp_all(validate_head, validate_head_trl, validate_point);
+  route_disp_all(validate_head_f, validate_head_trl_f, validate_point_f);
   if (debug) {
     fprintf(stderr, "route head ct: %u, route_count: %u\n", head_ct, route_count());
     fprintf(stderr, "total route point ct: %u, route_waypt_count: %u\n", point_ct, route_waypt_count());
@@ -115,7 +95,7 @@ validate_process()
   if (debug) {
     fprintf(stderr, "\nProcessing tracks\n");
   }
-  track_disp_all(validate_head, validate_head_trl, validate_point);
+  track_disp_all(validate_head_f, validate_head_trl_f, validate_point_f);
   if (debug) {
     fprintf(stderr, "track head ct: %u, track_count: %u\n", head_ct, track_count());
     fprintf(stderr, "total track point ct: %u, track_waypt_count: %u\n", point_ct, track_waypt_count());
@@ -133,13 +113,5 @@ validate_process()
     }
   }
 }
-
-filter_vecs_t validate_vecs = {
-  nullptr,
-  validate_process,
-  nullptr,
-  nullptr,
-  validate_args
-};
 
 #endif

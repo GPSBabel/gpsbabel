@@ -20,22 +20,16 @@
  */
 #include "defs.h"
 #include "filterdefs.h"
+#include "reverse_route.h"
 
 #if FILTERS_ENABLED
 
 #define MYNAME "Route reversal filter"
 
-static int prev_new_trkseg;
-
-static
-arglist_t reverse_route_args[] = {
-  ARG_TERMINATOR
-};
-
 /*
  * reverse_route_wpt fixes up the waypoint flag new_trkseg
  */
-static void reverse_route_wpt(const Waypoint* waypointp)
+void ReverseRouteFilter::reverse_route_wpt(const Waypoint* waypointp)
 {
 
   /* Cast away const-ness */
@@ -48,22 +42,22 @@ static void reverse_route_wpt(const Waypoint* waypointp)
   prev_new_trkseg = curr_new_trkseg;
 }
 
-static void
-reverse_route_head(const route_head* rte)
+void ReverseRouteFilter::reverse_route_head(const route_head* rte)
 {
   route_reverse(rte);
   prev_new_trkseg = 1;
 }
 
-static void
-reverse_route_process()
+void ReverseRouteFilter::process()
 {
-  track_disp_all(reverse_route_head, nullptr, reverse_route_wpt);
-  route_disp_all(reverse_route_head, nullptr, nullptr);
+  WayptFunctor<ReverseRouteFilter> reverse_route_wpt_f(this, &ReverseRouteFilter::reverse_route_wpt);
+  RteHdFunctor<ReverseRouteFilter> reverse_route_head_f(this, &ReverseRouteFilter::reverse_route_head);
+
+  track_disp_all(reverse_route_head_f, nullptr, reverse_route_wpt_f);
+  route_disp_all(reverse_route_head_f, nullptr, nullptr);
 }
 
-static void
-reverse_route_init(const char*)
+void ReverseRouteFilter::init()
 {
   switch (global_opts.objective) {
   case rtedata:
@@ -76,17 +70,4 @@ reverse_route_init(const char*)
   }
 }
 
-static void
-reverse_route_deinit()
-{
-  /* do nothing */
-}
-
-filter_vecs_t reverse_route_vecs = {
-  reverse_route_init,
-  reverse_route_process,
-  reverse_route_deinit,
-  nullptr,
-  reverse_route_args
-};
 #endif

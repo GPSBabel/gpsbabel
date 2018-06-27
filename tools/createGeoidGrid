@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# this is used to generate height.h
+# this is used to generate heightgrid.h
 # which is used by height.c to compute the EMG96 geoid height
 # relative to the WGS84 ellipsoid.
 # It requires the GeographicLib utility GeoidEval.

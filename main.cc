@@ -204,7 +204,7 @@ main(int argc, char* argv[])
   int argn;
   ff_vecs_t* ivecs = nullptr;
   ff_vecs_t* ovecs = nullptr;
-  filter_vecs_t* fvecs = nullptr;
+  Filter* filter = nullptr;
   QString fname;
   QString ofname;
   const char* ivec_opts = nullptr;
@@ -487,17 +487,13 @@ main(int argc, char* argv[])
       break;
     case 'x':
       optarg = FETCH_OPTARG;
-      fvecs = find_filter_vec(CSTR(optarg), &fvec_opts);
+      filter = find_filter_vec(CSTR(optarg), &fvec_opts);
 
-      if (fvecs) {
-        if (fvecs->f_init) {
-          fvecs->f_init(fvec_opts);
-        }
-        fvecs->f_process();
-        if (fvecs->f_deinit) {
-          fvecs->f_deinit();
-        }
-        free_filter_vec(fvecs);
+      if (filter) {
+        filter->init();
+        filter->process();
+        filter->deinit();
+        free_filter_vec(filter);
       }  else {
         fatal("Unknown filter '%s'\n",qPrintable(optarg));
       }

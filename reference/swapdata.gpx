@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata>
+    <time>2018-06-07T15:44:59.297Z</time>
+    <bounds minlat="45.000000000" minlon="0.000000000" maxlat="47.100000000" maxlon="2.100000000"/>
+  </metadata>
+  <wpt lat="45.000000000" lon="0.000000000">
+    <name>WPT001</name>
+    <cmt>WPT001</cmt>
+    <desc>WPT001</desc>
+  </wpt>
+  <wpt lat="45.100000000" lon="0.100000000">
+    <name>WPT002</name>
+    <cmt>WPT002</cmt>
+    <desc>WPT002</desc>
+  </wpt>
+  <rte>
+    <rtept lat="46.000000000" lon="1.000000000">
+      <name>RPT001</name>
+    </rtept>
+    <rtept lat="46.100000000" lon="1.100000000">
+      <name>RPT002</name>
+    </rtept>
+  </rte>
+  <trk>
+    <trkseg>
+      <trkpt lat="47.000000000" lon="2.000000000"/>
+      <trkpt lat="47.100000000" lon="2.100000000"/>
+    </trkseg>
+  </trk>
+</gpx>

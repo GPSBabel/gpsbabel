@@ -59,78 +59,22 @@
 #include "defs.h"
 #include "filterdefs.h"
 #include "grtcirc.h"
+#include "smplrout.h"
 #include <cstdlib>
 
+#if FILTERS_ENABLED
 #define MYNAME "simplify"
 
 #define sqr(a) ((a)*(a))
 
-static int count = 0;
-static double totalerror = 0;
-static double error = 0;
-
-static char* countopt;
-static char* erroropt;
-static char* xteopt;
-static char* lenopt;
-static char* relopt;
-static void (*waypt_del_fnp)(route_head* rte, Waypoint* wpt);
-
-static
-arglist_t routesimple_args[] = {
-  {
-    "count", &countopt,  "Maximum number of points in route",
-    nullptr, ARGTYPE_INT | ARGTYPE_BEGIN_REQ | ARGTYPE_BEGIN_EXCL, "1", nullptr, nullptr
-  },
-  {
-    "error", &erroropt, "Maximum error", nullptr,
-    ARGTYPE_STRING | ARGTYPE_END_REQ | ARGTYPE_END_EXCL, "0", nullptr, nullptr
-  },
-  {
-    "crosstrack", &xteopt, "Use cross-track error (default)", nullptr,
-    ARGTYPE_BOOL | ARGTYPE_BEGIN_EXCL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "length", &lenopt, "Use arclength error", nullptr,
-    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "relative", &relopt, "Use relative error", nullptr,
-    ARGTYPE_BOOL | ARGTYPE_END_EXCL, ARG_NOMINMAX, nullptr
-  },
-  ARG_TERMINATOR
-};
-
-struct xte_intermed;
-
-struct xte {
-  double distance;
-  int ordinal;
-  struct xte_intermed* intermed;
-};
-
-struct xte_intermed {
-  struct xte* xte_rec;
-  struct xte_intermed* next;
-  struct xte_intermed* prev;
-  const Waypoint* wpt;
-};
-
-static void
-free_xte(struct xte* xte_rec)
+void SimplifyRouteFilter::free_xte(struct xte* xte_rec)
 {
   xfree(xte_rec->intermed);
 }
 
 #define HUGEVAL 2000000000
 
-static struct xte_intermed* tmpprev = nullptr;
-static int xte_count = 0;
-static const route_head* cur_rte = nullptr;
-static struct xte* xte_recs = nullptr;
-
-static void
-routesimple_waypt_pr(const Waypoint* wpt)
+void SimplifyRouteFilter::routesimple_waypt_pr(const Waypoint* wpt)
 {
   if (!cur_rte) {
     return;
@@ -148,8 +92,7 @@ routesimple_waypt_pr(const Waypoint* wpt)
   xte_count++;
 }
 
-static void
-compute_xte(struct xte* xte_rec)
+void SimplifyRouteFilter::compute_xte(struct xte* xte_rec)
 {
   const Waypoint* wpt3 = xte_rec->intermed->wpt;
   const Waypoint* wpt1 = nullptr;
@@ -209,9 +152,7 @@ compute_xte(struct xte* xte_rec)
   }
 }
 
-
-static int
-compare_xte(const void* a, const void* b)
+int SimplifyRouteFilter::compare_xte(const void* a, const void* b)
 {
   double distdiff = ((struct xte*)a)->distance -
                     ((struct xte*)b)->distance;
@@ -241,8 +182,7 @@ compare_xte(const void* a, const void* b)
   return 0;
 }
 
-static void
-routesimple_head(const route_head* rte)
+void SimplifyRouteFilter::routesimple_head(const route_head* rte)
 {
   cur_rte = nullptr;
   /* build array of XTE/wpt xref records */
@@ -265,8 +205,7 @@ routesimple_head(const route_head* rte)
 
 }
 
-static void
-shuffle_xte(struct xte* xte_rec)
+void SimplifyRouteFilter::shuffle_xte(struct xte* xte_rec)
 {
   struct xte tmp_xte;
   while (xte_rec > xte_recs && compare_xte(xte_rec, xte_rec-1) < 0) {
@@ -300,8 +239,7 @@ shuffle_xte(struct xte* xte_rec)
   }
 }
 
-static void
-routesimple_tail(const route_head* rte)
+void SimplifyRouteFilter::routesimple_tail(const route_head* rte)
 {
   int i;
   if (!cur_rte) {
@@ -321,9 +259,9 @@ routesimple_tail(const route_head* rte)
     xte_recs[i].intermed->xte_rec = xte_recs+i;
   }
   // Ensure totalerror starts with the distance between first and second points
-  // and not the zero-init.  From a June 25, 2014  thread titled "Simplify 
+  // and not the zero-init.  From a June 25, 2014  thread titled "Simplify
   // Filter: GPSBabel removes one trackpoint..."  I never could repro it it
-  // with the sample data, so there is no automated test case, but Steve's 
+  // with the sample data, so there is no automated test case, but Steve's
   // fix is "obviously" right here.
   if (xte_count >= 1) {
     totalerror = xte_recs[xte_count-1].distance;
@@ -372,18 +310,20 @@ routesimple_tail(const route_head* rte)
   xfree(xte_recs);
 }
 
-static void
-routesimple_process()
+void SimplifyRouteFilter::process()
 {
+  WayptFunctor<SimplifyRouteFilter> routesimple_waypt_pr_f(this, &SimplifyRouteFilter::routesimple_waypt_pr);
+  RteHdFunctor<SimplifyRouteFilter> routesimple_head_f(this, &SimplifyRouteFilter::routesimple_head);
+  RteHdFunctor<SimplifyRouteFilter> routesimple_tail_f(this, &SimplifyRouteFilter::routesimple_tail);
+
   waypt_del_fnp = route_del_wpt;
-  route_disp_all(routesimple_head, routesimple_tail, routesimple_waypt_pr);
+  route_disp_all(routesimple_head_f, routesimple_tail_f, routesimple_waypt_pr_f);
 
   waypt_del_fnp = track_del_wpt;
-  track_disp_all(routesimple_head, routesimple_tail, routesimple_waypt_pr);
+  track_disp_all(routesimple_head_f, routesimple_tail_f, routesimple_waypt_pr_f);
 }
 
-static void
-routesimple_init(const char*)
+void SimplifyRouteFilter::init()
 {
   count = 0;
 
@@ -410,16 +350,4 @@ routesimple_init(const char*)
   }
 }
 
-static void
-routesimple_deinit()
-{
-  /* do nothing */
-}
-
-filter_vecs_t routesimple_vecs = {
-  routesimple_init,
-  routesimple_process,
-  routesimple_deinit,
-  nullptr,
-  routesimple_args
-};
+#endif // FILTERS_ENABLED

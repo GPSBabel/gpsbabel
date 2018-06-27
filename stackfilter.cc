@@ -21,78 +21,14 @@
 
 #include "defs.h"
 #include "filterdefs.h"
+#include "stackfilter.h"
 #include <cstdlib>
 
 #if FILTERS_ENABLED
 
 #define MYNAME "Stack filter"
 
-static char* opt_push = nullptr;
-static char* opt_copy = nullptr;
-static char* opt_pop = nullptr;
-static char* opt_append = nullptr;
-static char* opt_discard = nullptr;
-static char* opt_replace = nullptr;
-static char* opt_swap = nullptr;
-static char* opt_depth = nullptr;
-static char* nowarn = nullptr;
-static int  warnings_enabled = 1;
-static int  swapdepth = 0;
-
-static
-arglist_t stackfilt_args[] = {
-  {
-    "push", &opt_push, "Push waypoint list onto stack", nullptr,
-    ARGTYPE_BEGIN_EXCL | ARGTYPE_BEGIN_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "pop", &opt_pop, "Pop waypoint list from stack", nullptr,
-    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "swap", &opt_swap, "Swap waypoint list with <depth> item on stack",
-    nullptr, ARGTYPE_END_EXCL | ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "copy", &opt_copy, "(push) Copy waypoint list", nullptr,
-    ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "append", &opt_append, "(pop) Append list", nullptr,
-    ARGTYPE_BEGIN_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "discard", &opt_discard, "(pop) Discard top of stack",
-    nullptr, ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "replace", &opt_replace, "(pop) Replace list (default)",
-    nullptr, ARGTYPE_END_EXCL | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  {
-    "depth", &opt_depth, "(swap) Item to use (default=1)",
-    nullptr, ARGTYPE_INT, "0", nullptr, nullptr
-  },
-  {
-    "nowarn", &nowarn, "Suppress cleanup warning", nullptr,
-    ARGTYPE_BOOL | ARGTYPE_HIDDEN, ARG_NOMINMAX, nullptr
-  },
-  ARG_TERMINATOR
-};
-
-static struct stack_elt {
-  queue waypts;
-  queue routes;
-  queue tracks;
-  unsigned int waypt_ct;
-  int route_count;
-  int track_count;
-  struct stack_elt* next;
-}* stack = nullptr;
-
-
-static void
-stackfilt_process()
+void StackFilter::process()
 {
   struct stack_elt* tmp_elt = nullptr;
   queue* elem = nullptr;
@@ -191,8 +127,7 @@ stackfilt_process()
   }
 }
 
-static void
-stackfilt_init(const char*)
+void StackFilter::init()
 {
 
   int invalid = 0;
@@ -231,14 +166,12 @@ stackfilt_init(const char*)
 
 }
 
-static void
-stackfilt_deinit()
+void StackFilter::deinit()
 {
   swapdepth = 0;
 }
 
-static void
-stackfilt_exit()
+void StackFilter::exit()
 {
   struct stack_elt* tmp_elt = nullptr;
 
@@ -253,13 +186,5 @@ stackfilt_exit()
     xfree(tmp_elt);
   }
 }
-
-filter_vecs_t stackfilt_vecs = {
-  stackfilt_init,
-  stackfilt_process,
-  stackfilt_deinit,
-  stackfilt_exit,
-  stackfilt_args
-};
 
 #endif // FILTERS_ENABLED

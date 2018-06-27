@@ -568,8 +568,8 @@ unsigned int waypt_count(void);
 void set_waypt_count(unsigned int nc);
 void waypt_disp(const Waypoint* wpt);
 void waypt_status_disp(int total_ct, int myct);
-void waypt_disp_all(waypt_cb);
-void waypt_disp_session(const session_t* se, waypt_cb cb);
+//void waypt_disp_all(waypt_cb); /* template */
+//void waypt_disp_session(const session_t* se, waypt_cb cb); /* template */
 void waypt_init_bounds(bounds* bounds);
 int waypt_bounds_valid(bounds* bounds);
 void waypt_add_to_bounds(bounds* bounds, const Waypoint* waypointp);
@@ -594,6 +594,40 @@ double waypt_speed(const Waypoint* A, const Waypoint* B);
 double waypt_vertical_speed(const Waypoint* A, const Waypoint* B);
 double waypt_gradient(const Waypoint* A, const Waypoint* B);
 double waypt_course(const Waypoint* A, const Waypoint* B);
+
+template <typename T>
+void
+waypt_disp_session(const session_t* se, T cb)
+{
+  extern queue waypt_head;
+  int i = 0;
+#if NEWQ
+  foreach (Waypoint* waypointp, waypt_list) {
+#else
+  queue* elem, *tmp;
+  Waypoint* waypointp;
+  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+    waypointp = (Waypoint*) elem;
+#endif
+    if ((se == nullptr) || (waypointp->session == se)) {
+      if (global_opts.verbose_status) {
+        i++;
+        waypt_status_disp(waypt_count(), i);
+      }
+      cb(waypointp);
+    }
+  }
+  if (global_opts.verbose_status) {
+    fprintf(stdout, "\r\n");
+  }
+}
+
+template <typename T>
+void
+waypt_disp_all(T cb)
+{
+  waypt_disp_session(nullptr, cb);
+}
 
 /*
  *  Structure of recomputed track/roue data.
@@ -657,9 +691,10 @@ void track_add_wpt(route_head* rte, Waypoint* wpt);
 Waypoint* route_find_waypt_by_name(route_head* rh, const char* name);
 void route_del_wpt(route_head* rte, Waypoint* wpt);
 void track_del_wpt(route_head* rte, Waypoint* wpt);
-void route_disp(const route_head* rte, waypt_cb);
-void route_disp_all(route_hdr, route_trl, waypt_cb);
-void track_disp_all(route_hdr, route_trl, waypt_cb);
+//void route_disp(const route_head* rte, waypt_cb); /* template */
+void route_disp(const route_head* rte, std::nullptr_t /* waypt_cb */); /* override to catch nullptr */
+//void route_disp_all(route_hdr, route_trl, waypt_cb); /* template */
+//void track_disp_all(route_hdr, route_trl, waypt_cb); /* template */
 void route_reverse(const route_head* rte_hd);
 void route_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
 void track_disp_session(const session_t* se, route_hdr rh, route_trl rt, waypt_cb wc);
@@ -675,6 +710,97 @@ void route_restore(queue* head_bak);
 void track_backup(signed int* count, queue** head_bak);
 void track_restore(queue* head_bak);
 void track_recompute(const route_head* trk, computed_trkdata**);
+
+template <typename T>
+void
+route_disp(const route_head* rh, T cb)
+{
+  queue* elem, *tmp;
+// cb != nullptr, caught with an overload of route_disp
+  QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
+    Waypoint* waypointp;
+    waypointp = (Waypoint*) elem;
+    cb(waypointp);
+  }
+}
+
+template <typename T1, typename T2, typename T3>
+void
+common_disp_all(queue* qh, T1 rh, T2 rt, T3 wc)
+{
+  queue* elem, *tmp;
+  QUEUE_FOR_EACH(qh, elem, tmp) {
+    const route_head* rhp;
+    rhp = (route_head*) elem;
+// rh != nullptr, caught with an overload of common_disp_all
+    rh(rhp);
+    route_disp(rhp, wc);
+// rt != nullptr, caught with an overload of common_disp_all
+    rt(rhp);
+  }
+}
+
+template <typename T2, typename T3>
+void
+common_disp_all(queue* qh, std::nullptr_t /* rh */, T2 rt, T3 wc)
+{
+  queue* elem, *tmp;
+  QUEUE_FOR_EACH(qh, elem, tmp) {
+    const route_head* rhp;
+    rhp = (route_head*) elem;
+// rh == nullptr
+    route_disp(rhp, wc);
+// rt != nullptr, caught with an overload of common_disp_all
+    rt(rhp);
+  }
+}
+
+template <typename T1, typename T3>
+void
+common_disp_all(queue* qh, T1 rh, std::nullptr_t /* rt */, T3 wc)
+{
+  queue* elem, *tmp;
+  QUEUE_FOR_EACH(qh, elem, tmp) {
+    const route_head* rhp;
+    rhp = (route_head*) elem;
+// rh != nullptr, caught with an overload of common_disp_all
+    rh(rhp);
+    route_disp(rhp, wc);
+// rt == nullptr
+  }
+}
+
+template <typename T3>
+void
+common_disp_all(queue* qh, std::nullptr_t /* rh */, std::nullptr_t /* rt */, T3 wc)
+{
+  queue* elem, *tmp;
+  QUEUE_FOR_EACH(qh, elem, tmp) {
+    const route_head* rhp;
+    rhp = (route_head*) elem;
+// rh == nullptr
+    route_disp(rhp, wc);
+// rt == nullptr
+  }
+}
+
+template <typename T1, typename T2, typename T3>
+void
+route_disp_all(T1 rh, T2 rt, T3 wc)
+{
+  extern queue my_route_head;
+
+  common_disp_all(&my_route_head, rh, rt, wc);
+}
+
+template <typename T1, typename T2, typename T3>
+void
+track_disp_all(T1 rh, T2 rt, T3 wc)
+{
+  extern queue my_track_head;
+
+  common_disp_all(&my_track_head, rh, rt, wc);
+}
 
 typedef struct {
   volatile int request_terminate;

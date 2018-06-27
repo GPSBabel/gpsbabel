@@ -24,32 +24,15 @@
 
 #include "defs.h"
 #include "filterdefs.h"
+#include "height.h"
 #include <cmath>
 #include <cstdlib>
 
 #define MYNAME "height"
 
 #if FILTERS_ENABLED
-static char* addopt        = nullptr;
-static char* wgs84tomslopt = nullptr;
-static double addf;
 
-
-static
-arglist_t height_args[] = {
-  {
-    "add", &addopt, "Adds a constant value to every altitude (meter, append \"f\" (x.xxf) for feet)",
-    nullptr, ARGTYPE_BEGIN_REQ | ARGTYPE_FLOAT, ARG_NOMINMAX, nullptr
-  },
-  {
-    "wgs84tomsl", &wgs84tomslopt, "Converts WGS84 ellipsoidal height to orthometric height (MSL)",
-    nullptr, ARGTYPE_END_REQ | ARGTYPE_BOOL, ARG_NOMINMAX, nullptr
-  },
-  ARG_TERMINATOR
-};
-
-
-static double bilinear(double x1, double y1, double x2, double y2, double x, double y, double z11, double z12, double z21, double z22)
+double HeightFilter::bilinear(double x1, double y1, double x2, double y2, double x, double y, double z11, double z12, double z21, double z22)
 {
   double delta;
 
@@ -68,11 +51,10 @@ static double bilinear(double x1, double y1, double x2, double y2, double x, dou
   return (z22*(y-y1)*(x-x1)+z12*(y2-y)*(x-x1)+z21*(y-y1)*(x2-x)+z11*(y2-y)*(x2-x))/delta;
 }
 
-
 /* return geoid separation (MSL - WGS84) in meters, given a lat/lot in degrees */
-static double wgs84_separation(double lat, double lon)
+double HeightFilter::wgs84_separation(double lat, double lon)
 {
-#include "height.h"
+#include "heightgrid.h"
   int	ilat, ilon;
   int	ilat1, ilat2, ilon1, ilon2;
 
@@ -103,9 +85,7 @@ static double wgs84_separation(double lat, double lon)
          );
 }
 
-
-static void
-correct_height(const Waypoint* wpt)
+void HeightFilter::correct_height(const Waypoint* wpt)
 {
   Waypoint* waypointp = (Waypoint*) wpt;
 
@@ -113,16 +93,14 @@ correct_height(const Waypoint* wpt)
     if (addopt) {
       waypointp->altitude += addf;
     }
-  
+
     if (wgs84tomslopt) {
-        waypointp->altitude -= wgs84_separation(waypointp->latitude, waypointp->longitude);
+      waypointp->altitude -= wgs84_separation(waypointp->latitude, waypointp->longitude);
     }
   }
 }
 
-
-static void
-height_init(const char*)
+void HeightFilter::init()
 {
   char* unit;
 
@@ -139,23 +117,13 @@ height_init(const char*)
   }
 }
 
-
-static void
-height_process()	/* this procedure must be present in vecs */
+void HeightFilter::process()
 {
-  waypt_disp_all(correct_height);
-  route_disp_all(nullptr, nullptr, correct_height);
-  track_disp_all(nullptr, nullptr, correct_height);
+  WayptFunctor<HeightFilter> correct_height_f(this, &HeightFilter::correct_height);
+
+  waypt_disp_all(correct_height_f);
+  route_disp_all(nullptr, nullptr, correct_height_f);
+  track_disp_all(nullptr, nullptr, correct_height_f);
 }
-
-
-filter_vecs_t height_vecs = {
-  height_init,
-  height_process,
-  nullptr,
-  nullptr,
-  height_args
-};
-
 
 #endif // FILTERS_ENABLED

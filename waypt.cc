@@ -199,37 +199,6 @@ waypt_status_disp(int total_ct, int myct)
 }
 
 void
-waypt_disp_all(waypt_cb cb)
-{
-  waypt_disp_session(nullptr, cb);
-}
-
-void
-waypt_disp_session(const session_t* se, waypt_cb cb)
-{
-  int i = 0;
-#if NEWQ
-  foreach(Waypoint* waypointp, waypt_list) {
-#else
-  queue* elem, *tmp;
-  Waypoint* waypointp;
-  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (Waypoint*) elem;
-#endif
-    if ((se == nullptr) || (waypointp->session == se)) {
-      if (global_opts.verbose_status) {
-        i++;
-        waypt_status_disp(waypt_count(), i);
-      }
-      (*cb)(waypointp);
-    }
-  }
-  if (global_opts.verbose_status) {
-    fprintf(stdout, "\r\n");
-  }
-}
-
-void
 waypt_init_bounds(bounds* bounds)
 {
   /* Set data out of bounds so that even one waypoint will reset */
