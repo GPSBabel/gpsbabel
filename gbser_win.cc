@@ -26,9 +26,9 @@
 #include <windows.h>
 #include <setupapi.h>
 
-#include <assert.h>
-#include <stdarg.h>
-#include <stdio.h>
+#include <cassert>
+#include <cstdarg>
+#include <cstdio>
 
 typedef struct {
   HANDLE          comport;
