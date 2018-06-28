@@ -1390,7 +1390,7 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
 
   /* calculate line-size for source and destination */
   src_line_sz = (src_h.width * src_h.bpp) / 8;
-  src_line_sz = ((int)((src_line_sz + 3) / 4)) * 4;
+  src_line_sz = (((src_line_sz + 3) / 4)) * 4;
 
   if (src_h.bpp == 24) {
     dest_bpp = 32;
@@ -1399,7 +1399,7 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
   }
 
   dest_line_sz = (src_h.width * dest_bpp) / 8;
-  dest_line_sz = ((int)((dest_line_sz + 3) / 4)) * 4;
+  dest_line_sz = (((dest_line_sz + 3) / 4)) * 4;
 
   sz = sizeof(*dest_h) + (src_h.height * dest_line_sz);
   if (src_h.used_colors) {

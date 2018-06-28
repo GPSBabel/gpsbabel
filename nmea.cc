@@ -1037,7 +1037,7 @@ nmea_read()
   if (optdate) {
     memset(&opt_tm, 0, sizeof(opt_tm));
 
-    ck = (char*)strptime(optdate, "%Y%m%d", &opt_tm);
+    ck = strptime(optdate, "%Y%m%d", &opt_tm);
     if ((ck == nullptr) || (*ck != '\0') || (strlen(optdate) != 8)) {
       fatal(MYNAME ": Invalid date \"%s\"!\n", optdate);
     } else if (opt_tm.tm_year < 70) {

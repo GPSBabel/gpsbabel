@@ -63,7 +63,7 @@ fmt_distance(const double distance_meters, const char** tag)
     if (d < 1000) {
       *tag = "meters";
     } else {
-      d = d / (double) 1000.0;
+      d = d / 1000.0;
       *tag = "km";
     }
     break;

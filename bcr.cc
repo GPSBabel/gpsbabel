@@ -225,7 +225,7 @@ bcr_wgs84_to_mercator(const double lat, const double lon, int* north, int* east)
   double N, E;
 
   N = log(tan(lat * M_PI / 360 + M_PI / 4)) * radius;
-  E = lon * radius * M_PI / (double)180;
+  E = lon * radius * M_PI / 180.0;
 
   if (lat > 0) {
     N += 0.500000000001;  /* we go from double to integer */
@@ -245,8 +245,8 @@ bcr_wgs84_to_mercator(const double lat, const double lon, int* north, int* east)
 static void
 bcr_mercator_to_wgs84(const int north, const int east, double* lat, double* lon)
 {
-  *lat = 2 * (atan(exp(north / radius)) - M_PI / 4) / M_PI * (double)180;
-  *lon = (double)east * (double)180 / (radius * M_PI);
+  *lat = 2 * (atan(exp(north / radius)) - M_PI / 4) / M_PI * 180.0;
+  *lon = (double)east * 180.0 / (radius * M_PI);
 }
 
 /* ------------------------------------------------------------- */

@@ -522,12 +522,12 @@ track_read()
     //payload is packed with a number of trainingheaders with the size of 29bytes each
     number_headers = length / 29;	//29=packed sizeof(gh_trainheader)
     if (global_opts.debug_level > 1) {
-      printf("length=%d sizeof(gh_trainheader)=%d number_headers=%d\n", (int) length, (int) 29, (int) number_headers);
+      printf("length=%d sizeof(gh_trainheader)=%d number_headers=%d\n", length, 29, number_headers);
     }
 
     for (int i = 0; i < number_headers; i++) {
       int pos = i * 29; //29=packed sizeof(gh_trainheader)
-      uint8_t* hdr = (uint8_t*) & (payload[pos]);
+      uint8_t* hdr = & (payload[pos]);
       gh_trainheader header;
       header.dateStart.Year = hdr[0];
       header.dateStart.Month = hdr[1];
@@ -582,7 +582,7 @@ track_read()
         is_fatal(((track_length == 0) || (track_payload == nullptr)) , "tracklength in 0 bytes or payload nonexistant");
         //      printf("Got track package!!! Train data\n");
 
-        uint8_t* dbtrain = (uint8_t*) track_payload;
+        uint8_t* dbtrain = track_payload;
         gh_db_train db_train;
         db_train.dateStart.Year = dbtrain[0];
         db_train.dateStart.Month = dbtrain[1];
@@ -637,7 +637,7 @@ track_read()
           is_fatal(((track_length == 0) || (track_payload == nullptr)), "tracklength in 0 bytes or payload nonexistant");
           //	printf("Got track package!!! Laps data\n");
 
-          uint8_t* hdr = (uint8_t*) track_payload;
+          uint8_t* hdr = track_payload;
           gh_trainheader header;
           header.dateStart.Year = hdr[0];
           header.dateStart.Month = hdr[1];
@@ -678,7 +678,7 @@ track_read()
           uint8_t* lap_start_pos = track_payload + 29;	//29=packed sizeof(gh_trainheader)
           int lap;
           for (lap = 0; lap < laps_in_package; lap++) {
-            uint8_t* dblap = (uint8_t*)(lap_start_pos) + lap * 41;	//  packed sizeof(gh_db_lap)=41
+            uint8_t* dblap = (lap_start_pos) + lap * 41;	//  packed sizeof(gh_db_lap)=41
             gh_db_lap db_lap;
 
             db_lap.AccruedTime = be_read32(dblap+0);
@@ -725,7 +725,7 @@ track_read()
           track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
           if ((track_length > 0) && (track_payload != nullptr)) {
             //	  printf("Got track package!!! Train data\n");
-            uint8_t* hdr = (uint8_t*) track_payload;
+            uint8_t* hdr = track_payload;
             gh_trainheader header;
             header.dateStart.Year = hdr[0];
             header.dateStart.Month = hdr[1];
@@ -756,7 +756,7 @@ track_read()
             uint8_t* recpoints_start_pos = track_payload + 29;	//29=packed sizeof(gh_trainheader)
             int recpoint;
             for (recpoint = 0; recpoint < recpoints_in_package; recpoint++) {
-              uint8_t* ghpoint = (uint8_t*)(recpoints_start_pos + recpoint * 25);	//  packed sizeof(gh_recpoint)=25
+              uint8_t* ghpoint = (recpoints_start_pos + recpoint * 25);	//  packed sizeof(gh_recpoint)=25
               gh_recpoint point;
               point.Latitude = be_read32(ghpoint);
               point.Longitude = be_read32(ghpoint+4);

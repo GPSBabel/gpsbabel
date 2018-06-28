@@ -335,13 +335,13 @@ static void write_header()
   if (igo8_option_title) {
     title = igo8_option_title;
   }
-  current_position += ascii_to_unicode_2((char*)(header+current_position), IGO8_HEADER_SIZE - current_position - 2, title);
+  current_position += ascii_to_unicode_2((header+current_position), IGO8_HEADER_SIZE - current_position - 2, title);
 
   // Set the description of the track
   if (igo8_option_description) {
     description = igo8_option_description;
   }
-  current_position += ascii_to_unicode_2((char*)(header+current_position), IGO8_HEADER_SIZE - current_position, description);
+  current_position += ascii_to_unicode_2((header+current_position), IGO8_HEADER_SIZE - current_position, description);
 
   gbfwrite(&header, IGO8_HEADER_SIZE, 1, igo8_file_out);
 }

@@ -414,7 +414,7 @@ double
 waypt_time(const Waypoint* wpt)
 {
   if (!wpt->creation_time.isValid()) {
-    return (double) 0;
+    return 0.0;
   } else {
     return ((double)wpt->creation_time.toMSecsSinceEpoch()) / 1000.0;
   }

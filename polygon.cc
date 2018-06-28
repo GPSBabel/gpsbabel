@@ -261,7 +261,7 @@ void PolygonFilter::process()
           ed = (extra_data*) xcalloc(1, sizeof(*ed));
           ed->state = OUTSIDE;
           ed->override = 0;
-          waypointp->extra_data = (extra_data*) ed;
+          waypointp->extra_data = ed;
         }
         if (lat2 == waypointp->latitude &&
             lon2 == waypointp->longitude) {

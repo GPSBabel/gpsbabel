@@ -399,9 +399,9 @@ intdeg_to_dec(const int ideg)
   double d;
 
   if (ideg >= 0) {
-    d = ((2147483647) - ideg) / (double)8388608;
+    d = ((2147483647) - ideg) / 8388608.0;
   } else {
-    d = ((-2147483647-1) + ideg) / (double)8388608;
+    d = ((-2147483647-1) + ideg) / 8388608.0;
   }
 
   return(d);
@@ -1390,9 +1390,9 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
   break;
   case -1:
     if (strncmp(fmp->key, "LON_10E", 7) == 0) {
-      wpt->longitude = atof(s) / pow((double)10, atof(fmp->key+7));
+      wpt->longitude = atof(s) / pow(10.0, atof(fmp->key+7));
     } else if (strncmp(fmp->key, "LAT_10E", 7) == 0) {
-      wpt->latitude = atof(s) / pow((double)10, atof(fmp->key+7));
+      wpt->latitude = atof(s) / pow(10.0, atof(fmp->key+7));
     } else {
       warning(MYNAME ": Unknown style directive: %s\n", fmp->key);
     }
@@ -2150,9 +2150,9 @@ xcsv_waypt_pr(const Waypoint* wpt)
       break;
     case -1:
       if (strncmp(fmp->key, "LON_10E", 7) == 0) {
-        buff = QString().sprintf(fmp->printfc, lon * pow((double)10, atof(fmp->key+7)));
+        buff = QString().sprintf(fmp->printfc, lon * pow(10.0, atof(fmp->key+7)));
       } else if (strncmp(fmp->key, "LAT_10E", 7) == 0) {
-        buff = QString().sprintf(fmp->printfc, lat * pow((double)10, atof(fmp->key+7)));
+        buff = QString().sprintf(fmp->printfc, lat * pow(10.0, atof(fmp->key+7)));
       }
       break;
     default:

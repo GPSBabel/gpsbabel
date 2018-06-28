@@ -545,7 +545,7 @@ static void tpo_process_tracks()
     // next three bytes are RGB color, fourth is unknown
     // Topo and web uses rrggbb, also need line_color.bbggrr for KML
     for (xx = 0; xx < 3; xx++) {
-      int col = (int)gbfgetc(tpo_file_in);
+      int col = gbfgetc(tpo_file_in);
       if ((col < 0) || (col >255)) {
         col = 0; // assign black if out of range 0x00 to 0xff
       }
@@ -572,11 +572,11 @@ static void tpo_process_tracks()
     }
     //TBD: Should this be TRACKNAMELENGTH?
     for (xx = 0; xx < 3; xx++) {
-      if (styles[ii].name[xx] == (char) ',') {
-        styles[ii].name[xx] = (char) '_';
+      if (styles[ii].name[xx] == ',') {
+        styles[ii].name[xx] = '_';
       }
-      if (styles[ii].name[xx] == (char) '=') {
-        styles[ii].name[xx] = (char) '_';
+      if (styles[ii].name[xx] == '=') {
+        styles[ii].name[xx] = '_';
       }
     }
 

@@ -1081,8 +1081,8 @@ exif_put_coord(const int ifd_nr, const int tag_id, const double val)
   vmin = floor(vmin);
 
   exif_put_double(ifd_nr, tag_id, 0, (double)vint);
-  exif_put_double(ifd_nr, tag_id, 1, (double)vmin);
-  exif_put_double(ifd_nr, tag_id, 2, (double)vsec);
+  exif_put_double(ifd_nr, tag_id, 1, vmin);
+  exif_put_double(ifd_nr, tag_id, 2, vsec);
 }
 
 static void

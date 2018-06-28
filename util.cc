@@ -1076,7 +1076,7 @@ double degrees2ddmm(double deg_val)
 {
   signed int deg;
   deg = (signed int) deg_val;
-  return (double)(deg * 100.0) + ((deg_val - deg) * 60.0);
+  return (deg * 100.0) + ((deg_val - deg) * 60.0);
 }
 
 /*
