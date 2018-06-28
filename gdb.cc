@@ -1629,7 +1629,7 @@ write_waypoint_cb(const Waypoint* refpt)
   /* do this when backup always happens in main */
 #if NEW_STRINGS
 // but, but, casting away the const here is wrong...
-  ((Waypoint*)refpt)->shortname = refpt->shortname.trimmed();
+  (const_cast<Waypoint*>(refpt))->shortname = refpt->shortname.trimmed();
 #else
   rtrim(((Waypoint*)refpt)->shortname);
 #endif

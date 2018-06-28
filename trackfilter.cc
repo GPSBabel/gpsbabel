@@ -60,7 +60,7 @@ int TrackFilter::trackfilter_parse_time_opt(const char* arg)
 {
   time_t t0, t1;
   int sign = 1;
-  char* cin = (char*)arg;
+  char* cin = const_cast<char*>(arg);
   char c;
 
   t0 = t1 = 0;
@@ -178,7 +178,7 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
   queue* elem, *tmp;
 
   if (track->rte_waypt_ct == 0) {
-    track_del_head((route_head*)track);
+    track_del_head(const_cast<route_head*>(track));
     return;
   }
 
@@ -186,15 +186,15 @@ void TrackFilter::trackfilter_fill_track_list_cb(const route_head* track) 	/* ca
     if (!QRegExp(opt_name, Qt::CaseInsensitive, QRegExp::WildcardUnix).exactMatch(track->rte_name)) {
       QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
         Waypoint* wpt = (Waypoint*)elem;
-        track_del_wpt((route_head*)track, wpt);
+        track_del_wpt(const_cast<route_head*>(track), wpt);
         delete wpt;
       }
-      track_del_head((route_head*)track);
+      track_del_head(const_cast<route_head*>(track));
       return;
     }
   }
 
-  track_list[track_ct].track = (route_head*)track;
+  track_list[track_ct].track = const_cast<route_head*>(track);
 
   i = 0;
   prev = nullptr;
@@ -234,7 +234,7 @@ void TrackFilter::trackfilter_minpoint_list_cb(const route_head* track)
 {
   int minimum_points = atoi(opt_minpoints);
   if (track->rte_waypt_ct < minimum_points) {
-    track_del_head((route_head*)track);
+    track_del_head(const_cast<route_head*>(track));
     return;
   }
 }
@@ -747,7 +747,7 @@ time_t TrackFilter::trackfilter_range_check(const char* timestr)
 
   i = 0;
   strncpy(fmt, "00000101000000", sizeof(fmt));
-  cin = (char*)timestr;
+  cin = const_cast<char*>(timestr);
 
   while ((c = *cin++)) {
     if (fmt[i] == '\0') {
@@ -1044,7 +1044,7 @@ void TrackFilter::trackfilter_segment_head(const route_head* rte)
           Waypoint* next_wpt = (Waypoint*) QUEUE_NEXT(&wpt->Q);
           if (trackfilter_points_are_same(prev_wpt, wpt) &&
               trackfilter_points_are_same(wpt, next_wpt)) {
-            track_del_wpt((route_head*)rte, wpt);
+            track_del_wpt(const_cast<route_head*>(rte), wpt);
             continue;
           }
         }

@@ -87,7 +87,7 @@ double HeightFilter::wgs84_separation(double lat, double lon)
 
 void HeightFilter::correct_height(const Waypoint* wpt)
 {
-  Waypoint* waypointp = (Waypoint*) wpt;
+  Waypoint* waypointp = const_cast<Waypoint*>(wpt);
 
   if (waypointp->altitude != unknown_alt) {
     if (addopt) {

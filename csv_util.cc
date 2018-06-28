@@ -489,7 +489,7 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
       *c = '.';
     }
   } else {
-    buff = (char*)instr;
+    buff = const_cast<char*>(instr);
   }
 
   cur = buff;
@@ -1566,10 +1566,10 @@ xcsv_resetpathlen(const route_head* head)
   csv_route = csv_track = nullptr;
   switch (xcsv_file.datatype) {
   case trkdata:
-    csv_track = (route_head*) head;
+    csv_track = const_cast<route_head*>(head);
     break;
   case rtedata:
-    csv_route = (route_head*) head;
+    csv_route = const_cast<route_head*>(head);
     break;
   default:
     break;

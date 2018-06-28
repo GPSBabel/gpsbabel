@@ -250,7 +250,7 @@ mmo_register_object(const int objid, const void* ptr, const gpsdata_type type)
   mmo_data_t* data;
 
   data = (mmo_data_t*) xcalloc(1, sizeof(*data));
-  data->data = (void*)ptr;
+  data->data = const_cast<void*>(ptr);
   data->visible = 1;
   data->locked = 0;
   data->type = type;
@@ -956,7 +956,7 @@ mmo_read_object()
 static void
 mmo_finalize_rtept_cb(const Waypoint* wptref)
 {
-  Waypoint* wpt = (Waypoint*)wptref;
+  Waypoint* wpt = const_cast<Waypoint*>(wptref);
 
   if ((wpt->shortname[0] == 1) && (wpt->latitude == 0) && (wpt->longitude == 0)) {
     mmo_data_t* data;
@@ -1340,7 +1340,7 @@ mmo_write_rte_head_cb(const route_head* rte)
     return;
   }
 
-  mmo_rte = (route_head*)rte;
+  mmo_rte = const_cast<route_head*>(rte);
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
     Waypoint* wpt = (Waypoint*)elem;

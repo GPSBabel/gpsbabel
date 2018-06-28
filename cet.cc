@@ -163,7 +163,7 @@ cet_utf8_to_ucs4(const char* str, int* bytes, int* value)
           if ((*cp & 0xc0) != 0x80) {
             break;  /* invalid 	*/
           } else if (i == 0) {		/* all valid 	*/
-            char* c = (char*)str;		/* found valid sequence, now storing value */
+            char* c = const_cast<char*>(str);		/* found valid sequence, now storing value */
             int res = *c++ & (mask ^ 0xFF);
             i = len;
             while (i-- > 0) {
@@ -205,7 +205,7 @@ cet_ucs4_to_char(const int value, const cet_cs_vec_t* vec)
 {
   cet_ucs4_link_t* link;
 
-  if ((link = (cet_ucs4_link_t*)vec->ucs4_link)) {
+  if ((link = const_cast<cet_ucs4_link_t*>(vec->ucs4_link))) {
     int i = 0;
     int j = vec->ucs4_links - 1;			/* validate ucs value against vec */
     while (i <= j) {
@@ -222,7 +222,7 @@ cet_ucs4_to_char(const int value, const cet_cs_vec_t* vec)
     }
   }
 
-  if ((link = (cet_ucs4_link_t*)vec->ucs4_extra)) {	/* can be NULL */
+  if ((link = const_cast<cet_ucs4_link_t*>(vec->ucs4_extra))) {	/* can be NULL */
     int i = 0;
     int j = vec->ucs4_extras - 1;
     while (i <= j) {
@@ -362,7 +362,7 @@ cet_utf8_strndup(const char* str, const int maxlen)
 char*
 cet_str_utf8_to_any(const char* src, const cet_cs_vec_t* vec)
 {
-  char* c = (char*)src;
+  char* c = const_cast<char*>(src);
   int len;
   char* res, *dest, *cend;
 
@@ -400,7 +400,7 @@ cet_str_any_to_utf8(const char* src, const cet_cs_vec_t* vec)
   char* result, *cin, *cout;
   char temp = CET_NOT_CONVERTABLE_DEFAULT;
 
-  cin = (char*)src;
+  cin = const_cast<char*>(src);
   if (cin == nullptr) {
     return nullptr;
   }
@@ -417,7 +417,7 @@ cet_str_any_to_utf8(const char* src, const cet_cs_vec_t* vec)
   }
 
   result = cout = (char*) xmalloc(len + 1);
-  cin = (char*)src;
+  cin = const_cast<char*>(src);
 
   while (*cin != '\0') {
     if (CET_ERROR == cet_char_to_ucs4(*cin++, vec, &value)) {

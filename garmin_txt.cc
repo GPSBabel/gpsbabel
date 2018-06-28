@@ -212,13 +212,13 @@ enum_waypt_cb(const Waypoint* wpt)
     for (i = 0; i < wpt_a_ct; i++) {		/* check for duplicates */
       Waypoint* tmp = wpt_a[i];
       if (case_ignore_strcmp(tmp->shortname, wpt->shortname) == 0) {
-        wpt_a[i] = (Waypoint*)wpt;
+        wpt_a[i] = const_cast<Waypoint*>(wpt);
         waypoints--;
         return;
 
       }
     }
-    wpt_a[wpt_a_ct++] = (Waypoint*)wpt;
+    wpt_a[wpt_a_ct++] = const_cast<Waypoint*>(wpt);
   }
 
 }
@@ -259,10 +259,10 @@ prework_wpt_cb(const Waypoint* wpt)
     cur_info->time += (wpt->GetCreationTime().toTime_t() - prev->GetCreationTime().toTime_t());
     cur_info->length += waypt_distance_ex(prev, wpt);
   } else {
-    cur_info->first_wpt = (Waypoint*)wpt;
+    cur_info->first_wpt = const_cast<Waypoint*>(wpt);
     cur_info->start = wpt->GetCreationTime().toTime_t();
   }
-  cur_info->prev_wpt = (Waypoint*)wpt;
+  cur_info->prev_wpt = const_cast<Waypoint*>(wpt);
   cur_info->count++;
   routepoints++;
 }
@@ -628,7 +628,7 @@ write_waypt(const Waypoint* wpt)
 static void
 route_disp_hdr_cb(const route_head* rte)
 {
-  current_trk = (route_head*)rte;
+  current_trk = const_cast<route_head*>(rte);
   cur_info = &route_info[route_idx];
   cur_info->prev_wpt = nullptr;
   cur_info->total = 0;
@@ -674,7 +674,7 @@ route_disp_wpt_cb(const Waypoint* wpt)
 
   gbfprintf(fout, "\r\n");
 
-  cur_info->prev_wpt = (Waypoint*)wpt;
+  cur_info->prev_wpt = const_cast<Waypoint*>(wpt);
 }
 
 static void
@@ -683,7 +683,7 @@ track_disp_hdr_cb(const route_head* track)
   cur_info = &route_info[route_idx];
   cur_info->prev_wpt = nullptr;
   cur_info->total = 0;
-  current_trk = (route_head*)track;
+  current_trk = const_cast<route_head*>(track);
   if (track->rte_waypt_ct <= 0) {
     return;
   }
@@ -745,7 +745,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
   }
   gbfprintf(fout, "\r\n");
 
-  cur_info->prev_wpt = (Waypoint*)wpt;
+  cur_info->prev_wpt = const_cast<Waypoint*>(wpt);
 }
 
 /*******************************************************************************

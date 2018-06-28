@@ -87,14 +87,14 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
             ed->prjlongitude = prjlon;
             ed->frac = frac;
             ed->arcpt1 = arcpt1;
-            ed->arcpt2 = (Waypoint*) arcpt2;
+            ed->arcpt2 = const_cast<Waypoint*>(arcpt2);
           }
         }
         waypointp->extra_data = ed;
       }
     }
   }
-  arcpt1 = (Waypoint*) arcpt2;
+  arcpt1 = const_cast<Waypoint*>(arcpt2);
 }
 
 void ArcDistanceFilter::arcdist_arc_disp_hdr_cb(const route_head*)

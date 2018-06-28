@@ -462,7 +462,7 @@ unicsv_adjust_time(const time_t time, time_t* date)
 static char
 unicsv_compare_fields(const char* s, const field_t* f)
 {
-  char* name = (char*)f->name;
+  char* name = const_cast<char*>(f->name);
   const char* test = s;
   char result;
 

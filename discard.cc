@@ -39,7 +39,7 @@ void DiscardFilter::fix_process_wpt(const Waypoint* wpt)
   int delh = 0;
   int delv = 0;
 
-  Waypoint* waypointp = (Waypoint*) wpt;
+  Waypoint* waypointp = const_cast<Waypoint*>(wpt);
 
   if ((hdopf >= 0.0) && (waypointp->hdop > hdopf)) {
     delh = 1;
@@ -107,7 +107,7 @@ void DiscardFilter::fix_process_wpt(const Waypoint* wpt)
 
 void DiscardFilter::fix_process_head(const route_head* trk)
 {
-  head = (route_head*)trk;
+  head = const_cast<route_head*>(trk);
 }
 
 void DiscardFilter::process()

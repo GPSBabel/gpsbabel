@@ -124,7 +124,7 @@ XFREE(const void* mem, DEBUG_PARAMS)
 xfree(const void* mem)
 #endif
 {
-  free((void*) mem);
+  free(const_cast<void*>(mem));
 #ifdef DEBUG_MEM
   debug_mem_output("free, %x, %s, %d\n",
                    mem, file, line);
@@ -167,7 +167,7 @@ xstrndup(const char* str, size_t sz)
 #endif
 {
   size_t newlen = 0;
-  char* cin = (char*)str;
+  char* cin = const_cast<char*>(str);
   char* newstr;
 
   while ((newlen < sz) && (*cin != '\0')) {
@@ -484,8 +484,8 @@ str_match(const char* str, const char* match)
 {
   char* m, *s;
 
-  s = (char*)str;
-  m = (char*)match;
+  s = const_cast<char*>(str);
+  m = const_cast<char*>(match);
 
   while (*m || *s) {
     switch (*m) {
@@ -1121,7 +1121,7 @@ gstrsub(const char* s, const char* search, const char* replace)
 {
   int ooffs = 0;
   char* o, *c;
-  char* src = (char*)s;
+  char* src = const_cast<char*>(s);
   int olen = strlen(src);
   int slen = strlen(search);
   int rlen = strlen(replace);
@@ -1212,7 +1212,7 @@ convert_human_date_format(const char* human_datef)
   prev = '\0';
   ylen = 0;
 
-  for (cin = (char*)human_datef; *cin; cin++) {
+  for (cin = const_cast<char*>(human_datef); *cin; cin++) {
     char okay = 1;
 
     if (toupper(*cin) != 'Y') {
@@ -1278,7 +1278,7 @@ convert_human_time_format(const char* human_timef)
   cout = result;
   prev = '\0';
 
-  for (cin = (char*)human_timef; *cin; cin++) {
+  for (cin = const_cast<char*>(human_timef); *cin; cin++) {
     int okay = 1;
 
     if (isalpha(*cin)) {

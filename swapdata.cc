@@ -30,7 +30,7 @@
 
 void SwapDataFilter::swapdata_cb(const Waypoint* ref)
 {
-  Waypoint* wpt = (Waypoint*)ref;
+  Waypoint* wpt = const_cast<Waypoint*>(ref);
   double x;
 
   x = wpt->latitude;

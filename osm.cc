@@ -461,7 +461,7 @@ osm_strip_html(const char* str)
 {
   utf_string utf;
   utf.is_html = true;
-  utf.utfstring = (char*)str;
+  utf.utfstring = const_cast<char*>(str);
 
   return strip_html(&utf);	// util.cc
 }
@@ -775,7 +775,7 @@ static void
 osm_release_ids(const Waypoint* wpt)
 {
   if (wpt && wpt->extra_data) {
-    Waypoint* tmp = (Waypoint*)wpt;
+    Waypoint* tmp = const_cast<Waypoint*>(wpt);
     xfree(tmp->extra_data);
     tmp->extra_data = nullptr;
   }
@@ -806,7 +806,7 @@ osm_waypt_disp(const Waypoint* wpt)
 
   id = (int*) xmalloc(sizeof(*id));
   *id = --node_id;
-  ((Waypoint*)(wpt))->extra_data = id;
+  (const_cast<Waypoint*>(wpt))->extra_data = id;
 
   gbfprintf(fout, "  <node id='%d' visible='true' lat='%0.7f' lon='%0.7f'", *id, wpt->latitude, wpt->longitude);
   if (wpt->creation_time.isValid()) {

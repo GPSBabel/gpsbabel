@@ -263,7 +263,7 @@ void
 route_reverse(const route_head* rte_hd)
 {
   /* Cast away const-ness */
-  route_head* rh = (route_head*) rte_hd;
+  route_head* rh = const_cast<route_head*>(rte_hd);
   queue* elem, *tmp;
   QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
     ENQUEUE_HEAD(&rh->waypoint_list, dequeue(elem));

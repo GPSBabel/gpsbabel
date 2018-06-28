@@ -514,7 +514,7 @@ write_waypt_cb(const Waypoint* wpt)
 static void
 write_route_hdr_cb(const route_head* rte)
 {
-  curr_route = (route_head*) rte;
+  curr_route = const_cast<route_head*>(rte);
   curr_index++;
   if (curr_index != target_index) {
     return;
@@ -540,7 +540,7 @@ static void
 write_track_hdr_cb(const route_head* trk)
 {
   track_info_flag = 0;
-  curr_track = (route_head*) trk;
+  curr_track = const_cast<route_head*>(trk);
 
   curr_index++;
   if (curr_index != target_index) {
