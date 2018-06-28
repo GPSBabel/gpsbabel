@@ -158,8 +158,8 @@ read_point(route_head* gpsbabel_route,gpsbabel::DateTime& gpsDateTime)
 
   Waypoint* waypt;
   waypt = new Waypoint;
-  waypt->latitude = (point.Latitude / (double)1000000);
-  waypt->longitude = (point.Longitude / (double)1000000);
+  waypt->latitude = (point.Latitude / 1000000.0);
+  waypt->longitude = (point.Longitude / 1000000.0);
   waypt->altitude = point.Altitude;
 
   if (global_opts.debug_level > 1) {

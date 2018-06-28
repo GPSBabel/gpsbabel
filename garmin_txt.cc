@@ -442,7 +442,7 @@ print_distance(const double distance, const int no_scale, const int with_tab, co
       gbfprintf(fout, "%.*f ft", decis, dist);
     } else {
       dist = METERS_TO_MILES(distance);
-      if (dist < (double)100) {
+      if (dist < 100.0) {
         gbfprintf(fout, "%.1f mi", dist);
       } else {
         gbfprintf(fout, "%d mi", si_round(dist));
@@ -453,7 +453,7 @@ print_distance(const double distance, const int no_scale, const int with_tab, co
       gbfprintf(fout, "%.*f m", decis, dist);
     } else {
       dist = dist / 1000.0;
-      if (dist < (double)100) {
+      if (dist < 100.0) {
         gbfprintf(fout, "%.1f km", dist);
       } else {
         gbfprintf(fout, "%d km", si_round(dist));
