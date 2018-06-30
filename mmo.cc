@@ -1291,10 +1291,7 @@ mmo_write_wpt_cb(const Waypoint* wpt)
     char* kml = nullptr;
 
     if (strcmp(wpt->session->name, "kml") == 0) {
-      utf_string tmp;
-
-      tmp.utfstring = cx;
-      tmp.is_html = true;
+      utf_string tmp(true, cx);
       cx = kml = strip_html(&tmp);
     }
     str += cx;

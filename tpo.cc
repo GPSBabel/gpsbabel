@@ -495,16 +495,10 @@ static Waypoint* tpo_convert_ll(int lat, int lon)
 #define TRACKNAMELENGTH 256
 class StyleInfo {
 public:
-  StyleInfo() {
-    color[0] = 0;
-    color[1] = 0;
-    color[2] = 0;
-    wide = dash = 0;
-  }
   QString name;
-  uint8_t color[3];  // keep R/G/B values separate because line_color needs BGR
-  uint8_t wide;
-  uint8_t dash;
+  uint8_t color[3]{0, 0, 0};  // keep R/G/B values separate because line_color needs BGR
+  uint8_t wide{0};
+  uint8_t dash{0};
 };
 
 // Track decoder for version 3.x files.  This block contains tracks

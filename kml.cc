@@ -198,8 +198,8 @@ struct {
 #define ICON_DIR ICON_BASE "track-directional/track-%1.png" // format string where next arg is rotational degrees.
 
 static struct {
-  float seq;
-  float step;
+  float seq{0.0f};
+  float step{0.0f};
   gb_color color;
 } kml_color_sequencer;
 #define KML_COLOR_LIMIT 204	/* allowed range [0,255] */
