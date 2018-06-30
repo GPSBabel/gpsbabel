@@ -459,10 +459,7 @@ osm_feature_symbol(const int ikey, const char* value)
 static char*
 osm_strip_html(const char* str)
 {
-  utf_string utf;
-  utf.is_html = true;
-  utf.utfstring = const_cast<char*>(str);
-
+  utf_string utf(true, str);
   return strip_html(&utf);	// util.cc
 }
 
