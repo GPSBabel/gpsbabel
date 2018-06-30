@@ -50,7 +50,7 @@ void signal_handler(int sig);
 class QargStackElement
 {
 public:
-  int argn;
+  int argn{0};
   QStringList qargs;
 
 public:

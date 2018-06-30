@@ -39,12 +39,9 @@ typedef struct GPS_SPacket {
 
 class GPS_PPacket {
 public:
-  GPS_PPacket() : type(0), n(0) {
-    memset(data, 0, MAX_GPS_PACKET_SIZE);
-  }
-  US type;
-  uint32 n;
-  UC data[MAX_GPS_PACKET_SIZE];
+  US type{0};
+  uint32 n{0};
+  UC data[MAX_GPS_PACKET_SIZE]{};
 };
 
 
