@@ -253,10 +253,12 @@ typedef enum {
 class utf_string
 {
 public:
-  utf_string() :
-    is_html(false)
-  {};
-  bool is_html;
+  utf_string() = default;
+  utf_string(bool html, const QString& str) :
+    is_html{html},
+    utfstring{str}
+  {}
+  bool is_html{false};
   QString utfstring;
 };
 
@@ -312,11 +314,8 @@ typedef struct format_specific_data {
 class gb_color
 {
 public:
-  gb_color() :
-    bbggrr(-1),
-    opacity(255) {}
-  int bbggrr;   // 32 bit color: Blue/Green/Red.  < 0 == unknown.
-  unsigned char opacity;  // 0 == transparent.  255 == opaque.
+  int bbggrr{-1};   // 32 bit color: Blue/Green/Red.  < 0 == unknown.
+  unsigned char opacity{255};  // 0 == transparent.  255 == opaque.
 };
 
 
@@ -340,7 +339,7 @@ void fs_chain_add(format_specific_data** chain, format_specific_data* data);
 class UrlLink
 {
 public:
-  UrlLink() { }
+  UrlLink() = default;
   UrlLink(const QString& url) :
     url_(url)
   { }
