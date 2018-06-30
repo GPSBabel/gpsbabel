@@ -155,7 +155,7 @@ cet_register()
     for (p = cet_cs_vec_root; p != nullptr; p = p->next) {
       c++;
       if (p->alias != nullptr) {
-        char** a = const_cast<char**>(p->alias);
+        const char** a = p->alias;
         while ((*a) != nullptr) {
           a++;
           c++;
@@ -168,7 +168,7 @@ cet_register()
     i = 0;
     for (p = cet_cs_vec_root; p != nullptr; p = p->next) {
       if (p->alias != nullptr) {
-        char** a = const_cast<char**>(p->alias);
+        const char** a = p->alias;
 
         list[i].name = xstrdup(p->name);
         list[i].vec = p;
@@ -440,7 +440,7 @@ cet_convert_route_tlr(const route_head* route)
 void
 cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, const char* format)
 {
-  char* cs_name_from, *cs_name_to;
+  const char* cs_name_from, *cs_name_to;
   (void)format;
 
   converter = nullptr;
@@ -454,8 +454,8 @@ cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, cons
     cet_output = 1;
 
     converter = cet_convert_from_utf8;
-    cs_name_from = const_cast<char*>(cet_cs_vec_utf8.name);
-    cs_name_to = const_cast<char*>(target->name);
+    cs_name_from = cet_cs_vec_utf8.name;
+    cs_name_to = target->name;
   } else {
     if ((target != nullptr) && (target != &cet_cs_vec_utf8)) {
       fatal(MYNAME ": Internal error!\n");
@@ -464,8 +464,8 @@ cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, cons
     cet_output = 0;
 
     converter = cet_convert_to_utf8;
-    cs_name_to = const_cast<char*>(cet_cs_vec_utf8.name);
-    cs_name_from = const_cast<char*>(source->name);
+    cs_name_to = cet_cs_vec_utf8.name;
+    cs_name_from = source->name;
   }
 
   if (global_opts.debug_level > 0) {
