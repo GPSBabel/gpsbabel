@@ -60,7 +60,7 @@ int TrackFilter::trackfilter_parse_time_opt(const char* arg)
 {
   time_t t0, t1;
   int sign = 1;
-  char* cin = const_cast<char*>(arg);
+  const char* cin = arg;
   char c;
 
   t0 = t1 = 0;
@@ -741,13 +741,13 @@ time_t TrackFilter::trackfilter_range_check(const char* timestr)
   int i;
   char fmt[20];
   char c;
-  char* cin;
+  const char* cin;
   struct tm time;
 
 
   i = 0;
   strncpy(fmt, "00000101000000", sizeof(fmt));
-  cin = const_cast<char*>(timestr);
+  cin = timestr;
 
   while ((c = *cin++)) {
     if (fmt[i] == '\0') {

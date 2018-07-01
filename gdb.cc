@@ -1631,7 +1631,7 @@ write_waypoint_cb(const Waypoint* refpt)
 // but, but, casting away the const here is wrong...
   (const_cast<Waypoint*>(refpt))->shortname = refpt->shortname.trimmed();
 #else
-  rtrim(((Waypoint*)refpt)->shortname);
+  rtrim(const_cast<Waypoint*>(refpt))->shortname);
 #endif
   test = gdb_find_wayptq(&wayptq_out, refpt, 1);
 
