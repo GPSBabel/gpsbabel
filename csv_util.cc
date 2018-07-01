@@ -480,7 +480,7 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
   const char* cur;
   double* numres = unk;
   int numind = 0;
-  char* buff;
+  char* buff = nullptr;
 
   if (strchr(instr, ',') != nullptr) {
     char* c;
@@ -488,11 +488,10 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
     while ((c = strchr(buff, ','))) {
       *c = '.';
     }
+    cur = buff;
   } else {
-    buff = const_cast<char*>(instr);
+    cur = instr;
   }
-
-  cur = buff;
 
   while (cur && *cur) {
     switch (*cur) {
@@ -626,7 +625,7 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
       *outlon *= lonsign;
     }
   }
-  if (buff != instr) {
+  if (buff) {
     xfree(buff);
   }
 }

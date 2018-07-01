@@ -1179,7 +1179,7 @@ assign_option(const char* module, arglist_t* ap, const char* val)
   if (case_ignore_strcmp(val, ap->argstring) == 0) {
     c = "";
   } else {
-    c = const_cast<char*>(val);
+    c = val;
   }
 
   switch (ap->argtype & ARGTYPE_TYPEMASK) {
@@ -1290,7 +1290,7 @@ find_vec(const char* vecname, const char** opts)
           if (opt) {
             found = 1;
             assign_option(svecname, ap, opt);
-            xfree(const_cast<char*>(opt));
+            xfree(opt);
             continue;
           }
         }
@@ -1347,7 +1347,7 @@ find_vec(const char* vecname, const char** opts)
           if (opt) {
             found = 1;
             assign_option(svecname, ap, opt);
-            xfree(const_cast<char*>(opt));
+            xfree(opt);
             continue;
           }
         }
