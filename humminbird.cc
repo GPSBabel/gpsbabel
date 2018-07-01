@@ -953,13 +953,13 @@ humminbird_write_waypoint_wrapper(const Waypoint* wpt)
 
   xasprintf(&key, "%s\01%.9f\01%.9f", CSTRc(wpt->shortname), wpt->latitude, wpt->longitude);
   if (!(tmpwpt = map[key])) {
-    tmpwpt = (Waypoint*)wpt;
-    map[key] = (Waypoint*) wpt;
+    tmpwpt = const_cast<Waypoint*>(wpt);
+    map[key] = const_cast<Waypoint*>(wpt);
     tmpwpt->extra_data = gb_int2ptr(waypoint_num + 1);	/* NOT NULL */
     humminbird_write_waypoint(wpt);
   } else {
     void* p = tmpwpt->extra_data;
-    tmpwpt = (Waypoint*)wpt;
+    tmpwpt = const_cast<Waypoint*>(wpt);
     tmpwpt->extra_data = p;
   }
 

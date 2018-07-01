@@ -288,7 +288,7 @@ static void
 register_waypt(const Waypoint* ref, const char)
 {
   int i;
-  Waypoint* wpt = (Waypoint*) ref;
+  Waypoint* wpt = const_cast<Waypoint*>(ref);
 
   for (i = 0; i < waypt_table_ct; i++) {
     Waypoint* cmp = waypt_table[i];
@@ -317,13 +317,13 @@ register_waypt(const Waypoint* ref, const char)
 static void
 enum_waypt_cb(const Waypoint* wpt)
 {
-  register_waypt((Waypoint*) wpt, 0);
+  register_waypt(wpt, 0);
 }
 
 static void
 enum_rtept_cb(const Waypoint* wpt)
 {
-  register_waypt((Waypoint*) wpt, 1);
+  register_waypt(wpt, 1);
 }
 
 static int

@@ -124,7 +124,7 @@ XFREE(const void* mem, DEBUG_PARAMS)
 xfree(const void* mem)
 #endif
 {
-  free((void*) mem);
+  free(const_cast<void*>(mem));
 #ifdef DEBUG_MEM
   debug_mem_output("free, %x, %s, %d\n",
                    mem, file, line);
@@ -167,7 +167,7 @@ xstrndup(const char* str, size_t sz)
 #endif
 {
   size_t newlen = 0;
-  char* cin = (char*)str;
+  const char* cin = str;
   char* newstr;
 
   while ((newlen < sz) && (*cin != '\0')) {
@@ -482,10 +482,10 @@ lrtrim(char* buff)
 int
 str_match(const char* str, const char* match)
 {
-  char* m, *s;
+  const char* m, *s;
 
-  s = (char*)str;
-  m = (char*)match;
+  s = str;
+  m = match;
 
   while (*m || *s) {
     switch (*m) {
@@ -511,7 +511,7 @@ str_match(const char* str, const char* match)
       }
 
       do {
-        char* mx, *sx;
+        const char* mx, *sx;
 
         while (*s && (*s != *m)) {
           s++;
@@ -1120,8 +1120,9 @@ char*
 gstrsub(const char* s, const char* search, const char* replace)
 {
   int ooffs = 0;
-  char* o, *c;
-  char* src = (char*)s;
+  char* o;
+  const char* c;
+  const char* src = s;
   int olen = strlen(src);
   int slen = strlen(search);
   int rlen = strlen(replace);
@@ -1203,7 +1204,7 @@ rot13(const QString& s)
 char*
 convert_human_date_format(const char* human_datef)
 {
-  char* result, *cin, *cout;
+  char* result, *cout;
   char prev;
   int ylen;
 
@@ -1212,7 +1213,7 @@ convert_human_date_format(const char* human_datef)
   prev = '\0';
   ylen = 0;
 
-  for (cin = (char*)human_datef; *cin; cin++) {
+  for (const char* cin = human_datef; *cin; cin++) {
     char okay = 1;
 
     if (toupper(*cin) != 'Y') {
@@ -1271,14 +1272,14 @@ convert_human_date_format(const char* human_datef)
 char*
 convert_human_time_format(const char* human_timef)
 {
-  char* result, *cin, *cout;
+  char* result, *cout;
   char prev;
 
   result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
   cout = result;
   prev = '\0';
 
-  for (cin = (char*)human_timef; *cin; cin++) {
+  for (const char* cin = human_timef; *cin; cin++) {
     int okay = 1;
 
     if (isalpha(*cin)) {

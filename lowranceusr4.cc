@@ -300,7 +300,7 @@ static void
 register_waypt(const Waypoint* ref)
 {
   int i;
-  Waypoint* wpt = (Waypoint*) ref;
+  Waypoint* wpt = const_cast<Waypoint*>(ref);
 
   for (i = 0; i < waypt_table_ct; i++) {
     Waypoint* cmp = waypt_table[i];

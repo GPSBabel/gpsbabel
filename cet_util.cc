@@ -155,7 +155,7 @@ cet_register()
     for (p = cet_cs_vec_root; p != nullptr; p = p->next) {
       c++;
       if (p->alias != nullptr) {
-        char** a = (char**)p->alias;
+        const char** a = p->alias;
         while ((*a) != nullptr) {
           a++;
           c++;
@@ -168,7 +168,7 @@ cet_register()
     i = 0;
     for (p = cet_cs_vec_root; p != nullptr; p = p->next) {
       if (p->alias != nullptr) {
-        char** a = (char**)p->alias;
+        const char** a = p->alias;
 
         list[i].name = xstrdup(p->name);
         list[i].vec = p;
@@ -322,13 +322,13 @@ cet_convert_init(const QString& cs_name, const int force)
 static void
 cet_flag_waypt(const Waypoint* wpt)
 {
-  ((Waypoint*)(wpt))->wpt_flags.cet_converted = 1;
+  (const_cast<Waypoint*>(wpt))->wpt_flags.cet_converted = 1;
 }
 
 static void
 cet_flag_route(const route_head* rte)
 {
-  ((route_head*)(rte))->cet_converted = 1;
+  (const_cast<route_head*>(rte))->cet_converted = 1;
 }
 
 static void
@@ -391,7 +391,7 @@ cet_convert_string(const QString& str)
 static void
 cet_convert_waypt(const Waypoint* wpt)
 {
-  Waypoint* w = (Waypoint*)wpt;
+  Waypoint* w = const_cast<Waypoint*>(wpt);
   format_specific_data* fs;
 
   if ((cet_output == 0) && (w->wpt_flags.cet_converted != 0)) {
@@ -414,7 +414,7 @@ cet_convert_waypt(const Waypoint* wpt)
 static void
 cet_convert_route_hdr(const route_head* route)
 {
-  route_head* rte = (route_head*)route;
+  route_head* rte = const_cast<route_head*>(route);
 
   if ((cet_output == 0) && (rte->cet_converted != 0)) {
     return;
@@ -440,7 +440,7 @@ cet_convert_route_tlr(const route_head* route)
 void
 cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, const char* format)
 {
-  char* cs_name_from, *cs_name_to;
+  const char* cs_name_from, *cs_name_to;
   (void)format;
 
   converter = nullptr;
@@ -454,8 +454,8 @@ cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, cons
     cet_output = 1;
 
     converter = cet_convert_from_utf8;
-    cs_name_from = (char*)cet_cs_vec_utf8.name;
-    cs_name_to = (char*)target->name;
+    cs_name_from = cet_cs_vec_utf8.name;
+    cs_name_to = target->name;
   } else {
     if ((target != nullptr) && (target != &cet_cs_vec_utf8)) {
       fatal(MYNAME ": Internal error!\n");
@@ -464,8 +464,8 @@ cet_convert_strings(const cet_cs_vec_t* source, const cet_cs_vec_t* target, cons
     cet_output = 0;
 
     converter = cet_convert_to_utf8;
-    cs_name_to = (char*)cet_cs_vec_utf8.name;
-    cs_name_from = (char*)source->name;
+    cs_name_to = cet_cs_vec_utf8.name;
+    cs_name_from = source->name;
   }
 
   if (global_opts.debug_level > 0) {

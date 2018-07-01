@@ -61,8 +61,8 @@ static queue trackpts;
 static QString rte_name;
 static QString rte_desc;
 
-static Waypoint* trkpt_out;
-static route_head* trk_out;
+static const Waypoint* trkpt_out;
+static const route_head* trk_out;
 
 static double trkpt_dist;
 static double minalt, maxalt, maxspeed;
@@ -509,7 +509,7 @@ any_hdr_calc_cb(const route_head* trk)
     rte_desc = trk->rte_desc;
   }
 
-  trk_out = (route_head*)trk;
+  trk_out = trk;
 }
 
 static void
@@ -544,7 +544,7 @@ any_waypt_calc_cb(const Waypoint* wpt)
     this_time += (wpt->GetCreationTime().toTime_t() - trkpt_out->GetCreationTime().toTime_t());
   }
 
-  trkpt_out = (Waypoint*)wpt;
+  trkpt_out = wpt;
 }
 
 static void
@@ -566,7 +566,7 @@ track_disp_hdr_cb(const route_head* trk)
 {
   track_index++;
   track_points = 0;
-  trk_out = (route_head*)trk;
+  trk_out = trk;
   trkpt_out = nullptr;
 }
 
@@ -630,7 +630,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
     gbfprintf(fout, ",0\n");
   }
 
-  trkpt_out = (Waypoint*)wpt;
+  trkpt_out = wpt;
 }
 
 static void

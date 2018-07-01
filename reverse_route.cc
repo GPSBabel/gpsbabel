@@ -33,7 +33,7 @@ void ReverseRouteFilter::reverse_route_wpt(const Waypoint* waypointp)
 {
 
   /* Cast away const-ness */
-  Waypoint* wpp = (Waypoint*) waypointp;
+  Waypoint* wpp = const_cast<Waypoint*>(waypointp);
 
   int curr_new_trkseg;
 

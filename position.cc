@@ -134,8 +134,8 @@ void PositionFilter::position_process_any_route(const route_head* rh, int type)
   int i = rh->rte_waypt_ct;
 
   if (i) {
-    cur_rte = (route_head*)rh;
-    position_runqueue((queue*)&rh->waypoint_list, i, type);
+    cur_rte = const_cast<route_head*>(rh);
+    position_runqueue(const_cast<queue*>(&rh->waypoint_list), i, type);
     cur_rte = nullptr;
   }
 

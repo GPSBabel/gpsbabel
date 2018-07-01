@@ -50,7 +50,7 @@ arglist_t cst_args[] = {
 /* helpers */
 
 static void
-cst_add_wpt(const route_head* track, Waypoint* wpt)
+cst_add_wpt(route_head* track, Waypoint* wpt)
 {
   if ((wpt == nullptr) || (track == nullptr)) {
     return;
@@ -69,7 +69,7 @@ cst_add_wpt(const route_head* track, Waypoint* wpt)
     }
     route_add_wpt(temp_route, new Waypoint(*wpt));
   }
-  track_add_wpt((route_head*)track, wpt);
+  track_add_wpt(track, wpt);
 }
 
 static char*

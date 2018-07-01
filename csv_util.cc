@@ -480,7 +480,7 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
   const char* cur;
   double* numres = unk;
   int numind = 0;
-  char* buff;
+  char* buff = nullptr;
 
   if (strchr(instr, ',') != nullptr) {
     char* c;
@@ -488,11 +488,10 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
     while ((c = strchr(buff, ','))) {
       *c = '.';
     }
+    cur = buff;
   } else {
-    buff = (char*)instr;
+    cur = instr;
   }
-
-  cur = buff;
 
   while (cur && *cur) {
     switch (*cur) {
@@ -626,7 +625,7 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
       *outlon *= lonsign;
     }
   }
-  if (buff != instr) {
+  if (buff) {
     xfree(buff);
   }
 }
@@ -1566,10 +1565,10 @@ xcsv_resetpathlen(const route_head* head)
   csv_route = csv_track = nullptr;
   switch (xcsv_file.datatype) {
   case trkdata:
-    csv_track = (route_head*) head;
+    csv_track = const_cast<route_head*>(head);
     break;
   case rtedata:
-    csv_route = (route_head*) head;
+    csv_route = const_cast<route_head*>(head);
     break;
   default:
     break;
