@@ -317,13 +317,13 @@ register_waypt(const Waypoint* ref, const char)
 static void
 enum_waypt_cb(const Waypoint* wpt)
 {
-  register_waypt(const_cast<Waypoint*>(wpt), 0);
+  register_waypt(wpt, 0);
 }
 
 static void
 enum_rtept_cb(const Waypoint* wpt)
 {
-  register_waypt(const_cast<Waypoint*>(wpt), 1);
+  register_waypt(wpt, 1);
 }
 
 static int

@@ -78,7 +78,7 @@ static uint16_t ico_object_id;
 static uint16_t pos_object_id;
 static uint16_t txt_object_id;
 static gpsdata_type mmo_datatype;
-static route_head* mmo_rte;
+static const route_head* mmo_rte;
 
 static QHash<QString, int> category_names;
 static QHash<int, QString> icons;
@@ -1337,7 +1337,7 @@ mmo_write_rte_head_cb(const route_head* rte)
     return;
   }
 
-  mmo_rte = const_cast<route_head*>(rte);
+  mmo_rte = rte;
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
     Waypoint* wpt = (Waypoint*)elem;
