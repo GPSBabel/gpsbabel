@@ -1120,7 +1120,8 @@ char*
 gstrsub(const char* s, const char* search, const char* replace)
 {
   int ooffs = 0;
-  char* o, *c;
+  char* o;
+  const char* c;
   const char* src = s;
   int olen = strlen(src);
   int slen = strlen(search);
