@@ -1,11 +1,13 @@
 /autom4te.cache/
 /babelweb/
+/compile_commands.json
 /config.h
 /config.log
 /config.status
 /cscope.out
 /gpsbabel
 /gpsbabel-debug
+/gpsbabel_coverage.xml
 /gpsbabel.exe
 /gpsbabel.fo
 /gpsbabel.html
@@ -14,6 +16,9 @@
 /.qmake.cache
 /.qmake.stash
 /GPSBabel
+/*.gcda
+/*.gcno
+/*.gcov
 *.o
 /GPSBabel[0-9]*.[0-9]*.[0-9]*/
 /GPSBabel[0-9]*.[0-9]*.[0-9]*.tar.bz2

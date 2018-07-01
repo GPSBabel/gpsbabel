@@ -50,7 +50,7 @@ static gbfile* fin, *fout;
 static route_head* current_trk, *current_rte;
 static int waypoints;
 static int routepoints;
-static Waypoint** wpt_a;
+static const Waypoint** wpt_a;
 static int wpt_a_ct;
 static grid_type grid_index;
 static int datum_index;
@@ -132,9 +132,9 @@ typedef struct info_s {
   double speed;
   double total;
   int count;
-  Waypoint* prev_wpt;
-  Waypoint* first_wpt;
-  Waypoint* last_wpt;
+  const Waypoint* prev_wpt;
+  const Waypoint* first_wpt;
+  const Waypoint* last_wpt;
 } info_t;
 
 static info_t* route_info;
@@ -210,15 +210,15 @@ enum_waypt_cb(const Waypoint* wpt)
       return;
     }
     for (i = 0; i < wpt_a_ct; i++) {		/* check for duplicates */
-      Waypoint* tmp = wpt_a[i];
+      const Waypoint* tmp = wpt_a[i];
       if (case_ignore_strcmp(tmp->shortname, wpt->shortname) == 0) {
-        wpt_a[i] = const_cast<Waypoint*>(wpt);
+        wpt_a[i] = wpt;
         waypoints--;
         return;
 
       }
     }
-    wpt_a[wpt_a_ct++] = const_cast<Waypoint*>(wpt);
+    wpt_a[wpt_a_ct++] = wpt;
   }
 
 }
@@ -253,16 +253,16 @@ prework_tlr_cb(const route_head*)
 static void
 prework_wpt_cb(const Waypoint* wpt)
 {
-  Waypoint* prev = cur_info->prev_wpt;
+  const Waypoint* prev = cur_info->prev_wpt;
 
   if (prev != nullptr) {
     cur_info->time += (wpt->GetCreationTime().toTime_t() - prev->GetCreationTime().toTime_t());
     cur_info->length += waypt_distance_ex(prev, wpt);
   } else {
-    cur_info->first_wpt = const_cast<Waypoint*>(wpt);
+    cur_info->first_wpt = wpt;
     cur_info->start = wpt->GetCreationTime().toTime_t();
   }
-  cur_info->prev_wpt = const_cast<Waypoint*>(wpt);
+  cur_info->prev_wpt = wpt;
   cur_info->count++;
   routepoints++;
 }
@@ -628,7 +628,6 @@ write_waypt(const Waypoint* wpt)
 static void
 route_disp_hdr_cb(const route_head* rte)
 {
-  current_trk = const_cast<route_head*>(rte);
   cur_info = &route_info[route_idx];
   cur_info->prev_wpt = nullptr;
   cur_info->total = 0;
@@ -640,7 +639,7 @@ route_disp_hdr_cb(const route_head* rte)
     gtxt_flags.route_header_written = 1;
     gbfprintf(fout, "\r\n\r\nHeader\t%s\r\n", headers[route_header]);
   }
-  print_string("\r\nRoute\t%s\t", current_trk->rte_name);
+  print_string("\r\nRoute\t%s\t", rte->rte_name);
   print_distance(cur_info->length, 0, 1, 0);
   print_course(cur_info->first_wpt, cur_info->last_wpt);
   gbfprintf(fout, "\t%d waypoints\t", cur_info->count);
@@ -657,7 +656,7 @@ route_disp_tlr_cb(const route_head*)
 static void
 route_disp_wpt_cb(const Waypoint* wpt)
 {
-  Waypoint* prev = cur_info->prev_wpt;
+  const Waypoint* prev = cur_info->prev_wpt;
 
   gbfprintf(fout, "Route Waypoint\t");
   gbfprintf(fout, "%s\t", CSTRc(wpt->shortname));
@@ -674,7 +673,7 @@ route_disp_wpt_cb(const Waypoint* wpt)
 
   gbfprintf(fout, "\r\n");
 
-  cur_info->prev_wpt = const_cast<Waypoint*>(wpt);
+  cur_info->prev_wpt = wpt;
 }
 
 static void
@@ -683,7 +682,6 @@ track_disp_hdr_cb(const route_head* track)
   cur_info = &route_info[route_idx];
   cur_info->prev_wpt = nullptr;
   cur_info->total = 0;
-  current_trk = const_cast<route_head*>(track);
   if (track->rte_waypt_ct <= 0) {
     return;
   }
@@ -692,7 +690,7 @@ track_disp_hdr_cb(const route_head* track)
     gtxt_flags.track_header_written = 1;
     gbfprintf(fout, "\r\n\r\nHeader\t%s\r\n", headers[track_header]);
   }
-  print_string("\r\nTrack\t%s\t", current_trk->rte_name);
+  print_string("\r\nTrack\t%s\t", track->rte_name);
   print_date_and_time(cur_info->start, 0);
   print_date_and_time(cur_info->time, 1);
   print_distance(cur_info->length, 0, 1, 0);
@@ -710,7 +708,7 @@ track_disp_tlr_cb(const route_head*)
 static void
 track_disp_wpt_cb(const Waypoint* wpt)
 {
-  Waypoint* prev = cur_info->prev_wpt;
+  const Waypoint* prev = cur_info->prev_wpt;
   time_t delta;
   double dist, depth;
 
@@ -745,7 +743,7 @@ track_disp_wpt_cb(const Waypoint* wpt)
   }
   gbfprintf(fout, "\r\n");
 
-  cur_info->prev_wpt = const_cast<Waypoint*>(wpt);
+  cur_info->prev_wpt = wpt;
 }
 
 /*******************************************************************************
@@ -841,14 +839,14 @@ garmin_txt_write()
     int i;
 
     wpt_a_ct = 0;
-    wpt_a = (Waypoint**)xcalloc(waypoints, sizeof(*wpt_a));
+    wpt_a = (const Waypoint**)xcalloc(waypoints, sizeof(*wpt_a));
     waypt_disp_all(enum_waypt_cb);
     route_disp_all(nullptr, nullptr, enum_waypt_cb);
     qsort(wpt_a, waypoints, sizeof(*wpt_a), sort_waypt_cb);
 
     gbfprintf(fout, "Header\t%s\r\n\r\n", headers[waypt_header]);
     for (i = 0; i < waypoints; i++) {
-      Waypoint* wpt = wpt_a[i];
+      const Waypoint* wpt = wpt_a[i];
       write_waypt(wpt);
     }
     xfree(wpt_a);
