@@ -29,6 +29,7 @@
 #include "xmlgeneric.h"
 #include <QtCore/QRegExp>
 #include <QtCore/QXmlStreamAttributes>
+#include <cassert>
 #include <cmath>
 #include <cstdio> /* for snprintf */
 #include <cstdlib> /* for qsort */
@@ -555,13 +556,12 @@ void TrackFilter::trackfilter_split()
     int new_track_flag;
 
     if ((opt_interval == 0) && (opt_distance == 0)) {
-      struct tm t1, t2;
 // FIXME: This whole function needs to be reconsidered for arbitrary time.
       time_t tt1 = buff[i]->GetCreationTime().toTime_t();
       time_t tt2 = buff[j]->GetCreationTime().toTime_t();
 
-      t1 = *localtime(&tt1);
-      t2 = *localtime(&tt2);
+      const struct tm t1 = *localtime(&tt1);
+      const struct tm t2 = *localtime(&tt2);
 
       new_track_flag = ((t1.tm_year != t2.tm_year) || (t1.tm_mon != t2.tm_mon) ||
                         (t1.tm_mday != t2.tm_mday));
@@ -917,9 +917,9 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
   char c;
   const char* cin;
   struct tm time;
-  int timeparse = 1;
+  bool timeparse = true;
   faketime_t result;
-  result.force = 0;
+  result.force = false;
 
   i = j = 0;
   strncpy(fmtstart, "00000101000000", sizeof(fmtstart));
@@ -928,7 +928,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
 
   while ((c = *cin++)) {
     if (c=='f') {
-      result.force = 1;
+      result.force = true;
       continue;
     }
 
@@ -939,7 +939,7 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
     if (timeparse) {
       if (c == '+') {
         fmtstart[i++] = '\0';
-        timeparse = 0;
+        timeparse = false;
       } else {
         if (fmtstart[i] == '\0') {
           fatal(MYNAME "-faketime: parameter too long \"%s\"!\n", timestr);
@@ -965,33 +965,25 @@ TrackFilter::faketime_t TrackFilter::trackfilter_faketime_check(const char* time
   return result;
 }
 
-int TrackFilter::trackfilter_faketime()             /* returns number of track points left after filtering */
+void TrackFilter::trackfilter_faketime()
 {
-  faketime_t faketime;
-
   queue* elem, *tmp;
-  int i, dropped, inside = 0;
 
-  if (opt_faketime != nullptr) {
-    faketime = trackfilter_faketime_check(opt_faketime);
-  }
+  assert(opt_faketime != nullptr);
+  faketime_t faketime = trackfilter_faketime_check(opt_faketime);
 
-  dropped = inside = 0;
-
-  for (i = 0; i < track_ct; i++) {
+  for (int i = 0; i < track_ct; i++) {
     route_head* track = track_list[i].track;
 
     QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
       Waypoint* wpt = (Waypoint*)elem;
 
-      if (opt_faketime != nullptr && (!wpt->creation_time.isValid() || faketime.force)) {
+      if (!wpt->creation_time.isValid() || faketime.force) {
         wpt->creation_time = QDateTime::fromTime_t(faketime.start);
         faketime.start += faketime.step;
       }
     }
   }
-
-  return track_pts - dropped;
 }
 
 int TrackFilter::trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb)

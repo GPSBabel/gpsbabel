@@ -254,7 +254,7 @@ track_del_wpt(route_head* rte, Waypoint* wpt)
 }
 
 void
-route_disp(const route_head* rh, std::nullptr_t /* wc */)
+route_disp(const route_head* /* rh */, std::nullptr_t /* wc */)
 {
 // wc == nullptr
 }

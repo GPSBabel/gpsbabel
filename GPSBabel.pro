@@ -94,6 +94,7 @@ HEADERS =  \
 	csv_util.h \
 	defs.h \
 	explorist_ini.h \
+	filter.h \
 	filterdefs.h \
 	garmin_device_xml.h \
 	garmin_fs.h \
