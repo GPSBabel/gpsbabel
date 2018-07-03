@@ -71,10 +71,6 @@ ignr_xml_error(int condition)
 
 /* xmlgeneric callbacks */
 
-static xg_callback	ignr_start;
-static xg_callback	ignr_nb_etapes, ignr_descr;
-static xg_callback	ignr_etape_begin, ignr_etape_end;
-
 static void
 ignr_start(xg_string, const QXmlStreamAttributes*)
 {
