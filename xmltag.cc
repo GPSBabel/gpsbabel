@@ -116,8 +116,6 @@ convert_xml_tag(xml_tag* tag)
   convert_xml_tag(tag->child);
 }
 
-fs_xml* fs_xml_alloc(long type);
-
 static void
 fs_xml_destroy(void* fs)
 {
