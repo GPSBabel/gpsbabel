@@ -216,11 +216,11 @@ private:
   typedef struct faketime_s {
     time_t start;
     int    step;
-    int   force;
+    bool   force;
   } faketime_t;
 
   faketime_t trackfilter_faketime_check(const char* timestr);
-  int trackfilter_faketime();             /* returns number of track points left after filtering */
+  void trackfilter_faketime();             /* returns number of track points left after filtering */
   int trackfilter_points_are_same(const Waypoint* wpta, const Waypoint* wptb);
 
   void trackfilter_segment_head(const route_head* rte);
