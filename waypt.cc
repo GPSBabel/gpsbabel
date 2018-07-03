@@ -706,7 +706,7 @@ Waypoint::GetCreationTime() const
 }
 
 void
-Waypoint::SetCreationTime(gpsbabel::DateTime t)
+Waypoint::SetCreationTime(const gpsbabel::DateTime& t)
 {
   creation_time = t;
 }

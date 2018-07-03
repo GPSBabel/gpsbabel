@@ -57,7 +57,7 @@ public:
   QargStackElement()
     = default;
 
-  QargStackElement(int p_argn, QStringList p_qargs)
+  QargStackElement(int p_argn, const QStringList& p_qargs)
   {
     argn = p_argn;
     qargs = p_qargs;

@@ -46,8 +46,8 @@ public:
     setTime_t(0);
   }
 
-  DateTime(QDate date, QTime time) : QDateTime(date, time) {}
-  DateTime(QDateTime dt) : QDateTime(dt) {}
+  DateTime(const QDate& date, const QTime& time) : QDateTime(date, time) {}
+  DateTime(const QDateTime& dt) : QDateTime(dt) {}
 
   // TODO: this should go away in favor of .addSecs().
   // add time_t without losing any existing milliseconds.
