@@ -548,8 +548,8 @@ public:
   const QList<UrlLink> GetUrlLinks() const;
   void AddUrlLink(const UrlLink& l);
   QString CreationTimeXML() const;
-  gpsbabel::DateTime  GetCreationTime() const;
-  void SetCreationTime(gpsbabel::DateTime t);
+  gpsbabel::DateTime GetCreationTime() const;
+  void SetCreationTime(const gpsbabel::DateTime& t);
   void SetCreationTime(time_t t);
   void SetCreationTime(time_t t, int ms);
   geocache_data* AllocGCData();
