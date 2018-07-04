@@ -27,6 +27,7 @@
 #include "inifile.h"
 
 #include <QtCore/QXmlStreamWriter>
+#include <cassert>
 #include <cstdio>
 #include <cstdlib>
 
@@ -388,6 +389,9 @@ garmin_fs_convert_category(const char* category_name, uint16_t* category)
       char* c;
       char key[3];
 
+      // use assertion to silence gcc 7.3 warning
+      // warning: ‘%d’ directive output may be truncated writing between 1 and 11 bytes into a region of size 3 [-Wformat-truncation=]
+      assert((i>=0) && (i<16));
       snprintf(key, sizeof(key), "%d", i + 1);
       c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
       if ((c != nullptr) && (case_ignore_strcmp(c, category_name) == 0)) {

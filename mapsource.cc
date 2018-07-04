@@ -609,7 +609,7 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, Waypoint** wpt, unsigned int* mpsc
  * MRCB
  */
 static void
-mps_waypoint_w(gbfile* mps_file, int mps_ver, const Waypoint* wpt, const int isRouteWpt)
+mps_waypoint_w(gbfile* mps_file, int mps_ver, const Waypoint* wpt, const bool isRouteWpt)
 {
   int reclen;
   int lat, lon;
@@ -768,7 +768,7 @@ mps_waypoint_w_unique_wrapper(const Waypoint* wpt)
 
   /* if this waypoint hasn't been written then it is okay to do so */
   if (wptfound == nullptr) {
-    mps_waypoint_w(mps_file_out, mps_ver_out, wpt, (1==0));
+    mps_waypoint_w(mps_file_out, mps_ver_out, wpt, false);
 
     /* ensure we record in our "private" queue what has been
     written so that we don't write it again */
@@ -807,10 +807,10 @@ mps_route_wpt_w_unique_wrapper(const Waypoint* wpt)
 
     if (wptfound == nullptr) {
       /* well, we tried to find: it wasn't written and isn't a real waypoint */
-      mps_waypoint_w(mps_file_out, mps_ver_out, wpt, (1==1));
+      mps_waypoint_w(mps_file_out, mps_ver_out, wpt, true);
       mps_wpt_q_add(&written_route_wpt_head, wpt);
     } else {
-      mps_waypoint_w(mps_file_out, mps_ver_out, wpt, (1==0));
+      mps_waypoint_w(mps_file_out, mps_ver_out, wpt, false);
       /* Simulated real user waypoint */
       mps_wpt_q_add(&written_wpt_head, wpt);
     }
@@ -849,11 +849,11 @@ mps_waypoint_w_uniqloc_wrapper(Waypoint* wpt)
       wptfound = new Waypoint(*wpt);
       xfree(wptfound->shortname);
       wptfound->shortname = newName;
-      mps_waypoint_w(mps_file_out, mps_ver_out, wptfound, (1==0));
+      mps_waypoint_w(mps_file_out, mps_ver_out, wptfound, false);
       mps_wpt_q_add(&written_wpt_head, wpt);
     }
   } else {
-    mps_waypoint_w(mps_file_out, mps_ver_out, wpt, (1==0));
+    mps_waypoint_w(mps_file_out, mps_ver_out, wpt, false);
     /* ensure we record in out "private" queue what has been
     written so that we don't write it again */
     mps_wpt_q_add(&written_wpt_head, wpt);

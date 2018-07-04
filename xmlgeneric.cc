@@ -35,7 +35,6 @@
 #include <QtCore/QDebug>
 #endif
 
-static QString current_tag;
 static xg_tag_mapping* xg_tag_tbl;
 static QSet<QString> xg_ignore_taglist;
 
@@ -100,9 +99,10 @@ xml_consider_ignoring(const QStringRef& name)
 }
 
 static void
-xml_run_parser(QXmlStreamReader& reader, QString& current_tag)
+xml_run_parser(QXmlStreamReader& reader)
 {
   xg_callback* cb;
+  QString current_tag;
 
   while (!reader.atEnd()) {
     switch (reader.tokenType()) {
@@ -175,13 +175,12 @@ readnext:
 void xml_read()
 {
   gpsbabel::File file(rd_fname);
-  QString current_tag;
 
   file.open(QIODevice::ReadOnly);
 
   QXmlStreamReader reader(&file);
 
-  xml_run_parser(reader, current_tag);
+  xml_run_parser(reader);
   if (reader.hasError())  {
     fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
           qPrintable(reader.errorString()),
@@ -209,13 +208,11 @@ void xml_readprefixstring(const char* str)
 // determine file encoding, falls back to UTF-8 if unspecified.
 void xml_readstring(const char* str)
 {
-  QString current_tag;
-
   reader_data.append(str);
 
   QXmlStreamReader reader(reader_data);
 
-  xml_run_parser(reader, current_tag);
+  xml_run_parser(reader);
   if (reader.hasError())  {
     fatal(MYNAME ":Read error: %s (%s, line %ld, col %ld)\n",
           qPrintable(reader.errorString()),
@@ -229,10 +226,9 @@ void xml_readstring(const char* str)
 // encoding because the source is already Qt's internal UTF-16.
 void xml_readunicode(const QString& str)
 {
-  QString current_tag;
   QXmlStreamReader reader(str);
 
-  xml_run_parser(reader, current_tag);
+  xml_run_parser(reader);
 }
 
 /******************************************/

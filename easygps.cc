@@ -48,7 +48,7 @@ rd_init(const QString& fname)
   sz = gbfread(ibuf, 1, 52, file_in);
 
   if ((sz < 52) ||
-      strncmp(ibuf, ezsig, sizeof(ezsig)-1) ||
+      strncmp(ibuf, ezsig, strlen(ezsig)) ||
       (ibuf[51] != 'W')) {
     fatal(MYNAME ": %s is not an EasyGPS file.\n", qPrintable(fname));
   }
