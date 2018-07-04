@@ -74,6 +74,7 @@
 #include "defs.h"
 #include "jeeps/gpsmath.h" /* for datum conversions */
 #include <QtCore/QScopedArrayPointer> // Wish we could use c++11...
+#include <cassert>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -1453,6 +1454,10 @@ tpo_read()
 static void
 tpo_write_file_header()
 {
+  // this assertion will quiet gcc 7.3 warnings about output_state in the strncmp calls
+  // warning: argument 2 null where non-null expected [-Wnonnull]
+  assert(output_state != nullptr);
+
   /* force upper-case state name */
   strupper(output_state);
 

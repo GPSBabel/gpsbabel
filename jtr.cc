@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "csv_util.h"
 #include <QtCore/QHash>
+//#include <cassert>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -265,23 +266,24 @@ static void
 jtr_trkpt_disp_cb(const Waypoint* wpt)
 {
   char* str, *tmp;
-  char stime[10], sdate[7], scourse[6], sspeed[8];
-  struct tm tm;
+  char scourse[6], sspeed[8];
+  QString sdate;
+  QString stime;
 
   if (wpt->creation_time.isValid()) {
-    const time_t tt = wpt->GetCreationTime().toTime_t();
-    tm = *gmtime(&tt);
+    gpsbabel::DateTime dt = wpt->GetCreationTime().toUTC();
 
-    tm.tm_year += 1900;
-    tm.tm_mon += 1;
-    snprintf(sdate, sizeof(sdate), "%02d%02d%02d", tm.tm_mday, tm.tm_mon, tm.tm_year % 100);
-    snprintf(stime, sizeof(stime), "%02d%02d%02d.%02d", tm.tm_hour, tm.tm_min, tm.tm_sec, wpt->creation_time.time().msec());
-    if (wpt->creation_time.time().msec() == 0) {
-      stime[6] = 0;
-    }
-  } else {
-    stime[0] = 0;
-    sdate[0] = 0;
+    // round time to centiseconds.
+    int msec = dt.time().msec();
+    int csec = lround(msec/10.0);
+    dt = dt.addMSecs(csec*10-msec);
+    sdate = dt.toString(QStringLiteral("ddMMyy"));
+    stime = dt.toString(QStringLiteral("HHmmss.zzz"));
+    // toss milliseconds position which should now be zero.
+    //assert(stime.endsWith('0'));
+    stime.chop(1);
+    // suppress fractional seconds if they are zero.
+    stime = stime.replace(QLatin1String(".00"), QLatin1String(""));
   }
   if (WAYPT_HAS(wpt, speed) && (wpt->speed >= 0)) {
     snprintf(sspeed, sizeof(sspeed), "%.1f", MPS_TO_KNOTS(wpt->speed));
@@ -295,7 +297,7 @@ jtr_trkpt_disp_cb(const Waypoint* wpt)
   }
 
   xasprintf(&str, "GEOTAG2,%s,%c,%09.4f,%c,%010.4f,%c,%s,%s,%s,,E,A",
-            stime,
+            CSTR(stime),
             wpt->creation_time.isValid() ? 'A' : 'V',
             fabs(degrees2ddmm(wpt->latitude)),
             wpt->latitude < 0 ? 'S' : 'N',
@@ -303,7 +305,7 @@ jtr_trkpt_disp_cb(const Waypoint* wpt)
             wpt->longitude < 0 ? 'W' : 'E',
             sspeed,
             scourse,
-            sdate);
+            CSTR(sdate));
 
   xasprintf(&tmp, "%s*%02X", str, nmea_cksum(str));
   xfree(str);
