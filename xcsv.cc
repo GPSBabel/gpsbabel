@@ -461,12 +461,12 @@ xcsv_parse_style_buff(const char* sbuff)
   // FIXME: should not be a static buf.  Should not be a raw character
   // buffer at all!
   char ibuf[4096];
-  char* ibufp;
   size_t i;
 
   while (*sbuff) {
     ibuf[0] = 0;
     i = 0;
+    char* ibufp;
     for (ibufp = ibuf; *sbuff != '\n' && i++ < sizeof(ibuf);) {
       *ibufp++ = *sbuff++;
     }

@@ -58,8 +58,6 @@ copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
 {
   xml_tag* res = nullptr;
   char** ap = nullptr;
-  char** ap2 = nullptr;
-  int count = 0;
 
   if (!src) {
     *copy = nullptr;
@@ -75,13 +73,14 @@ copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
   res->parentcdata = (src->parentcdata);
   if (src->attributes) {
     ap = src->attributes;
+    int count = 0;
     while (*ap) {
       count++;
       ap++;
     }
     res->attributes = (char**)xcalloc(count+1, sizeof(char*));
     ap = src->attributes;
-    ap2 = res->attributes;
+    auto ap2 = res->attributes;
     while (*ap) {
       *ap2 = xstrdup(*ap);
       ap++;
@@ -150,9 +149,7 @@ fs_xml_convert(void* fs)
 
 fs_xml* fs_xml_alloc(long type)
 {
-  fs_xml* result = nullptr;
-
-  result = (fs_xml*)xcalloc(1, sizeof(fs_xml));
+  fs_xml* result = new fs_xml;
   result->fs.type = type;
   result->fs.copy = fs_xml_copy;
   result->fs.destroy = fs_xml_destroy;

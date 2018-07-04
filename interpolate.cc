@@ -32,9 +32,7 @@ void InterpolateFilter::process()
 {
   queue* backuproute = nullptr;
   queue* elem, *tmp, *elem2, *tmp2;
-  route_head* rte_new;
   int count = 0;
-  int first = 0;
   double lat1 = 0, lon1 = 0;
   double altitude1 = unknown_alt;
   unsigned int time1 = 0;
@@ -57,9 +55,10 @@ void InterpolateFilter::process()
   }
 
   QUEUE_FOR_EACH(backuproute, elem, tmp) {
+    bool first = false;
     route_head* rte_old = (route_head*)elem;
 
-    rte_new = route_head_alloc();
+    route_head* rte_new = route_head_alloc();
     rte_new->rte_name = rte_old->rte_name;
     rte_new->rte_desc = rte_old->rte_desc;
     rte_new->fs = fs_chain_copy(rte_old->fs);

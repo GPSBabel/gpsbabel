@@ -590,12 +590,10 @@ osm_way_nd(xg_string, const QXmlStreamAttributes* attrv)
 {
   if (attrv->hasAttribute("ref")) {
     QString atstr = attrv->value("ref").toString();
-    Waypoint* tmp;
-    const Waypoint* ctmp;
 
     if (waypoints.contains(atstr)) {
-      ctmp = waypoints.value(atstr);
-      tmp = new Waypoint(*ctmp);
+      const Waypoint* ctmp = waypoints.value(atstr);
+      Waypoint* tmp = new Waypoint(*ctmp);
       route_add_wpt(rte, tmp);
     } else {
       warning(MYNAME ": Way reference id \"%s\" wasn't listed under nodes!\n", qPrintable(atstr));
@@ -731,10 +729,8 @@ osm_write_tag(const QString& key, const QString& value)
 static void
 osm_disp_feature(const Waypoint* wpt)
 {
-  const osm_icon_mapping_t* map;
-
   if (icons.contains(wpt->icon_descr)) {
-    map = icons.value(wpt->icon_descr);
+    const osm_icon_mapping_t* map = icons.value(wpt->icon_descr);
     osm_write_tag(osm_features[map->key], map->value);
   }
 }
@@ -882,14 +878,13 @@ static void
 osm_rtept_disp(const Waypoint* wpt_ref)
 {
   QString name = osm_name_from_wpt(wpt_ref);
-  const Waypoint* wpt;
 
   if (skip_rte) {
     return;
   }
 
   if (waypoints.contains(name)) {
-    wpt = waypoints.value(name);
+    const Waypoint* wpt = waypoints.value(name);
     int* id = (int*) wpt->extra_data;
     gbfprintf(fout, "    <nd ref='%d'/>\n", *id);
   }

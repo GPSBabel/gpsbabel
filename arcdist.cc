@@ -36,12 +36,8 @@
 
 void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
 {
-  queue* elem, * tmp;
-  Waypoint* waypointp;
-  extra_data* ed;
-  double dist;
-  double prjlat, prjlon, frac;
   static Waypoint* arcpt1 = nullptr;
+  double prjlat, prjlon, frac;
 
   if (arcpt2 && arcpt2->latitude != BADVAL && arcpt2->longitude != BADVAL &&
       (ptsopt || (arcpt1 &&
@@ -49,9 +45,12 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
 #if NEWQ
     foreach (Waypoint* waypointp, waypt_list) {
 #else
+    queue* elem, * tmp;
     QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-      waypointp = (Waypoint*) elem;
+      Waypoint *  waypointp = (Waypoint*) elem;
 #endif
+      double dist;
+      extra_data* ed;
       if (waypointp->extra_data) {
         ed = (extra_data*) waypointp->extra_data;
       } else {
@@ -125,12 +124,11 @@ void ArcDistanceFilter::process()
 
     arcpt2->latitude = arcpt2->longitude = BADVAL;
     while ((line = gbfgetstr(file_in))) {
-      char* pound = nullptr;
       int argsfound = 0;
 
       fileline++;
 
-      pound = strchr(line, '#');
+      char* pound = strchr(line, '#');
       if (pound) {
         if (0 == strncmp(pound, "#break", 6)) {
           arcdist_arc_disp_hdr_cb(nullptr);
@@ -215,7 +213,7 @@ void ArcDistanceFilter::process()
     }
   }
   if (global_opts.verbose_status > 0) {
-    printf(MYNAME "-arc: %d waypoint(s) removed.\n", removed);
+    printf(MYNAME "-arc: %u waypoint(s) removed.\n", removed);
   }
 }
 

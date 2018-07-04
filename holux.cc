@@ -78,13 +78,10 @@ static void wr_deinit()
 static void data_read()
 {
   char name[9], desc[90];
-  double lat,lon;
   unsigned char* HxWpt;
-  Waypoint* wpt_tmp;
   int iCount;
   int iDataRead;
   int iWptNum;
-  int iWptIndex;
   WPT* pWptHxTmp;
   struct tm tm;
   struct tm* ptm;
@@ -104,9 +101,9 @@ static void data_read()
 
   /* Get the waypoints */
   for (iCount = 0; iCount < iWptNum ; iCount ++) {
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
 
-    iWptIndex = le_read16(&((WPTHDR*)HxWpt)->idx[iCount]);
+    int iWptIndex = le_read16(&((WPTHDR*)HxWpt)->idx[iCount]);
     pWptHxTmp = (WPT*)&HxWpt[OFFS_WPT + (sizeof(WPT) * iWptIndex)];
 
     wpt_tmp->altitude = 0;
@@ -142,8 +139,8 @@ static void data_read()
       wpt_tmp->SetCreationTime(mktime(&tm));
     }
 
-    lon = le_read32(&pWptHxTmp->pt.iLongitude) / 36000.0;
-    lat = (le_read32(&pWptHxTmp->pt.iLatitude)  / 36000.0) * -1.0;
+    double lon = le_read32(&pWptHxTmp->pt.iLongitude) / 36000.0;
+    double lat = (le_read32(&pWptHxTmp->pt.iLatitude)  / 36000.0) * -1.0;
     wpt_tmp->longitude = lon;
     wpt_tmp->latitude = lat;
     waypt_add(wpt_tmp);
@@ -186,12 +183,11 @@ static const char* mknshort(const char* stIn,unsigned int sLen)
 
 static void holux_disp(const Waypoint* wpt)
 {
-  double lon,lat;
   short sIndex;
   WPT* pWptHxTmp;
 
-  lon =wpt->longitude * 36000.0;
-  lat =wpt->latitude * -36000.0;
+  double lon = wpt->longitude * 36000.0;
+  double lat = wpt->latitude * -36000.0;
 
 
   /* round it to increase the accuracy */

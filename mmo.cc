@@ -164,12 +164,12 @@ mmo_readstr()
       // length is number of "characters" not number of bytes
       len = (unsigned)gbfgetc(fin);
       if (len > 0) {
-        unsigned int ch, resbytes=0;
+        unsigned int resbytes=0;
         res = (char*) xmalloc(len*2 + 1);  // bigger to allow for utf-8 expansion
         for (signed int ii = 0; ii<len; ii++) {
           char utf8buf[8];
           int utf8len;
-          ch = gbfgetint16(fin);
+          unsigned int ch = gbfgetint16(fin);
           // convert to utf-8, possibly multiple bytes
           utf8len = cet_ucs4_to_utf8(utf8buf, sizeof(utf8buf), ch);
           for (signed int jj = 0; jj < utf8len; jj++) {
@@ -300,7 +300,7 @@ mmo_get_waypt(mmo_data_t* data)
 {
   data->refct++;
   if (data->refct == 1) {
-    return (Waypoint*)data->data;
+    return static_cast<Waypoint*>(data->data);
   } else {
     return new Waypoint(*(Waypoint*)data->data);
   }
@@ -564,9 +564,7 @@ mmo_read_CObjRoute(mmo_data_t* data)
 #ifdef MMO_DBG
   const char* sobj = "CObjRoute";
 #endif
-  int rtept;
   route_head* rte;
-  char buf[16];
   int ux;
 
   DBG((sobj, ":-----------------------------------------------------\n"));
@@ -594,11 +592,11 @@ mmo_read_CObjRoute(mmo_data_t* data)
   DBG((sobj, "line label = %d\n", ux));
   (void) ux;
 
-  data->left = rtept = gbfgetint16(fin);
-  DBG((sobj, "route has %d point(s)\n", rtept));
+  data->left = gbfgetint16(fin);
 
   if (data->left <= 0) {
     if (mmo_version >= 0x12) {
+      char buf[16];
       mmo_fillbuf(buf, 7, 1);
     }
     route_del_head(rte);
@@ -1166,11 +1164,9 @@ static int
 mmo_write_obj_mark(const char* sobj, const char* name)
 {
   QString key = QString::fromUtf8(sobj);
-  uint16_t nr;
-  int res;
 
   if (mmobjects.contains(key)) {
-    nr = mmobjects.value(key);
+    uint16_t nr = mmobjects.value(key);
     gbfputuint16(nr, fout);
   } else {
     mmo_object_id++;
@@ -1186,7 +1182,7 @@ mmo_write_obj_mark(const char* sobj, const char* name)
   }
 
   mmo_object_id++;
-  res = mmo_object_id;
+  int res = mmo_object_id;
   mmo_writestr(name);
 
   return res;

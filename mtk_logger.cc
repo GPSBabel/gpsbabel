@@ -400,11 +400,10 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
         /* A quick parser for ACK packets */
         if (!cmd_erase && strncmp(line, "$PMTK001,", 9) == 0 && line[9] != '\0') {
           char* pType, *pRslt;
-          int pAck;
           pType = &line[9];
           pRslt = strchr(&line[9], ',') + 1;
           if (memcmp(&cmd[5], pType, 3) == 0 && pRslt != nullptr && *pRslt != '\0') {
-            pAck = *pRslt - '0';
+            int pAck = *pRslt - '0';
             if (pAck != 3 && pAck >= 0 && pAck < 4) {  // Erase will return '2'
               dbg(1, "NMEA command '%s' failed - %s\n", cmd, MTK_ACK[pAck]);
               return -1;
@@ -500,7 +499,7 @@ static void mtk_rd_deinit()
 
 static int mtk_erase()
 {
-  int log_status, log_mask, err;
+  int log_status, err;
   char* lstatus = nullptr;
 
   log_status = 0;
@@ -515,7 +514,7 @@ static int mtk_erase()
 
   do_cmd(CMD_LOG_FORMAT, "PMTK182,3,2,", &lstatus, 2);
   if (lstatus) {
-    log_mask = strtoul(lstatus, nullptr, 16);
+    int log_mask = strtoul(lstatus, nullptr, 16);
     dbg(3, "LOG Mask '%s' - 0x%.8x \n", lstatus, log_mask);
     xfree(lstatus);
     lstatus = nullptr;
@@ -1090,10 +1089,10 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
   }
 
   if (bmask & (1<<SID)) {
-    int l, slen, do_sc = 0;
+    int do_sc = 0;
     char sstr[40];
-    for (l=0; l<itm->sat_count; l++) {
-      slen = 0;
+    for (int l=0; l<itm->sat_count; l++) {
+      int slen = 0;
       slen += sprintf(&sstr[slen], "%s%.2d"
                       , itm->sat_data[l].used?"#":""
                       , itm->sat_data[l].id);
@@ -1346,14 +1345,13 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
  */
 static int mtk_parse_info(const unsigned char* data, int dataLen)
 {
-  unsigned short cmd;
   unsigned int bm;
 
   if (dataLen >= 16
       && memcmp(&data[0], &LOG_RST[0], 6) == 0
       && memcmp(&data[12], &LOG_RST[12], 4) == 0) {
 
-    cmd = le_read16(data + 8);
+    unsigned short cmd = le_read16(data + 8);
     switch (data[7]) {
     case 0x02:
       bm = le_read32(data + 8);
@@ -1523,7 +1521,7 @@ static int is_holux_string(const unsigned char* data, int dataLen)
 static void file_read()
 {
   long fsize, pos;
-  int i, j, k, bLen;
+//  int i, j, k, bLen;
   unsigned char buf[512];
 
   memset(buf, '\0', sizeof(buf));
@@ -1548,12 +1546,11 @@ static void file_read()
       u32:  log speed , km/h*10
    */
 
-  bLen = 0;
-  j = 0;
+  int j = 0;
   pos = 0;
 
   /* get default bitmask, log period/speed/distance */
-  bLen = fread(buf, 1, 20, fl);
+  int bLen = fread(buf, 1, 20, fl);
   if (bLen == 20) {
     unsigned int mask, log_period, log_distance, log_speed, log_policy;
     log_policy   = le_read16(buf + 6);
@@ -1609,9 +1606,9 @@ static void file_read()
 
   while (pos < fsize && (bLen = fread(&buf[j], 1, sizeof(buf)-j, fl)) > 0) {
     bLen += j;
-    i = 0;
+    int i = 0;
     while ((bLen - i) >= mtk_info.logLen) {
-      k = 0;
+      int k = 0;
       if ((bLen - i) >= 16 && memcmp(&buf[i], &LOG_RST[0], 6) == 0
           && memcmp(&buf[i+12], &LOG_RST[12], 4) == 0) {
         mtk_parse_info(&buf[i], (bLen-i));

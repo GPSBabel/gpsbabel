@@ -869,11 +869,9 @@ static void wr_track()
 {
   const route_head* pres_track;
   const route_head* gnss_track;
-  const Waypoint* wpt;
   const queue* elem;
   const queue* tmp;
   int time_adj;
-  double pres_alt;
 
   // Find pressure altitude and GNSS altitude tracks
   get_tracks(&pres_track, &gnss_track);
@@ -894,8 +892,8 @@ static void wr_track()
     }
     // Iterate through waypoints in both tracks simultaneously
     QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
-      wpt = (Waypoint*) elem;
-      pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime().toTime_t() + time_adj);
+      Waypoint* wpt = (Waypoint*) elem;
+      double pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime().toTime_t() + time_adj);
       wr_fix_record(wpt, (int) pres_alt, (int) wpt->altitude);
     }
   } else {

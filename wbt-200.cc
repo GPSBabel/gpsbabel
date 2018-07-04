@@ -238,7 +238,6 @@ static void buf_update_checksum(struct buf_head* h, const void* data, size_t len
 
 static void buf_write(struct buf_head* h, const void* data, size_t len)
 {
-  size_t avail;
   const char* bp = (const char*) data;
 
   buf_update_checksum(h, data, len);
@@ -250,7 +249,7 @@ static void buf_write(struct buf_head* h, const void* data, size_t len)
   }
 
   for (;;) {
-    avail = h->tail->size - h->tail->used;
+    size_t avail = h->tail->size - h->tail->used;
     if (avail > len) {
       avail = len;
     }
@@ -300,16 +299,15 @@ static void wr_cmdl(const char* cmd)
 static int expect(const char* str)
 {
   int state = 0;
-  int c, i;
   int errors = 5; /* allow this many errors */
 
-  for (i = 0; i < 5000; i++) {
+  for (int i = 0; i < 5000; i++) {
     /* reached end of string */
     if (str[state] == '\0') {
       return 1;
     }
 
-    c = gbser_readc_wait(fd, 500);
+    int c = gbser_readc_wait(fd, 500);
     if (c < 0) {
       db(3, "Got error: %d\n", c);
       if (--errors <= 0) {
@@ -886,7 +884,7 @@ static int wbt201_read_chunk(struct read_state* st, unsigned pos, unsigned limit
   buf_empty(&st->data);
 
   rd_drain();
-  sprintf(cmd_buf, "@AL,5,3,%d", pos);
+  sprintf(cmd_buf, "@AL,5,3,%u", pos);
   wr_cmdl(cmd_buf);
 
 
@@ -996,7 +994,7 @@ static void wbt201_data_read()
         read_limit = log_addr_end;
       }
     } else {
-      if (--tries <= 0) {
+      if (--tries == 0) {
         fatal(MYNAME ": Too many data errors during read\n");
       }
     }

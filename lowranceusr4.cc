@@ -585,7 +585,7 @@ lowranceusr4_parse_routes()
 static void
 lowranceusr4_parse_trails()
 {
-  int num_trails, num_trail_pts, M, i, j, k, trk_num, text_len;
+  int num_trails, M, i, j, k, trk_num, text_len;
   char buff[MAXUSRSTRINGSIZE + 1];
   Waypoint* wpt_tmp;
 
@@ -684,7 +684,7 @@ lowranceusr4_parse_trails()
     gbfgetc(file_in);
     gbfgetc(file_in);
 
-    num_trail_pts = gbfgetint32(file_in);
+    int num_trail_pts = gbfgetint32(file_in);
 
     if (global_opts.debug_level >= 1) {
       printf(MYNAME " parse_trails: trail %d name=%s has %d trackpoints\n",
@@ -842,8 +842,8 @@ static void
 lowranceusr4_write_waypoints()
 {
   int i;
-
-  /* enumerate all waypoints from both the plain old waypoint list and
+  
+/* enumerate all waypoints from both the plain old waypoint list and
      also all routes */
   waypt_table_sz = 0;
   waypt_table_ct = 0;
@@ -862,7 +862,7 @@ lowranceusr4_write_waypoints()
       printf(MYNAME " writing out waypt %d (%s - %s)\n",
              i, qPrintable(waypt_table[i]->shortname), qPrintable(waypt_table[i]->description));
     }
-    lowranceusr4_waypt_disp((const Waypoint*)waypt_table[i]);
+    lowranceusr4_waypt_disp((static_cast<const Waypoint*>(waypt_table[i])));
   }
 }
 
@@ -1010,7 +1010,7 @@ static void
 lowranceusr4_write_trails()
 {
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " writing %d tracks\n", track_count());
+    printf(MYNAME " writing %ud tracks\n", track_count());
   }
   gbfputint32(track_count(), file_out);
   track_uid = 0;

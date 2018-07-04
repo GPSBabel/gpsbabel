@@ -179,14 +179,13 @@ static void
    as a C array definition. */
 tpo_dump_header_bytes(int header_size)
 {
-  int i;
   unsigned char* buffer = (unsigned char*) xmalloc(header_size);
 
   gbfread(buffer, 1, header_size, tpo_file_in);
 
   printf("unsigned char header_bytes[] = {\n");
 
-  for (i=0; i<header_size; i++) {
+  for (int i = 0; i < header_size; i++) {
     if (i%8 == 0) {
       printf("    ");
     }
@@ -260,10 +259,8 @@ static void tpo_read_2_x()
 {
   char buff[16];
   short track_count, waypoint_count;
-  double first_lat, first_lon, lat_scale, lon_scale, amt;
+  double lat_scale, lon_scale, amt;
   int i, j;
-  route_head* track_temp;
-  Waypoint* waypoint_temp;
 
   /* track count */
   track_count = gbfgetint16(tpo_file_in);
@@ -278,7 +275,7 @@ static void tpo_read_2_x()
 
   for (i=0; i<track_count; i++) {
 
-    track_temp = route_head_alloc();
+    route_head* track_temp = route_head_alloc();
     track_add_head(track_temp);
 
     /* generate a generic track name */
@@ -298,10 +295,10 @@ static void tpo_read_2_x()
     /* coordinates are in NAD27/CONUS datum                     */
 
     /* 8 bytes - longitude, sign swapped  */
-    first_lon = gbfgetdbl(tpo_file_in);
+    double first_lon = gbfgetdbl(tpo_file_in);
 
     /* 8 bytes - latitude */
-    first_lat = gbfgetdbl(tpo_file_in);
+    double first_lat = gbfgetdbl(tpo_file_in);
 
     /* swap sign before we do datum conversions */
     first_lon *= -1.0;
@@ -343,7 +340,7 @@ static void tpo_read_2_x()
     /* multiply all the deltas by the scaling factors to determine the waypoint positions */
     for (j = 0; j < waypoint_count; j++) {
 
-      waypoint_temp = new Waypoint;
+      Waypoint* waypoint_temp = new Waypoint;
 
       /* convert incoming NAD27/CONUS coordinates to WGS84 */
       GPS_Math_Known_Datum_To_WGS84_M(
@@ -507,7 +504,7 @@ public:
 static void tpo_process_tracks()
 {
   unsigned int track_count, track_style_count;
-  unsigned int xx,ii,tmp;
+  unsigned int tmp;
 
   const int DEBUG = 0;
 
@@ -523,22 +520,23 @@ static void tpo_process_tracks()
   track_style_count = tpo_read_int(); // 8 bit value
 
   if (DEBUG) {
-    printf("Unpacking %d track styles...\n",track_style_count);
+    printf("Unpacking %u track styles...\n",track_style_count);
   }
 
   QScopedArrayPointer<StyleInfo> styles(new StyleInfo[track_style_count]);
 
-  for (ii = 0; ii < track_style_count; ii++) {
+  for (unsigned ii = 0; ii < track_style_count; ii++) {
 
     // clumsy way to skip two undefined bytes (compiler should unwind this)
-    for (xx = 0; xx < 2; xx++) {
-      tmp = (unsigned char) gbfgetc(tpo_file_in);
-      // printf("Skipping unknown (visibility?) byte 0x%x\n",tmp);
+    for (unsigned xx = 0; xx < 2; xx++) {
+      unsigned int skipped = (unsigned char) gbfgetc(tpo_file_in);
+      Q_UNUSED(skipped);
+      // printf("Skipping unknown (visibility?) byte 0x%x\n", skipped);
     }
 
     // next three bytes are RGB color, fourth is unknown
     // Topo and web uses rrggbb, also need line_color.bbggrr for KML
-    for (xx = 0; xx < 3; xx++) {
+    for (unsigned xx = 0; xx < 3; xx++) {
       int col = gbfgetc(tpo_file_in);
       if ((col < 0) || (col >255)) {
         col = 0; // assign black if out of range 0x00 to 0xff
@@ -552,7 +550,7 @@ static void tpo_process_tracks()
     // byte for name length, then name
     tmp = (unsigned char) gbfgetc(tpo_file_in);
     // wrong byte order?? tmp = tpo_read_int(); // 16 bit value
-    // printf("Track %d has %d-byte (0x%x) name\n",ii,tmp,tmp);
+    // printf("Track %d has %d-byte (0x%x) name\n", ii, tmp, tmp);
     if (tmp >= TRACKNAMELENGTH) {
       printf("ERROR! Found track style over TRACKNAMELENGTH chars, skipping all tracks!\n");
       return;
@@ -565,7 +563,7 @@ static void tpo_process_tracks()
       styles[ii].name = QString("STYLE %1").arg(ii);
     }
     //TBD: Should this be TRACKNAMELENGTH?
-    for (xx = 0; xx < 3; xx++) {
+    for (unsigned xx = 0; xx < 3; xx++) {
       if (styles[ii].name[xx] == ',') {
         styles[ii].name[xx] = '_';
       }
@@ -579,18 +577,20 @@ static void tpo_process_tracks()
     styles[ii].dash = (uint8_t) gbfgetc(tpo_file_in);
 
     // clumsy way to skip two undefined bytes
-    for (xx = 0; xx < 2; xx++) {
+    for (unsigned xx = 0; xx < 2; xx++) {
       tmp = (unsigned char) gbfgetc(tpo_file_in);
       // printf("Skipping final byte 0x%x\n",tmp);
     }
 
     if (DEBUG) {
-      printf("Track style %d: color=#%02x%02x%02x, width=%d, dashed=%d, name=%s\n",ii,styles[ii].color[0],styles[ii].color[1],styles[ii].color[2],styles[ii].wide,styles[ii].dash,qPrintable(styles[ii].name));
+      printf("Track style %d: color=#%02x%02x%02x, width=%d, dashed=%d, name=%s\n",
+             ii, styles[ii].color[0], styles[ii].color[1], styles[ii].color[2],
+             styles[ii].wide, styles[ii].dash, qPrintable(styles[ii].name));
     }
   }
 
   if (DEBUG) {
-    printf("Processing Tracks... found %d track styles\n",track_style_count);
+    printf("Processing Tracks... found %u track styles\n", track_style_count);
   }
 
   // Find block 0x060000 (free-hand routes) (original track code, pre-2012, without styles)
@@ -602,7 +602,7 @@ static void tpo_process_tracks()
   track_count = tpo_read_int();
 
   if (DEBUG) {
-    printf("Total Tracks: %d\n", track_count);
+    printf("Total Tracks: %u\n", track_count);
   }
 
   if (track_count == 0) {
@@ -611,7 +611,7 @@ static void tpo_process_tracks()
 
   // Read/process each track in the file
   //
-  for (ii = 0; ii < track_count; ii++) {
+  for (unsigned ii = 0; ii < track_count; ii++) {
     unsigned int line_type;
     unsigned int track_style;
     unsigned int name_length;
@@ -620,7 +620,6 @@ static void tpo_process_tracks()
     unsigned char* buf;
     int lonscale;
     int latscale;
-    int waypoint_count = 0;
     int lat = 0;
     int lon = 0;
     unsigned int jj;
@@ -749,7 +748,6 @@ static void tpo_process_tracks()
 
         waypoint_temp = tpo_convert_ll(lat, lon);
         track_add_wpt(track_temp, waypoint_temp);
-        waypoint_count++;
       }
 
       // Check whether there's a lonlat coming up instead of
@@ -789,7 +787,6 @@ static void tpo_process_tracks()
 
         waypoint_temp = tpo_convert_ll(lat, lon);
         track_add_wpt(track_temp, waypoint_temp);
-        waypoint_count++;
       }
     }
 
@@ -1811,10 +1808,10 @@ tpo_track_disp(const Waypoint* waypointp)
 static void
 tpo_track_tlr(const route_head*)
 {
-  unsigned char unknown1[] = { 0x06, 0x00 };
+  static const unsigned char unknown1[] = { 0x06, 0x00 };
 
-  unsigned char continue_marker[] = { 0x01, 0x80 };
-  unsigned char end_marker[] = { 0x00, 0x00 };
+  static const unsigned char continue_marker[] = { 0x01, 0x80 };
+  static const unsigned char end_marker[] = { 0x00, 0x00 };
 
   /* pixel to degree scaling factors */
   gbfputdbl(output_track_lon_scale, tpo_file_out);
