@@ -541,6 +541,7 @@ static void tpo_process_tracks()
     }
 
     unsigned char tmp = gbfgetc(tpo_file_in);
+    Q_UNUSED(tmp);
     // printf("Skipping unknown byte 0x%x after color\n",tmp);
 
     // byte for name length, then name

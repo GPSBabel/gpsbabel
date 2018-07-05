@@ -466,7 +466,8 @@ psit_routehdr_w(gbfile* psit_file, const route_head* rte)
     unsigned int rte_datapoints = 0;
     queue *elem, *tmp;
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-      testwpt = (Waypoint*)elem;
+      void* vwaypointp = static_cast<void*>(elem);
+      Waypoint* testwpt = static_cast<Waypoint*>(vwaypointp);
       if (rte_datapoints == 0) {
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
@@ -612,7 +613,8 @@ psit_trackhdr_w(gbfile* psit_file, const route_head* trk)
       unsigned int trk_datapoints = 0;
       QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
         if (trk_datapoints == 0) {
-          Waypoint* testwpt = (Waypoint*)elem;
+          void* vwaypointp = static_cast<void*>(elem);
+          Waypoint* testwpt = static_cast<Waypoint*>(vwaypointp);
           uniqueValue = testwpt->GetCreationTime().toTime_t();
         }
         trk_datapoints++;
