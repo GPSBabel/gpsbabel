@@ -122,7 +122,7 @@ fs_xml_destroy(void* fs)
   if (xml) {
     free_xml_tag(xml->tag);
   }
-  xfree(fs);
+  delete xml;
 }
 
 static void

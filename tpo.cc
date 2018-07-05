@@ -259,8 +259,6 @@ static void tpo_read_2_x()
 {
   char buff[16];
   short track_count, waypoint_count;
-  double lat_scale, lon_scale, amt;
-  int i, j;
 
   /* track count */
   track_count = gbfgetint16(tpo_file_in);
@@ -273,7 +271,7 @@ static void tpo_read_2_x()
   /* chunk name: "CTopoRoute" */
   gbfread(&buff[0], 1, 12, tpo_file_in);
 
-  for (i=0; i<track_count; i++) {
+  for (int i = 0; i < track_count; i++) {
 
     route_head* track_temp = route_head_alloc();
     track_add_head(track_temp);
@@ -313,7 +311,7 @@ static void tpo_read_2_x()
     std::vector<short> lat_delta(waypoint_count);
     std::vector<short> lon_delta(waypoint_count);
 
-    for (j = 0; j < waypoint_count; j++) {
+    for (int j = 0; j < waypoint_count; j++) {
 
       /* get this point's longitude delta from the first waypoint */
       lon_delta[j] = gbfgetint16(tpo_file_in);
@@ -323,10 +321,10 @@ static void tpo_read_2_x()
     }
 
     /* 8 bytes - longitude delta to degrees scale  */
-    lon_scale = gbfgetdbl(tpo_file_in);
+    double lon_scale = gbfgetdbl(tpo_file_in);
 
     /* 8 bytes - latitude delta to degrees scale */
-    lat_scale = gbfgetdbl(tpo_file_in);
+    double lat_scale = gbfgetdbl(tpo_file_in);
 
     /* 4 bytes: the total length of the route in feet*/
     gbfread(&buff[0], 1, 4, tpo_file_in);
@@ -338,14 +336,14 @@ static void tpo_read_2_x()
     gbfread(&buff[0], 1, 2, tpo_file_in);
 
     /* multiply all the deltas by the scaling factors to determine the waypoint positions */
-    for (j = 0; j < waypoint_count; j++) {
+    for (int j = 0; j < waypoint_count; j++) {
 
       Waypoint* waypoint_temp = new Waypoint;
-
+      double amt;
       /* convert incoming NAD27/CONUS coordinates to WGS84 */
       GPS_Math_Known_Datum_To_WGS84_M(
-        first_lat-lat_delta[j]*lat_scale,
-        first_lon+lon_delta[j]*lon_scale,
+        first_lat-lat_delta[j] * lat_scale,
+        first_lon+lon_delta[j] * lon_scale,
         0.0,
         &waypoint_temp->latitude,
         &waypoint_temp->longitude,
@@ -489,7 +487,7 @@ static Waypoint* tpo_convert_ll(int lat, int lon)
   return(waypoint_temp);
 }
 
-#define TRACKNAMELENGTH 256
+#define TRACKNAMELENGTH 255
 class StyleInfo {
 public:
   QString name;
@@ -504,8 +502,6 @@ public:
 static void tpo_process_tracks()
 {
   unsigned int track_count, track_style_count;
-  unsigned int tmp;
-
   const int DEBUG = 0;
 
   if (DEBUG) {
@@ -544,11 +540,11 @@ static void tpo_process_tracks()
       styles[ii].color[xx] = (uint8_t)col;
     }
 
-    tmp = (unsigned char) gbfgetc(tpo_file_in);
+    unsigned char tmp = gbfgetc(tpo_file_in);
     // printf("Skipping unknown byte 0x%x after color\n",tmp);
 
     // byte for name length, then name
-    tmp = (unsigned char) gbfgetc(tpo_file_in);
+    tmp = gbfgetc(tpo_file_in);
     // wrong byte order?? tmp = tpo_read_int(); // 16 bit value
     // printf("Track %d has %d-byte (0x%x) name\n", ii, tmp, tmp);
     if (tmp >= TRACKNAMELENGTH) {
@@ -578,12 +574,12 @@ static void tpo_process_tracks()
 
     // clumsy way to skip two undefined bytes
     for (unsigned xx = 0; xx < 2; xx++) {
-      tmp = (unsigned char) gbfgetc(tpo_file_in);
-      // printf("Skipping final byte 0x%x\n",tmp);
+      tmp = gbfgetc(tpo_file_in);
+      // printf("Skipping final byte 0x%x\n", tmp);
     }
 
     if (DEBUG) {
-      printf("Track style %d: color=#%02x%02x%02x, width=%d, dashed=%d, name=%s\n",
+      printf("Track style %u: color=#%02x%02x%02x, width=%d, dashed=%d, name=%s\n",
              ii, styles[ii].color[0], styles[ii].color[1], styles[ii].color[2],
              styles[ii].wide, styles[ii].dash, qPrintable(styles[ii].name));
     }

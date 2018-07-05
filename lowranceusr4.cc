@@ -349,7 +349,6 @@ lowranceusr4_parse_waypoints()
 {
   short int icon_num;
   unsigned int i, num_waypts, create_date, create_time;
-  int text_len;
   char buff[MAXUSRSTRINGSIZE + 1];
 
   num_waypts = gbfgetint32(file_in);
@@ -401,7 +400,7 @@ lowranceusr4_parse_waypoints()
     gbfgetint16(file_in);
 
     /* Waypoint name; input is 2 bytes per char, we convert to 1 */
-    text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
+    int text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
     if (text_len) {
       buff[text_len] = '\0';
       wpt_tmp->shortname = buff;
@@ -585,7 +584,7 @@ lowranceusr4_parse_routes()
 static void
 lowranceusr4_parse_trails()
 {
-  int num_trails, M, i, j, k, trk_num, text_len;
+  int num_trails, M, i, j, k, trk_num;
   char buff[MAXUSRSTRINGSIZE + 1];
   Waypoint* wpt_tmp;
 
@@ -649,7 +648,7 @@ lowranceusr4_parse_trails()
     gbfgetint16(file_in);
 
     /* Trail name; input is 2 bytes per char, we convert to 1 */
-    text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
+    int text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
     if (text_len) {
       buff[text_len] = '\0';
       trk_head->rte_name = buff;

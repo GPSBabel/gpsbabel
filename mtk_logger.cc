@@ -499,7 +499,7 @@ static void mtk_rd_deinit()
 
 static int mtk_erase()
 {
-  int log_status, err;
+  int log_status;
   char* lstatus = nullptr;
 
   log_status = 0;
@@ -529,8 +529,8 @@ static int mtk_erase()
   gb_sleep(100*1000);
 
   if ((log_status & 2)) {  // auto-log were enabled before..re-enable log.
-    err = do_cmd(CMD_LOG_ENABLE, "PMTK001,182,4,3", nullptr, 2);
-    dbg(3, "re-enable log %s\n", err==0?"Success":"Fail");
+    int err = do_cmd(CMD_LOG_ENABLE, "PMTK001,182,4,3", nullptr, 2);
+    dbg(3, "re-enable log %s\n", err == 0 ? "Success" : "Fail");
   }
   return 0;
 }

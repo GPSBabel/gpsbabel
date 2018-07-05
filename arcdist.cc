@@ -47,7 +47,7 @@ void ArcDistanceFilter::arcdist_arc_disp_wpt_cb(const Waypoint* arcpt2)
 #else
     queue* elem, * tmp;
     QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-      Waypoint *  waypointp = (Waypoint*) elem;
+      Waypoint* waypointp = (Waypoint*) elem;
 #endif
       double dist;
       extra_data* ed;

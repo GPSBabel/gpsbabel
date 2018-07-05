@@ -459,12 +459,11 @@ psit_routehdr_w(gbfile* psit_file, const route_head* rte)
   Waypoint* testwpt;
 
   /* total nodes (waypoints) this route */
-  unsigned int rte_datapoints = 0;
   if (rte->waypoint_list.next) { 
     // this test doesn't do what I w ant i.e test if this is a valid 
     // route - treat as a placeholder for now .
- 
     time_t uniqueValue = 0;
+    unsigned int rte_datapoints = 0;
     queue *elem, *tmp;
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
       testwpt = (Waypoint*)elem;
@@ -608,9 +607,9 @@ psit_trackhdr_w(gbfile* psit_file, const route_head* trk)
 
   if (psit_track_state == 2) {
     /* total nodes (waypoints) this track */
-    unsigned int trk_datapoints = 0;
     if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
 
+      unsigned int trk_datapoints = 0;
       QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
         if (trk_datapoints == 0) {
           Waypoint* testwpt = (Waypoint*)elem;
