@@ -892,9 +892,9 @@ static void wr_track()
     }
     // Iterate through waypoints in both tracks simultaneously
     QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
-      Waypoint* wpt = (Waypoint*) elem;
-      double pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime().toTime_t() + time_adj);
-      wr_fix_record(wpt, (int) pres_alt, (int) wpt->altitude);
+      // FIXME(NEW_Q): the excessive casting of the iterators is gross. Rethink.
+      double pres_alt = interpolate_alt(pres_track, ((Waypoint*) elem)->GetCreationTime().toTime_t() + time_adj);
+      wr_fix_record(((Waypoint*) elem), (int) pres_alt, (int) ((Waypoint*)elem)->altitude);
     }
   } else {
     if (pres_track) {

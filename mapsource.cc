@@ -139,7 +139,8 @@ mps_find_wpt_q_by_name(const queue* whichQueue, const QString& name)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(whichQueue, elem, tmp) {
-    Waypoint* waypointp = (Waypoint*) elem;
+    void* vwaypointp = static_cast<void*>(elem);
+    Waypoint* waypointp = static_cast<Waypoint*>(vwaypointp);
     if (waypointp->shortname == name) {
       return waypointp;
     }

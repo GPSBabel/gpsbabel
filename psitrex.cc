@@ -456,8 +456,6 @@ psit_routehdr_w(gbfile* psit_file, const route_head* rte)
 {
   QString rname;
 
-  Waypoint* testwpt;
-
   /* total nodes (waypoints) this route */
   if (rte->waypoint_list.next) { 
     // this test doesn't do what I w ant i.e test if this is a valid 
