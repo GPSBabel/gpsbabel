@@ -586,11 +586,10 @@ kml_wr_deinit()
   oqfile = nullptr;
 
   if (!posnfilenametmp.isEmpty()) {
-#if __WIN32__
-    MoveFileExW((const wchar_t*) posnfilenametmp.utf16(),
-                (const wchar_t*) posnfilename.utf16(),
-                MOVEFILE_REPLACE_EXISTING);
-#endif
+    // QFile::rename() can't replace an existing file, so do a QFile::remove()
+    // first (which can fail silently if posnfilename doesn't exist). A race
+    // condition can theoretically still cause rename to fail... oh well.
+    QFile::remove(posnfilename);
     QFile::rename(posnfilenametmp, posnfilename);
   }
 }
