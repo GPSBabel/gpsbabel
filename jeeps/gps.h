@@ -263,7 +263,6 @@ typedef int (*pcb_fn)(int, struct GPS_SWay**);
 #include "gpsmath.h"
 #include "gpsmem.h"
 #include "gpsrqst.h"
-#include "gpsinput.h"
 #include "gpsproj.h"
 
 extern time_t gps_save_time;

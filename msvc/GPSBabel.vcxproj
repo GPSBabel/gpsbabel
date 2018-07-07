@@ -311,7 +311,6 @@
     <ClInclude Include="..\jeeps\gpsdatum.h" />
     <ClInclude Include="..\jeeps\gpsdevice.h" />
     <ClInclude Include="..\jeeps\gpsfmt.h" />
-    <ClInclude Include="..\jeeps\gpsinput.h" />
     <ClInclude Include="..\jeeps\gpsmath.h" />
     <ClInclude Include="..\jeeps\gpsmem.h" />
     <ClInclude Include="..\jeeps\gpsnmea.h" />
