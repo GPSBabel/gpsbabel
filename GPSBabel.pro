@@ -115,7 +115,6 @@ HEADERS =  \
 	jeeps/gpsdatum.h \
 	jeeps/gpsdevice.h \
 	jeeps/gpsfmt.h \
-	jeeps/gpsinput.h \
 	jeeps/gpsmath.h \
 	jeeps/gpsmem.h \
 	jeeps/gpsport.h \
