@@ -842,8 +842,7 @@ decode_sbp_position(const unsigned char* buffer, Waypoint* waypt)
 Waypoint*
 navilink_decode_logpoint(const unsigned char* buffer)
 {
-  Waypoint* waypt = nullptr;
-  waypt = new Waypoint;
+  Waypoint* waypt = new Waypoint;
 
   waypt->hdop = (buffer[0]) * 0.2f;
   waypt->sat = buffer[1];
@@ -905,15 +904,14 @@ static void
 read_datalog_records(route_head* track,
                      unsigned int start_addr, unsigned int len)
 {
-  unsigned char  logpoints[MAX_READ_LOGPOINTS * SBP_RECORD_LEN];
-  unsigned int   logpoints_len;
   unsigned char  payload[7];
   unsigned char* p;
 
   /* The protocol only supports reading 256 logpoints at once, so
    * read small chunks until none left. */
   while (len > 0) {
-    logpoints_len = len > MAX_READ_LOGPOINTS ? MAX_READ_LOGPOINTS : len;
+  unsigned char  logpoints[MAX_READ_LOGPOINTS * SBP_RECORD_LEN];
+  unsigned int   logpoints_len = len > MAX_READ_LOGPOINTS ? MAX_READ_LOGPOINTS : len;
 
     le_write32(payload, start_addr);
     le_write16(payload + 4, logpoints_len);

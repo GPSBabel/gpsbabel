@@ -1187,7 +1187,6 @@ void GPS_Math_EN_To_LatLon(double E, double N, double* phi,
   double nphi=0.0;
 
   double tmp;
-  double tmp2;
   double fdf;
   double fde;
 
@@ -1215,8 +1214,7 @@ void GPS_Math_EN_To_LatLon(double E, double N, double* phi,
 
     tmp   = 1.0 + n + (fdf * n * n) + (fdf * n * n * n);
     tmp  *= (nphi - phi0);
-    tmp2  = 3.0*n + 3.0*n*n +
-            (21./8.)*n*n*n;
+    double tmp2  = 3.0*n + 3.0*n*n + (21./8.)*n*n*n;
     tmp2 *= (sin(nphi-phi0) * cos(nphi+phi0));
     tmp  -= tmp2;
 

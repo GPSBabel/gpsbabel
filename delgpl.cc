@@ -123,7 +123,6 @@ gpl_trackpt(const Waypoint* wpt)
 {
   double alt_feet = METERS_TO_FEET(wpt->altitude);
   int status = 3;
-  gpl_point_t gp;
   double speed = 3600*METERS_TO_MILES(wpt->speed);
   double heading = wpt->course;
 
@@ -144,7 +143,7 @@ gpl_trackpt(const Waypoint* wpt)
     status = 3;   // a strategic lie for fix_unknown.
   }
 
-  memset(&gp, 0, sizeof(gp));
+  gpl_point_t gp = {0};
   le_write32(&gp.status, status);
   le_write_double(&gp.lat, wpt->latitude);
   le_write_double(&gp.lon, wpt->longitude);

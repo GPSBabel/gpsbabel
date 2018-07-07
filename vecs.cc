@@ -1107,9 +1107,8 @@ init_vecs()
 {
   vecs_t* vec = vec_list;
   while (vec->vec) {
-    arglist_t* ap;
     if (vec->vec->args) {
-      for (ap = vec->vec->args; ap->argstring; ap++) {
+      for (auto ap = vec->vec->args; ap->argstring; ap++) {
         ap->argvalptr = nullptr;
         if (ap->argval) {
           *ap->argval = nullptr;
@@ -1622,8 +1621,8 @@ disp_v2(ff_vecs_t* v)
 {
   int i;
   for (i = 0; i < 3; i++) {
-    putchar(v->cap[i] & ff_cap_read  ? 'r' : '-');
-    putchar(v->cap[i] & ff_cap_write  ? 'w' : '-');
+    putchar((v->cap[i] & ff_cap_read) ? 'r' : '-');
+    putchar((v->cap[i] & ff_cap_write) ? 'w' : '-');
   }
   putchar('\t');
 }

@@ -349,14 +349,13 @@ humminbird_read_route(gbfile* fin)
     route_head* rte = nullptr;
 
     for (i = 0; i < hrte.count; i++) {
-      const Waypoint* wpt;
       char buff[10];
       hrte.points[i] = be_read16(&hrte.points[i]);
 
       /* locate the point over his internal Humminbird "Number" */
       snprintf(buff, sizeof(buff), "%d", hrte.points[i]);
       if ((map.value(buff))) {
-        wpt = map.value(buff);
+        const Waypoint* wpt = map.value(buff);
         if (rte == nullptr) {
           rte = route_head_alloc();
           route_add_head(rte);

@@ -137,10 +137,10 @@ static Waypoint*
 mps_find_wpt_q_by_name(const queue* whichQueue, const QString& name)
 {
   queue* elem, *tmp;
-  Waypoint* waypointp;
 
   QUEUE_FOR_EACH(whichQueue, elem, tmp) {
-    waypointp = (Waypoint*) elem;
+    void* vwaypointp = static_cast<void*>(elem);
+    Waypoint* waypointp = static_cast<Waypoint*>(vwaypointp);
     if (waypointp->shortname == name) {
       return waypointp;
     }
@@ -516,16 +516,11 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, Waypoint** wpt, unsigned int* mpsc
 {
   char tbuf[100];
   char wptname[MPSNAMEBUFFERLEN];
-  int lat;
-  int lon;
-  int	icon;
+  double mps_altitude = unknown_alt;
+  double mps_proximity = unknown_alt;
+  double mps_depth = unknown_alt;
 
-  Waypoint*	thisWaypoint = nullptr;
-  double	mps_altitude = unknown_alt;
-  double	mps_proximity = unknown_alt;
-  double	mps_depth = unknown_alt;
-
-  thisWaypoint = new Waypoint;
+  Waypoint* thisWaypoint = new Waypoint;
   *wpt = thisWaypoint;
 
   mps_readstr(mps_file, wptname, sizeof(wptname));
@@ -539,8 +534,8 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, Waypoint** wpt, unsigned int* mpsc
     gbfread(tbuf, 5, 1, mps_file);			/* additional subclass data (1) & terminator? (4) */
   }
 
-  lat = gbfgetint32(mps_file);
-  lon = gbfgetint32(mps_file);
+  int lat = gbfgetint32(mps_file);
+  int lon = gbfgetint32(mps_file);
 
   if (gbfgetc(mps_file) == 1) {				/* altitude validity */
     mps_altitude = gbfgetdbl(mps_file);
@@ -560,7 +555,7 @@ mps_waypoint_r(gbfile* mps_file, int mps_ver, Waypoint** wpt, unsigned int* mpsc
 
   (void) gbfgetint32(mps_file);					/* display flag */
   (void) gbfgetint32(mps_file);					/* colour */
-  icon = gbfgetint32(mps_file);					/* display symbol */
+  int icon = gbfgetint32(mps_file);					/* display symbol */
 
   mps_readstr(mps_file, tbuf, sizeof(tbuf));		/* city */
   mps_readstr(mps_file, tbuf, sizeof(tbuf));		/* state */
@@ -757,10 +752,8 @@ mps_waypoint_w(gbfile* mps_file, int mps_ver, const Waypoint* wpt, const bool is
 static void
 mps_waypoint_w_unique_wrapper(const Waypoint* wpt)
 {
-  Waypoint* wptfound = nullptr;
-
   /* Search for this waypoint in the ones already written */
-  wptfound = mps_find_wpt_q_by_name(&written_wpt_head, CSTRc(wpt->shortname));
+  Waypoint* wptfound = mps_find_wpt_q_by_name(&written_wpt_head, CSTRc(wpt->shortname));
   /* is the next line necessary? Assumes we know who's called us and in what order */
   if (wptfound == nullptr) {
     wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, CSTRc(wpt->shortname));
@@ -1639,7 +1632,6 @@ mps_trackhdr_w_wrapper(const route_head* trk)
 static void
 mps_trackdatapoint_w(gbfile* mps_file, int mps_ver, const Waypoint* wpt)
 {
-  int lat, lon;
   time_t	t = wpt->GetCreationTime().toTime_t();
   char zbuf[10];
 
@@ -1648,8 +1640,8 @@ mps_trackdatapoint_w(gbfile* mps_file, int mps_ver, const Waypoint* wpt)
 
   (void)mps_ver;
 
-  lat = GPS_Math_Deg_To_Semi(wpt->latitude);
-  lon = GPS_Math_Deg_To_Semi(wpt->longitude);
+  int lat = GPS_Math_Deg_To_Semi(wpt->latitude);
+  int lon = GPS_Math_Deg_To_Semi(wpt->longitude);
   if (WAYPT_HAS(wpt, depth) && mpsusedepth) {
     mps_depth = wpt->depth;
   }

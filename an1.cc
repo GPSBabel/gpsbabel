@@ -115,8 +115,7 @@ typedef struct guid {
 static char*
 ReadString(gbfile* f, short len)
 {
-  char* result = nullptr;
-  result = (char*)xcalloc(1, len + 1);
+  char* result = (char*)xcalloc(1, len + 1);
   if (len) {
     gbfread(result, 1, len, f);
   }
@@ -652,13 +651,12 @@ static void Write_AN1_Header(gbfile* f)
 static void Read_AN1_Bitmaps(gbfile* f)
 {
   long count;
-  unsigned short magic;
   an1_symbol_record symbol;
 
   count = ReadLong(f);
 
   while (count) {
-    magic = ReadShort(f);
+    unsigned short magic = ReadShort(f);
     switch (magic) {
     case 0x4d42:
       Skip_AN1_BM(f);
@@ -736,20 +734,19 @@ static void
 Write_One_AN1_Waypoint(const Waypoint* wpt)
 {
   an1_waypoint_record* rec;
-  int local;
-  format_specific_data* fs = nullptr;
+  bool local;
+  format_specific_data* fs = fs_chain_find(wpt->fs, FS_AN1W);
 
-  fs = fs_chain_find(wpt->fs, FS_AN1W);
   if (fs) {
     rec = (an1_waypoint_record*)fs;
     xfree(rec->name);
-    local = 0;
+    local = false;
     if (opt_zoom) {
       rec->visible_zoom = opt_zoom_num;
     }
   } else {
     rec = Alloc_AN1_Waypoint();
-    local = 1;
+    local = true;
     rec->magic = 1;
     rec->type = wpt_type_num;
     rec->unk2 = 3;

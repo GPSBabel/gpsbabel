@@ -158,9 +158,8 @@ rd_drain()
 static int
 rd_char(int* errors)
 {
-  int c;
   while (*errors > 0) {
-    c = gbser_readc_wait(serial_handle, TIMEOUT);
+    int c = gbser_readc_wait(serial_handle, TIMEOUT);
     if (c < 0) {
       db(1, MYNAME ": rd_char(): Got error: %d\n", c);
       (*errors)--;
@@ -383,10 +382,8 @@ skytraq_expect_ack(uint8_t id)
 static int
 skytraq_expect_msg(uint8_t id, const uint8_t* payload, int len)
 {
-  int i, rc;
-
-  for (i = 0; i < MSG_RETRIES; i++) {
-    rc = skytraq_rd_msg(payload, len);
+  for (int i = 0; i < MSG_RETRIES; i++) {
+    int rc = skytraq_rd_msg(payload, len);
     if (rc < 0) {
       return rc;
     }
@@ -491,7 +488,7 @@ skytraq_configure_logging()
   // an0008-1.4.14: logs if
   // (dt > tmin & dd >= dmin & v >= vmin) | dt > tmax | dd > dmax | v > vmax
   unsigned int tmin=6, tmax=3600, dmin=0, dmax=10000, nn=0;
-  uint8_t MSG_LOG_CONFIGURE_CONTROL[] = {
+  static uint8_t MSG_LOG_CONFIGURE_CONTROL[] = {
     0x18,			// message_id
     0x00, 0x00, 0x0e, 0x10,	// max_time: was 0x0000ffff (big endian!)
     0x00, 0x00, 0x00, 0x06,	// min_time: was 0x00000005

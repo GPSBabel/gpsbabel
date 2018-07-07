@@ -101,7 +101,6 @@ static void
 tpg_read()
 {
   char buff[MAXTPGSTRINGSIZE + 1];
-  Waypoint* wpt_tmp;
   double lat, lon, elev;
   double amt;
   short int pointcount;
@@ -117,7 +116,7 @@ tpg_read()
 
 
   while (pointcount--) {
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
 
     /* pascal-like shortname */
     wpt_tmp->shortname = gbfgetpstr(tpg_file_in);

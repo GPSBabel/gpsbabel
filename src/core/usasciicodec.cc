@@ -85,10 +85,9 @@ QByteArray UsAsciiCodec::convertFromUnicode(const QChar* uc, int len, ConverterS
   unsigned char* c = (unsigned char*)result.data();
   const char replacement = (state && state->flags & ConvertInvalidToNull) ? 0 : '?';
   int invalid = 0;
-  int u;
 
   for (int i = 0; i < len; i++) {
-    u = uc[i].unicode();
+    int u = uc[i].unicode();
     if (u < 128) {
       c[i] = (char) u;
     } else {

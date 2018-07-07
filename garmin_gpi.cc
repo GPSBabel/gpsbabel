@@ -283,7 +283,6 @@ gpi_read_string_old(const char* field)
     if (first == 0) {
       short l1;
       short l2;
-      char* res1 = nullptr;
       char* res2 = nullptr;
       char lc1[3] = "";
       char lc2[3] = "";
@@ -291,7 +290,7 @@ gpi_read_string_old(const char* field)
       is_fatal((gbfgetc(fin) != 0),
                MYNAME ": Error reading field '%s'!", field);
 
-      res1 = gpi_read_lc_string_old(lc1,  &l1);
+      char* res1 = gpi_read_lc_string_old(lc1,  &l1);
       if ((l1 + 4) < l0) { // dual language?
         res2 = gpi_read_lc_string_old(lc2,  &l2);
         is_fatal((l1 + 4 + l2 + 4 != l0),

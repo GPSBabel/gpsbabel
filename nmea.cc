@@ -930,7 +930,6 @@ static void
 nmea_parse_one_line(char* ibuf)
 {
   char* ck;
-  int ckval, ckcmp;
   char* tbuf = lrtrim(ibuf);
 
   /*
@@ -948,9 +947,10 @@ nmea_parse_one_line(char* ibuf)
   ck = strrchr(tbuf, '*');
   if (ck != nullptr) {
     *ck = '\0';
-    ckval = nmea_cksum(&tbuf[1]);
+    int ckval = nmea_cksum(&tbuf[1]);
     *ck = '*';
     ck++;
+    int ckcmp;
     sscanf(ck, "%2X", &ckcmp);
     if (ckval != ckcmp) {
       Warning() << "Invalid NMEA checksum. Computed " << ckval << " but found " << ckcmp << ". Ignoring sentence";
@@ -1019,7 +1019,6 @@ static void
 nmea_read()
 {
   char* ibuf;
-  char* ck;
   double lt = -1;
   int line = -1;
 
@@ -1037,7 +1036,7 @@ nmea_read()
   if (optdate) {
     memset(&opt_tm, 0, sizeof(opt_tm));
 
-    ck = strptime(optdate, "%Y%m%d", &opt_tm);
+    char* ck = strptime(optdate, "%Y%m%d", &opt_tm);
     if ((ck == nullptr) || (*ck != '\0') || (strlen(optdate) != 8)) {
       fatal(MYNAME ": Invalid date \"%s\"!\n", optdate);
     } else if (opt_tm.tm_year < 70) {

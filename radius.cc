@@ -59,7 +59,6 @@ void RadiusFilter::process()
 #if !NEWQ
   queue* elem, * tmp;
 #endif
-  double dist;
   Waypoint** comp;
   int i, wc;
   queue temp_head;
@@ -70,7 +69,7 @@ void RadiusFilter::process()
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     Waypoint* waypointp = (Waypoint*)elem;
 #endif
-    dist = gc_distance(waypointp->latitude,
+    double dist = gc_distance(waypointp->latitude,
                        waypointp->longitude,
                        home_pos->latitude,
                        home_pos->longitude);
@@ -168,7 +167,7 @@ void RadiusFilter::init()
     maxct = 0;
   }
 
-  home_pos = (Waypoint*) xcalloc(sizeof(*home_pos), 1);
+  home_pos = new Waypoint;
 
   if (latopt) {
     home_pos->latitude = atof(latopt);
@@ -181,7 +180,7 @@ void RadiusFilter::init()
 void RadiusFilter::deinit()
 {
   if (home_pos) {
-    xfree(home_pos);
+    delete home_pos;
   }
 }
 

@@ -735,7 +735,6 @@ read_route()
   int points, warnings, links, i;
   char buf[128];
   bounds bounds;
-  int color_idx;
 
   rte_ct++;
   warnings = 0;
@@ -923,7 +922,7 @@ read_route()
   } else {
     rte->rte_url = gdb_fread_strlist();
 
-    color_idx = FREAD_i32;
+    int color_idx = FREAD_i32;
     rte->line_color.bbggrr = gt_color_value(color_idx);
     FREAD(buf, 1);			/* ?????????????????????????????????? */
 
@@ -1472,7 +1471,7 @@ write_route(const route_head* rte, const QString& rte_name)
     Waypoint* wpt = (Waypoint*)elem;
     Waypoint* next = (Waypoint*)tmp;
     Waypoint* test;
-    garmin_fs_t* gmsd = nullptr;
+//    garmin_fs_t* gmsd = nullptr;
     int wpt_class;
 
     index++;
@@ -1492,7 +1491,7 @@ write_route(const route_head* rte, const QString& rte_name)
       fatal(MYNAME ": Sorry, that should never happen!!!\n");
     }
 
-    gmsd = GMSD_FIND(wpt);
+    garmin_fs_t* gmsd = GMSD_FIND(wpt);
 
     /* extra_data may contain a modified shortname */
     FWRITE_CSTR((wpt->extra_data) ? (char*)wpt->extra_data : wpt->shortname);
@@ -1622,10 +1621,6 @@ finalize_item(gbfile* origin, const char identifier)
 static void
 write_waypoint_cb(const Waypoint* refpt)
 {
-  garmin_fs_t* gmsd;
-  Waypoint* test;
-  gbfile* fsave;
-
   /* do this when backup always happens in main */
 #if NEW_STRINGS
 // but, but, casting away the const here is wrong...
@@ -1633,7 +1628,7 @@ write_waypoint_cb(const Waypoint* refpt)
 #else
   rtrim(const_cast<Waypoint*>(refpt))->shortname);
 #endif
-  test = gdb_find_wayptq(&wayptq_out, refpt, 1);
+  Waypoint* test = gdb_find_wayptq(&wayptq_out, refpt, 1);
 
   if (refpt->HasUrlLink() && test && test->HasUrlLink() && route_flag == 0) {
     UrlLink orig_link = refpt->GetUrlLink();
@@ -1656,11 +1651,11 @@ write_waypoint_cb(const Waypoint* refpt)
     gdb_check_waypt(wpt);
     ENQUEUE_TAIL(&wayptq_out, &wpt->Q);
 
-    fsave = fout;
+    gbfile* fsave = fout;
     fout = ftmp;
 
     /* prepare the waypoint */
-    gmsd = GMSD_FIND(wpt);
+    garmin_fs_t* gmsd = GMSD_FIND(wpt);
 
     wpt_class = GMSD_GET(wpt_class, -1);
     if (wpt_class == -1) {

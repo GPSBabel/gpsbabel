@@ -138,14 +138,8 @@ double linedistprj(double lat1, double lon1,
   static double x2, y2, z2;
   static double xa, ya, za, la;
 
-  double x3, y3, z3;
-  double xp, yp, zp, lp;
-
   double xa1, ya1, za1;
   double xa2, ya2, za2;
-
-  double d1, d2;
-  double c1, c2;
 
   double dot;
 
@@ -182,9 +176,9 @@ double linedistprj(double lat1, double lon1,
     y2 = sin(lat2);
     z2 = sin(lon2) * cos(lat2);
   }
-  x3 = cos(lon3) * cos(lat3);
-  y3 = sin(lat3);
-  z3 = sin(lon3) * cos(lat3);
+  double x3 = cos(lon3) * cos(lat3);
+  double y3 = sin(lat3);
+  double z3 = sin(lon3) * cos(lat3);
 
   if (newpoints) {
     /* 'a' is the axis; the line that passes through the center of the earth
@@ -206,11 +200,11 @@ double linedistprj(double lat1, double lon1,
 
     dot = dotproduct(x3, y3, z3, xa, ya, za);
 
-    xp = x3 - dot * xa;
-    yp = y3 - dot * ya;
-    zp = z3 - dot * za;
+    double xp = x3 - dot * xa;
+    double yp = y3 - dot * ya;
+    double zp = z3 - dot * za;
 
-    lp = sqrt(xp * xp + yp * yp + zp * zp);
+    double lp = sqrt(xp * xp + yp * yp + zp * zp);
 
     if (lp) {
       /* After this, 'p' is normalized */
@@ -219,10 +213,10 @@ double linedistprj(double lat1, double lon1,
       zp /= lp;
 
       crossproduct(x1, y1, z1, xp, yp, zp, &xa1, &ya1, &za1);
-      d1 = dotproduct(xa1, ya1, za1, xa, ya, za);
+      double d1 = dotproduct(xa1, ya1, za1, xa, ya, za);
 
       crossproduct(xp, yp, zp, x2, y2, z2, &xa2, &ya2, &za2);
-      d2 = dotproduct(xa2, ya2, za2, xa, ya, za);
+      double d2 = dotproduct(xa2, ya2, za2, xa, ya, za);
 
       if (d1 >= 0 && d2 >= 0) {
         /* rather than call gcdist and all its sines and cosines and
@@ -246,8 +240,8 @@ double linedistprj(double lat1, double lon1,
       }
 
       /* otherwise, get the distance from the closest endpoint */
-      c1 = dotproduct(x1, y1, z1, xp, yp, zp);
-      c2 = dotproduct(x2, y2, z2, xp, yp, zp);
+      double c1 = dotproduct(x1, y1, z1, xp, yp, zp);
+      double c2 = dotproduct(x2, y2, z2, xp, yp, zp);
       d1 = fabs(d1);
       d2 = fabs(d2);
 
@@ -313,13 +307,6 @@ void linepart(double lat1, double lon1,
   double x1, y1, z1;
   double x2, y2, z2;
   double xa, ya, za, la;
-  double xr, yr, zr;
-  double xx, yx, zx;
-
-  double theta = 0;
-  double phi = 0;
-  double cosphi = 0;
-  double sinphi = 0;
 
   /* result must be in degrees */
   *reslat = lat1;
@@ -353,21 +340,21 @@ void linepart(double lat1, double lon1,
   /* if la is zero, the points are either equal or directly opposite
    * each other.  Either way, there's no single geodesic, so we punt. */
   if (la) {
+    double xx, yx, zx;
     crossproduct(x1, y1, z1, xa, ya, za, &xx, &yx, &zx);
 
-    theta = atan2(dotproduct(xx,yx,zx,x2,y2,z2),
-                  dotproduct(x1,y1,z1,x2,y2,z2));
+    double theta = atan2(dotproduct(xx,yx,zx,x2,y2,z2),
+                         dotproduct(x1,y1,z1,x2,y2,z2));
 
-    phi = frac * theta;
-    cosphi = cos(phi);
-    sinphi = sin(phi);
-
+    double phi = frac * theta;
+    double cosphi = cos(phi);
+    double sinphi = sin(phi);
 
     /* The second term of the formula from the mathworld reference is always
      * zero, because r (lat1,lon1) is always perpendicular to n (a here) */
-    xr = x1*cosphi + xx * sinphi;
-    yr = y1*cosphi + yx * sinphi;
-    zr = z1*cosphi + zx * sinphi;
+    double xr = x1*cosphi + xx * sinphi;
+    double yr = y1*cosphi + yx * sinphi;
+    double zr = z1*cosphi + zx * sinphi;
 
     if (xr > 1) {
       xr = 1;

@@ -286,14 +286,13 @@ ozi_track_pr()
 static void
 ozi_route_hdr(const route_head* rte)
 {
-  static const char* ozi_route_header =
-    "OziExplorer Route File Version 1.0\r\n"
-    "WGS 84\r\n"
-    "Reserved 1\r\n"
-    "Reserved 2\r\n";
-
   /* prologue on 1st pass only */
   if (route_out_count == 0) {
+		static const char* ozi_route_header =
+			"OziExplorer Route File Version 1.0\r\n"
+			"WGS 84\r\n"
+			"Reserved 1\r\n"
+			"Reserved 2\r\n";
     gbfprintf(file_out, ozi_route_header);
   }
 
@@ -938,6 +937,8 @@ ozi_waypt_pr(const Waypoint* wpt)
 static void
 data_write()
 {
+
+  if (waypt_count()) {
   static const char* ozi_wpt_header =
     "OziExplorer Waypoint File Version 1.1\r\n"
     "WGS 84\r\n"
@@ -945,8 +946,6 @@ data_write()
     "Reserved 3\r\n";
 
   track_out_count = route_out_count = 0;
-
-  if (waypt_count()) {
     ozi_objective = wptdata;
     ozi_openfile(ozi_ofname);
     gbfprintf(file_out, ozi_wpt_header);

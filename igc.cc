@@ -869,11 +869,9 @@ static void wr_track()
 {
   const route_head* pres_track;
   const route_head* gnss_track;
-  const Waypoint* wpt;
   const queue* elem;
   const queue* tmp;
   int time_adj;
-  double pres_alt;
 
   // Find pressure altitude and GNSS altitude tracks
   get_tracks(&pres_track, &gnss_track);
@@ -893,17 +891,25 @@ static void wr_track()
       printf(MYNAME ": adjusting time by %ds\n", time_adj);
     }
     // Iterate through waypoints in both tracks simultaneously
-    QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
-      wpt = (Waypoint*) elem;
-      pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime().toTime_t() + time_adj);
-      wr_fix_record(wpt, (int) pres_alt, (int) wpt->altitude);
+    queue* melem;
+    queue* mtmp;
+    QUEUE_FOR_EACH(&gnss_track->waypoint_list, melem, mtmp) {
+      // FIXME(NEW_Q): the excessive casting of the iterators is gross. Rethink.
+      void* vwaypointp = static_cast<void*>(melem);
+      Waypoint* wpt = static_cast<Waypoint*>(vwaypointp);
+      double pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime().toTime_t() + time_adj);
+      wr_fix_record(wpt, pres_alt, wpt->altitude);
     }
   } else {
     if (pres_track) {
       // Only the pressure altitude track was found so generate fix
       // records from it alone.
-      QUEUE_FOR_EACH(&pres_track->waypoint_list, elem, tmp) {
-        wr_fix_record((Waypoint*) elem, (int)((Waypoint*) elem)->altitude, (int) unknown_alt);
+      queue* melem;
+      queue* mtmp;
+      QUEUE_FOR_EACH(&pres_track->waypoint_list, melem, mtmp) {
+        void* vwaypointp = static_cast<void*>(melem);
+        Waypoint* wpt = static_cast<Waypoint*>(vwaypointp);
+        wr_fix_record(wpt, wpt->altitude, unknown_alt);
       }
     } else if (gnss_track) {
       // Only the GNSS altitude track was found so generate fix

@@ -134,14 +134,13 @@ dynarray16_init(struct dynarray16* a, unsigned limit)
 static int16_t*
 dynarray16_alloc(struct dynarray16* a, unsigned n)
 {
-  unsigned oldcount, need;
   const unsigned elements_per_chunk = 4096 / sizeof(a->data[0]);
 
-  oldcount = a->count;
+  unsigned oldcount = a->count;
   a->count += n;
 
   if (a->count > a->limit) {
-    need = a->count - a->limit;
+    unsigned need = a->count - a->limit;
     need = (need > elements_per_chunk) ? need : elements_per_chunk;
     a->limit += need;
     a->data = (int16_t*) xrealloc(a->data, sizeof(a->data[0]) * a->limit);
@@ -216,18 +215,14 @@ bin2deg(int val)
    * ffff: the fractional part of minutes (decimal fraction 0.ffff)
    */
 
-  float deg;
-  int deg_int, min_scaled, isneg;
-  unsigned absval;
-
   /* avoid division of negative integers,
    * which has platform-dependent results */
-  absval = abs(val);
-  isneg = (val < 0);
+  unsigned absval = abs(val);
+  bool isneg = (val < 0);
 
-  deg_int = absval / 1000000;      /* extract ddd */
-  min_scaled = absval % 1000000;   /* extract mmffff (minutes * 10^4) */
-  deg = deg_int + (double) min_scaled / (10000 * 60);
+  int deg_int = absval / 1000000;      /* extract ddd */
+  int min_scaled = absval % 1000000;   /* extract mmffff (minutes * 10^4) */
+  float deg = deg_int + (double) min_scaled / (10000 * 60);
 
   /* restore the sign */
   deg = isneg ? -deg : deg;
@@ -238,25 +233,21 @@ static void
 process_gpsfile(uint8_t data[], route_head** track)
 {
   const int recordsizes[3] = {8, 20, 32};
-  int i, style, recsize;
-  int lat, lon, bintime, bindate;
-  Waypoint* wpt;
 
   /* the first record of each file is always full-sized; its style field
    * determines the format of all subsequent records in the file */
-  style = be_read32(data + 28);
+  int style = be_read32(data + 28);
   if (style > 2) {
     fprintf(stderr, "unknown GPS record style %d", style);
     return;
   }
-  recsize = recordsizes[style];
+  int recsize = recordsizes[style];
 
-  for (i = 0; i <= 2048 - recsize; i += (i == 0) ? 32 : recsize) {
-    float latitude;
+  for (int i = 0; i <= 2048 - recsize; i += (i == 0) ? 32 : recsize) {
     int manual_point = 0;
 
-    lat = be_read32(data + i + 0);
-    lon = be_read32(data + i + 4);
+    int lat = be_read32(data + i + 0);
+    int lon = be_read32(data + i + 4);
 
     /* skip invalid trackpoints (blank records) */
     if (lat == -1 && lon == -1) {
@@ -271,8 +262,8 @@ process_gpsfile(uint8_t data[], route_head** track)
     if (*track == nullptr) {
       time_t creation_time;
       char buf[1024];
-      bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
-      bindate = be_read32(data + i + 12);
+      int bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
+      int bindate = be_read32(data + i + 12);
       creation_time = bintime2utc(bindate, bintime);
       strncpy(buf, model->name, sizeof(buf));
       strftime(&buf[strlen(model->name)], sizeof(buf)-strlen(model->name), " tracklog (%Y/%m/%d %H:%M:%S)",
@@ -283,8 +274,8 @@ process_gpsfile(uint8_t data[], route_head** track)
       track_add_head(*track);
     }
 
-    wpt = new Waypoint;
-    latitude = bin2deg(lat);
+    Waypoint* wpt = new Waypoint;
+    float latitude = bin2deg(lat);
     if (latitude >= 100) {
       manual_point = 1;
       latitude -= 100;
@@ -296,8 +287,8 @@ process_gpsfile(uint8_t data[], route_head** track)
     wpt->longitude = bin2deg(lon);
 
     if (style >= 1) {
-      bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
-      bindate = be_read32(data + i + 12);
+      int bintime = be_read32(data + i +  8) & 0x7FFFFFFF;
+      int bindate = be_read32(data + i + 12);
       wpt->SetCreationTime(bintime2utc(bindate, bintime));
       /* The device presents the speed as a fixed-point number
        * with a scaling factor of 100, in km/h.
@@ -555,7 +546,7 @@ dg100_recv(uint8_t expected_id, void* buf, unsigned int len)
 
   /* check for buffer overflow */
   if (len < copysize) {
-    fprintf(stderr, "ERROR: buffer too small, size=%d, need=%d", len, copysize);
+    fprintf(stderr, "ERROR: buffer too small, size=%u, need=%u", len, copysize);
     return -1;
   }
 
@@ -569,20 +560,18 @@ static int
 dg100_request(uint8_t cmd, const void* sendbuf, void* recvbuf, size_t count)
 {
   struct dg100_command* cmdinfo;
-  int n, i, frames, fill;
-  uint8_t* buf;
 
   cmdinfo = dg100_findcmd(cmd);
   assert(cmdinfo != nullptr);
   dg100_send(cmd, sendbuf, cmdinfo->sendsize);
 
   /* the number of frames the answer will comprise */
-  frames = (cmd == dg100cmd_getfile) ? 2 : 1;
+  int frames = (cmd == dg100cmd_getfile) ? 2 : 1;
   /* alias pointer for easy typecasting */
-  buf = (uint8_t*) recvbuf;
-  fill = 0;
-  for (i = 0; i < frames; i++) {
-    n = dg100_recv(cmd, buf + fill, count - fill);
+  uint8_t* buf = (uint8_t*) recvbuf;
+  int fill = 0;
+  for (int i = 0; i < frames; i++) {
+    int n = dg100_recv(cmd, buf + fill, count - fill);
     if (n < 0) {
       return(-1);
     }
@@ -597,18 +586,15 @@ dg100_getfileheaders(struct dynarray16* headers)
 {
   uint8_t request[2];
   uint8_t answer[FRAME_MAXLEN];
-  int seqnum;
-  int16_t numheaders, nextheader, *h;
-  int i, offset;
 
-  nextheader = 0;
+  int16_t nextheader = 0;
   do {
     /* request the next batch of headers */
     be_write16(request, nextheader);
     dg100_request(dg100cmd_getfileheader, request, answer, sizeof(answer));
 
     /* process the answer */
-    numheaders = be_read16(answer);
+    int16_t numheaders = be_read16(answer);
     nextheader = be_read16(answer + 2);
     dg100_log("found %d headers, nextheader=%d\n",
               numheaders, nextheader);
@@ -617,10 +603,10 @@ dg100_getfileheaders(struct dynarray16* headers)
       break;
     }
 
-    h = dynarray16_alloc(headers, numheaders);
-    for (i = 0; i < numheaders; i++) {
-      offset = 4 + i * 12;
-      seqnum = be_read32(answer + offset + 8);
+    int16_t*h = dynarray16_alloc(headers, numheaders);
+    for (int i = 0; i < numheaders; i++) {
+      int offset = 4 + i * 12;
+      int seqnum = be_read32(answer + offset + 8);
       h[i] = seqnum;
       if (global_opts.debug_level) {
         int time   = be_read32(answer + offset) & 0x7FFFFFFF;
@@ -655,8 +641,6 @@ dg100_getfile(int16_t num, route_head** track)
 static void
 dg100_getfiles()
 {
-  unsigned int i;
-  int filenum;
   struct dynarray16 headers;
   route_head* track = nullptr;
 
@@ -666,8 +650,8 @@ dg100_getfiles()
 
   dg100_getfileheaders(&headers);
 
-  for (i = 0; i < headers.count; i++) {
-    filenum = headers.data[i];
+  for (int i = 0; i < headers.count; i++) {
+    int filenum = headers.data[i];
     dg100_getfile(filenum, &track);
   }
   dg100_getconfig();       // To light on the green LED on the DG-200

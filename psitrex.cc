@@ -295,12 +295,8 @@ psit_isKnownToken(char* buf)
 static void
 psit_waypoint_r(gbfile* psit_file, Waypoint**)
 {
-  int		garmin_icon_num;
-
-  Waypoint*	thisWaypoint;
-
   if (strlen(psit_current_token) > 0) {
-    thisWaypoint = new Waypoint;
+    Waypoint* thisWaypoint = new Waypoint;
 
     thisWaypoint->latitude = atof(psit_current_token);
 
@@ -324,7 +320,7 @@ psit_waypoint_r(gbfile* psit_file, Waypoint**)
     rtrim(psit_current_token);
     /* since PsiTrex only deals with Garmins, let's use the "proper" Garmin icon name */
     /* convert the PsiTrex name to the number, which is the PCX one; from there to Garmin desc */
-    garmin_icon_num = psit_find_icon_number_from_desc(psit_current_token);
+    int garmin_icon_num = psit_find_icon_number_from_desc(psit_current_token);
     thisWaypoint->icon_descr = gt_find_desc_from_icon_number(garmin_icon_num, PCX);
 
     waypt_add(thisWaypoint);
@@ -390,9 +386,7 @@ static void
 psit_route_r(gbfile* psit_file, route_head** rte)
 {
   char rtename[256];
-  int garmin_icon_num;
   route_head* rte_head;
-  Waypoint* thisWaypoint;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
 
@@ -413,7 +407,7 @@ psit_route_r(gbfile* psit_file, route_head** rte)
 
   while (psit_isKnownToken(psit_current_token) != 0) {
     if (strlen(psit_current_token) > 0) {
-      thisWaypoint = new Waypoint;
+      Waypoint* thisWaypoint = new Waypoint;
 
       thisWaypoint->latitude = atof(psit_current_token);
 
@@ -437,7 +431,7 @@ psit_route_r(gbfile* psit_file, route_head** rte)
       rtrim(psit_current_token);
       /* since PsiTrex only deals with Garmins, let's use the "proper" Garmin icon name */
       /* convert the PsiTrex name to the number, which is the PCX one; from there to Garmin desc */
-      garmin_icon_num = psit_find_icon_number_from_desc(psit_current_token);
+      int garmin_icon_num = psit_find_icon_number_from_desc(psit_current_token);
       thisWaypoint->icon_descr = gt_find_desc_from_icon_number(garmin_icon_num, PCX);
 
       route_add_wpt(rte_head, thisWaypoint);
@@ -460,20 +454,18 @@ psit_route_r(gbfile* psit_file, route_head** rte)
 static void
 psit_routehdr_w(gbfile* psit_file, const route_head* rte)
 {
-  unsigned int rte_datapoints;
   QString rname;
 
-  Waypoint* testwpt;
-  time_t uniqueValue = 0;
-  queue* elem, *tmp;
-
   /* total nodes (waypoints) this route */
-  rte_datapoints = 0;
-
-  if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
-
+  if (rte->waypoint_list.next) { 
+    // this test doesn't do what I w ant i.e test if this is a valid 
+    // route - treat as a placeholder for now .
+    time_t uniqueValue = 0;
+    unsigned int rte_datapoints = 0;
+    queue *elem, *tmp;
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-      testwpt = (Waypoint*)elem;
+      void* vwaypointp = static_cast<void*>(elem);
+      Waypoint* testwpt = static_cast<Waypoint*>(vwaypointp);
       if (rte_datapoints == 0) {
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
@@ -607,21 +599,20 @@ psit_track_r(gbfile* psit_file, route_head**)
 static void
 psit_trackhdr_w(gbfile* psit_file, const route_head* trk)
 {
-  unsigned int trk_datapoints;
-  QString	tname;
-  Waypoint*	testwpt;
-  time_t		uniqueValue = 0;
+  QString tname;
+  time_t uniqueValue = 0;
 
   queue* elem, *tmp;
 
   if (psit_track_state == 2) {
     /* total nodes (waypoints) this track */
-    trk_datapoints = 0;
     if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
 
+      unsigned int trk_datapoints = 0;
       QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
         if (trk_datapoints == 0) {
-          testwpt = (Waypoint*)elem;
+          void* vwaypointp = static_cast<void*>(elem);
+          Waypoint* testwpt = static_cast<Waypoint*>(vwaypointp);
           uniqueValue = testwpt->GetCreationTime().toTime_t();
         }
         trk_datapoints++;

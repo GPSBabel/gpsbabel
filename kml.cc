@@ -386,8 +386,6 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
   double lat, lon, alt;
   Waypoint* trkpt;
   int n = 0;
-  queue* curr_elem;
-  queue* tmp_elem;
 
   route_head* trk_head = route_head_alloc();
 
@@ -429,6 +427,8 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
 	  if ( trk_head->rte_waypt_ct > 0 ) {
 		  qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
 		  qint64 ms_per_waypoint = timespan_ms / trk_head->rte_waypt_ct;
+                  queue* curr_elem;
+                  queue* tmp_elem;
 		  QUEUE_FOR_EACH(&trk_head->waypoint_list, curr_elem, tmp_elem) {
 			  trkpt = (Waypoint*) curr_elem;
 			  trkpt->SetCreationTime(wpt_timespan_begin);
@@ -1453,10 +1453,8 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
 
     logpart = xml_findfirst(curlog, "groundspeak:text");
     if (logpart) {
-      char* encstr = nullptr;
-      char* t = nullptr;
       int encoded = 0;
-      encstr = xml_attribute(logpart, "encoded");
+      char* encstr = xml_attribute(logpart, "encoded");
       encoded = (toupper(encstr[0]) != 'F');
 
       QString s;
@@ -1467,7 +1465,7 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
       }
 
       r = r + "<br />";
-      t = html_entitize(s);
+      char* t = html_entitize(s);
       r = r + t;
       xfree(t);
     }
