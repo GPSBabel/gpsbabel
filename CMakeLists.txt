@@ -131,7 +131,6 @@ set(HEADERS
   jeeps/gpsdatum.h
   jeeps/gpsdevice.h
   jeeps/gpsfmt.h
-  jeeps/gpsinput.h
   jeeps/gpsmath.h
   jeeps/gpsmem.h
   jeeps/gpsport.h
@@ -258,3 +257,7 @@ message("${DirDefs}")
 message("Libs are:")
 message("${LIBS}")
 
+if(UNIX)
+  # the tests only work if the pwd is top level source dir due to the file name getting embedded in the file nonexistent.err.
+  add_custom_target(check cd ${CMAKE_SOURCE_DIR}\; PNAME=${CMAKE_BINARY_DIR}/GPSBabel ./testo DEPENDS GPSBabel)
+endif()
