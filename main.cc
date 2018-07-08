@@ -700,9 +700,7 @@ main(int argc, char* argv[])
       wpt = ivecs->position_ops.rd_position(&tracking_status);
 
       if (tracking_status.request_terminate) {
-        if (wpt) {
-          delete wpt;
-        }
+        delete wpt;
         break;
       }
       if (wpt) {
