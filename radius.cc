@@ -156,7 +156,7 @@ void RadiusFilter::init()
     pos_dist = strtod(distopt, &fm);
 
     if ((*fm == 'k') || (*fm == 'K')) {
-      /* distance is kilometers, convert to feet */
+      /* distance is kilometers, convert to miles */
       pos_dist *= .6214;
     }
   }
@@ -179,9 +179,7 @@ void RadiusFilter::init()
 
 void RadiusFilter::deinit()
 {
-  if (home_pos) {
-    delete home_pos;
-  }
+  delete home_pos;
 }
 
 #endif // FILTERS_ENABLED

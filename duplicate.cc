@@ -196,9 +196,7 @@ void DuplicateFilter::process(void)
     btmp = addnode(sup_tree, newnode, &oldnode);
 
     if (btmp == nullptr) {
-      if (delwpt) {
-        delete delwpt;
-      }
+      delete delwpt;
       if (correct_coords && oldnode && oldnode->wpt) {
         oldnode->wpt->latitude = waypointp->latitude;
         oldnode->wpt->longitude = waypointp->longitude;
@@ -219,9 +217,7 @@ void DuplicateFilter::process(void)
     }
   }
 
-  if (delwpt) {
-    delete delwpt;
-  }
+  delete delwpt;
 
   xfree(htable);
   if (sup_tree) {

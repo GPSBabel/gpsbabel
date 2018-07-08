@@ -448,9 +448,7 @@ void gx_trk_s(xg_string, const QXmlStreamAttributes*)
     gx_trk_head->rte_desc  = wpt_tmp->description;
   }
   track_add_head(gx_trk_head);
-  if (gx_trk_times) {
-    delete gx_trk_times;
-  }
+  delete gx_trk_times;
   gx_trk_times = new QList<gpsbabel::DateTime>;
 }
 
