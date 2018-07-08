@@ -1498,8 +1498,6 @@ garmin_gpi_rd_init(const QString& fname)
 static void
 garmin_gpi_wr_init(const QString& fname)
 {
-  int i;
-
   if (gpi_timestamp != 0) {			/* not the first gpi output session */
     time_t t = time(nullptr);
     if (t <= gpi_timestamp) {
@@ -1525,7 +1523,7 @@ garmin_gpi_wr_init(const QString& fname)
 
   codepage = 0;
 
-  for (i = 1250; i <= 1257; i++) {
+  for (int i = 1250; i <= 1257; i++) {
     if (QString("windows-%1").arg(i).compare(QString(opt_writecodec), Qt::CaseInsensitive) == 0) {
       codepage = i;
       break;

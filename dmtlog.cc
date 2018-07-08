@@ -541,7 +541,7 @@ read_CTrackFile(const int version)
 
   while (wcount > 0) {
     Waypoint* wpt;
-    int32_t namect, i;
+    int32_t namect;
 
     wcount--;
 
@@ -557,7 +557,7 @@ read_CTrackFile(const int version)
 
     // variants of shortname
 
-    for (i = 0; i < namect; i++) {
+    for (int32_t i = 0; i < namect; i++) {
       char* name;
 
       name = read_str(fin);
@@ -732,7 +732,7 @@ dmtlog_wr_deinit()
 static void
 write_header(const route_head* trk)
 {
-  int count, i;
+  int count;
   const char ZERO = '\0';
 
   header_written = 1;
@@ -754,7 +754,7 @@ write_header(const route_head* trk)
                  QString::number(waypt_count()) + " waypoints";
   write_str(cout, fout);
 
-  for (i = 3; i <= 8; i++) {
+  for (int i = 3; i <= 8; i++) {
     gbfputc(ZERO, fout);
   }
   write_str("GPSBabel", fout);

@@ -159,8 +159,6 @@ mtk_locus_rd_deinit()
 static void
 mtk_locus_read()
 {
-  int i;
-
   track = route_head_alloc();
   track_add_head(track);
   dbg(1, "Track initialized\n");
@@ -174,7 +172,7 @@ mtk_locus_read()
 
   read_line();
   // initial serial buffer may contain garbage, so read until valid packet found
-  for (i=0; i<10; i++) {
+  for (int i = 0; i<10; i++) {
     process_packet();
     read_line();
     if (valid_packet_found) {
@@ -345,8 +343,6 @@ process_pmtklox()
   uint8_t calculated_checksum;
   int hexval;
   uint8_t fixbytes[16];
-  int i;
-  int wordnum;
   int bytenum;
   int fixnum;
   static Waypoint* trkpt;
@@ -400,12 +396,12 @@ process_pmtklox()
     fixnum++;
     bytenum = 0;
     calculated_checksum = 0;
-    for (wordnum=0; wordnum<4; wordnum++) {  // 4 8-byte hex strings per fix
+    for (int wordnum = 0; wordnum<4; wordnum++) {  // 4 8-byte hex strings per fix
       if (token == nullptr) {
         dbg(1, "Line %i: Fix %i incomplete data\n", packetnum, fixnum);
         return;
       }
-      for (i=0; i<4; i++) {
+      for (int i = 0; i<4; i++) {
         sscanf(&token[i * 2], "%2x", &hexval);
         fixbytes[bytenum++] = hexval;
         calculated_checksum ^= hexval;
@@ -590,11 +586,10 @@ send_command(const char* s, const char* wait_for)
 int
 calculate_checksum(const char* s, int length)
 {
-  int i;
   int sum;
   sum = 0;
 
-  for (i=0; i<length; i++) {
+  for (int i = 0; i<length; i++) {
     sum ^= *s++;
   }
   return sum;

@@ -620,7 +620,6 @@ static void tpo_process_tracks()
     int latscale;
     int lat = 0;
     int lon = 0;
-    unsigned int jj;
     route_head* track_temp;
     char rgb[7],bgr[7];
     int bbggrr = 0;
@@ -702,7 +701,7 @@ static void tpo_process_tracks()
 
     // Process the track bytes
     llvalid = 0;
-    for (jj = 0; jj < track_byte_count;) {
+    for (unsigned int jj = 0; jj < track_byte_count;) {
       Waypoint* waypoint_temp;
 
       // Time to read a new latlong?
@@ -809,7 +808,6 @@ static unsigned int tpo_index_ptr;
 static void tpo_process_waypoints()
 {
   unsigned int waypoint_count;
-  unsigned int ii;
 
 
 //printf("Processing Waypoints...\n");
@@ -834,7 +832,7 @@ static void tpo_process_waypoints()
   }
 
   // Read/process each waypoint in the file
-  for (ii = 0; ii < waypoint_count; ii++) {
+  for (unsigned int ii = 0; ii < waypoint_count; ii++) {
     Waypoint* waypoint_temp;
     Waypoint* waypoint_temp2;
     unsigned int name_length;
@@ -930,7 +928,6 @@ static void tpo_process_waypoints()
 static void tpo_process_map_notes()
 {
   unsigned int waypoint_count;
-  unsigned int ii;
 
 
 //printf("Processing Map Notes...\n");
@@ -950,13 +947,12 @@ static void tpo_process_map_notes()
   }
 
   // Process each waypoint
-  for (ii = 0; ii < waypoint_count; ii++) {
+  for (unsigned int ii = 0; ii < waypoint_count; ii++) {
     int lat;
     int lon;
     unsigned int name_length;
     Waypoint* waypoint_temp;
     unsigned int num_bytes;
-    unsigned int jj;
 
 
 //UNKNOWN DATA LENGTH
@@ -1023,7 +1019,7 @@ static void tpo_process_map_notes()
     // block.  May be 8/16/32 bits.
     num_bytes = tpo_read_int();
 //printf("num_bytes: %x\n", num_bytes);
-    for (jj = 0; jj < num_bytes; jj++) {
+    for (unsigned int jj = 0; jj < num_bytes; jj++) {
       (void) gbfgetc(tpo_file_in); // Skip bytes
     }
 
@@ -1047,7 +1043,6 @@ static void tpo_process_map_notes()
 static void tpo_process_symbols()
 {
   unsigned int waypoint_count;
-  unsigned int ii;
 
 
 //printf("Processing Symbols...\n");
@@ -1067,7 +1062,7 @@ static void tpo_process_symbols()
   }
 
   // Process each waypoint
-  for (ii = 0; ii < waypoint_count; ii++) {
+  for (unsigned int ii = 0; ii < waypoint_count; ii++) {
     int lat;
     int lon;
     Waypoint* waypoint_temp;
@@ -1102,7 +1097,6 @@ static void tpo_process_symbols()
 static void tpo_process_text_labels()
 {
   unsigned int waypoint_count;
-  unsigned int ii;
 
 
 //printf("Processing Text Labels...\n");
@@ -1122,8 +1116,7 @@ static void tpo_process_text_labels()
   }
 
   // Process each waypoint
-  for (ii = 0; ii < waypoint_count; ii++) {
-    int jj;
+  for (unsigned int ii = 0; ii < waypoint_count; ii++) {
     int lat;
     int lon;
     unsigned int name_length;
@@ -1145,7 +1138,7 @@ static void tpo_process_text_labels()
     // Assign a generic waypoint name
     waypoint_temp->shortname = QString("TXT %1").arg(ii + 1);
 
-    for (jj = 0; jj < 16; jj++) {
+    for (int jj = 0; jj < 16; jj++) {
 //UNKNOWN DATA LENGTH
       (void) gbfgetc(tpo_file_in);
     }
@@ -1177,7 +1170,6 @@ static void tpo_process_text_labels()
 static void tpo_process_routes()
 {
   unsigned int route_count;
-  unsigned int ii;
 
 
 //printf("Processing Routes...\n");
@@ -1198,9 +1190,8 @@ static void tpo_process_routes()
 
   // Read/process each route in the file
   //
-  for (ii = 0; ii < route_count; ii++) {
+  for (unsigned int ii = 0; ii < route_count; ii++) {
     unsigned int name_length = 0;
-    unsigned int jj;
     unsigned int waypoint_cnt;
     route_head* route_temp;
 
@@ -1245,7 +1236,7 @@ static void tpo_process_routes()
     // Run through the list of waypoints, look up each in our
     // index, then add the waypoint to this route.
     //
-    for (jj = 0; jj < waypoint_cnt; jj++) {
+    for (unsigned int jj = 0; jj < waypoint_cnt; jj++) {
       Waypoint* waypoint_temp;
       unsigned int val;
 
@@ -1376,10 +1367,8 @@ tpo_rd_init(const QString& fname)
 static void
 tpo_rd_deinit()
 {
-  unsigned int i;
-
   // Free the waypoint index, we don't need it anymore.
-  for (i = 0; i < tpo_index_ptr; i++) {
+  for (unsigned int i = 0; i < tpo_index_ptr; i++) {
     delete tpo_wp_index[i];
   }
   tpo_index_ptr = 0;

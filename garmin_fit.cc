@@ -110,9 +110,7 @@ fit_rd_init(const QString& fname)
 static void
 fit_rd_deinit()
 {
-  int local_id;
-
-  for (local_id=0; local_id<16; local_id++) {
+  for (int local_id = 0; local_id<16; local_id++) {
     fit_message_def* def = &fit_data.message_def[local_id];
     if (def->fields) {
       xfree(def->fields);
@@ -418,7 +416,6 @@ fit_parse_data(fit_message_def* def, int time_offset)
   uint8_t cadence = 0xff;
   uint16_t power = 0xffff;
   int8_t temperature = 0x7f;
-  int i;
   Waypoint* waypt;
   int32_t startlat = 0x7fffffff;
   int32_t startlon = 0x7fffffff;
@@ -431,7 +428,7 @@ fit_parse_data(fit_message_def* def, int time_offset)
   if (global_opts.debug_level >= 7) {
     debug_print(7,"%s: parsing fit data ID %d with num_fields=%d\n", MYNAME, def->global_id, def->num_fields);
   }
-  for (i = 0; i < def->num_fields; i++) {
+  for (int i = 0; i < def->num_fields; i++) {
     if (global_opts.debug_level >= 7) {
       debug_print(7,"%s: parsing field %d\n", MYNAME, i);
     }

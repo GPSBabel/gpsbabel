@@ -45,8 +45,7 @@ void
 debug_print(int level, const char* fmt, ...)
 {
   va_list ap;
-  int i;
-  for (i=1; i<level; i++) {
+  for (int i = 1; i<level; i++) {
     fprintf(stderr, ".");
   }
   va_start(ap, fmt);

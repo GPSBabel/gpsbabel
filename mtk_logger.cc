@@ -934,7 +934,6 @@ static int add_trackpoint(int idx, unsigned long bmask, struct data_item* itm)
 static gbfile* cd;
 static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
 {
-  int i;
   FILE* cf;
 
   dbg(1, "Opening csv output file %s...\n", csv_fname);
@@ -953,7 +952,7 @@ static void mtk_csv_init(char* csv_fname, unsigned long bitmask)
   /* Add the header line */
   gbfprintf(cd, "INDEX,%s%s", ((1<<RCR) & bitmask)?"RCR,":"",
             ((1<<UTC) & bitmask)?"DATE,TIME,":"");
-  for (i=0; i<32; i++) {
+  for (int i = 0; i<32; i++) {
     if ((1<<i) & bitmask) {
       switch (i) {
       case RCR:
@@ -1125,15 +1124,14 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
 static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
 {
   static int count = 0;
-  int i, k, sat_id, hspd;
+  int i, sat_id, hspd;
   unsigned char crc, hbuf[4];
   struct data_item itm;
 
   dbg(5,"Entering mtk_parse, count = %i, dataLen = %i\n", count, dataLen);
   if (global_opts.debug_level > 5) {
-    int j;
     fprintf(stderr,"# Data block:");
-    for (j=0; j<dataLen; j++) {
+    for (int j = 0; j<dataLen; j++) {
       fprintf(stderr,"%.2x ", data[j]);
     }
     fprintf(stderr,"\n");
@@ -1143,7 +1141,7 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
   memset(&itm, 0, sizeof(itm));
   i = 0;
   crc = 0;
-  for (k=0; k<32; k++) {
+  for (int k = 0; k<32; k++) {
     switch (((1<<k) & bmask)) {
     case 1<<UTC:
       itm.timestamp = le_read32(data + i);
@@ -1297,8 +1295,7 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
 
     /* update item checksum and length */
     if (((1<<k) & bmask)) {
-      int j;
-      for (j=0; j<log_type[k].size; j++) {
+      for (int j = 0; j<log_type[k].size; j++) {
         crc ^= data[i+j];
       }
       i += log_type[k].size;
@@ -1432,7 +1429,7 @@ static int mtk_parse_info(const unsigned char* data, int dataLen)
 
 static int mtk_log_len(unsigned int bitmask)
 {
-  int i, len;
+  int len;
 
   /* calculate the length of a binary log item. */
   switch (mtk_device) {
@@ -1445,7 +1442,7 @@ static int mtk_log_len(unsigned int bitmask)
     len = 2; // add '*' + crc
     break;
   }
-  for (i=0; i<32; i++) {
+  for (int i = 0; i<32; i++) {
     if ((1<<i) & bitmask) {
       if (i > DISTANCE && global_opts.debug_level > 0) {
         warning(MYNAME ": Unknown size/meaning of bit %d\n", i);

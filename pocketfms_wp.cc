@@ -106,10 +106,10 @@ enigma_waypt_disp(const Waypoint* wpt)
 {
   if (!wpt->shortname.isEmpty()) {
     // The output might have a space or control character.
-    int i, l = wpt->shortname.length();
+    int l = wpt->shortname.length();
     char *t = (char*) xmalloc(l + 1);
     char* d = t;
-    for (i = 0; i < l; i++) {
+    for (int i = 0; i < l; i++) {
       char s = wpt->shortname[i].cell();
       if (isgraph(s)) {
         *d++ = s;

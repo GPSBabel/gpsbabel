@@ -345,10 +345,9 @@ humminbird_read_route(gbfile* fin)
   hrte.num = be_read16(&hrte.num);
 
   if (hrte.count > 0) {
-    int i;
     route_head* rte = nullptr;
 
-    for (i = 0; i < hrte.count; i++) {
+    for (int i = 0; i < hrte.count; i++) {
       char buff[10];
       hrte.points[i] = be_read16(&hrte.points[i]);
 
@@ -379,7 +378,6 @@ humminbird_read_track(gbfile* fin)
   humminbird_trk_point_t* points;
   route_head* trk;
   Waypoint* first_wpt;
-  int i;
   int max_points = 0;
   int32_t accum_east;
   int32_t accum_north;
@@ -443,7 +441,7 @@ humminbird_read_track(gbfile* fin)
   /* No depth info in the header. */
   track_add_wpt(trk, first_wpt);
 
-  for (i=0 ; i<th.num_points-1 ; i++) {
+  for (int i = 0 ; i<th.num_points-1 ; i++) {
     Waypoint* wpt = new Waypoint;
     int16_t next_deltaeast, next_deltanorth;
     double guder;
@@ -500,7 +498,6 @@ humminbird_read_track_old(gbfile* fin)
   humminbird_trk_point_old_t* points;
   route_head* trk;
   Waypoint* first_wpt;
-  int i;
   int max_points = 0;
   int32_t accum_east;
   int32_t accum_north;
@@ -562,7 +559,7 @@ humminbird_read_track_old(gbfile* fin)
   first_wpt->altitude  = 0.0;
   track_add_wpt(trk, first_wpt);
 
-  for (i=0 ; i<th.num_points-1 ; i++) {
+  for (int i = 0 ; i<th.num_points-1 ; i++) {
     Waypoint* wpt = new Waypoint;
 //		int16_t next_deltaeast, next_deltanorth;
     double guder;
@@ -900,11 +897,9 @@ humminbird_rte_tail(const route_head* rte)
   }
 
   if (humrte->count > 0) {
-    int i;
-
     humrte->num = rte_num++;
     humrte->time = gpsbabel_time;
-    for (i = 0; i < humrte->count; i++) {
+    for (int i = 0; i < humrte->count; i++) {
       be_write16(&humrte->points[i], humrte->points[i]);
     }
 

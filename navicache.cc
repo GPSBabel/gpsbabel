@@ -64,10 +64,9 @@ static
 geocache_type
 nc_mktype(const QString& t)
 {
-  int i;
   int sz = sizeof(nc_type_map) / sizeof(nc_type_map[0]);
 
-  for (i = 0; i < sz; i++) {
+  for (int i = 0; i < sz; i++) {
     if (0 == t.compare(nc_type_map[i].name, Qt::CaseInsensitive)) {
       return nc_type_map[i].type;
     }
@@ -79,10 +78,9 @@ static
 geocache_container
 nc_mkcont(const QString& t)
 {
-  int i;
   int sz = sizeof(nc_container_map) / sizeof(nc_container_map[0]);
 
-  for (i = 0; i < sz; i++) {
+  for (int i = 0; i < sz; i++) {
     if (0 == t.compare(nc_container_map[i].name, Qt::CaseInsensitive)) {
       return nc_container_map[i].type;
     }

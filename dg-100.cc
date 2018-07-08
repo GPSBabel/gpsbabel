@@ -111,10 +111,8 @@ struct dynarray16 {
 /* helper functions */
 static struct dg100_command*
 dg100_findcmd(int id) {
-  unsigned int i;
-
   /* linear search should be OK as long as dg100_numcommands is small */
-  for (i = 0; i < model->numcommands; i++) {
+  for (unsigned int i = 0; i < model->numcommands; i++) {
     if (model->commands[i].id == id) {
       return(&model->commands[i]);
     }
@@ -175,8 +173,6 @@ bintime2utc(int date, int time)
 static void
 dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf)
 {
-  unsigned int i;
-
   /* Only give byte dumps for higher debug levels */
   if (global_opts.debug_level < 5) {
     return;
@@ -184,7 +180,7 @@ dg100_debug(const char* hdr, int include_nl, size_t sz, unsigned char* buf)
 
   fprintf(stderr, "%s", hdr);
 
-  for (i = 0; i < sz; i++)  {
+  for (unsigned int i = 0; i < sz; i++)  {
     fprintf(stderr, "%02x ", buf[i]);
   }
 
@@ -314,9 +310,8 @@ static uint16_t
 dg100_checksum(uint8_t buf[], int count)
 {
   uint16_t sum = 0;
-  int i;
 
-  for (i = 0; i < count; i++) {
+  for (int i = 0; i < count; i++) {
     sum += buf[i];
   }
   sum &= (1<<15) - 1;

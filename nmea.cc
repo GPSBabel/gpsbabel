@@ -225,9 +225,8 @@ int
 nmea_cksum(const char* const buf)
 {
   int x = 0 ;
-  const char* p;
 
-  for (p = buf; *p; p++) {
+  for (const char* p = buf; *p; p++) {
     x ^= *p;
   }
   return x;
@@ -883,7 +882,6 @@ nmea_fix_timestamps(route_head* track)
     }
   } else {
     time_t prev;
-    queue* elem;
 
     tm.tm_hour = 23; /* last date found */
     tm.tm_min = 59;
@@ -893,7 +891,7 @@ nmea_fix_timestamps(route_head* track)
 
     /* go backward through the track and complete timestamps */
 
-    for (elem = QUEUE_LAST(&track->waypoint_list); elem != &track->waypoint_list; elem=elem->prev) {
+    for (queue* elem = QUEUE_LAST(&track->waypoint_list); elem != &track->waypoint_list; elem=elem->prev) {
       Waypoint* wpt = (Waypoint*)elem;
 
       if (wpt->wpt_flags.fmt_use != 0) {
@@ -1119,8 +1117,7 @@ nmea_rd_posn_init(const QString& fname)
 static void
 safe_print(int cnt, const char* b)
 {
-  int i;
-  for (i = 0; i < cnt; i++) {
+  for (int i = 0; i < cnt; i++) {
     char c = isprint(b[i]) ? b[i] : '.';
     fputc(c, stderr);
   }
@@ -1175,7 +1172,6 @@ nmea_rd_posn(posn_status*)
 {
   char ibuf[1024];
   static double lt = -1;
-  int i;
   int am_sirf = 0;
 
   /*
@@ -1185,7 +1181,7 @@ nmea_rd_posn(posn_status*)
    * to get any better than we now have) hand that back to the caller.
    */
 
-  for (i = 0; i < 10; i++) {
+  for (int i = 0; i < 10; i++) {
     int rv;
     ibuf[0] = 0;
     rv = gbser_read_line(gbser_handle, ibuf, sizeof(ibuf), 2000, 0x0a, 0x0d);
@@ -1437,10 +1433,10 @@ ff_vecs_t nmea_vecs = {
 static void
 sirf_write(unsigned char* buf)
 {
-  int i, chksum = 0;
+  int chksum = 0;
   int len = buf[2] << 8 | buf[3];
 
-  for (i = 0; i < len; i++) {
+  for (int i = 0; i < len; i++) {
     chksum += buf[4 + i];
   }
   chksum &= 0x7fff;

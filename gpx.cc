@@ -440,8 +440,7 @@ get_tag(const QString& t, int* passthrough)
 static void
 prescan_tags()
 {
-  tag_mapping* tm;
-  for (tm = tag_path_map; tm->tag_type_ != 0; tm++) {
+  for (tag_mapping* tm = tag_path_map; tm->tag_type_ != 0; tm++) {
     hash[tm->tag_name] = tm;
   }
 }
@@ -752,10 +751,9 @@ struct
 geocache_type
 gs_mktype(const QString& t)
 {
-  int i;
   int sz = sizeof(gs_type_map) / sizeof(gs_type_map[0]);
 
-  for (i = 0; i < sz; i++) {
+  for (int i = 0; i < sz; i++) {
     if (!t.compare(gs_type_map[i].name,Qt::CaseInsensitive)) {
       return gs_type_map[i].type;
     }
@@ -766,10 +764,9 @@ gs_mktype(const QString& t)
 const char*
 gs_get_cachetype(geocache_type t)
 {
-  int i;
   int sz = sizeof(gs_type_map) / sizeof(gs_type_map[0]);
 
-  for (i = 0; i < sz; i++) {
+  for (int i = 0; i < sz; i++) {
     if (t == gs_type_map[i].type) {
       return gs_type_map[i].name;
     }
@@ -780,10 +777,9 @@ gs_get_cachetype(geocache_type t)
 geocache_container
 gs_mkcont(const QString& t)
 {
-  int i;
   int sz = sizeof(gs_container_map) / sizeof(gs_container_map[0]);
 
-  for (i = 0; i < sz; i++) {
+  for (int i = 0; i < sz; i++) {
     if (!t.compare(gs_container_map[i].name,Qt::CaseInsensitive)) {
       return gs_container_map[i].type;
     }
@@ -794,10 +790,9 @@ gs_mkcont(const QString& t)
 const char*
 gs_get_container(geocache_container t)
 {
-  int i;
   int sz = sizeof(gs_container_map) / sizeof(gs_container_map[0]);
 
-  for (i = 0; i < sz; i++) {
+  for (int i = 0; i < sz; i++) {
     if (t == gs_container_map[i].type) {
       return gs_container_map[i].name;
     }

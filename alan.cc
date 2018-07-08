@@ -343,8 +343,6 @@ static void swap_trkhdr(struct trkhdr* trkhdr,
 static void swap_loghdr(struct loghdr* loghdr,
                         void (*swap16_func)(void*), void (*swap32_func)(void*))
 {
-  int i;
-
   if (swap16_func != nullptr) {
     swap16_func(&(loghdr->num));
     swap16_func(&(loghdr->next));
@@ -354,7 +352,7 @@ static void swap_loghdr(struct loghdr* loghdr,
     swap32_func(&(loghdr->date));
     swap32_func(&(loghdr->time));
   }
-  for (i=0; i<MAXTRK; i++) {
+  for (int i = 0; i<MAXTRK; i++) {
     swap_trkhdr(&(loghdr->trkhdr[i]), swap16_func, swap32_func);
   }
 }
@@ -382,7 +380,6 @@ static void trl_swap(struct trldata* trldata)
 {
   void (*swap16_func)(void*);
   void (*swap32_func)(void*);
-  int i;
 
   switch (byte_order()) {
   case SWAP_NONE:		   /* same byte oder, LITTLE_ENDIAN */
@@ -405,7 +402,7 @@ static void trl_swap(struct trldata* trldata)
   }
 
   swap_loghdr(&(trldata->loghdr), swap16_func, swap32_func);
-  for (i=0; i<MAXTRK; i++) {
+  for (int i = 0; i<MAXTRK; i++) {
     swap_trklog(&(trldata->trklog[i]), swap16_func, swap32_func);
   }
 }
@@ -654,14 +651,14 @@ static void trl_read()
 static int find_wpt(struct wprdata* wprdata, const Waypoint* WP)
 {
   struct wpt pattern, *wpt;
-  int i, wpt_idx;
+  int wpt_idx;
 
   str2lab(pattern.name, WP->shortname, WPT_NAME_LEN, nullptr, 0);
   pattern.pt.x = deg2pt(WP->longitude);
   pattern.pt.y = deg2pt(-WP->latitude);
 
   wpt = wprdata->wpt;
-  for (i=0; i<MAXWPT; i++) {
+  for (int i = 0; i<MAXWPT; i++) {
     wpt_idx = wprdata->wpthdr.idx[i];
     if (wpt_idx == WPT_IDX_NONE ||
         wprdata->wpthdr.used[wpt_idx] == WPT_UNUSED) {

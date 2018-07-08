@@ -406,7 +406,6 @@ exif_read_ifd(exif_app_t* app, const uint16_t ifd_nr, gbsize_t offs,
               uint32_t* exif_ifd_ofs, uint32_t* gps_ifd_ofs, uint32_t* inter_ifd_ofs)
 {
   queue* elem, *tmp;
-  uint16_t i;
   exif_ifd_t* ifd;
   gbfile* fin = app->fexif;
 
@@ -449,7 +448,7 @@ exif_read_ifd(exif_app_t* app, const uint16_t ifd_nr, gbsize_t offs,
     return ifd;
   }
 
-  for (i = 0; i < ifd->count; i++) {
+  for (uint16_t i = 0; i < ifd->count; i++) {
     exif_tag_t* tag;
 
     tag = (exif_tag_t*) xcalloc(sizeof(*tag), 1);

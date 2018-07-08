@@ -244,10 +244,9 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
       writer->writeTextElement(QStringLiteral("gpxx:DisplayMode"), cx);
     }
     if (gmsd->flags.category && gmsd->category) {
-      int i;
       uint16_t cx = gmsd->category;
       writer->writeStartElement(QStringLiteral("gpxx:Categories"));
-      for (i = 0; i < 16; i++) {
+      for (int i = 0; i < 16; i++) {
         if (cx & 1) {
           writer->writeTextElement(QStringLiteral("gpxx:Category"), QStringLiteral("Category %1").arg(i+1));
         }

@@ -245,7 +245,6 @@ cet_find_cs_by_name(const QString& name)
 void
 cet_deregister()
 {
-  int i;
   int j = cet_cs_alias_ct;
   cet_cs_alias_t* p = cet_cs_alias;
 
@@ -256,7 +255,7 @@ cet_deregister()
   cet_cs_alias_ct = 0;
   cet_cs_alias = nullptr;
 
-  for (i = 0; i < j; i++) {
+  for (int i = 0; i < j; i++) {
     xfree(p[i].name);
   }
   xfree(p);

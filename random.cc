@@ -59,14 +59,14 @@ static char*
 rand_str(const int maxlen, const char* fmt)
 {
   char* res;
-  int i, len;
+  int len;
 
   len = rand_int(maxlen) + 1;
 
   res = (char*) xmalloc(len + 1);
   res[len] = '\0';
 
-  for (i = 0; i < len; i++) {
+  for (int i = 0; i < len; i++) {
     int c = rand_int(26 + 26 + 10);
     if (c < 26) {
       c += 'a';
@@ -111,7 +111,7 @@ random_read()
 {
 #define RND(a) (rand_int(a) > 0)
 
-  int i, points;
+  int points;
   route_head* head;
   Waypoint* prev = nullptr;
   time_t time = gpsbabel_time;
@@ -141,7 +141,7 @@ random_read()
     head = nullptr;
   }
 
-  for (i = 0; i < points; i++) {
+  for (int i = 0; i < points; i++) {
 
     Waypoint* wpt;
     garmin_fs_t* gmsd;

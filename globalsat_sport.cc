@@ -325,7 +325,6 @@ globalsat_read_package(int* out_length, uint8_t* out_DeviceCommand)
   uint8_t DeviceCommand, len_h, len_l, crc;
   uint8_t* payload;
   int length;
-  int i;
   uint8_t calc_crc = 0;
 
   DeviceCommand = recv_byte();
@@ -347,7 +346,7 @@ globalsat_read_package(int* out_length, uint8_t* out_DeviceCommand)
     goto error_out;
   }
 
-  for (i = 0; i < length; i++) {
+  for (int i = 0; i < length; i++) {
     payload[i] = recv_byte();
     calc_crc ^= payload[i];
   }
@@ -676,8 +675,7 @@ track_read()
           int laps_in_package = header.gh_laprec.LapIndex - header.gh_ptrec.Index + 1;
 //					printf("Lap Data:\n");
           uint8_t* lap_start_pos = track_payload + 29;	//29=packed sizeof(gh_trainheader)
-          int lap;
-          for (lap = 0; lap < laps_in_package; lap++) {
+          for (int lap = 0; lap < laps_in_package; lap++) {
             uint8_t* dblap = (lap_start_pos) + lap * 41;	//  packed sizeof(gh_db_lap)=41
             gh_db_lap db_lap;
 
@@ -754,8 +752,7 @@ track_read()
             int recpoints_in_package = header.gh_laprec.EndPt - header.gh_ptrec.StartPt + 1;
             //	  printf("Recpoints Data:\n");
             uint8_t* recpoints_start_pos = track_payload + 29;	//29=packed sizeof(gh_trainheader)
-            int recpoint;
-            for (recpoint = 0; recpoint < recpoints_in_package; recpoint++) {
+            for (int recpoint = 0; recpoint < recpoints_in_package; recpoint++) {
               uint8_t* ghpoint = (recpoints_start_pos + recpoint * 25);	//  packed sizeof(gh_recpoint)=25
               gh_recpoint point;
               point.Latitude = be_read32(ghpoint);

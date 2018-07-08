@@ -234,7 +234,6 @@ lowranceusr_readstr(char* buf, const int maxlen, gbfile* file)
   if (len < 0) {
     fatal(MYNAME ": Invalid item length (%d)!\n", len);
   } else if (len) {
-    int i;
     if (len > maxlen) {
       len = maxlen;
     }
@@ -244,7 +243,7 @@ lowranceusr_readstr(char* buf, const int maxlen, gbfile* file)
     }
     // IWay 350C puts 0x01 for the accented o in the street name
     // of the Montreal Holiday Inn.
-    for (i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++) {
       if (buf[i] == 0x01) {
         buf[i] = '*';
       }
@@ -258,9 +257,7 @@ lowranceusr_readstr(char* buf, const int maxlen, gbfile* file)
 const QString
 lowranceusr_find_desc_from_icon_number(const int icon)
 {
-  const lowranceusr_icon_mapping_t* i;
-
-  for (i = lowranceusr_icon_value_table; i->icon; i++) {
+  for (const lowranceusr_icon_mapping_t* i = lowranceusr_icon_value_table; i->icon; i++) {
     if (icon == i->value) {
       return i->icon;
     }
@@ -272,7 +269,6 @@ lowranceusr_find_desc_from_icon_number(const int icon)
 static int
 lowranceusr_find_icon_number_from_desc(const QString& desc)
 {
-  const lowranceusr_icon_mapping_t* i;
   int n;
 
   if (desc.isNull()) {
@@ -289,7 +285,7 @@ lowranceusr_find_icon_number_from_desc(const QString& desc)
   }
 
 
-  for (i = lowranceusr_icon_value_table; i->icon; i++) {
+  for (const lowranceusr_icon_mapping_t* i = lowranceusr_icon_value_table; i->icon; i++) {
     if (desc.compare(i->icon,Qt::CaseInsensitive) == 0) {
       return i->value;
     }
@@ -494,7 +490,6 @@ lowranceusr_parse_icons()
 {
   char buff[MAXUSRSTRINGSIZE + 1];
   short int num_icons;
-  int i;
 
   num_icons = gbfgetint16(file_in);
 
@@ -502,7 +497,7 @@ lowranceusr_parse_icons()
     printf(MYNAME " parse_icons: num Icons = %d\n", num_icons);
   }
 
-  for (i=0; i < num_icons && !gbfeof(file_in); i++) {
+  for (int i = 0; i < num_icons && !gbfeof(file_in); i++) {
     if (ignoreicons) {
       /* position coord lat & long */
       (void) gbfread(&buff[0], 4, 2, file_in);

@@ -157,8 +157,8 @@ static void buf_init(struct buf_head* h, size_t alloc)
 
 static void buf_empty(struct buf_head* h)
 {
-  struct buf_chunk* chunk, *next;
-  for (chunk = h->head; chunk; chunk = next) {
+  struct buf_chunk* next;
+  for (struct buf_chunk* chunk = h->head; chunk; chunk = next) {
     next = chunk->next;
     xfree(chunk);
   }
@@ -226,11 +226,10 @@ static void buf_extend(struct buf_head* h, size_t amt)
 static void buf_update_checksum(struct buf_head* h, const void* data, size_t len)
 {
   unsigned char* cp = (unsigned char*) data;
-  unsigned i;
 
   db(4, "Updating checksum with %p, %lu, before: %02x ",
      data, (unsigned long) len, h->checksum);
-  for (i = 0; i < len; i++) {
+  for (unsigned i = 0; i < len; i++) {
     h->checksum ^= cp[i];
   }
   db(4, "after: %02x\n", h->checksum);
@@ -373,9 +372,8 @@ static int wsg1000_try()
 
 static wintec_gps_types guess_device()
 {
-  int i;
   db(1, "Guessing device...\n");
-  for (i = 0; i < 5; i++) {
+  for (int i = 0; i < 5; i++) {
     if (wbt200_try()) {
       return WBT200;
     }
@@ -452,8 +450,6 @@ static int starts_with(const char* buf, const char* pat)
  */
 static int do_cmd(const char* cmd, const char* expect, char* buf, int len)
 {
-  int trycount;
-
   rd_drain();
   wr_cmdl(cmd);
 
@@ -463,7 +459,7 @@ static int do_cmd(const char* cmd, const char* expect, char* buf, int len)
    * NMEA data all the time so it's highly likely that it'll be in the
    * middle of an NMEA sentence when we start listening.
    */
-  for (trycount = 0; trycount < RETRIES; trycount++) {
+  for (int trycount = 0; trycount < RETRIES; trycount++) {
     rd_line(buf, len);
     db(3, "Got: %s\n", buf);
     if (starts_with(buf, expect)) {
@@ -790,9 +786,8 @@ static void wbt200_data_read()
 static int all_null(const void* buf, const int len)
 {
   const char* bp = (const char*) buf;
-  int i;
 
-  for (i = 0; i < len; i++) {
+  for (int i = 0; i < len; i++) {
     if (bp[i]) {
       return 0;
     }

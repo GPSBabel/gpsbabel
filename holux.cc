@@ -79,7 +79,6 @@ static void data_read()
 {
   char name[9], desc[90];
   unsigned char* HxWpt;
-  int iCount;
   int iDataRead;
   int iWptNum;
   WPT* pWptHxTmp;
@@ -100,7 +99,7 @@ static void data_read()
   iWptNum = le_read16(&((WPTHDR*)HxWpt)->num);
 
   /* Get the waypoints */
-  for (iCount = 0; iCount < iWptNum ; iCount ++) {
+  for (int iCount = 0; iCount < iWptNum ; iCount ++) {
     Waypoint* wpt_tmp = new Waypoint;
 
     int iWptIndex = le_read16(&((WPTHDR*)HxWpt)->idx[iCount]);

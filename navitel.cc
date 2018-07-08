@@ -48,13 +48,13 @@ navitel_rd_deinit()
 static void
 navitel_read_track()
 {
-  int points, i;
+  int points;
   route_head* trk = nullptr;
 
   points = gbfgetint32(fin);
   (void) gbfgetint32(fin); /* unknown */
 
-  for (i = 0; i < points; i++) {
+  for (int i = 0; i < points; i++) {
     int lat, lon;
     Waypoint* wpt;
 
