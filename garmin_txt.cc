@@ -75,17 +75,27 @@ typedef enum {
   unknown_header
 } header_type;
 
-#if __cplusplus
-inline header_type operator++(header_type& rs, int)
+inline header_type& operator++(header_type& s) // prefix
 {
-  return rs = (header_type)((int)rs + 1);
+  return s = static_cast<header_type>(s + 1);
+}
+inline const header_type operator++(header_type& s, int) // postfix
+{
+  header_type ret(s);
+  s = ++s;
+  return ret;
 }
 
-inline gt_display_modes_e  operator++(gt_display_modes_e& rs, int)
+inline gt_display_modes_e& operator++(gt_display_modes_e& s) // prefix
 {
-  return rs = (gt_display_modes_e)((int)rs + 1);
+  return s = static_cast<gt_display_modes_e>(s + 1);
 }
-#endif
+inline const gt_display_modes_e operator++(gt_display_modes_e& s, int) // postfix
+{
+  gt_display_modes_e ret(s);
+  s = ++s;
+  return ret;
+}
 
 #define MAX_HEADER_FIELDS 36
 
@@ -1002,7 +1012,7 @@ parse_display(const char* str, int* val)
     return 0;
   }
 
-  for (gt_display_modes_e i = GT_DISPLAY_MODE_MIN; i <= GT_DISPLAY_MODE_MAX; i++) {
+  for (gt_display_modes_e i = GT_DISPLAY_MODE_MIN; i <= GT_DISPLAY_MODE_MAX; ++i) {
     if (case_ignore_strcmp(str, gt_display_mode_names[i]) == 0) {
       *val = i;
       return 1;
@@ -1348,7 +1358,7 @@ garmin_txt_rd_init(const QString& fname)
 static void
 garmin_txt_rd_deinit()
 {
-  for (header_type h = waypt_header; h <= unknown_header; h++) {
+  for (header_type h = waypt_header; h <= unknown_header; ++h) {
     free_header(h);
   }
   gbfclose(fin);
