@@ -1535,10 +1535,9 @@ disp_vecs()
 {
   vecs_t** svp;
   int vc;
-  int i = 0;
 
   svp = sort_and_unify_vecs(&vc);
-  for (i=0; i<vc; i++) {
+  for (int i = 0; i<vc; i++) {
     if (svp[i]->vec->type == ff_type_internal)  {
       continue;
     }
@@ -1562,10 +1561,9 @@ disp_vec(const char* vecname)
 {
   vecs_t** svp;
   int vc;
-  int i = 0;
 
   svp = sort_and_unify_vecs(&vc);
-  for (i=0; i<vc; i++) {
+  for (int i = 0; i<vc; i++) {
     if (case_ignore_strcmp(svp[i]->name, vecname))  {
       continue;
     }

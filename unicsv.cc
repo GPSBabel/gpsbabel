@@ -517,7 +517,6 @@ unicsv_fondle_header(QString s)
 {
   // TODO: clean up this back and forth between QString and char*.
   char* buf = nullptr;
-  char* cbuf_start = nullptr;
   const cet_cs_vec_t* ascii = &cet_cs_vec_ansi_x3_4_1968;	/* us-ascii */
 
   /* Convert the entire header to lower case for convenience.
@@ -531,7 +530,7 @@ unicsv_fondle_header(QString s)
   } else if (s.contains('|')) {
     unicsv_fieldsep = "|";
   }
-  cbuf_start = xstrdup(s.toLower());
+  char* cbuf_start = xstrdup(s.toLower());
   const char* cbuf = cbuf_start;
 
   /* convert the header line into native ascii */
@@ -628,7 +627,6 @@ unicsv_rd_deinit()
 static void
 unicsv_parse_one_line(char* ibuf)
 {
-  Waypoint* wpt = nullptr;
   int column;
   int  utm_zone = -9999;
   double utm_easting = 0;
@@ -652,7 +650,7 @@ unicsv_parse_one_line(char* ibuf)
   int ns = 1;
   int ew = 1;
   geocache_data* gc_data = nullptr;
-  wpt = new Waypoint;
+  Waypoint* wpt = new Waypoint;
   wpt->latitude = unicsv_unknown;
   wpt->longitude = unicsv_unknown;
   memset(&ymd, 0, sizeof(ymd));

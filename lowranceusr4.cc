@@ -115,9 +115,7 @@ lowranceusr4_readstr(char* buf, const int maxlen, gbfile* file, int bytes_per_ch
 static void
 lowranceusr4_writestr(const QString& buf, gbfile* file, unsigned int bytes_per_char)
 {
-  unsigned int len = 0;
-
-  len = buf.length();
+  unsigned int len = buf.length();
 
   if (0xffffffff / bytes_per_char < len) {
     /* be pedantic and check for the unlikely event that we are asked

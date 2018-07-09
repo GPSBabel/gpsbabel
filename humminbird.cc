@@ -378,7 +378,6 @@ humminbird_read_track(gbfile* fin)
   humminbird_trk_point_t* points;
   route_head* trk;
   Waypoint* first_wpt;
-  int max_points = 0;
   int32_t accum_east;
   int32_t accum_north;
   double g_lat;
@@ -401,7 +400,7 @@ humminbird_read_track(gbfile* fin)
   th.ne_east     = be_read32(&th.ne_east);
   th.ne_north    = be_read32(&th.ne_north);
 
-  max_points = (131080 - sizeof(uint32_t) - sizeof(th)) / sizeof(humminbird_trk_point_t);
+  int max_points = (131080 - sizeof(uint32_t) - sizeof(th)) / sizeof(humminbird_trk_point_t);
 
   if (th.num_points == max_points + 1) {
     th.num_points--;
@@ -498,7 +497,6 @@ humminbird_read_track_old(gbfile* fin)
   humminbird_trk_point_old_t* points;
   route_head* trk;
   Waypoint* first_wpt;
-  int max_points = 0;
   int32_t accum_east;
   int32_t accum_north;
   double g_lat;
@@ -521,7 +519,7 @@ humminbird_read_track_old(gbfile* fin)
 
   // These files are always 8048 bytes long. Note that that's the value
   // of the second 16-bit word in the signature.
-  max_points = (file_len - (sizeof(th) + sizeof(uint32_t) + TRK_NAME_LEN)) / sizeof(humminbird_trk_point_old_t);
+  int max_points = (file_len - (sizeof(th) + sizeof(uint32_t) + TRK_NAME_LEN)) / sizeof(humminbird_trk_point_old_t);
 
   if (th.num_points > max_points) {
     fatal(MYNAME ": Too many track points! (%d)\n", th.num_points);

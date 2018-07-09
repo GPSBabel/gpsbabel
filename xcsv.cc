@@ -112,7 +112,6 @@ xcsv_destroy_style(void)
 {
   queue* elem, *tmp;
   field_map_t* fmp;
-  int internal = 0;
 
   /*
    * If this xcsv_file struct came from a file we can free it all.
@@ -184,7 +183,7 @@ xcsv_destroy_style(void)
   }
 
   /* return everything to zeros */
-  internal = xcsv_file.is_internal;
+  int internal = xcsv_file.is_internal;
   xcsv_file.is_internal = internal;
 }
 

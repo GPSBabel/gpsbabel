@@ -486,7 +486,7 @@ skytraq_configure_logging()
 {
   // an0008-1.4.14: logs if
   // (dt > tmin & dd >= dmin & v >= vmin) | dt > tmax | dd > dmax | v > vmax
-  unsigned int tmin=6, tmax=3600, dmin=0, dmax=10000, nn=0;
+  unsigned int tmin=6, tmax=3600, dmin=0, dmax=10000;
   static uint8_t MSG_LOG_CONFIGURE_CONTROL[] = {
     0x18,			// message_id
     0x00, 0x00, 0x0e, 0x10,	// max_time: was 0x0000ffff (big endian!)
@@ -501,7 +501,7 @@ skytraq_configure_logging()
 
   if (opt_configure_logging) {
     if (*opt_configure_logging) {
-      nn = sscanf(opt_configure_logging, "%u:%u:%u:%u", &tmin, &tmax, &dmin, &dmax);
+      unsigned int nn = sscanf(opt_configure_logging, "%u:%u:%u:%u", &tmin, &tmax, &dmin, &dmax);
       if (nn>3) {
         db(0, "Reconfiguring logging to: tmin=%u, tmax=%u, dmin=%u, dmax=%u\n", tmin, tmax, dmin, dmax);
         be_write32(MSG_LOG_CONFIGURE_CONTROL+5, tmin);
@@ -1060,7 +1060,6 @@ skytraq_read_tracks()
   int opt_first_sector_val = atoi(opt_first_sector);
   int opt_last_sector_val = atoi(opt_last_sector);
   int multi_read_supported = 1;
-  uint8_t* buffer = nullptr;
   gbfile* dumpfile = nullptr;
 
   state_init(&st);
@@ -1100,7 +1099,7 @@ skytraq_read_tracks()
     }
   }
 
-  buffer = (uint8_t*) xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6);
+  uint8_t* buffer = (uint8_t*) xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6);
   // m.ad/090930: removed code that tried reducing read_at_once if necessary since doesn't work with xmalloc
 
   if (opt_dump_file) {

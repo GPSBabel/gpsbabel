@@ -177,13 +177,12 @@ static void
 finalize_tracks(void)
 {
   Waypoint** list;
-  int count = 0;
   queue* elem, *tmp;
   int index;
   route_head* track = nullptr;
   int trackno = 0;
 
-  count = 0;
+  int count = 0;
   QUEUE_FOR_EACH(&trackpts, elem, tmp) {
     count++;
   };

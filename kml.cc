@@ -356,13 +356,12 @@ void wpt_ts_end(xg_string args, const QXmlStreamAttributes*)
 
 void wpt_coord(const QString& args, const QXmlStreamAttributes*)
 {
-  int n = 0;
   double lat, lon, alt;
   if (! wpt_tmp) {
     return;
   }
   // Alt is actually optional.
-  n = sscanf(CSTRc(args), "%lf,%lf,%lf", &lon, &lat, &alt);
+  int n = sscanf(CSTRc(args), "%lf,%lf,%lf", &lon, &lat, &alt);
   if (n >= 2) {
     wpt_tmp->latitude = lat;
     wpt_tmp->longitude = lon;
@@ -1417,20 +1416,17 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
   QString r;
 
   fs_xml* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
-  xml_tag* root = nullptr;
-  xml_tag* curlog = nullptr;
-  xml_tag* logpart = nullptr;
 
   if (!fs_gpx) {
     return r;
   }
 
-  root = fs_gpx->tag;
-  curlog = xml_findfirst(root, "groundspeak:log");
+  xml_tag* root = fs_gpx->tag;
+  xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
   while (curlog) {
     // Unless we have a broken GPX input, these logparts
     // branches will always be taken.
-    logpart = xml_findfirst(curlog, "groundspeak:type");
+    xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
     if (logpart) {
       r = r + "<p><b>" + logpart->cdata + "</b>";
     }
@@ -1450,9 +1446,8 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
 
     logpart = xml_findfirst(curlog, "groundspeak:text");
     if (logpart) {
-      int encoded = 0;
       char* encstr = xml_attribute(logpart, "encoded");
-      encoded = (toupper(encstr[0]) != 'F');
+      int encoded = (toupper(encstr[0]) != 'F');
 
       QString s;
       if (html_encrypt && encoded) {

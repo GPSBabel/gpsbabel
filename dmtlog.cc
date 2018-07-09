@@ -584,7 +584,6 @@ read_CTrackFile(const int version)
 static int
 inflate_buff(const char* buff, const size_t size, char** out_buff)
 {
-  int res = Z_OK;
   z_stream strm;
   char out[DEFLATE_BUFF_SIZE];
   char* cout = nullptr;
@@ -597,7 +596,7 @@ inflate_buff(const char* buff, const size_t size, char** out_buff)
   strm.avail_in = 0;
   strm.next_in = Z_NULL;
 
-  res = inflateInit(&strm);
+  int res = inflateInit(&strm);
   if (res != Z_OK) {
     return res;
   }

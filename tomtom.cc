@@ -373,12 +373,10 @@ compute_blocks(struct hdr* start, int count,
   newblock->maxlat = maxlat;
   newblock->size = 4 * 5 + 1;   /* hdr is 5 longs, 1 char */
   if (count < 20) {
-    Waypoint* wpt = nullptr;
-
     for (int i = 0; i < count; i++) {
       newblock->size += 4 * 3 + 1;
       /* wpt const part 3 longs, 1 char */
-      wpt = start[i].wpt;
+      Waypoint* wpt = start[i].wpt;
       newblock->size += wpt->description.length() + 1;
     }
   } else {

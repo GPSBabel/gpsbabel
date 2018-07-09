@@ -416,14 +416,13 @@ data_read(void)
   route_head* head = nullptr;
 
   while ((buff = gbfgetstr(fin))) {
-    char* cin = buff;
     char* cdata;
 
     if ((line++ == 0) && fin->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
     }
 
-    cin = lrtrim(buff);
+    char* cin = lrtrim(buff);
     if (!*cin) {
       continue;
     }

@@ -1438,11 +1438,10 @@ void mag_track_disp(const Waypoint* waypointp)
   int hms=0;
   int fracsec=0;
   int date=0;
-  struct tm* tm = nullptr;
 
   ilat = waypointp->latitude;
   ilon = waypointp->longitude;
-  tm = nullptr;
+  struct tm* tm = nullptr;
   if (waypointp->creation_time.isValid()) {
     const time_t ct = waypointp->GetCreationTime().toTime_t();
     tm = gmtime(&ct);

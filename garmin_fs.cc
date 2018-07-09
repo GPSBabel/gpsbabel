@@ -36,9 +36,7 @@
 garmin_fs_t*
 garmin_fs_alloc(const int protocol)
 {
-  garmin_fs_t* result = nullptr;
-
-  result = (garmin_fs_t*)xcalloc(1, sizeof(*result));
+  garmin_fs_t* result = (garmin_fs_t*)xcalloc(1, sizeof(*result));
   result->fs.type = FS_GMSD;
   result->fs.copy = (fs_copy) garmin_fs_copy;
   result->fs.destroy = garmin_fs_destroy;
@@ -432,9 +430,7 @@ garmin_fs_merge_category(const char* category_name, Waypoint* waypt)
 void
 garmin_fs_garmin_after_read(const GPS_PWay way, Waypoint* wpt, const int protoid)
 {
-  garmin_fs_t* gmsd = nullptr;
-
-  gmsd = garmin_fs_alloc(protoid);
+  garmin_fs_t* gmsd = garmin_fs_alloc(protoid);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
   /* nothing happens until gmsd is allocated some lines above */

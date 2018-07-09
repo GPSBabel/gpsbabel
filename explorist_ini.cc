@@ -16,7 +16,6 @@ explorist_read_value(const char* section, const char* key)
 static mag_info*
 explorist_ini_try(const char* path)
 {
-  mag_info* info = nullptr;
   char* inipath;
   char* s;
 
@@ -27,7 +26,7 @@ explorist_ini_try(const char* path)
     return nullptr;
   }
 
-  info = (mag_info*) xmalloc(sizeof(mag_info));
+  mag_info* info = (mag_info*) xmalloc(sizeof(mag_info));
   info->geo_path = nullptr;
   info->track_path = nullptr;
   info->waypoint_path = nullptr;

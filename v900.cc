@@ -211,7 +211,6 @@ v900_read()
     struct one_line_advanced_mode adv;
     char text[200]; /* used to read the header line, which is normal text */
   } line;
-  int is_advanced_mode = 0;
   int lc = 0;
   route_head* track;
 
@@ -226,7 +225,7 @@ v900_read()
   if (!fgets(line.text, sizeof(line), fin)) {
     fatal("v900: error reading header (first) line from input file\n");
   }
-  is_advanced_mode = (nullptr != strstr(line.text,"PDOP")); /* PDOP field appears only in advanced mode */
+  int is_advanced_mode = (nullptr != strstr(line.text,"PDOP")); /* PDOP field appears only in advanced mode */
 
   v900_log("header line: %s",line.text);
   v900_log("is_advance_mode=%d\n",is_advanced_mode);

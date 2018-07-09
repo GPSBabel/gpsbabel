@@ -106,7 +106,6 @@ jtr_read()
     Waypoint* wpt;
     struct tm tm;
     char* tmp;
-    int column = -1;
     char valid = 'V';
     double lat, lon;
     float speed, course, mcourse, mvar, mdev;
@@ -131,7 +130,7 @@ jtr_read()
     speed = course = mcourse = mvar = mdev = -1;
     mvardir = mdevdir = 0;
 
-    column = -1;
+    int column = -1;
     tmp = str;
     while ((str = csv_lineparse(tmp, ",", "", column++))) {
       tmp = nullptr;

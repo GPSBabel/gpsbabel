@@ -85,7 +85,6 @@ html_disp(const Waypoint* wpt)
   int32_t utmz;
   double utme, utmn;
   char utmzc;
-  fs_xml* fs_gpx = nullptr;
 
 
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
@@ -151,22 +150,19 @@ html_disp(const Waypoint* wpt)
     gbfprintf(file_out, "<p class=\"gpsbabelnotes\">%s</p>\n", CSTRc(wpt->notes));
   }
 
-  fs_gpx = nullptr;
+  fs_xml* fs_gpx = nullptr;
   if (includelogs) {
     fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
   }
 
   if (fs_gpx && fs_gpx->tag) {
     xml_tag* root = fs_gpx->tag;
-    xml_tag* curlog = nullptr;
-    xml_tag* logpart = nullptr;
-    curlog = xml_findfirst(root, "groundspeak:log");
+    xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
     while (curlog) {
       time_t logtime = 0;
-      struct tm* logtm = nullptr;
       gbfprintf(file_out, "<p class=\"gpsbabellog\">\n");
 
-      logpart = xml_findfirst(curlog, "groundspeak:type");
+      xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
       if (logpart) {
         gbfprintf(file_out, "<span class=\"gpsbabellogtype\">%s</span> by ", CSTR(logpart->cdata));
       }
@@ -181,7 +177,7 @@ html_disp(const Waypoint* wpt)
       logpart = xml_findfirst(curlog, "groundspeak:date");
       if (logpart) {
         logtime = xml_parse_time(logpart->cdata).toTime_t();
-        logtm = localtime(&logtime);
+        struct tm* logtm = localtime(&logtime);
         if (logtm) {
           gbfprintf(file_out,
                     "<span class=\"gpsbabellogdate\">%04d-%02d-%02d</span><br>\n",
@@ -193,10 +189,9 @@ html_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
       if (logpart) {
-        char* coordstr = nullptr;
         double lat = 0;
         double lon = 0;
-        coordstr = xml_attribute(logpart, "lat");
+        char* coordstr = xml_attribute(logpart, "lat");
         if (coordstr) {
           lat = atof(coordstr);
         }
@@ -213,10 +208,8 @@ html_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:text");
       if (logpart) {
-        char* encstr = nullptr;
-        int encoded = 0;
-        encstr = xml_attribute(logpart, "encoded");
-        encoded = (toupper(encstr[0]) != 'F');
+        char* encstr = xml_attribute(logpart, "encoded");
+        int encoded = (toupper(encstr[0]) != 'F');
 
         QString s;
         if (html_encrypt && encoded) {

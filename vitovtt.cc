@@ -57,13 +57,11 @@ rd_deinit()
 static void
 vitovtt_read()
 {
-  route_head* route_head= nullptr;
-  Waypoint* wpt_tmp = nullptr;
   struct tm tmStruct;
 
   memset(&tmStruct, 0, sizeof(tmStruct));
 
-  route_head = route_head_alloc();
+  route_head* route_head = route_head_alloc();
   track_add_head(route_head);
 
   /* Read the header. */
@@ -90,7 +88,7 @@ vitovtt_read()
     int course = gbfgetint16(infile);
     int status = gbfgetint32(infile);
 
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
 
     wpt_tmp->latitude= scaled_lat / vitovtt_latitudescale;
     wpt_tmp->longitude= scaled_lon / vitovtt_longitudescale;

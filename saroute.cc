@@ -130,7 +130,6 @@ my_read()
   struct ll mylatlon;
   uint16_t coordcount;
   route_head* track_head = nullptr;
-  route_head* old_track_head = nullptr;
   Waypoint* wpt_tmp;
   char* routename = nullptr;
   double seglen = 0.0;
@@ -139,7 +138,6 @@ my_read()
   double totaldist = 0.0;
   double oldlat = 0;
   double oldlon = 0;
-  int first = 0;
 
   ReadShort(infile);		/* magic */
   version = ReadShort(infile);
@@ -311,7 +309,7 @@ my_read()
       }
     }
     while (count) {
-      old_track_head = nullptr;
+      route_head* old_track_head = nullptr;
       ReadShort(infile);
       recsize = ReadLong(infile);
       record = ReadRecord(infile, recsize);
@@ -359,7 +357,7 @@ my_read()
         coordcount--;
       }
 
-      first = 1;
+      int first = 1;
 
       while (coordcount) {
         double lat;

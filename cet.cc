@@ -153,9 +153,8 @@ cet_utf8_to_ucs4(const char* str, int* bytes, int* value)
   } else {
     unsigned char bits = 0xc0;
     unsigned char mask = 0xe0;
-    int len = 0;
 
-    for (len = 1; len <= 6; len++) {		/* outer loop, test UTF-8 frame */
+    for (int len = 1; len <= 6; len++) {		/* outer loop, test UTF-8 frame */
       if ((*cp & mask) == bits) {
         int i = len;
         while (i-- > 0) {
