@@ -95,11 +95,10 @@ lowranceusr4_readstr(char* buf, const int maxlen, gbfile* file, int bytes_per_ch
          bits (or more).  for now let's just project the characters
          down onto utf-8 space by ignoring all but the most
          significant byte. */
-      int i, j;
       char discard;
-      for (i = 0; i < len/bytes_per_char; ++i) {
+      for (int i = 0; i < len/bytes_per_char; ++i) {
         bytesread += gbfread(&buf[i], 1, 1, file);
-        for (j = 1; j < bytes_per_char; ++j) {
+        for (int j = 1; j < bytes_per_char; ++j) {
           bytesread +=gbfread(&discard, 1, 1, file);
         }
       }
@@ -299,10 +298,9 @@ same_points(const Waypoint* A, const Waypoint* B)
 static void
 register_waypt(const Waypoint* ref)
 {
-  int i;
   Waypoint* wpt = const_cast<Waypoint*>(ref);
 
-  for (i = 0; i < waypt_table_ct; i++) {
+  for (int i = 0; i < waypt_table_ct; i++) {
     Waypoint* cmp = waypt_table[i];
 
     if (same_points(wpt, cmp)) {
@@ -333,8 +331,7 @@ register_waypt(const Waypoint* ref)
 static int
 lowranceusr4_find_waypt_index(const Waypoint* wpt)
 {
-  int i;
-  for (i = 0; i < waypt_table_ct; ++i) {
+  for (int i = 0; i < waypt_table_ct; ++i) {
     if (same_points(wpt, (const Waypoint*)waypt_table[i])) {
       return i;
     }
@@ -348,7 +345,7 @@ static void
 lowranceusr4_parse_waypoints()
 {
   short int icon_num;
-  unsigned int i, num_waypts, create_date, create_time;
+  unsigned int num_waypts, create_date, create_time;
   char buff[MAXUSRSTRINGSIZE + 1];
 
   num_waypts = gbfgetint32(file_in);
@@ -357,7 +354,7 @@ lowranceusr4_parse_waypoints()
     printf(MYNAME " parse_waypoints: Num waypoints %d\n", num_waypts);
   }
 
-  for (i = 0; i < num_waypts; ++i) {
+  for (unsigned int i = 0; i < num_waypts; ++i) {
     Waypoint* wpt_tmp;
 
     wpt_tmp = new Waypoint;
@@ -506,7 +503,7 @@ lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
 static void
 lowranceusr4_parse_routes()
 {
-  unsigned int num_routes, i, j, text_len;
+  unsigned int num_routes, text_len;
   unsigned int num_legs;
   char buff[MAXUSRSTRINGSIZE + 1];
   Waypoint* wpt_tmp;
@@ -518,7 +515,7 @@ lowranceusr4_parse_routes()
     printf(MYNAME " parse_routes: Num routes = %d\n", num_routes);
   }
 
-  for (i = 0; i < num_routes; ++i) {
+  for (unsigned int i = 0; i < num_routes; ++i) {
     rte_head = route_head_alloc();
     route_add_head(rte_head);
     rte_head->rte_num = i+1;
@@ -562,7 +559,7 @@ lowranceusr4_parse_routes()
              qPrintable(rte_head->rte_name), num_legs);
     }
 
-    for (j = 0; j < num_legs; ++j) {
+    for (unsigned int j = 0; j < num_legs; ++j) {
       uid_unit = gbfgetint32(file_in);
       uid_seq_low = gbfgetint32(file_in);
       uid_seq_high = gbfgetint32(file_in);
@@ -584,7 +581,7 @@ lowranceusr4_parse_routes()
 static void
 lowranceusr4_parse_trails()
 {
-  int num_trails, M, i, j, k, trk_num;
+  int num_trails, M, trk_num;
   char buff[MAXUSRSTRINGSIZE + 1];
   Waypoint* wpt_tmp;
 
@@ -595,7 +592,7 @@ lowranceusr4_parse_trails()
     printf(MYNAME " parse_trails: num trails = %d\n", num_trails);
   }
 
-  for (i = trk_num = 0; i < num_trails; ++i) {
+  for (int i = trk_num = 0; i < num_trails; ++i) {
     trk_head = route_head_alloc();
     trk_head->rte_num = ++trk_num;
     track_add_head(trk_head);
@@ -690,7 +687,7 @@ lowranceusr4_parse_trails()
              trk_num, qPrintable(trk_head->rte_name), num_trail_pts);
     }
 
-    for (j = 0; j < num_trail_pts; ++j) {
+    for (int j = 0; j < num_trail_pts; ++j) {
       wpt_tmp = new Waypoint;
 
       /* Some unknown bytes */
@@ -706,7 +703,7 @@ lowranceusr4_parse_trails()
 
       /* Mysterious per-trackpoint data, toss it for now */
       M = gbfgetint32(file_in);
-      for (k = 0; k < M; ++k) {
+      for (int k = 0; k < M; ++k) {
         gbfgetc(file_in);
         gbfgetflt(file_in);
       }
@@ -840,9 +837,7 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
 static void
 lowranceusr4_write_waypoints()
 {
-  int i;
-  
-/* enumerate all waypoints from both the plain old waypoint list and
+  /* enumerate all waypoints from both the plain old waypoint list and
      also all routes */
   waypt_table_sz = 0;
   waypt_table_ct = 0;
@@ -856,7 +851,7 @@ lowranceusr4_write_waypoints()
 
   gbfputint32(waypt_table_ct, file_out);
   waypt_uid = 0;
-  for (i = 0; i < waypt_table_ct; ++i) {
+  for (int i = 0; i < waypt_table_ct; ++i) {
     if (global_opts.debug_level >= 2) {
       printf(MYNAME " writing out waypt %d (%s - %s)\n",
              i, qPrintable(waypt_table[i]->shortname), qPrintable(waypt_table[i]->description));

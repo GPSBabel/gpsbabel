@@ -101,11 +101,10 @@ static void
 ggv_ovl_read()
 {
   int symbols;
-  int i;
 
   symbols = inifile_readint_def(inifile, "Overlay", "Symbols", -1);
 
-  for (i = 1; i <= symbols; i++) {
+  for (int i = 1; i <= symbols; i++) {
     int points;
     OVL_SYMBOL_TYP type;
     char symbol[32];
@@ -130,7 +129,6 @@ ggv_ovl_read()
       }
 
       if (points > 0) {
-        int j;
         route_head* rte, *trk;
 
         rte = trk = route_head_alloc();
@@ -144,7 +142,7 @@ ggv_ovl_read()
           trk->rte_name = QString("Track %1").arg(track_ct);
         }
 
-        for (j = 0; j < points; j++) {
+        for (int j = 0; j < points; j++) {
 
           wpt = new Waypoint;
 

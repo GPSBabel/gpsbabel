@@ -848,9 +848,8 @@ month_lookup(const char* m)
     "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
     "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", nullptr
   };
-  const char** mp;
 
-  for (mp = months; *mp; mp++) {
+  for (const char** mp = months; *mp; mp++) {
     if (0 == case_ignore_strcmp(*mp, m)) {
       return mp - months;
     }
@@ -1154,9 +1153,7 @@ gstrsub(const char* s, const char* search, const char* replace)
 char*
 strupper(char* src)
 {
-  char* c;
-
-  for (c = src; *c; c++) {
+  for (char* c = src; *c; c++) {
     *c = toupper(*c);
   }
   return src;
@@ -1168,9 +1165,7 @@ strupper(char* src)
 char*
 strlower(char* src)
 {
-  char* c;
-
-  for (c = src; *c; c++) {
+  for (char* c = src; *c; c++) {
     *c = tolower(*c);
   }
   return src;

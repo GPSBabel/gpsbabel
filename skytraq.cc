@@ -245,8 +245,7 @@ wr_char(int c)
 static void
 wr_buf(const unsigned char* str, int len)
 {
-  int i;
-  for (i = 0; i < len; i++) {
+  for (int i = 0; i < len; i++) {
     wr_char(str[i]);
   }
 }
@@ -262,8 +261,8 @@ static uint8_t SECTOR_READ_END[13] = { 'E','N','D', 0, 'C','H','E','C','K','S','
 static int
 skytraq_calc_checksum(const unsigned char* buf, int len)
 {
-  int i, cs = 0;
-  for (i = 0; i < len; i++) {
+  int cs = 0;
+  for (int i = 0; i < len; i++) {
     cs ^= buf[i];
   }
   return cs;
@@ -344,9 +343,9 @@ static int
 skytraq_expect_ack(uint8_t id)
 {
   uint8_t ack_msg[2];
-  int i/*, rcv_len*/;
+  //int rcv_len;
 
-  for (i = 0; i < MSG_RETRIES; i++) {
+  for (int i = 0; i < MSG_RETRIES; i++) {
 //		rcv_len = skytraq_rd_msg(ack_msg, sizeof(ack_msg));
 //		if (rcv_len == sizeof(ack_msg)) {
     if (skytraq_rd_msg(ack_msg, sizeof(ack_msg)) == res_OK) {
@@ -398,9 +397,9 @@ skytraq_expect_msg(uint8_t id, const uint8_t* payload, int len)
 static int
 skytraq_wr_msg_verify(const uint8_t* payload, int len)
 {
-  int i, rc;
+  int rc;
 
-  for (i = 0; i < MSG_RETRIES; i++) {
+  for (int i = 0; i < MSG_RETRIES; i++) {
     if (i > 0) {
       db(1, "resending msg (id=0x%02x)...\n", payload[0]);
     }
@@ -1056,7 +1055,7 @@ skytraq_read_tracks()
   struct read_state st;
   uint32_t log_wr_ptr;
   uint16_t sectors_free, sectors_total, /*sectors_used_a, sectors_used_b,*/ sectors_used;
-  int i, t, s, rc, got_sectors, total_sectors_read = 0;
+  int t, rc, got_sectors, total_sectors_read = 0;
   int read_at_once = MAX(atoi(opt_read_at_once), 1);
   int opt_first_sector_val = atoi(opt_first_sector);
   int opt_last_sector_val = atoi(opt_last_sector);
@@ -1111,7 +1110,7 @@ skytraq_read_tracks()
   db(1, MYNAME ": Reading log data from device...\n");
   db(1, MYNAME ": start=%d used=%d\n", opt_first_sector_val, sectors_used);
   db(1, MYNAME ": opt_last_sector_val=%d\n", opt_last_sector_val);
-  for (i = opt_first_sector_val; i < sectors_used; i += got_sectors) {
+  for (int i = opt_first_sector_val; i < sectors_used; i += got_sectors) {
     for (t = 0, got_sectors = 0; (t < SECTOR_RETRIES) && (got_sectors <= 0); t++) {
       if (atoi(opt_read_at_once) == 0  ||  multi_read_supported == 0) {
         rc = skytraq_read_single_sector(i, buffer);
@@ -1158,7 +1157,7 @@ skytraq_read_tracks()
       continue;		// skip decoding
     }
 
-    for (s = 0; s < got_sectors; s++) {
+    for (int s = 0; s < got_sectors; s++) {
       db(4, MYNAME ": Decoding sector #%i...\n", i+s);
       rc = process_data_sector(&st, buffer+s*SECTOR_SIZE, SECTOR_SIZE);
       if (rc == 0) {
@@ -1195,7 +1194,7 @@ skytraq_probe()
     uint8_t odm_ver[4];
     uint8_t revision[4];
   } MSG_SOFTWARE_VERSION;
-  int i, rc;
+  int rc;
 
   // TODO: get current serial port baud rate and try that first
   // (only sensible if init to 4800 can be disabled...)
@@ -1205,7 +1204,7 @@ skytraq_probe()
     baud_rates_count = 1;
   }
 
-  for (i = 0; i < baud_rates_count; i++) {
+  for (int i = 0; i < baud_rates_count; i++) {
     db(1, MYNAME ": Probing SkyTraq Venus at %ibaud...\n", baud_rates[i]);
 
     rd_drain();
@@ -1274,7 +1273,6 @@ static void
 skytraq_set_location()
 {
   double lat, lng;
-  unsigned int i;
   uint8_t MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
   uint8_t MSG_GET_LOCATION = 0x35;
 
@@ -1283,7 +1281,7 @@ skytraq_set_location()
   sscanf(opt_set_location, "%lf:%lf", &lat, &lng);
   le_write_double(&MSG_SET_LOCATION[1], lat);
   le_write_double(&MSG_SET_LOCATION[9], lng);
-  for (i=0; i<sizeof MSG_SET_LOCATION; i++) {
+  for (unsigned int i = 0; i<sizeof MSG_SET_LOCATION; i++) {
     db(3, "%02x ", MSG_SET_LOCATION[i]);
   }
   db(3, "\n");
@@ -1529,12 +1527,11 @@ static void miniHomer_get_poi()
 {
   uint8_t MSG_GET_POI[3] = { 0x4D, 0, 0};
   uint8_t buf[32];
-  unsigned int poi;
   double lat, lng, alt;
   double ecef_x, ecef_y, ecef_z;
   Waypoint* wpt;
 
-  for (poi=0; poi<NUMPOI; poi++) {
+  for (unsigned int poi = 0; poi<NUMPOI; poi++) {
     MSG_GET_POI[1]=(poi>>8)&0xff;
     MSG_GET_POI[2]=(poi)&0xff;
     if (skytraq_wr_msg_verify((uint8_t*)&MSG_GET_POI, sizeof(MSG_GET_POI)) != res_OK) {

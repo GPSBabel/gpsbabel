@@ -87,10 +87,9 @@ MKSHORT_NEW_HANDLE(DEBUG_PARAMS)
 mkshort_new_handle()
 #endif
 {
-  int i;
   mkshort_handle_imp* h = (mkshort_handle_imp*) xxcalloc(sizeof *h, 1, file, line);
 
-  for (i = 0; i < PRIME; i++) {
+  for (int i = 0; i < PRIME; i++) {
     QUEUE_INIT(&h->namelist[i]);
   }
 
@@ -162,13 +161,12 @@ void
 mkshort_del_handle(short_handle* h)
 {
   mkshort_handle_imp* hdr = (mkshort_handle_imp*) *h;
-  int i;
 
   if (!h || !hdr) {
     return;
   }
 
-  for (i = 0; i < PRIME; i++) {
+  for (int i = 0; i < PRIME; i++) {
     queue* e, *t;
     QUEUE_FOR_EACH(&hdr->namelist[i], e, t) {
       uniq_shortname* s = (uniq_shortname*) e;
@@ -204,13 +202,11 @@ static
 char*
 delete_last_vowel(int start, char* istring, int* replaced)
 {
-  int l;
-
   /*
    * Basically impelement strrchr.
    */
   *replaced = 0;
-  for (l = strlen(istring); l > start; l--) {
+  for (int l = strlen(istring); l > start; l--) {
     if (strchr(vowels, istring[l-1])) {
       char* ostring;
       /* If vowel is the first letter of a word, keep it.*/

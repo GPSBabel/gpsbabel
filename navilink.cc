@@ -176,9 +176,7 @@ static void (*write_route_end)(const route_head* track) = nullptr;
 static int
 find_icon_from_descr(const QString& descr)
 {
-  unsigned int i;
-
-  for (i = 0; i < sizeof(icon_table) / sizeof(const char*); i++) {
+  for (unsigned int i = 0; i < sizeof(icon_table) / sizeof(const char*); i++) {
     if (0 == descr.compare(icon_table[i])) {
       return i;
     }
@@ -190,9 +188,7 @@ find_icon_from_descr(const QString& descr)
 static void
 free_waypoints(Waypoint** waypts)
 {
-  Waypoint** wayptp;
-
-  for (wayptp = waypts; wayptp < waypts + MAX_WAYPOINTS; wayptp++) {
+  for (Waypoint** wayptp = waypts; wayptp < waypts + MAX_WAYPOINTS; wayptp++) {
     if (*wayptp) {
       delete *wayptp;
     }
@@ -473,7 +469,6 @@ serial_read_waypoints()
   Waypoint**       waypts = nullptr;
   unsigned char  information[32];
   unsigned short total;
-  unsigned short start;
 
   if (global_opts.masked_objective & RTEDATAMASK) {
     waypts = (Waypoint**) xcalloc(MAX_WAYPOINTS, sizeof(Waypoint*));
@@ -486,11 +481,10 @@ serial_read_waypoints()
 
   total = le_read16(information + 0);
 
-  for (start = 0; start < total; start += 32) {
+  for (unsigned short start = 0; start < total; start += 32) {
     unsigned short count = total - start;
     unsigned char  payload[7];
     unsigned char*  waypoints;
-    unsigned char*  w;
 
     if (count > 32) {
       count = 32;
@@ -506,7 +500,7 @@ serial_read_waypoints()
 
     read_packet(PID_DATA, waypoints, count * 32, count * 32, FALSE);
 
-    for (w = waypoints; w < waypoints + count * 32; w = w + 32) {
+    for (unsigned char*  w = waypoints; w < waypoints + count * 32; w = w + 32) {
       if (global_opts.masked_objective & WPTDATAMASK) {
         waypt_add(decode_waypoint(w));
       }
@@ -569,7 +563,6 @@ serial_read_track()
     unsigned short count = total < MAX_READ_TRACKPOINTS ? total : MAX_READ_TRACKPOINTS;
     unsigned char  payload[7];
     unsigned char*  trackpoints;
-    unsigned char*  t;
 
     le_write32(payload + 0, address);
     le_write16(payload + 4, count * 32);
@@ -582,7 +575,7 @@ serial_read_track()
     read_packet(PID_DATA, trackpoints, count * 32, count * 32, FALSE);
     write_packet(PID_ACK, nullptr, 0);
 
-    for (t = trackpoints; t < trackpoints + count * 32; t = t + 32) {
+    for (unsigned char*  t = trackpoints; t < trackpoints + count * 32; t = t + 32) {
       track_add_wpt(track, decode_trackpoint(t));
     }
 
@@ -656,7 +649,6 @@ serial_read_routes(Waypoint** waypts)
 {
   unsigned char information[32];
   unsigned char routec;
-  unsigned char r;
 
   write_packet(PID_QRY_INFORMATION, nullptr, 0);
   read_packet(PID_DATA, information,
@@ -665,11 +657,10 @@ serial_read_routes(Waypoint** waypts)
 
   routec = information[2];
 
-  for (r = 0; r < routec; r++) {
+  for (unsigned char r = 0; r < routec; r++) {
     unsigned char payload[7];
     unsigned char routedata[320];
     route_head*    route;
-    int           sr;
 
     le_write32(payload + 0, r);
     le_write16(payload + 2, 0);
@@ -683,10 +674,8 @@ serial_read_routes(Waypoint** waypts)
     route->rte_name = xstrdup((char*)routedata + 4);
     route_add_head(route);
 
-    for (sr = 0; sr < MAX_SUBROUTES; sr++) {
-      int w;
-
-      for (w = 0; w < MAX_SUBROUTE_LENGTH; w++) {
+    for (int sr = 0; sr < MAX_SUBROUTES; sr++) {
+      for (int w = 0; w < MAX_SUBROUTE_LENGTH; w++) {
         unsigned short id = le_read16(routedata + 34 + 32 * sr + 2 *w);
 
         if (id == 0xffffu) {
@@ -735,7 +724,6 @@ serial_write_route_end(const route_head* route)
 {
   unsigned char* data;
   unsigned src;
-  unsigned sr;
   unsigned char id[1];
   QString rte_name;
 
@@ -763,14 +751,13 @@ serial_write_route_end(const route_head* route)
   data[30] = 0x7b;
   data[31] = 0x77;
 
-  for (sr = 0; sr < src; sr++) {
+  for (unsigned sr = 0; sr < src; sr++) {
     unsigned char* srdata = data + 32 + 32 * sr;
     unsigned      pt_offset = MAX_SUBROUTE_LENGTH * sr;
-    unsigned      pt;
 
     le_write16(srdata + 0, 0x2010);
 
-    for (pt = 0; pt < MAX_SUBROUTE_LENGTH; pt++) {
+    for (unsigned pt = 0; pt < MAX_SUBROUTE_LENGTH; pt++) {
       if (pt_offset + pt < route_id_ptr) {
         le_write16(srdata + 2 + 2 * pt, route_ids[pt_offset + pt]);
       } else {
@@ -905,7 +892,6 @@ read_datalog_records(route_head* track,
                      unsigned int start_addr, unsigned int len)
 {
   unsigned char  payload[7];
-  unsigned char* p;
 
   /* The protocol only supports reading 256 logpoints at once, so
    * read small chunks until none left. */
@@ -921,7 +907,7 @@ read_datalog_records(route_head* track,
     read_packet(PID_DATA, logpoints, logpoints_len, logpoints_len, FALSE);
     write_packet(PID_ACK, nullptr, 0);
 
-    for (p = logpoints; p < logpoints + logpoints_len; p += 32) {
+    for (unsigned char* p = logpoints; p < logpoints + logpoints_len; p += 32) {
       track_add_wpt(track, navilink_decode_logpoint(p));
     }
 

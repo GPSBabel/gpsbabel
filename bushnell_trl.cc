@@ -55,14 +55,13 @@ rd_deinit()
 static void
 wr_init(const QString& fname)
 {
-  int i;
   int l = fname.length();
   char obuf[20] = { 0 } ;
   char* p = obuf;
   file_out = gbfopen_le(fname, "w", MYNAME);
   trkpt_count = 0;
   QString fnameu = fname.toUpper();
-  for (i = 0; (i < l) && (i < 20); i++) {
+  for (int i = 0; (i < l) && (i < 20); i++) {
     char c = fnameu[i].toLatin1();
     if (isalnum(c)) {
       *p++ = c;

@@ -137,12 +137,16 @@ static void rd_deinit()
 }
 
 typedef enum { id, takeoff, start, turnpoint, finish, landing } state_t;
-#if __cplusplus
-inline state_t operator++(state_t& rs, int)
+inline state_t& operator++(state_t& s) // prefix
 {
-  return rs = (state_t)((int)rs + 1);
+  return s = static_cast<state_t>(s + 1);
 }
-#endif
+inline const state_t operator++(state_t& s, int) // postfix
+{
+  state_t ret(s);
+  s = ++s;
+  return ret;
+}
 
 /**
  * Handle pre- or post-flight task declarations.
@@ -189,7 +193,7 @@ static void igc_task_rec(const char* rec)
     rte_head->rte_name = task_num;
     rte_head->rte_desc = QStringLiteral(DATEMAGIC) + flight_date + QStringLiteral(": ") + task_desc;
     route_add_head(rte_head);
-    state++;
+    ++state;
     return;
   }
   // Get the waypoint
@@ -214,25 +218,25 @@ static void igc_task_rec(const char* rec)
   switch (state) {
   case takeoff:
     snprintf(short_name, 8, "TAKEOFF");
-    state++;
+    ++state;
     break;
 
   case start:
     snprintf(short_name, 8, "START");
     tp_ct = 0;
-    state++;
+    ++state;
     break;
 
   case turnpoint:
     if (++tp_ct == num_tp) {
-      state++;
+      ++state;
     }
     snprintf(short_name, 8, "TURN%02u", tp_ct);
     break;
 
   case finish:
     snprintf(short_name, 8, "FINISH");
-    state++;
+    ++state;
     break;
 
   case landing:

@@ -45,7 +45,7 @@ void PositionFilter::position_runqueue(queue* q, int nelems, int qtype)
   Waypoint** comp;
   int* qlist;
   double dist, diff_time;
-  int i = 0, j, anyitem;
+  int i = 0, anyitem;
 
   comp = (Waypoint**) xcalloc(nelems, sizeof(*comp));
   qlist = (int*) xcalloc(nelems, sizeof(*qlist));
@@ -65,7 +65,7 @@ void PositionFilter::position_runqueue(queue* q, int nelems, int qtype)
     anyitem = 0;
 
     if (!qlist[i]) {
-      for (j = i + 1 ; j < nelems ; j++) {
+      for (int j = i + 1 ; j < nelems ; j++) {
         if (!qlist[j]) {
           dist = gc_distance(comp[j]->latitude,
                              comp[j]->longitude,

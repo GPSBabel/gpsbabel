@@ -627,7 +627,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
       res->description = l.url_;
     }
   } else { // if (gdb_ver >= GDB_VER_3)
-    int i, url_ct;
+    int url_ct;
 
     waypt_flag = 0;
 
@@ -637,7 +637,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
     FREAD(buf, 5);				/* instruction depended */
     res->description = FREAD_CSTR_AS_QSTR;	/* instruction */
     url_ct = FREAD_i32;
-    for (i = url_ct; (i); i--) {
+    for (int i = url_ct; (i); i--) {
       QString str = FREAD_CSTR_AS_QSTR;
       if (!str.isEmpty()) {
         waypt_add_url(res, str, nullptr);
@@ -732,7 +732,7 @@ static route_head*
 read_route()
 {
   route_head* rte;
-  int points, warnings, links, i;
+  int points, warnings, links;
   char buf[128];
   bounds bounds;
 
@@ -767,8 +767,8 @@ read_route()
          nice(rte->rte_name), points);
 #endif
 
-  for (i = 0; i < points; i++) {
-    int wpt_class, j;
+  for (int i = 0; i < points; i++) {
+    int wpt_class;
     char buf[128];
     garmin_ilink_t* il_root, *il_anchor;
 
@@ -793,15 +793,13 @@ read_route()
     FREAD(buf, 18);			/* unknown 18 bytes; but first should be 0x01 or 0x03 */
     /* seen also 0 with VER3 */
     if ((buf[0] != 0x00) && (buf[0] != 0x01) && (buf[0] != 0x03)) {
-      int i;
-
       warnings++;
       if (warnings > 3) {
         fatal(MYNAME "-rte_pt \"%s\": too many warnings!\n", qPrintable(wpt->shortname));
       }
       warning(MYNAME "-rte_pt \"%s\" (class %d): possible error in route.\n", qPrintable(wpt->shortname), wpt_class);
       warning(MYNAME "-rte_pt (dump):");
-      for (i = 0; i < 18; i++) {
+      for (int i = 0; i < 18; i++) {
         warning(" %02x", (unsigned char)buf[i]);
       }
       warning("\n");
@@ -815,7 +813,7 @@ read_route()
     printf(MYNAME "-rte_pt \"%s\" (%d): %d interlink step(s)\n",
            nice(wpt->shortname), wpt_class, links);
 #endif
-    for (j = 0; j < links; j++) {
+    for (int j = 0; j < links; j++) {
       garmin_ilink_t* il_step = (garmin_ilink_t*) xmalloc(sizeof(*il_step));
 
       il_step->ref_count = 1;
@@ -947,7 +945,7 @@ static route_head*
 read_track()
 {
   route_head* res;
-  int points, index;
+  int points;
   char dummy;
   int color_idx;
 
@@ -963,7 +961,7 @@ read_track()
 
   points = FREAD_i32;
 
-  for (index = 0; index < points; index++) {
+  for (int index = 0; index < points; index++) {
     Waypoint* wpt = new Waypoint;
 
     trkpt_ct++;
@@ -1124,12 +1122,11 @@ read_data()
         warning(MYNAME ":(%d%c): delta = %d -", gdb_ver, typ, delta);
       }
       if (delta > 0) {
-        int i;
         char* buf = (char*) xmalloc(delta);
         if (FREAD(buf, delta) < 1) {
           fatal(MYNAME ": Attempt to read past EOF.\n");
         }
-        for (i = 0; i < delta; i++) {
+        for (int i = 0; i < delta; i++) {
           warning(" %02x", (unsigned char)buf[i]);
         }
         xfree(buf);

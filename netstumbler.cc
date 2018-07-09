@@ -97,7 +97,7 @@ data_read()
 
   while ((ibuf = gbfgetstr(file_in))) {
     char* field;
-    int field_num, len, i, stealth = 0;
+    int field_num, len, stealth = 0;
 
     if ((line++ == 0) && file_in->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
@@ -160,7 +160,7 @@ data_read()
         if (!snmac) {
           int found = 0;
           /* check for all whitespace */
-          for (i = 0; i < len && !found; i++) {
+          for (int i = 0; i < len && !found; i++) {
             if (!isspace(ssid[i])) {
               found = 1;
             }

@@ -147,9 +147,7 @@ const psit_icon_mapping_t psit_icon_value_table[] = {
 static const char*
 psit_find_desc_from_icon_number(const int icon)
 {
-  const psit_icon_mapping_t* i;
-
-  for (i = psit_icon_value_table; i->icon; i++) {
+  for (const psit_icon_mapping_t* i = psit_icon_value_table; i->icon; i++) {
     if (icon == i->value) {
       return i->icon;
     }
@@ -160,14 +158,13 @@ psit_find_desc_from_icon_number(const int icon)
 static int
 psit_find_icon_number_from_desc(const char* desc)
 {
-  const psit_icon_mapping_t* i;
   int def_icon = 18;
 
   if (!desc) {
     return def_icon;
   }
 
-  for (i = psit_icon_value_table; i->icon; i++) {
+  for (const psit_icon_mapping_t* i = psit_icon_value_table; i->icon; i++) {
     if (case_ignore_strcmp(desc,i->icon) == 0) {
       return i->value;
     }

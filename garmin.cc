@@ -372,7 +372,7 @@ waypt_read_cb(int total_ct, GPS_PWay* )
 static void
 waypt_read()
 {
-  int i,n;
+  int n;
   GPS_PWay* way = nullptr;
 
   if (getposn) {
@@ -391,7 +391,7 @@ waypt_read()
     fatal(MYNAME  ":Can't get waypoint from %s\n", portname);
   }
 
-  for (i = 0; i < n; i++) {
+  for (int i = 0; i < n; i++) {
     Waypoint* wpt_tmp = new Waypoint;
 
     wpt_tmp->shortname = QString::fromLatin1(way[i]->ident);
@@ -448,8 +448,7 @@ static unsigned int checkWayPointIsAtSplit(Waypoint* wpt, GPS_PLap* laps, int nl
   int result = 0;
 
   if ((laps != nullptr) && (nlaps > 0)) {
-    int i;
-    for (i=(nlaps-1); i >= 0; i--) {
+    for (int i = (nlaps-1); i >= 0; i--) {
       GPS_PLap lap = laps[i];
       time_t delta = lap->start_time - wpt->GetCreationTime().toTime_t();
       if ((delta >= -1) && (delta <= 1)) {
@@ -478,7 +477,6 @@ track_read()
   GPS_PTrack* array;
   route_head* trk_head = nullptr;
   int trk_num = 0;
-  int i;
   const char* trk_name = "";
   GPS_PLap* laps = nullptr;
   int nlaps = 0;
@@ -495,7 +493,7 @@ track_read()
     return;
   }
 
-  for (i = 0; i < ntracks; i++) {
+  for (int i = 0; i < ntracks; i++) {
     Waypoint* wpt;
 
     /*
@@ -563,7 +561,6 @@ void
 route_read()
 {
   int32 nroutepts;
-  int i;
   GPS_PWay* array;
   /* TODO: Fixes warning but is it right?
    * RJL:  No, the warning isn't right; GCC's flow analysis is broken.
@@ -575,7 +572,7 @@ route_read()
 
 //	fprintf(stderr, "Routes %d\n", (int) nroutepts);
 #if 1
-  for (i = 0; i < nroutepts; i++) {
+  for (int i = 0; i < nroutepts; i++) {
     if (array[i]->isrte) {
       char* csrc = nullptr;
       /* What a horrible API has libjeeps for making this
@@ -1041,7 +1038,7 @@ waypoint_prepare()
 static void
 waypoint_write()
 {
-  int i, n;
+  int n;
   int32 ret;
 
   n = waypoint_prepare();
@@ -1050,7 +1047,7 @@ waypoint_write()
     fatal(MYNAME ":communication error sending wayoints..\n");
   }
 
-  for (i = 0; i < n; ++i) {
+  for (int i = 0; i < n; ++i) {
     GPS_Way_Del(&tx_waylist[i]);
   }
   if (global_opts.verbose_status) {
@@ -1136,13 +1133,12 @@ route_noop(const route_head* )
 static void
 route_write()
 {
-  int i;
   int n = 2 * route_waypt_count(); /* Doubled for the islink crap. */
 
   tx_routelist = (struct GPS_SWay**) xcalloc(n,sizeof(GPS_PWay));
   cur_tx_routelist_entry = tx_routelist;
 
-  for (i = 0; i < n; i++) {
+  for (int i = 0; i < n; i++) {
     tx_routelist[i] = sane_GPS_Way_New();
   }
 
@@ -1182,12 +1178,11 @@ track_waypt_pr(const Waypoint* wpt)
 static int
 track_prepare()
 {
-  int i;
   int32 n = track_waypt_count() + track_count();
 
   tx_tracklist = (struct GPS_STrack**) xcalloc(n, sizeof(GPS_PTrack));
   cur_tx_tracklist_entry = tx_tracklist;
-  for (i = 0; i < n; i++) {
+  for (int i = 0; i < n; i++) {
     tx_tracklist[i] = GPS_Track_New();
   }
   my_track_count = 0;
@@ -1201,12 +1196,12 @@ track_prepare()
 static void
 track_write()
 {
-  int i, n;
+  int n;
 
   n = track_prepare();
   GPS_Command_Send_Track(portname, tx_tracklist, n, (eraset)? 1 : 0);
 
-  for (i = 0; i < n; i++) {
+  for (int i = 0; i < n; i++) {
     GPS_Track_Del(&tx_tracklist[i]);
   }
   xfree(tx_tracklist);
@@ -1311,13 +1306,11 @@ d103_symbol_from_icon_number(unsigned int n)
 static int
 d103_icon_number_from_symbol(const QString& s)
 {
-  unsigned int i;
-
   if (s.isNull()) {
     return 0;
   }
 
-  for (i = 0; i < sizeof(d103_icons) / sizeof(d103_icons[0]); i++) {
+  for (unsigned int i = 0; i < sizeof(d103_icons) / sizeof(d103_icons[0]); i++) {
     if (0 == (s.compare(d103_icons[i], Qt::CaseInsensitive))) {
       return i;
     }

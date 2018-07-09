@@ -704,13 +704,11 @@ osm_rd_deinit()
 static void
 osm_init_icons()
 {
-  int i;
-
   if (!icons.isEmpty()) {
     return;
   }
 
-  for (i = 0; osm_icon_mappings[i].value; i++) {
+  for (int i = 0; osm_icon_mappings[i].value; i++) {
     icons.insert(QString::fromUtf8(osm_icon_mappings[i].icon),
                  &osm_icon_mappings[i]);
   }

@@ -75,17 +75,27 @@ typedef enum {
   unknown_header
 } header_type;
 
-#if __cplusplus
-inline header_type operator++(header_type& rs, int)
+inline header_type& operator++(header_type& s) // prefix
 {
-  return rs = (header_type)((int)rs + 1);
+  return s = static_cast<header_type>(s + 1);
+}
+inline const header_type operator++(header_type& s, int) // postfix
+{
+  header_type ret(s);
+  s = ++s;
+  return ret;
 }
 
-inline gt_display_modes_e  operator++(gt_display_modes_e& rs, int)
+inline gt_display_modes_e& operator++(gt_display_modes_e& s) // prefix
 {
-  return rs = (gt_display_modes_e)((int)rs + 1);
+  return s = static_cast<gt_display_modes_e>(s + 1);
 }
-#endif
+inline const gt_display_modes_e operator++(gt_display_modes_e& s, int) // postfix
+{
+  gt_display_modes_e ret(s);
+  s = ++s;
+  return ret;
+}
 
 #define MAX_HEADER_FIELDS 36
 
@@ -203,13 +213,11 @@ enum_waypt_cb(const Waypoint* wpt)
   gmsd = GMSD_FIND(wpt);
   wpt_class = GMSD_GET(wpt_class, 0);
   if (wpt_class < 0x80) {
-    int i;
-
     if (gtxt_flags.enum_waypoints) {		/* enumerate only */
       waypoints++;
       return;
     }
-    for (i = 0; i < wpt_a_ct; i++) {		/* check for duplicates */
+    for (int i = 0; i < wpt_a_ct; i++) {		/* check for duplicates */
       const Waypoint* tmp = wpt_a[i];
       if (case_ignore_strcmp(tmp->shortname, wpt->shortname) == 0) {
         wpt_a[i] = wpt;
@@ -388,7 +396,7 @@ print_date_and_time(const time_t time, const int time_only)
 static void
 print_categories(uint16_t categories)
 {
-  int i, count;
+  int count;
   char* c;
 
   if (categories == 0) {
@@ -396,7 +404,7 @@ print_categories(uint16_t categories)
   }
 
   count = 0;
-  for (i = 0; i < 16; i++) {
+  for (int i = 0; i < 16; i++) {
     if ((categories & 1) != 0) {
       if (global_opts.inifile != nullptr) {
         char key[3];
@@ -510,12 +518,11 @@ print_temperature(const float temperature)
 static void
 print_string(const char* fmt, const char* string)
 {
-  char* c;
   char* buff;
 
   buff = xstrdup(string);
   /* remove unwanted characters from source string */
-  for (c = buff; *c; c++) {
+  for (char* c = buff; *c; c++) {
     if (iscntrl(*c)) {
       *c = ' ';
     }
@@ -836,8 +843,6 @@ garmin_txt_write()
   gtxt_flags.enum_waypoints = 0;
 
   if (waypoints > 0) {
-    int i;
-
     wpt_a_ct = 0;
     wpt_a = (const Waypoint**)xcalloc(waypoints, sizeof(*wpt_a));
     waypt_disp_all(enum_waypt_cb);
@@ -845,7 +850,7 @@ garmin_txt_write()
     qsort(wpt_a, waypoints, sizeof(*wpt_a), sort_waypt_cb);
 
     gbfprintf(fout, "Header\t%s\r\n\r\n", headers[waypt_header]);
-    for (i = 0; i < waypoints; i++) {
+    for (int i = 0; i < waypoints; i++) {
       const Waypoint* wpt = wpt_a[i];
       write_waypt(wpt);
     }
@@ -881,9 +886,7 @@ garmin_txt_write()
 static void
 free_header(const header_type ht)
 {
-  int i;
-
-  for (i = 0; i < MAX_HEADER_FIELDS; i++) {
+  for (int i = 0; i < MAX_HEADER_FIELDS; i++) {
     char* c = header_lines[ht][i];
     if (c != nullptr) {
       xfree(c);
@@ -1005,13 +1008,11 @@ parse_header()
 static int
 parse_display(const char* str, int* val)
 {
-  gt_display_modes_e i;
-
   if ((str == nullptr) || (*str == '\0')) {
     return 0;
   }
 
-  for (i = GT_DISPLAY_MODE_MIN; i <= GT_DISPLAY_MODE_MAX; i++) {
+  for (gt_display_modes_e i = GT_DISPLAY_MODE_MIN; i <= GT_DISPLAY_MODE_MAX; ++i) {
     if (case_ignore_strcmp(str, gt_display_mode_names[i]) == 0) {
       *val = i;
       return 1;
@@ -1357,9 +1358,7 @@ garmin_txt_rd_init(const QString& fname)
 static void
 garmin_txt_rd_deinit()
 {
-  header_type h;
-
-  for (h = waypt_header; h <= unknown_header; h++) {
+  for (header_type h = waypt_header; h <= unknown_header; ++h) {
     free_header(h);
   }
   gbfclose(fin);

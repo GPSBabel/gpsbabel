@@ -301,8 +301,6 @@ void TrackFilter::trackfilter_pack_init_rte_name(route_head* track, const time_t
 
 void TrackFilter::trackfilter_title()
 {
-  int i;
-
   if (opt_title == nullptr) {
     return;
   }
@@ -310,7 +308,7 @@ void TrackFilter::trackfilter_title()
   if (strlen(opt_title) == 0) {
     fatal(MYNAME "-title: Missing your title!\n");
   }
-  for (i = 0; i < track_ct; i++) {
+  for (int i = 0; i < track_ct; i++) {
     route_head* track = track_list[i].track;
     trackfilter_pack_init_rte_name(track, 0);
   }
@@ -627,7 +625,6 @@ void TrackFilter::trackfilter_split()
 
 void TrackFilter::trackfilter_move()
 {
-  int i;
   queue* elem, *tmp;
   Waypoint* wpt;
   time_t delta;
@@ -637,7 +634,7 @@ void TrackFilter::trackfilter_move()
     return;
   }
 
-  for (i = 0; i < track_ct; i++) {
+  for (int i = 0; i < track_ct; i++) {
     route_head* track = track_list[i].track;
     QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
       wpt = (Waypoint*)elem;
@@ -655,7 +652,6 @@ void TrackFilter::trackfilter_move()
 
 void TrackFilter::trackfilter_synth()
 {
-  int i;
   queue* elem, *tmp;
   Waypoint* wpt;
 
@@ -670,7 +666,7 @@ void TrackFilter::trackfilter_synth()
 
   fix = trackfilter_parse_fix(&nsats);
 
-  for (i = 0; i < track_ct; i++) {
+  for (int i = 0; i < track_ct; i++) {
     route_head* track = track_list[i].track;
     first = 1;
     QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
@@ -770,7 +766,7 @@ int TrackFilter::trackfilter_range()		/* returns number of track points left aft
 {
   time_t start, stop;
   queue* elem, *tmp;
-  int i, dropped, inside = 0;
+  int dropped, inside = 0;
 
   if (opt_start != nullptr) {
     start = trackfilter_range_check(opt_start);
@@ -786,7 +782,7 @@ int TrackFilter::trackfilter_range()		/* returns number of track points left aft
 
   dropped = inside = 0;
 
-  for (i = 0; i < track_ct; i++) {
+  for (int i = 0; i < track_ct; i++) {
     route_head* track = track_list[i].track;
 
     QUEUE_FOR_EACH((queue*)&track->waypoint_list, elem, tmp) {
@@ -826,9 +822,7 @@ int TrackFilter::trackfilter_range()		/* returns number of track points left aft
 
 void TrackFilter::trackfilter_seg2trk()
 {
-  int i;
-
-  for (i = 0; i < track_ct; i++) {
+  for (int i = 0; i < track_ct; i++) {
     queue* elem, *tmp;
     route_head* src = track_list[i].track;
     route_head* dest = nullptr;
@@ -875,12 +869,12 @@ void TrackFilter::trackfilter_seg2trk()
 
 void TrackFilter::trackfilter_trk2seg()
 {
-  int i, first;
+  int first;
   route_head* master;
 
   master = track_list[0].track;
 
-  for (i = 1; i < track_ct; i++) {
+  for (int i = 1; i < track_ct; i++) {
     queue* elem, *tmp;
     route_head* curr = track_list[i].track;
 

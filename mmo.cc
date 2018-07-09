@@ -641,7 +641,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
 #ifdef MMO_DBG
   const char* sobj = "CObjTrack";
 #endif
-  int tp, ctp;
+  int tp;
   route_head* trk;
 
   DBG((sobj, ":-----------------------------------------------------\n"));
@@ -668,7 +668,7 @@ mmo_read_CObjTrack(mmo_data_t* data)
   tp = gbfgetint16(fin);
   DBG((sobj, "track has %d point(s)\n", tp));
 
-  for (ctp = 0; ctp < tp; ctp++) {
+  for (int ctp = 0; ctp < tp; ctp++) {
     Waypoint* wpt;
     char unk;
 
@@ -1480,8 +1480,6 @@ mmo_wr_deinit()
 static void
 mmo_write()
 {
-  int i;
-
   /* find out number of objects we have to write */
   waypt_disp_all(mmo_enum_waypt_cb);
   route_disp_all(mmo_enum_route_cb, nullptr, mmo_enum_waypt_cb);
@@ -1490,7 +1488,7 @@ mmo_write()
   gbfputuint16(mmo_obj_ct, fout);
 
   mmo_write_obj_head("CObjIcons", "Unnamed object", gpsbabel_time, obj_type_ico);
-  for (i = 0; i < 5; i++) {
+  for (int i = 0; i < 5; i++) {
     gbfputuint16(0, fout);
   }
 

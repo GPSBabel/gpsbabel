@@ -47,12 +47,16 @@ typedef enum {
   num_states
 } state_t;
 static state_t state;
-#if __cplusplus
-inline state_t operator++(state_t& rs, int)
+inline state_t& operator++(state_t& s) // prefix
 {
-  return rs = (state_t)((int)rs + 1);
+  return s = static_cast<state_t>(s + 1);
 }
-#endif
+inline const state_t operator++(state_t& s, int) // postfix
+{
+  state_t ret(s);
+  s = ++s;
+  return ret;
+}
 
 static const int reqd_bytes[num_states] = { 6, 1, 2, 2, 25, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 1 };
 
@@ -221,7 +225,7 @@ static int process_data(const unsigned char* data)
   default:
     fatal(MYNAME ": Bad internal state\n");
   }
-  state++;
+  ++state;
   return remaining;
 }
 

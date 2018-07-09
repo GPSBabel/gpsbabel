@@ -185,12 +185,10 @@ static void
 raymarine_read()
 {
   Waypoint* wpt;
-  unsigned int ix;
-  unsigned int rx;
 
   /* Read all waypoints */
 
-  for (ix = 0; ix < 0x3FFF; ix++) {
+  for (unsigned int ix = 0; ix < 0x3FFF; ix++) {
     char sect[10];
     char* str, *name, *lat, *lon;
 
@@ -233,11 +231,10 @@ raymarine_read()
 
   /* Read all routes */
 
-  for (rx = 0; rx < 0x3FFF; rx++) {
+  for (unsigned int rx = 0; rx < 0x3FFF; rx++) {
     char sect[10];
     char* name;
     route_head* rte;
-    int wx;
 
     snprintf(sect, sizeof(sect), "Rt%d", rx);
     if (nullptr == (name = inifile_readstr(fin, sect, "Name"))) {
@@ -248,7 +245,7 @@ raymarine_read()
     rte->rte_name = name;
     route_add_head(rte);
 
-    for (wx = 0; wx < 0x3FFF; wx++) {
+    for (int wx = 0; wx < 0x3FFF; wx++) {
       char buff[32];
       char* str;
       Waypoint* wpt;
@@ -287,10 +284,9 @@ same_points(const Waypoint* A, const Waypoint* B)
 static void
 register_waypt(const Waypoint* ref, const char)
 {
-  int i;
   Waypoint* wpt = const_cast<Waypoint*>(ref);
 
-  for (i = 0; i < waypt_table_ct; i++) {
+  for (int i = 0; i < waypt_table_ct; i++) {
     Waypoint* cmp = waypt_table[i];
 
     if (same_points(wpt, cmp)) {

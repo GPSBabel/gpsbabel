@@ -839,12 +839,11 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
    */
 
   if (find_flag == 0) {
-    const char** prefix;
     const char* prefixes[] = {
       "White ", "Red ", "Green ", "Blue ", "Black ", nullptr
     };
     // Rewrite "Green Square" to "Square, Green".
-    for (prefix = prefixes; *prefix != nullptr; prefix++) {
+    for (const char** prefix = prefixes; *prefix != nullptr; prefix++) {
       if (desc.startsWith(*prefix, Qt::CaseInsensitive)) {
         QString buff = desc;
         buff.replace(*prefix, "");
@@ -964,9 +963,7 @@ gt_get_icao_cc(const QString& country, const QString& shortname)
 grid_type
 gt_lookup_grid_type(const char* grid_name, const QString& module)
 {
-  grid_mapping_t* g;
-
-  for (g = gt_mps_grid_names; (g->shortname); g++) {
+  for (grid_mapping_t* g = gt_mps_grid_names; (g->shortname); g++) {
     if (QString::compare(grid_name, g->shortname, Qt::CaseInsensitive) == 0 ||
         QString::compare(grid_name, g->longname,Qt::CaseInsensitive) == 0) {
       return g->grid;
@@ -993,11 +990,10 @@ const char*
 gt_get_mps_datum_name(const int datum_index)
 {
   const char* result;
-  datum_mapping_t* d;
 
   result = GPS_Math_Get_Datum_Name(datum_index);
 
-  for (d = gt_mps_datum_names; (d->jeeps_name); d++)
+  for (datum_mapping_t* d = gt_mps_datum_names; (d->jeeps_name); d++)
     if (QString::compare(result, d->jeeps_name, Qt::CaseInsensitive) == 0) {
       return d->mps_name;
     }
@@ -1008,11 +1004,10 @@ gt_get_mps_datum_name(const int datum_index)
 int
 gt_lookup_datum_index(const char* datum_str, const QString& module)
 {
-  datum_mapping_t* d;
   int result;
   const char* name = datum_str;
 
-  for (d = gt_mps_datum_names; (d->jeeps_name); d++) {
+  for (datum_mapping_t* d = gt_mps_datum_names; (d->jeeps_name); d++) {
     if (QString::compare(name, d->mps_name, Qt::CaseInsensitive) == 0) {
       name = d->jeeps_name;
       break;
@@ -1047,9 +1042,7 @@ gt_color_value(const unsigned int garmin_index)
 uint32_t
 gt_color_value_by_name(const QString& name)
 {
-  unsigned int i;
-
-  for (i = 0; i < GT_COLORS_CT; i++)
+  for (unsigned int i = 0; i < GT_COLORS_CT; i++)
     if (QString::compare(gt_colors[i].name, name, Qt::CaseInsensitive) == 0) {
       return gt_colors[i].rgb;
     }
@@ -1060,9 +1053,7 @@ gt_color_value_by_name(const QString& name)
 int
 gt_color_index_by_name(const QString& name)
 {
-  unsigned int i;
-
-  for (i = 0; i < GT_COLORS_CT; i++)
+  for (unsigned int i = 0; i < GT_COLORS_CT; i++)
     if (QString::compare(gt_colors[i].name, name, Qt::CaseInsensitive) == 0) {
       return i;
     }
@@ -1073,9 +1064,7 @@ gt_color_index_by_name(const QString& name)
 int
 gt_color_index_by_rgb(const int rgb)
 {
-  unsigned int i;
-
-  for (i = 0; i < GT_COLORS_CT; i++)
+  for (unsigned int i = 0; i < GT_COLORS_CT; i++)
     if (rgb == gt_colors[i].rgb) {
       return i;
     }

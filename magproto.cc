@@ -279,9 +279,8 @@ unsigned int
 mag_checksum(const char* const buf)
 {
   int csum = 0;
-  const char* p;
 
-  for (p = buf; *p; p++) {
+  for (const char* p = buf; *p; p++) {
     csum  ^= *p;
   }
 
@@ -1222,7 +1221,6 @@ mag_wptparse(char* trkmsg)
   Waypoint* waypt;
   char* icons;
   char* icone;
-  char* blah;
   int i = 0;
 
   descr[0] = 0;
@@ -1239,7 +1237,7 @@ mag_wptparse(char* trkmsg)
 
   mag_dequote(descr);
 
-  for (blah = icons ; blah < icone; blah++) {
+  for (char* blah = icons ; blah < icone; blah++) {
     icon_token[i++] = *blah;
   }
   icon_token[i++] = '\0';
