@@ -283,7 +283,6 @@ gpi_read_string_old(const char* field)
     if (first == 0) {
       short l1;
       short l2;
-      char* res2 = nullptr;
       char lc1[3] = "";
       char lc2[3] = "";
 
@@ -292,7 +291,7 @@ gpi_read_string_old(const char* field)
 
       char* res1 = gpi_read_lc_string_old(lc1,  &l1);
       if ((l1 + 4) < l0) { // dual language?
-        res2 = gpi_read_lc_string_old(lc2,  &l2);
+        char* res2 = gpi_read_lc_string_old(lc2,  &l2);
         is_fatal((l1 + 4 + l2 + 4 != l0),
                  MYNAME ": Error out of sync (wrong size %d/%d/%d) on field '%s'!", l0, l1, l2, field);
         if (opt_lang && (strcmp(opt_lang, lc1) == 0)) {

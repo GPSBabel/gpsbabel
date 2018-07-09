@@ -174,15 +174,12 @@ text_disp(const Waypoint* wpt)
 
   if (fs_gpx && fs_gpx->tag) {
     xml_tag* root = fs_gpx->tag;
-    xml_tag* curlog = nullptr;
-    xml_tag* logpart = nullptr;
-    curlog = xml_findfirst(root, "groundspeak:log");
+    xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
     while (curlog) {
       time_t logtime = 0;
-      struct tm* logtm = nullptr;
       gbfprintf(file_out, "\n");
 
-      logpart = xml_findfirst(curlog, "groundspeak:type");
+      xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
       if (logpart) {
         gbfputs(logpart->cdata, file_out);
         gbfputs(" by ", file_out);
@@ -197,7 +194,7 @@ text_disp(const Waypoint* wpt)
       logpart = xml_findfirst(curlog, "groundspeak:date");
       if (logpart) {
         logtime = xml_parse_time(logpart->cdata).toTime_t();
-        logtm = localtime(&logtime);
+        struct tm* logtm = localtime(&logtime);
         if (logtm) {
           gbfprintf(file_out,
                     "%4.4d-%2.2d-%2.2d\n",
@@ -209,10 +206,9 @@ text_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:log_wpt");
       if (logpart) {
-        char* coordstr = nullptr;
         double lat = 0;
         double lon = 0;
-        coordstr = xml_attribute(logpart, "lat");
+        char* coordstr = xml_attribute(logpart, "lat");
         if (coordstr) {
           lat = atof(coordstr);
         }
@@ -227,10 +223,8 @@ text_disp(const Waypoint* wpt)
 
       logpart = xml_findfirst(curlog, "groundspeak:text");
       if (logpart) {
-        char* encstr = nullptr;
-        int encoded = 0;
-        encstr = xml_attribute(logpart, "encoded");
-        encoded = (toupper(encstr[0]) != 'F');
+        char* encstr = xml_attribute(logpart, "encoded");
+        int encoded = (toupper(encstr[0]) != 'F');
 
         QString s;
         if (txt_encrypt && encoded) {

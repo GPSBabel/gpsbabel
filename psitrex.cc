@@ -504,8 +504,6 @@ psit_track_r(gbfile* psit_file, route_head**)
   unsigned int trk_num;
 
   struct tm tmTime;
-  time_t dateTime = 0;
-  route_head* track_head = nullptr;
   Waypoint* thisWaypoint;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
@@ -518,7 +516,7 @@ psit_track_r(gbfile* psit_file, route_head**)
   rtrim(trkname);
 
   trk_num = 0;
-  track_head = nullptr;
+  route_head* track_head = nullptr;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), wscomma);
 
@@ -557,7 +555,7 @@ psit_track_r(gbfile* psit_file, route_head**)
              &(tmTime.tm_sec));
 
       tmTime.tm_isdst = 0;
-      dateTime = mkgmtime(&tmTime);
+      time_t dateTime = mkgmtime(&tmTime);
 
       psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), whitespace);
 

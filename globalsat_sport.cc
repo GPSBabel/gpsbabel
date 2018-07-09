@@ -576,8 +576,7 @@ track_read()
 
         uint8_t trackDeviceCommand;
         int track_length;
-        uint8_t* track_payload = nullptr;
-        track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
+        uint8_t* track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
         is_fatal(((track_length == 0) || (track_payload == nullptr)) , "tracklength in 0 bytes or payload nonexistant");
         //      printf("Got track package!!! Train data\n");
 

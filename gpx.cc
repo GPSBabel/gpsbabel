@@ -806,11 +806,9 @@ xml_parse_time(const QString& dateTimeString)
   int off_hr = 0;
   int off_min = 0;
   int off_sign = 1;
-  char* offsetstr = nullptr;
-  char* pointstr = nullptr;
   char* timestr = xstrdup(dateTimeString);
 
-  offsetstr = strchr(timestr, 'Z');
+  char* offsetstr = strchr(timestr, 'Z');
   if (offsetstr) {
     /* zulu time; offsets stay at defaults */
     *offsetstr = '\0';
@@ -835,7 +833,7 @@ xml_parse_time(const QString& dateTimeString)
   }
 
   double fsec = 0;
-  pointstr = strchr(timestr, '.');
+  char* pointstr = strchr(timestr, '.');
   if (pointstr) {
     sscanf(pointstr, "%le", &fsec);
 #if 0
@@ -1455,7 +1453,6 @@ fprint_xml_chain(xml_tag* tag, const Waypoint* wpt)
 
 void free_gpx_extras(xml_tag* tag)
 {
-  xml_tag* next = nullptr;
   char** ap;
 
   while (tag) {
@@ -1472,7 +1469,7 @@ void free_gpx_extras(xml_tag* tag)
       xfree(tag->attributes);
     }
 
-    next = tag->sibling;
+    xml_tag* next = tag->sibling;
     delete tag;
     tag = next;
   }

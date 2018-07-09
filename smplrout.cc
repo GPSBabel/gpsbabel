@@ -95,22 +95,20 @@ void SimplifyRouteFilter::routesimple_waypt_pr(const Waypoint* wpt)
 void SimplifyRouteFilter::compute_xte(struct xte* xte_rec)
 {
   const Waypoint* wpt3 = xte_rec->intermed->wpt;
-  const Waypoint* wpt1 = nullptr;
-  const Waypoint* wpt2 = nullptr;
   double frac, reslat, reslon;
   /* if no previous, this is an endpoint and must be preserved. */
   if (!xte_rec->intermed->prev) {
     xte_rec->distance = HUGEVAL;
     return;
   }
-  wpt1 = xte_rec->intermed->prev->wpt;
+  const Waypoint* wpt1 = xte_rec->intermed->prev->wpt;
 
   /* if no next, this is an endpoint and must be preserved. */
   if (!xte_rec->intermed->next) {
     xte_rec->distance = HUGEVAL;
     return;
   }
-  wpt2 = xte_rec->intermed->next->wpt;
+  const Waypoint* wpt2 = xte_rec->intermed->next->wpt;
 
   if (xteopt) {
     xte_rec->distance = radtomiles(linedist(

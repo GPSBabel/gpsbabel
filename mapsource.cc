@@ -780,10 +780,8 @@ mps_waypoint_w_unique_wrapper(const Waypoint* wpt)
 static void
 mps_route_wpt_w_unique_wrapper(const Waypoint* wpt)
 {
-  Waypoint* wptfound = nullptr;
-
   /* Search for this waypoint in the ones already written */
-  wptfound = mps_find_wpt_q_by_name(&written_wpt_head, CSTRc(wpt->shortname));
+  Waypoint* wptfound = mps_find_wpt_q_by_name(&written_wpt_head, CSTRc(wpt->shortname));
   if (wptfound == nullptr)
     /* so, not a real wpt, so must check route wpts already written as reals */
   {

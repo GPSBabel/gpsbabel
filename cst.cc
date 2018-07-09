@@ -165,12 +165,10 @@ cst_data_read()
   Waypoint* wpt = nullptr;
 
   while ((buff = gbfgetstr(fin))) {
-    char* cin = buff;
-
     if ((line++ == 0) && fin->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
     }
-    cin = lrtrim(buff);
+    char* cin = lrtrim(buff);
     if (strlen(cin) == 0) {
       continue;
     }

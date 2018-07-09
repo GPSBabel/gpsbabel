@@ -191,7 +191,6 @@ char*
 csv_stringtrim(const char* string, const char* enclosure, int strip_max)
 {
   static const char* p1 = nullptr;
-  char* p2 = nullptr;
   char* tmp = xxstrdup(string,file,line);
   size_t elen;
   int stripped = 0;
@@ -206,7 +205,7 @@ csv_stringtrim(const char* string, const char* enclosure, int strip_max)
     elen = strlen(enclosure);
   }
 
-  p2 = tmp + strlen(tmp) - 1;
+  char* p2 = tmp + strlen(tmp) - 1;
   p1 = tmp;
 
   /* trim off trailing whitespace */
@@ -638,17 +637,11 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
 QString
 dec_to_human(const char* format, const char* dirs, double val)
 {
-  char* subformat = nullptr;
-  const char* formatptr = nullptr;
-  char* percent = nullptr;
-  char* type = nullptr;
-
   int  index = 0;
   int  intvals[3] = {0,0,0};
   double  dblvals[3] = {0,0,0};
-  int  sign = 0;
 
-  sign = (val < 0) ? 0 : 1;
+  int sign = (val < 0) ? 0 : 1;
 
   dblvals[0] = fabs(val);
   intvals[0] = (int)dblvals[0];
@@ -657,16 +650,16 @@ dec_to_human(const char* format, const char* dirs, double val)
   dblvals[2] = 60*(dblvals[1]-intvals[1]);
   intvals[2] = (int)dblvals[2];
 
-  subformat = (char*) xmalloc(strlen(format)+2);
-  formatptr = format;
+  char* subformat = (char*) xmalloc(strlen(format)+2);
+  const char* formatptr = format;
 
   QString buff;
 
   while (formatptr && *formatptr) {
     strcpy(subformat, formatptr);
-    percent = strchr(subformat, '%');
+    char* percent = strchr(subformat, '%');
     if (percent) {
-      type = percent+1+strcspn(percent+1, "cdiouxXeEfgG%");
+      char* type = percent+1+strcspn(percent+1, "cdiouxXeEfgG%");
       *(type+1) = '\0';
       switch (*type) {
       case 'c':

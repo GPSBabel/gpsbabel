@@ -622,7 +622,6 @@ static void tpo_process_tracks()
     int lon = 0;
     route_head* track_temp;
     char rgb[7],bgr[7];
-    int bbggrr = 0;
 
     // Allocate the track struct
     track_temp = route_head_alloc();
@@ -652,7 +651,7 @@ static void tpo_process_tracks()
     // RGB line_color expressed for html=rrggbb and kml=bbggrr - not assigned before 2012
     sprintf(rgb,"%02x%02x%02x",styles[track_style].color[0],styles[track_style].color[1],styles[track_style].color[2]);
     sprintf(bgr,"%02x%02x%02x",styles[track_style].color[2],styles[track_style].color[1],styles[track_style].color[0]);
-    bbggrr = styles[track_style].color[2] << 16 | styles[track_style].color[1] << 8 | styles[track_style].color[0];
+    int bbggrr = styles[track_style].color[2] << 16 | styles[track_style].color[1] << 8 | styles[track_style].color[0];
     track_temp->line_color.bbggrr = bbggrr;
 
     // track texture (dashed=1, solid=0) mapped into opacity - not assigned before 2012
@@ -1191,7 +1190,6 @@ static void tpo_process_routes()
   // Read/process each route in the file
   //
   for (unsigned int ii = 0; ii < route_count; ii++) {
-    unsigned int name_length = 0;
     unsigned int waypoint_cnt;
     route_head* route_temp;
 
@@ -1208,7 +1206,7 @@ static void tpo_process_routes()
 
 //UNKNOWN DATA LENGTH
     // Fetch name length
-    name_length = tpo_read_int();
+    unsigned int name_length = tpo_read_int();
     QString route_name;
     if (name_length) {
       gbfread(route_name, 1, name_length, tpo_file_in);

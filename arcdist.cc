@@ -125,8 +125,6 @@ void ArcDistanceFilter::process()
 
     arcpt2->latitude = arcpt2->longitude = BADVAL;
     while ((line = gbfgetstr(file_in))) {
-      int argsfound = 0;
-
       fileline++;
 
       char* pound = strchr(line, '#');
@@ -138,7 +136,7 @@ void ArcDistanceFilter::process()
       }
 
       arcpt2->latitude = arcpt2->longitude = BADVAL;
-      argsfound = sscanf(line, "%lf %lf", &arcpt2->latitude, &arcpt2->longitude);
+      int argsfound = sscanf(line, "%lf %lf", &arcpt2->latitude, &arcpt2->longitude);
 
       if (argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
         warning(MYNAME ": Warning: Arc file contains unusable vertex on line %d.\n", fileline);

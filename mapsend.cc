@@ -268,7 +268,6 @@ mapsend_read()
 static void
 mapsend_waypt_pr(const Waypoint* waypointp)
 {
-  unsigned int c = 0;
   double falt;
   static int cnt = 0;
   QString sn = global_opts.synthesize_shortnames ?
@@ -296,7 +295,7 @@ mapsend_waypt_pr(const Waypoint* waypointp)
 
   // This is funny looking to ensure that no more than 30 bytes
   // get written to the file.
-  c = waypointp->description.length();
+  unsigned int c = waypointp->description.length();
   if (c > 30) {
     c = 30;
   }

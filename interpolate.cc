@@ -55,7 +55,6 @@ void InterpolateFilter::process()
   }
 
   QUEUE_FOR_EACH(backuproute, elem, tmp) {
-    bool first = false;
     route_head* rte_old = (route_head*)elem;
 
     route_head* rte_new = route_head_alloc();
@@ -68,7 +67,7 @@ void InterpolateFilter::process()
     } else {
       track_add_head(rte_new);
     }
-    first = 1;
+    bool first = 1;
     QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2) {
       Waypoint* wpt = (Waypoint*)elem2;
       if (first) {

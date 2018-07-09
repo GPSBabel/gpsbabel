@@ -155,7 +155,6 @@ static const char* mknshort(const char* stIn,unsigned int sLen)
 #define MAX_STRINGLEN 255
   static char strOut[MAX_STRINGLEN];
   char strTmp[MAX_STRINGLEN];
-  char* shortstr = nullptr;
 
   if (sLen > MAX_STRINGLEN) {
     return (stIn);
@@ -168,7 +167,7 @@ static const char* mknshort(const char* stIn,unsigned int sLen)
   setshort_length(mkshort_handle, sLen);
   setshort_mustuniq(mkshort_handle, 0);
 
-  shortstr = mkshort(mkshort_handle, stIn);
+  char* shortstr = mkshort(mkshort_handle, stIn);
   strcpy(strTmp,shortstr);
   xfree(shortstr);
 

@@ -39,9 +39,8 @@ format_specific_data* fs_chain_copy(format_specific_data* source)
 void fs_chain_destroy(format_specific_data* chain)
 {
   format_specific_data* cur = chain;
-  format_specific_data* next = nullptr;
   while (cur) {
-    next = cur->next;
+    format_specific_data* next = cur->next;
     cur->destroy(cur);
     cur = next;
   }

@@ -566,7 +566,6 @@ static int wbt200_data_chunk(struct read_state* st, const void* buf, int fmt)
   uint32_t   tim;
   double     lat, lon, alt;
   time_t     rtim;
-  Waypoint*   tpt     = nullptr;
   const char* bp      = (const char*) buf;
   size_t     buf_used = fmt_version[fmt].reclen;
 
@@ -595,7 +594,7 @@ static int wbt200_data_chunk(struct read_state* st, const void* buf, int fmt)
     st->route_head_ = nullptr;
   }
 
-  tpt = make_trackpoint(st, lat, lon, alt, rtim);
+  Waypoint*   tpt = make_trackpoint(st, lat, lon, alt, rtim);
 
   if (nullptr == st->route_head_) {
     db(1, "New Track\n");
@@ -802,7 +801,6 @@ static int wbt201_data_chunk(struct read_state* st, const void* buf)
   uint16_t    flags;
   double      lat, lon, alt;
   time_t      rtim;
-  Waypoint*    tpt     = nullptr;
   const char*  bp      = (const char*) buf;
 
   /* Zero records are skipped */
@@ -834,7 +832,7 @@ static int wbt201_data_chunk(struct read_state* st, const void* buf)
       st->route_head_ = nullptr;
     }
 
-    tpt = make_trackpoint(st, lat, lon, alt, rtim);
+    Waypoint*    tpt = make_trackpoint(st, lat, lon, alt, rtim);
 
     if (nullptr == st->route_head_) {
       db(1, "New Track\n");

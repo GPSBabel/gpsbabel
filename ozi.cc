@@ -869,10 +869,9 @@ ozi_waypt_pr(const Waypoint* wpt)
   QString description;
   QString shortname;
   int faked_fsdata = 0;
-  ozi_fsdata* fs = nullptr;
   int icon = 0;
 
-  fs = (ozi_fsdata*) fs_chain_find(wpt->fs, FS_OZI);
+  ozi_fsdata* fs = (ozi_fsdata*) fs_chain_find(wpt->fs, FS_OZI);
 
   if (!fs) {
     fs = ozi_alloc_fsdata();

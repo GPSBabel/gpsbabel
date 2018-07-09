@@ -230,18 +230,15 @@ void PolygonFilter::process()
 
   olat = olon = lat1 = lon1 = lat2 = lon2 = BADVAL;
   while ((line = gbfgetstr(file_in))) {
-    char* pound = nullptr;
-    int argsfound = 0;
-
     fileline++;
 
-    pound = strchr(line, '#');
+    char* pound = strchr(line, '#');
     if (pound) {
       *pound = '\0';
     }
 
     lat2 = lon2 = BADVAL;
-    argsfound = sscanf(line, "%lf %lf", &lat2, &lon2);
+    int argsfound = sscanf(line, "%lf %lf", &lat2, &lon2);
 
     if (argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
       warning(MYNAME

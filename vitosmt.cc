@@ -68,21 +68,8 @@ rd_deinit()
 static void
 vitosmt_read()
 {
-  long  version  =0;
-  long  subversion =0;
-  long  check1  =-1;
-  long  check2  =-2;
-  long  check3  =-3;
   route_head* route_head =nullptr;
-  Waypoint* wpt_tmp =nullptr;
-  unsigned char* timestamp =nullptr;
   struct tm tmStruct;
-  double speed = 0.0;
-  double course = 0.0;
-  double pdop = 0.0;
-  unsigned char gpsfix = 0;
-  unsigned char gpsvalid = 0;
-  unsigned char gpssats = 0;
   int  serial  =0;
 
 
@@ -90,13 +77,13 @@ vitosmt_read()
   /*
    * 24 bytes header
    */
-  version = gbfgetint32(infile); /* 2 */
-  subversion = gbfgetint32(infile); /* 1000 */
+  long version = gbfgetint32(infile); /* 2 */
+  long subversion = gbfgetint32(infile); /* 1000 */
   count = gbfgetint32(infile); /* n */
-  check1 = gbfgetint32(infile); /* 0 */
-  check2 = gbfgetint32(infile); /* not sure */
+  long check1 = gbfgetint32(infile); /* 0 */
+  long check2 = gbfgetint32(infile); /* not sure */
   (void) check2; // silence warning.
-  check3 = gbfgetint32(infile); /* n */
+  long check3 = gbfgetint32(infile); /* n */
 
   if (version!=vitosmt_version) {
 
@@ -130,16 +117,16 @@ vitosmt_read()
     double latrad = gbfgetdbl(infile); /* WGS84 latitude in radians */
     double lonrad = gbfgetdbl(infile); /* WGS84 longitude in radians */
     double elev = gbfgetdbl(infile); /* elevation in meters */
-    timestamp = ReadRecord(infile,5); /* UTC time yr/mo/dy/hr/mi */
+    unsigned char* timestamp = ReadRecord(infile,5); /* UTC time yr/mo/dy/hr/mi */
     double seconds = gbfgetdbl(infile); /* seconds */
-    speed = gbfgetdbl(infile);    /* speed in knots */
-    course = gbfgetdbl(infile); /* course in degrees */
-    pdop = gbfgetdbl(infile); /* dilution of precision */
-    gpsfix = gbfgetc(infile); /* fix type x08,x10, x20 */
-    gpsvalid = gbfgetc(infile); /* fix is valid */
-    gpssats = gbfgetc(infile); /* number of sats */
+    double speed = gbfgetdbl(infile);    /* speed in knots */
+    double course = gbfgetdbl(infile); /* course in degrees */
+    double pdop = gbfgetdbl(infile); /* dilution of precision */
+    unsigned char gpsfix = gbfgetc(infile); /* fix type x08,x10, x20 */
+    unsigned char gpsvalid = gbfgetc(infile); /* fix is valid */
+    unsigned char gpssats = gbfgetc(infile); /* number of sats */
 
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
 
     wpt_tmp->latitude =DEG(latrad);
     wpt_tmp->longitude =DEG(lonrad);
@@ -223,12 +210,11 @@ wr_deinit()
 static void
 vitosmt_waypt_pr(const Waypoint* waypointp)
 {
-  unsigned char*  workbuffer =nullptr;
   size_t  position =0;
   double  seconds  =0;
 
   ++count;
-  workbuffer = (unsigned char*) xcalloc(vitosmt_datasize,1);
+  unsigned char*  workbuffer = (unsigned char*) xcalloc(vitosmt_datasize,1);
 
   WriteDouble(&workbuffer[position], RAD(waypointp->latitude));
   position += sizeof(double);
@@ -302,9 +288,7 @@ vitosmt_waypt_pr(const Waypoint* waypointp)
 static void
 vitosmt_write()
 {
-  unsigned char* workbuffer = nullptr;
-
-  workbuffer = (unsigned char*) xcalloc(vitosmt_headersize,1);
+  unsigned char* workbuffer = (unsigned char*) xcalloc(vitosmt_headersize,1);
 
   count = 0;
 
