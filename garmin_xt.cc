@@ -231,7 +231,7 @@ static void
 format_garmin_xt_proc_strk()
 {
   int 		Count = 0; // Used to obtain number of read bytes
-  int TracksCompleted = 0; // Number of tracks in the file and number of processed tracks
+  int TracksCompleted = 0; // Number of processed tracks
   uint8_t	TrackBlock[STRK_BLOCK_SIZE + 1]; // File Block
   uint8_t 	ii; // temp variable
   double		Lat = 0, Lon = 0; // wpt data
@@ -244,7 +244,7 @@ format_garmin_xt_proc_strk()
   gbfseek(fin, 12, SEEK_SET);
 
   // read # of tracks
-  int NumberOfTracks = gbfgetuint16(fin);
+  int NumberOfTracks = gbfgetuint16(fin); // Number of tracks in the file
 
   // Skip 2 bytes
   gbfseek(fin, 2, SEEK_CUR);
@@ -257,7 +257,7 @@ format_garmin_xt_proc_strk()
     trk_name = (char*) xmalloc(30);
 
     // Generate Track Header
-    uint16_t trackbytes = format_garmin_xt_rd_st_attrs(trk_name, &trk_color) - 50;
+    uint16_t trackbytes = format_garmin_xt_rd_st_attrs(trk_name, &trk_color) - 50; // Bytes in track
 
     tmp_track = route_head_alloc();
     // update track color
