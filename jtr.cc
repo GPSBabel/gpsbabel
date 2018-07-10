@@ -40,10 +40,9 @@ static QHash<QString, const Waypoint*> trkpts;
 static time_t
 jtr_parse_time(const char* str, struct tm* tm, int* milli)
 {
-  long int hms;
   char* dot;
 
-  hms = strtol(str, &dot, 10);
+  long int hms = strtol(str, &dot, 10);
   if (hms > 0) {
     tm->tm_sec = hms % 100;
     hms = hms / 100;
@@ -103,16 +102,14 @@ jtr_read()
   route_head* trk = nullptr;
 
   while ((str = gbfgetstr(fin))) {
-    Waypoint* wpt;
     struct tm tm;
-    char* tmp;
     char valid = 'V';
-    double lat, lon;
-    float speed, course, mcourse, mvar, mdev;
+    double lon;
+    float course, mcourse, mvar, mdev;
     time_t time = 0;
     int mills = 0;
     char buf[32];
-    char mvardir, mdevdir;
+    char mdevdir;
 
     line++;
 
@@ -126,12 +123,12 @@ jtr_read()
     }
 
     memset(&tm, 0, sizeof(tm));
-    lat = lon = 999;
-    speed = course = mcourse = mvar = mdev = -1;
-    mvardir = mdevdir = 0;
+    double lat = lon = 999;
+    float speed = course = mcourse = mvar = mdev = -1;
+    char mvardir = mdevdir = 0;
 
     int column = -1;
-    tmp = str;
+    char* tmp = str;
     while ((str = csv_lineparse(tmp, ",", "", column++))) {
       tmp = nullptr;
 
@@ -210,7 +207,7 @@ jtr_read()
       continue;
     }
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     wpt->latitude = lat;
     wpt->longitude = lon;

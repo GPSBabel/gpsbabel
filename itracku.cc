@@ -138,8 +138,6 @@ itracku_device_update_data_init()
 static int
 itracku_device_update_data_read(void* buf, int len)
 {
-  int rc;
-
   if (update_data_buffer_write - update_data_buffer_read >= len) {
     memcpy(buf, update_data_buffer_read, len);
     update_data_buffer_read += len;
@@ -152,7 +150,7 @@ itracku_device_update_data_read(void* buf, int len)
     update_data_buffer_read = update_data_buffer;
   }
 
-  rc = gbser_read_wait(fd, update_data_buffer_write, update_data_buffer_end - update_data_buffer_write, timeout);
+  int rc = gbser_read_wait(fd, update_data_buffer_write, update_data_buffer_end - update_data_buffer_write, timeout);
   if (rc == gbser_ERROR) {
     return 0;
   }
@@ -202,9 +200,6 @@ static double
 deg_min_to_deg(volatile uint32_t x)
 {
   double sign;
-  uint32_t sep;
-  uint32_t d;
-  uint32_t m10000;
   // determine the sign
   if (x > 0x80000000) {
     sign = -1.0;
@@ -213,12 +208,12 @@ deg_min_to_deg(volatile uint32_t x)
     sign = 1.0;
   }
 
-  sep = 1000000;
+  uint32_t sep = 1000000;
 
   // extract degrees
-  d = (unsigned int) x / (unsigned int) sep;
+  uint32_t d = (unsigned int) x / (unsigned int) sep;
   // extract (minutes * 10000)
-  m10000 = x - d * sep;
+  uint32_t m10000 = x - d * sep;
 
   // convert minutes and degrees to a double
   return sign * ((double)d + ((double)m10000) / 600000.0);
@@ -231,8 +226,6 @@ static uint32_t
 deg_to_deg_min(double x)
 {
   int32_t sign;
-  double d;
-  double f;
 
   // determine sign
   if (x >= 0) {
@@ -243,10 +236,10 @@ deg_to_deg_min(double x)
   }
 
   // integer degrees
-  d = floor(x);
+  double d = floor(x);
 
   // fractional part
-  f = x - d;
+  double f = x - d;
 
   return
     (uint32_t)d * 1000000 + // multiply integer degrees to shift it to the right digits.
@@ -295,8 +288,7 @@ encode_itracku_time(time_t time)
 static Waypoint*
 to_waypoint(itracku_data_record* d)
 {
-  Waypoint* wp;
-  wp = new Waypoint;
+  Waypoint* wp = new Waypoint;
   wp->longitude = deg_min_to_deg(le_read32(d->longitude));
   wp->latitude = deg_min_to_deg(le_read32(d->latitude));
   wp->SetCreationTime(decode_itracku_time(le_read32(d->creation_time)));
@@ -328,14 +320,13 @@ static int
 init_device()
 {
   int rc;
-  const char* greeting;
   // verify that we have a MTK based logger...
   dbg(1, "verifying device on port %s", port);
 
   itracku_device_write_string("WP AP-Exit");
   gbser_flush(fd);
   itracku_device_write_string("W'P Camera Detect");
-  greeting = itracku_device_read_string();
+  const char* greeting = itracku_device_read_string();
 
   if (0 == strcmp(greeting , "WP GPS+BT")) {
     dbg(1, "device recognised on port %s", port);
@@ -540,8 +531,7 @@ static uint32_t
 itracku_file_read_last_time(gbfile* fin)
 {
   itracku_data_record d;
-  gbsize_t s;
-  s = sizeof(itracku_data_record);
+  gbsize_t s = sizeof(itracku_data_record);
   gbfseek(fin, 0, SEEK_END);
   if (gbftell(fin) < s) {
     return 0;
@@ -686,8 +676,6 @@ gprmc_parse(char* ibuf)
   char fix;
   unsigned int dmy;
   double speed,course;
-  Waypoint* waypt;
-  double fsec;
   struct tm tm;
 
   int rc = sscanf(ibuf,"$GPRMC,%lf,%c,%lf,%c,%lf,%c,%lf,%lf,%u",
@@ -699,7 +687,7 @@ gprmc_parse(char* ibuf)
     return nullptr;
   }
 
-  fsec = hms - (int)hms;
+  double fsec = hms - (int)hms;
 
   tm.tm_sec = (long) hms % 100;
   hms = hms / 100;
@@ -713,7 +701,7 @@ gprmc_parse(char* ibuf)
   dmy = dmy / 100;
   tm.tm_mday = dmy;
 
-  waypt  = new Waypoint;
+  Waypoint* waypt = new Waypoint;
 
   WAYPT_SET(waypt, speed, KNOTS_TO_MPS(speed));
 
@@ -745,11 +733,10 @@ static Waypoint*
 itracku_rt_position(posn_status*)
 {
   char line[1024];
-  Waypoint* wpt;
   while (true) {
     gbser_read_line(fd, line, sizeof(line), 5000, 13, 10);
     dbg(1, line);
-    wpt = gprmc_parse(line);
+    Waypoint* wpt = gprmc_parse(line);
     if (wpt) {
       return wpt;
     }

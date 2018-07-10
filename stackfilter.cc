@@ -34,7 +34,6 @@ void StackFilter::process()
   queue* elem = nullptr;
   queue* tmp = nullptr;
   queue tmp_queue;
-  unsigned int tmp_count;
 
   if (opt_push) {
     tmp_elt = (struct stack_elt*)xmalloc(sizeof(struct stack_elt));
@@ -121,7 +120,7 @@ void StackFilter::process()
     xfree(tmp);
     track_restore(&tmp_queue);
 
-    tmp_count = waypt_count();
+    unsigned int tmp_count = waypt_count();
     set_waypt_count(tmp_elt->waypt_ct);
     tmp_elt->waypt_ct = tmp_count;
   }

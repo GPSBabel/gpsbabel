@@ -100,9 +100,8 @@ text_disp(const Waypoint* wpt)
   int32_t utmz;
   double utme, utmn;
   char utmzc;
-  char* tmpout1, *tmpout2;
+  char*tmpout2;
   char* altout;
-  fs_xml* fs_gpx;
 
   waypoint_count++;
 
@@ -114,7 +113,7 @@ text_disp(const Waypoint* wpt)
 
   GPS_Math_WGS84_To_UTM_EN(wpt->latitude, wpt->longitude,
                            &utme, &utmn, &utmz, &utmzc);
-  tmpout1 = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 0);
+  char* tmpout1 = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 0);
   if (wpt->altitude != unknown_alt) {
     xasprintf(&altout, " alt:%d", (int)((altunits[0]=='f')?METERS_TO_FEET(wpt->altitude):wpt->altitude));
   } else {
@@ -167,7 +166,7 @@ text_disp(const Waypoint* wpt)
     gbfputs("\n", file_out);
   }
 
-  fs_gpx = nullptr;
+  fs_xml* fs_gpx = nullptr;
   if (includelogs) {
     fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
   }

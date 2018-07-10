@@ -142,12 +142,11 @@ gdx_read(const char* fname)
 const gdx_info*
 gdx_find_file(char** dirlist)
 {
-  const gdx_info* gdx;
   while (dirlist && *dirlist) {
     char* tbuf;
     xasprintf(&tbuf, "%s/%s", *dirlist, "/Garmin/GarminDevice.xml");
     mountpoint = *dirlist;
-    gdx = gdx_read(tbuf);
+    const gdx_info* gdx = gdx_read(tbuf);
     xfree(tbuf);
     if (gdx) {
       longjmp(gdx_jmp_buf, 1);

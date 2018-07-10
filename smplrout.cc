@@ -95,7 +95,7 @@ void SimplifyRouteFilter::routesimple_waypt_pr(const Waypoint* wpt)
 void SimplifyRouteFilter::compute_xte(struct xte* xte_rec)
 {
   const Waypoint* wpt3 = xte_rec->intermed->wpt;
-  double frac, reslat, reslon;
+  double reslat, reslon;
   /* if no previous, this is an endpoint and must be preserved. */
   if (!xte_rec->intermed->prev) {
     xte_rec->distance = HUGEVAL;
@@ -129,8 +129,8 @@ void SimplifyRouteFilter::compute_xte(struct xte* xte_rec)
     }
     // if timestamps exist, distance to interpolated point
     if (wpt1->GetCreationTime() != wpt2->GetCreationTime()) {
-      frac = (double)(wpt3->GetCreationTime().toTime_t() - wpt1->GetCreationTime().toTime_t()) /
-             (wpt2->GetCreationTime().toTime_t() - wpt1->GetCreationTime().toTime_t());
+      double frac = (double)(wpt3->GetCreationTime().toTime_t() - wpt1->GetCreationTime().toTime_t()) /
+        (wpt2->GetCreationTime().toTime_t() - wpt1->GetCreationTime().toTime_t());
       linepart(wpt1->latitude, wpt1->longitude,
                wpt2->latitude, wpt2->longitude,
                frac, &reslat, &reslon);

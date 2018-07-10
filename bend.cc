@@ -53,7 +53,6 @@ Waypoint* BendFilter::create_wpt_dest(const Waypoint* wpt_orig, double lat_orig,
 {
   double distance = gcdist(lat_orig, long_orig,
                            lat_orig_adj, long_orig_adj);
-  double frac;
   double lat_dest;
   double long_dest;
   distance = radtometers(distance);
@@ -61,7 +60,7 @@ Waypoint* BendFilter::create_wpt_dest(const Waypoint* wpt_orig, double lat_orig,
     return nullptr;
   }
 
-  frac = maxDist / distance;
+  double frac = maxDist / distance;
 
   linepart(lat_orig, long_orig, lat_orig_adj, long_orig_adj, frac,
            &lat_dest, &long_dest);

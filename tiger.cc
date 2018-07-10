@@ -159,7 +159,6 @@ data_read()
   char desc[101];
   char icon[101];
   char* ibuf;
-  Waypoint* wpt_tmp;
   int line = 0;
 
   while ((ibuf = gbfgetstr(file_in))) {
@@ -168,7 +167,7 @@ data_read()
     }
     if (sscanf(ibuf, "%lf,%lf:%100[^:]:%100[^\n]",
                &lon, &lat, icon, desc)) {
-      wpt_tmp = new Waypoint;
+      Waypoint* wpt_tmp = new Waypoint;
 
       wpt_tmp->longitude = lon;
       wpt_tmp->latitude = lat;
@@ -263,7 +262,6 @@ dscale(double distance)
 static void
 data_write()
 {
-  double latsz,lonsz;
   maxlat = -9999.0;
   maxlon = -9999.0;
   minlat = 9999.0;
@@ -283,11 +281,9 @@ data_write()
   waypt_disp_all(tiger_disp);
 
   if (genurl) {
-    gbfile* urlf;
-
-    urlf = gbfopen(genurl, "w", MYNAME);
-    latsz = fabs(maxlat - minlat);
-    lonsz = fabs(maxlon - minlon);
+    gbfile* urlf = gbfopen(genurl, "w", MYNAME);
+    double latsz = fabs(maxlat - minlat);
+    double lonsz = fabs(maxlon - minlon);
 
     /*
      * Center the map along X and Y axis the midpoint of

@@ -111,8 +111,7 @@ void
 sortqueue(queue* qh, T cmp)
 {
 
-  queue* p, *q, *e, *tail, *oldhead, *list;
-  int insize, nmerges, psize, qsize, i;
+  queue *e;
 
   /*
    * Special case: if `list' is empty, we're done.
@@ -126,25 +125,25 @@ sortqueue(queue* qh, T cmp)
    * element.	 So remove the list head for now.  Put it back later.
    */
 
-  list = QUEUE_FIRST(qh);
+  queue* list = QUEUE_FIRST(qh);
   dequeue(qh);
 
-  insize = 1;
+  int insize = 1;
 
   while (true) {
-    p = list;
-    oldhead = list;	 /* only used for circular linkage */
+    queue* p = list;
+    queue* oldhead = list;	 /* only used for circular linkage */
     list = nullptr;
-    tail = nullptr;
+    queue* tail = nullptr;
 
-    nmerges = 0;  /* count number of merges we do in this pass */
+    int nmerges = 0;  /* count number of merges we do in this pass */
 
     while (p) {
       nmerges++;	/* there exists a merge to be done */
       /* step `insize' places along from p */
-      q = p;
-      psize = 0;
-      for (i = 0; i < insize; i++) {
+      queue* q = p;
+      int psize = 0;
+      for (int i = 0; i < insize; i++) {
         psize++;
         q = (q->next == oldhead ? nullptr : q->next);
         if (!q) {
@@ -154,7 +153,7 @@ sortqueue(queue* qh, T cmp)
 
       /* if q hasn't fallen off end, we have
        * two lists to merge */
-      qsize = insize;
+      int qsize = insize;
 
       /* now we have two lists; merge them */
       while (psize > 0 || (qsize > 0 && q)) {

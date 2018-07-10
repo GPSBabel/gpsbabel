@@ -719,8 +719,6 @@ data_read()
 {
   QString buff;
   char* trk_name = nullptr;
-  Waypoint* wpt_tmp;
-  int i;
   int linecount = 0;
 
   while ((buff = gbfgetstr(file_in)), !buff.isNull()) {
@@ -776,13 +774,13 @@ data_read()
     if (buff.contains(',')) {
       bool ozi_fsdata_used = false;
       ozi_fsdata* fsdata = ozi_alloc_fsdata();
-      wpt_tmp = new Waypoint;
+      Waypoint* wpt_tmp = new Waypoint;
 
       /* data delimited by commas, possibly enclosed in quotes.  */
       char* orig_s = xstrdup(CSTR(buff));
       char* s = csv_lineparse(orig_s, ",", "", linecount);
 
-      i = 0;
+      int i = 0;
       bool header = false;
       while (s) {
         switch (ozi_objective) {

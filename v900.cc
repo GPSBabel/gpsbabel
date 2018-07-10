@@ -212,7 +212,6 @@ v900_read()
     char text[200]; /* used to read the header line, which is normal text */
   } line;
   int lc = 0;
-  route_head* track;
 
   v900_log("%s\n",__func__);
 
@@ -230,14 +229,12 @@ v900_read()
   v900_log("header line: %s",line.text);
   v900_log("is_advance_mode=%d\n",is_advanced_mode);
 
-  track = route_head_alloc();
+  route_head* track = route_head_alloc();
   track->rte_name = "V900 tracklog";
   track->rte_desc = "V900 GPS tracklog data";
   track_add_head(track);
 
   while (true) {
-    Waypoint* wpt;
-    char c;
     int bad = 0;
     int record_len = is_advanced_mode ? sizeof(line.adv) : sizeof(line.bas);
     if (fread(&line, record_len, 1, fin) != 1) {
@@ -295,10 +292,10 @@ v900_read()
       line.bas.cr = 0;	/* null terminate vox field */
     }
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     /* lat is a string in the form: 31.768380N */
-    c = line.bas.common.latitude_NS;	/* N/S */
+    char c = line.bas.common.latitude_NS;	/* N/S */
     assert(c == 'N' || c == 'S');
     wpt->latitude = atof(line.bas.common.latitude_num);
     if (c == 'S') {
@@ -318,9 +315,8 @@ v900_read()
 
     /* handle date/time fields */
     {
-      int date, time;
-      date = atoi(line.bas.common.date);
-      time = atoi(line.bas.common.time);
+      int date = atoi(line.bas.common.date);
+      int time = atoi(line.bas.common.time);
       wpt->SetCreationTime(bintime2utc(date, time));
     }
 
@@ -351,13 +347,12 @@ v900_read()
 
     track_add_wpt(track, wpt);
     if (line.bas.common.tag != 'T') {
-      Waypoint* wpt2;
       // A 'G' tag appears to be a 'T' tag, but generated on the trailing
       // edge of a DGPS fix as it decays to an SPS fix.  See 1/13/13 email
       // thread on gpsbabel-misc with Jamie Robertson.
       assert(line.bas.common.tag == 'C' || line.bas.common.tag == 'G' ||
              line.bas.common.tag == 'V');
-      wpt2 = new Waypoint(*wpt);
+      Waypoint* wpt2 = new Waypoint(*wpt);
       if (line.bas.common.tag == 'V') {	// waypoint with voice recording?
         char vox_file_name[sizeof(line.adv.vox)+5];
         const char* vox = is_advanced_mode ? line.adv.vox : line.bas.vox;

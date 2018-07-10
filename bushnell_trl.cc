@@ -95,19 +95,15 @@ wr_deinit()
 static void
 bushnell_read()
 {
-  int lat_tmp,lon_tmp;
-
   while (true) {
-    Waypoint* wpt_tmp;
-
-    lat_tmp = gbfgetint32(file_in);
-    lon_tmp = gbfgetint32(file_in);
+    int lat_tmp = gbfgetint32(file_in);
+    int lon_tmp = gbfgetint32(file_in);
 
     if (!lat_tmp && !lon_tmp) {
       break;
     }
 
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
     wpt_tmp->latitude  = lat_tmp / 10000000.0;
     wpt_tmp->longitude = lon_tmp / 10000000.0;
 

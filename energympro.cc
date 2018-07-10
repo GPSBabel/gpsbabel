@@ -156,8 +156,7 @@ read_point(route_head* gpsbabel_route,gpsbabel::DateTime& gpsDateTime)
   qint64 mSecsSinceEpoc = gpsbabeltime.toMSecsSinceEpoch();
   gpsbabeltime.setMSecsSinceEpoch(mSecsSinceEpoc-mSecsSinceEpoc%1000);
 
-  Waypoint* waypt;
-  waypt = new Waypoint;
+  Waypoint* waypt = new Waypoint;
   waypt->latitude = (point.Latitude / 1000000.0);
   waypt->longitude = (point.Longitude / 1000000.0);
   waypt->altitude = point.Altitude;
@@ -215,8 +214,7 @@ rd_init(const QString& fname)
 
   /* copy file to memory stream (needed for seek-ops and piped commands) */
   file_in = gbfopen(nullptr, "wb", MYNAME);
-  gbsize_t size;
-  size = gbfcopyfrom(file_in, fileorg_in, 0x7FFFFFFF);
+  gbsize_t size = gbfcopyfrom(file_in, fileorg_in, 0x7FFFFFFF);
   if(global_opts.debug_level > 1) {
     printf (MYNAME "  filesize=%d\n",size);
   }

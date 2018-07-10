@@ -224,10 +224,9 @@ static void kml_init_color_sequencer(unsigned int steps_per_rev)
 
 static void kml_step_color()
 {
-  int color_seq;
   // Map kml_color_sequencer.seq to an integer in the range [0, KML_COLOR_LIMIT*6).
   // Note that color_seq may be outside this range if the cast from float to int fails.
-  color_seq = ((int) kml_color_sequencer.seq) % (KML_COLOR_LIMIT * 6);
+  int color_seq = ((int) kml_color_sequencer.seq) % (KML_COLOR_LIMIT * 6);
   if (global_opts.debug_level >= 1) {
     printf(MYNAME ": kml_color_sequencer seq %f %d, step %f\n",kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
   }
@@ -470,16 +469,14 @@ void gx_trk_when(xg_string args, const QXmlStreamAttributes*)
 
 void gx_trk_coord(xg_string args, const QXmlStreamAttributes*)
 {
-  Waypoint* trkpt;
   double lat, lon, alt;
-  int n;
 
   if (! gx_trk_times || gx_trk_times->isEmpty()) {
     fatal(MYNAME ": There were more gx:coord elements than the number of when elements.\n");
   }
-  trkpt = new Waypoint;
+  Waypoint* trkpt = new Waypoint;
   trkpt->SetCreationTime(gx_trk_times->takeFirst());
-  n = sscanf(CSTR(args), "%lf %lf %lf", &lon, &lat, &alt);
+  int n = sscanf(CSTR(args), "%lf %lf %lf", &lon, &lat, &alt);
   // Empty gx_coord elements are allowed to balance the number of when elements,
   // but if we get one we will throw away the time as we don't have a location.
   // It is not clear that coord elements without altitude are allowed, but our
@@ -740,11 +737,8 @@ static
 void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
 {
   const char* max_alt_units;
-  double max_alt;
   const char* min_alt_units;
-  double min_alt;
   const char* distance_units;
-  double distance;
 
   if (!td || !trackdata) {
     return;
@@ -753,9 +747,9 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   QString hstring;
   gpsbabel::XmlStreamWriter hwriter(&hstring);
 
-  max_alt = fmt_altitude(td->max_alt, &max_alt_units);
-  min_alt = fmt_altitude(td->min_alt, &min_alt_units);
-  distance = fmt_distance(td->distance_meters, &distance_units);
+  double max_alt = fmt_altitude(td->max_alt, &max_alt_units);
+  double min_alt = fmt_altitude(td->min_alt, &min_alt_units);
+  double distance = fmt_distance(td->distance_meters, &distance_units);
 
   writer->writeEmptyElement(QStringLiteral("snippet"));
 
@@ -806,8 +800,7 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
     kml_td(hwriter, QStringLiteral("Max Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(td->max_cad)));
   }
   if (td->start && td->end) {
-    gpsbabel::DateTime t;
-    t = QDateTime::fromTime_t(td->start);
+    gpsbabel::DateTime t = QDateTime::fromTime_t(td->start);
     if (t.isValid()) {
       kml_td(hwriter, QStringLiteral("Start Time"), t.toPrettyString());
     }
@@ -829,8 +822,7 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   if (td->start && td->end) {
     writer->writeStartElement(QStringLiteral("TimeSpan"));
 
-    gpsbabel::DateTime t;
-    t = QDateTime::fromTime_t(td->start);
+    gpsbabel::DateTime t = QDateTime::fromTime_t(td->start);
     writer->writeTextElement(QStringLiteral("begin"), t.toPrettyString());
     t = QDateTime::fromTime_t(td->end);
     writer->writeTextElement(QStringLiteral("end"), t.toPrettyString());
@@ -920,7 +912,6 @@ static void kml_output_positioning(bool tessellate)
 static void kml_output_description(const Waypoint* pt)
 {
   const char* alt_units;
-  double alt;
 
   if (!trackdata) {
     return;
@@ -929,7 +920,7 @@ static void kml_output_description(const Waypoint* pt)
   QString hstring;
   gpsbabel::XmlStreamWriter hwriter(&hstring);
 
-  alt = fmt_altitude(pt->altitude, &alt_units);
+  double alt = fmt_altitude(pt->altitude, &alt_units);
 
   writer->writeStartElement(QStringLiteral("description"));
   hwriter.writeCharacters(QStringLiteral("\n"));
@@ -1896,8 +1887,6 @@ static void kml_route_tlr(const route_head* header)
 // to include all our data.
 static void kml_write_AbstractView()
 {
-  double bb_size;
-
   // Make a pass through all the points to find the bounds.
   if (waypt_count()) {
     waypt_disp_all(kml_add_to_bounds);
@@ -1917,7 +1906,6 @@ static void kml_write_AbstractView()
       writer->writeTextElement(QStringLiteral("begin"), kml_time_min.toPrettyString());
     }
     if (kml_time_max.isValid()) {
-      gpsbabel::DateTime time_max;
       // In realtime tracking mode, we fudge the end time by a few minutes
       // to ensure that the freshest data (our current location) is contained
       // within the timespan.   Earth's time may not match the GPS because
@@ -1925,7 +1913,7 @@ static void kml_write_AbstractView()
       // the network position.  So we shove the end of the timespan out to
       // ensure the right edge of that time slider includes us.
       //
-      time_max = realtime_positioning ? kml_time_max.addSecs(600) : kml_time_max;
+      gpsbabel::DateTime time_max = realtime_positioning ? kml_time_max.addSecs(600) : kml_time_max;
       writer->writeTextElement(QStringLiteral("end"), time_max.toPrettyString());
     }
     writer->writeEndElement(); // Close gx:TimeSpan tag
@@ -1943,8 +1931,8 @@ static void kml_write_AbstractView()
 
   // It turns out the length of the diagonal of the bounding box gives us a
   // reasonable guess for setting the camera altitude.
-  bb_size = gcgeodist(kml_bounds.min_lat, kml_bounds.min_lon,
-                      kml_bounds.max_lat, kml_bounds.max_lon);
+  double bb_size = gcgeodist(kml_bounds.min_lat, kml_bounds.min_lon,
+                             kml_bounds.max_lat, kml_bounds.max_lon);
   // Clamp bottom zoom level.  Otherwise, a single point zooms to grass.
   if (bb_size < 1000) {
     bb_size = 1000;

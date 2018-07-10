@@ -51,19 +51,16 @@ gpl_rd_init(const QString& fname)
 static void
 gpl_read()
 {
-  Waypoint* wpt_tmp;
-  route_head* track_head;
   gpl_point_t gp;
-  double alt_feet;
 
-  track_head = route_head_alloc();
+  route_head* track_head = route_head_alloc();
   track_add_head(track_head);
 
   while (gbfread(&gp, sizeof(gp), 1, gplfile_in) > 0) {
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
     wpt_tmp->latitude = le_read_double(&gp.lat);
     wpt_tmp->longitude = le_read_double(&gp.lon);
-    alt_feet = le_read_double(&gp.alt);
+    double alt_feet = le_read_double(&gp.alt);
     wpt_tmp->altitude = FEET_TO_METERS(alt_feet);
     if (wpt_tmp->altitude <= unknown_alt + 1) {
       wpt_tmp->altitude = unknown_alt;

@@ -144,10 +144,7 @@ static int
 find_symbol_num(const QString& descr)
 {
   if (!descr.isNull()) {
-
-    raymarine_symbol_mapping_t* a;
-
-    a = &raymarine_symbols[0];
+    raymarine_symbol_mapping_t* a = &raymarine_symbols[0];
 
     for (unsigned int i = 0; i < RAYMARINE_SYMBOL_CT; i++, a++) {
       if (descr.compare(a->name, Qt::CaseInsensitive) == 0) {
@@ -184,8 +181,6 @@ raymarine_rd_done()
 static void
 raymarine_read()
 {
-  Waypoint* wpt;
-
   /* Read all waypoints */
 
   for (unsigned int ix = 0; ix < 0x3FFF; ix++) {
@@ -206,7 +201,7 @@ raymarine_read()
       break;
     }
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
     wpt->shortname = name;
     wpt->latitude = atof(lat);
     wpt->longitude = atof(lon);
@@ -234,29 +229,26 @@ raymarine_read()
   for (unsigned int rx = 0; rx < 0x3FFF; rx++) {
     char sect[10];
     char* name;
-    route_head* rte;
 
     snprintf(sect, sizeof(sect), "Rt%d", rx);
     if (nullptr == (name = inifile_readstr(fin, sect, "Name"))) {
       break;
     }
 
-    rte = route_head_alloc();
+    route_head* rte = route_head_alloc();
     rte->rte_name = name;
     route_add_head(rte);
 
     for (int wx = 0; wx < 0x3FFF; wx++) {
       char buff[32];
-      char* str;
-      Waypoint* wpt;
 
       snprintf(buff, sizeof(buff), "Mk%d", wx);
-      str = inifile_readstr(fin, sect, buff);
+      char* str = inifile_readstr(fin, sect, buff);
       if ((str == nullptr) || (*str == '\0')) {
         break;
       }
 
-      wpt = find_waypt_by_name(str);
+      Waypoint* wpt = find_waypt_by_name(str);
       if (wpt == nullptr)
         fatal(MYNAME ": No associated waypoint for route point %s (Route %s)!\n",
               str, qPrintable(rte->rte_name));
@@ -333,11 +325,7 @@ qsort_cb(const void* a, const void* b)
 static void
 write_waypoint(gbfile* fout, const Waypoint* wpt, const int waypt_no, const char* location)
 {
-  QString notes;
-  char* name;
-  double time;
-
-  notes = wpt->notes;
+  QString notes = wpt->notes;
   if (notes == nullptr) {
     notes = wpt->description;
     if (notes == nullptr) {
@@ -345,8 +333,8 @@ write_waypoint(gbfile* fout, const Waypoint* wpt, const int waypt_no, const char
     }
   }
   notes = csv_stringclean(notes, LINE_FEED);
-  time = wpt->creation_time.isValid() ? TIMET_TO_EXCEL(wpt->GetCreationTime().toTime_t()) : TIMET_TO_EXCEL(gpsbabel_time);
-  name = (char*)wpt->extra_data;
+  double time = wpt->creation_time.isValid() ? TIMET_TO_EXCEL(wpt->GetCreationTime().toTime_t()) : TIMET_TO_EXCEL(gpsbabel_time);
+  char* name = (char*)wpt->extra_data;
 
   gbfprintf(fout, "[Wp%d]" LINE_FEED
             "Loc=%s" LINE_FEED
@@ -381,9 +369,7 @@ write_waypoint(gbfile* fout, const Waypoint* wpt, const int waypt_no, const char
 static void
 write_route_head_cb(const route_head* rte)
 {
-  QString name;
-
-  name = rte->rte_name;
+  QString name = rte->rte_name;
   if (name.isEmpty()) {
     name=QString("Route%1").arg(rte_index);
   }
@@ -433,9 +419,7 @@ enum_route_hdr_cb(const route_head* rte)
 static short_handle
 raymarine_new_short_handle()
 {
-  short_handle res;
-
-  res = mkshort_new_handle();
+  short_handle res = mkshort_new_handle();
 
   setshort_length(res, 16);
   setshort_badchars(res, ",");
@@ -469,7 +453,6 @@ static void
 raymarine_write()
 {
   int i;
-  Waypoint* wpt;
 
   waypt_table_sz = 0;
   waypt_table_ct = 0;
@@ -497,7 +480,7 @@ raymarine_write()
 
   /* release local used data */
   for (i = 0; i < waypt_table_ct; i++) {
-    wpt = waypt_table[i];
+    Waypoint* wpt = waypt_table[i];
     xfree(wpt->extra_data);
     wpt->extra_data = nullptr;
   }

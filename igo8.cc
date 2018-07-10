@@ -150,17 +150,15 @@ static void igo8_read_init(const QString& fname)
 // Reader callback
 static void igo8_read()
 {
-  Waypoint* wpt_tmp;
-  route_head* track_head;
   igo8_point point;
 
-  track_head = route_head_alloc();
+  route_head* track_head = route_head_alloc();
   track_add_head(track_head);
 
   while (in_point_count &&
          gbfread(&point, sizeof(point), 1, igo8_file_in) > 0) {
     in_point_count--;
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
 
     wpt_tmp->latitude = le_read32(&point.lat) / (double)0x800000;
     wpt_tmp->longitude = le_read32(&point.lon) / (double)0x800000;
@@ -279,10 +277,9 @@ static unsigned int print_unicode(char* dst, const unsigned int dst_max_length, 
 
 static unsigned int ascii_to_unicode_2(char* dst, const unsigned int dst_max_length, const char* src)
 {
-  short* unicode;
   int len;
 
-  unicode = cet_str_any_to_uni(src, &cet_cs_vec_ansi_x3_4_1968, &len);
+  short* unicode = cet_str_any_to_uni(src, &cet_cs_vec_ansi_x3_4_1968, &len);
 
   len *= 2;	/* real size in bytes */
   len = print_unicode(dst, dst_max_length, unicode, len);

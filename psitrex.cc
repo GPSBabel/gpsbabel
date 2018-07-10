@@ -333,8 +333,6 @@ psit_waypoint_r(gbfile* psit_file, Waypoint**)
 static void
 psit_waypoint_w(gbfile* psit_file, const Waypoint* wpt)
 {
-  int	icon;
-  const char* ident;
   char* src = nullptr;  /* BUGBUG Passed to mkshort */
 
   gbfprintf(psit_file, "%11.6f,%11.6f,",
@@ -347,14 +345,14 @@ psit_waypoint_w(gbfile* psit_file, const Waypoint* wpt)
     gbfprintf(psit_file, "%8.2f,",
               wpt->altitude);
 
-  ident = global_opts.synthesize_shortnames ?
-          mkshort(mkshort_handle, src) :
-          xstrdup(wpt->shortname);
+  const char* ident = global_opts.synthesize_shortnames ?
+                         mkshort(mkshort_handle, src) :
+                         xstrdup(wpt->shortname);
 
   gbfprintf(psit_file, " %-6s, ", ident);
   xfree(ident);
 
-  icon = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
+  int icon = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
 
   if (get_cache_icon(wpt) && wpt->icon_descr.compare(QLatin1String("Geocache Found")) != 0) {
     icon = gt_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
@@ -383,7 +381,6 @@ static void
 psit_route_r(gbfile* psit_file, route_head** rte)
 {
   char rtename[256];
-  route_head* rte_head;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
 
@@ -395,7 +392,7 @@ psit_route_r(gbfile* psit_file, route_head** rte)
 
   rtrim(rtename);
 
-  rte_head = route_head_alloc();
+  route_head* rte_head = route_head_alloc();
   rte_head->rte_name = rtename;
   route_add_head(rte_head);
   *rte = rte_head;
@@ -501,10 +498,8 @@ static void
 psit_track_r(gbfile* psit_file, route_head**)
 {
   char trkname[256];
-  unsigned int trk_num;
 
   struct tm tmTime;
-  Waypoint* thisWaypoint;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
   if (strlen(psit_current_token) == 0) {
@@ -515,14 +510,14 @@ psit_track_r(gbfile* psit_file, route_head**)
 
   rtrim(trkname);
 
-  trk_num = 0;
+  unsigned int trk_num = 0;
   route_head* track_head = nullptr;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), wscomma);
 
   while (psit_isKnownToken(psit_current_token) != 0) {
     if (strlen(psit_current_token) > 0) {
-      thisWaypoint = new Waypoint;
+      Waypoint* thisWaypoint = new Waypoint;
 
       thisWaypoint->latitude = atof(psit_current_token);
 

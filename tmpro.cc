@@ -70,9 +70,6 @@ static void
 data_read()
 {
   char* buff;
-  char* s;
-  Waypoint* wpt_tmp;
-  int i;
   int linecount = 0;
 
   while ((buff = gbfgetstr(file_in))) {
@@ -83,13 +80,13 @@ data_read()
     /* skip the line if it contains "sHyperLink" as it is a header (I hope :) */
     if ((strlen(buff)) && (strstr(buff, "sHyperLink") == nullptr)) {
 
-      wpt_tmp = new Waypoint;
+      Waypoint* wpt_tmp = new Waypoint;
 
       /* data delimited by tabs, not enclosed in quotes.  */
-      s = buff;
+      char* s = buff;
       s = csv_lineparse(s, "\t", "", linecount);
 
-      i = 0;
+      int i = 0;
       while (s) {
         switch (i) {
 

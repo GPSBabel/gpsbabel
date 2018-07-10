@@ -100,11 +100,10 @@ static void data_read() {
   char* buff;
   route_head* track = nullptr;
   route_head* route = nullptr;
-  int points;
   int line_number = 0;
 
   read_as_degrees = 0;
-  points = 0;
+  int points = 0;
 
   // Each line is both |buff| as a C string and |line| as a QString.
   while ((buff = gbfgetstr(file_in))) {
@@ -293,11 +292,10 @@ static void data_read() {
 }
 
 static void gpsutil_disp(const Waypoint* wpt) {
-  double lon, lat;
   int icon_token = 0;
 
-  lon = degrees2ddmm(wpt->longitude);
-  lat = degrees2ddmm(wpt->latitude);
+  double lon = degrees2ddmm(wpt->longitude);
+  double lat = degrees2ddmm(wpt->latitude);
 
   QDateTime dt = wpt->GetCreationTime().toUTC();
   const QString ds = dt.toString("dd-MMM-yy hh:mm:ss").toUpper();
@@ -357,10 +355,8 @@ static void pcx_route_hdr(const route_head* rte) {
 }
 
 static void pcx_track_disp(const Waypoint* wpt) {
-  double lon, lat;
-
-  lon = degrees2ddmm(wpt->longitude);
-  lat = degrees2ddmm(wpt->latitude);
+  double lon = degrees2ddmm(wpt->longitude);
+  double lat = degrees2ddmm(wpt->latitude);
 
   QDateTime dt = wpt->GetCreationTime().toUTC();
   const QString ds = dt.toString("dd-MMM-yy hh:mm:ss").toUpper();

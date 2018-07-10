@@ -36,10 +36,6 @@ void InterpolateFilter::process()
   double lat1 = 0, lon1 = 0;
   double altitude1 = unknown_alt;
   unsigned int time1 = 0;
-  unsigned int timen;
-  double distn;
-  double curdist;
-  double rt1, rn1, rt2, rn2;
   double frac;
 
   if (opt_route) {
@@ -75,7 +71,7 @@ void InterpolateFilter::process()
       } else {
         if (opt_interval &&
             wpt->creation_time.toTime_t() - time1 > interval) {
-          for (timen = time1+interval;
+          for (unsigned int timen = time1+interval;
                timen < wpt->creation_time.toTime_t();
                timen += interval) {
             Waypoint* wpt_new = new Waypoint(*wpt);
@@ -99,14 +95,14 @@ void InterpolateFilter::process()
             }
           }
         } else if (opt_dist) {
-          rt1 = RAD(lat1);
-          rn1 = RAD(lon1);
-          rt2 = RAD(wpt->latitude);
-          rn2 = RAD(wpt->longitude);
-          curdist = gcdist(rt1, rn1, rt2, rn2);
+          double rt1 = RAD(lat1);
+          double rn1 = RAD(lon1);
+          double rt2 = RAD(wpt->latitude);
+          double rn2 = RAD(wpt->longitude);
+          double curdist = gcdist(rt1, rn1, rt2, rn2);
           curdist = radtomiles(curdist);
           if (curdist > dist) {
-            for (distn = dist;
+            for (double distn = dist;
                  distn < curdist;
                  distn += dist) {
               Waypoint* wpt_new = new Waypoint(*wpt);

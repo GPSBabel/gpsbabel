@@ -84,10 +84,7 @@ maggeo_read()
   char* buff;
 
   while ((buff = gbfgetstr(maggeofile_in))) {
-    Waypoint* wpt_tmp;
-    geocache_data* gcdata;
     char* s = nullptr;
-    int fld;
 
     buff = lrtrim(buff);
     if (*buff == '\0') {
@@ -98,10 +95,10 @@ maggeo_read()
     }
 
     buff += 9; /* skip field no. 1 */
-    fld = 1;
+    int fld = 1;
 
-    wpt_tmp = new Waypoint;
-    gcdata = wpt_tmp->AllocGCData();
+    Waypoint* wpt_tmp = new Waypoint;
+    geocache_data* gcdata = wpt_tmp->AllocGCData();
 
     while ((s = csv_lineparse(buff, ",", "", fld++))) {
       buff = nullptr;
@@ -210,7 +207,7 @@ static
 void
 append(char* buf, const char* str)
 {
-  char* cleansed1, *cleansed2;
+  char*cleansed2;
 
   strcat(buf, ",");
 
@@ -218,7 +215,7 @@ append(char* buf, const char* str)
     return;
   }
 
-  cleansed1 = xstrdup(str);
+  char* cleansed1 = xstrdup(str);
 #if FIRMWARE_DOES_88591
   /* Actually, this function needs needs refactored... */
   cleansed2 = xstrdup(cleansed1);
@@ -238,20 +235,16 @@ static void
 maggeo_waypt_pr(const Waypoint* waypointp)
 {
   char obuf[4096];
-  double ilon, ilat;
-  double lon, lat;
-  int lon_deg, lat_deg;
   const char* ctype = nullptr;
-  QString placer;
 
-  ilat = waypointp->latitude;
-  ilon = waypointp->longitude;
+  double ilat = waypointp->latitude;
+  double ilon = waypointp->longitude;
 
-  lon = fabs(ilon);
-  lat = fabs(ilat);
+  double lon = fabs(ilon);
+  double lat = fabs(ilat);
 
-  lon_deg = lon;
-  lat_deg = lat;
+  int lon_deg = lon;
+  int lat_deg = lat;
 
   lon = (lon - lon_deg) * 60.0;
   lat = (lat - lat_deg) * 60.0;
@@ -272,7 +265,7 @@ maggeo_waypt_pr(const Waypoint* waypointp)
   QString lfounddate = maggeo_fmtdate(waypointp->gc_data->last_found);
   QString cname = mkshort(desc_handle,
                   waypointp->notes.isEmpty() ? waypointp->description : waypointp->notes);
-  placer = waypointp->gc_data->placer;
+  QString placer = waypointp->gc_data->placer;
 
   /*
    * As of this writing on 05/04, the firmware in the units will

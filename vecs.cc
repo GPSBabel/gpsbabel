@@ -1395,7 +1395,6 @@ get_option(const char* iarglist, const char* argname)
 #endif
 {
   const size_t arglen = strlen(argname);
-  char* arglist;
   char* rval = nullptr;
   char* argp;
 
@@ -1403,7 +1402,7 @@ get_option(const char* iarglist, const char* argname)
     return nullptr;
   }
 
-  arglist = xstrdup(iarglist);
+  char* arglist = xstrdup(iarglist);
 
   for (char* arg = arglist; argp = strtok(arg, ","), nullptr != argp; arg = nullptr) {
     if (0 == case_ignore_strncmp(argp, argname, arglen)) {
@@ -1533,10 +1532,9 @@ sort_and_unify_vecs(int* ctp)
 void
 disp_vecs()
 {
-  vecs_t** svp;
   int vc;
 
-  svp = sort_and_unify_vecs(&vc);
+  vecs_t** svp = sort_and_unify_vecs(&vc);
   for (int i = 0; i<vc; i++) {
     if (svp[i]->vec->type == ff_type_internal)  {
       continue;
@@ -1559,10 +1557,9 @@ disp_vecs()
 void
 disp_vec(const char* vecname)
 {
-  vecs_t** svp;
   int vc;
 
-  svp = sort_and_unify_vecs(&vc);
+  vecs_t** svp = sort_and_unify_vecs(&vc);
   for (int i = 0; i<vc; i++) {
     if (case_ignore_strcmp(svp[i]->name, vecname))  {
       continue;

@@ -44,13 +44,11 @@ static const Waypoint* prev_wpt;
 static Waypoint*
 skyforce_parse_coords(const char* str)
 {
-  Waypoint* wpt;
-
   if (strlen(str) < 38) {
     fatal(MYNAME ": Incomplete line!\n");
   }
 
-  wpt = new Waypoint;
+  Waypoint* wpt = new Waypoint;
 
   wpt->latitude = atof(str + 21);
   if (str[20] == 'S') {
@@ -71,9 +69,7 @@ skyforce_parse_coords(const char* str)
 static Waypoint*
 skyforce_parse_wpt(const char* str, int* rte_num)
 {
-  Waypoint* wpt;
-
-  wpt = skyforce_parse_coords(str);
+  Waypoint* wpt = skyforce_parse_coords(str);
   if (wpt == nullptr) {
     return nullptr;
   }
@@ -95,11 +91,8 @@ static Waypoint*
 skyforce_parse_trk(const char* str)
 {
   char buf[15];
-  int len;
 
-  Waypoint* wpt;
-
-  wpt = skyforce_parse_coords(str);
+  Waypoint* wpt = skyforce_parse_coords(str);
   if (wpt == nullptr) {
     return nullptr;
   }
@@ -111,7 +104,7 @@ skyforce_parse_trk(const char* str)
   dt = dt.addYears(100);
 
   wpt->SetCreationTime(dt);
-  len = strlen(str);
+  int len = strlen(str);
 
   if (len >= 45) {
     WAYPT_SET(wpt, speed, KNOTS_TO_MPS(atof(str + 39)));
@@ -151,7 +144,6 @@ static void
 skyforce_waypt_disp_cb(const Waypoint* wpt)
 {
   char buf[75];	/* long enough for all data types */
-  double lat, lon;
 
 
   memset(buf, ' ', sizeof(buf));
@@ -202,23 +194,23 @@ skyforce_waypt_disp_cb(const Waypoint* wpt)
   }
 
 
-  lat = degrees2ddmm(wpt->latitude);
+  double lat = degrees2ddmm(wpt->latitude);
   buf[20] = (wpt->latitude < 0) ? 'S' : 'N';
   snprintf(&buf[21], sizeof(buf) - 21, "%06.2f ", fabs(lat));
 
-  lon = degrees2ddmm(wpt->longitude);
+  double lon = degrees2ddmm(wpt->longitude);
   buf[29] = (wpt->longitude < 0) ? 'W' : 'E';
   snprintf(&buf[30], sizeof(buf) - 30, "%08.2f ", fabs(lon));
 
   if (global_opts.objective == trkdata) {
-    double alt, speed;
+    double alt;
 
     if (wpt->altitude == unknown_alt) {
       alt = 0;
     } else {
       alt = METERS_TO_FEET(wpt->altitude);
     }
-    speed = MPS_TO_KNOTS(waypt_speed(prev_wpt, wpt));
+    double speed = MPS_TO_KNOTS(waypt_speed(prev_wpt, wpt));
 
     snprintf(&buf[39], sizeof(buf) - 39, "%06.2f 000.00 %c%05d",
              speed,
@@ -253,10 +245,10 @@ static void
 skyforce_read()
 {
   char* str;
-  route_head* rte, *trk;
 
   wpt_num = 0;
-  rte = trk = nullptr;
+  route_head* rte = nullptr;
+  route_head* trk = nullptr;
   rte_num = -1;
 
   while ((str = gbfgetstr(fin))) {

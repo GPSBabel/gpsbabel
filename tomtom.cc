@@ -154,14 +154,13 @@ check_recsize(int sz)
 static void
 data_read()
 {
-  int rectype;
   long recsize;
   long x;
   long y;
   char* desc;
   Waypoint* wpt_tmp;
   while (!gbfeof(file_in)) {
-    rectype = read_char(file_in);
+    int rectype = read_char(file_in);
     if (rectype == EOF) {
       fatal(MYNAME ":Unexpected EOF.");
     }
@@ -362,9 +361,7 @@ static struct blockheader*
 compute_blocks(struct hdr* start, int count,
                double minlon, double maxlon, double minlat, double maxlat)
 {
-  struct blockheader* newblock;
-
-  newblock = (struct blockheader*)xcalloc(sizeof(*newblock), 1);
+  struct blockheader* newblock = (struct blockheader*)xcalloc(sizeof(*newblock), 1);
   newblock->start = start;
   newblock->count = count;
   newblock->minlon = minlon;

@@ -94,7 +94,6 @@ static unsigned char coords_match(double lat1, double lon1, double lat2, double 
  */
 static igc_rec_type_t get_record(char** rec)
 {
-  size_t len;
   char* c;
 retry:
   *rec = c = gbfgetstr(file_in);
@@ -105,7 +104,7 @@ retry:
     return rec_none;
   }
 
-  len = strlen(c);
+  size_t len = strlen(c);
 
   /* Trackwiev writes (bogus) blank links between each record */
   if (len == 0) {
@@ -162,7 +161,6 @@ static void igc_task_rec(const char* rec)
 
   char task_num[5];
   char task_desc[MAXRECLEN];
-  Waypoint* wpt;
   unsigned int lat_deg, lat_min, lat_frac;
   unsigned int lon_deg, lon_min, lon_frac;
   char lat_hemi[2], lon_hemi[2];
@@ -204,7 +202,7 @@ static void igc_task_rec(const char* rec)
     fatal(MYNAME ": task waypoint (C) record parse error\n%s", rec);
   }
 
-  wpt = new Waypoint;
+  Waypoint* wpt = new Waypoint;
   wpt->latitude = ('N' == lat_hemi[0] ? 1 : -1) *
                   (lat_deg + (lat_min * 1000 + lat_frac) / 1000.0 / 60);
 
@@ -261,7 +259,6 @@ static void igc_task_rec(const char* rec)
 static void data_read()
 {
   char* ibuf;
-  igc_rec_type_t rec_type;
   unsigned int hours, mins, secs;
   unsigned int lat_deg, lat_min, lat_frac;
   unsigned int lon_deg, lon_min, lon_frac;
@@ -286,7 +283,7 @@ static void data_read()
   strcpy(trk_desc, HDRMAGIC HDRDELIM);
 
   while (true) {
-    rec_type = get_record(&ibuf);
+    igc_rec_type_t rec_type = get_record(&ibuf);
     switch (rec_type) {
     case rec_manuf_id:
       // Manufacturer/ID record already found in rd_init().
@@ -544,10 +541,8 @@ static char* latlon2str(const Waypoint* wpt)
   long lon_milliminutes = lround(wpt->longitude * 60000.0);
   char lat_hemi = lat_milliminutes < 0 ? 'S' : 'N';
   char lon_hemi = lon_milliminutes < 0 ? 'W' : 'E';
-  ldiv_t lat_digits;
-  ldiv_t lon_digits;
-  lat_digits = ldiv(labs(lat_milliminutes), 60000L);
-  lon_digits = ldiv(labs(lon_milliminutes), 60000L);
+  ldiv_t lat_digits = ldiv(labs(lat_milliminutes), 60000L);
+  ldiv_t lon_digits = ldiv(labs(lon_milliminutes), 60000L);
 
   if (snprintf(str, 18, "%02ld%05ld%c%03ld%05ld%c",
                lat_digits.quot, lat_digits.rem, lat_hemi, lon_digits.quot, lon_digits.rem, lon_hemi) != 17) {
@@ -655,7 +650,6 @@ static void wr_task_wpt_name(const Waypoint* wpt, const char* alt_name)
 static void wr_task_hdr(const route_head* rte)
 {
   unsigned char have_takeoff = 0;
-  const Waypoint* wpt;
   char flight_date[7] = "000000";
   char task_desc[MAXRECLEN] = "";
   int num_tps = rte->rte_waypt_ct - 2;
@@ -668,7 +662,7 @@ static void wr_task_hdr(const route_head* rte)
   }
   // See if the takeoff and landing waypoints are there or if we need to
   // generate them.
-  wpt = (Waypoint*) QUEUE_LAST(&rte->waypoint_list);
+  const Waypoint* wpt = (Waypoint*) QUEUE_LAST(&rte->waypoint_list);
   if (wpt->shortname.startsWith("LANDING")) {
     num_tps--;
   }
@@ -728,10 +722,8 @@ static void wr_tasks()
  */
 static void wr_fix_record(const Waypoint* wpt, int pres_alt, int gnss_alt)
 {
-  struct tm* tm;
-
   const time_t tt = wpt->GetCreationTime().toTime_t();
-  tm = gmtime(&tt);
+  struct tm* tm = gmtime(&tt);
 
   if (nullptr == tm) {
     fatal(MYNAME ": bad track timestamp\n");
@@ -757,17 +749,16 @@ static void wr_fix_record(const Waypoint* wpt, int pres_alt, int gnss_alt)
  */
 static int correlate_tracks(const route_head* pres_track, const route_head* gnss_track)
 {
-  const queue* elem;
-  double last_alt, alt_diff;
+  double alt_diff;
   double speed;
-  time_t pres_time, gnss_time;
+  time_t pres_time;
+  time_t gnss_time;
   int time_diff;
-  const Waypoint* wpt;
 
   // Deduce the landing time from the pressure altitude track based on
   // when we last descended to within 10m of the final track altitude.
-  elem = QUEUE_LAST(&pres_track->waypoint_list);
-  last_alt = ((Waypoint*) elem)->altitude;
+  const queue* elem = QUEUE_LAST(&pres_track->waypoint_list);
+  double last_alt = ((Waypoint*) elem)->altitude;
   do {
     elem = elem->prev;
     if (&pres_track->waypoint_list == elem) {
@@ -789,7 +780,7 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
   elem = QUEUE_LAST(&gnss_track->waypoint_list);
   last_alt = ((Waypoint*) elem)->altitude;
   do {
-    wpt = (Waypoint*) elem;
+    const Waypoint* wpt = (Waypoint*) elem;
     elem = elem->prev;
     if (&gnss_track->waypoint_list == elem) {
       // No track left
@@ -825,10 +816,7 @@ static double interpolate_alt(const route_head* track, time_t time)
 {
   static const queue* prev_elem = nullptr;
   static const queue* curr_elem = nullptr;
-  const Waypoint* prev_wpt;
-  const Waypoint* curr_wpt;
   int time_diff;
-  double alt_diff;
 
   // Start search at the beginning of the track
   if (!prev_elem) {
@@ -844,8 +832,8 @@ static double interpolate_alt(const route_head* track, time_t time)
     curr_elem = QUEUE_NEXT(prev_elem);
   }
 
-  prev_wpt = (Waypoint*) prev_elem;
-  curr_wpt = (Waypoint*) curr_elem;
+  const Waypoint* prev_wpt = (Waypoint*) prev_elem;
+  const Waypoint* curr_wpt = (Waypoint*) curr_elem;
 
   if (QUEUE_FIRST(&track->waypoint_list) == curr_elem) {
     if (curr_wpt->GetCreationTime().toTime_t() == time) {
@@ -861,7 +849,7 @@ static double interpolate_alt(const route_head* track, time_t time)
     // Avoid divide by zero
     return curr_wpt->altitude;
   }
-  alt_diff = curr_wpt->altitude - prev_wpt->altitude;
+  double alt_diff = curr_wpt->altitude - prev_wpt->altitude;
   return prev_wpt->altitude + (alt_diff / time_diff) * (time - prev_wpt->GetCreationTime().toTime_t());
 }
 

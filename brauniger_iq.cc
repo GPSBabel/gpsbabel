@@ -232,7 +232,6 @@ static int process_data(const unsigned char* data)
 static void data_read()
 {
   unsigned char ibuf[25];
-  int rd_cnt;
 
   if (global_opts.debug_level >= 0) {
     puts(MYNAME ":  Select recorded flight in memo mode.");
@@ -248,7 +247,7 @@ static void data_read()
   state = st_sync;
   for (;;) {
     /* wait up to 5 seconds for more data */
-    rd_cnt = gbser_read_wait(serial_handle, ibuf, reqd_bytes[state], 5000);
+    int rd_cnt = gbser_read_wait(serial_handle, ibuf, reqd_bytes[state], 5000);
     if (rd_cnt < 0) {
       fatal(MYNAME ": Serial error\n");
     } else if (rd_cnt < reqd_bytes[state]) {

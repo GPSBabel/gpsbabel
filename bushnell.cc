@@ -130,13 +130,11 @@ static icon_mapping_t bushnell_icons[] = {
 static unsigned int
 bushnell_get_icon_from_name(QString name)
 {
-  icon_mapping_t* t;
-
   if (name.isNull()) {
     name = "Waypoint";
   }
 
-  for (t = bushnell_icons; t->icon != nullptr; t++) {
+  for (icon_mapping_t* t = bushnell_icons; t->icon != nullptr; t++) {
     if (0 == name.compare(t->icon, Qt::CaseInsensitive)) {
       return t->symbol;
     }
@@ -147,8 +145,7 @@ bushnell_get_icon_from_name(QString name)
 static const char*
 bushnell_get_name_from_symbol(signed int s)
 {
-  icon_mapping_t* t;
-  for (t = bushnell_icons; t->icon != nullptr; t++) {
+  for (icon_mapping_t* t = bushnell_icons; t->icon != nullptr; t++) {
     if (s == t->symbol) {
       return t->icon;
     }
@@ -201,17 +198,14 @@ wr_deinit()
 static void
 bushnell_read()
 {
-  int32_t lat_tmp,lon_tmp;
-  unsigned int proximity;
-  unsigned int icon;
   Waypoint* wpt_tmp = new Waypoint;
 
-  lat_tmp = gbfgetint32(file_in);
-  lon_tmp = gbfgetint32(file_in);
+  int32_t lat_tmp = gbfgetint32(file_in);
+  int32_t lon_tmp = gbfgetint32(file_in);
 
-  icon = gbfgetc(file_in);
+  unsigned int icon = gbfgetc(file_in);
   wpt_tmp->icon_descr = bushnell_get_name_from_symbol(icon);
-  proximity = gbfgetc(file_in); // 1 = off, 3 = proximity alarm.
+  unsigned int proximity = gbfgetc(file_in); // 1 = off, 3 = proximity alarm.
   (void) proximity;
   wpt_tmp->latitude = lat_tmp /  10000000.0;
   wpt_tmp->longitude = lon_tmp / 10000000.0;
@@ -228,14 +222,13 @@ bushnell_write_one(const Waypoint* wpt)
 {
   char tbuf[20]; // 19 text bytes + null terminator.
   char padding[2] = {0, 0};
-  gbfile* file_out;
   static int wpt_count;
   QString fname(ofname);
   fname += "-";
   fname += QString::number(wpt_count++);
   fname += ".wpt";
 
-  file_out = gbfopen_le(fname, "wb", MYNAME);
+  gbfile* file_out = gbfopen_le(fname, "wb", MYNAME);
   gbfputint32(round(wpt->latitude  * 10000000), file_out);
   gbfputint32(round(wpt->longitude * 10000000), file_out);
   gbfputc(bushnell_get_icon_from_name(wpt->icon_descr), file_out);

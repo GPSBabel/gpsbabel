@@ -28,7 +28,7 @@
 
 DuplicateFilter::btree_node* DuplicateFilter::addnode(btree_node* tree, btree_node* newnode, btree_node** oldnode)
 {
-  btree_node* tmp, * last = nullptr;
+  btree_node* last = nullptr;
 
   if (*oldnode) {
     *oldnode = nullptr;
@@ -38,7 +38,7 @@ DuplicateFilter::btree_node* DuplicateFilter::addnode(btree_node* tree, btree_no
     return (newnode);
   }
 
-  tmp = tree;
+  btree_node* tmp = tree;
 
   while (tmp) {
     last = tmp;
@@ -144,14 +144,13 @@ void DuplicateFilter::process(void)
   } dupe;
   Waypoint* delwpt = nullptr;
 
-  int i, ct = waypt_count();
-  wpt_ptr* htable, *bh;
+  int ct = waypt_count();
   queue* elem, *tmp;
 
-  htable = (wpt_ptr*) xmalloc(ct * sizeof(*htable));
-  bh = htable;
+  wpt_ptr* htable = (wpt_ptr*) xmalloc(ct * sizeof(*htable));
+  wpt_ptr* bh = htable;
 
-  i = 0;
+  int i = 0;
 #if NEWQ
   foreach (Waypoint* waypointp, waypt_list) {
     bh->wpt = waypointp;

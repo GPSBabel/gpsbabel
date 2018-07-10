@@ -167,11 +167,12 @@ parse_coordinates(const char* str, int datum, const grid_type grid,
   int utmz;
   double utme, utmn;
   char utmc;
-  int valid, result, ct;
+  int result;
+  int ct;
   double lx, ly;
   const char* format;
 
-  valid = 1;
+  int valid = 1;
 
   switch (grid) {
 

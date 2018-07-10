@@ -77,11 +77,10 @@ stmwpp_rd_deinit(void)
 static void
 stmwpp_data_read(void)
 {
-  char* buff;
   int line = 0;
 
   what = STM_NOTHING;
-  buff = gbfgetstr(fin);
+  char* buff = gbfgetstr(fin);
   buff = (buff == nullptr) ? (char*) "" : buff;
 
   if (case_ignore_strncmp(buff, "Datum,WGS 84,WGS 84,", 20) != 0) {
@@ -217,9 +216,8 @@ static void
 stmwpp_write_double(const double val)
 {
   char buff[64];
-  char* c;
 
-  c = buff + snprintf(buff, sizeof(buff), "%3.7f", val);
+  char* c = buff + snprintf(buff, sizeof(buff), "%3.7f", val);
   while (*--c == '0') {
     *c = '\0';
   }
@@ -233,14 +231,13 @@ static void
 stmwpp_waypt_cb(const Waypoint* wpt)
 {
   char cdate[16], ctime[16];
-  struct tm tm;
 
   if (track_index != track_num) {
     return;
   }
 
   const time_t tt = wpt->GetCreationTime().toTime_t();
-  tm = *gmtime(&tt);
+  struct tm tm = *gmtime(&tt);
   tm.tm_year += 1900;
   tm.tm_mon++;
 

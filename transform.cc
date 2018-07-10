@@ -33,9 +33,7 @@
 
 void TransformFilter::transform_waypoints()
 {
-  route_head* rte;
-
-  rte = route_head_alloc();
+  route_head* rte = route_head_alloc();
   switch (current_target) {
   case 'R':
     route_add_head(rte);

@@ -58,12 +58,9 @@ rand_int(const int max)
 static char*
 rand_str(const int maxlen, const char* fmt)
 {
-  char* res;
-  int len;
+  int len = rand_int(maxlen) + 1;
 
-  len = rand_int(maxlen) + 1;
-
-  res = (char*) xmalloc(len + 1);
+  char* res = (char*) xmalloc(len + 1);
   res[len] = '\0';
 
   for (int i = 0; i < len; i++) {
@@ -111,7 +108,6 @@ random_read()
 {
 #define RND(a) (rand_int(a) > 0)
 
-  int points;
   route_head* head;
   Waypoint* prev = nullptr;
   time_t time = gpsbabel_time;
@@ -123,7 +119,7 @@ random_read()
   }
 
 
-  points = (opt_points) ? atoi(opt_points) : rand_int(128) + 1;
+  int points = (opt_points) ? atoi(opt_points) : rand_int(128) + 1;
   if (doing_trks || doing_rtes) {
     head = route_head_alloc();
     if (doing_trks) {
@@ -142,12 +138,8 @@ random_read()
   }
 
   for (int i = 0; i < points; i++) {
-
-    Waypoint* wpt;
-    garmin_fs_t* gmsd;
-
-    wpt = new Waypoint;
-    gmsd = garmin_fs_alloc(-1);
+    Waypoint* wpt = new Waypoint;
+    garmin_fs_t* gmsd = garmin_fs_alloc(-1);
     fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
     do {

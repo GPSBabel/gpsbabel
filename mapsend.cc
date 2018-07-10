@@ -108,11 +108,10 @@ static void
 mapsend_wpt_read()
 {
   char tbuf[256];
-  int wpt_count, rte_count, rte_num;
   char wpt_icon;
   Waypoint* wpt_tmp;
 
-  wpt_count = gbfgetint32(mapsend_file_in);
+  int wpt_count = gbfgetint32(mapsend_file_in);
 
   while (wpt_count--) {
     wpt_tmp = new Waypoint;
@@ -141,7 +140,7 @@ mapsend_wpt_read()
   }
 
   /* now read the routes... */
-  rte_count = gbfgetint32(mapsend_file_in);
+  int rte_count = gbfgetint32(mapsend_file_in);
 
   while (rte_count--) {
     route_head* rte_head = route_head_alloc();
@@ -151,7 +150,7 @@ mapsend_wpt_read()
     rte_head->rte_name = gbfgetpstr(mapsend_file_in);
 
     /* route # */
-    rte_num = gbfgetint32(mapsend_file_in);
+    int rte_num = gbfgetint32(mapsend_file_in);
     rte_head->rte_num = rte_num;
 
     /* points this route */
@@ -186,14 +185,11 @@ mapsend_wpt_read()
 static void
 mapsend_track_read()
 {
-  unsigned int trk_count;
-  route_head* track_head;
-
-  track_head = route_head_alloc();
+  route_head* track_head = route_head_alloc();
   track_head->rte_name = gbfgetpstr(mapsend_file_in);
   track_add_head(track_head);
 
-  trk_count = gbfgetuint32(mapsend_file_in);
+  unsigned int trk_count = gbfgetuint32(mapsend_file_in);
 
   while (trk_count--) {
     Waypoint* wpt_tmp = new Waypoint;
@@ -230,8 +226,6 @@ static void
 mapsend_read()
 {
   mapsend_hdr hdr;
-  int type;
-  gbsize_t len;
   char buf[3];
 
   /*
@@ -239,10 +233,10 @@ mapsend_read()
    * strings, each member has to be read in one at a time.  Grrr.
    */
 
-  len = gbfread(&hdr, 1, sizeof(hdr), mapsend_file_in);
+  gbsize_t len = gbfread(&hdr, 1, sizeof(hdr), mapsend_file_in);
   is_fatal(len < sizeof(hdr), MYNAME ": No mapsend or empty file!");
 
-  type = le_read16(&hdr.ms_type);
+  int type = le_read16(&hdr.ms_type);
   strncpy(buf, hdr.ms_version, 2);
   buf[2] = '\0';
 
@@ -268,7 +262,6 @@ mapsend_read()
 static void
 mapsend_waypt_pr(const Waypoint* waypointp)
 {
-  double falt;
   static int cnt = 0;
   QString sn = global_opts.synthesize_shortnames ?
                    mkshort_from_wpt(mkshort_handle, waypointp) :
@@ -329,7 +322,7 @@ mapsend_waypt_pr(const Waypoint* waypointp)
   gbfputc(c, mapsend_file_out);
   gbfputc(1, mapsend_file_out);
 
-  falt = waypointp->altitude;
+  double falt = waypointp->altitude;
   if (falt == unknown_alt) {
     falt = 0;
   }
@@ -370,7 +363,6 @@ static void
 mapsend_route_disp(const Waypoint* waypointp)
 {
   unsigned char c;
-  QString iconp;
 
   route_wp_count++;
 
@@ -384,7 +376,7 @@ mapsend_route_disp(const Waypoint* waypointp)
   gbfputdbl(-waypointp->latitude, mapsend_file_out);
 
   if (!waypointp->icon_descr.isNull()) {
-    iconp = mag_find_token_from_descr(waypointp->icon_descr);
+    QString iconp = mag_find_token_from_descr(waypointp->icon_descr);
     if (1 == iconp.size()) {
       c = iconp[0].toLatin1() - 'a';
     } else {
@@ -404,7 +396,6 @@ static void mapsend_track_hdr(const route_head* trk)
    */
   const char* verstring = "30";
   queue* elem, *tmp;
-  int i;
   mapsend_hdr hdr = {13, {'4','D','5','3','3','3','3','4',' ','M','S'},
     {'3','0'}, ms_type_track, {0, 0, 0}
   };
@@ -437,7 +428,7 @@ static void mapsend_track_hdr(const route_head* trk)
   gbfputpstr(tname, mapsend_file_out);
 
   /* total nodes (waypoints) this track */
-  i = 0;
+  int i = 0;
   QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
     i++;
   }
@@ -449,7 +440,6 @@ static void mapsend_track_hdr(const route_head* trk)
 static void mapsend_track_disp(const Waypoint* wpt)
 {
   unsigned char c;
-  int32_t t;
   static int last_time;
 
   /*
@@ -462,7 +452,7 @@ static void mapsend_track_disp(const Waypoint* wpt)
    *
    * This is rumoured (but yet unconfirmed) to be fixed in f/w 5.12.
    */
-  t = wpt->GetCreationTime().toTime_t();
+  int32_t t = wpt->GetCreationTime().toTime_t();
   if (t < last_time)  {
     t = last_time;
   }

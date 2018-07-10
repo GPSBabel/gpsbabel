@@ -76,7 +76,6 @@ static char*
 cst_make_url(char* str)
 {
   int len = strlen(str);
-  char* res;
 
   if (len < 3) {
     return nullptr;
@@ -85,30 +84,27 @@ cst_make_url(char* str)
   if (strstr(str, "://") > str) {
     return xstrdup(str);
   } else if (strstr(str, ":\\") == str+1) {	/* DOS 0.01++ file format */
-    res = xstrdup("file://*:");
+    char* res = xstrdup("file://*:");
     res[7] = *str++;
     res[8] = *str++;
     res = xstrappend(res, str);
     {
-      char* c;
-      int i;
-
-      c = res;			/* replace all backslashes with a slash */
+      char* c = res;			/* replace all backslashes with a slash */
       while ((c = strchr(c, '\\'))) {
         *c++ = '/';
       }
 
       c = res;			/* enumerate number of spaces within filename */
-      i = 0;
+      int i = 0;
       while ((c = strchr(c, ' '))) {
         c++;
         i++;
       }
 
       if (i > 0) {		/* .. and replace them with "%20" */
-        char* src, *dest, *last;
+        char* src, *dest;
 
-        last = src = res;
+        char* last = src = res;
         res = dest = (char*) xcalloc(strlen(src) + (2*i) + 1, 1);
         while ((c = strchr(src, ' '))) {
           if (c != src) {
