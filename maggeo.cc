@@ -207,7 +207,7 @@ static
 void
 append(char* buf, const char* str)
 {
-  char*cleansed2;
+  char* cleansed2;
 
   strcat(buf, ",");
 

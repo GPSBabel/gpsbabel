@@ -356,7 +356,7 @@ void TrackFilter::trackfilter_merge()
   int i;
 
   queue* elem, *tmp;
-  Waypoint*wpt;
+  Waypoint* wpt;
   route_head* master = track_list[0].track;
 
   if (track_pts-timeless_pts < 1) {

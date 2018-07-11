@@ -1119,7 +1119,7 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
 
   if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-      Waypoint*	testwpt = (Waypoint*)elem;
+      Waypoint* testwpt = (Waypoint*)elem;
       if (rte_datapoints == 0) {
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
@@ -1372,7 +1372,7 @@ mps_routedatapoint_w(gbfile* mps_file, int mps_ver, const Waypoint* rtewpt)
   gbfputs(ident, mps_file);
   gbfwrite(zbuf, 1, 1, mps_file);	/* NULL termination to ident */
 
-  Waypoint*	wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, ident);
+  Waypoint* wptfound = mps_find_wpt_q_by_name(&written_route_wpt_head, ident);
   if (wptfound != nullptr)	{
     zbuf[0] = (char)MPSHIDDENROUTEWPTCLASS;
   } else {
@@ -1547,7 +1547,7 @@ mps_trackhdr_w(gbfile* mps_file, int mps_ver, const route_head* trk)
   if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
     QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
       if (trk_datapoints == 0) {
-        Waypoint*	testwpt = (Waypoint*)elem;
+        Waypoint* testwpt = (Waypoint*)elem;
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
       trk_datapoints++;

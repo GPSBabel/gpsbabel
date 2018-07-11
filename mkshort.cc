@@ -406,7 +406,7 @@ mkshort(short_handle h, const char* istring)
   if ((strlen(ostring) > hdl->target_len + 4) &&
       (strncmp(ostring, "The ", 4) == 0 ||
        strncmp(ostring, "the ", 4) == 0)) {
-    char * nstring = xxstrdup(ostring + 4, file, line);
+    char* nstring = xxstrdup(ostring + 4, file, line);
     xfree(ostring);
     ostring = nstring;
   }

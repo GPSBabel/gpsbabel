@@ -801,7 +801,7 @@ garmin_txt_wr_deinit()
 static void
 garmin_txt_write()
 {
-  char*c;
+  char* c;
 
   char* grid_str = xstrdup(gt_get_mps_grid_longname(grid_index, MYNAME));
   while ((c = strchr(grid_str, '*'))) {

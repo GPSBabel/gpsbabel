@@ -111,7 +111,7 @@ void
 sortqueue(queue* qh, T cmp)
 {
 
-  queue *e;
+  queue* e;
 
   /*
    * Special case: if `list' is empty, we're done.

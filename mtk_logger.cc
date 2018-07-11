@@ -534,7 +534,7 @@ static void mtk_read()
 {
   char cmd[256];
   char* line = nullptr;
-  unsigned char*data = nullptr;
+  unsigned char* data = nullptr;
   int i;
   unsigned int bsize;
   unsigned long dpos = 0;

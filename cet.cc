@@ -467,7 +467,7 @@ short*
 cet_str_any_to_uni(const char* src, const cet_cs_vec_t* vec, int* length)
 {
   char* utf8;
-  short*sout;
+  short* sout;
 
   if (! src) {
     utf8 = xstrdup("");

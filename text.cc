@@ -100,7 +100,7 @@ text_disp(const Waypoint* wpt)
   int32_t utmz;
   double utme, utmn;
   char utmzc;
-  char*tmpout2;
+  char* tmpout2;
   char* altout;
 
   waypoint_count++;

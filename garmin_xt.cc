@@ -246,7 +246,7 @@ format_garmin_xt_proc_strk()
   // Process all tracks one by one
   while ((TracksCompleted < NumberOfTracks) && (!gbfeof(fin))) {
     Waypoint*	wpt;
-    char*	trk_name = (char*) xmalloc(30);
+    char* trk_name = (char*) xmalloc(30);
 
     // Generate Track Header
     uint16_t trackbytes = format_garmin_xt_rd_st_attrs(trk_name, &trk_color) - 50; // Bytes in track
@@ -373,7 +373,7 @@ format_garmin_xt_proc_atrk()
     double AltF = (double)uu * GARMIN_XT_ELE - 1500;
 
     //create new waypoint
-    Waypoint*	wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     //populate wpt;
     wpt->latitude = LatF*180/16777216;	/* Degrees */

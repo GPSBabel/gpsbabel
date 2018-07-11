@@ -171,7 +171,7 @@ gopal_read()
   double hmsd;
   int fix;
   int hms;
-  Waypoint*lastwpt=nullptr;
+  Waypoint* lastwpt=nullptr;
   char tbuffer[64];
   struct tm tm2;
   double lat_old = 0;
