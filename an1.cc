@@ -351,8 +351,6 @@ static void Destroy_AN1_Symbol(an1_symbol_record* symbol)
 
 static void Read_AN1_Waypoint(gbfile* f, an1_waypoint_record* wpt)
 {
-  unsigned short len;
-
   wpt->magic = ReadShort(f);
   wpt->unk1 = ReadLong(f);
   wpt->lon = ReadLong(f);
@@ -368,7 +366,7 @@ static void Read_AN1_Waypoint(gbfile* f, an1_waypoint_record* wpt)
   wpt->visible_zoom = ReadChar(f);
   wpt->unk5 = ReadShort(f);
   wpt->radius = ReadDouble(f);
-  len = ReadShort(f);
+  unsigned short len = ReadShort(f);
   wpt->name = ReadString(f, len);
 
   if (len != strlen(wpt->name)) {
@@ -382,13 +380,12 @@ static void Read_AN1_Waypoint(gbfile* f, an1_waypoint_record* wpt)
     ofs += 2;
 
     if (len) {
-      char* oldurlstr;
       /*
        * Trust URL encoded in new format over one in
        * old format if both are present.  Whack the
        * name starting at '{URL='.
        */
-      oldurlstr = strstr(wpt->name, "{URL=");
+      char* oldurlstr = strstr(wpt->name, "{URL=");
       if (oldurlstr) {
         *oldurlstr = 0;
       }
@@ -541,16 +538,13 @@ static void Write_AN1_Vertex(gbfile* f, an1_vertex_record* vertex)
 
 static void Read_AN1_Line(gbfile* f, an1_line_record* line)
 {
-
-  short len;
-
   line->roadtype = ReadLong(f);
   line->serial = ReadShort(f);
   line->unk2 = ReadLong(f);
   line->unk3 = ReadShort(f);
   line->type = ReadShort(f);
   line->unk4 = ReadLong(f);
-  len = ReadShort(f);
+  short len = ReadShort(f);
   line->name = ReadString(f, len);
   line->lineweight = ReadShort(f);
   line->linestyle = ReadLong(f);
@@ -565,15 +559,13 @@ static void Read_AN1_Line(gbfile* f, an1_line_record* line)
 
 static void Write_AN1_Line(gbfile* f, an1_line_record* line)
 {
-  short len;
-
   WriteLong(f, line->roadtype);
   WriteShort(f, line->serial);
   WriteLong(f, line->unk2);
   WriteShort(f, line->unk3);
   WriteShort(f, line->type);
   WriteLong(f, line->unk4);
-  len = strlen(line->name);
+  short len = strlen(line->name);
   WriteShort(f, len);
   WriteString(f, line->name);
   WriteShort(f, (short) line->lineweight);
@@ -594,45 +586,35 @@ static void Skip_AN1_IL(gbfile* f)
 
 static void Skip_AN1_BM(gbfile* f)
 {
-  unsigned long bmsize;
-  unsigned long palettesize;
-  unsigned long bmisize;
-  unsigned long bitoffset;
-
   Skip(f, 8);    /* BITMAPFILEHEADER fields 1-3 */
-  bitoffset = ReadLong(f);
+  unsigned long bitoffset = ReadLong(f);
 
-  bmisize = ReadLong(f);
+  unsigned long bmisize = ReadLong(f);
   Skip(f, 16);    /* BITMAPINFOHEADER fields 2-6 */
-  bmsize = ReadLong(f);
+  unsigned long bmsize = ReadLong(f);
   Skip(f, 16);    /* BITMAPINFOHEADER fields 8-11 */
 
-  palettesize = bitoffset - bmisize - 14;
+  unsigned long palettesize = bitoffset - bmisize - 14;
   Skip(f, bmsize + palettesize);
 }
 
 static void Read_AN1_Symbol(gbfile* f, an1_symbol_record* symbol)
 {
-  short len;
-
   /* This is just the high word of a long; we ate the low
    * word in the caller.  Fortunately, we don't care. */
   symbol->hotspotxhi = ReadShort(f);
   symbol->hotspoty = ReadLong(f);
   symbol->unk1 = ReadLong(f);
   ReadGuid(f, &symbol->guid);
-  len = ReadChar(f);
+  short len = ReadChar(f);
   symbol->name = ReadString(f, len);
 }
 
 static void Read_AN1_Header(gbfile* f)
 {
-  unsigned short magic;
-  unsigned short type;
-
-  magic = ReadShort(f);
+  unsigned short magic = ReadShort(f);
   (void) magic; // hush warning.
-  type = ReadShort(f);
+  unsigned short type = ReadShort(f);
 
   last_read_type = type;
 }
@@ -645,10 +627,9 @@ static void Write_AN1_Header(gbfile* f)
 
 static void Read_AN1_Bitmaps(gbfile* f)
 {
-  long count;
   an1_symbol_record symbol;
 
-  count = ReadLong(f);
+  long count = ReadLong(f);
 
   while (count) {
     unsigned short magic = ReadShort(f);
@@ -679,14 +660,13 @@ static void Write_AN1_Bitmaps(gbfile* f)
 
 static void Read_AN1_Waypoints(gbfile* f)
 {
-  Waypoint* wpt_tmp;
   char* icon = nullptr;
   ReadShort(f);
   unsigned long count = ReadLong(f);
   for (unsigned long i = 0; i < count; i++) {
     an1_waypoint_record* rec = Alloc_AN1_Waypoint();
     Read_AN1_Waypoint(f, rec);
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
 
     if (rec->creation_time) {
       wpt_tmp->SetCreationTime(rec->creation_time);
@@ -824,16 +804,13 @@ static void Write_AN1_Waypoints(gbfile* f)
 
 static void Read_AN1_Lines(gbfile* f)
 {
-  route_head* rte_head;
-  Waypoint* wpt_tmp;
-
   ReadShort(f);
   unsigned long count = ReadLong(f);
   for (unsigned long i = 0; i < count; i++) {
     an1_line_record* rec = Alloc_AN1_Line();
     Read_AN1_Line(f, rec);
     /* create route rec */
-    rte_head = route_head_alloc();
+    route_head* rte_head = route_head_alloc();
     rte_head->line_color.bbggrr = rec->linecolor;
     if (rec->opacity == 0x8200) {
       rte_head->line_color.opacity = 128;
@@ -852,7 +829,7 @@ static void Read_AN1_Lines(gbfile* f)
       Read_AN1_Vertex(f, vert);
 
       /* create route point */
-      wpt_tmp = new Waypoint;
+      Waypoint* wpt_tmp = new Waypoint;
       wpt_tmp->latitude = DecodeOrd(vert->lat);
       wpt_tmp->longitude = -DecodeOrd(vert->lon);
       wpt_tmp->shortname = QString().sprintf("\\%5.5lx", rtserial++);

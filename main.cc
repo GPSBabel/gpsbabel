@@ -695,9 +695,7 @@ main(int argc, char* argv[])
 
     tracking_status.request_terminate = 0;
     while (!tracking_status.request_terminate) {
-      Waypoint* wpt;
-
-      wpt = ivecs->position_ops.rd_position(&tracking_status);
+      Waypoint* wpt = ivecs->position_ops.rd_position(&tracking_status);
 
       if (tracking_status.request_terminate) {
         delete wpt;

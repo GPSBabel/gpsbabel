@@ -460,11 +460,10 @@ xcsv_parse_style_buff(const char* sbuff)
   // FIXME: should not be a static buf.  Should not be a raw character
   // buffer at all!
   char ibuf[4096];
-  size_t i;
 
   while (*sbuff) {
     ibuf[0] = 0;
-    i = 0;
+    size_t i = 0;
     char* ibufp;
     for (ibufp = ibuf; *sbuff != '\n' && i++ < sizeof(ibuf);) {
       *ibufp++ = *sbuff++;
@@ -481,11 +480,10 @@ static void
 xcsv_read_style(const char* fname)
 {
   char* sbuff;
-  gbfile* fp;
 
   xcsv_file_init();
 
-  fp = gbfopen(fname, "rb", MYNAME);
+  gbfile* fp = gbfopen(fname, "rb", MYNAME);
   while ((sbuff = gbfgetstr(fp))) {
     sbuff = lrtrim(sbuff);
     xcsv_parse_style_line(sbuff);

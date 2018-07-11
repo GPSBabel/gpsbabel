@@ -313,10 +313,8 @@ static const QString GetTempName(bool backup) {
 
 static int do_send_cmd(const char* cmd, int cmdLen)
 {
-  int rc;
-
   dbg(6, "Send %s ", cmd);
-  rc = gbser_print(fd, cmd);
+  int rc = gbser_print(fd, cmd);
   if (rc != gbser_OK) {
     fatal(MYNAME ": Write error (%d)\n", rc);
   }
@@ -328,7 +326,7 @@ static int do_send_cmd(const char* cmd, int cmdLen)
 static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeout_sec)
 {
   char line[256];
-  int len, done, loops, cmd_erase;
+  int len;
   int expect_len;
   time_t tout;
 
@@ -345,7 +343,7 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
     tout += 1;
   }
 
-  cmd_erase = 0;
+  int cmd_erase = 0;
   if (strncmp(cmd, CMD_LOG_ERASE, 12) == 0) {
     cmd_erase = 1;
     if (global_opts.verbose_status || global_opts.debug_level > 0) {
@@ -356,12 +354,11 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
 
   do_send_cmd(cmd, strlen(cmd)); // success or fatal()...
 
-  done = 0;
-  loops = 0;
+  int done = 0;
+  int loops = 0;
   memset(line, '\0', sizeof(line));
   do {
-    int rc;
-    rc = gbser_read_line(fd, line, sizeof(line)-1, TIMEOUT, 0x0A, 0x0D);
+    int rc = gbser_read_line(fd, line, sizeof(line)-1, TIMEOUT, 0x0A, 0x0D);
     if (rc != gbser_OK) {
       if (rc == gbser_TIMEOUT && time(nullptr) > tout) {
         dbg(2, "NMEA command '%s' timeout !\n", cmd);
@@ -399,9 +396,8 @@ static int do_cmd(const char* cmd, const char* expect, char** rslt, time_t timeo
       } else if (strncmp(line, "$PMTK", 5) == 0) {
         /* A quick parser for ACK packets */
         if (!cmd_erase && strncmp(line, "$PMTK001,", 9) == 0 && line[9] != '\0') {
-          char* pType, *pRslt;
-          pType = &line[9];
-          pRslt = strchr(&line[9], ',') + 1;
+          char* pType = &line[9];
+          char* pRslt = strchr(&line[9], ',') + 1;
           if (memcmp(&cmd[5], pType, 3) == 0 && pRslt != nullptr && *pRslt != '\0') {
             int pAck = *pRslt - '0';
             if (pAck != 3 && pAck >= 0 && pAck < 4) {  // Erase will return '2'
@@ -499,10 +495,9 @@ static void mtk_rd_deinit()
 
 static int mtk_erase()
 {
-  int log_status;
   char* lstatus = nullptr;
 
-  log_status = 0;
+  int log_status = 0;
   // check log status - is logging disabled ?
   do_cmd(CMD_LOG_STATUS, "PMTK182,3,7,", &lstatus, 2);
   if (lstatus) {
@@ -539,12 +534,10 @@ static void mtk_read()
 {
   char cmd[256];
   char* line = nullptr;
-  unsigned char crc, *data = nullptr;
-  int cmdLen, i, len, rc, init_scan, retry_cnt, log_enabled;
-  unsigned int j, bsize, scan_bsize, read_bsize_kb, read_bsize, scan_step, ff_len, null_len, chunk_size;
-  unsigned int line_size, data_size, data_addr, addr, addr_max, rcvd_addr, rcvd_bsize;
-  unsigned long dsize, dpos = 0;
-  FILE* dout;
+  unsigned char* data = nullptr;
+  int i;
+  unsigned int bsize;
+  unsigned long dpos = 0;
   char* fusage = nullptr;
 
 
@@ -553,9 +546,9 @@ static void mtk_read()
     return;
   }
 
-  log_enabled = 0;
-  init_scan = 0;
-  dout = ufopen(TEMP_DATA_BIN, "r+b");
+  int log_enabled = 0;
+  int init_scan = 0;
+  FILE* dout = ufopen(TEMP_DATA_BIN, "r+b");
   if (dout == nullptr) {
     dout = ufopen(TEMP_DATA_BIN, "wb");
     if (dout == nullptr) {
@@ -565,7 +558,7 @@ static void mtk_read()
     }
   }
   fseek(dout, 0L,SEEK_END);
-  dsize = ftell(dout);
+  unsigned long dsize = ftell(dout);
   if (dsize > 1024) {
     dbg(1, "Temp %s file exists. with size %d\n", qPrintable(TEMP_DATA_BIN),
         dsize);
@@ -590,7 +583,7 @@ static void mtk_read()
   }
   gb_sleep(100*1000);
 
-  addr_max = 0;
+  unsigned int addr_max = 0;
   // get flash usage, current log address..cmd only works if log disabled.
   do_cmd("$PMTK182,2,8*33\r\n", "PMTK182,3,8,", &fusage, 2);
   if (fusage) {
@@ -621,25 +614,25 @@ static void mtk_read()
     }
   }
 
-  scan_step = 0x10000;
-  scan_bsize = 0x0400;
-  read_bsize_kb = strtol(OPT_block_size_kb, nullptr, 10);
+  unsigned int scan_step = 0x10000;
+  unsigned int scan_bsize = 0x0400;
+  unsigned int read_bsize_kb = strtol(OPT_block_size_kb, nullptr, 10);
   if (errno == ERANGE || read_bsize_kb < 1) {
     read_bsize_kb = 1;
   } else if (read_bsize_kb > 64) {
     read_bsize_kb = 64;
   }
-  read_bsize = read_bsize_kb * 1024;
+  unsigned int read_bsize = read_bsize_kb * 1024;
   dbg(2, "Download block size is %d bytes\n", read_bsize);
   if (init_scan) {
     bsize = scan_bsize;
   } else {
     bsize = read_bsize;
   }
-  addr  = 0x0000;
+  unsigned int addr = 0x0000;
 
-  line_size = 2*read_bsize + 32; // logdata as nmea/hex.
-  data_size = read_bsize + 32;
+  unsigned int line_size = 2*read_bsize + 32; // logdata as nmea/hex.
+  unsigned int data_size = read_bsize + 32;
   if ((line = (char*) xmalloc(line_size)) == nullptr) {
     fatal(MYNAME ": Can't allocate %u bytes for NMEA buffer\n",  line_size);
   }
@@ -648,12 +641,12 @@ static void mtk_read()
   }
   memset(line, '\0', line_size);
   memset(data, '\0', data_size);
-  retry_cnt = 0;
+  int retry_cnt = 0;
 
   while (init_scan || addr < addr_max) {
     // generate - read address NMEA command, add crc.
-    crc = 0;
-    cmdLen = snprintf(cmd, sizeof(cmd), "$PMTK182,7,%.8x,%.8x", addr, bsize);
+    unsigned char crc = 0;
+    int cmdLen = snprintf(cmd, sizeof(cmd), "$PMTK182,7,%.8x,%.8x", addr, bsize);
     for (i=1; i<cmdLen; i++) {
       crc ^= cmd[i];
     }
@@ -663,9 +656,9 @@ mtk_retry:
     do_send_cmd(cmd, cmdLen);
 
     memset(line, '\0', line_size);
-    rcvd_addr = addr;
+    unsigned int rcvd_addr = addr;
     do {
-      rc = gbser_read_line(fd, line, line_size-1, TIMEOUT, 0x0A, 0x0D);
+      int rc = gbser_read_line(fd, line, line_size-1, TIMEOUT, 0x0A, 0x0D);
       if (rc != gbser_OK) {
         if (rc == gbser_TIMEOUT && retry_cnt < 3) {
           dbg(2, "\nRetry %d at 0x%.8x\n", retry_cnt, addr);
@@ -674,19 +667,19 @@ mtk_retry:
         } // else
         fatal(MYNAME "mtk_read(): Read error (%d)\n", rc);
       }
-      len = strlen(line);
+      int len = strlen(line);
       dbg(8, "Read %d bytes: '%s'\n", len, line);
 
       if (len > 0) {
         line[len] = '\0';
         if (strncmp(line, "$PMTK182,8", 10) == 0) { //  $PMTK182,8,00005000,FFFFFFF
           retry_cnt = 0;
-          data_addr = strtoul(&line[11], nullptr, 16);
+          unsigned int data_addr = strtoul(&line[11], nullptr, 16);
           // fixme - we should check if all data before data_addr is already received
           i = 20;
-          j = data_addr - addr;
-          ff_len = 0; // number of 0xff bytes.
-          null_len = 0; // number of 0x00 bytes.
+          unsigned int j = data_addr - addr;
+          unsigned int ff_len = 0; // number of 0xff bytes.
+          unsigned int null_len = 0; // number of 0x00 bytes.
           while (i + 3 < len && j < data_size) {
             data[j] = (isdigit(line[i])?(line[i]-'0'):(line[i]-'A'+0xA))*0x10 +
                       (isdigit(line[i+1])?(line[i+1]-'0'):(line[i+1]-'A'+0xA));
@@ -700,7 +693,7 @@ mtk_retry:
             j++;
           }
           rcvd_addr = addr + j;
-          chunk_size = rcvd_addr - data_addr;
+          unsigned int chunk_size = rcvd_addr - data_addr;
           if (init_scan) {
             if (ff_len == chunk_size) {  // data in sector - we've found max sector..
               addr_max = data_addr;
@@ -731,7 +724,7 @@ mtk_retry:
       }
     } while (rcvd_addr < addr + bsize);
 
-    rcvd_bsize = rcvd_addr - addr;
+    unsigned int rcvd_bsize = rcvd_addr - addr;
     dbg(2, "Received %d bytes\n", rcvd_bsize);
 
     if (init_scan) {
@@ -762,8 +755,7 @@ mtk_retry:
       }
       addr += rcvd_bsize;
       if (global_opts.verbose_status || (global_opts.debug_level >= 2 && global_opts.debug_level < 5)) {
-        int perc;
-        perc = 100 - 100*(addr_max-addr)/addr_max;
+        int perc = 100 - 100*(addr_max-addr)/addr_max;
         if (addr >= addr_max) {
           perc = 100;
         }
@@ -994,11 +986,10 @@ static void mtk_csv_deinit()
 /* Output a single data line in MTK application compatible format - i.e ignore any locale settings... */
 static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_item* itm)
 {
-  struct tm* ts_tm;
   char ts_str[30];
   const char* fix_str = "";
 
-  ts_tm = gmtime(&(itm->timestamp));
+  struct tm* ts_tm = gmtime(&(itm->timestamp));
   strftime(ts_str, sizeof(ts_str)-1, "%Y/%m/%d,%H:%M:%S", ts_tm);
 
   if (bmask & (1<<VALID)) {
@@ -1124,8 +1115,9 @@ static int csv_line(gbfile* csvFile, int idx, unsigned long bmask, struct data_i
 static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
 {
   static int count = 0;
-  int i, sat_id, hspd;
-  unsigned char crc, hbuf[4];
+  int sat_id;
+  int hspd;
+  unsigned char hbuf[4];
   struct data_item itm;
 
   dbg(5,"Entering mtk_parse, count = %i, dataLen = %i\n", count, dataLen);
@@ -1139,8 +1131,8 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
   }
 
   memset(&itm, 0, sizeof(itm));
-  i = 0;
-  crc = 0;
+  int i = 0;
+  unsigned char crc = 0;
   for (int k = 0; k<32; k++) {
     switch (((1<<k) & bmask)) {
     case 1<<UTC:
@@ -1216,8 +1208,12 @@ static int mtk_parse(unsigned char* data, int dataLen, unsigned int bmask)
       itm.sat_used = data[i+1];
       break;
     case 1<<SID: {
-      int sat_count, sat_idx, sid_size, l;
-      int azoffset, snroffset;
+      int sat_count;
+      int sat_idx;
+      int sid_size;
+      int l;
+      int azoffset;
+      int snroffset;
 
       sat_count = le_read16(data + i + 2);
       if (sat_count > 32) {
@@ -1517,15 +1513,14 @@ static int is_holux_string(const unsigned char* data, int dataLen)
 
 static void file_read()
 {
-  long fsize, pos;
-//  int i, j, k, bLen;
+  //  int i, j, k, bLen;
   unsigned char buf[512];
 
   memset(buf, '\0', sizeof(buf));
 
   /* Get size of file to  parse */
   fseek(fl, 0L, SEEK_END);
-  fsize = ftell(fl);
+  long fsize = ftell(fl);
   if (fsize <= 0) {
     fatal(MYNAME ": File has size %ld\n", fsize);
   }
@@ -1544,13 +1539,12 @@ static void file_read()
    */
 
   int j = 0;
-  pos = 0;
+  long pos = 0;
 
   /* get default bitmask, log period/speed/distance */
   int bLen = fread(buf, 1, 20, fl);
   if (bLen == 20) {
-    unsigned int mask, log_period, log_distance, log_speed, log_policy;
-    log_policy   = le_read16(buf + 6);
+    unsigned int log_policy = le_read16(buf + 6);
 
     if (!(log_policy == 0x0104 || log_policy == 0x0106) && fsize > 0x10000) {
       dbg(1, "Invalid initial log policy 0x%.4x - check next block\n", log_policy);
@@ -1558,13 +1552,13 @@ static void file_read()
       bLen = fread(buf, 1, 20, fl);
       log_policy   = le_read16(buf + 6);
     }
-    mask = le_read32(buf + 2);
+    unsigned int mask = le_read32(buf + 2);
     if (mtk_device != MTK_LOGGER) {   // clear Holux-specific 'low precision' bit
       mask &= 0x7fffffffU;
     }
-    log_period   = le_read32(buf + 8);
-    log_distance = le_read32(buf + 12);
-    log_speed    = le_read32(buf + 16);
+    unsigned int log_period = le_read32(buf + 8);
+    unsigned int log_distance = le_read32(buf + 12);
+    unsigned int log_speed = le_read32(buf + 16);
 
     dbg(1, "Default Bitmask %.8x, Log every %.0f sec, %.0f m, %.0f km/h\n",
         mask, log_period/10., log_distance/10., log_speed/10.);

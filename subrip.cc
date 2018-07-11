@@ -58,8 +58,7 @@ sync_time(time_t arg_gpstime, char* arg_videotime)
 static void
 subrip_prevwp_pr(const Waypoint* waypointp)
 {
-  QDateTime startdtime, enddtime;
-  QTime starttime, endtime;
+  QDateTime enddtime;
 
   /* Now that we have the next waypoint, we can write out the subtitle for
    * the previous one.
@@ -75,14 +74,14 @@ subrip_prevwp_pr(const Waypoint* waypointp)
   gbfprintf(fout, "%d\n", stnum++);
 
   /* Writes start and end time for subtitle display to file. */
-  startdtime = prevwpp->GetCreationTime().addSecs(-time_offset);
+  QDateTime startdtime = prevwpp->GetCreationTime().addSecs(-time_offset);
   if (!waypointp) {
     enddtime = startdtime.addSecs(1);
   } else {
     enddtime = waypointp->GetCreationTime().addSecs(-time_offset);
   }
-  starttime = startdtime.toUTC().time();
-  endtime = enddtime.toUTC().time();
+  QTime starttime = startdtime.toUTC().time();
+  QTime endtime = enddtime.toUTC().time();
   gbfprintf(fout, "%02d:%02d:%02d,%03d --> %02d:%02d:%02d,%03d\n",
     starttime.hour(), starttime.minute(), starttime.second(), starttime.msec(),
     endtime.hour(), endtime.minute(), endtime.second(), endtime.msec());
@@ -198,7 +197,6 @@ static void
 subrip_wr_init(const QString& fname)
 {
   time_t gpstime_t;
-  struct tm* ptm_gps;
 
   stnum = 1;
 
@@ -210,7 +208,7 @@ subrip_wr_init(const QString& fname)
 
   if ((opt_gpstime != nullptr) && (opt_gpsdate != nullptr)) {
     time(&gpstime_t);
-    ptm_gps = gmtime(&gpstime_t);
+    struct tm* ptm_gps = gmtime(&gpstime_t);
     if (opt_gpstime) {
       sscanf(opt_gpstime, "%2d%2d%2d", &ptm_gps->tm_hour, &ptm_gps->tm_min, &ptm_gps->tm_sec);
     }

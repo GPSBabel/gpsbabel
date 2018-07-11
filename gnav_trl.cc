@@ -91,13 +91,12 @@ gnav_trl_read()
 
   while (! gbfeof(fin)) {
     gnav_trl_t rec;
-    Waypoint* wpt;
 
     if (gbfread(&rec, sizeof(rec), 1, fin) != 1) {
       fatal(MYNAME ": Unexpected EOF (end of file)!\n");
     }
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     wpt->SetCreationTime(le_read32(&rec.time));
     wpt->latitude = le_read_float(&rec.lat);

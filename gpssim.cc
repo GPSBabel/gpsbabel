@@ -108,14 +108,13 @@ static void
 gpssim_write_pt(const Waypoint* wpt)
 {
   char obuf[1024];
-  double lat, lon;
 
   if WAYPT_HAS(wpt, speed) {
     gpssim_write_spd(MPS_TO_KNOTS(wpt->speed));
   }
 
-  lat = degrees2ddmm(wpt->latitude);
-  lon = degrees2ddmm(wpt->longitude);
+  double lat = degrees2ddmm(wpt->latitude);
+  double lon = degrees2ddmm(wpt->longitude);
 
   snprintf(obuf, sizeof(obuf), "FRWPT,%10.5f,%c,%011.5f,%c,%.1f",
            fabs(lat), lat < 0 ? 'S' : 'N',
@@ -125,13 +124,11 @@ gpssim_write_pt(const Waypoint* wpt)
 
   if (wpt->creation_time.isValid()) {
     char tbuf[20];
-    int hms, ymd;
-    struct tm* tm;
 
     const time_t tt = wpt->GetCreationTime().toTime_t();
-    tm = gmtime(&tt);
-    hms = tm->tm_hour * 10000 + tm->tm_min * 100 + tm->tm_sec;
-    ymd = tm->tm_mday * 10000 + tm->tm_mon * 100 + tm->tm_year;
+    struct tm* tm = gmtime(&tt);
+    int hms = tm->tm_hour * 10000 + tm->tm_min * 100 + tm->tm_sec;
+    int ymd = tm->tm_mday * 10000 + tm->tm_mon * 100 + tm->tm_year;
 
     snprintf(tbuf, sizeof(tbuf), ",%d,%d",ymd, hms);
     strcat(obuf, tbuf);

@@ -29,14 +29,12 @@
 static void
 free_xml_tag(xml_tag* tag)
 {
-  char** ap;
-
   while (tag) {
     if (tag->child) {
       free_gpx_extras(tag->child);
     }
     if (tag->attributes) {
-      ap = tag->attributes;
+      char** ap = tag->attributes;
 
       while (*ap) {
         xfree(*ap++);

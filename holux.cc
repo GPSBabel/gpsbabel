@@ -77,33 +77,30 @@ static void wr_deinit()
 
 static void data_read()
 {
-  char name[9], desc[90];
-  unsigned char* HxWpt;
-  int iDataRead;
-  int iWptNum;
-  WPT* pWptHxTmp;
+  char name[9];
+  char desc[90];
   struct tm tm;
   struct tm* ptm;
 
   memset(&tm, 0, sizeof(tm));
 
-  HxWpt = (unsigned char*) xcalloc(GM100_WPO_FILE_SIZE, 1);
+  unsigned char* HxWpt = (unsigned char*) xcalloc(GM100_WPO_FILE_SIZE, 1);
 
   /* read the wpo file to the data-array */
-  iDataRead = gbfread(HxWpt, 1, GM100_WPO_FILE_SIZE, file_in);
+  int iDataRead = gbfread(HxWpt, 1, GM100_WPO_FILE_SIZE, file_in);
 
   if (iDataRead == 0) {
     fatal(MYNAME ": Error reading data from %s.\n", file_in->name);
   }
 
-  iWptNum = le_read16(&((WPTHDR*)HxWpt)->num);
+  int iWptNum = le_read16(&((WPTHDR*)HxWpt)->num);
 
   /* Get the waypoints */
   for (int iCount = 0; iCount < iWptNum ; iCount ++) {
     Waypoint* wpt_tmp = new Waypoint;
 
     int iWptIndex = le_read16(&((WPTHDR*)HxWpt)->idx[iCount]);
-    pWptHxTmp = (WPT*)&HxWpt[OFFS_WPT + (sizeof(WPT) * iWptIndex)];
+    WPT* pWptHxTmp = (WPT*)&HxWpt[OFFS_WPT + (sizeof(WPT) * iWptIndex)];
 
     wpt_tmp->altitude = 0;
     strncpy(name,pWptHxTmp->name,sizeof(pWptHxTmp->name));
@@ -181,9 +178,6 @@ static const char* mknshort(const char* stIn,unsigned int sLen)
 
 static void holux_disp(const Waypoint* wpt)
 {
-  short sIndex;
-  WPT* pWptHxTmp;
-
   double lon = wpt->longitude * 36000.0;
   double lat = wpt->latitude * -36000.0;
 
@@ -196,14 +190,14 @@ static void holux_disp(const Waypoint* wpt)
     lat += (double)((int)lat/abs((int)lat)) * .5;
   }
 
-  sIndex =  le_read16(&((WPTHDR*)HxWFile)->num);
+  short sIndex = le_read16(&((WPTHDR*)HxWFile)->num);
   ((WPTHDR*)HxWFile)->idx[sIndex] = sIndex;          /* set the waypoint index  */
   le_write16(&((WPTHDR*)HxWFile)->idx[sIndex], sIndex);          /* set the waypoint index  */
   ((WPTHDR*)HxWFile)->used[sIndex] = 0xff;            /* Waypoint used */
 
 
   /* set Waypoint */
-  pWptHxTmp = (WPT*)&HxWFile[OFFS_WPT + (sizeof(WPT) * sIndex)];
+  WPT* pWptHxTmp = (WPT*)&HxWFile[OFFS_WPT + (sizeof(WPT) * sIndex)];
 
   memset(pWptHxTmp->name,0x20,sizeof(pWptHxTmp->name));
   if (wpt->shortname != nullptr) {
@@ -253,7 +247,6 @@ static void holux_disp(const Waypoint* wpt)
 
 static void data_write()
 {
-  int iWritten;
   short sCount;
 
   /* init the waypoint area*/
@@ -285,7 +278,7 @@ static void data_write()
 
   waypt_disp_all(holux_disp);
 
-  iWritten = gbfwrite(HxWFile, 1, GM100_WPO_FILE_SIZE,file_out);
+  int iWritten = gbfwrite(HxWFile, 1, GM100_WPO_FILE_SIZE,file_out);
   if (iWritten == 0) {
     fatal(MYNAME ": Error writing data to %s.\n", file_out->name);
   }

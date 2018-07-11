@@ -85,7 +85,6 @@ data_read()
   char mac[2 + 17 + 2 + 1];			/* "( " + MAC + " )" + null */
   char desc[sizeof ssid - 1 + 15 + 1];	/* room for channel/speed */
   double lat = 0, lon = 0;
-  Waypoint* wpt_tmp;
   int line_no = 0;
   int stealth_num = 0, whitespace_num = 0;
   long flags = 0;
@@ -96,8 +95,8 @@ data_read()
   memset(&tm, 0, sizeof(tm));
 
   while ((ibuf = gbfgetstr(file_in))) {
-    char* field;
-    int field_num, len, stealth = 0;
+    int len;
+    int stealth = 0;
 
     if ((line++ == 0) && file_in->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
@@ -125,9 +124,9 @@ data_read()
       continue;
     }
 
-    field_num = 0;
+    int field_num = 0;
     line_no++;
-    field = csv_lineparse(ibuf, "\t", "", line_no);
+    char* field = csv_lineparse(ibuf, "\t", "", line_no);
 
     while (field) {
       switch (field_num) {
@@ -212,7 +211,7 @@ data_read()
       continue;
     }
 
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
 
     if (stealth) {
       if (!snmac) {
@@ -292,14 +291,13 @@ static
 void
 fix_netstumbler_dupes()
 {
-  int i, ct = waypt_count(), serial = 0;
-  htable_t* htable, *bh;
+  int ct = waypt_count(), serial = 0;
   unsigned long last_crc;
 
-  htable = (htable_t*) xmalloc(ct * sizeof *htable);
-  bh = htable;
+  htable_t* htable = (htable_t*) xmalloc(ct * sizeof *htable);
+  htable_t* bh = htable;
 
-  i = 0;
+  int i = 0;
 #if NEWQ
   // Why, oh, why is this format running over the entire waypoint list and
   // modifying it?  This seems wrong.

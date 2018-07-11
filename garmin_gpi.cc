@@ -247,11 +247,10 @@ static char*
 gpi_read_lc_string_old(char* languagecode, short* length)
 {
   char lc[3];
-  short len;
 
   gbfread(lc, 1, 2, fin);
   lc[2] = '\0';
-  len = gbfgetint16(fin);
+  short len = gbfgetint16(fin);
 
   if ((lc[0] < 'A') || (lc[0] > 'Z') || (lc[1] < 'A') || (lc[1] > 'Z')) {
     fatal(MYNAME ": Invalid language code %s!\n", lc);
@@ -272,14 +271,11 @@ gpi_read_lc_string_old(char* languagecode, short* length)
 static char*
 gpi_read_string_old(const char* field)
 {
-  int l0;
   char* res = nullptr;
 
-  l0 = gbfgetint16(fin);
+  int l0 = gbfgetint16(fin);
   if (l0 > 0) {
-    char first;
-
-    first = gbfgetc(fin);
+    char first = gbfgetc(fin);
     if (first == 0) {
       short l1;
       short l2;
@@ -468,9 +464,9 @@ read_poi(const int sz, const int tag)
 static void
 read_poi_list(const int sz)
 {
-  int pos, i;
+  int i;
 
-  pos = gbftell(fin);
+  int pos = gbftell(fin);
 #ifdef GPI_DBG
   PP;
   dbginfo("> reading poi list (-> %1$x / %1$d )\n", pos + sz);
@@ -509,18 +505,14 @@ read_poi_list(const int sz)
 static void
 read_poi_group(const int sz, const int tag)
 {
-  int pos;
-
-  pos = gbftell(fin);
+  int pos = gbftell(fin);
 #ifdef GPI_DBG
   PP;
   dbginfo("> reading poi group (-> %1$x / %1$d)\n", pos + sz);
 #endif
   if (tag == 0x80009) {
-    int subsz;
-
     PP;
-    subsz = gbfgetint32(fin);	/* ? offset to category data ? */
+    int subsz = gbfgetint32(fin);	/* ? offset to category data ? */
 #ifdef GPI_DBG
     dbginfo("group sublen = %d (-> %x / %d)\n", subsz, pos + subsz + 4, pos + subsz + 4);
 #else
@@ -553,15 +545,15 @@ static int
 read_tag(const char* caller, const int tag, Waypoint* wpt)
 {
   Q_UNUSED(caller);
-  int pos, sz, dist;
+  int dist;
   double speed;
   short mask;
   QString str;
   char* cstr;
   garmin_fs_t* gmsd;
 
-  sz = gbfgetint32(fin);
-  pos = gbftell(fin);
+  int sz = gbfgetint32(fin);
+  int pos = gbftell(fin);
 
 #ifdef GPI_DBG
   PP;
@@ -762,9 +754,7 @@ read_tag(const char* caller, const int tag, Waypoint* wpt)
 static void
 write_string(const char* str, const char long_format)
 {
-  int len;
-
-  len = strlen(str);
+  int len = strlen(str);
   if (long_format) {
     gbfputint32(len + 4, fout);
     gbfwrite("EN", 1, 2, fout);
@@ -790,9 +780,7 @@ compare_strings(const QString& s1, const QString& s2)
 static writer_data_t*
 wdata_alloc()
 {
-  writer_data_t* res;
-
-  res = (writer_data_t*) xcalloc(1, sizeof(*res));
+  writer_data_t* res = (writer_data_t*) xcalloc(1, sizeof(*res));
   QUEUE_INIT(&res->Q);
   waypt_init_bounds(&res->bds);
 
@@ -848,7 +836,7 @@ static void
 wdata_check(writer_data_t* data)
 {
   queue* elem, *tmp;
-  double center_lat, center_lon;
+  double center_lon;
 
   if ((data->ct <= WAYPOINTS_PER_BLOCK) ||
       /* avoid endless loop for points (more than WAYPOINTS_PER_BLOCK)
@@ -862,7 +850,7 @@ wdata_check(writer_data_t* data)
 
   /* compute the (mean) center of current bounds */
 
-  center_lat = center_lon = 0;
+  double center_lat = center_lon = 0;
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
     Waypoint* wpt = (Waypoint*) elem;
     center_lat += wpt->latitude;
@@ -928,9 +916,7 @@ wdata_compute_size(writer_data_t* data)
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
     Waypoint* wpt = (Waypoint*) elem;
-    gpi_waypt_t* dt;
     garmin_fs_t* gmsd;
-    QString str;
 
     res += 12;		/* tag/sz/sub-sz */
     res += 19;		/* poi fixed size */
@@ -939,16 +925,14 @@ wdata_compute_size(writer_data_t* data)
       res += 10;  /* tag(4) */
     }
 
-    dt = (gpi_waypt_t*) xcalloc(1, sizeof(*dt));
+    gpi_waypt_t* dt = (gpi_waypt_t*) xcalloc(1, sizeof(*dt));
     wpt->extra_data = dt;
 
     if (alerts) {
 #if NEW_STRINGS
-// examine closely.
-      const char* pos;
       int pidx;
       if ((pidx = wpt->shortname.indexOf('@')) != -1) {
-        pos = CSTR(wpt->shortname.mid(pidx));
+        const char* pos = CSTR(wpt->shortname.mid(pidx));
 #else
       char* pos;
       if ((pos = strchr(wpt->shortname, '@'))) {
@@ -984,7 +968,7 @@ wdata_compute_size(writer_data_t* data)
       }
     }
 
-    str = QString();
+    QString str = QString();
     if (opt_descr) {
       if (!wpt->description.isEmpty()) {
         str = wpt->description;
@@ -1096,18 +1080,17 @@ wdata_write(const writer_data_t* data)
   gbfputc(data->alert, fout);
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    QString str;
-    int s0, s1;
+    int s1;
     Waypoint* wpt = (Waypoint*)elem;
     gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
 
-    str = wpt->description;
+    QString str = wpt->description;
     if (str.isEmpty()) {
       str = wpt->notes;
     }
 
     gbfputint32(0x80002, fout);
-    s0 = s1 = 19 + strlen(STRFROMUNICODE(wpt->shortname));
+    int s0 = s1 = 19 + strlen(STRFROMUNICODE(wpt->shortname));
     if (! opt_hide_bitmap) {
       s0 += 10;  /* tag(4) */
     }
@@ -1224,9 +1207,7 @@ skip_empty_block:
 static void
 write_category(const char*, const unsigned char* image, const int image_sz)
 {
-  int sz;
-
-  sz = wdata_compute_size(wdata);
+  int sz = wdata_compute_size(wdata);
   sz += 8;	/* string header */
   sz += strlen(STRFROMUNICODE(QString::fromUtf8(opt_cat)));
 
@@ -1284,7 +1265,6 @@ write_header()
 static void
 enum_waypt_cb(const Waypoint* ref)
 {
-  Waypoint* wpt;
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&wdata->Q, elem, tmp) {
@@ -1300,7 +1280,7 @@ enum_waypt_cb(const Waypoint* ref)
     }
   }
 
-  wpt = new Waypoint(*ref);
+  Waypoint* wpt = new Waypoint(*ref);
 
   if (*opt_unique == '1') {
     wpt->shortname = mkshort(short_h, wpt->shortname);
@@ -1313,7 +1293,6 @@ enum_waypt_cb(const Waypoint* ref)
 static void
 load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
 {
-  gbfile* f;
   int i, sz;
   int dest_bpp;
   int src_line_sz, dest_line_sz;
@@ -1322,7 +1301,7 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
   gpi_bitmap_header_t* dest_h;
   unsigned char* ptr;
 
-  f = gbfopen_le(fname, "rb", MYNAME);
+  gbfile* f = gbfopen_le(fname, "rb", MYNAME);
   is_fatal(gbfgetint16(f) != 0x4d42, MYNAME ": No BMP image.");
 
   /* read a standard bmp file header */
@@ -1435,8 +1414,7 @@ load_bitmap_from_file(const char* fname, unsigned char** data, int* data_sz)
       unsigned char* p = ptr;
 
       for (j = 0; j < src_h.width; j++) {
-        int color;
-        color = (int32_t)gbfgetint16(f) | (gbfgetc(f) << 16);
+        int color = (int32_t)gbfgetint16(f) | (gbfgetc(f) << 16);
         le_write32(p, color);
         p += 4;
       }

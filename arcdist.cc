@@ -109,18 +109,15 @@ void ArcDistanceFilter::process()
   RteHdFunctor<ArcDistanceFilter> arcdist_arc_disp_hdr_cb_f(this, &ArcDistanceFilter::arcdist_arc_disp_hdr_cb);
 
   queue* elem, * tmp;
-  unsigned removed;
 
   if (arcfileopt) {
     int fileline = 0;
     char* line;
-    gbfile* file_in;
-    Waypoint* arcpt2, * arcpt1;
 
-    file_in = gbfopen(arcfileopt, "r", MYNAME);
+    gbfile* file_in = gbfopen(arcfileopt, "r", MYNAME);
 
-    arcpt1 = new Waypoint;
-    arcpt2 = new Waypoint;
+    Waypoint* arcpt1 = new Waypoint;
+    Waypoint* arcpt2 = new Waypoint;
     arcdist_arc_disp_hdr_cb(nullptr);
 
     arcpt2->latitude = arcpt2->longitude = BADVAL;
@@ -157,15 +154,14 @@ void ArcDistanceFilter::process()
     track_disp_all(arcdist_arc_disp_hdr_cb_f, nullptr, arcdist_arc_disp_wpt_cb_f);
   }
 
-  removed = 0;
+  unsigned removed = 0;
 #if NEWQ
   foreach (Waypoint* wp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     Waypoint* wp = (Waypoint*) elem;
 #endif
-    extra_data* ed;
-    ed = (extra_data*) wp->extra_data;
+    extra_data* ed = (extra_data*) wp->extra_data;
     wp->extra_data = nullptr;
     if (ed) {
       if ((ed->distance >= pos_dist) == (exclopt == nullptr)) {

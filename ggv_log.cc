@@ -52,9 +52,7 @@ ggv_log_rd_init(const QString& fname)
   fin = gbfopen(fname, "rb", MYNAME);
 
   for (;;) {
-    int cin;
-
-    cin = gbfgetc(fin);
+    int cin = gbfgetc(fin);
     if (cin < 0) {
       break;
     }
@@ -63,12 +61,11 @@ ggv_log_rd_init(const QString& fname)
 
     if (cin == '\0') {
       double ver = 0;
-      char* sver;
       if (strncmp(magic, "DOMGVGPS Logfile V", 18) != 0) {
         break;
       }
 
-      sver = &magic[18];
+      char* sver = &magic[18];
       sscanf(sver, "%lf:", &ver);
       ggv_log_ver = ver * 10;
       if ((ggv_log_ver == 10) || (ggv_log_ver == 25)) {
@@ -92,7 +89,6 @@ ggv_log_rd_deinit()
 static void
 ggv_log_read()
 {
-  signed char* buf;
   int bufsz = 0, len;
   route_head* trk = nullptr;
 
@@ -105,14 +101,10 @@ ggv_log_read()
     break;
   }
 
-  buf = (signed char*) xmalloc(bufsz);
+  signed char* buf = (signed char*) xmalloc(bufsz);
 
   while ((len = gbfread(buf, 1, bufsz, fin))) {
-    int deg, min;
-    double xlat, xlon;
-    float sec;
     struct tm tm;
-    Waypoint* wpt;
 
     if (len != bufsz) {
       break;
@@ -125,25 +117,23 @@ ggv_log_read()
 
     memset(&tm, 0, sizeof(tm));
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
-    deg = (int16_t) le_read16(&buf[0]);
-    min = le_read16(&buf[2]);
-    sec = le_read_float(&buf[4]);
-    xlat = (double)deg + ((double)min / 60.0) + (sec / 3600.0);
+    int deg = (int16_t) le_read16(&buf[0]);
+    int min = le_read16(&buf[2]);
+    float sec = le_read_float(&buf[4]);
+    double xlat = (double)deg + ((double)min / 60.0) + (sec / 3600.0);
     wpt->latitude = xlat;
 
     deg = (int16_t) le_read16(&buf[8]);
     min = le_read16(&buf[10]);
     sec = le_read_float(&buf[12]);
-    xlon = (double)deg + ((double)min / 60.0) + (sec / 3600.0);
+    double xlon = (double)deg + ((double)min / 60.0) + (sec / 3600.0);
     wpt->longitude = xlon;
 
     WAYPT_SET(wpt, course, le_read16(&buf[16 + 0]));
     int milliseconds = 0;
     if (ggv_log_ver == 10) {
-      double secs;
-
       wpt->altitude = le_read16(&buf[16 +  2]);
       WAYPT_SET(wpt, speed, le_read16(&buf[16 +  4]));
       tm.tm_year =    le_read16(&buf[16 +  8]);
@@ -151,7 +141,7 @@ ggv_log_read()
       tm.tm_mday =    le_read16(&buf[16 + 12]);
       tm.tm_hour =    le_read16(&buf[16 + 14]);
       tm.tm_min =     le_read16(&buf[16 + 16]);
-      secs =          le_read_double(&buf[16 + 18]);
+      double secs = le_read_double(&buf[16 + 18]);
       tm.tm_sec = (int)secs;
       milliseconds = lround((secs - tm.tm_sec) * 1000.0);
     } else {
@@ -210,19 +200,17 @@ ggv_log_track_head_cb(const route_head* trk)
   Waypoint* prev = nullptr;
 
   QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
-    double  latmin, lonmin, latsec, lonsec;
-    int     latint, lonint;
     double  course = 0, speed = 0;
     struct tm tm;
     Waypoint* wpt = (Waypoint*)elem;
     double secs = 0;
 
-    latint = wpt->latitude;
-    lonint = wpt->longitude;
-    latmin = 60.0 * (fabs(wpt->latitude) - latint);
-    lonmin = 60.0 * (fabs(wpt->longitude) - lonint);
-    latsec = 60.0 * (latmin - floor(latmin));
-    lonsec = 60.0 * (lonmin - floor(lonmin));
+    int latint = wpt->latitude;
+    int lonint = wpt->longitude;
+    double latmin = 60.0 * (fabs(wpt->latitude) - latint);
+    double lonmin = 60.0 * (fabs(wpt->longitude) - lonint);
+    double latsec = 60.0 * (latmin - floor(latmin));
+    double lonsec = 60.0 * (lonmin - floor(lonmin));
 
     if (wpt->creation_time.isValid()) {
       time_t t = wpt->GetCreationTime().toTime_t();

@@ -183,7 +183,6 @@ void
 garmin_fs_xml_fprint(const Waypoint* waypt,
                      QXmlStreamWriter* writer)
 {
-  const char* phone, *addr;
   garmin_fs_t* gmsd = GMSD_FIND(waypt);
 
   if (gmsd == nullptr) {
@@ -191,7 +190,7 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
   }
 
   /* Find out if there is at least one field set */
-  addr = GMSD_GET(addr, "");
+  const char* addr = GMSD_GET(addr, "");
   if (! *addr) {
     addr = GMSD_GET(city, "");
   }
@@ -205,7 +204,7 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
     addr = GMSD_GET(state, "");
   }
 
-  phone = GMSD_GET(phone_nr, "");
+  const char* phone = GMSD_GET(phone_nr, "");
 
   if (*addr || *phone ||
       (gmsd->flags.category && gmsd->category) ||
@@ -287,10 +286,9 @@ garmin_fs_xml_fprint(const Waypoint* waypt,
 void
 garmin_fs_xml_convert(const int base_tag, int tag, const QString& Qcdatastr, Waypoint* waypt)
 {
-  garmin_fs_t* gmsd;
-// FIXME: eliminate C string copy/use here:
+  // FIXME: eliminate C string copy/use here:
   const char *cdatastr = xstrdup(Qcdatastr);
-  gmsd = GMSD_FIND(waypt);
+  garmin_fs_t* gmsd = GMSD_FIND(waypt);
   if (gmsd == nullptr) {
     gmsd = garmin_fs_alloc(-1);
     fs_chain_add(&waypt->fs, (format_specific_data*) gmsd);
@@ -383,14 +381,13 @@ garmin_fs_convert_category(const char* category_name, uint16_t* category)
   } else if (global_opts.inifile != nullptr) {
     // Do we have a gpsbabel.ini that maps category names to category #'s?
     for (i = 0; i < 16; i++) {
-      char* c;
       char key[3];
 
       // use assertion to silence gcc 7.3 warning
       // warning: ‘%d’ directive output may be truncated writing between 1 and 11 bytes into a region of size 3 [-Wformat-truncation=]
       assert((i>=0) && (i<16));
       snprintf(key, sizeof(key), "%d", i + 1);
-      c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
+      char* c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
       if ((c != nullptr) && (case_ignore_strcmp(c, category_name) == 0)) {
         cat = (1 << i);
         break;
@@ -409,14 +406,13 @@ unsigned char
 garmin_fs_merge_category(const char* category_name, Waypoint* waypt)
 {
   uint16_t cat;
-  garmin_fs_t* gmsd;
 
   // Attempt to get a textual category name to a category number.
   if (!garmin_fs_convert_category(category_name, &cat)) {
     return 0;
   }
 
-  gmsd = GMSD_FIND(waypt);
+  garmin_fs_t* gmsd = GMSD_FIND(waypt);
   cat = cat | (GMSD_GET(category, 0));
 
   if (gmsd == nullptr) {

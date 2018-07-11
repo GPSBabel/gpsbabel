@@ -173,7 +173,6 @@ vpl_parse_75_sentence(const char* ibuf)
   int16_t alt, speed_raw;
   uint16_t hdg_raw;
   uint8_t sats, hdop_raw, vdop_raw;
-  Waypoint* waypt;
   struct tm tm;
 
   // The files have DOS line endings (CR/LF) but we don't care, because we
@@ -194,7 +193,7 @@ vpl_parse_75_sentence(const char* ibuf)
   ymd /= 100;
   tm.tm_year = ymd % 100 + 100;
 
-  waypt = new Waypoint;
+  Waypoint* waypt = new Waypoint;
 
   // Lat/Lon are both stored *0xE1000 which we have to divide out
   // for decimal degrees

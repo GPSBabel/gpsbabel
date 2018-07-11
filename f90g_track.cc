@@ -88,10 +88,8 @@ static const float  SPEED_CONVERSION = (10.0f)/(36.0f); // convert KPH to meters
 static void
 f90g_track_read()
 {
-  Waypoint* readWaypoint;
   char northSouth, eastWest, velocityMark, ttRec[TTRECORDSIZE], tempBuf[20];
   int year, mon, mday, hour, min, sec, latitudeDeg, latitudeMin, longitudeDeg, longitudeMin, velocity;
-  QDateTime dt;
 
   is_fatal((track == nullptr), MYNAME "Track setup error");
   for (;;) {
@@ -121,8 +119,8 @@ f90g_track_read()
         && velocityMark == 'M') {
 
       // create the Waypoint and fill it in
-      readWaypoint = new Waypoint;
-      dt = QDateTime(QDate(year, mon, mday), QTime(hour, min, sec), Qt::UTC);
+      Waypoint* readWaypoint = new Waypoint;
+      QDateTime dt = QDateTime(QDate(year, mon, mday), QTime(hour, min, sec), Qt::UTC);
 
       readWaypoint->SetCreationTime(dt);
       readWaypoint->latitude = (double(latitudeDeg) + double(latitudeMin)/MIN_PER_DEGREE)

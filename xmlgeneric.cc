@@ -59,8 +59,7 @@ static QTextCodec* codec = utf8_codec;  // Qt has no vanilla ASCII encoding =(
 xg_callback*
 xml_tbl_lookup(const QString& tag, xg_cb_type cb_type)
 {
-  xg_tag_mapping* tm;
-  for (tm = xg_tag_tbl; tm->tag_cb != nullptr; tm++) {
+  for (xg_tag_mapping* tm = xg_tag_tbl; tm->tag_cb != nullptr; tm++) {
     if (str_match(CSTR(tag), tm->tag_name) && (cb_type == tm->cb_type)) {
       return tm->tag_cb;
     }

@@ -112,7 +112,6 @@ static int d103_icon_number_from_symbol(const QString& s);
 static void
 rw_init(const QString& fname)
 {
-  int receiver_short_length;
   int receiver_must_upper = 1;
   const char* receiver_charset = nullptr;
 
@@ -181,7 +180,7 @@ rw_init(const QString& fname)
    * Fortunately, getting this "wrong" only results in ugly names
    * when we're using the synthesize_shortname path.
    */
-  receiver_short_length = 10;
+  int receiver_short_length = 10;
 
   switch (gps_waypt_type) {	/* waypoint type as defined by jeeps */
   case 0:
@@ -473,7 +472,6 @@ static
 void
 track_read()
 {
-  int32 ntracks;
   GPS_PTrack* array;
   route_head* trk_head = nullptr;
   int trk_num = 0;
@@ -487,15 +485,13 @@ track_read()
   }
 
 
-  ntracks = GPS_Command_Get_Track(portname, &array, waypt_read_cb);
+  int32 ntracks = GPS_Command_Get_Track(portname, &array, waypt_read_cb);
 
   if (ntracks <= 0) {
     return;
   }
 
   for (int i = 0; i < ntracks; i++) {
-    Waypoint* wpt;
-
     /*
      * This is probably always in slot zero, but the Garmin
      * serial spec says these can appear anywhere.  Toss them
@@ -526,7 +522,7 @@ track_read()
     if (array[i]->no_latlon || array[i]->ishdr) {
       continue;
     }
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     wpt->longitude = array[i]->lon;
     wpt->latitude = array[i]->lat;
@@ -560,7 +556,6 @@ static
 void
 route_read()
 {
-  int32 nroutepts;
   GPS_PWay* array;
   /* TODO: Fixes warning but is it right?
    * RJL:  No, the warning isn't right; GCC's flow analysis is broken.
@@ -568,7 +563,7 @@ route_read()
    */
   route_head* rte_head = nullptr;
 
-  nroutepts = GPS_Command_Get_Route(portname, &array);
+  int32 nroutepts = GPS_Command_Get_Route(portname, &array);
 
 //	fprintf(stderr, "Routes %d\n", (int) nroutepts);
 #if 1
@@ -710,8 +705,6 @@ lap_read_as_track(void)
 static void
 pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
 {
-  double wptime, wptimes;
-
   wpt->altitude = pvt->alt;
   wpt->latitude = pvt->lat;
   wpt->longitude = pvt->lon;
@@ -731,10 +724,10 @@ pvt2wpt(GPS_PPvt_Data pvt, Waypoint* wpt)
    * 3) The number of leap seconds that offset the current UTC and GPS
    *    reference clocks.
    */
-  wptime = 631065600.0 + pvt->wn_days * 86400.0  +
-           pvt->tow
-           - pvt->leap_scnds;
-  wptimes = floor(wptime);
+  double wptime = 631065600.0 + pvt->wn_days * 86400.0  +
+    pvt->tow
+    - pvt->leap_scnds;
+  double wptimes = floor(wptime);
   wpt->SetCreationTime(wptimes, 1000000.0 * (wptime - wptimes));
 
   /*
@@ -843,8 +836,7 @@ data_read()
 static GPS_PWay
 sane_GPS_Way_New()
 {
-  GPS_PWay way;
-  way = GPS_Way_New();
+  GPS_PWay way = GPS_Way_New();
   if (!way) {
     fatal(MYNAME ":not enough memory\n");
   }
@@ -942,7 +934,6 @@ waypoint_prepare()
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
     Waypoint* wpt = (Waypoint*) elem;
 #endif
-    char* ident;
     char obuf[256];
 
     QString src;
@@ -957,9 +948,9 @@ waypoint_prepare()
      * mkshort will do collision detection and namespace
      * cleaning
      */
-    ident = mkshort(mkshort_handle,
-                    global_opts.synthesize_shortnames ? CSTRc(src) :
-                    CSTRc(wpt->shortname));
+    char* ident = mkshort(mkshort_handle,
+                           global_opts.synthesize_shortnames ? CSTRc(src) :
+                             CSTRc(wpt->shortname));
     /* Should not be a strcpy as 'ident' isn't really a C string,
      * but rather a garmin "fixed length" buffer that's padded
      * to the end with spaces.  So this is NOT (strlen+1).
@@ -1038,10 +1029,9 @@ waypoint_prepare()
 static void
 waypoint_write()
 {
-  int n;
   int32 ret;
 
-  n = waypoint_prepare();
+  int n = waypoint_prepare();
 
   if ((ret = GPS_Command_Send_Waypoint(portname, tx_waylist, n, waypt_write_cb)) < 0) {
     fatal(MYNAME ":communication error sending wayoints..\n");
@@ -1099,12 +1089,7 @@ route_waypt_pr(const Waypoint* wpt)
     rte->alt = 0;
   }
 
-  // Garmin protocol spec says no spaces, no lowercase, etc. in a route.
-  // enforce that here, since jeeps doesn't.
-  //
-  // This was strncpy(rte->ident, wpt->shortname, sizeof(rte->ident));
-  char* d;
-  d = rte->ident;
+  char* d = rte->ident;
   for (auto idx : wpt->shortname) {
     int c = idx.toLatin1();
     if (receiver_must_upper && isalpha(c)) {
@@ -1196,9 +1181,7 @@ track_prepare()
 static void
 track_write()
 {
-  int n;
-
-  n = track_prepare();
+  int n = track_prepare();
   GPS_Command_Send_Track(portname, tx_tracklist, n, (eraset)? 1 : 0);
 
   for (int i = 0; i < n; i++) {
@@ -1210,10 +1193,10 @@ track_write()
 static void
 course_write()
 {
-  int i, n_trk, n_wpt;
+  int i;
 
-  n_wpt = waypoint_prepare();
-  n_trk = track_prepare();
+  int n_wpt = waypoint_prepare();
+  int n_trk = track_prepare();
 
   GPS_Command_Send_Track_As_Course(portname, tx_tracklist, n_trk,
                                    tx_waylist, n_wpt, (eraset)? 1 : 0);

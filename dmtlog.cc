@@ -333,15 +333,12 @@ tlog3b_xgcb_wpten(xg_string, const QXmlStreamAttributes*)
 static char*
 read_str(gbfile* f)
 {
-  int i;
-  char* res;
-
-  i = gbfgetc(f);
+  int i = gbfgetc(f);
   if (i == 0xff) {
     i = gbfgetint16(f);
   }
 
-  res = (char*) xmalloc(i + 1);
+  char* res = (char*) xmalloc(i + 1);
   res[i] = '\0';
   if (i) {
     gbfread(res, 1, i, f);
@@ -384,13 +381,10 @@ write_str(const QString& str, gbfile* f)
 static int
 read_datum(gbfile* f)
 {
-  int res;
-  char* d, *g;
+  char* d = read_str(f);
+  char* g = read_str(f);
 
-  d = read_str(f);
-  g = read_str(f);
-
-  res = GPS_Lookup_Datum_Index(d);
+  int res = GPS_Lookup_Datum_Index(d);
 
   if (*g && (strcmp(d, g) != 0)) {
     fatal(MYNAME ": Unsupported combination of datum '%s' and grid '%s'!\n",
@@ -407,14 +401,9 @@ static void
 read_CTrackFile(const int version)
 {
   char buf[128];
-  int32_t ver;
-  int32_t tcount, wcount;
-  int16_t u1;
-  int32_t ux;
-  route_head* track;
   int i;
 
-  u1 = gbfgetint16(fin);
+  int16_t u1 = gbfgetint16(fin);
 
   gbfread(buf, 1, 10, fin);
   if ((u1 != 0x0a) || (strncmp("CTrackFile", buf, 10) != 0)) {
@@ -425,17 +414,17 @@ read_CTrackFile(const int version)
     gbfseek(fin, 36, SEEK_CUR);  /* skip unknown 36 bytes */
   }
 
-  ver = gbfgetint32(fin);
+  int32_t ver = gbfgetint32(fin);
   if (ver != version) {
     fatal(MYNAME ": Unknown or invalid track file (%d).\n", ver);
   }
 
-  ux = gbfgetint32(fin); // Unknown 2
+  int32_t ux = gbfgetint32(fin); // Unknown 2
   ux = gbfgetint32(fin); // Unknown 3
   ux = gbfgetint32(fin); // Unknown 4
   (void) ux; // Silence warning.
 
-  track = route_head_alloc();
+  route_head* track = route_head_alloc();
   track_add_head(track);
 
   /* S1 .. S9: comments, hints, jokes, aso */
@@ -444,29 +433,25 @@ read_CTrackFile(const int version)
     xfree(s);
   }
 
-  tcount = gbfgetint32(fin);
+  int32_t tcount = gbfgetint32(fin);
   int datum = 118;
   if (tcount > 0) {
     datum = read_datum(fin);
     if (version == 8) {
-      int len;
-
       gbfread(buf, 1, 4, fin);
-      len = gbfgetint16(fin);
+      int len = gbfgetint16(fin);
       gbfseek(fin, len, SEEK_CUR);
     }
   }
 
   while (tcount > 0) {
-    Waypoint* wpt;
-
     tcount--;
 
     if (version == 8) {
       datum = read_datum(fin);
     }
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);
@@ -505,8 +490,6 @@ read_CTrackFile(const int version)
     }
 
     while (! gbfeof(fin)) {
-      Waypoint* wpt;
-
       i = gbfgetc(fin);
       if (i == 0) {
         break;
@@ -515,7 +498,7 @@ read_CTrackFile(const int version)
       gbfungetc(i, fin);
       datum = read_datum(fin);
 
-      wpt = new Waypoint;
+      Waypoint* wpt = new Waypoint;
 
       wpt->latitude = gbfgetdbl(fin);
       wpt->longitude = gbfgetdbl(fin);
@@ -532,7 +515,7 @@ read_CTrackFile(const int version)
     return;
   }
 
-  wcount = gbfgetint32(fin);
+  int32_t wcount = gbfgetint32(fin);
   if (wcount == 0) {
     return;
   }
@@ -540,12 +523,9 @@ read_CTrackFile(const int version)
   datum = read_datum(fin);
 
   while (wcount > 0) {
-    Waypoint* wpt;
-    int32_t namect;
-
     wcount--;
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     wpt->latitude = gbfgetdbl(fin);
     wpt->longitude = gbfgetdbl(fin);
@@ -553,14 +533,12 @@ read_CTrackFile(const int version)
 
     convert_datum(wpt, datum);
 
-    namect = gbfgetint32(fin);
+    int32_t namect = gbfgetint32(fin);
 
     // variants of shortname
 
     for (int32_t i = 0; i < namect; i++) {
-      char* name;
-
-      name = read_str(fin);
+      char* name = read_str(fin);
       if (name && *name) {
         switch (i) {
         case 0:
@@ -588,7 +566,6 @@ inflate_buff(const char* buff, const size_t size, char** out_buff)
   char out[DEFLATE_BUFF_SIZE];
   char* cout = nullptr;
   uint32_t bytes = 0;
-  uint32_t have;
 
   strm.zalloc = Z_NULL;
   strm.zfree = Z_NULL;
@@ -617,7 +594,7 @@ inflate_buff(const char* buff, const size_t size, char** out_buff)
       (void)inflateEnd(&strm);
       return res;
     }
-    have = DEFLATE_BUFF_SIZE - strm.avail_out;
+    uint32_t have = DEFLATE_BUFF_SIZE - strm.avail_out;
     if (have > 0) {
       cout = (char*) xrealloc(cout, bytes + have);
       memcpy(cout+bytes, out, have);
@@ -731,12 +708,11 @@ dmtlog_wr_deinit()
 static void
 write_header(const route_head* trk)
 {
-  int count;
   const char ZERO = '\0';
 
   header_written = 1;
 
-  count = 0;
+  int count = 0;
   if (trk != nullptr) {
     queue* curr, *prev;
     QUEUE_FOR_EACH(&trk->waypoint_list, curr, prev) count++;
@@ -795,13 +771,11 @@ track_wpt_cb(const Waypoint* wpt)
 static void
 wpt_cb(const Waypoint* wpt)
 {
-  int names;
-
   gbfputdbl(wpt->latitude, fout);
   gbfputdbl(wpt->longitude, fout);
   gbfputdbl(wpt->altitude != unknown_alt ? wpt->altitude : 0, fout);
 
-  names = 1;
+  int names = 1;
   if (!wpt->description.isEmpty()) {
     names = 2;
   }

@@ -65,23 +65,18 @@ static void
 nmn4_read_data()
 {
   char* buff;
-  char* str;
-  QString c;
-  int column;
   int line = 0;
 
-  QString zip1, zip2, city, street, number;
-  route_head* route;
-  Waypoint* wpt;
+  QString zip2, city, street, number;
 
-  route = route_head_alloc();
+  route_head* route = route_head_alloc();
   route_add_head(route);
 
   while ((buff = gbfgetstr(fin))) {
     if ((line++ == 0) && fin->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
     }
-    str = buff = lrtrim(buff);
+    char* str = buff = lrtrim(buff);
     if (*buff == '\0') {
       continue;
     }
@@ -89,12 +84,12 @@ nmn4_read_data()
     nmn4_check_line(buff);
 
     /* for a quiet compiler */
-    zip1 = zip2 = city = street = number = QString();
+    QString zip1 = zip2 = city = street = number = QString();
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
-    column = -1;
-    c = csv_lineparse(str, "|", "", column++);
+    int column = -1;
+    QString c = csv_lineparse(str, "|", "", column++);
     while (c != nullptr) {
       switch (column) {
       case  0: /* "-" */	/* unknown fields for the moment */

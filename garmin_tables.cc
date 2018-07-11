@@ -775,7 +775,6 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
   static int find_flag = 0;
   icon_mapping_t* i;
   int def_icon = DEFAULT_ICON_VALUE;
-  int n;
 
   if (desc.isNull()) {
     return def_icon;
@@ -785,7 +784,7 @@ int gt_find_icon_number_from_desc(const QString& desc, garmin_formats_e garmin_f
    * If we were given a numeric icon number as a description
    * (i.e. 8255), just return that.
    */
-  n = desc.toInt();
+  int n = desc.toInt();
   if (n)  {
     return n;
   }
@@ -899,7 +898,6 @@ gt_get_icao_cc(const QString& country, const QString& shortname)
   gt_country_code_t* x = &gt_country_codes[0];
 
   if (country.isEmpty()) {
-    const char* test;
     if (shortname == nullptr) {
       return nullptr;
     }
@@ -913,7 +911,7 @@ gt_get_icao_cc(const QString& country, const QString& shortname)
     default:
       return nullptr;
     }
-    test = gt_get_icao_country(res);
+    const char* test = gt_get_icao_country(res);
     if (test != nullptr) {
       return res;
     } else {
@@ -989,9 +987,7 @@ gt_get_mps_grid_longname(const grid_type grid, const char* module)
 const char*
 gt_get_mps_datum_name(const int datum_index)
 {
-  const char* result;
-
-  result = GPS_Math_Get_Datum_Name(datum_index);
+  const char* result = GPS_Math_Get_Datum_Name(datum_index);
 
   for (datum_mapping_t* d = gt_mps_datum_names; (d->jeeps_name); d++)
     if (QString::compare(result, d->jeeps_name, Qt::CaseInsensitive) == 0) {
@@ -1004,7 +1000,6 @@ gt_get_mps_datum_name(const int datum_index)
 int
 gt_lookup_datum_index(const char* datum_str, const QString& module)
 {
-  int result;
   const char* name = datum_str;
 
   for (datum_mapping_t* d = gt_mps_datum_names; (d->jeeps_name); d++) {
@@ -1014,7 +1009,7 @@ gt_lookup_datum_index(const char* datum_str, const QString& module)
     }
   }
 
-  result = GPS_Lookup_Datum_Index(name);
+  int result = GPS_Lookup_Datum_Index(name);
 
   // Didn't get a hit?  Try again after modifying the lookup.
   if (result < 0) {

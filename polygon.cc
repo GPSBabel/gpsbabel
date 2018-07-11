@@ -218,17 +218,19 @@ void PolygonFilter::process()
   queue* elem, * tmp;
   Waypoint* waypointp;
   extra_data* ed;
-  double lat1, lon1, lat2, lon2;
-  double olat, olon;
   int fileline = 0;
   int first = 1;
   int last = 0;
   char* line;
-  gbfile* file_in;
 
-  file_in = gbfopen(polyfileopt, "r", MYNAME);
+  gbfile* file_in = gbfopen(polyfileopt, "r", MYNAME);
 
-  olat = olon = lat1 = lon1 = lat2 = lon2 = BADVAL;
+  double olat = BADVAL;
+  double olon = BADVAL;
+  double lat1 = BADVAL;
+  double lon1 = BADVAL;
+  double lat2 = BADVAL;
+  double lon2 = BADVAL;
   while ((line = gbfgetstr(file_in))) {
     fileline++;
 

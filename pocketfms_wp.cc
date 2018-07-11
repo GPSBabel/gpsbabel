@@ -60,15 +60,13 @@ data_read()
   char* buff;
   int linecount = 0;
   while ((buff = gbfgetstr(file_in))) {
-    char* s;
-    Waypoint* wpt;
     rtrim(buff);
     if (strlen(buff) == 0) {
       break;
     }
     linecount++;
-    wpt = new Waypoint;
-    s = buff;
+    Waypoint* wpt = new Waypoint;
+    char* s = buff;
     s = csv_lineparse(s, "\\w", "", linecount);
     if (!s) {
       fatal(MYNAME "Invalid name");

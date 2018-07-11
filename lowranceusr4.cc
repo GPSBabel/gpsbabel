@@ -77,10 +77,10 @@ typedef struct {
 static int
 lowranceusr4_readstr(char* buf, const int maxlen, gbfile* file, int bytes_per_char)
 {
-  int org, len;
+  int len;
   int bytesread = 0;
 
-  org = len = gbfgetint32(file); /* bytes */
+  int org = len = gbfgetint32(file); /* bytes */
   if (len < 0) {
     buf[0] = '\0'; /* seems len=-1 means no string */
     return 0;
@@ -214,30 +214,28 @@ lat_deg_to_mm(double x)
 static time_t
 lowranceusr4_get_timestamp(int jd_number, time_t t)
 {
-  int a, b, c, d, e, m;
-  struct tm* ptm, ntm;
-  time_t out;
+  struct tm ntm;
 
   /* get UTC time from time_t */
-  ptm = gmtime(&t);
+  struct tm* ptm = gmtime(&t);
   memset(&ntm, 0, sizeof(ntm));
   ntm.tm_hour = ptm->tm_hour;
   ntm.tm_min = ptm->tm_min;
   ntm.tm_sec = ptm->tm_sec;
 
   /* convert the JD number to get day/month/year */
-  a = jd_number + 32044;
-  b = (4*a + 3) / 146097;
-  c = a - (146097*b) / 4;
-  d = (4*c + 3) / 1461;
-  e = c - (1461*d) / 4;
-  m = (5*e + 2) / 153;
+  int a = jd_number + 32044;
+  int b = (4*a + 3) / 146097;
+  int c = a - (146097*b) / 4;
+  int d = (4*c + 3) / 1461;
+  int e = c - (1461*d) / 4;
+  int m = (5*e + 2) / 153;
   ntm.tm_mday = e + 1 - (153*m + 2) / 5;
   ntm.tm_mon = m + 3 - 12 * (m / 10) - 1;
   ntm.tm_year = 100 * b + d - 4800 + m / 10 - 1900;
 
   /* put it all back together into a unix timestamp in UTC */
-  out = mkgmtime(&ntm);
+  time_t out = mkgmtime(&ntm);
 
   return out;
 }
@@ -342,20 +340,16 @@ lowranceusr4_find_waypt_index(const Waypoint* wpt)
 static void
 lowranceusr4_parse_waypoints()
 {
-  short int icon_num;
-  unsigned int num_waypts, create_date, create_time;
   char buff[MAXUSRSTRINGSIZE + 1];
 
-  num_waypts = gbfgetint32(file_in);
+  unsigned int num_waypts = gbfgetint32(file_in);
 
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " parse_waypoints: Num waypoints %d\n", num_waypts);
   }
 
   for (unsigned int i = 0; i < num_waypts; ++i) {
-    Waypoint* wpt_tmp;
-
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
     lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
     fs_chain_add(&(wpt_tmp->fs), (format_specific_data*) fsdata);
 
@@ -413,7 +407,7 @@ lowranceusr4_parse_waypoints()
        icon description; however it doesn't seem that the icon ids
        used in usr4 match those from usr{2,3} so we need a new
        mapping. */
-    icon_num = gbfgetint16(file_in);
+    short int icon_num = gbfgetint16(file_in);
     (void) icon_num; // Hush warning for now.
     /* wpt_tmp->icon_descr = lowranceusr_find_desc_from_icon_number(icon_num); */
 
@@ -433,8 +427,8 @@ lowranceusr4_parse_waypoints()
 
     /* Creation date/time; the date is a Julian day number, and the
        time is a unix timestamp. */
-    create_date = gbfgetint32(file_in);
-    create_time = gbfgetint32(file_in);
+    unsigned int create_date = gbfgetint32(file_in);
+    unsigned int create_time = gbfgetint32(file_in);
 
     // Julian date 2440487 is 1/1/1970.  If that's the date we're working
     // with, as a practical matter, we have no date, so don't even compute
@@ -501,13 +495,9 @@ lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
 static void
 lowranceusr4_parse_routes()
 {
-  unsigned int num_routes, text_len;
-  unsigned int num_legs;
   char buff[MAXUSRSTRINGSIZE + 1];
-  Waypoint* wpt_tmp;
-  unsigned int uid_unit, uid_seq_low, uid_seq_high;
 
-  num_routes = gbfgetint32(file_in);
+  unsigned int num_routes = gbfgetint32(file_in);
 
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " parse_routes: Num routes = %d\n", num_routes);
@@ -544,13 +534,13 @@ lowranceusr4_parse_routes()
     gbfgetint16(file_in);
 
     /* Route name; input is 2 bytes per char, we convert to 1 */
-    text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
+    unsigned int text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
     if (text_len) {
       buff[text_len] = '\0';
       rte_head->rte_name = buff;
     }
 
-    num_legs = gbfgetint32(file_in);
+    unsigned int num_legs = gbfgetint32(file_in);
 
     if (global_opts.debug_level >= 1) {
       printf(MYNAME " parse_routes: route name=%s has %d waypoints\n",
@@ -558,10 +548,10 @@ lowranceusr4_parse_routes()
     }
 
     for (unsigned int j = 0; j < num_legs; ++j) {
-      uid_unit = gbfgetint32(file_in);
-      uid_seq_low = gbfgetint32(file_in);
-      uid_seq_high = gbfgetint32(file_in);
-      wpt_tmp = lowranceusr4_find_waypt(uid_unit, uid_seq_low, uid_seq_high);
+      unsigned int uid_unit = gbfgetint32(file_in);
+      unsigned int uid_seq_low = gbfgetint32(file_in);
+      unsigned int uid_seq_high = gbfgetint32(file_in);
+      Waypoint* wpt_tmp = lowranceusr4_find_waypt(uid_unit, uid_seq_low, uid_seq_high);
       if (wpt_tmp) {
         if (global_opts.debug_level >= 2) {
           printf(MYNAME " parse_routes: added wpt %s to route %s\n",
@@ -579,12 +569,11 @@ lowranceusr4_parse_routes()
 static void
 lowranceusr4_parse_trails()
 {
-  int num_trails, M, trk_num;
+  int trk_num;
   char buff[MAXUSRSTRINGSIZE + 1];
-  Waypoint* wpt_tmp;
 
   /* num trails */
-  num_trails = gbfgetint32(file_in);
+  int num_trails = gbfgetint32(file_in);
 
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " parse_trails: num trails = %d\n", num_trails);
@@ -686,7 +675,7 @@ lowranceusr4_parse_trails()
     }
 
     for (int j = 0; j < num_trail_pts; ++j) {
-      wpt_tmp = new Waypoint;
+      Waypoint* wpt_tmp = new Waypoint;
 
       /* Some unknown bytes */
       gbfgetint16(file_in);
@@ -700,7 +689,7 @@ lowranceusr4_parse_trails()
       wpt_tmp->latitude = gbfgetdbl(file_in) / DEGREESTORADIANS;
 
       /* Mysterious per-trackpoint data, toss it for now */
-      M = gbfgetint32(file_in);
+      int M = gbfgetint32(file_in);
       for (int k = 0; k < M; ++k) {
         gbfgetc(file_in);
         gbfgetflt(file_in);
@@ -720,17 +709,13 @@ lowranceusr4_parse_trails()
 static void
 data_read()
 {
-  short int MajorVersion, MinorVersion;
-  int text_len, DataStreamVersion;
-  unsigned int create_date, create_time, serial_num;
-  unsigned char byte;
   char buff[MAXUSRSTRINGSIZE + 1];
 
 
-  MajorVersion = gbfgetint16(file_in);
+  short int MajorVersion = gbfgetint16(file_in);
   reading_version = MajorVersion;
-  MinorVersion = gbfgetint16(file_in);
-  DataStreamVersion = gbfgetint32(file_in);
+  short int MinorVersion = gbfgetint16(file_in);
+  int DataStreamVersion = gbfgetint32(file_in);
 
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " data_read: Major Version %d Minor Version %d Data Stream Version %d\n",
@@ -741,7 +726,7 @@ data_read()
     fatal(MYNAME ": input file is from an unsupported version of the USR format (must be version 4)\n");
   }
 
-  text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 1);
+  int text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 1);
   if (text_len > 0 && global_opts.debug_level >= 1) {
     buff[text_len] = '\0';
     printf(MYNAME " file title: %s\n", buff);
@@ -754,14 +739,14 @@ data_read()
   }
 
   /* for now we won't use these for anything */
-  create_date = gbfgetint32(file_in);
+  unsigned int create_date = gbfgetint32(file_in);
   (void) create_date;
-  create_time = gbfgetint32(file_in);
+  unsigned int create_time = gbfgetint32(file_in);
   (void) create_time;
-  byte = gbfgetc(file_in); /* unused, apparently */
+  unsigned char byte = gbfgetc(file_in); /* unused, apparently */
   (void) byte;
 
-  serial_num = gbfgetint32(file_in);
+  unsigned int serial_num = gbfgetint32(file_in);
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " device serial number %u\n", serial_num);
   }
@@ -886,10 +871,8 @@ lowranceusr4_write_route_hdr(const route_head* rte)
 static void
 lowranceusr4_write_wpt_uids(const Waypoint* wpt)
 {
-  int waypt_idx;
-
   /* find the index of wpt in our table */
-  waypt_idx = lowranceusr4_find_waypt_index(wpt);
+  int waypt_idx = lowranceusr4_find_waypt_index(wpt);
   if (global_opts.debug_level >= 2) {
     if (waypt_idx > waypt_table_ct) {
       printf(MYNAME " WARNING: failed finding waypoint %s in waypoint table\n",
@@ -1012,17 +995,14 @@ lowranceusr4_write_trails()
 static void
 data_write()
 {
-  short int MajorVersion, MinorVersion;
-  int DataStreamVersion;
   time_t now;
-  struct tm* now_tm;
   char buf[256];
 
   setshort_length(mkshort_handle, 15);
 
-  MajorVersion = 4;
-  MinorVersion = 0;
-  DataStreamVersion = 10;
+  short int MajorVersion = 4;
+  short int MinorVersion = 0;
+  int DataStreamVersion = 10;
 
   gbfputint16(MajorVersion, file_out);
   gbfputint16(MinorVersion, file_out);
@@ -1033,7 +1013,7 @@ data_write()
 
   /* date string */
   now = time(nullptr);
-  now_tm = gmtime(&now);
+  struct tm* now_tm = gmtime(&now);
   sprintf(buf, "%d/%d/%d", now_tm->tm_mon+1, now_tm->tm_mday, now_tm->tm_year+1900);
   lowranceusr4_writestr(buf, file_out, 1);
 

@@ -68,15 +68,12 @@ double radtometers(double rads)
 
 double gcdist(double lat1, double lon1, double lat2, double lon2)
 {
-  double res;
-  double sdlat, sdlon;
-
   errno = 0;
 
-  sdlat = sin((lat1 - lat2) / 2.0);
-  sdlon = sin((lon1 - lon2) / 2.0);
+  double sdlat = sin((lat1 - lat2) / 2.0);
+  double sdlon = sin((lon1 - lon2) / 2.0);
 
-  res = sqrt(sdlat * sdlat + cos(lat1) * cos(lat2) * sdlon * sdlon);
+  double res = sqrt(sdlat * sdlat + cos(lat1) * cos(lat2) * sdlon * sdlon);
 
   if (res > 1.0) {
     res = 1.0;
@@ -99,9 +96,8 @@ double gcdist(double lat1, double lon1, double lat2, double lon2)
  */
 double heading(double lat1, double lon1, double lat2, double lon2)
 {
-  double v1, v2;
-  v1 = sin(lon1 - lon2) * cos(lat2);
-  v2 = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon1 - lon2);
+  double v1 = sin(lon1 - lon2) * cos(lat2);
+  double v2 = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(lon1 - lon2);
   /* rounding error protection */
   if (fabs(v1) < 1e-15) {
     v1 = 0.0;
@@ -143,8 +139,6 @@ double linedistprj(double lat1, double lon1,
 
   double dot;
 
-  int newpoints;
-
   *prjlat = lat1;
   *prjlon = lon1;
   *frac = 0;
@@ -157,7 +151,7 @@ double linedistprj(double lat1, double lon1,
   lat3 = RAD(lat3);
   lon3 = RAD(lon3);
 
-  newpoints = 1;
+  int newpoints = 1;
   if (lat1 == _lat1 && lat2 == _lat2 && lon1 == _lon1 && lon2 == _lon2) {
     newpoints = 0;
   } else {
@@ -304,9 +298,7 @@ void linepart(double lat1, double lon1,
               double frac,
               double* reslat, double* reslon)
 {
-  double x1, y1, z1;
-  double x2, y2, z2;
-  double xa, ya, za, la;
+  double xa, ya, za;
 
   /* result must be in degrees */
   *reslat = lat1;
@@ -319,18 +311,18 @@ void linepart(double lat1, double lon1,
   lon2 = RAD(lon2);
 
   /* polar to ECEF rectangular */
-  x1 = cos(lon1) * cos(lat1);
-  y1 = sin(lat1);
-  z1 = sin(lon1) * cos(lat1);
-  x2 = cos(lon2) * cos(lat2);
-  y2 = sin(lat2);
-  z2 = sin(lon2) * cos(lat2);
+  double x1 = cos(lon1) * cos(lat1);
+  double y1 = sin(lat1);
+  double z1 = sin(lon1) * cos(lat1);
+  double x2 = cos(lon2) * cos(lat2);
+  double y2 = sin(lat2);
+  double z2 = sin(lon2) * cos(lat2);
 
   /* 'a' is the axis; the line that passes through the center of the earth
    * and is perpendicular to the great circle through point 1 and point 2
    * It is computed by taking the cross product of the '1' and '2' vectors.*/
   crossproduct(x1, y1, z1, x2, y2, z2, &xa, &ya, &za);
-  la = sqrt(xa * xa + ya * ya + za * za);
+  double la = sqrt(xa * xa + ya * ya + za * za);
 
   if (la) {
     xa /= la;

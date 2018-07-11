@@ -195,13 +195,10 @@ lmx_write_xml(int tag, const QString& data, int indent)
 static void
 lmx_print(const Waypoint* wpt)
 {
-  QString oname;
-  QString odesc;
-
   /*
    * Desparation time, try very hard to get a good shortname
    */
-  odesc = wpt->notes;
+  QString odesc = wpt->notes;
   if (odesc.isEmpty()) {
     odesc = wpt->description;
   }
@@ -209,7 +206,7 @@ lmx_print(const Waypoint* wpt)
     odesc = wpt->shortname;
   }
 
-  oname = global_opts.synthesize_shortnames ? odesc : wpt->shortname;
+  QString oname = global_opts.synthesize_shortnames ? odesc : wpt->shortname;
 
   lmx_start_tag(0x47, 2); // landmark
   if (!binary) {

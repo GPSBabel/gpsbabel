@@ -176,9 +176,7 @@ track_qsort_cb(const void* a, const void* b)
 static void
 finalize_tracks(void)
 {
-  Waypoint** list;
   queue* elem, *tmp;
-  int index;
   route_head* track = nullptr;
   int trackno = 0;
 
@@ -190,9 +188,9 @@ finalize_tracks(void)
     return;
   }
 
-  list = (Waypoint**)xmalloc(count * sizeof(*list));
+  Waypoint** list = (Waypoint**)xmalloc(count * sizeof(*list));
 
-  index = 0;
+  int index = 0;
   QUEUE_FOR_EACH(&trackpts, elem, tmp) {
     list[index] = (Waypoint*)elem;
     dequeue(elem);
@@ -437,9 +435,6 @@ calculate(const Waypoint* wpt, double* dist, double* speed, double* course,
           double* asc, double* desc)
 {
   if (trkpt_out != nullptr) {
-
-    time_t time;
-
     *course = heading_true_degrees(
                 RAD(trkpt_out->latitude), RAD(trkpt_out->longitude),
                 RAD(wpt->latitude), RAD(wpt->longitude));
@@ -451,7 +446,7 @@ calculate(const Waypoint* wpt, double* dist, double* speed, double* course,
       *dist = 0;  /* calc. diffs on 32- and 64-bit hosts */
     }
 
-    time = wpt->creation_time.toTime_t() - trkpt_out->GetCreationTime().toTime_t();
+    time_t time = wpt->creation_time.toTime_t() - trkpt_out->GetCreationTime().toTime_t();
     if (time == 0) {
       *speed = 0;
     } else {

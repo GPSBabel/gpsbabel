@@ -110,11 +110,11 @@ arglist_t ng_args[] = {
 static void
 ng_convert_datum(Waypoint* wpt)
 {
-  double lat, lon, east, north, alt;
+  double lat, lon;
 
-  east = (double) WPNC.wp_data.East;
-  north = (double) WPNC.wp_data.North;
-  alt = (double) WPNC.wp_data.Alt;
+  double east = (double) WPNC.wp_data.East;
+  double north = (double) WPNC.wp_data.North;
+  double alt = (double) WPNC.wp_data.Alt;
 
   GPS_Math_ICS_EN_To_WGS84(east, north, &lat, &lon);
   wpt->latitude = lat;
@@ -129,11 +129,10 @@ ng_convert_datum(Waypoint* wpt)
 static void
 ng_fwrite_wp_data(const QString& s, const QString& d, ng_wp_data_t* wp_data, gbfile* f)
 {
-  int i;
   char z[50];
 
   memset(z, 0, 50);
-  i = strlen(STRFROMUNICODE(s));
+  int i = strlen(STRFROMUNICODE(s));
   gbfputc(i, f);
   gbfwrite(STRFROMUNICODE(s), 1, i, f);
 
@@ -160,9 +159,6 @@ ng_fwrite_next_wp(ng_next_wp_t* nwp, gbfile* f)
 static void
 ng_fread_wp_data(char* d, ng_wp_no_comment_t* wpnc, gbfile* f)
 {
-
-  int i;
-
   gbfread(&wpnc->chHeaderLen ,sizeof(wpnc->chHeaderLen), 1, f);
   gbfread(&wpnc->strName, wpnc->chHeaderLen, 1, f);
   wpnc->strName[wpnc->chHeaderLen] = 0;
@@ -174,7 +170,7 @@ ng_fread_wp_data(char* d, ng_wp_no_comment_t* wpnc, gbfile* f)
   gbfread(&wpnc->wp_data.pad2,2, 1, f);
   wpnc->wp_data.Alt = gbfgetint32(f);
   gbfread(&wpnc->wp_data.CommentLength, 1, 1, f);
-  i = (int)wpnc->wp_data.CommentLength;
+  int i = (int)wpnc->wp_data.CommentLength;
 
 
   /* Read the comment field */

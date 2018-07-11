@@ -221,10 +221,9 @@ static int HexByte(const char* hex)
 int
 color_to_bbggrr(const char* opt_color)
 {
-  int color_num;
   char* ep;
 
-  color_num = strtol(opt_color, &ep, 10);
+  int color_num = strtol(opt_color, &ep, 10);
 
   if (ep != opt_color) {
     return color_num;

@@ -300,9 +300,8 @@ static arglist_t unicsv_args[] = {
 static int
 unicsv_strrcmp(const char* s1, const char* s2)
 {
-  int l1, l2;
-  l1 = strlen(s1);
-  l2 = strlen(s2);
+  int l1 = strlen(s1);
+  int l2 = strlen(s2);
   if ((l1 - l2) >= 0) {
     return strcmp(s1 + (l1 - l2), s2);
   } else {
@@ -334,13 +333,13 @@ unicsv_parse_gc_id(const QString& str)
 static time_t
 unicsv_parse_date(const char* str, int* consumed)
 {
-  int p1, p2, p3, ct;
+  int p1, p2, p3;
   char sep[2];
   struct tm tm;
   int lconsumed = 0;
 
   memset(&tm, 0, sizeof(tm));
-  ct = sscanf(str, "%d%1[-.//]%d%1[-.//]%d%n", &p1, sep, &p2, sep, &p3, &lconsumed);
+  int ct = sscanf(str, "%d%1[-.//]%d%1[-.//]%d%n", &p1, sep, &p2, sep, &p3, &lconsumed);
   if (consumed && lconsumed) {
     *consumed = lconsumed;
   }
@@ -390,23 +389,22 @@ unicsv_parse_date(const char* str, int* consumed)
 static time_t
 unicsv_parse_time(const char* str, int* usec, time_t* date)
 {
-  int hour, min, ct, sec;
+  int hour, min, sec;
   int consumed = 0;
   double us;
   char sep[2];
-  time_t ldate;
 
   /* If we have somethine we're pretty sure is a date, parse that
    * first, skip over it, and pass that back to the caller)
    */
-  ldate = unicsv_parse_date(str, &consumed);
+  time_t ldate = unicsv_parse_date(str, &consumed);
   if (consumed && ldate) {
     str += consumed;
     if (date) {
       *date = ldate;
     }
   }
-  ct = sscanf(str, "%d%1[.://]%d%1[.://]%d%lf", &hour, sep, &min, sep, &sec, &us);
+  int ct = sscanf(str, "%d%1[.://]%d%1[.://]%d%lf", &hour, sep, &min, sep, &sec, &us);
   is_fatal(ct < 5, MYNAME ": Could not parse time string (%s).\n", str);
   if (ct == 6) {
     *usec = lround((us * 1000000));
@@ -627,7 +625,6 @@ unicsv_rd_deinit()
 static void
 unicsv_parse_one_line(char* ibuf)
 {
-  int column;
   int  utm_zone = -9999;
   double utm_easting = 0;
   double utm_northing = 0;
@@ -655,7 +652,7 @@ unicsv_parse_one_line(char* ibuf)
   wpt->longitude = unicsv_unknown;
   memset(&ymd, 0, sizeof(ymd));
 
-  column = -1;
+  int column = -1;
   QString s;
   while ((s = csv_lineparse(ibuf, unicsv_fieldsep, "\"", 0)), !s.isNull()) {
     if (++column >= unicsv_fields_tab.size()) {
@@ -1278,10 +1275,8 @@ unicsv_print_data_time(const QDateTime& idt)
 static void
 unicsv_waypt_enum_cb(const Waypoint* wpt)
 {
-  garmin_fs_t* gmsd;
-
   const QString& shortname = wpt->shortname;
-  gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = GMSD_FIND(wpt);
 
   if (!shortname.isEmpty()) {
     gb_setbit(&unicsv_outp_flags, fld_shortname);
@@ -1432,12 +1427,11 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
 {
   double lat, lon, alt;
   char* cout = nullptr;
-  garmin_fs_t* gmsd;
   const geocache_data* gc_data = nullptr;
   unicsv_waypt_ct++;
 
   QString shortname = wpt->shortname;
-  gmsd = GMSD_FIND(wpt);
+  garmin_fs_t* gmsd = GMSD_FIND(wpt);
 
   if (unicsv_datum_idx == DATUM_WGS84) {
     lat = wpt->latitude;
@@ -1463,12 +1457,10 @@ unicsv_waypt_disp_cb(const Waypoint* wpt)
     break;
 
   case grid_lat_lon_dms: {
-    char* sep;
-    QString tmp;
     cout = pretty_deg_format(lat, lon, 's', unicsv_fieldsep, 0);
-    sep = strchr(cout, ',');
+    char* sep = strchr(cout, ',');
     *sep = '\0';
-    tmp = strenquote(cout, UNICSV_QUOT_CHAR);
+    QString tmp = strenquote(cout, UNICSV_QUOT_CHAR);
     gbfprintf(fout, "%s%s", CSTR(tmp), unicsv_fieldsep);
     tmp = strenquote(sep+1, UNICSV_QUOT_CHAR);
     gbfputs(tmp, fout);

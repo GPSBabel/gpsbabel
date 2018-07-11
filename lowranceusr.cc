@@ -228,9 +228,9 @@ const time_t base_time_secs = 946706400;
 static int
 lowranceusr_readstr(char* buf, const int maxlen, gbfile* file)
 {
-  int org, len;
+  int len;
 
-  org = len = gbfgetint32(file);
+  int org = len = gbfgetint32(file);
   if (len < 0) {
     fatal(MYNAME ": Invalid item length (%d)!\n", len);
   } else if (len) {
@@ -269,8 +269,6 @@ lowranceusr_find_desc_from_icon_number(const int icon)
 static int
 lowranceusr_find_icon_number_from_desc(const QString& desc)
 {
-  int n;
-
   if (desc.isNull()) {
     return DEF_ICON;
   }
@@ -279,7 +277,7 @@ lowranceusr_find_icon_number_from_desc(const QString& desc)
    * If we were given a numeric icon number as a description
    * (i.e. 8255), just return that.
    */
-  n = desc.toInt();
+  int n = desc.toInt();
   if (n)  {
     return n;
   }
@@ -379,7 +377,6 @@ static void
 lowranceusr_parse_waypt(Waypoint* wpt_tmp)
 {
   char buff[MAXUSRSTRINGSIZE + 1];
-  int text_len;
 
   wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
   wpt_tmp->longitude = lon_mm_to_deg(gbfgetint32(file_in));
@@ -388,7 +385,7 @@ lowranceusr_parse_waypt(Waypoint* wpt_tmp)
     wpt_tmp->altitude = unknown_alt;
   }
 
-  text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
+  int text_len = lowranceusr_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in);
   if (text_len) {
     buff[text_len] = '\0';
     wpt_tmp->shortname = buff;
@@ -446,9 +443,8 @@ static void
 lowranceusr_parse_routes()
 {
   char buff[MAXUSRSTRINGSIZE + 1];
-  short int num_routes;
 
-  num_routes = gbfgetint16(file_in);
+  short int num_routes = gbfgetint16(file_in);
 
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " parse_routes: Num Routes = %d\n", num_routes);
@@ -489,9 +485,8 @@ static void
 lowranceusr_parse_icons()
 {
   char buff[MAXUSRSTRINGSIZE + 1];
-  short int num_icons;
 
-  num_icons = gbfgetint16(file_in);
+  short int num_icons = gbfgetint16(file_in);
 
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " parse_icons: num Icons = %d\n", num_icons);
@@ -504,8 +499,7 @@ lowranceusr_parse_icons()
       /* symbol */
       (void) gbfread(&buff[0], 4, 1, file_in);
     } else {
-      Waypoint* wpt_tmp;
-      wpt_tmp = new Waypoint;
+      Waypoint* wpt_tmp = new Waypoint;
 
       /* position coord lat & long */
       wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
@@ -525,11 +519,10 @@ static void
 lowranceusr_parse_trails()
 {
   char buff[MAXUSRSTRINGSIZE + 1];
-  short int num_trails, num_section_points;
   int trk_num;
 
   /* num trails */
-  num_trails = gbfgetint16(file_in);
+  short int num_trails = gbfgetint16(file_in);
 
   if (global_opts.debug_level >= 1) {
     printf(MYNAME " parse_trails: num trails = %d\n", num_trails);
@@ -576,7 +569,7 @@ lowranceusr_parse_trails()
 
       while (num_trail_points && !gbfeof(file_in)) {
         /* num section points */
-        num_section_points = gbfgetint16(file_in);
+        short int num_section_points = gbfgetint16(file_in);
 
         if (global_opts.debug_level >= 1) {
           printf(MYNAME " parse_trails: num section points = %d\n", num_section_points);
@@ -640,9 +633,7 @@ data_read()
   }
 
   for (int i = 0; i < NumWaypoints && !gbfeof(file_in); i++) {
-    Waypoint* wpt_tmp;
-
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
 
     /* Object num */
     short object_num = gbfgetint16(file_in);
@@ -664,16 +655,15 @@ data_read()
 static void
 lowranceusr_waypt_disp(const Waypoint* wpt)
 {
-  int text_len, Lat, Lon, Time, SymbolId;
-  short int WayptType;
+  int Time, SymbolId;
   int alt = METERS_TO_FEET(wpt->altitude);
 
   if (wpt->altitude == unknown_alt) {
     alt = UNKNOWN_USR_ALTITUDE;
   }
 
-  Lat = lat_deg_to_mm(wpt->latitude);
-  Lon = lon_deg_to_mm(wpt->longitude);
+  int Lat = lat_deg_to_mm(wpt->latitude);
+  int Lon = lon_deg_to_mm(wpt->longitude);
   gbfputint32(Lat, file_out);
   gbfputint32(Lon, file_out);
   gbfputint32(alt, file_out);
@@ -710,7 +700,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
     name = wpt->shortname;
   }
 
-  text_len = name.length();
+  int text_len = name.length();
   if (text_len > MAXUSRSTRINGSIZE) {
     text_len = MAXUSRSTRINGSIZE;
   }
@@ -766,7 +756,7 @@ lowranceusr_waypt_disp(const Waypoint* wpt)
   gbfputint32(SymbolId, file_out);
 
   /* USER waypoint type */
-  WayptType = 0;
+  short int WayptType = 0;
   gbfputint16(WayptType, file_out);
 }
 
@@ -826,9 +816,7 @@ lowranceusr_write_icon(const Waypoint* wpt)
 static void
 lowranceusr_track_hdr(const route_head* trk)
 {
-  int text_len;
   QString name;
-  short num_trail_points, max_trail_size;
   char visible=1;
 
   ++trail_count;
@@ -841,7 +829,7 @@ lowranceusr_track_hdr(const route_head* trk)
     name = name + QString("Babel %1").arg(trail_count);
   }
 
-  text_len = name.length();
+  int text_len = name.length();
   if (text_len > MAXUSRSTRINGSIZE) {
     text_len = MAXUSRSTRINGSIZE;
   }
@@ -855,8 +843,8 @@ lowranceusr_track_hdr(const route_head* trk)
   }
   gbfwrite(CSTR(name), 1, text_len, file_out);
 
-  num_trail_points = (short) trk->rte_waypt_ct;
-  max_trail_size = MAX_TRAIL_POINTS;
+  short num_trail_points = (short) trk->rte_waypt_ct;
+  short max_trail_size = MAX_TRAIL_POINTS;
   if (num_trail_points > max_trail_size) {
     num_trail_points = max_trail_size;
   }
@@ -876,7 +864,6 @@ lowranceusr_track_hdr(const route_head* trk)
 static void
 lowranceusr_route_hdr(const route_head* rte)
 {
-  int text_len;
   char* name, tmp_name[20];
   char route_reversed=0;
 
@@ -891,7 +878,7 @@ lowranceusr_route_hdr(const route_head* rte)
     snprintf(tmp_name, sizeof(tmp_name), "Babel R%u", ++lowrance_route_count);
     name = xstrdup(tmp_name);
   }
-  text_len = strlen(name);
+  int text_len = strlen(name);
   if (text_len > MAXUSRSTRINGSIZE) {
     text_len = MAXUSRSTRINGSIZE;
   }
@@ -933,7 +920,6 @@ lowranceusr_track_disp(const Waypoint* wpt)
 static void
 lowranceusr_merge_track_hdr(const route_head* trk)
 {
-  int text_len;
   char* name, tmp_name[20];
 
   if (++trail_count == 1) {
@@ -946,7 +932,7 @@ lowranceusr_merge_track_hdr(const route_head* trk)
       snprintf(tmp_name, sizeof(tmp_name), "Babel %u", trail_count);
       name = xstrdup(tmp_name);
     }
-    text_len = strlen(name);
+    int text_len = strlen(name);
     if (text_len > MAXUSRSTRINGSIZE) {
       text_len = MAXUSRSTRINGSIZE;
     }
@@ -994,12 +980,11 @@ lowranceusr_merge_track_hdr_2(const route_head*)
 static void
 data_write()
 {
-  short int NumWaypoints, MajorVersion, MinorVersion, NumRoutes, NumTrails;
   setshort_length(mkshort_handle, 15);
-  MajorVersion = writing_version;
-  MinorVersion = 0;
+  short int MajorVersion = writing_version;
+  short int MinorVersion = 0;
 
-  NumWaypoints = waypt_count();
+  short int NumWaypoints = waypt_count();
 
   gbfputint16(MajorVersion, file_out);
   gbfputint16(MinorVersion, file_out);
@@ -1017,7 +1002,7 @@ data_write()
   }
 
   /* Route support added 6/21/05 */
-  NumRoutes = route_count();
+  short int NumRoutes = route_count();
   gbfputint16(NumRoutes, file_out);
 
   if (global_opts.debug_level >= 1) {
@@ -1038,7 +1023,7 @@ data_write()
   }
 
   /* Track support added 6/21/05 */
-  NumTrails = track_count();
+  short int NumTrails = track_count();
 
   if (NumTrails && merge) {
     NumTrails = 1;

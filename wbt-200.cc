@@ -206,10 +206,9 @@ static size_t buf_read(struct buf_head* h, void* data, size_t len)
 
 static void buf_extend(struct buf_head* h, size_t amt)
 {
-  struct buf_chunk* c;
   size_t sz = amt + sizeof(struct buf_chunk);
 
-  c = (struct buf_chunk*) xmalloc(sz);
+  struct buf_chunk* c = (struct buf_chunk*) xmalloc(sz);
   c->next = nullptr;
   c->size = amt;
   c->used = 0;
@@ -563,16 +562,14 @@ static Waypoint* make_trackpoint(struct read_state* st, double lat, double lon, 
 
 static int wbt200_data_chunk(struct read_state* st, const void* buf, int fmt)
 {
-  uint32_t   tim;
-  double     lat, lon, alt;
-  time_t     rtim;
+  double alt;
   const char* bp      = (const char*) buf;
   size_t     buf_used = fmt_version[fmt].reclen;
 
-  tim = le_read32(bp + 0);
+  uint32_t tim = le_read32(bp + 0);
 
-  lat = (double)((int32_t) le_read32(bp + 4)) / 10000000;
-  lon = (double)((int32_t) le_read32(bp + 8)) / 10000000;
+  double lat = (double)((int32_t) le_read32(bp + 4)) / 10000000;
+  double lon = (double)((int32_t) le_read32(bp + 8)) / 10000000;
 
   /* Handle extra fields in longer records here. */
   if (buf_used >= 16) {
@@ -581,7 +578,7 @@ static int wbt200_data_chunk(struct read_state* st, const void* buf, int fmt)
     alt = unknown_alt;
   }
 
-  rtim = decode_date(tim);
+  time_t rtim = decode_date(tim);
 
   if (lat >= 100) {
     /* Start new track in the northern hemisphere */
@@ -619,7 +616,6 @@ static int is_valid(struct buf_head* h, int fmt)
 
   for (;;) {
     size_t got = buf_read(h, buf, reclen);
-    uint32_t tim;
     /* Don't mind odd bytes at the end - we may
      * be examining an incomplete dataset.
      */
@@ -627,7 +623,7 @@ static int is_valid(struct buf_head* h, int fmt)
       break;
     }
 
-    tim = le_read32(buf + 0);
+    uint32_t tim = le_read32(buf + 0);
     if (!check_date(tim)) {
       return 0;
     }
@@ -706,7 +702,6 @@ static void wbt200_data_read()
    */
   char                line_buf[100];
   int                 fmt;
-  unsigned long       count;
   struct read_state   st;
 
   state_init(&st);
@@ -724,7 +719,7 @@ static void wbt200_data_read()
 
   /* Now we're into binary mode */
   rd_buf(line_buf, 6);            /* six byte header */
-  count = le_read16(line_buf + 2) + 1;
+  unsigned long count = le_read16(line_buf + 2) + 1;
   if (count == 0x10000) {
     count = 0;
   }
@@ -797,10 +792,6 @@ static int all_null(const void* buf, const int len)
 
 static int wbt201_data_chunk(struct read_state* st, const void* buf)
 {
-  uint32_t    tim;
-  uint16_t    flags;
-  double      lat, lon, alt;
-  time_t      rtim;
   const char*  bp      = (const char*) buf;
 
   /* Zero records are skipped */
@@ -808,19 +799,19 @@ static int wbt201_data_chunk(struct read_state* st, const void* buf)
     return 1;
   }
 
-  flags = le_read16(bp + 0);
-  tim   = le_read32(bp + 2);
+  uint16_t flags = le_read16(bp + 0);
+  uint32_t tim = le_read32(bp + 2);
 
   if (TK1_END_FLAG == tim) {
     /* EOF? (TK1 files only as far as I know) */
     return 0;
   }
 
-  lat   = (double)((int32_t) le_read32(bp +  6)) / 10000000;
-  lon   = (double)((int32_t) le_read32(bp + 10)) / 10000000;
-  alt   = (double)((int16_t) le_read16(bp + 14));
+  double lat = (double)((int32_t) le_read32(bp +  6)) / 10000000;
+  double lon = (double)((int32_t) le_read32(bp + 10)) / 10000000;
+  double alt = (double)((int16_t) le_read16(bp + 14));
 
-  rtim = decode_date(tim);
+  time_t rtim = decode_date(tim);
 
   if ((flags & WBT201_WAYPOINT) && (global_opts.masked_objective & WPTDATAMASK)) {
     Waypoint* wpt = make_waypoint(st, lat, lon, alt, rtim);
@@ -862,8 +853,7 @@ static int wbt201_read_chunk(struct read_state* st, unsigned pos, unsigned limit
 {
   char cmd_buf[30];
   char line_buf[100];
-  unsigned long cs;
-  char* lp, *op;
+  char* op;
   static const char* cs_prefix = "@AL,CS,";
 
   unsigned want = limit - pos;
@@ -893,8 +883,8 @@ static int wbt201_read_chunk(struct read_state* st, unsigned pos, unsigned limit
     return 0;
   }
 
-  lp = line_buf + strlen(cs_prefix);
-  cs = strtoul(lp, &op, 16);
+  char* lp = line_buf + strlen(cs_prefix);
+  unsigned long cs = strtoul(lp, &op, 16);
   if (*lp == ',' || *op != ',') {
     db(2, "Badly formed checksum\n");
     return 0;
@@ -921,41 +911,25 @@ static void wbt201_data_read()
 {
   char                line_buf[100];
   struct read_state   st;
-  unsigned            tries;
-
-  const char*          tmp;
-
-  double              ver_hw;
-  double              ver_sw;
-  double              ver_fmt;
-
-  unsigned            log_addr_start;
-  unsigned            log_addr_end;
-  unsigned            log_area_start;
-  unsigned            log_area_end;
-
-  unsigned			wantbytes;
-  unsigned			read_pointer;
-  unsigned			read_limit;
 
   /* Read various device information. We don't use much of this yet -
    * just log_addr_start and log_addr_end - but it's useful to have it
    * here for debug and documentation purposes.
    */
-  tmp = get_param("@AL,7,1", BUFSPEC(line_buf));
+  const char*          tmp = get_param("@AL,7,1", BUFSPEC(line_buf));
   db(1, "Reading device \"%s\"\n", tmp);
 
-  ver_hw         = get_param_float("@AL,8,1");
-  ver_sw         = get_param_float("@AL,8,2");
-  ver_fmt        = get_param_float("@AL,8,3");
+  double ver_hw = get_param_float("@AL,8,1");
+  double ver_sw = get_param_float("@AL,8,2");
+  double ver_fmt = get_param_float("@AL,8,3");
 
   db(2, "versions: hw=%f, sw=%f, fmt=%f\n",
      ver_hw, ver_sw, ver_fmt);
 
-  log_addr_start = get_param_int("@AL,5,1");  /* we read from here... */
-  log_addr_end   = get_param_int("@AL,5,2");  /*  ...to here, but ... */
-  log_area_start = get_param_int("@AL,5,9");  /*  ...we need these when ... */
-  log_area_end   = get_param_int("@AL,5,10"); /*  ...the gps wrote more then it fits in memory */
+  unsigned log_addr_start = get_param_int("@AL,5,1");  /* we read from here... */
+  unsigned log_addr_end = get_param_int("@AL,5,2");  /*  ...to here, but ... */
+  unsigned log_area_start = get_param_int("@AL,5,9");  /*  ...we need these when ... */
+  unsigned log_area_end = get_param_int("@AL,5,10"); /*  ...the gps wrote more then it fits in memory */
 
   db(2, "Log addr=(%d..%d), area=(%d..%d)\n",
      log_addr_start, log_addr_end,
@@ -963,16 +937,16 @@ static void wbt201_data_read()
 
   state_init(&st);
 
-  tries = 10;
+  unsigned tries = 10;
 
   /* If the WBT-201 device logs more then the memory can handle it continues to write at the beginning of the memory,
    * thus overwriting the oldest tracks. In this case log_addr_end is smaller then log_addr_start and we need to read
    * from log_addr_start to log_area_end and then from log_area_start to log_addr_end.
    */
 
-  wantbytes = (log_addr_start < log_addr_end) ? log_addr_end - log_addr_start : log_area_end - (log_addr_start - log_addr_end);
-  read_pointer = log_addr_start;
-  read_limit = (log_addr_start < log_addr_end) ? log_addr_end : log_area_end;
+  unsigned wantbytes = (log_addr_start < log_addr_end) ? log_addr_end - log_addr_start : log_area_end - (log_addr_start - log_addr_end);
+  unsigned read_pointer = log_addr_start;
+  unsigned read_limit = (log_addr_start < log_addr_end) ? log_addr_end : log_area_end;
 
   db(2, "Want %d bytes from device\n", wantbytes);
   while (wantbytes > 0) {
@@ -1005,7 +979,6 @@ static void wbt201_data_read()
 static void file_read()
 {
   char                buf[512];
-  size_t              rc;
   struct read_state   st;
   int                 fmt;
 
@@ -1015,7 +988,7 @@ static void file_read()
   state_init(&st);
 
   /* Read the whole file into the buffer */
-  rc = fread(buf, 1, sizeof(buf), fl);
+  size_t rc = fread(buf, 1, sizeof(buf), fl);
   while (rc != 0) {
     buf_write(&st.data, buf, rc);
     rc = fread(buf, 1, sizeof(buf), fl);

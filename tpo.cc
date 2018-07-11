@@ -142,12 +142,11 @@ tpo_check_version_string()
 {
 
   unsigned char string_size;
-  char* string_buffer;
   const char* v3_id_string = "TOPO! Ver";
 
   /* read the id string */
   gbfread(&string_size, 1, 1, tpo_file_in);
-  string_buffer = (char*) xmalloc(string_size+1);
+  char* string_buffer = (char*) xmalloc(string_size+1);
   gbfread(string_buffer, 1, string_size, tpo_file_in);
 
   /* terminate the string */
@@ -259,10 +258,9 @@ tpo_read_until_section(const char* section_name, int seek_bytes)
 static void tpo_read_2_x()
 {
   char buff[16];
-  short track_count, waypoint_count;
 
   /* track count */
-  track_count = gbfgetint16(tpo_file_in);
+  short track_count = gbfgetint16(tpo_file_in);
 
   /*fprintf(stderr,"track_count:%d\n", track_count);*/
 
@@ -306,7 +304,7 @@ static void tpo_read_2_x()
     gbfread(&buff[0], 1, 8, tpo_file_in);
 
     /* number of route points */
-    waypoint_count = gbfgetint16(tpo_file_in);
+    short waypoint_count = gbfgetint16(tpo_file_in);
 
     /* allocate temporary memory for the waypoint deltas */
     std::vector<short> lat_delta(waypoint_count);
@@ -374,9 +372,7 @@ static void tpo_read_2_x()
 //
 static int tpo_read_int()
 {
-  unsigned char val;
-
-  val = (unsigned char) gbfgetc(tpo_file_in);
+  unsigned char val = (unsigned char) gbfgetc(tpo_file_in);
 
   switch (val) {
 
@@ -415,11 +411,10 @@ static int tpo_read_int()
 static int tpo_find_block(unsigned int block_desired)
 {
   unsigned int block_type;
-  unsigned int block_offset;
 
 
   // Skip 512 byte fixed-length header
-  block_offset = 512;
+  unsigned int block_offset = 512;
 
   do {
 
@@ -451,15 +446,10 @@ static int tpo_find_block(unsigned int block_desired)
 //
 static Waypoint* tpo_convert_ll(int lat, int lon)
 {
-  double latitude;
-  double longitude;
-  Waypoint* waypoint_temp;
+  Waypoint* waypoint_temp = new Waypoint;
 
-
-  waypoint_temp = new Waypoint;
-
-  latitude = (double)lat / 0x800000;
-  longitude = (double)lon / 0x800000;
+  double latitude = (double)lat / 0x800000;
+  double longitude = (double)lon / 0x800000;
 
 //printf("lat: %f\tlon: %f\n", latitude, longitude);
 
@@ -502,7 +492,6 @@ public:
 //
 static void tpo_process_tracks()
 {
-  unsigned int track_count, track_style_count;
   const int DEBUG = 0;
 
   if (DEBUG) {
@@ -514,7 +503,7 @@ static void tpo_process_tracks()
     return;
   }
   // Read the number of track styles.
-  track_style_count = tpo_read_int(); // 8 bit value
+  unsigned int track_style_count = tpo_read_int(); // 8 bit value
 
   if (DEBUG) {
     printf("Unpacking %u track styles...\n",track_style_count);
@@ -597,7 +586,7 @@ static void tpo_process_tracks()
   }
 
   // Read the number of tracks.  Can be 8/16/32-bit value.
-  track_count = tpo_read_int();
+  unsigned int track_count = tpo_read_int();
 
   if (DEBUG) {
     printf("Total Tracks: %u\n", track_count);
@@ -610,35 +599,26 @@ static void tpo_process_tracks()
   // Read/process each track in the file
   //
   for (unsigned ii = 0; ii < track_count; ii++) {
-    unsigned int line_type;
-    unsigned int track_style;
-    unsigned int name_length;
-    unsigned int track_byte_count;
-    int llvalid;
-    unsigned char* buf;
-    int lonscale;
-    int latscale;
     int lat = 0;
     int lon = 0;
-    route_head* track_temp;
     char rgb[7],bgr[7];
 
     // Allocate the track struct
-    track_temp = route_head_alloc();
+    route_head* track_temp = route_head_alloc();
     track_add_head(track_temp);
 
 //UNKNOWN DATA LENGTH
-    line_type = tpo_read_int(); // always zero??
+    unsigned int line_type = tpo_read_int(); // always zero??
 
     // Can be 8/16/32-bit value (defined in 2012, ignored before then)
-    track_style = tpo_read_int(); // index into freehand route styles defined in this .tpo file
+    unsigned int track_style = tpo_read_int(); // index into freehand route styles defined in this .tpo file
     track_style -= 1;  // STARTS AT 1, whereas style arrays start at 0
 
     // Can be 8/16/32-bit value - never used?
     track_length = tpo_read_int();
 
 //UNKNOWN DATA LENGTH
-    name_length = tpo_read_int();
+    unsigned int name_length = tpo_read_int();
     QString track_name;
     if (name_length) {
       gbfread(track_name, 1, name_length, tpo_file_in);
@@ -682,7 +662,7 @@ static void tpo_process_tracks()
     track_temp->rte_num = ii + 1;
 
 //UNKNOWN DATA LENGTH
-    track_byte_count = tpo_read_int();
+    unsigned int track_byte_count = tpo_read_int();
 
     // Read the number of bytes specified for the track.  These
     // contain scaling factors, long/lat's, and offsets from
@@ -692,14 +672,14 @@ static void tpo_process_tracks()
     // proper place for the next track.
 
     // Read the track bytes into a buffer
-    buf = (unsigned char*) xmalloc(track_byte_count);
+    unsigned char* buf = (unsigned char*) xmalloc(track_byte_count);
     gbfread(buf, 1, track_byte_count, tpo_file_in);
 
-    latscale=0;
-    lonscale=0;
+    int latscale = 0;
+    int lonscale = 0;
 
     // Process the track bytes
-    llvalid = 0;
+    int llvalid = 0;
     for (unsigned int jj = 0; jj < track_byte_count;) {
       Waypoint* waypoint_temp;
 
@@ -806,10 +786,7 @@ static unsigned int tpo_index_ptr;
 //
 static void tpo_process_waypoints()
 {
-  unsigned int waypoint_count;
-
-
-//printf("Processing Waypoints...\n");
+  //printf("Processing Waypoints...\n");
 
   // Find block 0x0e0000 (GPS-Waypoints)
   if (tpo_find_block(0x0e0000)) {
@@ -817,7 +794,7 @@ static void tpo_process_waypoints()
   }
 
   // Read the number of waypoints.  8/16/32-bit value.
-  waypoint_count = tpo_read_int();
+  unsigned int waypoint_count = tpo_read_int();
 
 //printf("Total Waypoints: %d\n", waypoint_count);
 
@@ -832,14 +809,7 @@ static void tpo_process_waypoints()
 
   // Read/process each waypoint in the file
   for (unsigned int ii = 0; ii < waypoint_count; ii++) {
-    Waypoint* waypoint_temp;
-    Waypoint* waypoint_temp2;
-    unsigned int name_length;
-    int lat;
-    int lon;
-    int altitude;
-
-//UNKNOWN DATA LENGTH
+    //UNKNOWN DATA LENGTH
     (void)tpo_read_int(); // 0x00
 
 //UNKNOWN DATA LENGTH
@@ -847,7 +817,7 @@ static void tpo_process_waypoints()
 
 //UNKNOWN DATA LENGTH
     // Fetch name length
-    name_length = tpo_read_int();
+    unsigned int name_length = tpo_read_int();
     QString waypoint_name;
     if (name_length) {
       gbfread(waypoint_name, 1, name_length, tpo_file_in);
@@ -859,17 +829,17 @@ static void tpo_process_waypoints()
 //UNKNOWN DATA LENGTH
     (void)tpo_read_int();
 
-    lon = gbfgetint32(tpo_file_in);
-    lat = gbfgetint32(tpo_file_in);
+    int lon = gbfgetint32(tpo_file_in);
+    int lat = gbfgetint32(tpo_file_in);
 
     // Allocate space for waypoint and store lat/lon
-    waypoint_temp = tpo_convert_ll(lat, lon);
+    Waypoint* waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign the waypoint name
     waypoint_temp->shortname = waypoint_name;
 
     // Grab the altitude in centimeters
-    altitude = gbfgetint32(tpo_file_in);
+    int altitude = gbfgetint32(tpo_file_in);
     // The original untested check for unknown altitude was for 0xfffd000c (-196596 cm),
     // but a test case submitted later used 0xffce0000 (-3276800 cm).
     if (altitude == -3276800) { // Unknown altitude
@@ -892,7 +862,7 @@ static void tpo_process_waypoints()
 
     // For routes (later), we need a duplicate of each waypoint
     // indexed by the order we read them in.
-    waypoint_temp2 = new Waypoint(*waypoint_temp);
+    Waypoint* waypoint_temp2 = new Waypoint(*waypoint_temp);
 
     // Attach the copy to our index
     tpo_wp_index[tpo_index_ptr++] = waypoint_temp2;
@@ -926,10 +896,7 @@ static void tpo_process_waypoints()
 //
 static void tpo_process_map_notes()
 {
-  unsigned int waypoint_count;
-
-
-//printf("Processing Map Notes...\n");
+  //printf("Processing Map Notes...\n");
 
   // Find block 0x090000 (Map Notes)
   if (tpo_find_block(0x090000)) {
@@ -937,7 +904,7 @@ static void tpo_process_map_notes()
   }
 
   // Read the number of waypoints.  8/16/32-bit value.
-  waypoint_count = tpo_read_int();
+  unsigned int waypoint_count = tpo_read_int();
 
 //printf("Elements: %d\n", waypoint_count);
 
@@ -947,21 +914,14 @@ static void tpo_process_map_notes()
 
   // Process each waypoint
   for (unsigned int ii = 0; ii < waypoint_count; ii++) {
-    int lat;
-    int lon;
-    unsigned int name_length;
-    Waypoint* waypoint_temp;
-    unsigned int num_bytes;
-
-
-//UNKNOWN DATA LENGTH
+    //UNKNOWN DATA LENGTH
     (void)tpo_read_int();
 
-    lon = gbfgetint32(tpo_file_in);
-    lat = gbfgetint32(tpo_file_in);
+    int lon = gbfgetint32(tpo_file_in);
+    int lat = gbfgetint32(tpo_file_in);
 
     // Allocate space for waypoint and store lat/lon
-    waypoint_temp = tpo_convert_ll(lat, lon);
+    Waypoint* waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
     waypoint_temp->shortname = QString("NOTE %1").arg(ii + 1);
@@ -977,7 +937,7 @@ static void tpo_process_map_notes()
 
 //UNKNOWN DATA LENGTH
     // Fetch comment length
-    name_length = tpo_read_int();
+    unsigned int name_length = tpo_read_int();
     if (name_length) {
       QString comment;
 
@@ -1016,7 +976,7 @@ static void tpo_process_map_notes()
 
     // Number of bytes to skip until next element or end of
     // block.  May be 8/16/32 bits.
-    num_bytes = tpo_read_int();
+    unsigned int num_bytes = tpo_read_int();
 //printf("num_bytes: %x\n", num_bytes);
     for (unsigned int jj = 0; jj < num_bytes; jj++) {
       (void) gbfgetc(tpo_file_in); // Skip bytes
@@ -1041,10 +1001,7 @@ static void tpo_process_map_notes()
 //
 static void tpo_process_symbols()
 {
-  unsigned int waypoint_count;
-
-
-//printf("Processing Symbols...\n");
+  //printf("Processing Symbols...\n");
 
   // Find block 0x040000 (Symbols)
   if (tpo_find_block(0x040000)) {
@@ -1052,7 +1009,7 @@ static void tpo_process_symbols()
   }
 
   // Read the number of waypoints.  8/16/32-bit value.
-  waypoint_count = tpo_read_int();
+  unsigned int waypoint_count = tpo_read_int();
 
 //printf("Elements: %d\n", waypoint_count);
 
@@ -1062,22 +1019,17 @@ static void tpo_process_symbols()
 
   // Process each waypoint
   for (unsigned int ii = 0; ii < waypoint_count; ii++) {
-    int lat;
-    int lon;
-    Waypoint* waypoint_temp;
-
-
-//UNKNOWN DATA LENGTH
+    //UNKNOWN DATA LENGTH
     (void)tpo_read_int();
 
 //UNKNOWN DATA LENGTH
     (void)tpo_read_int();
 
-    lon = gbfgetint32(tpo_file_in);
-    lat = gbfgetint32(tpo_file_in);
+    int lon = gbfgetint32(tpo_file_in);
+    int lat = gbfgetint32(tpo_file_in);
 
     // Allocate space for waypoint and store lat/lon
-    waypoint_temp = tpo_convert_ll(lat, lon);
+    Waypoint* waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
     waypoint_temp->shortname = QString("SYM %1").arg(ii + 1);
@@ -1095,10 +1047,7 @@ static void tpo_process_symbols()
 //
 static void tpo_process_text_labels()
 {
-  unsigned int waypoint_count;
-
-
-//printf("Processing Text Labels...\n");
+  //printf("Processing Text Labels...\n");
 
   // Find block 0x080000 (Text Labels)
   if (tpo_find_block(0x080000)) {
@@ -1106,7 +1055,7 @@ static void tpo_process_text_labels()
   }
 
   // Read the number of waypoints.  8/16/32-bit value.
-  waypoint_count = tpo_read_int();
+  unsigned int waypoint_count = tpo_read_int();
 
 //printf("Elements: %d\n", waypoint_count);
 
@@ -1116,23 +1065,17 @@ static void tpo_process_text_labels()
 
   // Process each waypoint
   for (unsigned int ii = 0; ii < waypoint_count; ii++) {
-    int lat;
-    int lon;
-    unsigned int name_length;
-    Waypoint* waypoint_temp;
-
-
-//UNKNOWN DATA LENGTH
+    //UNKNOWN DATA LENGTH
     (void)tpo_read_int();
 
 //UNKNOWN DATA LENGTH
     (void)tpo_read_int();
 
-    lon = gbfgetint32(tpo_file_in);
-    lat = gbfgetint32(tpo_file_in);
+    int lon = gbfgetint32(tpo_file_in);
+    int lat = gbfgetint32(tpo_file_in);
 
     // Allocate space for waypoint and store lat/lon
-    waypoint_temp = tpo_convert_ll(lat, lon);
+    Waypoint* waypoint_temp = tpo_convert_ll(lat, lon);
 
     // Assign a generic waypoint name
     waypoint_temp->shortname = QString("TXT %1").arg(ii + 1);
@@ -1144,7 +1087,7 @@ static void tpo_process_text_labels()
 
     // Fetch comment length
 //UNKNOWN DATA LENGTH
-    name_length = tpo_read_int();
+    unsigned int name_length = tpo_read_int();
     if (name_length) {
       QString comment;
       gbfread(comment, 1, name_length, tpo_file_in);
@@ -1168,10 +1111,7 @@ static void tpo_process_text_labels()
 //
 static void tpo_process_routes()
 {
-  unsigned int route_count;
-
-
-//printf("Processing Routes...\n");
+  //printf("Processing Routes...\n");
 
   // Find block 0x0f0000 (GPS-Routes)
   if (tpo_find_block(0x0f0000)) {
@@ -1179,7 +1119,7 @@ static void tpo_process_routes()
   }
 
   // Read the number of routes.  8/16/32-bit value
-  route_count = tpo_read_int();
+  unsigned int route_count = tpo_read_int();
 
 //printf("Total Routes: %d\n", route_count);
 
@@ -1190,12 +1130,8 @@ static void tpo_process_routes()
   // Read/process each route in the file
   //
   for (unsigned int ii = 0; ii < route_count; ii++) {
-    unsigned int waypoint_cnt;
-    route_head* route_temp;
-
-
     // Allocate the route struct
-    route_temp = route_head_alloc();
+    route_head* route_temp = route_head_alloc();
     route_add_head(route_temp);
 
 //UNKNOWN DATA LENGTH
@@ -1228,24 +1164,20 @@ static void tpo_process_routes()
 
     // Fetch the number of waypoints in this route.  8/16/32-bit
     // value.
-    waypoint_cnt = tpo_read_int();
+    unsigned int waypoint_cnt = tpo_read_int();
 
 
     // Run through the list of waypoints, look up each in our
     // index, then add the waypoint to this route.
     //
     for (unsigned int jj = 0; jj < waypoint_cnt; jj++) {
-      Waypoint* waypoint_temp;
-      unsigned int val;
-
-
-//UNKNOWN DATA LENGTH
+      //UNKNOWN DATA LENGTH
       // Fetch the index to the waypoint
-      val = tpo_read_int();
+      unsigned int val = tpo_read_int();
 //printf("val: %x\t\t", val);
 
       // Duplicate a waypoint from our index of waypoints.
-      waypoint_temp = new Waypoint(*tpo_wp_index[val-1]);
+      Waypoint* waypoint_temp = new Waypoint(*tpo_wp_index[val-1]);
 
       // Add the waypoint to the route
       route_add_wpt(route_temp, waypoint_temp);
@@ -1745,7 +1677,6 @@ static void
 tpo_track_disp(const Waypoint* waypointp)
 {
   double lat, lon, amt, x, y, z;
-  short lat_delta, lon_delta;
 
   /* fprintf(stderr, "%f/%f\n", waypointp->latitude, waypointp->longitude); */
 
@@ -1781,11 +1712,11 @@ tpo_track_disp(const Waypoint* waypointp)
   lon *= -1.0;
 
   /* longitude delta from first route point */
-  lon_delta = (short)((first_track_waypoint_lon - lon) / output_track_lon_scale);
+  short lon_delta = (short)((first_track_waypoint_lon - lon) / output_track_lon_scale);
   gbfputint16(lon_delta, tpo_file_out);
 
   /* latitude delta from first route point */
-  lat_delta = (short)((first_track_waypoint_lat - lat) / output_track_lat_scale);
+  short lat_delta = (short)((first_track_waypoint_lat - lat) / output_track_lat_scale);
   gbfputint16(lat_delta, tpo_file_out);
 
   /*

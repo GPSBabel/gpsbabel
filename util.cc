@@ -168,14 +168,13 @@ xstrndup(const char* str, size_t sz)
 {
   size_t newlen = 0;
   const char* cin = str;
-  char* newstr;
 
   while ((newlen < sz) && (*cin != '\0')) {
     newlen++;
     cin++;
   }
 
-  newstr = (char*) xmalloc(newlen + 1);
+  char* newstr = (char*) xmalloc(newlen + 1);
   memcpy(newstr, str, newlen);
   newstr[newlen] = 0;
 
@@ -215,8 +214,6 @@ XSTRAPPEND(char* src, const char* newd, DEBUG_PARAMS)
 xstrappend(char* src, const char* newd)
 #endif
 {
-  size_t newsz;
-
   if (!src) {
     return xxstrdup(newd, file, line);
   }
@@ -224,7 +221,7 @@ xstrappend(char* src, const char* newd)
     return xxstrdup(src, file, line);
   }
 
-  newsz = strlen(src) + strlen(newd) + 1;
+  size_t newsz = strlen(src) + strlen(newd) + 1;
   src = (char*) xxrealloc(src, newsz, file, line);
   strcat(src, newd);
 
@@ -237,7 +234,6 @@ xstrappend(char* src, const char* newd)
 FILE*
 xfopen(const char* fname, const char* type, const char* errtxt)
 {
-  FILE* f;
   int am_writing = strchr(type, 'w') != nullptr;
 
   if (fname == nullptr) {
@@ -248,7 +244,7 @@ xfopen(const char* fname, const char* type, const char* errtxt)
   if (0 == strcmp(fname, "-")) {
     return am_writing ? stdout : stdin;
   }
-  f = ufopen(QString::fromUtf8(fname), type);
+  FILE* f = ufopen(QString::fromUtf8(fname), type);
   if (nullptr == f) {
     fatal("%s cannot open '%s' for %s.  Error was '%s'.\n",
           errtxt, fname,
@@ -302,10 +298,9 @@ int
 xasprintf(char** strp, const char* fmt, ...)
 {
   va_list args;
-  int res;
 
   va_start(args, fmt);
-  res = xvasprintf(strp, fmt, args);
+  int res = xvasprintf(strp, fmt, args);
   va_end(args);
 
   return res;
@@ -315,10 +310,9 @@ int
 xasprintf(QString* strp, const char* fmt, ...)
 {
   va_list args;
-  int res;
   va_start(args, fmt);
   char* cstrp;
-  res = xvasprintf(&cstrp, fmt, args);
+  int res = xvasprintf(&cstrp, fmt, args);
   *strp = cstrp;
   xfree(cstrp);
   va_end(args);
@@ -337,13 +331,12 @@ xvasprintf(char** strp, const char* fmt, va_list ap)
 # define	FIRSTSIZE	1
 #endif
   char* buf = nullptr;
-  int bufsize;
   char* newbuf;
   size_t nextsize = 0;
   int outsize;
   va_list args;
 
-  bufsize = 0;
+  int bufsize = 0;
   for (;;) {
     if (bufsize == 0) {
       if ((buf = (char*) xmalloc(FIRSTSIZE)) == nullptr) {
@@ -439,13 +432,11 @@ rtrim(char* s)
 char*
 lrtrim(char* buff)
 {
-  char* c;
-
   if (buff[0] == '\0') {
     return buff;
   }
 
-  c = buff + strlen(buff);
+  char* c = buff + strlen(buff);
   while ((c >= buff) && ((unsigned char)*c <= ' ')) {
     *c-- = '\0';
   }
@@ -482,10 +473,8 @@ lrtrim(char* buff)
 int
 str_match(const char* str, const char* match)
 {
-  const char* m, *s;
-
-  s = str;
-  m = match;
+  const char* s = str;
+  const char* m = match;
 
   while (*m || *s) {
     switch (*m) {
@@ -511,8 +500,6 @@ str_match(const char* str, const char* match)
       }
 
       do {
-        const char* mx, *sx;
-
         while (*s && (*s != *m)) {
           s++;
         }
@@ -520,8 +507,8 @@ str_match(const char* str, const char* match)
           return 0;
         }
 
-        sx = s + 1;
-        mx = m + 1;
+        const char* sx = s + 1;
+        const char* mx = m + 1;
 
         while (*sx) {
           if (*mx == '\\') {	/* ? escaped ? */
@@ -770,19 +757,17 @@ si_round(double d)
 time_t
 mkgmtime(struct tm* t)
 {
-  short  month, year;
-  time_t result;
   static int      m_to_d[12] =
   {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334};
 
-  month = t->tm_mon;
-  year = t->tm_year + month / 12 + 1900;
+  short month = t->tm_mon;
+  short year = t->tm_year + month / 12 + 1900;
   month %= 12;
   if (month < 0) {
     year -= 1;
     month += 12;
   }
-  result = (year - 1970) * 365 + m_to_d[month];
+  time_t result = (year - 1970) * 365 + m_to_d[month];
   if (month <= 1) {
     year -= 1;
   }
@@ -1064,17 +1049,14 @@ be_write_double(void* ptr, double d)
 /* Magellan and PCX formats use this DDMM.mm format */
 double ddmm2degrees(double pcx_val)
 {
-  double minutes;
-  signed int deg;
-  deg = (signed int)(pcx_val / 100.0);
-  minutes = (((pcx_val / 100.0) - deg) * 100.0) / 60.0;
+  signed int deg = (signed int)(pcx_val / 100.0);
+  double minutes = (((pcx_val / 100.0) - deg) * 100.0) / 60.0;
   return (double) deg + minutes;
 }
 
 double degrees2ddmm(double deg_val)
 {
-  signed int deg;
-  deg = (signed int) deg_val;
+  signed int deg = (signed int) deg_val;
   return (deg * 100.0) + ((deg_val - deg) * 60.0);
 }
 
@@ -1086,18 +1068,16 @@ double degrees2ddmm(double deg_val)
 char*
 strsub(const char* s, const char* search, const char* replace)
 {
-  const char* p;
   int len = strlen(s);
   int slen = strlen(search);
   int rlen = strlen(replace);
-  char* d;
 
-  p = strstr(s, search);
+  const char* p = strstr(s, search);
   if (!slen || !p) {
     return nullptr;
   }
 
-  d = (char*) xmalloc(len + rlen + 1);
+  char* d = (char*) xmalloc(len + rlen + 1);
 
   /* Copy first part */
   len = p - s;
@@ -1119,14 +1099,13 @@ char*
 gstrsub(const char* s, const char* search, const char* replace)
 {
   int ooffs = 0;
-  char* o;
   const char* c;
   const char* src = s;
   int olen = strlen(src);
   int slen = strlen(search);
   int rlen = strlen(replace);
 
-  o = (char*) xmalloc(olen + 1);
+  char* o = (char*) xmalloc(olen + 1);
 
   while ((c = strstr(src, search))) {
     olen += (rlen - slen);
@@ -1199,14 +1178,10 @@ rot13(const QString& s)
 char*
 convert_human_date_format(const char* human_datef)
 {
-  char* result, *cout;
-  char prev;
-  int ylen;
-
-  result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
-  cout = result;
-  prev = '\0';
-  ylen = 0;
+  char* result = (char*) xcalloc((2*strlen(human_datef)) + 1, 1);
+  char* cout = result;
+  char prev = '\0';
+  int ylen = 0;
 
   for (const char* cin = human_datef; *cin; cin++) {
     char okay = 1;
@@ -1267,12 +1242,9 @@ convert_human_date_format(const char* human_datef)
 char*
 convert_human_time_format(const char* human_timef)
 {
-  char* result, *cout;
-  char prev;
-
-  result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
-  cout = result;
-  prev = '\0';
+  char* result = (char*) xcalloc((2*strlen(human_timef)) + 1, 1);
+  char* cout = result;
+  char prev = '\0';
 
   for (const char* cin = human_timef; *cin; cin++) {
     int okay = 1;
@@ -1363,18 +1335,15 @@ convert_human_time_format(const char* human_timef)
 char*
 pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html)
 {
-  double  latmin, lonmin, latsec, lonsec;
-  int     latint, lonint;
-  char	latsig, lonsig;
   char*	result;
-  latsig = lat < 0 ? 'S':'N';
-  lonsig = lon < 0 ? 'W':'E';
-  latint = abs((int) lat);
-  lonint = abs((int) lon);
-  latmin = 60.0 * (fabs(lat) - latint);
-  lonmin = 60.0 * (fabs(lon) - lonint);
-  latsec = 60.0 * (latmin - floor(latmin));
-  lonsec = 60.0 * (lonmin - floor(lonmin));
+  char latsig = lat < 0 ? 'S':'N';
+  char lonsig = lon < 0 ? 'W':'E';
+  int latint = abs((int) lat);
+  int lonint = abs((int) lon);
+  double latmin = 60.0 * (fabs(lat) - latint);
+  double lonmin = 60.0 * (fabs(lon) - lonint);
+  double latsec = 60.0 * (latmin - floor(latmin));
+  double lonsec = 60.0 * (lonmin - floor(lonmin));
   if (sep == nullptr) {
     sep = " ";  /* default " " */
   }
@@ -1406,11 +1375,11 @@ pretty_deg_format(double lat, double lon, char fmt, const char* sep, int html)
 char*
 strip_nastyhtml(const QString& in)
 {
-  char* returnstr, *sp;
-  char* lcstr, *lcp;
+  char* returnstr;
+  char* lcstr;
 
-  sp = returnstr = xstrdup(in);
-  lcp = lcstr = strlower(xstrdup(in));
+  char* sp = returnstr = xstrdup(in);
+  char* lcp = lcstr = strlower(xstrdup(in));
 
   while (lcp = strstr(lcstr, "<body>"), nullptr != lcp) {
     sp = returnstr + (lcp - lcstr) ; /* becomes <!   > */
@@ -1505,19 +1474,19 @@ strip_html(const utf_string* in)
   doc.setHtml(in->utfstring);
   return xstrdup(CSTR(doc.toPlainText().simplified()));
 #else
-  char* outstring, *out;
-  char* incopy, *instr;
+  char* out;
+  char* instr;
   char tag[8];
   unsigned short int taglen = 0;
 
-  incopy = instr = xstrdup(in->utfstring);
+  char* incopy = instr = xstrdup(in->utfstring);
   if (!in->is_html) {
     return instr;
   }
   /*
    * We only shorten, so just dupe the input buf for space.
    */
-  outstring = out = xstrdup(in->utfstring);
+  char* outstring = out = xstrdup(in->utfstring);
 
   tag[0] = 0;
   while (*instr) {
@@ -1638,19 +1607,20 @@ static
 char*
 entitize(const char* str, bool is_html)
 {
-  int elen, ecount, nsecount;
-  entity_types* ep;
-  const char* cp;
-  char* p, * tmp, * xstr;
+  int ecount;
+  int nsecount;
+  char* p;
+  char* tmp;
+  char* xstr;
 
   int bytes = 0;
   int value = 0;
-  ep = stdentities;
-  elen = ecount = nsecount = 0;
+  entity_types* ep = stdentities;
+  int elen = ecount = nsecount = 0;
 
   /* figure # of entity replacements and additional size. */
   while (ep->text) {
-    cp = str;
+    const char* cp = str;
     while ((cp = strstr(cp, ep->text)) != nullptr) {
       elen += strlen(ep->entity) - strlen(ep->text);
       ecount++;

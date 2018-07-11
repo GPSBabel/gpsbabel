@@ -152,9 +152,9 @@ format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_color)
 static void
 format_garmin_xt_decrypt_trk_blk(int Count, uint8_t TrackBlock[])
 {
-  uint8_t i,j = 12;
+  uint8_t j = 12;
   while (j<(Count-1)) {
-    for (i = j; i < Count; i++) {
+    for (uint8_t i = j; i < Count; i++) {
       TrackBlock[i] = TrackBlock[i] >> 1;
       if (i<(Count)) {
         TrackBlock[i] = TrackBlock[i] + (TrackBlock[i+1] % 2) * 128;
@@ -170,10 +170,8 @@ format_garmin_xt_decrypt_trk_blk(int Count, uint8_t TrackBlock[])
 static void
 format_garmin_xt_decomp_trk_blk(uint8_t ii, uint8_t TrackBlock[], double* Ele, double* Lat, double* Lon, uint32_t* Time)
 {
-  uint16_t	PrevEleW;
-
   //printf("%d %d %d %d %d %d\n", TrackBlock[0], TrackBlock[1], TrackBlock[2], TrackBlock[3], TrackBlock[4], TrackBlock[5]);
-  PrevEleW = TrackBlock[(ii - 1) * 12 + 1 ];
+  uint16_t PrevEleW = TrackBlock[(ii - 1) * 12 + 1 ];
   PrevEleW = PrevEleW << 8;
   PrevEleW = PrevEleW + TrackBlock[(ii - 1) * 12 ];
   *Ele = (double)PrevEleW * GARMIN_XT_ELE - 1500;
@@ -216,9 +214,7 @@ format_garmin_xt_decomp_trk_blk(uint8_t ii, uint8_t TrackBlock[], double* Ele, d
 static void
 format_garmin_xt_decomp_last_ele(uint8_t ii, double* PrevEle, uint8_t TrackBlock[])
 {
-  uint16_t	PrevEleW;
-
-  PrevEleW = TrackBlock[ii - 1];
+  uint16_t PrevEleW = TrackBlock[ii - 1];
   PrevEleW = PrevEleW << 8;
   PrevEleW = PrevEleW + TrackBlock[ii - 2];
   *PrevEle = (double)PrevEleW * GARMIN_XT_ELE - 1500;
@@ -233,11 +229,9 @@ format_garmin_xt_proc_strk()
   int 		Count = 0; // Used to obtain number of read bytes
   int TracksCompleted = 0; // Number of processed tracks
   uint8_t	TrackBlock[STRK_BLOCK_SIZE + 1]; // File Block
-  uint8_t 	ii; // temp variable
   double		Lat = 0, Lon = 0; // wpt data
   double		PrevLat = 0, PrevLon = 0, PrevEle = 0; // wpt data
   uint32_t	Time = 0; // wpt data
-  int		FirstCoo;
   uint8_t	trk_color = 0xff;
 
   // Skip 12 bytes from the BOF
@@ -251,15 +245,13 @@ format_garmin_xt_proc_strk()
 
   // Process all tracks one by one
   while ((TracksCompleted < NumberOfTracks) && (!gbfeof(fin))) {
-    route_head* tmp_track;
     Waypoint*	wpt;
-    char*	trk_name;
-    trk_name = (char*) xmalloc(30);
+    char* trk_name = (char*) xmalloc(30);
 
     // Generate Track Header
     uint16_t trackbytes = format_garmin_xt_rd_st_attrs(trk_name, &trk_color) - 50; // Bytes in track
 
-    tmp_track = route_head_alloc();
+    route_head* tmp_track = route_head_alloc();
     // update track color
     tmp_track->line_color.bbggrr = colors[trk_color];
     tmp_track->line_color.opacity = 255;
@@ -269,7 +261,7 @@ format_garmin_xt_proc_strk()
     track_add_head(tmp_track);
 
     // This is the 1st coordinate of the track
-    FirstCoo = TRUE;
+    int FirstCoo = TRUE;
     while (trackbytes>0) {
       if (trackbytes>=STRK_BLOCK_SIZE) {
         Count = gbfread(&TrackBlock, DATABLOCKSIZE, STRK_BLOCK_SIZE, fin);
@@ -283,7 +275,7 @@ format_garmin_xt_proc_strk()
       format_garmin_xt_decrypt_trk_blk(Count, TrackBlock);
 
       // process each track point in the loaded TrackBlock
-      for (ii=1; ii <= ((Count-1) / 12); ii++) {
+      for (uint8_t ii = 1; ii <= ((Count-1) / 12); ii++) {
         // decompose loaded track block part (track point)
         format_garmin_xt_decomp_trk_blk(ii, TrackBlock, &PrevEle, &Lat, &Lon, &Time);
 
@@ -334,10 +326,8 @@ format_garmin_xt_proc_strk()
 static void
 format_garmin_xt_proc_atrk()
 {
-  Waypoint*	wpt;
   int		method = 0;
   unsigned char 	buf[3];
-  int32_t 	num_trackpoints;
 
   // get the option for the processing the track name
   if (opt_trk_header) {
@@ -355,7 +345,7 @@ format_garmin_xt_proc_atrk()
 
   // We think the word at offset 0xc is the trackpoint count.
   gbfseek(fin, 12, SEEK_SET);
-  num_trackpoints = gbfgetuint32(fin);
+  int32_t num_trackpoints = gbfgetuint32(fin);
 
   while (num_trackpoints--) {
     uint16_t block = gbfgetuint16(fin);
@@ -383,7 +373,7 @@ format_garmin_xt_proc_atrk()
     double AltF = (double)uu * GARMIN_XT_ELE - 1500;
 
     //create new waypoint
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     //populate wpt;
     wpt->latitude = LatF*180/16777216;	/* Degrees */

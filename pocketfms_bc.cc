@@ -90,7 +90,6 @@ read_tracks()
 
   while (1 == gbfread(&bc, sizeof(bc), 1, file_in)) {
     struct tm tm;
-    Waypoint* wpt;
 
     if (strcmp(bc.id, header_id) != 0) {
       fatal(MYNAME ": invalid breadcrumb header in input file.\n");
@@ -104,7 +103,7 @@ read_tracks()
     tm.tm_min = le_readu16(&bc.minute);
     tm.tm_sec = le_readu16(&bc.second);
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
     wpt->latitude = le_read_float(&bc.latitude);
     wpt->longitude = le_read_float(&bc.longitude);
     wpt->altitude = FEET_TO_METERS(le_read_float(&bc.altitude));
@@ -129,11 +128,10 @@ static void
 pocketfms_waypt_disp(const Waypoint* wpt)
 {
   struct breadcrumb bc;
-  struct tm* tm;
 
   memset(&bc, 0, sizeof(bc));
   const time_t tt = wpt->GetCreationTime().toTime_t();
-  tm = localtime(&tt);
+  struct tm* tm = localtime(&tt);
   if (wpt->creation_time.isValid()) {
     const time_t tt = wpt->GetCreationTime().toTime_t();
     tm = gmtime(&tt);

@@ -155,9 +155,8 @@ fix_win_serial_name_r(const char* comname, char* obuf, size_t len)
      ) {
     strncpy(obuf, comname, len);
   } else {
-    size_t l;
     snprintf(obuf, len, DEV_PREFIX "%s", comname);
-    l = strlen(obuf);
+    size_t l = strlen(obuf);
     if (obuf[l - 1] == ':') {
       obuf[l - 1] = '\0';
     }
@@ -180,7 +179,6 @@ const char* fix_win_serial_name(const char* comname)
  */
 void* gbser_init(const char* port_name)
 {
-  HANDLE comport;
   gbser_handle* h = (gbser_handle*) xcalloc(1, sizeof(*h));
   const char* xname = fix_win_serial_name(port_name);
 
@@ -188,8 +186,8 @@ void* gbser_init(const char* port_name)
 
   h->magic = MYMAGIC;
 
-  comport = CreateFileA(xname, GENERIC_READ | GENERIC_WRITE,
-                        0, NULL, OPEN_EXISTING, 0, NULL);
+  HANDLE comport = CreateFileA(xname, GENERIC_READ | GENERIC_WRITE,
+                               0, NULL, OPEN_EXISTING, 0, NULL);
 
   if (comport == INVALID_HANDLE_VALUE) {
     goto failed;
@@ -330,8 +328,7 @@ int gbser__fill_buffer(void* handle, unsigned want, unsigned* ms)
     }
   } else {
     hp_time tv;
-    double time_left;
-    DWORD err, nread;
+    DWORD nread;
     get_time(&tv);
     if (rc = set_rx_timeout(h, *ms), rc) {
       return rc;
@@ -339,13 +336,13 @@ int gbser__fill_buffer(void* handle, unsigned want, unsigned* ms)
     if (!ReadFile(h->comport, h->inbuf + h->inbuf_used,
                   want - h->inbuf_used,
                   &nread, NULL)) {
-      err = GetLastError();
+      DWORD err = GetLastError();
       if (err != ERROR_COUNTER_TIMEOUT && err != ERROR_TIMEOUT) {
         return gbser_ERROR;
       }
     }
     h->inbuf_used += nread;
-    time_left = *ms - elapsed(&tv);
+    double time_left = *ms - elapsed(&tv);
     *ms = time_left < 0 ? 0 : (unsigned) time_left;
   }
 
@@ -446,11 +443,10 @@ int gbser_read_line(void* handle, void* buf,
   bp[pos] = '\0';
   for (;;) {
     signed time_left = ms - elapsed(&tv);
-    int c;
     if (time_left <= 0) {
       return gbser_TIMEOUT;
     }
-    c = gbser_readc_wait(handle, time_left);
+    int c = gbser_readc_wait(handle, time_left);
     if (c == gbser_ERROR) {
       return c;
     } else if (c == eol) {

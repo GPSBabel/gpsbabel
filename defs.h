@@ -604,9 +604,8 @@ waypt_disp_session(const session_t* se, T cb)
   foreach (Waypoint* waypointp, waypt_list) {
 #else
   queue* elem, *tmp;
-  Waypoint* waypointp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = (Waypoint*) elem;
 #endif
     if ((se == nullptr) || (waypointp->session == se)) {
       if (global_opts.verbose_status) {

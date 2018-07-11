@@ -191,7 +191,6 @@ find_filter_vec(const char* const vecname, const char** opts)
 
   while (vec->vec) {
     arglist_t* ap;
-    const char* res;
 
     if (svecname.compare(vec->name, Qt::CaseInsensitive)) {
       vec++;
@@ -202,9 +201,7 @@ find_filter_vec(const char* const vecname, const char** opts)
     struct arglist* args = vec->vec->get_args();
     if (args) {
       for (ap = args; ap->argstring; ap++) {
-        const char* temp;
-
-        temp = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
+        const char* temp = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
         if (temp == nullptr) {
           temp = inifile_readstr(global_opts.inifile, "Common filter settings", ap->argstring);
         }
@@ -216,15 +213,13 @@ find_filter_vec(const char* const vecname, const char** opts)
     }
 
     /* step 2: override settings with command-line values */
-    res = strchr(vecname, ',');
+    const char* res = strchr(vecname, ',');
     if (res) {
       *opts = res+1;
 
       if (args) {
         for (ap = args; ap->argstring; ap++) {
-          char* opt;
-
-          opt = get_option(*opts, ap->argstring);
+          char* opt = get_option(*opts, ap->argstring);
           if (opt) {
             found = 1;
             assign_option(vec->name, ap, opt);
@@ -254,11 +249,10 @@ find_filter_vec(const char* const vecname, const char** opts)
 void
 free_filter_vec(Filter* filter)
 {
-  arglist_t* ap;
   struct arglist* args = filter->get_args();
 
   if (args) {
-    for (ap = args; ap->argstring; ap++) {
+    for (arglist_t* ap = args; ap->argstring; ap++) {
       if (ap->argvalptr) {
         xfree(ap->argvalptr);
         ap->argvalptr = *ap->argval = nullptr;
@@ -272,10 +266,9 @@ init_filter_vecs()
 {
   fl_vecs_t* vec = filter_vec_list;
   while (vec->vec) {
-    arglist_t* ap;
     struct arglist* args = vec->vec->get_args();
     if (args) {
-      for (ap = args; ap->argstring; ap++) {
+      for (arglist_t* ap = args; ap->argstring; ap++) {
         ap->argvalptr = nullptr;
       }
     }
@@ -300,14 +293,11 @@ exit_filter_vecs()
 void
 disp_filter_vecs()
 {
-  fl_vecs_t* vec;
-  arglist_t* ap;
-
-  for (vec = filter_vec_list; vec->vec; vec++) {
+  for (fl_vecs_t* vec = filter_vec_list; vec->vec; vec++) {
     printf("	%-20.20s  %-50.50s\n",
            vec->name, vec->desc);
     struct arglist* args = vec->vec->get_args();
-    for (ap = args; ap && ap->argstring; ap++) {
+    for (arglist_t* ap = args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %-.50s %s\n",
                ap->argstring, ap->helpstring,
@@ -319,17 +309,14 @@ disp_filter_vecs()
 void
 disp_filter_vec(const char* vecname)
 {
-  fl_vecs_t* vec;
-  arglist_t* ap;
-
-  for (vec = filter_vec_list; vec->vec; vec++) {
+  for (fl_vecs_t* vec = filter_vec_list; vec->vec; vec++) {
     if (case_ignore_strcmp(vec->name, vecname)) {
       continue;
     }
     printf("	%-20.20s  %-50.50s\n",
            vec->name, vec->desc);
     struct arglist* args = vec->vec->get_args();
-    for (ap = args; ap && ap->argstring; ap++) {
+    for (arglist_t* ap = args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %-.50s %s\n",
                ap->argstring, ap->helpstring,
@@ -359,12 +346,10 @@ void disp_help_url(const fl_vecs_t* vec, arglist_t* arg)
 static void
 disp_v1(const fl_vecs_t* vec)
 {
-  arglist_t* ap;
-
   disp_help_url(vec, nullptr);
   printf("\n");
   struct arglist* args = vec->vec->get_args();
-  for (ap = args; ap && ap->argstring; ap++) {
+  for (arglist_t* ap = args; ap && ap->argstring; ap++) {
     if (!(ap->argtype & ARGTYPE_HIDDEN)) {
       printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
              vec->name,

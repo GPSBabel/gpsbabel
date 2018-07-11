@@ -290,12 +290,11 @@ my_read(void)
 
   SHPGetInfo(ihandle, &npts, nullptr, nullptr, nullptr);
   for (int iShape=0; iShape<npts; iShape++) {
-    SHPObject* shp;
     Waypoint* wpt;
     QString name;
     QString url;
 
-    shp = SHPReadObject(ihandle, iShape);
+    SHPObject* shp = SHPReadObject(ihandle, iShape);
     if (nameidx >= 0) {
       name = DBFReadStringAttribute(ihandledb, iShape, nameidx);
 //  } else if (nameidx == -1) {
@@ -423,16 +422,14 @@ my_wr_deinit(void)
 static void
 my_write_wpt(const Waypoint* wpt)
 {
-  SHPObject* shpobject;
-
   // note that the z coordinate (&wpt->altitude) does not apply
   // to SHPT_POINT.
   // We could potentially write SHPT_POINTZ, but we would have
   // to address what to do when we don't have altitude data.
-  shpobject = SHPCreateSimpleObject(SHPT_POINT, 1,
-                                    &wpt->longitude,
-                                    &wpt->latitude,
-                                    &wpt->altitude);
+  SHPObject* shpobject = SHPCreateSimpleObject(SHPT_POINT, 1,
+                                                &wpt->longitude,
+                                                &wpt->latitude,
+                                                &wpt->altitude);
   int iShape = SHPWriteObject(ohandle, -1, shpobject);
   SHPDestroyObject(shpobject);
   DBFWriteStringAttribute(ohandledb, iShape, nameFieldIdx,
@@ -462,13 +459,12 @@ poly_point(const Waypoint* wpt)
 static void
 poly_deinit(const route_head* rte)
 {
-  SHPObject* shpobject;
   // note that the z coordinate (polybufz) does not apply
   // to SHPT_ARC.
   // We could potentially write SHPT_ARCZ, but we would have
   // to address what to do when we don't have altitude data.
-  shpobject = SHPCreateSimpleObject(SHPT_ARC, poly_count,
-                                    polybufx, polybufy, polybufz);
+  SHPObject* shpobject = SHPCreateSimpleObject(SHPT_ARC, poly_count,
+                                                polybufx, polybufy, polybufz);
   int iShape = SHPWriteObject(ohandle, -1,  shpobject);
   SHPDestroyObject(shpobject);
   DBFWriteStringAttribute(ohandledb, iShape, nameFieldIdx,

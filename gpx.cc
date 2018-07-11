@@ -267,14 +267,13 @@ static void
 gpx_write_gdata(gpx_global_entry* ge, const char* tag)
 {
   queue* elem, *tmp;
-  gpx_global_entry* gep;
 
   if (!gpx_global || QUEUE_EMPTY(&ge->queue)) {
     return;
   }
   writer->writeStartElement(tag);
   QUEUE_FOR_EACH(&ge->queue, elem, tmp) {
-    gep = BASE_STRUCT(elem, gpx_global_entry, queue);
+    gpx_global_entry* gep = BASE_STRUCT(elem, gpx_global_entry, queue);
     writer->writeCharacters(gep->tagdata);
     /* Some tags we just output once. */
     if ((0 == strcmp(tag, "url")) ||
@@ -528,23 +527,18 @@ tag_gs_cache(const QXmlStreamAttributes& attr)
 static void
 start_something_else(const QString& el, const QXmlStreamAttributes& attr)
 {
-  char** avcp;
-  int attr_count;
-  xml_tag* new_tag;
-  fs_xml* fs_gpx;
-
   if (!fs_ptr) {
     return;
   }
 
-  new_tag = new xml_tag;
+  xml_tag* new_tag = new xml_tag;
   new_tag->tagname = el;
 
-  attr_count = attr.size();
+  int attr_count = attr.size();
   const QXmlStreamNamespaceDeclarations nsdecl = reader->namespaceDeclarations();
   const int ns_count = nsdecl.size();
   new_tag->attributes = (char**)xcalloc(sizeof(char*),2*(attr_count+ns_count)+1);
-  avcp = new_tag->attributes;
+  char** avcp = new_tag->attributes;
   for (int i = 0; i < attr_count; i++)  {
     *avcp = xstrdup(attr[i].qualifiedName().toString());
     avcp++;
@@ -573,7 +567,7 @@ start_something_else(const QString& el, const QXmlStreamAttributes& attr)
       new_tag->parent = cur_tag;
     }
   } else {
-    fs_gpx = (fs_xml*)fs_chain_find(*fs_ptr, FS_GPX);
+    fs_xml* fs_gpx = (fs_xml*)fs_chain_find(*fs_ptr, FS_GPX);
 
     if (fs_gpx && fs_gpx->tag) {
       cur_tag = fs_gpx->tag;
@@ -639,14 +633,13 @@ static void
 gpx_start(const QString& el, const QXmlStreamAttributes& attr)
 {
   int passthrough;
-  int tag;
 
   /*
    * Reset end-of-string without actually emptying/reallocing cdatastr.
    */
   cdatastr = QString();
 
-  tag = get_tag(current_tag, &passthrough);
+  int tag = get_tag(current_tag, &passthrough);
   switch (tag) {
   case tt_gpx:
     tag_gpx(attr);
@@ -874,12 +867,11 @@ gpx_end(const QString&)
   float x;
   int passthrough;
   static QDateTime gc_log_date;
-  tag_type tag;
 
   // Remove leading, trailing whitespace.
   cdatastr = cdatastr.trimmed();
 
-  tag = get_tag(current_tag, &passthrough);
+  tag_type tag = get_tag(current_tag, &passthrough);
 
   switch (tag) {
     /*
@@ -1163,7 +1155,6 @@ static void
 gpx_cdata(const QString& s)
 {
   QString* cdata;
-  xml_tag* tmp_tag;
   cdatastr += s;
 
   if (!cur_tag) {
@@ -1171,7 +1162,7 @@ gpx_cdata(const QString& s)
   }
 
   if (cur_tag->child) {
-    tmp_tag = cur_tag->child;
+    xml_tag* tmp_tag = cur_tag->child;
     while (tmp_tag->sibling) {
       tmp_tag = tmp_tag->sibling;
     }
@@ -1406,8 +1397,7 @@ gpx_read()
 static void
 write_tag_attributes(xml_tag* tag)
 {
-  char** pa;
-  pa = tag->attributes;
+  char** pa = tag->attributes;
   if (pa) {
     while (*pa) {
       writer->writeAttribute(pa[0], pa[1]);
@@ -1453,14 +1443,12 @@ fprint_xml_chain(xml_tag* tag, const Waypoint* wpt)
 
 void free_gpx_extras(xml_tag* tag)
 {
-  char** ap;
-
   while (tag) {
     if (tag->child) {
       free_gpx_extras(tag->child);
     }
     if (tag->attributes) {
-      ap = tag->attributes;
+      char** ap = tag->attributes;
 
       while (*ap) {
         xfree(*ap++);
@@ -1663,24 +1651,20 @@ gpx_write_common_description(const Waypoint* waypointp, const QString& oname)
 static void
 gpx_waypt_pr(const Waypoint* waypointp)
 {
-  QString oname;
-  fs_xml* fs_gpx;
-  garmin_fs_t* gmsd;	/* gARmIN sPECIAL dATA */
-
   writer->writeStartElement(QStringLiteral("wpt"));
   writer->writeAttribute(QStringLiteral("lat"), toString(waypointp->latitude));
   writer->writeAttribute(QStringLiteral("lon"), toString(waypointp->longitude));
 
-  oname = global_opts.synthesize_shortnames ?
-          mkshort_from_wpt(mkshort_handle, waypointp) :
-          waypointp->shortname;
+  QString oname = global_opts.synthesize_shortnames ?
+                    mkshort_from_wpt(mkshort_handle, waypointp) :
+                    waypointp->shortname;
   gpx_write_common_position(waypointp, gpxpt_waypoint);
   gpx_write_common_description(waypointp, oname);
   gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
-    fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
-    gmsd = GMSD_FIND(waypointp);
+    fs_xml* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
+    garmin_fs_t* gmsd = GMSD_FIND(waypointp); /* gARmIN sPECIAL dATA */
     if (fs_gpx) {
       if (! gmsd) {
         fprint_xml_chain(fs_gpx->tag, waypointp);
@@ -1699,7 +1683,6 @@ gpx_waypt_pr(const Waypoint* waypointp)
 static void
 gpx_track_hdr(const route_head* rte)
 {
-  fs_xml* fs_gpx;
   current_trk_head = rte;
 
   writer->writeStartElement(QStringLiteral("trk"));
@@ -1712,7 +1695,7 @@ gpx_track_hdr(const route_head* rte)
 
   if (gpx_wversion_num > 10) {
     if (!(opt_humminbirdext || opt_garminext)) {
-      fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
+      fs_xml* fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
       if (fs_gpx) {
         fprint_xml_chain(fs_gpx->tag, nullptr);
       }
@@ -1735,7 +1718,6 @@ gpx_track_hdr(const route_head* rte)
 static void
 gpx_track_disp(const Waypoint* waypointp)
 {
-  fs_xml* fs_gpx;
   bool first_in_trk = waypointp->Q.prev == &current_trk_head->waypoint_list;
 
   if (waypointp->wpt_flags.new_trkseg) {
@@ -1751,20 +1733,16 @@ gpx_track_disp(const Waypoint* waypointp)
 
   gpx_write_common_position(waypointp, gpxpt_track);
 
-  /* GPX doesn't require a name on output, so if we made one up
-   * on input, we might as well say nothing.
-   */
-  QString oname;
-  oname = global_opts.synthesize_shortnames ?
-          mkshort_from_wpt(mkshort_handle, waypointp) :
-          waypointp->shortname;
+  QString oname = global_opts.synthesize_shortnames ?
+                    mkshort_from_wpt(mkshort_handle, waypointp) :
+                    waypointp->shortname;
   gpx_write_common_description(waypointp,
                                waypointp->wpt_flags.shortname_is_synthetic ?
                                nullptr : oname);
   gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
-    fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
+    fs_xml* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
     if (fs_gpx) {
       fprint_xml_chain(fs_gpx->tag, waypointp);
     }
@@ -1795,8 +1773,6 @@ void gpx_track_pr()
 static void
 gpx_route_hdr(const route_head* rte)
 {
-  fs_xml* fs_gpx;
-
   writer->writeStartElement(QStringLiteral("rte"));
   writer->writeOptionalTextElement(QStringLiteral("name"), rte->rte_name);
   writer->writeOptionalTextElement(QStringLiteral("desc"), rte->rte_desc);
@@ -1807,7 +1783,7 @@ gpx_route_hdr(const route_head* rte)
 
   if (gpx_wversion_num > 10) {
     if (!(opt_humminbirdext || opt_garminext)) {
-      fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
+      fs_xml* fs_gpx = (fs_xml*)fs_chain_find(rte->fs, FS_GPX);
       if (fs_gpx) {
         fprint_xml_chain(fs_gpx->tag, nullptr);
       }
@@ -1832,21 +1808,19 @@ gpx_route_hdr(const route_head* rte)
 static void
 gpx_route_disp(const Waypoint* waypointp)
 {
-  QString oname;
-  fs_xml* fs_gpx;
   writer->writeStartElement(QStringLiteral("rtept"));
   writer->writeAttribute(QStringLiteral("lat"), toString(waypointp->latitude));
   writer->writeAttribute(QStringLiteral("lon"), toString(waypointp->longitude));
 
-  oname = global_opts.synthesize_shortnames ?
-          mkshort_from_wpt(mkshort_handle, waypointp) :
-          waypointp->shortname;
+  QString oname = global_opts.synthesize_shortnames ?
+                    mkshort_from_wpt(mkshort_handle, waypointp) :
+                    waypointp->shortname;
   gpx_write_common_position(waypointp, gpxpt_route);
   gpx_write_common_description(waypointp, oname);
   gpx_write_common_acc(waypointp);
 
   if (!(opt_humminbirdext || opt_garminext)) {
-    fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
+    fs_xml* fs_gpx = (fs_xml*)fs_chain_find(waypointp->fs, FS_GPX);
     if (fs_gpx) {
       fprint_xml_chain(fs_gpx->tag, waypointp);
     }

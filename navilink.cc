@@ -293,7 +293,6 @@ read_packet(unsigned type, void* payload,
             int handle_nak)
 {
   unsigned      size;
-  unsigned char* data;
   unsigned      checksum;
 
   if (read_word() != 0xa2a0) {
@@ -305,7 +304,7 @@ read_packet(unsigned type, void* payload,
     fatal(MYNAME ": Protocol error: Packet too short\n");
   }
 
-  data = (unsigned char*) xmalloc(size);
+  unsigned char* data = (unsigned char*) xmalloc(size);
 
   if (gbser_read_wait(serial_handle, data, size, SERIAL_TIMEOUT) != size) {
     fatal(MYNAME ": Read error reading %d byte payload\n", size);
@@ -468,7 +467,6 @@ serial_read_waypoints()
 {
   Waypoint**       waypts = nullptr;
   unsigned char  information[32];
-  unsigned short total;
 
   if (global_opts.masked_objective & RTEDATAMASK) {
     waypts = (Waypoint**) xcalloc(MAX_WAYPOINTS, sizeof(Waypoint*));
@@ -479,12 +477,11 @@ serial_read_waypoints()
               sizeof(information), sizeof(information),
               FALSE);
 
-  total = le_read16(information + 0);
+  unsigned short total = le_read16(information + 0);
 
   for (unsigned short start = 0; start < total; start += 32) {
     unsigned short count = total - start;
     unsigned char  payload[7];
-    unsigned char*  waypoints;
 
     if (count > 32) {
       count = 32;
@@ -496,7 +493,7 @@ serial_read_waypoints()
 
     write_packet(PID_QRY_WAYPOINTS, payload, sizeof(payload));
 
-    waypoints = (unsigned char*) xmalloc(count * 32);
+    unsigned char*  waypoints = (unsigned char*) xmalloc(count * 32);
 
     read_packet(PID_DATA, waypoints, count * 32, count * 32, FALSE);
 
@@ -544,25 +541,21 @@ static void
 serial_read_track()
 {
   unsigned char  information[32];
-  unsigned int   address;
-  unsigned short total;
-  route_head*     track;
 
   write_packet(PID_QRY_INFORMATION, nullptr, 0);
   read_packet(PID_DATA, information,
               sizeof(information), sizeof(information),
               FALSE);
 
-  address = le_read32(information + 4);
-  total = le_read16(information + 12);
+  unsigned int address = le_read32(information + 4);
+  unsigned short total = le_read16(information + 12);
 
-  track = route_head_alloc();
+  route_head*     track = route_head_alloc();
   track_add_head(track);
 
   while (total > 0) {
     unsigned short count = total < MAX_READ_TRACKPOINTS ? total : MAX_READ_TRACKPOINTS;
     unsigned char  payload[7];
-    unsigned char*  trackpoints;
 
     le_write32(payload + 0, address);
     le_write16(payload + 4, count * 32);
@@ -570,7 +563,7 @@ serial_read_track()
 
     write_packet(PID_READ_TRACKPOINTS, payload, sizeof(payload));
 
-    trackpoints = (unsigned char*) xmalloc(count * 32);
+    unsigned char*  trackpoints = (unsigned char*) xmalloc(count * 32);
 
     read_packet(PID_DATA, trackpoints, count * 32, count * 32, FALSE);
     write_packet(PID_ACK, nullptr, 0);
@@ -590,8 +583,6 @@ static void
 serial_write_track()
 {
   unsigned char  information[32];
-  unsigned int   address;
-  unsigned short total;
   unsigned char  data[7];
 
   write_packet(PID_QRY_INFORMATION, nullptr, 0);
@@ -599,8 +590,8 @@ serial_write_track()
               sizeof(information), sizeof(information),
               FALSE);
 
-  address = le_read32(information + 4);
-  total = le_read16(information + 12);
+  unsigned int address = le_read32(information + 4);
+  unsigned short total = le_read16(information + 12);
 
   le_write32(data + 0, address + total * 32);
   le_write16(data + 4, track_data_ptr - track_data);
@@ -648,19 +639,17 @@ static void
 serial_read_routes(Waypoint** waypts)
 {
   unsigned char information[32];
-  unsigned char routec;
 
   write_packet(PID_QRY_INFORMATION, nullptr, 0);
   read_packet(PID_DATA, information,
               sizeof(information), sizeof(information),
               FALSE);
 
-  routec = information[2];
+  unsigned char routec = information[2];
 
   for (unsigned char r = 0; r < routec; r++) {
     unsigned char payload[7];
     unsigned char routedata[320];
-    route_head*    route;
 
     le_write32(payload + 0, r);
     le_write16(payload + 2, 0);
@@ -669,7 +658,7 @@ serial_read_routes(Waypoint** waypts)
     write_packet(PID_QRY_ROUTE, payload, sizeof(payload));
     read_packet(PID_DATA, routedata, 64, sizeof(routedata), FALSE);
 
-    route = route_head_alloc();
+    route_head*    route = route_head_alloc();
     route->rte_num = routedata[2];
     route->rte_name = xstrdup((char*)routedata + 4);
     route_add_head(route);
@@ -722,12 +711,9 @@ serial_write_route_point(const Waypoint* waypt)
 static void
 serial_write_route_end(const route_head* route)
 {
-  unsigned char* data;
-  unsigned src;
   unsigned char id[1];
-  QString rte_name;
 
-  rte_name = route->rte_name;
+  QString rte_name = route->rte_name;
   if (rte_name == nullptr) {
     rte_name = "NO NAME";
   }
@@ -735,8 +721,8 @@ serial_write_route_end(const route_head* route)
     fatal(MYNAME ": Route %s too long\n", qPrintable(route->rte_name));
   }
 
-  src = (route_id_ptr + MAX_SUBROUTE_LENGTH) / MAX_SUBROUTE_LENGTH;
-  data = (unsigned char*) xmalloc(32 + src * 32);
+  unsigned src = (route_id_ptr + MAX_SUBROUTE_LENGTH) / MAX_SUBROUTE_LENGTH;
+  unsigned char* data = (unsigned char*) xmalloc(32 + src * 32);
 
   le_write16(data + 0, 0x2000);
   data[2] = 0;
@@ -802,7 +788,6 @@ decode_sbp_datetime_packed(const unsigned char* buffer)
    * SSSSSSMM MMMMHHHH Hdddddmm mmmmmmmm
    */
 
-  int months;
   struct tm tm;
 
   memset(&tm, 0, sizeof(tm));
@@ -811,7 +796,7 @@ decode_sbp_datetime_packed(const unsigned char* buffer)
   tm.tm_min = ((buffer[0] & 0xC0) >> 6) | ((buffer[1] & 0x0F) << 2);
   tm.tm_hour = ((buffer[1] & 0xF0) >> 4) | ((buffer[2] & 0x01) << 4);
   tm.tm_mday = (buffer[2] & 0x3E) >> 1;
-  months = ((buffer[2] & 0xC0) >> 6) | buffer[3] << 2;
+  int months = ((buffer[2] & 0xC0) >> 6) | buffer[3] << 2;
   tm.tm_mon = months % 12 - 1;
   tm.tm_year = 100 + months / 12;
 
@@ -854,18 +839,14 @@ read_datalog_info(unsigned int* seg1_addr, unsigned int* seg1_len,
                   unsigned int* seg2_addr, unsigned int* seg2_len)
 {
   unsigned char  info[16];
-  unsigned int   flash_start_addr;
-  unsigned int   flash_length;
-  unsigned int   data_start_addr;
-  unsigned int   next_blank_addr;
 
   write_packet(PID_INFO_DATALOG, nullptr, 0);
   read_packet(PID_DATA, info, sizeof(info), sizeof(info), FALSE);
 
-  flash_start_addr = le_read32(info);
-  flash_length = le_read32(info + 4);
-  data_start_addr = le_read32(info + 8);
-  next_blank_addr = le_read32(info + 12);
+  unsigned int flash_start_addr = le_read32(info);
+  unsigned int flash_length = le_read32(info + 4);
+  unsigned int data_start_addr = le_read32(info + 8);
+  unsigned int next_blank_addr = le_read32(info + 12);
 
   if (data_start_addr > next_blank_addr) {
     /* usually there are two segments to be read */
@@ -919,7 +900,6 @@ read_datalog_records(route_head* track,
 static void
 serial_read_datalog()
 {
-  route_head* track;
   unsigned int seg1_addr;
   unsigned int seg1_len;
   unsigned int seg2_addr;
@@ -927,7 +907,7 @@ serial_read_datalog()
 
   read_datalog_info(&seg1_addr, &seg1_len, &seg2_addr, &seg2_len);
 
-  track = route_head_alloc();
+  route_head* track = route_head_alloc();
   track_add_head(track);
 
   if (seg1_len) {

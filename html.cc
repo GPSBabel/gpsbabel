@@ -81,9 +81,9 @@ wr_deinit()
 static void
 html_disp(const Waypoint* wpt)
 {
-  char* cout;
   int32_t utmz;
-  double utme, utmn;
+  double utme;
+  double utmn;
   char utmzc;
 
 
@@ -93,7 +93,7 @@ html_disp(const Waypoint* wpt)
   gbfprintf(file_out, "\n<a name=\"%s\"><hr></a>\n", CSTRc(wpt->shortname));
   gbfprintf(file_out, "<table width=\"100%%\">\n");
   gbfprintf(file_out, "<tr><td><p class=\"gpsbabelwaypoint\">%s - ",(global_opts.synthesize_shortnames) ? CSTRc(mkshort_from_wpt(mkshort_handle, wpt)) : CSTRc(wpt->shortname));
-  cout = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 1);
+  char* cout = pretty_deg_format(wpt->latitude, wpt->longitude, degformat[2], " ", 1);
   gbfprintf(file_out, "%s (%d%c %6.0f %7.0f)", cout, utmz, utmzc, utme, utmn);
   xfree(cout);
   if (wpt->altitude != unknown_alt) {
