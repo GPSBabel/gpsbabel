@@ -114,7 +114,7 @@ void ArcDistanceFilter::process()
     int fileline = 0;
     char* line;
 
-    gbfile * file_in = gbfopen(arcfileopt, "r", MYNAME);
+    gbfile* file_in = gbfopen(arcfileopt, "r", MYNAME);
 
     Waypoint* arcpt1 = new Waypoint;
     Waypoint* arcpt2 = new Waypoint;
