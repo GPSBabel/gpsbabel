@@ -464,7 +464,7 @@ print_distance(const double distance, const int no_scale, const int with_tab, co
 }
 
 static void
-print_speed(double* distance, time_t* time)
+print_speed(const double* distance, const time_t* time)
 {
   double dist = *distance;
   const char* unit;

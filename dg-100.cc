@@ -307,7 +307,7 @@ process_gpsfile(uint8_t data[], route_head** track)
 }
 
 static uint16_t
-dg100_checksum(uint8_t buf[], int count)
+dg100_checksum(const uint8_t buf[], int count)
 {
   uint16_t sum = 0;
 

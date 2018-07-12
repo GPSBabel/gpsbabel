@@ -168,7 +168,7 @@ format_garmin_xt_decrypt_trk_blk(int Count, uint8_t TrackBlock[])
  * Function to Decompose track block of STRK_BLOCK_SIZE bytes
  */
 static void
-format_garmin_xt_decomp_trk_blk(uint8_t ii, uint8_t TrackBlock[], double* Ele, double* Lat, double* Lon, uint32_t* Time)
+format_garmin_xt_decomp_trk_blk(uint8_t ii, const uint8_t TrackBlock[], double* Ele, double* Lat, double* Lon, uint32_t* Time)
 {
   //printf("%d %d %d %d %d %d\n", TrackBlock[0], TrackBlock[1], TrackBlock[2], TrackBlock[3], TrackBlock[4], TrackBlock[5]);
   uint16_t PrevEleW = TrackBlock[(ii - 1) * 12 + 1 ];
@@ -212,7 +212,7 @@ format_garmin_xt_decomp_trk_blk(uint8_t ii, uint8_t TrackBlock[], double* Ele, d
  * Decompose Last Waypoint Eleveation
  */
 static void
-format_garmin_xt_decomp_last_ele(uint8_t ii, double* PrevEle, uint8_t TrackBlock[])
+format_garmin_xt_decomp_last_ele(uint8_t ii, double* PrevEle, const uint8_t TrackBlock[])
 {
   uint16_t PrevEleW = TrackBlock[ii - 1];
   PrevEleW = PrevEleW << 8;

@@ -442,7 +442,7 @@ unicsv_parse_status(const QString& str)
 }
 
 static QDateTime
-unicsv_adjust_time(const time_t time, time_t* date)
+unicsv_adjust_time(const time_t time, const time_t* date)
 {
   time_t res = time;
   if (date) {
