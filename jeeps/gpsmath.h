@@ -122,6 +122,13 @@
                                    double* lambda, double phi0, double lambda0,
                                    double E0, double N0, double a, double b);
 
+  void GPS_Math_Cassini_LatLon_To_EN(double phi, double lambda, double* E,
+                                     double* N, double phi0, double M0,
+                                     double E0, double N0, double a, double b);
+  void GPS_Math_Cassini_EN_To_LatLon(double E, double N, double* phi,
+                                     double* lambda, double phi0, double M0,
+                                     double E0, double N0, double a, double b);
+
   int32 GPS_Math_WGS84_To_ICS_EN(double lat, double lon, double* E,
                                  double* N);
   void GPS_Math_ICS_EN_To_WGS84(double E, double N, double* lat, double* lon);
