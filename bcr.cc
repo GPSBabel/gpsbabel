@@ -340,7 +340,7 @@ bcr_write_wpt(const Waypoint*)
 {
 }
 
-static void bcr_write_line(gbfile* fout, const QString& key, int* index, const QString& value)
+static void bcr_write_line(gbfile* fout, const QString& key, const int* index, const QString& value)
 {
   if (value.isEmpty()) {			/* this is mostly used in the world of windows */
     /* so we respectfully add a CR/LF on each line */
