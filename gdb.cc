@@ -844,7 +844,7 @@ read_route()
         bounds.max_alt = FREAD_DBL;
       }
       bounds.min_lat = FREAD_LATLON;
-      bounds.min_lat = FREAD_LATLON;
+      bounds.min_lon = FREAD_LATLON;
       if (FREAD_C == 1) {
         bounds.min_alt = FREAD_DBL;
       }

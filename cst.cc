@@ -254,8 +254,6 @@ cst_data_read()
         }
 
         cst_add_wpt(track, wpt);
-        wpt = nullptr;
-
 
         wpt = new Waypoint;
 
