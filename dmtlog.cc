@@ -419,10 +419,9 @@ read_CTrackFile(const int version)
     fatal(MYNAME ": Unknown or invalid track file (%d).\n", ver);
   }
 
-  int32_t ux = gbfgetint32(fin); // Unknown 2
-  ux = gbfgetint32(fin); // Unknown 3
-  ux = gbfgetint32(fin); // Unknown 4
-  (void) ux; // Silence warning.
+  (void) gbfgetint32(fin); // Unknown 2
+  (void) gbfgetint32(fin); // Unknown 3
+  (void) gbfgetint32(fin); // Unknown 4
 
   route_head* track = route_head_alloc();
   track_add_head(track);

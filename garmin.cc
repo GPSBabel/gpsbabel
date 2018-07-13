@@ -853,7 +853,6 @@ sane_GPS_Way_New()
   way->facility[0] = 0;
   way->addr[0] = 0;
   way->cross_road[0] = 0;
-  way->cross_road[0] = 0;
   way->dpth = 1.0e25f;
   way->wpt_class = 0;  // user waypoint by default.
 
