@@ -134,7 +134,6 @@ set(HEADERS
   jeeps/gpsmath.h
   jeeps/gpsmem.h
   jeeps/gpsport.h
-  jeeps/gpsproj.h
   jeeps/gpsprot.h
   jeeps/gpsread.h
   jeeps/gpsrqst.h
