@@ -861,8 +861,6 @@ static void wr_track()
 {
   const route_head* pres_track;
   const route_head* gnss_track;
-  const queue* elem;
-  const queue* tmp;
   int time_adj;
 
   // Find pressure altitude and GNSS altitude tracks
@@ -883,12 +881,11 @@ static void wr_track()
       printf(MYNAME ": adjusting time by %ds\n", time_adj);
     }
     // Iterate through waypoints in both tracks simultaneously
-    queue* melem;
-    queue* mtmp;
-    QUEUE_FOR_EACH(&gnss_track->waypoint_list, melem, mtmp) {
+    const queue* elem;
+    const queue* tmp;
+    QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
       // FIXME(NEW_Q): the excessive casting of the iterators is gross. Rethink.
-      void* vwaypointp = static_cast<void*>(melem);
-      Waypoint* wpt = static_cast<Waypoint*>(vwaypointp);
+      const Waypoint* wpt = reinterpret_cast<const Waypoint*>(elem);
       double pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime().toTime_t() + time_adj);
       wr_fix_record(wpt, pres_alt, wpt->altitude);
     }
@@ -896,18 +893,20 @@ static void wr_track()
     if (pres_track) {
       // Only the pressure altitude track was found so generate fix
       // records from it alone.
-      queue* melem;
-      queue* mtmp;
-      QUEUE_FOR_EACH(&pres_track->waypoint_list, melem, mtmp) {
-        void* vwaypointp = static_cast<void*>(melem);
-        Waypoint* wpt = static_cast<Waypoint*>(vwaypointp);
+      const queue* elem;
+      const queue* tmp;
+      QUEUE_FOR_EACH(&pres_track->waypoint_list, elem, tmp) {
+        const Waypoint* wpt = reinterpret_cast<const Waypoint*>(elem);
         wr_fix_record(wpt, wpt->altitude, unknown_alt);
       }
     } else if (gnss_track) {
       // Only the GNSS altitude track was found so generate fix
       // records from it alone.
+      const queue* elem;
+      const queue* tmp;
       QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
-        wr_fix_record((Waypoint*) elem, (int) unknown_alt, (int)((Waypoint*) elem)->altitude);
+        const Waypoint* wpt = reinterpret_cast<const Waypoint*>(elem);
+        wr_fix_record(wpt, unknown_alt, wpt->altitude);
       }
     } else {
       // No tracks found so nothing to do
