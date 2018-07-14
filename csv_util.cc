@@ -1471,7 +1471,7 @@ xcsv_data_read(void)
        * off the beginning of buff since there's no index into queue.
        */
       while (s) {
-        field_map_t* fmp = (field_map_t*) elem;
+        field_map_t* fmp = reinterpret_cast<field_map_t *>(elem);
         xcsv_parse_val(s, wpt_tmp, fmp, &trk);
 
         elem = QUEUE_NEXT(elem);
@@ -1632,7 +1632,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
      */
     int field_is_unknown = 0;
 
-    field_map_t* fmp = (field_map_t*) elem;
+    field_map_t* fmp = reinterpret_cast<field_map_t *>(elem);
 
     if ((i != 0) && !(fmp->options & OPTIONS_NODELIM)) {
       *xcsv_file.stream << write_delimiter;

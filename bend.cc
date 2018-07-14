@@ -95,7 +95,7 @@ void BendFilter::process_route(const route_head* route_orig, route_head* route_d
 
   queue* elem, *tmp;
   QUEUE_FOR_EACH(&route_orig->waypoint_list, elem, tmp) {
-    Waypoint* wpt_orig_next = (Waypoint*)elem;
+    Waypoint* wpt_orig_next = reinterpret_cast<Waypoint *>(elem);
 
     if (wpt_orig_prev == nullptr) {
       if (wpt_orig != nullptr) {
@@ -160,7 +160,7 @@ void BendFilter::process()
 {
   queue* elem, *tmp;
   QUEUE_FOR_EACH(routes_orig, elem, tmp) {
-    route_head* route_orig = (route_head*)elem;
+    route_head* route_orig = reinterpret_cast<route_head *>(elem);
     process_route_orig(route_orig);
   }
 }

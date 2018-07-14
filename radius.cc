@@ -67,7 +67,7 @@ void RadiusFilter::process()
   foreach (Waypoint* waypointp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = (Waypoint*)elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
 #endif
     double dist = gc_distance(waypointp->latitude,
                        waypointp->longitude,
@@ -105,7 +105,7 @@ void RadiusFilter::process()
   foreach (Waypoint* wp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wp = (Waypoint*) elem;
+    Waypoint* wp = reinterpret_cast<Waypoint *>(elem);
 #endif
     comp[i] = wp;
     waypt_del(wp);

@@ -1279,7 +1279,7 @@ mmo_write_rte_head_cb(const route_head* rte)
   mmo_rte = rte;
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    Waypoint* wpt = (Waypoint*)elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     QDateTime t = wpt->GetCreationTime();
     if ((t.isValid()) && (t.toTime_t() < time)) {
       time = t.toTime_t();
@@ -1323,7 +1323,7 @@ mmo_write_rte_tail_cb(const route_head* rte)
   }
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    Waypoint* wpt = (Waypoint*)elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     int objid = mmo_get_objid(wpt);
     gbfputuint16(objid & 0x7FFF, fout);
   }

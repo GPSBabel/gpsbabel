@@ -124,7 +124,7 @@ mps_wpt_q_deinit(queue* whichQueue)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(whichQueue, elem, tmp) {
-    Waypoint* q = (Waypoint*) dequeue(elem);
+    Waypoint* q = reinterpret_cast<Waypoint *>(dequeue(elem));
     delete q;
   }
 }
@@ -1118,7 +1118,7 @@ mps_routehdr_w(gbfile* mps_file, int mps_ver, const route_head* rte)
 
   if (rte->waypoint_list.next) {		/* this test doesn't do what I want i.e test if this is a valid route - treat as a placeholder for now */
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-      Waypoint* testwpt = (Waypoint*)elem;
+      Waypoint* testwpt = reinterpret_cast<Waypoint *>(elem);
       if (rte_datapoints == 0) {
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
@@ -1546,7 +1546,7 @@ mps_trackhdr_w(gbfile* mps_file, int mps_ver, const route_head* trk)
   if (trk->waypoint_list.next) {	/* this test doesn't do what I want i.e test if this is a valid track - treat as a placeholder for now */
     QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
       if (trk_datapoints == 0) {
-        Waypoint* testwpt = (Waypoint*)elem;
+        Waypoint* testwpt = reinterpret_cast<Waypoint *>(elem);
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
       trk_datapoints++;

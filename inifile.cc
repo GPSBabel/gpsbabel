@@ -176,13 +176,13 @@ inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* k
   }
 
   QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-    inifile_section_t* sec = (inifile_section_t*) elem;
+    inifile_section_t* sec = reinterpret_cast<inifile_section_t *>(elem);
 
     if (case_ignore_strcmp(sec->name, sec_name) == 0) {
       queue* elem, *tmp;
 
       QUEUE_FOR_EACH(&sec->entries, elem, tmp) {
-        inifile_entry_t* entry = (inifile_entry_t*) elem;
+        inifile_entry_t* entry = reinterpret_cast<inifile_entry_t *>(elem);
 
         if (case_ignore_strcmp(entry->key, key) == 0) {
           return entry->val;
@@ -235,13 +235,13 @@ inifile_done(inifile_t* inifile)
     queue* elem, *tmp;
 
     QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-      inifile_section_t* sec = (inifile_section_t*) elem;
+      inifile_section_t* sec = reinterpret_cast<inifile_section_t *>(elem);
 
       if (sec->ientries > 0) {
         queue* elem, *tmp;
 
         QUEUE_FOR_EACH(&sec->entries, elem, tmp) {
-          inifile_entry_t* entry = (inifile_entry_t*) elem;
+          inifile_entry_t* entry = reinterpret_cast<inifile_entry_t *>(elem);
 
           if (entry->key) {
             xfree(entry->key);
@@ -270,7 +270,7 @@ inifile_has_section(const inifile_t* inifile, const char* section)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-    inifile_section_t* sec = (inifile_section_t*) elem;
+    inifile_section_t* sec = reinterpret_cast<inifile_section_t *>(elem);
     if (case_ignore_strcmp(sec->name, section) == 0) {
       return 1;
     }

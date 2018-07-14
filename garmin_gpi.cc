@@ -766,8 +766,8 @@ write_string(const char* str, const char long_format)
 static int
 compare_wpt_cb(const queue* a, const queue* b)
 {
-  const Waypoint* wa = (Waypoint*) a;
-  const Waypoint* wb = (Waypoint*) b;
+  const Waypoint* wa = reinterpret_cast<const Waypoint *>(a);
+  const Waypoint* wb = reinterpret_cast<const Waypoint *>(b);
   return wa->shortname.compare(wb->shortname);
 }
 
@@ -794,7 +794,7 @@ wdata_free(writer_data_t* data)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    Waypoint* wpt = (Waypoint*)elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
 
     if (wpt->extra_data) {
       gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
@@ -852,7 +852,7 @@ wdata_check(writer_data_t* data)
 
   double center_lat = center_lon = 0;
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    Waypoint* wpt = (Waypoint*) elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     center_lat += wpt->latitude;
     center_lon += wpt->longitude;
   }
@@ -860,7 +860,7 @@ wdata_check(writer_data_t* data)
   center_lon /= data->ct;
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    Waypoint* wpt = (Waypoint*) elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     writer_data_t** ref;
 
     if (wpt->latitude < center_lat) {
@@ -915,7 +915,7 @@ wdata_compute_size(writer_data_t* data)
   res = 23;	/* bounds, ... of tag 0x80008 */
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
-    Waypoint* wpt = (Waypoint*) elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     garmin_fs_t* gmsd;
 
     res += 12;		/* tag/sz/sub-sz */
@@ -1081,7 +1081,7 @@ wdata_write(const writer_data_t* data)
 
   QUEUE_FOR_EACH(&data->Q, elem, tmp) {
     int s1;
-    Waypoint* wpt = (Waypoint*)elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     gpi_waypt_t* dt = (gpi_waypt_t*) wpt->extra_data;
 
     QString str = wpt->description;
@@ -1268,7 +1268,7 @@ enum_waypt_cb(const Waypoint* ref)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&wdata->Q, elem, tmp) {
-    Waypoint* cmp = (Waypoint*) elem;
+    Waypoint* cmp = reinterpret_cast<Waypoint *>(elem);
 
     /* sort out nearly equal waypoints */
     if ((compare_strings(cmp->shortname, ref->shortname) == 0) &&

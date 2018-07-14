@@ -283,7 +283,7 @@ track_disp_cb(const route_head* trk)
 
   QUEUE_FOR_EACH(&(trk->waypoint_list), elem, tmp) {
 
-    Waypoint* wpt = (Waypoint*) elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
 
     gbfprintf(fout, "XKoord%d=%0.8f\n", i, wpt->longitude);
     gbfprintf(fout, "YKoord%d=%0.8f\n", i, wpt->latitude);
@@ -313,7 +313,7 @@ route_disp_cb(const route_head* rte)
 
   QUEUE_FOR_EACH(&(rte->waypoint_list), elem, tmp) {
 
-    Waypoint* wpt = (Waypoint*) elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
 
     if (prev != nullptr) {
       draw_symbol_basics(OVL_SYMBOL_TRIANGLE, 1, (OVL_COLOR_TYP)9 /* color */, prev);

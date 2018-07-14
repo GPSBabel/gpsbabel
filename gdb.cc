@@ -100,7 +100,7 @@ gdb_flush_waypt_queue(queue* Q)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(Q, elem, tmp) {
-    Waypoint* wpt = (Waypoint*)elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     dequeue(elem);
     if (wpt->extra_data) {
 #if NEW_STRINGS
@@ -289,7 +289,7 @@ gdb_find_wayptq(const queue* Q, const Waypoint* wpt, const char exact)
   QString name = wpt->shortname;
 
   QUEUE_FOR_EACH(Q, elem, tmp) {
-    Waypoint* tmp = (Waypoint*)elem;
+    Waypoint* tmp = reinterpret_cast<Waypoint *>(elem);
     if (name.compare(tmp->shortname,Qt::CaseInsensitive) == 0) {
       if (! exact) {
         return tmp;
@@ -1395,7 +1395,7 @@ route_compute_bounds(const route_head* rte, bounds* bounds)
   queue* elem, *tmp;
   waypt_init_bounds(bounds);
   QUEUE_FOR_EACH((queue*)&rte->waypoint_list, elem, tmp) {
-    Waypoint* wpt = (Waypoint*)elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     gdb_check_waypt(wpt);
     waypt_add_to_bounds(bounds, wpt);
   }
@@ -1440,8 +1440,8 @@ write_route(const route_head* rte, const QString& rte_name)
 
   QUEUE_FOR_EACH((queue*)&rte->waypoint_list, elem, tmp) {
 
-    Waypoint* wpt = (Waypoint*)elem;
-    Waypoint* next = (Waypoint*)tmp;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* next = reinterpret_cast<Waypoint *>(tmp);
 
     index++;
     rtept_ct++;	/* increase informational number of written route points */
@@ -1542,7 +1542,7 @@ write_track(const route_head* trk, const QString& trk_name)
   FWRITE_i32(points);	/* total number of waypoints in waypoint list */
 
   QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
-    Waypoint* wpt = (Waypoint*)elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
 
     trkpt_ct++;	/* increase informational number of written route points */
 

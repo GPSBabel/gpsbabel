@@ -27,8 +27,8 @@
 
 int SortFilter::sort_comp(const queue* a, const queue* b)
 {
-  const Waypoint* x1 = (Waypoint*)a;
-  const Waypoint* x2 = (Waypoint*)b;
+  const Waypoint* x1 = reinterpret_cast<const Waypoint *>(a);
+  const Waypoint* x2 = reinterpret_cast<const Waypoint *>(b);
 
   switch (sort_mode)  {
   case sm_gcid:

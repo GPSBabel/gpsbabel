@@ -428,7 +428,7 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
                   queue* curr_elem;
                   queue* tmp_elem;
 		  QUEUE_FOR_EACH(&trk_head->waypoint_list, curr_elem, tmp_elem) {
-			  trkpt = (Waypoint*) curr_elem;
+			  trkpt = reinterpret_cast<Waypoint *>(curr_elem);
 			  trkpt->SetCreationTime(wpt_timespan_begin);
 			  wpt_timespan_begin = wpt_timespan_begin.addMSecs(ms_per_waypoint);
 		  }
@@ -1071,7 +1071,7 @@ static void kml_output_tailer(const route_head* header)
     queue* elem, *tmp;
 
     QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-      Waypoint* tpt = (Waypoint*) elem;
+      Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
       int first_in_trk = tpt->Q.prev == &header->waypoint_list;
       if (!first_in_trk && tpt->wpt_flags.new_trkseg) {
         needs_multigeometry = 1;
@@ -1108,7 +1108,7 @@ static void kml_output_tailer(const route_head* header)
     }
 
     QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-      Waypoint* tpt = (Waypoint*) elem;
+      Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
       int first_in_trk = tpt->Q.prev == &header->waypoint_list;
       if (tpt->wpt_flags.new_trkseg) {
         if (!first_in_trk) {
@@ -1698,7 +1698,7 @@ static void kml_mt_simple_array(const route_head* header,
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
 
-    Waypoint* wpt = (Waypoint*) elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
 
     switch (member) {
     case fld_power:
@@ -1729,7 +1729,7 @@ static int track_has_time(const route_head* header)
   queue* elem, *tmp;
   int points_with_time = 0;
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = (Waypoint*)elem;
+    Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
 
     if (tpt->GetCreationTime().isValid()) {
       points_with_time++;
@@ -1747,7 +1747,7 @@ static void write_as_linestring(const route_head* header)
   queue* elem, *tmp;
   kml_track_hdr(header);
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = (Waypoint*)elem;
+    Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
     kml_track_disp(tpt);
   }
   kml_track_tlr(header);
@@ -1777,7 +1777,7 @@ static void kml_mt_hdr(const route_head* header)
   kml_output_positioning(false);
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = (Waypoint*)elem;
+    Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
 
     if (tpt->GetCreationTime().isValid()) {
       QString time_string = tpt->CreationTimeXML();
@@ -1790,7 +1790,7 @@ static void kml_mt_hdr(const route_head* header)
 
   // TODO: How to handle clamped, floating, extruded, etc.?
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = (Waypoint*)elem;
+    Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
 
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement(QStringLiteral("gx:coord"),
@@ -2165,9 +2165,9 @@ kml_wr_position(Waypoint* wpt)
 
   /* In order to avoid clutter while we're sitting still, don't add
      track points if we've not moved a minimum distance from the
-     beginnning of our accumulated track. */
+     beginning of our accumulated track. */
   {
-    Waypoint* newest_posn= (Waypoint*) QUEUE_LAST(&posn_trk_head->waypoint_list);
+    Waypoint* newest_posn= reinterpret_cast<Waypoint *>QUEUE_LAST(&posn_trk_head->waypoint_list);
 
     if (radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
                            RAD(newest_posn->latitude), RAD(newest_posn->longitude))) > 50) {
@@ -2192,7 +2192,7 @@ kml_wr_position(Waypoint* wpt)
    */
   while (max_position_points &&
          (posn_trk_head->rte_waypt_ct >= max_position_points)) {
-    Waypoint* tonuke = (Waypoint*) QUEUE_FIRST(&posn_trk_head->waypoint_list);
+    Waypoint* tonuke = reinterpret_cast<Waypoint *>QUEUE_FIRST(&posn_trk_head->waypoint_list);
     track_del_wpt(posn_trk_head, tonuke);
   }
 

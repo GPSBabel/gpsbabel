@@ -135,7 +135,7 @@ common_route_by_name(queue* routes, const char* name)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(routes, elem, tmp) {
-    route_head* rte = (route_head*) elem;
+    route_head* rte = reinterpret_cast<route_head *>(elem);
     if (rte->rte_name == name) {
       return rte;
     }
@@ -217,7 +217,7 @@ route_find_waypt_by_name(route_head* rh, const char* name)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
-    Waypoint* waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
     if (waypointp->shortname == name) {
       return waypointp;
     }
@@ -228,8 +228,8 @@ route_find_waypt_by_name(route_head* rh, const char* name)
 static void
 any_route_del_wpt(route_head* rte, Waypoint* wpt, int* ct)
 {
-  if (wpt->wpt_flags.new_trkseg && wpt != (Waypoint*)QUEUE_LAST(&rte->waypoint_list)) {
-    Waypoint* wpt_next = (Waypoint*)QUEUE_NEXT(&wpt->Q);
+  if (wpt->wpt_flags.new_trkseg && wpt != reinterpret_cast<Waypoint *>QUEUE_LAST(&rte->waypoint_list)) {
+    Waypoint* wpt_next = reinterpret_cast<Waypoint *>QUEUE_NEXT(&wpt->Q);
     wpt_next->wpt_flags.new_trkseg = 1;
   }
   wpt->wpt_flags.new_trkseg = 0;
@@ -274,7 +274,7 @@ common_disp_session(const session_t* se, queue* qh, route_hdr rh, route_trl rt, 
 {
   queue* elem, *tmp;
   QUEUE_FOR_EACH(qh, elem, tmp) {
-    const route_head* rhp = (route_head*) elem;
+    const route_head* rhp = reinterpret_cast<route_head *>(elem);
     if (rhp->session == se) {
       if (rh) {
         (*rh)(rhp);
@@ -306,7 +306,7 @@ route_flush_q(queue* head)
 
   QUEUE_FOR_EACH(head, elem, tmp) {
     queue* q = dequeue(elem);
-    any_route_free((route_head*) q);
+    any_route_free(reinterpret_cast<route_head *>(q));
   }
 }
 
@@ -339,7 +339,7 @@ route_flush(queue* head)
   queue* elem, *tmp;
   QUEUE_FOR_EACH(head, elem, tmp) {
     queue* q = dequeue(elem);
-    any_route_free((route_head*)q);
+    any_route_free(reinterpret_cast<route_head *>(q));
   }
 }
 
@@ -361,7 +361,7 @@ route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src)
 
   const char RPT[] = "RPT";
   QUEUE_FOR_EACH(src, elem, tmp) {
-    route_head* rte_old = (route_head*)elem;
+    route_head* rte_old = reinterpret_cast<route_head *>(elem);
 
     route_head* rte_new = route_head_alloc();
     rte_new->rte_name = rte_old->rte_name;
@@ -371,7 +371,7 @@ route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src)
     rte_new->rte_num = rte_old->rte_num;
     any_route_add_head(rte_new, *dst);
     QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2) {
-      any_route_add_wpt(rte_new, new Waypoint(*(Waypoint*)elem2), dst_wpt_count, 0, RPT, 3);
+      any_route_add_wpt(rte_new, new Waypoint(*reinterpret_cast<Waypoint *>(elem2)), dst_wpt_count, 0, RPT, 3);
     }
     (*dst_count)++;
   }
@@ -544,7 +544,7 @@ void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
   tdata->max_alt =  unknown_alt;
 
   QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
-    Waypoint* thisw = (Waypoint*)elem;
+    Waypoint* thisw = reinterpret_cast<Waypoint *>(elem);
 
     /*
      * gcdist and heading want radians, not degrees.

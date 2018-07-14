@@ -45,7 +45,7 @@ void StackFilter::process()
     stack = tmp_elt;
     if (opt_copy) {
       QUEUE_FOR_EACH(&(stack->waypts), elem, tmp) {
-        waypt_add(new Waypoint(*(Waypoint*)elem));
+        waypt_add(new Waypoint(*reinterpret_cast<Waypoint *>(elem)));
       }
     }
 
@@ -72,7 +72,7 @@ void StackFilter::process()
     }
     if (opt_append) {
       QUEUE_FOR_EACH(&(stack->waypts), elem, tmp) {
-        waypt_add((Waypoint*)elem);
+        waypt_add(reinterpret_cast<Waypoint *>(elem));
       }
       route_append(&(stack->routes));
       route_flush(&(stack->routes));

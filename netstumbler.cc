@@ -308,7 +308,7 @@ fix_netstumbler_dupes()
   queue* elem, *tmp;
   extern queue waypt_head;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    bh->wpt = (Waypoint*) elem;
+    bh->wpt = reinterpret_cast<Waypoint *>(elem);
 #endif
     QString snptr = bh->wpt->shortname;
     QString tmp_sn = snptr.toLower();

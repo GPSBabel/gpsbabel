@@ -223,7 +223,7 @@ gpx_rm_from_global(gpx_global_entry* ge)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&ge->queue, elem, tmp) {
-    gpx_global_entry* g = (gpx_global_entry*) dequeue(elem);
+    gpx_global_entry* g = reinterpret_cast<gpx_global_entry *>(dequeue(elem));
     xfree(g->tagdata);
     xfree(g);
   }

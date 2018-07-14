@@ -158,7 +158,7 @@ void ArcDistanceFilter::process()
   foreach (Waypoint* wp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wp = (Waypoint*) elem;
+    Waypoint* wp = reinterpret_cast<Waypoint *>(elem);
 #endif
     extra_data* ed = (extra_data*) wp->extra_data;
     wp->extra_data = nullptr;
