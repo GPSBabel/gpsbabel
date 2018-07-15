@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>metadata_name</name>
+    <desc>metadata_desc</desc>
+    <author>
+      <name></name>
+      <email id="email_id" domain="email_domain"></email>
+      <link href="www.gpsbabel.org">
+        <text>author.link.text</text>
+        <type>author.link.type</type>
+      </link>
+    </author>
+    <copyright author="copyright_author">
+      <year>2018</year>
+      <license>GNU General Public License, version 2</license>
+    </copyright>
+    <link href="www.example1.com">
+      <text>link1.text</text>
+      <type>link2.type</type>
+    </link>
+    <link href="www.example2.com">
+      <text>link2.text</text>
+      <type>link2.type</type>
+    </link>
+    <time>1970-01-01T00:00:00Z</time>
+    <keywords>metadata_keywords</keywords>
+    <bounds minlat="45.450000000" minlon="-75.770000000" maxlat="45.460000000" maxlon="-75.760000000"/>
+    <extensions>
+    </extensions>
+  </metadata>
+  <wpt lat="45.450000000" lon="-75.770000000">
+    <name>WPT001</name>
+    <cmt>WPT001</cmt>
+    <desc>WPT001</desc>
+  </wpt>
+  <wpt lat="45.460000000" lon="-75.760000000">
+    <name>WPT002</name>
+    <cmt>WPT002</cmt>
+    <desc>WPT002</desc>
+  </wpt>
+</gpx>

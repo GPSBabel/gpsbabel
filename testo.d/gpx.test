@@ -44,3 +44,13 @@ compare ${REFERENCE}/unknowntag~gpx.gpx ${TMPDIR}/unknowntag.gpx
 rm -f ${TMPDIR}/unknowntag2.gpx
 gpsbabel -i gpx -f ${REFERENCE}/unknowntag2.gpx -o gpx -F ${TMPDIR}/unknowntag2.gpx
 compare ${REFERENCE}/unknowntag2~gpx.gpx ${TMPDIR}/unknowntag2.gpx
+
+# test passing of globals from input to output
+# gpx 1.0
+rm -f ${TMPDIR}/global.gpx
+gpsbabel -i gpx -f ${REFERENCE}/global.gpx -o gpx -F ${TMPDIR}/global.gpx
+compare ${REFERENCE}/global.gpx ${TMPDIR}/global.gpx
+# gpx 1.1 (only partially implemented)
+rm -f ${TMPDIR}/metadata.gpx
+gpsbabel -i gpx -f ${REFERENCE}/metadata.gpx -o gpx -F ${TMPDIR}/metadata.gpx
+compare ${REFERENCE}/metadata~gpx.gpx ${TMPDIR}/metadata.gpx
