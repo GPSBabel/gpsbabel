@@ -169,7 +169,7 @@ tr7_check_after_read_trailer_cb(const route_head* trk)
 {
   queue* elem, *tmp;
   QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
-    Waypoint* wpt = (Waypoint*)elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     if (speed_tmp == 0) {
       WAYPT_UNSET(wpt, speed);
     }

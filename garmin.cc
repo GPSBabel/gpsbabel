@@ -931,7 +931,7 @@ waypoint_prepare()
   foreach(Waypoint* wpt, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wpt = (Waypoint*) elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
 #endif
     char obuf[256];
 

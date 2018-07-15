@@ -1126,14 +1126,14 @@ mag_rteparse(char* rtemsg)
      */
 
     QUEUE_FOR_EACH(&mag_rte_head->Q, elem, tmp) {
-      mag_rte_elem* re = (mag_rte_elem*) elem;
+      mag_rte_elem* re = reinterpret_cast<mag_rte_elem *>(elem);
       queue* welem, *wtmp;
 
       /*
        * Copy route points from temp wpt queue.
        */
       QUEUE_FOR_EACH(&rte_wpt_tmp, welem, wtmp) {
-        Waypoint* waypt = (Waypoint*)welem;
+        Waypoint* waypt = reinterpret_cast<Waypoint *>(welem);
         if (waypt->shortname == re->wpt_name) {
           Waypoint* wpt = new Waypoint(*waypt);
           route_add_wpt(rte_head, wpt);
@@ -1490,7 +1490,7 @@ mag_route_trl(const route_head* rte)
 
   int thisline = i = 0;
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    Waypoint* waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
     i++;
 
     if (deficon) {

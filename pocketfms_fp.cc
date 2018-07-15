@@ -65,8 +65,8 @@ static void
 rd_deinit()
 {
   if (route != nullptr) {
-    Waypoint* head = (Waypoint*) QUEUE_FIRST(&route->waypoint_list);
-    Waypoint* tail = (Waypoint*) QUEUE_LAST(&route->waypoint_list);
+    Waypoint* head = reinterpret_cast<Waypoint *>QUEUE_FIRST(&route->waypoint_list);
+    Waypoint* tail = reinterpret_cast<Waypoint *>QUEUE_LAST(&route->waypoint_list);
     if (head != nullptr) {
       route->rte_name = head->shortname;
     }

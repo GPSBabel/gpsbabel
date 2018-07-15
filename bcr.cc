@@ -207,7 +207,7 @@ bcr_create_waypts_from_route(route_head* route)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    Waypoint* wpt = new Waypoint(*(Waypoint*) elem);
+    Waypoint* wpt = new Waypoint(*reinterpret_cast<Waypoint *>(elem));
     waypt_add(wpt);
   }
 }
@@ -385,7 +385,7 @@ bcr_route_header(const route_head* route)
 
   int i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    Waypoint* wpt = (Waypoint*) elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
 
     i++;
 
@@ -403,7 +403,7 @@ bcr_route_header(const route_head* route)
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
     i++;
-    wpt = (Waypoint*) elem;
+    wpt = reinterpret_cast<Waypoint *>(elem);
 
     bcr_wgs84_to_mercator(wpt->latitude, wpt->longitude, &north, &east);
 
@@ -431,7 +431,7 @@ bcr_route_header(const route_head* route)
     QString s2;
 
     i++;
-    wpt = (Waypoint*) elem;
+    wpt = reinterpret_cast<Waypoint *>(elem);
     QString s1 = wpt->notes;
     if (s1.isEmpty()) {
       s1 = wpt->description;

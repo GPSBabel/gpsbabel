@@ -4,7 +4,7 @@
  * Refer to Appendix 1 of
  * http://www.fai.org:81/gliding/gnss/tech_spec_gnss.asp for the
  * specification of the IGC data format.  This translation code was
- * written when the latest ammendment list for the specification was AL6.
+ * written when the latest amendment list for the specification was AL6.
  *
  * Copyright (C) 2004 Chris Jones
  *
@@ -533,8 +533,8 @@ static char* latlon2str(const Waypoint* wpt)
   static char str[18] = "";
   // We use lround here because it:
   // "Returns the integral value that is nearest to x, with halfway cases rounded away from zero."
-  // The halfway rounding cases of *printf are not precisely defined, and can vary with implmentation.
-  // We don't really care which way the halfway cases go, but we want them to go that way consistenly
+  // The halfway rounding cases of *printf are not precisely defined, and can vary with implementation.
+  // We don't really care which way the halfway cases go, but we want them to go that way consistently
   // across implementations.
   // We also try to use a minimum of floating point arithmetic to minimize accumulated fp math errors.
   long lat_milliminutes = lround(wpt->latitude * 60000.0);
@@ -590,7 +590,7 @@ static void wr_header()
   }
   // Date in header record is that of the first fix record
   date = !track ? current_time().toTime_t() :
-         ((Waypoint*) QUEUE_FIRST(&track->waypoint_list))->GetCreationTime().toTime_t();
+         (reinterpret_cast<Waypoint *>QUEUE_FIRST(&track->waypoint_list))->GetCreationTime().toTime_t();
 
   if (nullptr == (tm = gmtime(&date))) {
     fatal(MYNAME ": Bad track timestamp\n");
@@ -662,11 +662,11 @@ static void wr_task_hdr(const route_head* rte)
   }
   // See if the takeoff and landing waypoints are there or if we need to
   // generate them.
-  const Waypoint* wpt = (Waypoint*) QUEUE_LAST(&rte->waypoint_list);
+  const Waypoint* wpt = reinterpret_cast<Waypoint *>QUEUE_LAST(&rte->waypoint_list);
   if (wpt->shortname.startsWith("LANDING")) {
     num_tps--;
   }
-  wpt = (Waypoint*) QUEUE_FIRST(&rte->waypoint_list);
+  wpt = reinterpret_cast<Waypoint *>QUEUE_FIRST(&rte->waypoint_list);
   if (wpt->shortname.startsWith("TAKEOFF")) {
     have_takeoff = 1;
     num_tps--;
@@ -704,7 +704,7 @@ static void wr_task_wpt(const Waypoint* wpt)
 static void wr_task_tlr(const route_head* rte)
 {
   // If the landing waypoint is not supplied we need to generate it.
-  const Waypoint* wpt = (Waypoint*) QUEUE_LAST(&rte->waypoint_list);
+  const Waypoint* wpt = reinterpret_cast<Waypoint *>QUEUE_LAST(&rte->waypoint_list);
   QString sn = wpt->shortname;
 //  if (!wpt->shortname || strncmp(wpt->shortname, "LANDIN", 6) != 0) {
   if (sn.isEmpty() || !sn.startsWith("LANDIN")) {
@@ -742,7 +742,7 @@ static void wr_fix_record(const Waypoint* wpt, int pres_alt, int gnss_alt)
 /**
  * Attempt to align the pressure and GNSS tracks in time.
  * This is useful when trying to merge a track (lat/lon/time) recorded by a
- * GPS with a barograph (alt/time) recorded by a seperate instrument with
+ * GPS with a barograph (alt/time) recorded by a separate instrument with
  * independent clocks which are not closely synchronised.
  * @return The number of seconds to add to the GNSS track in order to align
  *         it with the pressure track.
@@ -758,44 +758,44 @@ static int correlate_tracks(const route_head* pres_track, const route_head* gnss
   // Deduce the landing time from the pressure altitude track based on
   // when we last descended to within 10m of the final track altitude.
   const queue* elem = QUEUE_LAST(&pres_track->waypoint_list);
-  double last_alt = ((Waypoint*) elem)->altitude;
+  double last_alt = (reinterpret_cast<const Waypoint *>(elem))->altitude;
   do {
     elem = elem->prev;
     if (&pres_track->waypoint_list == elem) {
       // No track left
       return 0;
     }
-    alt_diff = last_alt - ((Waypoint*) elem)->altitude;
+    alt_diff = last_alt - (reinterpret_cast<const Waypoint *>(elem))->altitude;
     if (alt_diff > 10.0) {
       // Last part of track was ascending
       return 0;
     }
   } while (alt_diff > -10.0);
-  pres_time = ((Waypoint*) elem->next)->GetCreationTime().toTime_t();
+  pres_time = (reinterpret_cast<Waypoint *>(elem->next))->GetCreationTime().toTime_t();
   if (global_opts.debug_level >= 1) {
     printf(MYNAME ": pressure landing time %s", ctime(&pres_time));
   }
   // Deduce the landing time from the GNSS altitude track based on
   // when the groundspeed last dropped below a certain level.
   elem = QUEUE_LAST(&gnss_track->waypoint_list);
-  last_alt = ((Waypoint*) elem)->altitude;
+  last_alt = (reinterpret_cast<const Waypoint *>(elem))->altitude;
   do {
-    const Waypoint* wpt = (Waypoint*) elem;
+    const Waypoint* wpt = reinterpret_cast<const Waypoint *>(elem);
     elem = elem->prev;
     if (&gnss_track->waypoint_list == elem) {
       // No track left
       return 0;
     }
     // Get a crude indication of groundspeed from the change in lat/lon
-    time_diff = wpt->GetCreationTime().toTime_t() - ((Waypoint*) elem)->GetCreationTime().toTime_t();
+    time_diff = wpt->GetCreationTime().toTime_t() - (reinterpret_cast<const Waypoint *>(elem))->GetCreationTime().toTime_t();
     speed = !time_diff ? 0 :
-            (fabs(wpt->latitude - ((Waypoint*) elem)->latitude) +
-             fabs(wpt->longitude - ((Waypoint*) elem)->longitude)) / time_diff;
+            (fabs(wpt->latitude - (reinterpret_cast<const Waypoint *>(elem))->latitude) +
+             fabs(wpt->longitude - (reinterpret_cast<const Waypoint *>(elem))->longitude)) / time_diff;
     if (global_opts.debug_level >= 2) {
       printf(MYNAME ": speed=%f\n", speed);
     }
   } while (speed < 0.00003);
-  gnss_time = ((Waypoint*) elem->next)->GetCreationTime().toTime_t();
+  gnss_time = (reinterpret_cast<Waypoint *>(elem->next))->GetCreationTime().toTime_t();
   if (global_opts.debug_level >= 1) {
     printf(MYNAME ": gnss landing time %s", ctime(&gnss_time));
   }
@@ -823,7 +823,7 @@ static double interpolate_alt(const route_head* track, time_t time)
     curr_elem = prev_elem = QUEUE_FIRST(&track->waypoint_list);
   }
   // Find the track points either side of the requested time
-  while (((Waypoint*) curr_elem)->GetCreationTime().toTime_t() < time) {
+  while ((reinterpret_cast<const Waypoint *>(curr_elem))->GetCreationTime().toTime_t() < time) {
     if (QUEUE_LAST(&track->waypoint_list) == curr_elem) {
       // Requested time later than all track points, we can't interpolate
       return unknown_alt;
@@ -832,8 +832,8 @@ static double interpolate_alt(const route_head* track, time_t time)
     curr_elem = QUEUE_NEXT(prev_elem);
   }
 
-  const Waypoint* prev_wpt = (Waypoint*) prev_elem;
-  const Waypoint* curr_wpt = (Waypoint*) curr_elem;
+  const Waypoint* prev_wpt = reinterpret_cast<const Waypoint *>(prev_elem);
+  const Waypoint* curr_wpt = reinterpret_cast<const Waypoint *>(curr_elem);
 
   if (QUEUE_FIRST(&track->waypoint_list) == curr_elem) {
     if (curr_wpt->GetCreationTime().toTime_t() == time) {
@@ -854,15 +854,13 @@ static double interpolate_alt(const route_head* track, time_t time)
 }
 
 /*
- * Pressure altitude and GNSS altitude may be provided in two seperate
+ * Pressure altitude and GNSS altitude may be provided in two separate
  * tracks.  This function attempts to merge them into one.
  */
 static void wr_track()
 {
   const route_head* pres_track;
   const route_head* gnss_track;
-  const queue* elem;
-  const queue* tmp;
   int time_adj;
 
   // Find pressure altitude and GNSS altitude tracks
@@ -883,12 +881,11 @@ static void wr_track()
       printf(MYNAME ": adjusting time by %ds\n", time_adj);
     }
     // Iterate through waypoints in both tracks simultaneously
-    queue* melem;
-    queue* mtmp;
-    QUEUE_FOR_EACH(&gnss_track->waypoint_list, melem, mtmp) {
+    const queue* elem;
+    const queue* tmp;
+    QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
       // FIXME(NEW_Q): the excessive casting of the iterators is gross. Rethink.
-      void* vwaypointp = static_cast<void*>(melem);
-      Waypoint* wpt = static_cast<Waypoint*>(vwaypointp);
+      const Waypoint* wpt = reinterpret_cast<const Waypoint*>(elem);
       double pres_alt = interpolate_alt(pres_track, wpt->GetCreationTime().toTime_t() + time_adj);
       wr_fix_record(wpt, pres_alt, wpt->altitude);
     }
@@ -896,18 +893,20 @@ static void wr_track()
     if (pres_track) {
       // Only the pressure altitude track was found so generate fix
       // records from it alone.
-      queue* melem;
-      queue* mtmp;
-      QUEUE_FOR_EACH(&pres_track->waypoint_list, melem, mtmp) {
-        void* vwaypointp = static_cast<void*>(melem);
-        Waypoint* wpt = static_cast<Waypoint*>(vwaypointp);
+      const queue* elem;
+      const queue* tmp;
+      QUEUE_FOR_EACH(&pres_track->waypoint_list, elem, tmp) {
+        const Waypoint* wpt = reinterpret_cast<const Waypoint*>(elem);
         wr_fix_record(wpt, wpt->altitude, unknown_alt);
       }
     } else if (gnss_track) {
       // Only the GNSS altitude track was found so generate fix
       // records from it alone.
+      const queue* elem;
+      const queue* tmp;
       QUEUE_FOR_EACH(&gnss_track->waypoint_list, elem, tmp) {
-        wr_fix_record((Waypoint*) elem, (int) unknown_alt, (int)((Waypoint*) elem)->altitude);
+        const Waypoint* wpt = reinterpret_cast<const Waypoint*>(elem);
+        wr_fix_record(wpt, unknown_alt, wpt->altitude);
       }
     } else {
       // No tracks found so nothing to do

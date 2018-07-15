@@ -202,7 +202,7 @@ ggv_log_track_head_cb(const route_head* trk)
   QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
     double  course = 0, speed = 0;
     struct tm tm;
-    Waypoint* wpt = (Waypoint*)elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     double secs = 0;
 
     int latint = wpt->latitude;

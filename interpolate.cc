@@ -51,7 +51,7 @@ void InterpolateFilter::process()
   }
 
   QUEUE_FOR_EACH(backuproute, elem, tmp) {
-    route_head* rte_old = (route_head*)elem;
+    route_head* rte_old = reinterpret_cast<route_head *>(elem);
 
     route_head* rte_new = route_head_alloc();
     rte_new->rte_name = rte_old->rte_name;
@@ -65,7 +65,7 @@ void InterpolateFilter::process()
     }
     bool first = 1;
     QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2) {
-      Waypoint* wpt = (Waypoint*)elem2;
+      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem2);
       if (first) {
         first = 0;
       } else {

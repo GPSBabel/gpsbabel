@@ -192,7 +192,7 @@ finalize_tracks(void)
 
   int index = 0;
   QUEUE_FOR_EACH(&trackpts, elem, tmp) {
-    list[index] = (Waypoint*)elem;
+    list[index] = reinterpret_cast<Waypoint *>(elem);
     dequeue(elem);
     index++;
   }

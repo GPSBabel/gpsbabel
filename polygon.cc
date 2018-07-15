@@ -252,7 +252,7 @@ void PolygonFilter::process()
       foreach (Waypoint* waypointp, waypt_list) {
 #else
       QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-        waypointp = (Waypoint*)elem;
+        waypointp = reinterpret_cast<Waypoint *>(elem);
 #endif
         if (waypointp->extra_data) {
           ed = (extra_data*) waypointp->extra_data;
@@ -301,7 +301,7 @@ void PolygonFilter::process()
   foreach (Waypoint* wp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wp = (Waypoint*) elem;
+    Waypoint* wp = reinterpret_cast<Waypoint *>(elem);
 #endif
     ed = (extra_data*) wp->extra_data;
     wp->extra_data = nullptr;

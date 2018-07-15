@@ -588,7 +588,7 @@ gtm_read()
   for (i = 0; i != ts_count && i != real_tr_count; i++) {
     trk_head->rte_name = fread_string(file_in);
     fread_discard(file_in, 12);
-    trk_head = (route_head*)QUEUE_NEXT(&trk_head->Q);
+    trk_head = reinterpret_cast<route_head *>QUEUE_NEXT(&trk_head->Q);
   }
 
   /* Routes */

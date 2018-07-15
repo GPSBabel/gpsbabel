@@ -53,7 +53,7 @@ void PositionFilter::position_runqueue(queue* q, int nelems, int qtype)
     comp[i] = waypointp;
 #else
   QUEUE_FOR_EACH(q, elem, tmp) {
-    comp[i] = (Waypoint*)elem;
+    comp[i] = reinterpret_cast<Waypoint *>(elem);
 #endif
     qlist[i] = 0;
     i++;

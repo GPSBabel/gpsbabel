@@ -260,7 +260,7 @@ waypt_compute_bounds(bounds* bounds)
 #else
   queue* elem, *tmp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
 #endif
     waypt_add_to_bounds(bounds, waypointp);
   }
@@ -275,7 +275,7 @@ find_waypt_by_name(const QString& name)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
 #endif
     if (waypointp->shortname == name) {
       return waypointp;
@@ -308,7 +308,7 @@ waypt_flush(queue* head)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(head, elem, tmp) {
-    Waypoint* q = (Waypoint*) dequeue(elem);
+    Waypoint* q = reinterpret_cast<Waypoint *>(dequeue(elem));
     delete q;
     if (head == &waypt_head) {
       waypt_ct--;
@@ -351,7 +351,7 @@ waypt_backup(signed int* count, queue** head_bak)
   waypt_ct = 0;
 
   QUEUE_FOR_EACH(qbackup, elem, tmp) {
-    wpt = (Waypoint*)elem;
+    wpt = reinterpret_cast<Waypoint *>(elem);
     waypt_add(new Waypoint(*wpt));
     no++;
   }

@@ -1616,7 +1616,7 @@ tpo_track_hdr(const route_head* rte)
   unsigned char unknown1[] = { 0xFF, 0x00, 0x00, 0x00 };
   unsigned char bounding_box[8] = { 0x00, 0x80, 0x00, 0x80, 0xFF, 0x7F, 0xFF, 0x7F };
 
-  Waypoint* first_track_waypoint = (Waypoint*) QUEUE_FIRST(&rte->waypoint_list);
+  Waypoint* first_track_waypoint = reinterpret_cast<Waypoint *>QUEUE_FIRST(&rte->waypoint_list);
 
   /* zoom level 1-5 visibility flags */
   gbfwrite(visibility_flags, 1, sizeof(visibility_flags), tpo_file_out);

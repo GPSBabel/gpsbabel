@@ -156,7 +156,7 @@ void DuplicateFilter::process(void)
     bh->wpt = waypointp;
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    bh->wpt = (Waypoint*) elem;
+    bh->wpt = reinterpret_cast<Waypoint *>(elem);
 #endif
     bh->index = i;
     i ++;

@@ -443,7 +443,7 @@ data_write()
   foreach(Waypoint* waypointp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
 #endif
     bh->wpt = waypointp;
     if (waypointp->longitude > maxlon) {

@@ -126,7 +126,7 @@ xcsv_destroy_style(void)
 
   /* destroy the ifields */
   QUEUE_FOR_EACH(&xcsv_file.ifield, elem, tmp) {
-    fmp = (field_map_t*) elem;
+    fmp = reinterpret_cast<field_map_t *>(elem);
     if (fmp->key) {
       xfree(fmp->key);
     }
@@ -144,7 +144,7 @@ xcsv_destroy_style(void)
   /* destroy the ofields, if they are not re-mapped to ifields. */
   if (xcsv_file.ofield != &xcsv_file.ifield) {
     QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
-      fmp = (field_map_t*) elem;
+      fmp = reinterpret_cast<field_map_t *>(elem);
       if (fmp->key) {
         xfree(fmp->key);
       }

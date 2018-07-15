@@ -841,7 +841,7 @@ pcmpt_parse(char* ibuf)
     route_head* trk_head = route_head_alloc();
     track_add_head(trk_head);
     QUEUE_FOR_EACH(&pcmpt_head, elem, tmp) {
-      Waypoint* wpt = (Waypoint*) dequeue(elem);
+      Waypoint* wpt = reinterpret_cast<Waypoint *>(dequeue(elem));
       nmea_add_wpt(wpt, trk_head);
     }
   }
@@ -867,7 +867,7 @@ nmea_fix_timestamps(route_head* track)
     time_t delta_tm = mkgmtime(&opt_tm);
 
     QUEUE_FOR_EACH(&track->waypoint_list, elem, temp) {
-      Waypoint* wpt = (Waypoint*)elem;
+      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
 
       wpt->creation_time += delta_tm;
       if ((prev != nullptr) && (prev->creation_time > wpt->creation_time)) {
@@ -887,7 +887,7 @@ nmea_fix_timestamps(route_head* track)
     /* go backward through the track and complete timestamps */
 
     for (queue* elem = QUEUE_LAST(&track->waypoint_list); elem != &track->waypoint_list; elem=elem->prev) {
-      Waypoint* wpt = (Waypoint*)elem;
+      Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
 
       if (wpt->wpt_flags.fmt_use != 0) {
         wpt->wpt_flags.fmt_use = 0; /* reset flag */

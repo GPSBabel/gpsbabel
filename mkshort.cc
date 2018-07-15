@@ -111,7 +111,7 @@ is_unique(mkshort_handle_imp* h, char* name)
 
   int hash = hash_string(name);
   QUEUE_FOR_EACH(&h->namelist[hash], e, t) {
-    uniq_shortname* z = (uniq_shortname*) e;
+    uniq_shortname* z = reinterpret_cast<uniq_shortname *>(e);
     if (0 == case_ignore_strcmp(z->orig_shortname, name)) {
       return z;
     }
@@ -167,7 +167,7 @@ mkshort_del_handle(short_handle* h)
   for (int i = 0; i < PRIME; i++) {
     queue* e, *t;
     QUEUE_FOR_EACH(&hdr->namelist[i], e, t) {
-      uniq_shortname* s = (uniq_shortname*) e;
+      uniq_shortname* s = reinterpret_cast<uniq_shortname *>(e);
 #if 0
       if (global_opts.verbose_status >= 2 && s->conflictctr) {
         fprintf(stderr, "%d Output name conflicts: '%s'\n",
