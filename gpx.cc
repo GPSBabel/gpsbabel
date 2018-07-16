@@ -190,18 +190,18 @@ typedef enum  {
  * which is the default if maxOccurs is not in the xsd.
  * The only gpx 1.1 metadata that has a maxOccurs limit > one is link.
  */
-static
-struct gpx_global {
-  QStringList* name;
-  QStringList* desc;
-  QStringList* author;
-  QStringList* email;
-  QStringList* url;
-  QStringList* urlname;
-  QStringList* keywords;
-  QList<UrlLink>* link;
+struct GpxGlobal {
+  QStringList name;
+  QStringList desc;
+  QStringList author;
+  QStringList email;
+  QStringList url;
+  QStringList urlname;
+  QStringList keywords;
+  QList<UrlLink> link;
   /* time and bounds aren't here; they're recomputed. */
-}* gpx_global ;
+};
+static GpxGlobal* gpx_global;
 
 static void
 gpx_add_to_global(QStringList& ge, const QString& s)
@@ -246,18 +246,18 @@ gpx_reset_short_handle()
 }
 
 static void
-gpx_write_gdata(const QStringList& ge, const char* tag)
+gpx_write_gdata(const QStringList& ge, const QString& tag)
 {
   if (!ge.isEmpty()) {
     writer->writeStartElement(tag);
     // TODO: this seems wrong, it is concatenating element content
     // from multiple illegally repeated elements into one.
     // However, this does result in output that complies with the schema.
-    foreach (const QString& str, ge) {
+    for (const auto& str : ge) {
       writer->writeCharacters(str);
       /* Some tags we just output once. */
-      if ((0 == strcmp(tag, "url")) ||
-          (0 == strcmp(tag, "email"))) {
+      if ((tag == QLatin1String("url")) ||
+          (tag == QLatin1String("email"))) {
         break;
       }
     }
@@ -867,28 +867,28 @@ gpx_end(const QString&)
    * First, the tags that are file-global.
    */
   case tt_name:
-    gpx_add_to_global(*gpx_global->name, cdatastr);
+    gpx_add_to_global(gpx_global->name, cdatastr);
     break;
   case tt_desc:
-    gpx_add_to_global(*gpx_global->desc, cdatastr);
+    gpx_add_to_global(gpx_global->desc, cdatastr);
     break;
   case tt_author:
-    gpx_add_to_global(*gpx_global->author, cdatastr);
+    gpx_add_to_global(gpx_global->author, cdatastr);
     break;
   case tt_email:
-    gpx_add_to_global(*gpx_global->email, cdatastr);
+    gpx_add_to_global(gpx_global->email, cdatastr);
     break;
   case tt_url:
-    gpx_add_to_global(*gpx_global->url, cdatastr);
+    gpx_add_to_global(gpx_global->url, cdatastr);
     break;
   case tt_urlname:
-    gpx_add_to_global(*gpx_global->urlname, cdatastr);
+    gpx_add_to_global(gpx_global->urlname, cdatastr);
     break;
   case tt_keywords:
-    gpx_add_to_global(*gpx_global->keywords, cdatastr);
+    gpx_add_to_global(gpx_global->keywords, cdatastr);
     break;
   case tt_link:
-    (*gpx_global->link).push_back(UrlLink(link_url, link_text, link_type));
+    (gpx_global->link).push_back(UrlLink(link_url, link_text, link_type));
     link_type.clear();
     link_text.clear();
     link_url.clear();
@@ -1188,15 +1188,7 @@ gpx_rd_init(const QString& fname)
   cdatastr = QString();
 
   if (nullptr == gpx_global) {
-    gpx_global = (struct gpx_global*) xcalloc(sizeof(*gpx_global), 1);
-    gpx_global->name = new QStringList;
-    gpx_global->desc = new QStringList;
-    gpx_global->author = new QStringList;
-    gpx_global->email = new QStringList;
-    gpx_global->url = new QStringList;
-    gpx_global->urlname = new QStringList;
-    gpx_global->keywords = new QStringList;
-    gpx_global->link = new QList<UrlLink>;
+    gpx_global = new GpxGlobal;
   }
 
   fs_ptr = nullptr;
@@ -1283,15 +1275,15 @@ gpx_wr_init(const QString& fname)
     writer->writeStartElement(QStringLiteral("metadata"));
   }
   if (gpx_global) {
-    gpx_write_gdata(*gpx_global->name, "name");
-    gpx_write_gdata(*gpx_global->desc, "desc");
+    gpx_write_gdata(gpx_global->name, "name");
+    gpx_write_gdata(gpx_global->desc, "desc");
   }
   /* In GPX 1.1, author changed from a string to a PersonType.
    * since it's optional, we just drop it instead of rewriting it.
    */
   if (gpx_wversion_num < 11) {
     if (gpx_global) {
-      gpx_write_gdata(*gpx_global->author, "author");
+      gpx_write_gdata(gpx_global->author, "author");
     }
   } // else {
   // TODO: gpx 1.1 author goes here.
@@ -1299,14 +1291,14 @@ gpx_wr_init(const QString& fname)
   /* In GPX 1.1 email, url, urlname aren't allowed. */
   if (gpx_wversion_num < 11) {
     if (gpx_global) {
-      gpx_write_gdata(*gpx_global->email, "email");
-      gpx_write_gdata(*gpx_global->url, "url");
-      gpx_write_gdata(*gpx_global->urlname, "urlname");
+      gpx_write_gdata(gpx_global->email, "email");
+      gpx_write_gdata(gpx_global->url, "url");
+      gpx_write_gdata(gpx_global->urlname, "urlname");
     }
   } else {
     if (gpx_global) {
       // TODO: gpx 1.1 copyright goes here
-      foreach (const UrlLink& l, *gpx_global->link) {
+      for (const auto& l : gpx_global->link) {
         writer->writeStartElement(QStringLiteral("link"));
         writer->writeAttribute(QStringLiteral("href"), l.url_);
         writer->writeOptionalTextElement(QStringLiteral("text"), l.url_link_text_);
@@ -1320,7 +1312,7 @@ gpx_wr_init(const QString& fname)
   writer->writeTextElement(QStringLiteral("time"), now.toPrettyString());
 
   if (gpx_global) {
-    gpx_write_gdata(*gpx_global->keywords, "keywords");
+    gpx_write_gdata(gpx_global->keywords, "keywords");
   }
 
   gpx_write_bounds();
@@ -1491,7 +1483,7 @@ write_gpx_url(const Waypoint* waypointp)
   }
 
   if (gpx_wversion_num > 10) {
-    foreach (const UrlLink& l, waypointp->GetUrlLinks()) {
+    for (const auto& l : waypointp->GetUrlLinks()) {
       writer->writeStartElement(QStringLiteral("link"));
       writer->writeAttribute(QStringLiteral("href"), l.url_);
       writer->writeOptionalTextElement(QStringLiteral("text"), l.url_link_text_);
@@ -1900,21 +1892,6 @@ gpx_write()
   writer->writeEndElement(); // Close gpx tag.
 }
 
-
-static void
-gpx_free_gpx_global()
-{
-  delete gpx_global->name;
-  delete gpx_global->desc;
-  delete gpx_global->author;
-  delete gpx_global->email;
-  delete gpx_global->url;
-  delete gpx_global->urlname;
-  delete gpx_global->keywords;
-  delete gpx_global->link;
-  xfree(gpx_global);
-}
-
 static void
 gpx_exit()
 {
@@ -1922,10 +1899,8 @@ gpx_exit()
 
   gpx_namespace_attribute.clear();
 
-  if (gpx_global) {
-    gpx_free_gpx_global();
-    gpx_global = nullptr;
-  }
+  delete gpx_global;
+  gpx_global = nullptr;
 }
 
 static
