@@ -189,6 +189,8 @@ typedef enum  {
  * Note that all gpx 1.0 "global data" has a maxOccurs limit of one,
  * which is the default if maxOccurs is not in the xsd.
  * The only gpx 1.1 metadata that has a maxOccurs limit > one is link.
+ * However, multiple gpx files may be read, and their global/metadata
+ * combined, by this implementation.
  */
 struct GpxGlobal {
   QStringList name;
@@ -201,7 +203,7 @@ struct GpxGlobal {
   QList<UrlLink> link;
   /* time and bounds aren't here; they're recomputed. */
 };
-static GpxGlobal* gpx_global;
+static GpxGlobal* gpx_global = nullptr;
 
 static void
 gpx_add_to_global(QStringList& ge, const QString& s)
@@ -250,9 +252,11 @@ gpx_write_gdata(const QStringList& ge, const QString& tag)
 {
   if (!ge.isEmpty()) {
     writer->writeStartElement(tag);
-    // TODO: this seems wrong, it is concatenating element content
-    // from multiple illegally repeated elements into one.
-    // However, this does result in output that complies with the schema.
+    // TODO: This seems questionable.
+    // We concatenate element content from multiple elements,
+    // possibly from muliple input files, into one element.
+    // This is necessary to comply with the schema as
+    // these elements have maxOccurs limits of 1.
     for (const auto& str : ge) {
       writer->writeCharacters(str);
       /* Some tags we just output once. */
