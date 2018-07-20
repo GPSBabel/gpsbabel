@@ -344,10 +344,8 @@ exif_load_apps()
   ExifApp* exif_app = nullptr;
 
   while (! gbfeof(fin)) {
-    auto* app = new ExifApp;
-
-    exif_apps->append(*app);
-    app = &exif_apps->last();
+    exif_apps->append(ExifApp());
+    ExifApp* app = &exif_apps->last();
     app->fcache = gbfopen(nullptr, "wb", MYNAME);
 
     app->marker = gbfgetuint16(fin);
@@ -377,9 +375,8 @@ exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, gbsize_t offs,
 {
   gbfile* fin = app->fexif;
 
-  auto* ifd = new ExifIfd;
-  app->ifds.append(*ifd);
-  ifd = &app->ifds.last();
+  app->ifds.append(ExifIfd());
+  ExifIfd* ifd = &app->ifds.last();
   ifd->nr = ifd_nr;
 
   gbfseek(fin, offs, SEEK_SET);
@@ -417,7 +414,8 @@ exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, gbsize_t offs,
   }
 
   for (uint16_t i = 0; i < ifd->count; i++) {
-    auto* tag = new ExifTag;
+    ifd->tags.append(ExifTag());
+    ExifTag* tag = &ifd->tags.last();
 #ifdef EXIF_DBG
     offs = gbftell(fin);
     tag->offs = offs;
@@ -449,8 +447,6 @@ exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, gbsize_t offs,
         *inter_ifd_ofs = tag->value;
       }
     }
-
-    ifd->tags.append(*tag);
   }
 
 #ifdef EXIF_DBG
@@ -922,10 +918,9 @@ exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, con
 
   ExifIfd* ifd = exif_find_ifd(exif_app, ifd_nr);
   if (ifd == nullptr) {
-    ifd = new ExifIfd;
-    ifd->nr = ifd_nr;
-    exif_app->ifds.append(*ifd);
+    exif_app->ifds.append(ExifIfd());
     ifd = &exif_app->ifds.last();
+    ifd->nr = ifd_nr;
     
   } else {
     tag = exif_find_tag(exif_app, ifd_nr, tag_id);
@@ -944,7 +939,8 @@ exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, con
       return nullptr;
     }
 
-    tag = new ExifTag;
+    ifd->tags.append(ExifTag());
+    tag = &ifd->tags.last();
 
     tag->id = tag_id;
     tag->type = type;
@@ -953,8 +949,6 @@ exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, con
     tag->data.reset(reinterpret_cast<char*>(xcalloc((size < 4) ? 4 : size, 1)), xfree);
     ifd->count++;
 
-    ifd->tags.append(*tag);
-    tag = &ifd->tags.last();
   } else {
     if (size == 0) {	/* remove this element */
       ifd->count--;
