@@ -4,7 +4,7 @@ compare ${REFERENCE}/exif-dat.csv ${TMPDIR}/exif-dat.csv
 
 # write test
 cp ${REFERENCE}/20180717_080125.jpg ${TMPDIR}/20180717_080125.jpg
-gpsbabel -i unicsv -f ${REFERENCE}/20180717_080125.csv -o exif -F ${TMPDIR}/20180717_080125.jpg
+gpsbabel -i unicsv -f ${REFERENCE}/20180717_080125.csv -o exif,name=20180717_080125 -F ${TMPDIR}/20180717_080125.jpg
 bincompare ${REFERENCE}/20180717_080125.jpg.jpg ${TMPDIR}/20180717_080125.jpg.jpg
 
 # write test with IFD0 and IFD1 present, which triggers some "next" code.
