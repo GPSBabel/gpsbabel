@@ -38,7 +38,7 @@ struct inifile_t {
 inifile_t* inifile_init(const QString& filename, const char* myname);
 void inifile_done(inifile_t* inifile);
 
-int inifile_has_section(const inifile_t* inifile, const char* section);
+bool inifile_has_section(const inifile_t* inifile, const char* section);
 
 /*
      inifile_readstr:

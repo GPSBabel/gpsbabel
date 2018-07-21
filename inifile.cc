@@ -165,11 +165,11 @@ inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* k
     return nullptr;
   }
 
-  for (auto sec : inifile->secs) {
+  for (const auto& sec : inifile->secs) {
 
     if (case_ignore_strcmp(sec.name.data(), sec_name) == 0) {
 
-      for (auto entry : sec.entries) {
+      for (const auto& entry : sec.entries) {
 
         if (case_ignore_strcmp(entry.key.data(), key) == 0) {
           return entry.val.data();
@@ -217,15 +217,15 @@ inifile_done(inifile_t* inifile)
   gbinipathname.clear();
 }
 
-int
+bool
 inifile_has_section(const inifile_t* inifile, const char* section)
 {
-  for (auto sec : inifile->secs) {
+  for (const auto& sec : inifile->secs) {
     if (case_ignore_strcmp(sec.name.data(), section) == 0) {
-      return 1;
+      return true;
     }
   }
-  return 0;
+  return false;
 }
 
 /*
