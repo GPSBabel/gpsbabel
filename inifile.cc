@@ -22,28 +22,24 @@
 #include "inifile.h"
 #include <QtCore/QDir>
 #include <QtCore/QFile>
+#include <QtCore/QList>
+#include <QtCore/QSharedPointer>
 #include <cstdio>
 #include <cstdlib>
 
 #define MYNAME "inifile"
 
-typedef struct inifile_entry_s {
-  queue Q;
-  char* key;
-  char* val;
-} inifile_entry_t;
+struct inifile_entry_t {
+  QSharedPointer<char> key;
+  QSharedPointer<char> val;
+};
 
-typedef struct inifile_section_s {
-  queue Q;
-  char* name;
-  int ientries;
-  queue entries;
-} inifile_section_t;
+struct inifile_section_t {
+  QSharedPointer<char> name;
+  QList<inifile_entry_t> entries;
+};
 
 /* internal procedures */
-
-#define START_BUFSIZE 257
-#define DELTA_BUFSIZE 128
 
 #define GPSBABEL_INIFILE "gpsbabel.ini"
 #define GPSBABEL_SUBDIR ".gpsbabel"
@@ -109,7 +105,7 @@ inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
     char* cin = lrtrim(buf);
 
     if ((line++ == 0) && fin->unicode) {
-      inifile->unicode = 1;
+      inifile->unicode = true;
     }
 
     if (*cin == '\0') {
@@ -132,21 +128,17 @@ inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
               qPrintable(gbinipathname));
       }
 
-      sec = (inifile_section_t*) xcalloc(1, sizeof(*sec));
-
-      sec->name = xstrdup(cin);
-      QUEUE_INIT(&sec->entries);
-      ENQUEUE_TAIL(&inifile->secs, &sec->Q);
-      inifile->isecs++;
+      inifile->secs.append(inifile_section_t());
+      sec = &inifile->secs.last();
+      sec->name.reset(xstrdup(cin), xfree);
     } else {
       if (sec == nullptr) {
         fatal("%s: missing section header in '%s'.\n", myname,
               qPrintable(gbinipathname));
       }
 
-      inifile_entry_t* entry = (inifile_entry_t*) xcalloc(1, sizeof(*entry));
-      ENQUEUE_TAIL(&sec->entries, &entry->Q);
-      sec->ientries++;
+      sec->entries.append(inifile_entry_t());
+      inifile_entry_t* entry = &sec->entries.last();
 
       char* cx = strchr(cin, '=');
       if (cx != nullptr) {
@@ -154,13 +146,13 @@ inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
         cin = lrtrim(cin);
       }
 
-      entry->key = xstrdup(cin);
+      entry->key.reset(xstrdup(cin), xfree);
 
       if (cx != nullptr) {
         cx = lrtrim(++cx);
-        entry->val = xstrdup(cx);
+        entry->val.reset(xstrdup(cx), xfree);
       } else {
-        entry->val = xstrdup("");
+        entry->val.reset(xstrdup(""), xfree);
       }
     }
   }
@@ -169,23 +161,18 @@ inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
 static char*
 inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* key)
 {
-  queue* elem, *tmp;
-
   if (inifile == nullptr) {
     return nullptr;
   }
 
-  QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-    inifile_section_t* sec = reinterpret_cast<inifile_section_t *>(elem);
+  for (auto sec : inifile->secs) {
 
-    if (case_ignore_strcmp(sec->name, sec_name) == 0) {
-      queue* elem, *tmp;
+    if (case_ignore_strcmp(sec.name.data(), sec_name) == 0) {
 
-      QUEUE_FOR_EACH(&sec->entries, elem, tmp) {
-        inifile_entry_t* entry = reinterpret_cast<inifile_entry_t *>(elem);
+      for (auto entry : sec.entries) {
 
-        if (case_ignore_strcmp(entry->key, key) == 0) {
-          return entry->val;
+        if (case_ignore_strcmp(entry.key.data(), key) == 0) {
+          return entry.val.data();
         }
       }
     }
@@ -216,8 +203,7 @@ inifile_init(const QString& filename, const char* myname)
     fin = gbfopen(filename, "rb", myname);
   }
 
-  inifile_t* result = (inifile_t*) xcalloc(1, sizeof(*result));
-  QUEUE_INIT(&result->secs);
+  auto* result = new inifile_t;
   inifile_load_file(fin, result, myname);
 
   gbfclose(fin);
@@ -227,51 +213,15 @@ inifile_init(const QString& filename, const char* myname)
 void
 inifile_done(inifile_t* inifile)
 {
-  if (inifile == nullptr) {
-    return;
-  }
-
-  if (inifile->isecs > 0) {
-    queue* elem, *tmp;
-
-    QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-      inifile_section_t* sec = reinterpret_cast<inifile_section_t *>(elem);
-
-      if (sec->ientries > 0) {
-        queue* elem, *tmp;
-
-        QUEUE_FOR_EACH(&sec->entries, elem, tmp) {
-          inifile_entry_t* entry = reinterpret_cast<inifile_entry_t *>(elem);
-
-          if (entry->key) {
-            xfree(entry->key);
-          }
-          if (entry->val) {
-            xfree(entry->val);
-          }
-          dequeue(elem);
-          xfree(entry);
-        }
-      }
-      dequeue(elem);
-      if (sec->name) {
-        xfree(sec->name);
-      }
-      xfree(sec);
-    }
-    xfree(inifile);
-  }
+  delete inifile;
   gbinipathname.clear();
 }
 
 int
 inifile_has_section(const inifile_t* inifile, const char* section)
 {
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-    inifile_section_t* sec = reinterpret_cast<inifile_section_t *>(elem);
-    if (case_ignore_strcmp(sec->name, section) == 0) {
+  for (auto sec : inifile->secs) {
+    if (case_ignore_strcmp(sec.name.data(), section) == 0) {
       return 1;
     }
   }

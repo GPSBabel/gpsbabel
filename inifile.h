@@ -22,12 +22,13 @@
 #define HAVE_INIFILE_H
 
 #include "defs.h"
+#include <QtCore/QList>
 
-typedef struct inifile_s {
-  int isecs;			/* number of sections */
-  queue secs;			/* sections */
-  uint8_t unicode:1;
-} inifile_t;
+struct inifile_section_t;
+struct inifile_t {
+  QList<inifile_section_t> secs;			/* sections */
+  bool unicode{false};
+};
 
 /*
 	inifile_init:
