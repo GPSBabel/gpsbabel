@@ -211,8 +211,7 @@ xcsv_get_char_from_constant_table(const char* key)
 static void
 xcsv_parse_style_line(char* sbuff)
 {
-  int i, linecount = 0;
-  char* s, *sp;
+  char* sp;
   char* p;
   const char* cp;
   const char* key, *val, *pfc;
@@ -381,8 +380,8 @@ xcsv_parse_style_line(char* sbuff)
 
                                   QStringList fields = QString(&sbuff[6]).split(",", QString::KeepEmptyParts);
                                   // Note: simplifieid() has to run after split().
-                                  if (fields.size() != 3) {
-                                    Fatal() << "Invalied IFIELD line: " << sbuff;
+                                  if (fields.size() < 3) {
+                                    Fatal() << "Invalid IFIELD line: " << sbuff;
                                   }
 
                                   // The key ("LAT_DIR") should never contain quotes.
@@ -420,8 +419,8 @@ xcsv_parse_style_line(char* sbuff)
 
                                   QStringList fields = QString(&sbuff[6]).split(",", QString::KeepEmptyParts);
                                   // Note: simplifieid() has to run after split().
-                                  if (fields.size() != 3) {
-                                    Fatal() << "Invalied IFIELD line: " << sbuff;
+                                  if (fields.size() < 3) {
+                                    Fatal() << "Invalid OFIELD line: " << sbuff;
                                   }
 
                                   // The key ("LAT_DIR") should never contain quotes.
