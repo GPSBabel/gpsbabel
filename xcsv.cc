@@ -25,6 +25,7 @@
 
 #include <QtCore/QTextCodec>
 #include <QtCore/QTextStream>
+#include <QtCore/QDebug>
 
 #include "csv_util.h"
 #include "defs.h"
@@ -120,7 +121,7 @@ xcsv_destroy_style(void)
    */
 
   /* destroy the prologue */
-  xcsv_file.epilogue.clear();
+  xcsv_file.prologue.clear();
 
   /* destroy the epilogue */
   xcsv_file.epilogue.clear();
@@ -188,16 +189,23 @@ xcsv_destroy_style(void)
   xcsv_file.is_internal = internal;
 }
 
+// Given a keyword of "COMMASPACE", return ", ".
 const char*
-xcsv_get_char_from_constant_table(char* key)
+xcsv_get_char_from_constant_table(const char* key)
 {
-  char_map_t* cm = xcsv_char_table;
-
-  while ((cm->key) && (strcmp(key, cm->key) != 0)) {
-    cm++;
+  static QHash<QString, QString> substitutions;
+  if (substitutions.empty()) {
+    for (char_map_t* cm = xcsv_char_table; cm->key; cm++) {
+      substitutions.insert(cm->key, cm->chars);
+    }
   }
-
-  return (cm->chars);
+  if (!substitutions.contains(key)) {
+    return xstrdup(key);
+  }
+  // QHash is very unhappy with raw character pointers.
+  // This is almost certainly a leak and IS certainly in bad taste, but
+  // all the callers seem to free it quickly.
+  return xstrdup(substitutions[key]);
 }
 
 static void
@@ -207,7 +215,7 @@ xcsv_parse_style_line(char* sbuff)
   char* s, *sp;
   char* p;
   const char* cp;
-  char* key, *val, *pfc;
+  const char* key, *val, *pfc;
 
   /*
    * tokens should be parsed longest to shortest, unless something
@@ -371,33 +379,34 @@ xcsv_parse_style_line(char* sbuff)
                                 if (ISSTOKEN(sbuff, "IFIELD")) {
                                   key = val = pfc = nullptr;
 
-                                  s = csv_lineparse(&sbuff[6], ",", "", linecount);
-
-                                  i = 0;
-                                  while (s) {
-                                    switch (i) {
-                                    case 0:
-                                      /* key */
-                                      key = csv_stringtrim(s, "\"", 1);
-                                      break;
-                                    case 1:
-                                      /* default value */
-                                      val = csv_stringtrim(s, "\"", 1);
-                                      break;
-                                    case 2:
-                                      /* printf conversion */
-                                      pfc = csv_stringtrim(s, "\"", 1);
-                                      break;
-                                    default:
-                                      break;
-                                    }
-                                    i++;
-
-                                    s = csv_lineparse(nullptr, ",", "", linecount);
+                                  QStringList fields = QString(&sbuff[6]).split(",", QString::KeepEmptyParts);
+                                  // Note: simplifieid() has to run after split().
+                                  if (fields.size() != 3) {
+                                    Fatal() << "Invalied IFIELD line: " << sbuff;
                                   }
 
-                                  xcsv_ifield_add(key, val, pfc);
+                                  // The key ("LAT_DIR") should never contain quotes.
+                                  key = xstrdup(fields[0].simplified());
 
+                                  // No, I don't know why these are comma-separated AND quoted.
+                                  // There may be a regex way to remove only the
+                                  // outermost quote, but leave remaining ones.
+                                  // This is required for formats like tomtom_asc
+                                  // that uses ... ""%s"" - and relies on the quotes.
+                                  // This probably works quite badly if there's a quote
+                                  // in the output stream, but this is emulating what
+                                  // the previous pointer-bashing did for 15+ years.
+                                  QString s1 = fields[1].simplified();
+                                  if (s1.startsWith("\"")) s1 = s1.mid(1);
+                                  if (s1.endsWith("\"")) s1.chop(1);
+                                  val = xstrdup(s1);
+
+                                  QString s2 = fields[2].simplified();
+                                  if (s2.startsWith("\"")) s2 = s2.mid(1);
+                                  if (s2.endsWith("\"")) s2.chop(1);
+                                  pfc = xstrdup(s2);
+
+                                  xcsv_ifield_add(key, val, pfc);
                                 } else
 
                                   /*
@@ -407,43 +416,49 @@ xcsv_parse_style_line(char* sbuff)
                                    */
                                   if (ISSTOKEN(sbuff, "OFIELD")) {
                                     int options = 0;
-                                    key = val = pfc = nullptr;
+                                  key = val = pfc = nullptr;
 
-                                    s = csv_lineparse(&sbuff[6], ",", "", linecount);
+                                  QStringList fields = QString(&sbuff[6]).split(",", QString::KeepEmptyParts);
+                                  // Note: simplifieid() has to run after split().
+                                  if (fields.size() != 3) {
+                                    Fatal() << "Invalied IFIELD line: " << sbuff;
+                                  }
 
-                                    i = 0;
-                                    while (s) {
-                                      switch (i) {
-                                      case 0:
-                                        /* key */
-                                        key = csv_stringtrim(s, "\"", 1);
-                                        break;
-                                      case 1:
-                                        /* default value */
-                                        val = csv_stringtrim(s, "\"", 1);
-                                        break;
-                                      case 2:
-                                        /* printf conversion */
-                                        pfc = csv_stringtrim(s, "\"", 1);
-                                        break;
-                                      case 3:
-                                        /* Any additional options. */
-                                        if (strstr(s, "no_delim_before")) {
-                                          options |= OPTIONS_NODELIM;
-                                        }
-                                        if (strstr(s, "absolute")) {
-                                          options |= OPTIONS_ABSOLUTE;
-                                        }
-                                        if (strstr(s, "optional")) {
-                                          options |= OPTIONS_OPTIONAL;
-                                        }
-                                      default:
-                                        break;
-                                      }
-                                      i++;
-                                      s = csv_lineparse(nullptr, ",", "", linecount);
+                                  // The key ("LAT_DIR") should never contain quotes.
+                                  key = xstrdup(fields[0].simplified());
+
+                                  // No, I don't know why these are comma-separated AND quoted.
+                                  // There may be a regex way to remove only the
+                                  // outermost quote, but leave remaining ones.
+                                  // This is required for formats like tomtom_asc
+                                  // that uses ... ""%s"" - and relies on the quotes.
+                                  // This probably works quite badly if there's a quote
+                                  // in the output stream, but this is emulating what
+                                  // the previous pointer-bashing did for 15+ years.
+                                  QString s1 = fields[1].simplified();
+                                  if (s1.startsWith("\"")) s1 = s1.mid(1);
+                                  if (s1.endsWith("\"")) s1.chop(1);
+                                  val = xstrdup(s1);
+
+                                  QString s2 = fields[2].simplified();
+                                  if (s2.startsWith("\"")) s2 = s2.mid(1);
+                                  if (s2.endsWith("\"")) s2.chop(1);
+                                  pfc = xstrdup(s2);
+
+                                  // This is pretty lazy way to parse write options.
+                                  // They've very rarely used, so we'll go for simple.
+                                  if (fields.size() > 4) {
+                                    QString options_string = fields[3].simplified();
+                                    if (options_string.contains("no_delim_before")) {
+                                      options |= OPTIONS_NODELIM;
                                     }
-
+                                          if (options_string.contains("absolute")) {
+                                      options |= OPTIONS_ABSOLUTE;
+                                    }
+                                    if (options_string.contains("optional")) {
+                                      options |= OPTIONS_OPTIONAL;
+                                    }
+                                  }
                                     xcsv_ofield_add(key, val, pfc, options);
                                   }
   }
@@ -707,7 +722,7 @@ ff_vecs_t xcsv_vecs = {
   xcsv_args,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
   { nullptr, nullptr, nullptr, xcsv_wr_position_init, xcsv_wr_position, xcsv_wr_position_deinit },
-  nullptr 
+  nullptr
 
 };
 #else
