@@ -11,4 +11,18 @@ bincompare ${REFERENCE}/20180717_080125.jpg.jpg ${TMPDIR}/20180717_080125.jpg.jp
 # this also deletes an existing tag (satellites).
 cp ${REFERENCE}/IMG_2065.JPG ${TMPDIR}/IMG_2065.JPG
 gpsbabel -i unicsv -f ${REFERENCE}/IMG_2065_retag.csv -o exif,name=IMG_2065 -F ${TMPDIR}/IMG_2065.JPG
-bincompare ${REFERENCE}/IMG_2065.JPG.jpg ${TMPDIR}/IMG_2065.JPG
+bincompare ${REFERENCE}/IMG_2065.JPG.jpg ${TMPDIR}/IMG_2065.JPG.jpg
+
+# test a big endian image
+# image from 	https://github.com/ianare/exif-samples.git
+# we lose ~20kB in this file and corrupt the maker notes.
+#cp ${REFERENCE}/kodak-dc210.jpg ${TMPDIR}/kodak-dc210.jpg
+#gpsbabel -i unicsv -f ${REFERENCE}/IMG_2065_retag.csv -o exif,name=IMG_2065 -F ${TMPDIR}/kodak-dc210.jpg
+#bincompare ${REFERENCE}/kodak-dc210.jpg.jpg ${TMPDIR}/kodak-dc210.jpg.jpg
+
+# test a big endian image
+# image from 	https://github.com/ianare/exif-samples.git
+cp ${REFERENCE}/ricoh-rdc5300.jpg ${TMPDIR}/ricoh-rdc5300.jpg
+gpsbabel -i unicsv -f ${REFERENCE}/IMG_2065_retag.csv -o exif,name=IMG_2065 -F ${TMPDIR}/ricoh-rdc5300.jpg
+bincompare ${REFERENCE}/ricoh-rdc5300.jpg.jpg ${TMPDIR}/ricoh-rdc5300.jpg.jpg
+
