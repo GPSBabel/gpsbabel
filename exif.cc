@@ -359,7 +359,7 @@ exif_load_apps()
     app->marker = gbfgetuint16(fin);
     app->len = gbfgetuint16(fin);
 #ifdef EXIF_DBG
-    printf(MYNAME ": api = %02X, len = %d (0x%04x), offs = 0x%08X\n", app->marker & 0xFF, app->len, app->len, gbftell(fin));
+    printf(MYNAME ": api = %02X, len = %u (0x%04x), offs = 0x%08X\n", app->marker & 0xFF, app->len, app->len, gbftell(fin));
 #endif
     if (exif_app || (app->marker == 0xFFDA)) /* compressed data */ {
       gbfcopyfrom(app->fcache, fin, 0x7FFFFFFF);
@@ -515,7 +515,7 @@ exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, gbsize_t offs,
         }
     }
 #ifdef EXIF_DBG
-    printf(MYNAME "-offs 0x%08X: ifd=%d id=0x%04X t=0x%04X c=%4d s=%4d",
+    printf(MYNAME "-offs 0x%08X: ifd=%d id=0x%04X t=0x%04X c=%4u s=%4u",
            tag->offs, ifd->nr, tag->id, tag->type, tag->count, tag->size);
     if (tag->size > 4) {
       printf(" o=0x%08X", tag->offset);
