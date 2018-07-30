@@ -203,7 +203,7 @@ static void
 xcsv_parse_style_line(char* sbuff)
 {
 //  QString cp;
-  char* p = nullptr;
+//  char* p = nullptr;
   #if 1
 //XXX This is high priority. This loop SHOULDN'T be needed, but there's
 // some weird overrun that shows on the mxf test. I think the comments get
@@ -215,7 +215,8 @@ xcsv_parse_style_line(char* sbuff)
    * SHORT and SHORTNAME don't collide.
    */
   /* whack off any comments */
-  if ((p = strchr(sbuff, '#')) != nullptr) {
+  char* p = nullptr;
+  if (((p = strchr(sbuff, '#'))) != nullptr) {
     if ((p > sbuff) && p[-1] == '\\') {
       memmove(p-1, p, strlen(p));
       p[strlen(p)-1] = '\0';
@@ -259,7 +260,7 @@ xcsv_parse_style_line(char* sbuff)
       auto cp = xcsv_get_char_from_constant_table(tokens[0]);
       xcsv_file.field_delimiter = cp;
 
-      p = csv_stringtrim(CSTR(xcsv_file.field_delimiter), " ", 0);
+      char* p = csv_stringtrim(CSTR(xcsv_file.field_delimiter), " ", 0);
       /* field delimiters are always bad characters */
       if (0 == strcmp(p, "\\w")) {
         xcsv_file.badchars = " \n\r";
@@ -274,7 +275,7 @@ xcsv_parse_style_line(char* sbuff)
       auto cp = xcsv_get_char_from_constant_table(tokens[0]);
       xcsv_file.field_encloser = cp;
 
-      p = csv_stringtrim(CSTR(xcsv_file.field_encloser), " ", 0);
+      char* p = csv_stringtrim(CSTR(xcsv_file.field_encloser), " ", 0);
       xcsv_file.badchars += p;
       xfree(p);
     } else
@@ -324,7 +325,7 @@ xcsv_parse_style_line(char* sbuff)
       // TODO: Simplify this terror.
       char* sp = csv_stringtrim(&sbuff[9], "\"", 1);
       QString cp = xcsv_get_char_from_constant_table(sp);
-
+      char* p;
       if (!cp.isEmpty()) {
         p = xstrdup(cp);
         xfree(sp);
@@ -348,14 +349,13 @@ xcsv_parse_style_line(char* sbuff)
       ba.append(tokens[0]);
       xcsv_file.codec = QTextCodec::codecForName(ba);
       if (!xcsv_file.codec) {
-        Fatal() << "Unsupported character set '" << p << "'.";
+        Fatal() << "Unsupported character set '" << QString(tokens[0]) << "'.";
       }
     } else
 
     if (op == "DATUM") {
       xcsv_file.gps_datum = GPS_Lookup_Datum_Index(tokens[0]);
       is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", CSTR(tokens[0]));
-      xfree(p);
     } else
 
     if (op == "DATATYPE") {
@@ -372,8 +372,8 @@ xcsv_parse_style_line(char* sbuff)
     } else
 
     if (op == "IFIELD") {
-      const char* key, *val, *pfc;
-      key = val = pfc = nullptr;
+//      const char* key, *val, *pfc;
+//      key = val = pfc = nullptr;
 
       QStringList fields = QString(&sbuff[6]).split(",", QString::KeepEmptyParts);
                                   // Note: simplifieid() has to run after split().
@@ -382,7 +382,7 @@ xcsv_parse_style_line(char* sbuff)
       }
 
                                   // The key ("LAT_DIR") should never contain quotes.
-      key = xstrdup(fields[0].simplified());
+
 
                                   // No, I don't know why these are comma-separated AND quoted.
                                   // There may be a regex way to remove only the
@@ -395,33 +395,35 @@ xcsv_parse_style_line(char* sbuff)
       QString s1 = fields[1].simplified();
       if (s1.startsWith("\"")) s1 = s1.mid(1);
       if (s1.endsWith("\"")) s1.chop(1);
-      val = xstrdup(s1);
+      char* val = xstrdup(s1);
 
       QString s2 = fields[2].simplified();
       if (s2.startsWith("\"")) s2 = s2.mid(1);
       if (s2.endsWith("\"")) s2.chop(1);
-      pfc = xstrdup(s2);
+      char* pfc = xstrdup(s2);
+      const char* key = xstrdup(fields[0].simplified());
+      //dconst char* key = xstrdup(fields[0].simplified());
       xcsv_ifield_add(key, val, pfc);
     } else
 
-                                  /*
-                                   * as OFIELDs are implemented as an after-thought, I'll
-                                   * leave this as it's own parsing for now.  We could
-                                   * change the world on ifield vs ofield format later..
-                                   */
+      //
+      //  as OFIELDs are implemented as an after-thought, I'll
+      //  leave this as it's own parsing for now.  We could
+      //  change the world on ifield vs ofield format later..
+      //
     if (ISSTOKEN(sbuff, "OFIELD")) {
       int options = 0;
-      const char* key, *val, *pfc;
-      key = val = pfc = nullptr;
+      //const char* = *pfc;
+      // key = val = pfc = nullptr;
 
       QStringList fields = QString(&sbuff[6]).split(",", QString::KeepEmptyParts);
-                                  // Note: simplifieid() has to run after split().
+      // Note: simplifieid() has to run after split().
       if (fields.size() < 3) {
         Fatal() << "Invalid OFIELD line: " << sbuff;
       }
 
-                                  // The key ("LAT_DIR") should never contain quotes.
-      key = xstrdup(fields[0].simplified());
+      // The key ("LAT_DIR") should never contain quotes.
+      const char *key = xstrdup(fields[0].simplified());
 
                                   // No, I don't know why these are comma-separated AND quoted.
                                   // There may be a regex way to remove only the
@@ -434,12 +436,12 @@ xcsv_parse_style_line(char* sbuff)
       QString s1 = fields[1].simplified();
       if (s1.startsWith("\"")) s1 = s1.mid(1);
       if (s1.endsWith("\"")) s1.chop(1);
-      val = xstrdup(s1);
+      char *val = xstrdup(s1);
 
       QString s2 = fields[2].simplified();
       if (s2.startsWith("\"")) s2 = s2.mid(1);
       if (s2.endsWith("\"")) s2.chop(1);
-      pfc = xstrdup(s2);
+      const char* pfc = xstrdup(s2);
 
                                   // This is pretty lazy way to parse write options.
                                   // They've very rarely used, so we'll go for simple.
