@@ -31,8 +31,8 @@
 typedef struct {
   ff_vecs_t* vec;
   const char* name;
-  const char* desc;
-  const char* extensions; // list of possible extensions separated by '/', first is output default for GUI.
+  QString desc;
+  QString extensions; // list of possible extensions separated by '/', first is output default for GUI.
   const char* parent;
 } vecs_t;
 
@@ -1172,7 +1172,7 @@ assign_option(const char* module, arglist_t* ap, const char* val)
     return;
   }
 
-  // Fixme - this is probably somewhere between wrong and less than great.  If you have an option "foo" 
+  // Fixme - this is probably somewhere between wrong and less than great.  If you have an option "foo"
   // and want to set it to the value "foo", this code will prevent that from happening, but we seem to have
   // code all over the place that relies on this. :-/
   if (case_ignore_strcmp(val, ap->argstring) == 0) {
@@ -1547,7 +1547,7 @@ disp_vecs()
     if (svp[i]->vec->type == ff_type_internal)  {
       continue;
     }
-    printf(VEC_FMT, svp[i]->name, svp[i]->desc);
+    printf(VEC_FMT, svp[i]->name, CSTR(svp[i]->desc));
     for (ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %s%-.50s %s\n",
@@ -1575,7 +1575,7 @@ disp_vec(const char* vecname)
     if (case_ignore_strcmp(svp[i]->name, vecname))  {
       continue;
     }
-    printf(VEC_FMT, svp[i]->name, svp[i]->desc);
+    printf(VEC_FMT, svp[i]->name, CSTR(svp[i]->desc));
     for (ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %s%-.50s %s\n",
@@ -1714,8 +1714,8 @@ disp_formats(int version)
         disp_v2(vec->vec);
       }
       printf("%s\t%s\t%s%s%s\n", vec->name,
-             vec->extensions? vec->extensions : "",
-             vec->desc,
+             CSTR(vec->extensions) ? CSTR(vec->extensions) : "",
+             CSTR(vec->desc),
              version >= 3 ? "\t" : "",
              version >= 3 ? vec->parent : "");
       if (version >= 3) {

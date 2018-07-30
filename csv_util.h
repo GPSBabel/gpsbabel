@@ -63,10 +63,10 @@ void
 xcsv_file_init(void);
 
 void
-xcsv_prologue_add(char*);
+xcsv_prologue_add(QString);
 
 void
-xcsv_epilogue_add(char*);
+xcsv_epilogue_add(QString);
 
 void
 xcsv_ifield_add(const char*, const char*, const char*);
@@ -78,7 +78,7 @@ void
 xcsv_destroy_style(void);
 
 QString
-xcsv_get_char_from_constant_table(const char* key);
+xcsv_get_char_from_constant_table(QString key);
 
 /****************************************************************************/
 /* types required for various xcsv functions                                */
@@ -143,8 +143,8 @@ class XcsvFile {
   QTextCodec* codec;
   QString fname;                 /* ptr to filename of above. */
 
-  const char* description;		/* Description for help text */
-  const char* extension;		/* preferred filename extension (for wrappers)*/
+  QString description;		/* Description for help text */
+  QString extension;		/* preferred filename extension (for wrappers)*/
 
   short_handle mkshort_handle;/* handle for mkshort() */
   ff_type type;		/* format type for GUI wrappers. */

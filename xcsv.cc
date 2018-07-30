@@ -27,13 +27,13 @@
 #include <QtCore/QTextStream>
 #include <QtCore/QDebug>
 
+#include <cctype>
+#include <cstdlib>
 #include "csv_util.h"
 #include "defs.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/file.h"
 #include "src/core/logging.h"
-#include <cctype>
-#include <cstdlib>
 
 #if CSVFMTS_ENABLED
 #define MYNAME	"XCSV"
@@ -171,14 +171,8 @@ xcsv_destroy_style(void)
   xcsv_file.field_encloser = QString();
   xcsv_file.record_delimiter = QString();
   xcsv_file.badchars = QString();
-
-  if (xcsv_file.description) {
-    xfree(xcsv_file.description);
-  }
-
-  if (xcsv_file.extension) {
-    xfree(xcsv_file.extension);
-  }
+  xcsv_file.description = QString();
+  xcsv_file.extension = QString();
 
   if (xcsv_file.mkshort_handle) {
     mkshort_del_handle(&xcsv_file.mkshort_handle);
@@ -191,7 +185,7 @@ xcsv_destroy_style(void)
 
 // Given a keyword of "COMMASPACE", return ", ".
 QString
-xcsv_get_char_from_constant_table(const char* key)
+xcsv_get_char_from_constant_table(QString key)
 {
   static QHash<QString, QString> substitutions;
   if (substitutions.empty()) {
@@ -202,25 +196,25 @@ xcsv_get_char_from_constant_table(const char* key)
   if (substitutions.contains(key)) {
     return substitutions[key];
   }
-  // This seems like it should be bad, but we have formats depending on it!?!
-  // Warning() << "Unknown substitution keyword" << key;
-  return QString();
+  // No substition found? Just return original.
+  return key;
 }
 
 static void
 xcsv_parse_style_line(char* sbuff)
 {
-  char* sp;
-  char *p;
-  QString cp;
-  const char* key, *val, *pfc;
-
+//  QString cp;
+  char* p = nullptr;
+  #if 1
+//XXX This is high priority. This loop SHOULDN'T be needed, but there's
+// some weird overrun that shows on the mxf test. I think the comments get
+// sbuff and tokens[] outof sync. I could be wrong, but I'm keeping this hideous
+// loop for now.
   /*
    * tokens should be parsed longest to shortest, unless something
    * requires a previously set value.  This way something like
    * SHORT and SHORTNAME don't collide.
    */
-
   /* whack off any comments */
   if ((p = strchr(sbuff, '#')) != nullptr) {
     if ((p > sbuff) && p[-1] == '\\') {
@@ -230,20 +224,43 @@ xcsv_parse_style_line(char* sbuff)
       *p = '\0';
     }
   }
+  #endif
 
-  if (strlen(sbuff)) {
-    if (ISSTOKEN(sbuff, "FIELD_DELIMITER")) {
-      sp = csv_stringtrim(&sbuff[16], "\"", 1);
-      cp = xcsv_get_char_from_constant_table(sp);
-      if (!cp.isEmpty()) {
-        xcsv_file.field_delimiter = cp;
-        xfree(sp);
-      } else {
-        xcsv_file.field_delimiter = sp;
-      }
+  // The lines to be parsed have a leading operation |op| that is
+  // separated by whitespace from the rest. Each op may have zero or
+  // more comma separated tokens  |token[]|.
+  QString line(sbuff);
+  line = line.mid(0, line.indexOf("#")).trimmed();
+  #if 0
+  int escape_index = line.indexOf("\\");
+  int comment_index = line.indexOf("#");
+  qDebug() << escape_index << comment_index;
+  if (escape_index +1 != comment_index) {
+    qDebug() << "Shortening:" << line;
+    line = line.mid(0, line.indexOf("#")).trimmed();
+  } else {
+    qDebug() << "NOT Shortening:" << line;
+  }
+  #endif
+
+  // Separate op and tokens.
+  int sep = line.indexOf(QRegExp("\\s+"));
+//qDebug() << sep;
+  // Line has only comments or no tokens? We're done.
+  if (sep < 0) {
+    // FIXME: this can prematurely return for PROLOGUE with quoted escape
+//    return;
+  }
+  QString op = line.mid(0, sep).trimmed().toUpper();
+  QString tokenstr = line.mid(sep).trimmed();
+  QStringList tokens = tokenstr.split(",");
+//  qDebug() << op << "Tokens:" << tokens;
+ // if (strlen(sbuff)) {
+    if (op == "FIELD_DELIMITER") {
+      auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+      xcsv_file.field_delimiter = cp;
 
       p = csv_stringtrim(CSTR(xcsv_file.field_delimiter), " ", 0);
-
       /* field delimiters are always bad characters */
       if (0 == strcmp(p, "\\w")) {
         xcsv_file.badchars = " \n\r";
@@ -254,137 +271,119 @@ xcsv_parse_style_line(char* sbuff)
 
     } else
 
-      if (ISSTOKEN(sbuff, "FIELD_ENCLOSER")) {
-        sp = csv_stringtrim(&sbuff[15], "\"", 1);
-        cp = xcsv_get_char_from_constant_table(sp);
-        if (!cp.isEmpty()) {
-          xcsv_file.field_encloser = cp;
-          xfree(sp);
-        } else {
-          xcsv_file.field_encloser = sp;
-        }
+    if (op == "FIELD_ENCLOSER") {
+      auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+      xcsv_file.field_encloser = cp;
 
-        p = csv_stringtrim(CSTR(xcsv_file.field_encloser), " ", 0);
-        xcsv_file.badchars += p;
-        xfree(p);
-      } else
+      p = csv_stringtrim(CSTR(xcsv_file.field_encloser), " ", 0);
+      xcsv_file.badchars += p;
+      xfree(p);
+    } else
 
-        if (ISSTOKEN(sbuff, "RECORD_DELIMITER")) {
-          sp = csv_stringtrim(&sbuff[17], "\"", 1);
-          cp = xcsv_get_char_from_constant_table(sp);
-          if (!cp.isEmpty()) {
-            xcsv_file.record_delimiter = cp;
-            xfree(sp);
-          } else {
-            xcsv_file.record_delimiter = sp;
-          }
+    if (op == "RECORD_DELIMITER") {
+      auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+      xcsv_file.record_delimiter = cp;
 
-          /* record delimiters are always bad characters */
-          p = csv_stringtrim(CSTR(xcsv_file.record_delimiter), " ", 0);
-          xcsv_file.badchars += p;
-          xfree(p);
+      // Record delimiters are always bad characters.
+      auto p = csv_stringtrim(CSTR(xcsv_file.record_delimiter), " ", 0);
+      xcsv_file.badchars += p;
+      xfree(p);
 
-        } else
+    } else
 
-          if (ISSTOKEN(sbuff, "FORMAT_TYPE")) {
-            const char* p;
-            for (p = &sbuff[11]; *p && isspace(*p); p++) {
-              ;
-            }
-            if (ISSTOKEN(p, "INTERNAL")) {
-              xcsv_file.type = ff_type_internal;
-            }
-            /* this is almost inconcievable... */
-            if (ISSTOKEN(p, "SERIAL")) {
-              xcsv_file.type = ff_type_serial;
-            }
-          } else
+    if (op == "FORMAT_TYPE") {
+      if (tokens[0] == "INTERNAL") {
+        xcsv_file.type = ff_type_internal;
+      }
+      // this is almost inconcievable...
+      if (tokens[0] == "SERIAL") {
+        xcsv_file.type = ff_type_serial;
+      }
+    } else
 
-            if (ISSTOKEN(sbuff, "DESCRIPTION")) {
-              xcsv_file.description = csv_stringtrim(&sbuff[11],"", 0);
-            } else
+    if (op == "DESCRIPTION") {
+      xcsv_file.description = tokens[0];
+    } else
 
-              if (ISSTOKEN(sbuff, "EXTENSION")) {
-                xcsv_file.extension = csv_stringtrim(&sbuff[10],"", 0);
-              } else
+    if (op == "EXTENSION") {
+      xcsv_file.extension = tokens[0];
+    } else
 
-                if (ISSTOKEN(sbuff, "SHORTLEN")) {
-                  if (xcsv_file.mkshort_handle) {
-                    setshort_length(xcsv_file.mkshort_handle, atoi(&sbuff[9]));
-                  }
-                } else
+    if (op == "SHORTLEN") {
+      if (xcsv_file.mkshort_handle) {
+        setshort_length(xcsv_file.mkshort_handle, tokens[0].toInt());
+      }
+    } else
 
-                  if (ISSTOKEN(sbuff, "SHORTWHITE")) {
-                    if (xcsv_file.mkshort_handle) {
-                      setshort_whitespace_ok(xcsv_file.mkshort_handle, atoi(&sbuff[12]));
-                    }
-                  } else
+    if (op == "SHORTWHITE") {
+      if (xcsv_file.mkshort_handle) {
+        setshort_whitespace_ok(xcsv_file.mkshort_handle, tokens[0].toInt());
+      }
+    } else
 
-                    if (ISSTOKEN(sbuff, "BADCHARS")) {
-                      sp = csv_stringtrim(&sbuff[9], "\"", 1);
-                      cp = xcsv_get_char_from_constant_table(sp);
+    if (op == "BADCHARS") {
+      // TODO: Simplify this terror.
+      char* sp = csv_stringtrim(&sbuff[9], "\"", 1);
+      QString cp = xcsv_get_char_from_constant_table(sp);
 
-                      if (!cp.isEmpty()) {
-                        p = xstrdup(cp);
-                        xfree(sp);
-                      } else {
-                        p = sp;
-                      }
-                      xcsv_file.badchars += p;
-                      xfree(p);
+      if (!cp.isEmpty()) {
+        p = xstrdup(cp);
+        xfree(sp);
+      } else {
+        p = sp;
+      }
+      xcsv_file.badchars += p;
+      xfree(p);
+    } else
 
-                    } else
+    if (op =="PROLOGUE") {
+      xcsv_prologue_add(sbuff + 9);
+    } else
 
-                      if (ISSTOKEN(sbuff, "PROLOGUE")) {
-                        xcsv_prologue_add(sbuff + 9);
-                      } else
+    if (op == "EPILOGUE") {
+      xcsv_epilogue_add(sbuff + 9);
+    } else
 
-                        if (ISSTOKEN(sbuff, "EPILOGUE")) {
-                          xcsv_epilogue_add(sbuff + 9);
-                        } else
+    if (op == "ENCODING") {
+      QByteArray ba;
+      ba.append(tokens[0]);
+      xcsv_file.codec = QTextCodec::codecForName(ba);
+      if (!xcsv_file.codec) {
+        Fatal() << "Unsupported character set '" << p << "'.";
+      }
+    } else
 
-                          if (ISSTOKEN(sbuff, "ENCODING")) {
-                            p = csv_stringtrim(&sbuff[8], "\"", 1);
-                            xcsv_file.codec = QTextCodec::codecForName(p);
-                            if (!xcsv_file.codec) {
-                              Fatal() << "Unsupported character set '" << p << "'.";
-                            }
-                            xfree(p);
-                          } else
+    if (op == "DATUM") {
+      xcsv_file.gps_datum = GPS_Lookup_Datum_Index(tokens[0]);
+      is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", CSTR(tokens[0]));
+      xfree(p);
+    } else
 
-                            if (ISSTOKEN(sbuff, "DATUM")) {
-                              p = csv_stringtrim(&sbuff[5], "\"", 1);
-                              xcsv_file.gps_datum = GPS_Lookup_Datum_Index(p);
-                              is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", p);
-                              xfree(p);
-                            } else
+    if (op == "DATATYPE") {
+      QString p = tokens[0].toUpper();
+      if (p == "TRACK") {
+        xcsv_file.datatype = trkdata;
+      } else if (p == "ROUTE") {
+        xcsv_file.datatype = rtedata;
+      } else if (p == "WAYPOINT") {
+        xcsv_file.datatype = wptdata;
+      } else {
+        Fatal() << MYNAME << ": Unknown data type" << p;
+      }
+    } else
 
-                              if (ISSTOKEN(sbuff, "DATATYPE")) {
-                                p = csv_stringtrim(&sbuff[8], "\"", 1);
-                                if (case_ignore_strcmp(p, "TRACK") == 0) {
-                                  xcsv_file.datatype = trkdata;
-                                } else if (case_ignore_strcmp(p, "ROUTE") == 0) {
-                                  xcsv_file.datatype = rtedata;
-                                } else if (case_ignore_strcmp(p, "WAYPOINT") == 0) {
-                                  xcsv_file.datatype = wptdata;
-                                } else {
-                                  fatal(MYNAME ": Unknown data type \"%s\"!\n", p);
-                                }
-                                xfree(p);
+    if (op == "IFIELD") {
+      const char* key, *val, *pfc;
+      key = val = pfc = nullptr;
 
-                              } else
-
-                                if (ISSTOKEN(sbuff, "IFIELD")) {
-                                  key = val = pfc = nullptr;
-
-                                  QStringList fields = QString(&sbuff[6]).split(",", QString::KeepEmptyParts);
+      QStringList fields = QString(&sbuff[6]).split(",", QString::KeepEmptyParts);
                                   // Note: simplifieid() has to run after split().
-                                  if (fields.size() < 3) {
-                                    Fatal() << "Invalid IFIELD line: " << sbuff;
-                                  }
+      if (fields.size() < 3) {
+        Fatal() << "Invalid IFIELD line: " << sbuff;
+      }
 
                                   // The key ("LAT_DIR") should never contain quotes.
-                                  key = xstrdup(fields[0].simplified());
+      key = xstrdup(fields[0].simplified());
 
                                   // No, I don't know why these are comma-separated AND quoted.
                                   // There may be a regex way to remove only the
@@ -394,36 +393,36 @@ xcsv_parse_style_line(char* sbuff)
                                   // This probably works quite badly if there's a quote
                                   // in the output stream, but this is emulating what
                                   // the previous pointer-bashing did for 15+ years.
-                                  QString s1 = fields[1].simplified();
-                                  if (s1.startsWith("\"")) s1 = s1.mid(1);
-                                  if (s1.endsWith("\"")) s1.chop(1);
-                                  val = xstrdup(s1);
+      QString s1 = fields[1].simplified();
+      if (s1.startsWith("\"")) s1 = s1.mid(1);
+      if (s1.endsWith("\"")) s1.chop(1);
+      val = xstrdup(s1);
 
-                                  QString s2 = fields[2].simplified();
-                                  if (s2.startsWith("\"")) s2 = s2.mid(1);
-                                  if (s2.endsWith("\"")) s2.chop(1);
-                                  pfc = xstrdup(s2);
-
-                                  xcsv_ifield_add(key, val, pfc);
-                                } else
+      QString s2 = fields[2].simplified();
+      if (s2.startsWith("\"")) s2 = s2.mid(1);
+      if (s2.endsWith("\"")) s2.chop(1);
+      pfc = xstrdup(s2);
+      xcsv_ifield_add(key, val, pfc);
+    } else
 
                                   /*
                                    * as OFIELDs are implemented as an after-thought, I'll
                                    * leave this as it's own parsing for now.  We could
                                    * change the world on ifield vs ofield format later..
                                    */
-                                  if (ISSTOKEN(sbuff, "OFIELD")) {
-                                    int options = 0;
-                                  key = val = pfc = nullptr;
+    if (ISSTOKEN(sbuff, "OFIELD")) {
+      int options = 0;
+      const char* key, *val, *pfc;
+      key = val = pfc = nullptr;
 
-                                  QStringList fields = QString(&sbuff[6]).split(",", QString::KeepEmptyParts);
+      QStringList fields = QString(&sbuff[6]).split(",", QString::KeepEmptyParts);
                                   // Note: simplifieid() has to run after split().
-                                  if (fields.size() < 3) {
-                                    Fatal() << "Invalid OFIELD line: " << sbuff;
-                                  }
+      if (fields.size() < 3) {
+        Fatal() << "Invalid OFIELD line: " << sbuff;
+      }
 
                                   // The key ("LAT_DIR") should never contain quotes.
-                                  key = xstrdup(fields[0].simplified());
+      key = xstrdup(fields[0].simplified());
 
                                   // No, I don't know why these are comma-separated AND quoted.
                                   // There may be a regex way to remove only the
@@ -433,33 +432,33 @@ xcsv_parse_style_line(char* sbuff)
                                   // This probably works quite badly if there's a quote
                                   // in the output stream, but this is emulating what
                                   // the previous pointer-bashing did for 15+ years.
-                                  QString s1 = fields[1].simplified();
-                                  if (s1.startsWith("\"")) s1 = s1.mid(1);
-                                  if (s1.endsWith("\"")) s1.chop(1);
-                                  val = xstrdup(s1);
+      QString s1 = fields[1].simplified();
+      if (s1.startsWith("\"")) s1 = s1.mid(1);
+      if (s1.endsWith("\"")) s1.chop(1);
+      val = xstrdup(s1);
 
-                                  QString s2 = fields[2].simplified();
-                                  if (s2.startsWith("\"")) s2 = s2.mid(1);
-                                  if (s2.endsWith("\"")) s2.chop(1);
-                                  pfc = xstrdup(s2);
+      QString s2 = fields[2].simplified();
+      if (s2.startsWith("\"")) s2 = s2.mid(1);
+      if (s2.endsWith("\"")) s2.chop(1);
+      pfc = xstrdup(s2);
 
                                   // This is pretty lazy way to parse write options.
                                   // They've very rarely used, so we'll go for simple.
-                                  if (fields.size() > 4) {
-                                    QString options_string = fields[3].simplified();
-                                    if (options_string.contains("no_delim_before")) {
-                                      options |= OPTIONS_NODELIM;
-                                    }
-                                          if (options_string.contains("absolute")) {
-                                      options |= OPTIONS_ABSOLUTE;
-                                    }
-                                    if (options_string.contains("optional")) {
-                                      options |= OPTIONS_OPTIONAL;
-                                    }
-                                  }
-                                    xcsv_ofield_add(key, val, pfc, options);
-                                  }
-  }
+      if (fields.size() > 4) {
+        QString options_string = fields[3].simplified();
+        if (options_string.contains("no_delim_before")) {
+          options |= OPTIONS_NODELIM;
+        }
+        if (options_string.contains("absolute")) {
+          options |= OPTIONS_ABSOLUTE;
+        }
+        if (options_string.contains("optional")) {
+          options |= OPTIONS_OPTIONAL;
+        }
+      }
+      xcsv_ofield_add(key, val, pfc, options);
+    }
+//  }
 }
 
 

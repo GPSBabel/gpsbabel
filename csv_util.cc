@@ -753,7 +753,7 @@ void xcsv_file_init(void)
 XcsvFile::XcsvFile() {
   is_internal = false;
   ifield_ct = ofield_ct = 0;
-  extension = description = nullptr;
+  extension  = nullptr;
 //   xcsv_file_init();
 }
 
@@ -820,7 +820,7 @@ xcsv_ofield_add(const char* key, const char* val, const char* pfc, int options)
 /* usage: xcsv_prologue_add("Four score and seven years ago today,")         */
 /*****************************************************************************/
 void
-xcsv_prologue_add(char* prologue)
+xcsv_prologue_add(QString prologue)
 {
   xcsv_file.prologue.append(prologue);
 }
@@ -830,7 +830,7 @@ xcsv_prologue_add(char* prologue)
 /* usage: xcsv_epilogue_add("shall not perish from the earth.")              */
 /*****************************************************************************/
 void
-xcsv_epilogue_add(char* epilogue)
+xcsv_epilogue_add(QString epilogue)
 {
   xcsv_file.epilogue.append(epilogue);
 }
@@ -1481,7 +1481,7 @@ xcsv_data_read(void)
                         CSTR(xcsv_file.field_encloser), linecount);
 
       if (QUEUE_EMPTY(&xcsv_file.ifield)) {
-        fatal(MYNAME ": attempt to read, but style '%s' has no IFIELDs in it.\n", xcsv_file.description? xcsv_file.description : "unknown");
+        fatal(MYNAME ": attempt to read, but style '%s' has no IFIELDs in it.\n", CSTR(xcsv_file.description)? CSTR(xcsv_file.description) : "unknown");
       }
 
       /* reset the ifield queue */
