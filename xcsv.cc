@@ -113,7 +113,6 @@ xcsv_destroy_style(void)
 {
   queue* elem, *tmp;
   field_map_t* fmp;
-  int internal = 0;
 
   /*
    * If this xcsv_file struct came from a file we can free it all.
@@ -128,7 +127,7 @@ xcsv_destroy_style(void)
 
   /* destroy the ifields */
   QUEUE_FOR_EACH(&xcsv_file.ifield, elem, tmp) {
-    fmp = (field_map_t*) elem;
+    fmp = reinterpret_cast<field_map_t *>(elem);
     if (fmp->key) {
       xfree(fmp->key);
     }
@@ -146,7 +145,7 @@ xcsv_destroy_style(void)
   /* destroy the ofields, if they are not re-mapped to ifields. */
   if (xcsv_file.ofield != &xcsv_file.ifield) {
     QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
-      fmp = (field_map_t*) elem;
+      fmp = reinterpret_cast<field_map_t *>(elem);
       if (fmp->key) {
         xfree(fmp->key);
       }
@@ -179,7 +178,7 @@ xcsv_destroy_style(void)
   }
 
   /* return everything to zeros */
-  internal = xcsv_file.is_internal;
+  int internal = xcsv_file.is_internal;
   xcsv_file.is_internal = internal;
 }
 
@@ -473,11 +472,10 @@ xcsv_parse_style_buff(const char* sbuff)
   // FIXME: should not be a static buf.  Should not be a raw character
   // buffer at all!
   char ibuf[4096];
-  size_t i;
 
   while (*sbuff) {
     ibuf[0] = 0;
-    i = 0;
+    size_t i = 0;
     char* ibufp;
     for (ibufp = ibuf; *sbuff != '\n' && i++ < sizeof(ibuf);) {
       *ibufp++ = *sbuff++;
@@ -494,11 +492,10 @@ static void
 xcsv_read_style(const char* fname)
 {
   char* sbuff;
-  gbfile* fp;
 
   xcsv_file_init();
 
-  fp = gbfopen(fname, "rb", MYNAME);
+  gbfile* fp = gbfopen(fname, "rb", MYNAME);
   while ((sbuff = gbfgetstr(fp))) {
     sbuff = lrtrim(sbuff);
     xcsv_parse_style_line(sbuff);

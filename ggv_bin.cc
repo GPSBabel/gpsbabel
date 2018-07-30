@@ -115,14 +115,10 @@ ggv_bin_read_v2(QDataStream& stream)
   route_head* ggv_bin_track;
   Waypoint* wpt;
   double lon, lat;
-  quint16 header_len;
-  quint16 entry_type;
-  quint16 entry_subtype;
   quint16 line_points;
-  quint64 entry_pos;
 
   // header length is usually either 0x90 or 0x00
-  header_len = ggv_bin_read16(stream, "map name len");
+  quint16 header_len = ggv_bin_read16(stream, "map name len");
   if (header_len > 0) {
     ggv_bin_read_bytes(stream, buf, header_len, "map name");
     buf.remove(0,4);
@@ -137,11 +133,11 @@ ggv_bin_read_v2(QDataStream& stream)
     if (global_opts.debug_level > 1)
       qDebug("------------------------------------ 0x%llx", stream.device()->pos());
 
-    entry_pos = stream.device()->pos();
-    entry_type = ggv_bin_read16(stream, "entry type");
+    quint64 entry_pos = stream.device()->pos();
+    quint16 entry_type = ggv_bin_read16(stream, "entry type");
     ggv_bin_read16(stream, "entry group");
     ggv_bin_read16(stream, "entry zoom");
-    entry_subtype = ggv_bin_read16(stream, "entry subtype");
+    quint16 entry_subtype = ggv_bin_read16(stream, "entry subtype");
 
     if (entry_subtype != 1) {
       ggv_bin_read_text32(stream, buf, "text len");
@@ -226,8 +222,7 @@ static void
 ggv_bin_read_v34_header(QDataStream& stream, quint32& number_labels, quint32 &number_records)
 {
   QByteArray buf;
-  quint16 header_len;
-    
+
   ggv_bin_read_bytes(stream, buf, 8, "unknown");
   number_labels = ggv_bin_read32(stream, "num labels");
   number_records = ggv_bin_read32(stream, "num records");
@@ -236,7 +231,7 @@ ggv_bin_read_v34_header(QDataStream& stream, quint32& number_labels, quint32 &nu
   ggv_bin_read16(stream, "unknown");
   // 8 bytes ending with 1E 00, contains len of header block
   ggv_bin_read16(stream, "unknown");
-  header_len = ggv_bin_read16(stream, "header len");
+  quint16 header_len = ggv_bin_read16(stream, "header len");
   ggv_bin_read16(stream, "unknown");
   ggv_bin_read16(stream, "unknown");
   if (header_len > 0) {
@@ -266,10 +261,7 @@ static QString
 ggv_bin_read_v34_common(QDataStream& stream)
 {
   QByteArray buf;
-  QString res;
-  quint16 type1;
-  quint16 type2;
-  
+
   ggv_bin_read16(stream, "entry group");
   ggv_bin_read16(stream, "entry prop2");
   ggv_bin_read16(stream, "entry prop3");
@@ -281,12 +273,12 @@ ggv_bin_read_v34_common(QDataStream& stream)
   ggv_bin_read16(stream, "entry zoom");
   ggv_bin_read16(stream, "entry prop10");
   ggv_bin_read_text16(stream, buf, "entry txt");
-  res = QString::fromLatin1(buf.constData()).simplified();
-  type1 = ggv_bin_read16(stream, "entry type1");
+  QString res = QString::fromLatin1(buf.constData()).simplified();
+  quint16 type1 = ggv_bin_read16(stream, "entry type1");
   if (type1 != 1) {
     ggv_bin_read_text32(stream, buf, "entry object");
   }
-  type2 = ggv_bin_read16(stream, "entry type2");
+  quint16 type2 = ggv_bin_read16(stream, "entry type2");
   if (type2 != 1) {
     ggv_bin_read_text32(stream, buf, "entry object");
   }
@@ -297,10 +289,8 @@ static void
 ggv_bin_read_v34_record(QDataStream& stream)
 {
   QByteArray buf;
-  QString label;
   Waypoint *wpt;
   route_head* ggv_bin_track;
-  quint16 entry_type;
   quint32 bmp_len;
   quint16 line_points;
   double lon, lat;
@@ -308,8 +298,8 @@ ggv_bin_read_v34_record(QDataStream& stream)
   if (global_opts.debug_level > 1)
     qDebug("------------------------------------ 0x%llx", stream.device()->pos());
 
-  entry_type = ggv_bin_read16(stream, "entry type");
-  label = ggv_bin_read_v34_common(stream);
+  quint16 entry_type = ggv_bin_read16(stream, "entry type");
+  QString label = ggv_bin_read_v34_common(stream);
 
   switch (entry_type) {
   case 0x02:

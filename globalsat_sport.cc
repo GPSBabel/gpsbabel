@@ -223,9 +223,8 @@ serial_deinit()
 static int
 serial_recv_byte()
 {
-  int result;
   /* allow for a delay of 4s */
-  result = gbser_readc_wait(serial_handle, 4000);
+  int result = gbser_readc_wait(serial_handle, 4000);
   switch (result) {
   case gbser_ERROR:
     fatal("serial_recv_byte(): error reading one byte\n");
@@ -240,12 +239,11 @@ serial_recv_byte()
 static void
 serial_write_byte(uint8_t byte)
 {
-  int n;
   if (global_opts.debug_level > 1) {
     printf("0x%02x (%d), ", byte, byte);
   }
 
-  n = gbser_writec(serial_handle, byte);
+  int n = gbser_writec(serial_handle, byte);
   if (n == gbser_ERROR) {
     fatal("globalsat_probe_device(): write failed\n");
   }
@@ -259,8 +257,7 @@ recv_byte()
   if (!opt_input_dump_file) {
     result=serial_recv_byte();
   } else {
-    int bytes;
-    bytes=gbfread(&result, 1, 1, in_file);
+    int bytes = gbfread(&result, 1, 1, in_file);
     is_fatal((bytes != 1), MYNAME ": read error");
   }
   // Check if byte sould be dumped also into a file
@@ -322,32 +319,29 @@ globalsat_write_package(uint8_t* payload, uint32_t size)
 static uint8_t*
 globalsat_read_package(int* out_length, uint8_t* out_DeviceCommand)
 {
-  uint8_t DeviceCommand, len_h, len_l, crc;
-  uint8_t* payload;
-  int length;
-  int i;
+  uint8_t crc;
   uint8_t calc_crc = 0;
 
-  DeviceCommand = recv_byte();
+  uint8_t DeviceCommand = recv_byte();
   if (global_opts.debug_level > 1) {
     printf("DeviceCommand: 0x%02x ", DeviceCommand);
   }
-  len_h = recv_byte();
+  uint8_t len_h = recv_byte();
   calc_crc ^= len_h;
-  len_l = recv_byte();
+  uint8_t len_l = recv_byte();
   calc_crc ^= len_l;
 
-  length = (len_h << 8) + len_l;
+  int length = (len_h << 8) + len_l;
   if (global_opts.debug_level > 1) {
     printf("len=%d Payload:", length);
   }
 
-  payload = (uint8_t*) malloc(length);
+  uint8_t* payload = (uint8_t*) malloc(length);
   if (payload == nullptr) {
     goto error_out;
   }
 
-  for (i = 0; i < length; i++) {
+  for (int i = 0; i < length; i++) {
     payload[i] = recv_byte();
     calc_crc ^= payload[i];
   }
@@ -387,10 +381,9 @@ globalsat_probe_device()
 
   globalsat_send_simple(CommandWhoAmI);
 
-  uint8_t* payload;
   int len;
   uint8_t DeviceCommand;
-  payload = globalsat_read_package(&len, &DeviceCommand);
+  uint8_t* payload = globalsat_read_package(&len, &DeviceCommand);
   if ((len > 0) && (payload != nullptr)) {
     if (global_opts.debug_level > 1) {
       printf("Got package!!!\n");
@@ -483,10 +476,9 @@ waypoint_read()
   //CommandGetTrackFileHeaders
   globalsat_send_simple(CommandGetWaypoints);
 
-  uint8_t* in_payload;
   int len;
   uint8_t DeviceCommand;
-  in_payload = globalsat_read_package(&len, &DeviceCommand);
+  uint8_t* in_payload = globalsat_read_package(&len, &DeviceCommand);
   if ((len > 0) && (in_payload != nullptr)) {
     if (global_opts.debug_level > 1) {
       printf("Got package!!!\n");
@@ -510,17 +502,15 @@ track_read()
     printf("Sent...\n");
   }
 
-  uint8_t* payload;
   int length;
   uint8_t DeviceCommand;
-  payload = globalsat_read_package(&length, &DeviceCommand);
+  uint8_t* payload = globalsat_read_package(&length, &DeviceCommand);
   if ((length > 0) && (payload != nullptr)) {
     if (global_opts.debug_level > 1) {
       printf("Got package!!! headers\n");
     }
-    int number_headers;
     //payload is packed with a number of trainingheaders with the size of 29bytes each
-    number_headers = length / 29;	//29=packed sizeof(gh_trainheader)
+    int number_headers = length / 29;	//29=packed sizeof(gh_trainheader)
     if (global_opts.debug_level > 1) {
       printf("length=%d sizeof(gh_trainheader)=%d number_headers=%d\n", length, 29, number_headers);
     }
@@ -577,8 +567,7 @@ track_read()
 
         uint8_t trackDeviceCommand;
         int track_length;
-        uint8_t* track_payload = nullptr;
-        track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
+        uint8_t* track_payload = globalsat_read_package(&track_length, &trackDeviceCommand);
         is_fatal(((track_length == 0) || (track_payload == nullptr)) , "tracklength in 0 bytes or payload nonexistant");
         //      printf("Got track package!!! Train data\n");
 
@@ -676,8 +665,7 @@ track_read()
           int laps_in_package = header.gh_laprec.LapIndex - header.gh_ptrec.Index + 1;
 //					printf("Lap Data:\n");
           uint8_t* lap_start_pos = track_payload + 29;	//29=packed sizeof(gh_trainheader)
-          int lap;
-          for (lap = 0; lap < laps_in_package; lap++) {
+          for (int lap = 0; lap < laps_in_package; lap++) {
             uint8_t* dblap = (lap_start_pos) + lap * 41;	//  packed sizeof(gh_db_lap)=41
             gh_db_lap db_lap;
 
@@ -754,8 +742,7 @@ track_read()
             int recpoints_in_package = header.gh_laprec.EndPt - header.gh_ptrec.StartPt + 1;
             //	  printf("Recpoints Data:\n");
             uint8_t* recpoints_start_pos = track_payload + 29;	//29=packed sizeof(gh_trainheader)
-            int recpoint;
-            for (recpoint = 0; recpoint < recpoints_in_package; recpoint++) {
+            for (int recpoint = 0; recpoint < recpoints_in_package; recpoint++) {
               uint8_t* ghpoint = (recpoints_start_pos + recpoint * 25);	//  packed sizeof(gh_recpoint)=25
               gh_recpoint point;
               point.Latitude = be_read32(ghpoint);

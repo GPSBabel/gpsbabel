@@ -191,7 +191,6 @@ char*
 csv_stringtrim(const char* string, const char* enclosure, int strip_max)
 {
   static const char* p1 = nullptr;
-  char* p2 = nullptr;
   char* tmp = xxstrdup(string,file,line);
   size_t elen;
   int stripped = 0;
@@ -206,7 +205,7 @@ csv_stringtrim(const char* string, const char* enclosure, int strip_max)
     elen = strlen(enclosure);
   }
 
-  p2 = tmp + strlen(tmp) - 1;
+  char* p2 = tmp + strlen(tmp) - 1;
   p1 = tmp;
 
   /* trim off trailing whitespace */
@@ -264,12 +263,10 @@ char*
 csv_lineparse(const char* stringstart, const char* delimited_by,
               const char* enclosed_in, const int line_no)
 {
-  const char* sp;
   static const char* p = nullptr;
   static char* tmp = nullptr;
   size_t dlen = 0, elen = 0, efound = 0;
   int enclosedepth = 0;
-  short int dfound;
   short int hyper_whitespace_delimiter = 0;
 
   if (tmp) {
@@ -303,7 +300,7 @@ csv_lineparse(const char* stringstart, const char* delimited_by,
   }
 
   /* the beginning of the string we start with (this pass) */
-  sp = p;
+  const char* sp = p;
 
   /* length of delimiters and enclosures */
   if ((delimited_by) && (!hyper_whitespace_delimiter)) {
@@ -312,7 +309,7 @@ csv_lineparse(const char* stringstart, const char* delimited_by,
   if (enclosed_in) {
     elen = strlen(enclosed_in);
   }
-  dfound = 0;
+  short int dfound = 0;
 
   while ((*p) && (!dfound)) {
     if ((elen) && (strncmp(p, enclosed_in, elen) == 0)) {
@@ -416,11 +413,9 @@ static double
 decdir_to_dec(const char* decdir)
 {
   char* p;
-  const char* cp;
-  double rval;
   int sign = 0;
 
-  cp = &decdir[0];
+  const char* cp = &decdir[0];
 
   if ((*cp == 'W') || (*cp == 'S')) {
     sign = -1;
@@ -428,7 +423,7 @@ decdir_to_dec(const char* decdir)
     sign = 1;
   }
 
-  rval = sign ? strtod(&decdir[1], &p) : strtod(&decdir[0], &p);
+  double rval = sign ? strtod(&decdir[1], &p) : strtod(&decdir[0], &p);
 
   if (sign == 0) {
     if ((*p == 'W') || (*p == 'S')) {
@@ -638,17 +633,11 @@ human_to_dec(const char* instr, double* outlat, double* outlon, int which)
 QString
 dec_to_human(const char* format, const char* dirs, double val)
 {
-  char* subformat = nullptr;
-  const char* formatptr = nullptr;
-  char* percent = nullptr;
-  char* type = nullptr;
-
   int  index = 0;
   int  intvals[3] = {0,0,0};
   double  dblvals[3] = {0,0,0};
-  int  sign = 0;
 
-  sign = (val < 0) ? 0 : 1;
+  int sign = (val < 0) ? 0 : 1;
 
   dblvals[0] = fabs(val);
   intvals[0] = (int)dblvals[0];
@@ -657,16 +646,16 @@ dec_to_human(const char* format, const char* dirs, double val)
   dblvals[2] = 60*(dblvals[1]-intvals[1]);
   intvals[2] = (int)dblvals[2];
 
-  subformat = (char*) xmalloc(strlen(format)+2);
-  formatptr = format;
+  char* subformat = (char*) xmalloc(strlen(format)+2);
+  const char* formatptr = format;
 
   QString buff;
 
   while (formatptr && *formatptr) {
     strcpy(subformat, formatptr);
-    percent = strchr(subformat, '%');
+    char* percent = strchr(subformat, '%');
     if (percent) {
-      type = percent+1+strcspn(percent+1, "cdiouxXeEfgG%");
+      char* type = percent+1+strcspn(percent+1, "cdiouxXeEfgG%");
       *(type+1) = '\0';
       switch (*type) {
       case 'c':
@@ -883,10 +872,9 @@ addhms(const char* s, const char* format)
   int  hour =0;
   int  min  =0;
   int  sec  =0;
-  int ac;
 
   char* ampm = (char*) xmalloc(strlen(s) + 1);
-  ac = sscanf(s, format, &hour, &min, &sec, ampm);
+  int ac = sscanf(s, format, &hour, &min, &sec, ampm);
   /* If no time format in arg string, assume AM */
   if (ac < 4) {
     ampm[0] = 0;
@@ -1126,10 +1114,8 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
   break;
   /* ALTITUDE CONVERSIONS ************************************************/
   case XT_ALT_FEET: {
-    /* altitude in feet as a decimal value */
-    double val;
     char *endptr;
-    val = strtod(s, &endptr);
+    double val = strtod(s, &endptr);
     if ((val == 0 && s==endptr)) {
       wpt->altitude = unknown_alt;
     } else {
@@ -1141,10 +1127,8 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
   }
   break;
   case XT_ALT_METERS: {
-    /* altitude in meters as a decimal value */
-    double val;
     char *endptr;
-    val = strtod(s, &endptr);
+    double val = strtod(s, &endptr);
     if ((val == 0 && s==endptr)) {
       wpt->altitude = unknown_alt;
     } else {
@@ -1431,11 +1415,7 @@ void
 xcsv_data_read(void)
 {
   char* buff = nullptr;
-  char* s;
-  Waypoint* wpt_tmp;
   int linecount = 0;
-  queue* elem;
-  field_map_t* fmp;
   route_head* rte = nullptr;
   route_head* trk = nullptr;
   utm_northing = 0;
@@ -1474,9 +1454,9 @@ xcsv_data_read(void)
        }
     }
     if (strlen(buff)) {
-      wpt_tmp = new Waypoint;
+      Waypoint* wpt_tmp = new Waypoint;
 
-      s = buff;
+      char* s = buff;
       s = csv_lineparse(s, CSTR(xcsv_file.field_delimiter),
                         CSTR(xcsv_file.field_encloser), linecount);
 
@@ -1485,13 +1465,13 @@ xcsv_data_read(void)
       }
 
       /* reset the ifield queue */
-      elem = QUEUE_FIRST(&xcsv_file.ifield);
+      queue* elem = QUEUE_FIRST(&xcsv_file.ifield);
 
       /* now rip the line apart, advancing the queue for each tear
        * off the beginning of buff since there's no index into queue.
        */
       while (s) {
-        fmp = (field_map_t*) elem;
+        field_map_t* fmp = reinterpret_cast<field_map_t *>(elem);
         xcsv_parse_val(s, wpt_tmp, fmp, &trk);
 
         elem = QUEUE_NEXT(elem);
@@ -1583,8 +1563,6 @@ static void
 xcsv_waypt_pr(const Waypoint* wpt)
 {
   QString buff;
-  int i;
-  field_map_t* fmp;
   queue* elem, *tmp;
   double latitude, longitude;
   int32 utmz;
@@ -1642,7 +1620,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
                                     &latitude, &longitude, &alt, xcsv_file.gps_datum);
   }
 
-  i = 0;
+  int i = 0;
   QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
     double lat = latitude;
     double lon = longitude;
@@ -1654,7 +1632,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
      */
     int field_is_unknown = 0;
 
-    fmp = (field_map_t*) elem;
+    field_map_t* fmp = reinterpret_cast<field_map_t *>(elem);
 
     if ((i != 0) && !(fmp->options & OPTIONS_NODELIM)) {
       *xcsv_file.stream << write_delimiter;

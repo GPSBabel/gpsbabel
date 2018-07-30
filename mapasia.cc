@@ -70,24 +70,20 @@ static void
 tr7_read()
 {
   route_head* trk = nullptr;
-  unsigned int magic;
   Waypoint* prev = nullptr;
 
-  magic = gbfgetint32(fin);
+  unsigned int magic = gbfgetint32(fin);
   if (magic != TR7_TRACK_MAGIC) {
     fatal(MYNAME ": Invalid magic number in header (%X, but %X expected)!\n", magic, TR7_TRACK_MAGIC);
   }
 
   while (! gbfeof(fin)) {
     unsigned char buff[TR7_S_SIZE];
-    double lat, lon;
-    Waypoint* wpt;
-    float speed, course;
 
     gbfread(buff, 1, sizeof(buff), fin);
 
-    lat = (double)le_read32(&buff[TR7_S_LAT]) / 1000000.0;
-    lon = (double)le_read32(&buff[TR7_S_LON]) / 1000000.0;
+    double lat = (double)le_read32(&buff[TR7_S_LAT]) / 1000000.0;
+    double lon = (double)le_read32(&buff[TR7_S_LON]) / 1000000.0;
 
     if ((fabs(lat) > 90) || (fabs(lon) > 180)) {	/* that really happens */
       trk = nullptr;
@@ -104,13 +100,13 @@ tr7_read()
       continue;
     }
 
-    speed = KPH_TO_MPS(le_read16(&buff[TR7_S_SPEED]));
-    course = 360 - le_read16(&buff[TR7_S_COURSE]);
+    float speed = KPH_TO_MPS(le_read16(&buff[TR7_S_SPEED]));
+    float course = 360 - le_read16(&buff[TR7_S_COURSE]);
     if ((speed < 0) || (course > 360) || (course < 0)) {
       continue;
     }
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     wpt->latitude = lat;
     wpt->longitude = lon;
@@ -173,7 +169,7 @@ tr7_check_after_read_trailer_cb(const route_head* trk)
 {
   queue* elem, *tmp;
   QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
-    Waypoint* wpt = (Waypoint*)elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
     if (speed_tmp == 0) {
       WAYPT_UNSET(wpt, speed);
     }

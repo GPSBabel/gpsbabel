@@ -221,11 +221,9 @@ static int HexByte(const char* hex)
 int
 color_to_bbggrr(const char* opt_color)
 {
-  int color_num;
-  unsigned int i;
   char* ep;
 
-  color_num = strtol(opt_color, &ep, 10);
+  int color_num = strtol(opt_color, &ep, 10);
 
   if (ep != opt_color) {
     return color_num;
@@ -238,7 +236,7 @@ color_to_bbggrr(const char* opt_color)
     return color_num;
   }
 
-  for (i = 0; i < sizeof(color_table) / sizeof(color_table[0]); i++) {
+  for (unsigned int i = 0; i < sizeof(color_table) / sizeof(color_table[0]); i++) {
     if (0 == case_ignore_strcmp(opt_color, color_table[i].cn)) {
       return (color_table[i].b << 16) +
              (color_table[i].g << 8) +

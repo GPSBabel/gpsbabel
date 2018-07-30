@@ -270,14 +270,11 @@ parse_line(char* buff, int index, const char* delimiter, Waypoint* wpt)
 static Waypoint*
 parse_waypt(char* buff)
 {
-  char* cin, *cerr;
-  int i;
+  char* cin;
   struct tm tm;
-  Waypoint* wpt;
-  garmin_fs_p gmsd;
 
-  wpt = new Waypoint;
-  gmsd = garmin_fs_alloc(-1);
+  Waypoint* wpt = new Waypoint;
+  garmin_fs_p gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
   if (gardown) {
@@ -315,14 +312,14 @@ parse_waypt(char* buff)
   }
 
   memset(&tm, 0, sizeof(tm));
-  cerr = strptime(buff, "%a %b %d %H:%M:%S %Y", &tm);
+  char* cerr = strptime(buff, "%a %b %d %H:%M:%S %Y", &tm);
   if (cerr == nullptr) {
     fatal(MYNAME ": Unable to convert date (%s)!\n", buff);
   }
   wpt->SetCreationTime(mkgmtime(&tm));
 
   /* go over time stamp */
-  i = 5;
+  int i = 5;
   while (buff && i) {
     i--;
     buff = strchr(buff, ' ');
@@ -347,11 +344,8 @@ parse_waypt(char* buff)
 static Waypoint*
 parse_trkpt(char* buff)
 {
-  garmin_fs_p gmsd;
-  Waypoint* wpt;
-
-  wpt = new Waypoint;
-  gmsd = garmin_fs_alloc(-1);
+  Waypoint* wpt = new Waypoint;
+  garmin_fs_p gmsd = garmin_fs_alloc(-1);
   fs_chain_add(&wpt->fs, (format_specific_data*) gmsd);
 
   parse_line(buff, TRKPT__OFS, ";", wpt);
@@ -416,19 +410,16 @@ data_read(void)
   route_head* head = nullptr;
 
   while ((buff = gbfgetstr(fin))) {
-    char* cin = buff;
-    char* cdata;
-
     if ((line++ == 0) && fin->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
     }
 
-    cin = lrtrim(buff);
+    char* cin = lrtrim(buff);
     if (!*cin) {
       continue;
     }
 
-    cdata = cin+1;
+    char* cdata = cin+1;
     while (! isspace(*cdata)) {
       cdata++;
     }
@@ -536,8 +527,7 @@ data_read(void)
           cdata++;
         }
         if (*cdata) {
-          char* s;
-          s = strrchr(cdata, ',');
+          char* s = strrchr(cdata, ',');
           if (s) {
             *s = '\0';
             s = strrchr(cdata, ',');

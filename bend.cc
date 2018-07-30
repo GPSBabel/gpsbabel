@@ -53,21 +53,19 @@ Waypoint* BendFilter::create_wpt_dest(const Waypoint* wpt_orig, double lat_orig,
 {
   double distance = gcdist(lat_orig, long_orig,
                            lat_orig_adj, long_orig_adj);
-  double frac;
   double lat_dest;
   double long_dest;
-  Waypoint* wpt_dest = nullptr;
   distance = radtometers(distance);
   if (distance <= maxDist) {
     return nullptr;
   }
 
-  frac = maxDist / distance;
+  double frac = maxDist / distance;
 
   linepart(lat_orig, long_orig, lat_orig_adj, long_orig_adj, frac,
            &lat_dest, &long_dest);
 
-  wpt_dest = new Waypoint(*wpt_orig);
+  Waypoint* wpt_dest = new Waypoint(*wpt_orig);
   wpt_dest->latitude = DEG(lat_dest);
   wpt_dest->longitude = DEG(long_dest);
 
@@ -97,7 +95,7 @@ void BendFilter::process_route(const route_head* route_orig, route_head* route_d
 
   queue* elem, *tmp;
   QUEUE_FOR_EACH(&route_orig->waypoint_list, elem, tmp) {
-    Waypoint* wpt_orig_next = (Waypoint*)elem;
+    Waypoint* wpt_orig_next = reinterpret_cast<Waypoint *>(elem);
 
     if (wpt_orig_prev == nullptr) {
       if (wpt_orig != nullptr) {
@@ -113,7 +111,6 @@ void BendFilter::process_route(const route_head* route_orig, route_head* route_d
 
       double lat_orig_next = RAD(wpt_orig_next->latitude);
       double long_orig_next = RAD(wpt_orig_next->longitude);
-      Waypoint* wpt_dest_next = nullptr;
 
       if (is_small_angle(lat_orig, long_orig, lat_orig_prev,
                          long_orig_prev, lat_orig_next, long_orig_next)) {
@@ -126,8 +123,8 @@ void BendFilter::process_route(const route_head* route_orig, route_head* route_d
           route_add_wpt(route_dest, wpt_dest_prev);
         }
 
-        wpt_dest_next = create_wpt_dest(wpt_orig,
-                                        lat_orig, long_orig, lat_orig_next, long_orig_next);
+        Waypoint* wpt_dest_next = create_wpt_dest(wpt_orig,
+                                                   lat_orig, long_orig, lat_orig_next, long_orig_next);
         if (wpt_dest_next != nullptr) {
           route_add_wpt(route_dest, wpt_dest_next);
 
@@ -163,7 +160,7 @@ void BendFilter::process()
 {
   queue* elem, *tmp;
   QUEUE_FOR_EACH(routes_orig, elem, tmp) {
-    route_head* route_orig = (route_head*)elem;
+    route_head* route_orig = reinterpret_cast<route_head *>(elem);
     process_route_orig(route_orig);
   }
 }

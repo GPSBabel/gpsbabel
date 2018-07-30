@@ -61,17 +61,14 @@ wr_deinit()
 static void
 vcf_print_utf(const utf_string* s)
 {
-  char* p, *p2, *p3;
-  char* stripped_html;
-
   if (!s) {
     return;
   }
 
-  stripped_html = strip_html(s);
-  p = gstrsub(stripped_html, "\n", "\\n");
-  p2 = gstrsub(p, "<p>", "\\n");
-  p3 = gstrsub(p2, ";", "\\;");
+  char* stripped_html = strip_html(s);
+  char* p = gstrsub(stripped_html, "\n", "\\n");
+  char* p2 = gstrsub(p, "<p>", "\\n");
+  char* p3 = gstrsub(p2, ";", "\\;");
   gbfputs(p3, file_out);
   xfree(p);
   xfree(p2);
@@ -82,13 +79,11 @@ vcf_print_utf(const utf_string* s)
 static void
 vcf_print(const char* s)
 {
-  char* p;
-
   if (!s) {
     return;
   }
 
-  p = gstrsub(s, "\n", "\\n");
+  char* p = gstrsub(s, "\n", "\\n");
   gbfputs(p, file_out);
   xfree(p);
 }
@@ -102,10 +97,8 @@ vcf_print(const QString& s)
 static void
 vcf_disp(const Waypoint* wpt)
 {
-  int latint, lonint;
-
-  lonint = abs((int) wpt->longitude);
-  latint = abs((int) wpt->latitude);
+  int lonint = abs((int) wpt->longitude);
+  int latint = abs((int) wpt->latitude);
 
   gbfprintf(file_out, "BEGIN:VCARD\nVERSION:3.0\n");
   gbfprintf(file_out, "N:%s;%s;;;\n", CSTRc(wpt->description),CSTRc(wpt->shortname));

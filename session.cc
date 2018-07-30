@@ -40,7 +40,7 @@ session_exit()
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&session_list, elem, tmp) {
-    session_t* s = (session_t*)elem;
+    session_t* s = reinterpret_cast<session_t *>(elem);
     dequeue(&s->Q);
     session_free(s);
   }
@@ -49,14 +49,12 @@ session_exit()
 void
 start_session(const char* name, const char* filename)
 {
-  session_t* s;
-
   if (session_ct == 0) {
     QUEUE_INIT(&session_list);
   }
   session_ct++;
 
-  s = (session_t*) xcalloc(1, sizeof(*s));
+  session_t* s = (session_t*) xcalloc(1, sizeof(*s));
   ENQUEUE_TAIL(&session_list, &s->Q);
   QUEUE_INIT(&s->category_list);
   s->nr = session_ct;
@@ -67,7 +65,7 @@ start_session(const char* name, const char* filename)
 session_t*
 curr_session()
 {
-  return (session_t*) session_list.prev;
+  return reinterpret_cast<session_t *>(session_list.prev);
 }
 
 /* in work
@@ -109,7 +107,7 @@ session_free(session_t* s)
 {
   queue* elem, *tmp;
   QUEUE_FOR_EACH(&s->category_list, elem, tmp) {
-    category_t* c = (category_t*) elem;
+    category_t* c = reinterpret_cast<category_t *>(elem);
     dequeue(&c->Q);
     xfree(c);
   }

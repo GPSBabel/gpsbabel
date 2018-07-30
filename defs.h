@@ -604,9 +604,8 @@ waypt_disp_session(const session_t* se, T cb)
   foreach (Waypoint* waypointp, waypt_list) {
 #else
   queue* elem, *tmp;
-  Waypoint* waypointp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
 #endif
     if ((se == nullptr) || (waypointp->session == se)) {
       if (global_opts.verbose_status) {
@@ -718,7 +717,7 @@ route_disp(const route_head* rh, T cb)
 // cb != nullptr, caught with an overload of route_disp
   QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
     Waypoint* waypointp;
-    waypointp = (Waypoint*) elem;
+    waypointp = reinterpret_cast<Waypoint *>(elem);
     cb(waypointp);
   }
 }
@@ -730,7 +729,7 @@ common_disp_all(queue* qh, T1 rh, T2 rt, T3 wc)
   queue* elem, *tmp;
   QUEUE_FOR_EACH(qh, elem, tmp) {
     const route_head* rhp;
-    rhp = (route_head*) elem;
+    rhp = reinterpret_cast<route_head *>(elem);
 // rh != nullptr, caught with an overload of common_disp_all
     rh(rhp);
     route_disp(rhp, wc);
@@ -746,7 +745,7 @@ common_disp_all(queue* qh, std::nullptr_t /* rh */, T2 rt, T3 wc)
   queue* elem, *tmp;
   QUEUE_FOR_EACH(qh, elem, tmp) {
     const route_head* rhp;
-    rhp = (route_head*) elem;
+    rhp = reinterpret_cast<route_head *>(elem);
 // rh == nullptr
     route_disp(rhp, wc);
 // rt != nullptr, caught with an overload of common_disp_all
@@ -761,7 +760,7 @@ common_disp_all(queue* qh, T1 rh, std::nullptr_t /* rt */, T3 wc)
   queue* elem, *tmp;
   QUEUE_FOR_EACH(qh, elem, tmp) {
     const route_head* rhp;
-    rhp = (route_head*) elem;
+    rhp = reinterpret_cast<route_head *>(elem);
 // rh != nullptr, caught with an overload of common_disp_all
     rh(rhp);
     route_disp(rhp, wc);
@@ -776,7 +775,7 @@ common_disp_all(queue* qh, std::nullptr_t /* rh */, std::nullptr_t /* rt */, T3 
   queue* elem, *tmp;
   QUEUE_FOR_EACH(qh, elem, tmp) {
     const route_head* rhp;
-    rhp = (route_head*) elem;
+    rhp = reinterpret_cast<route_head *>(elem);
 // rh == nullptr
     route_disp(rhp, wc);
 // rt == nullptr

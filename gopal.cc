@@ -103,7 +103,6 @@ static int gopal_check_line(char* line)
 static void
 gopal_rd_init(const QString& fname)
 {
-  char* ck;
   CHECK_BOOL(optclean);
   if (optminspeed) {
     minspeed=atof(optminspeed);
@@ -130,7 +129,7 @@ gopal_rd_init(const QString& fname)
   if (optdate) {
     memset(&opt_tm, 0, sizeof(opt_tm));
 
-    ck = strptime(optdate, "%Y%m%d", &opt_tm);
+    char* ck = strptime(optdate, "%Y%m%d", &opt_tm);
     if ((ck == nullptr) || (*ck != '\0') || (strlen(optdate) != 8)) {
       fatal(MYNAME ": Invalid date \"%s\"!\n", optdate);
     } else if (opt_tm.tm_year < 70) {
@@ -169,20 +168,16 @@ gopal_read()
 {
 
   char* buff;
-  char* str, *c;
-  int column;
-  long line;
-  double hmsd,speed;
-  int fix, hms;
-  route_head* route;
-  Waypoint* wpt, *lastwpt=nullptr;
-  double lat_old;
+  double hmsd;
+  int fix;
+  int hms;
+  Waypoint* lastwpt=nullptr;
   char tbuffer[64];
   struct tm tm2;
-  lat_old=0;
+  double lat_old = 0;
   
 
-  route = route_head_alloc();
+  route_head* route = route_head_alloc();
   QDateTime qtx;
   qtx.setTimeSpec(Qt::UTC);
   qtx.setTime_t(tx);
@@ -190,18 +185,17 @@ gopal_read()
   route->rte_name += qtx.toString(Qt::ISODate);
   route_add_head(route);
 
-  line=0;
+  long line = 0;
   while ((buff = gbfgetstr(fin))) {
-    int nfields;
     if ((line == 0) && fin->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
     }
 
-    str = buff = lrtrim(buff);
+    char* str = buff = lrtrim(buff);
     if (*buff == '\0') {
       continue;
     }
-    nfields = gopal_check_line(buff);
+    int nfields = gopal_check_line(buff);
     if ((nfields != 8) && (nfields != 11)) {
       continue;
     }
@@ -209,13 +203,13 @@ gopal_read()
     if ((nfields == 8) && (tx == 0)) {
       // fatal(MYNAME ": Invalid date in filename \"%s\", try to set manually using \"date\" switch!\n", buff);
     }
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
-    column = -1;
+    int column = -1;
     // the format of gopal is quite simple. Unfortunately the developers forgot the date as the first element...
     //TICK;    TIME;   LONG;     LAT;       HEIGHT; SPEED;  Fix; HDOP;    SAT
     //3801444, 080558, 2.944362, 43.262117, 295.28, 0.12964, 2, 2.900000, 3
-    c = csv_lineparse(str, ",", "", column++);
+    char* c = csv_lineparse(str, ",", "", column++);
     int millisecs = 0;
     while (c != nullptr) {
       switch (column) {
@@ -313,7 +307,7 @@ gopal_read()
       lastwpt=wpt;
     }
     //calculate the speed to reach this waypoint from the last. This way I try to sort out invalid waypoints
-    speed=0;
+    double speed = 0;
     if (lastwpt !=nullptr) {
       speed=3.6*radtometers(gcdist(RAD(lastwpt->latitude), RAD(lastwpt->longitude), RAD(wpt->latitude), RAD(wpt->longitude))) /
             abs((int)(wpt->creation_time.toTime_t() - lastwpt->GetCreationTime().toTime_t()));
@@ -354,7 +348,6 @@ static void
 gopal_write_waypt(const Waypoint* wpt)
 {
   char tbuffer[64];
-  unsigned long timestamp;
   int fix=fix_unknown;
   //TICK;    TIME;   LONG;     LAT;       HEIGHT; SPEED;  UN; HDOP;     SAT
   //3801444, 080558, 2.944362, 43.262117, 295.28, 0.12964, 2, 2.900000, 3
@@ -373,7 +366,7 @@ gopal_write_waypt(const Waypoint* wpt)
     }
   }
   //MSVC handles time_t as int64, gcc and mac only int32, so convert it:
-  timestamp=(unsigned long)wpt->GetCreationTime().toTime_t();
+  unsigned long timestamp = (unsigned long)wpt->GetCreationTime().toTime_t();
   gbfprintf(fout, "%lu, %s, %lf, %lf, %5.1lf, %8.5lf, %d, %lf, %d\n",timestamp,tbuffer,  wpt->longitude, wpt->latitude,wpt->altitude,
             wpt->speed,fix,wpt->hdop,wpt->sat);
 }

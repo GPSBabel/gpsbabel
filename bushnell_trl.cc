@@ -55,14 +55,13 @@ rd_deinit()
 static void
 wr_init(const QString& fname)
 {
-  int i;
   int l = fname.length();
   char obuf[20] = { 0 } ;
   char* p = obuf;
   file_out = gbfopen_le(fname, "w", MYNAME);
   trkpt_count = 0;
   QString fnameu = fname.toUpper();
-  for (i = 0; (i < l) && (i < 20); i++) {
+  for (int i = 0; (i < l) && (i < 20); i++) {
     char c = fnameu[i].toLatin1();
     if (isalnum(c)) {
       *p++ = c;
@@ -96,19 +95,15 @@ wr_deinit()
 static void
 bushnell_read()
 {
-  int lat_tmp,lon_tmp;
-
   while (true) {
-    Waypoint* wpt_tmp;
-
-    lat_tmp = gbfgetint32(file_in);
-    lon_tmp = gbfgetint32(file_in);
+    int lat_tmp = gbfgetint32(file_in);
+    int lon_tmp = gbfgetint32(file_in);
 
     if (!lat_tmp && !lon_tmp) {
       break;
     }
 
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
     wpt_tmp->latitude  = lat_tmp / 10000000.0;
     wpt_tmp->longitude = lon_tmp / 10000000.0;
 

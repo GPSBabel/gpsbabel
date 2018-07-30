@@ -16,9 +16,7 @@ explorist_read_value(const char* section, const char* key)
 static mag_info*
 explorist_ini_try(const char* path)
 {
-  mag_info* info = nullptr;
   char* inipath;
-  char* s;
 
   xasprintf(&inipath, "%s/%s", path, "APP/Atlas.ini");
   inifile = inifile_init(QString::fromUtf8(inipath), myname);
@@ -27,12 +25,12 @@ explorist_ini_try(const char* path)
     return nullptr;
   }
 
-  info = (mag_info*) xmalloc(sizeof(mag_info));
+  mag_info* info = (mag_info*) xmalloc(sizeof(mag_info));
   info->geo_path = nullptr;
   info->track_path = nullptr;
   info->waypoint_path = nullptr;
 
-  s = xstrdup(inifile_readstr(inifile,  "UGDS", "WpFolder"));
+  char* s = xstrdup(inifile_readstr(inifile,  "UGDS", "WpFolder"));
   if (s) {
     s = gstrsub(s, "\\", "/");
     xasprintf(&info->waypoint_path, "%s/%s", path, s);

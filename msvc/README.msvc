@@ -1,3 +1,13 @@
+**********************************************************************
+ THE NOTES BELOW ARE OUT OF DATE
+
+ But here are some hints:
+ 1. To generate GPSBabel.vcxproj and GPSBabel.vcxproj.filters
+    qmake -tp vc GPSBabel.pro
+ 2. To gather all the bits you need including the dlls
+    use the Qt supplied program windeployoqt, e.g.
+    windeployqt GPSBabel.exe
+**********************************************************************
 
 Building GPSBabel on Windows with QtCreator or Microsoft Visual Studio:
 

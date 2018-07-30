@@ -34,8 +34,6 @@
 
 double HeightFilter::bilinear(double x1, double y1, double x2, double y2, double x, double y, double z11, double z12, double z21, double z22)
 {
-  double delta;
-
   if (y1 == y2 && x1 == x2) {
     return (z11);
   }
@@ -46,7 +44,7 @@ double HeightFilter::bilinear(double x1, double y1, double x2, double y2, double
     return (z22*(y-y1)+z11*(y2-y))/(y2-y1);
   }
 
-  delta=(y2-y1)*(x2-x1);
+  double delta = (y2-y1)*(x2-x1);
 
   return (z22*(y-y1)*(x-x1)+z12*(y2-y)*(x-x1)+z21*(y-y1)*(x2-x)+z11*(y2-y)*(x2-x))/delta;
 }
@@ -55,8 +53,7 @@ double HeightFilter::bilinear(double x1, double y1, double x2, double y2, double
 double HeightFilter::wgs84_separation(double lat, double lon)
 {
 #include "heightgrid.h"
-  int	ilat, ilon;
-  int	ilat1, ilat2, ilon1, ilon2;
+
 
   /* sanity checks to prevent segfault on bad data */
   if ((lat > 90.0) || (lat < -90.0)) {
@@ -66,13 +63,13 @@ double HeightFilter::wgs84_separation(double lat, double lon)
     fatal(MYNAME ": Invalid longitude value (%f)\n", lon);
   }
 
-  ilat=(int)floor((90.0+lat)/GEOID_GRID_DEG);
-  ilon=(int)floor((180.0+lon)/GEOID_GRID_DEG);
+  int ilat = (int)floor((90.0+lat)/GEOID_GRID_DEG);
+  int ilon = (int)floor((180.0+lon)/GEOID_GRID_DEG);
 
-  ilat1=ilat;
-  ilon1=ilon;
-  ilat2=(ilat < GEOID_ROW-1)? ilat+1:ilat;
-  ilon2=(ilon < GEOID_COL-1)? ilon+1:ilon;
+  int ilat1 = ilat;
+  int ilon1 = ilon;
+  int ilat2 = (ilat < GEOID_ROW-1)? ilat+1:ilat;
+  int ilon2 = (ilon < GEOID_COL-1)? ilon+1:ilon;
 
   return bilinear(
            ilon1*GEOID_GRID_DEG-180.0,ilat1*GEOID_GRID_DEG-90.0,

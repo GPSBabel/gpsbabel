@@ -22,6 +22,7 @@
 #include "defs.h"
 #include "csv_util.h"
 #include <QtCore/QHash>
+//#include <cassert>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -39,10 +40,9 @@ static QHash<QString, const Waypoint*> trkpts;
 static time_t
 jtr_parse_time(const char* str, struct tm* tm, int* milli)
 {
-  long int hms;
   char* dot;
 
-  hms = strtol(str, &dot, 10);
+  long int hms = strtol(str, &dot, 10);
   if (hms > 0) {
     tm->tm_sec = hms % 100;
     hms = hms / 100;
@@ -102,17 +102,14 @@ jtr_read()
   route_head* trk = nullptr;
 
   while ((str = gbfgetstr(fin))) {
-    Waypoint* wpt;
     struct tm tm;
-    char* tmp;
-    int column = -1;
     char valid = 'V';
-    double lat, lon;
-    float speed, course, mcourse, mvar, mdev;
+    double lon;
+    float course, mcourse, mvar, mdev;
     time_t time = 0;
     int mills = 0;
     char buf[32];
-    char mvardir, mdevdir;
+    char mdevdir;
 
     line++;
 
@@ -126,12 +123,12 @@ jtr_read()
     }
 
     memset(&tm, 0, sizeof(tm));
-    lat = lon = 999;
-    speed = course = mcourse = mvar = mdev = -1;
-    mvardir = mdevdir = 0;
+    double lat = lon = 999;
+    float speed = course = mcourse = mvar = mdev = -1;
+    char mvardir = mdevdir = 0;
 
-    column = -1;
-    tmp = str;
+    int column = -1;
+    char* tmp = str;
     while ((str = csv_lineparse(tmp, ",", "", column++))) {
       tmp = nullptr;
 
@@ -210,7 +207,7 @@ jtr_read()
       continue;
     }
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     wpt->latitude = lat;
     wpt->longitude = lon;
@@ -265,23 +262,24 @@ static void
 jtr_trkpt_disp_cb(const Waypoint* wpt)
 {
   char* str, *tmp;
-  char stime[10], sdate[7], scourse[6], sspeed[8];
-  struct tm tm;
+  char scourse[6], sspeed[8];
+  QString sdate;
+  QString stime;
 
   if (wpt->creation_time.isValid()) {
-    const time_t tt = wpt->GetCreationTime().toTime_t();
-    tm = *gmtime(&tt);
+    gpsbabel::DateTime dt = wpt->GetCreationTime().toUTC();
 
-    tm.tm_year += 1900;
-    tm.tm_mon += 1;
-    snprintf(sdate, sizeof(sdate), "%02d%02d%02d", tm.tm_mday, tm.tm_mon, tm.tm_year % 100);
-    snprintf(stime, sizeof(stime), "%02d%02d%02d.%02d", tm.tm_hour, tm.tm_min, tm.tm_sec, wpt->creation_time.time().msec());
-    if (wpt->creation_time.time().msec() == 0) {
-      stime[6] = 0;
-    }
-  } else {
-    stime[0] = 0;
-    sdate[0] = 0;
+    // round time to centiseconds.
+    int msec = dt.time().msec();
+    int csec = lround(msec/10.0);
+    dt = dt.addMSecs(csec*10-msec);
+    sdate = dt.toString(QStringLiteral("ddMMyy"));
+    stime = dt.toString(QStringLiteral("HHmmss.zzz"));
+    // toss milliseconds position which should now be zero.
+    //assert(stime.endsWith('0'));
+    stime.chop(1);
+    // suppress fractional seconds if they are zero.
+    stime = stime.replace(QLatin1String(".00"), QLatin1String(""));
   }
   if (WAYPT_HAS(wpt, speed) && (wpt->speed >= 0)) {
     snprintf(sspeed, sizeof(sspeed), "%.1f", MPS_TO_KNOTS(wpt->speed));
@@ -295,7 +293,7 @@ jtr_trkpt_disp_cb(const Waypoint* wpt)
   }
 
   xasprintf(&str, "GEOTAG2,%s,%c,%09.4f,%c,%010.4f,%c,%s,%s,%s,,E,A",
-            stime,
+            CSTR(stime),
             wpt->creation_time.isValid() ? 'A' : 'V',
             fabs(degrees2ddmm(wpt->latitude)),
             wpt->latitude < 0 ? 'S' : 'N',
@@ -303,7 +301,7 @@ jtr_trkpt_disp_cb(const Waypoint* wpt)
             wpt->longitude < 0 ? 'W' : 'E',
             sspeed,
             scourse,
-            sdate);
+            CSTR(sdate));
 
   xasprintf(&tmp, "%s*%02X", str, nmea_cksum(str));
   xfree(str);

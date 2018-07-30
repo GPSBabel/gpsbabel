@@ -75,14 +75,13 @@ fread_bool(gbfile* fd)
 static QString
 fread_string(gbfile* fd)
 {
-  char* val;
   int len = fread_integer(fd);
 
   if (len == 0) {
     return nullptr;
   }
 
-  val = (char*) xmalloc(len+1);
+  char* val = (char*) xmalloc(len+1);
   gbfread(val, 1, len, fd);
   while (len != 0 && val[len-1] == ' ') {
     len--;
@@ -394,9 +393,8 @@ static void convert_datum(double* lat, double* lon)
 static void
 gtm_rd_init(const QString& fname)
 {
-  int version;
   file_in = gbfopen_le(fname, "rb", MYNAME);
-  version = fread_integer(file_in);
+  int version = fread_integer(file_in);
   QString name = fread_fixedstring(file_in, 10);
   if (version == -29921) {
     fatal(MYNAME ": Uncompress the file first\n");
@@ -590,7 +588,7 @@ gtm_read()
   for (i = 0; i != ts_count && i != real_tr_count; i++) {
     trk_head->rte_name = fread_string(file_in);
     fread_discard(file_in, 12);
-    trk_head = (route_head*)QUEUE_NEXT(&trk_head->Q);
+    trk_head = reinterpret_cast<route_head *>QUEUE_NEXT(&trk_head->Q);
   }
 
   /* Routes */

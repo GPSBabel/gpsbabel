@@ -279,9 +279,8 @@ unsigned int
 mag_checksum(const char* const buf)
 {
   int csum = 0;
-  const char* p;
 
-  for (p = buf; *p; p++) {
+  for (const char* p = buf; *p; p++) {
     csum  ^= *p;
   }
 
@@ -303,7 +302,6 @@ mag_writemsg(const char* const buf)
 {
   unsigned int osum = mag_checksum(buf);
   int retry_cnt = 5;
-  int i;
   char obuf[1000];
 
   if (debug_serial) {
@@ -312,7 +310,7 @@ mag_writemsg(const char* const buf)
 
 retry:
 
-  i = sprintf(obuf, "$%s*%02X\r\n",buf, osum);
+  int i = sprintf(obuf, "$%s*%02X\r\n",buf, osum);
   termwrite(obuf, i);
   if (magrxstate == mrs_handon || magrxstate == mrs_awaiting_ack) {
     magrxstate = mrs_awaiting_ack;
@@ -338,16 +336,14 @@ mag_writeack(int osum)
 {
   char obuf[200];
   char nbuf[200];
-  int i;
-  unsigned int nsum;
 
   if (is_file) {
     return;
   }
 
   (void) sprintf(nbuf, "PMGNCSM,%02X", osum);
-  nsum = mag_checksum(nbuf);
-  i = sprintf(obuf, "$%s*%02X\r\n",nbuf, nsum);
+  unsigned int nsum = mag_checksum(nbuf);
+  int i = sprintf(obuf, "$%s*%02X\r\n",nbuf, nsum);
 
   if (debug_serial) {
     warning("ACK WRITE: %s",obuf);
@@ -426,9 +422,6 @@ mag_readmsg(gpsdata_type objective)
 {
   char ibuf[512];	/* oliskoli: corrupted data (I've seen descr with a lot
 				     of escaped FFFFFFFF) may need more size  */
-  int isz;
-  unsigned int isum;
-  char* isump;
   int retrycnt = 20;
 
 retry:
@@ -460,7 +453,7 @@ retry:
   }
 
 
-  isz = strlen(ibuf);
+  int isz = strlen(ibuf);
 
   if (isz < 5) {
     if (debug_serial) {
@@ -472,8 +465,8 @@ retry:
   while (!isprint(ibuf[isz])) {
     isz--;
   }
-  isump = &ibuf[isz-1];
-  isum  = strtoul(isump, nullptr,16);
+  char* isump = &ibuf[isz-1];
+  unsigned int isum = strtoul(isump, nullptr,16);
   if (isum != mag_pchecksum(&ibuf[1], isz-3)) {
     if (debug_serial) {
       warning("RXERR %02x/%02x: '%s'\n", isum, mag_pchecksum(&ibuf[1],isz-5), ibuf);
@@ -600,8 +593,7 @@ static QString termread(char* ibuf, int size)
   if (is_file) {
     return gbfgets(ibuf, size, magfile_h);
   } else {
-    int rc;
-    rc = gbser_read_line(serial_handle, ibuf, size, 2000, 0x0a, 0x0d);
+    int rc = gbser_read_line(serial_handle, ibuf, size, 2000, 0x0a, 0x0d);
     if (rc != gbser_OK) {
       fatal(MYNAME ": Read error\n");
     }
@@ -726,8 +718,6 @@ arglist_t mag_fargs[] = {
 static void
 mag_serial_init_common(const QString& portname)
 {
-  time_t now, later;
-
   if (is_file) {
     return;
   }
@@ -737,12 +727,12 @@ mag_serial_init_common(const QString& portname)
     mag_handon();
   }
 
-  now = current_time().toTime_t();
+  time_t now = current_time().toTime_t();
   /*
    * The 315 can take up to 4.25 seconds to respond to initialization
    * commands.   Time out on the side of caution.
    */
-  later = now + 6;
+  time_t later = now + 6;
   got_version = 0;
   mag_writemsg("PMGNCMD,VERSION");
 
@@ -944,10 +934,10 @@ static
 void parse_istring(char* istring)
 {
   int f = 0;
-  int n,x;
+  int n;
   while (istring[0]) {
     char* fp = ifield[f];
-    x = sscanf(istring, "%[^,]%n", fp, &n);
+    int x = sscanf(istring, "%[^,]%n", fp, &n);
     f++;
     if (x) {
       istring += n;
@@ -969,17 +959,11 @@ void parse_istring(char* istring)
 Waypoint*
 mag_trkparse(char* trkmsg)
 {
-  double latdeg, lngdeg;
-  int alt;
-  char altunits;
-  char lngdir, latdir;
-  int dmy;
   int hms;
   int fracsecs;
   struct tm tm;
-  Waypoint* waypt;
 
-  waypt  = new Waypoint;
+  Waypoint* waypt = new Waypoint;
 
   memset(&tm, 0, sizeof(tm));
 
@@ -988,17 +972,17 @@ mag_trkparse(char* trkmsg)
    * for us.
    */
   parse_istring(trkmsg);
-  latdeg = atof(ifield[1]);
-  latdir = ifield[2][0];
-  lngdeg = atof(ifield[3]);
-  lngdir = ifield[4][0];
-  alt = atof(ifield[5]);
-  altunits = ifield[6][0];
+  double latdeg = atof(ifield[1]);
+  char latdir = ifield[2][0];
+  double lngdeg = atof(ifield[3]);
+  char lngdir = ifield[4][0];
+  int alt = atof(ifield[5]);
+  char altunits = ifield[6][0];
   (void)altunits;
   sscanf(ifield[7], "%d.%d", &hms, &fracsecs);
   /* Field 8 is constant */
   /* Field nine is optional track name */
-  dmy = atoi(ifield[10]);
+  int dmy = atoi(ifield[10]);
 
   tm.tm_sec = hms % 100;
   hms = hms / 100;
@@ -1055,12 +1039,10 @@ mag_rteparse(char* rtemsg)
   /* Explorist has a route name here */
   QString rte_name;
   if (explorist) {
-    char* ca, *ce;
-
-    ca = rtemsg + n;
+    char* ca = rtemsg + n;
     is_fatal(*ca++ != ',', MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
 
-    ce = strchr(ca, ',');
+    char* ce = strchr(ca, ',');
     is_fatal(ce == nullptr, MYNAME ": Incorrectly formatted route line '%s'", rtemsg);
 
     if (ca == ce) {
@@ -1131,9 +1113,8 @@ mag_rteparse(char* rtemsg)
    */
   if (frag == mag_rte_head->nelems) {
     queue* elem, *tmp;
-    route_head* rte_head;
 
-    rte_head = route_head_alloc();
+    route_head* rte_head = route_head_alloc();
     route_add_head(rte_head);
     rte_head->rte_num = rtenum;
     rte_head->rte_name = rte_name;
@@ -1145,15 +1126,14 @@ mag_rteparse(char* rtemsg)
      */
 
     QUEUE_FOR_EACH(&mag_rte_head->Q, elem, tmp) {
-      mag_rte_elem* re = (mag_rte_elem*) elem;
-      Waypoint* waypt;
+      mag_rte_elem* re = reinterpret_cast<mag_rte_elem *>(elem);
       queue* welem, *wtmp;
 
       /*
        * Copy route points from temp wpt queue.
        */
       QUEUE_FOR_EACH(&rte_wpt_tmp, welem, wtmp) {
-        waypt = (Waypoint*)welem;
+        Waypoint* waypt = reinterpret_cast<Waypoint *>(welem);
         if (waypt->shortname == re->wpt_name) {
           Waypoint* wpt = new Waypoint(*waypt);
           route_add_wpt(rte_head, wpt);
@@ -1219,27 +1199,23 @@ mag_wptparse(char* trkmsg)
   char shortname[100];
   char descr[256];
   char icon_token[100];
-  Waypoint* waypt;
-  char* icons;
-  char* icone;
-  char* blah;
   int i = 0;
 
   descr[0] = 0;
   icon_token[0] = 0;
 
-  waypt  = new Waypoint;
+  Waypoint* waypt = new Waypoint;
 
   sscanf(trkmsg,"$PMGNWPL,%lf,%c,%lf,%c,%d,%c,%[^,],%[^,]",
          &latdeg,&latdir,
          &lngdeg,&lngdir,
          &alt,&altunits,shortname,descr);
-  icone = strrchr(trkmsg, '*');
-  icons = strrchr(trkmsg, ',')+1;
+  char* icone = strrchr(trkmsg, '*');
+  char* icons = strrchr(trkmsg, ',')+1;
 
   mag_dequote(descr);
 
-  for (blah = icons ; blah < icone; blah++) {
+  for (char* blah = icons ; blah < icone; blah++) {
     icon_token[i++] = *blah;
   }
   icon_token[i++] = '\0';
@@ -1350,21 +1326,18 @@ static
 void
 mag_waypt_pr(const Waypoint* waypointp)
 {
-  double lon, lat;
-  double ilon, ilat;
-  int lon_deg, lat_deg;
   char obuf[200];
   char ofmtdesc[200];
   QString icon_token;
 
-  ilat = waypointp->latitude;
-  ilon = waypointp->longitude;
+  double ilat = waypointp->latitude;
+  double ilon = waypointp->longitude;
 
-  lon = fabs(ilon);
-  lat = fabs(ilat);
+  double lon = fabs(ilon);
+  double lat = fabs(ilat);
 
-  lon_deg = lon;
-  lat_deg = lat;
+  int lon_deg = lon;
+  int lat_deg = lat;
 
   lon = (lon - lon_deg) * 60.0;
   lat = (lat - lat_deg) * 60.0;
@@ -1433,18 +1406,14 @@ void mag_track_nop(const route_head*)
 static
 void mag_track_disp(const Waypoint* waypointp)
 {
-  double ilon, ilat;
-  double lon, lat;
-  int lon_deg, lat_deg;
   char obuf[200];
   int hms=0;
   int fracsec=0;
   int date=0;
-  struct tm* tm = nullptr;
 
-  ilat = waypointp->latitude;
-  ilon = waypointp->longitude;
-  tm = nullptr;
+  double ilat = waypointp->latitude;
+  double ilon = waypointp->longitude;
+  struct tm* tm = nullptr;
   if (waypointp->creation_time.isValid()) {
     const time_t ct = waypointp->GetCreationTime().toTime_t();
     tm = gmtime(&ct);
@@ -1461,11 +1430,11 @@ void mag_track_disp(const Waypoint* waypointp)
     fracsec = 0;
   }
 
-  lon = fabs(ilon);
-  lat = fabs(ilat);
+  double lon = fabs(ilon);
+  double lat = fabs(ilat);
 
-  lon_deg = lon;
-  lat_deg = lat;
+  int lon_deg = lon;
+  int lat_deg = lat;
 
   lon = (lon - lon_deg) * 60.0;
   lat = (lat - lat_deg) * 60.0;
@@ -1505,25 +1474,23 @@ static void
 mag_route_trl(const route_head* rte)
 {
   queue* elem, *tmp;
-  Waypoint* waypointp;
   char obuff[256];
   char buff1[64], buff2[64];
   char* pbuff;
   QString icon_token;
-  int i, numlines, thisline;
 
   /* count waypoints for this route */
-  i = rte->rte_waypt_ct;
+  int i = rte->rte_waypt_ct;
 
   /* number of output PMGNRTE messages at 2 points per line */
-  numlines = (i / 2) + (i % 2);
+  int numlines = (i / 2) + (i % 2);
 
   /* increment the route counter. */
   route_out_count++;
 
-  thisline = i = 0;
+  int thisline = i = 0;
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
     i++;
 
     if (deficon) {

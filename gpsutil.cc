@@ -65,11 +65,9 @@ data_read()
   char desc[31];
   double lat,lon;
   char latdir, londir;
-  int ilat, ilon;
   long alt;
   char alttype;
   char icon[3];
-  Waypoint* wpt_tmp;
   int line = 0;
   /*
    * Make sure that all waypoints in single read have same
@@ -79,7 +77,6 @@ data_read()
   icon[0] = 0;
 
   while ((ibuf = gbfgetstr(file_in))) {
-    int n, len;
     char* sn;
 
     if ((line++ == 0) && file_in->unicode) {
@@ -88,7 +85,7 @@ data_read()
 
     /*  A sharp in column zero or an blank line is a comment */
     ibuf = lrtrim(ibuf);
-    len = strlen(ibuf);
+    int len = strlen(ibuf);
     if ((len == 0) || (*ibuf == '#')) {
       continue;
     }
@@ -102,9 +99,9 @@ data_read()
       ibuf += 9;
     }
 
-    n = sscanf(ibuf, "%lf%c %lf%c %ld%c %30[^,] %2s",
-               &lat, &latdir, &lon, &londir,
-               &alt, &alttype, desc, icon);
+    int n = sscanf(ibuf, "%lf%c %lf%c %ld%c %30[^,] %2s",
+                   &lat, &latdir, &lon, &londir,
+                   &alt, &alttype, desc, icon);
     /* Require at least first threee fields, otherwise ignore */
     if (n < 2) {
       xfree(sn);
@@ -113,7 +110,7 @@ data_read()
     rtrim(sn);
     rtrim(desc);
     rtrim(icon);
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
     wpt_tmp->altitude = alt;
     wpt_tmp->shortname = sn;
     xfree(sn);
@@ -129,9 +126,9 @@ data_read()
 
     lat /= 100.0;
     lon /= 100.0;
-    ilon = (int)(lon);
+    int ilon = (int)(lon);
     wpt_tmp->longitude = ilon + (lon - ilon)*(100.0/60.0);
-    ilat = (int)(lat);
+    int ilat = (int)(lat);
     wpt_tmp->latitude = ilat + (lat - ilat) * (100.0/60.0);
     wpt_tmp->icon_descr = mag_find_descr_from_token(icon);
     waypt_add(wpt_tmp);
@@ -141,14 +138,12 @@ data_read()
 static void
 gpsutil_disp(const Waypoint* wpt)
 {
-  double lon,lat;
-  QString icon_token;
   char* tdesc = xstrdup(wpt->description);
 
-  icon_token = mag_find_token_from_descr(wpt->icon_descr);
+  QString icon_token = mag_find_token_from_descr(wpt->icon_descr);
 
-  lon = degrees2ddmm(wpt->longitude);
-  lat = degrees2ddmm(wpt->latitude);
+  double lon = degrees2ddmm(wpt->longitude);
+  double lat = degrees2ddmm(wpt->latitude);
 
   gbfprintf(file_out, "%-8.8s %08.3f%c %09.3f%c %07.0f%c %-30.30s %s\n",
             global_opts.synthesize_shortnames ?

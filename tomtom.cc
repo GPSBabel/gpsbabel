@@ -154,14 +154,13 @@ check_recsize(int sz)
 static void
 data_read()
 {
-  int rectype;
   long recsize;
   long x;
   long y;
   char* desc;
   Waypoint* wpt_tmp;
   while (!gbfeof(file_in)) {
-    rectype = read_char(file_in);
+    int rectype = read_char(file_in);
     if (rectype == EOF) {
       fatal(MYNAME ":Unexpected EOF.");
     }
@@ -362,9 +361,7 @@ static struct blockheader*
 compute_blocks(struct hdr* start, int count,
                double minlon, double maxlon, double minlat, double maxlat)
 {
-  struct blockheader* newblock;
-
-  newblock = (struct blockheader*)xcalloc(sizeof(*newblock), 1);
+  struct blockheader* newblock = (struct blockheader*)xcalloc(sizeof(*newblock), 1);
   newblock->start = start;
   newblock->count = count;
   newblock->minlon = minlon;
@@ -373,13 +370,10 @@ compute_blocks(struct hdr* start, int count,
   newblock->maxlat = maxlat;
   newblock->size = 4 * 5 + 1;   /* hdr is 5 longs, 1 char */
   if (count < 20) {
-    int i;
-    Waypoint* wpt = nullptr;
-
-    for (i = 0; i < count; i++) {
+    for (int i = 0; i < count; i++) {
       newblock->size += 4 * 3 + 1;
       /* wpt const part 3 longs, 1 char */
-      wpt = start[i].wpt;
+      Waypoint* wpt = start[i].wpt;
       newblock->size += wpt->description.length() + 1;
     }
   } else {
@@ -449,7 +443,7 @@ data_write()
   foreach(Waypoint* waypointp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
 #endif
     bh->wpt = waypointp;
     if (waypointp->longitude > maxlon) {

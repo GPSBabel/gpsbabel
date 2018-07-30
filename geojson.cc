@@ -119,8 +119,7 @@ geojson_wr_deinit() {
   object[FEATURES]  = *feature_collection;
 
   QJsonDocument save(object);
-  QJsonDocument::JsonFormat style;
-  style = compact_opt ? QJsonDocument::Compact : QJsonDocument::Indented;
+  QJsonDocument::JsonFormat style = compact_opt ? QJsonDocument::Compact : QJsonDocument::Indented;
   gbfputs(save.toJson(style),ofd);
 
   gbfclose(ofd);

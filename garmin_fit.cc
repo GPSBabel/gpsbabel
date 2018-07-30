@@ -110,9 +110,7 @@ fit_rd_init(const QString& fname)
 static void
 fit_rd_deinit()
 {
-  int local_id;
-
-  for (local_id=0; local_id<16; local_id++) {
+  for (int local_id = 0; local_id<16; local_id++) {
     fit_message_def* def = &fit_data.message_def[local_id];
     if (def->fields) {
       xfree(def->fields);
@@ -130,11 +128,9 @@ fit_rd_deinit()
 static void
 fit_parse_header()
 {
-  int len;
-  int ver;
   char sig[4];
 
-  len = gbfgetc(fin);
+  int len = gbfgetc(fin);
   if (len == EOF || len < 12) {
     fatal(MYNAME ": Bad header\n");
   }
@@ -142,7 +138,7 @@ fit_parse_header()
     debug_print(1,"%s: header len=%d\n", MYNAME, len);
   }
 
-  ver = gbfgetc(fin);
+  int ver = gbfgetc(fin);
   if (ver == EOF || (ver >> 4) > 2)
     fatal(MYNAME ": Unsupported protocol version %d.%d\n",
           ver >> 4, ver & 0xf);
@@ -177,8 +173,6 @@ fit_parse_header()
 static uint8_t
 fit_getuint8()
 {
-  int val;
-
   if (fit_data.len == 0) {
     // fail gracefully for GARMIN Edge 800 with newest firmware, seems to write a wrong record length
     // for the last record.
@@ -188,7 +182,7 @@ fit_getuint8()
     }
     return 0;
   }
-  val = gbfgetc(fin);
+  int val = gbfgetc(fin);
   if (val == EOF) {
     fatal(MYNAME ": unexpected end of file with fit_data.len=%d\n",fit_data.len);
   }
@@ -240,7 +234,6 @@ fit_parse_definition_message(uint8_t header)
 {
   int local_id = header & 0x0f;
   fit_message_def* def = &fit_data.message_def[local_id];
-  int i;
 
   if (def->fields) {
     xfree(def->fields);
@@ -248,7 +241,7 @@ fit_parse_definition_message(uint8_t header)
 
   // first byte is reserved.  It's usually 0 and we don't know what it is,
   // but we've seen some files that are 0x40.  So we just read it and toss it.
-  i = fit_getuint8();
+  int i = fit_getuint8();
 
   // second byte is endianness
   def->endian = fit_getuint8();
@@ -407,9 +400,7 @@ fit_read_field(fit_field_t* f)
 static void
 fit_parse_data(fit_message_def* def, int time_offset)
 {
-  fit_field_t* f;
   uint32_t timestamp = fit_data.last_timestamp + time_offset;
-  uint32_t val;
   int32_t lat = 0x7fffffff;
   int32_t lon = 0x7fffffff;
   uint16_t alt = 0xffff;
@@ -418,7 +409,6 @@ fit_parse_data(fit_message_def* def, int time_offset)
   uint8_t cadence = 0xff;
   uint16_t power = 0xffff;
   int8_t temperature = 0x7f;
-  int i;
   Waypoint* waypt;
   int32_t startlat = 0x7fffffff;
   int32_t startlon = 0x7fffffff;
@@ -431,12 +421,12 @@ fit_parse_data(fit_message_def* def, int time_offset)
   if (global_opts.debug_level >= 7) {
     debug_print(7,"%s: parsing fit data ID %d with num_fields=%d\n", MYNAME, def->global_id, def->num_fields);
   }
-  for (i = 0; i < def->num_fields; i++) {
+  for (int i = 0; i < def->num_fields; i++) {
     if (global_opts.debug_level >= 7) {
       debug_print(7,"%s: parsing field %d\n", MYNAME, i);
     }
-    f = &def->fields[i];
-    val = fit_read_field(f);
+    fit_field_t* f = &def->fields[i];
+    uint32_t val = fit_read_field(f);
     if (f->id == kFieldTimestamp) {
       if (global_opts.debug_level >= 7) {
         debug_print(7,"%s: parsing fit data: timestamp=%d\n", MYNAME, val);
@@ -682,9 +672,7 @@ fit_parse_compressed_message(uint8_t header)
 static void
 fit_parse_record()
 {
-  uint8_t header;
-
-  header = fit_getuint8();
+  uint8_t header = fit_getuint8();
   // high bit 7 set -> compressed message (0 for normal)
   // second bit 6 set -> 0 for data message, 1 for definition message
   // bit 5 -> message type specific 

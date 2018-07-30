@@ -42,20 +42,18 @@ double PositionFilter::gc_distance(double lat1, double lon1, double lat2, double
 void PositionFilter::position_runqueue(queue* q, int nelems, int qtype)
 {
   queue* elem, * tmp;
-  Waypoint** comp;
-  int* qlist;
   double dist, diff_time;
-  int i = 0, j, anyitem;
+  int i = 0, anyitem;
 
-  comp = (Waypoint**) xcalloc(nelems, sizeof(*comp));
-  qlist = (int*) xcalloc(nelems, sizeof(*qlist));
+  Waypoint** comp = (Waypoint**) xcalloc(nelems, sizeof(*comp));
+  int* qlist = (int*) xcalloc(nelems, sizeof(*qlist));
 
 #if NEWQ
   foreach (Waypoint* waypointp, waypt_list) {
     comp[i] = waypointp;
 #else
   QUEUE_FOR_EACH(q, elem, tmp) {
-    comp[i] = (Waypoint*)elem;
+    comp[i] = reinterpret_cast<Waypoint *>(elem);
 #endif
     qlist[i] = 0;
     i++;
@@ -65,7 +63,7 @@ void PositionFilter::position_runqueue(queue* q, int nelems, int qtype)
     anyitem = 0;
 
     if (!qlist[i]) {
-      for (j = i + 1 ; j < nelems ; j++) {
+      for (int j = i + 1 ; j < nelems ; j++) {
         if (!qlist[j]) {
           dist = gc_distance(comp[j]->latitude,
                              comp[j]->longitude,

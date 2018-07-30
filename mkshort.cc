@@ -87,10 +87,9 @@ MKSHORT_NEW_HANDLE(DEBUG_PARAMS)
 mkshort_new_handle()
 #endif
 {
-  int i;
   mkshort_handle_imp* h = (mkshort_handle_imp*) xxcalloc(sizeof *h, 1, file, line);
 
-  for (i = 0; i < PRIME; i++) {
+  for (int i = 0; i < PRIME; i++) {
     QUEUE_INIT(&h->namelist[i]);
   }
 
@@ -109,11 +108,10 @@ uniq_shortname*
 is_unique(mkshort_handle_imp* h, char* name)
 {
   queue* e, *t;
-  int hash;
 
-  hash = hash_string(name);
+  int hash = hash_string(name);
   QUEUE_FOR_EACH(&h->namelist[hash], e, t) {
-    uniq_shortname* z = (uniq_shortname*) e;
+    uniq_shortname* z = reinterpret_cast<uniq_shortname *>(e);
     if (0 == case_ignore_strcmp(z->orig_shortname, name)) {
       return z;
     }
@@ -138,13 +136,12 @@ mkshort_add_to_list(mkshort_handle_imp* h, char* name)
   uniq_shortname* s;
 
   while ((s = is_unique(h, name))) {
-    int dl;
     char tbuf[10];
     size_t l = strlen(name);
 
     s->conflictctr++;
 
-    dl = sprintf(tbuf, ".%d", s->conflictctr);
+    int dl = sprintf(tbuf, ".%d", s->conflictctr);
 
     if (l + dl < h->target_len) {
       name = (char*) xrealloc(name, l + dl + 1);
@@ -162,16 +159,15 @@ void
 mkshort_del_handle(short_handle* h)
 {
   mkshort_handle_imp* hdr = (mkshort_handle_imp*) *h;
-  int i;
 
   if (!h || !hdr) {
     return;
   }
 
-  for (i = 0; i < PRIME; i++) {
+  for (int i = 0; i < PRIME; i++) {
     queue* e, *t;
     QUEUE_FOR_EACH(&hdr->namelist[i], e, t) {
-      uniq_shortname* s = (uniq_shortname*) e;
+      uniq_shortname* s = reinterpret_cast<uniq_shortname *>(e);
 #if 0
       if (global_opts.verbose_status >= 2 && s->conflictctr) {
         fprintf(stderr, "%d Output name conflicts: '%s'\n",
@@ -204,20 +200,17 @@ static
 char*
 delete_last_vowel(int start, char* istring, int* replaced)
 {
-  int l;
-
   /*
    * Basically impelement strrchr.
    */
   *replaced = 0;
-  for (l = strlen(istring); l > start; l--) {
+  for (int l = strlen(istring); l > start; l--) {
     if (strchr(vowels, istring[l-1])) {
-      char* ostring;
       /* If vowel is the first letter of a word, keep it.*/
       if (istring[l-2] == ' ') {
         continue;
       }
-      ostring = xstrdup(istring);
+      char* ostring = xstrdup(istring);
       strncpy(&ostring[l-1], &istring[l], 1+strlen(istring)-l);
       ostring[strlen(istring)-1] = 0;
       *replaced = 1;
@@ -236,10 +229,9 @@ delete_last_vowel(int start, char* istring, int* replaced)
 void
 replace_constants(char* s)
 {
-  struct replacements* r;
   int origslen = strlen(s);
 
-  for (r = replacements; r->orig; r++) {
+  for (struct replacements* r = replacements; r->orig; r++) {
     int rl = strlen(r->orig);
     /*
      * If word is in replacement list and preceeded by a
@@ -385,12 +377,9 @@ mkshort(short_handle h, const char* istring)
 #endif
 {
   char* ostring;
-  char* nstring;
   char* tstring;
   char* cp;
-  char* np;
   int i, l, replaced;
-  size_t nlen;
   mkshort_handle_imp* hdl = (mkshort_handle_imp*) h;
 
   if (hdl->is_utf8) {
@@ -417,7 +406,7 @@ mkshort(short_handle h, const char* istring)
   if ((strlen(ostring) > hdl->target_len + 4) &&
       (strncmp(ostring, "The ", 4) == 0 ||
        strncmp(ostring, "the ", 4) == 0)) {
-    nstring = xxstrdup(ostring + 4, file, line);
+    char* nstring = xxstrdup(ostring + 4, file, line);
     xfree(ostring);
     ostring = nstring;
   }
@@ -530,11 +519,11 @@ mkshort(short_handle h, const char* istring)
    * Walk in the Woods 2.
    */
 
-  np = ostring + strlen(ostring);
+  char* np = ostring + strlen(ostring);
   while ((np != ostring) && *(np-1) && isdigit(*(np-1))) {
     np--;
   }
-  nlen = strlen(np);
+  size_t nlen = strlen(np);
 
   /*
    * Now brutally truncate the resulting string, preserve trailing

@@ -224,10 +224,9 @@ static void kml_init_color_sequencer(unsigned int steps_per_rev)
 
 static void kml_step_color()
 {
-  int color_seq;
   // Map kml_color_sequencer.seq to an integer in the range [0, KML_COLOR_LIMIT*6).
   // Note that color_seq may be outside this range if the cast from float to int fails.
-  color_seq = ((int) kml_color_sequencer.seq) % (KML_COLOR_LIMIT * 6);
+  int color_seq = ((int) kml_color_sequencer.seq) % (KML_COLOR_LIMIT * 6);
   if (global_opts.debug_level >= 1) {
     printf(MYNAME ": kml_color_sequencer seq %f %d, step %f\n",kml_color_sequencer.seq, color_seq, kml_color_sequencer.step);
   }
@@ -356,13 +355,12 @@ void wpt_ts_end(xg_string args, const QXmlStreamAttributes*)
 
 void wpt_coord(const QString& args, const QXmlStreamAttributes*)
 {
-  int n = 0;
   double lat, lon, alt;
   if (! wpt_tmp) {
     return;
   }
   // Alt is actually optional.
-  n = sscanf(CSTRc(args), "%lf,%lf,%lf", &lon, &lat, &alt);
+  int n = sscanf(CSTRc(args), "%lf,%lf,%lf", &lon, &lat, &alt);
   if (n >= 2) {
     wpt_tmp->latitude = lat;
     wpt_tmp->longitude = lon;
@@ -430,7 +428,7 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
                   queue* curr_elem;
                   queue* tmp_elem;
 		  QUEUE_FOR_EACH(&trk_head->waypoint_list, curr_elem, tmp_elem) {
-			  trkpt = (Waypoint*) curr_elem;
+			  trkpt = reinterpret_cast<Waypoint *>(curr_elem);
 			  trkpt->SetCreationTime(wpt_timespan_begin);
 			  wpt_timespan_begin = wpt_timespan_begin.addMSecs(ms_per_waypoint);
 		  }
@@ -448,9 +446,7 @@ void gx_trk_s(xg_string, const QXmlStreamAttributes*)
     gx_trk_head->rte_desc  = wpt_tmp->description;
   }
   track_add_head(gx_trk_head);
-  if (gx_trk_times) {
-    delete gx_trk_times;
-  }
+  delete gx_trk_times;
   gx_trk_times = new QList<gpsbabel::DateTime>;
 }
 
@@ -473,16 +469,14 @@ void gx_trk_when(xg_string args, const QXmlStreamAttributes*)
 
 void gx_trk_coord(xg_string args, const QXmlStreamAttributes*)
 {
-  Waypoint* trkpt;
   double lat, lon, alt;
-  int n;
 
   if (! gx_trk_times || gx_trk_times->isEmpty()) {
     fatal(MYNAME ": There were more gx:coord elements than the number of when elements.\n");
   }
-  trkpt = new Waypoint;
+  Waypoint* trkpt = new Waypoint;
   trkpt->SetCreationTime(gx_trk_times->takeFirst());
-  n = sscanf(CSTR(args), "%lf %lf %lf", &lon, &lat, &alt);
+  int n = sscanf(CSTR(args), "%lf %lf %lf", &lon, &lat, &alt);
   // Empty gx_coord elements are allowed to balance the number of when elements,
   // but if we get one we will throw away the time as we don't have a location.
   // It is not clear that coord elements without altitude are allowed, but our
@@ -586,11 +580,10 @@ kml_wr_deinit()
   oqfile = nullptr;
 
   if (!posnfilenametmp.isEmpty()) {
-#if __WIN32__
-    MoveFileExW((const wchar_t*) posnfilenametmp.utf16(),
-                (const wchar_t*) posnfilename.utf16(),
-                MOVEFILE_REPLACE_EXISTING);
-#endif
+    // QFile::rename() can't replace an existing file, so do a QFile::remove()
+    // first (which can fail silently if posnfilename doesn't exist). A race
+    // condition can theoretically still cause rename to fail... oh well.
+    QFile::remove(posnfilename);
     QFile::rename(posnfilenametmp, posnfilename);
   }
 }
@@ -744,11 +737,8 @@ static
 void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
 {
   const char* max_alt_units;
-  double max_alt;
   const char* min_alt_units;
-  double min_alt;
   const char* distance_units;
-  double distance;
 
   if (!td || !trackdata) {
     return;
@@ -757,9 +747,9 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   QString hstring;
   gpsbabel::XmlStreamWriter hwriter(&hstring);
 
-  max_alt = fmt_altitude(td->max_alt, &max_alt_units);
-  min_alt = fmt_altitude(td->min_alt, &min_alt_units);
-  distance = fmt_distance(td->distance_meters, &distance_units);
+  double max_alt = fmt_altitude(td->max_alt, &max_alt_units);
+  double min_alt = fmt_altitude(td->min_alt, &min_alt_units);
+  double distance = fmt_distance(td->distance_meters, &distance_units);
 
   writer->writeEmptyElement(QStringLiteral("snippet"));
 
@@ -810,8 +800,7 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
     kml_td(hwriter, QStringLiteral("Max Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(td->max_cad)));
   }
   if (td->start && td->end) {
-    gpsbabel::DateTime t;
-    t = QDateTime::fromTime_t(td->start);
+    gpsbabel::DateTime t = QDateTime::fromTime_t(td->start);
     if (t.isValid()) {
       kml_td(hwriter, QStringLiteral("Start Time"), t.toPrettyString());
     }
@@ -833,8 +822,7 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   if (td->start && td->end) {
     writer->writeStartElement(QStringLiteral("TimeSpan"));
 
-    gpsbabel::DateTime t;
-    t = QDateTime::fromTime_t(td->start);
+    gpsbabel::DateTime t = QDateTime::fromTime_t(td->start);
     writer->writeTextElement(QStringLiteral("begin"), t.toPrettyString());
     t = QDateTime::fromTime_t(td->end);
     writer->writeTextElement(QStringLiteral("end"), t.toPrettyString());
@@ -924,7 +912,6 @@ static void kml_output_positioning(bool tessellate)
 static void kml_output_description(const Waypoint* pt)
 {
   const char* alt_units;
-  double alt;
 
   if (!trackdata) {
     return;
@@ -933,7 +920,7 @@ static void kml_output_description(const Waypoint* pt)
   QString hstring;
   gpsbabel::XmlStreamWriter hwriter(&hstring);
 
-  alt = fmt_altitude(pt->altitude, &alt_units);
+  double alt = fmt_altitude(pt->altitude, &alt_units);
 
   writer->writeStartElement(QStringLiteral("description"));
   hwriter.writeCharacters(QStringLiteral("\n"));
@@ -1084,7 +1071,7 @@ static void kml_output_tailer(const route_head* header)
     queue* elem, *tmp;
 
     QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-      Waypoint* tpt = (Waypoint*) elem;
+      Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
       int first_in_trk = tpt->Q.prev == &header->waypoint_list;
       if (!first_in_trk && tpt->wpt_flags.new_trkseg) {
         needs_multigeometry = 1;
@@ -1121,7 +1108,7 @@ static void kml_output_tailer(const route_head* header)
     }
 
     QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-      Waypoint* tpt = (Waypoint*) elem;
+      Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
       int first_in_trk = tpt->Q.prev == &header->waypoint_list;
       if (tpt->wpt_flags.new_trkseg) {
         if (!first_in_trk) {
@@ -1420,20 +1407,17 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
   QString r;
 
   fs_xml* fs_gpx = (fs_xml*)fs_chain_find(wpt->fs, FS_GPX);
-  xml_tag* root = nullptr;
-  xml_tag* curlog = nullptr;
-  xml_tag* logpart = nullptr;
 
   if (!fs_gpx) {
     return r;
   }
 
-  root = fs_gpx->tag;
-  curlog = xml_findfirst(root, "groundspeak:log");
+  xml_tag* root = fs_gpx->tag;
+  xml_tag* curlog = xml_findfirst(root, "groundspeak:log");
   while (curlog) {
     // Unless we have a broken GPX input, these logparts
     // branches will always be taken.
-    logpart = xml_findfirst(curlog, "groundspeak:type");
+    xml_tag* logpart = xml_findfirst(curlog, "groundspeak:type");
     if (logpart) {
       r = r + "<p><b>" + logpart->cdata + "</b>";
     }
@@ -1453,9 +1437,8 @@ static QString kml_geocache_get_logs(const Waypoint* wpt)
 
     logpart = xml_findfirst(curlog, "groundspeak:text");
     if (logpart) {
-      int encoded = 0;
       char* encstr = xml_attribute(logpart, "encoded");
-      encoded = (toupper(encstr[0]) != 'F');
+      int encoded = (toupper(encstr[0]) != 'F');
 
       QString s;
       if (html_encrypt && encoded) {
@@ -1715,7 +1698,7 @@ static void kml_mt_simple_array(const route_head* header,
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
 
-    Waypoint* wpt = (Waypoint*) elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
 
     switch (member) {
     case fld_power:
@@ -1746,7 +1729,7 @@ static int track_has_time(const route_head* header)
   queue* elem, *tmp;
   int points_with_time = 0;
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = (Waypoint*)elem;
+    Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
 
     if (tpt->GetCreationTime().isValid()) {
       points_with_time++;
@@ -1764,7 +1747,7 @@ static void write_as_linestring(const route_head* header)
   queue* elem, *tmp;
   kml_track_hdr(header);
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = (Waypoint*)elem;
+    Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
     kml_track_disp(tpt);
   }
   kml_track_tlr(header);
@@ -1794,7 +1777,7 @@ static void kml_mt_hdr(const route_head* header)
   kml_output_positioning(false);
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = (Waypoint*)elem;
+    Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
 
     if (tpt->GetCreationTime().isValid()) {
       QString time_string = tpt->CreationTimeXML();
@@ -1807,7 +1790,7 @@ static void kml_mt_hdr(const route_head* header)
 
   // TODO: How to handle clamped, floating, extruded, etc.?
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = (Waypoint*)elem;
+    Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
 
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement(QStringLiteral("gx:coord"),
@@ -1904,8 +1887,6 @@ static void kml_route_tlr(const route_head* header)
 // to include all our data.
 static void kml_write_AbstractView()
 {
-  double bb_size;
-
   // Make a pass through all the points to find the bounds.
   if (waypt_count()) {
     waypt_disp_all(kml_add_to_bounds);
@@ -1925,7 +1906,6 @@ static void kml_write_AbstractView()
       writer->writeTextElement(QStringLiteral("begin"), kml_time_min.toPrettyString());
     }
     if (kml_time_max.isValid()) {
-      gpsbabel::DateTime time_max;
       // In realtime tracking mode, we fudge the end time by a few minutes
       // to ensure that the freshest data (our current location) is contained
       // within the timespan.   Earth's time may not match the GPS because
@@ -1933,7 +1913,7 @@ static void kml_write_AbstractView()
       // the network position.  So we shove the end of the timespan out to
       // ensure the right edge of that time slider includes us.
       //
-      time_max = realtime_positioning ? kml_time_max.addSecs(600) : kml_time_max;
+      gpsbabel::DateTime time_max = realtime_positioning ? kml_time_max.addSecs(600) : kml_time_max;
       writer->writeTextElement(QStringLiteral("end"), time_max.toPrettyString());
     }
     writer->writeEndElement(); // Close gx:TimeSpan tag
@@ -1951,8 +1931,8 @@ static void kml_write_AbstractView()
 
   // It turns out the length of the diagonal of the bounding box gives us a
   // reasonable guess for setting the camera altitude.
-  bb_size = gcgeodist(kml_bounds.min_lat, kml_bounds.min_lon,
-                      kml_bounds.max_lat, kml_bounds.max_lon);
+  double bb_size = gcgeodist(kml_bounds.min_lat, kml_bounds.min_lon,
+                             kml_bounds.max_lat, kml_bounds.max_lon);
   // Clamp bottom zoom level.  Otherwise, a single point zooms to grass.
   if (bb_size < 1000) {
     bb_size = 1000;
@@ -2185,9 +2165,9 @@ kml_wr_position(Waypoint* wpt)
 
   /* In order to avoid clutter while we're sitting still, don't add
      track points if we've not moved a minimum distance from the
-     beginnning of our accumulated track. */
+     beginning of our accumulated track. */
   {
-    Waypoint* newest_posn= (Waypoint*) QUEUE_LAST(&posn_trk_head->waypoint_list);
+    Waypoint* newest_posn= reinterpret_cast<Waypoint *>QUEUE_LAST(&posn_trk_head->waypoint_list);
 
     if (radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
                            RAD(newest_posn->latitude), RAD(newest_posn->longitude))) > 50) {
@@ -2212,7 +2192,7 @@ kml_wr_position(Waypoint* wpt)
    */
   while (max_position_points &&
          (posn_trk_head->rte_waypt_ct >= max_position_points)) {
-    Waypoint* tonuke = (Waypoint*) QUEUE_FIRST(&posn_trk_head->waypoint_list);
+    Waypoint* tonuke = reinterpret_cast<Waypoint *>QUEUE_FIRST(&posn_trk_head->waypoint_list);
     track_del_wpt(posn_trk_head, tonuke);
   }
 

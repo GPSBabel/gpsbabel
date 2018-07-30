@@ -186,12 +186,11 @@ fix_notes(const QString&, const QString& notes){
 static void
 waypoint_final()
 {
-  int via;
   if (wpt_tmp == nullptr) {
     return;
   }
 
-  via = wpt_tmp->wpt_flags.fmt_use ;
+  int via = wpt_tmp->wpt_flags.fmt_use;
   wpt_tmp->wpt_flags.fmt_use  = 0;
 
   if (version < 2) {	/* keep the old behaviour */
@@ -271,9 +270,8 @@ static double
 tef_read_comma_float(const QStringRef& value)
 {
   QString svalue = value.toString();
-  int cidx;
 
-  cidx = svalue.indexOf(',');
+  int cidx = svalue.indexOf(',');
   if (cidx == -1) {
     return svalue.toDouble();
   }

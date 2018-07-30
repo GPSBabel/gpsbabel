@@ -33,9 +33,7 @@
 
 void TransformFilter::transform_waypoints()
 {
-  route_head* rte;
-
-  rte = route_head_alloc();
+  route_head* rte = route_head_alloc();
   switch (current_target) {
   case 'R':
     route_add_head(rte);
@@ -49,7 +47,7 @@ void TransformFilter::transform_waypoints()
 #else
   queue* elem, *tmp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wpt = (Waypoint*) elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
 #endif
 
     wpt = new Waypoint(*wpt);

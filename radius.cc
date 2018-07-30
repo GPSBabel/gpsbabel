@@ -67,7 +67,7 @@ void RadiusFilter::process()
   foreach (Waypoint* waypointp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* waypointp = (Waypoint*)elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
 #endif
     double dist = gc_distance(waypointp->latitude,
                        waypointp->longitude,
@@ -105,7 +105,7 @@ void RadiusFilter::process()
   foreach (Waypoint* wp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wp = (Waypoint*) elem;
+    Waypoint* wp = reinterpret_cast<Waypoint *>(elem);
 #endif
     comp[i] = wp;
     waypt_del(wp);
@@ -156,7 +156,7 @@ void RadiusFilter::init()
     pos_dist = strtod(distopt, &fm);
 
     if ((*fm == 'k') || (*fm == 'K')) {
-      /* distance is kilometers, convert to feet */
+      /* distance is kilometers, convert to miles */
       pos_dist *= .6214;
     }
   }
@@ -179,9 +179,7 @@ void RadiusFilter::init()
 
 void RadiusFilter::deinit()
 {
-  if (home_pos) {
-    delete home_pos;
-  }
+  delete home_pos;
 }
 
 #endif // FILTERS_ENABLED

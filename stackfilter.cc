@@ -34,7 +34,6 @@ void StackFilter::process()
   queue* elem = nullptr;
   queue* tmp = nullptr;
   queue tmp_queue;
-  unsigned int tmp_count;
 
   if (opt_push) {
     tmp_elt = (struct stack_elt*)xmalloc(sizeof(struct stack_elt));
@@ -46,7 +45,7 @@ void StackFilter::process()
     stack = tmp_elt;
     if (opt_copy) {
       QUEUE_FOR_EACH(&(stack->waypts), elem, tmp) {
-        waypt_add(new Waypoint(*(Waypoint*)elem));
+        waypt_add(new Waypoint(*reinterpret_cast<Waypoint *>(elem)));
       }
     }
 
@@ -73,7 +72,7 @@ void StackFilter::process()
     }
     if (opt_append) {
       QUEUE_FOR_EACH(&(stack->waypts), elem, tmp) {
-        waypt_add((Waypoint*)elem);
+        waypt_add(reinterpret_cast<Waypoint *>(elem));
       }
       route_append(&(stack->routes));
       route_flush(&(stack->routes));
@@ -121,7 +120,7 @@ void StackFilter::process()
     xfree(tmp);
     track_restore(&tmp_queue);
 
-    tmp_count = waypt_count();
+    unsigned int tmp_count = waypt_count();
     set_waypt_count(tmp_elt->waypt_ct);
     tmp_elt->waypt_ct = tmp_count;
   }

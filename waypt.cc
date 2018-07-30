@@ -259,9 +259,8 @@ waypt_compute_bounds(bounds* bounds)
   foreach(Waypoint* waypointp, waypt_list) {
 #else
   queue* elem, *tmp;
-  Waypoint* waypointp;
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
 #endif
     waypt_add_to_bounds(bounds, waypointp);
   }
@@ -274,10 +273,9 @@ find_waypt_by_name(const QString& name)
   foreach(Waypoint* waypointp, waypt_list) {
 #else
   queue* elem, *tmp;
-  Waypoint* waypointp;
 
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
 #endif
     if (waypointp->shortname == name) {
       return waypointp;
@@ -310,7 +308,7 @@ waypt_flush(queue* head)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(head, elem, tmp) {
-    Waypoint* q = (Waypoint*) dequeue(elem);
+    Waypoint* q = reinterpret_cast<Waypoint *>(dequeue(elem));
     delete q;
     if (head == &waypt_head) {
       waypt_ct--;
@@ -336,11 +334,11 @@ waypt_flush_all()
 void
 waypt_backup(signed int* count, queue** head_bak)
 {
-  queue* elem, *tmp, *qbackup;
+  queue* elem, *tmp;
   Waypoint* wpt;
   int no = 0;
 
-  qbackup = (queue*) xcalloc(1, sizeof(*qbackup));
+  queue* qbackup = (queue*) xcalloc(1, sizeof(*qbackup));
   QUEUE_INIT(qbackup);
 #if NEWQ
 // Why does this code exist?
@@ -353,7 +351,7 @@ waypt_backup(signed int* count, queue** head_bak)
   waypt_ct = 0;
 
   QUEUE_FOR_EACH(qbackup, elem, tmp) {
-    wpt = (Waypoint*)elem;
+    wpt = reinterpret_cast<Waypoint *>(elem);
     waypt_add(new Waypoint(*wpt));
     no++;
   }
@@ -396,9 +394,7 @@ double
 gcgeodist(const double lat1, const double lon1,
           const double lat2, const double lon2)
 {
-  double res;
-
-  res = radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
+  double res = radtometers(gcdist(RAD(lat1), RAD(lon1), RAD(lat2), RAD(lon2)));
   if (res < 0.1) {
     res = 0;  /* calc. diffs on 32- and 64-bit hosts */
   }
@@ -472,14 +468,12 @@ waypt_distance(const Waypoint* A, const Waypoint* B)
 double
 waypt_speed_ex(const Waypoint* A, const Waypoint* B)
 {
-  double dist, time;
-
-  dist = waypt_distance_ex(A, B);
+  double dist = waypt_distance_ex(A, B);
   if (dist == 0) {
     return 0;
   }
 
-  time = fabs((double)A->creation_time.msecsTo(B->creation_time)) / 1000.0;
+  double time = fabs((double)A->creation_time.msecsTo(B->creation_time)) / 1000.0;
   if (time > 0) {
     return (dist / time);
   } else {
@@ -495,14 +489,12 @@ waypt_speed_ex(const Waypoint* A, const Waypoint* B)
 double
 waypt_speed(const Waypoint* A, const Waypoint* B)
 {
-  double dist, time;
-
-  dist = waypt_distance(A, B);
+  double dist = waypt_distance(A, B);
   if (dist == 0) {
     return 0;
   }
 
-  time = fabs((double)A->creation_time.msecsTo(B->creation_time)) / 1000.0;
+  double time = fabs((double)A->creation_time.msecsTo(B->creation_time)) / 1000.0;
   if (time > 0) {
     return (dist / time);
   } else {
@@ -518,14 +510,12 @@ waypt_speed(const Waypoint* A, const Waypoint* B)
 double
 waypt_vertical_speed(const Waypoint* A, const Waypoint* B)
 {
-  double altitude, time;
-
-  altitude = A->altitude - B->altitude;
+  double altitude = A->altitude - B->altitude;
   if (altitude == 0) {
     return 0;
   }
 
-  time = fabs((double)A->creation_time.msecsTo(B->creation_time)) / 1000.0;
+  double time = fabs((double)A->creation_time.msecsTo(B->creation_time)) / 1000.0;
   if (time > 0) {
     return (altitude / time);
   } else {
@@ -540,19 +530,18 @@ waypt_vertical_speed(const Waypoint* A, const Waypoint* B)
 double
 waypt_gradient(const Waypoint* A, const Waypoint* B)
 {
-  double dist, altitude, gradient;
-  dist = waypt_distance(A, B);
+  double dist = waypt_distance(A, B);
   if (dist == 0) {
     return 0;
   }
 
-  altitude = A->altitude - B->altitude;
+  double altitude = A->altitude - B->altitude;
   if (altitude == 0 || 
       A->altitude == unknown_alt || B->altitude == unknown_alt) {
     return 0;
   }
 
-  gradient = (altitude / dist) * 100;
+  double gradient = (altitude / dist) * 100;
   return (gradient);
 }
 

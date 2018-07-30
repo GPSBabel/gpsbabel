@@ -63,7 +63,6 @@ cet_str_utf8_to_uni(const char* src, int* length)
 char*
 cet_str_any_to_any(const char* src, const cet_cs_vec_t* src_vec, const cet_cs_vec_t* dest_vec)
 {
-  char* c0, *c1;
   const cet_cs_vec_t* v_in = (src_vec != nullptr)  ? src_vec :  &cet_cs_vec_ansi_x3_4_1968;
   const cet_cs_vec_t* v_out = (dest_vec != nullptr) ? dest_vec : &cet_cs_vec_ansi_x3_4_1968;
 
@@ -73,8 +72,8 @@ cet_str_any_to_any(const char* src, const cet_cs_vec_t* src_vec, const cet_cs_ve
     return xstrdup(src);
   }
 
-  c0 = (v_in == &cet_cs_vec_utf8) ? xstrdup(src) : cet_str_any_to_utf8(src, v_in);
-  c1 = (v_out == &cet_cs_vec_utf8) ? xstrdup(c0) : cet_str_utf8_to_any(c0, v_out);
+  char* c0 = (v_in == &cet_cs_vec_utf8) ? xstrdup(src) : cet_str_any_to_utf8(src, v_in);
+  char* c1 = (v_out == &cet_cs_vec_utf8) ? xstrdup(c0) : cet_str_utf8_to_any(c0, v_out);
   xfree(c0);
 
   return c1;
@@ -147,7 +146,6 @@ cet_register()
 
   if (cet_cs_vec_ct > 0) {
     cet_cs_vec_t* p;
-    cet_cs_alias_t* list;
     c = 0;
 
     /* enumerate count of all names and aliases */
@@ -164,7 +162,7 @@ cet_register()
     }
     /* create name to vec table */
 
-    list = (cet_cs_alias_t*) xcalloc(c, sizeof(*list));
+    cet_cs_alias_t* list = (cet_cs_alias_t*) xcalloc(c, sizeof(*list));
     i = 0;
     for (p = cet_cs_vec_root; p != nullptr; p = p->next) {
       if (p->alias != nullptr) {
@@ -213,24 +211,19 @@ cet_register()
 cet_cs_vec_t*
 cet_find_cs_by_name(const QString& name)
 {
-  int i, j;
-
   cet_register();
 
   if (cet_cs_alias == nullptr) {
     return nullptr;
   }
 
-  i = 0;
-  j = cet_cs_alias_ct - 1;
+  int i = 0;
+  int j = cet_cs_alias_ct - 1;
 
   while (i <= j) {
-    int a, x;
-    cet_cs_alias_t* n;
-
-    a = (i + j) >> 1;
-    n = &cet_cs_alias[a];
-    x = case_ignore_strcmp(name, n->name);
+    int a = (i + j) >> 1;
+    cet_cs_alias_t* n = &cet_cs_alias[a];
+    int x = case_ignore_strcmp(name, n->name);
     if (x == 0) {
       return n->vec;
     } else if (x < 0) {
@@ -245,7 +238,6 @@ cet_find_cs_by_name(const QString& name)
 void
 cet_deregister()
 {
-  int i;
   int j = cet_cs_alias_ct;
   cet_cs_alias_t* p = cet_cs_alias;
 
@@ -256,7 +248,7 @@ cet_deregister()
   cet_cs_alias_ct = 0;
   cet_cs_alias = nullptr;
 
-  for (i = 0; i < j; i++) {
+  for (int i = 0; i < j; i++) {
     xfree(p[i].name);
   }
   xfree(p);
@@ -267,15 +259,13 @@ cet_deregister()
 int
 cet_validate_cs(const QString& cs, cet_cs_vec_t** vec, QString* cs_name)
 {
-  cet_cs_vec_t* v;
-
   if (cs.isEmpty()) { /* set default us-ascii */
     *vec = &cet_cs_vec_ansi_x3_4_1968;
     *cs_name = CET_CHARSET_ASCII;
     return 1;
   }
 
-  v = cet_find_cs_by_name(cs);
+  cet_cs_vec_t* v = cet_find_cs_by_name(cs);
   if (v != nullptr) {
     // TODO: make v->name into q QString and replace this...
     char* tmp = xstrdup(v->name);
@@ -364,15 +354,13 @@ cet_convert_from_utf8(const char* str)
 char*
 cet_convert_string(char* str)
 {
-  char* res;
-
   if (str == nullptr) {
     return nullptr;  /* return origin if empty or NULL */
   } else if (*str == '\0') {
     return str;
   }
 
-  res = converter(str);
+  char* res = converter(str);
   xfree(str);
   return res;
 }
@@ -392,7 +380,6 @@ static void
 cet_convert_waypt(const Waypoint* wpt)
 {
   Waypoint* w = const_cast<Waypoint*>(wpt);
-  format_specific_data* fs;
 
   if ((cet_output == 0) && (w->wpt_flags.cet_converted != 0)) {
     return;
@@ -400,7 +387,7 @@ cet_convert_waypt(const Waypoint* wpt)
 
   w->wpt_flags.cet_converted = 1;
 
-  fs = wpt->fs;
+  format_specific_data* fs = wpt->fs;
   while (fs != nullptr) {
     if (fs->convert != nullptr) {
       fs->convert(fs);

@@ -87,7 +87,6 @@ static uint16_t
 format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_color)
 {
   int		method = 0;
-  uint16_t	trackbytes = 0, TrackPoints = 0;
   uint8_t	spam = 0;
   int32_t		TrackMaxLat = 0, TrackMaxLon = 0, TrackMinLat = 0, TrackMinLon = 0;
   char		trk_name[30]="";
@@ -105,8 +104,8 @@ format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_color)
   // set to RED if not specified
   *p_track_color=9;
 
-  trackbytes = gbfgetuint16(fin);
-  TrackPoints = gbfgetuint16(fin);
+  uint16_t trackbytes = gbfgetuint16(fin);
+  uint16_t TrackPoints = gbfgetuint16(fin);
   (void) TrackPoints;
 
   switch (method) {
@@ -153,9 +152,9 @@ format_garmin_xt_rd_st_attrs(char* p_trk_name, uint8_t* p_track_color)
 static void
 format_garmin_xt_decrypt_trk_blk(int Count, uint8_t TrackBlock[])
 {
-  uint8_t i,j = 12;
+  uint8_t j = 12;
   while (j<(Count-1)) {
-    for (i = j; i < Count; i++) {
+    for (uint8_t i = j; i < Count; i++) {
       TrackBlock[i] = TrackBlock[i] >> 1;
       if (i<(Count)) {
         TrackBlock[i] = TrackBlock[i] + (TrackBlock[i+1] % 2) * 128;
@@ -169,41 +168,37 @@ format_garmin_xt_decrypt_trk_blk(int Count, uint8_t TrackBlock[])
  * Function to Decompose track block of STRK_BLOCK_SIZE bytes
  */
 static void
-format_garmin_xt_decomp_trk_blk(uint8_t ii, uint8_t TrackBlock[], double* Ele, double* Lat, double* Lon, uint32_t* Time)
+format_garmin_xt_decomp_trk_blk(uint8_t ii, const uint8_t TrackBlock[], double* Ele, double* Lat, double* Lon, uint32_t* Time)
 {
-  uint32_t	LatLW = 0, LonLW = 0, TimeLW = 0;
-  double		LatF = 0, LonF = 0;
-  uint16_t	PrevEleW;
-
   //printf("%d %d %d %d %d %d\n", TrackBlock[0], TrackBlock[1], TrackBlock[2], TrackBlock[3], TrackBlock[4], TrackBlock[5]);
-  PrevEleW = TrackBlock[(ii - 1) * 12 + 1 ];
+  uint16_t PrevEleW = TrackBlock[(ii - 1) * 12 + 1 ];
   PrevEleW = PrevEleW << 8;
   PrevEleW = PrevEleW + TrackBlock[(ii - 1) * 12 ];
   *Ele = (double)PrevEleW * GARMIN_XT_ELE - 1500;
 
-  LatLW = TrackBlock[(ii - 1) * 12 + 4];
+  uint32_t LatLW = TrackBlock[(ii - 1) * 12 + 4];
   LatLW = LatLW << 8;
   LatLW = LatLW + TrackBlock[(ii - 1) * 12 + 3];
   LatLW = LatLW << 8;
   LatLW = LatLW + TrackBlock[(ii - 1) * 12 + 2];
-  LatF = (double)LatLW;
+  double LatF = (double)LatLW;
   if (LatF > 8388608) {
     LatF = LatF - 16777216;
   }
   *Lat = LatF * 360 / 16777216;
 
-  LonLW = TrackBlock[(ii-1)*12+7];
+  uint32_t LonLW = TrackBlock[(ii-1)*12+7];
   LonLW = LonLW << 8;
   LonLW = LonLW+TrackBlock[(ii-1)*12+6];
   LonLW = LonLW << 8;
   LonLW = LonLW+TrackBlock[(ii-1)*12+5];
-  LonF = (double)LonLW;
+  double LonF = (double)LonLW;
   if (LonF>8388608) {
     LonF = LonF - 16777216;
   }
   *Lon = LonF * 360 / 16777216;
 
-  TimeLW = TrackBlock[(ii - 1) * 12 + 11];
+  uint32_t TimeLW = TrackBlock[(ii - 1) * 12 + 11];
   TimeLW = TimeLW << 8;
   TimeLW = TimeLW+TrackBlock[(ii - 1) * 12 + 10];
   TimeLW = TimeLW << 8;
@@ -217,11 +212,9 @@ format_garmin_xt_decomp_trk_blk(uint8_t ii, uint8_t TrackBlock[], double* Ele, d
  * Decompose Last Waypoint Eleveation
  */
 static void
-format_garmin_xt_decomp_last_ele(uint8_t ii, double* PrevEle, uint8_t TrackBlock[])
+format_garmin_xt_decomp_last_ele(uint8_t ii, double* PrevEle, const uint8_t TrackBlock[])
 {
-  uint16_t	PrevEleW;
-
-  PrevEleW = TrackBlock[ii - 1];
+  uint16_t PrevEleW = TrackBlock[ii - 1];
   PrevEleW = PrevEleW << 8;
   PrevEleW = PrevEleW + TrackBlock[ii - 2];
   *PrevEle = (double)PrevEleW * GARMIN_XT_ELE - 1500;
@@ -234,36 +227,31 @@ static void
 format_garmin_xt_proc_strk()
 {
   int 		Count = 0; // Used to obtain number of read bytes
-  int		NumberOfTracks = 0, TracksCompleted = 0; // Number of tracks in the file and number of processed tracks
-  uint16_t	trackbytes = 0; // Bytes in track
+  int TracksCompleted = 0; // Number of processed tracks
   uint8_t	TrackBlock[STRK_BLOCK_SIZE + 1]; // File Block
-  uint8_t 	ii; // temp variable
   double		Lat = 0, Lon = 0; // wpt data
   double		PrevLat = 0, PrevLon = 0, PrevEle = 0; // wpt data
   uint32_t	Time = 0; // wpt data
-  int		FirstCoo;
   uint8_t	trk_color = 0xff;
 
   // Skip 12 bytes from the BOF
   gbfseek(fin, 12, SEEK_SET);
 
   // read # of tracks
-  NumberOfTracks = gbfgetuint16(fin);
+  int NumberOfTracks = gbfgetuint16(fin); // Number of tracks in the file
 
   // Skip 2 bytes
   gbfseek(fin, 2, SEEK_CUR);
 
   // Process all tracks one by one
   while ((TracksCompleted < NumberOfTracks) && (!gbfeof(fin))) {
-    route_head* tmp_track;
     Waypoint*	wpt;
-    char*	trk_name;
-    trk_name = (char*) xmalloc(30);
+    char* trk_name = (char*) xmalloc(30);
 
     // Generate Track Header
-    trackbytes = format_garmin_xt_rd_st_attrs(trk_name, &trk_color) - 50;
+    uint16_t trackbytes = format_garmin_xt_rd_st_attrs(trk_name, &trk_color) - 50; // Bytes in track
 
-    tmp_track = route_head_alloc();
+    route_head* tmp_track = route_head_alloc();
     // update track color
     tmp_track->line_color.bbggrr = colors[trk_color];
     tmp_track->line_color.opacity = 255;
@@ -273,7 +261,7 @@ format_garmin_xt_proc_strk()
     track_add_head(tmp_track);
 
     // This is the 1st coordinate of the track
-    FirstCoo = TRUE;
+    int FirstCoo = TRUE;
     while (trackbytes>0) {
       if (trackbytes>=STRK_BLOCK_SIZE) {
         Count = gbfread(&TrackBlock, DATABLOCKSIZE, STRK_BLOCK_SIZE, fin);
@@ -287,7 +275,7 @@ format_garmin_xt_proc_strk()
       format_garmin_xt_decrypt_trk_blk(Count, TrackBlock);
 
       // process each track point in the loaded TrackBlock
-      for (ii=1; ii <= ((Count-1) / 12); ii++) {
+      for (uint8_t ii = 1; ii <= ((Count-1) / 12); ii++) {
         // decompose loaded track block part (track point)
         format_garmin_xt_decomp_trk_blk(ii, TrackBlock, &PrevEle, &Lat, &Lon, &Time);
 
@@ -338,14 +326,8 @@ format_garmin_xt_proc_strk()
 static void
 format_garmin_xt_proc_atrk()
 {
-  uint16_t	block=0, uu=0;
-  uint32_t	Lat=0, Lon=0;
-  uint32_t	Tim=0;
-  double		LatF = 0, LonF = 0, AltF = 0;
-  Waypoint*	wpt;
   int		method = 0;
   unsigned char 	buf[3];
-  int32_t 	num_trackpoints;
 
   // get the option for the processing the track name
   if (opt_trk_header) {
@@ -363,35 +345,35 @@ format_garmin_xt_proc_atrk()
 
   // We think the word at offset 0xc is the trackpoint count.
   gbfseek(fin, 12, SEEK_SET);
-  num_trackpoints = gbfgetuint32(fin);
+  int32_t num_trackpoints = gbfgetuint32(fin);
 
   while (num_trackpoints--) {
-    block = gbfgetuint16(fin);
+    uint16_t block = gbfgetuint16(fin);
     if (block != 0x0c) {
       break;
     }
 
     gbfread(&buf, 3, DATABLOCKSIZE, fin); //1. Lat
-    Lat = buf[0] | (buf[1] << 8) | (buf[2] << 16);
+    uint32_t Lat = buf[0] | (buf[1] << 8) | (buf[2] << 16);
     gbfread(&buf, 3, DATABLOCKSIZE, fin); //2. Lon
-    Lon = buf[0] | (buf[1] << 8) | (buf[2] << 16);
+    uint32_t Lon = buf[0] | (buf[1] << 8) | (buf[2] << 16);
 
-    uu = gbfgetuint16(fin);
-    Tim = gbfgetuint32(fin);
+    uint16_t uu = gbfgetuint16(fin);
+    uint32_t Tim = gbfgetuint32(fin);
 
     Tim += 631065600; // adjustment to UnixTime
-    LatF = Lat;
+    double LatF = Lat;
     if (LatF>8388608) {
       LatF -= 16777216;
     };
-    LonF = Lon;
+    double LonF = Lon;
     if (LonF>8388608) {
       LonF -= 16777216;
     };
-    AltF = (double)uu * GARMIN_XT_ELE - 1500;
+    double AltF = (double)uu * GARMIN_XT_ELE - 1500;
 
     //create new waypoint
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     //populate wpt;
     wpt->latitude = LatF*180/16777216;	/* Degrees */

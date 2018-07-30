@@ -133,10 +133,9 @@ route_head*
 common_route_by_name(queue* routes, const char* name)
 {
   queue* elem, *tmp;
-  route_head* rte;
 
   QUEUE_FOR_EACH(routes, elem, tmp) {
-    rte = (route_head*) elem;
+    route_head* rte = reinterpret_cast<route_head *>(elem);
     if (rte->rte_name == name) {
       return rte;
     }
@@ -218,7 +217,7 @@ route_find_waypt_by_name(route_head* rh, const char* name)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&rh->waypoint_list, elem, tmp) {
-    Waypoint* waypointp = (Waypoint*) elem;
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
     if (waypointp->shortname == name) {
       return waypointp;
     }
@@ -229,8 +228,8 @@ route_find_waypt_by_name(route_head* rh, const char* name)
 static void
 any_route_del_wpt(route_head* rte, Waypoint* wpt, int* ct)
 {
-  if (wpt->wpt_flags.new_trkseg && wpt != (Waypoint*)QUEUE_LAST(&rte->waypoint_list)) {
-    Waypoint* wpt_next = (Waypoint*)QUEUE_NEXT(&wpt->Q);
+  if (wpt->wpt_flags.new_trkseg && wpt != reinterpret_cast<Waypoint *>QUEUE_LAST(&rte->waypoint_list)) {
+    Waypoint* wpt_next = reinterpret_cast<Waypoint *>QUEUE_NEXT(&wpt->Q);
     wpt_next->wpt_flags.new_trkseg = 1;
   }
   wpt->wpt_flags.new_trkseg = 0;
@@ -275,8 +274,7 @@ common_disp_session(const session_t* se, queue* qh, route_hdr rh, route_trl rt, 
 {
   queue* elem, *tmp;
   QUEUE_FOR_EACH(qh, elem, tmp) {
-    const route_head* rhp;
-    rhp = (route_head*) elem;
+    const route_head* rhp = reinterpret_cast<route_head *>(elem);
     if (rhp->session == se) {
       if (rh) {
         (*rh)(rhp);
@@ -305,11 +303,10 @@ static void
 route_flush_q(queue* head)
 {
   queue* elem, *tmp;
-  queue* q;
 
   QUEUE_FOR_EACH(head, elem, tmp) {
-    q = dequeue(elem);
-    any_route_free((route_head*) q);
+    queue* q = dequeue(elem);
+    any_route_free(reinterpret_cast<route_head *>(q));
   }
 }
 
@@ -340,10 +337,9 @@ void
 route_flush(queue* head)
 {
   queue* elem, *tmp;
-  queue* q;
   QUEUE_FOR_EACH(head, elem, tmp) {
-    q = dequeue(elem);
-    any_route_free((route_head*)q);
+    queue* q = dequeue(elem);
+    any_route_free(reinterpret_cast<route_head *>(q));
   }
 }
 
@@ -351,7 +347,6 @@ void
 route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src)
 {
   queue* elem, *tmp, *elem2, *tmp2;
-  route_head* rte_new;
   int junk;
   if (!dst_wpt_count) {
     dst_wpt_count = &junk;
@@ -366,9 +361,9 @@ route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src)
 
   const char RPT[] = "RPT";
   QUEUE_FOR_EACH(src, elem, tmp) {
-    route_head* rte_old = (route_head*)elem;
+    route_head* rte_old = reinterpret_cast<route_head *>(elem);
 
-    rte_new = route_head_alloc();
+    route_head* rte_new = route_head_alloc();
     rte_new->rte_name = rte_old->rte_name;
     rte_new->rte_desc = rte_old->rte_desc;
     rte_new->rte_url = rte_old->rte_url;
@@ -376,7 +371,7 @@ route_copy(int* dst_count, int* dst_wpt_count, queue** dst, queue* src)
     rte_new->rte_num = rte_old->rte_num;
     any_route_add_head(rte_new, *dst);
     QUEUE_FOR_EACH(&rte_old->waypoint_list, elem2, tmp2) {
-      any_route_add_wpt(rte_new, new Waypoint(*(Waypoint*)elem2), dst_wpt_count, 0, RPT, 3);
+      any_route_add_wpt(rte_new, new Waypoint(*reinterpret_cast<Waypoint *>(elem2)), dst_wpt_count, 0, RPT, 3);
     }
     (*dst_count)++;
   }
@@ -528,7 +523,6 @@ tracks_to_routes()
 void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
 {
   Waypoint first;
-  Waypoint* thisw;
   Waypoint* prev = &first;
   queue* elem, *tmp;
   int tkpt = 0;
@@ -550,20 +544,18 @@ void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
   tdata->max_alt =  unknown_alt;
 
   QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
-    double tlat, tlon, plat, plon, dist;
-
-    thisw = (Waypoint*)elem;
+    Waypoint* thisw = reinterpret_cast<Waypoint *>(elem);
 
     /*
      * gcdist and heading want radians, not degrees.
      */
-    tlat = RAD(thisw->latitude);
-    tlon = RAD(thisw->longitude);
-    plat = RAD(prev->latitude);
-    plon = RAD(prev->longitude);
+    double tlat = RAD(thisw->latitude);
+    double tlon = RAD(thisw->longitude);
+    double plat = RAD(prev->latitude);
+    double plon = RAD(prev->longitude);
     WAYPT_SET(thisw, course, heading_true_degrees(plat, plon,
               tlat, tlon));
-    dist = radtometers(gcdist(plat, plon, tlat, tlon));
+    double dist = radtometers(gcdist(plat, plon, tlat, tlon));
 
     /*
      * Avoid that 6300 mile jump as we move from 0,0.

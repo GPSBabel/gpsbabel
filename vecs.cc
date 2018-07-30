@@ -1130,12 +1130,11 @@ exit_vecs()
 {
   vecs_t* vec = vec_list;
   while (vec->vec) {
-    arglist_t* ap;
     if (vec->vec->exit) {
       (*vec->vec->exit)();
     }
     if (vec->vec->args) {
-      for (ap = vec->vec->args; ap->argstring; ap++) {
+      for (auto ap = vec->vec->args; ap->argstring; ap++) {
         if (ap->defaultvalue &&
             (ap->argtype == ARGTYPE_INT) &&
             ! is_integer(ap->defaultvalue)) {
@@ -1281,7 +1280,7 @@ find_vec(const char* vecname, const char** opts)
     }
 
     if (vec->vec->args) {
-      for (arglist_t* ap = vec->vec->args; ap->argstring; ap++) {
+      for (auto ap = vec->vec->args; ap->argstring; ap++) {
         const char* opt;
 
         if (res) {
@@ -1338,7 +1337,7 @@ find_vec(const char* vecname, const char** opts)
     }
 
     if (vec_list[0].vec->args) {
-      for (arglist_t* ap = vec_list[0].vec->args; ap->argstring; ap++) {
+      for (auto ap = vec_list[0].vec->args; ap->argstring; ap++) {
         const char* opt;
 
         if (res) {
@@ -1396,18 +1395,16 @@ get_option(const char* iarglist, const char* argname)
 #endif
 {
   const size_t arglen = strlen(argname);
-  char* arglist;
   char* rval = nullptr;
-  char* arg;
   char* argp;
 
   if (!iarglist) {
     return nullptr;
   }
 
-  arglist = xstrdup(iarglist);
+  char* arglist = xstrdup(iarglist);
 
-  for (arg = arglist; argp = strtok(arg, ","), nullptr != argp; arg = nullptr) {
+  for (char* arg = arglist; argp = strtok(arg, ","), nullptr != argp; arg = nullptr) {
     if (0 == case_ignore_strncmp(argp, argname, arglen)) {
       /*
        * If we have something of the form "foo=bar"
@@ -1459,9 +1456,7 @@ sort_and_unify_vecs(int* ctp)
 {
   int vc;
   vecs_t** svp;
-  vecs_t* vec;
 #if CSVFMTS_ENABLED
-  style_vecs_t* svec;
 #endif
   int i = 0;
 
@@ -1477,7 +1472,7 @@ sort_and_unify_vecs(int* ctp)
 
   svp = (vecs_t**)xcalloc(vc, sizeof(style_vecs_t*));
   /* Normal vecs are easy; populate the first part of the array. */
-  for (vec = vec_list; vec->vec; vec++, i++) {
+  for (vecs_t* vec = vec_list; vec->vec; vec++, i++) {
     svp[i] = vec;
     if (svp[i]->parent == nullptr) {
       svp[i]->parent = svp[i]->name;
@@ -1486,7 +1481,7 @@ sort_and_unify_vecs(int* ctp)
 
 #if CSVFMTS_ENABLED
   /* Walk the style list, parse the entries, dummy up a "normal" vec */
-  for (svec = style_list; svec->name; svec++, i++)  {
+  for (style_vecs_t* svec = style_list; svec->name; svec++, i++)  {
     xcsv_read_internal_style(svec->style_buf);
     svp[i] = (vecs_t*) xcalloc(1, sizeof** svp);
     svp[i]->name = svec->name;
@@ -1537,18 +1532,15 @@ sort_and_unify_vecs(int* ctp)
 void
 disp_vecs()
 {
-  vecs_t** svp;
-  arglist_t* ap;
   int vc;
-  int i = 0;
 
-  svp = sort_and_unify_vecs(&vc);
-  for (i=0; i<vc; i++) {
+  vecs_t** svp = sort_and_unify_vecs(&vc);
+  for (int i = 0; i<vc; i++) {
     if (svp[i]->vec->type == ff_type_internal)  {
       continue;
     }
     printf(VEC_FMT, svp[i]->name, CSTR(svp[i]->desc));
-    for (ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
+    for (auto ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %s%-.50s %s\n",
                ap->argstring,
@@ -1565,18 +1557,16 @@ disp_vecs()
 void
 disp_vec(const char* vecname)
 {
-  vecs_t** svp;
-  arglist_t* ap;
   int vc;
-  int i = 0;
 
-  svp = sort_and_unify_vecs(&vc);
-  for (i=0; i<vc; i++) {
+  vecs_t** svp = sort_and_unify_vecs(&vc);
+  for (int i = 0; i<vc; i++) {
     if (case_ignore_strcmp(svp[i]->name, vecname))  {
       continue;
     }
+
     printf(VEC_FMT, svp[i]->name, CSTR(svp[i]->desc));
-    for (ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
+    for (auto ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %s%-.50s %s\n",
                ap->argstring,
@@ -1619,8 +1609,7 @@ disp_v1(ff_type t)
 static void
 disp_v2(ff_vecs_t* v)
 {
-  int i;
-  for (i = 0; i < 3; i++) {
+  for (int i = 0; i < 3; i++) {
     putchar((v->cap[i] & ff_cap_read) ? 'r' : '-');
     putchar((v->cap[i] & ff_cap_write) ? 'w' : '-');
   }
@@ -1660,10 +1649,8 @@ void disp_help_url(const vecs_t* vec, arglist_t* arg)
 static void
 disp_v3(const vecs_t* vec)
 {
-  arglist_t* ap;
-
   disp_help_url(vec, nullptr);
-  for (ap = vec->vec->args; ap && ap->argstring; ap++) {
+  for (auto ap = vec->vec->args; ap && ap->argstring; ap++) {
     if (!(ap->argtype & ARGTYPE_HIDDEN)) {
       printf("option\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
              vec->name,
@@ -1689,7 +1676,7 @@ disp_formats(int version)
 {
   vecs_t** svp;
   vecs_t* vec;
-  int i, vc = 0;
+  int vc = 0;
 
   switch (version) {
   case 0:
@@ -1697,7 +1684,7 @@ disp_formats(int version)
   case 2:
   case 3:
     svp = sort_and_unify_vecs(&vc);
-    for (i=0; i<vc; i++,vec++) {
+    for (int i = 0; i<vc; i++,vec++) {
       vec = svp[i];
 
       /* Version 1 displays type at front of all types.

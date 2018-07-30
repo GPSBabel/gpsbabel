@@ -101,9 +101,8 @@ static void
 write_wcstr(const QString& str)
 {
   int len;
-  short* unicode;
 
-  unicode = cet_str_utf8_to_uni(CSTR(str), &len);
+  short* unicode = cet_str_utf8_to_uni(CSTR(str), &len);
   gbfwrite((void*)unicode, 2, len + 1, fout);
   xfree(unicode);
 }
@@ -111,13 +110,11 @@ write_wcstr(const QString& str)
 static int
 read_until_wcstr(const char* str)
 {
-  char* buff;
-  int len, sz;
   int eos = 0, res = 0;
 
-  len = strlen(str);
-  sz = (len + 1) * 2;
-  buff = (char*) xcalloc(sz, 1);
+  int len = strlen(str);
+  int sz = (len + 1) * 2;
+  char* buff = (char*) xcalloc(sz, 1);
 
   while (! gbfeof(fin)) {
 
@@ -148,14 +145,12 @@ read_until_wcstr(const char* str)
 static void
 destinator_read_poi()
 {
-  Waypoint* wpt;
   int count = 0;
 
   gbfrewind(fin);
 
   while (!(gbfeof(fin))) {
-    QString str, hnum;
-    double ll;
+    QString str;
     garmin_fs_t* gmsd;
 
     if (count == 0) {
@@ -169,12 +164,12 @@ destinator_read_poi()
 
     count++;
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     wpt->shortname = read_wcstr(0);
     wpt->notes = read_wcstr(0);		/* comment */
 
-    hnum = read_wcstr(0);			/* house number */
+    QString hnum = read_wcstr(0);			/* house number */
 
     str = read_wcstr(0); 			/* street */
     if (str.isEmpty()) {
@@ -208,7 +203,7 @@ destinator_read_poi()
 
     wpt->longitude = gbfgetdbl(fin);
     wpt->latitude = gbfgetdbl(fin);
-    ll = gbfgetdbl(fin);
+    double ll = gbfgetdbl(fin);
     if (ll != wpt->longitude) {
       fatal(MYNAME "_poi: Invalid file!\n");
     }
@@ -230,11 +225,8 @@ destinator_read_rte()
   gbfrewind(fin);
 
   while (!(gbfeof(fin))) {
-    QString str;
-    Waypoint* wpt;
-
     if (count == 0) {
-      str = read_wcstr(0);
+      QString str = read_wcstr(0);
       if ((str != DST_ITINERARY)) {
         fatal(MYNAME "_itn: Invalid record header!\n");
       }
@@ -244,7 +236,7 @@ destinator_read_rte()
 
     count++;
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     wpt->shortname = read_wcstr(0);
     wpt->notes = read_wcstr(0);
@@ -283,10 +275,8 @@ destinator_read_trk()
   gbfrewind(fin);
 
   while (!(gbfeof(fin))) {
-    Waypoint* wpt;
     struct tm tm;
     char buff[20];
-    int date;
 
     recno++;
 
@@ -294,7 +284,7 @@ destinator_read_trk()
       break;
     }
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     wpt->longitude = gbfgetdbl(fin);
     wpt->latitude = gbfgetdbl(fin);
@@ -309,7 +299,7 @@ destinator_read_trk()
 
     gbfseek(fin, 12 * sizeof(int32_t), SEEK_CUR);	/* SAT info */
 
-    date = gbfgetint32(fin);
+    int date = gbfgetint32(fin);
     double milliseconds = gbfgetflt(fin);
 
     gbfseek(fin, 2 * 12, SEEK_CUR);			/* SAT info */
@@ -343,7 +333,6 @@ destinator_read_trk()
 static void
 destinator_read()
 {
-  int i0, i1;
   double d0, d1;
   char buff[16];
 
@@ -351,8 +340,8 @@ destinator_read()
     fatal(MYNAME ": Unexpected EOF (end of file)!\n");
   }
 
-  i0 = le_read32(&buff[0]);
-  i1 = le_read32(&buff[4]);
+  int i0 = le_read32(&buff[0]);
+  int i1 = le_read32(&buff[4]);
 
   if ((i0 == 0x690043) && (i1 == 0x790074)) {
     if (data_type != rtedata) {
@@ -428,17 +417,14 @@ destinator_trkpt_disp(const Waypoint* wpt)
   }
 
   if (wpt->creation_time.isValid()) {
-    struct tm tm;
-    double milliseconds;
-    int date;
     const time_t ct = wpt->GetCreationTime().toTime_t();
-    tm = *gmtime(&ct);
+    struct tm tm = *gmtime(&ct);
     tm.tm_mon += 1;
     tm.tm_year -= 100;
-    date = (tm.tm_mday * 10000) + (tm.tm_mon * 100) + tm.tm_year;
+    int date = (tm.tm_mday * 10000) + (tm.tm_mon * 100) + tm.tm_year;
     gbfputint32(date, fout);
-    milliseconds = (tm.tm_hour * 10000) +
-                   (tm.tm_min * 100) + tm.tm_sec;
+    double milliseconds = (tm.tm_hour * 10000) +
+      (tm.tm_min * 100) + tm.tm_sec;
     milliseconds = (milliseconds * 1000) + (wpt->GetCreationTime().time().msec());
 
     gbfputflt(milliseconds, fout);

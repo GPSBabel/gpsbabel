@@ -126,14 +126,10 @@ bcr_icon_mapping_t bcr_icon_mapping[] = {
 static void
 bcr_handle_icon_str(const char* str, Waypoint* wpt)
 {
-  bcr_icon_mapping_t* m;
-
   wpt->icon_descr = BCR_DEF_MPS_ICON;
 
-  for (m = bcr_icon_mapping; (m->bcr_name); m++) {
+  for (bcr_icon_mapping_t* m = bcr_icon_mapping; (m->bcr_name); m++) {
     if (case_ignore_strcmp(str, m->bcr_name) == 0) {
-      int nr;
-
       if (m->symbol_DE == nullptr) {
         if (! m->warned) {
           m->warned = true;
@@ -143,7 +139,7 @@ bcr_handle_icon_str(const char* str, Waypoint* wpt)
       }
       wpt->description = m->symbol_DE;
       if (m->mps_name != nullptr) {
-        nr = gt_find_icon_number_from_desc(m->mps_name, MAPSOURCE);
+        int nr = gt_find_icon_number_from_desc(m->mps_name, MAPSOURCE);
         wpt->icon_descr = gt_find_desc_from_icon_number(nr, MAPSOURCE);
       }
       return;
@@ -157,9 +153,7 @@ get_bcr_icon_from_icon_descr(const QString& icon_descr)
   const char* result = BCR_DEF_ICON;
 
   if (!icon_descr.isNull()) {
-    bcr_icon_mapping_t* m;
-
-    for (m = bcr_icon_mapping; (m->bcr_name); m++) {
+    for (bcr_icon_mapping_t* m = bcr_icon_mapping; (m->bcr_name); m++) {
       if (! m->mps_name) {
         continue;
       }
@@ -210,11 +204,10 @@ bcr_rd_deinit()
 static void
 bcr_create_waypts_from_route(route_head* route)
 {
-  Waypoint* wpt;
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    wpt = new Waypoint(*(Waypoint*) elem);
+    Waypoint* wpt = new Waypoint(*reinterpret_cast<Waypoint *>(elem));
     waypt_add(wpt);
   }
 }
@@ -222,10 +215,8 @@ bcr_create_waypts_from_route(route_head* route)
 static void
 bcr_wgs84_to_mercator(const double lat, const double lon, int* north, int* east)
 {
-  double N, E;
-
-  N = log(tan(lat * M_PI / 360 + M_PI / 4)) * radius;
-  E = lon * radius * M_PI / 180.0;
+  double N = log(tan(lat * M_PI / 360 + M_PI / 4)) * radius;
+  double E = lon * radius * M_PI / 180.0;
 
   if (lat > 0) {
     N += 0.500000000001;  /* we go from double to integer */
@@ -254,11 +245,9 @@ bcr_mercator_to_wgs84(const int north, const int east, double* lat, double* lon)
 static void
 bcr_data_read()
 {
-  int index;
   char* str;
-  route_head* route;
 
-  route = route_head_alloc();
+  route_head* route = route_head_alloc();
 
   if ((str = inifile_readstr(ini, "client", "routename"))) {
     route->rte_name = str;
@@ -266,12 +255,11 @@ bcr_data_read()
 
   route_add_head(route);
 
-  for (index = 1; index > 0; index ++) {
+  for (int index = 1; index > 0; index ++) {
 
     char station[32];
     char* str;
     int mlat, mlon;		/* mercator data */
-    Waypoint* wpt;
 
     snprintf(station, sizeof(station), "STATION%d", index);
     if (nullptr == (str = inifile_readstr(ini, "coordinates", station))) {
@@ -282,15 +270,13 @@ bcr_data_read()
       fatal(MYNAME ": structure error at %s (Coordinates)!\n", station);
     }
 
-    wpt = new Waypoint;
+    Waypoint* wpt = new Waypoint;
 
     wpt->shortname = station;
     bcr_mercator_to_wgs84(mlat, mlon, &wpt->latitude, &wpt->longitude);
 
     if (nullptr != (str = inifile_readstr(ini, "client", station))) {
-      char* cx;
-
-      cx = strchr(str, ',');
+      char* cx = strchr(str, ',');
       if (cx == nullptr) {
         fatal(MYNAME ": structure error at %s (Client)!\n", station);
       }
@@ -299,9 +285,7 @@ bcr_data_read()
     }
 
     if (nullptr != (str = inifile_readstr(ini, "description", station))) {
-      char* c;
-
-      c = strchr(str, ',');
+      char* c = strchr(str, ',');
       if (c != nullptr) {
         *c = '\0';
       }
@@ -356,15 +340,13 @@ bcr_write_wpt(const Waypoint*)
 {
 }
 
-static void bcr_write_line(gbfile* fout, const QString& key, int* index, const QString& value)
+static void bcr_write_line(gbfile* fout, const QString& key, const int* index, const QString& value)
 {
   if (value.isEmpty()) {			/* this is mostly used in the world of windows */
     /* so we respectfully add a CR/LF on each line */
     gbfprintf(fout, "%s\r\n", CSTR(key));
   } else {
-    char* tmp;
-
-    tmp = (value != nullptr) ? xstrdup(value) : xstrdup("");
+    char* tmp = (value != nullptr) ? xstrdup(value) : xstrdup("");
     if (index != nullptr) {
       gbfprintf(fout, "%s%d=%s\r\n", CSTR(key), *index, tmp);
     } else {
@@ -379,8 +361,7 @@ bcr_route_header(const route_head* route)
 {
   queue* elem, *tmp;
   Waypoint* wpt;
-  QString sout;
-  int i, north, east, nmin, nmax, emin, emax;
+  int north, east, nmax, emin;
 
   curr_rte_num++;
   if (curr_rte_num != target_rte_num) {
@@ -390,7 +371,7 @@ bcr_route_header(const route_head* route)
   bcr_write_line(fout, "[CLIENT]", nullptr, nullptr);			/* client section */
   bcr_write_line(fout, "REQUEST", nullptr, "TRUE");
 
-  sout = route->rte_name;
+  QString sout = route->rte_name;
   if (rtename_opt != nullptr) {
     sout = rtename_opt;
   }
@@ -402,14 +383,13 @@ bcr_route_header(const route_head* route)
 
   bcr_write_line(fout, "DESCRIPTIONLINES", nullptr, "0");
 
-  i = 0;
+  int i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    const char* icon;
-    Waypoint* wpt = (Waypoint*) elem;
+    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
 
     i++;
 
-    icon = get_bcr_icon_from_icon_descr(wpt->icon_descr);
+    const char* icon = get_bcr_icon_from_icon_descr(wpt->icon_descr);
 
     sout = QString("%1,%2").arg(icon).arg(BCR_UNKNOWN,10);
     bcr_write_line(fout, "STATION", &i, sout);
@@ -417,13 +397,13 @@ bcr_route_header(const route_head* route)
 
   bcr_write_line(fout, "[COORDINATES]", nullptr, nullptr);		/* coords section */
 
-  nmin = emin = (1<<30);
-  emax = nmax = -nmin;
+  int nmin = emin = (1<<30);
+  int emax = nmax = -nmin;
 
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
     i++;
-    wpt = (Waypoint*) elem;
+    wpt = reinterpret_cast<Waypoint *>(elem);
 
     bcr_wgs84_to_mercator(wpt->latitude, wpt->longitude, &north, &east);
 
@@ -448,11 +428,11 @@ bcr_route_header(const route_head* route)
 
   i = 0;
   QUEUE_FOR_EACH(&route->waypoint_list, elem, tmp) {
-    QString s1, s2;
+    QString s2;
 
     i++;
-    wpt = (Waypoint*) elem;
-    s1 = wpt->notes;
+    wpt = reinterpret_cast<Waypoint *>(elem);
+    QString s1 = wpt->notes;
     if (s1.isEmpty()) {
       s1 = wpt->description;
     }

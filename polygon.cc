@@ -218,30 +218,29 @@ void PolygonFilter::process()
   queue* elem, * tmp;
   Waypoint* waypointp;
   extra_data* ed;
-  double lat1, lon1, lat2, lon2;
-  double olat, olon;
   int fileline = 0;
   int first = 1;
   int last = 0;
   char* line;
-  gbfile* file_in;
 
-  file_in = gbfopen(polyfileopt, "r", MYNAME);
+  gbfile* file_in = gbfopen(polyfileopt, "r", MYNAME);
 
-  olat = olon = lat1 = lon1 = lat2 = lon2 = BADVAL;
+  double olat = BADVAL;
+  double olon = BADVAL;
+  double lat1 = BADVAL;
+  double lon1 = BADVAL;
+  double lat2 = BADVAL;
+  double lon2 = BADVAL;
   while ((line = gbfgetstr(file_in))) {
-    char* pound = nullptr;
-    int argsfound = 0;
-
     fileline++;
 
-    pound = strchr(line, '#');
+    char* pound = strchr(line, '#');
     if (pound) {
       *pound = '\0';
     }
 
     lat2 = lon2 = BADVAL;
-    argsfound = sscanf(line, "%lf %lf", &lat2, &lon2);
+    int argsfound = sscanf(line, "%lf %lf", &lat2, &lon2);
 
     if (argsfound != 2 && strspn(line, " \t\n") < strlen(line)) {
       warning(MYNAME
@@ -253,7 +252,7 @@ void PolygonFilter::process()
       foreach (Waypoint* waypointp, waypt_list) {
 #else
       QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-        waypointp = (Waypoint*)elem;
+        waypointp = reinterpret_cast<Waypoint *>(elem);
 #endif
         if (waypointp->extra_data) {
           ed = (extra_data*) waypointp->extra_data;
@@ -302,7 +301,7 @@ void PolygonFilter::process()
   foreach (Waypoint* wp, waypt_list) {
 #else
   QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
-    Waypoint* wp = (Waypoint*) elem;
+    Waypoint* wp = reinterpret_cast<Waypoint *>(elem);
 #endif
     ed = (extra_data*) wp->extra_data;
     wp->extra_data = nullptr;

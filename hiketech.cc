@@ -268,7 +268,6 @@ static
 void	ht_trk_utc(xg_string args, const QXmlStreamAttributes*)
 {
   struct tm tm;
-  time_t utc;
 
   sscanf(CSTRc(args), "%d-%d-%d %d:%d:%d",
          &tm.tm_year, &tm.tm_mon,
@@ -278,7 +277,7 @@ void	ht_trk_utc(xg_string args, const QXmlStreamAttributes*)
   tm.tm_year -= 1900;
   tm.tm_isdst = 0;
 
-  utc = mkgmtime(&tm);
+  time_t utc = mkgmtime(&tm);
 
   wpt_tmp->SetCreationTime(utc);
 }

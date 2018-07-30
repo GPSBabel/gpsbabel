@@ -115,22 +115,13 @@ rd_deinit()
 static void
 my_read()
 {
-
-  uint16_t version;
-  uint32_t count;
-  uint32_t outercount;
-  uint32_t recsize;
-  uint16_t stringlen;
-  unsigned char* record;
   static int serial = 0;
   struct ll {
     int32_t lat;
     int32_t lon;
   } *latlon;
   struct ll mylatlon;
-  uint16_t coordcount;
   route_head* track_head = nullptr;
-  route_head* old_track_head = nullptr;
   Waypoint* wpt_tmp;
   char* routename = nullptr;
   double seglen = 0.0;
@@ -139,10 +130,9 @@ my_read()
   double totaldist = 0.0;
   double oldlat = 0;
   double oldlon = 0;
-  int first = 0;
 
   ReadShort(infile);		/* magic */
-  version = ReadShort(infile);
+  uint16_t version = ReadShort(infile);
 
   ReadLong(infile);
   if (version >= 6) {
@@ -155,14 +145,14 @@ my_read()
    */
 
   ReadShort(infile);
-  recsize = ReadLong(infile);
+  uint32_t recsize = ReadLong(infile);
   /*
    * the first recsize, oddly, doesn't include the filename string
    * but it does include the header.
    */
-  record = ReadRecord(infile, recsize);
+  unsigned char* record = ReadRecord(infile, recsize);
 
-  stringlen = le_read16((uint16_t*)(record + 0x1a));
+  uint16_t stringlen = le_read16((uint16_t*)(record + 0x1a));
   if (stringlen) {
     routename = (char*)xmalloc(stringlen + 1);
     routename[stringlen] = '\0';
@@ -187,28 +177,25 @@ my_read()
       track_head->rte_name = routename;
     }
   }
-  count = ReadLong(infile);
+  uint32_t count = ReadLong(infile);
   while (count) {
     ReadShort(infile);
     recsize = ReadLong(infile);
     if (version < 6 || control) {
-      double lat;
-      double lon;
-
       record = ReadRecord(infile, recsize);
       latlon = (struct ll*)(record);
 
       /* These records are backwards for some reason */
-      lat = (0x80000000UL -
-             le_read32(&latlon->lon)) / (double)(0x800000);
-      lon = (0x80000000UL -
-             le_read32(&latlon->lat)) / (double)(0x800000);
+      double lat = (0x80000000UL -
+        le_read32(&latlon->lon)) / (double)(0x800000);
+      double lon = (0x80000000UL -
+        le_read32(&latlon->lat)) / (double)(0x800000);
 
       wpt_tmp = new Waypoint;
       wpt_tmp->latitude = lat;
       wpt_tmp->longitude = -lon;
       if (control) {
-        int obase, addrlen, cmtlen;
+        int obase;
 
         /* Somewhere around TopoUSA 6.0, these moved  */
         /* This block also seems to get miscompiled
@@ -222,8 +209,8 @@ my_read()
           obase = 18;
         }
 
-        addrlen = le_read16(&record[obase]);
-        cmtlen = le_read16(&record[obase+2+addrlen]);
+        int addrlen = le_read16(&record[obase]);
+        int cmtlen = le_read16(&record[obase+2+addrlen]);
         (void) cmtlen;
 #if NEW_STRINGS
         // That we've had no bugreports on this strongly indicates this code
@@ -281,7 +268,7 @@ my_read()
    * outercount is the number of route segments (start+end+stops+vias-1)
    */
 
-  outercount = ReadLong(infile);
+  uint32_t outercount = ReadLong(infile);
   while (outercount) {
 
     /*
@@ -311,7 +298,7 @@ my_read()
       }
     }
     while (count) {
-      old_track_head = nullptr;
+      route_head* old_track_head = nullptr;
       ReadShort(infile);
       recsize = ReadLong(infile);
       record = ReadRecord(infile, recsize);
@@ -351,30 +338,27 @@ my_read()
         seglen /= 5280*12*2.54/100000; /* to miles */
       }
 
-      coordcount = le_read16((uint16_t*)
-                             (record + 2 + stringlen + 0x3c));
+      uint16_t coordcount = le_read16((uint16_t*)
+        (record + 2 + stringlen + 0x3c));
       latlon = (struct ll*)(record + 2 + stringlen + 0x3c + 2);
       count--;
       if (count) {
         coordcount--;
       }
 
-      first = 1;
+      int first = 1;
 
       while (coordcount) {
-        double lat;
-        double lon;
-
         wpt_tmp = new Waypoint;
 
         // copy to make sure we don't violate alignment restrictions.
         memcpy(&mylatlon,latlon,sizeof(mylatlon));
-        lat = (0x80000000UL -
-               le_read32(&mylatlon.lat)) /
-              (double)(0x800000);
-        lon = (0x80000000UL -
-               le_read32(&mylatlon.lon)) /
-              (double)(0x800000);
+        double lat = (0x80000000UL -
+            le_read32(&mylatlon.lat)) /
+          (double)(0x800000);
+        double lon = (0x80000000UL -
+            le_read32(&mylatlon.lon)) /
+          (double)(0x800000);
 
         wpt_tmp->latitude = lat;
         wpt_tmp->longitude = -lon;

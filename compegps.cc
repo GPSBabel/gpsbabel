@@ -127,12 +127,11 @@ static void
 compegps_parse_date(const char* c, struct tm* tm)
 {
   char month[4];
-  int year;
   tm->tm_mday = atoi(c);
   strncpy(month, c+3, 3);
   month[3] = 0;
   tm->tm_mon = month_lookup(month);
-  year = atoi(c + 7);
+  int year = atoi(c + 7);
   if (year < 70) {
     year += 100;
   }
@@ -157,13 +156,13 @@ static Waypoint*
 parse_wpt(char* buff)
 {
   int col = -1;
-  char* c, *cx;
+  char* cx;
   Waypoint* wpt = new Waypoint;
   struct tm tm;
   int has_time = 0;
   memset(&tm, 0, sizeof(tm));
 
-  c = strstr(buff, "A ");
+  char* c = strstr(buff, "A ");
   if (c == buff) {
     col++;
   }
@@ -230,11 +229,10 @@ parse_wpt(char* buff)
 static void
 parse_wpt_info(const char* buff, Waypoint* wpt)		/* "w" */
 {
-  char* c;
   int col = -1;
   double fx;
 
-  c = csv_lineparse(buff, ",", "", col++);
+  char* c = csv_lineparse(buff, ",", "", col++);
   while (c != nullptr) {
     c = lrtrim(c);
     if (*c != '\0') {
@@ -275,11 +273,10 @@ static Waypoint*
 parse_trkpt(char* buff)
 {
   int col = -1;
-  char* c;
   struct tm tm;
   Waypoint* wpt = new Waypoint;
 
-  c = strstr(buff, "A ");
+  char* c = strstr(buff, "A ");
   if (c == buff) {
     col++;
   }
@@ -320,10 +317,9 @@ parse_trkpt(char* buff)
 static void
 parse_track_info(const char* buff, route_head* track)	/* "t" */
 {
-  char* c;
   int col = -1;
 
-  c = csv_lineparse(buff, "|", "", col++);
+  char* c = csv_lineparse(buff, "|", "", col++);
   while (c != nullptr) {
     c = lrtrim(c);
     if (*c != '\0') {
@@ -349,10 +345,9 @@ parse_track_info(const char* buff, route_head* track)	/* "t" */
 static void
 parse_rte_info(const char* buff, route_head* route)	/* "R" */
 {
-  char* c;
   int col = -1;
 
-  c = csv_lineparse(buff, ",", "", col++);
+  char* c = csv_lineparse(buff, ",", "", col++);
   while (c != nullptr) {
     c = lrtrim(c);
     if (*c != '\0') {
@@ -400,18 +395,15 @@ compegps_data_read(void)
   route_head* track = nullptr;
 
   while ((buff = gbfgetstr(fin))) {
-    char* cin = buff;
-    char* ctail;
-
     if ((line++ == 0) && fin->unicode) {
       cet_convert_init(CET_CHARSET_UTF8, 1);
     }
-    cin = lrtrim(buff);
+    char* cin = lrtrim(buff);
     if (strlen(cin) == 0) {
       continue;
     }
 
-    ctail = strchr(cin, ' ');
+    char* ctail = strchr(cin, ' ');
     if (ctail == nullptr) {
       continue;
     }
@@ -479,8 +471,6 @@ compegps_data_read(void)
 static void
 write_waypt_cb(const Waypoint* wpt)
 {
-  QString name;
-
   if (curr_index != target_index) {
     return;
   }
@@ -489,7 +479,7 @@ write_waypt_cb(const Waypoint* wpt)
   QString cleaned_name(wpt->shortname);
   cleaned_name.replace(' ', '_');
 
-  name = (snlen > 0) ? mkshort(sh, cleaned_name) : cleaned_name;
+  QString name = (snlen > 0) ? mkshort(sh, cleaned_name) : cleaned_name;
 
   gbfprintf(fout, "W  %s A ", CSTR(name));
   gbfprintf(fout, "%.10f%c%c ",

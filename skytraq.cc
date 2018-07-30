@@ -175,18 +175,17 @@ rd_char(int* errors)
 static int
 rd_buf(const uint8_t* buf, int len)
 {
-  int rc, timeout;
   char dump[16*3+16+2];
 
   /* Allow TIMEOUT plus the time needed to actually receive the data bytes:
    * baudrate/10 bytes per second (8 data bits, start and stop bit)
    * TODO: use dlbaud if selected.
    */
-  timeout = TIMEOUT + len;//*1000/(skytraq_baud/10);
+  int timeout = TIMEOUT + len;//*1000/(skytraq_baud/10);
   /*TODO: timeout gets <0 e.g. when len~=250000 --> 32bit signed int is too small.
   	if (skytraq_baud > 0)  timeout = TIMEOUT + (long long int)len*1000*10/(long long int)skytraq_baud;
   printf("len=%i  skytraq_baud=%i  timeout=%i\n", len, skytraq_baud, timeout);*/
-  rc = gbser_read_wait(serial_handle, (void*)buf, len, timeout);
+  int rc = gbser_read_wait(serial_handle, (void*)buf, len, timeout);
   if (rc < 0) {
     db(1, MYNAME ": rd_buf(): Read error (%d)\n", rc);
     return res_ERROR;
@@ -245,8 +244,7 @@ wr_char(int c)
 static void
 wr_buf(const unsigned char* str, int len)
 {
-  int i;
-  for (i = 0; i < len; i++) {
+  for (int i = 0; i < len; i++) {
     wr_char(str[i]);
   }
 }
@@ -262,8 +260,8 @@ static uint8_t SECTOR_READ_END[13] = { 'E','N','D', 0, 'C','H','E','C','K','S','
 static int
 skytraq_calc_checksum(const unsigned char* buf, int len)
 {
-  int i, cs = 0;
-  for (i = 0; i < len; i++) {
+  int cs = 0;
+  for (int i = 0; i < len; i++) {
     cs ^= buf[i];
   }
   return cs;
@@ -275,7 +273,6 @@ skytraq_rd_msg(const void* payload, unsigned int len)
   int errors = 5;		/* allow this many errors */
   unsigned int c, i, state;
   signed int rcv_len;
-  unsigned int calc_cs, rcv_cs;
 
   for (i = 0, state = 0; i < RETRIES && state < sizeof(MSG_START); i++) {
     c = rd_char(&errors);
@@ -304,13 +301,13 @@ skytraq_rd_msg(const void* payload, unsigned int len)
   db(2, "Receiving message with %i bytes of payload (expected >=%i)\n", rcv_len, len);
   rd_buf((const unsigned char*) payload, MIN(rcv_len, len));
 
-  calc_cs = skytraq_calc_checksum((const unsigned char*) payload, MIN(rcv_len, len));
+  unsigned int calc_cs = skytraq_calc_checksum((const unsigned char*) payload, MIN(rcv_len, len));
   for (i = 0; i < rcv_len-len; i++) {
     c = rd_char(&errors);
     calc_cs ^= c;
   }
 
-  rcv_cs = rd_char(&errors);
+  unsigned int rcv_cs = rd_char(&errors);
   if (rcv_cs != calc_cs) {
     fatal(MYNAME ": Checksum error: got 0x%02x, expected 0x%02x\n", rcv_cs, calc_cs);
   }
@@ -326,8 +323,6 @@ skytraq_rd_msg(const void* payload, unsigned int len)
 static void
 skytraq_wr_msg(const uint8_t* payload, int len)
 {
-  int cs;
-
   rd_drain();
 
   wr_buf(MSG_START, sizeof(MSG_START));
@@ -335,7 +330,7 @@ skytraq_wr_msg(const uint8_t* payload, int len)
   wr_char(len & 0x0FF);
   wr_buf(payload, len);
 
-  cs = skytraq_calc_checksum(payload, len);
+  int cs = skytraq_calc_checksum(payload, len);
   wr_char(cs);
   wr_buf(NL, sizeof(NL));
 }
@@ -344,9 +339,9 @@ static int
 skytraq_expect_ack(uint8_t id)
 {
   uint8_t ack_msg[2];
-  int i/*, rcv_len*/;
+  //int rcv_len;
 
-  for (i = 0; i < MSG_RETRIES; i++) {
+  for (int i = 0; i < MSG_RETRIES; i++) {
 //		rcv_len = skytraq_rd_msg(ack_msg, sizeof(ack_msg));
 //		if (rcv_len == sizeof(ack_msg)) {
     if (skytraq_rd_msg(ack_msg, sizeof(ack_msg)) == res_OK) {
@@ -398,14 +393,12 @@ skytraq_expect_msg(uint8_t id, const uint8_t* payload, int len)
 static int
 skytraq_wr_msg_verify(const uint8_t* payload, int len)
 {
-  int i, rc;
-
-  for (i = 0; i < MSG_RETRIES; i++) {
+  for (int i = 0; i < MSG_RETRIES; i++) {
     if (i > 0) {
       db(1, "resending msg (id=0x%02x)...\n", payload[0]);
     }
     skytraq_wr_msg(payload, len);
-    rc = skytraq_expect_ack(payload[0]);
+    int rc = skytraq_expect_ack(payload[0]);
     if (rc == res_OK  ||  rc == res_NACK) {
       return rc;
     }
@@ -434,7 +427,6 @@ skytraq_set_baud(int baud)
    */
   uint8_t MSG_CONFIGURE_SERIAL_PORT[4]
     = { 0x05, 0x00, 0x00, 0x02 };
-  int rc;
 
   db(2, "Setting baud rate to %i\n", baud);
 
@@ -464,7 +456,7 @@ skytraq_set_baud(int baud)
     fatal(MYNAME ": Unsupported baud rate: %ibd\n", baud);
   }
 
-  rc = skytraq_wr_msg_verify(MSG_CONFIGURE_SERIAL_PORT, sizeof(MSG_CONFIGURE_SERIAL_PORT));
+  int rc = skytraq_wr_msg_verify(MSG_CONFIGURE_SERIAL_PORT, sizeof(MSG_CONFIGURE_SERIAL_PORT));
   if (rc != res_OK) {
     db(2, "Warning: error setting skytraq device baud rate\n");
     return rc;
@@ -487,7 +479,7 @@ skytraq_configure_logging()
 {
   // an0008-1.4.14: logs if
   // (dt > tmin & dd >= dmin & v >= vmin) | dt > tmax | dd > dmax | v > vmax
-  unsigned int tmin=6, tmax=3600, dmin=0, dmax=10000, nn=0;
+  unsigned int tmin=6, tmax=3600, dmin=0, dmax=10000;
   static uint8_t MSG_LOG_CONFIGURE_CONTROL[] = {
     0x18,			// message_id
     0x00, 0x00, 0x0e, 0x10,	// max_time: was 0x0000ffff (big endian!)
@@ -502,7 +494,7 @@ skytraq_configure_logging()
 
   if (opt_configure_logging) {
     if (*opt_configure_logging) {
-      nn = sscanf(opt_configure_logging, "%u:%u:%u:%u", &tmin, &tmax, &dmin, &dmax);
+      unsigned int nn = sscanf(opt_configure_logging, "%u:%u:%u:%u", &tmin, &tmax, &dmin, &dmax);
       if (nn>3) {
         db(0, "Reconfiguring logging to: tmin=%u, tmax=%u, dmin=%u, dmax=%u\n", tmin, tmax, dmin, dmax);
         be_write32(MSG_LOG_CONFIGURE_CONTROL+5, tmin);
@@ -548,16 +540,14 @@ skytraq_get_log_buffer_status(uint32_t* log_wr_ptr, uint16_t* sectors_free, uint
   *sectors_free = le_readu16(&MSG_LOG_STATUS_OUTPUT.sectors_free);
   *sectors_total = le_readu16(&MSG_LOG_STATUS_OUTPUT.sectors_total);
 
-  // print logging parameters -- useful, but does this belong here?
-  unsigned int tmax, tmin, dmax, dmin, vmax, vmin;
   // unsigned char log_bool, fifo_mode;
   char* mystatus;
-  tmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_time);
-  tmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_time);
-  dmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_dist);
-  dmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_dist);
-  vmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_speed);
-  vmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_speed);
+  unsigned int tmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_time);
+  unsigned int tmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_time);
+  unsigned int dmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_dist);
+  unsigned int dmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_dist);
+  unsigned int vmax = le_readu32(&MSG_LOG_STATUS_OUTPUT.max_speed);
+  unsigned int vmin = le_readu32(&MSG_LOG_STATUS_OUTPUT.min_speed);
   // log_bool = *(MSG_LOG_STATUS_OUTPUT.datalog_enable);
   // fifo_mode = *(MSG_LOG_STATUS_OUTPUT.log_fifo_mode);
   xasprintf(&mystatus, "#logging: tmin=%u, tmax=%u, dmin=%u, dmax=%u, vmin=%u, vmax=%u\n", tmin, tmax, dmin, dmax, vmin, vmax);
@@ -660,9 +650,7 @@ struct read_state {
 static void
 state_init(struct read_state* pst)
 {
-  route_head* track;
-
-  track = route_head_alloc();
+  route_head* track = route_head_alloc();
   track->rte_name = "SkyTraq tracklog";
   track->rte_desc = "SkyTraq GPS tracklog data";
   track_add_head(track);
@@ -757,7 +745,10 @@ static int
 process_data_item(struct read_state* pst, const item_frame* pitem, int len)
 {
   int res = 0;
-  double lat, lon, alt, spe;
+  double lat;
+  double lon;
+  double alt;
+  double spe;
   unsigned int ts;
   int poi = 0;
   full_item f;
@@ -1005,8 +996,7 @@ static int
 skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8_t* buf)
 {
   uint8_t MSG_LOG_READ_MULTI_SECTORS[5] = { 0x1D };
-  uint8_t* buf_end_tag;
-  unsigned int cs, i, read_result;
+  unsigned int i;
 
   if (first_sector < 0  ||  first_sector > 0xFFFF) {
     fatal(MYNAME ": Invalid sector number (%i)\n", first_sector);
@@ -1019,7 +1009,7 @@ skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8
 
   db(2, "Reading %i sectors beginning from #%i...\n", sector_count, first_sector);
 
-  read_result = skytraq_wr_msg_verify((uint8_t*)&MSG_LOG_READ_MULTI_SECTORS, sizeof(MSG_LOG_READ_MULTI_SECTORS));
+  unsigned int read_result = skytraq_wr_msg_verify((uint8_t*)&MSG_LOG_READ_MULTI_SECTORS, sizeof(MSG_LOG_READ_MULTI_SECTORS));
   if (read_result != res_OK) {
     return read_result;
   }
@@ -1030,7 +1020,7 @@ skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8
   }
   rd_buf(buf+SECTOR_SIZE*sector_count, sizeof(SECTOR_READ_END)+6);
 
-  buf_end_tag = buf + SECTOR_SIZE*sector_count;
+  uint8_t* buf_end_tag = buf + SECTOR_SIZE*sector_count;
   for (i = 0; i < sizeof(SECTOR_READ_END); i++) {
     if (buf_end_tag[i] != SECTOR_READ_END[i]) {
       db(1, MYNAME ": Wrong end tag: got 0x%02x ('%c'), expected 0x%02x ('%c')\n",
@@ -1040,7 +1030,7 @@ skytraq_read_multiple_sectors(int first_sector, unsigned int sector_count, uint8
     }
   }
 
-  cs = skytraq_calc_checksum(buf, SECTOR_SIZE*sector_count);
+  unsigned int cs = skytraq_calc_checksum(buf, SECTOR_SIZE*sector_count);
   if (cs != buf_end_tag[sizeof(SECTOR_READ_END)]) {
     db(1, MYNAME ": Checksum error while reading sector: got 0x%02x, expected 0x%02x\n",
        buf_end_tag[sizeof(SECTOR_READ_END)], cs);
@@ -1056,12 +1046,11 @@ skytraq_read_tracks()
   struct read_state st;
   uint32_t log_wr_ptr;
   uint16_t sectors_free, sectors_total, /*sectors_used_a, sectors_used_b,*/ sectors_used;
-  int i, t, s, rc, got_sectors, total_sectors_read = 0;
+  int t, rc, got_sectors, total_sectors_read = 0;
   int read_at_once = MAX(atoi(opt_read_at_once), 1);
   int opt_first_sector_val = atoi(opt_first_sector);
   int opt_last_sector_val = atoi(opt_last_sector);
   int multi_read_supported = 1;
-  uint8_t* buffer = nullptr;
   gbfile* dumpfile = nullptr;
 
   state_init(&st);
@@ -1101,7 +1090,7 @@ skytraq_read_tracks()
     }
   }
 
-  buffer = (uint8_t*) xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6);
+  uint8_t* buffer = (uint8_t*) xmalloc(SECTOR_SIZE*read_at_once+sizeof(SECTOR_READ_END)+6);
   // m.ad/090930: removed code that tried reducing read_at_once if necessary since doesn't work with xmalloc
 
   if (opt_dump_file) {
@@ -1111,7 +1100,7 @@ skytraq_read_tracks()
   db(1, MYNAME ": Reading log data from device...\n");
   db(1, MYNAME ": start=%d used=%d\n", opt_first_sector_val, sectors_used);
   db(1, MYNAME ": opt_last_sector_val=%d\n", opt_last_sector_val);
-  for (i = opt_first_sector_val; i < sectors_used; i += got_sectors) {
+  for (int i = opt_first_sector_val; i < sectors_used; i += got_sectors) {
     for (t = 0, got_sectors = 0; (t < SECTOR_RETRIES) && (got_sectors <= 0); t++) {
       if (atoi(opt_read_at_once) == 0  ||  multi_read_supported == 0) {
         rc = skytraq_read_single_sector(i, buffer);
@@ -1158,7 +1147,7 @@ skytraq_read_tracks()
       continue;		// skip decoding
     }
 
-    for (s = 0; s < got_sectors; s++) {
+    for (int s = 0; s < got_sectors; s++) {
       db(4, MYNAME ": Decoding sector #%i...\n", i+s);
       rc = process_data_sector(&st, buffer+s*SECTOR_SIZE, SECTOR_SIZE);
       if (rc == 0) {
@@ -1195,7 +1184,7 @@ skytraq_probe()
     uint8_t odm_ver[4];
     uint8_t revision[4];
   } MSG_SOFTWARE_VERSION;
-  int i, rc;
+  int rc;
 
   // TODO: get current serial port baud rate and try that first
   // (only sensible if init to 4800 can be disabled...)
@@ -1205,7 +1194,7 @@ skytraq_probe()
     baud_rates_count = 1;
   }
 
-  for (i = 0; i < baud_rates_count; i++) {
+  for (int i = 0; i < baud_rates_count; i++) {
     db(1, MYNAME ": Probing SkyTraq Venus at %ibaud...\n", baud_rates[i]);
 
     rd_drain();
@@ -1274,7 +1263,6 @@ static void
 skytraq_set_location()
 {
   double lat, lng;
-  unsigned int i;
   uint8_t MSG_SET_LOCATION[17] = { 0x36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
   uint8_t MSG_GET_LOCATION = 0x35;
 
@@ -1283,7 +1271,7 @@ skytraq_set_location()
   sscanf(opt_set_location, "%lf:%lf", &lat, &lng);
   le_write_double(&MSG_SET_LOCATION[1], lat);
   le_write_double(&MSG_SET_LOCATION[9], lng);
-  for (i=0; i<sizeof MSG_SET_LOCATION; i++) {
+  for (unsigned int i = 0; i<sizeof MSG_SET_LOCATION; i++) {
     db(3, "%02x ", MSG_SET_LOCATION[i]);
   }
   db(3, "\n");
@@ -1322,8 +1310,6 @@ skytraq_rd_deinit()
 static void
 skytraq_read()
 {
-  int dlbaud;
-
   if (opt_set_location) {
     skytraq_set_location();
     return;
@@ -1334,7 +1320,7 @@ skytraq_read()
     return;
   }
 
-  dlbaud = atoi(opt_dlbaud);
+  int dlbaud = atoi(opt_dlbaud);
   if (dlbaud != 0  &&  dlbaud != skytraq_baud) {
     skytraq_set_baud(dlbaud);
   }
@@ -1375,14 +1361,12 @@ static void
 file_read()
 {
   struct read_state st;
-  int rc, got_bytes;
+  int got_bytes;
   int opt_first_sector_val = atoi(opt_first_sector);
   int opt_last_sector_val = atoi(opt_last_sector);
-  int sectors_read;
-  uint8_t* buffer;
 
   state_init(&st);
-  buffer = (uint8_t*) xmalloc(SECTOR_SIZE);
+  uint8_t* buffer = (uint8_t*) xmalloc(SECTOR_SIZE);
 
   if (opt_first_sector_val > 0) {
     db(4, MYNAME ": Seeking to first-sector index %i\n", opt_first_sector_val*SECTOR_SIZE);
@@ -1390,10 +1374,10 @@ file_read()
   }
 
   db(1, MYNAME ": Reading log data from file...\n");
-  sectors_read = 0;
+  int sectors_read = 0;
   while ((got_bytes = gbfread(buffer, 1, SECTOR_SIZE, file_handle)) > 0) {
     db(4, MYNAME ": Decoding sector #%i...\n", sectors_read++);
-    rc = process_data_sector(&st, buffer, got_bytes);
+    int rc = process_data_sector(&st, buffer, got_bytes);
     if (opt_last_sector_val < 0) {
       if (rc < (4096-FULL_ITEM_LEN)) {
         db(1, MYNAME ": Empty sector encountered, terminating.\n");
@@ -1508,18 +1492,15 @@ static int getPoiByName(char* name)
 // http://earth-info.nga.mil/GandG/publications/tr8350.2/wgs84fin.pdf
 static void lla2ecef(double lat, double lng, double alt, double* ecef_x, double* ecef_y, double* ecef_z)
 {
-  long double n;
   long double a = 6378137.0;
   long double esqr = 6.69437999014e-3;
-  long double s;
-  long double llat, llng, lalt;
 
-  llat=lat*M_PI/180;
-  llng=lng*M_PI/180;
-  lalt=alt;
+  long double llat = lat*M_PI/180;
+  long double llng = lng*M_PI/180;
+  long double lalt = alt;
 
-  s=sin(llat);
-  n = a / sqrt(1 - esqr * s*s);
+  long double s = sin(llat);
+  long double n = a / sqrt(1 - esqr * s*s);
 
   *ecef_x = (double)((n+lalt) * cos(llat) * cos(llng));
   *ecef_y = (double)((n+lalt) * cos(llat) * sin(llng));
@@ -1529,21 +1510,18 @@ static void miniHomer_get_poi()
 {
   uint8_t MSG_GET_POI[3] = { 0x4D, 0, 0};
   uint8_t buf[32];
-  unsigned int poi;
   double lat, lng, alt;
-  double ecef_x, ecef_y, ecef_z;
-  Waypoint* wpt;
 
-  for (poi=0; poi<NUMPOI; poi++) {
+  for (unsigned int poi = 0; poi<NUMPOI; poi++) {
     MSG_GET_POI[1]=(poi>>8)&0xff;
     MSG_GET_POI[2]=(poi)&0xff;
     if (skytraq_wr_msg_verify((uint8_t*)&MSG_GET_POI, sizeof(MSG_GET_POI)) != res_OK) {
       warning(MYNAME ": cannot read poi %d '%s'\n", poi, poinames[poi]);
     }
     skytraq_rd_msg(buf, 25);
-    ecef_x=be_read_double(buf+1);
-    ecef_y=be_read_double(buf+9);
-    ecef_z=be_read_double(buf+17);
+    double ecef_x = be_read_double(buf+1);
+    double ecef_y = be_read_double(buf+9);
+    double ecef_z = be_read_double(buf+17);
 
     // todo - how to determine not-set POIs ?
     if (ecef_x < 100.0 && ecef_y < 100.0 && ecef_z < 100.0) {
@@ -1551,7 +1529,7 @@ static void miniHomer_get_poi()
     } else {
       ECEF_to_LLA(ecef_x, ecef_y, ecef_z, &lat, &lng, &alt);
 
-      wpt = new Waypoint;
+      Waypoint* wpt = new Waypoint;
       wpt->shortname      = QString().sprintf("POI_%s", poinames[poi]);
       wpt->description    = QString().sprintf("miniHomer points to this coordinates if the %s symbol is on", poinames[poi]);
       wpt->latitude       = lat;
@@ -1580,12 +1558,11 @@ static int miniHomer_set_poi(uint16_t poinum, const char* opt_poi)
     0, 0, 0, 0, 0, 0, 0, 0,	//alt (double ecef)
     0 			// attr (u8, 1-> to flash, 0->ro sram)
   };
-  int n, result;
   double lat, lng, alt;
   double ecef_x, ecef_y, ecef_z;
 
 
-  result=0;		// result will be 0 if opt_poi isn't set
+  int result = 0;		// result will be 0 if opt_poi isn't set
   if (opt_poi) { 	// first check opt_poi
     if (*opt_poi) {
       lat=lng=alt=0.0;
@@ -1593,7 +1570,7 @@ static int miniHomer_set_poi(uint16_t poinum, const char* opt_poi)
        * parse format of <lat>:<lng>[:alt]
        * we assume at least two elements in the value string
        */
-      n = sscanf(opt_poi, "%lf:%lf:%lf", &lat, &lng, &alt);
+      int n = sscanf(opt_poi, "%lf:%lf:%lf", &lat, &lng, &alt);
       if (n >= 2) {
         db(3, "found %d elems '%s':poi=%s@%d, lat=%f, lng=%f, alt=%f over=%s\n", n, opt_poi, poinames[poinum], poinum, lat, lng, alt);
         lla2ecef(lat, lng, alt, &ecef_x, &ecef_y, &ecef_z);

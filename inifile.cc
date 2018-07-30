@@ -64,11 +64,9 @@ find_gpsbabel_inifile(const QString& path)  /* can be empty or NULL */
 static gbfile*
 open_gpsbabel_inifile()
 {
-  QString name;
-  QString envstr;
   gbfile* res = nullptr;
 
-  envstr = ugetenv("GPSBABELINI");
+  QString envstr = ugetenv("GPSBABELINI");
   if (!envstr.isNull()) {
     if (QFile(envstr).open(QIODevice::ReadOnly)) {
       return gbfopen(envstr, "r", "GPSBabel");
@@ -76,7 +74,7 @@ open_gpsbabel_inifile()
     warning("WARNING: GPSBabel-inifile, defined in environment, NOT found!\n");
     return nullptr;
   }
-  name = find_gpsbabel_inifile("");  // Check in current directory first.
+  QString name = find_gpsbabel_inifile("");  // Check in current directory first.
   if (name.isNull()) {
 #ifdef __WIN32__
     // Use &&'s early-out behaviour to try successive file locations: first
@@ -141,19 +139,16 @@ inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
       ENQUEUE_TAIL(&inifile->secs, &sec->Q);
       inifile->isecs++;
     } else {
-      char* cx;
-      inifile_entry_t* entry;
-
       if (sec == nullptr) {
         fatal("%s: missing section header in '%s'.\n", myname,
               qPrintable(gbinipathname));
       }
 
-      entry = (inifile_entry_t*) xcalloc(1, sizeof(*entry));
+      inifile_entry_t* entry = (inifile_entry_t*) xcalloc(1, sizeof(*entry));
       ENQUEUE_TAIL(&sec->entries, &entry->Q);
       sec->ientries++;
 
-      cx = strchr(cin, '=');
+      char* cx = strchr(cin, '=');
       if (cx != nullptr) {
         *cx = '\0';
         cin = lrtrim(cin);
@@ -181,13 +176,13 @@ inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* k
   }
 
   QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-    inifile_section_t* sec = (inifile_section_t*) elem;
+    inifile_section_t* sec = reinterpret_cast<inifile_section_t *>(elem);
 
     if (case_ignore_strcmp(sec->name, sec_name) == 0) {
       queue* elem, *tmp;
 
       QUEUE_FOR_EACH(&sec->entries, elem, tmp) {
-        inifile_entry_t* entry = (inifile_entry_t*) elem;
+        inifile_entry_t* entry = reinterpret_cast<inifile_entry_t *>(elem);
 
         if (case_ignore_strcmp(entry->key, key) == 0) {
           return entry->val;
@@ -210,7 +205,6 @@ inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* k
 inifile_t*
 inifile_init(const QString& filename, const char* myname)
 {
-  inifile_t* result;
   gbfile* fin = nullptr;
 
   if (filename.isEmpty()) {
@@ -222,7 +216,7 @@ inifile_init(const QString& filename, const char* myname)
     fin = gbfopen(filename, "rb", myname);
   }
 
-  result = (inifile_t*) xcalloc(1, sizeof(*result));
+  inifile_t* result = (inifile_t*) xcalloc(1, sizeof(*result));
   QUEUE_INIT(&result->secs);
   inifile_load_file(fin, result, myname);
 
@@ -241,13 +235,13 @@ inifile_done(inifile_t* inifile)
     queue* elem, *tmp;
 
     QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-      inifile_section_t* sec = (inifile_section_t*) elem;
+      inifile_section_t* sec = reinterpret_cast<inifile_section_t *>(elem);
 
       if (sec->ientries > 0) {
         queue* elem, *tmp;
 
         QUEUE_FOR_EACH(&sec->entries, elem, tmp) {
-          inifile_entry_t* entry = (inifile_entry_t*) elem;
+          inifile_entry_t* entry = reinterpret_cast<inifile_entry_t *>(elem);
 
           if (entry->key) {
             xfree(entry->key);
@@ -276,7 +270,7 @@ inifile_has_section(const inifile_t* inifile, const char* section)
   queue* elem, *tmp;
 
   QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-    inifile_section_t* sec = (inifile_section_t*) elem;
+    inifile_section_t* sec = reinterpret_cast<inifile_section_t *>(elem);
     if (case_ignore_strcmp(sec->name, section) == 0) {
       return 1;
     }
@@ -305,9 +299,7 @@ inifile_readstr(const inifile_t* inifile, const char* section, const char* key)
 int
 inifile_readint(const inifile_t* inifile, const char* section, const char* key, int* value)
 {
-  char* str;
-
-  str = inifile_find_value(inifile, section, key);
+  char* str = inifile_find_value(inifile, section, key);
 
   if (str == nullptr) {
     return 0;

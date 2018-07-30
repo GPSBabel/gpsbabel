@@ -147,9 +147,7 @@ const psit_icon_mapping_t psit_icon_value_table[] = {
 static const char*
 psit_find_desc_from_icon_number(const int icon)
 {
-  const psit_icon_mapping_t* i;
-
-  for (i = psit_icon_value_table; i->icon; i++) {
+  for (const psit_icon_mapping_t* i = psit_icon_value_table; i->icon; i++) {
     if (icon == i->value) {
       return i->icon;
     }
@@ -160,14 +158,13 @@ psit_find_desc_from_icon_number(const int icon)
 static int
 psit_find_icon_number_from_desc(const char* desc)
 {
-  const psit_icon_mapping_t* i;
   int def_icon = 18;
 
   if (!desc) {
     return def_icon;
   }
 
-  for (i = psit_icon_value_table; i->icon; i++) {
+  for (const psit_icon_mapping_t* i = psit_icon_value_table; i->icon; i++) {
     if (case_ignore_strcmp(desc,i->icon) == 0) {
       return i->value;
     }
@@ -336,8 +333,6 @@ psit_waypoint_r(gbfile* psit_file, Waypoint**)
 static void
 psit_waypoint_w(gbfile* psit_file, const Waypoint* wpt)
 {
-  int	icon;
-  const char* ident;
   char* src = nullptr;  /* BUGBUG Passed to mkshort */
 
   gbfprintf(psit_file, "%11.6f,%11.6f,",
@@ -350,14 +345,14 @@ psit_waypoint_w(gbfile* psit_file, const Waypoint* wpt)
     gbfprintf(psit_file, "%8.2f,",
               wpt->altitude);
 
-  ident = global_opts.synthesize_shortnames ?
-          mkshort(mkshort_handle, src) :
-          xstrdup(wpt->shortname);
+  const char* ident = global_opts.synthesize_shortnames ?
+                         mkshort(mkshort_handle, src) :
+                         xstrdup(wpt->shortname);
 
   gbfprintf(psit_file, " %-6s, ", ident);
   xfree(ident);
 
-  icon = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
+  int icon = gt_find_icon_number_from_desc(wpt->icon_descr, PCX);
 
   if (get_cache_icon(wpt) && wpt->icon_descr.compare(QLatin1String("Geocache Found")) != 0) {
     icon = gt_find_icon_number_from_desc(get_cache_icon(wpt), PCX);
@@ -386,7 +381,6 @@ static void
 psit_route_r(gbfile* psit_file, route_head** rte)
 {
   char rtename[256];
-  route_head* rte_head;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
 
@@ -398,7 +392,7 @@ psit_route_r(gbfile* psit_file, route_head** rte)
 
   rtrim(rtename);
 
-  rte_head = route_head_alloc();
+  route_head* rte_head = route_head_alloc();
   rte_head->rte_name = rtename;
   route_add_head(rte_head);
   *rte = rte_head;
@@ -464,8 +458,7 @@ psit_routehdr_w(gbfile* psit_file, const route_head* rte)
     unsigned int rte_datapoints = 0;
     queue *elem, *tmp;
     QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-      void* vwaypointp = static_cast<void*>(elem);
-      Waypoint* testwpt = static_cast<Waypoint*>(vwaypointp);
+      Waypoint* testwpt = reinterpret_cast<Waypoint*>(elem);
       if (rte_datapoints == 0) {
         uniqueValue = testwpt->GetCreationTime().toTime_t();
       }
@@ -504,12 +497,8 @@ static void
 psit_track_r(gbfile* psit_file, route_head**)
 {
   char trkname[256];
-  unsigned int trk_num;
 
   struct tm tmTime;
-  time_t dateTime = 0;
-  route_head* track_head = nullptr;
-  Waypoint* thisWaypoint;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), ltrimEOL);
   if (strlen(psit_current_token) == 0) {
@@ -520,14 +509,14 @@ psit_track_r(gbfile* psit_file, route_head**)
 
   rtrim(trkname);
 
-  trk_num = 0;
-  track_head = nullptr;
+  unsigned int trk_num = 0;
+  route_head* track_head = nullptr;
 
   psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), wscomma);
 
   while (psit_isKnownToken(psit_current_token) != 0) {
     if (strlen(psit_current_token) > 0) {
-      thisWaypoint = new Waypoint;
+      Waypoint* thisWaypoint = new Waypoint;
 
       thisWaypoint->latitude = atof(psit_current_token);
 
@@ -560,7 +549,7 @@ psit_track_r(gbfile* psit_file, route_head**)
              &(tmTime.tm_sec));
 
       tmTime.tm_isdst = 0;
-      dateTime = mkgmtime(&tmTime);
+      time_t dateTime = mkgmtime(&tmTime);
 
       psit_getToken(psit_file,psit_current_token,sizeof(psit_current_token), whitespace);
 
@@ -611,8 +600,7 @@ psit_trackhdr_w(gbfile* psit_file, const route_head* trk)
       unsigned int trk_datapoints = 0;
       QUEUE_FOR_EACH(&trk->waypoint_list, elem, tmp) {
         if (trk_datapoints == 0) {
-          void* vwaypointp = static_cast<void*>(elem);
-          Waypoint* testwpt = static_cast<Waypoint*>(vwaypointp);
+          Waypoint* testwpt = reinterpret_cast<Waypoint*>(elem);
           uniqueValue = testwpt->GetCreationTime().toTime_t();
         }
         trk_datapoints++;

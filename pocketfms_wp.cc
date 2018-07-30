@@ -60,15 +60,13 @@ data_read()
   char* buff;
   int linecount = 0;
   while ((buff = gbfgetstr(file_in))) {
-    char* s;
-    Waypoint* wpt;
     rtrim(buff);
     if (strlen(buff) == 0) {
       break;
     }
     linecount++;
-    wpt = new Waypoint;
-    s = buff;
+    Waypoint* wpt = new Waypoint;
+    char* s = buff;
     s = csv_lineparse(s, "\\w", "", linecount);
     if (!s) {
       fatal(MYNAME "Invalid name");
@@ -106,10 +104,10 @@ enigma_waypt_disp(const Waypoint* wpt)
 {
   if (!wpt->shortname.isEmpty()) {
     // The output might have a space or control character.
-    int i, l = wpt->shortname.length();
+    int l = wpt->shortname.length();
     char *t = (char*) xmalloc(l + 1);
     char* d = t;
-    for (i = 0; i < l; i++) {
+    for (int i = 0; i < l; i++) {
       char s = wpt->shortname[i].cell();
       if (isgraph(s)) {
         *d++ = s;

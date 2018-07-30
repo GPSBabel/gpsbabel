@@ -439,12 +439,11 @@ static QString
 osm_feature_symbol(const int ikey, const char* value)
 {
   char buff[128];
-  QString key;
 
   buff[0] = ikey;
   strncpy(&buff[1], value, sizeof(buff) - 1);
 
-  key = QString::fromUtf8(buff);
+  QString key = QString::fromUtf8(buff);
 
   QString result;
   if (values.contains(key)) {
@@ -523,7 +522,6 @@ static void
 osm_node_tag(xg_string, const QXmlStreamAttributes* attrv)
 {
   QString key, value;
-  QString str;
   signed char ikey;
 
   if (attrv->hasAttribute("k")) {
@@ -533,7 +531,7 @@ osm_node_tag(xg_string, const QXmlStreamAttributes* attrv)
     value = attrv->value("v").toString();
   }
 
-  str = osm_strip_html(value);
+  QString str = osm_strip_html(value);
 
   if (key == QLatin1String("name")) {
     if (wpt->shortname.isEmpty()) {
@@ -605,7 +603,6 @@ static void
 osm_way_tag(xg_string, const QXmlStreamAttributes* attrv)
 {
   QString key, value;
-  QString str;
   signed char ikey;
 
   if (attrv->hasAttribute("k")) {
@@ -615,7 +612,7 @@ osm_way_tag(xg_string, const QXmlStreamAttributes* attrv)
     value = attrv->value("v").toString();
   }
 
-  str = osm_strip_html(value);
+  QString str = osm_strip_html(value);
 
   if (key == QLatin1String("name")) {
     if (rte->rte_name.isEmpty()) {
@@ -704,13 +701,11 @@ osm_rd_deinit()
 static void
 osm_init_icons()
 {
-  int i;
-
   if (!icons.isEmpty()) {
     return;
   }
 
-  for (i = 0; osm_icon_mappings[i].value; i++) {
+  for (int i = 0; osm_icon_mappings[i].value; i++) {
     icons.insert(QString::fromUtf8(osm_icon_mappings[i].icon),
                  &osm_icon_mappings[i]);
   }
@@ -738,14 +733,14 @@ osm_disp_feature(const Waypoint* wpt)
 static void
 osm_write_opt_tag(const char* atag)
 {
-  char* tag, *cin, *ce;
+  char* cin;
 
   if (!atag) {
     return;
   }
 
-  tag = cin = xstrdup(atag);
-  ce = cin + strlen(cin);
+  char* tag = cin = xstrdup(atag);
+  char* ce = cin + strlen(cin);
 
   while (cin < ce) {
     char* sc, *dp;
@@ -795,9 +790,7 @@ osm_waypt_disp(const Waypoint* wpt)
 
   waypoints.insert(name, wpt);
 
-  int* id;
-
-  id = (int*) xmalloc(sizeof(*id));
+  int* id = (int*) xmalloc(sizeof(*id));
   *id = --node_id;
   (const_cast<Waypoint*>(wpt))->extra_data = id;
 

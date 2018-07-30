@@ -29,15 +29,12 @@
 static void
 free_xml_tag(xml_tag* tag)
 {
-  xml_tag* next = nullptr;
-  char** ap;
-
   while (tag) {
     if (tag->child) {
       free_gpx_extras(tag->child);
     }
     if (tag->attributes) {
-      ap = tag->attributes;
+      char** ap = tag->attributes;
 
       while (*ap) {
         xfree(*ap++);
@@ -46,7 +43,7 @@ free_xml_tag(xml_tag* tag)
       xfree(tag->attributes);
     }
 
-    next = tag->sibling;
+    xml_tag* next = tag->sibling;
     delete tag;
     tag = next;
   }
@@ -56,15 +53,12 @@ free_xml_tag(xml_tag* tag)
 static void
 copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
 {
-  xml_tag* res = nullptr;
-  char** ap = nullptr;
-
   if (!src) {
     *copy = nullptr;
     return;
   }
 
-  res = new xml_tag;
+  xml_tag* res = new xml_tag;
   *copy = res;
 
 //  memcpy(res, src, sizeof(xml_tag));
@@ -72,7 +66,7 @@ copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
   res->cdata = (src->cdata);
   res->parentcdata = (src->parentcdata);
   if (src->attributes) {
-    ap = src->attributes;
+    char** ap = src->attributes;
     int count = 0;
     while (*ap) {
       count++;
@@ -95,8 +89,6 @@ copy_xml_tag(xml_tag** copy, xml_tag* src, xml_tag* parent)
 static void
 convert_xml_tag(xml_tag* tag)
 {
-  char** ap = nullptr;
-
   if (tag == nullptr) {
     return;
   }
@@ -106,7 +98,7 @@ convert_xml_tag(xml_tag* tag)
   tag->cdata = tag->cdata;
   tag->parentcdata = tag->parentcdata;
 
-  ap = tag->attributes;
+  char** ap = tag->attributes;
   while (*ap) {
     *ap = cet_convert_string(*ap);
     ap++;

@@ -39,16 +39,15 @@ arglist_t easygps_args[] = {
 static void
 rd_init(const QString& fname)
 {
-  int sz;
   char ibuf[100] = {'0'} ;
   const char* ezsig = "TerraByte Location File";
 
   file_in = gbfopen_le(fname, "rb", MYNAME);
 
-  sz = gbfread(ibuf, 1, 52, file_in);
+  int sz = gbfread(ibuf, 1, 52, file_in);
 
   if ((sz < 52) ||
-      strncmp(ibuf, ezsig, sizeof(ezsig)-1) ||
+      strncmp(ibuf, ezsig, strlen(ezsig)) ||
       (ibuf[51] != 'W')) {
     fatal(MYNAME ": %s is not an EasyGPS file.\n", qPrintable(fname));
   }
@@ -80,13 +79,10 @@ data_read()
   char p;
   char ibuf[10];
   do {
-    unsigned char tag;
-    Waypoint* wpt_tmp;
-
-    wpt_tmp = new Waypoint;
+    Waypoint* wpt_tmp = new Waypoint;
     UrlLink link;
 
-    for (tag = gbfgetc(file_in); tag != 0xff; tag = gbfgetc(file_in)) {
+    for (unsigned char tag = gbfgetc(file_in); tag != 0xff; tag = gbfgetc(file_in)) {
       switch (tag) {
       case 1:
         wpt_tmp->shortname = gbfgetpstr(file_in);
