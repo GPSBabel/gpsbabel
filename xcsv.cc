@@ -190,30 +190,29 @@ xcsv_destroy_style(void)
 }
 
 // Given a keyword of "COMMASPACE", return ", ".
-const char*
+QString
 xcsv_get_char_from_constant_table(const char* key)
 {
   static QHash<QString, QString> substitutions;
   if (substitutions.empty()) {
-    for (char_map_t* cm = xcsv_char_table; cm->key; cm++) {
+    for (char_map_t* cm = xcsv_char_table; !cm->key.isNull(); cm++) {
       substitutions.insert(cm->key, cm->chars);
     }
   }
-  if (!substitutions.contains(key)) {
-    return xstrdup(key);
+  if (substitutions.contains(key)) {
+    return substitutions[key];
   }
-  // QHash is very unhappy with raw character pointers.
-  // This is almost certainly a leak and IS certainly in bad taste, but
-  // all the callers seem to free it quickly.
-  return xstrdup(substitutions[key]);
+  // This seems like it should be bad, but we have formats depending on it!?!
+  // Warning() << "Unknown substitution keyword" << key;
+  return QString();
 }
 
 static void
 xcsv_parse_style_line(char* sbuff)
 {
   char* sp;
-  char* p;
-  const char* cp;
+  char *p;
+  QString cp;
   const char* key, *val, *pfc;
 
   /*
@@ -236,7 +235,7 @@ xcsv_parse_style_line(char* sbuff)
     if (ISSTOKEN(sbuff, "FIELD_DELIMITER")) {
       sp = csv_stringtrim(&sbuff[16], "\"", 1);
       cp = xcsv_get_char_from_constant_table(sp);
-      if (cp) {
+      if (!cp.isEmpty()) {
         xcsv_file.field_delimiter = cp;
         xfree(sp);
       } else {
@@ -258,7 +257,7 @@ xcsv_parse_style_line(char* sbuff)
       if (ISSTOKEN(sbuff, "FIELD_ENCLOSER")) {
         sp = csv_stringtrim(&sbuff[15], "\"", 1);
         cp = xcsv_get_char_from_constant_table(sp);
-        if (cp) {
+        if (!cp.isEmpty()) {
           xcsv_file.field_encloser = cp;
           xfree(sp);
         } else {
@@ -273,7 +272,7 @@ xcsv_parse_style_line(char* sbuff)
         if (ISSTOKEN(sbuff, "RECORD_DELIMITER")) {
           sp = csv_stringtrim(&sbuff[17], "\"", 1);
           cp = xcsv_get_char_from_constant_table(sp);
-          if (cp) {
+          if (!cp.isEmpty()) {
             xcsv_file.record_delimiter = cp;
             xfree(sp);
           } else {
@@ -325,7 +324,7 @@ xcsv_parse_style_line(char* sbuff)
                       sp = csv_stringtrim(&sbuff[9], "\"", 1);
                       cp = xcsv_get_char_from_constant_table(sp);
 
-                      if (cp) {
+                      if (!cp.isEmpty()) {
                         p = xstrdup(cp);
                         xfree(sp);
                       } else {

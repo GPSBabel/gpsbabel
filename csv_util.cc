@@ -1676,9 +1676,9 @@ xcsv_waypt_pr(const Waypoint* wpt)
       buff = QString().sprintf(fmp->printfc, waypt_out_count + atoi(fmp->val));
       break;
     case XT_CONSTANT: {
-      const char* cp = xcsv_get_char_from_constant_table(fmp->val);
-      if (cp) {
-        buff = QString().sprintf(fmp->printfc, cp);
+      auto cp = xcsv_get_char_from_constant_table(fmp->val);
+      if (!cp.isEmpty()) {
+        buff = QString().sprintf(fmp->printfc, CSTR(cp));
       } else {
         buff = QString().sprintf(fmp->printfc, fmp->val);
       }

@@ -77,7 +77,7 @@ xcsv_ofield_add(const char*, const char*, const char*, int options);
 void
 xcsv_destroy_style(void);
 
-const char*
+QString
 xcsv_get_char_from_constant_table(const char* key);
 
 /****************************************************************************/
@@ -99,8 +99,8 @@ typedef struct field_map {
 
 /* something to map config file constants to chars */
 typedef struct char_map {
-  const char* key;
-  const char* chars;
+  const QString key;
+  const QString chars;
 } char_map_t;
 
 namespace gpsbabel
