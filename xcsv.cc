@@ -300,6 +300,7 @@ xcsv_parse_style_line(QString line)
     char* sp = csv_stringtrim(CSTR(tokenstr), "\"", 1);
     QString cp = xcsv_get_char_from_constant_table(sp);
     xcsv_file.badchars += cp;
+    xfree(sp);
   } else
 
   if (op =="PROLOGUE") {
