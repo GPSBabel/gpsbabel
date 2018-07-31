@@ -23,6 +23,8 @@
 #include "csv_util.h"
 #include "gbversion.h"
 #include "inifile.h"
+#include "QtCore/QDebug"
+#include <cstdio>
 #include <cstdio>
 #include <cstdlib> // qsort
 
@@ -1483,7 +1485,7 @@ sort_and_unify_vecs(int* ctp)
   /* Walk the style list, parse the entries, dummy up a "normal" vec */
   for (style_vecs_t* svec = style_list; svec->name; svec++, i++)  {
     xcsv_read_internal_style(svec->style_buf);
-    svp[i] = (vecs_t*) xcalloc(1, sizeof** svp);
+    svp[i] = new vecs_t;
     svp[i]->name = svec->name;
     svp[i]->vec = (ff_vecs_t*) xmalloc(sizeof(*svp[i]->vec));
     svp[i]->extensions = xcsv_file.extension;
@@ -1677,7 +1679,6 @@ disp_formats(int version)
   vecs_t** svp;
   vecs_t* vec;
   int vc = 0;
-
   switch (version) {
   case 0:
   case 1:
@@ -1701,7 +1702,7 @@ disp_formats(int version)
         disp_v2(vec->vec);
       }
       printf("%s\t%s\t%s%s%s\n", vec->name,
-             CSTR(vec->extensions) ? CSTR(vec->extensions) : "",
+             !vec->extensions.isEmpty() ? CSTR(vec->extensions) : "",
              CSTR(vec->desc),
              version >= 3 ? "\t" : "",
              version >= 3 ? vec->parent : "");
