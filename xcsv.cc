@@ -163,6 +163,8 @@ xcsv_destroy_style(void)
       xfree(xcsv_file.ofield);
     }
   }
+  xcsv_file.ifields.clear();
+  xcsv_file.ofields.clear();
 
   /* other alloc'd glory */
   xcsv_file.field_delimiter = QString();
@@ -343,24 +345,14 @@ xcsv_parse_style_line(QString line)
       Fatal() << "Invalid IFIELD line: " << tokenstr;
     }
 
-                                  // The key ("LAT_DIR") should never contain quotes.
+    // The key ("LAT_DIR") should never contain quotes.
 
-
-                                  // No, I don't know why these are comma-separated AND quoted.
-                                  // There may be a regex way to remove only the
-                                  // outermost quote, but leave remaining ones.
-                                  // This is required for formats like tomtom_asc
-                                  // that uses ... ""%s"" - and relies on the quotes.
-                                  // This probably works quite badly if there's a quote
-                                  // in the output stream, but this is emulating what
-                                  // the previous pointer-bashing did for 15+ years.
     const char* key = xstrdup(tokens[0].simplified());
     QString s1 = dequote(tokens[1]);
     char* val = xstrdup(s1);
 
     QString s2 = dequote(tokens[2]);
     char* pfc = xstrdup(s2);
-      //dconst char* key = xstrdup(fields[0].simplified());
     xcsv_ifield_add(key, val, pfc);
   } else
 
@@ -376,25 +368,17 @@ xcsv_parse_style_line(QString line)
       Fatal() << "Invalid OFIELD line: " << tokenstr;
     }
 
-      // The key ("LAT_DIR") should never contain quotes.
+    // The key ("LAT_DIR") should never contain quotes.
     const char *key = xstrdup(tokens[0].simplified());
 
-                                  // No, I don't know why these are comma-separated AND quoted.
-                                  // There may be a regex way to remove only the
-                                  // outermost quote, but leave remaining ones.
-                                  // This is required for formats like tomtom_asc
-                                  // that uses ... ""%s"" - and relies on the quotes.
-                                  // This probably works quite badly if there's a quote
-                                  // in the output stream, but this is emulating what
-                                  // the previous pointer-bashing did for 15+ years.
     QString s1 = dequote(tokens[1]);
     char *val = xstrdup(s1);
 
     QString s2 = dequote(tokens[2]);
     const char* pfc = xstrdup(s2);
 
-                                  // This is pretty lazy way to parse write options.
-                                  // They've very rarely used, so we'll go for simple.
+    // This is pretty lazy way to parse write options.
+    // They've very rarely used, so we'll go for simple.
     if (tokens.size() > 4) {
       QString options_string = tokens[3].simplified();
       if (options_string.contains("no_delim_before")) {
