@@ -23,7 +23,6 @@
 #include "csv_util.h"
 #include "gbversion.h"
 #include "inifile.h"
-#include "QtCore/QDebug"
 #include <cstdio>
 #include <cstdio>
 #include <cstdlib> // qsort
@@ -1680,10 +1679,10 @@ disp_formats(int version)
   vecs_t* vec;
   int vc = 0;
   switch (version) {
-  case 0:
-  case 1:
-  case 2:
-  case 3:
+    case 0:
+    case 1:
+    case 2:
+    case 3:
     svp = sort_and_unify_vecs(&vc);
     for (int i = 0; i<vc; i++,vec++) {
       vec = svp[i];
@@ -1702,17 +1701,17 @@ disp_formats(int version)
         disp_v2(vec->vec);
       }
       printf("%s\t%s\t%s%s%s\n", vec->name,
-             !vec->extensions.isEmpty() ? CSTR(vec->extensions) : "",
-             CSTR(vec->desc),
-             version >= 3 ? "\t" : "",
-             version >= 3 ? vec->parent : "");
+        !vec->extensions.isEmpty() ? CSTR(vec->extensions) : "",
+        CSTR(vec->desc),
+        version >= 3 ? "\t" : "",
+        version >= 3 ? vec->parent : "");
       if (version >= 3) {
         disp_v3(vec);
       }
     }
     xfree(svp);
     break;
-  default:
+    default:
     ;
   }
 }
