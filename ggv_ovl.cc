@@ -21,10 +21,10 @@
  */
 
 #include "defs.h"
-#include "cet_util.h"
 #include "grtcirc.h"
 #include "inifile.h"
 
+#include <QtCore/QString>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -83,9 +83,6 @@ static void
 ggv_ovl_rd_init(const QString& fname)
 {
   inifile = inifile_init(fname, MYNAME);
-  if (inifile->unicode) {
-    cet_convert_init(CET_CHARSET_UTF8, 1);
-  }
 
   route_ct = 0;
   track_ct = 0;
@@ -110,11 +107,12 @@ ggv_ovl_read()
     OVL_SYMBOL_TYP type = (OVL_SYMBOL_TYP) inifile_readint_def(inifile, symbol, "Typ", 0);
     int points = inifile_readint_def(inifile, symbol, "Punkte", -1);
 
+    QString lat;
+    QString lon;
     switch (type) {
 
       char coord[32];
       Waypoint* wpt;
-      char* cx;
       int group;
 
     case OVL_SYMBOL_LINE:
@@ -143,15 +141,17 @@ ggv_ovl_read()
           wpt = new Waypoint;
 
           snprintf(coord, sizeof(coord), "YKoord%d", j);
-          if ((cx = inifile_readstr(inifile, symbol, coord))) {
-            wpt->latitude = atof(cx);
+          lat = inifile_readstr(inifile, symbol, coord);
+          if (!lat.isNull()) {
+            wpt->latitude = lat.toDouble();
           } else {
             continue;
           }
 
           snprintf(coord, sizeof(coord), "XKoord%d", j);
-          if ((cx = inifile_readstr(inifile, symbol, coord))) {
-            wpt->longitude = atof(cx);
+          lon = inifile_readstr(inifile, symbol, coord);
+          if (!lon.isNull()) {
+            wpt->longitude = lon.toDouble();
           } else {
             continue;
           }
@@ -171,13 +171,15 @@ ggv_ovl_read()
       wpt = new Waypoint;
       wpt->shortname = symbol;
 
-      if ((cx = inifile_readstr(inifile, symbol, "YKoord"))) {
-        wpt->latitude = atof(cx);
+      lat = inifile_readstr(inifile, symbol, "YKoord");
+      if (!lat.isNull()) {
+        wpt->latitude = lat.toDouble();
       } else {
         continue;
       }
-      if ((cx = inifile_readstr(inifile, symbol, "XKoord"))) {
-        wpt->longitude = atof(cx);
+      lon = inifile_readstr(inifile, symbol, "XKoord");
+      if (!lon.isNull()) {
+        wpt->longitude = lon.toDouble();
       } else {
         continue;
       }

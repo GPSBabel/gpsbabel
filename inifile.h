@@ -21,13 +21,13 @@
 #ifndef HAVE_INIFILE_H
 #define HAVE_INIFILE_H
 
-#include "defs.h"
-#include <QtCore/QList>
+#include <QtCore/QList>    // for QList
+#include <QtCore/QString>  // for QString
 
-struct inifile_section_t;
+class InifileSection;
 struct inifile_t {
-  QList<inifile_section_t> secs;			/* sections */
-  bool unicode{false};
+  QList<InifileSection> secs;			/* sections */
+  QString source;
 };
 
 /*
@@ -45,7 +45,7 @@ bool inifile_has_section(const inifile_t* inifile, const char* section);
        returns NULL if not found, otherwise a pointer to the value of key ...
        all key values are valid entities until "inifile_done"
  */
-char* inifile_readstr(const inifile_t* inifile, const char* section, const char* key);
+QString inifile_readstr(const inifile_t* inifile, const char* section, const char* key);
 
 /*
      inifile_readint:

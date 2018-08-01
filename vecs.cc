@@ -23,6 +23,7 @@
 #include "csv_util.h"
 #include "gbversion.h"
 #include "inifile.h"
+#include <QtCore/QString>
 #include <cstdio>
 #include <cstdlib> // qsort
 
@@ -1281,10 +1282,8 @@ find_vec(const char* vecname, const char** opts)
 
     if (vec->vec->args) {
       for (auto ap = vec->vec->args; ap->argstring; ap++) {
-        const char* opt;
-
         if (res) {
-          opt = get_option(*opts, ap->argstring);
+          const char* opt = get_option(*opts, ap->argstring);
           if (opt) {
             found = 1;
             assign_option(svecname, ap, opt);
@@ -1292,14 +1291,15 @@ find_vec(const char* vecname, const char** opts)
             continue;
           }
         }
-        opt = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
-        if (opt == nullptr) {
-          opt = inifile_readstr(global_opts.inifile, "Common format settings", ap->argstring);
+        QString qopt = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
+        if (qopt.isNull()) {
+          qopt = inifile_readstr(global_opts.inifile, "Common format settings", ap->argstring);
         }
-        if (opt == nullptr) {
-          opt = ap->defaultvalue;
+        if (qopt.isNull()) {
+          assign_option(vec->name, ap, ap->defaultvalue);
+        } else {
+          assign_option(vec->name, ap, CSTR(qopt));
         }
-        assign_option(vec->name, ap, opt);
       }
     }
     if (opts && opts[0] && !found) {
@@ -1338,10 +1338,8 @@ find_vec(const char* vecname, const char** opts)
 
     if (vec_list[0].vec->args) {
       for (auto ap = vec_list[0].vec->args; ap->argstring; ap++) {
-        const char* opt;
-
         if (res) {
-          opt = get_option(*opts, ap->argstring);
+          const char* opt = get_option(*opts, ap->argstring);
           if (opt) {
             found = 1;
             assign_option(svecname, ap, opt);
@@ -1349,14 +1347,15 @@ find_vec(const char* vecname, const char** opts)
             continue;
           }
         }
-        opt = inifile_readstr(global_opts.inifile, svec->name, ap->argstring);
-        if (opt == nullptr) {
-          opt = inifile_readstr(global_opts.inifile, "Common format settings", ap->argstring);
+        QString qopt = inifile_readstr(global_opts.inifile, svec->name, ap->argstring);
+        if (qopt.isNull()) {
+          qopt = inifile_readstr(global_opts.inifile, "Common format settings", ap->argstring);
         }
-        if (opt == nullptr) {
-          opt = ap->defaultvalue;
+        if (qopt.isNull()) {
+          assign_option(svec->name, ap, ap->defaultvalue);
+        } else {
+          assign_option(svec->name, ap, CSTR(qopt));
         }
-        assign_option(svec->name, ap, opt);
       }
     }
 
