@@ -389,7 +389,7 @@ garmin_fs_convert_category(const char* category_name, uint16_t* category)
       assert((i>=0) && (i<16));
       snprintf(key, sizeof(key), "%d", i + 1);
       QString c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
-      if ((!c.isNull()) && c.compare(category_name, Qt::CaseInsensitive) == 0) {
+      if (c.compare(category_name, Qt::CaseInsensitive) == 0) {
         cat = (1 << i);
         break;
       }

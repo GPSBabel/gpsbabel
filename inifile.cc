@@ -100,7 +100,7 @@ static void
 inifile_load_file(QTextStream* stream, inifile_t* inifile, const char* myname)
 {
   QString buf;
-  InifileSection* sec = nullptr;
+  InifileSection section;
 
   while (!(buf = stream->readLine()).isNull()) {
     buf = buf.trimmed();
@@ -113,19 +113,21 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile, const char* myname)
     }
 
     if (buf.at(0) == '[') {
-      QString secname;
+      QString section_name;
       if (buf.contains(']')) {
-        secname = buf.mid(1, buf.indexOf(']') - 1).trimmed();
+        section_name = buf.mid(1, buf.indexOf(']') - 1).trimmed();
       }
-      if (secname.isEmpty()) {
-        fatal("%s: invalid section header '%s' in '%s'.\n", myname, qPrintable(secname),
+      if (section_name.isEmpty()) {
+        fatal("%s: invalid section header '%s' in '%s'.\n", myname, qPrintable(section_name),
               qPrintable(inifile->source));
       }
 
-      inifile->secs.append(InifileSection(secname));
-      sec = &inifile->secs.last();
+      // form lowercase key to implement CaseInsensitive matching.
+      section_name = section_name.toLower();
+      inifile->sections.insert(section_name, InifileSection(section_name));
+      section = inifile->sections.value(section_name);
     } else {
-      if (sec == nullptr) {
+      if (section.name.isEmpty()) {
         fatal("%s: missing section header in '%s'.\n", myname,
               qPrintable(inifile->source));
       }
@@ -137,7 +139,10 @@ inifile_load_file(QTextStream* stream, inifile_t* inifile, const char* myname)
       // and a found key without a value, i.e. force value
       // to be non-null but possibly empty.
       QString value = buf.section('=', 1).append("").trimmed();
-      sec->entries.insert(key, value);
+      section.entries.insert(key, value);
+
+      // update the QHash sections with the modified InifileSection section.
+      inifile->sections.insert(section.name, section);
     }
   }
 }
@@ -149,12 +154,13 @@ inifile_find_value(const inifile_t* inifile, const QString& sec_name, const QStr
     return QString();
   }
 
-  for (const auto& sec : inifile->secs) {
+  // CaseInsensitive matching implemented by forcing sec_name to lower case.
+  QString section_name = sec_name.toLower();
 
-    if (sec.name.compare(sec_name, Qt::CaseInsensitive) == 0) {
-      // CaseInsensitive matching implemented by forcing key to lower case.
-      return sec.entries.value(key.toLower());
-    }
+  if (inifile->sections.contains(section_name)) {
+    const InifileSection section = inifile->sections.value(section_name);
+    // CaseInsensitive matching implemented by forcing key to lower case.
+    return section.entries.value(key.toLower());
   }
   return QString();
 }
@@ -206,12 +212,7 @@ inifile_done(inifile_t* inifile)
 bool
 inifile_has_section(const inifile_t* inifile, const char* section)
 {
-  for (const auto& sec : inifile->secs) {
-    if (sec.name.compare(section, Qt::CaseInsensitive) == 0) {
-      return true;
-    }
-  }
-  return false;
+  return inifile->sections.contains(QString(section).toLower());
 }
 
 /*

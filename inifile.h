@@ -21,12 +21,13 @@
 #ifndef HAVE_INIFILE_H
 #define HAVE_INIFILE_H
 
+#include <QtCore/QHash>    // for QHash
 #include <QtCore/QList>    // for QList
 #include <QtCore/QString>  // for QString
 
 class InifileSection;
 struct inifile_t {
-  QList<InifileSection> secs;			/* sections */
+  QHash<QString, InifileSection> sections;
   QString source;
 };
 
@@ -42,8 +43,8 @@ bool inifile_has_section(const inifile_t* inifile, const char* section);
 
 /*
      inifile_readstr:
-       returns NULL if not found, otherwise a pointer to the value of key ...
-       all key values are valid entities until "inifile_done"
+       returns a null QString if not found, otherwise a non-null but possibly
+       empty Qstring with the value of key ...
  */
 QString inifile_readstr(const inifile_t* inifile, const char* section, const char* key);
 
