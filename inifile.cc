@@ -154,15 +154,8 @@ inifile_find_value(const inifile_t* inifile, const QString& sec_name, const QStr
     return QString();
   }
 
-  // CaseInsensitive matching implemented by forcing sec_name to lower case.
-  QString section_name = sec_name.toLower();
-
-  if (inifile->sections.contains(section_name)) {
-    const InifileSection section = inifile->sections.value(section_name);
-    // CaseInsensitive matching implemented by forcing key to lower case.
-    return section.entries.value(key.toLower());
-  }
-  return QString();
+  // CaseInsensitive matching implemented by forcing sec_name & key to lower case.
+  return inifile->sections.value(sec_name.toLower()).entries.value(key.toLower());
 }
 
 /* public procedures */
