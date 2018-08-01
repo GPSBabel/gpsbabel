@@ -34,7 +34,9 @@
 
 #define MYNAME "inifile"
 
-struct InifileSection {
+class InifileSection
+{
+public:
   QString name;
   QHash<QString, QString> entries;
 
