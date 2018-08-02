@@ -18,38 +18,37 @@
     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 USA
 */
 
-#include "defs.h"
+#include "defs.h"              // for fatal, ugetenv, warning
 #include "inifile.h"
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <cstdio>
-#include <cstdlib>
+#include "src/core/file.h"     // for File
+#include <QtCore/QByteArray>   // for QByteArray
+#include <QtCore/QChar>        // for operator==, QChar
+#include <QtCore/QDir>         // for QDir
+#include <QtCore/QFile>        // for QFile
+#include <QtCore/QFileInfo>    // for QFileInfo
+#include <QtCore/QHash>        // for QHash
+#include <QtCore/QIODevice>    // for QIODevice::ReadOnly, QIODevice
+#include <QtCore/QTextStream>  // for QTextStream
+#include <QtCore/Qt>           // for CaseInsensitive
+#include <QtCore/QtGlobal>     // for qPrintable
 
 #define MYNAME "inifile"
 
-typedef struct inifile_entry_s {
-  queue Q;
-  char* key;
-  char* val;
-} inifile_entry_t;
+class InifileSection
+{
+public:
+  QString name;
+  QHash<QString, QString> entries;
 
-typedef struct inifile_section_s {
-  queue Q;
-  char* name;
-  int ientries;
-  queue entries;
-} inifile_section_t;
+  InifileSection() = default;
+  explicit InifileSection(QString nm) : name{nm} {}
+};
 
 /* internal procedures */
-
-#define START_BUFSIZE 257
-#define DELTA_BUFSIZE 128
 
 #define GPSBABEL_INIFILE "gpsbabel.ini"
 #define GPSBABEL_SUBDIR ".gpsbabel"
 
-/* Remember the filename we used so we can include it in errors. */
-static QString gbinipathname;
 
 static QString
 find_gpsbabel_inifile(const QString& path)  /* can be empty or NULL */
@@ -61,18 +60,18 @@ find_gpsbabel_inifile(const QString& path)  /* can be empty or NULL */
   return QFile(inipath).open(QIODevice::ReadOnly) ? inipath : QString();
 }
 
-static gbfile*
+static QString
 open_gpsbabel_inifile()
 {
-  gbfile* res = nullptr;
+  QString res;
 
   QString envstr = ugetenv("GPSBABELINI");
   if (!envstr.isNull()) {
     if (QFile(envstr).open(QIODevice::ReadOnly)) {
-      return gbfopen(envstr, "r", "GPSBabel");
+      return envstr;
     }
     warning("WARNING: GPSBabel-inifile, defined in environment, NOT found!\n");
-    return nullptr;
+    return res;
   }
   QString name = find_gpsbabel_inifile("");  // Check in current directory first.
   if (name.isNull()) {
@@ -80,117 +79,83 @@ open_gpsbabel_inifile()
     // Use &&'s early-out behaviour to try successive file locations: first
     // %APPDATA%, then %WINDIR%, then %SYSTEMROOT%.
     (name = find_gpsbabel_inifile(ugetenv("APPDATA"))).isNull()
-        && (name = find_gpsbabel_inifile(ugetenv("WINDIR"))).isNull()
-        && (name = find_gpsbabel_inifile(ugetenv("SYSTEMROOT"))).isNull();
+    && (name = find_gpsbabel_inifile(ugetenv("WINDIR"))).isNull()
+    && (name = find_gpsbabel_inifile(ugetenv("SYSTEMROOT"))).isNull();
 #else
     // Use &&'s early-out behaviour to try successive file locations: first
     // ~/.gpsbabel, then /usr/local/etc, then /etc.
     (name = find_gpsbabel_inifile(QDir::home().filePath(GPSBABEL_SUBDIR))).
-            isNull()
-        && (name = find_gpsbabel_inifile("/usr/local/etc")).isNull()
-        && (name = find_gpsbabel_inifile("/etc")).isNull();
+    isNull()
+    && (name = find_gpsbabel_inifile("/usr/local/etc")).isNull()
+    && (name = find_gpsbabel_inifile("/etc")).isNull();
 #endif
   }
   if (!name.isNull()) {
-    res = gbfopen(name, "r", "GPSBabel");
-    gbinipathname = name;
+    res = name;
   }
   return res;
 }
 
 static void
-inifile_load_file(gbfile* fin, inifile_t* inifile, const char* myname)
+inifile_load_file(QTextStream* stream, inifile_t* inifile, const char* myname)
 {
-  char* buf;
-  inifile_section_t* sec = nullptr;
-  int line = 0;
+  QString buf;
+  InifileSection section;
 
-  while ((buf = gbfgetstr(fin))) {
-    char* cin = lrtrim(buf);
+  while (!(buf = stream->readLine()).isNull()) {
+    buf = buf.trimmed();
 
-    if ((line++ == 0) && fin->unicode) {
-      inifile->unicode = 1;
-    }
-
-    if (*cin == '\0') {
+    if (buf.isEmpty()) {
       continue;  /* skip empty lines */
     }
-    if ((*cin == '#') || (*cin == ';')) {
+    if ((buf.at(0) == '#') || (buf.at(0) == ';')) {
       continue;  /* skip comments */
     }
 
-    if (*cin == '[') {
-
-      char* cend = strchr(++cin, ']');
-
-      if (cend != nullptr) {
-        *cend = '\0';
-        cin = lrtrim(cin);
+    if (buf.at(0) == '[') {
+      QString section_name;
+      if (buf.contains(']')) {
+        section_name = buf.mid(1, buf.indexOf(']') - 1).trimmed();
       }
-      if ((*cin == '\0') || (cend == nullptr)) {
-        fatal("%s: invalid section header '%s' in '%s'.\n", myname, cin,
-              qPrintable(gbinipathname));
+      if (section_name.isEmpty()) {
+        fatal("%s: invalid section header '%s' in '%s'.\n", myname, qPrintable(section_name),
+              qPrintable(inifile->source));
       }
 
-      sec = (inifile_section_t*) xcalloc(1, sizeof(*sec));
-
-      sec->name = xstrdup(cin);
-      QUEUE_INIT(&sec->entries);
-      ENQUEUE_TAIL(&inifile->secs, &sec->Q);
-      inifile->isecs++;
+      // form lowercase key to implement CaseInsensitive matching.
+      section_name = section_name.toLower();
+      inifile->sections.insert(section_name, InifileSection(section_name));
+      section = inifile->sections.value(section_name);
     } else {
-      if (sec == nullptr) {
+      if (section.name.isEmpty()) {
         fatal("%s: missing section header in '%s'.\n", myname,
-              qPrintable(gbinipathname));
+              qPrintable(inifile->source));
       }
 
-      inifile_entry_t* entry = (inifile_entry_t*) xcalloc(1, sizeof(*entry));
-      ENQUEUE_TAIL(&sec->entries, &entry->Q);
-      sec->ientries++;
+      // Store key in lower case to implement CaseInsensitive matching.
+      QString key = buf.section('=', 0, 0).trimmed().toLower();
+      // Take some care so the return from inifile_find_value can
+      // be used to distinguish between a key that isn't found
+      // and a found key without a value, i.e. force value
+      // to be non-null but possibly empty.
+      QString value = buf.section('=', 1).append("").trimmed();
+      section.entries.insert(key, value);
 
-      char* cx = strchr(cin, '=');
-      if (cx != nullptr) {
-        *cx = '\0';
-        cin = lrtrim(cin);
-      }
-
-      entry->key = xstrdup(cin);
-
-      if (cx != nullptr) {
-        cx = lrtrim(++cx);
-        entry->val = xstrdup(cx);
-      } else {
-        entry->val = xstrdup("");
-      }
+      // update the QHash sections with the modified InifileSection section.
+      inifile->sections.insert(section.name, section);
     }
   }
 }
 
-static char*
-inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* key)
+static const QString
+inifile_find_value(const inifile_t* inifile, const QString& sec_name, const QString& key)
 {
-  queue* elem, *tmp;
-
   if (inifile == nullptr) {
-    return nullptr;
+    return QString();
   }
 
-  QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-    inifile_section_t* sec = reinterpret_cast<inifile_section_t *>(elem);
-
-    if (case_ignore_strcmp(sec->name, sec_name) == 0) {
-      queue* elem, *tmp;
-
-      QUEUE_FOR_EACH(&sec->entries, elem, tmp) {
-        inifile_entry_t* entry = reinterpret_cast<inifile_entry_t *>(elem);
-
-        if (case_ignore_strcmp(entry->key, key) == 0) {
-          return entry->val;
-        }
-      }
-    }
-  }
-  return nullptr;
+  // CaseInsensitive matching implemented by forcing sec_name & key to lower case.
+  return inifile->sections.value(sec_name.toLower()).entries.value(key.toLower());
 }
 
 /* public procedures */
@@ -205,86 +170,51 @@ inifile_find_value(const inifile_t* inifile, const char* sec_name, const char* k
 inifile_t*
 inifile_init(const QString& filename, const char* myname)
 {
-  gbfile* fin = nullptr;
+  QString name;
 
   if (filename.isEmpty()) {
-    fin = open_gpsbabel_inifile();
-    if (fin == nullptr) {
+    name = open_gpsbabel_inifile();
+    if (name.isEmpty()) {
       return nullptr;
     }
   } else {
-    fin = gbfopen(filename, "rb", myname);
+    name = filename;
   }
 
-  inifile_t* result = (inifile_t*) xcalloc(1, sizeof(*result));
-  QUEUE_INIT(&result->secs);
-  inifile_load_file(fin, result, myname);
+  gpsbabel::File file(name);
+  file.open(QFile::ReadOnly);
+  QTextStream stream(&file);
+  stream.setCodec("UTF-8");
+  stream.setAutoDetectUnicode(true);
 
-  gbfclose(fin);
+  auto* result = new inifile_t;
+  QFileInfo fileinfo(file);
+  result->source = fileinfo.absoluteFilePath();
+  inifile_load_file(&stream, result, myname);
+
+  file.close();
   return result;
 }
 
 void
 inifile_done(inifile_t* inifile)
 {
-  if (inifile == nullptr) {
-    return;
-  }
-
-  if (inifile->isecs > 0) {
-    queue* elem, *tmp;
-
-    QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-      inifile_section_t* sec = reinterpret_cast<inifile_section_t *>(elem);
-
-      if (sec->ientries > 0) {
-        queue* elem, *tmp;
-
-        QUEUE_FOR_EACH(&sec->entries, elem, tmp) {
-          inifile_entry_t* entry = reinterpret_cast<inifile_entry_t *>(elem);
-
-          if (entry->key) {
-            xfree(entry->key);
-          }
-          if (entry->val) {
-            xfree(entry->val);
-          }
-          dequeue(elem);
-          xfree(entry);
-        }
-      }
-      dequeue(elem);
-      if (sec->name) {
-        xfree(sec->name);
-      }
-      xfree(sec);
-    }
-    xfree(inifile);
-  }
-  gbinipathname.clear();
+  delete inifile;
 }
 
-int
+bool
 inifile_has_section(const inifile_t* inifile, const char* section)
 {
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(&inifile->secs, elem, tmp) {
-    inifile_section_t* sec = reinterpret_cast<inifile_section_t *>(elem);
-    if (case_ignore_strcmp(sec->name, section) == 0) {
-      return 1;
-    }
-  }
-  return 0;
+  return inifile->sections.contains(QString(section).toLower());
 }
 
 /*
      inifile_readstr:
-       returns NULL if not found, otherwise a pointer to the value of key ...
-       all key values are valid entities until "inifile_done"
+       returns a null QString if not found, otherwise a non-null but possibly
+       empty Qstring with the value of key ...
  */
 
-char*
+QString
 inifile_readstr(const inifile_t* inifile, const char* section, const char* key)
 {
   return inifile_find_value(inifile, section, key);
@@ -299,14 +229,14 @@ inifile_readstr(const inifile_t* inifile, const char* section, const char* key)
 int
 inifile_readint(const inifile_t* inifile, const char* section, const char* key, int* value)
 {
-  char* str = inifile_find_value(inifile, section, key);
+  const QString str = inifile_find_value(inifile, section, key);
 
-  if (str == nullptr) {
+  if (str.isNull()) {
     return 0;
   }
 
   if (value != nullptr) {
-    *value = atoi(str);
+    *value = str.toInt();
   }
   return 1;
 }

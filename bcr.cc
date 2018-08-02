@@ -27,10 +27,10 @@
 */
 
 #include "defs.h"
-#include "cet_util.h"
 #include "csv_util.h"
 #include "garmin_tables.h"
 #include "inifile.h"
+#include <QtCore/QString>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -187,9 +187,6 @@ static void
 bcr_rd_init(const QString& fname)
 {
   ini = inifile_init(fname, MYNAME);
-  if (ini->unicode) {
-    cet_convert_init(CET_CHARSET_UTF8, 1);
-  }
   bcr_init_radius();
 }
 
@@ -245,11 +242,12 @@ bcr_mercator_to_wgs84(const int north, const int east, double* lat, double* lon)
 static void
 bcr_data_read()
 {
-  char* str;
+  QString str;
 
   route_head* route = route_head_alloc();
 
-  if ((str = inifile_readstr(ini, "client", "routename"))) {
+  str = inifile_readstr(ini, "client", "routename");
+  if (!str.isNull()) {
     route->rte_name = str;
   }
 
@@ -258,15 +256,16 @@ bcr_data_read()
   for (int index = 1; index > 0; index ++) {
 
     char station[32];
-    char* str;
+    QString str;
     int mlat, mlon;		/* mercator data */
 
     snprintf(station, sizeof(station), "STATION%d", index);
-    if (nullptr == (str = inifile_readstr(ini, "coordinates", station))) {
+    str = inifile_readstr(ini, "coordinates", station);
+    if (str.isNull()) {
       break;
     }
 
-    if (2 != sscanf(str, "%d,%d", &mlon, &mlat)) {
+    if (2 != sscanf(CSTR(str), "%d,%d", &mlon, &mlat)) {
       fatal(MYNAME ": structure error at %s (Coordinates)!\n", station);
     }
 
@@ -275,32 +274,24 @@ bcr_data_read()
     wpt->shortname = station;
     bcr_mercator_to_wgs84(mlat, mlon, &wpt->latitude, &wpt->longitude);
 
-    if (nullptr != (str = inifile_readstr(ini, "client", station))) {
-      char* cx = strchr(str, ',');
-      if (cx == nullptr) {
+    str = inifile_readstr(ini, "client", station);
+    if (!str.isNull()) {
+      int cx = str.indexOf(',');
+      if (cx < 0) {
         fatal(MYNAME ": structure error at %s (Client)!\n", station);
       }
-      *cx++ = '\0';
-      bcr_handle_icon_str(str, wpt);
+      bcr_handle_icon_str(CSTR(str.left(cx)), wpt);
     }
 
-    if (nullptr != (str = inifile_readstr(ini, "description", station))) {
-      char* c = strchr(str, ',');
-      if (c != nullptr) {
-        *c = '\0';
+    str = inifile_readstr(ini, "description", station);
+    if (!str.isNull()) {
+      QString note = str.section(',', 0, 0);
+      if (!note.isEmpty()) {
+        wpt->notes = note;
       }
-      if (*str) {
-        wpt->notes = str;
-      }
-      if ((str = c)) {
-        str++;
-        c = strchr(str, ',');
-        if (c != nullptr) {
-          *c = '\0';
-        }
-        if (*str) {
-          wpt->shortname = str;
-        }
+      QString shortname = str.section(',', 1, 1);
+      if (!shortname.isEmpty()) {
+        wpt->shortname = shortname;
       }
     }
 

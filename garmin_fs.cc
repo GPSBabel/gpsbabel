@@ -26,6 +26,7 @@
 #include "garmin_tables.h"
 #include "inifile.h"
 
+#include <QtCore/QString>
 #include <QtCore/QXmlStreamWriter>
 #include <cassert>
 #include <cstdio>
@@ -387,8 +388,8 @@ garmin_fs_convert_category(const char* category_name, uint16_t* category)
       // warning: ‘%d’ directive output may be truncated writing between 1 and 11 bytes into a region of size 3 [-Wformat-truncation=]
       assert((i>=0) && (i<16));
       snprintf(key, sizeof(key), "%d", i + 1);
-      char* c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
-      if ((c != nullptr) && (case_ignore_strcmp(c, category_name) == 0)) {
+      QString c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
+      if (c.compare(category_name, Qt::CaseInsensitive) == 0) {
         cat = (1 << i);
         break;
       }

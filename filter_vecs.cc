@@ -42,7 +42,7 @@
 #include "validate.h"
 #include "gbversion.h"
 #include "inifile.h"
-#include <QtCore/QStringList>
+#include <QtCore/QString>
 #include <cstdio>
 #include <cstdlib>
 #include <cstdlib> // qsort
@@ -201,14 +201,15 @@ find_filter_vec(const char* const vecname, const char** opts)
     struct arglist* args = vec->vec->get_args();
     if (args) {
       for (ap = args; ap->argstring; ap++) {
-        const char* temp = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
-        if (temp == nullptr) {
-          temp = inifile_readstr(global_opts.inifile, "Common filter settings", ap->argstring);
+        QString qtemp = inifile_readstr(global_opts.inifile, vec->name, ap->argstring);
+        if (qtemp.isNull()) {
+          qtemp = inifile_readstr(global_opts.inifile, "Common filter settings", ap->argstring);
         }
-        if (temp == nullptr) {
-          temp = ap->defaultvalue;
+        if (qtemp.isNull()) {
+          assign_option(vec->name, ap, ap->defaultvalue);
+        } else {
+          assign_option(vec->name, ap, CSTR(qtemp));
         }
-        assign_option(vec->name, ap, temp);
       }
     }
 

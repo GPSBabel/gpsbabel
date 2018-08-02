@@ -44,10 +44,10 @@
 */
 
 #include "defs.h"
-#include "cet_util.h"
 #include "csv_util.h"
 #include "inifile.h"
 
+#include <QtCore/QString>
 #include <cctype>
 #include <cstdio>
 #include <cstdlib>
@@ -167,9 +167,6 @@ static void
 raymarine_rd_init(const QString& fname)
 {
   fin = inifile_init(fname, MYNAME);
-  if (fin->unicode) {
-    cet_convert_init(CET_CHARSET_UTF8, 1);
-  }
 }
 
 static void
@@ -185,37 +182,43 @@ raymarine_read()
 
   for (unsigned int ix = 0; ix < 0x3FFF; ix++) {
     char sect[10];
-    char* str, *name, *lat, *lon;
+    QString str, name, lat, lon;
 
     /* built section identifier */
     snprintf(sect, sizeof(sect), "Wp%d", ix);
 
     /* try to read our most expected values */
-    if (nullptr == (name = inifile_readstr(fin, sect, "Name"))) {
+    name = inifile_readstr(fin, sect, "Name");
+    if (name.isNull()) {
       break;
     }
-    if (nullptr == (lat = inifile_readstr(fin, sect, "Lat"))) {
+    lat = inifile_readstr(fin, sect, "Lat");
+    if (lat.isNull()) {
       break;
     }
-    if (nullptr == (lon = inifile_readstr(fin, sect, "Long"))) {
+    lon = inifile_readstr(fin, sect, "Long");
+    if (lon.isNull()) {
       break;
     }
 
     Waypoint* wpt = new Waypoint;
     wpt->shortname = name;
-    wpt->latitude = atof(lat);
-    wpt->longitude = atof(lon);
+    wpt->latitude = lat.toDouble();
+    wpt->longitude = lon.toDouble();
     waypt_add(wpt);
 
     /* try to read optional values */
-    if (((str = inifile_readstr(fin, sect, "Notes"))) && *str) {
+    str = inifile_readstr(fin, sect, "Notes");
+    if (!str.isEmpty()) {
       wpt->notes = str;
     }
-    if (((str = inifile_readstr(fin, sect, "Time"))) && *str) {
-      wpt->SetCreationTime(EXCEL_TO_TIMET(atof(str)));
+    str = inifile_readstr(fin, sect, "Time");
+    if (!str.isEmpty()) {
+      wpt->SetCreationTime(EXCEL_TO_TIMET(str.toDouble()));
     }
-    if (((str = inifile_readstr(fin, sect, "Bmp"))) && *str) {
-      unsigned int symbol = atoi(str);
+    str = inifile_readstr(fin, sect, "Bmp");
+    if (!str.isEmpty()) {
+      unsigned int symbol = str.toInt();
 
       if ((symbol < 3) && (symbol >= RAYMARINE_SYMBOL_CT)) {
         symbol = RAYMARINE_STD_SYMBOL;
@@ -228,10 +231,11 @@ raymarine_read()
 
   for (unsigned int rx = 0; rx < 0x3FFF; rx++) {
     char sect[10];
-    char* name;
+    QString name;
 
     snprintf(sect, sizeof(sect), "Rt%d", rx);
-    if (nullptr == (name = inifile_readstr(fin, sect, "Name"))) {
+    name = inifile_readstr(fin, sect, "Name");
+    if (name.isNull()) {
       break;
     }
 
@@ -243,15 +247,15 @@ raymarine_read()
       char buff[32];
 
       snprintf(buff, sizeof(buff), "Mk%d", wx);
-      char* str = inifile_readstr(fin, sect, buff);
-      if ((str == nullptr) || (*str == '\0')) {
+      QString str = inifile_readstr(fin, sect, buff);
+      if (str.isEmpty()) {
         break;
       }
 
       Waypoint* wpt = find_waypt_by_name(str);
       if (wpt == nullptr)
         fatal(MYNAME ": No associated waypoint for route point %s (Route %s)!\n",
-              str, qPrintable(rte->rte_name));
+              qPrintable(str), qPrintable(rte->rte_name));
 
       route_add_wpt(rte, new Waypoint(*wpt));
     }

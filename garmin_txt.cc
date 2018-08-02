@@ -32,6 +32,7 @@
 #include "jeeps/gpsmath.h"
 #include "strptime.h"
 
+#include <QtCore/QString>
 #include <cmath>
 #include <cstdlib> // qsort
 
@@ -388,8 +389,6 @@ print_date_and_time(const time_t time, const int time_only)
 static void
 print_categories(uint16_t categories)
 {
-  char* c;
-
   if (categories == 0) {
     return;
   }
@@ -397,21 +396,20 @@ print_categories(uint16_t categories)
   int count = 0;
   for (int i = 0; i < 16; i++) {
     if ((categories & 1) != 0) {
+      QString c;
       if (global_opts.inifile != nullptr) {
         char key[3];
         snprintf(key, sizeof(key), "%d", i + 1);
         c = inifile_readstr(global_opts.inifile, GMSD_SECTION_CATEGORIES, key);
-      } else {
-        c = nullptr;
       }
 
       gbfprintf(fout, "%s", (count++ > 0) ? "," : "");
-      if (c == nullptr) {
+      if (c.isNull()) {
         gbfprintf(fout, "Category %d", i+1);
       }
 //				gbfprintf(fout, "%s", gps_categories[i]);
       else {
-        gbfprintf(fout, "%s", c);
+        gbfprintf(fout, "%s", CSTR(c));
       }
 
     }
