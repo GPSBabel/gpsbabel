@@ -1007,9 +1007,8 @@ void* xmalloc(size_t size);
 void* xrealloc(void* p, size_t s);
 void xfree(const void* mem);
 char* xstrdup(const QString& s);
-char* xstrndup(const char* s, size_t n);
-char* xstrndupt(const char* s, size_t n);
-char* xstrappend(char* src, const char* addon);
+char* xstrndup(const char* str, size_t sz);
+char* xstrappend(char* src, const char* newd);
 #define xxcalloc(nmemb, size, file, line) xcalloc(nmemb, size)
 #define xxmalloc(size, file, line) xmalloc(size)
 #define xxrealloc(p, s, file, line) xrealloc(p,s)
@@ -1024,7 +1023,6 @@ void* XREALLOC(void* p, size_t s, DEBUG_PARAMS);
 void XFREE(void* mem, DEBUG_PARAMS);
 char* XSTRDUP(const char* s, DEBUG_PARAMS);
 char* XSTRNDUP(const char* src, size_t size, DEBUG_PARAMS);
-char* XSTRNDUPT(const char* src, size_t size, DEBUG_PARAMS);
 char* XSTRAPPEND(char* src, const char* addon, DEBUG_PARAMS);
 void debug_mem_open();
 void debug_mem_output(char* format, ...);
@@ -1035,14 +1033,12 @@ void debug_mem_close();
 #define xfree(mem) XFREE(mem, __FILE__, __LINE__)
 #define xstrdup(s) XSTRDUP(s, __FILE__, __LINE__)
 #define xstrndup(s, z) XSTRNDUP(s, z, __FILE__, __LINE__)
-#define xstrndupt(s, z) XSTRNDUPT(s, z, __FILE__, __LINE__)
 #define xstrappend(src,addon) XSTRAPPEND(src, addon, __FILE__, __LINE__)
 #define xxcalloc XCALLOC
 #define xxmalloc XMALLOC
 #define xxrealloc XREALLOC
 #define xxfree XFREE
 #define xxstrdup XSTRDUP
-#define xxstrndupt XSTRNDUPT
 #define xxstrappend XSTRAPPEND
 #endif /* DEBUG_MEM */
 
@@ -1075,7 +1071,7 @@ char* strsub(const char* s, const char* search, const char* replace);
 char* gstrsub(const char* s, const char* search, const char* replace);
 const char* xstrrstr(const char* s1, const char* s2);
 void rtrim(char* s);
-char* lrtrim(char* s);
+char* lrtrim(char* buff);
 int xasprintf(char** strp, const char* fmt, ...) PRINTFLIKE(2, 3);
 int xasprintf(QString* strp, const char* fmt, ...) PRINTFLIKE(2, 3);
 int xvasprintf(char** strp, const char* fmt, va_list ap);
@@ -1085,7 +1081,7 @@ signed int get_tz_offset(void);
 time_t mklocaltime(struct tm* t);
 time_t mkgmtime(struct tm* t);
 gpsbabel::DateTime current_time(void);
-void dotnet_time_to_time_t(double dotnet, time_t* t, int* ms);
+void dotnet_time_to_time_t(double dotnet, time_t* t, int* millisecs);
 signed int month_lookup(const char* m);
 const char* get_cache_icon(const Waypoint* waypointp);
 const char* gs_get_cachetype(geocache_type t);
@@ -1120,7 +1116,7 @@ const QString get_filename(const QString& fname);			/* extract the filename port
 /* this lives in gpx.c */
 gpsbabel::DateTime xml_parse_time(const QString& cdatastr);
 
-QString rot13(const QString& str);
+QString rot13(const QString& s);
 
 /*
  * PalmOS records like fixed-point numbers, which should be rounded
@@ -1141,39 +1137,39 @@ signed int si_round(double d);
  * Protypes for Endianness helpers.
  */
 
-signed int be_read16(const void* p);
-unsigned int be_readu16(const void* p);
-signed int be_read32(const void* p);
-signed int le_read16(const void* p);
-unsigned int le_readu16(const void* p);
-signed int le_read32(const void* p);
-unsigned int le_readu32(const void* p);
+signed int be_read16(const void* ptr);
+unsigned int be_readu16(const void* ptr);
+signed int be_read32(const void* ptr);
+signed int le_read16(const void* ptr);
+unsigned int le_readu16(const void* ptr);
+signed int le_read32(const void* ptr);
+unsigned int le_readu32(const void* ptr);
 void le_read64(void* dest, const void* src);
-void be_write16(void* pp, const unsigned i);
-void be_write32(void* pp, const unsigned i);
-void le_write16(void* pp, const unsigned i);
-void le_write32(void* pp, const unsigned i);
+void be_write16(void* ptr, const unsigned value);
+void be_write32(void* ptr, const unsigned value);
+void le_write16(void* ptr, const unsigned value);
+void le_write32(void* ptr, const unsigned value);
 
 double endian_read_double(const void* ptr, int read_le);
 float  endian_read_float(const void* ptr, int read_le);
-void   endian_write_double(void* ptr, double d, int write_le);
-void   endian_write_float(void* ptr, float f, int write_le);
+void   endian_write_double(void* ptr, double value, int write_le);
+void   endian_write_float(void* ptr, float value, int write_le);
 
-float  be_read_float(void* p);
-double be_read_double(void* p);
-void   be_write_float(void* pp, float d);
-void   be_write_double(void* pp, double d);
+float  be_read_float(void* ptr);
+double be_read_double(void* ptr);
+void   be_write_float(void* ptr, float value);
+void   be_write_double(void* ptr, double value);
 
-float  le_read_float(const void* p);
-double le_read_double(const void* p);
-void   le_write_float(void* ptr, float f);
-void   le_write_double(void* p, double d);
+float  le_read_float(const void* ptr);
+double le_read_double(const void* ptr);
+void   le_write_float(void* ptr, float value);
+void   le_write_double(void* ptr, double value);
 
 /*
  * Prototypes for generic conversion routines (util.c).
  */
 
-double ddmm2degrees(double ddmm_val);
+double ddmm2degrees(double pcx_val);
 double degrees2ddmm(double deg_val);
 
 typedef enum {
