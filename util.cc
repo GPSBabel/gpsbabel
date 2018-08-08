@@ -188,7 +188,7 @@ XREALLOC(void* p, size_t s, DEBUG_PARAMS)
 xrealloc(void* p, size_t s)
 #endif
 {
-  char* o = (char*) realloc(p,s);
+  char* o = (char*) realloc(p, s);
 #ifdef DEBUG_MEM
   if (p != NULL) {
     debug_mem_output("realloc, %x, %x, %x, %s, %d\n", o, p, s, file, line);
@@ -623,71 +623,70 @@ is_fatal(const int condition, const char* fmt, ...)
  * Read 4 bytes in big-endian.   Return as "int" in native endianness.
  */
 signed int
-be_read32(const void* p)
+be_read32(const void* ptr)
 {
-  unsigned char* i = (unsigned char*) p;
+  const unsigned char* i = (const unsigned char*) ptr;
   return i[0] << 24 | i[1] << 16  | i[2] << 8 | i[3];
 }
 
 signed int
-be_read16(const void* p)
+be_read16(const void* ptr)
 {
-  unsigned char* i = (unsigned char*) p;
+  const unsigned char* i = (const unsigned char*) ptr;
   return i[0] << 8 | i[1];
 }
 
 unsigned int
-be_readu16(const void* p)
+be_readu16(const void* ptr)
 {
-  const unsigned char* i = (unsigned char*) p;
+  const unsigned char* i = (const unsigned char*) ptr;
   return i[0] << 8 | i[1];
 }
 
 void
-be_write16(void* addr, const unsigned value)
+be_write16(void* ptr, const unsigned value)
 {
-  unsigned char* p = (unsigned char*) addr;
+  unsigned char* p = (unsigned char*) ptr;
   p[0] = value >> 8;
   p[1] = value;
-
 }
 
 void
-be_write32(void* pp, const unsigned i)
+be_write32(void* ptr, const unsigned value)
 {
-  char* p = (char*)pp;
+  unsigned char* p = (unsigned char*) ptr;
 
-  p[0] = (i >> 24) & 0xff;
-  p[1] = (i >> 16) & 0xff;
-  p[2] = (i >> 8) & 0xff;
-  p[3] = i & 0xff;
+  p[0] = value >> 24;
+  p[1] = value >> 16;
+  p[2] = value >> 8;
+  p[3] = value;
 }
 
 signed int
-le_read16(const void* addr)
+le_read16(const void* ptr)
 {
-  const unsigned char* p = (const unsigned char*) addr;
+  const unsigned char* p = (const unsigned char*) ptr;
   return p[0] | (p[1] << 8);
 }
 
 unsigned int
-le_readu16(const void* addr)
+le_readu16(const void* ptr)
 {
-  const unsigned char* p = (const unsigned char*) addr;
+  const unsigned char* p = (const unsigned char*) ptr;
   return p[0] | (p[1] << 8);
 }
 
 signed int
-le_read32(const void* addr)
+le_read32(const void* ptr)
 {
-  const unsigned char* p = (const unsigned char*) addr;
+  const unsigned char* p = (const unsigned char*) ptr;
   return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
 }
 
 unsigned int
-le_readu32(const void* addr)
+le_readu32(const void* ptr)
 {
-  const unsigned char* p = (const unsigned char*) addr;
+  const unsigned char* p = (const unsigned char*) ptr;
   return p[0] | (p[1] << 8) | (p[2] << 16) | (p[3] << 24);
 }
 
@@ -712,18 +711,17 @@ le_read64(void* dest, const void* src)
 }
 
 void
-le_write16(void* addr, const unsigned value)
+le_write16(void* ptr, const unsigned value)
 {
-  unsigned char* p = (unsigned char*) addr;
+  unsigned char* p = (unsigned char*) ptr;
   p[0] = value;
   p[1] = value >> 8;
-
 }
 
 void
-le_write32(void* addr, const unsigned value)
+le_write32(void* ptr, const unsigned value)
 {
-  unsigned char* p = (unsigned char*) addr;
+  unsigned char* p = (unsigned char*) ptr;
   p[0] = value;
   p[1] = value >> 8;
   p[2] = value >> 16;
@@ -960,16 +958,16 @@ endian_read_float(const void* ptr, int read_le)
 }
 
 void
-endian_write_double(void* ptr, double d, int write_le)
+endian_write_double(void* ptr, double value, int write_le)
 {
   char* optr = (char*) ptr;
 // Word order is different on arm, but not on arm-eabi.
 #if defined(__arm__) && !defined(__ARM_EABI__)
   char r[8];
-  memcpy(r + 4, &d, 4);
-  memcpy(r, ((void*)&d) + 4, 4);
+  memcpy(r + 4, &value, 4);
+  memcpy(r, ((void*)&value) + 4, 4);
 #else
-  char* r = (char*)(void*)&d;
+  char* r = (char*)(void*)&value;
 #endif
 
 
@@ -983,13 +981,13 @@ endian_write_double(void* ptr, double d, int write_le)
 }
 
 void
-endian_write_float(void* ptr, float f, int write_le)
+endian_write_float(void* ptr, float value, int write_le)
 {
-  char* r = (char*)(void*)&f;
+  char* r = (char*)(void*)&value;
   char* optr = (char*) ptr;
 
   if (i_am_little_endian == write_le) {
-    memcpy(ptr, &f, 4);
+    memcpy(ptr, &value, 4);
   } else {
     for (int i = 0; i < 4; i++) {
       *optr++ = r[3-i];
@@ -1004,9 +1002,9 @@ le_read_float(const void* ptr)
 }
 
 void
-le_write_float(void* ptr, float f)
+le_write_float(void* ptr, float value)
 {
-  endian_write_float(ptr,f,1);
+  endian_write_float(ptr, value, 1);
 }
 
 float
@@ -1016,33 +1014,33 @@ be_read_float(void* ptr)
 }
 
 void
-be_write_float(void* ptr, float f)
+be_write_float(void* ptr, float value)
 {
-  endian_write_float(ptr,f,0);
+  endian_write_float(ptr, value, 0);
 }
 
 double
 le_read_double(const void* ptr)
 {
-  return endian_read_double(ptr,1);
+  return endian_read_double(ptr, 1);
 }
 
 void
-le_write_double(void* ptr, double d)
+le_write_double(void* ptr, double value)
 {
-  endian_write_double(ptr,d,1);
+  endian_write_double(ptr, value, 1);
 }
 
 double
 be_read_double(void* ptr)
 {
-  return endian_read_double(ptr,0);
+  return endian_read_double(ptr, 0);
 }
 
 void
-be_write_double(void* ptr, double d)
+be_write_double(void* ptr, double value)
 {
-  endian_write_double(ptr,d,0);
+  endian_write_double(ptr, value, 0);
 }
 
 
@@ -1514,7 +1512,7 @@ strip_html(const utf_string* in)
 
     if (((tag[0] == '<') && (*instr == '>')) ||
         ((tag[0] == '&') && (*instr == ';'))) {
-      if (! strcmp(tag,"&amp;")) {
+      if (! strcmp(tag, "&amp;")) {
         *out++ = '&';
       } else if (! strcmp(tag, "&lt;")) {
         *out++ = '<';
@@ -1565,7 +1563,7 @@ typedef struct {
 static
 entity_types stdentities[] =  {
   { "&",	"&amp;", 0 },
-  { "'", 	"&apos;", 1 },
+  { "'",	"&apos;", 1 },
   { "<",	"&lt;", 0 },
   { ">",	"&gt;", 0 },
   { "\"",	"&quot;", 0 },
