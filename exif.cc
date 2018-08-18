@@ -48,6 +48,7 @@
 #include <QtCore/QtGlobal>         // for qPrintable
 #include <algorithm>               // for sort
 #include <cassert>                 // for assert
+#include <cfloat>                  // for DBL_EPSILON
 #include <cmath>                   // for fabs, floor
 #include <cstdio>                  // for snprintf, SEEK_SET, sscanf
 #include <cstdint>                 // for int32_t, int16_t, uint16_t, uint32_t, uint8_t
@@ -891,69 +892,67 @@ exif_waypt_from_exif_app(ExifApp* app)
   return wpt;
 }
 
-static int exif_gcd(int ui, int vi)
+template <class T>
+class Rational
 {
-  int u = abs(ui);
-  int v = abs(vi);
+public:
+  T num;
+  T den;
 
-  /* Modern Euclidean algorithum to find greatest commond divisor */
-  /* See Knuth, Seminumerical Algorithms, pg. 320 */
-  while (v != 0) {
-    int r = u % v;
-    u = v;
-    v = r;
-  }
-  return u;
-}
+  Rational() = default;
+  Rational(T n, T d) : num{n}, den{d} {}
+};
 
-// TODO: This algorithm could be improved upon using continued fractions,
-// i.e. the domain could be expanded and the accuracy improved.
-// We could also achieve an increased domain and accuracy for RATIONAL
-// types if we handled them separately.
-static void
-exif_dec2frac(double val, int32_t* num, int32_t* den)
+// TODO: we could achieve an increased domain and accuracy for TIFF RATIONAL
+// types if we handled them separately (int32_t -> uint32_t, INT32_MAX -> UINT32_MAX).
+Rational<int32_t> exif_dec2frac(double val, double tolerance = DBL_EPSILON)
 {
-  char sval[16], snum[16];
-  char dot = 0;
-  int den1 = 1;
+  constexpr double upper_limit = INT32_MAX;
+  constexpr double lower_limit = 1.0/upper_limit;
+  const double pval = fabs(val);
+  const double tol = fmax(tolerance, DBL_EPSILON);
 
-  assert(val >= 0.0);
-  if (val < 0.000000001) {
-    val = 0.0;
-  } else if (val > 999999999.0) {
+  if (pval < lower_limit) {
+    return Rational<int32_t>(0, upper_limit);
+  } else if (pval > upper_limit) {
     fatal(MYNAME ": Value (%f) to big for a rational representation!\n", val);
+    return Rational<int32_t>(copysign(upper_limit, val), 1);
   }
 
-  int num1 = 0;
-  double vx = fabs(val);
-  while (vx > 1) {
-    num1++;
-    vx = vx / 10;
-  }
+  double b;
+  double remainder = modf(pval, &b);
+  Rational<double> prev_prev(1.0, 0.0);
+  Rational<double> prev(b, 1.0);
+  Rational<double> curr = prev;
 
-  snprintf(sval, sizeof(sval), "%*.*f", 9, 9 - num1, fabs(val));
-  snum[0] = '\0';
-
-  char* cx = sval;
-  while (*cx) {
-    if (dot) {
-      den1 *= 10;
+  // phi = (1.0+sqrt(5.0))/2.0 is badly approximable and the slowest to converge.
+  // This is a good test case to see the maximum number of iterations required.
+  for (int idx = 0; idx < 64; ++idx) {
+    // Calculate the next simple continued fraction coefficient (b), and remainder (remainder).
+    if (remainder < lower_limit) {
+      break; // remainder is nearly zero, use current estimate.
     }
-    if (*cx == '.') {
-      dot = 1;
-    } else {
-      strncat(snum, cx, 1);
+    remainder = modf(1.0/remainder, &b);
+
+    // Convert the truncated simple continued fraction, a.k.a. a convergent, to an ordinary fraction (curr.num/curr.den).
+    Rational<double> candidate((b * prev.num) + prev_prev.num, (b * prev.den) + prev_prev.den);
+    if (candidate.num > upper_limit) {
+      break; // numerator too big, use current estimate.
     }
-    cx++;
+    if (candidate.den > upper_limit) {
+      break; // denominator too big, use current estimate.
+    }
+    curr = candidate;
+
+    if (fabs(pval- (curr.num/curr.den)) < (pval * tol)) {
+      break; // close enough, use current estimate.
+    }
+
+    prev_prev = prev;
+    prev = curr;
   }
 
-  num1 = atoi(snum);
-
-  int gcd = exif_gcd(num1, den1);
-  assert(gcd != 0); // Note gcd(0, 0) = 0, but we shouldn't generate num1 = den1 = 0.
-
-  *num = num1 / gcd;
-  *den = den1 / gcd;
+  return Rational<int32_t>(round(copysign(curr.num, val)), round(curr.den));
 }
 
 static ExifTag*
@@ -1008,24 +1007,15 @@ exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, con
   case EXIF_TYPE_RAT:
   case EXIF_TYPE_SRAT: {
     double val = *(double*)data;
-    uint32_t* dest = reinterpret_cast<uint32_t*>(tag->data.data());
+    int32_t* dest = reinterpret_cast<int32_t*>(tag->data.data());
 
     if ((val < 0.0) && (type == EXIF_TYPE_RAT)) {
       fatal(MYNAME ": A negative value cannot be stored as type RATIONAL.");
     }
-    if ((int)val == val) {
-      // For integers this expands the domain compared to the sub-optimal exif_dec2frac implementation.
-      dest[index * 2] = (int)val;
-      dest[(index * 2) + 1] = 1;
-    } else {
-      int32_t Nom, Den;
-      exif_dec2frac(fabs(val), &Nom, &Den);
-      if (val < 0.0) {
-        Nom *= -1;
-      }
-      dest[index * 2] = Nom;
-      dest[(index * 2) + 1] = Den;
-    }
+
+    Rational<int32_t> rat = exif_dec2frac(val, 1e-11);
+    dest[index * 2] = rat.num;
+    dest[(index * 2) + 1] = rat.den;
   }
   break;
   default: {
@@ -1060,7 +1050,7 @@ exif_put_coord(const int ifd_nr, const int tag_id, const double val)
   double vmin;
   double fractional_part;
 
-  fractional_part = modf(val, &vdeg); 
+  fractional_part = modf(val, &vdeg);
   fractional_part = modf(60.0 * fractional_part, &vmin);
   double vsec = 60.0 * fractional_part;
 
