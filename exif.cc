@@ -64,8 +64,6 @@
 
 #define MYNAME "exif"
 
-#define UNKNOWN_TIMESTAMP 999999999
-
 #define IFD0    0
 #define IFD1    1
 #define EXIF_IFD  2   /* dummy index */
@@ -384,7 +382,7 @@ exif_load_apps()
     if (exif_app || (app->marker == 0xFFDA)) { /* compressed data */
       gbfcopyfrom(app->fcache, fin, 0x7FFFFFFF);
       if (global_opts.debug_level >= 3) {
-        printf(MYNAME ": compressed data size = %d\n", gbftell(app->fcache));
+        printf(MYNAME ": compressed data size = %u\n", gbftell(app->fcache));
       }
     } else {
       gbfcopyfrom(app->fcache, fin, app->len - 2);
