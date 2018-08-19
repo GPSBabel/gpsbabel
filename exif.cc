@@ -40,25 +40,29 @@
 #include "jeeps/gpsmath.h"         // for GPS_Math_WGS84_To_Known_Datum_M
 #include "src/core/datetime.h"     // for DateTime
 #include <QtCore/QByteArray>       // for QByteArray
+#include <QtCore/QDate>            // for QDate
 #include <QtCore/QDateTime>        // for QDateTime
 #include <QtCore/QFile>            // for QFile
 #include <QtCore/QList>            // for QList<>::iterator, QList
 #include <QtCore/QString>          // for QString
 #include <QtCore/QTextCodec>       // for QTextCodec
+#include <QtCore/QTime>            // for QTime
+#include <QtCore/QVariant>         // for QVariant
+#include <QtCore/QVector>          // for QVector
+#include <QtCore/Qt>               // for ISODate, UTC
 #include <QtCore/QtGlobal>         // for qPrintable
-#include <algorithm>               // for sort
+#include <algorithm>               // for sort, min
 #include <cassert>                 // for assert
 #include <cfloat>                  // for DBL_EPSILON
-#include <cmath>                   // for fabs, floor
-#include <cstdio>                  // for snprintf, SEEK_SET, sscanf
-#include <cstdint>                 // for int32_t, int16_t, uint16_t, uint32_t, uint8_t
-#include <cstdlib>                 // for labs, atoi, abs
-#include <cstring>                 // for strrchr, memcmp, memcpy, memset, strchr, strlen, strncat
+#include <cmath>                   // for fabs, modf, copysign, round, fmax
+#include <cstdint>                 // for int32_t, int16_t, uint16_t, uint32_t, uint8_t, INT32_MAX
+#include <cstdio>                  // for printf, snprintf, SEEK_SET, SEEK_CUR
+#include <cstdlib>                 // for labs, atoi
+#include <cstring>                 // for strrchr, memcmp, strchr, strlen
 #include <ctime>                   // for gmtime, localtime, time_t, tm
+#include <ctype.h>                 // for isprint, isspace
 
 #define MYNAME "exif"
-
-// #define EXIF_DBG
 
 #define UNKNOWN_TIMESTAMP 999999999
 
@@ -122,16 +126,28 @@ struct ExifTag {
   uint16_t type{0};         // field type.
   uint32_t count{0};        // number of values. Note that Count is not the total number of bytes.
   uint32_t offset{0};       // byte offset relative to beginning of TIFF file to value (only for values longer than 4 bytes).
-  uint32_t original{0};
+  QVector<QVariant> data;   // value
   uint32_t size{0};         // derived size in bytes of value.
-#ifdef EXIF_DBG
-  uint32_t tag_offset {0};  // byte offset relative to beginning of TIFF file of this tag.
-#endif
-  QByteArray data;
+
+  uint32_t tag_offset {0};  // byte offset relative to beginning of TIFF file of this tag, for debug only.
+  uint8_t raw[4] {0,0,0,0}; // raw value/offset data, for debug only.
 
   bool operator==(const ExifTag& other) const
   {
     return id == other.id;
+  }
+
+  // grow data vector, initializing any new elements to type T with value 0.
+  template <typename T>
+  void grow(const int size)
+  {
+    int old_size = data.size();
+    if (size > old_size) {
+      data.resize(size);
+      for (int idx = old_size; idx < size; ++idx) {
+        data[idx] = 0;
+      }
+    }
   }
 
   // Return data value interpreted as EXIF_TYPE_LONG.
@@ -139,7 +155,7 @@ struct ExifTag {
   // which occurs for multiple specific tags where we need the value.
   inline uint32_t toLong() const
   {
-    return *reinterpret_cast<const uint32_t*>(data.constData());
+    return data.at(0).value<uint32_t>();
   }
 };
 
@@ -188,7 +204,7 @@ static arglist_t exif_args[] = {
   ARG_TERMINATOR
 };
 
-#ifdef EXIF_DBG
+// for debug only
 static void
 print_buff(const char* buf, int sz, const char* cmt)
 {
@@ -208,7 +224,6 @@ print_buff(const char* buf, int sz, const char* cmt)
     printf("%c", c);
   }
 }
-#endif
 
 static uint16_t
 exif_type_size(const uint16_t type)
@@ -218,8 +233,8 @@ exif_type_size(const uint16_t type)
   switch (type) {
   case EXIF_TYPE_BYTE:
   case EXIF_TYPE_ASCII:
-  case EXIF_TYPE_UNK:
   case EXIF_TYPE_SBYTE:
+  case EXIF_TYPE_UNK:
     size = 1;
     break;
 
@@ -268,7 +283,8 @@ static char*
 exif_read_str(ExifTag* tag)
 {
   // Panasonic DMC-TZ10 stores datum with trailing spaces.
-  char* buf = xstrndup(tag->data.constData(), tag->size);
+  // Kodak stores zero count ASCII tags.
+  char* buf = (tag->count == 0) ? xstrdup("") : xstrndup(tag->data.at(0).toByteArray().constData(), tag->size);
   rtrim(buf);
   return buf;
 }
@@ -276,15 +292,15 @@ exif_read_str(ExifTag* tag)
 static double
 exif_read_double(const ExifTag* tag, const int index)
 {
-  int32_t* data = (int32_t*)tag->data.constData();
-
-  unsigned int num = data[index * 2];
-  unsigned int den = data[(index * 2) + 1];
-  if (den == 0) {
-    den = 1;
+  if (tag->type == EXIF_TYPE_RAT) {
+    uint32_t num = tag->data.at(index * 2).value<uint32_t>();
+    uint32_t den = tag->data.at((index * 2) + 1).value<uint32_t>();
+    return (double)num / (double)den;
+  } else { // EXIF_TYPE_SRAT
+    int32_t num = tag->data.at(index * 2).value<int32_t>();
+    int32_t den = tag->data.at((index * 2) + 1).value<int32_t>();
+    return (double)num / (double)den;
   }
-
-  return (double)num / (double)den;
 }
 
 static double
@@ -307,30 +323,20 @@ exif_read_coord(const ExifTag* tag)
   return res;
 }
 
-static time_t
+static QTime
 exif_read_timestamp(const ExifTag* tag)
 {
   double hour = exif_read_double(tag, 0);
   double min = exif_read_double(tag, 1);
   double sec = exif_read_double(tag, 2);
 
-  return ((int)hour * SECONDS_PER_HOUR) + ((int)min * 60) + (int)sec;
+  return QTime(int(hour), int(min), int(sec));
 }
 
-static time_t
+static QDate
 exif_read_datestamp(const ExifTag* tag)
 {
-  struct tm tm;
-
-  memset(&tm, 0, sizeof(tm));
-  char* str = xstrndup(tag->data.constData(), tag->size);
-  sscanf(str, "%d:%d:%d", &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
-  xfree(str);
-
-  tm.tm_year -= 1900;
-  tm.tm_mon -= 1;
-
-  return mkgmtime(&tm);
+  return QDate::fromString(tag->data.at(0).toByteArray().constData(), "yyyy:MM:dd");
 }
 
 static void
@@ -372,14 +378,14 @@ exif_load_apps()
 
     app->marker = gbfgetuint16(fin);
     app->len = gbfgetuint16(fin);
-#ifdef EXIF_DBG
-    printf(MYNAME ": api = %02X, len = %u (0x%04x), offs = 0x%08X\n", app->marker & 0xFF, app->len, app->len, gbftell(fin));
-#endif
-    if (exif_app || (app->marker == 0xFFDA)) /* compressed data */ {
+    if (global_opts.debug_level >= 3) {
+      printf(MYNAME ": api = %02X, len = %u (0x%04x), offs = 0x%08X\n", app->marker & 0xFF, app->len, app->len, gbftell(fin));
+    }
+    if (exif_app || (app->marker == 0xFFDA)) { /* compressed data */
       gbfcopyfrom(app->fcache, fin, 0x7FFFFFFF);
-#ifdef EXIF_DBG
-      printf(MYNAME ": compressed data size = %d\n", gbftell(app->fcache));
-#endif
+      if (global_opts.debug_level >= 3) {
+        printf(MYNAME ": compressed data size = %d\n", gbftell(app->fcache));
+      }
     } else {
       gbfcopyfrom(app->fcache, fin, app->len - 2);
       if (app->marker == 0xFFE1) {
@@ -389,6 +395,32 @@ exif_load_apps()
   }
 
   return exif_app;
+}
+
+static void
+exif_validate_tag_structure(const ExifTag* tag)
+{
+  // The count times the element size should match the saved size.
+  assert((tag->count * exif_type_size(tag->type)) == tag->size);
+
+  // for BYTE_TYPE we store a QByteArray as the only component of the QVector,
+  // and the count should match the size of the byte array.
+  assert((!BYTE_TYPE(tag->type)) ||
+         ((tag->data.size() == 0) && (tag->count == 0)) ||
+         ((tag->data.size() == 1) && (static_cast<unsigned>(tag->data.at(0).toByteArray().size()) == tag->count)));
+
+  // EXIF_TYPE_RAT and EXIF_TYPE_SRAT are stored as two values per item.
+  assert(((tag->type != EXIF_TYPE_RAT) && (tag->type != EXIF_TYPE_SRAT)) ||
+         (static_cast<unsigned>(tag->data.size()) == (2 * tag->count)));
+
+  // types other that BYTE_TYPE, RAT, SRAT are stored as one value per item.
+  assert(BYTE_TYPE(tag->type) || (tag->type == EXIF_TYPE_RAT) || (tag->type == EXIF_TYPE_SRAT) ||
+         (static_cast<unsigned>(tag->data.size()) == tag->count));
+
+  // For EXIF_TYPE_ASCII the last byte of the value must be NUL (binary 0).
+  assert((tag->type != EXIF_TYPE_ASCII) ||
+         ((tag->data.size() == 0) && (tag->count == 0)) ||
+         ((tag->data.size() == 1) && (tag->data.at(0).toByteArray().endsWith('\0'))));
 }
 
 static ExifIfd*
@@ -404,8 +436,7 @@ exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t offs,
   gbfseek(fin, offs, SEEK_SET);
   ifd->count = gbfgetuint16(fin);
 
-#ifdef EXIF_DBG
-  {
+  if (global_opts.debug_level >= 3) {
     const char* name;
     switch (ifd_nr) {
     case IFD0:
@@ -430,7 +461,6 @@ exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t offs,
     printf(MYNAME "-offs 0x%08X: Number of items in IFD%d \"%s\" = %d (0x%04x)\n",
            offs, ifd_nr, name, ifd->count, ifd->count);
   }
-#endif
   if (ifd->count == 0) {
     return ifd;
   }
@@ -438,36 +468,51 @@ exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t offs,
   for (uint16_t i = 0; i < ifd->count; i++) {
     ifd->tags.append(ExifTag());
     ExifTag* tag = &ifd->tags.last();
-#ifdef EXIF_DBG
-    tag->tag_offset = gbftell(fin);
-#endif
+    if (global_opts.debug_level >= 3) {
+      tag->tag_offset = gbftell(fin);
+    }
 
     tag->id = gbfgetuint16(fin);
     tag->type = gbfgetuint16(fin);
     tag->count = gbfgetuint32(fin);
     tag->size = exif_type_size(tag->type) * tag->count;
-    tag->data = QByteArray(4, 0);
 
     if (tag->size <= 4) { // data is in value offset field
       if (BYTE_TYPE(tag->type)) {
-        gbfread(tag->data.data(), 4, 1, fin);
+        assert(tag->count <= 4);
+        if (tag->count > 0) {
+          QByteArray qba(tag->count, 0);
+          gbfread(qba.data(), tag->count, 1, fin);
+          tag->data.append(qba);
+        }
       } else if (WORD_TYPE(tag->type)) {
-        uint16_t* ptr = reinterpret_cast<uint16_t*>(tag->data.data());
-        *ptr = gbfgetuint16(fin);
-        *(ptr+1) = gbfgetuint16(fin);
+        assert(tag->count <= 2);
+        for (unsigned idx=0; idx < tag->count; ++idx) {
+          tag->data.append(gbfgetuint16(fin));
+        }
       } else if (LONG_TYPE(tag->type)) {
-        uint32_t* ptr = reinterpret_cast<uint32_t*>(tag->data.data());
-        *ptr = gbfgetuint32(fin);
+        assert(tag->count <= 1);
+        if (tag->count == 1) {
+          tag->data.append(gbfgetuint32(fin));
+        }
       } else if (tag->type == EXIF_TYPE_FLOAT) {
-        float* ptr = reinterpret_cast<float*>(tag->data.data());
-        *ptr = gbfgetflt(fin);
+        assert(tag->count <= 1);
+        if (tag->count == 1) {
+          tag->data.append(gbfgetflt(fin));
+        }
       } else {
         fatal(MYNAME "Unknown type %d has size <= 4! Please report.\n", tag->type);
       }
-      tag->original = tag->toLong();
+      int skip_bytes = 4 - tag->size;
+      if (skip_bytes > 0) {
+        gbfseek(fin, skip_bytes, SEEK_CUR);
+      }
+      if (global_opts.debug_level >= 3) {
+        gbfseek(fin, -4, SEEK_CUR);
+        gbfread(tag->raw, 4, 1, fin);
+      }
     } else { // offset is in value offset field
       tag->offset = gbfgetuint32(fin);
-      tag->original = tag->offset;
     }
 
     if (ifd_nr == IFD0) {
@@ -483,70 +528,108 @@ exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t offs,
     }
   }
 
-#ifdef EXIF_DBG
-  gbsize_t next_ifd_offs = gbftell(fin);
-#endif
+  gbsize_t next_ifd_offs;
+  if (global_opts.debug_level >= 3) {
+    next_ifd_offs = gbftell(fin);
+  }
   ifd->next_ifd = gbfgetuint32(fin);
 
   for (auto& tag_instance : ifd->tags) {
     ExifTag* tag = &tag_instance;
     if ((tag->size > 4) && (tag->offset)) {
-      tag->data = QByteArray(tag->size, 0);
-
-      char* ptr = tag->data.data();
       gbfseek(fin, tag->offset, SEEK_SET);
 
       if (BYTE_TYPE(tag->type)) {
-        gbfread(ptr, tag->count, 1, fin);
+        QByteArray qba(tag->count, 0);
+        gbfread(qba.data(), tag->count, 1, fin);
+        tag->data.append(qba);
       } else for (uint16_t i = 0; i < tag->count; i++) {
           switch (tag->type) {
           case EXIF_TYPE_SHORT:
           case EXIF_TYPE_SSHORT:
-            *(int16_t*)ptr = gbfgetuint16(fin);
+            tag->data.append(gbfgetuint16(fin));
             break;
           case EXIF_TYPE_IFD:
           case EXIF_TYPE_LONG:
           case EXIF_TYPE_SLONG:
-            *(int32_t*)ptr = gbfgetuint32(fin);
+            tag->data.append(gbfgetuint32(fin));
             break;
           case EXIF_TYPE_RAT:
           case EXIF_TYPE_SRAT:
-            *(int32_t*)ptr = gbfgetuint32(fin);
-            *(int32_t*)(ptr+4) = gbfgetuint32(fin);
+            tag->data.append(gbfgetuint32(fin));
+            tag->data.append(gbfgetuint32(fin));
             break;
           case EXIF_TYPE_FLOAT:
-            *(float*)ptr = gbfgetflt(fin);
+            tag->data.append(gbfgetflt(fin));
             break;
           case EXIF_TYPE_DOUBLE:
-            *(double*)ptr = gbfgetdbl(fin);
+            tag->data.append(gbfgetdbl(fin));
             break;
-          default:
-            gbfread(ptr, exif_type_size(tag->type), 1, fin);
-            break;
+          default: {
+            // We know the size for this tag type, but not the layout.
+            // Save it is a byte array we can echo on write.
+            QByteArray qba(tag->count, 0);
+            gbfread(qba.data(), exif_type_size(tag->type), 1, fin);
+            tag->data.append(qba);
           }
-          ptr += (tag->size / tag->count);
+          break;
+          }
         }
     }
-#ifdef EXIF_DBG
-    printf(MYNAME "-offs 0x%08X: ifd=%d id=0x%04X t=0x%04X c=%4u s=%4u",
-           tag->tag_offset, ifd->nr, tag->id, tag->type, tag->count, tag->size);
-    if (tag->size > 4) {
-      printf(" o=0x%08X", tag->offset);
-    } else {
-      printf(" v=0x%08X", tag->toLong());
+    if (global_opts.debug_level >= 3) {
+      printf(MYNAME "-offs 0x%08X: ifd=%d id=0x%04X t=0x%04X c=%4u s=%4u",
+             tag->tag_offset, ifd->nr, tag->id, tag->type, tag->count, tag->size);
+      if (tag->size > 4) {
+        printf(" o=0x%08X", tag->offset);
+      } else {
+        printf(" v=0x%02X%02X%02X%02X", tag->raw[0], tag->raw[1], tag->raw[2], tag->raw[3]);
+      }
+      if (tag->type == EXIF_TYPE_ASCII) {
+        char* str = exif_read_str(tag);
+        printf(" \"%s\"", str);
+        xfree(str);
+      } else {
+        for (unsigned idx = 0; idx < std::min(tag->count, 4u); ++idx) {
+          if (tag->type == EXIF_TYPE_BYTE) {
+            printf(" %u", tag->data.at(0).toByteArray().at(idx));
+          } else if (tag->type == EXIF_TYPE_SBYTE) {
+            printf(" %d", tag->data.at(0).toByteArray().at(idx));
+          } else if (tag->type == EXIF_TYPE_UNK) {
+            printf(" 0x%02X", tag->data.at(0).toByteArray().at(idx));
+          } else if (tag->type == EXIF_TYPE_RAT) {
+            printf(" %+#g(%u/%u)", exif_read_double(tag, idx), tag->data.at(idx * 2).value<uint32_t>(), tag->data.at((idx * 2) + 1).value<uint32_t>());
+          } else if (tag->type == EXIF_TYPE_SRAT) {
+            printf(" %+#g(%d/%d)", exif_read_double(tag, idx), tag->data.at(idx * 2).value<int32_t>(), tag->data.at((idx * 2) + 1).value<int32_t>());
+          } else if (tag->type == EXIF_TYPE_SHORT) {
+            printf(" %u", tag->data.at(idx).value<uint16_t>());
+          } else if (tag->type == EXIF_TYPE_SSHORT) {
+            printf(" %d", tag->data.at(idx).value<int16_t>());
+          } else if (tag->type == EXIF_TYPE_LONG) {
+            printf(" %u", tag->data.at(idx).value<uint32_t>());
+          } else if (tag->type == EXIF_TYPE_SLONG) {
+            printf(" %d", tag->data.at(idx).value<int32_t>());
+          } else if (tag->type == EXIF_TYPE_FLOAT) {
+            printf(" %+#g", tag->data.at(idx).value<float>());
+          } else if (tag->type == EXIF_TYPE_DOUBLE) {
+            printf(" %+#g", tag->data.at(idx).value<double>());
+          } else {
+            printf(" 0x%0*X", 2 * exif_type_size(tag->type), tag->data.at(idx).value<uint32_t>());
+          }
+        }
+        if (tag->count > 4) {
+          printf(" ...");
+        }
+      }
+      printf("\n");
     }
-    if (tag->type == EXIF_TYPE_ASCII) {
-      char* str = exif_read_str(tag);
-      printf(" \"%s\"", str);
-      xfree(str);
-    }
-    printf("\n");
+#ifndef NDEBUG
+    exif_validate_tag_structure(tag);
 #endif
   }
 
-#ifdef EXIF_DBG
-  printf(MYNAME "-offs 0x%08X: Next IFD=0x%08X\n", next_ifd_offs,  ifd->next_ifd);
-#endif
+  if (global_opts.debug_level >= 3) {
+    printf(MYNAME "-offs 0x%08X: Next IFD=0x%08X\n", next_ifd_offs,  ifd->next_ifd);
+  }
 
   return ifd;
 }
@@ -559,11 +642,11 @@ exif_read_app(ExifApp* app)
   ExifIfd* ifd;
   gbfile* fin = app->fexif;
 
-#ifdef EXIF_DBG
-  printf(MYNAME ": read_app...\n");
-  print_buff((const char*)fin->handle.mem, 8, MYNAME "-offs 0x00000000: Image File Header");
-  printf("\n");
-#endif
+  if (global_opts.debug_level >= 3) {
+    printf(MYNAME ": read_app...\n");
+    print_buff((const char*)fin->handle.mem, 8, MYNAME "-offs 0x00000000: Image File Header");
+    printf("\n");
+  }
   exif_ifd_ofs = gps_ifd_ofs = inter_ifd_ofs = 0;
 
   gbfseek(fin, 4, SEEK_SET);
@@ -601,9 +684,9 @@ exif_examine_app(ExifApp* app)
   is_fatal(gbfgetint16(ftmp) != 0, MYNAME ": Error in EXIF header.");
   uint16_t endianess = gbfgetint16(ftmp);
 
-#ifdef EXIF_DBG
-  printf(MYNAME ": endianess = 0x%04X\n", endianess);
-#endif
+  if (global_opts.debug_level >= 3) {
+    printf(MYNAME ": endianess = 0x%04X\n", endianess);
+  }
   if (endianess == 0x4949) {
     ftmp->big_endian = 0;
   } else if (endianess == 0x4D4D) {
@@ -681,8 +764,9 @@ exif_waypt_from_exif_app(ExifApp* app)
   char mode = '\0';
   double gpsdop = unknown_alt;
   double alt = unknown_alt;
-  time_t timestamp = UNKNOWN_TIMESTAMP;
-  time_t datestamp = UNKNOWN_TIMESTAMP;
+  QTime timestamp;
+  QDate datestamp;
+  QDateTime gps_datetime;
 
   ExifIfd* ifd = exif_find_ifd(app, GPS_IFD);
   if (ifd == nullptr) {
@@ -701,19 +785,19 @@ exif_waypt_from_exif_app(ExifApp* app)
     case GPS_IFD_TAG_VERSION:
       break;
     case GPS_IFD_TAG_LATREF:
-      lat_ref = tag->data.at(0);
+      lat_ref = tag->data.at(0).toByteArray().at(0);
       break;
     case GPS_IFD_TAG_LAT:
       wpt->latitude = exif_read_coord(tag);
       break;
     case GPS_IFD_TAG_LONREF:
-      lon_ref = tag->data.at(0);
+      lon_ref = tag->data.at(0).toByteArray().at(0);
       break;
     case GPS_IFD_TAG_LON:
       wpt->longitude = exif_read_coord(tag);
       break;
     case GPS_IFD_TAG_ALTREF:
-      alt_ref = tag->data.at(0);
+      alt_ref = tag->data.at(0).toByteArray().at(0);
       break;
     case GPS_IFD_TAG_ALT:
       alt = exif_read_double(tag, 0);
@@ -722,16 +806,16 @@ exif_waypt_from_exif_app(ExifApp* app)
       timestamp = exif_read_timestamp(tag);
       break;
     case GPS_IFD_TAG_SAT:
-      wpt->sat = atoi(tag->data.constData());
+      wpt->sat = tag->data.at(0).toByteArray().toInt();
       break;
     case GPS_IFD_TAG_MODE:
-      mode = tag->data.at(0);
+      mode = tag->data.at(0).toByteArray().at(0);
       break;
     case GPS_IFD_TAG_DOP:
       gpsdop = exif_read_double(tag, 0);
       break;
     case GPS_IFD_TAG_SPEEDREF:
-      speed_ref = tag->data.at(0);
+      speed_ref = tag->data.at(0).toByteArray().at(0);
       break;
     case GPS_IFD_TAG_SPEED:
       WAYPT_SET(wpt, speed, exif_read_double(tag, 0));
@@ -758,7 +842,7 @@ exif_waypt_from_exif_app(ExifApp* app)
   if (lon_ref == 'W') {
     wpt->longitude *= -1;
   } else if (lon_ref != 'E') {
-    warning(MYNAME ": GPSLongitudeRef not set! Using E(east).\n");
+    warning(MYNAME ": GPSLongitudeRef not set! Using E(ast).\n");
   }
 
 #ifdef EXIF_DBG
@@ -834,20 +918,12 @@ exif_waypt_from_exif_app(ExifApp* app)
     }
   }
 
-  if (timestamp != UNKNOWN_TIMESTAMP) {
-    if (datestamp != UNKNOWN_TIMESTAMP) {
-      timestamp += datestamp;
+  gps_datetime = QDateTime(datestamp, timestamp, Qt::UTC);
+  if (gps_datetime.isValid()) {
+    if (global_opts.debug_level >= 3) {
+      printf(MYNAME "-GPSTimeStamp =   %s\n", qPrintable(gps_datetime.toString(Qt::ISODate)));
     }
-  } else {
-    timestamp = datestamp;
-  }
-
-  if (timestamp != UNKNOWN_TIMESTAMP) {
-#ifdef EXIF_DBG
-    QString str =  QDateTime::fromTime_t(timestamp).toUTC().toString(Qt::ISODate);
-    printf(MYNAME "-GPSTimeStamp =   %s\n", qPrintable(str));
-#endif
-    wpt->SetCreationTime(timestamp);
+    wpt->SetCreationTime(gps_datetime);
   } else {
     wpt->SetCreationTime(exif_get_exif_time(app));
   }
@@ -855,16 +931,16 @@ exif_waypt_from_exif_app(ExifApp* app)
   tag = exif_find_tag(app, EXIF_IFD, EXIF_IFD_TAG_USER_CMT); /* UserComment */
   if (tag && (tag->size > 8)) {
     // TODO: User comments with JIS and Undefined Code Designations are ignored.
-    if (memcmp(tag->data.constData(), "ASCII\0\0\0", 8) == 0) {
-      wpt->notes = QString::fromLatin1(tag->data.constData() + 8, tag->size - 8);
-    } else if (memcmp(tag->data.constData(), "UNICODE\0", 8) == 0) {
+    if (memcmp(tag->data.at(0).toByteArray().constData(), "ASCII\0\0\0", 8) == 0) {
+      wpt->notes = QString::fromLatin1(tag->data.at(0).toByteArray().constData() + 8, tag->size - 8);
+    } else if (memcmp(tag->data.at(0).toByteArray().constData(), "UNICODE\0", 8) == 0) {
       QTextCodec* utf16_codec;
       if (app->fcache->big_endian) {
         utf16_codec = QTextCodec::codecForName("UTF-16BE");
       } else {
         utf16_codec = QTextCodec::codecForName("UTF-16LE");
       }
-      wpt->notes = utf16_codec->toUnicode(tag->data.constData() + 8, tag->size - 8);
+      wpt->notes = utf16_codec->toUnicode(tag->data.at(0).toByteArray().constData() + 8, tag->size - 8);
     }
   }
 
@@ -990,38 +1066,69 @@ exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, con
     tag->type = type;
     tag->count = index + count;
     tag->size = size;
-    tag->data = QByteArray((size < 4) ? 4 : size, 0);
     ifd->count++;
 
-  } else if (size == 0) { /* remove this element */
+  } else if (size == 0) {	/* remove this tag */
     ifd->count--;
     ifd->tags.removeOne(*tag);
     return nullptr;
-  } else if (size > tag->data.size()) { /* modify existing tag */
-    tag->data.append(size - tag->data.size(), 0);
-    tag->size = size;
+  } else { /* modify existing tag */
     tag->count = index + count;
+    tag->size = size;
   }
 
-  switch (type) {
-  case EXIF_TYPE_RAT:
-  case EXIF_TYPE_SRAT: {
-    double val = *(double*)data;
-    int32_t* dest = reinterpret_cast<int32_t*>(tag->data.data());
-
-    if ((val < 0.0) && (type == EXIF_TYPE_RAT)) {
-      fatal(MYNAME ": A negative value cannot be stored as type RATIONAL.");
+  if (BYTE_TYPE(type)) {
+    assert(item_size == 1);
+    if (tag->data.size() == 0) {
+      tag->data.append(QByteArray());
     }
+    QByteArray qba = tag->data.at(0).toByteArray();
+    int size_increase = (index + count) - qba.size();
+    if (size_increase > 0) {
+      qba.append(size_increase, 0);
+    }
+    qba.replace(index, count, (char*) data, count);
+    tag->data[0] = qba;
+  } else {
+    // we haven't coded for insertion of multiple values (except for BYTE_TYPE above).
+    assert(count == 1);
+    switch (type) {
+    case EXIF_TYPE_SHORT:
+    case EXIF_TYPE_SSHORT:
+      tag->grow<uint16_t>(index + count);
+      tag->data[index] = *(uint16_t*)data;
+      break;
+    case EXIF_TYPE_LONG:
+    case EXIF_TYPE_SLONG:
+    case EXIF_TYPE_IFD:
+      tag->grow<uint32_t>(index + count);
+      tag->data[index] = *(uint32_t*)data;
+      break;
+    case EXIF_TYPE_RAT:
+    case EXIF_TYPE_SRAT: {
+      double val = *(double*)data;
 
-    Rational<int32_t> rat = exif_dec2frac(val, 1e-11);
-    dest[index * 2] = rat.num;
-    dest[(index * 2) + 1] = rat.den;
-  }
-  break;
-  default: {
-    char* dest = tag->data.data();
-    memcpy(&dest[index * item_size], data, count * item_size);
-  }
+      if ((val < 0.0) && (type == EXIF_TYPE_RAT)) {
+        fatal(MYNAME ": A negative value cannot be stored as type RATIONAL.");
+      }
+
+      Rational<int32_t> rat = exif_dec2frac(val, 1e-11);
+      tag->grow<uint32_t>((index + count) * 2);
+      tag->data[index * 2] = rat.num;
+      tag->data[(index * 2) + 1] = rat.den;
+    }
+    break;
+    case EXIF_TYPE_FLOAT:
+      tag->grow<float>(index + count);
+      tag->data[index] = *(float*)data;
+      break;
+    case EXIF_TYPE_DOUBLE:
+      tag->grow<double>(index + count);
+      tag->data[index] = *(double*)data;
+      break;
+    default:
+      fatal(MYNAME ": Unknown data type %u!\n", type);
+    }
   }
   return tag;
 }
@@ -1030,7 +1137,7 @@ exif_put_value(const int ifd_nr, const uint16_t tag_id, const uint16_t type, con
 static void
 exif_put_double(const int ifd_nr, const int tag_id, const int index, const double val)
 {
-  // TODO: It seems wrong to toss the sign.
+  // TODO: It seems wrong to throw away the sign.
   double d = fabs(val);
   exif_put_value(ifd_nr, tag_id, EXIF_TYPE_RAT, 1, index, &d);
 }
@@ -1114,19 +1221,32 @@ exif_write_value(ExifTag* tag, gbfile* fout)
   if (tag->size > 4) {
     gbfputuint32(tag->offset, fout);  /* offset to data */
   } else {
-    char* data = tag->data.data();
-
     if BYTE_TYPE(tag->type) {
-      gbfwrite(data, 4, 1, fout);
+      assert(tag->count <= 4);
+      if (tag->count > 0) {
+        gbfwrite(tag->data.at(0).toByteArray().constData(), tag->count, 1, fout);
+      }
     } else if WORD_TYPE(tag->type) {
-      gbfputuint16(*(uint16_t*)data, fout);
-      gbfputuint16(*(uint16_t*)(data+2), fout);
+      assert(tag->count <= 2);
+      for (unsigned idx = 0; idx < tag->count; ++idx) {
+        gbfputuint16(tag->data.at(idx).value<uint16_t>(), fout);
+      }
     } else if LONG_TYPE(tag->type) {
-      gbfputuint32(*(uint32_t*)data, fout);
+      assert(tag->count <= 1);
+      if (tag->count > 0) {
+        gbfputuint32(tag->data.at(0).value<uint32_t>(), fout);
+      }
     } else if (tag->type == EXIF_TYPE_FLOAT) {
-      gbfputflt(*(float*)data, fout);
+      assert(tag->count <= 1);
+      if (tag->count > 0) {
+        gbfputflt(tag->data.at(0).value<float>(), fout);
+      }
     } else {
-      fatal(MYNAME ": Unknown data type %d!\n", tag->type);
+      fatal(MYNAME ": Unknown data type %d or wrong tag size %d!\n", tag->type, tag->size);
+    }
+    int fill_bytes = 4 - tag->size;
+    for (int idx = 0; idx < fill_bytes; ++idx) {
+      gbfputc(0, fout);
     }
   }
 }
@@ -1139,6 +1259,10 @@ exif_write_ifd(ExifIfd* ifd, const char next, gbfile* fout)
 
   for (auto& tag_instance : ifd->tags) {
     ExifTag* tag = &tag_instance;
+
+#ifndef NDEBUG
+    exif_validate_tag_structure(tag);
+#endif
 
     gbfputuint16(tag->id, fout);
     gbfputuint16(tag->type, fout);
@@ -1165,37 +1289,36 @@ exif_write_ifd(ExifIfd* ifd, const char next, gbfile* fout)
     ExifTag* tag = &tag_instance;
 
     if (tag->size > 4) {
-      char* ptr = tag->data.data();
-
       if BYTE_TYPE(tag->type) {
-        gbfwrite(tag->data.data(), tag->size, 1, fout);
+        gbfwrite(tag->data.at(0).toByteArray().constData(), tag->size, 1, fout);
       } else for (uint16_t i = 0; i < tag->count; i++) {
           switch (tag->type) {
           case EXIF_TYPE_SHORT:
           case EXIF_TYPE_SSHORT:
-            gbfputuint16(*(int16_t*)ptr, fout);
+            gbfputuint16(tag->data.at(i).value<uint16_t>(), fout);
             break;
           case EXIF_TYPE_LONG:
           case EXIF_TYPE_SLONG:
           case EXIF_TYPE_IFD:
-            gbfputuint32(*(int32_t*)ptr, fout);
+            gbfputuint32(tag->data.at(i).value<uint32_t>(), fout);
             break;
           case EXIF_TYPE_RAT:
           case EXIF_TYPE_SRAT:
-            gbfputuint32(*(int32_t*)ptr, fout);
-            gbfputuint32(*(int32_t*)(ptr+4), fout);
+            gbfputuint32(tag->data.at(2 * i).value<uint32_t>(), fout);
+            gbfputuint32(tag->data.at((2 * i) + 1).value<uint32_t>(), fout);
             break;
           case EXIF_TYPE_FLOAT:
-            gbfputflt(*(float*)ptr, fout);
+            gbfputflt(tag->data.at(i).value<float>(), fout);
             break;
           case EXIF_TYPE_DOUBLE:
-            gbfputdbl(*(double*)ptr, fout);
+            gbfputdbl(tag->data.at(i).value<double>(), fout);
             break;
           default:
-            gbfwrite(ptr, exif_type_size(tag->type), 1, fin);
+            // We know the size for this tag type, but not the layout.
+            // Echo saved data from read.
+            gbfwrite(tag->data.at(i).toByteArray().constData(), tag->size, 1, fout);
             break;
           }
-          ptr += (tag->size / tag->count);
         }
       if (gbftell(fout) & 1u) {
         gbfputc(0, fout);
@@ -1240,7 +1363,9 @@ exif_write_apps()
 
       len += 4; /* DWORD(0) after last ifd */
 
-      if ((exif_find_tag(app, IFD1, IFD1_TAG_JPEG_OFFS))) {
+      uint32_t original_jpeg_offset;
+      if ((tag = exif_find_tag(app, IFD1, IFD1_TAG_JPEG_OFFS))) {
+        original_jpeg_offset = tag->toLong();
         exif_put_long(IFD1, IFD1_TAG_JPEG_OFFS, 0, len);
       }
 
@@ -1267,10 +1392,9 @@ exif_write_apps()
 
       gbfputuint32(0, ftmp); /* DWORD(0) after last ifd */
 
-      if ((tag = exif_find_tag(app, IFD1, IFD1_TAG_JPEG_OFFS))) {
-        gbsize_t offs = tag->original;
+      if (exif_find_tag(app, IFD1, IFD1_TAG_JPEG_OFFS)) {
         if ((tag = exif_find_tag(app, IFD1, IFD1_TAG_JPEG_SIZE))) {
-          gbfseek(app->fexif, offs, SEEK_SET);
+          gbfseek(app->fexif, original_jpeg_offset, SEEK_SET);
           gbfcopyfrom(ftmp, app->fexif, tag->toLong());
         }
       }
