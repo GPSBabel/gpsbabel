@@ -394,6 +394,7 @@ exif_load_apps()
   return exif_app;
 }
 
+#ifndef NDEBUG
 static void
 exif_validate_tag_structure(const ExifTag* tag)
 {
@@ -419,6 +420,7 @@ exif_validate_tag_structure(const ExifTag* tag)
          ((tag->data.size() == 0) && (tag->count == 0)) ||
          ((tag->data.size() == 1) && (tag->data.at(0).toByteArray().endsWith('\0'))));
 }
+#endif
 
 static ExifIfd*
 exif_read_ifd(ExifApp* app, const uint16_t ifd_nr, const gbsize_t offs,
@@ -1367,7 +1369,7 @@ exif_write_apps()
 
     if (app == exif_app) {
       assert(app->marker == 0xFFE1);
-      uint16_t len = 8;
+      uint32_t len = 8;
       ExifTag* tag;
 
       exif_put_long(IFD0, IFD0_TAG_GPS_IFD_OFFS, 0, 0);
@@ -1391,10 +1393,16 @@ exif_write_apps()
 
       len += 4; /* DWORD(0) after last ifd */
 
-      uint32_t original_jpeg_offset;
+      bool jpeg_info_valid = false;
+      uint32_t jpeg_info_original_offset;
+      uint32_t jpeg_info_original_size;
       if ((tag = exif_find_tag(app, IFD1, IFD1_TAG_JPEG_OFFS))) {
-        original_jpeg_offset = tag->toLong();
+        jpeg_info_original_offset = tag->toLong();
         exif_put_long(IFD1, IFD1_TAG_JPEG_OFFS, 0, len);
+        if ((tag = exif_find_tag(app, IFD1, IFD1_TAG_JPEG_SIZE))) {
+          jpeg_info_original_size = tag->toLong();
+          jpeg_info_valid = true;
+        }
       }
 
       for (auto& ifd_instance : app->ifds) {
@@ -1415,16 +1423,13 @@ exif_write_apps()
         char next = ((ifd->nr == IFD0) && ((i + 1) < app->ifds.size()) && (app->ifds[i+1].nr == IFD1));
 
         exif_write_ifd(ifd, next, ftmp);
-        len = gbftell(ftmp);
       }
 
       gbfputuint32(0, ftmp); /* DWORD(0) after last ifd */
 
-      if (exif_find_tag(app, IFD1, IFD1_TAG_JPEG_OFFS)) {
-        if ((tag = exif_find_tag(app, IFD1, IFD1_TAG_JPEG_SIZE))) {
-          gbfseek(app->fexif, original_jpeg_offset, SEEK_SET);
-          gbfcopyfrom(ftmp, app->fexif, tag->toLong());
-        }
+      if (jpeg_info_valid) {
+        gbfseek(app->fexif, jpeg_info_original_offset, SEEK_SET);
+        gbfcopyfrom(ftmp, app->fexif, jpeg_info_original_size);
       }
 
       len = gbftell(ftmp);
