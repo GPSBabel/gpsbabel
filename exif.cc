@@ -44,12 +44,13 @@
 #include <QtCore/QDateTime>        // for QDateTime
 #include <QtCore/QFile>            // for QFile
 #include <QtCore/QList>            // for QList<>::iterator, QList
+#include <QtCore/QRegExp>          // for QRegExp
 #include <QtCore/QString>          // for QString
 #include <QtCore/QTextCodec>       // for QTextCodec
 #include <QtCore/QTime>            // for QTime
 #include <QtCore/QVariant>         // for QVariant
 #include <QtCore/QVector>          // for QVector
-#include <QtCore/Qt>               // for ISODate, UTC
+#include <QtCore/Qt>               // for UTC, ISODate
 #include <QtCore/QtGlobal>         // for qPrintable
 #include <algorithm>               // for sort, min
 #include <cassert>                 // for assert
@@ -59,7 +60,6 @@
 #include <cstdio>                  // for printf, snprintf, SEEK_SET, SEEK_CUR
 #include <cstdlib>                 // for labs, atoi
 #include <cstring>                 // for strrchr, memcmp, strchr, strlen
-#include <ctime>                   // for gmtime, localtime, time_t, tm
 #include <ctype.h>                 // for isprint, isspace
 
 #define MYNAME "exif"
@@ -186,7 +186,7 @@ static gbfile* fin, *fout;
 static QList<ExifApp>* exif_apps;
 static ExifApp* exif_app;
 static const Waypoint* exif_wpt_ref;
-static time_t exif_time_ref;
+static QDateTime exif_time_ref;
 static char exif_success;
 static QString exif_fout_name;
 
@@ -264,17 +264,16 @@ exif_type_size(const uint16_t type)
   return size;
 }
 
-// TODO: If this were actually ever used (!?!?!) it could probably be
-// replaced by return QDateTime(time).toString("yyyy/MM/dd, hh:mm:ss);
 static QString
-exif_time_str(const time_t time)
+exif_time_str(const QDateTime& time)
 {
-  struct tm tm = *localtime(&time);
-  tm.tm_year += 1900;
-  tm.tm_mon += 1;
-
-  return QString().sprintf("%04d/%02d/%02d, %02d:%02d:%02d",
-                           tm.tm_year, tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+  QString str = time.toString("yyyy/MM/dd hh:mm:ss t");
+  if (time.timeSpec() != Qt::UTC) {
+    str.append(" (");
+    str.append(time.toUTC().toString("yyyy/MM/dd hh:mm:ss t"));
+    str.append(")");
+  }
+  return str;
 }
 
 static char*
@@ -729,7 +728,7 @@ exif_find_tag(ExifApp* app, const uint16_t ifd_nr, const uint16_t tag_id)
   return nullptr;
 }
 
-static time_t
+static QDateTime
 exif_get_exif_time(ExifApp* app)
 {
   QDateTime res;
@@ -744,10 +743,41 @@ exif_get_exif_time(ExifApp* app)
 
   if (tag) {
     char* str = exif_read_str(tag);
+    // This assumes the Qt::TimeSpec is Qt::LocalTime, i.e. the current system time zone.
+    // Note the assumption of local time can be problematic if the data
+    // is processed in a different time zone than was used in recording
+    // the time in the image.
     res = QDateTime::fromString(str, "yyyy:MM:dd hh:mm:ss");
     xfree(str);
+
+    // Exif 2.31 added offset tags to record the offset to UTC.
+    // If these are present use them, otherwise assume local time.
+    ExifTag* offset_tag = nullptr;
+    switch (tag->id) {
+    case 0x9003:
+      offset_tag = exif_find_tag(app, EXIF_IFD, 0x9011);  /* OffsetTimeOriginal from EXIF */
+      break;
+    case 0x0132:
+      offset_tag = exif_find_tag(app, EXIF_IFD, 0x9010);  /* OffsetTime from EXIF */
+      break;
+    case 0x9004:
+      offset_tag = exif_find_tag(app, EXIF_IFD, 0x9012);  /* OffsetTimeDigitized from EXIF */
+      break;
+    }
+
+    if (offset_tag) {
+      char* str = exif_read_str(offset_tag);
+      // string should be +HH:MM or -HH:MM
+      QRegExp re("([+-])(\\d{2})(?::)(\\d{2})");
+      if (re.exactMatch(str)) {
+        // Correct the date time by supplying the offset from UTC.
+        int offset_hours = re.cap(1).append(re.cap(2)).toInt();
+        int offset_mins = re.cap(1).append(re.cap(3)).toInt();
+        res.setOffsetFromUtc(((offset_hours * 60) + offset_mins) * 60);
+      }
+    }
   }
-  return res.toTime_t();
+  return res;
 }
 
 static Waypoint*
@@ -1185,7 +1215,7 @@ exif_find_wpt_by_time(const Waypoint* wpt)
 
   if (exif_wpt_ref == nullptr) {
     exif_wpt_ref = wpt;
-  } else if (labs(exif_time_ref - wpt->creation_time.toTime_t()) < labs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t())) {
+  } else if (labs(exif_time_ref.msecsTo(wpt->creation_time)) < labs(exif_time_ref.msecsTo(exif_wpt_ref->creation_time))) {
     exif_wpt_ref = wpt;
   }
 }
@@ -1465,7 +1495,7 @@ exif_wr_init(const QString& fname)
   gbfclose(fin);
 
   exif_time_ref = exif_get_exif_time(exif_app);
-  if (exif_time_ref == 0) {
+  if (!exif_time_ref.isValid()) {
     fatal(MYNAME ": No valid timestamp found in picture!\n");
   }
 
@@ -1511,22 +1541,21 @@ exif_write()
       warning(MYNAME ": No matching point with name \"%s\" found.\n", opt_name);
     }
   } else {
-    QString str = exif_time_str(exif_time_ref);
-
     track_disp_all(nullptr, nullptr, exif_find_wpt_by_time);
     route_disp_all(nullptr, nullptr, exif_find_wpt_by_time);
     waypt_disp_all(exif_find_wpt_by_time);
 
-    time_t frame = atoi(opt_frame);
+    qint64 frame = atoi(opt_frame);
 
     if (exif_wpt_ref == nullptr) {
       warning(MYNAME ": No point with a valid timestamp found.\n");
-    } else if (labs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t()) > frame) {
+    } else if (labs(exif_time_ref.secsTo(exif_wpt_ref->creation_time)) > frame) {
+      QString str = exif_time_str(exif_time_ref);
       warning(MYNAME ": No matching point found for image date %s!\n", qPrintable(str));
       if (exif_wpt_ref != nullptr) {
-        QString str = exif_time_str(exif_wpt_ref->creation_time.toTime_t());
+        QString str = exif_time_str(exif_wpt_ref->creation_time);
         warning(MYNAME ": Best is from %s, %ld second(s) away.\n",
-                qPrintable(str), labs(exif_time_ref - exif_wpt_ref->creation_time.toTime_t()));
+                qPrintable(str), labs(exif_time_ref.secsTo(exif_wpt_ref->creation_time)));
       }
       exif_wpt_ref = nullptr;
     }
@@ -1559,20 +1588,13 @@ exif_write()
     }
 
     if (wpt->creation_time.isValid()) {
-      char buf[32];
+      const QDateTime dt = wpt->GetCreationTime().toUTC();
 
-      const time_t tt = wpt->GetCreationTime().toTime_t();
-      struct tm tm = *gmtime(&tt);
+      exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 0, dt.time().hour());
+      exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 1, dt.time().minute());
+      exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 2, dt.time().second());
 
-      tm.tm_year += 1900;
-      tm.tm_mon += 1;
-
-      exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 0, tm.tm_hour);
-      exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 1, tm.tm_min);
-      exif_put_double(GPS_IFD, GPS_IFD_TAG_TIMESTAMP, 2, tm.tm_sec);
-
-      snprintf(buf, sizeof(buf), "%04d:%02d:%02d", tm.tm_year, tm.tm_mon, tm.tm_mday);
-      exif_put_str(GPS_IFD, GPS_IFD_TAG_DATESTAMP, buf);
+      exif_put_str(GPS_IFD, GPS_IFD_TAG_DATESTAMP, CSTR(dt.toString("yyyy:MM:dd")));
     } else {
       exif_remove_tag(GPS_IFD, GPS_IFD_TAG_TIMESTAMP);
       exif_remove_tag(GPS_IFD, GPS_IFD_TAG_DATESTAMP);
