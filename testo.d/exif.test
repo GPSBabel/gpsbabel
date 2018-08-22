@@ -2,3 +2,27 @@
 gpsbabel -i exif -f ${REFERENCE}/IMG_2065.JPG -o unicsv,utc=0 -F ${TMPDIR}/exif-dat.csv
 compare ${REFERENCE}/exif-dat.csv ${TMPDIR}/exif-dat.csv
 
+# write test
+cp ${REFERENCE}/20180717_080125.jpg ${TMPDIR}/20180717_080125.jpg
+gpsbabel -i unicsv -f ${REFERENCE}/20180717_080125.csv -o exif,name=20180717_080125 -F ${TMPDIR}/20180717_080125.jpg
+bincompare ${REFERENCE}/20180717_080125.jpg.jpg ${TMPDIR}/20180717_080125.jpg.jpg
+
+# write test with IFD0 and IFD1 present, which triggers some "next" code.
+# this also deletes an existing tag (satellites).
+cp ${REFERENCE}/IMG_2065.JPG ${TMPDIR}/IMG_2065.JPG
+gpsbabel -i unicsv -f ${REFERENCE}/IMG_2065_retag.csv -o exif,name=IMG_2065 -F ${TMPDIR}/IMG_2065.JPG
+bincompare ${REFERENCE}/IMG_2065.JPG.jpg ${TMPDIR}/IMG_2065.JPG.jpg
+
+# test a big endian image
+# image from 	https://github.com/ianare/exif-samples.git
+# this image has uncompressed thumbnail data.
+cp ${REFERENCE}/kodak-dc210.jpg ${TMPDIR}/kodak-dc210.jpg
+gpsbabel -i unicsv -f ${REFERENCE}/IMG_2065_retag.csv -o exif,name=IMG_2065 -F ${TMPDIR}/kodak-dc210.jpg
+bincompare ${REFERENCE}/kodak-dc210.jpg.jpg ${TMPDIR}/kodak-dc210.jpg.jpg
+
+# test a big endian image
+# image from 	https://github.com/ianare/exif-samples.git
+cp ${REFERENCE}/ricoh-rdc5300.jpg ${TMPDIR}/ricoh-rdc5300.jpg
+gpsbabel -i unicsv -f ${REFERENCE}/IMG_2065_retag.csv -o exif,name=IMG_2065 -F ${TMPDIR}/ricoh-rdc5300.jpg
+bincompare ${REFERENCE}/ricoh-rdc5300.jpg.jpg ${TMPDIR}/ricoh-rdc5300.jpg.jpg
+

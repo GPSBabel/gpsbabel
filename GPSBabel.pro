@@ -158,6 +158,8 @@ INCLUDEPATH += zlib
 
 load(configure)
 
+CONFIG(release, debug|release): DEFINES *= NDEBUG
+
 macx|linux {
   qtCompileTest(unistd) {
     # this is used by zlib
