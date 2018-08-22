@@ -15,10 +15,10 @@ bincompare ${REFERENCE}/IMG_2065.JPG.jpg ${TMPDIR}/IMG_2065.JPG.jpg
 
 # test a big endian image
 # image from 	https://github.com/ianare/exif-samples.git
-# we lose ~20kB in this file and corrupt the maker notes.
-#cp ${REFERENCE}/kodak-dc210.jpg ${TMPDIR}/kodak-dc210.jpg
-#gpsbabel -i unicsv -f ${REFERENCE}/IMG_2065_retag.csv -o exif,name=IMG_2065 -F ${TMPDIR}/kodak-dc210.jpg
-#bincompare ${REFERENCE}/kodak-dc210.jpg.jpg ${TMPDIR}/kodak-dc210.jpg.jpg
+# this image has uncompressed thumbnail data.
+cp ${REFERENCE}/kodak-dc210.jpg ${TMPDIR}/kodak-dc210.jpg
+gpsbabel -i unicsv -f ${REFERENCE}/IMG_2065_retag.csv -o exif,name=IMG_2065 -F ${TMPDIR}/kodak-dc210.jpg
+bincompare ${REFERENCE}/kodak-dc210.jpg.jpg ${TMPDIR}/kodak-dc210.jpg.jpg
 
 # test a big endian image
 # image from 	https://github.com/ianare/exif-samples.git

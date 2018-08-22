@@ -44,6 +44,7 @@
 #include <QtCore/QDateTime>        // for QDateTime
 #include <QtCore/QFile>            // for QFile
 #include <QtCore/QList>            // for QList<>::iterator, QList
+#include <QtCore/QPair>            // for QPair
 #include <QtCore/QRegExp>          // for QRegExp
 #include <QtCore/QString>          // for QString
 #include <QtCore/QTextCodec>       // for QTextCodec
@@ -93,12 +94,14 @@
 #define WORD_TYPE(a) ( (a==EXIF_TYPE_SHORT) || (a==EXIF_TYPE_SSHORT) )
 #define LONG_TYPE(a) ( (a==EXIF_TYPE_LONG) || (a==EXIF_TYPE_SLONG) || (a==EXIF_TYPE_IFD) )
 
-#define IFD0_TAG_EXIF_IFD_OFFS  0x8769 // aka JPEGInterchangeFormat
-#define IFD0_TAG_GPS_IFD_OFFS   0x8825  // aka JPEGInterchangeFormatLength
+#define IFD0_TAG_EXIF_IFD_OFFS  0x8769
+#define IFD0_TAG_GPS_IFD_OFFS   0x8825
 
-#define IFD1_TAG_STRIP_OFFS   0x0111
-#define IFD1_TAG_JPEG_OFFS    0x0201
-#define IFD1_TAG_JPEG_SIZE    0x0202
+#define IFD1_TAG_COMPRESSION       0x0103  // Compression, 1 => uncompressed, 6 => JPEG compression
+#define IFD1_TAG_STRIP_OFFS        0x0111  // StripOffsets
+#define IFD1_TAG_STRIP_BYTE_COUNTS 0x0117  // StripByteCounts
+#define IFD1_TAG_JPEG_OFFS         0x0201  // JPEGInterchangeFormat
+#define IFD1_TAG_JPEG_SIZE         0x0202  // JPEGInterchangeFormatLength
 
 #define EXIF_IFD_TAG_USER_CMT       0x9286
 #define EXIF_IFD_TAG_INTER_IFD_OFFS 0xA005
@@ -1203,6 +1206,12 @@ exif_put_long(const int ifd_nr, const int tag_id, const int index, const int32_t
 }
 
 static void
+exif_put_short(const int ifd_nr, const int tag_id, const int index, const int16_t val)
+{
+  exif_put_value(ifd_nr, tag_id, EXIF_TYPE_SHORT, 1, index, &val);
+}
+
+static void
 exif_remove_tag(const int ifd_nr, const int tag_id)
 {
   exif_put_value(ifd_nr, tag_id, EXIF_TYPE_BYTE, 0, 0, nullptr);
@@ -1370,7 +1379,6 @@ exif_write_apps()
     if (app == exif_app) {
       assert(app->marker == 0xFFE1);
       uint32_t len = 8;
-      ExifTag* tag;
 
       exif_put_long(IFD0, IFD0_TAG_GPS_IFD_OFFS, 0, 0);
       exif_put_value(GPS_IFD, GPS_IFD_TAG_VERSION, EXIF_TYPE_BYTE, 4, 0, writer_gps_tag_version);
@@ -1393,15 +1401,38 @@ exif_write_apps()
 
       len += 4; /* DWORD(0) after last ifd */
 
-      bool jpeg_info_valid = false;
-      uint32_t jpeg_info_original_offset;
-      uint32_t jpeg_info_original_size;
-      if ((tag = exif_find_tag(app, IFD1, IFD1_TAG_JPEG_OFFS))) {
-        jpeg_info_original_offset = tag->toLong();
+      // gather offsets and sizes of thumbnail image data to relocate.
+      // update offsets to point to relocated data.
+      ExifTag* tag_offset;
+      ExifTag* tag_size;
+      QVector<QPair<uint32_t, uint32_t>> image_data;
+      if ((tag_offset = exif_find_tag(app, IFD1, IFD1_TAG_JPEG_OFFS))) {
+        // IFD1_TAG_COMPRESSION should be 6 indicating JPEG compressed image data.
+        tag_size = exif_find_tag(app, IFD1, IFD1_TAG_JPEG_SIZE);
+        if (tag_size == nullptr) {
+          fatal(MYNAME ": Invalid image file, in IFD1 both JPEGInterchangeFormat and JPEGInterchangeFormatLength must exist for compressed thumbnails.");
+        }
+        uint32_t offset = tag_offset->data.at(0).value<uint32_t>();
+        uint32_t size = tag_size->data.at(0).value<uint32_t>();
+        image_data.append(QPair<uint32_t, uint32_t>(offset, size));
         exif_put_long(IFD1, IFD1_TAG_JPEG_OFFS, 0, len);
-        if ((tag = exif_find_tag(app, IFD1, IFD1_TAG_JPEG_SIZE))) {
-          jpeg_info_original_size = tag->toLong();
-          jpeg_info_valid = true;
+        len += size;
+      } else if ((tag_offset = exif_find_tag(app, IFD1, IFD1_TAG_STRIP_OFFS))) {
+        // IFD1_TAG_COMPRESSION should be 1 indicating uncompressed image data.
+        tag_size = exif_find_tag(app, IFD1, IFD1_TAG_STRIP_BYTE_COUNTS);
+        if ((tag_size == nullptr) || (tag_size->count != tag_offset->count)) {
+          fatal(MYNAME ": Invalid image file, in IFD1 both StripOffsets and StripByteCounts must exist and have equal counts for uncompressed thumbnails.");
+        }
+        for (unsigned idx = 0; idx < tag_offset->count; idx++) {
+          uint32_t offset = tag_offset->data.at(idx).value<uint32_t>();
+          uint32_t size = tag_size->data.at(idx).value<uint32_t>();
+          image_data.append(QPair<uint32_t, uint32_t>(offset, size));
+          if (tag_offset->type == EXIF_TYPE_SHORT) {
+            exif_put_short(IFD1, IFD1_TAG_STRIP_OFFS, idx, len);
+          } else {
+            exif_put_long(IFD1, IFD1_TAG_STRIP_OFFS, idx, len);
+          }
+          len += size;
         }
       }
 
@@ -1427,9 +1458,10 @@ exif_write_apps()
 
       gbfputuint32(0, ftmp); /* DWORD(0) after last ifd */
 
-      if (jpeg_info_valid) {
-        gbfseek(app->fexif, jpeg_info_original_offset, SEEK_SET);
-        gbfcopyfrom(ftmp, app->fexif, jpeg_info_original_size);
+      // relocate thumbnail image data.
+      for (int idx = 0; idx < image_data.size(); ++idx) {
+        gbfseek(app->fexif, image_data.at(idx).first, SEEK_SET);
+        gbfcopyfrom(ftmp, app->fexif, image_data.at(idx).second);
       }
 
       len = gbftell(ftmp);
