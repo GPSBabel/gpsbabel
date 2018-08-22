@@ -875,10 +875,10 @@ exif_waypt_from_exif_app(ExifApp* app)
     warning(MYNAME ": GPSLongitudeRef not set! Using E(ast).\n");
   }
 
-#ifdef EXIF_DBG
-  printf(MYNAME "-GPSLatitude =  %12.7f\n", wpt->latitude);
-  printf(MYNAME "-GPSLongitude = %12.7f\n", wpt->longitude);
-#endif
+  if (global_opts.debug_level >= 3) {
+    printf(MYNAME "-GPSLatitude =  %12.7f\n", wpt->latitude);
+    printf(MYNAME "-GPSLongitude = %12.7f\n", wpt->longitude);
+  }
   if (datum) {
     int idatum = gt_lookup_datum_index(datum, MYNAME);
     if (idatum < 0) {
@@ -908,9 +908,9 @@ exif_waypt_from_exif_app(ExifApp* app)
       sign = 1.0;
     }
     wpt->altitude = sign * alt;
-#ifdef EXIF_DBG
-    printf(MYNAME "-GPSAltitude =  %12.7f m\n", wpt->altitude);
-#endif
+    if (global_opts.debug_level >= 3) {
+      printf(MYNAME "-GPSAltitude =  %12.7f m\n", wpt->altitude);
+    }
   }
 
   if WAYPT_HAS(wpt, speed) {
@@ -929,11 +929,11 @@ exif_waypt_from_exif_app(ExifApp* app)
       WAYPT_UNSET(wpt, speed);
       warning(MYNAME ": Unknown GPSSpeedRef unit %c (0x%02x)!\n", speed_ref, speed_ref);
     }
-#ifdef EXIF_DBG
-    if WAYPT_HAS(wpt, speed) {
-      printf(MYNAME "-GPSSpeed = %12.2f m/s\n", wpt->speed);
+    if (global_opts.debug_level >= 3) {
+      if WAYPT_HAS(wpt, speed) {
+        printf(MYNAME "-GPSSpeed = %12.2f m/s\n", wpt->speed);
+      }
     }
-#endif
   }
 
   if (mode == '2') {
@@ -1582,12 +1582,7 @@ exif_write()
       exif_remove_tag(GPS_IFD, GPS_IFD_TAG_ALT);
       exif_remove_tag(GPS_IFD, GPS_IFD_TAG_ALTREF);
     } else {
-      uint8_t alt_ref;
-      if (wpt->altitude >= 0.0) {
-        alt_ref = 0;
-      } else {
-        alt_ref = 1;
-      }
+      uint8_t alt_ref = (wpt->altitude >= 0.0) ? 0 : 1;
       exif_put_value(GPS_IFD, GPS_IFD_TAG_ALTREF, EXIF_TYPE_BYTE, 1, 0, &alt_ref);
       exif_put_double(GPS_IFD, GPS_IFD_TAG_ALT, 0, fabs(wpt->altitude));
     }
