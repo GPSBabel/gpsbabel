@@ -537,7 +537,7 @@ unicsv_fondle_header(QString s)
     cbuf = buf;
   }
 
-  while ((s = csv_lineparse(cbuf, unicsv_fieldsep, "\"", 0)) , !s.isEmpty()) {
+  while ((s = csv_lineparse(cbuf, unicsv_fieldsep, "\"", 0)), !s.isEmpty()) {
     s = s.trimmed();
 
     field_t* f = &fields_def[0];
@@ -631,8 +631,8 @@ unicsv_parse_one_line(char* ibuf)
   char utm_zc = 'N';
   // Zones are always two bytes.  Spare one for null termination..
   char bng_zone[3] = "";
-  double bng_easting = 0;
-  double bng_northing = 0;
+  double bng_easting = unicsv_unknown;
+  double bng_northing = unicsv_unknown;
   double swiss_easting = unicsv_unknown;
   double swiss_northing = unicsv_unknown;
   int checked = 0;
@@ -1166,12 +1166,30 @@ unicsv_parse_one_line(char* ibuf)
     if (utm_zone != -9999) {
       GPS_Math_UTM_EN_To_Known_Datum(&wpt->latitude, &wpt->longitude,
                                      utm_easting, utm_northing, utm_zone, utm_zc, unicsv_datum_idx);
-    } else if (bng_zone[0]) {
-      if (! GPS_Math_UKOSMap_To_WGS84_M(
-            bng_zone, bng_easting, bng_northing,
-            &wpt->latitude, &wpt->longitude))
-        fatal(MYNAME ": Unable to convert BNG coordinates (%s %.f %.f)!\n",
-              bng_zone, bng_easting, bng_northing);
+    } else if ((bng_easting != unicsv_unknown) && (bng_northing != unicsv_unknown)) {
+      if (bng_zone[0] == '\0') { // OS easting northing
+        // Grid references may also be quoted as a pair of numbers: eastings then northings in metres, measured from the southwest corner of the SV square.
+        double bnge;
+        double bngn;
+        char bngz[3];
+        if (! GPS_Math_EN_To_UKOSNG_Map(
+              bng_easting, bng_northing,
+              &bnge, &bngn, bngz)) {
+          fatal(MYNAME ": Unable to convert BNG coordinates (%.f %.f)!\n",
+                bng_easting, bng_northing);
+        }
+        if (! GPS_Math_UKOSMap_To_WGS84_M(
+              bngz, bnge, bngn,
+              &wpt->latitude, &wpt->longitude))
+          fatal(MYNAME ": Unable to convert BNG coordinates (%s %.f %.f)!\n",
+                bngz, bnge, bngn);
+      } else { // traditional zone easting northing
+        if (! GPS_Math_UKOSMap_To_WGS84_M(
+              bng_zone, bng_easting, bng_northing,
+              &wpt->latitude, &wpt->longitude))
+          fatal(MYNAME ": Unable to convert BNG coordinates (%s %.f %.f)!\n",
+                bng_zone, bng_easting, bng_northing);
+      }
       src_datum = DATUM_WGS84;	/* don't convert afterwards */
     } else if ((swiss_easting != unicsv_unknown) && (swiss_northing != unicsv_unknown)) {
       GPS_Math_Swiss_EN_To_WGS84(swiss_easting, swiss_northing,
@@ -1875,10 +1893,11 @@ unicsv_wr_deinit()
 // 'win' which can result in no data silently being displayed.
 
 static void
-unicsv_check_modes(bool test) {
+unicsv_check_modes(bool test)
+{
   if (test) {
     Fatal() << MYNAME <<
-      " : Invalid combination of -w, -t, -r selected. Use only one.";
+            " : Invalid combination of -w, -t, -r selected. Use only one.";
   }
 }
 
@@ -1889,15 +1908,15 @@ unicsv_wr()
   switch (global_opts.objective) {
   case wptdata:
   case unknown_gpsdata:
-    unicsv_check_modes (doing_rtes || doing_trks);
+    unicsv_check_modes(doing_rtes || doing_trks);
     waypt_disp_all(unicsv_waypt_enum_cb);
     break;
   case trkdata:
-    unicsv_check_modes (doing_rtes);
+    unicsv_check_modes(doing_rtes);
     track_disp_all(nullptr, nullptr, unicsv_waypt_enum_cb);
     break;
   case rtedata:
-    unicsv_check_modes (doing_trks);
+    unicsv_check_modes(doing_trks);
     route_disp_all(nullptr, nullptr, unicsv_waypt_enum_cb);
     break;
   case posndata:
