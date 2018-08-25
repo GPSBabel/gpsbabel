@@ -55,13 +55,13 @@
 #include <QtCore/QtGlobal>         // for qPrintable
 #include <algorithm>               // for sort, min
 #include <cassert>                 // for assert
+#include <cctype>                  // for isprint, isspace
 #include <cfloat>                  // for DBL_EPSILON
 #include <cmath>                   // for fabs, modf, copysign, round, fmax
 #include <cstdint>                 // for int32_t, int16_t, uint16_t, uint32_t, uint8_t, INT32_MAX
 #include <cstdio>                  // for printf, snprintf, SEEK_SET, SEEK_CUR
 #include <cstdlib>                 // for labs, atoi
 #include <cstring>                 // for strrchr, memcmp, strchr, strlen
-#include <ctype.h>                 // for isprint, isspace
 
 #define MYNAME "exif"
 
@@ -1459,9 +1459,9 @@ exif_write_apps()
       gbfputuint32(0, ftmp); /* DWORD(0) after last ifd */
 
       // relocate thumbnail image data.
-      for (int idx = 0; idx < image_data.size(); ++idx) {
-        gbfseek(app->fexif, image_data.at(idx).first, SEEK_SET);
-        gbfcopyfrom(ftmp, app->fexif, image_data.at(idx).second);
+      for (const auto& segment : image_data) {
+        gbfseek(app->fexif, segment.first, SEEK_SET);
+        gbfcopyfrom(ftmp, app->fexif, segment.second);
       }
 
       len = gbftell(ftmp);
