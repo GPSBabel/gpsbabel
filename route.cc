@@ -520,7 +520,7 @@ tracks_to_routes()
  * If trkdatap is non-null upon entry, a pointer to an allocated collection
  * (hopefully interesting) statistics about the track will be placed there.
  */
-void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
+computed_trkdata track_recompute(const route_head* trk)
 {
   Waypoint first;
   Waypoint* prev = &first;
@@ -530,18 +530,11 @@ void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
   double tot_hrt = 0.0;
   int pts_cad = 0;
   double tot_cad = 0.0;
-  computed_trkdata* tdata = (computed_trkdata*)xcalloc(1, sizeof(computed_trkdata));
-
-  if (trkdatap) {
-    *trkdatap = tdata;
-  }
+  computed_trkdata tdata;
 
 //  first.latitude = 0;
 //  first.longitude = 0;
 //  first.creation_time = 0;
-  tdata->min_hrt =  9999;
-  tdata->min_alt = -unknown_alt;
-  tdata->max_alt =  unknown_alt;
 
   QUEUE_FOR_EACH((queue*)&trk->waypoint_list, elem, tmp) {
     Waypoint* thisw = reinterpret_cast<Waypoint *>(elem);
@@ -561,7 +554,7 @@ void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
      * Avoid that 6300 mile jump as we move from 0,0.
      */
     if (plat && plon) {
-      tdata->distance_meters += dist;
+      tdata.distance_meters += dist;
     }
 
     /*
@@ -580,73 +573,72 @@ void track_recompute(const route_head* trk, computed_trkdata** trkdatap)
       }
     }
     if (WAYPT_HAS(thisw, speed)) {
-      if (thisw->speed > tdata->max_spd) {
-        tdata->max_spd = thisw->speed;
+      if ((!tdata.min_spd) || (thisw->speed < tdata.min_spd)) {
+        tdata.min_spd = thisw->speed;
       }
-      if (thisw->speed < tdata->min_spd) {
-        tdata->min_spd = thisw->speed;
+      if ((!tdata.max_spd) || (thisw->speed > tdata.max_spd)) {
+        tdata.max_spd = thisw->speed;
       }
     }
 
     if (thisw->altitude != unknown_alt) {
-      if (thisw->altitude < tdata->min_alt) {
-        tdata->min_alt = thisw->altitude;
+      if ((!tdata.min_alt) || (thisw->altitude < tdata.min_alt)) {
+        tdata.min_alt = thisw->altitude;
       }
-      if (thisw->altitude > tdata->max_alt) {
-        tdata->max_alt = thisw->altitude;
+      if ((!tdata.max_alt) || (thisw->altitude > tdata.max_alt)) {
+        tdata.max_alt = thisw->altitude;
       }
     }
 
     if (thisw->heartrate > 0) {
       pts_hrt++;
-      tot_hrt += (float) thisw->heartrate;
+      tot_hrt += thisw->heartrate;
     }
 
-    if ((thisw->heartrate > 0) && (thisw->heartrate < tdata->min_hrt)) {
-      tdata->min_hrt = (int) thisw->heartrate;
-    }
-
-    if ((thisw->heartrate > 0) && (thisw->heartrate > tdata->max_hrt)) {
-      tdata->max_hrt = (int) thisw->heartrate;
+    if (thisw->heartrate > 0) {
+      if ((!tdata.min_hrt) || (thisw->heartrate < tdata.min_hrt)) {
+        tdata.min_hrt = thisw->heartrate;
+      }
+      if ((!tdata.max_hrt) || (thisw->heartrate > tdata.max_hrt)) {
+        tdata.max_hrt = thisw->heartrate;
+      }
     }
 
     if (thisw->cadence > 0) {
       pts_cad++;
-      tot_cad += (float) thisw->cadence;
+      tot_cad += thisw->cadence;
     }
 
-    if ((thisw->cadence > 0) && (thisw->cadence > tdata->max_cad)) {
-      tdata->max_cad = (int) thisw->cadence;
+    if ((thisw->cadence > 0) && ((!tdata.max_cad) || (thisw->cadence > tdata.max_cad))) {
+      tdata.max_cad = thisw->cadence;
     }
 
-    if (thisw->GetCreationTime().isValid() && (thisw->GetCreationTime().toTime_t() < tdata->start)) {
-      tdata->start = thisw->GetCreationTime().toTime_t();
-    }
+    if (thisw->GetCreationTime().isValid()) {
+      if (!tdata.start.isValid() || (thisw->GetCreationTime() < tdata.start)) {
+        tdata.start = thisw->GetCreationTime();
+      }
 
-    if (thisw->creation_time.toTime_t() > tdata->end) {
-      tdata->end = thisw->GetCreationTime().toTime_t();
-      if (tdata->start == 0) {
-        tdata->start = tdata->end;
+      if (!tdata.end.isValid() || (thisw->GetCreationTime() > tdata.end)) {
+        tdata.end = thisw->GetCreationTime();
       }
     }
-    prev = thisw;
+
     if (thisw->shortname.isEmpty()) {
       thisw->shortname = QString("%1-%2").arg(trk->rte_name).arg(tkpt);
     }
     tkpt++;
+    prev = thisw;
   }
 
   if (pts_hrt > 0) {
-    tdata->avg_hrt = tot_hrt / (float) pts_hrt;
+    tdata.avg_hrt = tot_hrt / pts_hrt;
   }
 
   if (pts_cad > 0) {
-    tdata->avg_cad = tot_cad / (float) pts_cad;
+    tdata.avg_cad = tot_cad / pts_cad;
   }
 
-  if (!trkdatap) {
-    xfree(tdata);
-  }
+  return tdata;
 }
 
 route_head::route_head() :
