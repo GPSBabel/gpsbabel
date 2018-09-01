@@ -734,22 +734,14 @@ void kml_td(gpsbabel::XmlStreamWriter& hwriter, const QString& data)
  * Output the track summary.
  */
 static
-void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
+void kml_output_trkdescription(const route_head* header, const computed_trkdata* td)
 {
-  const char* max_alt_units;
-  const char* min_alt_units;
-  const char* distance_units;
-
   if (!td || !trackdata) {
     return;
   }
 
   QString hstring;
   gpsbabel::XmlStreamWriter hwriter(&hstring);
-
-  double max_alt = fmt_altitude(td->max_alt, &max_alt_units);
-  double min_alt = fmt_altitude(td->min_alt, &min_alt_units);
-  double distance = fmt_distance(td->distance_meters, &distance_units);
 
   writer->writeEmptyElement(QStringLiteral("snippet"));
 
@@ -759,55 +751,55 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   if (!header->rte_desc.isEmpty()) {
     kml_td(hwriter, QStringLiteral("Description"), QStringLiteral(" %1 ").arg(header->rte_desc));
   }
+  const char* distance_units;
+  double distance = fmt_distance(td->distance_meters, &distance_units);
   kml_td(hwriter, QStringLiteral("Distance"), QStringLiteral(" %1 %2 ").arg(QString::number(distance, 'f', 1)).arg(distance_units));
-  if (td->min_alt != -unknown_alt) {
+  if (td->min_alt) {
+    const char* min_alt_units;
+    double min_alt = fmt_altitude(*td->min_alt, &min_alt_units);
     kml_td(hwriter, QStringLiteral("Min Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(min_alt, 'f', 3)).arg(min_alt_units));
   }
-  if (td->max_alt != unknown_alt) {
+  if (td->max_alt) {
+    const char* max_alt_units;
+    double max_alt = fmt_altitude(*td->max_alt, &max_alt_units);
     kml_td(hwriter, QStringLiteral("Max Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(max_alt, 'f', 3)).arg(max_alt_units));
   }
   if (td->min_spd) {
     const char* spd_units;
-    double spd = fmt_speed(td->min_spd, &spd_units);
+    double spd = fmt_speed(*td->min_spd, &spd_units);
     kml_td(hwriter, QStringLiteral("Min Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
   }
   if (td->max_spd) {
     const char* spd_units;
-    double spd = fmt_speed(td->max_spd, &spd_units);
+    double spd = fmt_speed(*td->max_spd, &spd_units);
     kml_td(hwriter, QStringLiteral("Max Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
   }
-  if (td->max_spd && td->start && td->end) {
+  if (td->max_spd && td->start.isValid() && td->end.isValid()) {
     const char* spd_units;
-    time_t elapsed = td->end - td->start;
+    double elapsed = td->start.msecsTo(td->end)/1000.0;
     double spd = fmt_speed(td->distance_meters / elapsed, &spd_units);
     if (spd > 1.0)  {
       kml_td(hwriter, QStringLiteral("Avg Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
     }
   }
   if (td->avg_hrt) {
-    kml_td(hwriter, QStringLiteral("Avg Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(td->avg_hrt, 'f', 1)));
+    kml_td(hwriter, QStringLiteral("Avg Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->avg_hrt, 'f', 1)));
   }
-  if (td->min_hrt < td->max_hrt) {
-    kml_td(hwriter, QStringLiteral("Min Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(td->min_hrt)));
+  if (td->min_hrt) {
+    kml_td(hwriter, QStringLiteral("Min Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->min_hrt)));
   }
   if (td->max_hrt) {
-    kml_td(hwriter, QStringLiteral("Max Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(td->max_hrt)));
+    kml_td(hwriter, QStringLiteral("Max Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->max_hrt)));
   }
   if (td->avg_cad) {
-    kml_td(hwriter, QStringLiteral("Avg Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(td->avg_cad, 'f', 1)));
+    kml_td(hwriter, QStringLiteral("Avg Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(*td->avg_cad, 'f', 1)));
   }
   if (td->max_cad) {
-    kml_td(hwriter, QStringLiteral("Max Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(td->max_cad)));
+    kml_td(hwriter, QStringLiteral("Max Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(*td->max_cad)));
   }
-  if (td->start && td->end) {
-    gpsbabel::DateTime t = QDateTime::fromTime_t(td->start);
-    if (t.isValid()) {
-      kml_td(hwriter, QStringLiteral("Start Time"), t.toPrettyString());
-    }
-    t = QDateTime::fromTime_t(td->end);
-    if (t.isValid()) {
-      kml_td(hwriter, QStringLiteral("End Time"), t.toPrettyString());
-    }
+  if (td->start.isValid() && td->end.isValid()) {
+    kml_td(hwriter, QStringLiteral("Start Time"), td->start.toPrettyString());
+    kml_td(hwriter, QStringLiteral("End Time"), td->end.toPrettyString());
   }
 
   hwriter.writeCharacters(QStringLiteral("\n"));
@@ -819,21 +811,17 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   writer->writeEndElement(); // Close description tag
 
   /* We won't always have times. Garmin saved tracks, for example... */
-  if (td->start && td->end) {
+  if (td->start.isValid() && td->end.isValid()) {
     writer->writeStartElement(QStringLiteral("TimeSpan"));
-
-    gpsbabel::DateTime t = QDateTime::fromTime_t(td->start);
-    writer->writeTextElement(QStringLiteral("begin"), t.toPrettyString());
-    t = QDateTime::fromTime_t(td->end);
-    writer->writeTextElement(QStringLiteral("end"), t.toPrettyString());
-
+    writer->writeTextElement(QStringLiteral("begin"), td->start.toPrettyString());
+    writer->writeTextElement(QStringLiteral("end"), td->end.toPrettyString());
     writer->writeEndElement(); // Close TimeSpan tag
   }
 }
 
 
 static
-void kml_output_header(const route_head* header, computed_trkdata* td)
+void kml_output_header(const route_head* header, const computed_trkdata* td)
 {
   if (!realtime_positioning)  {
     writer->writeStartElement(QStringLiteral("Folder"));
@@ -1652,12 +1640,10 @@ static void kml_waypt_pr(const Waypoint* waypointp)
 
 static void kml_track_hdr(const route_head* header)
 {
-  computed_trkdata* td;
-  track_recompute(header, &td);
+  computed_trkdata td = track_recompute(header);
   if (header->rte_waypt_ct > 0 && (export_lines || export_points)) {
-    kml_output_header(header, td);
+    kml_output_header(header, &td);
   }
-  xfree(td);
 }
 
 static void kml_track_disp(const Waypoint* waypointp)

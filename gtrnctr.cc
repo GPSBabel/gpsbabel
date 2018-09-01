@@ -35,7 +35,6 @@ static int lap_ct = 0;
 static int lap_s = 0;
 static Waypoint* wpt_tmp;
 static route_head* trk_head;
-static computed_trkdata* tdata;
 
 #define MYNAME "gtc"
 
@@ -255,10 +254,10 @@ gtc_lap_start(const route_head*)
   gtc_most_time = gpsbabel::DateTime();
 }
 
-static void
+static computed_trkdata
 gtc_new_study_lap(const route_head* rte)
 {
-  track_recompute(rte, &tdata);  /* called routine allocates space for tdata */
+  return track_recompute(rte);
 }
 
 static void
@@ -339,7 +338,7 @@ gtc_waypt_pr(const Waypoint* wpt)
 }
 
 static void
-gtc_fake_hdr()
+gtc_fake_hdr(const computed_trkdata& tdata)
 {
   /* handle the CourseLap_t or the ActivityLap_t types. */
   /* note that the elements must appear in the order required by the schema. */
@@ -352,7 +351,7 @@ gtc_fake_hdr()
 
   /* write these in either case, course or activity format */
   gtc_write_xml(0, "<TotalTimeSeconds>%d</TotalTimeSeconds>\n", secs);
-  gtc_write_xml(0, "<DistanceMeters>%.2f</DistanceMeters>\n", tdata->distance_meters);
+  gtc_write_xml(0, "<DistanceMeters>%.2f</DistanceMeters>\n", tdata.distance_meters);
   if (gtc_course_flag) { /* course format */
     gtc_write_xml(1, "<BeginPosition>\n");
     gtc_write_xml(0, "<LatitudeDegrees>%lf</LatitudeDegrees>\n", gtc_start_lat);
@@ -364,24 +363,24 @@ gtc_fake_hdr()
     gtc_write_xml(-1,"</EndPosition>\n");
 
   } else {  /* activity (history) format */
-    if (tdata->max_spd) {
-      gtc_write_xml(0, "<MaximumSpeed>%.3f</MaximumSpeed>\n", tdata->max_spd);
+    if (tdata.max_spd) {
+      gtc_write_xml(0, "<MaximumSpeed>%.3f</MaximumSpeed>\n", *tdata.max_spd);
     }
     gtc_write_xml(0, "<Calories>0</Calories>\n"); /* element is required */
   }
-  if (tdata->avg_hrt) {
+  if (tdata.avg_hrt) {
     gtc_write_xml(1, "<AverageHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0, "<Value>%d</Value>\n", (int)(tdata->avg_hrt + 0.5));
+    gtc_write_xml(0, "<Value>%d</Value>\n", (int)(*tdata.avg_hrt + 0.5));
     gtc_write_xml(-1,"</AverageHeartRateBpm>\n");
   }
-  if (tdata->max_hrt) {
+  if (tdata.max_hrt) {
     gtc_write_xml(1, "<MaximumHeartRateBpm xsi:type=\"HeartRateInBeatsPerMinute_t\">\n");
-    gtc_write_xml(0, "<Value>%d</Value>\n", (int)(tdata->max_hrt + 0.5));
+    gtc_write_xml(0, "<Value>%d</Value>\n", *tdata.max_hrt);
     gtc_write_xml(-1,"</MaximumHeartRateBpm>\n");
   }
   gtc_write_xml(0, "<Intensity>Active</Intensity>\n");
-  if (tdata->avg_cad) {
-    gtc_write_xml(0, "<Cadence>%d</Cadence>\n", tdata->avg_cad);
+  if (tdata.avg_cad) {
+    gtc_write_xml(0, "<Cadence>%d</Cadence>\n", (int)(*tdata.avg_cad + 0.5));
   }
 
   if (!gtc_course_flag) { /* activity (history) format */
@@ -395,7 +394,7 @@ gtc_act_hdr(const route_head* rte)
 {
   gtc_write_xml(1, "<Activity Sport=\"%s\">\n", gtc_sportlist[gtc_sport]);
   gtc_lap_start(nullptr);
-  gtc_new_study_lap(rte);
+  computed_trkdata tdata = gtc_new_study_lap(rte);
   route_disp(rte, gtc_study_lap);
   if (gtc_least_time.isValid()) {
     gtc_write_xml(0, "<Id>%s</Id>\n",
@@ -405,8 +404,7 @@ gtc_act_hdr(const route_head* rte)
   } else {
     gtc_write_xml(1, "<Lap>\n");
   }
-  gtc_fake_hdr();
-  xfree(tdata);
+  gtc_fake_hdr(tdata);
   gtc_write_xml(1,"<Track>\n");
 }
 
@@ -424,7 +422,7 @@ gtc_crs_hdr(const route_head* rte)
 
   gtc_write_xml(1, "<Course>\n");
   gtc_lap_start(nullptr);
-  gtc_new_study_lap(rte);
+  computed_trkdata tdata = gtc_new_study_lap(rte);
   route_disp(rte, gtc_study_lap);
 
   if (!rte->rte_name.isEmpty()) {
@@ -435,9 +433,8 @@ gtc_crs_hdr(const route_head* rte)
   }
   /* write_optional_xml_entity(ofd, "      ", "Name", rte->rte_name); */
   gtc_write_xml(1, "<Lap>\n");
-  gtc_fake_hdr();
+  gtc_fake_hdr(tdata);
   gtc_write_xml(-1, "</Lap>\n");
-  xfree(tdata);
   gtc_write_xml(1,"<Track>\n");
 }
 

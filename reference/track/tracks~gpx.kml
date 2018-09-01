@@ -784,15 +784,16 @@
 <tr><td><b>Distance</b> 7.7 km </td></tr>
 <tr><td><b>Min Alt</b> 0.000 meters </td></tr>
 <tr><td><b>Max Alt</b> 7.000 meters </td></tr>
+<tr><td><b>Min Speed</b> 361.3 meters/hour </td></tr>
 <tr><td><b>Max Speed</b> 41.1 km/hour </td></tr>
 <tr><td><b>Avg Speed</b> 3.8 km/hour </td></tr>
-<tr><td><b>Start Time</b>2002-05-25T17:06:21Z</td></tr>
-<tr><td><b>End Time</b>2002-05-25T19:05:57Z</td></tr>
+<tr><td><b>Start Time</b>2002-05-25T17:06:21.250Z</td></tr>
+<tr><td><b>End Time</b>2002-05-25T19:05:57.980Z</td></tr>
 </table>]]>
 </description>
         <TimeSpan>
-          <begin>2002-05-25T17:06:21Z</begin>
-          <end>2002-05-25T19:05:57Z</end>
+          <begin>2002-05-25T17:06:21.250Z</begin>
+          <end>2002-05-25T19:05:57.980Z</end>
         </TimeSpan>
         <Folder>
           <name>Points</name>
