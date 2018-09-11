@@ -307,6 +307,20 @@ vecs_t vec_list[] = {
     nullptr,
   },
   {
+    &lowranceusr4_vecs,
+    "lowranceusr5",
+    "Lowrance USR version 5",
+    "usr",
+    nullptr,
+  },
+  {
+    &lowranceusr4_vecs,
+    "lowranceusr6",
+    "Lowrance USR version 6",
+    "usr",
+    nullptr,
+  },
+  {
     &holux_vecs,
     "holux",
     "Holux (gm-100) .wpo Format",
