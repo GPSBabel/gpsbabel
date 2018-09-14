@@ -4,6 +4,7 @@ This is the source code for [GPSBabel](https://www.gpsbabel.org), the free softw
 # Welcome newbie open source contributors!
 
 We have a [GPSBabel contributor guide](https://github.com/gpsbabel/gpsbabel/blob/master/README.contrib).
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/8f55bf8b8f454b4a9b1116c9268e26c6)](https://app.codacy.com/app/gpsbabel/gpsbabel?utm_source=github.com&utm_medium=referral&utm_content=gpsbabel/gpsbabel&utm_campaign=Badge_Grade_Settings)
 [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 </br> 
 Current status of the trunk build is [![Build Status](https://travis-ci.org/gpsbabel/gpsbabel.svg?branch=master)]. Passing is good. We like passing. </br>
