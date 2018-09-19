@@ -1,5 +1,5 @@
 /*
-	Access to Lowrance USR version 4 files.
+	Access to Lowrance USR version 4/5/6 files.
 	Contributed to gpsbabel by Kris Beevers (beevek at gmail.com)
 
 	Copyright (C) 2011 Robert Lipe, robertlipe+source@gpsbabel.org
@@ -22,6 +22,43 @@
 
 	01/06/2012 - Kris Beevers (beevek at gmail.com)
 	- First pass read-write support
+        09/12/2018 - BJ Kowalski (bj dot kowalski at gmail.com)
+        - Correct USR 4 decode
+        - Added initial support for USR 5 and USR 6 formats
+
+        USRv3 supported trails with a maximum of 10,000 track-points.
+        USRv4 and above support a maximum of 20,000 track-points(actually 24K and change).
+        USRv4 and above & GPX support trails with track-segments.  
+        USRv6 supports trail characteristics speed & temperature.
+
+        USR Data File Description from Lowrance Manual
+        ----------------------------------------------
+          User Data File version 6 - USRv6
+            This is used to import and export waypoints, routes and colored Trails.
+
+          User Data File version 5 - USRv5
+            This is used to import and export waypoints and routes with a
+            standardized universally unique identifier (UUID), which is very
+            reliable and easy to use. The data includes such information as
+            the time and date when a route was created, and so on.
+
+          User Data File version 4 - USRv4
+            This is best used when transferring data from one system to
+            another, since it contains all the extra bits of information these
+            systems store about items.
+
+          User Data File version 3 - USRv3 (w/depth)
+            Should be used when transferring user data from one system to
+            a legacy product (Lowrance LMS, LCX, and so on.)
+
+          User Data File version 2 - USRv2 (no depth)
+            Can be used when transferring user data from one system to a
+            legacy product (Lowrance LMS, LCX, and so on.)
+
+          GPX (GPS Exchange, no depth)
+            This is the format most used on the web that shares among
+            most GPS systems in the world. Use this format if you are taking
+            data to a competitors unit. 
 */
 
 
@@ -45,7 +82,6 @@ static short_handle mkshort_handle;
 
 static route_head* trk_head;
 static route_head* rte_head;
-static int reading_version;
 
 static int waypt_uid;
 static int route_uid;
@@ -61,16 +97,24 @@ static char* opt_content_descr;
 
 #define MYNAME "Lowrance USR4"
 
-#define MAXUSRSTRINGSIZE	256
-#define SEMIMINOR		   6356752.3142
-#define DEGREESTORADIANS	0.017453292
+#define MAXUSRSTRINGSIZE   256
+#define SEMIMINOR          6356752.3142
+#define DEGREESTORADIANS   0.01745329252
 
 
 typedef struct {
   format_specific_data fs;
   int uid_unit;
+  int uid_unit2;
   int uid_seq_low;
   int uid_seq_high;
+  uint UUID1;
+  uint UUID2;
+  uint UUID3;
+  uint UUID4;
+  int  flags;
+  int  color;
+  int  icon_num;
 } lowranceusr4_fsdata;
 
 
@@ -335,12 +379,48 @@ lowranceusr4_find_waypt_index(const Waypoint* wpt)
   return waypt_table_ct+1; /* should never happen */
 }
 
+/* read/parse waypoint, with fields as follows (taken mostly
+   from http://lowranceusrv4togpxconverter.blogspot.com/):
 
+     UUID 1 value                - uint32   *** UNIQUE to USR 5/6 ***
+     UUID 2 value                - uint32   *** UNIQUE to USR 5/6 ***
+     UUID 3 value                - uint32   *** UNIQUE to USR 5/6 ***
+     UUID 4 value                - uint32   *** UNIQUE to USR 5/6 ***
+     UID unit number             - uint32
+     UID sequence number         - int64
+     Waypt stream version number - uint16
+     Waypt name length (bytes)   - uint32
+     Waypoint name               - utf-16 string w/above length (w->shortname)
+     Unit Number                 - uint32   *** UNIQUE to USR 5/6 ***
+     Longitude (mercator meters) - int32 (w->longitude)
+     Latitude (mercator meters)  - int32 (w->latitude)
+     Flags                       - uint32 (0 - Hidden ICON, 1 - Display ICON only, 2 - Display ICON and Name, 5 - Route Point)
+     Icon ID                     - uint16 (to w->icon_descr via conversion)
+     Color ID                    - uint16
+     Description length (bytes)  - uint32
+     Description                 - utf-16 string w/above length (w->description)
+     Alarm radius                - float (w->proximity)
+     Creation date               - uint32 (w->creation_time)
+     Creation time               - uint32 (w->creation_time)
+     Unused                      - uint8
+     Depth (feet)                - float (w->depth)
+                                          Use of Loran based navigation became obsolete Worldwide in 2015 due to adoption of GPS
+     Loran GRI                   - int32  Loran Group Repetition Interval
+     Loran TdA                   - int32  Loran Time Differential A
+     Loran TdB                   - int32  Loran Time Differential B
+ */
 
 static void
-lowranceusr4_parse_waypoints()
+lowranceusr4_parse_waypoints(int USR_version)
 {
-  char buff[MAXUSRSTRINGSIZE + 1];
+  char name_buff[MAXUSRSTRINGSIZE + 1];
+  char desc_buff[MAXUSRSTRINGSIZE + 1];
+  unsigned int waypoint_version;
+/*
+  time_t now;
+  struct tm ts;
+  char   time_buf[32];
+*/
 
   unsigned int num_waypts = gbfgetint32(file_in);
 
@@ -348,35 +428,49 @@ lowranceusr4_parse_waypoints()
     printf(MYNAME " parse_waypoints: Num waypoints %d\n", num_waypts);
   }
 
+  if (global_opts.debug_level == 99) {
+    printf(MYNAME " parse_waypoints: ");
+    if (USR_version > 4) {
+      printf("Universal ID                        ");
+    }
+    printf("              Sequence Number  Stream  Waypoint\n");
+
+    printf(MYNAME " parse_waypoints: ");
+    if (USR_version > 4) {
+      printf("    ID1      ID2      ID3      ID4  ");
+    }
+    printf("Unit Number     Low      High  Version Length Name            ");
+    if (USR_version > 4) {
+      printf(" Unit Number2");
+    }
+    printf(" Longitude    Latitude    Flags    ICON  Color Length Description     ");
+    printf(" Time     Date     Unused   Depth    LoranGRI LoranTda LoranTdb\n");
+
+    printf(MYNAME " parse_waypoints: ");
+    if (USR_version > 4) {
+      printf("-------- -------- -------- -------- ");
+    }
+    printf("----------- -------- -------- -------- ------ ----------------");
+    if (USR_version > 4) {
+      printf(" ------------");
+    }
+    printf(" ------------ ----------- -------- ------ ------ ------ ----------------");
+    printf(" -------- -------- -------- -------- -------- -------- --------\n");
+  }
+
   for (unsigned int i = 0; i < num_waypts; ++i) {
     Waypoint* wpt_tmp = new Waypoint;
     lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
     fs_chain_add(&(wpt_tmp->fs), (format_specific_data*) fsdata);
 
-    /* read/parse waypoint, with fields as follows (taken mostly
-       from http://lowranceusrv4togpxconverter.blogspot.com/):
-
-         UID unit number             - uint32
-         UID sequence number         - int64
-         Waypt stream version number - uint16
-         Waypt name length (bytes)   - uint32
-         Waypoint name               - utf-16 string w/above length (w->shortname)
-         Longitude (mercator meters) - int32 (w->longitude)
-         Latitude (mercator meters)  - int32 (w->latitude)
-         Flags                       - uint32
-         Icon ID                     - uint16 (to w->icon_descr via conversion)
-         Color ID                    - uint16
-         Description length (bytes)  - uint32
-         Description                 - utf-16 string w/above length (w->description)
-         Alarm radius                - float (w->proximity)
-         Creation date               - uint32 (w->creation_time)
-         Creation time               - uint32 (w->creation_time)
-         Unused                      - uint8
-         Depth (feet)                - float (w->depth)
-         Loran GRI                   - int32
-         Loran TdA                   - int32
-         Loran TdB                   - int32
-     */
+    if (USR_version > 4) {
+      /* USR 5 and 6 have four additional data values at the start of each Waypoint */
+      /* These values are used to identify global way points that define routes */
+      fsdata->UUID1 = gbfgetint32(file_in);
+      fsdata->UUID2 = gbfgetint32(file_in);
+      fsdata->UUID3 = gbfgetint32(file_in);
+      fsdata->UUID4 = gbfgetint32(file_in);
+    }
 
     /* UID unit number */
     fsdata->uid_unit = gbfgetint32(file_in);
@@ -385,14 +479,19 @@ lowranceusr4_parse_waypoints()
     fsdata->uid_seq_low = gbfgetint32(file_in);
     fsdata->uid_seq_high = gbfgetint32(file_in);
 
-    /* Waypt stream version number, discard for now */
-    gbfgetint16(file_in);
+    /* Waypt stream version number */
+    waypoint_version = gbfgetint16(file_in);
 
     /* Waypoint name; input is 2 bytes per char, we convert to 1 */
-    int text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
-    if (text_len) {
-      buff[text_len] = '\0';
-      wpt_tmp->shortname = buff;
+    int name_len = lowranceusr4_readstr(&name_buff[0], MAXUSRSTRINGSIZE, file_in, 2);
+    if (name_len) {
+      name_buff[name_len] = '\0';
+      wpt_tmp->shortname = name_buff;
+    }
+
+    if (USR_version > 4) {
+      /* USR 5 and 6 have a second Unit Number captured in Waypoints */
+      fsdata->uid_unit2 = gbfgetint32(file_in);
     }
 
     /* Long/Lat */
@@ -400,25 +499,24 @@ lowranceusr4_parse_waypoints()
     wpt_tmp->latitude = lat_mm_to_deg(gbfgetint32(file_in));
 
     /* Flags, discard for now */
-    gbfgetint32(file_in);
+    fsdata->flags = gbfgetint32(file_in);
 
     /* Icon ID; TODO: need to run this through something like
        lowranceusr_find_desc_from_icon_number to convert to a gpsbabel
        icon description; however it doesn't seem that the icon ids
        used in usr4 match those from usr{2,3} so we need a new
        mapping. */
-    short int icon_num = gbfgetint16(file_in);
-    (void) icon_num; // Hush warning for now.
+    fsdata->icon_num = gbfgetint16(file_in);
     /* wpt_tmp->icon_descr = lowranceusr_find_desc_from_icon_number(icon_num); */
 
     /* Color ID, discard for now */
-    gbfgetint16(file_in);
+    fsdata->color = gbfgetint16(file_in);
 
     /* Waypoint descr; input is 2 bytes per char, we convert to 1 */
-    text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
-    if (text_len) {
-      buff[text_len] = '\0';
-      wpt_tmp->description = buff;
+    int desc_len = lowranceusr4_readstr(&desc_buff[0], MAXUSRSTRINGSIZE, file_in, 2);
+    if (desc_len) {
+      desc_buff[desc_len] = '\0';
+      wpt_tmp->description = desc_buff;
     }
 
     /* Alarm radius; XXX: I'm not sure what the units are here,
@@ -439,22 +537,42 @@ lowranceusr4_parse_waypoints()
     }
 
     /* Unused byte */
-    gbfgetc(file_in);
+    char unused_byte = gbfgetc(file_in);
 
     /* Depth in feet */
-    WAYPT_SET(wpt_tmp, depth, FEET_TO_METERS(gbfgetflt(file_in)));
+    float waypt_depth = FEET_TO_METERS(gbfgetflt(file_in));
+    WAYPT_SET(wpt_tmp, depth, waypt_depth);
 
     /* Loran data, discard for now */
-    gbfgetint32(file_in);
-    gbfgetint32(file_in);
-    gbfgetint32(file_in);
+    int loran_GRI = gbfgetint32(file_in);
+    int loran_Tda = gbfgetint32(file_in);
+    int loran_Tdb = gbfgetint32(file_in);
 
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " parse_waypoints: name = %s, uid_unit = %u, "
+      if (global_opts.debug_level == 99) {
+        printf(MYNAME " parse_waypoints: ");
+        if (USR_version > 4) {
+          printf("%08x %08x %08x %08x ",
+               fsdata->UUID1, fsdata->UUID2, fsdata->UUID3, fsdata->UUID4);
+        }
+        printf(" %8d  %8d %8d %8d %6d %16s",
+               fsdata->uid_unit, fsdata->uid_seq_low, fsdata->uid_seq_high,
+               waypoint_version, name_len, name_buff);
+        if (USR_version > 4) {
+          printf("  %8d  ", fsdata->uid_unit2);
+        }
+        printf(" %.8f %.8f", wpt_tmp->longitude, wpt_tmp->latitude);
+        printf(" %08x %6d %6d", fsdata->flags, fsdata->icon_num, fsdata->color);
+        printf(" %6d %16s", desc_len, desc_buff);
+        printf(" %08x %0x8 %08x %f %08x %08x %08x\n",
+            create_date, create_time, unused_byte, waypt_depth, loran_GRI, loran_Tda, loran_Tdb);
+      } else {
+        printf(MYNAME " parse_waypoints: version = %d, name = %s, uid_unit = %u, "
              "uid_seq_low = %d, uid_seq_high = %d, lat = %f, lon = %f, depth = %f\n",
-             qPrintable(wpt_tmp->shortname), fsdata->uid_unit,
+             waypoint_version, qPrintable(wpt_tmp->shortname), fsdata->uid_unit,
              fsdata->uid_seq_low, fsdata->uid_seq_high,
-             wpt_tmp->latitude, wpt_tmp->longitude, wpt_tmp->depth);
+             wpt_tmp->longitude, wpt_tmp->latitude, wpt_tmp->depth);
+      }
     }
 
     waypt_add(wpt_tmp);
@@ -492,10 +610,70 @@ lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
   return nullptr;
 }
 
+static Waypoint*
+lowranceusr4_find_global_waypt(uint id1, uint id2, uint id3, uint id4)
+{
+#if !NEWQ
+  queue* elem, *tmp;
+#endif
+  lowranceusr4_fsdata* fs = nullptr;
+
+#if NEWQ
+  // Iterate with waypt_disp_all?
+  foreach(Waypoint* waypointp, waypt_list) {
+#else
+  QUEUE_FOR_EACH(&waypt_head, elem, tmp) {
+    Waypoint* waypointp = reinterpret_cast<Waypoint *>(elem);
+#endif
+    fs = (lowranceusr4_fsdata*) fs_chain_find(waypointp->fs, FS_LOWRANCEUSR4);
+
+    if (fs && fs->UUID1 == id1 &&
+        fs->UUID2 == id2 &&
+        fs->UUID3 == id3 &&
+        fs->UUID4 == id4) {
+      return waypointp;
+    }
+  }
+
+  if (global_opts.debug_level >= 1) {
+    printf(MYNAME " lowranceusr4_find_global_waypt: warning, failed finding waypoint with ids %08x %08x %08x %08x\n",
+           id1, id2, id3, id4);
+  }
+  return nullptr;
+}
+
+
+/* Route - with fields as follows (taken mostly
+   from http://lowranceusrv4togpxconverter.blogspot.com/):
+
+     UID unit number             - uint32
+     UID sequence number         - int64
+     Route stream version number - uint16
+     Route name length (bytes)   - uint32
+     Route name                  - utf-16 string w/above length (r->rte_name)
+     Number of waypoints         - uint32 (N)
+     Waypoint list               - sequence of N (uint32, uint64) waypoint UIDs
+
+     USR Version 4 or less, Waypoint list format uses local sequence number
+     UID unit number             - uint32
+     UID sequence number high    - uint32 (used for waypoint matching)
+     UID sequence number low     - uint32 (used for waypoint matching)
+
+     USR Version 5 or greater, Waypoints are identified by Universal IDs
+     UUID ID 1                   - uint32 (used for waypoint matching)
+     UUID ID 2                   - uint32 (used for waypoint matching)
+     UUID ID 3                   - uint32 (used for waypoint matching)
+     UUID ID 4                   - uint32 (used for waypoint matching)
+
+    USR 5 or greater also has some additional unidentified fields at the end of the route data
+ */
+
 static void
-lowranceusr4_parse_routes()
+lowranceusr4_parse_routes(int USR_version)
 {
   char buff[MAXUSRSTRINGSIZE + 1];
+  int route_version;
+  int UUID1, UUID2, UUID3, UUID4;
 
   unsigned int num_routes = gbfgetint32(file_in);
 
@@ -511,27 +689,29 @@ lowranceusr4_parse_routes()
     lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
     fs_chain_add(&(rte_head->fs), (format_specific_data*) fsdata);
 
-    /* read/parse route, with fields as follows (taken mostly
-       from http://lowranceusrv4togpxconverter.blogspot.com/):
-
-         UID unit number             - uint32
-         UID sequence number         - int64
-         Route stream version number - uint16
-         Route name length (bytes)   - uint32
-         Route name                  - utf-16 string w/above length (r->rte_name)
-         Number of waypoints         - uint32 (N)
-         Waypoint list               - sequence of N (uint32, uint64) waypoint UIDs
-     */
+    if (USR_version >= 5) {
+      /* Routes have Universal IDs */
+        UUID1 = gbfgetint32(file_in);
+        UUID2 = gbfgetint32(file_in);
+        UUID3 = gbfgetint32(file_in);
+        UUID4 = gbfgetint32(file_in);
+    }
 
     /* UID unit number */
     fsdata->uid_unit = gbfgetint32(file_in);
+    if (global_opts.debug_level >= 1) {
+      printf(MYNAME " parse_routes: Unit %d (0x%08x)\n", fsdata->uid_unit, fsdata->uid_unit);
+    }
 
     /* 64-bit UID sequence number */
     fsdata->uid_seq_low = gbfgetint32(file_in);
     fsdata->uid_seq_high = gbfgetint32(file_in);
 
-    /* Route stream version number, discard for now */
-    gbfgetint16(file_in);
+    /* Route stream version number */
+    route_version = gbfgetint16(file_in);
+    if (global_opts.debug_level >= 1) {
+      printf(MYNAME " parse_routes: Version = %d\n", route_version);
+    }
 
     /* Route name; input is 2 bytes per char, we convert to 1 */
     unsigned int text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
@@ -540,37 +720,127 @@ lowranceusr4_parse_routes()
       rte_head->rte_name = buff;
     }
 
+    if (USR_version >= 5) {
+      /* USR Version 5 and greater include unit ID in each route */
+      gbfgetint32(file_in);
+    }
+
     unsigned int num_legs = gbfgetint32(file_in);
 
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " parse_routes: route name=%s has %d waypoints\n",
+      if (USR_version >= 5) {
+        printf(MYNAME " parse_routes: route name=%s (UUID %08x %08x %8x %08x) has %d legs\n",
+             qPrintable(rte_head->rte_name), UUID1, UUID2, UUID3, UUID4, num_legs);
+      } else {
+        printf(MYNAME " parse_routes: route name=%s has %d legs\n",
              qPrintable(rte_head->rte_name), num_legs);
-    }
-
-    for (unsigned int j = 0; j < num_legs; ++j) {
-      unsigned int uid_unit = gbfgetint32(file_in);
-      unsigned int uid_seq_low = gbfgetint32(file_in);
-      unsigned int uid_seq_high = gbfgetint32(file_in);
-      Waypoint* wpt_tmp = lowranceusr4_find_waypt(uid_unit, uid_seq_low, uid_seq_high);
-      if (wpt_tmp) {
-        if (global_opts.debug_level >= 2) {
-          printf(MYNAME " parse_routes: added wpt %s to route %s\n",
-                 qPrintable(wpt_tmp->shortname), qPrintable(rte_head->rte_name));
-        }
-        route_add_wpt(rte_head, new Waypoint(*wpt_tmp));
       }
     }
 
+    if (USR_version <= 4) {
+      /* Use UID based sequence numbers for route */
+      for (unsigned int j = 0; j < num_legs; ++j) {
+        unsigned int uid_unit = gbfgetint32(file_in);
+        unsigned int uid_seq_low = gbfgetint32(file_in);
+        unsigned int uid_seq_high = gbfgetint32(file_in);
+        Waypoint* wpt_tmp = lowranceusr4_find_waypt(uid_unit, uid_seq_low, uid_seq_high);
+        if (wpt_tmp) {
+          if (global_opts.debug_level >= 2) {
+            printf(MYNAME " parse_routes: added leg #%d routepoint %s (%f, %f) to route %s\n",
+                   j, qPrintable(wpt_tmp->shortname),
+                   wpt_tmp->longitude, wpt_tmp->latitude, qPrintable(rte_head->rte_name));
+          }
+          route_add_wpt(rte_head, new Waypoint(*wpt_tmp));
+        }
+      }
+    } else {
+      /* Use global sequence number for route */
+      for (unsigned int j = 0; j < num_legs; ++j) {
+        UUID1 = gbfgetint32(file_in);
+        UUID2 = gbfgetint32(file_in);
+        UUID3 = gbfgetint32(file_in);
+        UUID4 = gbfgetint32(file_in);
+        Waypoint* wpt_tmp = lowranceusr4_find_global_waypt(UUID1, UUID2, UUID3, UUID4);
+        if (wpt_tmp) {
+          if (global_opts.debug_level >= 2) {
+            printf(MYNAME " parse_routes: added leg #%d wpt %s (%f, %f) to route %s\n",
+                   j, qPrintable(wpt_tmp->shortname), 
+                   wpt_tmp->longitude, wpt_tmp->latitude, qPrintable(rte_head->rte_name));
+          }
+          route_add_wpt(rte_head, new Waypoint(*wpt_tmp));
+        }
+      }
+    }
+
+    if (USR_version > 4) {
+      /* USR Version 5 or greater, more mystery data, ignore for now */
+      gbfgetint32(file_in);
+      gbfgetint32(file_in);
+      gbfgetc(file_in);
+    }
+
     /* Mystery byte, discard */
-    gbfgetc(file_in);
+    if (global_opts.debug_level == 99) {
+      printf(MYNAME " parse_routes: end of route %02x\n", gbfgetc(file_in));
+    } else {
+      gbfgetc(file_in);
+    }
   }
 }
+
+/* read/parse trail, with fields as follows (taken mostly from
+   http://lowranceusrv4togpxconverter.blogspot.com/):
+
+     UID unit number             - uint32
+     UID sequence number         - int64
+     Trail stream version number - uint16 (USR 4/5 value = 4; USR 6 value = 5)
+     Trail name length (bytes)   - uint32
+     Trail name                  - utf-16 string w/above length (t->rte_name)
+     Flags                       - uint32
+     Color ID                    - uint32
+     Comment length (bytes)      - uint32
+     Comment                     - utf-16 string w/above length (t->rte_desc)
+     Creation date               - uint32
+     Creation time               - uint32
+     Unknown                     - uint8
+     Active flag                 - uint8
+     Visible flag                - uint8
+     Data count                  - uint32
+                                          *** START Trail Stream Version 4 ***
+     Data type depth (?)         - uint8    total number of byte values based on Data count above
+     Data type water temp (?)    - uint8
+     Data type SOG (?)           - uint8
+     Unknown data                - uint8
+                                          *** END Trail Stream Version 4 ***
+                                          *** START Trail Stream Version 5 ***
+     Data type depth (?)         - uint32    total number of int32 values based on Data count above
+     Data type water temp (?)    - uint32
+     Data type SOG (?)           - uint32
+     Unknown data                - uint32
+                                          *** END Trail Stream Version 5 ***
+     Trackpoint count            - int32 (N)
+     Trackpoint list             - sequence of N objects as follows:
+       Unknown (?)               - uint16
+       Unknown (?)               - uint8
+       POSIX timestamp (?)       - uint32 (w->creation_time)
+       Longitude (radians)       - double (w->longitude)
+       Latitude (radians)        - double (w->latitude)
+       Data item count           - uint32 (M)
+       Data items                - sequence of M objects as follows:
+         Unknown (?)             - uint8
+         Unknown (?)             - float
+ */
 
 static void
 lowranceusr4_parse_trails()
 {
   int trk_num;
-  char buff[MAXUSRSTRINGSIZE + 1];
+  int trail_version;
+  int data_count;
+  char name_buff[MAXUSRSTRINGSIZE + 1];
+  char desc_buff[MAXUSRSTRINGSIZE + 1];
+  int trail_color;
+  int trail_flags;
 
   /* num trails */
   int num_trails = gbfgetint32(file_in);
@@ -587,40 +857,6 @@ lowranceusr4_parse_trails()
     lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
     fs_chain_add(&(trk_head->fs), (format_specific_data*) fsdata);
 
-    /* read/parse trail, with fields as follows (taken mostly from
-       http://lowranceusrv4togpxconverter.blogspot.com/):
-
-         UID unit number             - uint32
-         UID sequence number         - int64
-         Trail stream version number - uint16
-         Trail name length (bytes)   - uint32
-         Trail name                  - utf-16 string w/above length (t->rte_name)
-         Flags                       - uint32
-         Color ID                    - uint32
-         Comment length (bytes)      - uint32
-         Comment                     - utf-16 string w/above length (t->rte_desc)
-         Creation date               - uint32
-         Creation time               - uint32
-         Unused                      - uint8
-         Active flag                 - uint8
-         Visible flag                - uint8
-         Data count (?)              - uint32
-         Data type depth (?)         - uint8
-         Data type water temp (?)    - uint8
-         Data type SOG (?)           - uint8
-         Trackpoint count            - int32 (N)
-         Trackpoint list             - sequence of N objects as follows:
-           Unknown (?)               - uint16
-           Unknown (?)               - uint8
-           POSIX timestamp (?)       - uint32 (w->creation_time)
-           Longitude (radians)       - double (w->longitude)
-           Latitude (radians)        - double (w->latitude)
-           Data item count           - uint32 (M)
-           Data items                - sequence of M objects as follows:
-             Unknown (?)             - uint8
-             Unknown (?)             - float
-     */
-
     /* UID unit number */
     fsdata->uid_unit = gbfgetint32(file_in);
 
@@ -628,27 +864,31 @@ lowranceusr4_parse_trails()
     fsdata->uid_seq_low = gbfgetint32(file_in);
     fsdata->uid_seq_high = gbfgetint32(file_in);
 
-    /* Trail stream version number, discard for now */
-    gbfgetint16(file_in);
+    /* Trail stream version number */
+    trail_version = gbfgetint16(file_in);
+    if (global_opts.debug_level >= 1)
+    {
+      printf(MYNAME " parse_trails: trail Version %d\n", trail_version);
+    }
 
     /* Trail name; input is 2 bytes per char, we convert to 1 */
-    int text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
-    if (text_len) {
-      buff[text_len] = '\0';
-      trk_head->rte_name = buff;
+    int name_len = lowranceusr4_readstr(&name_buff[0], MAXUSRSTRINGSIZE, file_in, 2);
+    if (name_len) {
+      name_buff[name_len] = '\0';
+      trk_head->rte_name = name_buff;
     }
 
     /* Flags, discard for now */
-    gbfgetint32(file_in);
+    trail_flags = gbfgetint32(file_in);
 
     /* Color ID, discard for now */
-    gbfgetint32(file_in);
+    trail_color = gbfgetint32(file_in);
 
     /* Comment/description */
-    text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 2);
-    if (text_len) {
-      buff[text_len] = '\0';
-      trk_head->rte_desc = buff;
+    int desc_len = lowranceusr4_readstr(&desc_buff[0], MAXUSRSTRINGSIZE, file_in, 2);
+    if (desc_len) {
+      desc_buff[desc_len] = '\0';
+      trk_head->rte_desc = desc_buff;
     }
 
     /* Creation date/time, discard for now */
@@ -660,20 +900,32 @@ lowranceusr4_parse_trails()
     gbfgetc(file_in);
     gbfgetc(file_in);
 
-    /* Some mysterious "data count" and "data type" stuff, not sure
-       what it's for, need dox */
-    gbfgetint32(file_in);
-    gbfgetc(file_in);
-    gbfgetc(file_in);
-    gbfgetc(file_in);
+    /* Some mysterious "data count" */
+    data_count = gbfgetint32(file_in);
+
+    /* Structure differences between versions */
+    if (trail_version < 5)
+    {
+      /* All values are byte values - ignore for now */
+      for (int j = 0; j < data_count; j++)
+        gbfgetc(file_in);
+    } else {
+      /* All values are int32 - ignore for now */
+      for (int j = 0; j < data_count; j++)
+        gbfgetint32(file_in);
+    }
 
     int num_trail_pts = gbfgetint32(file_in);
 
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " parse_trails: trail %d name=%s has %d trackpoints\n",
-             trk_num, qPrintable(trk_head->rte_name), num_trail_pts);
+      printf(MYNAME " parse_trails: trail %d name=%s color=%d flags=%d has %d trackpoints\n",
+             trk_num, qPrintable(trk_head->rte_name), trail_color, trail_flags, num_trail_pts);
     }
 
+    if (global_opts.debug_level == 99) {
+          printf(MYNAME " parse_trails: Trail %s\n", qPrintable(trk_head->rte_name));
+          printf(MYNAME " parse_trails: Longitude  Latitude  Flag/Value pairs (01=Speed)\n");
+    }
     for (int j = 0; j < num_trail_pts; ++j) {
       Waypoint* wpt_tmp = new Waypoint;
 
@@ -688,42 +940,54 @@ lowranceusr4_parse_trails()
       wpt_tmp->longitude = gbfgetdbl(file_in) / DEGREESTORADIANS; /* rad to deg */
       wpt_tmp->latitude = gbfgetdbl(file_in) / DEGREESTORADIANS;
 
-      /* Mysterious per-trackpoint data, toss it for now */
-      int M = gbfgetint32(file_in);
-      for (int k = 0; k < M; ++k) {
-        gbfgetc(file_in);
-        gbfgetflt(file_in);
+      if (global_opts.debug_level >= 2) {
+        if (global_opts.debug_level == 99) {
+          printf(MYNAME " parse_trails: %f %f", wpt_tmp->longitude, wpt_tmp->latitude);
+        } else {
+          printf(MYNAME " parse_trails: added trackpoint %f,%f to trail %s",
+               wpt_tmp->longitude, wpt_tmp->latitude, qPrintable(trk_head->rte_name));
+        }
       }
 
       track_add_wpt(trk_head, wpt_tmp);
 
-      if (global_opts.debug_level >= 2) {
-        printf(MYNAME " parse_routes: added trackpoint %f,%f to route %s\n",
-               wpt_tmp->latitude, wpt_tmp->longitude, qPrintable(trk_head->rte_name));
+      /* Mysterious per-trackpoint data, toss it for now */
+      int M = gbfgetint32(file_in);
+      for (int k = 0; k < M; ++k) {
+        int flag = gbfgetc(file_in);
+        float value = gbfgetflt(file_in);
+        if (global_opts.debug_level == 99) {
+          printf(" %02x %f", flag, value);
+        }
       }
+
+      printf("\n");
     }
   }
 }
-
 
 static void
 data_read()
 {
   char buff[MAXUSRSTRINGSIZE + 1];
 
-
-  short int MajorVersion = gbfgetint16(file_in);
-  reading_version = MajorVersion;
-  short int MinorVersion = gbfgetint16(file_in);
-  int DataStreamVersion = gbfgetint32(file_in);
+  int USR_version = gbfgetint32(file_in);
+  int DataStream_version = gbfgetint32(file_in);
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " data_read: Major Version %d Minor Version %d Data Stream Version %d\n",
-           MajorVersion, MinorVersion, DataStreamVersion);
+    printf(MYNAME " data_read: USR Version %d Data Stream Version %d\n",
+           USR_version, DataStream_version);
   }
 
-  if (MajorVersion != 4) {
-    fatal(MYNAME ": input file is from an unsupported version of the USR format (must be version 4)\n");
+  switch (USR_version)
+  {
+    case 4:       /* Lowrance USR Version 4 */
+    case 5:       /* Lowrance USR Version 5 */
+    case 6:       /* Lowrance USR Version 6 */
+      break;
+    default:
+      fatal(MYNAME ": input file is USR Version %d format - try the 'lowranceusr' input option\n", USR_version);
+      break;
   }
 
   int text_len = lowranceusr4_readstr(&buff[0], MAXUSRSTRINGSIZE, file_in, 1);
@@ -757,8 +1021,8 @@ data_read()
     printf(MYNAME " content description: %s\n", buff);
   }
 
-  lowranceusr4_parse_waypoints();
-  lowranceusr4_parse_routes();
+  lowranceusr4_parse_waypoints(USR_version);
+  lowranceusr4_parse_routes(USR_version);
   lowranceusr4_parse_trails();
 }
 
@@ -985,7 +1249,7 @@ static void
 lowranceusr4_write_trails()
 {
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " writing %ud tracks\n", track_count());
+    printf(MYNAME " writing %d tracks\n", track_count());
   }
   gbfputint32(track_count(), file_out);
   track_uid = 0;
