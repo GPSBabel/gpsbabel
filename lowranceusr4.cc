@@ -961,7 +961,9 @@ lowranceusr4_parse_trails()
         }
       }
 
-      printf("\n");
+      if (M && (global_opts.debug_level == 99)) {
+        printf("\n");
+      }
     }
   }
 }
