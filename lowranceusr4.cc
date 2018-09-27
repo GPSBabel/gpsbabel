@@ -452,7 +452,7 @@ lowranceusr4_parse_waypoints(int USR_version)
     if (USR_version > 4) {
       printf(" Unit Number2");
     }
-    printf(" Longitude    Latitude    Flags    ICON  Color Length Description     ");
+    printf(" Longitude      Latitude       Flags    ICON   Color  Length Description     ");
     printf(" Time     Date     Unused   Depth    LoranGRI LoranTda LoranTdb\n");
 
     printf(MYNAME " parse_waypoints: ");
@@ -461,9 +461,9 @@ lowranceusr4_parse_waypoints(int USR_version)
     }
     printf("----------- -------- -------- -------- ------ ----------------");
     if (USR_version > 4) {
-      printf(" --------------");
+      printf(" ------------");
     }
-    printf(" ------------ ----------- -------- ------ ------ ------ ----------------");
+    printf(" -------------- -------------- -------- ------ ------ ------ ----------------");
     printf(" -------- -------- -------- -------- -------- -------- --------\n");
   }
 
@@ -568,16 +568,16 @@ lowranceusr4_parse_waypoints(int USR_version)
                fsdata->uid_unit, fsdata->uid_seq_low, fsdata->uid_seq_high,
                waypoint_version, name_len, name_buff);
         if (USR_version > 4) {
-          printf("  %10u  ", fsdata->uid_unit2);
+          printf("  %10u ", fsdata->uid_unit2);
         }
-        printf(" %.8f %.8f", wpt_tmp->longitude, wpt_tmp->latitude);
+        printf(" %+14.9f %+14.9f", wpt_tmp->longitude, wpt_tmp->latitude);
         printf(" %08x %6d %6d", fsdata->flags, fsdata->icon_num, fsdata->color);
         printf(" %6d %16s", desc_len, desc_buff);
         printf(" %08x %0x8 %08x %f %08x %08x %08x\n",
             create_date, create_time, unused_byte, waypt_depth, loran_GRI, loran_Tda, loran_Tdb);
       } else {
         printf(MYNAME " parse_waypoints: version = %d, name = %s, uid_unit = %u, "
-             "uid_seq_low = %d, uid_seq_high = %d, lat = %f, lon = %f, depth = %f\n",
+             "uid_seq_low = %d, uid_seq_high = %d, lat = %+.9f, lon = %+.9f, depth = %f\n",
              waypoint_version, qPrintable(wpt_tmp->shortname), fsdata->uid_unit,
              fsdata->uid_seq_low, fsdata->uid_seq_high,
              wpt_tmp->longitude, wpt_tmp->latitude, wpt_tmp->depth);
@@ -755,7 +755,7 @@ lowranceusr4_parse_routes(int USR_version)
         Waypoint* wpt_tmp = lowranceusr4_find_waypt(uid_unit, uid_seq_low, uid_seq_high);
         if (wpt_tmp) {
           if (global_opts.debug_level >= 2) {
-            printf(MYNAME " parse_routes: added leg #%d routepoint %s (%f, %f) to route %s\n",
+            printf(MYNAME " parse_routes: added leg #%d routepoint %s (%+.9f, %+.9f) to route %s\n",
                    j, qPrintable(wpt_tmp->shortname),
                    wpt_tmp->longitude, wpt_tmp->latitude, qPrintable(rte_head->rte_name));
           }
@@ -772,7 +772,7 @@ lowranceusr4_parse_routes(int USR_version)
         Waypoint* wpt_tmp = lowranceusr4_find_global_waypt(UUID1, UUID2, UUID3, UUID4);
         if (wpt_tmp) {
           if (global_opts.debug_level >= 2) {
-            printf(MYNAME " parse_routes: added leg #%d wpt %s (%f, %f) to route %s\n",
+            printf(MYNAME " parse_routes: added leg #%d wpt %s (%+.9f, %+.9f) to route %s\n",
                    j, qPrintable(wpt_tmp->shortname), 
                    wpt_tmp->longitude, wpt_tmp->latitude, qPrintable(rte_head->rte_name));
           }
@@ -933,7 +933,8 @@ lowranceusr4_parse_trails()
 
     if (global_opts.debug_level == 99) {
           printf(MYNAME " parse_trails: Trail %s\n", qPrintable(trk_head->rte_name));
-          printf(MYNAME " parse_trails: Longitude  Latitude  Flag/Value pairs (01=Speed)\n");
+          printf(MYNAME " parse_trails: Longitude      Latitude       Flag/Value pairs (01=Speed)\n");
+          printf(MYNAME " parse_trails: -------------- -------------- -- -------- -- -------- -- --------\n");
     }
     for (int j = 0; j < num_trail_pts; ++j) {
       Waypoint* wpt_tmp = new Waypoint;
@@ -951,9 +952,9 @@ lowranceusr4_parse_trails()
 
       if (global_opts.debug_level >= 2) {
         if (global_opts.debug_level == 99) {
-          printf(MYNAME " parse_trails: %f %f", wpt_tmp->longitude, wpt_tmp->latitude);
+          printf(MYNAME " parse_trails: %+14.9f %+14.9f", wpt_tmp->longitude, wpt_tmp->latitude);
         } else {
-          printf(MYNAME " parse_trails: added trackpoint %f,%f to trail %s",
+          printf(MYNAME " parse_trails: added trackpoint %+.9f,%+.9f to trail %s",
                wpt_tmp->longitude, wpt_tmp->latitude, qPrintable(trk_head->rte_name));
         }
       }
