@@ -394,8 +394,17 @@ lowranceusr4_find_waypt_index(const Waypoint* wpt)
      Unit Number                 - uint32   *** UNIQUE to USR 5/6 ***
      Longitude (mercator meters) - int32 (w->longitude)
      Latitude (mercator meters)  - int32 (w->latitude)
-     Flags                       - uint32 (0 - Hidden ICON, 1 - Display ICON only, 2 - Display ICON and Name, 5 - Route Point)
+     Flags                       - uint32 (0 - Hidden ICON, 1 - Display ICON, 2 - Display ICON and Name, 4 - Route Point)
      Icon ID                     - uint16 (to w->icon_descr via conversion)
+                                     0  Circle
+                                     1  Diamond
+                                     2  X
+                                    22  Stop Sign
+                                    30  Campsite
+                                    37  Skull and Cross Bones
+                                    40  Diver Flag
+                                    42  Anchor
+                                    61  Star
      Color ID                    - uint16
      Description length (bytes)  - uint32
      Description                 - utf-16 string w/above length (w->description)
@@ -452,7 +461,7 @@ lowranceusr4_parse_waypoints(int USR_version)
     }
     printf("----------- -------- -------- -------- ------ ----------------");
     if (USR_version > 4) {
-      printf(" ------------");
+      printf(" --------------");
     }
     printf(" ------------ ----------- -------- ------ ------ ------ ----------------");
     printf(" -------- -------- -------- -------- -------- -------- --------\n");
@@ -555,11 +564,11 @@ lowranceusr4_parse_waypoints(int USR_version)
           printf("%08x %08x %08x %08x ",
                fsdata->UUID1, fsdata->UUID2, fsdata->UUID3, fsdata->UUID4);
         }
-        printf(" %8d  %8d %8d %8d %6d %16s",
+        printf(" %10u %8d %8d %8d %6d %16s",
                fsdata->uid_unit, fsdata->uid_seq_low, fsdata->uid_seq_high,
                waypoint_version, name_len, name_buff);
         if (USR_version > 4) {
-          printf("  %8d  ", fsdata->uid_unit2);
+          printf("  %10u  ", fsdata->uid_unit2);
         }
         printf(" %.8f %.8f", wpt_tmp->longitude, wpt_tmp->latitude);
         printf(" %08x %6d %6d", fsdata->flags, fsdata->icon_num, fsdata->color);
@@ -604,7 +613,7 @@ lowranceusr4_find_waypt(int uid_unit, int uid_seq_low, int uid_seq_high)
   }
 
   if (global_opts.debug_level >= 1) {
-    printf(MYNAME " lowranceusr4_find_waypt: warning, failed finding waypoint with ids %d %d %d\n",
+    printf(MYNAME " lowranceusr4_find_waypt: warning, failed finding waypoint with ids %u %d %d\n",
            uid_unit, uid_seq_low, uid_seq_high);
   }
   return nullptr;
@@ -700,7 +709,7 @@ lowranceusr4_parse_routes(int USR_version)
     /* UID unit number */
     fsdata->uid_unit = gbfgetint32(file_in);
     if (global_opts.debug_level >= 1) {
-      printf(MYNAME " parse_routes: Unit %d (0x%08x)\n", fsdata->uid_unit, fsdata->uid_unit);
+      printf(MYNAME " parse_routes: Unit %u (0x%08x)\n", fsdata->uid_unit, fsdata->uid_unit);
     }
 
     /* 64-bit UID sequence number */
