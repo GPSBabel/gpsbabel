@@ -22,6 +22,7 @@
 
 #include <QtCore/QRegExp>
 #include <QtCore/QTextStream>
+#include <QtCore/QDebug>
 
 #include "csv_util.h"
 #include "defs.h"
@@ -868,10 +869,10 @@ static
 time_t
 addhms(const char* s, const char* format)
 {
-  time_t tt =0;
-  int  hour =0;
-  int  min  =0;
-  int  sec  =0;
+  time_t tt = 0;
+  int hour = 0;
+  int min = 0;
+  int sec = 0;
 
   char* ampm = (char*) xmalloc(strlen(s) + 1);
   int ac = sscanf(s, format, &hour, &min, &sec, ampm);
@@ -880,7 +881,7 @@ addhms(const char* s, const char* format)
     ampm[0] = 0;
   }
   if (ac) {
-    tt = ((tolower(ampm[0])=='p')?43200:0)+3600*hour+60*min+sec;
+    tt = ((tolower(ampm[0])=='p') ? 43200 : 0) + 3600 * hour + 60 * min + sec;
   }
   xfree(ampm);
 
@@ -1387,26 +1388,6 @@ xcsv_parse_val(const char* s, Waypoint* wpt, const field_map_t* fmp,
   }
 }
 
-// TODO: eliminate this routine which is modeled
-// after gbfgetstr for legacy compatibility.
-static char*
-xcsv_readline(char* buff)
-{
-  if (buff) {
-    xfree(buff);
-  }
-  QString line = xcsv_file.stream->readLine();
-  if (line.isNull()) {
-    return nullptr;
-  } else {
-    // TODO: move csv processing to Qt, eliminating the need to go
-    // back to 8 bit encoding, which is shaky for encoding like utf8
-    // that have multibyte characters.
-    char* newbuff = xstrdup(CSTR(line));
-    return newbuff;
-  }
-}
-
 /*****************************************************************************/
 /* xcsv_data_read() - read input file, parsing lines, fields and handling    */
 /*                   any data conversion (the input meat)                    */
@@ -1414,7 +1395,6 @@ xcsv_readline(char* buff)
 void
 xcsv_data_read(void)
 {
-  char* buff = nullptr;
   int linecount = 0;
   route_head* rte = nullptr;
   route_head* trk = nullptr;
@@ -1430,13 +1410,19 @@ xcsv_data_read(void)
     csv_route = rte;
   }
 
-  // TODO: stop the back and forth between QString and char strings,
-  while ((buff = xcsv_readline(buff))) {
+  while (true) {
+    QString buff = xcsv_file.stream->readLine();
+    if (buff.isNull()) { 
+      break;
+    }
     linecount++;
     /* Whack trailing space; leading space may matter if our field sep
      * is whitespace and we have leading whitespace.
      */
-    rtrim(buff);
+    // This could be hoisted out as a generic rtrim() if we need such a thing.
+    while(buff.size() > 0 && buff.at(buff.size() - 1).isSpace()) {
+      buff.chop(1); 
+    }
 
     /* skip over x many lines on the top for the prologue... */
     if ((linecount - 1) < xcsv_file.prologue.count()) {
@@ -1449,14 +1435,14 @@ xcsv_data_read(void)
      */
     foreach(const QString& ogp, xcsv_file.epilogue) {
        if (ogp.startsWith(buff)) {
-         buff[0] = '\0';
+         buff.clear();
          break;
        }
     }
-    if (strlen(buff)) {
+    if (!buff.isEmpty()) {
       Waypoint* wpt_tmp = new Waypoint;
 
-      char* s = buff;
+      const char* s = strdup(CSTR(buff));
       s = csv_lineparse(s, CSTR(xcsv_file.field_delimiter),
                         CSTR(xcsv_file.field_encloser), linecount);
 
@@ -1479,7 +1465,7 @@ xcsv_data_read(void)
         if (elem == &xcsv_file.ifield) {
           /* we've wrapped the queue. so stop parsing! */
           while (s) {
-            s=csv_lineparse(nullptr, "\xff","",linecount);
+            s = csv_lineparse(nullptr, "\xff","",linecount);
           }
           break;
         }
