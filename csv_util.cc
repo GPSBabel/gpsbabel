@@ -183,8 +183,8 @@ csv_stringclean(const QString& source, const QString& to_nuke)
   return r.remove(QRegExp(regex));
 }
 
-// csv_stringtrim() - trim whitespace and leading and trailing 
-//                    enclosures (quotes) 
+// csv_stringtrim() - trim whitespace and leading and trailing
+//                    enclosures (quotes)
 //                    returns a copy of the modified string
 //    usage: p = csv_stringtrim(string, "\"", 0)
 char*
@@ -242,9 +242,9 @@ csv_stringtrim(const char* string, const char* enclosure, int strip_max)
   return (tmp);
 }
 
-// Is this really the replacement for the above?  
+// Is this really the replacement for the above?
 QString
-csv_stringtrim(const QString& source, const QString& enclosure) 
+csv_stringtrim(const QString& source, const QString& enclosure)
 {
   QString r = source;
   r.replace(enclosure, "");
@@ -742,17 +742,17 @@ void xcsv_file_init(void)
 XcsvFile::XcsvFile() {
   is_internal = false;
   ifield_ct = ofield_ct = 0;
-  extension = description = nullptr;
-//   xcsv_file_init(); 
+  extension  = nullptr;
+//   xcsv_file_init();
 }
 
-void validate_fieldmap(field_map_t* fmp, bool is_output) {
+static void validate_fieldmap(const field_map_t* fmp, bool is_output) {
   QString qkey = fmp->key;
   QString qval = fmp->val;
   QString qprintfc = fmp->printfc;
 
   if (qkey.isEmpty()) {
-    Fatal() << MYNAME << ": xcsv style is missing" << 
+    Fatal() << MYNAME << ": xcsv style is missing" <<
             (is_output ? "output" : "input") << "field type.";
   }
   if (!fmp->val) {
@@ -768,7 +768,7 @@ void validate_fieldmap(field_map_t* fmp, bool is_output) {
 /* usage: xcsv_ifield_add("DESCRIPTION", "", "%s")                           */
 /*****************************************************************************/
 void
-xcsv_ifield_add(char* key, char* val, char* pfc)
+xcsv_ifield_add(const char* key, const char* val, const char* pfc)
 {
   field_map_t* fmp = (field_map_t*) xcalloc(sizeof(*fmp), 1);
   struct xt_mapping* xm = Perfect_Hash::in_word_set(key, strlen(key));
@@ -788,7 +788,7 @@ xcsv_ifield_add(char* key, char* val, char* pfc)
 /* usage: xcsv_ofield_add("LAT_DECIMAL", "", "%08.5lf")                      */
 /*****************************************************************************/
 void
-xcsv_ofield_add(char* key, char* val, char* pfc, int options)
+xcsv_ofield_add(const char* key, const char* val, const char* pfc, int options)
 {
   field_map_t* fmp = (field_map_t*) xcalloc(sizeof(*fmp), 1);
   struct xt_mapping* xm = Perfect_Hash::in_word_set(key, strlen(key));
@@ -809,7 +809,7 @@ xcsv_ofield_add(char* key, char* val, char* pfc, int options)
 /* usage: xcsv_prologue_add("Four score and seven years ago today,")         */
 /*****************************************************************************/
 void
-xcsv_prologue_add(char* prologue)
+xcsv_prologue_add(QString prologue)
 {
   xcsv_file.prologue.append(prologue);
 }
@@ -819,7 +819,7 @@ xcsv_prologue_add(char* prologue)
 /* usage: xcsv_epilogue_add("shall not perish from the earth.")              */
 /*****************************************************************************/
 void
-xcsv_epilogue_add(char* epilogue)
+xcsv_epilogue_add(QString epilogue)
 {
   xcsv_file.epilogue.append(epilogue);
 }
@@ -916,7 +916,7 @@ writetime(const char* format, const gpsbabel::DateTime& t, bool gmt)
   return writetime(format, t.toTime_t(), gmt);
 }
 
-QString 
+QString
 writehms(const char* format, time_t t, int gmt)
 {
   static struct tm no_time = tm();
@@ -1461,7 +1461,7 @@ xcsv_data_read(void)
                         CSTR(xcsv_file.field_encloser), linecount);
 
       if (QUEUE_EMPTY(&xcsv_file.ifield)) {
-        fatal(MYNAME ": attempt to read, but style '%s' has no IFIELDs in it.\n", xcsv_file.description? xcsv_file.description : "unknown");
+        fatal(MYNAME ": attempt to read, but style '%s' has no IFIELDs in it.\n", CSTR(xcsv_file.description)? CSTR(xcsv_file.description) : "unknown");
       }
 
       /* reset the ifield queue */
@@ -1654,9 +1654,9 @@ xcsv_waypt_pr(const Waypoint* wpt)
       buff = QString().sprintf(fmp->printfc, waypt_out_count + atoi(fmp->val));
       break;
     case XT_CONSTANT: {
-      const char* cp = xcsv_get_char_from_constant_table(fmp->val);
-      if (cp) {
-        buff = QString().sprintf(fmp->printfc, cp);
+      auto cp = xcsv_get_char_from_constant_table(fmp->val);
+      if (!cp.isEmpty()) {
+        buff = QString().sprintf(fmp->printfc, CSTR(cp));
       } else {
         buff = QString().sprintf(fmp->printfc, fmp->val);
       }
@@ -2175,6 +2175,39 @@ xcsv_noop(const route_head* wp)
   /* no-op */
 }
 
+// return |original| after performing token replacement.
+static QString
+xcsv_replace_tokens(const QString& original) {
+  QString replacement = original;
+    // Don't do potentially expensive replacements if token prefix
+    // isn't present;
+    if (original.contains("__")) {
+      struct tm tm;
+      time_t my_time = gpsbabel_time;
+      if (my_time == 0) {  /* testo script ? */
+        tm = *gmtime(&my_time);
+      } else {
+        tm = *localtime(&my_time);
+      }
+
+      replacement.replace("__FILE__", xcsv_file.fname);
+      replacement.replace("__VERSION__", my_time == 0 ? "" : gpsbabel_version);
+
+      QDateTime dt = QDateTime::fromTime_t(my_time);
+      dt = dt.toTimeSpec(Qt::UTC);
+
+      QString dts = dt.toString("ddd MMM dd hh:mm:ss yyyy");
+      replacement.replace("__DATE_AND_TIME__", dts);
+
+      QString d = dt.toString("MM/dd/yyyy");
+      replacement.replace("__DATE__", d);
+
+      QString t = dt.toString("hh:mm:ss");
+      replacement.replace("__TIME__", t);
+    }
+  return replacement;
+}
+
 /*****************************************************************************/
 /* xcsv_data_write(void) - write prologues, spawn the output loop, and write */
 /*                         epilogues.                                        */
@@ -2196,30 +2229,9 @@ xcsv_data_write(void)
   }
 
   /* output prologue lines, if any. */
-  foreach(const QString& line, xcsv_file.prologue) {
-    // If the XCSV description contains weird characters (like sportsim)
-    // this is where they get lost.
-   QString cout = line;
-
-    // Don't do potentially expensive replacements if token prefix 
-    // isn't present;
-    if (cout.contains("__")) {
-      cout.replace("__FILE__", xcsv_file.fname);
-      cout.replace("__VERSION__", time == 0 ? "" : gpsbabel_version);
-
-      QDateTime dt = QDateTime::fromTime_t(time);
-      dt = dt.toTimeSpec(Qt::UTC);
-
-      QString dts = dt.toString("ddd MMM dd hh:mm:ss yyyy");
-      cout.replace("__DATE_AND_TIME__", dts);
-
-      QString d = dt.toString("MM/dd/yyyy");
-      cout.replace("__DATE__", d);
-
-      QString t = dt.toString("hh:mm:ss");
-      cout.replace("__TIME__", t);
-    }
-    *xcsv_file.stream << cout <<  xcsv_file.record_delimiter;
+  for (auto line : xcsv_file.prologue) {
+   QString line_to_write = xcsv_replace_tokens(line);
+    *xcsv_file.stream << line_to_write <<  xcsv_file.record_delimiter;
   }
 
   if ((xcsv_file.datatype == 0) || (xcsv_file.datatype == wptdata)) {
@@ -2233,8 +2245,9 @@ xcsv_data_write(void)
   }
 
   /* output epilogue lines, if any. */
-  foreach(const QString& ogp, xcsv_file.epilogue) {
-    *xcsv_file.stream << ogp << xcsv_file.record_delimiter;
+  for (auto line : xcsv_file.epilogue) {
+    QString line_to_write = xcsv_replace_tokens(line);
+    *xcsv_file.stream << line_to_write << xcsv_file.record_delimiter;
   }
 }
 #endif

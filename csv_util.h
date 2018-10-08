@@ -63,22 +63,22 @@ void
 xcsv_file_init(void);
 
 void
-xcsv_prologue_add(char*);
+xcsv_prologue_add(QString);
 
 void
-xcsv_epilogue_add(char*);
+xcsv_epilogue_add(QString);
 
 void
-xcsv_ifield_add(char*, char*, char*);
+xcsv_ifield_add(const char*, const char*, const char*);
 
 void
-xcsv_ofield_add(char*, char*, char*, int options);
+xcsv_ofield_add(const char*, const char*, const char*, int options);
 
 void
 xcsv_destroy_style(void);
 
-const char*
-xcsv_get_char_from_constant_table(char* key);
+QString
+xcsv_get_char_from_constant_table(QString key);
 
 /****************************************************************************/
 /* types required for various xcsv functions                                */
@@ -90,17 +90,17 @@ xcsv_get_char_from_constant_table(char* key);
 #define OPTIONS_OPTIONAL 3
 typedef struct field_map {
   queue Q;
-  char* key;
-  char* val;
-  char* printfc;
+  const char* key;
+  const char* val;
+  const char* printfc;
   int hashed_key;
   int options;
 } field_map_t;
 
 /* something to map config file constants to chars */
 typedef struct char_map {
-  const char* key;
-  const char* chars;
+  const QString key;
+  const QString chars;
 } char_map_t;
 
 namespace gpsbabel
@@ -132,6 +132,8 @@ class XcsvFile {
 
   queue ifield;		/* input field mapping */
   queue* ofield;    		/* output field mapping */
+  QList<field_map> ifields;
+  QList<field_map> ofields;
 
   int ifield_ct;		/* actual # of ifields */
   int ofield_ct;		/* actual # of ofields */
@@ -141,8 +143,8 @@ class XcsvFile {
   QTextCodec* codec;
   QString fname;                 /* ptr to filename of above. */
 
-  char* description;		/* Description for help text */
-  char* extension;		/* preferred filename extension (for wrappers)*/
+  QString description;		/* Description for help text */
+  QString extension;		/* preferred filename extension (for wrappers)*/
 
   short_handle mkshort_handle;/* handle for mkshort() */
   ff_type type;		/* format type for GUI wrappers. */
