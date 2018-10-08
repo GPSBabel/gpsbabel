@@ -413,16 +413,13 @@ xcsv_parse_style_buff(const char* sbuff)
 static void
 xcsv_read_style(const char* fname)
 {
-  char* sbuff;
-
   xcsv_file_init();
 
   gbfile* fp = gbfopen(fname, "rb", MYNAME);
-  while ((sbuff = gbfgetstr(fp))) {
-    sbuff = lrtrim(sbuff);
+  for  (QString sbuff = gbfgetstr(fp); !sbuff.isNull(); sbuff = gbfgetstr(fp)) {
+    sbuff = sbuff.trimmed();
     xcsv_parse_style_line(sbuff);
   }
-  while (!gbfeof(fp));
 
   /* if we have no output fields, use input fields as output fields */
   if (xcsv_file.ofield_ct == 0) {
