@@ -393,7 +393,7 @@ rpm: changes.html
 	tools/mkrpm $(WEB) $(VERSD) $(RELEASE)
 
 gui: gpsbabel$(EXEEXT)
-	cd gui ; $(QMAKE) app.pro && make
+	cd gui ; $(QMAKE) app.pro && $(MAKE) $(MAKEFLAGS)
 	cd gui ; $(LUPDATE) app.pro
 	cd gui ; $(LRELEASE) app.pro
 
