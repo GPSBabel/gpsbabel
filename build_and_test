@@ -24,6 +24,10 @@ touch internal_styles.cc
 export GBTEMP=$(pwd)/gbtemp
 mkdir -p $GBTEMP
 ./configure --with-doc=$(pwd)/gpsbabel_docdir
+# As of 2018-10, all the virtualized travis build images are two cores per:
+# https://docs.travis-ci.com/user/reference/overview/
+# We'll be slightly abusive on CPU knowing that I/O is virtualized.
+export MAKEFLAGS=-j3
 make toolinfo
 make clean
 make
