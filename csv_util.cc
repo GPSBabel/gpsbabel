@@ -1441,8 +1441,9 @@ xcsv_data_read(void)
     }
     if (!buff.isEmpty()) {
       Waypoint* wpt_tmp = new Waypoint;
-
-      const char* s = strdup(CSTR(buff));
+      // tbuf is a temporary copy of buff since we modify it. :-(
+      char *tbuf = xstrdup(buff);
+      const char* s = tbuf;
       s = csv_lineparse(s, CSTR(xcsv_file.field_delimiter),
                         CSTR(xcsv_file.field_encloser), linecount);
 
@@ -1518,6 +1519,7 @@ xcsv_data_read(void)
       default:
         ;
       }
+      xfree(tbuf);
     }
   }
 }
