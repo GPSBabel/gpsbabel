@@ -6260,8 +6260,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 #	When using Qt installed on a non-system path,
 #	e.g. with Qt installed with a Qt installer from download.qt.io,
 #	we may need to add the Qt lib location to the runtime library search path.
-# we use AC_RUN_IFELSE because AC_LINK_IFELSE may pass when a different
-# Qt library is found on the runtime library search path.
+#	we use AC_RUN_IFELSE because AC_LINK_IFELSE may pass when a different
+#	Qt library is found on the runtime library search path.
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking loader paths for Qt libs" >&5
 $as_echo_n "checking loader paths for Qt libs... " >&6; }
 	OCPPFLAGS="$CPPFLAGS"

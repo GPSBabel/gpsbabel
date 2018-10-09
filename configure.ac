@@ -352,8 +352,8 @@ AS_CASE(["$target"], [*-*-darwin*], [
 #	When using Qt installed on a non-system path,
 #	e.g. with Qt installed with a Qt installer from download.qt.io,
 #	we may need to add the Qt lib location to the runtime library search path.
-# we use AC_RUN_IFELSE because AC_LINK_IFELSE may pass when a different
-# Qt library is found on the runtime library search path.
+#	we use AC_RUN_IFELSE because AC_LINK_IFELSE may pass when a different
+#	Qt library is found on the runtime library search path.
 	AC_MSG_CHECKING(loader paths for Qt libs)
 	OCPPFLAGS="$CPPFLAGS"
 	CPPFLAGS="$CPPFLAGS -I$QT_INC"
