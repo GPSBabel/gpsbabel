@@ -265,6 +265,7 @@ AS_CASE(["$target"], [*-*-cygwin* | *-*-mingw32*], [
 		)
 		OSJEEPS=jeeps/gpslibusb.o
 		CFLAGS="$OCFLAGS"
+		LDFLAGS="$OLDFLAGS"
 	])
 ], [
 	GBSER=gbser_posix.o
@@ -288,6 +289,7 @@ AS_CASE(["$target"], [*-*-cygwin* | *-*-mingw32*], [
 			)
 			OSJEEPS=jeeps/gpslibusb.o
 			CFLAGS="$OCFLAGS"
+			LDFLAGS="$OLDFLAGS"
 			#LIBS="$LIBS `libusb-config --libs`"
 		], [
 			OSJEEPS=jeeps/gpsusbstub.o
@@ -346,6 +348,40 @@ AS_CASE(["$target"], [*-*-darwin*], [
 			)]
 		)
 	CPPFLAGS="$OCPPFLAGS"
+
+#	When using Qt installed on a non-system path,
+#	e.g. with Qt installed with a Qt installer from download.qt.io,
+#	we may need to add the Qt lib location to the runtime library search path.
+# we use AC_RUN_IFELSE because AC_LINK_IFELSE may pass when a different
+# Qt library is found on the runtime library search path.
+	AC_MSG_CHECKING(loader paths for Qt libs)
+	OCPPFLAGS="$CPPFLAGS"
+	CPPFLAGS="$CPPFLAGS -I$QT_INC"
+	OLIBS="$LIBS"
+	LIBS="$LIBS $QT_LIBS"
+	AC_RUN_IFELSE([AC_LANG_SOURCE([
+		#include <QtCore/QtGlobal>
+		#include <cstring>
+		int main () {
+		return strcmp(QT_VERSION_STR, qVersion()) != 0;
+		}])],
+		[AC_MSG_RESULT(rpath not needed)],
+		[OLDFLAGS="$LDFLAGS"
+		LDFLAGS="$LDFLAGS -Wl,-rpath,$($QMAKE -query QT_INSTALL_LIBS)"
+		AC_RUN_IFELSE([AC_LANG_SOURCE([
+			#include <QtCore/QtGlobal>
+			#include <cstring>
+			int main () {
+			return strcmp(QT_VERSION_STR, qVersion()) != 0;
+			}])],
+			[AC_MSG_RESULT(rpath required)],
+			[AC_MSG_FAILURE(loader cannot find Qt library)
+			LDFLAGS="$OLDFLAGS"]
+			)]
+		)
+	CPPFLAGS="$OCPPFLAGS"
+	LIBS="$OLIBS"
+
 ])
 
 AC_MSG_CHECKING([for random stuff to make you feel better])
