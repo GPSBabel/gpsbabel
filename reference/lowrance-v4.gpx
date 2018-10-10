@@ -1,0 +1,985 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="1.239863929" minlon="103.840582346" maxlat="2.847377587" maxlon="104.505949539"/>
+  <wpt lat="1.480182691" lon="104.339400433">
+    <time>2010-11-30T04:49:29Z</time>
+    <name>RT5P12</name>
+    <cmt>RT5P12</cmt>
+    <desc>RT5P12</desc>
+  </wpt>
+  <wpt lat="1.369082172" lon="104.362402561">
+    <time>2010-11-30T04:49:17Z</time>
+    <name>RT5P11</name>
+    <cmt>RT5P11</cmt>
+    <desc>RT5P11</desc>
+  </wpt>
+  <wpt lat="1.278377782" lon="103.976909612">
+    <time>2010-11-30T04:48:12Z</time>
+    <name>RT5P6</name>
+    <cmt>RT5P6</cmt>
+    <desc>RT5P6</desc>
+  </wpt>
+  <wpt lat="1.276638634" lon="103.924668102">
+    <time>2010-11-30T04:48:01Z</time>
+    <name>RT5P5</name>
+    <cmt>RT5P5</cmt>
+    <desc>RT5P5</desc>
+  </wpt>
+  <wpt lat="1.320567540" lon="104.071928590">
+    <time>2010-11-30T04:48:38Z</time>
+    <name>RT5P8</name>
+    <cmt>RT5P8</cmt>
+    <desc>RT5P8</desc>
+  </wpt>
+  <wpt lat="1.288497261" lon="104.031656839">
+    <time>2010-11-30T04:48:26Z</time>
+    <name>RT5P7</name>
+    <cmt>RT5P7</cmt>
+    <desc>RT5P7</desc>
+  </wpt>
+  <wpt lat="1.356845475" lon="104.317876498">
+    <time>2010-12-01T00:56:45Z</time>
+    <name>005</name>
+    <cmt>005</cmt>
+    <desc>005</desc>
+  </wpt>
+  <wpt lat="1.893968541" lon="104.122980334">
+    <time>2010-12-01T02:38:35Z</time>
+    <name>ANCHOR1</name>
+    <cmt>ANCHOR1</cmt>
+    <desc>ANCHOR1</desc>
+  </wpt>
+  <wpt lat="1.867348371" lon="104.195655160">
+    <time>2010-11-30T04:49:53Z</time>
+    <name>RT5P14</name>
+    <cmt>RT5P14</cmt>
+    <desc>RT5P14</desc>
+  </wpt>
+  <wpt lat="1.867348371" lon="104.195655160">
+    <time>2010-11-30T04:49:42Z</time>
+    <name>RT5P13</name>
+    <cmt>RT5P13</cmt>
+    <desc>RT5P13</desc>
+  </wpt>
+  <wpt lat="1.863492691" lon="103.995963882">
+    <time>2010-11-30T04:50:06Z</time>
+    <name>RT5P15</name>
+    <cmt>RT5P15</cmt>
+    <desc>RT5P15</desc>
+  </wpt>
+  <wpt lat="2.309078554" lon="104.067124462">
+    <time>2010-12-02T02:58:48Z</time>
+    <name>RT6P5</name>
+    <cmt>RT6P5</cmt>
+    <desc>RT6P5</desc>
+  </wpt>
+  <wpt lat="2.228454095" lon="104.041057787">
+    <time>2010-12-02T02:58:36Z</time>
+    <name>RT6P4</name>
+    <cmt>RT6P4</cmt>
+    <desc>RT6P4</desc>
+  </wpt>
+  <wpt lat="2.661178436" lon="104.077922483">
+    <time>2010-12-02T02:59:14Z</time>
+    <name>RT6P7</name>
+    <cmt>RT6P7</cmt>
+    <desc>RT6P7</desc>
+  </wpt>
+  <wpt lat="2.432546099" lon="104.069008257">
+    <time>2010-12-02T02:59:01Z</time>
+    <name>RT6P6</name>
+    <cmt>RT6P6</cmt>
+    <desc>RT6P6</desc>
+  </wpt>
+  <wpt lat="1.950991075" lon="104.158276703">
+    <time>2010-12-02T02:57:52Z</time>
+    <name>RT6P1</name>
+    <cmt>RT6P1</cmt>
+    <desc>RT6P1</desc>
+  </wpt>
+  <wpt lat="1.908805393" lon="104.132471416">
+    <time>2010-12-02T02:57:04Z</time>
+    <name>RT6P0</name>
+    <cmt>RT6P0</cmt>
+    <desc>RT6P0</desc>
+  </wpt>
+  <wpt lat="2.086206825" lon="104.108838352">
+    <time>2010-12-02T02:58:24Z</time>
+    <name>RT6P3</name>
+    <cmt>RT6P3</cmt>
+    <desc>RT6P3</desc>
+  </wpt>
+  <wpt lat="2.014136995" lon="104.133201499">
+    <time>2010-12-02T02:58:13Z</time>
+    <name>RT6P2</name>
+    <cmt>RT6P2</cmt>
+    <desc>RT6P2</desc>
+  </wpt>
+  <wpt lat="2.670983374" lon="103.907786054">
+    <time>2010-12-02T19:43:40Z</time>
+    <name>ANCHOR2</name>
+    <cmt>ANCHOR2</cmt>
+    <desc>ANCHOR2</desc>
+  </wpt>
+  <wpt lat="2.834729364" lon="104.125954747">
+    <time>2010-12-02T02:59:38Z</time>
+    <name>RT6P9</name>
+    <cmt>RT6P9</cmt>
+    <desc>RT6P9</desc>
+  </wpt>
+  <wpt lat="2.791733375" lon="104.091595770">
+    <time>2010-12-02T02:59:26Z</time>
+    <name>RT6P8</name>
+    <cmt>RT6P8</cmt>
+    <desc>RT6P8</desc>
+  </wpt>
+  <wpt lat="2.847377587" lon="104.029727977">
+    <time>2010-12-02T03:00:03Z</time>
+    <name>RT6P11</name>
+    <cmt>RT6P11</cmt>
+    <desc>RT6P11</desc>
+  </wpt>
+  <wpt lat="2.830759323" lon="104.154536153">
+    <time>2010-12-02T02:59:50Z</time>
+    <name>RT6P10</name>
+    <cmt>RT6P10</cmt>
+    <desc>RT6P10</desc>
+  </wpt>
+  <wpt lat="2.830759323" lon="104.148866741">
+    <time>2010-12-03T03:35:53Z</time>
+    <name>RT10P3</name>
+    <cmt>RT10P3</cmt>
+    <desc>RT10P3</desc>
+  </wpt>
+  <wpt lat="2.793704960" lon="104.206786676">
+    <time>2010-12-04T16:15:05Z</time>
+    <name>006</name>
+    <cmt>006</cmt>
+    <desc>006</desc>
+  </wpt>
+  <wpt lat="2.681400473" lon="103.898520307">
+    <time>2010-12-03T03:34:42Z</time>
+    <name>RT10P0</name>
+    <cmt>RT10P0</cmt>
+    <desc>RT10P0</desc>
+  </wpt>
+  <wpt lat="2.834126206" lon="104.120411523">
+    <time>2010-12-03T03:35:41Z</time>
+    <name>RT10P2</name>
+    <cmt>RT10P2</cmt>
+    <desc>RT10P2</desc>
+  </wpt>
+  <wpt lat="2.675134018" lon="103.924091246">
+    <time>2010-12-03T03:35:23Z</time>
+    <name>RT10P1</name>
+    <cmt>RT10P1</cmt>
+    <desc>RT10P1</desc>
+  </wpt>
+  <wpt lat="2.791832405" lon="104.207138198">
+    <time>2010-12-04T12:22:01Z</time>
+    <name>010</name>
+    <cmt>010</cmt>
+    <desc>010</desc>
+  </wpt>
+  <wpt lat="2.479588703" lon="104.492456519">
+    <time>2010-12-05T17:36:45Z</time>
+    <name>AUR</name>
+    <cmt>AUR</cmt>
+    <desc>AUR</desc>
+  </wpt>
+  <wpt lat="2.793533909" lon="104.205524804">
+    <time>2010-12-04T21:44:33Z</time>
+    <name>011</name>
+    <cmt>011</cmt>
+    <desc>011</desc>
+  </wpt>
+  <wpt lat="2.793569920" lon="104.207264385">
+    <time>2010-12-04T17:24:59Z</time>
+    <name>007</name>
+    <cmt>007</cmt>
+    <desc>007</desc>
+  </wpt>
+  <wpt lat="2.793803989" lon="104.209094100">
+    <time>2010-12-04T04:22:34Z</time>
+    <name>009</name>
+    <cmt>009</cmt>
+    <desc>009</desc>
+  </wpt>
+  <wpt lat="2.792381568" lon="104.208706525">
+    <time>2010-12-04T08:31:22Z</time>
+    <name>008</name>
+    <cmt>008</cmt>
+    <desc>008</desc>
+  </wpt>
+  <wpt lat="2.464163162" lon="104.503092299">
+    <time>2010-12-06T14:14:09Z</time>
+    <name>017</name>
+    <cmt>017</cmt>
+    <desc>017</desc>
+  </wpt>
+  <wpt lat="2.468341493" lon="104.505949539">
+    <time>2010-12-06T07:28:08Z</time>
+    <name>016</name>
+    <cmt>016</cmt>
+    <desc>016</desc>
+  </wpt>
+  <wpt lat="2.209170932" lon="104.056299401">
+    <time>2010-12-06T20:07:29Z</time>
+    <name>ANCHOR SIBU</name>
+    <cmt>ANCHOR SIBU</cmt>
+    <desc>ANCHOR SIBU</desc>
+  </wpt>
+  <wpt lat="2.206739128" lon="104.061148596">
+    <time>2010-12-06T19:09:36Z</time>
+    <name>SEBU</name>
+    <cmt>SEBU</cmt>
+    <desc>SEBU</desc>
+  </wpt>
+  <wpt lat="2.465270781" lon="104.504967081">
+    <time>2010-12-06T17:48:57Z</time>
+    <name>013</name>
+    <cmt>013</cmt>
+    <desc>013</desc>
+  </wpt>
+  <wpt lat="2.465946159" lon="104.503209473">
+    <time>2010-12-05T01:28:08Z</time>
+    <name>012</name>
+    <cmt>012</cmt>
+    <desc>012</desc>
+  </wpt>
+  <wpt lat="2.465594963" lon="104.500226047">
+    <time>2010-12-06T00:17:50Z</time>
+    <name>015</name>
+    <cmt>015</cmt>
+    <desc>015</desc>
+  </wpt>
+  <wpt lat="2.468242438" lon="104.501001197">
+    <time>2010-12-06T13:36:51Z</time>
+    <name>014</name>
+    <cmt>014</cmt>
+    <desc>014</desc>
+  </wpt>
+  <wpt lat="2.209882459" lon="104.057993915">
+    <time>2010-12-06T12:39:16Z</time>
+    <name>022</name>
+    <cmt>022</cmt>
+    <desc>022</desc>
+  </wpt>
+  <wpt lat="2.209684312" lon="104.055118649">
+    <time>2010-12-06T03:13:41Z</time>
+    <name>021</name>
+    <cmt>021</cmt>
+    <desc>021</desc>
+  </wpt>
+  <wpt lat="2.031251733" lon="104.134887000">
+    <time>2010-12-07T13:52:21Z</time>
+    <name>RT11P1</name>
+    <cmt>RT11P1</cmt>
+    <desc>RT11P1</desc>
+  </wpt>
+  <wpt lat="2.166226494" lon="104.063492073">
+    <time>2010-12-07T13:52:00Z</time>
+    <name>RT11P0</name>
+    <cmt>RT11P0</cmt>
+    <desc>RT11P0</desc>
+  </wpt>
+  <wpt lat="2.206892241" lon="104.056659936">
+    <time>2010-12-06T20:52:45Z</time>
+    <name>018</name>
+    <cmt>018</cmt>
+    <desc>018</desc>
+  </wpt>
+  <wpt lat="2.207765890" lon="104.054911342">
+    <time>2010-12-06T11:41:10Z</time>
+    <name>020</name>
+    <cmt>020</cmt>
+    <desc>020</desc>
+  </wpt>
+  <wpt lat="2.208135164" lon="104.058534717">
+    <time>2010-12-06T16:41:00Z</time>
+    <name>019</name>
+    <cmt>019</cmt>
+    <desc>019</desc>
+  </wpt>
+  <wpt lat="1.475839691" lon="104.328791693">
+    <time>2010-12-07T13:53:39Z</time>
+    <name>RT11P7</name>
+    <cmt>RT11P7</cmt>
+    <desc>RT11P7</desc>
+  </wpt>
+  <wpt lat="1.501879544" lon="104.319138370">
+    <time>2010-12-07T13:53:27Z</time>
+    <name>RT11P6</name>
+    <cmt>RT11P6</cmt>
+    <desc>RT11P6</desc>
+  </wpt>
+  <wpt lat="1.387599294" lon="104.348089324">
+    <time>2010-12-07T13:54:13Z</time>
+    <name>RT11P9</name>
+    <cmt>RT11P9</cmt>
+    <desc>RT11P9</desc>
+  </wpt>
+  <wpt lat="1.393384176" lon="104.343744878">
+    <time>2010-12-07T13:54:01Z</time>
+    <name>RT11P8</name>
+    <cmt>RT11P8</cmt>
+    <desc>RT11P8</desc>
+  </wpt>
+  <wpt lat="1.822989536" lon="104.219774947">
+    <time>2010-12-07T13:52:49Z</time>
+    <name>RT11P3</name>
+    <cmt>RT11P3</cmt>
+    <desc>RT11P3</desc>
+  </wpt>
+  <wpt lat="1.907841497" lon="104.173473250">
+    <time>2010-12-07T13:52:33Z</time>
+    <name>RT11P2</name>
+    <cmt>RT11P2</cmt>
+    <desc>RT11P2</desc>
+  </wpt>
+  <wpt lat="1.544308521" lon="104.296956459">
+    <time>2010-12-07T13:53:14Z</time>
+    <name>RT11P5</name>
+    <cmt>RT11P5</cmt>
+    <desc>RT11P5</desc>
+  </wpt>
+  <wpt lat="1.652318781" lon="104.277658828">
+    <time>2010-12-07T13:53:02Z</time>
+    <name>RT11P4</name>
+    <cmt>RT11P4</cmt>
+    <desc>RT11P4</desc>
+  </wpt>
+  <wpt lat="1.355340663" lon="104.313495999">
+    <time>2010-12-07T13:55:27Z</time>
+    <name>RT11P15</name>
+    <cmt>RT11P15</cmt>
+    <desc>RT11P15</desc>
+  </wpt>
+  <wpt lat="1.359098185" lon="104.319580026">
+    <time>2010-12-07T13:55:15Z</time>
+    <name>RT11P14</name>
+    <cmt>RT11P14</cmt>
+    <desc>RT11P14</desc>
+  </wpt>
+  <wpt lat="1.325875001" lon="104.179746557">
+    <time>2010-12-07T13:55:51Z</time>
+    <name>RT11P17</name>
+    <cmt>RT11P17</cmt>
+    <desc>RT11P17</desc>
+  </wpt>
+  <wpt lat="1.338553389" lon="104.255621131">
+    <time>2010-12-07T13:55:39Z</time>
+    <name>RT11P16</name>
+    <cmt>RT11P16</cmt>
+    <desc>RT11P16</desc>
+  </wpt>
+  <wpt lat="1.376993642" lon="104.349774825">
+    <time>2010-12-07T13:54:38Z</time>
+    <name>RT11P11</name>
+    <cmt>RT11P11</cmt>
+    <desc>RT11P11</desc>
+  </wpt>
+  <wpt lat="1.378921946" lon="104.348323672">
+    <time>2010-12-07T13:54:27Z</time>
+    <name>RT11P10</name>
+    <cmt>RT11P10</cmt>
+    <desc>RT11P10</desc>
+  </wpt>
+  <wpt lat="1.366378931" lon="104.347115880">
+    <time>2010-12-07T13:55:03Z</time>
+    <name>RT11P13</name>
+    <cmt>RT11P13</cmt>
+    <desc>RT11P13</desc>
+  </wpt>
+  <wpt lat="1.369037118" lon="104.350252534">
+    <time>2010-12-07T13:54:50Z</time>
+    <name>RT11P12</name>
+    <cmt>RT11P12</cmt>
+    <desc>RT11P12</desc>
+  </wpt>
+  <wpt lat="1.268005951" lon="103.876095035">
+    <time>2010-12-07T13:57:15Z</time>
+    <name>RT11P23</name>
+    <cmt>RT11P23</cmt>
+    <desc>RT11P23</desc>
+  </wpt>
+  <wpt lat="1.274034414" lon="103.912518075">
+    <time>2010-12-07T13:57:01Z</time>
+    <name>RT11P22</name>
+    <cmt>RT11P22</cmt>
+    <desc>RT11P22</desc>
+  </wpt>
+  <wpt lat="1.250163782" lon="103.852948693">
+    <time>2010-12-07T13:57:35Z</time>
+    <name>RT11P25</name>
+    <cmt>RT11P25</cmt>
+    <desc>RT11P25</desc>
+  </wpt>
+  <wpt lat="1.251605578" lon="103.859934057">
+    <time>2010-12-07T13:57:24Z</time>
+    <name>RT11P24</name>
+    <cmt>RT11P24</cmt>
+    <desc>RT11P24</desc>
+  </wpt>
+  <wpt lat="1.321288419" lon="104.058669918">
+    <time>2010-12-07T13:56:23Z</time>
+    <name>RT11P19</name>
+    <cmt>RT11P19</cmt>
+    <desc>RT11P19</desc>
+  </wpt>
+  <wpt lat="1.323703359" lon="104.096535098">
+    <time>2010-12-07T13:56:10Z</time>
+    <name>RT11P18</name>
+    <cmt>RT11P18</cmt>
+    <desc>RT11P18</desc>
+  </wpt>
+  <wpt lat="1.285847998" lon="103.957377633">
+    <time>2010-12-07T13:56:49Z</time>
+    <name>RT11P21</name>
+    <cmt>RT11P21</cmt>
+    <desc>RT11P21</desc>
+  </wpt>
+  <wpt lat="1.300554076" lon="104.043960093">
+    <time>2010-12-07T13:56:36Z</time>
+    <name>RT11P20</name>
+    <cmt>RT11P20</cmt>
+    <desc>RT11P20</desc>
+  </wpt>
+  <wpt lat="1.242206856" lon="103.844016441">
+    <time>2010-12-07T13:57:46Z</time>
+    <name>RT11P26</name>
+    <cmt>RT11P26</cmt>
+    <desc>RT11P26</desc>
+  </wpt>
+  <wpt lat="1.423858191" lon="104.291151847">
+    <time>2010-12-07T18:31:10Z</time>
+    <name>023</name>
+    <cmt>023</cmt>
+    <desc>023</desc>
+  </wpt>
+  <wpt lat="1.488868666" lon="104.324618501">
+    <time>2010-12-07T02:55:50Z</time>
+    <name>D7</name>
+    <cmt>D7</cmt>
+    <desc>D7</desc>
+  </wpt>
+  <wpt lat="1.239863929" lon="103.841907311">
+    <time>2010-11-23T06:16:40Z</time>
+    <name>002</name>
+    <cmt>002</cmt>
+    <desc>002</desc>
+  </wpt>
+  <wpt lat="1.244477691" lon="103.840582346">
+    <time>2010-11-23T03:13:20Z</time>
+    <name>One 15 Marina</name>
+    <cmt>One 15 Marina</cmt>
+    <desc>One 15 Marina</desc>
+  </wpt>
+  <wpt lat="1.300914518" lon="104.040940613">
+    <time>2010-11-23T03:30:00Z</time>
+    <name>NM001</name>
+    <cmt>NM001</cmt>
+    <desc>NM001</desc>
+  </wpt>
+  <wpt lat="1.244450657" lon="103.840699519">
+    <time>2010-11-19T01:13:13Z</time>
+    <name>MOB</name>
+    <cmt>MOB</cmt>
+    <desc>MOB</desc>
+  </wpt>
+  <wpt lat="1.268699811" lon="103.879637291">
+    <time>2010-11-23T07:23:20Z</time>
+    <name>003</name>
+    <cmt>003</cmt>
+    <desc>003</desc>
+  </wpt>
+  <wpt lat="1.244441646" lon="103.840690506">
+    <time>2010-11-19T17:13:33Z</time>
+    <name>001</name>
+    <cmt>001</cmt>
+    <desc>001</desc>
+  </wpt>
+  <wpt lat="1.252740992" lon="103.862088253">
+    <time>2010-11-30T04:47:24Z</time>
+    <name>RT5P2</name>
+    <cmt>RT5P2</cmt>
+    <desc>RT5P2</desc>
+  </wpt>
+  <wpt lat="1.240341526" lon="103.841150188">
+    <time>2010-11-30T04:47:12Z</time>
+    <name>RT5P1</name>
+    <cmt>RT5P1</cmt>
+    <desc>RT5P1</desc>
+  </wpt>
+  <wpt lat="1.275332019" lon="103.913680800">
+    <time>2010-11-30T04:47:49Z</time>
+    <name>RT5P4</name>
+    <cmt>RT5P4</cmt>
+    <desc>RT5P4</desc>
+  </wpt>
+  <wpt lat="1.270384898" lon="103.890029710">
+    <time>2010-11-30T04:47:36Z</time>
+    <name>RT5P3</name>
+    <cmt>RT5P3</cmt>
+    <desc>RT5P3</desc>
+  </wpt>
+  <wpt lat="1.344996184" lon="104.049999053">
+    <time>2010-11-23T02:16:40Z</time>
+    <name>Eastern Quarantine Anchorage</name>
+    <cmt>Call &quot;Eastern Immigration&quot; on Ch 74; alternatively, fly 2&amp;5 or 2 green vertical lights at night</cmt>
+    <desc>Call &quot;Eastern Immigration&quot; on Ch 74; alternatively, fly 2&amp;5 or 2 green vertical lights at night</desc>
+  </wpt>
+  <wpt lat="1.312890174" lon="104.063789514">
+    <time>2010-11-23T10:26:40Z</time>
+    <name>004</name>
+    <cmt>004</cmt>
+    <desc>004</desc>
+  </wpt>
+  <wpt lat="1.243414364" lon="103.840888800">
+    <time>2010-11-30T04:46:58Z</time>
+    <name>RT5P0</name>
+    <cmt>RT5P0</cmt>
+    <desc>RT5P0</desc>
+  </wpt>
+  <wpt lat="1.340725018" lon="104.331441624">
+    <time>2010-11-30T04:49:04Z</time>
+    <name>RT5P10</name>
+    <cmt>RT5P10</cmt>
+    <desc>RT5P10</desc>
+  </wpt>
+  <wpt lat="1.321054133" lon="104.197593036">
+    <time>2010-11-30T04:48:49Z</time>
+    <name>RT5P9</name>
+    <cmt>RT5P9</cmt>
+    <desc>RT5P9</desc>
+  </wpt>
+  <rte>
+    <name>Second Day Route</name>
+    <number>1</number>
+    <rtept lat="1.908805393" lon="104.132471416">
+      <time>2010-12-02T02:57:04Z</time>
+      <name>RT6P0</name>
+      <cmt>RT6P0</cmt>
+      <desc>RT6P0</desc>
+    </rtept>
+    <rtept lat="1.950991075" lon="104.158276703">
+      <time>2010-12-02T02:57:52Z</time>
+      <name>RT6P1</name>
+      <cmt>RT6P1</cmt>
+      <desc>RT6P1</desc>
+    </rtept>
+    <rtept lat="2.014136995" lon="104.133201499">
+      <time>2010-12-02T02:58:13Z</time>
+      <name>RT6P2</name>
+      <cmt>RT6P2</cmt>
+      <desc>RT6P2</desc>
+    </rtept>
+    <rtept lat="2.086206825" lon="104.108838352">
+      <time>2010-12-02T02:58:24Z</time>
+      <name>RT6P3</name>
+      <cmt>RT6P3</cmt>
+      <desc>RT6P3</desc>
+    </rtept>
+    <rtept lat="2.228454095" lon="104.041057787">
+      <time>2010-12-02T02:58:36Z</time>
+      <name>RT6P4</name>
+      <cmt>RT6P4</cmt>
+      <desc>RT6P4</desc>
+    </rtept>
+    <rtept lat="2.309078554" lon="104.067124462">
+      <time>2010-12-02T02:58:48Z</time>
+      <name>RT6P5</name>
+      <cmt>RT6P5</cmt>
+      <desc>RT6P5</desc>
+    </rtept>
+    <rtept lat="2.432546099" lon="104.069008257">
+      <time>2010-12-02T02:59:01Z</time>
+      <name>RT6P6</name>
+      <cmt>RT6P6</cmt>
+      <desc>RT6P6</desc>
+    </rtept>
+    <rtept lat="2.661178436" lon="104.077922483">
+      <time>2010-12-02T02:59:14Z</time>
+      <name>RT6P7</name>
+      <cmt>RT6P7</cmt>
+      <desc>RT6P7</desc>
+    </rtept>
+    <rtept lat="2.791733375" lon="104.091595770">
+      <time>2010-12-02T02:59:26Z</time>
+      <name>RT6P8</name>
+      <cmt>RT6P8</cmt>
+      <desc>RT6P8</desc>
+    </rtept>
+    <rtept lat="2.834729364" lon="104.125954747">
+      <time>2010-12-02T02:59:38Z</time>
+      <name>RT6P9</name>
+      <cmt>RT6P9</cmt>
+      <desc>RT6P9</desc>
+    </rtept>
+    <rtept lat="2.830759323" lon="104.154536153">
+      <time>2010-12-02T02:59:50Z</time>
+      <name>RT6P10</name>
+      <cmt>RT6P10</cmt>
+      <desc>RT6P10</desc>
+    </rtept>
+  </rte>
+  <rte>
+    <name>First Day</name>
+    <number>2</number>
+    <rtept lat="1.243414364" lon="103.840888800">
+      <time>2010-11-30T04:46:58Z</time>
+      <name>RT5P0</name>
+      <cmt>RT5P0</cmt>
+      <desc>RT5P0</desc>
+    </rtept>
+    <rtept lat="1.240341526" lon="103.841150188">
+      <time>2010-11-30T04:47:12Z</time>
+      <name>RT5P1</name>
+      <cmt>RT5P1</cmt>
+      <desc>RT5P1</desc>
+    </rtept>
+    <rtept lat="1.252740992" lon="103.862088253">
+      <time>2010-11-30T04:47:24Z</time>
+      <name>RT5P2</name>
+      <cmt>RT5P2</cmt>
+      <desc>RT5P2</desc>
+    </rtept>
+    <rtept lat="1.270384898" lon="103.890029710">
+      <time>2010-11-30T04:47:36Z</time>
+      <name>RT5P3</name>
+      <cmt>RT5P3</cmt>
+      <desc>RT5P3</desc>
+    </rtept>
+    <rtept lat="1.275332019" lon="103.913680800">
+      <time>2010-11-30T04:47:49Z</time>
+      <name>RT5P4</name>
+      <cmt>RT5P4</cmt>
+      <desc>RT5P4</desc>
+    </rtept>
+    <rtept lat="1.276638634" lon="103.924668102">
+      <time>2010-11-30T04:48:01Z</time>
+      <name>RT5P5</name>
+      <cmt>RT5P5</cmt>
+      <desc>RT5P5</desc>
+    </rtept>
+    <rtept lat="1.278377782" lon="103.976909612">
+      <time>2010-11-30T04:48:12Z</time>
+      <name>RT5P6</name>
+      <cmt>RT5P6</cmt>
+      <desc>RT5P6</desc>
+    </rtept>
+    <rtept lat="1.288497261" lon="104.031656839">
+      <time>2010-11-30T04:48:26Z</time>
+      <name>RT5P7</name>
+      <cmt>RT5P7</cmt>
+      <desc>RT5P7</desc>
+    </rtept>
+    <rtept lat="1.320567540" lon="104.071928590">
+      <time>2010-11-30T04:48:38Z</time>
+      <name>RT5P8</name>
+      <cmt>RT5P8</cmt>
+      <desc>RT5P8</desc>
+    </rtept>
+    <rtept lat="1.321054133" lon="104.197593036">
+      <time>2010-11-30T04:48:49Z</time>
+      <name>RT5P9</name>
+      <cmt>RT5P9</cmt>
+      <desc>RT5P9</desc>
+    </rtept>
+    <rtept lat="1.340725018" lon="104.331441624">
+      <time>2010-11-30T04:49:04Z</time>
+      <name>RT5P10</name>
+      <cmt>RT5P10</cmt>
+      <desc>RT5P10</desc>
+    </rtept>
+    <rtept lat="1.369082172" lon="104.362402561">
+      <time>2010-11-30T04:49:17Z</time>
+      <name>RT5P11</name>
+      <cmt>RT5P11</cmt>
+      <desc>RT5P11</desc>
+    </rtept>
+    <rtept lat="1.480182691" lon="104.339400433">
+      <time>2010-11-30T04:49:29Z</time>
+      <name>RT5P12</name>
+      <cmt>RT5P12</cmt>
+      <desc>RT5P12</desc>
+    </rtept>
+    <rtept lat="1.867348371" lon="104.195655160">
+      <time>2010-11-30T04:49:42Z</time>
+      <name>RT5P13</name>
+      <cmt>RT5P13</cmt>
+      <desc>RT5P13</desc>
+    </rtept>
+    <rtept lat="1.867348371" lon="104.195655160">
+      <time>2010-11-30T04:49:53Z</time>
+      <name>RT5P14</name>
+      <cmt>RT5P14</cmt>
+      <desc>RT5P14</desc>
+    </rtept>
+    <rtept lat="1.863492691" lon="103.995963882">
+      <time>2010-11-30T04:50:06Z</time>
+      <name>RT5P15</name>
+      <cmt>RT5P15</cmt>
+      <desc>RT5P15</desc>
+    </rtept>
+  </rte>
+  <rte>
+    <name>Third Day</name>
+    <number>3</number>
+    <rtept lat="2.681400473" lon="103.898520307">
+      <time>2010-12-03T03:34:42Z</time>
+      <name>RT10P0</name>
+      <cmt>RT10P0</cmt>
+      <desc>RT10P0</desc>
+    </rtept>
+    <rtept lat="2.675134018" lon="103.924091246">
+      <time>2010-12-03T03:35:23Z</time>
+      <name>RT10P1</name>
+      <cmt>RT10P1</cmt>
+      <desc>RT10P1</desc>
+    </rtept>
+    <rtept lat="2.834126206" lon="104.120411523">
+      <time>2010-12-03T03:35:41Z</time>
+      <name>RT10P2</name>
+      <cmt>RT10P2</cmt>
+      <desc>RT10P2</desc>
+    </rtept>
+    <rtept lat="2.830759323" lon="104.148866741">
+      <time>2010-12-03T03:35:53Z</time>
+      <name>RT10P3</name>
+      <cmt>RT10P3</cmt>
+      <desc>RT10P3</desc>
+    </rtept>
+  </rte>
+  <rte>
+    <name>Seventh Day Route</name>
+    <number>4</number>
+    <rtept lat="2.166226494" lon="104.063492073">
+      <time>2010-12-07T13:52:00Z</time>
+      <name>RT11P0</name>
+      <cmt>RT11P0</cmt>
+      <desc>RT11P0</desc>
+    </rtept>
+    <rtept lat="2.031251733" lon="104.134887000">
+      <time>2010-12-07T13:52:21Z</time>
+      <name>RT11P1</name>
+      <cmt>RT11P1</cmt>
+      <desc>RT11P1</desc>
+    </rtept>
+    <rtept lat="1.907841497" lon="104.173473250">
+      <time>2010-12-07T13:52:33Z</time>
+      <name>RT11P2</name>
+      <cmt>RT11P2</cmt>
+      <desc>RT11P2</desc>
+    </rtept>
+    <rtept lat="1.822989536" lon="104.219774947">
+      <time>2010-12-07T13:52:49Z</time>
+      <name>RT11P3</name>
+      <cmt>RT11P3</cmt>
+      <desc>RT11P3</desc>
+    </rtept>
+    <rtept lat="1.652318781" lon="104.277658828">
+      <time>2010-12-07T13:53:02Z</time>
+      <name>RT11P4</name>
+      <cmt>RT11P4</cmt>
+      <desc>RT11P4</desc>
+    </rtept>
+    <rtept lat="1.544308521" lon="104.296956459">
+      <time>2010-12-07T13:53:14Z</time>
+      <name>RT11P5</name>
+      <cmt>RT11P5</cmt>
+      <desc>RT11P5</desc>
+    </rtept>
+    <rtept lat="1.501879544" lon="104.319138370">
+      <time>2010-12-07T13:53:27Z</time>
+      <name>RT11P6</name>
+      <cmt>RT11P6</cmt>
+      <desc>RT11P6</desc>
+    </rtept>
+    <rtept lat="1.475839691" lon="104.328791693">
+      <time>2010-12-07T13:53:39Z</time>
+      <name>RT11P7</name>
+      <cmt>RT11P7</cmt>
+      <desc>RT11P7</desc>
+    </rtept>
+    <rtept lat="1.393384176" lon="104.343744878">
+      <time>2010-12-07T13:54:01Z</time>
+      <name>RT11P8</name>
+      <cmt>RT11P8</cmt>
+      <desc>RT11P8</desc>
+    </rtept>
+    <rtept lat="1.387599294" lon="104.348089324">
+      <time>2010-12-07T13:54:13Z</time>
+      <name>RT11P9</name>
+      <cmt>RT11P9</cmt>
+      <desc>RT11P9</desc>
+    </rtept>
+    <rtept lat="1.378921946" lon="104.348323672">
+      <time>2010-12-07T13:54:27Z</time>
+      <name>RT11P10</name>
+      <cmt>RT11P10</cmt>
+      <desc>RT11P10</desc>
+    </rtept>
+    <rtept lat="1.376993642" lon="104.349774825">
+      <time>2010-12-07T13:54:38Z</time>
+      <name>RT11P11</name>
+      <cmt>RT11P11</cmt>
+      <desc>RT11P11</desc>
+    </rtept>
+    <rtept lat="1.369037118" lon="104.350252534">
+      <time>2010-12-07T13:54:50Z</time>
+      <name>RT11P12</name>
+      <cmt>RT11P12</cmt>
+      <desc>RT11P12</desc>
+    </rtept>
+    <rtept lat="1.366378931" lon="104.347115880">
+      <time>2010-12-07T13:55:03Z</time>
+      <name>RT11P13</name>
+      <cmt>RT11P13</cmt>
+      <desc>RT11P13</desc>
+    </rtept>
+    <rtept lat="1.359098185" lon="104.319580026">
+      <time>2010-12-07T13:55:15Z</time>
+      <name>RT11P14</name>
+      <cmt>RT11P14</cmt>
+      <desc>RT11P14</desc>
+    </rtept>
+    <rtept lat="1.355340663" lon="104.313495999">
+      <time>2010-12-07T13:55:27Z</time>
+      <name>RT11P15</name>
+      <cmt>RT11P15</cmt>
+      <desc>RT11P15</desc>
+    </rtept>
+    <rtept lat="1.338553389" lon="104.255621131">
+      <time>2010-12-07T13:55:39Z</time>
+      <name>RT11P16</name>
+      <cmt>RT11P16</cmt>
+      <desc>RT11P16</desc>
+    </rtept>
+    <rtept lat="1.325875001" lon="104.179746557">
+      <time>2010-12-07T13:55:51Z</time>
+      <name>RT11P17</name>
+      <cmt>RT11P17</cmt>
+      <desc>RT11P17</desc>
+    </rtept>
+    <rtept lat="1.323703359" lon="104.096535098">
+      <time>2010-12-07T13:56:10Z</time>
+      <name>RT11P18</name>
+      <cmt>RT11P18</cmt>
+      <desc>RT11P18</desc>
+    </rtept>
+    <rtept lat="1.321288419" lon="104.058669918">
+      <time>2010-12-07T13:56:23Z</time>
+      <name>RT11P19</name>
+      <cmt>RT11P19</cmt>
+      <desc>RT11P19</desc>
+    </rtept>
+    <rtept lat="1.300554076" lon="104.043960093">
+      <time>2010-12-07T13:56:36Z</time>
+      <name>RT11P20</name>
+      <cmt>RT11P20</cmt>
+      <desc>RT11P20</desc>
+    </rtept>
+    <rtept lat="1.285847998" lon="103.957377633">
+      <time>2010-12-07T13:56:49Z</time>
+      <name>RT11P21</name>
+      <cmt>RT11P21</cmt>
+      <desc>RT11P21</desc>
+    </rtept>
+    <rtept lat="1.274034414" lon="103.912518075">
+      <time>2010-12-07T13:57:01Z</time>
+      <name>RT11P22</name>
+      <cmt>RT11P22</cmt>
+      <desc>RT11P22</desc>
+    </rtept>
+    <rtept lat="1.268005951" lon="103.876095035">
+      <time>2010-12-07T13:57:15Z</time>
+      <name>RT11P23</name>
+      <cmt>RT11P23</cmt>
+      <desc>RT11P23</desc>
+    </rtept>
+    <rtept lat="1.251605578" lon="103.859934057">
+      <time>2010-12-07T13:57:24Z</time>
+      <name>RT11P24</name>
+      <cmt>RT11P24</cmt>
+      <desc>RT11P24</desc>
+    </rtept>
+    <rtept lat="1.250163782" lon="103.852948693">
+      <time>2010-12-07T13:57:35Z</time>
+      <name>RT11P25</name>
+      <cmt>RT11P25</cmt>
+      <desc>RT11P25</desc>
+    </rtept>
+    <rtept lat="1.242206856" lon="103.844016441">
+      <time>2010-12-07T13:57:46Z</time>
+      <name>RT11P26</name>
+      <cmt>RT11P26</cmt>
+      <desc>RT11P26</desc>
+    </rtept>
+  </rte>
+  <rte>
+    <name>One 15 Marina to</name>
+    <number>5</number>
+    <rtept lat="1.244477691" lon="103.840582346">
+      <time>2010-11-23T03:13:20Z</time>
+      <name>One 15 Marina</name>
+      <cmt>One 15 Marina</cmt>
+      <desc>One 15 Marina</desc>
+    </rtept>
+    <rtept lat="1.239863929" lon="103.841907311">
+      <time>2010-11-23T06:16:40Z</time>
+      <name>002</name>
+      <cmt>002</cmt>
+      <desc>002</desc>
+    </rtept>
+    <rtept lat="1.268699811" lon="103.879637291">
+      <time>2010-11-23T07:23:20Z</time>
+      <name>003</name>
+      <cmt>003</cmt>
+      <desc>003</desc>
+    </rtept>
+    <rtept lat="1.300914518" lon="104.040940613">
+      <time>2010-11-23T03:30:00Z</time>
+      <name>NM001</name>
+      <cmt>NM001</cmt>
+      <desc>NM001</desc>
+    </rtept>
+    <rtept lat="1.312890174" lon="104.063789514">
+      <time>2010-11-23T10:26:40Z</time>
+      <name>004</name>
+      <cmt>004</cmt>
+      <desc>004</desc>
+    </rtept>
+    <rtept lat="1.344996184" lon="104.049999053">
+      <time>2010-11-23T02:16:40Z</time>
+      <name>Eastern Quarantine Anchorage</name>
+      <cmt>Call &quot;Eastern Immigration&quot; on Ch 74; alternatively, fly 2&amp;5 or 2 green vertical lights at night</cmt>
+      <desc>Call &quot;Eastern Immigration&quot; on Ch 74; alternatively, fly 2&amp;5 or 2 green vertical lights at night</desc>
+    </rtept>
+  </rte>
+  <trk>
+    <number>1</number>
+  </trk>
+  <trk>
+    <number>2</number>
+  </trk>
+  <trk>
+    <number>3</number>
+  </trk>
+  <trk>
+    <number>4</number>
+  </trk>
+  <trk>
+    <number>5</number>
+  </trk>
+  <trk>
+    <number>6</number>
+  </trk>
+  <trk>
+    <number>7</number>
+  </trk>
+  <trk>
+    <number>8</number>
+  </trk>
+</gpx>
