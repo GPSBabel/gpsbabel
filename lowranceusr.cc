@@ -646,7 +646,7 @@ arglist_t lowranceusr_args[] = {
   {
     // Specify the Output USR Version to be generated
     "wversion", &opt_wversion, "(USR output) Write version",
-    "4", ARGTYPE_INT, "2", "6", nullptr
+    "2", ARGTYPE_INT, "2", "6", nullptr
   },
   {
     // Only used if Write Version is 4/5/6
