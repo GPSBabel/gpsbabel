@@ -1,9 +1,59 @@
 <para> 
-The <ulink url="http://www.lowrance.com">Lowrance iFinder GPS</ulink> series has the unique capability within the Lowrance models
-to output its data to an MMC card.  The data is saved to the card as a
-.USR file and can be read by your computer using a card reader.
-Waypoints, icons, routes, tracks are supported.   Event marker icons contain a symbol, name, latitude and longitude
-only. By default, Event marker
-icons are converted to waypoints on read.  On write, you are able to create icons from waypoints.
+Many <ulink url="http://www.lowrance.com">Lowrance</ulink> systems have the ability
+to output their data to an external storage device.
+Early models (such as iFinder Hunt) supported an MMC card.
+Newer models (HDS, Hook, Hook2, etc) support either an SD card or a microSD card.
+When exported the data is saved to the card as a
+file which can be read by your computer.
+</para>
+
+<para>
+<ulink url="http://www.lowrance.com">Lowrance</ulink> has defined five distinct versions of USR files.
+Some USR formats also have multiple element versions (i.e. USR version 4 has two versions of route data).
+Depending on the model of device you have you may be able to specify export data in any of the
+five USR formats and some models also support exporting data in GPX format. 
+
+The following describes the multiple USR formats (this was copied from a recent Lowrance User Manual).
+<para>
+          User Data File version 6 - 
+            This is used to import and export waypoints, routes and colored Trails.
+</para>
+<para>
+          User Data File version 5 - 
+            This is used to import and export waypoints and routes with a
+            standardized universally unique identifier (UUID), which is very
+            reliable and easy to use. The data includes such information as
+            the time and date when a route was created, and so on.
+</para>
+<para>
+          User Data File version 4 - 
+            This is best used when transferring data from one system to
+            another, since it contains all the extra bits of information these
+            systems store about items.
+</para>
+<para>
+          User Data File version 3 (w/depth) - 
+            Should be used when transferring user data from one system to
+            a legacy product (Lowrance LMS, LCX, and so on.)
+</para>
+<para>
+          User Data File version 2 (no depth) - 
+            Can be used when transferring user data from one system to a
+            legacy product (Lowrance LMS, LCX, and so on.)
+</para>
+<para>
+          GPX (GPS Exchange, no depth) - 
+            This is the format most used on the web that shares amoung
+            most GPS systems in the world.  Use this format if you are taking
+            data to a competitors unit.
+</para>
+</para>
+
+<para>
+All systems support various numbers of waypoints, routes, and tracks.
+Some early systems also supported event icon markers.
+Event icon markers are represented by symbol, name, latitude and longitude data only.
+By default, event icon markers are converted to waypoints on read.  You have the option to ignore event icon markers.
+On write, you have the option to create event icon markers using waypoint data.
 </para>
     

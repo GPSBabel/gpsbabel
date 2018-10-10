@@ -1,6 +1,8 @@
 <para>
   Newer (post 2006 or so) Lowrance devices added a version three of their
-  .usr file format that adds depth.   Specify "3" here to use that format
+  USR file format that adds depth.  Lowrance recommends that this USR version
+  be used when transferring user data to older systems such as
+  LMS, LCX, and so on.   Specify "3" to output USR version 3 data
   on write.  
 </para>
 
@@ -21,5 +23,4 @@ on older Lowrance products, use this:
 <userinput>
  gpsbabel ... -o lowranceusr,wversion=3 -F blah.usr
 </userinput>
-
 </para>
