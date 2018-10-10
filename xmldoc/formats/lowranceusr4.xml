@@ -1,7 +1,0 @@
-<para> Newer <ulink url="http://www.lowrance.com">Lowrance</ulink> HDS
-series units use a new format, USR version 4.  Waypoints, routes,
-tracks are supported.  The format is not completely understood, so
-certain extended data is ignored, but basic waypoint, route, and track
-details are all present.  Icons are not currently deciphered.
-</para>
-    
