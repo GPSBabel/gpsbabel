@@ -1314,7 +1314,131 @@ lowranceusr_parse_trail(int *trail_num)
 static void
 lowranceusr4_parse_trail(int *trail_num)
 {
+  int trk_num;
+  int trail_version;
+  int data_count;
+  char name_buff[MAXUSRSTRINGSIZE + 1];
+  char desc_buff[MAXUSRSTRINGSIZE + 1];
+  int trail_color;
+  int trail_flags;
+
+  trk_head = route_head_alloc();
+  trk_head->rte_num = *trail_num;
+  track_add_head(trk_head);
+
+  lowranceusr4_fsdata* fsdata = lowranceusr4_alloc_fsdata();
+  fs_chain_add(&(trk_head->fs), (format_specific_data*) fsdata);
+
+  /* UID unit number */
+  fsdata->uid_unit = gbfgetint32(file_in);
+
+  /* 64-bit UID sequence number */
+  fsdata->uid_seq_low = gbfgetint32(file_in);
+  fsdata->uid_seq_high = gbfgetint32(file_in);
+
+  /* Trail stream version number */
+  trail_version = gbfgetint16(file_in);
+  if (global_opts.debug_level >= 1)
+  {
+    printf(MYNAME " parse_trails: trail Version %d\n", trail_version);
+  }
+
+  /* Trail name; input is 2 bytes per char, we convert to 1 */
+  int name_len = lowranceusr4_readstr(&name_buff[0], MAXUSRSTRINGSIZE, file_in, 2);
+  if (name_len) {
+    name_buff[name_len] = '\0';
+    trk_head->rte_name = name_buff;
+  }
+
+  /* Flags, discard for now */
+  trail_flags = gbfgetint32(file_in);
+
+  /* Color ID, discard for now */
+  trail_color = gbfgetint32(file_in);
+
+  /* Comment/description */
+  int desc_len = lowranceusr4_readstr(&desc_buff[0], MAXUSRSTRINGSIZE, file_in, 2);
+  if (desc_len) {
+    desc_buff[desc_len] = '\0';
+    trk_head->rte_desc = desc_buff;
+  }
+  /* Creation date/time, discard for now */
+  gbfgetint32(file_in);
+  gbfgetint32(file_in);
+
+  /* Some flag bytes, discard for now */
+  gbfgetc(file_in);
+  gbfgetc(file_in);
+  gbfgetc(file_in);
+
+  /* Some mysterious "data count" */
+  data_count = gbfgetint32(file_in);
+
+  /* Structure differences between versions */
+  if (trail_version < 5)
+  {
+    /* All values are byte values - ignore for now */
+    for (int j = 0; j < data_count; j++)
+      gbfgetc(file_in);
+  } else {
+    /* All values are int32 - ignore for now */
+    for (int j = 0; j < data_count; j++)
+      gbfgetint32(file_in);
+  }
+
+  int num_trail_pts = gbfgetint32(file_in);
+
+  if (global_opts.debug_level >= 1) {
+    printf(MYNAME " parse_trails: trail %d name=%s color=%d flags=%d has %d trackpoints\n",
+           trk_num, qPrintable(trk_head->rte_name), trail_color, trail_flags, num_trail_pts);
+  }
+
+  if (global_opts.debug_level == 99) {
+        printf(MYNAME " parse_trails: Trail %s\n", qPrintable(trk_head->rte_name));
+        printf(MYNAME " parse_trails: Longitude      Latitude       Flag/Value pairs (01=Speed)\n");
+        printf(MYNAME " parse_trails: -------------- -------------- -- -------- -- -------- -- --------\n");
+  }
+  for (int j = 0; j < num_trail_pts; ++j) {
+    Waypoint* wpt_tmp = new Waypoint;
+
+    /* Some unknown bytes */
+    gbfgetint16(file_in);
+    gbfgetc(file_in);
+
+    /* POSIX timestamp */
+    wpt_tmp->SetCreationTime(QDateTime::fromTime_t(gbfgetint32(file_in)));
+
+    /* Long/Lat */
+    wpt_tmp->longitude = gbfgetdbl(file_in) / DEGREESTORADIANS; /* rad to deg */
+    wpt_tmp->latitude = gbfgetdbl(file_in) / DEGREESTORADIANS;
+
+    if (global_opts.debug_level >= 2) {
+      if (global_opts.debug_level == 99) {
+        printf(MYNAME " parse_trails: %+14.9f %+14.9f", wpt_tmp->longitude, wpt_tmp->latitude);
+      } else {
+        printf(MYNAME " parse_trails: added trackpoint %+.9f,%+.9f to trail %s",
+               wpt_tmp->longitude, wpt_tmp->latitude, qPrintable(trk_head->rte_name));
+      }
+    }
+
+    track_add_wpt(trk_head, wpt_tmp);
+
+    /* Mysterious per-trackpoint data, toss it for now */
+    int M = gbfgetint32(file_in);
+    for (int k = 0; k < M; ++k) {
+      int flag = gbfgetc(file_in);
+      float value = gbfgetflt(file_in);
+      if (global_opts.debug_level == 99) {
+        printf(" %02x %f", flag, value);
+      }
+    }
+
+    if (M && (global_opts.debug_level == 99)) {
+      printf("\n");
+    }
+  }
 }
+
 
 static void
 lowranceusr_parse_trails()
