@@ -23,9 +23,13 @@
 
  */
 
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
-#include <QtCore/QDebug>
+#include <QtCore/QByteArray>   // for QByteArray
+#include <QtCore/QHash>        // for QHash
+#include <QtCore/QString>      // for QString
+#include <QtCore/QStringList>  // for QStringList
+#include <QtCore/QTextCodec>   // for QTextCodec
+#include <QtCore/QTextStream>  // for QTextStream
+#include <QtCore/QtGlobal>     // for qPrintable
 
 #include <cctype>
 #include <cstdlib>
@@ -110,8 +114,6 @@ char_map_t xcsv_char_table[] = {
 void
 xcsv_destroy_style(void)
 {
-  queue* elem, *tmp;
-  field_map_t* fmp;
 
   /*
    * If this xcsv_file struct came from a file we can free it all.
@@ -125,45 +127,8 @@ xcsv_destroy_style(void)
   xcsv_file.epilogue.clear();
 
   /* destroy the ifields */
-  QUEUE_FOR_EACH(&xcsv_file.ifield, elem, tmp) {
-    fmp = reinterpret_cast<field_map_t *>(elem);
-    if (fmp->key) {
-      xfree(fmp->key);
-    }
-    if (fmp->val) {
-      xfree(fmp->val);
-    }
-    if (fmp->printfc) {
-      xfree(fmp->printfc);
-    }
-    if (elem) {
-      xfree(elem);
-    }
-  }
-
-  /* destroy the ofields, if they are not re-mapped to ifields. */
-  if (xcsv_file.ofield != &xcsv_file.ifield) {
-    QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
-      fmp = reinterpret_cast<field_map_t *>(elem);
-      if (fmp->key) {
-        xfree(fmp->key);
-      }
-      if (fmp->val) {
-        xfree(fmp->val);
-      }
-      if (fmp->printfc) {
-        xfree(fmp->printfc);
-      }
-      if (elem) {
-        xfree(elem);
-      }
-    }
-
-    if (xcsv_file.ofield) {
-      xfree(xcsv_file.ofield);
-    }
-  }
   xcsv_file.ifields.clear();
+  /* destroy the ofields */
   xcsv_file.ofields.clear();
 
   /* other alloc'd glory */
@@ -185,7 +150,7 @@ xcsv_destroy_style(void)
 
 // Given a keyword of "COMMASPACE", return ", ".
 QString
-xcsv_get_char_from_constant_table(QString key)
+xcsv_get_char_from_constant_table(const QString& key)
 {
   static QHash<QString, QString> substitutions;
   if (substitutions.empty()) {
@@ -202,7 +167,7 @@ xcsv_get_char_from_constant_table(QString key)
 
 // Remove outer quotes.
 // Should probably be in csv_util.
-static QString dequote(QString in) {
+static QString dequote(const QString& in) {
   QString r = in.simplified();
   if (r.startsWith("\"")) r = r.mid(1);
   if (r.endsWith("\"")) r.chop(1);
@@ -347,12 +312,9 @@ xcsv_parse_style_line(QString line)
 
     // The key ("LAT_DIR") should never contain quotes.
 
-    const char* key = xstrdup(tokens[0].simplified());
-    QString s1 = dequote(tokens[1]);
-    char* val = xstrdup(s1);
-
-    QString s2 = dequote(tokens[2]);
-    char* pfc = xstrdup(s2);
+    const QString key = tokens[0].simplified();
+    const QString val = dequote(tokens[1]);
+    const QString pfc = dequote(tokens[2]);
     xcsv_ifield_add(key, val, pfc);
   } else
 
@@ -362,20 +324,16 @@ xcsv_parse_style_line(QString line)
       //  change the world on ifield vs ofield format later..
       //
   if (op == "OFIELD") {
-    int options = 0;
+    unsigned options = 0;
       // Note: simplifieid() has to run after split().
     if (tokens.size() < 3) {
       Fatal() << "Invalid OFIELD line: " << tokenstr;
     }
 
     // The key ("LAT_DIR") should never contain quotes.
-    const char *key = xstrdup(tokens[0].simplified());
-
-    QString s1 = dequote(tokens[1]);
-    char *val = xstrdup(s1);
-
-    QString s2 = dequote(tokens[2]);
-    const char* pfc = xstrdup(s2);
+    const QString key = tokens[0].simplified();
+    const QString val = dequote(tokens[1]);
+    const QString pfc = dequote(tokens[2]);
 
     // This is pretty lazy way to parse write options.
     // They've very rarely used, so we'll go for simple.
@@ -422,12 +380,8 @@ xcsv_read_style(const char* fname)
   }
 
   /* if we have no output fields, use input fields as output fields */
-  if (xcsv_file.ofield_ct == 0) {
-    if (xcsv_file.ofield) {
-      xfree(xcsv_file.ofield);
-    }
-    xcsv_file.ofield = &xcsv_file.ifield;
-    xcsv_file.ofield_ct = xcsv_file.ifield_ct;
+  if (xcsv_file.ofields.isEmpty()) {
+    xcsv_file.ofields = xcsv_file.ifields;
   }
   gbfclose(fp);
 }
@@ -446,12 +400,8 @@ xcsv_read_internal_style(const char* style_buf)
   xcsv_parse_style_buff(style_buf);
 
   /* if we have no output fields, use input fields as output fields */
-  if (xcsv_file.ofield_ct == 0) {
-    if (xcsv_file.ofield) {
-      xfree(xcsv_file.ofield);
-    }
-    xcsv_file.ofield = &xcsv_file.ifield;
-    xcsv_file.ofield_ct = xcsv_file.ifield_ct;
+  if (xcsv_file.ofields.isEmpty()) {
+    xcsv_file.ofields = xcsv_file.ifields;
   }
 }
 
