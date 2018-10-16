@@ -53,6 +53,7 @@ public:
   }
 
   // if constexpr will conflict with constexpr non-const version in c++11, ok in c++14.
+  // but MSVC2015 with the c++14 standard can't handle it.  MSVC2017 is ok.
   // intentionally does not check to see if a value is contained, use value() for that.
   const T& operator*() const&
   {
@@ -60,6 +61,7 @@ public:
   }
 
   // if constexpr will conflict with constexpr const version in c++11, ok in c++14.
+  // but MSVC2015 with the c++14 standard can't handle it.  MSVC2017 is ok.
   // intentionally does not check to see if a value is contained, use value() for that.
   T& operator*()&
   {
@@ -77,6 +79,7 @@ public:
   }
 
   // if constexpr will conflict with constexpr const version in c++11, ok in c++14.
+  // but MSVC2015 with the c++14 standard can't handle it.  MSVC2017 is ok.
   // if constexpr cannot use assert.
   T& value() &
   {
@@ -85,6 +88,7 @@ public:
   }
 
   // if constexpr will conflict with constexpr non-const version in c++11, ok in c++14.
+  // but MSVC2015 with the c++14 standard can't handle it.  MSVC2017 is ok.
   // if constexpr cannot use assert.
   const T& value() const&
   {
