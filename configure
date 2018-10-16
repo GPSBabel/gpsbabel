@@ -6044,6 +6044,7 @@ fi
 
 		OSJEEPS=jeeps/gpslibusb.o
 		CFLAGS="$OCFLAGS"
+		LDFLAGS="$OLDFLAGS"
 
 fi
  ;; #(
@@ -6153,6 +6154,7 @@ fi
 
 			OSJEEPS=jeeps/gpslibusb.o
 			CFLAGS="$OCFLAGS"
+			LDFLAGS="$OLDFLAGS"
 			#LIBS="$LIBS `libusb-config --libs`"
 
 else
@@ -6254,6 +6256,78 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 	CPPFLAGS="$OCPPFLAGS"
+
+#	When using Qt installed on a non-system path,
+#	e.g. with Qt installed with a Qt installer from download.qt.io,
+#	we may need to add the Qt lib location to the runtime library search path.
+#	we use AC_RUN_IFELSE because AC_LINK_IFELSE may pass when a different
+#	Qt library is found on the runtime library search path.
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking loader paths for Qt libs" >&5
+$as_echo_n "checking loader paths for Qt libs... " >&6; }
+	OCPPFLAGS="$CPPFLAGS"
+	CPPFLAGS="$CPPFLAGS -I$QT_INC"
+	OLIBS="$LIBS"
+	LIBS="$LIBS $QT_LIBS"
+	if test "$cross_compiling" = yes; then :
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "cannot run test program while cross compiling
+See \`config.log' for more details" "$LINENO" 5; }
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+		#include <QtCore/QtGlobal>
+		#include <cstring>
+		int main () {
+		return strcmp(QT_VERSION_STR, qVersion()) != 0;
+		}
+_ACEOF
+if ac_fn_cxx_try_run "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: rpath not needed" >&5
+$as_echo "rpath not needed" >&6; }
+else
+  OLDFLAGS="$LDFLAGS"
+		LDFLAGS="$LDFLAGS -Wl,-rpath,$($QMAKE -query QT_INSTALL_LIBS)"
+		if test "$cross_compiling" = yes; then :
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "cannot run test program while cross compiling
+See \`config.log' for more details" "$LINENO" 5; }
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+			#include <QtCore/QtGlobal>
+			#include <cstring>
+			int main () {
+			return strcmp(QT_VERSION_STR, qVersion()) != 0;
+			}
+_ACEOF
+if ac_fn_cxx_try_run "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: rpath required" >&5
+$as_echo "rpath required" >&6; }
+else
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "loader cannot find Qt library
+See \`config.log' for more details" "$LINENO" 5; }
+			LDFLAGS="$OLDFLAGS"
+
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+	CPPFLAGS="$OCPPFLAGS"
+	LIBS="$OLIBS"
+
  ;;
 esac
 
