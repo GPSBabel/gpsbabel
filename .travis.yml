@@ -17,6 +17,7 @@ matrix:
       cache:
         directories:
           - $HOME/Qt
+        timeout: 600
     - os: linux
       dist: trusty
       sudo: required
