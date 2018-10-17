@@ -36,7 +36,7 @@ public:
 void session_init(void);
 void session_exit(void);
 
-void start_session(const char* name, const QString& filename);
+void start_session(const QString& name, const QString& filename);
 const session_t* curr_session(void);
 
 #endif  // SESSION_H_INCLUDED_

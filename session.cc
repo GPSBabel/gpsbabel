@@ -39,7 +39,7 @@ session_exit()
 }
 
 void
-start_session(const char* name, const QString& filename)
+start_session(const QString& name, const QString& filename)
 {
   session_list.append(session_t(name, filename));
 }
