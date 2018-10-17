@@ -2090,10 +2090,10 @@ xcsv_waypt_pr(const Waypoint* wpt)
     break;
     /* specials */
     case XT_FILENAME:
-      buff = QString().sprintf(fmp.printfc.constData(), wpt->session->filename);
+      buff = QString().sprintf(fmp.printfc.constData(), CSTR(wpt->session->filename));
       break;
     case XT_FORMAT:
-      buff = QString().sprintf(fmp.printfc.constData(), wpt->session->name);
+      buff = QString().sprintf(fmp.printfc.constData(), CSTR(wpt->session->name));
       break;
     case -1:
       if (strncmp(fmp.key.constData(), "LON_10E", 7) == 0) {
