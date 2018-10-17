@@ -532,7 +532,7 @@ public:
   float odometer_distance; /* Meters? */
   geocache_data* gc_data;
   format_specific_data* fs;
-  session_t* session;	/* pointer to a session struct */
+  const session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
 
 public:
@@ -660,7 +660,7 @@ public:
   unsigned short cet_converted;	/* strings are converted to UTF8; interesting only for input */
   gb_color line_color;         /* Optional line color for rendering */
   int line_width;         /* in pixels (sigh).  < 0 is unknown. */
-  session_t* session;	/* pointer to a session struct */
+  const session_t* session;	/* pointer to a session struct */
 
 public:
   route_head();

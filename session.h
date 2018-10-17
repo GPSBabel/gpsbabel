@@ -24,30 +24,19 @@
 
 #include "queue.h"
 
-typedef struct {
-  queue Q;
-  int id;
-  char* name;
-} category_t;
+struct session_t {
+public:
+  QString name;					/* in normal case the name of a format */
+  QString filename;			/* used file within format */
 
-typedef struct {
-  queue Q;
-  int nr;
-  const char* name;		/* in normal case the name of a format */
-  char* filename;			/* used file within format */
-  int category_ct;
-  int unknown_category_ct;	/* added without id */
-  queue category_list;
-} session_t;
+public:
+  session_t(const QString& name_p, const QString& filename_p) : name{name_p},filename{filename_p} {}
+};
 
 void session_init(void);
 void session_exit(void);
 
-void start_session(const char* name, const char* filename);
-session_t* curr_session(void);
-
-/* in work
-int session_add_category(const char *name, const int id);
-*/
+void start_session(const char* name, const QString& filename);
+const session_t* curr_session(void);
 
 #endif  // SESSION_H_INCLUDED_
