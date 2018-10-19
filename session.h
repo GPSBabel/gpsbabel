@@ -22,7 +22,7 @@
 #ifndef SESSION_H_INCLUDED_
 #define SESSION_H_INCLUDED_
 
-#include "queue.h"
+#include <QtCore/QString>  // for QString
 
 struct session_t {
 public:
