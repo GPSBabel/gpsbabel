@@ -1,3 +1,4 @@
 <para>
-(USR output) This option converts the waypoint information to an event marker icon.
+(USR output) This option causes waypoint information read from the input file to be
+converted to an event marker icon in the output.
 </para>

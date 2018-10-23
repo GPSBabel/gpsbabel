@@ -1,12 +1,12 @@
 <para>
-  Newer (post 2006 or so) Lowrance devices added a version three of their
-  USR file format that adds depth.  Lowrance recommends that this USR version
-  be used when transferring user data to older systems such as
-  LMS, LCX, and so on.   Specify "3" to output USR version 3 data
-  on write.  
+  While GPSBabel is capable of supporting all five USR formats for input processing
+  it is currently only able to generate USR format 2, 3, or 4 due to the lack of
+  detailed information on the other formats.
 </para>
-
+ 
 <para>
+  By default, GPSBabel will generate USR version 2 data if the output format is
+  specified as <emphasis>lowranceusr</emphasis>.
 <userinput>
  gpsbabel ... -o lowranceusr,wversion=2 -F blah.usr
 </userinput>
@@ -18,8 +18,15 @@ is exactly the same as
 
 
 <para>
-To create a file that contains depth but therefore isn't usable
-on older Lowrance products, use this:
+  Newer (post 2006 or so) Lowrance devices added a version three of their
+  USR file format that adds waypoint depth.  Lowrance recommends that this USR version
+  be used when transferring user data to systems such as
+  LMS, LCX, and so on.   Specify "3" to output USR version 3 data
+  on write.  
+</para>
+
+<para>
+To create a USR version 3 file that contains waypoint depth information use these output options:
 <userinput>
  gpsbabel ... -o lowranceusr,wversion=3 -F blah.usr
 </userinput>

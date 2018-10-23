@@ -4,17 +4,21 @@ to output their data to an external storage device.
 Early models (such as iFinder Hunt) supported an MMC card.
 Newer models (HDS, Hook, Hook2, etc) support either an SD card or a microSD card.
 When exported the data is saved to the card as a
-file which can be read by your computer.
+file which can be read by your computer.  Some models have the ability to export data in GPX format but the
+format native to <ulink url="http://www.lowrance.com">Lowrance</ulink> units is called USR.
 </para>
 
 <para>
-<ulink url="http://www.lowrance.com">Lowrance</ulink> has defined five distinct versions of USR files.
-Some USR formats also have multiple element versions (i.e. USR version 4 has two versions of route data).
-Depending on the model of device you have you may be able to specify export data in any of the
-five USR formats and some models also support exporting data in GPX format. 
+<ulink url="http://www.lowrance.com">Lowrance</ulink> currently supports five distinct versions of USR files.
+Some USR formats also have multiple element versions (i.e. USR version 4 has two different versions of
+route data).
+Depending on the model of device you have you may be able to select the format for export data from any of the
+five USR formats or even the GPX format. 
+</para>
 
-The following describes the multiple USR formats that are supported by the Lowrance product set (this is based on information contained
-in a 2018 Lowrance User Manual).
+<para>
+The following describes the multiple USR formats that are supported by the Lowrance product set
+(this is based on information contained in the <ulink url="ftp://software.lowrance.com/Documents/Hook2-Series_OM_EN_988-11760-001_w.pdf">2018 Lowrance Hook2 Series Operator Manual</ulink>).
 </para>
 <para>
           <emphasis>User Data File version 2 (no depth) </emphasis>- 
@@ -25,7 +29,7 @@ in a 2018 Lowrance User Manual).
 </para>
 <para>
           <emphasis>User Data File version 3 (w/depth)</emphasis> - 
-            ALso used when transferring user data from one system to
+            Also used when transferring user data from one system to
             a legacy product (Lowrance LMS, LCX, and so on.)
 </para>
 <para>
@@ -49,14 +53,27 @@ in a 2018 Lowrance User Manual).
 <para>
 Lowrance systems support varying numbers of waypoints, routes, and tracks dependent on the specific
 device capabilities.
-Some early systems also supported event icon markers.
+Some early systems also supported entities called event icon markers.
 Event icon markers are represented by symbol, latitude and longitude data only.
-By default, event icon markers are converted to waypoints on read with name being generated in the format "Event Marker XXX"
-where XXX is replaced by the squence number of the Event Marker ICON found in the input data.  You have the option to ignore Event Icon Markers
+By default, event icon markers are converted by GPSBabel to waypoints on read with their name being generated
+in the format "Event Marker XXX"
+where XXX is replaced by the squence number of the Event Marker ICON found in the input data.
+You have the option to ignore Event Icon Markers
 effectively removing them from the output data using the input option <emphasis>ignoreicons</emphasis>.
-On output, you can use the write option <emphasis>writeasicons</emphasis> to create event icon markers from waypoint data present
-in the input file.
+On output, you can use the write option <emphasis>writeasicons</emphasis> to create event icon markers
+from waypoint data present in the input file.
 </para>
+
+<para>
+The following tables detail the content format of USR data files.</para>
+<itemizedlist mark="bullet">
+  <listitem><para><link linkend="usr_format">Lowrance USR Data File Contents</link></para></listitem>
+  <listitem><para><link linkend="usr_waypoint">Lowrance USR 2 and 3 Waypoint Element Format</link></para></listitem>
+  <listitem><para><link linkend="usr4_waypoint">Lowrance USR 4, 5 and 6 Waypoint Element Format</link></para></listitem>
+  <listitem><para><link linkend="usr_route">Lowrance USR Route Element Format</link></para></listitem>
+  <listitem><para><link linkend="usr_eventmarker">Lowrance USR 2 and 3 Event Marker ICON Element Format</link></para></listitem>
+  <listitem><para><link linkend="usr_trail">Lowrance USR Trail Element Format</link></para></listitem>
+</itemizedlist>
 
 <table id="usr_format">
   <title>Lowrance USR Data File Contents</title>
@@ -68,7 +85,7 @@ in the input file.
     <colspec colname="u6" align="center" colwidth="22pt"/>
     <colspec colname="f" colwidth="*" />
     <colspec colname="s" align="center"  colwidth="34pt"/>
-    <colspec colname="d" colwidth="2*"/>
+    <colspec colname="d" colwidth="2.5*"/>
     <thead>
       <row>
         <entry namest="u2" nameend="u6" align="center">Present In</entry>
@@ -165,14 +182,14 @@ in the input file.
         <entry>  Number of Waypoint Objects </entry>
         <entry>  2 </entry>
         <entry>  In USR versions 2 and 3, the number of Waypoint objects is represented as a short integer.
-                 If the value is zero there are no Waypoint Objects present in the data. </entry>
+                 If the value is zero there are no Waypoint objects present in the data. </entry>
       </row>
       <row valign="middle">
         <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
         <entry>  Number of Waypoint Objects </entry>
         <entry>  4 </entry>
         <entry>  In USR versions 4, 5 and 6, the number of Waypoint objects is represented as an integer,
-                 If the value is zero there are no Waypoint Objects present in the data. </entry>
+                 If the value is zero there are no Waypoint objects present in the data. </entry>
       </row>
       <row valign="middle">
         <entry>X</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
@@ -185,14 +202,14 @@ in the input file.
         <entry>  Number of Route Objects </entry>
         <entry>  2 </entry>
         <entry>  In USR versions 2 and 3, the number of Route objects is represented as a short integer.
-                 If the value is zero there are no Route Objects present in the data. </entry>
+                 If the value is zero there are no Route objects present in the data. </entry>
       </row>
       <row valign="middle">
         <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
         <entry>  Number of Route Objects </entry>
         <entry>  4 </entry>
         <entry>  In USR versions 4, 5 and 6, the number of Route objects is represented as an integer,
-                 If the value is zero there are no Route Objects present in the data. </entry>
+                 If the value is zero there are no Route objects present in the data. </entry>
       </row>
       <row valign="middle">
         <entry>X</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
@@ -219,14 +236,14 @@ in the input file.
         <entry>  Number of Trail Objects </entry>
         <entry>  2 </entry>
         <entry>  In USR versions 2 and 3, the number of Trail objects is represented as a short integer.
-                 If the value is zero there are no Trail Objects present in the data. </entry>
+                 If the value is zero there are no Trail objects present in the data. </entry>
       </row>
       <row valign="middle">
         <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
         <entry>  Number of Trail Objects </entry>
         <entry>  4 </entry>
         <entry>  In USR versions 4, 5 and 6, the number of Trail objects is represented as an integer,
-                 If the value is zero there are no Trail Objects present in the data. </entry>
+                 If the value is zero there are no Trail objects present in the data. </entry>
       </row>
       <row valign="middle">
         <entry>X</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
@@ -462,7 +479,7 @@ in the input file.
   </tgroup>
 </table>
 
-<table id="usr_routes">
+<table id="usr_route">
   <title>Lowrance USR Route Element Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>

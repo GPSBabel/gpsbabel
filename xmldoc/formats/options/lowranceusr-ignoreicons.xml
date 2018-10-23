@@ -1,4 +1,4 @@
 <para>
-This option instructs GPSBabel to not convert icons to waypoints on input,
-but to instead disregard them altogether 
+This option instructs GPSBabel to not convert event marker icons found in the input data to waypoints,
+but to instead disregard them altogether.  These are present only in USR version 2 and 3 formats.
 </para>
