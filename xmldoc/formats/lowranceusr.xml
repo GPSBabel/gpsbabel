@@ -70,7 +70,9 @@ The following tables detail the content format of USR data files.</para>
   <listitem><para><link linkend="usr_format">Lowrance USR Data File Contents</link></para></listitem>
   <listitem><para><link linkend="usr_waypoint">Lowrance USR 2 and 3 Waypoint Element Format</link></para></listitem>
   <listitem><para><link linkend="usr4_waypoint">Lowrance USR 4, 5 and 6 Waypoint Element Format</link></para></listitem>
-  <listitem><para><link linkend="usr_route">Lowrance USR Route Element Format</link></para></listitem>
+  <listitem><para><link linkend="usr_route">Lowrance USR Route 2 and 3 Element Format</link></para></listitem>
+  <listitem><para><link linkend="usr4_route">Lowrance USR Route 4, 5 and 6 Element Format</link></para></listitem>
+  <listitem><para><link linkend="usr4_leg">Lowrance USR 4, 5 and 6 Leg Element Format</link></para></listitem>
   <listitem><para><link linkend="usr_eventmarker">Lowrance USR 2 and 3 Event Marker ICON Element Format</link></para></listitem>
   <listitem><para><link linkend="usr_trail">Lowrance USR Trail Element Format</link></para></listitem>
 </itemizedlist>
@@ -480,7 +482,7 @@ The following tables detail the content format of USR data files.</para>
 </table>
 
 <table id="usr_route">
-  <title>Lowrance USR Route Element Format</title>
+  <title>Lowrance USR 2 and 3 Route Element Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -516,7 +518,7 @@ The following tables detail the content format of USR data files.</para>
         <entry>  Sequence number of the Waypoint Object </entry>
       </row>
       <row valign="middle">
-        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
+        <entry>X</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
         <entry>  Latitude </entry>
         <entry>  4 </entry>
         <entry>  Waypoint Latitude value (float) </entry>
@@ -591,6 +593,162 @@ The following tables detail the content format of USR data files.</para>
   </tgroup>
 </table>
 
+<table id="usr4_route">
+  <title>Lowrance USR 4, 5 and 6 Route Element Format</title>
+  <tgroup cols="8">
+    <colspec colname="u2" align="center" colwidth="22pt"/>
+    <colspec colname="u3" align="center" colwidth="22pt"/>
+    <colspec colname="u4" align="center" colwidth="22pt"/>
+    <colspec colname="u5" align="center" colwidth="22pt"/>
+    <colspec colname="u6" align="center" colwidth="22pt"/>
+    <colspec colname="f" colwidth="*" />
+    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="d" colwidth="2*"/>
+    <thead>
+      <row>
+        <entry namest="u2" nameend="u6" align="center">Present In</entry>
+        <entry></entry>
+        <entry></entry>
+        <entry></entry>
+      </row>
+      <row>
+        <entry>USR 2</entry>
+        <entry>USR 3</entry>
+        <entry>USR 4</entry>
+        <entry>USR 5</entry>
+        <entry>USR 6</entry>
+        <entry>Field</entry>
+        <entry>Size (Bytes)</entry>
+        <entry>Descrption</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Route Universally Unique ID Number </entry>
+        <entry>  16 </entry>
+        <entry>  Appears only in USR 5 and 6 format.  Universally Unique Route ID captured 
+                 as four integers</entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Unit Number </entry>
+        <entry>  4 </entry>
+        <entry>  Serial Number of Unit capturing Route (integer)</entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Route Object Sequence Number </entry>
+        <entry>  8 </entry>
+        <entry>  Sequence number of the Route Object captured as a long integer </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Stream Version </entry>
+        <entry>  4 </entry>
+        <entry>  Route Stream version (integer) </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Name Length </entry>
+        <entry>  4 </entry>
+        <entry>  Length of Route Name string (integer) </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Name </entry>
+        <entry>  Name Length </entry>
+        <entry>  Name text, with USR 4, 5 and 6 format this is UTF-16 representation. </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Unit Number </entry>
+        <entry>  4 </entry>
+        <entry>  Serial Number of Unit capturing Route (integer).  Only present in USR 5 and 6 format. </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Number of Legs </entry>
+        <entry>  4 </entry>
+        <entry>  Number of legs in route (integer) </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Leg Objects </entry>
+        <entry>  Sizeof Leg Object * Number of Legs </entry>
+        <entry>  Array of Leg Object data. </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Unknown Data </entry>
+        <entry>  9 </entry>
+        <entry>  Unknown data fields.  Appears to be three values, two integers and one character.</entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Unknown Data </entry>
+        <entry>  1 </entry>
+        <entry>  Unknown data field. Possibly end of Route element indicator. </entry>
+      </row>
+    </tbody>
+  </tgroup>
+</table>
+
+<table id="usr4_leg">
+  <title>Lowrance USR 4, 5 and 6 Leg Element Format</title>
+  <tgroup cols="8">
+    <colspec colname="u2" align="center" colwidth="22pt"/>
+    <colspec colname="u3" align="center" colwidth="22pt"/>
+    <colspec colname="u4" align="center" colwidth="22pt"/>
+    <colspec colname="u5" align="center" colwidth="22pt"/>
+    <colspec colname="u6" align="center" colwidth="22pt"/>
+    <colspec colname="f" colwidth="*" />
+    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="d" colwidth="2*"/>
+    <thead>
+      <row>
+        <entry namest="u2" nameend="u6" align="center">Present In</entry>
+        <entry></entry>
+        <entry></entry>
+        <entry></entry>
+      </row>
+      <row>
+        <entry>USR 2</entry>
+        <entry>USR 3</entry>
+        <entry>USR 4</entry>
+        <entry>USR 5</entry>
+        <entry>USR 6</entry>
+        <entry>Field</entry>
+        <entry>Size (Bytes)</entry>
+        <entry>Descrption</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Route Universally Unique ID Number </entry>
+        <entry>  16 </entry>
+        <entry>  Appears only in USR 5 and 6 format.  Universally Unique ID for Waypoint
+                 that represents this leg of Route captured as four integers.  Used to find
+                 Lat/Long values for leg. </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry>
+        <entry>  Unit Number </entry>
+        <entry>  4 </entry>
+        <entry>  Serial Number of Unit capturing Route Leg(integer).  Used with Waypoint
+                 Sequence Number to find Lat/Long values for leg. </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry>
+        <entry>  Waypoint Object Sequence Number </entry>
+        <entry>  8 </entry>
+        <entry>  Sequence number of the Waypoint Object captured as a long integer.  Used with
+                 Unit Number to find Lat/Long values for leg. </entry>
+      </row>
+    </tbody>
+  </tgroup>
+</table>
 
 <table id="usr_eventmarker">
   <title>Lowrance USR 2 and 3 Event Marker ICON Element Format</title>
