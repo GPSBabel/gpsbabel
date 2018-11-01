@@ -61,6 +61,10 @@ compare ${REFERENCE}/bounds-test.kml ${TMPDIR}/bnds_so.kml
 gpsbabel -i gpx -f ${REFERENCE}/track/tracks.gpx -o kml,track=1,trackdirection=1,units='m' -F ${TMPDIR}/tracks~gpx.kml
 compare ${REFERENCE}/track/tracks~gpx.kml ${TMPDIR}/tracks~gpx.kml
 
+# kml 2.3
+gpsbabel -i kml -f ${REFERENCE}/track/Placemark-Track-1.kml -o gpx -F ${TMPDIR}/Placemark-Track-1~kml.gpx
+compare ${REFERENCE}/track/Placemark-Track-1~kml.gpx ${TMPDIR}/Placemark-Track-1~kml.gpx
+
 set -e
 if which xmllint > /dev/null;
 then

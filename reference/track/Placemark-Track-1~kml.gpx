@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="37.371915000" minlon="-122.207881000" maxlat="37.374857000" maxlon="-122.203207000"/>
+  <trk>
+    <trkseg>
+      <trkpt lat="37.371915000" lon="-122.207881000">
+        <ele>156.000</ele>
+        <time>2010-05-28T02:02:09Z</time>
+      </trkpt>
+      <trkpt lat="37.373288000" lon="-122.205712000">
+        <ele>152.000</ele>
+        <time>2010-05-28T02:02:35Z</time>
+      </trkpt>
+      <trkpt lat="37.373939000" lon="-122.204678000">
+        <ele>147.000</ele>
+        <time>2010-05-28T02:02:44Z</time>
+      </trkpt>
+      <trkpt lat="37.374630000" lon="-122.203572000">
+        <ele>142.200</ele>
+        <time>2010-05-28T02:02:53Z</time>
+      </trkpt>
+      <trkpt lat="37.374706000" lon="-122.203451000">
+        <ele>141.800</ele>
+        <time>2010-05-28T02:02:54Z</time>
+      </trkpt>
+      <trkpt lat="37.374780000" lon="-122.203329000">
+        <ele>141.200</ele>
+        <time>2010-05-28T02:02:55Z</time>
+      </trkpt>
+      <trkpt lat="37.374857000" lon="-122.203207000">
+        <ele>140.200</ele>
+        <time>2010-05-28T02:02:56Z</time>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
