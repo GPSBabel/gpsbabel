@@ -26,15 +26,23 @@
 
 #include "defs.h"
 #include "grtcirc.h"
+#include "queue.h"
+#include "src/core/datetime.h"
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
 #include "src/core/xmltag.h"
 #include "xmlgeneric.h"
-#include <QtCore/QRegExp>
-#include <QtCore/QXmlStreamAttributes>
+#include <QtCore/QXmlStreamAttributes> // for QXmlStreamAttributes
+#include <QtCore/QDateTime>            // for QDateTime
+#include <QtCore/QFile>                // for QFile
+#include <QtCore/QList>                // for QList
+#include <QtCore/QString>              // for QString, QStringLiteral, QStat...
+#include <QtCore/QtGlobal>             // for qint64, qPrintable
+#include <cctype>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <tuple>
 
 // options
@@ -485,9 +493,9 @@ void gx_trk_e(xg_string, const QXmlStreamAttributes*)
     // It is not clear that coord elements without altitude are allowed, but our
     // writer produces them.
     if (n >= 2) {
-    trkpt->latitude = lat;
-    trkpt->longitude = lon;
-    if (n >= 3) {
+      trkpt->latitude = lat;
+      trkpt->longitude = lon;
+      if (n >= 3) {
         trkpt->altitude = alt;
       }
       track_add_wpt(gx_trk_head, trkpt);
