@@ -4,20 +4,24 @@ to output their data to an external storage device.
 Early models (such as iFinder Hunt) supported an MMC card.
 Newer models (HDS, Hook, Hook2, etc) support either an SD card or a microSD card.
 When exported the data is saved to the card as a
-file which can be read by your computer.  Some models have the ability to export data in GPX format but the
+file.  Some models have the ability to export data in GPX format but the
 format native to <ulink url="http://www.lowrance.com">Lowrance</ulink> units is called USR.
+Typically the file created by the export operation will have a ".usr" suffix if is a 
+native format or a ".gpx" suffix if is is a GPX format file.
 </para>
 
 <para>
-<ulink url="http://www.lowrance.com">Lowrance</ulink> currently supports five distinct versions of USR files.
-Some USR formats also have multiple element versions (i.e. USR version 4 has two different versions of
+<ulink url="http://www.lowrance.com">Lowrance</ulink> units currently use five different versions of USR files.
+These different USR versions store the four internal elements (waypoints, routes, trails, and event marker icons)
+using different formats.  Some units do not support all four elements (typically event marker icons are not supported).
+Some USR formats also have multiple element versions (i.e. USR version 4 has two different formats for storing
 route data).
 Depending on the model of device you have you may be able to select the format for export data from any of the
 five USR formats or even the GPX format. 
 </para>
 
 <para>
-The following describes the multiple USR formats that are supported by the Lowrance product set
+The following provides a high-level description of the multiple USR formats that are supported by the Lowrance product set
 (this is based on information contained in the <ulink url="ftp://software.lowrance.com/Documents/Hook2-Series_OM_EN_988-11760-001_w.pdf">2018 Lowrance Hook2 Series Operator Manual</ulink>).
 </para>
 <para>
@@ -35,7 +39,7 @@ The following describes the multiple USR formats that are supported by the Lowra
 <para>
           <emphasis>User Data File version 4</emphasis> - 
             This is best used when transferring data from one system to
-            another, since it contains all the extra bits of information these
+            another since it contains all the extra bits of information these
             systems store about items.
 </para>
 <para>
@@ -53,14 +57,14 @@ The following describes the multiple USR formats that are supported by the Lowra
 <para>
 Lowrance systems support varying numbers of waypoints, routes, and tracks dependent on the specific
 device capabilities.
-Some early systems also supported entities called event icon markers.
+Some early systems also supported entities called event marker icons.
 Event icon markers are represented by symbol, latitude and longitude data only.
-By default, event icon markers are converted by GPSBabel to waypoints on read with their name being generated
+By default, event marker icons are converted by GPSBabel to waypoints on read with their name being generated
 in the format "Event Marker XXX"
 where XXX is replaced by the squence number of the Event Marker ICON found in the input data.
 You have the option to ignore Event Icon Markers
 effectively removing them from the output data using the input option <emphasis>ignoreicons</emphasis>.
-On output, you can use the write option <emphasis>writeasicons</emphasis> to create event icon markers
+On output, you can use the write option <emphasis>writeasicons</emphasis> to create event marker icons
 from waypoint data present in the input file.
 </para>
 
@@ -68,13 +72,13 @@ from waypoint data present in the input file.
 The following tables detail the content format of USR data files.</para>
 <itemizedlist mark="bullet">
   <listitem><para><link linkend="usr_format">Lowrance USR Data File Contents</link></para></listitem>
-  <listitem><para><link linkend="usr_waypoint">Lowrance USR 2 and 3 Waypoint Element Format</link></para></listitem>
-  <listitem><para><link linkend="usr4_waypoint">Lowrance USR 4, 5 and 6 Waypoint Element Format</link></para></listitem>
-  <listitem><para><link linkend="usr_route">Lowrance USR Route 2 and 3 Element Format</link></para></listitem>
-  <listitem><para><link linkend="usr4_route">Lowrance USR Route 4, 5 and 6 Element Format</link></para></listitem>
-  <listitem><para><link linkend="usr4_leg">Lowrance USR 4, 5 and 6 Leg Element Format</link></para></listitem>
-  <listitem><para><link linkend="usr_eventmarker">Lowrance USR 2 and 3 Event Marker ICON Element Format</link></para></listitem>
-  <listitem><para><link linkend="usr_trail">Lowrance USR Trail Element Format</link></para></listitem>
+  <listitem><para><link linkend="usr_waypoint">Lowrance USR 2 and 3 Waypoint Object Format</link></para></listitem>
+  <listitem><para><link linkend="usr4_waypoint">Lowrance USR 4, 5 and 6 Waypoint Object Format</link></para></listitem>
+  <listitem><para><link linkend="usr_route">Lowrance USR 2 and 3 Route Object Format</link></para></listitem>
+  <listitem><para><link linkend="usr4_route">Lowrance USR 4, 5 and 6 Route Object Format</link></para></listitem>
+  <listitem><para><link linkend="usr_eventmarker">Lowrance USR 2 and 3 Event Marker ICON Object Format</link></para></listitem>
+  <listitem><para><link linkend="usr_trail">Lowrance USR 2 and 3 Trail Object Format</link></para></listitem>
+  <listitem><para><link linkend="usr4_trail">Lowrance USR 4, 5 and 6 Trail Object Format</link></para></listitem>
 </itemizedlist>
 
 <table id="usr_format">
@@ -258,7 +262,7 @@ The following tables detail the content format of USR data files.</para>
 </table>
 
 <table id="usr_waypoint">
-  <title>Lowrance USR 2 and 3 Waypoint Element Format</title>
+  <title>Lowrance USR 2 and 3 Waypoint Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -370,7 +374,7 @@ The following tables detail the content format of USR data files.</para>
 </table>
 
 <table id="usr4_waypoint">
-  <title>Lowrance USR 4, 5 and 6 Waypoint Element Format</title>
+  <title>Lowrance USR 4, 5 and 6 Waypoint Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -482,7 +486,7 @@ The following tables detail the content format of USR data files.</para>
 </table>
 
 <table id="usr_route">
-  <title>Lowrance USR 2 and 3 Route Element Format</title>
+  <title>Lowrance USR 2 and 3 Route Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -594,7 +598,7 @@ The following tables detail the content format of USR data files.</para>
 </table>
 
 <table id="usr4_route">
-  <title>Lowrance USR 4, 5 and 6 Route Element Format</title>
+  <title>Lowrance USR 4, 5 and 6 Route Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -695,7 +699,7 @@ The following tables detail the content format of USR data files.</para>
 </table>
 
 <table id="usr4_leg">
-  <title>Lowrance USR 4, 5 and 6 Leg Element Format</title>
+  <title>Lowrance USR 4, 5 and 6 Route Leg Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -751,7 +755,7 @@ The following tables detail the content format of USR data files.</para>
 </table>
 
 <table id="usr_eventmarker">
-  <title>Lowrance USR 2 and 3 Event Marker ICON Element Format</title>
+  <title>Lowrance USR 2 and 3 Event Marker ICON Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -803,7 +807,7 @@ The following tables detail the content format of USR data files.</para>
 </table>
 
 <table id="usr_trail">
-  <title>Lowrance USR Trail Element Format</title>
+  <title>Lowrance USR 2 and 3 Trail Object Format</title>
   <tgroup cols="8">
     <colspec colname="u2" align="center" colwidth="22pt"/>
     <colspec colname="u3" align="center" colwidth="22pt"/>
@@ -834,33 +838,9 @@ The following tables detail the content format of USR data files.</para>
     <tbody>
       <row valign="middle">
         <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
-        <entry>  Waypoint Object Sequence Number </entry>
-        <entry>  2 </entry>
-        <entry>  Sequence number of the Waypoint Object </entry>
-      </row>
-      <row valign="middle">
-        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
-        <entry>  Latitude </entry>
-        <entry>  4 </entry>
-        <entry>  Waypoint Latitude value (float) </entry>
-      </row>
-      <row valign="middle">
-        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
-        <entry>  Longitude</entry>
-        <entry>  4 </entry>
-        <entry>  Waypoint Longitude value (float) </entry>
-      </row>
-      <row valign="middle">
-        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
-        <entry>  Altitude </entry>
-        <entry>  4 </entry>
-        <entry>  Waypoint Altitude (float) </entry>
-      </row>
-      <row valign="middle">
-        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
         <entry>  Name Length </entry>
         <entry>  4 </entry>
-        <entry>  Length of Waypoint Name string (integer) </entry>
+        <entry>  Length of Trail Name string (integer) </entry>
       </row>
       <row valign="middle">
         <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
@@ -870,48 +850,230 @@ The following tables detail the content format of USR data files.</para>
       </row>
       <row valign="middle">
         <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
-        <entry>  Creation Time </entry>
-        <entry>  4 </entry>
-        <entry>  Description </entry>
+        <entry>  Flag </entry>
+        <entry>  1 </entry>
+        <entry>  = 0 Trail not displayed, = 1 Trail Visible (byte) </entry>
       </row>
       <row valign="middle">
         <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
-        <entry>  Unknown Data </entry>
-        <entry>  4 </entry>
-        <entry>  Unknown data field.  Only present if USR 2 or 3 format data generated by HOOK 2 unit </entry>
-      </row>
-      <row valign="middle">
-        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
-        <entry>  ICON Identifier </entry>
-        <entry>  4 </entry>
-        <entry>  ICON identifier value (integer) </entry>
-      </row>
-      <row valign="middle">
-        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
-        <entry>  Description Length </entry>
-        <entry>  4 </entry>
-        <entry>  Length of Description (integer) </entry>
-      </row>
-      <row valign="middle">
-        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
-        <entry>  Description </entry>
-        <entry>  Description Length </entry>
-        <entry>  Description text represented in UTF-8 characters. </entry>
-      </row>
-      <row valign="middle">
-        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
-        <entry>  Type </entry>
+        <entry>  Number of Points </entry>
         <entry>  2 </entry>
-        <entry>  Waypoint type (short integer) </entry>
+        <entry>  Number of points on trail (integer) </entry>
       </row>
       <row valign="middle">
-        <entry>-</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
-        <entry>  Depth </entry>
-        <entry>  4 </entry>
-        <entry>  Waypoint depth (float) </entry>
+        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
+        <entry>  Max Points </entry>
+        <entry>  2 </entry>
+        <entry>  Maximum number of points on trail (integer) </entry>
+      </row>
+      <row valign="middle">
+        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
+        <entry>  Trail Point Objects </entry>
+        <entry>  Sizeof Trail Point Object * Number of Points</entry>
+        <entry>  Array of Trail Point Object data </entry>
       </row>
     </tbody>
   </tgroup>
 </table>
 
+
+<table id="usr_trail_pts">
+  <title>Lowrance USR 2 and 3 Trail Point Object Format</title>
+  <tgroup cols="8">
+    <colspec colname="u2" align="center" colwidth="22pt"/>
+    <colspec colname="u3" align="center" colwidth="22pt"/>
+    <colspec colname="u4" align="center" colwidth="22pt"/>
+    <colspec colname="u5" align="center" colwidth="22pt"/>
+    <colspec colname="u6" align="center" colwidth="22pt"/>
+    <colspec colname="f" colwidth="*" />
+    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="d" colwidth="2*"/>
+    <thead>
+      <row>
+        <entry namest="u2" nameend="u6" align="center">Present In</entry>
+        <entry></entry>
+        <entry></entry>
+        <entry></entry>
+      </row>
+      <row>
+        <entry>USR 2</entry>
+        <entry>USR 3</entry>
+        <entry>USR 4</entry>
+        <entry>USR 5</entry>
+        <entry>USR 6</entry>
+        <entry>Field</entry>
+        <entry>Size (Bytes)</entry>
+        <entry>Descrption</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row valign="middle">
+        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
+        <entry>  Number of Section Points </entry>
+        <entry>  2 </entry>
+        <entry>  Number of Lat-Long Pairs in Section (integer) </entry>
+      </row>
+      <row valign="middle">
+        <entry>X</entry> <entry>X</entry> <entry>-</entry> <entry>-</entry> <entry>-</entry>
+        <entry>  Lat-Lon Pair Objects</entry>
+        <entry>  8 * Number of Section Points </entry>
+        <entry>  Array of Lat-Long Pair values for Section Points.  Each Latitude value occupies 4 bytes (float) and each Longitude value occupies 4 bytes (float)</entry>
+      </row>
+    </tbody>
+  </tgroup>
+</table>
+
+<table id="usr4_trail">
+  <title>Lowrance USR 4, 5 and 6 Trail Object Format</title>
+  <tgroup cols="8">
+    <colspec colname="u2" align="center" colwidth="22pt"/>
+    <colspec colname="u3" align="center" colwidth="22pt"/>
+    <colspec colname="u4" align="center" colwidth="22pt"/>
+    <colspec colname="u5" align="center" colwidth="22pt"/>
+    <colspec colname="u6" align="center" colwidth="22pt"/>
+    <colspec colname="f" colwidth="*" />
+    <colspec colname="s" align="center"  colwidth="34pt"/>
+    <colspec colname="d" colwidth="2*"/>
+    <thead>
+      <row>
+        <entry namest="u2" nameend="u6" align="center">Present In</entry>
+        <entry></entry>
+        <entry></entry>
+        <entry></entry>
+      </row>
+      <row>
+        <entry>USR 2</entry>
+        <entry>USR 3</entry>
+        <entry>USR 4</entry>
+        <entry>USR 5</entry>
+        <entry>USR 6</entry>
+        <entry>Field</entry>
+        <entry>Size (Bytes)</entry>
+        <entry>Descrption</entry>
+      </row>
+    </thead>
+    <tbody>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Unit Number </entry>
+        <entry>  4 </entry>
+        <entry>  Serial Number of Unit capturing Trail (integer). </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Trail Object Sequence Number </entry>
+        <entry>  8 </entry>
+        <entry>  Sequence number of the Waypoint Object captured as a long integer. </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Stream Version </entry>
+        <entry>  4 </entry>
+        <entry>  Trail Stream version (integer). </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Name Length </entry>
+        <entry>  4 </entry>
+        <entry>  Length of Trail Name string (integer) </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Name </entry>
+        <entry>  Name Length </entry>
+        <entry>  Name text, with USR 4, 5 and 6 format this is UTF-16 representation. </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Flag </entry>
+        <entry>  4 </entry>
+        <entry>  Unknown flag value </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Color </entry>
+        <entry>  4 </entry>
+        <entry>  Trail Display Color </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Desc Length </entry>
+        <entry>  4 </entry>
+        <entry>  Length of Trail Description string (integer) </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Description </entry>
+        <entry>  Desc Length </entry>
+        <entry>  Description text, with USR 4, 5 and 6 format this is UTF-16 representation. </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Creation Date </entry>
+        <entry>  4 </entry>
+        <entry>  Date Trail was captured </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Creation Time </entry>
+        <entry>  4 </entry>
+        <entry>  Time stamp when Trail was captured </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Flag1 </entry>
+        <entry>  1 </entry>
+        <entry>  Unknown flag byte </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Flag2 </entry>
+        <entry>  1 </entry>
+        <entry>  Unknown flag byte </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Flag3 </entry>
+        <entry>  1 </entry>
+        <entry>  Unknown flag byte </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Count </entry>
+        <entry>  4 </entry>
+        <entry>  Unknown Count (integer) </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Flag4 </entry>
+        <entry>  1 </entry>
+        <entry>  Unknown flag byte </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Flag5 </entry>
+        <entry>  1 </entry>
+        <entry>  Unknown flag byte </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Flag6 </entry>
+        <entry>  1 </entry>
+        <entry>  Unknown flag byte </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Number of Trail Points </entry>
+        <entry>  4 </entry>
+        <entry>  Number of Trail Point Objects (integer) </entry>
+      </row>
+      <row valign="middle">
+        <entry>-</entry> <entry>-</entry> <entry>X</entry> <entry>X</entry> <entry>X</entry>
+        <entry>  Trail Points Array </entry>
+        <entry>  Sizeof Trail Point Object * Number of Trail Points </entry>
+        <entry>  Array of Trail Point Objects </entry>
+      </row>
+    </tbody>
+  </tgroup>
+</table>
     
