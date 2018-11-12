@@ -1593,7 +1593,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
   }
 
   int i = 0;
-  for (const auto& fmp : xcsv_file.ofields) {
+  for (const auto& fmp : qAsConst(xcsv_file.ofields)) {
     double lat = latitude;
     double lon = longitude;
     /*
@@ -2183,7 +2183,7 @@ xcsv_data_write(void)
   waypt_out_count = 0;
 
   /* output prologue lines, if any. */
-  for (const auto& line : xcsv_file.prologue) {
+  for (const auto& line : qAsConst(xcsv_file.prologue)) {
    QString line_to_write = xcsv_replace_tokens(line);
     *xcsv_file.stream << line_to_write <<  xcsv_file.record_delimiter;
   }
@@ -2199,7 +2199,7 @@ xcsv_data_write(void)
   }
 
   /* output epilogue lines, if any. */
-  for (const auto& line : xcsv_file.epilogue) {
+  for (const auto& line : qAsConst(xcsv_file.epilogue)) {
     QString line_to_write = xcsv_replace_tokens(line);
     *xcsv_file.stream << line_to_write << xcsv_file.record_delimiter;
   }
