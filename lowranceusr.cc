@@ -1836,12 +1836,13 @@ lowranceusr_trail_hdr(const route_head* trk)
   }
   num_section_points = num_trail_points;
 
-  if (global_opts.debug_level >= 1)
+  if (global_opts.debug_level) {
     printf("num_trail_points = %d ", num_trail_points);
-  if (global_opts.debug_level > 1)
-    printf("max_trail_size = %d num_section_points = %d\n", max_trail_size, num_section_points);
-  else
-    printf("\n");
+    if (global_opts.debug_level > 1)
+      printf("max_trail_size = %d num_section_points = %d\n", max_trail_size, num_section_points);
+    else
+      printf("\n");
+  }
 
   gbfwrite(&visible, 1, 1, file_out);
   gbfputint16(num_trail_points, file_out);
