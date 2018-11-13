@@ -24,7 +24,7 @@
 #include <QtCore/QDateTime>        // for QDateTime, QDate
 #include <QtCore/QString>          // for QString, QCharRef
 #include <QtCore/QTextStream>      // for QTextStream
-#include <QtCore/QtGlobal>         // for foreach
+#include <QtCore/QtGlobal>         // for qAsConst
 
 #include "csv_util.h"
 #include "defs.h"
@@ -1421,7 +1421,7 @@ xcsv_data_read(void)
      * pre-read the file to know how many data lines we should be seeing,
      * we take this cheap shot at the data and cross our fingers.
      */
-    foreach(const QString& ogp, xcsv_file.epilogue) {
+    for(const auto& ogp : qAsConst(xcsv_file.epilogue)) {
        if (ogp.startsWith(buff)) {
          buff.clear();
          break;
