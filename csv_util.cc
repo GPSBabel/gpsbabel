@@ -894,7 +894,6 @@ writetime(const char* format, time_t t, bool gmt)
 
   char tbuff[1024];
   strftime(tbuff, sizeof tbuff, format, stmp);
-  QDateTime dt = QDateTime::fromTime_t(t);
   return QString(tbuff);
 }
 

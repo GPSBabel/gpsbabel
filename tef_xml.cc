@@ -245,7 +245,6 @@ tef_item_start(xg_string, const QXmlStreamAttributes* attrv)
 
   foreach(QXmlStreamAttribute attr, *attrv) {
     QString attrstr = attr.value().toString();
-    QByteArray attrtext = attrstr.toUtf8();
 
     if (attr.name().compare(QLatin1String("SegDescription"), Qt::CaseInsensitive) == 0) {
       wpt_tmp->shortname = attrstr.trimmed();
