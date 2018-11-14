@@ -598,7 +598,7 @@ main(int argc, char* argv[])
   }
   if (qargs.size() > 2) {
     fatal("Extra arguments on command line\n");
-  } else if (qargs.size() && ivecs) {
+  } else if ((!qargs.isEmpty()) && ivecs) {
     did_something = 1;
     /* simulates the default behaviour of waypoints */
     if (doing_nothing) {
@@ -632,7 +632,7 @@ main(int argc, char* argv[])
 
       cet_convert_deinit();
     }
-  } else if (qargs.size()) {
+  } else if (!qargs.isEmpty()) {
     usage(prog_name,0);
     exit(0);
   }

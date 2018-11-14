@@ -792,33 +792,33 @@ void kml_output_trkdescription(const route_head* header, const computed_trkdata*
   }
   const char* distance_units;
   double distance = fmt_distance(td->distance_meters, &distance_units);
-  kml_td(hwriter, QStringLiteral("Distance"), QStringLiteral(" %1 %2 ").arg(QString::number(distance, 'f', 1)).arg(distance_units));
+  kml_td(hwriter, QStringLiteral("Distance"), QStringLiteral(" %1 %2 ").arg(QString::number(distance, 'f', 1), distance_units));
   if (td->min_alt) {
     const char* min_alt_units;
     double min_alt = fmt_altitude(*td->min_alt, &min_alt_units);
-    kml_td(hwriter, QStringLiteral("Min Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(min_alt, 'f', 3)).arg(min_alt_units));
+    kml_td(hwriter, QStringLiteral("Min Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(min_alt, 'f', 3), min_alt_units));
   }
   if (td->max_alt) {
     const char* max_alt_units;
     double max_alt = fmt_altitude(*td->max_alt, &max_alt_units);
-    kml_td(hwriter, QStringLiteral("Max Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(max_alt, 'f', 3)).arg(max_alt_units));
+    kml_td(hwriter, QStringLiteral("Max Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(max_alt, 'f', 3), max_alt_units));
   }
   if (td->min_spd) {
     const char* spd_units;
     double spd = fmt_speed(*td->min_spd, &spd_units);
-    kml_td(hwriter, QStringLiteral("Min Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
+    kml_td(hwriter, QStringLiteral("Min Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
   }
   if (td->max_spd) {
     const char* spd_units;
     double spd = fmt_speed(*td->max_spd, &spd_units);
-    kml_td(hwriter, QStringLiteral("Max Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
+    kml_td(hwriter, QStringLiteral("Max Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
   }
   if (td->max_spd && td->start.isValid() && td->end.isValid()) {
     const char* spd_units;
     double elapsed = td->start.msecsTo(td->end)/1000.0;
     double spd = fmt_speed(td->distance_meters / elapsed, &spd_units);
     if (spd > 1.0)  {
-      kml_td(hwriter, QStringLiteral("Avg Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
+      kml_td(hwriter, QStringLiteral("Avg Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
     }
   }
   if (td->avg_hrt) {
@@ -957,7 +957,7 @@ static void kml_output_description(const Waypoint* pt)
   kml_td(hwriter, QStringLiteral("Latitude: %1 ").arg(QString::number(pt->latitude, 'f', precision)));
 
   if (kml_altitude_known(pt)) {
-    kml_td(hwriter, QStringLiteral("Altitude: %1 %2 ").arg(QString::number(alt, 'f', 3)).arg(alt_units));
+    kml_td(hwriter, QStringLiteral("Altitude: %1 %2 ").arg(QString::number(alt, 'f', 3), alt_units));
   }
 
   if (pt->heartrate) {
@@ -976,13 +976,13 @@ static void kml_output_description(const Waypoint* pt)
   if WAYPT_HAS(pt, depth) {
     const char* depth_units;
     double depth = fmt_distance(pt->depth, &depth_units);
-    kml_td(hwriter, QStringLiteral("Depth: %1 %2 ").arg(QString::number(depth, 'f', 1)).arg(depth_units));
+    kml_td(hwriter, QStringLiteral("Depth: %1 %2 ").arg(QString::number(depth, 'f', 1), depth_units));
   }
 
   if WAYPT_HAS(pt, speed) {
     const char* spd_units;
     double spd = fmt_speed(pt->speed, &spd_units);
-    kml_td(hwriter, QStringLiteral("Speed: %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
+    kml_td(hwriter, QStringLiteral("Speed: %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
   }
 
   if WAYPT_HAS(pt, course) {

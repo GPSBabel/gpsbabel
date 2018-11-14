@@ -24,7 +24,7 @@
 #include <QtCore/QDateTime>        // for QDateTime, QDate
 #include <QtCore/QString>          // for QString, QCharRef
 #include <QtCore/QTextStream>      // for QTextStream
-#include <QtCore/QtGlobal>         // for foreach
+#include <QtCore/QtGlobal>         // for qAsConst
 
 #include "csv_util.h"
 #include "defs.h"
@@ -894,7 +894,6 @@ writetime(const char* format, time_t t, bool gmt)
 
   char tbuff[1024];
   strftime(tbuff, sizeof tbuff, format, stmp);
-  QDateTime dt = QDateTime::fromTime_t(t);
   return QString(tbuff);
 }
 
@@ -1421,7 +1420,7 @@ xcsv_data_read(void)
      * pre-read the file to know how many data lines we should be seeing,
      * we take this cheap shot at the data and cross our fingers.
      */
-    foreach(const QString& ogp, xcsv_file.epilogue) {
+    for(const auto& ogp : qAsConst(xcsv_file.epilogue)) {
        if (ogp.startsWith(buff)) {
          buff.clear();
          break;
@@ -1593,7 +1592,7 @@ xcsv_waypt_pr(const Waypoint* wpt)
   }
 
   int i = 0;
-  for (const auto& fmp : xcsv_file.ofields) {
+  for (const auto& fmp : qAsConst(xcsv_file.ofields)) {
     double lat = latitude;
     double lon = longitude;
     /*
@@ -2183,7 +2182,7 @@ xcsv_data_write(void)
   waypt_out_count = 0;
 
   /* output prologue lines, if any. */
-  for (const auto& line : xcsv_file.prologue) {
+  for (const auto& line : qAsConst(xcsv_file.prologue)) {
    QString line_to_write = xcsv_replace_tokens(line);
     *xcsv_file.stream << line_to_write <<  xcsv_file.record_delimiter;
   }
@@ -2199,7 +2198,7 @@ xcsv_data_write(void)
   }
 
   /* output epilogue lines, if any. */
-  for (const auto& line : xcsv_file.epilogue) {
+  for (const auto& line : qAsConst(xcsv_file.epilogue)) {
     QString line_to_write = xcsv_replace_tokens(line);
     *xcsv_file.stream << line_to_write << xcsv_file.record_delimiter;
   }
