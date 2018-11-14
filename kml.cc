@@ -26,15 +26,24 @@
 
 #include "defs.h"
 #include "grtcirc.h"
+#include "queue.h"
+#include "src/core/datetime.h"
 #include "src/core/file.h"
 #include "src/core/xmlstreamwriter.h"
 #include "src/core/xmltag.h"
 #include "xmlgeneric.h"
-#include <QtCore/QRegExp>
-#include <QtCore/QXmlStreamAttributes>
+#include <QtCore/QXmlStreamAttributes> // for QXmlStreamAttributes
+#include <QtCore/QDateTime>            // for QDateTime
+#include <QtCore/QFile>                // for QFile
+#include <QtCore/QList>                // for QList
+#include <QtCore/QString>              // for QString, QStringLiteral, QStat...
+#include <QtCore/QtGlobal>             // for qint64, qPrintable
+#include <cctype>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
+#include <tuple>
 
 // options
 static char* opt_deficon = nullptr;
@@ -73,6 +82,7 @@ static QString posnfilenametmp;
 
 static route_head* gx_trk_head;
 static QList<gpsbabel::DateTime>* gx_trk_times;
+static QList<std::tuple<int, double, double, double>>* gx_trk_coords;
 
 static gpsbabel::File* oqfile;
 static gpsbabel::XmlStreamWriter* writer;
@@ -276,6 +286,14 @@ xg_tag_mapping kml_map[] = {
   { gx_trk_e,  	cb_end, 	"/Placemark/*gx:Track" },
   { gx_trk_when,  cb_cdata, "/Placemark/*gx:Track/when" },
   { gx_trk_coord, cb_cdata, "/Placemark/*gx:Track/gx:coord" },
+  { gx_trk_s,  	cb_start, 	"/Placemark/Track" }, // KML 2.3
+  { gx_trk_e,  	cb_end, 	"/Placemark/Track" }, // KML 2.3
+  { gx_trk_when,  cb_cdata, "/Placemark/Track/when" }, // KML 2.3
+  { gx_trk_coord, cb_cdata, "/Placemark/Track/coord" }, // KML 2.3
+  { gx_trk_s,  	cb_start, 	"/Placemark/MultiTrack/Track" }, // KML 2.3
+  { gx_trk_e,  	cb_end, 	"/Placemark/MultiTrack/Track" }, // KML 2.3
+  { gx_trk_when,  cb_cdata, "/Placemark/MultiTrack/Track/when" }, // KML 2.3
+  { gx_trk_coord, cb_cdata, "/Placemark/MultiTrack/Track/coord" }, // KML 2.3
   { nullptr,	(xg_cb_type) 0, 		nullptr }
 };
 
@@ -345,12 +363,12 @@ void wpt_time(xg_string args, const QXmlStreamAttributes*)
 
 void wpt_ts_begin(xg_string args, const QXmlStreamAttributes*)
 {
-	wpt_timespan_begin = xml_parse_time(args);
+  wpt_timespan_begin = xml_parse_time(args);
 }
 
 void wpt_ts_end(xg_string args, const QXmlStreamAttributes*)
 {
-	wpt_timespan_end = xml_parse_time(args);
+  wpt_timespan_end = xml_parse_time(args);
 }
 
 void wpt_coord(const QString& args, const QXmlStreamAttributes*)
@@ -419,20 +437,20 @@ void trk_coord(xg_string args, const QXmlStreamAttributes*)
    *
    * If this is specified, then SetCreationDate
    */
-  if ( wpt_timespan_begin.isValid() && wpt_timespan_end.isValid() ) {
+  if (wpt_timespan_begin.isValid() && wpt_timespan_end.isValid()) {
 
-	  // If there are some Waypoints, then distribute the TimeSpan to all Waypoints
-	  if ( trk_head->rte_waypt_ct > 0 ) {
-		  qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
-		  qint64 ms_per_waypoint = timespan_ms / trk_head->rte_waypt_ct;
-                  queue* curr_elem;
-                  queue* tmp_elem;
-		  QUEUE_FOR_EACH(&trk_head->waypoint_list, curr_elem, tmp_elem) {
-			  trkpt = reinterpret_cast<Waypoint *>(curr_elem);
-			  trkpt->SetCreationTime(wpt_timespan_begin);
-			  wpt_timespan_begin = wpt_timespan_begin.addMSecs(ms_per_waypoint);
-		  }
-	  }
+    // If there are some Waypoints, then distribute the TimeSpan to all Waypoints
+    if (trk_head->rte_waypt_ct > 0) {
+      qint64 timespan_ms = wpt_timespan_begin.msecsTo(wpt_timespan_end);
+      qint64 ms_per_waypoint = timespan_ms / trk_head->rte_waypt_ct;
+      queue* curr_elem;
+      queue* tmp_elem;
+      QUEUE_FOR_EACH(&trk_head->waypoint_list, curr_elem, tmp_elem) {
+        trkpt = reinterpret_cast<Waypoint*>(curr_elem);
+        trkpt->SetCreationTime(wpt_timespan_begin);
+        wpt_timespan_begin = wpt_timespan_begin.addMSecs(ms_per_waypoint);
+      }
+    }
   }
 }
 
@@ -448,15 +466,51 @@ void gx_trk_s(xg_string, const QXmlStreamAttributes*)
   track_add_head(gx_trk_head);
   delete gx_trk_times;
   gx_trk_times = new QList<gpsbabel::DateTime>;
+  delete gx_trk_coords;
+  gx_trk_coords = new QList<std::tuple<int, double, double, double>>;
 }
 
 void gx_trk_e(xg_string, const QXmlStreamAttributes*)
 {
+  // Check that for every temporal value (kml:when) in a kml:Track there is a position (kml:coord) value.
+  // Check that for every temporal value (kml:when) in a gx:Track there is a position (gx:coord) value.
+  if (gx_trk_times->size() != gx_trk_coords->size()) {
+    fatal(MYNAME ": There were more coord elements than the number of when elements.\n");
+  }
+
+  // In KML 2.3 kml:Track elements kml:coord and kml:when elements are not required to be in any order.
+  // In gx:Track elements all kml:when elements are required to precede all gx:coord elements.
+  // For both we allow any order.  Many writers using gx:Track elements don't adhere to the schema.
+  while (!gx_trk_times->isEmpty()) {
+    Waypoint* trkpt = new Waypoint;
+    trkpt->SetCreationTime(gx_trk_times->takeFirst());
+    double lat, lon, alt;
+    int n;
+    std::tie(n, lat, lon, alt) = gx_trk_coords->takeFirst();
+    // An empty kml:coord element is permitted to indicate missing position data;
+    // the estimated position may be determined using some interpolation method.
+    // However if we get one we will throw away the time as we don't have a location.
+    // It is not clear that coord elements without altitude are allowed, but our
+    // writer produces them.
+    if (n >= 2) {
+      trkpt->latitude = lat;
+      trkpt->longitude = lon;
+      if (n >= 3) {
+        trkpt->altitude = alt;
+      }
+      track_add_wpt(gx_trk_head, trkpt);
+    } else {
+      delete trkpt;
+    }
+  }
+
   if (!gx_trk_head->rte_waypt_ct) {
     track_del_head(gx_trk_head);
   }
   delete gx_trk_times;
   gx_trk_times = nullptr;
+  delete gx_trk_coords;
+  gx_trk_coords = nullptr;
 }
 
 void gx_trk_when(xg_string args, const QXmlStreamAttributes*)
@@ -469,31 +523,16 @@ void gx_trk_when(xg_string args, const QXmlStreamAttributes*)
 
 void gx_trk_coord(xg_string args, const QXmlStreamAttributes*)
 {
-  double lat, lon, alt;
+  if (! gx_trk_coords) {
+    fatal(MYNAME ": gx_trk_coord: invalid kml file\n");
+  }
 
-  if (! gx_trk_times || gx_trk_times->isEmpty()) {
-    fatal(MYNAME ": There were more gx:coord elements than the number of when elements.\n");
-  }
-  Waypoint* trkpt = new Waypoint;
-  trkpt->SetCreationTime(gx_trk_times->takeFirst());
+  double lat, lon, alt;
   int n = sscanf(CSTR(args), "%lf %lf %lf", &lon, &lat, &alt);
-  // Empty gx_coord elements are allowed to balance the number of when elements,
-  // but if we get one we will throw away the time as we don't have a location.
-  // It is not clear that coord elements without altitude are allowed, but our
-  // writer produces them.
   if (0 != n && 2 != n && 3 != n) {
-    fatal(MYNAME ": gx:coord field decode failure on \"%s\".\n", qPrintable(args));
+    fatal(MYNAME ": coord field decode failure on \"%s\".\n", qPrintable(args));
   }
-  if (n >= 2) {
-    trkpt->latitude = lat;
-    trkpt->longitude = lon;
-    if (n >= 3) {
-      trkpt->altitude = alt;
-    }
-    track_add_wpt(gx_trk_head, trkpt);
-  } else {
-    delete trkpt;
-  }
+  gx_trk_coords->append(std::make_tuple(n, lat, lon, alt));
 }
 
 static
@@ -734,22 +773,14 @@ void kml_td(gpsbabel::XmlStreamWriter& hwriter, const QString& data)
  * Output the track summary.
  */
 static
-void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
+void kml_output_trkdescription(const route_head* header, const computed_trkdata* td)
 {
-  const char* max_alt_units;
-  const char* min_alt_units;
-  const char* distance_units;
-
   if (!td || !trackdata) {
     return;
   }
 
   QString hstring;
   gpsbabel::XmlStreamWriter hwriter(&hstring);
-
-  double max_alt = fmt_altitude(td->max_alt, &max_alt_units);
-  double min_alt = fmt_altitude(td->min_alt, &min_alt_units);
-  double distance = fmt_distance(td->distance_meters, &distance_units);
 
   writer->writeEmptyElement(QStringLiteral("snippet"));
 
@@ -759,55 +790,55 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   if (!header->rte_desc.isEmpty()) {
     kml_td(hwriter, QStringLiteral("Description"), QStringLiteral(" %1 ").arg(header->rte_desc));
   }
-  kml_td(hwriter, QStringLiteral("Distance"), QStringLiteral(" %1 %2 ").arg(QString::number(distance, 'f', 1)).arg(distance_units));
-  if (td->min_alt != -unknown_alt) {
-    kml_td(hwriter, QStringLiteral("Min Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(min_alt, 'f', 3)).arg(min_alt_units));
+  const char* distance_units;
+  double distance = fmt_distance(td->distance_meters, &distance_units);
+  kml_td(hwriter, QStringLiteral("Distance"), QStringLiteral(" %1 %2 ").arg(QString::number(distance, 'f', 1), distance_units));
+  if (td->min_alt) {
+    const char* min_alt_units;
+    double min_alt = fmt_altitude(*td->min_alt, &min_alt_units);
+    kml_td(hwriter, QStringLiteral("Min Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(min_alt, 'f', 3), min_alt_units));
   }
-  if (td->max_alt != unknown_alt) {
-    kml_td(hwriter, QStringLiteral("Max Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(max_alt, 'f', 3)).arg(max_alt_units));
+  if (td->max_alt) {
+    const char* max_alt_units;
+    double max_alt = fmt_altitude(*td->max_alt, &max_alt_units);
+    kml_td(hwriter, QStringLiteral("Max Alt"), QStringLiteral(" %1 %2 ").arg(QString::number(max_alt, 'f', 3), max_alt_units));
   }
   if (td->min_spd) {
     const char* spd_units;
-    double spd = fmt_speed(td->min_spd, &spd_units);
-    kml_td(hwriter, QStringLiteral("Min Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
+    double spd = fmt_speed(*td->min_spd, &spd_units);
+    kml_td(hwriter, QStringLiteral("Min Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
   }
   if (td->max_spd) {
     const char* spd_units;
-    double spd = fmt_speed(td->max_spd, &spd_units);
-    kml_td(hwriter, QStringLiteral("Max Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
+    double spd = fmt_speed(*td->max_spd, &spd_units);
+    kml_td(hwriter, QStringLiteral("Max Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
   }
-  if (td->max_spd && td->start && td->end) {
+  if (td->max_spd && td->start.isValid() && td->end.isValid()) {
     const char* spd_units;
-    time_t elapsed = td->end - td->start;
+    double elapsed = td->start.msecsTo(td->end)/1000.0;
     double spd = fmt_speed(td->distance_meters / elapsed, &spd_units);
     if (spd > 1.0)  {
-      kml_td(hwriter, QStringLiteral("Avg Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
+      kml_td(hwriter, QStringLiteral("Avg Speed"), QStringLiteral(" %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
     }
   }
   if (td->avg_hrt) {
-    kml_td(hwriter, QStringLiteral("Avg Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(td->avg_hrt, 'f', 1)));
+    kml_td(hwriter, QStringLiteral("Avg Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->avg_hrt, 'f', 1)));
   }
-  if (td->min_hrt < td->max_hrt) {
-    kml_td(hwriter, QStringLiteral("Min Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(td->min_hrt)));
+  if (td->min_hrt) {
+    kml_td(hwriter, QStringLiteral("Min Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->min_hrt)));
   }
   if (td->max_hrt) {
-    kml_td(hwriter, QStringLiteral("Max Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(td->max_hrt)));
+    kml_td(hwriter, QStringLiteral("Max Heart Rate"), QStringLiteral(" %1 bpm ").arg(QString::number(*td->max_hrt)));
   }
   if (td->avg_cad) {
-    kml_td(hwriter, QStringLiteral("Avg Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(td->avg_cad, 'f', 1)));
+    kml_td(hwriter, QStringLiteral("Avg Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(*td->avg_cad, 'f', 1)));
   }
   if (td->max_cad) {
-    kml_td(hwriter, QStringLiteral("Max Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(td->max_cad)));
+    kml_td(hwriter, QStringLiteral("Max Cadence"), QStringLiteral(" %1 rpm ").arg(QString::number(*td->max_cad)));
   }
-  if (td->start && td->end) {
-    gpsbabel::DateTime t = QDateTime::fromTime_t(td->start);
-    if (t.isValid()) {
-      kml_td(hwriter, QStringLiteral("Start Time"), t.toPrettyString());
-    }
-    t = QDateTime::fromTime_t(td->end);
-    if (t.isValid()) {
-      kml_td(hwriter, QStringLiteral("End Time"), t.toPrettyString());
-    }
+  if (td->start.isValid() && td->end.isValid()) {
+    kml_td(hwriter, QStringLiteral("Start Time"), td->start.toPrettyString());
+    kml_td(hwriter, QStringLiteral("End Time"), td->end.toPrettyString());
   }
 
   hwriter.writeCharacters(QStringLiteral("\n"));
@@ -819,21 +850,17 @@ void kml_output_trkdescription(const route_head* header, computed_trkdata* td)
   writer->writeEndElement(); // Close description tag
 
   /* We won't always have times. Garmin saved tracks, for example... */
-  if (td->start && td->end) {
+  if (td->start.isValid() && td->end.isValid()) {
     writer->writeStartElement(QStringLiteral("TimeSpan"));
-
-    gpsbabel::DateTime t = QDateTime::fromTime_t(td->start);
-    writer->writeTextElement(QStringLiteral("begin"), t.toPrettyString());
-    t = QDateTime::fromTime_t(td->end);
-    writer->writeTextElement(QStringLiteral("end"), t.toPrettyString());
-
+    writer->writeTextElement(QStringLiteral("begin"), td->start.toPrettyString());
+    writer->writeTextElement(QStringLiteral("end"), td->end.toPrettyString());
     writer->writeEndElement(); // Close TimeSpan tag
   }
 }
 
 
 static
-void kml_output_header(const route_head* header, computed_trkdata* td)
+void kml_output_header(const route_head* header, const computed_trkdata* td)
 {
   if (!realtime_positioning)  {
     writer->writeStartElement(QStringLiteral("Folder"));
@@ -930,7 +957,7 @@ static void kml_output_description(const Waypoint* pt)
   kml_td(hwriter, QStringLiteral("Latitude: %1 ").arg(QString::number(pt->latitude, 'f', precision)));
 
   if (kml_altitude_known(pt)) {
-    kml_td(hwriter, QStringLiteral("Altitude: %1 %2 ").arg(QString::number(alt, 'f', 3)).arg(alt_units));
+    kml_td(hwriter, QStringLiteral("Altitude: %1 %2 ").arg(QString::number(alt, 'f', 3), alt_units));
   }
 
   if (pt->heartrate) {
@@ -949,13 +976,13 @@ static void kml_output_description(const Waypoint* pt)
   if WAYPT_HAS(pt, depth) {
     const char* depth_units;
     double depth = fmt_distance(pt->depth, &depth_units);
-    kml_td(hwriter, QStringLiteral("Depth: %1 %2 ").arg(QString::number(depth, 'f', 1)).arg(depth_units));
+    kml_td(hwriter, QStringLiteral("Depth: %1 %2 ").arg(QString::number(depth, 'f', 1), depth_units));
   }
 
   if WAYPT_HAS(pt, speed) {
     const char* spd_units;
     double spd = fmt_speed(pt->speed, &spd_units);
-    kml_td(hwriter, QStringLiteral("Speed: %1 %2 ").arg(QString::number(spd, 'f', 1)).arg(spd_units));
+    kml_td(hwriter, QStringLiteral("Speed: %1 %2 ").arg(QString::number(spd, 'f', 1), spd_units));
   }
 
   if WAYPT_HAS(pt, course) {
@@ -1071,7 +1098,7 @@ static void kml_output_tailer(const route_head* header)
     queue* elem, *tmp;
 
     QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-      Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
+      Waypoint* tpt = reinterpret_cast<Waypoint*>(elem);
       int first_in_trk = tpt->Q.prev == &header->waypoint_list;
       if (!first_in_trk && tpt->wpt_flags.new_trkseg) {
         needs_multigeometry = 1;
@@ -1108,7 +1135,7 @@ static void kml_output_tailer(const route_head* header)
     }
 
     QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-      Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
+      Waypoint* tpt = reinterpret_cast<Waypoint*>(elem);
       int first_in_trk = tpt->Q.prev == &header->waypoint_list;
       if (tpt->wpt_flags.new_trkseg) {
         if (!first_in_trk) {
@@ -1652,12 +1679,10 @@ static void kml_waypt_pr(const Waypoint* waypointp)
 
 static void kml_track_hdr(const route_head* header)
 {
-  computed_trkdata* td;
-  track_recompute(header, &td);
+  computed_trkdata td = track_recompute(header);
   if (header->rte_waypt_ct > 0 && (export_lines || export_points)) {
-    kml_output_header(header, td);
+    kml_output_header(header, &td);
   }
-  xfree(td);
 }
 
 static void kml_track_disp(const Waypoint* waypointp)
@@ -1698,7 +1723,7 @@ static void kml_mt_simple_array(const route_head* header,
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
 
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
 
     switch (member) {
     case fld_power:
@@ -1729,7 +1754,7 @@ static int track_has_time(const route_head* header)
   queue* elem, *tmp;
   int points_with_time = 0;
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* tpt = reinterpret_cast<Waypoint*>(elem);
 
     if (tpt->GetCreationTime().isValid()) {
       points_with_time++;
@@ -1747,7 +1772,7 @@ static void write_as_linestring(const route_head* header)
   queue* elem, *tmp;
   kml_track_hdr(header);
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* tpt = reinterpret_cast<Waypoint*>(elem);
     kml_track_disp(tpt);
   }
   kml_track_tlr(header);
@@ -1777,7 +1802,7 @@ static void kml_mt_hdr(const route_head* header)
   kml_output_positioning(false);
 
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* tpt = reinterpret_cast<Waypoint*>(elem);
 
     if (tpt->GetCreationTime().isValid()) {
       QString time_string = tpt->CreationTimeXML();
@@ -1790,7 +1815,7 @@ static void kml_mt_hdr(const route_head* header)
 
   // TODO: How to handle clamped, floating, extruded, etc.?
   QUEUE_FOR_EACH(&header->waypoint_list, elem, tmp) {
-    Waypoint* tpt = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* tpt = reinterpret_cast<Waypoint*>(elem);
 
     if (kml_altitude_known(tpt)) {
       writer->writeTextElement(QStringLiteral("gx:coord"),
@@ -2167,7 +2192,7 @@ kml_wr_position(Waypoint* wpt)
      track points if we've not moved a minimum distance from the
      beginning of our accumulated track. */
   {
-    Waypoint* newest_posn= reinterpret_cast<Waypoint *>QUEUE_LAST(&posn_trk_head->waypoint_list);
+    Waypoint* newest_posn= reinterpret_cast<Waypoint*>QUEUE_LAST(&posn_trk_head->waypoint_list);
 
     if (radtometers(gcdist(RAD(wpt->latitude), RAD(wpt->longitude),
                            RAD(newest_posn->latitude), RAD(newest_posn->longitude))) > 50) {
@@ -2192,7 +2217,7 @@ kml_wr_position(Waypoint* wpt)
    */
   while (max_position_points &&
          (posn_trk_head->rte_waypt_ct >= max_position_points)) {
-    Waypoint* tonuke = reinterpret_cast<Waypoint *>QUEUE_FIRST(&posn_trk_head->waypoint_list);
+    Waypoint* tonuke = reinterpret_cast<Waypoint*>QUEUE_FIRST(&posn_trk_head->waypoint_list);
     track_del_wpt(posn_trk_head, tonuke);
   }
 

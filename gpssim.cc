@@ -146,10 +146,10 @@ gpssim_trk_hdr(const route_head* rh)
       fatal(MYNAME ": output file already open.\n");
     }
 
-    QString ofname = QString("%1%2%3.gpssim").arg(fnamestr).arg(doing_tracks ? "-track" : "-route").arg(trk_count++, 4, 10, QChar('0'));
+    QString ofname = QString("%1%2%3.gpssim").arg(fnamestr, doing_tracks ? "-track" : "-route").arg(trk_count++, 4, 10, QChar('0'));
     fout = gbfopen(ofname, "wb", MYNAME);
   }
-  track_recompute(rh, nullptr);
+  (void) track_recompute(rh);
 }
 
 static void

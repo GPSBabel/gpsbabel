@@ -383,7 +383,7 @@ main(int argc, char* argv[])
 
       cet_convert_init(ivecs->encode, ivecs->fixed_encode);	/* init by module vec */
 
-      start_session(ivecs->name, CSTR(fname));
+      start_session(ivecs->name, fname);
       ivecs->rd_init(fname);
       ivecs->read();
       ivecs->rd_deinit();
@@ -598,7 +598,7 @@ main(int argc, char* argv[])
   }
   if (qargs.size() > 2) {
     fatal("Extra arguments on command line\n");
-  } else if (qargs.size() && ivecs) {
+  } else if ((!qargs.isEmpty()) && ivecs) {
     did_something = 1;
     /* simulates the default behaviour of waypoints */
     if (doing_nothing) {
@@ -607,7 +607,7 @@ main(int argc, char* argv[])
 
     cet_convert_init(ivecs->encode, 1);
 
-    start_session(ivecs->name, CSTR(qargs.at(0)));
+    start_session(ivecs->name, qargs.at(0));
     if (ivecs->rd_init == nullptr) {
       fatal("Format does not support reading.\n");
     }
@@ -632,7 +632,7 @@ main(int argc, char* argv[])
 
       cet_convert_deinit();
     }
-  } else if (qargs.size()) {
+  } else if (!qargs.isEmpty()) {
     usage(prog_name,0);
     exit(0);
   }
@@ -671,7 +671,7 @@ main(int argc, char* argv[])
       if (fname.isEmpty()) {
         fatal("An input file (-f) must be specified.\n");
       }
-      start_session(ivecs->name, CSTR(fname));
+      start_session(ivecs->name, fname);
       ivecs->position_ops.rd_init(fname);
     }
 

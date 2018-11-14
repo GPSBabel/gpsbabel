@@ -22,95 +22,37 @@
 #include "defs.h"
 #include "session.h"
 
-static queue session_list;
-static int session_ct;
+#include <QtCore/QList>  // for QList
 
-static void session_free(session_t* s);
+static QList<session_t> session_list;
 
 void
 session_init()
 {
-  QUEUE_INIT(&session_list);
-  session_ct = 0;
+  session_list.clear();
 }
 
 void
 session_exit()
 {
-  queue* elem, *tmp;
-
-  QUEUE_FOR_EACH(&session_list, elem, tmp) {
-    session_t* s = reinterpret_cast<session_t *>(elem);
-    dequeue(&s->Q);
-    session_free(s);
-  }
+  session_list.clear();
 }
 
 void
-start_session(const char* name, const char* filename)
+start_session(const QString& name, const QString& filename)
 {
-  if (session_ct == 0) {
-    QUEUE_INIT(&session_list);
-  }
-  session_ct++;
-
-  session_t* s = (session_t*) xcalloc(1, sizeof(*s));
-  ENQUEUE_TAIL(&session_list, &s->Q);
-  QUEUE_INIT(&s->category_list);
-  s->nr = session_ct;
-  s->name = name;
-  s->filename = xstrdup(filename);
+  session_list.append(session_t(name, filename));
 }
 
-session_t*
+const session_t*
 curr_session()
 {
-  return reinterpret_cast<session_t *>(session_list.prev);
+  if (!session_list.isEmpty()) {
+    return &session_list.last();
+  } else {
+    fatal("Attempt to fetch session outside of session range.");
+  }
 }
-
-/* in work
-
-int
-session_add_category(const char *name, const int id)
-{
-	queue *elem, *tmp;
-	session_t *s;
-	category_t *c;
-
-	s = curr_session();
-
-	QUEUE_FOR_EACH(&s->category_list, elem, tmp) {
-		c = (category_t *) elem;
-		if (case_ignore_strcmp(c->name, name) == 0) {
-			if (id >= 0) c->id = id;
-			return c->id;
-		}
-
-	}
-
-	c = xmalloc(sizeof(*c));
-	c->name = xstrdup(name);
-	if (id < 0) c->id = -(++s->unknown_category_ct);
-	else c->id = id;
-
-	s->category_ct++;
-	ENQUEUE_TAIL(&s->category_list, &c->Q);
-
-	return c->id;
-}
-*/
 
 /* non public functions */
 
-static void
-session_free(session_t* s)
-{
-  queue* elem, *tmp;
-  QUEUE_FOR_EACH(&s->category_list, elem, tmp) {
-    category_t* c = reinterpret_cast<category_t *>(elem);
-    dequeue(&c->Q);
-    xfree(c);
-  }
-  xfree(s->filename);
-  xfree(s);
-}

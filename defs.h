@@ -36,7 +36,8 @@
 
 #include <QtCore/QString>
 
-# include "src/core/datetime.h"
+#include "src/core/datetime.h"
+#include "src/core/optional.h"
 
 #define CSTR(qstr) (qstr.toUtf8().constData())
 #define CSTRc(qstr) (qstr.toLatin1().constData())
@@ -531,7 +532,7 @@ public:
   float odometer_distance; /* Meters? */
   geocache_data* gc_data;
   format_specific_data* fs;
-  session_t* session;	/* pointer to a session struct */
+  const session_t* session;	/* pointer to a session struct */
   void* extra_data;	/* Extra data added by, say, a filter. */
 
 public:
@@ -628,22 +629,22 @@ waypt_disp_all(T cb)
 }
 
 /*
- *  Structure of recomputed track/roue data.
+ *  Structure of recomputed track/route data.
  */
-typedef struct {
-  double	distance_meters;
-  double	max_alt;	/*  unknown_alt => invalid */
-  double	min_alt;	/* -unknown_alt => invalid */
-  double	max_spd;	/* Meters/sec */
-  double	min_spd;	/* Meters/sec */
-  double	avg_hrt;	/* Avg Heartrate */
-  double	avg_cad;	/* Avg Cadence */
-  time_t	start;		/* Min time */
-  time_t	end;		/* Max time */
-  int	min_hrt;        /* Min Heartrate */
-  int	max_hrt;        /* Max Heartrate */
-  int	max_cad;        /* Max Cadence */
-} computed_trkdata;
+struct computed_trkdata {
+  double distance_meters{0.0};
+  gpsbabel_optional::optional<double> max_alt;	/* Meters */
+  gpsbabel_optional::optional<double> min_alt;	/* Meters */
+  gpsbabel_optional::optional<double> max_spd;	/* Meters/sec */
+  gpsbabel_optional::optional<double> min_spd;	/* Meters/sec */
+  gpsbabel_optional::optional<double> avg_hrt;	/* Avg Heartrate */
+  gpsbabel_optional::optional<double> avg_cad;	/* Avg Cadence */
+  gpsbabel::DateTime start;		/* Min time */
+  gpsbabel::DateTime end;		/* Max time */
+  gpsbabel_optional::optional<int> min_hrt;			/* Min Heartrate */
+  gpsbabel_optional::optional<int> max_hrt;			/* Max Heartrate */
+  gpsbabel_optional::optional<int> max_cad;			/* Max Cadence */
+};
 
 class route_head
 {
@@ -659,7 +660,7 @@ public:
   unsigned short cet_converted;	/* strings are converted to UTF8; interesting only for input */
   gb_color line_color;         /* Optional line color for rendering */
   int line_width;         /* in pixels (sigh).  < 0 is unknown. */
-  session_t* session;	/* pointer to a session struct */
+  const session_t* session;	/* pointer to a session struct */
 
 public:
   route_head();
@@ -707,7 +708,7 @@ void route_backup(signed int* count, queue** head_bak);
 void route_restore(queue* head_bak);
 void track_backup(signed int* count, queue** head_bak);
 void track_restore(queue* head_bak);
-void track_recompute(const route_head* trk, computed_trkdata**);
+computed_trkdata track_recompute(const route_head* trk);
 
 template <typename T>
 void
@@ -1061,7 +1062,7 @@ case_ignore_strcmp(const QString& s1, const QString& s2)
 // In 95% of the callers, this could be s1.startsWith(s2)...
 inline int case_ignore_strncmp(const QString& s1, const QString& s2, int n)
 {
-  return s1.left(n).compare(s2.left(n), Qt::CaseInsensitive);
+  return s1.leftRef(n).compare(s2.left(n), Qt::CaseInsensitive);
 }
 
 int str_match(const char* str, const char* match);
@@ -1207,8 +1208,6 @@ int parse_distance(const char* str, double* val, double scale, const char* modul
 int parse_distance(const QString& str, double* val, double scale, const char* module);
 int parse_speed(const char* str, double* val, const double scale, const char* module);
 int parse_speed(const QString& str, double* val, const double scale, const char* module);
-time_t parse_date(const char* str, const char* format, const char* module);
-time_t parse_date(const QString& str, const char* format, const char* module);
 
 /*
  *  From util_crc.c

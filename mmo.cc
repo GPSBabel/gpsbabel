@@ -22,6 +22,7 @@
 
 #include "defs.h"
 #include <QtCore/QHash>
+#include <QtCore/QtGlobal>
 #include <cerrno>
 #include <cstdio>
 #include <cstdlib>
@@ -259,9 +260,9 @@ mmo_register_object(const int objid, const void* ptr, const gpsdata_type type)
 static int
 mmo_get_objid(const void* ptr)
 {
-  foreach(int key, objects.keys()) {
-    if (objects.value(key)->data == ptr) {
-      return key;
+  for (auto o = objects.constBegin(); o != objects.constEnd(); ++o) {
+    if (o.value()->data == ptr) {
+      return o.key();
     }
   }
   return 0;
@@ -305,7 +306,7 @@ mmo_free_object(mmo_data_t* data)
     xfree(data->name);
   }
   if ((data->type == wptdata) && (data->refct == 0)) {
-    delete(Waypoint*)data->data;
+    delete (Waypoint*)data->data;
   }
   xfree(data);
 }
@@ -973,8 +974,8 @@ mmo_rd_deinit()
 
   icons.clear();
 
-  foreach(int k, objects.keys()) {
-    mmo_free_object(objects.value(k));
+  for (auto value : qAsConst(objects)) {
+    mmo_free_object(value);
   }
   objects.clear();
 
@@ -1230,7 +1231,7 @@ mmo_write_wpt_cb(const Waypoint* wpt)
   if (cx != nullptr) {
     char* kml = nullptr;
 
-    if (strcmp(wpt->session->name, "kml") == 0) {
+    if (wpt->session->name == QLatin1String("kml")) {
       utf_string tmp(true, cx);
       cx = kml = strip_html(&tmp);
     }
@@ -1279,7 +1280,7 @@ mmo_write_rte_head_cb(const route_head* rte)
   mmo_rte = rte;
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
     QDateTime t = wpt->GetCreationTime();
     if ((t.isValid()) && (t.toTime_t() < time)) {
       time = t.toTime_t();
@@ -1323,7 +1324,7 @@ mmo_write_rte_tail_cb(const route_head* rte)
   }
 
   QUEUE_FOR_EACH(&rte->waypoint_list, elem, tmp) {
-    Waypoint* wpt = reinterpret_cast<Waypoint *>(elem);
+    Waypoint* wpt = reinterpret_cast<Waypoint*>(elem);
     int objid = mmo_get_objid(wpt);
     gbfputuint16(objid & 0x7FFF, fout);
   }
@@ -1409,8 +1410,8 @@ mmo_wr_deinit()
   mmobjects.clear();
   category_names.clear();
 
-  foreach(int k, objects.keys()) {
-    mmo_free_object(objects.value(k));
+  for (auto value : qAsConst(objects)) {
+    mmo_free_object(value);
   }
   objects.clear();
 

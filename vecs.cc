@@ -32,8 +32,8 @@
 typedef struct {
   ff_vecs_t* vec;
   const char* name;
-  const char* desc;
-  const char* extensions; // list of possible extensions separated by '/', first is output default for GUI.
+  QString desc;
+  QString extensions; // list of possible extensions separated by '/', first is output default for GUI.
   const char* parent;
 } vecs_t;
 
@@ -1164,7 +1164,7 @@ assign_option(const char* module, arglist_t* ap, const char* val)
     return;
   }
 
-  // Fixme - this is probably somewhere between wrong and less than great.  If you have an option "foo" 
+  // Fixme - this is probably somewhere between wrong and less than great.  If you have an option "foo"
   // and want to set it to the value "foo", this code will prevent that from happening, but we seem to have
   // code all over the place that relies on this. :-/
   if (case_ignore_strcmp(val, ap->argstring) == 0) {
@@ -1474,7 +1474,7 @@ sort_and_unify_vecs(int* ctp)
   /* Walk the style list, parse the entries, dummy up a "normal" vec */
   for (style_vecs_t* svec = style_list; svec->name; svec++, i++)  {
     xcsv_read_internal_style(svec->style_buf);
-    svp[i] = (vecs_t*) xcalloc(1, sizeof** svp);
+    svp[i] = new vecs_t;
     svp[i]->name = svec->name;
     svp[i]->vec = (ff_vecs_t*) xmalloc(sizeof(*svp[i]->vec));
     svp[i]->extensions = xcsv_file.extension;
@@ -1530,7 +1530,7 @@ disp_vecs()
     if (svp[i]->vec->type == ff_type_internal)  {
       continue;
     }
-    printf(VEC_FMT, svp[i]->name, svp[i]->desc);
+    printf(VEC_FMT, svp[i]->name, CSTR(svp[i]->desc));
     for (auto ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %s%-.50s %s\n",
@@ -1555,7 +1555,8 @@ disp_vec(const char* vecname)
     if (case_ignore_strcmp(svp[i]->name, vecname))  {
       continue;
     }
-    printf(VEC_FMT, svp[i]->name, svp[i]->desc);
+
+    printf(VEC_FMT, svp[i]->name, CSTR(svp[i]->desc));
     for (auto ap = svp[i]->vec->args; ap && ap->argstring; ap++) {
       if (!(ap->argtype & ARGTYPE_HIDDEN))
         printf("	  %-18.18s    %s%-.50s %s\n",
@@ -1667,12 +1668,11 @@ disp_formats(int version)
   vecs_t** svp;
   vecs_t* vec;
   int vc = 0;
-
   switch (version) {
-  case 0:
-  case 1:
-  case 2:
-  case 3:
+    case 0:
+    case 1:
+    case 2:
+    case 3:
     svp = sort_and_unify_vecs(&vc);
     for (int i = 0; i<vc; i++,vec++) {
       vec = svp[i];
@@ -1691,17 +1691,17 @@ disp_formats(int version)
         disp_v2(vec->vec);
       }
       printf("%s\t%s\t%s%s%s\n", vec->name,
-             vec->extensions? vec->extensions : "",
-             vec->desc,
-             version >= 3 ? "\t" : "",
-             version >= 3 ? vec->parent : "");
+        !vec->extensions.isEmpty() ? CSTR(vec->extensions) : "",
+        CSTR(vec->desc),
+        version >= 3 ? "\t" : "",
+        version >= 3 ? vec->parent : "");
       if (version >= 3) {
         disp_v3(vec);
       }
     }
     xfree(svp);
     break;
-  default:
+    default:
     ;
   }
 }

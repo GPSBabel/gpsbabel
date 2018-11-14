@@ -25,6 +25,12 @@
 
 #if FILTERS_ENABLED
 
+template <class T>
+inline int sgn(T v) {
+// Returns 1 if v > 0, -1 if v < 0, and 0 if v is zero
+  return (v > T(0)) - (v < T(0));
+}
+
 int SortFilter::sort_comp(const queue* a, const queue* b)
 {
   const Waypoint* x1 = reinterpret_cast<const Waypoint *>(a);
@@ -38,7 +44,7 @@ int SortFilter::sort_comp(const queue* a, const queue* b)
   case sm_description:
     return x1->description.compare(x2->description);
   case sm_time:
-    return x1->GetCreationTime().toTime_t() - x2->GetCreationTime().toTime_t();
+    return sgn(x2->GetCreationTime().msecsTo(x1->GetCreationTime()));
   default:
     abort();
     return 0; /* Internal caller error. */

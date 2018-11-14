@@ -447,9 +447,9 @@ bcr_route_header(const route_head* route)
     }
 
     if (sout.isEmpty()) {
-      sout = QString("%1,%2,@,0").arg(s1).arg(s1);
+      sout = QString("%1,%2,@,0").arg(s1, s1);
     } else {
-      sout = QString("%1,%2,@,0").arg(s1).arg(s2);
+      sout = QString("%1,%2,@,0").arg(s1, s2);
     }
 
     bcr_write_line(fout, "STATION", &i, sout);

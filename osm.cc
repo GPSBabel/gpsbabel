@@ -449,7 +449,7 @@ osm_feature_symbol(const int ikey, const char* value)
   if (values.contains(key)) {
     result = values.value(key)->icon;
   } else {
-    result = QString("%1:%2").arg(osm_features[ikey]).arg(value);
+    result = QString("%1:%2").arg(osm_features[ikey], value);
   }
   return result;
 }
