@@ -63,44 +63,52 @@ void
 xcsv_file_init(void);
 
 void
-xcsv_prologue_add(char*);
+xcsv_prologue_add(const QString&);
 
 void
-xcsv_epilogue_add(char*);
+xcsv_epilogue_add(const QString&);
 
 void
-xcsv_ifield_add(char*, char*, char*);
+xcsv_ifield_add(const QString&, const QString&, const QString&);
 
 void
-xcsv_ofield_add(char*, char*, char*, int options);
+xcsv_ofield_add(const QString&, const QString&, const QString&, unsigned options);
 
 void
 xcsv_destroy_style(void);
 
-const char*
-xcsv_get_char_from_constant_table(char* key);
+QString
+xcsv_get_char_from_constant_table(const QString& key);
 
 /****************************************************************************/
 /* types required for various xcsv functions                                */
 /****************************************************************************/
 
 /* something to map fields to waypts */
-#define OPTIONS_NODELIM 1
-#define OPTIONS_ABSOLUTE 2
-#define OPTIONS_OPTIONAL 3
-typedef struct field_map {
-  queue Q;
-  char* key;
-  char* val;
-  char* printfc;
-  int hashed_key;
-  int options;
-} field_map_t;
+#define OPTIONS_NODELIM 1U
+#define OPTIONS_ABSOLUTE 2U
+#define OPTIONS_OPTIONAL 4U
+struct field_map {
+public:
+  // We use QByteArrays because consumers want char* data and QByteArrays supply this through constData().
+  // If we used QStrings, then we would have to convert to QByteArrays to get the char* data.
+  // If we use char* then we have to manage memory allocation/deallocation.
+  // TODO: when consumers use QStrings then we can store QStrings instead of QByteArrays.
+  QByteArray key;
+  QByteArray val;
+  QByteArray printfc;
+  int hashed_key{0};
+  unsigned options{0};
+
+  field_map() = default;
+  field_map(const QByteArray& k, const QByteArray& v, const QByteArray& p, int hk) : key{k},val{v},printfc{p},hashed_key{hk} {}
+  field_map(const QByteArray& k, const QByteArray& v, const QByteArray& p, int hk, unsigned o) : key{k},val{v},printfc{p},hashed_key{hk},options{o} {}
+};
 
 /* something to map config file constants to chars */
 typedef struct char_map {
-  const char* key;
-  const char* chars;
+  const QString key;
+  const QString chars;
 } char_map_t;
 
 namespace gpsbabel
@@ -125,24 +133,21 @@ class XcsvFile {
   QStringList epilogue;
 
   QString field_delimiter; 	/* comma, quote, etc... */
-  QString field_encloser; 	/* doublequote, etc... */
+  QString field_encloser;		/* doublequote, etc... */
   QString record_delimiter;	/* newline, c/r, etc... */
 
   QString badchars;		/* characters we never write to output */
 
-  queue ifield;		/* input field mapping */
-  queue* ofield;    		/* output field mapping */
-
-  int ifield_ct;		/* actual # of ifields */
-  int ofield_ct;		/* actual # of ofields */
+  QList<field_map> ifields;	/* input field mapping */
+  QList<field_map> ofields;	/* output field mapping */
 
   gpsbabel::File* file;
   QTextStream* stream;
   QTextCodec* codec;
   QString fname;                 /* ptr to filename of above. */
 
-  char* description;		/* Description for help text */
-  char* extension;		/* preferred filename extension (for wrappers)*/
+  QString description;		/* Description for help text */
+  QString extension;		/* preferred filename extension (for wrappers)*/
 
   short_handle mkshort_handle;/* handle for mkshort() */
   ff_type type;		/* format type for GUI wrappers. */

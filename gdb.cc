@@ -603,7 +603,7 @@ read_waypoint(gt_waypt_classes_e* waypt_class_out)
       FREAD(buf, 2);
     }
 
-    QString junk = FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
+    (void) FREAD_CSTR_AS_QSTR;				/* undocumented & unused string */
 #if GDB_DEBUG
     DBG(GDB_DBG_WPTe, temp)
     printf(MYNAME "-wpt \"%s\" (%d): Unknown string = %s\n",

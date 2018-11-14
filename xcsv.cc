@@ -23,20 +23,24 @@
 
  */
 
-#include <QtCore/QTextCodec>
-#include <QtCore/QTextStream>
+#include <QtCore/QByteArray>   // for QByteArray
+#include <QtCore/QHash>        // for QHash
+#include <QtCore/QString>      // for QString
+#include <QtCore/QStringList>  // for QStringList
+#include <QtCore/QTextCodec>   // for QTextCodec
+#include <QtCore/QTextStream>  // for QTextStream
+#include <QtCore/QtGlobal>     // for qPrintable
 
+#include <cctype>
+#include <cstdlib>
 #include "csv_util.h"
 #include "defs.h"
 #include "jeeps/gpsmath.h"
 #include "src/core/file.h"
 #include "src/core/logging.h"
-#include <cctype>
-#include <cstdlib>
 
 #if CSVFMTS_ENABLED
 #define MYNAME	"XCSV"
-#define ISSTOKEN(a,b) (strncmp(a,b, strlen(b)) == 0)
 
 static char* styleopt = nullptr;
 static char* snlenopt = nullptr;
@@ -110,8 +114,6 @@ char_map_t xcsv_char_table[] = {
 void
 xcsv_destroy_style(void)
 {
-  queue* elem, *tmp;
-  field_map_t* fmp;
 
   /*
    * If this xcsv_file struct came from a file we can free it all.
@@ -119,332 +121,231 @@ xcsv_destroy_style(void)
    */
 
   /* destroy the prologue */
-  xcsv_file.epilogue.clear();
+  xcsv_file.prologue.clear();
 
   /* destroy the epilogue */
   xcsv_file.epilogue.clear();
 
   /* destroy the ifields */
-  QUEUE_FOR_EACH(&xcsv_file.ifield, elem, tmp) {
-    fmp = reinterpret_cast<field_map_t *>(elem);
-    if (fmp->key) {
-      xfree(fmp->key);
-    }
-    if (fmp->val) {
-      xfree(fmp->val);
-    }
-    if (fmp->printfc) {
-      xfree(fmp->printfc);
-    }
-    if (elem) {
-      xfree(elem);
-    }
-  }
-
-  /* destroy the ofields, if they are not re-mapped to ifields. */
-  if (xcsv_file.ofield != &xcsv_file.ifield) {
-    QUEUE_FOR_EACH(xcsv_file.ofield, elem, tmp) {
-      fmp = reinterpret_cast<field_map_t *>(elem);
-      if (fmp->key) {
-        xfree(fmp->key);
-      }
-      if (fmp->val) {
-        xfree(fmp->val);
-      }
-      if (fmp->printfc) {
-        xfree(fmp->printfc);
-      }
-      if (elem) {
-        xfree(elem);
-      }
-    }
-
-    if (xcsv_file.ofield) {
-      xfree(xcsv_file.ofield);
-    }
-  }
+  xcsv_file.ifields.clear();
+  /* destroy the ofields */
+  xcsv_file.ofields.clear();
 
   /* other alloc'd glory */
   xcsv_file.field_delimiter = QString();
   xcsv_file.field_encloser = QString();
   xcsv_file.record_delimiter = QString();
   xcsv_file.badchars = QString();
-
-  if (xcsv_file.description) {
-    xfree(xcsv_file.description);
-  }
-
-  if (xcsv_file.extension) {
-    xfree(xcsv_file.extension);
-  }
+  xcsv_file.description = QString();
+  xcsv_file.extension = QString();
 
   if (xcsv_file.mkshort_handle) {
     mkshort_del_handle(&xcsv_file.mkshort_handle);
   }
-
-  /* return everything to zeros */
-  int internal = xcsv_file.is_internal;
-  xcsv_file.is_internal = internal;
 }
 
-const char*
-xcsv_get_char_from_constant_table(char* key)
+// Given a keyword of "COMMASPACE", return ", ".
+QString
+xcsv_get_char_from_constant_table(const QString& key)
 {
-  char_map_t* cm = xcsv_char_table;
-
-  while ((cm->key) && (strcmp(key, cm->key) != 0)) {
-    cm++;
+  static QHash<QString, QString> substitutions;
+  if (substitutions.empty()) {
+    for (char_map_t* cm = xcsv_char_table; !cm->key.isNull(); cm++) {
+      substitutions.insert(cm->key, cm->chars);
+    }
   }
+  if (substitutions.contains(key)) {
+    return substitutions[key];
+  }
+  // No substition found? Just return original.
+  return key;
+}
 
-  return (cm->chars);
+// Remove outer quotes.
+// Should probably be in csv_util.
+static QString dequote(const QString& in) {
+  QString r = in.simplified();
+  if (r.startsWith("\"")) r = r.mid(1);
+  if (r.endsWith("\"")) r.chop(1);
+  return r;
 }
 
 static void
-xcsv_parse_style_line(char* sbuff)
+xcsv_parse_style_line(QString line)
 {
-  int i, linecount = 0;
-  char* s, *sp;
-  char* p;
-  const char* cp;
-  char* key, *val, *pfc;
+  // The lines to be parsed have a leading operation |op| that is
+  // separated by whitespace from the rest. Each op may have zero or
+  // more comma separated tokens  |token[]|.
 
-  /*
-   * tokens should be parsed longest to shortest, unless something
-   * requires a previously set value.  This way something like
-   * SHORT and SHORTNAME don't collide.
-   */
-
-  /* whack off any comments */
-  if ((p = strchr(sbuff, '#')) != nullptr) {
-    if ((p > sbuff) && p[-1] == '\\') {
-      memmove(p-1, p, strlen(p));
-      p[strlen(p)-1] = '\0';
-    } else {
-      *p = '\0';
-    }
+  // Handle comments, with an escape. Probably not optimal.
+  int escape_idx = line.indexOf('\\');
+  int comment_idx = line.indexOf('#');
+  if (comment_idx > 0 && escape_idx +1 != comment_idx) {
+    line = line.mid(0, line.indexOf("#")).trimmed();
+  } else {
+    line = line.replace("\\#", "#");
   }
 
-  if (strlen(sbuff)) {
-    if (ISSTOKEN(sbuff, "FIELD_DELIMITER")) {
-      sp = csv_stringtrim(&sbuff[16], "\"", 1);
-      cp = xcsv_get_char_from_constant_table(sp);
-      if (cp) {
-        xcsv_file.field_delimiter = cp;
-        xfree(sp);
-      } else {
-        xcsv_file.field_delimiter = sp;
-      }
+  // Separate op and tokens.
+  int sep = line.indexOf(QRegExp("\\s+"));
 
-      p = csv_stringtrim(CSTR(xcsv_file.field_delimiter), " ", 0);
+  // the first token is the operation, e.g. "IFIELD"
+  QString op = line.mid(0, sep).trimmed().toUpper();
+  QString tokenstr = line.mid(sep).trimmed();
+  QStringList tokens = tokenstr.split(",");
 
+  if (op == "FIELD_DELIMITER") {
+    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+    xcsv_file.field_delimiter = cp;
+
+    char* p = csv_stringtrim(CSTR(xcsv_file.field_delimiter), " ", 0);
       /* field delimiters are always bad characters */
-      if (0 == strcmp(p, "\\w")) {
-        xcsv_file.badchars = " \n\r";
-      } else {
-        xcsv_file.badchars += p;
+    if (0 == strcmp(p, "\\w")) {
+      xcsv_file.badchars = " \n\r";
+    } else {
+      xcsv_file.badchars += p;
+    }
+    xfree(p);
+
+  } else
+
+  if (op == "FIELD_ENCLOSER") {
+    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+    xcsv_file.field_encloser = cp;
+
+    char* p = csv_stringtrim(CSTR(xcsv_file.field_encloser), " ", 0);
+    xcsv_file.badchars += p;
+    xfree(p);
+  } else
+
+  if (op == "RECORD_DELIMITER") {
+    auto cp = xcsv_get_char_from_constant_table(tokens[0]);
+    xcsv_file.record_delimiter = cp;
+
+      // Record delimiters are always bad characters.
+    auto p = csv_stringtrim(CSTR(xcsv_file.record_delimiter), " ", 0);
+    xcsv_file.badchars += p;
+    xfree(p);
+
+  } else
+
+  if (op == "FORMAT_TYPE") {
+    if (tokens[0] == "INTERNAL") {
+      xcsv_file.type = ff_type_internal;
+    }
+      // this is almost inconcievable...
+    if (tokens[0] == "SERIAL") {
+      xcsv_file.type = ff_type_serial;
+    }
+  } else
+
+  if (op == "DESCRIPTION") {
+    xcsv_file.description = tokens[0];
+  } else
+
+  if (op == "EXTENSION") {
+    xcsv_file.extension = tokens[0];
+  } else
+
+  if (op == "SHORTLEN") {
+    if (xcsv_file.mkshort_handle) {
+      setshort_length(xcsv_file.mkshort_handle, tokens[0].toInt());
+    }
+  } else
+
+  if (op == "SHORTWHITE") {
+    if (xcsv_file.mkshort_handle) {
+      setshort_whitespace_ok(xcsv_file.mkshort_handle, tokens[0].toInt());
+    }
+  } else
+
+  if (op == "BADCHARS") {
+    char* sp = csv_stringtrim(CSTR(tokenstr), "\"", 1);
+    QString cp = xcsv_get_char_from_constant_table(sp);
+    xcsv_file.badchars += cp;
+    xfree(sp);
+  } else
+
+  if (op =="PROLOGUE") {
+    xcsv_prologue_add(tokenstr);
+  } else
+
+  if (op == "EPILOGUE") {
+    xcsv_epilogue_add(tokenstr);
+  } else
+
+  if (op == "ENCODING") {
+    QByteArray ba;
+    ba.append(tokens[0]);
+    xcsv_file.codec = QTextCodec::codecForName(ba);
+    if (!xcsv_file.codec) {
+      Fatal() << "Unsupported character set '" << QString(tokens[0]) << "'.";
+    }
+  } else
+
+  if (op == "DATUM") {
+    xcsv_file.gps_datum = GPS_Lookup_Datum_Index(tokens[0]);
+    is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", CSTR(tokens[0]));
+  } else
+
+  if (op == "DATATYPE") {
+    QString p = tokens[0].toUpper();
+    if (p == "TRACK") {
+      xcsv_file.datatype = trkdata;
+    } else if (p == "ROUTE") {
+      xcsv_file.datatype = rtedata;
+    } else if (p == "WAYPOINT") {
+      xcsv_file.datatype = wptdata;
+    } else {
+      Fatal() << MYNAME << ": Unknown data type" << p;
+    }
+  } else
+
+  if (op == "IFIELD") {
+    if (tokens.size() < 3) {
+      Fatal() << "Invalid IFIELD line: " << tokenstr;
+    }
+
+    // The key ("LAT_DIR") should never contain quotes.
+
+    const QString key = tokens[0].simplified();
+    const QString val = dequote(tokens[1]);
+    const QString pfc = dequote(tokens[2]);
+    xcsv_ifield_add(key, val, pfc);
+  } else
+
+      //
+      //  as OFIELDs are implemented as an after-thought, I'll
+      //  leave this as it's own parsing for now.  We could
+      //  change the world on ifield vs ofield format later..
+      //
+  if (op == "OFIELD") {
+    unsigned options = 0;
+      // Note: simplifieid() has to run after split().
+    if (tokens.size() < 3) {
+      Fatal() << "Invalid OFIELD line: " << tokenstr;
+    }
+
+    // The key ("LAT_DIR") should never contain quotes.
+    const QString key = tokens[0].simplified();
+    const QString val = dequote(tokens[1]);
+    const QString pfc = dequote(tokens[2]);
+
+    // This is pretty lazy way to parse write options.
+    // They've very rarely used, so we'll go for simple.
+    if (tokens.size() > 4) {
+      QString options_string = tokens[3].simplified();
+      if (options_string.contains("no_delim_before")) {
+        options |= OPTIONS_NODELIM;
       }
-      xfree(p);
-
-    } else
-
-      if (ISSTOKEN(sbuff, "FIELD_ENCLOSER")) {
-        sp = csv_stringtrim(&sbuff[15], "\"", 1);
-        cp = xcsv_get_char_from_constant_table(sp);
-        if (cp) {
-          xcsv_file.field_encloser = cp;
-          xfree(sp);
-        } else {
-          xcsv_file.field_encloser = sp;
-        }
-
-        p = csv_stringtrim(CSTR(xcsv_file.field_encloser), " ", 0);
-        xcsv_file.badchars += p;
-        xfree(p);
-      } else
-
-        if (ISSTOKEN(sbuff, "RECORD_DELIMITER")) {
-          sp = csv_stringtrim(&sbuff[17], "\"", 1);
-          cp = xcsv_get_char_from_constant_table(sp);
-          if (cp) {
-            xcsv_file.record_delimiter = cp;
-            xfree(sp);
-          } else {
-            xcsv_file.record_delimiter = sp;
-          }
-
-          /* record delimiters are always bad characters */
-          p = csv_stringtrim(CSTR(xcsv_file.record_delimiter), " ", 0);
-          xcsv_file.badchars += p;
-          xfree(p);
-
-        } else
-
-          if (ISSTOKEN(sbuff, "FORMAT_TYPE")) {
-            const char* p;
-            for (p = &sbuff[11]; *p && isspace(*p); p++) {
-              ;
-            }
-            if (ISSTOKEN(p, "INTERNAL")) {
-              xcsv_file.type = ff_type_internal;
-            }
-            /* this is almost inconcievable... */
-            if (ISSTOKEN(p, "SERIAL")) {
-              xcsv_file.type = ff_type_serial;
-            }
-          } else
-
-            if (ISSTOKEN(sbuff, "DESCRIPTION")) {
-              xcsv_file.description = csv_stringtrim(&sbuff[11],"", 0);
-            } else
-
-              if (ISSTOKEN(sbuff, "EXTENSION")) {
-                xcsv_file.extension = csv_stringtrim(&sbuff[10],"", 0);
-              } else
-
-                if (ISSTOKEN(sbuff, "SHORTLEN")) {
-                  if (xcsv_file.mkshort_handle) {
-                    setshort_length(xcsv_file.mkshort_handle, atoi(&sbuff[9]));
-                  }
-                } else
-
-                  if (ISSTOKEN(sbuff, "SHORTWHITE")) {
-                    if (xcsv_file.mkshort_handle) {
-                      setshort_whitespace_ok(xcsv_file.mkshort_handle, atoi(&sbuff[12]));
-                    }
-                  } else
-
-                    if (ISSTOKEN(sbuff, "BADCHARS")) {
-                      sp = csv_stringtrim(&sbuff[9], "\"", 1);
-                      cp = xcsv_get_char_from_constant_table(sp);
-
-                      if (cp) {
-                        p = xstrdup(cp);
-                        xfree(sp);
-                      } else {
-                        p = sp;
-                      }
-                      xcsv_file.badchars += p;
-                      xfree(p);
-
-                    } else
-
-                      if (ISSTOKEN(sbuff, "PROLOGUE")) {
-                        xcsv_prologue_add(sbuff + 9);
-                      } else
-
-                        if (ISSTOKEN(sbuff, "EPILOGUE")) {
-                          xcsv_epilogue_add(sbuff + 9);
-                        } else
-
-                          if (ISSTOKEN(sbuff, "ENCODING")) {
-                            p = csv_stringtrim(&sbuff[8], "\"", 1);
-                            xcsv_file.codec = QTextCodec::codecForName(p);
-                            if (!xcsv_file.codec) {
-                              Fatal() << "Unsupported character set '" << p << "'.";
-                            }
-                            xfree(p);
-                          } else
-
-                            if (ISSTOKEN(sbuff, "DATUM")) {
-                              p = csv_stringtrim(&sbuff[5], "\"", 1);
-                              xcsv_file.gps_datum = GPS_Lookup_Datum_Index(p);
-                              is_fatal(xcsv_file.gps_datum < 0, MYNAME ": datum \"%s\" is not supported.", p);
-                              xfree(p);
-                            } else
-
-                              if (ISSTOKEN(sbuff, "DATATYPE")) {
-                                p = csv_stringtrim(&sbuff[8], "\"", 1);
-                                if (case_ignore_strcmp(p, "TRACK") == 0) {
-                                  xcsv_file.datatype = trkdata;
-                                } else if (case_ignore_strcmp(p, "ROUTE") == 0) {
-                                  xcsv_file.datatype = rtedata;
-                                } else if (case_ignore_strcmp(p, "WAYPOINT") == 0) {
-                                  xcsv_file.datatype = wptdata;
-                                } else {
-                                  fatal(MYNAME ": Unknown data type \"%s\"!\n", p);
-                                }
-                                xfree(p);
-
-                              } else
-
-                                if (ISSTOKEN(sbuff, "IFIELD")) {
-                                  key = val = pfc = nullptr;
-
-                                  s = csv_lineparse(&sbuff[6], ",", "", linecount);
-
-                                  i = 0;
-                                  while (s) {
-                                    switch (i) {
-                                    case 0:
-                                      /* key */
-                                      key = csv_stringtrim(s, "\"", 1);
-                                      break;
-                                    case 1:
-                                      /* default value */
-                                      val = csv_stringtrim(s, "\"", 1);
-                                      break;
-                                    case 2:
-                                      /* printf conversion */
-                                      pfc = csv_stringtrim(s, "\"", 1);
-                                      break;
-                                    default:
-                                      break;
-                                    }
-                                    i++;
-
-                                    s = csv_lineparse(nullptr, ",", "", linecount);
-                                  }
-
-                                  xcsv_ifield_add(key, val, pfc);
-
-                                } else
-
-                                  /*
-                                   * as OFIELDs are implemented as an after-thought, I'll
-                                   * leave this as it's own parsing for now.  We could
-                                   * change the world on ifield vs ofield format later..
-                                   */
-                                  if (ISSTOKEN(sbuff, "OFIELD")) {
-                                    int options = 0;
-                                    key = val = pfc = nullptr;
-
-                                    s = csv_lineparse(&sbuff[6], ",", "", linecount);
-
-                                    i = 0;
-                                    while (s) {
-                                      switch (i) {
-                                      case 0:
-                                        /* key */
-                                        key = csv_stringtrim(s, "\"", 1);
-                                        break;
-                                      case 1:
-                                        /* default value */
-                                        val = csv_stringtrim(s, "\"", 1);
-                                        break;
-                                      case 2:
-                                        /* printf conversion */
-                                        pfc = csv_stringtrim(s, "\"", 1);
-                                        break;
-                                      case 3:
-                                        /* Any additional options. */
-                                        if (strstr(s, "no_delim_before")) {
-                                          options |= OPTIONS_NODELIM;
-                                        }
-                                        if (strstr(s, "absolute")) {
-                                          options |= OPTIONS_ABSOLUTE;
-                                        }
-                                        if (strstr(s, "optional")) {
-                                          options |= OPTIONS_OPTIONAL;
-                                        }
-                                      default:
-                                        break;
-                                      }
-                                      i++;
-                                      s = csv_lineparse(nullptr, ",", "", linecount);
-                                    }
-
-                                    xcsv_ofield_add(key, val, pfc, options);
-                                  }
+      if (options_string.contains("absolute")) {
+        options |= OPTIONS_ABSOLUTE;
+      }
+      if (options_string.contains("optional")) {
+        options |= OPTIONS_OPTIONAL;
+      }
+    }
+    xcsv_ofield_add(key, val, pfc, options);
   }
 }
 
@@ -457,46 +358,26 @@ xcsv_parse_style_line(char* sbuff)
 static void
 xcsv_parse_style_buff(const char* sbuff)
 {
-  // FIXME: should not be a static buf.  Should not be a raw character
-  // buffer at all!
-  char ibuf[4096];
-
-  while (*sbuff) {
-    ibuf[0] = 0;
-    size_t i = 0;
-    char* ibufp;
-    for (ibufp = ibuf; *sbuff != '\n' && i++ < sizeof(ibuf);) {
-      *ibufp++ = *sbuff++;
-    }
-    while (*sbuff == '\n' || *sbuff == '\r') {
-      sbuff++;
-    }
-    *ibufp = 0;
-    xcsv_parse_style_line(ibuf);
+  QStringList lines = QString(sbuff).split('\n');
+  for (const auto& line : lines) {
+    xcsv_parse_style_line(line);
   }
 }
 
 static void
 xcsv_read_style(const char* fname)
 {
-  char* sbuff;
-
   xcsv_file_init();
 
   gbfile* fp = gbfopen(fname, "rb", MYNAME);
-  while ((sbuff = gbfgetstr(fp))) {
-    sbuff = lrtrim(sbuff);
+  for  (QString sbuff = gbfgetstr(fp); !sbuff.isNull(); sbuff = gbfgetstr(fp)) {
+    sbuff = sbuff.trimmed();
     xcsv_parse_style_line(sbuff);
   }
-  while (!gbfeof(fp));
 
   /* if we have no output fields, use input fields as output fields */
-  if (xcsv_file.ofield_ct == 0) {
-    if (xcsv_file.ofield) {
-      xfree(xcsv_file.ofield);
-    }
-    xcsv_file.ofield = &xcsv_file.ifield;
-    xcsv_file.ofield_ct = xcsv_file.ifield_ct;
+  if (xcsv_file.ofields.isEmpty()) {
+    xcsv_file.ofields = xcsv_file.ifields;
   }
   gbfclose(fp);
 }
@@ -515,12 +396,8 @@ xcsv_read_internal_style(const char* style_buf)
   xcsv_parse_style_buff(style_buf);
 
   /* if we have no output fields, use input fields as output fields */
-  if (xcsv_file.ofield_ct == 0) {
-    if (xcsv_file.ofield) {
-      xfree(xcsv_file.ofield);
-    }
-    xcsv_file.ofield = &xcsv_file.ifield;
-    xcsv_file.ofield_ct = xcsv_file.ifield_ct;
+  if (xcsv_file.ofields.isEmpty()) {
+    xcsv_file.ofields = xcsv_file.ifields;
   }
 }
 
@@ -704,7 +581,7 @@ ff_vecs_t xcsv_vecs = {
   xcsv_args,
   CET_CHARSET_ASCII, 0,	/* CET-REVIEW */
   { nullptr, nullptr, nullptr, xcsv_wr_position_init, xcsv_wr_position, xcsv_wr_position_deinit },
-  nullptr 
+  nullptr
 
 };
 #else

@@ -263,10 +263,10 @@ void TrackFilter::trackfilter_split_init_rte_name(route_head* track, const QDate
       strftime(buff, sizeof(buff), opt_title, &tm);
       track->rte_name = buff;
     } else {
-      track->rte_name = QString("%1-%2").arg(opt_title).arg(datetimestring);
+      track->rte_name = QString("%1-%2").arg(opt_title, datetimestring);
     }
   } else if (!track->rte_name.isEmpty()) {
-    track->rte_name = QString("%1-%2").arg(track->rte_name).arg(datetimestring);
+    track->rte_name = QString("%1-%2").arg(track->rte_name, datetimestring);
   } else {
     track->rte_name = datetimestring;
   }

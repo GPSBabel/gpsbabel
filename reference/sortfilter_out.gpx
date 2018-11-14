@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.0" creator="GPSBabel - http://www.gpsbabel.org" xmlns="http://www.topografix.com/GPX/1/0">
+  <time>1970-01-01T00:00:00Z</time>
+  <bounds minlat="48.858370100" minlon="2.292292600" maxlat="48.858370100" maxlon="2.292292600"/>
+  <wpt lat="48.858370100" lon="2.292292600">
+    <time>2018-07-05T05:04:03.750Z</time>
+    <name>WPT004</name>
+    <cmt>WPT004</cmt>
+    <desc>WPT004</desc>
+  </wpt>
+  <wpt lat="48.858370100" lon="2.292292600">
+    <time>2018-07-06T05:04:03.250Z</time>
+    <name>WPT002</name>
+    <cmt>WPT002</cmt>
+    <desc>WPT002</desc>
+  </wpt>
+  <wpt lat="48.858370100" lon="2.292292600">
+    <time>2018-07-06T05:04:03.750Z</time>
+    <name>WPT001</name>
+    <cmt>WPT001</cmt>
+    <desc>WPT001</desc>
+  </wpt>
+  <wpt lat="48.858370100" lon="2.292292600">
+    <time>2018-07-07T05:04:03.750Z</time>
+    <name>WPT003</name>
+    <cmt>WPT003</cmt>
+    <desc>WPT003</desc>
+  </wpt>
+</gpx>

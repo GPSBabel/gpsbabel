@@ -20,20 +20,28 @@
  */
 
 #include "defs.h"
-#include "cet_util.h"
 #include "garmin_fs.h"
 #include "garmin_tables.h"
+#include "src/core/datetime.h"
 #include "src/core/file.h"
 #include "src/core/logging.h"
 #include "src/core/xmlstreamwriter.h"
 #include "src/core/xmltag.h"
 
-#include <QtCore/QDateTime>
-#include <QtCore/QDebug>
-#include <QtCore/QRegExp>
-#include <QtCore/QXmlStreamReader>
+#include <QtCore/QDateTime>            // for QDateTime, QDate, QTime
+#include <QtCore/QHash>                // for QHash
+#include <QtCore/QList>                // for QList
+#include <QtCore/QString>              // for QString, QStringLiteral, QStringRef, QStaticStringData, QLatin1String, operator+
+#include <QtCore/QStringList>          // for QStringList
+#include <QtCore/QXmlStreamAttributes> // for QXmlStreamAttributes
+#include <QtCore/QXmlStreamNamespaceDeclarations> // for QXmlStreamNamespaceDeclarations
+#include <QtCore/QXmlStreamReader>     // for QXmlStreamReader, QXmlStreamReader::TokenType::Characters, QXmlStreamReader::TokenType::EndDocument, QXmlStreamReader::TokenType::EndElement, QXmlStreamReader::TokenType::Invalid, QXmlStreamReader::TokenType::StartElement
+#include <QtCore/QtGlobal>             // for qAsConst
 
-#include <cmath>
+#include <cmath>                       // for lround
+#include <cstdio>                      // for sscanf
+#include <cstdlib>                     // for atoi, strtod
+#include <cstring>                     // for strchr
 
 
 static QXmlStreamReader* reader;
@@ -1302,7 +1310,7 @@ gpx_wr_init(const QString& fname)
   } else {
     if (gpx_global) {
       // TODO: gpx 1.1 copyright goes here
-      for (const auto& l : gpx_global->link) {
+      for (const auto& l : qAsConst(gpx_global->link)) {
         writer->writeStartElement(QStringLiteral("link"));
         writer->writeAttribute(QStringLiteral("href"), l.url_);
         writer->writeOptionalTextElement(QStringLiteral("text"), l.url_link_text_);

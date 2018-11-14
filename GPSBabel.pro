@@ -18,7 +18,7 @@ QT -= gui
 TARGET = GPSBabel
 CONFIG += console
 CONFIG -= app_bundle
-CONFIG += c++11
+CONFIG += c++14
 
 TEMPLATE = app
 
@@ -262,7 +262,7 @@ linux{
   coverage.commands += ln -sf GPSBabel gpsbabel;
   coverage.commands += $(MAKE) CFLAGS=\"$(CFLAGS) -fprofile-arcs -ftest-coverage\" CXXFLAGS=\"$(CXXFLAGS) -fprofile-arcs -ftest-coverage\" LFLAGS=\"$(LFLAGS) --coverage\" &&
   coverage.commands += ./testo &&
-  coverage.commands += gcov -r $(SOURCES) &&
+  coverage.commands += gcov -r -o . $(SOURCES) &&
   coverage.commands += gcovr -r . --xml --exclude='zlib/*' --exclude='shapelib/*' -o gpsbabel_coverage.xml;
   QMAKE_EXTRA_TARGETS += coverage
 }

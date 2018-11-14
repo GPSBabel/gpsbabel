@@ -1,0 +1,9 @@
+#
+# sort filter tests
+#
+
+rm -f ${TMPDIR}/sortfilter*
+
+gpsbabel -i gpx -f ${REFERENCE}/sortfilter_in.gpx -x sort,time -o gpx -F ${TMPDIR}/sortfilter_out.gpx
+compare ${REFERENCE}/sortfilter_out.gpx ${TMPDIR}/sortfilter_out.gpx
+

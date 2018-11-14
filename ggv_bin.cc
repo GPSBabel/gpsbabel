@@ -397,7 +397,6 @@ static void
 ggv_bin_read_v34(QDataStream& stream)
 {
   QByteArray buf;
-  QString track_name;
   quint32 label_count;
   quint32 record_count;
 

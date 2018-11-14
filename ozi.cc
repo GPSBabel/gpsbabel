@@ -216,7 +216,7 @@ ozi_openfile(const QString& fname)
     sname.chop(suffix_len + 1);
   }
 
-  QString tmpname = QString("%1%2.%3").arg(sname).arg(buff).arg(ozi_extensions[ozi_objective]);
+  QString tmpname = QString("%1%2.%3").arg(sname, buff, ozi_extensions[ozi_objective]);
 
   /* re-open file_out with the new filename */
   if (file_out) {

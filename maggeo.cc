@@ -192,9 +192,9 @@ maggeo_fmtdate(const QDateTime& dt)
 static QDateTime maggeo_parsedate(char* dmy)
 {
   QString date(dmy);
-  int d = date.mid(0,2).toInt();
-  int m = date.mid(2,2).toInt();
-  int y = date.mid(4,3).toInt();
+  int d = date.midRef(0,2).toInt();
+  int m = date.midRef(2,2).toInt();
+  int y = date.midRef(4,3).toInt();
   QDateTime r(QDate(y + 1900, m, d));
   return r;
 }

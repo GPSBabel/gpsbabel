@@ -1,0 +1,30 @@
+#!/bin/bash -ex
+#
+# This script is run on travis for the install stage of mac builds.
+# Note the script must be sourced if you want the modified PATH to
+# be used outside this script.
+#
+
+# our expectation is that install-qt creates $QTDIR, $QTDIR/bin.
+QTDIR=${HOME}/Qt/5.9.7/gcc_64
+
+if [ -d "${QTDIR}/bin" ]; then
+  echo "Using cached Qt."
+  echo "If you need to clear the cache see"
+  echo "https://docs.travis-ci.com/user/caching/#Fetching-and-storing-caches."
+else
+  pushd ${HOME};
+  rm -fr Qt
+  # install_qt creates the install at $PWD/Qt.
+  QT_CI_PACKAGES=qt.qt5.597.gcc_64,qt.qt5.597.qtwebengine PATH=${TRAVIS_BUILD_DIR}/tools/qtci:${PATH} install-qt 5.9.7
+  popd;
+fi
+# note that qt-5.9.7.env created by install-qt is not cached!
+export PATH=${QTDIR}/bin:${PATH}
+unset -v QTDIR
+
+# prepare locale for test_encoding_latin1, requires locales package.
+sudo rm -rf /var/lib/apt/lists/* \
+  && sudo sed -i 's/^# *\(en_US ISO-8859-1\)/\1/' /etc/locale.gen \
+  && sudo locale-gen \
+  && locale -a
