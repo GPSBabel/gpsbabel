@@ -1237,7 +1237,7 @@ lowranceusr_parse_icons()
     double longitude   = lon_mm_to_deg(gbfgetint32(file_in));
     int    icon_number = gbfgetint32(file_in);
 
-    if (opt_ignoreicons == NULL) {          /* Option not specified if NULL */
+    if (opt_ignoreicons == nullptr) {          /* Option not specified if NULL */
       Waypoint* wpt_tmp = new Waypoint;
 
       /* position coord lat & long */
@@ -1668,7 +1668,7 @@ lowranceusr4_waypt_disp(const Waypoint* wpt)
   /* UID unit number */
   if (opt_serialnum_i > 0) {
     gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
-  } else if (wpt->fs != (format_specific_data*)NULL) {
+  } else if (wpt->fs != (format_specific_data*)nullptr) {
     gbfputint32(((lowranceusr4_fsdata*)(wpt->fs))->uid_unit, file_out);  // else use serial number from input if valid
   } else {
     gbfputint32(0, file_out);  // else Write Serial Number = 0
@@ -1898,7 +1898,7 @@ lowranceusr4_route_hdr(const route_head* rte)
   /* UID unit number */
   if (opt_serialnum_i > 0) {
     gbfputint32(opt_serialnum_i, file_out);  // use option serial number if specified
-  } else if (rte->fs != (format_specific_data*)NULL) {
+  } else if (rte->fs != (format_specific_data*)nullptr) {
     gbfputint32(((lowranceusr4_fsdata*)(rte->fs))->uid_unit, file_out);  // else use serial number from input if valid
   } else {
     gbfputint32(0, file_out);  // else Write Serial Number = 0
